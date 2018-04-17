@@ -11,10 +11,10 @@ with stdenv.lib;
 
 stdenv.mkDerivation rec {
   name = "fmit-${version}";
-  version = "1.1.13";
+  version = "1.1.14";
 
   src = fetchFromGitHub {
-    sha256 = "1p374gf7iksrlyvddm3w4qk3l0rxsiyymz5s8dmc447yvin8ykfq";
+    sha256 = "18gvl8smcnigzldy1acs5h8rscf287b39xi4y2cl5armqbj0y38x";
     rev = "v${version}";
     repo = "fmit";
     owner = "gillesdegottex";

@@ -135,8 +135,7 @@ in {
         default = { inherit networkmanager modemmanager wpa_supplicant
                             networkmanager-openvpn networkmanager-vpnc
                             networkmanager-openconnect networkmanager-fortisslvpn
-                            networkmanager-pptp networkmanager-l2tp
-                            networkmanager-iodine; };
+                            networkmanager-l2tp networkmanager-iodine; };
         internal = true;
       };
 
@@ -267,8 +266,6 @@ in {
       message = "You can not use networking.networkmanager with networking.wireless";
     }];
 
-    boot.kernelModules = [ "ppp_mppe" ]; # Needed for most (all?) PPTP VPN connections.
-
     environment.etc = with cfg.basePackages; [
       { source = configFile;
         target = "NetworkManager/NetworkManager.conf";
@@ -284,9 +281,6 @@ in {
       }
       { source = "${networkmanager-fortisslvpn}/etc/NetworkManager/VPN/nm-fortisslvpn-service.name";
         target = "NetworkManager/VPN/nm-fortisslvpn-service.name";
-      }
-      { source = "${networkmanager-pptp}/etc/NetworkManager/VPN/nm-pptp-service.name";
-        target = "NetworkManager/VPN/nm-pptp-service.name";
       }
       { source = "${networkmanager-l2tp}/etc/NetworkManager/VPN/nm-l2tp-service.name";
         target = "NetworkManager/VPN/nm-l2tp-service.name";

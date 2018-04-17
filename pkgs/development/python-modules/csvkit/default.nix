@@ -6,11 +6,11 @@
 
 buildPythonPackage rec {
   pname = "csvkit";
-  version = "1.0.2";
+  version = "1.0.3";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "05vfsba9nwh4islszgs18rq8sjkpzqni0cdwvvkw7pi0r63pz2as";
+    sha256 = "a6c859c1321d4697dc41252877249091681297f093e08d9c1e1828a6d52c260c";
   };
 
   propagatedBuildInputs = [

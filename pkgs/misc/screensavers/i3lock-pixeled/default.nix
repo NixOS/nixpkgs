@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "i3lock-pixeled-${version}";
-  version = "1.1.0";
+  version = "1.2.0";
 
   src = fetchurl {
     url = "https://github.com/Ma27/i3lock-pixeled/archive/${version}.tar.gz";
-    sha256 = "046qbx4qvcc66h53h4mm9pyjj9gjc6dzy38a0f0jc5a84xbivh7k";
+    sha256 = "0vlynm833fk1mmdnkcgh4hwqmfypn22zskhysm110k39zvikif0h";
   };
 
   propagatedBuildInputs = with pkgs; [

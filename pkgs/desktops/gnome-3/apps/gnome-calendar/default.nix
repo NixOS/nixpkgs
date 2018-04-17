@@ -1,25 +1,28 @@
-{ stdenv, fetchurl, meson, ninja, pkgconfig, wrapGAppsHook
+{ stdenv, fetchurl, meson, ninja, pkgconfig, wrapGAppsHook, libdazzle, libgweather, geoclue2, geocode-glib
 , gettext, libxml2, gnome3, gtk, evolution-data-server, libsoup
 , glib, gnome-online-accounts, gsettings-desktop-schemas }:
 
-stdenv.mkDerivation rec {
-  name = "gnome-calendar-${version}";
-  version = "3.26.3";
+let
+  pname = "gnome-calendar";
+  version = "3.28.1";
+in stdenv.mkDerivation rec {
+  name = "${pname}-${version}";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gnome-calendar/${gnome3.versionBranch version}/${name}.tar.xz";
-    sha256 = "1clnfvvsaqw9vpxrs6qrxzmgpaw9x2nkjik2x2vwvm07pdvhddxn";
+    url = "mirror://gnome/sources/${pname}/${gnome3.versionBranch version}/${name}.tar.xz";
+    sha256 = "1jacznnjql5jgzvzcp5kh2k0cd0y41cri6qz2bsakpllf7adbrq6";
   };
 
   passthru = {
-    updateScript = gnome3.updateScript { packageName = "gnome-calendar"; attrPath = "gnome3.gnome-calendar"; };
+    updateScript = gnome3.updateScript {
+      packageName = pname;
+      attrPath = "gnome3.${pname}";
+    };
   };
-
-  NIX_CFLAGS_COMPILE = "-I${gnome3.glib.dev}/include/gio-unix-2.0";
 
   nativeBuildInputs = [ meson ninja pkgconfig gettext libxml2 wrapGAppsHook ];
   buildInputs = [
-    gtk evolution-data-server libsoup glib gnome-online-accounts
+    gtk evolution-data-server libsoup glib gnome-online-accounts libdazzle libgweather geoclue2 geocode-glib
     gsettings-desktop-schemas gnome3.defaultIconTheme
   ];
 

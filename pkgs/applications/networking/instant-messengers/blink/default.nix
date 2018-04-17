@@ -1,13 +1,14 @@
-{ stdenv, fetchurl, pythonPackages, libvncserver, zlib
+{ stdenv, fetchdarcs, pythonPackages, libvncserver, zlib
 , gnutls, libvpx, makeDesktopItem }:
 
 pythonPackages.buildPythonApplication rec {
   name = "blink-${version}";
-  version = "2.0.0";
+  version = "3.0.3";
 
-  src = fetchurl {
-    url = "http://download.ag-projects.com/BlinkQt/${name}.tar.gz";
-    sha256 = "07hvy45pavgkvdlh4wbz3shsxh4fapg96qlqmfymdi1nfhwghb05";
+  src = fetchdarcs {
+    url = http://devel.ag-projects.com/repositories/blink-qt;
+    rev = "release-${version}";
+    sha256 = "1vj6zzfvxygz0fzr8bhymcw6j4v8xmr0kba53d6qg285j7hj1bdi";
   };
 
   patches = [ ./pythonpath.patch ];
@@ -15,7 +16,7 @@ pythonPackages.buildPythonApplication rec {
     sed -i 's|@out@|'"''${out}"'|g' blink/resources.py
   '';
 
-  propagatedBuildInputs = with pythonPackages; [ pyqt4 cjson sipsimple twisted ];
+  propagatedBuildInputs = with pythonPackages; [ pyqt5 cjson sipsimple twisted google_api_python_client ];
 
   buildInputs = [ pythonPackages.cython zlib libvncserver libvpx ];
 

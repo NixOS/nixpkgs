@@ -2,7 +2,7 @@
 , CompressZlib, zlib, libjpeg, expat, pkgconfigUpstream, freetype, libwpd
 , libxml2, db, sablotron, curl, fontconfig, libsndfile, neon
 , bison, flex, zip, unzip, gtk3, gtk2, libmspack, getopt, file, cairo, which
-, icu, boost, jdk, ant, cups, xorg, libcmis
+, icu, boost, jdk, ant, cups, xorg, libcmis, carlito
 , openssl, gperf, cppunit, GConf, ORBit2, poppler
 , librsvg, gnome_vfs, libGLU_combined, bsh, CoinMP, libwps, libabw
 , autoconf, automake, openldap, bash, hunspell, librdf_redland, nss, nspr
@@ -42,14 +42,14 @@ let
 
     translations = fetchSrc {
       name = "translations";
-      sha256 = "0max423hdlr4j6y6ymng15awilh2aq8gly1hsf16lnk1pxihgr54";
+      sha256 = "16g85bn6qkql81a0k9iv3nwrpg2kpvz5nk4r7lab5jzlcl20qplc";
     };
 
     # TODO: dictionaries
 
     help = fetchSrc {
       name = "help";
-      sha256 = "14ziy02qq092x8h29f9dlwvvk2scd5v385zhln4848lf3q5cnifl";
+      sha256 = "02382d09svcgmp5q2xglhbx1na9ycd77f5cbcj9jgs8lpkgwbxxc";
     };
 
   };
@@ -106,6 +106,11 @@ in stdenv.mkDerivation rec {
 
     # BLFS patch for Glibc 2.23 renaming isnan
     sed -ire "s@isnan@std::&@g" xmloff/source/draw/ximp3dscene.cxx
+
+    # This is required as some cppunittests require fontconfig configured
+    cp "${fontsConf}" fonts.conf
+    sed -e '/include/i<include>${carlito}/etc/fonts/conf.d</include>' -i fonts.conf
+    export FONTCONFIG_FILE="$PWD/fonts.conf"
   '';
 
   # fetch_Download_item tries to interpret the name as a variable name
@@ -261,7 +266,7 @@ in stdenv.mkDerivation rec {
   nativeBuildInputs = [ wrapGAppsHook ];
 
   passthru = {
-    inherit srcs;
+    inherit srcs jdk;
   };
 
   requiredSystemFeatures = [ "big-parallel" ];

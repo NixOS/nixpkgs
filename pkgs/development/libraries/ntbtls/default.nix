@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, libgpgerror, libgcrypt, libksba, zlib }:
+{ stdenv, fetchurl, gettext, libgpgerror, libgcrypt, libksba, zlib }:
 
 with stdenv.lib;
 
@@ -13,7 +13,8 @@ stdenv.mkDerivation rec {
 
   outputs = [ "dev" "out" ];
 
-  buildInputs = [ libgcrypt libgpgerror libksba zlib ];
+  buildInputs = [ libgcrypt libgpgerror libksba zlib ]
+    ++ stdenv.lib.optional stdenv.isDarwin gettext;
 
   postInstall = ''
     moveToOutput "bin/ntbtls-config" $dev

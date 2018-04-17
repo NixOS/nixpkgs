@@ -174,7 +174,7 @@ meta-attributes</title>
     maintainers of this Nix expression. If
     you would like to be a maintainer of a package, you may want to add
     yourself to <link
-    xlink:href="https://github.com/NixOS/nixpkgs/blob/master/lib/maintainers.nix"><filename>nixpkgs/lib/maintainers.nix</filename></link>
+    xlink:href="https://github.com/NixOS/nixpkgs/blob/master/maintainers/maintainer-list.nix"><filename>nixpkgs/maintainers/maintainer-list.nix</filename></link>
     and write something like <literal>[ stdenv.lib.maintainers.alice
     stdenv.lib.maintainers.bob ]</literal>.</para></listitem>
   </varlistentry>

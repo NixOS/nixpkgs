@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "gtksourceviewmm-${version}";
-  version = "3.21.2";
+  version = "3.21.3";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gtksourceviewmm/${gnome3.versionBranch version}/${name}.tar.xz";
-    sha256 = "d21296d8624a1046841bfec082021b7b966df0b62e19ee300828519bc54dd9c6";
+    sha256 = "1danc9mp5mnb65j01qxkwj92z8jf1gns41wbgp17qh7050f0pc6v";
   };
 
   passthru = {

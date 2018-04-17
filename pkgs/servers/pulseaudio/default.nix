@@ -43,7 +43,11 @@ stdenv.mkDerivation rec {
     sha256 = "17ndr6kc7hpv4ih4gygwlcpviqifbkvnk4fbwf4n25kpb991qlpj";
   };
 
-  patches = [ ./caps-fix.patch ]
+  patches = [ ./caps-fix.patch (fetchpatch {
+    name = "glibc-2.27.patch";
+    url = "https://cgit.freedesktop.org/pulseaudio/pulseaudio/patch/?id=dfb0460fb4743aec047cdf755a660a9ac2d0f3fb";
+    sha256 = "1bi6rbfdjyl6wn0jql4k18xa4hm5l2lpf1sc5j77f8l6jw956afv";
+  }) ]
     ++ stdenv.lib.optional stdenv.hostPlatform.isMusl (fetchpatch {
       name = "padsp-fix.patch";
       url = "https://git.alpinelinux.org/cgit/aports/plain/testing/pulseaudio/0001-padsp-Make-it-compile-on-musl.patch?id=167be02bf4618a90328e2b234f6a63a5dc05f244";

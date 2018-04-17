@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, fetchpatch
-, libX11, libGL
+, libX11, libGL, mesa_noglu
 , nvidia_x11 ? null
 , libglvnd
 }:
@@ -33,7 +33,7 @@ in stdenv.mkDerivation {
   makeFlags = [ "LIBDIR=$(out)/lib"
                 "PRIMUS_libGLa=${aPackage}/lib/libGL.so"
                 "PRIMUS_libGLd=${libGL}/lib/libGL.so"
-                "PRIMUS_LOAD_GLOBAL=${libGL}/lib/libglapi.so"
+                "PRIMUS_LOAD_GLOBAL=${mesa_noglu}/lib/libglapi.so"
               ];
 
   installPhase = ''

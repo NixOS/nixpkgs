@@ -6,12 +6,21 @@ let
   cfg = config.services.varnish;
 
   commandLine = "-f ${pkgs.writeText "default.vcl" cfg.config}" +
-      optionalString (cfg.extraModules != []) " -p vmod_path='${makeSearchPathOutput "lib" "lib/varnish/vmods" ([pkgs.varnish] ++ cfg.extraModules)}' -r vmod_path";
+      optionalString (cfg.extraModules != []) " -p vmod_path='${makeSearchPathOutput "lib" "lib/varnish/vmods" ([cfg.package] ++ cfg.extraModules)}' -r vmod_path";
 in
 {
   options = {
     services.varnish = {
       enable = mkEnableOption "Varnish Server";
+
+      package = mkOption {
+        type = types.package;
+        default = pkgs.varnish5;
+        defaultText = "pkgs.varnish5";
+        description = ''
+          The package to use
+        '';
+      };
 
       http_address = mkOption {
         type = types.str;
@@ -39,7 +48,7 @@ in
       extraModules = mkOption {
         type = types.listOf types.package;
         default = [];
-        example = literalExample "[ pkgs.varnish-geoip ]";
+        example = literalExample "[ pkgs.varnish5Packages.geoip ]";
         description = "
           Varnish modules (except 'std').
         ";
@@ -73,7 +82,7 @@ in
       serviceConfig = {
         Type = "simple";
         PermissionsStartOnly = true;
-        ExecStart = "${pkgs.varnish}/sbin/varnishd -a ${cfg.http_address} -n ${cfg.stateDir} -F ${cfg.extraCommandLine} ${commandLine}";
+        ExecStart = "${cfg.package}/sbin/varnishd -a ${cfg.http_address} -n ${cfg.stateDir} -F ${cfg.extraCommandLine} ${commandLine}";
         Restart = "always";
         RestartSec = "5s";
         User = "varnish";
@@ -84,13 +93,13 @@ in
       };
     };
 
-    environment.systemPackages = [ pkgs.varnish ];
+    environment.systemPackages = [ cfg.package ];
 
     # check .vcl syntax at compile time (e.g. before nixops deployment)
     system.extraDependencies = [
       (pkgs.stdenv.mkDerivation {
         name = "check-varnish-syntax";
-        buildCommand = "${pkgs.varnish}/sbin/varnishd -C ${commandLine} 2> $out";
+        buildCommand = "${cfg.package}/sbin/varnishd -C ${commandLine} 2> $out || (cat $out; exit 1)";
       })
     ];
 

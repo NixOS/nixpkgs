@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "efivar-${version}";
-  version = "34";
+  version = "35";
 
   src = fetchFromGitHub {
     owner = "rhinstaller";
     repo = "efivar";
     rev = version;
-    sha256 = "0ycrdaz0ijkm3xb9fnwzhwi0pdj5c6s636wj4i6lbjbrijbzn4x5";
+    sha256 = "0hc7l5z0hw5472bm6p4d9n24bbggv9lgw7px1hqrdkfjghqfnlxh";
   };
 
   nativeBuildInputs = [ pkgconfig ];

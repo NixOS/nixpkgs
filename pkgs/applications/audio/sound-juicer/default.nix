@@ -1,41 +1,33 @@
-{ stdenv, fetchurl, pkgconfig, gtk3, intltool, itstool, libxml2, brasero
+{ stdenv, fetchurl, pkgconfig, glib, gtk3, intltool, itstool, libxml2, brasero
 , libcanberra-gtk3, gnome3, gst_all_1, libmusicbrainz5, libdiscid, isocodes
-, makeWrapper }:
+, wrapGAppsHook }:
 
 let
-  major = "3.16";
-  minor = "1";
-
-in stdenv.mkDerivation rec {
-  version = "${major}.${minor}";
-  name = "sound-juicer-${version}";
+  pname = "sound-juicer";
+  version = "3.16.1";
+in stdenv.mkDerivation rec{
+  name = "${pname}-${version}";
 
   src = fetchurl {
-    url = "http://download.gnome.org/sources/sound-juicer/${major}/${name}.tar.xz";
+    url = "mirror://gnome/sources/${pname}/${gnome3.versionBranch version}/${name}.tar.xz";
     sha256 = "0mx6n901vb97hsv0cwaafjffj75s1kcp8jsqay90dy3099849dyz";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ gtk3 intltool itstool libxml2 brasero libcanberra-gtk3
-                  gnome3.gsettings-desktop-schemas libmusicbrainz5 libdiscid isocodes
-                  makeWrapper (stdenv.lib.getLib gnome3.dconf)
-                  gst_all_1.gstreamer gst_all_1.gst-plugins-base
-                  gst_all_1.gst-plugins-good gst_all_1.gst-plugins-bad
-                  gst_all_1.gst-libav
-                ];
+  nativeBuildInputs = [ pkgconfig intltool itstool libxml2 wrapGAppsHook ];
+  buildInputs = [
+    glib gtk3 brasero libcanberra-gtk3 gnome3.defaultIconTheme
+    gnome3.gsettings-desktop-schemas libmusicbrainz5 libdiscid isocodes
+    gst_all_1.gstreamer gst_all_1.gst-plugins-base
+    gst_all_1.gst-plugins-good gst_all_1.gst-plugins-bad
+    gst_all_1.gst-libav
+  ];
 
-  preFixup = ''
-    for f in $out/bin/* $out/libexec/*; do
-      wrapProgram "$f" \
-        --prefix XDG_DATA_DIRS : "${gnome3.gnome-themes-standard}/share:$XDG_ICON_DIRS:$GSETTINGS_SCHEMAS_PATH" \
-        --prefix GST_PLUGIN_SYSTEM_PATH_1_0 : "$GST_PLUGIN_SYSTEM_PATH_1_0" \
-        --prefix GIO_EXTRA_MODULES : "${stdenv.lib.getLib gnome3.dconf}/lib/gio/modules"
-    done
-  '';
-
-  postInstall = ''
-    rm $out/share/icons/hicolor/icon-theme.cache
-  '';
+  passthru = {
+    updateScript = gnome3.updateScript {
+      packageName = pname;
+      attrPath = "gnome3.${pname}";
+    };
+  };
 
   meta = with stdenv.lib; {
     description = "A Gnome CD Ripper";

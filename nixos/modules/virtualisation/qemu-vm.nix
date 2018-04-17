@@ -98,7 +98,7 @@ let
           ${qemuGraphics} \
           ${toString config.virtualisation.qemu.options} \
           $QEMU_OPTS \
-          $@
+          "$@"
     '';
 
 
@@ -320,7 +320,7 @@ in
         mkOption {
           default = [
             "-net nic,netdev=user.0,model=virtio"
-            "-netdev user,id=user.0,\${QEMU_NET_OPTS:+,$QEMU_NET_OPTS}"
+            "-netdev user,id=user.0\${QEMU_NET_OPTS:+,$QEMU_NET_OPTS}"
           ];
           type = types.listOf types.str;
           description = ''

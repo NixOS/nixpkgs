@@ -1,7 +1,7 @@
-{ stdenv, fetchurl, cmake, gnome3, pcre, freetype, glew, gtk3, libjpeg, libpng,
-  SDL, SDL_mixer, libupnp, xorg, pkgconfig, gtest, tinyxml, gmock, readline,
-  libxkbcommon, epoxy, at-spi2-core, dbus, libxml2,
-  enableSoundtrack ? false # Enable the "Open Clonk Soundtrack - Explorers Journey" by David Oerther
+{ stdenv, fetchurl, cmake, pkgconfig
+, SDL2, libvorbis, libogg, libjpeg, libpng, freetype, glew, tinyxml, openal
+, freealut, readline, gcc-unwrapped
+, enableSoundtrack ? false # Enable the "Open Clonk Soundtrack - Explorers Journey" by David Oerther
 }:
 
 let
@@ -10,32 +10,38 @@ let
     sha256 = "1ckj0dlpp5zsnkbb5qxxfxpkiq76jj2fgj91fyf3ll7n0gbwcgw5";
   };
 in stdenv.mkDerivation rec {
-  version = "7.0";
+  version = "8.1";
   name = "openclonk-${version}";
 
   src = fetchurl {
-    url = "http://www.openclonk.org/builds/release/7.0/openclonk-${version}-src.tar.bz2";
-    sha256 = "0ch71dqaaalg744pc1gvg6sj2yp2kgvy2m4yh6l7ljkpf8fj66mw";
+    url = "http://www.openclonk.org/builds/release/8.1/openclonk-${version}-src.tar.bz2";
+    sha256 = "0imkqjp8lww5p0cnqf4k4mb2v682mnsas63qmiz17rspakr7fxik";
   };
 
   postInstall = ''
     mv -v $out/games/openclonk $out/bin/
   '' + stdenv.lib.optionalString enableSoundtrack ''
-    cp -v ${soundtrack_src} $out/share/games/openclonk/Music.ocg
+    ln -sv ${soundtrack_src} $out/share/games/openclonk/Music.ocg
   '';
 
   enableParallelBuilding = true;
 
+  nativeBuildInputs = [ cmake pkgconfig ];
+
   buildInputs = [
-    cmake gnome3.gtksourceview pcre freetype glew gtk3 libjpeg libpng SDL
-    SDL_mixer libupnp tinyxml xorg.libpthreadstubs libxkbcommon xorg.libXdmcp
-    pkgconfig gtest gmock readline epoxy at-spi2-core dbus libxml2
+    SDL2 libvorbis libogg libjpeg libpng freetype glew tinyxml openal freealut
+    readline
   ];
+
+  cmakeFlags = [ "-DCMAKE_AR=${gcc-unwrapped}/bin/gcc-ar" "-DCMAKE_RANLIB=${gcc-unwrapped}/bin/gcc-ranlib" ];
+
+  cmakeBuildType = "RelWithDebInfo";
 
   meta = with stdenv.lib; {
     description = "Free multiplayer action game in which you control clonks, small but witty and nimble humanoid beings";
-    homepage = http://openclonk.org;
+    homepage = https://www.openclonk.org;
     license = if enableSoundtrack then licenses.unfreeRedistributable else licenses.isc;
-    platforms = platforms.all;
+    maintainers = with maintainers; [ lheckemann ];
+    platforms = [ "x86_64-linux" "i686-linux" ];
   };
 }

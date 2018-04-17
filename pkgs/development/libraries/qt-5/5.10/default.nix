@@ -90,6 +90,7 @@ let
       qtscript = callPackage ../modules/qtscript.nix {};
       qtsensors = callPackage ../modules/qtsensors.nix {};
       qtserialport = callPackage ../modules/qtserialport.nix {};
+      qtspeech = callPackage ../modules/qtspeech.nix {};
       qtsvg = callPackage ../modules/qtsvg.nix {};
       qttools = callPackage ../modules/qttools.nix {};
       qttranslations = callPackage ../modules/qttranslations.nix {};

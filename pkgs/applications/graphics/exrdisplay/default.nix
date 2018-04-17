@@ -3,11 +3,11 @@
 assert fltk.glSupport;
 
 stdenv.mkDerivation {
-  name ="openexr_viewers-2.2.0";
+  name ="openexr_viewers-2.2.1";
 
   src = fetchurl {
-    url =  "mirror://savannah/openexr/openexr_viewers-2.2.0.tar.gz";
-    sha256 = "1s84vnas12ybx8zz0jcmpfbk9m4ab5bg2d3cglqwk3wys7jf4gzp";
+    url =  "mirror://savannah/openexr/openexr_viewers-2.2.1.tar.gz";
+    sha256 = "1ixx2wbjp4rvsf7h3bkja010gl1ihjrcjzy7h20jnn47ikg12vj8";
   };
 
   configurePhase = ''

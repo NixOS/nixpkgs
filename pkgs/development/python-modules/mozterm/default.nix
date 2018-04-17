@@ -1,8 +1,11 @@
-{ lib, buildPythonPackage, fetchPypi }:
+{ lib, buildPythonPackage, fetchPypi, isPy3k }:
 
 buildPythonPackage rec {
   pname = "mozterm";
   version = "0.1.0";
+
+  # name 'unicode' is not defined
+  disabled = isPy3k;
 
   src = fetchPypi {
     inherit pname version;

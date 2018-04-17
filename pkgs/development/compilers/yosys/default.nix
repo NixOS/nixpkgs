@@ -6,14 +6,14 @@ with builtins;
 
 stdenv.mkDerivation rec {
   name = "yosys-${version}";
-  version = "2018.03.07";
+  version = "2018.03.21";
 
   srcs = [
     (fetchFromGitHub {
       owner  = "yosyshq";
       repo   = "yosys";
-      rev    = "8b604004dae31f7f3120685dd05d16a4bace904a";
-      sha256 = "18i4l5rka3l9lg8cdpigprw80im293j3bmv0zab1gxf3rhbjpcb7";
+      rev    = "3f0070247590458c5ed28c5a7abfc3b9d1ec138b";
+      sha256 = "0rsnjk25asg7dkxcmim464rmxgvm7x7njmcp5nyl8y4iwn8i9p8v";
       name   = "yosys";
     })
 
@@ -35,14 +35,18 @@ stdenv.mkDerivation rec {
   buildInputs = [ tcl readline libffi python3 bison flex ];
 
   patchPhase = ''
+    substituteInPlace ../yosys-abc/Makefile \
+      --replace 'CC   := gcc' ""
     substituteInPlace ./Makefile \
+      --replace 'CXX = clang' "" \
+      --replace 'ABCMKARGS = CC="$(CXX)"' 'ABCMKARGS =' \
       --replace 'echo UNKNOWN' 'echo ${substring 0 10 (elemAt srcs 0).rev}'
   '';
 
   preBuild = ''
     chmod -R u+w ../yosys-abc
     ln -s ../yosys-abc abc
-    make config-gcc
+    make config-${if stdenv.cc.isClang or false then "clang" else "gcc"}
     echo 'ABCREV := default' >> Makefile.conf
     makeFlags="PREFIX=$out $makeFlags"
   '';
@@ -61,6 +65,6 @@ stdenv.mkDerivation rec {
     homepage    = http://www.clifford.at/yosys/;
     license     = stdenv.lib.licenses.isc;
     maintainers = with stdenv.lib.maintainers; [ shell thoughtpolice ];
-    platforms   = stdenv.lib.platforms.linux;
+    platforms   = stdenv.lib.platforms.unix;
   };
 }

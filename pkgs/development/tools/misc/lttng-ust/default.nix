@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "LTTng Userspace Tracer libraries";
-    homepage = http://lttng.org/;
+    homepage = https://lttng.org/;
     license = licenses.lgpl21Plus;
     platforms = platforms.linux;
     maintainers = [ maintainers.bjornfor ];

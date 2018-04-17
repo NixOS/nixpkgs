@@ -6,29 +6,62 @@
   kubelets
 }:
 let
-  runWithCFSSL = name: cmd:
-    builtins.fromJSON (builtins.readFile (
-      pkgs.runCommand "${name}-cfss.json" {
-        buildInputs = [ pkgs.cfssl ];
-      } "cfssl ${cmd} > $out"
-    ));
+   runWithCFSSL = name: cmd:
+     let secrets = pkgs.runCommand "${name}-cfss.json" {
+         buildInputs = [ pkgs.cfssl pkgs.jq ];
+         outputs = [ "out" "cert" "key" "csr" ];
+       }
+       ''
+         (
+           echo "${cmd}"
+           cfssl ${cmd} > tmp
+           cat tmp | jq -r .key > $key
+           cat tmp | jq -r .cert > $cert
+           cat tmp | jq -r .csr > $csr
 
-  writeCFSSL = content:
-    pkgs.runCommand content.name {
-      buildInputs = [ pkgs.cfssl ];
-    } ''
-      mkdir -p $out
-      cd $out
-      cat ${writeFile content} | cfssljson -bare ${content.name}
-    '';
+           touch $out
+         ) 2>&1 | fold -w 80 -s
+       '';
+     in {
+       key = secrets.key;
+       cert = secrets.cert;
+       csr = secrets.csr;
+     };
+
+   writeCFSSL = content:
+     pkgs.runCommand content.name {
+      buildInputs = [ pkgs.cfssl pkgs.jq ];
+     } ''
+       mkdir -p $out
+       cd $out
+
+       json=${pkgs.lib.escapeShellArg (builtins.toJSON content)}
+
+       # for a given $field in the $json, treat the associated value as a
+       # file path and substitute the contents thereof into the $json
+       # object.
+       expandFileField() {
+         local field=$1
+         if jq -e --arg field "$field" 'has($field)'; then
+           local path="$(echo "$json" | jq -r ".$field")"
+           json="$(echo "$json" | jq --arg val "$(cat "$path")" ".$field = \$val")"
+         fi
+       }
+
+       expandFileField key
+       expandFileField ca
+       expandFileField cert
+
+       echo "$json" | cfssljson -bare ${content.name}
+     '';
 
   noCSR = content: pkgs.lib.filterAttrs (n: v: n != "csr") content;
   noKey = content: pkgs.lib.filterAttrs (n: v: n != "key") content;
 
-  writeFile = content: pkgs.writeText "content" (
-    if pkgs.lib.isAttrs content then builtins.toJSON content
-    else toString content
-  );
+  writeFile = content:
+    if pkgs.lib.isDerivation content
+    then content
+    else pkgs.writeText "content" (builtins.toJSON content);
 
   createServingCertKey = { ca, cn, hosts? [], size ? 2048, name ? cn }:
     noCSR (

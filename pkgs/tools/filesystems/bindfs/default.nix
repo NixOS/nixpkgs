@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
   name    = "bindfs-${version}";
 
   src = fetchurl {
-    url    = "http://bindfs.org/downloads/${name}.tar.gz";
+    url    = "https://bindfs.org/downloads/${name}.tar.gz";
     sha256 = "1dgqjq2plpds442ygpv8czr5v199ljscp33m89y19x04ssljrymc";
   };
 

@@ -137,7 +137,6 @@ let
 
       # Slices / containers.
       "slices.target"
-      "system.slice"
       "user.slice"
       "machine.slice"
       "machines.target"
@@ -524,6 +523,14 @@ in
       '';
     };
 
+    systemd.enableCgroupAccounting = mkOption {
+      default = false;
+      type = types.bool;
+      description = ''
+        Whether to enable cgroup accounting.
+      '';
+    };
+
     systemd.extraConfig = mkOption {
       default = "";
       type = types.lines;
@@ -725,6 +732,13 @@ in
 
       "systemd/system.conf".text = ''
         [Manager]
+        ${optionalString config.systemd.enableCgroupAccounting ''
+          DefaultCPUAccounting=yes
+          DefaultIOAccounting=yes
+          DefaultBlockIOAccounting=yes
+          DefaultMemoryAccounting=yes
+          DefaultTasksAccounting=yes
+        ''}
         ${config.systemd.extraConfig}
       '';
 
@@ -821,7 +835,8 @@ in
 
     system.requiredKernelConfig = map config.lib.kernelConfig.isEnabled
       [ "DEVTMPFS" "CGROUPS" "INOTIFY_USER" "SIGNALFD" "TIMERFD" "EPOLL" "NET"
-        "SYSFS" "PROC_FS" "FHANDLE" "DMIID" "AUTOFS4_FS" "TMPFS_POSIX_ACL"
+        "SYSFS" "PROC_FS" "FHANDLE" "CRYPTO_USER_API_HASH" "CRYPTO_HMAC"
+        "CRYPTO_SHA256" "DMIID" "AUTOFS4_FS" "TMPFS_POSIX_ACL"
         "TMPFS_XATTR" "SECCOMP"
       ];
 

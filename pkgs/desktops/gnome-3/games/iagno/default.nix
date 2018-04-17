@@ -3,11 +3,11 @@
 
 stdenv.mkDerivation rec {
   name = "iagno-${version}";
-  version = "3.26.1";
+  version = "3.28.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/iagno/${gnome3.versionBranch version}/${name}.tar.xz";
-    sha256 = "3476810d0c42aa1600484de2c111c94e0cf5247a98f071b23a0b5e3036362121";
+    sha256 = "12haq1vgrr6wf970rja55rcg0352sm0i3l5z7gj0ipr2isv8506x";
   };
 
   passthru = {

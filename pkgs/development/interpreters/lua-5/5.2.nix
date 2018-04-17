@@ -19,17 +19,17 @@ stdenv.mkDerivation rec {
     sha256 = "0b8034v1s82n4dg5rzcn12067ha3nxaylp2vdp8gg08kjsbzphhk";
   };
 
-  nativeBuildInputs = [ readline ];
+  buildInputs = [ readline ];
 
   patches = if stdenv.isDarwin then [ ./5.2.darwin.patch ] else [ dsoPatch ];
 
   configurePhase =
     if stdenv.isDarwin
     then ''
-    makeFlagsArray=( INSTALL_TOP=$out INSTALL_MAN=$out/share/man/man1 PLAT=macosx CFLAGS="-DLUA_USE_LINUX -fno-common -O2 -fPIC${if compat then " -DLUA_COMPAT_ALL" else ""}" LDFLAGS="-fPIC" V=${luaversion} R=${version} )
+    makeFlagsArray=( INSTALL_TOP=$out INSTALL_MAN=$out/share/man/man1 PLAT=macosx CFLAGS="-DLUA_USE_LINUX -fno-common -O2 -fPIC${if compat then " -DLUA_COMPAT_ALL" else ""}" LDFLAGS="-fPIC" V=${luaversion} R=${version}  CC="$CC" )
     installFlagsArray=( TO_BIN="lua luac" TO_LIB="liblua.${version}.dylib" INSTALL_DATA='cp -d' )
   '' else ''
-    makeFlagsArray=( INSTALL_TOP=$out INSTALL_MAN=$out/share/man/man1 PLAT=linux CFLAGS="-DLUA_USE_LINUX -O2 -fPIC${if compat then " -DLUA_COMPAT_ALL" else ""}" LDFLAGS="-fPIC" V=${luaversion} R=${version} )
+    makeFlagsArray=( INSTALL_TOP=$out INSTALL_MAN=$out/share/man/man1 PLAT=linux CFLAGS="-DLUA_USE_LINUX -O2 -fPIC${if compat then " -DLUA_COMPAT_ALL" else ""}" LDFLAGS="-fPIC" V=${luaversion} R=${version} CC="$CC" AR="$AR q" RANLIB="$RANLIB" )
     installFlagsArray=( TO_BIN="lua luac" TO_LIB="liblua.a liblua.so liblua.so.${luaversion} liblua.so.${version}" INSTALL_DATA='cp -d' )
   '';
 
@@ -55,31 +55,6 @@ stdenv.mkDerivation rec {
     Cflags: -I$out/include
     EOF
   '';
-
-  crossAttrs = let
-    inherit (hostPlatform) isDarwin isMinGW;
-  in {
-    configurePhase = ''
-      makeFlagsArray=(
-        INSTALL_TOP=$out
-        INSTALL_MAN=$out/share/man/man1
-        V=${luaversion}
-        R=${version}
-        ${if isMinGW then "mingw" else stdenv.lib.optionalString isDarwin ''
-        ''}
-      )
-    '' + stdenv.lib.optionalString isMinGW ''
-      installFlagsArray=(
-        TO_BIN="lua.exe luac.exe"
-        TO_LIB="liblua.a lua52.dll"
-        INSTALL_DATA="cp -d"
-      )
-    '';
-  } // stdenv.lib.optionalAttrs isDarwin {
-    postPatch = ''
-      sed -i -e 's/-Wl,-soname[^ ]* *//' src/Makefile
-    '';
-  };
 
   meta = {
     homepage = http://www.lua.org;

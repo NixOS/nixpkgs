@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, glib, pkgconfig, perl, gettext, gobjectIntrospection, libintlOrEmpty, gnome3 }:
+{ stdenv, fetchurl, glib, pkgconfig, perl, gettext, gobjectIntrospection, libintl, gnome3 }:
 let
   pname = "libgtop";
   version = "2.38.0";
@@ -12,10 +12,7 @@ stdenv.mkDerivation rec {
   };
 
   propagatedBuildInputs = [ glib ];
-  buildInputs = libintlOrEmpty;
   nativeBuildInputs = [ pkgconfig perl gettext gobjectIntrospection ];
-
-  NIX_LDFLAGS = stdenv.lib.optionalString stdenv.isDarwin "-lintl";
 
   passthru = {
     updateScript = gnome3.updateScript {

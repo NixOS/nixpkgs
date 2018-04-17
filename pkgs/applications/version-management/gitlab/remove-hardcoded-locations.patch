@@ -1,8 +1,8 @@
 diff --git a/config/environments/production.rb b/config/environments/production.rb
-index c5cbfcf64c..e40f10e25f 100644
+index c5cbfcf64c..4d01f6fab8 100644
 --- a/config/environments/production.rb
 +++ b/config/environments/production.rb
-@@ -70,14 +70,16 @@ Rails.application.configure do
+@@ -70,10 +70,10 @@ Rails.application.configure do
  
    config.action_mailer.delivery_method = :sendmail
    # Defaults to:
@@ -11,23 +11,17 @@ index c5cbfcf64c..e40f10e25f 100644
 -  # #   arguments: '-i -t'
 -  # # }
 +  config.action_mailer.sendmail_settings = {
-+    location: '/run/wrappers/bin/sendmail',
++    location: '/usr/sbin/sendmail',
 +    arguments: '-i -t'
 +  }
    config.action_mailer.perform_deliveries = true
    config.action_mailer.raise_delivery_errors = true
  
-   config.eager_load = true
- 
-   config.allow_concurrency = false
-+
-+  config.active_record.dump_schema_after_migration = false
- end
 diff --git a/config/gitlab.yml.example b/config/gitlab.yml.example
-index 0b33783869..cd4e41d9bd 100644
+index bd696a7f2c..44e3863736 100644
 --- a/config/gitlab.yml.example
 +++ b/config/gitlab.yml.example
-@@ -574,7 +574,7 @@ production: &base
+@@ -590,7 +590,7 @@ production: &base
    # CAUTION!
    # Use the default values unless you really know what you are doing
    git:
@@ -37,10 +31,10 @@ index 0b33783869..cd4e41d9bd 100644
    ## Webpack settings
    # If enabled, this will tell rails to serve frontend assets from the webpack-dev-server running
 diff --git a/config/initializers/1_settings.rb b/config/initializers/1_settings.rb
-index 8ddf8e4d2e..559cf9adf7 100644
+index 0bea8a4f4b..290248547b 100644
 --- a/config/initializers/1_settings.rb
 +++ b/config/initializers/1_settings.rb
-@@ -252,7 +252,7 @@ Settings.gitlab['user']       ||= 'git'
+@@ -255,7 +255,7 @@ Settings.gitlab['user']       ||= 'git'
  Settings.gitlab['user_home']  ||= begin
    Etc.getpwnam(Settings.gitlab['user']).dir
  rescue ArgumentError # no user configured
@@ -49,7 +43,7 @@ index 8ddf8e4d2e..559cf9adf7 100644
  end
  Settings.gitlab['time_zone'] ||= nil
  Settings.gitlab['signup_enabled'] ||= true if Settings.gitlab['signup_enabled'].nil?
-@@ -491,7 +491,7 @@ Settings.backup['upload']['storage_class'] ||= nil
+@@ -507,7 +507,7 @@ Settings.backup['upload']['storage_class'] ||= nil
  # Git
  #
  Settings['git'] ||= Settingslogic.new({})
@@ -58,29 +52,42 @@ index 8ddf8e4d2e..559cf9adf7 100644
  
  # Important: keep the satellites.path setting until GitLab 9.0 at
  # least. This setting is fed to 'rm -rf' in
+diff --git a/lib/api/api.rb b/lib/api/api.rb
+index e953f3d2ec..3a8d9f076b 100644
+--- a/lib/api/api.rb
++++ b/lib/api/api.rb
+@@ -2,7 +2,7 @@ module API
+   class API < Grape::API
+     include APIGuard
+ 
+-    LOG_FILENAME = Rails.root.join("log", "api_json.log")
++    LOG_FILENAME = File.join(ENV["GITLAB_LOG_PATH"], "api_json.log")
+ 
+     NO_SLASH_URL_PART_REGEX = %r{[^/]+}
+     PROJECT_ENDPOINT_REQUIREMENTS = { id: NO_SLASH_URL_PART_REGEX }.freeze
 diff --git a/lib/gitlab/logger.rb b/lib/gitlab/logger.rb
-index 59b21149a9..4f4a39a06c 100644
+index a42e312b5d..ccaab9229e 100644
 --- a/lib/gitlab/logger.rb
 +++ b/lib/gitlab/logger.rb
-@@ -26,7 +26,7 @@
+@@ -26,7 +26,7 @@ module Gitlab
      end
  
      def self.full_log_path
 -      Rails.root.join("log", file_name)
-+      File.join(ENV["GITLAB_LOG_PATH"], file_name)
++        File.join(ENV["GITLAB_LOG_PATH"], file_name)
      end
  
      def self.cache_key
 diff --git a/lib/gitlab/uploads_transfer.rb b/lib/gitlab/uploads_transfer.rb
-index b5f4124052..f72c556983 100644
+index 7d7400bdab..cb25211d44 100644
 --- a/lib/gitlab/uploads_transfer.rb
 +++ b/lib/gitlab/uploads_transfer.rb
 @@ -1,7 +1,7 @@
  module Gitlab
    class UploadsTransfer < ProjectTransfer
      def root_dir
--      File.join(CarrierWave.root, FileUploader.base_dir)
-+      ENV['GITLAB_UPLOADS_PATH'] || File.join(CarrierWave.root, FileUploader.base_dir)
+-      FileUploader.root
++      ENV['GITLAB_UPLOADS_PATH'] || FileUploader.root
      end
    end
  end
@@ -98,7 +105,7 @@ index 3e0c436d6e..28cefc5514 100644
      end
    end
 diff --git a/lib/system_check/app/uploads_directory_exists_check.rb b/lib/system_check/app/uploads_directory_exists_check.rb
-index 7026d0ba07..6d88b8b9fb 100644
+index 7026d0ba07..c56e1f7ed9 100644
 --- a/lib/system_check/app/uploads_directory_exists_check.rb
 +++ b/lib/system_check/app/uploads_directory_exists_check.rb
 @@ -4,12 +4,13 @@ module SystemCheck
@@ -113,7 +120,7 @@ index 7026d0ba07..6d88b8b9fb 100644
 +        uploads_dir = ENV['GITLAB_UPLOADS_PATH'] || Rails.root.join('public/uploads')
          try_fixing_it(
 -          "sudo -u #{gitlab_user} mkdir #{Rails.root}/public/uploads"
-+          "sudo -u #{gitlab_user} mkdir #{uploads_dir}"
++            "sudo -u #{gitlab_user} mkdir #{uploads_dir}"
          )
          for_more_information(
            see_installation_guide_section 'GitLab'
@@ -143,14 +150,3 @@ index b276a81eac..070e3ebd81 100644
        end
      end
    end
---- a/lib/api/api.rb	1970-01-01 01:00:01.000000000 +0100
-+++ b/lib/api/api.rb	2017-09-28 19:37:24.953605705 +0200
-@@ -2,7 +2,7 @@
-   class API < Grape::API
-     include APIGuard
- 
--    LOG_FILENAME = Rails.root.join("log", "api_json.log")
-+    LOG_FILENAME = File.join(ENV["GITLAB_LOG_PATH"], "api_json.log")
- 
-     use GrapeLogging::Middleware::RequestLogger,
-         logger: Logger.new(LOG_FILENAME),

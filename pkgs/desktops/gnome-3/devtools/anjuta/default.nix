@@ -3,11 +3,11 @@
 
 stdenv.mkDerivation rec {
   name = "anjuta-${version}";
-  version = "3.26.0";
+  version = "3.28.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/anjuta/${gnome3.versionBranch version}/${name}.tar.xz";
-    sha256 = "fb895464c1a3c915bb2bb3ea5d236fd17202caa7205f6792f70a75affc343d70";
+    sha256 = "0ya7ajai9rx9g597sr5wawr6l5pb2s34bbjdsbnx0lkrhnjv11xh";
   };
 
   passthru = {

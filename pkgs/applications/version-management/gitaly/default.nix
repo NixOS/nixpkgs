@@ -7,14 +7,14 @@ let
     gemdir = ./.;
   };
 in buildGoPackage rec {
-  version = "0.59.2";
+  version = "0.81.0";
   name = "gitaly-${version}";
 
   src = fetchFromGitLab {
     owner = "gitlab-org";
     repo = "gitaly";
     rev = "v${version}";
-    sha256 = "08f109rw3qxdr93l0kl8wxmrvn846a6vdkssvrp2zr40yn9wif7m";
+    sha256 = "01sw5y201xbd21k9r7xmzqiiypb924ac95nqqfhzplqnssa98n9y";
   };
 
   goPackagePath = "gitlab.com/gitlab-org/gitaly";

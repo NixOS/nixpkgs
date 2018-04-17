@@ -33,16 +33,11 @@ let
 
 in python.pkgs.buildPythonApplication rec {
   pname = "appdaemon";
-  version = "3.0.0b4";
+  version = "3.0.0";
 
   src = python.pkgs.fetchPypi {
     inherit pname version;
-    sha256 = "0dfc37ecd8e1344001d4970d32813c581aba1385cf3b82c69f8b7df2eca6c019";
-  };
-
-  patches = fetchpatch {
-    url = "${meta.homepage}/pull/252.patch";
-    sha256 = "164qvgdibd2645yxm4n16bhnan13wrchfi70jp2ff806fwdg9mg0";
+    sha256 = "ed925d3cb25db2c3f57304a0bca8fd0d9072d7ffe347ac5fcf68c4a30b7f1721";
   };
 
   propagatedBuildInputs = with python.pkgs; [

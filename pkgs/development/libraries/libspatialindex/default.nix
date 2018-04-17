@@ -16,6 +16,6 @@ stdenv.mkDerivation rec {
     description = "Extensible spatial index library in C++";
     homepage = http://libspatialindex.github.io/;
     license = stdenv.lib.licenses.mit;
-    platforms = stdenv.lib.platforms.linux;
+    platforms = stdenv.lib.platforms.unix;
   };
 }

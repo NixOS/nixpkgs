@@ -3,11 +3,11 @@
 
 stdenv.mkDerivation rec {
   name = "gnome-packagekit-${version}";
-  version = "3.26.0";
+  version = "3.28.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-packagekit/${gnome3.versionBranch version}/${name}.tar.xz";
-    sha256 = "6a219e16923d3976f424416c944bef06913922da24bc9e6644ec114c2d563417";
+    sha256 = "051q3hc78qa85mfh4jxxprfcrfj1hva6smfqsgzm0kx4zkkj1c1r";
   };
 
   passthru = {

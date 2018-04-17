@@ -204,12 +204,11 @@ rec {
         });
 
       validity = import ./check-meta.nix {
-        inherit lib config meta derivationArg;
-        mkDerivationArg = attrs;
+        inherit lib config meta;
         # Nix itself uses the `system` field of a derivation to decide where
         # to build it. This is a bit confusing for cross compilation.
-        inherit (stdenv) system;
-      };
+        inherit (stdenv) hostPlatform;
+      } attrs;
 
       # The meta attribute is passed in the resulting attribute set,
       # but it's not part of the actual derivation, i.e., it's not

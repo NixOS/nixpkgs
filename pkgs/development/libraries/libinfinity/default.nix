@@ -4,7 +4,7 @@
 , avahiSupport ? false # build support for Avahi in libinfinity
 , stdenv, fetchurl, pkgconfig, glib, libxml2, gnutls, gsasl
 , gtk2 ? null, gtkdoc ? null, avahi ? null, libdaemon ? null, libidn, gss
-, libintlOrEmpty }:
+, libintl }:
 
 let
   edf = flag: feature: (if flag then "--with-" else "--without-") + feature;
@@ -19,14 +19,14 @@ in stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ glib libxml2 gsasl libidn gss libintlOrEmpty ]
+  buildInputs = [ glib libxml2 gsasl libidn gss libintl ]
     ++ optional gtkWidgets gtk2
     ++ optional documentation gtkdoc
     ++ optional avahiSupport avahi
     ++ optional daemon libdaemon;
 
   propagatedBuildInputs = [ gnutls ];
-  
+
   configureFlags = ''
     ${if documentation then "--enable-gtk-doc" else "--disable-gtk-doc"}
     ${edf gtkWidgets "inftextgtk"}
@@ -35,8 +35,6 @@ in stdenv.mkDerivation rec {
     ${edf daemon "libdaemon"}
     ${edf avahiSupport "avahi"}
   '';
-
-  NIX_LDFLAGS = stdenv.lib.optionalString stdenv.isDarwin "-lintl";
 
   meta = {
     homepage = http://gobby.0x539.de/;

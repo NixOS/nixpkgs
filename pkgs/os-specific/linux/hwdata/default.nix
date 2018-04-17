@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "hwdata-${version}";
-  version = "0.309";
+  version = "0.310";
 
   src = fetchurl {
-    url = "https://github.com/vcrhonek/hwdata/archive/v0.309.tar.gz";
-    sha256 = "1njx4lhg7a0cawz82x535vk4mslmnfj7nmf8dbq8kgqxiqh6h2c7";
+    url = "https://github.com/vcrhonek/hwdata/archive/v0.310.tar.gz";
+    sha256 = "08mhwwc9g9cpfyxrwwviflkdk2jnqs6hc95iv4r5d59hqrj5kida";
   };
 
   preConfigure = "patchShebangs ./configure";

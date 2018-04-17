@@ -7,14 +7,14 @@ let
 in
 
 python3Packages.buildPythonApplication rec {
-  version = "3.1.2";
+  version = "3.1.6";
   name = "electron-cash-${version}";
 
   src = fetchurl {
     url = "https://electroncash.org/downloads/${version}/win-linux/ElectronCash-${version}.tar.gz";
     # Verified using official SHA-1 and signature from
     # https://github.com/fyookball/keys-n-hashes
-    sha256 = "18h44jfbc2ksj34hdzgszvvq82xi28schl3wp3lkq9fjp7ny0mf3";
+    sha256 = "062k5iw0jcp10zxrffvgiyfg51c5xzs7gmm638icx01yy67d58dm";
   };
 
   propagatedBuildInputs = with python3Packages; [

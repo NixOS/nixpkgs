@@ -24,7 +24,7 @@ runCommand "dbus-1"
           rewritePrefix="file://${dbus}/share/xml/dbus/"/>
       </catalog>
     '';
-    nativeBuildInputs = [ libxslt ];
+    nativeBuildInputs = [ libxslt.bin ];
   }
   ''
     mkdir -p $out

@@ -1,43 +1,48 @@
-{ stdenv, intltool, fetchurl, exempi, libxml2
+{ stdenv, gettext, fetchurl, libxml2, libgdata
 , pkgconfig, gtk3, glib, tracker, tracker-miners
-, makeWrapper, itstool, gegl, babl, lcms2
-, desktop-file-utils, gmp, libmediaart, wrapGAppsHook
-, gnome3, librsvg, gdk_pixbuf, libexif, gexiv2, geocode-glib
+, itstool, gegl, babl, libdazzle, gfbgraph, grilo-plugins
+, grilo, gnome-online-accounts
+, desktop-file-utils, wrapGAppsHook
+, gnome3, gdk_pixbuf, gexiv2, geocode-glib
 , dleyna-renderer }:
 
-stdenv.mkDerivation rec {
-  name = "gnome-photos-${version}";
-  version = "3.26.3";
+let
+  pname = "gnome-photos";
+  version = "3.28.0";
+in stdenv.mkDerivation rec {
+  name = "${pname}-${version}";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gnome-photos/${gnome3.versionBranch version}/${name}.tar.xz";
-    sha256 = "028de4c8662b7d1dc3ca6c3fbe3ce7f6bb90dd097708e99f235a409756dbadab";
-  };
-
-  passthru = {
-    updateScript = gnome3.updateScript { packageName = "gnome-photos"; attrPath = "gnome3.gnome-photos"; };
+    url = "mirror://gnome/sources/${pname}/${gnome3.versionBranch version}/${name}.tar.xz";
+    sha256 = "1n280j7crgwlzyf09j66f1zkrnnhfrr8pshn824njs1xyk3g0q11";
   };
 
   # doCheck = true;
 
-  NIX_CFLAGS_COMPILE = "-I${gnome3.glib.dev}/include/gio-unix-2.0";
+  nativeBuildInputs = [ pkgconfig gettext itstool libxml2 desktop-file-utils wrapGAppsHook ];
+  buildInputs = [
+    gtk3 glib gegl babl libgdata libdazzle
+    gnome3.gsettings-desktop-schemas
+    gdk_pixbuf gnome3.defaultIconTheme
+    gfbgraph grilo-plugins grilo
+    gnome-online-accounts tracker
+    gexiv2 geocode-glib dleyna-renderer
+    tracker-miners # For 'org.freedesktop.Tracker.Miner.Files' GSettings schema
+  ];
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ gtk3 glib intltool itstool gegl babl gnome3.libgdata
-                  gnome3.gsettings-desktop-schemas makeWrapper gmp libmediaart
-                  gdk_pixbuf gnome3.defaultIconTheme librsvg exempi
-                  gnome3.gfbgraph gnome3.grilo-plugins gnome3.grilo
-                  gnome3.gnome-online-accounts gnome3.gnome-desktop
-                  lcms2 libexif tracker tracker-miners libxml2 desktop-file-utils
-                  wrapGAppsHook gexiv2 geocode-glib dleyna-renderer ];
 
-  enableParallelBuilding = true;
+  passthru = {
+    updateScript = gnome3.updateScript {
+      packageName = pname;
+      attrPath = "gnome3.${pname}";
+    };
+  };
 
   meta = with stdenv.lib; {
     homepage = https://wiki.gnome.org/Apps/Photos;
-    description = "Photos is an application to access, organize and share your photos with GNOME 3";
+    description = "Access, organize and share your photos";
     maintainers = gnome3.maintainers;
-    license = licenses.gpl2;
+    license = licenses.gpl3Plus;
     platforms = platforms.linux;
   };
 }

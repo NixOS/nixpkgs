@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = http://www.jabberwocky.com/software/paperkey/;
     license = licenses.gpl2;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
     maintainers = with maintainers; [ skeidel ];
   };
 }

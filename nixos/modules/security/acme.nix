@@ -140,14 +140,6 @@ in
         '';
       };
 
-      tosHash = mkOption {
-        type = types.string;
-        default = "cc88d8d9517f490191401e7b54e9ffd12a2b9082ec7a1d4cec6101f9f1647e7b";
-        description = ''
-          SHA256 of the Terms of Services document. This changes once in a while.
-        '';
-      };
-
       production = mkOption {
         type = types.bool;
         default = true;
@@ -196,7 +188,7 @@ in
               let
                 cpath = "${cfg.directory}/${cert}";
                 rights = if data.allowKeysForGroup then "750" else "700";
-                cmdline = [ "-v" "-d" data.domain "--default_root" data.webroot "--valid_min" cfg.validMin "--tos_sha256" cfg.tosHash ]
+                cmdline = [ "-v" "-d" data.domain "--default_root" data.webroot "--valid_min" cfg.validMin ]
                           ++ optionals (data.email != null) [ "--email" data.email ]
                           ++ concatMap (p: [ "-f" p ]) data.plugins
                           ++ concatLists (mapAttrsToList (name: root: [ "-d" (if root == null then name else "${name}:${root}")]) data.extraDomains)
@@ -248,6 +240,7 @@ in
                 };
                 selfsignedService = {
                   description = "Create preliminary self-signed certificate for ${cert}";
+                  path = [ pkgs.openssl ];
                   preStart = ''
                       if [ ! -d '${cpath}' ]
                       then
@@ -258,37 +251,41 @@ in
                   '';
                   script = 
                     ''
-                      # Create self-signed key
-                      workdir="/run/acme-selfsigned-${cert}"
-                      ${pkgs.openssl.bin}/bin/openssl genrsa -des3 -passout pass:x -out $workdir/server.pass.key 2048
-                      ${pkgs.openssl.bin}/bin/openssl rsa -passin pass:x -in $workdir/server.pass.key -out $workdir/server.key
-                      ${pkgs.openssl.bin}/bin/openssl req -new -key $workdir/server.key -out $workdir/server.csr \
+                      workdir="$(mktemp -d)"
+
+                      # Create CA
+                      openssl genrsa -des3 -passout pass:x -out $workdir/ca.pass.key 2048
+                      openssl rsa -passin pass:x -in $workdir/ca.pass.key -out $workdir/ca.key
+                      openssl req -new -key $workdir/ca.key -out $workdir/ca.csr \
+                        -subj "/C=UK/ST=Warwickshire/L=Leamington/O=OrgName/OU=Security Department/CN=example.com"
+                      openssl x509 -req -days 1 -in $workdir/ca.csr -signkey $workdir/ca.key -out $workdir/ca.crt
+
+                      # Create key
+                      openssl genrsa -des3 -passout pass:x -out $workdir/server.pass.key 2048
+                      openssl rsa -passin pass:x -in $workdir/server.pass.key -out $workdir/server.key
+                      openssl req -new -key $workdir/server.key -out $workdir/server.csr \
                         -subj "/C=UK/ST=Warwickshire/L=Leamington/O=OrgName/OU=IT Department/CN=example.com"
-                      ${pkgs.openssl.bin}/bin/openssl x509 -req -days 1 -in $workdir/server.csr -signkey $workdir/server.key -out $workdir/server.crt
+                      openssl x509 -req -days 1 -in $workdir/server.csr -CA $workdir/ca.crt \
+                        -CAkey $workdir/ca.key -CAserial $workdir/ca.srl -CAcreateserial \
+                        -out $workdir/server.crt
 
-                      # Move key to destination
-                      mv $workdir/server.key ${cpath}/key.pem
-                      mv $workdir/server.crt ${cpath}/fullchain.pem
+                      # Copy key to destination
+                      cp $workdir/server.key ${cpath}/key.pem
 
-                      # Create full.pem for e.g. lighttpd (same format as "simp_le ... -f full.pem" creates)
-                      cat "${cpath}/key.pem" "${cpath}/fullchain.pem" > "${cpath}/full.pem"
+                      # Create fullchain.pem (same format as "simp_le ... -f fullchain.pem" creates)
+                      cat $workdir/{server.crt,ca.crt} > "${cpath}/fullchain.pem"
 
-                      # Clean up working directory
-                      rm $workdir/server.csr
-                      rm $workdir/server.pass.key
+                      # Create full.pem for e.g. lighttpd
+                      cat $workdir/{server.key,server.crt,ca.crt} > "${cpath}/full.pem"
 
                       # Give key acme permissions
-                      chmod ${rights} '${cpath}/key.pem'
-                      chown '${data.user}:${data.group}' '${cpath}/key.pem'
-                      chmod ${rights} '${cpath}/fullchain.pem'
-                      chown '${data.user}:${data.group}' '${cpath}/fullchain.pem'
-                      chmod ${rights} '${cpath}/full.pem'
-                      chown '${data.user}:${data.group}' '${cpath}/full.pem'
+                      chown '${data.user}:${data.group}' "${cpath}/"{key,fullchain,full}.pem
+                      chmod ${rights} "${cpath}/"{key,fullchain,full}.pem
                     '';
                   serviceConfig = {
                     Type = "oneshot";
-                    RuntimeDirectory = "acme-selfsigned-${cert}";
                     PermissionsStartOnly = true;
+                    PrivateTmp = true;
                     User = data.user;
                     Group = data.group;
                   };

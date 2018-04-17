@@ -18,10 +18,10 @@ rec {
 
   firefox = common rec {
     pname = "firefox";
-    version = "59.0";
+    version = "59.0.2";
     src = fetchurl {
-      url = "https://hg.mozilla.org/releases/mozilla-release/archive/c61f5f5ead48c78a80c80db5c489bdc7cfaf8175.tar.bz2";
-      sha512 = "03yybi1yp9g29jzdfgrq32r7a0gl2jz64w6ai8219cvhx8y95ahxfznj3vm29frrp6c18dk2nlpv2s89iczwm00lnn42r7dn6s6ppl9";
+      url = "https://hg.mozilla.org/releases/mozilla-release/archive/239e434d6d2b8e1e2b697c3416d1e96d48fe98e5.tar.bz2";
+      sha512 = "3kfh224sfc9ig4733frnskcs49xzjkrs00lxllsvx1imm6f4sf117mqlvc7bhgrn8ldiqn6vaa5g6gd9b7awkk1g975bbzk9namb3yv";
     };
 
     patches = nixpkgsPatches ++ [
@@ -41,10 +41,10 @@ rec {
 
   firefox-esr = common rec {
     pname = "firefox-esr";
-    version = "52.7.1esr";
+    version = "52.7.3esr";
     src = fetchurl {
       url = "mirror://mozilla/firefox/releases/${version}/source/firefox-${version}.source.tar.xz";
-      sha512 = "0275ca9c093fd0dcf09cfd31a4bca8c6ddb87aa74ace6b273a62f61079eeed11c2c0330c52c5f76aa73ed97e9cd18aa63cee69387e1fe346a30e4f9affc91ba7";
+      sha512 = "31y3qrslg61724vmly6gr1lqcrqgpkh3zsl8riax45gizfcp3qbgkvmd5wwfn9fiwjqi6ww3i08j51wxrfxcxznv7c6qzsvzzc30mgw";
     };
 
     patches = nixpkgsPatches;
@@ -136,9 +136,9 @@ in rec {
     src = fetchFromGitHub {
       owner = "SLNOS";
       repo  = "tor-browser";
-      # branch "tor-browser-52.7.0esr-7.5-1-slnos";
-      rev   = "211b2be3fea45a450915b0addcd7783aa939e24a";
-      sha256 = "18gv4r8cjf89mamjh93a856a5yfp7dm3jrk8g05w89vxb3lrl74v";
+      # branch "tor-browser-52.7.3esr-7.5-1-slnos";
+      rev   = "62e77aa47d90c10cfc9c6f3b7358a6bdc3167182";
+      sha256 = "09pyqicv6z0h4lmjdybx56gj3l28gkl0bbpk0pnmlzcyr9vng7zj";
     };
 
     patches = nixpkgsPatches;

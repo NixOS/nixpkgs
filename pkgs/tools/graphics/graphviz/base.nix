@@ -23,8 +23,9 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     libpng libjpeg expat yacc libtool fontconfig gd gts libdevil flex pango
+    gettext
   ] ++ optionals (xorg != null) (with xorg; [ libXrender libXaw libXpm ])
-    ++ optionals (stdenv.isDarwin) [ ApplicationServices gettext ];
+    ++ optionals (stdenv.isDarwin) [ ApplicationServices ];
 
   hardeningDisable = [ "fortify" ];
 

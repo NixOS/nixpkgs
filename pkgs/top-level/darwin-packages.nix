@@ -57,12 +57,16 @@ in
 
   stubs = callPackages ../os-specific/darwin/stubs { };
 
-  swift-corefoundation = callPackage ../os-specific/darwin/swift-corefoundation { };
-
   trash = callPackage ../os-specific/darwin/trash { inherit (darwin.apple_sdk) frameworks; };
 
   usr-include = callPackage ../os-specific/darwin/usr-include { };
 
   xcode = callPackage ../os-specific/darwin/xcode { };
+
+  CoreSymbolication = callPackage ../os-specific/darwin/CoreSymbolication { };
+
+  swift-corelibs = callPackages ../os-specific/darwin/swift-corelibs { };
+
+  darling = callPackage ../os-specific/darwin/darling/default.nix { };
 
 })

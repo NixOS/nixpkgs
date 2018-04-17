@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, cmake, unzip }:
+{ stdenv, lib, fetchurl, cmake, unzip, boost }:
 
 stdenv.mkDerivation rec {
   name = "opencolorio-${version}";
@@ -11,7 +11,9 @@ stdenv.mkDerivation rec {
 
   outputs = [ "bin" "out" "dev" ];
 
-  buildInputs = [ cmake unzip ];
+  buildInputs = [ cmake unzip ] ++ lib.optional stdenv.isDarwin boost;
+
+  cmakeFlags = lib.optional stdenv.isDarwin "-DOCIO_USE_BOOST_PTR=ON";
 
   postInstall = ''
     rm $out/lib/*.a
@@ -23,6 +25,6 @@ stdenv.mkDerivation rec {
     description = "A color management framework for visual effects and animation";
     license = licenses.bsd3;
     maintainers = [ maintainers.goibhniu ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

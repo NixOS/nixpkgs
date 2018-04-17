@@ -11,4 +11,6 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ autoreconfHook pkgconfig ];
+
+  setupHook = ./fts-setup-hook.sh;
 }

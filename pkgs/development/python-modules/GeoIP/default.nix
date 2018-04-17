@@ -23,7 +23,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "MaxMind GeoIP Legacy Database - Python API";
-    homepage = http://www.maxmind.com/;
+    homepage = https://www.maxmind.com/;
     maintainers = with lib.maintainers; [ jluttine ];
     license = lib.licenses.lgpl21Plus;
   };

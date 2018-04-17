@@ -16,10 +16,6 @@ build-idris-package {
     sha256 = "0ifp76cqg340jkkzanx69vg76qivv53vh1lzv9zkp5f49prkwl5d";
   };
 
-  # The tests for this package fail. We should attempt to enable them when
-  # updating this package again.
-  doCheck = false;
-
   idrisDeps = [ prelude base ];
 
   meta = {

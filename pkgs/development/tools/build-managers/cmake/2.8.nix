@@ -1,11 +1,10 @@
 { stdenv, fetchurl, fetchpatch, replace, curl, expat, zlib, bzip2
-, useNcurses ? false, ncurses, useQt4 ? false, qt4, wantPS ? false, ps ? null
+, useNcurses ? false, ncurses, useQt4 ? false, qt4, ps
 , buildPlatform, hostPlatform
 }:
 
 with stdenv.lib;
 
-assert wantPS -> (ps != null);
 assert stdenv ? cc;
 assert stdenv.cc ? libc;
 
@@ -43,11 +42,16 @@ stdenv.mkDerivation rec {
       sha256 = "16acmdr27adma7gs9rs0dxdiqppm15vl3vv3agy7y8s94wyh4ybv";
     });
 
+  postPatch = ''
+    substituteInPlace Utilities/cmlibarchive/CMakeLists.txt \
+      --replace '"-framework CoreServices"' '""'
+  '';
+
   buildInputs = [ curl expat zlib bzip2 ]
     ++ optional useNcurses ncurses
     ++ optional useQt4 qt4;
 
-  propagatedBuildInputs = optional wantPS ps;
+  propagatedBuildInputs = [ ps ];
 
   CMAKE_PREFIX_PATH = concatStringsSep ":"
     (concatMap (p: [ (p.dev or p) (p.out or p) ]) buildInputs);
@@ -76,7 +80,7 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = http://www.cmake.org/;
     description = "Cross-Platform Makefile Generator";
-    platforms = if useQt4 then qt4.meta.platforms else stdenv.lib.platforms.linux;
+    platforms = if useQt4 then qt4.meta.platforms else stdenv.lib.platforms.unix;
     maintainers = with stdenv.lib.maintainers; [ ];
   };
 }

@@ -3,12 +3,7 @@
 with lib;
 
 let
-  cfg = config.services.lighttpd.gitweb;
-  gitwebConfigFile = pkgs.writeText "gitweb.conf" ''
-    # path to git projects (<project>.git)
-    $projectroot = "${cfg.projectroot}";
-    ${cfg.extraConfig}
-  '';
+  cfg = config.services.gitweb;
 
 in
 {
@@ -23,26 +18,9 @@ in
       '';
     };
 
-    projectroot = mkOption {
-      default = "/srv/git";
-      type = types.path;
-      description = ''
-        Path to git projects (bare repositories) that should be served by
-        gitweb. Must not end with a slash.
-      '';
-    };
-
-    extraConfig = mkOption {
-      default = "";
-      type = types.lines;
-      description = ''
-        Verbatim configuration text appended to the generated gitweb.conf file.
-      '';
-    };
-
   };
 
-  config = mkIf cfg.enable {
+  config = mkIf config.services.lighttpd.gitweb.enable {
 
     # declare module dependencies
     services.lighttpd.enableModules = [ "mod_cgi" "mod_redirect" "mod_alias" "mod_setenv" ];
@@ -60,7 +38,7 @@ in
               "/gitweb/"        => "${pkgs.git}/share/gitweb/gitweb.cgi"
           )
           setenv.add-environment = (
-              "GITWEB_CONFIG" => "${gitwebConfigFile}",
+              "GITWEB_CONFIG" => "${cfg.gitwebConfigFile}",
               "HOME" => "${cfg.projectroot}"
           )
       }

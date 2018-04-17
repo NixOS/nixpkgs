@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "libpqxx-${version}";
-  version = "6.1.0";
+  version = "6.1.1";
 
   src = fetchFromGitHub {
     owner = "jtv";
     repo = "libpqxx";
     rev = version;
-    sha256 = "1dv96h10njg115216n2zm6fsvi4kb502hmhhn8cjhlfbxr9vc84q";
+    sha256 = "0yw0wvnpw0j560f5zv4gvmafi19d9hrknwjzl7qrss926aqx65jq";
   };
 
   nativeBuildInputs = [ gnused python2 ];

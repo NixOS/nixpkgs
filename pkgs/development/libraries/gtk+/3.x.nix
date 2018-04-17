@@ -1,7 +1,7 @@
-{ stdenv, fetchurl, fetchpatch, pkgconfig, gettext, perl
+{ stdenv, fetchurl, fetchpatch, pkgconfig, gettext, perl, makeWrapper, shared-mime-info
 , expat, glib, cairo, pango, gdk_pixbuf, atk, at-spi2-atk, gobjectIntrospection
 , xorg, epoxy, json-glib, libxkbcommon, gmp
-, waylandSupport ? stdenv.isLinux, wayland, wayland-protocols
+, waylandSupport ? stdenv.isLinux, mesa_noglu, wayland, wayland-protocols
 , xineramaSupport ? stdenv.isLinux
 , cupsSupport ? stdenv.isLinux, cups ? null
 , darwin, gnome3
@@ -11,19 +11,21 @@ assert cupsSupport -> cups != null;
 
 with stdenv.lib;
 
+let
+  version = "3.22.29";
+in
 stdenv.mkDerivation rec {
   name = "gtk+3-${version}";
-  version = "3.22.28";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gtk+/${gnome3.versionBranch version}/gtk+-${version}.tar.xz";
-    sha256 = "d299612b018cfed7b2c689168ab52b668023708e17c335eb592260d186f15e1f";
+    sha256 = "1y5vzdbgww9l7xcrg13azff2rs94kggkywmpcsh39h7w76wn8zd0";
   };
 
   outputs = [ "out" "dev" ];
   outputBin = "dev";
 
-  nativeBuildInputs = [ pkgconfig gettext gobjectIntrospection perl ];
+  nativeBuildInputs = [ pkgconfig gettext gobjectIntrospection perl makeWrapper ];
 
   patches = [
     ./3.0-immodules.cache.patch
@@ -38,13 +40,11 @@ stdenv.mkDerivation rec {
   propagatedBuildInputs = with xorg; with stdenv.lib;
     [ expat glib cairo pango gdk_pixbuf atk at-spi2-atk gnome3.gsettings-desktop-schemas
       libXrandr libXrender libXcomposite libXi libXcursor libSM libICE ]
-    ++ optionals waylandSupport [ wayland wayland-protocols ]
+    ++ optionals waylandSupport [ mesa_noglu wayland wayland-protocols ]
     ++ optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [ AppKit Cocoa ])
     ++ optional xineramaSupport libXinerama
     ++ optional cupsSupport cups;
   #TODO: colord?
-
-  NIX_LDFLAGS = optionalString stdenv.isDarwin "-lintl";
 
   # demos fail to install, no idea where's the problem
   preConfigure = "sed '/^SRC_SUBDIRS /s/demos//' -i Makefile.in";
@@ -70,6 +70,11 @@ stdenv.mkDerivation rec {
     moveToOutput bin/gtk-update-icon-cache "$out"
     # Launcher
     moveToOutput bin/gtk-launch "$out"
+
+    # TODO: patch glib directly
+    for f in $dev/bin/gtk-encode-symbolic-svg; do
+      wrapProgram $f --prefix XDG_DATA_DIRS : "${shared-mime-info}/share"
+    done
   '';
 
   passthru = {

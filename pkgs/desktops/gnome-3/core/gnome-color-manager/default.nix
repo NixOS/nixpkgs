@@ -2,25 +2,17 @@
 
 let
   pname = "gnome-color-manager";
-  version = "3.26.0";
+  version = "3.28.0";
 in stdenv.mkDerivation rec {
   name = "${pname}-${version}";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${gnome3.versionBranch version}/${name}.tar.xz";
-    sha256 = "1kbi46vk0qf0gxiwm4yhsx8931r7c9cg0c4244j8ncr0hph008b5";
+    sha256 = "1mixga6mq67wgxdsg6rnl7lvyh3z3yabxjmnyjq2k2v8ljgklczc";
   };
 
   nativeBuildInputs = [ meson ninja pkgconfig gettext itstool desktop-file-utils ];
   buildInputs = [ glib gtk3 libexif libtiff colord colord-gtk libcanberra-gtk3 lcms2 vte exiv2 ];
-
-  patches = [
-    # https://bugzilla.gnome.org/show_bug.cgi?id=791158
-    (fetchurl {
-      url = https://bugzilla.gnome.org/attachment.cgi?id=364865;
-      sha256 = "1zh1aql6rwzfhy2xbdw0jqgzrl9l6wf0jcbdkjd67ykbmynh2cmv";
-    })
-  ];
 
   passthru = {
     updateScript = gnome3.updateScript {

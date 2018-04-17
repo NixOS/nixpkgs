@@ -7,13 +7,13 @@
 
 let
   pname   = "NetworkManager";
-  version = "1.10.2";
+  version = "1.10.6";
 in stdenv.mkDerivation rec {
   name    = "network-manager-${version}";
 
   src = fetchurl {
     url    = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "0nv2jm2lsidlrzn4dkbc5rpj8ma4cpzjqz8z8dmwkqvh0zsk970n";
+    sha256 = "0xmc3x41dbcaxjm85wfv405xq1a1n3xw8m8zg645ywm3avlb3w3a";
   };
 
   outputs = [ "out" "dev" ];

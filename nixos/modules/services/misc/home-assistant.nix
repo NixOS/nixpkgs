@@ -104,7 +104,6 @@ in {
   config = mkIf cfg.enable {
     systemd.services.home-assistant = {
       description = "Home Assistant";
-      wantedBy = [ "multi-user.target" ];
       after = [ "network.target" ];
       preStart = lib.optionalString (cfg.config != null) ''
         rm -f ${cfg.configDir}/configuration.yaml
@@ -121,6 +120,16 @@ in {
         ReadWritePaths = "${cfg.configDir}";
         PrivateTmp = true;
       };
+      path = [
+        "/run/wrappers" # needed for ping
+      ];
+    };
+
+    systemd.targets.home-assistant = rec {
+      description = "Home Assistant";
+      wantedBy = [ "multi-user.target" ];
+      wants = [ "home-assistant.service" ];
+      after = wants;
     };
 
     users.extraUsers.hass = {

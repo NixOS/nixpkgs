@@ -12,11 +12,9 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ xcbuild libiconv Cocoa ncurses ];
 
-  dontUseXcbuild = true;
-
   installPhase = ''
     mkdir -p $out/Applications
-    mv pinentry-mac-*/Build/Products/Release/pinentry-mac.app $out/Applications
+    mv Products/Release/pinentry-mac.app $out/Applications
   '';
 
   passthru = {

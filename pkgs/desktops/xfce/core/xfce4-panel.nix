@@ -7,14 +7,14 @@ let
   inherit (stdenv.lib) optional;
   p_name  = "xfce4-panel";
   ver_maj = "4.12";
-  ver_min = "1";
+  ver_min = "2";
 in
 stdenv.mkDerivation rec {
   name = "${p_name}-${ver_maj}.${ver_min}";
 
   src = fetchurl {
     url = "mirror://xfce/src/xfce/${p_name}/${ver_maj}/${name}.tar.bz2";
-    sha256 = "1s52k80911pkp65zkxw9mrnczxsd81svr0djmmcfpjd9rj08pmck";
+    sha256 = "1s8cvsrgmkmmm84g6mghpj2k4777gm22g5lrsf8pdy5qh6xql1a2";
   };
 
   patches = [ ./xfce4-panel-datadir.patch ];

@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "samplv1-${version}";
-  version = "0.8.6";
+  version = "0.9.0";
 
   src = fetchurl {
     url = "mirror://sourceforge/samplv1/${name}.tar.gz";
-    sha256 = "035bq7yfg1yirsqk63zwkzjw9dxl52lrzq9y0w7nga0vb11xdfij";
+    sha256 = "0g67vm9ilmq5nlvk0f3abia9pbinr4ck5v4mll6igni1rxz2n7wk";
   };
 
   buildInputs = [ libjack2 alsaLib liblo libsndfile lv2 qt5.qtbase qt5.qttools];

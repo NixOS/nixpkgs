@@ -30,14 +30,14 @@ in rec {
   aarch64 = filterDoubles predicates.isAarch64;
   x86     = filterDoubles predicates.isx86;
   i686    = filterDoubles predicates.isi686;
-  mips    = filterDoubles predicates.isMips;
   x86_64  = filterDoubles predicates.isx86_64;
+  mips    = filterDoubles predicates.isMips;
 
   cygwin  = filterDoubles predicates.isCygwin;
   darwin  = filterDoubles predicates.isDarwin;
   freebsd = filterDoubles predicates.isFreeBSD;
   # Should be better, but MinGW is unclear, and HURD is bit-rotted.
-  gnu     = filterDoubles (matchAttrs { kernel = parse.kernels.linux;  abi = parse.abis.gnu; });
+  gnu     = filterDoubles (matchAttrs { kernel = parse.kernels.linux; abi = parse.abis.gnu; });
   illumos = filterDoubles predicates.isSunOS;
   linux   = filterDoubles predicates.isLinux;
   netbsd  = filterDoubles predicates.isNetBSD;

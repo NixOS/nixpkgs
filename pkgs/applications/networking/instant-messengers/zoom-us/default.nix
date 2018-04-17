@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, system, makeWrapper,
+{ stdenv, fetchurl, system, makeWrapper, makeDesktopItem,
   alsaLib, dbus, glib, gstreamer, fontconfig, freetype, libpulseaudio, libxml2,
   libxslt, libGLU_combined, nspr, nss, sqlite, utillinux, zlib, xorg, udev, expat, libv4l }:
 
@@ -59,7 +59,7 @@ in stdenv.mkDerivation {
   ];
 
   installPhase = ''
-    $preInstallHooks
+    runHook preInstall
 
     packagePath=$out/share/zoom-us
     mkdir -p $packagePath
@@ -88,8 +88,18 @@ in stdenv.mkDerivation {
     Prefix = $packagePath
     EOF
 
-    $postInstallHooks
+    runHook postInstall
   '';
+
+  postInstall = (makeDesktopItem {
+    name = "zoom-us";
+    exec = "$out/bin/zoom-us %U";
+    icon = "$out/share/zoom-us/application-x-zoom.png";
+    desktopName = "Zoom";
+    genericName = "Video Conference";
+    categories = "Network;Application;";
+    mimeType = "x-scheme-handler/zoommtg;";
+  }).buildCommand;
 
   meta = {
     homepage = https://zoom.us/;

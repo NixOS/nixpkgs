@@ -1,7 +1,7 @@
-{ stdenv, buildPackages, fetchurl, gettext
-, hostPlatform, genPosixLockObjOnly ? false
+{ stdenv, lib, fetchpatch, buildPackages, fetchurl, gettext
+, genPosixLockObjOnly ? false
 }: let
-  genPosixLockObjOnlyAttrs = stdenv.lib.optionalAttrs genPosixLockObjOnly {
+  genPosixLockObjOnlyAttrs = lib.optionalAttrs genPosixLockObjOnly {
     buildPhase = ''
       cd src
       make gen-posix-lock-obj
@@ -17,18 +17,24 @@
   };
 in stdenv.mkDerivation (rec {
   name = "libgpg-error-${version}";
-  version = "1.27";
+  version = "1.28";
 
   src = fetchurl {
     url = "mirror://gnupg/libgpg-error/${name}.tar.bz2";
-    sha256 = "1li95ni122fzinzlmxbln63nmgij63irxfvi52ws4zfbzv3am4sg";
+    sha256 = "0jfsfnh9bxlxiwxws60yah4ybjw2hshmvqp31pri4m4h8ivrbnry";
   };
 
-  patches = if hostPlatform.isRiscV then ./riscv.patch else null;
+  patches = [
+    # Fix builds on ARM, AArch64
+    (fetchpatch {
+      url = "https://github.com/gpg/libgpg-error/commit/791177de023574223eddf7288eb7c5a0721ac623.patch";
+      sha256 = "0vqfw0ak1j37wf6sk9y9vmdyk3kxdxkldhs0bv2waa76s11cmdx0";
+    })
+  ];
 
   postPatch = ''
     sed '/BUILD_TIMESTAMP=/s/=.*/=1970-01-01T00:01+0000/' -i ./configure
-  '' + stdenv.lib.optionalString stdenv.hostPlatform.isMusl ''
+  '' + lib.optionalString stdenv.hostPlatform.isMusl ''
     ln -s lock-obj-pub.x86_64-pc-linux-musl.h src/syscfg/lock-obj-pub.linux-musl.h
   '';
 
@@ -41,7 +47,7 @@ in stdenv.mkDerivation (rec {
   nativeBuildInputs = [ gettext ];
 
   postConfigure =
-    stdenv.lib.optionalString stdenv.isSunOS
+    lib.optionalString stdenv.isSunOS
     # For some reason, /bin/sh on OpenIndiana leads to this at the end of the
     # `config.status' run:
     #   ./config.status[1401]: shift: (null): bad number

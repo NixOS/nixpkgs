@@ -4,7 +4,7 @@
 , bison, coreutils, flex, git, gperf, ninja, pkgconfig, python2, which
 
 , xorg, libXcursor, libXScrnSaver, libXrandr, libXtst
-, fontconfig, freetype, harfbuzz, icu, dbus
+, fontconfig, freetype, harfbuzz, icu, dbus, libdrm
 , zlib, minizip, libjpeg, libpng, libtiff, libwebp, libopus
 , jsoncpp, protobuf, libvpx, srtp, snappy, nss, libevent
 , alsaLib
@@ -63,8 +63,9 @@ qtModule {
         src/3rdparty/chromium/gpu/config/gpu_info_collector_linux.cc
     '';
 
+
   preConfigure = ''
-    export MAKEFLAGS=-j$NIX_BUILD_CORES
+    export NINJAFLAGS=-j$NIX_BUILD_CORES
 
     if [ -d "$PWD/tools/qmake" ]; then
         QMAKEPATH="$PWD/tools/qmake''${QMAKEPATH:+:}$QMAKEPATH"
@@ -104,7 +105,7 @@ qtModule {
 
     # X11 libs
     xorg.xrandr libXScrnSaver libXcursor libXrandr xorg.libpciaccess libXtst
-    xorg.libXcomposite
+    xorg.libXcomposite xorg.libXdamage libdrm
   ];
 
   dontUseNinjaBuild = true;

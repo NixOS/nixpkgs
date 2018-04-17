@@ -32,6 +32,7 @@
 , youtubeSupport     ? true,  youtube-dl    ? null
 , vaapiSupport       ? true,  libva         ? null
 , drmSupport         ? true,  libdrm        ? null
+, openalSupport      ? true,  openalSoft   ? null
 , vapoursynthSupport ? false, vapoursynth   ? null
 , archiveSupport     ? false, libarchive    ? null
 , jackaudioSupport   ? false, libjack2      ? null
@@ -59,6 +60,7 @@ assert dvdnavSupport      -> available libdvdnav;
 assert bluraySupport      -> available libbluray;
 assert speexSupport       -> available speex;
 assert theoraSupport      -> available libtheora;
+assert openalSupport      -> available openalSoft;
 assert pulseSupport       -> available libpulseaudio;
 assert bs2bSupport        -> available libbs2b;
 assert cacaSupport        -> available libcaca;
@@ -113,6 +115,7 @@ in stdenv.mkDerivation rec {
     (enableFeature archiveSupport "libarchive")
     (enableFeature dvdreadSupport "dvdread")
     (enableFeature dvdnavSupport "dvdnav")
+    (enableFeature openalSupport "openal")
     (enableFeature vaapiSupport "vaapi")
     (enableFeature waylandSupport "wayland")
     (enableFeature stdenv.isLinux "dvbin")
@@ -143,6 +146,8 @@ in stdenv.mkDerivation rec {
     ++ optional vdpauSupport       libvdpau
     ++ optional speexSupport       speex
     ++ optional bs2bSupport        libbs2b
+    ++ optional openalSupport      openalSoft
+    ++ optional (openalSupport && stdenv.isDarwin) darwin.apple_sdk.frameworks.OpenAL
     ++ optional libpngSupport      libpng
     ++ optional youtubeSupport     youtube-dl
     ++ optional sdl2Support        SDL2

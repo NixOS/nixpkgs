@@ -1,27 +1,27 @@
-{ stdenv, fetchurl, vala, libxslt, pkgconfig, glib, dbus-glib, gnome3
-, libxml2, intltool, docbook_xsl_ns, docbook_xsl, makeWrapper }:
+{ stdenv, fetchurl, meson, ninja, python3, vala, libxslt, pkgconfig, glib, dbus-glib, gnome3
+, libxml2, docbook_xsl, makeWrapper }:
 
 let
   pname = "dconf";
 in
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";
-  version = "0.26.1";
+  version = "0.28.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${gnome3.versionBranch version}/${name}.tar.xz";
-    sha256 = "0da587hpiqy8h3pswn1102h4b905x8k6mk3ajpi7kf4kzkvv30ym";
+    sha256 = "0hn7v6769xabqz7kvyb2hfm19h46z1whkair7ff752zmbs3b7lv1";
   };
+
+  postPatch = ''
+    chmod +x meson_post_install.py
+    patchShebangs meson_post_install.py
+  '';
 
   outputs = [ "out" "lib" "dev" ];
 
-  nativeBuildInputs = [ vala pkgconfig intltool libxslt libxml2 docbook_xsl docbook_xsl_ns makeWrapper ];
+  nativeBuildInputs = [ meson ninja vala pkgconfig python3 libxslt libxml2 docbook_xsl ];
   buildInputs = [ glib dbus-glib ];
-
-  postConfigure = stdenv.lib.optionalString stdenv.isDarwin ''
-    substituteInPlace client/Makefile \
-      --replace "-soname=libdconf.so.1" "-install_name,libdconf.so.1"
-  '';
 
   passthru = {
     updateScript = gnome3.updateScript {
