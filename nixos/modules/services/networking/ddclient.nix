@@ -20,8 +20,8 @@ let
     wildcard=YES
     quiet=${boolToStr cfg.quiet}
     verbose=${boolToStr cfg.verbose}
-    ${cfg.domain}
     ${cfg.extraConfig}
+    ${cfg.domain}
   '';
 
 in
