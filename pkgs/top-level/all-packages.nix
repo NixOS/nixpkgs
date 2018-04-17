@@ -20077,6 +20077,9 @@ with pkgs;
   z3 = callPackage ../applications/science/logic/z3 { python = python2; };
 
   tlaplus = callPackage ../applications/science/logic/tlaplus {};
+  tlaps = callPackage ../applications/science/logic/tlaplus/tlaps.nix {};
+  tlaplusToolbox = callPackage ../applications/science/logic/tlaplus/toolbox.nix {gtk = gtk2;};
+
 
   aiger = callPackage ../applications/science/logic/aiger {};
 
