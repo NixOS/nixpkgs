@@ -488,6 +488,11 @@
     github = "auntie";
     name = "Jonathan Glines";
   };
+  avalent = {
+    email = "ashley.valent@gmail.com";
+    github = "avalent";
+    name = "Ashley Valent";
+  };
   avnik = {
     email = "avn@avnik.info";
     github = "avnik";
