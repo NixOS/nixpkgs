@@ -1544,7 +1544,7 @@ with pkgs;
   davix = callPackage ../tools/networking/davix { };
 
   cantata = libsForQt5.callPackage ../applications/audio/cantata {
-    inherit vlc;
+    vlc = vlc_qt5;
     ffmpeg = ffmpeg_2;
   };
 
