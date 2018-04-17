@@ -1424,7 +1424,7 @@ with pkgs;
     utillinux = utillinuxMinimal;
   };
 
-  antigen = callPackage ../shells/antigen { };
+  antigen = callPackage ../shells/zsh/antigen { };
 
   apparix = callPackage ../tools/misc/apparix { };
 
@@ -1888,7 +1888,7 @@ with pkgs;
 
   debootstrap = callPackage ../tools/misc/debootstrap { };
 
-  deer = callPackage ../shells/zsh-deer { };
+  deer = callPackage ../shells/zsh/zsh-deer { };
 
   detox = callPackage ../tools/misc/detox { };
 
@@ -4026,7 +4026,7 @@ with pkgs;
 
   offlineimap = callPackage ../tools/networking/offlineimap { };
 
-  oh-my-zsh = callPackage ../shells/oh-my-zsh { };
+  oh-my-zsh = callPackage ../shells/zsh/oh-my-zsh { };
 
   ola = callPackage ../applications/misc/ola { };
 
@@ -5790,17 +5790,17 @@ with pkgs;
 
   zsh-autoenv = callPackage ../tools/misc/zsh-autoenv { };
 
-  zsh-git-prompt = callPackage ../shells/zsh-git-prompt { };
+  zsh-git-prompt = callPackage ../shells/zsh/zsh-git-prompt { };
 
   zsh-navigation-tools = callPackage ../tools/misc/zsh-navigation-tools { };
 
-  zsh-syntax-highlighting = callPackage ../shells/zsh-syntax-highlighting { };
+  zsh-syntax-highlighting = callPackage ../shells/zsh/zsh-syntax-highlighting { };
 
-  zsh-autosuggestions = callPackage ../shells/zsh-autosuggestions { };
+  zsh-autosuggestions = callPackage ../shells/zsh/zsh-autosuggestions { };
 
-  zsh-powerlevel9k = callPackage ../shells/zsh-powerlevel9k { };
+  zsh-powerlevel9k = callPackage ../shells/zsh/zsh-powerlevel9k { };
 
-  zsh-command-time = callPackage ../shells/zsh-command-time { };
+  zsh-command-time = callPackage ../shells/zsh/zsh-command-time { };
 
   zssh = callPackage ../tools/networking/zssh { };
 
@@ -5827,9 +5827,9 @@ with pkgs;
     interactive = true;
   });
 
-  bash-completion = callPackage ../shells/bash-completion { };
+  bash-completion = callPackage ../shells/bash/bash-completion { };
 
-  nix-bash-completions = callPackage ../shells/nix-bash-completions { };
+  nix-bash-completions = callPackage ../shells/bash/nix-bash-completions { };
 
   dash = callPackage ../shells/dash { };
 
@@ -5837,7 +5837,7 @@ with pkgs;
 
   fish = callPackage ../shells/fish { };
 
-  fish-foreign-env = callPackage ../shells/fish-foreign-env { };
+  fish-foreign-env = callPackage ../shells/fish/fish-foreign-env { };
 
   ion = callPackage ../shells/ion { };
 
@@ -5859,13 +5859,13 @@ with pkgs;
 
   zsh = callPackage ../shells/zsh { };
 
-  nix-zsh-completions = callPackage ../shells/nix-zsh-completions { };
+  nix-zsh-completions = callPackage ../shells/zsh/nix-zsh-completions { };
 
-  zsh-completions = callPackage ../shells/zsh-completions { };
+  zsh-completions = callPackage ../shells/zsh/zsh-completions { };
 
-  zsh-prezto = callPackage ../shells/zsh-prezto { };
+  zsh-prezto = callPackage ../shells/zsh/zsh-prezto { };
 
-  grml-zsh-config = callPackage ../shells/grml-zsh-config { };
+  grml-zsh-config = callPackage ../shells/zsh/grml-zsh-config { };
 
 
   ### DEVELOPMENT / COMPILERS
@@ -11278,7 +11278,7 @@ with pkgs;
     haskellLib = haskell.lib;
   };
 
-  lambda-mod-zsh-theme = callPackage ../shells/lambda-mod-zsh-theme/default.nix { };
+  lambda-mod-zsh-theme = callPackage ../shells/zsh/lambda-mod-zsh-theme { };
 
   leksah = callPackage ../development/tools/haskell/leksah {
     inherit (haskellPackages) ghcWithPackages;
