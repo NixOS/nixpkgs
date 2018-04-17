@@ -14,6 +14,11 @@ buildPythonPackage rec {
     sha256 = "13vbh2r952ai2m6sc79psfwaj5fc8cssdg2pqpizg2mwd0l1s6lb";
   };
 
+  postPatch = ''
+    # drop upper bound of prawcore requirement
+    sed -ri "s/'(prawcore >=.+), <.+'/'\1'/" setup.py
+  '';
+
   propagatedBuildInputs = [
     requests
     decorator
