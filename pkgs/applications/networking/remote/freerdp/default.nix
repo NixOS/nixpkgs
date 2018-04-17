@@ -14,13 +14,13 @@
 
 stdenv.mkDerivation rec {
   name = "freerdp-${version}";
-  version = "2.0.0-rc1";
+  version = "2.0.0-rc2";
 
   src = fetchFromGitHub {
     owner  = "FreeRDP";
     repo   = "FreeRDP";
     rev    = version;
-    sha256 = "0m28n3mq3ax0j6j3ai4pnlx3shg2ap0md0bxlqkhfv6civ9r11nn";
+    sha256 = "01cm9g4xqihnnc5d2w1zs8gabkv59p7fyjwi1cwpzv6s198xwbfs";
   };
 
   # outputs = [ "bin" "out" "dev" ];
