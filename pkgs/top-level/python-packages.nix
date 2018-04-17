@@ -311,6 +311,10 @@ in {
 
   pyamf = callPackage ../development/python-modules/pyamf { };
 
+  pyarrow = callPackage ../development/python-modules/pyarrow {
+    inherit (pkgs) arrow-cpp cmake pkgconfig;
+  };
+
   pyatspi = disabledIf (!isPy3k) (callPackage ../development/python-modules/pyatspi { });
 
   pyaxmlparser = callPackage ../development/python-modules/pyaxmlparser { };
