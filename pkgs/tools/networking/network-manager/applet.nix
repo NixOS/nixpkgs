@@ -32,7 +32,10 @@ in stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ meson ninja intltool pkgconfig wrapGAppsHook gobjectIntrospection gtk-doc docbook_xsl libxml2 ];
 
-  propagatedUserEnvPkgs = [ hicolor-icon-theme ];
+  propagatedUserEnvPkgs = [
+    hicolor-icon-theme
+    gnome3.gnome-keyring  # See https://github.com/NixOS/nixpkgs/issues/38967
+  ];
 
   NIX_CFLAGS = [
     ''-DMOBILE_BROADBAND_PROVIDER_INFO=\"${mobile-broadband-provider-info}/share/mobile-broadband-provider-info/serviceproviders.xml\"''
