@@ -1,19 +1,19 @@
 { stdenv, fetchurl, pkgconfig, libmtp, libid3tag, flac, libvorbis, gtk3
-, gsettings_desktop_schemas, wrapGAppsHook
+, gsettings-desktop-schemas, wrapGAppsHook
 }:
 
-let version = "1.3.10"; in
+let version = "1.3.11"; in
 
 stdenv.mkDerivation {
   name = "gmtp-${version}";
 
   src = fetchurl {
     url = "mirror://sourceforge/gmtp/gMTP-${version}/gmtp-${version}.tar.gz";
-    sha256 = "b21b9a8e66ae7bb09fc70ac7e317a0e32aff3917371a7241dea73c41db1dd13b";
+    sha256 = "04q6byyq002fhzkc2rkkahwh5b6272xakaj4m3vwm8la8jf0r0ss";
   };
 
   nativeBuildInputs = [ pkgconfig wrapGAppsHook ];
-  buildInputs = [ libmtp libid3tag flac libvorbis gtk3 gsettings_desktop_schemas ];
+  buildInputs = [ libmtp libid3tag flac libvorbis gtk3 gsettings-desktop-schemas ];
 
   enableParallelBuilding = true;
 

@@ -3,15 +3,13 @@
 , pytestrunner, requests-mock, pytestcov, pytest
 }:
 
-
 buildPythonPackage rec {
-  name = "${pname}-${version}";
   pname = "MechanicalSoup";
-  version = "0.9.0.post4";
+  version = "0.10.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "ce8f822afbc9bef1499be417e8d5deecd0cd32606420165700e89477955f03ab";
+    sha256 = "22423efd025c3eedb06f41d3ff1127174a59f40dc560e82dce143956976195bf";
   };
 
   checkInputs = [ pytest pytestrunner requests-mock pytestcov ];

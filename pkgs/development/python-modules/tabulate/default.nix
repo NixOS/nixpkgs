@@ -7,7 +7,6 @@
 buildPythonPackage rec {
   version = "0.8.2";
   pname = "tabulate";
-  name = "${pname}-${version}";
 
   src = fetchPypi {
     inherit pname version;

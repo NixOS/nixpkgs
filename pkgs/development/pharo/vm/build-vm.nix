@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, bash, unzip, glibc, openssl, gcc, mesa, freetype, xorg, alsaLib, cairo, libuuid, autoreconfHook, gcc48, ... }:
+{ stdenv, fetchurl, bash, unzip, glibc, openssl, gcc, libGLU_combined, freetype, xorg, alsaLib, cairo, libuuid, autoreconfHook, gcc48, ... }:
 
 { name, src, version, source-date, source-url, ... }:
 
@@ -83,7 +83,7 @@ stdenv.mkDerivation rec {
     mkdir -p "$out/bin"
 
     # Note: include ELF rpath in LD_LIBRARY_PATH for finding libc.
-    libs=$out:$(patchelf --print-rpath "$out/pharo"):${cairo}/lib:${mesa}/lib:${freetype}/lib:${openssl}/lib:${libuuid}/lib:${alsaLib}/lib:${xorg.libICE}/lib:${xorg.libSM}/lib
+    libs=$out:$(patchelf --print-rpath "$out/pharo"):${cairo}/lib:${libGLU_combined}/lib:${freetype}/lib:${openssl}/lib:${libuuid}/lib:${alsaLib}/lib:${xorg.libICE}/lib:${xorg.libSM}/lib
 
     # Create the script
     cat > "$out/bin/${cmd}" <<EOF
@@ -104,7 +104,7 @@ stdenv.mkDerivation rec {
   #
   # (stack protection is disabled above for gcc 4.8 compatibility.)
   nativeBuildInputs = [ autoreconfHook ];
-  buildInputs = [ bash unzip glibc openssl gcc48 mesa freetype xorg.libX11 xorg.libICE xorg.libSM alsaLib cairo pharo-share libuuid ];
+  buildInputs = [ bash unzip glibc openssl gcc48 libGLU_combined freetype xorg.libX11 xorg.libICE xorg.libSM alsaLib cairo pharo-share libuuid ];
 
   meta = with stdenv.lib; {
     description = "Clean and innovative Smalltalk-inspired environment";

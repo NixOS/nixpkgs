@@ -50,7 +50,7 @@ let
     else if stdenv.system == "i686-linux" then "${stdenv.cc}/nix-support/dynamic-linker"
     else throw "Unsupported platform for PlayOnLinux: ${stdenv.system}";
   ld64 = "${stdenv.cc}/nix-support/dynamic-linker";
-  libs = pkgs: stdenv.lib.makeLibraryPath [ pkgs.xlibs.libX11 ];
+  libs = pkgs: stdenv.lib.makeLibraryPath [ pkgs.xorg.libX11 ];
 
 in stdenv.mkDerivation {
   name = "playonlinux-${version}";

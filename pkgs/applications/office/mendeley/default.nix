@@ -1,7 +1,7 @@
 { fetchurl, stdenv, dpkg, which
 , makeWrapper
 , alsaLib
-, desktop_file_utils
+, desktop-file-utils
 , dbus
 , libcap
 , fontconfig
@@ -24,7 +24,6 @@
 , qtwebengine
 , sqlite
 , xorg
-, xlibs
 , zlib
 # The provided wrapper does this, but since we don't use it
 # we emulate the behavior.  The downside is that this
@@ -78,7 +77,7 @@ let
     orc
     sqlite
     xorg.libX11
-    xlibs.xcbutilkeysyms
+    xorg.xcbutilkeysyms
     xorg.libxcb
     xorg.libXcomposite
     xorg.libXext
@@ -129,7 +128,7 @@ stdenv.mkDerivation {
 
     # Patch up link handler script
     wrapProgram $out/bin/install-mendeley-link-handler.sh \
-      --prefix PATH ':' ${stdenv.lib.makeBinPath [ which gconf desktop_file_utils ] }
+      --prefix PATH ':' ${stdenv.lib.makeBinPath [ which gconf desktop-file-utils ] }
   '';
 
   dontStrip = true;

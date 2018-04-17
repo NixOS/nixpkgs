@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, glibc, mesa, freetype, glib, libSM, libICE, libXi, libXv
+{ stdenv, fetchurl, glibc, libGLU_combined, freetype, glib, libSM, libICE, libXi, libXv
 , libXrender, libXrandr, libXfixes, libXcursor, libXinerama, libXext, libX11, qt4
 , zlib, fontconfig, dpkg }:
 
@@ -19,7 +19,7 @@ let
     libICE
     libXi
     libXv
-    mesa
+    libGLU_combined
     libXrender
     libXrandr
     libXfixes

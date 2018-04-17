@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, mesa_glu, qtbase, qtscript, qtxmlpatterns }:
+{ stdenv, fetchFromGitHub, libGLU, qtbase, qtscript, qtxmlpatterns }:
 
 let
   meshlabRev = "5700f5474c8f90696a8925e2a209a0a8ab506662";
@@ -53,7 +53,7 @@ in stdenv.mkDerivation {
     ln -s $out/opt/meshlab/meshlabserver $out/bin/meshlabserver
   '';
 
-  buildInputs = [ mesa_glu qtbase qtscript qtxmlpatterns ];
+  buildInputs = [ libGLU qtbase qtscript qtxmlpatterns ];
 
   meta = {
     description = "A system for processing and editing 3D triangular meshes.";

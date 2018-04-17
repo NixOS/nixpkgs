@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, cmake, irrlicht, libpng, bzip2, curl, libogg, jsoncpp
-, libjpeg, libXxf86vm, mesa, openal, libvorbis, xlibsWrapper, sqlite, luajit
+, libjpeg, libXxf86vm, libGLU_combined, openal, libvorbis, xlibsWrapper, sqlite, luajit
 , freetype, gettext, doxygen, ncurses, leveldb
 }:
 
@@ -36,7 +36,7 @@ in stdenv.mkDerivation {
   NIX_CFLAGS_COMPILE = [ "-DluaL_reg=luaL_Reg" ]; # needed since luajit-2.1.0-beta3
 
   buildInputs = [
-    cmake irrlicht libpng bzip2 libjpeg curl libogg jsoncpp libXxf86vm mesa
+    cmake irrlicht libpng bzip2 libjpeg curl libogg jsoncpp libXxf86vm libGLU_combined
     openal libvorbis xlibsWrapper sqlite luajit freetype gettext doxygen ncurses
     leveldb
   ];

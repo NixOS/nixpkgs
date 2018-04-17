@@ -5,7 +5,7 @@
 } :
 
 let
-  version = "6.17";
+  version = "6.18";
 
   subdirs = [
     "beeond_thirdparty/build"
@@ -30,7 +30,7 @@ in stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://git.beegfs.com/pub/v6/repository/archive.tar.bz2?ref=${version}";
-    sha256 = "10xs7gzdmlg23k6zn1b7jij3lljn7rr1j6h476hq4lbg981qk3n3";
+    sha256 = "1g874qyxh4v53ah3lzchrqi0jci7wngr54q3f4d9q0kzvvifripn";
   };
 
   nativeBuildInputs = [ which unzip pkgconfig cppunit openjdk ant perl ];

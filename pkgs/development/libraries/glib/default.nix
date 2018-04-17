@@ -1,10 +1,10 @@
-{ stdenv, hostPlatform, fetchurl, pkgconfig, gettext, perl, python
-, libiconv, libintlOrEmpty, zlib, libffi, pcre, libelf
+{ stdenv, hostPlatform, fetchurl, gettext, pkgconfig, perl, python
+, libiconv, zlib, libffi, pcre, libelf, gnome3
 # use utillinuxMinimal to avoid circular dependency (utillinux, systemd, glib)
 , utillinuxMinimal ? null
 
 # this is just for tests (not in closure of any regular package)
-, coreutils, dbus_daemon, libxml2, tzdata, desktop_file_utils, shared_mime_info, doCheck ? false
+, coreutils, dbus_daemon, libxml2, tzdata, desktop-file-utils, shared-mime-info, doCheck ? false
 }:
 
 with stdenv.lib;
@@ -42,16 +42,15 @@ let
     ln -sr -t "''${!outputInclude}/include/" "''${!outputInclude}"/lib/*/include/* 2>/dev/null || true
   '';
 
-  ver_maj = "2.54";
-  ver_min = "3";
+  version = "2.56.0";
 in
 
 stdenv.mkDerivation rec {
-  name = "glib-${ver_maj}.${ver_min}";
+  name = "glib-${version}";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/glib/${ver_maj}/${name}.tar.xz";
-    sha256 = "963fdc6685dc3da8e5381dfb9f15ca4b5709b28be84d9d05a9bb8e446abac0a8";
+    url = "mirror://gnome/sources/glib/${gnome3.versionBranch version}/${name}.tar.xz";
+    sha256 = "1iqgi90fmpl3l23jm2iv44qp7hqsxvnv7978s18933bvx4bnxvzc";
   };
 
   patches = optional stdenv.isDarwin ./darwin-compilation.patch
@@ -65,19 +64,15 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ libelf setupHook pcre ]
     ++ optionals stdenv.isLinux [ utillinuxMinimal ] # for libmount
-    ++ optionals doCheck [ tzdata libxml2 desktop_file_utils shared_mime_info ];
+    ++ optionals doCheck [ tzdata libxml2 desktop-file-utils shared-mime-info ];
 
-  nativeBuildInputs = [ pkgconfig gettext perl python ];
+  nativeBuildInputs = [ pkgconfig perl python ];
 
-  propagatedBuildInputs = [ zlib libffi libiconv ]
-    ++ libintlOrEmpty;
+  propagatedBuildInputs = [ zlib libffi gettext libiconv ];
 
   # internal pcre would only add <200kB, but it's relatively common
   configureFlags = [ "--with-pcre=system" ]
     ++ optional stdenv.isDarwin "--disable-compile-warnings"
-    # glibc inclues GNU libiconv, but Darwin's iconv function is good enonugh.
-    ++ optional (stdenv.hostPlatform.libc != "glibc" && !stdenv.hostPlatform.isDarwin)
-      "--with-libiconv=gnu"
     ++ optional stdenv.isSunOS "--disable-dtrace"
     # Can't run this test when cross-compiling
     ++ optionals (stdenv.hostPlatform != stdenv.buildPlatform)
@@ -85,8 +80,7 @@ stdenv.mkDerivation rec {
     # GElf only supports elf64 hosts
     ++ optional (!stdenv.hostPlatform.is64bit) "--disable-libelf";
 
-  NIX_CFLAGS_COMPILE = optional stdenv.isDarwin "-lintl"
-    ++ optional stdenv.isSunOS "-DBSD_COMP";
+  NIX_CFLAGS_COMPILE = optional stdenv.isSunOS "-DBSD_COMP";
 
   preConfigure = optionalString stdenv.isSunOS ''
     sed -i -e 's|inotify.h|foobar-inotify.h|g' configure
@@ -124,7 +118,7 @@ stdenv.mkDerivation rec {
     export XDG_CACHE_HOME="$TMP"
     export XDG_RUNTIME_HOME="$TMP"
     export HOME="$TMP"
-    export XDG_DATA_DIRS="${desktop_file_utils}/share:${shared_mime_info}/share"
+    export XDG_DATA_DIRS="${desktop-file-utils}/share:${shared-mime-info}/share"
     export G_TEST_DBUS_DAEMON="${dbus_daemon.out}/bin/dbus-daemon"
     export PATH="$PATH:$(pwd)/gobject"
     echo "PATH=$PATH"
@@ -143,8 +137,9 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
-     gioModuleDir = "lib/gio/modules";
-     inherit flattenInclude;
+    gioModuleDir = "lib/gio/modules";
+    inherit flattenInclude;
+    updateScript = gnome3.updateScript { packageName = "glib"; };
   };
 
   meta = with stdenv.lib; {

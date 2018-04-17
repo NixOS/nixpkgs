@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgconfig, intltool, alsaLib, libpulseaudio, speex, gsm
-, libopus, ffmpeg, libX11, libXv, mesa, glew, libtheora, libvpx, SDL, libupnp
+, libopus, ffmpeg, libX11, libXv, libGLU_combined, glew, libtheora, libvpx, SDL, libupnp
 , ortp, libv4l, libpcap, srtp, fetchFromGitHub, cmake, bctoolbox, doxygen
 , python, libXext, libmatroska, openssl, fetchpatch
 }:
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = [
     alsaLib libpulseaudio speex gsm libopus
-    ffmpeg libX11 libXv mesa glew libtheora libvpx SDL libupnp
+    ffmpeg libX11 libXv libGLU_combined glew libtheora libvpx SDL libupnp
     ortp libv4l libpcap srtp bctoolbox libXext libmatroska
     openssl
   ];

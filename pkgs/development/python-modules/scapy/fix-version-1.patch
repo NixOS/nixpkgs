@@ -1,11 +1,11 @@
 --- a/setup.py	2018-02-15 22:14:08.531591678 +0100
-+++ b/setup.py	2018-02-15 22:14:57.947703737 +0100
++++ b/setup.py	2018-03-27 17:15:38.617315539 +0200
 @@ -47,7 +47,7 @@
  
  setup(
      name='scapy',
 -    version=__import__('scapy').VERSION,
-+    version='2.3.3',
++    version='2.4.0',
      packages=[
          'scapy',
          'scapy/arch',

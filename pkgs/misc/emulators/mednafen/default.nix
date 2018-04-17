@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, freeglut, mesa, libcdio, libjack2
+{ stdenv, fetchurl, pkgconfig, freeglut, libGLU_combined, libcdio, libjack2
 , libsamplerate, libsndfile, libX11, SDL, SDL_net, zlib }:
 
 stdenv.mkDerivation rec {
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     freeglut
-    mesa
+    libGLU_combined
     libcdio
     libjack2
     libsamplerate

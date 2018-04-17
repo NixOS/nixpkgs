@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, gnome3, libtool, intltool, pkgconfig, gtk3, hicolor_icon_theme, wrapGAppsHook } :
+{ stdenv, fetchFromGitHub, gnome3, libtool, intltool, pkgconfig, gtk3, hicolor-icon-theme, wrapGAppsHook } :
 
 let
   version = "2.2";
@@ -12,7 +12,7 @@ in stdenv.mkDerivation {
     sha256 = "1rbahsi33pfggpj5cigy6wy5333g3rpm8v2q0b35c6m7pwhmf2gr";
   };
 
-  nativeBuildInputs = [ gnome3.gnome_common libtool intltool pkgconfig hicolor_icon_theme wrapGAppsHook ];
+  nativeBuildInputs = [ gnome3.gnome-common libtool intltool pkgconfig hicolor-icon-theme wrapGAppsHook ];
 
   buildInputs = [ gtk3 ];
 

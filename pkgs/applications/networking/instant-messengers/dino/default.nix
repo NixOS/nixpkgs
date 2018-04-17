@@ -1,11 +1,11 @@
 { stdenv, fetchFromGitHub
 , vala, cmake, ninja, wrapGAppsHook, pkgconfig, gettext
-, gobjectIntrospection, gnome3, glib, gdk_pixbuf, gtk3, glib_networking
+, gobjectIntrospection, gnome3, glib, gdk_pixbuf, gtk3, glib-networking
 , xorg, libXdmcp, libxkbcommon
 , libnotify, libsoup
 , libgcrypt
 , epoxy
-, at_spi2_core
+, at-spi2-core
 , sqlite
 , dbus
 , gpgme
@@ -13,13 +13,13 @@
  }:
 
 stdenv.mkDerivation rec {
-  name = "dino-unstable-2018-02-11";
+  name = "dino-unstable-2018-03-10";
 
   src = fetchFromGitHub {
     owner = "dino";
     repo = "dino";
-    rev = "5436d716c0f508eb8ab70f322da862f996ce421e";
-    sha256 = "0yxkhl9xm5f0j2i9vxgyabpa5fwja0329fmg0878mqsm89nzz3am";
+    rev = "4ccdc1d0920a93b313d81b4014b6f45efb49b1fe";
+    sha256 = "0d9698zi09s107zva6cgip7xxmdby0zfmqvka4n0khxrsnii5awq";
     fetchSubmodules = true;
   };
 
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     gobjectIntrospection
-    glib_networking
+    glib-networking
     glib
     gnome3.libgee
     gnome3.defaultIconTheme
@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
     libXdmcp
     libxkbcommon
     epoxy
-    at_spi2_core
+    at-spi2-core
     dbus
     gettext
   ];

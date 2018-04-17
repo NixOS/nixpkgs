@@ -5,7 +5,7 @@ rec {
 
   description = ''MySQL Native Driver'';
 
-  deps = [ args."alexandria" args."asdf-finalizers" args."babel" args."bordeaux-threads" args."cffi" args."chipz" args."cl+ssl" args."flexi-streams" args."ironclad" args."list-of" args."nibbles" args."salza2" args."split-sequence" args."trivial-features" args."trivial-garbage" args."trivial-gray-streams" args."usocket" ];
+  deps = [ args."alexandria" args."asdf-finalizers" args."babel" args."bordeaux-threads" args."cffi" args."chipz" args."cl_plus_ssl" args."flexi-streams" args."ironclad" args."list-of" args."nibbles" args."salza2" args."split-sequence" args."trivial-features" args."trivial-garbage" args."trivial-gray-streams" args."usocket" ];
 
   src = fetchurl {
     url = ''http://beta.quicklisp.org/archive/qmynd/2018-01-31/qmynd-20180131-git.tgz'';
@@ -26,7 +26,8 @@ rec {
      (NAME babel FILENAME babel)
      (NAME bordeaux-threads FILENAME bordeaux-threads)
      (NAME cffi FILENAME cffi) (NAME chipz FILENAME chipz)
-     (NAME cl+ssl FILENAME cl+ssl) (NAME flexi-streams FILENAME flexi-streams)
+     (NAME cl+ssl FILENAME cl_plus_ssl)
+     (NAME flexi-streams FILENAME flexi-streams)
      (NAME ironclad FILENAME ironclad) (NAME list-of FILENAME list-of)
      (NAME nibbles FILENAME nibbles) (NAME salza2 FILENAME salza2)
      (NAME split-sequence FILENAME split-sequence)

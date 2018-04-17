@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, intltool, itstool, gtk3, libxml2, libgtop, libcanberra_gtk3, mate, hicolor_icon_theme, wrapGAppsHook }:
+{ stdenv, fetchurl, pkgconfig, intltool, itstool, gtk3, libxml2, libgtop, libcanberra-gtk3, mate, hicolor-icon-theme, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
   name = "mate-utils-${version}";
@@ -19,10 +19,10 @@ stdenv.mkDerivation rec {
   buildInputs = [
     gtk3
     libgtop
-    libcanberra_gtk3
+    libcanberra-gtk3
     libxml2
     mate.mate-panel
-    hicolor_icon_theme
+    hicolor-icon-theme
   ];
 
   meta = with stdenv.lib; {

@@ -14,9 +14,9 @@ let
    * The JRE libraries are in directories that depend on the CPU.
    */
   architecture =
-    if stdenv.system == "i686-linux" then
+    if stdenv.hostPlatform.system == "i686-linux" then
       "i386"
-    else if stdenv.system == "x86_64-linux" then
+    else if stdenv.hostPlatform.system == "x86_64-linux" then
       "amd64"
     else
       throw "openjdk requires i686-linux or x86_64 linux";
@@ -93,7 +93,7 @@ let
       ./004_add-fontconfig.patch
       ./005_enable-infinality.patch
     ] ++ lib.optionals (!minimal && enableGnome2) [
-      ./swing-use-gtk.patch
+      ./swing-use-gtk-jdk8.patch
     ];
 
     preConfigure = ''

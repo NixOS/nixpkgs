@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, fetchsvn, pkgconfig, scons, mesa, SDL2, SDL2_image
+{ stdenv, fetchFromGitHub, fetchsvn, pkgconfig, scons, libGLU_combined, SDL2, SDL2_image
 , libvorbis, bullet, curl, gettext, writeTextFile, writeShellScriptBin
 
 , data ? fetchsvn {
@@ -20,7 +20,7 @@ let
     };
 
     nativeBuildInputs = [ pkgconfig ];
-    buildInputs = [ scons mesa SDL2 SDL2_image libvorbis bullet curl gettext ];
+    buildInputs = [ scons libGLU_combined SDL2 SDL2_image libvorbis bullet curl gettext ];
 
     patches = [ ./0001-Ignore-missing-data-for-installation.patch ];
 

@@ -1,12 +1,13 @@
 { stdenv, pass, fetchFromGitHub, oathToolkit }:
-stdenv.mkDerivation {
-  name = "pass-otp";
+stdenv.mkDerivation rec {
+  name = "pass-otp-${version}";
+  version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "tadfisher";
     repo = "pass-otp";
-    rev = "f2feb3082324a91089782af9b7fbb71d34aa213d";
-    sha256 = "0iklvcfgw1320dggdr02lq3bc7xvnd2934l1w9kkjpbsfmhs955c";
+    rev = "v${version}";
+    sha256 = "1cgj4zc8fq88n3h6c0vkv9i5al785mdprpgpbv5m22dz9p1wqvbb";
   };
 
   buildInputs = [ pass oathToolkit ];
@@ -23,7 +24,7 @@ stdenv.mkDerivation {
     description = "A pass extension for managing one-time-password (OTP) tokens";
     homepage = https://github.com/tadfisher/pass-otp;
     license = licenses.gpl3;
-    maintainers = with maintainers; [ jwiegley ];
+    maintainers = with maintainers; [ jwiegley tadfisher ];
     platforms = platforms.unix;
   };
 }

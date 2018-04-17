@@ -3,13 +3,13 @@
 
 stdenv.mkDerivation rec {
   name = "ddcutil-${version}";
-  version = "0.8.5";
+  version = "0.8.6";
 
   src = fetchFromGitHub {
     owner  = "rockowitz";
     repo   = "ddcutil";
     rev    = "v${version}";
-    sha256 = "127a5v545gvfgxqqjxqafsg1p8i4qd5wnpdwccr38jbsphl6yzl4";
+    sha256 = "1c4cl9cac90xf9rap6ss2d4yshcmhdq8pdfjz3g4cns789fs1vcf";
   };
 
   nativeBuildInputs = [ autoreconfHook pkgconfig ];

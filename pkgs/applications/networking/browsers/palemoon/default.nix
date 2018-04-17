@@ -1,23 +1,23 @@
 { stdenv, fetchFromGitHub, makeDesktopItem
 , pkgconfig, autoconf213, alsaLib, bzip2, cairo
-, dbus, dbus_glib, file, fontconfig, freetype
+, dbus, dbus-glib, file, fontconfig, freetype
 , gstreamer, gst-plugins-base, gst_all_1
 , gtk2, hunspell, icu, libevent, libjpeg, libnotify
-, libstartup_notification, libvpx, makeWrapper, mesa
+, libstartup_notification, libvpx, makeWrapper, libGLU_combined
 , nspr, nss, pango, perl, python, libpulseaudio, sqlite
-, unzip, xlibs, which, yasm, zip, zlib
+, unzip, xorg, which, yasm, zip, zlib
 }:
 
 stdenv.mkDerivation rec {
   name = "palemoon-${version}";
-  version = "27.7.2";
+  version = "27.8.0";
 
   src = fetchFromGitHub {
     name   = "palemoon-src";
     owner  = "MoonchildProductions";
     repo   = "Pale-Moon";
     rev    = version + "_Release";
-    sha256 = "19ki6gp6bhcvhjnclalviiyp93mqsgc22xjl0gm9x5y4sxdb5wlq";
+    sha256 = "0b08rzn50jg59rnjzx6dvsmj5dikfjipnmvhpkimvr38v8q7wdar";
   };
 
   desktopItem = makeDesktopItem {
@@ -39,12 +39,12 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [
-    alsaLib bzip2 cairo dbus dbus_glib file fontconfig freetype
+    alsaLib bzip2 cairo dbus dbus-glib file fontconfig freetype
     gst-plugins-base gstreamer gst_all_1.gst-plugins-base gtk2
     hunspell icu libevent libjpeg libnotify libstartup_notification
-    libvpx makeWrapper mesa nspr nss pango perl pkgconfig python
+    libvpx makeWrapper libGLU_combined nspr nss pango perl pkgconfig python
     libpulseaudio sqlite unzip which yasm zip zlib
-  ] ++ (with xlibs; [
+  ] ++ (with xorg; [
     libX11 libXext libXft libXi libXrender libXScrnSaver
     libXt pixman scrnsaverproto xextproto
   ]);

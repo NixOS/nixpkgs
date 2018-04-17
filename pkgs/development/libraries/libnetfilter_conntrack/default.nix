@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
   version = "1.0.6";
 
   src = fetchurl {
-    url = "http://netfilter.org/projects/libnetfilter_conntrack/files/${name}.tar.bz2";
+    url = "https://netfilter.org/projects/libnetfilter_conntrack/files/${name}.tar.bz2";
     sha256 = "1svzyf3rq9nbrcw1jsricgyhh7x1am8iqn6kjr6mzrw42810ik7g";
   };
 
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
       previously known as libnfnetlink_conntrack and libctnetlink. This library is currently used
       by conntrack-tools among many other applications
     '';
-    homepage = http://netfilter.org/projects/libnetfilter_conntrack/;
+    homepage = https://netfilter.org/projects/libnetfilter_conntrack/;
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
   };

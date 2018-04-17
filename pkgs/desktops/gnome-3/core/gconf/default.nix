@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, dbus_glib, gnome3 ? null, glib, libxml2
+{ stdenv, fetchurl, pkgconfig, dbus-glib, gnome3 ? null, glib, libxml2
 , intltool, polkit, orbit, python, withGtk ? false }:
 
 assert withGtk -> (gnome3 != null);
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ libxml2 polkit orbit python ] ++ stdenv.lib.optional withGtk gnome3.gtk;
-  propagatedBuildInputs = [ glib dbus_glib  ];
+  propagatedBuildInputs = [ glib dbus-glib  ];
   nativeBuildInputs = [ pkgconfig intltool ];
 
   # ToDo: ldap reported as not found but afterwards reported as supported

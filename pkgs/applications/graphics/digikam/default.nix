@@ -34,7 +34,7 @@
 , libqtav
 , libusb1
 , marble
-, mesa
+, libGLU_combined
 , mysql
 , opencv3
 , pcre
@@ -50,13 +50,13 @@
 
 mkDerivation rec {
   name    = "digikam-${version}";
-  version = "5.8.0";
+  version = "5.9.0";
 
   src = fetchFromGitHub {
     owner  = "KDE";
     repo   = "digikam";
     rev    = "v${version}";
-    sha256 = "1bvidg0fn92xvw5brhb34lm7m4iy4jb5xpvnhbgh8vik2m4n41w1";
+    sha256 = "09diw273h9i7rss89ba82yrfy6jb2njv3k0dknrrg7bb998vrw2d";
   };
 
   nativeBuildInputs = [ cmake doxygen extra-cmake-modules kdoctools wrapGAppsHook ];
@@ -76,7 +76,7 @@ mkDerivation rec {
     liblqr1
     libqtav
     libusb1
-    mesa
+    libGLU_combined
     opencv3
     pcre
 

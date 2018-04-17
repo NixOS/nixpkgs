@@ -1,11 +1,11 @@
 { stdenv, fetchurl, openssl }:
 
 stdenv.mkDerivation rec {
-  name = "srelay-0.4.8b6";
+  name = "srelay-0.4.8";
 
   src = fetchurl {
-    url = "mirror://sourceforge/project/socks-relay/socks-relay/srelay-0.4.8/srelay-0.4.8b6.tar.gz";
-    sha256 = "1az9ds10hpmpw6bqk7fcd1w70001kz0mm48v3vgg2z6vrbmgn0qj";
+    url = "mirror://sourceforge/project/socks-relay/socks-relay/srelay-0.4.8/srelay-0.4.8.tar.gz";
+    sha256 = "1sn6005aqyfvrlkm5445cyyaj6h6wfyskfncfmds55x34hfyxpvl";
   };
 
   patches = [ ./arm.patch ];

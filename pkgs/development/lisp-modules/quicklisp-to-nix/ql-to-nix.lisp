@@ -55,6 +55,7 @@
           (#\\ "_backslash_")
           (#\_ "__")
           (#\. "_dot_")
+          (#\+ "_plus_")
           (t x)))))
 
 (defvar *system-info-bin*

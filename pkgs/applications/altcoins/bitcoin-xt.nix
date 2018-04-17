@@ -6,13 +6,13 @@ with stdenv.lib;
 stdenv.mkDerivation rec{
 
   name = "bitcoin" + (toString (optional (!withGui) "d")) + "-xt-" + version;
-  version = "0.11G2";
+  version = "0.11H";
 
   src = fetchFromGitHub {
     owner = "bitcoinxt";
     repo = "bitcoinxt";
     rev = "v${version}";
-    sha256 = "071rljvsabyc9j64v248qfb7zfqpfl84hpsnvlavin235zljq8qs";
+    sha256 = "1v43bynmidn2zdpky939km721x3ks91bzyh4200gji61qzsmyg62";
   };
 
   nativeBuildInputs = [ pkgconfig autoreconfHook ];

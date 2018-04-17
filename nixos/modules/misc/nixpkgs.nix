@@ -61,7 +61,7 @@ in
             inherit (config.nixpkgs) config overlays system;
           }
         '';
-      default = import ../../.. { inherit (cfg) config overlays system; };
+      default = import ../../.. { inherit (cfg) config overlays system crossSystem; };
       type = pkgsType;
       example = literalExample ''import <nixpkgs> {}'';
       description = ''
@@ -125,6 +125,18 @@ in
         takes as an argument the <emphasis>original</emphasis> Nixpkgs.
         The first argument should be used for finding dependencies, and
         the second should be used for overriding recipes.
+
+        Ignored when <code>nixpkgs.pkgs</code> is set.
+      '';
+    };
+
+    crossSystem = mkOption {
+      type = types.nullOr types.attrs;
+      default = null;
+      description = ''
+        The description of the system we're cross-compiling to, or null
+        if this isn't a cross-compile. See the description of the
+        crossSystem argument in the nixpkgs manual.
 
         Ignored when <code>nixpkgs.pkgs</code> is set.
       '';

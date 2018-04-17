@@ -1,21 +1,21 @@
 { stdenv, fetchFromGitHub, cmake, gettext, libxml2, pkgconfig, txt2man, vala, wrapGAppsHook
-, gsettings_desktop_schemas, gtk3, keybinder3
+, gsettings-desktop-schemas, gtk3, keybinder3
 }:
 
 stdenv.mkDerivation rec {
   name = "peek-${version}";
-  version = "1.2.0";
+  version = "1.3.0";
 
   src = fetchFromGitHub {
     owner = "phw";
     repo = "peek";
     rev = version;
-    sha256 = "04sc6gfrqvnx288rmgsywpjx9l6jcfn2qdbwjcbdvx4wl3gna0qm";
+    sha256 = "0yizf55rzkm88bfjzwr8yyhm33yqp1mbih2ifwhvnjd1911db0x9";
   };
 
   nativeBuildInputs = [ cmake gettext pkgconfig libxml2.bin txt2man vala wrapGAppsHook ];
 
-  buildInputs = [ gsettings_desktop_schemas gtk3 keybinder3 ];
+  buildInputs = [ gsettings-desktop-schemas gtk3 keybinder3 ];
 
   enableParallelBuilding = true;
 

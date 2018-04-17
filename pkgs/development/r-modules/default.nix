@@ -310,7 +310,7 @@ let
     rgdal = [ pkgs.proj pkgs.gdal ];
     rgeos = [ pkgs.geos ];
     rggobi = [ pkgs.ggobi pkgs.gtk2.dev pkgs.libxml2.dev ];
-    rgl = [ pkgs.mesa pkgs.xlibsWrapper ];
+    rgl = [ pkgs.libGLU_combined pkgs.xlibsWrapper ];
     Rglpk = [ pkgs.glpk ];
     RGtk2 = [ pkgs.gtk2.dev ];
     rhdf5 = [ pkgs.zlib ];
@@ -366,10 +366,9 @@ let
     udunits2 = [ pkgs.udunits pkgs.expat ];
     V8 = [ pkgs.v8_3_14 ];
     VBLPCM = [ pkgs.gsl_1 ];
-    VBmix = [ pkgs.gsl_1 pkgs.fftw pkgs.qt4 ];
     WhopGenome = [ pkgs.zlib.dev ];
     XBRL = [ pkgs.zlib pkgs.libxml2.dev ];
-    xml2 = [ pkgs.libxml2.dev ];
+    xml2 = [ pkgs.libxml2.dev ] ++ lib.optionals stdenv.isDarwin [ pkgs.perl ];
     XML = [ pkgs.libtool pkgs.libxml2.dev pkgs.xmlsec pkgs.libxslt ];
     affyPLM = [ pkgs.zlib.dev ];
     bamsignals = [ pkgs.zlib.dev ];
@@ -404,13 +403,13 @@ let
     RGtk2 = [ pkgs.pkgconfig ];
     RProtoBuf = [ pkgs.pkgconfig ];
     Rpoppler = [ pkgs.pkgconfig ];
-    VBmix = [ pkgs.pkgconfig ];
     XML = [ pkgs.pkgconfig ];
     cairoDevice = [ pkgs.pkgconfig ];
     chebpol = [ pkgs.pkgconfig ];
     fftw = [ pkgs.pkgconfig ];
     geoCount = [ pkgs.pkgconfig ];
     gdtools = [ pkgs.pkgconfig ];
+    JuniperKernel = lib.optionals stdenv.isDarwin [ pkgs.binutils.bintools ];
     kza = [ pkgs.pkgconfig ];
     magick = [ pkgs.pkgconfig ];
     mwaved = [ pkgs.pkgconfig ];
@@ -492,7 +491,6 @@ let
     "EasyqpcR"
     "EcoVirtual"
     "ENiRG"
-    "EnQuireR"
     "eVenn"
     "exactLoglinTest"
     "fat2Lpoly"
@@ -760,6 +758,17 @@ let
       '';
     });
 
+    JuniperKernel = old.JuniperKernel.overrideDerivation (attrs: {
+      postPatch = ''
+        for file in {R,src}/*.R; do
+            sed -i 's#system("which \(otool\|install_name_tool\)"[^)]*)#"${pkgs.binutils.bintools}/bin/\1"#g' $file
+        done
+      '';
+      preConfigure = ''
+        patchShebangs configure
+      '';
+    });
+
     Mposterior = old.Mposterior.overrideDerivation (attrs: {
       PKG_LIBS = "-L${pkgs.openblasCompat}/lib -lopenblas";
     });
@@ -912,6 +921,13 @@ let
       NIX_CFLAGS_COMPILE = "${attrs.NIX_CFLAGS_COMPILE} -DBOOST_PHOENIX_NO_VARIADIC_EXPRESSION";
     });
 
+    mongolite = old.mongolite.overrideDerivation (attrs: {
+      preConfigure = ''
+        patchShebangs configure
+        '';
+      PKGCONFIG_CFLAGS = "-I${pkgs.openssl.dev}/include -I${pkgs.cyrus_sasl.dev}/include -I${pkgs.zlib.dev}/include";
+      PKGCONFIG_LIBS = "-Wl,-rpath,${pkgs.openssl.out}/lib -L${pkgs.openssl.out}/lib -L${pkgs.cyrus_sasl.out}/lib -L${pkgs.zlib.out}/lib -lssl -lcrypto -lsasl2 -lz";
+    });
   };
 in
   self

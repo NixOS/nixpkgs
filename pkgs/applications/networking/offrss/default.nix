@@ -28,6 +28,6 @@ stdenv.mkDerivation {
     description = "Offline RSS/Atom reader";
     license="AGPLv3+";
     maintainers = with stdenv.lib.maintainers; [viric];
-    platforms = with stdenv.lib.platforms; all;
+    platforms = stdenv.lib.platforms.linux;
   };
 }

@@ -1,18 +1,25 @@
-{ stdenv, fetchurl, fetchpatch, runCommand, zlib, makeWrapper }:
+{ stdenv, fetchurl, fetchpatch, runCommand, perl, zlib, makeWrapper }:
 
 let ccache = stdenv.mkDerivation rec {
   name = "ccache-${version}";
-  version = "3.3.5";
+  version = "3.4.1";
 
   src = fetchurl {
-    sha256 = "1iih5d171rq29366c1z90dri2h8173yyc8rm2740wxiqx6k7c18r";
+    sha256 = "1pppi4jbkkj641cdynmc35jaj40jjicw7gj75ran5qs5886jcblc";
     url = "mirror://samba/ccache/${name}.tar.xz";
   };
 
+  nativeBuildInputs = [ perl ];
+
   buildInputs = [ zlib ];
 
+  outputs = [ "out" "man" ];
+
   # non to be fail on filesystems with unconventional blocksizes (zfs on Hydra?)
-  patches = [ ./skip-fs-dependent-test.patch ];
+  patches = [
+    ./fix-debug-prefix-map-suite.patch
+    ./skip-fs-dependent-test.patch
+  ];
 
   postPatch = ''
     substituteInPlace Makefile.in --replace 'objs) $(extra_libs)' 'objs)'

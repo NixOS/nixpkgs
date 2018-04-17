@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, ncurses, glib, openssl, perl, libintlOrEmpty }:
+{ stdenv, fetchurl, pkgconfig, ncurses, glib, openssl, perl, libintl }:
 
 stdenv.mkDerivation rec {
   version = "1.1.1";
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ ncurses glib openssl perl libintlOrEmpty ];
+  buildInputs = [ ncurses glib openssl perl libintl ];
 
   configureFlags = [
     "--with-proxy"

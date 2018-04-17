@@ -1,12 +1,12 @@
-{ stdenv, fetchurl, pkgconfig, intltool, itstool, gnome3, libwnck3, libgtop, libxml2, libnotify, dbus_glib, polkit, upower, wirelesstools, mate, hicolor_icon_theme, wrapGAppsHook }:
+{ stdenv, fetchurl, pkgconfig, intltool, itstool, gnome3, libwnck3, libgtop, libxml2, libnotify, dbus-glib, polkit, upower, wirelesstools, mate, hicolor-icon-theme, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
   name = "mate-applets-${version}";
-  version = "1.20.0";
+  version = "1.20.1";
 
   src = fetchurl {
     url = "http://pub.mate-desktop.org/releases/${mate.getRelease version}/${name}.tar.xz";
-    sha256 = "1jmhswfcbawp9ax5p5h2dj8pyajadjdyxa0ac7ldvh7viv8qy52s";
+    sha256 = "1a119g49sr7jrd8i32bw7sn2qlsg3sdiwqdb2v36bm2999j261wc";
   };
 
   nativeBuildInputs = [
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     wirelesstools
     mate.libmateweather
     mate.mate-panel
-    hicolor_icon_theme
+    hicolor-icon-theme
   ];
 
   configureFlags = [ "--enable-suid=no" ];

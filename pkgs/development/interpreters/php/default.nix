@@ -319,7 +319,7 @@ let
         description = "An HTML-embedded scripting language";
         homepage = http://www.php.net/;
         license = licenses.php301;
-        maintainers = with maintainers; [ globin ];
+        maintainers = with maintainers; [ globin etu ];
         platforms = platforms.all;
         outputsToInstall = [ "out" "dev" ];
       };
@@ -338,22 +338,22 @@ let
 
 in {
   php56 = generic {
-    version = "5.6.33";
-    sha256 = "1k1ip1slk89hkp57qiqp8k2m5yrg9lx5rja542g87k8xfslrdxh7";
+    version = "5.6.35";
+    sha256 = "14ivsxdny0s7qm9pf773pafs8xzlzzpmaz039lwymn11rblsfy7f";
   };
 
   php70 = generic {
-    version = "7.0.27";
-    sha256 = "0ca174kp2l3fjcp8z0mqnkbjfhijjzz7rs7bkzg1qk2cpdijbylr";
+    version = "7.0.29";
+    sha256 = "1g1z1nhnmq0idsb9rfb46cdddfimaacw3yal291i2ypzqpal54cq";
   };
 
   php71 = generic {
-    version = "7.1.14";
-    sha256 = "1x41qmq66r0ff0573ln34d3qbzwg5z20nagsn1b6frfpkq9zvck3";
+    version = "7.1.16";
+    sha256 = "1rg7n12rd2v1p2yar615kqcdxpvphw3p89lpgajjgwy0qzwjm3il";
   };
 
   php72 = generic {
-    version = "7.2.2";
-    sha256 = "1vjaixm4f7rz9vz1yrlzmn9rpp01vd7b74m83qjg4wblw5caqhgq";
+    version = "7.2.4";
+    sha256 = "1wvy8jdd1l5hmdqgw7lq2ynkim3mxfsx8q7vp4il1jadfq6qlr8i";
   };
 }

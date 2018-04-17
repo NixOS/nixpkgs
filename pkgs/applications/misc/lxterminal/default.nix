@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, automake, autoconf, intltool, pkgconfig, gtk2, vte
+{ stdenv, fetchurl, automake, autoconf, intltool, pkgconfig, gtk3, vte
 , libxslt, docbook_xml_dtd_412, docbook_xml_xslt, libxml2, findXMLCatalogs
 }:
 
@@ -14,6 +14,7 @@ stdenv.mkDerivation rec {
 
   configureFlags = [
     "--enable-man"
+    "--enable-gtk3"
   ];
 
   nativeBuildInputs = [
@@ -21,7 +22,7 @@ stdenv.mkDerivation rec {
     libxslt docbook_xml_dtd_412 docbook_xml_xslt libxml2 findXMLCatalogs
   ];
 
-  buildInputs = [ gtk2 vte ];
+  buildInputs = [ gtk3 vte ];
 
   patches = [
     ./respect-xml-catalog-files-var.patch

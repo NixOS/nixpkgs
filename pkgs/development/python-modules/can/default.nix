@@ -8,11 +8,11 @@
 
 buildPythonPackage rec {
   pname = "python-can";
-  version = "2.0.0";
+  version = "2.1.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1c6zfd29ck9ffdklfb5xgxvfl52xdaqd89isykkypm1ll97yk2fs";
+    sha256 = "4a5c01dd67feeda35f88e6c12ea14ac8cabd426b9be0cc5f9fd083fe90a9dbfc";
   };
 
   propagatedBuildInputs = [ pyserial ];

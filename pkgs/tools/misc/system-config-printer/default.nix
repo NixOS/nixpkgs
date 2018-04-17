@@ -1,7 +1,7 @@
 { stdenv, fetchurl, udev, intltool, pkgconfig, glib, xmlto, wrapGAppsHook
 , makeWrapper, gtk3, docbook_xml_dtd_412, docbook_xsl
-, libxml2, desktop_file_utils, libusb1, cups, gdk_pixbuf, pango, atk, libnotify
-, gobjectIntrospection, libgnome_keyring3
+, libxml2, desktop-file-utils, libusb1, cups, gdk_pixbuf, pango, atk, libnotify
+, gobjectIntrospection, libgnome-keyring3
 , cups-filters
 , pythonPackages
 , withGUI ? true
@@ -20,10 +20,10 @@ stdenv.mkDerivation rec {
 
   buildInputs =
     [ intltool pkgconfig glib udev libusb1 cups xmlto
-      libxml2 docbook_xml_dtd_412 docbook_xsl desktop_file_utils
+      libxml2 docbook_xml_dtd_412 docbook_xsl desktop-file-utils
       pythonPackages.python pythonPackages.wrapPython
       libnotify gobjectIntrospection gdk_pixbuf pango atk
-      libgnome_keyring3
+      libgnome-keyring3
     ];
 
   nativeBuildInputs = [ wrapGAppsHook ];

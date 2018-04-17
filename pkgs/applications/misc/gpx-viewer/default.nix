@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, intltool, pkgconfig, gnome3, shared_mime_info, desktop_file_utils, wrapGAppsHook }:
+{ stdenv, fetchurl, intltool, pkgconfig, gnome3, shared-mime-info, desktop-file-utils, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
   name = "gpx-viewer-${version}";
@@ -17,8 +17,8 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     intltool pkgconfig
-    shared_mime_info # For update-mime-database
-    desktop_file_utils # For update-desktop-database
+    shared-mime-info # For update-mime-database
+    desktop-file-utils # For update-desktop-database
     wrapGAppsHook # Fix error: GLib-GIO-ERROR **: No GSettings schemas are installed on the system
   ];
   buildInputs = with gnome3; [ gdl libchamplain defaultIconTheme ];

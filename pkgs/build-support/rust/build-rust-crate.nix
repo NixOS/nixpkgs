@@ -19,7 +19,7 @@ let makeDeps = dependencies:
       echo_build_heading() {
        start=""
        end=""
-       if [[ x"${colors}" -eq x"always" ]]; then
+       if [[ "${colors}" == "always" ]]; then
          start="$(printf '\033[0;1;32m')" #set bold, and set green.
          end="$(printf '\033[0m')" #returns to "normal"
        fi
@@ -34,7 +34,7 @@ let makeDeps = dependencies:
       noisily() {
         start=""
         end=""
-        if [[ x"${colors}" -eq x"always" ]]; then
+        if [[ "${colors}" == "always" ]]; then
           start="$(printf '\033[0;1;32m')" #set bold, and set green.
           end="$(printf '\033[0m')" #returns to "normal"
         fi
@@ -194,7 +194,7 @@ let makeDeps = dependencies:
       bold=""
       green=""
       boldgreen=""
-      if [[ "${colors}" -eq "always" ]]; then
+      if [[ "${colors}" == "always" ]]; then
         norm="$(printf '\033[0m')" #returns to "normal"
         bold="$(printf '\033[0;1m')" #set bold
         green="$(printf '\033[0;32m')" #set green
@@ -230,7 +230,7 @@ let makeDeps = dependencies:
           ${crateFeatures} --out-dir target/bin --emit=dep-info,link -L dependency=target/deps \
           $LINK ${deps}$EXTRA_LIB --cap-lints allow \
           $BUILD_OUT_DIR $EXTRA_BUILD $EXTRA_FEATURES --color ${colors}
-        if [ "$crate_name_" -ne "$crate_name" ]; then
+        if [ "$crate_name_" != "$crate_name" ]; then
           mv target/bin/$crate_name_ target/bin/$crate_name
         fi
       }

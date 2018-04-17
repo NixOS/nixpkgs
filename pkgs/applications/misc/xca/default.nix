@@ -3,11 +3,11 @@
 
 mkDerivation rec {
   name = "xca-${version}";
-  version = "1.4.0";
+  version = "1.4.1";
 
   src = fetchurl {
     url = "mirror://sourceforge/xca/${name}.tar.gz";
-    sha256 = "1gygj6kljj3r1y0pg67mks36vfcz4vizjsqnqdvrk6zlgqjbzm7z";
+    sha256 = "11niik2m4yswkp71hrdh54z5kgkvdg8y0b6wdqbrn6vy1n8gz63q";
   };
 
   enableParallelBuilding = true;

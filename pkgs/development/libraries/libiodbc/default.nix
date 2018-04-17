@@ -1,11 +1,11 @@
 { stdenv, fetchurl, pkgconfig, gtk2, useGTK ? false }:
 
 stdenv.mkDerivation rec {
-  name = "libiodbc-3.52.8";
+  name = "libiodbc-3.52.12";
 
   src = fetchurl {
     url = "mirror://sourceforge/iodbc/${name}.tar.gz";
-    sha256 = "16hjb6fcval85gnkgkxfhw4c5h3pgf86awyh8p2bhnnvzc0ma5hq";
+    sha256 = "0qpvklgr1lcn5g8xbz7fbc9rldqf9r8s6xybhqj20m4sglxgziai";
   };
 
   nativeBuildInputs = [ pkgconfig ];

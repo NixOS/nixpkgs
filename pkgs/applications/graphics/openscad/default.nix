@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, qt4, qmake4Hook, bison, flex, eigen, boost, mesa, glew, opencsg, cgal
+{ stdenv, fetchurl, qt4, qmake4Hook, bison, flex, eigen, boost, libGLU_combined, glew, opencsg, cgal
 , mpfr, gmp, glib, pkgconfig, harfbuzz, qscintilla, gettext
 }:
 
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [
-    qt4 qmake4Hook bison flex eigen boost mesa glew opencsg cgal mpfr gmp glib
+    qt4 qmake4Hook bison flex eigen boost libGLU_combined glew opencsg cgal mpfr gmp glib
     pkgconfig harfbuzz qscintilla gettext
   ];
 

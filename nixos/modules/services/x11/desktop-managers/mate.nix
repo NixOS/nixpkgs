@@ -102,11 +102,13 @@ in
 
     services.dbus.packages = [
       pkgs.gnome3.dconf
-      pkgs.at_spi2_core
+      pkgs.at-spi2-core
     ];
 
     services.gnome3.gnome-keyring.enable = true;
     services.upower.enable = config.powerManagement.enable;
+
+    security.pam.services."mate-screensaver".unixAuth = true;
 
     environment.pathsToLink = [ "/share" ];
   };

@@ -44,6 +44,20 @@ cmakeConfigurePhase() {
         cmakeFlags="-DCMAKE_STRIP=$(command -v $crossConfig-strip) $cmakeFlags"
     fi
 
+    # on macOS we want to prefer Unix-style headers to Frameworks
+    # because we usually do not package the framework
+    cmakeFlags="-DCMAKE_FIND_FRAMEWORK=last $cmakeFlags"
+
+    # we never want to use the global macOS SDK
+    cmakeFlags="-DCMAKE_OSX_SYSROOT= $cmakeFlags"
+
+    # disable OSX deployment target
+    # we don't want our binaries to have a "minimum" OSX version
+    cmakeFlags="-DCMAKE_OSX_DEPLOYMENT_TARGET= $cmakeFlags"
+
+    # correctly detect our clang compiler
+    cmakeFlags="-DCMAKE_POLICY_DEFAULT_CMP0025=NEW $cmakeFlags"
+
     # This installs shared libraries with a fully-specified install
     # name. By default, cmake installs shared libraries with just the
     # basename as the install name, which means that, on Darwin, they

@@ -11,20 +11,21 @@
 , pytest
 , gunicorn
 , pytest-mock
+, async_generator
 }:
 
 buildPythonPackage rec {
   pname = "aiohttp";
-  version = "3.0.1";
+  version = "3.1.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "7aee5c0750584946fde40da70f0b28fe769f85182f1171acef18a35fd8ecd221";
+    sha256 = "df49fe4452a942e0031174c78917f9926d122d4603bf56bae4591639f2a3dc6a";
   };
 
-  disabled = pythonOlder "3.4";
+  disabled = pythonOlder "3.5";
 
-  checkInputs = [ pytest gunicorn pytest-mock ];
+  checkInputs = [ pytest gunicorn pytest-mock async_generator ];
 
   propagatedBuildInputs = [ attrs chardet multidict async-timeout yarl ]
     ++ lib.optional (pythonOlder "3.7") idna-ssl;

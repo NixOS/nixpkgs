@@ -31,6 +31,7 @@
   ./hardware/ckb.nix
   ./hardware/cpu/amd-microcode.nix
   ./hardware/cpu/intel-microcode.nix
+  ./hardware/digitalbitbox.nix
   ./hardware/sensor/iio.nix
   ./hardware/ksm.nix
   ./hardware/mcelog.nix
@@ -40,6 +41,7 @@
   ./hardware/pcmcia.nix
   ./hardware/raid/hpsa.nix
   ./hardware/usb-wwan.nix
+  ./hardware/onlykey.nix
   ./hardware/video/amdgpu.nix
   ./hardware/video/amdgpu-pro.nix
   ./hardware/video/ati.nix
@@ -57,6 +59,7 @@
   ./installer/tools/tools.nix
   ./misc/assertions.nix
   ./misc/crashdump.nix
+  ./misc/documentation.nix
   ./misc/extra-arguments.nix
   ./misc/ids.nix
   ./misc/lib.nix
@@ -78,17 +81,17 @@
   ./programs/command-not-found/command-not-found.nix
   ./programs/criu.nix
   ./programs/dconf.nix
+  ./programs/digitalbitbox/default.nix
   ./programs/environment.nix
   ./programs/fish.nix
   ./programs/freetds.nix
   ./programs/gnupg.nix
   ./programs/gphoto2.nix
-  ./programs/info.nix
+  ./programs/iftop.nix
   ./programs/java.nix
   ./programs/kbdlight.nix
   ./programs/less.nix
   ./programs/light.nix
-  ./programs/man.nix
   ./programs/mosh.nix
   ./programs/mtr.nix
   ./programs/nano.nix
@@ -102,6 +105,7 @@
   ./programs/shadow.nix
   ./programs/shell.nix
   ./programs/spacefm.nix
+  ./programs/singularity.nix
   ./programs/ssh.nix
   ./programs/ssmtp.nix
   ./programs/sysdig.nix
@@ -109,6 +113,7 @@
   ./programs/sway.nix
   ./programs/thefuck.nix
   ./programs/tmux.nix
+  ./programs/udevil.nix
   ./programs/venus.nix
   ./programs/vim.nix
   ./programs/way-cooler.nix
@@ -154,8 +159,9 @@
   ./services/audio/slimserver.nix
   ./services/audio/squeezelite.nix
   ./services/audio/ympd.nix
-  ./services/backup/almir.nix
   ./services/backup/bacula.nix
+  ./services/backup/borgbackup.nix
+  ./services/backup/duplicati.nix
   ./services/backup/crashplan.nix
   ./services/backup/crashplan-small-business.nix
   ./services/backup/mysql-backup.nix
@@ -319,8 +325,9 @@
   ./services/misc/geoip-updater.nix
   ./services/misc/gitea.nix
   #./services/misc/gitit.nix
-  ./services/misc/gitlab.nix
+  #./services/misc/gitlab.nix
   ./services/misc/gitolite.nix
+  ./services/misc/gitweb.nix
   ./services/misc/gogs.nix
   ./services/misc/gollum.nix
   ./services/misc/gpsd.nix
@@ -358,6 +365,8 @@
   ./services/misc/rippled.nix
   ./services/misc/ripple-data-api.nix
   ./services/misc/rogue.nix
+  ./services/misc/serviio.nix
+  ./services/misc/safeeyes.nix
   ./services/misc/siproxd.nix
   ./services/misc/snapper.nix
   ./services/misc/sonarr.nix
@@ -393,16 +402,7 @@
   ./services/monitoring/osquery.nix
   ./services/monitoring/prometheus/default.nix
   ./services/monitoring/prometheus/alertmanager.nix
-  ./services/monitoring/prometheus/blackbox-exporter.nix
-  ./services/monitoring/prometheus/collectd-exporter.nix
-  ./services/monitoring/prometheus/fritzbox-exporter.nix
-  ./services/monitoring/prometheus/json-exporter.nix
-  ./services/monitoring/prometheus/minio-exporter.nix
-  ./services/monitoring/prometheus/nginx-exporter.nix
-  ./services/monitoring/prometheus/node-exporter.nix
-  ./services/monitoring/prometheus/snmp-exporter.nix
-  ./services/monitoring/prometheus/unifi-exporter.nix
-  ./services/monitoring/prometheus/varnish-exporter.nix
+  ./services/monitoring/prometheus/exporters.nix
   ./services/monitoring/riemann.nix
   ./services/monitoring/riemann-dash.nix
   ./services/monitoring/riemann-tools.nix
@@ -436,6 +436,7 @@
   ./services/network-filesystems/u9fs.nix
   ./services/network-filesystems/yandex-disk.nix
   ./services/network-filesystems/xtreemfs.nix
+  ./services/network-filesystems/ceph.nix
   ./services/networking/amuled.nix
   ./services/networking/aria2.nix
   ./services/networking/asterisk.nix
@@ -546,6 +547,7 @@
   ./services/networking/searx.nix
   ./services/networking/seeks.nix
   ./services/networking/skydns.nix
+  ./services/networking/shadowsocks.nix
   ./services/networking/shairport-sync.nix
   ./services/networking/shout.nix
   ./services/networking/sniproxy.nix
@@ -634,11 +636,9 @@
   ./services/web-apps/atlassian/jira.nix
   ./services/web-apps/frab.nix
   ./services/web-apps/mattermost.nix
-  ./services/web-apps/nixbot.nix
   ./services/web-apps/nexus.nix
   ./services/web-apps/pgpkeyserver-lite.nix
-  ./services/web-apps/piwik.nix
-  ./services/web-apps/pump.io.nix
+  ./services/web-apps/matomo.nix
   ./services/web-apps/restya-board.nix
   ./services/web-apps/tt-rss.nix
   ./services/web-apps/selfoss.nix
@@ -655,6 +655,7 @@
   ./services/web-servers/mighttpd2.nix
   ./services/web-servers/minio.nix
   ./services/web-servers/nginx/default.nix
+  ./services/web-servers/nginx/gitweb.nix
   ./services/web-servers/phpfpm/default.nix
   ./services/web-servers/shellinabox.nix
   ./services/web-servers/tomcat.nix

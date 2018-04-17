@@ -3,12 +3,12 @@
 
 buildPythonPackage rec {
   pname = "nilearn";
-  version = "0.4.0";
+  version = "0.4.1";
   name = pname + "-" + version;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "bb692254bde35d7e1d3d1534d9b3117810b35a744724625f150fbbc64d519c02";
+    sha256 = "c2ef16d357d24699abced07e89a50d465c8fbaa8537f1a9d4d5cb8a612926dbc";
   };
 
   checkPhase = "nosetests --exclude with_expand_user nilearn/tests";

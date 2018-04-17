@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, gtk3, hicolor_icon_theme }:
+{ stdenv, fetchFromGitHub, gtk3, hicolor-icon-theme }:
 
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     sha256 = "0q3hpq2jc9iwnzzqpb12g1qzjsw4ckhdqkfqf6nirl87r5drkv6j";
   };
 
-  nativeBuildInputs = [ gtk3 hicolor_icon_theme ];
+  nativeBuildInputs = [ gtk3 hicolor-icon-theme ];
 
   installPhase = ''
     mkdir -p $out/share/icons

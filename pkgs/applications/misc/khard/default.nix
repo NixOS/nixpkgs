@@ -31,6 +31,6 @@ python3Packages.buildPythonApplication rec {
     homepage = https://github.com/scheibler/khard;
     description = "Console carddav client";
     license = stdenv.lib.licenses.gpl3;
-    maintainers = with stdenv.lib.maintainers; [ matthiasbeyer ];
+    maintainers = with stdenv.lib.maintainers; [ ];
   };
 }

@@ -21,7 +21,7 @@
 , libiconv, postgresql, v8_3_16_14, clang, sqlite, zlib, imagemagick
 , pkgconfig , ncurses, xapian_1_2_22, gpgme, utillinux, fetchpatch, tzdata, icu, libffi
 , cmake, libssh2, openssl, mysql, darwin, git, perl, pcre, gecode_3, curl
-, libmsgpack, qt48, libsodium, snappy, libossp_uuid, lxc, libpcap, xlibs, gtk2, buildRubyGem
+, libmsgpack, qt48, libsodium, snappy, libossp_uuid, lxc, libpcap, xorg, gtk2, buildRubyGem
 , cairo, re2, rake, gobjectIntrospection, gdk_pixbuf
 }@args:
 
@@ -60,12 +60,12 @@ in
 
   cairo = attrs: {
     nativeBuildInputs = [ pkgconfig ];
-    buildInputs = [ gtk2 pcre xlibs.libpthreadstubs xlibs.libXdmcp];
+    buildInputs = [ gtk2 pcre xorg.libpthreadstubs xorg.libXdmcp];
   };
 
   cairo-gobject = attrs: {
     nativeBuildInputs = [ pkgconfig ];
-    buildInputs = [ cairo pcre xlibs.libpthreadstubs xlibs.libXdmcp ];
+    buildInputs = [ cairo pcre xorg.libpthreadstubs xorg.libXdmcp ];
   };
 
   capybara-webkit = attrs: {
@@ -87,14 +87,14 @@ in
       sed -i $installPath/lib/dep-selector-libgecode.rb -e 's@VENDORED_GECODE_DIR =.*@VENDORED_GECODE_DIR = "${gecode_3}"@'
     '';
   };
-  
+
   ethon = attrs: {
     dontBuild = false;
     postPatch = ''
       substituteInPlace lib/ethon/curls/settings.rb \
         --replace "libcurl" "${curl.out}/lib/libcurl${stdenv.hostPlatform.extensions.sharedLibrary}"
     '';
-  }; 
+  };
 
   eventmachine = attrs: {
     buildInputs = [ openssl ];
@@ -128,7 +128,7 @@ in
 
   gtk2 = attrs: {
     nativeBuildInputs = [ pkgconfig ];
-    buildInputs = [ gtk2 pcre xlibs.libpthreadstubs xlibs.libXdmcp];
+    buildInputs = [ gtk2 pcre xorg.libpthreadstubs xorg.libXdmcp];
     # CFLAGS must be set for this gem to detect gdkkeysyms.h correctly
     CFLAGS = "-I${gtk2.dev}/include/gtk-2.0 -I/non-existent-path";
   };
@@ -139,8 +139,9 @@ in
   };
 
   grpc = attrs: {
-  nativeBuildInputs = [ pkgconfig ];
+    nativeBuildInputs = [ pkgconfig ];
     buildInputs = [ openssl ];
+    NIX_CFLAGS_COMPILE = [ "-Wno-error=stringop-overflow" "-Wno-error=implicit-fallthrough" ];
   };
 
   hitimes = attrs: {
@@ -204,7 +205,7 @@ in
 
   pango = attrs: {
   nativeBuildInputs = [ pkgconfig ];
-    buildInputs = [ gtk2 xlibs.libXdmcp pcre xlibs.libpthreadstubs ];
+    buildInputs = [ gtk2 xorg.libXdmcp pcre xorg.libpthreadstubs ];
   };
 
   patron = attrs: {
@@ -258,8 +259,9 @@ in
     ];
   };
   rugged = attrs: {
-  nativeBuildInputs = [ pkgconfig ];
+    nativeBuildInputs = [ pkgconfig ];
     buildInputs = [ cmake openssl libssh2 zlib ];
+    dontUseCmakeConfigure = true;
   };
 
   scrypt = attrs:

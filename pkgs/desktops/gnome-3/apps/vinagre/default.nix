@@ -2,7 +2,17 @@
 , libsecret, itstool, makeWrapper, librsvg }:
 
 stdenv.mkDerivation rec {
-  inherit (import ./src.nix fetchurl) name src;
+  name = "vinagre-${version}";
+  version = "3.22.0";
+
+  src = fetchurl {
+    url = "mirror://gnome/sources/vinagre/${gnome3.versionBranch version}/${name}.tar.xz";
+    sha256 = "cd1cdbacca25c8d1debf847455155ee798c3e67a20903df8b228d4ece5505e82";
+  };
+
+  passthru = {
+    updateScript = gnome3.updateScript { packageName = "vinagre"; attrPath = "gnome3.vinagre"; };
+  };
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ gtk3 vte libxml2 gtkvnc intltool libsecret

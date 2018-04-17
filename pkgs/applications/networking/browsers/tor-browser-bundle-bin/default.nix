@@ -9,7 +9,7 @@
 , atk
 , cairo
 , dbus
-, dbus_glib
+, dbus-glib
 , fontconfig
 , freetype
 , gdk_pixbuf
@@ -42,8 +42,8 @@
 # Wrapper runtime
 , coreutils
 , glibcLocales
-, hicolor_icon_theme
-, shared_mime_info
+, hicolor-icon-theme
+, shared-mime-info
 
 # Whether to disable multiprocess support to work around crashing tabs
 # TODO: fix the underlying problem instead of this terrible work-around
@@ -62,7 +62,7 @@ let
     atk
     cairo
     dbus
-    dbus_glib
+    dbus-glib
     fontconfig
     freetype
     gdk_pixbuf
@@ -98,7 +98,7 @@ let
   fteLibPath = makeLibraryPath [ stdenv.cc.cc gmp ];
 
   # Upstream source
-  version = "7.5";
+  version = "7.5.3";
 
   lang = "en-US";
 
@@ -108,7 +108,7 @@ let
         "https://github.com/TheTorProject/gettorbrowser/releases/download/v${version}/tor-browser-linux64-${version}_${lang}.tar.xz"
         "https://dist.torproject.org/torbrowser/${version}/tor-browser-linux64-${version}_${lang}.tar.xz"
       ];
-      sha256 = "1ia8qv5hj7zrrli5d9qf65s3rlrls0whrx3q96lw63x2gn05nwv7";
+      sha256 = "0vgw1qsd6rqbbgnsw9zwcv5m308abh7wp1p12mp8g04xndxnzw0d";
     };
 
     "i686-linux" = fetchurl {
@@ -116,7 +116,7 @@ let
         "https://github.com/TheTorProject/gettorbrowser/releases/download/v${version}/tor-browser-linux32-${version}_${lang}.tar.xz"
         "https://dist.torproject.org/torbrowser/${version}/tor-browser-linux32-${version}_${lang}.tar.xz"
       ];
-      sha256 = "1sw1n7jsagyl5cjs265x3k9jzh0j0yh767ixcy17vif5f9dfyzak";
+      sha256 = "0scjy51zmyn7za0gii0dvndq06slip64nd0ik2cjyq232agvbxmr";
     };
   };
 in
@@ -261,8 +261,8 @@ stdenv.mkDerivation rec {
     EOF
 
     WRAPPER_XDG_DATA_DIRS=${concatMapStringsSep ":" (x: "${x}/share") [
-      hicolor_icon_theme
-      shared_mime_info
+      hicolor-icon-theme
+      shared-mime-info
     ]}
 
     # Generate wrapper

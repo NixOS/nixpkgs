@@ -46,6 +46,8 @@ stdenv.mkDerivation rec {
     "WARNINGS+=-Wno-inconsistent-missing-override"
   ];
 
+  NIX_CFLAGS_COMPILE = stdenv.lib.optionalString stdenv.cc.isClang "-Wno-user-defined-warnings";
+
   postBuild = stdenv.lib.optionalString (tiles && stdenv.isDarwin) ''
     # iconutil on macOS is not available in nixpkgs
     png2icns data/osx/AppIcon.icns data/osx/AppIcon.iconset/*
@@ -92,7 +94,7 @@ stdenv.mkDerivation rec {
       substances or radiation, now more closely resemble insects, birds or fish
       than their original form.
     '';
-    homepage = http://cataclysmdda.org/;
+    homepage = https://cataclysmdda.org/;
     license = licenses.cc-by-sa-30;
     maintainers = [ maintainers.skeidel ];
     platforms = platforms.unix;

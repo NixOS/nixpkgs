@@ -9,15 +9,16 @@ let
       serverName = if vhostConfig.serverName != null
         then vhostConfig.serverName
         else vhostName;
+      acmeDirectory = config.security.acme.directory;
     in
     vhostConfig // {
       inherit serverName;
     } // (optionalAttrs vhostConfig.enableACME {
-      sslCertificate = "/var/lib/acme/${serverName}/fullchain.pem";
-      sslCertificateKey = "/var/lib/acme/${serverName}/key.pem";
+      sslCertificate = "${acmeDirectory}/${serverName}/fullchain.pem";
+      sslCertificateKey = "${acmeDirectory}/${serverName}/key.pem";
     }) // (optionalAttrs (vhostConfig.useACMEHost != null) {
-      sslCertificate = "/var/lib/acme/${vhostConfig.useACMEHost}/fullchain.pem";
-      sslCertificateKey = "/var/lib/acme/${vhostConfig.useACMEHost}/key.pem";
+      sslCertificate = "${acmeDirectory}/${vhostConfig.useACMEHost}/fullchain.pem";
+      sslCertificateKey = "${acmeDirectory}/${vhostConfig.useACMEHost}/key.pem";
     })
   ) cfg.virtualHosts;
   enableIPv6 = config.networking.enableIPv6;

@@ -1,5 +1,5 @@
 { stdenv, buildPythonPackage, fetchPypi
-, mesa, xorg, freetype, fontconfig, future}:
+, libGLU_combined, xorg, freetype, fontconfig, future}:
 
 buildPythonPackage rec {
   version = "1.3.1";
@@ -11,7 +11,7 @@ buildPythonPackage rec {
   };
 
   postPatch = let
-    libs = [ mesa xorg.libX11 freetype fontconfig ];
+    libs = [ libGLU_combined xorg.libX11 freetype fontconfig ];
     paths = builtins.concatStringsSep "," (map (l: "\"${l}/lib\"") libs);
   in "sed -i -e 's|directories\.extend.*lib[^]]*|&,${paths}|' pyglet/lib.py";
 

@@ -1,5 +1,5 @@
 { stdenv, lib, fetchhg, cmake, pkgconfig, makeWrapper, callPackage
-, soundfont-fluid, SDL, mesa, glew, bzip2, zlib, libjpeg, fluidsynth, openssl, gtk2, python3
+, soundfont-fluid, SDL, libGL, glew, bzip2, zlib, libjpeg, fluidsynth, openssl, gtk2, python3, libgme
 , serverOnly ? false
 }:
 
@@ -7,6 +7,7 @@ let
   suffix = lib.optionalString serverOnly "-server";
   fmod = callPackage ./fmod.nix { };
   sqlite = callPackage ./sqlite.nix { };
+  clientLibPath = lib.makeLibraryPath [ fluidsynth ];
 
 in stdenv.mkDerivation {
   name = "zandronum${suffix}-3.0";
@@ -27,8 +28,8 @@ in stdenv.mkDerivation {
 
   # I have no idea why would SDL and libjpeg be needed for the server part!
   # But they are.
-  buildInputs = [ openssl bzip2 zlib SDL libjpeg sqlite ]
-             ++ lib.optionals (!serverOnly) [ mesa glew fmod fluidsynth gtk2 ];
+  buildInputs = [ openssl bzip2 zlib SDL libjpeg sqlite libgme ]
+             ++ lib.optionals (!serverOnly) [ libGL glew fmod fluidsynth gtk2 ];
 
   nativeBuildInputs = [ cmake pkgconfig makeWrapper python3 ];
 
@@ -44,9 +45,10 @@ in stdenv.mkDerivation {
   '';
 
   cmakeFlags =
-    lib.optional (!serverOnly) "-DFMOD_LIBRARY=${fmod}/lib/libfmodex.so"
-    ++ lib.optional serverOnly "-DSERVERONLY=ON"
-    ;
+    [ "-DFORCE_INTERNAL_GME=OFF" ]
+    ++ (if serverOnly
+    then [ "-DSERVERONLY=ON" ]
+    else [ "-DFMOD_LIBRARY=${fmod}/lib/libfmodex.so" ]);
 
   enableParallelBuilding = true;
 
@@ -59,15 +61,17 @@ in stdenv.mkDerivation {
        *.pk3 \
        ${lib.optionalString (!serverOnly) "liboutput_sdl.so"} \
        $out/lib/zandronum
-  '' + (if (!serverOnly) then
-          ''makeWrapper $out/lib/zandronum/zandronum $out/bin/zandronum --prefix LD_LIBRARY_PATH : "$LD_LIBRARY_PATH:${fluidsynth}/lib"''
-        else
-          ''makeWrapper $out/lib/zandronum/zandronum${suffix} $out/bin/zandronum${suffix}'');
+    makeWrapper $out/lib/zandronum/zandronum${suffix} $out/bin/zandronum${suffix}
+  '';
 
   postFixup = lib.optionalString (!serverOnly) ''
-    patchelf --set-rpath $(patchelf --print-rpath $out/lib/zandronum/zandronum):$out/lib/zandronum \
+    patchelf --set-rpath $(patchelf --print-rpath $out/lib/zandronum/zandronum):$out/lib/zandronum:${clientLibPath} \
       $out/lib/zandronum/zandronum
   '';
+
+  passthru = {
+    inherit fmod sqlite;
+  };
 
   meta = with stdenv.lib; {
     homepage = http://zandronum.com/;

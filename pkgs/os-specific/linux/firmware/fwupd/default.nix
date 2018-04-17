@@ -1,9 +1,9 @@
-{ stdenv, fetchurl, fetchpatch, gtk_doc, pkgconfig, gobjectIntrospection, intltool
-, libgudev, polkit, appstream-glib, gusb, sqlite, libarchive, glib_networking
+{ stdenv, fetchurl, fetchpatch, gtk-doc, pkgconfig, gobjectIntrospection, intltool
+, libgudev, polkit, appstream-glib, gusb, sqlite, libarchive, glib-networking
 , libsoup, help2man, gpgme, libxslt, elfutils, libsmbios, efivar, glibcLocales
 , fwupdate, libyaml, valgrind, meson, libuuid, colord, docbook_xml_dtd_43, docbook_xsl
-, ninja, gcab, gnutls, python3, wrapGAppsHook, json_glib
-, shared_mime_info, umockdev
+, ninja, gcab, gnutls, python3, wrapGAppsHook, json-glib
+, shared-mime-info, umockdev
 }:
 let
   # Updating? Keep $out/etc synchronized with passthru.filesInstalledToEtc
@@ -20,12 +20,12 @@ in stdenv.mkDerivation {
   outputs = [ "out" "devdoc" "man" "installedTests" ];
 
   nativeBuildInputs = [
-    meson ninja gtk_doc pkgconfig gobjectIntrospection intltool glibcLocales shared_mime_info
+    meson ninja gtk-doc pkgconfig gobjectIntrospection intltool glibcLocales shared-mime-info
     valgrind gcab docbook_xml_dtd_43 docbook_xsl help2man libxslt python wrapGAppsHook
   ];
   buildInputs = [
     polkit appstream-glib gusb sqlite libarchive libsoup elfutils libsmbios fwupdate libyaml
-    libgudev colord gpgme libuuid gnutls glib_networking efivar json_glib umockdev
+    libgudev colord gpgme libuuid gnutls glib-networking efivar json-glib umockdev
   ];
 
   LC_ALL = "en_US.UTF-8"; # For po/make-images
@@ -50,7 +50,7 @@ in stdenv.mkDerivation {
   doCheck = true;
 
   preFixup = ''
-    gappsWrapperArgs+=(--prefix XDG_DATA_DIRS : "${shared_mime_info}/share")
+    gappsWrapperArgs+=(--prefix XDG_DATA_DIRS : "${shared-mime-info}/share")
   '';
 
   mesonFlags = [

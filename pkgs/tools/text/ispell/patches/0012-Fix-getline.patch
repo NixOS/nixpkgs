@@ -1,0 +1,62 @@
+From: Stefan Potyra <sistpoty@ubuntu.com>
+Date: Sat, 3 Oct 2009 04:00:34 +0200
+Subject: 0012 Fix getline
+
+getline is not provided by eglibc, avoid conflict
+
+Bug-Debian: http://bugs.debian.org/cgi-bin/bugreport.cgi?bug=549401
+Forwarded: no
+---
+ correct.c |   10 +++++-----
+ 1 files changed, 5 insertions(+), 5 deletions(-)
+
+diff --git a/correct.c b/correct.c
+index 661bf57..ff7cb99 100644
+--- a/correct.c
++++ b/correct.c
+@@ -246,7 +246,7 @@ static void	save_root_cap P ((ichar_t * word, ichar_t * pattern,
+ 		  struct flagent * sufent,
+ 		  ichar_t savearea[MAX_CAPS][INPUTWORDLEN + MAXAFFIXLEN],
+ 		  int * nsaved));
+-static char *	getline P ((char * buf, int bufsize));
++static char *	getline_ispell P ((char * buf, int bufsize));
+ void		askmode P ((void));
+ void		copyout P ((unsigned char ** cc, int cnt));
+ static void	lookharder P ((unsigned char * string));
+@@ -572,7 +572,7 @@ checkagain:
+ 
+ 		imove (li - 1, 0);
+ 		(void) putchar ('!');
+-		if (getline ((char *) buf, sizeof buf) == NULL)
++		if (getline_ispell ((char *) buf, sizeof buf) == NULL)
+ 		    {
+ 		    (void) putchar (7);
+ 		    ierase ();
+@@ -597,7 +597,7 @@ checkagain:
+ 		    (void) printf ("%s ", CORR_C_READONLY);
+ 		    }
+ 		(void) printf (CORR_C_REPLACE_WITH);
+-		if (getline ((char *) ctok, ctokl) == NULL)
++		if (getline_ispell ((char *) ctok, ctokl) == NULL)
+ 		    {
+ 		    (void) putchar (7);
+ 		    /* Put it back */
+@@ -665,7 +665,7 @@ checkagain:
+ 		unsigned char	buf[100];
+ 		imove (li - 1, 0);
+ 		(void) printf (CORR_C_LOOKUP_PROMPT);
+-		if (getline ((char *) buf, sizeof buf) == NULL)
++		if (getline_ispell ((char *) buf, sizeof buf) == NULL)
+ 		    {
+ 		    (void) putchar (7);
+ 		    ierase ();
+@@ -1584,7 +1584,7 @@ static void save_root_cap (word, pattern, prestrip, preadd, sufstrip, sufadd,
+     return;
+     }
+ 
+-static char * getline (s, len)
++static char * getline_ispell(s, len)
+     register char *	s;
+     register int	len;
+     {
+-- 

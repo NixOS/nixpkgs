@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, patchelf, glibc, libX11, mesa }:
+{ stdenv, fetchurl, patchelf, glibc, libX11, libGLU_combined }:
 
 with stdenv.lib;
 assert stdenv.isi686;
@@ -25,7 +25,7 @@ stdenv.mkDerivation {
     cp -r * $out/res
 
     patchelf --set-interpreter ${glibc.out}/lib/ld-linux.so.2 \
-             --set-rpath ${stdenv.lib.makeLibraryPath [ stdenv.cc.cc libX11 mesa ]} \
+             --set-rpath ${stdenv.lib.makeLibraryPath [ stdenv.cc.cc libX11 libGLU_combined ]} \
              "$out/res/Tibia"
 
     # We've patchelf'd the files. The main ‘Tibia’ binary is a bit

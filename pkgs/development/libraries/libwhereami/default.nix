@@ -2,14 +2,17 @@
 
 stdenv.mkDerivation rec {
   name = "libwhereami-${version}";
-  version = "0.1.3";
+  version = "0.2.0";
 
   src = fetchFromGitHub {
-    sha256 = "0mpy2rkxcm2nz1qvldih01czxlsksqfkzgh58pnrw8yva31wv9q6";
+    sha256 = "10phq4a11m8ly6b4dc2yg3dnjzg8ad5wnjv0ilvwylnw32800pxr";
     rev = version;
     repo = "libwhereami";
     owner = "puppetlabs";
   };
+
+  # post gcc7, upstream bug: https://tickets.puppetlabs.com/browse/FACT-1828
+  NIX_CFLAGS_COMPILE = "-Wno-error=deprecated";
 
   nativeBuildInputs = [ cmake ];
 

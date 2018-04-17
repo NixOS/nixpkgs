@@ -1,5 +1,5 @@
 { stdenv, lib, fetchurl, dpkg, gnome2, atk, cairo, gdk_pixbuf, glib, freetype,
-fontconfig, dbus, libX11, xlibs, libXi, libXcursor, libXdamage, libXrandr,
+fontconfig, dbus, libX11, xorg, libXi, libXcursor, libXdamage, libXrandr,
 libXcomposite, libXext, libXfixes, libXrender, libXtst, libXScrnSaver, nss,
 nspr, alsaLib, cups, expat, udev
 }:
@@ -33,7 +33,7 @@ let
     nss
     stdenv.cc.cc
     udev
-    xlibs.libxcb
+    xorg.libxcb
   ];
 
 in

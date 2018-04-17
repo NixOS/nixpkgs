@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, libpng, python3, boost, mesa, qtbase, ncurses, cmake, flex, lemon }:
+{ stdenv, fetchFromGitHub, libpng, python3, boost, libGLU_combined, qtbase, ncurses, cmake, flex, lemon }:
 
 let
   gitRev    = "020910c25614a3752383511ede5a1f5551a8bd39";
@@ -24,7 +24,7 @@ in
 
     buildInputs = [
       libpng python3 (boost.override { python = python3; })
-      mesa qtbase ncurses
+      libGLU_combined qtbase ncurses
     ];
 
     nativeBuildInputs = [ cmake flex lemon ];

@@ -4,11 +4,11 @@
 
 stdenv.mkDerivation rec {
   name = "clamav-${version}";
-  version = "0.99.3";
+  version = "0.99.4";
 
   src = fetchurl {
     url = "https://www.clamav.net/downloads/production/${name}.tar.gz";
-    sha256 = "114f7qk3h0klgm0zzn2394n5spcn91vjc9mq6m03l2p0ls955yh0";
+    sha256 = "0q94iwi729id9pyc72w6zlllbaz37qvpi6gc51g2x3fy7ckw6anp";
   };
 
   # don't install sample config files into the absolute sysconfdir folder
@@ -20,8 +20,6 @@ stdenv.mkDerivation rec {
   buildInputs = [
     zlib bzip2 libxml2 openssl ncurses curl libiconv libmilter pcre
   ];
-
-  patches = [ ./fd-leak.patch ];
 
   configureFlags = [
     "--sysconfdir=/etc/clamav"

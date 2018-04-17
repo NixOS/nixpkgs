@@ -1,13 +1,16 @@
-{ lib, buildPythonPackage, fetchurl, fetchpatch
+{ lib, buildPythonPackage, fetchurl, fetchpatch, isPy3k
 , pytest, werkzeug, pygments
 }:
 
 buildPythonPackage rec {
-  name = "moinmoin-${ver}";
-  ver = "1.9.9";
+  name = "moinmoin";
+  version = "1.9.9";
+
+  # SyntaxError in setup.py
+  disabled = isPy3k;
 
   src = fetchurl {
-    url = "http://static.moinmo.in/files/moin-${ver}.tar.gz";
+    url = "http://static.moinmo.in/files/moin-${version}.tar.gz";
     sha256 = "197ga41qghykmir80ik17f9hjpmixslv3zjgj7bj9qvs1dvdg5s3";
   };
 
@@ -25,7 +28,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Advanced, easy to use and extensible WikiEngine";
 
-    homepage = "http://moinmo.in/";
+    homepage = "https://moinmo.in/";
 
     license = licenses.gpl2Plus;
   };

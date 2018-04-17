@@ -5,7 +5,7 @@
 , openldap, lttngUst
 , babeltrace, gperf
 , cunit, snappy
-, rocksdb
+, rocksdb, makeWrapper
 
 # Optional Dependencies
 , yasm ? null, fcgi ? null, expat ? null
@@ -37,8 +37,7 @@ with stdenv.lib;
 let
 
   shouldUsePkg = pkg_: let pkg = (builtins.tryEval pkg_).value;
-    in if lib.any (x: x == system) (pkg.meta.platforms or [])
-      then pkg else null;
+    in if pkg.meta.available or false then pkg else null;
 
   optYasm = shouldUsePkg yasm;
   optFcgi = shouldUsePkg fcgi;
@@ -86,12 +85,18 @@ let
   };
 
   ceph-python-env = python2Packages.python.withPackages (ps: [ 
-	ps.sphinx
-	ps.flask
-	ps.argparse
-	ps.cython 
-	ps.setuptools
-	ps.pip
+    ps.sphinx
+    ps.flask
+    ps.argparse
+    ps.cython 
+    ps.setuptools
+    ps.pip
+    # Libraries needed by the python tools
+    ps.Mako
+    ps.pecan
+    ps.prettytable
+    ps.webob
+    ps.cherrypy
 	]);
 
 in
@@ -103,11 +108,13 @@ stdenv.mkDerivation {
   patches = [ 
  #	 ./ceph-patch-cmake-path.patch
     ./0001-kv-RocksDBStore-API-break-additional.patch   
+  ] ++ optionals stdenv.isLinux [
+    ./0002-fix-absolute-include-path.patch
   ];
 
   nativeBuildInputs = [
     cmake
-    pkgconfig which git
+    pkgconfig which git python2Packages.wrapPython makeWrapper
     (ensureNewerSourcesHook { year = "1980"; })
   ];
   
@@ -122,6 +129,7 @@ stdenv.mkDerivation {
   ] ++ optionals hasKinetic [
     optKinetic-cpp-client
   ];
+
   
   preConfigure =''
     # rip off submodule that interfer with system libs
@@ -149,12 +157,17 @@ stdenv.mkDerivation {
     "-DWITH_LIBCEPHFS=OFF"
   ];
 
+  postFixup = ''
+    wrapPythonPrograms
+    wrapProgram $out/bin/ceph-mgr --set PYTHONPATH $out/${python2Packages.python.sitePackages}
+  '';
+
   enableParallelBuilding = true;
   
   outputs = [ "dev" "lib" "out" "doc" ];
 
   meta = {
-    homepage = http://ceph.com/;
+    homepage = https://ceph.com/;
     description = "Distributed storage system";
     license = licenses.lgpl21;
     maintainers = with maintainers; [ adev ak wkennington ];

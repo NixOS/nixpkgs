@@ -98,7 +98,7 @@ go.stdenv.mkDerivation (
     rmdir goPath
 
   '') + (lib.optionalString (extraSrcPaths != []) ''
-    ${rsync}/bin/rsync -a ${lib.concatMapStrings (p: "${p}/src") extraSrcPaths} go
+    ${rsync}/bin/rsync -a ${lib.concatMapStringsSep " " (p: "${p}/src") extraSrcPaths} go
 
   '') + ''
     export GOPATH=$NIX_BUILD_TOP/go:$GOPATH

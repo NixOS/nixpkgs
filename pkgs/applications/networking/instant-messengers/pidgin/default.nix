@@ -1,7 +1,7 @@
 { stdenv, fetchurl, makeWrapper, pkgconfig, gtk2, gtkspell2, aspell
 , gst_all_1, startupnotification, gettext
 , perl, perlXMLParser, libxml2, nss, nspr, farstream
-, libXScrnSaver, ncurses, avahi, dbus, dbus_glib, intltool, libidn
+, libXScrnSaver, ncurses, avahi, dbus, dbus-glib, intltool, libidn
 , lib, python, libICE, libXext, libSM
 , cyrus_sasl ? null
 , openssl ? null
@@ -33,7 +33,7 @@ let unwrapped = stdenv.mkDerivation rec {
     gst_all_1.gstreamer gst_all_1.gst-plugins-base gst_all_1.gst-plugins-good
     libxml2 nss nspr farstream
     libXScrnSaver ncurses python
-    avahi dbus dbus_glib intltool libidn
+    avahi dbus dbus-glib intltool libidn
     libICE libXext libSM cyrus_sasl
   ]
   ++ (lib.optional (openssl != null) openssl)

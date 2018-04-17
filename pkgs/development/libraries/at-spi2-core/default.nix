@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, python, pkgconfig, popt, gettext, dbus_glib
+{ stdenv, fetchurl, python, pkgconfig, popt, gettext, dbus-glib
 , libX11, xextproto, libSM, libICE, libXtst, libXi, gobjectIntrospection }:
 
 stdenv.mkDerivation rec {
@@ -16,17 +16,14 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig gettext gobjectIntrospection ];
   buildInputs = [
-    python popt dbus_glib
+    python popt dbus-glib
     libX11 xextproto libSM libICE libXtst libXi
   ];
 
   # ToDo: on non-NixOS we create a symlink from there?
   configureFlags = "--with-dbus-daemondir=/run/current-system/sw/bin/";
 
-  NIX_LDFLAGS = with stdenv; lib.optionalString isDarwin "-lintl";
-
   meta = with stdenv.lib; {
     platforms = platforms.unix;
   };
 }
-

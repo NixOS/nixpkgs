@@ -89,7 +89,7 @@ stdenv.mkDerivation rec {
     '';
 
   meta = with stdenv.lib; {
-    homepage    = http://github.com/fcitx/fcitx;
+    homepage    = https://github.com/fcitx/fcitx;
     description = "A Flexible Input Method Framework";
     license     = licenses.gpl2;
     platforms   = platforms.linux;

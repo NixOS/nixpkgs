@@ -1,20 +1,20 @@
 { stdenv, fetchurl, alsaLib, boost, cairo, cmake, fftwSinglePrec, fltk, pcre
-, libjack2, libsndfile, libXdmcp, readline, lv2, mesa, minixml, pkgconfig, zlib, xorg
+, libjack2, libsndfile, libXdmcp, readline, lv2, libGLU_combined, minixml, pkgconfig, zlib, xorg
 }:
 
 assert stdenv ? glibc;
 
 stdenv.mkDerivation  rec {
   name = "yoshimi-${version}";
-  version = "1.5.6";
+  version = "1.5.7";
 
   src = fetchurl {
     url = "mirror://sourceforge/yoshimi/${name}.tar.bz2";
-    sha256 = "0bjfhfslpa2hjrc9h38m7dlr62953w9n4cvkgvfy495cbym12dak";
+    sha256 = "1w916mmi6hh547a7icrgx6qr2kwxlxwlm6ampql427rshcz9r61k";
   };
 
   buildInputs = [
-    alsaLib boost cairo fftwSinglePrec fltk libjack2 libsndfile libXdmcp readline lv2 mesa
+    alsaLib boost cairo fftwSinglePrec fltk libjack2 libsndfile libXdmcp readline lv2 libGLU_combined
     minixml zlib xorg.libpthreadstubs pcre
   ];
 

@@ -386,7 +386,7 @@ in
           echo Resetting znapzend zetups
           ${pkgs.znapzend}/bin/znapzendzetup list \
             | grep -oP '(?<=\*\*\* backup plan: ).*(?= \*\*\*)' \
-            | xargs ${pkgs.znapzend}/bin/znapzendzetup delete
+            | xargs -I{} ${pkgs.znapzend}/bin/znapzendzetup delete "{}"
         '' + concatStringsSep "\n" (mapAttrsToList (dataset: config: ''
           echo Importing znapzend zetup ${config} for dataset ${dataset}
           ${pkgs.znapzend}/bin/znapzendzetup import --write ${dataset} ${config}

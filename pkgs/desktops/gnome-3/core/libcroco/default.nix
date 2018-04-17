@@ -1,10 +1,12 @@
-{ stdenv, fetchurl, pkgconfig, libxml2, glib, fetchpatch }:
-
-stdenv.mkDerivation rec {
-  name = "libcroco-0.6.12";
+{ stdenv, fetchurl, pkgconfig, libxml2, glib, fetchpatch, gnome3 }:
+let
+  pname = "libcroco";
+  version = "0.6.12";
+in stdenv.mkDerivation rec {
+  name = "${pname}-${version}";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/libcroco/0.6/${name}.tar.xz";
+    url = "mirror://gnome/sources/${pname}/${gnome3.versionBranch version}/${name}.tar.xz";
     sha256 = "0q7qhi7z64i26zabg9dbs5706fa8pmzp1qhpa052id4zdiabbi6x";
   };
 
@@ -28,6 +30,12 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ libxml2 glib ];
+
+  passthru = {
+    updateScript = gnome3.updateScript {
+      packageName = pname;
+    };
+  };
 
   meta = with stdenv.lib; {
     description = "GNOME CSS2 parsing and manipulation toolkit";

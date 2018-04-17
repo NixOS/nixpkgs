@@ -75,26 +75,17 @@ rec {
   in stdenv // {
     mkDerivation =
       { nativeBuildInputs ? []
-      , selfNativeBuildInput ? args.crossAttrs.selfNativeBuildInput or false
       , ...
       } @ args:
 
-      let
-        # *BuildInputs exists temporarily as another name for
-        # *HostInputs.
-
-        # The base stdenv already knows that nativeBuildInputs and
-        # buildInputs should be built with the usual gcc-wrapper
-        # And the same for propagatedBuildInputs.
-        nativeDrv = stdenv.mkDerivation args;
-      in
         stdenv.mkDerivation (args // {
           nativeBuildInputs = nativeBuildInputs
-            ++ stdenv.lib.optional selfNativeBuildInput nativeDrv
               # without proper `file` command, libtool sometimes fails
               # to recognize 64-bit DLLs
             ++ stdenv.lib.optional (hostPlatform.config == "x86_64-w64-mingw32") pkgs.file
-            ++ stdenv.lib.optional (hostPlatform.isAarch64 || hostPlatform.libc == "musl") pkgs.updateAutotoolsGnuConfigScriptsHook
+            ++ stdenv.lib.optional
+                 (hostPlatform.isAarch64 || hostPlatform.isMips || hostPlatform.libc == "musl")
+                 pkgs.updateAutotoolsGnuConfigScriptsHook
             ;
 
           crossConfig = hostPlatform.config;

@@ -3,7 +3,11 @@
 with import ./build-vms.nix { inherit system minimal config; };
 with pkgs;
 
-rec {
+let
+  jquery-ui = callPackage ./testing/jquery-ui.nix { };
+  jquery = callPackage ./testing/jquery.nix { };
+
+in rec {
 
   inherit pkgs;
 
@@ -107,6 +111,8 @@ rec {
 
       ocrProg = tesseract_4.override { enableLanguages = [ "eng" ]; };
 
+      imagemagick_tiff = imagemagick_light.override { inherit libtiff; };
+
       # Generate onvenience wrappers for running the test driver
       # interactively with the specified network, and for starting the
       # VMs from the command line.
@@ -124,7 +130,7 @@ rec {
           wrapProgram $out/bin/nixos-test-driver \
             --add-flags "''${vms[*]}" \
             ${lib.optionalString enableOCR
-              "--prefix PATH : '${ocrProg}/bin:${imagemagick}/bin'"} \
+              "--prefix PATH : '${ocrProg}/bin:${imagemagick_tiff}/bin'"} \
             --run "export testScript=\"\$(cat $out/test-script)\"" \
             --set VLANS '${toString vlans}'
           ln -s ${testDriver}/bin/nixos-test-driver $out/bin/nixos-run-vms
@@ -143,8 +149,8 @@ rec {
       test = passMeta (runTests driver);
       report = passMeta (releaseTools.gcovReport { coverageRuns = [ test ]; });
 
-    in (if makeCoverageReport then report else test) // { 
-      inherit nodes driver test; 
+    in (if makeCoverageReport then report else test) // {
+      inherit nodes driver test;
     };
 
   runInMachine =

@@ -112,7 +112,7 @@ $ git rebase --onto nixos-unstable BASEBRANCH FETCH_HEAD <co
               <varname>BASEBRANCH</varname> the base branch of the
               pull-request.</para>
           </callout>
-          <callout arearefs='reviewing-rebase-3'>
+          <callout arearefs='reviewing-rebase-4'>
             <para>Rebasing the pull-request changes to the nixos-unstable
               branch.</para>
           </callout>

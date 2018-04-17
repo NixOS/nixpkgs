@@ -1,4 +1,4 @@
-{ stdenv, callPackage, fetchurl, ... } @ args:
+{ stdenv, callPackage, fetchurl, hostPlatform, buildPlatform, ... } @ args:
 
 callPackage ./generic.nix (args // rec {
   version = "1.66_0";
@@ -9,4 +9,5 @@ callPackage ./generic.nix (args // rec {
     sha256 = "5721818253e6a0989583192f96782c4a98eb6204965316df9f5ad75819225ca9";
   };
 
+  toolset = if stdenv.cc.isClang then "clang" else null;
 })

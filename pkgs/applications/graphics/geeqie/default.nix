@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgconfig, autoconf, automake, gettext, intltool
-, gtk3, lcms2, exiv2, libchamplain, clutter_gtk, ffmpegthumbnailer, fbida
+, gtk3, lcms2, exiv2, libchamplain, clutter-gtk, ffmpegthumbnailer, fbida
 }:
 
 stdenv.mkDerivation rec {
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig autoconf automake gettext intltool ];
   buildInputs = [
-    gtk3 lcms2 exiv2 libchamplain clutter_gtk ffmpegthumbnailer fbida
+    gtk3 lcms2 exiv2 libchamplain clutter-gtk ffmpegthumbnailer fbida
   ];
 
   postInstall = ''

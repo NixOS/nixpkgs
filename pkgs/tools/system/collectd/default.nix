@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, darwin
+{ stdenv, fetchurl, fetchpatch, darwin
 # optional:
 , pkgconfig ? null  # most of the extra deps need pkgconfig to be found
 , curl ? null
@@ -65,6 +65,13 @@ stdenv.mkDerivation rec {
     darwin.apple_sdk.frameworks.ApplicationServices
   ];
 
+  # Patch fixes broken build on 18.03
+  # Should be included in the next release of this package
+  patches = fetchpatch {
+    name = "collectd_kafka_fix";
+    url = "https://github.com/collectd/collectd/commit/6c2eb3ad28f08f7e774b6eaea5ae01b0857cf884.patch";
+    sha256 = "14wsyj5xghij9lz7c61bzdyh45zg8pv5xn490cvbqiaci948zzv6";
+  };
   configureFlags = [ "--localstatedir=/var" ];
 
   # do not create directories in /var during installPhase

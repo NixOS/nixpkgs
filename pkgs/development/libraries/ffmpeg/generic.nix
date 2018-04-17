@@ -3,7 +3,7 @@
 , libtheora, libva, libvorbis, libvpx, lzma, libpulseaudio, soxr
 , x264, x265, xvidcore, zlib, libopus
 , hostPlatform
-, openglSupport ? false, mesa ? null
+, openglSupport ? false, libGLU_combined ? null
 # Build options
 , runtimeCpuDetectBuild ? true # Detect CPU capabilities at runtime
 , multithreadBuild ? true # Multithreading via pthreads/win32 threads
@@ -60,7 +60,7 @@ let
   vaapiSupport = reqMin "0.6" && ((isLinux || isFreeBSD) && !isArm);
 in
 
-assert openglSupport -> mesa != null;
+assert openglSupport -> libGLU_combined != null;
 
 stdenv.mkDerivation rec {
 
@@ -152,7 +152,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     bzip2 fontconfig freetype gnutls libiconv lame libass libogg libtheora
     libvdpau libvorbis lzma soxr x264 x265 xvidcore zlib libopus
-  ] ++ optional openglSupport mesa
+  ] ++ optional openglSupport libGLU_combined
     ++ optionals (!isDarwin && !isArm) [ libvpx libpulseaudio ] # Need to be fixed on Darwin and ARM
     ++ optional ((isLinux || isFreeBSD) && !isArm) libva
     ++ optional isLinux alsaLib

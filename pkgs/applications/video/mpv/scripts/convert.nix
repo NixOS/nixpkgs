@@ -1,5 +1,5 @@
 { stdenv, fetchgit, lib
-, yad, mkvtoolnix, libnotify }:
+, yad, mkvtoolnix-cli, libnotify }:
 
 stdenv.mkDerivation {
   name = "mpv-convert-script-2016-03-18.lua";
@@ -19,7 +19,7 @@ stdenv.mkDerivation {
       substituteInPlace convert_script.lua \
         ${subs "NOTIFY_CMD" "notify-send" "${libnotify}/bin/notify-send"} \
         ${subs "YAD_CMD" "yad" "${yad}/bin/yad"} \
-        ${subs "MKVMERGE_CMD" "mkvmerge" "${mkvtoolnix}/bin/mkvmerge"}
+        ${subs "MKVMERGE_CMD" "mkvmerge" "${mkvtoolnix-cli}/bin/mkvmerge"}
   '';
 
   dontBuild = true;

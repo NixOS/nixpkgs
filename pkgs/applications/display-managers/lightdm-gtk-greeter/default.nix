@@ -1,5 +1,5 @@
 { stdenv, fetchurl, lightdm, pkgconfig, intltool
-, hicolor_icon_theme, makeWrapper
+, hicolor-icon-theme, makeWrapper
 , useGTK2 ? false, gtk2, gtk3 # gtk3 seems better supported
 , exo
 }:
@@ -9,14 +9,14 @@
 
 let
   ver_branch = "2.0";
-  version = "2.0.3";
+  version = "2.0.5";
 in
 stdenv.mkDerivation rec {
   name = "lightdm-gtk-greeter-${version}";
 
   src = fetchurl {
     url = "${meta.homepage}/${ver_branch}/${version}/+download/${name}.tar.gz";
-    sha256 = "0c6v2myzqj8nzpcqyvbab7c66kwgcshw2chn5r6dhm7xrx19bcrx";
+    sha256 = "1pw70db8320wvkhkrw4i2qprxlrqy3jmb6yrr4bm3lgrizahiijx";
   };
 
   nativeBuildInputs = [ pkgconfig ];
@@ -28,6 +28,8 @@ stdenv.mkDerivation rec {
     "--sysconfdir=/etc"
   ] ++ stdenv.lib.optional useGTK2 "--with-gtk2";
 
+  NIX_CFLAGS_COMPILE = [ "-Wno-error=deprecated-declarations" ];
+
   installFlags = [
     "localstatedir=\${TMPDIR}"
     "sysconfdir=\${out}/etc"
@@ -37,7 +39,7 @@ stdenv.mkDerivation rec {
     substituteInPlace "$out/share/xgreeters/lightdm-gtk-greeter.desktop" \
       --replace "Exec=lightdm-gtk-greeter" "Exec=$out/sbin/lightdm-gtk-greeter"
     wrapProgram "$out/sbin/lightdm-gtk-greeter" \
-      --prefix XDG_DATA_DIRS ":" "${hicolor_icon_theme}/share"
+      --prefix XDG_DATA_DIRS ":" "${hicolor-icon-theme}/share"
   '';
 
   meta = with stdenv.lib; {

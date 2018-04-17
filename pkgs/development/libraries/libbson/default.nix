@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "libbson-${version}";
-  version = "1.8.0";
+  version = "1.9.3";
 
   src = fetchFromGitHub {
     owner = "mongodb";
     repo = "libbson";
     rev = version;
-    sha256 = "1bd9z07q3faq5k4521d9inv0j836w6hrsd0vj2sapjlq8jmqgslg";
+    sha256 = "0dbpmvd2p9bdqdyiijmsc1hd9d6l36migk79smw7fpfvh0y6ldsk";
   };
 
   nativeBuildInputs = [ cmake ];

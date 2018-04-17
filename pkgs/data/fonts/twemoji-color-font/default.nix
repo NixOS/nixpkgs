@@ -14,7 +14,11 @@ stdenv.mkDerivation rec {
   preBuild = "export HOME=\"$NIX_BUILD_ROOT\"";
   makeFlags = [ "SCFBUILD=${scfbuild}/bin/scfbuild" ];
   enableParallelBuilding = true;
-  installPhase = "install -Dm755 build/TwitterColorEmoji-SVGinOT.ttf $out/share/fonts/truetype/TwitterColorEmoji-SVGinOT.ttf";
+
+  installPhase = ''
+    install -Dm755 build/TwitterColorEmoji-SVGinOT.ttf $out/share/fonts/truetype/TwitterColorEmoji-SVGinOT.ttf
+    install -Dm644 linux/fontconfig/56-twemoji-color.conf $out/etc/fonts/conf.d/56-twemoji-color.conf
+  '';
 
   meta = with stdenv.lib; {
     version = "1.3";

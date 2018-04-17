@@ -1,4 +1,4 @@
-{ stdenv, autoreconfHook, pkgconfig, fetchFromGitHub, dleyna-connector-dbus, dleyna-core, gssdp, gupnp, gupnp_av, gupnp_dlna, libsoup, makeWrapper }:
+{ stdenv, autoreconfHook, pkgconfig, fetchFromGitHub, dleyna-connector-dbus, dleyna-core, gssdp, gupnp, gupnp-av, gupnp-dlna, libsoup, makeWrapper }:
 
 stdenv.mkDerivation rec {
   name = "dleyna-renderer";
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ autoreconfHook pkgconfig makeWrapper ];
-  buildInputs = [ dleyna-core dleyna-connector-dbus gssdp gupnp gupnp_av gupnp_dlna libsoup ];
+  buildInputs = [ dleyna-core dleyna-connector-dbus gssdp gupnp gupnp-av gupnp-dlna libsoup ];
 
   preFixup = ''
     wrapProgram "$out/libexec/dleyna-renderer-service" \

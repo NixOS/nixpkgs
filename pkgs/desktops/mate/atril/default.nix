@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, intltool, gtk3, libxml2, libsecret, poppler, itstool, hicolor_icon_theme, mate, wrapGAppsHook }:
+{ stdenv, fetchurl, pkgconfig, intltool, gtk3, libxml2, libsecret, poppler, itstool, hicolor-icon-theme, mate, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
   name = "atril-${version}";
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     poppler
     mate.caja
     mate.mate-desktop
-    hicolor_icon_theme
+    hicolor-icon-theme
   ];
   
   makeFlags = [ "cajaextensiondir=$$out/lib/caja/extensions-2.0" ];

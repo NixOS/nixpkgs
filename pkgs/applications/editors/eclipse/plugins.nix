@@ -160,6 +160,29 @@ rec {
     };
   };
 
+  antlr-runtime_4_7 = buildEclipsePluginBase rec {
+    name = "antlr-runtime-4.7.1";
+
+    src = fetchurl {
+      url = "http://www.antlr.org/download/${name}.jar";
+      sha256 = "07f91mjclacrvkl8a307w2abq5wcqp0gcsnh0jg90ddfpqcnsla3";
+    };
+
+    buildCommand = ''
+      dropinDir="$out/eclipse/dropins/"
+      mkdir -p $dropinDir
+      cp -v $src $dropinDir/${name}.jar
+    '';
+
+    meta = with stdenv.lib; {
+      description = "A powerful parser generator for processing structured text or binary files";
+      homepage = http://www.antlr.org/;
+      license = licenses.bsd3;
+      platforms = platforms.all;
+      maintainers = [ maintainers.rycee ];
+    };
+  };
+
   anyedittools = buildEclipsePlugin rec {
     name = "anyedit-${version}";
     version = "2.7.1.201709201439";
@@ -409,11 +432,11 @@ rec {
 
   jsonedit = buildEclipsePlugin rec {
     name = "jsonedit-${version}";
-    version = "1.0.1";
+    version = "1.1.0";
 
     srcFeature = fetchurl {
       url = "https://boothen.github.io/Json-Eclipse-Plugin/features/jsonedit-feature_${version}.jar";
-      sha256 = "19221409wzcsrlm2fqf6mrxzb5ip1x6y5ba8anw788p7aaz1w30k";
+      sha256 = "1qqbzh9sv0s9p0irim7kimvzdkw0hg6yv090bz5ifpzqdxc4v9r5";
     };
 
     srcPlugins =
@@ -425,16 +448,16 @@ rec {
           };
       in
         map fetch [
-          { n = "core"; h = "05ipjbh9yz97zhqaqq6cja3zz44n0dn40ms13qnlgf4bxyaf0f6w"; }
-          { n = "editor"; h = "1i71rh2fd5hsx6gygnafz2gjz4hlb0ckazxn0maxmnlx4p5apjql"; }
-          { n = "folding"; h = "13p8vqdna23ln82w1jgchm59375f1ky0p2b1v7jih55yfhw1ymam"; }
-          { n = "model"; h = "0llswhsd58f0rjb9canjncavq4z7q8zidn26yl5gradbbz580p6w"; }
-          { n = "outline"; h = "1rs8g0iv2kklbl7j0p6nr26m6ii89yyr9bpi05mh21xva40pzkl5"; }
-          { n = "preferences"; h = "0vs074ahhiba7if43ryf9m8xd81sqj9grppy0pzcnkkdkbk870n0"; }
-          { n = "text"; h = "0nqpzjw8hhvh9jlpldpmcmg83a170wjdabgsvjq207j12jkvfiqq"; }
+          { n = "core"; h = "1fl4api6j0wp4vfbyabxqsrjvvpclp8p3b4xnxxpn4v8g12q526m"; }
+          { n = "editor"; h = "1kn15qampdlpxblj2bv94b3bb15qfwng27lk0n578585yqmb3p66"; }
+          { n = "folding"; h = "1qnzdx4xx9ma3p6lg1ab8xf3nik1yrww33nksi0j3vnvh8i9ihdm"; }
+          { n = "model"; h = "0n8855ma1h2as0skrrp2qy3sdkmnhl5vlqxcjv8xlc3faa72174a"; }
+          { n = "outline"; h = "07i2spmzghs49pkxl8z9c29n6l38x26v20prkh4a7i1rf9whg1q8"; }
+          { n = "preferences"; h = "0d1m8pb903wpc4vvhsp0gx0h65r432ax898wif3a23c5wxj4nh9i"; }
+          { n = "text"; h = "0z80d9qgpbx88jrq8b4r478lrcrf52gxqkl94l13wrk7rszjpldh"; }
         ];
 
-    propagatedBuildInputs = [ antlr-runtime_4_5 ];
+    propagatedBuildInputs = [ antlr-runtime_4_7 ];
 
     meta = with stdenv.lib; {
       description = "Adds support for JSON files to Eclipse";
@@ -509,16 +532,16 @@ rec {
 
   spotbugs = buildEclipsePlugin rec {
     name = "spotbugs-${version}";
-    version = "3.1.1.r201712011030-903b7a0";
+    version = "3.1.2.r201802250230-59118d9";
 
     srcFeature = fetchurl {
       url = "https://spotbugs.github.io/eclipse/features/com.github.spotbugs.plugin.eclipse_${version}.jar";
-      sha256 = "12z5dbs10h5k567wbmwz1w4pnidmqsls52qcfdb3zlgr0rqvz072";
+      sha256 = "1p0pz7znpfi5h1wr60sl8clkpd7rzkh7krmc0nxc6w43gkgkg9h4";
     };
 
     srcPlugin = fetchurl {
       url = "https://spotbugs.github.io/eclipse/plugins/com.github.spotbugs.plugin.eclipse_${version}.jar";
-      sha256 = "0dnkp2alymvyyql7g8w79i27b3c64inhdvpxx1v014ng9liv54xb";
+      sha256 = "1z3jjbcjif4qip1gx2dhfcm9fyhps96ms7z3ngbdcakgw7wai9v4";
     };
 
     meta = with stdenv.lib; {

@@ -47,7 +47,7 @@ rec {
 
   androidsdk = import ./androidsdk.nix {
     inherit (pkgs) stdenv fetchurl unzip makeWrapper;
-    inherit (pkgs) zlib glxinfo freetype fontconfig glib gtk2 atk mesa file alsaLib jdk coreutils libpulseaudio dbus;
+    inherit (pkgs) zlib glxinfo freetype fontconfig glib gtk2 atk libGLU_combined file alsaLib jdk coreutils libpulseaudio dbus;
     inherit (pkgs.xorg) libX11 libXext libXrender libxcb libXau libXdmcp libXtst xkeyboardconfig;
 
     inherit platformTools buildTools support supportRepository platforms sysimages addons sources includeSources;
@@ -241,5 +241,20 @@ rec {
   emulateApp = import ./emulate-app.nix {
     inherit (pkgs) stdenv;
     inherit androidsdk;
+  };
+
+  androidndkPkgs = import ./androidndk-pkgs.nix {
+    inherit (buildPackages)
+      makeWrapper;
+    inherit (pkgs)
+      lib hostPlatform targetPlatform
+      runCommand wrapBintoolsWith wrapCCWith;
+    # buildPackages.foo rather than buildPackages.buildPackages.foo would work,
+    # but for splicing messing up on infinite recursion for the variants we
+    # *dont't* use. Using this workaround, but also making a test to ensure
+    # these two really are the same.
+    buildAndroidndk = buildPackages.buildPackages.androidenv.androidndk;
+    inherit androidndk;
+    targetAndroidndkPkgs = targetPackages.androidenv.androidndkPkgs;
   };
 }

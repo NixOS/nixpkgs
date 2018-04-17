@@ -1,4 +1,4 @@
-{ stdenv, lib, gnome2, fetchurl, pkgs, xlibs, udev, makeWrapper, makeDesktopItem }:
+{ stdenv, lib, gnome2, fetchurl, pkgs, xorg, udev, makeWrapper, makeDesktopItem }:
 
 stdenv.mkDerivation rec {
   name = "postman-${version}";
@@ -54,19 +54,19 @@ stdenv.mkDerivation rec {
       pkgs.nss
       pkgs.nspr
       pkgs.udev.lib
-      xlibs.libX11
-      xlibs.libxcb
-      xlibs.libXi
-      xlibs.libXcursor
-      xlibs.libXdamage
-      xlibs.libXrandr
-      xlibs.libXcomposite
-      xlibs.libXext
-      xlibs.libXfixes
-      xlibs.libXrender
-      xlibs.libX11
-      xlibs.libXtst
-      xlibs.libXScrnSaver
+      xorg.libX11
+      xorg.libxcb
+      xorg.libXi
+      xorg.libXcursor
+      xorg.libXdamage
+      xorg.libXrandr
+      xorg.libXcomposite
+      xorg.libXext
+      xorg.libXfixes
+      xorg.libXrender
+      xorg.libX11
+      xorg.libXtst
+      xorg.libXScrnSaver
     ];
   in ''
     patchelf \

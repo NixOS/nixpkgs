@@ -1,7 +1,7 @@
 { lib, stdenv, fetchurl, pkgconfig, gtk2, pango, perl, python, zip, libIDL
-, libjpeg, zlib, dbus, dbus_glib, bzip2, xorg
+, libjpeg, zlib, dbus, dbus-glib, bzip2, xorg
 , freetype, fontconfig, file, nspr, nss, libnotify
-, yasm, mesa, sqlite, unzip
+, yasm, libGLU_combined, sqlite, unzip
 , hunspell, libevent, libstartup_notification
 , cairo, gstreamer, gst-plugins-base, icu, libpng, jemalloc
 , autoconf213, which, m4
@@ -22,11 +22,11 @@ let
   wrapperTool = if enableGTK3 then wrapGAppsHook else makeWrapper;
 in stdenv.mkDerivation rec {
   name = "thunderbird-${version}";
-  version = "52.6.0";
+  version = "52.7.0";
 
   src = fetchurl {
     url = "mirror://mozilla/thunderbird/releases/${version}/source/thunderbird-${version}.source.tar.xz";
-    sha512 = "80742c95ed61d1cb2e72b71bb23bdd211a40240ab4393e9f028a38f902547372084a8f56445e2394484be088a7b9801405f3d6618fb2742601cc968bf34427f0";
+    sha512 = "875ad6f2b030c65d248ecec4f4a5b51767c3ee7944ac72893237efd2af50145ec2e4a9efa8d60807b78bcfb8189969e5a67d15124710e8b0091f639cddfbfe21";
   };
 
   # New sed no longer tolerates this mistake.
@@ -39,9 +39,9 @@ in stdenv.mkDerivation rec {
   # from firefox, but without sound libraries
   buildInputs =
     [ gtk2 zip libIDL libjpeg zlib bzip2
-      dbus dbus_glib pango freetype fontconfig xorg.libXi
+      dbus dbus-glib pango freetype fontconfig xorg.libXi
       xorg.libX11 xorg.libXrender xorg.libXft xorg.libXt file
-      nspr nss libnotify xorg.pixman yasm mesa
+      nspr nss libnotify xorg.pixman yasm libGLU_combined
       xorg.libXScrnSaver xorg.scrnsaverproto
       xorg.libXext xorg.xextproto sqlite unzip
       hunspell libevent libstartup_notification /* cairo */
@@ -140,7 +140,7 @@ in stdenv.mkDerivation rec {
           exec = "thunderbird %U";
           desktopName = "Thunderbird";
           icon = "$out/lib/thunderbird-${version}/chrome/icons/default/default256.png";
-          genericName = "Main Reader";
+          genericName = "Mail Reader";
           categories = "Application;Network";
           mimeType = stdenv.lib.concatStringsSep ";" [
             # Email

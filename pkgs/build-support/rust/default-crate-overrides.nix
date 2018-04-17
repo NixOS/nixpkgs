@@ -1,5 +1,5 @@
 { stdenv, pkgconfig, curl, darwin, libiconv, libgit2, libssh2,
-  openssl, sqlite, zlib, dbus_libs, dbus_glib, gdk_pixbuf, cairo, python3,
+  openssl, sqlite, zlib, dbus_libs, dbus-glib, gdk_pixbuf, cairo, python3,
   libsodium, postgresql, ... }:
 
 let
@@ -45,13 +45,13 @@ in
     buildInputs = [ pkgconfig dbus_libs ];
   };
   gobject-sys = attrs: {
-    buildInputs = [ dbus_glib ];
+    buildInputs = [ dbus-glib ];
   };
   gio-sys = attrs: {
-    buildInputs = [ dbus_glib ];
+    buildInputs = [ dbus-glib ];
   };
   gdk-pixbuf-sys = attrs: {
-    buildInputs = [ dbus_glib ];
+    buildInputs = [ dbus-glib ];
   };
   gdk-pixbuf = attrs: {
     buildInputs = [ gdk_pixbuf ];

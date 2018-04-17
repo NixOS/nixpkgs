@@ -47,7 +47,7 @@ let
   };
 
   provisionedHook = pkgs.writeScript "provisioned-hook" ''
-    #!${pkgs.stdenv.shell}
+    #!${pkgs.runtimeShell}
     ${config.systemd.package}/bin/systemctl start provisioned.target
   '';
 

@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ openssl ];
 
-  installFlags = [ "PREFIX=$(out)" ];
+  makeFlags = [ "PREFIX=$(out)" "CC=cc" ];
 
   meta = with stdenv.lib; {
     description = "Tests SSL/TLS services and discover supported cipher suites";

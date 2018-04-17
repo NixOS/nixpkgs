@@ -36,6 +36,6 @@ stdenv.mkDerivation rec {
     homepage = https://www.argon2.com/;
     license = with licenses; [ asl20 cc0 ];
     maintainers = with maintainers; [ taeer olynch ];
-    platforms = platforms.linux;
+    platforms = platforms.linux ++ platforms.darwin;
   };
 }

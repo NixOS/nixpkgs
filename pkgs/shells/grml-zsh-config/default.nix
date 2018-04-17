@@ -14,8 +14,8 @@ stdenv.mkDerivation rec {
     sha256 = "1xvv2mnkfqa657w8y4q2zrchhindngdzij9fbalcg1gggz4zdwcm";
   };
 
-  buildInputs = [ zsh coreutils txt2tags ]
-    ++ optional stdenv.isLinux [ inetutils procps ];
+  buildInputs = [ zsh coreutils txt2tags procps ]
+    ++ optional stdenv.isLinux [ inetutils ];
 
   buildPhase = ''
     cd doc

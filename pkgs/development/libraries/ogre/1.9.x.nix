@@ -1,5 +1,5 @@
 { fetchFromGitHub, stdenv, lib
-, cmake, mesa
+, cmake, libGLU_combined
 , freetype, freeimage, zziplib, randrproto, libXrandr
 , libXaw, freeglut, libXt, libpng, boost, ois
 , xproto, libX11, libXmu, libSM, pkgconfig
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   buildInputs =
-   [ cmake mesa
+   [ cmake libGLU_combined
      freetype freeimage zziplib randrproto libXrandr
      libXaw freeglut libXt libpng boost ois
      xproto libX11 libXmu libSM pkgconfig
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "A 3D engine";
-    homepage = http://www.ogre3d.org/;
+    homepage = https://www.ogre3d.org/;
     maintainers = [ stdenv.lib.maintainers.raskin ];
     platforms = stdenv.lib.platforms.linux;
     license = stdenv.lib.licenses.mit;

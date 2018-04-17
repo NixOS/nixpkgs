@@ -1,19 +1,19 @@
 { stdenv, fetchurl, texlive, bison, flex
 , gmp, mpfr, pari, ntl, gsl, blas, mpfi, liblapackWithAtlas
 , readline, gettext, libpng, libao, gfortran, perl
-, enableGUI ? false, mesa ? null, xorg ? null, fltk ? null
+, enableGUI ? false, libGLU_combined ? null, xorg ? null, fltk ? null
 }:
 
-assert enableGUI -> mesa != null && xorg != null && fltk != null;
+assert enableGUI -> libGLU_combined != null && xorg != null && fltk != null;
 
 stdenv.mkDerivation rec {
   name = "${attr}-${version}";
   attr = if enableGUI then "giac-with-xcas" else "giac";
-  version = "1.4.9";
+  version = "1.4.9-59";
 
   src = fetchurl {
-    url = "https://www-fourier.ujf-grenoble.fr/~parisse/giac/giac-${version}.tar.bz2";
-    sha256 = "1n7xxgpqrsq7cv5wgcmgag6jvxw5wijkf1yv1r5aizlf1rc7dhai";
+    url = "https://www-fourier.ujf-grenoble.fr/~parisse/debian/dists/stable/main/source/giac_${version}.tar.gz";
+    sha256 = "0dv5p5y6gkrsmz3xa7fw87rjyabwdwk09mqb09kb7gai9n9dgayk";
   };
 
   postPatch = ''
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
     # we want libgfortran.so.3 instead
     (stdenv.lib.getLib gfortran.cc)
   ] ++ stdenv.lib.optionals enableGUI [
-    mesa fltk xorg.libX11
+    libGLU_combined fltk xorg.libX11
   ];
 
   outputs = [ "out" ];

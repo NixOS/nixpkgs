@@ -1,5 +1,5 @@
 { stdenv, lib, fetchurl, fetchzip, python3Packages
-, makeWrapper, wrapGAppsHook, qtbase, glib_networking
+, makeWrapper, wrapGAppsHook, qtbase, glib-networking
 , asciidoc, docbook_xml_dtd_45, docbook_xsl, libxml2
 , libxslt, gst_all_1 ? null
 , withPdfReader        ? true
@@ -29,13 +29,13 @@ let
 in python3Packages.buildPythonApplication rec {
   name = "qutebrowser-${version}${versionPostfix}";
   namePrefix = "";
-  version = "1.1.1";
+  version = "1.2.1";
   versionPostfix = "";
 
   # the release tarballs are different from the git checkout!
   src = fetchurl {
     url = "https://github.com/qutebrowser/qutebrowser/releases/download/v${version}/${name}.tar.gz";
-    sha256 = "09fa77rg1yrl8cksavxmgm9z2246s4d8wjbkl5jm1gsam345f7mz";
+    sha256 = "1svbski378x276033v07jailm81b0i6hxdakbiqkwvgh6hkczrhw";
   };
 
   # Needs tox
@@ -43,7 +43,7 @@ in python3Packages.buildPythonApplication rec {
 
   buildInputs = [
     qtbase
-    glib_networking
+    glib-networking
   ] ++ lib.optionals withMediaPlayback (with gst_all_1; [
     gst-plugins-base gst-plugins-good
     gst-plugins-bad gst-plugins-ugly gst-libav

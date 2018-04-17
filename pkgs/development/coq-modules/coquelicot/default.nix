@@ -22,4 +22,7 @@ stdenv.mkDerivation {
     maintainers = [ stdenv.lib.maintainers.vbgl ];
     inherit (coq.meta) platforms;
   };
+
+  passthru = { inherit (ssreflect) compatibleCoqVersions; };
+
 }

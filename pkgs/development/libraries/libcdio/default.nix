@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, libcddb, pkgconfig, ncurses, help2man, libiconv }:
+{ stdenv, fetchurl, libcddb, pkgconfig, ncurses, help2man, libiconv, Carbon, IOKit }:
 
 stdenv.mkDerivation rec {
   name = "libcdio-2.0.0";
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ libcddb ncurses help2man ]
-    ++ stdenv.lib.optional stdenv.isDarwin libiconv;
+    ++ stdenv.lib.optionals stdenv.isDarwin [ libiconv Carbon IOKit ];
 
   # Disabled due to several spurious test failures.
   # doCheck = true;

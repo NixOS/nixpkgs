@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, pkgconfig, pidgin, json_glib }:
+{ stdenv, fetchFromGitHub, pkgconfig, pidgin, json-glib }:
 
 stdenv.mkDerivation rec {
   name = "pidgin-skypeweb-${version}";
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   '';
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ pidgin json_glib ];
+  buildInputs = [ pidgin json-glib ];
 
   makeFlags = [
     "PLUGIN_DIR_PURPLE=/lib/pidgin/"

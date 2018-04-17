@@ -151,11 +151,11 @@ mapAttrs (channel: chromiumPkg: makeTest rec {
 
       $machine->screenshot("sandbox_info");
 
-      $machine->succeed(ru "${xdo "submit-url" ''
+      $machine->succeed(ru "${xdo "find-window" ''
         search --sync --onlyvisible --name "sandbox status"
         windowfocus --sync
       ''}");
-      $machine->succeed(ru "${xdo "submit-url" ''
+      $machine->succeed(ru "${xdo "copy-sandbox-info" ''
         key --delay 1000 Ctrl+a Ctrl+c
       ''}");
 
@@ -166,6 +166,26 @@ mapAttrs (channel: chromiumPkg: makeTest rec {
           && $clipboard =~ /network namespaces.*yes/mi
           && $clipboard =~ /seccomp.*sandbox.*yes/mi
           && $clipboard =~ /you are adequately sandboxed/mi;
+
+      $machine->sleep(1);
+      $machine->succeed(ru "${xdo "find-window-after-copy" ''
+        search --onlyvisible --name "sandbox status"
+      ''}");
+
+      my $clipboard = $machine->succeed(ru "echo void | ${pkgs.xclip}/bin/xclip -i");
+      $machine->succeed(ru "${xdo "copy-sandbox-info" ''
+        key --delay 1000 Ctrl+a Ctrl+c
+      ''}");
+
+      my $clipboard = $machine->succeed(ru "${pkgs.xclip}/bin/xclip -o");
+      die "copying twice in a row does not work properly: $clipboard"
+      unless $clipboard =~ /namespace sandbox.*yes/mi
+          && $clipboard =~ /pid namespaces.*yes/mi
+          && $clipboard =~ /network namespaces.*yes/mi
+          && $clipboard =~ /seccomp.*sandbox.*yes/mi
+          && $clipboard =~ /you are adequately sandboxed/mi;
+
+      $machine->screenshot("afer_copy_from_chromium");
     };
 
     $machine->shutdown;

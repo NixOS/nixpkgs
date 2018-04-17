@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, qtbase, qttools, qmake, mesa, openssl, zlib }:
+{ stdenv, fetchFromGitHub, qtbase, qttools, qmake, libGLU_combined, openssl, zlib }:
 
 stdenv.mkDerivation rec {
   name = "librepcb-${version}";

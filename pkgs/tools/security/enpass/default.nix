@@ -1,5 +1,5 @@
 {stdenv, system, fetchurl, dpkg, openssl, xorg
-, glib, mesa, libpulseaudio, zlib, dbus, fontconfig, freetype
+, glib, libGLU_combined, libpulseaudio, zlib, dbus, fontconfig, freetype
 , gtk2, pango, atk, cairo, gdk_pixbuf, jasper, xkeyboardconfig
 , makeWrapper , makeDesktopItem, python, pythonPackages, lib
 , libredirect, lsof}:
@@ -18,7 +18,7 @@ let
   # used of both wrappers and libpath
   libPath = lib.makeLibraryPath (with xorg; [
     openssl
-    mesa
+    libGLU_combined
     fontconfig
     freetype
     libpulseaudio

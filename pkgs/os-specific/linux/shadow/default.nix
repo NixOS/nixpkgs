@@ -1,5 +1,5 @@
 { stdenv, fetchpatch, fetchFromGitHub, autoreconfHook, libxslt, libxml2
-, docbook_xml_dtd_412, docbook_xsl, gnome_doc_utils, flex, bison
+, docbook_xml_dtd_412, docbook_xsl, gnome-doc-utils, flex, bison
 , pam ? null, glibcCross ? null
 , buildPlatform, hostPlatform
 }:
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = stdenv.lib.optional (pam != null && stdenv.isLinux) pam;
   nativeBuildInputs = [autoreconfHook libxslt libxml2
-    docbook_xml_dtd_412 docbook_xsl gnome_doc_utils flex bison
+    docbook_xml_dtd_412 docbook_xsl gnome-doc-utils flex bison
     ];
 
   patches =
@@ -60,8 +60,10 @@ stdenv.mkDerivation rec {
     configureFlags="$configureFlags --with-xml-catalog=$PWD/xmlcatalog ";
   '';
 
-  configureFlags = " --enable-man "
-    + stdenv.lib.optionalString (hostPlatform.libc != "glibc") " --disable-nscd ";
+  configureFlags = [
+    "--enable-man"
+    "--with-group-name-max-length=32"
+  ] ++ stdenv.lib.optional (hostPlatform.libc != "glibc") "--disable-nscd";
 
   preBuild = stdenv.lib.optionalString (hostPlatform.libc == "glibc")
     ''

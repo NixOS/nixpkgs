@@ -188,7 +188,7 @@ in {
       description = "Mesos Slave";
       wantedBy = [ "multi-user.target" ];
       after = [ "network.target" ];
-      path = [ pkgs.stdenv.shellPackage ];
+      path = [ pkgs.runtimeShellPackage ];
       serviceConfig = {
         ExecStart = ''
           ${pkgs.mesos}/bin/mesos-slave \

@@ -1,5 +1,5 @@
 { stdenv, fetchurl, makeDesktopItem, makeWrapper, premake4, unzip
-, openal, libpng, libvorbis, mesa_glu, SDL2, SDL2_image, SDL2_ttf }:
+, openal, libpng, libvorbis, libGLU, SDL2, SDL2_image, SDL2_ttf }:
 
 let
   pname = "tome4";
@@ -29,10 +29,11 @@ in stdenv.mkDerivation rec {
 
   # tome4 vendors quite a few libraries so someone might want to look into avoiding that...
   buildInputs = [
-    mesa_glu openal libpng libvorbis SDL2 SDL2_ttf SDL2_image
+    libGLU openal libpng libvorbis SDL2 SDL2_ttf SDL2_image
   ];
 
-  enableParallelBuilding = true;
+  # disable parallel building as it caused sporadic build failures
+  enableParallelBuilding = false;
 
   NIX_CFLAGS_COMPILE = [
     "-I${SDL2_image}/include/SDL2"
@@ -81,6 +82,6 @@ in stdenv.mkDerivation rec {
     homepage = https://te4.org/;
     license = licenses.gpl3;
     maintainers = with maintainers; [ chattered peterhoeg ];
-    platforms = platforms.linux;
+    platforms = subtractLists ["aarch64-linux"] platforms.linux;
   };
 }

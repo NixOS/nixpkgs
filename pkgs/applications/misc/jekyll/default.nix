@@ -2,6 +2,8 @@
 , withOptionalDependencies ? false
 }:
 
+# Bundix:
+# nix-shell -p bundix zlib
 bundlerEnv rec {
   name = pname + "-" + version;
   pname = "jekyll";

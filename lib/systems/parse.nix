@@ -34,7 +34,7 @@ rec {
 
   ################################################################################
 
-  types.openSignifiantByte = mkOptionType {
+  types.openSignificantByte = mkOptionType {
     name = "significant-byte";
     description = "Endianness";
     merge = mergeOneOption;
@@ -42,7 +42,7 @@ rec {
 
   types.significantByte = enum (attrValues significantBytes);
 
-  significantBytes = setTypes types.openSignifiantByte {
+  significantBytes = setTypes types.openSignificantByte {
     bigEndian = {};
     littleEndian = {};
   };
@@ -75,7 +75,10 @@ rec {
     aarch64  = { bits = 64; significantByte = littleEndian; family = "aarch64"; };
     i686     = { bits = 32; significantByte = littleEndian; family = "x86"; };
     x86_64   = { bits = 64; significantByte = littleEndian; family = "x86"; };
-    mips64el = { bits = 32; significantByte = littleEndian; family = "mips"; };
+    mips     = { bits = 32; significantByte = bigEndian;    family = "mips"; };
+    mipsel   = { bits = 32; significantByte = littleEndian; family = "mips"; };
+    mips64   = { bits = 64; significantByte = bigEndian;    family = "mips"; };
+    mips64el = { bits = 64; significantByte = littleEndian; family = "mips"; };
     powerpc  = { bits = 32; significantByte = bigEndian;    family = "power"; };
     riscv32  = { bits = 32; significantByte = littleEndian; family = "riscv"; };
     riscv64  = { bits = 64; significantByte = littleEndian; family = "riscv"; };
@@ -131,6 +134,7 @@ rec {
 
   kernelFamilies = setTypes types.openKernelFamily {
     bsd = {};
+    darwin = {};
   };
 
   ################################################################################
@@ -146,7 +150,10 @@ rec {
   types.kernel = enum (attrValues kernels);
 
   kernels = with execFormats; with kernelFamilies; setTypes types.openKernel {
-    darwin  = { execFormat = macho;   families = { }; };
+    # TODO(@Ericson2314): Don't want to mass-rebuild yet to keeping 'darwin' as
+    # the nnormalized name for macOS.
+    macos   = { execFormat = macho;   families = { inherit darwin; }; name = "darwin"; };
+    ios     = { execFormat = macho;   families = { inherit darwin; }; };
     freebsd = { execFormat = elf;     families = { inherit bsd; }; };
     hurd    = { execFormat = elf;     families = { }; };
     linux   = { execFormat = elf;     families = { }; };
@@ -156,9 +163,13 @@ rec {
     solaris = { execFormat = elf;     families = { }; };
     windows = { execFormat = pe;      families = { }; };
   } // { # aliases
+    # 'darwin' is the kernel for all of them. We choose macOS by default.
+    darwin = kernels.macos;
     # TODO(@Ericson2314): Handle these Darwin version suffixes more generally.
-    darwin10 = kernels.darwin;
-    darwin14 = kernels.darwin;
+    darwin10 = kernels.macos;
+    darwin14 = kernels.macos;
+    watchos = kernels.ios;
+    tvos = kernels.ios;
     win32 = kernels.windows;
   };
 
@@ -173,6 +184,7 @@ rec {
   types.abi = enum (attrValues abis);
 
   abis = setTypes types.openAbi {
+    android = {};
     cygnus = {};
     gnu = {};
     msvc = {};
@@ -259,8 +271,8 @@ rec {
   mkSystemFromString = s: mkSystemFromSkeleton (mkSkeletonFromList (lib.splitString "-" s));
 
   doubleFromSystem = { cpu, vendor, kernel, abi, ... }:
-    if abi == abis.cygnus
-    then "${cpu.name}-cygwin"
+    /**/ if abi == abis.cygnus       then "${cpu.name}-cygwin"
+    else if kernel.families ? darwin then "${cpu.name}-darwin"
     else "${cpu.name}-${kernel.name}";
 
   tripleFromSystem = { cpu, vendor, kernel, abi, ... } @ sys: assert isSystem sys; let

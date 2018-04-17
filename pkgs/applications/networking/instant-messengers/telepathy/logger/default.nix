@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, dbus_glib, libxml2, sqlite, telepathy_glib, pkgconfig
+{ stdenv, fetchurl, dbus-glib, libxml2, sqlite, telepathy-glib, pkgconfig
 , gnome3, makeWrapper, intltool, libxslt, gobjectIntrospection, dbus_libs }:
 
 stdenv.mkDerivation rec {
@@ -14,8 +14,8 @@ stdenv.mkDerivation rec {
     makeWrapper pkgconfig intltool libxslt gobjectIntrospection
   ];
   buildInputs = [
-    dbus_glib libxml2 sqlite telepathy_glib
-    dbus_libs telepathy_glib.python
+    dbus-glib libxml2 sqlite telepathy-glib
+    dbus_libs telepathy-glib.python
   ];
 
   configureFlags = "--enable-call";

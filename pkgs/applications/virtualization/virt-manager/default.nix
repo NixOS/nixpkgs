@@ -1,20 +1,20 @@
 { stdenv, fetchurl, python2Packages, intltool, file
 , wrapGAppsHook, gtkvnc, vte, avahi, dconf
 , gobjectIntrospection, libvirt-glib, system-libvirt
-, gsettings_desktop_schemas, glib, libosinfo, gnome3, gtk3
-, spiceSupport ? true, spice_gtk ? null
+, gsettings-desktop-schemas, glib, libosinfo, gnome3, gtk3
+, spiceSupport ? true, spice-gtk ? null
 }:
 
 with stdenv.lib;
 
 python2Packages.buildPythonApplication rec {
   name = "virt-manager-${version}";
-  version = "1.5.0";
+  version = "1.5.1";
   namePrefix = "";
 
   src = fetchurl {
     url = "http://virt-manager.org/download/sources/virt-manager/${name}.tar.gz";
-    sha256 = "d43a7b99d40acdcb8e9455e7874beee132cfcfce9eed0d6252e8f254a82cadc6";
+    sha256 = "1ardmd4sxdmd57y7qpka44gf09c1yq2g0xs074d3k1h925crv27f";
   };
 
   nativeBuildInputs = [
@@ -24,8 +24,8 @@ python2Packages.buildPythonApplication rec {
 
   buildInputs =
     [ libvirt-glib vte dconf gtkvnc gnome3.defaultIconTheme avahi
-      gsettings_desktop_schemas libosinfo gtk3
-    ] ++ optional spiceSupport spice_gtk;
+      gsettings-desktop-schemas libosinfo gtk3
+    ] ++ optional spiceSupport spice-gtk;
 
   propagatedBuildInputs = with python2Packages;
     [

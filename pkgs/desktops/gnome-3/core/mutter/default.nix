@@ -1,10 +1,20 @@
 { fetchurl, stdenv, pkgconfig, gnome3, intltool, gobjectIntrospection, upower, cairo
-, pango, cogl, clutter, libstartup_notification, zenity, libcanberra_gtk3
+, pango, cogl, clutter, libstartup_notification, zenity, libcanberra-gtk3
 , libtool, makeWrapper, xkeyboard_config, libxkbfile, libxkbcommon, libXtst, libinput
 , pipewire, libgudev, libwacom, xwayland, autoreconfHook }:
 
 stdenv.mkDerivation rec {
-  inherit (import ./src.nix fetchurl) name src;
+  name = "mutter-${version}";
+  version = "3.28.0";
+
+  src = fetchurl {
+    url = "mirror://gnome/sources/mutter/${gnome3.versionBranch version}/${name}.tar.xz";
+    sha256 = "1c46sf10mgvwgym4c6hbjm7wa82dvfv8j8dx4zdbc7zj4n0grzsq";
+  };
+
+  passthru = {
+    updateScript = gnome3.updateScript { packageName = "mutter"; attrPath = "gnome3.mutter"; };
+  };
 
   configureFlags = [
     "--with-x"
@@ -19,15 +29,6 @@ stdenv.mkDerivation rec {
     "--with-xwayland-path=${xwayland}/bin/Xwayland"
   ];
 
-  patches = [
-    # Pipewire 0.1.8 compatibility
-    (fetchurl {
-      name = "mutter-pipewire-0.1.8-compat.patch";
-      url = https://bugzilla.gnome.org/attachment.cgi?id=367356;
-      sha256 = "10bx5zf11wwhhy686w11ggikk56pbxydpbk9fbd947ir385x92cz";
-    })
-  ];
-
   propagatedBuildInputs = [
     # required for pkgconfig to detect mutter-clutter
     libXtst
@@ -36,10 +37,10 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ autoreconfHook pkgconfig intltool libtool makeWrapper ];
 
   buildInputs = with gnome3; [
-    glib gobjectIntrospection gtk gsettings_desktop_schemas upower
-    gnome_desktop cairo pango cogl clutter zenity libstartup_notification
-    gnome3.geocode_glib libinput libgudev libwacom
-    libcanberra_gtk3 zenity xkeyboard_config libxkbfile
+    glib gobjectIntrospection gtk gsettings-desktop-schemas upower
+    gnome-desktop cairo pango cogl clutter zenity libstartup_notification
+    gnome3.geocode-glib libinput libgudev libwacom
+    libcanberra-gtk3 zenity xkeyboard_config libxkbfile
     libxkbcommon pipewire
   ];
 

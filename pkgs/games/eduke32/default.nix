@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, flac, gtk2, libvorbis, libvpx, makeDesktopItem, mesa, nasm
+{ stdenv, fetchurl, flac, gtk2, libvorbis, libvpx, makeDesktopItem, libGLU_combined, nasm
 , pkgconfig, SDL2, SDL2_mixer }:
 
 let
@@ -14,14 +14,14 @@ in stdenv.mkDerivation rec {
     sha256 = "1nlq5jbglg00c1z1vsyl627fh0mqfxvk5qyxav5vzla2b4svik2v";
   };
 
-  buildInputs = [ flac gtk2 libvorbis libvpx mesa SDL2 SDL2_mixer ]
+  buildInputs = [ flac gtk2 libvorbis libvpx libGLU_combined SDL2 SDL2_mixer ]
     ++ stdenv.lib.optional (stdenv.system == "i686-linux") nasm;
   nativeBuildInputs = [ pkgconfig ];
 
   postPatch = ''
     substituteInPlace build/src/glbuild.c \
-      --replace libGL.so	${mesa}/lib/libGL.so \
-      --replace libGLU.so	${mesa}/lib/libGLU.so
+      --replace libGL.so	${libGLU_combined}/lib/libGL.so \
+      --replace libGLU.so	${libGLU_combined}/lib/libGLU.so
   '';
 
   NIX_CFLAGS_COMPILE = "-I${SDL2.dev}/include/SDL2 -I${SDL2_mixer}/include/SDL2";

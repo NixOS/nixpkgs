@@ -241,6 +241,12 @@ in
           '';
           target = "default/xendomains";
         }
+      ]
+      ++ lib.optionals (builtins.compareVersions cfg.package.version "4.10" >= 0) [
+        # in V 4.10 oxenstored requires /etc/xen/oxenstored.conf to start
+        { source = "${cfg.package}/etc/xen/oxenstored.conf";
+          target = "xen/oxenstored.conf";
+        }
       ];
 
     # Xen provides udev rules.
@@ -262,7 +268,7 @@ in
         mkdir -p /var/lib/xen # so we create them here unconditionally.
         grep -q control_d /proc/xen/capabilities
         '';
-      serviceConfig = if cfg.package.version < "4.8" then
+      serviceConfig = if (builtins.compareVersions cfg.package.version "4.8" < 0) then
         { ExecStart = ''
             ${cfg.stored}${optionalString cfg.trace " -T /var/log/xen/xenstored-trace.log"} --no-fork
             '';
@@ -275,7 +281,7 @@ in
           NotifyAccess    = "all";
         };
       postStart = ''
-        ${optionalString (cfg.package.version < "4.8") ''
+        ${optionalString (builtins.compareVersions cfg.package.version "4.8" < 0) ''
           time=0
           timeout=30
           # Wait for xenstored to actually come up, timing out after 30 seconds
@@ -320,7 +326,7 @@ in
       serviceConfig = {
         ExecStart = ''
           ${cfg.package}/bin/xenconsoled\
-            ${optionalString ((cfg.package.version >= "4.8")) " -i"}\
+            ${optionalString ((builtins.compareVersions cfg.package.version "4.8" >= 0)) " -i"}\
             ${optionalString cfg.trace " --log=all --log-dir=/var/log/xen"}
           '';
       };

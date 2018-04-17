@@ -1,15 +1,25 @@
 { stdenv, fetchurl, pkgconfig, dbus, libgcrypt, libtasn1, pam, python2, glib, libxslt
-, intltool, pango, gcr, gdk_pixbuf, atk, p11_kit, wrapGAppsHook
+, intltool, pango, gcr, gdk_pixbuf, atk, p11-kit, openssh, wrapGAppsHook
 , docbook_xsl, docbook_xml_dtd_42, gnome3 }:
 
 stdenv.mkDerivation rec {
-  inherit (import ./src.nix fetchurl) name src;
+  name = "gnome-keyring-${version}";
+  version = "3.28.0.2";
+
+  src = fetchurl {
+    url = "mirror://gnome/sources/gnome-keyring/${gnome3.versionBranch version}/${name}.tar.xz";
+    sha256 = "0a52xz535vgfymjw3cxmryi3xn2ik24vwk6sixyb7q6jgmqi4bw8";
+  };
+
+  passthru = {
+    updateScript = gnome3.updateScript { packageName = "gnome-keyring"; attrPath = "gnome3.gnome-keyring"; };
+  };
 
   outputs = [ "out" "dev" ];
 
   buildInputs = with gnome3; [
-    dbus libgcrypt pam gtk3 libgnome_keyring
-    pango gcr gdk_pixbuf atk p11_kit
+    dbus libgcrypt pam gtk3 libgnome-keyring openssh
+    pango gcr gdk_pixbuf atk p11-kit
   ];
 
   # In 3.20.1, tests do not support Python 3
@@ -30,8 +40,7 @@ stdenv.mkDerivation rec {
     patchShebangs build
   '';
 
-  # Tests are not deterministic https://bugzilla.gnome.org/show_bug.cgi?id=791932
-  doCheck = false;
+  doCheck = true;
   checkPhase = ''
     export HOME=$(mktemp -d)
     dbus-run-session \

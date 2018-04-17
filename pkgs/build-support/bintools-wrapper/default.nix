@@ -5,7 +5,8 @@
 # script that sets up the right environment variables so that the
 # compiler and the linker just "work".
 
-{ name ? "", stdenvNoCC, nativeTools, noLibc ? false, nativeLibc, nativePrefix ? ""
+{ name ? ""
+, stdenvNoCC, nativeTools, propagateDoc ? !nativeTools, noLibc ? false, nativeLibc, nativePrefix ? ""
 , bintools ? null, libc ? null
 , coreutils ? null, shell ? stdenvNoCC.shell, gnugrep ? null
 , extraPackages ? [], extraBuildCommands ? ""
@@ -15,7 +16,7 @@
 
 with stdenvNoCC.lib;
 
-assert nativeTools -> nativePrefix != "";
+assert nativeTools -> !propagateDoc && nativePrefix != "";
 assert !nativeTools ->
   bintools != null && coreutils != null && gnugrep != null;
 assert !(nativeLibc && noLibc);
@@ -52,13 +53,14 @@ let
   dynamicLinker =
     /**/ if libc == null then null
     else if targetPlatform.libc == "musl"             then "${libc_lib}/lib/ld-musl-*"
+    else if targetPlatform.libc == "bionic"           then "/system/bin/linker"
     else if targetPlatform.system == "i686-linux"     then "${libc_lib}/lib/ld-linux.so.2"
     else if targetPlatform.system == "x86_64-linux"   then "${libc_lib}/lib/ld-linux-x86-64.so.2"
     # ARM with a wildcard, which can be "" or "-armhf".
     else if (with targetPlatform; isArm && isLinux)   then "${libc_lib}/lib/ld-linux*.so.3"
     else if targetPlatform.system == "aarch64-linux"  then "${libc_lib}/lib/ld-linux-aarch64.so.1"
     else if targetPlatform.system == "powerpc-linux"  then "${libc_lib}/lib/ld.so.1"
-    else if targetPlatform.system == "mips64el-linux" then "${libc_lib}/lib/ld.so.1"
+    else if targetPlatform.isMips                     then "${libc_lib}/lib/ld.so.1"
     else if targetPlatform.isDarwin                   then "/usr/lib/dyld"
     else if stdenv.lib.hasSuffix "pc-gnu" targetPlatform.config then "ld.so.1"
     else null;
@@ -83,7 +85,7 @@ stdenv.mkDerivation {
 
   inherit targetPrefix infixSalt;
 
-  outputs = [ "out" "info" "man" ];
+  outputs = [ "out" ] ++ optionals propagateDoc [ "man" "info" ];
 
   passthru = {
     inherit bintools libc nativeTools nativeLibc nativePrefix;
@@ -111,7 +113,7 @@ stdenv.mkDerivation {
     ''
       set -u
 
-      mkdir -p $out/bin {$out,$info,$man}/nix-support
+      mkdir -p $out/bin $out/nix-support
 
       wrap() {
         local dst="$1"
@@ -171,13 +173,20 @@ stdenv.mkDerivation {
       else if targetPlatform.isWindows then "pe"
       else "elf" + toString targetPlatform.parsed.cpu.bits;
     endianPrefix = if targetPlatform.isBigEndian then "big" else "little";
+    sep = optionalString (!targetPlatform.isMips) "-";
     arch =
       /**/ if targetPlatform.isAarch64 then endianPrefix + "aarch64"
       else if targetPlatform.isArm     then endianPrefix + "arm"
       else if targetPlatform.isx86_64  then "x86-64"
       else if targetPlatform.isi686    then "i386"
+      else if targetPlatform.isMips    then {
+          "mips"     = "btsmipn32"; # n32 variant
+          "mipsel"   = "ltsmipn32"; # n32 variant
+          "mips64"   = "btsmip";
+          "mips64el" = "ltsmip";
+        }.${targetPlatform.parsed.cpu.name}
       else throw "unknown emulation for platform: " + targetPlatform.config;
-    in targetPlatform.platform.bfdEmulation or (fmt + "-" + arch);
+    in targetPlatform.platform.bfdEmulation or (fmt + sep + arch);
 
   depsTargetTargetPropagated = extraPackages;
 
@@ -237,28 +246,27 @@ stdenv.mkDerivation {
     '')
 
     + optionalString (!nativeTools) ''
-
       ##
       ## User env support
       ##
 
       # Propagate the underling unwrapped bintools so that if you
-      # install the wrapper, you get tools like objdump, the manpages,
-      # etc. as well (same for any binaries of libc).
+      # install the wrapper, you get tools like objdump (same for any
+      # binaries of libc).
       printWords ${bintools_bin} ${if libc == null then "" else libc_bin} > $out/nix-support/propagated-user-env-packages
+    ''
 
+    + optionalString propagateDoc ''
       ##
       ## Man page and info support
       ##
 
-      printWords ${bintools.info or ""} \
-        >> $info/nix-support/propagated-build-inputs
-      printWords ${bintools.man or ""} \
-        >> $man/nix-support/propagated-build-inputs
+      mkdir -p $man/nix-support $info/nix-support
+      printWords ${bintools.man or ""} >> $man/nix-support/propagated-build-inputs
+      printWords ${bintools.info or ""} >> $info/nix-support/propagated-build-inputs
     ''
 
     + ''
-
       ##
       ## Hardening support
       ##
@@ -286,8 +294,8 @@ stdenv.mkDerivation {
       ##
       ## Extra custom steps
       ##
-
     ''
+
     + extraBuildCommands;
 
   inherit dynamicLinker expand-response-params;

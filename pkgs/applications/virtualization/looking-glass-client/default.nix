@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub
-, pkgconfig, SDL2, SDL, SDL2_ttf, openssl, spice_protocol, fontconfig
+, pkgconfig, SDL2, SDL, SDL2_ttf, openssl, spice-protocol, fontconfig
 , libX11, freefont_ttf
 }:
 
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkgconfig ];
 
   buildInputs = [
-    SDL SDL2 SDL2_ttf openssl spice_protocol fontconfig
+    SDL SDL2 SDL2_ttf openssl spice-protocol fontconfig
     libX11 freefont_ttf
   ];
 

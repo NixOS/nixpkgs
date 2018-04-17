@@ -41,6 +41,6 @@ stdenv.mkDerivation rec {
       gpl3Plus cc-by-sa-30 cc-by-sa-40 publicDomain
     ];
     maintainers = with maintainers; [ lheckemann ];
-    platforms = with platforms; allBut darwin;
+    platforms = platforms.linux; # Maybe other non-darwin Unix
   };
 }
