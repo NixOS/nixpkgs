@@ -15227,7 +15227,7 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Hypervisor vmnet;
   };
 
-  docker-distribution = callPackage ../applications/virtualization/docker-distribution { };
+  docker-distribution = callPackage ../applications/virtualization/docker/distribution.nix { };
 
   docker-credential-gcr = callPackage ../tools/admin/docker-credential-gcr { };
 
@@ -15293,9 +15293,9 @@ with pkgs;
 
   electrum = callPackage ../applications/misc/electrum { };
 
-  electrum-dash = callPackage ../applications/misc/electrum-dash { };
+  electrum-dash = callPackage ../applications/misc/electrum/dash.nix { };
 
-  electrum-ltc = callPackage ../applications/misc/electrum-ltc { };
+  electrum-ltc = callPackage ../applications/misc/electrum/ltc.nix { };
 
   elinks = callPackage ../applications/networking/browsers/elinks { };
 
@@ -15643,15 +15643,15 @@ with pkgs;
     extraPackages = [ gnuradio-nacl gnuradio-osmosdr gnuradio-gsm gnuradio-ais gnuradio-rds ];
   };
 
-  gnuradio-nacl = callPackage ../applications/misc/gnuradio-nacl { };
+  gnuradio-nacl = callPackage ../applications/misc/gnuradio/nacl.nix { };
 
-  gnuradio-gsm = callPackage ../applications/misc/gnuradio-gsm { };
+  gnuradio-gsm = callPackage ../applications/misc/gnuradio/gsm.nix { };
 
-  gnuradio-ais = callPackage ../applications/misc/gnuradio-ais { };
+  gnuradio-ais = callPackage ../applications/misc/gnuradio/ais.nix { };
 
-  gnuradio-rds = callPackage ../applications/misc/gnuradio-rds { };
+  gnuradio-rds = callPackage ../applications/misc/gnuradio/rds.nix { };
 
-  gnuradio-osmosdr = callPackage ../applications/misc/gnuradio-osmosdr { };
+  gnuradio-osmosdr = callPackage ../applications/misc/gnuradio/osmosdr.nix { };
 
   goldendict = libsForQt5.callPackage ../applications/misc/goldendict { };
 
@@ -16762,7 +16762,7 @@ with pkgs;
 
   xmrig = callPackage ../applications/misc/xmrig { };
 
-  xmrig-proxy = callPackage ../applications/misc/xmrig-proxy { };
+  xmrig-proxy = callPackage ../applications/misc/xmrig/proxy.nix { };
 
   monkeysAudio = callPackage ../applications/audio/monkeys-audio { };
 
@@ -16782,27 +16782,27 @@ with pkgs;
 
   mopidy = callPackage ../applications/audio/mopidy { };
 
-  mopidy-gmusic = callPackage ../applications/audio/mopidy-gmusic { };
+  mopidy-gmusic = callPackage ../applications/audio/mopidy/gmusic.nix { };
 
-  mopidy-local-images = callPackage ../applications/audio/mopidy-local-images { };
+  mopidy-local-images = callPackage ../applications/audio/mopidy/local-images.nix { };
 
-  mopidy-local-sqlite = callPackage ../applications/audio/mopidy-local-sqlite { };
+  mopidy-local-sqlite = callPackage ../applications/audio/mopidy/local-sqlite.nix { };
 
-  mopidy-spotify = callPackage ../applications/audio/mopidy-spotify { };
+  mopidy-spotify = callPackage ../applications/audio/mopidy/spotify.nix { };
 
-  mopidy-moped = callPackage ../applications/audio/mopidy-moped { };
+  mopidy-moped = callPackage ../applications/audio/mopidy/moped.nix { };
 
-  mopidy-mopify = callPackage ../applications/audio/mopidy-mopify { };
+  mopidy-mopify = callPackage ../applications/audio/mopidy/mopify.nix { };
 
-  mopidy-spotify-tunigo = callPackage ../applications/audio/mopidy-spotify-tunigo { };
+  mopidy-spotify-tunigo = callPackage ../applications/audio/mopidy/spotify-tunigo.nix { };
 
-  mopidy-youtube = callPackage ../applications/audio/mopidy-youtube { };
+  mopidy-youtube = callPackage ../applications/audio/mopidy/youtube.nix { };
 
-  mopidy-soundcloud = callPackage ../applications/audio/mopidy-soundcloud { };
+  mopidy-soundcloud = callPackage ../applications/audio/mopidy/soundcloud.nix { };
 
-  mopidy-musicbox-webclient = callPackage ../applications/audio/mopidy-musicbox-webclient { };
+  mopidy-musicbox-webclient = callPackage ../applications/audio/mopidy/musicbox-webclient.nix { };
 
-  mopidy-iris = callPackage ../applications/audio/mopidy-iris { };
+  mopidy-iris = callPackage ../applications/audio/mopidy/iris.nix { };
 
   motif = callPackage ../development/libraries/motif { };
 
@@ -17749,7 +17749,7 @@ with pkgs;
 
   dropbox = callPackage ../applications/networking/dropbox { };
 
-  dropbox-cli = callPackage ../applications/networking/dropbox-cli { };
+  dropbox-cli = callPackage ../applications/networking/dropbox/cli.nix { };
 
   insync = callPackage ../applications/networking/insync { };
 
@@ -17760,13 +17760,13 @@ with pkgs;
 
   lightdm_qt = lightdm.override { withQt5 = true; };
 
-  lightdm_gtk_greeter = callPackage ../applications/display-managers/lightdm-gtk-greeter {
+  lightdm_gtk_greeter = callPackage ../applications/display-managers/lightdm/gtk-greeter.nix {
     inherit (xfce) exo;
   };
 
   slic3r = callPackage ../applications/misc/slic3r { };
 
-  slic3r-prusa3d = callPackage ../applications/misc/slic3r-prusa3d { };
+  slic3r-prusa3d = callPackage ../applications/misc/slic3r/prusa3d.nix { };
 
   curaengine_stable = callPackage ../applications/misc/curaengine/stable.nix { };
   cura_stable = callPackage ../applications/misc/cura/stable.nix {
@@ -18312,7 +18312,7 @@ with pkgs;
 
   vscode = callPackage ../applications/editors/vscode { };
 
-  vscode-with-extensions = callPackage ../applications/editors/vscode-with-extensions {};
+  vscode-with-extensions = callPackage ../applications/editors/vscode/with-extensions.nix {};
 
   vscode-utils = callPackage ../misc/vscode-extensions/vscode-utils.nix {};
 
