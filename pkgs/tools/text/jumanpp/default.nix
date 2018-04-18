@@ -1,12 +1,14 @@
-{ stdenv, fetchurl, boost, libunwind, gperftools }:
+{ stdenv, fetchurl, cmake, protobuf }:
 stdenv.mkDerivation rec {
   name = "jumanpp";
-  version = "1.02";
+  version = "2.0.0-rc2";
+
   src = fetchurl {
-    url = "http://lotus.kuee.kyoto-u.ac.jp/nl-resource/jumanpp/jumanpp-${version}.tar.xz";
-    sha256 = "14768b419bak8h2px8chw4cbfscb0jj012bpr769qv5nn6f53yh1";
+    url = "https://github.com/ku-nlp/${name}/releases/download/v${version}/${name}-${version}.tar.xz";
+    sha256 = "17fzmd0f5m9ayfhsr0mg7hjp3pg1mhbgknhgyd8v87x46g8bg6qp";
   };
-  buildInputs = [ boost libunwind gperftools ];
+  buildInputs = [ cmake protobuf ];
+
   meta = with stdenv.lib; {
     description = "A Japanese morphological analyser using a recurrent neural network language model (RNNLM)";
     longDescription = ''
