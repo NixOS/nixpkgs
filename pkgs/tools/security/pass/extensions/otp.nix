@@ -1,4 +1,5 @@
-{ stdenv, pass, fetchFromGitHub, oathToolkit }:
+{ stdenv, fetchFromGitHub, oathToolkit }:
+
 stdenv.mkDerivation rec {
   name = "pass-otp-${version}";
   version = "1.1.0";
@@ -10,15 +11,15 @@ stdenv.mkDerivation rec {
     sha256 = "1cgj4zc8fq88n3h6c0vkv9i5al785mdprpgpbv5m22dz9p1wqvbb";
   };
 
-  buildInputs = [ pass oathToolkit ];
+  buildInputs = [ oathToolkit ];
+
+  dontBuild = true;
 
   patchPhase = ''
     sed -i -e 's|OATH=\$(which oathtool)|OATH=${oathToolkit}/bin/oathtool|' otp.bash
   '';
 
-  installPhase = ''
-    make PREFIX=$out install
-  '';
+  installFlags = [ "PREFIX=$(out)" ];
 
   meta = with stdenv.lib; {
     description = "A pass extension for managing one-time-password (OTP) tokens";
