@@ -19,6 +19,6 @@ stdenv.mkDerivation rec {
     homepage = http://nlp.ist.i.kyoto-u.ac.jp/index.php?JUMAN++;
     license = licenses.asl20;
     maintainers = with maintainers; [ mt-caret ];
-    platforms = platforms.x86_64;
+    platforms = platforms.all;
   };
 }
