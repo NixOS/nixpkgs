@@ -20540,7 +20540,9 @@ with pkgs;
 
   pythia = callPackage ../development/libraries/physics/pythia { };
 
-  rivet = callPackage ../development/libraries/physics/rivet { };
+  rivet = callPackage ../development/libraries/physics/rivet {
+    imagemagick = graphicsmagick-imagemagick-compat;
+  };
 
   thepeg = callPackage ../development/libraries/physics/thepeg { };
 
