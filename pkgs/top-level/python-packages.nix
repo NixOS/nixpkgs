@@ -3501,6 +3501,8 @@ in {
 
   m2r = callPackage ../development/python-modules/m2r { };
 
+  macpack = callPackage ../development/python-modules/macpack { };
+
   mailchimp = buildPythonPackage rec {
     version = "2.0.9";
     name = "mailchimp-${version}";
