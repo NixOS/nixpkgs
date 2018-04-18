@@ -15245,6 +15245,8 @@ with pkgs;
 
   dunst = callPackage ../applications/misc/dunst { };
 
+  du-dust = callPackage ../tools/misc/dust { };
+
   devede = callPackage ../applications/video/devede { };
 
   denemo = callPackage ../applications/audio/denemo {
