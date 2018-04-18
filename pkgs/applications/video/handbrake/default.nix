@@ -37,15 +37,13 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     cmake python2 pkgconfig yasm autoconf automake libtool m4
-  ] ++ lib.optionals useGtk [
-    intltool wrapGAppsHook
-  ];
+  ] ++ lib.optionals useGtk [ intltool wrapGAppsHook ];
 
   buildInputs = [
     fribidi fontconfig freetype jansson zlib
     libass libiconv libsamplerate libxml2 bzip2
     libogg libopus libtheora libvorbis libdvdcss a52dec libmkv
-    lame ffmpeg libdvdread libdvdnav libbluray mp4v2 mpeg2dec x264 x265 libvpx
+    lame libdvdread libdvdnav libbluray mp4v2 mpeg2dec x264 x265 libvpx
   ] ++ lib.optionals useGtk [
     glib gtk3 libappindicator-gtk3 libnotify
     gst_all_1.gstreamer gst_all_1.gst-plugins-base dbus-glib udev
@@ -59,8 +57,6 @@ stdenv.mkDerivation rec {
 
   preConfigure = ''
     patchShebangs scripts
-
-    echo 'TAG=${version}' > version.txt
 
     # `configure` errors out when trying to read the current year which is too low
     substituteInPlace make/configure.py \
@@ -97,13 +93,17 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     homepage = http://handbrake.fr/;
-    description = "A tool for ripping DVDs into video files";
+    description = "A tool for converting video files and ripping DVDs";
     longDescription = ''
-      Handbrake is a versatile transcoding DVD ripper. This package
-      provides the cli HandbrakeCLI and the GTK+ version ghb.
+      Tool for converting and remuxing video files
+      into selection of modern and widely supported codecs
+      and containers. Very versatile and customizable.
+      Package provides:
+      CLI - `HandbrakeCLI`
+      GTK+ GUI - `ghb`
     '';
     license = licenses.gpl2;
-    maintainers = with maintainers; [ wmertens ];
+    maintainers = with maintainers; [ Anton-Latukha wmertens ];
     # Not tested on anything else
     platforms = platforms.linux;
   };
