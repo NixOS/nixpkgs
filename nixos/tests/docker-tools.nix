@@ -3,7 +3,7 @@
 import ./make-test.nix ({ pkgs, ... }: {
   name = "docker-tools";
   meta = with pkgs.stdenv.lib.maintainers; {
-    maintainers = [ ];
+    maintainers = [ lnl7 ];
   };
 
   nodes = {
@@ -21,12 +21,12 @@ import ./make-test.nix ({ pkgs, ... }: {
       $docker->waitForUnit("sockets.target");
 
       $docker->succeed("docker load --input='${pkgs.dockerTools.examples.bash}'");
-      $docker->succeed("docker run --rm ${pkgs.dockerTools.examples.bash.imageName} /bin/bash --version");
+      $docker->succeed("docker run --rm ${pkgs.dockerTools.examples.bash.imageName} bash --version");
       $docker->succeed("docker rmi ${pkgs.dockerTools.examples.bash.imageName}");
 
       # Check if the nix store is correctly initialized by listing dependencies of the installed Nix binary
       $docker->succeed("docker load --input='${pkgs.dockerTools.examples.nix}'");
-      $docker->succeed("docker run --rm ${pkgs.dockerTools.examples.nix.imageName} /bin/nix-store -qR ${pkgs.nix}");
+      $docker->succeed("docker run --rm ${pkgs.dockerTools.examples.nix.imageName} nix-store -qR ${pkgs.nix}");
       $docker->succeed("docker rmi ${pkgs.dockerTools.examples.nix.imageName}");
 
       # To test the pullImage tool

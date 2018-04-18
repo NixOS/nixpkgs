@@ -3,11 +3,11 @@
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";
   pname = "samtools";
-  version = "1.7";
+  version = "1.8";
 
   src = fetchurl {
     url = "https://github.com/samtools/samtools/releases/download/${version}/${name}.tar.bz2";
-    sha256 = "e7b09673176aa32937abd80f95f432809e722f141b5342186dfef6a53df64ca1";
+    sha256 = "05myg7bs90i68qbqab9cdg9rqj2xh39azibrx82ipzc5kcfvqhn9";
   };
 
   nativeBuildInputs = [ perl ];

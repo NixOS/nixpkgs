@@ -35,5 +35,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
     maintainers = [ maintainers.spacefrogg ];
+    broken = true; # 2018-04-10
   };
 }

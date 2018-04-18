@@ -25,8 +25,8 @@ python3Packages.buildPythonApplication rec {
 
   nativeBuildInputs = [ makeWrapper python3Packages.setuptools_scm ] ++ stdenv.lib.optional (stdenv.system != "i686-linux") pandoc;
   buildInputs =
-    [ coreutils openssh ] ++
-    stdenv.lib.optionals stdenv.isLinux [ iptables nettools procps ];
+    [ coreutils openssh procps nettools ]
+    ++ stdenv.lib.optionals stdenv.isLinux [ iptables ];
 
   checkInputs = with python3Packages; [ mock pytest pytestrunner ];
 

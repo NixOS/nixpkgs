@@ -60,7 +60,7 @@ let
       TARGET = "ATHLON";
       DYNAMIC_ARCH = "1";
       CC = "gcc";
-      USE_OPENMP = "1";
+      USE_OPENMP = if stdenv.hostPlatform.isMusl then "0" else "1";
     };
   };
 in

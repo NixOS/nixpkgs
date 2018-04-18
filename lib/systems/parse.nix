@@ -34,7 +34,7 @@ rec {
 
   ################################################################################
 
-  types.openSignifiantByte = mkOptionType {
+  types.openSignificantByte = mkOptionType {
     name = "significant-byte";
     description = "Endianness";
     merge = mergeOneOption;
@@ -42,7 +42,7 @@ rec {
 
   types.significantByte = enum (attrValues significantBytes);
 
-  significantBytes = setTypes types.openSignifiantByte {
+  significantBytes = setTypes types.openSignificantByte {
     bigEndian = {};
     littleEndian = {};
   };

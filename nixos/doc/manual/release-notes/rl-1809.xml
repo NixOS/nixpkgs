@@ -58,6 +58,9 @@ following incompatible changes:</para>
 <itemizedlist>
   <listitem>
     <para>
+      The <literal>clementine</literal> package points now to the free derivation.
+      <literal>clementineFree</literal> is removed now and <literal>clementineUnfree</literal>
+      points to the package which is bundled with the unfree <literal>libspotify</literal> package.
     </para>
   </listitem>
 </itemizedlist>

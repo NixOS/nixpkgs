@@ -9,8 +9,12 @@ stdenv.mkDerivation {
     sha256 = "0sifr3bkmhyr5s6ljgfyr0fw6w49ajf11rlp1r797f3r3r6j9w4k";
   };
 
-  installPhase = "mkdir -p $out; mv * $out/";
   dontFixup = true;
+  # no "make install", gnulib is a collection of source code
+  installPhase = ''
+    mkdir -p $out; mv * $out/
+    ln -s $out/lib $out/include
+  '';
 
   meta = {
     homepage = http://www.gnu.org/software/gnulib/;

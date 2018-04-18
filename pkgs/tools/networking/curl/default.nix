@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, perl
+{ stdenv, lib, fetchurl, pkgconfig, perl
 , http2Support ? true, nghttp2
 , idnSupport ? false, libidn ? null
 , ldapSupport ? false, openldap ? null
@@ -24,11 +24,14 @@ assert brotliSupport -> brotli != null;
 assert gssSupport -> kerberos != null;
 
 stdenv.mkDerivation rec {
-  name = "curl-7.58.0";
+  name = "curl-7.59.0";
 
   src = fetchurl {
-    url = "https://curl.haxx.se/download/${name}.tar.bz2";
-    sha256 = "0cg7klhf1ksnbw5wvwa802qir877zv4y3dj7swz1xh07g3wq3c0w";
+    urls = [
+      "https://github.com/curl/curl/releases/download/${lib.replaceStrings ["."] ["_"] name}/${name}.tar.bz2"
+      "https://curl.haxx.se/download/${name}.tar.bz2"
+    ];
+    sha256 = "185mazhi4bc5mc6rvhrmnc67j8l3sg7f0w2hp5gmi5ccdbyhz4mm";
   };
 
   outputs = [ "bin" "dev" "out" "man" "devdoc" ];

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, intltool, pkgconfig, networkmanager, strongswanNM, procps
+{ stdenv, fetchurl, intltool, pkgconfig, networkmanager, strongswanNM, sysctl
 , gnome3, libgnome-keyring, libsecret }:
 
 stdenv.mkDerivation rec {
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
 
   preConfigure = ''
      substituteInPlace "configure" \
-       --replace "/sbin/sysctl" "${procps}/bin/sysctl"
+       --replace "/sbin/sysctl" "${sysctl}/bin/sysctl"
   '';
 
   configureFlags = [ "--with-charon=${strongswanNM}/libexec/ipsec/charon-nm" ];

@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, fetchpatch, removeReferencesTo, which, go_1_9, go-bindata, makeWrapper, rsync
+{ stdenv, lib, fetchFromGitHub, fetchpatch, removeReferencesTo, which, go_1_9, go-bindata, makeWrapper, rsync, utillinux
 , iptables, coreutils, kerberos, clang
 , components ? [
   "cmd/oc"
@@ -37,6 +37,18 @@ in stdenv.mkDerivation rec {
 
   patchPhase = ''
     patchShebangs ./hack
+
+    substituteInPlace pkg/oc/bootstrap/docker/host/host.go  \
+      --replace 'nsenter --mount=/rootfs/proc/1/ns/mnt findmnt' \
+      'nsenter --mount=/rootfs/proc/1/ns/mnt ${utillinux}/bin/findmnt'
+
+    substituteInPlace pkg/oc/bootstrap/docker/host/host.go  \
+      --replace 'nsenter --mount=/rootfs/proc/1/ns/mnt mount' \
+      'nsenter --mount=/rootfs/proc/1/ns/mnt ${utillinux}/bin/mount'
+
+    substituteInPlace pkg/oc/bootstrap/docker/host/host.go  \
+      --replace 'nsenter --mount=/rootfs/proc/1/ns/mnt mkdir' \
+      'nsenter --mount=/rootfs/proc/1/ns/mnt ${utillinux}/bin/mount'
   '';
 
   buildPhase = ''

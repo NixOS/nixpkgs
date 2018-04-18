@@ -22,6 +22,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     xorg.libxcb
+    xorg.libXdamage
     xorg.xcbutilwm
     xorg.xcbutilimage
     qtbase

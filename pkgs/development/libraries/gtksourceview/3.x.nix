@@ -32,6 +32,8 @@ in stdenv.mkDerivation rec {
 
   patches = [ ./3.x-nix_share_path.patch ];
 
+  NIX_LDFLAGS = stdenv.lib.optionalString stdenv.isDarwin "-lintl";
+
   enableParallelBuilding = true;
 
   doCheck = stdenv.isLinux;

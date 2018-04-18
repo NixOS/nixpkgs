@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgconfig, flex, bison, libxslt, autoconf, graphviz
-, glib, libiconv, libintlOrEmpty, libtool, expat
+, glib, libiconv, libintl, libtool, expat
 }:
 
 let
@@ -16,7 +16,7 @@ let
 
     nativeBuildInputs = [ pkgconfig flex bison libxslt ] ++ extraNativeBuildInputs;
 
-    buildInputs = [ glib libiconv ] ++ libintlOrEmpty ++ extraBuildInputs;
+    buildInputs = [ glib libiconv libintl ] ++ extraBuildInputs;
 
     meta = with stdenv.lib; {
       description = "Compiler for GObject type system";

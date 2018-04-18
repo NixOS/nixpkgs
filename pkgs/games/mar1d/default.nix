@@ -47,6 +47,7 @@ stdenv.mkDerivation rec {
       xorg.libXrandr
       xorg.libXi
       xorg.xinput
+      xorg.libXxf86vm
     ];
 
   preConfigure = ''

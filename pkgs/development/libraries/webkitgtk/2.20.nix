@@ -2,7 +2,7 @@
 , pkgconfig, gettext, gobjectIntrospection, libnotify, gnutls, libgcrypt
 , gtk3, wayland, libwebp, enchant2, xorg, libxkbcommon, epoxy, at-spi2-core
 , libxml2, libsoup, libsecret, libxslt, harfbuzz, libpthreadstubs, pcre, nettle, libtasn1, p11-kit
-, libidn, libedit, readline, libGLU_combined, libintlOrEmpty
+, libidn, libedit, readline, libGLU_combined, libintl
 , enableGeoLocation ? true, geoclue2, sqlite
 , enableGtk2Plugins ? false, gtk2 ? null
 , gst-plugins-base, gst-plugins-bad, woff2
@@ -66,20 +66,18 @@ stdenv.mkDerivation rec {
   "-DENABLE_GTKDOC=OFF"
   ];
 
-  NIX_CFLAGS_COMPILE = optionalString stdenv.isDarwin " -lintl";
-
   nativeBuildInputs = [
     cmake ninja perl python2 ruby bison gperf
     pkgconfig gettext gobjectIntrospection
   ];
 
-  buildInputs = libintlOrEmpty ++ [
-    libwebp enchant2 libnotify gnutls pcre nettle libidn libgcrypt woff2
+  buildInputs = [
+    libintl libwebp enchant2 libnotify gnutls pcre nettle libidn libgcrypt woff2
     libxml2 libsecret libxslt harfbuzz libpthreadstubs libtasn1 p11-kit
     sqlite gst-plugins-base gst-plugins-bad libxkbcommon epoxy at-spi2-core
   ] ++ optional enableGeoLocation geoclue2
     ++ optional enableGtk2Plugins gtk2
-    ++ (with xorg; [ libXdmcp libXt libXtst ])
+    ++ (with xorg; [ libXdmcp libXt libXtst libXdamage ])
     ++ optionals stdenv.isDarwin [ libedit readline libGLU_combined ]
     ++ optional stdenv.isLinux wayland;
 

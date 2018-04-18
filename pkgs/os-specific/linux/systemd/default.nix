@@ -19,14 +19,16 @@ let
   pythonLxmlEnv = buildPackages.python3Packages.python.withPackages ( ps: with ps; [ python3Packages.lxml ]);
 
 in stdenv.mkDerivation rec {
-  version = "237";
+  version = "238";
   name = "systemd-${version}";
 
+  # When updating, use https://github.com/systemd/systemd-stable tree, not the development one!
+  # Also fresh patches should be cherry-picked from that tree to our current one.
   src = fetchFromGitHub {
     owner = "NixOS";
     repo = "systemd";
-    rev = "98067cc806ae0d2759cdd2334f230cd8548e5317";
-    sha256 = "077svfs2xy3g30s62q69wcv5pb9vfhzh8i7lhfri73vvhwbpzd5q";
+    rev = "02042d012c4d6c0a2854d8436dd6636d4327774f";
+    sha256 = "0iv6fygzac0z6dagbmw1nf8dx7rrr6d9cxp0fr304rn3ir58g5f0";
   };
 
   outputs = [ "out" "lib" "man" "dev" ];
@@ -77,7 +79,7 @@ in stdenv.mkDerivation rec {
     "-Dsystem-gid-max=499"
     # "-Dtime-epoch=1"
 
-    (if stdenv.isArm || !hostPlatform.isEfi then "-Dgnu-efi=false" else "-Dgnu-efi=true")
+    (if stdenv.isArm || stdenv.isAarch64 || !hostPlatform.isEfi then "-Dgnu-efi=false" else "-Dgnu-efi=true")
     "-Defi-libdir=${toString gnu-efi}/lib"
     "-Defi-includedir=${toString gnu-efi}/include/efi"
     "-Defi-ldsdir=${toString gnu-efi}/lib"
@@ -180,13 +182,6 @@ in stdenv.mkDerivation rec {
     mv $out/lib/systemd/{system,user} $out/example/systemd
 
     rm -rf $out/etc/systemd/system
-
-    # Install SysV compatibility commands.
-    mkdir -p $out/sbin
-    ln -s $out/lib/systemd/systemd $out/sbin/telinit
-    for i in init halt poweroff runlevel reboot shutdown; do
-      ln -s $out/bin/systemctl $out/sbin/$i
-    done
 
     # Fix reference to /bin/false in the D-Bus services.
     for i in $out/share/dbus-1/system-services/*.service; do

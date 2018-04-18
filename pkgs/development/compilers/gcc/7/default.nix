@@ -57,16 +57,18 @@ let version = "7.3.0";
     enableParallelBuilding = true;
 
     patches =
-      [ ]
+      [ # https://gcc.gnu.org/ml/gcc-patches/2018-02/msg00633.html
+        ./riscv-pthread-reentrant.patch
+        # https://gcc.gnu.org/ml/gcc-patches/2018-03/msg00297.html
+        ./riscv-no-relax.patch
+      ]
       ++ optional (targetPlatform != hostPlatform) ../libstdc++-target.patch
       ++ optional noSysDirs ../no-sys-dirs.patch
       ++ optional (hostPlatform != buildPlatform) (fetchpatch { # XXX: Refine when this should be applied
         url = "https://git.busybox.net/buildroot/plain/package/gcc/7.1.0/0900-remove-selftests.patch?id=11271540bfe6adafbc133caf6b5b902a816f5f02";
         sha256 = "0mrvxsdwip2p3l17dscpc1x8vhdsciqw1z5q9i6p5g9yg1cqnmgs";
       })
-      ++ optional langFortran ../gfortran-driving.patch
-         # https://gcc.gnu.org/ml/gcc-patches/2018-02/msg00633.html
-      ++ optional targetPlatform.isRiscV ./riscv-pthread-reentrant.patch;
+      ++ optional langFortran ../gfortran-driving.patch;
 
     javaEcj = fetchurl {
       # The `$(top_srcdir)/ecj.jar' file is automatically picked up at
@@ -212,7 +214,12 @@ stdenv.mkDerivation ({
       --replace "-install_name \\\$rpath/\\\$soname" "-install_name $lib/lib/\\\$soname"
   '';
 
-  postPatch =
+  postPatch = ''
+    configureScripts=$(find . -name configure)
+    for configureScript in $configureScripts; do
+      patchShebangs $configureScript
+    done
+  '' + (
     if (hostPlatform.isHurd
         || (libcCross != null                  # e.g., building `gcc.crossDrv'
             && libcCross ? crossConfig
@@ -271,7 +278,7 @@ stdenv.mkDerivation ({
             sed -i gcc/config/linux.h -e '1i#undef LOCAL_INCLUDE_DIR'
         ''
         )
-    else null;
+    else "");
 
   # TODO(@Ericson2314): Make passthru instead. Weird to avoid mass rebuild,
   crossStageStatic = targetPlatform == hostPlatform || crossStageStatic;

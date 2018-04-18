@@ -1,4 +1,6 @@
-{ stdenv, fetchurl, alsaLib, bison, flex, libsndfile, which }:
+{ stdenv, fetchurl, alsaLib, bison, flex, libsndfile, which
+, AppKit, Carbon, CoreAudio, CoreMIDI, CoreServices, Kernel
+}:
 
 stdenv.mkDerivation rec {
   version = "1.3.5.2";
@@ -10,19 +12,24 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ bison flex libsndfile which ]
-    ++ stdenv.lib.optional (!stdenv.isDarwin) alsaLib;
+    ++ stdenv.lib.optional (!stdenv.isDarwin) alsaLib
+    ++ stdenv.lib.optional stdenv.isDarwin [ AppKit Carbon CoreAudio CoreMIDI CoreServices Kernel ];
 
-  patches = [ ./darwin-limits.patch ];
+  patches = [ ./clang.patch ./darwin-limits.patch ];
+
+  NIX_CFLAGS_COMPILE = stdenv.lib.optionalString stdenv.isDarwin "-Wno-missing-sysroot";
+  NIX_LDFLAGS = stdenv.lib.optionalString stdenv.isDarwin "-framework MultitouchSupport";
 
   postPatch = ''
     substituteInPlace src/makefile --replace "/usr/bin" "$out/bin"
     substituteInPlace src/makefile.osx --replace "xcodebuild" "/usr/bin/xcodebuild"
     substituteInPlace src/makefile.osx --replace "weak_framework" "framework"
+    substituteInPlace src/makefile.osx --replace "MACOSX_DEPLOYMENT_TARGET=10.5" "MACOSX_DEPLOYMENT_TARGET=$MACOSX_DEPLOYMENT_TARGET"
   '';
 
-  buildPhase =
-    stdenv.lib.optionals stdenv.isLinux  ["make -C src linux-alsa"] ++
-    stdenv.lib.optionals stdenv.isDarwin ["make -C src osx"];
+  buildPhase = ''
+    make -C src ${if stdenv.isDarwin then "osx" else "linux-alsa"}
+  '';
 
   installPhase = ''
     install -Dm755 ./src/chuck $out/bin/chuck

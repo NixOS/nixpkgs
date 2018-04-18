@@ -1,9 +1,9 @@
 { stdenv, fetchurl, pkgconfig, openssl, libjpeg, zlib, lz4, freetype, fontconfig
-, fribidi, SDL2, SDL, libGLU_combined, giflib, libpng, libtiff, glib, gst_all_1, libpulseaudio
+, fribidi, SDL2, SDL, libGL, giflib, libpng, libtiff, glib, gst_all_1, libpulseaudio
 , libsndfile, xorg, libdrm, libxkbcommon, udev, utillinux, dbus, bullet, luajit
 , python27Packages, openjpeg, doxygen, expat, harfbuzz, jbig2dec, librsvg
 , dbus_libs, alsaLib, poppler, ghostscript, libraw, libspectre, xineLib, libwebp
-, curl, libinput, systemd, writeText
+, curl, libinput, systemd, mesa_noglu, writeText
 }:
 
 stdenv.mkDerivation rec {
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig ];
 
-  buildInputs = [ openssl zlib lz4 freetype fontconfig SDL libGLU_combined
+  buildInputs = [ openssl zlib lz4 freetype fontconfig SDL libGL mesa_noglu
     giflib libpng libtiff glib gst_all_1.gstreamer gst_all_1.gst-plugins-base gst_all_1.gst-plugins-good
     gst_all_1.gst-libav libpulseaudio libsndfile xorg.libXcursor xorg.printproto
     xorg.libX11 udev systemd ];

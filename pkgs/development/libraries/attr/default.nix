@@ -18,6 +18,12 @@ stdenv.mkDerivation rec {
 
   patches = if (hostPlatform.libc == "musl") then [ ./fix-headers-musl.patch ] else null;
 
+  postPatch = ''
+    for script in install-sh include/install-sh; do
+      patchShebangs $script
+    done
+  '';
+
   meta = with stdenv.lib; {
     homepage = "http://savannah.nongnu.org/projects/attr/";
     description = "Library and tools for manipulating extended attributes";

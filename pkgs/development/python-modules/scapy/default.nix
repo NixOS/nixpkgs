@@ -6,7 +6,6 @@
 buildPythonPackage rec {
   pname = "scapy";
   version = "2.4.0";
-  name = pname + "-" + version;
 
   disabled = isPyPy;
 

@@ -47,4 +47,3 @@ stdenv.mkDerivation rec {
     platforms = platforms.unix;
   };
 }
-

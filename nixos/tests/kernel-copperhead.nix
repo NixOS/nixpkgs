@@ -6,14 +6,14 @@ import ./make-test.nix ({ pkgs, ...} : {
 
   machine = { config, lib, pkgs, ... }:
     {
-      boot.kernelPackages = pkgs.linuxPackages_hardened_copperhead;
+      boot.kernelPackages = pkgs.linuxPackages_copperhead_hardened;
     };
 
   testScript =
     ''
       $machine->succeed("uname -a");
       $machine->succeed("uname -s | grep 'Linux'");
-      $machine->succeed("uname -a | grep '${pkgs.linuxPackages_hardened_copperhead.kernel.modDirVersion}'");
+      $machine->succeed("uname -a | grep '${pkgs.linuxPackages_copperhead_hardened.kernel.modDirVersion}'");
       $machine->succeed("uname -a | grep 'hardened'");
     '';
 })

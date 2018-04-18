@@ -10,11 +10,11 @@
 
 buildPythonPackage rec {
   pname = "aws-shell";
-  version = "0.1.1";
+  version = "0.2.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1pw9lrdjl24n6lrs6lnqpyiyic8bdxgvhyqvb2rx6kkbjrfhhgv5";
+    sha256 = "b46a673b81254e5e014297e08c9ecab535773aa651ca33dc3786a1fd612f9810";
   };
 
   # Why does it propagate packages that are used for testing?

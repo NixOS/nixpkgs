@@ -1,12 +1,13 @@
 { stdenv, fetchFromGitHub, gdal, cmake, ninja, proj, clipper, zlib, qtbase, qttools
-  , qtlocation, qtsensors, doxygen, cups, makeWrapper
+  , qtlocation, qtsensors, doxygen, cups, makeWrapper, qtimageformats
 }:
 
 stdenv.mkDerivation rec {
   name = "OpenOrienteering-Mapper-${version}";
-  version = "0.8.1";
+  version = "0.8.1.2";
 
-  buildInputs = [ gdal qtbase qttools qtlocation qtsensors clipper zlib proj doxygen cups];
+  buildInputs = [ gdal qtbase qttools qtlocation qtimageformats
+                  qtsensors clipper zlib proj doxygen cups];
 
   nativeBuildInputs = [ cmake makeWrapper ninja ];
 
@@ -14,7 +15,7 @@ stdenv.mkDerivation rec {
     owner = "OpenOrienteering";
     repo = "mapper";
     rev = "v${version}";
-    sha256 = "10viw8bddl76mc2gh84jsl7h237yzvh4nim61pbd63vg1hlqisi6";
+    sha256 = "0f7zxzl2n46qy86k6n3f6a7l1nhba58i28l8ngp3drf74qffaa33";
   };
 
   cmakeFlags =
@@ -48,19 +49,20 @@ stdenv.mkDerivation rec {
     # Fixes "This application failed to start because it could not find or load the Qt
     # platform plugin "cocoa"."
     wrapProgram $out/Mapper.app/Contents/MacOS/Mapper \
-      --set QT_QPA_PLATFORM_PLUGIN_PATH ${qtbase.bin}/lib/qt-*/plugins/platforms
+      --set QT_QPA_PLATFORM_PLUGIN_PATH ${qtbase.bin}/lib/qt-*/plugins/platforms \
+      --set QT_PLUGIN_PATH ${qtbase.bin}/${qtbase.qtPluginPrefix}:${qtimageformats}/${qtbase.qtPluginPrefix}
     mkdir -p $out/bin
     ln -s $out/Mapper.app/Contents/MacOS/Mapper $out/bin/mapper
     '';
 
-  meta = {
+  meta = with stdenv.lib; {
     description = ''
       OpenOrienteering Mapper is an orienteering mapmaking program
       and provides a free alternative to the existing proprietary solution.
     '';
     homepage = https://www.openorienteering.org/apps/mapper/;
-    license = stdenv.lib.licenses.gpl3;
-    platforms = with stdenv.lib.platforms; darwin;
-    maintainers = with stdenv.lib.maintainers; [mpickering];
+    license = licenses.gpl3;
+    platforms = with platforms; linux ++ darwin;
+    maintainers = with maintainers; [mpickering];
   };
 }

@@ -5,11 +5,11 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "udisks-2.1.6";
+  name = "udisks-2.1.8";
 
   src = fetchurl {
     url = "http://udisks.freedesktop.org/releases/${name}.tar.bz2";
-    sha256 = "0spl155k0g2l2hvqf8xyjv08i68gfyhzpjva6cwlzxx0bz4gbify";
+    sha256 = "1nkxhnqh39c9pzvm4zfj50rgv6apqawdx09bv3sfaxrah4a6jhfs";
   };
 
   outputs = [ "out" "man" "dev" ];
@@ -27,7 +27,11 @@ stdenv.mkDerivation rec {
         --replace "/bin/sh" "${stdenv.shell}" \
         --replace "/sbin/mdadm" "${mdadm}/bin/mdadm" \
         --replace " sed " " ${gnused}/bin/sed "
-    '';
+  '' + stdenv.lib.optionalString stdenv.hostPlatform.isMusl ''
+      substituteInPlace udisks/udisksclient.c \
+        --replace 'defined( __GNUC_PREREQ)' 1 \
+        --replace '__GNUC_PREREQ(4,6)' 1
+  '';
 
   nativeBuildInputs = [ pkgconfig intltool gobjectIntrospection ];
 

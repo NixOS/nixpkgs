@@ -64,6 +64,9 @@
 /pkgs/development/interpreters/ruby @zimbatm
 /pkgs/development/ruby-modules      @zimbatm
 
+# Rust
+/pkgs/development/compilers/rust @Mic92 @LnL7
+
 # Darwin-related
 /pkgs/stdenv/darwin         @NixOS/darwin-maintainers
 /pkgs/os-specific/darwin    @NixOS/darwin-maintainers

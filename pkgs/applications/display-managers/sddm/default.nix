@@ -22,6 +22,10 @@ in mkDerivation rec {
     # Module Qt5::Test must be included in `find_package` before it is used.
     ''
       sed -i CMakeLists.txt -e '/find_package(Qt5/ s|)| Test)|'
+    ''
+    # Fix missing include for gettimeofday()
+    + ''
+      sed -e '1i#include <sys/time.h>' -i src/helper/HelperApp.cpp
     '';
 
   nativeBuildInputs = [ cmake extra-cmake-modules pkgconfig qttools ];

@@ -21,7 +21,7 @@
 }:
 
 let
-  version = "2.1.4";
+  version = "2.2.2";
 in assert version == cryptography_vectors.version; buildPythonPackage rec {
   # also bump cryptography_vectors
   pname = "cryptography";
@@ -29,7 +29,7 @@ in assert version == cryptography_vectors.version; buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "e4d967371c5b6b2e67855066471d844c5d52d210c36c28d49a8507b96e2c5291";
+    sha256 = "9fc295bf69130a342e7a19a39d7bbeb15c0bcaabc7382ec33ef3b2b7d18d2f63";
   };
 
   outputs = [ "out" "dev" ];

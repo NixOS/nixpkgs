@@ -12,6 +12,11 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
+  preCheck = ''
+    # Tests have a /bin/sh dependency...
+    patchShebangs tests
+  '';
+
   # In stdenv-linux, prevent a dependency on bootstrap-tools.
   preConfigure = "CONFIG_SHELL=/bin/sh";
 

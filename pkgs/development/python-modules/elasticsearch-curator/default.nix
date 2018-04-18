@@ -15,11 +15,11 @@
 
 buildPythonPackage rec {
   pname   = "elasticsearch-curator";
-  version = "5.4.1";
+  version = "5.5.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1bhiqa61h6bbrfp0aygwwchr785x281hnwk8qgnjhb8g4r8ppr3s";
+    sha256 = "2d2762fa55613855b0a04f22e1c6c2c5b53d60301b437205d0e2533e4185671a";
   };
 
   # The integration tests require a running elasticsearch cluster.

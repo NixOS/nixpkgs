@@ -1,6 +1,6 @@
 { stdenv, fetchurl, pkgconfig, glib, babl, libpng, cairo, libjpeg, which
 , librsvg, pango, gtk, bzip2, json-glib, intltool, autoreconfHook, libraw
-, libwebp, gnome3 }:
+, libwebp, gnome3, libintl }:
 
 stdenv.mkDerivation rec {
   name = "gegl-0.3.30";
@@ -9,8 +9,6 @@ stdenv.mkDerivation rec {
     url = "http://download.gimp.org/pub/gegl/0.3/${name}.tar.bz2";
     sha256 = "0lg5j5kn24qvyb6fn7khxf3jadkacbpnb9nrqzy7w665s8xakd7q";
   };
-
-  NIX_LDFLAGS = stdenv.lib.optionalString stdenv.isDarwin "-lintl";
 
   hardeningDisable = [ "format" ];
 
@@ -28,7 +26,7 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = [ glib json-glib babl ]; # for gegl-3.0.pc
 
-  nativeBuildInputs = [ pkgconfig intltool which autoreconfHook ];
+  nativeBuildInputs = [ pkgconfig intltool which autoreconfHook libintl ];
 
   meta = with stdenv.lib; {
     description = "Graph-based image processing framework";

@@ -4,11 +4,11 @@
 
 stdenv.mkDerivation rec {
   name = "devhelp-${version}";
-  version = "3.28.0";
+  version = "3.28.1";
 
   src = fetchurl {
     url = "mirror://gnome/sources/devhelp/${gnome3.versionBranch version}/${name}.tar.xz";
-    sha256 = "1b4l71775p3mps1jsv7pz26v0lhd0qczsp6qr1dwv7hyslmpb5qn";
+    sha256 = "08a8xizjqz68k30zd37r7g516azhan9bbrjsvv10hjd5dg3f476s";
   };
 
   nativeBuildInputs = [ pkgconfig gettext itstool wrapGAppsHook appstream-glib gobjectIntrospection ];

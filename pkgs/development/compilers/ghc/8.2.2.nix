@@ -4,6 +4,7 @@
 # build-tools
 , bootPkgs, alex, happy, hscolour
 , autoconf, autoreconfHook, automake, coreutils, fetchurl, fetchpatch, perl, python3, sphinx
+, runCommand
 
 , libffi, libiconv ? null, ncurses
 
@@ -89,6 +90,7 @@ stdenv.mkDerivation rec {
       url = "https://git.haskell.org/ghc.git/commitdiff_plain/2fc8ce5f0c8c81771c26266ac0b150ca9b75c5f3";
       sha256 = "03253ci40np1v6k0wmi4aypj3nmj3rdyvb1k6rwqipb30nfc719f";
     })
+    (import ./abi-depends-determinism.nix { inherit fetchpatch runCommand; })
   ] ++ stdenv.lib.optional deterministicProfiling
     (fetchpatch { # Backport of https://phabricator.haskell.org/D4388 for more determinism
       url = "https://github.com/shlevy/ghc/commit/fec1b8d3555c447c0d8da0e96b659be67c8bb4bc.patch";

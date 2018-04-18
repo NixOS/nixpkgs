@@ -5,10 +5,13 @@
 , fetchurl
 , findutils
 , file
+, fontsConf
 , git
 , glxinfo
 , gnugrep
+, gnused
 , gnutar
+, gtk2, gnome_vfs, glib, GConf
 , gzip
 , fontconfig
 , freetype
@@ -29,8 +32,6 @@
 , writeTextFile
 , xkeyboard_config
 , zlib
-, gtk2, gnome_vfs, glib, GConf
-, fontsConf
 }:
 
 let
@@ -57,6 +58,7 @@ let
           findutils
           gnugrep
           which
+          gnused
 
           # For Android emulator
           file

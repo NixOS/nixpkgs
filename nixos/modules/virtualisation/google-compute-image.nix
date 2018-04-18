@@ -75,6 +75,9 @@ in
 
   networking.usePredictableInterfaceNames = false;
 
+  # GC has 1460 MTU
+  networking.interfaces.eth0.mtu = 1460;
+
   # allow the google-accounts-daemon to manage users
   users.mutableUsers = true;
   # and allow users to sudo without password

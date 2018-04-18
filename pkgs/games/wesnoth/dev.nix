@@ -1,23 +1,23 @@
 { stdenv, fetchurl, cmake, pkgconfig, SDL2, SDL2_image, SDL2_mixer, SDL2_net, SDL2_ttf
-, pango, gettext, boost, freetype, libvorbis, fribidi, dbus, libpng, pcre, openssl
+, pango, gettext, boost, freetype, libvorbis, fribidi, dbus, libpng, pcre, openssl, icu
 , enableTools ? false
 }:
 
 stdenv.mkDerivation rec {
   pname = "wesnoth";
-  version = "1.13.11";
+  version = "1.13.13";
 
   name = "${pname}-${version}";
 
   src = fetchurl {
     url = "mirror://sourceforge/sourceforge/${pname}/${name}.tar.bz2";
-    sha256 = "168732lmdnskca9hrkmaz4mi0bssc5ppklln10s306cbsl93bd39";
+    sha256 = "1jn3gvw0x8ndwvdm4bqpki1p1cxg2ij02s6w0frhfi4kz706al0c";
   };
 
   nativeBuildInputs = [ cmake pkgconfig ];
 
   buildInputs = [ SDL2 SDL2_image SDL2_mixer SDL2_net SDL2_ttf pango gettext boost
-                  libvorbis fribidi dbus libpng pcre openssl ];
+                  libvorbis fribidi dbus libpng pcre openssl icu ];
 
   cmakeFlags = [ "-DENABLE_TOOLS=${if enableTools then "ON" else "OFF"}" ];
 

@@ -50,8 +50,7 @@ stdenv.mkDerivation rec {
     "--enable-static"
     "--enable-debug"
     "CFLAGS=-fstack-protector-strong"
-    # Fix cycle between outputs
-    "--disable-wrapper"
+    "--enable-wrapper=all"
   ];
 
   outputs = [ "out" "dev" ];
@@ -59,18 +58,25 @@ stdenv.mkDerivation rec {
   dontDisableStatic = true;
   separateDebugInfo = true;
 
-  postInstall =
-  ''
+  postInstall = ''
     # Not sure why, but link in all but scsi directory as that's what uclibc/glibc do.
     # Apparently glibc provides scsi itself?
     (cd $dev/include && ln -s $(ls -d ${linuxHeaders}/include/* | grep -v "scsi$") .)
-  '' + ''
+
     # Strip debug out of the static library
     $STRIP -S $out/lib/libc.a
-  '' + ''
     mkdir -p $out/bin
+
     # Create 'ldd' symlink, builtin
     ln -s $out/lib/libc.so $out/bin/ldd
+
+    # (impure) cc wrapper around musl for interactive usuage
+    for i in musl-gcc musl-clang ld.musl-clang; do
+      moveToOutput bin/$i $dev
+    done
+    moveToOutput lib/musl-gcc.specs $dev
+    substituteInPlace $dev/bin/musl-gcc \
+      --replace $out/lib/musl-gcc.specs $dev/lib/musl-gcc.specs
   '' + lib.optionalString useBSDCompatHeaders ''
     install -D ${queue_h} $dev/include/sys/queue.h
     install -D ${cdefs_h} $dev/include/sys/cdefs.h

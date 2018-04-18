@@ -17,7 +17,7 @@ let
           inherit sha256;
         };
 
-        docheck = true;
+        doCheck = true;
 
         buildFlagsArray = let t = "${goPackagePath}/version"; in ''
           -ldflags=
@@ -50,7 +50,7 @@ in rec {
   };
 
   prometheus_2 = generic {
-    version = "2.1.0";
-    sha256 = "01pbqfp43qrqcgyidyg2lw9jnjdrv140vnmqmm49z0vhlkxkwlvw";
+    version = "2.2.1";
+    sha256 = "1zwxjmj8jh02i4y3i3zrkz7ml66zyhg3ad1npjzf3319mglsp7ch";
   };
 }
