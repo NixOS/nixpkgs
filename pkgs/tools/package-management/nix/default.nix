@@ -6,13 +6,14 @@
 , storeDir ? "/nix/store"
 , stateDir ? "/nix/var"
 , confDir ? "/etc"
+, fromGit ? false
 }:
 
 let
 
   sh = busybox-sandbox-shell;
 
-  common = { name, suffix ? "", src, fromGit ? false }: stdenv.mkDerivation rec {
+  common = { name, suffix ? "", src, fromGit ? fromGit }: stdenv.mkDerivation rec {
     inherit name src;
     version = lib.getVersion name;
 
