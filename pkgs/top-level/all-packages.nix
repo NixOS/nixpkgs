@@ -16142,6 +16142,8 @@ with pkgs;
   graphicsmagick = callPackage ../applications/graphics/graphicsmagick { };
   graphicsmagick_q16 = callPackage ../applications/graphics/graphicsmagick { quantumdepth = 16; };
 
+  graphicsmagick-imagemagick-compat = callPackage ../applications/graphics/graphicsmagick/compat.nix { };
+
   grisbi = callPackage ../applications/office/grisbi { gtk = gtk2; };
 
   gtkpod = callPackage ../applications/audio/gtkpod { };
