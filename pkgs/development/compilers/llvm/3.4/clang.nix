@@ -1,4 +1,4 @@
-{ stdenv, fetch, cmake, libxml2, llvm, zlib, version, clang-tools-extra_src }:
+{ stdenv, fetch, cmake, libxml2, libedit, llvm, zlib, version, clang-tools-extra_src }:
 
 stdenv.mkDerivation {
   name = "clang-${version}";
@@ -17,7 +17,7 @@ stdenv.mkDerivation {
 
   patches = [ ./clang-separate-build.patch ./clang-purity.patch ];
 
-  buildInputs = [ cmake libxml2 zlib ];
+  buildInputs = [ cmake libedit libxml2 zlib ];
 
   cmakeFlags = [
     "-DCMAKE_CXX_FLAGS=-std=c++11"
