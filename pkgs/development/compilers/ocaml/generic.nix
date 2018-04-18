@@ -45,7 +45,8 @@ stdenv.mkDerivation (args // rec {
   ;
 
   buildFlags = "world" + optionalString useNativeCompilers " bootstrap world.opt";
-  buildInputs = [ncurses] ++ optionals useX11 [ libX11 xproto ];
+  buildInputs = optional (!stdenv.lib.versionAtLeast version "4.07") ncurses
+    ++ optionals useX11 [ libX11 xproto ];
   installTargets = "install" + optionalString useNativeCompilers " installopt";
   preConfigure = optionalString (!stdenv.lib.versionAtLeast version "4.04") ''
     CAT=$(type -tp cat)
