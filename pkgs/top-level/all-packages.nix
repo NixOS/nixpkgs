@@ -17950,6 +17950,7 @@ with pkgs;
 
   qgis = callPackage ../applications/gis/qgis {
     inherit (darwin.apple_sdk.frameworks) IOKit ApplicationServices;
+    saga = saga_2_3_2;
   };
 
   qgroundcontrol = libsForQt5.callPackage ../applications/science/robotics/qgroundcontrol { };
