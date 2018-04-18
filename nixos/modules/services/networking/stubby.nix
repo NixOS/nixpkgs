@@ -129,7 +129,7 @@ in
       idleTimeout = mkOption {
         default = 10000;
         type = types.int;
-        description = "EDNS0 option for keepalive idle timeout.";
+        description = "EDNS0 option for keepalive idle timeout expressed in milliseconds.";
       };
 
       listenAddresses = mkOption {
@@ -184,6 +184,7 @@ in
     systemd.services.stubby = {
       description = "Stubby local DNS resolver";
       after = [ "network.target" ];
+      before = [ "nss-lookup.target" ];
       wantedBy = [ "multi-user.target" ];
 
       serviceConfig = {
