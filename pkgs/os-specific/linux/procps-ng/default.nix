@@ -1,14 +1,12 @@
-{ lib, stdenv, fetchFromGitLab, ncurses, libtool, gettext, autoconf, automake, pkgconfig }:
+{ lib, stdenv, fetchurl, ncurses, libtool, gettext, autoconf, automake, pkgconfig }:
 
 stdenv.mkDerivation rec {
   name = "procps-${version}";
   version = "3.3.14";
 
-  src = fetchFromGitLab {
-    owner ="procps-ng";
-    repo = "procps";
-    rev = "v${version}";
-    sha256 = "0l2xfm3vr8qpzvdnkcvmfj1rdw6lxx840zw9vp0z9f008y5fc31g";
+  src = fetchurl {
+    url = "https://gitlab.com/procps-ng/procps/-/archive/v${version}/procps-v${version}.tar.bz2";
+    sha256 = "0igvsl3s7m5ygxgypzksk4cp2wkvv3lk49s7i9m5wbimyakmr0vf";
   };
 
   buildInputs = [ ncurses ];
