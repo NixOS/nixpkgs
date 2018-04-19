@@ -1,4 +1,4 @@
-{ stdenv, fetchurl }:
+{ stdenv, fetchurl, libbsd }:
 
 let
   rev = "89a718d88ec7466e721f3bbe9ede5ffe58061d78";
@@ -18,6 +18,17 @@ in stdenv.mkDerivation {
   };
 
   unpackPhase = ":";
+
+  NIX_CFLAGS_COMPILE = stdenv.lib.optionals (stdenv.hostPlatform.libc == "glibc") [
+    "-D_XOPEN_SOURCE=700"
+    "-D_DEFAULT_SOURCE"
+
+    "-I${stdenv.lib.getDev libbsd}/include/bsd"
+    "-DLIBBSD_OVERLAY"
+  ];
+  NIX_LDFLAGS = stdenv.lib.optional (stdenv.hostPlatform.libc == "glibc") "-lbsd";
+
+  buildInputs = stdenv.lib.optional (stdenv.hostPlatform.libc == "glibc") libbsd;
 
   buildPhase = ''
     mkdir -p bin
