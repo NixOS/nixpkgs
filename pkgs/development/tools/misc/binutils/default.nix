@@ -1,5 +1,5 @@
 { stdenv, buildPackages
-, fetchurl, zlib
+, fetchurl, zlib, autoreconfHook264
 , buildPlatform, hostPlatform, targetPlatform
 , noSysDirs, gold ? true, bison ? null
 }:
@@ -64,12 +64,16 @@ stdenv.mkDerivation rec {
 
     # https://sourceware.org/bugzilla/show_bug.cgi?id=22868
     ./gold-symbol-visibility.patch
-  ];
+  ] ++ stdenv.lib.optional targetPlatform.isiOS ./support-ios.patch;
 
   outputs = [ "out" "info" "man" ];
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
-  nativeBuildInputs = [ bison ];
+  nativeBuildInputs = [
+    bison
+  ] ++ stdenv.lib.optionals targetPlatform.isiOS [
+    autoreconfHook264
+  ];
   buildInputs = [ zlib ];
 
   inherit noSysDirs;
