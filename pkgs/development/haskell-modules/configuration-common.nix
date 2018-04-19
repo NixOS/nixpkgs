@@ -1020,6 +1020,8 @@ self: super: {
     preCheck = ''export PATH="$PWD/dist/build/alex:$PATH"'';
   });
 
+  # This package refers to the wrong library (itself in fact!)
+  vulkan = super.vulkan.override { vulkan = pkgs.vulkan-loader; };
 }
 
 //
