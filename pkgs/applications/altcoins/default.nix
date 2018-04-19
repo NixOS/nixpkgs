@@ -51,6 +51,8 @@ rec {
   memorycoin  = callPackage ./memorycoin.nix { boost = boost165; withGui = true; };
   memorycoind = callPackage ./memorycoin.nix { boost = boost165; withGui = false; };
 
+  mist = callPackage ./mist.nix { };
+
   namecoin  = callPackage ./namecoin.nix  { withGui = true; };
   namecoind = callPackage ./namecoin.nix { withGui = false; };
 
