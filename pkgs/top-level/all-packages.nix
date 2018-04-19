@@ -4231,6 +4231,8 @@ with pkgs;
 
   owncloud-client = libsForQt5.callPackage ../applications/networking/owncloud-client { };
 
+  oxidized = callPackage ../tools/admin/oxidized { };
+
   oxipng = callPackage ../tools/graphics/oxipng { };
 
   p2pvc = callPackage ../applications/video/p2pvc {};

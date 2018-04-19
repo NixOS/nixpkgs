@@ -1,0 +1,13 @@
+diff --git a/lib/oxidized/model/powerconnect.rb b/lib/oxidized/model/powerconnect.rb
+index f602a36..3f3a0f9 100644
+--- a/lib/oxidized/model/powerconnect.rb
++++ b/lib/oxidized/model/powerconnect.rb
+@@ -4,7 +4,7 @@ class PowerConnect < Oxidized::Model
+ 
+   comment  '! '
+ 
+-  expect /^\s*--More--\s+.*$/ do |data, re|
++  expect /^([[:cntrl:]]...More:|\s*--More--\s+).*$/ do |data, re|
+      send ' '
+      data.sub re, ''
+   end
