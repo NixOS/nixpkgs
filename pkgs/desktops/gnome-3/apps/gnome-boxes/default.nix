@@ -24,6 +24,7 @@ in stdenv.mkDerivation rec {
     meson ninja vala pkgconfig gettext itstool wrapGAppsHook gobjectIntrospection desktop-file-utils
   ];
 
+  # Required for USB redirection PolicyKit rules file
   propagatedUserEnvPkgs = [ spice-gtk ];
 
   buildInputs = [
