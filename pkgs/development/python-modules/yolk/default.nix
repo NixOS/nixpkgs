@@ -17,7 +17,7 @@ buildPythonApplication rec {
   meta = {
     description = "Command-line tool for querying PyPI and Python packages installed on your system";
     homepage = https://github.com/cakebread/yolk;
-    maintainer = with maintainers; [];
+    maintainers = with maintainers; [];
     license = licenses.bsd3;
   };
 }
