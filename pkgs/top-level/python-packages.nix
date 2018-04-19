@@ -271,6 +271,8 @@ in {
 
   intelhex = callPackage ../development/python-modules/intelhex { };
 
+  jira = callPackage ../development/python-modules/jira { };
+
   lmtpd = callPackage ../development/python-modules/lmtpd { };
 
   logster = callPackage ../development/python-modules/logster { };
