@@ -18072,6 +18072,10 @@ with pkgs;
 
   swh_lv2 = callPackage ../applications/audio/swh-lv2 { };
 
+  swift-im = libsForQt5.callPackage ../applications/networking/instant-messengers/swift-im {
+    inherit (gnome2) GConf;
+  };
+
   sylpheed = callPackage ../applications/networking/mailreaders/sylpheed { };
 
   symlinks = callPackage ../tools/system/symlinks { };
