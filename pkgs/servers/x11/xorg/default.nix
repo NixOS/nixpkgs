@@ -2570,6 +2570,9 @@ let
       url = mirror://xorg/individual/util/xorg-cf-files-1.0.6.tar.bz2;
       sha256 = "0kckng0zs1viz0nr84rdl6dswgip7ndn4pnh5nfwnviwpsfmmksd";
     };
+    postInstall = stdenv.lib.optionalString stdenv.isDarwin ''
+      substituteInPlace $out/lib/X11/config/darwin.cf --replace "/usr/bin/" ""
+    '';
     nativeBuildInputs = [ pkgconfig ];
     buildInputs = [ ];
     meta.platforms = stdenv.lib.platforms.unix;
