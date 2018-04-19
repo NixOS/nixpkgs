@@ -2395,6 +2395,8 @@ with pkgs;
 
   fsfs = callPackage ../tools/filesystems/fsfs { };
 
+  fstl = qt5.callPackage ../applications/graphics/fstl { };
+
   fswebcam = callPackage ../os-specific/linux/fswebcam { };
 
   fuseiso = callPackage ../tools/filesystems/fuseiso { };
