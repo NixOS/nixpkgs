@@ -41,9 +41,14 @@ in rec {
         nfs3
         openssh
         php-pcre
-        predictable-interface-names
+        #predictable-interface-names  # disabled because of #39069
         proxy
         simple;
+      # add the 3 sub-tests of predictable-interface-names not affected by #39069
+      inherit (nixos'.tests.predictable-interface-names)
+        vm-test-run-predictableInterfaceNames
+        vm-test-run-unpredictableInterfaceNames
+        vm-test-run-unpredictableInterfaceNames-with-networkd;
       installer = {
         inherit (nixos'.tests.installer)
           lvm
