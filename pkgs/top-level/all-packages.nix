@@ -10119,6 +10119,8 @@ with pkgs;
     mysql = mysql57;
   };
 
+  libnatpmp = callPackage ../development/libraries/libnatpmp { };
+
   libnatspec = callPackage ../development/libraries/libnatspec { };
 
   libndp = callPackage ../development/libraries/libndp { };
