@@ -1,5 +1,5 @@
 { stdenv, pkgs, fetchgit, autoconf, sbcl, lispPackages, xdpyinfo, texinfo4
-, makeWrapper , rlwrap, gnused, gnugrep, coreutils, xprop
+, makeWrapper , rlwrap, gnused, gnugrep, coreutils, xprop, writeScript
 , extraModulePaths ? []
 , version }:
 
@@ -29,6 +29,15 @@ let
         patches = [];
     };
   }.${version};
+  sbclWrapper = writeScript "sbcl.sh" ''
+    #!/bin/sh
+    ${lispPackages.clwrapper}/bin/cl-wrapper.sh ${sbcl}/bin/sbcl \
+      --eval "(require 'asdf)" \
+      --eval "(asdf:oos 'asdf:load-op 'cl-ppcre)" \
+      --eval "(asdf:oos 'asdf:load-op 'clx)" \
+      --eval "(asdf:oos 'asdf:load-op 'alexandria)" \
+      "$@"
+  '';
 in
 stdenv.mkDerivation rec {
   name = "stumpwm-${versionSpec.name}";
@@ -46,19 +55,19 @@ stdenv.mkDerivation rec {
   buildInputs = [
     texinfo4 makeWrapper autoconf
     sbcl
+    lispPackages.clwrapper
     lispPackages.clx
     lispPackages.cl-ppcre
     lispPackages.alexandria
     xdpyinfo
   ];
 
-
   # Stripping destroys the generated SBCL image
   dontStrip = true;
 
   configurePhase = ''
     ./autogen.sh
-    ./configure --prefix=$out --with-module-dir=$out/share/stumpwm/modules
+    ./configure --prefix=$out --with-module-dir=$out/share/stumpwm/modules --with-sbcl=${sbclWrapper}
   '';
 
   preBuild = ''
