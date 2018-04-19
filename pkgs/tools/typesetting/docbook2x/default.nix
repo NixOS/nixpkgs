@@ -2,11 +2,12 @@
 , XMLSAX, XMLSAXBase, XMLParser, XMLNamespaceSupport
 , groff, libxml2, libxslt, gnused, libiconv, opensp
 , docbook_xml_dtd_43
+, musl-utils # "iconv" binary -- not part of libiconv unless it's libiconvReal
 , makeWrapper }:
 
 stdenv.mkDerivation rec {
   name = "docbook2X-0.8.8";
-  
+
   src = fetchurl {
     url = "mirror://sourceforge/docbook2x/${name}.tar.gz";
     sha256 = "0ifwzk99rzjws0ixzimbvs83x6cxqk1xzmg84wa1p7bs6rypaxs0";
@@ -15,6 +16,10 @@ stdenv.mkDerivation rec {
   # This patch makes sure that `docbook2texi --to-stdout' actually
   # writes its output to stdout instead of creating a file.
   patches = [ ./db2x_texixml-to-stdout.patch ];
+
+  # for 'iconv' utility
+  # With glibc, this is provided by libc, with musl use tool from musl-utils
+  nativeBuildInputs = stdenv.lib.optional stdenv.hostPlatform.isMusl musl-utils;
 
   buildInputs = [ perl texinfo groff libxml2 libxslt makeWrapper
                   XMLSAX XMLParser XMLNamespaceSupport opensp libiconv
