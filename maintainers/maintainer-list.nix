@@ -1971,6 +1971,11 @@
     github = "kragniz";
     name = "Louis Taylor";
   };
+  krav = {
+    email = "kristoffer@microdisko.no";
+    github = "krav";
+    name = "Kristoffer Thømt Ravneberg";
+  };
   kristoff3r = {
     email = "k.soeholm@gmail.com";
     github = "kristoff3r";

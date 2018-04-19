@@ -4857,6 +4857,8 @@ with pkgs;
 
   sleuthkit = callPackage ../tools/system/sleuthkit {};
 
+  sleepyhead = callPackage ../applications/misc/sleepyhead {};
+
   slimrat = callPackage ../tools/networking/slimrat {
     inherit (perlPackages) WWWMechanize LWP;
   };
