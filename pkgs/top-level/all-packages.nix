@@ -19850,6 +19850,8 @@ with pkgs;
     docs = true;
   };
 
+  lrcalc = callPackage ../applications/science/math/lrcalc { };
+
   lie = callPackage ../applications/science/math/LiE { };
 
   magma = callPackage ../development/libraries/science/math/magma { };
