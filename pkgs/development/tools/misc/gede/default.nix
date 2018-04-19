@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, makeWrapper, python, qt4, ctags, gdb }:
+{ stdenv, fetchurl, makeWrapper, python, qmake, ctags, gdb }:
 
 stdenv.mkDerivation rec {
   name = "gede-${version}";
@@ -9,12 +9,14 @@ stdenv.mkDerivation rec {
     sha256 = "0jallpchl3c3i90hwic4n7n0ggk5wra0fki4by9ag26ln0k42c4r";
   };
 
-  nativeBuildInputs = [ makeWrapper python ];
+  nativeBuildInputs = [ qmake makeWrapper python ];
 
-  buildInputs = [ qt4 ctags ];
+  buildInputs = [ ctags ];
+
+  dontUseQmakeConfigure = true;
 
   postPatch = ''
-    sed -i build.py -e 's,qmake-qt4,qmake,'
+    sed -i build.py -e 's,qmake-qt5,qmake,'
   '';
 
   buildPhase = ":";
