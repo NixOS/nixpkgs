@@ -15,10 +15,6 @@ stdenv.mkDerivation rec {
 
   dontUseQmakeConfigure = true;
 
-  postPatch = ''
-    sed -i build.py -e 's,qmake-qt5,qmake,'
-  '';
-
   buildPhase = ":";
 
   installPhase = ''
