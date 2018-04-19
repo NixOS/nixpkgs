@@ -29,7 +29,7 @@ assert stdenv.system == "x86_64-linux";
 assert swingSupport -> xorg != null;
 
 let
-  version = "10";
+  version = "10.0.1";
 
   downloadUrlBase = http://www.oracle.com/technetwork/java/javase/downloads;
 
@@ -52,19 +52,19 @@ let result = stdenv.mkDerivation rec {
       requireFile {
         name = "jdk-${version}_linux-x64_bin.tar.gz";
         url =  "${downloadUrlBase}/jdk10-downloads-4416644.html";
-        sha256 = "0338m0x5lka0xjsbcll70r1i308bjw3m42cm9dx9zmfk70kplj5c";
+        sha256 = "1975s6cn2lxb8jmxp236afvq6hhxqrx5jix8aqm46f5gwr2xd3mf";
       }
     else if packageType == "JRE" then
       requireFile {
         name = "jre-${version}_linux-x64_bin.tar.gz";
         url = "${downloadUrlBase}/jre10-downloads-4417026.html";
-        sha256 = "1clawcahkla1h9pxnqfqzcgv51aqgq78v1ws5jygbk6fbbi7l54w";
+        sha256 = "11pb8cwzmalc6ax735m84g13jh1mrfc8g84b5qypnmqjjdv6fpiq";
       }
     else if packageType == "ServerJRE" then
       requireFile {
         name = "serverjre-${version}_linux-x64_bin.tar.gz";
         url = "${downloadUrlBase}/sjre10-downloads-4417025.html";
-        sha256 = "0kiyg33fv29ad0nyl35r7y0bhyxivb2hxlds44m9l0259s55nwhw";
+        sha256 = "0hvfqgr22sq9zyqc496vqgg5ail189h3a4pazp39i8n86brd48lw";
       }
     else abort "unknown package Type ${packageType}";
 
