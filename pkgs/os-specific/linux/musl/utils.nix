@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, libbsd }:
+{ stdenv, fetchurl, libbsd, useLibBSDOverlay ? (stdenv.hostPlatform.libc == "glibc") }:
 
 let
   rev = "89a718d88ec7466e721f3bbe9ede5ffe58061d78";
@@ -20,15 +20,17 @@ in stdenv.mkDerivation {
   unpackPhase = ":";
 
   NIX_CFLAGS_COMPILE = stdenv.lib.optionals (stdenv.hostPlatform.libc == "glibc") [
-    "-D_XOPEN_SOURCE=700"
-    "-D_DEFAULT_SOURCE"
-
+    "-D_XOPEN_SOURCE=700" # for LONG_BIT
+    "-D_DEFAULT_SOURCE"   # for h_addr compat define
+  ] ++ stdenv.lib.optionals useLibBSDOverlay [
+    # for strlcpy
+    # "overlay" forwards to normal headers and adds bsd functions
     "-I${stdenv.lib.getDev libbsd}/include/bsd"
     "-DLIBBSD_OVERLAY"
   ];
-  NIX_LDFLAGS = stdenv.lib.optional (stdenv.hostPlatform.libc == "glibc") "-lbsd";
+  NIX_LDFLAGS = stdenv.lib.optional useLibBSDOverlay "-lbsd";
 
-  buildInputs = stdenv.lib.optional (stdenv.hostPlatform.libc == "glibc") libbsd;
+  buildInputs = stdenv.lib.optional useLibBSDOverlay libbsd;
 
   buildPhase = ''
     mkdir -p bin
