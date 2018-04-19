@@ -201,7 +201,7 @@ rec {
 
   ################################################################################
 
-  types.system = mkOptionType {
+  types.parsedPlatform = mkOptionType {
     name = "system";
     description = "fully parsed representation of llvm- or nix-style platform tuple";
     merge = mergeOneOption;
@@ -215,7 +215,7 @@ rec {
   isSystem = isType "system";
 
   mkSystem = components:
-    assert types.system.check components;
+    assert types.parsedPlatform.check components;
     setType "system" components;
 
   mkSkeletonFromList = l: {
