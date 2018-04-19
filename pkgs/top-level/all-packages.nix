@@ -4701,6 +4701,8 @@ with pkgs;
 
   runzip = callPackage ../tools/archivers/runzip { };
 
+  rw = callPackage ../tools/misc/rw { };
+
   rxp = callPackage ../tools/text/xml/rxp { };
 
   rzip = callPackage ../tools/compression/rzip { };
