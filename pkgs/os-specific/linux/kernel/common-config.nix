@@ -345,6 +345,8 @@ with stdenv.lib;
   NLS_ISO8859_1 m    # VFAT default for the iocharset= mount option
 
   # Runtime security tests
+  MODULE_SIG y
+  MODULE_SIG_ALL y # sign modules automatically
   ${optionalString (versionOlder version "4.11") ''
     DEBUG_SET_MODULE_RONX? y # Detect writes to read-only module pages
   ''}
