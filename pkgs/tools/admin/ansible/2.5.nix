@@ -6,12 +6,12 @@
 
 pythonPackages.buildPythonPackage rec {
   pname = "ansible";
-  version = "2.5.0";
+  version = "2.5.1";
   name = "${pname}-${version}";
 
   src = fetchurl {
     url = "http://releases.ansible.com/ansible/${name}.tar.gz";
-    sha256 = "1p76d1pv89yhi8q05jas5gskkd1anjmqqvaks8nynmal1x5xwkki";
+    sha256 = "06h0cmz0cgj1xszzn6rsypfc8lkazgh5g1yxyss1yx242d0wkw2i";
   };
 
   prePatch = ''
