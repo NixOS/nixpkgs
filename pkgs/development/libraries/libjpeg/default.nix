@@ -7,7 +7,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = http://www.ijg.org/files/jpegsrc.v9c.tar.gz;
-    sha256 = "1m3a137r7m14wd92a03qdvp4jfazc0657nzry7rqzs2p1xhkyfhz";
+    sha256 = "08kixcf3a7s9x91174abjnk1xbvj4v8crdc73zi4k9h3jfbm00k5";
   };
 
   configureFlags = optional static "--enable-static --disable-shared";
