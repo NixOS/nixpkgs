@@ -2409,6 +2409,8 @@ with pkgs;
 
   fuseiso = callPackage ../tools/filesystems/fuseiso { };
 
+  foundationdb = callPackage ../servers/foundationdb { stdenv = overrideCC stdenv gcc49; };
+
   fuse-7z-ng = callPackage ../tools/filesystems/fuse-7z-ng { };
 
   fwknop = callPackage ../tools/security/fwknop { };
