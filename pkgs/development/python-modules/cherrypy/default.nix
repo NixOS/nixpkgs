@@ -1,11 +1,10 @@
 { lib, buildPythonPackage, fetchPypi
 , cheroot, portend, routes, six
 , setuptools_scm
-, backports_unittest-mock, codecov, coverage, objgraph, pathpy, pytest, pytest-sugar, pytestcov
+, backports_unittest-mock, objgraph, pathpy, pytest, pytestcov
 }:
 
 buildPythonPackage rec {
-  name = "${pname}-${version}";
   pname = "CherryPy";
   version = "14.0.1";
 
@@ -18,7 +17,7 @@ buildPythonPackage rec {
 
   buildInputs = [ setuptools_scm ];
 
-  checkInputs = [ backports_unittest-mock codecov coverage objgraph pathpy pytest pytest-sugar pytestcov ];
+  checkInputs = [ backports_unittest-mock objgraph pathpy pytest pytestcov ];
 
   checkPhase = ''
     LANG=en_US.UTF-8 pytest
