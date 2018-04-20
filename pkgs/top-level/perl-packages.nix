@@ -7572,6 +7572,18 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
+  iCalParser = buildPerlPackage rec {
+    name = "iCal-Parser-1.21";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/R/RI/RIXED/${name}.tar.gz";
+      sha256 = "0d7939a644a8e67017ec7239d3d9604f3986bb9a4ff80be68fe7299ebfd2270c";
+    };
+    propagatedBuildInputs = [ DateTimeFormatICal FreezeThaw IOString TextvFileasData ];
+    meta = {
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   "if" = null;
 
   # For backwards compatibility.
