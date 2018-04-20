@@ -1,4 +1,4 @@
-{ lib, pythonPackages, fetchurl, kmod, systemd, cloud-utils }:
+{ lib, pythonPackages, fetchurl, kmod, systemd, e2fsprogs }:
 
 let version = "0.7.9";
 
@@ -22,7 +22,7 @@ in pythonPackages.buildPythonApplication rec {
       --replace 'self.init_system = ""' 'self.init_system = "systemd"'
 
     substituteInPlace cloudinit/config/cc_growpart.py \
-      --replace 'util.subp(["growpart"' 'util.subp(["${cloud-utils}/bin/growpart"'
+      --replace 'util.subp(["growpart"' 'util.subp(["${e2fsprogs}/bin/growpart"'
 
     # Argparse is part of python stdlib
     sed -i s/argparse// requirements.txt
