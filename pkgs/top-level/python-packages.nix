@@ -18745,16 +18745,16 @@ EOF
 
   canonicaljson = buildPythonPackage rec {
     name = "canonicaljson-${version}";
-    version = "1.0.0";
+    version = "1.1.3";
 
     src = pkgs.fetchgit {
       url = "https://github.com/matrix-org/python-canonicaljson.git";
       rev = "refs/tags/v${version}";
-      sha256 = "0r82zlip93y169ijkn8xpbp0yr22mf92pni6dw420vb53l27sprq";
+      sha256 = "11j0xmbw2hbl789pyfga02w8aa3s8rkc8pk6501r1sfy8xljd8zy";
     };
 
     propagatedBuildInputs = with self; [
-      frozendict simplejson
+      frozendict simplejson six
     ];
   };
 
