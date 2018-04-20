@@ -15636,6 +15636,8 @@ with pkgs;
 
   ghostwriter = libsForQt5.callPackage ../applications/editors/ghostwriter { };
 
+  gitweb = callPackage ../applications/version-management/git-and-tools/gitweb/default.nix { };
+
   gksu = callPackage ../applications/misc/gksu { };
 
   gnss-sdr = callPackage ../applications/misc/gnss-sdr { };
