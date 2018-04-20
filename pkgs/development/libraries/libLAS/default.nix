@@ -14,6 +14,8 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [
     "-DGDAL_CONFIG=${gdal}/bin/gdal-config"
+    "-DWITH_LASZIP=ON"
+    "-DLASZIP_INCLUDE_DIR=${LASzip}/include"
   ];
 
   postFixup = stdenv.lib.optionalString stdenv.isDarwin ''
