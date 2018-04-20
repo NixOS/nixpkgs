@@ -11160,7 +11160,7 @@ with pkgs;
       kservice ktexteditor ktextwidgets kunitconversion kwallet kwayland
       kwidgetsaddons kwindowsystem kxmlgui kxmlrpcclient modemmanager-qt
       networkmanager-qt plasma-framework prison solid sonnet syntax-highlighting
-      threadweaver kirigami2;
+      threadweaver kirigami2 kholidays;
 
     ### KDE PLASMA 5
 
@@ -11170,7 +11170,7 @@ with pkgs;
     ### KDE APPLICATIONS
 
     inherit (kdeApplications.override { libsForQt5 = self; })
-      kholidays libkdcraw libkexiv2 libkipi libkomparediff2 libksane;
+      libkdcraw libkexiv2 libkipi libkomparediff2 libksane;
 
     ### LIBRARIES
 
