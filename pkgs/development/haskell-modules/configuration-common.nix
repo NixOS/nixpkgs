@@ -1023,9 +1023,13 @@ self: super: {
     preCheck = ''export PATH="$PWD/dist/build/alex:$PATH"'';
   });
 
+  # This package refers to the wrong library (itself in fact!)
+  vulkan = super.vulkan.override { vulkan = pkgs.vulkan-loader; };
+
   # Both need a more up-to-date version
   hlint = super.hlint.override { extra = self.extra_1_6_6; };
   hoogle = super.hoogle.override { extra = self.extra_1_6_6; };
+
 }
 
 //
