@@ -20838,6 +20838,8 @@ with pkgs;
 
   nix-pin = callPackage ../tools/package-management/nix-pin { };
 
+  nix-prefetch-github = callPackage ../build-support/nix-prefetch-github {};
+
   inherit (callPackages ../tools/package-management/nix-prefetch-scripts { })
     nix-prefetch-bzr
     nix-prefetch-cvs

@@ -1,28 +1,32 @@
 { buildPythonPackage
 , fetchPypi
 , lib
-, attrs
 , six
+, attrs
+, pytest
+, testtools
 }:
-let
+buildPythonPackage rec {
+  version = "0.11.0";
+  pname = "effect";
 
-version = "0.11.0";
-pname = "effect";
-
-in
-buildPythonPackage {
-  inherit version pname;                      
   src = fetchPypi {
     inherit pname version;
     sha256 = "1q75w4magkqd8ggabhhzzxmxakpdnn0vdg7ygj89zdc9yl7561q6";
   };
+  checkInputs = [
+    pytest
+    testtools
+  ];
   propagatedBuildInputs = [
     six
     attrs
   ];
-  doCheck = false;
+  checkPhase = ''
+    pytest .
+  '';
   meta = with lib; {
-    description = "pure effects for Python";
+    description = "Pure effects for Python";
     homepage = https://github.com/python-effect/effect;
     license = licenses.mit;
   };
