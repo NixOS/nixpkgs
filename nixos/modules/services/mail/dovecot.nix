@@ -24,6 +24,7 @@ let
     '' else ''
       ssl_cert = <${cfg.sslServerCert}
       ssl_key = <${cfg.sslServerKey}
+      ssl_dh = <${config.security.dhparams.path}/dovecot2.pem
       ${optionalString (!(isNull cfg.sslCACert)) ("ssl_ca = <" + cfg.sslCACert)}
       disable_plaintext_auth = yes
     '')
@@ -87,7 +88,7 @@ let
       }
 
       plugin {
-        quota_rule = *:storage=${cfg.quotaGlobalPerUser} 
+        quota_rule = *:storage=${cfg.quotaGlobalPerUser}
         quota = maildir:User quota # per virtual mail user quota # BUG/FIXME broken, we couldn't get this working
         quota_status_success = DUNNO
         quota_status_nouser = DUNNO
@@ -338,7 +339,8 @@ in
     systemd.services.dovecot2 = {
       description = "Dovecot IMAP/POP3 server";
 
-      after = [ "keys.target" "network.target" ];
+      after = [ "keys.target" "network.target" "dhparams-gen-dovecot2.service"];
+      requires = [ "dhparams-gen-dovecot2.service" ];
       wants = [ "keys.target" ];
       wantedBy = [ "multi-user.target" ];
       restartTriggers = [ cfg.configFile ];
@@ -370,6 +372,13 @@ in
         '') cfg.sieveScripts)}
         chown -R '${cfg.mailUser}:${cfg.mailGroup}' '${stateDir}/sieve'
       '';
+    };
+
+    security.dhparams = {
+      enable = true;
+      params = {
+        dovecot2 = 2048;
+      };
     };
 
     environment.systemPackages = [ dovecotPkg ];
