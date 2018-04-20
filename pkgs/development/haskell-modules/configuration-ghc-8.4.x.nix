@@ -583,7 +583,7 @@ self: super: {
   });
 
   # Older versions don't compile.
-  brick = self.brick_0_36;
+  brick = doJailbreak super.brick_0_36; # https://github.com/jtdaugherty/brick/issues/171
   HaTeX = self.HaTeX_3_19_0_0;
   matrix = self.matrix_0_3_6_1;
   pandoc = self.pandoc_2_1_3;

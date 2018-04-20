@@ -7,7 +7,6 @@
 , libmtp, unzip, taglib, libkate, libtiger, libv4l, samba, liboggz
 , libass, libva, libdvbpsi, libdc1394, libraw1394, libopus
 , libvdpau, libsamplerate, live555, fluidsynth
-, onlyLibVLC ? false
 , qt4 ? null
 , withQt5 ? false, qtbase ? null, qtx11extras ? null
 , jackSupport ? false
@@ -68,8 +67,7 @@ stdenv.mkDerivation rec {
       "--enable-vdpau"
       "--enable-dvdnav"
       "--enable-samplerate"
-    ]
-    ++ optional onlyLibVLC  "--disable-vlc";
+    ];
 
   enableParallelBuilding = true;
 
