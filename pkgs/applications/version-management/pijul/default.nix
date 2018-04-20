@@ -9,11 +9,9 @@ buildRustPackage rec {
   src = fetchCrate {
     crateName = "pijul";
     version = version;
-    sha256 = "1qmbqk0jnwih97mdshlr89lmvh4crazpysq20xz53nb8ynpwppvy";
+    sha256 = "0q2hmavsnmmpb1lmq774wdz9yy3m7j2j47l0s2n1715yg7pv42jg";
     extraPostFetch = ''
-      cd $out
-      export CARGO_HOME=$(mktemp -d cargo-home.XXX)
-      ${cargo}/bin/cargo update
+      cp ${./Cargo.lock} $out/Cargo.lock
     '';
   };
 
