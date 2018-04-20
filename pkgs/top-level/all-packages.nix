@@ -19308,6 +19308,8 @@ with pkgs;
 
   gogui = callPackage ../games/gogui {};
 
+  gshogi = python3Packages.callPackage ../games/gshogi {};
+
   gtetrinet = callPackage ../games/gtetrinet {
     inherit (gnome2) GConf libgnome libgnomeui;
   };
