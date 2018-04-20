@@ -4,13 +4,13 @@
 
 stdenv.mkDerivation rec {
   name = "peek-${version}";
-  version = "1.3.0";
+  version = "1.3.1";
 
   src = fetchFromGitHub {
     owner = "phw";
     repo = "peek";
     rev = version;
-    sha256 = "0yizf55rzkm88bfjzwr8yyhm33yqp1mbih2ifwhvnjd1911db0x9";
+    sha256 = "1fnvlklmg6s5rs3ql74isa5fgdkqqrpsyf8k2spxj520239l4vgb";
   };
 
   nativeBuildInputs = [ cmake gettext pkgconfig libxml2.bin txt2man vala wrapGAppsHook ];
