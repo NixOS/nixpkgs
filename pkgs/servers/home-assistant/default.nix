@@ -13,6 +13,7 @@ let
           inherit version;
           sha256 = "dc5cab081d4b334d0440b019edf24fe1cb138b8114e0e22d2b0661284bc1775f";
         };
+        propagatedBuildInputs = oldAttrs.propagatedBuildInputs ++ [ super.async_generator ];
       });
       pytest = super.pytest.overridePythonAttrs (oldAttrs: rec {
         version = "3.4.2";
