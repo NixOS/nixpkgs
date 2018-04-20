@@ -92,5 +92,5 @@ new file mode 100644
 +let b:did_ftplugin = 1
 +
 +" coding conventions
-+setlocal shiftwidth=2 expandtab
-+let b:undo_ftplugin = "setlocal sw< et<"
++setlocal shiftwidth=2 expandtab softtabstop=2
++let b:undo_ftplugin = "setlocal sw< et< sts<"
