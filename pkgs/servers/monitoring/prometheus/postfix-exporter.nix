@@ -13,7 +13,8 @@ buildGoPackage rec {
     sha256 = "1p2j66jzzgyv2w832pw57g02vrac6ldrblqllgwyy0i8krb3ibyz";
   };
 
-  buildInputs = [ systemd makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
+  buildInputs = [ systemd ];
 
   goDeps = ./postfix-exporter-deps.nix;
 
