@@ -2,12 +2,12 @@
 
 buildPythonPackage rec {
   pname = "amqplib";
-  version = "0.6.1";
+  version = "1.0.2";
   name = "${pname}-${version}";
 
   src = fetchurl {
-    url = https://github.com/barryp/py-amqplib/archive/0.6.1.tar.gz;
-    sha256 = "04nsn68wz9m24rvbssirkyighazbn20j60wjmi0r7jcpcf00sb3s";
+    url = https://github.com/barryp/py-amqplib/archive/1.0.2.tar.gz;
+    sha256 = "0dir9kvh0kfqfwq27j7v3pk4h69askdbaf37cmmlww6aflzxfqcl";
   };
 
   # error: invalid command 'test'
