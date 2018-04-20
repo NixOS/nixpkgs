@@ -4341,11 +4341,11 @@ in {
   fritzconnection = callPackage ../development/python-modules/fritzconnection { };
 
   frozendict = buildPythonPackage rec {
-    name = "frozendict-0.5";
+    name = "frozendict-1.2";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/f/frozendict/${name}.tar.gz";
-      sha256 = "0m4kg6hbadvf99if78nx01q7qnbyhdw3x4znl5dasgciyi54432n";
+      sha256 = "0ibf1wipidz57giy53dh7mh68f2hz38x8f4wdq88mvxj5pr7jhbp";
     };
 
     meta = {
