@@ -19,5 +19,9 @@ buildPythonPackage rec {
     description = "A plugin that changes the default look and feel of py.test";
     homepage = https://github.com/Frozenball/pytest-sugar;
     license = licenses.bsd3;
+
+    # incompatible with pytest 3.5
+    # https://github.com/Frozenball/pytest-sugar/issues/134
+    broken = true; # 2018-04-20
   };
 }
