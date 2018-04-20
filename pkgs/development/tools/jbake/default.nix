@@ -1,4 +1,4 @@
-{ stdenv, fetchzip, jre }:
+{ stdenv, fetchzip, makeWrapper, jre }:
 
 stdenv.mkDerivation rec {
   version = "2.6.1";
@@ -9,12 +9,12 @@ stdenv.mkDerivation rec {
     sha256 = "0zlh2azmv8gj3c4d4ndivar31wd42nmvhxq6xhn09cib9kffxbc7";
   };
 
-  buildInputs = [ jre ];
+  buildInputs = [ makeWrapper jre ];
 
   installPhase = ''
-    substituteInPlace bin/jbake --replace "java" "${jre}/bin/java" 
     mkdir -p $out
     cp -vr * $out
+    wrapProgram $out/bin/jbake --set JAVA_HOME "${jre}"
   '';
 
   meta = with stdenv.lib; {
