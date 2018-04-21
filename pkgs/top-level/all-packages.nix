@@ -19895,6 +19895,8 @@ with pkgs;
 
   symmetrica = callPackage ../applications/science/math/symmetrica {};
 
+  sympow = callPackage ../development/libraries/science/math/sympow { };
+
   ipopt = callPackage ../development/libraries/science/math/ipopt { openblas = openblasCompat; };
 
   gmsh = callPackage ../applications/science/math/gmsh { };
