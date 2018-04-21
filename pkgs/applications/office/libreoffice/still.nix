@@ -2,7 +2,7 @@
 , CompressZlib, zlib, libjpeg, expat, pkgconfigUpstream, freetype, libwpd
 , libxml2, db, sablotron, curl, fontconfig, libsndfile, neon
 , bison, flex, zip, unzip, gtk3, gtk2, libmspack, getopt, file, cairo, which
-, icu, boost, jdk, ant, cups, xorg, libcmis
+, icu, boost, jdk, ant, cups, xorg, libcmis, carlito
 , openssl, gperf, cppunit, GConf, ORBit2, poppler
 , librsvg, gnome_vfs, libGLU_combined, bsh, CoinMP, libwps, libabw
 , autoconf, automake, openldap, bash, hunspell, librdf_redland, nss, nspr
@@ -106,6 +106,11 @@ in stdenv.mkDerivation rec {
 
     # BLFS patch for Glibc 2.23 renaming isnan
     sed -ire "s@isnan@std::&@g" xmloff/source/draw/ximp3dscene.cxx
+
+    # This is required as some cppunittests require fontconfig configured
+    cp "${fontsConf}" fonts.conf
+    sed -e '/include/i<include>${carlito}/etc/fonts/conf.d</include>' -i fonts.conf
+    export FONTCONFIG_FILE="$PWD/fonts.conf"
   '';
 
   # fetch_Download_item tries to interpret the name as a variable name

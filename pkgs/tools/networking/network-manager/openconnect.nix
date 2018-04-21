@@ -1,5 +1,5 @@
 { stdenv, fetchurl, openconnect, intltool, pkgconfig, networkmanager, libsecret
-, withGnome ? true, gnome3, procps, kmod }:
+, withGnome ? true, gnome3, sysctl, kmod }:
 
 let
   pname   = "NetworkManager-openconnect";
@@ -24,7 +24,7 @@ in stdenv.mkDerivation rec {
 
   preConfigure = ''
      substituteInPlace "configure" \
-       --replace "/sbin/sysctl" "${procps}/bin/sysctl"
+       --replace "/sbin/sysctl" "${sysctl}/bin/sysctl"
      substituteInPlace "src/nm-openconnect-service.c" \
        --replace "/usr/sbin/openconnect" "${openconnect}/bin/openconnect" \
        --replace "/sbin/modprobe" "${kmod}/bin/modprobe"
@@ -42,4 +42,3 @@ in stdenv.mkDerivation rec {
     inherit (networkmanager.meta) maintainers platforms;
   };
 }
-

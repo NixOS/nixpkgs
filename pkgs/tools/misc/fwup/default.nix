@@ -23,9 +23,6 @@ stdenv.mkDerivation rec {
     ];
   propagatedBuildInputs = [ zip unzip mtools dosfstools coreutils ];
 
-  # segfaults on darwin without
-  NIX_LDFLAGS = lib.optional stdenv.isDarwin "-F/System/Library/Frameworks";
-
   meta = with stdenv.lib; {
     description = "Configurable embedded Linux firmware update creator and runner";
     homepage = https://github.com/fhunleth/fwup;

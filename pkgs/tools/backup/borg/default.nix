@@ -1,4 +1,4 @@
-{ stdenv, python3Packages, acl, lz4, openssl, openssh }:
+{ stdenv, python3Packages, acl, libb2, lz4, zstd, openssl, openssh }:
 
 python3Packages.buildPythonApplication rec {
   pname = "borgbackup";
@@ -19,7 +19,7 @@ python3Packages.buildPythonApplication rec {
     sphinx guzzle_sphinx_theme
   ];
   buildInputs = [
-    lz4 openssl python3Packages.setuptools_scm
+    libb2 lz4 zstd openssl python3Packages.setuptools_scm
   ] ++ stdenv.lib.optionals stdenv.isLinux [ acl ];
   propagatedBuildInputs = with python3Packages; [
     cython msgpack-python
@@ -28,6 +28,8 @@ python3Packages.buildPythonApplication rec {
   preConfigure = ''
     export BORG_OPENSSL_PREFIX="${openssl.dev}"
     export BORG_LZ4_PREFIX="${lz4.dev}"
+    export BORG_LIBB2_PREFIX="${libb2}"
+    export BORG_LIBZSTD_PREFIX="${zstd}"
   '';
 
   makeWrapperArgs = [

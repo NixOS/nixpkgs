@@ -1,5 +1,5 @@
-{ stdenv, fetchurl, python2Packages, wrapGAppsHook, gettext, intltool, libsoup, gnome3,
-  tag ? "",
+{ stdenv, fetchurl, python3, wrapGAppsHook, gettext, intltool, libsoup, gnome3, gtk3, gdk_pixbuf,
+  tag ? "", xvfb_run, dbus, glibcLocales, glib, gobjectIntrospection,
   gst_all_1, withGstPlugins ? true,
   xineBackend ? false, xineLib,
   withDbusPython ? false, withPyInotify ? false, withMusicBrainzNgs ? false, withPahoMqtt ? false,
@@ -7,38 +7,53 @@
   keybinder3 ? null, gtksourceview ? null, libmodplug ? null, kakasi ? null, libappindicator-gtk3 ? null }:
 
 let optionals = stdenv.lib.optionals; in
-python2Packages.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication rec {
   name = "quodlibet${tag}-${version}";
-  version = "3.9.1";
+  version = "4.0.2";
 
   # XXX, tests fail
+  # https://github.com/quodlibet/quodlibet/issues/2820
   doCheck = false;
 
   src = fetchurl {
     url = "https://github.com/quodlibet/quodlibet/releases/download/release-${version}/quodlibet-${version}.tar.gz";
-    sha256 = "d2b42df5d439213973dc97149fddc779a6c90cec389c24baf1c0bdcc39ffe591";
+    sha256 = "072s983p3n84yl807pbdxsy5vrgs8jzzfl648gsri6kpwsp6w5fz";
   };
 
   nativeBuildInputs = [ wrapGAppsHook gettext intltool ];
-  # ++ (with python2Packages; [ pytest pyflakes pycodestyle polib ]); # test deps
 
-  buildInputs = [ gnome3.defaultIconTheme libsoup webkitgtk keybinder3 gtksourceview libmodplug libappindicator-gtk3 kakasi ]
+  checkInputs = with python3.pkgs; [ pytest pytest_xdist pyflakes pycodestyle polib xvfb_run dbus.daemon glibcLocales ];
+
+  buildInputs = [ gnome3.defaultIconTheme libsoup glib gtk3 webkitgtk gdk_pixbuf keybinder3 gtksourceview libmodplug libappindicator-gtk3 kakasi gobjectIntrospection ]
     ++ (if xineBackend then [ xineLib ] else with gst_all_1;
     [ gstreamer gst-plugins-base ] ++ optionals withGstPlugins [ gst-plugins-good gst-plugins-ugly gst-plugins-bad ]);
 
-  propagatedBuildInputs = with python2Packages;
-    [ pygobject3 pycairo mutagen pygtk gst-python feedparser faulthandler futures ]
+  propagatedBuildInputs = with python3.pkgs; [ pygobject3 pycairo mutagen gst-python feedparser ]
       ++ optionals withDbusPython [ dbus-python ]
       ++ optionals withPyInotify [ pyinotify ]
       ++ optionals withMusicBrainzNgs [ musicbrainzngs ]
       ++ optionals stdenv.isDarwin [ pyobjc ]
       ++ optionals withPahoMqtt [ paho-mqtt ];
 
-  makeWrapperArgs = optionals (kakasi != null) [ "--prefix PATH : ${kakasi}/bin" ];
+  LC_ALL = "en_US.UTF-8";
 
-  meta = {
+  checkPhase = ''
+    runHook preCheck
+    checkHomeDir=$(mktemp -d)
+    mkdir -p $checkHomeDir/.cache/thumbnails/normal # Required by TThumb.test_recreate_broken_cache_file
+    env XDG_DATA_DIRS="$out/share:${gtk3}/share/gsettings-schemas/${gtk3.name}:$XDG_DATA_DIRS" \
+      HOME=$checkHomeDir \
+      xvfb-run -s '-screen 0 800x600x24' dbus-run-session \
+        --config-file=${dbus.daemon}/share/dbus-1/session.conf \
+        py.test
+    runHook postCheck
+  '';
+
+  preFixup = stdenv.lib.optionalString (kakasi != null) "gappsWrapperArgs+=(--prefix PATH : ${kakasi}/bin)";
+
+  meta = with stdenv.lib; {
     description = "GTK+-based audio player written in Python, using the Mutagen tagging library";
-    license = stdenv.lib.licenses.gpl2;
+    license = licenses.gpl2Plus;
 
     longDescription = ''
       Quod Libet is a GTK+-based audio player written in Python, using
@@ -54,7 +69,7 @@ python2Packages.buildPythonApplication rec {
       & internet radio, and all major audio formats.
     '';
 
-    maintainers = with stdenv.lib.maintainers; [ coroa sauyon ];
+    maintainers = with maintainers; [ coroa sauyon ];
     homepage = https://quodlibet.readthedocs.io/en/latest/;
   };
 }

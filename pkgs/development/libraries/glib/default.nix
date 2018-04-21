@@ -1,5 +1,5 @@
-{ stdenv, hostPlatform, fetchurl, pkgconfig, gettext, perl, python
-, libiconv, libintlOrEmpty, zlib, libffi, pcre, libelf, gnome3
+{ stdenv, hostPlatform, fetchurl, gettext, pkgconfig, perl, python
+, libiconv, zlib, libffi, pcre, libelf, gnome3
 # use utillinuxMinimal to avoid circular dependency (utillinux, systemd, glib)
 , utillinuxMinimal ? null
 
@@ -66,17 +66,13 @@ stdenv.mkDerivation rec {
     ++ optionals stdenv.isLinux [ utillinuxMinimal ] # for libmount
     ++ optionals doCheck [ tzdata libxml2 desktop-file-utils shared-mime-info ];
 
-  nativeBuildInputs = [ pkgconfig gettext perl python ];
+  nativeBuildInputs = [ pkgconfig perl python ];
 
-  propagatedBuildInputs = [ zlib libffi libiconv ]
-    ++ libintlOrEmpty;
+  propagatedBuildInputs = [ zlib libffi gettext libiconv ];
 
   # internal pcre would only add <200kB, but it's relatively common
   configureFlags = [ "--with-pcre=system" ]
     ++ optional stdenv.isDarwin "--disable-compile-warnings"
-    # glibc inclues GNU libiconv, but Darwin's iconv function is good enonugh.
-    ++ optional (stdenv.hostPlatform.libc != "glibc" && !stdenv.hostPlatform.isDarwin)
-      "--with-libiconv=gnu"
     ++ optional stdenv.isSunOS "--disable-dtrace"
     # Can't run this test when cross-compiling
     ++ optionals (stdenv.hostPlatform != stdenv.buildPlatform)
@@ -84,8 +80,7 @@ stdenv.mkDerivation rec {
     # GElf only supports elf64 hosts
     ++ optional (!stdenv.hostPlatform.is64bit) "--disable-libelf";
 
-  NIX_CFLAGS_COMPILE = optional stdenv.isDarwin "-lintl"
-    ++ optional stdenv.isSunOS "-DBSD_COMP";
+  NIX_CFLAGS_COMPILE = optional stdenv.isSunOS "-DBSD_COMP";
 
   preConfigure = optionalString stdenv.isSunOS ''
     sed -i -e 's|inotify.h|foobar-inotify.h|g' configure

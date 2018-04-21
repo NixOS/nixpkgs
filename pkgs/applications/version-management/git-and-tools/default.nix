@@ -15,7 +15,6 @@ let
       perlPackages.MIMEBase64 perlPackages.AuthenSASL
       perlPackages.DigestHMAC
     ];
-    gitwebPerlLibs = with perlPackages; [ CGI HTMLParser CGIFast FCGI FCGIProcManager HTMLTagCloud ];
   };
 
 in
@@ -103,6 +102,10 @@ rec {
   grv = callPackage ./grv { };
 
   hub = callPackage ./hub {
+    inherit (darwin) Security;
+  };
+
+  hubUnstable = callPackage ./hub/unstable.nix {
     inherit (darwin) Security;
   };
 

@@ -1,7 +1,7 @@
 { stdenv, fetchurl, fetchpatch, pkgconfig, meson
 , ninja, gettext, gobjectIntrospection, python
 , gstreamer, orc, alsaLib, libXv, pango, libtheora
-, wayland, cdparanoia, libvisual, libintlOrEmpty
+, wayland, cdparanoia, libvisual, libintl
 }:
 
 stdenv.mkDerivation rec {
@@ -26,9 +26,8 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    orc libXv pango libtheora cdparanoia wayland
+    orc libXv pango libtheora cdparanoia libintl wayland
   ]
-  ++ libintlOrEmpty
   ++ stdenv.lib.optional stdenv.isLinux alsaLib
   ++ stdenv.lib.optional (!stdenv.isDarwin) libvisual;
 
@@ -38,7 +37,7 @@ stdenv.mkDerivation rec {
     patchShebangs .
   '';
 
-  NIX_LDFLAGS = if stdenv.isDarwin then "-lintl" else null;
+  enableParallelBuilding = true;
 
   patches = [
     (fetchpatch {

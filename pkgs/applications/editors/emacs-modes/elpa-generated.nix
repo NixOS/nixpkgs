@@ -713,10 +713,10 @@
     ebdb = callPackage ({ cl-lib ? null, elpaBuild, emacs, fetchurl, lib, seq }:
     elpaBuild {
         pname = "ebdb";
-        version = "0.5";
+        version = "0.5.2";
         src = fetchurl {
-          url = "https://elpa.gnu.org/packages/ebdb-0.5.tar";
-          sha256 = "1apsb08ml50nacqa6i86zwa2xxdfqry380bksp16zv63cj86b67g";
+          url = "https://elpa.gnu.org/packages/ebdb-0.5.2.tar";
+          sha256 = "09ff6kf74r6hg3m6lryrjr2rrczm9h702jpkap71xrj0fk4zfb5c";
         };
         packageRequires = [ cl-lib emacs seq ];
         meta = {
@@ -768,10 +768,10 @@
     el-search = callPackage ({ cl-print, elpaBuild, emacs, fetchurl, lib, stream }:
     elpaBuild {
         pname = "el-search";
-        version = "1.6.3";
+        version = "1.6.5";
         src = fetchurl {
-          url = "https://elpa.gnu.org/packages/el-search-1.6.3.tar";
-          sha256 = "1yd8qlq95fb5qfmg3m16i9d5nsmkkgr12q0981r5ng06pc0j4al6";
+          url = "https://elpa.gnu.org/packages/el-search-1.6.5.tar";
+          sha256 = "1iw13ifyrga2r2xz63zhjxiy541jy4p2rp3a8fgb22sjw1zi8n7w";
         };
         packageRequires = [ cl-print emacs stream ];
         meta = {
@@ -931,10 +931,10 @@
     gited = callPackage ({ cl-lib ? null, elpaBuild, emacs, fetchurl, lib }:
     elpaBuild {
         pname = "gited";
-        version = "0.4.1";
+        version = "0.4.3";
         src = fetchurl {
-          url = "https://elpa.gnu.org/packages/gited-0.4.1.tar";
-          sha256 = "0080jcr10xvvf2rl7ar01c6zmzd0pafrs6w2l8v4cwwapyhv0dcd";
+          url = "https://elpa.gnu.org/packages/gited-0.4.3.tar";
+          sha256 = "07sjrh7900v5gkjzac2hh05ygywp6k4803ikc3wj3x22yrc9l8bx";
         };
         packageRequires = [ cl-lib emacs ];
         meta = {
@@ -1507,10 +1507,10 @@
     nhexl-mode = callPackage ({ cl-lib ? null, elpaBuild, emacs, fetchurl, lib }:
     elpaBuild {
         pname = "nhexl-mode";
-        version = "0.2";
+        version = "0.5";
         src = fetchurl {
-          url = "https://elpa.gnu.org/packages/nhexl-mode-0.2.el";
-          sha256 = "0qrzpkxxdwi2b3136yj5agvaxwr9g2c58kpmjmjpfhpc6yyyx5x0";
+          url = "https://elpa.gnu.org/packages/nhexl-mode-0.5.el";
+          sha256 = "02z2mx39m96s7v5d8sh6hxb5p70qzbagjfa3lavfw10zjim8g9wl";
         };
         packageRequires = [ cl-lib emacs ];
         meta = {
@@ -1612,10 +1612,10 @@
       }) {};
     org = callPackage ({ elpaBuild, fetchurl, lib }: elpaBuild {
         pname = "org";
-        version = "9.1.9";
+        version = "9.1.10";
         src = fetchurl {
-          url = "https://elpa.gnu.org/packages/org-9.1.9.tar";
-          sha256 = "16yr0srfzsrzv2b1f2wjk8gb2pyhsgj2hxbscixirkxqz674c5cl";
+          url = "https://elpa.gnu.org/packages/org-9.1.10.tar";
+          sha256 = "01vvq6m7r2ifyflvq5ga241qvl4j62smz0zr6jljk56b6nqi20lm";
         };
         packageRequires = [];
         meta = {

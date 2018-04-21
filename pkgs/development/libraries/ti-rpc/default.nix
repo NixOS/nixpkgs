@@ -8,14 +8,12 @@ stdenv.mkDerivation rec {
     sha256 = "0ppxl3k3nsz0qdakq844i2kj4fvh9h937lhx26bgmpmxq67sghw6";
   };
 
-  patches = stdenv.lib.optional stdenv.hostPlatform.isMusl
-    (fetchpatch {
-      url = "https://raw.githubusercontent.com/openembedded/openembedded-core/2be873301420ec6ca2c70d899b7c49a7e2b0954d/meta/recipes-extended/libtirpc/libtirpc/0001-replace-__bzero-with-memset-API.patch";
-      sha256 = "1jmbn0j2bnjp0j9z5vzz5xiwyv3kd28w5pixbqsy2lz6q8nii7cf";
-    });
-
   postPatch = ''
     sed '1i#include <stdint.h>' -i src/xdr_sizeof.c
+  '' + stdenv.lib.optionalString stdenv.hostPlatform.isMusl ''
+    substituteInPlace tirpc/rpc/types.h \
+      --replace '#if defined __APPLE_CC__ || defined __FreeBSD__' \
+                '#if defined __APPLE_CC__ || defined __FreeBSD__ || !defined __GLIBC__'
   '';
 
   nativeBuildInputs = [ autoreconfHook ];

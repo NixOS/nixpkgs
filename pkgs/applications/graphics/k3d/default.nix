@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, fetchpatch, unzip, ftgl, glew, asciidoc
-, cmake, libGLU_combined, zlib, python, expat, libxml2, libsigcxx, libuuid, freetype
+, cmake, ninja, libGLU_combined, zlib, python, expat, libxml2, libsigcxx, libuuid, freetype
 , libpng, boost, doxygen, cairomm, pkgconfig, imagemagick, libjpeg, libtiff
 , gettext, intltool, perl, gtkmm2, glibmm, gtkglext, pangox_compat, libXmu }:
 
@@ -20,23 +20,24 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  cmakeFlags = "-DK3D_BUILD_DOCS=false -DK3D_BUILD_GUIDE=false";
+  cmakeFlags = [
+    "-DK3D_BUILD_DOCS=false"
+    "-DK3D_BUILD_GUIDE=false"
+  ];
 
   preConfigure = ''
     export LD_LIBRARY_PATH="$LD_LIBRARY_PATH''${LD_LIBRARY_PATH:+:}$PWD/build/lib"
-    export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE  -I$(echo ${gtkglext}/include/gtkglext-*) -I$(echo ${gtkglext}/lib/gtkglext-*/include)"
   '';
 
+  nativeBuildInputs = [ cmake ninja gettext intltool doxygen pkgconfig perl asciidoc ];
+
   buildInputs = [
-     cmake libGLU_combined zlib python expat libxml2 libsigcxx libuuid freetype libpng
-     boost doxygen cairomm pkgconfig imagemagick libjpeg libtiff
-     gettext intltool perl unzip ftgl glew asciidoc
-     gtkmm2 glibmm gtkglext pangox_compat libXmu
+     libGLU_combined zlib python expat libxml2 libsigcxx libuuid freetype libpng
+     boost cairomm imagemagick libjpeg libtiff
+     ftgl glew gtkmm2 glibmm gtkglext pangox_compat libXmu
     ];
 
   #doCheck = false;
-
-  enableParallelBuilding = true;
 
   meta = {
     description = "A 3D editor with support for procedural editing";

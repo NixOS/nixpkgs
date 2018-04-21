@@ -271,6 +271,11 @@ in
   };
 
   libxshmfence = attrs: attrs // {
+    name = "libxshmfence-1.3";
+    src = args.fetchurl {
+      url = mirror://xorg/individual/lib/libxshmfence-1.3.tar.bz2;
+      sha256 = "1ir0j92mnd1nk37mrv9bz5swnccqldicgszvfsh62jd14q6k115q";
+    };
     outputs = [ "out" "dev" ]; # mainly to avoid propagation
   };
 
@@ -400,7 +405,7 @@ in
   };
 
   xdriinfo = attrs: attrs // {
-    buildInputs = attrs.buildInputs ++ [args.mesa];
+    buildInputs = attrs.buildInputs ++ [args.libGL];
   };
 
   xvinfo = attrs: attrs // {
@@ -460,7 +465,7 @@ in
       version = (builtins.parseDrvName attrs.name).version;
       commonBuildInputs = attrs.buildInputs ++ [ xtrans ];
       commonPropagatedBuildInputs = [
-        args.zlib args.mesa args.dbus
+        args.zlib args.libGL args.mesa_noglu args.dbus
         xf86bigfontproto glproto xf86driproto
         compositeproto scrnsaverproto resourceproto
         xf86dgaproto
@@ -489,7 +494,7 @@ in
       if (!isDarwin)
       then {
         outputs = [ "out" "dev" ];
-        buildInputs = [ makeWrapper ] ++ commonBuildInputs;
+        buildInputs = [ makeWrapper args.libdrm ] ++ commonBuildInputs;
         propagatedBuildInputs = [ libpciaccess args.epoxy ] ++ commonPropagatedBuildInputs ++ lib.optionals stdenv.isLinux [
           args.udev
         ];
@@ -510,8 +515,6 @@ in
         ];
         postInstall = ''
           rm -fr $out/share/X11/xkb/compiled # otherwise X will try to write in it
-          wrapProgram $out/bin/Xvfb \
-            --set XORG_DRI_DRIVER_PATH ${args.mesa}/lib/dri
           ( # assert() keeps runtime reference xorgserver-dev in xf86-video-intel and others
             cd "$dev"
             for f in include/xorg/*.h; do

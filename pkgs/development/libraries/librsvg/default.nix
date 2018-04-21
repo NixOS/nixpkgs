@@ -1,5 +1,5 @@
 { lib, stdenv, fetchurl, pkgconfig, glib, gdk_pixbuf, pango, cairo, libxml2, libgsf
-, bzip2, libcroco, libintlOrEmpty, darwin, rust, gnome3
+, bzip2, libcroco, libintl, darwin, rust, gnome3
 , withGTK ? false, gtk3 ? null
 , vala, gobjectIntrospection }:
 
@@ -15,11 +15,9 @@ stdenv.mkDerivation rec {
     sha256 = "0c550a0bffef768a436286116c03d9f6cd3f97f5021c13e7f093b550fac12562";
   };
 
-  NIX_LDFLAGS = if stdenv.isDarwin then "-lintl" else null;
-
   outputs = [ "out" "dev" ];
 
-  buildInputs = [ libxml2 libgsf bzip2 libcroco pango libintlOrEmpty ];
+  buildInputs = [ libxml2 libgsf bzip2 libcroco pango libintl ];
 
   propagatedBuildInputs = [ glib gdk_pixbuf cairo ] ++ lib.optional withGTK gtk3;
 

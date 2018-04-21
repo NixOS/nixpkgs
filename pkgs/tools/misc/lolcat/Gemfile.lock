@@ -1,9 +1,11 @@
 GEM
   remote: http://rubygems.org/
   specs:
-    lolcat (90.8.8)
+    lolcat (99.9.10)
+      manpages (~> 0.6.1)
       paint (~> 2.0.0)
       trollop (~> 2.1.2)
+    manpages (0.6.1)
     paint (2.0.1)
     trollop (2.1.2)
 

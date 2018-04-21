@@ -25,6 +25,8 @@ stdenv.mkDerivation rec {
     substituteInPlace tests/Makefile.am --replace '$(CAIRO_CFLAGS)' '$(CAIRO_CFLAGS) $(GLIB_CFLAGS)'
   '';
 
+  enableParallelBuilding = true;
+
   meta = with stdenv.lib; {
     homepage = https://01.org/linuxgraphics/;
     description = "Tools for development and testing of the Intel DRM driver";

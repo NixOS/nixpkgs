@@ -82,7 +82,7 @@ self: super: {
       name = "git-annex-${drv.version}-src";
       url = "git://git-annex.branchable.com/";
       rev = "refs/tags/" + drv.version;
-      sha256 = "0qi5wpsvw6g8xrri1pr0401370acs5sg75myr0h5mjad6pvqc667";
+      sha256 = "011kiyy1anj99ab70npl5i7pcqri0pdk04s4cvdm39zyas5m9lbd";
     };
   })).overrideScope (self: super: {
     aws = dontCheck (self.aws_0_18);
@@ -508,7 +508,7 @@ self: super: {
   # https://github.com/alphaHeavy/lzma-enumerator/issues/3
   lzma-enumerator = dontCheck super.lzma-enumerator;
 
-  # https://github.com/haskell-hvr/lzma/issues/8
+  # https://github.com/haskell-hvr/lzma/pull/11
   lzma = appendPatch super.lzma ./patches/lzma-tests.patch;
 
   # https://github.com/BNFC/bnfc/issues/140
@@ -866,6 +866,9 @@ self: super: {
   # https://github.com/fpco/stackage/issues/3126
   stack = doJailbreak super.stack;
 
+  # https://github.com/snoyberg/monad-logger/issues/1
+  monad-logger = self.monad-logger_0_3_28_5;
+
   # These packages depend on each other, forming an infinite loop.
   scalendar = markBroken (super.scalendar.override { SCalendar = null; });
   SCalendar = markBroken (super.SCalendar.override { scalendar = null; });
@@ -881,9 +884,6 @@ self: super: {
 
   # Needs QuickCheck <2.10, HUnit <1.6 and base <4.10
   pointfree = doJailbreak super.pointfree;
-
-  # Needs time<1.7
-  taffybar = doJailbreak super.taffybar;
 
   # Needs tasty-quickcheck ==0.8.*, which we don't have.
   cryptohash-sha256 = doJailbreak super.cryptohash-sha256;
@@ -1023,6 +1023,16 @@ self: super: {
     preCheck = ''export PATH="$PWD/dist/build/alex:$PATH"'';
   });
 
+  # This package refers to the wrong library (itself in fact!)
+  vulkan = super.vulkan.override { vulkan = pkgs.vulkan-loader; };
+
+  vector-sized_1_0_0_0 = super.vector-sized_1_0_0_0.override {
+    indexed-list-literals = self.indexed-list-literals_0_2_0_0;
+  };
+
+  # Both need a more up-to-date version
+  hlint = super.hlint.override { extra = self.extra_1_6_6; };
+  hoogle = super.hoogle.override { extra = self.extra_1_6_6; };
 }
 
 //

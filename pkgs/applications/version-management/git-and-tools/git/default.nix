@@ -1,9 +1,9 @@
 { fetchurl, stdenv, curl, openssl, zlib, expat, perl, python, gettext, cpio
 , gnugrep, gnused, gawk, coreutils # needed at runtime by git-filter-branch etc
-, gzip, openssh, pcre2
+, openssh, pcre2
 , asciidoc, texinfo, xmlto, docbook2x, docbook_xsl, docbook_xml_dtd_45
 , libxslt, tcl, tk, makeWrapper, libiconv
-, svnSupport, subversionClient, perlLibs, smtpPerlLibs, gitwebPerlLibs
+, svnSupport, subversionClient, perlLibs, smtpPerlLibs
 , guiSupport
 , withManual ? true
 , pythonSupport ? true
@@ -13,7 +13,7 @@
 }:
 
 let
-  version = "2.17.0";
+  version = "2.16.3";
   svn = subversionClient.override { perlBindings = true; };
 in
 
@@ -22,8 +22,10 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "https://www.kernel.org/pub/software/scm/git/git-${version}.tar.xz";
-    sha256 = "1ismz7nsz8dgjmk782xr9s0mr2qh06f72pdcgbxfmnw1bvlya5p9";
+    sha256 = "0j1dwvg5llnj3g0fp8hdgpms4hp90qw9f6509vqw30dhwplrjpfn";
   };
+
+  outputs = [ "out" "gitweb" ];
 
   hardeningDisable = [ "format" ];
 
@@ -58,8 +60,6 @@ stdenv.mkDerivation {
       + (if pythonSupport then "PYTHON_PATH=${python}/bin/python" else "NO_PYTHON=1")
       + (if stdenv.isSunOS then " INSTALL=install NO_INET_NTOP= NO_INET_PTON=" else "")
       + (if stdenv.isDarwin then " NO_APPLE_COMMON_CRYPTO=1" else " sysconfdir=/etc/ ")
-      # XXX: USE_PCRE2 might be useful in general, look into it
-      # XXX other alpine options?
       + (if stdenv.hostPlatform.isMusl then "NO_SYS_POLL_H=1 NO_GETTEXT=YesPlease" else "");
 
   # build git-credential-osxkeychain if darwin
@@ -133,15 +133,8 @@ stdenv.mkDerivation {
       substituteInPlace $out/libexec/git-core/git-sh-i18n \
           --subst-var-by gettext ${gettext}
 
-      # gzip (and optionally bzip2, xz, zip) are runtime dependencies for
-      # gitweb.cgi, need to patch so that it's found
-      sed -i -e "s|'compressor' => \['gzip'|'compressor' => ['${gzip}/bin/gzip'|" \
-          $out/share/gitweb/gitweb.cgi
-      # Give access to CGI.pm and friends (was removed from perl core in 5.22)
-      for p in ${stdenv.lib.concatStringsSep " " gitwebPerlLibs}; do
-          sed -i -e "/use CGI /i use lib \"$p/lib/perl5/site_perl\";" \
-              "$out/share/gitweb/gitweb.cgi"
-      done
+      # put in separate package for simpler maintenance
+      mv $out/share/gitweb $gitweb/
 
       # Also put git-http-backend into $PATH, so that we can use smart
       # HTTP(s) transports for pushing

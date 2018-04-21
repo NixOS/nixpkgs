@@ -26,6 +26,9 @@ stdenv.mkDerivation rec {
   ] ++ stdenv.lib.optionals withBlas [
     openblas
   ];
+  propagatedBuildInputs = [
+    mpfr # flint.h includes mpfr.h
+  ];
   configureFlags = [
     "--with-gmp=${gmp}"
     "--with-mpir=${mpir}"

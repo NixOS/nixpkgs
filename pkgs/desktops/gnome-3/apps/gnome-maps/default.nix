@@ -5,13 +5,13 @@
 
 let
   pname = "gnome-maps";
-  version = "3.28.0";
+  version = "3.28.1";
 in stdenv.mkDerivation rec {
   name = "${pname}-${version}";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${gnome3.versionBranch version}/${name}.tar.xz";
-    sha256 = "1imcgw67cw1qkfz8m2my0f4qmss11fbqqqi4w7afcfq9p0rplgy0";
+    sha256 = "19xx1v25ycr8ih4jwb1vc662jcx6kynaf7baj4i569ccrcwaj2d5";
   };
 
   doCheck = true;

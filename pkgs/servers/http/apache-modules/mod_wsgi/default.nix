@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "mod_wsgi-${version}";
-  version = "4.6.3";
+  version = "4.6.4";
 
   src = fetchurl {
     url = "https://github.com/GrahamDumpleton/mod_wsgi/archive/${version}.tar.gz";
-    sha256 = "1vi2bf2spak70qqc1c673a7pwmzq01gmli43xwhrwdw7l2ig4wj9";
+    sha256 = "1hyaxr9km7cj4k6b0d6xx3bplpa8483fhyk9x802sl22m3f2vc1k";
   };
 
   buildInputs = [ apacheHttpd python2 ];

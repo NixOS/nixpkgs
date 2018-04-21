@@ -19,8 +19,8 @@ buildPythonApplication rec {
   postPatch = ''
     # https://github.com/blue-yonder/bonfire/pull/24
     substituteInPlace requirements.txt \
-      --replace "arrow>=0.5.4,<0.8" "arrow>=0.5.4,<0.13" \
-      --replace "keyring>=9,<10"    "keyring>=9,<=11"
+      --replace "arrow>=0.5.4,<0.8" "arrow>=0.5.4" \
+      --replace "keyring>=9,<10"    "keyring>=9"
     # pip fails when encountering the git hash for the package version
     substituteInPlace setup.py \
       --replace "version=version," "version='${version}',"

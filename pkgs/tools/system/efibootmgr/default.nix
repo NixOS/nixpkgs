@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   name = "efibootmgr-${version}";
-  version = "15";
+  version = "16";
 
   nativeBuildInputs = [ pkgconfig ];
 
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     owner = "rhboot";
     repo = "efibootmgr";
     rev = version;
-    sha256 = "0z7h1dirp8za6lbbf4f3dzn7l1px891rdymhkbqc10yj6gi1jpqp";
+    sha256 = "0b27h8vf1b6laln5n0wk2hkzyyh87sxanj7wrz9kimyx03dcq6vi";
   };
 
   makeFlags = [ "EFIDIR=nixos" ];

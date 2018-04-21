@@ -1,5 +1,6 @@
 { stdenv, fetchurl, pcre, pkgconfig, libsepol
 , enablePython ? true, swig ? null, python ? null
+, musl-fts
 }:
 
 assert enablePython -> swig != null && python != null;
@@ -18,7 +19,8 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ libsepol pcre ]
-             ++ optionals enablePython [ swig python ];
+             ++ optionals enablePython [ swig python ]
+             ++ optional stdenv.hostPlatform.isMusl musl-fts;
 
   # drop fortify here since package uses it by default, leading to compile error:
   # command-line>:0:0: error: "_FORTIFY_SOURCE" redefined [-Werror]

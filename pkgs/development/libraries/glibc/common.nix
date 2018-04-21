@@ -7,6 +7,7 @@
 , fetchurl, fetchpatch ? null
 , linuxHeaders ? null
 , gd ? null, libpng ? null
+, bison
 }:
 
 { name
@@ -19,9 +20,9 @@
 } @ args:
 
 let
-  version = "2.26";
-  patchSuffix = "-131";
-  sha256 = "1ggnj1hzjym7sn93rbwydcqd562q73lsb7g7kd199g6j9j9hlkp5";
+  version = "2.27";
+  patchSuffix = "";
+  sha256 = "0wpwq7gsm7sd6ysidv0z575ckqdg13cr2njyfgrbgh4f65adwwji";
   cross = if buildPlatform != hostPlatform then hostPlatform else null;
 in
 
@@ -29,7 +30,7 @@ assert withLinuxHeaders -> linuxHeaders != null;
 assert withGd -> gd != null && libpng != null;
 
 stdenv.mkDerivation ({
-  inherit  installLocales;
+  inherit version installLocales;
   linuxHeaders = if withLinuxHeaders then linuxHeaders else null;
 
   # The host/target system.
@@ -41,17 +42,6 @@ stdenv.mkDerivation ({
 
   patches =
     [
-      /*  No tarballs for stable upstream branch, only https://sourceware.org/git/?p=glibc.git
-          $ git co release/2.25/master; git describe
-          glibc-2.25-49-gbc5ace67fe
-          $ git show --reverse glibc-2.25..release/2.25/master | gzip -n -9 --rsyncable - > 2.25-49.patch.gz
-      */
-      ./2.26-75.patch.gz
-      ./2.26-75to115.diff.gz
-      # contains fix for CVE-2018-1000001 as the last commit:
-      # https://sourceware.org/git/?p=glibc.git;a=commit;h=fabef2edbc
-      ./2.26-115to131.diff.gz
-
       /* Have rpcgen(1) look for cpp(1) in $PATH.  */
       ./rpcgen-path.patch
 
@@ -97,24 +87,14 @@ stdenv.mkDerivation ({
       });
 
   postPatch =
-    # Needed for glibc to build with the gnumake 3.82
-    # http://comments.gmane.org/gmane.linux.lfs.support/31227
     ''
+      # Needed for glibc to build with the gnumake 3.82
+      # http://comments.gmane.org/gmane.linux.lfs.support/31227
       sed -i 's/ot \$/ot:\n\ttouch $@\n$/' manual/Makefile
-    ''
-    # nscd needs libgcc, and we don't want it dynamically linked
-    # because we don't want it to depend on bootstrap-tools libs.
-    + ''
+
+      # nscd needs libgcc, and we don't want it dynamically linked
+      # because we don't want it to depend on bootstrap-tools libs.
       echo "LDFLAGS-nscd += -static-libgcc" >> nscd/Makefile
-    ''
-    # Replace the date and time in nscd by a prefix of $out.
-    # It is used as a protocol compatibility check.
-    # Note: the size of the struct changes, but using only a part
-    # would break hash-rewriting. When receiving stats it does check
-    # that the struct sizes match and can't cause overflow or something.
-    + ''
-      cat ${./glibc-remove-datetime-from-nscd.patch} \
-        | sed "s,@out@,$out," | patch -p1
     '';
 
   configureFlags =
@@ -150,6 +130,7 @@ stdenv.mkDerivation ({
   outputs = [ "out" "bin" "dev" "static" ];
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
+  nativeBuildInputs = [ bison ];
   buildInputs = lib.optionals withGd [ gd libpng ];
 
   # Needed to install share/zoneinfo/zone.tab.  Set to impure /bin/sh to

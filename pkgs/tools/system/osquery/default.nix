@@ -75,5 +75,6 @@ stdenv.mkDerivation rec {
     license = licenses.bsd3;
     platforms = platforms.linux;
     maintainers = with maintainers; [ cstrahan ];
+    broken = true; # 2018-04-11
   };
 }

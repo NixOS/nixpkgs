@@ -3,14 +3,12 @@
 
 stdenv.mkDerivation rec {
   baseName="pure";
-  project="pure-lang";
-  version="0.66";
+  version="0.68";
   name="${baseName}-${version}";
-  extension="tar.gz";
 
   src = fetchurl {
-    url="https://bitbucket.org/purelang/${project}/downloads/${name}.${extension}";
-    sha256="42df6832476e8bee3a7ca179671284c1edd7bc82b71062fa0de62fd2117ee676";
+    url="https://github.com/agraef/pure-lang/releases/download/${name}/${name}.tar.gz";
+    sha256="0px6x5ivcdbbp2pz5n1r1cwg1syadklhjw8piqhl63n91i4r7iyb";
   };
 
   buildInputs = [ bison flex makeWrapper ];

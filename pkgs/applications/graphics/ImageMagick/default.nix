@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "ImageMagick";
-    repo = "ImageMagick";
+    repo = "ImageMagick6";
     rev = cfg.version;
     inherit (cfg) sha256;
   };

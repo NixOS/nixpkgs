@@ -9,12 +9,12 @@ let
   };
   setuptools_source = fetchPypi {
     pname = "setuptools";
-    version = "38.4.1";
+    version = "39.0.1";
     format = "wheel";
-    sha256 = "22f8bcff5ce7fd1867785701769eaba42b79331d0abf890974a9288787dc015b";
+    sha256 = "8010754433e3211b9cdbbf784b50f30e80bf40fc6b05eb5f865fab83300599b8";
   };
 
-  # TODO: Shouldn't be necessary anymore for pip > 9.0.1!
+  # TODO: Shouldn't be necessary anymore for pip >= 10!
   # https://github.com/NixOS/nixpkgs/issues/26392
   # https://github.com/pypa/setuptools/issues/885
   pkg_resources = fetchurl {
@@ -24,13 +24,13 @@ let
 
 in stdenv.mkDerivation rec {
   pname = "pip";
-  version = "9.0.1";
+  version = "9.0.3";
   name = "${python.libPrefix}-bootstrapped-${pname}-${version}";
 
   src = fetchPypi {
     inherit pname version;
     format = "wheel";
-    sha256 = "690b762c0a8460c303c089d5d0be034fb15a5ea2b75bdf565f40421f542fefb0";
+    sha256 = "c3ede34530e0e0b2381e7363aded78e0c33291654937e7373032fda04e8803e5";
   };
 
   unpackPhase = ''
@@ -38,7 +38,7 @@ in stdenv.mkDerivation rec {
     unzip -d $out/${python.sitePackages} $src
     unzip -d $out/${python.sitePackages} ${setuptools_source}
     unzip -d $out/${python.sitePackages} ${wheel_source}
-    # TODO: Shouldn't be necessary anymore for pip > 9.0.1!
+    # TODO: Shouldn't be necessary anymore for pip >= 10!
     cp ${pkg_resources} $out/${python.sitePackages}/pip/_vendor/pkg_resources/__init__.py
   '';
 

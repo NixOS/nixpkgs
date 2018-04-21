@@ -1,12 +1,11 @@
 { stdenv, buildPythonPackage, isPy3k, fetchFromGitHub, fetchurl
-, eject, pygit2, gitMinimal, git-annex }:
+, utillinux, pygit2, gitMinimal, git-annex }:
 
 buildPythonPackage rec {
   pname = "git-annex-adapter";
   version = "0.2.0";
-  name = "${pname}-${version}";
 
-  disabled = (!isPy3k);
+  disabled = !isPy3k;
 
   # There is only a wheel on PyPI - build from source instead
   src = fetchFromGitHub {
@@ -28,8 +27,8 @@ buildPythonPackage rec {
     sha256 = "1hbw8651amjskakvs1wv2msd1wryrq0vpryvbispg5267rs8q7hp";
   };
 
-  nativeBuildInputs = [
-    eject # `rev` is needed in tests/test_process.py
+  checkInputs = [
+    utillinux # `rev` is needed in tests/test_process.py
   ];
 
   propagatedBuildInputs = [ pygit2 gitMinimal ];

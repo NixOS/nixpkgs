@@ -61,5 +61,6 @@ in stdenv.mkDerivation {
     license = stdenv.lib.licenses.gpl3;
     maintainers = with stdenv.lib.maintainers; [viric];
     platforms = with stdenv.lib.platforms; linux;
+    broken = true; # 2018-04-11
   };
 }

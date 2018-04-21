@@ -35,6 +35,10 @@ in stdenv.mkDerivation rec {
   # https://bugs.exim.org/show_bug.cgi?id=2173
   patches = [ ./stacksize-detection.patch ];
 
+  preCheck = ''
+    patchShebangs RunGrepTest
+  '';
+
   doCheck = !(with hostPlatform; isCygwin || isFreeBSD) && hostPlatform == buildPlatform;
     # XXX: test failure on Cygwin
     # we are running out of stack on both freeBSDs on Hydra

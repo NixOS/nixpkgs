@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, glib, gtk, libGLU_combined, pango, pangox_compat, xorg }:
+{ stdenv, fetchurl, fetchpatch, pkgconfig, glib, gtk, libGLU_combined, pango, pangox_compat, xorg }:
 
 stdenv.mkDerivation rec {
   name = "gtkglext-1.2.0";
@@ -12,9 +12,20 @@ stdenv.mkDerivation rec {
     [ pkgconfig glib gtk libGLU_combined pango libX11 libXmu ];
   propagatedBuildInputs = [ pangox_compat ];
 
-  # The library uses `GTK_WIDGET_REALIZED', `GTK_WIDGET_TOPLEVEL', and
-  # `GTK_WIDGET_NO_WINDOW', all of which appear to be deprecated nowadays.
-  CPPFLAGS = "-UGTK_DISABLE_DEPRECATED";
+  patches = [
+    # The library uses `GTK_WIDGET_REALIZED', `GTK_WIDGET_TOPLEVEL', and
+    # `GTK_WIDGET_NO_WINDOW', all of which appear to be deprecated nowadays.
+    (fetchpatch {
+      name = "02_fix_gtk-2.20_deprecated_symbols.diff";
+      url = https://git.gnome.org/browse/gtkglext/patch/?id=d8f285d1397f6c41099c67e668288eecc1cdae67;
+      sha256 = "1zxak73plhy3m6psil1q9ssvjh9aqrif7kcbcz69y480qfb4ja08";
+    })
+    # Fix build with glibc ≥ 2.27
+    (fetchurl {
+      url = https://salsa.debian.org/gewo/gtkglext/raw/3b002677c907890c7de002c9f5b4b3ec71d11b31/debian/patches/04_glibc2.27-ftbfs.diff;
+      sha256 = "1l1swkjkai6pnah23xfsfpbq2fgbhp5pzj3l0ybsx6b858cxqzj5";
+    })
+  ];
 
   meta = with stdenv.lib; {
     homepage = https://projects.gnome.org/gtkglext/;

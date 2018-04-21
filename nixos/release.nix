@@ -166,8 +166,12 @@ in rec {
     inherit system;
   });
 
-  sd_image = forMatchingSystems [ "aarch64-linux" ] (system: makeSdImage {
-    module = ./modules/installer/cd-dvd/sd-image-aarch64.nix;
+  sd_image = forMatchingSystems [ "armv6l-linux" "armv7l-linux" "aarch64-linux" ] (system: makeSdImage {
+    module = {
+        armv6l-linux = ./modules/installer/cd-dvd/sd-image-raspberrypi.nix;
+        armv7l-linux = ./modules/installer/cd-dvd/sd-image-armv7l-multiplatform.nix;
+        aarch64-linux = ./modules/installer/cd-dvd/sd-image-aarch64.nix;
+      }.${system};
     inherit system;
   });
 
@@ -266,6 +270,7 @@ in rec {
   tests.couchdb = callTest tests/couchdb.nix {};
   tests.docker = callTestOnMatchingSystems ["x86_64-linux"] tests/docker.nix {};
   tests.docker-tools = callTestOnMatchingSystems ["x86_64-linux"] tests/docker-tools.nix {};
+  tests.docker-tools-overlay = callTestOnMatchingSystems ["x86_64-linux"] tests/docker-tools-overlay.nix {};
   tests.docker-edge = callTestOnMatchingSystems ["x86_64-linux"] tests/docker-edge.nix {};
   tests.dovecot = callTest tests/dovecot.nix {};
   tests.dnscrypt-proxy = callTestOnMatchingSystems ["x86_64-linux"] tests/dnscrypt-proxy.nix {};
@@ -365,7 +370,7 @@ in rec {
   tests.prometheus = callTest tests/prometheus.nix {};
   tests.prosody = callTest tests/prosody.nix {};
   tests.proxy = callTest tests/proxy.nix {};
-  # tests.quagga = callTest tests/quagga.nix {};
+  tests.quagga = callTest tests/quagga.nix {};
   tests.quake3 = callTest tests/quake3.nix {};
   tests.rabbitmq = callTest tests/rabbitmq.nix {};
   tests.radicale = callTest tests/radicale.nix {};
