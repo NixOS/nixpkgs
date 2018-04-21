@@ -16,6 +16,7 @@ with lib;
           example = "/etc/nixos/restic-password";
 
         };
+
         repository = mkOption {
           type = types.str;
           description = ''
@@ -23,17 +24,19 @@ with lib;
           '';
           example = "sftp:backup@192.168.1.100:/backups/${name}";
         };
-        directories = mkOption {
+
+        paths = mkOption {
           type = types.listOf types.str;
           default = [];
           description = ''
-            Which directories to backup.
+            Which paths to backup.
           '';
           example = [
             "/var/lib/postgresql"
             "/home/user/backup"
           ];
         };
+
         timerConfig = mkOption {
           type = types.attrsOf types.str;
           default = {
@@ -47,6 +50,7 @@ with lib;
             RandomizedDelaySec = "5h";
           };
         };
+
         user = mkOption {
           type = types.str;
           default = "root";
@@ -55,16 +59,29 @@ with lib;
           '';
           example = "postgresql";
         };
-        extraArguments = mkOption {
+
+        extraBackupArgs = mkOption {
           type = types.listOf types.str;
           default = [];
           description = ''
-            Extra arguments to append to the restic command.
+            Extra arguments passed to restic backup.
           '';
           example = [
-            "sftp.command='ssh backup@192.168.1.100 -i /home/user/.ssh/id_rsa -s sftp"
+            "--exclude-file=/etc/nixos/restic-ignore"
           ];
         };
+
+        extraOptions = mkOption {
+          type = types.listOf types.str;
+          default = [];
+          description = ''
+            Extra extended options to be passed to the restic --option flag.
+          '';
+          example = [
+            "sftp.command='ssh backup@192.168.1.100 -i /home/user/.ssh/id_rsa -s sftp'"
+          ];
+        };
+
         initialize = mkOption {
           type = types.bool;
           default = false;
@@ -77,16 +94,16 @@ with lib;
     default = {};
     example = {
       localbackup = {
-        directories = [ "/home" ];
+        paths = [ "/home" ];
         repository = "/mnt/backup-hdd";
         passwordFile = "/etc/nixos/secrets/restic-password";
         initialize = true;
       };
       remotebackup = {
-        directories = [ "/home" ];
+        paths = [ "/home" ];
         repository = "sftp:backup@host:/backups/home";
         passwordFile = "/etc/nixos/secrets/restic-password";
-        extraArguments = [
+        extraOptions = [
           "sftp.command='ssh backup@host -i /etc/nixos/secrets/backup-private-key -s sftp'"
         ];
         timerConfig = {
@@ -101,9 +118,9 @@ with lib;
     systemd.services =
       mapAttrs' (name: backup:
         let
-          extraArguments = concatMapStringsSep " " (arg: "-o ${arg}") backup.extraArguments;
+          extraOptions = concatMapStrings (arg: " -o ${arg}") backup.extraOptions;
           connectTo = elemAt (splitString ":" backup.repository) 1;
-          resticCmd = "${pkgs.restic}/bin/restic ${extraArguments}";
+          resticCmd = "${pkgs.restic}/bin/restic${extraOptions}";
         in nameValuePair "restic-backups-${name}" ({
           environment = {
             RESTIC_PASSWORD_FILE = backup.passwordFile;
@@ -115,7 +132,7 @@ with lib;
           restartIfChanged = false;
           serviceConfig = {
             Type = "oneshot";
-            ExecStart = map (dir: "${resticCmd} backup ${dir}") backup.directories;
+            ExecStart = "${resticCmd} backup ${concatStringsSep " " backup.extraBackupArgs} ${concatStringsSep " " backup.paths}";
             User = backup.user;
           };
         } // optionalAttrs backup.initialize {
