@@ -64,6 +64,16 @@ in {
       '';
     };
 
+    group = mkOption {
+      default = "traefik";
+      type = types.string;
+      example = "docker";
+      description = ''
+        Set the group that traefik runs under.
+        For the docker backend this needs to be set to <literal>docker</literal> instead.
+      '';
+    };
+
     package = mkOption {
       default = pkgs.traefik;
       defaultText = "pkgs.traefik";
@@ -87,7 +97,7 @@ in {
         ];
         Type = "simple";
         User = "traefik";
-        Group = "traefik";
+        Group = cfg.group;
         Restart = "on-failure";
         StartLimitInterval = 86400;
         StartLimitBurst = 5;

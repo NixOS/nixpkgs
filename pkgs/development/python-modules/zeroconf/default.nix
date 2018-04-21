@@ -3,12 +3,12 @@
 
 buildPythonPackage rec {
   pname = "zeroconf";
-  version = "0.19.1";
+  version = "0.20.0";
   name = "${pname}-${version}";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0ykzg730n915qbrq9bn5pn06bv6rb5zawal4sqjyfnjjm66snkj3";
+    sha256 = "6e3f1e7b5871e3d1410ac29b9fb85aafc1e2d661ed596b07a6f84559a475efcb";
   };
 
   propagatedBuildInputs = [ netifaces six enum-compat ];

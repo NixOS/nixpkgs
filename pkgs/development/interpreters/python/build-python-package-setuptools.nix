@@ -21,18 +21,18 @@ let
   setuppy = ./run_setup.py;
 
 in attrs // {
-  # we copy nix_run_setup.py over so it's executed relative to the root of the source
+  # we copy nix_run_setup over so it's executed relative to the root of the source
   # many project make that assumption
   buildPhase = attrs.buildPhase or ''
     runHook preBuild
-    cp ${setuppy} nix_run_setup.py
-    ${python.interpreter} nix_run_setup.py ${lib.optionalString (setupPyBuildFlags != []) ("build_ext " + (lib.concatStringsSep " " setupPyBuildFlags))} bdist_wheel
+    cp ${setuppy} nix_run_setup
+    ${python.interpreter} nix_run_setup ${lib.optionalString (setupPyBuildFlags != []) ("build_ext " + (lib.concatStringsSep " " setupPyBuildFlags))} bdist_wheel
     runHook postBuild
   '';
 
   installCheckPhase = attrs.checkPhase or ''
     runHook preCheck
-    ${python.interpreter} nix_run_setup.py test
+    ${python.interpreter} nix_run_setup test
     runHook postCheck
   '';
 

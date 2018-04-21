@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, libiconv, libunistring, help2man, ronn }:
+{ fetchurl, stdenv, libiconv, libunistring, help2man, ronn, buildPackages }:
 
 with stdenv.lib;
 
@@ -15,8 +15,9 @@ stdenv.mkDerivation rec {
 
   patches = optional stdenv.isDarwin ./fix-error-darwin.patch;
 
-  buildInputs = [ libunistring ronn ]
-    ++ optionals stdenv.isDarwin [ libiconv help2man ];
+  nativeBuildInputs = optional stdenv.isDarwin help2man;
+  buildInputs = [ libunistring ] ++ optional stdenv.isDarwin libiconv;
+  depsBuildBuild = [ buildPackages.stdenv.cc ];
 
   meta = {
     homepage = "https://www.gnu.org/software/libidn/#libidn2";

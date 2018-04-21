@@ -11,7 +11,7 @@ let
       config = {
         networking.firewall.enable = false;
         networking.firewall.allowPing = true;
-        networking.interfaces.eth0.ip4 = [
+        networking.interfaces.eth0.ipv4.addresses = [
           { address = "192.168.1.122"; prefixLength = 24; }
         ];
       };
@@ -33,8 +33,8 @@ in import ./make-test.nix ({ pkgs, lib, ...} :
         rstp = false;
       };
       networking.interfaces = {
-        eth1.ip4 = lib.mkOverride 0 [ ];
-        br0.ip4 = [{ address = "192.168.1.1"; prefixLength = 24; }];
+        eth1.ipv4.addresses = lib.mkOverride 0 [ ];
+        br0.ipv4.addresses = [ { address = "192.168.1.1"; prefixLength = 24; } ];
       };
 
     };
@@ -44,8 +44,8 @@ in import ./make-test.nix ({ pkgs, lib, ...} :
         rstp = false;
       };
       networking.interfaces = {
-        eth1.ip4 = lib.mkOverride 0 [ ];
-        br0.ip4 = [{ address = "192.168.1.2"; prefixLength = 24; }];
+        eth1.ipv4.addresses = lib.mkOverride 0 [ ];
+        br0.ipv4.addresses = [ { address = "192.168.1.2"; prefixLength = 24; } ];
       };
     };
     client_eth1_rstp = { lib, pkgs, ... }: client_base // {
@@ -54,8 +54,8 @@ in import ./make-test.nix ({ pkgs, lib, ...} :
         rstp = true;
       };
       networking.interfaces = {
-        eth1.ip4 = lib.mkOverride 0 [ ];
-        br0.ip4 = [{ address = "192.168.1.2"; prefixLength = 24; }];
+        eth1.ipv4.addresses = lib.mkOverride 0 [ ];
+        br0.ipv4.addresses =  [ { address = "192.168.1.2"; prefixLength = 24; } ];
       };
     };
   };

@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "0dqjj3mlc28s8ljnph6l086b4j9r5dly4fldq59crycwys72zzai";
   };
 
-  buildInputs = [ fontforge ];
+  nativeBuildInputs = [ fontforge ];
 
   installPhase = ''
     mkdir -p $out/share/fonts/truetype

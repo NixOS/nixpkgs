@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "units-${version}";
-  version = "2.14";
+  version = "2.16";
 
   src = fetchurl {
     url = "mirror://gnu/units/${name}.tar.gz";
-    sha256 = "9d33893d82f3ddd831d5822992007c40bcd0826ae67d3cbc96539951fb0a82e8";
+    sha256 = "11hnp3gcmcc5kci2caxw4hs6m08h2mhqs3xzqq7iafx1ha2ggwyw";
   };
 
   buildInputs = [ readline ];

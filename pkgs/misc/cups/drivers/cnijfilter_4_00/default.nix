@@ -9,7 +9,7 @@
 let arch = 
   if stdenv.system == "x86_64-linux" then "64"
     else if stdenv.system == "i686-linux" then "32"
-    else abort "Unsupported architecture";
+    else throw "Unsupported system ${stdenv.system}";
 
 in stdenv.mkDerivation rec {
   name = "cnijfilter-${version}";

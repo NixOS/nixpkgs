@@ -155,7 +155,7 @@ in
       requires = [ "postgresql.service" ];
       after = [ "postgresql.service" ];
 
-      path = [ cfg.jrePackage ];
+      path = [ cfg.jrePackage pkgs.bash ];
 
       environment = {
         JIRA_USER = cfg.user;

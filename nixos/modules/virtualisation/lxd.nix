@@ -15,42 +15,63 @@ in
 
   options = {
 
-    virtualisation.lxd.enable =
-      mkOption {
+    virtualisation.lxd = {
+      enable = mkOption {
         type = types.bool;
         default = false;
-        description =
-          ''
-            This option enables lxd, a daemon that manages
-            containers. Users in the "lxd" group can interact with
-            the daemon (e.g. to start or stop containers) using the
-            <command>lxc</command> command line tool, among others.
-          '';
+        description = ''
+          This option enables lxd, a daemon that manages
+          containers. Users in the "lxd" group can interact with
+          the daemon (e.g. to start or stop containers) using the
+          <command>lxc</command> command line tool, among others.
+        '';
       };
-
+      zfsSupport = mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          enables lxd to use zfs as a storage for containers.
+          This option is enabled by default if a zfs pool is configured
+          with nixos.
+        '';
+      };
+    };
   };
-
 
   ###### implementation
 
   config = mkIf cfg.enable {
 
-    environment.systemPackages =
-      [ pkgs.lxd ];
+    environment.systemPackages = [ pkgs.lxd ];
 
-    systemd.services.lxd =
-      { description = "LXD Container Management Daemon";
+    security.apparmor = {
+      enable = true;
+      profiles = [
+        "${pkgs.lxc}/etc/apparmor.d/usr.bin.lxc-start"
+        "${pkgs.lxc}/etc/apparmor.d/lxc-containers"
+      ];
+      packages = [ pkgs.lxc ];
+    };
 
-        wantedBy = [ "multi-user.target" ];
-        after = [ "systemd-udev-settle.service" ];
+    systemd.services.lxd = {
+      description = "LXD Container Management Daemon";
 
-        # TODO(wkennington): Add lvm2 and thin-provisioning-tools
-        path = with pkgs; [ acl rsync gnutar xz btrfs-progs gzip dnsmasq squashfsTools iproute iptables ];
+      wantedBy = [ "multi-user.target" ];
+      after = [ "systemd-udev-settle.service" ];
 
-        serviceConfig.ExecStart = "@${pkgs.lxd.bin}/bin/lxd lxd --syslog --group lxd";
-        serviceConfig.Type = "simple";
-        serviceConfig.KillMode = "process"; # when stopping, leave the containers alone
+      path = lib.optional cfg.zfsSupport pkgs.zfs;
+
+      preStart = ''
+        mkdir -m 0755 -p /var/lib/lxc/rootfs
+      '';
+
+      serviceConfig = {
+        ExecStart = "@${pkgs.lxd.bin}/bin/lxd lxd --group lxd";
+        Type = "simple";
+        KillMode = "process"; # when stopping, leave the containers alone
       };
+
+    };
 
     users.extraGroups.lxd.gid = config.ids.gids.lxd;
 
@@ -58,7 +79,5 @@ in
       subUidRanges = [ { startUid = 1000000; count = 65536; } ];
       subGidRanges = [ { startGid = 1000000; count = 65536; } ];
     };
-
   };
-
 }

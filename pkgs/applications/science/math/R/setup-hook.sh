@@ -1,5 +1,7 @@
 addRLibPath () {
-    addToSearchPath R_LIBS_SITE $1/library
+    if [[ -d "$1/library" ]]; then
+        addToSearchPath R_LIBS_SITE "$1/library"
+    fi
 }
 
-envHooks+=(addRLibPath)
+addEnvHooks "$targetOffset" addRLibPath

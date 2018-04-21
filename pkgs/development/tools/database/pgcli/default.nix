@@ -35,6 +35,5 @@ pythonPackages.buildPythonApplication rec {
     '';
     homepage = https://pgcli.com;
     license = licenses.bsd3;
-    maintainers = with maintainers; [ nckx ];
   };
 }

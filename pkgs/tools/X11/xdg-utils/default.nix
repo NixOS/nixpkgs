@@ -1,6 +1,6 @@
 { stdenv, fetchurl, fetchFromGitHub
 , file, libxslt, docbook_xml_dtd_412, docbook_xsl, xmlto
-, w3m, which, gnugrep, gnused, coreutils
+, w3m, which, gnugrep, gnused, coreutils, xset
 , mimiSupport ? false, gawk ? null }:
 
 assert mimiSupport -> gawk != null;
@@ -38,6 +38,7 @@ stdenv.mkDerivation rec {
     file()  { ${file}/bin/file      "$@"; }\
     awk()   { ${gawk}/bin/awk       "$@"; }\
     sort()  { ${coreutils}/bin/sort "$@"; }\
+    xset()  { ${xset}/bin/xset      "$@"; }\
     &#' -i "$out"/bin/*
 
     substituteInPlace $out/bin/xdg-open \
@@ -53,7 +54,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = http://portland.freedesktop.org/wiki/;
+    homepage = https://www.freedesktop.org/wiki/Software/xdg-utils/;
     description = "A set of command line tools that assist applications with a variety of desktop integration tasks";
     license = if mimiSupport then licenses.gpl2 else licenses.free;
     maintainers = [ maintainers.eelco ];

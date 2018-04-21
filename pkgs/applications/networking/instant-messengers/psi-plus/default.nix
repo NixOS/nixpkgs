@@ -5,13 +5,13 @@
 
 stdenv.mkDerivation rec {
   name = "psi-plus-${version}";
-  version = "0.16.575.639";
+  version = "1.2.235";
 
   src = fetchFromGitHub {
     owner = "psi-plus";
     repo = "psi-plus-snapshots";
     rev = "${version}";
-    sha256 = "0mn24y3y4qybw81rjy0hr46y7y96dvwdl6kk61kizwj32z1in8cg";
+    sha256 = "0rc65gs6m3jxg407r99kikdylvrar5mq7x5m66ma604yk5igwg47";
   };
 
   resources = fetchFromGitHub {

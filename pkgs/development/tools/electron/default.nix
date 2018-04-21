@@ -1,14 +1,16 @@
 { stdenv, lib, libXScrnSaver, makeWrapper, fetchurl, unzip, atomEnv }:
 
 let
-  version = "1.8.1";
+  version = "1.8.2";
   name = "electron-${version}";
+
+  throwSystem = throw "Unsupported system: ${stdenv.system}";
 
   meta = with stdenv.lib; {
     description = "Cross platform desktop application shell";
     homepage = https://github.com/electron/electron;
     license = licenses.mit;
-    maintainers = [ maintainers.travisbhartwell ];
+    maintainers = with maintainers; [ travisbhartwell manveru ];
     platforms = [ "x86_64-darwin" "x86_64-linux" "i686-linux" "armv7l-linux" "aarch64-linux" ];
   };
 
@@ -18,25 +20,21 @@ let
     src = {
       i686-linux = fetchurl {
         url = "https://github.com/electron/electron/releases/download/v${version}/electron-v${version}-linux-ia32.zip";
-        sha256 = "0djqlcs4m9n9354idaqcs4cwskq2m3sf9mzvxpp4wy0a93pk78bw";
-        name = "${name}.zip";
+        sha256 = "12q5h6gh9zzhndg6yfka821rblq3l80d2qzqrq4nbq6rlsshjp9d";
       };
       x86_64-linux = fetchurl {
         url = "https://github.com/electron/electron/releases/download/v${version}/electron-v${version}-linux-x64.zip";
-        sha256 = "0as7bgs050wsc9ywzr7f4i2c9dp1ynddcmiblm2b0hdcvw61k9q2";
-        name = "${name}.zip";
+        sha256 = "07ggq9wgfz3z5z0lwzzgs6im0qs83pz0pcfwr0r42zgmwg7j78b8";
       };
       armv7l-linux = fetchurl {
         url = "https://github.com/electron/electron/releases/download/v${version}/electron-v${version}-linux-armv7l.zip";
-        sha256 = "19x9c12kdr3rj39x4kshv3zi132dpnki7vaqrhadsn23q85n56ig";
-        name = "${name}.zip";
+        sha256 = "1b0p5x9zigyd6d8gz2hxc4scllrpnbx1dzzwlsvw6ilqbj1ypc7i";
       };
       aarch64-linux = fetchurl {
         url = "https://github.com/electron/electron/releases/download/v${version}/electron-v${version}-linux-arm64.zip";
-        sha256 = "12w1ajj94rqwh4906dzswh3vhs3micn80jvd015qxwss3n4n1lsz";
-        name = "${name}.zip";
+        sha256 = "0k4np2d4y15x1qfay8y9m8v9y223vdpbq5fdxa3ywbbyf8j361zd";
       };
-    }.${stdenv.system};
+    }.${stdenv.system} or throwSystem;
 
     buildInputs = [ unzip makeWrapper ];
 
@@ -62,8 +60,7 @@ let
 
     src = fetchurl {
       url = "https://github.com/electron/electron/releases/download/v${version}/electron-v${version}-darwin-x64.zip";
-      sha256 = "0r0zbiqblwkcrljkljkj7zvfwr078bfgd38lhb1ivbj73fri17ir";
-      name = "${name}.zip";
+      sha256 = "0pq587vr1i87jdwcpbf6n136i9dp6i39dp5s95kihnm9qglxr42b";
     };
 
     buildInputs = [ unzip ];

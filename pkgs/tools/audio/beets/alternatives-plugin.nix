@@ -11,6 +11,8 @@ pythonPackages.buildPythonApplication rec {
     sha256 = "10za6h59pxa13y8i4amqhc6392csml0dl771lssv6b6a98kamsy7";
   };
 
+  patches = [ ./alternatives-beets-1.4.6.patch ];
+
   postPatch = ''
     sed -i -e '/install_requires/,/\]/{/beets/d}' setup.py
     sed -i -e '/test_suite/d' setup.py

@@ -22,6 +22,15 @@ options = {
 };
 </programlisting>
 
+The attribute names within the <replaceable>name</replaceable>
+attribute path must be camel cased in general but should, as an
+exception, match the
+<link
+xlink:href="https://nixos.org/nixpkgs/manual/#sec-package-naming">
+package attribute name</link> when referencing a Nixpkgs package. For
+example, the option <varname>services.nix-serve.bindAddress</varname>
+references the <varname>nix-serve</varname> Nixpkgs package.
+
 </para>
 
 <para>The function <varname>mkOption</varname> accepts the following arguments.

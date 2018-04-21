@@ -23,9 +23,13 @@ stdenv.mkDerivation rec {
     )
   '';
 
+  # `make -f lib/Interface/CMakeFiles/cppinterface.dir/build.make lib/Interface/CMakeFiles/cppinterface.dir/cpp_interface.cpp.o`:
+  # include/stp/AST/UsefulDefs.h:41:29: fatal error: stp/AST/ASTKind.h: No such file or directory
+  enableParallelBuilding = false;
+
   meta = with stdenv.lib; {
     description = "Simple Theorem Prover";
-    maintainers = with maintainers; [ mornfall ];
+    maintainers = with maintainers; [ ];
     platforms = platforms.linux;
     license = licenses.mit;
   };

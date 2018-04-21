@@ -13,6 +13,12 @@ stdenv.mkDerivation rec {
     sha256 = "1wsfzy0iia0c89wnx1ilzw54wqcmlp2nz8mkpvc393z0zagrx48q";
   };
 
+  prePatch = ''
+    substituteInPlace window_vector.cc --replace \
+      "insert( 0U, 1," \
+      "insert( 0U, 1U,"
+  '';
+
   nativeBuildInputs = [ lzip ];
   buildInputs = [ ncurses ];
 

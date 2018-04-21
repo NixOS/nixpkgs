@@ -14,6 +14,10 @@ stdenv.mkDerivation rec {
   buildInputs = [ pcre ];
   nativeBuildInputs = [ cmake doxygen ];
 
+  # Multiple doxygen can not generate man pages in the same base directory in
+  # parallel: https://bugzilla.gnome.org/show_bug.cgi?id=791153
+  enableParallelBuilding = false;
+
   meta = with stdenv.lib; {
     homepage = http://editorconfig.org/;
     description = "EditorConfig core library written in C";

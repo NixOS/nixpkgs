@@ -1,6 +1,6 @@
 { stdenv, fetchurl, pkgconfig, intltool, makeWrapper
 , glib, gstreamer, gst-plugins-base, gtk
-, libxfce4util, libxfce4ui, xfce4panel, xfconf, libunique ? null
+, libxfce4util, libxfce4ui, xfce4-panel, xfconf, libunique ? null
 , pulseaudioSupport ? false, gst-plugins-good
 }:
 
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
 
   buildInputs =
     [ pkgconfig intltool glib gstreamer gtk
-      libxfce4util libxfce4ui xfce4panel xfconf libunique makeWrapper
+      libxfce4util libxfce4ui xfce4-panel xfconf libunique makeWrapper
     ] ++ gst_plugins;
 
   postInstall =

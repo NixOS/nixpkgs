@@ -3,15 +3,15 @@
 let param =
   {
     "8.6" = {
-      version = "1.0-beta";
-      rev = "v1.0-beta";
-      sha256 = "00pzlh5ij7s2hmpvimq1hjq3fjf0nrk997l3dl51kigx5r5dnvxd";
+      version = "1.0";
+      rev = "v1.0";
+      sha256 = "19ylw9v9g35607w4hm86j7mmkghh07hmkc1ls5bqlz3dizh5q4pj";
     };
 
     "8.7" = {
-      version = "cdf8c53";
-      rev = "cdf8c53f1f2274b29506f53bff476409ce717dc5";
-      sha256 = "0ipjzmviwnp0ippbkn03ld4j4j0dkzmyidmj4dvpdvymrkv31ai1";
+      version = "1.0";
+      rev = "v1.0-8.7";
+      sha256 = "1bavg4zl1xn0jqrdq8iw7xqzdvdf39ligj9saz5m9c507zri952h";
     };
 
   }."${coq.coq-version}"
@@ -40,6 +40,10 @@ stdenv.mkDerivation rec {
     description = "A plugin for Coq to add dependent pattern-matching";
     maintainers = with maintainers; [ jwiegley ];
     platforms = coq.meta.platforms;
+  };
+
+  passthru = {
+    compatibleCoqVersions = v: builtins.elem v [ "8.6" "8.7" ];
   };
 
 }

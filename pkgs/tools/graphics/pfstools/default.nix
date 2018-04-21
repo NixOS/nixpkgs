@@ -1,12 +1,16 @@
-{ stdenv, fetchurl, cmake, pkgconfig, openexr, ilmbase, zlib, imagemagick, mesa, freeglut, fftwFloat, fftw, gsl, libexif, perl, opencv, qt4 }:
+{ stdenv, fetchurl, cmake, pkgconfig
+, openexr, zlib, imagemagick, libGLU_combined, freeglut, fftwFloat
+, fftw, gsl, libexif, perl, opencv, qt4
+}:
 
 stdenv.mkDerivation rec {
-  name = "pfstools";
-  version = "2.0.5";
+  name = "${pname}-${version}";
+  pname = "pfstools";
+  version = "2.1.0";
 
   src = fetchurl {
-    url = "mirror://sourceforge/${name}/${version}/${name}-${version}.tgz";
-    sha256 = "1fyc2c7jzr7k797c2dqyyvapzc3szxwcp48r382yxz2yq558xgd9";
+    url = "mirror://sourceforge/${pname}/${version}/${name}.tgz";
+    sha256 = "04rlb705gmdiphcybf9dyr0d5lla2cfs3c308zz37x0vwi445six";
   };
 
   outputs = [ "out" "dev" "man"];
@@ -15,9 +19,11 @@ stdenv.mkDerivation rec {
     -DWITH_MATLAB=false 
   '';
 
-  buildInputs = [ openexr zlib imagemagick mesa freeglut fftwFloat fftw gsl libexif perl opencv qt4 ];
-
   nativeBuildInputs = [ cmake pkgconfig ];
+  buildInputs = [
+    openexr zlib imagemagick libGLU_combined freeglut fftwFloat
+    fftw gsl libexif perl opencv qt4
+  ];
 
   patches = [ ./threads.patch ./pfstools.patch ];
 

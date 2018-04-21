@@ -25,14 +25,14 @@ let
   loginCfgFile = optional cfg.ssh.enable
     { source = pkgs.writeText "login_duo.conf" configFile;
       mode   = "0600";
-      uid    = config.ids.uids.sshd;
+      user   = "sshd";
       target = "duo/login_duo.conf";
     };
 
   pamCfgFile = optional cfg.pam.enable
     { source = pkgs.writeText "pam_duo.conf" configFile;
       mode   = "0600";
-      uid    = config.ids.uids.sshd;
+      user   = "sshd";
       target = "duo/pam_duo.conf";
     };
 in

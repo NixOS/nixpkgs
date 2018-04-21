@@ -11,18 +11,17 @@ stdenv.mkDerivation rec {
     sha256 = "1x7r8sjmdqlqjz0xfiwdyrqpgaj5yrvrgb28ivgpvnxgar5qv6m2";
   };
 
+  patches = [ ./disable-benchmark.patch ];
+
   outputs = [ "out" "dev" ];
 
   nativeBuildInputs = [ cmake ];
 
-  # -DNDEBUG for speed
-  configureFlags = [ "CXXFLAGS=-DNDEBUG" ];
+  cmakeFlags = [ "-DBUILD_SHARED_LIBS=ON" "-DCMAKE_SKIP_BUILD_RPATH=OFF" ];
 
-  # SIGILL on darwin
-  doCheck = !stdenv.isDarwin;
-  checkPhase = ''
-    (cd .. && ./build/snappy_unittest)
-  '';
+  checkTarget = "test";
+
+  doCheck = true;
 
   meta = with stdenv.lib; {
     homepage = https://google.github.io/snappy/;

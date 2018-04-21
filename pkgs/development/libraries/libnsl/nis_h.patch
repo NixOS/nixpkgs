@@ -1,0 +1,45 @@
+--- a/src/rpcsvc/nis.h
++++ b/src/rpcsvc/nis.h
+@@ -32,6 +32,7 @@
+ #ifndef _RPCSVC_NIS_H
+ #define _RPCSVC_NIS_H 1
+ 
++#include <sys/cdefs.h>
+ #include <features.h>
+ #include <rpc/rpc.h>
+ #include <rpcsvc/nis_tags.h>
+@@ -56,6 +57,34 @@
+  *                                              <kukuk@suse.de>
+  */
+ 
++#ifndef rawmemchr
++#define rawmemchr(s,c) memchr((s),(size_t)-1,(c))
++#endif
++
++#ifndef __asprintf
++#define __asprintf asprintf
++#endif
++
++#ifndef __mempcpy
++#define __mempcpy mempcpy
++#endif
++
++#ifndef __strtok_r
++#define __strtok_r strtok_r
++#endif
++
++#ifndef __always_inline
++#define __always_inline __attribute__((__always_inline__))
++#endif
++
++#ifndef TEMP_FAILURE_RETRY
++#define TEMP_FAILURE_RETRY(exp) ({ \
++typeof (exp) _rc; \
++ do { \
++  _rc = (exp); \
++ } while (_rc == -1 && errno == EINTR); \
++ _rc; })
++#endif
+ 
+ #ifndef __nis_object_h
+ #define __nis_object_h

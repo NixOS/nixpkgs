@@ -6,12 +6,12 @@ let
   cfg = config.services.kubernetes.addons.dashboard;
 
   name = "gcr.io/google_containers/kubernetes-dashboard-amd64";
-	version = "v1.6.3";
+	version = "v1.8.2";
 
   image = pkgs.dockerTools.pullImage {
     imageName = name;
     imageTag = version;
-    sha256 = "1sf54d96nkgic9hir9c6p14gw24ns1k5d5a0r1sg414kjrvic0b4";
+    sha256 = "11h0fz3wxp0f10fsyqaxjm7l2qg7xws50dv5iwlck5gb1fjmajad";
   };
 in {
   options.services.kubernetes.addons.dashboard = {

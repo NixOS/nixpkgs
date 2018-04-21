@@ -79,7 +79,7 @@ mkDerivation {
     mkdir -p "$out/dev-envs" "$out/nix-support" "$out/bin"
     s="$out/nix-support/setup-new-modified"
     # shut some warning up.., do not use set -e
-    sed -e 's@set -e@@' \
+    sed -e 's@set -eu@@' \
         -e 's@assertEnvExists\s\+NIX_STORE@:@' \
         -e 's@trap.*@@' \
         -e '1i initialPath="${toString initialPath}"' \

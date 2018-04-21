@@ -1,4 +1,4 @@
-{stdenv, fetchurl, freetype, mesa}:
+{stdenv, fetchurl, freetype, libGLU_combined}:
 
 let
   name = "ftgl-2.1.3-rc5";
@@ -11,7 +11,7 @@ stdenv.mkDerivation {
     sha256 = "0nsn4s6vnv5xcgxcw6q031amvh2zfj2smy1r5mbnjj2548hxcn2l";
   };
 
-  buildInputs = [ freetype mesa ];
+  buildInputs = [ freetype libGLU_combined ];
 
   enableParallelBuilding = true;
 

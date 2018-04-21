@@ -11,13 +11,13 @@ diff --git a/utils/build-presets.ini b/utils/build-presets.ini
 index e6b0af3581..1095cbaab7 100644
 --- a/utils/build-presets.ini
 +++ b/utils/build-presets.ini
-@@ -692,7 +692,7 @@ install-lldb
+@@ -708,7 +708,7 @@ install-lldb
  install-llbuild
  install-swiftpm
  install-xctest
 -install-prefix=/usr
 +install-prefix=%(install_prefix)s
- swift-install-components=autolink-driver;compiler;clang-builtin-headers;stdlib;swift-remote-mirror;sdk-overlay;license
+ swift-install-components=autolink-driver;compiler;clang-builtin-headers;stdlib;swift-remote-mirror;sdk-overlay;license;sourcekit-inproc
  build-swift-static-stdlib
  build-swift-static-sdk-overlay
 -- 

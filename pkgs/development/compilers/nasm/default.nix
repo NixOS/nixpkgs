@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "nasm-${version}";
-  version = "2.13.02";
+  version = "2.13.03";
 
   src = fetchurl {
     url = "http://www.nasm.us/pub/nasm/releasebuilds/${version}/${name}.tar.bz2";
-    sha256 = "1gmvjckxvkmx1kbglgrakc98qhy55xlqlk5flrdihz5yhv92hc4d";
+    sha256 = "04bh736zfj3xy5ihh1whshpjxsisv7hqkz954clzdw6kg93qdv33";
   };
 
   nativeBuildInputs = [ perl ];

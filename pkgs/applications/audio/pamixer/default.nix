@@ -1,14 +1,21 @@
-{ stdenv, fetchurl, boost, libpulseaudio }:
+{ stdenv, fetchFromGitHub, fetchpatch, boost, libpulseaudio }:
 
 stdenv.mkDerivation rec {
-
   name = "pamixer-${version}";
-  version = "1.3";
+  version = "1.3.1";
 
-  src = fetchurl {
-    url = "https://github.com/cdemoulins/pamixer/archive/${version}.tar.gz";
-    sha256 = "091676ww4jbf4jr728gjfk7fkd5nisy70mr6f3s1p7n05hjpmfjx";
+  src = fetchFromGitHub {
+    owner = "cdemoulins";
+    repo = "pamixer";
+    rev = version;
+    sha256 = "15zs2x4hnrpxphqn542b6qqm4ymvhkvbcfyffy69d6cki51chzzw";
   };
+
+  # Remove after https://github.com/cdemoulins/pamixer/pull/16 gets fixed
+  patches = [(fetchpatch {
+    url = "https://github.com/oxij/pamixer/commit/dea1cd967aa837940e5c0b04ef7ebc47a7a93d63.patch";
+    sha256 = "0s77xmsiwywyyp6f4bjxg1sqdgms1k5fiy7na6ws0aswshfnzfjb";
+  })];
 
   buildInputs = [ boost libpulseaudio ];
 

@@ -4,6 +4,7 @@
 , leveldb, glog, perf, utillinux, libnl, iproute, openssl, libevent
 , ethtool, coreutils, which, iptables, maven
 , bash, autoreconfHook
+, withJava ? !stdenv.isDarwin
 }:
 
 let
@@ -23,7 +24,7 @@ let
   });
 
 in stdenv.mkDerivation rec {
-  version = "1.4.0";
+  version = "1.4.1";
   name = "mesos-${version}";
 
   enableParallelBuilding = true;
@@ -31,7 +32,7 @@ in stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://apache/mesos/${version}/${name}.tar.gz";
-    sha256 = "0c08kd226nrjwm2z2drpq4vi97h9r8b1xkdvkgh1114fxg7cyvys";
+    sha256 = "1c7l0rim9ija913gpppz2mcms08ywyqhlzbbspqsi7wwfdd7jwsr";
   };
 
   patches = [
@@ -46,11 +47,13 @@ in stdenv.mkDerivation rec {
     autoreconfHook
   ];
   buildInputs = [
-    makeWrapper curl sasl jdk
+    makeWrapper curl sasl
     python wrapPython boto setuptools leveldb
-    subversion apr glog openssl libevent maven
+    subversion apr glog openssl libevent
   ] ++ lib.optionals stdenv.isLinux [
     libnl
+  ] ++ lib.optionals withJava [
+    jdk maven
   ];
 
   propagatedBuildInputs = [
@@ -181,6 +184,7 @@ in stdenv.mkDerivation rec {
     "--with-libevent=${libevent.dev}"
     "--with-protobuf=${pythonProtobuf.protobuf}"
     "PROTOBUF_JAR=${mavenRepo}/com/google/protobuf/protobuf-java/3.3.0/protobuf-java-3.3.0.jar"
+    (if withJava then "--enable-java" else "--disable-java")
   ] ++ lib.optionals stdenv.isLinux [
     "--with-network-isolator"
     "--with-nl=${libnl.dev}"
@@ -189,16 +193,6 @@ in stdenv.mkDerivation rec {
   postInstall = ''
     rm -rf $out/var
     rm $out/bin/*.sh
-
-    mkdir -p $out/share/java
-    cp src/java/target/mesos-*.jar $out/share/java
-
-    MESOS_NATIVE_JAVA_LIBRARY=$out/lib/libmesos${stdenv.hostPlatform.extensions.sharedLibrary}
-
-    mkdir -p $out/nix-support
-    touch $out/nix-support/setup-hook
-    echo "export MESOS_NATIVE_JAVA_LIBRARY=$MESOS_NATIVE_JAVA_LIBRARY" >> $out/nix-support/setup-hook
-    echo "export MESOS_NATIVE_LIBRARY=$MESOS_NATIVE_JAVA_LIBRARY" >> $out/nix-support/setup-hook
 
     # Inspired by: pkgs/development/python-modules/generic/default.nix
     pushd src/python
@@ -218,6 +212,16 @@ in stdenv.mkDerivation rec {
       --old-and-unmanageable \
       --prefix="$out"
     popd
+  '' + stdenv.lib.optionalString withJava ''
+    mkdir -p $out/share/java
+    cp src/java/target/mesos-*.jar $out/share/java
+
+    MESOS_NATIVE_JAVA_LIBRARY=$out/lib/libmesos${stdenv.hostPlatform.extensions.sharedLibrary}
+
+    mkdir -p $out/nix-support
+    touch $out/nix-support/setup-hook
+    echo "export MESOS_NATIVE_JAVA_LIBRARY=$MESOS_NATIVE_JAVA_LIBRARY" >> $out/nix-support/setup-hook
+    echo "export MESOS_NATIVE_LIBRARY=$MESOS_NATIVE_JAVA_LIBRARY" >> $out/nix-support/setup-hook
   '';
 
   postFixup = ''
@@ -248,6 +252,6 @@ in stdenv.mkDerivation rec {
     license     = licenses.asl20;
     description = "A cluster manager that provides efficient resource isolation and sharing across distributed applications, or frameworks";
     maintainers = with maintainers; [ cstrahan kevincox offline ];
-    platforms   = platforms.linux;
+    platforms   = platforms.unix;
   };
 }

@@ -13,8 +13,7 @@
 , python
 , mkDerivation
 , stdenv
-, pythonOlder
-, isPy35
+, isPy3k
 }:
 let
   compyte = import ./compyte.nix {
@@ -35,7 +34,7 @@ buildPythonPackage rec {
     ${python.interpreter} configure.py --boost-inc-dir=${boost.dev}/include \
                           --boost-lib-dir=${boost}/lib \
                           --no-use-shipped-boost \
-                          --boost-python-libname=boost_python
+                          --boost-python-libname=boost_python${stdenv.lib.optionalString isPy3k "3"}
   '';
 
   postInstall = ''

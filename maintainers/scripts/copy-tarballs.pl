@@ -1,5 +1,5 @@
 #! /usr/bin/env nix-shell
-#! nix-shell -i perl -p perl perlPackages.NetAmazonS3 perlPackages.FileSlurp nixUnstable
+#! nix-shell -i perl -p perl perlPackages.NetAmazonS3 perlPackages.FileSlurp nixUnstable nixUnstable.perl-bindings
 
 # This command uploads tarballs to tarballs.nixos.org, the
 # content-addressed cache used by fetchurl as a fallback for when
@@ -59,6 +59,7 @@ my $s3 = Net::Amazon::S3->new(
     { aws_access_key_id     => $aws_access_key_id,
       aws_secret_access_key => $aws_secret_access_key,
       retry                 => 1,
+      host                  => "s3-eu-west-1.amazonaws.com",
     });
 
 my $bucket = $s3->bucket("nixpkgs-tarballs") or die;
@@ -99,7 +100,10 @@ sub uploadFile {
     sub redirect {
         my ($name, $dest) = @_;
         #print STDERR "linking $name to $dest...\n";
-        $bucket->add_key($name, "", { 'x-amz-website-redirect-location' => "/" . $dest })
+        $bucket->add_key($name, "", {
+	    'x-amz-website-redirect-location' => "/" . $dest,
+	    'x-amz-acl' => "public-read"
+        })
             or die "failed to create redirect from $name to $dest\n";
         $cache{$name} = 1;
     }
@@ -111,7 +115,10 @@ sub uploadFile {
 
     # Upload the file as sha512/<hash-in-base-16>.
     print STDERR "uploading $fn to $mainKey...\n";
-    $bucket->add_key_filename($mainKey, $fn, { 'x-amz-meta-original-name' => $name })
+    $bucket->add_key_filename($mainKey, $fn, {
+	'x-amz-meta-original-name' => $name,
+	'x-amz-acl' => "public-read"
+    })
         or die "failed to upload $fn to $mainKey\n";
     $cache{$mainKey} = 1;
 }

@@ -1,0 +1,43 @@
+diff --git a/libinput-gestures b/libinput-gestures
+index f337ba3..5f5b05d 100755
+--- a/libinput-gestures
++++ b/libinput-gestures
+@@ -75,17 +75,13 @@ def get_libinput_vers():
+     'Return the libinput installed version number string'
+     # Try to use newer libinput interface then fall back to old
+     # (depreciated) interface.
+-    res = run(('libinput', '--version'), check=False)
++    res = run(('@libinput@', '--version'), check=False)
+     return res.strip() if res else run(('libinput-list-devices', '--version'))
+ 
+ # Libinput changed the way in which it's utilities are called
+ libvers = get_libinput_vers()
+-if Version(libvers) >= Version('1.8'):
+-    cmd_debug_events = 'libinput debug-events'
+-    cmd_list_devices = 'libinput list-devices'
+-else:
+-    cmd_debug_events = 'libinput-debug-events'
+-    cmd_list_devices = 'libinput-list-devices'
++cmd_debug_events = '@libinput@ debug-events'
++cmd_list_devices = '@libinput@ list-devices'
+ 
+ def get_devices_list():
+     'Get list of devices and their attributes (as a dict) from libinput'
+@@ -187,7 +183,7 @@ class COMMAND_internal(COMMAND):
+ 
+     def run(self):
+         'Get list of current workspaces and select next one'
+-        stdout = run(('wmctrl', '-d'), check=False)
++        stdout = run(('@wmctrl@', '-d'), check=False)
+         if not stdout:
+             # This command can fail on GNOME when you have only a single
+             # dynamic workspace using Xorg (probably a GNOME bug) so let's
+@@ -220,7 +216,7 @@ class COMMAND_internal(COMMAND):
+ 
+         # Switch to desired workspace
+         if index >= minindex and index < maxindex:
+-            run(('wmctrl', '-s', str(index)))
++            run(('@wmctrl@', '-s', str(index)))
+ 
+ # Table of gesture handlers
+ handlers = OrderedDict()

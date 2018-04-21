@@ -1,8 +1,8 @@
 { fetchurl, stdenv, python2, makeWrapper, lib
-, mesa, SDL, freeglut, ghostscript, pdftk, dejavu_fonts }:
+, libGLU_combined, SDL, freeglut, ghostscript, pdftk, dejavu_fonts }:
 
 let
-  version = "0.11.1";
+  version = "0.12.0";
   pythonEnv = python2.withPackages (ps: with ps; [pyopengl pygame pillow]);
 in stdenv.mkDerivation {
     # This project was formerly known as KeyJNote.
@@ -12,7 +12,7 @@ in stdenv.mkDerivation {
 
     src = fetchurl {
       url = "mirror://sourceforge/impressive/Impressive-${version}.tar.gz";
-      sha256 = "0b3rmy6acp2vmf5nill3aknxvr9a5aawk1vnphkah61anxp62gsr";
+      sha256 = "0zaqq3yvd296mfr5bxpj2hqlk7vrb0rsbgd4dc1l5ag46giqvivx";
     };
 
     buildInputs = [ makeWrapper pythonEnv ];

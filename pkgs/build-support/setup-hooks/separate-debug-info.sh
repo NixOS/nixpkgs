@@ -19,7 +19,7 @@ _separateDebugInfo() {
         if ! isELF "$i"; then continue; fi
 
         # Extract the Build ID. FIXME: there's probably a cleaner way.
-        local id="$(readelf -n "$i" | sed 's/.*Build ID: \([0-9a-f]*\).*/\1/; t; d')"
+        local id="$($READELF -n "$i" | sed 's/.*Build ID: \([0-9a-f]*\).*/\1/; t; d')"
         if [ "${#id}" != 40 ]; then
             echo "could not find build ID of $i, skipping" >&2
             continue
@@ -28,8 +28,8 @@ _separateDebugInfo() {
         # Extract the debug info.
         header "separating debug info from $i (build ID $id)"
         mkdir -p "$dst/${id:0:2}"
-        objcopy --only-keep-debug "$i" "$dst/${id:0:2}/${id:2}.debug"
-        strip --strip-debug "$i"
+        $OBJCOPY --only-keep-debug "$i" "$dst/${id:0:2}/${id:2}.debug"
+        $STRIP --strip-debug "$i"
 
         # Also a create a symlink <original-name>.debug.
         ln -sfn ".build-id/${id:0:2}/${id:2}.debug" "$dst/../$(basename "$i")"

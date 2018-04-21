@@ -4,11 +4,11 @@
 
 stdenv.mkDerivation rec {
   name = "apache-storm-" + version;
-  version = "1.0.1";
+  version = "1.2.1";
   src = fetchurl {
     url =
     "mirror://apache/storm/${name}/${name}.tar.gz";
-    sha256 = "1gr00s0fhf8ci0faf3x5dinkiw9mlnc1x1vqki8cfszvij6w0x0m";
+    sha256 = "177dqgbviagrpvalg8h67mwiwwgmiqsg0hh97hcqqcjg71ypnjkv";
   };
 
   buildInputs = [ zip unzip jzmq ];
@@ -19,8 +19,7 @@ stdenv.mkDerivation rec {
     mv examples $out/share/${name}/.
 
     rm -f lib/jzmq* || exit 1
-    mv lib $out/.
-    mv external extlib* $out/lib/.
+    mv external extlib* lib $out/.
     mv conf bin $out/.
     mv log4j2 $out/conf/.
   '';

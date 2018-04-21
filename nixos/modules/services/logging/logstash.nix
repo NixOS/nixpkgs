@@ -103,7 +103,7 @@ in
 
       listenAddress = mkOption {
         type = types.str;
-        default = "0.0.0.0";
+        default = "127.0.0.1";
         description = "Address on which to start webserver.";
       };
 

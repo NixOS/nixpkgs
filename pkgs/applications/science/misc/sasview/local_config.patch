@@ -1,0 +1,10 @@
+--- a/src/sas/_config.py
++++ b/src/sas/_config.py
+@@ -70,2 +70,2 @@
+-        logger.critical("Error loading %s: %s", path, exc)
+-        sys.exit()
++        import sas.sasview.local_config
++        return sas.sasview.local_config
+-- 
+2.15.0
+

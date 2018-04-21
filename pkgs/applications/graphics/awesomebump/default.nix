@@ -15,6 +15,7 @@ let
     name = "qtnproperty";
     inherit src;
     sourceRoot = "AwesomeBump/Sources/utils/QtnProperty";
+    patches = [ ./qtnproperty-parallel-building.patch ];
     buildInputs = [ qtscript qtbase qtdeclarative ];
     nativeBuildInputs = [ qmake flex bison ];
     postInstall = ''
@@ -45,6 +46,10 @@ in stdenv.mkDerivation rec {
     makeWrapper $d/AwesomeBump $out/bin/AwesomeBump \
         --run "cd $d"
   '';
+
+  # $ cd Sources; qmake; make ../workdir/linux-g++-dgb-gl4/obj/glwidget.o
+  # fatal error: properties/ImageProperties.peg.h: No such file or directory
+  enableParallelBuilding = false;
 
   meta = {
     homepage = https://github.com/kmkolasinski/AwesomeBump;

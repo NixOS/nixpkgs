@@ -14,23 +14,19 @@ let
         sha256 = "18clfpw03g8dxm61bmdkmccyaxir3gnq451z6xqa2ilm3j820aa5";
       });
 in
-{
+rec {
   # Policy: use the highest stable version as the default (on our master).
   stable = generic {
-    version = "387.22";
-    sha256_32bit = "16v4ljq07hs1xw6amc7cmddvmmmd3swli3b617xs8f3qcw54ym1r";
-    sha256_64bit = "1i0fmzsv4bkfxaw2wnnhj2z64gdyqd6xvxrsq7zj7gq7crcd6sma";
-    settingsSha256 = "0wszyfj9hcib7dcfin22nsrfsm1mb4rq6ha5fma7sq68p175j1yk";
-    persistencedSha256 = "0wrkmw8gw780vcl0s0d0vd8niaf741ji5sggxxqb1aa1w61rjf0d";
+    version = "390.48";
+    sha256_32bit = "1y6n2hfz9vd0h7gd31fgxcl76s5pjf8afwqyq5slqpcxpd78j5ai";
+    sha256_64bit = "16a3blvizcksmaxr644s857yanw3i3vcvqvn7qnwbsbqpmxga09c";
+    settingsSha256 = "058xaiw5g0kxrvc3lvy4424fqbjkvmsznj2v73cgbm25i1m83krl";
+    persistencedSha256 = "0y86bhzl42lqyrbibqzf8a8yd49zbq3ryb78vgsl13i44f9sl79k";
+
+    patches = [ ./fix_missing_symbol.patch ];
   };
 
-  beta = generic {
-    version = "381.22";
-    sha256_32bit = "024x3c6hrivg2bkbzv1xd0585hvpa2kbn1y2gwvca7c73kpdczbv";
-    sha256_64bit = "13fj9ndy5rmh410d0vi2b0crfl7rbsm6rn7cwms0frdzkyhshghs";
-    settingsSha256 = "1gls187zfd201b29qfvwvqvl5gvp5wl9lq966vd28crwqh174jrh";
-    persistencedSha256 = "08315rb9l932fgvy758an5vh3jgks0qc4g36xip4l32pkxd9k963";
-  };
+  beta = stable; # not enough interest to maintain beta ATM
 
 
   legacy_340 = generic {
@@ -52,12 +48,13 @@ in
     persistencedSha256 = null;
     useGLVND = false;
     useProfiles = false;
+    settings32Bit = true;
 
     prePatch = let
       debPatches = fetchurl {
         url = "mirror://debian/pool/non-free/n/nvidia-graphics-drivers-legacy-304xx/"
-            + "nvidia-graphics-drivers-legacy-304xx_304.135-2.debian.tar.xz";
-        sha256 = "0mhji0ssn7075q5a650idigs48kzf11pzj2ca2n07rwxg3vj6pdr";
+            + "nvidia-graphics-drivers-legacy-304xx_304.137-5.debian.tar.xz";
+        sha256 = "0n8512mfcnvklfbg8gv4lzbkm3z6nncwj6ix2b8ngdkmc04f3b6l";
       };
       prefix = "debian/module/debian/patches";
       applyPatches = pnames: if pnames == [] then null else
@@ -69,6 +66,4 @@ in
     in applyPatches [ "fix-typos" ];
     patches = maybePatch_drm_legacy;
   };
-
-  legacy_173 = callPackage ./legacy173.nix { };
 }

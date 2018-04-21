@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "liblscp-${version}";
-  version = "0.5.8";
+  version = "0.6.0";
 
   src = fetchurl {
-    url = "http://download.linuxsampler.org/packages/${name}.tar.gz";
-    sha256 = "00cfafkw1n80sdjwm9zdsg5vx287wqpgpbajd3zmiz415wzr84dn";
+    url = "https://download.linuxsampler.org/packages/${name}.tar.gz";
+    sha256 = "1rl7ssdzj0z3658yvdijmb27n2lcwmplx4qxg5mwrm07pvs7i75k";
   };
 
   nativeBuildInputs = [ autoconf automake libtool pkgconfig ];

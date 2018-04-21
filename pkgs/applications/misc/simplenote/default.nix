@@ -1,25 +1,26 @@
 { fetchurl, stdenv, lib, zlib, glib, alsaLib, dbus, gtk2, atk, pango, freetype, fontconfig
-, libgnome_keyring3, gdk_pixbuf, gvfs, cairo, cups, expat, libgpgerror, nspr
+, libgnome-keyring3, gdk_pixbuf, gvfs, cairo, cups, expat, libgpgerror, nspr
 , nss, xorg, libcap, systemd, libnotify ,libXScrnSaver, gnome3 }:
 
  stdenv.mkDerivation rec {
 
   name = "simplenote-${pkgver}";
-  pkgver = "1.0.6";
+  pkgver = "1.1.3";
 
   src = fetchurl {
-    url = "https://github.com/Automattic/simplenote-electron/releases/download/v${pkgver}/Simplenote-linux-x64.${pkgver}.tar.gz";
-    sha256 = "18wj880iw92yd57w781dqaj7iv9j3bqhyh2cbikqrl4m5w9xkla8";
+    url = "https://github.com/Automattic/simplenote-electron/releases/download/v${pkgver}/Simplenote-linux-${pkgver}.tar.gz";
+    sha256 = "1z92yyjmg3bgfqfdpnysf98h9hhhnqzdqqigwlmdmn3d7fy49kcf";
   };
 
   buildCommand = let
 
     packages = [
-      stdenv.cc.cc zlib glib dbus gtk2 atk pango freetype libgnome_keyring3
+      stdenv.cc.cc zlib glib dbus gtk2 atk pango freetype libgnome-keyring3
       fontconfig gdk_pixbuf cairo cups expat libgpgerror alsaLib nspr nss
       xorg.libXrender xorg.libX11 xorg.libXext xorg.libXdamage xorg.libXtst
       xorg.libXcomposite xorg.libXi xorg.libXfixes xorg.libXrandr
       xorg.libXcursor libcap systemd libnotify libXScrnSaver gnome3.gconf
+      xorg.libxcb
     ];
 
     libPathNative = lib.makeLibraryPath packages;

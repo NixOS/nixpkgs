@@ -3,10 +3,10 @@
 , curl, tzdata, gdb, darwin
 , callPackage
 , bootstrapVersion ? false
-, version ? "2.075.1"
-, dmdSha256 ? "0kq6r8rcghvzk5jcphg89l85rg734s29bssd2rcw3fygx0k9a9k5"
-, druntimeSha256 ? "0idn2v1lmp7hl637g3i7pdfj9mjk4sclkz4cm77nl8873k2fhk8j"
-, phobosSha256 ? "1a7q5fd15yspgs5plxgx54jyrcwgzlyw3rahmz04jd2s5h56dj04"
+, version ? "2.079.0"
+, dmdSha256 ? "1k6cky71pqnss6h6391p1ich2mjs598f5fda018aygnxg87qgh4y"
+, druntimeSha256 ? "183pqygj5w4105czs5kswyjn9mrcybx3wmkynz3in0m3ylzzjmvl"
+, phobosSha256 ? "0y9i86ggmf41ww2xk2bsrlsv9b1blj5dbyan6q6r6xp8dmgrd79w"
 }:
 
 let
@@ -80,17 +80,6 @@ let
       "phobos/std/datetime/timezone.d";
 
     phobosPatches = ''
-        substituteInPlace ${datetimePath} \
-            --replace "import core.time;" "import core.time;import std.path;"
-
-        substituteInPlace ${datetimePath} \
-            --replace "tzName == \"leapseconds\"" "baseName(tzName) == \"leapseconds\""
-
-        # Ugly hack to fix the hardcoded path to zoneinfo in the source file.
-        # https://issues.dlang.org/show_bug.cgi?id=15391
-        substituteInPlace ${datetimePath} \
-            --replace /usr/share/zoneinfo/ ${tzdata}/share/zoneinfo/
-
         # Ugly hack so the dlopen call has a chance to succeed.
         # https://issues.dlang.org/show_bug.cgi?id=15391
         substituteInPlace phobos/std/net/curl.d \
@@ -102,16 +91,30 @@ let
 
     ''
 
+    + stdenv.lib.optionalString (!bootstrapVersion) ''
+	# Can be removed when https://github.com/dlang/phobos/pull/6224 is included.
+        substituteInPlace ${datetimePath} \
+            --replace "foreach (DirEntry de; dirEntries(tzDatabaseDir, SpanMode.depth))" "import std.path : baseName; foreach (DirEntry de; dirEntries(tzDatabaseDir, SpanMode.depth))"
+
+        substituteInPlace ${datetimePath} \
+            --replace "tzName == \"leapseconds\"" "baseName(tzName) == \"leapseconds\""
+    ''
+
     + stdenv.lib.optionalString (bootstrapVersion) ''
         substituteInPlace ${datetimePath} \
             --replace "import std.traits;" "import std.traits;import std.path;"
 
         substituteInPlace ${datetimePath} \
             --replace "tzName == \"+VERSION\"" "baseName(tzName) == \"leapseconds\" || tzName == \"+VERSION\""
+
+        # Ugly hack to fix the hardcoded path to zoneinfo in the source file.
+        # https://issues.dlang.org/show_bug.cgi?id=15391
+        substituteInPlace ${datetimePath} \
+            --replace /usr/share/zoneinfo/ ${tzdata}/share/zoneinfo/
     ''
 
-    + stdenv.lib.optionalString stdenv.hostPlatform.isLinux ''
-        # See https://github.com/NixOS/nixpkgs/issues/29443
+    + stdenv.lib.optionalString (bootstrapVersion && stdenv.hostPlatform.isLinux) ''
+        # See https://github.com/dlang/phobos/pull/5960
         substituteInPlace phobos/std/path.d \
             --replace "\"/root" "\"${ROOT_HOME_DIR}"
     '';
@@ -122,18 +125,17 @@ let
       "dmd";
 
     postPatch = ''
-        # Use proper C++ compiler
-        substituteInPlace ${dmdPath}/posix.mak \
-            --replace g++ $CXX
-
-        # TODO
-        substituteInPlace druntime/src/core/memory.d \
-            --replace "assert(z is null);" "//assert(z is null);"
     ''
 
     + stdenv.lib.optionalString (!bootstrapVersion) ''
         substituteInPlace druntime/test/common.mak \
             --replace "DFLAGS:=" "DFLAGS:=${usePIC} "
+    ''
+
+    + stdenv.lib.optionalString (bootstrapVersion) ''
+        # Use proper C++ compiler
+        substituteInPlace ${dmdPath}/posix.mak \
+            --replace g++ $CXX
     ''
 
     + phobosPatches
@@ -149,9 +151,9 @@ let
     ''
 
     + stdenv.lib.optionalString (stdenv.hostPlatform.isDarwin && bootstrapVersion) ''
-	# Was not able to compile on darwin due to "__inline_isnanl"
-	# being undefined.
-	substituteInPlace ${dmdPath}/root/port.c --replace __inline_isnanl __inline_isnan
+	    # Was not able to compile on darwin due to "__inline_isnanl"
+	    # being undefined.
+	    substituteInPlace ${dmdPath}/root/port.c --replace __inline_isnanl __inline_isnan
     '';
 
     nativeBuildInputs = [ bootstrapDmd makeWrapper unzip which gdb ]
@@ -180,7 +182,7 @@ let
         cd ../druntime
         make -j$NIX_BUILD_CORES -f posix.mak PIC=1 INSTALL_DIR=$out DMD=${pathToDmd}
         cd ../phobos
-        make -j$NIX_BUILD_CORES -f posix.mak PIC=1 INSTALL_DIR=$out DMD=${pathToDmd}
+        make -j$NIX_BUILD_CORES -f posix.mak PIC=1 INSTALL_DIR=$out DMD=${pathToDmd} TZ_DATABASE_DIR=${tzdata}/share/zoneinfo/
         cd ..
     '';
 
@@ -264,7 +266,7 @@ let
 
     buildPhase = ''
         cd phobos
-        make -j$NIX_BUILD_CORES -f posix.mak unittest PIC=1 DMD=${dmdBuild}/bin/dmd BUILD=release
+        make -j$NIX_BUILD_CORES -f posix.mak unittest PIC=1 DMD=${dmdBuild}/bin/dmd BUILD=release TZ_DATABASE_DIR=${tzdata}/share/zoneinfo/
     '';
 
     installPhase = ''

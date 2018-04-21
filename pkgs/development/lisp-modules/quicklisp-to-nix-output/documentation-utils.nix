@@ -1,15 +1,15 @@
 args @ { fetchurl, ... }:
 rec {
   baseName = ''documentation-utils'';
-  version = ''20170630-git'';
+  version = ''20180131-git'';
 
   description = ''A few simple tools to help you with documenting your library.'';
 
   deps = [ args."trivial-indent" ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/documentation-utils/2017-06-30/documentation-utils-20170630-git.tgz'';
-    sha256 = ''0iz3r5llv0rv8l37fdcjrx9zibbaqf9nd6xhy5n2hf024997bbks'';
+    url = ''http://beta.quicklisp.org/archive/documentation-utils/2018-01-31/documentation-utils-20180131-git.tgz'';
+    sha256 = ''0kyxjcl7dvylymzvmrn90kdwaxgrzyzpi1mqpirsr3yyb8h71avm'';
   };
 
   packageName = "documentation-utils";
@@ -19,9 +19,9 @@ rec {
 }
 /* (SYSTEM documentation-utils DESCRIPTION
     A few simple tools to help you with documenting your library. SHA256
-    0iz3r5llv0rv8l37fdcjrx9zibbaqf9nd6xhy5n2hf024997bbks URL
-    http://beta.quicklisp.org/archive/documentation-utils/2017-06-30/documentation-utils-20170630-git.tgz
-    MD5 7c0541d4207ba221a251c8c3ec7a8cac NAME documentation-utils FILENAME
+    0kyxjcl7dvylymzvmrn90kdwaxgrzyzpi1mqpirsr3yyb8h71avm URL
+    http://beta.quicklisp.org/archive/documentation-utils/2018-01-31/documentation-utils-20180131-git.tgz
+    MD5 375dbb8ce48543fce1526eeea8d2a976 NAME documentation-utils FILENAME
     documentation-utils DEPS ((NAME trivial-indent FILENAME trivial-indent))
-    DEPENDENCIES (trivial-indent) VERSION 20170630-git SIBLINGS NIL PARASITES
+    DEPENDENCIES (trivial-indent) VERSION 20180131-git SIBLINGS NIL PARASITES
     NIL) */

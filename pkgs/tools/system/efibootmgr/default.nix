@@ -2,20 +2,18 @@
 
 stdenv.mkDerivation rec {
   name = "efibootmgr-${version}";
-  version = "15";
+  version = "16";
 
   nativeBuildInputs = [ pkgconfig ];
-  
+
   buildInputs = [ efivar popt ];
 
   src = fetchFromGitHub {
-    owner = "rhinstaller";
+    owner = "rhboot";
     repo = "efibootmgr";
     rev = version;
-    sha256 = "0z7h1dirp8za6lbbf4f3dzn7l1px891rdymhkbqc10yj6gi1jpqp";
+    sha256 = "0b27h8vf1b6laln5n0wk2hkzyyh87sxanj7wrz9kimyx03dcq6vi";
   };
-
-  NIX_CFLAGS_COMPILE = "-I${efivar}/include/efivar";
 
   makeFlags = [ "EFIDIR=nixos" ];
 
@@ -23,8 +21,9 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A Linux user-space application to modify the Intel Extensible Firmware Interface (EFI) Boot Manager";
-    homepage = https://github.com/rhinstaller/efibootmgr;
+    homepage = https://github.com/rhboot/efibootmgr;
     license = licenses.gpl2;
+    maintainers = with maintainers; [ ];
     platforms = platforms.linux;
   };
 }

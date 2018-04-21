@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "src-${version}";
-  version = "1.13";
+  version = "1.18";
 
   src = fetchurl {
     url = "http://www.catb.org/~esr/src/${name}.tar.gz";
-    sha256 = "0l13ld8nxm1c720ns22lyx3q1bq2c2zn78vi5w92b7nl6p2nncy8";
+    sha256 = "0n0skhvya8w2az45h2gsafxy8m2mvqas64nrgxifcmrzfv0rf26c";
   };
 
   buildInputs = [ python rcs git makeWrapper ];
@@ -24,9 +24,17 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Simple single-file revision control";
-    homepage = http://www.catb.org/~esr/src/;
+    longDescription = ''
+      SRC, acronym of Simple Revision Control, is RCS/SCCS reloaded with a
+      modern UI, designed to manage single-file solo projects kept more than one
+      to a directory. Use it for FAQs, ~/bin directories, config files, and the
+      like. Features integer sequential revision numbers, a command set that
+      will seem familiar to Subversion/Git/hg users, and no binary blobs
+      anywhere.
+    '';
+    homepage = http://www.catb.org/esr/src/;
     license = licenses.bsd3;
     platforms = platforms.all;
-    maintainers = with maintainers; [ calvertvl ];
+    maintainers = with maintainers; [ calvertvl AndersonTorres ];
   };
 }

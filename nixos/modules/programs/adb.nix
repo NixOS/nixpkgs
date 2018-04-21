@@ -16,6 +16,7 @@ with lib;
           To grant access to a user, it must be part of adbusers group:
           <code>users.extraUsers.alice.extraGroups = ["adbusers"];</code>
         '';
+        relatedPackages = [ ["androidenv" "platformTools"] ];
       };
     };
   };

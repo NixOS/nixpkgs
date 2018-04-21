@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, cmake, pkgconfig
 , zlib, libpng, libjpeg
-, mesa, glm, libX11, libXext, libXfixes, libXrandr, libXcomposite, slop, icu }:
+, libGLU_combined, glm, libX11, libXext, libXfixes, libXrandr, libXcomposite, slop, icu }:
 
 stdenv.mkDerivation rec {
   name = "maim-${version}";
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake pkgconfig ];
   buildInputs =
-    [ zlib libpng libjpeg mesa glm libX11 libXext libXfixes libXrandr
+    [ zlib libpng libjpeg libGLU_combined glm libX11 libXext libXfixes libXrandr
       libXcomposite slop icu ];
 
   doCheck = false;

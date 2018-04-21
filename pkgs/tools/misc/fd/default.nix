@@ -2,29 +2,24 @@
 
 rustPlatform.buildRustPackage rec {
   name = "fd-${version}";
-  version = "6.0.0";
+  version = "7.0.0";
 
   src = fetchFromGitHub {
     owner = "sharkdp";
     repo = "fd";
     rev = "v${version}";
-    sha256 = "1pzb6ha9c89zq6nxx0zsyv24diix4z23p8lf7113bfili3as3k5q";
+    sha256 = "0qykzkwrj4w3i5h1a328kadd7fgd91w0z2n4xr6i3csyaiwwgd1x";
   };
 
-  cargoSha256 = "0y4svzv1y94baciiy08byhywwfshdfqn3nx0c4z23i7ashy8yhnf";
-
-  buildPhase = ''
-    # do not pass --frozen
-    cargo build --release
-  '';
+  cargoSha256 = "1qicgfaqzjm7sjzgxkci6bg495n227pyicj4ycds5z6mfy15hi4q";
 
   preFixup = ''
     mkdir -p "$out/man/man1"
     cp "$src/doc/fd.1" "$out/man/man1"
 
-    mkdir -p "$out/share/"{bash-completion/completions,fish/completions,zsh/site-functions}
-    cp target/release/build/fd-find-*/out/fd.bash-completion "$out/share/bash-completion/completions/"
-    cp target/release/build/fd-find-*/out/fd.fish "$out/share/fish/completions/"
+    mkdir -p "$out/share/"{bash-completion/completions,fish/vendor_completions.d,zsh/site-functions}
+    cp target/release/build/fd-find-*/out/fd.bash "$out/share/bash-completion/completions/"
+    cp target/release/build/fd-find-*/out/fd.fish "$out/share/fish/vendor_completions.d/"
     cp target/release/build/fd-find-*/out/_fd "$out/share/zsh/site-functions/"
   '';
 
@@ -38,6 +33,7 @@ rustPlatform.buildRustPackage rec {
     '';
     homepage = "https://github.com/sharkdp/fd";
     license = with licenses; [ asl20 /* or */ mit ];
+    maintainers = with maintainers; [ dywedir ];
     platforms = platforms.all;
   };
 }

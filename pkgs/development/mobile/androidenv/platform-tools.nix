@@ -1,4 +1,9 @@
-{stdenv, zlib, fetchurl, unzip}:
+{ buildPackages, pkgs }:
+
+let
+  inherit (buildPackages) fetchurl unzip;
+  inherit (pkgs) stdenv zlib;
+in
 
 stdenv.mkDerivation rec {
   version = "26.0.2";
@@ -42,5 +47,5 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  buildInputs = [ unzip ];
+  nativeBuildInputs = [ unzip ];
 }

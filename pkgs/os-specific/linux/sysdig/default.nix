@@ -3,18 +3,18 @@
 with stdenv.lib;
 stdenv.mkDerivation rec {
   name = "sysdig-${version}";
-  version = "0.18.0";
+  version = "0.21.0";
 
   src = fetchFromGitHub {
     owner = "draios";
     repo = "sysdig";
     rev = version;
-    sha256 = "1hmkjvfg3371hp873mnkjq9cirqszw2ji4p7mb6jcn9ihwxil2z2";
+    sha256 = "0dakxv2pkbsivavz09fwvav4dla7qzklnv45zb7x306gankkjgi1";
   };
 
   buildInputs = [
     cmake zlib luajit ncurses perl jsoncpp libb64 openssl curl jq gcc
-  ];
+  ] ++ optional (kernel != null) kernel.moduleBuildDependencies;
 
   hardeningDisable = [ "pic" ];
 

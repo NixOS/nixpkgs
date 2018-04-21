@@ -2,7 +2,7 @@
 
 buildPythonApplication rec {
   name = "dmensamenu-${version}";
-  version = "1.1.0";
+  version = "1.1.1";
 
   propagatedBuildInputs = [
     requests
@@ -13,7 +13,7 @@ buildPythonApplication rec {
     owner = "dotlambda";
     repo = "dmensamenu";
     rev = version;
-    sha256 = "126gidid53blrpfq1vd85iim338qrk7n8r4nyhh2hvsi7cfaab1y";
+    sha256 = "0gc23k2zbv9zfc0v27y4spiva8cizxavpzd5pch5qbawh2lak6a3";
   };
 
   meta = with stdenv.lib; {

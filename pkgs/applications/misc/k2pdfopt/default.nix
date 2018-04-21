@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     mupdf_modded = mupdf.overrideAttrs (attrs: {
       name = "mupdf-1.10a";
       src = fetchurl {
-        url = "http://mupdf.com/downloads/archive/mupdf-1.10a-source.tar.gz";
+        url = "https://mupdf.com/downloads/archive/mupdf-1.10a-source.tar.gz";
         sha256 = "0dm8wcs8i29aibzkqkrn8kcnk4q0kd1v66pg48h5c3qqp4v1zk5a";
       };
       # Excluded the pdf-*.c files, since they mostly just broke the #includes

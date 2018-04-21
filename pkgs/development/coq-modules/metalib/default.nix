@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, coq, ocamlPackages, haskellPackages, which, ott
+{ stdenv, fetchgit, coq, haskellPackages, which, ott
 }:
 
 stdenv.mkDerivation rec {
@@ -29,8 +29,7 @@ stdenv.mkDerivation rec {
     license = stdenv.lib.licenses.mit;
   };
 
-  buildInputs = [ coq.ocaml coq.camlp5 which coq lngen ott ]
-    ++ (with ocamlPackages; [ findlib ]);
+  buildInputs = [ coq.ocaml coq.camlp5 which coq lngen ott coq.findlib ];
   propagatedBuildInputs = [ coq ];
 
   enableParallelBuilding = true;
@@ -48,6 +47,10 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     maintainers = [ maintainers.jwiegley ];
     platforms = coq.meta.platforms;
+  };
+
+  passthru = {
+    compatibleCoqVersions = v: stdenv.lib.versionAtLeast v "8.6";
   };
 
 }

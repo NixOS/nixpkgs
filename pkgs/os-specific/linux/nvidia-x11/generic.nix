@@ -6,6 +6,7 @@
 , useGLVND ? true
 , useProfiles ? true
 , preferGtk2 ? false
+, settings32Bit ? false
 
 , prePatch ? ""
 , patches ? []
@@ -62,12 +63,13 @@ let
 
     libPath = makeLibraryPath [ xorg.libXext xorg.libX11 xorg.libXv xorg.libXrandr zlib stdenv.cc.cc ];
 
-    nativeBuildInputs = [ perl nukeReferences ];
+    nativeBuildInputs = [ perl nukeReferences ]
+      ++ optionals (!libsOnly) kernel.moduleBuildDependencies;
 
     disallowedReferences = optional (!libsOnly) [ kernel.dev ];
 
     passthru = {
-      settings = callPackage (import ./settings.nix self settingsSha256) {
+      settings = (if settings32Bit then callPackage_i686 else callPackage) (import ./settings.nix self settingsSha256) {
         withGtk2 = preferGtk2;
         withGtk3 = !preferGtk2;
       };
@@ -78,7 +80,7 @@ let
       homepage = http://www.nvidia.com/object/unix.html;
       description = "X.org driver and kernel module for NVIDIA graphics cards";
       license = licenses.unfreeRedistributable;
-      platforms = platforms.linux;
+      platforms = [ "i686-linux" "x86_64-linux" ];
       maintainers = [ maintainers.vcunat ];
       priority = 4; # resolves collision with xorg-server's "lib/xorg/modules/extensions/libglx.so"
     };

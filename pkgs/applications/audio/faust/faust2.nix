@@ -16,13 +16,14 @@ with stdenv.lib.strings;
 
 let
 
-  version = "2.1.0";
+  version = "2.5.23";
 
   src = fetchFromGitHub {
     owner = "grame-cncm";
     repo = "faust";
-    rev = "v${builtins.replaceStrings ["."] ["-"] version}";
-    sha256 = "1pmiwy287g79ipz9pppnkfrdgls3l912kpkr7dfymk9wk5y5di9m";
+    rev = "${version}";
+    sha256 = "1pci8ac6sqrm3mb3yikmmr3iy35g3nj4iihazif1amqkbdz719rc";
+    fetchSubmodules = true;
   };
 
   meta = with stdenv.lib; {
@@ -77,7 +78,7 @@ let
     # faust.wrapWithBuildEnv.
     postInstall = ''
       # syntax error when eval'd directly
-      pattern="faust2!(svg)"
+      pattern="faust2!(*@(atomsnippets|graph|graphviewer|md|plot|sig|sigviewer|svg))"
       (shopt -s extglob; rm "$out"/bin/$pattern)
     '';
 

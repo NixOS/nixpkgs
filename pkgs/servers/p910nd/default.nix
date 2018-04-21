@@ -40,6 +40,5 @@ stdenv.mkDerivation rec {
     downloadPage = http://sourceforge.net/projects/p910nd/;
     license = licenses.gpl2;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ nckx ];
   };
 }

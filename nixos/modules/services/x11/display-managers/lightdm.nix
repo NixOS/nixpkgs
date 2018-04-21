@@ -9,6 +9,10 @@ let
   xEnv = config.systemd.services."display-manager".environment;
   cfg = dmcfg.lightdm;
 
+  dmDefault = xcfg.desktopManager.default;
+  wmDefault = xcfg.windowManager.default;
+  hasDefaultUserSession = dmDefault != "none" || wmDefault != "none";
+
   inherit (pkgs) stdenv lightdm writeScript writeText;
 
   # lightdm runs with clearenv(), but we need a few things in the enviornment for X to startup
@@ -54,14 +58,13 @@ let
         autologin-user-timeout = ${toString cfg.autoLogin.timeout}
         autologin-session = ${defaultSessionName}
       ''}
+      ${optionalString hasDefaultUserSession ''
+        user-session=${defaultSessionName}
+      ''}
       ${cfg.extraSeatDefaults}
     '';
 
-  defaultSessionName =
-    let
-      dm = xcfg.desktopManager.default;
-      wm = xcfg.windowManager.default;
-    in dm + optionalString (wm != "none") ("+" + wm);
+  defaultSessionName = dmDefault + optionalString (wmDefault != "none") ("+" + wmDefault);
 in
 {
   # Note: the order in which lightdm greeter modules are imported
@@ -177,6 +180,14 @@ in
           LightDM auto-login requires that services.xserver.desktopManager.default and
           services.xserver.windowMananger.default are set to valid values. The current
           default session: ${defaultSessionName} is not valid.
+        '';
+      }
+      { assertion = hasDefaultUserSession -> elem defaultSessionName dmcfg.session.names;
+        message = ''
+          services.xserver.desktopManager.default and
+          services.xserver.windowMananger.default are not set to valid
+          values. The current default session: ${defaultSessionName}
+          is not valid.
         '';
       }
       { assertion = !cfg.greeter.enable -> (cfg.autoLogin.enable && cfg.autoLogin.timeout == 0);

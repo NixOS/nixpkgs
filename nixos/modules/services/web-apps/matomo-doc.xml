@@ -1,0 +1,95 @@
+<chapter xmlns="http://docbook.org/ns/docbook"
+         xmlns:xlink="http://www.w3.org/1999/xlink"
+         xmlns:xi="http://www.w3.org/2001/XInclude"
+         version="5.0"
+         xml:id="module-services-matomo">
+
+  <title>Matomo</title>
+  <para>
+    Matomo is a real-time web analytics application.
+    This module configures php-fpm as backend for Matomo, optionally configuring an nginx vhost as well.
+  </para>
+
+  <para>
+    An automatic setup is not suported by Matomo, so you need to configure Matomo itself in the browser-based Matomo setup.
+  </para>
+
+
+  <section>
+    <title>Database Setup</title>
+
+    <para>
+      You also need to configure a MariaDB or MySQL database and -user for Matomo yourself,
+      and enter those credentials in your browser.
+      You can use passwordless database authentication via the UNIX_SOCKET authentication plugin
+      with the following SQL commands:
+
+      <programlisting>
+        # For MariaDB
+        INSTALL PLUGIN unix_socket SONAME 'auth_socket';
+        CREATE DATABASE matomo;
+        CREATE USER 'matomo'@'localhost' IDENTIFIED WITH unix_socket;
+        GRANT ALL PRIVILEGES ON matomo.* TO 'matomo'@'localhost';
+
+        # For MySQL
+        INSTALL PLUGIN auth_socket SONAME 'auth_socket.so';
+        CREATE DATABASE matomo;
+        CREATE USER 'matomo'@'localhost' IDENTIFIED WITH auth_socket;
+        GRANT ALL PRIVILEGES ON matomo.* TO 'matomo'@'localhost';
+      </programlisting>
+
+      Then fill in <literal>matomo</literal> as database user and database name, and leave the password field blank.
+      This authentication works by allowing only the <literal>matomo</literal> unix user to authenticate as the
+      <literal>matomo</literal> database user (without needing a password), but no other users.
+      For more information on passwordless login, see
+      <link xlink:href="https://mariadb.com/kb/en/mariadb/unix_socket-authentication-plugin/" />.
+    </para>
+
+    <para>
+      Of course, you can use password based authentication as well, e.g. when the database is not on the same host.
+    </para>
+  </section>
+
+
+  <section>
+    <title>Backup</title>
+    <para>
+      You only need to take backups of your MySQL database and the
+      <filename>/var/lib/matomo/config/config.ini.php</filename> file.
+      Use a user in the <literal>matomo</literal> group or root to access the file.
+      For more information, see <link xlink:href="https://matomo.org/faq/how-to-install/faq_138/" />.
+    </para>
+  </section>
+
+
+  <section>
+    <title>Issues</title>
+    <itemizedlist>
+      <listitem>
+        <para>
+          Matomo's file integrity check will warn you.
+          This is due to the patches necessary for NixOS, you can safely ignore this.
+        </para>
+      </listitem>
+
+      <listitem>
+        <para>
+          Matomo will warn you that the JavaScript tracker is not writable.
+          This is because it's located in the read-only nix store.
+          You can safely ignore this, unless you need a plugin that needs JavaScript tracker access.
+        </para>
+      </listitem>
+    </itemizedlist>
+  </section>
+
+
+  <section>
+    <title>Using other Web Servers than nginx</title>
+
+    <para>
+      You can use other web servers by forwarding calls for <filename>index.php</filename> and
+      <filename>piwik.php</filename> to the <literal>/run/phpfpm-matomo.sock</literal> fastcgi unix socket.
+      You can use the nginx configuration in the module code as a reference to what else should be configured.
+    </para>
+  </section>
+</chapter>

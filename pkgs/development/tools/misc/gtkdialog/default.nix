@@ -1,4 +1,4 @@
-{stdenv, fetchurl, gtk2, pkgconfig, hicolor_icon_theme }:
+{stdenv, fetchurl, gtk2, pkgconfig, hicolor-icon-theme }:
 
 stdenv.mkDerivation {
   name = "gtkdialog-0.8.3";
@@ -9,7 +9,7 @@ stdenv.mkDerivation {
   };
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ gtk2 hicolor_icon_theme ];
+  buildInputs = [ gtk2 hicolor-icon-theme ];
 
   meta = {
     homepage = https://code.google.com/archive/p/gtkdialog/;

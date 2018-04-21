@@ -1,26 +1,25 @@
-{ stdenv, fetchurl, spidermonkey, unzip, curl, pcre, readline, openssl, perl, html-tidy }:
+{ stdenv, fetchFromGitHub, duktape, curl, pcre, readline, openssl, perl, html-tidy }:
 
 stdenv.mkDerivation rec {
   name = "edbrowse-${version}";
-  version = "3.6.1";
+  version = "3.7.3";
 
-  nativeBuildInputs = [ unzip ];
-  buildInputs = [ curl pcre readline openssl spidermonkey perl html-tidy ];
+  buildInputs = [ curl pcre readline openssl duktape perl html-tidy ];
 
   patchPhase = ''
-    substituteInPlace src/ebjs.c --replace \"edbrowse-js\" \"$out/bin/edbrowse-js\"
     for i in ./tools/*.pl
     do
       substituteInPlace $i --replace "/usr/bin/perl" "${perl}/bin/perl"
     done
   '';
 
-  NIX_CFLAGS_COMPILE = "-I${spidermonkey}/include/mozjs-31";
   makeFlags = "-C src prefix=$(out)";
 
-  src = fetchurl {
-    url = "http://edbrowse.org/${name}.zip";
-    sha256 = "1grkn09r31nmvcnm76jkd8aclmd9n5141mpqvb86wndp9pa7gz7q";
+  src = fetchFromGitHub {
+    owner = "CMB";
+    repo = "edbrowse";
+    rev = "v${version}";
+    sha256 = "19qdxigp0qv5vyy0hpn0czcc8papvivsjrxx7p367ihizm39yzla";
   };
   meta = with stdenv.lib; {
     description = "Command Line Editor Browser";
@@ -35,6 +34,5 @@ stdenv.mkDerivation rec {
     homepage = http://edbrowse.org/;
     maintainers = [ maintainers.schmitthenner maintainers.vrthra ];
     platforms = platforms.linux;
-    broken = true;  # no compatible spidermonkey
   };
 }

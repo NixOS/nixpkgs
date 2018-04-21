@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, ocaml, findlib, ocamlbuild, opam, topkg, cppo
+{ stdenv, fetchFromGitHub, ocaml, findlib, ocamlbuild, topkg, cppo
 , ppx_import, ppx_deriving, yojson, ounit
 }:
 
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     sha256 = "1pwfnq7z60nchba4gnf58918ll11w3gj5i88qhz1p2jm45hxqgnw";
   };
 
-  buildInputs = [ ocaml findlib ocamlbuild opam cppo ounit ppx_import ];
+  buildInputs = [ ocaml findlib ocamlbuild cppo ounit ppx_import ];
 
   propagatedBuildInputs = [ ppx_deriving yojson ];
 

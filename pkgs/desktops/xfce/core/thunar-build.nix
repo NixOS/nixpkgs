@@ -1,6 +1,6 @@
 { stdenv, fetchurl, pkgconfig, intltool
-, gtk, dbus_glib, libstartup_notification, libnotify, libexif, pcre, udev
-, exo, libxfce4util, xfconf, xfce4panel, wrapGAppsHook
+, gtk, dbus-glib, libstartup_notification, libnotify, libexif, pcre, udev
+, exo, libxfce4util, xfconf, xfce4-panel, wrapGAppsHook
 }:
 
 stdenv.mkDerivation rec {
@@ -24,8 +24,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkgconfig wrapGAppsHook ];
   buildInputs = [
     intltool
-    gtk dbus_glib libstartup_notification libnotify libexif pcre udev
-    exo libxfce4util xfconf xfce4panel
+    gtk dbus-glib libstartup_notification libnotify libexif pcre udev
+    exo libxfce4util xfconf xfce4-panel
   ];
   # TODO: optionality?
 

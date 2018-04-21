@@ -1,5 +1,5 @@
 { stdenv, fetchurl, fetchpatch, pkgconfig, libXft, cairo, harfbuzz
-, libintlOrEmpty, gobjectIntrospection, darwin
+, libintl, gobjectIntrospection, darwin
 }:
 
 with stdenv.lib;
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
        CoreGraphics
        CoreText
     ]);
-  propagatedBuildInputs = [ cairo harfbuzz libXft ] ++ libintlOrEmpty;
+  propagatedBuildInputs = [ cairo harfbuzz libXft libintl ];
 
   enableParallelBuilding = true;
 
