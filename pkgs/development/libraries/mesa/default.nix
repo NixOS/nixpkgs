@@ -160,7 +160,7 @@ let self = stdenv.mkDerivation {
   doCheck = false;
 
   installFlags = [
-    "sysconfdir=\${out}/etc"
+    "sysconfdir=\${drivers}/etc"
     "localstatedir=\${TMPDIR}"
     "vendorjsondir=\${out}/share/glvnd/egl_vendor.d"
   ];
