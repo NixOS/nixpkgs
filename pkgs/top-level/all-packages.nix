@@ -11971,11 +11971,11 @@ with pkgs;
 
   ### DEVELOPMENT / LIBRARIES / AGDA
 
-  agda = callPackage ../build-support/agda {
+  agda = (callPackage ../build-support/agda {
     glibcLocales = if pkgs.stdenv.isLinux then pkgs.glibcLocales else null;
     extension = self : super : { };
     inherit (haskellPackages) Agda;
-  };
+  });
 
   agdaBase = callPackage ../development/libraries/agda/agda-base { };
 
