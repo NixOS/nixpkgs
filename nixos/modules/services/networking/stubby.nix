@@ -8,6 +8,7 @@ let
   stateDir = "/var/lib/stubby";
   fallbacks = concatMapStringsSep "\n  " (x: "- ${x}") cfg.fallbackProtocols;
   listeners = concatMapStringsSep "\n  " (x: "- ${x}") cfg.listenAddresses;
+
   # By default, the recursive resolvers maintained by the getdns
   # project itself are enabled. More information about both getdns's servers, # as well as third party options for upstream resolvers, can be found here:
   # https://dnsprivacy.org/wiki/display/DP/DNS+Privacy+Test+Servers
@@ -92,7 +93,7 @@ in
 
       fallbackProtocols = mkOption {
         default = [ "GETDNS_TRANSPORT_TLS" ];
-        type = types.listOf types.str;
+        type = with types; listOf (enum [ "GETDNS_TRANSPORT_TLS" "GETDNS_TRANSPORT_TCP" "GETDNS_TRANSPORT_UDP" ]);
         description = ''
           Ordered list composed of one or more transport protocols.
           Strict mode should only use GETDNS_TRANSPORT_TLS.
@@ -102,7 +103,7 @@ in
 
       authenticationMode = mkOption {
         default = "GETDNS_AUTHENTICATION_REQUIRED";
-        type = types.str;
+        type = types.enum [ "GETDNS_AUTHENTICATION_REQUIRED" "GETDNS_AUTHENTICATION_NONE" ];
         description = ''
           Selects the Strict or Opportunistic usage profile.
           For strict, set to GETDNS_AUTHENTICATION_REQUIRED.
@@ -129,12 +130,12 @@ in
       idleTimeout = mkOption {
         default = 10000;
         type = types.int;
-        description = "EDNS0 option for keepalive idle timeout expressed in milliseconds.";
+        description = "EDNS0 option for keepalive idle timeout in milliseconds.";
       };
 
       listenAddresses = mkOption {
         default = [ "127.0.0.1" "0::1" ];
-        type = types.listOf types.str;
+        type = with types; listOf str;
         description = ''
           Sets the listen address for the stubby daemon.
           Uses port 53 by default.
@@ -189,7 +190,7 @@ in
 
       serviceConfig = {
         AmbientCapabilities = "CAP_NET_BIND_SERVICE";
-        CapabilitiesBoundingSet = "CAP_NET_BIND_SERVICE";
+        CapabilityBoundingSet = "CAP_NET_BIND_SERVICE";
         ExecStart = "${pkgs.stubby}/bin/stubby -C ${confFile} ${optionalString cfg.debugLogging "-l"}";
         DynamicUser = true;
       };
