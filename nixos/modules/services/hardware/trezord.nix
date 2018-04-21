@@ -38,7 +38,7 @@ in {
       path = [];
       serviceConfig = {
         Type = "simple";
-        ExecStart = "${pkgs.trezord}/bin/trezord -f";
+        ExecStart = "${pkgs.trezord}/bin/trezord-go";
         User = "trezord";
       };
     };

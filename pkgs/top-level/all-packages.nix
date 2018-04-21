@@ -2088,8 +2088,8 @@ with pkgs;
   evemu = callPackage ../tools/system/evemu { };
 
   # The latest version used by elasticsearch, logstash, kibana and the the beats from elastic.
-  elk5Version = "5.6.6";
-  elk6Version = "6.1.2";
+  elk5Version = "5.6.9";
+  elk6Version = "6.2.4";
 
   elasticsearch = callPackage ../servers/search/elasticsearch { };
   elasticsearch2 = callPackage ../servers/search/elasticsearch/2.x.nix { };
@@ -19657,7 +19657,9 @@ with pkgs;
 
   blas = callPackage ../development/libraries/science/math/blas { };
 
-  clblas = callPackage ../development/libraries/science/math/clblas { };
+  clblas = callPackage ../development/libraries/science/math/clblas {
+    inherit (darwin.apple_sdk.frameworks) Accelerate CoreGraphics CoreVideo OpenCL;
+  };
 
   jags = callPackage ../applications/science/math/jags { };
 
