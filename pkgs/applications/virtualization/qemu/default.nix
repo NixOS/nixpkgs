@@ -67,6 +67,8 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+  outputs = [ "out" "ga" ];
+
   patches = [ ./no-etc-install.patch ./statfs-flags.patch (fetchpatch {
     name = "glibc-2.27-memfd.patch";
     url = "https://git.qemu.org/?p=qemu.git;a=patch;h=75e5b70e6b5dcc4f2219992d7cffa462aa406af0";
@@ -122,6 +124,9 @@ stdenv.mkDerivation rec {
       for exe in $out/bin/qemu-system-* ; do
         paxmark m $exe
       done
+      # copy qemu-ga (guest agent) to separate output
+      mkdir -p $ga/bin
+      cp $out/bin/qemu-ga $ga/bin/
     '';
 
   # Add a ‘qemu-kvm’ wrapper for compatibility/convenience.
