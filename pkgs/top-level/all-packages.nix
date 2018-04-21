@@ -288,7 +288,7 @@ with pkgs;
     ... # For hash agility
   }@args: fetchzip ({
     inherit name;
-    url = "https://gitlab.com/${owner}/${repo}/repository/archive.tar.gz?ref=${rev}";
+    url = "https://gitlab.com/${owner}/${repo}/-/archive/${rev}/${repo}-${rev}.tar.gz";
     meta.homepage = "https://gitlab.com/${owner}/${repo}/";
   } // removeAttrs args [ "owner" "repo" "rev" ]) // { inherit rev; };
 
