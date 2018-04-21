@@ -1,15 +1,13 @@
 { config, lib, pkgs, ... }:
 
-with import <stockholm/lib>;
-
+with lib;
 {
-  options.services.restic = mkOption {
-    type = types.attrsOf (types.submodule ({ config, ... }: {
+  options.services.restic.backups = mkOption {
+    description = ''
+      Periodic backups to create with Restic.
+    '';
+    type = types.attrsOf (types.submodule ({ name, config, ... }: {
       options = {
-        name = mkOption {
-          type = types.str;
-          default = config._module.args.name;
-        };
         passwordFile = mkOption {
           type = types.str;
           description = ''
@@ -18,14 +16,14 @@ with import <stockholm/lib>;
           example = "/etc/nixos/restic-password";
 
         };
-        repo = mkOption {
+        repository = mkOption {
           type = types.str;
           description = ''
             repository to backup to.
           '';
-          example = "sftp:backup@192.168.1.100:/backups/${config.name}";
+          example = "sftp:backup@192.168.1.100:/backups/${name}";
         };
-        dirs = mkOption {
+        directories = mkOption {
           type = types.listOf types.str;
           default = [];
           description = ''
@@ -77,41 +75,59 @@ with import <stockholm/lib>;
       };
     }));
     default = {};
+    example = {
+      localbackup = {
+        directories = [ "/home" ];
+        repository = "/mnt/backup-hdd";
+        passwordFile = "/etc/nixos/secrets/restic-password";
+        initialize = true;
+      };
+      remotebackup = {
+        directories = [ "/home" ];
+        repository = "sftp:backup@host:/backups/home";
+        passwordFile = "/etc/nixos/secrets/restic-password";
+        extraArguments = [
+          "sftp.command='ssh backup@host -i /etc/nixos/secrets/backup-private-key -s sftp'"
+        ];
+        timerConfig = {
+          OnCalendar = "00:05";
+          RandomizedDelaySec = "5h";
+        };
+      };
+    };
   };
 
   config = {
     systemd.services =
-      mapAttrs' (_: plan:
+      mapAttrs' (name: backup:
         let
-          extraArguments = concatMapStringsSep " " (arg: "-o ${arg}") plan.extraArguments;
-          connectTo = elemAt (splitString ":" plan.repo) 1;
+          extraArguments = concatMapStringsSep " " (arg: "-o ${arg}") backup.extraArguments;
+          connectTo = elemAt (splitString ":" backup.repository) 1;
           resticCmd = "${pkgs.restic}/bin/restic ${extraArguments}";
-        in nameValuePair "backup.${plan.name}" {
+        in nameValuePair "restic-backups-${name}" ({
           environment = {
-            RESTIC_PASSWORD_FILE = plan.passwordFile;
-            RESTIC_REPOSITORY = plan.repo;
+            RESTIC_PASSWORD_FILE = backup.passwordFile;
+            RESTIC_REPOSITORY = backup.repository;
           };
           path = with pkgs; [
             openssh
           ];
           restartIfChanged = false;
           serviceConfig = {
-            ExecStartPre = mkIf plan.initialize (pkgs.writeScript "rustic-${plan.name}-init" ''
-              #! ${pkgs.bash}/bin/bash
-              ${resticCmd} snapshots || ${resticCmd} init
-            '');
-            ExecStart = pkgs.writeScript "rustic-${plan.name}" ''
-              #! ${pkgs.bash}/bin/bash\n
-              ${concatMapStringsSep "\n" (dir: "${resticCmd} backup ${dir}") plan.dirs}
-            '';
-            User = plan.user;
+            Type = "oneshot";
+            ExecStart = map (dir: "${resticCmd} backup ${dir}") backup.directories;
+            User = backup.user;
           };
-        }
-      ) config.services.restic;
+        } // optionalAttrs backup.initialize {
+          preStart = ''
+            ${resticCmd} snapshots || ${resticCmd} init
+          '';
+        })
+      ) config.services.restic.backups;
     systemd.timers =
-      mapAttrs' (_: plan: nameValuePair "backup.${plan.name}" {
+      mapAttrs' (name: backup: nameValuePair "restic-backups-${name}" {
         wantedBy = [ "timers.target" ];
-        timerConfig = plan.timerConfig;
-      }) config.services.restic;
+        timerConfig = backup.timerConfig;
+      }) config.services.restic.backups;
   };
 }
