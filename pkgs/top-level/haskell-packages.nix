@@ -19,7 +19,10 @@ let
     inherit pkgs;
   };
 
-  callPackage = newScope { inherit haskellLib; };
+  callPackage = newScope {
+    inherit haskellLib;
+    overrides = pkgs.haskell.packageOverrides;
+  };
 
   bootstrapPackageSet = self: super: {
     mkDerivation = drv: super.mkDerivation (drv // {
@@ -98,6 +101,9 @@ in rec {
       integerSimpleGhcNames
       (name: compiler."${name}".override { enableIntegerSimple = true; }));
   };
+
+  # Default overrides that are applied to all package sets.
+  packageOverrides = self : super : {};
 
   # Always get compilers from `buildPackages`
   packages = let bh = buildPackages.haskell; in {
