@@ -16,7 +16,7 @@ python3Packages.buildPythonApplication rec {
     description = "Tool to convert XDXF dictionary files to slob format";
     homepage = https://github.com/itkach/xdxf2slob/;
     license = licenses.gpl3;
-    maintainer = [ maintainers.rycee ];
+    maintainers = [ maintainers.rycee ];
     platforms = platforms.all;
   };
 }

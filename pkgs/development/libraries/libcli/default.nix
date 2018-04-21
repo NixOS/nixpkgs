@@ -27,6 +27,5 @@ stdenv.mkDerivation rec {
     homepage = http://sites.dparrish.com/libcli;
     license = licenses.lgpl21Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ nckx ];
   };
 }

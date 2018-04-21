@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, pkgconfig, pidgin, json_glib, glib, http-parser } :
+{ stdenv, fetchgit, pkgconfig, pidgin, json-glib, glib, http-parser } :
 
 let
   version = "2016-07-11";
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ pidgin json_glib glib http-parser ];
+  buildInputs = [ pidgin json-glib glib http-parser ];
 
   installPhase = ''
     install -Dm755 -t $out/lib/pidgin/ libmatrix.so

@@ -7,7 +7,7 @@ stdenv.mkDerivation rec {
   name = "epsxe-${version}";
   version = "2.0.5";
 
-  src = with stdenv.lib; let
+  src = let
     version2 = concatStrings (splitString "." version);
     platform = "linux" + (optionalString stdenv.is64bit "_x64");
   in fetchurl {

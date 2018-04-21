@@ -9,12 +9,12 @@ in
 
 stdenv.mkDerivation rec {
   name    = "frama-c-${version}";
-  version = "20170501";
-  slang   = "Phosphorus";
+  version = "20171101";
+  slang   = "Sulfur";
 
   src = fetchurl {
     url    = "http://frama-c.com/download/frama-c-${slang}-${version}.tar.gz";
-    sha256 = "16bccacms3n4rfpsxdxpdf24bk0hwrnzdpa2pbr6s847li73hkv1";
+    sha256 = "1vwjfqmm1r36gkybsy3a7m89q5zicf4rnz5vlsn9imnpjpl9gjw1";
   };
 
   why2 = fetchurl {

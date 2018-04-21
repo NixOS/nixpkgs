@@ -45,6 +45,8 @@ let
     theme-name = ${cfg.theme.name}
     icon-theme-name = ${cfg.iconTheme.name}
     background = ${ldmcfg.background}
+    ${optionalString (cfg.clock-format != null) "clock-format = ${cfg.clock-format}"}
+    ${optionalString (cfg.indicators != null) "indicators = ${concatStringsSep ";" cfg.indicators}"}
     ${cfg.extraConfig}
     '';
 
@@ -66,8 +68,8 @@ in
 
         package = mkOption {
           type = types.package;
-          default = pkgs.gnome3.gnome_themes_standard;
-          defaultText = "pkgs.gnome3.gnome_themes_standard";
+          default = pkgs.gnome3.gnome-themes-standard;
+          defaultText = "pkgs.gnome3.gnome-themes-standard";
           description = ''
             The package path that contains the theme given in the name option.
           '';
@@ -102,6 +104,35 @@ in
           '';
         };
 
+      };
+
+      clock-format = mkOption {
+        type = types.nullOr types.str;
+        default = null;
+        example = "%F";
+        description = ''
+          Clock format string (as expected by strftime, e.g. "%H:%M")
+          to use with the lightdm gtk greeter panel.
+
+          If set to null the default clock format is used.
+        '';
+      };
+
+      indicators = mkOption {
+        type = types.nullOr (types.listOf types.str);
+        default = null;
+        example = [ "~host" "~spacer" "~clock" "~spacer" "~session" "~language" "~a11y" "~power" ];
+        description = ''
+          List of allowed indicator modules to use for the lightdm gtk
+          greeter panel.
+
+          Built-in indicators include "~a11y", "~language", "~session",
+          "~power", "~clock", "~host", "~spacer". Unity indicators can be
+          represented by short name (e.g. "sound", "power"), service file name,
+          or absolute path.
+
+          If set to null the default indicators are used.
+        '';
       };
 
       extraConfig = mkOption {

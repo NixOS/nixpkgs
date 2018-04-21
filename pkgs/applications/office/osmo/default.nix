@@ -3,11 +3,11 @@
 
 stdenv.mkDerivation rec {
   name = "osmo-${version}";
-  version = "0.4.0-1";
+  version = "0.4.2";
 
   src = fetchurl {
     url = "mirror://sourceforge/osmo-pim/${name}.tar.gz";
-    sha256 = "fb454718e071c44bd360ce3e56cb29926cbf44a0d06ec738fa9b40fe3cbf8a33";
+    sha256 = "1gjd4w9jckfpqr9n0bw0w25h3qhfyzw1xvilh3hqdadfinwyal2v";
   };
 
   nativeBuildInputs = [ pkgconfig gettext wrapGAppsHook ];

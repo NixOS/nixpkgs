@@ -1,9 +1,10 @@
-{stdenv, fetchFromGitHub, fetchurl, fetchpatch, pkgconfig, libusb, readline, libewf, perl, zlib, openssl,
-gtk2 ? null, vte ? null, gtkdialog ? null,
-python ? null,
-ruby ? null,
-lua ? null,
-useX11, rubyBindings, pythonBindings, luaBindings}:
+{stdenv, fetchFromGitHub, pkgconfig, libusb, readline, libewf, perl, zlib, openssl
+, gtk2 ? null, vte ? null, gtkdialog ? null
+, python ? null
+, ruby ? null
+, lua ? null
+, useX11, rubyBindings, pythonBindings, luaBindings
+}:
 
 assert useX11 -> (gtk2 != null && vte != null && gtkdialog != null);
 assert rubyBindings -> ruby != null;
@@ -13,36 +14,34 @@ let
   inherit (stdenv.lib) optional;
 in
 stdenv.mkDerivation rec {
-  version = "2.0.1";
+  version = "2.5.0";
   name = "radare2-${version}";
 
   src = fetchFromGitHub {
     owner = "radare";
     repo = "radare2";
     rev = version;
-    sha256 = "031ndvinsypagpkdszxjq0hj91ijq9zx4dzk53sz7il7s3zn65c7";
+    sha256 = "07x94chkhpn3wgw4pypn35psxq370j6xwmhf1mh5z27cqkq7c2yd";
   };
 
-  patches = [
-    (fetchpatch {
-      name = "CVE-2017-15385.patch";
-      url = https://github.com/radare/radare2/commit/21a6f570ba33fa9f52f1bba87f07acc4e8c178f4.patch;
-      sha256 = "19qg5j9yr5r62nrq2b6mscxsz0wyyfah2z5jz8dvj9kqxq186d43";
-    })
-  ];
+  # do not try to update capstone
+  WITHOUT_PULL=1;
 
   postPatch = let
-    cs_ver = "3.0.4"; # version from $sourceRoot/shlr/Makefile
-    capstone = fetchurl {
-      url = "https://github.com/aquynh/capstone/archive/${cs_ver}.tar.gz";
-      sha256 = "1whl5c8j6vqvz2j6ay2pyszx0jg8d3x8hq66cvgghmjchvsssvax";
+    cs_tip = "4a1b580d069c82d60070d0869a87000db7cdabe2"; # version from $sourceRoot/shlr/Makefile
+    capstone = fetchFromGitHub {
+      owner = "aquynh";
+      repo = "capstone";
+      rev = cs_tip;
+      sha256 = "0v6rxfpxjq0hf40qn1n5m5wsv1dv6p1j8vm94a708lhvcbk9nkv8";
     };
   in ''
-    if ! grep -F "CS_VER=${cs_ver}" shlr/Makefile; then echo "CS_VER mismatch"; exit 1; fi
-    substituteInPlace shlr/Makefile --replace CS_RELEASE=0 CS_RELEASE=1
-    cp ${capstone} shlr/capstone-${cs_ver}.tar.gz
-
+    if ! grep -F "CS_TIP=${cs_tip}" shlr/Makefile; then echo "CS_TIP mismatch"; exit 1; fi
+    cp -r ${capstone} shlr/capstone
+    chmod -R u+rw shlr/capstone
   '';
+
+  enableParallelBuilding = true;
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ readline libusb libewf perl zlib openssl]
@@ -50,13 +49,6 @@ stdenv.mkDerivation rec {
     ++ optional rubyBindings [ruby]
     ++ optional pythonBindings [python]
     ++ optional luaBindings [lua];
-
-  postInstall = ''
-    # replace symlinks pointing into the build directory with the files they point to
-    rm $out/bin/{r2-docker,r2-indent}
-    cp sys/r2-docker.sh $out/bin/r2-docker
-    cp sys/indent.sh    $out/bin/r2-indent
-  '';
 
   meta = {
     description = "unix-like reverse engineering framework and commandline tools";

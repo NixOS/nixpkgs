@@ -26,9 +26,9 @@ import ./make-test.nix ({ pkgs, ...} : {
           interface = "eth1";
           mode = "bridge";
         };
-        networking.interfaces.eth1.ip4 = lib.mkForce [];
+        networking.interfaces.eth1.ipv4.addresses = lib.mkForce [];
         networking.interfaces.mv-eth1-host = {
-          ip4 = [ { address = "192.168.1.1"; prefixLength = 24; } ];
+          ipv4.addresses = [ { address = "192.168.1.1"; prefixLength = 24; } ];
         };
 
         containers.test1 = {
@@ -37,7 +37,7 @@ import ./make-test.nix ({ pkgs, ...} : {
 
           config = {
             networking.interfaces.mv-eth1 = {
-              ip4 = [ { address = containerIp1; prefixLength = 24; } ];
+              ipv4.addresses = [ { address = containerIp1; prefixLength = 24; } ];
             };
           };
         };
@@ -48,7 +48,7 @@ import ./make-test.nix ({ pkgs, ...} : {
 
           config = {
             networking.interfaces.mv-eth1 = {
-              ip4 = [ { address = containerIp2; prefixLength = 24; } ];
+              ipv4.addresses = [ { address = containerIp2; prefixLength = 24; } ];
             };
           };
         };

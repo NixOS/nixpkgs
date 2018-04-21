@@ -1,10 +1,14 @@
 { stdenv, fetchurl, pythonPackages, qt4, pkgconfig, lndir, dbus_libs, makeWrapper }:
 
 let
+  pname = "PyQt-x11-gpl";
   version = "4.12";
+
   inherit (pythonPackages) buildPythonPackage python dbus-python sip;
 in buildPythonPackage {
-  name = "PyQt-x11-gpl-${version}";
+  pname = pname;
+  name = pname + "-" + version;
+  version = version;
   format = "other";
 
   src = fetchurl {

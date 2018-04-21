@@ -1,4 +1,4 @@
-{ config, stdenv, fetchgit, makeWrapper, gnome3, at_spi2_core, libcxx,
+{ config, stdenv, fetchgit, makeWrapper, gnome3, at-spi2-core, libcxx,
   boost, epoxy, cmake, aspell, llvmPackages, libgit2, pkgconfig, pcre,
   libXdmcp, libxkbcommon, libpthreadstubs, wrapGAppsHook, aspellDicts,
   coreutils, glibc, dbus_libs, openssl, libxml2, gnumake, ctags }:
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
     openssl
     libxml2
     gnome3.gtksourceview
-    at_spi2_core
+    at-spi2-core
     pcre
     epoxy
     boost

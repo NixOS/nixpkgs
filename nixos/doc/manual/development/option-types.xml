@@ -110,6 +110,12 @@
     <listitem><para>A string. Multiple definitions are concatenated with a 
         collon <literal>":"</literal>.</para></listitem>
   </varlistentry>
+  <varlistentry>
+    <term><varname>types.strMatching</varname></term>
+    <listitem><para>A string matching a specific regular expression. Multiple
+    definitions cannot be merged.  The regular expression is processed using
+    <literal>builtins.match</literal>.</para></listitem>
+  </varlistentry>
 </variablelist>
 
  </section>
@@ -276,8 +282,8 @@ options.mod = mkOption {
     option set (<xref linkend='ex-submodule-listof-definition' />).</para>
     
 
-<example xml:id='ex-submodule-listof-declaration'><title>Declaration of a list 
-    nof submodules</title>
+<example xml:id='ex-submodule-listof-declaration'><title>Declaration of a list
+    of submodules</title>
 <screen>
 options.mod = mkOption {
   description = "submodule example";

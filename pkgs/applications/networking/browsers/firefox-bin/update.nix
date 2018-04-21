@@ -37,7 +37,7 @@ in writeScript "update-${name}" ''
   #    versions or removes release versions if we are looking for beta
   #    versions
   # - this line pick up latest release
-  version=`xidel -q $url --extract "//a" | \
+  version=`xidel -s $url --extract "//a" | \
            sed s"/.$//" | \
            grep "^[0-9]" | \
            sort --version-sort | \

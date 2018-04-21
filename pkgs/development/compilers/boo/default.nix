@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, pkgconfig, dbus, mono, makeWrapper, nant
-, shared_mime_info, gtksourceview, gtk2
+, shared-mime-info, gtksourceview, gtk2
 , targetVersion ? "4.5" }:
 
 let
@@ -18,7 +18,7 @@ in stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
-    mono makeWrapper nant shared_mime_info gtksourceview
+    mono makeWrapper nant shared-mime-info gtksourceview
     gtk2
   ];
 

@@ -4,8 +4,7 @@
 }:
 
 let
-
-  version = "0.16.0";
+  version = "0.17.0";
 
 in mkDerivation rec {
   name = "sddm-${version}";
@@ -14,7 +13,7 @@ in mkDerivation rec {
     owner = "sddm";
     repo = "sddm";
     rev = "v${version}";
-    sha256 = "1j0rc8nk8bz7sxa0bc6lx9v7r3zlcfyicngfjqb894ni9k71kzsb";
+    sha256 = "1m35ly6miwy8ivsln3j1bfv0nxbc4gyqnj7f847zzp53jsqrm3mq";
   };
 
   patches = [ ./sddm-ignore-config-mtime.patch ];
@@ -23,6 +22,10 @@ in mkDerivation rec {
     # Module Qt5::Test must be included in `find_package` before it is used.
     ''
       sed -i CMakeLists.txt -e '/find_package(Qt5/ s|)| Test)|'
+    ''
+    # Fix missing include for gettimeofday()
+    + ''
+      sed -e '1i#include <sys/time.h>' -i src/helper/HelperApp.cpp
     '';
 
   nativeBuildInputs = [ cmake extra-cmake-modules pkgconfig qttools ];

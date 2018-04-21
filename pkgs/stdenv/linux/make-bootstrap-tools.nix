@@ -1,8 +1,11 @@
-{ system ? builtins.currentSystem }:
+{ localSystem ? { system = builtins.currentSystem; }
+, crossSystem ? null
+}:
 
-with import ../../.. {inherit system;};
-
-rec {
+let
+  pkgs = import ../../.. { inherit localSystem crossSystem; };
+  libc = pkgs.stdenv.cc.libc;
+in with pkgs; rec {
 
 
   coreutilsMinimal = coreutils.override (args: {
@@ -16,7 +19,7 @@ rec {
   tarMinimal = gnutar.override { acl = null; };
 
   busyboxMinimal = busybox.override {
-    useMusl = true;
+    useMusl = !targetPlatform.isRiscV;
     enableStatic = true;
     enableMinimal = true;
     extraConfig = ''
@@ -35,35 +38,36 @@ rec {
     stdenv.mkDerivation {
       name = "stdenv-bootstrap-tools";
 
-      buildInputs = [nukeReferences cpio];
+      nativeBuildInputs = [ buildPackages.nukeReferences buildPackages.cpio ];
 
       buildCommand = ''
         set -x
         mkdir -p $out/bin $out/lib $out/libexec
 
+      '' + (if (hostPlatform.libc == "glibc") then ''
         # Copy what we need of Glibc.
-        cp -d ${glibc.out}/lib/ld*.so* $out/lib
-        cp -d ${glibc.out}/lib/libc*.so* $out/lib
-        cp -d ${glibc.out}/lib/libc_nonshared.a $out/lib
-        cp -d ${glibc.out}/lib/libm*.so* $out/lib
-        cp -d ${glibc.out}/lib/libdl*.so* $out/lib
-        cp -d ${glibc.out}/lib/librt*.so*  $out/lib
-        cp -d ${glibc.out}/lib/libpthread*.so* $out/lib
-        cp -d ${glibc.out}/lib/libnsl*.so* $out/lib
-        cp -d ${glibc.out}/lib/libutil*.so* $out/lib
-        cp -d ${glibc.out}/lib/libnss*.so* $out/lib
-        cp -d ${glibc.out}/lib/libresolv*.so* $out/lib
-        cp -d ${glibc.out}/lib/crt?.o $out/lib
+        cp -d ${libc.out}/lib/ld*.so* $out/lib
+        cp -d ${libc.out}/lib/libc*.so* $out/lib
+        cp -d ${libc.out}/lib/libc_nonshared.a $out/lib
+        cp -d ${libc.out}/lib/libm*.so* $out/lib
+        cp -d ${libc.out}/lib/libdl*.so* $out/lib
+        cp -d ${libc.out}/lib/librt*.so*  $out/lib
+        cp -d ${libc.out}/lib/libpthread*.so* $out/lib
+        cp -d ${libc.out}/lib/libnsl*.so* $out/lib
+        cp -d ${libc.out}/lib/libutil*.so* $out/lib
+        cp -d ${libc.out}/lib/libnss*.so* $out/lib
+        cp -d ${libc.out}/lib/libresolv*.so* $out/lib
+        cp -d ${libc.out}/lib/crt?.o $out/lib
 
-        cp -rL ${glibc.dev}/include $out
+        cp -rL ${libc.dev}/include $out
         chmod -R u+w "$out"
 
-        # glibc can contain linker scripts: find them, copy their deps,
+        # libc can contain linker scripts: find them, copy their deps,
         # and get rid of absolute paths (nuke-refs would make them useless)
         local lScripts=$(grep --files-with-matches --max-count=1 'GNU ld script' -R "$out/lib")
-        cp -d -t "$out/lib/" $(cat $lScripts | tr " " "\n" | grep -F '${glibc.out}' | sort -u)
+        cp -d -t "$out/lib/" $(cat $lScripts | tr " " "\n" | grep -F '${libc.out}' | sort -u)
         for f in $lScripts; do
-          substituteInPlace "$f" --replace '${glibc.out}/lib/' ""
+          substituteInPlace "$f" --replace '${libc.out}/lib/' ""
         done
 
         # Hopefully we won't need these.
@@ -71,9 +75,20 @@ rec {
         find $out/include -name .install -exec rm {} \;
         find $out/include -name ..install.cmd -exec rm {} \;
         mv $out/include $out/include-glibc
+    '' else if (hostPlatform.libc == "musl") then ''
+        # Copy what we need from musl
+        cp ${libc.out}/lib/* $out/lib
+        cp -rL ${libc.dev}/include $out
+        chmod -R u+w "$out"
 
+        rm -rf $out/include/mtd $out/include/rdma $out/include/sound $out/include/video
+        find $out/include -name .install -exec rm {} \;
+        find $out/include -name ..install.cmd -exec rm {} \;
+        mv $out/include $out/include-libc
+    '' else throw "unsupported libc for bootstrap tools")
+    + ''
         # Copy coreutils, bash, etc.
-        cp ${coreutilsMinimal.out}/bin/* $out/bin
+        cp -d ${coreutilsMinimal.out}/bin/* $out/bin
         (cd $out/bin && rm vdir dir sha*sum pinky factor pathchk runcon shuf who whoami shred users)
 
         cp ${bash.out}/bin/bash $out/bin
@@ -110,7 +125,7 @@ rec {
         cp -rd ${gcc.cc.out}/libexec/* $out/libexec
         chmod -R u+w $out/libexec
         rm -rf $out/libexec/gcc/*/*/plugin
-        mkdir $out/include
+        mkdir -p $out/include
         cp -rd ${gcc.cc.out}/include/c++ $out/include
         chmod -R u+w $out/include
         rm -rf $out/include/c++/*/ext/pb_ds
@@ -118,17 +133,25 @@ rec {
 
         cp -d ${gmpxx.out}/lib/libgmp*.so* $out/lib
         cp -d ${mpfr.out}/lib/libmpfr*.so* $out/lib
-        cp -d ${libmpc}/lib/libmpc*.so* $out/lib
+        cp -d ${libmpc.out}/lib/libmpc*.so* $out/lib
         cp -d ${zlib.out}/lib/libz.so* $out/lib
         cp -d ${libelf}/lib/libelf.so* $out/lib
+      '' + lib.optionalString (hostPlatform.libc == "musl") ''
+        cp -d ${libiconv.out}/lib/libiconv*.so* $out/lib
 
+      '' + lib.optionalString (hostPlatform != buildPlatform) ''
+        # These needed for cross but not native tools because the stdenv
+        # GCC has certain things built in statically. See
+        # pkgs/stdenv/linux/default.nix for the details.
+        cp -d ${isl_0_17.out}/lib/libisl*.so* $out/lib
+
+      '' + ''
         cp -d ${bzip2.out}/lib/libbz2.so* $out/lib
 
         # Copy binutils.
         for i in as ld ar ranlib nm strip readelf objdump; do
-          cp ${binutils.out}/bin/$i $out/bin
+          cp ${binutils.bintools.out}/bin/$i $out/bin
         done
-        cp -d ${binutils.lib}/lib/lib*.so* $out/lib
 
         chmod -R u+w $out
 
@@ -136,20 +159,21 @@ rec {
         for i in $out/bin/* $out/libexec/gcc/*/*/*; do
             if test -x $i -a ! -L $i; then
                 chmod +w $i
-                strip -s $i || true
+                $STRIP -s $i || true
             fi
         done
 
         nuke-refs $out/bin/*
         nuke-refs $out/lib/*
         nuke-refs $out/libexec/gcc/*/*/*
+        nuke-refs $out/lib/gcc/*/*/*
 
         mkdir $out/.pack
         mv $out/* $out/.pack
         mv $out/.pack $out/pack
 
         mkdir $out/on-server
-        tar cvfJ $out/on-server/bootstrap-tools.tar.xz --hard-dereference --sort=name --numeric-owner --owner=0 --group=0 --mtime=@1 -C $out/pack .
+        XZ_OPT=-9 tar cvJf $out/on-server/bootstrap-tools.tar.xz --hard-dereference --sort=name --numeric-owner --owner=0 --group=0 --mtime=@1 -C $out/pack .
         cp ${busyboxMinimal}/bin/busybox $out/on-server
         chmod u+w $out/on-server/busybox
         nuke-refs $out/on-server/busybox
@@ -177,11 +201,21 @@ rec {
     bootstrapTools = runCommand "bootstrap-tools.tar.xz" {} "cp ${build}/on-server/bootstrap-tools.tar.xz $out";
   };
 
-  bootstrapTools = import ./bootstrap-tools { inherit system bootstrapFiles; };
+  bootstrapTools = if (hostPlatform.libc == "glibc") then
+    import ./bootstrap-tools {
+      inherit (hostPlatform) system;
+      inherit bootstrapFiles;
+    }
+    else if (hostPlatform.libc == "musl") then
+    import ./bootstrap-tools-musl {
+      inherit (hostPlatform) system;
+      inherit bootstrapFiles;
+    }
+    else throw "unsupported libc";
 
   test = derivation {
     name = "test-bootstrap-tools";
-    inherit system;
+    inherit (hostPlatform) system;
     builder = bootstrapFiles.busybox;
     args = [ "ash" "-e" "-c" "eval \"$buildCommand\"" ];
 
@@ -200,10 +234,17 @@ rec {
       grep --version
       gcc --version
 
+    '' + lib.optionalString (hostPlatform.libc == "glibc") ''
       ldlinux=$(echo ${bootstrapTools}/lib/ld-linux*.so.?)
       export CPP="cpp -idirafter ${bootstrapTools}/include-glibc -B${bootstrapTools}"
       export CC="gcc -idirafter ${bootstrapTools}/include-glibc -B${bootstrapTools} -Wl,-dynamic-linker,$ldlinux -Wl,-rpath,${bootstrapTools}/lib"
       export CXX="g++ -idirafter ${bootstrapTools}/include-glibc -B${bootstrapTools} -Wl,-dynamic-linker,$ldlinux -Wl,-rpath,${bootstrapTools}/lib"
+    '' + lib.optionalString (hostPlatform.libc == "musl") ''
+      ldmusl=$(echo ${bootstrapTools}/lib/ld-musl*.so.?)
+      export CPP="cpp -idirafter ${bootstrapTools}/include-libc -B${bootstrapTools}"
+      export CC="gcc -idirafter ${bootstrapTools}/include-libc -B${bootstrapTools} -Wl,-dynamic-linker,$ldmusl -Wl,-rpath,${bootstrapTools}/lib"
+      export CXX="g++ -idirafter ${bootstrapTools}/include-libc -B${bootstrapTools} -Wl,-dynamic-linker,$ldmusl -Wl,-rpath,${bootstrapTools}/lib"
+    '' + ''
 
       echo '#include <stdio.h>' >> foo.c
       echo '#include <limits.h>' >> foo.c

@@ -1,4 +1,4 @@
-{ stdenv, fetchzip, makeWrapper, jre, pythonPackages
+{ stdenv, fetchzip, makeWrapper, jre, pythonPackages, coreutils
 , RSupport? true, R
 , mesosSupport ? true, mesos
 , version
@@ -6,13 +6,9 @@
 
 let
   versionMap = {
-    "1.6.3" = {
-                hadoopVersion = "cdh4";
-                sparkSha256 = "00il083cjb9xqzsma2ifphq9ggichwndrj6skh2z5z9jk3z0lgyn";
-              };
-    "2.2.0" = {
+    "2.2.1" = {
                 hadoopVersion = "hadoop2.7";
-                sparkSha256 = "0wjjn2pgalrcji8avhj5d48kl1mf7rhrdxhzf29dbiszq4fkx0s6";
+                sparkSha256 = "10nxsf9a6hj1263sxv0cbdqxdb8mb4cl6iqq32ljq9ydvk32s99c";
               };
   };
 in
@@ -57,6 +53,7 @@ stdenv.mkDerivation rec {
 
     for n in $(find $out/lib/${untarDir}/bin -type f ! -name "*.*"); do
       makeWrapper "$n" "$out/bin/$(basename $n)"
+      substituteInPlace "$n" --replace dirname ${coreutils.out}/bin/dirname
     done
     ln -s $out/lib/${untarDir}/lib/spark-assembly-*.jar $out/share/java
   '';

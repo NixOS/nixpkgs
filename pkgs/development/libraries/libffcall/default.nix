@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "libffcall-${version}";
-  version = "2.0";
+  version = "2.1";
 
   src = fetchurl {
     url = "mirror://gnu/libffcall/libffcall-${version}.tar.gz";
-    sha256 = "0v0rh3vawb8z5q40fs3kr2f9zp06n2fq4rr2ww4562nr96sd5aj1";
+    sha256 = "0iwcad6w78jp84vd6xaz5fwqm84n3cb42bdf5m5cj5xzpa5zp4d0";
   };
 
   enableParallelBuilding = false;

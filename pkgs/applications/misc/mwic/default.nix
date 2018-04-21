@@ -1,12 +1,12 @@
 { stdenv, fetchurl, pythonPackages }:
 
 stdenv.mkDerivation rec {
-  version = "0.7.3";
+  version = "0.7.4";
   name = "mwic-${version}";
 
   src = fetchurl {
     url = "https://github.com/jwilk/mwic/releases/download/${version}/${name}.tar.gz";
-    sha256 = "0baa2pnaba954k169p9rpzc66mhz9zqdd3lz9q95rp9dgygvchzn";
+    sha256 = "0c0xk7wx4vaamlry6srdixw1q6afmqznvxdzcg1skr0qjypw5i5q";
   };
 
   makeFlags=["PREFIX=\${out}"];
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
     homepage = http://jwilk.net/software/mwic;
     description = "spell-checker that groups possible misspellings and shows them in their contexts";
     license = licenses.mit;
-    maintainers = with maintainers; [ matthiasbeyer ];
+    maintainers = with maintainers; [ ];
   };
 }
 

@@ -1,21 +1,25 @@
-{ stdenv, fetchFromGitHub, makeWrapper, perl, AlgorithmDiff, RegexpCommon }:
+{ stdenv, fetchFromGitHub, makeWrapper, perl
+, AlgorithmDiff, ParallelForkManager, RegexpCommon
+}:
 
 stdenv.mkDerivation rec {
   name = "cloc-${version}";
-  version = "1.74";
+  version = "1.76";
 
   src = fetchFromGitHub {
     owner = "AlDanial";
     repo = "cloc";
-    rev = version;
-    sha256 = "1ihma4f6f92jp1mvzr4rjrgyh9m5wzrlxngaxfn7g0a8r2kyi65b";
+    rev = "v${version}";
+    sha256 = "03z4ar959ximsddd92zchi013lh82ganzisk309y3b09q10hl9k7";
   };
 
   setSourceRoot = ''
     sourceRoot=$(echo */Unix)
   '';
 
-  buildInputs = [ makeWrapper perl AlgorithmDiff RegexpCommon ];
+  buildInputs = [
+    makeWrapper perl AlgorithmDiff ParallelForkManager RegexpCommon
+  ];
 
   makeFlags = [ "prefix=" "DESTDIR=$(out)" "INSTALL=install" ];
 

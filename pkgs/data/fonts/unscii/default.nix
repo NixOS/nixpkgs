@@ -8,7 +8,6 @@ stdenv.mkDerivation rec {
     url = "http://pelulamu.net/${pname}/${name}-src.tar.gz";
     sha256 = "0qcxcnqz2nlwfzlrn115kkp3n8dd7593h762vxs6vfqm13i39lq1";
   };
-  buildInputs = [];
   nativeBuildInputs = [perl bdftopcf perlPackages.TextCharWidth fontforge 
     SDL SDL_image];
   preConfigure = ''

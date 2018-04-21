@@ -1,5 +1,5 @@
 { stdenv, lib, fetchurl, dpkg, gnome2, atk, cairo, gdk_pixbuf, glib, freetype,
-fontconfig, dbus, libX11, xlibs, libXi, libXcursor, libXdamage, libXrandr,
+fontconfig, dbus, libX11, xorg, libXi, libXcursor, libXdamage, libXrandr,
 libXcomposite, libXext, libXfixes, libXrender, libXtst, libXScrnSaver, nss,
 nspr, alsaLib, cups, expat, udev
 }:
@@ -33,20 +33,20 @@ let
     nss
     stdenv.cc.cc
     udev
-    xlibs.libxcb
+    xorg.libxcb
   ];
 
 in
   stdenv.mkDerivation rec {
     name = "signal-desktop-${version}";
 
-    version = "1.0.35";
+    version = "1.7.1";
 
     src =
       if stdenv.system == "x86_64-linux" then
         fetchurl {
           url = "https://updates.signal.org/desktop/apt/pool/main/s/signal-desktop/signal-desktop_${version}_amd64.deb";
-          sha256 = "d9f9d4d54f4121efc8eadf1cf0ff957828088b313e53b66dc540b851c44c1860";
+          sha256 = "02zx8ynbvvs260mrvqbsg0fi561da4ni3i9f4bjh53vqn92vhvvq";
         }
       else
         throw "Signal for Desktop is not currently supported on ${stdenv.system}";
@@ -79,9 +79,10 @@ in
 
     meta = {
       description = "Signal Private Messenger for the Desktop.";
-      homepage = https://signal.org/;
-      license = lib.licenses.gpl3;
-      platforms = [
+      homepage    = https://signal.org/;
+      license     = lib.licenses.gpl3;
+      maintainers = [ lib.maintainers.ixmatus ];
+      platforms   = [
         "x86_64-linux"
       ];
     };

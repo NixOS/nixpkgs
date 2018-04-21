@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgconfig, pidgin, libnotify, gdk_pixbuf, glib, dbus
-, dbus_glib }:
+, dbus-glib }:
 
 stdenv.mkDerivation rec {
   name = "skype4pidgin-novas0x2a-20120411-6c53f7c48f";
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
   postInstall = "ln -s \$out/lib/pidgin \$out/share/pidgin-otr";
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ pidgin libnotify gdk_pixbuf glib dbus dbus_glib ];
+  buildInputs = [ pidgin libnotify gdk_pixbuf glib dbus dbus-glib ];
 
   meta = {
     homepage = https://github.com/novas0x2a/skype4pidgin;

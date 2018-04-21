@@ -2,8 +2,9 @@
 
 buildPythonPackage rec {
   version = "1.2.3";
-  name = "robotframework-ride-${version}";
+  pname = "robotframework-ride";
   disabled = isPy3k;
+  name = pname + "-" + version;
 
   src = fetchurl {
     url = "https://robotframework-ride.googlecode.com/files/${name}.tar.gz";

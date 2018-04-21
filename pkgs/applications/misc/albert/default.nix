@@ -1,15 +1,15 @@
-{ mkDerivation, lib, fetchFromGitHub, makeWrapper, qtbase, qtdeclarative, qtsvg, qtx11extras, muparser,
-  cmake, python3 }:
+{ mkDerivation, lib, fetchFromGitHub, makeWrapper, qtbase,
+  qtdeclarative, qtsvg, qtx11extras, muparser, cmake, python3 }:
 
 mkDerivation rec {
   name    = "albert-${version}";
-  version = "0.14.7";
+  version = "0.14.15";
 
   src = fetchFromGitHub {
     owner  = "albertlauncher";
     repo   = "albert";
     rev    = "v${version}";
-    sha256 = "1ryjrbrbgignhkvsv4021l4am8ml7g8v4bs5cp5jj288k4p2rf4n";
+    sha256 = "1rjp0bmzs8b9blbxz3sfcanyhgmds882pf1g3jx5qp85y64j8507";
     fetchSubmodules = true;
   };
 

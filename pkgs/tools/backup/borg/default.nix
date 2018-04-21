@@ -1,30 +1,35 @@
-{ stdenv, fetchurl, python3Packages, acl, lz4, openssl, openssh }:
+{ stdenv, python3Packages, acl, libb2, lz4, zstd, openssl, openssh }:
 
 python3Packages.buildPythonApplication rec {
-  name = "borgbackup-${version}";
-  version = "1.1.1";
-  namePrefix = "";
+  pname = "borgbackup";
+  version = "1.1.5";
 
-  src = fetchurl {
-    url = "https://github.com/borgbackup/borg/releases/download/"
-      + "${version}/${name}.tar.gz";
-    sha256 = "0iik5lq349cl87imlwra2pp0j36wjhpn8r1d3778azvvqpyjq2d5";
+  src = python3Packages.fetchPypi {
+    inherit pname version;
+    sha256 = "4356e6c712871f389e3cb1d6382e341ea635f9e5c65de1cd8fcd103d0fb66d3d";
   };
+
+  postPatch = ''
+    # loosen constraint on msgpack version, only 0.5.0 had problems
+    sed -i "s/'msgpack-python.*'/'msgpack-python'/g" setup.py
+  '';
 
   nativeBuildInputs = with python3Packages; [
     # For building documentation:
     sphinx guzzle_sphinx_theme
   ];
   buildInputs = [
-    lz4 openssl python3Packages.setuptools_scm
+    libb2 lz4 zstd openssl python3Packages.setuptools_scm
   ] ++ stdenv.lib.optionals stdenv.isLinux [ acl ];
   propagatedBuildInputs = with python3Packages; [
-    cython msgpack
+    cython msgpack-python
   ] ++ stdenv.lib.optionals (!stdenv.isDarwin) [ llfuse ];
 
   preConfigure = ''
     export BORG_OPENSSL_PREFIX="${openssl.dev}"
     export BORG_LZ4_PREFIX="${lz4.dev}"
+    export BORG_LIBB2_PREFIX="${libb2}"
+    export BORG_LIBZSTD_PREFIX="${zstd}"
   '';
 
   makeWrapperArgs = [
@@ -41,14 +46,11 @@ python3Packages.buildPythonApplication rec {
     cp -R docs/_build/man $out/share/man/man1
   '';
 
-  # tests fail due to missing test command in nix_run_setup.py
-  doCheck = false;
-
   meta = with stdenv.lib; {
     description = "A deduplicating backup program (attic fork)";
     homepage = https://borgbackup.github.io/;
     license = licenses.bsd3;
     platforms = platforms.unix; # Darwin and FreeBSD mentioned on homepage
-    maintainers = with maintainers; [ nckx flokli ];
+    maintainers = with maintainers; [ flokli ];
   };
 }

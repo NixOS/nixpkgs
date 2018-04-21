@@ -2,23 +2,23 @@
 
 buildGoPackage rec {
   name = "hugo-${version}";
-  version = "0.29";
+  version = "0.36.1";
 
   goPackagePath = "github.com/gohugoio/hugo";
 
   src = fetchFromGitHub {
-    owner = "gohugoio";
-    repo = "hugo";
-    rev = "v${version}";
-    sha256 = "1vklws05534ig9rj55cqnxpqfsvns64kfdg6zjyrcpz7l0z07a33";
+    owner  = "gohugoio";
+    repo   = "hugo";
+    rev    = "v${version}";
+    sha256 = "179lzkd6f81rssgcwlngx2mhr9nvbj0rsh6yjbf1fsrpxfzr2q9z";
   };
 
   goDeps = ./deps.nix;
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "A fast and modern static website engine.";
     homepage = https://gohugo.io;
-    maintainers = with stdenv.lib.maintainers; [ schneefux ];
-    license = stdenv.lib.licenses.asl20;
+    license = licenses.asl20;
+    maintainers = with maintainers; [ schneefux ];
   };
 }

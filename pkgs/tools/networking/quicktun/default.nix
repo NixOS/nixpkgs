@@ -11,6 +11,8 @@ stdenv.mkDerivation rec {
     sha256 = "1ydvwasj84qljfbzh6lmhyzjc20yw24a0v2mykp8afsm97zzlqgx";
   };
 
+  patches = [ ./tar-1.30.diff ]; # quicktun master seems not to need this
+
   buildInputs = [ libsodium ];
 
   buildPhase = "bash build.sh";

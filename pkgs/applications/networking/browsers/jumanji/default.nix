@@ -1,5 +1,5 @@
-{ stdenv, fetchgit, pkgconfig, girara, gtk, webkitgtk, glib_networking, makeWrapper
-, gsettings_desktop_schemas }:
+{ stdenv, fetchgit, pkgconfig, girara, gtk, webkitgtk, glib-networking, makeWrapper
+, gsettings-desktop-schemas }:
 
 stdenv.mkDerivation rec {
   name = "jumanji-${version}";
@@ -12,13 +12,13 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ girara gtk webkitgtk makeWrapper gsettings_desktop_schemas ];
+  buildInputs = [ girara gtk webkitgtk makeWrapper gsettings-desktop-schemas ];
 
   makeFlags = [ "PREFIX=$(out)" ];
 
   preFixup=''
     wrapProgram "$out/bin/jumanji" \
-     --prefix GIO_EXTRA_MODULES : "${glib_networking.out}/lib/gio/modules" \
+     --prefix GIO_EXTRA_MODULES : "${glib-networking.out}/lib/gio/modules" \
      --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH"
   '';
 

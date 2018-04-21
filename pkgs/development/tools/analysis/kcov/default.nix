@@ -1,4 +1,4 @@
-{stdenv, fetchFromGitHub, cmake, pkgconfig, zlib, curl, elfutils, python, libiberty, binutils}:
+{stdenv, fetchFromGitHub, cmake, pkgconfig, zlib, curl, elfutils, python, libiberty, libopcodes}:
 
 stdenv.mkDerivation rec {
   name = "kcov-${version}";
@@ -12,8 +12,9 @@ stdenv.mkDerivation rec {
   };
 
   preConfigure = "patchShebangs src/bin-to-c-source.py";
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ cmake zlib curl elfutils python libiberty binutils ];
+  nativeBuildInputs = [ cmake pkgconfig ];
+
+  buildInputs = [ zlib curl elfutils python libiberty libopcodes ];
 
   enableParallelBuilding = true;
 

@@ -5,9 +5,11 @@
  */
 let
 
-  callLibs = file: import file { inherit lib; };
+  inherit (import ./fixed-points.nix {}) makeExtensible;
 
-  lib = rec {
+  lib = makeExtensible (self: let
+    callLibs = file: import file { lib = self; };
+  in with self; {
 
     # often used, or depending on very little
     trivial = callLibs ./trivial.nix;
@@ -21,10 +23,10 @@ let
 
     # packaging
     customisation = callLibs ./customisation.nix;
-    maintainers = callLibs ./maintainers.nix;
+    maintainers = import ../maintainers/maintainer-list.nix;
     meta = callLibs ./meta.nix;
     sources = callLibs ./sources.nix;
-
+    versions = callLibs ./versions.nix;
 
     # module system
     modules = callLibs ./modules.nix;
@@ -41,23 +43,23 @@ let
     generators = callLibs ./generators.nix;
     misc = callLibs ./deprecated.nix;
     # domain-specific
-    sandbox = callLibs ./sandbox.nix;
     fetchers = callLibs ./fetchers.nix;
 
     # Eval-time filesystem handling
     filesystem = callLibs ./filesystem.nix;
 
     # back-compat aliases
-    platforms = systems.doubles;
+    platforms = systems.forMeta;
 
     inherit (builtins) add addErrorContext attrNames
       concatLists deepSeq elem elemAt filter genericClosure genList
-      getAttr hasAttr head isAttrs isBool isFunction isInt isList
+      getAttr hasAttr head isAttrs isBool isInt isList
       isString length lessThan listToAttrs pathExists readFile
       replaceStrings seq stringLength sub substring tail;
     inherit (trivial) id const concat or and boolToString mergeAttrs
       flip mapNullable inNixShell min max importJSON warn info
-      nixpkgsVersion mod;
+      nixpkgsVersion mod compare splitByAndCompare
+      functionArgs setFunctionArgs isFunction;
 
     inherit (fixedPoints) fix fix' extends composeExtensions
       makeExtensible makeExtensibleWithCustomName;
@@ -72,8 +74,8 @@ let
     inherit (lists) singleton foldr fold foldl foldl' imap0 imap1
       concatMap flatten remove findSingle findFirst any all count
       optional optionals toList range partition zipListsWith zipLists
-      reverseList listDfs toposort sort take drop sublist last init
-      crossLists unique intersectLists subtractLists
+      reverseList listDfs toposort sort naturalSort compareLists take drop sublist
+      last init crossLists unique intersectLists subtractLists
       mutuallyExclusive;
     inherit (strings) concatStrings concatMapStrings concatImapStrings
       intersperse concatStringsSep concatMapStringsSep
@@ -88,13 +90,14 @@ let
     inherit (stringsWithDeps) textClosureList textClosureMap
       noDepEntry fullDepEntry packEntry stringAfter;
     inherit (customisation) overrideDerivation makeOverridable
-      callPackageWith callPackagesWith addPassthru hydraJob makeScope;
+      callPackageWith callPackagesWith extendDerivation
+      hydraJob makeScope;
     inherit (meta) addMetaAttrs dontDistribute setName updateName
       appendToName mapDerivationAttrset lowPrio lowPrioSet hiPrio
       hiPrioSet;
     inherit (sources) pathType pathIsDirectory cleanSourceFilter
       cleanSource sourceByRegex sourceFilesBySuffices
-      commitIdFromGitRepo;
+      commitIdFromGitRepo cleanSourceWith pathHasContext canCleanSource;
     inherit (modules) evalModules closeModules unifyModuleSyntax
       applyIfFunction unpackSubmodule packSubmodule mergeModules
       mergeModules' mergeOptionDecls evalOptionValue mergeDefinitions
@@ -127,5 +130,5 @@ let
       mergeAttrsNoOverride mergeAttrByFunc mergeAttrsByFuncDefaults
       mergeAttrsByFuncDefaultsClean mergeAttrBy
       prepareDerivationArgs nixType imap overridableDelayableArgs;
-  };
+  });
 in lib

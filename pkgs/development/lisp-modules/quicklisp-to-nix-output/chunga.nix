@@ -1,15 +1,15 @@
 args @ { fetchurl, ... }:
 rec {
   baseName = ''chunga'';
-  version = ''1.1.6'';
+  version = ''20180131-git'';
 
   description = '''';
 
   deps = [ args."trivial-gray-streams" ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/chunga/2014-12-17/chunga-1.1.6.tgz'';
-    sha256 = ''1ivdfi9hjkzp2anhpjm58gzrjpn6mdsp35km115c1j1c4yhs9lzg'';
+    url = ''http://beta.quicklisp.org/archive/chunga/2018-01-31/chunga-20180131-git.tgz'';
+    sha256 = ''0crlv6n6al7j9b40dpfjd13870ih5hzwra29xxfg3zg2zy2kdnrq'';
   };
 
   packageName = "chunga";
@@ -18,8 +18,8 @@ rec {
   overrides = x: x;
 }
 /* (SYSTEM chunga DESCRIPTION NIL SHA256
-    1ivdfi9hjkzp2anhpjm58gzrjpn6mdsp35km115c1j1c4yhs9lzg URL
-    http://beta.quicklisp.org/archive/chunga/2014-12-17/chunga-1.1.6.tgz MD5
-    75f5c4f9dec3a8a181ed5ef7e5d700b5 NAME chunga FILENAME chunga DEPS
+    0crlv6n6al7j9b40dpfjd13870ih5hzwra29xxfg3zg2zy2kdnrq URL
+    http://beta.quicklisp.org/archive/chunga/2018-01-31/chunga-20180131-git.tgz
+    MD5 044b684535b11b1eee1cf939bec6e14a NAME chunga FILENAME chunga DEPS
     ((NAME trivial-gray-streams FILENAME trivial-gray-streams)) DEPENDENCIES
-    (trivial-gray-streams) VERSION 1.1.6 SIBLINGS NIL PARASITES NIL) */
+    (trivial-gray-streams) VERSION 20180131-git SIBLINGS NIL PARASITES NIL) */

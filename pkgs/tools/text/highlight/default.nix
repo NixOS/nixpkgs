@@ -4,13 +4,13 @@ with stdenv.lib;
 
 stdenv.mkDerivation rec {
   name = "highlight-${version}";
-  version = "3.40";
+  version = "3.42";
 
   src = fetchFromGitHub {
     owner = "andre-simon";
     repo = "highlight";
     rev = "${version}";
-    sha256 = "0bkywhz4y10qcajimdha1ck5mvn7fsrv3yn8nd6rqbva39gbfmfd";
+    sha256 = "1fxx827igzqjn5rri57b8980hnd3ixz3j7smfxwi1ivfhlfznzgr";
   };
 
   nativeBuildInputs = [ pkgconfig ] ++ optional stdenv.isDarwin  gcc ;

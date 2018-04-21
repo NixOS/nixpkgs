@@ -1,11 +1,11 @@
 { stdenv, fetchurl, expat, zlib, geos, libspatialite }:
 
 stdenv.mkDerivation rec {
-  name = "readosm-1.0.0b";
+  name = "readosm-1.1.0";
 
   src = fetchurl {
     url = "http://www.gaia-gis.it/gaia-sins/readosm-sources/${name}.tar.gz";
-    sha256 = "042pv31smc7l6y111rvp0hza5sw86wa8ldg2jyq78xgwzcbhszpd";
+    sha256 = "1v20pnda67imjd70fn0zw30aar525xicy3d3v49md5cvqklws265";
   };
 
   buildInputs = [ expat zlib geos libspatialite ];

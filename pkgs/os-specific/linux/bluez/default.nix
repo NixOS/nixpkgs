@@ -1,19 +1,19 @@
 { stdenv, fetchurl, pkgconfig, dbus, glib, alsaLib,
   pythonPackages, readline, udev, libical,
-  systemd, enableWiimote ? false }:
+  systemd, enableWiimote ? false, enableMidi ? false }:
 
 assert stdenv.isLinux;
 
 stdenv.mkDerivation rec {
-  name = "bluez-5.47";
+  name = "bluez-5.49";
 
   src = fetchurl {
     url = "mirror://kernel/linux/bluetooth/${name}.tar.xz";
-    sha256 = "1j22hfjz0fp4pgclgz9mfcwjbr4wqgah3gd2qhfg4r6msmybyxfg";
+    sha256 = "15ffsaz7l3fgdg03l7g1xx9jw7xgs6pc548zxqsxawsca5x1sc1k";
   };
 
   pythonPath = with pythonPackages;
-    [ dbus pygobject2 pygobject3 recursivePthLoader ];
+    [ dbus-python pygobject2 pygobject3 recursivePthLoader ];
 
   buildInputs = [
     pkgconfig dbus glib alsaLib pythonPackages.python pythonPackages.wrapPython
@@ -40,8 +40,8 @@ stdenv.mkDerivation rec {
     "--with-systemdsystemunitdir=$(out)/etc/systemd/system"
     "--with-systemduserunitdir=$(out)/etc/systemd/user"
     "--with-udevdir=$(out)/lib/udev"
-    ] ++
-    stdenv.lib.optional enableWiimote [ "--enable-wiimote" ];
+    ] ++ stdenv.lib.optional enableWiimote [ "--enable-wiimote" ]
+    ++ stdenv.lib.optional enableMidi [ "--enable-midi" ];
 
   # Work around `make install' trying to create /var/lib/bluetooth.
   installFlags = "statedir=$(TMPDIR)/var/lib/bluetooth";

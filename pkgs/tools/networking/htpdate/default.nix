@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   makeFlags = [
     "INSTALL=install"
-    "STRIP=${stdenv.cc.bintools.prefix}strip"
+    "STRIP=${stdenv.cc.bintools.targetPrefix}strip"
     "prefix=$(out)"
   ];
 
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     description = "Utility to fetch time and set the system clock over HTTP";
     homepage = http://www.vervest.org/htp/;
-    platforms = platforms.unix;
+    platforms = platforms.linux;
     license = licenses.gpl2Plus;
   };
 }

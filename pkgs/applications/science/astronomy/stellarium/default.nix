@@ -1,5 +1,5 @@
 { mkDerivation, lib, fetchurl
-, cmake, freetype, libpng, mesa, gettext, openssl, perl, libiconv
+, cmake, freetype, libpng, libGLU_combined, gettext, openssl, perl, libiconv
 , qtscript, qtserialport, qttools
 , qtmultimedia, qtlocation
 }:
@@ -16,7 +16,7 @@ mkDerivation rec {
   nativeBuildInputs = [ cmake perl ];
 
   buildInputs = [
-    freetype libpng mesa openssl libiconv qtscript qtserialport qttools
+    freetype libpng libGLU_combined openssl libiconv qtscript qtserialport qttools
     qtmultimedia qtlocation
   ];
 

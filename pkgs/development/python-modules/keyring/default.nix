@@ -1,30 +1,28 @@
 { stdenv, buildPythonPackage, fetchPypi
-, secretstorage
-, fs, gdata, python_keyczar, pyasn1, pycrypto, six, setuptools_scm
-, mock, pytest_28, pytestrunner }:
+, setuptools_scm, entrypoints, secretstorage
+, pytest, pytest-flake8 }:
 
 buildPythonPackage rec {
-  name = "${pname}-${version}";
   pname = "keyring";
-  version = "10.4.0";
+  version = "12.0.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "09iv50c14mdmdk7sjd6bb47yg7347gymh6r8c0q4gfnzs173y6lh";
+    sha256 = "846c9c709ee1203bac5444abec19b5228f4601377686f33cba672aa0ba313abd";
   };
 
-  buildInputs = [
-    fs gdata python_keyczar pyasn1 pycrypto six setuptools_scm
-  ];
+  nativeBuildInputs = [ setuptools_scm ];
 
-  checkInputs = [ mock pytest_28 pytestrunner ];
+  checkInputs = [ pytest pytest-flake8 ];
 
-  propagatedBuildInputs = [ secretstorage ];
+  propagatedBuildInputs = [ entrypoints ] ++ stdenv.lib.optional stdenv.isLinux secretstorage;
 
-  doCheck = !stdenv.isDarwin;
+  # all tests with flake8 are broken right now
+  # https://github.com/tholo/pytest-flake8/issues/45
+  doCheck = false;
 
   checkPhase = ''
-    py.test $out
+    py.test
   '';
 
   meta = with stdenv.lib; {

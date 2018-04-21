@@ -10,10 +10,12 @@ appleDerivation rec {
     # - su ('security/pam_appl.h' file not found)
     # - find (Undefined symbol '_get_date')
     # - w (Undefined symbol '_res_9_init')
+    # - expr
     substituteInPlace shell_cmds.xcodeproj/project.pbxproj \
       --replace "FCBA168714A146D000AA698B /* PBXTargetDependency */," "" \
       --replace "FCBA165914A146D000AA698B /* PBXTargetDependency */," "" \
-      --replace "FCBA169514A146D000AA698B /* PBXTargetDependency */," ""
+      --replace "FCBA169514A146D000AA698B /* PBXTargetDependency */," "" \
+      --replace "FCBA165514A146D000AA698B /* PBXTargetDependency */," ""
 
     # disable w, test install
     # get rid of permission stuff
@@ -27,7 +29,7 @@ appleDerivation rec {
   # temporary install phase until xcodebuild has "install" support
   installPhase = ''
     mkdir -p $out/usr/bin
-    install shell_cmds-*/Build/Products/Release/* $out/usr/bin
+    install Products/Release/* $out/usr/bin
 
     export DSTROOT=$out
     export SRCROOT=$PWD

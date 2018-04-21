@@ -1,34 +1,35 @@
 { stdenv, fetchurl, python2Packages, intltool, file
-, wrapGAppsHook, virtinst, gtkvnc, vte, avahi, dconf
+, wrapGAppsHook, gtkvnc, vte, avahi, dconf
 , gobjectIntrospection, libvirt-glib, system-libvirt
-, gsettings_desktop_schemas, glib, libosinfo, gnome3
-, spiceSupport ? true, spice_gtk ? null
+, gsettings-desktop-schemas, glib, libosinfo, gnome3, gtk3
+, spiceSupport ? true, spice-gtk ? null
 }:
 
 with stdenv.lib;
 
 python2Packages.buildPythonApplication rec {
   name = "virt-manager-${version}";
-  version = "1.4.2";
+  version = "1.5.1";
   namePrefix = "";
 
   src = fetchurl {
     url = "http://virt-manager.org/download/sources/virt-manager/${name}.tar.gz";
-    sha256 = "0x6mnqw8bng3r69pvmnq9q6yyhicxg22yz62b6dzbb4z16xl1r23";
+    sha256 = "1ardmd4sxdmd57y7qpka44gf09c1yq2g0xs074d3k1h925crv27f";
   };
 
-  nativeBuildInputs = [ wrapGAppsHook intltool file ];
+  nativeBuildInputs = [
+    wrapGAppsHook intltool file
+    gobjectIntrospection # for setup hook populating GI_TYPELIB_PATH
+  ];
 
   buildInputs =
-    [ libvirt-glib vte virtinst dconf gtkvnc gnome3.defaultIconTheme avahi
-      gsettings_desktop_schemas libosinfo
-    ] ++ optional spiceSupport spice_gtk;
+    [ libvirt-glib vte dconf gtkvnc gnome3.defaultIconTheme avahi
+      gsettings-desktop-schemas libosinfo gtk3
+    ] ++ optional spiceSupport spice-gtk;
 
   propagatedBuildInputs = with python2Packages;
-    [ eventlet greenlet gflags netaddr carrot routes PasteDeploy
-      m2crypto ipy twisted distutils_extra simplejson
-      cheetah lockfile httplib2 urlgrabber pyGtkGlade dbus-python
-      pygobject3 ipaddr mox libvirt libxml2 requests
+    [
+      pygobject3 ipaddr libvirt libxml2 requests
     ];
 
   patchPhase = ''
@@ -60,6 +61,8 @@ python2Packages.buildPythonApplication rec {
       manages Xen and LXC (linux containers).
     '';
     license = licenses.gpl2;
+    # exclude Darwin since libvirt-glib currently doesn't build there
+    platforms = platforms.linux;
     maintainers = with maintainers; [ qknight offline fpletz ];
   };
 }

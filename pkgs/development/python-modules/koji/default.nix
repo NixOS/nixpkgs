@@ -25,7 +25,7 @@ buildPythonPackage rec {
   '';
 
   meta = {
-    maintainers = [ stdenv.lib.maintainers.mornfall ];
+    maintainers = [ ];
     platforms = stdenv.lib.platforms.linux;
   };
 }

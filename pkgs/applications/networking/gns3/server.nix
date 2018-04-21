@@ -4,39 +4,31 @@
 
 let
   pythonPackages = python3Packages;
-  # TODO: Not sure if all these overwrites are really required...
-  # Upstream seems to have some reasons (bugs, incompatibilities) though.
-  multidict_3_1_3 =
-    (stdenv.lib.overrideDerivation pythonPackages.multidict (oldAttrs:
-      rec {
-        pname = "multidict";
-        version = "3.1.3";
-        name = "${pname}-${version}";
-        src = pythonPackages.fetchPypi {
-          inherit pname version;
-          sha256 = "04kdxh19m41c6vbshwk8jfbidsfsqn7mn0abvx09nyg78sh80pw7";
-        };
-        doInstallCheck = false;
-      }));
-  yarl = (stdenv.lib.overrideDerivation pythonPackages.yarl
-    (oldAttrs:
-      { propagatedBuildInputs = [ multidict_3_1_3 ]; }));
   aiohttp = (stdenv.lib.overrideDerivation pythonPackages.aiohttp
     (oldAttrs:
       rec {
         pname = "aiohttp";
-        version = "2.2.5";
-        name = "${pname}-${version}";
+        version = "2.3.10";
         src = pythonPackages.fetchPypi {
           inherit pname version;
-          sha256 = "1g6kzkf5in0briyscwxsihgps833dq2ggcq6lfh1hq95ck8zsnxg";
+          sha256 = "8adda6583ba438a4c70693374e10b60168663ffa6564c5c75d3c7a9055290964";
         };
-        propagatedBuildInputs = [ yarl multidict_3_1_3 ]
-          ++ (with pythonPackages; [ async-timeout chardet ]);
       }));
   aiohttp-cors = (stdenv.lib.overrideDerivation pythonPackages.aiohttp-cors
     (oldAttrs:
-      { propagatedBuildInputs = [ aiohttp ]; }));
+      rec {
+        pname = "aiohttp-cors";
+        version = "0.5.3";
+        name = "${pname}-${version}";
+        src = pythonPackages.fetchPypi {
+          inherit pname version;
+          sha256 = "11b51mhr7wjfiikvj3nc5s8c7miin2zdhl3yrzcga4mbpkj892in";
+        };
+        propagatedBuildInputs = [ aiohttp ]
+          ++ stdenv.lib.optional
+               (pythonPackages.pythonOlder "3.5")
+               pythonPackages.typing;
+      }));
 in pythonPackages.buildPythonPackage rec {
   name = "${pname}-${version}";
   pname = "gns3-server";
@@ -48,21 +40,18 @@ in pythonPackages.buildPythonPackage rec {
     sha256 = sha256Hash;
   };
 
-  propagatedBuildInputs = [ yarl aiohttp aiohttp-cors ]
+  propagatedBuildInputs = [ aiohttp-cors ]
     ++ (with pythonPackages; [
+      yarl aiohttp multidict
       jinja2 psutil zipstream raven jsonschema typing
       prompt_toolkit
     ]);
-
-  postPatch = ''
-    sed -i 's/yarl>=0.11,<0.12/yarl/g' requirements.txt
-  '';
 
   # Requires network access
   doCheck = false;
 
   postInstall = ''
-    rm $out/bin/gns3loopback # For windows only
+    rm $out/bin/gns3loopback # For Windows only
   '';
   meta = with stdenv.lib; {
     description = "Graphical Network Simulator 3 server (${branch} release)";

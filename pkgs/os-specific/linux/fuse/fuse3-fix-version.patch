@@ -1,0 +1,8 @@
+--- a/meson.build	2018-04-01 01:05:19.612723597 +0200
++++ b/meson.build	2018-04-01 01:40:58.171109615 +0200
+@@ -1,4 +1,4 @@
+-project('libfuse3', 'c', version: '3.2.1',
++project('libfuse3', 'c', version: '3.2.2',
+         meson_version: '>= 0.38',
+         default_options: [ 'buildtype=debugoptimized' ])
+

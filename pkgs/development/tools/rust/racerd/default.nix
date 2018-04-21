@@ -4,17 +4,17 @@ with rustPlatform;
 
 buildRustPackage rec {
   name = "racerd-${version}";
-  version = "2017-02-17";
+  version = "2017-09-15";
   src = fetchFromGitHub {
     owner = "jwilm";
     repo = "racerd";
-    rev = "e3f3ff010fce2c67195750d9a6a669ffb3c2ac5f";
-    sha256 = "125pmbkjnjh83xwikcwfbb8g150nldz7wh0ly1gv9kl1b521dydk";
+    rev = "29cd4c6fd2a9301e49931c2e065b2e10c4b587e4";
+    sha256 = "0knz881mjhd8q2i8ydggaa7lfpiqy11wjmnv5p80n1d8zca6yb7z";
   };
 
   doCheck = false;
 
-  cargoSha256 = "1h7hm7vkk1grah6pn5ydfi5pzc2kd48lh2kxim5jlvrxhd2dingg";
+  cargoSha256 = "00gxj98zdkbrc5cxd4w5hk7iwv9a1kwa535hhspx9xd02r4d8rzl";
 
   buildInputs = [ makeWrapper ];
 

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, libxml2, gtk, libSM, shared_mime_info, hicolor_icon_theme }:
+{ stdenv, fetchurl, pkgconfig, libxml2, gtk, libSM, shared-mime-info, hicolor-icon-theme }:
 
 let
   version = "2.11";
@@ -12,7 +12,7 @@ in stdenv.mkDerivation {
   };
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ libxml2 gtk shared_mime_info hicolor_icon_theme libSM ];
+  buildInputs = [ libxml2 gtk shared-mime-info hicolor-icon-theme libSM ];
 
   patches = [
     ./rox-filer-2.11-in-source-build.patch

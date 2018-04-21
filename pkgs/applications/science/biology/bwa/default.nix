@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name    = "bwa-${version}";
-  version = "0.7.16a";
+  version = "0.7.17";
 
   src = fetchurl {
     url = "mirror://sourceforge/bio-bwa/${name}.tar.bz2";
-    sha256 = "0w61zxh6b4isydw5qp6pdb1mc50jg1h8vhahw2xm24w7i1gxpv4g";
+    sha256 = "1zfhv2zg9v1icdlq4p9ssc8k01mca5d1bd87w71py2swfi74s6yy";
   };
 
   buildInputs = [ zlib ];

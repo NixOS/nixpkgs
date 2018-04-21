@@ -26,6 +26,5 @@ stdenv.mkDerivation rec {
     homepage = http://rote.sourceforge.net/;
     license = licenses.lgpl21;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ nckx ];
   };
 }

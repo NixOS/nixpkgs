@@ -10,6 +10,7 @@ let
   bootStage2 = pkgs.substituteAll {
     src = ./stage-2-init.sh;
     shellDebug = "${pkgs.bashInteractive}/bin/bash";
+    shell = "${pkgs.bash}/bin/bash";
     isExecutable = true;
     inherit (config.nix) readOnlyStore;
     inherit (config.networking) useHostResolvConf;

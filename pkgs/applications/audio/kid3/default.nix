@@ -10,11 +10,11 @@
 stdenv.mkDerivation rec {
 
   name = "kid3-${version}";
-  version = "3.4.2";
+  version = "3.6.0";
 
   src = fetchurl {
     url = "mirror://sourceforge/project/kid3/kid3/${version}/${name}.tar.gz";
-    sha256 = "0gka4na583015jyqva18g85q7vnkjdk0iji2jp88di3kpvqhf1sw";
+    sha256 = "1kv795prc4d3f2cbzskvdi73l6nx4cfcd32x255wq1s74zp1k73p";
   };
 
   buildInputs = with stdenv.lib;
@@ -32,6 +32,8 @@ stdenv.mkDerivation rec {
   postInstall = ''
     wrapProgram $out/bin/kid3-qt --prefix QT_PLUGIN_PATH : $out/lib/qt4/plugins
   '';
+
+  enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
     description = "A simple and powerful audio tag editor";

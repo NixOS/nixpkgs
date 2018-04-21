@@ -1,12 +1,12 @@
 diff --git a/src/ckb/animscript.cpp b/src/ckb/animscript.cpp
-index d0b7f46..d7a3459 100644
+index f49a64c..d7a3459 100644
 --- a/src/ckb/animscript.cpp
 +++ b/src/ckb/animscript.cpp
 @@ -30,7 +30,7 @@ QString AnimScript::path(){
  #ifdef __APPLE__
      return QDir(QApplication::applicationDirPath() + "/../Resources").absoluteFilePath("ckb-animations");
  #else
--    return QDir(QApplication::applicationDirPath()).absoluteFilePath("ckb-animations");
+-    return QDir("/usr/lib").absoluteFilePath("ckb-animations");
 +    return QDir(QApplication::applicationDirPath() + "/../libexec").absoluteFilePath("ckb-animations");
  #endif
  }

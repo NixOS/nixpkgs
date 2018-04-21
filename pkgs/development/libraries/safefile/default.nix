@@ -1,4 +1,4 @@
-{stdenv, fetchurl}:
+{ stdenv, fetchurl, path }:
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";
   pname = "safefile";
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   passthru = {
     updateScript = ''
       cd ${toString ./.}
-      ${toString <nixpkgs/pkgs/build-support/upstream-updater/update-walker.sh>} default.nix
+      ${toString path}/pkgs/build-support/upstream-updater/update-walker.sh default.nix
     '';
   };
 

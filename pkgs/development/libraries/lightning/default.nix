@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, binutils }:
+{ stdenv, fetchurl, libopcodes }:
 
 with stdenv.lib;
 stdenv.mkDerivation rec {
@@ -11,8 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "19j9nwl88k660045s40cbz5zrl1wpd2mcxnnc8qqnnaj311a58qz";
   };
 
-  # Needs libopcodes.so from binutils for 'make check'
-  buildInputs = [ binutils ];
+  buildInputs = stdenv.lib.optional doCheck libopcodes;
 
   doCheck = true;
 

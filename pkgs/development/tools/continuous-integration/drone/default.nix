@@ -61,7 +61,7 @@ buildGoPackage rec {
   };
 
   meta = with stdenv.lib; {
-    maintainer = with maintainers; [ avnik ];
+    maintainers = with maintainers; [ avnik ];
     license = licenses.asl20;
     description = "Continuous Integration platform built on container technology";
   };

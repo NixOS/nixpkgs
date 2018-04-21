@@ -30,6 +30,7 @@ let
 
     ''
       default_internal_user = ${cfg.user}
+      default_internal_group = ${cfg.group}
       ${optionalString (cfg.mailUser != null) "mail_uid = ${cfg.mailUser}"}
       ${optionalString (cfg.mailGroup != null) "mail_gid = ${cfg.mailGroup}"}
 
@@ -104,7 +105,7 @@ let
   };
 
   mailboxConfig = mailbox: ''
-    mailbox ${mailbox.name} {
+    mailbox "${mailbox.name}" {
       auto = ${toString mailbox.auto}
   '' + optionalString (mailbox.specialUse != null) ''
       special_use = \${toString mailbox.specialUse}
@@ -113,7 +114,7 @@ let
   mailboxes = { lib, pkgs, ... }: {
     options = {
       name = mkOption {
-        type = types.str;
+        type = types.strMatching ''[^"]+'';
         example = "Spam";
         description = "The name of the mailbox.";
       };

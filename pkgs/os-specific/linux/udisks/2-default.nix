@@ -1,17 +1,18 @@
 { stdenv, fetchurl, pkgconfig, intltool, gnused
 , expat, acl, systemd, glib, libatasmart, polkit
 , libxslt, docbook_xsl, utillinux, mdadm, libgudev
+, gobjectIntrospection
 }:
 
 stdenv.mkDerivation rec {
-  name = "udisks-2.1.6";
+  name = "udisks-2.1.8";
 
   src = fetchurl {
     url = "http://udisks.freedesktop.org/releases/${name}.tar.bz2";
-    sha256 = "0spl155k0g2l2hvqf8xyjv08i68gfyhzpjva6cwlzxx0bz4gbify";
+    sha256 = "1nkxhnqh39c9pzvm4zfj50rgv6apqawdx09bv3sfaxrah4a6jhfs";
   };
 
-  outputs = [ "out" "man" ];
+  outputs = [ "out" "man" "dev" ];
 
   patches = [ ./force-path.patch ];
 
@@ -26,9 +27,13 @@ stdenv.mkDerivation rec {
         --replace "/bin/sh" "${stdenv.shell}" \
         --replace "/sbin/mdadm" "${mdadm}/bin/mdadm" \
         --replace " sed " " ${gnused}/bin/sed "
-    '';
+  '' + stdenv.lib.optionalString stdenv.hostPlatform.isMusl ''
+      substituteInPlace udisks/udisksclient.c \
+        --replace 'defined( __GNUC_PREREQ)' 1 \
+        --replace '__GNUC_PREREQ(4,6)' 1
+  '';
 
-  nativeBuildInputs = [ pkgconfig intltool ];
+  nativeBuildInputs = [ pkgconfig intltool gobjectIntrospection ];
 
   buildInputs = [ libxslt docbook_xsl libgudev expat acl systemd glib libatasmart polkit ];
 
@@ -36,6 +41,11 @@ stdenv.mkDerivation rec {
     "--localstatedir=/var"
     "--with-systemdsystemunitdir=$(out)/etc/systemd/system"
     "--with-udevdir=$(out)/lib/udev"
+  ];
+
+  makeFlags = [
+    "INTROSPECTION_GIRDIR=$(dev)/share/gir-1.0"
+    "INTROSPECTION_TYPELIBDIR=$(out)/lib/girepository-1.0"
   ];
 
   meta = {

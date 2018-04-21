@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     sha256 = "0ypkmwyfrsnag69h1c0mx89ranz4f6jc9y1sqkpq2rbzg64maik0";
   };
 
-  buildInputs = [ mkfontscale mkfontdir ];
+  nativeBuildInputs = [ mkfontscale mkfontdir ];
 
   phases = "installPhase";
 

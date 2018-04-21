@@ -93,6 +93,7 @@ runTests {
             "${builtins.storeDir}/d945ibfx9x185xf04b890y4f9g3cbb63-python-2.7.11";
       in {
         storePath = isStorePath goodPath;
+        storePathDerivation = isStorePath (import ../.. {}).hello;
         storePathAppendix = isStorePath
           "${goodPath}/bin/python";
         nonAbsolute = isStorePath (concatStrings (tail (stringToCharacters goodPath)));
@@ -106,6 +107,7 @@ runTests {
       };
     expected = {
       storePath = true;
+      storePathDerivation = true;
       storePathAppendix = false;
       nonAbsolute = false;
       asPath = true;
@@ -201,8 +203,31 @@ runTests {
 # in alphabetical order
 
   testMkKeyValueDefault = {
-    expr = generators.mkKeyValueDefault ":" "f:oo" "bar";
+    expr = generators.mkKeyValueDefault {} ":" "f:oo" "bar";
     expected = ''f\:oo:bar'';
+  };
+
+  testMkValueString = {
+    expr = let
+      vals = {
+        int = 42;
+        string = ''fo"o'';
+        bool = true;
+        bool2 = false;
+        null = null;
+        # float = 42.23; # floats are strange
+      };
+      in mapAttrs
+        (const (generators.mkValueStringDefault {}))
+        vals;
+    expected = {
+      int = "42";
+      string = ''fo"o'';
+      bool = "true";
+      bool2 = "false";
+      null = "null";
+      # float = "42.23" true false [ "bar" ] ]'';
+    };
   };
 
   testToKeyValue = {
@@ -247,6 +272,8 @@ runTests {
       "section 1" = {
         attribute1 = 5;
         x = "Me-se JarJar Binx";
+        # booleans are converted verbatim by default
+        boolean = false;
       };
       "foo[]" = {
         "he\\h=he" = "this is okay";
@@ -258,6 +285,7 @@ runTests {
 
       [section 1]
       attribute1=5
+      boolean=false
       x=Me-se JarJar Binx
     '';
   };

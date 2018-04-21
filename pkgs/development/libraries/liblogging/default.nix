@@ -3,11 +3,11 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "liblogging-1.0.5";
+  name = "liblogging-1.0.6";
 
   src = fetchurl {
     url = "http://download.rsyslog.com/liblogging/${name}.tar.gz";
-    sha256 = "02w94j344q0ywlj4mdf9fnzwggdsn3j1yn43sdlsddvr29lw239i";
+    sha256 = "14xz00mq07qmcgprlj5b2r21ljgpa4sbwmpr6jm2wrf8wms6331k";
   };
 
   nativeBuildInputs = [ pkgconfig ];

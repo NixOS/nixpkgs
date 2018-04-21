@@ -1,28 +1,22 @@
-{ stdenv, fetchurl, perl, cmake, vala_0_23, pkgconfig, glib, gtk3, granite, gnome3, libnotify, gettext, makeWrapper }:
+{ stdenv, fetchurl, perl, cmake, vala_0_38, pkgconfig, glib, gtk3, granite, gnome3, libnotify, gettext, wrapGAppsHook, gobjectIntrospection }:
 
 stdenv.mkDerivation rec {
-  majorVersion = "0.3";
-  minorVersion = "1.3";
+  majorVersion = "0.4";
+  minorVersion = "3";
   name = "pantheon-terminal-${majorVersion}.${minorVersion}";
   src = fetchurl {
     url = "https://launchpad.net/pantheon-terminal/${majorVersion}.x/${majorVersion}.${minorVersion}/+download/${name}.tgz";
     sha256 = "0bfrqxig26i9qhm15kk7h9lgmzgnqada5snbbwqkp0n0pnyyh4ss";
   };
 
-  preConfigure = ''
-    export PKG_CONFIG_PATH="$PKG_CONFIG_PATH:${granite}/lib64/pkgconfig"
-  '';
-
-  preFixup = ''
-    for f in $out/bin/*; do
-      wrapProgram $f \
-        --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH:$XDG_ICON_DIRS:$out/share"
-    done
-  '';
-
+  nativeBuildInputs = [
+    perl cmake vala_0_38 pkgconfig wrapGAppsHook
+    # For setup hook
+    gobjectIntrospection
+  ];
   buildInputs = with gnome3; [
-    perl cmake vala_0_23 pkgconfig glib gtk3 granite libnotify gettext makeWrapper
-    vte_290 libgee gsettings_desktop_schemas defaultIconTheme
+    glib gtk3 granite libnotify gettext vte_290 libgee
+    gsettings-desktop-schemas defaultIconTheme
   ];
   meta = {
     description = "Elementary OS's terminal";

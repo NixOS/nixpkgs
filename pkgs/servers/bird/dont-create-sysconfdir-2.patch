@@ -1,0 +1,13 @@
+diff --git a/Makefile.in b/Makefile.in
+index fdd5e6c..45f81a1 100644
+--- a/Makefile.in
++++ b/Makefile.in
+@@ -165,7 +165,7 @@ tags:
+ # Install
+ 
+ install: all
+-	$(INSTALL) -d $(DESTDIR)/$(sbindir) $(DESTDIR)/$(sysconfdir) $(DESTDIR)/@runtimedir@
++	$(INSTALL) -d $(DESTDIR)/$(sbindir) $(DESTDIR)/$(sysconfdir)
+ 	$(INSTALL_PROGRAM) $(exedir)/bird $(DESTDIR)/$(sbindir)/bird
+ 	$(INSTALL_PROGRAM) $(exedir)/birdcl $(DESTDIR)/$(sbindir)/birdcl
+ 	if test -n "@CLIENT@" ; then								\

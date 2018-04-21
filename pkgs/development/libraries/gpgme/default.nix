@@ -1,23 +1,22 @@
 { stdenv, fetchurl, fetchpatch, libgpgerror, gnupg, pkgconfig, glib, pth, libassuan
-, qtbase ? null }:
+, file, which
+, autoreconfHook
+, git
+, texinfo5
+, qtbase ? null
+, withPython ? false, swig2 ? null, python ? null
+}:
 
 let inherit (stdenv) lib system; in
 
 stdenv.mkDerivation rec {
-  name = "gpgme-1.9.0";
+  name = "gpgme-${version}";
+  version = "1.10.0";
 
   src = fetchurl {
     url = "mirror://gnupg/gpgme/${name}.tar.bz2";
-    sha256 = "1ssc0gs02r4fasabk7c6v6r865k2j02mpb5g1vkpbmzsigdzwa8v";
+    sha256 = "14q619lxbk64vz7lih5gjb928qm28jrnn1h3yhsrrff3jw8yv3qs";
   };
-
-  patches = [
-    (fetchpatch {
-      url = "https://git.gnupg.org/cgi-bin/gitweb.cgi?p=gpgme.git;a=commitdiff_plain;h=5d4f977dac542340c877fdd4b1304fa8f6e058e6";
-      sha256 = "0swpxzd3x3b6h2ry2py9j8l0xp3vdw8rixxhgfavzia5p869qyyx";
-      name = "qgpgme-format-security.patch";
-    })
-  ];
 
   outputs = [ "out" "dev" "info" ];
   outputBin = "dev"; # gpgme-config; not so sure about gpgme-tool
@@ -26,11 +25,17 @@ stdenv.mkDerivation rec {
     [ libgpgerror glib libassuan pth ]
     ++ lib.optional (qtbase != null) qtbase;
 
-  nativeBuildInputs = [ pkgconfig gnupg ];
+  nativeBuildInputs = [ file pkgconfig gnupg autoreconfHook git texinfo5 ]
+  ++ lib.optionals withPython [ python swig2 which ];
+
+  postPatch =''
+    substituteInPlace ./configure --replace /usr/bin/file ${file}/bin/file
+  '';
 
   configureFlags = [
     "--enable-fixed-path=${gnupg}/bin"
-  ];
+    "--with-libgpg-error-prefix=${libgpgerror.dev}"
+  ] ++ lib.optional withPython "--enable-languages=python";
 
   NIX_CFLAGS_COMPILE =
     # qgpgme uses Q_ASSERT which retains build inputs at runtime unless

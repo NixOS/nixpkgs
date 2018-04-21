@@ -1,0 +1,30 @@
+https://www.tug.org/pipermail/tex-live/2017-June/040192.html
+---
+ texk/web2c/luatexdir/luaffi/ctype.c |    4 ++++
+ texk/web2c/luatexdir/luaffi/ffi.h   |    2 +-
+ 2 files changed, 5 insertions(+), 1 deletion(-)
+
+--- a/texk/web2c/luatexdir/luaffi/ctype.c
++++ b/texk/web2c/luatexdir/luaffi/ctype.c       2017-05-31 13:08:25.421741873 +0000
+@@ -245,6 +245,10 @@ void* to_cdata(lua_State* L, int idx, st
+ 
+     lua_pop(L, 1); /* mt */
+     cd = (struct cdata*) lua_touserdata(L, idx);
++    if (!cd) {
++        lua_pushnil(L);
++        return NULL;
++    }
+     *ct = cd->type;
+     lua_getuservalue(L, idx);
+ 
+--- a/texk/web2c/luatexdir/luaffi/ffi.h
++++ b/texk/web2c/luatexdir/luaffi/ffi.h 2017-06-01 09:12:45.128442092 +0000
+@@ -370,7 +370,7 @@ __declspec(align(16))
+ #endif
+ struct cdata {
+     const struct ctype type
+-#ifdef __GNUC__
++#if 0 /* def __GNUC__ */
+       __attribute__ ((aligned(16)))
+ #endif
+       ;

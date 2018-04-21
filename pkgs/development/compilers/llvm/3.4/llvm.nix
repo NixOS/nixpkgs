@@ -6,7 +6,7 @@
 , cmake
 , python2
 , libffi
-, binutils
+, libbfd
 , libxml2
 , valgrind
 , ncurses
@@ -67,7 +67,7 @@ in stdenv.mkDerivation rec {
     "-DLLVM_BUILD_TESTS=ON"
     "-DLLVM_ENABLE_FFI=ON"
     "-DLLVM_REQUIRES_RTTI=1"
-    "-DLLVM_BINUTILS_INCDIR=${stdenv.lib.getDev binutils}/include"
+    "-DLLVM_BINUTILS_INCDIR=${libbfd.dev}/include"
     "-DCMAKE_CXX_FLAGS=-std=c++11"
   ] ++ stdenv.lib.optional (!stdenv.isDarwin) "-DBUILD_SHARED_LIBS=ON";
 
@@ -90,6 +90,6 @@ in stdenv.mkDerivation rec {
     homepage    = http://llvm.org/;
     license     = stdenv.lib.licenses.ncsa;
     maintainers = with stdenv.lib.maintainers; [ lovek323 raskin viric ];
-    platforms   = stdenv.lib.platforms.all;
+    platforms = [ "i686-linux" "x86_64-linux" "x86_64-darwin" "armv7l-linux"];
   };
 }

@@ -1,0 +1,27 @@
+diff -burN calibre-2.9.0.orig/src/calibre/gui2/main.py calibre-2.9.0/src/calibre/gui2/main.py
+--- calibre-2.9.0.orig/src/calibre/gui2/main.py	2014-11-09 20:09:54.081231882 +0800
++++ calibre-2.9.0/src/calibre/gui2/main.py	2014-11-09 20:15:48.193033844 +0800
+@@ -37,8 +37,9 @@
+                       help=_('Start minimized to system tray.'))
+     parser.add_option('-v', '--verbose', default=0, action='count',
+                       help=_('Ignored, do not use. Present only for legacy reasons'))
+-    parser.add_option('--no-update-check', default=False, action='store_true',
+-            help=_('Do not check for updates'))
++    parser.add_option('--update-check', dest='no_update_check', default=True,
++            action='store_false',
++            help=_('Check for updates'))
+     parser.add_option('--ignore-plugins', default=False, action='store_true',
+             help=_('Ignore custom plugins, useful if you installed a plugin'
+                 ' that is preventing calibre from starting'))
+diff -burN calibre-2.9.0.orig/src/calibre/gui2/update.py calibre-2.9.0/src/calibre/gui2/update.py
+--- calibre-2.9.0.orig/src/calibre/gui2/update.py	2014-11-09 20:09:54.082231864 +0800
++++ calibre-2.9.0/src/calibre/gui2/update.py	2014-11-09 20:17:49.954767115 +0800
+@@ -154,6 +154,8 @@
+             self.update_checker.signal.update_found.connect(self.update_found,
+                     type=Qt.QueuedConnection)
+             self.update_checker.start()
++        else:
++            self.update_checker = None
+ 
+     def recalc_update_label(self, number_of_plugin_updates):
+         self.update_found(self.last_newest_calibre_version, number_of_plugin_updates)

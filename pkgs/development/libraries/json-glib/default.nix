@@ -1,4 +1,7 @@
-{ stdenv, fetchurl, fetchpatch, glib, meson, ninja, pkgconfig, gettext, gobjectIntrospection, dbus, libintlOrEmpty }:
+{ stdenv, fetchurl, fetchpatch, glib, meson, ninja, pkgconfig, gettext
+, gobjectIntrospection, dbus
+, fixDarwinDylibNames
+}:
 
 stdenv.mkDerivation rec {
   name = "json-glib-${minVer}.2";
@@ -11,9 +14,7 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = [ glib ];
   nativeBuildInputs = [ meson ninja pkgconfig gettext gobjectIntrospection ];
-  buildInputs = libintlOrEmpty;
-
-  NIX_LDFLAGS = stdenv.lib.optionalString stdenv.isDarwin "-lintl";
+  buildInputs = stdenv.lib.optional stdenv.isDarwin fixDarwinDylibNames;
 
   patches = [
     # https://gitlab.gnome.org/GNOME/json-glib/issues/27
@@ -26,8 +27,6 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "dev" ];
 
   doCheck = true;
-
-  checkPhase = "meson test";
 
   meta = with stdenv.lib; {
     homepage = http://live.gnome.org/JsonGlib;

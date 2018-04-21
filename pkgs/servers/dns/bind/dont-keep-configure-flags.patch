@@ -1,40 +1,41 @@
 diff --git a/bin/named/include/named/globals.h b/bin/named/include/named/globals.h
-index f354cfb..2aa0cc5 100644
+index 388dc97..3c6135c 100644
 --- a/bin/named/include/named/globals.h
 +++ b/bin/named/include/named/globals.h
-@@ -71,7 +71,9 @@ EXTERN const char *		ns_g_version		INIT(VERSION);
- EXTERN const char *		ns_g_product		INIT(PRODUCT);
- EXTERN const char *		ns_g_description	INIT(DESCRIPTION);
- EXTERN const char *		ns_g_srcid		INIT(SRCID);
+@@ -65,7 +65,9 @@ EXTERN const char *		named_g_version		INIT(VERSION);
+ EXTERN const char *		named_g_product		INIT(PRODUCT);
+ EXTERN const char *		named_g_description	INIT(DESCRIPTION);
+ EXTERN const char *		named_g_srcid		INIT(SRCID);
 +#if 0
- EXTERN const char *		ns_g_configargs		INIT(CONFIGARGS);
+ EXTERN const char *		named_g_configargs	INIT(CONFIGARGS);
 +#endif
- EXTERN const char *		ns_g_builder		INIT(BUILDER);
- EXTERN in_port_t		ns_g_port		INIT(0);
- EXTERN isc_dscp_t		ns_g_dscp		INIT(-1);
+ EXTERN const char *		named_g_builder		INIT(BUILDER);
+ EXTERN in_port_t		named_g_port		INIT(0);
+ EXTERN isc_dscp_t		named_g_dscp		INIT(-1);
 diff --git a/bin/named/main.c b/bin/named/main.c
-index 556db54..edab41d 100644
+index 4fb0566..60d56cd 100644
 --- a/bin/named/main.c
 +++ b/bin/named/main.c
-@@ -636,8 +636,10 @@ parse_command_line(int argc, char *argv[]) {
- 			       (*ns_g_description != '\0') ? " " : "",
- 			       ns_g_description, ns_g_srcid);
- 			printf("running on %s\n", ns_os_uname());
-+#if 0
+@@ -672,8 +672,10 @@ parse_command_line(int argc, char *argv[]) {
+ 			       (*named_g_description != '\0') ? " " : "",
+ 			       named_g_description, named_g_srcid);
+ 			printf("running on %s\n", named_os_uname());
++			#if 0
  			printf("built by %s with %s\n",
- 			       ns_g_builder, ns_g_configargs);
-+#endif
+ 			       named_g_builder, named_g_configargs);
++			#endif
  #ifdef __clang__
  			printf("compiled by CLANG %s\n", __VERSION__);
  #else
-@@ -998,8 +1000,10 @@ setup(void) {
- 	isc_log_write(ns_g_lctx, NS_LOGCATEGORY_GENERAL, NS_LOGMODULE_MAIN,
- 		      ISC_LOG_NOTICE, "running on %s", ns_os_uname());
+@@ -1075,9 +1077,11 @@ setup(void) {
+ 		      NAMED_LOGMODULE_MAIN, ISC_LOG_NOTICE,
+ 		      "running on %s", named_os_uname());
  
 +#if 0
- 	isc_log_write(ns_g_lctx, NS_LOGCATEGORY_GENERAL, NS_LOGMODULE_MAIN,
- 		      ISC_LOG_NOTICE, "built with %s", ns_g_configargs);
+ 	isc_log_write(named_g_lctx, NAMED_LOGCATEGORY_GENERAL,
+ 		      NAMED_LOGMODULE_MAIN, ISC_LOG_NOTICE,
+ 		      "built with %s", named_g_configargs);
 +#endif
  
- 	isc_log_write(ns_g_lctx, NS_LOGCATEGORY_GENERAL, NS_LOGMODULE_MAIN,
- 		      ISC_LOG_NOTICE,
+ 	isc_log_write(named_g_lctx, NAMED_LOGCATEGORY_GENERAL,
+ 		      NAMED_LOGMODULE_MAIN, ISC_LOG_NOTICE,

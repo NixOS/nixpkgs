@@ -5,12 +5,12 @@ assert enableJabber -> minmay != null;
 
 let
 
-  version = "2.0.11";
+  version = "2.0.21";
   branch = "2.0";
 
   src = fetchurl {
     url = "mirror://sourceforge/zabbix/zabbix-${version}.tar.gz";
-    sha256 = "1vqxlqwhnz02wrca08vrqbq8k19qp84hbdplmqk7d9699njim46i";
+    sha256 = "14g22x2zy5xqnh2xg23xy5gjd49d1i8pks7pkidwdwa9acwgfx71";
   };
 
   preConfigure =

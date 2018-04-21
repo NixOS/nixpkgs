@@ -1,7 +1,7 @@
 { fetchurl, stdenv, python, bash }:
 
 let
-  version = "22.5.0";
+  version = "22.5.1";
 in
   stdenv.mkDerivation rec {
     name = "autojump-${version}";
@@ -9,7 +9,7 @@ in
     src = fetchurl {
       url = "http://github.com/joelthelion/autojump/archive/release-v${version}.tar.gz";
       name = "autojump-${version}.tar.gz";
-      sha256 = "00ai0j37ka3557a8m7ig44dby7v01pckwi8gl479vz5b5pw1z8cd";
+      sha256 = "17z9j9936x0nizwrzf664bngh60x5qbvrrf1s5qdzd0f2gdanpvn";
     };
 
     buildInputs = [ python bash ];
@@ -21,6 +21,9 @@ in
 
       mkdir -p "$out/etc/bash_completion.d"
       cp -v $out/share/autojump/autojump.bash "$out/etc/bash_completion.d"
+
+      mkdir -p $out/share/fish/vendor_completions.d/
+      cp -v $out/share/autojump/autojump.fish "$out/share/fish/vendor_completions.d/autojump.fish"
 
       cat <<SCRIPT > $out/bin/autojump-share
       #!/bin/sh

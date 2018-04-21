@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, cmake, zlib, boost,
-  openal, glm, freetype, mesa, glew, SDL2,
+  openal, glm, freetype, libGLU_combined, glew, SDL2,
   dejavu_fonts, inkscape, optipng, imagemagick }:
 
 stdenv.mkDerivation rec {
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     cmake zlib boost openal glm
-    freetype mesa glew SDL2 inkscape
+    freetype libGLU_combined glew SDL2 inkscape
     optipng imagemagick
   ];
 

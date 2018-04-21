@@ -1,4 +1,4 @@
-{ stdenv 
+{ stdenv
 , lib
 , buildPythonPackage
 , fetchFromGitHub
@@ -11,18 +11,19 @@
 , python
 , cudaSupport ? false, cudatoolkit
 , openclSupport ? true, ocl-icd, clblas
-}: 
+}:
 
 buildPythonPackage rec {
-  name = "libgpuarray-${version}";
-  version = "0.6.9";
+  pname = "libgpuarray";
+  version = "0.7.5";
+  name = pname + "-" + version;
 
   src = fetchFromGitHub {
-    owner = "Theano"; 
+    owner = "Theano";
     repo = "libgpuarray";
     rev = "v${version}";
-    sha256 = "06z47ls42a37gbv0x7f3l1qvils7q0hvy02s95l530klgibp19s0";
-  }; 
+    sha256 = "0zkdwjq3k6ciiyf8y5w663fbsnmzhgy27yvpxfhkpxazw9vg3l5v";
+  };
 
   # requires a GPU
   doCheck = false;
@@ -32,22 +33,21 @@ buildPythonPackage rec {
   libraryPath = lib.makeLibraryPath (
     []
     ++ lib.optionals cudaSupport [ cudatoolkit.lib cudatoolkit.out ]
-    ++ lib.optionals openclSupport [ ocl-icd clblas ]
+    ++ lib.optionals openclSupport ([ clblas ] ++ lib.optional (!stdenv.isDarwin) ocl-icd)
   );
 
   preBuild = ''
     make -j$NIX_BUILD_CORES
     make install
 
-    ls $out/lib
     export NIX_CFLAGS_COMPILE="-L $out/lib -I $out/include $NIX_CFLAGS_COMPILE"
 
     cd ..
-  ''; 
+  '';
 
   postFixup = ''
     rm $out/lib/libgpuarray-static.a
-
+  '' + stdenv.lib.optionalString (!stdenv.isDarwin) ''
     function fixRunPath {
       p=$(patchelf --print-rpath $1)
       patchelf --set-rpath "$p:$libraryPath" $1
@@ -64,18 +64,18 @@ buildPythonPackage rec {
 
   enableParallelBuilding = true;
 
-  buildInputs = [ 
-    cmake 
-    cython 
+  buildInputs = [
+    cmake
+    cython
     nose
-  ]; 
+  ];
 
   meta = with stdenv.lib; {
     homepage = "https://github.com/Theano/libgpuarray";
     description = "Library to manipulate tensors on GPU.";
     license = licenses.free;
     maintainers = with maintainers; [ artuuge ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 
 }

@@ -6,12 +6,27 @@
 
 <para>The DocBook sources of the Nixpkgs manual are in the <filename
 xlink:href="https://github.com/NixOS/nixpkgs/tree/master/doc">doc</filename>
-subdirectory of the Nixpkgs repository. If you make modifications to
-the manual, it's important to build it before committing. You can do that as follows:
+subdirectory of the Nixpkgs repository.</para>
+
+<para>You can quickly check your edits with <command>make</command>:</para>
 
 <screen>
-$ cd /path/to/nixpkgs
-$ nix-build doc
+  $ cd /path/to/nixpkgs/doc
+  $ nix-shell
+  [nix-shell]$ make
+</screen>
+
+<para>If you experience problems, run <command>make debug</command>
+to help understand the docbook errors.</para>
+
+<para>After making modifications to the manual, it's important to
+build it before committing. You can do that as follows:
+
+<screen>
+  $ cd /path/to/nixpkgs/doc
+  $ nix-shell
+  [nix-shell]$ make clean
+  [nix-shell]$ nix-build .
 </screen>
 
 If the build succeeds, the manual will be in

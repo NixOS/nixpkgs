@@ -1,12 +1,12 @@
 { gsmakeDerivation, fetchurl, base }:
 let
-  version = "0.25.0";
+  version = "0.26.2";
 in
 gsmakeDerivation {
   name = "gnustep-gui-${version}";
   src = fetchurl {
     url = "ftp://ftp.gnustep.org/pub/gnustep/core/gnustep-gui-${version}.tar.gz";
-    sha256 = "10jf3xir59qzbhhl0bvs9wdw40fsmvv6mdv5akdkia1rnck60xf5";
+    sha256 = "1dsbkifnjha3ghq8xx55bpsbbng0cjsni3yz71r7342ax2ixcvxc";
   };
   buildInputs = [ base ];
   patches = [ ./fixup-all.patch ];
