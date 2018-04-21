@@ -9634,9 +9634,7 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  MNI-Perllib = import ../development/perl-modules/MNI {
-    inherit buildPerlPackage fetchFromGitHub stdenv perl;
-  };
+  MNI-Perllib = pkgs.callPackage ../development/perl-modules/MNI {};
 
   Mo = buildPerlPackage rec {
      name = "Mo-0.40";
@@ -16254,7 +16252,8 @@ let self = _self // overrides; _self = with self; {
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
       maintainers = with maintainers; [ bcdarwin ];
     };
-    
+  };
+
   TextGerman = buildPerlPackage rec {
      name = "Text-German-0.06";
      src = fetchurl {
