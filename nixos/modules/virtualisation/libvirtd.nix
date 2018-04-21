@@ -37,11 +37,13 @@ in {
       '';
     };
 
-    virtualisation.libvirtd.enableKVM = mkOption {
-      type = types.bool;
-      default = true;
+    virtualisation.libvirtd.qemuPackage = mkOption {
+      type = types.package;
+      default = pkgs.qemu;
       description = ''
-        This option enables support for QEMU/KVM in libvirtd.
+        Qemu package to use with libvirt.
+        `pkgs.qemu` can emulate alien architectures (e.g. aarch64 on x86)
+        `pkgs.qemu_kvm` saves disk space allowing to emulate only host architectures.
       '';
     };
 
@@ -102,7 +104,7 @@ in {
 
   config = mkIf cfg.enable {
 
-    environment.systemPackages = with pkgs; [ libvirt netcat-openbsd qemu_kvm ];
+    environment.systemPackages = with pkgs; [ libvirt netcat-openbsd cfg.qemuPackage ];
 
     boot.kernelModules = [ "tun" ];
 
@@ -117,17 +119,10 @@ in {
       after = [ "systemd-udev-settle.service" ]
               ++ optional vswitch.enable "vswitchd.service";
 
-      environment = {
-        LIBVIRTD_ARGS = ''--config "${configFile}" ${concatStringsSep " " cfg.extraOptions}'';
-      };
+      environment.LIBVIRTD_ARGS = ''--config "${configFile}" ${concatStringsSep " " cfg.extraOptions}'';
 
-      path = with pkgs; [
-          bridge-utils
-          dmidecode
-          dnsmasq
-          ebtables
-        ]
-        ++ optional vswitch.enable vswitch.package;
+      path = [ cfg.qemuPackage ] # libvirtd requires qemu-img to manage disk images
+             ++ optional vswitch.enable vswitch.package;
 
       preStart = ''
         mkdir -p /var/log/libvirt/qemu -m 755
@@ -154,9 +149,9 @@ in {
 
         # stable (not GC'able as in /nix/store) paths for using in <emulator> section of xml configs
         mkdir -p /run/libvirt/nix-emulators
-        ln -s --force ${pkgs.libvirt}/libexec/libvirt_lxc /run/libvirt/nix-emulators/
-        ${optionalString pkgs.stdenv.isAarch64 "ln -s --force ${pkgs.qemu}/bin/qemu-system-aarch64 /run/libvirt/nix-emulators/"}
-        ${optionalString cfg.enableKVM         "ln -s --force ${pkgs.qemu_kvm}/bin/qemu-kvm        /run/libvirt/nix-emulators/"}
+        for emulator in ${pkgs.libvirt}/libexec/libvirt_lxc ${cfg.qemuPackage}/bin/qemu-kvm ${cfg.qemuPackage}/bin/qemu-system-*; do
+          ln -s --force "$emulator" /run/libvirt/nix-emulators/
+        done
 
         ${optionalString cfg.qemuOvmf ''
             mkdir -p /run/libvirt/nix-ovmf

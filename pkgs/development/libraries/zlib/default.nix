@@ -62,7 +62,7 @@ stdenv.mkDerivation rec {
   ];
 
   makeFlags = [
-    "PREFIX=${stdenv.cc.prefix}"
+    "PREFIX=${stdenv.cc.targetPrefix}"
   ] ++ stdenv.lib.optionals (hostPlatform.libc == "msvcrt") [
     "-f" "win32/Makefile.gcc"
   ] ++ stdenv.lib.optionals (!static) [

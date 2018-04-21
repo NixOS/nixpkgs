@@ -1,0 +1,9 @@
+.docbook .xref img[src^=images\/callouts\/],
+.screen img,
+.programlisting img {
+    width: 1em;
+}
+
+.calloutlist img {
+    width: 1.5em;
+}

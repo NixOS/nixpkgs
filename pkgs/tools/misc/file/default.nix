@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, zlib }:
+{ stdenv, fetchurl, file, zlib }:
 
 stdenv.mkDerivation rec {
   name = "file-${version}";
@@ -12,6 +12,7 @@ stdenv.mkDerivation rec {
     sha256 = "0l1bfa0icng9vdwya00ff48fhvjazi5610ylbhl35qi13d6xqfc6";
   };
 
+  nativeBuildInputs = stdenv.lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) file;
   buildInputs = [ zlib ];
 
   doCheck = true;

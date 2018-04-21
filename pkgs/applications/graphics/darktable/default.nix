@@ -1,34 +1,28 @@
-{ stdenv, fetchurl, libsoup, graphicsmagick, SDL, json_glib
-, GConf, atk, cairo, cmake, curl, dbus_glib, exiv2, glib
-, libgnome_keyring, gtk3, ilmbase, intltool, lcms, lcms2
-, lensfun, libXau, libXdmcp, libexif, libglade, libgphoto2, libjpeg
-, libpng, libpthreadstubs, librsvg, libtiff, libxcb
-, openexr, osm-gps-map, pixman, pkgconfig, sqlite, bash, libxslt, openjpeg
-, mesa, lua, pugixml, colord, colord-gtk, libxshmfence, libxkbcommon
-, epoxy, at_spi2_core, libwebp, libsecret, wrapGAppsHook, gnome3
+{ stdenv, fetchurl, libsoup, graphicsmagick, json-glib, wrapGAppsHook
+, cairo, cmake, ninja, curl, perl, llvm, desktop-file-utils, exiv2, glib
+, ilmbase, gtk3, intltool, lcms2, lensfun, libX11, libexif, libgphoto2, libjpeg
+, libpng, librsvg, libtiff, openexr, osm-gps-map, pkgconfig, sqlite, libxslt
+, openjpeg, lua, pugixml, colord, colord-gtk, libwebp, libsecret, gnome3
 }:
 
-assert stdenv ? glibc;
-
 stdenv.mkDerivation rec {
-  version = "2.2.5";
+  version = "2.4.2";
   name = "darktable-${version}";
 
   src = fetchurl {
     url = "https://github.com/darktable-org/darktable/releases/download/release-${version}/darktable-${version}.tar.xz";
-    sha256 = "10gjzd4irxhladh4jyss9kgp627k8vgx2divipsb33pp6cms80z3";
+    sha256 = "10asz918kv2248px3w9bn5k8cfrad5xrci58x9y61l0yf5hcpk0r";
   };
 
-  buildInputs =
-    [ GConf atk cairo cmake curl dbus_glib exiv2 glib libgnome_keyring gtk3
-      ilmbase intltool lcms lcms2 lensfun libXau libXdmcp libexif
-      libglade libgphoto2 libjpeg libpng libpthreadstubs
-      librsvg libtiff libxcb openexr pixman pkgconfig sqlite libxslt
-      libsoup graphicsmagick SDL json_glib openjpeg mesa lua pugixml
-      colord colord-gtk libxshmfence libxkbcommon epoxy at_spi2_core
-      libwebp libsecret wrapGAppsHook gnome3.adwaita-icon-theme
-      osm-gps-map
-    ];
+  nativeBuildInputs = [ cmake ninja llvm pkgconfig intltool perl desktop-file-utils wrapGAppsHook ];
+
+  buildInputs = [
+    cairo curl exiv2 glib gtk3 ilmbase lcms2 lensfun libX11 libexif
+    libgphoto2 libjpeg libpng librsvg libtiff openexr sqlite libxslt
+    libsoup graphicsmagick json-glib openjpeg lua pugixml
+    colord colord-gtk libwebp libsecret gnome3.adwaita-icon-theme
+    osm-gps-map
+  ];
 
   cmakeFlags = [
     "-DBUILD_USERMANUAL=False"
@@ -49,6 +43,6 @@ stdenv.mkDerivation rec {
     homepage = https://www.darktable.org;
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = [ maintainers.goibhniu maintainers.rickynils maintainers.flosse ];
+    maintainers = with maintainers; [ goibhniu rickynils flosse mrVanDalo ];
   };
 }

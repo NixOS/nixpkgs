@@ -24,6 +24,25 @@ let
   compose = f: g: x: f (g x);
 in
 {
+  bdftopcf = attrs: attrs // {
+    buildInputs = attrs.buildInputs ++ [ xorg.xproto xorg.fontsproto ];
+  };
+
+  bitmap = attrs: attrs // {
+    nativeBuildInputs = attrs.nativeBuildInputs ++ [ makeWrapper ];
+    postInstall = ''
+      paths=(
+        "$out/share/X11/%T/%N"
+        "$out/include/X11/%T/%N"
+        "${xorg.xbitmaps}/include/X11/%T/%N"
+      )
+      wrapProgram "$out/bin/bitmap" \
+        --suffix XFILESEARCHPATH : $(IFS=:; echo "''${paths[*]}")
+      makeWrapper "$out/bin/bitmap" "$out/bin/bitmap-color" \
+        --suffix XFILESEARCHPATH : "$out/share/X11/%T/%N-color"
+    '';
+  };
+
   encodings = attrs: attrs // {
     buildInputs = attrs.buildInputs ++ [ xorg.mkfontscale ];
   };
@@ -41,7 +60,7 @@ in
       ''
         ALIASFILE=${xorg.fontalias}/share/fonts/X11/misc/fonts.alias
         test -f $ALIASFILE
-        ln -s $ALIASFILE $out/lib/X11/fonts/misc/fonts.alias
+        cp $ALIASFILE $out/lib/X11/fonts/misc/fonts.alias
       '';
   };
 
@@ -252,6 +271,11 @@ in
   };
 
   libxshmfence = attrs: attrs // {
+    name = "libxshmfence-1.3";
+    src = args.fetchurl {
+      url = mirror://xorg/individual/lib/libxshmfence-1.3.tar.bz2;
+      sha256 = "1ir0j92mnd1nk37mrv9bz5swnccqldicgszvfsh62jd14q6k115q";
+    };
     outputs = [ "out" "dev" ]; # mainly to avoid propagation
   };
 
@@ -338,6 +362,10 @@ in
       "--with-xorg-conf-dir=$(out)/share/X11/xorg.conf.d"
       "--with-udev-rules-dir=$(out)/lib/udev/rules.d"
     ];
+
+    meta = attrs.meta // {
+      platforms = ["i686-linux" "x86_64-linux"];
+    };
   };
 
   # Obsolete drivers that don't compile anymore.
@@ -361,14 +389,23 @@ in
 
   xf86videovmware = attrs: attrs // {
     buildInputs =  attrs.buildInputs ++ [ args.mesa_drivers ]; # for libxatracker
+    meta = attrs.meta // {
+      platforms = ["i686-linux" "x86_64-linux"];
+    };
   };
 
   xf86videoqxl = attrs: attrs // {
-    buildInputs =  attrs.buildInputs ++ [ args.spice_protocol ];
+    buildInputs =  attrs.buildInputs ++ [ args.spice-protocol ];
+  };
+
+  xf86videosiliconmotion = attrs: attrs // {
+    meta = attrs.meta // {
+      platforms = ["i686-linux" "x86_64-linux"];
+    };
   };
 
   xdriinfo = attrs: attrs // {
-    buildInputs = attrs.buildInputs ++ [args.mesa];
+    buildInputs = attrs.buildInputs ++ [args.libGL];
   };
 
   xvinfo = attrs: attrs // {
@@ -397,8 +434,9 @@ in
   xorgserver = with xorg; attrs_passed:
     # exchange attrs if abiCompat is set
     let
+      version = (builtins.parseDrvName attrs_passed.name).version;
       attrs = with args;
-        if (args.abiCompat == null) then attrs_passed
+        if (args.abiCompat == null || lib.hasPrefix args.abiCompat version) then attrs_passed
         else if (args.abiCompat == "1.17") then {
           name = "xorg-server-1.17.4";
           builder = ./builder.sh;
@@ -418,15 +456,16 @@ in
             };
             nativeBuildInputs = [ pkgconfig ];
             buildInputs = [ dri2proto dri3proto renderproto libdrm openssl libX11 libXau libXaw libxcb xcbutil xcbutilwm xcbutilimage xcbutilkeysyms xcbutilrenderutil libXdmcp libXfixes libxkbfile libXmu libXpm libXrender libXres libXt ];
+            postPatch = "sed '1i#include <malloc.h>' -i include/os.h";
             meta.platforms = stdenv.lib.platforms.unix;
-        } else throw "unsupported xorg abiCompat: ${args.abiCompat}";
+        } else throw "unsupported xorg abiCompat ${args.abiCompat} for ${attrs_passed.name}";
 
     in attrs //
     (let
       version = (builtins.parseDrvName attrs.name).version;
       commonBuildInputs = attrs.buildInputs ++ [ xtrans ];
       commonPropagatedBuildInputs = [
-        args.zlib args.mesa args.dbus
+        args.zlib args.libGL args.mesa_noglu args.dbus
         xf86bigfontproto glproto xf86driproto
         compositeproto scrnsaverproto resourceproto
         xf86dgaproto
@@ -455,11 +494,14 @@ in
       if (!isDarwin)
       then {
         outputs = [ "out" "dev" ];
-        buildInputs = [ makeWrapper ] ++ commonBuildInputs;
+        buildInputs = [ makeWrapper args.libdrm ] ++ commonBuildInputs;
         propagatedBuildInputs = [ libpciaccess args.epoxy ] ++ commonPropagatedBuildInputs ++ lib.optionals stdenv.isLinux [
           args.udev
         ];
         patches = commonPatches;
+        prePatch = stdenv.lib.optionalString stdenv.hostPlatform.isMusl ''
+          export CFLAGS+=" -D__uid_t=uid_t -D__gid_t=gid_t"
+        '';
         configureFlags = [
           "--enable-kdrive"             # not built by default
           "--enable-xephyr"
@@ -473,8 +515,6 @@ in
         ];
         postInstall = ''
           rm -fr $out/share/X11/xkb/compiled # otherwise X will try to write in it
-          wrapProgram $out/bin/Xvfb \
-            --set XORG_DRI_DRIVER_PATH ${args.mesa}/lib/dri
           ( # assert() keeps runtime reference xorgserver-dev in xf86-video-intel and others
             cd "$dev"
             for f in include/xorg/*.h; do
@@ -513,7 +553,7 @@ in
           "--with-sha1=CommonCrypto"
         ];
         preConfigure = ''
-          ensureDir $out/Applications
+          mkdir -p $out/Applications
           export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -Wno-error"
           substituteInPlace hw/xquartz/pbproxy/Makefile.in --replace -F/System -F${args.apple_sdk.frameworks.ApplicationServices}
         '';
@@ -573,6 +613,10 @@ in
     buildInputs = attrs.buildInputs ++ [xorg.libXfixes xorg.libXScrnSaver xorg.pixman];
     nativeBuildInputs = attrs.nativeBuildInputs ++ [args.autoreconfHook xorg.utilmacros];
     configureFlags = "--with-default-dri=3 --enable-tools";
+
+    meta = attrs.meta // {
+      platforms = ["i686-linux" "x86_64-linux"];
+    };
   };
 
   xf86videoxgi = attrs: attrs // {

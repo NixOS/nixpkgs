@@ -1,11 +1,11 @@
 { stdenv, fetchurl, tk }:
 
 stdenv.mkDerivation rec {
-  name = "gocr-0.50";
+  name = "gocr-0.51";
 
   src = fetchurl {
     url = "http://www-e.uni-magdeburg.de/jschulen/ocr/${name}.tar.gz";
-    sha256 = "1dgmcpapy7h68d53q2c5d0bpgzgfb2nw2blndnx9qhc7z12149mw";
+    sha256 = "14i6zi6q11h6d0qds2cpvgvhbxk5xaa027h8cd0wy1zblh7sxckf";
   };
 
   buildFlags = [ "all" "libs" ];

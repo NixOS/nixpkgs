@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, pkgconfig, gnome_doc_utils, intltool, lib
+{ stdenv, fetchurl, fetchpatch, pkgconfig, gnome-doc-utils, intltool, lib
 , mono, gtk-sharp-2_0, gnome-sharp, hyena
 , which, makeWrapper, glib, gnome3, poppler, wrapGAppsHook
 }:
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
-    gnome_doc_utils intltool mono gtk-sharp-2_0 gnome-sharp
+    gnome-doc-utils intltool mono gtk-sharp-2_0 gnome-sharp
     hyena which makeWrapper wrapGAppsHook
   ];
 

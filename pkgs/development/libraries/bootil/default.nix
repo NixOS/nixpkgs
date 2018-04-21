@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
   platform =
     if stdenv.isLinux then "linux"
     else if stdenv.isDarwin then "macosx"
-    else abort "unrecognized platform";
+    else throw "unrecognized system ${stdenv.system}";
 
   buildInputs = [ premake4 ];
 

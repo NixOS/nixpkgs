@@ -1,11 +1,14 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, utillinux, nukeReferences, coreutils, fetchpatch
+{ stdenv, fetchFromGitHub, autoreconfHook, utillinux, nukeReferences, coreutils
+, perl, fetchpatch
 , configFile ? "all"
 
 # Userspace dependencies
 , zlib, libuuid, python, attr, openssl
+, libtirpc
+, nfs-utils
 
 # Kernel dependencies
-, kernel ? null, spl ? null, splUnstable ? null
+, kernel ? null, spl ? null, splUnstable ? null, splLegacyCrypto ? null
 }:
 
 with stdenv.lib;
@@ -19,13 +22,14 @@ let
     , spl
     , rev ? "zfs-${version}"
     , isUnstable ? false
+    , isLegacyCrypto ? false
     , incompatibleKernelVersion ? null } @ args:
     if buildKernel &&
       (incompatibleKernelVersion != null) &&
         versionAtLeast kernel.version incompatibleKernelVersion then
        throw ''
          Linux v${kernel.version} is not yet supported by zfsonlinux v${version}.
-         ${stdenv.lib.optional (!isUnstable) "Try zfsUnstable or set the NixOS option boot.zfs.enableUnstable."}
+         ${stdenv.lib.optionalString (!isUnstable) "Try zfsUnstable or set the NixOS option boot.zfs.enableUnstable."}
        ''
     else stdenv.mkDerivation rec {
       name = "zfs-${configFile}-${version}${optionalString buildKernel "-${kernel.version}"}";
@@ -38,11 +42,20 @@ let
 
       patches = extraPatches;
 
-      nativeBuildInputs = [ autoreconfHook nukeReferences ];
+      postPatch = optionalString buildKernel ''
+        patchShebangs scripts
+      '' + optionalString stdenv.hostPlatform.isMusl ''
+        substituteInPlace config/user-libtirpc.m4 \
+          --replace /usr/include/tirpc ${libtirpc}/include/tirpc
+      '';
+
+      nativeBuildInputs = [ autoreconfHook nukeReferences ]
+         ++ optional buildKernel (kernel.moduleBuildDependencies ++ [ perl ]);
       buildInputs =
            optionals buildKernel [ spl ]
         ++ optionals buildUser [ zlib libuuid python attr ]
-        ++ optionals (buildUser && isUnstable) [ openssl ];
+        ++ optionals (buildUser && (isUnstable || isLegacyCrypto)) [ openssl ]
+        ++ optional stdenv.hostPlatform.isMusl [ libtirpc ];
 
       # for zdb to get the rpath to libgcc_s, needed for pthread_cancel to work
       NIX_CFLAGS_LINK = "-lgcc_s";
@@ -54,6 +67,7 @@ let
         substituteInPlace ./module/zfs/zfs_ctldir.c   --replace "mount -t zfs"            "${utillinux}/bin/mount -t zfs"
         substituteInPlace ./lib/libzfs/libzfs_mount.c --replace "/bin/umount"             "${utillinux}/bin/umount"
         substituteInPlace ./lib/libzfs/libzfs_mount.c --replace "/bin/mount"              "${utillinux}/bin/mount"
+        substituteInPlace ./lib/libshare/nfs.c        --replace "/usr/sbin/exportfs"      "${nfs-utils}/bin/exportfs"
         substituteInPlace ./cmd/ztest/ztest.c         --replace "/usr/sbin/ztest"         "$out/sbin/ztest"
         substituteInPlace ./cmd/ztest/ztest.c         --replace "/usr/sbin/zdb"           "$out/sbin/zdb"
         substituteInPlace ./config/user-systemd.m4    --replace "/usr/lib/modules-load.d" "$out/etc/modules-load.d"
@@ -70,6 +84,7 @@ let
         done
 
         ./autogen.sh
+        configureFlagsArray+=("--libexecdir=$out/libexec")
       '';
 
       configureFlags = [
@@ -79,6 +94,7 @@ let
         "--with-udevdir=$(out)/lib/udev"
         "--with-systemdunitdir=$(out)/etc/systemd/system"
         "--with-systemdpresetdir=$(out)/etc/systemd/system-preset"
+        "--with-systemdgeneratordir=$(out)/lib/systemd/system-generator"
         "--with-mounthelperdir=$(out)/bin"
         "--sysconfdir=/etc"
         "--localstatedir=/var"
@@ -125,7 +141,7 @@ let
           Copy-On-Write filesystem with data integrity detection and repair,
           snapshotting, cloning, block devices, deduplication, and more.
         '';
-        home = http://zfsonlinux.org/;
+        homepage = http://zfsonlinux.org/;
         license = licenses.cddl;
         platforms = platforms.linux;
         maintainers = with maintainers; [ jcumming wizeman wkennington fpletz globin ];
@@ -140,9 +156,9 @@ in {
     incompatibleKernelVersion = null;
 
     # this package should point to the latest release.
-    version = "0.7.3";
+    version = "0.7.8";
 
-    sha256 = "1bbajrwfilnmfhn1n69gvsaznyc4q29wi7nkwc0p9r4dli37w28b";
+    sha256 = "0m7j5cpz81lqcfbh4w3wvqjjka07wickl27klgy1zplv6vr0baix";
 
     extraPatches = [
       (fetchpatch {
@@ -154,24 +170,48 @@ in {
     inherit spl;
   };
 
-  zfsUnstable = common {
+  zfsUnstable = common rec {
     # comment/uncomment if breaking kernel versions are known
-    incompatibleKernelVersion = null;
+    incompatibleKernelVersion = "4.16";
 
     # this package should point to a version / git revision compatible with the latest kernel release
-    version = "2017-11-12";
+    version = "2018-04-10";
 
-    rev = "5277f208f290ea4e2204800a66c3ba20a03fe503";  
-    sha256 = "0hhlhv4g678j1w45813xfrk8zza0af59cdkmib9bkxy0cn0jsnd6";
+    rev = "74df0c5e251a920a1966a011c16f960cd7ba562e";
+    sha256 = "1x3mipj3ryznnd7kx84r3n607hv6jqs66mb61g3zcdmvk6al4yq4";
     isUnstable = true;
 
     extraPatches = [
       (fetchpatch {
-        url = "https://github.com/Mic92/zfs/compare/ded8f06a3cfee...nixos-zfs-2017-09-12.patch";
-        sha256 = "033wf4jn0h0kp0h47ai98rywnkv5jwvf3xwym30phnaf8xxdx8aj";
+        url = "https://github.com/Mic92/zfs/compare/${rev}...nixos-zfs-2018-02-02.patch";
+        sha256 = "1gqmgqi39qhk5kbbvidh8f2xqq25vj58i9x0wjqvcx6a71qj49ch";
       })
     ];
 
     spl = splUnstable;
   };
+
+  # TODO: Remove this module before 18.09
+  # also remove boot.zfs.enableLegacyCrypto
+  zfsLegacyCrypto = common {
+    # comment/uncomment if breaking kernel versions are known
+    incompatibleKernelVersion = "4.16";
+
+    # this package should point to a version / git revision compatible with the latest kernel release
+    version = "2018-02-01";
+
+    rev = "4c46b99d24a6e71b3c72462c11cb051d0930ad60";
+    sha256 = "011lcp2x44jgfzqqk2gjmyii1v7rxcprggv20prxa3c552drsx3c";
+    isUnstable = true;
+
+    extraPatches = [
+      (fetchpatch {
+        url = "https://github.com/Mic92/zfs/compare/4c46b99d24a6e71b3c72462c11cb051d0930ad60...nixos-zfs-2018-02-01.patch";
+        sha256 = "1gqmgqi39qhk5kbbvidh8f2xqq25vj58i9x0wjqvcx6a71qj49ch";
+      })
+    ];
+
+    spl = splLegacyCrypto;
+  };
+
 }

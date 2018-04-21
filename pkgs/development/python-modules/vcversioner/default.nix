@@ -13,6 +13,6 @@ buildPythonPackage rec {
   meta = with stdenv.lib; {
     description = "take version numbers from version control";
     homepage = https://github.com/habnabit/vcversioner;
-    licenses = licenses.isc;
+    license = licenses.isc;
   };
 }

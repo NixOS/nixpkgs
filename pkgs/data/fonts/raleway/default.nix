@@ -35,6 +35,6 @@ in fetchzip {
     homepage = https://github.com/impallari/Raleway;
     license = stdenv.lib.licenses.ofl;
 
-    maintainers = with stdenv.lib.maintainers; [ profpatsch ];
+    maintainers = with stdenv.lib.maintainers; [ Profpatsch ];
   };
 }

@@ -11,15 +11,17 @@ tedious, so here is a quick way to see if the installer works
 properly:
 
 <screen>
-$ nix-build -A config.system.build.nixos-install
 # mount -t tmpfs none /mnt
+# nixos-generate-config --root /mnt
+$ nix-build '&lt;nixpkgs/nixos>' -A config.system.build.nixos-install
 # ./result/bin/nixos-install</screen>
 
 To start a login shell in the new NixOS installation in
 <filename>/mnt</filename>:
 
 <screen>
-# ./result/bin/nixos-install --chroot
+$ nix-build '&lt;nixpkgs/nixos>' -A config.system.build.nixos-enter
+# ./result/bin/nixos-enter
 </screen>
 
 </para>

@@ -23,6 +23,9 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = [ "all" ];
 
+  # The tests try to do stuff with 127.0.0.1 and localhost
+  __darwinAllowLocalNetworking = true;
+
   # I'm not sure what go wants from its 'src', but the go installation manual
   # describes an installation keeping the src.
   preUnpack = ''

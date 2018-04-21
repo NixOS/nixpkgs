@@ -12,6 +12,8 @@ stdenv.mkDerivation rec {
     sha256 = "0jz2ayadx62zv2b5ji947bkvw63axl4a2q70lwli86zgmcl390gf";
   };
 
+  patches = [ ./ignore-complex-float128.patch ];
+
   preBuild = ''
     patchShebangs .
   '';

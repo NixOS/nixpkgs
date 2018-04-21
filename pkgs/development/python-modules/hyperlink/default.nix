@@ -1,12 +1,15 @@
-{ stdenv, buildPythonPackage, fetchurl, pytest }:
-buildPythonPackage rec {
-  name = "hyperlink-${version}";
-  version = "17.3.0";
+{ stdenv, buildPythonPackage, fetchPypi, idna, pytest }:
 
-  src = fetchurl {
-    url = "mirror://pypi/h/hyperlink/${name}.tar.gz";
-    sha256 = "06mgnxwjzx8hv34bifc7jvgxz21ixhk5s6xy2kd84hdrlbfvpbfx";
+buildPythonPackage rec {
+  pname = "hyperlink";
+  version = "18.0.0";
+
+  src = fetchPypi {
+    inherit pname version;
+    sha256 = "f01b4ff744f14bc5d0a22a6b9f1525ab7d6312cb0ff967f59414bbac52f0a306";
   };
+
+  propagatedBuildInputs = [ idna ];
 
   checkInputs = [ pytest ];
 

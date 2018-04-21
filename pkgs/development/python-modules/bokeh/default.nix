@@ -34,11 +34,11 @@
 buildPythonPackage rec {
   pname = "bokeh";
   name = "${pname}${version}";
-  version = "0.12.10";
+  version = "0.12.15";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "6465fae82e94223f16584645b38d34a73d95712870f29c0244649c2cbf2c8393";
+    sha256 = "2891b883b30107dc610a7e963a21222f1fd096844d157c09db115179cfab6513";
   };
 
   disabled = isPyPy;
@@ -78,5 +78,6 @@ buildPythonPackage rec {
     description = "Statistical and novel interactive HTML plots for Python";
     homepage = "http://github.com/bokeh/bokeh";
     license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ orivej ];
   };
 }

@@ -112,6 +112,20 @@ let
               jobs.tests.cc-wrapper-clang-39.x86_64-darwin
               jobs.tests.cc-wrapper-libcxx-39.x86_64-linux
               jobs.tests.cc-wrapper-libcxx-39.x86_64-darwin
+              jobs.tests.cc-wrapper-clang-4.x86_64-linux
+              jobs.tests.cc-wrapper-clang-4.x86_64-darwin
+              jobs.tests.cc-wrapper-libcxx-4.x86_64-linux
+              jobs.tests.cc-wrapper-libcxx-4.x86_64-darwin
+              jobs.tests.cc-wrapper-clang-5.x86_64-linux
+              jobs.tests.cc-wrapper-clang-5.x86_64-darwin
+              jobs.tests.cc-wrapper-libcxx-5.x86_64-linux
+              jobs.tests.cc-wrapper-libcxx-6.x86_64-darwin
+              jobs.tests.cc-wrapper-clang-6.x86_64-linux
+              jobs.tests.cc-wrapper-clang-6.x86_64-darwin
+              jobs.tests.cc-wrapper-libcxx-6.x86_64-linux
+              jobs.tests.cc-wrapper-libcxx-6.x86_64-darwin
+              jobs.tests.cc-multilib-gcc.x86_64-linux
+              jobs.tests.cc-multilib-clang.x86_64-linux
               jobs.tests.stdenv-inputs.x86_64-linux
               jobs.tests.stdenv-inputs.x86_64-darwin
               jobs.tests.macOSSierraShared.x86_64-darwin
@@ -121,7 +135,10 @@ let
       stdenvBootstrapTools = with lib;
         genAttrs systemsWithAnySupport
           (system: {
-            inherit (import ../stdenv/linux/make-bootstrap-tools.nix { inherit system; })
+            inherit
+              (import ../stdenv/linux/make-bootstrap-tools.nix {
+                localSystem = { inherit system; };
+              })
               dist test;
           })
         # darwin is special in this

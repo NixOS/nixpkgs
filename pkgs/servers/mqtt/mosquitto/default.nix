@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "mosquitto";
-  version = "1.4.14";
+  version = "1.4.15";
 
   name = "${pname}-${version}";
 
   src = fetchurl {
     url = "http://mosquitto.org/files/source/mosquitto-${version}.tar.gz";
-    sha256 = "1la2577h7hcyj7lq26vizj0sh2zmi9m7nbxjp3aalayi66kiysqm";
+    sha256 = "10wsm1n4y61nz45zwk4zjhvrfd86r2cq33370m5wjkivb8j3wfvx";
   };
 
   buildInputs = [ openssl libuuid libwebsockets c-ares libuv ]

@@ -23,7 +23,7 @@ appleDerivation rec {
       (cd $dep/include && find . -name '*.h' | cpio -pdm $out/include)
     done
 
-    (cd ${cctools}/include/mach-o && find . -name '*.h' | cpio -pdm $out/include/mach-o)
+    (cd ${cctools.dev}/include/mach-o && find . -name '*.h' | cpio -pdm $out/include/mach-o)
 
     cat <<EOF > $out/include/TargetConditionals.h
     #ifndef __TARGETCONDITIONALS__

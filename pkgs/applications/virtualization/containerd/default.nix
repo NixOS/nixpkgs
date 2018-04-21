@@ -1,23 +1,38 @@
 { stdenv, lib, fetchFromGitHub, removeReferencesTo
-, go, libapparmor, apparmor-parser, libseccomp }:
+, go, libapparmor, apparmor-parser, libseccomp, btrfs-progs }:
 
 with lib;
 
 stdenv.mkDerivation rec {
   name = "containerd-${version}";
-  version = "0.2.9";
+  version = "1.0.3";
 
   src = fetchFromGitHub {
     owner = "containerd";
     repo = "containerd";
     rev = "v${version}";
-    sha256 = "0rix0mv203fn3rcxmpqdpb54l1a0paqplg2xgldpd943qi1rm552";
+    sha256 = "0k1zjn0mpd7q3p5srxld2fr4k6ijzbk0r34r6w69sh0d0rd2fvbs";
   };
 
-  buildInputs = [ removeReferencesTo go ];
+  hardeningDisable = [ "fortify" ];
+
+  buildInputs = [ removeReferencesTo go btrfs-progs ];
+  buildFlags = "VERSION=v${version}";
+
+  BUILDTAGS = []
+    ++ optional (btrfs-progs == null) "no_btrfs";
+
+  preConfigure = ''
+    # Extract the source
+    cd "$NIX_BUILD_TOP"
+    mkdir -p "go/src/github.com/containerd"
+    mv "$sourceRoot" "go/src/github.com/containerd/containerd"
+    export GOPATH=$NIX_BUILD_TOP/go:$GOPATH
+'';
 
   preBuild = ''
-    ln -s $(pwd) vendor/src/github.com/containerd/containerd
+    cd go/src/github.com/containerd/containerd
+    patchShebangs .
   '';
 
   installPhase = ''

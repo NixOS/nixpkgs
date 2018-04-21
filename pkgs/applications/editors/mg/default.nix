@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "mg-${version}";
-  version = "20170828";
+  version = "20171014";
 
   src = fetchurl {
     url = "http://homepage.boetes.org/software/mg/${name}.tar.gz";
-    sha256 = "139nc58l5ifj3d3478nhqls0lic52skmxfxggznzxaz9camqd20z";
+    sha256 = "0hakfikzsml7z0hja8m8mcahrmfy2piy81bq9nccsjplyfc9clai";
   };
 
   enableParallelBuilding = true;

@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, fetchhg, pidgin, glib, json_glib, mercurial, autoreconfHook } :
+{ stdenv, fetchFromGitHub, fetchhg, pidgin, glib, json-glib, mercurial, autoreconfHook } :
 
 
 let
@@ -53,7 +53,7 @@ in stdenv.mkDerivation rec {
   '';
 
   nativeBuildInputs = [ autoreconfHook ];
-  buildInputs = [pidgin glib json_glib mercurial];
+  buildInputs = [pidgin glib json-glib mercurial];
 
   meta = with stdenv.lib; {
     inherit (src.meta) homepage;

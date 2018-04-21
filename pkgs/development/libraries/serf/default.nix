@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
         APU="$(echo "${aprutil.dev}"/bin/*-config)" CC="${
           if stdenv.cc.isClang then "clang" else "${stdenv.cc}/bin/gcc"
         }" ${
-          if (stdenv.isDarwin || stdenv.isCygwin) then "" else "GSSAPI=\"${kerberos}\""
+          if (stdenv.isDarwin || stdenv.isCygwin) then "" else "GSSAPI=\"${kerberos.dev}\""
         }
   '';
 

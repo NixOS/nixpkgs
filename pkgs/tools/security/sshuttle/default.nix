@@ -16,18 +16,19 @@ python3Packages.buildPythonApplication rec {
       url = "https://github.com/sshuttle/sshuttle/commit/91aa6ff625f7c89a19e6f8702425cfead44a146f.patch";
       sha256 = "0sqcc6kj53wlas2d3klbyilhns6vakzwbbp8y7j9wlmbnc530pks";
     })
+    # fix macos patch
+    (fetchpatch {
+      url = "https://github.com/sshuttle/sshuttle/commit/884bd6deb0b699a5648bb1c7bdfbc7be8ea0e7df.patch";
+      sha256 = "1nn0wx0rckxl9yzw9dxjji44zw4xqz7ws4qwjdvfn48w1f786lmz";
+    })
   ];
 
-  nativeBuildInputs = [ makeWrapper pandoc python3Packages.setuptools_scm ];
+  nativeBuildInputs = [ makeWrapper python3Packages.setuptools_scm ] ++ stdenv.lib.optional (stdenv.system != "i686-linux") pandoc;
   buildInputs =
-    [ coreutils openssh ] ++
-    stdenv.lib.optionals stdenv.isLinux [ iptables nettools procps ];
+    [ coreutils openssh procps nettools ]
+    ++ stdenv.lib.optionals stdenv.isLinux [ iptables ];
 
   checkInputs = with python3Packages; [ mock pytest pytestrunner ];
-
-  # Tests only run with Python 3. Server-side Python 2 still works if client
-  # uses Python 3, so it should be fine.
-  doCheck = true;
 
   postInstall = let
     mapPath = f: x: stdenv.lib.concatStringsSep ":" (map f x);
@@ -44,7 +45,7 @@ python3Packages.buildPythonApplication rec {
       target network (though it does require Python 2 at both ends).
       Works with Linux and Mac OS and supports DNS tunneling.
     '';
-    maintainers = with maintainers; [ domenkozar nckx ];
+    maintainers = with maintainers; [ domenkozar ];
     platforms = platforms.unix;
   };
 }

@@ -6,10 +6,11 @@ let
 
   cfg = config.security.acme;
 
-  certOpts = { ... }: {
+  certOpts = { name, ... }: {
     options = {
       webroot = mkOption {
         type = types.str;
+        example = "/var/lib/acme/acme-challenges";
         description = ''
           Where the webroot of the HTTP vhost is located.
           <filename>.well-known/acme-challenge/</filename> directory
@@ -20,8 +21,8 @@ let
       };
 
       domain = mkOption {
-        type = types.nullOr types.str;
-        default = null;
+        type = types.str;
+        default = name;
         description = "Domain to fetch certificate for (defaults to the entry name)";
       };
 
@@ -48,7 +49,7 @@ let
         default = false;
         description = ''
           Give read permissions to the specified group
-          (<option>security.acme.group</option>) to read SSL private certificates.
+          (<option>security.acme.cert.&lt;name&gt;.group</option>) to read SSL private certificates.
         '';
       };
 
@@ -87,7 +88,7 @@ let
           }
         '';
         description = ''
-          Extra domain names for which certificates are to be issued, with their
+          A list of extra domain names, which are included in the one certificate to be issued, with their
           own server roots if needed.
         '';
       };
@@ -185,10 +186,9 @@ in
           servicesLists = mapAttrsToList certToServices cfg.certs;
           certToServices = cert: data:
               let
-                domain = if data.domain != null then data.domain else cert;
                 cpath = "${cfg.directory}/${cert}";
                 rights = if data.allowKeysForGroup then "750" else "700";
-                cmdline = [ "-v" "-d" domain "--default_root" data.webroot "--valid_min" cfg.validMin ]
+                cmdline = [ "-v" "-d" data.domain "--default_root" data.webroot "--valid_min" cfg.validMin ]
                           ++ optionals (data.email != null) [ "--email" data.email ]
                           ++ concatMap (p: [ "-f" p ]) data.plugins
                           ++ concatLists (mapAttrsToList (name: root: [ "-d" (if root == null then name else "${name}:${root}")]) data.extraDomains)
@@ -240,6 +240,7 @@ in
                 };
                 selfsignedService = {
                   description = "Create preliminary self-signed certificate for ${cert}";
+                  path = [ pkgs.openssl ];
                   preStart = ''
                       if [ ! -d '${cpath}' ]
                       then
@@ -250,37 +251,41 @@ in
                   '';
                   script = 
                     ''
-                      # Create self-signed key
-                      workdir="/run/acme-selfsigned-${cert}"
-                      ${pkgs.openssl.bin}/bin/openssl genrsa -des3 -passout pass:x -out $workdir/server.pass.key 2048
-                      ${pkgs.openssl.bin}/bin/openssl rsa -passin pass:x -in $workdir/server.pass.key -out $workdir/server.key
-                      ${pkgs.openssl.bin}/bin/openssl req -new -key $workdir/server.key -out $workdir/server.csr \
+                      workdir="$(mktemp -d)"
+
+                      # Create CA
+                      openssl genrsa -des3 -passout pass:x -out $workdir/ca.pass.key 2048
+                      openssl rsa -passin pass:x -in $workdir/ca.pass.key -out $workdir/ca.key
+                      openssl req -new -key $workdir/ca.key -out $workdir/ca.csr \
+                        -subj "/C=UK/ST=Warwickshire/L=Leamington/O=OrgName/OU=Security Department/CN=example.com"
+                      openssl x509 -req -days 1 -in $workdir/ca.csr -signkey $workdir/ca.key -out $workdir/ca.crt
+
+                      # Create key
+                      openssl genrsa -des3 -passout pass:x -out $workdir/server.pass.key 2048
+                      openssl rsa -passin pass:x -in $workdir/server.pass.key -out $workdir/server.key
+                      openssl req -new -key $workdir/server.key -out $workdir/server.csr \
                         -subj "/C=UK/ST=Warwickshire/L=Leamington/O=OrgName/OU=IT Department/CN=example.com"
-                      ${pkgs.openssl.bin}/bin/openssl x509 -req -days 1 -in $workdir/server.csr -signkey $workdir/server.key -out $workdir/server.crt
+                      openssl x509 -req -days 1 -in $workdir/server.csr -CA $workdir/ca.crt \
+                        -CAkey $workdir/ca.key -CAserial $workdir/ca.srl -CAcreateserial \
+                        -out $workdir/server.crt
 
-                      # Move key to destination
-                      mv $workdir/server.key ${cpath}/key.pem
-                      mv $workdir/server.crt ${cpath}/fullchain.pem
+                      # Copy key to destination
+                      cp $workdir/server.key ${cpath}/key.pem
 
-                      # Create full.pem for e.g. lighttpd (same format as "simp_le ... -f full.pem" creates)
-                      cat "${cpath}/key.pem" "${cpath}/fullchain.pem" > "${cpath}/full.pem"
+                      # Create fullchain.pem (same format as "simp_le ... -f fullchain.pem" creates)
+                      cat $workdir/{server.crt,ca.crt} > "${cpath}/fullchain.pem"
 
-                      # Clean up working directory
-                      rm $workdir/server.csr
-                      rm $workdir/server.pass.key
+                      # Create full.pem for e.g. lighttpd
+                      cat $workdir/{server.key,server.crt,ca.crt} > "${cpath}/full.pem"
 
                       # Give key acme permissions
-                      chmod ${rights} '${cpath}/key.pem'
-                      chown '${data.user}:${data.group}' '${cpath}/key.pem'
-                      chmod ${rights} '${cpath}/fullchain.pem'
-                      chown '${data.user}:${data.group}' '${cpath}/fullchain.pem'
-                      chmod ${rights} '${cpath}/full.pem'
-                      chown '${data.user}:${data.group}' '${cpath}/full.pem'
+                      chown '${data.user}:${data.group}' "${cpath}/"{key,fullchain,full}.pem
+                      chmod ${rights} "${cpath}/"{key,fullchain,full}.pem
                     '';
                   serviceConfig = {
                     Type = "oneshot";
-                    RuntimeDirectory = "acme-selfsigned-${cert}";
                     PermissionsStartOnly = true;
+                    PrivateTmp = true;
                     User = data.user;
                     Group = data.group;
                   };

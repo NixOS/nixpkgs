@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, ocaml, findlib, ocamlbuild, topkg, opam, js_of_ocaml
+{ stdenv, lib, fetchurl, ocaml, findlib, ocamlbuild, topkg, js_of_ocaml
 , jsooSupport ? true
 }:
 
@@ -25,7 +25,7 @@ stdenv.mkDerivation {
 
   unpackCmd = "tar xjf $src";
 
-  buildInputs = [ ocaml findlib ocamlbuild opam topkg ]
+  buildInputs = [ ocaml findlib ocamlbuild topkg ]
   ++ stdenv.lib.optional jsooSupport js_of_ocaml;
 
   buildPhase = "${topkg.buildPhase} --with-js_of_ocaml ${boolToString jsooSupport}";

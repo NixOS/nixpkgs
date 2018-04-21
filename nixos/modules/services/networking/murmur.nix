@@ -80,7 +80,7 @@ in
 
       pidfile = mkOption {
         type = types.path;
-        default = "/tmp/murmurd.pid";
+        default = "/run/murmur/murmurd.pid";
         description = "Path to PID file for Murmur daemon.";
       };
 
@@ -252,6 +252,7 @@ in
 
       serviceConfig = {
         Type      = "forking";
+        RuntimeDirectory = "murmur";
         PIDFile   = cfg.pidfile;
         Restart   = "always";
         User      = "murmur";

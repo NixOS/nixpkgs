@@ -1,16 +1,16 @@
 { stdenv, fetchurl, meson, ninja, pkgconfig, gettext, efl,
   xcbutilkeysyms, libXrandr, libXdmcp, libxcb, libffi, pam, alsaLib,
-  luajit, bzip2, libpthreadstubs, gdbm, libcap, mesa_glu,
+  luajit, bzip2, libpthreadstubs, gdbm, libcap, libGLU,
   xkeyboard_config, pcre
 }:
 
 stdenv.mkDerivation rec {
   name = "enlightenment-${version}";
-  version = "0.22.0";
+  version = "0.22.3";
 
   src = fetchurl {
     url = "http://download.enlightenment.org/rel/apps/enlightenment/${name}.tar.xz";
-    sha256 = "0xmrvryr35idd7fyqgshfhvy2053bs3vwrxbx681pi6rgpdvjghv";
+    sha256 = "16zydv7z94aw3rywmb9gr8ya85k7b75h22wng95lfx1x0y1yb0ad";
   };
 
   nativeBuildInputs = [

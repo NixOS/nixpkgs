@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, ocaml, findlib, ocamlbuild, opam, topkg, uchar, uutf, cmdliner }:
+{ stdenv, fetchurl, ocaml, findlib, ocamlbuild, topkg, uchar, uutf, cmdliner }:
 let
   pname = "uunf";
   webpage = "http://erratique.ch/software/${pname}";
@@ -15,11 +15,9 @@ stdenv.mkDerivation rec {
     sha256 = "0c5lwica5668ybsffllk6x4p921nw4pljimgqikhf17k5hvyjsbr";
   };
 
-  buildInputs = [ ocaml findlib ocamlbuild opam topkg uutf cmdliner ];
+  buildInputs = [ ocaml findlib ocamlbuild topkg uutf cmdliner ];
 
   propagatedBuildInputs = [ uchar ];
-
-  createFindlibDestdir = true;
 
   unpackCmd = "tar xjf $src";
 

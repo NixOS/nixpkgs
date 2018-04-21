@@ -11,11 +11,11 @@
 
 stdenv.mkDerivation rec {
   name = "fim-${version}";
-  version = "0.5rc3";
+  version = "0.6";
 
   src = fetchurl {
-    url = mirror://savannah/fbi-improved/fim-0.5-rc3.tar.gz;
-    sha256 = "12aka85h469zfj0zcx3xdpan70gq8nf5rackgb1ldcl9mqjn50c2";
+    url = "mirror://savannah/fbi-improved/${name}-trunk.tar.gz";
+    sha256 = "124b7c4flx5ygmy5sqq0gpvxqzafnknbcj6f45ddnbdxik9lazzp";
   };
 
   postPatch = ''

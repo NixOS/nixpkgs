@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, efl, pcre, curl, makeWrapper }:
+{ stdenv, fetchurl, pkgconfig, efl, pcre, makeWrapper }:
 
 stdenv.mkDerivation rec {
   name = "terminology-${version}";
@@ -17,14 +17,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     efl
     pcre
-    curl
   ];
-
-  postInstall = ''
-    for f in $out/bin/*; do
-      wrapProgram $f --prefix LD_LIBRARY_PATH : ${curl.out}/lib
-    done
-  '';
 
   meta = {
     description = "The best terminal emulator written with the EFL";

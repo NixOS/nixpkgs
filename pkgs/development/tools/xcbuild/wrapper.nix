@@ -30,7 +30,7 @@ let
 in
 
 stdenv.mkDerivation {
-  name = "xcbuild-wrapper";
+  name = "xcbuild-wrapper-${xcbuild.version}";
 
   buildInputs = [ xcbuild makeWrapper ];
 
@@ -45,6 +45,9 @@ stdenv.mkDerivation {
     for file in ${xcbuild}/bin/*; do
       ln -s $file
     done
+
+    mkdir $out/usr
+    ln -s $out/bin $out/usr/bin
 
     mkdir -p $out/Library/Xcode/
     ln -s ${xcbuild}/Library/Xcode/Specifications $out/Library/Xcode/Specifications

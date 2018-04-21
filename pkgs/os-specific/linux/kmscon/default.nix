@@ -4,7 +4,7 @@
 , systemd
 , libxkbcommon
 , libdrm
-, mesa
+, libGLU_combined
 , pango
 , pixman
 , pkgconfig
@@ -25,13 +25,15 @@ stdenv.mkDerivation rec {
     systemd
     libxkbcommon
     libdrm
-    mesa
+    libGLU_combined
     pango
     pixman
     pkgconfig
     docbook_xsl
     libxslt
   ];
+
+  patches = [ ./kmscon-8-glibc-2.26.patch ];
 
   # FIXME: Remove as soon as kmscon > 8 comes along.
   postPatch = ''
@@ -44,6 +46,8 @@ stdenv.mkDerivation rec {
     "--enable-optimizations"
     "--with-renderers=bbulk,gltex,pixman"
   ];
+
+  enableParallelBuilding = true;
 
   meta = {
     description = "KMS/DRM based System Console";

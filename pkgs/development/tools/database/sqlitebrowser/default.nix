@@ -33,7 +33,7 @@ mkDerivation rec {
     description = "DB Browser for SQLite";
     homepage = http://sqlitebrowser.org/;
     license = licenses.gpl3;
-    maintainers = with maintainers; [ matthiasbeyer ];
+    maintainers = with maintainers; [ ];
     platforms = platforms.linux; # can only test on linux
   };
 }

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, SDL, libxml2, SDL_image, libjpeg, libpng, mesa, zlib }:
+{ stdenv, fetchurl, SDL, libxml2, SDL_image, libjpeg, libpng, libGLU_combined, zlib }:
 
 let
   versionMajor = "0.2.8";
@@ -15,8 +15,10 @@ stdenv.mkDerivation {
 
   NIX_LDFLAGS = [ "-lSDL_image" ];
 
+  enableParallelBuilding = true;
+
   configureFlags = [ "--disable-etc" ];
-  buildInputs = [ SDL SDL_image libxml2 libjpeg libpng mesa zlib ];
+  buildInputs = [ SDL SDL_image libxml2 libjpeg libpng libGLU_combined zlib ];
 
   meta = with stdenv.lib; {
     homepage = http://armagetronad.org;

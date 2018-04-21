@@ -1,33 +1,42 @@
-{ lib, stdenv, fetchurl, pkgconfig, libpulseaudio, alsaLib, libcap
+{ stdenv, lib, fetchFromGitHub, autoreconfHook, pkgconfig, libpulseaudio, alsaLib, libcap
 , CoreAudio, CoreServices, AudioUnit
 , usePulseAudio }:
 
 stdenv.mkDerivation rec {
-  version = "1.2.0";
+  version = "1.2.2";
   name = "libao-${version}";
-  src = fetchurl {
-    url = "http://downloads.xiph.org/releases/ao/${name}.tar.gz";
-    sha256 = "1bwwv1g9lchaq6qmhvj1pp3hnyqr64ydd4j38x94pmprs4d27b83";
+
+  # the github mirror is more up to date than downloads.xiph.org
+  src = fetchFromGitHub {
+    owner  = "xiph";
+    repo   = "libao";
+    rev    = "${version}";
+    sha256 = "0svgk4sc9kdhcsfyvbvgm5vpbg3sfr6z5rliflrw49v3x2i4vxq5";
   };
+
+  configureFlags = [
+    "--disable-broken-oss"
+    "--enable-alsa-mmap"
+  ];
 
   outputs = [ "out" "dev" "man" "doc" ];
 
-  buildInputs =
-    [ pkgconfig ] ++
-    lib.optional usePulseAudio libpulseaudio ++
-    lib.optional stdenv.isLinux alsaLib ++
-    lib.optional stdenv.isLinux libcap ++
+  buildInputs = [ ] ++
+    lib.optional  usePulseAudio   libpulseaudio ++
+    lib.optionals stdenv.isLinux  [ alsaLib libcap ] ++
     lib.optionals stdenv.isDarwin [ CoreAudio CoreServices AudioUnit ];
 
-  meta = {
+  nativeBuildInputs = [ autoreconfHook pkgconfig ];
+
+  meta = with stdenv.lib; {
     longDescription = ''
       Libao is Xiph.org's cross-platform audio library that allows
       programs to output audio using a simple API on a wide variety of
       platforms.
     '';
     homepage = https://xiph.org/ao/;
-    license = stdenv.lib.licenses.gpl2;
-    maintainers = with stdenv.lib.maintainers; [ fuuzetsu ];
-    platforms = with stdenv.lib.platforms; unix;
+    license = licenses.gpl2;
+    maintainers = with maintainers; [ fuuzetsu ];
+    platforms = with platforms; unix;
   };
 }

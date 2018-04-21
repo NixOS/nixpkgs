@@ -1,13 +1,25 @@
 { stdenv, fetchurl, pkgconfig, libevent, openssl, zlib, torsocks
 , libseccomp, systemd, libcap
+
+# for update.nix
+, writeScript
+, runCommand
+, common-updater-scripts
+, bash
+, coreutils
+, curl
+, gnugrep
+, gnupg
+, gnused
+, nix
 }:
 
 stdenv.mkDerivation rec {
-  name = "tor-0.3.1.8";
+  name = "tor-0.3.2.10";
 
   src = fetchurl {
     url = "https://dist.torproject.org/${name}.tar.gz";
-    sha256 = "18dinpj03d036rashlad16lv7j2hba8gg742z07l37x5c242kxkx";
+    sha256 = "1vnb2wkcmm8rnz0fqi3k7arl60mpycs8rjn8hvbgv56g3p1pgpv0";
   };
 
   outputs = [ "out" "geoip" ];
@@ -33,6 +45,22 @@ stdenv.mkDerivation rec {
   '';
 
   doCheck = true;
+
+  passthru.updateScript = import ./update.nix {
+    inherit (stdenv) lib;
+    inherit
+      writeScript
+      runCommand
+      common-updater-scripts
+      bash
+      coreutils
+      curl
+      gnupg
+      gnugrep
+      gnused
+      nix
+    ;
+  };
 
   meta = with stdenv.lib; {
     homepage = https://www.torproject.org/;

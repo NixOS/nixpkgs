@@ -112,7 +112,7 @@ in
         mkdir -m 0755 -p ${stateDir}/dev/
         cp ${confFile} ${stateDir}/unbound.conf
         ${optionalString cfg.enableRootTrustAnchor ''
-        ${pkgs.unbound}/bin/unbound-anchor -a ${rootTrustAnchorFile}
+        ${pkgs.unbound}/bin/unbound-anchor -a ${rootTrustAnchorFile} || echo "Root anchor updated!"
         chown unbound ${stateDir} ${rootTrustAnchorFile}
         ''}
         touch ${stateDir}/dev/random

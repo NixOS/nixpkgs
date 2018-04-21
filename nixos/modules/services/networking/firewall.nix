@@ -54,7 +54,7 @@ let
     '';
 
   writeShScript = name: text: let dir = pkgs.writeScriptBin name ''
-    #! ${pkgs.stdenv.shell} -e
+    #! ${pkgs.runtimeShell} -e
     ${text}
   ''; in "${dir}/bin/${name}";
 
@@ -124,6 +124,9 @@ let
       # For now, we just drop, as the raw table doesn't have a log-refuse yet
       ip46tables -t raw -N nixos-fw-rpfilter 2> /dev/null || true
       ip46tables -t raw -A nixos-fw-rpfilter -m rpfilter ${optionalString (cfg.checkReversePath == "loose") "--loose"} -j RETURN
+
+      # Allows this host to act as a DHCP4 client without first having to use APIPA
+      iptables -t raw -A nixos-fw-rpfilter -p udp --sport 67 --dport 68 -j RETURN
 
       # Allows this host to act as a DHCPv4 server
       iptables -t raw -A nixos-fw-rpfilter -s 0.0.0.0 -d 255.255.255.255 -p udp --sport 68 --dport 67 -j RETURN

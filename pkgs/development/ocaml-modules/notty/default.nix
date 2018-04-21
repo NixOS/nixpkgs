@@ -1,30 +1,27 @@
-{ stdenv, buildOcaml, fetchpatch, fetchFromGitHub, findlib, topkg, opam, ocb-stubblr
+{ stdenv, fetchurl, ocaml, findlib, ocamlbuild, topkg, ocb-stubblr
 , result, uucp, uuseg, uutf
 , lwt     ? null }:
 
 with stdenv.lib;
 
+if !versionAtLeast ocaml.version "4.03"
+then throw "notty is not available for OCaml ${ocaml.version}"
+else
+
 let withLwt = lwt != null; in
 
-buildOcaml rec {
-  version = "0.1.1a";
-  name = "notty";
+stdenv.mkDerivation rec {
+  version = "0.2.1";
+  name = "ocaml${ocaml.version}-notty-${version}";
 
-  minimumSupportedOcamlVersion = "4.02";
-
-  src = fetchFromGitHub {
-    owner  = "pqwy";
-    repo   = "notty";
-    rev    = "53f5946653490fce980dc5d8cadf8b122cff4f19";
-    sha256 = "0qmwb1hrp04py2i5spy0yd6c5jqxyss3wzvlkgxyl9r07kvsx6xf";
+  src = fetchurl {
+    url = "https://github.com/pqwy/notty/releases/download/v${version}/notty-${version}.tbz";
+    sha256 = "0wdfmgx1mz77s7m451vy8r9i4iqwn7s7b39kpbpckf3w9417riq0";
   };
 
-  patches = [ (fetchpatch {
-    url = https://github.com/dbuenzli/notty/commit/b0e12930acc26d030a74d6d63d622ae220b12c92.patch;
-    sha256 = "0pklplbnjbsjriqj73pc8fsadg404px534w7zknz2617zb44m6x6";
-  })];
+  unpackCmd = "tar -xjf $curSrc";
 
-  buildInputs = [ findlib opam topkg ocb-stubblr ];
+  buildInputs = [ ocaml findlib ocamlbuild topkg ocb-stubblr ];
   propagatedBuildInputs = [ result uucp uuseg uutf ] ++
                           optional withLwt lwt;
 
@@ -34,7 +31,8 @@ buildOcaml rec {
   inherit (topkg) installPhase;
 
   meta = {
-    inherit (src.meta) homepage;
+    homepage = "https://github.com/pqwy/notty";
+    inherit (ocaml.meta) platforms;
     description = "Declarative terminal graphics for OCaml";
     license = licenses.isc;
     maintainers = with maintainers; [ sternenseemann ];

@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     homepage = http://www.routino.org/;
     description = "OpenStreetMap Routing Software";
     license = licenses.agpl3;
-    maintainter = with maintainers; [ dotlambda ];
+    maintainers = with maintainers; [ dotlambda ];
     platforms = with platforms; linux;
   };
 }

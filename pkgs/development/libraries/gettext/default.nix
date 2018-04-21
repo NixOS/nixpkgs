@@ -48,6 +48,9 @@ stdenv.mkDerivation rec {
   # HACK, see #10874 (and 14664)
   buildInputs = stdenv.lib.optional (!stdenv.isLinux && !hostPlatform.isCygwin) libiconv;
 
+  setupHook = ./gettext-setup-hook.sh;
+  gettextNeedsLdflags = hostPlatform.libc != "glibc" && !hostPlatform.isMusl;
+
   enableParallelBuilding = true;
 
   meta = {

@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "wolfssl-${version}";
-  version = "3.12.0";
+  version = "3.13.0";
 
   src = fetchFromGitHub {
     owner = "wolfSSL";
     repo = "wolfssl";
     rev = "v${version}-stable";
-    sha256 = "0bjfzpgj50cd27lfz6vry9bdz0f0kvgq8plqdbhlk7kjp32nm2bv";
+    sha256 = "0mvq7ifcpckfrg0zzcxqfbrv08pnz4a8g2z2j3s9h3cwns9ipn6h";
   };
 
   outputs = [ "out" "dev" "doc" "lib" ];

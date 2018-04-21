@@ -45,6 +45,8 @@
 
 let
   inherit (stdenv.lib) optional optionalString;
+  # Don't upgrade until https://github.com/math-atlas/math-atlas/issues/44
+  # is resolved.
   version = "3.10.2";
 in
 
@@ -99,6 +101,10 @@ stdenv.mkDerivation {
       mv $out/lib/liblapack.a $out/lib/liblapack_atlas.a
     fi
   '';
+
+  # 1. /buildATLAS/build/bin/ATLrun.sh: multiple segfaults.
+  # 2. "atlas does its own parallel builds"
+  enableParallelBuilding = false;
 
   meta = {
     homepage = http://math-atlas.sourceforge.net/;

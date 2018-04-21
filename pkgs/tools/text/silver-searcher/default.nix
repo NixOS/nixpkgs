@@ -11,6 +11,8 @@ stdenv.mkDerivation rec {
     sha256 = "0wcw4kyivb10m9b173183jrj46a0gisd35yqxi1mr9hw5l5dhkpa";
   };
 
+  patches = [ ./bash-completion.patch ];
+
   NIX_LDFLAGS = stdenv.lib.optionalString stdenv.isLinux "-lgcc_s";
 
   nativeBuildInputs = [ autoreconfHook pkgconfig ];

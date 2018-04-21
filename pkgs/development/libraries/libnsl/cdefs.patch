@@ -1,0 +1,30 @@
+--- a/src/rpcsvc/nislib.h
++++ b/src/rpcsvc/nislib.h
+@@ -19,6 +19,7 @@
+ #ifndef	__RPCSVC_NISLIB_H__
+ #define	__RPCSVC_NISLIB_H__
+ 
++#include <sys/cdefs.h>
+ #include <features.h>
+ 
+ __BEGIN_DECLS
+--- a/src/rpcsvc/ypclnt.h
++++ b/src/rpcsvc/ypclnt.h
+@@ -20,6 +20,7 @@
+ #ifndef	__RPCSVC_YPCLNT_H__
+ #define	__RPCSVC_YPCLNT_H__
+ 
++#include <sys/cdefs.h>
+ #include <features.h>
+ 
+ /* Some defines */
+--- a/src/rpcsvc/ypupd.h
++++ b/src/rpcsvc/ypupd.h
+@@ -33,6 +33,7 @@
+ #ifndef __RPCSVC_YPUPD_H__
+ #define __RPCSVC_YPUPD_H__
+ 
++#include <sys/cdefs.h>
+ #include <features.h>
+ 
+ #include <rpc/rpc.h>

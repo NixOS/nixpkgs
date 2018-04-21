@@ -4,13 +4,13 @@
 
 stdenv.mkDerivation rec {
   name    = "styx-${version}";
-  version = "0.7.0";
+  version = "0.7.1";
 
   src = fetchFromGitHub {
     owner  = "styx-static";
     repo   = "styx";
     rev    = "v${version}";
-    sha256 = "044zpj92w96csaddf1qnnc2w2w9iq4b7rzlqqsqnd1s0a87lm1qd";
+    sha256 = "01lklz7l9klqmmsncikwjnk3glzyz15c30118s82yd1chwpwhpfl";
   };
 
   server = "${caddy.bin}/bin/caddy";

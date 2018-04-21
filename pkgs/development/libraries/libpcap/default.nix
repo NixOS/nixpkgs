@@ -26,6 +26,15 @@ stdenv.mkDerivation rec {
       url    = "https://sources.debian.net/data/main/libp/libpcap/1.8.1-3/debian/patches/disable-remote.diff";
       sha256 = "0dvjax9c0spvq8cdjnkbnm65wlzaml259yragf95kzg611vszfmj";
     })
+    # See https://github.com/wjt/bustle/commit/f62cf6bfa662af4ae39effbbd4891bc619e3b4e9
+    (fetchpatch {
+      url    = "https://github.com/the-tcpdump-group/libpcap/commit/2be9c29d45fb1fab8e9549342a30c160b7dea3e1.patch";
+      sha256 = "1g8mh942vr0abn48g0bdvi4gmhq1bz0l80276603y7064qhy3wq5";
+    })
+    (fetchpatch {
+      url    = "https://github.com/the-tcpdump-group/libpcap/commit/1a6b088a88886eac782008f37a7219a32b86da45.patch";
+      sha256 = "1n5ylm7ch3i1lh4y2q16b0vabgym8g8mqiqxpqcdkjdn05c1wflr";
+    })
   ];
 
   preInstall = ''mkdir -p $out/bin'';

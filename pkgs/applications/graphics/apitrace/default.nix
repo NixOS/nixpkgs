@@ -22,6 +22,5 @@ stdenv.mkDerivation rec {
     description = "Tools to trace OpenGL, OpenGL ES, Direct3D, and DirectDraw APIs";
     license = licenses.mit;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ nckx ];
   };
 }

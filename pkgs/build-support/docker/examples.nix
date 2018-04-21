@@ -102,7 +102,7 @@ rec {
     ];
   };
 
-  # 5. nix example to play with the container nix store
+  # 6. nix example to play with the container nix store
   # docker run -it --rm nix nix-store -qR $(nix-build '<nixpkgs>' -A nix)
   nix = buildImageWithNixDb {
     name = "nix";
@@ -115,5 +115,13 @@ rec {
     config = {
       Env = [ "NIX_PAGER=cat" ];
     };
+  };
+
+  # 7. example of adding something on top of an image pull by our
+  # dockerTools chain.
+  onTopOfPulledImage = buildImage {
+    name = "onTopOfPulledImage";
+    fromImage = nixFromDockerHub;
+    contents = [ pkgs.hello ];
   };
 }

@@ -41,7 +41,17 @@ stdenv.mkDerivation {
     "-DLLDB_CODESIGN_IDENTITY=" # codesigning makes nondeterministic
   ];
 
+  # Add missing include to fix error when using std::bind
+  prePatch = ''
+    sed -i -e '30i#include <functional>' include/lldb/Utility/TaskPool.h
+  '';
+
   enableParallelBuilding = true;
+
+  postInstall = ''
+    mkdir -p $out/share/man/man1
+    cp ../docs/lldb.1 $out/share/man/man1/
+  '';
 
   meta = with stdenv.lib; {
     description = "A next-generation high-performance debugger";

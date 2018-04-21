@@ -1,10 +1,10 @@
 {stdenv, fetchurl, zlib, openssl, libre}:
 stdenv.mkDerivation rec {
-  version = "0.5.0";
+  version = "0.5.2";
   name = "librem-${version}";
   src=fetchurl {
     url = "http://www.creytiv.com/pub/rem-${version}.tar.gz";
-    sha256 = "1n1ajy1ccw0xw6bndad4js2pnj977s2angzs7lawadh7x5wnalbb";
+    sha256 = "1sv4986yyq42irk9alwp20gc3r5y0r6kix15sl8qmljgxn0lxigv";
   };
   buildInputs = [zlib openssl libre];
   makeFlags = [

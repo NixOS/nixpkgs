@@ -1,18 +1,39 @@
-;;; NixOS specific load-path
-(setq load-path
-      (append (reverse (mapcar (lambda (x) (concat x "/share/emacs/site-lisp/"))
-                               (split-string (or (getenv "NIX_PROFILES") ""))))
-              load-path))
+(defun nix--profile-paths ()
+  "Returns a list of all paths in the NIX_PROFILES environment
+variable, ordered from more-specific (the user profile) to the
+least specific (the system profile)"
+  (reverse (split-string (or (getenv "NIX_PROFILES") ""))))
+
+;;; Extend `load-path' to search for elisp files in subdirectories of
+;;; all folders in `NIX_PROFILES'. Also search for one level of
+;;; subdirectories in these directories to handle multi-file libraries
+;;; like `mu4e'.'
+(require 'seq)
+(let* ((subdirectory-sites (lambda (site-lisp)
+                             (when (file-exists-p site-lisp)
+                               (seq-filter (lambda (f) (file-directory-p (file-truename f)))
+                                           ;; Returns all files in `site-lisp', excluding `.' and `..'
+                                           (directory-files site-lisp 'full "^\\([^.]\\|\\.[^.]\\|\\.\\..\\)")))))
+       (paths (apply #'append
+                     (mapcar (lambda (profile-dir)
+                               (let ((site-lisp (concat profile-dir "/share/emacs/site-lisp/")))
+                                 (cons site-lisp (funcall subdirectory-sites site-lisp))))
+                             (nix--profile-paths)))))
+  (setq load-path (append paths load-path)))
+
 
 ;;; Make `woman' find the man pages
 (eval-after-load 'woman
   '(setq woman-manpath
-         (append (reverse (mapcar (lambda (x) (concat x "/share/man/"))
-                                  (split-string (or (getenv "NIX_PROFILES") ""))))
+         (append (mapcar (lambda (x) (concat x "/share/man/"))
+                         (nix--profile-paths))
                  woman-manpath)))
 
 ;;; Make tramp work for remote NixOS machines
 (eval-after-load 'tramp
+  ;; TODO: We should also add the other `NIX_PROFILES' to this path.
+  ;; However, these are user-specific, so we would need to discover
+  ;; them dynamically after connecting via `tramp'
   '(add-to-list 'tramp-remote-path "/run/current-system/sw/bin"))
 
 ;;; C source directory
@@ -22,9 +43,9 @@
 ;;; from: /nix/store/<hash>-emacs-<version>/share/emacs/site-lisp/site-start.el
 ;;; to:   /nix/store/<hash>-emacs-<version>/share/emacs/<version>/src/
 (let ((emacs
-       (file-name-directory                      ;; .../emacs/
-        (directory-file-name                     ;; .../emacs/site-lisp
-         (file-name-directory load-file-name)))) ;; .../emacs/site-lisp/
+       (file-name-directory                      ; .../emacs/
+        (directory-file-name                     ; .../emacs/site-lisp
+         (file-name-directory load-file-name)))) ; .../emacs/site-lisp/
       (version
        (file-name-as-directory
         (concat

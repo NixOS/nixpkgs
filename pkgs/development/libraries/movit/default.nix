@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
   version = "1.5.1";
 
   src = fetchurl {
-    url = "http://movit.sesse.net/${name}.tar.gz";
+    url = "https://movit.sesse.net/${name}.tar.gz";
     sha256 = "1259iq2ixiprk4mn7ypapinbg2w1sjq1aivzzbbch9i23kcfsd44";
   };
 

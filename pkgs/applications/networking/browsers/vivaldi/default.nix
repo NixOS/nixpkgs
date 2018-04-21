@@ -4,7 +4,7 @@
 , freetype, fontconfig, libXft, libXrender, libxcb, expat, libXau, libXdmcp
 , libuuid, xz
 , gstreamer, gst-plugins-base, libxml2
-, glib, gtk3, pango, gdk_pixbuf, cairo, atk, gnome3
+, glib, gtk3, pango, gdk_pixbuf, cairo, atk, at-spi2-atk, gnome3
 , nss, nspr
 , patchelf, makeWrapper
 , proprietaryCodecs ? false, vivaldi-ffmpeg-codecs ? null
@@ -13,11 +13,11 @@
 stdenv.mkDerivation rec {
   name = "${product}-${version}";
   product = "vivaldi";
-  version = "1.12.955.38-1";
+  version = "1.14.1077.45-1";
 
   src = fetchurl {
     url = "https://downloads.vivaldi.com/stable/${product}-stable_${version}_amd64.deb";
-    sha256 = "1bq1ss6vkpr6rw5n0sw9zipxx19vficvxys1lra9symcxk1b4gqw";
+    sha256 = "0b4iviar927jx6xqyrzgzb3p4p617zm4an1np8jnldadq2a0p56d";
   };
 
   unpackPhase = ''
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     stdenv.cc.cc stdenv.cc.libc zlib libX11 libXt libXext libSM libICE libxcb
     libXi libXft libXcursor libXfixes libXScrnSaver libXcomposite libXdamage libXtst libXrandr
-    atk alsaLib dbus_libs cups gtk3 gdk_pixbuf libexif ffmpeg systemd
+    atk at-spi2-atk alsaLib dbus_libs cups gtk3 gdk_pixbuf libexif ffmpeg systemd
     freetype fontconfig libXrender libuuid expat glib nss nspr
     gstreamer libxml2 gst-plugins-base pango cairo gnome3.gconf
   ] ++ stdenv.lib.optional proprietaryCodecs vivaldi-ffmpeg-codecs;

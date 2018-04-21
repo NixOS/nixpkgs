@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "libdvdnav-${version}";
-  version = "5.0.3";
+  version = "6.0.0";
 
   src = fetchurl {
     url = "http://get.videolan.org/libdvdnav/${version}/${name}.tar.bz2";
-    sha256 = "5097023e3d2b36944c763f1df707ee06b19dc639b2b68fb30113a5f2cbf60b6d";
+    sha256 = "062njcksmpgw9yv3737qkf93r2pzhaxi9szqjabpa8d010dp38ph";
   };
 
   nativeBuildInputs = [ pkgconfig ];

@@ -2,12 +2,12 @@
 
 buildPythonPackage rec {
   pname = "pyroute2";
-  version = "0.4.21";
+  version = "0.5.0";
   name = "${pname}-${version}";
 
   src = fetchurl {
     url = "mirror://pypi/p/pyroute2/${name}.tar.gz";
-    sha256 = "7afad28ee0a0f3e7c34adaa9f953d00560ed9910203e93f107833b6e8d151171";
+    sha256 = "bb02fe5a02fb4e8baad4d7ccf7ba5e748044ee0a1ad7d2fa4927f68f396863c4";
   };
 
   # requires root priviledges

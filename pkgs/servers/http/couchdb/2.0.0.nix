@@ -3,14 +3,15 @@
 
 stdenv.mkDerivation rec {
   name = "couchdb-${version}";
-  version = "2.0.0";
+  version = "2.1.1";
 
   src = fetchurl {
     url = "mirror://apache/couchdb/source/${version}/apache-${name}.tar.gz";
-    sha256 = "1jkfx6g9anrgmkhrkcn50axcamragranwsciw1rhmi86rglkrbyc";
+    sha256 = "1k3v9v05417087b6fcj5yv03wl6i61xqrrhp0prl9b3ir2mmbwnm";
   };
 
-  buildInputs = [ erlang icu openssl spidermonkey makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
+  buildInputs = [ erlang icu openssl spidermonkey ];
 
   patches = [ ./jsapi.patch ];
   postPatch = ''

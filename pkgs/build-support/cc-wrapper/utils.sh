@@ -1,3 +1,39 @@
+mangleVarList() {
+    local var="$1"
+    shift
+    local -a role_infixes=("$@")
+
+    local outputVar="${var/+/_@infixSalt@_}"
+    declare -gx ${outputVar}+=''
+    # For each role we serve, we accumulate the input parameters into our own
+    # cc-wrapper-derivation-specific environment variables.
+    for infix in "${role_infixes[@]}"; do
+        local inputVar="${var/+/${infix}}"
+        if [ -v "$inputVar" ]; then
+            export ${outputVar}+="${!outputVar:+ }${!inputVar}"
+        fi
+    done
+}
+
+mangleVarBool() {
+    local var="$1"
+    shift
+    local -a role_infixes=("$@")
+
+    local outputVar="${var/+/_@infixSalt@_}"
+    declare -gxi ${outputVar}+=0
+    for infix in "${role_infixes[@]}"; do
+        local inputVar="${var/+/${infix}}"
+        if [ -v "$inputVar" ]; then
+            # "1" in the end makes `let` return success error code when
+            # expression itself evaluates to zero.
+            # We don't use `|| true` because that would silence actual
+            # syntax errors from bad variable values.
+            let "${outputVar} |= ${!inputVar:-0}" "1"
+        fi
+    done
+}
+
 skip () {
     if (( "${NIX_DEBUG:-0}" >= 1 )); then
         echo "skipping impure path $1" >&2

@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, elementary-icon-theme }:
+{ stdenv, fetchFromGitHub, autoreconfHook, elementary-icon-theme, gtk3 }:
 
 stdenv.mkDerivation rec {
   name = "${package-name}-${version}";
@@ -12,13 +12,13 @@ stdenv.mkDerivation rec {
     sha256 = "0hif030pd4w3s851k0s65w0mf2pik10ha25ycpsv91gpbgarqcns";
   };
 
-  nativeBuildInputs = [ autoreconfHook ];
-
-  buildInputs = [ elementary-icon-theme ];
+  nativeBuildInputs = [ autoreconfHook elementary-icon-theme gtk3 ];
 
   postPatch = ''
     substituteInPlace Makefile.am --replace '$(DESTDIR)'/usr $out
   '';
+
+  postFixup = "gtk-update-icon-cache $out/share/icons/Faba";
 
   meta = with stdenv.lib; {
     description = "A sexy and modern icon theme with Tango influences";

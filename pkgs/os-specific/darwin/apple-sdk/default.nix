@@ -198,22 +198,35 @@ in rec {
   };
 
   overrides = super: {
+    AppKit = stdenv.lib.overrideDerivation super.AppKit (drv: {
+      __propagatedImpureHostDeps = drv.__propagatedImpureHostDeps ++ [
+        "/System/Library/PrivateFrameworks/"
+      ];
+    });
+
+    CoreMedia = stdenv.lib.overrideDerivation super.CoreMedia (drv: {
+      __propagatedImpureHostDeps = drv.__propagatedImpureHostDeps ++ [
+        "/System/Library/Frameworks/CoreImage.framework"
+      ];
+    });
+
+    CoreMIDI = stdenv.lib.overrideDerivation super.CoreMIDI (drv: {
+      __propagatedImpureHostDeps = drv.__propagatedImpureHostDeps ++ [
+        "/System/Library/PrivateFrameworks/"
+      ];
+      setupHook = ./private-frameworks-setup-hook.sh;
+    });
+
+    Security = stdenv.lib.overrideDerivation super.Security (drv: {
+      setupHook = ./security-setup-hook.sh;
+    });
+
     QuartzCore = stdenv.lib.overrideDerivation super.QuartzCore (drv: {
       installPhase = drv.installPhase + ''
         f="$out/Library/Frameworks/QuartzCore.framework/Headers/CoreImage.h"
         substituteInPlace "$f" \
           --replace "QuartzCore/../Frameworks/CoreImage.framework/Headers" "CoreImage"
       '';
-    });
-
-    CoreServices = stdenv.lib.overrideDerivation super.CoreServices (drv: {
-      __propagatedSandboxProfile = drv.__propagatedSandboxProfile ++ [''
-        (allow mach-lookup (global-name "com.apple.CoreServices.coreservicesd"))
-      ''];
-    });
-
-    Security = stdenv.lib.overrideDerivation super.Security (drv: {
-      setupHook = ./security-setup-hook.sh;
     });
   };
 

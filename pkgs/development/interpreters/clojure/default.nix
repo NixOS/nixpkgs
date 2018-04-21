@@ -1,23 +1,28 @@
-{ stdenv, fetchurl, unzip, ant, jdk, makeWrapper }:
+{ stdenv, fetchurl, jdk, rlwrap, makeWrapper }:
 
-let version = "1.8.0"; in
-
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   name = "clojure-${version}";
+  version = "1.9.0.358";
 
   src = fetchurl {
-    url = "http://repo1.maven.org/maven2/org/clojure/clojure/${version}/clojure-${version}.zip";
-    sha256 = "1nip095fz5c492sw15skril60i1vd21ibg6szin4jcvyy3xr6cym";
+    url = "https://download.clojure.org/install/clojure-tools-${version}.tar.gz";
+    sha256 = "0fi5kni6rdqjy6qgklf4xf7p1pgbsrdwd17iy6lrlg2vb8n8nksp";
   };
 
-  buildInputs = [ unzip ant jdk makeWrapper ];
+  buildInputs = [ makeWrapper ];
 
-  buildPhase = "ant jar";
+  outputs = [ "out" "prefix" ];
 
   installPhase = ''
-    mkdir -p $out/share/java $out/bin
-    install -t $out/share/java clojure.jar
-    makeWrapper ${jdk.jre}/bin/java $out/bin/clojure --add-flags "-cp $out/share/java/clojure.jar clojure.main"
+    mkdir -p $prefix/libexec
+    cp clojure-tools-${version}.jar $prefix/libexec
+    cp {,example-}deps.edn $prefix
+
+    substituteInPlace clojure --replace PREFIX $prefix
+
+    install -Dt $out/bin clj clojure
+    wrapProgram $out/bin/clj --suffix PATH ${rlwrap}/bin
+    wrapProgram $out/bin/clojure --suffix PATH ${jdk}/bin
   '';
 
   meta = with stdenv.lib; {

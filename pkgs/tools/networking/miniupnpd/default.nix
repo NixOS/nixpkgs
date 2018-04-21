@@ -3,11 +3,11 @@
 assert stdenv.isLinux;
 
 stdenv.mkDerivation rec {
-  name = "miniupnpd-2.0";
+  name = "miniupnpd-2.0.20180410";
 
   src = fetchurl {
     url = "http://miniupnp.free.fr/files/download.php?file=${name}.tar.gz";
-    sha256 = "1dxzhvkylrnbkd5srb9rb2g4f9ydd1zbjg5sdf190m0g1sha6snr";
+    sha256 = "1w4crmsmrygagh0v9phx8aicbyh6nypfjh2fdmknijngvx05biaq";
     name = "${name}.tar.gz";
   };
 
@@ -24,6 +24,5 @@ stdenv.mkDerivation rec {
     homepage = http://miniupnp.free.fr/;
     description = "A daemon that implements the UPnP Internet Gateway Device (IGD) specification";
     platforms = platforms.linux;
-    maintainers = with maintainers; [ nckx ];
   };
 }

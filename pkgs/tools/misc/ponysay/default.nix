@@ -1,11 +1,11 @@
 { stdenv, fetchurl, python3, texinfo, makeWrapper }:
 
 stdenv.mkDerivation rec {
-  name = "ponysay-3.0.2";
+  name = "ponysay-3.0.3";
 
   src = fetchurl {
-    url = "https://github.com/erkin/ponysay/archive/3.0.2.tar.gz";
-    sha256 = "03avcbl96rv718lgg6yyrq5mvg3xxzccrnnb6brf4g9mcrwqmsb9";
+    url = "https://github.com/erkin/ponysay/archive/3.0.3.tar.gz";
+    sha256 = "12mjabf5cpp5dgg63s19rlyq3dhhpzzy2sa439yncqzsk7rdg0n3";
   };
 
   buildInputs = [ python3 texinfo makeWrapper ];

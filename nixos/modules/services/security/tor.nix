@@ -5,9 +5,30 @@ with lib;
 let
   cfg = config.services.tor;
   torDirectory = "/var/lib/tor";
+  torRunDirectory = "/run/tor";
 
   opt    = name: value: optionalString (value != null) "${name} ${value}";
   optint = name: value: optionalString (value != null && value != 0)    "${name} ${toString value}";
+
+  isolationOptions = {
+    type = types.listOf (types.enum [
+      "IsolateClientAddr"
+      "IsolateSOCKSAuth"
+      "IsolateClientProtocol"
+      "IsolateDestPort"
+      "IsolateDestAddr"
+    ]);
+    default = [];
+    example = [
+      "IsolateClientAddr"
+      "IsolateSOCKSAuth"
+      "IsolateClientProtocol"
+      "IsolateDestPort"
+      "IsolateDestAddr"
+    ];
+    description = "Tor isolation options";
+  };
+
 
   torRc = ''
     User tor
@@ -18,12 +39,23 @@ let
     ''}
 
     ${optint "ControlPort" cfg.controlPort}
+    ${optionalString cfg.controlSocket.enable "ControlSocket ${torRunDirectory}/control GroupWritable RelaxDirModeCheck"}
   ''
   # Client connection config
-  + optionalString cfg.client.enable  ''
-    SOCKSPort ${cfg.client.socksListenAddress} IsolateDestAddr
+  + optionalString cfg.client.enable ''
+    SOCKSPort ${cfg.client.socksListenAddress} ${toString cfg.client.socksIsolationOptions}
     SOCKSPort ${cfg.client.socksListenAddressFaster}
     ${opt "SocksPolicy" cfg.client.socksPolicy}
+
+    ${optionalString cfg.client.transparentProxy.enable ''
+    TransPort ${cfg.client.transparentProxy.listenAddress} ${toString cfg.client.transparentProxy.isolationOptions}
+    ''}
+
+    ${optionalString cfg.client.dns.enable ''
+    DNSPort ${cfg.client.dns.listenAddress} ${toString cfg.client.dns.isolationOptions}
+    AutomapHostsOnResolve 1
+    AutomapHostsSuffixes ${concatStringsSep "," cfg.client.dns.automapHostsSuffixes}
+    ''}
   ''
   # Relay config
   + optionalString cfg.relay.enable ''
@@ -58,6 +90,9 @@ let
     ${flip concatMapStrings v.map (p: ''
       HiddenServicePort ${toString p.port} ${p.destination}
     '')}
+    ${optionalString (v.authorizeClient != null) ''
+      HiddenServiceAuthorizeClient ${v.authorizeClient.authType} ${concatStringsSep "," v.authorizeClient.clientNames}
+    ''}
   ''))
   + cfg.extraConfig;
 
@@ -107,6 +142,17 @@ in
         '';
       };
 
+      controlSocket = {
+        enable = mkOption {
+          type = types.bool;
+          default = false;
+          description = ''
+            Wheter to enable Tor control socket. Control socket is created
+            in <literal>${torRunDirectory}/control</literal>
+          '';
+        };
+      };
+
       client = {
         enable = mkOption {
           type = types.bool;
@@ -152,6 +198,55 @@ in
             is set, we accept all (and only) requests from
             <option>socksListenAddress</option>.
           '';
+        };
+
+        socksIsolationOptions = mkOption (isolationOptions // {
+          default = ["IsolateDestAddr"];
+        });
+
+        transparentProxy = {
+          enable = mkOption {
+            type = types.bool;
+            default = false;
+            description = "Whether to enable tor transaprent proxy";
+          };
+
+          listenAddress = mkOption {
+            type = types.str;
+            default = "127.0.0.1:9040";
+            example = "192.168.0.1:9040";
+            description = ''
+              Bind transparent proxy to this address.
+            '';
+          };
+
+          isolationOptions = mkOption isolationOptions;
+        };
+
+        dns = {
+          enable = mkOption {
+            type = types.bool;
+            default = false;
+            description = "Whether to enable tor dns resolver";
+          };
+
+          listenAddress = mkOption {
+            type = types.str;
+            default = "127.0.0.1:9053";
+            example = "192.168.0.1:9053";
+            description = ''
+              Bind tor dns to this address.
+            '';
+          };
+
+          isolationOptions = mkOption isolationOptions;
+
+          automapHostsSuffixes = mkOption {
+            type = types.listOf types.str;
+            default = [".onion" ".exit"];
+            example = [".onion"];
+            description = "List of suffixes to use with automapHostsOnResolve";
+          };
         };
 
         privoxy.enable = mkOption {
@@ -540,6 +635,33 @@ in
                }));
              };
 
+             authorizeClient = mkOption {
+               default = null;
+               description = "If configured, the hidden service is accessible for authorized clients only.";
+               type = types.nullOr (types.submodule ({config, ...}: {
+
+                 options = {
+
+                   authType = mkOption {
+                     type = types.enum [ "basic" "stealth" ];
+                     description = ''
+                       Either <literal>"basic"</literal> for a general-purpose authorization protocol
+                       or <literal>"stealth"</literal> for a less scalable protocol
+                       that also hides service activity from unauthorized clients.
+                     '';
+                   };
+
+                   clientNames = mkOption {
+                     type = types.nonEmptyListOf (types.strMatching "[A-Za-z0-9+-_]+");
+                     description = ''
+                       Only clients that are listed here are authorized to access the hidden service.
+                       Generated authorization data can be found in <filename>${torDirectory}/onion/$name/hostname</filename>.
+                       Clients need to put this authorization data in their configuration file using <literal>HidServAuth</literal>.
+                     '';
+                   };
+                 };
+               }));
+             };
           };
 
           config = {
@@ -581,14 +703,10 @@ in
         after    = [ "network.target" ];
         restartTriggers = [ torRcFile ];
 
-        # Translated from the upstream contrib/dist/tor.service.in
-        preStart = ''
-          install -o tor -g tor -d ${torDirectory}/onion
-          ${pkgs.tor}/bin/tor -f ${torRcFile} --verify-config
-        '';
-
         serviceConfig =
           { Type         = "simple";
+            # Translated from the upstream contrib/dist/tor.service.in
+            ExecStartPre = "${pkgs.tor}/bin/tor -f ${torRcFile} --verify-config";
             ExecStart    = "${pkgs.tor}/bin/tor -f ${torRcFile} --RunAsDaemon 0";
             ExecReload   = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
             KillSignal   = "SIGINT";
@@ -603,11 +721,13 @@ in
             #   DeviceAllow /dev/urandom r
             # .. but we can't specify DeviceAllow multiple times. 'closed'
             # is close enough.
+            RuntimeDirectory        = "tor";
+            StateDirectory          = [ "tor" "tor/onion" ];
             PrivateTmp              = "yes";
             DevicePolicy            = "closed";
             InaccessibleDirectories = "/home";
             ReadOnlyDirectories     = "/";
-            ReadWriteDirectories    = torDirectory;
+            ReadWriteDirectories    = [torDirectory torRunDirectory];
             NoNewPrivileges         = "yes";
           };
       };

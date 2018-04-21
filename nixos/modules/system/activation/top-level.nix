@@ -26,11 +26,12 @@ let
      cloner false config.nesting.children
   ++ cloner true config.nesting.clone;
 
-
   systemBuilder =
     let
       kernelPath = "${config.boot.kernelPackages.kernel}/" +
         "${config.system.boot.loader.kernelFile}";
+      initrdPath = "${config.system.build.initialRamdisk}/" +
+        "${config.system.boot.loader.initrdFile}";
     in ''
       mkdir $out
 
@@ -51,7 +52,7 @@ let
 
         echo -n "$kernelParams" > $out/kernel-params
 
-        ln -s ${config.system.build.initialRamdisk}/initrd $out/initrd
+        ln -s ${initrdPath} $out/initrd
 
         ln -s ${config.system.build.initialRamdiskSecretAppender}/bin/append-initrd-secrets $out
 
@@ -83,6 +84,7 @@ let
       done
 
       mkdir $out/bin
+      export localeArchive="${config.i18n.glibcLocales}/lib/locale/locale-archive"
       substituteAll ${./switch-to-configuration.pl} $out/bin/switch-to-configuration
       chmod +x $out/bin/switch-to-configuration
 
@@ -106,7 +108,7 @@ let
     if [] == failed then pkgs.stdenvNoCC.mkDerivation {
       name = let hn = config.networking.hostName;
                  nn = if (hn != "") then hn else "unnamed";
-          in "nixos-system-${nn}-${config.system.nixosLabel}";
+          in "nixos-system-${nn}-${config.system.nixos.label}";
       preferLocalBuild = true;
       allowSubstitutes = false;
       buildCommand = systemBuilder;
@@ -120,7 +122,7 @@ let
         config.system.build.installBootLoader
         or "echo 'Warning: do not know how to make this configuration bootable; please enable a boot loader.' 1>&2; true";
       activationScript = config.system.activationScripts.script;
-      nixosLabel = config.system.nixosLabel;
+      nixosLabel = config.system.nixos.label;
 
       configurationName = config.boot.loader.grub.configurationName;
 
@@ -176,6 +178,15 @@ in
       type = types.str;
       description = ''
         Name of the kernel file to be passed to the bootloader.
+      '';
+    };
+
+    system.boot.loader.initrdFile = mkOption {
+      internal = true;
+      default = "initrd";
+      type = types.str;
+      description = ''
+        Name of the initrd file to be passed to the bootloader.
       '';
     };
 

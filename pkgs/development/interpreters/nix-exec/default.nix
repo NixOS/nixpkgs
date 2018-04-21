@@ -18,5 +18,6 @@ in stdenv.mkDerivation {
     homepage = https://github.com/shlevy/nix-exec;
     license = stdenv.lib.licenses.mit;
     platforms = nix.meta.platforms;
+    broken = true;
   };
 }

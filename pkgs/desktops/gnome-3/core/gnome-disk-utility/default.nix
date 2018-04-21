@@ -1,24 +1,35 @@
-{ stdenv, intltool, fetchurl, pkgconfig, udisks2, libsecret, libdvdread
-, bash, gtk3, glib, wrapGAppsHook, cracklib, libnotify
-, itstool, gnome3, gdk_pixbuf, libxml2, python
-, libcanberra_gtk3, libxslt, libtool, docbook_xsl, libpwquality }:
+{ stdenv, gettext, fetchurl, pkgconfig, udisks2, libsecret, libdvdread
+, meson, ninja, gtk, glib, wrapGAppsHook, libnotify
+, itstool, gnome3, libxml2
+, libcanberra-gtk3, libxslt, docbook_xsl, libpwquality }:
 
 stdenv.mkDerivation rec {
-  inherit (import ./src.nix fetchurl) name src;
+  name = "gnome-disk-utility-${version}";
+  version = "3.28.1";
 
-  doCheck = true;
+  src = fetchurl {
+    url = "mirror://gnome/sources/gnome-disk-utility/${gnome3.versionBranch version}/${name}.tar.xz";
+    sha256 = "09dmknfas8iifv6k5jb4a9ag57s8awrn0f26fd1qlg0mbfjlnfd6";
+  };
 
-  NIX_CFLAGS_COMPILE = "-I${gnome3.glib.dev}/include/gio-unix-2.0";
+  passthru = {
+    updateScript = gnome3.updateScript { packageName = "gnome-disk-utility"; attrPath = "gnome3.gnome-disk-utility"; };
+  };
 
-  propagatedUserEnvPkgs = [ gnome3.gnome_themes_standard ];
+  nativeBuildInputs = [
+    meson ninja pkgconfig gettext itstool libxslt docbook_xsl
+    wrapGAppsHook libxml2
+  ];
+  buildInputs = [
+    gtk glib libsecret libpwquality libnotify libdvdread libcanberra-gtk3
+    udisks2 gnome3.defaultIconTheme
+    gnome3.gnome-settings-daemon gnome3.gsettings-desktop-schemas
+  ];
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ bash gtk3 glib intltool itstool
-                  libxslt libtool libsecret libpwquality cracklib
-                  libnotify libdvdread libcanberra_gtk3 docbook_xsl
-                  gdk_pixbuf gnome3.defaultIconTheme
-                  udisks2 gnome3.gnome_settings_daemon
-                  gnome3.gsettings_desktop_schemas wrapGAppsHook libxml2 ];
+  postPatch = ''
+    chmod +x meson_post_install.py # patchShebangs requires executable file
+    patchShebangs meson_post_install.py
+  '';
 
   meta = with stdenv.lib; {
     homepage = https://en.wikipedia.org/wiki/GNOME_Disks;

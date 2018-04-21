@@ -9,8 +9,6 @@ let
     modules = [ configuration ];
   };
 
-  inherit (eval) pkgs;
-
   # This is for `nixos-rebuild build-vm'.
   vmConfig = (import ./lib/eval-config.nix {
     inherit system;
@@ -30,7 +28,7 @@ let
 in
 
 {
-  inherit (eval) config options;
+  inherit (eval) pkgs config options;
 
   system = eval.config.system.build.toplevel;
 

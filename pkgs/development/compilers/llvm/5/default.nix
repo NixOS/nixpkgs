@@ -6,7 +6,7 @@
 let
   callPackage = newScope (self // { inherit stdenv cmake libxml2 python2 isl release_version version fetch; });
 
-  release_version = "5.0.0";
+  release_version = "5.0.1";
   version = release_version; # differentiating these is important for rc's
 
   fetch = name: sha256: fetchurl {
@@ -14,13 +14,13 @@ let
     inherit sha256;
   };
 
-  compiler-rt_src = fetch "compiler-rt" "1cy0y389zxn7mk8vffqvfirk9bbcbc8ziwc1nf1a8d118rk55bfm";
-  clang-tools-extra_src = fetch "clang-tools-extra" "1ikkv6k8cfgpjqlm24iqz52i5nyafzsc4dyikzzyb9n4b6wpil47";
+  compiler-rt_src = fetch "compiler-rt" "1nlmm0b3wpdwxkldqp1klzv3rpqf94q2a248xgqb7aapyhbi9paf";
+  clang-tools-extra_src = fetch "clang-tools-extra" "09fjii7w43kvxvsxxs6gig9vz95vnvx1779rqd36h8kksvws3bcs";
 
   # Add man output without introducing extra dependencies.
   overrideManOutput = drv:
     let drv-manpages = drv.override { enableManpages = true; }; in
-    drv // { man = drv-manpages.man; /*outputs = drv.outputs ++ ["man"];*/ };
+    drv // { man = drv-manpages.out; /*outputs = drv.outputs ++ ["man"];*/ };
 
   llvm = callPackage ./llvm.nix {
     inherit compiler-rt_src stdenv;
@@ -34,6 +34,7 @@ let
     llvm = overrideManOutput llvm;
     clang-unwrapped = overrideManOutput clang-unwrapped;
 
+    libclang = self.clang-unwrapped.lib;
     llvm-manpages = lowPrio self.llvm.man;
     clang-manpages = lowPrio self.clang-unwrapped.man;
 
@@ -42,29 +43,25 @@ let
     libstdcxxClang = ccWrapperFun {
       cc = self.clang-unwrapped;
       /* FIXME is this right? */
-      inherit (stdenv.cc) libc nativeTools nativeLibc;
+      inherit (stdenv.cc) bintools libc nativeTools nativeLibc;
       extraPackages = [ libstdcxxHook ];
     };
 
     libcxxClang = ccWrapperFun {
       cc = self.clang-unwrapped;
       /* FIXME is this right? */
-      inherit (stdenv.cc) libc nativeTools nativeLibc;
+      inherit (stdenv.cc) bintools libc nativeTools nativeLibc;
       extraPackages = [ self.libcxx self.libcxxabi ];
     };
 
     stdenv = stdenv.override (drv: {
       allowedRequisites = null;
       cc = self.clang;
-      # Don't include the libc++ and libc++abi from the original stdenv.
-      extraBuildInputs = stdenv.lib.optional stdenv.isDarwin darwin.CF;
     });
 
     libcxxStdenv = stdenv.override (drv: {
       allowedRequisites = null;
       cc = self.libcxxClang;
-      # Don't include the libc++ and libc++abi from the original stdenv.
-      extraBuildInputs = stdenv.lib.optional stdenv.isDarwin darwin.CF;
     });
 
     lld = callPackage ./lld.nix {};

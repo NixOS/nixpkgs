@@ -18,6 +18,18 @@ import ./make-test.nix {
         MAIL
       '';
 
+      sendTestMailViaDeliveryAgent = pkgs.writeScriptBin "send-lda" ''
+        #!${pkgs.stdenv.shell}
+
+        exec ${pkgs.dovecot}/libexec/dovecot/deliver -d bob <<MAIL
+        From: root@localhost
+        To: bob@localhost
+        Subject: Something else...
+
+        I'm running short of ideas!
+        MAIL
+      '';
+
       testImap = pkgs.writeScriptBin "test-imap" ''
         #!${pkgs.python3.interpreter}
         import imaplib
@@ -39,24 +51,25 @@ import ./make-test.nix {
 
         pop = poplib.POP3('localhost')
         try:
-          pop.user('alice')
+          pop.user('bob')
           pop.pass_('foobar')
           assert len(pop.list()[1]) == 1
           status, fullmail, size = pop.retr(1)
           assert status.startswith(b'+OK ')
           body = b"".join(fullmail[fullmail.index(b""):]).strip()
-          assert body == b'Hello world!'
+          assert body == b"I'm running short of ideas!"
         finally:
           pop.quit()
       '';
 
-    in [ sendTestMail testImap testPop ];
+    in [ sendTestMail sendTestMailViaDeliveryAgent testImap testPop ];
   };
 
   testScript = ''
     $machine->waitForUnit('postfix.service');
     $machine->waitForUnit('dovecot2.service');
     $machine->succeed('send-testmail');
+    $machine->succeed('send-lda');
     $machine->waitUntilFails('[ "$(postqueue -p)" != "Mail queue is empty" ]');
     $machine->succeed('test-imap');
     $machine->succeed('test-pop');

@@ -1,4 +1,4 @@
-{ stdenv, requireFile, dpkg, makeWrapper, gcc, mesa, xdg_utils,
+{ stdenv, requireFile, dpkg, makeWrapper, gcc, libGLU_combined, xdg_utils,
   dbus_tools, alsaLib, cups, fontconfig, glib, icu, libpng12,
   xkeyboard_config, gstreamer, zlib, libxslt, libxml2, sqlite, orc,
   libX11, libXcursor, libXrandr, libxcb, libXi, libSM, libICE,
@@ -59,7 +59,7 @@ stdenv.mkDerivation {
     sha256 = "04i3dqza6y4p2059pqg5inp3qzr5jmiqplzzk7h1a6gh380v1rbr";
   };
 
-  libPath = stdenv.lib.makeLibraryPath [ gcc.cc mesa xdg_utils
+  libPath = stdenv.lib.makeLibraryPath [ gcc.cc libGLU_combined xdg_utils
     dbus_tools alsaLib cups.lib fontconfig glib icu libpng12
     xkeyboard_config gstreamer zlib libxslt libxml2 sqlite orc libX11
     libXcursor libXrandr libxcb libXi libSM libICE libXrender

@@ -29,6 +29,5 @@ stdenv.mkDerivation rec {
     homepage = http://coan2.sourceforge.net/;
     license = licenses.bsd3;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ nckx ];
   };
 }

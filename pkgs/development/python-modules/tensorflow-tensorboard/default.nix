@@ -1,22 +1,19 @@
-{ stdenv
-, fetchPypi
-, buildPythonPackage
-, isPy3k
+{ stdenv, lib, fetchPypi, buildPythonPackage, isPy3k
 , bleach_1_5_0
 , numpy
 , werkzeug
 , protobuf
 , markdown
+, futures
 }:
 
-# tensorflow is built from a downloaded wheel, because the upstream
-# project's build system is an arcane beast based on
-# bazel. Untangling it and building the wheel from source is an open
-# problem.
+# tensorflow is built from a downloaded wheel, because
+# https://github.com/tensorflow/tensorboard/issues/719
+# blocks buildBazelPackage.
 
 buildPythonPackage rec {
   pname = "tensorflow-tensorboard";
-  version = "0.1.5";
+  version = "1.5.1";
   name = "${pname}-${version}";
   format = "wheel";
 
@@ -26,16 +23,16 @@ buildPythonPackage rec {
     format = "wheel";
   } // (if isPy3k then {
     python = "py3";
-    sha256 = "0sfia05y1mzgy371faj96vgzhag1rgpa3gnbz9w1fay13jryw26x";
+    sha256 = "1cydgvrr0s05xqz1v9z2wdiv60gzbs8wv9wvbflw5700a2llb63l";
   } else {
     python = "py2";
-    sha256 = "0qx4f55zp54x079kxir4zz5b1ckiglsdcb9afz5wcdj6af4a6czg";
+    sha256 = "0dhljddlirq6nr84zg4yrk5k69gj3x2abb6wg3crgrparb6qbya7";
   }));
 
-  propagatedBuildInputs = [ bleach_1_5_0 numpy werkzeug protobuf markdown ];
+  propagatedBuildInputs = [ bleach_1_5_0 numpy werkzeug protobuf markdown ] ++ lib.optional (!isPy3k) futures;
 
   meta = with stdenv.lib; {
-    description = "TensorFlow helps the tensors flow";
+    description = "TensorFlow's Visualization Toolkit";
     homepage = http://tensorflow.org;
     license = licenses.asl20;
     maintainers = with maintainers; [ abbradar ];

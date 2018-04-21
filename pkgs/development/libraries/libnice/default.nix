@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, glib, gupnp_igd, gst_all_1, gnutls }:
+{ stdenv, fetchurl, pkgconfig, glib, gupnp-igd, gst_all_1, gnutls }:
 
 stdenv.mkDerivation rec {
   name = "libnice-0.1.14";
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ gst_all_1.gstreamer gst_all_1.gst-plugins-base gnutls ];
-  propagatedBuildInputs = [ glib gupnp_igd ];
+  propagatedBuildInputs = [ glib gupnp-igd ];
 
   meta = {
     homepage = https://nice.freedesktop.org/wiki/;

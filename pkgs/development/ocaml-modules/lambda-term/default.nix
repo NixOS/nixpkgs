@@ -1,19 +1,21 @@
-{ stdenv, buildOcaml, fetchurl, libev, ocaml, findlib, jbuilder, opam, zed, lwt_react }:
+{ stdenv, buildOcaml, fetchurl, libev, ocaml, findlib, jbuilder, zed, lwt_react }:
 
 assert stdenv.lib.versionAtLeast ocaml.version "4.02";
 
 buildOcaml rec {
-  version = "1.11";
+  version = "1.12.0";
   name = "lambda-term";
 
   src = fetchurl {
     url = "https://github.com/diml/lambda-term/archive/${version}.tar.gz";
-    sha256 = "10lx1jqgmmfwwlv64di4a8nia9l53v7179z70n9fx6aq5l7r8nba";
+    sha256 = "129m5jb015rqm6k3k25m1i2217vhz26n8sa7z113vjv4gs0bcd3d";
   };
 
-  buildInputs = [ libev ocaml findlib jbuilder opam ];
+  buildInputs = [ libev ocaml findlib jbuilder ];
 
   propagatedBuildInputs = [ zed lwt_react ];
+
+  buildPhase = "jbuilder build -p lambda-term";
 
   installPhase = ''
     ${jbuilder.installPhase}
