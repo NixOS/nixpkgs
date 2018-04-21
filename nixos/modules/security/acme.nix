@@ -212,7 +212,6 @@ in
                 domain = if data.domain != null then data.domain else cert;
                 cpath = lpath + optionalString (data.activationDelay != null) ".staging";
                 lpath = "${cfg.directory}/${cert}";
-                cpath = "${cfg.directory}/${cert}";
                 rights = if data.allowKeysForGroup then "750" else "700";
                 cmdline = [ "-v" "-d" data.domain "--default_root" data.webroot "--valid_min" cfg.validMin ]
                           ++ optionals (data.email != null) [ "--email" data.email ]
