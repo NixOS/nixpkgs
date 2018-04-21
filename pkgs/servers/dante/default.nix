@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation (rec {
   name = "dante-${version}";
-  version = "1.4.1";
+  version = "1.4.2";
 
   src = fetchurl {
     url = "https://www.inet.no/dante/files/${name}.tar.gz";
-    sha256 = "0lsg3hk8zd2h9f08s13bn4l4pvyyzkj4gr4ppwa7vj7gdyyk5lmn";
+    sha256 = "1bfafnm445afrmyxvvcl8ckq0p59yzykmr3y8qvryzrscd85g8ms";
   };
 
   configureFlags = [

@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation rec {
   name = "sway-${version}";
-  version = "0.15.0";
+  version = "0.15.2";
 
   src = fetchFromGitHub {
     owner = "swaywm";
     repo = "sway";
     rev = version;
-    sha256 = "0rz5rgap2ah7hkk4glvlmjq0c8i2f47qzkwjx7gm4wmb8gymikmh";
+    sha256 = "1p9j5gv85lsgj4z28qja07dqyvqk41w6mlaflvvm9yxafx477g5n";
   };
 
   nativeBuildInputs = [
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  cmakeFlags = "-DVERSION=${version}";
+  cmakeFlags = "-DVERSION=${version} -DLD_LIBRARY_PATH=/run/opengl-driver/lib:/run/opengl-driver-32/lib";
 
   meta = with stdenv.lib; {
     description = "i3-compatible window manager for Wayland";

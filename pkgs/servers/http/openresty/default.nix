@@ -1,25 +1,30 @@
-{ stdenv, fetchurl, fetchgit, openssl, zlib, pcre, libxml2, libxslt, gd, geoip
-, perl }:
-
-assert stdenv.isLinux;
+{ stdenv, fetchurl, fetchgit, openssl, zlib, pcre, postgresql, libxml2, libxslt,
+gd, geoip, perl }:
 
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
   name = "openresty-${version}";
-  version = "1.9.3.1";
+  version = "1.13.6.1";
 
   src = fetchurl {
-    url = "http://openresty.org/download/ngx_openresty-${version}.tar.gz";
-    sha256 = "1fw8yxjndf5gsk44l4bsixm270fxv7f5cdiwzq9ps6j3hhgx5kyv";
+    url = "http://openresty.org/download/openresty-${version}.tar.gz";
+    sha256 = "0sv93nw1j597mdpnibmgaa3nnghdk0z6k27vavm8w2c1z9n6w96i";
   };
 
-  buildInputs = [ openssl zlib pcre libxml2 libxslt gd geoip perl ];
+  buildInputs = [ openssl zlib pcre libxml2 libxslt gd geoip postgresql ];
+  nativeBuildInputs = [ perl ];
+
+  NIX_CFLAGS_COMPILE = ["-I${libxml2.dev}/include/libxml2"];
+
+  preConfigure = ''
+    patchShebangs .
+  '';
 
   configureFlags = [
     "--with-pcre-jit"
     "--with-http_ssl_module"
-    "--with-http_spdy_module"
+    "--with-http_v2_module"
     "--with-http_realip_module"
     "--with-http_addition_module"
     "--with-http_xslt_module"
@@ -36,26 +41,22 @@ stdenv.mkDerivation rec {
     "--with-http_secure_link_module"
     "--with-http_degradation_module"
     "--with-http_stub_status_module"
+    "--with-http_postgres_module"
     "--with-ipv6"
   ];
 
-  postInstall = ''
-    mv $out/nginx/sbin/nginx $out/bin
-    mv $out/luajit/bin/luajit-2.1.0-alpha $out/bin/luajit-openresty
-    ln -s $out/bin/nginx $out/bin/openresty
-  '';
+  enableParallelBuilding = true;
 
-  preConfigure = ''
-    export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -I${libxml2.dev}/include/libxml2 $additionalFlags"
-    export PATH="$PATH:${stdenv.cc.libc.bin}/bin"
-    patchShebangs .
+  postInstall = ''
+    ln -s $out/luajit/bin/luajit-2.1.0-beta3 $out/bin/luajit-openresty
+    ln -s $out/nginx/sbin/nginx $out/bin/nginx
   '';
 
   meta = {
     description = "A fast web application server built on Nginx";
     homepage    = http://openresty.org;
     license     = licenses.bsd2;
-    platforms   = platforms.linux;
-    maintainers = with maintainers; [ thoughtpolice ];
+    platforms   = platforms.all;
+    maintainers = with maintainers; [ thoughtpolice lblasc ];
   };
 }

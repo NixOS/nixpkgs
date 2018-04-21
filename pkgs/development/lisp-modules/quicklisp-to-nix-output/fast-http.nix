@@ -1,15 +1,15 @@
 args @ { fetchurl, ... }:
 rec {
   baseName = ''fast-http'';
-  version = ''20170630-git'';
+  version = ''20180131-git'';
 
   description = ''A fast HTTP protocol parser in Common Lisp'';
 
-  deps = [ args."alexandria" args."babel" args."cl-utilities" args."proc-parse" args."smart-buffer" args."xsubseq" ];
+  deps = [ args."alexandria" args."babel" args."cl-utilities" args."flexi-streams" args."proc-parse" args."smart-buffer" args."trivial-features" args."trivial-gray-streams" args."xsubseq" ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/fast-http/2017-06-30/fast-http-20170630-git.tgz'';
-    sha256 = ''0fkqwbwqc9a783ynjbszimcrannpqq4ja6wcf8ybgizr4zvsgj29'';
+    url = ''http://beta.quicklisp.org/archive/fast-http/2018-01-31/fast-http-20180131-git.tgz'';
+    sha256 = ''057wg23a1pfdr3522nzjpclxdrmx3azbnw57nkvdjmfp6fyb3rpg'';
   };
 
   packageName = "fast-http";
@@ -18,13 +18,18 @@ rec {
   overrides = x: x;
 }
 /* (SYSTEM fast-http DESCRIPTION A fast HTTP protocol parser in Common Lisp
-    SHA256 0fkqwbwqc9a783ynjbszimcrannpqq4ja6wcf8ybgizr4zvsgj29 URL
-    http://beta.quicklisp.org/archive/fast-http/2017-06-30/fast-http-20170630-git.tgz
-    MD5 d117d59c1f71965e0c32b19e6790cf9a NAME fast-http FILENAME fast-http DEPS
+    SHA256 057wg23a1pfdr3522nzjpclxdrmx3azbnw57nkvdjmfp6fyb3rpg URL
+    http://beta.quicklisp.org/archive/fast-http/2018-01-31/fast-http-20180131-git.tgz
+    MD5 0722e935fb644d57d44e8604e41e689e NAME fast-http FILENAME fast-http DEPS
     ((NAME alexandria FILENAME alexandria) (NAME babel FILENAME babel)
      (NAME cl-utilities FILENAME cl-utilities)
+     (NAME flexi-streams FILENAME flexi-streams)
      (NAME proc-parse FILENAME proc-parse)
-     (NAME smart-buffer FILENAME smart-buffer) (NAME xsubseq FILENAME xsubseq))
+     (NAME smart-buffer FILENAME smart-buffer)
+     (NAME trivial-features FILENAME trivial-features)
+     (NAME trivial-gray-streams FILENAME trivial-gray-streams)
+     (NAME xsubseq FILENAME xsubseq))
     DEPENDENCIES
-    (alexandria babel cl-utilities proc-parse smart-buffer xsubseq) VERSION
-    20170630-git SIBLINGS (fast-http-test) PARASITES NIL) */
+    (alexandria babel cl-utilities flexi-streams proc-parse smart-buffer
+     trivial-features trivial-gray-streams xsubseq)
+    VERSION 20180131-git SIBLINGS (fast-http-test) PARASITES NIL) */

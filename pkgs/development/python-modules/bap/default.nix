@@ -2,13 +2,13 @@
 
 buildPythonPackage rec {
   pname = "bap";
-  version = "1.1.0";
+  version = "1.3.1";
   name = "${pname}-${version}";
   src = fetchFromGitHub {
     owner = "BinaryAnalysisPlatform";
     repo = "bap-python";
-    rev = "v${version}";
-    sha256 = "0wd46ksxscgb2dci69sbndzxs6drq5cahraqq42cdk114hkrsxs3";
+    rev = "${version}";
+    sha256 = "1ahkrmcn7qaivps1gar8wd9mq2qqyx6zzvznf5r9rr05h17x5lbp";
   };
 
   propagatedBuildInputs = [bap requests];

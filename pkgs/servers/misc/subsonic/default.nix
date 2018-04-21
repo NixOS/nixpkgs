@@ -1,6 +1,6 @@
 { stdenv, fetchurl, jre }:
 
-let version = "6.0"; in
+let version = "6.1.3"; in
 
 stdenv.mkDerivation rec {
   name = "subsonic-${version}";
@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://sourceforge/subsonic/subsonic-${version}-standalone.tar.gz";
-    sha256 = "0aw7lz7bkhqvjj3lkk68n2aqr5l84s91cgifg2379w2j7dgd056z";
+    sha256 = "1v21gfymaqcx6n6d88hvha60q9hgj5z1wsac5gcwq7cjah1893jx";
   };
 
   inherit jre;

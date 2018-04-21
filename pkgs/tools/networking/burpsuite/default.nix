@@ -19,6 +19,8 @@ in stdenv.mkDerivation {
     chmod +x $out/bin/burpsuite
   '';
 
+  preferLocalBuild = true;
+
   meta = {
     description = "An integrated platform for performing security testing of web applications";
     longDescription = ''
@@ -30,7 +32,6 @@ in stdenv.mkDerivation {
     homepage = https://portswigger.net/burp/;
     downloadPage = "https://portswigger.net/burp/freedownload";
     license = [ stdenv.lib.licenses.unfree ];
-    preferLocalBuild = true;
     platforms = jre.meta.platforms;
     hydraPlatforms = [];
     maintainers = [ stdenv.lib.maintainers.bennofs ];

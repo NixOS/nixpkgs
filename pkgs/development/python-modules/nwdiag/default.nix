@@ -3,11 +3,13 @@
 }:
 
 buildPythonPackage rec {
-  name = "nwdiag-1.0.3";
+  pname = "nwdiag";
+  version = "1.0.4";
+  name = pname + "-" + version;
 
   src = fetchurl {
     url = "mirror://pypi/n/nwdiag/${name}.tar.gz";
-    sha256 = "0n7ary1fngxk8bk15vabc8fhnmxlh098piciwaviwn7l4a5q1zys";
+    sha256 = "002565875559789a2dfc5f578c07abdf44269c3f7cdf78d4809bdc4bdc2213fa";
   };
 
   buildInputs = [ pep8 nose unittest2 docutils ];

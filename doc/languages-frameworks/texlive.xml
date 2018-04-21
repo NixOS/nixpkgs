@@ -39,6 +39,9 @@ nix-repl> :l &lt;nixpkgs>
 nix-repl> texlive.collection-&lt;TAB>
       </programlisting>
     </para></listitem>
+    <listitem><para>
+      Note that the wrapper assumes that the result has a chance to be useful. For example, the core executables should be present, as well as some core data files. The supported way of ensuring this is by including some scheme, for example <varname>scheme-basic</varname>, into the combination.
+    </para></listitem>
   </itemizedlist>
 </section>
 

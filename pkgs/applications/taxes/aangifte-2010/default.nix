@@ -32,7 +32,7 @@ stdenv.mkDerivation {
 
   meta = {
     description = "Elektronische aangifte IB 2010 (Dutch Tax Return Program)";
-    url = http://www.belastingdienst.nl/particulier/aangifte2009/download/;
+    homepage = http://www.belastingdienst.nl/particulier/aangifte2009/download/;
     license = stdenv.lib.licenses.unfree;
     platforms = stdenv.lib.platforms.linux;
     hydraPlatforms = [];

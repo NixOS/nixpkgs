@@ -1,6 +1,6 @@
 { stdenv, fetchurl, coreutils, utillinux,
   nettools, kbd, bc, which, gnused, gnugrep,
-  groff, man-db, glibc, libiconv, pcre2,
+  groff, man-db, getent, libiconv, pcre2,
   gettext, ncurses, python3
 
   , writeText
@@ -35,11 +35,11 @@ let
     #     source both, but source the more global configuration files earlier
     #     than the more local ones, so that more local configurations inherit
     #     from but override the more global locations.
-    
+
     if test -f /etc/fish/config.fish
       source /etc/fish/config.fish
     end
-    
+
     #                                                                             #
     ############### ↑ Nix hook for sourcing /etc/fish/config.fish ↑ ###############
   '';
@@ -88,13 +88,15 @@ let
 
   fish = stdenv.mkDerivation rec {
     name = "fish-${version}";
-    version = "2.6.0";
+    version = "2.7.1";
 
     etcConfigAppendix = builtins.toFile "etc-config.appendix.fish" etcConfigAppendixText;
 
     src = fetchurl {
-      url = "http://fishshell.com/files/${version}/${name}.tar.gz";
-      sha256 = "1yzx73kg5ng5ivhi68756sl5hpb8869110l9fwim6gn7f7bbprby";
+      # There are differences between the release tarball and the tarball github packages from the tag
+      # Hence we cannot use fetchFromGithub
+      url = "https://github.com/fish-shell/fish-shell/releases/download/${version}/${name}.tar.gz";
+      sha256 = "0nhc3yc5lnnan7zmxqqxm07rdpwjww5ijy45ll2njdc6fnfb2az4";
     };
 
     buildInputs = [ ncurses libiconv pcre2 ];
@@ -140,7 +142,7 @@ let
       sed -e "s| ul| ${utillinux}/bin/ul|" \
           -i "$out/share/fish/functions/__fish_print_help.fish"
       for cur in $out/share/fish/functions/*.fish; do
-        sed -e "s|/usr/bin/getent|${glibc.bin}/bin/getent|" \
+        sed -e "s|/usr/bin/getent|${getent}/bin/getent|" \
             -i "$cur"
       done
 
@@ -156,6 +158,8 @@ let
     '' + ''
       tee -a $out/share/fish/__fish_build_paths.fish < ${(writeText "__fish_build_paths_suffix.fish" fishPreInitHooks)}
     '';
+
+    enableParallelBuilding = true;
 
     meta = with stdenv.lib; {
       description = "Smart and user-friendly command line shell";

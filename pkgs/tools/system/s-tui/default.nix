@@ -17,7 +17,7 @@ pythonPackages.buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     homepage = https://amanusk.github.io/s-tui/;
-    descrption = "Stress-Terminal UI monitoring tool";
+    description = "Stress-Terminal UI monitoring tool";
     license = licenses.gpl2;
     maintainers = with maintainers; [ infinisil ];
   };

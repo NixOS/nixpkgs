@@ -29,7 +29,8 @@ let inherit (localSystem) system; in
     inherit bootstrapTools;
 
     fetchurl = import ../../build-support/fetchurl {
-      inherit stdenv;
+      inherit lib;
+      stdenvNoCC = stdenv;
       curl = bootstrapTools;
     };
 

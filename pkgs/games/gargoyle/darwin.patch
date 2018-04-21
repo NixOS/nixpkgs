@@ -26,6 +26,147 @@ index 1f8829d..d8455eb 100644
  }
  
  SEARCH_SOURCE =
+diff --git a/garglk/fontmac.m b/garglk/fontmac.m
+index d6e1426..72304a3 100644
+--- a/garglk/fontmac.m
++++ b/garglk/fontmac.m
+@@ -167,7 +167,7 @@ static void propfont(char *file, int style)
+     }
+ }
+ 
+-static NSMutableArray<NSURL *> * gli_registered_fonts = nil;
++static NSMutableArray * gli_registered_fonts = nil;
+ static NSDistributedLock * gli_font_lock = nil;
+ 
+ void fontreplace(char *font, int type)
+@@ -181,7 +181,7 @@ void fontreplace(char *font, int type)
+     NSFontDescriptor * fontFamilyDescriptor =
+         [[NSFontDescriptor fontDescriptorWithFontAttributes: nil] fontDescriptorWithFamily: fontFamily];
+ 
+-    NSArray<NSFontDescriptor *> * fontMatches =
++    NSArray * fontMatches =
+         [fontFamilyDescriptor matchingFontDescriptorsWithMandatoryKeys: nil];
+ 
+     for (NSFontDescriptor * sysfont in fontMatches)
+@@ -197,7 +197,7 @@ void fontreplace(char *font, int type)
+ 
+         else if ([sysfont symbolicTraits] & NSFontItalicTrait)
+             style = FONTI;
+-        
++
+         /* find path for font */
+         CFURLRef urlRef = CTFontDescriptorCopyAttribute((CTFontDescriptorRef)sysfont, kCTFontURLAttribute);
+         if (!urlRef)
+@@ -259,7 +259,7 @@ void fontload(void)
+ 
+     // obtain a list of all files in the Fonts directory
+     NSString * fontFolder = [[NSString stringWithUTF8String: env] stringByAppendingPathComponent: @"Fonts"];
+-    NSArray<NSString *> * fontFiles = [[NSFileManager defaultManager] contentsOfDirectoryAtPath: fontFolder error: nil];
++    NSArray * fontFiles = [[NSFileManager defaultManager] contentsOfDirectoryAtPath: fontFolder error: nil];
+ 
+     // create a collection to hold the registered font URLs
+     gli_registered_fonts = [NSMutableArray new];
+diff --git a/garglk/launchmac.m b/garglk/launchmac.m
+index 68deca5..9f752ac 100644
+--- a/garglk/launchmac.m
++++ b/garglk/launchmac.m
+@@ -72,14 +72,14 @@ char *winfilters[] =
+            height: (unsigned int) height
+ {
+     [[self openGLContext] makeCurrentContext];
+-    
++
+     /* allocate new texture */
+     glDeleteTextures(1, &output);
+     glGenTextures(1, &output);
+ 
+     /* bind target to texture */
+-    glEnable(GL_TEXTURE_RECTANGLE_ARB);    
+-    glBindTexture(GL_TEXTURE_RECTANGLE_ARB, output);  
++    glEnable(GL_TEXTURE_RECTANGLE_ARB);
++    glBindTexture(GL_TEXTURE_RECTANGLE_ARB, output);
+ 
+     /* set target parameters */
+     glTexParameteri(GL_TEXTURE_RECTANGLE_ARB, GL_TEXTURE_STORAGE_HINT_APPLE, GL_STORAGE_CACHED_APPLE);
+@@ -460,7 +460,7 @@ static BOOL isTextbufferEvent(NSEvent * evt)
+     if (filter != FILTER_ALL)
+     {
+         NSArray * filterTypes = [NSArray arrayWithObject: [NSString stringWithCString: winfilters[filter]
+-                                                                             encoding: NSUTF8StringEncoding]];        
++                                                                             encoding: NSUTF8StringEncoding]];
+         [openDlg setAllowedFileTypes: filterTypes];
+         [openDlg setAllowsOtherFileTypes: NO];
+     }
+@@ -485,7 +485,7 @@ static BOOL isTextbufferEvent(NSEvent * evt)
+     if (filter != FILTER_ALL)
+     {
+         NSArray * filterTypes = [NSArray arrayWithObject: [NSString stringWithCString: winfilters[filter]
+-                                                                             encoding: NSUTF8StringEncoding]];        
++                                                                             encoding: NSUTF8StringEncoding]];
+         [saveDlg setAllowedFileTypes: filterTypes];
+         [saveDlg setAllowsOtherFileTypes: NO];
+     }
+@@ -518,7 +518,7 @@ static BOOL isTextbufferEvent(NSEvent * evt)
+                          <GargoyleApp, NSApplicationDelegate, NSWindowDelegate>
+ {
+     BOOL openedFirstGame;
+-    NSMutableDictionary<NSNumber *, GargoyleWindow *> * windows;
++    NSMutableDictionary * windows;
+     NSConnection * link;
+ }
+ - (BOOL) launchFile: (NSString *) file;
+@@ -760,20 +760,20 @@ static BOOL isTextbufferEvent(NSEvent * evt)
+ - (BOOL) launchFileDialog
+ {
+     int result;
+-    
++
+     NSOpenPanel * openDlg = [NSOpenPanel openPanel];
+ 
+     [openDlg setCanChooseFiles: YES];
+     [openDlg setCanChooseDirectories: NO];
+     [openDlg setAllowsMultipleSelection: NO];
+     [openDlg setTitle: [NSString stringWithCString: AppName encoding: NSUTF8StringEncoding]];
+-    
++
+     NSMutableArray *filterTypes = [NSMutableArray arrayWithCapacity:100];
+-    
+-    NSEnumerator *docTypeEnum = [[[[NSBundle mainBundle] infoDictionary] 
++
++    NSEnumerator *docTypeEnum = [[[[NSBundle mainBundle] infoDictionary]
+                                   objectForKey:@"CFBundleDocumentTypes"] objectEnumerator];
+     NSDictionary *docType;
+-    
++
+     while (docType = [docTypeEnum nextObject])
+     {
+         [filterTypes addObjectsFromArray:[docType objectForKey: @"CFBundleTypeExtensions"]];
+diff --git a/garglk/ttsmac.m b/garglk/ttsmac.m
+index 9f6ab0e..de3d6fe 100644
+--- a/garglk/ttsmac.m
++++ b/garglk/ttsmac.m
+@@ -30,7 +30,7 @@
+ #import "sysmac.h"
+ 
+ // a queue of phrases to feed to the speech synthesizer
+-static NSMutableArray<NSString *> * phraseQueue = nil;
++static NSMutableArray * phraseQueue = nil;
+ static NSRange purgeRange;
+ 
+ @interface SpeechDelegate : NSObject <NSSpeechSynthesizerDelegate>
+@@ -96,10 +96,10 @@ void gli_initialize_tts(void)
+             NSString * lang = [NSString stringWithCString: gli_conf_speak_language
+                                                  encoding: NSUTF8StringEncoding];
+ 
+-            NSArray<NSString *> * voices = [NSSpeechSynthesizer availableVoices];
++            NSArray * voices = [NSSpeechSynthesizer availableVoices];
+             for (NSString * voice in voices)
+             {
+-                NSDictionary<NSString *, id> * attr = [NSSpeechSynthesizer attributesForVoice: voice];
++                NSDictionary * attr = [NSSpeechSynthesizer attributesForVoice: voice];
+                 if ([lang isEqualToString: [attr objectForKey: NSVoiceLocaleIdentifier]])
+                 {
+                     [synth setVoice: voice];
 diff --git a/tads/tads3/vmtz.cpp b/tads/tads3/vmtz.cpp
 index 5e193a1..dce46f7 100644
 --- a/tads/tads3/vmtz.cpp

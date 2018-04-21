@@ -1,0 +1,12 @@
+Index: wsjtx/CMakeLists.txt
+===================================================================
+--- wsjtx/CMakeLists.txt	(revision 8382)
++++ wsjtx/CMakeLists.txt	(working copy)
+@@ -866,6 +866,7 @@
+ find_package (Qt5Widgets 5 REQUIRED)
+ find_package (Qt5Multimedia 5 REQUIRED)
+ find_package (Qt5PrintSupport 5 REQUIRED)
++find_package (Qt5SerialPort 5 REQUIRED)
+ 
+ if (WIN32)
+   add_definitions (-DQT_NEEDS_QTMAIN)

@@ -1,5 +1,5 @@
 { fetchurl, stdenv, makeWrapper, python, alsaLib
-, libX11, mesa_glu, SDL, lua5, zlib, bam, freetype
+, libX11, libGLU, SDL, lua5, zlib, bam, freetype
 }:
 
 stdenv.mkDerivation rec {
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   postPatch = "rm -r other/{freetype,sdl}/{include,lib32,lib64}";
 
   buildInputs = [
-    python makeWrapper alsaLib libX11 mesa_glu SDL lua5 zlib bam freetype
+    python makeWrapper alsaLib libX11 libGLU SDL lua5 zlib bam freetype
   ];
 
   buildPhase = ''
@@ -61,7 +61,7 @@ stdenv.mkDerivation rec {
       Flag.  You can even design your own maps!
     '';
 
-    homepage = http://teeworlds.com/;
+    homepage = https://teeworlds.com/;
     license = "BSD-style, see `license.txt'";
     maintainers = with stdenv.lib.maintainers; [ astsmtl ];
     platforms = with stdenv.lib.platforms; linux;

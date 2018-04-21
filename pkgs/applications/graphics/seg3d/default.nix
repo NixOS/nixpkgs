@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, cmake, wxGTK, itk, mesa, libXft, libXext, libXi, zlib, libXmu,
+{ fetchurl, stdenv, cmake, wxGTK, itk, libGLU_combined, libXft, libXext, libXi, zlib, libXmu,
 libuuid }:
 
 assert (stdenv ? glibc);
@@ -47,7 +47,7 @@ stdenv.mkDerivation {
     exit 1
   '';
 
-  buildInputs = [ cmake wxGTK itk mesa libXft libXext libXi zlib libXmu libuuid ];
+  buildInputs = [ cmake wxGTK itk libGLU_combined libXft libXext libXi zlib libXmu libuuid ];
 
   meta = {
     broken = true;

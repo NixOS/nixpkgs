@@ -1,6 +1,6 @@
-{stdenv, git, cacert}: let
+{stdenvNoCC, git, cacert}: let
   urlToName = url: rev: let
-    inherit (stdenv.lib) removeSuffix splitString last;
+    inherit (stdenvNoCC.lib) removeSuffix splitString last;
     base = last (splitString ":" (baseNameOf (removeSuffix "/" url)));
 
     matched = builtins.match "(.*).git" base;
@@ -48,11 +48,11 @@ assert deepClone -> leaveDotGit;
 if md5 != "" then
   throw "fetchgit does not support md5 anymore, please use sha256"
 else
-stdenv.mkDerivation {
+stdenvNoCC.mkDerivation {
   inherit name;
   builder = ./builder.sh;
   fetcher = "${./nix-prefetch-git}";  # This must be a string to ensure it's called with bash.
-  buildInputs = [git];
+  nativeBuildInputs = [git];
 
   outputHashAlgo = "sha256";
   outputHashMode = "recursive";
@@ -62,7 +62,7 @@ stdenv.mkDerivation {
 
   GIT_SSL_CAINFO = "${cacert}/etc/ssl/certs/ca-bundle.crt";
 
-  impureEnvVars = stdenv.lib.fetchers.proxyImpureEnvVars ++ [
+  impureEnvVars = stdenvNoCC.lib.fetchers.proxyImpureEnvVars ++ [
     "GIT_PROXY_COMMAND" "SOCKS_SERVER"
   ];
 

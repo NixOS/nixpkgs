@@ -18,6 +18,8 @@ stdenv.mkDerivation {
 
   hardeningDisable = [ "pic" ];
 
+  nativeBuildInputs = kernel.moduleBuildDependencies;
+
   preBuild = ''
     sed -e 's/break/true/' -i examples/turn_off_gpu.sh
     sed -e 's@/bin/bash@.bin/sh@' -i examples/turn_off_gpu.sh

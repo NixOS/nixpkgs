@@ -2,13 +2,13 @@
 stdenv.mkDerivation rec {
   name = "${baseName}-${version}";
   baseName = "bcunit";
-  version = "3.0";
+  version = "3.0.2";
   buildInputs = [cmake];
   src = fetchFromGitHub {
     owner = "BelledonneCommunications";
     repo = "${baseName}";
     rev = "${version}";
-    sha256 = "1kdq9w8i3nypfz7d43rmv1csqrqpip9p8xfa7vyp52aqkmhrby9l";
+    sha256 = "063yl7kxkix76r49qrj0h1qpz2p538d1yw8aih0x4i47g35k00y7";
   };
 
   meta = {

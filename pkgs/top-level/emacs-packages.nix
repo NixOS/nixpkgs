@@ -32,9 +32,7 @@
 #   `meta` with `platforms` and `homepage` set to something you are
 #   unlikely to want to override for most packages
 
-{ overrides
-
-, lib, newScope, stdenv, fetchurl, fetchgit, fetchFromGitHub, fetchhg, runCommand
+{ lib, newScope, stdenv, fetchurl, fetchgit, fetchFromGitHub, fetchhg, runCommand
 
 , emacs, texinfo, lndir, makeWrapper
 , trivialBuild
@@ -75,24 +73,14 @@ let
 
   ## START HERE
 
-  tablist = melpaBuild rec {
-    pname = "tablist";
-    inherit (pdf-tools) src version;
-    fileSpecs = [ "lisp/tablist.el" "lisp/tablist-filter.el" ];
-    meta = {
-      description = "Extended tabulated-list-mode";
-      license = gpl3;
-    };
-  };
-
   pdf-tools = melpaBuild rec {
     pname = "pdf-tools";
-    version = "0.70";
+    version = "0.80";
     src = fetchFromGitHub {
       owner = "politza";
       repo = "pdf-tools";
       rev = "v${version}";
-      sha256 = "19sy49r3ijh36m7hl4vspw5c4i8pnfqdn4ldm2sqchxigkw56ayl";
+      sha256 = "1i4647vax5na73basc5dz4lh9kprir00fh8ps4i0l1y3ippnjs2s";
     };
     nativeBuildInputs = [ external.pkgconfig ];
     buildInputs = with external; [ autoconf automake libpng zlib poppler ];
@@ -397,9 +385,9 @@ let
 in
   lib.makeScope newScope (self:
     {}
-    // melpaPackages self
     // elpaPackages self
     // melpaStablePackages self
+    // melpaPackages self
     // orgPackages self
     // packagesFun self
   )

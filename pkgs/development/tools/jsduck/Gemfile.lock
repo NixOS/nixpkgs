@@ -8,7 +8,7 @@ GEM
       parallel (~> 0.7.1)
       rdiscount (~> 2.1.6)
       rkelly-remix (~> 0.0.4)
-    json (1.8.3)
+    json (1.8.6)
     parallel (0.7.1)
     rdiscount (2.1.8)
     rkelly-remix (0.0.7)

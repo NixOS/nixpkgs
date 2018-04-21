@@ -1,7 +1,7 @@
 args @ { fetchurl, ... }:
 rec {
   baseName = ''static-vectors'';
-  version = ''v1.8.2'';
+  version = ''v1.8.3'';
 
   parasites = [ "static-vectors/test" ];
 
@@ -10,8 +10,8 @@ rec {
   deps = [ args."alexandria" args."babel" args."cffi" args."cffi-grovel" args."fiveam" args."trivial-features" ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/static-vectors/2017-01-24/static-vectors-v1.8.2.tgz'';
-    sha256 = ''0p35f0wrnv46bmmxlviwpsbxnlnkmxwd3xp858lhf0dy52cyra1g'';
+    url = ''http://beta.quicklisp.org/archive/static-vectors/2017-10-19/static-vectors-v1.8.3.tgz'';
+    sha256 = ''084690v6xldb9xysgc4hg284j0j9ppxldz4gxwmfin1dzxq0g6xk'';
   };
 
   packageName = "static-vectors";
@@ -21,13 +21,13 @@ rec {
 }
 /* (SYSTEM static-vectors DESCRIPTION
     Create vectors allocated in static memory. SHA256
-    0p35f0wrnv46bmmxlviwpsbxnlnkmxwd3xp858lhf0dy52cyra1g URL
-    http://beta.quicklisp.org/archive/static-vectors/2017-01-24/static-vectors-v1.8.2.tgz
-    MD5 fd3ebe4e79a71c49e32ac87d6a1bcaf4 NAME static-vectors FILENAME
+    084690v6xldb9xysgc4hg284j0j9ppxldz4gxwmfin1dzxq0g6xk URL
+    http://beta.quicklisp.org/archive/static-vectors/2017-10-19/static-vectors-v1.8.3.tgz
+    MD5 cbad9e34904eedde61cd4cddcca6de29 NAME static-vectors FILENAME
     static-vectors DEPS
     ((NAME alexandria FILENAME alexandria) (NAME babel FILENAME babel)
      (NAME cffi FILENAME cffi) (NAME cffi-grovel FILENAME cffi-grovel)
      (NAME fiveam FILENAME fiveam)
      (NAME trivial-features FILENAME trivial-features))
     DEPENDENCIES (alexandria babel cffi cffi-grovel fiveam trivial-features)
-    VERSION v1.8.2 SIBLINGS NIL PARASITES (static-vectors/test)) */
+    VERSION v1.8.3 SIBLINGS NIL PARASITES (static-vectors/test)) */

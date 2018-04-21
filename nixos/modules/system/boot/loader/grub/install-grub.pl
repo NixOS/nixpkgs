@@ -182,7 +182,7 @@ sub GrubFs {
                 # Based on the type pull in the identifier from the system
                 my ($status, @devInfo) = runCommand("@utillinux@/bin/blkid -o export @{[$fs->device]}");
                 if ($status != 0) {
-                    die "Failed to get blkid info for @{[$fs->mount]} on @{[$fs->device]}";
+                    die "Failed to get blkid info (returned $status) for @{[$fs->mount]} on @{[$fs->device]}";
                 }
                 my @matches = join("", @devInfo) =~ m/@{[uc $fsIdentifier]}=([^\n]*)/;
                 if ($#matches != 0) {

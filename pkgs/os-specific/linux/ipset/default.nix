@@ -1,11 +1,11 @@
 { stdenv, fetchurl, pkgconfig, libmnl }:
 
 stdenv.mkDerivation rec {
-  name = "ipset-6.27";
+  name = "ipset-6.38";
 
   src = fetchurl {
     url = "http://ipset.netfilter.org/${name}.tar.bz2";
-    sha256 = "0ddj66wr0xh9v6ks430l8r80lj2s9qc44d9c2ik48lwm0fl9fj3j";
+    sha256 = "0i72wcljl0nkpmzc20jcch3hpphrm0qp4v4j4ajamq0zlddn5vyf";
   };
 
   nativeBuildInputs = [ pkgconfig ];

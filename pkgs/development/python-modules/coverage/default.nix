@@ -7,12 +7,12 @@
 
 buildPythonPackage rec {
   pname = "coverage";
-  version = "4.4.1";
+  version = "4.5.1";
   name = "${pname}-${version}";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "7a9c44400ee0f3b4546066e0710e1250fd75831adc02ab99dda176ad8726f424";
+    sha256 = "56e448f051a201c5ebbaa86a5efd0ca90d327204d8b059ab25ad0f35fbfd79f1";
   };
 
   # No tests in archive

@@ -1,4 +1,4 @@
-{ stdenv, squashfsTools, perl, pathsFromGraph
+{ stdenv, squashfsTools, closureInfo
 
 , # The root directory of the squashfs filesystem is filled with the
   # closures of the Nix store paths listed here.
@@ -8,23 +8,18 @@
 stdenv.mkDerivation {
   name = "squashfs.img";
 
-  buildInputs = [perl squashfsTools];
-
-  # For obtaining the closure of `storeContents'.
-  exportReferencesGraph =
-    map (x: [("closure-" + baseNameOf x) x]) storeContents;
+  nativeBuildInputs = [ squashfsTools ];
 
   buildCommand =
     ''
-      # Add the closures of the top-level store objects.
-      storePaths=$(perl ${pathsFromGraph} closure-*)
+      closureInfo=${closureInfo { rootPaths = storeContents; }}
 
       # Also include a manifest of the closures in a format suitable
       # for nix-store --load-db.
-      printRegistration=1 perl ${pathsFromGraph} closure-* > nix-path-registration
+      cp $closureInfo/registration nix-path-registration
 
       # Generate the squashfs image.
-      mksquashfs nix-path-registration $storePaths $out \
+      mksquashfs nix-path-registration $(cat $closureInfo/store-paths) $out \
         -keep-as-directory -all-root -b 1048576 -comp xz -Xdict-size 100%
     '';
 }

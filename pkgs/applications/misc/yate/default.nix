@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "yate-${version}";
-  version = "5.4.2-1";
+  version = "6.0.0-1";
 
   src = fetchurl {
-    url = "http://voip.null.ro/tarballs/yate5/${name}.tar.gz";
-    sha256 = "08gwz0gipc5v75jv46p2yg8hg31xjp6x7jssd0rrgsa3szi5697n";
+    url = "http://voip.null.ro/tarballs/yate${lib.versions.major version}/${name}.tar.gz";
+    sha256 = "05qqdhi3rp5660gq1484jkmxkm9vq81j0yr765h0gf0xclan1dqa";
   };
 
   # TODO zaptel ? postgres ?
@@ -17,6 +17,7 @@ stdenv.mkDerivation rec {
   preConfigure =
     ''
       sed -i 's@,/dev/null@@' configure
+      patchShebangs configure
     '';
 
   # --unresolved-symbols=ignore-in-shared-libs makes ld no longer find --library=yate? Why?
@@ -35,7 +36,7 @@ stdenv.mkDerivation rec {
     # OpenH323 and PWlib (licensed under MPL).
     license = ["GPL" "MPL"];
     maintainers = [ lib.maintainers.marcweber ];
-    platforms = lib.platforms.linux;
+    platforms = [ "i686-linux" "x86_64-linux" ];
   };
 
 }

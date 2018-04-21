@@ -1,16 +1,15 @@
-{ stdenv, fetchgit, qmake, qtwebengine, qttools, wrapGAppsHook }:
+{ stdenv, fetchFromGitHub, qmake, qtwebengine, qttools, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
-  name = "rssguard-${version}";
-  version = "3.4.2";
+  name = "${pname}-${version}";
+  pname = "rssguard";
+  version = "3.5.6";
 
-  src = fetchgit {
-    url = https://github.com/martinrotter/rssguard;
-    rev = "refs/tags/${version}";
-    sha256 = "0iy0fd3qr2dm0pc6xr7sin6cjfxfa0pxhxiwzs55dhsdk9zir62s";
-    # Submodules are required only for Windows (and one of them is a huge binary
-    # package ~400MB). See project wiki for more details.
-    fetchSubmodules = false;
+  src = fetchFromGitHub {
+    owner = "martinrotter";
+    repo = pname;
+    rev = version;
+    sha256 = "1pdas7hg3nzykm3qi951fk25c9s6gjb7my82b9xzjn2yd7ks71by";
   };
 
   buildInputs =  [ qtwebengine qttools ];

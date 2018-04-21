@@ -4,9 +4,12 @@ appleDerivation {
     libauto
     libobjc
     IOKit
+  ];
+  propagatedBuildInputs = [
     sqlite
     apple_sdk.frameworks.PCSC
   ];
+  NIX_LDFLAGS = "-framework PCSC";
   patchPhase = ''
     substituteInPlace lib/errors.h --replace \
       '<CoreServices/../Frameworks/CarbonCore.framework/Headers/MacTypes.h>' \

@@ -1,7 +1,0 @@
-[
-  "pump.io",
-  "databank-mongodb",
-  "databank-redis",
-  "databank-memcached",
-  "databank-lrucache"
-]

@@ -37,7 +37,7 @@ let
 
     installPhase = ''
       mkdir -p "$out/share/${extendedPkgName}/extensions/${vscodeExtUniqueId}"
-      find . -mindepth 1 -maxdepth 1 | xargs mv -t "$out/share/${extendedPkgName}/extensions/${vscodeExtUniqueId}/"
+      find . -mindepth 1 -maxdepth 1 | xargs -d'\n' mv -t "$out/share/${extendedPkgName}/extensions/${vscodeExtUniqueId}/"
     '';
 
   });
@@ -70,12 +70,14 @@ let
       mktplcRef = ext; 
     }); 
 
+  extensionFromVscodeMarketplace = mktplcExtRefToExtDrv;
   extensionsFromVscodeMarketplace = mktplcExtRefList:
-    builtins.map mktplcExtRefToExtDrv mktplcExtRefList;
+    builtins.map extensionFromVscodeMarketplace mktplcExtRefList;
 
 in
 
 {
   inherit fetchVsixFromVscodeMarketplace buildVscodeExtension 
-          buildVscodeMarketplaceExtension extensionsFromVscodeMarketplace;
+          buildVscodeMarketplaceExtension extensionFromVscodeMarketplace
+          extensionsFromVscodeMarketplace;
 }

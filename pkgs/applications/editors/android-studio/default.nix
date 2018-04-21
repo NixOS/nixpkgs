@@ -1,19 +1,34 @@
-{ stdenv, callPackage, fetchurl, makeFontsConf }:
+{ stdenv, callPackage, fetchurl, makeFontsConf, gnome2 }:
+
 let
   mkStudio = opts: callPackage (import ./common.nix opts) {
     fontsConf = makeFontsConf {
       fontDirectories = [];
     };
+    inherit (gnome2) GConf gnome_vfs;
+  };
+  stableVersion = {
+    version = "3.1.1.0"; # "Android Studio 3.1.1"
+    build = "173.4697961";
+    sha256Hash = "0xn02miq2hz7666mziza56pfqw9sjflgvn88ds7j5yd4rlcr0lq8";
+  };
+  latestVersion = {
+    version = "3.2.0.10"; # "Android Studio 3.2 Canary 11"
+    build = "181.4720098";
+    sha256Hash = "00cd7qdznspi69cgs1a13a3fnkvsc7zjfl517jgp32vdygkb0qxw";
   };
 in rec {
-  stable = mkStudio {
+  # Old alias
+  preview = beta;
+
+  # Attributes are named by the corresponding release channels
+
+  stable = mkStudio (stableVersion // {
     pname = "android-studio";
-    version = "3.0.0.18"; # "Android Studio 3.0"
-    build = "171.4408382";
-    sha256Hash = "18npm7ckdybj6vc2vndr0wd50da19m9z2j7wld2mdidnl5ggk4br";
+    #pname = "android-studio-stable"; # TODO: Rename and provide symlink
 
     meta = with stdenv.lib; {
-      description = "The Official IDE for Android (stable version)";
+      description = "The Official IDE for Android (stable channel)";
       longDescription = ''
         Android Studio is the official IDE for Android app development, based on
         IntelliJ IDEA.
@@ -23,17 +38,31 @@ in rec {
       platforms = [ "x86_64-linux" ];
       maintainers = with maintainers; [ primeos ];
     };
-  };
+  });
 
-  preview = mkStudio {
+  beta = mkStudio (stableVersion // {
     pname = "android-studio-preview";
-    version = "3.1.0.2"; # "Android Studio 3.1 Canary 3"
-    build = "171.4435470";
-    sha256Hash = "1yqzxmzqxvhq9q9k07yfchh2al0wdy0j5k5fmjv4zbw20panx10h";
+    #pname = "android-studio-beta"; # TODO: Rename and provide symlink
 
     meta = stable.meta // {
-      description = "The Official IDE for Android (preview version)";
+      description = "The Official IDE for Android (beta channel)";
       homepage = https://developer.android.com/studio/preview/index.html;
     };
-  };
+  });
+
+  dev = mkStudio (latestVersion // {
+    pname = "android-studio-dev";
+
+    meta = beta.meta // {
+      description = "The Official IDE for Android (dev channel)";
+    };
+  });
+
+  canary = mkStudio (latestVersion // {
+    pname = "android-studio-canary";
+
+    meta = beta.meta // {
+      description = "The Official IDE for Android (canary channel)";
+    };
+  });
 }

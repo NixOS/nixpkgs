@@ -1,7 +1,7 @@
 {stdenv, fetchurl, makeWrapper, gettext, pkgconfig, libtool, backintime-common, python3, python3Packages }:
 
 stdenv.mkDerivation rec {
-  inherit (backintime-common) version src installFlags meta;
+  inherit (backintime-common) version src installFlags;
 
   name = "backintime-qt4-${version}";
 
@@ -22,4 +22,7 @@ stdenv.mkDerivation rec {
         --prefix PATH : "${backintime-common}/bin:$PATH"
     '';
 
+  meta = with stdenv.lib; {
+    broken = true;
+  };
 }

@@ -2,11 +2,16 @@
 , libxml2, intltool, itstool }:
 
 stdenv.mkDerivation rec {
-  name = "hitori-${gnome3.version}.1";
+  name = "hitori-${version}";
+  version = "3.22.4";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/hitori/${gnome3.version}/${name}.tar.xz";
-    sha256 = "07pm3xl05jgb8x151k1j2ap57dmfvk2nkz9dmqnn5iywfigsysd1";
+    url = "mirror://gnome/sources/hitori/${gnome3.versionBranch version}/${name}.tar.xz";
+    sha256 = "dcac6909b6007857ee425ac8c65fed179f2c71da138d5e5300cd62c8b9ea15d3";
+  };
+
+  passthru = {
+    updateScript = gnome3.updateScript { packageName = "hitori"; attrPath = "gnome3.hitori"; };
   };
 
   nativeBuildInputs = [ pkgconfig ];

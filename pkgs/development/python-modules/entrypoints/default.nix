@@ -3,12 +3,12 @@
 , fetchPypi
 , configparser
 , pytest
+, isPy3k
 }:
 
 buildPythonPackage rec {
   pname = "entrypoints";
   version = "0.2.3";
-  name = "${pname}-${version}";
 
   src = fetchPypi {
     inherit pname version;
@@ -17,7 +17,7 @@ buildPythonPackage rec {
 
   checkInputs = [ pytest];
 
-  propagatedBuildInputs = [ configparser ];
+  propagatedBuildInputs = [] ++ lib.optional (!isPy3k) [ configparser ];
 
   checkPhase = ''
     py.test tests

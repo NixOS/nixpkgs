@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ perl pkgconfig ];
 
   buildInputs = [ openssl libxslt curl pcre libxml2 ]
-    ++ stdenv.lib.optional withMysql mysql
+    ++ stdenv.lib.optional withMysql mysql.connector-c
     ++ stdenv.lib.optional withSqlite sqlite
     ++ stdenv.lib.optional withPostgresql postgresql
     ++ stdenv.lib.optional withBdb db;

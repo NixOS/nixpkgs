@@ -63,7 +63,6 @@ let
         kdepimTeam = with lib.maintainers; [ ttuegel vandenoever ];
       };
     in {
-      kdelibs = callPackage ./kdelibs { inherit attica phonon; };
       akonadi = callPackage ./akonadi {};
       akonadi-calendar = callPackage ./akonadi-calendar.nix {};
       akonadi-contacts = callPackage ./akonadi-contacts.nix {};
@@ -85,6 +84,7 @@ let
       incidenceeditor = callPackage ./incidenceeditor.nix {};
       k3b = callPackage ./k3b.nix {};
       kaddressbook = callPackage ./kaddressbook.nix {};
+      kalarm = callPackage ./kalarm.nix {};
       kalarmcal = callPackage ./kalarmcal.nix {};
       kate = callPackage ./kate.nix {};
       kcachegrind = callPackage ./kcachegrind.nix {};
@@ -94,6 +94,7 @@ let
       kcolorchooser = callPackage ./kcolorchooser.nix {};
       kcontacts = callPackage ./kcontacts.nix {};
       kdav = callPackage ./kdav.nix {};
+      kdebugsettings = callPackage ./kdebugsettings.nix {};
       kdegraphics-mobipocket = callPackage ./kdegraphics-mobipocket.nix {};
       kdegraphics-thumbnailers = callPackage ./kdegraphics-thumbnailers.nix {};
       kdenetwork-filesharing = callPackage ./kdenetwork-filesharing.nix {};
@@ -101,7 +102,9 @@ let
       kdepim-runtime = callPackage ./kdepim-runtime.nix {};
       kdepim-apps-libs = callPackage ./kdepim-apps-libs {};
       kdf = callPackage ./kdf.nix {};
+      kdialog = callPackage ./kdialog.nix {};
       keditbookmarks = callPackage ./keditbookmarks.nix {};
+      kget = callPackage ./kget.nix {};
       kgpg = callPackage ./kgpg.nix {};
       khelpcenter = callPackage ./khelpcenter.nix {};
       kholidays = callPackage ./kholidays.nix {};
@@ -124,9 +127,12 @@ let
       kontactinterface = callPackage ./kontactinterface.nix {};
       korganizer = callPackage ./korganizer.nix {};
       kpimtextedit = callPackage ./kpimtextedit.nix {};
+      ksmtp = callPackage ./ksmtp {};
       kqtquickcharts = callPackage ./kqtquickcharts.nix {};
       krdc = callPackage ./krdc.nix {};
       krfb = callPackage ./krfb.nix {};
+      kruler = callPackage ./kruler.nix {};
+      ksystemlog = callPackage ./ksystemlog.nix {};
       ktnef = callPackage ./ktnef.nix {};
       kwalletmanager = callPackage ./kwalletmanager.nix {};
       libgravatar = callPackage ./libgravatar.nix {};
@@ -134,6 +140,7 @@ let
       libkdcraw = callPackage ./libkdcraw.nix {};
       libkdepim = callPackage ./libkdepim.nix {};
       libkexiv2 = callPackage ./libkexiv2.nix {};
+      libkgapi = callPackage ./libkgapi.nix {};
       libkipi = callPackage ./libkipi.nix {};
       libkleo = callPackage ./libkleo.nix {};
       libkomparediff2 = callPackage ./libkomparediff2.nix {};
@@ -153,8 +160,6 @@ let
       print-manager = callPackage ./print-manager.nix {};
       spectacle = callPackage ./spectacle.nix {};
       syndication = callPackage ./syndication.nix {};
-
-      l10n = recurseIntoAttrs (import ./l10n.nix { inherit callPackage lib recurseIntoAttrs; });
     };
 
 in lib.makeScope libsForQt5.newScope packages

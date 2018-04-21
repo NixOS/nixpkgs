@@ -43,6 +43,7 @@ stdenv.mkDerivation rec {
       ./qemu-patches/no-etc-install.patch
       ./qemu-patches/translate-all.patch
       ./qemu-patches/syscall.patch
+      ./qemu-patches/qemu-2.3.0-glibc-2.26.patch
     ];
 
   preConfigure = ''

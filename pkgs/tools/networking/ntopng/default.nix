@@ -53,6 +53,8 @@ stdenv.mkDerivation rec {
     sed 's|LIBS += -lstdc++.6||' -i Makefile
   '';
 
+  NIX_CFLAGS_COMPILE = [ "-fpermissive" ];
+
   meta = with stdenv.lib; {
     description = "High-speed web-based traffic analysis and flow collection tool";
     homepage = http://www.ntop.org/products/ntop/;

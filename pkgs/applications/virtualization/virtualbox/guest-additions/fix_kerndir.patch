@@ -1,7 +1,7 @@
-diff --git a/install/src/vboxguest-5.2.0/vboxsf/Makefile.include.header b/install/src/vboxguest-5.2.0/vboxsf/Makefile.include.header
+diff --git a/vboxsf/Makefile.include.header b/vboxsf/Makefile.include.header
 index 8df1eb4d25..5a3e5604e7 100644
---- a/install/src/vboxguest-5.2.0/vboxsf/Makefile.include.header
-+++ b/install/src/vboxguest-5.2.0/vboxsf/Makefile.include.header
+--- a/vboxsf/Makefile.include.header
++++ b/vboxsf/Makefile.include.header
 @@ -117,7 +117,6 @@ else # neq($(KERNELRELEASE),)
  endif # neq($(KERNELRELEASE),)
 
@@ -11,10 +11,10 @@ index 8df1eb4d25..5a3e5604e7 100644
   $(error Error: unable to find the headers of the Linux kernel to build against. \
            Specify KERN_VER=<version> and run Make again)
 
-diff --git a/install/src/vboxguest-5.2.0/vboxguest/Makefile.include.header b/install/src/vboxguest-5.2.0/vboxguest/Makefile.include.header
+diff --git a/vboxguest/Makefile.include.header b/vboxguest/Makefile.include.header
 index 8df1eb4d25..5a3e5604e7 100644
---- a/install/src/vboxguest-5.2.0/vboxguest/Makefile.include.header
-+++ b/install/src/vboxguest-5.2.0/vboxguest/Makefile.include.header
+--- a/vboxguest/Makefile.include.header
++++ b/vboxguest/Makefile.include.header
 @@ -117,7 +117,6 @@ else # neq($(KERNELRELEASE),)
  endif # neq($(KERNELRELEASE),)
 
@@ -24,10 +24,10 @@ index 8df1eb4d25..5a3e5604e7 100644
   $(error Error: unable to find the headers of the Linux kernel to build against. \
            Specify KERN_VER=<version> and run Make again)
 
-diff --git a/install/src/vboxguest-5.2.0/vboxvideo/Makefile.include.header b/install/src/vboxguest-5.2.0/vboxvideo/Makefile.include.header
+diff --git a/vboxvideo/Makefile.include.header b/vboxvideo/Makefile.include.header
 index 8df1eb4d25..5a3e5604e7 100644
---- a/install/src/vboxguest-5.2.0/vboxvideo/Makefile.include.header
-+++ b/install/src/vboxguest-5.2.0/vboxvideo/Makefile.include.header
+--- a/vboxvideo/Makefile.include.header
++++ b/vboxvideo/Makefile.include.header
 @@ -117,7 +117,6 @@ else # neq($(KERNELRELEASE),)
  endif # neq($(KERNELRELEASE),)
 

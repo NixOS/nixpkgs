@@ -14,7 +14,7 @@ in stdenv.mkDerivation rec {
     sha256 = "05wn744ydclpnpyah6yfjqlfjlasrrhzj48lqmm5a91nyps5yqyn";
   };
 
-  pythonPath = with pythonPackages; [ dns m2crypto ipaddr python-gnupg
+  pythonPath = with pythonPackages; [ dnspython m2crypto ipaddr python-gnupg
                                       pyunbound ];
 
   buildInputs = [ pythonPackages.wrapPython ];

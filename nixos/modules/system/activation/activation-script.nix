@@ -61,7 +61,7 @@ in
       apply = set: {
         script =
           ''
-            #! ${pkgs.stdenv.shell}
+            #! ${pkgs.runtimeShell}
 
             systemConfig=@out@
 
@@ -117,14 +117,7 @@ in
 
   config = {
 
-    system.activationScripts.stdio =
-      ''
-        # Needed by some programs.
-        ln -sfn /proc/self/fd /dev/fd
-        ln -sfn /proc/self/fd/0 /dev/stdin
-        ln -sfn /proc/self/fd/1 /dev/stdout
-        ln -sfn /proc/self/fd/2 /dev/stderr
-      '';
+    system.activationScripts.stdio = ""; # obsolete
 
     system.activationScripts.var =
       ''

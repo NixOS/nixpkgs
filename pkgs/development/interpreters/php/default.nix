@@ -4,7 +4,7 @@
 , mysql, libxml2, readline, zlib, curl, postgresql, gettext
 , openssl, pcre, pkgconfig, sqlite, config, libjpeg, libpng, freetype
 , libxslt, libmcrypt, bzip2, icu, openldap, cyrus_sasl, libmhash, freetds
-, uwimap, pam, gmp, apacheHttpd, libiconv, systemd }:
+, uwimap, pam, gmp, apacheHttpd, libiconv, systemd, libsodium }:
 
 let
 
@@ -12,9 +12,8 @@ let
     { version, sha256 }:
 
     let php7 = lib.versionAtLeast version "7.0";
-        mysqlHeaders = mysql.lib.dev or mysql;
         mysqlndSupport = config.php.mysqlnd or false;
-        mysqlBuildInputs = lib.optional (!mysqlndSupport) mysqlHeaders;
+        mysqlBuildInputs = lib.optional (!mysqlndSupport) mysql.connector-c;
 
     in composableDerivation.composableDerivation {} (fixed: {
 
@@ -121,7 +120,7 @@ let
         };
 
         mysqli = {
-          configureFlags = ["--with-mysqli=${if mysqlndSupport then "mysqlnd" else "${mysqlHeaders}/bin/mysql_config"}"];
+          configureFlags = ["--with-mysqli=${if mysqlndSupport then "mysqlnd" else "${mysql.connector-c}/bin/mysql_config"}"];
           buildInputs = mysqlBuildInputs;
         };
 
@@ -132,7 +131,7 @@ let
         };
 
         pdo_mysql = {
-          configureFlags = ["--with-pdo-mysql=${if mysqlndSupport then "mysqlnd" else mysqlHeaders}"];
+          configureFlags = ["--with-pdo-mysql=${if mysqlndSupport then "mysqlnd" else mysql.connector-c}"];
           buildInputs = mysqlBuildInputs;
         };
 
@@ -226,6 +225,11 @@ let
         calendar = {
           configureFlags = ["--enable-calendar"];
         };
+
+        sodium = {
+          configureFlags = ["--with-sodium=${libsodium.dev}"];
+          buildInputs = [libsodium];
+        };
       };
 
       cfg = {
@@ -265,6 +269,7 @@ let
         mssqlSupport = (!php7) && (config.php.mssql or (!stdenv.isDarwin));
         ztsSupport = config.php.zts or false;
         calendarSupport = config.php.calendar or true;
+        sodiumSupport = (lib.versionAtLeast version "7.2") && config.php.sodium or true;
       };
 
       hardeningDisable = [ "bindnow" ];
@@ -314,7 +319,7 @@ let
         description = "An HTML-embedded scripting language";
         homepage = http://www.php.net/;
         license = licenses.php301;
-        maintainers = with maintainers; [ globin ];
+        maintainers = with maintainers; [ globin etu ];
         platforms = platforms.all;
         outputsToInstall = [ "out" "dev" ];
       };
@@ -333,17 +338,22 @@ let
 
 in {
   php56 = generic {
-    version = "5.6.32";
-    sha256 = "0lfbmdkvijkm6xc4p9sykv66y8xwhws0vsmka8v5cax4bxx4xr1y";
+    version = "5.6.35";
+    sha256 = "14ivsxdny0s7qm9pf773pafs8xzlzzpmaz039lwymn11rblsfy7f";
   };
 
   php70 = generic {
-    version = "7.0.25";
-    sha256 = "09fc2lj447phprvilvq2sb6n0r1snj142f8faphrd896s6b4v8lm";
+    version = "7.0.29";
+    sha256 = "1g1z1nhnmq0idsb9rfb46cdddfimaacw3yal291i2ypzqpal54cq";
   };
 
   php71 = generic {
-    version = "7.1.11";
-    sha256 = "0ww5493w8w3jlks0xqlfm3v6mm53vpnv5vjy63inkj8zf3gdfikn";
+    version = "7.1.16";
+    sha256 = "1rg7n12rd2v1p2yar615kqcdxpvphw3p89lpgajjgwy0qzwjm3il";
+  };
+
+  php72 = generic {
+    version = "7.2.4";
+    sha256 = "1wvy8jdd1l5hmdqgw7lq2ynkim3mxfsx8q7vp4il1jadfq6qlr8i";
   };
 }

@@ -45,6 +45,8 @@ buildPythonApplication rec {
 
   propagatedBuildInputs = [ boto setuptools ];
 
+  doCheck = false;
+
   meta = with lib; {
     description = "Google Compute Engine tools and services";
     homepage = "https://github.com/GoogleCloudPlatform/compute-image-packages";

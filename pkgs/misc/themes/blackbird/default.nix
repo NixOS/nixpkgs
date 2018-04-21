@@ -2,19 +2,19 @@
 
 stdenv.mkDerivation rec {
   pname = "Blackbird";
-  version = "2017-02-20";
+  version = "2017-12-13";
   name = "${pname}-${version}";
 
   src = fetchFromGitHub {
     repo = "${pname}";
     owner = "shimmerproject";
-    rev = "51eaa1853675866e2e4bd026876162b35ab1a196";
-    sha256 = "06d040s5jmw9v6fkif6zjcd3lp56dmvwchcwflinc165iazbp5n2";
+    rev = "a1c5674c0ec38b4cc8ba41d2c0e6187987ae7eb4";
+    sha256 = "0xskcw36ci2ykra5gir5pkrawh2qkcv18p4fp2kxivssbd20d4jw";
   };
 
   nativeBuildInputs = [ autoreconfHook ];
 
-  buildInputs = [ gtk-engine-murrine ];
+  propagatedUserEnvPkgs = [ gtk-engine-murrine ];
 
   meta = {
     description = "Dark Desktop Suite for Gtk, Xfce and Metacity";

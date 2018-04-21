@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "ansifilter-${version}";
-  version = "2.4";
+  version = "2.10";
 
   src = fetchurl {
     url = "http://www.andre-simon.de/zip/ansifilter-${version}.tar.bz2";
-    sha256 = "c57cb878afa7191c7b7db3c086a344b4234df814aed632596619a4bda5941d48";
+    sha256 = "0gzfxfpic47cs2kqrbvaw166ji62c5nq5cjhh3ngpm2fkm1wzli3";
 
   };
 
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     '';
 
     license = licenses.gpl1;
-    maintainers = maintainers.Adjective-Object;
+    maintainers = [ maintainers.Adjective-Object ];
     platforms = platforms.linux;
   };
 }

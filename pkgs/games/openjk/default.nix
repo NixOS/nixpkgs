@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, makeDesktopItem, makeWrapper, cmake, libjpeg, zlib, libpng, mesa_noglu, SDL2 }:
+{ stdenv, fetchFromGitHub, makeDesktopItem, makeWrapper, cmake, libjpeg, zlib, libpng, libGL, SDL2 }:
 
 let
   jamp = makeDesktopItem rec {
@@ -33,7 +33,7 @@ in stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   nativeBuildInputs = [ makeWrapper cmake ];
-  buildInputs = [ libjpeg zlib libpng mesa_noglu SDL2 ];
+  buildInputs = [ libjpeg zlib libpng libGL SDL2 ];
 
   # move from $out/JediAcademy to $out/opt/JediAcademy
   preConfigure = ''

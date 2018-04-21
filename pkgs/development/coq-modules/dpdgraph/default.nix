@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, autoreconfHook, coq, ocamlPackages }:
 
-let param = {
+let params = {
   "8.7" = {
     version = "0.6.2";
     rev = "d76ddde37d918569945774733b7997e8b24daf51";
@@ -16,7 +16,9 @@ let param = {
     rev = "v0.6";
     sha256 = "0qvar8gfbrcs9fmvkph5asqz4l5fi63caykx3bsn8zf0xllkwv0n";
   };
-}."${coq.coq-version}"; in
+};
+param = params."${coq.coq-version}";
+in
 
 stdenv.mkDerivation {
   name = "coq${coq.coq-version}-dpdgraph-${param.version}";
@@ -46,4 +48,9 @@ stdenv.mkDerivation {
     maintainers = with stdenv.lib.maintainers; [ vbgl ];
     platforms = coq.meta.platforms;
   };
+
+  passthru = {
+    compatibleCoqVersions = v: builtins.hasAttr v params;
+  };
+
 }

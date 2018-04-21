@@ -1,61 +1,52 @@
-{ stdenv, fetchurl, autoconf213, pkgconfig, perl, python2, zip, which, readline, icu, zlib, nspr }:
+{ stdenv, fetchurl, fetchpatch, autoconf213, pkgconfig, perl, python2, zip, which, readline, icu, zlib, nspr }:
 
-stdenv.mkDerivation rec {
-  version = "52.2.1gnome1";
+let
+  version = "52.6.0";
+in stdenv.mkDerivation rec {
   name = "spidermonkey-${version}";
 
-  # the release notes point to some guys home directory, see
-  # https://developer.mozilla.org/en-US/docs/Mozilla/Projects/SpiderMonkey/Releases/38
-  # probably it would be more ideal to pull a particular tag/revision
-  # from the mercurial repo
   src = fetchurl {
-    url = "mirror://gnome/teams/releng/tarballs-needing-help/mozjs/mozjs-${version}.tar.gz";
-    sha256 = "1bxhz724s1ch1c0kdlzlg9ylhg1mk8kbhdgfkax53fyvn51pjs9i";
+    url = "mirror://mozilla/firefox/releases/${version}esr/source/firefox-${version}esr.source.tar.xz";
+    sha256 = "0hhyd4ni4jja7jd687dm0csi1jcjxahf918zbjzr8njz655djz2q";
   };
 
   buildInputs = [ readline icu zlib nspr ];
   nativeBuildInputs = [ autoconf213 pkgconfig perl which python2 zip ];
 
-  postUnpack = "sourceRoot=\${sourceRoot}/js/src";
+  patches = [
+    # needed to build gnome3.gjs
+    (fetchpatch {
+      name = "mozjs52-disable-mozglue.patch";
+      url = https://git.archlinux.org/svntogit/packages.git/plain/trunk/mozjs52-disable-mozglue.patch?h=packages/js52&id=4279d2e18d9a44f6375f584911f63d13de7704be;
+      sha256 = "18wkss0agdyff107p5lfflk72qiz350xqw2yqc353alkx4fsfpz0";
+    })
+  ];
 
   preConfigure = ''
     export CXXFLAGS="-fpermissive"
     export LIBXUL_DIST=$out
     export PYTHON="${python2.interpreter}"
+
+    cd js/src
+
+    autoconf
   '';
 
   configureFlags = [
-    "--enable-threadsafe"
     "--with-system-nspr"
     "--with-system-zlib"
     "--with-system-icu"
     "--with-intl-api"
     "--enable-readline"
-
-    # enabling these because they're wanted by 0ad. They may or may
-    # not be good defaults for other uses.
-    "--enable-gcgenerational"
     "--enable-shared-js"
   ];
 
-  # This addresses some build system bug. It's quite likely to be safe
-  # to re-enable parallel builds if the source revision changes.
   enableParallelBuilding = true;
-
-  postFixup = ''
-    # The headers are symlinks to a directory that doesn't get put
-    # into $out, so they end up broken. Fix that by just resolving the
-    # symlinks.
-    for i in $(find $out -type l); do
-      cp --remove-destination "$(readlink "$i")" "$i";
-    done
-  '';
 
   meta = with stdenv.lib; {
     description = "Mozilla's JavaScript engine written in C/C++";
     homepage = https://developer.mozilla.org/en/SpiderMonkey;
-    # TODO: MPL/GPL/LGPL tri-license.
-
+    license = licenses.gpl2; # TODO: MPL/GPL/LGPL tri-license.
     maintainers = [ maintainers.abbradar ];
     platforms = platforms.linux;
   };

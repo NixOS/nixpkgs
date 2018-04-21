@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, glibc, mesa, freetype, glib, libSM, libICE, libXi, libXv
+{ stdenv, fetchurl, glibc, libGLU_combined, freetype, glib, libSM, libICE, libXi, libXv
 , libXrender, libXrandr, libXfixes, libXcursor, libXinerama, libXext, libX11, qt4
 , zlib, fontconfig, dpkg }:
 
@@ -6,7 +6,7 @@ let
   arch =
     if stdenv.system == "x86_64-linux" then "amd64"
     else if stdenv.system == "i686-linux" then "i386"
-    else abort "Unsupported architecture";
+    else throw "Unsupported system ${stdenv.system}";
   sha256 =
     if arch == "amd64"
     then "0dwnppn5snl5bwkdrgj4cyylnhngi0g66fn2k41j3dvis83x24k6"
@@ -19,7 +19,7 @@ let
     libICE
     libXi
     libXv
-    mesa
+    libGLU_combined
     libXrender
     libXrandr
     libXfixes

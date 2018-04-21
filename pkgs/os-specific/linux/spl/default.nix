@@ -1,20 +1,19 @@
 { fetchFromGitHub, stdenv, autoreconfHook, coreutils, gawk
-, configFile ? "all"
 
 # Kernel dependencies
-, kernel ? null
+, kernel
 }:
 
 with stdenv.lib;
 
 let
-  buildKernel = any (n: n == configFile) [ "kernel" "all" ];
-  buildUser = any (n: n == configFile) [ "user" "all" ];
   common = { version
     , sha256
     , rev ? "spl-${version}"
+    , broken ? false
+    , patches ? []
     } @ args : stdenv.mkDerivation rec {
-      name = "spl-${configFile}-${version}${optionalString buildKernel "-${kernel.version}"}";
+      name = "spl-${version}-${kernel.version}";
 
       src = fetchFromGitHub {
         owner = "zfsonlinux";
@@ -22,9 +21,9 @@ let
         inherit rev sha256;
       };
 
-      patches = [ ./const.patch ./install_prefix.patch ];
+      inherit patches;
 
-      nativeBuildInputs = [ autoreconfHook ];
+      nativeBuildInputs = [ autoreconfHook ] ++ kernel.moduleBuildDependencies;
 
       hardeningDisable = [ "pic" ];
 
@@ -36,8 +35,7 @@ let
       '';
 
       configureFlags = [
-        "--with-config=${configFile}"
-      ] ++ optionals buildKernel [
+        "--with-config=kernel"
         "--with-linux=${kernel.dev}/lib/modules/${kernel.modDirVersion}/source"
         "--with-linux-obj=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
       ];
@@ -52,7 +50,7 @@ let
           kernel.
         '';
 
-        broken = kernel != null && stdenv.lib.versionAtLeast kernel.version "4.14";
+        inherit broken;
 
         homepage = http://zfsonlinux.org/;
         platforms = platforms.linux;
@@ -61,17 +59,25 @@ let
       };
   };
 in
-  assert any (n: n == configFile) [ "kernel" "user" "all" ];
-  assert buildKernel -> kernel != null;
+  assert kernel != null;
 {
     splStable = common {
-      version = "0.7.3";
-      sha256 = "0j8mb9ky3pjz9hnz5w6fajpzajl15jq3p0xvxb6lhpqj3rjzsqxb";
+      version = "0.7.8";
+      sha256 = "0ypyy7ij280n7rly6ifrvna9k55gxwdx9a7lalf4r1ka714379fi";
+      patches = [ ./install_prefix-0.7.8.patch ];
     };
 
     splUnstable = common {
-      version = "2017-10-31";
-      rev = "35a44fcb8d6e346f51be82dfe57562c2ea0c6a9c";
-      sha256 = "193clx7b4p4qhgivmhc88dva0186rnhyv58fx0fwnb5zbx70dam1";
+      version = "2018-04-10";
+      rev = "9125f8f5bdb36bfbd2d816d30b6b29b9f89ae3d8";
+      sha256 = "00zrbca906rzjd62m4khiw3sdv8x18dapcmvkyaawripwvzc4iri";
+      patches = [ ./install_prefix.patch ];
+    };
+
+    splLegacyCrypto = common {
+      version = "2018-01-24";
+      rev = "23602fdb39e1254c669707ec9d2d0e6bcdbf1771";
+      sha256 = "09py2dwj77f6s2qcnkwdslg5nxb3hq2bq39zpxpm6msqyifhl69h";
+      patches = [ ./install_prefix.patch ];
     };
 }

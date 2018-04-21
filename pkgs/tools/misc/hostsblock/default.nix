@@ -64,7 +64,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "An ad- and malware-blocking script for Linux";
-    website = http://gaenserich.github.io/hostsblock/;
+    homepage = http://gaenserich.github.io/hostsblock/;
     license = licenses.gpl3;
     maintainers = [ maintainers.nicknovitski ];
     platforms = platforms.unix;

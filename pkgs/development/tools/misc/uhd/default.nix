@@ -7,36 +7,45 @@
 #   SUBSYSTEMS=="usb", ATTRS{idVendor}=="fffe", ATTRS{idProduct}=="0002", MODE:="0666"
 #   SUBSYSTEMS=="usb", ATTRS{idVendor}=="2500", ATTRS{idProduct}=="0002", MODE:="0666"
 
-stdenv.mkDerivation rec {
-  name = "uhd-${version}";
-  version = "3.10.2.0";
+let
+  uhdVer = "v" + version;
+  ImgVer = "uhd-images_3.11.0.git-227-g9277fc58.tar.xz";
 
   # UHD seems to use three different version number styles: x.y.z, xxx_yyy_zzz
-  # and xxx.yyy.zzz. Hrmpf...
+  # and xxx.yyy.zzz. Hrmpf... style keeps changing
+  version = "3.11.0.0";
+
+  # Firmware images are downloaded (pre-built) from:
+  # http://files.ettus.com/binaries/images/
+  uhdImagesSrc = fetchurl {
+    url = "http://files.ettus.com/binaries/images/${ImgVer}";
+    sha256 = "1z8isnlxc5h0168jjpdvdv7rkd55x4dkfh14m8pc501zsf8azd6z";
+  };
+
+in stdenv.mkDerivation {
+  name = "uhd-${version}";
 
   src = fetchFromGitHub {
     owner = "EttusResearch";
     repo = "uhd";
-    rev = "release_003_010_002_000";
-    sha256 = "0g6f4amw7h0vr6faa1nc1zs3bc645binza0zqqx5cwgfxybv8cfy";
+    rev = "${uhdVer}";
+    sha256 = "1ilx1a8k5zygfq7acm9yk2fi368b1a1l7ll21kmmxjv6ifz8ds5q";
   };
 
   enableParallelBuilding = true;
 
-  cmakeFlags = "-DLIBUSB_INCLUDE_DIRS=${libusb1.dev}/include/libusb-1.0";
+  # ABI differences GCC 7.1
+  # /nix/store/wd6r25miqbk9ia53pp669gn4wrg9n9cj-gcc-7.3.0/include/c++/7.3.0/bits/vector.tcc:394:7: note: parameter passing for argument of type 'std::vector<uhd::range_t>::iterator {aka __gnu_cxx::__normal_iterator<uhd::range_t*, std::vector<uhd::range_t> >}' changed in GCC 7.1
+
+  cmakeFlags = [ "-DLIBUSB_INCLUDE_DIRS=${libusb1.dev}/include/libusb-1.0"] ++
+               [ (stdenv.lib.optionalString stdenv.isArm "-DCMAKE_CXX_FLAGS=-Wno-psabi") ];
 
   nativeBuildInputs = [ cmake pkgconfig ];
   buildInputs = [ python pythonPackages.pyramid_mako orc libusb1 boost ];
 
   # Build only the host software
   preConfigure = "cd host";
-
-  # Firmware images are downloaded (pre-built)
-  uhdImagesName = "uhd-images_003.007.003-release";
-  uhdImagesSrc = fetchurl {
-    url = "http://files.ettus.com/binaries/maint_images/archive/${uhdImagesName}.tar.gz";
-    sha256 = "1pv5c5902041494z0jfw623ca29pvylrw5klybbhklvn5wwlr6cv";
-  };
+  patches = if stdenv.isArm then ./neon.patch else null;
 
   postPhases = [ "installFirmware" ];
 
@@ -55,7 +64,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = https://uhd.ettus.com/;
     license = licenses.gpl3Plus;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ bjornfor fpletz ];
+    platforms = platforms.linux ++ platforms.darwin;
+    maintainers = with maintainers; [ bjornfor fpletz tomberek ];
   };
 }

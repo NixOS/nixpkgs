@@ -18,7 +18,7 @@ in fetchzip rec {
   sha256 = "1qr2wjdmm93167b0w9cidlf3wwsyjx4838ja9jmm4jkyian5whhp";
 
   meta = with stdenv.lib; {
-    homepage = http://software.sil.org/gentium/;
+    homepage = https://software.sil.org/gentium/;
     description = "A high-quality typeface family for Latin, Cyrillic, and Greek";
     longDescription = ''
       Gentium is a typeface family designed to enable the diverse ethnic groups
@@ -35,7 +35,7 @@ in fetchzip rec {
       This package contains the regular and italic styles for the Gentium Plus
       font family, along with documentation.
     '';
-    downloadPage = "http://software.sil.org/gentium/download/";
+    downloadPage = "https://software.sil.org/gentium/download/";
     maintainers = with maintainers; [ raskin rycee ];
     license = licenses.ofl;
     platforms = platforms.all;

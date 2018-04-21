@@ -1,0 +1,15 @@
+
+Fix "No known features for CXX compiler", see
+https://cmake.org/pipermail/cmake/2016-December/064733.html and the note at
+https://cmake.org/cmake/help/v3.10/command/cmake_minimum_required.html
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -8,7 +8,7 @@
+ #
+ #========================================================================
+ 
+-cmake_minimum_required(VERSION 2.8.8)
++cmake_minimum_required(VERSION 3.1.0)
+ 
+ project(xpdf)
+ 

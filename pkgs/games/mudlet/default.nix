@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     cp -r mudlet-lua $out
 
     makeWrapper $out/mudlet $out/bin/mudlet \
-      --set LUA_CPATH "\"${luaFileSystemPath};${luaZipPath};${lrexlibPath};${luasqlitePath}\"" \
+      --set LUA_CPATH "${luaFileSystemPath};${luaZipPath};${lrexlibPath};${luasqlitePath}" \
       --run "cd $out";
   '';
 

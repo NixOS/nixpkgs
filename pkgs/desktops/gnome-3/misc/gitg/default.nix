@@ -1,36 +1,51 @@
-{ stdenv, fetchurl, fetchgit, vala_0_32, intltool, libgit2, pkgconfig, gtk3, glib
-, json_glib, webkitgtk, wrapGAppsHook, libpeas, bash, gobjectIntrospection
-, gnome3, gtkspell3, shared_mime_info, libgee, libgit2-glib, librsvg, libsecret
-, dconf}:
+{ stdenv, fetchurl, vala, intltool, pkgconfig, gtk3, glib
+, json-glib, wrapGAppsHook, libpeas, bash, gobjectIntrospection
+, gnome3, gtkspell3, shared-mime-info, libgee, libgit2-glib, librsvg, libsecret
+, libsoup }:
 
+let
+  pname = "gitg";
+  version = "3.26.0";
+in stdenv.mkDerivation rec {
+  name = "${pname}-${version}";
 
-# TODO: icons and theme still does not work
-# use packaged gnome3.adwaita-icon-theme
-
-stdenv.mkDerivation rec {
-  inherit (import ./src.nix fetchurl) name src;
+  src = fetchurl {
+    url = "mirror://gnome/sources/${pname}/${gnome3.versionBranch version}/${name}.tar.xz";
+    sha256 = "26730d437d6a30d6e341b9e8da99d2134dce4b96022c195609f45062f82b54d5";
+  };
 
   preCheck = ''
     substituteInPlace tests/libgitg/test-commit.c --replace "/bin/bash" "${bash}/bin/bash"
   '';
   doCheck = true;
 
+  enableParallelBuilding = true;
+
   makeFlags = "INTROSPECTION_GIRDIR=$(out)/share/gir-1.0/ INTROSPECTION_TYPELIBDIR=$(out)/lib/girepository-1.0";
 
-  propagatedUserEnvPkgs = [ shared_mime_info
-                            gnome3.gnome_themes_standard ];
+  buildInputs = [
+    gtk3 glib json-glib libgee libpeas gnome3.libsoup
+    libgit2-glib gtkspell3 gnome3.gtksourceview gnome3.gsettings-desktop-schemas
+    libsecret gobjectIntrospection gnome3.adwaita-icon-theme
+  ];
 
-  buildInputs = [ vala_0_32 libgit2 gtk3 glib json_glib webkitgtk libgee libpeas
-                  libgit2-glib gtkspell3 gnome3.gtksourceview gnome3.gsettings_desktop_schemas
-                  librsvg libsecret gobjectIntrospection gnome3.adwaita-icon-theme ];
+  nativeBuildInputs = [ vala wrapGAppsHook intltool pkgconfig ];
 
-  nativeBuildInputs = [ wrapGAppsHook intltool pkgconfig ];
+  preFixup = ''
+    gappsWrapperArgs+=(
+      # Thumbnailers
+      --prefix XDG_DATA_DIRS : "${shared-mime-info}/share"
+    )
+  '';
 
-  # https://bugzilla.gnome.org/show_bug.cgi?id=758240
-  preBuild = ''make -j$NIX_BUILD_CORES Gitg-1.0.gir'';
+  passthru = {
+    updateScript = gnome3.updateScript {
+      packageName = pname;
+    };
+  };
 
   meta = with stdenv.lib; {
-    homepage = https://wiki.gnome.org/action/show/Apps/Gitg;
+    homepage = https://wiki.gnome.org/Apps/Gitg;
     description = "GNOME GUI client to view git repositories";
     maintainers = with maintainers; [ domenkozar ];
     license = licenses.gpl2;

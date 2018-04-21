@@ -1,9 +1,7 @@
 { productVersion
 , patchVersion
 , downloadUrl
-, sha256_i686
-, sha256_x86_64
-, sha256_armv7l
+, sha256
 , jceName
 , jceDownloadUrl
 , sha256JCE
@@ -24,7 +22,7 @@
 , libav_0_8
 , ffmpeg
 , libxslt
-, mesa_noglu
+, libGL
 , freetype
 , fontconfig
 , gtk2
@@ -36,26 +34,19 @@
 , setJavaClassPath
 }:
 
-assert stdenv.system == "i686-linux"
-    || stdenv.system == "x86_64-linux"
-    || stdenv.system == "armv7l-linux";
 assert swingSupport -> xorg != null;
 
 let
-  abortArch = abort "jdk requires i686-linux, x86_64-linux, or armv7l-linux";
 
   /**
    * The JRE libraries are in directories that depend on the CPU.
    */
-  architecture =
-    if stdenv.system == "i686-linux" then
-      "i386"
-    else if stdenv.system == "x86_64-linux" then
-      "amd64"
-    else if stdenv.system == "armv7l-linux" then
-      "arm"
-    else
-      abortArch;
+  architecture = {
+    i686-linux    = "i386";
+    x86_64-linux  = "amd64";
+    armv7l-linux  = "arm";
+    aarch64-linux = "aarch64";
+  }.${stdenv.system};
 
   jce =
     if installjce then
@@ -80,27 +71,16 @@ let result = stdenv.mkDerivation rec {
   name =
     if installjdk then "oraclejdk-${productVersion}u${patchVersion}" else "oraclejre-${productVersion}u${patchVersion}";
 
-  src =
-    if stdenv.system == "i686-linux" then
-      requireFile {
-        name = "jdk-${productVersion}u${patchVersion}-linux-i586.tar.gz";
-        url = downloadUrl;
-        sha256 = sha256_i686;
-      }
-    else if stdenv.system == "x86_64-linux" then
-      requireFile {
-        name = "jdk-${productVersion}u${patchVersion}-linux-x64.tar.gz";
-        url = downloadUrl;
-        sha256 = sha256_x86_64;
-      }
-    else if stdenv.system == "armv7l-linux" then
-      requireFile {
-        name = "jdk-${productVersion}u${patchVersion}-linux-arm32-vfp-hflt.tar.gz";
-        url = downloadUrl;
-        sha256 = sha256_armv7l;
-      }
-    else
-      abortArch;
+  src = requireFile {
+    name = {
+      i686-linux    = "jdk-${productVersion}u${patchVersion}-linux-i586.tar.gz";
+      x86_64-linux  = "jdk-${productVersion}u${patchVersion}-linux-x64.tar.gz";
+      armv7l-linux  = "jdk-${productVersion}u${patchVersion}-linux-arm32-vfp-hflt.tar.gz";
+      aarch64-linux = "jdk-${productVersion}u${patchVersion}-linux-arm64-vfp-hflt.tar.gz";
+    }.${stdenv.system};
+    url = downloadUrl;
+    sha256 = sha256.${stdenv.system};
+  };
 
   nativeBuildInputs = [ file ]
     ++ stdenv.lib.optional installjce unzip;
@@ -116,7 +96,7 @@ let result = stdenv.mkDerivation rec {
     # Set PaX markings
     exes=$(file $sourceRoot/bin/* $sourceRoot/jre/bin/* 2> /dev/null | grep -E 'ELF.*(executable|shared object)' | sed -e 's/: .*$//')
     for file in $exes; do
-      paxmark m "$file"
+      paxmark m "$file" || true
       # On x86 for heap sizes over 700MB disable SEGMEXEC and PAGEEXEC as well.
       ${stdenv.lib.optionalString stdenv.isi686 ''paxmark msp "$file"''}
     done
@@ -166,7 +146,7 @@ let result = stdenv.mkDerivation rec {
     ln -s $jrePath/lib/${architecture}/libnpjp2.so $jrePath/lib/${architecture}/plugins
 
     mkdir -p $out/nix-support
-    printWords ${setJavaClassPath} > $out/nix-support/propagated-native-build-inputs
+    printWords ${setJavaClassPath} > $out/nix-support/propagated-build-inputs
 
     # Set JAVA_HOME automatically.
     cat <<EOF >> $out/nix-support/setup-hook
@@ -197,7 +177,7 @@ let result = stdenv.mkDerivation rec {
    * libXt is only needed on amd64
    */
   libraries =
-    [stdenv.cc.libc glib libxml2 libav_0_8 ffmpeg libxslt mesa_noglu xorg.libXxf86vm alsaLib fontconfig freetype pango gtk2 cairo gdk_pixbuf atk] ++
+    [stdenv.cc.libc glib libxml2 libav_0_8 ffmpeg libxslt libGL xorg.libXxf86vm alsaLib fontconfig freetype pango gtk2 cairo gdk_pixbuf atk] ++
     (if swingSupport then [xorg.libX11 xorg.libXext xorg.libXtst xorg.libXi xorg.libXp xorg.libXt xorg.libXrender stdenv.cc.cc] else []);
 
   rpath = stdenv.lib.strings.makeLibraryPath libraries;
@@ -212,7 +192,7 @@ let result = stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     license = licenses.unfree;
-    platforms = [ "i686-linux" "x86_64-linux" "armv7l-linux" ]; # some inherit jre.meta.platforms
+    platforms = [ "i686-linux" "x86_64-linux" "armv7l-linux" "aarch64-linux" ]; # some inherit jre.meta.platforms
   };
 
 }; in result

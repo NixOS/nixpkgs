@@ -14,7 +14,6 @@ let
   upstreamSystemUnits =
     [ # Targets.
       "basic.target"
-      "busnames.target"
       "sysinit.target"
       "sockets.target"
       "exit.target"
@@ -47,6 +46,7 @@ let
 
       # Consoles.
       "getty.target"
+      "getty-pre.target"
       "getty@.service"
       "serial-getty@.service"
       "console-getty.service"
@@ -63,10 +63,7 @@ let
       "systemd-logind.service"
       "autovt@.service"
       "systemd-user-sessions.service"
-      "dbus-org.freedesktop.login1.service"
       "dbus-org.freedesktop.machine1.service"
-      "org.freedesktop.login1.busname"
-      "org.freedesktop.machine1.busname"
       "user@.service"
 
       # Journal.
@@ -99,7 +96,6 @@ let
       "swap.target"
       "dev-hugepages.mount"
       "dev-mqueue.mount"
-      "proc-sys-fs-binfmt_misc.mount"
       "sys-fs-fuse-connections.mount"
       "sys-kernel-config.mount"
       "sys-kernel-debug.mount"
@@ -141,7 +137,6 @@ let
 
       # Slices / containers.
       "slices.target"
-      "system.slice"
       "user.slice"
       "machine.slice"
       "machines.target"
@@ -155,19 +150,16 @@ let
       "systemd-tmpfiles-setup-dev.service"
 
       # Misc.
-      "org.freedesktop.systemd1.busname"
       "systemd-sysctl.service"
       "dbus-org.freedesktop.timedate1.service"
       "dbus-org.freedesktop.locale1.service"
       "dbus-org.freedesktop.hostname1.service"
-      "org.freedesktop.timedate1.busname"
-      "org.freedesktop.locale1.busname"
-      "org.freedesktop.hostname1.busname"
       "systemd-timedated.service"
       "systemd-localed.service"
       "systemd-hostnamed.service"
       "systemd-binfmt.service"
       "systemd-exit.service"
+      "systemd-update-done.service"
     ]
     ++ cfg.additionalUpstreamSystemUnits;
 
@@ -182,7 +174,6 @@ let
   upstreamUserUnits =
     [ "basic.target"
       "bluetooth.target"
-      "busnames.target"
       "default.target"
       "exit.target"
       "graphical-session-pre.target"
@@ -249,37 +240,37 @@ let
         }
         (mkIf (config.preStart != "")
           { serviceConfig.ExecStartPre = makeJobScript "${name}-pre-start" ''
-              #! ${pkgs.stdenv.shell} -e
+              #! ${pkgs.runtimeShell} -e
               ${config.preStart}
             '';
           })
         (mkIf (config.script != "")
           { serviceConfig.ExecStart = makeJobScript "${name}-start" ''
-              #! ${pkgs.stdenv.shell} -e
+              #! ${pkgs.runtimeShell} -e
               ${config.script}
             '' + " " + config.scriptArgs;
           })
         (mkIf (config.postStart != "")
           { serviceConfig.ExecStartPost = makeJobScript "${name}-post-start" ''
-              #! ${pkgs.stdenv.shell} -e
+              #! ${pkgs.runtimeShell} -e
               ${config.postStart}
             '';
           })
         (mkIf (config.reload != "")
           { serviceConfig.ExecReload = makeJobScript "${name}-reload" ''
-              #! ${pkgs.stdenv.shell} -e
+              #! ${pkgs.runtimeShell} -e
               ${config.reload}
             '';
           })
         (mkIf (config.preStop != "")
           { serviceConfig.ExecStop = makeJobScript "${name}-pre-stop" ''
-              #! ${pkgs.stdenv.shell} -e
+              #! ${pkgs.runtimeShell} -e
               ${config.preStop}
             '';
           })
         (mkIf (config.postStop != "")
           { serviceConfig.ExecStopPost = makeJobScript "${name}-post-stop" ''
-              #! ${pkgs.stdenv.shell} -e
+              #! ${pkgs.runtimeShell} -e
               ${config.postStop}
             '';
           })
@@ -524,11 +515,19 @@ in
     };
 
     systemd.globalEnvironment = mkOption {
-      type = types.attrs;
+      type = with types; attrsOf (nullOr (either str package));
       default = {};
       example = { TZ = "CET"; };
       description = ''
         Environment variables passed to <emphasis>all</emphasis> systemd units.
+      '';
+    };
+
+    systemd.enableCgroupAccounting = mkOption {
+      default = false;
+      type = types.bool;
+      description = ''
+        Whether to enable cgroup accounting.
       '';
     };
 
@@ -733,6 +732,13 @@ in
 
       "systemd/system.conf".text = ''
         [Manager]
+        ${optionalString config.systemd.enableCgroupAccounting ''
+          DefaultCPUAccounting=yes
+          DefaultIOAccounting=yes
+          DefaultBlockIOAccounting=yes
+          DefaultMemoryAccounting=yes
+          DefaultTasksAccounting=yes
+        ''}
         ${config.systemd.extraConfig}
       '';
 
@@ -789,8 +795,7 @@ in
 
         # Keep a persistent journal. Note that systemd-tmpfiles will
         # set proper ownership/permissions.
-        # FIXME: revert to 0700 with systemd v233.
-        mkdir -m 0750 -p /var/log/journal
+        mkdir -m 0700 -p /var/log/journal
       '';
 
     users.extraUsers.systemd-network.uid = config.ids.uids.systemd-network;
@@ -830,7 +835,8 @@ in
 
     system.requiredKernelConfig = map config.lib.kernelConfig.isEnabled
       [ "DEVTMPFS" "CGROUPS" "INOTIFY_USER" "SIGNALFD" "TIMERFD" "EPOLL" "NET"
-        "SYSFS" "PROC_FS" "FHANDLE" "DMIID" "AUTOFS4_FS" "TMPFS_POSIX_ACL"
+        "SYSFS" "PROC_FS" "FHANDLE" "CRYPTO_USER_API_HASH" "CRYPTO_HMAC"
+        "CRYPTO_SHA256" "DMIID" "AUTOFS4_FS" "TMPFS_POSIX_ACL"
         "TMPFS_XATTR" "SECCOMP"
       ];
 
@@ -887,7 +893,7 @@ in
     systemd.targets.local-fs.unitConfig.X-StopOnReconfiguration = true;
     systemd.targets.remote-fs.unitConfig.X-StopOnReconfiguration = true;
     systemd.targets.network-online.wantedBy = [ "multi-user.target" ];
-    systemd.services.systemd-binfmt.wants = [ "proc-sys-fs-binfmt_misc.automount" ];
+    systemd.services.systemd-binfmt.wants = [ "proc-sys-fs-binfmt_misc.mount" ];
 
     # Don't bother with certain units in containers.
     systemd.services.systemd-remount-fs.unitConfig.ConditionVirtualization = "!container";

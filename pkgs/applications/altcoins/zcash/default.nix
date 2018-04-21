@@ -2,36 +2,35 @@
 , zlib, gtest, gmock, callPackage, gmp, qt4, utillinux, protobuf, qrencode, libevent
 , withGui }:
 
-let libsnark     = callPackage ./libsnark { inherit boost openssl; };
-    librustzcash = callPackage ./librustzcash {};
+let librustzcash = callPackage ./librustzcash {};
 in
 with stdenv.lib;
 stdenv.mkDerivation rec {
 
   name = "zcash" + (toString (optional (!withGui) "d")) + "-" + version;
-  version = "1.0.12";
+  version = "1.0.13";
 
   src = fetchFromGitHub {
     owner = "zcash";
     repo  = "zcash";
     rev = "v${version}";
-    sha256 = "19bxhdnkvgncgl9x6nbaf5nwgrdfw99icvdbi9adfh646pd5z64s";
+    sha256 = "05y7wxs66anxr5akbf05r36mmjfzqpwawn6vyh3jhpva51hzzzyz";
   };
 
-  enableParallelBuilding = true;
+  # Dependencies are underspecified: "make -C src gtest/zcash_gtest-test_merkletree.o"
+  # fails with "fatal error: test/data/merkle_roots.json.h: No such file or directory"
+  enableParallelBuilding = false;
 
   nativeBuildInputs = [ autoreconfHook pkgconfig ];
-  buildInputs = [ gtest gmock gmp libsnark openssl wget db62 boost zlib
+  buildInputs = [ gtest gmock gmp openssl wget db62 boost zlib
                   protobuf libevent libsodium librustzcash ]
                   ++ optionals stdenv.isLinux [ utillinux ]
                   ++ optionals withGui [ qt4 qrencode ];
 
-  configureFlags = [ "LIBSNARK_INCDIR=${libsnark}/include/libsnark"
-                     "--with-boost-libdir=${boost.out}/lib"
+  configureFlags = [ "--with-boost-libdir=${boost.out}/lib"
                    ] ++ optionals withGui [ "--with-gui=qt4" ];
 
   patchPhase = ''
-    sed -i"" '/^\[LIBSNARK_INCDIR/d'               configure.ac
     sed -i"" 's,-lboost_system-mt,-lboost_system,' configure.ac
     sed -i"" 's,-fvisibility=hidden,,g'            src/Makefile.am
   '';
@@ -45,6 +44,6 @@ stdenv.mkDerivation rec {
     homepage = https://z.cash/;
     maintainers = with maintainers; [ rht ];
     license = licenses.mit;
-    platforms = platforms.unix;
+    platforms = platforms.linux;
   };
 }

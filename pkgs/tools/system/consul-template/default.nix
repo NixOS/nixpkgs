@@ -2,7 +2,7 @@
 
 buildGoPackage rec {
   name = "consul-template-${version}";
-  version = "0.18.1";
+  version = "0.19.4";
   rev = "v${version}";
 
   goPackagePath = "github.com/hashicorp/consul-template";
@@ -11,7 +11,7 @@ buildGoPackage rec {
     inherit rev;
     owner = "hashicorp";
     repo = "consul-template";
-    sha256 = "0swyhc5smjbp5wql43qhpxrcbg47v89l5icb1s60gszhxizlkk7d";
+    sha256 = "06agjzpax45gw7s9b69cz9w523nx7ksikqcg0z0vipwrp7pwrydd";
   };
 
   meta = with stdenv.lib; {

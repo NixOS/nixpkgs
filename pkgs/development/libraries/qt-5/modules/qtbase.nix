@@ -3,14 +3,14 @@
   src, patches, version, qtCompatVersion,
 
   coreutils, bison, flex, gdb, gperf, lndir, patchelf, perl, pkgconfig, python2,
-  ruby,
+  ruby, which,
   # darwin support
   darwin, libiconv, libcxx,
 
   dbus, fontconfig, freetype, glib, harfbuzz, icu, libX11, libXcomposite,
   libXcursor, libXext, libXi, libXrender, libinput, libjpeg, libpng, libtiff,
   libxcb, libxkbcommon, libxml2, libxslt, openssl, pcre16, pcre2, sqlite, udev,
-  xcbutil, xcbutilimage, xcbutilkeysyms, xcbutilrenderutil, xcbutilwm, xlibs,
+  xcbutil, xcbutilimage, xcbutilkeysyms, xcbutilrenderutil, xcbutilwm, xorg,
   zlib,
 
   # optional dependencies
@@ -18,8 +18,8 @@
   withGtk3 ? false, dconf ? null, gtk3 ? null,
 
   # options
-  mesaSupported ? (!stdenv.isDarwin),
-  mesa,
+  libGLSupported ? (!stdenv.isDarwin),
+  libGL,
   buildExamples ? false,
   buildTests ? false,
   developerBuild ? false,
@@ -30,7 +30,6 @@ assert withGtk3 -> dconf != null;
 assert withGtk3 -> gtk3 != null;
 
 let
-  system-x86_64 = lib.elem stdenv.system lib.platforms.x86_64;
   compareVersion = v: builtins.compareVersions version v;
 in
 
@@ -69,7 +68,7 @@ stdenv.mkDerivation {
           libX11 libXcomposite libXext libXi libXrender libxcb libxkbcommon xcbutil
           xcbutilimage xcbutilkeysyms xcbutilrenderutil xcbutilwm
         ]
-        ++ lib.optional mesaSupported mesa
+        ++ lib.optional libGLSupported libGL
     );
 
   buildInputs =
@@ -80,11 +79,11 @@ stdenv.mkDerivation {
     )
     ++ lib.optional developerBuild gdb
     ++ lib.optional (cups != null) cups
-    ++ lib.optional (mysql != null) mysql.lib
+    ++ lib.optional (mysql != null) mysql.connector-c
     ++ lib.optional (postgresql != null) postgresql;
 
   nativeBuildInputs =
-    [ bison flex gperf lndir perl pkgconfig python2 ]
+    [ bison flex gperf lndir perl pkgconfig python2 which ]
     ++ lib.optional (!stdenv.isDarwin) patchelf;
 
   propagatedNativeBuildInputs = [ lndir ];
@@ -93,11 +92,9 @@ stdenv.mkDerivation {
 
   inherit patches;
 
-  fix_qt_static_libs = ../hooks/fix-qt-static-libs.sh;
   fix_qt_builtin_paths = ../hooks/fix-qt-builtin-paths.sh;
   fix_qt_module_paths = ../hooks/fix-qt-module-paths.sh;
   preHook = ''
-    . "$fix_qt_static_libs"
     . "$fix_qt_builtin_paths"
     . "$fix_qt_module_paths"
     . ${../hooks/move-qt-dev-tools.sh}
@@ -144,11 +141,11 @@ stdenv.mkDerivation {
         # Note on the above: \x27 is a way if including a single-quote
         # character in the sed string arguments.
       else
-        lib.optionalString mesaSupported
+        lib.optionalString libGLSupported
           ''
             sed -i mkspecs/common/linux.conf \
-                -e "/^QMAKE_INCDIR_OPENGL/ s|$|${mesa.dev or mesa}/include|" \
-                -e "/^QMAKE_LIBDIR_OPENGL/ s|$|${mesa.out}/lib|"
+                -e "/^QMAKE_INCDIR_OPENGL/ s|$|${libGL.dev or libGL}/include|" \
+                -e "/^QMAKE_LIBDIR_OPENGL/ s|$|${libGL.out}/lib|"
           ''
     );
 
@@ -210,7 +207,7 @@ stdenv.mkDerivation {
           # 10.10
         ]
       else
-        lib.optional mesaSupported ''-DNIXPKGS_MESA_GL="${mesa.out}/lib/libGL"''
+        lib.optional libGLSupported ''-DNIXPKGS_MESA_GL="${libGL.out}/lib/libGL"''
         ++ lib.optionals withGtk3
           [
             ''-DNIXPKGS_QGTK3_XDG_DATA_DIRS="${gtk3}/share/gsettings-schemas/${gtk3.name}"''
@@ -260,7 +257,7 @@ stdenv.mkDerivation {
       "-no-warnings-are-errors"
     ]
     ++ (
-      if (!system-x86_64)
+      if (!stdenv.hostPlatform.isx86_64)
       then [ "-no-sse2" ]
       else lib.optional (compareVersion "5.9.0" >= 0) [ "-sse2" ]
     )
@@ -361,11 +358,6 @@ stdenv.mkDerivation {
     + ''
       fixQtModulePaths "''${!outputDev}/mkspecs/modules"
       fixQtBuiltinPaths "''${!outputDev}" '*.pr?'
-    ''
-
-    # Move static libraries and QMake library definitions into $dev.
-    + ''
-      fixQtStaticLibs "''${!outputLib}" "''${!outputDev}"
     ''
 
     # Move development tools to $dev

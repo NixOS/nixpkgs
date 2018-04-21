@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, intltool, ncurses, gtk, vte, dbus_glib
+{ stdenv, fetchurl, pkgconfig, intltool, ncurses, gtk, vte, dbus-glib
 , exo, libxfce4util, libxfce4ui
 }:
 
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   name = "${p_name}-${ver_maj}.${ver_min}";
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ intltool exo gtk vte libxfce4util ncurses dbus_glib libxfce4ui ];
+  buildInputs = [ intltool exo gtk vte libxfce4util ncurses dbus-glib libxfce4ui ];
 
   meta = {
     homepage = http://www.xfce.org/projects/terminal;

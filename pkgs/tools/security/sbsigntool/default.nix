@@ -1,5 +1,7 @@
-{ stdenv, fetchgit, autoconf, automake, utillinux, openssl, libuuid, gnu-efi
-, binutils, pkgconfig, help2man }:
+{ stdenv
+, fetchgit, autoconf, automake, pkgconfig, help2man
+, utillinux, openssl, libuuid, gnu-efi, libbfd
+}:
 
 stdenv.mkDerivation rec {
   name = "sbsigntool-${version}";
@@ -15,8 +17,8 @@ stdenv.mkDerivation rec {
 
   prePatch = "patchShebangs .";
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ autoconf automake utillinux openssl libuuid gnu-efi binutils help2man ];
+  nativeBuildInputs = [ autoconf automake pkgconfig help2man ];
+  buildInputs = [ utillinux openssl libuuid gnu-efi libbfd ];
 
   configurePhase = ''
     substituteInPlace configure.ac --replace "@@NIX_GNUEFI@@" "${gnu-efi}"

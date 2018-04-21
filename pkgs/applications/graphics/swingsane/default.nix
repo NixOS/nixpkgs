@@ -57,6 +57,5 @@ stdenv.mkDerivation rec {
     homepage = http://swingsane.com/;
     license = licenses.asl20;
     platforms = platforms.all;
-    maintainers = with maintainers; [ nckx ];
   };
 }

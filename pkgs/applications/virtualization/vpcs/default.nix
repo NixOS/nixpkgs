@@ -6,25 +6,26 @@ stdenv.mkDerivation rec {
   version = "0.8";
 
   src = fetchurl {
+    name = "${name}.tar.bz2";
     url = "mirror://sourceforge/project/${pname}/${version}/${name}-src.tbz";
     sha256 = "14y9nflcyq486vvw0na0fkfmg5dac004qb332v4m5a0vaz8059nw";
   };
 
-  unpackCmd = "tar -xjf $src";
+  patches = [ ./vpcs-0.8-glibc-2.26.patch ];
 
   buildInputs = [ glibc.static ];
 
-  buildPhase = ''
+  buildPhase = ''(
     cd src
     ./mk.sh ${buildPlatform.platform.kernelArch}
-  '';
+  )'';
 
   installPhase = ''
-    cd ..
-
     install -D -m555 src/vpcs $out/bin/vpcs;
     install -D -m444 man/vpcs.1 $out/share/man/man1/vpcs.1;
   '';
+
+  enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
     description = "Virtual PC simulator";

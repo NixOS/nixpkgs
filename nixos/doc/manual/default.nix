@@ -6,22 +6,52 @@ let
   lib = pkgs.lib;
 
   # Remove invisible and internal options.
-  optionsList = lib.filter (opt: opt.visible && !opt.internal) (lib.optionAttrSetToDocList options);
+  optionsListVisible = lib.filter (opt: opt.visible && !opt.internal) (lib.optionAttrSetToDocList options);
 
   # Replace functions by the string <function>
   substFunction = x:
     if builtins.isAttrs x then lib.mapAttrs (name: substFunction) x
     else if builtins.isList x then map substFunction x
-    else if builtins.isFunction x then "<function>"
+    else if lib.isFunction x then "<function>"
     else x;
 
-  # Clean up declaration sites to not refer to the NixOS source tree.
-  optionsList' = lib.flip map optionsList (opt: opt // {
+  # Generate DocBook documentation for a list of packages. This is
+  # what `relatedPackages` option of `mkOption` from
+  # ../../../lib/options.nix influences.
+  #
+  # Each element of `relatedPackages` can be either
+  # - a string:  that will be interpreted as an attribute name from `pkgs`,
+  # - a list:    that will be interpreted as an attribute path from `pkgs`,
+  # - an attrset: that can specify `name`, `path`, `package`, `comment`
+  #   (either of `name`, `path` is required, the rest are optional).
+  genRelatedPackages = packages:
+    let
+      unpack = p: if lib.isString p then { name = p; }
+                  else if lib.isList p then { path = p; }
+                  else p;
+      describe = args:
+        let
+          name = args.name or (lib.concatStringsSep "." args.path);
+          path = args.path or [ args.name ];
+          package = args.package or (lib.attrByPath path (throw "Invalid package attribute path `${toString path}'") pkgs);
+        in "<listitem>"
+        + "<para><literal>pkgs.${name} (${package.meta.name})</literal>"
+        + lib.optionalString (!package.meta.available) " <emphasis>[UNAVAILABLE]</emphasis>"
+        + ": ${package.meta.description or "???"}.</para>"
+        + lib.optionalString (args ? comment) "\n<para>${args.comment}</para>"
+        # Lots of `longDescription's break DocBook, so we just wrap them into <programlisting>
+        + lib.optionalString (package.meta ? longDescription) "\n<programlisting>${package.meta.longDescription}</programlisting>"
+        + "</listitem>";
+    in "<itemizedlist>${lib.concatStringsSep "\n" (map (p: describe (unpack p)) packages)}</itemizedlist>";
+
+  optionsListDesc = lib.flip map optionsListVisible (opt: opt // {
+    # Clean up declaration sites to not refer to the NixOS source tree.
     declarations = map stripAnyPrefixes opt.declarations;
   }
   // lib.optionalAttrs (opt ? example) { example = substFunction opt.example; }
   // lib.optionalAttrs (opt ? default) { default = substFunction opt.default; }
-  // lib.optionalAttrs (opt ? type) { type = substFunction opt.type; });
+  // lib.optionalAttrs (opt ? type) { type = substFunction opt.type; }
+  // lib.optionalAttrs (opt ? relatedPackages) { relatedPackages = genRelatedPackages opt.relatedPackages; });
 
   # We need to strip references to /nix/store/* from options,
   # including any `extraSources` if some modules came from elsewhere,
@@ -32,8 +62,21 @@ let
   prefixesToStrip = map (p: "${toString p}/") ([ ../../.. ] ++ extraSources);
   stripAnyPrefixes = lib.flip (lib.fold lib.removePrefix) prefixesToStrip;
 
+  # Custom "less" that pushes up all the things ending in ".enable*"
+  # and ".package*"
+  optionLess = a: b:
+    let
+      ise = lib.hasPrefix "enable";
+      isp = lib.hasPrefix "package";
+      cmp = lib.splitByAndCompare ise lib.compare
+                                 (lib.splitByAndCompare isp lib.compare lib.compare);
+    in lib.compareLists cmp a.loc b.loc < 0;
+
+  # Customly sort option list for the man page.
+  optionsList = lib.sort optionLess optionsListDesc;
+
   # Convert the list of options into an XML file.
-  optionsXML = builtins.toFile "options.xml" (builtins.toXML optionsList');
+  optionsXML = builtins.toFile "options.xml" (builtins.toXML optionsList);
 
   optionsDocBook = runCommand "options-db.xml" {} ''
     optionsXML=${optionsXML}
@@ -44,7 +87,7 @@ let
       echo "for hints about the offending path)."
       exit 1
     fi
-    ${libxslt.bin}/bin/xsltproc \
+    ${buildPackages.libxslt.bin}/bin/xsltproc \
       --stringparam revision '${revision}' \
       -o $out ${./options-to-docbook.xsl} $optionsXML
   '';
@@ -81,11 +124,12 @@ let
   manualXsltprocOptions = toString [
     "--param section.autolabel 1"
     "--param section.label.includes.component.label 1"
-    "--stringparam html.stylesheet style.css"
+    "--stringparam html.stylesheet 'style.css overrides.css highlightjs/mono-blue.css'"
+    "--stringparam html.script './highlightjs/highlight.pack.js ./highlightjs/loader.js'"
     "--param xref.with.number.and.title 1"
     "--param toc.section.depth 3"
     "--stringparam admon.style ''"
-    "--stringparam callout.graphics.extension .gif"
+    "--stringparam callout.graphics.extension .svg"
     "--stringparam current.docid manual"
     "--param chunk.section.depth 0"
     "--param chunk.first.sections 1"
@@ -96,7 +140,7 @@ let
 
   manual-combined = runCommand "nixos-manual-combined"
     { inherit sources;
-      buildInputs = [ libxml2 libxslt ];
+      nativeBuildInputs = [ buildPackages.libxml2.bin buildPackages.libxslt.bin ];
       meta.description = "The NixOS manual as plain docbook XML";
     }
     ''
@@ -106,13 +150,43 @@ let
       xmllint --xinclude --noxincludenode \
          --output ./man-pages-combined.xml ./man-pages.xml
 
-      xmllint --debug --noout --nonet \
-        --relaxng ${docbook5}/xml/rng/docbook/docbook.rng \
-        manual-combined.xml
-      xmllint --debug --noout --nonet \
-        --relaxng ${docbook5}/xml/rng/docbook/docbook.rng \
-        man-pages-combined.xml
+      # outputs the context of an xmllint error output
+      # LEN lines around the failing line are printed
+      function context {
+        # length of context
+        local LEN=6
+        # lines to print before error line
+        local BEFORE=4
 
+        # xmllint output lines are:
+        # file.xml:1234: there was an error on line 1234
+        while IFS=':' read -r file line rest; do
+          echo
+          if [[ -n "$rest" ]]; then
+            echo "$file:$line:$rest"
+            local FROM=$(($line>$BEFORE ? $line - $BEFORE : 1))
+            # number lines & filter context
+            nl --body-numbering=a "$file" | sed -n "$FROM,+$LEN p"
+          else
+            if [[ -n "$line" ]]; then
+              echo "$file:$line"
+            else
+              echo "$file"
+            fi
+          fi
+        done
+      }
+
+      function lintrng {
+        xmllint --debug --noout --nonet \
+          --relaxng ${docbook5}/xml/rng/docbook/docbook.rng \
+          "$1" \
+          2>&1 | context 1>&2
+          # ^ redirect assumes xmllint doesn’t print to stdout
+      }
+
+      lintrng manual-combined.xml
+      lintrng man-pages-combined.xml
 
       mkdir $out
       cp manual-combined.xml $out/
@@ -121,7 +195,7 @@ let
 
   olinkDB = runCommand "manual-olinkdb"
     { inherit sources;
-      buildInputs = [ libxml2 libxslt ];
+      nativeBuildInputs = [ buildPackages.libxml2.bin buildPackages.libxslt.bin ];
     }
     ''
       xsltproc \
@@ -161,7 +235,7 @@ in rec {
       mkdir -p $dst
 
       cp ${builtins.toFile "options.json" (builtins.unsafeDiscardStringContext (builtins.toJSON
-        (builtins.listToAttrs (map (o: { name = o.name; value = removeAttrs o ["name" "visible" "internal"]; }) optionsList'))))
+        (builtins.listToAttrs (map (o: { name = o.name; value = removeAttrs o ["name" "visible" "internal"]; }) optionsList))))
       } $dst/options.json
 
       mkdir -p $out/nix-support
@@ -171,7 +245,7 @@ in rec {
   # Generate the NixOS manual.
   manual = runCommand "nixos-manual"
     { inherit sources;
-      buildInputs = [ libxml2 libxslt ];
+      nativeBuildInputs = [ buildPackages.libxml2.bin buildPackages.libxslt.bin ];
       meta.description = "The NixOS manual in HTML format";
       allowedReferences = ["out"];
     }
@@ -187,9 +261,11 @@ in rec {
         ${manual-combined}/manual-combined.xml
 
       mkdir -p $dst/images/callouts
-      cp ${docbook5_xsl}/xml/xsl/docbook/images/callouts/*.gif $dst/images/callouts/
+      cp ${docbook5_xsl}/xml/xsl/docbook/images/callouts/*.svg $dst/images/callouts/
 
-      cp ${./style.css} $dst/style.css
+      cp ${../../../doc/style.css} $dst/style.css
+      cp ${../../../doc/overrides.css} $dst/overrides.css
+      cp -r ${pkgs.documentation-highlighter} $dst/highlightjs
 
       mkdir -p $out/nix-support
       echo "nix-build out $out" >> $out/nix-support/hydra-build-products
@@ -199,7 +275,7 @@ in rec {
 
   manualEpub = runCommand "nixos-manual-epub"
     { inherit sources;
-      buildInputs = [ libxml2 libxslt zip ];
+      buildInputs = [ libxml2.bin libxslt.bin zip ];
     }
     ''
       # Generate the epub manual.
@@ -213,7 +289,7 @@ in rec {
         ${manual-combined}/manual-combined.xml
 
       mkdir -p $dst/epub/OEBPS/images/callouts
-      cp -r ${docbook5_xsl}/xml/xsl/docbook/images/callouts/*.gif $dst/epub/OEBPS/images/callouts # */
+      cp -r ${docbook5_xsl}/xml/xsl/docbook/images/callouts/*.svg $dst/epub/OEBPS/images/callouts # */
       echo "application/epub+zip" > mimetype
       manual="$dst/nixos-manual.epub"
       zip -0Xq "$manual" mimetype
@@ -229,7 +305,7 @@ in rec {
   # Generate the NixOS manpages.
   manpages = runCommand "nixos-manpages"
     { inherit sources;
-      buildInputs = [ libxml2 libxslt ];
+      nativeBuildInputs = [ buildPackages.libxml2.bin buildPackages.libxslt.bin ];
       allowedReferences = ["out"];
     }
     ''

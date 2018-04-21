@@ -8,7 +8,7 @@ with lib;
 
 let
 
-  versionFile = pkgs.writeText "nixos-version" config.system.nixosVersion;
+  versionFile = pkgs.writeText "nixos-label" config.system.nixos.label;
 
 in
 
@@ -58,8 +58,8 @@ in
     # Individual files to be included on the CD, outside of the Nix
     # store on the CD.
     tarball.contents =
-      [ { source = config.system.build.initialRamdisk + "/initrd";
-          target = "/boot/initrd";
+      [ { source = config.system.build.initialRamdisk + "/" + config.system.boot.loader.initrdFile;
+          target = "/boot/" + config.system.boot.loader.initrdFile;
         }
         { source = versionFile;
           target = "/nixos-version.txt";

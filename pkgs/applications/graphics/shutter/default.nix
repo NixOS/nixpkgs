@@ -8,6 +8,7 @@ let
       ProcProcessTable URI ImageExifTool Gtk2AppIndicator LWPUserAgent JSON
       PerlMagick WWWMechanize HTTPDate HTMLForm HTMLParser HTMLTagset JSONXS
       CommonSense HTTPCookies NetOAuth PathClass GooCanvas X11Protocol Cairo
+      EncodeLocale TryTiny TypesSerialiser LWPMediaTypes
     ];
 in
 stdenv.mkDerivation rec {
