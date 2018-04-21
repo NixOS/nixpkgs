@@ -5839,7 +5839,7 @@ with pkgs;
 
   dash = callPackage ../shells/dash { };
 
-  dashing = callPackages ../tools/misc/dashing { };
+  dashing = callPackage ../tools/misc/dashing { };
 
   es = callPackage ../shells/es { };
 
