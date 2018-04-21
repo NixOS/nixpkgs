@@ -22,7 +22,7 @@ stdenv.mkDerivation {
   '';
 
   buildPhase = ''
-    makeFlags="SHELL=$SHELL ''${enableParallelBuilding:+-j$NIX_BUILD_CORES -l$NIX_BUILD_CORES}"
+    makeFlags="SHELL=$SHELL ''${enableParallelBuilding:+-j$NIX_BUILD_CORES -l$NIX_MAX_CORES}"
     make $makeFlags -C generator
 
     # Set QTDIR, see https://code.google.com/archive/p/qtscriptgenerator/issues/38

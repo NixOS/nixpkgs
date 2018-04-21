@@ -612,6 +612,22 @@ fi
 export NIX_INDENT_MAKE=1
 
 
+# Guess the optimal parallelism using the same formula as Ninja; return nothing
+# if it can not be determined.  (Note that "make" ignores "-l" without value.)
+guessParallelism() {
+    local n=$(getconf _NPROCESSORS_ONLN 2>/dev/null || nproc 2>/dev/null || true)
+    if [ "$n" -ge 1 ]; then
+        if [ "$n" -le 2 ]; then
+            expr "$n" + 1
+        else
+            expr "$n" + 2
+        fi
+    fi
+}
+
+# NIX_MAX_CORES is the optimal load average (when known).
+: ${NIX_MAX_CORES=$(guessParallelism)}
+
 # Normalize the NIX_BUILD_CORES variable. The value might be 0, which
 # means that we're supposed to try and auto-detect the number of
 # available CPU cores at run-time.
@@ -619,12 +635,7 @@ export NIX_INDENT_MAKE=1
 if [ -z "${NIX_BUILD_CORES:-}" ]; then
   NIX_BUILD_CORES="1"
 elif [ "$NIX_BUILD_CORES" -le 0 ]; then
-  NIX_BUILD_CORES=$(nproc 2>/dev/null || true)
-  if expr >/dev/null 2>&1 "$NIX_BUILD_CORES" : "^[0-9][0-9]*$"; then
-    :
-  else
-    NIX_BUILD_CORES="1"
-  fi
+  NIX_BUILD_CORES=${NIX_MAX_CORES:-1}
 fi
 export NIX_BUILD_CORES
 
@@ -977,7 +988,7 @@ buildPhase() {
         # Old bash empty array hack
         # shellcheck disable=SC2086
         local flagsArray=(
-            ${enableParallelBuilding:+-j${NIX_BUILD_CORES} -l${NIX_BUILD_CORES}}
+            ${enableParallelBuilding:+-j${NIX_BUILD_CORES} -l${NIX_MAX_CORES}}
             $makeFlags ${makeFlagsArray+"${makeFlagsArray[@]}"}
             $buildFlags ${buildFlagsArray+"${buildFlagsArray[@]}"}
         )
@@ -997,7 +1008,7 @@ checkPhase() {
     # Old bash empty array hack
     # shellcheck disable=SC2086
     local flagsArray=(
-        ${enableParallelBuilding:+-j${NIX_BUILD_CORES} -l${NIX_BUILD_CORES}}
+        ${enableParallelBuilding:+-j${NIX_BUILD_CORES} -l${NIX_MAX_CORES}}
         $makeFlags ${makeFlagsArray+"${makeFlagsArray[@]}"}
         ${checkFlags:-VERBOSE=y} ${checkFlagsArray+"${checkFlagsArray[@]}"}
         ${checkTarget:-check}

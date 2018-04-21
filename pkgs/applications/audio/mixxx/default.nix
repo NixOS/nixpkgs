@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
     runHook preBuild
     mkdir -p "$out"
     scons \
-      -j$NIX_BUILD_CORES -l$NIX_BUILD_CORES \
+      -j$NIX_BUILD_CORES -l$NIX_MAX_CORES \
       $sconsFlags "prefix=$out"
     runHook postBuild
   '';
