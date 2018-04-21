@@ -1,50 +1,40 @@
-{ stdenv, fetchurl, meson, ninja, pkgconfig, gettext, python3, libxml2, libxslt, docbook_xsl
-, docbook_xml_dtd_43, gtk-doc, glib, libtiff, libjpeg, libpng, libX11, gnome3
-, jasper, gobjectIntrospection, doCheck ? false, makeWrapper }:
+{ stdenv, fetchurl, pkgconfig, glib, libtiff, libjpeg, libpng, libX11, gnome3
+, jasper, gobjectIntrospection, doCheck ? false }:
 
 let
   pname = "gdk-pixbuf";
-  version = "2.36.12";
+  version = "2.36.7";
+  # TODO: since 2.36.8 gdk-pixbuf gets configured to use mime-type sniffing,
+  # which apparently requires access to shared-mime-info files during runtime.
 in
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${gnome3.versionBranch version}/${name}.tar.xz";
-    sha256 = "0d534ysa6n9prd17wwzisq7mj6qkhwh8wcf8qgin1ar3hbs5ry7z";
+    sha256 = "1b6e5eef09d98f05f383014ecd3503e25dfb03d7e5b5f5904e5a65b049a6a4d8";
   };
 
-  patches = [
-    # TODO: since 2.36.8 gdk-pixbuf gets configured to use mime-type sniffing,
-    # which requires access to shared-mime-info files during runtime.
-    # For now, we are patching the build script to avoid the dependency.
-    ./no-mime-sniffing.patch
-  ];
-
-  outputs = [ "out" "dev" "man" "devdoc" ];
+  outputs = [ "out" "dev" "devdoc" ];
 
   setupHook = ./setup-hook.sh;
 
-  # !!! We might want to factor out the gdk-pixbuf-xlib subpackage.
-  buildInputs = [ libX11 ];
+  enableParallelBuilding = true;
 
-  nativeBuildInputs = [
-    meson ninja pkgconfig gettext python3 libxml2 libxslt docbook_xsl docbook_xml_dtd_43
-    gtk-doc gobjectIntrospection makeWrapper
-  ];
+  # !!! We might want to factor out the gdk-pixbuf-xlib subpackage.
+  buildInputs = [ libX11 gobjectIntrospection ];
+
+  nativeBuildInputs = [ pkgconfig ];
 
   propagatedBuildInputs = [ glib libtiff libjpeg libpng jasper ];
 
-  mesonFlags = [
-    "-Ddocs=true"
-    "-Djasper=true"
-    "-Dx11=true"
-    "-Dgir=${if gobjectIntrospection != null then "true" else "false"}"
-  ];
+  configureFlags = "--with-libjasper --with-x11"
+    + stdenv.lib.optionalString (gobjectIntrospection != null) " --enable-introspection=yes"
+    ;
 
-  postPatch = ''
-    chmod +x build-aux/* # patchShebangs only applies to executables
-    patchShebangs build-aux
+  # on darwin, tests don't link
+  preBuild = stdenv.lib.optionalString (stdenv.isDarwin && !doCheck) ''
+    substituteInPlace Makefile --replace "docs tests" "docs"
   '';
 
   postInstall =
@@ -52,9 +42,6 @@ stdenv.mkDerivation rec {
     ''
       moveToOutput "bin" "$dev"
       moveToOutput "bin/gdk-pixbuf-thumbnailer" "$out"
-
-      # We need to install 'loaders.cache' in lib/gdk-pixbuf-2.0/2.10.0/
-      $dev/bin/gdk-pixbuf-query-loaders --update-cache
     '';
 
   # The tests take an excessive amount of time (> 1.5 hours) and memory (> 6 GB).
