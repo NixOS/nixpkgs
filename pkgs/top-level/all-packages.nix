@@ -7644,9 +7644,7 @@ with pkgs;
 
   cl-launch = callPackage ../development/tools/misc/cl-launch {};
 
-  cloudfoundry-cli = callPackage ../development/tools/cloudfoundry-cli {
-    go = go_1_9;
-  };
+  cloudfoundry-cli = callPackage ../development/tools/cloudfoundry-cli { };
 
   coan = callPackage ../development/tools/analysis/coan { };
 
