@@ -587,6 +587,11 @@
     github = "bergey";
     name = "Daniel Bergey";
   };
+  bfortz = {
+    email = "bernard.fortz@gmail.com";
+    github = "bfortz";
+    name = "Bernard Fortz";
+  };
   bgamari = {
     email = "ben@smart-cactus.org";
     github = "bgamari";
