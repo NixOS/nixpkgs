@@ -519,6 +519,8 @@ with pkgs;
 
   apitrace = libsForQt5.callPackage ../applications/graphics/apitrace {};
 
+  arguments = callPackage ../development/libraries/arguments { };
+
   argus = callPackage ../tools/networking/argus {};
 
   argus-clients = callPackage ../tools/networking/argus-clients {};
@@ -1141,6 +1143,8 @@ with pkgs;
   dynamic-colors = callPackage ../tools/misc/dynamic-colors { };
 
   earlyoom = callPackage ../os-specific/linux/earlyoom { };
+
+  EBTKS = callPackage ../development/libraries/science/biology/EBTKS { };
 
   ecasound = callPackage ../applications/audio/ecasound { };
 
@@ -8477,6 +8481,8 @@ with pkgs;
 
   libopcodes = callPackage ../development/libraries/libopcodes { };
 
+  bicpl = callPackage ../development/libraries/science/biology/bicpl { };
+
   # TODO(@Ericson2314): Build bionic libc from source
   bionic = assert hostPlatform.useAndroidPrebuilt;
     androidenv.androidndkPkgs.libraries;
@@ -10771,6 +10777,8 @@ with pkgs;
   oneko = callPackage ../applications/misc/oneko { };
 
   oniguruma = callPackage ../development/libraries/oniguruma { };
+
+  oobicpl = callPackage ../development/libraries/science/biology/oobicpl { };
 
   openal = self.openalSoft;
 
@@ -19741,9 +19749,15 @@ with pkgs;
 
   emboss = callPackage ../applications/science/biology/emboss { };
 
+  ezminc = callPackage ../applications/science/biology/EZminc { };
+
   htslib = callPackage ../development/libraries/science/biology/htslib { };
 
   igv = callPackage ../applications/science/biology/igv { };
+
+  inormalize = callPackage ../applications/science/biology/inormalize {
+    inherit (perlPackages) GetoptTabular MNI-Perllib;
+  };
 
   iv = callPackage ../applications/science/biology/iv {
     neuron-version = neuron.version;
@@ -19752,6 +19766,10 @@ with pkgs;
   kallisto = callPackage ../applications/science/biology/kallisto { };
 
   muscle = callPackage ../applications/science/biology/muscle/default.nix { };
+
+  n3 = callPackage ../applications/science/biology/N3 {
+    inherit (perlPackages) perl GetoptTabular MNI-Perllib;
+  };
 
   neuron = callPackage ../applications/science/biology/neuron {
     python = null;
@@ -19765,7 +19783,17 @@ with pkgs;
 
   mrbayes = callPackage ../applications/science/biology/mrbayes { };
 
-  minc-tools = callPackage ../applications/science/biology/minc-tools { };
+  minc_tools = callPackage ../applications/science/biology/minc-tools {
+    inherit (perlPackages) TextFormat;
+  };
+
+  minc_widgets = callPackage ../applications/science/biology/minc-widgets {
+    inherit (perlPackages) GetoptTabular MNI-Perllib;
+  };
+
+  mni_autoreg = callPackage ../applications/science/biology/mni_autoreg {
+    inherit (perlPackages) GetoptTabular MNI-Perllib;
+  };
 
   ncbi_tools = callPackage ../applications/science/biology/ncbi-tools { };
 
