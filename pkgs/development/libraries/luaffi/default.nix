@@ -12,9 +12,9 @@ stdenv.mkDerivation {
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ lua ];
 
-  patches = [
-    ./makefile-errors.patch
-  ];
+  patches = [ ./darwin.patch ./makefile-errors.patch ];
+
+  makeFlags = [ "PREFIX=$(out)" ];
 
   installPhase = ''
     mkdir -p $out/lib

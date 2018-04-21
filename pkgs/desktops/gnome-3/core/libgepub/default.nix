@@ -1,20 +1,29 @@
 { stdenv, fetchurl, meson, ninja, pkgconfig, glib, gobjectIntrospection, gnome3
 , webkitgtk, libsoup, libxml2, libarchive }:
-stdenv.mkDerivation rec {
-  name = "libgepub-${version}.2";
-  version = "0.5";
+
+let
+  pname = "libgepub";
+  version = "0.6.0";
+in stdenv.mkDerivation rec {
+  name = "${pname}-${version}";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/libgepub/${version}/${name}.tar.xz";
-    sha256 = "0f1bczy3b00kj7mhm80xgpcgibh8h0pgcr46l4wifi45jacji0w4";
+    url = "mirror://gnome/sources/${pname}/${gnome3.versionBranch version}/${name}.tar.xz";
+    sha256 = "16dkyywqdnfngmwsgbyga0kl9vcnzczxi3lmhm27pifrq5f3k2n7";
   };
 
   doCheck = true;
 
-  checkPhase = "meson test";
-
   nativeBuildInputs = [ meson ninja pkgconfig gobjectIntrospection ];
   buildInputs = [ glib webkitgtk libsoup libxml2 libarchive ];
+
+  passthru = {
+    updateScript = gnome3.updateScript {
+      packageName = pname;
+      attrPath = "gnome3.${pname}";
+      versionPolicy = "none";
+    };
+  };
 
   meta = with stdenv.lib; {
     description = "GObject based library for handling and rendering epub documents";

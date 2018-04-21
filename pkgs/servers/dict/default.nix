@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     description = "Dict protocol server and client";
     homepage    = http://www.dict.org;
     license     = licenses.gpl2;
-    maintainers = with maintainers; [ mornfall ];
+    maintainers = with maintainers; [ ];
     platforms   = platforms.linux;
   };
 }

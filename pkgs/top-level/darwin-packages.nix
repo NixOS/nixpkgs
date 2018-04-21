@@ -1,4 +1,6 @@
-{ pkgs, darwin, stdenv, callPackage, callPackages, newScope }:
+{ buildPackages, pkgs, targetPackages
+, darwin, stdenv, callPackage, callPackages, newScope
+}:
 
 let
   apple-source-releases = callPackage ../os-specific/darwin/apple-source-releases { };
@@ -10,13 +12,23 @@ in
 
   apple_sdk = callPackage ../os-specific/darwin/apple-sdk { };
 
-  binutils = callPackage ../os-specific/darwin/binutils {
+  binutils-unwrapped = callPackage ../os-specific/darwin/binutils {
     inherit (darwin) cctools;
+    inherit (pkgs) binutils-unwrapped;
+  };
+
+  binutils = pkgs.wrapBintoolsWith {
+    libc =
+      if pkgs.targetPlatform != pkgs.hostPlatform
+      then pkgs.libcCross
+      else pkgs.stdenv.cc.libc;
+    bintools = darwin.binutils-unwrapped;
   };
 
   cctools = callPackage ../os-specific/darwin/cctools/port.nix {
     inherit (darwin) libobjc maloader;
     stdenv = if stdenv.isDarwin then stdenv else pkgs.libcxxStdenv;
+    libcxxabi = pkgs.libcxxabi;
     xctoolchain = darwin.xcode.toolchain;
   };
 
@@ -31,11 +43,17 @@ in
     inherit (darwin) opencflite;
   };
 
-  ios-cross = callPackage ../os-specific/darwin/ios-cross {
-    inherit (darwin) binutils;
+  insert_dylib = callPackage ../os-specific/darwin/insert_dylib { };
+
+  iosSdkPkgs = darwin.callPackage ../os-specific/darwin/ios-sdk-pkgs {
+    buildIosSdk = buildPackages.darwin.iosSdkPkgs.sdk;
+    targetIosSdkPkgs = targetPackages.darwin.iosSdkPkgs;
+    inherit (pkgs.llvmPackages) clang-unwrapped;
   };
 
   libobjc = apple-source-releases.objc4;
+  
+  lsusb = callPackage ../os-specific/darwin/lsusb { };
 
   opencflite = callPackage ../os-specific/darwin/opencflite { };
 
@@ -47,10 +65,16 @@ in
 
   stubs = callPackages ../os-specific/darwin/stubs { };
 
-  swift-corefoundation = callPackage ../os-specific/darwin/swift-corefoundation { };
+  trash = callPackage ../os-specific/darwin/trash { inherit (darwin.apple_sdk) frameworks; };
 
   usr-include = callPackage ../os-specific/darwin/usr-include { };
 
   xcode = callPackage ../os-specific/darwin/xcode { };
+
+  CoreSymbolication = callPackage ../os-specific/darwin/CoreSymbolication { };
+
+  swift-corelibs = callPackages ../os-specific/darwin/swift-corelibs { };
+
+  darling = callPackage ../os-specific/darwin/darling/default.nix { };
 
 })

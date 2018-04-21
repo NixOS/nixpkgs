@@ -9,7 +9,7 @@ let
     "macosx"
   else if stdenv.system == "aarch64-linux" then
     "linux-arm"
-  else abort "Platform ${stdenv.system} not yet supported.";
+  else throw "Platform ${stdenv.system} not yet supported.";
 in
 
 stdenv.mkDerivation rec {

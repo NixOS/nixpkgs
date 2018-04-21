@@ -28,7 +28,7 @@ stdenv.mkDerivation {
 
   meta = {
     description = "Visual Interactive Taskwarrior";
-    maintainers = with pkgs.lib.maintainers; [ matthiasbeyer ];
+    maintainers = with pkgs.lib.maintainers; [ ];
     platforms = pkgs.lib.platforms.linux;
     license = pkgs.lib.licenses.gpl3;
   };

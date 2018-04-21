@@ -1,17 +1,15 @@
 { stdenv, fetchFromGitHub, pkgconfig, qmake
 , python, qtbase, qttools, zlib }:
 
-let
-#  qtEnv = with qt5; env "qt-${qtbase.version}" [ qtbase qttools ];
-in stdenv.mkDerivation rec {
+stdenv.mkDerivation rec {
   name = "tiled-${version}";
-  version = "1.0.3";
+  version = "1.1.4";
 
   src = fetchFromGitHub {
     owner = "bjorn";
     repo = "tiled";
     rev = "v${version}";
-    sha256 = "1j8307h7xkxqwr8rpr9fn1svm5h10k61w6zxr4sgph1hiv8x33aa";
+    sha256 = "0ln8lis9g23wp3w70xwbkzqmmbkd02cdx6z7msw9lrpkjzkj7mlr";
   };
 
   nativeBuildInputs = [ pkgconfig qmake ];
@@ -26,7 +24,7 @@ in stdenv.mkDerivation rec {
       bsd2	# libtiled and tmxviewer
       gpl2Plus	# all the rest
     ];
+    maintainers = with maintainers; [ dywedir ];
     platforms = platforms.linux;
-    maintainers = [ maintainers.nckx ];
   };
 }

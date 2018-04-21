@@ -131,10 +131,10 @@
     dependencies = ["addressable" "chef" "chef-provisioning" "cookbook-omnifetch" "diff-lcs" "ffi-yajl" "minitar" "mixlib-cli" "mixlib-shellout" "paint" "solve"];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "06dnzlvwpkp9a2lrm3vn600i7j9328872nx4269hvbqnb9ix2cdk";
+      sha256 = "0zqbwkad61rn4wli6z8a7l7glfnnrhbg474vfshvr0k1sicy8z2d";
       type = "gem";
     };
-    version = "2.3.4";
+    version = "2.4.17";
   };
   chef-provisioning = {
     dependencies = ["cheffish" "inifile" "mixlib-install" "net-scp" "net-ssh" "net-ssh-gateway" "winrm" "winrm-elevated" "winrm-fs"];
@@ -175,10 +175,10 @@
     dependencies = ["chef" "fauxhai" "rspec"];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "181378d6qf8rxbaan5q8nrv71iy90zljd558n9nys7h5vmqws0qg";
+      sha256 = "0zpycdwp18k6nkgyx7l3ndhyaby1v4bfqh9by6ld2fbksnx29p6k";
       type = "gem";
     };
-    version = "7.1.0";
+    version = "7.1.1";
   };
   cleanroom = {
     source = {
@@ -217,18 +217,18 @@
     dependencies = ["backports" "cucumber-tag_expressions" "gherkin"];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "17qvnxa6ybbxqm22aji41vsappwnrdb56aiggy2swnphx1b7b1ql";
+      sha256 = "06lip8ds4lw3wyjwsjv1laimk5kz39vsmvv9if7hiq9v611kd3sn";
       type = "gem";
     };
-    version = "3.0.0";
+    version = "3.1.0";
   };
   cucumber-tag_expressions = {
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "10q5096vag8s4azj4rmmb3ws7l316gr0jj8jhgr2fmhi05ppbqcf";
+      sha256 = "0cvmbljybws0qzjs1l67fvr9gqr005l8jk1ni5gcsis9pfmqh3vc";
       type = "gem";
     };
-    version = "1.0.1";
+    version = "1.1.1";
   };
   diff-lcs = {
     source = {
@@ -417,10 +417,10 @@
     dependencies = ["addressable" "faraday" "hashie" "htmlentities" "json" "method_source" "mixlib-log" "parallel" "parslet" "pry" "rainbow" "rspec" "rspec-its" "rubyzip" "semverse" "sslshake" "thor" "tomlrb" "train"];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "0i1kb0lanx9wzvlr83981528s5b8l4gqx0911ymh04pz2qy16c5x";
+      sha256 = "0yvmqdhpag7v6m9z1mcwqj6y1rnrx6hbqws0lhh1zp4xky3w7fn4";
       type = "gem";
     };
-    version = "1.45.13";
+    version = "1.47.0";
   };
   ipaddress = {
     source = {
@@ -701,10 +701,10 @@
     dependencies = ["chef-config" "ffi" "ffi-yajl" "ipaddress" "mixlib-cli" "mixlib-config" "mixlib-log" "mixlib-shellout" "plist" "systemu" "wmi-lite"];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "0li307m47jin82y9k9xsh1xd9fh5gapvrl3dy997w9i199jgp1hx";
+      sha256 = "05dx2nsswcnd9f7qvz4jgiwwh18z4qbx6mqvflzlx276adx68i0s";
       type = "gem";
     };
-    version = "13.6.0";
+    version = "13.7.0";
   };
   paint = {
     source = {
@@ -1021,10 +1021,10 @@
     dependencies = ["mixlib-install" "mixlib-shellout" "net-scp" "net-ssh" "net-ssh-gateway" "safe_yaml" "thor" "winrm" "winrm-elevated" "winrm-fs"];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "19f2wck79wr56pf2vdq9bk98ksry4w22qpyyandljif7icgsmkmb";
+      sha256 = "0wypsc0yl5zgw4f39i8nwq35z0lnjpqx333w9ginmiifs9jydlvm";
       type = "gem";
     };
-    version = "1.19.1";
+    version = "1.19.2";
   };
   thor = {
     source = {
@@ -1055,10 +1055,10 @@
     dependencies = ["docker-api" "json" "mixlib-shellout" "net-scp" "net-ssh" "winrm" "winrm-fs"];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "0nxv3gb665a05nhik3w44j5bvkyqfl8jz1aj4a69jvsf0jj406sw";
+      sha256 = "1ic719ghmyvf93p4y91y00rc09s946sg4n1h855yip9h5795q9i5";
       type = "gem";
     };
-    version = "0.29.2";
+    version = "0.31.1";
   };
   treetop = {
     dependencies = ["polyglot"];
@@ -1116,10 +1116,10 @@
     dependencies = ["erubis" "logging" "rubyzip" "winrm"];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "1ib5ggy0wfnpiyyynibvcixgipysgffh2jb6d8c4qddkzzbpy1dm";
+      sha256 = "0vax34qbr3n6jifxyzr4nngaz8vrmzw6ydw21cnnrhidfkqgh7ja";
       type = "gem";
     };
-    version = "1.0.2";
+    version = "1.1.1";
   };
   wmi-lite = {
     source = {

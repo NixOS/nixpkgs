@@ -6,12 +6,12 @@
 
 buildPythonPackage rec {
   pname = "pexpect";
-  version = "4.3.0";
+  version = "4.4.0";
   name = "${pname}-${version}";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1nfjmz81gsixv22dywidakm7pff3ly1i4yly950bfp8gz1r0iaq0";
+    sha256 = "67b85a1565968e3d5b5e7c9283caddc90c3947a2625bed1905be27bd5a03e47d";
   };
 
   # Wants to run pythonin a subprocess

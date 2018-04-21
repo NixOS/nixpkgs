@@ -1,10 +1,20 @@
 { stdenv, intltool, fetchurl, apacheHttpd, nautilus
 , pkgconfig, gtk3, glib, libxml2, gnused, systemd
 , bash, wrapGAppsHook, itstool, libnotify, libtool, mod_dnssd
-, gnome3, librsvg, gdk_pixbuf, file, libcanberra_gtk3 }:
+, gnome3, librsvg, gdk_pixbuf, file, libcanberra-gtk3 }:
 
 stdenv.mkDerivation rec {
-  inherit (import ./src.nix fetchurl) name src;
+  name = "gnome-user-share-${version}";
+  version = "3.28.0";
+
+  src = fetchurl {
+    url = "mirror://gnome/sources/gnome-user-share/${gnome3.versionBranch version}/${name}.tar.xz";
+    sha256 = "04wjnrcdlmyszj582nsda32sgi44nwgrw2ksy11xp17nb09d7m09";
+  };
+
+  passthru = {
+    updateScript = gnome3.updateScript { packageName = "gnome-user-share"; attrPath = "gnome3.gnome-user-share"; };
+  };
 
   doCheck = true;
 
@@ -24,7 +34,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ gtk3 glib intltool itstool libxml2 libtool
                   wrapGAppsHook file gdk_pixbuf gnome3.defaultIconTheme librsvg
-                  nautilus libnotify libcanberra_gtk3 systemd ];
+                  nautilus libnotify libcanberra-gtk3 systemd ];
 
   postInstall = ''
     mkdir -p $out/share/gsettings-schemas/$name

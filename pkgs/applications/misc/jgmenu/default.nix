@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "jgmenu-${version}";
-  version = "0.7.5";
+  version = "0.8.2";
 
   src = fetchFromGitHub {
     owner = "johanmalm";
     repo = "jgmenu";
     rev = "v${version}";
-    sha256 = "1gml2g711pr6wakznlxjrlmz8kylkv0ydpvv0jx2y5qczp3rwk3a";
+    sha256 = "0nflj4fcpz7rcd1s0zlyi5ikxjykkmz3p5w4gzica1fdbyn2l7x3";
   };
 
   nativeBuildInputs = [
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
     homepage = https://github.com/johanmalm/jgmenu;
     description = "Small X11 menu intended to be used with openbox and tint2";
     license = licenses.gpl2;
-    platforms = platforms.unix;
+    platforms = platforms.linux;
     maintainers = [ maintainers.romildo ];
   };
 }

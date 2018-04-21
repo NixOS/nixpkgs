@@ -14,7 +14,7 @@ let
 
       builder = ./pull.sh;
 
-      buildInputs = [ curl utillinux docker kmod dhcp cacert e2fsprogs ];
+      nativeBuildInputs = [ curl utillinux docker kmod dhcp cacert e2fsprogs ];
 
       outputHashAlgo = "sha256";
       outputHash = sha256;

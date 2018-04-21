@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "fpp-${version}";
-  version = "0.7.1";
+  version = "0.7.2";
 
   src = fetchFromGitHub {
     owner = "facebook";
     repo = "PathPicker";
     rev = version;
-    sha256 = "1mfyr9k5s3l1sg3c9vlyiqg8n1wwppzb981az2xaxqyk95wwl1sa";
+    sha256 = "03n8sc2fvs2vk46jv6qfkjbyqz85yxnphvabji7qnmd3jv631w47";
   };
 
   postPatch = ''

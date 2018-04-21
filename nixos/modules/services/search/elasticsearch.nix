@@ -6,6 +6,7 @@ let
   cfg = config.services.elasticsearch;
 
   es5 = builtins.compareVersions (builtins.parseDrvName cfg.package.name).version "5" >= 0;
+  es6 = builtins.compareVersions (builtins.parseDrvName cfg.package.name).version "6" >= 0;
 
   esConfig = ''
     network.host: ${cfg.listenAddress}
@@ -31,8 +32,11 @@ let
       (if es5 then (pkgs.writeTextDir "log4j2.properties" cfg.logging)
               else (pkgs.writeTextDir "logging.yml" cfg.logging))
     ];
-    # Elasticsearch 5.x won't start when the scripts directory does not exist
-    postBuild = if es5 then "${pkgs.coreutils}/bin/mkdir -p $out/scripts" else "";
+    postBuild = concatStringsSep "\n" (concatLists [
+      # Elasticsearch 5.x won't start when the scripts directory does not exist
+      (optional es5 "${pkgs.coreutils}/bin/mkdir -p $out/scripts")
+      (optional es6 "ln -s ${cfg.package}/config/jvm.options $out/jvm.options")
+    ]);
   };
 
   esPlugins = pkgs.buildEnv {
@@ -92,8 +96,6 @@ in {
         node.name: "elasticsearch"
         node.master: true
         node.data: false
-        index.number_of_shards: 5
-        index.number_of_replicas: 1
       '';
     };
 
@@ -165,7 +167,10 @@ in {
       path = [ pkgs.inetutils ];
       environment = {
         ES_HOME = cfg.dataDir;
-        ES_JAVA_OPTS = toString ([ "-Des.path.conf=${configDir}" ] ++ cfg.extraJavaOptions);
+        ES_JAVA_OPTS = toString ( optional (!es6) [ "-Des.path.conf=${configDir}" ]
+                                  ++ cfg.extraJavaOptions);
+      } // optionalAttrs es6 {
+        ES_PATH_CONF = configDir;
       };
       serviceConfig = {
         ExecStart = "${cfg.package}/bin/elasticsearch ${toString cfg.extraCmdLineOptions}";

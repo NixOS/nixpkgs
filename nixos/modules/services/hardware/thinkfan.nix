@@ -55,7 +55,7 @@ in {
       enable = mkOption {
         default = false;
         description = ''
-          Whether to enable thinkfan, fan controller for ibm/lenovo thinkpads.
+          Whether to enable thinkfan, fan controller for IBM/Lenovo ThinkPads.
         '';
       };
 

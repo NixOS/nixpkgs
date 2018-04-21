@@ -3,7 +3,7 @@
 , fetchurl
 , pciutils
 , confuse
-, dbus, dbus_glib
+, dbus, dbus-glib
 , alsaLib
 , audiofile
 , pkgconfig
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
     dbus
     alsaLib
     audiofile
-    dbus_glib
+    dbus-glib
     pkgconfig
     gtk2
     gettext

@@ -8,7 +8,7 @@ stdenv.mkDerivation {
     sha256 = "1xn14jbv3m1khy7ydvad9ydkn7yygdbhjy9wm1v000jzjwr3lv21";
   };
   
-  buildInputs = [ mkfontdir mkfontscale ];
+  nativeBuildInputs = [ mkfontdir mkfontscale ];
 
   installPhase =
     ''

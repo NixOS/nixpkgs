@@ -29,7 +29,6 @@ stdenv.mkDerivation rec {
     '';
     homepage = http://include-what-you-use.org;
     license = licenses.bsd3;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ nckx ];
+    platforms = platforms.unix;
   };
 }

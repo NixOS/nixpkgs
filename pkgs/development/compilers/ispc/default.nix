@@ -3,8 +3,8 @@ testedTargets ? ["sse2" "host"] # the default test target is sse4, but that is n
 }:
 
 stdenv.mkDerivation rec {
-  version = "20170807";
-  rev = "6e0fc2f148e95afad998a7c7f4d7908d29fd8e44";
+  version = "1.9.2";
+  rev = "v${version}";
 
   inherit testedTargets;
 
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     owner = "ispc";
     repo = "ispc";
     inherit rev;
-    sha256 = "17fwnfm8a329lgfhjwcvji4h1fm4iqmc28wz23hvgqbpj8lk6qgh";
+    sha256 = "0zaw7mwvly1csbdcbz9j8ry89n0r1fag1m1f579l4mgg1x6ksqry";
   };
 
   # there are missing dependencies in the Makefile, causing sporadic build failures

@@ -1,5 +1,5 @@
 { fetchurl, stdenv, pkgconfig, autoconf, automake, clutter, clutter-gst
-, gdk_pixbuf, cairo, clutter_gtk }:
+, gdk_pixbuf, cairo, clutter-gtk }:
 
 stdenv.mkDerivation rec {
   name = "pinpoint-${version}";
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   };
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ autoconf automake clutter clutter-gst gdk_pixbuf
-                  cairo clutter_gtk ];
+                  cairo clutter-gtk ];
 
   meta = with stdenv.lib; {
     homepage = https://wiki.gnome.org/action/show/Apps/Pinpoint;

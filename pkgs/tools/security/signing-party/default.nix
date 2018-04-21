@@ -14,12 +14,12 @@ let
   ];
 in stdenv.mkDerivation rec {
   pname = "signing-party";
-  version = "2.6";
+  version = "2.7";
   name = "${pname}-${version}";
 
   src = fetchurl {
     url = "mirror://debian/pool/main/s/${pname}/${pname}_${version}.orig.tar.gz";
-    sha256 = "1n5bpcfpl9vg1xp6r1jhbyahrgdyxp05b5pria1rh4m0qnv8sifr";
+    sha256 = "0znklgvxn7k7p6q7r8chcj86zmzildjamr3qlqfxkj5m7yziqr21";
   };
 
   sourceRoot = ".";

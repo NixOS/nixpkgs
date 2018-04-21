@@ -2,8 +2,8 @@
 , python, libconfig, lit, gdb, unzip, darwin, bash
 , callPackage
 , bootstrapVersion ? false
-, version ? "1.5.0"
-, ldcSha256 ? "1150sgns03vplni2wd4afk3rgw3rap8rsiipspw0rzxgki5rlr83"
+, version ? "1.8.0"
+, ldcSha256 ? "0zswjlibj8zcdj06nn09jjhbd99chsa5f4kps8xifzgrpgsa28g4"
 }:
 
 let
@@ -29,16 +29,12 @@ let
       sha256 = ldcSha256;
     };
 
-    sourceRoot = ".";
-
     postUnpack = ''
-        cd ldc-${version}-src/
-
         patchShebangs .
 
         # Remove cppa test for now because it doesn't work.
-        rm tests/d2/dmd-testsuite/runnable/cppa.d
-        rm tests/d2/dmd-testsuite/runnable/extra-files/cppb.cpp
+        rm ldc-${version}-src/tests/d2/dmd-testsuite/runnable/cppa.d
+        rm ldc-${version}-src/tests/d2/dmd-testsuite/runnable/extra-files/cppb.cpp
     ''
 
     + stdenv.lib.optionalString (bootstrapVersion) ''
@@ -55,12 +51,15 @@ let
         #
         #==============================
         #Test failed: expected rc == 0, exited with rc == 1
-        rm tests/d2/dmd-testsuite/runnable/variadic.d
+        rm ldc-${version}-src/tests/d2/dmd-testsuite/runnable/variadic.d
     ''
 
     + stdenv.lib.optionalString (!bootstrapVersion) ''
-        # https://github.com/NixOS/nixpkgs/issues/29611
-        rm tests/sanitizers/asan_*
+	    # http://forum.dlang.org/thread/xtbbqthxutdoyhnxjhxl@forum.dlang.org
+	    rm -r ldc-${version}-src/tests/dynamiccompile
+
+            # https://github.com/NixOS/nixpkgs/issues/34817
+	    rm -r ldc-${version}-src/tests/plugins/addFuncEntryCall
     '';
 
     ROOT_HOME_DIR = "$(echo ~root)";
@@ -71,9 +70,6 @@ let
       "phobos/std/datetime/timezone.d";
 
     postPatch = ''
-        substituteInPlace cmake/Modules/FindLLVM.cmake \
-            --replace "llvm_set(LIBRARY_DIRS" "#llvm_set(LIBRARY_DIRS"
-
         substituteInPlace runtime/${datetimePath} \
             --replace "import core.time;" "import core.time;import std.path;"
 
@@ -97,7 +93,7 @@ let
         substituteInPlace runtime/phobos/std/path.d \
             --replace "\"/root" "\"${ROOT_HOME_DIR}"
 
-        # TODO
+        # Can be remove with front end version >= 2.078.0
         substituteInPlace runtime/druntime/src/core/memory.d \
             --replace "assert(z is null);" "//assert(z is null);"
     ''
@@ -108,14 +104,16 @@ let
         substituteInPlace gen/programs.cpp \
             --replace "gcc" "clang"
 
-	# Was not able to compile on darwin due to "__inline_isnanl"
-	# being undefined.
-	substituteInPlace dmd2/root/port.c --replace __inline_isnanl __inline_isnan
+        # Was not able to compile on darwin due to "__inline_isnanl"
+        # being undefined.
+        substituteInPlace dmd2/root/port.c --replace __inline_isnanl __inline_isnan
     ''
 
-    + stdenv.lib.optionalString (stdenv.hostPlatform.isLinux && bootstrapVersion) ''
-      substituteInPlace dmd2/root/port.c \
-        --replace "#include <bits/mathdef.h>" "#include <complex.h>"
+    + stdenv.lib.optionalString (!bootstrapVersion) ''
+        # TODO Can be removed with the next ldc version > 1.7.0
+        # https://github.com/ldc-developers/ldc/issues/2493
+        substituteInPlace tests/d2/dmd-testsuite/Makefile \
+            --replace "# disable tests based on arch" "DISABLED_TESTS += test_cdvecfill"
     ''
 
     + stdenv.lib.optionalString (bootstrapVersion) ''
@@ -147,7 +145,6 @@ let
                        "-DLDC_WITH_LLD=OFF"
                        # Xcode 9.0.1 fixes that bug according to ldc release notes
                        "-DRT_ARCHIVE_WITH_LDC=OFF"
-                       "-DLLVM_LIBRARY_DIRS=${llvm}/lib"
                       )
     '';
 
@@ -192,8 +189,6 @@ let
 
     src = ldcBuild.src;
 
-    sourceRoot = ".";
-
     postUnpack = ldcBuild.postUnpack;
 
     postPatch = ldcBuild.postPatch;
@@ -214,8 +209,7 @@ let
                         "-DLDC_WITH_LLD=OFF"
                         # Xcode 9.0.1 fixes that bug according to ldc release notes
                         "-DRT_ARCHIVE_WITH_LDC=OFF"
-                        "-DLLVM_LIBRARY_DIRS=${llvm}/lib"
-                        "-DD_COMPILER=${ldcBuild}/bin/ldmd2"
+                        "-DD_COMPILER=${ldcBuild.out}/bin/ldmd2"
                       )
     '';
 
@@ -226,7 +220,7 @@ let
     buildCmd = if bootstrapVersion then
       "ctest -V -R \"build-druntime-ldc-unittest|build-phobos2-ldc-unittest\""
     else
-      "make -j$NIX_BUILD_CORES DMD=${ldcBuild}/bin/ldc2 druntime-test-runner druntime-test-runner-debug phobos2-test-runner phobos2-test-runner-debug";
+      "make -j$NIX_BUILD_CORES DMD=${ldcBuild.out}/bin/ldc2 phobos2-test-runner phobos2-test-runner-debug";
 
     testCmd = if bootstrapVersion then
       "ctest -j$NIX_BUILD_CORES --output-on-failure -E \"dmd-testsuite|lit-tests|ldc2-unittest|llvm-ir-testsuite\""
@@ -235,6 +229,7 @@ let
 
     buildPhase = ''
         ${buildCmd}
+        ln -s ${ldcBuild.out}/bin/ldmd2 $PWD/bin/ldmd2
         ${testCmd}
     '';
 
@@ -249,10 +244,13 @@ stdenv.mkDerivation rec {
   inherit ldcUnittests;
   name = "ldc-${version}";
   phases = "installPhase";
+  buildInputs = ldcBuild.buildInputs;
 
   installPhase = ''
     mkdir $out
     cp -r --symbolic-link ${ldcBuild}/* $out/
   '';
+
+  meta = ldcBuild.meta;
 }
 

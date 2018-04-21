@@ -1,4 +1,4 @@
-{stdenv, fetchurl, wxGTK, perl, python2, zlib, mesa, libX11}:
+{stdenv, fetchurl, wxGTK, perl, python2, zlib, libGLU_combined, libX11}:
 stdenv.mkDerivation rec {
   baseName="golly";
   version = "3.1";
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [
-    wxGTK perl python2 zlib mesa libX11
+    wxGTK perl python2 zlib libGLU_combined libX11
   ];
 
   setSourceRoot = ''

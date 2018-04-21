@@ -54,32 +54,31 @@
 # For more details, read the individual files where the mechanisms used to
 # accomplish this will be individually documented.
 
+set -u
+
+# Skip setup hook if we're neither a build-time dep, nor, temporarily, doing a
+# native compile.
+#
+# TODO(@Ericson2314): No native exception
+[[ -z ${crossConfig-} ]] || (( "$hostOffset" < 0 )) || return 0
 
 # It's fine that any other cc-wrapper will redefine this. Bash functions close
 # over no state, and there's no @-substitutions within, so any redefined
 # function is guaranteed to be exactly the same.
 ccWrapper_addCVars () {
-    # The `depOffset` describes how the platforms of the dependencies are slid
-    # relative to the depending package. It is brought into scope of the
-    # environment hook defined as the role of the dependency being applied.
-    case $depOffset in
+    # The `depHostOffset` describes how the host platform of the dependencies
+    # are slid relative to the depending package. It is brought into scope of
+    # the environment hook defined as the role of the dependency being applied.
+    case $depHostOffset in
         -1) local role='BUILD_' ;;
         0)  local role='' ;;
         1)  local role='TARGET_' ;;
-        *)  echo "cc-wrapper: Error: Cannot be used with $depOffset-offset deps, " >2;
+        *)  echo "cc-wrapper: Error: Cannot be used with $depHostOffset-offset deps" >2;
             return 1 ;;
     esac
 
     if [[ -d "$1/include" ]]; then
         export NIX_${role}CFLAGS_COMPILE+=" ${ccIncludeFlag:--isystem} $1/include"
-    fi
-
-    if [[ -d "$1/lib64" && ! -L "$1/lib64" ]]; then
-        export NIX_${role}LDFLAGS+=" -L$1/lib64"
-    fi
-
-    if [[ -d "$1/lib" ]]; then
-        export NIX_${role}LDFLAGS+=" -L$1/lib"
     fi
 
     if [[ -d "$1/Library/Frameworks" ]]; then
@@ -95,20 +94,31 @@ ccWrapper_addCVars () {
 #
 # We also need to worry about what role is being added on *this* invocation of
 # setup-hook, which `role` tracks.
-if [ -n "${crossConfig:-}" ]; then
-    export NIX_CC_WRAPPER_@infixSalt@_TARGET_BUILD=1
-    role_pre='BUILD_'
-    role_post='_FOR_BUILD'
-else
-    export NIX_CC_WRAPPER_@infixSalt@_TARGET_HOST=1
-    role_pre=''
-    role_post=''
-fi
+case $targetOffset in
+    -1)
+        export NIX_CC_WRAPPER_@infixSalt@_TARGET_BUILD=1
+        role_pre='BUILD_'
+        role_post='_FOR_BUILD'
+        ;;
+    0)
+        export NIX_CC_WRAPPER_@infixSalt@_TARGET_HOST=1
+        role_pre=''
+        role_post=''
+        ;;
+    1)
+        export NIX_CC_WRAPPER_@infixSalt@_TARGET_TARGET=1
+        role_pre='TARGET_'
+        role_post='_FOR_TARGET'
+        ;;
+    *)
+        echo "cc-wrapper: used as improper sort of dependency" >2;
+        return 1
+        ;;
+esac
 
-# Eventually the exact sort of env-hook we create will depend on the role. This
-# is because based on what relative platform we are targeting, we use different
-# dependencies.
-envHooks+=(ccWrapper_addCVars)
+# We use the `targetOffset` to choose the right env hook to accumulate the right
+# sort of deps (those with that offset).
+addEnvHooks "$targetOffset" ccWrapper_addCVars
 
 # Note 1: these come *after* $out in the PATH (see setup.sh).
 # Note 2: phase separation makes this look useless to shellcheck.
@@ -116,11 +126,6 @@ envHooks+=(ccWrapper_addCVars)
 # shellcheck disable=SC2157
 if [ -n "@cc@" ]; then
     addToSearchPath _PATH @cc@/bin
-fi
-
-# shellcheck disable=SC2157
-if [ -n "@binutils_bin@" ]; then
-    addToSearchPath _PATH @binutils_bin@/bin
 fi
 
 # shellcheck disable=SC2157
@@ -142,17 +147,6 @@ export ${role_pre}CXX=@named_cxx@
 export CC${role_post}=@named_cc@
 export CXX${role_post}=@named_cxx@
 
-for cmd in \
-    ar as ld nm objcopy objdump readelf ranlib strip strings size windres
-do
-    if
-        PATH=$_PATH type -p "@targetPrefix@${cmd}" > /dev/null
-    then
-        upper_case="$(echo "$cmd" | tr "[:lower:]" "[:upper:]")"
-        export "${role_pre}${upper_case}=@targetPrefix@${cmd}";
-        export "${upper_case}${role_post}=@targetPrefix@${cmd}";
-    fi
-done
-
 # No local scope in sourced file
-unset -v role_pre role_post cmd upper_case
+unset -v role_pre role_post
+set +u

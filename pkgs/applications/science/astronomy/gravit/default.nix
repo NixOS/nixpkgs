@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, SDL, SDL_ttf, SDL_image, libSM, libICE, mesa, libpng, lua5, autoconf, automake }:
+{ stdenv, fetchurl, SDL, SDL_ttf, SDL_image, libSM, libICE, libGLU_combined, libpng, lua5, autoconf, automake }:
 
 stdenv.mkDerivation rec {
   name = "gravit-0.5.1";
@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     sha256 = "14vf7zj2bgrl96wsl3f1knsggc8h9624354ajzd72l46y09x5ky7";
   };
 
-  buildInputs = [ mesa SDL SDL_ttf SDL_image lua5 libpng libSM libICE ];
+  buildInputs = [ libGLU_combined SDL SDL_ttf SDL_image lua5 libpng libSM libICE ];
 
   nativeBuildInputs = [ autoconf automake ];
 

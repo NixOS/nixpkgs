@@ -19,6 +19,13 @@ stdenv.mkDerivation rec {
     sed -i 's:MANDIR = $(PREFIX)/man:MANDIR = '$out'/share/man:' ./Jamsettings
     sed -i 's:READMEDIR = $(PREFIX):READMEDIR = '$out'/share/doc/archiveopteryx:' ./Jamsettings
   '';
+
+  # fix build on gcc7
+  NIX_CFLAGS_COMPILE = [
+    "-Wno-error=builtin-declaration-mismatch"
+    "-Wno-error=implicit-fallthrough"
+  ];
+
   buildPhase = ''jam "-j$NIX_BUILD_CORES" '';
   installPhase = ''
     jam install

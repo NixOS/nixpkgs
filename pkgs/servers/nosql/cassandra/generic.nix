@@ -10,7 +10,8 @@ let
     gawk
     which
     jre
-  ] ++ stdenv.lib.optional stdenv.isLinux procps);
+    procps
+  ]);
 in
 
 stdenv.mkDerivation rec {
@@ -65,6 +66,6 @@ stdenv.mkDerivation rec {
     description = "A massively scalable open source NoSQL database";
     platforms = platforms.unix;
     license = licenses.asl20;
-    maintainers = with maintainers; [ nckx cransom ];
+    maintainers = with maintainers; [ cransom ];
   };
 }

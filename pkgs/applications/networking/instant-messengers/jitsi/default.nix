@@ -70,6 +70,6 @@ stdenv.mkDerivation rec {
     description = "Open Source Video Calls and Chat";
     license = licenses.lgpl21Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ khumba ndowens ];
+    maintainers = with maintainers; [ ndowens ];
   };
 }

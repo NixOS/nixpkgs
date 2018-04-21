@@ -53,14 +53,13 @@ self: super: builtins.intersectAttrs super {
 
   # Use the default version of mysql to build this package (which is actually mariadb).
   # test phase requires networking
-  mysql = dontCheck (super.mysql.override { mysql = pkgs.mysql.lib; });
+  mysql = dontCheck (super.mysql.override { mysql = pkgs.mysql.connector-c; });
 
   # CUDA needs help finding the SDK headers and libraries.
   cuda = overrideCabal super.cuda (drv: {
     extraLibraries = (drv.extraLibraries or []) ++ [pkgs.linuxPackages.nvidia_x11];
-    configureFlags = (drv.configureFlags or []) ++
-      pkgs.lib.optional pkgs.stdenv.is64bit "--extra-lib-dirs=${pkgs.cudatoolkit}/lib64" ++ [
-      "--extra-lib-dirs=${pkgs.cudatoolkit}/lib"
+    configureFlags = (drv.configureFlags or []) ++ [
+      "--extra-lib-dirs=${pkgs.cudatoolkit.lib}/lib"
       "--extra-include-dirs=${pkgs.cudatoolkit}/include"
     ];
     preConfigure = ''
@@ -144,6 +143,8 @@ self: super: builtins.intersectAttrs super {
   gtk3 = disableHardening (super.gtk3.override { inherit (pkgs) gtk3; }) ["fortify"];
   gtk = disableHardening (addPkgconfigDepend (addBuildTool super.gtk self.gtk2hs-buildtools) pkgs.gtk2) ["fortify"];
   gtksourceview2 = addPkgconfigDepend super.gtksourceview2 pkgs.gtk2;
+  gtk-traymanager = addPkgconfigDepend super.gtk-traymanager pkgs.gtk3;
+  taffybar = (addPkgconfigDepend super.taffybar pkgs.gtk3).override { dbus = self.dbus_1_0_1; };
 
   # Need WebkitGTK, not just webkit.
   webkit = super.webkit.override { webkit = pkgs.webkitgtk24x-gtk2; };
@@ -203,7 +204,7 @@ self: super: builtins.intersectAttrs super {
   # Tries to mess with extended POSIX attributes, but can't in our chroot environment.
   xattr = dontCheck super.xattr;
 
-   # Needs access to locale data, but looks for it in the wrong place.
+  # Needs access to locale data, but looks for it in the wrong place.
   scholdoc-citeproc = dontCheck super.scholdoc-citeproc;
 
   # Expect to find sendmail(1) in $PATH.
@@ -221,7 +222,7 @@ self: super: builtins.intersectAttrs super {
   wxcore = super.wxcore.override { wxGTK = pkgs.wxGTK30; };
 
   # Test suite wants to connect to $DISPLAY.
-  hsqml = dontCheck (addExtraLibrary (super.hsqml.override { qt5 = pkgs.qt5Full; }) pkgs.mesa);
+  hsqml = dontCheck (addExtraLibrary (super.hsqml.override { qt5 = pkgs.qt5Full; }) pkgs.libGLU_combined);
 
   # Tests attempt to use NPM to install from the network into
   # /homeless-shelter. Disabled.
@@ -258,7 +259,7 @@ self: super: builtins.intersectAttrs super {
       }
     );
 
-  llvm-hs = super.llvm-hs.override { llvm-config = pkgs.llvm_4; };
+  llvm-hs = super.llvm-hs.override { llvm-config = pkgs.llvm; };
 
   # Needs help finding LLVM.
   spaceprobe = addBuildTool super.spaceprobe self.llvmPackages.llvm;
@@ -350,7 +351,7 @@ self: super: builtins.intersectAttrs super {
   # https://github.com/deech/fltkhs/issues/16
   fltkhs = overrideCabal super.fltkhs (drv: {
     libraryToolDepends = (drv.libraryToolDepends or []) ++ [pkgs.autoconf];
-    librarySystemDepends = (drv.librarySystemDepends or []) ++ [pkgs.fltk13 pkgs.mesa_noglu pkgs.libjpeg];
+    librarySystemDepends = (drv.librarySystemDepends or []) ++ [pkgs.fltk13 pkgs.libGL pkgs.libjpeg];
   });
 
   # https://github.com/skogsbaer/hscurses/pull/26
@@ -463,9 +464,6 @@ self: super: builtins.intersectAttrs super {
   # This propagates this to everything depending on haskell-gi-base
   haskell-gi-base = addBuildDepend super.haskell-gi-base pkgs.gobjectIntrospection;
 
-  # Requires gi-javascriptcore API version 4
-  gi-webkit2 = super.gi-webkit2.override { gi-javascriptcore = self.gi-javascriptcore_4_0_14; };
-
   # requires valid, writeable $HOME
   hatex-guide = overrideCabal super.hatex-guide (drv: {
     preConfigure = ''
@@ -473,10 +471,6 @@ self: super: builtins.intersectAttrs super {
       export HOME=$PWD
     '';
   });
-
-  # Fails to link against with newer gsl versions because a deprecrated function
-  # was removed
-  hmatrix-gsl = super.hmatrix-gsl.override { gsl = pkgs.gsl_1; };
 
   # tests run executable, relying on PATH
   # without this, tests fail with "Couldn't launch intero process"
@@ -495,16 +489,17 @@ self: super: builtins.intersectAttrs super {
   liquid-fixpoint = disableSharedExecutables super.liquid-fixpoint;
   liquidhaskell = dontCheck (disableSharedExecutables super.liquidhaskell);
 
-  # Haskell OpenCV bindings need contrib code enabled in the C++ library.
-  opencv = super.opencv.override { opencv3 = pkgs.opencv3.override { enableContrib = true; }; };
-
   # Without this override, the builds lacks pkg-config.
-  opencv-extra = addPkgconfigDepend super.opencv-extra (pkgs.opencv3.override { enableContrib = true; });
-
-  # Written against the 6.X series of megaparsec
-  htoml-megaparsec = super.htoml-megaparsec.override { megaparsec = self.megaparsec_6_2_0; };
+  opencv-extra = addPkgconfigDepend super.opencv-extra pkgs.opencv3;
 
   # Break cyclic reference that results in an infinite recursion.
   partial-semigroup = dontCheck super.partial-semigroup;
+  colour = dontCheck super.colour;
 
+  LDAP = dontCheck (overrideCabal super.LDAP (drv: {
+    librarySystemDepends = drv.librarySystemDepends or [] ++ [ pkgs.cyrus_sasl.dev ];
+  }));
+
+  # Tests require a browser: https://github.com/ku-fpg/blank-canvas/issues/73
+  blank-canvas = dontCheck super.blank-canvas;
 }

@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "libtomcrypt-${version}";
-  version = "1.18.0";
+  version = "1.18.1";
 
   src = fetchurl {
     url = "https://github.com/libtom/libtomcrypt/releases/download/v${version}/crypt-${version}.tar.xz";
-    sha256 = "0ymqi0zf5gzn8pq4mnylwgg6pskml2v1p9rsjrqspyja65mgb7fs";
+    sha256 = "053z0jzyvf6c9929phlh2p0ybx289s34g7nii5hnjigxzcs3mhap";
   };
 
   nativeBuildInputs = [ libtool ];

@@ -1,26 +1,37 @@
 { stdenv, itstool, fetchurl, fetchpatch, gdk_pixbuf, adwaita-icon-theme
-, telepathy_glib, gjs, meson, ninja, gettext, telepathy_idle, libxml2, desktop_file_utils
+, telepathy-glib, gjs, meson, ninja, gettext, telepathy-idle, libxml2, desktop-file-utils
 , pkgconfig, gtk3, glib, libsecret, libsoup, gobjectIntrospection, appstream-glib
-, gnome3, wrapGAppsHook, telepathy_logger, gspell }:
+, gnome3, wrapGAppsHook, telepathy-logger, gspell }:
 
-stdenv.mkDerivation rec {
-  inherit (import ./src.nix fetchurl) name src;
+let
+  pname = "polari";
+  version = "3.28.0";
+in stdenv.mkDerivation rec {
+  name = "${pname}-${version}";
 
-  propagatedUserEnvPkgs = [ telepathy_idle telepathy_logger ];
+  src = fetchurl {
+    url = "mirror://gnome/sources/${pname}/${gnome3.versionBranch version}/${name}.tar.xz";
+    sha256 = "08zgdqrnxl752nv0gac1k7wvjd4j7h5n4c0flrq7q337p40k3dd5";
+  };
 
-  nativeBuildInputs = [ meson ninja pkgconfig itstool gettext wrapGAppsHook libxml2
-                        desktop_file_utils gobjectIntrospection appstream-glib ];
-  buildInputs = [ gtk3 glib adwaita-icon-theme gnome3.gsettings_desktop_schemas
-                  telepathy_glib telepathy_logger gjs gspell gdk_pixbuf libsecret libsoup ];
+  propagatedUserEnvPkgs = [ telepathy-idle telepathy-logger ];
 
-  patches = [
-    (fetchpatch {
-      url = https://gitlab.gnome.org/jtojnar/polari/commit/a6733a6ad95eac1813e7b18e3d0018a22ee7a377.diff;
-      sha256 = "0f5ll49h5w0477lkh67kaa2j83z376z1jk7z3i2v7cq4d3hi5lf9";
-    })
+  nativeBuildInputs = [
+    meson ninja pkgconfig itstool gettext wrapGAppsHook libxml2
+    desktop-file-utils gobjectIntrospection appstream-glib
   ];
 
-  enableParallelBuilding = true;
+  buildInputs = [
+    gtk3 glib adwaita-icon-theme gnome3.gsettings-desktop-schemas
+    telepathy-glib telepathy-logger gjs gspell gdk_pixbuf libsecret libsoup
+  ];
+
+  passthru = {
+    updateScript = gnome3.updateScript {
+      packageName = pname;
+      attrPath = "gnome3.${pname}";
+    };
+  };
 
   meta = with stdenv.lib; {
     homepage = https://wiki.gnome.org/Apps/Polari;

@@ -18,9 +18,9 @@
   tab settings so it’s asking for trouble.</para></listitem>
 
   <listitem><para>Use <literal>lowerCamelCase</literal> for variable
-  names, not <literal>UpperCamelCase</literal>.  TODO: naming of
-  attributes in
-  <filename>all-packages.nix</filename>?</para></listitem>
+  names, not <literal>UpperCamelCase</literal>.  Note, this rule does
+  not apply to package attribute names, which instead follow the rules
+  in <xref linkend="sec-package-naming"/>.</para></listitem>
 
   <listitem><para>Function calls with attribute set arguments are
   written as
@@ -220,9 +220,10 @@ args.stdenv.mkDerivation (args // {
 
   <listitem><para>The variable name used for the instantiated package
   in <filename>all-packages.nix</filename>, and when passing it as a
-  dependency to other functions.  This is what Nix expression authors
-  see.  It can also be used when installing using <command>nix-env
-  -iA</command>.</para></listitem>
+  dependency to other functions.  Typically this is called the
+  <emphasis>package attribute name</emphasis>.  This is what Nix
+  expression authors see.  It can also be used when installing using
+  <command>nix-env -iA</command>.</para></listitem>
 
   <listitem><para>The filename for (the directory containing) the Nix
   expression.</para></listitem>
@@ -259,12 +260,12 @@ bound to the variable name <varname>e2fsprogs</varname> in
   Also append <literal>"unstable"</literal> to the name - e.g.,
   <literal>"pkgname-unstable-2014-09-23"</literal>.</para></listitem>
 
-  <listitem><para>Dashes in the package name should be preserved
-  in new variable names, rather than converted to underscores
-  (which was convention up to around 2013 and most names
-   still have underscores instead of dashes) — e.g.,
-  <varname>http-parser</varname> instead of
-  <varname>http_parser</varname>.</para></listitem>
+  <listitem><para>Dashes in the package name should be preserved in
+  new variable names, rather than converted to underscores or camel
+  cased — e.g., <varname>http-parser</varname> instead of
+  <varname>http_parser</varname> or <varname>httpParser</varname>.  The
+  hyphenated style is preferred in all three package
+  names.</para></listitem>
 
   <listitem><para>If there are multiple versions of a package, this
   should be reflected in the variable names in

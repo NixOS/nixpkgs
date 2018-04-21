@@ -4,10 +4,10 @@ with stdenv.lib;
 
 python2Packages.buildPythonApplication rec {
   name = "tryton-${version}";
-  version = "4.2.1";
+  version = "4.6.2";
   src = fetchurl {
     url = "mirror://pypi/t/tryton/${name}.tar.gz";
-    sha256 = "1ry3kvbk769m8rwqa90pplfvmmgsv4jj9w1aqhv892smia8f0ybm";
+    sha256 = "0bamr040np02gfjk8c734rw3mbgg75irfgpdcl2npgkdzyw1ksf9";
   };
   propagatedBuildInputs = with python2Packages; [
     chardet

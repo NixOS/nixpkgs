@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     description = "An offline WPS bruteforce utility";
     homepage = https://github.com/wiire/pixiewps;
     license = stdenv.lib.licenses.gpl3;
-    maintainer = stdenv.lib.maintainers.nico202;
+    maintainers = [ stdenv.lib.maintainers.nico202 ];
     platforms = stdenv.lib.platforms.linux;
   };
 }

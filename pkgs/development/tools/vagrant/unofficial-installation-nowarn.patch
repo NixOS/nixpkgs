@@ -1,0 +1,16 @@
+diff --git i/bin/vagrant w/bin/vagrant
+index 19df75033..682fae226 100755
+--- i/bin/vagrant
++++ w/bin/vagrant
+@@ -128,11 +128,6 @@ begin
+     end
+   end
+ 
+-  if !Vagrant.in_installer? && !Vagrant.very_quiet?
+-    # If we're not in the installer, warn.
+-    env.ui.warn(I18n.t("vagrant.general.not_in_installer") + "\n", prefix: false)
+-  end
+-
+   begin
+     # Execute the CLI interface, and exit with the proper error code
+     exit_status = env.cli(argv)

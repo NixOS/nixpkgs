@@ -1,4 +1,4 @@
-{ stdenv, xlibs, fetchgit, libXScrnSaver, libX11 }:
+{ stdenv, fetchgit, libXScrnSaver, libX11 }:
 
 stdenv.mkDerivation {
   name = "x11idle-unstable-2017-07-01";

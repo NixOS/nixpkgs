@@ -1,5 +1,6 @@
 { stdenv, fetchurl, openssl, libevent, libasr,
-  python2, pkgconfig, lua5, perl, mariadb, postgresql, sqlite, hiredis }:
+  python2, pkgconfig, lua5, perl, mysql, postgresql, sqlite, hiredis }:
+
 stdenv.mkDerivation rec {
   name = "opensmtpd-extras-${version}";
   version = "5.7.1";
@@ -11,7 +12,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ openssl libevent
-    libasr python2 lua5 perl mariadb.client postgresql sqlite hiredis ];
+    libasr python2 lua5 perl mysql.connector-c postgresql sqlite hiredis ];
 
   configureFlags = [
     "--sysconfdir=/etc"
@@ -54,7 +55,7 @@ stdenv.mkDerivation rec {
     "--with-perl=${perl}"
     "--with-filter-perl"
 
-  ] ++ stdenv.lib.optional (mariadb != null) [
+  ] ++ stdenv.lib.optional (mysql != null) [
     "--with-table-mysql"
 
   ] ++ stdenv.lib.optional (postgresql != null) [
@@ -67,13 +68,14 @@ stdenv.mkDerivation rec {
     "--with-table-redis"
   ];
 
-  NIX_CFLAGS_COMPILE = stdenv.lib.optional (hiredis != null) [ "-I${hiredis}/include/hiredis" ];
+  NIX_CFLAGS_COMPILE = stdenv.lib.optional (hiredis != null) "-I${hiredis}/include/hiredis" ++
+    stdenv.lib.optional (mysql != null) "-L${mysql.connector-c}/lib/mysql";
 
   meta = with stdenv.lib; {
     homepage = https://www.opensmtpd.org/;
     description = "Extra plugins for the OpenSMTPD mail server";
     license = licenses.isc;
-    platforms = platforms.unix;
+    platforms = platforms.linux;
     maintainers = with maintainers; [ gebner ];
   };
 }

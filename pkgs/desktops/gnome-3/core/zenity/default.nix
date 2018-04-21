@@ -1,8 +1,18 @@
 { stdenv, fetchurl, pkgconfig, cairo, libxml2, libxslt, gnome3, pango
-, gnome_doc_utils, intltool, libX11, which, itstool, wrapGAppsHook }:
+, gnome-doc-utils, intltool, libX11, which, itstool, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
-  inherit (import ./src.nix fetchurl) name src;
+  name = "zenity-${version}";
+  version = "3.28.1";
+
+  src = fetchurl {
+    url = "mirror://gnome/sources/zenity/${gnome3.versionBranch version}/${name}.tar.xz";
+    sha256 = "0swavrkc5ps3fwzy6h6l5mmim0wwy10xrq0qqkay5d0zf9a965yv";
+  };
+
+  passthru = {
+    updateScript = gnome3.updateScript { packageName = "zenity"; attrPath = "gnome3.zenity"; };
+  };
 
   preBuild = ''
     mkdir -p $out/include
@@ -10,7 +20,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ gnome3.gtk libxml2 libxslt libX11 itstool ];
 
-  nativeBuildInputs = [ pkgconfig intltool gnome_doc_utils which wrapGAppsHook ];
+  nativeBuildInputs = [ pkgconfig intltool gnome-doc-utils which wrapGAppsHook ];
 
   meta = with stdenv.lib; {
     platforms = platforms.linux;

@@ -1,6 +1,6 @@
-{ stdenv, buildPythonPackage, fetchFromGitHub, python
-, pythonOlder, pythonAtLeast, enum34
-, doCheck ? true, pytest, pytest_xdist, flake8, flaky
+{ lib, buildPythonPackage, fetchFromGitHub, python
+, isPy3k, attrs, coverage, enum34
+, doCheck ? true, pytest, pytest_xdist, flake8, flaky, mock
 }:
 buildPythonPackage rec {
   # http://hypothesis.readthedocs.org/en/latest/packaging.html
@@ -9,20 +9,19 @@ buildPythonPackage rec {
   # pytz fake_factory django numpy pytest
   # If you need these, you can just add them to your environment.
 
-  version = "3.11.1";
+  version = "3.45.2";
   pname = "hypothesis";
-  name = "${pname}-${version}";
 
   # Upstream prefers github tarballs
   src = fetchFromGitHub {
     owner = "HypothesisWorks";
     repo = "hypothesis-python";
-    rev = "${version}";
-    sha256 = "0damf6zbm0db2a3gfwrbbj92yal576wpmhhchc0w0np8vdnax70n";
+    rev = version;
+    sha256 = "063sn5m1966gvm3wrlxczdq4vw0r94h3nd9xpr94qxahpg2r4bpb";
   };
 
-  checkInputs = stdenv.lib.optionals doCheck [ pytest pytest_xdist flake8 flaky ];
-  propagatedBuildInputs = stdenv.lib.optionals (pythonOlder "3.4") [ enum34 ];
+  checkInputs = [ pytest pytest_xdist flaky mock ];
+  propagatedBuildInputs = [ attrs coverage ] ++ lib.optional (!isPy3k) [ enum34 ];
 
   inherit doCheck;
 
@@ -32,13 +31,9 @@ buildPythonPackage rec {
     py.test tests/cover
   '';
 
-  # Unsupport by upstream on certain versions
-  # https://github.com/HypothesisWorks/hypothesis-python/issues/477
-  disabled = pythonOlder "3.4" && pythonAtLeast "2.8";
-
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A Python library for property based testing";
-    homepage = https://github.com/DRMacIver/hypothesis;
+    homepage = https://github.com/HypothesisWorks/hypothesis;
     license = licenses.mpl20;
   };
 }

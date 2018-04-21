@@ -25,6 +25,5 @@ stdenv.mkDerivation rec {
     homepage = http://wireless.kernel.org/en/users/Drivers/b43;
     downloadPage = http://www.lwfinger.com/b43-firmware;
     license = licenses.unfree;
-    maintainers = with maintainers; [ nckx ];
   };
 }

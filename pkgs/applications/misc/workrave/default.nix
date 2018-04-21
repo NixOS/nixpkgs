@@ -1,39 +1,30 @@
-{ stdenv, fetchFromGitHub, fetchpatch
-, autoconf, automake, gettext, intltool, libtool, pkgconfig
+{ stdenv, fetchFromGitHub, wrapGAppsHook
+, autoconf, autoconf-archive, automake, gettext, intltool, libtool, pkgconfig
 , libICE, libSM, libXScrnSaver, libXtst, cheetah
-, glib, glibmm, gtkmm2, atk, pango, pangomm, cairo, cairomm
-, dbus, dbus_glib, GConf, gconfmm, gdome2, gstreamer, libsigcxx }:
+, gobjectIntrospection, glib, glibmm, gtkmm3, atk, pango, pangomm, cairo
+, cairomm , dbus, dbus-glib, gdome2, gstreamer, gst-plugins-base
+, gst-plugins-good, libsigcxx }:
 
 stdenv.mkDerivation rec {
   name = "workrave-${version}";
-  version = "1.10.7";
+  version = "1.10.20";
 
   src = let
   in fetchFromGitHub {
-    sha256 = "1mxg882rfih7xzadrpj51m9r33f6s3rzwv61nfwi94vzd68qjnxb";
+    sha256 = "099a87zkrkmsgfz9isrfm89dh545x52891jh6qxmn19h6wwsi941";
     rev = with stdenv.lib;
       "v" + concatStringsSep "_" (splitString "." version);
     repo = "workrave";
     owner = "rcaelers";
   };
 
-  patches = [
-    # Building with gtk{,mm}3 works just fine, but let's be conservative for once:
-    (fetchpatch {
-      name = "workrave-fix-compilation-with-gtk2.patch";
-      url = "https://github.com/rcaelers/workrave/commit/"
-        + "271efdcd795b3592bfede8b1af2162af4b1f0f26.patch";
-      sha256 = "1a3d4jj8516m3m24bl6y8alanl1qnyzv5dv1hz5v3hjgk89fj6rk";
-    })
-  ];
-
   nativeBuildInputs = [
-    autoconf automake gettext intltool libtool pkgconfig
+    autoconf autoconf-archive automake gettext intltool libtool pkgconfig wrapGAppsHook
   ];
   buildInputs = [
     libICE libSM libXScrnSaver libXtst cheetah
-    glib glibmm gtkmm2 atk pango pangomm cairo cairomm
-    dbus dbus_glib GConf gconfmm gdome2 gstreamer libsigcxx
+    gobjectIntrospection glib glibmm gtkmm3 atk pango pangomm cairo cairomm
+    dbus dbus-glib gdome2 gstreamer gst-plugins-base gst-plugins-good libsigcxx
   ];
 
   preConfigure = "./autogen.sh";
@@ -50,7 +41,7 @@ stdenv.mkDerivation rec {
     homepage = http://www.workrave.org/;
     downloadPage = https://github.com/rcaelers/workrave/releases;
     license = licenses.gpl3;
-    maintainers = with maintainers; [ nckx prikhi ];
+    maintainers = with maintainers; [ prikhi ];
     platforms = platforms.linux;
   };
 }

@@ -1,14 +1,17 @@
-{ stdenv, buildPythonPackage, fetchPypi, isPyPy,
-  nose, olefile,
-  freetype, libjpeg, zlib, libtiff, libwebp, tcl, lcms2, tk, libX11}:
+{ stdenv, buildPythonPackage, fetchPypi, isPyPy
+, olefile
+, freetype, libjpeg, zlib, libtiff, libwebp, tcl, lcms2, tk, libX11
+, pytestrunner
+, pytest
+}:
 buildPythonPackage rec {
   pname = "Pillow";
-  version = "4.3.0";
+  version = "5.1.0";
   name = "${pname}-${version}";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "a97c715d44efd5b4aa8d739b8fad88b93ed79f1b33fc2822d5802043f3b1b527";
+    sha256 = "cee9bc75bff455d317b6947081df0824a8f118de2786dc3d74a3503fd631f4ef";
   };
 
   doCheck = !stdenv.isDarwin && !isPyPy;
@@ -21,11 +24,21 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ olefile ];
 
+  checkInputs = [ pytest pytestrunner ];
+
   buildInputs = [
-    freetype libjpeg zlib libtiff libwebp tcl nose lcms2 ]
+    freetype libjpeg zlib libtiff libwebp tcl lcms2 ]
     ++ stdenv.lib.optionals (isPyPy) [ tk libX11 ];
 
   # NOTE: we use LCMS_ROOT as WEBP root since there is not other setting for webp.
+  # NOTE: The Pillow install script will, by default, add paths like /usr/lib
+  # and /usr/include to the search paths. This can break things when building
+  # on a non-NixOS system that has some libraries installed that are not
+  # installed in Nix (for example, Arch Linux has jpeg2000 but Nix doesn't
+  # build Pillow with this support). We patch the `disable_platform_guessing`
+  # setting here, instead of passing the `--disable-platform-guessing`
+  # command-line option, since the command-line option doesn't work when we run
+  # tests.
   preConfigure = let
     libinclude' = pkg: ''"${pkg.out}/lib", "${pkg.out}/include"'';
     libinclude = pkg: ''"${pkg.out}/lib", "${pkg.dev}/include"'';
@@ -36,7 +49,8 @@ buildPythonPackage rec {
             s|^ZLIB_ROOT =.*$|ZLIB_ROOT = ${libinclude zlib}|g ;
             s|^LCMS_ROOT =.*$|LCMS_ROOT = ${libinclude lcms2}|g ;
             s|^TIFF_ROOT =.*$|TIFF_ROOT = ${libinclude libtiff}|g ;
-            s|^TCL_ROOT=.*$|TCL_ROOT = ${libinclude' tcl}|g ;'
+            s|^TCL_ROOT=.*$|TCL_ROOT = ${libinclude' tcl}|g ;
+            s|self\.disable_platform_guessing = None|self.disable_platform_guessing = True|g ;'
     export LDFLAGS="-L${libwebp}/lib"
     export CFLAGS="-I${libwebp}/include"
   ''

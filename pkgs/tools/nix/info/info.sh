@@ -143,7 +143,7 @@ fact() {
             printf ", "
         fi
     else
-        printf " - %s: \`%s\`\n" "$name" "$value"
+        printf " - %s: \`%s\`\\n" "$name" "$value"
     fi
 
     if [ "$last" -eq 0 ]; then

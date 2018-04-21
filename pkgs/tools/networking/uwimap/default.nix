@@ -29,8 +29,8 @@ stdenv.mkDerivation {
     "-I${openssl.dev}/include/openssl";
 
   installPhase = ''
-    mkdir -p $out/bin $out/lib $out/include
-    cp c-client/*.h c-client/linkage.c $out/include
+    mkdir -p $out/bin $out/lib $out/include/c-client
+    cp c-client/*.h osdep/unix/*.h c-client/linkage.c c-client/auths.c $out/include/c-client/
     cp c-client/c-client.a $out/lib/libc-client.a
     cp mailutil/mailutil imapd/imapd dmail/dmail mlock/mlock mtest/mtest tmail/tmail \
       tools/{an,ua} $out/bin

@@ -1,15 +1,16 @@
-{ fetchurl, stdenv, libtool, readline, gmp
-, gawk, makeWrapper }:
+{ stdenv, buildPackages
+, buildPlatform, hostPlatform
+, fetchurl, makeWrapper, gawk, pkgconfig
+, libtool, readline, gmp
+}:
 
 stdenv.mkDerivation rec {
   name = "guile-1.8.8";
 
   src = fetchurl {
-    url = "mirror://gnu/guile/" + name + ".tar.gz";
+    url = "mirror://gnu/guile/${name}.tar.gz";
     sha256 = "0l200a0v7h8bh0cwz6v7hc13ds39cgqsmfrks55b1rbj5vniyiy3";
   };
-
-  patches = [ ./cpp-4.5.patch ];
 
   outputs = [ "out" "dev" "info" ];
   setOutputFlags = false; # $dev gets into the library otherwise
@@ -17,17 +18,24 @@ stdenv.mkDerivation rec {
   # GCC 4.6 raises a number of set-but-unused warnings.
   configureFlags = [ "--disable-error-on-warning" ];
 
-  nativeBuildInputs = [ makeWrapper gawk ];
-  propagatedBuildInputs = [ readline gmp libtool ];
-  selfNativeBuildInput = true;
+  depsBuildBuild = [ buildPackages.stdenv.cc ]
+    ++ stdenv.lib.optional (hostPlatform != buildPlatform)
+                           buildPackages.buildPackages.guile_1_8;
+  nativeBuildInputs = [ makeWrapper gawk pkgconfig ];
+  buildInputs = [ readline libtool ];
 
-  postInstall = ''
-    wrapProgram $out/bin/guile-snarf --prefix PATH : "${gawk}/bin"
-  '';
+  propagatedBuildInputs = [
+    gmp
 
-  preBuild = ''
-    sed -e '/lt_dlinit/a  lt_dladdsearchdir("'$out/lib'");' -i libguile/dynl.c
-  '';
+    # XXX: These ones aren't normally needed here, but `libguile*.la' has '-l'
+    # flags for them without corresponding '-L' flags. Adding them here will add
+    # the needed `-L' flags.  As for why the `.la' file lacks the `-L' flags,
+    # see below.
+    libtool
+  ];
+
+
+  patches = [ ./cpp-4.5.patch ];
 
   # Guile needs patching to preset results for the configure tests
   # about pthreads, which work only in native builds.
@@ -35,6 +43,22 @@ stdenv.mkDerivation rec {
     if test -n "$crossConfig"; then
       configureFlags="--with-threads=no $configureFlags"
     fi
+  '';
+
+  preBuild = ''
+    sed -e '/lt_dlinit/a  lt_dladdsearchdir("'$out/lib'");' -i libguile/dynl.c
+  '';
+
+
+  postInstall = ''
+    wrapProgram $out/bin/guile-snarf --prefix PATH : "${gawk}/bin"
+  ''
+    # XXX: See http://thread.gmane.org/gmane.comp.lib.gnulib.bugs/18903 for
+    # why `--with-libunistring-prefix' and similar options coming from
+    # `AC_LIB_LINKFLAGS_BODY' don't work on NixOS/x86_64.
+  + ''
+    sed -i "$out/lib/pkgconfig/guile"-*.pc    \
+        -e "s|-lltdl|-L${libtool.lib}/lib -lltdl|g"
   '';
 
   # One test fails.
@@ -46,17 +70,16 @@ stdenv.mkDerivation rec {
   setupHook = ./setup-hook.sh;
 
   meta = {
-    description = "GNU Guile, an embeddable Scheme interpreter";
+    description = "Embeddable Scheme implementation";
+    homepage    = http://www.gnu.org/software/guile/;
+    license     = stdenv.lib.licenses.lgpl2Plus;
+    maintainers = [ stdenv.lib.maintainers.ludo ];
+    platforms   = stdenv.lib.platforms.unix;
+
     longDescription = ''
       GNU Guile is an interpreter for the Scheme programming language,
       packaged as a library that can be embedded into programs to make
       them extensible.  It supports many SRFIs.
     '';
-
-    homepage = http://www.gnu.org/software/guile/;
-    license = stdenv.lib.licenses.lgpl2Plus;
-
-    maintainers = [ stdenv.lib.maintainers.ludo ];
-    platforms = stdenv.lib.platforms.unix;
   };
 }

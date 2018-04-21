@@ -1,0 +1,28 @@
+diff -urNZ a/configure.ac.in b/configure.ac.in
+--- a/configure.ac.in	2017-11-20 02:57:40.476664918 +0000
++++ b/configure.ac.in	2017-11-20 03:07:18.999128370 +0000
+@@ -165,11 +165,9 @@
+ dnl ***********************************
+ XDT_CHECK_PACKAGE([GLIB], [glib-2.0], [2.42.0])
+ XDT_CHECK_PACKAGE([GIO], [gio-2.0], [2.42.0])
+-XDT_CHECK_PACKAGE([GTK], [gtk+-2.0], [2.24.0])
+ XDT_CHECK_PACKAGE([GTK3], [gtk+-3.0], [3.20.0])
+ XDT_CHECK_PACKAGE([GTHREAD], [gthread-2.0], [2.42.0])
+ XDT_CHECK_PACKAGE([LIBXFCE4UTIL], [libxfce4util-1.0], [4.10.0])
+-XDT_CHECK_PACKAGE([LIBXFCE4UI], [libxfce4ui-1], [4.12.0])
+ XDT_CHECK_PACKAGE([LIBXFCE4UI2], [libxfce4ui-2], [4.12.0])
+ XDT_CHECK_OPTIONAL_PACKAGE([GIO_UNIX], [gio-unix-2.0], [2.42.0], [gio-unix], [GIO-Unix features])
+ 
+diff -urNZ a/exo/Makefile.am b/exo/Makefile.am
+--- a/exo/Makefile.am	2017-11-20 02:57:34.444785202 +0000
++++ b/exo/Makefile.am	2017-11-20 03:00:49.402897465 +0000
+@@ -117,7 +117,7 @@
+ 
+ libexo_2_includedir = $(includedir)/exo-2/exo
+ 
+-lib_LTLIBRARIES += libexo-2.la
++lib_LTLIBRARIES = libexo-2.la
+ 
+ libexo_2_include_HEADERS =						\
+ 	exo.h								\
+Binary files a/.git/index and b/.git/index differ

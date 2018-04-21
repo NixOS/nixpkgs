@@ -5,10 +5,10 @@ with stdenv.lib;
 
 python2Packages.buildPythonApplication rec {
   name = "trytond-${version}";
-  version = "4.2.1";
+  version = "4.6.2";
   src = fetchurl {
     url = "mirror://pypi/t/trytond/${name}.tar.gz";
-    sha256 = "1ijjpbsf3s0s7ksbi7xgzss4jgr14q5hqsyf6d68l8hwardrwpj7";
+    sha256 = "0asc3pd37h8ky8j66iqxr0fv0k6mpjcwxwm0xgm5hrdi32l5cdda";
   };
 
   # Tells the tests which database to use

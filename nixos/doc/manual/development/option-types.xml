@@ -282,8 +282,8 @@ options.mod = mkOption {
     option set (<xref linkend='ex-submodule-listof-definition' />).</para>
     
 
-<example xml:id='ex-submodule-listof-declaration'><title>Declaration of a list 
-    nof submodules</title>
+<example xml:id='ex-submodule-listof-declaration'><title>Declaration of a list
+    of submodules</title>
 <screen>
 options.mod = mkOption {
   description = "submodule example";

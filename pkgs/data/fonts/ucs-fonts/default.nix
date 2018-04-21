@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   sourceRoot = ".";
 
-  buildInputs = [ mkfontdir mkfontscale ];
+  nativeBuildInputs = [ mkfontdir mkfontscale ];
 
   phases = [ "unpackPhase" "installPhase" ];
 

@@ -1,12 +1,12 @@
 { stdenv, buildPythonPackage, fetchPypi }:
 buildPythonPackage rec {
   pname = "interruptingcow";
-  version = "0.7";
+  version = "0.8";
   name = "${pname}-${version}";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0j6d0rbh8xjfw7bf8vcjld6q45i7vr9xsw5b9q6j87nhf4qhzx53";
+    sha256 = "3e8cd5058b651e625702cba53e3b1fb76d7a5ec07ab69c52a167a9f784e3306c";
   };
 
   meta = with stdenv.lib; {

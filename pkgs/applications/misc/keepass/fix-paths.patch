@@ -1,0 +1,87 @@
+diff --git a/KeePass/Native/NativeMethods.Unix.cs b/KeePass/Native/NativeMethods.Unix.cs
+index 7495a1c..4ef4727 100644
+--- a/KeePass/Native/NativeMethods.Unix.cs
++++ b/KeePass/Native/NativeMethods.Unix.cs
+@@ -128,7 +128,7 @@ namespace KeePass.Native
+ 			try
+ 			{
+ 				Application.DoEvents(); // E.g. for clipboard updates
+-				string strOutput = NativeLib.RunConsoleApp("xdotool", strParams);
++				string strOutput = NativeLib.RunConsoleApp("@xdotool@", strParams);
+ 				Application.DoEvents(); // E.g. for clipboard updates
+ 				return (strOutput ?? string.Empty);
+ 			}
+diff --git a/KeePass/Util/ClipboardUtil.Unix.cs b/KeePass/Util/ClipboardUtil.Unix.cs
+index e93a22a..3fd9a2b 100644
+--- a/KeePass/Util/ClipboardUtil.Unix.cs
++++ b/KeePass/Util/ClipboardUtil.Unix.cs
+@@ -62,7 +62,7 @@ namespace KeePass.Util
+ 			//	"-out -selection clipboard");
+ 			// if(str != null) return str;
+ 
+-			string str = NativeLib.RunConsoleApp("xsel",
++			string str = NativeLib.RunConsoleApp("@xsel@",
+ 				"--output --clipboard", null, XSelFlags);
+ 			if(str != null) return str;
+ 
+@@ -83,10 +83,10 @@ namespace KeePass.Util
+ 			if(string.IsNullOrEmpty(str))
+ 			{
+ 				// xsel with an empty input can hang, thus use --clear
+-				if(NativeLib.RunConsoleApp("xsel", "--clear --primary",
++				if(NativeLib.RunConsoleApp("@xsel@", "--clear --primary",
+ 					null, XSelFlags) != null)
+ 				{
+-					NativeLib.RunConsoleApp("xsel", "--clear --clipboard",
++					NativeLib.RunConsoleApp("@xsel@", "--clear --clipboard",
+ 						null, XSelFlags);
+ 					return;
+ 				}
+@@ -97,10 +97,10 @@ namespace KeePass.Util
+ 			}
+ 
+ 			// xsel does not support --primary and --clipboard together
+-			if(NativeLib.RunConsoleApp("xsel", "--input --primary",
++			if(NativeLib.RunConsoleApp("@xsel@", "--input --primary",
+ 				str, XSelFlags) != null)
+ 			{
+-				NativeLib.RunConsoleApp("xsel", "--input --clipboard",
++				NativeLib.RunConsoleApp("@xsel@", "--input --clipboard",
+ 					str, XSelFlags);
+ 				return;
+ 			}
+diff --git a/KeePassLib/Native/ClipboardU.cs b/KeePassLib/Native/ClipboardU.cs
+index ddd8f57..150eb82 100644
+--- a/KeePassLib/Native/ClipboardU.cs
++++ b/KeePassLib/Native/ClipboardU.cs
+@@ -27,7 +27,7 @@ namespace KeePassLib.Native
+ {
+ 	internal static class ClipboardU
+ 	{
+-		private const string XSel = "xsel";
++		private const string XSel = "@xsel@";
+ 		private const string XSelV = "--version";
+ 		private const string XSelR = "--output --clipboard";
+ 		private const string XSelC = "--clear --clipboard";
+diff --git a/KeePassLib/Utility/MonoWorkarounds.cs b/KeePassLib/Utility/MonoWorkarounds.cs
+index 0da7019..f6a1022 100644
+--- a/KeePassLib/Utility/MonoWorkarounds.cs
++++ b/KeePassLib/Utility/MonoWorkarounds.cs
+@@ -41,7 +41,7 @@ namespace KeePassLib.Utility
+ {
+ 	public static class MonoWorkarounds
+ 	{
+-		private const string AppXDoTool = "xdotool";
++		private const string AppXDoTool = "@xdotool@";
+ 
+ 		private static Dictionary<uint, bool> g_dForceReq = new Dictionary<uint, bool>();
+ 		private static Thread g_thFixClip = null;
+@@ -303,7 +303,7 @@ namespace KeePassLib.Utility
+ 				// }
+ 				// else { Debug.Assert(false); }
+ 
+-				string strWmClass = (NativeLib.RunConsoleApp("xprop",
++				string strWmClass = (NativeLib.RunConsoleApp("@xprop@",
+ 					"-id " + strHandle + " WM_CLASS") ?? string.Empty);
+ 
+ 				if(strWmClass.IndexOf("\"" + PwDefs.ResClass + "\"",

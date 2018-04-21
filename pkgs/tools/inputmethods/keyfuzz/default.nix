@@ -6,7 +6,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Manipulate the scancode/keycode translation tables of keyboard drivers.";
-    homepace    = http://0pointer.de/lennart/projects/keyfuzz/;
+    homepage    = http://0pointer.de/lennart/projects/keyfuzz/;
     license     = licenses.gpl2Plus;
     platforms   = platforms.linux;
     maintainers = with maintainers; [ mboes ];

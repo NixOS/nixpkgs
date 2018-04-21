@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "7e1983924b2d90e89eddb3da8f4c43dc1326fe138fd191c8212c7904dcd618b0";
   };
 
-  buildInputs = [ gtk-engine-murrine ];
+  propagatedUserEnvPkgs = [ gtk-engine-murrine ];
 
   dontBuild = true;
 

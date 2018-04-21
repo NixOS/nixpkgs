@@ -4,16 +4,16 @@ with rustPlatform;
 
 buildRustPackage rec {
   name = "ethabi-${version}";
-  version = "1.0.4";
+  version = "4.1.0";
 
   src = fetchFromGitHub {
     owner = "paritytech";
     repo = "ethabi";
-    rev = "18ddc983d77b2a97e6c322abcc23bec59940d65f";
-    sha256 = "1rg7ydvnhlg8w6blilm3cv6v4q51x1hgrbkln2ikhpdq0vakp5fd";
+    rev = "v${version}";
+    sha256 = "0kxflixmgycdh7sv73zf2mrkbcfzzw7f5sjbsjks9crc9cvjqi6p";
   };
 
-  cargoSha256 = "0i9617qwc6d4jvlbydwk03rcsnyvxzpbn2ms10ds4r6x7jy2a4sy";
+  cargoSha256 = "18rigpsmfiv6im2sspnxadgqrlfdp9dd75ji8s56ksc9g7hrc3wz";
 
   cargoBuildFlags = ["--features cli"];
 

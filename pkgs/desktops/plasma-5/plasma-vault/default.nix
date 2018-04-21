@@ -26,13 +26,13 @@ mkDerivation {
     kactivities plasma-framework kwindowsystem libksysguard
   ];
 
-  NIX_CFLAGS_COMPILE = [
-    ''-DNIXPKGS_ENCFS="${lib.getBin encfs}/bin/encfs"''
-    ''-DNIXPKGS_ENCFSCTL="${lib.getBin encfs}/bin/encfsctl"''
+  CXXFLAGS = [
+    ''-DNIXPKGS_ENCFS=\"${lib.getBin encfs}/bin/encfs\"''
+    ''-DNIXPKGS_ENCFSCTL=\"${lib.getBin encfs}/bin/encfsctl\"''
 
-    ''-DNIXPKGS_CRYFS="${lib.getBin cryfs}/bin/cryfs"''
+    ''-DNIXPKGS_CRYFS=\"${lib.getBin cryfs}/bin/cryfs\"''
 
-    ''-DNIXPKGS_FUSERMOUNT="${lib.getBin fuse}/bin/fusermount"''
+    ''-DNIXPKGS_FUSERMOUNT=\"${lib.getBin fuse}/bin/fusermount\"''
   ];
 
 }

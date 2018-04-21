@@ -1,27 +1,36 @@
-{ stdenv, fetchurl, pkgconfig,
-  boost, libyamlcpp, libsodium, sqlite, protobuf,
-  libmysql, postgresql, lua, openldap, geoip, curl
+{ stdenv, fetchurl, pkgconfig
+, boost, libyamlcpp, libsodium, sqlite, protobuf, botan2
+, mysql57, postgresql, lua, openldap, geoip, curl, opendbx, unixODBC
 }:
 
 stdenv.mkDerivation rec {
   name = "powerdns-${version}";
-  version = "4.0.4";
+  version = "4.1.1";
 
   src = fetchurl {
     url = "http://downloads.powerdns.com/releases/pdns-${version}.tar.bz2";
-    sha256 = "0qypns1iqlrc5d3iwabrsi1vpb0yffy36chsb1zpqiv9vs4snx6r";
+    sha256 = "1fh4zgj0gxgcnnhnih8k6fbw18hb9brkkrfpx3mj8b4a3hr8ilq8";
   };
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ boost libmysql postgresql lua openldap sqlite protobuf geoip libyamlcpp libsodium curl ];
+  buildInputs = [
+    boost mysql57.connector-c postgresql lua openldap sqlite protobuf geoip
+    libyamlcpp libsodium curl opendbx unixODBC botan2
+  ];
+
+  patches = [
+    # checksum type not found, maybe a dependency is to old?
+    ./skip-sha384-test.patch
+  ];
 
   # nix destroy with-modules arguments, when using configureFlags
   preConfigure = ''
     configureFlagsArray=(
-      "--with-modules=bind gmysql geoip gpgsql gsqlite3 ldap lua pipe random remote"
+      "--with-modules=bind gmysql geoip godbc gpgsql gsqlite3 ldap lua mydns opendbx pipe random remote"
       --with-sqlite3
       --with-socketdir=/var/lib/powerdns
       --enable-libsodium
+      --enable-botan
       --enable-tools
       --disable-dependency-tracking
       --disable-silent-rules
@@ -29,7 +38,8 @@ stdenv.mkDerivation rec {
       --enable-unit-tests
     )
   '';
-  checkPhase = "make check";
+
+  doCheck = true;
 
   meta = with stdenv.lib; {
     description = "Authoritative DNS server";

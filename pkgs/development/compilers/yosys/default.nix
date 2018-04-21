@@ -2,24 +2,30 @@
 , pkgconfig, tcl, readline, libffi, python3, bison, flex
 }:
 
+with builtins;
+
 stdenv.mkDerivation rec {
   name = "yosys-${version}";
-  version = "2017.11.05";
+  version = "2018.03.21";
 
   srcs = [
     (fetchFromGitHub {
-      owner = "cliffordwolf";
-      repo = "yosys";
-      rev = "4f31cb6daddedcee467d85797d81b79360ce1826";
-      sha256 = "1a5n0g5kpjsy8f99f64w81gkrr450wvffp407r1pddl8pmb0c3r7";
-      name = "yosys";
+      owner  = "yosyshq";
+      repo   = "yosys";
+      rev    = "3f0070247590458c5ed28c5a7abfc3b9d1ec138b";
+      sha256 = "0rsnjk25asg7dkxcmim464rmxgvm7x7njmcp5nyl8y4iwn8i9p8v";
+      name   = "yosys";
     })
+
+    # NOTE: the version of abc used here is synchronized with
+    # the one in the yosys Makefile of the version above;
+    # keep them the same for quality purposes.
     (fetchFromBitbucket {
-      owner = "alanmi";
-      repo = "abc";
-      rev = "f6838749f234";
-      sha256 = "0n7ywvih958h1c4n7a398a9w3qikhkv885fx5j3y2a0xwqc86m4y";
-      name = "yosys-abc";
+      owner  = "alanmi";
+      repo   = "abc";
+      rev    = "6e3c24b3308a";
+      sha256 = "1i4wv0si4fb6dpv2yrpkp588mdlfrnx2s02q2fgra5apdm54c53w";
+      name   = "yosys-abc";
     })
   ];
   sourceRoot = "yosys";
@@ -27,10 +33,20 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ tcl readline libffi python3 bison flex ];
+
+  patchPhase = ''
+    substituteInPlace ../yosys-abc/Makefile \
+      --replace 'CC   := gcc' ""
+    substituteInPlace ./Makefile \
+      --replace 'CXX = clang' "" \
+      --replace 'ABCMKARGS = CC="$(CXX)"' 'ABCMKARGS =' \
+      --replace 'echo UNKNOWN' 'echo ${substring 0 10 (elemAt srcs 0).rev}'
+  '';
+
   preBuild = ''
     chmod -R u+w ../yosys-abc
     ln -s ../yosys-abc abc
-    make config-gcc
+    make config-${if stdenv.cc.isClang or false then "clang" else "gcc"}
     echo 'ABCREV := default' >> Makefile.conf
     makeFlags="PREFIX=$out $makeFlags"
   '';
@@ -49,6 +65,6 @@ stdenv.mkDerivation rec {
     homepage    = http://www.clifford.at/yosys/;
     license     = stdenv.lib.licenses.isc;
     maintainers = with stdenv.lib.maintainers; [ shell thoughtpolice ];
-    platforms   = stdenv.lib.platforms.linux;
+    platforms   = stdenv.lib.platforms.unix;
   };
 }

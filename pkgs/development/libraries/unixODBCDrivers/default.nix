@@ -5,11 +5,11 @@
 {
   psql = stdenv.mkDerivation rec {
     name = "psqlodbc-${version}";
-    version = "09.05.0210";
+    version = "10.01.0000";
 
     src = fetchurl {
       url = "http://ftp.postgresql.org/pub/odbc/versions/src/${name}.tar.gz";
-      sha256 = "0317zrxaiy209xzcc6b5sz6hsyiv4zm74iikp91rgz7z3ll4n4dc";
+      sha256 = "1cyams7157f3gry86x64xrplqi2vyqrq3rqka59gv4lb4rpl7jl7";
     };
 
     buildInputs = [ unixODBC postgresql ];
@@ -37,18 +37,11 @@
     };
 
     nativeBuildInputs = [ cmake ];
-    buildInputs = [ unixODBC mariadb.lib ];
+    buildInputs = [ unixODBC mariadb.connector-c ];
 
     cmakeFlags = [
-      "-DMARIADB_INCLUDE_DIR=${mariadb.lib}/include/mysql"
+      "-DMARIADB_INCLUDE_DIR=${mariadb.connector-c}/include/mariadb"
     ];
-
-    preConfigure = ''
-      sed -i \
-        -e 's,mariadb_config,mysql_config,g' \
-        -e 's,libmariadbclient,libmysqlclient,g' \
-        cmake/FindMariaDB.cmake
-    '';
 
     passthru = {
       fancyName = "MariaDB";
@@ -60,7 +53,6 @@
       homepage =  https://downloads.mariadb.org/connector-odbc/;
       license = licenses.gpl2;
       platforms = platforms.linux;
-      broken = true;
     };
   };
 

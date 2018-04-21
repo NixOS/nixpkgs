@@ -131,6 +131,7 @@ let
       name = "sundown";
       src = "${distro_src}/pkg/sundown";
       rockspec = "rocks/${name}-scm-1.rockspec";
+      meta.broken = true; # 2018-04-11
     };
 
     cwrap = buildLuaRocks rec {
@@ -289,6 +290,7 @@ let
         rev = "1e9e4f1e0bf589a0ed39f58acc185ec5e213d207";
         sha256 = "1i1fpy9v6r4w3lrmz7bmf5ppq65925rv90gx39b3pykfmn0hcb9c";
       };
+      meta.broken = true; # 2018-04-11
     };
 
     luuid = stdenv.mkDerivation rec {

@@ -1,38 +1,36 @@
-{ stdenv, fetchurl, pkgconfig, gtk2
-, openssl ? null
-, gpgme ? null
-, sslSupport ? true
-, gpgSupport ? true
-}:
+{ stdenv, fetchurl, pkgconfig, gtk2, openssl ? null, gpgme ? null
+, gpgSupport ? true, sslSupport ? true }:
+
+assert gpgSupport -> gpgme != null;
+assert sslSupport -> openssl != null;
 
 with stdenv.lib;
 
-assert sslSupport -> openssl != null;
-assert gpgSupport -> gpgme != null;
-
 stdenv.mkDerivation rec {
   name = "sylpheed-${version}";
-  version = "3.5.1";
+  version = "3.7.0";
 
   src = fetchurl {
-    url = "http://sylpheed.sraoss.jp/sylpheed/v3.5/${name}.tar.bz2";
-    sha256 = "11qhbfyvi5hxv1f448zgbzgrdjj3a4mxj2bfpk6k4bqf7ahh8nis";
+    url = "http://sylpheed.sraoss.jp/sylpheed/v3.7/${name}.tar.xz";
+    sha256 = "0j9y5vdzch251s264diw9clrn88dn20bqqkwfmis9l7m8vmwasqd";
   };
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs =
-    [ gtk2 ]
-    ++ optional sslSupport openssl
-    ++ optional gpgSupport gpgme;
 
-  configureFlags = optional sslSupport "--enable-ssl"
-                ++ optional gpgSupport "--enable-gpgme";
+  buildInputs = [ gtk2 ]
+    ++ optionals gpgSupport [ gpgme ]
+    ++ optionals sslSupport [ openssl ];
+
+  configureFlags = [
+    (optional gpgSupport "--enable-gpgme")
+    (optional sslSupport "--enable-ssl")
+  ];
 
   meta = {
     homepage = http://sylpheed.sraoss.jp/en/;
-    description = "A lightweight and user-friendly e-mail client";
-    maintainers = [ maintainers.eelco ];
+    description = "Lightweight and user-friendly e-mail client";
+    maintainers = with maintainers; [ eelco ];
     platforms = platforms.linux ++ platforms.darwin;
-    license = "GPL";
+    license = licenses.gpl2;
   };
 }

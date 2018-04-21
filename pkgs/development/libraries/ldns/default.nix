@@ -1,4 +1,4 @@
-{stdenv, fetchurl, openssl, perl, dns-root-data}:
+{ stdenv, fetchurl, fetchpatch, openssl, perl, dns-root-data }:
 
 stdenv.mkDerivation rec {
   pname = "ldns";
@@ -8,10 +8,25 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://www.nlnetlabs.nl/downloads/ldns/${name}.tar.gz";
-    sha1 = "ceeeccf8a27e61a854762737f6ee02f44662c1b8";
+    sha256 = "1k56jw4hz8njspfxcfw0czf1smg0n48ylia89ziwyx5k9wdmp7y1";
   };
 
-  patchPhase = ''
+  patches = [
+    (fetchpatch {
+      name = "CVE-2017-1000231.patch";
+      url = "https://git.nlnetlabs.nl/ldns/patch/?id=c8391790";
+      sha256 = "1rprfh0y1c28dqiy3vgwvwdhn7b5rsylfzzblx5xdhwfqgdw8vn0";
+      excludes = [ "Changelog" ];
+    })
+    (fetchpatch {
+      name = "CVE-2017-1000232.patch";
+      url = "https://git.nlnetlabs.nl/ldns/patch/?id=3bdeed02";
+      sha256 = "0bv0s5jjp0sswfg8da47d346iwp9yjhj9w7fa3bxh174br0zj07r";
+      excludes = [ "Changelog" ];
+    })
+  ];
+
+  postPatch = ''
     patchShebangs doc/doxyparse.pl
   '';
 

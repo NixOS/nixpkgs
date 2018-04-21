@@ -7,6 +7,8 @@ stdenv.mkDerivation {
     "fortify" "pic" "stackprotector"
   ];
 
+  nativeBuildInputs = kernel.moduleBuildDependencies;
+
   patches = [
     ./fix_kerndir.patch
     ./fix_kbuild.patch

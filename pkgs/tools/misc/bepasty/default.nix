@@ -4,7 +4,10 @@
 
 with python.pkgs;
 
-buildPythonApplication rec {
+#We need to use buildPythonPackage here to get the PYTHONPATH build correctly.
+#This is needed for services.bepasty
+#https://github.com/NixOS/nixpkgs/pull/38300
+buildPythonPackage rec {
   pname = "bepasty";
   version = "0.4.0";
   name = "${pname}-${version}";
@@ -24,6 +27,11 @@ buildPythonApplication rec {
     inherit pname version;
     sha256 = "0bs79pgrjlnkmjfyj2hllbx3rw757va5w2g2aghi9cydmsl7gyi4";
   };
+
+  checkInputs = [
+    pytest
+    selenium
+  ];
 
   meta = {
     homepage = https://github.com/bepasty/bepasty-server;

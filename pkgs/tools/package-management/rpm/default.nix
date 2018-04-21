@@ -5,11 +5,11 @@
 
 stdenv.mkDerivation rec {
   name = "rpm-${version}";
-  version = "4.14.0";
+  version = "4.14.1";
 
   src = fetchurl {
     url = "http://ftp.rpm.org/releases/rpm-4.14.x/rpm-${version}.tar.bz2";
-    sha256 = "053396glswgszzg6wizn76vc8zc5m2bicw025vj44g0dc1aav806";
+    sha256 = "0fvrjq6jsvbllb5q6blchzh7p5flk61rz34g4g9mp9iwrhn0xx23";
   };
 
   outputs = [ "out" "dev" "man" ];
@@ -18,7 +18,8 @@ stdenv.mkDerivation rec {
   buildInputs = [ cpio zlib bzip2 file libarchive nspr nss db xz python lua ];
 
   # rpm/rpmlib.h includes popt.h, and then the pkg-config file mentions these as linkage requirements
-  propagatedBuildInputs = [ popt elfutils nss db bzip2 libarchive libbfd ];
+  propagatedBuildInputs = [ popt nss db bzip2 libarchive libbfd ]
+    ++ stdenv.lib.optional stdenv.isLinux elfutils;
 
   NIX_CFLAGS_COMPILE = "-I${nspr.dev}/include/nspr -I${nss.dev}/include/nss";
 
@@ -58,7 +59,7 @@ stdenv.mkDerivation rec {
     homepage = http://www.rpm.org/;
     license = licenses.gpl2;
     description = "The RPM Package Manager";
-    maintainers = with maintainers; [ mornfall copumpkin ];
-    platforms = platforms.linux;
+    maintainers = with maintainers; [ copumpkin ];
+    platforms = platforms.linux ++ platforms.darwin;
   };
 }

@@ -1,17 +1,25 @@
 { fetchurl, stdenv, pkgconfig, gnome3, intltool, gobjectIntrospection, upower, cairo
-, pango, cogl, clutter, libstartup_notification, libcanberra_gtk2, zenity, libcanberra_gtk3
-, libtool, makeWrapper, xkeyboard_config, libxkbfile, libxkbcommon, libXtst, libudev, libinput
-, libgudev, libwacom, xwayland, autoreconfHook }:
+, pango, cogl, clutter, libstartup_notification, zenity, libcanberra-gtk3
+, libtool, makeWrapper, xkeyboard_config, libxkbfile, libxkbcommon, libXtst, libinput
+, pipewire, libgudev, libwacom, xwayland, autoreconfHook }:
 
 stdenv.mkDerivation rec {
-  inherit (import ./src.nix fetchurl) name src;
+  name = "mutter-${version}";
+  version = "3.28.0";
 
-  # fatal error: gio/gunixfdlist.h: No such file or directory
-  NIX_CFLAGS_COMPILE = "-I${gnome3.glib.dev}/include/gio-unix-2.0 -Wno-error=format -Wno-error=sign-compare";
+  src = fetchurl {
+    url = "mirror://gnome/sources/mutter/${gnome3.versionBranch version}/${name}.tar.xz";
+    sha256 = "1c46sf10mgvwgym4c6hbjm7wa82dvfv8j8dx4zdbc7zj4n0grzsq";
+  };
+
+  passthru = {
+    updateScript = gnome3.updateScript { packageName = "mutter"; attrPath = "gnome3.mutter"; };
+  };
 
   configureFlags = [
     "--with-x"
     "--disable-static"
+    "--enable-remote-desktop"
     "--enable-shape"
     "--enable-sm"
     "--enable-startup-notification"
@@ -28,12 +36,13 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoreconfHook pkgconfig intltool libtool makeWrapper ];
 
-  buildInputs = with gnome3;
-    [ glib gobjectIntrospection gtk gsettings_desktop_schemas upower
-      gnome_desktop cairo pango cogl clutter zenity libstartup_notification libcanberra_gtk2
-      gnome3.geocode_glib libudev libinput libgudev libwacom
-      libcanberra_gtk3 zenity xkeyboard_config libxkbfile
-      libxkbcommon ];
+  buildInputs = with gnome3; [
+    glib gobjectIntrospection gtk gsettings-desktop-schemas upower
+    gnome-desktop cairo pango cogl clutter zenity libstartup_notification
+    gnome3.geocode-glib libinput libgudev libwacom
+    libcanberra-gtk3 zenity xkeyboard_config libxkbfile
+    libxkbcommon pipewire
+  ];
 
   preFixup = ''
     wrapProgram "$out/bin/mutter" \
@@ -45,6 +54,6 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     platforms = platforms.linux;
     maintainers = gnome3.maintainers;
+    license = licenses.gpl2;
   };
-
 }
