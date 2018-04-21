@@ -16638,20 +16638,7 @@ EOF
     };
   };
 
-  canonicaljson = buildPythonPackage rec {
-    name = "canonicaljson-${version}";
-    version = "1.1.3";
-
-    src = pkgs.fetchgit {
-      url = "https://github.com/matrix-org/python-canonicaljson.git";
-      rev = "refs/tags/v${version}";
-      sha256 = "11j0xmbw2hbl789pyfga02w8aa3s8rkc8pk6501r1sfy8xljd8zy";
-    };
-
-    propagatedBuildInputs = with self; [
-      frozendict simplejson six
-    ];
-  };
+  canonicaljson = callPackage ../development/python-modules/canonicaljson { };
 
   daemonize = buildPythonPackage rec {
     name = "daemonize-${version}";
