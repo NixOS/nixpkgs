@@ -5,7 +5,6 @@ with lib;
 let
   cfg = config.services.stubby;
 
-  stateDir = "/var/lib/stubby";
   fallbacks = concatMapStringsSep "\n  " (x: "- ${x}") cfg.fallbackProtocols;
   listeners = concatMapStringsSep "\n  " (x: "- ${x}") cfg.listenAddresses;
 
@@ -93,21 +92,29 @@ in
 
       fallbackProtocols = mkOption {
         default = [ "GETDNS_TRANSPORT_TLS" ];
-        type = with types; listOf (enum [ "GETDNS_TRANSPORT_TLS" "GETDNS_TRANSPORT_TCP" "GETDNS_TRANSPORT_UDP" ]);
+        type = with types; listOf (enum [
+          "GETDNS_TRANSPORT_TLS"
+          "GETDNS_TRANSPORT_TCP"
+          "GETDNS_TRANSPORT_UDP"
+        ]);
         description = ''
           Ordered list composed of one or more transport protocols.
-          Strict mode should only use GETDNS_TRANSPORT_TLS.
-          Other options are GETDNS_TRANSPORT_UDP and GETDNS_TRANSPORT_TCP.
+          Strict mode should only use <literal>GETDNS_TRANSPORT_TLS</literal>.
+          Other options are <literal>GETDNS_TRANSPORT_UDP</literal> and
+          <literal>GETDNS_TRANSPORT_TCP</literal>.
         '';
       };
 
       authenticationMode = mkOption {
         default = "GETDNS_AUTHENTICATION_REQUIRED";
-        type = types.enum [ "GETDNS_AUTHENTICATION_REQUIRED" "GETDNS_AUTHENTICATION_NONE" ];
+        type = types.enum [
+          "GETDNS_AUTHENTICATION_REQUIRED"
+          "GETDNS_AUTHENTICATION_NONE"
+        ];
         description = ''
           Selects the Strict or Opportunistic usage profile.
-          For strict, set to GETDNS_AUTHENTICATION_REQUIRED.
-          for opportunistic, use GETDNS_AUTHENTICATION_NONE.
+          For strict, set to <literal>GETDNS_AUTHENTICATION_REQUIRED</literal>.
+          for opportunistic, use <literal>GETDNS_AUTHENTICATION_NONE</literal>.
         '';
       };
 
@@ -123,14 +130,17 @@ in
         default = true;
         type = types.bool;
         description = ''
-          EDNS0 option for ECS client privacy. Default is true.
+          EDNS0 option for ECS client privacy. Default is
+          <literal>true</literal>. If set, this option prevents the client
+          subnet from being sent to authoritative nameservers.
         '';
       };
 
       idleTimeout = mkOption {
         default = 10000;
         type = types.int;
-        description = "EDNS0 option for keepalive idle timeout in milliseconds.";
+        description = "EDNS0 option for keepalive idle timeout expressed in
+        milliseconds.";
       };
 
       listenAddresses = mkOption {
@@ -147,8 +157,9 @@ in
         default = true;
         type = types.bool;
         description = ''
-          Instructs stubby to distribute queries across all available name servers.
-          Default is true. Set to false in order to use the first available.
+          Instructs stubby to distribute queries across all available name
+          servers. Default is <literal>true</literal>. Set to
+          <literal>false</literal> in order to use the first available.
         '';
       };
 
@@ -156,16 +167,19 @@ in
         default = defaultUpstream;
         type = types.lines;
         description = ''
-          Add additional upstreams see <citerefentry><refentrytitle>stubby
+          Add additional upstreams. See <citerefentry><refentrytitle>stubby
           </refentrytitle><manvolnum>1</manvolnum></citerefentry> for an
-          example of the entry formatting.
+          example of the entry formatting. In Strict mode, at least one of the
+          following settings must be supplied for each nameserver:
+          <literal>tls_auth_name</literal> or
+          <literal>tls_pubkey_pinset</literal>.
         '';
       };
 
       debugLogging = mkOption {
         default = false;
         type = types.bool;
-        description = "enable debug level logging.";
+        description = "Enable or disable debug level logging.";
       };
 
       extraConfig = mkOption {
