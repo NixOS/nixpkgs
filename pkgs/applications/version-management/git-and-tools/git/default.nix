@@ -4,6 +4,7 @@
 , asciidoc, texinfo, xmlto, docbook2x, docbook_xsl, docbook_xml_dtd_45
 , libxslt, tcl, tk, makeWrapper, libiconv
 , svnSupport, subversionClient, perlLibs, smtpPerlLibs
+, perlSupport ? true
 , guiSupport
 , withManual ? true
 , pythonSupport ? true
@@ -12,9 +13,12 @@
 , darwin
 }:
 
+assert sendEmailSupport -> perlSupport;
+assert svnSupport -> perlSupport;
+
 let
   version = "2.16.3";
-  svn = subversionClient.override { perlBindings = true; };
+  svn = subversionClient.override { perlBindings = perlSupport; };
 in
 
 stdenv.mkDerivation {
@@ -25,7 +29,7 @@ stdenv.mkDerivation {
     sha256 = "0j1dwvg5llnj3g0fp8hdgpms4hp90qw9f6509vqw30dhwplrjpfn";
   };
 
-  outputs = [ "out" "gitweb" ];
+  outputs = [ "out" ] ++ stdenv.lib.optional perlSupport "gitweb";
 
   hardeningDisable = [ "format" ];
 
@@ -44,7 +48,9 @@ stdenv.mkDerivation {
     done
   '';
 
-  buildInputs = [curl openssl zlib expat gettext cpio makeWrapper libiconv perl]
+  nativeBuildInputs = [ perl ];
+  buildInputs = [curl openssl zlib expat gettext cpio makeWrapper libiconv]
+    ++ stdenv.lib.optionals perlSupport [ perl ]
     ++ stdenv.lib.optionals withManual [ asciidoc texinfo xmlto docbook2x
          docbook_xsl docbook_xml_dtd_45 libxslt ]
     ++ stdenv.lib.optionals guiSupport [tcl tk]
@@ -60,6 +66,7 @@ stdenv.mkDerivation {
     "prefix=\${out}"
     "SHELL_PATH=${stdenv.shell}"
   ]
+  ++ (if perlSupport then ["PERL_PATH=${perl}/bin/perl"] else ["NO_PERL=1"])
   ++ (if pythonSupport then ["PYTHON_PATH=${python}/bin/python"] else ["NO_PYTHON=1"])
   ++ stdenv.lib.optionals stdenv.isSunOS ["INSTALL=install" "NO_INET_NTOP=" "NO_INET_PTON="]
   ++ (if stdenv.isDarwin then ["NO_APPLE_COMMON_CRYPTO=1"] else ["sysconfdir=/etc/"])
@@ -117,9 +124,10 @@ stdenv.mkDerivation {
       SCRIPT="$(cat <<'EOS'
         BEGIN{
           @a=(
-            '${perl}/bin/perl', '${gnugrep}/bin/grep', '${gnused}/bin/sed', '${gawk}/bin/awk',
+            '${gnugrep}/bin/grep', '${gnused}/bin/sed', '${gawk}/bin/awk',
             '${coreutils}/bin/cut', '${coreutils}/bin/basename', '${coreutils}/bin/dirname',
             '${coreutils}/bin/wc', '${coreutils}/bin/tr'
+            ${stdenv.lib.optionalString perlSupport ", '${perl}/bin/perl'"}
           );
         }
         foreach $c (@a) {
@@ -135,12 +143,12 @@ stdenv.mkDerivation {
       substituteInPlace $out/libexec/git-core/git-sh-i18n \
           --subst-var-by gettext ${gettext}
 
-      # put in separate package for simpler maintenance
-      mv $out/share/gitweb $gitweb/
-
       # Also put git-http-backend into $PATH, so that we can use smart
       # HTTP(s) transports for pushing
       ln -s $out/libexec/git-core/git-http-backend $out/bin/git-http-backend
+    '' + stdenv.lib.optionalString perlSupport ''
+      # put in separate package for simpler maintenance
+      mv $out/share/gitweb $gitweb/
 
       # wrap perl commands
       gitperllib=$out/lib/perl5/site_perl
@@ -186,7 +194,7 @@ stdenv.mkDerivation {
        '')
 
    + stdenv.lib.optionalString withManual ''# Install man pages and Info manual
-       make -j $NIX_BUILD_CORES -l $NIX_BUILD_CORES PERL_PATH="${perl}/bin/perl" cmd-list.made install install-info \
+       make -j $NIX_BUILD_CORES -l $NIX_BUILD_CORES cmd-list.made install install-info \
          -C Documentation ''
 
    + (if guiSupport then ''
