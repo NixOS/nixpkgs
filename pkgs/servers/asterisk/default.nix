@@ -18,10 +18,6 @@ let
       # This patch changes the runtime behavior to look for state
       # directories in /var rather than ${out}/var.
       ./runtime-vardirs.patch
-      (fetchpatch {
-         url = "http://sources.debian.net/data/main/a/asterisk/1:13.14.1~dfsg-1/debian/patches/pjsip_unresolved_symbol.patch";
-         sha256 = "0i6a6zplvzbjcvxqlmr87jmrfza7c3qx0rlym2nlmzzp2m7qpnfp";
-      })
     ];
 
     # Disable MD5 verification for pjsip
@@ -73,9 +69,9 @@ let
     };
   };
 
-  pjproject-26 = fetchurl {
-    url = http://www.pjsip.org/release/2.6/pjproject-2.6.tar.bz2;
-    sha256 = "1d67c58jn22f7h6smkykk5vwl3sqpc7xi2vm3j3lbn3lq6hisnig";
+  pjproject-27 = fetchurl {
+    url = http://www.pjsip.org/release/2.7.1/pjproject-2.7.1.tar.bz2;
+    sha256 = "09ii5hgl5s7grx4fiimcl3s77i385h7b3kwpfa2q0arbl1ibryjr";
   };
 
   mp3-202 = fetchsvn {
@@ -88,19 +84,19 @@ in
 {
 
   asterisk-lts = common {
-    version = "13.17.1";
-    sha256 = "0d7vqpkz0wv8d17vi7qxs9j7dbqwf4n80s411qva030hljcmdqdf";
+    version = "13.20.0";
+    sha256 = "a3d6d953f844867ea11e0be22ee6225049cd4f5870df6ab23454623bcfbc94d5";
     externals = {
-      "externals_cache/pjproject-2.6.tar.bz2" = pjproject-26;
+      "externals_cache/pjproject-2.7.1.tar.bz2" = pjproject-27;
       "addons/mp3" = mp3-202;
     };
   };
 
   asterisk-stable = common {
-    version = "14.6.1";
-    sha256 = "0xg26p8rx9gw1ym9xdnpxr7bqp0kp76afy7f4ywmh25ki41inz08";
+    version = "15.3.0";
+    sha256 = "f424f89f23b72f267ff9baab82d449bebbbf00c54e54fcd06b8fca13788b012c";
     externals = {
-      "externals_cache/pjproject-2.6.tar.bz2" = pjproject-26;
+      "externals_cache/pjproject-2.7.1.tar.bz2" = pjproject-27;
       "addons/mp3" = mp3-202;
     };
   };
