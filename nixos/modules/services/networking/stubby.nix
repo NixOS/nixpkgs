@@ -9,7 +9,8 @@ let
   listeners = concatMapStringsSep "\n  " (x: "- ${x}") cfg.listenAddresses;
 
   # By default, the recursive resolvers maintained by the getdns
-  # project itself are enabled. More information about both getdns's servers, # as well as third party options for upstream resolvers, can be found here:
+  # project itself are enabled. More information about both getdns's servers,
+  # # as well as third party options for upstream resolvers, can be found here:
   # https://dnsprivacy.org/wiki/display/DP/DNS+Privacy+Test+Servers
   #
   # You can override these values by supplying a yaml-formatted array of your
