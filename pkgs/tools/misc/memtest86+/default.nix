@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
 
   NIX_CFLAGS_COMPILE = "-I. -std=gnu90";
 
-  hardeningDisable = [ "fortify" "stackprotector" "pic" ];
+  hardeningDisable = [ "all" ];
 
   buildFlags = "memtest.bin";
 
