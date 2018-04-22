@@ -20,6 +20,19 @@ let self = stdenv.mkDerivation rec {
     let api = import "${self}/share/nix/api.nix" { inherit pkgs; }; in
     {
       inherit (api) augmentedPkgs pins callPackage;
+      updateScript = ''
+        set -e
+        echo
+        cd ${toString ./.}
+        ${pkgs.nix-update-source}/bin/nix-update-source \
+          --prompt version \
+          --replace-attr version \
+          --set owner timbertson \
+          --set repo nix-pin \
+          --set type fetchFromGitHub \
+          --set rev 'version-{version}' \
+          --modify-nix default.nix
+      '';
     };
   meta = with stdenv.lib; {
     homepage = "https://github.com/timbertson/nix-pin";
