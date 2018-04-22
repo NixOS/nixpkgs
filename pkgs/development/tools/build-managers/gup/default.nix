@@ -1,11 +1,11 @@
-{ stdenv, fetchFromGitHub, lib, python, which, pychecker ? null }:
+{ stdenv, fetchFromGitHub, nix-update-source, lib, python, which, pychecker ? null }:
 stdenv.mkDerivation rec {
   version = "0.7.0";
   src = fetchFromGitHub {
-    sha256 = "1pwnmlq2pgkkln9sgz4wlb9dqlqw83bkf105qljnlvggc21zm3pv";
-    rev = "version-${version}";
-    repo = "gup";
     owner = "timbertson";
+    repo = "gup";
+    rev = "version-0.7.0";
+    sha256 = "1pwnmlq2pgkkln9sgz4wlb9dqlqw83bkf105qljnlvggc21zm3pv";
   };
   name = "gup-${version}";
   buildInputs = lib.remove null [ python which pychecker ];
@@ -14,6 +14,19 @@ stdenv.mkDerivation rec {
   installPhase = ''
     mkdir $out
     cp -r python/bin $out/bin
+  '';
+  passthru.updateScript = ''
+    set -e
+    echo
+    cd ${toString ./.}
+    ${nix-update-source}/bin/nix-update-source \
+      --prompt version \
+      --replace-attr version \
+      --set owner timbertson \
+      --set repo gup \
+      --set type fetchFromGitHub \
+      --set rev 'version-{version}' \
+      --modify-nix default.nix
   '';
   meta = {
     inherit (src.meta) homepage;
