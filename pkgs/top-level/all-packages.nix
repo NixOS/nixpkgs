@@ -19903,6 +19903,8 @@ with pkgs;
     docs = true;
   };
 
+  lcalc = callPackage ../development/libraries/science/math/lcalc { };
+
   lrcalc = callPackage ../applications/science/math/lrcalc { };
 
   lie = callPackage ../applications/science/math/LiE { };
