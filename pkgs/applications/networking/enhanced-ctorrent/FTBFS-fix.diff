@@ -1,0 +1,15 @@
+Description: added a false instruction into line 360 preventing a FTBFS after applying cve-security-fix patch. (which contains NMU changes)
+Author: Andrea Veri <and@debian.org>
+
+diff -urNad ctorrent-1.3.4+dnh3.3.2~/btcontent.cpp ctorrent-1.3.4+dnh3.3.2/btcontent.cpp
+--- ctorrent-1.3.4+dnh3.3.2~/btcontent.cpp	2008-06-15 02:00:19.000000000 +0200
++++ ctorrent-1.3.4+dnh3.3.2/btcontent.cpp	2009-07-13 00:15:14.000000000 +0200
+@@ -357,7 +357,7 @@
+ 
+   cfg_req_queue_length = (m_piece_length / cfg_req_slice_size) * 2 - 1;
+ 
+-  if( m_btfiles.BuildFromMI(b, flen, saveas) < 0 ) ERR_RETURN();
++  if( m_btfiles.BuildFromMI(b, flen, saveas, 0) < 0 ) ERR_RETURN();
+ 
+   delete []b;
+   b = (char *)0;

@@ -3,10 +3,14 @@
 stdenv.mkDerivation rec {
   version = "dnh3.3.2";
   name = "enhanced-ctorrent";
+
   src = fetchurl {
     url = "http://www.rahul.net/dholmes/ctorrent/ctorrent-dnh3.3.2.tar.gz";
     sha256 = "0qs8waqwllk56i3yy3zhncy7nsnhmf09a494p5siz4vm2k4ncwy8";
   };
+
+  # These patches come from Debian and fix CVE-2009-1759.
+  patches = [ ./cve-security-fix.diff ./FTBFS-fix.diff ];
 
   meta = {
     description = "BitTorrent client written in C++";
