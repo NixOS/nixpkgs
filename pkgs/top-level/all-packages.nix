@@ -21355,6 +21355,8 @@ with pkgs;
 
   mmark = callPackage ../tools/typesetting/mmark { };
 
+  wire-desktop = callPackage ../applications/networking/instant-messengers/wire-desktop { };
+
   # Unix tools
   unixtools = recurseIntoAttrs (callPackages ./unix-tools.nix { });
   inherit (unixtools) hexdump ps logger eject umount
