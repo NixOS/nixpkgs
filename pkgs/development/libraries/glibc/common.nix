@@ -1,5 +1,21 @@
 /* Build configuration used to build glibc, Info files, and locale
-   information.  */
+   information.
+
+   Note that this derivation has multiple outputs and does not respect the
+   standard convention of putting the executables into the first output. The
+   first output is `lib` so that the libraries provided by this derivation
+   can be accessed directly, e.g.
+
+     "${pkgs.glibc}/lib/ld-linux-x86_64.so.2"
+
+   The executables are put into `bin` output and need to be referenced via
+   the `bin` attribute of the main package, e.g.
+
+     "${pkgs.glibc.bin}/bin/ldd".
+
+  The executables provided by glibc typically include `ldd`, `locale`, `iconv`
+  but the exact set depends on the library version and the configuration.
+*/
 
 { stdenv, lib
 , buildPlatform, hostPlatform
