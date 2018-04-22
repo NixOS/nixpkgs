@@ -310,6 +310,11 @@
     email = "alex@farfromthere.net";
     github = "AJChapman";
   };
+  alexfmpe = {
+    email = "alexandre.fmp.esteves@gmail.com";
+    github = "alexfmpe";
+    name = "Alexandre Esteves";
+  };
   alexvorobiev = {
     email = "alexander.vorobiev@gmail.com";
     github = "alexvorobiev";
