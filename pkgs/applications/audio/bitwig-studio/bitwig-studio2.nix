@@ -3,11 +3,11 @@
 
 bitwig-studio1.overrideAttrs (oldAttrs: rec {
   name = "bitwig-studio-${version}";
-  version = "2.3.1";
+  version = "2.3.2";
 
   src = fetchurl {
     url    = "https://downloads.bitwig.com/stable/${version}/bitwig-studio-${version}.deb";
-    sha256 = "18gghx0ygwh01cidj8mkf82l9qhq2dy1b3yc4ajksvj762yg6cf2";
+    sha256 = "10ji4jqnnlhv4bgvhqwysprax6jcjk4759jskr9imwj6qjnj3vzn";
   };
 
   buildInputs = bitwig-studio1.buildInputs ++ [ ffmpeg ];
