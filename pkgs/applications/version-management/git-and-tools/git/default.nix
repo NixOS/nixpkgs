@@ -56,11 +56,14 @@ stdenv.mkDerivation {
   NIX_LDFLAGS = stdenv.lib.optionalString (!stdenv.cc.isClang) "-lgcc_s"
               + stdenv.lib.optionalString (stdenv.isFreeBSD) "-lthr";
 
-  makeFlags = "prefix=\${out} PERL_PATH=${perl}/bin/perl SHELL_PATH=${stdenv.shell} "
-      + (if pythonSupport then "PYTHON_PATH=${python}/bin/python" else "NO_PYTHON=1")
-      + (if stdenv.isSunOS then " INSTALL=install NO_INET_NTOP= NO_INET_PTON=" else "")
-      + (if stdenv.isDarwin then " NO_APPLE_COMMON_CRYPTO=1" else " sysconfdir=/etc/ ")
-      + (if stdenv.hostPlatform.isMusl then "NO_SYS_POLL_H=1 NO_GETTEXT=YesPlease" else "");
+  makeFlags = [
+    "prefix=\${out}"
+    "SHELL_PATH=${stdenv.shell}"
+  ]
+  ++ (if pythonSupport then ["PYTHON_PATH=${python}/bin/python"] else ["NO_PYTHON=1"])
+  ++ stdenv.lib.optionals stdenv.isSunOS ["INSTALL=install" "NO_INET_NTOP=" "NO_INET_PTON="]
+  ++ (if stdenv.isDarwin then ["NO_APPLE_COMMON_CRYPTO=1"] else ["sysconfdir=/etc/"])
+  ++ stdenv.lib.optionals stdenv.hostPlatform.isMusl ["NO_SYS_POLL_H=1" "NO_GETTEXT=YesPlease"];
 
   # build git-credential-osxkeychain if darwin
   postBuild = stdenv.lib.optionalString stdenv.isDarwin ''
