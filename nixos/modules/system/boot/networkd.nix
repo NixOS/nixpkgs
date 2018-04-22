@@ -713,6 +713,9 @@ in
     systemd.services.systemd-networkd = {
       wantedBy = [ "multi-user.target" ];
       restartTriggers = map (f: f.source) (unitFiles);
+      # prevent race condition with interface renaming (#39069)
+      requires = [ "systemd-udev-settle.service" ];
+      after = [ "systemd-udev-settle.service" ];
     };
 
     systemd.services.systemd-networkd-wait-online = {
