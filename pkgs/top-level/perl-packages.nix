@@ -7572,6 +7572,18 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
+  iCalParser = buildPerlPackage rec {
+    name = "iCal-Parser-1.21";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/R/RI/RIXED/${name}.tar.gz";
+      sha256 = "0d7939a644a8e67017ec7239d3d9604f3986bb9a4ff80be68fe7299ebfd2270c";
+    };
+    propagatedBuildInputs = [ DateTimeFormatICal FreezeThaw IOString TextvFileasData ];
+    meta = {
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   "if" = null;
 
   # For backwards compatibility.
@@ -9622,6 +9634,8 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
+  MNI-Perllib = pkgs.callPackage ../development/perl-modules/MNI {};
+
   Mo = buildPerlPackage rec {
      name = "Mo-0.40";
      src = fetchurl {
@@ -9649,6 +9663,7 @@ let self = _self // overrides; _self = with self; {
 
   ModernPerl = buildPerlModule {
     name = "Modern-Perl-1.20170117";
+
     src = fetchurl {
       url = mirror://cpan/authors/id/C/CH/CHROMATIC/Modern-Perl-1.20170117.tar.gz;
       sha256 = "5df2a83461163212db22b9c3353606a1a123616820fe50675041c34f004b3628";
@@ -16221,6 +16236,21 @@ let self = _self // overrides; _self = with self; {
     meta = {
       description = "Perform diffs on files and record sets";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
+  TextFormat = buildPerlPackage rec {
+    name = "Text-Format-0.60";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/S/SH/SHLOMIF/${name}.tar.gz";
+      sha256 = "664f313570604624ff9e1fc9b26b6d04e06897b3e4eac83089fc0905a692a2b8";
+    };
+    buildInputs = [ ModuleBuild ];
+    meta = {
+      homepage = http://www.shlomifish.org/open-source/projects/Text-Format/;
+      description = "Format text";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = with maintainers; [ bcdarwin ];
     };
   };
 

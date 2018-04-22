@@ -370,7 +370,7 @@ in rec {
   tests.prometheus = callTest tests/prometheus.nix {};
   tests.prosody = callTest tests/prosody.nix {};
   tests.proxy = callTest tests/proxy.nix {};
-  # tests.quagga = callTest tests/quagga.nix {};
+  tests.quagga = callTest tests/quagga.nix {};
   tests.quake3 = callTest tests/quake3.nix {};
   tests.rabbitmq = callTest tests/rabbitmq.nix {};
   tests.radicale = callTest tests/radicale.nix {};
@@ -384,6 +384,7 @@ in rec {
   tests.smokeping = callTest tests/smokeping.nix {};
   tests.snapper = callTest tests/snapper.nix {};
   tests.statsd = callTest tests/statsd.nix {};
+  tests.strongswan-swanctl = callTest tests/strongswan-swanctl.nix {};
   tests.sudo = callTest tests/sudo.nix {};
   tests.systemd = callTest tests/systemd.nix {};
   tests.switchTest = callTest tests/switch-test.nix {};

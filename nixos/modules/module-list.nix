@@ -166,6 +166,7 @@
   ./services/backup/crashplan-small-business.nix
   ./services/backup/mysql-backup.nix
   ./services/backup/postgresql-backup.nix
+  ./services/backup/restic.nix
   ./services/backup/rsnapshot.nix
   ./services/backup/tarsnap.nix
   ./services/backup/znapzend.nix
@@ -533,7 +534,7 @@
   ./services/networking/prayer.nix
   ./services/networking/privoxy.nix
   ./services/networking/prosody.nix
-  # ./services/networking/quagga.nix
+  ./services/networking/quagga.nix
   ./services/networking/quassel.nix
   ./services/networking/racoon.nix
   ./services/networking/radicale.nix
@@ -559,6 +560,7 @@
   ./services/networking/ssh/lshd.nix
   ./services/networking/ssh/sshd.nix
   ./services/networking/strongswan.nix
+  ./services/networking/strongswan-swanctl/module.nix
   ./services/networking/stunnel.nix
   ./services/networking/supplicant.nix
   ./services/networking/supybot.nix

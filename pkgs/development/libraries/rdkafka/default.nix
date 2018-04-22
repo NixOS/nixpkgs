@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, zlib, perl, pkgconfig, python }:
+{ stdenv, fetchFromGitHub, zlib, perl, pkgconfig, python, openssl }:
 
 stdenv.mkDerivation rec {
   name = "rdkafka-${version}";
@@ -12,11 +12,9 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ zlib perl python ];
+  buildInputs = [ zlib perl python openssl ];
 
   NIX_CFLAGS_COMPILE = "-Wno-error=strict-overflow";
-
-  configureFlags = stdenv.lib.optionals stdenv.isDarwin [ "--disable-ssl" ];
 
   postPatch = ''
     patchShebangs .

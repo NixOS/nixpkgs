@@ -515,7 +515,7 @@ in
     };
 
     systemd.globalEnvironment = mkOption {
-      type = types.attrs;
+      type = with types; attrsOf (nullOr (either str package));
       default = {};
       example = { TZ = "CET"; };
       description = ''

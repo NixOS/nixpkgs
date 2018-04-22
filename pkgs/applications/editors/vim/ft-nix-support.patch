@@ -85,5 +85,12 @@ new file mode 100644
 --- /dev/null
 +++ b/runtime/ftplugin/nix.vim
 @@ -0,0 +1,2 @@
++" Only do this when not done yet for this buffer
++if exists("b:did_ftplugin")
++  finish
++endif
++let b:did_ftplugin = 1
++
 +" coding conventions
-+setlocal sw=2 ts=2 expandtab
++setlocal shiftwidth=2 expandtab softtabstop=2
++let b:undo_ftplugin = "setlocal sw< et< sts<"

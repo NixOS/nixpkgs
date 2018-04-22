@@ -29,6 +29,6 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ matthewbauer ];
     license = licenses.gpl3;
     description = "Darwin/macOS emulation layer for Linux";
-    platforms = platforms.unix;
+    platforms = platforms.darwin;
   };
 }

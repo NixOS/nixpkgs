@@ -112,7 +112,7 @@ let
 
       # If the host is 64-bit and the container is 32-bit, add a
       # --personality flag.
-      ${optionalString (config.nixpkgs.system == "x86_64-linux") ''
+      ${optionalString (config.nixpkgs.localSystem.system == "x86_64-linux") ''
         if [ "$(< ''${SYSTEM_PATH:-/nix/var/nix/profiles/per-container/$INSTANCE/system}/system)" = i686-linux ]; then
           extraFlags+=" --personality=x86"
         fi
@@ -255,7 +255,7 @@ let
   };
 
 
-  system = config.nixpkgs.system;
+  system = config.nixpkgs.localSystem.system;
 
   bindMountOpts = { name, config, ... }: {
 
@@ -575,6 +575,16 @@ in
               '';
             };
 
+            extraFlags = mkOption {
+              type = types.listOf types.str;
+              default = [];
+              example = [ "--drop-capability=CAP_SYS_CHROOT" ];
+              description = ''
+                Extra flags passed to the systemd-nspawn command.
+                See systemd-nspawn(1) for details.
+              '';
+            };
+
           } // networkOptions;
 
           config = mkMerge
@@ -714,7 +724,9 @@ in
             ${optionalString cfg.autoStart ''
               AUTO_START=1
             ''}
-            EXTRA_NSPAWN_FLAGS="${mkBindFlags cfg.bindMounts}"
+            EXTRA_NSPAWN_FLAGS="${mkBindFlags cfg.bindMounts +
+              optionalString (cfg.extraFlags != [])
+                (" " + concatStringsSep " " cfg.extraFlags)}"
           '';
       }) config.containers;
 

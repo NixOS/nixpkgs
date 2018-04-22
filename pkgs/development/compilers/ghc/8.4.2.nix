@@ -3,7 +3,7 @@
 
 # build-tools
 , bootPkgs, alex, happy
-, autoconf, automake, coreutils, fetchgit, fetchpatch, perl, python3
+, autoconf, automake, coreutils, fetchurl, perl, python3
 
 , libffi, libiconv ? null, ncurses
 
@@ -68,13 +68,11 @@ let
 in
 stdenv.mkDerivation rec {
   inherit version;
-  inherit (src) rev;
   name = "${targetPrefix}ghc-${version}";
 
-  src = fetchgit {
-    url = "git://git.haskell.org/ghc.git";
-    rev = "6d7eecff7948ad77854f834f55b4d4f942276ad3";
-    sha256 = "0aqy5x0b6qxhyvxw1q9pssf1xvhbyviglqkjrx4gvhbr3nax3wxp";
+  src = fetchurl {
+    url = "https://downloads.haskell.org/~ghc/${version}/ghc-${version}-src.tar.xz";
+    sha256 = "0yq4y0smn92sksnjjva28b8847krxizns6rm50j3pgq69br35k01";
   };
 
   enableParallelBuilding = true;
@@ -102,9 +100,6 @@ stdenv.mkDerivation rec {
     export STRIP="${targetCC.bintools.bintools}/bin/${targetCC.bintools.targetPrefix}strip"
 
     echo -n "${buildMK}" > mk/build.mk
-    echo ${version} >VERSION
-    echo ${src.rev} >GIT_COMMIT_ID
-    ./boot
     sed -i -e 's|-isysroot /Developer/SDKs/MacOSX10.5.sdk||' configure
   '' + stdenv.lib.optionalString (!stdenv.isDarwin) ''
     export NIX_LDFLAGS+=" -rpath $out/lib/ghc-${version}"

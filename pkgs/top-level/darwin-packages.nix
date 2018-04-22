@@ -1,4 +1,6 @@
-{ pkgs, darwin, stdenv, callPackage, callPackages, newScope }:
+{ buildPackages, pkgs, targetPackages
+, darwin, stdenv, callPackage, callPackages, newScope
+}:
 
 let
   apple-source-releases = callPackage ../os-specific/darwin/apple-source-releases { };
@@ -10,19 +12,23 @@ in
 
   apple_sdk = callPackage ../os-specific/darwin/apple-sdk { };
 
+  binutils-unwrapped = callPackage ../os-specific/darwin/binutils {
+    inherit (darwin) cctools;
+    inherit (pkgs) binutils-unwrapped;
+  };
+
   binutils = pkgs.wrapBintoolsWith {
     libc =
       if pkgs.targetPlatform != pkgs.hostPlatform
       then pkgs.libcCross
       else pkgs.stdenv.cc.libc;
-    bintools = callPackage ../os-specific/darwin/binutils {
-      inherit (darwin) cctools;
-    };
+    bintools = darwin.binutils-unwrapped;
   };
 
   cctools = callPackage ../os-specific/darwin/cctools/port.nix {
     inherit (darwin) libobjc maloader;
     stdenv = if stdenv.isDarwin then stdenv else pkgs.libcxxStdenv;
+    libcxxabi = pkgs.libcxxabi;
     xctoolchain = darwin.xcode.toolchain;
   };
 
@@ -39,8 +45,10 @@ in
 
   insert_dylib = callPackage ../os-specific/darwin/insert_dylib { };
 
-  ios-cross = callPackage ../os-specific/darwin/ios-cross {
-    inherit (darwin) binutils;
+  iosSdkPkgs = darwin.callPackage ../os-specific/darwin/ios-sdk-pkgs {
+    buildIosSdk = buildPackages.darwin.iosSdkPkgs.sdk;
+    targetIosSdkPkgs = targetPackages.darwin.iosSdkPkgs;
+    inherit (pkgs.llvmPackages) clang-unwrapped;
   };
 
   libobjc = apple-source-releases.objc4;

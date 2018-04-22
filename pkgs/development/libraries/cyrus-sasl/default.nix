@@ -22,7 +22,8 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./missing-size_t.patch # https://bugzilla.redhat.com/show_bug.cgi?id=906519
-    (fetchpatch { # CVE-2013-4122
+    (fetchpatch {
+      name = "CVE-2013-4122.patch";
       url = "http://sourceforge.net/projects/miscellaneouspa/files/glibc217/cyrus-sasl-2.1.26-glibc217-crypt.diff";
       sha256 = "05l7dh1w9d5fvzg0pjwzqh0fy4ah8y5cv6v67s4ssbq8xwd4pkf2";
     })

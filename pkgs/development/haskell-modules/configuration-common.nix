@@ -866,6 +866,9 @@ self: super: {
   # https://github.com/fpco/stackage/issues/3126
   stack = doJailbreak super.stack;
 
+  # https://github.com/snoyberg/monad-logger/issues/1
+  monad-logger = self.monad-logger_0_3_28_5;
+
   # These packages depend on each other, forming an infinite loop.
   scalendar = markBroken (super.scalendar.override { SCalendar = null; });
   SCalendar = markBroken (super.SCalendar.override { scalendar = null; });
@@ -1020,6 +1023,16 @@ self: super: {
     preCheck = ''export PATH="$PWD/dist/build/alex:$PATH"'';
   });
 
+  # This package refers to the wrong library (itself in fact!)
+  vulkan = super.vulkan.override { vulkan = pkgs.vulkan-loader; };
+
+  vector-sized_1_0_0_0 = super.vector-sized_1_0_0_0.override {
+    indexed-list-literals = self.indexed-list-literals_0_2_0_0;
+  };
+
+  # Both need a more up-to-date version
+  hlint = super.hlint.override { extra = self.extra_1_6_6; };
+  hoogle = super.hoogle.override { extra = self.extra_1_6_6; };
 }
 
 //

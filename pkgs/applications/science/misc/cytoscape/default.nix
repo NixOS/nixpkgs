@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "cytoscape-${version}";
-  version = "3.6.0";
+  version = "3.6.1";
 
   src = fetchurl {
     url = "http://chianti.ucsd.edu/${name}/${name}.tar.gz";
-    sha256 = "13q8caksbzi6j7xy8v5f0pi6766yfawys6jcm50ng78mnhrv2v97";
+    sha256 = "1pkdilv1nw6vvdxk71bwjngr8yafrsqwaqvlakhp8yb342r1jd4s";
   };
 
   buildInputs = [jre makeWrapper];

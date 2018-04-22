@@ -32,8 +32,11 @@ let
       (if es5 then (pkgs.writeTextDir "log4j2.properties" cfg.logging)
               else (pkgs.writeTextDir "logging.yml" cfg.logging))
     ];
-    # Elasticsearch 5.x won't start when the scripts directory does not exist
-    postBuild = if es5 then "${pkgs.coreutils}/bin/mkdir -p $out/scripts" else "";
+    postBuild = concatStringsSep "\n" (concatLists [
+      # Elasticsearch 5.x won't start when the scripts directory does not exist
+      (optional es5 "${pkgs.coreutils}/bin/mkdir -p $out/scripts")
+      (optional es6 "ln -s ${cfg.package}/config/jvm.options $out/jvm.options")
+    ]);
   };
 
   esPlugins = pkgs.buildEnv {
