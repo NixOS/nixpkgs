@@ -14244,7 +14244,7 @@ with pkgs;
   crimson = callPackage ../data/fonts/crimson {};
 
   dejavu_fonts = lowPrio (callPackage ../data/fonts/dejavu-fonts {
-    inherit (perlPackages) FontTTF;
+    inherit (perlPackages);
   });
 
   # solve collision for nix-env before https://github.com/NixOS/nix/pull/815
