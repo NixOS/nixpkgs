@@ -234,6 +234,11 @@ let
           password, KDE will prompt separately after login.
         '';
       };
+      sssdStrictAccess = mkOption {
+        default = false;
+        type = types.bool;
+        description = "enforce sssd access control";
+      };
 
       enableGnomeKeyring = mkOption {
         default = false;
@@ -264,11 +269,13 @@ let
       text = mkDefault
         (''
           # Account management.
-          account sufficient pam_unix.so
+          account ${if cfg.sssdStrictAccess then "required" else "sufficient"} pam_unix.so
           ${optionalString use_ldap
               "account sufficient ${pam_ldap}/lib/security/pam_ldap.so"}
-          ${optionalString config.services.sssd.enable
+          ${optionalString (config.services.sssd.enable && cfg.sssdStrictAccess==false)
               "account sufficient ${pkgs.sssd}/lib/security/pam_sss.so"}
+          ${optionalString (config.services.sssd.enable && cfg.sssdStrictAccess)
+              "account [default=bad success=ok user_unknown=ignore] ${pkgs.sssd}/lib/security/pam_sss.so"}
           ${optionalString config.krb5.enable
               "account sufficient ${pam_krb5}/lib/security/pam_krb5.so"}
 

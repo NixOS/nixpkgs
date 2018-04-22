@@ -28,8 +28,12 @@ stdenv.mkDerivation rec {
 
   unpackPhase = "tar xvjf $src; cd lsof_*; tar xvf lsof_*.tar; sourceRoot=$( echo lsof_*/); ";
 
+  patches = stdenv.lib.optional stdenv.isDarwin ./darwin-dfile.patch;
+
   postPatch = stdenv.lib.optionalString stdenv.hostPlatform.isMusl ''
     substituteInPlace dialects/linux/dlsof.h --replace "defined(__UCLIBC__)" 1
+  '' + stdenv.lib.optionalString stdenv.isDarwin ''
+    sed -i 's|lcurses|lncurses|g' Configure
   '';
 
   # Stop build scripts from searching global include paths

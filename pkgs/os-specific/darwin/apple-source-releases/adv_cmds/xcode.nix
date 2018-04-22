@@ -27,14 +27,14 @@ appleDerivation {
                 | grep -v -e Desktop -e Embedded -e mklocale -e colldef)
 
     for i in $targets; do
-      xcodebuild -target $i
+      xcodebuild SYMROOT=$PWD/Products OBJROOT=$PWD/Intermediates -target $i
     done
   '';
 
   # temporary install phase until xcodebuild has "install" support
   installPhase = ''
     mkdir -p $out/bin/
-    install adv_cmds-*/Build/Products/Release/* $out/bin/
+    install Products/Release/* $out/bin/
 
     for n in 1 8; do
       mkdir -p $out/share/man/man$n

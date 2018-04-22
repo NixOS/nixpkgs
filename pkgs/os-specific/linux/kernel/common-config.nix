@@ -115,7 +115,6 @@ with stdenv.lib;
   # Enable various subsystems.
   ACCESSIBILITY y # Accessibility support
   AUXDISPLAY y # Auxiliary Display support
-  DONGLE y # Serial dongle support
   HIPPI y
   MTD_COMPLEX_MAPPINGS y # needed for many devices
   SCSI_LOWLEVEL y # enable lots of SCSI devices
@@ -124,6 +123,9 @@ with stdenv.lib;
   SPI y # needed for many devices
   SPI_MASTER y
   WAN y
+  ${optionalString (versionOlder version "4.17") ''
+    DONGLE y # Serial dongle support
+  ''}
 
   # Networking options.
   NET y
@@ -420,7 +422,9 @@ with stdenv.lib;
   ${optionalString (versionAtLeast version "4.3") ''
     IDLE_PAGE_TRACKING y
   ''}
-  IRDA_ULTRA y # Ultra (connectionless) protocol
+  ${optionalString (versionOlder version "4.17") ''
+    IRDA_ULTRA y # Ultra (connectionless) protocol
+  ''}
   JOYSTICK_IFORCE_232? y # I-Force Serial joysticks and wheels
   JOYSTICK_IFORCE_USB? y # I-Force USB joysticks and wheels
   JOYSTICK_XPAD_FF? y # X-Box gamepad rumble support

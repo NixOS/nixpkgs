@@ -213,7 +213,7 @@ in {
         PermissionsStartOnly = true;
       };
       preStart = ''
-        mkdir -m 0700 -p ${cfg.workDir}
+        mkdir -m 0701 -p ${cfg.workDir}
       '';
     };
   };

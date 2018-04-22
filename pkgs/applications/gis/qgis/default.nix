@@ -1,7 +1,7 @@
 { stdenv, fetchurl, fetchpatch, gdal, cmake, qt4, flex, bison, proj, geos, xlibsWrapper, sqlite, gsl
 , qwt, fcgi, python2Packages, libspatialindex, libspatialite, qscintilla, postgresql, makeWrapper
 , qjson, qca2, txt2tags, openssl, darwin, pkgconfig
-, withGrass ? false, grass, IOKit, ApplicationServices
+, withGrass ? true, grass, IOKit, ApplicationServices
 }:
 
 stdenv.mkDerivation rec {
@@ -58,11 +58,13 @@ stdenv.mkDerivation rec {
           '') +
     (stdenv.lib.optionalString stdenv.isDarwin ''
       # Necessary for QGIS to find the correct default GRASS path
+      # Plugins look for gdal tools like deminfo on the PATH
       ${stdenv.lib.optionalString withGrass "ln -sf ${grass} $out/QGIS.app/Contents/MacOS/grass"}
       for file in $(find $out -type f -name "QGIS"); do
         wrapProgram "$file" \
           --prefix DYLD_LIBRARY_PATH : "${qwt}/lib" \
           --prefix DYLD_LIBRARY_PATH : "${qscintilla}/lib" \
+          --prefix PATH : "${gdal}/bin" \
           ${stdenv.lib.optionalString withGrass "--prefix PATH : ${grass}/bin"} \
           --set PYTHONPATH $PYTHONPATH
       done
@@ -75,6 +77,6 @@ stdenv.mkDerivation rec {
     homepage = http://www.qgis.org;
     license = stdenv.lib.licenses.gpl2Plus;
     platforms = with stdenv.lib.platforms; unix;
-    maintainers = with stdenv.lib.maintainers; [viric];
+    maintainers = with stdenv.lib.maintainers; [viric mpickering];
   };
 }

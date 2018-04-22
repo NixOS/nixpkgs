@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, cmake, pkgconfig, lndir
+{ stdenv, lib, fetchurl, fetchpatch, cmake, pkgconfig, lndir
 , zlib, gettext, libvdpau, libva, libXv, sqlite
 , yasm, freetype, fontconfig, fribidi
 , makeWrapper, libXext, libGLU, qttools, qtbase
@@ -32,7 +32,15 @@ stdenv.mkDerivation rec {
     sha256 = "1bf4l9qwxq3smc1mx5pybydc742a4qqsk17z50j9550d9iwnn7gy";
   };
 
-  patches = [ ./dynamic_install_dir.patch ./bootstrap_logging.patch ];
+  patches = [
+    ./dynamic_install_dir.patch
+    ./bootstrap_logging.patch
+    # glibc 2.27 compat
+    (fetchpatch {
+      url = https://github.com/mean00/avidemux2/commit/afdd9c4b876d77a4974d3fa7d9f25caeffbdf13d.patch;
+      sha256 = "0mf8vpfdqybziqsfyvxwcdm3zsmnp64293icinhvfpq9xp5b6vn6";
+    })
+  ];
 
   nativeBuildInputs = [ yasm cmake pkgconfig ];
   buildInputs = [

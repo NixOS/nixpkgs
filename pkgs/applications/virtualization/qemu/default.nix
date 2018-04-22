@@ -8,6 +8,7 @@
 , seccompSupport ? stdenv.isLinux, libseccomp
 , pulseSupport ? !stdenv.isDarwin, libpulseaudio
 , sdlSupport ? !stdenv.isDarwin, SDL2
+, gtkSupport ? !xenSupport, gtk3, gettext, gnome3
 , vncSupport ? true, libjpeg, libpng
 , spiceSupport ? !stdenv.isDarwin, spice, spice-protocol
 , usbredirSupport ? spiceSupport, usbredir
@@ -55,6 +56,7 @@ stdenv.mkDerivation rec {
     ++ optionals numaSupport [ numactl ]
     ++ optionals pulseSupport [ libpulseaudio ]
     ++ optionals sdlSupport [ SDL2 ]
+    ++ optionals gtkSupport [ gtk3 gettext gnome3.vte ]
     ++ optionals vncSupport [ libjpeg libpng ]
     ++ optionals spiceSupport [ spice-protocol spice ]
     ++ optionals usbredirSupport [ usbredir ]
@@ -64,6 +66,8 @@ stdenv.mkDerivation rec {
     ++ optionals virglSupport [ virglrenderer ];
 
   enableParallelBuilding = true;
+
+  outputs = [ "out" "ga" ];
 
   patches = [ ./no-etc-install.patch ./statfs-flags.patch (fetchpatch {
     name = "glibc-2.27-memfd.patch";
@@ -110,6 +114,7 @@ stdenv.mkDerivation rec {
     ++ optional hostCpuOnly "--target-list=${hostCpuTargets}"
     ++ optional stdenv.isDarwin "--enable-cocoa"
     ++ optional stdenv.isLinux "--enable-linux-aio"
+    ++ optional gtkSupport "--enable-gtk"
     ++ optional xenSupport "--enable-xen"
     ++ optional openGLSupport "--enable-opengl"
     ++ optional virglSupport "--enable-virglrenderer";
@@ -119,6 +124,9 @@ stdenv.mkDerivation rec {
       for exe in $out/bin/qemu-system-* ; do
         paxmark m $exe
       done
+      # copy qemu-ga (guest agent) to separate output
+      mkdir -p $ga/bin
+      cp $out/bin/qemu-ga $ga/bin/
     '';
 
   # Add a ‘qemu-kvm’ wrapper for compatibility/convenience.

@@ -1,6 +1,6 @@
 { fetchurl, stdenv, SDL, SDL_image, SDL_mixer, SDL_sound, libsigcxx, physfs
-, boost, expat, freetype, libjpeg, wxGTK, lua, perl, pkgconfig, zlib, zip, bzip2,
-libpng, libtiff, fluidsynth, libmikmod }:
+, boost, expat, freetype, libjpeg, wxGTK, lua, perl, pkgconfig, zlib, zip, bzip2
+, libpng, libtiff, fluidsynth, libmikmod, libvorbis, flac, libogg }:
 
 stdenv.mkDerivation rec {
   name = "asc-2.6.0.0";
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     SDL SDL_image SDL_mixer SDL_sound libsigcxx physfs boost expat
     freetype libjpeg wxGTK lua perl pkgconfig zlib zip bzip2 libpng
-    libtiff fluidsynth libmikmod
+    libtiff fluidsynth libmikmod flac libvorbis libogg
   ];
 
   meta = with stdenv.lib; {
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     longDescription = ''
       Advanced Strategic Command is a free, turn based strategy game. It is
       designed in the tradition of the Battle Isle series from Bluebyte and is
-      currently available for Windows and Linux. 
+      currently available for Windows and Linux.
     '';
 
     homepage = http://www.asc-hq.org/;
