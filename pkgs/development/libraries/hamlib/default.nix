@@ -3,12 +3,12 @@
 
 stdenv.mkDerivation rec {
   pname = "hamlib";
-  version = "1.2.15.3";
+  version = "3.2";
   name = "${pname}-${version}";
 
   src = fetchurl {
     url = "mirror://sourceforge/${pname}/${name}.tar.gz";
-    sha256 = "0ppp6fc2h9d8p30j2s9wlqd620kmnny4wd8fc3jxd6gxwi4lbjm2";
+    sha256 = "07ddsykbliiv0p717z1h5vzmvsx6lm75j32rhvmwqxp8m3kbap5m";
   };
 
   buildInputs = [ perl perlPackages.ExtUtilsMakeMaker python2 swig gd libxml2
