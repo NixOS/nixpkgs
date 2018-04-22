@@ -1453,6 +1453,11 @@
     github = "georgewhewell";
     name = "George Whewell";
   };
+  gerschtli = {
+    email = "tobias.happ@gmx.de";
+    github = "Gerschtli";
+    name = "Tobias Happ";
+  };
   gilligan = {
     email = "tobias.pflug@gmail.com";
     github = "gilligan";
