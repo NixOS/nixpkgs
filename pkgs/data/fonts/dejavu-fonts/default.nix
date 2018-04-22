@@ -1,4 +1,4 @@
-{fetchFromGitHub, stdenv, fontforge, perl, FontTTF}:
+{ fetchFromGitHub, stdenv, fontforge, perl, perlPackages }:
 
 let
   version = "2.37";
@@ -25,7 +25,7 @@ let
 
   full-ttf = stdenv.mkDerivation {
     name = "dejavu-fonts-full-${version}";
-    nativeBuildInputs = [fontforge perl FontTTF];
+    nativeBuildInputs = [fontforge perl perlPackages.IOString perlPackages.FontTTF];
 
     src = fetchFromGitHub {
       owner = "dejavu-fonts";
