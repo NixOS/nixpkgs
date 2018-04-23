@@ -1731,7 +1731,7 @@
     name = "Jeffrey David Johnson";
   };
   jensbin = {
-    email = "jensbin@protonmail.com";
+    email = "jensbin+git@pm.me";
     github = "jensbin";
     name = "Jens Binkert";
   };
