@@ -2089,6 +2089,8 @@ with pkgs;
 
   edk2 = callPackage ../development/compilers/edk2 { };
 
+  eff = callPackage ../development/interpreters/eff { };
+
   eflite = callPackage ../applications/audio/eflite {};
 
   eid-mw = callPackage ../tools/security/eid-mw { };
