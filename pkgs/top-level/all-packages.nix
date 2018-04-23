@@ -17107,9 +17107,7 @@ with pkgs;
 
   notbit = callPackage ../applications/networking/mailreaders/notbit { };
 
-  notmuch = callPackage ../applications/networking/mailreaders/notmuch {
-    gmime = gmime3;
-  };
+  notmuch = callPackage ../applications/networking/mailreaders/notmuch { };
 
   notmuch-mutt = callPackage ../applications/networking/mailreaders/notmuch/mutt.nix { };
 
