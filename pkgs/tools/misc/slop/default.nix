@@ -1,15 +1,17 @@
 { stdenv, fetchFromGitHub, cmake, pkgconfig
-, glew, glm, libGLU_combined, libX11, libXext, libXrender, cppcheck, icu}:
+, glew, glm, libGLU_combined, libX11, libXext, libXrender, icu
+, cppcheck
+}:
 
 stdenv.mkDerivation rec {
   name = "slop-${version}";
-  version = "7.3.49";
+  version = "7.4";
 
   src = fetchFromGitHub {
     owner = "naelstrof";
     repo = "slop";
     rev = "v${version}";
-    sha256 = "0is3mh2d1jqgvv72v5x92w23yf26n8n384nbr1b6cn883aw8j7jz";
+    sha256 = "0fgd8a2dqkg64all0f96sca92sdss9r3pzmv5kck46b99z2325z6";
   };
 
   nativeBuildInputs = [ cmake pkgconfig ];
