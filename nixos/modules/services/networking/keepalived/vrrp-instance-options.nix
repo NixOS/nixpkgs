@@ -108,6 +108,20 @@ with lib;
       description = "Declarative vhost config";
     };
 
+    trackScripts = mkOption {
+      type = types.listOf types.str;
+      default = [];
+      example = [ "chk_cmd1" "chk_cmd2" ];
+      description = "List of script names to invoke for health tracking.";
+    };
+
+    trackInterfaces = mkOption {
+      type = types.listOf types.str;
+      default = [];
+      example = [ "eth0" "eth1" ];
+      description = "List of network interfaces to monitor for health tracking.";
+    };
+
     extraConfig = mkOption {
       type = types.lines;
       default = "";
