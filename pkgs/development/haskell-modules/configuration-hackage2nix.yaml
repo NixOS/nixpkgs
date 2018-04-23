@@ -38,7 +38,7 @@ core-packages:
   - ghcjs-base-0
 
 default-package-overrides:
-  # LTS Haskell 11.5
+  # LTS Haskell 11.6
   - abstract-deque ==0.3
   - abstract-deque-tests ==0.3
   - abstract-par ==0.3.3
@@ -69,7 +69,7 @@ default-package-overrides:
   - aeson-compat ==0.3.7.1
   - aeson-diff ==1.1.0.4
   - aeson-extra ==0.4.1.0
-  - aeson-generic-compat ==0.0.1.1
+  - aeson-generic-compat ==0.0.1.2
   - aeson-injector ==1.1.0.0
   - aeson-picker ==0.1.0.4
   - aeson-pretty ==0.8.7
@@ -83,10 +83,10 @@ default-package-overrides:
   - alerts ==0.1.0.0
   - alex ==3.2.4
   - algebra ==4.3.1
-  - algebraic-graphs ==0.0.5
+  - algebraic-graphs ==0.1.1.1
   - alsa-core ==0.5.0.1
   - alsa-mixer ==0.2.0.3
-  - alsa-pcm ==0.6.0.4
+  - alsa-pcm ==0.6.1
   - alsa-seq ==0.6.0.7
   - alternative-vector ==0.0.0
   - alternators ==0.1.2.0
@@ -132,7 +132,7 @@ default-package-overrides:
   - attoparsec-path ==0.0.0.1
   - attoparsec-time ==1
   - attoparsec-uri ==0.0.4
-  - audacity ==0.0.1.2
+  - audacity ==0.0.2
   - authenticate ==1.3.4
   - authenticate-oauth ==1.6
   - auto ==0.4.3.1
@@ -140,7 +140,7 @@ default-package-overrides:
   - auto-update ==0.1.4
   - avwx ==0.3.0.2
   - axiom ==0.4.6
-  - b9 ==0.5.44
+  - b9 ==0.5.47
   - backprop ==0.1.5.1
   - bank-holidays-england ==0.1.0.6
   - barrier ==0.1.1
@@ -263,7 +263,7 @@ default-package-overrides:
   - cabal-rpm ==0.12.2
   - cabal-toolkit ==0.0.5
   - cache ==0.1.1.0
-  - cairo ==0.13.4.2
+  - cairo ==0.13.5.0
   - calendar-recycling ==0.0
   - call-stack ==0.1.0
   - capataz ==0.1.0.1
@@ -291,12 +291,12 @@ default-package-overrides:
   - Chart-cairo ==1.8.3
   - chaselev-deque ==0.5.0.5
   - ChasingBottoms ==1.3.1.4
-  - chatwork ==0.1.3.1
+  - chatwork ==0.1.3.2
   - cheapskate ==0.1.1
   - cheapskate-highlight ==0.1.0.0
   - cheapskate-lucid ==0.1.0.0
   - check-email ==1.0.2
-  - checkers ==0.4.9.5
+  - checkers ==0.4.10
   - choice ==0.2.2
   - chunked-data ==0.3.1
   - cipher-aes ==0.2.11
@@ -471,7 +471,7 @@ default-package-overrides:
   - dawg-ord ==0.5.1.0
   - dbcleaner ==0.1.3
   - dbus ==0.10.15
-  - debian-build ==0.10.1.0
+  - debian-build ==0.10.1.1
   - debug ==0.1.1
   - Decimal ==0.5.1
   - declarative ==0.5.2
@@ -610,7 +610,7 @@ default-package-overrides:
   - extensible ==0.4.8
   - extensible-effects ==2.4.0.0
   - extensible-exceptions ==0.1.1.4
-  - extra ==1.6.5
+  - extra ==1.6.6
   - extractable-singleton ==0.0.1
   - extrapolate ==0.3.1
   - fail ==4.9.0.0
@@ -666,7 +666,7 @@ default-package-overrides:
   - ForestStructures ==0.0.0.2
   - forma ==0.2.0
   - format-numbers ==0.1.0.0
-  - formatting ==6.3.2
+  - formatting ==6.3.4
   - foundation ==0.0.20
   - FPretty ==1.1
   - Frames ==0.3.0.2
@@ -734,10 +734,10 @@ default-package-overrides:
   - ghc-paths ==0.1.0.9
   - ghc-prof ==1.4.1.1
   - ghc-syb-utils ==0.2.3.3
-  - ghc-tcplugins-extra ==0.2.4
+  - ghc-tcplugins-extra ==0.2.5
   - ghc-typelits-extra ==0.2.4
-  - ghc-typelits-knownnat ==0.4.1
-  - ghc-typelits-natnormalise ==0.5.9
+  - ghc-typelits-knownnat ==0.4.2
+  - ghc-typelits-natnormalise ==0.5.10
   - ghost-buster ==0.1.1.0
   - gi-atk ==2.0.15
   - gi-cairo ==1.0.15
@@ -759,7 +759,7 @@ default-package-overrides:
   - glazier ==0.11.0.1
   - glazier-pipes ==0.1.5.1
   - GLFW-b ==1.4.8.3
-  - glib ==0.13.5.0
+  - glib ==0.13.6.0
   - Glob ==0.9.2
   - glob-posix ==0.1.0.1
   - gloss ==1.11.1.1
@@ -792,7 +792,7 @@ default-package-overrides:
   - group-by-date ==0.1.0.2
   - grouped-list ==0.2.2.0
   - groups ==0.4.1.0
-  - gtk2hs-buildtools ==0.13.3.1
+  - gtk2hs-buildtools ==0.13.4.0
   - H ==0.9.0.1
   - h2c ==1.0.0
   - hackage-db ==2.0
@@ -817,8 +817,8 @@ default-package-overrides:
   - hashmap ==1.3.3
   - hashtables ==1.2.3.0
   - haskeline ==0.7.4.2
-  - haskell-gi ==0.21.0
-  - haskell-gi-base ==0.21.0
+  - haskell-gi ==0.21.2
+  - haskell-gi-base ==0.21.1
   - haskell-gi-overloading ==0.0
   - haskell-lexer ==1.0.1
   - haskell-lsp ==0.2.0.1
@@ -931,8 +931,8 @@ default-package-overrides:
   - hsdns ==1.7.1
   - hsebaysdk ==0.4.0.0
   - hsemail ==2
-  - HSet ==0.0.1
   - hset ==2.2.0
+  - HSet ==0.0.1
   - hsexif ==0.6.1.5
   - hs-GeoIP ==0.3
   - hsignal ==0.2.7.5
@@ -982,12 +982,12 @@ default-package-overrides:
   - HTTP ==4000.3.11
   - http2 ==1.6.3
   - http-api-data ==0.3.7.2
-  - http-client ==0.5.12
+  - http-client ==0.5.12.1
   - http-client-openssl ==0.2.1.1
   - http-client-tls ==0.3.5.3
   - http-common ==0.8.2.0
   - http-conduit ==2.3.1
-  - http-date ==0.0.6.1
+  - http-date ==0.0.7
   - http-link-header ==1.0.3
   - http-media ==0.7.1.2
   - http-reverse-proxy ==0.5.0.1
@@ -1007,13 +1007,13 @@ default-package-overrides:
   - hw-fingertree ==0.1.0.1
   - hw-fingertree-strict ==0.1.0.3
   - hw-hedgehog ==0.1.0.1
-  - hw-hspec-hedgehog ==0.1.0.3
+  - hw-hspec-hedgehog ==0.1.0.4
   - hw-int ==0.0.0.3
   - hw-json ==0.6.0.0
   - hw-mquery ==0.1.0.1
   - hworker ==0.1.0.1
   - hw-parser ==0.0.0.3
-  - hw-prim ==0.5.0.0
+  - hw-prim ==0.5.0.2
   - hw-rankselect ==0.10.0.3
   - hw-rankselect-base ==0.2.0.2
   - hw-string-parse ==0.0.0.4
@@ -1071,7 +1071,7 @@ default-package-overrides:
   - intervals ==0.8.1
   - intro ==0.3.1.0
   - invariant ==0.5
-  - invertible ==0.2.0.4
+  - invertible ==0.2.0.5
   - io-choice ==0.0.6
   - io-machine ==0.2.0.0
   - io-manager ==0.1.0.2
@@ -1082,7 +1082,7 @@ default-package-overrides:
   - io-streams-haproxy ==1.0.0.2
   - ip ==1.1.2
   - ip6addr ==0.5.3
-  - iproute ==1.7.3
+  - iproute ==1.7.4
   - IPv6Addr ==1.0.2
   - IPv6DB ==0.2.6
   - ipython-kernel ==0.9.0.2
@@ -1245,7 +1245,7 @@ default-package-overrides:
   - markup ==4.0.4
   - marvin-interpolate ==1.1.2
   - massiv ==0.1.6.1
-  - massiv-io ==0.1.2.0
+  - massiv-io ==0.1.3.0
   - mathexpr ==0.3.0.0
   - math-functions ==0.2.1.0
   - matplotlib ==0.6.0
@@ -1282,7 +1282,7 @@ default-package-overrides:
   - mighty-metropolis ==1.2.0
   - milena ==0.5.2.1
   - mime-mail ==0.4.14
-  - mime-mail-ses ==0.4.0.0
+  - mime-mail-ses ==0.4.1
   - mime-types ==0.1.0.7
   - minimorph ==0.1.6.1
   - miniutter ==0.4.7.0
@@ -1312,7 +1312,7 @@ default-package-overrides:
   - monadic-arrays ==0.2.2
   - monad-journal ==0.8.1
   - monadloc ==0.7.1
-  - monad-logger ==0.3.28.4
+  - monad-logger ==0.3.28.5
   - monad-logger-json ==0.1.0.0
   - monad-logger-prefix ==0.1.9
   - monad-logger-syslog ==0.1.4.0
@@ -1436,7 +1436,7 @@ default-package-overrides:
   - old-time ==1.1.0.3
   - once ==0.2
   - one-liner ==0.9.2
-  - one-liner-instances ==0.1.1.0
+  - one-liner-instances ==0.1.2.1
   - OneTuple ==0.2.1
   - online ==0.2.1.0
   - Only ==0.1
@@ -1470,7 +1470,7 @@ default-package-overrides:
   - pandoc ==2.1.2
   - pandoc-citeproc ==0.14.3
   - pandoc-types ==1.17.3.1
-  - pango ==0.13.4.0
+  - pango ==0.13.5.0
   - papillon ==0.1.0.5
   - parallel ==3.2.1.1
   - parallel-io ==0.3.3
@@ -1533,7 +1533,7 @@ default-package-overrides:
   - pipes-category ==0.3.0.0
   - pipes-concurrency ==2.0.10
   - pipes-csv ==1.4.3
-  - pipes-extras ==1.0.13
+  - pipes-extras ==1.0.14
   - pipes-fastx ==0.3.0.0
   - pipes-fluid ==0.6.0.0
   - pipes-group ==1.0.9
@@ -1652,7 +1652,7 @@ default-package-overrides:
   - raaz ==0.2.0
   - rainbow ==0.28.0.4
   - rainbox ==0.18.0.10
-  - rakuten ==0.1.1.0
+  - rakuten ==0.1.1.1
   - ramus ==0.1.2
   - random ==1.1
   - random-fu ==0.2.7.0
@@ -1748,13 +1748,13 @@ default-package-overrides:
   - SafeSemaphore ==0.10.1
   - sample-frame ==0.0.3
   - sample-frame-np ==0.0.4.1
-  - sampling ==0.3.2
+  - sampling ==0.3.3
   - sandman ==0.2.0.1
   - say ==0.1.0.0
-  - sbp ==2.3.13
+  - sbp ==2.3.16
   - sbv ==7.5
-  - scalendar ==1.2.0
   - SCalendar ==1.1.0
+  - scalendar ==1.2.0
   - scalpel ==0.5.1
   - scalpel-core ==0.5.1
   - scanner ==0.2
@@ -1889,7 +1889,7 @@ default-package-overrides:
   - Spock-worker ==0.3.1.0
   - spreadsheet ==0.1.3.7
   - sqlite-simple ==0.4.15.0
-  - sql-words ==0.1.5.1
+  - sql-words ==0.1.6.0
   - squeal-postgresql ==0.1.1.4
   - srcloc ==0.5.1.2
   - stache ==1.2.1
@@ -1898,7 +1898,7 @@ default-package-overrides:
   - state-codes ==0.1.3
   - stateref ==0.3
   - statestack ==0.2.0.5
-  - StateVar ==1.1.0.4
+  - StateVar ==1.1.1.0
   - stateWriter ==0.2.10
   - static-text ==0.2.0.1
   - statistics ==0.14.0.2
@@ -2020,7 +2020,7 @@ default-package-overrides:
   - text-generic-pretty ==1.2.1
   - text-icu ==0.7.0.1
   - text-latin1 ==0.3.1
-  - text-ldap ==0.1.1.11
+  - text-ldap ==0.1.1.12
   - textlocal ==0.1.0.5
   - text-manipulate ==0.2.0.1
   - text-metrics ==0.3.0
@@ -2034,7 +2034,7 @@ default-package-overrides:
   - tfp ==1.0.0.2
   - tf-random ==0.5
   - th-abstraction ==0.2.6.0
-  - th-data-compat ==0.0.2.5
+  - th-data-compat ==0.0.2.6
   - th-desugar ==1.7
   - these ==0.7.4
   - th-expand-syns ==0.4.4.0
@@ -2049,7 +2049,7 @@ default-package-overrides:
   - threepenny-editors ==0.5.6
   - threepenny-gui ==0.8.2.3
   - threepenny-gui-flexbox ==0.4.2
-  - th-reify-compat ==0.0.1.3
+  - th-reify-compat ==0.0.1.4
   - th-reify-many ==0.1.8
   - throttle-io-stream ==0.2.0.1
   - through-text ==0.1.0.0
@@ -2058,7 +2058,7 @@ default-package-overrides:
   - th-to-exp ==0.0.1.1
   - th-utilities ==0.2.0.1
   - tibetan-utils ==0.1.1.5
-  - tidal ==0.9.8
+  - tidal ==0.9.9
   - tile ==0.3.0.0
   - time-compat ==0.1.0.3
   - timeit ==2.0
@@ -2104,7 +2104,7 @@ default-package-overrides:
   - tuple ==0.3.0.2
   - tuples-homogenous-h98 ==0.1.1.0
   - tuple-th ==0.2.5
-  - turtle ==1.5.7
+  - turtle ==1.5.8
   - turtle-options ==0.1.0.4
   - type-assertions ==0.1.0.0
   - type-combinators ==0.2.4.3
@@ -2150,7 +2150,7 @@ default-package-overrides:
   - universe-instances-extended ==1.0.0.1
   - universe-instances-trans ==1.0.0.1
   - universe-reverse-instances ==1.0
-  - universum ==1.1.0
+  - universum ==1.1.1
   - unix-bytestring ==0.3.7.3
   - unix-compat ==0.5.0.1
   - unix-time ==0.3.8
@@ -2241,8 +2241,8 @@ default-package-overrides:
   - wai-slack-middleware ==0.2.0
   - wai-transformers ==0.0.7
   - wai-websockets ==3.0.1.2
-  - warp ==3.2.18.2
-  - warp-tls ==3.2.4.2
+  - warp ==3.2.19
+  - warp-tls ==3.2.4.3
   - wave ==0.1.5
   - wavefront ==0.7.1.2
   - webdriver ==0.8.5
@@ -2273,7 +2273,7 @@ default-package-overrides:
   - with-location ==0.1.0
   - witness ==0.4
   - wizards ==1.0.2
-  - wl-pprint ==1.2
+  - wl-pprint ==1.2.1
   - wl-pprint-annotated ==0.1.0.0
   - wl-pprint-console ==0.1.0.1
   - wl-pprint-extras ==3.5.0.5
@@ -2327,7 +2327,7 @@ default-package-overrides:
   - xml-types ==0.3.6
   - xmonad ==0.13
   - xmonad-contrib ==0.13
-  - xmonad-extras ==0.13.2
+  - xmonad-extras ==0.13.3
   - xss-sanitize ==0.3.5.7
   - xturtle ==0.2.0.0
   - xxhash ==0.0.2
