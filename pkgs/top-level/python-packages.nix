@@ -7642,6 +7642,8 @@ in {
 
   micawber = callPackage ../development/python-modules/micawber { };
 
+  milksnake = callPackage ../development/python-modules/milksnake { };
+
   minimock = buildPythonPackage rec {
     version = "1.2.8";
     name = "minimock-${version}";
