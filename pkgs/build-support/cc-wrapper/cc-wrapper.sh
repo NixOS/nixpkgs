@@ -180,7 +180,6 @@ fi
 
 PATH="$path_backup"
 # Old bash workaround, see above.
-exec @prog@ \
-    ${extraBefore+"${extraBefore[@]}"} \
-    ${params+"${params[@]}"} \
-    ${extraAfter+"${extraAfter[@]}"}
+(echo ${extraBefore+"${extraBefore[@]}"}; \
+ echo ${params+"${params[@]}"}; \
+ echo ${extraAfter+"${extraAfter[@]}"}) | xargs -x @prog@
