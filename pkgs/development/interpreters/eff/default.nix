@@ -1,4 +1,4 @@
-{ stdenv, fetchzip, which, ocamlPackages }:
+{ stdenv, fetchFromGitHub, which, ocamlPackages }:
 
 let version = "5.0"; in
 
@@ -6,8 +6,10 @@ stdenv.mkDerivation {
 
   name = "eff-${version}";
 
-  src = fetchzip {
-    url = "https://github.com/matijapretnar/eff/archive/v${version}.tar.gz";
+  src = fetchFromGitHub {
+    owner = "matijapretnar";
+    repo = "eff";
+    rev = "v${version}";
     sha256 = "1fslfj5d7fhj3f7kh558b8mk5wllwyq4rnhfkyd96fpy144sdcka";
   };
 
