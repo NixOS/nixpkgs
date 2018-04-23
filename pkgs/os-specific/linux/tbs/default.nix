@@ -1,19 +1,24 @@
-{ stdenv, fetchFromGitHub, kernel, kmod, perl, patchutils, perlPackages }:
+{ stdenv, lib, fetchFromGitHub, kernel, kmod, perl, patchutils, perlPackages, libelf }:
 let
-  media = fetchFromGitHub {
+
+  media = fetchFromGitHub rec {
+    name = repo;
     owner = "tbsdtv";
     repo = "linux_media";
-    rev = "14ebbec91f2cd0423aaf859fc6e6d5d986397cd4";
-    sha256 = "1cmqj3kby8sxfcpvslbxywr95529vjxzbn800fdp35lka1fv962h";
+    rev = "efe31531b77efd3a4c94516504a5823d31cdc776";
+    sha256 = "1533qi3sb91v00289hl5zaj4l35r2sf9fqc6z5ky1vbb7byxgnlr";
   };
-  build = fetchFromGitHub {
+
+  build = fetchFromGitHub rec {
+    name = repo;
     owner = "tbsdtv";
     repo = "media_build";
-    rev = "c340e29a4047e43f7ea7ebf19e1e28c1f2112d05";
-    sha256 = "0hfn1j9qk8lh30z3ywj22qky480nsf8z2iag2bqhrhy4375vjlbl";
+    rev = "a0d62eba4d429e0e9d2c2f910fb203e817cac84b";
+    sha256 = "1329s7w9xlqjqwkpaqsd6b5dmzhm97jw0c7c7zzmmbdkl289i4i4";
   };
+
 in stdenv.mkDerivation {
-  name = "tbs-2017-11-05-${kernel.version}";
+  name = "tbs-2018.04.18-${kernel.version}";
 
   srcs = [ media build ];
   sourceRoot = "${build.name}";
@@ -39,10 +44,13 @@ in stdenv.mkDerivation {
   installFlags = [ "DESTDIR=$(out)" ];
 
   hardeningDisable = [ "pic" "format" ];
-  nativeBuildInputs = [ patchutils kmod perl perlPackages.ProcProcessTable ];
 
-  meta = with stdenv.lib; {
+  nativeBuildInputs = [ patchutils kmod perl perlPackages.ProcProcessTable ]
+  ++ lib.optional (lib.versionAtLeast kernel.version "4.14") [ libelf ];
+
+  meta = with lib; {
     homepage = https://www.tbsdtv.com/;
+    description = "Linux driver for TBSDTV cards";
     license = licenses.gpl2;
     maintainers = with maintainers; [ ck3d ];
     priority = 20;
