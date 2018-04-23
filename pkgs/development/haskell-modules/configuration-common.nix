@@ -866,9 +866,6 @@ self: super: {
   # https://github.com/fpco/stackage/issues/3126
   stack = doJailbreak super.stack;
 
-  # https://github.com/snoyberg/monad-logger/issues/1
-  monad-logger = self.monad-logger_0_3_28_5;
-
   # These packages depend on each other, forming an infinite loop.
   scalendar = markBroken (super.scalendar.override { SCalendar = null; });
   SCalendar = markBroken (super.SCalendar.override { scalendar = null; });
