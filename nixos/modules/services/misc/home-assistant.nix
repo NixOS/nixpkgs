@@ -5,9 +5,10 @@ with lib;
 let
   cfg = config.services.home-assistant;
 
-  configFile = pkgs.writeText "configuration.json" (builtins.toJSON (if cfg.applyDefaultConfig
-    then (lib.recursiveUpdate defaultConfig (if (isNull cfg.config) then {} else cfg.config))
-    else cfg.config));
+  # cfg.config != null can be assumed here
+  configFile = pkgs.writeText "configuration.json"
+    (builtins.toJSON (if cfg.applyDefaultConfig then
+    (lib.recursiveUpdate defaultConfig cfg.config) else cfg.config));
 
   availableComponents = pkgs.home-assistant.availableComponents;
 
