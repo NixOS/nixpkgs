@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, givaro, pkgconfig, openblas, liblapack
+{ stdenv, fetchFromGitHub, autoreconfHook, givaro, pkgconfig, openblas
 , gmpxx
 , optimize ? false # impure
 }:
@@ -19,10 +19,10 @@ stdenv.mkDerivation rec {
     autoreconfHook
     pkgconfig
   ] ++ stdenv.lib.optionals doCheck checkInputs;
-  buildInputs = [ givaro (liblapack.override {shared = true;}) openblas];
+  buildInputs = [ givaro openblas];
   configureFlags = [
     "--with-blas-libs=-lopenblas"
-    "--with-lapack-libs=-llapack"
+    "--with-lapack-libs=-lopenblas"
   ] ++ stdenv.lib.optionals (!optimize) [
     # disable SIMD instructions (which are enabled *when available* by default)
     "--disable-sse"
