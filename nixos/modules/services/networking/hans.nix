@@ -1,13 +1,13 @@
-# NixOS module for iodine, ip over dns daemon
+# NixOS module for hans, ip over icmp daemon
 
 { config, lib, pkgs, ... }:
 
 with lib;
 
 let
-  cfg = config.services.iodine;
+  cfg = config.services.hans;
 
-  iodinedUser = "iodined";
+  hansUser = "hans";
 
 in
 {
@@ -16,22 +16,21 @@ in
 
   options = {
 
-    services.iodine = {
+    services.hans = {
       clients = mkOption {
         default = {};
         description = ''
           Each attribute of this option defines a systemd service that
-          runs iodine. Many or none may be defined.
+          runs hans. Many or none may be defined.
           The name of each service is
-          <literal>iodine-<replaceable>name</replaceable></literal>
+          <literal>hans-<replaceable>name</replaceable></literal>
           where <replaceable>name</replaceable> is the name of the
           corresponding attribute name.
         '';
         example = literalExample ''
         {
           foo = {
-            server = "tunnel.mdomain.com";
-            relay = "8.8.8.8";
+            server = "192.0.2.1";
             extraConfig = "-v";
           }
         }
@@ -42,22 +41,15 @@ in
             server = mkOption {
               type = types.str;
               default = "";
-              description = "Domain or Subdomain of server running iodined";
-              example = "tunnel.mydomain.com";
-            };
-
-            relay = mkOption {
-              type = types.str;
-              default = "";
-              description = "DNS server to use as a intermediate relay to the iodined server";
-              example = "8.8.8.8";
+              description = "IP address of server running hans";
+              example = "192.0.2.1";
             };
 
             extraConfig = mkOption {
               type = types.str;
               default = "";
               description = "Additional command line parameters";
-              example = "-l 192.168.1.10 -p 23";
+              example = "-v";
             };
 
             passwordFile = mkOption {
@@ -65,6 +57,7 @@ in
               default = "";
               description = "File that containts password";
             };
+
           };
         }));
       };
@@ -73,28 +66,27 @@ in
         enable = mkOption {
           type = types.bool;
           default = false;
-          description = "enable iodined server";
+          description = "enable hans server";
         };
 
         ip = mkOption {
           type = types.str;
           default = "";
-          description = "The assigned ip address or ip range";
-          example = "172.16.10.1/24";
+          description = "The assigned ip range";
+          example = "198.51.100.0";
         };
 
-        domain = mkOption {
-          type = types.str;
-          default = "";
-          description = "Domain or subdomain of which nameservers point to us";
-          example = "tunnel.mydomain.com";
+        respondToSystemPings = mkOption {
+          type = types.bool;
+          default = false;
+          description = "Force hans respond to ordinary pings";
         };
 
         extraConfig = mkOption {
           type = types.str;
           default = "";
           description = "Additional command line parameters";
-          example = "-l 192.168.1.10 -p 23";
+          example = "-v";
         };
 
         passwordFile = mkOption {
@@ -110,17 +102,20 @@ in
   ### implementation
 
   config = mkIf (cfg.server.enable || cfg.clients != {}) {
-    environment.systemPackages = [ pkgs.iodine ];
+    boot.kernel.sysctl = optionalAttrs cfg.server.respondToSystemPings {
+      "net.ipv4.icmp_echo_ignore_all" = 1;
+    };
+
     boot.kernelModules = [ "tun" ];
 
     systemd.services =
     let
-      createIodineClientService = name: cfg:
+      createHansClientService = name: cfg:
       {
-        description = "iodine client - ${name}";
+        description = "hans client - ${name}";
         after = [ "network.target" ];
         wantedBy = [ "multi-user.target" ];
-        script = "${pkgs.iodine}/bin/iodine -f -u ${iodinedUser} ${cfg.extraConfig} ${optionalString (cfg.passwordFile != "") "-P $(cat \"${cfg.passwordFile}\")"} ${cfg.relay} ${cfg.server}";
+        script = "${pkgs.hans}/bin/hans -f -u ${hansUser} ${cfg.extraConfig} -c ${cfg.server} ${optionalString (cfg.passwordFile != "") "-p $(cat \"${cfg.passwordFile}\")"}";
         serviceConfig = {
           RestartSec = "30s";
           Restart = "always";
@@ -129,22 +124,22 @@ in
     in
     listToAttrs (
       mapAttrsToList
-        (name: value: nameValuePair "iodine-${name}" (createIodineClientService name value))
+        (name: value: nameValuePair "hans-${name}" (createHansClientService name value))
         cfg.clients
     ) // {
-      iodined = mkIf (cfg.server.enable) {
-        description = "iodine, ip over dns server daemon";
+      hans = mkIf (cfg.server.enable) {
+        description = "hans, ip over icmp server daemon";
         after = [ "network.target" ];
         wantedBy = [ "multi-user.target" ];
-        script = "${pkgs.iodine}/bin/iodined -f -u ${iodinedUser} ${cfg.server.extraConfig} ${optionalString (cfg.passwordFile != "") "-P $(cat \"${cfg.passwordFile}\")"} ${cfg.server.ip} ${cfg.server.domain}";
+        script = "${pkgs.hans}/bin/hans -f -u ${hansUser} ${cfg.server.extraConfig} -s ${cfg.server.ip} ${optionalString cfg.server.respondToSystemPings "-r"} ${optionalString (cfg.passwordFile != "") "-p $(cat \"${cfg.passwordFile}\")"}";
       };
     };
 
     users.extraUsers = singleton {
-      name = iodinedUser;
-      uid = config.ids.uids.iodined;
-      description = "Iodine daemon user";
+      name = hansUser;
+      description = "Hans daemon user";
     };
-    users.extraGroups.iodined.gid = config.ids.gids.iodined;
   };
+
+  meta.maintainers = with maintainers; [ gnidorah ];
 }
