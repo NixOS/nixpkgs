@@ -1,0 +1,36 @@
+{ stdenv, fetchFromGitHub, pkgs, pythonPackages, wrapGAppsHook}:
+
+pythonPackages.buildPythonApplication rec {
+  name = "pdf-quench-${version}";
+  version = "1.0.5";
+
+  src = fetchFromGitHub {
+    owner = "linuxerwang";
+    repo = "pdf-quench";
+    rev = "b72b3970b371026f9a7ebe6003581e8a63af98f6";
+    sha256 = "1rp9rlwr6rarcsxygv5x2c5psgwl6r69k0lsgribgyyla9cf2m7n";
+  };
+
+  nativeBuildInputs = [ wrapGAppsHook ];
+  buildInputs = with pkgs; [ gtk3 gobjectIntrospection goocanvas2 (poppler.override { introspectionSupport = true; }) ];
+  propagatedBuildInputs = with pythonPackages; [ pygobject3 pypdf2 ];
+
+  dontBuild = true;
+  doCheck = false;
+
+  postPatch = ''
+    substituteInPlace src/pdf_quench.py \
+      --replace /usr/bin/python "${pythonPackages.python}/bin/python"
+    '';
+
+  installPhase = ''
+    install -D -T -m 755 src/pdf_quench.py $out/bin/pdf-quench
+  '';
+
+  meta = with stdenv.lib; {
+    homepage = https://github.com/linuxerwang/pdf-quench;
+    description = "A visual tool for cropping pdf files";
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ flokli ];
+  };
+}
