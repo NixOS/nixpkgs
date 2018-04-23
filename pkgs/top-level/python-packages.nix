@@ -8227,6 +8227,8 @@ in {
     };
   };
 
+  pytaglib = callPackage ../development/python-modules/pytaglib { };
+
   pyte = callPackage ../development/python-modules/pyte { };
 
   graphviz = buildPythonPackage rec {
