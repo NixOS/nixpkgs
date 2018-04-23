@@ -55,9 +55,9 @@ let
     testScript = ''
       sub waitCatAndDelete ($) {
         return $machine->succeed(
-          "for i in \$(seq 600); do if [ -e '$_[0]' ]; then ".
+          "for i in \$(seq 500); do if [ -e '$_[0]' ]; then ".
           "cat '$_[0]' && rm -f '$_[0]' && exit 0; ".
-          "fi; sleep 0.1; done; echo timed out after 60 seconds >&2; exit 1"
+          "fi; sleep 0.2; done; echo timed out after 100 seconds >&2; exit 1"
         );
       };
 
