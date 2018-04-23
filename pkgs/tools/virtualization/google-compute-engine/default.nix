@@ -52,5 +52,6 @@ buildPythonApplication rec {
     homepage = "https://github.com/GoogleCloudPlatform/compute-image-packages";
     license = licenses.asl20;
     maintainers = with maintainers; [ zimbatm ];
+    platforms = platforms.linux;
   };
 }
