@@ -136,7 +136,7 @@ in
         description = "iodine, ip over dns server daemon";
         after = [ "network.target" ];
         wantedBy = [ "multi-user.target" ];
-        script = "${pkgs.iodine}/bin/iodined -f -u ${iodinedUser} ${cfg.server.extraConfig} ${optionalString (cfg.passwordFile != "") "-P $(cat \"${cfg.passwordFile}\")"} ${cfg.server.ip} ${cfg.server.domain}";
+        script = "${pkgs.iodine}/bin/iodined -f -u ${iodinedUser} ${cfg.server.extraConfig} ${optionalString (cfg.server.passwordFile != "") "-P $(cat \"${cfg.server.passwordFile}\")"} ${cfg.server.ip} ${cfg.server.domain}";
       };
     };
 
