@@ -13,16 +13,11 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
 
-  prePatch = stdenv.lib.optional stdenv.isDarwin ''
-    substituteInPlace cmake/dist.cmake \
-      --replace '@executable_path/''${UP_DIR}/''${INSTALL_LIB}' $out'/''${INSTALL_LIB}'
-  '';
-
-  meta = {
+  meta = with stdenv.lib; {
     homepage = https://github.com/kkos/oniguruma;
     description = "Regular expressions library";
-    license = stdenv.lib.licenses.bsd2;
-    maintainers = with stdenv.lib.maintainers; [ fuuzetsu ];
-    platforms = with stdenv.lib.platforms; unix;
+    license = licenses.bsd2;
+    maintainers = with maintainers; [ fuuzetsu ];
+    platforms = platforms.unix;
   };
 }
