@@ -5,13 +5,13 @@
 
 stdenv.mkDerivation rec {
   name = "shotcut-${version}";
-  version = "17.11";
+  version = "18.03";
 
   src = fetchFromGitHub {
     owner = "mltframework";
     repo = "shotcut";
     rev = "v${version}";
-    sha256 = "1bw2cjpzycddxi9b21haiaslv0ikia85wwgkfm2xl2m15w5j8510";
+    sha256 = "0c8mi6hm0iwdnq30aizp9bbfx6vl1qcyp4h3clb2q8dkywijd08f";
   };
 
   enableParallelBuilding = true;
