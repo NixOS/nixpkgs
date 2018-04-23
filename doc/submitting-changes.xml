@@ -179,6 +179,10 @@ Additional information.
 
 <listitem>
 <para>Rebase you branch against current <command>master</command>.</para>
+<note>
+  <para>If the rebase fails it might be because the commit from <command>nixos-version</command> happened to be cherry-picked (not an ancestor of master). This is usually mentioned in the commit message.</para>
+  <para>To correct: <command>git rebase --onto upstream/master &lt;SHA_FIRST_COMMIT&gt; HEAD</command> (Where <command>upstream</command> is the nixpkgs remote (not your fork))</para>
+</note>
 </listitem>
 </itemizedlist>
 </section>
@@ -456,4 +460,3 @@ the stone age.
 
 </section>
 </chapter>
-
