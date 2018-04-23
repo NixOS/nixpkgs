@@ -8592,6 +8592,9 @@ let self = _self // overrides; _self = with self; {
        url = mirror://cpan/authors/id/R/RE/REHSACK/List-MoreUtils-XS-0.428.tar.gz;
        sha256 = "0bfndmnkqaaf3gffprak143bzplxd69c368jxgr7rzlx88hyd7wx";
      };
+     preConfigure = ''
+       export LD=$CC
+     '';
      propagatedBuildInputs = [ XSLoader ];
      meta = {
        description = "Provide the stuff missing in List::Util in XS";
