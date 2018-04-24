@@ -53,7 +53,7 @@ manual</link> for the rest.</para>
       </row>
       <row>
         <entry><literal>{ x = 1; y = 2; }</literal></entry>
-        <entry>An set with attributes names <literal>x</literal> and <literal>y</literal></entry>
+        <entry>A set with attributes named <literal>x</literal> and <literal>y</literal></entry>
       </row>
       <row>
         <entry><literal>{ foo.bar = 1; }</literal></entry>
