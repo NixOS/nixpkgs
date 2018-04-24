@@ -58,11 +58,12 @@ rec {
 
   inherit (lib.strings) fileContents;
 
+  version = fileContents ../.version;
+  suffix = let suffixFile = ../.version-suffix; in
+    if pathExists suffixFile then fileContents suffixFile else "pre-git";
+
   # Return the Nixpkgs version number.
-  nixpkgsVersion =
-    let suffixFile = ../.version-suffix; in
-    fileContents ../.version
-    + (if pathExists suffixFile then fileContents suffixFile else "pre-git");
+  nixpkgsVersion = version + suffix;
 
   # Whether we're being called by nix-shell.
   inNixShell = builtins.getEnv "IN_NIX_SHELL" != "";
