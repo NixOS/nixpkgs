@@ -710,6 +710,11 @@
     github = "canndrew";
     name = "Andrew Cann";
   };
+  carlosdagos = {
+    email = "m@cdagostino.io";
+    github = "carlosdagos";
+    name = "Carlos D'Agostino";
+  };
   carlsverre = {
     email = "accounts@carlsverre.com";
     github = "carlsverre";

@@ -3118,6 +3118,8 @@ with pkgs;
 
   jnettop = callPackage ../tools/networking/jnettop { };
 
+  go-jira = callPackage ../applications/misc/go-jira { };
+
   john = callPackage ../tools/security/john {
     gcc = gcc49; # doesn't build with gcc5
   };
