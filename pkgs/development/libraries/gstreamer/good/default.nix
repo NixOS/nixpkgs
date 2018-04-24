@@ -6,6 +6,7 @@
 , libsoup, libpulseaudio, libintl
 , darwin, lame, mpg123, twolame
 , gtkSupport ? false, gtk3 ? null
+, ncurses
 }:
 
 assert gtkSupport -> gtk3 != null;
@@ -26,6 +27,7 @@ stdenv.mkDerivation rec {
     '';
     license     = licenses.lgpl2Plus;
     platforms   = platforms.linux ++ platforms.darwin;
+    maintainers = with maintainers; [ matthewbauer ];
   };
 
   src = fetchurl {
@@ -39,11 +41,14 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig python meson ninja gettext ];
 
+  NIX_LDFLAGS = "-lncurses";
+
   buildInputs = [
     gst-plugins-base orc bzip2
     libdv libvpx speex flac taglib
     cairo gdk_pixbuf aalib libcaca
     libsoup libshout lame mpg123 twolame libintl
+    ncurses
   ]
   ++ optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.Cocoa ]
   ++ optionals stdenv.isLinux [ libv4l libpulseaudio libavc1394 libiec61883 ];
