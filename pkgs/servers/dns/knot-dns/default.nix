@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
 
   #doCheck = true; problems in combination with dynamic linking
 
-  postInstall = ''rm -r "$out"/var'';
+  postInstall = ''rm -r "$out"/var "$out"/lib/*.la'';
 
   meta = with stdenv.lib; {
     description = "Authoritative-only DNS server from .cz domain registry";
