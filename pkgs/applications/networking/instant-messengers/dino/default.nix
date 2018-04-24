@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     owner = "dino";
     repo = "dino";
     rev = "e80da806022d8aaa32f77f3c7f0333cc1c80829b";
-    sha256 = "04z4k1s4ck6vmbzlbpiw096ny0wpj4zi3cd0iv9vb2iwdj22gib";
+    sha256 = "04z4k1s4ck6vmbzlbpiw096ny0wpj4zi3cd0iv9vb2iwdj22gibm";
     fetchSubmodules = true;
   };
 
