@@ -114,7 +114,7 @@ let
       mkdir -p $out$BINDIR $out$LIBDIR $out$INFODIR \
                $out$DOCDIR $out$LOCALEDIR
       for i in 1 2 3 4 5 6 7 8 9; do
-        mkdir -p $out$MANDIR/man$i $out$MANDIR/html$i
+        mkdir -p $out$MANDIR/man$i $out$MANDIR/html$i $out$DOCDIR/reference/ref$i
       done
       mkdir -p $out/usr/include
     '';
@@ -195,6 +195,7 @@ let
       install -D $NETBSDSRCDIR/sys/sys/rmd160.h $out/include/rmd160.h
       install -D $NETBSDSRCDIR/sys/sys/sha1.h $out/include/sha1.h
       install -D $NETBSDSRCDIR/sys/sys/sha2.h $out/include/sha2.h
+      install -D $NETBSDSRCDIR/include/vis.h $out/include/vis.h
     '';
     extraPaths = [ libc.src libutil.src
       (fetchNetBSD "include" "7.1.2" "1vc58xrhrp202biiv1chhlh0jwnjr7k3qq91pm46k6v5j95j0qwp")
