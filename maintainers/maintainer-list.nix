@@ -2675,6 +2675,11 @@
     github = "nmattia";
     name = "Nicolas Mattia";
   };
+  nocent = {
+    email = "nocent@protonmail.ch";
+    github = "nocent";
+    name = "nocent";
+  };
   nocoolnametom = {
     email = "nocoolnametom@gmail.com";
     github = "nocoolnametom";
