@@ -26,3 +26,7 @@ indent_size = 4
 # Match diffs, avoid to trim trailing whitespace
 [*.{diff,patch}]
 trim_trailing_whitespace = false
+
+# https://github.com/NixOS/nixpkgs/pull/39336#discussion_r183387754
+[.version]
+insert_final_newline = false

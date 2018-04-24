@@ -195,6 +195,7 @@
   ./services/databases/clickhouse.nix
   ./services/databases/couchdb.nix
   ./services/databases/firebird.nix
+  ./services/databases/foundationdb.nix
   ./services/databases/hbase.nix
   ./services/databases/influxdb.nix
   ./services/databases/memcached.nix
@@ -481,6 +482,7 @@
   ./services/networking/gnunet.nix
   ./services/networking/gogoclient.nix
   ./services/networking/gvpe.nix
+  ./services/networking/hans.nix
   ./services/networking/haproxy.nix
   ./services/networking/heyefi.nix
   ./services/networking/hostapd.nix

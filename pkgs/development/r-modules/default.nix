@@ -438,7 +438,6 @@ let
   packagesRequireingX = [
     "accrual"
     "ade4TkGUI"
-    "adehabitat"
     "analogue"
     "analogueExtra"
     "AnalyzeFMRI"
@@ -585,7 +584,6 @@ let
     "ProbForecastGOP"
     "qtbase"
     "qtpaint"
-    "R2STATS"
     "r4ss"
     "RandomFields"
     "rareNMtests"

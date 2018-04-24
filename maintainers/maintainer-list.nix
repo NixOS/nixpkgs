@@ -28,6 +28,11 @@
     github = "AndersonTorres";
     name = "Anderson Torres";
   };
+  Anton-Latukha = {
+    email = "anton.latuka+nixpkgs@gmail.com";
+    github = "Anton-Latukha";
+    name = "Anton Latukha";
+  };
   Baughn = {
     email = "sveina@gmail.com";
     github = "Baughn";
@@ -309,6 +314,11 @@
     name = "Alex Chapman";
     email = "alex@farfromthere.net";
     github = "AJChapman";
+  };
+  alexfmpe = {
+    email = "alexandre.fmp.esteves@gmail.com";
+    github = "alexfmpe";
+    name = "Alexandre Esteves";
   };
   alexvorobiev = {
     email = "alexander.vorobiev@gmail.com";
@@ -709,6 +719,11 @@
     email = "shum@canndrew.org";
     github = "canndrew";
     name = "Andrew Cann";
+  };
+  carlosdagos = {
+    email = "m@cdagostino.io";
+    github = "carlosdagos";
+    name = "Carlos D'Agostino";
   };
   carlsverre = {
     email = "accounts@carlsverre.com";
@@ -1726,7 +1741,7 @@
     name = "Jeffrey David Johnson";
   };
   jensbin = {
-    email = "jensbin@protonmail.com";
+    email = "jensbin+git@pm.me";
     github = "jensbin";
     name = "Jens Binkert";
   };
@@ -2659,6 +2674,11 @@
     email = "nicolas@nmattia.com";
     github = "nmattia";
     name = "Nicolas Mattia";
+  };
+  nocent = {
+    email = "nocent@protonmail.ch";
+    github = "nocent";
+    name = "nocent";
   };
   nocoolnametom = {
     email = "nocoolnametom@gmail.com";

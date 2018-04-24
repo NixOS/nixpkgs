@@ -101,6 +101,9 @@ let
               jobs.git.x86_64-darwin
               jobs.mysql.x86_64-darwin
               jobs.vim.x86_64-darwin
+              # Ensure that UI stuff works on darwin
+              jobs.inkscape.x86_64-darwin
+              jobs.qt5.qtmultimedia.x86_64-darwin
 
               jobs.tests.cc-wrapper.x86_64-linux
               jobs.tests.cc-wrapper.x86_64-darwin

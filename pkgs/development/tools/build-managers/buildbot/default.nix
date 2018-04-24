@@ -14,11 +14,11 @@ let
   package = pythonPackages.buildPythonApplication rec {
     name = "${pname}-${version}";
     pname = "buildbot";
-    version = "1.0.0";
+    version = "1.1.0";
 
     src = pythonPackages.fetchPypi {
       inherit pname version;
-      sha256 = "0y7gpymxl09gd9dyqj7zqhaihpl9da1v8ppxi4r161ywd8jv9b1g";
+      sha256 = "1rhmlcvw0dsr4f37sb3xmb9xcn76lsrsw2g1z611g339nmxzi0sc";
     };
 
     buildInputs = with pythonPackages; [

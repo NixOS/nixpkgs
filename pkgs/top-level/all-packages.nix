@@ -2089,6 +2089,8 @@ with pkgs;
 
   edk2 = callPackage ../development/compilers/edk2 { };
 
+  eff = callPackage ../development/interpreters/eff { };
+
   eflite = callPackage ../applications/audio/eflite {};
 
   eid-mw = callPackage ../tools/security/eid-mw { };
@@ -2406,6 +2408,8 @@ with pkgs;
   fswebcam = callPackage ../os-specific/linux/fswebcam { };
 
   fuseiso = callPackage ../tools/filesystems/fuseiso { };
+
+  foundationdb = callPackage ../servers/foundationdb { stdenv = overrideCC stdenv gcc49; };
 
   fuse-7z-ng = callPackage ../tools/filesystems/fuse-7z-ng { };
 
@@ -3115,6 +3119,8 @@ with pkgs;
   jmtpfs = callPackage ../tools/filesystems/jmtpfs { };
 
   jnettop = callPackage ../tools/networking/jnettop { };
+
+  go-jira = callPackage ../applications/misc/go-jira { };
 
   john = callPackage ../tools/security/john {
     gcc = gcc49; # doesn't build with gcc5
@@ -8786,6 +8792,7 @@ with pkgs;
 
   fflas-ffpack = callPackage ../development/libraries/fflas-ffpack {};
   fflas-ffpack_1 = callPackage ../development/libraries/fflas-ffpack/1.nix {};
+  linbox = callPackage ../development/libraries/linbox {};
 
   ffmpeg_0_10 = callPackage ../development/libraries/ffmpeg/0.10.nix {
     inherit (darwin.apple_sdk.frameworks) Cocoa;
@@ -13369,21 +13376,6 @@ with pkgs;
       ];
   };
 
-  linux_4_15 = callPackage ../os-specific/linux/kernel/linux-4.15.nix {
-    kernelPatches =
-      [ kernelPatches.bridge_stp_helper
-        # See pkgs/os-specific/linux/kernel/cpu-cgroup-v2-patches/README.md
-        # when adding a new linux version
-        # kernelPatches.cpu-cgroup-v2."4.11"
-        kernelPatches.modinst_arg_list_too_long
-      ]
-      ++ lib.optionals ((platform.kernelArch or null) == "mips")
-      [ kernelPatches.mips_fpureg_emu
-        kernelPatches.mips_fpu_sigill
-        kernelPatches.mips_ext3_n32
-      ];
-  };
-
   linux_4_16 = callPackage ../os-specific/linux/kernel/linux-4.16.nix {
     kernelPatches =
       [ kernelPatches.bridge_stp_helper
@@ -13501,8 +13493,6 @@ with pkgs;
 
     broadcom_sta = callPackage ../os-specific/linux/broadcom-sta/default.nix { };
 
-    tbs = callPackage ../os-specific/linux/tbs { };
-
     nvidiabl = callPackage ../os-specific/linux/nvidiabl { };
 
     nvidiaPackages = callPackage ../os-specific/linux/nvidia-x11 { };
@@ -13605,7 +13595,6 @@ with pkgs;
   linuxPackages_4_4 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_4_4);
   linuxPackages_4_9 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_4_9);
   linuxPackages_4_14 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_4_14);
-  linuxPackages_4_15 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_4_15);
   linuxPackages_4_16 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_4_16);
   # Don't forget to update linuxPackages_latest!
 
@@ -14235,9 +14224,7 @@ with pkgs;
 
   crimson = callPackage ../data/fonts/crimson {};
 
-  dejavu_fonts = lowPrio (callPackage ../data/fonts/dejavu-fonts {
-    inherit (perlPackages) FontTTF;
-  });
+  dejavu_fonts = lowPrio (callPackage ../data/fonts/dejavu-fonts {});
 
   # solve collision for nix-env before https://github.com/NixOS/nix/pull/815
   dejavu_fontsEnv = buildEnv {
@@ -14966,6 +14953,8 @@ with pkgs;
     ffmpeg = ffmpeg_2;
   };
 
+  bonzomatic = callPackage ../applications/editors/bonzomatic { };
+
   brackets = callPackage ../applications/editors/brackets { gconf = gnome3.gconf; };
 
   notmuch-bower = callPackage ../applications/networking/mailreaders/notmuch-bower { };
@@ -15131,6 +15120,8 @@ with pkgs;
 
   convchain = callPackage ../tools/graphics/convchain {};
 
+  coursera-dl = callPackage ../applications/misc/coursera-dl {};
+
   coyim = callPackage ../applications/networking/instant-messengers/coyim {};
 
   cpp_ethereum = callPackage ../applications/misc/cpp-ethereum { };
@@ -15259,6 +15250,8 @@ with pkgs;
   dr14_tmeter = callPackage ../applications/audio/dr14_tmeter { };
 
   draftsight = callPackage ../applications/graphics/draftsight { };
+
+  dragonfly-reverb = callPackage ../applications/audio/dragonfly-reverb { };
 
   droopy = callPackage ../applications/networking/droopy {
     inherit (python3Packages) wrapPython;
@@ -16786,6 +16779,7 @@ with pkgs;
   };
 
   xmr-stak = callPackage ../applications/misc/xmr-stak {
+    stdenvGcc6 = overrideCC stdenv gcc6;
     hwloc = hwloc-nox;
   };
 
@@ -19896,6 +19890,8 @@ with pkgs;
 
   planarity = callPackage ../development/libraries/science/math/planarity { };
 
+  rankwidth = callPackage ../development/libraries/science/math/rankwidth { };
+
   fenics = callPackage ../development/libraries/science/math/fenics {
     inherit (python3Packages) numpy ply pytest python six sympy;
     pythonPackages = python3Packages;
@@ -19938,6 +19934,8 @@ with pkgs;
   ipopt = callPackage ../development/libraries/science/math/ipopt { openblas = openblasCompat; };
 
   gmsh = callPackage ../applications/science/math/gmsh { };
+
+  zn_poly = callPackage ../development/libraries/science/math/zn_poly { };
 
   ### SCIENCE/MOLECULAR-DYNAMICS
 
@@ -20268,7 +20266,6 @@ with pkgs;
 
   pari = callPackage ../applications/science/math/pari { tex = texlive.combined.scheme-basic; };
   gp2c = callPackage ../applications/science/math/pari/gp2c.nix { };
-  pari-unstable = callPackage ../applications/science/math/pari/unstable.nix {};
 
   palp = callPackage ../applications/science/math/palp { };
 
@@ -21352,6 +21349,8 @@ with pkgs;
   mmark = callPackage ../tools/typesetting/mmark { };
 
   wire-desktop = callPackage ../applications/networking/instant-messengers/wire-desktop { };
+
+  teseq = callPackage ../applications/misc/teseq {  };
 
   # Unix tools
   unixtools = recurseIntoAttrs (callPackages ./unix-tools.nix { });
