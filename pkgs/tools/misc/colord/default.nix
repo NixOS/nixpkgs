@@ -21,6 +21,12 @@ stdenv.mkDerivation rec {
     "-Denable-docs=false"
   ];
 
+  # Install `ColorManager.conf` under `etc` rather than `share`
+  # See https://github.com/hughsie/colord/issues/61
+  prePatch = ''
+    sed "s/\([[:space:]]*\)install_dir: join_paths(datadir, 'dbus-1', 'system.d') ,/\1install_dir: join_paths(prefix, 'etc', 'dbus-1', 'system.d') ,/" -i data/meson.build
+  '';
+
   nativeBuildInputs = [ meson pkgconfig vala_0_40 ninja gettext libxml2 gobjectIntrospection makeWrapper ];
 
   buildInputs = [ glib polkit gusb lcms2 sqlite systemd dbus bash-completion argyllcms libgudev sane-backends ];
