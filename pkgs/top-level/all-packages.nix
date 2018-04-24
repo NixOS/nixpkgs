@@ -16649,6 +16649,7 @@ with pkgs;
   };
 
   xmr-stak = callPackage ../applications/misc/xmr-stak {
+    stdenvGcc6 = overrideCC stdenv gcc6;
     hwloc = hwloc-nox;
   };
 
