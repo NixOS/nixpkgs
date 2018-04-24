@@ -8,17 +8,19 @@ let
 
   testReader = pkgs.writeScript "test-input-reader" ''
     #!${pkgs.stdenv.shell}
-    rm -f ${resultFile}
+    rm -f ${resultFile} ${resultFile}.tmp
     logger "testReader: START: Waiting for $1 characters, expecting '$2'."
     touch ${readyFile}
     read -r -N $1 chars
     rm -f ${readyFile}
 
     if [ "$chars" == "$2" ]; then
-      logger -s "testReader: PASS: Got '$2' as expected." 2>${resultFile}
+      logger -s "testReader: PASS: Got '$2' as expected." 2>${resultFile}.tmp
     else
-      logger -s "testReader: FAIL: Expected '$2' but got '$chars'." 2>${resultFile}
+      logger -s "testReader: FAIL: Expected '$2' but got '$chars'." 2>${resultFile}.tmp
     fi
+    # rename after the file is written to prevent a race condition
+    mv  ${resultFile}.tmp ${resultFile}
   '';
 
 
@@ -52,7 +54,7 @@ let
           if ($desc eq "Xorg keymap") {
             # make sure the xterm window is open and has focus
             $machine->waitForWindow(qr/testterm/);
-            $machine->succeed("${pkgs.xdotool}/bin/xdotool search --name testterm windowactivate --sync");
+            $machine->waitUntilSucceeds("${pkgs.xdotool}/bin/xdotool search --sync --onlyvisible --class testterm windowfocus --sync");
           }
 
           # wait for reader to be ready
@@ -71,7 +73,7 @@ let
       $machine->waitForX;
 
       mkTest "VT keymap", "openvt -sw --";
-      mkTest "Xorg keymap", "DISPLAY=:0 xterm -title testterm -fullscreen -e";
+      mkTest "Xorg keymap", "DISPLAY=:0 xterm -title testterm -class testterm -fullscreen -e";
     '';
   };
 
