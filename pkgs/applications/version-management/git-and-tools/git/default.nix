@@ -1,4 +1,5 @@
-{ fetchurl, stdenv, curl, openssl, zlib, expat, perl, python, gettext, cpio
+{ fetchurl, stdenv, buildPackages
+, curl, openssl, zlib, expat, perl, python, gettext, cpio
 , gnugrep, gnused, gawk, coreutils # needed at runtime by git-filter-branch etc
 , openssh, pcre2
 , asciidoc, texinfo, xmlto, docbook2x, docbook_xsl, docbook_xml_dtd_45
@@ -199,7 +200,7 @@ stdenv.mkDerivation {
        '')
 
    + stdenv.lib.optionalString withManual ''# Install man pages and Info manual
-       make -j $NIX_BUILD_CORES -l $NIX_BUILD_CORES cmd-list.made install install-info \
+       make -j $NIX_BUILD_CORES -l $NIX_BUILD_CORES PERL_PATH="${buildPackages.perl}/bin/perl" cmd-list.made install install-info \
          -C Documentation ''
 
    + (if guiSupport then ''
