@@ -4,7 +4,11 @@
 , noUnicode ? false
 , gcc
 , threadSupport ? false
+, useBoehmgc ? true, boehmgc
 }:
+
+assert useBoehmgc -> boehmgc != null;
+
 let
   s = # Generated upstream information
   rec {
@@ -19,6 +23,9 @@ let
   ];
   propagatedBuildInputs = [
     libffi gmp mpfr gcc
+  ] ++ stdenv.lib.optionals useBoehmgc [
+    # replaces ecl's own gc which other packages can depend on, thus propagated
+    boehmgc
   ];
 in
 stdenv.mkDerivation {
