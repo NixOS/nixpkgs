@@ -19940,6 +19940,8 @@ with pkgs;
 
   gmsh = callPackage ../applications/science/math/gmsh { };
 
+  zn_poly = callPackage ../development/libraries/science/math/zn_poly { };
+
   ### SCIENCE/MOLECULAR-DYNAMICS
 
   lammps = callPackage ../applications/science/molecular-dynamics/lammps {
