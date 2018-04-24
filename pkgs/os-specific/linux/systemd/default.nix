@@ -27,6 +27,11 @@ in stdenv.mkDerivation rec {
     sha256 = "077svfs2xy3g30s62q69wcv5pb9vfhzh8i7lhfri73vvhwbpzd5q";
   };
 
+  patches = [ (fetchpatch {
+    url = https://github.com/systemd/systemd/commit/848e863acc51ecfb0f3955c498874588201d9130.patch;
+    sha256 = "0vi24xbv4n9dfnlwqz2cnd7s2lqpi2s9z11ayp9mrp4qkyglh5zi";
+  }) ];
+
   outputs = [ "out" "lib" "man" "dev" ];
 
   nativeBuildInputs =
