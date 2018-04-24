@@ -315,7 +315,7 @@ in {
     inherit (pkgs) arrow-cpp cmake pkgconfig;
   };
 
-  pyatspi = disabledIf (!isPy3k) (callPackage ../development/python-modules/pyatspi { });
+  pyatspi = callPackage ../development/python-modules/pyatspi { };
 
   pyaxmlparser = callPackage ../development/python-modules/pyaxmlparser { };
 
