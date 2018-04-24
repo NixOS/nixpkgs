@@ -70,13 +70,20 @@ let
 
   free = stdenv.mkDerivation {
     name = "clementine-free-${version}";
-    inherit src patches nativeBuildInputs buildInputs postPatch;
+    inherit src patches nativeBuildInputs postPatch;
+
+    buildInputs = buildInputs ++ [ makeWrapper ];
 
     cmakeFlags = [ "-DUSE_SYSTEM_PROJECTM=ON" ];
 
     enableParallelBuilding = true;
 
     passthru.unfree = unfree;
+
+    postInstall = ''
+      wrapProgram $out/bin/clementine \
+        --prefix GST_PLUGIN_SYSTEM_PATH_1_0 : "$GST_PLUGIN_SYSTEM_PATH_1_0"
+    '';
 
     meta = with stdenv.lib; {
       homepage = http://www.clementine-player.org;
@@ -108,8 +115,7 @@ let
       rmdir $out/bin
 
       makeWrapper ${free}/bin/clementine $out/bin/clementine \
-        --set CLEMENTINE_SPOTIFYBLOB $out/libexec/clementine \
-        --prefix GST_PLUGIN_SYSTEM_PATH_1_0 : "$GST_PLUGIN_SYSTEM_PATH_1_0"
+        --set CLEMENTINE_SPOTIFYBLOB $out/libexec/clementine
 
       mkdir -p $out/share
       for dir in applications icons kde4; do
