@@ -3,34 +3,46 @@
 with import ../lib/testing.nix { inherit system; };
 
 let
-  readyFile  = "/tmp/readerReady";
-  resultFile = "/tmp/readerResult";
-
   testReader = pkgs.writeScript "test-input-reader" ''
     #!${pkgs.stdenv.shell}
-    rm -f ${resultFile}
-    logger "testReader: START: Waiting for $1 characters, expecting '$2'."
-    touch ${readyFile}
-    read -r -N $1 chars
-    rm -f ${readyFile}
+    readInput() {
+      touch /tmp/reader.ready
+      echo "Waiting for '$1' to be typed"
+      read -r -n1 c
+      if [ "$c" = "$2" ]; then
+        echo "SUCCESS: Got back '$c' as expected."
+        echo 0 >&2
+      else
+        echo "FAIL: Expected '$2' but got '$c' instead."
+        echo 1 >&2
+      fi
+    }
 
-    if [ "$chars" == "$2" ]; then
-      logger -s "testReader: PASS: Got '$2' as expected." 2>${resultFile}
-    else
-      logger -s "testReader: FAIL: Expected '$2' but got '$chars'." 2>${resultFile}
-    fi
+    main() {
+      error=0
+      while [ $# -gt 0 ]; do
+        ret="$((readInput "$2" "$3" | systemd-cat -t "$1") 2>&1)"
+        if [ $ret -ne 0 ]; then error=1; fi
+        shift 3
+      done
+      return $error
+    }
+
+    main "$@"; echo -n $? > /tmp/reader.exit
   '';
 
+  mkReaderInput = testname: { qwerty, expect }: with pkgs.lib; let
+    lq = length qwerty;
+    le = length expect;
+    msg = "`qwerty' (${lq}) and `expect' (${le}) lists"
+        + " need to be of the same length!";
+    result = flatten (zipListsWith (a: b: [testname a b]) qwerty expect);
+  in if lq != le then throw msg else result;
 
   mkKeyboardTest = layout: { extraConfig ? {}, tests }: with pkgs.lib; let
-    combinedTests = foldAttrs (acc: val: acc ++ val) [] (builtins.attrValues tests);
+    readerInput = flatten (mapAttrsToList mkReaderInput tests);
     perlStr = val: "'${escape ["'" "\\"] val}'";
-    lq = length combinedTests.qwerty;
-    le = length combinedTests.expect;
-    msg = "length mismatch between qwerty (${toString lq}) and expect (${toString le}) lists!";
-    send   = concatMapStringsSep ", " perlStr combinedTests.qwerty;
-    expect = if (lq == le) then concatStrings combinedTests.expect else throw msg;
-
+    perlReaderInput = concatMapStringsSep ", " perlStr readerInput;
   in makeTest {
     name = "keymap-${layout}";
 
@@ -38,40 +50,69 @@ let
     machine.i18n.consoleKeyMap = mkOverride 900 layout;
     machine.services.xserver.layout = mkOverride 900 layout;
     machine.imports = [ ./common/x11.nix extraConfig ];
+    machine.services.xserver.displayManager.slim = {
+      enable = true;
+
+      # Use a custom theme in order to get best OCR results
+      theme = pkgs.runCommand "slim-theme-ocr" {
+        nativeBuildInputs = [ pkgs.imagemagick ];
+      } ''
+        mkdir "$out"
+        convert -size 1x1 xc:white "$out/background.jpg"
+        convert -size 200x100 xc:white "$out/panel.jpg"
+        cat > "$out/slim.theme" <<EOF
+        background_color #ffffff
+        background_style tile
+
+        input_fgcolor #000000
+        msg_color #000000
+
+        session_color #000000
+        session_font Verdana:size=16:bold
+
+        username_msg Username:
+        username_font Verdana:size=16:bold
+        username_color #000000
+        username_x 50%
+        username_y 40%
+
+        password_msg Password:
+        password_x 50%
+        password_y 40%
+        EOF
+      '';
+    };
 
     testScript = ''
+      sub waitCatAndDelete ($) {
+        return $machine->succeed(
+          "for i in \$(seq 600); do if [ -e '$_[0]' ]; then ".
+          "cat '$_[0]' && rm -f '$_[0]' && exit 0; ".
+          "fi; sleep 0.1; done; echo timed out after 60 seconds >&2; exit 1"
+        );
+      };
 
       sub mkTest ($$) {
         my ($desc, $cmd) = @_;
 
+        my @testdata = (${perlReaderInput});
+        my $shellTestdata = join ' ', map { "'".s/'/'\\'''/gr."'" } @testdata;
+
         subtest $desc, sub {
-          # prepare and start testReader
-          $machine->execute("rm -f ${readyFile} ${resultFile}");
-          $machine->succeed("$cmd ${testReader} ${toString le} ".q(${escapeShellArg expect} & ));
-
-          if ($desc eq "Xorg keymap") {
-            # make sure the xterm window is open and has focus
-            $machine->waitForWindow(qr/testterm/);
-            $machine->succeed("${pkgs.xdotool}/bin/xdotool search --name testterm windowactivate --sync");
-          }
-
-          # wait for reader to be ready
-          $machine->waitForFile("${readyFile}");
-          $machine->sleep(1);
-
-          # send all keys
-          foreach ((${send})) { $machine->sendKeys($_); };
-
-          # wait for result and check
-          $machine->waitForFile("${resultFile}");
-          $machine->succeed("grep -q 'PASS:' ${resultFile}");
+          $machine->succeed("$cmd ${testReader} $shellTestdata &");
+          while (my ($testname, $qwerty, $expect) = splice(@testdata, 0, 3)) {
+            waitCatAndDelete "/tmp/reader.ready";
+            $machine->sendKeys($qwerty);
+          };
+          my $exitcode = waitCatAndDelete "/tmp/reader.exit";
+          die "tests for $desc failed" if $exitcode ne 0;
         };
-      };
+      }
 
       $machine->waitForX;
 
       mkTest "VT keymap", "openvt -sw --";
-      mkTest "Xorg keymap", "DISPLAY=:0 xterm -title testterm -fullscreen -e";
+      mkTest "Xorg keymap", "DISPLAY=:0 xterm -fullscreen -e";
     '';
   };
 
