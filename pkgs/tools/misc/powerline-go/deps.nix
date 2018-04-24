@@ -5,8 +5,17 @@
     fetch = {
       type = "git";
       url = "https://github.com/mattn/go-runewidth";
-      rev = "a9d6d1e4dc51df2130326793d49971f238839169";
-      sha256 = "1x6x5r6ijik5ardfrpncjbqvpv8j5m7yb94svzz83a15ln44ajmg";
+      rev = "ce7b0b5c7b45a81508558cd1dba6bb1e4ddb51bb";
+      sha256 = "0lc39b6xrxv7h3v3y1kgz49cgi5qxwlygs715aam6ba35m48yi7g";
+    };
+  }
+  {
+    goPackagePath = "github.com/shirou/gopsutil";
+    fetch = {
+      type = "git";
+      url = "https://github.com/shirou/gopsutil";
+      rev = "63047d776e07105e370af46ecbd0ae96850f5ef2";
+      sha256 = "0204f0gx3fd8ya6rb478a7a4gr2v4i3m71148iv3jrdfvr5q5aaw";
     };
   }
   {
@@ -14,8 +23,8 @@
     fetch = {
       type = "git";
       url = "https://go.googlesource.com/crypto";
-      rev = "91a49db82a88618983a78a06c1cbd4e00ab749ab";
-      sha256 = "1xb4vlshx76xany4w60dkpz67plyfk7nr97pinf1bbha32pi36jc";
+      rev = "2b6c08872f4b66da917bb4ce98df4f0307330f78";
+      sha256 = "07wgdhs7ac3qmx0lfr4zazg2l159jqbwmn7jx49rr9811vivl1yh";
     };
   }
   {
@@ -23,8 +32,8 @@
     fetch = {
       type = "git";
       url = "https://go.googlesource.com/sys";
-      rev = "dd2ff4accc098aceecb86b36eaa7829b2a17b1c9";
-      sha256 = "086j1kk56vm1m5m9sf3lcww9phqw6p2q3g0is1jn4ixfxd3wm2wg";
+      rev = "79b0c6888797020a994db17c8510466c72fe75d9";
+      sha256 = "0aydjw886c4dwcjg7ssb7xp39ag1529nh3ly1la71rqjr94cjnag";
     };
   }
   {
@@ -32,8 +41,8 @@
     fetch = {
       type = "git";
       url = "https://go.googlesource.com/text";
-      rev = "b7ef84aaf62aa3e70962625c80a571ae7c17cb40";
-      sha256 = "0xfb515f3bmcq15sq1cm641qwgsmq1w5xjdx2mhwgns770jngndd";
+      rev = "7922cc490dd5a7dbaa7fd5d6196b49db59ac042f";
+      sha256 = "06sicjc24hv7v9p1l6psaq87w4lycx3mjixd6gsd1wnd4jhqvlnr";
     };
   }
   {
@@ -41,8 +50,8 @@
     fetch = {
       type = "git";
       url = "https://gopkg.in/yaml.v2";
-      rev = "7f97868eec74b32b0982dd158a51a446d1da7eb5";
-      sha256 = "0a31jd1p00b9c82f3sfsbv2bdh7mlfy9vhcqxipll2cyvxplgfq8";
+      rev = "5420a8b6744d3b0345ab293f6fcba19c978f1183";
+      sha256 = "0dwjrs2lp2gdlscs7bsrmyc5yf6mm4fvgw71bzr9mv2qrd2q73s1";
     };
   }
 ]
