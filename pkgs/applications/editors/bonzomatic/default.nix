@@ -1,14 +1,14 @@
 { stdenv, makeWrapper, fetchFromGitHub, cmake, alsaLib, mesa_glu, libXcursor, libXinerama, libXrandr, xorgserver }:
 
-let
-  name = "bonzomatic";
-in stdenv.mkDerivation {
-  inherit name;
+stdenv.mkDerivation rec {
+  name = "${pname}-${version}";
+  pname = "bonzomatic";
+  version = "2018-03-29";
 
   src = fetchFromGitHub {
-    repo = name;
     owner = "Gargaj";
-    rev = "2018-03-29";
+    repo = pname;
+    rev = version;
     sha256 = "12mdfjvbhdqz1585772rj4cap8m4ijfci6ib62jysxjf747k41fg";
   };
 
@@ -25,7 +25,6 @@ in stdenv.mkDerivation {
       unfreeRedistributable # contains libbass.so in repository
     ];
     maintainers = [ maintainers.nocent ];
-    platforms = platforms.linux;
+    platforms = [ "i686-linux" "x86_64-linux" ];
   };
 }
-
