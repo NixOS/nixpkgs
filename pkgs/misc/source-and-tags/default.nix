@@ -1,4 +1,4 @@
-args: with args; {
+{ stdenv, lib, glibcLocales, unzip, hasktags, ctags } : {
   # optional srcDir
   annotatedWithSourceAndTagInfo = x : (x ? passthru && x.passthru ? sourceWithTags 
                                       || x ? meta && x.meta ? sourceWithTags );
@@ -59,8 +59,8 @@ args: with args; {
                     # without this creating tag files for lifted-base fails
                     export LC_ALL=en_US.UTF-8
                     export LANG=en_US.UTF-8
-                    ${if args.stdenv.isLinux then "export LOCALE_ARCHIVE=${args.pkgs.glibcLocales}/lib/locale/locale-archive;" else ""}
- 
+                    ${if stdenv.isLinux then "export LOCALE_ARCHIVE=${glibcLocales}/lib/locale/locale-archive;" else ""}
+
                     ${toString hasktags}/bin/hasktags --ignore-close-implementation --ctags .
                     mv tags \$TAG_FILE
                    }";
