@@ -17912,6 +17912,8 @@ with pkgs;
 
   sublime3-dev = sublime3Packages.sublime3-dev;
 
+  sublime3-dev = lowPrio (callPackage ../applications/editors/sublime3-dev { });
+
   inherit (callPackages ../applications/version-management/subversion/default.nix {
       bdbSupport = true;
       httpServer = false;
