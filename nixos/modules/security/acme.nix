@@ -58,9 +58,11 @@ let
         default = "";
         example = "systemctl reload nginx.service";
         description = ''
-          Commands to run after certificates are re-issued. Typically
+          Commands to run after new certificates go live. Typically
           the web server and other servers using certificates need to
           be reloaded.
+
+          Executed in the same directory with the new certificate.
         '';
       };
 
@@ -75,6 +77,27 @@ let
           store public certificate bundle in <filename>fullchain.pem</filename>,
           private key in <filename>key.pem</filename> and those two previous
           files combined in <filename>full.pem</filename> in its state directory.
+        '';
+      };
+
+      activationDelay = mkOption {
+        type = types.nullOr types.str;
+        default = null;
+        description = ''
+          Systemd time span expression to delay copying new certificates to main
+          state directory. See <citerefentry><refentrytitle>systemd.time</refentrytitle>
+          <manvolnum>7</manvolnum></citerefentry>.
+        '';
+      };
+
+      preDelay = mkOption {
+        type = types.lines;
+        default = "";
+        description = ''
+          Commands to run after certificates are re-issued but before they are
+          activated. Typically the new certificate is published to DNS.
+
+          Executed in the same directory with the new certificate.
         '';
       };
 
@@ -186,14 +209,15 @@ in
           servicesLists = mapAttrsToList certToServices cfg.certs;
           certToServices = cert: data:
               let
-                cpath = "${cfg.directory}/${cert}";
+                domain = if data.domain != null then data.domain else cert;
+                cpath = lpath + optionalString (data.activationDelay != null) ".staging";
+                lpath = "${cfg.directory}/${cert}";
                 rights = if data.allowKeysForGroup then "750" else "700";
                 cmdline = [ "-v" "-d" data.domain "--default_root" data.webroot "--valid_min" cfg.validMin ]
                           ++ optionals (data.email != null) [ "--email" data.email ]
                           ++ concatMap (p: [ "-f" p ]) data.plugins
                           ++ concatLists (mapAttrsToList (name: root: [ "-d" (if root == null then name else "${name}:${root}")]) data.extraDomains)
-                          ++ (if cfg.production then []
-                              else ["--server" "https://acme-staging.api.letsencrypt.org/directory"]);
+                          ++ optionals (!cfg.production) ["--server" "https://acme-staging.api.letsencrypt.org/directory"];
                 acmeService = {
                   description = "Renew ACME Certificate for ${cert}";
                   after = [ "network.target" "network-online.target" ];
@@ -206,7 +230,7 @@ in
                     Group = data.group;
                     PrivateTmp = true;
                   };
-                  path = [ pkgs.simp_le ];
+                  path = with pkgs; [ simp_le systemd ];
                   preStart = ''
                     mkdir -p '${cfg.directory}'
                     chown 'root:root' '${cfg.directory}'
@@ -229,14 +253,35 @@ in
                     exit "$EXITCODE"
                   '';
                   postStop = ''
+                    cd '${cpath}'
+
                     if [ -e /tmp/lastExitCode ] && [ "$(cat /tmp/lastExitCode)" = "0" ]; then
-                      echo "Executing postRun hook..."
-                      ${data.postRun}
+                      ${if data.activationDelay != null then ''
+                      
+                      ${data.preDelay}
+
+                      if [ -d '${lpath}' ]; then
+                        systemd-run --no-block --on-active='${data.activationDelay}' --unit acme-setlive-${cert}.service
+                      else
+                        systemctl --wait start acme-setlive-${cert}.service
+                      fi
+                      '' else data.postRun}
                     fi
                   '';
 
                   before = [ "acme-certificates.target" ];
                   wantedBy = [ "acme-certificates.target" ];
+                };
+                delayService = {
+                  description = "Set certificate for ${cert} live";
+                  path = with pkgs; [ rsync ];
+                  serviceConfig = {
+                    Type = "oneshot";
+                  };
+                  script = ''
+                    rsync -a --delete-after '${cpath}/' '${lpath}'
+                  '';
+                  postStop = data.postRun;
                 };
                 selfsignedService = {
                   description = "Create preliminary self-signed certificate for ${cert}";
@@ -302,11 +347,8 @@ in
                 };
               in (
                 [ { name = "acme-${cert}"; value = acmeService; } ]
-                ++
-                (if cfg.preliminarySelfsigned
-                  then [ { name = "acme-selfsigned-${cert}"; value = selfsignedService; } ]
-                  else []
-                )
+                ++ optional cfg.preliminarySelfsigned { name = "acme-selfsigned-${cert}"; value = selfsignedService; }
+                ++ optional (data.activationDelay != null) { name = "acme-setlive-${cert}"; value = delayService; }
               );
           servicesAttr = listToAttrs services;
           injectServiceDep = {
