@@ -14586,6 +14586,8 @@ with pkgs;
 
   camingo-code = callPackage ../data/fonts/camingo-code { };
 
+  combinatorial_designs = callPackage ../data/misc/combinatorial_designs { };
+
   dosis = callPackage ../data/fonts/dosis { };
 
   dosemu_fonts = callPackage ../data/fonts/dosemu-fonts { };
