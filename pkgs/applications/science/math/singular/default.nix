@@ -1,5 +1,6 @@
 { stdenv, fetchurl, gmp, bison, perl, autoconf, ncurses, readline, coreutils, pkgconfig
 , autoreconfHook
+, file
 , flint
 , ntl
 , cddlib
@@ -18,7 +19,9 @@ stdenv.mkDerivation rec {
     sha256 = "0wvgz7l1b7zkpmim0r3mvv4fp8xnhlbz4c7hc90rn30snlansnf1";
   };
 
-  configureFlags = stdenv.lib.optionals enableFactory [
+  configureFlags = [
+    "--with-ntl=${ntl}"
+  ] ++stdenv.lib.optionals enableFactory [
     "--enable-factory"
   ] ++ stdenv.lib.optionals enableGfanlib [
     "--enable-gfanlib"
@@ -42,11 +45,19 @@ stdenv.mkDerivation rec {
   ] ++ stdenv.lib.optionals enableGfanlib [
     cddlib
   ];
-  nativeBuildInputs = [ autoconf bison perl pkgconfig autoreconfHook ];
+  nativeBuildInputs = [
+    bison
+    perl
+    pkgconfig
+    autoreconfHook
+  ];
 
-  preConfigure = ''
-    find . -type f -exec sed -e 's@/bin/rm@${coreutils}&@g' -i '{}' ';'
-    find . -type f -exec sed -e 's@/bin/uname@${coreutils}&@g' -i '{}' ';'
+  preAutoreconf = ''
+    find . -type f -readable -writable -exec sed \
+      -e 's@/bin/rm@${coreutils}&@g' \
+      -e 's@/bin/uname@${coreutils}&@g' \
+      -e 's@/usr/bin/file@${file}/bin/file@g' \
+      -i '{}' ';'
   '';
 
   hardeningDisable = stdenv.lib.optional stdenv.isi686 "stackprotector";
