@@ -15124,6 +15124,8 @@ with pkgs;
 
   convchain = callPackage ../tools/graphics/convchain {};
 
+  coursera-dl = callPackage ../applications/misc/coursera-dl {};
+
   coyim = callPackage ../applications/networking/instant-messengers/coyim {};
 
   cpp_ethereum = callPackage ../applications/misc/cpp-ethereum { };
