@@ -34,7 +34,8 @@ in buildPythonApplication rec {
   ];
 
   propagatedBuildInputs = [
-    pygobject3 pyatspi dbus-python pyxdg brltty liblouis speechd gst-python setproctitle
+    # TODO: re-add liblouis when it is fixed
+    pygobject3 pyatspi dbus-python pyxdg brltty speechd gst-python setproctitle
   ];
 
   buildInputs = [
