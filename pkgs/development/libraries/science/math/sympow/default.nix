@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     # Original website no longer reachable
-    url = "http://mirrors.mit.edu/sage/spkg/upstream/sympow/sympow-${version}.tar.bz2";
+    url = "mirror://sageupstream/sympow/sympow-${version}.tar.bz2";
     sha256 = "0hphs7ia1wr5mydf288zvwj4svrymfpadcg3pi6w80km2yg5bm3c";
   };
 
