@@ -1,7 +1,7 @@
 { mkDerivation, lib, cmake, xorg, plasma-framework, fetchFromGitHub
 , extra-cmake-modules, karchive, kwindowsystem, qtx11extras, kcrash }:
 
-let version = "0.7.4"; in
+let version = "0.7.5"; in
 
 mkDerivation {
   name = "latte-dock-${version}";
@@ -10,7 +10,7 @@ mkDerivation {
     owner = "psifidotos";
     repo = "Latte-Dock";
     rev = "v${version}";
-    sha256 = "0w4fphgpdvql31wrypxyfahmr4cv5ap96wjc4270yyawnrqrx0y6";
+    sha256 = "0fblbx6qk4miag1mhiyns7idsw03p9pj3xc3xxxnb5rpj1fy0ifv";
   };
 
   buildInputs = [ plasma-framework xorg.libpthreadstubs xorg.libXdmcp xorg.libSM ];
