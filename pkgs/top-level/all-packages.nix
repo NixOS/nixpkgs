@@ -14596,6 +14596,8 @@ with pkgs;
 
   eb-garamond = callPackage ../data/fonts/eb-garamond { };
 
+  elliptic_curves = callPackage ../data/misc/elliptic_curves { };
+
   faba-icon-theme = callPackage ../data/icons/faba-icon-theme { };
 
   faba-mono-icons = callPackage ../data/icons/faba-mono-icons { };
