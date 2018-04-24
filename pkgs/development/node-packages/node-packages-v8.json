@@ -16,4 +16,5 @@
 , "swagger"
 , "npm"
 , "three"
+, "mathjax"
 ]
