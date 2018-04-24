@@ -185,8 +185,17 @@
     fetch = {
       type = "git";
       url = "https://github.com/eclipse/paho.mqtt.golang";
-      rev = "d4f545eb108a2d19f9b1a735689dbfb719bc21fb";
-      sha256 = "01cnca8y5caramqn6p8aigj6l5p6z0nrs2xqqv90658x584138kh";
+      rev = "aff15770515e3c57fc6109da73d42b0d46f7f483";
+      sha256 = "1blfvrp1d5jqxxqdw7xd0ns1qiml45k0nch9jwpi0ddg7hckii2d";
+    };
+  }
+  {
+    goPackagePath = "github.com/go-redis/redis";
+    fetch = {
+      type = "git";
+      url = "https://github.com/go-redis/redis";
+      rev = "73b70592cdaa9e6abdfcfbf97b4a90d80728c836";
+      sha256 = "0b6xwajnk65bdq98czv137gvypwnznkjnm2ksnxm87nyj2vyddm9";
     };
   }
   {
@@ -257,8 +266,8 @@
     fetch = {
       type = "git";
       url = "https://github.com/influxdata/tail";
-      rev = "a395bf99fe07c233f41fba0735fa2b13b58588ea";
-      sha256 = "0bmkv932xhjpxwp8n74xy8wf34kiiknwq8agfbnz931apq6iw9b0";
+      rev = "c43482518d410361b6c383d7aebce33d0471d7bc";
+      sha256 = "0kf155nz9wvwawsbgaa76q4r975l7945nlvnh4ig60xm0jv8580b";
     };
   }
   {
@@ -358,6 +367,15 @@
       url = "https://github.com/naoina/go-stringutil";
       rev = "6b638e95a32d0c1131db0e7fe83775cbea4a0d0b";
       sha256 = "00831p1wn3rimybk1z8l30787kn1akv5jax5wx743nn76qcmkmc6";
+    };
+  }
+  {
+    goPackagePath = "github.com/nats-io/gnatsd";
+    fetch = {
+      type = "git";
+      url = "https://github.com/nats-io/gnatsd";
+      rev = "393bbb7c031433e68707c8810fda0bfcfbe6ab9b";
+      sha256 = "1hnn4p24gm90siixdvj97csrxnr78svxmypglcjska474adhhnzz";
     };
   }
   {
@@ -509,8 +527,8 @@
     fetch = {
       type = "git";
       url = "https://github.com/shirou/gopsutil";
-      rev = "384a55110aa5ae052eb93ea94940548c1e305a99";
-      sha256 = "00idmnsmalxhm1y60lhm9vyck1ay7gbp0r35fgs8bbiwq351bs23";
+      rev = "a5c2888e464b14fa882c2a059e0f95716bd45cf1";
+      sha256 = "1czzl00lxcyhmf6x7wmw3dxmnyqij8lcahn5mv325csgyym4vm4w";
     };
   }
   {
@@ -518,8 +536,8 @@
     fetch = {
       type = "git";
       url = "https://github.com/soniah/gosnmp";
-      rev = "5ad50dc75ab389f8a1c9f8a67d3a1cd85f67ed15";
-      sha256 = "0dqz0w077xfk9fj5dd8xa6sqgdvjpb8vx997wnqpi3kbii1b9jnb";
+      rev = "f15472a4cd6f6ea7929e4c7d9f163c49f059924f";
+      sha256 = "1blhxq9sayfg7zih5rj0dg2qj9h10m6sbri57hxya9iz3jfgcx11";
     };
   }
   {
@@ -536,8 +554,26 @@
     fetch = {
       type = "git";
       url = "https://github.com/stretchr/testify";
-      rev = "4d4bfba8f1d1027c4fdbe371823030df51419987";
-      sha256 = "1d3yz1d2s88byjzmn60jbi1m9s552f7ghzbzik97fbph37i8yjhp";
+      rev = "12b6f73e6084dad08a7c6e575284b177ecafbc71";
+      sha256 = "01f80s0q64pw5drfgqwwk1wfwwkvd2lhbs56lhhkff4ni83k73fd";
+    };
+  }
+  {
+    goPackagePath = "github.com/tidwall/gjson";
+    fetch = {
+      type = "git";
+      url = "https://github.com/tidwall/gjson";
+      rev = "0623bd8fbdbf97cc62b98d15108832851a658e59";
+      sha256 = "0g6rhilcmqpdvjdds7ykzhrlsjx234chf73l8sjah0rsd03207k0";
+    };
+  }
+  {
+    goPackagePath = "github.com/tidwall/match";
+    fetch = {
+      type = "git";
+      url = "https://github.com/tidwall/match";
+      rev = "173748da739a410c5b0b813b956f89ff94730b4c";
+      sha256 = "0a4hp323gnjam3nfxfljq7d24m7rgk5vxbscjmi3ik3ph78r5avg";
     };
   }
   {
