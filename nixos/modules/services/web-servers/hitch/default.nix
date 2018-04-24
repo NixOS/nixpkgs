@@ -102,9 +102,8 @@ with lib;
 
     users.extraUsers.hitch = {
       group = "hitch";
-      uid = config.ids.uids.hitch;
     };
 
-    users.extraGroups.hitch.gid = config.ids.gids.hitch;
+    users.extraGroups.hitch = {};
   };
 }
