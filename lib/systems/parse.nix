@@ -291,6 +291,7 @@ rec {
     ghcjs    = { execFormat = unknown; families = { }; };
     genode   = { execFormat = elf;     families = { }; };
     mmixware = { execFormat = unknown; families = { }; };
+    unknown  = { execFormat = unknown; families = { }; };
   } // { # aliases
     # 'darwin' is the kernel for all of them. We choose macOS by default.
     darwin = kernels.macos;
@@ -353,6 +354,7 @@ rec {
     uclibceabihf = { float = "soft"; };
     uclibceabi   = { float = "hard"; };
     uclibc       = {};
+    wasm         = {};
 
     unknown = {};
   };

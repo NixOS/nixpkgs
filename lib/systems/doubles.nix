@@ -51,6 +51,8 @@ let
     # WASI
     "wasm64-wasi" "wasm32-wasi"
 
+    "wasm32-unknown"
+
     # Windows
     "x86_64-windows" "i686-windows"
   ];
@@ -93,6 +95,7 @@ in {
   redox         = filterDoubles predicates.isRedox;
   windows       = filterDoubles predicates.isWindows;
   genode        = filterDoubles predicates.isGenode;
+  wasm          = filterDoubles predicates.isWasm;
 
   embedded      = filterDoubles predicates.isNone;
 
