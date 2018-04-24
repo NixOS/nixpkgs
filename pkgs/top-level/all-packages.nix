@@ -20381,7 +20381,10 @@ with pkgs;
 
   petsc = callPackage ../development/libraries/science/math/petsc { };
 
-  sage = callPackage ../applications/science/math/sage { };
+  sage = callPackage ../applications/science/math/sage {
+    nixpkgs = pkgs;
+  };
+  sageWithDoc = sage.override { withDoc = true; };
 
   suitesparse_4_2 = callPackage ../development/libraries/science/math/suitesparse/4.2.nix { };
   suitesparse_4_4 = callPackage ../development/libraries/science/math/suitesparse {};
