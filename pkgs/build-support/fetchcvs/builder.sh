@@ -1,5 +1,10 @@
 source $stdenv/setup
 
+(echo '#!/usr/bin/env sh'; \
+ echo 'ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no "$@"') > ssh
+chmod +x ssh
+export CVS_RSH=$PWD/ssh
+
 # creating the export drictory and checking out there only to be able to
 # move the content without the root directory into $out ...
 # cvs -f -d "$url" export $tag -d "$out" "$module"
