@@ -1028,6 +1028,9 @@ self: super: {
     indexed-list-literals = self.indexed-list-literals_0_2_0_0;
   };
 
+  # https://github.com/dmwit/encoding/pull/3
+  encoding = appendPatch super.encoding ./patches/encoding-Cabal-2.0.patch;
+
 }
 
 //
