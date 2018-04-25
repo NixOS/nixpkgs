@@ -2,25 +2,30 @@
 , fontconfig, libxml2, gnome2 }:
 
 assert stdenv.isLinux;
-
 let
+
   libPath = stdenv.lib.makeLibraryPath
     [ stdenv.cc.libc stdenv.cc.cc gtk2 gdk_pixbuf atk pango glib cairo
       freetype fontconfig libxml2 gnome2.gtksourceview
-    ] + ":${stdenv.cc.cc.lib}/lib64";
+    ] + ":${stdenv.cc.cc.lib}/lib64:$out/libexec";
 
   patchExe = x: ''
     patchelf --interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
       --set-rpath ${libPath} ${x}
   '';
+
+  patchLib = x: ''
+    patchelf --set-rpath ${libPath} ${x}
+  '';
+
 in
 stdenv.mkDerivation rec {
   name    = "verifast-${version}";
-  version = "14.5";
+  version = "18.02";
 
   src = fetchurl {
-    url    = "http://people.cs.kuleuven.be/~bart.jacobs/verifast/${name}-x64.tar.gz";
-    sha256 = "03y1s6s2j9vqgiad0vbxriipsypxaylxxd3q36n9rvrc3lf9xra9";
+    url    = "https://github.com/verifast/verifast/releases/download/${version}/${name}-linux.tar.gz";
+    sha256 = "19050be23b6d5e471690421fee59f84c58b29e38379fb86b8f3713a206a4423e";
   };
 
   dontStrip = true;
@@ -29,10 +34,11 @@ stdenv.mkDerivation rec {
     mkdir -p $out/bin
     cp -R bin $out/libexec
 
-    ${patchExe "$out/libexec/verifast-core"}
-    ${patchExe "$out/libexec/vfide-core"}
-    ln -s $out/libexec/verifast-core $out/bin/verifast
-    ln -s $out/libexec/vfide-core    $out/bin/vfide
+    ${patchExe "$out/libexec/verifast"}
+    ${patchExe "$out/libexec/vfide"}
+    ${patchLib "$out/libexec/libz3.so"}
+    ln -s $out/libexec/verifast $out/bin/verifast
+    ln -s $out/libexec/vfide    $out/bin/vfide
   '';
 
   meta = {
