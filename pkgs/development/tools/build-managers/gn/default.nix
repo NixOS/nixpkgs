@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchgit, fetchurl, fetchpatch
+{ stdenv, lib, fetchgit, fetchzip, fetchpatch
 , libevent, ninja, python, darwin }:
 
 let
@@ -28,9 +28,10 @@ let
       rev = "585ec31ea716f08233a815e680fc0d4699843938";
       sha256 = "0csn1cza66851nmxxiw42smsm3422mx67vcyykwn0a71lcjng6rc";
     };
-    "third_party/apple_apsl" = fetchurl {
+    "third_party/apple_apsl" = fetchzip {
       url = "https://chromium.googlesource.com/chromium/src/third_party/+archive/8e6ccb8c74db6dfa15dd21401ace3ac96c054cf7/apple_apsl.tar.gz";
-      sha256 = "0sc7b7zdw7f9piyyijl7xq3v1fzflqlck1apwm8kvgdhkyz3l63k";
+      sha256 = "1vgcg741lwz84kdy0qc5wn9dxx3j9zh6a9d185fpygdsipwikqv8";
+      stripRoot = false;
     };
   };
 
