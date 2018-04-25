@@ -73,7 +73,8 @@ let
     APPEND ${toString config.boot.loader.grub.memtest86.params}
   '';
 
-  isolinuxCfg = baseIsolinuxCfg + (optionalString config.boot.loader.grub.memtest86.enable isolinuxMemtest86Entry);
+  isolinuxCfg = concatStringsSep "\n"
+    ([ baseIsolinuxCfg ] ++ optional config.boot.loader.grub.memtest86.enable isolinuxMemtest86Entry);
 
   # The EFI boot image.
   efiDir = pkgs.runCommand "efi-directory" {} ''
