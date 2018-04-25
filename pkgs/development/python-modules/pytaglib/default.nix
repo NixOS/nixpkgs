@@ -3,6 +3,8 @@
 , fetchPypi
 , taglib
 , cython
+, pytest
+, glibcLocales
 }:
 
 buildPythonPackage rec {
@@ -15,6 +17,12 @@ buildPythonPackage rec {
   };
 
   buildInputs = [ taglib cython ];
+
+  checkInputs = [ pytest glibcLocales ];
+
+  checkPhase = ''
+    LC_ALL=en_US.utf-8 pytest .
+  '';
 
   meta = {
     homepage = https://github.com/supermihi/pytaglib;
