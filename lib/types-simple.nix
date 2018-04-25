@@ -314,34 +314,34 @@ let
     # opt and rec fields must not contain the same fields
     assert (lib.intersectLists reqfs optfs == []);
     mkBaseType {
-    name = "product";
-    description = "{ " +
-      lib.concatStringsSep ", "
-        (  lib.mapAttrsToList (n: t: "${n}: ${describe t}") req
-        ++ lib.mapAttrsToList (n: t: "[${n}: ${describe t}]") opt
-        # TODO: maybe but this at the beginning: [ …,
-        # so that it’s easier to see that an attrset is open
-        ++ lib.optional open "…")
-      + " }";
-    check = v:
+      name = "product";
+      description = "{ " +
+        lib.concatStringsSep ", "
+          (  lib.mapAttrsToList (n: t: "${n}: ${describe t}") req
+          ++ lib.mapAttrsToList (n: t: "[${n}: ${describe t}]") opt
+          # TODO: maybe but this at the beginning: [ …,
+          # so that it’s easier to see that an attrset is open
+          ++ lib.optional open "…")
+        + " }";
+      check = v:
         let vfs = builtins.attrNames v; in
         lib.foldl lib.and (builtins.isAttrs v) [
-      # if there’s only required fields, this is an optimization
-        (opt == {} && !open -> reqfs == vfs)
-        # all required fields have to exist in the value
-        # reqfs - vfs
-        (lib.subtractLists vfs reqfs == [])
-        # whithout req, and if the product is not open
-        # only opt fields must be in the value
-        # (vfs - reqfs) - otfs
-        (!open -> [] == lib.subtractLists optfs
-                          (lib.subtractLists reqfs vfs))
-      ];
-    variant = variants.product;
-    extraFields = {
+          # if there’s only required fields, this is an optimization
+          (opt == {} && !open -> reqfs == vfs)
+          # all required fields have to exist in the value
+          # reqfs - vfs
+          (lib.subtractLists vfs reqfs == [])
+          # whithout req, and if the product is not open
+          # only opt fields must be in the value
+          # (vfs - reqfs) - otfs
+          (!open -> [] == lib.subtractLists optfs
+                            (lib.subtractLists reqfs vfs))
+        ];
+      variant = variants.product;
+      extraFields = {
         inherit opt req open;
+      };
     };
-  };
 
   # sum type with alternatives of the specified types
   # sum { left = string; right = bool; }:
