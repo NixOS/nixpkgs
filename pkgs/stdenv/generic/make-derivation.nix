@@ -131,31 +131,33 @@ rec {
         outputs ++
         (if separateDebugInfo then assert stdenv.hostPlatform.isLinux; [ "debug" ] else []);
 
+      computedSandboxProfile =
+        lib.concatMap (input: input.__propagatedSandboxProfile or [])
+          (stdenv.extraNativeBuildInputs
+           ++ stdenv.extraBuildInputs
+           ++ lib.concatLists dependencies);
+
+      computedPropagatedSandboxProfile =
+        lib.concatMap (input: input.__propagatedSandboxProfile or [])
+          (lib.concatLists propagatedDependencies);
+
+      computedImpureHostDeps =
+        lib.unique (lib.concatMap (input: input.__propagatedImpureHostDeps or [])
+          (stdenv.extraNativeBuildInputs
+           ++ stdenv.extraBuildInputs
+           ++ lib.concatLists dependencies));
+
+      computedPropagatedImpureHostDeps =
+        lib.unique (lib.concatMap (input: input.__propagatedImpureHostDeps or [])
+          (lib.concatLists propagatedDependencies));
+
       derivationArg =
         (removeAttrs attrs
           ["meta" "passthru" "crossAttrs" "pos"
            "doCheck" "doInstallCheck"
            "__impureHostDeps" "__propagatedImpureHostDeps"
            "sandboxProfile" "propagatedSandboxProfile"])
-        // (let
-          computedSandboxProfile =
-            lib.concatMap (input: input.__propagatedSandboxProfile or [])
-              (stdenv.extraNativeBuildInputs
-               ++ stdenv.extraBuildInputs
-               ++ lib.concatLists dependencies);
-          computedPropagatedSandboxProfile =
-            lib.concatMap (input: input.__propagatedSandboxProfile or [])
-              (lib.concatLists propagatedDependencies);
-          computedImpureHostDeps =
-            lib.unique (lib.concatMap (input: input.__propagatedImpureHostDeps or [])
-              (stdenv.extraNativeBuildInputs
-               ++ stdenv.extraBuildInputs
-               ++ lib.concatLists dependencies));
-          computedPropagatedImpureHostDeps =
-            lib.unique (lib.concatMap (input: input.__propagatedImpureHostDeps or [])
-              (lib.concatLists propagatedDependencies));
-        in
-        {
+        // {
           # A hack to make `nix-env -qa` and `nix search` ignore broken packages.
           # TODO(@oxij): remove this assert when something like NixOS/nix#1771 gets merged into nix.
           name = assert validity.handled; name + lib.optionalString
@@ -194,6 +196,13 @@ rec {
 
         } // lib.optionalAttrs (hardeningDisable != [] || hardeningEnable != []) {
           NIX_HARDENING_ENABLE = enabledHardeningOptions;
+        } // lib.optionalAttrs (outputs' != [ "out" ]) {
+          outputs = outputs';
+        } // lib.optionalAttrs doCheck' {
+          doCheck = true;
+        } // lib.optionalAttrs doInstallCheck' {
+          doInstallCheck = true;
+
         } // lib.optionalAttrs (stdenv.buildPlatform.isDarwin) {
           # TODO: remove lib.unique once nix has a list canonicalization primitive
           __sandboxProfile =
@@ -208,13 +217,7 @@ rec {
             "/bin/sh"
           ];
           __propagatedImpureHostDeps = computedPropagatedImpureHostDeps ++ __propagatedImpureHostDeps;
-        } // lib.optionalAttrs (outputs' != [ "out" ]) {
-          outputs = outputs';
-        } // lib.optionalAttrs doCheck' {
-          doCheck = true;
-        } // lib.optionalAttrs doInstallCheck' {
-          doInstallCheck = true;
-        });
+        };
 
       validity = import ./check-meta.nix {
         inherit lib config meta;
