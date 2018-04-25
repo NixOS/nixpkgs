@@ -21,8 +21,9 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   postPatch = ''
-    substituteInPlace Makefile --replace "mandir = /usr/share/man" "mandir = \$(prefix)/man"
-    substituteInPlace Makefile --replace "sharedir = /usr/share/fio" "sharedir = \$(prefix)/share/fio"
+    substituteInPlace Makefile \
+      --replace "mandir = /usr/share/man" "mandir = \$(prefix)/man" \
+      --replace "sharedir = /usr/share/fio" "sharedir = \$(prefix)/share/fio"
     substituteInPlace tools/plot/fio2gnuplot --replace /usr/share/fio $out/share/fio
   '';
 
