@@ -9767,10 +9767,12 @@ with pkgs;
   };
   libheimdal = heimdal.override { type = "lib"; };
 
-  harfbuzz = callPackage ../development/libraries/harfbuzz { };
+  harfbuzz = callPackage ../development/libraries/harfbuzz {
+    inherit (darwin.apple_sdk.frameworks) ApplicationServices CoreText;
+  };
   harfbuzz-icu = harfbuzz.override {
-    withIcu = true;
     withGraphite2 = true;
+    withIcu = true;
   };
   harfbuzz-icu-58 = harfbuzz-icu.override {
     icu = icu58;
