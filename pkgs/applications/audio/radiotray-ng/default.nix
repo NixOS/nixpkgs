@@ -78,7 +78,8 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  doCheck = true;
+ # XXX: as of 0.2.2, tries to download gmock instead of checking for provided
+  doCheck = false;
 
   checkPhase = "ctest";
 
