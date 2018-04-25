@@ -68,6 +68,8 @@ stdenv.mkDerivation rec {
   dontDisableStatic = true;
   separateDebugInfo = true;
 
+  NIX_DONT_SET_RPATH = true;
+
   postInstall = ''
     # Not sure why, but link in all but scsi directory as that's what uclibc/glibc do.
     # Apparently glibc provides scsi itself?
@@ -88,8 +90,13 @@ stdenv.mkDerivation rec {
     substituteInPlace $dev/bin/musl-gcc \
       --replace $out/lib/musl-gcc.specs $dev/lib/musl-gcc.specs
 
-    # provide 'iconv' utility
-    $CC ${iconv_c} -o $out/bin/iconv
+    # provide 'iconv' utility, using just-built headers, libc/ldso
+    $CC ${iconv_c} -o $out/bin/iconv \
+      -I$dev/include \
+      -L$out/lib -Wl,-rpath=$out/lib \
+      -lc \
+      -B $out/lib \
+      -Wl,-dynamic-linker=$(ls $out/lib/ld-*)
   '' + lib.optionalString useBSDCompatHeaders ''
     install -D ${queue_h} $dev/include/sys/queue.h
     install -D ${cdefs_h} $dev/include/sys/cdefs.h
