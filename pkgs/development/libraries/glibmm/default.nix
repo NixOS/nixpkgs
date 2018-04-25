@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, gnum4, glib, libsigcxx }:
+{ stdenv, fetchurl, fetchpatch, pkgconfig, gnum4, glib, libsigcxx }:
 
 let
   ver_maj = "2.54";
@@ -13,6 +13,14 @@ stdenv.mkDerivation rec {
   };
 
   outputs = [ "out" "dev" ];
+
+  patchFlags = "-p0";
+  patches = [
+    (fetchpatch {
+      url = "https://raw.githubusercontent.com/macports/macports-ports/e864b2340be9ef003d8ff4aef92e7151d06287dd/devel/glibmm/files/0001-ustring-Fix-wchar-conversion-on-macOS-with-libc.patch";
+      sha256 = "02qvnailw1i59cjbj3cy7y02kfcivsvkdjrf4njkp4plarayyqp9";
+    })
+  ];
 
   nativeBuildInputs = [ pkgconfig gnum4 ];
   propagatedBuildInputs = [ glib libsigcxx ];
