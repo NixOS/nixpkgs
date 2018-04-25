@@ -1,77 +1,124 @@
-{ stdenv, lib, fetchgit, fetchurl, libevent, ninja, python }:
+{ stdenv, lib, fetchgit, fetchurl, fetchpatch
+, libevent, ninja, python, darwin }:
 
 let
   depsGit = {
     "tools/gn" = fetchgit {
       url = "https://chromium.googlesource.com/chromium/src/tools/gn";
-      rev = "d0c518db129975ce88ff1de26c857873b0619c4b";
-      sha256 = "0l15vzmjyx6bwlz1qhn3fy7yx3qzzxr3drnkj3l0p0fmyxza52vx";
+      rev = "0fa417a0d2d8484e9a5a636e3301da322f586601";
+      sha256 = "0pigcl14yc4aak6q1ghfjxdz2ah4fg4m2r5y3asw2rz6mpr5y9z0";
     };
     "base" = fetchgit {
       url = "https://chromium.googlesource.com/chromium/src/base";
-      rev = "bc6e3ce8ca01b894751e1f7b22b561e3ae2e7f17";
-      sha256 = "1yl49v6nxbrfms52xf7fiwh7d4301m2aj744pa3hzzh989c5j6g5";
+      rev = "ab1d7c3b92ce9c9bc756bdefb8338360d1a33a1e";
+      sha256 = "15wis6qg9ka62k6v1vamg0bp3v5vkpapg485jsn4bbfcaqp6di0f";
     };
     "build" = fetchgit {
       url = "https://chromium.googlesource.com/chromium/src/build";
-      rev = "e934a19ae908081fba13769924e4ea45a7a451ce";
-      sha256 = "0jhy418vaiin7djg9zvk83f8zhasigki4442x5j7gkmgmgmyc4am";
+      rev = "8d44c08a4c9997695db8098198bdd5026bc7a6f9";
+      sha256 = "19sajgf55xfmvnwvy2ss7g6pyljp751cfsws30w415m6m00lmpxl";
     };
     "config" = fetchgit {
       url = "https://chromium.googlesource.com/chromium/src/build/config";
-      rev = "df16c6a2c070704b0a25efe46ee9af16de1e65b3";
-      sha256 = "1x18syzz1scwhd8lf448hy5lnfpq118l403x9qmwm0np318w09wg";
+      rev = "14116c0cdcb9e28995ca8bb384a12e5c9dbd1dbb";
+      sha256 = "04nif0lm4wcy05b7xhal023874s4r0iq067q57cgwdm72i2gml40";
     };
     "testing/gtest" = fetchgit {
       url = "https://chromium.googlesource.com/chromium/testing/gtest";
       rev = "585ec31ea716f08233a815e680fc0d4699843938";
       sha256 = "0csn1cza66851nmxxiw42smsm3422mx67vcyykwn0a71lcjng6rc";
     };
+    "third_party/apple_apsl" = fetchurl {
+      url = "https://chromium.googlesource.com/chromium/src/third_party/+archive/8e6ccb8c74db6dfa15dd21401ace3ac96c054cf7/apple_apsl.tar.gz";
+      sha256 = "0sc7b7zdw7f9piyyijl7xq3v1fzflqlck1apwm8kvgdhkyz3l63k";
+    };
   };
 
-in
-  stdenv.mkDerivation rec {
-    name = "gn";
-    version = "0.0.0.20170629";
-    sourceRoot = ".";
+in stdenv.mkDerivation {
+  name = "gn";
+  version = "20180423";
+  sourceRoot = ".";
 
-    unpackPhase = ''
-      ${lib.concatStringsSep "\n" (
-        lib.mapAttrsToList (n: v: ''
-          mkdir -p $sourceRoot/${n}
+  unpackPhase = ''
+    ${lib.concatStringsSep "\n" (
+      lib.mapAttrsToList (n: v: ''
+        mkdir -p $sourceRoot/${n}
+        if [ -d ${v} ]; then
           cp -r ${v}/* $sourceRoot/${n}
-        '') depsGit)}
-    '';
+        else
+          mkdir -p $sourceRoot/${n}
+          pushd $sourceRoot/${n}
+          unpackFile ${v}
+          popd
+        fi
+      '') depsGit)}
 
-    postPatch = ''
-      # Patch shebands (for sandbox build)
-      chmod u+w -R build
-      patchShebangs build
+    chmod u+w -R $sourceRoot
+  '';
 
-      # Patch out Chromium-bundled libevent
-      chmod u+w tools/gn/bootstrap tools/gn/bootstrap/bootstrap.py
-      sed -i -e '/static_libraries.*libevent/,/^ *\]\?[})]$/d' \
-          tools/gn/bootstrap/bootstrap.py
-    '';
+  patches = [
+    (fetchpatch {
+      url = "https://raw.githubusercontent.com/Eloston/ungoogled-chromium/master/resources/patches/ungoogled-chromium/macos/fix-gn-bootstrap.patch";
+      sha256 = "1h8jgxznm7zrxlzb4wcfx4zx4lyvfrmpd0r7cd7h0s23wn8ibb3a";
+    })
+  ];
 
-    NIX_LDFLAGS = "-levent";
+  postPatch = ''
+    # Disable libevent bootstrapping (we will provide it).
+    sed -i -e '/static_libraries.*libevent/,/^ *\]\?[})]$/d' \
+      tools/gn/bootstrap/bootstrap.py
 
-    nativeBuildInputs = [ ninja python ];
-    buildInputs = [ libevent ];
+    # FIXME Needed with old Apple SDKs
+    substituteInPlace base/mac/foundation_util.mm \
+      --replace "NSArray<NSString*>*" "NSArray*"
+    substituteInPlace base/mac/sdk_forward_declarations.h \
+      --replace "NSDictionary<VNImageOption, id>*" "NSDictionary*" \
+      --replace "NSArray<VNRequest*>*" "NSArray*" \
+      --replace "typedef NSString* VNImageOption NS_STRING_ENUM" "typedef NSString* VNImageOption"
 
-    buildPhase = ''
-      python tools/gn/bootstrap/bootstrap.py -s
-    '';
+    # Patch shebangs (for sandbox build)
+    patchShebangs build
+  '';
 
-    installPhase = ''
-      install -vD out/Release/gn "$out/bin/gn"
-    '';
+  # FIXME again this shouldn't be necessary but I can't figure out a better way
+  NIX_CFLAGS_COMPILE = "-DMAC_OS_X_VERSION_MAX_ALLOWED=MAC_OS_X_VERSION_10_10 -DMAC_OS_X_VERSION_MIN_REQUIRED=MAC_OS_X_VERSION_10_10";
 
-    meta = with stdenv.lib; {
-      description = "A meta-build system that generates NinjaBuild files";
-      homepage = https://chromium.googlesource.com/chromium/src/tools/gn;
-      license = licenses.bsd3;
-      platforms = platforms.linux;
-      maintainers = [ maintainers.stesie ];
-    };
-  }
+  NIX_LDFLAGS = "-levent";
+
+  nativeBuildInputs = [ ninja python ];
+  buildInputs = [ libevent ]
+
+  # FIXME These dependencies shouldn't be needed but can't find a way
+  # around it. Chromium pulls this in while bootstrapping GN.
+  ++ lib.optionals stdenv.isDarwin (with darwin; with apple_sdk.frameworks; [
+    libobjc
+    cctools
+
+    # frameworks
+    ApplicationServices
+    Foundation
+    AppKit
+    ImageCaptureCore
+    CoreBluetooth
+    IOBluetooth
+    CoreWLAN
+    Quartz
+    Cocoa
+  ]);
+
+  buildPhase = ''
+    python tools/gn/bootstrap/bootstrap.py -s
+  '';
+
+  installPhase = ''
+    install -vD out/Release/gn "$out/bin/gn"
+  '';
+
+  meta = with lib; {
+    description = "A meta-build system that generates NinjaBuild files";
+    homepage = https://chromium.googlesource.com/chromium/src/tools/gn;
+    license = licenses.bsd3;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ stesie matthewbauer ];
+  };
+}
