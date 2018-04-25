@@ -110,7 +110,7 @@ in
       };
 
       enableCompletion = mkOption {
-        default = false;
+        default = true;
         description = ''
           Enable Bash completion for all interactive bash shells.
         '';
@@ -126,7 +126,7 @@ in
     programs.bash = {
 
       shellInit = ''
-        . ${config.system.build.setEnvironment}
+        ${config.system.build.setEnvironment.text}
 
         ${cfge.shellInit}
       '';

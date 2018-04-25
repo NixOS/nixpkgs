@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, gnome3, gtk3, wrapGAppsHook
+{ stdenv, fetchurl, pkgconfig, gnome3, gtk3, wrapGAppsHook, gobjectIntrospection
 , itstool, libxml2, python3Packages, at-spi2-core
 , dbus, intltool, libwnck3 }:
 
@@ -11,7 +11,10 @@ stdenv.mkDerivation rec {
     sha256 = "883306274442c7ecc076b24afca5190c835c40871ded1b9790da69347e9ca3c5";
   };
 
-  nativeBuildInputs = [ pkgconfig wrapGAppsHook itstool intltool ];
+  nativeBuildInputs = [
+    pkgconfig wrapGAppsHook itstool intltool
+    gobjectIntrospection # For setup hook
+  ];
   buildInputs = [
     gtk3 libxml2 python3Packages.python python3Packages.pyatspi
     python3Packages.pygobject3 python3Packages.ipython

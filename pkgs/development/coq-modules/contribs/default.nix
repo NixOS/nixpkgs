@@ -189,11 +189,18 @@ let mkContrib = repo: revs: param:
     sha256 = "1ddwzg12pbzpnz3njin4zhpph92kscrbsn3bzds26yj8fp76zc33";
   };
 
-  containers = mkContrib "containers" [ "8.6" ] {
-    version = "8.6.0";
-    rev = "fa1fec7";
-    sha256 = "1ns0swlr8hzb1zc7fsyd3vws1vbq0vvfxcf0lszqnca9c9hfkfy4";
-  };
+  containers = mkContrib "containers" [ "8.6" "8.7" ] {
+    "8.6" = {
+      version = "8.6.0";
+      rev = "fa1fec7";
+      sha256 = "1ns0swlr8hzb1zc7fsyd3vws1vbq0vvfxcf0lszqnca9c9hfkfy4";
+    };
+    "8.7" = {
+      version = "20180313";
+      rev = "77ac16366529c9e558f70ba86f0168a76ca76b8f";
+      sha256 = "01gp8injb0knaxgqsdc4x9h8714k7qxg7j5w7y6i45dnpd81ndr4";
+    };
+  }."${coq.coq-version}";
 
   continuations = mkContrib "continuations" [ ] {
     version = "v8.5.0-13-g6885310";

@@ -1,12 +1,11 @@
 diff --git a/support/go_build.rb b/support/go_build.rb
-index 82f94d2..40ba35e 100644
+index 30a6b71..46b4dfa 100644
 --- a/support/go_build.rb
 +++ b/support/go_build.rb
-@@ -25,9 +25,8 @@ module GoBuild
-   def run!(env, cmd)
+@@ -26,8 +26,8 @@ module GoBuild
      raise "env must be a hash" unless env.is_a?(Hash)
      raise "cmd must be an array" unless cmd.is_a?(Array)
--  
+   
 -    if !system(env, *cmd)
 -      abort "command failed: #{env.inspect} #{cmd.join(' ')}"
 -    end

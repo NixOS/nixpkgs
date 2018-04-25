@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
   version = "1.4.5";
 
   src = fetchgit {
-    url = "git://git.kernel.org/pub/scm/utils/dtc/dtc.git";
+    url = "https://git.kernel.org/pub/scm/utils/dtc/dtc.git";
     rev = "refs/tags/v${version}";
     sha256 = "10y5pbkcj5gkijcgnlvrh6q2prpnvsgihb9asz3zfp66mcjwzsy3";
   };

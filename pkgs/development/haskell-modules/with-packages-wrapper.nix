@@ -95,6 +95,15 @@ symlinkJoin {
         makeWrapper ${ghc}/bin/$prg $out/bin/$prg --add-flags "${packageDBFlag}=${packageCfgDir}"
       fi
     done
+
+    # haddock was referring to the base ghc, https://github.com/NixOS/nixpkgs/issues/36976
+    if [[ -x "${ghc}/bin/haddock" ]]; then
+      rm -f $out/bin/haddock
+      makeWrapper ${ghc}/bin/haddock $out/bin/haddock    \
+        --add-flags '"-B$NIX_${ghcCommandCaps}_LIBDIR"'  \
+        --set "NIX_${ghcCommandCaps}_LIBDIR" "${libDir}"
+    fi
+
   '' + (lib.optionalString targetPlatform.isDarwin ''
     # Work around a linker limit in macOS Sierra (see generic-builder.nix):
     local packageConfDir="$out/lib/${ghc.name}/package.conf.d";

@@ -41,6 +41,7 @@
   ./hardware/pcmcia.nix
   ./hardware/raid/hpsa.nix
   ./hardware/usb-wwan.nix
+  ./hardware/onlykey.nix
   ./hardware/video/amdgpu.nix
   ./hardware/video/amdgpu-pro.nix
   ./hardware/video/ati.nix
@@ -58,6 +59,7 @@
   ./installer/tools/tools.nix
   ./misc/assertions.nix
   ./misc/crashdump.nix
+  ./misc/documentation.nix
   ./misc/extra-arguments.nix
   ./misc/ids.nix
   ./misc/lib.nix
@@ -85,12 +87,11 @@
   ./programs/freetds.nix
   ./programs/gnupg.nix
   ./programs/gphoto2.nix
-  ./programs/info.nix
+  ./programs/iftop.nix
   ./programs/java.nix
   ./programs/kbdlight.nix
   ./programs/less.nix
   ./programs/light.nix
-  ./programs/man.nix
   ./programs/mosh.nix
   ./programs/mtr.nix
   ./programs/nano.nix
@@ -104,6 +105,7 @@
   ./programs/shadow.nix
   ./programs/shell.nix
   ./programs/spacefm.nix
+  ./programs/singularity.nix
   ./programs/ssh.nix
   ./programs/ssmtp.nix
   ./programs/sysdig.nix
@@ -157,12 +159,14 @@
   ./services/audio/slimserver.nix
   ./services/audio/squeezelite.nix
   ./services/audio/ympd.nix
-  ./services/backup/almir.nix
   ./services/backup/bacula.nix
+  ./services/backup/borgbackup.nix
+  ./services/backup/duplicati.nix
   ./services/backup/crashplan.nix
   ./services/backup/crashplan-small-business.nix
   ./services/backup/mysql-backup.nix
   ./services/backup/postgresql-backup.nix
+  ./services/backup/restic.nix
   ./services/backup/rsnapshot.nix
   ./services/backup/tarsnap.nix
   ./services/backup/znapzend.nix
@@ -191,6 +195,7 @@
   ./services/databases/clickhouse.nix
   ./services/databases/couchdb.nix
   ./services/databases/firebird.nix
+  ./services/databases/foundationdb.nix
   ./services/databases/hbase.nix
   ./services/databases/influxdb.nix
   ./services/databases/memcached.nix
@@ -322,8 +327,9 @@
   ./services/misc/geoip-updater.nix
   ./services/misc/gitea.nix
   #./services/misc/gitit.nix
-  ./services/misc/gitlab.nix
+  #./services/misc/gitlab.nix
   ./services/misc/gitolite.nix
+  ./services/misc/gitweb.nix
   ./services/misc/gogs.nix
   ./services/misc/gollum.nix
   ./services/misc/gpsd.nix
@@ -361,6 +367,8 @@
   ./services/misc/rippled.nix
   ./services/misc/ripple-data-api.nix
   ./services/misc/rogue.nix
+  ./services/misc/serviio.nix
+  ./services/misc/safeeyes.nix
   ./services/misc/siproxd.nix
   ./services/misc/snapper.nix
   ./services/misc/sonarr.nix
@@ -396,16 +404,7 @@
   ./services/monitoring/osquery.nix
   ./services/monitoring/prometheus/default.nix
   ./services/monitoring/prometheus/alertmanager.nix
-  ./services/monitoring/prometheus/blackbox-exporter.nix
-  ./services/monitoring/prometheus/collectd-exporter.nix
-  ./services/monitoring/prometheus/fritzbox-exporter.nix
-  ./services/monitoring/prometheus/json-exporter.nix
-  ./services/monitoring/prometheus/minio-exporter.nix
-  ./services/monitoring/prometheus/nginx-exporter.nix
-  ./services/monitoring/prometheus/node-exporter.nix
-  ./services/monitoring/prometheus/snmp-exporter.nix
-  ./services/monitoring/prometheus/unifi-exporter.nix
-  ./services/monitoring/prometheus/varnish-exporter.nix
+  ./services/monitoring/prometheus/exporters.nix
   ./services/monitoring/riemann.nix
   ./services/monitoring/riemann-dash.nix
   ./services/monitoring/riemann-tools.nix
@@ -483,6 +482,7 @@
   ./services/networking/gnunet.nix
   ./services/networking/gogoclient.nix
   ./services/networking/gvpe.nix
+  ./services/networking/hans.nix
   ./services/networking/haproxy.nix
   ./services/networking/heyefi.nix
   ./services/networking/hostapd.nix
@@ -536,7 +536,7 @@
   ./services/networking/prayer.nix
   ./services/networking/privoxy.nix
   ./services/networking/prosody.nix
-  # ./services/networking/quagga.nix
+  ./services/networking/quagga.nix
   ./services/networking/quassel.nix
   ./services/networking/racoon.nix
   ./services/networking/radicale.nix
@@ -550,6 +550,7 @@
   ./services/networking/searx.nix
   ./services/networking/seeks.nix
   ./services/networking/skydns.nix
+  ./services/networking/shadowsocks.nix
   ./services/networking/shairport-sync.nix
   ./services/networking/shout.nix
   ./services/networking/sniproxy.nix
@@ -561,6 +562,7 @@
   ./services/networking/ssh/lshd.nix
   ./services/networking/ssh/sshd.nix
   ./services/networking/strongswan.nix
+  ./services/networking/strongswan-swanctl/module.nix
   ./services/networking/stunnel.nix
   ./services/networking/supplicant.nix
   ./services/networking/supybot.nix
@@ -638,7 +640,6 @@
   ./services/web-apps/atlassian/jira.nix
   ./services/web-apps/frab.nix
   ./services/web-apps/mattermost.nix
-  ./services/web-apps/nixbot.nix
   ./services/web-apps/nexus.nix
   ./services/web-apps/pgpkeyserver-lite.nix
   ./services/web-apps/matomo.nix
@@ -658,6 +659,7 @@
   ./services/web-servers/mighttpd2.nix
   ./services/web-servers/minio.nix
   ./services/web-servers/nginx/default.nix
+  ./services/web-servers/nginx/gitweb.nix
   ./services/web-servers/phpfpm/default.nix
   ./services/web-servers/shellinabox.nix
   ./services/web-servers/tomcat.nix

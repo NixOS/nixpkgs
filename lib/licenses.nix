@@ -179,6 +179,11 @@ lib.mapAttrs (n: v: v // { shortName = n; }) rec {
     fullName  = "CeCILL-C Free Software License Agreement";
   };
 
+  cpal10 = spdx {
+    spdxId = "CPAL-1.0";
+    fullName = "Common Public Attribution License 1.0";
+  };
+
   cpl10 = spdx {
     spdxId = "CPL-1.0";
     fullName = "Common Public License 1.0";
@@ -279,7 +284,7 @@ lib.mapAttrs (n: v: v // { shortName = n; }) rec {
 
   gpl2Oss = {
     fullName = "GNU General Public License version 2 only (with OSI approved licenses linking exception)";
-    url = http://www.mysql.com/about/legal/licensing/foss-exception;
+    url = https://www.mysql.com/about/legal/licensing/foss-exception;
   };
 
   gpl2Plus = spdx {

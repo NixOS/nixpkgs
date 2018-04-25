@@ -54,7 +54,9 @@ let
 
     base64 = callPackage ../development/ocaml-modules/base64 { };
 
-    bap = callPackage ../development/ocaml-modules/bap { };
+    bap = callPackage ../development/ocaml-modules/bap {
+      inherit (janeStreet_0_9_0) core_kernel ppx_jane parsexp;
+    };
 
     batteries = callPackage ../development/ocaml-modules/batteries { };
 
@@ -117,7 +119,10 @@ let
     camlimages_4_1 = callPackage ../development/ocaml-modules/camlimages/4.1.nix {
       giflib = pkgs.giflib_4_1;
     };
-    camlimages = camlimages_4_1;
+    camlimages =
+          if lib.versionOlder "4.06" ocaml.version
+          then callPackage ../development/ocaml-modules/camlimages { }
+          else camlimages_4_1;
 
     benchmark = callPackage ../development/ocaml-modules/benchmark { };
 
@@ -211,8 +216,6 @@ let
     dtoa = callPackage ../development/ocaml-modules/dtoa { };
 
     easy-format = callPackage ../development/ocaml-modules/easy-format { };
-
-    eff = callPackage ../development/interpreters/eff { };
 
     eliom = callPackage ../development/ocaml-modules/eliom {
       lwt = lwt2;
@@ -321,9 +324,15 @@ let
 
     js_of_ocaml-compiler = callPackage ../development/tools/ocaml/js_of_ocaml/compiler.nix {};
 
+    js_of_ocaml-lwt = callPackage ../development/tools/ocaml/js_of_ocaml/lwt.nix {};
+
     js_of_ocaml-ocamlbuild = callPackage ../development/tools/ocaml/js_of_ocaml/ocamlbuild.nix {};
 
     js_of_ocaml-ppx = callPackage ../development/tools/ocaml/js_of_ocaml/ppx.nix {};
+
+    js_of_ocaml-ppx_deriving_json = callPackage ../development/tools/ocaml/js_of_ocaml/ppx_deriving_json.nix {};
+
+    js_of_ocaml-tyxml = callPackage ../development/tools/ocaml/js_of_ocaml/tyxml.nix {};
 
     jsonm = callPackage ../development/ocaml-modules/jsonm { };
 
@@ -361,15 +370,17 @@ let
 
     lru = callPackage ../development/ocaml-modules/lru { };
 
-    lwt2 = callPackage ../development/ocaml-modules/lwt { };
+    lwt2 = callPackage ../development/ocaml-modules/lwt/legacy.nix { };
 
     lwt3 = if lib.versionOlder "4.02" ocaml.version
-      then callPackage ../development/ocaml-modules/lwt {
-        version = "3.0.0";
-      }
+      then callPackage ../development/ocaml-modules/lwt { }
       else throw "lwt3 is not available for OCaml ${ocaml.version}";
 
     ocaml_lwt = if lib.versionOlder "4.02" ocaml.version then lwt3 else lwt2;
+
+    lwt_ppx = callPackage ../development/ocaml-modules/lwt/ppx.nix {
+      lwt = lwt3;
+    };
 
     lwt_react = callPackage ../development/ocaml-modules/lwt_react {
       lwt = lwt3;
@@ -645,7 +656,9 @@ let
 
     ssl = callPackage ../development/ocaml-modules/ssl { };
 
-    stog = callPackage ../applications/misc/stog { };
+    stog = callPackage ../applications/misc/stog {
+      ocaml_lwt = lwt2;
+    };
 
     stringext = callPackage ../development/ocaml-modules/stringext { };
 
@@ -712,10 +725,19 @@ let
     # Jane Street
 
     janePackage = callPackage ../development/ocaml-modules/janestreet/janePackage.nix {};
-
+    
     janeStreet = import ../development/ocaml-modules/janestreet {
-      inherit lib janePackage ocaml ocamlbuild ctypes cryptokit magic-mime num;
-      inherit ocaml-migrate-parsetree octavius ounit ppx_deriving re zarith;
+      inherit lib janePackage ocaml ocamlbuild angstrom ctypes cryptokit;
+      inherit magic-mime num ocaml-migrate-parsetree octavius ounit;
+      inherit ppx_deriving re zarith;
+      inherit (pkgs) stdenv openssl;
+    };
+    
+    janeStreet_0_9_0 = import ../development/ocaml-modules/janestreet/old.nix {
+      janePackage = callPackage ../development/ocaml-modules/janestreet/janePackage.nix { defaultVersion = "0.9.0"; };
+      inherit lib ocaml ocamlbuild ctypes cryptokit;
+      inherit magic-mime num ocaml-migrate-parsetree octavius ounit;
+      inherit ppx_deriving re zarith;
       inherit (pkgs) stdenv openssl;
     };
 
@@ -955,10 +977,6 @@ let
 
     # Apps / from all-packages
 
-    wyrd = callPackage ../tools/misc/wyrd {
-      ncurses = pkgs.ncurses5;
-    };
-
     haxe = callPackage ../development/compilers/haxe { };
 
     ocamlnat = callPackage  ../development/ocaml-modules/ocamlnat { };
@@ -1024,7 +1042,9 @@ in rec
 
   ocamlPackages_4_06 = mkOcamlPackages (callPackage ../development/compilers/ocaml/4.06.nix { }) (self: super: { });
 
+  ocamlPackages_4_07 = mkOcamlPackages (callPackage ../development/compilers/ocaml/4.07.nix { }) (self: super: { });
+
   ocamlPackages_latest = ocamlPackages_4_06;
 
-  ocamlPackages = ocamlPackages_4_04;
+  ocamlPackages = ocamlPackages_4_05;
 }

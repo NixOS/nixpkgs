@@ -72,6 +72,11 @@ let
       meta = {
         homepage = http://www.weechat.org/;
         description = "A fast, light and extensible chat client";
+        longDescription = ''
+          You can find more documentation as to how to customize this package
+          (eg. adding python modules for scripts that would require them, etc.)
+          on https://nixos.org/nixpkgs/manual/#sec-weechat .
+        '';
         license = stdenv.lib.licenses.gpl3;
         maintainers = with stdenv.lib.maintainers; [ lovek323 garbas the-kenny lheckemann ];
         platforms = stdenv.lib.platforms.unix;
@@ -117,4 +122,7 @@ in if configure == null then weechat else
     export WEECHAT_EXTRA_LIBDIR=${pluginsDir}
     ${lib.concatMapStringsSep "\n" (p: lib.optionalString (p ? extraEnv) p.extraEnv) plugins}
     exec ${weechat}/bin/weechat "$@"
-  '') // { unwrapped = weechat; }
+  '') // {
+    unwrapped = weechat;
+    meta = weechat.meta;
+  }

@@ -2,7 +2,7 @@
 
 buildPythonPackage rec {
   pname = "pyhomematic";
-  version = "0.1.39";
+  version = "0.1.41";
 
   disabled = !isPy3k;
 
@@ -11,8 +11,11 @@ buildPythonPackage rec {
     owner = "danielperna84";
     repo = pname;
     rev = version;
-    sha256 = "1g181x2mrhxcaswr6vi2m7if97wv4rf2g2pny60334sciga8njfz";
+    sha256 = "01j6y2ypi7a8ffnkqd8j8vnpszza2cxqpiqbnk1dwbg9w9pwwq53";
   };
+
+  # Unreliable timing: https://github.com/danielperna84/pyhomematic/issues/126
+  doCheck = false;
 
   meta = with stdenv.lib; {
     description = "Python 3 Interface to interact with Homematic devices";

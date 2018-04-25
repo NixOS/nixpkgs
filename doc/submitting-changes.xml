@@ -317,11 +317,11 @@ Additional information.
     </para>
     <para>
       review uncommitted changes:
-      <screen>nix-shell -p nox --run nox-review wip</screen>
+      <screen>nix-shell -p nox --run "nox-review wip"</screen>
     </para>
     <para>
       review changes from pull request number 12345:
-      <screen>nix-shell -p nox --run nox-review pr 12345</screen>
+      <screen>nix-shell -p nox --run "nox-review pr 12345"</screen>
     </para>
   </section>
   <section>

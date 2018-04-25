@@ -1,0 +1,35 @@
+From 4046e0ac8ed93354c01de5f3b5cae790cce70404 Mon Sep 17 00:00:00 2001
+From: Will Dietz <w@wdtz.org>
+Date: Thu, 29 Mar 2018 07:21:02 -0500
+Subject: [PATCH] Explicitly search LIBGL_PATH as fallback, if defined.
+
+---
+ src/dispatch_common.c | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
+
+diff --git a/src/dispatch_common.c b/src/dispatch_common.c
+index bc2fb94..776237b 100644
+--- a/src/dispatch_common.c
++++ b/src/dispatch_common.c
+@@ -306,6 +306,18 @@ get_dlopen_handle(void **handle, const char *lib_name, bool exit_on_fail)
+     pthread_mutex_lock(&api.mutex);
+     if (!*handle) {
+         *handle = dlopen(lib_name, RTLD_LAZY | RTLD_LOCAL);
++#ifdef LIBGL_PATH
++        if (!*handle) {
++          char pathbuf[sizeof(LIBGL_PATH) + 1 + 1024 + 1];
++          int l = snprintf(pathbuf, sizeof(pathbuf), "%s/%s", LIBGL_PATH, lib_name);
++          if (l < 0 || l >= sizeof(pathbuf)) {
++            // This really shouldn't happen
++            fprintf(stderr, "Error prefixing library pathname\n");
++            exit(1);
++          }
++          *handle = dlopen(pathbuf, RTLD_LAZY | RTLD_LOCAL);
++        }
++#endif
+         if (!*handle) {
+             if (exit_on_fail) {
+                 fprintf(stderr, "Couldn't open %s: %s\n", lib_name, dlerror());
+-- 
+2.16.3
+

@@ -1,30 +1,3 @@
-diff --git a/lib/gitlab_projects.rb b/lib/gitlab_projects.rb
-index 0b11ce3..ffc3faf 100644
---- a/lib/gitlab_projects.rb
-+++ b/lib/gitlab_projects.rb
-@@ -8,7 +8,7 @@ require_relative 'gitlab_metrics'
- require_relative 'gitlab_metrics'
- 
- class GitlabProjects
--  GLOBAL_HOOKS_DIRECTORY = File.join(ROOT_PATH, 'hooks')
-+  GLOBAL_HOOKS_DIRECTORY = ENV['GITLAB_SHELL_HOOKS_PATH'] || File.join(ROOT_PATH, 'hooks')
- 
-   # Project name is a directory name for repository with .git at the end
-   # It may be namespaced or not. Like repo.git or gitlab/repo.git
-diff --git a/lib/gitlab_shell.rb b/lib/gitlab_shell.rb
-index e7d0254..181ec8a 100644
---- a/lib/gitlab_shell.rb
-+++ b/lib/gitlab_shell.rb
-@@ -188,7 +188,8 @@ class GitlabShell
-     end
- 
-     # We use 'chdir: ROOT_PATH' to let the next executable know where config.yml is.
--    Kernel::exec(env, *args, unsetenv_others: true, chdir: ROOT_PATH)
-+    # Except we don't, because we're already in the right directory on nixos !
-+    Kernel::exec(env, *args, unsetenv_others: true)
-   end
- 
-   def api
 diff --git a/go/internal/config/config.go b/go/internal/config/config.go
 index c57b4de..88cfc95 100644
 --- a/go/internal/config/config.go
@@ -34,7 +7,21 @@ index c57b4de..88cfc95 100644
  	cfg.RootDir = dir
  
 -	configBytes, err := ioutil.ReadFile(path.Join(cfg.RootDir, configFile))
-+	configBytes, err := ioutil.ReadFile(os.Getenv("GITLAB_SHELL_CONFIG_PATH"))
++	configBytes, err := ioutil.ReadFile("/run/gitlab/shell-config.yml")
  	if err != nil {
  		return nil, err
  	}
+diff --git a/lib/gitlab_shell.rb b/lib/gitlab_shell.rb
+index 1452f95..2b40327 100644
+--- a/lib/gitlab_shell.rb
++++ b/lib/gitlab_shell.rb
+@@ -180,7 +180,8 @@ class GitlabShell
+     end
+ 
+     # We use 'chdir: ROOT_PATH' to let the next executable know where config.yml is.
+-    Kernel::exec(env, *args, unsetenv_others: true, chdir: ROOT_PATH)
++    # Except we don't, because we're already in the right directory on nixos!
++    Kernel::exec(env, *args, unsetenv_others: true)
+   end
+ 
+   def api

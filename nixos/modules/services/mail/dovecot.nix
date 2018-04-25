@@ -30,6 +30,7 @@ let
 
     ''
       default_internal_user = ${cfg.user}
+      default_internal_group = ${cfg.group}
       ${optionalString (cfg.mailUser != null) "mail_uid = ${cfg.mailUser}"}
       ${optionalString (cfg.mailGroup != null) "mail_gid = ${cfg.mailGroup}"}
 

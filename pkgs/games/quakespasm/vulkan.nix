@@ -12,10 +12,12 @@ stdenv.mkDerivation rec {
   };
 
   sourceRoot = "source/Quake";
-  
+
   buildInputs = [
     makeWrapper gzip SDL2 libvorbis libmad vulkan-loader.dev
   ];
+
+  buildFlags = [ "DO_USERDIRS=1" ];
 
   preInstall = ''
     mkdir -p "$out/bin"
@@ -28,7 +30,7 @@ stdenv.mkDerivation rec {
   '';
 
   enableParallelBuilding = true;
-  
+
   meta = {
     description = "Vulkan Quake port based on QuakeSpasm";
     homepage = src.meta.homepage;
@@ -40,7 +42,7 @@ stdenv.mkDerivation rec {
       passes & sub passes, pipeline barriers & synchronization, compute shaders, push &
       specialization constants, CPU/GPU parallelism and memory pooling.
     '';
-  
+
     platforms = stdenv.lib.platforms.linux;
     maintainers = [ stdenv.lib.maintainers.gnidorah ];
   };

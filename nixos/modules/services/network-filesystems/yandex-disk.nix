@@ -99,10 +99,10 @@ in
             exit 1
         fi
 
-        ${pkgs.su}/bin/su -s ${pkgs.stdenv.shell} ${u} \
+        ${pkgs.su}/bin/su -s ${pkgs.runtimeShell} ${u} \
           -c '${pkgs.yandex-disk}/bin/yandex-disk token -p ${cfg.password} ${cfg.username} ${dir}/token'
 
-        ${pkgs.su}/bin/su -s ${pkgs.stdenv.shell} ${u} \
+        ${pkgs.su}/bin/su -s ${pkgs.runtimeShell} ${u} \
           -c '${pkgs.yandex-disk}/bin/yandex-disk start --no-daemon -a ${dir}/token -d ${cfg.directory} --exclude-dirs=${cfg.excludes}'
       '';
 

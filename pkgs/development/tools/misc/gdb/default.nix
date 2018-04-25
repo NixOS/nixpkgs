@@ -35,7 +35,8 @@ stdenv.mkDerivation rec {
     sha256 = "0d2bpqk58fqlx21rbnk8mbcjlggzc9kb5sjirrfrrrjq70ka0qdg";
   };
 
-  patches = [ ./debug-info-from-env.patch ];
+  patches = [ ./debug-info-from-env.patch ]
+    ++ stdenv.lib.optional stdenv.isDarwin ./darwin-target-match.patch;
 
   nativeBuildInputs = [ pkgconfig texinfo perl setupDebugInfoDirs ]
     # TODO(@Ericson2314) not sure if should be host or target

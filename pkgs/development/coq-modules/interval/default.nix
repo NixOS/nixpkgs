@@ -24,4 +24,7 @@ stdenv.mkDerivation {
     maintainers = with maintainers; [ vbgl ];
     platforms = coq.meta.platforms;
   };
+
+  passthru = { inherit (mathcomp) compatibleCoqVersions; };
+
 }

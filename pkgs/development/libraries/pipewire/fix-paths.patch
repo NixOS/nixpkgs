@@ -1,8 +1,0 @@
---- a/src/daemon/systemd/user/meson.build
-+++ b/src/daemon/systemd/user/meson.build
-@@ -1,4 +1,4 @@
--systemd_user_services_dir = systemd.get_pkgconfig_variable('systemduserunitdir')
-+systemd_user_services_dir = join_paths(get_option('prefix'), 'etc', 'systemd', 'user')
- 
- install_data(sources : 'pipewire.socket', install_dir : systemd_user_services_dir)
- 

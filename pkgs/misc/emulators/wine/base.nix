@@ -36,10 +36,10 @@ stdenv.mkDerivation ((lib.optionalAttrs (! isNull buildScript) {
   ++ lib.optional odbcSupport            pkgs.unixODBC
   ++ lib.optional netapiSupport          pkgs.samba4
   ++ lib.optional cursesSupport          pkgs.ncurses
-  ++ lib.optional vaSupport              pkgs.libva-full
+  ++ lib.optional vaSupport              pkgs.libva
   ++ lib.optional pcapSupport            pkgs.libpcap
   ++ lib.optional v4lSupport             pkgs.libv4l
-  ++ lib.optional saneSupport            pkgs.saneBackends
+  ++ lib.optional saneSupport            pkgs.sane-backends
   ++ lib.optional gsmSupport             pkgs.gsm
   ++ lib.optional gphoto2Support         pkgs.libgphoto2
   ++ lib.optional ldapSupport            pkgs.openldap
@@ -53,7 +53,7 @@ stdenv.mkDerivation ((lib.optionalAttrs (! isNull buildScript) {
   ++ lib.optionals openclSupport [ pkgs.opencl-headers pkgs.ocl-icd ]
   ++ lib.optionals xmlSupport    [ pkgs.libxml2 pkgs.libxslt ]
   ++ lib.optionals tlsSupport    [ pkgs.openssl pkgs.gnutls ]
-  ++ lib.optionals openglSupport [ pkgs.libGLU_combined pkgs.libGL.osmesa pkgs.libdrm ]
+  ++ lib.optionals openglSupport [ pkgs.libGLU_combined pkgs.mesa_noglu.osmesa pkgs.libdrm ]
   ++ (with pkgs.xorg; [
     libX11  libXi libXcursor libXrandr libXrender libXxf86vm libXcomposite libXext
   ])));
@@ -102,6 +102,10 @@ stdenv.mkDerivation ((lib.optionalAttrs (! isNull buildScript) {
   '';
   
   enableParallelBuilding = true;
+
+  # https://bugs.winehq.org/show_bug.cgi?id=43530
+  # https://github.com/NixOS/nixpkgs/issues/31989
+  hardeningDisable = [ "bindnow" ];
 
   passthru = { inherit pkgArches; };
   meta = {

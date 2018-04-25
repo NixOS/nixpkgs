@@ -1,18 +1,23 @@
-{stdenv, fetchgit, gnome3, automake, autoconf, which, libtool, pkgconfig, graphviz, glib, gobjectIntrospection, expat}:
+{stdenv, fetchurl, gnome3, automake, autoconf, which, libtool, pkgconfig, graphviz, glib, gobjectIntrospection, expat}:
 stdenv.mkDerivation rec {
-  version = "2016-11-11";
-  name = "valadoc-unstable-${version}";
+  version = "0.36.1";
+  name = "valadoc-${version}";
 
-  src = fetchgit {
-    url = "git://git.gnome.org/valadoc";
-    rev = "8080b626db9c16ac9a0a9802677b4f6ab0d36d4e";
-    sha256 = "1y00yls4wgxggzfagm3hcmzkpskfbs3m52pjgl71lg4p85kv6msv";
+  src = fetchurl {
+    url = "mirror://gnome/sources/valadoc/${gnome3.versionBranch version}/${name}.tar.xz";
+    sha256 = "07501k2j9c016bd7rfr6xzaxdplq7j9sd18b5ixbqdbipvn6whnv";
   };
 
   nativeBuildInputs = [ automake autoconf which gnome3.vala libtool pkgconfig gobjectIntrospection ];
   buildInputs = [ graphviz glib gnome3.libgee expat ];
 
   preConfigure = "./autogen.sh";
+
+  passthru = {
+    updateScript = gnome3.updateScript {
+      packageName = "valadoc";
+    };
+  };
 
   meta = with stdenv.lib; {
     description = "valadoc is a documentation generator for generating API documentation from Vala source code";

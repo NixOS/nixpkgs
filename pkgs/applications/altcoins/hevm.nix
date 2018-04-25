@@ -55,6 +55,7 @@ lib.overrideDerivation (mkDerivation rec {
   description = "Ethereum virtual machine evaluator";
   license = stdenv.lib.licenses.agpl3;
   maintainers = [stdenv.lib.maintainers.dbrock];
+  broken = true; # 2018-04-10
 }) (attrs: {
   buildInputs = attrs.buildInputs ++ [solc];
   nativeBuildInputs = attrs.nativeBuildInputs ++ [makeWrapper];

@@ -1,5 +1,6 @@
 { stdenv, fetchurl, pkgconfig, ncurses, ocaml, findlib, ocaml_pcre, camlzip
-, gnutls, nettle }:
+, gnutls, nettle, fetchpatch
+}:
 
 let version = "4.1.5"; in
 
@@ -10,6 +11,12 @@ stdenv.mkDerivation {
     url = "http://download.camlcity.org/download/ocamlnet-${version}.tar.gz";
     sha256 = "1ppcd2zjhj6s3ib9q8dngnr53qlmkhvv7a8hzp88r79k6jygn4cm";
   };
+
+  patches = [ (fetchpatch {
+      url = "https://raw.githubusercontent.com/ocaml/opam-repository/master/packages/ocamlnet/ocamlnet.4.1.5/files/netgzip.patch";
+      sha256 = "1say7zzgk24qcy9m91gcfgvz4fv7nksx4j5qnbxyq8wqw0g88ba0";
+    })
+  ];
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ ncurses ocaml findlib ocaml_pcre camlzip gnutls nettle ];

@@ -3,7 +3,7 @@
 buildPythonPackage rec {
   name = "${pname}-${version}";
   pname = "pyobjc";
-  version = "4.1";
+  version = "4.2.1";
 
   # Gives "No matching distribution found for
   # pyobjc-framework-Collaboration==4.0b1 (from pyobjc==4.0b1)"
@@ -11,7 +11,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "287db11f912ac7d05c4907dbf6e74abaa475e36368f7c92e05aca2886a94562c";
+    sha256 = "b156abab60da3f3c4bc65a919eabb2c98539a94163a277efba5828358396d23e";
   };
 
   meta = {

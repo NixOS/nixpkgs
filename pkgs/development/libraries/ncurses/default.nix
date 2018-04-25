@@ -13,18 +13,12 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "6.0-20171125";
+  version = "6.1";
   name = "ncurses-${version}" + lib.optionalString (abiVersion == "5") "-abi5-compat";
 
   src = fetchurl {
-    urls = [
-      # Remove this mirror on next upgrade, it's only needed because upstream took ncurses-6.0-20171125.tgz down!
-      "http://bld1.alpinelinux.org/distfiles/v3.5/ncurses-${version}.tgz"
-
-      "ftp://ftp.invisible-island.net/ncurses/current/ncurses-${version}.tgz"
-      "https://invisible-mirror.net/archives/ncurses/current/ncurses-${version}.tgz"
-    ];
-    sha256 = "11adzj0k82nlgpfrflabvqn2m7fmhp2y6pd7ivmapynxqb9vvb92";
+    url = "mirror://gnu/ncurses/ncurses-${version}.tar.gz";
+    sha256 = "05qdmbmrrn88ii9f66rkcmcyzp1kb1ymkx7g040lfkd1nkp7w1da";
   };
 
   patches = lib.optional (!stdenv.cc.isClang) ./clang.patch;
@@ -127,6 +121,8 @@ stdenv.mkDerivation rec {
     moveToOutput "bin/tic" "$out"
     moveToOutput "bin/tput" "$out"
     moveToOutput "bin/tset" "$out"
+    moveToOutput "bin/captoinfo" "$out"
+    moveToOutput "bin/infotocap" "$out"
   '';
 
   preFixup = lib.optionalString (!hostPlatform.isCygwin) ''

@@ -6,7 +6,7 @@
 
 let
   python = python3Packages.python;
-  version = "1.4";
+  version = "1.5";
 in
   stdenv.mkDerivation {
     name = "autorandr-${version}";
@@ -48,7 +48,7 @@ in
       owner = "phillipberndt";
       repo = "autorandr";
       rev = "${version}";
-      sha256 = "08i71r221ilc8k1c59w89g3iq5m7zwhnjjzapavhqxlr8y9dcpf5";
+      sha256 = "01pij2r73f190qk7q3cgf5cmk0w59g9l9v4vah5vf4ddn7nnk7yq";
     };
 
     meta = {

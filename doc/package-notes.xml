@@ -713,12 +713,22 @@ the <literal>inotify.py</literal> script in weechat-scripts requires
 D-Bus or libnotify, and the <literal>fish.py</literal> script requires
 pycrypto. To use these scripts, use the <literal>python</literal>
 plugin's <literal>withPackages</literal> attribute:
-<programlisting>weechat.override {configure = {availablePlugins, ...}: {
+<programlisting>weechat.override { configure = {availablePlugins, ...}: {
     plugins = with availablePlugins; [
             (python.withPackages (ps: with ps; [ pycrypto python-dbus ]))
         ];
     }
 }
+</programlisting>
+</para>
+<para>
+In order to also keep all default plugins installed, it is possible to use
+the following method:
+<programlisting>weechat.override { configure = { availablePlugins, ... }: {
+  plugins = builtins.attrValues (availablePlugins // {
+    python = availablePlugins.python.withPackages (ps: with ps; [ pycrypto python-dbus ]);
+  });
+}; }
 </programlisting>
 </para>
 </section>

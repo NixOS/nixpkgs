@@ -221,15 +221,68 @@
 
   <para>
     All generators follow a similar call interface: <code>generatorName
-    configFunctions data</code>, where <literal>configFunctions</literal> is a
-    set of user-defined functions that format variable parts of the content.
+    configFunctions data</code>, where <literal>configFunctions</literal> is
+    an attrset of user-defined functions that format nested parts of the
+    content.
     They each have common defaults, so often they do not need to be set
     manually. An example is <code>mkSectionName ? (name: libStr.escape [ "[" "]"
-    ] name)</code> from the <literal>INI</literal> generator. It gets the name
-    of a section and returns a sanitized name. The default
+    ] name)</code> from the <literal>INI</literal> generator. It receives the
+    name of a section and sanitizes it. The default
     <literal>mkSectionName</literal> escapes <literal>[</literal> and
     <literal>]</literal> with a backslash.
   </para>
+
+  <para>
+    Generators can be fine-tuned to produce exactly the file format required
+    by your application/service. One example is an INI-file format which uses
+    <literal>: </literal> as separator, the strings
+    <literal>"yes"</literal>/<literal>"no"</literal> as boolean values
+    and requires all string values to be quoted:
+  </para>
+
+<programlisting>
+with lib;
+let
+  customToINI = generators.toINI {
+    # specifies how to format a key/value pair
+    mkKeyValue = generators.mkKeyValueDefault {
+      # specifies the generated string for a subset of nix values
+      mkValueString = v:
+             if v == true then ''"yes"''
+        else if v == false then ''"no"''
+        else if isString v then ''"${v}"''
+        # and delegats all other values to the default generator
+        else generators.mkValueStringDefault {} v;
+    } ":";
+  };
+
+# the INI file can now be given as plain old nix values
+in customToINI {
+  main = {
+    pushinfo = true;
+    autopush = false;
+    host = "localhost";
+    port = 42;
+  };
+  mergetool = {
+    merge = "diff3";
+  };
+}
+</programlisting>
+
+  <para>This will produce the following INI file as nix string:</para>
+
+<programlisting>
+[main]
+autopush:"no"
+host:"localhost"
+port:42
+pushinfo:"yes"
+str\:ange:"very::strange"
+
+[mergetool]
+merge:"diff3"
+</programlisting>
 
   <note><para>Nix store paths can be converted to strings by enclosing a
   derivation attribute like so: <code>"${drv}"</code>.</para></note>

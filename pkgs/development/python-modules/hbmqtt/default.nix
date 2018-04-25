@@ -3,13 +3,13 @@
 
 buildPythonPackage rec {
   pname = "hbmqtt";
-  version = "0.9.1";
+  version = "0.9.2";
 
   disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "04lqqcy84f9gcwqhrlvzp689r3mkdd8ipsnfzw8gryfny4lh8wrx";
+    sha256 = "6f61e05007648a4f33e300fafcf42776ca95508ba1141799f94169427ce5018c";
   };
 
   propagatedBuildInputs = [ transitions websockets passlib docopt pyyaml ];

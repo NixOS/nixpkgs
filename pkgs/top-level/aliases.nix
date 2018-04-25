@@ -24,10 +24,6 @@ in
   ### Deprecated aliases - for backward compatibility
 
 mapAliases (rec {
-  _2048-in-terminal = "2048-in-terminal"; # added 2017-01-16
-  _2bwm = "2bwm"; # added 2017-01-16
-  _389-ds-base = "389-ds-base"; # added 2017-01-16
-  _90secondportraits = "90secondsportraits"; # added 2017-01-16
   accounts-qt = libsForQt5.accounts-qt; # added 2015-12-19
   adobeReader = adobe-reader; # added 2013-11-04
   aircrackng = aircrack-ng; # added 2016-01-14
@@ -36,7 +32,6 @@ mapAliases (rec {
   asciidocFull = asciidoc-full;  # added 2014-06-22
   at_spi2_atk = at-spi2-atk; # added 2018-02-25
   at_spi2_core = at-spi2-core; # added 2018-02-25
-  bar = lemonbar;  # added 2015-01-16
   bar-xft = lemonbar-xft;  # added 2015-01-16
   bashCompletion = bash-completion; # Added 2016-09-28
   bridge_utils = bridge-utils;  # added 2015-02-20
@@ -60,7 +55,6 @@ mapAliases (rec {
   digikam5 = digikam; # added 2017-02-18
   double_conversion = double-conversion; # 2017-11-22
   dwarf_fortress = dwarf-fortress; # added 2016-01-23
-  dwbWrapper = dwb; # added 2015-01
   enblendenfuse = enblend-enfuse; # 2015-09-30
   evolution_data_server = evolution-data-server; # added 2018-02-25
   exfat-utils = exfat;                  # 2015-09-11
@@ -77,6 +71,7 @@ mapAliases (rec {
   go-pup = pup; # added 2017-12-19
   googleAuthenticator = google-authenticator; # added 2016-10-16
   gnome_doc_utils = gnome-doc-utils; # added 2018-02-25
+  gnome-themes-standard = gnome-themes-extra; # added 2018-03-14
   gnome_themes_standard = gnome-themes-standard; # added 2018-02-25
   grantlee5 = libsForQt5.grantlee;  # added 2015-12-19
   gsettings_desktop_schemas = gsettings-desktop-schemas; # added 2018-02-25
@@ -104,7 +99,6 @@ mapAliases (rec {
   inotifyTools = inotify-tools;
   joseki = apache-jena-fuseki; # added 2016-02-28
   json_glib = json-glib; # added 2018-02-25
-  jquery_ui = jquery-ui;  # added 2014-09-07
   kdiff3-qt5 = kdiff3; # added 2017-02-18
   keepassx2-http = keepassx-reboot; # added 2016-10-17
   keepassx-reboot = keepassx-community; # added 2017-02-01
@@ -121,6 +115,7 @@ mapAliases (rec {
   libgnome_keyring = libgnome-keyring; # added 2018-02-25
   libgnome_keyring3 = libgnome-keyring3; # added 2018-02-25
   libgumbo = gumbo; # added 2018-01-21
+  libintlOrEmpty = stdenv.lib.optional (!stdenv.isLinux || hostPlatform.libc != "glibc") gettext; # added 2018-03-14
   libjson_rpc_cpp = libjson-rpc-cpp; # added 2017-02-28
   libmysql = mysql.connector-c; # added # 2017-12-28, this was a misnomer refering to libmysqlclient
   libtidy = html-tidy;  # added 2014-12-21
@@ -135,7 +130,6 @@ mapAliases (rec {
   man_db = man-db; # added 2016-05
   piwik = matomo; # added 2018-01-16
   midoriWrapper = midori; # added 2015-01
-  minc_tools = minc-tools; # 2017-12
   mlt-qt5 = libsForQt5.mlt;  # added 2015-12-19
   mobile_broadband_provider_info = mobile-broadband-provider-info; # added 2018-02-25
   module_init_tools = kmod; # added 2016-04-22
@@ -149,7 +143,6 @@ mapAliases (rec {
   networkmanager_l2tp = networkmanager-l2tp; # added 2018-02-25
   networkmanager_openconnect = networkmanager-openconnect; # added 2018-02-25
   networkmanager_openvpn = networkmanager-openvpn; # added 2018-02-25
-  networkmanager_pptp = networkmanager-pptp; # added 2018-02-25
   networkmanager_vpnc = networkmanager-vpnc; # added 2018-02-25
   nmap_graphical = nmap-graphical;  # added 2017-01-19
   nfsUtils = nfs-utils;  # added 2014-12-06
@@ -204,6 +197,7 @@ mapAliases (rec {
   sshfs = sshfs-fuse; # added 2017-08-14
   sshfsFuse = sshfs-fuse; # added 2016-09
   surf-webkit2 = surf; # added 2017-04-02
+  tahoelafs = tahoe-lafs; # added 2018-03-26
   system_config_printer = system-config-printer;  # added 2016-01-03
   telepathy_farstream = telepathy-farstream; # added 2018-02-25
   telepathy_gabble = telepathy-gabble; # added 2018-02-25
@@ -215,6 +209,10 @@ mapAliases (rec {
   telepathy_qt = telepathy-qt; # added 2018-02-25
   telepathy_qt5 = libsForQt5.telepathy;  # added 2015-12-19
   telepathy_salut = telepathy-salut; # added 2018-02-25
+  tex-gyre-bonum-math = tex-gyre-math.bonum; # added 2018-04-03
+  tex-gyre-pagella-math = tex-gyre-math.pagella; # added 2018-04-03
+  tex-gyre-schola-math = tex-gyre-math.schola; # added 2018-04-03
+  tex-gyre-termes-math = tex-gyre-math.termes; # added 2018-04-03
   tftp_hpa = tftp-hpa; # added 2015-04-03
   transmission_gtk = transmission-gtk; # added 2018-01-06
   transmission_remote_gtk = transmission-remote-gtk; # added 2018-01-06
@@ -225,6 +223,7 @@ mapAliases (rec {
   vimprobable2Wrapper = vimprobable2; # added 2015-01
   virtviewer = virt-viewer; # added 2015-12-24
   vorbisTools = vorbis-tools; # added 2016-01-26
+  wineStaging = wine-staging; # added 2018-01-08
   winusb = woeusb; # added 2017-12-22
   x11 = xlibsWrapper; # added 2015-09
   xf86_video_nouveau = xorg.xf86videonouveau; # added 2015-09
@@ -236,6 +235,10 @@ mapAliases (rec {
   wineFull = winePackages.full;
   wineStable = winePackages.stable;
   wineUnstable = winePackages.unstable;
+
+  # added 2018-03-26
+  libva-full = libva;
+  libva1-full = libva1;
 
   inherit (ocaml-ng) # added 2016-09-14
     ocamlPackages_3_10_0 ocamlPackages_3_11_2 ocamlPackages_3_12_1

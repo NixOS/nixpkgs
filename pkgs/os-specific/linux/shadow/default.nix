@@ -60,8 +60,10 @@ stdenv.mkDerivation rec {
     configureFlags="$configureFlags --with-xml-catalog=$PWD/xmlcatalog ";
   '';
 
-  configureFlags = " --enable-man "
-    + stdenv.lib.optionalString (hostPlatform.libc != "glibc") " --disable-nscd ";
+  configureFlags = [
+    "--enable-man"
+    "--with-group-name-max-length=32"
+  ] ++ stdenv.lib.optional (hostPlatform.libc != "glibc") "--disable-nscd";
 
   preBuild = stdenv.lib.optionalString (hostPlatform.libc == "glibc")
     ''

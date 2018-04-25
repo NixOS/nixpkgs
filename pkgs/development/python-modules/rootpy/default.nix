@@ -1,4 +1,4 @@
-{ lib, fetchPypi, isPy3k, buildPythonPackage, numpy, matplotlib, root, root_numpy, tables }:
+{ lib, fetchPypi, isPy3k, buildPythonPackage, numpy, matplotlib, root, root_numpy, tables, pytest }:
 
 buildPythonPackage rec {
   pname = "rootpy";
@@ -13,6 +13,14 @@ buildPythonPackage rec {
   disabled = isPy3k;
 
   propagatedBuildInputs = [ matplotlib numpy root root_numpy tables ];
+
+  checkInputs = [ pytest ];
+  checkPhase = ''
+    # tests fail with /homeless-shelter
+    export HOME=$PWD
+    # skip problematic tests
+    py.test rootpy -k "not test_stl and not test_cpp and not test_xrootd_glob_single and not test_xrootd_glob_multiple"
+  '';
 
   meta = with lib; {
     homepage = http://www.rootpy.org;

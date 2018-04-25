@@ -2,15 +2,21 @@
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";
   pname = "arb";
-  version = "2.8.1";
+  version = "2.13.0";
   src = fetchFromGitHub {
     owner = "fredrik-johansson";
     repo = "${pname}";
     rev = "${version}";
-    sha256 = "15phk71ci9rr32aqznpkd2b993wjahsgliilkg4mnxsr86nwdf6x";
+    sha256 = "1fl9gmxf6c1cphk5r8jbys5pywj2rfm705kv0055i0aqc6hrv303";
   };
   buildInputs = [mpir gmp mpfr flint];
-  configureFlags = "--with-gmp=${gmp} --with-mpir=${mpir} --with-mpfr=${mpfr} --with-flint=${flint}";
+  configureFlags = [
+    "--with-gmp=${gmp}"
+    "--with-mpir=${mpir}"
+    "--with-mpfr=${mpfr}"
+    "--with-flint=${flint}"
+  ];
+  doCheck = true;
   meta = {
     inherit version;
     description = ''A library for arbitrary-precision interval arithmetic'';

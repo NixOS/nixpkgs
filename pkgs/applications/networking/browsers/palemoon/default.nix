@@ -5,19 +5,19 @@
 , gtk2, hunspell, icu, libevent, libjpeg, libnotify
 , libstartup_notification, libvpx, makeWrapper, libGLU_combined
 , nspr, nss, pango, perl, python, libpulseaudio, sqlite
-, unzip, xlibs, which, yasm, zip, zlib
+, unzip, xorg, which, yasm, zip, zlib
 }:
 
 stdenv.mkDerivation rec {
   name = "palemoon-${version}";
-  version = "27.7.2";
+  version = "27.8.3";
 
   src = fetchFromGitHub {
     name   = "palemoon-src";
     owner  = "MoonchildProductions";
     repo   = "Pale-Moon";
     rev    = version + "_Release";
-    sha256 = "19ki6gp6bhcvhjnclalviiyp93mqsgc22xjl0gm9x5y4sxdb5wlq";
+    sha256 = "1v3wliq8k5yq17ms214fhwka8x4l3sq8kja59dx4pbvczzb1zyzh";
   };
 
   desktopItem = makeDesktopItem {
@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
     hunspell icu libevent libjpeg libnotify libstartup_notification
     libvpx makeWrapper libGLU_combined nspr nss pango perl pkgconfig python
     libpulseaudio sqlite unzip which yasm zip zlib
-  ] ++ (with xlibs; [
+  ] ++ (with xorg; [
     libX11 libXext libXft libXi libXrender libXScrnSaver
     libXt pixman scrnsaverproto xextproto
   ]);

@@ -13,6 +13,10 @@ in stdenv.mkDerivation rec {
     sha256 = "1c3vfg8wlsv0fmi1lm9qhsqdvp4k33yvwn6j680rh49laayf7k3g";
   };
 
+  patches = [
+    ./fix-include.patch
+  ];
+
   outputs = [ "out" "dev" "devdoc" ];
 
   mesonFlags = [

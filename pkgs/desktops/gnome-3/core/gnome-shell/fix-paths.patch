@@ -1,18 +1,11 @@
-diff --git a/meson.build b/meson.build
-index 4c1f5c63b..a9edb8795 100644
---- a/meson.build
-+++ b/meson.build
-@@ -59,12 +59,7 @@ servicedir = join_paths(datadir, 'dbus-1', 'services')
- 
- plugindir = get_variable('BROWSER_PLUGIN_DIR', mozplugindir)
- 
--keybindings_dep = dependency('gnome-keybindings', required: false)
--if keybindings_dep.found()
--  keysdir = keybindings_dep.get_pkgconfig_variable('keysdir')
--else
--  keysdir = join_paths(datadir, 'gnome-control-center', 'keybindings')
--endif
-+keysdir = join_paths(datadir, 'gnome-control-center', 'keybindings')
- 
- atk_bridge_dep = dependency('atk-bridge-2.0')
- canberra_dep = dependency('libcanberra')
+--- a/js/ui/extensionDownloader.js
++++ b/js/ui/extensionDownloader.js
+@@ -86,7 +86,7 @@
+     stream.output_stream.write_bytes(contents, null);
+     stream.close(null);
+     let [success, pid] = GLib.spawn_async(null,
+-                                          ['unzip', '-uod', dir.get_path(), '--', file.get_path()],
++                                          ['@unzip@/bin/unzip', '-uod', dir.get_path(), '--', file.get_path()],
+                                           null,
+                                           GLib.SpawnFlags.SEARCH_PATH | GLib.SpawnFlags.DO_NOT_REAP_CHILD,
+                                           null);

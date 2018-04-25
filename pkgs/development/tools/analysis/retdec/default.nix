@@ -116,5 +116,6 @@ in stdenv.mkDerivation rec {
     homepage = https://retdec.com;
     license = licenses.mit;
     maintainers = with maintainers; [ dtzWill ];
+    broken = withPEPatterns; # retdec-full is broken, 2018-04-11
   };
 }

@@ -24,4 +24,6 @@ stdenv.mkDerivation rec {
     platforms = coq.meta.platforms;
   };
 
+  passthru = { inherit (mathcomp) compatibleCoqVersions; };
+
 }

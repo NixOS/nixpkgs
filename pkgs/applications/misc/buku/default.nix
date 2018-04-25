@@ -1,17 +1,22 @@
-{ stdenv, python3, fetchFromGitHub }:
+{ stdenv, python3, fetchFromGitHub, fetchpatch }:
 
 with python3.pkgs; buildPythonApplication rec {
-  version = "3.6";
-  name = "buku-${version}";
+  version = "3.7";
+  pname = "buku";
 
   src = fetchFromGitHub {
     owner = "jarun";
     repo = "buku";
     rev = "v${version}";
-    sha256 = "1639sf200n9rxgkvvhlhnrjsb7vn42p1fl1rx562axh3vpr6j4c4";
+    sha256 = "0qc6xkrhf2phaj9fhym19blr4rr2vllvnyljjz909xr4vsynvb41";
   };
 
-  nativeBuildInputs = [
+  patches = fetchpatch {
+    url = https://github.com/jarun/Buku/commit/495d6eac4d9371e8ce6d3f601e2bb9e5e74962b4.patch;
+    sha256 = "0py4l5qcgdzqr0iqmcc8ddld1bspk8iwypz4dcr88y70j86588gk";
+  };
+
+  checkInputs = [
     pytestcov
     pytest-catchlog
     hypothesis
@@ -52,7 +57,7 @@ with python3.pkgs; buildPythonApplication rec {
     homepage = https://github.com/jarun/Buku;
     license = licenses.gpl3;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ matthiasbeyer infinisil ];
+    maintainers = with maintainers; [ infinisil ];
   };
 }
 

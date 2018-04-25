@@ -2,7 +2,7 @@
 
 with lib;
 let
-  diskSize = 1024; # MB
+  diskSize = 1536; # MB
   gce = pkgs.google-compute-engine;
 in
 {
@@ -57,6 +57,12 @@ in
   # Always include cryptsetup so that NixOps can use it.
   environment.systemPackages = [ pkgs.cryptsetup ];
 
+  # Make sure GCE image does not replace host key that NixOps sets
+  environment.etc."default/instance_configs.cfg".text = lib.mkDefault ''
+    [InstanceSetup]
+    set_host_keys = false
+  '';
+
   # Rely on GCP's firewall instead
   networking.firewall.enable = mkDefault false;
 
@@ -68,6 +74,9 @@ in
   networking.timeServers = [ "metadata.google.internal" ];
 
   networking.usePredictableInterfaceNames = false;
+
+  # GC has 1460 MTU
+  networking.interfaces.eth0.mtu = 1460;
 
   # allow the google-accounts-daemon to manage users
   users.mutableUsers = true;

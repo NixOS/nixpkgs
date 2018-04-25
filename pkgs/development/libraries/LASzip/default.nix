@@ -16,6 +16,6 @@ stdenv.mkDerivation rec {
     homepage = http://www.laszip.org;
     license = stdenv.lib.licenses.lgpl2;
     maintainers = [ stdenv.lib.maintainers.michelk ];
-    platforms = stdenv.lib.platforms.linux;
+    platforms = stdenv.lib.platforms.unix;
   };
 }

@@ -29,7 +29,7 @@ with  import ./functions.nix { inherit lib gemConfig; };
 let
   gemFiles = bundlerFiles args;
 
-  importedGemset = if builtins.typeOf gemFiles.gemset == "path"
+  importedGemset = if builtins.typeOf gemFiles.gemset != "set"
     then import gemFiles.gemset
     else gemFiles.gemset;
 

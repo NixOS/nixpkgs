@@ -1,15 +1,15 @@
 { stdenv, buildPackages, hostPlatform, fetchgit, perl, buildLinux, ... } @ args:
 
 buildLinux (args // rec {
-  version = "4.15.2018.02.09";
+  version = "4.15.2018.04.14";
   modDirVersion = "4.15.0";
   extraMeta.branch = "master";
-  extraMeta.maintainers = [ stdenv.lib.maintainers.davidak ];
+  extraMeta.maintainers = [ stdenv.lib.maintainers.davidak stdenv.lib.maintainers.chiiruno ];
 
   src = fetchgit {
     url = "https://evilpiepirate.org/git/bcachefs.git";
-    rev = "4506cd5ead31209a6a646c2412cbc7be735ebda4";
-    sha256 = "0fcyf3y27k2lga5na4dhdyc47br840gkqynv8gix297pqxgidrib";
+    rev = "3b7c824e9330a640312fce1b04537c684c1d602c";
+    sha256 = "1l5ib28qkhrxggn6zj9b2839543anbxk2ip75yizgzlv9vr5m4pk";
   };
 
   extraConfig = ''

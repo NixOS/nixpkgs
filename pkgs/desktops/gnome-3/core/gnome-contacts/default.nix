@@ -5,13 +5,13 @@
 , vala, meson, ninja }:
 
 let
-  version = "3.26.1";
+  version = "3.28.1";
 in stdenv.mkDerivation rec {
   name = "gnome-contacts-${version}";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-contacts/${gnome3.versionBranch version}/${name}.tar.xz";
-    sha256 = "1jszv4b8rc5q8r460wb7qppvm1ssj4733b4z2vyavc95g00ik286";
+    sha256 = "17iinxqf221kk9yppv3yhg0m7jxk5zvwxmdf3hjygf9xgfw7z3zi";
   };
 
   propagatedUserEnvPkgs = [ evolution-data-server ];
@@ -31,6 +31,12 @@ in stdenv.mkDerivation rec {
     chmod +x meson_post_install.py
     patchShebangs meson_post_install.py
   '';
+
+  # In file included from src/gnome-contacts@exe/contacts-avatar-selector.c:30:0:
+  # /nix/store/*-cheese-3.28.0/include/cheese/cheese-widget.h:26:10: fatal error: clutter-gtk/clutter-gtk.h: No such file or directory
+  #  #include <clutter-gtk/clutter-gtk.h>
+  #           ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+  NIX_CFLAGS_COMPILE = "-I${clutter-gtk}/include/clutter-gtk-1.0";
 
   doCheck = true;
 

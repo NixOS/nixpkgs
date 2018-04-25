@@ -3,7 +3,7 @@
 , img ? pkgs.stdenv.platform.kernelTarget
 , storeDir ? builtins.storeDir
 , rootModules ?
-    [ "virtio_pci" "virtio_mmio" "virtio_blk" "virtio_balloon" "virtio_rng" "ext4" "unix" "9p" "9pnet_virtio" ]
+    [ "virtio_pci" "virtio_mmio" "virtio_blk" "virtio_balloon" "virtio_rng" "ext4" "unix" "9p" "9pnet_virtio" "crc32c_generic" ]
       ++ pkgs.lib.optional (pkgs.stdenv.isi686 || pkgs.stdenv.isx86_64) "rtc_cmos"
 }:
 
@@ -941,8 +941,8 @@ rec {
     };
 
     ubuntu1710i386 = {
-      name = "ubuntu-17.10-xenial-i386";
-      fullName = "Ubuntu 17.10 Xenial (i386)";
+      name = "ubuntu-17.10-artful-i386";
+      fullName = "Ubuntu 17.10 Artful (i386)";
       packagesLists =
         [ (fetchurl {
             url = mirror://ubuntu/dists/artful/main/binary-i386/Packages.xz;
@@ -997,22 +997,22 @@ rec {
     };
 
     debian9i386 = {
-      name = "debian-9.3-stretch-i386";
-      fullName = "Debian 9.3 Stretch (i386)";
+      name = "debian-9.4-stretch-i386";
+      fullName = "Debian 9.4 Stretch (i386)";
       packagesList = fetchurl {
         url = mirror://debian/dists/stretch/main/binary-i386/Packages.xz;
-        sha256 = "1rpv0r92pkr9dmjvpffvgmq3an1s83npfmq870h67jqag3qpwj9l";
+        sha256 = "05z5ccg4ysbrgallhai53sh83i0364w7a3fdq84dpv1li059jf10";
       };
       urlPrefix = mirror://debian;
       packages = commonDebianPackages;
     };
 
     debian9x86_64 = {
-      name = "debian-9.3-stretch-amd64";
-      fullName = "Debian 9.3 Stretch (amd64)";
+      name = "debian-9.4-stretch-amd64";
+      fullName = "Debian 9.4 Stretch (amd64)";
       packagesList = fetchurl {
         url = mirror://debian/dists/stretch/main/binary-amd64/Packages.xz;
-        sha256 = "1gnkvh7wc5yp0rw8kq8p8rlskvl0lc4cv3gdylw8qpqzy75xqlig";
+        sha256 = "19j0c54b1b9lbk9fv2c2aswdh0s2c3klf97zrlmsz4hs8wm9jylq";
       };
       urlPrefix = mirror://debian;
       packages = commonDebianPackages;

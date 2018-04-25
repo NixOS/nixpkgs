@@ -30,7 +30,7 @@ let
     }:
 
     let
-      cfg = stdenv.lib.attrByPath [ browserName ] {} config;
+      cfg = config.${browserName} or {};
       enableAdobeFlash = cfg.enableAdobeFlash or false;
       ffmpegSupport = browser.ffmpegSupport or false;
       gssSupport = browser.gssSupport or false;
@@ -130,9 +130,13 @@ let
             mkdir -p "$out/share"
             ln -s "${browser}/share/icons" "$out/share/icons"
         else
-            mkdir -p "$out/share/icons/hicolor/128x128/apps"
-            ln -s "${browser}/lib/${browserName}-"*"/browser/icons/mozicon128.png" \
-                "$out/share/icons/hicolor/128x128/apps/${browserName}.png"
+            for res in 16 32 48 64 128; do
+            mkdir -p "$out/share/icons/hicolor/''${res}x''${res}/apps"
+            icon=( "${browser}/lib/"*"/browser/chrome/icons/default/default''${res}.png" )
+              if [ -e "$icon" ]; then ln -s "$icon" \
+                "$out/share/icons/hicolor/''${res}x''${res}/apps/${browserName}.png"
+              fi
+            done
         fi
 
         install -D -t $out/share/applications $desktopItem/share/applications/*

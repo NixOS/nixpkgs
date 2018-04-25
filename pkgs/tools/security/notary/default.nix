@@ -2,22 +2,22 @@
 
 buildGoPackage rec {
   name = "notary-${version}";
-  version = "0.5.1";
-  gitcommit = "9211198";
+  version = "0.6.0";
+  gitcommit = "34f53ad";
 
   src = fetchFromGitHub {
     owner = "theupdateframework";
     repo = "notary";
     rev = "v${version}";
-    sha256 = "0z9nsb1mrl0q5j02jkyzbc6xqsm83qzacsckypsxcrijhw935rs5";
+    sha256 = "0lg7ab2agkk3rnladcvpdzk8cnf3m49qfm4sanh7yjvlvlv1wm4a";
   };
 
   buildInputs = [ libtool ];
 
-  goPackagePath = "github.com/docker/notary";
+  goPackagePath = "github.com/theupdateframework/notary";
 
   buildPhase = ''
-    cd go/src/github.com/docker/notary
+    cd go/src/github.com/theupdateframework/notary
     make GITCOMMIT=${gitcommit} GITUNTRACKEDCHANGES= client
   '';
 

@@ -177,5 +177,19 @@ you need it.</para>
 
 </section>
 
+<section xml:id="ssec-perl-cross-compilation"><title>Cross-compiling modules</title>
+
+<para>Nixpkgs has experimental support for cross-compiling Perl
+modules. In many cases, it will just work out of the box, even for
+modules with native extensions. Sometimes, however, the Makefile.PL
+for a module may (indirectly) import a native module. In that case,
+you will need to make a stub for that module that will satisfy the
+Makefile.PL and install it into
+<filename>lib/perl5/site_perl/cross_perl/${perl.version}</filename>.
+See the <varname>postInstall</varname> for <varname>DBI</varname> for
+an example.</para>
+
+</section>
+
 </section>
 

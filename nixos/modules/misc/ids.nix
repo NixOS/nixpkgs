@@ -56,7 +56,7 @@
       #dialout = 27; # unused
       polkituser = 28;
       #utmp = 29; # unused
-      ddclient = 30;
+      # ddclient = 30; # converted to DynamicUser = true
       davfs2 = 31;
       #disnix = 33; # unused
       osgi = 34;
@@ -106,7 +106,7 @@
       freenet = 79;
       ircd = 80;
       bacula = 81;
-      almir = 82;
+      #almir = 82; # removed 2018-03-25, the almir package was removed in 30291227f2411abaca097773eedb49b8f259e297 during 2017-08
       deluge = 83;
       mysql = 84;
       rabbitmq = 85;
@@ -305,6 +305,7 @@
       hass = 286;
       monero = 287;
       ceph = 288;
+      duplicati = 289;
 
       # When adding a uid, make sure it doesn't match an existing gid. And don't use uids above 399!
 
@@ -343,7 +344,7 @@
       dialout = 27;
       #polkituser = 28; # currently unused, polkitd doesn't need a group
       utmp = 29;
-      ddclient = 30;
+      # ddclient = 30; # converted to DynamicUser = true
       davfs2 = 31;
       disnix = 33;
       osgi = 34;
@@ -393,7 +394,7 @@
       freenet = 79;
       ircd = 80;
       bacula = 81;
-      almir = 82;
+      #almir = 82; # removed 2018-03-25, the almir package was removed in 30291227f2411abaca097773eedb49b8f259e297 during 2017-08
       deluge = 83;
       mysql = 84;
       rabbitmq = 85;
@@ -578,6 +579,7 @@
       hass = 286;
       monero = 287;
       ceph = 288;
+      duplicati = 289;
 
       # When adding a gid, make sure it doesn't match an existing
       # uid. Users and groups with the same name should have equal

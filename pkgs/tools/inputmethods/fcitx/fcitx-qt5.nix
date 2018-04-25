@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage    = http://github.com/fcitx/fcitx-qt5;
+    homepage    = https://github.com/fcitx/fcitx-qt5;
     description = "Qt5 IM Module for Fcitx";
     license     = licenses.gpl2;
     platforms   = platforms.linux;
