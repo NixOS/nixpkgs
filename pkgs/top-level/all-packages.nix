@@ -16290,6 +16290,7 @@ with pkgs;
   };
 
   hello = callPackage ../applications/misc/hello { };
+  hello-unfree = callPackage ../applications/misc/hello-unfree { };
 
   helmholtz = callPackage ../applications/audio/pd-plugins/helmholtz { };
 
