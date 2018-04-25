@@ -15,11 +15,15 @@ stdenv.mkDerivation rec {
     inherit sha256;
   };
 
-  buildInputs = [ libaio python zlib ];
+  buildInputs = [ python zlib ]
+    ++ stdenv.lib.optional (!stdenv.isDarwin) libaio;
 
   enableParallelBuilding = true;
 
   postPatch = ''
+    substituteInPlace Makefile \
+      --replace "mandir = /usr/share/man" "mandir = \$(prefix)/man" \
+      --replace "sharedir = /usr/share/fio" "sharedir = \$(prefix)/share/fio"
     substituteInPlace tools/plot/fio2gnuplot --replace /usr/share/fio $out/share/fio
   '';
 
