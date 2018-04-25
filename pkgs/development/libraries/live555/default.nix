@@ -27,6 +27,7 @@ stdenv.mkDerivation {
       x86_64-darwin = "macosx";
       i686-linux = "linux";
       x86_64-linux = "linux-64bit";
+      aarch64-linux = "linux-64bit";
     }.${stdenv.system}}
   '';
 
