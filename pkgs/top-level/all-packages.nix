@@ -21357,4 +21357,7 @@ with pkgs;
   inherit (unixtools) hexdump ps logger eject umount
                       mount wall hostname more sysctl getconf
                       getent;
+
+  inherit (recurseIntoAttrs (callPackages ../os-specific/bsd { }))
+          netbsd openbsd;
 }

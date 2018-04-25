@@ -2,13 +2,13 @@
 
 let
   pname = "gupnp-tools";
-  version = "0.8.13";
+  version = "0.8.14";
 in stdenv.mkDerivation rec {
   name = "${pname}-${version}";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "1vbr4iqi7nl7kq982agd3liw10gx67s95idd0pjy5h1jsnwyqgda";
+    sha256 = "1ykybsljjnngj8rsn808a0h37r2jx99c2jbmsb3ihf7l7hmraav8";
   };
 
   nativeBuildInputs = [ pkgconfig intltool wrapGAppsHook ];
