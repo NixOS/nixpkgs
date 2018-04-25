@@ -143,18 +143,13 @@ rec {
        (This means fn is type Val -> String.) */
     allowPrettyValues ? false
   }@args: v: with builtins;
-    if      isInt      v then toString v
+    let     isPath   = v: typeOf v == "path";
+    in if   isInt      v then toString v
     else if isString   v then ''"${libStr.escape [''"''] v}"''
     else if true  ==   v then "true"
     else if false ==   v then "false"
-    else if null ==    v then "null"
-    else if isFunction v then
-      let fna = lib.functionArgs v;
-          showFnas = concatStringsSep "," (libAttr.mapAttrsToList
-                       (name: hasDefVal: if hasDefVal then "(${name})" else name)
-                       fna);
-      in if fna == {}    then "<λ>"
-                         else "<λ:{${showFnas}}>"
+    else if null  ==   v then "null"
+    else if isPath     v then toString v
     else if isList     v then "[ "
         + libStr.concatMapStringsSep " " (toPretty args) v
       + " ]"
@@ -163,12 +158,21 @@ rec {
       if attrNames v == [ "__pretty" "val" ] && allowPrettyValues
          then v.__pretty v.val
       # TODO: there is probably a better representation?
-      else if v ? type && v.type == "derivation" then "<δ>"
+      else if v ? type && v.type == "derivation" then
+        "<δ:${v.name}>"
+        # "<δ:${concatStringsSep "," (builtins.attrNames v)}>"
       else "{ "
           + libStr.concatStringsSep " " (libAttr.mapAttrsToList
               (name: value:
                 "${toPretty args name} = ${toPretty args value};") v)
         + " }"
-    else abort "generators.toPretty: should never happen (v = ${v})";
+    else if isFunction v then
+      let fna = lib.functionArgs v;
+          showFnas = concatStringsSep "," (libAttr.mapAttrsToList
+                       (name: hasDefVal: if hasDefVal then "(${name})" else name)
+                       fna);
+      in if fna == {}    then "<λ>"
+                         else "<λ:{${showFnas}}>"
+    else abort "toPretty: should never happen (v = ${v})";
 
 }
