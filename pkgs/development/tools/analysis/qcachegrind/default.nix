@@ -12,14 +12,6 @@ in stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ qmake ];
 
-  patches = [
-    (fetchpatch {
-      name = "fix-qt5_10-build.patch";
-      url = https://github.com/KDE/kcachegrind/commit/c41607a.patch;
-      sha256 = "00kh5im3hpcarch8rc2dsgxsajfmd8vd7rry9x6mxrbkgr4ifq8y";
-    })
-  ];
-
   postInstall = ''
      mkdir -p $out/bin
      cp -p converters/dprof2calltree $out/bin/dprof2calltree
