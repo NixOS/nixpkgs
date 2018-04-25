@@ -41,6 +41,7 @@ let
       optionals stdenv.isDarwin [ ./qtbase-darwin.patch
                                   ./restore-pc-files.patch ];
     qtdeclarative = [ ./qtdeclarative.patch ];
+    qtlocation = optional stdenv.cc.isClang [ ./qtlocation.patch ];
     qtscript = [ ./qtscript.patch ];
     qtserialport = [ ./qtserialport.patch ];
     qttools = [ ./qttools.patch ];
