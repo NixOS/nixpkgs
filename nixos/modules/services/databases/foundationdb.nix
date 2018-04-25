@@ -206,7 +206,7 @@ in
             default = null;
             type = types.nullOr types.str;
             description = ''
-	      Machine identifier key. All processes on a machine should share a
+              Machine identifier key. All processes on a machine should share a
               unique id. By default, processes on a machine determine a unique id to share.
               This does not generally need to be set.
             '';
@@ -216,7 +216,7 @@ in
             default = null;
             type = types.nullOr types.str;
             description = ''
-	      Zone identifier key. Processes that share a zone id are
+              Zone identifier key. Processes that share a zone id are
               considered non-unique for the purposes of data replication.
               If unset, defaults to machine id.
             '';
@@ -226,7 +226,7 @@ in
             default = null;
             type = types.nullOr types.str;
             description = ''
-	      Data center identifier key. All processes physically located in a
+              Data center identifier key. All processes physically located in a
               data center should share the id. If you are depending on data
               center based replication this must be set on all processes.
             '';
@@ -236,7 +236,7 @@ in
             default = null;
             type = types.nullOr types.str;
             description = ''
-	      Data hall identifier key. All processes physically located in a
+              Data hall identifier key. All processes physically located in a
               data hall should share the id. If you are depending on data
               hall based replication this must be set on all processes.
             '';

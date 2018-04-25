@@ -16,8 +16,8 @@
 
 <para>FoundationDB (or "FDB") is a distributed, open source, high performance,
 transactional key-value store. It can store petabytes of data and deliver
-exceptional performance while maintaining consistency and ACID semantics over a
-large cluster.</para>
+exceptional performance while maintaining consistency and ACID semantics
+(serializable transactions) over a large cluster.</para>
 
 <section><title>Configuring and basic setup</title>
 
@@ -101,7 +101,7 @@ FoundationDB worker processes that should be started on the machine.</para>
 
 <para>FoundationDB worker processes typically require 4GB of RAM per-process at
 minimum for good performance, so this option is set to 1 by default since the
-maximum aount of RAM is unknown. You're advised to abide by this restriction,
+maximum amount of RAM is unknown. You're advised to abide by this restriction,
 so pick a number of processes so that each has 4GB or more.</para>
 
 <para>A similar option exists in order to scale backup agent processes,
@@ -129,7 +129,8 @@ client applications will use to find and join coordinators. Note that this file
 <emphasis>can not</emphasis> be managed by NixOS so easily: FoundationDB is
 designed so that it will rewrite the file at runtime for all clients and nodes
 when cluster coordinators change, with clients transparently handling this
-without intervention.</para>
+without intervention. It is fundamentally a mutable file, and you should not
+try to manage it in any way in NixOS.</para>
 
 <para>When dealing with a cluster, there are two main things you want to
 do:</para>
