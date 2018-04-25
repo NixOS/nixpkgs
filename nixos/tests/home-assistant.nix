@@ -51,9 +51,9 @@ in {
     startAll;
     $hass->waitForUnit("home-assistant.service");
 
-    # Since config is specified using a Nix attribute set,
-    # configuration.yaml is a link to the Nix store
-    $hass->succeed("test -L ${configDir}/configuration.yaml");
+    # The config is specified using a Nix attribute set,
+    # but then converted from JSON to YAML
+    $hass->succeed("test -f ${configDir}/configuration.yaml");
 
     # Check that Home Assistant's web interface and API can be reached
     $hass->waitForOpenPort(8123);
