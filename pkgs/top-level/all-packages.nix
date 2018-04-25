@@ -14524,6 +14524,8 @@ with pkgs;
 
   sampradaya = callPackage ../data/fonts/sampradaya { };
 
+  sarasa-gothic = callPackage ../data/fonts/sarasa-gothic { };
+
   scowl = callPackage ../data/misc/scowl { };
 
   shaderc = callPackage ../development/compilers/shaderc { };
