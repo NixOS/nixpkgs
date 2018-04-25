@@ -11464,6 +11464,29 @@ with pkgs;
 
   snappy = callPackage ../development/libraries/snappy { };
 
+  soapyairspy = callPackage ../applications/misc/soapyairspy { };
+
+  soapybladerf = callPackage ../applications/misc/soapybladerf { };
+
+  soapyhackrf = callPackage ../applications/misc/soapyhackrf { };
+
+  soapysdr = callPackage ../applications/misc/soapysdr { inherit (python3Packages) python numpy; };
+
+  soapyremote = callPackage ../applications/misc/soapyremote { };
+
+  soapysdr-with-plugins = callPackage ../applications/misc/soapysdr {
+    inherit (python3Packages) python numpy;
+    extraPackages = [
+      soapyairspy
+      soapybladerf
+      soapyhackrf
+      soapyremote
+      soapyuhd
+    ];
+  };
+
+  soapyuhd = callPackage ../applications/misc/soapyuhd { };
+
   socket_wrapper = callPackage ../development/libraries/socket_wrapper { };
 
   sofia_sip = callPackage ../development/libraries/sofia-sip { };
