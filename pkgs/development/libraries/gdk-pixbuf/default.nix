@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, meson, ninja, pkgconfig, gettext, python3, libxml2, libxslt, docbook_xsl
+{ stdenv, fetchurl, fetchgit, fetchpatch, meson, ninja, pkgconfig, gettext, python3, libxml2, libxslt, docbook_xsl
 , docbook_xml_dtd_43, gtk-doc, glib, libtiff, libjpeg, libpng, libX11, gnome3
 , jasper, gobjectIntrospection, doCheck ? false, makeWrapper }:
 
@@ -9,9 +9,15 @@ in
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";
 
-  src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${gnome3.versionBranch version}/${name}.tar.xz";
-    sha256 = "0d534ysa6n9prd17wwzisq7mj6qkhwh8wcf8qgin1ar3hbs5ry7z";
+  # TODO: Change back once tests/bug753605-atsize.jpg is part of the dist tarball
+  # src = fetchurl {
+  #   url = "mirror://gnome/sources/${pname}/${gnome3.versionBranch version}/${name}.tar.xz";
+  #   sha256 = "0d534ysa6n9prd17wwzisq7mj6qkhwh8wcf8qgin1ar3hbs5ry7z";
+  # };
+  src = fetchgit {
+    url = https://git.gnome.org/browse/gdk-pixbuf;
+    rev = version;
+    sha256 = "18lwqg63vyap2m1mw049rnb8fm869429xbf7636a2n21gs3d3jwv";
   };
 
   patches = [
@@ -20,9 +26,20 @@ stdenv.mkDerivation rec {
     # For now, we are patching the build script to avoid the dependency.
     ./no-mime-sniffing.patch
 
-    # Move installed tests to a separate output
-    # They are not usable at the moment, though:
+    # Fix installed tests with meson
     # https://bugzilla.gnome.org/show_bug.cgi?id=795527
+    (fetchurl {
+      url = https://bugzilla.gnome.org/attachment.cgi?id=371381;
+      sha256 = "0nl1cixkjfa5kcfh0laz8h6hdsrpdkxqn7a1k35jrb6zwc9hbydn";
+    })
+
+    # Add missing test file bug753605-atsize.jpg
+    (fetchpatch {
+      url = https://git.gnome.org/browse/gdk-pixbuf/patch/?id=87f8f4bf01dfb9982c1ef991e4060a5e19fdb7a7;
+      sha256 = "1slzywwnrzfx3zjzdsxrvp4g2q4skmv50pdfmyccp41j7bfyb2j0";
+    })
+
+    # Move installed tests to a separate output
     ./installed-tests-path.patch
   ];
 
