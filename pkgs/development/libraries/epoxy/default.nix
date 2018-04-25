@@ -29,6 +29,8 @@ stdenv.mkDerivation rec {
 
   NIX_CFLAGS_COMPILE = ''-DLIBGL_PATH="${getLib libGL}/lib"'';
 
+  doCheck = false; # needs X11
+
   meta = {
     description = "A library for handling OpenGL function pointer management";
     homepage = https://github.com/anholt/libepoxy;

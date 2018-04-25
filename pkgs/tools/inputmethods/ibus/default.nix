@@ -125,6 +125,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+  doCheck = false; # requires X11 daemon
   doInstallCheck = true;
   installCheckPhase = "$out/bin/ibus version";
 

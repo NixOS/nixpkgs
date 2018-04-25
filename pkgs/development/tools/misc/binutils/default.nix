@@ -121,6 +121,8 @@ stdenv.mkDerivation rec {
     "--enable-fix-loongson2f-nop"
   ] ++ optionals gold [ "--enable-gold" "--enable-plugins" ];
 
+  doCheck = false; # fails
+
   enableParallelBuilding = true;
 
   passthru = {

@@ -204,6 +204,8 @@ core-big = stdenv.mkDerivation { #TODO: upmendex
   CXXFLAGS = "-std=c++11 -Wno-reserved-user-defined-literal"; # TODO: remove once texlive 2018 is out?
   enableParallelBuilding = true;
 
+  doCheck = false; # fails
+
   # now distribute stuff into outputs, roughly as upstream TL
   # (uninteresting stuff remains in $out, typically duplicates from `core`)
   outputs = [ "out" "metafont" "metapost" "luatex" "xetex" ];

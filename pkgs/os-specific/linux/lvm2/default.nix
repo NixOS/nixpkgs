@@ -59,6 +59,8 @@ stdenv.mkDerivation {
     })
   ];
 
+  doCheck = false; # requires root
+
   # To prevent make install from failing.
   preInstall = "installFlags=\"OWNER= GROUP= confdir=$out/etc\"";
 

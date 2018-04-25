@@ -383,6 +383,8 @@ stdenv.mkDerivation ({
     (if profiledCompiler then "profiledbootstrap" else "bootstrap")
     else "";
 
+  doCheck = false; # requires a lot of tools, causes a dependency cycle for stdenv
+
   installTargets =
     if stripped
     then "install-strip"

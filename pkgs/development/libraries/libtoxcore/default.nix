@@ -29,12 +29,11 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  checkInputs = [ check ];
-
-  checkPhase = "ctest";
+  doCheck = false; # hangs, tries to access the net?
 
   # for some reason the tests are not running - it says "No tests found!!"
-  doCheck = true;
+  checkInputs = [ check ];
+  checkPhase = "ctest";
 
   meta = with stdenv.lib; {
     description = "P2P FOSS instant messaging application aimed to replace Skype";

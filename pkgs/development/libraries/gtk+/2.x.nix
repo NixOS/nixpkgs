@@ -49,6 +49,8 @@ stdenv.mkDerivation rec {
     "--disable-visibility"
   ];
 
+  doCheck = false; # needs X11
+
   postInstall = ''
     moveToOutput share/gtk-2.0/demo "$devdoc"
     # The updater is needed for nixos env and it's tiny.

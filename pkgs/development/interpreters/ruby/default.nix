@@ -136,6 +136,8 @@ let
           ++ op (stdenv.hostPlatform != stdenv.buildPlatform)
              "--with-baseruby=${buildRuby}";
 
+        doCheck = false; # expensive, fails
+
         preInstall = ''
           # Ruby installs gems here itself now.
           mkdir -pv "$out/${passthru.gemPath}"

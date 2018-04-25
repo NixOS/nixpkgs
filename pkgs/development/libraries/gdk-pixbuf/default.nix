@@ -65,7 +65,7 @@ stdenv.mkDerivation rec {
     '';
 
   # The tests take an excessive amount of time (> 1.5 hours) and memory (> 6 GB).
-  inherit (doCheck);
+  inherit doCheck;
 
   passthru = {
     updateScript = gnome3.updateScript {
