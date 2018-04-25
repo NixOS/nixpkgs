@@ -63,6 +63,6 @@ stdenv.mkDerivation rec {
 
       If you want to import .eps files install ps2edit.
     '';
-    maintainers = with maintainters; [ matthewbauer ];
+    maintainers = with maintainers; [ matthewbauer ];
   };
 }
