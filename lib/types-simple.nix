@@ -225,6 +225,15 @@ let
     check = builtins.isString;
   };
 
+  # a nix path
+  path = mkScalar {
+    name = "path";
+    description = "path";
+    # there is no `isPath` predicate,
+    # but `typeOf` exists since 1.6.1
+    check = v: builtins.typeOf v == "path";
+  };
+
   # a signed nix integer
   int = mkScalar {
     name = "int";
@@ -330,7 +339,7 @@ let
       ];
     variant = variants.product;
     extraFields = {
-      inherit opt req;
+        inherit opt req open;
     };
   };
 
@@ -448,7 +457,7 @@ in {
   Type = { inherit variants fmap cata; };
   # Constructor functions for types.
   # Their internal structure/fields are an *implementation detail*.
-  inherit void any unit bool string int float
+  inherit void any unit bool string path int float
           list attrs product productOpt sum union
           restrict;
   # Type checking.

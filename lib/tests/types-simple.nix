@@ -51,6 +51,9 @@ in lib.runTests ({
   testStringOk = test string "foo" ok;
   testStringFoo = test string false (err string false);
 
+  testPathOk = test path /. ok;
+  testPathFoo = test path "/nope" (err path "/nope");
+
   testIntOk = test int 42 ok;
   testIntFoo = test int {} (err int {});
 
