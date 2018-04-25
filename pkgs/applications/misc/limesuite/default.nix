@@ -30,8 +30,6 @@ in stdenv.mkDerivation {
     libX11
   ];
 
-  cmakeFlags = [ "-DCMAKE_BUILD_TYPE=Release" ];
-
   postInstall = ''
     mkdir -p $out/lib/udev/rules.d
     cp ../udev-rules/64-limesuite.rules $out/lib/udev/rules.d
