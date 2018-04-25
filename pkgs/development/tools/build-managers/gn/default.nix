@@ -33,6 +33,16 @@ let
       sha256 = "1vgcg741lwz84kdy0qc5wn9dxx3j9zh6a9d185fpygdsipwikqv8";
       stripRoot = false;
     };
+    "buildtools/third_party/libc++/trunk" = fetchgit {
+      url = "https://chromium.googlesource.com/chromium/llvm-project/libcxx";
+      rev = "ece1de8658d749e19c12cacd4458cc330eca94e3";
+      sha256 = "1nlyvfkzhchwv9b18bh82jcamqv3acj26ah9ajs31f2dql05amhg";
+    };
+    "buildtools/third_party/libc++abi/trunk" = fetchgit {
+      url = "https://chromium.googlesource.com/chromium/llvm-project/libcxxabi";
+      rev = "52c7a3760aef1df328a9bc957f686410872f0dc0";
+      sha256 = "1aam539j01381q27b7xhij18pz3h0lhw08hglvqq4hgvlqx5cn2s";
+    };
   };
 
 in stdenv.mkDerivation {
