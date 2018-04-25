@@ -98,7 +98,7 @@ in stdenv.mkDerivation rec {
     homepage    = http://llvm.org/;
     license     = stdenv.lib.licenses.ncsa;
     maintainers = with stdenv.lib.maintainers; [ lovek323 raskin viric ];
-    platforms   = stdenv.lib.platforms.all;
+    platforms = [ "i686-linux" "x86_64-linux" "x86_64-darwin"];
   };
 }
 

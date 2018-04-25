@@ -55,6 +55,7 @@ stdenv.mkDerivation {
   RUSTFLAGS = "-Ccodegen-units=10";
 
   # We need rust to build rust. If we don't provide it, configure will try to download it.
+  # Reference: https://github.com/rust-lang/rust/blob/master/src/bootstrap/configure.py
   configureFlags = configureFlags
                 ++ [ "--enable-local-rust" "--local-rust-root=${rustPlatform.rust.rustc}" "--enable-rpath" ]
                 ++ [ "--enable-vendor" ]
@@ -102,8 +103,7 @@ stdenv.mkDerivation {
 
     # Useful debugging parameter
     # export VERBOSE=1
-  ''
-  + optionalString stdenv.isDarwin ''
+  '' + optionalString stdenv.isDarwin ''
     # Disable all lldb tests.
     # error: Can't run LLDB test because LLDB's python path is not set
     rm -vr src/test/debuginfo/*

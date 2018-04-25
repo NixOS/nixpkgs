@@ -1,4 +1,4 @@
-{ callPackage, boost155, openssl_1_1_0, haskellPackages, darwin, libsForQt5, miniupnpc_2, python3 }:
+{ callPackage, boost155, boost165, openssl_1_1_0, haskellPackages, darwin, libsForQt5, miniupnpc_2, python3 }:
 
 rec {
 
@@ -7,20 +7,20 @@ rec {
   bitcoin  = libsForQt5.callPackage ./bitcoin.nix { miniupnpc = miniupnpc_2; withGui = true; };
   bitcoind = callPackage ./bitcoin.nix { miniupnpc = miniupnpc_2; withGui = false; };
 
-  bitcoin-abc  = libsForQt5.callPackage ./bitcoin-abc.nix { withGui = true; };
-  bitcoind-abc = callPackage ./bitcoin-abc.nix { withGui = false; };
+  bitcoin-abc  = libsForQt5.callPackage ./bitcoin-abc.nix { boost = boost165; withGui = true; };
+  bitcoind-abc = callPackage ./bitcoin-abc.nix { boost = boost165; withGui = false; };
 
   bitcoin-unlimited  = callPackage ./bitcoin-unlimited.nix { withGui = true; };
   bitcoind-unlimited = callPackage ./bitcoin-unlimited.nix { withGui = false; };
 
-  bitcoin-classic  = libsForQt5.callPackage ./bitcoin-classic.nix { withGui = true; };
-  bitcoind-classic = callPackage ./bitcoin-classic.nix { withGui = false; };
+  bitcoin-classic  = libsForQt5.callPackage ./bitcoin-classic.nix { boost = boost165; withGui = true; };
+  bitcoind-classic = callPackage ./bitcoin-classic.nix { boost = boost165; withGui = false; };
 
-  bitcoin-xt  = callPackage ./bitcoin-xt.nix { withGui = true; };
-  bitcoind-xt = callPackage ./bitcoin-xt.nix { withGui = false; };
+  bitcoin-xt  = callPackage ./bitcoin-xt.nix { boost = boost165; withGui = true; };
+  bitcoind-xt = callPackage ./bitcoin-xt.nix { boost = boost165; withGui = false; };
 
-  btc1 = callPackage ./btc1.nix { withGui = true; };
-  btc1d = callPackage ./btc1.nix { withGui = false; };
+  btc1 = callPackage ./btc1.nix { boost = boost165; withGui = true; };
+  btc1d = callPackage ./btc1.nix { boost = boost165; withGui = false; };
 
   cryptop = python3.pkgs.callPackage ./cryptop { };
 
@@ -31,8 +31,8 @@ rec {
 
   dero = callPackage ./dero.nix { };
 
-  dogecoin  = callPackage ./dogecoin.nix { withGui = true; };
-  dogecoind = callPackage ./dogecoin.nix { withGui = false; };
+  dogecoin  = callPackage ./dogecoin.nix { boost = boost165; withGui = true; };
+  dogecoind = callPackage ./dogecoin.nix { boost = boost165; withGui = false; };
 
   ethsign = callPackage ./ethsign { };
 
@@ -46,8 +46,10 @@ rec {
   litecoin  = callPackage ./litecoin.nix { withGui = true; };
   litecoind = callPackage ./litecoin.nix { withGui = false; };
 
-  memorycoin  = callPackage ./memorycoin.nix { withGui = true; };
-  memorycoind = callPackage ./memorycoin.nix { withGui = false; };
+  masari = callPackage ./masari.nix { };
+
+  memorycoin  = callPackage ./memorycoin.nix { boost = boost165; withGui = true; };
+  memorycoind = callPackage ./memorycoin.nix { boost = boost165; withGui = false; };
 
   namecoin  = callPackage ./namecoin.nix  { withGui = true; };
   namecoind = callPackage ./namecoin.nix { withGui = false; };

@@ -21,7 +21,7 @@ let
 
     # packaging
     customisation = callLibs ./customisation.nix;
-    maintainers = import ./maintainers-list.nix;
+    maintainers = import ../maintainers/maintainer-list.nix;
     meta = callLibs ./meta.nix;
     sources = callLibs ./sources.nix;
     versions = callLibs ./versions.nix;

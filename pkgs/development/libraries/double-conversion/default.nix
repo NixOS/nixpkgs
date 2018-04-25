@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake }:
+{ stdenv, lib, fetchFromGitHub, cmake }:
 
 stdenv.mkDerivation rec {
   name = "double-conversion-${version}";
@@ -14,6 +14,11 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake ];
 
   cmakeFlags = [ "-DBUILD_SHARED_LIBS=ON" ];
+
+  # Case sensitivity issue
+  preConfigure = lib.optionalString stdenv.isDarwin ''
+    rm BUILD
+  '';
 
   enableParallelBuilding = true;
 

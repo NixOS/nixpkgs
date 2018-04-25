@@ -417,6 +417,7 @@ stdenv.mkDerivation ({
     # gnatboot is not available out of linux platforms, so we disable the darwin build
     # for the gnat (ada compiler).
     platforms = stdenv.lib.platforms.linux ++ optionals (langAda == false) [ "i686-darwin" ];
+    broken = langAda;
   };
 }
 
@@ -466,7 +467,7 @@ stdenv.mkDerivation ({
     license = stdenv.lib.licenses.gpl2Plus;
     description = "Complete VHDL simulator, using the GCC technology (gcc ${version})";
     maintainers = with stdenv.lib.maintainers; [viric];
-    platforms = with stdenv.lib.platforms; linux;
+    platforms = ["i686-linux" "x86_64-linux"];
   };
 
 })

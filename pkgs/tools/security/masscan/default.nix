@@ -11,9 +11,13 @@ stdenv.mkDerivation rec {
     sha256 = "0mjvwh4i0ncsa3ywavw2s55v5bfv7pyga028c8m8xfash9764wwf";
   };
 
-  buildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
 
-  makeFlags = [ "PREFIX=$(out)" "CC=cc" "-j" ];
+  makeFlags = [ "PREFIX=$(out)" "GITVER=${version}" "CC=cc" ];
+
+  preInstall = ''
+    mkdir -p $out/bin
+  '';
 
   postInstall = ''
     mkdir -p $out/share/man/man8

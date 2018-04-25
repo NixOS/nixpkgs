@@ -116,4 +116,12 @@ rec {
       Env = [ "NIX_PAGER=cat" ];
     };
   };
+
+  # 7. example of adding something on top of an image pull by our
+  # dockerTools chain.
+  onTopOfPulledImage = buildImage {
+    name = "onTopOfPulledImage";
+    fromImage = nixFromDockerHub;
+    contents = [ pkgs.hello ];
+  };
 }

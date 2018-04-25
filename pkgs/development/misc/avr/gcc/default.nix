@@ -54,7 +54,7 @@ stdenv.mkDerivation {
     description = "GNU Compiler Collection, version ${version} for AVR microcontrollers";
     homepage = http://gcc.gnu.org;
     license = licenses.gpl3Plus;
-    platforms = platforms.unix;
+    platforms = platforms.linux;
     maintainers = with maintainers; [ mguentner ];
   };
 }

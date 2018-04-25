@@ -98,12 +98,12 @@ let
 
   flash = stdenv.mkDerivation rec {
     name = "flashplayer-ppapi-${version}";
-    version = "28.0.0.161";
+    version = "29.0.0.140";
 
     src = fetchzip {
       url = "https://fpdownload.adobe.com/pub/flashplayer/pdc/"
           + "${version}/flash_player_ppapi_linux.x86_64.tar.gz";
-      sha256 = "0xhfr2mqmg71dxnsq4x716hzkryj2dmmlzgyi8hf7s999p7x8djw";
+      sha256 = "1p0jr7s6vyzxw1mhbrl5yx092z2wpvfw0jjw127gs576z0zwamwh";
       stripRoot = false;
     };
 

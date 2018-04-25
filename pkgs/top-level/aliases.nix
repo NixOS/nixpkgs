@@ -60,7 +60,6 @@ mapAliases (rec {
   digikam5 = digikam; # added 2017-02-18
   double_conversion = double-conversion; # 2017-11-22
   dwarf_fortress = dwarf-fortress; # added 2016-01-23
-  dwbWrapper = dwb; # added 2015-01
   enblendenfuse = enblend-enfuse; # 2015-09-30
   evolution_data_server = evolution-data-server; # added 2018-02-25
   exfat-utils = exfat;                  # 2015-09-11
@@ -149,7 +148,6 @@ mapAliases (rec {
   networkmanager_l2tp = networkmanager-l2tp; # added 2018-02-25
   networkmanager_openconnect = networkmanager-openconnect; # added 2018-02-25
   networkmanager_openvpn = networkmanager-openvpn; # added 2018-02-25
-  networkmanager_pptp = networkmanager-pptp; # added 2018-02-25
   networkmanager_vpnc = networkmanager-vpnc; # added 2018-02-25
   nmap_graphical = nmap-graphical;  # added 2017-01-19
   nfsUtils = nfs-utils;  # added 2014-12-06

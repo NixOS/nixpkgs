@@ -1,0 +1,58 @@
+diff --git a/configure.ac b/configure.ac
+--- a/configure.ac
++++ b/configure.ac
+@@ -475,6 +475,7 @@
+ 
+ 
+ AC_CONFIG_FILES([ data/gsmartcontrol.desktop data/gsmartcontrol.appdata.xml \
++	data/org.gsmartcontrol.policy \
+ 	data/nsis/distribution.txt data/nsis/gsmartcontrol.nsi \
+ 	debian.dist/changelog \
+ 	src/gsc_winres.rc src/gsmartcontrol.exe.manifest \
+diff --git a/data/gsmartcontrol-root.in b/data/gsmartcontrol-root.in
+--- a/data/gsmartcontrol-root.in
++++ b/data/gsmartcontrol-root.in
+@@ -8,7 +8,7 @@
+ # Run gsmartcontrol with root, asking for root password first.
+ # export GSMARTCONTROL_SU to override a su command (e.g. "kdesu -c").
+ 
+-EXEC_BIN="@prefix@/sbin/gsmartcontrol";
++EXEC_BIN="@prefix@/bin/gsmartcontrol";
+ prog_name="gsmartcontrol"
+ 
+ 
+@@ -118,7 +118,7 @@
+ # Add @prefix@/sbin as well (freebsd seems to require it).
+ # Note that beesu won't show a GUI login box if /usr/sbin is before /usr/bin,
+ # so add it first as well.
+-EXTRA_PATHS="/usr/bin:/usr/sbin:/usr/local/sbin:@prefix@/sbin";
++EXTRA_PATHS="/usr/bin:/usr/sbin:/usr/local/sbin:@prefix@/bin";
+ export PATH="$EXTRA_PATHS:$PATH"
+ 
+ 
+diff --git a/data/org.gsmartcontrol.policy b/data/org.gsmartcontrol.policy.in
+rename from data/org.gsmartcontrol.policy
+rename to data/org.gsmartcontrol.policy.in
+--- a/data/org.gsmartcontrol.policy
++++ b/data/org.gsmartcontrol.policy.in
+@@ -12,7 +12,7 @@
+       <allow_inactive>auth_admin</allow_inactive>
+       <allow_active>auth_admin</allow_active>
+     </defaults>
+-    <annotate key="org.freedesktop.policykit.exec.path">/usr/sbin/gsmartcontrol</annotate>
++    <annotate key="org.freedesktop.policykit.exec.path">@prefix@/bin/gsmartcontrol</annotate>
+     <annotate key="org.freedesktop.policykit.exec.allow_gui">true</annotate>
+   </action>
+ 
+diff --git a/src/Makefile.am b/src/Makefile.am
+--- a/src/Makefile.am
++++ b/src/Makefile.am
+@@ -24,7 +24,7 @@
+ # endif
+ 
+ 
+-sbin_PROGRAMS = gsmartcontrol
++bin_PROGRAMS = gsmartcontrol
+ 
+ gsmartcontrol_LDADD = $(top_builddir)/src/applib/libapplib.a \
+ 	$(top_builddir)/src/libdebug/libdebug.a \

@@ -1,4 +1,4 @@
-{ stdenv, nixUnstable, perlPackages, buildEnv, releaseTools, fetchFromGitHub
+{ stdenv, nix, perlPackages, buildEnv, releaseTools, fetchFromGitHub
 , makeWrapper, autoconf, automake, libtool, unzip, pkgconfig, sqlite, libpqxx
 , gitAndTools, mercurial, darcs, subversion, bazaar, openssl, bzip2, libxslt
 , guile, perl, postgresql, aws-sdk-cpp, nukeReferences, git, boehmgc
@@ -54,8 +54,8 @@ let
         TextDiff
         TextTable
         XMLSimple
-        nixUnstable
-        nixUnstable.perl-bindings
+        nix
+        nix.perl-bindings
         git
         boehmgc
       ];
@@ -77,12 +77,12 @@ in releaseTools.nixBuild rec {
     [ makeWrapper autoconf automake libtool unzip nukeReferences pkgconfig sqlite libpqxx
       gitAndTools.topGit mercurial darcs subversion bazaar openssl bzip2 libxslt
       guile # optional, for Guile + Guix support
-      perlDeps perl nixUnstable
+      perlDeps perl nix
       postgresql # for running the tests
     ];
 
   hydraPath = lib.makeBinPath (
-    [ sqlite subversion openssh nixUnstable coreutils findutils pixz
+    [ sqlite subversion openssh nix coreutils findutils pixz
       gzip bzip2 lzma gnutar unzip git gitAndTools.topGit mercurial darcs gnused bazaar
     ] ++ lib.optionals stdenv.isLinux [ rpm dpkg cdrkit ] );
 
@@ -117,7 +117,7 @@ in releaseTools.nixBuild rec {
             --prefix PATH ':' $out/bin:$hydraPath \
             --set HYDRA_RELEASE ${version} \
             --set HYDRA_HOME $out/libexec/hydra \
-            --set NIX_RELEASE ${nixUnstable.name or "unknown"}
+            --set NIX_RELEASE ${nix.name or "unknown"}
     done
   ''; # */
 

@@ -19,15 +19,15 @@ let
   binDists = {
     x86_64-linux = let bdist = bdistForArch { inUrl = "linux64"; inTar = "x64"; }; in {
       alpha = {
-        stable        = bdist { sha256 = "1i25q8x80qdpmf00lvml67gyklrfvmr4gfyakrx954bq8giiy4ll"; fetcher = authenticatedFetch; };
-        experimental  = bdist { sha256 = "0s7cn5xhzwn793bmvlhlmibhbxdpfmpnpn33k5a4hdprc5gc27rg"; version = "0.16.24"; fetcher = authenticatedFetch; };
+        stable        = bdist { sha256 = "0gxa8wh0py4l1ym57sfq792kfh00khi0f9ykjlmjqqkdksyxgddf"; fetcher = authenticatedFetch; };
+        experimental  = bdist { sha256 = "1iy3k9zrw3za9mabf89lfl8i20xfij66ih5vngz5xfyy99mwxiy6"; version = "0.16.35"; fetcher = authenticatedFetch; };
       };
       headless = {
-        stable        = bdist { sha256 = "0v5sypz1q6x6hi6k5cyi06f9ld0cky80l0z64psd3v2ax9hyyh8h"; };
-        experimental  = bdist { sha256 = "1ff4yjybiqr5kw583hmxkbrbxa3haj4bkjj8sx811c3s269gspi2"; version = "0.16.24"; };
+        stable        = bdist { sha256 = "0n2j86af41dkbsyyy5lawjpdd7c0lvfdwxpwbj1m8v470i1g8zq4"; };
+        experimental  = bdist { sha256 = "0x4miyva1lmiyv3lb4savdlycia1kzw6bri4qj9b2jmyw1dr8x8h"; version = "0.16.35"; };
       };
       demo = {
-        stable        = bdist { sha256 = "0aca8gks7wl7yi821bcca16c94zcc41agin5j0vfz500i0sngzzw"; version = "0.15.36"; };
+        stable        = bdist { sha256 = "1z04rdlcxnfwami0l5nm292w4ydfhr1s6rcl8hxrsa73d4xk5lch"; version = "0.16.36"; };
         experimental  = bdist { };
       };
     };
@@ -49,7 +49,7 @@ let
   actual = binDists.${stdenv.system}.${releaseType}.${branch} or (throw "Factorio: unsupported platform");
 
   bdistForArch = arch: { sha256 ? null
-                       , version ? "0.15.40"
+                       , version ? "0.16.36"
                        , fetcher ? fetchurl
                        , nameMut ? x: x
                        }:

@@ -49,6 +49,8 @@ stdenv.mkDerivation rec {
     ./busybox-in-store.patch
   ];
 
+  postPatch = "patchShebangs .";
+
   configurePhase = ''
     export KCONFIG_NOTIMESTAMP=1
     make ${if enableMinimal then "allnoconfig" else "defconfig"}

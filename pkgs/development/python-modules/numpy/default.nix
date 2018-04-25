@@ -1,14 +1,14 @@
-{lib, fetchPypi, python, buildPythonPackage, isPy27, isPyPy, gfortran, nose, blas}:
+{lib, fetchPypi, python, buildPythonPackage, isPy27, isPyPy, gfortran, nose, blas, hostPlatform }:
 
 buildPythonPackage rec {
   pname = "numpy";
-  version = "1.14.0";
+  version = "1.14.2";
   name = "${pname}-${version}";
 
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
-    sha256 = "3de643935b212307b420248018323a44ec51987a336d1d747c1322afc3c099fb";
+    sha256 = "facc6f925c3099ac01a1f03758100772560a0b020fb9d70f210404be08006bcb";
   };
 
   disabled = isPyPy;
@@ -19,6 +19,18 @@ buildPythonPackage rec {
     # numpy.distutils is used by cython during it's check phase
     ./numpy-distutils-C++.patch
   ];
+
+  postPatch = lib.optionalString hostPlatform.isMusl ''
+    # Use fenv.h
+    sed -i \
+      numpy/core/src/npymath/ieee754.c.src \
+      numpy/core/include/numpy/ufuncobject.h \
+      -e 's/__GLIBC__/__linux__/'
+    # Don't use various complex trig functions
+    substituteInPlace numpy/core/src/private/npy_config.h \
+      --replace '#if defined(__GLIBC__)' "#if 1" \
+      --replace '#if !__GLIBC_PREREQ(2, 18)' "#if 1"
+  '';
 
   preConfigure = ''
     sed -i 's/-faltivec//' numpy/distutils/system_info.py

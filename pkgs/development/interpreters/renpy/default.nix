@@ -5,31 +5,37 @@
 
 with pythonPackages;
 
-stdenv.mkDerivation {
-  name = "renpy-6.99.12.4";
+stdenv.mkDerivation rec {
+  name = "renpy-${version}";
+  version = "6.99.14";
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "Ren'Py Visual Novel Engine";
     homepage = http://renpy.org/;
-    license = stdenv.lib.licenses.mit;
-    platforms = stdenv.lib.platforms.linux;
-    # This is an ancient version, last updated in 2014 (3d59f42ce); it fails to
-    # build with the most recent pygame version, and fails to run with 1.9.1.
-    broken = true;
+    license = licenses.mit;
+    platforms = platforms.linux;
   };
 
   src = fetchurl {
-    url = "http://www.renpy.org/dl/6.99.12.4/renpy-6.99.12.4-source.tar.bz2";
-    sha256 = "035342rr39zp7krp08z0xhcl73gqbqyilshgmljq0ynfrxxckn35";
+    url = "https://www.renpy.org/dl/${version}/renpy-${version}-source.tar.bz2";
+    sha256 = "00r1l9rd9wj8zfh279n7sak894xxhxqp3rcwg41g0md8yfiysc4h";
   };
+
+  patches = [
+    ./launcherenv.patch
+  ];
+
+  postPatch = ''
+    substituteInPlace launcher/game/choose_directory.rpy --replace /usr/bin/python ${python.interpreter}
+  '';
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
-    python cython wrapPython
+    python cython wrapPython tkinter
     SDL2 libpng ffmpeg freetype glew libGLU_combined fribidi zlib pygame_sdl2 glib
   ];
 
-  pythonPath = [ pygame_sdl2 ];
+  pythonPath = [ pygame_sdl2 tkinter ];
 
   RENPY_DEPS_INSTALL = stdenv.lib.concatStringsSep "::" (map (path: "${path}") [
     SDL2 SDL2.dev libpng ffmpeg ffmpeg.out freetype glew.dev glew.out libGLU_combined fribidi zlib
@@ -41,7 +47,9 @@ stdenv.mkDerivation {
 
   installPhase = ''
     mkdir -p $out/share/renpy
-    cp -r renpy renpy.py $out/share/renpy
+    cp -vr * $out/share/renpy
+    rm -rf $out/share/renpy/module
+
     python module/setup.py install --prefix=$out --install-lib=$out/share/renpy/module
 
     makeWrapper ${python}/bin/python $out/bin/renpy \

@@ -3,6 +3,7 @@
 buildPerlPackage rec {
   name = "rename-${version}";
   version = "1.9";
+  outputs = [ "out" ];
   src = fetchFromGitHub {
     owner = "pstray";
     repo = "rename";

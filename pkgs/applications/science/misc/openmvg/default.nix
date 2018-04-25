@@ -46,5 +46,6 @@ stdenv.mkDerivation rec {
     license = stdenv.lib.licenses.mpl20;
     platforms = stdenv.lib.platforms.linux;
     maintainers = with stdenv.lib.maintainers; [ mdaiter ];
+    broken = true; # 2018-04-11
   };
 }

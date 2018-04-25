@@ -57,5 +57,6 @@ stdenv.mkDerivation rec {
     platforms = platforms.linux;
     license = licenses.gpl2;
     maintainers = with maintainers; [ grahamc ];
+    broken = true; # 2018-04-11
   };
 }

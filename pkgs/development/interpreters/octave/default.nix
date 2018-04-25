@@ -18,11 +18,11 @@ let
 in
 
 stdenv.mkDerivation rec {
-  version = "4.2.1";
+  version = "4.2.2";
   name = "octave-${version}";
   src = fetchurl {
     url = "mirror://gnu/octave/${name}.tar.gz";
-    sha256 = "0frk0nk3aaic8hj3g45h11rnz3arp7pjsq0frbx50sspk1iqzhl0";
+    sha256 = "0vkjfrpv7aikcn73bxqkph1qrhrdx7jqy193n8d8lwp7v2al7f3p";
   };
 
   buildInputs = [ gfortran readline ncurses perl flex texinfo qhull

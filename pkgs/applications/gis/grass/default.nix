@@ -1,6 +1,6 @@
 { stdenv, fetchurl, flex, bison, pkgconfig, zlib, libtiff, libpng, fftw
 , cairo, readline, ffmpeg, makeWrapper, wxGTK30, netcdf, blas
-, proj, gdal, geos, sqlite, postgresql, mysql, python2Packages
+, proj, gdal, geos, sqlite, postgresql, mysql, python2Packages, libLAS
 }:
 
 stdenv.mkDerivation {
@@ -12,8 +12,13 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ flex bison zlib proj gdal libtiff libpng fftw sqlite cairo
-  readline ffmpeg makeWrapper wxGTK30 netcdf geos postgresql mysql.connector-c blas ]
+  readline ffmpeg makeWrapper wxGTK30 netcdf geos postgresql mysql.connector-c blas
+  libLAS ]
     ++ (with python2Packages; [ python dateutil wxPython30 numpy ]);
+
+  # On Darwin the installer tries to symlink the help files into a system
+  # directory
+  patches = [] ++ stdenv.lib.optional stdenv.isDarwin [ ./no_symbolic_links.patch ];
 
   configureFlags = [
     "--with-proj-share=${proj}/share/proj"
@@ -29,6 +34,7 @@ stdenv.mkDerivation {
     "--with-mysql-includes=${mysql.connector-c}/include/mysql"
     "--with-mysql-libs=${mysql.connector-c}/lib/mysql"
     "--with-blas"
+    "--with-liblas=${libLAS}/bin/liblas-config"
   ];
 
   /* Ensures that the python script run at build time are actually executable;

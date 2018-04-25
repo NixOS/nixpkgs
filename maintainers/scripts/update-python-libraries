@@ -1,5 +1,5 @@
 #! /usr/bin/env nix-shell
-#! nix-shell -i python3 -p 'python3.withPackages(ps: with ps; [ packaging requests toolz ])' -p git
+#! nix-shell -i python3 -p "python3.withPackages(ps: with ps; [ packaging requests toolz ])" -p git
 
 """
 Update a Python package expression by passing in the `.nix` file, or the directory containing it.

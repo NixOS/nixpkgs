@@ -10,10 +10,12 @@ appleDerivation rec {
     # - su ('security/pam_appl.h' file not found)
     # - find (Undefined symbol '_get_date')
     # - w (Undefined symbol '_res_9_init')
+    # - expr
     substituteInPlace shell_cmds.xcodeproj/project.pbxproj \
       --replace "FCBA168714A146D000AA698B /* PBXTargetDependency */," "" \
       --replace "FCBA165914A146D000AA698B /* PBXTargetDependency */," "" \
-      --replace "FCBA169514A146D000AA698B /* PBXTargetDependency */," ""
+      --replace "FCBA169514A146D000AA698B /* PBXTargetDependency */," "" \
+      --replace "FCBA165514A146D000AA698B /* PBXTargetDependency */," ""
 
     # disable w, test install
     # get rid of permission stuff

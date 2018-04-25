@@ -269,7 +269,7 @@ in stdenv.mkDerivation rec {
   nativeBuildInputs = [ wrapGAppsHook ];
 
   passthru = {
-    inherit srcs;
+    inherit srcs jdk;
   };
 
   requiredSystemFeatures = [ "big-parallel" ];

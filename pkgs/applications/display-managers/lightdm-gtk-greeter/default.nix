@@ -28,6 +28,8 @@ stdenv.mkDerivation rec {
     "--sysconfdir=/etc"
   ] ++ stdenv.lib.optional useGTK2 "--with-gtk2";
 
+  NIX_CFLAGS_COMPILE = [ "-Wno-error=deprecated-declarations" ];
+
   installFlags = [
     "localstatedir=\${TMPDIR}"
     "sysconfdir=\${out}/etc"

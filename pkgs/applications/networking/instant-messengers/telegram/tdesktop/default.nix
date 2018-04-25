@@ -1,5 +1,5 @@
 { mkDerivation, lib, fetchgit, fetchpatch
-, pkgconfig, gyp, cmake, makeWrapper
+, pkgconfig, gyp, cmake, wrapGAppsHook
 , qtbase, qtimageformats, gtk3, libappindicator-gtk3, libnotify
 , dee, ffmpeg, openalSoft, minizip, libopus, alsaLib, libpulseaudio, range-v3
 }:
@@ -36,7 +36,7 @@ mkDerivation rec {
     substituteInPlace Telegram/SourceFiles/platform/linux/linux_libnotify.cpp --replace '"notify"' '"${libnotify}/lib/libnotify.so"'
   '';
 
-  nativeBuildInputs = [ pkgconfig gyp cmake makeWrapper ];
+  nativeBuildInputs = [ pkgconfig gyp cmake wrapGAppsHook ];
 
   buildInputs = [
     qtbase qtimageformats gtk3 libappindicator-gtk3
@@ -112,11 +112,16 @@ mkDerivation rec {
     for icon_size in 16 32 48 64 128 256 512; do
       install -Dm644 "../../../Telegram/Resources/art/icon''${icon_size}.png" "$out/share/icons/hicolor/''${icon_size}x''${icon_size}/apps/telegram-desktop.png"
     done
+  '';
 
-    # This is necessary to run Telegram in a pure environment.
-    wrapProgram $out/bin/telegram-desktop \
-      --prefix QT_PLUGIN_PATH : "${qtbase}/${qtbase.qtPluginPrefix}" \
+  preFixup = ''
+    gappsWrapperArgs+=(
+      --prefix QT_PLUGIN_PATH : "${qtbase}/${qtbase.qtPluginPrefix}"
       --set XDG_RUNTIME_DIR "XDG-RUNTIME-DIR"
+    )
+  '';
+
+  postFixup = ''
     sed -i $out/bin/telegram-desktop \
       -e "s,'XDG-RUNTIME-DIR',\"\''${XDG_RUNTIME_DIR:-/run/user/\$(id --user)}\","
   '';
@@ -124,7 +129,7 @@ mkDerivation rec {
   meta = with lib; {
     description = "Telegram Desktop messaging app";
     license = licenses.gpl3;
-    platforms = platforms.linux;
+    platforms = [ "x86_64-linux" "i686-linux" ];
     homepage = https://desktop.telegram.org/;
     maintainers = with maintainers; [ abbradar garbas primeos ];
   };

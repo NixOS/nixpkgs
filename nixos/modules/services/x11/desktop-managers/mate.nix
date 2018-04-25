@@ -108,6 +108,8 @@ in
     services.gnome3.gnome-keyring.enable = true;
     services.upower.enable = config.powerManagement.enable;
 
+    security.pam.services."mate-screensaver".unixAuth = true;
+
     environment.pathsToLink = [ "/share" ];
   };
 

@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     homepage = "http://www.daidouji.com/oneko/";
     license = licenses.publicDomain;
     maintainers = [ maintainers.xaverdh ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }
 
