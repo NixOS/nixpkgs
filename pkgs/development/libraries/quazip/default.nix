@@ -1,11 +1,14 @@
-{ fetchurl, stdenv, zip, zlib, qtbase, qmake }:
+{ fetchFromGitHub, stdenv, zip, zlib, qtbase, qmake }:
 
 stdenv.mkDerivation rec {
-  name = "quazip-0.7.3";
+  name = "quazip-${version}";
+  version = "0.7.4";
 
-  src = fetchurl {
-    url = "mirror://sourceforge/quazip/${name}.tar.gz";
-    sha256 = "1db9w8ax1ki0p67a47h4cnbwfgi2di4y3k9nc3a610kffiag7m1a";
+  src = fetchFromGitHub {
+    owner = "stachenov";
+    repo = "quazip";
+    rev = version;
+    sha256 = "0chajfaf59js9yg743hd3pnah7r71mwj6jg695m164lxwzgyg602";
   };
 
   preConfigure = "cd quazip";
