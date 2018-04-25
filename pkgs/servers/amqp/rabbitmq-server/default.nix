@@ -1,5 +1,5 @@
 { stdenv, fetchurl, runCommand
-, erlang, python, libxml2, libxslt, xmlto
+, erlang, elixir, python, libxml2, libxslt, xmlto
 , docbook_xml_dtd_45, docbook_xsl, zip, unzip, rsync
 
 , AppKit, Carbon, Cocoa
@@ -13,15 +13,15 @@ let
 
 in stdenv.mkDerivation rec {
   name = "rabbitmq-server-${version}";
-  version = "3.6.15";
+  version = "3.7.4";
 
   src = fetchurl {
-    url = "https://www.rabbitmq.com/releases/rabbitmq-server/v${version}/${name}.tar.xz";
-    sha256 = "1zdmil657mhjmd20jv47s5dfpj2liqwvyg0zv2ky3akanfpgj98y";
+    url = "https://github.com/rabbitmq/rabbitmq-server/releases/download/v${version}/rabbitmq-server-${version}.tar.xz";
+    sha256 = "0y3c3kmj2jnfic4rzfn5x0raigkgscxv94fn3ijnnk535b209iw8";
   };
 
   buildInputs =
-    [ erlang python libxml2 libxslt xmlto docbook_xml_dtd_45 docbook_xsl zip unzip rsync ]
+    [ erlang elixir python libxml2 libxslt xmlto docbook_xml_dtd_45 docbook_xsl zip unzip rsync ]
     ++ stdenv.lib.optionals stdenv.isDarwin [ AppKit Carbon Cocoa ];
 
   outputs = [ "out" "man" "doc" ];
