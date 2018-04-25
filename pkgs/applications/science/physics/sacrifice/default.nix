@@ -27,6 +27,10 @@ stdenv.mkDerivation rec {
     "--with-pythia=${pythia}"
   ];
 
+  postInstall = stdenv.lib.optionalString stdenv.isDarwin ''
+    install_name_tool -add_rpath ${pythia}/lib "$out"/bin/run-pythia
+  '';
+
   enableParallelBuilding = true;
 
   meta = {
