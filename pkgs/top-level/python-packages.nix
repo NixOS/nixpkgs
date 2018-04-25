@@ -1202,6 +1202,8 @@ in {
 
   datadog = callPackage ../development/python-modules/datadog {};
 
+  dataclasses = callPackage ../development/python-modules/dataclasses { };
+
   debian = callPackage ../development/python-modules/debian {};
 
   defusedxml = callPackage ../development/python-modules/defusedxml {};
