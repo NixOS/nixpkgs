@@ -148,8 +148,6 @@ let
   ## -- TYPE SETUP STUFF --
 
   mkBaseType = {
-    # unique name (for matching on the type)
-    name,
     # the (displayable) type description
     description,
     # a function to check the outermost type, given a value (Val -> Bool)
@@ -158,15 +156,15 @@ let
     variant,
     # extra fields belonging to the variant
     extraFields
-  }: { inherit name description check variant; } // extraFields;
+  }: { inherit description check variant; } // extraFields;
 
-  mkScalar = { name, description, check }: mkBaseType {
-    inherit name description check;
+  mkScalar = { description, check }: mkBaseType {
+    inherit description check;
     variant = variants.scalar;
     extraFields = {};
   };
 
-  mkRecursive = { name, description, check,
+  mkRecursive = { description, check,
     # return all children for a value of this type T t,
     # give each child (of type t) a displayable name.
     # (T t -> Map Name t)
@@ -174,7 +172,7 @@ let
     # The nested value t of the type functor
     nested
   }: mkBaseType {
-    inherit name description check;
+    inherit description check;
     variant = variants.recursive;
     extraFields = { inherit each nested; };
   };
@@ -184,7 +182,6 @@ let
 
   # the type with no inhabitants (kind of useless …)
   void = mkScalar {
-    name = "void";
     description = "void";
     # there are no values of type void
     check = lib.const false;
@@ -193,14 +190,12 @@ let
   # the any type, every value is an inhabitant
   # it basically turns off the type system, use with care
   any = mkScalar {
-    name = "any";
     description = "any type";
     check = lib.const true;
   };
 
   # the type with exactly one inhabitant
   unit = mkScalar {
-    name = "unit";
     description = "unit";
     # there is exactly one unit value, we represent it with {}
     # Q: why not `null`?
@@ -213,21 +208,18 @@ let
 
   # the type with two inhabitants
   bool = mkScalar {
-    name = "bool";
     description = "boolean";
     check = builtins.isBool;
   };
 
   # a nix string
   string = mkScalar {
-    name = "string";
     description = "string";
     check = builtins.isString;
   };
 
   # a nix path
   path = mkScalar {
-    name = "path";
     description = "path";
     # there is no `isPath` predicate,
     # but `typeOf` exists since 1.6.1
@@ -236,14 +228,12 @@ let
 
   # a signed nix integer
   int = mkScalar {
-    name = "int";
     description = "integer";
     check = builtins.isInt;
   };
 
   # a nix floating point number
   float = mkScalar {
-    name = "float";
     description = "float";
     check = builtins.isFloat;
   };
@@ -260,7 +250,6 @@ let
   #   [ { a = {}; } { b = {}; } ]
   #   []
   list = t: mkRecursive {
-    name = "list";
     description = "list of ${describe t}";
     check = builtins.isList;
     # each child gets named by its index, starting from 0
@@ -275,7 +264,6 @@ let
   #  { foo.bar = "hello"; baz.quux = "x"; }
   #  { x = { y = "wow"; }; }
   attrs = t: mkRecursive {
-    name = "attrs";
     description = "attrset of ${describe t}";
     check = builtins.isAttrs;
     each = lib.id;
@@ -314,7 +302,6 @@ let
     # opt and rec fields must not contain the same fields
     assert (lib.intersectLists reqfs optfs == []);
     mkBaseType {
-      name = "product";
       description = "{ " +
         lib.concatStringsSep ", "
           (  lib.mapAttrsToList (n: t: "${n}: ${describe t}") req
@@ -354,7 +341,6 @@ let
   #   { X = { name = "peter shaw"; age = 22; }; }
   #   { Y = [ {} {} {} {} {} {} {} {} ]; }
   sum = alts: assert alts != {}; mkBaseType {
-    name = "sum";
     description = "< " +
       lib.concatStringsSep " | "
         (lib.mapAttrsToList (n: t: "${n}: ${describe t}") alts)
@@ -382,7 +368,6 @@ let
   #   [ "foo" 34 "bar" ]
   # please don’t use this.
   union = altList: assert altList != []; mkBaseType {
-    name = "union";
     description = "one of [ "
       + lib.concatMapStringsSep ", " describe altList
       + " ]";
