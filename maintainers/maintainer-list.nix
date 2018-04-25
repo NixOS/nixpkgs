@@ -3726,6 +3726,11 @@
     github = "titanous";
     name = "Jonathan Rudenberg";
   };
+  tmplt = {
+    email = "tmplt@dragons.rocks";
+    github = "tmplt";
+    name = "Viktor";
+  };
   tnias = {
     email = "phil@grmr.de";
     github = "tnias";
