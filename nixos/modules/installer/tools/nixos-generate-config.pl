@@ -571,14 +571,18 @@ EOF
     ];
 
 $bootLoaderConfig
-  # networking.hostName = "nixos"; # Define your hostname.
-  # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
+  # Define your hostname.
+  # networking.hostName = "nixos";
+
+  # Enable wireless support via wpa_supplicant.
+  # networking.wireless.enable = true;
 
   # Configure network proxy if necessary
   # networking.proxy.default = "http://user:password\@proxy:port/";
   # networking.proxy.noProxy = "127.0.0.1,localhost,internal.domain";
 
   # Select internationalisation properties.
+  #
   # i18n = {
   #   consoleFont = "Lat2-Terminus16";
   #   consoleKeyMap = "us";
@@ -588,14 +592,64 @@ $bootLoaderConfig
   # Set your time zone.
   # time.timeZone = "Europe/Amsterdam";
 
-  # List packages installed in system profile. To search, run:
-  # \$ nix search wget
+  # List of packages installed in system profile (by attribute name).
+  #
   # environment.systemPackages = with pkgs; [
   #   wget vim
   # ];
 
+  # To search packages, run:
+  #
+  # \$ nix search -u wget
+  # \$ nix search -u 'distributed.*storage'
+  #
+  # The "Attribute name" field in the outputs of those commands in the
+  # attribute name you can use in `environment.systemPackages` above.
+  #
+  # Also note that if you don't use the NixOS channels, you can
+  # still search by running it directly from the nixpkgs tree like so
+  # (these are equivalent)
+  #
+  # \$ nix search -uf . wget
+  # \$ nix search -uf ./default.nix wget
+
+  # Note that Nixpkgs and by consequence NixOS make unfree
+  # packages unavailable by default. That is,
+  #
+  # \$ nix search -u 'example-unfree-package'
+  #
+  # will provide no useful results and
+  #
+  # environment.systemPackages = [ pkgs.hello-unfree ];
+  #
+  #   (You might need to merge this line with the above mention of
+  #   environment.systemPackages as you can't assign the same attribute
+  #   multiple times in a single nix attribute set.)
+  #
+  # will fail to evaluate.
+  #
+  # To enable unfree packages in this configuration.nix
+  # uncomment the following
+  #
+  # nixpkgs.config.allowUnfree = true;
+  #
+  # To make unfree packages available in nix-env, nix-build,
+  # nix-shell, etc you can either run them with NIXPKGS_ALLOW_UNFREE=1
+  # environment variable set, e.g.
+  #
+  # \$ NIXPKGS_ALLOW_UNFREE=1 nix search -u 'example-unfree-package'
+  #
+  # or you can add
+  #
+  #     { allowUnfree = true; }
+  #
+  # into your ~/.config/nixpkgs/config.nix file.
+
   # Some programs need SUID wrappers, can be configured further or are
-  # started in user sessions.
+  # started in user sessions. Those usually can be configured with
+  # options under programs.<name> subtree. See configuration.nix(5)
+  # man page.
+  #
   # programs.mtr.enable = true;
   # programs.gnupg.agent = { enable = true; enableSSHSupport = true; };
 
@@ -605,35 +659,143 @@ $bootLoaderConfig
   # services.openssh.enable = true;
 
   # Open ports in the firewall.
+  #
   # networking.firewall.allowedTCPPorts = [ ... ];
   # networking.firewall.allowedUDPPorts = [ ... ];
-  # Or disable the firewall altogether.
+  #
+  # WARNING! WARNING! WARNING! INSECURE!
+  #
+  # To disable the firewall altogether use the following.
+  #
+  # Use only inside trusted networks behind another firewall or else
+  # bad people across the galaxy will be able to access any ports you
+  # leave open.
+  #
   # networking.firewall.enable = false;
 
   # Enable CUPS to print documents.
   # services.printing.enable = true;
 
-  # Enable sound.
+  # Enable ALSA. This option will add ALSA tools to your
+  # systemPackages and make ALSA settings such as volume persistent
+  # across reboots. Not enabling this doesn't actually disable sound
+  # output via ALSA because ALSA is the default sound API of the Linux
+  # kernel. Also see `sound.mediaKeys.enable` in configuration.nix(5).
+  #
   # sound.enable = true;
+
+  # Enable sound output via PulseAudio. This option will enable
+  # PulseAudio daemon and configure `asound.conf` to route the
+  # `default` ALSA pcm and ctl to PulseAudio daemon.
+  #
   # hardware.pulseaudio.enable = true;
+  #
+  # Note that you don't need to enable PulseAudio daemon to get either
+  # of sound playback or software sound mixing. It will out of the box
+  # over ALSA. If you do want to run PulseAudio daemon, however, you
+  # may safely disable `sound.enable`.
+
+  # Also note that you can emulate PulseAudio API over ALSA for apps
+  # that refuse to work over ALSA themselves by running them under
+  # apulse. This way you can run one daemon less which benefits your
+  # security (some people claim that PulseAudio codebase lacks in
+  # quality to be connected to untrusted data sources like the browser
+  # by default).
+  #
+  # environment.systemPackages = [ pkgs.apulse ];
 
   # Enable the X11 windowing system.
+  #
   # services.xserver.enable = true;
   # services.xserver.layout = "us";
   # services.xserver.xkbOptions = "eurosign:e";
-
+  #
   # Enable touchpad support.
   # services.xserver.libinput.enable = true;
 
+  # Enable graphical acceleration in X11. See configuration.nix(5) man
+  # page for possible options.
+  #
+  # services.xserver.videoDrivers = [ "<name-of-the-driver>" ];
+
+  # Enable support for 32-bit OpenGL libraries on x86_64 which is
+  # useful if you want to run 32-bit OpenGL applications
+  #
+  # hardware.opengl.driSupport32Bit = true;
+  #
+  # E.g., games under Wine
+  #
+  # environment.systemPackages = with pkgs; [ wine winetricks ];
+
+  # Some of the X11 drivers above might not work with the current Linux
+  # kernel, so you might end up overriding that too.
+  #
+  # boot.kernelPackages = pkgs.linuxPackages_4_9;
+
+  # Define a user account. Don't forget to set a password with ‘passwd’.
+  #
+  # users.users.me = {
+  #   isNormalUser = true;
+  #   uid = 1000;
+  #   extraGroups = [ "input" "audio" "video" "cdrom" ]
+  #              ++ [ "wheel" ]; # for sudo
+  #   openssh.authorizedKeys.keyFiles = [ /etc/nixos/id_rsa.pub ];
+  # };
+
   # Enable the KDE Desktop Environment.
+  #
   # services.xserver.displayManager.sddm.enable = true;
   # services.xserver.desktopManager.plasma5.enable = true;
 
-  # Define a user account. Don't forget to set a password with ‘passwd’.
-  # users.users.guest = {
-  #   isNormalUser = true;
-  #   uid = 1000;
+  # Or maybe you want to enable Xfce Desktop Environment and Slim
+  # display manager?
+  #
+  # services.xserver.displayManager.slim.enable = true;
+  # services.xserver.desktopManager.xfce.enable = true;
+
+  # Or maybe you just want to automatically login into your .xsession
+  # script? Then don't enable any desktopManagers and uncomment the
+  # following.
+  #
+  # services.xserver.displayManager.auto = {
+  #   enable = true;
+  #   user = "me";
   # };
+
+  # If you're in a hurry, you may stop editing your configuration.nix now
+  # and completely ignore everything below.
+
+  # It's generally considered a good practice to run networking
+  # software at the very least in a separate user accounts (if not in a
+  # separate containers or a VMs). NixOS does this automatically for
+  # the system services. However, like most other distros, at the moment
+  # NixOS doesn't do anything about the networking software that you run
+  # from your normal user accounts. Which is why you might want to setup
+  # separate user accounts for such things yourself.
+  #
+  # users.users.network = {
+  #   isNormalUser = true;
+  #   uid = 1001;
+  #
+  #   # Like systemPackages, but for this user only.
+  #   packages = pkgs; [ firefox thunderbird qtox ];
+  #
+  #   # You probably want it to play sound via ALSA
+  #   extraGroups = [ "audio" ];
+  #   # but you probably don't want to give it direct DRI access
+  #   # since OpenGL video drivers are pretty buggy and giving DRI
+  #   # access to WebGL might not be the best of ideas.
+  #   #          ++ [ "video" ];
+  # };
+  #
+  # The simplest way to get to the software installed there is by
+  # running
+  #
+  # \$ xhost +si:localuser:network
+  # \$ sudo -Hiu network firefox &disown
+  # \$ sudo -Hiu network qtox &disown
+  #
+  # from the account logged in into X11.
 
   # This value determines the NixOS release with which your system is to be
   # compatible, in order to avoid breaking some software such as database
