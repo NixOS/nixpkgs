@@ -1,4 +1,4 @@
-{ callPackage, self, stdenv, gettext, gvfs, libunique, bison2
+{ callPackage, self, stdenv, gettext, gvfs, libunique, bison2, rarian
 , libstartup_notification, overrides ? {} }:
 
 let overridden = set // overrides; set = with overridden; {
@@ -14,6 +14,7 @@ let overridden = set // overrides; set = with overridden; {
   gnome_desktop = gnome-desktop;
   gnome_settings_daemon = gnome-settings-daemon;
   gnome_control_center = gnome-control-center;
+  inherit rarian;
 
 #### PLATFORM
 
@@ -92,9 +93,6 @@ let overridden = set // overrides; set = with overridden; {
 
   # Removed from recent GNOME releases, but still required
   scrollkeeper = callPackage ./desktop/scrollkeeper { };
-
-  # scrollkeeper replacement
-  rarian = callPackage ./desktop/rarian { };
 
   zenity = callPackage ./desktop/zenity { };
 
