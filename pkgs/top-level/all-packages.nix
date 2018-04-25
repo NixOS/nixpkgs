@@ -3513,6 +3513,8 @@ with pkgs;
 
   libwebsockets = callPackage ../development/libraries/libwebsockets { };
 
+  limesuite = callPackage ../applications/misc/limesuite { };
+
   limesurvey = callPackage ../servers/limesurvey { };
 
   linuxquota = callPackage ../tools/misc/linuxquota { };
@@ -11477,6 +11479,7 @@ with pkgs;
   soapysdr-with-plugins = callPackage ../applications/misc/soapysdr {
     inherit (python3Packages) python numpy;
     extraPackages = [
+      limesuite
       soapyairspy
       soapybladerf
       soapyhackrf
