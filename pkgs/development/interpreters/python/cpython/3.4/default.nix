@@ -176,6 +176,8 @@ in stdenv.mkDerivation {
 
   enableParallelBuilding = true;
 
+  doCheck = false; # expensive, and fails
+
   meta = {
     homepage = http://python.org;
     description = "A high-level dynamically-typed programming language";

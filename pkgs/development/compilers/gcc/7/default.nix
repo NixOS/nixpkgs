@@ -409,6 +409,8 @@ stdenv.mkDerivation ({
   buildFlags =
     optional bootstrap (if profiledCompiler then "profiledbootstrap" else "bootstrap");
 
+  doCheck = false; # requires a lot of tools, causes a dependency cycle for stdenv
+
   installTargets =
     if stripped
     then "install-strip"

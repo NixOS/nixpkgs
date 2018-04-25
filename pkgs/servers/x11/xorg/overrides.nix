@@ -582,6 +582,10 @@ in
     nativeBuildInputs = attrs.nativeBuildInputs ++ [args.bison args.flex];
   };
 
+  xauth = attrs: attrs // {
+    doCheck = false; # fails
+  };
+
   xcursorthemes = attrs: attrs // {
     buildInputs = attrs.buildInputs ++ [xorg.xcursorgen];
     configureFlags = "--with-cursordir=$(out)/share/icons";

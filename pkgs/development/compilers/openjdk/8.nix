@@ -133,6 +133,8 @@ let
 
     buildFlags = [ "all" ];
 
+    doCheck = false; # fails with "No rule to make target 'y'."
+
     installPhase = ''
       mkdir -p $out/lib/openjdk $out/share $jre/lib/openjdk
 

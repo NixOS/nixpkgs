@@ -213,6 +213,7 @@ stdenv.mkDerivation (rec {
   ++ extraMakeFlags;
 
   enableParallelBuilding = true;
+  doCheck = false; # "--disable-tests" above
 
   preInstall = ''
     # The following is needed for startup cache creation on grsecurity kernels.

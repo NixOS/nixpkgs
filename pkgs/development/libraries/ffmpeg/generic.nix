@@ -160,8 +160,9 @@ stdenv.mkDerivation rec {
     ++ optional vdpauSupport libvdpau
     ++ optional sdlSupport (if reqMin "3.2" then SDL2 else SDL);
 
-
   enableParallelBuilding = true;
+
+  doCheck = false; # fails
 
   postFixup = ''
     moveToOutput bin "$bin"

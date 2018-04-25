@@ -85,6 +85,8 @@ in stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoreconfHook intltool pkgconfig libxslt docbook_xsl ];
 
+  doCheck = false; # requires /sys, the net
+
   preInstall = ''
     installFlagsArray=( "sysconfdir=$out/etc" "localstatedir=$out/var" "runstatedir=$out/var/run" )
   '';

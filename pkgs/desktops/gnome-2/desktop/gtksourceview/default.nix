@@ -40,4 +40,7 @@ stdenv.mkDerivation rec {
   '';
 
   NIX_LDFLAGS = stdenv.lib.optionalString stdenv.isDarwin "-lintl";
+
+  doCheck = false; # requires X11 daemon
+
 }

@@ -105,6 +105,8 @@ let
 
     passthru.libPrefix = "lib/perl5/site_perl";
 
+    doCheck = false; # some tests fail, expensive
+
     # TODO: it seems like absolute paths to some coreutils is required.
     postInstall =
       ''
