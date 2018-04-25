@@ -17,6 +17,13 @@ let
     sha256 = "14igk6k00bnpfw660qhswagyhvr0gfqg4q55dxvaaq7ikfkrir71";
   };
 
+  # iconv tool, implemented by musl author:
+  iconv_c = fetchurl {
+    name = "iconv.c";
+    url = "http://git.etalabs.net/cgit/noxcuse/plain/src/iconv.c?id=02d288d89683e99fd18fe9f54d4e731a6c474a4f";
+    sha256 = "1yafz6y509zxpa1i830p5463p91g0y70q60z8q054078qrpln8hp";
+  };
+
 in
 stdenv.mkDerivation rec {
   name    = "musl-${version}";
@@ -77,6 +84,9 @@ stdenv.mkDerivation rec {
     moveToOutput lib/musl-gcc.specs $dev
     substituteInPlace $dev/bin/musl-gcc \
       --replace $out/lib/musl-gcc.specs $dev/lib/musl-gcc.specs
+
+    # provide 'iconv' utility
+    $CC ${iconv_c} -o $out/bin/iconv
   '' + lib.optionalString useBSDCompatHeaders ''
     install -D ${queue_h} $dev/include/sys/queue.h
     install -D ${cdefs_h} $dev/include/sys/cdefs.h
