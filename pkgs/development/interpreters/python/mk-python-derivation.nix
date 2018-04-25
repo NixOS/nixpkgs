@@ -1,6 +1,7 @@
 # Generic builder.
 
 { lib
+, config
 , python
 , wrapPython
 , setuptools
@@ -53,7 +54,7 @@
 
 , passthru ? {}
 
-, doCheck ? false
+, doCheck ? config.doCheckByDefault or false
 
 , ... } @ attrs:
 
