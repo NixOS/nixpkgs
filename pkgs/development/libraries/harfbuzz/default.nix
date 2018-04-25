@@ -30,10 +30,10 @@ stdenv.mkDerivation {
 
   configureFlags = [
     # not auto-detected by default
-    "--with-coretext=${if withCoreText then "yes" else "no"}"
     "--with-graphite2=${if withGraphite2 then "yes" else "no"}"
     "--with-icu=${if withIcu then "yes" else "no"}"
-  ];
+  ]
+    ++ stdenv.lib.optional withCoreText "--with-coretext=yes";
 
   nativeBuildInputs = [ pkgconfig libintl ];
 
