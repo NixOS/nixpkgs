@@ -210,6 +210,16 @@ in lib.runTests ({
     + " ]";
   };
 
+  transitive = restrict {
+    description = "neither a nor b";
+    check = v: v != "b";
+    type = restrict {
+      description = "not a";
+      check = v: v != "a";
+      type = string;
+    };
+  };
+
 in {
   testRestrictEvenOk = test (list even)
     [ 2 4 128 42 ] ok;
@@ -237,6 +247,12 @@ in {
   testDeepRestrictionFoo = test thirdElementIsListOf23
     [ [] [] [24] [] [] ]
     (err thirdElementIsListOf23 [ [] [] [24] [] [] ]);
+
+  testRestrictTransitiveOk = test transitive "c" ok;
+  testRestrictTransitiveA = test transitive "a"
+    (err transitive "a");
+  testRestrictTransitiveB = test transitive "b"
+    (err transitive "b");
 
   testRestrictIntBetweenOk = test (list (intBetween (-2) 3))
     [ (-2) (-1) 0 1 2 3 ] ok;
