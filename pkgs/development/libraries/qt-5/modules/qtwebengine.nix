@@ -70,13 +70,10 @@ qtModule {
     if [ -d "$PWD/tools/qmake" ]; then
         QMAKEPATH="$PWD/tools/qmake''${QMAKEPATH:+:}$QMAKEPATH"
     fi
- '';
-
-  qmakeFlags =
-    [
-      # Use system Ninja because bootstrapping it is fragile
-      "WEBENGINE_CONFIG+=use_system_ninja"
-    ] ++ optional enableProprietaryCodecs "WEBENGINE_CONFIG+=use_proprietary_codecs";
+  ''
+  + optionalString (enableProprietaryCodecs) ''
+    qmakeFlags="$qmakeFlags -- -webengine-proprietary-codecs"
+  '';
 
   propagatedBuildInputs = [
     # Image formats
