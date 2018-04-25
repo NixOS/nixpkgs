@@ -9,8 +9,8 @@ rec {
     isx86_64       = { cpu = cpuTypes.x86_64; };
     isPowerPC      = { cpu = cpuTypes.powerpc; };
     isx86          = { cpu = { family = "x86"; }; };
-    isArm          = { cpu = { family = "arm"; }; };
-    isAarch64      = { cpu = { family = "aarch64"; }; };
+    isAarch32      = { cpu = { family = "arm"; bits = 32; }; };
+    isAarch64      = { cpu = { family = "arm"; bits = 64; }; };
     isMips         = { cpu = { family = "mips"; }; };
     isRiscV        = { cpu = { family = "riscv"; }; };
     isWasm         = { cpu = { family = "wasm"; }; };
@@ -41,6 +41,9 @@ rec {
 
     isEfi          = map (family: { cpu.family = family; })
                        [ "x86" "arm" "aarch64" ];
+
+    # Deprecated
+    isArm = isAarch32;
   };
 
   matchAnyAttrs = patterns:

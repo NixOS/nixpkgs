@@ -43,7 +43,7 @@ let
     UCLIBC_SUSV4_LEGACY y
     UCLIBC_HAS_THREADS_NATIVE y
     KERNEL_HEADERS "${linuxHeaders}/include"
-  '' + stdenv.lib.optionalString (stdenv.isArm && cross == null) ''
+  '' + stdenv.lib.optionalString (stdenv.isAarch32 && cross == null) ''
     CONFIG_ARM_EABI y
     ARCH_WANTS_BIG_ENDIAN n
     ARCH_BIG_ENDIAN n

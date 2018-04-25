@@ -123,7 +123,7 @@ everything = stdenv.mkDerivation (common // {
   buildInputs = common.buildInputs ++ [
     xz lzo lz4 bzip2 snappy
     libxml2 boost judy libevent cracklib
-  ] ++ optional (stdenv.isLinux && !stdenv.isArm) numactl;
+  ] ++ optional (stdenv.isLinux && !stdenv.isAarch32) numactl;
 
   cmakeFlags = common.cmakeFlags ++ [
     "-DMYSQL_DATADIR=/var/lib/mysql"
