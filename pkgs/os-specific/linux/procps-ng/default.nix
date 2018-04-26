@@ -1,22 +1,17 @@
-{ lib, stdenv, fetchurl, ncurses, libtool, gettext, autoconf, automake, pkgconfig }:
+{ lib, stdenv, fetchurl, ncurses, pkgconfig }:
 
 stdenv.mkDerivation rec {
   name = "procps-${version}";
   version = "3.3.14";
 
+  # The project's releases are on SF, but git repo on gitlab.
   src = fetchurl {
-    url = "https://gitlab.com/procps-ng/procps/-/archive/v${version}/procps-v${version}.tar.bz2";
-    sha256 = "0igvsl3s7m5ygxgypzksk4cp2wkvv3lk49s7i9m5wbimyakmr0vf";
+    url = "mirror://sourceforge/procps-ng/procps-ng-${version}.tar.xz";
+    sha256 = "0v3j6rkzzscqds37i105cxx3q4dk04rsgpqfd5p7hzcvk59h5njy";
   };
 
   buildInputs = [ ncurses ];
-  nativeBuildInputs = [ libtool gettext autoconf automake pkgconfig ];
-
-  # autoreconfHook doesn't quite get, what procps-ng buildprocss does
-  # with po/Makefile.in.in and stuff.
-  preConfigure = ''
-    ./autogen.sh
-  '';
+  nativeBuildInputs = [ pkgconfig ];
 
   makeFlags = "usrbin_execdir=$(out)/bin";
 
