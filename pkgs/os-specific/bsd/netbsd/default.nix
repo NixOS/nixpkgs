@@ -287,7 +287,7 @@ let
   };
 
 in rec {
-  inherit compat libc libutil install make mtree netBSDDerivation;
+  inherit compat install make netBSDDerivation;
 
   getent = netBSDDerivation {
     path = "usr.bin/getent";
