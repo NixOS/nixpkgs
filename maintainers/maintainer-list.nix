@@ -2001,6 +2001,11 @@
     github = "kristoff3r";
     name = "Kristoffer Søholm";
   };
+  ktf = {
+    email = "giulio.eulisse@cern.ch";
+    github = "ktf";
+    name = "Giuluo Eulisse";
+ };
   ktosiek = {
     email = "tomasz.kontusz@gmail.com";
     github = "ktosiek";
