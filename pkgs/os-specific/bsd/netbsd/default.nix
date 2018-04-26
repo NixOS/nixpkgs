@@ -196,6 +196,7 @@ let
       install -D $NETBSDSRCDIR/sys/sys/sha1.h $out/include/sha1.h
       install -D $NETBSDSRCDIR/sys/sys/sha2.h $out/include/sha2.h
       install -D $NETBSDSRCDIR/include/vis.h $out/include/vis.h
+      install -D $NETBSDSRCDIR/include/db.h $out/include/db.h
     '';
     extraPaths = [ libc.src libutil.src
       (fetchNetBSD "include" "7.1.2" "1vc58xrhrp202biiv1chhlh0jwnjr7k3qq91pm46k6v5j95j0qwp")
