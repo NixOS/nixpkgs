@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "ott-${version}";
-  version = "0.27";
+  version = "0.28";
 
   src = fetchFromGitHub {
     owner = "ott-lang";
     repo = "ott";
     rev = version;
-    sha256 = "12hzpyinswqaxwp6y793h7ywrv6289cw4911ah2yzq04ji095pfb";
+    sha256 = "0mzbrvqayqpns9zzg4m1scxx24dv9askhn51dawyb9pisvlyvai0";
   };
 
   nativeBuildInputs = [ pkgconfig ];
