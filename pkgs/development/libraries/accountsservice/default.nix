@@ -3,11 +3,11 @@
 
 stdenv.mkDerivation rec {
   name = "accountsservice-${version}";
-  version = "0.6.46";
+  version = "0.6.47";
 
   src = fetchurl {
     url = "http://www.freedesktop.org/software/accountsservice/accountsservice-${version}.tar.xz";
-    sha256 = "09ddndbha2wh22a0k5150d2wy0v8k8zj3vmbdijyirqwhf5vjr8q";
+    sha256 = "038k7p2fqqcycwbh1ik4rjlnzddkf9j9wf0risjabccqj33znkp3";
   };
 
   nativeBuildInputs = [ pkgconfig makeWrapper ];
