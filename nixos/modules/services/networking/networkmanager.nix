@@ -289,7 +289,7 @@ in {
             source = mkOption {
               type = types.path;
               description = ''
-                A script.
+                Path to the hook script.
               '';
             };
 
@@ -297,12 +297,28 @@ in {
               type = types.enum (attrNames dispatcherTypesSubdirMap);
               default = "basic";
               description = ''
-                Dispatcher hook type. Only basic hooks are currently available.
+                Dispatcher hook type. Look up the hooks described at
+                <link xlink:href="https://developer.gnome.org/NetworkManager/stable/NetworkManager.html">https://developer.gnome.org/NetworkManager/stable/NetworkManager.html</link>
+                and choose the type depending on the output folder.
+                You should then filter the event type (e.g., "up"/"down") from within your script.
               '';
             };
           };
         });
         default = [];
+        example = literalExample ''
+        [ {
+              source = pkgs.writeText "upHook" '''
+
+                if [ "$2" != "up" ]; then
+                    logger "exit: event $2 != up"
+                fi
+
+                # coreutils and iproute are in PATH too
+                logger "Device $DEVICE_IFACE coming up"
+            ''';
+            type = "basic";
+        } ]'';
         description = ''
           A list of scripts which will be executed in response to  network  events.
         '';
@@ -418,6 +434,7 @@ in {
       ++ lib.imap1 (i: s: {
         inherit (s) source;
         target = "NetworkManager/dispatcher.d/${dispatcherTypesSubdirMap.${s.type}}03userscript${lib.fixedWidthNumber 4 i}";
+        mode = "0544";
       }) cfg.dispatcherScripts
       ++ optional (dynamicHostsEnabled)
            { target = "NetworkManager/dnsmasq.d/dyndns.conf";
@@ -473,6 +490,14 @@ in {
         Type = "oneshot";
         RemainAfterExist = true;
       };
+    };
+
+    systemd.services."NetworkManager-dispatcher" = {
+      wantedBy = [ "network.target" ];
+      restartTriggers = [ configFile ];
+
+      # useful binaries for user-specified hooks
+      path = [ pkgs.iproute pkgs.utillinux pkgs.coreutils ];
     };
 
     # Turn off NixOS' network management
