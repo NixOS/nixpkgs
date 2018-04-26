@@ -25,6 +25,7 @@ let
       "-D__warn_references(a,b)="
       "-D__strong_alias(a,b)="
       "-D__va_list=va_list"
+      "-D__scanflike(a,b)="
     ];
 
     # Definitions passed to share/mk/*.mk. Should be pretty simple -
@@ -210,8 +211,35 @@ let
     version = "7.1.2";
     sha256 = "0nzhyh714m19h61m45gzc5dszkbafp5iaphbp5mza6w020fzf2y8";
     extraPaths = [ mtree.src make.src ];
-    nativeBuildInputs = [ makeMinimal mandoc groff compat ];
+    nativeBuildInputs = [ makeMinimal mandoc groff ];
+    buildInputs = [ compat fts ];
     RENAME = "-D";
+  };
+
+  fts = netBSDDerivation {
+    pname = "fts";
+    path = "include/fts.h";
+    sha256 = "01d4fpxvz1pgzfk5xznz5dcm0x0gdzwcsfm1h3d0xc9kc6hj2q77";
+    version = "7.1.2";
+    nativeBuildInputs = [ ];
+    propagatedBuildInputs = [ compat ];
+    extraPaths = [
+      (fetchNetBSD "lib/libc/gen/fts.c" "7.1.2" "1yfd2liypj6xky2h0mgxi5lgpflmkkg4zf3ii3apz5cf8jq9gmn9")
+      (fetchNetBSD "lib/libc/include/namespace.h" "7.1.2" "0kwd4v8y0mfjhmwplsk52pvzbcpvpp2qy2g8c0jmfraam63q6q1y")
+      (fetchNetBSD "lib/libc/gen/fts.3" "7.1.2" "1asxw0n3fhjdadwkkq3xplfgqgl3q32w1lyrvbakfa3gs0wz5zc1")
+    ];
+    buildPhase = ''
+      cc  -c -Iinclude -Ilib/libc/include lib/libc/gen/fts.c \
+          -o lib/libc/gen/fts.o
+      ar -rsc libfts.a lib/libc/gen/fts.o
+    '';
+    installPhase = ''
+      install -D lib/libc/gen/fts.3 $out/share/man/man3/fts.3
+      install -D include/fts.h $out/include/fts.h
+      install -D lib/libc/include/namespace.h $out/include/namespace.h
+      install -D libfts.a $out/lib/libfts.a
+    '';
+    setupHook = ./fts-setup-hook.sh;
   };
   # END BOOTSTRAPPING
 
@@ -288,7 +316,7 @@ let
   };
 
 in rec {
-  inherit compat install netBSDDerivation;
+  inherit compat install netBSDDerivation fts;
 
   getent = netBSDDerivation {
     path = "usr.bin/getent";
@@ -301,32 +329,6 @@ in rec {
     path = "usr.bin/getconf";
     sha256 = "122vslz4j3h2mfs921nr2s6m078zcj697yrb75rwp2hnw3qz4s8q";
     version = "7.1.2";
-  };
-
-  fts = netBSDDerivation {
-    pname = "fts";
-    path = "include/fts.h";
-    sha256 = "01d4fpxvz1pgzfk5xznz5dcm0x0gdzwcsfm1h3d0xc9kc6hj2q77";
-    version = "7.1.2";
-    nativeBuildInputs = [ ];
-    propagatedBuildInputs = [ compat ];
-    extraPaths = [
-      (fetchNetBSD "lib/libc/gen/fts.c" "7.1.2" "1yfd2liypj6xky2h0mgxi5lgpflmkkg4zf3ii3apz5cf8jq9gmn9")
-      (fetchNetBSD "lib/libc/include/namespace.h" "7.1.2" "0kwd4v8y0mfjhmwplsk52pvzbcpvpp2qy2g8c0jmfraam63q6q1y")
-      (fetchNetBSD "lib/libc/gen/fts.3" "7.1.2" "1asxw0n3fhjdadwkkq3xplfgqgl3q32w1lyrvbakfa3gs0wz5zc1")
-    ];
-    buildPhase = ''
-      cc  -c -Iinclude -Ilib/libc/include lib/libc/gen/fts.c \
-          -o lib/libc/gen/fts.o
-      ar -rsc libfts.a lib/libc/gen/fts.o
-    '';
-    installPhase = ''
-      install -D lib/libc/gen/fts.3 $out/share/man/man3/fts.3
-      install -D include/fts.h $out/include/fts.h
-      install -D lib/libc/include/namespace.h $out/include/namespace.h
-      install -D libfts.a $out/lib/libfts.a
-    '';
-    setupHook = ./fts-setup-hook.sh;
   };
 
   games = netBSDDerivation {
