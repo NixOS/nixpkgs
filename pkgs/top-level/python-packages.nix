@@ -9992,30 +9992,8 @@ in {
     inherit (pkgs.xorg) libX11;
   };
 
-  pkgconfig = buildPythonPackage rec {
-    name = "pkgconfig-${version}";
-    version = "1.3.1";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/p/pkgconfig/${name}.tar.gz";
-      sha256 = "107x2wmchlch8saixb488cgjz9n6inl38wi7nxkb942rbaapxiqb";
-    };
-
-    buildInputs = with self; [ nose ];
-
-    propagatedBuildInputs = with self; [pkgs.pkgconfig];
-
-    meta = {
-      description = "Interface Python with pkg-config";
-      homepage = https://github.com/matze/pkgconfig;
-      license = licenses.mit;
-    };
-
-    # nosetests needs to be run explicitly.
-    checkPhase = ''
-      nosetests
-    '';
-
+  pkgconfig = callPackage ../development/python-modules/pkgconfig {
+    inherit (pkgs) pkgconfig;
   };
 
   plumbum = callPackage ../development/python-modules/plumbum { };
