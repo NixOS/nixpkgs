@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, autoreconfHook }:
+{ stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, libcap }:
 
 stdenv.mkDerivation rec {
   name = "smcroute-${version}";
@@ -11,7 +11,13 @@ stdenv.mkDerivation rec {
     sha256 = "12xwdwvl9h269armwak7grm4g944j2c89srha4lqx2zndx1ycg1r";
   };
 
-  nativeBuildInputs = [ autoreconfHook ];
+  nativeBuildInputs = [ autoreconfHook pkgconfig ];
+  buildInputs = [ libcap ];
+
+  configureFlags = [
+    "--localstatedir=/var"
+    "--with-systemd=\$(out)/lib/systemd/system"
+  ];
 
   meta = with stdenv.lib; {
     description = "Static multicast routing daemon";
