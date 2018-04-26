@@ -95,6 +95,8 @@ stdenv.mkDerivation rec {
 
   preConfigure = ''
     unset CPP # intereferes with dependency calculation
+  '' + optionalString stdenv.hostPlatform.isMusl ''
+    NIX_CFLAGS_COMPILE+=" -D_LINUX_SYSINFO_H"
   '';
 
   configureFlags =
