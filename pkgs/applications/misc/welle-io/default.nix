@@ -42,7 +42,6 @@ in stdenv.mkDerivation {
     homepage = http://www.welle.io/;
     maintainers = with maintainers; [ ck3d ];
     license = licenses.gpl2;
-    platforms = with platforms; linux ++ darwin;
+    platforms = with platforms; [ "x86_64-linux" "i686-linux" ] ++ darwin;
   };
-
 }
