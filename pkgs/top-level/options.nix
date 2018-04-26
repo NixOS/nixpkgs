@@ -19,7 +19,7 @@ with lib;
   };
 
   withX11 = mkOption {
-    default = stdenv.isLinux || stdenv.isBSD;
+    default = stdenv.isLinux; # also BSDs?
     type = types.bool;
     description = ''
 
@@ -29,7 +29,7 @@ with lib;
   };
 
   withWayland = mkOption {
-    default = stdenv.isLinux || stdenv.isBSD;
+    default = stdenv.isLinux; # also BSDs?
     type = types.bool;
     description = ''
 

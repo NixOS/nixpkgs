@@ -118,9 +118,14 @@ let
 
   # Allow users to specify global use flags that are applied in all
   # packages.
-  useFlags = self: super:
-    lib.mapAttrs (name: option: config.${name} or option.default)
-                 (import ./use-flags.nix { inherit (self) lib stdenv; });
+  options = self: super:
+    let config' = (config // (if (config.headless or false)
+                              then { withGTK = false; withX11 = false;
+                                     withAlsa = false; withPulseAudio = false;
+                                     withJack = false; withWayland = false; }
+                              else {}));
+    in lib.mapAttrs (name: option: config'.${name} or option.default)
+              (import ./options.nix { inherit (self) lib stdenv; });
 
   # The complete chain of package set builders, applied from top to bottom.
   # stdenvOverlays must be last as it brings package forward from the
@@ -131,7 +136,7 @@ let
     stdenvAdapters
     trivialBuilders
     splice
-    useFlags
+    options
     allPackages
     aliases
     configOverrides
