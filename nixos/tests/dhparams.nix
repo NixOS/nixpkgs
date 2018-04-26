@@ -9,8 +9,13 @@ in import ./make-test.nix {
 
   nodes.generation1 = { pkgs, config, ... }: {
     imports = [ common ];
-    security.dhparams.params.foo = 16;
-    security.dhparams.params.bar = 17;
+    security.dhparams.params = {
+      # Use low values here because we don't want the test to run for ages.
+      foo.bits = 16;
+      # Also use the old format to make sure the type is coerced in the right
+      # way.
+      bar = 17;
+    };
 
     systemd.services.foo = {
       description = "Check systemd Ordering";
@@ -22,7 +27,7 @@ in import ./make-test.nix {
         DefaultDependencies = false;
 
         # We check later whether the service has been started or not.
-        ConditionPathExists = "${config.security.dhparams.path}/foo.pem";
+        ConditionPathExists = config.security.dhparams.params.foo.path;
       };
       serviceConfig.Type = "oneshot";
       serviceConfig.RemainAfterExit = true;
@@ -37,7 +42,7 @@ in import ./make-test.nix {
 
   nodes.generation2 = {
     imports = [ common ];
-    security.dhparams.params.foo = 18;
+    security.dhparams.params.foo.bits = 18;
   };
 
   nodes.generation3 = common;
@@ -45,8 +50,7 @@ in import ./make-test.nix {
   testScript = { nodes, ... }: let
     getParamPath = gen: name: let
       node = "generation${toString gen}";
-      inherit (nodes.${node}.config.security.dhparams) path;
-    in "${path}/${name}.pem";
+    in nodes.${node}.config.security.dhparams.params.${name}.path;
 
     assertParamBits = gen: name: bits: let
       path = getParamPath gen name;

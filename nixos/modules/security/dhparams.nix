@@ -1,10 +1,38 @@
 { config, lib, pkgs, ... }:
 
 with lib;
+
 let
   cfg = config.security.dhparams;
-in
-{
+
+  paramsSubmodule = { name, config, ... }: {
+    options.bits = mkOption {
+      type = types.addCheck types.int (b: b >= 16) // {
+        name = "bits";
+        description = "integer of at least 16 bits";
+      };
+      default = 4096;
+      description = ''
+        The bit size for the prime that is used during a Diffie-Hellman
+        key exchange.
+      '';
+    };
+
+    options.path = mkOption {
+      type = types.path;
+      readOnly = true;
+      description = ''
+        The resulting path of the generated Diffie-Hellman parameters
+        file for other services to reference. This could be either a
+        store path or a file inside the directory specified by
+        <option>security.dhparams.path</option>.
+      '';
+    };
+
+    config.path = "${cfg.path}/${name}.pem";
+  };
+
+in {
   options = {
     security.dhparams = {
       params = mkOption {
@@ -14,21 +42,23 @@ in
 
             The value is the size (in bits) of the DH params to generate. The
             generated DH params path can be found in
-            <filename><replaceable>security.dhparams.path</replaceable>/<replaceable>name</replaceable>.pem</filename>.
+            <literal>config.security.dhparams.params.<replaceable>name</replaceable>.path</literal>.
 
-            Note: The name of the DH params is taken as being the name of the
-            service it serves: the params will be generated before the said
-            service is started.
+            <note><para>The name of the DH params is taken as being the name of
+            the service it serves and the params will be generated before the
+            said service is started.</para></note>
 
-            Warning: If you are removing all dhparams from this list, you have
-            to leave security.dhparams.enable for at least one activation in
-            order to have them be cleaned up. This also means if you rollback to
-            a version without any dhparams the existing ones won't be cleaned
-            up.
+            <warning><para>If you are removing all dhparams from this list, you
+            have to leave <option>security.dhparams.enable</option> for at
+            least one activation in order to have them be cleaned up. This also
+            means if you rollback to a version without any dhparams the
+            existing ones won't be cleaned up.</para></warning>
           '';
-        type = with types; attrsOf int;
+        type = with types; let
+          coerce = bits: { inherit bits; };
+        in attrsOf (coercedTo types.int coerce (submodule paramsSubmodule));
         default = {};
-        example = { nginx = 3072; };
+        example = literalExample "{ nginx.bits = 3072; }";
       };
 
       path = mkOption {
@@ -71,10 +101,10 @@ in
               if [ ! -f "$file" ]; then
                 continue
               fi
-          '' + concatStrings (mapAttrsToList (name: value:
+          '' + concatStrings (mapAttrsToList (name: { bits, ... }:
           ''
               if [ "$file" == "${cfg.path}/${name}.pem" ] && \
-                  ${pkgs.openssl}/bin/openssl dhparam -in "$file" -text | head -n 1 | grep "(${toString value} bit)" > /dev/null; then
+                  ${pkgs.openssl}/bin/openssl dhparam -in "$file" -text | head -n 1 | grep "(${toString bits} bit)" > /dev/null; then
                 continue
               fi
           ''
@@ -89,7 +119,7 @@ in
           '';
       };
     } //
-      mapAttrs' (name: value: nameValuePair "dhparams-gen-${name}" {
+      mapAttrs' (name: { bits, ... }: nameValuePair "dhparams-gen-${name}" {
         description = "Generate Diffie-Hellman parameters for ${name} if they don't exist yet";
         after = [ "dhparams-init.service" ];
         before = [ "${name}.service" ];
@@ -99,7 +129,7 @@ in
           ''
             mkdir -p ${cfg.path}
             if [ ! -f ${cfg.path}/${name}.pem ]; then
-              ${pkgs.openssl}/bin/openssl dhparam -out ${cfg.path}/${name}.pem ${toString value}
+              ${pkgs.openssl}/bin/openssl dhparam -out ${cfg.path}/${name}.pem ${toString bits}
             fi
           '';
       }) cfg.params;
