@@ -875,7 +875,7 @@ with pkgs;
 
   buildtorrent = callPackage ../tools/misc/buildtorrent { };
 
-  bustle = haskellPackages.bustle;
+  inherit (haskellPackages) bustle;
 
   bwm_ng = callPackage ../tools/networking/bwm-ng { };
 
@@ -1205,7 +1205,7 @@ with pkgs;
 
   gbsplay = callPackage ../applications/audio/gbsplay { };
 
-  gdrivefs = python27Packages.gdrivefs;
+  inherit (python27Packages) gdrivefs;
 
   gdrive = callPackage ../applications/networking/gdrive { };
 
@@ -1295,7 +1295,7 @@ with pkgs;
 
   lynis = callPackage ../tools/security/lynis { };
 
-  mathics = pythonPackages.mathics;
+  inherit (pythonPackages) mathics;
 
   masscan = callPackage ../tools/security/masscan {
     stdenv = gccStdenv;
@@ -2026,11 +2026,7 @@ with pkgs;
 
   dvgrab = callPackage ../tools/video/dvgrab { };
 
-  dvtm = callPackage ../tools/misc/dvtm {
-    # if you prefer a custom config, write the config.h in dvtm.config.h
-    # and enable
-    # customConfig = builtins.readFile ./dvtm.config.h;
-  };
+  dvtm = callPackage ../tools/misc/dvtm { };
 
   ecmtools = callPackage ../tools/cd-dvd/ecm-tools { };
 
@@ -2832,7 +2828,7 @@ with pkgs;
 
   horst = callPackage ../tools/networking/horst { };
 
-  host = bind.host;
+  inherit (bind) host;
 
   hotpatch = callPackage ../development/libraries/hotpatch { };
 
@@ -4351,15 +4347,11 @@ with pkgs;
 
   pwndbg = callPackage ../development/tools/misc/pwndbg { };
 
-  pycangjie = pythonPackages.pycangjie;
+  inherit (pythonPackages) pycangjie pythonIRClib;
 
   pydb = callPackage ../development/tools/pydb { };
 
   pygmentex = callPackage ../tools/typesetting/pygmentex { };
-
-  pythonIRClib = pythonPackages.pythonIRClib;
-
-  pythonSexy = pythonPackages.libsexy;
 
   pytrainer = callPackage ../applications/misc/pytrainer { };
 
@@ -4678,7 +4670,7 @@ with pkgs;
 
   setserial = callPackage ../tools/system/setserial { };
 
-  seqdiag = pythonPackages.seqdiag;
+  inherit (pythonPackages) seqdiag;
 
   screenfetch = callPackage ../tools/misc/screenfetch { };
 
@@ -4694,7 +4686,7 @@ with pkgs;
 
   shotwell = callPackage ../applications/graphics/shotwell { };
 
-  shout = nodePackages.shout;
+  inherit (nodePackages) shout;
 
   shellinabox = callPackage ../servers/shellinabox { };
 
@@ -4722,7 +4714,7 @@ with pkgs;
   silc_server = callPackage ../servers/silc-server { };
 
   sile = callPackage ../tools/typesetting/sile {
-  inherit (lua52Packages) lua luaexpat luazlib luafilesystem lpeg;
+    inherit (lua52Packages) lua luaexpat luazlib luafilesystem lpeg;
   };
 
   silver-searcher = callPackage ../tools/text/silver-searcher { };
@@ -4908,7 +4900,7 @@ with pkgs;
   strongswanTNC = callPackage ../tools/networking/strongswan { enableTNC = true; };
   strongswanNM  = callPackage ../tools/networking/strongswan { enableNetworkManager = true; };
 
-  su = shadow.su;
+  inherit (shadow) su;
 
   subsonic = callPackage ../servers/misc/subsonic { };
 
@@ -5454,7 +5446,7 @@ with pkgs;
     varnish6Packages;
 
   varnishPackages = varnish5Packages;
-  varnish = varnishPackages.varnish;
+  inherit (varnishPackages) varnish;
 
   venus = callPackage ../tools/misc/venus {
     python = python27;
@@ -5959,8 +5951,6 @@ with pkgs;
   gcc_debug = lowPrio (wrapCC (gcc.cc.override {
     stripped = false;
   }));
-
-  gccApple = throw "gccApple is no longer supported";
 
   libstdcxxHook = makeSetupHook
     { substitutions = { gcc = gcc-unwrapped; }; }
@@ -7032,7 +7022,6 @@ with pkgs;
   php72Packages = recurseIntoAttrs (callPackage ./php-packages.nix {
     php = php72;
   });
-
 
   inherit (callPackages ../development/interpreters/php { })
     php56
@@ -8407,8 +8396,7 @@ with pkgs;
 
   clutter = callPackage ../development/libraries/clutter { };
 
-  clutter-gst = callPackage ../development/libraries/clutter-gst {
-  };
+  clutter-gst = callPackage ../development/libraries/clutter-gst { };
 
   clutter-gtk = callPackage ../development/libraries/clutter-gtk { };
 
@@ -8614,7 +8602,6 @@ with pkgs;
   ffmpeg_3_4 = callPackage ../development/libraries/ffmpeg/3.4.nix {
     inherit (darwin.apple_sdk.frameworks) Cocoa CoreMedia;
   };
-  # Aliases
   ffmpeg_0 = ffmpeg_0_10;
   ffmpeg_1 = ffmpeg_1_2;
   ffmpeg_2 = ffmpeg_2_8;
@@ -9118,7 +9105,7 @@ with pkgs;
 
   herqq = libsForQt5.callPackage ../development/libraries/herqq { };
 
-  heyefi = haskellPackages.heyefi;
+  inherit (haskellPackages) heyefi;
 
   hidapi = callPackage ../development/libraries/hidapi {
     libusb = libusb1;
@@ -9567,7 +9554,7 @@ with pkgs;
 
   libgap = callPackage ../development/libraries/libgap { };
 
-  libgdata = gnome3.libgdata;
+  inherit (gnome3) libgdata;
 
   libgig = callPackage ../development/libraries/libgig { };
 
@@ -11148,9 +11135,7 @@ with pkgs;
 
   smpeg2 = callPackage ../development/libraries/smpeg2 { };
 
-  snack = callPackage ../development/libraries/snack {
-        # optional
-  };
+  snack = callPackage ../development/libraries/snack { };
 
   snappy = callPackage ../development/libraries/snappy { };
 
@@ -11936,7 +11921,7 @@ with pkgs;
     enablePython = config.bind.enablePython or false;
     python3 = python3.withPackages (ps: with ps; [ ply ]);
   };
-  dnsutils = bind.dnsutils;
+  inherit (bind) dnsutils;
 
   inherit (callPackages ../servers/bird { })
     bird bird6 bird2;
@@ -11971,7 +11956,7 @@ with pkgs;
   dico = callPackage ../servers/dico { };
 
   dict = callPackage ../servers/dict {
-      libmaa = callPackage ../servers/dict/libmaa.nix {};
+    libmaa = callPackage ../servers/dict/libmaa.nix {};
   };
 
   dictdDBs = recurseIntoAttrs (callPackages ../servers/dict/dictd-db.nix {});
@@ -12096,11 +12081,7 @@ with pkgs;
 
   minio = callPackage ../servers/minio { };
 
-  # Backwards compatibility.
-  mod_dnssd = pkgs.apacheHttpdPackages.mod_dnssd;
-  mod_fastcgi = pkgs.apacheHttpdPackages.mod_fastcgi;
-  mod_python = pkgs.apacheHttpdPackages.mod_python;
-  mod_wsgi = pkgs.apacheHttpdPackages.mod_wsgi;
+  inherit (apacheHttpdPackages) mod_dnssd mod_fastcgi mod_python mod_wsgi;
 
   mpd = callPackage ../servers/mpd {
     aacSupport    = config.mpd.aacSupport or true;
@@ -14350,10 +14331,7 @@ with pkgs;
 
   schismtracker = callPackage ../applications/audio/schismtracker { };
 
-  altcoins = recurseIntoAttrs ( callPackage ../applications/altcoins { } );
-  bitcoin = altcoins.bitcoin;
-  bitcoin-xt = altcoins.bitcoin-xt;
-  cryptop = altcoins.cryptop;
+  altcoins = callPackage ../applications/altcoins { };
 
   libbitcoin = callPackage ../tools/misc/libbitcoin/libbitcoin.nix {
     secp256k1 = secp256k1.override { enableECDH = true; };
@@ -14364,19 +14342,9 @@ with pkgs;
   libbitcoin-network  = callPackage ../tools/misc/libbitcoin/libbitcoin-network.nix { };
   libbitcoin-explorer = callPackage ../tools/misc/libbitcoin/libbitcoin-explorer.nix { };
 
-
-  go-ethereum = self.altcoins.go-ethereum;
-  ethsign = self.altcoins.ethsign;
-  ethabi = self.altcoins.ethabi;
-  ethrun = self.altcoins.ethrun;
-  seth = self.altcoins.seth;
-  dapp = self.altcoins.dapp;
-  hevm = self.altcoins.hevm;
-
-  parity = self.altcoins.parity;
-  parity-beta = self.altcoins.parity-beta;
-
-  stellar-core = self.altcoins.stellar-core;
+  inherit (altcoins) go-ethereum ethsign ethabi ethrun seth dapp hevm
+                     parity parity-beta stellar-core bitcoin bitcoin-xt
+                     cryptop;
 
   aumix = callPackage ../applications/audio/aumix {
     gtkGUI = false;
@@ -14770,8 +14738,7 @@ with pkgs;
     inherit (python3Packages) buildPythonApplication requests;
   };
 
-  dmtx-utils = callPackage (callPackage ../tools/graphics/dmtx-utils) {
-  };
+  dmtx-utils = callPackage (callPackage ../tools/graphics/dmtx-utils) { };
 
   # go 1.9 pin until https://github.com/moby/moby/pull/35739
   inherit (callPackage ../applications/virtualization/docker { go = go_1_9; })
@@ -15062,7 +15029,7 @@ with pkgs;
   emacs25PackagesNg = emacsPackagesNgGen emacs25;
 
   emacs25WithPackages = emacs25PackagesNg.emacsWithPackages;
-  emacsWithPackages = emacsPackagesNg.emacsWithPackages;
+  inherit (emacsPackagesNg) emacsWithPackages;
 
   inherit (gnome3) empathy;
 
@@ -15255,7 +15222,7 @@ with pkgs;
 
   gthumb = callPackage ../applications/graphics/gthumb { };
 
-  gtimelog = pythonPackages.gtimelog;
+  inherit (pythonPackages) gtimelog;
 
   inherit (gnome3) gucharmap;
 
@@ -16684,8 +16651,7 @@ with pkgs;
 
   pekwm = callPackage ../applications/window-managers/pekwm { };
 
-  pencil = callPackage ../applications/graphics/pencil {
-  };
+  pencil = callPackage ../applications/graphics/pencil { };
 
   perseus = callPackage ../applications/science/math/perseus {};
 
@@ -16930,7 +16896,7 @@ with pkgs;
     tag = "-kf5";
   };
 
-  quassel-webserver = nodePackages.quassel-webserver;
+  inherit (nodePackages) quassel-webserver;
 
   quirc = callPackage ../tools/graphics/quirc {};
 
@@ -17109,7 +17075,7 @@ with pkgs;
 
   shutter = callPackage ../applications/graphics/shutter { };
 
-  simple-scan = gnome3.simple-scan;
+  inherit (gnome3) simple-scan;
 
   siproxd = callPackage ../applications/networking/siproxd { };
 
@@ -17176,7 +17142,7 @@ with pkgs;
 
   stella = callPackage ../misc/emulators/stella { };
 
-  statsd = nodePackages.statsd;
+  inherit (nodePackages) statsd;
 
   linuxstopmotion = callPackage ../applications/video/linuxstopmotion { };
 
@@ -17312,9 +17278,7 @@ with pkgs;
 
   sublime3Packages = recurseIntoAttrs (callPackage ../applications/editors/sublime/3/packages.nix { });
 
-  sublime3 = sublime3Packages.sublime3;
-
-  sublime3-dev = sublime3Packages.sublime3-dev;
+  inherit (sublime3Packages) sublime3 sublime3-dev;
 
   inherit (callPackages ../applications/version-management/subversion/default.nix {
       bdbSupport = true;
@@ -18514,8 +18478,7 @@ with pkgs;
     guile = guile_1_8;
   };
 
-  liquidwar5 = callPackage ../games/liquidwar/5.nix {
-  };
+  liquidwar5 = callPackage ../games/liquidwar/5.nix { };
 
   macopix = callPackage ../games/macopix {
     gtk = gtk2;
@@ -18617,7 +18580,7 @@ with pkgs;
 
   pokerth = callPackage ../games/pokerth { };
 
-  pokerth-server = with callPackage ../games/pokerth { }; server;
+  pokerth-server = pokerth.server;
 
   prboom = callPackage ../games/prboom { };
 

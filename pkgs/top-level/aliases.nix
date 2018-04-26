@@ -73,6 +73,7 @@ mapAliases (rec {
   enblendenfuse = enblend-enfuse; # 2015-09-30
   etcdctl = etcd; # added 2018-04-25
   exfat-utils = exfat;                  # 2015-09-11
+  evolution_data_server = evolution-data-server; # added 2018-02-25
   fam = gamin; # added 2018-04-25
   ffadoFull = ffado;                    # added 2018-04-25
   fftwFloat = fftwSinglePrec; # 2018-04-25
