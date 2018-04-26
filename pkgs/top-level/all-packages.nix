@@ -6128,7 +6128,6 @@ with pkgs;
       libc = libcCross1;
     };
     in wrapCCWith {
-      name = "gcc-cross-wrapper";
       cc = gccFun {
         # copy-pasted
         inherit noSysDirs;
