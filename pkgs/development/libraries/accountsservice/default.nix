@@ -6,7 +6,7 @@ stdenv.mkDerivation rec {
   version = "0.6.47";
 
   src = fetchurl {
-    url = "http://www.freedesktop.org/software/accountsservice/accountsservice-${version}.tar.xz";
+    url = "https://www.freedesktop.org/software/accountsservice/accountsservice-${version}.tar.xz";
     sha256 = "038k7p2fqqcycwbh1ik4rjlnzddkf9j9wf0risjabccqj33znkp3";
   };
 
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "D-Bus interface for user account query and manipulation";
-    homepage = http://www.freedesktop.org/wiki/Software/AccountsService;
+    homepage = https://www.freedesktop.org/wiki/Software/AccountsService;
     license = licenses.gpl3;
     maintainers = with maintainers; [ pSub ];
     platforms = with platforms; linux;
