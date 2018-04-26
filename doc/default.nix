@@ -30,7 +30,7 @@ pkgs.stdenv.mkDerivation {
   ];
 
   postPatch = ''
-    echo ${lib.nixpkgsVersion} > .version
+    echo ${lib.version} > .version
   '';
 
   installPhase = ''

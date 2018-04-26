@@ -64,7 +64,7 @@ manual-full.xml: ${MD_TARGETS} .version *.xml
 
 .version:
 	nix-instantiate --eval \
-		-E '(import ../lib).nixpkgsVersion' > .version
+		-E '(import ../lib).version' > .version
 
 %.section.xml: %.section.md
 	pandoc $^ -w docbook+smart \
