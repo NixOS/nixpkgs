@@ -23,14 +23,14 @@ in
     nixos.release = mkOption {
       readOnly = true;
       type = types.str;
-      default = trivial.version;
+      default = trivial.release;
       description = "The NixOS release (e.g. <literal>16.03</literal>).";
     };
 
     nixos.versionSuffix = mkOption {
       internal = true;
       type = types.str;
-      default = trivial.suffix;
+      default = trivial.versionSuffix;
       description = "The NixOS version suffix (e.g. <literal>1160.f2d4ee1</literal>).";
     };
 
