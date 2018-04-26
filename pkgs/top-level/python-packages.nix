@@ -14744,6 +14744,8 @@ in {
 
   uritemplate = callPackage ../development/python-modules/uritemplate { };
 
+  uproot = callPackage ../development/python-modules/uproot {};
+
   uptime = buildPythonPackage rec {
     name = "uptime-${version}";
     version = "3.0.1";
