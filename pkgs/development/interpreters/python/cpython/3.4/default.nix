@@ -1,4 +1,4 @@
-{ stdenv, fetchurl
+{ stdenv, fetchurl, fetchpatch
 , bzip2
 , expat
 , libffi
@@ -39,6 +39,8 @@ let
     ++ optionals x11Support [ tcl tk libX11 xproto ]
     ++ optionals stdenv.isDarwin [ CF configd ];
 
+  hasDistutilsCxxPatch = !(stdenv.cc.isGNU or false);
+
 in stdenv.mkDerivation {
   name = "python3-${version}";
   pythonVersion = majorVersion;
@@ -69,6 +71,16 @@ in stdenv.mkDerivation {
     ./ld_library_path.patch
   ] ++ optionals (x11Support && stdenv.isDarwin) [
     ./use-correct-tcl-tk-on-darwin.patch
+  ] ++ optionals hasDistutilsCxxPatch [
+    # Fix for http://bugs.python.org/issue1222585
+    # Upstream distutils is calling C compiler to compile C++ code, which
+    # only works for GCC and Apple Clang. This makes distutils to call C++
+    # compiler when needed.
+    (fetchpatch {
+      url = "https://bugs.python.org/file47046/python-3.x-distutils-C++.patch";
+      sha256 = "0dgdn9k2kmw4wh90vdnjcrnn97ylxgx7mbn9l87fwz6j501jqvk8";
+      extraPrefix = "";
+    })
   ];
 
   postPatch = ''
@@ -166,7 +178,7 @@ in stdenv.mkDerivation {
   passthru = let
     pythonPackages = callPackage ../../../../../top-level/python-packages.nix {python=self; overrides=packageOverrides;};
   in rec {
-    inherit libPrefix sitePackages x11Support;
+    inherit libPrefix sitePackages x11Support hasDistutilsCxxPatch;
     executable = "${libPrefix}m";
     buildEnv = callPackage ../../wrapper.nix { python = self; inherit (pythonPackages) requiredPythonModules; };
     withPackages = import ../../with-packages.nix { inherit buildEnv pythonPackages;};
