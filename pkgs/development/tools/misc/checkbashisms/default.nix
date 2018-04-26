@@ -1,11 +1,11 @@
 { stdenv, fetchurl, perl }:
 stdenv.mkDerivation rec {
-  version = "2.18.1";
+  version = "2.18.2";
   name = "checkbashisms-${version}";
 
   src = fetchurl {
     url = "mirror://debian/pool/main/d/devscripts/devscripts_${version}.tar.xz";
-    sha256 = "1yaygfzv5jzvcbahz6sdfnzhch9mxgsrlsym2ad62nk0svsnp24n";
+    sha256 = "0dflfy94bycqsymszpbia3biypk4kiniz4zi7m7iz7bspqa5hnv4";
   };
 
   buildInputs = [ perl ];
