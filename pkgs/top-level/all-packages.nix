@@ -14353,6 +14353,8 @@ with pkgs;
 
   input-fonts = callPackage ../data/fonts/input-fonts { };
 
+  inziu-iosevka = callPackage ../data/fonts/inziu-iosevka { };
+
   iosevka = callPackage ../data/fonts/iosevka {
     nodejs = nodejs-8_x;
   };
@@ -14509,6 +14511,8 @@ with pkgs;
   proggyfonts = callPackage ../data/fonts/proggyfonts { };
 
   sampradaya = callPackage ../data/fonts/sampradaya { };
+
+  sarasa-gothic = callPackage ../data/fonts/sarasa-gothic { };
 
   scowl = callPackage ../data/misc/scowl { };
 
