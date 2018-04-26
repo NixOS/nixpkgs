@@ -29,7 +29,6 @@ stdenv.mkDerivation rec {
     patchShebangs fix-roff-punct
 
     # XXX: Not needed for CMake:
-    patchShebangs share/filters
     patchShebangs share/palettes
     patchShebangs share/patterns
     patchShebangs share/symbols
