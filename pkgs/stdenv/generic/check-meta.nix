@@ -170,6 +170,8 @@ let
     isIbusEngine = bool;
     isGutenprint = bool;
     badPlatforms = platforms;
+    # Hydra build timeout
+    timeout = int;
   };
 
   checkMetaAttr = k: v:
