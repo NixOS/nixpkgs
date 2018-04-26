@@ -113,7 +113,10 @@ in stdenv.mkDerivation {
     "ac_cv_computed_gotos=yes"
     "ac_cv_file__dev_ptmx=yes"
     "ac_cv_file__dev_ptc=yes"
-  ];
+  ]
+    # Never even try to use lchmod on linux,
+    # don't rely on detecting glibc-isms.
+  ++ optional stdenv.hostPlatform.isLinux "ac_cv_func_lchmod=no";
 
   preConfigure = ''
     for i in /usr /sw /opt /pkg; do	# improve purity

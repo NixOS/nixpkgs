@@ -90,7 +90,10 @@ in stdenv.mkDerivation {
     "--without-ensurepip"
     "--with-system-expat"
     "--with-system-ffi"
-  ];
+  ]
+    # Never even try to use lchmod on linux,
+    # don't rely on detecting glibc-isms.
+  ++ optional stdenv.hostPlatform.isLinux "ac_cv_func_lchmod=no";
 
   preConfigure = ''
     for i in /usr /sw /opt /pkg; do	# improve purity
