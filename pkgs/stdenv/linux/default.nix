@@ -107,11 +107,6 @@ let
           # Having the proper 'platform' in all the stdenvs allows getting proper
           # linuxHeaders for example.
           inherit platform;
-
-          # stdenv.glibc is used by GCC build to figure out the system-level
-          # /usr/include directory.
-          # TODO: Remove this!
-          inherit (prevStage) glibc;
         };
         overrides = self: super: (overrides self super) // { fetchurl = thisStdenv.fetchurlBoot; };
       };
@@ -129,8 +124,6 @@ in
     __raw = true;
 
     gcc-unwrapped = null;
-    glibc = assert false; null;
-    musl = assert false; null;
     binutils = null;
     coreutils = null;
     gnugrep = null;
