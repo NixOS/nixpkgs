@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
 
   propagatedUserEnvPkgs = [ duplicity ];
 
-  PKG_CONFIG_LIBNAUTILUS_EXTENSION_EXTENSIONDIR = "lib/nautilus/extensions-3.0";
+  PKG_CONFIG_LIBNAUTILUS_EXTENSION_EXTENSIONDIR = "${placeholder "out"}/lib/nautilus/extensions-3.0";
 
   postInstall = ''
     glib-compile-schemas $out/share/glib-2.0/schemas
