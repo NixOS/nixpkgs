@@ -163,6 +163,9 @@ in mapOverrides (rec {
   });
   libffado = ffado.override { prefix = "lib"; };
   libheimdal = heimdal.override { type = "lib"; };
+  libpulseaudio = pulseaudio.override {
+    libOnly = true;
+  };
   liblapackWithoutAtlas = liblapack.override { atlas = null; };
   liblapack_3_5_0WithoutAtlas = liblapack.override { atlas = null; };
   libjack2 = jack2.override { prefix = "lib"; };
@@ -183,6 +186,7 @@ in mapOverrides (rec {
     fetchurl = fetchurlBoot;
     type = "lib";
   };
+  mutt-with-sidebar = mutt.override { withSidebar = true; };
   mesa_drivers = (mesa_noglu.override {
     grsecEnabled = config.grsecurity or false;
     enableTextureFloats = true;
@@ -203,6 +207,8 @@ in mapOverrides (rec {
     privsepUser = "ntp"; privsepPath = "/var/empty";
   };
   opencv3WithoutCuda = opencv3.override { enableCuda = false; };
+  openconnect_gnutl = openconnect.override { openssl = null; };
+  openconnect_openssl = openconnect.override { gnutls = null; };
   pgpool93 = pgpool.override { postgresql = postgresql93; };
   pgpool94 = pgpool.override { postgresql = postgresql94; };
   pkgconfigUpstream = pkgconfig.override { vanilla = true; };
@@ -229,6 +235,16 @@ in mapOverrides (rec {
   poppler_utils = poppler.override { suffix = "utils"; utils = true; };
   pcre16 = pcre.override { variant = "pcre16"; };
   pcre-cpp = pcre.override { variant = "cpp"; };
+  pulseaudioFull = pulseaudio.override {
+    gconf = gnome3.gconf;
+    x11Support = true;
+    jackaudioSupport = true;
+    airtunesSupport = true;
+    gconfSupport = true;
+    bluetoothSupport = true;
+    remoteControlSupport = true;
+    zeroconfSupport = true;
+  };
   raxml-mpi = appendToName "mpi" (raxml.override { mpi = true; });
   qemu_kvm = qemu.override { hostCpuOnly = true; };
   qemu_xen = qemu.override {
@@ -328,6 +344,7 @@ in mapOverrides (rec {
     enableCephFS = true;
     enableGlusterFS = true;
   };
+  sambaFull = samba4Full;
   steam = steamPackages.steam-chrootenv.override {
     withJava = config.steam.java or false;
     withPrimus = config.steam.primus or false;
@@ -352,6 +369,7 @@ in mapOverrides (rec {
          $out/lib/systemd/system-generators
     '';
   }));
+  suil-qt4 = suil.override { withQt4 = true; withQt5 = false; };
   transmission-gtk = transmission.override { enableGTK3 = true; };
   texinfoInteractive = appendToName "interactive" (
     texinfo.override { interactive = true; }
