@@ -1,8 +1,7 @@
 { config, lib, pkgs, ... }:
 
-with lib;
-
 let
+  inherit (lib) mkOption types;
   cfg = config.security.dhparams;
 
   paramsSubmodule = { name, config, ... }: {
@@ -39,32 +38,39 @@ let
 in {
   options = {
     security.dhparams = {
+      enable = mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          Whether to generate new DH params and clean up old DH params.
+        '';
+      };
+
       params = mkOption {
-        description =
-          ''
-            Diffie-Hellman parameters to generate.
-
-            The value is the size (in bits) of the DH params to generate. The
-            generated DH params path can be found in
-            <literal>config.security.dhparams.params.<replaceable>name</replaceable>.path</literal>.
-
-            <note><para>The name of the DH params is taken as being the name of
-            the service it serves and the params will be generated before the
-            said service is started.</para></note>
-
-            <warning><para>If you are removing all dhparams from this list, you
-            have to leave <option>security.dhparams.enable</option> for at
-            least one activation in order to have them be cleaned up. This also
-            means if you rollback to a version without any dhparams the
-            existing ones won't be cleaned up. Of course this only applies if
-            <option>security.dhparams.stateful</option> is
-            <literal>true</literal>.</para></warning>
-          '';
         type = with types; let
           coerce = bits: { inherit bits; };
-        in attrsOf (coercedTo types.int coerce (submodule paramsSubmodule));
+        in attrsOf (coercedTo int coerce (submodule paramsSubmodule));
         default = {};
-        example = literalExample "{ nginx.bits = 3072; }";
+        example = lib.literalExample "{ nginx.bits = 3072; }";
+        description = ''
+          Diffie-Hellman parameters to generate.
+
+          The value is the size (in bits) of the DH params to generate. The
+          generated DH params path can be found in
+          <literal>config.security.dhparams.params.<replaceable>name</replaceable>.path</literal>.
+
+          <note><para>The name of the DH params is taken as being the name of
+          the service it serves and the params will be generated before the
+          said service is started.</para></note>
+
+          <warning><para>If you are removing all dhparams from this list, you
+          have to leave <option>security.dhparams.enable</option> for at
+          least one activation in order to have them be cleaned up. This also
+          means if you rollback to a version without any dhparams the
+          existing ones won't be cleaned up. Of course this only applies if
+          <option>security.dhparams.stateful</option> is
+          <literal>true</literal>.</para></warning>
+        '';
       };
 
       stateful = mkOption {
@@ -84,77 +90,67 @@ in {
       };
 
       path = mkOption {
+        type = types.str;
+        default = "/var/lib/dhparams";
         description = ''
           Path to the directory in which Diffie-Hellman parameters will be
           stored. This only is relevant if
           <option>security.dhparams.stateful</option> is
           <literal>true</literal>.
         '';
-        type = types.str;
-        default = "/var/lib/dhparams";
-      };
-
-      enable = mkOption {
-        description =
-          ''
-            Whether to generate new DH params and clean up old DH params.
-          '';
-        default = false;
-        type = types.bool;
       };
     };
   };
 
-  config = mkIf (cfg.enable && cfg.stateful) {
+  config = lib.mkIf (cfg.enable && cfg.stateful) {
     systemd.services = {
       dhparams-init = {
-        description = "Cleanup old Diffie-Hellman parameters";
-        wantedBy = [ "multi-user.target" ]; # Clean up even when no DH params is set
-        serviceConfig.Type = "oneshot";
-        script =
-          # Create directory
-          ''
-            if [ ! -d ${cfg.path} ]; then
-              mkdir -p ${cfg.path}
-            fi
-          '' +
-          # Remove old dhparams
-          ''
-            for file in ${cfg.path}/*; do
-              if [ ! -f "$file" ]; then
-                continue
-              fi
-          '' + concatStrings (mapAttrsToList (name: { bits, ... }:
-          ''
-              if [ "$file" == "${cfg.path}/${name}.pem" ] && \
-                  ${pkgs.openssl}/bin/openssl dhparam -in "$file" -text | head -n 1 | grep "(${toString bits} bit)" > /dev/null; then
-                continue
-              fi
-          ''
-          ) cfg.params) +
-          ''
-              rm $file
-            done
+        description = "Clean Up Old Diffie-Hellman Parameters";
 
-            # TODO: Ideally this would be removing the *former* cfg.path, though this
-            # does not seem really important as changes to it are quite unlikely
-            rmdir --ignore-fail-on-non-empty ${cfg.path}
-          '';
-      };
-    } //
-      mapAttrs' (name: { bits, ... }: nameValuePair "dhparams-gen-${name}" {
-        description = "Generate Diffie-Hellman parameters for ${name} if they don't exist yet";
-        after = [ "dhparams-init.service" ];
-        before = [ "${name}.service" ];
+        # Clean up even when no DH params is set
         wantedBy = [ "multi-user.target" ];
+
+        serviceConfig.RemainAfterExit = true;
         serviceConfig.Type = "oneshot";
-        script =
-          ''
+
+        script = ''
+          if [ ! -d ${cfg.path} ]; then
             mkdir -p ${cfg.path}
-            if [ ! -f ${cfg.path}/${name}.pem ]; then
-              ${pkgs.openssl}/bin/openssl dhparam -out ${cfg.path}/${name}.pem ${toString bits}
+          fi
+
+          # Remove old dhparams
+          for file in ${cfg.path}/*; do
+            if [ ! -f "$file" ]; then
+              continue
             fi
-          '';
-      }) cfg.params;
+            ${lib.concatStrings (lib.mapAttrsToList (name: { bits, path, ... }: ''
+              if [ "$file" = ${lib.escapeShellArg path} ] && \
+                 ${pkgs.openssl}/bin/openssl dhparam -in "$file" -text \
+                 | head -n 1 | grep "(${toString bits} bit)" > /dev/null; then
+                continue
+              fi
+            '') cfg.params)}
+            rm $file
+          done
+
+          # TODO: Ideally this would be removing the *former* cfg.path, though
+          # this does not seem really important as changes to it are quite
+          # unlikely
+          rmdir --ignore-fail-on-non-empty ${cfg.path}
+        '';
+      };
+    } // lib.mapAttrs' (name: { bits, path, ... }: lib.nameValuePair "dhparams-gen-${name}" {
+      description = "Generate Diffie-Hellman Parameters for ${name}";
+      after = [ "dhparams-init.service" ];
+      before = [ "${name}.service" ];
+      wantedBy = [ "multi-user.target" ];
+      unitConfig.ConditionPathExists = "!${path}";
+      serviceConfig.Type = "oneshot";
+      script = ''
+        mkdir -p ${lib.escapeShellArg cfg.path}
+        ${pkgs.openssl}/bin/openssl dhparam -out ${lib.escapeShellArg path} \
+          ${toString bits}
+      '';
+    }) cfg.params;
   };
 }
