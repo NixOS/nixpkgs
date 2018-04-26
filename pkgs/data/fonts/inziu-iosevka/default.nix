@@ -27,5 +27,7 @@ stdenv.mkDerivation rec {
     license = licenses.ofl;
     maintainers = [ maintainers.ChengCat ];
     platforms = platforms.all;
+    # large package, mainly i/o bound
+    hydraPlatforms = [];
   };
 }
