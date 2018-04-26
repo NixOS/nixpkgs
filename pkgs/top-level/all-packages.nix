@@ -5115,9 +5115,7 @@ with pkgs;
 
   ted = callPackage ../tools/typesetting/ted { };
 
-  teamviewer = callPackage ../applications/networking/remote/teamviewer {
-    stdenv = stdenv_32bit;
-  };
+  teamviewer = libsForQt5.callPackage ../applications/networking/remote/teamviewer { };
 
   telnet = callPackage ../tools/networking/telnet { };
 
