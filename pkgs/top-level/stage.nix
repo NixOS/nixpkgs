@@ -127,8 +127,8 @@ let
     trivialBuilders
     splice
     allPackages
-    defaultOverrides
-    aliases
+    (if (config.quickEval or false) then (self: super: {}) else defaultOverrides)
+    (if (config.quickEval or false) then (self: super: {}) else aliases)
     configOverrides
   ] ++ overlays ++ [
     stdenvOverrides ]);
