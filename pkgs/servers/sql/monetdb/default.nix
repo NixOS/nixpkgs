@@ -18,6 +18,7 @@ in stdenv.mkDerivation rec {
     description = "An open source database system";
     homepage = https://www.monetdb.org/;
     license = licenses.mpl20;
+    platforms = platforms.unix;
     maintainers = [ maintainers.StillerHarpo ];
   };
 }
