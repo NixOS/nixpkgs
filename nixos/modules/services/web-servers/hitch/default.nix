@@ -22,7 +22,7 @@ with lib;
         type = types.str;
         description = ''
           The host and port Hitch connects to when receiving
-          a connection
+          a connection in the form [HOST]:PORT
         '';
       };
 
@@ -36,8 +36,8 @@ with lib;
         type = types.either types.str (types.listOf types.str);
         default = "[127.0.0.1]:443";
         description = ''
-          This specifies the port and interface (the listen endpoint) that Hitch
-          binds to when listening for connections. In the form [HOST]:PORT[+CERT]
+          The port and interface of the listen endpoint in the
++         form [HOST]:PORT[+CERT].
         '';
       };
 
@@ -85,9 +85,6 @@ with lib;
         mkdir -p ${cfg.ocspStaplingDir}
         chown -R hitch:hitch ${cfg.ocspStaplingDir}
       '';
-      postStop = ''
-        rm -rf ${cfg.ocspStaplingDir}
-      '';
       serviceConfig = {
         Type = "forking";
         ExecStart = "${pkgs.hitch}/sbin/hitch --daemon --config ${hitchConfig}";
@@ -100,10 +97,7 @@ with lib;
 
     environment.systemPackages = [ pkgs.hitch ];
 
-    users.extraUsers.hitch = {
-      group = "hitch";
-    };
-
+    users.extraUsers.hitch.group = "hitch";
     users.extraGroups.hitch = {};
   };
 }
