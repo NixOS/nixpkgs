@@ -130,6 +130,11 @@ let
 
         # Remove tests because they add a runtime dependency on gcc
         rm -rf $out/share/zfs/zfs-tests
+
+        # Add modprobe zfs if missing ()
+        if ! grep --quiet 'modprobe zfs' $(out)/lib/dracut/90zfs/mount-zfs.sh; then
+          sed -i '/udevadm settle/s/^/modprobe zfs 2>\/dev\/null&\n/' $(out)/lib/dracut/90zfs/mount-zfs.sh
+        fi
       '';
 
       outputs = [ "out" ] ++ optionals buildUser [ "lib" "dev" ];
@@ -153,7 +158,7 @@ in {
   # to be adapted
   zfsStable = common {
     # comment/uncomment if breaking kernel versions are known
-    incompatibleKernelVersion = "4.16";
+    #incompatibleKernelVersion = "";
 
     # this package should point to the latest release.
     version = "0.7.8";
@@ -172,7 +177,7 @@ in {
 
   zfsUnstable = common rec {
     # comment/uncomment if breaking kernel versions are known
-    incompatibleKernelVersion = "4.16";
+    #incompatibleKernelVersion = "";
 
     # this package should point to a version / git revision compatible with the latest kernel release
     version = "2018-04-10";
@@ -195,7 +200,7 @@ in {
   # also remove boot.zfs.enableLegacyCrypto
   zfsLegacyCrypto = common {
     # comment/uncomment if breaking kernel versions are known
-    incompatibleKernelVersion = "4.16";
+    #incompatibleKernelVersion = "";
 
     # this package should point to a version / git revision compatible with the latest kernel release
     version = "2018-02-01";
