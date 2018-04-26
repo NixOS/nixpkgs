@@ -12,7 +12,7 @@
 assert gtkSupport -> gtk3 != null;
 
 let
-  inherit (stdenv.lib) optionals optionalString;
+  inherit (stdenv.lib) optional optionals optionalString;
 in
 stdenv.mkDerivation rec {
   name = "gst-plugins-good-1.14.0";
@@ -50,6 +50,7 @@ stdenv.mkDerivation rec {
     libsoup libshout lame mpg123 twolame libintl
     ncurses
   ]
+  ++ optional gtkSupport gtk3 # for gtksink
   ++ optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.Cocoa ]
   ++ optionals stdenv.isLinux [ libv4l libpulseaudio libavc1394 libiec61883 ];
 
