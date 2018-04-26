@@ -288,7 +288,7 @@ let
   };
 
 in rec {
-  inherit compat install make netBSDDerivation;
+  inherit compat install netBSDDerivation;
 
   getent = netBSDDerivation {
     path = "usr.bin/getent";
@@ -309,6 +309,7 @@ in rec {
     sha256 = "01d4fpxvz1pgzfk5xznz5dcm0x0gdzwcsfm1h3d0xc9kc6hj2q77";
     version = "7.1.2";
     nativeBuildInputs = [ ];
+    propagatedBuildInputs = [ compat ];
     extraPaths = [
       (fetchNetBSD "lib/libc/gen/fts.c" "7.1.2" "1yfd2liypj6xky2h0mgxi5lgpflmkkg4zf3ii3apz5cf8jq9gmn9")
       (fetchNetBSD "lib/libc/include/namespace.h" "7.1.2" "0kwd4v8y0mfjhmwplsk52pvzbcpvpp2qy2g8c0jmfraam63q6q1y")
@@ -358,7 +359,8 @@ in rec {
 
   libedit = netBSDDerivation {
     path = "lib/libedit";
-    buildInputs = [ compat libterminfo ];
+    buildInputs = [ libterminfo libcurses ];
+    propagatedBuildInputs = [ compat ];
     patchPhase = ''
       sed -i '1i #undef bool_t' el.h
     '';
@@ -380,7 +382,8 @@ in rec {
     path = "lib/libcurses";
     version = "7.1.2";
     sha256 = "04djah9dadzw74nswn0xydkxn900kav8xdvxlxdl50nbrynxg9yf";
-    buildInputs = [ compat libterminfo ];
+    buildInputs = [ libterminfo ];
+    propagatedBuildInputs = [ compat ];
     MKDOC = "no"; # missing vfontedpr
   };
 
