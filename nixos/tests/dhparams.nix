@@ -47,6 +47,13 @@ in import ./make-test.nix {
 
   nodes.generation3 = common;
 
+  nodes.generation4 = {
+    imports = [ common ];
+    security.dhparams.stateful = false;
+    security.dhparams.params.foo2.bits = 18;
+    security.dhparams.params.bar2.bits = 19;
+  };
+
   testScript = { nodes, ... }: let
     getParamPath = gen: name: let
       node = "generation${toString gen}";
@@ -103,6 +110,20 @@ in import ./make-test.nix {
     subtest "ensure that 'security.dhparams.path' has been deleted", sub {
       $machine->fail(
         'test -e ${nodes.generation3.config.security.dhparams.path}'
+      );
+    };
+
+    ${switchToGeneration 4}
+
+    subtest "check bit sizes dhparam files", sub {
+      ${assertParamBits 4 "foo2" 18}
+      ${assertParamBits 4 "bar2" 19}
+    };
+
+    subtest "check whether dhparam files are in the Nix store", sub {
+      $machine->succeed(
+        'expr match ${getParamPath 4 "foo2"} ${builtins.storeDir}',
+        'expr match ${getParamPath 4 "bar2"} ${builtins.storeDir}',
       );
     };
   '';

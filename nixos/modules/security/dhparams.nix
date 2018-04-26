@@ -29,7 +29,11 @@ let
       '';
     };
 
-    config.path = "${cfg.path}/${name}.pem";
+    config.path = let
+      generated = pkgs.runCommand "dhparams-${name}.pem" {
+        nativeBuildInputs = [ pkgs.openssl ];
+      } "openssl dhparam -out \"$out\" ${toString config.bits}";
+    in if cfg.stateful then "${cfg.path}/${name}.pem" else generated;
   };
 
 in {
@@ -52,7 +56,9 @@ in {
             have to leave <option>security.dhparams.enable</option> for at
             least one activation in order to have them be cleaned up. This also
             means if you rollback to a version without any dhparams the
-            existing ones won't be cleaned up.</para></warning>
+            existing ones won't be cleaned up. Of course this only applies if
+            <option>security.dhparams.stateful</option> is
+            <literal>true</literal>.</para></warning>
           '';
         type = with types; let
           coerce = bits: { inherit bits; };
@@ -61,12 +67,29 @@ in {
         example = literalExample "{ nginx.bits = 3072; }";
       };
 
+      stateful = mkOption {
+        type = types.bool;
+        default = true;
+        description = ''
+          Whether generation of Diffie-Hellman parameters should be stateful or
+          not. If this is enabled, PEM-encoded files for Diffie-Hellman
+          parameters are placed in the directory specified by
+          <option>security.dhparams.path</option>. Otherwise the files are
+          created within the Nix store.
+
+          <note><para>If this is <literal>false</literal> the resulting store
+          path will be non-deterministic and will be rebuilt every time the
+          <package>openssl</package> package changes.</para></note>
+        '';
+      };
+
       path = mkOption {
-        description =
-          ''
-            Path to the directory in which Diffie-Hellman parameters will be
-            stored.
-          '';
+        description = ''
+          Path to the directory in which Diffie-Hellman parameters will be
+          stored. This only is relevant if
+          <option>security.dhparams.stateful</option> is
+          <literal>true</literal>.
+        '';
         type = types.str;
         default = "/var/lib/dhparams";
       };
@@ -82,7 +105,7 @@ in {
     };
   };
 
-  config = mkIf cfg.enable {
+  config = mkIf (cfg.enable && cfg.stateful) {
     systemd.services = {
       dhparams-init = {
         description = "Cleanup old Diffie-Hellman parameters";
