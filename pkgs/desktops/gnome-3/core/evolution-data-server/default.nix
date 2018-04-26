@@ -40,9 +40,6 @@ stdenv.mkDerivation rec {
     "-DINCLUDE_INSTALL_DIR=${placeholder "dev"}/include"
   ];
 
-  postPatch = ''
-    cmakeFlags="-DINCLUDE_INSTALL_DIR=$dev/include $cmakeFlags"
-  '';
 
   passthru = {
     updateScript = gnome3.updateScript {
