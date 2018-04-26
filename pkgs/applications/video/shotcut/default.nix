@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = https://shotcut.org;
     license = licenses.gpl3;
-    maintainers = [ maintainers.goibhniu ];
+    maintainers = with maintainers; [ goibhniu woffs ];
     platforms = platforms.linux;
   };
 }
