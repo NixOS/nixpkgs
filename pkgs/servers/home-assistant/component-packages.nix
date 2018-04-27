@@ -1112,7 +1112,7 @@
     "sensor.vultr" = ps: with ps; [ vultr ];
     "sensor.waqi" = ps: with ps; [  ];
     "sensor.waterfurnace" = ps: with ps; [  ];
-    "sensor.waze_travel_time" = ps: with ps; [  ];
+    "sensor.waze_travel_time" = ps: with ps; [ WazeRouteCalculator ];
     "sensor.whois" = ps: with ps; [  ];
     "sensor.wink" = ps: with ps; [  ];
     "sensor.wirelesstag" = ps: with ps; [  ];
