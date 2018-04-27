@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "A software package for jet finding in pp and e+e− collisions";
-    license     = stdenv.lib.licenses.gpl2;
+    license     = stdenv.lib.licenses.gpl2Plus;
     homepage    = http://fastjet.fr/;
     platforms   = stdenv.lib.platforms.unix;
     maintainers = with stdenv.lib.maintainers; [ veprbl ];
