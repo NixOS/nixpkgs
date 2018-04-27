@@ -159,10 +159,7 @@ let
         url = "https://bazaar.launchpad.net/~chromium-team/chromium-browser/bionic-stable/download/head:/addmissingblinktools-20180416203514-02f50sz15c2mn6ei-1/add-missing-blink-tools.patch";
         sha256 = "0dc4cmd05qjqyihrd4qb34kz0jlapjgah8bzgnvxf9m4791w062z";
       })
-    ] ++ optional enableWideVine ./patches/widevine.patch
-      ++ optionals (stdenv.isAarch64 && versionRange "65" "66") [
-        ./patches/skia_buildfix.patch
-    ];
+    ] ++ optional enableWideVine ./patches/widevine.patch;
 
     postPatch = ''
       # We want to be able to specify where the sandbox is via CHROME_DEVEL_SANDBOX
