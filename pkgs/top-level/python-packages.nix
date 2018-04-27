@@ -272,6 +272,8 @@ in {
 
   browsermob-proxy = disabledIf isPy3k (callPackage ../development/python-modules/browsermob-proxy {});
 
+  bt_proximity = callPackage ../development/python-modules/bt-proximity { };
+
   bugseverywhere = callPackage ../applications/version-management/bugseverywhere {};
 
   cachecontrol = callPackage ../development/python-modules/cachecontrol { };
