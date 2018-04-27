@@ -1,4 +1,8 @@
-{ stdenv, fetchurl, gnutls, gtk2, gtk3, libgcrypt, pkgconfig, gettext, which, qt5
+{ stdenv, fetchurl, gnutls, openssl, libgcrypt, libgpgerror, pkgconfig, gettext
+, which
+
+# GUI support
+, gtk2, gtk3, qt5
 
 , pluginSearchPaths ? [
     "/run/current-system/sw/lib/gwenhywfar/plugins"
@@ -20,6 +24,11 @@ in stdenv.mkDerivation rec {
     urls = mkURLs [ "http://www.aquamaniac.de" "http://www2.aquamaniac.de" ];
     inherit sha256;
   };
+
+  configureFlags = [
+    "--with-openssl-includes=${openssl.dev}/include"
+    "--with-openssl-libs=${openssl.out}/lib"
+  ];
 
   preConfigure = ''
     configureFlagsArray+=("--with-guis=gtk2 gtk3 qt5")
@@ -50,7 +59,7 @@ in stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig gettext which ];
 
-  buildInputs = [ gtk2 gtk3 qt5.qtbase gnutls libgcrypt ];
+  buildInputs = [ gtk2 gtk3 qt5.qtbase gnutls openssl libgcrypt libgpgerror ];
 
   meta = with stdenv.lib; {
     description = "OS abstraction functions used by aqbanking and related tools";
