@@ -16,6 +16,8 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ zlib curl elfutils python libiberty libopcodes ];
 
+  patches = [ ./aarch64_nt_prstatus.patch ];
+
   enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
