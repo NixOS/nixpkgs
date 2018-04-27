@@ -42,12 +42,6 @@ self: super: {
   ## Shadowed:
 
   ## Needs bump to a versioned attribute
-  ##     • No instance for (GHC.Base.Semigroup BV)
-  ##         arising from the superclasses of an instance declaration
-  ##     • In the instance declaration for ‘Monoid BV’
-  bv = super.bv_0_5;
-
-  ## Needs bump to a versioned attribute
   ## Issue: https://github.com/sol/doctest/issues/189
   doctest = overrideCabal super.doctest_0_15_0 (drv: {
     ## Setup: Encountered missing dependencies:
