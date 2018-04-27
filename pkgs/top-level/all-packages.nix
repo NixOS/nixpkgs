@@ -838,6 +838,8 @@ with pkgs;
     boost = boost160;
   };
 
+  blobfuse = callPackage ../tools/filesystems/blobfuse { };
+
   blockdiag = pythonPackages.blockdiag;
 
   blsd = callPackage ../tools/misc/blsd {
