@@ -16958,6 +16958,8 @@ with pkgs;
 
   ptex = callPackage ../development/libraries/ptex {};
 
+  rocketchat = callPackage ../applications/networking/instant-messengers/rocketchat {};
+
   rssguard = libsForQt5.callPackage ../applications/networking/feedreaders/rssguard { };
 
   scudcloud = callPackage ../applications/networking/instant-messengers/scudcloud { };
