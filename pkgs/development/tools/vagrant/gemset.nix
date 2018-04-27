@@ -70,10 +70,10 @@
   ffi = {
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "034f52xf7zcqgbvwbl20jwdyjwznvqnwpbaps9nk18v9lgb1dpx0";
+      sha256 = "0zw6pbyvmj8wafdc7l5h7w20zkp1vbr2805ql5d941g2b20pk4zr";
       type = "gem";
     };
-    version = "1.9.18";
+    version = "1.9.23";
   };
   gssapi = {
     dependencies = ["ffi"];
@@ -238,10 +238,10 @@
   public_suffix = {
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "0mvzd9ycjw8ydb9qy3daq3kdzqs2vpqvac4dqss6ckk4rfcjc637";
+      sha256 = "1x5h1dh1i3gwc01jbg01rly2g6a1qwhynb1s8a30ic507z1nh09s";
       type = "gem";
     };
-    version = "3.0.1";
+    version = "3.0.2";
   };
   rake = {
     source = {
@@ -403,10 +403,10 @@
     dependencies = ["childprocess" "log4r" "rspec" "thor"];
     source = {
       fetchSubmodules = false;
-      rev = "7ac8b4191de578e345b29acaf62ecc72c8e73be1";
-      sha256 = "0qybgxdnndx7xfmhyjcj46b2mv78d98yk30d68ppmfnmm3jx590h";
+      rev = "f3daedaac493ebc0ba1a96c915423a329e09e84a";
+      sha256 = "073wwapd9n13w23mnhrgh9bd80wkbcj8fl06k03ngy7cyn5r71d2";
       type = "git";
-      url = "https://github.com/mitchellh/vagrant-spec.git";
+      url = "https://github.com/hashicorp/vagrant-spec.git";
     };
     version = "0.0.1";
   };
