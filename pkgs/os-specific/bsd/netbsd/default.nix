@@ -108,10 +108,10 @@ let
     # will be removed in the postInstall.
     preInstall = ''
       mkdir -p $out$BINDIR $out$LIBDIR $out$INFODIR \
-               $out$DOCDIR $out$LOCALEDIR $out/usr/games
+               $out$DOCDIR $out$LOCALEDIR
       for i in 1 2 3 4 5 6 7 8 9; do
         mkdir -p $out$MANDIR/man$i $out$MANDIR/html$i \
-	         $out$DOCDIR/reference/ref$i
+                 $out$DOCDIR/reference/ref$i
       done
       mkdir -p $out/usr/include
     '';
@@ -363,8 +363,10 @@ in rec {
     patchPhase = ''
       sed -i '1i #include <time.h>' adventure/save.c
 
-      # Disable some games that don't build. They should be possible to
-      # build but need to look at how to implement stuff in Linux.
+      # Disable some games that don't build. They should be possible
+      # to build but need to look at how to implement stuff in
+      # Linux. macOS is missing gettime. TODO try to get these
+      # working.
       substituteInPlace Makefile \
         ${lib.optionalString stdenv.isDarwin "--replace adventure ''"} \
         --replace atc "" \
@@ -378,6 +380,9 @@ in rec {
         --replace sail "" \
         --replace trek "" \
 	--replace dab ""
+      substituteInPlace Makefile.inc \
+        --replace 2555 555 \
+        --replace 2550 550
     '';
     NIX_CFLAGS_COMPILE = [
       "-D__noinline="
@@ -387,6 +392,17 @@ in rec {
       "-DRANDOM_MAX=RAND_MAX"
       "-DINFTIM=-1"
     ];
+    postBuild = ''
+      mkdir -p $out/usr/games $out/usr/share/games/ching \
+               $out/usr/share/games/quiz.db \
+               $out/usr/libexec/ching $out/var/games/hackdir
+      touch $out/var/games/hackdir/perm
+    '';
+    preFixup = ''
+      mkdir -p $out/bin
+      mv $out/games/* $out/bin
+      rmdir $out/games
+    '';
     buildInputs = [ compat libcurses libterminfo libressl ];
     extraPaths = [
       (fetchNetBSD "share/dict" "7.1.2" "0nickhsjwgnr2h9nvwflvgfz93kqms5hzdnpyq02crpj35w98bh4")
