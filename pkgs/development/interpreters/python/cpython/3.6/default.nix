@@ -69,6 +69,12 @@ in stdenv.mkDerivation {
 
   patches = [
     ./no-ldconfig.patch
+  ] ++ optionals stdenv.isDarwin [
+    # Fix for https://bugs.python.org/issue24658
+    (fetchpatch {
+      url = "https://bugs.python.org/file45178/issue24658-3-3.6.diff";
+      sha256 = "1x060hs80nl34mcl2ji2i7l4shxkmxwgq8h8lcmav8rjqqz1nb4a";
+    })
   ] ++ optionals (x11Support && stdenv.isDarwin) [
     ./use-correct-tcl-tk-on-darwin.patch
   ];
