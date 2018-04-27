@@ -11181,6 +11181,8 @@ with pkgs;
 
     accounts-qt = callPackage ../development/libraries/accounts-qt { };
 
+    alkimia = callPackage ../development/libraries/alkimia { };
+
     fcitx-qt5 = callPackage ../tools/inputmethods/fcitx/fcitx-qt5.nix { };
 
     qgpgme = callPackage ../development/libraries/gpgme { };
