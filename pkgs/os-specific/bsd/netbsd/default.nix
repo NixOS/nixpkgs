@@ -340,6 +340,19 @@ let
     sha256 = "1dhsyfvcm67kf5zdbg5dmx5y8fimnbll6qxwp3gjfmbxqigmc52m";
   };
 
+  who = netBSDDerivation {
+    path = "usr.bin/who";
+    version = "7.1.2";
+    sha256 = "17ffwww957m3qw0b6fkgjpp12pd5ydg2hs9dxkkw0qpv11j00d88";
+    patchPhase = ''
+      substituteInPlace $NETBSDSRCDIR/usr.bin/who/utmpentry.c \
+        --replace "strncpy(e->name, up->ut_name, sizeof(up->ut_name))" "strncpy(e->name, up->ut_user, sizeof(up->ut_user))" \
+        --replace "utmptime = st.st_mtimespec" "utmptime = st.st_mtim" \
+        --replace "timespeccmp(&st.st_mtimespec, &utmptime, >)" "st.st_mtim.tv_sec == utmptime.tv_sec ? st.st_mtim.tv_nsec > utmptime.tv_nsec : st.st_mtim.tv_sec > utmptime.tv_sec" \
+        --replace "timespecclear(&utmptime)" "utmptime.tv_sec = utmptime.tv_nsec = 0"
+    '';
+  };
+
 in rec {
   inherit compat install netBSDDerivation fts;
 
@@ -410,17 +423,20 @@ in rec {
     ];
   };
 
-  who = netBSDDerivation {
-    path = "usr.bin/who";
-    version = "7.1.2";
-    sha256 = "17ffwww957m3qw0b6fkgjpp12pd5ydg2hs9dxkkw0qpv11j00d88";
-  };
-
   finger = netBSDDerivation {
     path = "usr.bin/finger";
     sha256 = "0jl672z50f2yf7ikp682b3xrarm6bnrrx9vi94xnp2fav8m8zfyi";
     version = "7.1.2";
     extraPaths = [ who.src ];
+    NIX_CFLAGS_COMPILE = [
+      "-DSUPPORT_UTMP"
+      "-USUPPORT_UTMPX"
+    ];
+    patchPhase = ''
+
+      ${who.patchPhase} 
+
+    '';
   };
 
   fingerd = netBSDDerivation {
