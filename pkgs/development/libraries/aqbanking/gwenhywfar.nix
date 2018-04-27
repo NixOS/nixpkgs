@@ -6,13 +6,14 @@
   ]
 }:
 
-stdenv.mkDerivation rec {
+let
+  inherit ((import ./sources.nix).gwenhywfar) sha256 releaseId version;
+in stdenv.mkDerivation rec {
   name = "gwenhywfar-${version}";
-  version = "4.15.3";
+  inherit version;
 
   src = let
-    inherit ((import ./sources.nix).gwenhywfar) sha256 releaseId;
-    qstring = "package=01&release=${releaseId}&file=01";
+    qstring = "package=01&release=${releaseId}&file=02";
     mkURLs = map (base: "${base}/sites/download/download.php?${qstring}");
   in fetchurl {
     name = "${name}.tar.gz";
