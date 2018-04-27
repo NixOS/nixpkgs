@@ -14673,28 +14673,6 @@ with pkgs;
 
   aacgain = callPackage ../applications/audio/aacgain { };
 
-  aangifte2006 = callPackage_i686 ../applications/taxes/aangifte-2006 { };
-
-  aangifte2007 = callPackage_i686 ../applications/taxes/aangifte-2007 { };
-
-  aangifte2008 = callPackage_i686 ../applications/taxes/aangifte-2008 { };
-
-  aangifte2009 = callPackage_i686 ../applications/taxes/aangifte-2009 { };
-
-  aangifte2010 = callPackage_i686 ../applications/taxes/aangifte-2010 { };
-
-  aangifte2011 = callPackage_i686 ../applications/taxes/aangifte-2011 { };
-
-  aangifte2012 = callPackage_i686 ../applications/taxes/aangifte-2012 { };
-
-  aangifte2013 = callPackage_i686 ../applications/taxes/aangifte-2013 { };
-
-  aangifte2014 = callPackage_i686 ../applications/taxes/aangifte-2014 { };
-
-  aangifte2013wa = callPackage_i686 ../applications/taxes/aangifte-2013-wa { };
-
-  aangifte2014wa = callPackage_i686 ../applications/taxes/aangifte-2014-wa { };
-
   abcde = callPackage ../applications/audio/abcde {
     inherit (perlPackages) DigestSHA MusicBrainz MusicBrainzDiscID;
     inherit (pythonPackages) eyeD3;
