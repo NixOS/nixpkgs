@@ -15,18 +15,10 @@ let
 
     extraPaths = [ ];
 
-    nativeBuildInputs = [ makeMinimal mandoc groff install yacc flex ];
+    nativeBuildInputs = [ makeMinimal mandoc groff install stat
+                          yacc flex tsort lorder ];
     buildInputs = [ compat ];
     installFlags = [ "includes" ];
-
-    # These should be coverd in nbcompat, but are missing, sadly
-    NIX_CFLAGS_COMPILE = [
-      "-D__noinline="
-      "-D__warn_references(a,b)="
-      "-D__strong_alias(a,b)="
-      "-D__va_list=va_list"
-      "-D__scanflike(a,b)="
-    ];
 
     # Definitions passed to share/mk/*.mk. Should be pretty simple -
     # eventually maybe move it to a configure script.
@@ -46,8 +38,12 @@ let
     LIBUTIL="";
     LIBSSL = "";
     LIBCRYPTO = "";
+    LIBCRYPT = "";
     LIBCURSES = "";
+    LIBTERMINFO = "";
+    LIBM = "";
     "LIBDO.terminfo" = "_external";
+    "LIBDO.curses" = "_external";
     _GCC_CRTBEGIN = "";
     _GCC_CRTBEGINS = "";
     _GCC_CRTEND = "";
@@ -75,7 +71,6 @@ let
     # not using bsd binutils
     SHLIB_WARNTEXTREL = "no";
     SHLIB_MKMAP = "no";
-    OBJCOPY = "true";
     PRESERVE = "-p";
 
     MACHINE_ARCH = hostPlatform.parsed.cpu.name;
@@ -85,9 +80,8 @@ let
     # but without they end up using gcc on Darwin stdenv
     preConfigure = ''
       export HAVE_${if stdenv.cc.isGNU then "GCC" else "LLVM"}=${lib.head (lib.splitString "." (lib.getVersion stdenv.cc.cc))}
-    '' + lib.optionalString (!builtins.hasAttr "nativeBuildInputs" attrs) ''
-      # hack until #38657 is fixed
-      export PATH=${install}/bin:$PATH
+      # Parallel building. Needs the space.
+      export makeFlags+=" -j $NIX_BUILD_CORES"
     '';
 
     postUnpack = ''
@@ -110,12 +104,14 @@ let
       fi
     '';
 
-    # need to create directories for xinstall to work
+    # Need to create directories for xinstall to work. Unused ones
+    # will be removed in the postInstall.
     preInstall = ''
       mkdir -p $out$BINDIR $out$LIBDIR $out$INFODIR \
-               $out$DOCDIR $out$LOCALEDIR
+               $out$DOCDIR $out$LOCALEDIR $out/usr/games
       for i in 1 2 3 4 5 6 7 8 9; do
-        mkdir -p $out$MANDIR/man$i $out$MANDIR/html$i $out$DOCDIR/reference/ref$i
+        mkdir -p $out$MANDIR/man$i $out$MANDIR/html$i \
+	         $out$DOCDIR/reference/ref$i
       done
       mkdir -p $out/usr/include
     '';
@@ -126,7 +122,6 @@ let
         cd $out/usr
         find . -type d -exec mkdir -p $out/\{} \;
         find . -type f -exec mv \{} $out/\{} \;
-        find . -type d -delete
       fi
 
       find $out -type d -empty -delete
@@ -147,8 +142,6 @@ let
 
     buildInputs = [];
     nativeBuildInputs = [];
-    NIX_CFLAGS_COMPILE = "";
-    NIX_LDFLAGS = "";
 
     patchPhase = ''
       patchShebangs configure
@@ -174,8 +167,6 @@ let
     # override defaults to prevent infinite recursion
     nativeBuildInputs = [ makeMinimal ];
     buildInputs = [ zlib ];
-    NIX_CFLAGS_COMPILE = "";
-    NIX_LDFLAGS = "";
 
     # temporarily use gnuinstall for bootstrapping
     # bsdinstall will be built later
@@ -198,6 +189,19 @@ let
       install -D $NETBSDSRCDIR/sys/sys/sha2.h $out/include/sha2.h
       install -D $NETBSDSRCDIR/include/vis.h $out/include/vis.h
       install -D $NETBSDSRCDIR/include/db.h $out/include/db.h
+      install -D $NETBSDSRCDIR/include/netconfig.h $out/include/netconfig.h
+      install -D $NETBSDSRCDIR/include/rpc/types.h $out/include/rpc/types.h
+      install -D $NETBSDSRCDIR/include/utmpx.h $out/include/utmpx.h
+      install -D $NETBSDSRCDIR/include/tzfile.h $out/include/tzfile.h
+
+      # Remove lingering /usr references
+      if [ -d $out/usr ]; then
+        cd $out/usr
+        find . -type d -exec mkdir -p $out/\{} \;
+        find . -type f -exec mv \{} $out/\{} \;
+      fi
+
+      find $out -type d -empty -delete
     '';
     extraPaths = [ libc.src libutil.src
       (fetchNetBSD "include" "7.1.2" "1vc58xrhrp202biiv1chhlh0jwnjr7k3qq91pm46k6v5j95j0qwp")
@@ -241,6 +245,27 @@ let
     '';
     setupHook = ./fts-setup-hook.sh;
   };
+
+  stat = netBSDDerivation {
+    path = "usr.bin/stat";
+    version = "7.1.2";
+    sha256 = "0z4r96id2r4cfy443rw2s1n52n186xm0lqvs8s3qjf4314z7r7yh";
+    nativeBuildInputs = [ makeMinimal mandoc groff install ];
+  };
+
+  tsort = netBSDDerivation {
+    path = "usr.bin/tsort";
+    version = "7.1.2";
+    sha256 = "1dqvf9gin29nnq3c4byxc7lfd062pg7m84843zdy6n0z63hnnwiq";
+    nativeBuildInputs = [ makeMinimal mandoc groff install ];
+  };
+
+  lorder = netBSDDerivation {
+    path = "usr.bin/lorder";
+    version = "7.1.2";
+    sha256 = "0rjf9blihhm0n699vr2bg88m4yjhkbxh6fxliaay3wxkgnydjwn2";
+    nativeBuildInputs = [ makeMinimal mandoc groff install ];
+  };
   # END BOOTSTRAPPING
 
   libutil = netBSDDerivation {
@@ -267,7 +292,7 @@ let
     version = "7.1.2";
     patchPhase = ''
       # make needs this to pick up our sys make files
-      NIX_CFLAGS_COMPILE+=" -D_PATH_DEFSYSPATH=\"$out/share/mk\""
+      export NIX_CFLAGS_COMPILE+=" -D_PATH_DEFSYSPATH=\"$out/share/mk\""
 
       # can't set owner or group in Nix build
       # maybe there is a better way to trick it?
@@ -293,13 +318,10 @@ let
       substituteInPlace $NETBSDSRCDIR/share/mk/bsd.lib.mk \
         --replace '-o ''${DEBUGOWN} -g ''${DEBUGGRP}' "" \
         --replace '-o ''${LIBOWN} -g ''${LIBGRP}' ""
-
-      substituteInPlace $NETBSDSRCDIR/share/mk/Makefile \
-        --replace /usr/share/mk /share/mk
+    '' + lib.optionalString stdenv.isDarwin ''
       substituteInPlace $NETBSDSRCDIR/share/mk/bsd.sys.mk \
         --replace '-Wl,--fatal-warnings' ""
       substituteInPlace $NETBSDSRCDIR/share/mk/bsd.lib.mk \
-        --replace ' ''${_ARFL} ''${.TARGET} `NM=''${NM} ''${LORDER} ''${.ALLSRC:M*o} | ''${TSORT}`' ' ''${_ARFL} ''${.TARGET} ''${.ALLSRC:M*o}' \
         --replace '-Wl,-soname,''${_LIB}.so.''${SHLIB_SOVERSION}' "" \
         --replace '-Wl,--whole-archive' "" \
         --replace '-Wl,--no-whole-archive' ""
@@ -340,8 +362,36 @@ in rec {
     version = "7.1.2";
     patchPhase = ''
       sed -i '1i #include <time.h>' adventure/save.c
+
+      # Disable some games that don't build. They should be possible to
+      # build but need to look at how to implement stuff in Linux.
+      substituteInPlace Makefile \
+        ${lib.optionalString stdenv.isDarwin "--replace adventure ''"} \
+        --replace atc "" \
+        --replace boggle "" \
+        --replace dm "" \
+        --replace fortune "" \
+        --replace hunt "" \
+        --replace larn "" \
+        --replace phantasia "" \
+        --replace rogue "" \
+        --replace sail "" \
+        --replace trek "" \
+	--replace dab ""
     '';
-    buildInputs = [ compat libcurses ];
+    NIX_CFLAGS_COMPILE = [
+      "-D__noinline="
+      "-D__scanflike(a,b)="
+      "-D__va_list=va_list"
+      "-DOXTABS=XTABS"
+      "-DRANDOM_MAX=RAND_MAX"
+      "-DINFTIM=-1"
+    ];
+    buildInputs = [ compat libcurses libterminfo libressl ];
+    extraPaths = [
+      (fetchNetBSD "share/dict" "7.1.2" "0nickhsjwgnr2h9nvwflvgfz93kqms5hzdnpyq02crpj35w98bh4")
+      who.src
+    ];
   };
 
   who = netBSDDerivation {
@@ -358,8 +408,8 @@ in rec {
   };
 
   fingerd = netBSDDerivation {
-    path = "usr.bin/fingerd";
-    sha256 = "04wjsang8f8kxsifiayklbxaaxmm3vx9rfr91hfbxj4hk8gkqz00";
+    path = "libexec/fingerd";
+    sha256 = "1hhdq70hrxxkjnjfmjm3w8w9g9xq2ngxaxk0chy4vm7chg9nfpmp";
     version = "7.1.2";
   };
 
@@ -367,9 +417,17 @@ in rec {
     path = "lib/libedit";
     buildInputs = [ libterminfo libcurses ];
     propagatedBuildInputs = [ compat ];
+    postBuild = "mkdir -p $out/usr/include/readline";
     patchPhase = ''
       sed -i '1i #undef bool_t' el.h
+      substituteInPlace config.h \
+        --replace "#define HAVE_STRUCT_DIRENT_D_NAMLEN 1" ""
     '';
+    NIX_CFLAGS_COMPILE = [
+      "-D__noinline="
+      "-D__scanflike(a,b)="
+      "-D__va_list=va_list"
+    ];
     version = "7.1.2";
     sha256 = "0qvr52j4qih10m7fa8nddn1psyjy9l0pa4ix02acyssjvgbz2kca";
   };
@@ -389,8 +447,20 @@ in rec {
     version = "7.1.2";
     sha256 = "04djah9dadzw74nswn0xydkxn900kav8xdvxlxdl50nbrynxg9yf";
     buildInputs = [ libterminfo ];
+    NIX_CFLAGS_COMPILE = [
+      "-D__scanflike(a,b)="
+      "-D__va_list=va_list"
+      "-D__warn_references(a,b)="
+    ];
     propagatedBuildInputs = [ compat ];
     MKDOC = "no"; # missing vfontedpr
+    patchPhase = ''
+      substituteInPlace printw.c \
+        --replace "funopen(win, NULL, __winwrite, NULL, NULL)" NULL \
+        --replace "__strong_alias(vwprintw, vw_printw)" 'extern int vwprintw(WINDOW*, const char*, va_list) __attribute__ ((alias ("vw_printw")));'
+      substituteInPlace scanw.c \
+        --replace "__strong_alias(vwscanw, vw_scanw)" 'extern int vwscanw(WINDOW*, const char*, va_list) __attribute__ ((alias ("vw_scanw")));'
+    '';
   };
 
   nbperf = netBSDDerivation {
