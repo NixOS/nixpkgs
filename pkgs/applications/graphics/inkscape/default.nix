@@ -29,10 +29,13 @@ stdenv.mkDerivation rec {
     patchShebangs fix-roff-punct
 
     # XXX: Not needed for CMake:
-    patchShebangs share/palettes
-    patchShebangs share/patterns
-    patchShebangs share/symbols
-    patchShebangs share/templates
+    ${lib.optionalString (!stdenv.isDarwin) ''
+      patchShebangs share/filters
+      patchShebangs share/palettes
+      patchShebangs share/patterns
+      patchShebangs share/symbols
+      patchShebangs share/templates
+    ''}
 
     # Python is used at run-time to execute scripts, e.g., those from
     # the "Effects" menu.
