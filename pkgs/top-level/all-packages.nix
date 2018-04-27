@@ -8904,6 +8904,10 @@ with pkgs;
     gtk = self.gtk2;
   };
 
+  gegl_0_4 = callPackage ../development/libraries/gegl/4.0.nix {
+    gtk = self.gtk2;
+  };
+
   geoclue = callPackage ../development/libraries/geoclue {};
 
   geoclue2 = callPackage ../development/libraries/geoclue/2.0.nix {};
