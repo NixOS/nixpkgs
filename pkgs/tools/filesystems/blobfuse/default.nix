@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "143rxgfmprir4a7frrv8llkv61jxzq50w2v8wn32vx6gl6vci1zs";
   };
 
-  buildInputs = [ cmake curl gnutls libgcrypt libuuid fuse ];
+  buildInputs = [ curl gnutls libgcrypt libuuid fuse ];
   nativeBuildInputs = [ cmake pkgconfig ];
 
   meta = with stdenv.lib; {
