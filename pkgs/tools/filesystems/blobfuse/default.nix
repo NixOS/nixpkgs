@@ -17,6 +17,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     description = "Mount an Azure Blob storage as filesystem through FUSE";
     license = licenses.mit;
+    maintainers = with maintainers; [ jbgi ];
     platforms = platforms.linux;
   };
 }
