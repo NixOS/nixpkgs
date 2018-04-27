@@ -326,7 +326,7 @@
     "device_tracker.automatic" = ps: with ps; [ aiohttp-cors ];
     "device_tracker.bbox" = ps: with ps; [  ];
     "device_tracker.bluetooth_le_tracker" = ps: with ps; [  ];
-    "device_tracker.bluetooth_tracker" = ps: with ps; [  ];
+    "device_tracker.bluetooth_tracker" = ps: with ps; [ bt_proximity ];
     "device_tracker.bmw_connected_drive" = ps: with ps; [  ];
     "device_tracker.bt_home_hub_5" = ps: with ps; [  ];
     "device_tracker.cisco_ios" = ps: with ps; [ pexpect ];
