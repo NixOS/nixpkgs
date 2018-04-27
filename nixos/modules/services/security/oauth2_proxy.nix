@@ -508,9 +508,9 @@ in
 
     setXauthrequest = mkOption {
       type = types.nullOr types.bool;
-      default = null;
+      default = false;
       description = ''
-        Set X-Auth-Request-User and X-Auth-Request-Email response headers (useful in Nginx auth_request mode).
+        Set X-Auth-Request-User and X-Auth-Request-Email response headers (useful in Nginx auth_request mode). Setting this to 'null' means using the upstream default (false).
       '';
     };
 
