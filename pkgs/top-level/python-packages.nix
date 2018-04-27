@@ -512,6 +512,8 @@ in {
 
   pyfakefs = callPackage ../development/python-modules/pyfakefs {};
 
+  pyfttt = callPackage ../development/python-modules/pyfttt { };
+
   pygame = callPackage ../development/python-modules/pygame { };
 
   pygame-git = callPackage ../development/python-modules/pygame/git.nix { };
