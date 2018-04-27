@@ -58,7 +58,7 @@ in rec {
         nixos.ova.x86_64-linux or []
 
         #(all nixos.tests.containers)
-        #nixos.tests.chromium.x86_64-linux or []
+        nixos.tests.chromium.x86_64-linux or []
         (all nixos.tests.firefox)
         (all nixos.tests.firewall)
         (all nixos.tests.gnome3)
