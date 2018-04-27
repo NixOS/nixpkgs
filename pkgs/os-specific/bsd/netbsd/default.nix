@@ -280,6 +280,9 @@ let
         --replace '-o ''${DEBUGOWN} -g ''${DEBUGGRP}' ""
       substituteInPlace $NETBSDSRCDIR/share/mk/bsd.doc.mk \
         --replace '-o ''${DOCOWN} -g ''${DOCGRP}' ""
+      substituteInPlace $NETBSDSRCDIR/share/mk/bsd.links.mk \
+        --replace '-o ''${LINKSOWN_''${.ALLSRC:T}:U''${LINKSOWN}}' "" \
+        --replace '-g ''${LINKSGRP_''${.ALLSRC:T}:U''${LINKSGRP}}' ""
       substituteInPlace $NETBSDSRCDIR/share/mk/bsd.man.mk \
         --replace '-o ''${MANOWN} -g ''${MANGRP}' ""
       substituteInPlace $NETBSDSRCDIR/share/mk/bsd.files.mk \
@@ -338,6 +341,7 @@ in rec {
     patchPhase = ''
       sed -i '1i #include <time.h>' adventure/save.c
     '';
+    buildInputs = [ compat libcurses ];
   };
 
   who = netBSDDerivation {
