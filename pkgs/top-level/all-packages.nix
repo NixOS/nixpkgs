@@ -1322,6 +1322,8 @@ with pkgs;
 
   metabase = callPackage ../servers/metabase { };
 
+  monetdb = callPackage ../servers/sql/monetdb { };
+
   mp3blaster = callPackage ../applications/audio/mp3blaster { };
 
   mp3fs = callPackage ../tools/filesystems/mp3fs { };
