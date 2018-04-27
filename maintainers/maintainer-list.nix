@@ -1241,7 +1241,7 @@
     name = "Mabry Cervin";
   };
   eqyiel = {
-    email = "r@rkm.id.au";
+    email = "ruben@maher.fyi";
     github = "eqyiel";
     name = "Ruben Maher";
   };
