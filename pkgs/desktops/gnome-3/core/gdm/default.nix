@@ -1,7 +1,7 @@
 { stdenv, fetchurl, substituteAll, pkgconfig, glib, itstool, libxml2, xorg, dbus
 , intltool, accountsservice, libX11, gnome3, systemd, autoreconfHook
 , gtk, libcanberra-gtk3, pam, libtool, gobjectIntrospection, plymouth
-, librsvg, coreutils }:
+, librsvg, coreutils, xwayland }:
 
 stdenv.mkDerivation rec {
   name = "gdm-${version}";
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
   patches = [
     (substituteAll {
       src = ./fix-paths.patch;
-      inherit coreutils plymouth;
+      inherit coreutils plymouth xwayland;
     })
     ./sessions_dir.patch
     ./gdm-x-session_extra_args.patch
