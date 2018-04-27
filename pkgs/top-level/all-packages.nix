@@ -5849,15 +5849,13 @@ with pkgs;
   runtimeShell = "${runtimeShellPackage}/bin/bash";
   runtimeShellPackage = bash;
 
-  bash = lowPrio (callPackage ../shells/bash/4.4.nix {
-    texinfo = null;
-    interactive = stdenv.isCygwin; # patch for cygwin requires readline support
-  });
+  bash = lowPrio (callPackage ../shells/bash/4.4.nix { });
 
   # WARNING: this attribute is used by nix-shell so it shouldn't be removed/renamed
-  bashInteractive = appendToName "interactive" (callPackage ../shells/bash/4.4.nix {
+  bashInteractive = callPackage ../shells/bash/4.4.nix {
     interactive = true;
-  });
+    withDocs = true;
+  };
 
   bash-completion = callPackage ../shells/bash/bash-completion { };
 

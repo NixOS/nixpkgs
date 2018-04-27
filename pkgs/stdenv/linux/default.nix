@@ -344,6 +344,7 @@ in
         concatMap (p: [ (getBin p) (getLib p) ])
           [ gzip bzip2 xz bash binutils.bintools coreutils diffutils findutils
             gawk gnumake gnused gnutar gnugrep gnupatch patchelf ed paxctl
+            texinfo
           ]
         # Library dependencies
         ++ map getLib (
@@ -363,7 +364,7 @@ in
         inherit (prevStage)
           gzip bzip2 xz bash coreutils diffutils findutils gawk
           gnumake gnused gnutar gnugrep gnupatch patchelf
-          attr acl paxctl zlib pcre;
+          attr acl paxctl zlib pcre texinfo;
         ${localSystem.libc} = getLibc prevStage;
       } // lib.optionalAttrs (super.targetPlatform == localSystem) {
         # Need to get rid of these when cross-compiling.
