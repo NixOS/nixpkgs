@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   buildPhase = "true";
 
   installFlags = [
-    "PREFIX=$out"
+    "PREFIX=$(out)"
   ];
 
   patches = [
