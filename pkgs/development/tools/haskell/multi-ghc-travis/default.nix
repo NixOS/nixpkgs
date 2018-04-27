@@ -8,8 +8,8 @@ mkDerivation {
   src = fetchFromGitHub {
     owner = "haskell-CI";
     repo = "haskell-ci";
-    rev = "848c2fe5c7d0d95b20312e86b360d5db8c95db75";
-    sha256 = "1n4y6j564sxxry19xs4x0ds7fg8h1q0svw9q45477czx82qzavym";
+    rev = "105005cde6bde903e477e5b9724d02bdea06bae4";
+    sha256 = "1l76782aa29mi88a2brvkyi6k0v33rpihxlskx99mak06bjrmnhh";
   };
   isLibrary = true;
   isExecutable = true;
