@@ -1,18 +1,18 @@
 {stdenv, fetchurl, fetchpatch, pkgconfig, libbsd}:
 
 stdenv.mkDerivation rec {
-  version = "1.187";
+  version = "1.190";
   deb-version = "${version}-1";
   name = "netcat-openbsd-${version}";
 
   srcs = [
     (fetchurl {
       url = "mirror://debian/pool/main/n/netcat-openbsd/netcat-openbsd_${version}.orig.tar.gz";
-      sha256 = "0sxsxl7n7hnxz931jqsp86cdwiq2lm4h3w0i2a67935pki924gxw";
+      sha256 = "0dp571m42zc7wvb9bf4hz5a08rcc5fknf0gdp98yq19c754c9k38";
     })
     (fetchurl {
       url = "mirror://debian/pool/main/n/netcat-openbsd/netcat-openbsd_${deb-version}.debian.tar.xz";
-      sha256 = "0jwbdis6avxdjzg8bcab1bdz296rkzzkdlv50fr3q0277fxjs49q";
+      sha256 = "0plgrri85sghzn499jzd9d3h7w61ksqj0amkwmcah8dmfkp7jrgv";
     })
   ];
 
