@@ -19,6 +19,14 @@ let
         };
       });
 
+      pathspec = super.pathspec.overridePythonAttrs (oldAttrs: rec {
+        version = "0.5.5";
+        src = oldAttrs.src.override {
+          inherit version;
+          sha256 = "72c495d1bbe76674219e307f6d1c6062f2e1b0b483a5e4886435127d0df3d0d3";
+        };
+      });
+
       requests = super.requests.overridePythonAttrs (oldAttrs: rec {
         version = "2.9.1";
         src = oldAttrs.src.override {
