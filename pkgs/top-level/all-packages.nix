@@ -12902,6 +12902,8 @@ with pkgs;
     erlang = erlangR18;
   };
 
+  youtrack = callPackage ../servers/jetbrains/youtrack.nix { };
+
   zabbix = recurseIntoAttrs (callPackages ../servers/monitoring/zabbix {});
 
   zabbix20 = callPackage ../servers/monitoring/zabbix/2.0.nix { };
