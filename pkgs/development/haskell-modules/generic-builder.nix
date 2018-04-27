@@ -1,5 +1,5 @@
 { stdenv, buildPackages, buildHaskellPackages, ghc
-, jailbreak-cabal, hscolour, cpphs, nodejs
+, mkCompilerEnv, jailbreak-cabal, hscolour, cpphs, nodejs
 , buildPlatform, hostPlatform
 }:
 
@@ -64,7 +64,7 @@ in
 , checkPhase ? "", preCheck ? "", postCheck ? ""
 , preFixup ? "", postFixup ? ""
 , shellHook ? ""
-, coreSetup ? false # Use only core packages to build Setup.hs.
+, coreSetup ? assert false; false # DEPRECATED
 , useCpphs ? false
 , hardeningDisable ? stdenv.lib.optional (ghc.isHaLVM or false) "all"
 , enableSeparateDataOutput ? false
@@ -84,18 +84,6 @@ let
 
   isGhcjs = ghc.isGhcjs or false;
   isHaLVM = ghc.isHaLVM or false;
-  packageDbFlag = if isGhcjs || isHaLVM || versionOlder "7.6" ghc.version
-                  then "package-db"
-                  else "package-conf";
-
-  # GHC used for building Setup.hs
-  #
-  # Same as our GHC, unless we're cross, in which case it is native GHC with the
-  # same version, or ghcjs, in which case its the ghc used to build ghcjs.
-  nativeGhc = buildHaskellPackages.ghc;
-  nativePackageDbFlag = if versionOlder "7.6" nativeGhc.version
-                        then "package-db"
-                        else "package-conf";
 
   # the target dir for haddock documentation
   docdir = docoutput: docoutput + "/share/doc";
@@ -106,11 +94,6 @@ let
     sha256 = editedCabalFile;
     name = "${pname}-${version}-r${revision}.cabal";
   };
-
-  defaultSetupHs = builtins.toFile "Setup.hs" ''
-                     import Distribution.Simple
-                     main = defaultMain
-                   '';
 
   hasActiveLibrary = isLibrary && (enableStaticLibraries || enableSharedLibraries || enableLibraryProfiling);
 
@@ -142,7 +125,6 @@ let
     (optionalString enableSeparateDataOutput "--datadir=$data/share/${ghc.name}")
     (optionalString enableSeparateDocOutput "--docdir=${docdir "$doc"}")
     "--with-gcc=$CC" # Clang won't work without that extra information.
-    "--package-db=$packageConfDir"
     (optionalString (enableSharedExecutables && stdenv.isLinux) "--ghc-option=-optl=-Wl,-rpath=$out/lib/${ghc.name}/${pname}-${version}")
     (optionalString (enableSharedExecutables && stdenv.isDarwin) "--ghc-option=-optl=-Wl,-headerpad_max_install_names")
     (optionalString enableParallelBuilding "--ghc-option=-j$NIX_BUILD_CORES")
@@ -166,21 +148,13 @@ let
     "--configure-option=--host=${hostPlatform.config}"
   ] ++ crossCabalFlags);
 
-  setupCompileFlags = [
-    (optionalString (!coreSetup) "-${nativePackageDbFlag}=$setupPackageConfDir")
-    (optionalString (isGhcjs || isHaLVM || versionOlder "7.8" ghc.version) "-j$NIX_BUILD_CORES")
-    # https://github.com/haskell/cabal/issues/2398
-    (optionalString (versionOlder "7.10" ghc.version && !isHaLVM) "-threaded")
-  ];
-
   isHaskellPkg = x: (x ? pname) && (x ? version) && (x ? env);
   isSystemPkg = x: !isHaskellPkg x;
 
   allPkgconfigDepends = pkgconfigDepends ++ libraryPkgconfigDepends ++ executablePkgconfigDepends ++
                         optionals doCheck testPkgconfigDepends ++ optionals doBenchmark benchmarkPkgconfigDepends;
 
-  nativeBuildInputs = [ ghc nativeGhc removeReferencesTo ] ++ optional (allPkgconfigDepends != []) pkgconfig ++
-                      setupHaskellDepends ++
+  nativeBuildInputs = [ ghc setup removeReferencesTo ] ++ optional (allPkgconfigDepends != []) pkgconfig ++
                       buildTools ++ libraryToolDepends ++ executableToolDepends;
   propagatedBuildInputs = buildDepends ++ libraryHaskellDepends ++ executableHaskellDepends ++ libraryFrameworkDepends;
   otherBuildInputs = extraLibraries ++ librarySystemDepends ++ executableSystemDepends ++ executableFrameworkDepends ++
@@ -197,32 +171,17 @@ let
   ghcEnv = ghc.withPackages (p:
     haskellBuildInputs ++ stdenv.lib.optional (!isCross) setupHaskellDepends);
 
-  setupCommand = "./Setup";
+  setup = buildHaskellPackages.mkSetup {
+    inherit pname version src setupHaskellDepends
+            preCompileBuildDriver postCompileBuildDriver
+            preUnpack postUnpack
+            patches patchPhase prePatch postPatch;
+  };
+  setupCommand = "${setup}/Setup";
 
   ghcCommand' = if isGhcjs then "ghcjs" else "ghc";
   ghcCommand = "${ghc.targetPrefix}${ghcCommand'}";
   ghcCommandCaps= toUpper ghcCommand';
-
-  nativeGhcCommand = "${nativeGhc.targetPrefix}ghc";
-
-  buildPkgDb = ghcName: packageConfDir: ''
-    if [ -d "$p/lib/${ghcName}/package.conf.d" ]; then
-      cp -f "$p/lib/${ghcName}/package.conf.d/"*.conf ${packageConfDir}/
-      continue
-    fi
-    if [ -d "$p/include" ]; then
-      configureFlags+=" --extra-include-dirs=$p/include"
-    fi
-    if [ -d "$p/lib" ]; then
-      configureFlags+=" --extra-lib-dirs=$p/lib"
-    fi
-  ''
-  # It is not clear why --extra-framework-dirs does work fine on Linux
-  + optionalString (!buildPlatform.isDarwin || versionAtLeast nativeGhc.version "8.0") ''
-    if [[ -d "$p/Library/Frameworks" ]]; then
-      configureFlags+=" --extra-framework-dirs=$p/Library/Frameworks"
-    fi
-  '';
 
 in
 
@@ -237,7 +196,6 @@ stdenv.mkDerivation ({
   pos = builtins.unsafeGetAttrPos "pname" args;
 
   prePhases = ["setupCompilerEnvironmentPhase"];
-  preConfigurePhases = ["compileBuildDriverPhase"];
   preInstallPhases = ["haddockPhase"];
 
   inherit src;
@@ -264,65 +222,13 @@ stdenv.mkDerivation ({
     echo "Build with ${ghc}."
     ${optionalString (hasActiveLibrary && hyperlinkSource) "export PATH=${hscolour}/bin:$PATH"}
 
-    setupPackageConfDir="$TMPDIR/setup-package.conf.d"
-    mkdir -p $setupPackageConfDir
-    packageConfDir="$TMPDIR/package.conf.d"
-    mkdir -p $packageConfDir
-
-    setupCompileFlags="${concatStringsSep " " setupCompileFlags}"
-    configureFlags="${concatStringsSep " " defaultConfigureFlags} $configureFlags"
-  ''
-  # We build the Setup.hs on the *build* machine, and as such should only add
-  # dependencies for the build machine.
-  #
-  # pkgs* arrays defined in stdenv/setup.hs
-  + ''
-    for p in "''${pkgsBuildBuild[@]}" "''${pkgsBuildHost[@]}" "''${pkgsBuildTarget[@]}"; do
-      ${buildPkgDb nativeGhc.name "$setupPackageConfDir"}
-    done
-    ${nativeGhcCommand}-pkg --${nativePackageDbFlag}="$setupPackageConfDir" recache
-  ''
-  # For normal components
-  + ''
-    for p in "''${pkgsHostHost[@]}" "''${pkgsHostTarget[@]}"; do
-      ${buildPkgDb ghc.name "$packageConfDir"}
-    done
-  ''
-  # only use the links hack if we're actually building dylibs. otherwise, the
-  # "dynamic-library-dirs" point to nonexistent paths, and the ln command becomes
-  # "ln -s $out/lib/links", which tries to recreate the links dir and fails
-  + (optionalString (stdenv.isDarwin && (enableSharedLibraries || enableSharedExecutables)) ''
-    # Work around a limit in the macOS Sierra linker on the number of paths
-    # referenced by any one dynamic library:
-    #
-    # Create a local directory with symlinks of the *.dylib (macOS shared
-    # libraries) from all the dependencies.
-    local dynamicLinksDir="$out/lib/links"
-    mkdir -p $dynamicLinksDir
-    for d in $(grep dynamic-library-dirs "$packageConfDir/"*|awk '{print $2}'|sort -u); do
-      ln -s "$d/"*.dylib $dynamicLinksDir
-    done
-    # Edit the local package DB to reference the links directory.
-    for f in "$packageConfDir/"*.conf; do
-      sed -i "s,dynamic-library-dirs: .*,dynamic-library-dirs: $dynamicLinksDir," $f
-    done
-  '') + ''
-    ${ghcCommand}-pkg --${packageDbFlag}="$packageConfDir" recache
+    ${mkCompilerEnv {
+      outDir = "$TMPDIR";
+      inherit enableSharedLibraries;
+    }}
+    configureFlags="${concatStringsSep " " defaultConfigureFlags} $envConfigureFlags $configureFlags"
 
     runHook postSetupCompilerEnvironment
-  '';
-
-  compileBuildDriverPhase = ''
-    runHook preCompileBuildDriver
-
-    for i in Setup.hs Setup.lhs ${defaultSetupHs}; do
-      test -f $i && break
-    done
-
-    echo setupCompileFlags: $setupCompileFlags
-    ${nativeGhcCommand} $setupCompileFlags --make -o Setup -odir $TMPDIR -hidir $TMPDIR $i
-
-    runHook postCompileBuildDriver
   '';
 
   # Cabal takes flags like `--configure-option=--host=...` instead

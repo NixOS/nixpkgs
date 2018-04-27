@@ -40,11 +40,23 @@ let
   inherit (stdenv.lib) fix' extends makeOverridable;
   inherit (haskellLib) overrideCabal getHaskellBuildInputs;
 
+  mkCompilerEnv = pkgs.callPackage ./compiler-env.nix {
+    inherit (self) ghc;
+  };
+
+  mkSetupImpl = pkgs.callPackage ./setup-builder.nix {
+    inherit stdenv;
+    inherit (self) ghc;
+    inherit mkCompilerEnv;
+  };
+  mkSetup = makeOverridable mkSetupImpl;
+
   mkDerivationImpl = pkgs.callPackage ./generic-builder.nix {
     inherit stdenv;
     nodejs = buildPackages.nodejs-slim;
     inherit buildHaskellPackages;
     inherit (self) ghc;
+    inherit mkCompilerEnv;
     inherit (buildHaskellPackages) jailbreak-cabal;
     hscolour = overrideCabal buildHaskellPackages.hscolour (drv: {
       isLibrary = false;
@@ -64,7 +76,6 @@ let
         postFixup = "rm -rf $out/lib $out/share $out/nix-support";
     });
   };
-
   mkDerivation = makeOverridable mkDerivationImpl;
 
   # manualArgs are the arguments that were explictly passed to `callPackage`, like:
@@ -103,6 +114,7 @@ let
 
   withPackages = packages: buildPackages.callPackage ./with-packages-wrapper.nix {
     inherit (self) ghc llvmPackages;
+    inherit mkCompilerEnv;
     inherit packages;
   };
 
@@ -150,7 +162,7 @@ let
 
 in package-set { inherit pkgs stdenv callPackage; } self // {
 
-    inherit mkDerivation callPackage haskellSrc2nix hackage2nix;
+    inherit mkCompilerEnv mkDerivation mkSetup callPackage haskellSrc2nix hackage2nix;
 
     inherit (haskellLib) packageSourceOverrides;
 
