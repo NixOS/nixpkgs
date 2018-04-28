@@ -293,23 +293,6 @@ self: super: {
     };
   });
 
-  ## Unmerged.  PR: https://github.com/sol/hpack/pull/277
-  ## Issue: https://github.com/sol/hpack/issues/276
-  hpack = overrideCabal super.hpack (drv: {
-    ##     • No instance for (Semigroup Dependencies)
-    ##         arising from the 'deriving' clause of a data type declaration
-    ##       Possible fix:
-    src = pkgs.fetchFromGitHub {
-      owner  = "deepfire";
-      repo   = "hpack";
-      rev    = "acce0cffcc1d165a0fd9f0b83878dfbd622ea0d6";
-      sha256 = "1wv0ya1gb1hwd9w8g4z5aig694q3arsqhxv0d4wcp270xnq9ja8y";
-    };
-    ## Setup: Encountered missing dependencies:
-    ## http-client -any, http-client-tls -any, http-types -any
-    libraryHaskellDepends = (drv.libraryHaskellDepends or []) ++ (with self; [ http-client http-client-tls http-types ]);
-  });
-
   ## Unmerged.  PR: https://github.com/hanshoglund/monadplus/pull/3
   monadplus = overrideCabal super.monadplus (drv: {
     ##     • No instance for (Semigroup (Partial a b))
@@ -574,6 +557,7 @@ self: super: {
   # Older versions don't compile.
   brick = self.brick_0_36_2;
   HaTeX = self.HaTeX_3_19_0_0;
+  hpack = self.hpack_0_28_2;
   matrix = self.matrix_0_3_6_1;
   pandoc = self.pandoc_2_2;
   pandoc-types = self.pandoc-types_1_17_4_2;
