@@ -77,6 +77,7 @@ let
           -name ${vmName} \
           -m ${toString config.virtualisation.memorySize} \
           -smp ${toString config.virtualisation.cores} \
+          -device virtio-rng-pci \
           ${concatStringsSep " " config.virtualisation.qemu.networkingOptions} \
           -virtfs local,path=/nix/store,security_model=none,mount_tag=store \
           -virtfs local,path=$TMPDIR/xchg,security_model=none,mount_tag=xchg \
