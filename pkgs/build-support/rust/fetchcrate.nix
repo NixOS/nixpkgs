@@ -3,6 +3,7 @@
 { crateName
 , version
 , sha256
+, extraPostFetch ? ""
 , ... } @ args:
 
 lib.overrideDerivation (fetchurl ({
@@ -29,7 +30,9 @@ lib.overrideDerivation (fetchurl ({
         mkdir $out
       fi
       mv "$unpackDir/$fn" "$out"
+
+      ${extraPostFetch}
     '';
-} // removeAttrs args [ "crateName" "version" ]))
+} // removeAttrs args [ "crateName" "version" "extraPostFetch" ]))
 # Hackety-hack: we actually need unzip hooks, too
 (x: {nativeBuildInputs = x.nativeBuildInputs++ [unzip];})
