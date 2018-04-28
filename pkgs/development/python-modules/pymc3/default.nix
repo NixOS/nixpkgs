@@ -23,7 +23,12 @@ buildPythonPackage rec {
     sha256 = "0hpzhkpv7sbwkcva7x914yvzcf1d1a952ynbcx6mvlgv5lqghc39";
   };
 
-  patches = [ ./0001-strip-pytest-cov.patch ];
+  # No need for coverage stats in Nix builds
+  postPatch = ''
+    substituteInPlace setup.py --replace \
+      "test_reqs = ['pytest', 'pytest-cov']" \
+      "test_reqs = ['pytest']"
+  '';
 
   propagatedBuildInputs = [
     Theano
