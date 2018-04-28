@@ -21387,5 +21387,5 @@ with pkgs;
                       getent;
 
   inherit (recurseIntoAttrs (callPackages ../os-specific/bsd { }))
-          netbsd openbsd;
+          netbsd;
 }
