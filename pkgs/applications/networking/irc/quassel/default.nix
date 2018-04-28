@@ -4,7 +4,7 @@
 , tag ? "" # tag added to the package name
 , static ? false # link statically
 
-, stdenv, fetchurl, cmake, makeWrapper, dconf
+, stdenv, fetchurl, fetchpatch, cmake, makeWrapper, dconf
 , qtbase, qtscript
 , phonon, libdbusmenu, qca-qt5
 
@@ -32,10 +32,10 @@ assert !buildClient -> !withKDE; # KDE is used by the client only
 
 let
   edf = flag: feature: [("-D" + feature + (if flag then "=ON" else "=OFF"))];
-  source = import ./source.nix { inherit fetchurl; };
+  source = import ./source.nix { inherit fetchurl fetchpatch; };
 
 in with stdenv; mkDerivation rec {
-  inherit (source) src version;
+  inherit (source) src version patches;
 
   name = "quassel${tag}-${version}";
 
