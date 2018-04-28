@@ -1,7 +1,7 @@
-{ stdenv, lib, fetchzip, cups
+{ stdenv, lib, fetchzip, cups, autoPatchelfHook
 
   # Can either be "EU" or "Global"; it's unclear what the difference is
-  , region ? "Global"
+  , region ? "Global", qt4
 }:
 
 let
@@ -9,25 +9,25 @@ let
     if stdenv.system == "x86_64-linux" then "64bit"
     else if stdenv.system == "i686-linux" then "32bit"
          else throw "Unsupported system: ${stdenv.system}";
-  debPlatform = 
+  debPlatform =
     if platform == "64bit" then "amd64"
     else "i386";
   debRegion = if region == "EU" then "EU." else "";
-
-  # TODO: add Qt4 for kyodialog3 application
-  libPath = lib.makeLibraryPath [ cups ];
 in
 stdenv.mkDerivation rec {
   name = "cups-kyodialog3-${version}";
   version = "8.1601";
 
-  dontPatchELF = true;
   dontStrip = true;
 
   src = fetchzip {
     url = "https://usa.kyoceradocumentsolutions.com/content/dam/kdc/kdag/downloads/technical/executables/drivers/kyoceradocumentsolutions/us/en/Kyocera_Linux_PPD_Ver_${version}.tar.gz";
     sha256 = "11znnlkfssakml7w80gxlz1k59f3nvhph91fkzzadnm9i7a8yjal";
   };
+
+  nativeBuildInputs = [ autoPatchelfHook ];
+
+  buildInputs = [ cups qt4 ];
 
   installPhase = ''
     mkdir -p $out
@@ -49,9 +49,6 @@ stdenv.mkDerivation rec {
     # prepend $out to all references in ppd and desktop files
     find -name "*.ppd" -exec sed -E -i "s:/usr/lib:$out/lib:g" {} \;
     find -name "*.desktop" -exec sed -E -i "s:/usr/lib:$out/lib:g" {} \;
-
-    # patchELF all executables
-    find -type f -executable -exec patchelf --set-rpath ${libPath} --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker) {} \;
   '';
 
   meta = with lib; {
@@ -61,5 +58,4 @@ stdenv.mkDerivation rec {
     maintainers = [ maintainers.steveej ];
     platforms = platforms.linux;
   };
-
 }
