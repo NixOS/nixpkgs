@@ -532,9 +532,7 @@ rec {
   #
   mkAliasDefinitions = mkAliasAndWrapDefinitions id;
   mkAliasAndWrapDefinitions = wrap: option:
-    mkMerge
-      (optional (isOption option && option.isDefined)
-        (wrap (mkMerge option.definitions)));
+    mkIf (isOption option && option.isDefined) (wrap (mkMerge option.definitions));
 
 
   /* Compatibility. */
