@@ -229,6 +229,7 @@ let
     '';
 
 in rec {
+  inherit generatedSources;
 
   # The NixOS options in JSON format.
   optionsJSON = runCommand "options-json"
