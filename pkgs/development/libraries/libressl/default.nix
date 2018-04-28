@@ -11,6 +11,8 @@ let
       inherit sha256;
     };
 
+    configureFlags = [ "--enable-nc" ];
+
     enableParallelBuilding = true;
 
     outputs = [ "bin" "dev" "out" "man" ];
