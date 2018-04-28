@@ -68,10 +68,10 @@ let
 
     HOST_SH = "${bash}/bin/sh";
 
-    # not using bsd binutils
     SHLIB_WARNTEXTREL = "no";
     SHLIB_MKMAP = "no";
     PRESERVE = "-p";
+    OBJCOPY = if stdenv.isDarwin then "true" else "objcopy";
 
     MACHINE_ARCH = hostPlatform.parsed.cpu.name;
     MACHINE_CPU = hostPlatform.parsed.cpu.name;
@@ -393,7 +393,7 @@ in rec {
         --replace rogue "" \
         --replace sail "" \
         --replace trek "" \
-	--replace dab ""
+        --replace dab ""
       substituteInPlace Makefile.inc \
         --replace 2555 555 \
         --replace 2550 550
@@ -469,6 +469,7 @@ in rec {
     version = "7.1.2";
     sha256 = "06plg0bjqgbb0aghpb9qlk8wkp1l2izdlr64vbr5laqyw8jg84zq";
     buildInputs = [ compat tic nbperf ];
+    MKPIC = if stdenv.isDarwin then "no" else "yes";
     extraPaths = [
       (fetchNetBSD "share/terminfo" "7.1.2" "1z5vzq8cw24j05r6df4vd6r57cvdbv7vbm4h962kplp14xrbg2h3")
     ];
@@ -483,10 +484,11 @@ in rec {
       "-D__scanflike(a,b)="
       "-D__va_list=va_list"
       "-D__warn_references(a,b)="
-    ];
+    ] ++ lib.optional stdenv.isDarwin "-D__strong_alias(a,b)=";
     propagatedBuildInputs = [ compat ];
     MKDOC = "no"; # missing vfontedpr
-    patchPhase = ''
+    MKPIC = if stdenv.isDarwin then "no" else "yes";
+    patchPhase = lib.optionalString (!stdenv.isDarwin) ''
       substituteInPlace printw.c \
         --replace "funopen(win, NULL, __winwrite, NULL, NULL)" NULL \
         --replace "__strong_alias(vwprintw, vw_printw)" 'extern int vwprintw(WINDOW*, const char*, va_list) __attribute__ ((alias ("vw_printw")));'
