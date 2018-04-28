@@ -20461,6 +20461,8 @@ with pkgs;
 
   cups-kyocera = callPackage ../misc/cups/drivers/kyocera {};
 
+  cups-kyodialog3 = callPackage ../misc/cups/drivers/kyodialog3 {};
+
   cups-dymo = callPackage ../misc/cups/drivers/dymo {};
 
   cups-toshiba-estudio = callPackage ../misc/cups/drivers/estudio {};
