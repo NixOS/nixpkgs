@@ -162,6 +162,7 @@ let
     ] ++ optional enableWideVine ./patches/widevine.patch
       ++ optionals (stdenv.isAarch64 && versionRange "65" "67") [
         ./patches/skia_buildfix.patch
+        ./patches/neon_buildfix.patch
     ];
 
     postPatch = ''
