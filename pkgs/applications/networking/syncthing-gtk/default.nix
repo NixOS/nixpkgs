@@ -1,14 +1,14 @@
-{ stdenv, fetchFromGitHub, libnotify, librsvg, psmisc, gtk3, substituteAll, syncthing, wrapGAppsHook, gnome3, buildPythonApplication, dateutil, pyinotify, pygobject3, bcrypt, gobjectIntrospection }:
+{ stdenv, fetchFromGitHub, libnotify, librsvg, darwin, psmisc, gtk3, libappindicator-gtk3, substituteAll, syncthing, wrapGAppsHook, gnome3, buildPythonApplication, dateutil, pyinotify, pygobject3, bcrypt, gobjectIntrospection }:
 
 buildPythonApplication rec {
-  version = "0.9.2.7";
+  version = "0.9.3.1";
   name = "syncthing-gtk-${version}";
 
   src = fetchFromGitHub {
     owner = "syncthing";
     repo = "syncthing-gtk";
     rev = "v${version}";
-    sha256 = "08k7vkibia85klwjxbnzk67h4pphrizka5v9zxwvvv3cisjiclc2";
+    sha256 = "15bh9i0j0g7hrqsz22px8g2bg0xj4lsn81rziznh9fxxx5b9v9bb";
   };
 
   nativeBuildInputs = [
@@ -18,8 +18,8 @@ buildPythonApplication rec {
   ];
 
   buildInputs = [
-    gtk3 librsvg
-    libnotify
+    gtk3 librsvg libappindicator-gtk3
+    libnotify gnome3.adwaita-icon-theme
     # Schemas with proxy configuration
     gnome3.gsettings-desktop-schemas
   ];
@@ -32,7 +32,7 @@ buildPythonApplication rec {
     ./disable-syncthing-binary-configuration.patch
     (substituteAll {
       src = ./paths.patch;
-      killall = "${psmisc}/bin/killall";
+      killall = "${if stdenv.isDarwin then darwin.shell_cmds else psmisc}/bin/killall";
       syncthing = "${syncthing}/bin/syncthing";
     })
   ];
