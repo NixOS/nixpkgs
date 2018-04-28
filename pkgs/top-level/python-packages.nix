@@ -10135,9 +10135,7 @@ in {
 
   pygraphviz = callPackage ../development/python-modules/pygraphviz { };
 
-  pymc3 = if pythonAtLeast "3.5"
-    then callPackage ../development/python-modules/pymc3 { }
-    else null;
+  pymc3 = callPackage ../development/python-modules/pymc3 { };
 
   pympler = buildPythonPackage rec {
     pname = "Pympler";
