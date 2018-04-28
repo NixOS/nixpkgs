@@ -575,7 +575,7 @@ self: super: {
   brick = self.brick_0_36_2;
   HaTeX = self.HaTeX_3_19_0_0;
   matrix = self.matrix_0_3_6_1;
-  pandoc = self.pandoc_2_1_3;
+  pandoc = self.pandoc_2_2;
   pandoc-types = self.pandoc-types_1_17_4_2;
 
   # https://github.com/xmonad/xmonad/issues/155
