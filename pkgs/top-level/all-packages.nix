@@ -13321,11 +13321,19 @@ with pkgs;
       ];
   };
 
-  linux_copperhead = callPackage ../os-specific/linux/kernel/linux-copperhead-hardened.nix {
+  linux_copperhead_lts = callPackage ../os-specific/linux/kernel/linux-copperhead-lts.nix {
     kernelPatches = with kernelPatches; [
-      kernelPatches.bridge_stp_helper
-      kernelPatches.modinst_arg_list_too_long
-      kernelPatches.tag_hardened
+      bridge_stp_helper
+      modinst_arg_list_too_long
+      tag_hardened
+    ];
+  };
+
+  linux_copperhead_stable = callPackage ../os-specific/linux/kernel/linux-copperhead-stable.nix {
+    kernelPatches = with kernelPatches; [
+      bridge_stp_helper
+      modinst_arg_list_too_long
+      tag_hardened
     ];
   };
 
@@ -13661,9 +13669,8 @@ with pkgs;
 
   linuxPackages_latest_xen_dom0_hardened = recurseIntoAttrs (hardenedLinuxPackagesFor (pkgs.linux_latest.override { features.xen_dom0=true; }));
 
-  linuxPackages_copperhead_hardened = recurseIntoAttrs (hardenedLinuxPackagesFor pkgs.linux_copperhead);
-  linux_copperhead_hardened = linuxPackages_copperhead_hardened.kernel;
-  linux_hardened_copperhead = linux_copperhead_hardened; # alias for backward compatibility
+  linuxPackages_copperhead_lts = recurseIntoAttrs (hardenedLinuxPackagesFor pkgs.linux_copperhead_lts);
+  linuxPackages_copperhead_stable = recurseIntoAttr (hardenedLinuxPackagesFor pkgs.linux_copperhead_stable);
 
   # Samus kernels
   linuxPackages_samus_4_12 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_samus_4_12);
