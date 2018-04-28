@@ -688,6 +688,8 @@ with pkgs;
     pkgs_i686 = pkgsi686Linux;
   };
 
+  abootimg = callPackage ../development/mobile/abootimg {};
+
   adbfs-rootless = callPackage ../development/mobile/adbfs-rootless {
     adb = androidenv.platformTools;
   };
