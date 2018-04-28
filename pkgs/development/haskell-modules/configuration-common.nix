@@ -863,8 +863,8 @@ self: super: {
     testToolDepends = drv.testToolDepends or [] ++ [pkgs.procps];
   });
 
-  # https://github.com/fpco/stackage/issues/3126
-  stack = doJailbreak super.stack;
+  # Needs newer versions than what we have in LTS-11.x at the moment.
+  stack = super.stack.overrideScope (self: super: { hpack = self.hpack_0_28_2; });
 
   # These packages depend on each other, forming an infinite loop.
   scalendar = markBroken (super.scalendar.override { SCalendar = null; });
