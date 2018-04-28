@@ -1,12 +1,13 @@
 { config, lib, pkgs, ...}:
 let
   cfg = config.services.hitch;
+  ocspDir = lib.optionalString cfg.ocsp-stapling.enabled "/var/cache/hitch/ocsp";
   hitchConfig = with lib; pkgs.writeText "hitch.conf" (concatStringsSep "\n" [
     ("backend = \"${cfg.backend}\"")
-    ("frontend = \"${cfg.frontend}\"")
+    (concatMapStrings (s: "frontend = \"${s}\"\n") cfg.frontend)
     (concatMapStrings (s: "pem-file = \"${s}\"\n") cfg.pem-files)
     ("ciphers = \"${cfg.ciphers}\"")
-    ("ocsp-dir = \"${cfg.ocspStaplingDir}\"")
+    ("ocsp-dir = \"${ocspDir}\"")
     "user = \"${cfg.user}\""
     "group = \"${cfg.group}\""
     cfg.extraConfig
@@ -39,6 +40,7 @@ with lib;
           The port and interface of the listen endpoint in the
 +         form [HOST]:PORT[+CERT].
         '';
+        apply = toList;
       };
 
       pem-files = mkOption {
@@ -47,10 +49,12 @@ with lib;
         description = "PEM files to use";
       };
 
-      ocspStaplingDir = mkOption {
-        type = types.path;
-        default = "/var/run/hitch/ocsp-cache";
-        description = "The location of the OCSP Stapling cache";
+      ocsp-stapling = {
+        enabled = mkOption {
+          type = types.bool;
+          default = true;
+          description = "Whether to enable OCSP Stapling";
+        };
       };
 
       user = mkOption {
@@ -82,9 +86,10 @@ with lib;
       after = [ "network.target" ];
       preStart = ''
         ${pkgs.hitch}/sbin/hitch -t --config ${hitchConfig}
-        mkdir -p ${cfg.ocspStaplingDir}
-        chown -R hitch:hitch ${cfg.ocspStaplingDir}
-      '';
+      '' + (optionalString cfg.ocsp-stapling.enabled ''
+        mkdir -p ${ocspDir}
+        chown -R hitch:hitch ${ocspDir}
+      '');
       serviceConfig = {
         Type = "forking";
         ExecStart = "${pkgs.hitch}/sbin/hitch --daemon --config ${hitchConfig}";
