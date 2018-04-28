@@ -80,7 +80,7 @@ with pkgs;
     ../build-support/setup-hooks/autoreconf.sh;
 
   autoPatchelfHook = makeSetupHook
-    { deps = [ file ]; }
+    { name = "auto-patchelf-hook"; deps = [ file ]; }
     ../build-support/setup-hooks/auto-patchelf.sh;
 
   ensureNewerSourcesHook = { year }: makeSetupHook {}
