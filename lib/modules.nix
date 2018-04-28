@@ -667,22 +667,26 @@ rec {
   };
 
   doRename = { from, to, visible, warn, use }:
+    { config, options, ... }:
     let
+      fromOpt = getAttrFromPath from options;
+      toOpt = getAttrFromPath to options;
       toOf = attrByPath to
         (abort "Renaming error: option `${showOption to}' does not exist.");
     in
-      { config, options, ... }:
-      { options = setAttrByPath from (mkOption {
-          inherit visible;
-          description = "Alias of <option>${showOption to}</option>.";
-          apply = x: use (toOf config);
-        });
-        config = {
-          warnings =
-            let opt = getAttrFromPath from options; in
-            optional (warn && opt.isDefined)
-              "The option `${showOption from}' defined in ${showFiles opt.files} has been renamed to `${showOption to}'.";
-        } // setAttrByPath to (mkAliasDefinitions (getAttrFromPath from options));
-      };
+    {
+      options = setAttrByPath from (mkOption {
+        inherit visible;
+        description = "Alias of <option>${showOption to}</option>.";
+        apply = x: use (toOf config);
+      });
+      config = mkMerge [
+        {
+          warnings = optional (warn && fromOpt.isDefined)
+            "The option `${showOption from}' defined in ${showFiles fromOpt.files} has been renamed to `${showOption to}'.";
+        }
+        (mkAliasAndWrapDefinitions (setAttrByPath to) fromOpt)
+      ];
+    };
 
 }
