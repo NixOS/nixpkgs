@@ -25,9 +25,7 @@ buildPythonPackage rec {
 
   # No need for coverage stats in Nix builds
   postPatch = ''
-    substituteInPlace setup.py --replace \
-      "test_reqs = ['pytest', 'pytest-cov']" \
-      "test_reqs = ['pytest']"
+    substituteInPlace setup.py --replace ", 'pytest-cov'" ""
   '';
 
   propagatedBuildInputs = [
