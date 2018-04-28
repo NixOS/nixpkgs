@@ -845,17 +845,8 @@ self: super: {
   # missing dependencies: Glob >=0.7.14 && <0.8, data-fix ==0.0.4
   stack2nix = doJailbreak super.stack2nix;
 
-  # Hacks to work around https://github.com/haskell/c2hs/issues/192.
-  c2hs = (overrideCabal super.c2hs {
-    version = "0.26.2-28-g8b79823";
-    doCheck = false;
-    src = pkgs.fetchFromGitHub {
-      owner = "deech";
-      repo = "c2hs";
-      rev = "8b79823c32e234c161baec67fdf7907952ca62b8";
-      sha256 = "0hyrcyssclkdfcw2kgcark8jl869snwnbrhr9k0a9sbpk72wp7nz";
-    };
-  });
+  # Work around https://github.com/haskell/c2hs/issues/192.
+  c2hs = dontCheck super.c2hs;
 
   # Needs pginit to function and pgrep to verify.
   tmp-postgres = overrideCabal super.tmp-postgres (drv: {
