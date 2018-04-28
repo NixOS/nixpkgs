@@ -82,7 +82,7 @@ self: super: {
       name = "git-annex-${drv.version}-src";
       url = "git://git-annex.branchable.com/";
       rev = "refs/tags/" + drv.version;
-      sha256 = "011kiyy1anj99ab70npl5i7pcqri0pdk04s4cvdm39zyas5m9lbd";
+      sha256 = "05rygb8jm4nh7ggzihz6664hcgwkbqspi8gbpkpf7l7wwvzdm1rd";
     };
   })).overrideScope (self: super: {
     aws = dontCheck (self.aws_0_18);
