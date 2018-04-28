@@ -1,6 +1,7 @@
 { lib
 , fetchPypi
 , buildPythonPackage
+, pythonOlder
 , Theano
 , pandas
 , patsy
@@ -17,6 +18,7 @@
 buildPythonPackage rec {
   pname = "pymc3";
   version = "3.2";
+  disabled = pythonOlder "3.5";
 
   src = fetchPypi {
     inherit pname version;
