@@ -558,6 +558,7 @@ self: super: {
   brick = self.brick_0_36_2;
   HaTeX = self.HaTeX_3_19_0_0;
   hpack = self.hpack_0_28_2;
+  hspec-smallcheck = self.hspec-smallcheck_0_5_2;
   matrix = self.matrix_0_3_6_1;
   pandoc = self.pandoc_2_2;
   pandoc-types = self.pandoc-types_1_17_4_2;
