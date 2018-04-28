@@ -405,6 +405,7 @@ in rec {
       "-DOXTABS=XTABS"
       "-DRANDOM_MAX=RAND_MAX"
       "-DINFTIM=-1"
+      (if hostPlatform.isMusl then "-include sys/ttydefaults.h -include sys/file.h" else "")
     ];
     postBuild = ''
       mkdir -p $out/usr/games $out/usr/share/games/ching \
@@ -424,21 +425,19 @@ in rec {
     ];
   };
 
-  finger = netBSDDerivation {
-    path = "usr.bin/finger";
-    sha256 = "0jl672z50f2yf7ikp682b3xrarm6bnrrx9vi94xnp2fav8m8zfyi";
-    version = "7.1.2";
-    extraPaths = [ who.src ];
-    NIX_CFLAGS_COMPILE = [
-      "-DSUPPORT_UTMP"
-      "-USUPPORT_UTMPX"
-    ];
-    patchPhase = ''
-
-      ${who.patchPhase} 
-
-    '';
-  };
+  # finger = netBSDDerivation {
+  #   path = "usr.bin/finger";
+  #   sha256 = "0jl672z50f2yf7ikp682b3xrarm6bnrrx9vi94xnp2fav8m8zfyi";
+  #   version = "7.1.2";
+  #   extraPaths = [ who.src ];
+  #   NIX_CFLAGS_COMPILE = [
+  #     "-DSUPPORT_UTMP"
+  #     "-USUPPORT_UTMPX"
+  #   ];
+  #   patchPhase = ''
+  #     ${who.patchPhase}
+  #   '';
+  # };
 
   fingerd = netBSDDerivation {
     path = "libexec/fingerd";
