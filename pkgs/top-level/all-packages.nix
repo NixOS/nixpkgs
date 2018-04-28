@@ -3887,7 +3887,7 @@ with pkgs;
 
   netcat = netcat-openbsd;
 
-  netcat-gnu = callPackage ../tools/networking/netcat-gnu { };
+  netcat-gnu = callPackage ../tools/networking/netcat { };
 
   netcat-openbsd = callPackage ../tools/networking/netcat-openbsd { };
 
