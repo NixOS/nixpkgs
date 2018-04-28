@@ -3879,8 +3879,6 @@ with pkgs;
 
   netcat-gnu = callPackage ../tools/networking/netcat { };
 
-  netcat-openbsd = callPackage ../tools/networking/netcat-openbsd { };
-
   nethogs = callPackage ../tools/networking/nethogs { };
 
   netkittftp = callPackage ../tools/networking/netkit/tftp { };
