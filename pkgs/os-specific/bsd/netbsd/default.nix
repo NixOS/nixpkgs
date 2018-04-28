@@ -11,7 +11,7 @@ let
 
   netBSDDerivation = attrs: stdenv.mkDerivation ((rec {
     name = "${attrs.pname or (baseNameOf attrs.path)}-netbsd-${attrs.version}";
-    src = fetchNetBSD attrs.path attrs.version attrs.sha256;
+    src = attrs.src or fetchNetBSD attrs.path attrs.version attrs.sha256;
 
     extraPaths = [ ];
 
@@ -187,6 +187,7 @@ let
       install -D $NETBSDSRCDIR/sys/sys/rmd160.h $out/include/rmd160.h
       install -D $NETBSDSRCDIR/sys/sys/sha1.h $out/include/sha1.h
       install -D $NETBSDSRCDIR/sys/sys/sha2.h $out/include/sha2.h
+      install -D $NETBSDSRCDIR/sys/sys/queue.h $out/include/sys/queue.h
       install -D $NETBSDSRCDIR/include/vis.h $out/include/vis.h
       install -D $NETBSDSRCDIR/include/db.h $out/include/db.h
       install -D $NETBSDSRCDIR/include/netconfig.h $out/include/netconfig.h
