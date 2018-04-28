@@ -8244,6 +8244,8 @@ in {
 
   pygraphviz = callPackage ../development/python-modules/pygraphviz { };
 
+  pymc3 = callPackage ../development/python-modules/pymc3 { };
+
   pympler = buildPythonPackage rec {
     pname = "Pympler";
     version = "0.4.3";
