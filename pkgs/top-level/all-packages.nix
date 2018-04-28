@@ -6706,12 +6706,12 @@ with pkgs;
 
   mlton = callPackage ../development/compilers/mlton { };
 
-  mono = mono40;
+  mono = mono58;
 
-  mono40 = callPackage ../development/compilers/mono/4.0.nix {
+  mono40 = lowPrio (callPackage ../development/compilers/mono/4.0.nix {
     inherit (darwin) libobjc;
     inherit (darwin.apple_sdk.frameworks) Foundation;
-  };
+  });
 
   mono44 = lowPrio (callPackage ../development/compilers/mono/4.4.nix {
     inherit (darwin) libobjc;
@@ -6738,10 +6738,10 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Foundation;
   });
 
-  mono58 = lowPrio (callPackage ../development/compilers/mono/5.8.nix {
+  mono58 = callPackage ../development/compilers/mono/5.8.nix {
     inherit (darwin) libobjc;
     inherit (darwin.apple_sdk.frameworks) Foundation;
-  });
+  };
 
   monoDLLFixer = callPackage ../build-support/mono-dll-fixer { };
 
