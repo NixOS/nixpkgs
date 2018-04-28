@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "gmic-${version}";
-  version = "2.2.1";
+  version = "2.2.2";
 
   src = fetchurl {
     url = "http://gmic.eu/files/source/gmic_${version}.tar.gz";
-    sha256 = "0iac1zaix2zv1dfp45ca0wk9pj6k02gf8l1vmg820z8jd12pa19w";
+    sha256 = "0zqfj2ym5nn3ff93xh2wf9ayxqlznabbdi00xw4lm7vw3iwkzqnc";
   };
 
   nativeBuildInputs = [ pkgconfig ];
