@@ -255,6 +255,7 @@ in
               chmod 644 /etc/ssh/ssh_host_ed25519_key.pub
           else
               echo "Setup of ssh host keys from http://metadata.google.internal/computeMetadata/v1/instance/attributes/ failed."
+              false
           fi
           rm -f $SSH_HOST_KEYS_DIR
         '';
