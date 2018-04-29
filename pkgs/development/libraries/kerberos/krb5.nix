@@ -1,16 +1,10 @@
 { stdenv, fetchurl, pkgconfig, perl, yacc, bootstrap_cmds
 , openssl, openldap, libedit
-
-# Extra Arguments
-, type ? ""
 }:
 
-let
-  libOnly = type == "lib";
-in
 with stdenv.lib;
 stdenv.mkDerivation rec {
-  name = "${type}krb5-${version}";
+  name = "krb5-${version}";
   majorVersion = "1.15";
   version = "${majorVersion}.2";
 
@@ -29,32 +23,12 @@ stdenv.mkDerivation rec {
          "ac_cv_printf_positional=yes"
        ];
 
-  nativeBuildInputs = [ pkgconfig perl ]
-    ++ optional (!libOnly) yacc
+  nativeBuildInputs = [ pkgconfig perl yacc ]
     # Provides the mig command used by the build scripts
     ++ optional stdenv.isDarwin bootstrap_cmds;
-  buildInputs = [ openssl ]
-    ++ optionals (!libOnly) [ openldap libedit ];
+  buildInputs = [ openssl openldap libedit ];
 
   preConfigure = "cd ./src";
-
-  buildPhase = optionalString libOnly ''
-    MAKE="make -j $NIX_BUILD_CORES -l $NIX_BUILD_CORES"
-    (cd util; $MAKE)
-    (cd include; $MAKE)
-    (cd lib; $MAKE)
-    (cd build-tools; $MAKE)
-  '';
-
-  installPhase = optionalString libOnly ''
-    mkdir -p "$out"/{bin,sbin,lib/pkgconfig,share/{et,man/man1}} \
-      "$dev"/include/{gssapi,gssrpc,kadm5,krb5}
-    (cd util; $MAKE install)
-    (cd include; $MAKE install)
-    (cd lib; $MAKE install)
-    (cd build-tools; $MAKE install)
-    ${postInstall}
-  '';
 
   # not via outputBin, due to reference from libkrb5.so
   postInstall = ''
