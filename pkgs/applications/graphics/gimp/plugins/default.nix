@@ -88,6 +88,7 @@ rec {
       url = "http://registry.gimp.org/files/${name}.tar.bz2";
       sha256 = "1gqf3hchz7n7v5kpqkhqh8kwnxbsvlb5cr2w2n7ngrvl56f5xs1h";
     };
+    meta.broken = true;
   };
 
   resynthesizer = pluginDerivation {
