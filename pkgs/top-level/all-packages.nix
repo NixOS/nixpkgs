@@ -17430,8 +17430,6 @@ with pkgs;
     inherit (darwin.stubs) rez setfile;
   };
 
-  qemu-riscv = lowPrio (callPackage ../applications/virtualization/qemu/riscv.nix {});
-
   qgis = callPackage ../applications/gis/qgis {
     inherit (darwin.apple_sdk.frameworks) IOKit ApplicationServices;
   };
