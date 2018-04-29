@@ -4,16 +4,11 @@
 # Optional dependencies
 , libjack2 ? null, dbus ? null, dbus_cplusplus ? null, alsaLib ? null
 , pyqt4 ? null, dbus-python ? null, xdg_utils ? null
-
-# Other Flags
-, prefix ? ""
 }:
 
 let
 
   shouldUsePkg = pkg: if pkg != null && pkg.meta.available then pkg else null;
-
-  libOnly = prefix == "lib";
 
   optLibjack2 = shouldUsePkg libjack2;
   optDbus = shouldUsePkg dbus;
@@ -24,7 +19,7 @@ let
   optXdg_utils = shouldUsePkg xdg_utils;
 in
 stdenv.mkDerivation rec {
-  name = "${prefix}ffado-${version}";
+  name = "ffado-${version}";
   version = "2.4.0";
 
   src = fetchurl {
@@ -36,7 +31,6 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     expat libraw1394 libconfig libavc1394 libiec61883
-  ] ++ stdenv.lib.optionals (!libOnly) [
     optLibjack2 optDbus optDbus_cplusplus optAlsaLib optPyqt4
     optXdg_utils libxmlxx glibmm
   ];
@@ -69,10 +63,7 @@ stdenv.mkDerivation rec {
       SERIALIZE_USE_EXPAT=True \
   '';
 
-  installPhase = if libOnly then ''
-    scons PREFIX=$TMPDIR UDEVDIR=$TMPDIR \
-      LIBDIR=$out/lib INCLUDEDIR=$out/include install
-  '' else ''
+  installPhase = ''
     scons PREFIX=$out PYPKGDIR=$PYDIR UDEVDIR=$out/lib/udev/rules.d install
   '' + stdenv.lib.optionalString (optPyqt4 != null && optPythonDBus != null) ''
     wrapProgram $out/bin/ffado-mixer --prefix PYTHONPATH : \

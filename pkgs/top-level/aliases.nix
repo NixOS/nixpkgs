@@ -112,6 +112,7 @@ mapAliases (rec {
   libcap_manpages = libcap.doc; # added 2016-04-29
   libcap_pam = if stdenv.isLinux then libcap.pam else null; # added 2016-04-29
   libcap_progs = libcap.out; # added 2016-04-29
+  libffado = ffadoFull; # added 2018-04-25
   libgnome_keyring = libgnome-keyring; # added 2018-02-25
   libgnome_keyring3 = libgnome-keyring3; # added 2018-02-25
   libgumbo = gumbo; # added 2018-01-21
