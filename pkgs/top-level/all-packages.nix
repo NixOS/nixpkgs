@@ -13138,6 +13138,7 @@ with pkgs;
 
   ffadoFull = callPackage ../os-specific/linux/ffado {
     inherit (python2Packages) python pyqt4 dbus-python;
+    libjack2 = libjack2.override { libffado = null; };
   };
 
   fbterm = callPackage ../os-specific/linux/fbterm { };
