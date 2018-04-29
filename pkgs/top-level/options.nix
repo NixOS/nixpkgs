@@ -1,4 +1,4 @@
-{lib, targetPlatform}:
+{lib, hostPlatform}:
 
 with lib;
 
@@ -20,7 +20,7 @@ with lib;
   };
 
   withX11 = mkOption {
-    default = targetPlatform.isLinux; # also BSDs?
+    default = hostPlatform.isLinux; # also BSDs?
     type = types.bool;
     description = ''
 
@@ -30,7 +30,7 @@ with lib;
   };
 
   withWayland = mkOption {
-    default = targetPlatform.isLinux; # also BSDs?
+    default = hostPlatform.isLinux; # also BSDs?
     type = types.bool;
     description = ''
 
@@ -40,7 +40,7 @@ with lib;
   };
 
   withAlsa = mkOption {
-    default = targetPlatform.isLinux;
+    default = hostPlatform.isLinux;
     type = types.bool;
     description = ''
 
@@ -50,7 +50,7 @@ with lib;
   };
 
   withPulseAudio = mkOption {
-    default = targetPlatform.isLinux;
+    default = hostPlatform.isLinux;
     type = types.bool;
     description = ''
 
@@ -90,7 +90,7 @@ with lib;
   };
 
   withApple = mkOption {
-    default = targetPlatform.isDarwin;
+    default = hostPlatform.isDarwin;
     type = types.bool;
     description = ''
 
@@ -102,7 +102,7 @@ with lib;
   };
 
   withSystemd = mkOption {
-    default = targetPlatform.isLinux;
+    default = hostPlatform.isLinux;
     type = types.bool;
     description = ''
 

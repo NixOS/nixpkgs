@@ -116,12 +116,6 @@ let
     lib.optionalAttrs allowCustomOverrides
       ((config.packageOverrides or (super: {})) super);
 
-  # Allow users to specify global use flags that are applied in all
-  # packages.
-  options = self: super:
-    lib.mapAttrs (name: option: config.${name} or option.default)
-              (import ./options.nix { inherit (self) lib stdenv; });
-
   # The complete chain of package set builders, applied from top to bottom.
   # stdenvOverlays must be last as it brings package forward from the
   # previous bootstrapping phases which have already been overlayed.
@@ -131,7 +125,6 @@ let
     stdenvAdapters
     trivialBuilders
     splice
-    options
     allPackages
     aliases
     configOverrides

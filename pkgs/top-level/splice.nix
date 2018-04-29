@@ -36,7 +36,13 @@ let
   # whether `nativeDrv` or `crossDrv` is the default in `defaultScope`.
   pkgsWithoutFetchers = lib.filterAttrs (n: _: !lib.hasPrefix "fetch" n) pkgs;
   targetPkgsWithoutFetchers = lib.filterAttrs (n: _: !lib.hasPrefix "fetch" n) pkgs.targetPackages;
-  defaultHostTargetScope = pkgsWithoutFetchers // pkgs.xorg;
+
+  # Allow users to specify global use flags that are applied in all
+  # packages.
+  options = lib.mapAttrs (name: option: pkgs.config.${name} or option.default)
+              (import ./options.nix { inherit lib; inherit (pkgs) hostPlatform; });
+
+  defaultHostTargetScope = pkgsWithoutFetchers // pkgs.xorg // options;
   defaultTargetTargetScope = targetPkgsWithoutFetchers // targetPkgsWithoutFetchers.xorg or {};
 
   splicer = pkgsBuildBuild: pkgsBuildHost: pkgsBuildTarget:
