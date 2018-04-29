@@ -17734,6 +17734,8 @@ with pkgs;
 
   spice-vdagent = callPackage ../applications/virtualization/spice-vdagent { };
 
+  soapysdr = callPackage ../applications/misc/soapysdr { };
+
   spideroak = callPackage ../applications/networking/spideroak { };
 
   squishyball = callPackage ../applications/audio/squishyball {
@@ -21258,6 +21260,8 @@ with pkgs;
   httrack = callPackage ../tools/backup/httrack { };
 
   httraqt = libsForQt5.callPackage ../tools/backup/httrack/qt.nix { };
+
+  limesuite = callPackage ../applications/misc/limesuite { };
 
   mg = callPackage ../applications/editors/mg { };
 
