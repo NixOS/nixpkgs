@@ -5,7 +5,6 @@
 , nose
 , scipy
 , scikitlearn
-, pythonOlder
 , fetchPypi
 }:
 
