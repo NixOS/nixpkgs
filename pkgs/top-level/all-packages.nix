@@ -12564,11 +12564,6 @@ with pkgs;
 
   # libpulse implementations
 
-  libpulseaudio-vanilla = callPackage ../servers/pulseaudio {
-    libOnly = true;
-    inherit (darwin.apple_sdk.frameworks) CoreServices AudioUnit Cocoa;
-  };
-
   apulse = callPackage ../misc/apulse { };
 
   libpressureaudio = callPackage ../misc/apulse/pressureaudio.nix {

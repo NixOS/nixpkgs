@@ -122,6 +122,7 @@ mapAliases (rec {
   libjson_rpc_cpp = libjson-rpc-cpp; # added 2017-02-28
   libkrb5 = krb5Full; # added 2018-04-25
   libmysql = mysql.connector-c; # added # 2017-12-28, this was a misnomer refering to libmysqlclient
+  libpulseaudio-vanilla = pulseaudioLight; # added 2018-04-25
   libtidy = html-tidy;  # added 2014-12-21
   links = links2; # added 2016-01-31
   lttngTools = lttng-tools;  # added 2014-07-31

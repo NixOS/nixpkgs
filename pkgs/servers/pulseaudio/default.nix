@@ -28,14 +28,11 @@
 
 , zeroconfSupport ? false
 
-, # Whether to build only the library.
-  libOnly ? false
-
 , CoreServices, AudioUnit, Cocoa
 }:
 
 stdenv.mkDerivation rec {
-  name = "${if libOnly then "lib" else ""}pulseaudio-${version}";
+  name = "pulseaudio-${version}";
   version = "11.1";
 
   src = fetchurl {
@@ -62,21 +59,19 @@ stdenv.mkDerivation rec {
     lib.optionals stdenv.isLinux [ libcap ];
 
   buildInputs =
-    [ libtool libsndfile speexdsp fftwFloat ]
+    [ libtool libsndfile speexdsp fftwFloat libasyncns webrtc-audio-processing ]
     ++ lib.optionals stdenv.isLinux [ glib dbus ]
     ++ lib.optionals stdenv.isDarwin [ CoreServices AudioUnit Cocoa ]
-    ++ lib.optionals (!libOnly) (
-      [ libasyncns webrtc-audio-processing ]
-      ++ lib.optional jackaudioSupport libjack2
-      ++ lib.optionals x11Support [ xorg.xlibsWrapper xorg.libXtst xorg.libXi ]
-      ++ lib.optional useSystemd systemd
-      ++ lib.optionals stdenv.isLinux [ alsaLib udev ]
-      ++ lib.optional airtunesSupport openssl
-      ++ lib.optional gconfSupport gconf
-      ++ lib.optionals bluetoothSupport [ bluez5 sbc ]
-      ++ lib.optional remoteControlSupport lirc
-      ++ lib.optional zeroconfSupport  avahi
-    );
+    ++ lib.optional jackaudioSupport libjack2
+    ++ lib.optionals x11Support [ xorg.xlibsWrapper xorg.libXtst xorg.libXi ]
+    ++ lib.optional useSystemd systemd
+    ++ lib.optionals stdenv.isLinux [ alsaLib udev ]
+    ++ lib.optional airtunesSupport openssl
+    ++ lib.optional gconfSupport gconf
+    ++ lib.optionals bluetoothSupport [ bluez5 sbc ]
+    ++ lib.optional remoteControlSupport lirc
+    ++ lib.optional zeroconfSupport  avahi
+    ;
 
   preConfigure = ''
     # Performs and autoreconf
@@ -104,7 +99,7 @@ stdenv.mkDerivation rec {
       "--with-access-group=audio"
       "--with-bash-completion-dir=\${out}/share/bash-completions/completions"
     ]
-    ++ lib.optional (jackaudioSupport && !libOnly) "--enable-jack"
+    ++ lib.optional jackaudioSupport "--enable-jack"
     ++ lib.optional stdenv.isDarwin "--with-mac-sysroot=/"
     ++ lib.optional (stdenv.isLinux && useSystemd) "--with-systemduserunitdir=\${out}/lib/systemd/user";
 
@@ -122,11 +117,9 @@ stdenv.mkDerivation rec {
       "pulseconfdir=$(out)/etc/pulse"
     ];
 
-  postInstall = lib.optionalString libOnly ''
-    rm -rf $out/{bin,share,etc,lib/{pulse-*,systemd}}
-    sed 's|-lltdl|-L${libtool.lib}/lib -lltdl|' -i $out/lib/pulseaudio/libpulsecore-${version}.la
-  ''
-    + ''moveToOutput lib/cmake "$dev" '';
+  postInstall = ''
+    moveToOutput lib/cmake "$dev"
+  '';
 
   meta = {
     description = "Sound server for POSIX and Win32 systems";
