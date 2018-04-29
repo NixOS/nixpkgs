@@ -1046,5 +1046,10 @@ in rec
 
   ocamlPackages_latest = ocamlPackages_4_06;
 
-  ocamlPackages = ocamlPackages_4_05;
+  ocamlPackages =
+    # OCaml 4.05 is broken on aarch64
+    if system == "aarch64-linux" then
+      ocamlPackages_4_06
+    else
+      ocamlPackages_4_05;
 }
