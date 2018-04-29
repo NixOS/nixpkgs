@@ -6344,6 +6344,8 @@ in {
     propagatedBuildInputs = with self; [ requests webob ];
   };
 
+  hdbscan = callPackage ../development/python-modules/hdbscan { };
+
   hmmlearn = callPackage ../development/python-modules/hmmlearn { };
 
   hcs_utils = callPackage ../development/python-modules/hcs_utils { };
