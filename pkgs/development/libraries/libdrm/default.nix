@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     "echo : \\\${ac_cv_func_clock_gettime=\'yes\'} > config.cache";
 
   configureFlags = [ "--enable-install-test-programs" ]
-    ++ stdenv.lib.optionals (stdenv.isArm || stdenv.isAarch64)
+    ++ stdenv.lib.optionals (stdenv.isAarch32 || stdenv.isAarch64)
       [ "--enable-tegra-experimental-api" "--enable-etnaviv-experimental-api" ]
     ++ stdenv.lib.optional stdenv.isDarwin "-C";
 

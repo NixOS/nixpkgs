@@ -35,6 +35,7 @@ stdenv.mkDerivation rec {
     '';
     license     = licenses.lgpl2Plus;
     platforms   = platforms.linux ++ platforms.darwin;
+    maintainers = with maintainers; [ matthewbauer ];
   };
 
   preConfigure = ''

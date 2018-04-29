@@ -98,6 +98,7 @@ let
     in res;
 
   aliases = self: super: import ./aliases.nix super;
+  defaultOverrides = self: super: import ./overrides.nix super;
 
   # stdenvOverrides is used to avoid having multiple of versions
   # of certain dependencies that were used in bootstrapping the
@@ -126,7 +127,8 @@ let
     trivialBuilders
     splice
     allPackages
-    aliases
+    (if (config.quickEval or false) then (self: super: {}) else defaultOverrides)
+    (if (config.quickEval or false) then (self: super: {}) else aliases)
     configOverrides
   ] ++ overlays ++ [
     stdenvOverrides ]);

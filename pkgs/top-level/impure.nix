@@ -52,22 +52,22 @@ in
           map (n: import (path + ("/" + n)))
             (builtins.filter (n: builtins.match ".*\\.nix" n != null || pathExists (path + ("/" + n + "/default.nix")))
               (attrNames content))
-        else 
+        else
           # it's a file, so the result is the contents of the file itself
           import path;
     in
       if pathOverlays != "" && pathExists pathOverlays then overlays pathOverlays
-      else if pathExists homeOverlaysFile && pathExists homeOverlaysDir then 
+      else if pathExists homeOverlaysFile && pathExists homeOverlaysDir then
         throw ''
           Nixpkgs overlays can be specified with ${homeOverlaysFile} or ${homeOverlaysDir}, but not both.
           Please remove one of them and try again.
         ''
-      else if pathExists homeOverlaysFile then 
-        if isDir homeOverlaysFile then 
+      else if pathExists homeOverlaysFile then
+        if isDir homeOverlaysFile then
           throw (homeOverlaysFile + " should be a file")
         else overlays homeOverlaysFile
       else if pathExists homeOverlaysDir then
-        if !(isDir homeOverlaysDir) then 
+        if !(isDir homeOverlaysDir) then
           throw (homeOverlaysDir + " should be a directory")
         else overlays homeOverlaysDir
       else []
