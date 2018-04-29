@@ -77,6 +77,7 @@ let
           -name ${vmName} \
           -m ${toString config.virtualisation.memorySize} \
           -smp ${toString config.virtualisation.cores} \
+          -device virtio-rng-pci \
           ${concatStringsSep " " config.virtualisation.qemu.networkingOptions} \
           -virtfs local,path=/nix/store,security_model=none,mount_tag=store \
           -virtfs local,path=$TMPDIR/xchg,security_model=none,mount_tag=xchg \
@@ -98,7 +99,7 @@ let
           ${qemuGraphics} \
           ${toString config.virtualisation.qemu.options} \
           $QEMU_OPTS \
-          $@
+          "$@"
     '';
 
 
@@ -437,7 +438,7 @@ in
     # FIXME: Consolidate this one day.
     virtualisation.qemu.options = mkMerge [
       (mkIf (pkgs.stdenv.isi686 || pkgs.stdenv.isx86_64) [ "-vga std" "-usb" "-device usb-tablet,bus=usb-bus.0" ])
-      (mkIf (pkgs.stdenv.isArm || pkgs.stdenv.isAarch64) [ "-device virtio-gpu-pci" "-device usb-ehci,id=usb0" "-device usb-kbd" "-device usb-tablet" ])
+      (mkIf (pkgs.stdenv.isAarch32 || pkgs.stdenv.isAarch64) [ "-device virtio-gpu-pci" "-device usb-ehci,id=usb0" "-device usb-kbd" "-device usb-tablet" ])
     ];
 
     # Mount the host filesystem via 9P, and bind-mount the Nix store

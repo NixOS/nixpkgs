@@ -1,0 +1,23 @@
+diff --git a/setup.cfg b/setup.cfg
+index a9e37ce..41b9886 100644
+--- a/setup.cfg
++++ b/setup.cfg
+@@ -1,5 +1,5 @@
+ [tool:pytest]
+-addopts = --flake8 --tb=native --cov=src --cov-report=html --junitxml=report.xml -m 'not jenkinsonly' src/vulnix
++addopts = --tb=native --cov=src --cov-report=html --junitxml=report.xml -m 'not jenkinsonly' src/vulnix
+ markers = slow: This is a non-unit test and thus is not run by default. Use ``-m slow`` to run these, or ``-m 1`` to run all tests.
+ 
+ [aliases]
+diff --git a/setup.py b/setup.py
+index a9315e5..d14ad59 100644
+--- a/setup.py
++++ b/setup.py
+@@ -35,7 +35,6 @@ setup(
+             'freezegun>0.3',
+             'pytest>=3.2',
+             'pytest-cov>=2.5',
+-            'pytest-flake8',
+             'pytest-runner>=2.11,<3dev',
+             'pytest-timeout>=1.2',
+             'setuptools_scm>=1.15',

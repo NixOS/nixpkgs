@@ -174,6 +174,8 @@ stdenv.mkDerivation {
 
   passthru.ffmpegSupport = true;
   passthru.gssSupport = true;
+  # update with:
+  # $ nix-shell maintainers/scripts/update.nix --argstr package firefox-bin-unwrapped
   passthru.updateScript = import ./update.nix {
     inherit name channel writeScript xidel coreutils gnused gnugrep gnupg curl;
     baseUrl =

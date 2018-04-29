@@ -6,11 +6,11 @@ with python3Packages;
 buildPythonApplication rec {
   name = "${pname}-${version}";
   pname = "vcstool";
-  version = "0.1.33";
+  version = "0.1.35";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1140d3ecafb2c42c2c1a309950c7f327b09b548c00fbf6e37c8f44b8a610dfbc";
+    sha256 = "c52ef4bae424deb284d042005db22844dae290758af77d76cac37d26bed9ad1c";
   };
 
   propagatedBuildInputs = [ pyyaml ];

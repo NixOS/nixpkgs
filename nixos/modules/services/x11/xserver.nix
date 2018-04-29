@@ -240,7 +240,10 @@ in
         type = types.listOf types.str;
         # !!! We'd like "nv" here, but it segfaults the X server.
         default = [ "ati" "cirrus" "intel" "vesa" "vmware" "modesetting" ];
-        example = [ "vesa" ];
+        example = [
+          "ati_unfree" "amdgpu" "amdgpu-pro"
+          "nv" "nvidia" "nvidiaLegacy340" "nvidiaLegacy304"
+        ];
         description = ''
           The names of the video drivers the configuration
           supports. They will be tried in order until one that
@@ -626,9 +629,7 @@ in
 
         environment =
           {
-            XORG_DRI_DRIVER_PATH = "/run/opengl-driver/lib/dri"; # !!! Depends on the driver selected at runtime.
-            LD_LIBRARY_PATH = concatStringsSep ":" (
-              [ "${xorg.libX11.out}/lib" "${xorg.libXext.out}/lib" "/run/opengl-driver/lib" ]
+            LD_LIBRARY_PATH = concatStringsSep ":" ([ "/run/opengl-driver/lib" ]
               ++ concatLists (catAttrs "libPath" cfg.drivers));
           } // cfg.displayManager.job.environment;
 

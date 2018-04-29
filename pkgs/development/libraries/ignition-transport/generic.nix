@@ -26,5 +26,6 @@ stdenv.mkDerivation rec {
     license = licenses.asl20;
     maintainers = with maintainers; [ pxc ];
     platforms = platforms.all;
+    broken = true; # 2018-04-10
   };
 }

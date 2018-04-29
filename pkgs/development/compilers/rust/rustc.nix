@@ -1,5 +1,5 @@
 { stdenv, targetPackages
-, fetchurl, fetchgit, fetchzip, file, python2, tzdata, procps
+, fetchurl, fetchgit, fetchzip, file, python2, tzdata, ps
 , llvm, jemalloc, ncurses, darwin, rustPlatform, git, cmake, curl
 , which, libffi, gdb
 , version
@@ -18,8 +18,6 @@
 let
   inherit (stdenv.lib) optional optionalString;
   inherit (darwin.apple_sdk.frameworks) Security;
-
-  procps = if stdenv.isDarwin then darwin.ps else args.procps;
 
   llvmShared = llvm.override { enableSharedLibraries = true; };
 
@@ -55,6 +53,7 @@ stdenv.mkDerivation {
   RUSTFLAGS = "-Ccodegen-units=10";
 
   # We need rust to build rust. If we don't provide it, configure will try to download it.
+  # Reference: https://github.com/rust-lang/rust/blob/master/src/bootstrap/configure.py
   configureFlags = configureFlags
                 ++ [ "--enable-local-rust" "--local-rust-root=${rustPlatform.rust.rustc}" "--enable-rpath" ]
                 ++ [ "--enable-vendor" ]
@@ -63,6 +62,13 @@ stdenv.mkDerivation {
                 ++ optional (!forceBundledLLVM) [ "--enable-llvm-link-shared" ]
                 ++ optional (targets != []) "--target=${target}"
                 ++ optional (!forceBundledLLVM) "--llvm-root=${llvmShared}";
+
+  # The boostrap.py will generated a Makefile that then executes the build.
+  # The BOOTSTRAP_ARGS used by this Makefile must include all flags to pass
+  # to the bootstrap builder.
+  postConfigure = ''
+    substituteInPlace Makefile --replace 'BOOTSTRAP_ARGS :=' 'BOOTSTRAP_ARGS := --jobs $(NIX_BUILD_CORES)'
+  '';
 
   patches = patches ++ targetPatches;
 
@@ -102,9 +108,6 @@ stdenv.mkDerivation {
 
     # Useful debugging parameter
     # export VERBOSE=1
-  '' + optionalString stdenv.isAarch64 ''
-    # https://github.com/rust-lang/rust/issues/49807
-    rm -vr src/test/debuginfo/by-value-self-argument-in-trait-impl.rs
   '' + optionalString stdenv.isDarwin ''
     # Disable all lldb tests.
     # error: Can't run LLDB test because LLDB's python path is not set
@@ -129,7 +132,7 @@ stdenv.mkDerivation {
 
   # ps is needed for one of the test cases
   nativeBuildInputs =
-    [ file python2 procps rustPlatform.rust.rustc git cmake
+    [ file python2 ps rustPlatform.rust.rustc git cmake
       which libffi
     ]
     # Only needed for the debuginfo tests

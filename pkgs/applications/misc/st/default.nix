@@ -8,7 +8,7 @@ in stdenv.mkDerivation rec {
   name = "st-0.8.1";
 
   src = fetchurl {
-    url = "http://dl.suckless.org/st/${name}.tar.gz";
+    url = "https://dl.suckless.org/st/${name}.tar.gz";
     sha256 = "09k94v3n20gg32xy7y68p96x9dq5msl80gknf9gbvlyjp3i0zyy4";
   };
 

@@ -9,12 +9,12 @@ let
     mkdir -p $out/{servers,ip}
 
     ${concatMapStrings (ip: ''
-      echo > "$out/ip/"${lib.escapeShellArg ip}
+      touch "$out/ip/"${lib.escapeShellArg ip}
     '') cfg.clientIps}
 
     ${concatStrings (mapAttrsToList (host: ips: ''
       ${concatMapStrings (ip: ''
-        echo ${lib.escapeShellArg ip} > "$out/servers/"${lib.escapeShellArg host}
+        echo ${lib.escapeShellArg ip} >> "$out/servers/"${lib.escapeShellArg host}
       '') ips}
     '') cfg.domainServers)}
 
@@ -34,33 +34,49 @@ in {
 
   options = {
     services.dnscache = {
+
       enable = mkOption {
         default = false;
         type = types.bool;
-        description = "Whether to run the dnscache caching dns server";
+        description = "Whether to run the dnscache caching dns server.";
       };
 
       ip = mkOption {
         default = "0.0.0.0";
         type = types.str;
-        description = "IP address on which to listen for connections";
+        description = "IP address on which to listen for connections.";
       };
 
       clientIps = mkOption {
         default = [ "127.0.0.1" ];
         type = types.listOf types.str;
-        description = "client IP addresses (or prefixes) from which to accept connections";
+        description = "Client IP addresses (or prefixes) from which to accept connections.";
         example = ["192.168" "172.23.75.82"];
       };
 
       domainServers = mkOption {
         default = { };
         type = types.attrsOf (types.listOf types.str);
-        description = "table of {hostname: server} pairs to use as authoritative servers for hosts (and subhosts)";
+        description = ''
+          Table of {hostname: server} pairs to use as authoritative servers for hosts (and subhosts).
+          If entry for @ is not specified predefined list of root servers is used.
+        '';
         example = {
-          "example.com" = ["8.8.8.8" "8.8.4.4"];
+          "@" = ["8.8.8.8" "8.8.4.4"];
+          "example.com" = ["192.168.100.100"];
         };
       };
+
+      forwardOnly = mkOption {
+        default = false;
+        type = types.bool;
+        description = ''
+          Whether to treat root servers (for @) as caching
+          servers, requesting addresses the same way a client does. This is
+          needed if you want to use e.g. Google DNS as your upstream DNS.
+        '';
+      };
+
     };
   };
 
@@ -82,6 +98,7 @@ in {
       '';
       script = ''
         cd /var/lib/dnscache/
+        ${optionalString cfg.forwardOnly "export FORWARDONLY=1"}
         exec ./run
       '';
     };

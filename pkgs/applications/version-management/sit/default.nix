@@ -2,19 +2,19 @@
 
 rustPlatform.buildRustPackage rec {
   name = "sit-${version}";
-  version = "0.2.1";
+  version = "0.3.0";
 
   src = fetchFromGitHub {
     owner = "sit-it";
     repo = "sit";
     rev = "v${version}";
-    sha256 = "1gcw5fqaqpxl2xgry0w8750g2msrk884zj1slym6r3nj7s2m9j22";
+    sha256 = "1si4fg02wxi35hpkr58na06h19yjw6qd9c5mbb9xfkkzgz5mnssj";
   };
 
-  cargoSha256 = "0hb82j97m8vw8m6gpb6s3bbi31xxv9nqh3aq7hkbmp1pqc02sg3q";
+  cargoSha256 = "083p7z7blj064840ddgnxvqjmih4bmy92clds3qgv5v7lh63wfmn";
 
   meta = with stdenv.lib; {
-    description = "SCM-agnostic, file-based, offline-first, immutable issue tracker";
+    description = "Serverless Information Tracker";
     homepage = http://sit-it.org/;
     license = with licenses; [ asl20 /* or */ mit ];
     maintainers = with maintainers; [ dywedir ];

@@ -2,12 +2,12 @@
 , keyutils, liburcu, zlib, libaio, zstd }:
 
 stdenv.mkDerivation rec {
-  name = "bcachefs-tools-unstable-2018-03-20";
+  name = "bcachefs-tools-unstable-2018-04-10";
 
   src = fetchgit {
     url = "https://evilpiepirate.org/git/bcachefs-tools.git";
-    rev = "ff5e165532a2eed87700649d03f91a612a58e92a";
-    sha256 = "1mikhffkr4a1yhy36yh70dhgcimcpvdm5mjl5fyni0bpgqrw67dn";
+    rev = "c598d91dcb0c7e95abdacb2711898ae14ab52ca1";
+    sha256 = "1mglw6p1145nryn8babkg2hj778kqa0vrzjbdp9kxjlyb3fksmff";
   };
 
   enableParallelBuilding = true;

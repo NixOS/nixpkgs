@@ -1,8 +1,8 @@
 { stdenv, fetchurl, glib, libxml2, pkgconfig, gnome3
 , gnomeSupport ? true, sqlite, glib-networking, gobjectIntrospection
 , valaSupport ? true, vala_0_40
-, libintlOrEmpty
 , intltool, python3 }:
+
 let
   pname = "libsoup";
   version = "2.62.0";
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "dev" ];
 
-  buildInputs = libintlOrEmpty ++ [ python3 sqlite ];
+  buildInputs = [ python3 sqlite ];
   nativeBuildInputs = [ pkgconfig intltool gobjectIntrospection ]
     ++ stdenv.lib.optionals valaSupport [ vala_0_40 ];
   propagatedBuildInputs = [ glib libxml2 ];
@@ -35,8 +35,6 @@ stdenv.mkDerivation rec {
     "--enable-vala=${if valaSupport then "yes" else "no"}"
     "--with-gnome=${if gnomeSupport then "yes" else "no"}"
   ];
-
-  NIX_CFLAGS_COMPILE = stdenv.lib.optionalString stdenv.isDarwin "-lintl";
 
   passthru = {
     propagatedUserEnvPackages = [ glib-networking.out ];

@@ -20,11 +20,15 @@ in rec {
 
     configureFlags = [ "--release-channel=stable" ];
 
+    # 1. Upstream is not running tests on aarch64:
+    # see https://github.com/rust-lang/rust/issues/49807#issuecomment-380860567
+    # So we do the same.
+    # 2. Tests run out of memory for i686
+    doCheck = !stdenv.isAarch64 && !stdenv.isi686;
+
     patches = [
       ./patches/0001-Disable-fragile-tests-libstd-net-tcp-on-Darwin-Linux.patch
-    ] ++ stdenv.lib.optional stdenv.needsPax ./patches/grsec.patch
-      # https://github.com/rust-lang/rust/issues/45410
-      ++ stdenv.lib.optional stdenv.isAarch64 ./patches/aarch64-disable-test_loading_cosine.patch;
+    ] ++ stdenv.lib.optional stdenv.needsPax ./patches/grsec.patch;
 
   };
 

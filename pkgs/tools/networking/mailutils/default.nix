@@ -1,6 +1,6 @@
 { stdenv, fetchurl, fetchpatch, autoreconfHook, dejagnu, gettext, pkgconfig
 , gdbm, pam, readline, ncurses, gnutls, guile, texinfo, gnum4, sasl, fribidi, nettools
-, python, gss, mysql }:
+, python, gss, mysql, sendmailPath ? "/run/wrappers/bin/sendmail" }:
 
 let
   p = "https://raw.githubusercontent.com/gentoo/gentoo/9c921e89d51876fd876f250324893fd90c019326/net-mail/mailutils/files";
@@ -41,6 +41,7 @@ in stdenv.mkDerivation rec {
     "--with-gssapi"
     "--with-gsasl"
     "--with-mysql"
+    "--with-path-sendmail=${sendmailPath}"
   ];
 
   readmsg-tests = stdenv.lib.optionals doCheck [

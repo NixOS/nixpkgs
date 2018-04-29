@@ -3,10 +3,10 @@
 assert readline != null;
 
 let
-  arch = if stdenv.isArm
+  arch = if stdenv.isAarch32
     then (if stdenv.is64bit then "arm64" else "arm")
     else (if stdenv.is64bit then "x64" else "ia32");
-  armHardFloat = stdenv.isArm && (stdenv.platform.gcc.float or null) == "hard";
+  armHardFloat = stdenv.isAarch32 && (stdenv.platform.gcc.float or null) == "hard";
 in
 
 stdenv.mkDerivation rec {

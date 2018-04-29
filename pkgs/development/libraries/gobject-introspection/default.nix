@@ -1,5 +1,5 @@
 { stdenv, fetchurl, glib, flex, bison, pkgconfig, libffi, python
-, libintlOrEmpty, cctools, cairo, gnome3
+, libintl, cctools, cairo, gnome3
 , substituteAll, nixStoreDir ? builtins.storeDir
 , x11Support ? true
 }:
@@ -24,9 +24,8 @@ stdenv.mkDerivation rec {
   outputBin = "dev";
   outputMan = "dev"; # tiny pages
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkgconfig libintl ];
   buildInputs = [ flex bison python setupHook/*move .gir*/ ]
-    ++ libintlOrEmpty
     ++ stdenv.lib.optional stdenv.isDarwin cctools;
   propagatedBuildInputs = [ libffi glib ];
 

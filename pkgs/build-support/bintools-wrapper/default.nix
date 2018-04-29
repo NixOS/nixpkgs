@@ -57,7 +57,7 @@ let
     else if targetPlatform.system == "i686-linux"     then "${libc_lib}/lib/ld-linux.so.2"
     else if targetPlatform.system == "x86_64-linux"   then "${libc_lib}/lib/ld-linux-x86-64.so.2"
     # ARM with a wildcard, which can be "" or "-armhf".
-    else if (with targetPlatform; isArm && isLinux)   then "${libc_lib}/lib/ld-linux*.so.3"
+    else if (with targetPlatform; isAarch32 && isLinux)   then "${libc_lib}/lib/ld-linux*.so.3"
     else if targetPlatform.system == "aarch64-linux"  then "${libc_lib}/lib/ld-linux-aarch64.so.1"
     else if targetPlatform.system == "powerpc-linux"  then "${libc_lib}/lib/ld.so.1"
     else if targetPlatform.isMips                     then "${libc_lib}/lib/ld.so.1"
@@ -176,7 +176,7 @@ stdenv.mkDerivation {
     sep = optionalString (!targetPlatform.isMips) "-";
     arch =
       /**/ if targetPlatform.isAarch64 then endianPrefix + "aarch64"
-      else if targetPlatform.isArm     then endianPrefix + "arm"
+      else if targetPlatform.isAarch32     then endianPrefix + "arm"
       else if targetPlatform.isx86_64  then "x86-64"
       else if targetPlatform.isi686    then "i386"
       else if targetPlatform.isMips    then {

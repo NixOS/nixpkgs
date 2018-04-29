@@ -15,11 +15,16 @@
 in lib.overrideDerivation qemu (orig: {
   name = "${(builtins.parseDrvName qemu.name).name}-${version}pre${revCount}_${shortRev}";
   inherit src;
+# <<<<<<< HEAD
+#   # https://github.com/riscv/riscv-qemu/pull/109
+#   patches = [ ./no-etc-install.patch ./statfs-flags.patch ./riscv-initrd.patch ];
+# =======
   # The pulseaudio and statfs patches are in 2.12.0+, which this is based on
   patches = [
     ./force-uid0-on-9p.patch
     ./no-etc-install.patch
   ];
+
   configureFlags = orig.configureFlags ++ [ "--target-list=${lib.concatStringsSep "," targets}" ];
   postInstall = null;
 })

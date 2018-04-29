@@ -1,11 +1,11 @@
 { stdenv, fetchurl, pkgconfig, libpthreadstubs, libpciaccess, valgrind-light }:
 
 stdenv.mkDerivation rec {
-  name = "libdrm-2.4.90";
+  name = "libdrm-2.4.91";
 
   src = fetchurl {
     url = "http://dri.freedesktop.org/libdrm/${name}.tar.bz2";
-    sha256 = "db37ec8f1dbaa2c192ad9903c8d0988b858ae88031e96f169bf76aaf705db68b";
+    sha256 = "0068dn47c478vm1lyyhy02gilrpsma0xmcblhvs0dzqyrk80wjk3";
   };
 
   outputs = [ "out" "dev" "bin" ];
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     "echo : \\\${ac_cv_func_clock_gettime=\'yes\'} > config.cache";
 
   configureFlags = [ "--enable-install-test-programs" ]
-    ++ stdenv.lib.optionals (stdenv.isArm || stdenv.isAarch64)
+    ++ stdenv.lib.optionals (stdenv.isAarch32 || stdenv.isAarch64)
       [ "--enable-tegra-experimental-api" "--enable-etnaviv-experimental-api" ]
     ++ stdenv.lib.optional stdenv.isDarwin "-C";
 

@@ -35,20 +35,21 @@ stdenv.mkDerivation rec {
   installPhase =
     ''
       mkdir -p $out/bin
-      cp -p ping tracepath clockdiff arping rdisc $out/bin/
+      cp -p ping tracepath clockdiff arping rdisc rarpd $out/bin/
       if [ -x ninfod/ninfod ]; then
         cp -p ninfod/ninfod $out/bin
       fi
 
       mkdir -p $out/share/man/man8
       cp -p \
-        doc/clockdiff.8 doc/arping.8 doc/ping.8 doc/rdisc.8 doc/tracepath.8 doc/ninfod.8 \
+        doc/clockdiff.8 doc/arping.8 doc/ping.8 doc/rdisc.8 doc/rarpd.8 doc/tracepath.8 doc/ninfod.8 \
         $out/share/man/man8
     '';
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = https://github.com/iputils/iputils;
     description = "A set of small useful utilities for Linux networking";
-    platforms = stdenv.lib.platforms.linux;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ lheckemann ];
   };
 }

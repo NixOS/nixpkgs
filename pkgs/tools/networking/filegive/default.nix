@@ -1,6 +1,6 @@
 { stdenv, fetchurl, fetchgit, go }:
 
-assert stdenv.isLinux && (stdenv.isi686 || stdenv.isx86_64 || stdenv.isArm);
+assert stdenv.isLinux && (stdenv.isi686 || stdenv.isx86_64 || stdenv.isAarch32);
 
 let
 

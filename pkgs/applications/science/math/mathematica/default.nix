@@ -1,7 +1,7 @@
 { stdenv
 , coreutils
 , patchelf
-, requireFile
+, callPackage
 , alsaLib
 , dbus
 , fontconfig
@@ -18,6 +18,7 @@
 , zlib
 , libxml2
 , libuuid
+, lang ? "en"
 }:
 
 let
@@ -26,21 +27,15 @@ let
       "Linux"
     else
       throw "Mathematica requires i686-linux or x86_64 linux";
+
+  l10n =
+    with stdenv.lib;
+    with callPackage ./l10ns.nix {};
+    flip (findFirst (l: l.lang == lang)) l10ns
+      (throw "Language '${lang}' not supported");
 in
 stdenv.mkDerivation rec {
-  version = "11.2.0";
-
-  name = "mathematica-${version}";
-
-  src = requireFile rec {
-    name = "Mathematica_${version}_LINUX.sh";
-    message = '' 
-      This nix expression requires that ${name} is
-      already part of the store. Find the file on your Mathematica CD
-      and add it to the nix store with nix-store --add-fixed sha256 <FILE>.
-    '';
-    sha256 = "4a1293cc1c404303aa1cab1bd273c7be151d37ac5ed928fbbb18e9c5ab2d8df9";
-  };
+  inherit (l10n) version name src;
 
   buildInputs = [
     coreutils

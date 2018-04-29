@@ -115,23 +115,17 @@ for a UEFI installation is by and large the same as a BIOS installation. The dif
       <varlistentry><term>UEFI systems</term>
       <listitem><para>For creating boot partitions:
     <command>mkfs.fat</command>.  Again it’s recommended to assign a
-    label to the boot partition: <option>-L
+    label to the boot partition: <option>-n
     <replaceable>label</replaceable></option>. For example:
 
 <screen>
-# mkfs.fat -F 32 -L boot /dev/sda3</screen>
+# mkfs.fat -F 32 -n boot /dev/sda3</screen>
 
     </para></listitem></varlistentry></variablelist></listitem>
 
     <listitem><para>For creating LVM volumes, the LVM commands, e.g.,
-
-<screen>
-# pvcreate /dev/sda1 /dev/sdb1
-# vgcreate MyVolGroup /dev/sda1 /dev/sdb1
-# lvcreate --size 2G --name bigdisk MyVolGroup
-# lvcreate --size 1G --name smalldisk MyVolGroup</screen>
-
-    </para></listitem>
+    <command>pvcreate</command>, <command>vgcreate</command>, and
+    <command>lvcreate</command>.</para></listitem>
 
     <listitem><para>For creating software RAID devices, use
     <command>mdadm</command>.</para></listitem>
@@ -155,6 +149,7 @@ for a UEFI installation is by and large the same as a BIOS installation. The dif
       <listitem><para>Mount the boot file system on <filename>/mnt/boot</filename>, e.g.
 
 <screen>
+# mkdir -p /mnt/boot
 # mount /dev/disk/by-label/boot /mnt/boot
 </screen>
 
@@ -366,8 +361,9 @@ drive (here <filename>/dev/sda</filename>).  <xref linkend="ex-config"
 # mkfs.ext4 -L nixos /dev/sda1
 # mkswap -L swap /dev/sda2
 # swapon /dev/sda2
-# mkfs.fat -F 32 -L boot /dev/sda3        # <lineannotation>(for UEFI systems only)</lineannotation>
+# mkfs.fat -F 32 -n boot /dev/sda3        # <lineannotation>(for UEFI systems only)</lineannotation>
 # mount /dev/disk/by-label/nixos /mnt
+# mkdir -p /mnt/boot                      # <lineannotation>(for UEFI systems only)</lineannotation>
 # mount /dev/disk/by-label/boot /mnt/boot # <lineannotation>(for UEFI systems only)</lineannotation>
 # nixos-generate-config --root /mnt
 # nano /mnt/etc/nixos/configuration.nix

@@ -62,5 +62,4 @@ in rec {
     repo = "winetricks";
     rev = version;
   };
-
 }

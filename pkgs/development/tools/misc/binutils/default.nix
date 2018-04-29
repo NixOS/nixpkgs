@@ -1,14 +1,14 @@
 { stdenv, buildPackages
-, fetchurl, zlib
+, fetchurl, zlib, autoreconfHook264
 , buildPlatform, hostPlatform, targetPlatform
 , noSysDirs, gold ? true, bison ? null
 }:
 
 let
-  # Note to whoever is upgrading this: 2.29 is broken.
-  # ('nix-build pkgs/stdenv/linux/make-bootstrap-tools.nix -A test' segfaults on aarch64)
-  # Also glibc might need patching, see commit 733e20fee4a6700510f71fbe1a58ac23ea202f6a.
-  version = "2.28.1";
+  # Remove gold-symbol-visibility patch when updating, the proper fix
+  # is now upstream.
+  # https://sourceware.org/git/gitweb.cgi?p=binutils-gdb.git;a=commitdiff;h=330b90b5ffbbc20c5de6ae6c7f60c40fab2e7a4f;hp=99181ccac0fc7d82e7dabb05dc7466e91f1645d3
+  version = "2.30";
   basename = "binutils-${version}";
   inherit (stdenv.lib) optional optionals optionalString;
   # The targetPrefix prepended to binary names to allow multiple binuntils on the
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnu/binutils/${basename}.tar.bz2";
-    sha256 = "1sj234nd05cdgga1r36zalvvdkvpfbr12g5mir2n8i1dwsdrj939";
+    sha256 = "028cklfqaab24glva1ks2aqa1zxa6w6xmc8q34zs1sb7h22dxspg";
   };
 
   patches = [
@@ -61,12 +61,19 @@ stdenv.mkDerivation rec {
     # override this behavior, forcing ld to search DT_RPATH even when
     # cross-compiling.
     ./always-search-rpath.patch
-  ];
+
+    # https://sourceware.org/bugzilla/show_bug.cgi?id=22868
+    ./gold-symbol-visibility.patch
+  ] ++ stdenv.lib.optional targetPlatform.isiOS ./support-ios.patch;
 
   outputs = [ "out" "info" "man" ];
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
-  nativeBuildInputs = [ bison ];
+  nativeBuildInputs = [
+    bison
+  ] ++ stdenv.lib.optionals targetPlatform.isiOS [
+    autoreconfHook264
+  ];
   buildInputs = [ zlib ];
 
   inherit noSysDirs;
@@ -93,7 +100,7 @@ stdenv.mkDerivation rec {
   # TODO(@Ericson2314): Always pass "--target" and always targetPrefix.
   configurePlatforms =
     # TODO(@Ericson2314): Figure out what's going wrong with Arm
-    if buildPlatform == hostPlatform && hostPlatform == targetPlatform && targetPlatform.isArm
+    if buildPlatform == hostPlatform && hostPlatform == targetPlatform && targetPlatform.isAarch32
     then []
     else [ "build" "host" ] ++ stdenv.lib.optional (targetPlatform != hostPlatform) "target";
 

@@ -362,7 +362,6 @@ in
         ++  [ /*propagated from .dev*/ linuxHeaders
             binutils gcc gcc.cc gcc.cc.lib gcc.expand-response-params
           ]
-          ++ lib.optional (localSystem.libc == "musl") libiconv
           ++ lib.optionals localSystem.isAarch64
             [ prevStage.updateAutotoolsGnuConfigScriptsHook prevStage.gnu-config ];
 
@@ -374,7 +373,7 @@ in
         ${localSystem.libc} = getLibc prevStage;
       } // lib.optionalAttrs (super.targetPlatform == localSystem) {
         # Need to get rid of these when cross-compiling.
-        inherit (prevStage) binutils binutils-raw;
+        inherit (prevStage) binutils binutils-unwrapped;
         gcc = cc;
       };
     };

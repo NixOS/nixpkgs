@@ -1,7 +1,7 @@
-diff --git a/Makefile b/Makefile
---- a/Makefile
-+++ b/Makefile
-@@ -2609,8 +2609,7 @@
+diff -ru -x '*~' git-1.8.2.1-orig/Makefile git-1.8.2.1/Makefile
+--- git-1.8.2.1-orig/Makefile	2013-04-08 00:52:04.000000000 +0200
++++ git-1.8.2.1/Makefile	2013-04-22 15:46:42.906026940 +0200
+@@ -2319,8 +2319,7 @@
  	{ test "$$bindir/" = "$$execdir/" || \
  	  for p in git$X $(filter $(install_bindir_programs),$(ALL_PROGRAMS)); do \
  		$(RM) "$$execdir/$$p" && \

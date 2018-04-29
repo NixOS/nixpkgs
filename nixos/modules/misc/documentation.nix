@@ -16,7 +16,10 @@ let cfg = config.documentation; in
         description = ''
           Whether to install documentation of packages from
           <option>environment.systemPackages</option> into the generated system path.
+
+          See "Multiple-output packages" chapter in the nixpkgs manual for more info.
         '';
+        # which is at ../../../doc/multiple-output.xml
       };
 
       man.enable = mkOption {
@@ -25,6 +28,15 @@ let cfg = config.documentation; in
         description = ''
           Whether to install manual pages and the <command>man</command> command.
           This also includes "man" outputs.
+        '';
+      };
+
+      info.enable = mkOption {
+        type = types.bool;
+        default = true;
+        description = ''
+          Whether to install info pages and the <command>info</command> command.
+          This also includes "info" outputs.
         '';
       };
 
@@ -38,12 +50,19 @@ let cfg = config.documentation; in
         '';
       };
 
-      info.enable = mkOption {
+      dev.enable = mkOption {
         type = types.bool;
-        default = true;
+        default = false;
         description = ''
-          Whether to install info pages and the <command>info</command> command.
-          This also includes "info" outputs.
+          Whether to install documentation targeted at developers.
+          <itemizedlist>
+          <listitem><para>This includes man pages targeted at developers if <option>man.enable</option> is
+                    set (this also includes "devman" outputs).</para></listitem>
+          <listitem><para>This includes info pages targeted at developers if <option>info.enable</option>
+                    is set (this also includes "devinfo" outputs).</para></listitem>
+          <listitem><para>This includes other pages targeted at developers if <option>doc.enable</option>
+                    is set (this also includes "devdoc" outputs).</para></listitem>
+          </itemizedlist>
         '';
       };
 
@@ -56,20 +75,20 @@ let cfg = config.documentation; in
     (mkIf cfg.man.enable {
       environment.systemPackages = [ pkgs.man-db ];
       environment.pathsToLink = [ "/share/man" ];
-      environment.extraOutputsToInstall = [ "man" ];
+      environment.extraOutputsToInstall = [ "man" ] ++ optional cfg.dev.enable [ "devman" ];
+    })
+
+    (mkIf cfg.info.enable {
+      environment.systemPackages = [ pkgs.texinfoInteractive ];
+      environment.pathsToLink = [ "/share/info" ];
+      environment.extraOutputsToInstall = [ "info" ] ++ optional cfg.dev.enable [ "devinfo" ];
     })
 
     (mkIf cfg.doc.enable {
       # TODO(@oxij): put it here and remove from profiles?
       # environment.systemPackages = [ pkgs.w3m ]; # w3m-nox?
       environment.pathsToLink = [ "/share/doc" ];
-      environment.extraOutputsToInstall = [ "doc" ];
-    })
-
-    (mkIf cfg.info.enable {
-      environment.systemPackages = [ pkgs.texinfoInteractive ];
-      environment.pathsToLink = [ "/share/info" ];
-      environment.extraOutputsToInstall = [ "info" ];
+      environment.extraOutputsToInstall = [ "doc" ] ++ optional cfg.dev.enable [ "devdoc" ];
     })
 
   ]);

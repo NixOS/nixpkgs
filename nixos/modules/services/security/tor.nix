@@ -703,14 +703,10 @@ in
         after    = [ "network.target" ];
         restartTriggers = [ torRcFile ];
 
-        # Translated from the upstream contrib/dist/tor.service.in
-        preStart = ''
-          install -o tor -g tor -d ${torDirectory}/onion ${torRunDirectory}
-          ${pkgs.tor}/bin/tor -f ${torRcFile} --verify-config
-        '';
-
         serviceConfig =
           { Type         = "simple";
+            # Translated from the upstream contrib/dist/tor.service.in
+            ExecStartPre = "${pkgs.tor}/bin/tor -f ${torRcFile} --verify-config";
             ExecStart    = "${pkgs.tor}/bin/tor -f ${torRcFile} --RunAsDaemon 0";
             ExecReload   = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
             KillSignal   = "SIGINT";
@@ -725,6 +721,8 @@ in
             #   DeviceAllow /dev/urandom r
             # .. but we can't specify DeviceAllow multiple times. 'closed'
             # is close enough.
+            RuntimeDirectory        = "tor";
+            StateDirectory          = [ "tor" "tor/onion" ];
             PrivateTmp              = "yes";
             DevicePolicy            = "closed";
             InaccessibleDirectories = "/home";

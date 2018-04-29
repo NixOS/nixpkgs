@@ -4,6 +4,8 @@
 
 # Userspace dependencies
 , zlib, libuuid, python, attr, openssl
+, libtirpc
+, nfs-utils
 
 # Kernel dependencies
 , kernel ? null, spl ? null, splUnstable ? null, splLegacyCrypto ? null
@@ -42,6 +44,9 @@ let
 
       postPatch = optionalString buildKernel ''
         patchShebangs scripts
+      '' + optionalString stdenv.hostPlatform.isMusl ''
+        substituteInPlace config/user-libtirpc.m4 \
+          --replace /usr/include/tirpc ${libtirpc}/include/tirpc
       '';
 
       nativeBuildInputs = [ autoreconfHook nukeReferences ]
@@ -49,7 +54,8 @@ let
       buildInputs =
            optionals buildKernel [ spl ]
         ++ optionals buildUser [ zlib libuuid python attr ]
-        ++ optionals (buildUser && (isUnstable || isLegacyCrypto)) [ openssl ];
+        ++ optionals (buildUser && (isUnstable || isLegacyCrypto)) [ openssl ]
+        ++ optional stdenv.hostPlatform.isMusl [ libtirpc ];
 
       # for zdb to get the rpath to libgcc_s, needed for pthread_cancel to work
       NIX_CFLAGS_LINK = "-lgcc_s";
@@ -61,6 +67,7 @@ let
         substituteInPlace ./module/zfs/zfs_ctldir.c   --replace "mount -t zfs"            "${utillinux}/bin/mount -t zfs"
         substituteInPlace ./lib/libzfs/libzfs_mount.c --replace "/bin/umount"             "${utillinux}/bin/umount"
         substituteInPlace ./lib/libzfs/libzfs_mount.c --replace "/bin/mount"              "${utillinux}/bin/mount"
+        substituteInPlace ./lib/libshare/nfs.c        --replace "/usr/sbin/exportfs"      "${nfs-utils}/bin/exportfs"
         substituteInPlace ./cmd/ztest/ztest.c         --replace "/usr/sbin/ztest"         "$out/sbin/ztest"
         substituteInPlace ./cmd/ztest/ztest.c         --replace "/usr/sbin/zdb"           "$out/sbin/zdb"
         substituteInPlace ./config/user-systemd.m4    --replace "/usr/lib/modules-load.d" "$out/etc/modules-load.d"
@@ -77,6 +84,7 @@ let
         done
 
         ./autogen.sh
+        configureFlagsArray+=("--libexecdir=$out/libexec")
       '';
 
       configureFlags = [
@@ -86,6 +94,7 @@ let
         "--with-udevdir=$(out)/lib/udev"
         "--with-systemdunitdir=$(out)/etc/systemd/system"
         "--with-systemdpresetdir=$(out)/etc/systemd/system-preset"
+        "--with-systemdgeneratordir=$(out)/lib/systemd/system-generator"
         "--with-mounthelperdir=$(out)/bin"
         "--sysconfdir=/etc"
         "--localstatedir=/var"
@@ -144,7 +153,7 @@ in {
   # to be adapted
   zfsStable = common {
     # comment/uncomment if breaking kernel versions are known
-    incompatibleKernelVersion = null;
+    incompatibleKernelVersion = "4.16";
 
     # this package should point to the latest release.
     version = "0.7.8";

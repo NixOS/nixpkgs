@@ -35,8 +35,7 @@ stdenv.mkDerivation rec {
   };
 
   # perl is used for testing go vet
-  nativeBuildInputs = [ perl which pkgconfig patch makeWrapper ]
-    ++ optionals stdenv.isLinux [ procps ];
+  nativeBuildInputs = [ perl which pkgconfig patch makeWrapper procps ];
   buildInputs = [ cacert pcre ]
     ++ optionals stdenv.isLinux [ stdenv.cc.libc.out ]
     ++ optionals (stdenv.hostPlatform.libc == "glibc") [ stdenv.cc.libc.static ];
@@ -86,7 +85,7 @@ stdenv.mkDerivation rec {
 
   '' + optionalString stdenv.isLinux ''
     sed -i 's,/usr/share/zoneinfo/,${tzdata}/share/zoneinfo/,' src/time/zoneinfo_unix.go
-  '' + optionalString stdenv.isArm ''
+  '' + optionalString stdenv.isAarch32 ''
     sed -i '/TestCurrent/areturn' src/os/user/user_test.go
     echo '#!${stdenv.shell}' > misc/cgo/testplugin/test.bash
   '' + optionalString stdenv.isDarwin ''
@@ -133,7 +132,7 @@ stdenv.mkDerivation rec {
   GOARCH = if stdenv.isDarwin then "amd64"
            else if stdenv.system == "i686-linux" then "386"
            else if stdenv.system == "x86_64-linux" then "amd64"
-           else if stdenv.isArm then "arm"
+           else if stdenv.isAarch32 then "arm"
            else if stdenv.isAarch64 then "arm64"
            else throw "Unsupported system";
   GOARM = optionalString (stdenv.system == "armv5tel-linux") "5";

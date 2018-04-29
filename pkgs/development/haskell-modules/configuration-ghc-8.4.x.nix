@@ -42,17 +42,6 @@ self: super: {
   ## Shadowed:
 
   ## Needs bump to a versioned attribute
-  ##     • No instance for (GHC.Base.Semigroup BV)
-  ##         arising from the superclasses of an instance declaration
-  ##     • In the instance declaration for ‘Monoid BV’
-  bv = super.bv_0_5;
-
-  ## Needs bump to a versioned attribute
-  ## Setup: Encountered missing dependencies:
-  ## template-haskell >=2.5 && <2.13
-  deriving-compat = super.deriving-compat_0_4_1;
-
-  ## Needs bump to a versioned attribute
   ## Issue: https://github.com/sol/doctest/issues/189
   doctest = overrideCabal super.doctest_0_15_0 (drv: {
     ## Setup: Encountered missing dependencies:
@@ -302,23 +291,6 @@ self: super: {
       rev    = "b9eb4b10a50bd6250330422afecc065339a32412";
       sha256 = "0l4nplpvnzzf397zyh7j2k6yiqb46k6bdy00m4zzvhlfp7p1xkaw";
     };
-  });
-
-  ## Unmerged.  PR: https://github.com/sol/hpack/pull/277
-  ## Issue: https://github.com/sol/hpack/issues/276
-  hpack = overrideCabal super.hpack (drv: {
-    ##     • No instance for (Semigroup Dependencies)
-    ##         arising from the 'deriving' clause of a data type declaration
-    ##       Possible fix:
-    src = pkgs.fetchFromGitHub {
-      owner  = "deepfire";
-      repo   = "hpack";
-      rev    = "acce0cffcc1d165a0fd9f0b83878dfbd622ea0d6";
-      sha256 = "1wv0ya1gb1hwd9w8g4z5aig694q3arsqhxv0d4wcp270xnq9ja8y";
-    };
-    ## Setup: Encountered missing dependencies:
-    ## http-client -any, http-client-tls -any, http-types -any
-    libraryHaskellDepends = (drv.libraryHaskellDepends or []) ++ (with self; [ http-client http-client-tls http-types ]);
   });
 
   ## Unmerged.  PR: https://github.com/hanshoglund/monadplus/pull/3
@@ -583,10 +555,12 @@ self: super: {
   });
 
   # Older versions don't compile.
-  brick = self.brick_0_36;
+  brick = self.brick_0_36_2;
   HaTeX = self.HaTeX_3_19_0_0;
+  hpack = self.hpack_0_28_2;
+  hspec-smallcheck = self.hspec-smallcheck_0_5_2;
   matrix = self.matrix_0_3_6_1;
-  pandoc = self.pandoc_2_1_3;
+  pandoc = self.pandoc_2_2;
   pandoc-types = self.pandoc-types_1_17_4_2;
 
   # https://github.com/xmonad/xmonad/issues/155

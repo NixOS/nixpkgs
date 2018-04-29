@@ -40,7 +40,7 @@ points to the generated virtual network.
   test1 = {pkgs, config, ...}:
     {
       services.openssh.enable = true;
-      nixpkgs.system = "i686-linux";
+      nixpkgs.localSystem.system = "i686-linux";
       deployment.targetHost = "test1.example.net";
 
       # Other NixOS options
@@ -51,7 +51,7 @@ points to the generated virtual network.
       services.openssh.enable = true;
       services.httpd.enable = true;
       environment.systemPackages = [ pkgs.lynx ];
-      nixpkgs.system = "x86_64-linux";
+      nixpkgs.localSystem.system = "x86_64-linux";
       deployment.targetHost = "test2.example.net";
 
       # Other NixOS options
@@ -66,7 +66,7 @@ In each NixOS configuration, two attributes have a special meaning.
 The <varname>deployment.targetHost</varname> specifies the address
 (domain name or IP address)
 of the system which is used by <command>ssh</command> to perform
-remote deployment operations. The <varname>nixpkgs.system</varname>
+remote deployment operations. The <varname>nixpkgs.localSystem.system</varname>
 attribute can be used to specify an architecture for the target machine,
 such as <varname>i686-linux</varname> which builds a 32-bit NixOS
 configuration. Omitting this property will build the configuration

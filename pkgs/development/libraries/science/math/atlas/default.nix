@@ -45,7 +45,9 @@
 
 let
   inherit (stdenv.lib) optional optionalString;
-  version = "3.10.3";
+  # Don't upgrade until https://github.com/math-atlas/math-atlas/issues/44
+  # is resolved.
+  version = "3.10.2";
 in
 
 stdenv.mkDerivation {
@@ -53,7 +55,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "mirror://sourceforge/math-atlas/atlas${version}.tar.bz2";
-    sha256 = "1dyjlq3fiparvm8ypwk6rsmjzmnwk81l88gkishphpvc79ryp216";
+    sha256 = "0bqh4bdnjdyww4mcpg6kn0x7338mfqbdgysn97dzrwwb26di7ars";
   };
 
   buildInputs = [ gfortran ];

@@ -666,6 +666,56 @@ prefer one built with GHC 7.8.x in the first place. However, for users who
 cannot use GHC 7.10.x at all for some reason, the approach of downgrading to an
 older version might be useful.
 
+### How to override packages in all compiler-specific package sets
+
+In the previous section we learned how to override a package in a single
+compiler-specific package set. You may have some overrides defined that you want
+to use across multiple package sets. To accomplish this you could use the
+technique that we learned in the previous section by repeating the overrides for
+all the compiler-specific package sets. For example:
+
+```nix
+{
+  packageOverrides = super: let self = super.pkgs; in
+  {
+    haskell = super.haskell // {
+      packages = super.haskell.packages // {
+        ghc784 = super.haskell.packages.ghc784.override {
+          overrides = self: super: {
+            my-package = ...;
+            my-other-package = ...;
+          };
+        };
+        ghc822 = super.haskell.packages.ghc784.override {
+          overrides = self: super: {
+            my-package = ...;
+            my-other-package = ...;
+          };
+        };
+        ...
+      };
+    };
+  };
+}
+```
+
+However there's a more convenient way to override all compiler-specific package
+sets at once:
+
+```nix
+{
+  packageOverrides = super: let self = super.pkgs; in
+  {
+    haskell = super.haskell // {
+      packageOverrides = self: super: {
+        my-package = ...;
+        my-other-package = ...;
+      };
+    };
+  };
+}
+```
+
 ### How to recover from GHC's infamous non-deterministic library ID bug
 
 GHC and distributed build farms don't get along well:

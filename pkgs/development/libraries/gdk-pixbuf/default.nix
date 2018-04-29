@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgconfig, glib, libtiff, libjpeg, libpng, libX11, gnome3
-, jasper, libintlOrEmpty, gobjectIntrospection, doCheck ? false }:
+, jasper, gobjectIntrospection, doCheck ? false }:
 
 let
   pname = "gdk-pixbuf";
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   # !!! We might want to factor out the gdk-pixbuf-xlib subpackage.
-  buildInputs = [ libX11 gobjectIntrospection ] ++ libintlOrEmpty;
+  buildInputs = [ libX11 gobjectIntrospection ];
 
   nativeBuildInputs = [ pkgconfig ];
 
@@ -61,4 +61,3 @@ stdenv.mkDerivation rec {
     platforms = platforms.unix;
   };
 }
-

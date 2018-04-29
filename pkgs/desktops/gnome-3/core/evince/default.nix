@@ -9,11 +9,11 @@
 
 stdenv.mkDerivation rec {
   name = "evince-${version}";
-  version = "3.28.0";
+  version = "3.28.2";
 
   src = fetchurl {
     url = "mirror://gnome/sources/evince/${gnome3.versionBranch version}/${name}.tar.xz";
-    sha256 = "1a3kcls18dcz1lj8hrx8skcli9xxfyi71c17xjwayh71cm5jc8zs";
+    sha256 = "1qbk1x2c7iacmmfwjzh136v2sdacrkqn9d6bnqid7xn9hlnx4m89";
   };
 
   passthru = {

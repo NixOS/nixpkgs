@@ -738,7 +738,7 @@ let
       owner = "libmpack";
       repo = "libmpack-lua";
       rev = version;
-      sha256 = "1nydi6xbmxwl1fmi32v5v8n74msnmzblzqaqnb102w6vkinampsb";
+      sha256 = "0l4k7qmwaa0zpxrlp27yp4pbbyiz3zgxywkm543q6wkzn6wmq8l8";
     };
 
     nativeBuildInputs = [ pkgconfig ];

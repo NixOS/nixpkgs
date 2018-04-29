@@ -1,5 +1,5 @@
 { lib, stdenv, fetchurl, fetchFromGitHub, perl, curl, bzip2, sqlite, openssl ? null, xz
-, pkgconfig, boehmgc, perlPackages, libsodium, aws-sdk-cpp, brotli
+, pkgconfig, boehmgc, perlPackages, libsodium, aws-sdk-cpp, brotli, boost
 , autoreconfHook, autoconf-archive, bison, flex, libxml2, libxslt, docbook5, docbook5_xsl
 , libseccomp, busybox-sandbox-shell
 , hostPlatform, buildPlatform
@@ -35,7 +35,8 @@ let
           (aws-sdk-cpp.override {
             apis = ["s3"];
             customMemoryManagement = false;
-          });
+          })
+      ++ lib.optional fromGit boost;
 
     propagatedBuildInputs = [ boehmgc ];
 
@@ -94,16 +95,19 @@ let
     passthru = { inherit fromGit; };
   };
 
-  perl-bindings = { nix }: stdenv.mkDerivation {
+  perl-bindings = { nix, needsBoost ? false }: stdenv.mkDerivation {
     name = "nix-perl-" + nix.version;
 
     inherit (nix) src;
 
     postUnpack = "sourceRoot=$sourceRoot/perl";
 
+    # This is not cross-compile safe, don't have time to fix right now
+    # but noting for future travellers.
     nativeBuildInputs =
       [ perl pkgconfig curl nix libsodium ]
-      ++ lib.optionals nix.fromGit [ autoreconfHook autoconf-archive ];
+      ++ lib.optionals nix.fromGit [ autoreconfHook autoconf-archive ]
+      ++ lib.optional needsBoost boost;
 
     configureFlags =
       [ "--with-dbi=${perlPackages.DBI}/${perl.libPrefix}"
@@ -128,26 +132,26 @@ in rec {
   }) // { perl-bindings = nixStable; };
 
   nixStable = (common rec {
-    name = "nix-2.0";
+    name = "nix-2.0.1";
     src = fetchurl {
       url = "http://nixos.org/releases/nix/${name}/${name}.tar.xz";
-      sha256 = "7024d327314bf92c1d3e6cccd944929828a44b24093954036bfb0115a92f5a14";
+      sha256 = "689c33b9885b56b7817bf94aad3bc7ccf50710ebb34b01c5a5a2ac4e472750b1";
     };
   }) // { perl-bindings = perl-bindings { nix = nixStable; }; };
 
-  nixUnstable = nix;
-/*
   nixUnstable = (lib.lowPrio (common rec {
-    name = "nix-2.0${suffix}";
-    suffix = "pre5968_a6c0b773";
+    name = "nix-2.1${suffix}";
+    suffix = "pre6148_a4aac7f";
     src = fetchFromGitHub {
       owner = "NixOS";
       repo = "nix";
-      rev = "a6c0b773b72d4e30690e01f1f1dcffc28f2d9ea1";
-      sha256 = "0i8wcblcjw3291ba6ki4llw3fgm8ylp9q52kajkyr58dih537346";
+      rev = "a4aac7f88c59c97299027c9668461c637bbc6a72";
+      sha256 = "1250fg1rgzcd0qy960nhl2bw9hsc1a6pyz11rmxasr0h3j1a2z53";
     };
     fromGit = true;
-  })) // { perl-bindings = perl-bindings { nix = nixUnstable; }; };
-*/
+  })) // { perl-bindings = perl-bindings {
+    nix = nixUnstable;
+    needsBoost = true;
+  }; };
 
 }

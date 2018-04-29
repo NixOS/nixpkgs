@@ -4,6 +4,7 @@
 # build-tools
 , bootPkgs, alex, happy
 , autoconf, automake, coreutils, fetchgit, fetchpatch, perl, python3
+, runCommand
 
 , libffi, libiconv ? null, ncurses
 
@@ -85,7 +86,9 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "doc" ];
 
-  patches = stdenv.lib.optional deterministicProfiling
+  patches = [
+    (import ./abi-depends-determinism.nix { inherit fetchpatch runCommand; })
+  ] ++ stdenv.lib.optional deterministicProfiling
     (fetchpatch { # https://phabricator.haskell.org/D4388 for more determinism
       url = "https://github.com/shlevy/ghc/commit/8b2dbd869d1a64de3e99fa8b1c9bb1140eee7099.patch";
       sha256 = "0hxpiwhbg64rsyjdr4psh6dwyp58b96mad3adccvfr0x8hc6ba2m";
@@ -103,7 +106,7 @@ stdenv.mkDerivation rec {
     export CC="${targetCC}/bin/${targetCC.targetPrefix}cc"
     export CXX="${targetCC}/bin/${targetCC.targetPrefix}cxx"
     # Use gold to work around https://sourceware.org/bugzilla/show_bug.cgi?id=16177
-    export LD="${targetCC.bintools}/bin/${targetCC.bintools.targetPrefix}ld${stdenv.lib.optionalString targetPlatform.isArm ".gold"}"
+    export LD="${targetCC.bintools}/bin/${targetCC.bintools.targetPrefix}ld${stdenv.lib.optionalString targetPlatform.isAarch32 ".gold"}"
     export AS="${targetCC.bintools.bintools}/bin/${targetCC.bintools.targetPrefix}as"
     export AR="${targetCC.bintools.bintools}/bin/${targetCC.bintools.targetPrefix}ar"
     export NM="${targetCC.bintools.bintools}/bin/${targetCC.bintools.targetPrefix}nm"
@@ -135,7 +138,7 @@ stdenv.mkDerivation rec {
     "--with-iconv-includes=${libiconv}/include" "--with-iconv-libraries=${libiconv}/lib"
   ] ++ stdenv.lib.optionals (targetPlatform != hostPlatform) [
     "--enable-bootstrap-with-devel-snapshot"
-  ] ++ stdenv.lib.optionals (targetPlatform.isArm) [
+  ] ++ stdenv.lib.optionals (targetPlatform.isAarch32) [
     "CFLAGS=-fuse-ld=gold"
     "CONF_GCC_LINKER_OPTS_STAGE1=-fuse-ld=gold"
     "CONF_GCC_LINKER_OPTS_STAGE2=-fuse-ld=gold"

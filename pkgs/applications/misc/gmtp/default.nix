@@ -17,6 +17,10 @@ stdenv.mkDerivation {
 
   enableParallelBuilding = true;
 
+  preFixup = ''
+    gappsWrapperArgs+=(--add-flags "--datapath \"$out/share\"");
+  '';
+
   meta = {
     description = "A simple MP3 and Media player client for UNIX and UNIX like systems.";
     homepage = https://gmtp.sourceforge.io;

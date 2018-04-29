@@ -50,7 +50,7 @@ in {
     protocol = mkOption {
       description = "Which protocol to listen.";
       default = "http";
-      type = types.enum ["http" "https"];
+      type = types.enum ["http" "https" "socket"];
     };
 
     addr = mkOption {

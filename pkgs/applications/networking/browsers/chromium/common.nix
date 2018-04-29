@@ -144,29 +144,7 @@ let
       # https://git.archlinux.org/svntogit/packages.git/tree/trunk?h=packages/chromium
       # for updated patches and hints about build flags
     # (gentooPatch "<patch>" "0000000000000000000000000000000000000000000000000000000000000000")
-    ]  ++ optionals (versionRange "65" "66") [
-      (gentooPatch "chromium-stdint.patch" "037gjnc8h087g6dpxz53nqvzbpa9mq0z47h25vix9p62s9nhz2a8")
-      (gentooPatch "chromium-webrtc-r0.patch" "0wp4zivbv2wpgiwmiznbq1aw4w98mvwjvdy36cpfmnvr8yw430pd")
-      (gentooPatch "chromium-math.h-r0.patch" "0dlzbdj0lvp9qklgifsvgbn6p1ppxbl3hkwqqqfsw1d9jka9wy8x")
-      # To enable ChromeCast, go to chrome://flags and set "Load Media Router Component Extension" to Enabled
-      # Fixes Chromecast: https://bugs.chromium.org/p/chromium/issues/detail?id=734325
-      (githubPatch "1517db71cccaec48a05cdf30208e0cba7ab9b9a8" "08ac502cwwb05ml3w4wzn66i5c2d1h22xs5rzszwlnhxckxfc0fk")
-      # GCC 7 fixes
-      (githubPatch "f64fadcd79aebe5ed893ecbf258d1123609d28f8" "1h255w1v327r08cnifs19s4bwmkinqjmdmbwihddc5dyl43sjnvv")
-      (githubPatch "4d8468a07f374c11425494271256151fb6fe0c34" "0kqqq8kj0zv5bi1n9mm0vnn8wsgi98mjmj7snpav21fh3pgiqjrm")
-      (githubPatch "ede5178322ccd297b0ad82ae4c59119ceaab9ea5" "0rsal0dy0yhgs4lhn8h1vy1s77xcssy4f5wals7hvrz5m08jqizj")
-      (githubPatch "7d721f438acb38db556ae9a9e6e8b718bd503216" "13lzvxm63zq3rd8p387ylq4bm9wr4r09vk2w4p81f838pf0v1kbj")
-      # Following commit doesn't apply cleanly to stable branch, replace with handcrafted one
-      #(githubPatch "4f2b52281ce1649ea8347489443965ad33262ecc" "1g59izkicn9cpcphamdgrijs306h5b9i7i4pmy134asn1ifiax5z")
-      ./patches/PlaybackImageProvider-copy-constructor.patch
-      # * base/optional.h
-      (githubPatch "f1c8789c71dbdaeeef98ecd52c9715495824e6b0" "0w3d82s10cl10r6zq9vpsscmdhbdkcy0vbdiqy5pvbr031nfxw5w")
-      (githubPatch "5cae9645215d02cb1f986a181a208f8a4817fc86" "052y0f9nwq6y6jh2gvr1pm8qdcqghyi3jj5svvrp5aqirlkwb7ri")
-      # * ConfigurationPolicyProviders
-      (githubPatch "1ee888aed9f9a6291570ce360bcdd2d06bcc68cb" "1bm34p3bsny44sk60j842ghhhx8qaibwpqnfnyndfj96f7nb2az0")
-      (githubPatch "76da73abaeede740fc97479c09c92a52972bc477" "03rkf514ddj9d32d3zfcnf96kzzdk6cwxvrqj8acyv93vp1hvckr")
-      #(gentooPatch "<patch>" "0000000000000000000000000000000000000000000000000000000000000000")
-    ] ++ optionals (versionRange "66" "67") [
+    ]  ++ optionals (versionRange "66" "67") [
       (gentooPatch "chromium-webrtc-r0.patch" "0wp4zivbv2wpgiwmiznbq1aw4w98mvwjvdy36cpfmnvr8yw430pd")
       (gentooPatch "chromium-ffmpeg-r1.patch" "1k8agaqsvg0w0s6s5wh346ih02cc86vr0vwyshw2q9vafa0jvmq4")
       # GCC 7 fixes
@@ -176,6 +154,11 @@ let
       (githubPatch "ba4141e451f4e0b1b19410b1b503bd32e150df06" "1cjxw1f9fin6z12b0mcxnxf2mdjb0n3chwz7mgvmp9yij8qhqnxj")
       (githubPatch "b34ed1e6524479d61ee944ebf6ca7389ea47e563" "1s13zw93nsyr259dzck6gbhg4x46qg5sg14djf4bvrrc6hlkiczw")
       (githubPatch "4f2b52281ce1649ea8347489443965ad33262ecc" "1g59izkicn9cpcphamdgrijs306h5b9i7i4pmy134asn1ifiax5z")
+      (fetchpatch {
+        ## see https://groups.google.com/a/chromium.org/forum/#!msg/chromium-packagers/So-ojMYOQdI/K66hndtdCAAJ
+        url = "https://bazaar.launchpad.net/~chromium-team/chromium-browser/bionic-stable/download/head:/addmissingblinktools-20180416203514-02f50sz15c2mn6ei-1/add-missing-blink-tools.patch";
+        sha256 = "0dc4cmd05qjqyihrd4qb34kz0jlapjgah8bzgnvxf9m4791w062z";
+      })
     ] ++ optional enableWideVine ./patches/widevine.patch
       ++ optionals (stdenv.isAarch64 && versionRange "65" "66") [
         ./patches/skia_buildfix.patch

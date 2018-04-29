@@ -15,18 +15,19 @@
 
 let
   malloc = if jemalloc != null then jemalloc else gperftools;
+  tools = [ "sst_dump" "ldb" "rocksdb_dump" "rocksdb_undump" "blob_dump" ];
 in
 stdenv.mkDerivation rec {
   name = "rocksdb-${version}";
-  version = "5.10.3";
+  version = "5.11.3";
 
-  outputs = [ "dev" "out" "static" ];
+  outputs = [ "dev" "out" "static" "bin" ];
 
   src = fetchFromGitHub {
     owner = "facebook";
     repo = "rocksdb";
     rev = "v${version}";
-    sha256 = "19d8i8map8qz639mhflmxc0w9gp78fvkq1l46y5s6b5imwh0w7xq";
+    sha256 = "15x2r7aib1xinwcchl32wghs8g96k4q5xgv6z97mxgp35475x01p";
   };
 
   nativeBuildInputs = [ which perl ];
@@ -55,7 +56,7 @@ stdenv.mkDerivation rec {
   buildFlags = buildAndInstallFlags ++ [
     "shared_lib"
     "static_lib"
-  ];
+  ] ++ tools ;
 
   installFlags = buildAndInstallFlags ++ [
     "INSTALL_PATH=\${out}"
@@ -69,6 +70,9 @@ stdenv.mkDerivation rec {
     cat make_config.mk
     mkdir -pv $static/lib/
     mv -vi $out/lib/${LIBNAME}.a $static/lib/
+
+    install -d ''${!outputBin}/bin
+    install -D ${stdenv.lib.concatStringsSep " " tools} ''${!outputBin}/bin
   '';
 
   enableParallelBuilding = true;

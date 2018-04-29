@@ -5,12 +5,12 @@ let
 in
 buildPythonApplication rec {
   pname = "fava";
-  version = "1.6";
+  version = "1.7";
   name = "${pname}-${version}";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0iif4imx76ra0lsisksrq5vf54wbivnrb3xqz6mkx9lik3pp5sbx";
+    sha256 = "c4eba4203bddaa7bc9d54971d2afeeebab0bc80ce89be1375a41a07c4e82b62f";
   };
 
   doCheck = false;

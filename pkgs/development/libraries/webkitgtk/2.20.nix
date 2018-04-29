@@ -2,7 +2,7 @@
 , pkgconfig, gettext, gobjectIntrospection, libnotify, gnutls, libgcrypt
 , gtk3, wayland, libwebp, enchant2, xorg, libxkbcommon, epoxy, at-spi2-core
 , libxml2, libsoup, libsecret, libxslt, harfbuzz, libpthreadstubs, pcre, nettle, libtasn1, p11-kit
-, libidn, libedit, readline, libGLU_combined, libintlOrEmpty
+, libidn, libedit, readline, libGLU_combined, libintl
 , enableGeoLocation ? true, geoclue2, sqlite
 , enableGtk2Plugins ? false, gtk2 ? null
 , gst-plugins-base, gst-plugins-bad, woff2
@@ -15,7 +15,7 @@ assert stdenv.isDarwin -> !enableGtk2Plugins;
 with stdenv.lib;
 stdenv.mkDerivation rec {
   name = "webkitgtk-${version}";
-  version = "2.20.0";
+  version = "2.20.1";
 
   meta = {
     description = "Web content rendering engine, GTK+ port";
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "http://webkitgtk.org/releases/${name}.tar.xz";
-    sha256 = "0g0an3pc2yz13gzpaysfgch2yp510gw1qcpk0xr8m6mx43vl1xjp";
+    sha256 = "0nc9dj05dbk31ciip08b3rdsfja7ckc5mgagrj030fafza2k5r23";
   };
 
   patches = optionals stdenv.isDarwin [
@@ -66,20 +66,18 @@ stdenv.mkDerivation rec {
   "-DENABLE_GTKDOC=OFF"
   ];
 
-  NIX_CFLAGS_COMPILE = optionalString stdenv.isDarwin " -lintl";
-
   nativeBuildInputs = [
     cmake ninja perl python2 ruby bison gperf
     pkgconfig gettext gobjectIntrospection
   ];
 
-  buildInputs = libintlOrEmpty ++ [
-    libwebp enchant2 libnotify gnutls pcre nettle libidn libgcrypt woff2
+  buildInputs = [
+    libintl libwebp enchant2 libnotify gnutls pcre nettle libidn libgcrypt woff2
     libxml2 libsecret libxslt harfbuzz libpthreadstubs libtasn1 p11-kit
     sqlite gst-plugins-base gst-plugins-bad libxkbcommon epoxy at-spi2-core
   ] ++ optional enableGeoLocation geoclue2
     ++ optional enableGtk2Plugins gtk2
-    ++ (with xorg; [ libXdmcp libXt libXtst ])
+    ++ (with xorg; [ libXdmcp libXt libXtst libXdamage ])
     ++ optionals stdenv.isDarwin [ libedit readline libGLU_combined ]
     ++ optional stdenv.isLinux wayland;
 

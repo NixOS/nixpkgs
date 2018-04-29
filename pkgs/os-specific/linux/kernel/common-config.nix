@@ -115,7 +115,6 @@ with stdenv.lib;
   # Enable various subsystems.
   ACCESSIBILITY y # Accessibility support
   AUXDISPLAY y # Auxiliary Display support
-  DONGLE y # Serial dongle support
   HIPPI y
   MTD_COMPLEX_MAPPINGS y # needed for many devices
   SCSI_LOWLEVEL y # enable lots of SCSI devices
@@ -124,6 +123,9 @@ with stdenv.lib;
   SPI y # needed for many devices
   SPI_MASTER y
   WAN y
+  ${optionalString (versionOlder version "4.17") ''
+    DONGLE y # Serial dongle support
+  ''}
 
   # Networking options.
   NET y
@@ -134,6 +136,7 @@ with stdenv.lib;
   NETFILTER y
   NETFILTER_ADVANCED y
   CGROUP_BPF? y # Required by systemd per-cgroup firewalling
+  CGROUP_NET_PRIO y # Required by systemd
   IP_ROUTE_VERBOSE y
   IP_MROUTE_MULTIPLE_TABLES y
   IP_VS_PROTO_TCP y
@@ -352,7 +355,7 @@ with stdenv.lib;
   SECURITY_SELINUX_BOOTPARAM_VALUE 0 # Disable SELinux by default
   SECURITY_YAMA? y # Prevent processes from ptracing non-children processes
   DEVKMEM n # Disable /dev/kmem
-  ${optionalString (! stdenv.hostPlatform.isArm)
+  ${optionalString (! stdenv.hostPlatform.isAarch32)
     (if versionOlder version "3.14" then ''
         CC_STACKPROTECTOR? y # Detect buffer overflows on the stack
       '' else ''
@@ -419,7 +422,9 @@ with stdenv.lib;
   ${optionalString (versionAtLeast version "4.3") ''
     IDLE_PAGE_TRACKING y
   ''}
-  IRDA_ULTRA y # Ultra (connectionless) protocol
+  ${optionalString (versionOlder version "4.17") ''
+    IRDA_ULTRA y # Ultra (connectionless) protocol
+  ''}
   JOYSTICK_IFORCE_232? y # I-Force Serial joysticks and wheels
   JOYSTICK_IFORCE_USB? y # I-Force USB joysticks and wheels
   JOYSTICK_XPAD_FF? y # X-Box gamepad rumble support

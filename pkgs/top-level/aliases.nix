@@ -24,10 +24,6 @@ in
   ### Deprecated aliases - for backward compatibility
 
 mapAliases (rec {
-  _2048-in-terminal = "2048-in-terminal"; # added 2017-01-16
-  _2bwm = "2bwm"; # added 2017-01-16
-  _389-ds-base = "389-ds-base"; # added 2017-01-16
-  _90secondportraits = "90secondsportraits"; # added 2017-01-16
   accounts-qt = libsForQt5.accounts-qt; # added 2015-12-19
   adobeReader = adobe-reader; # added 2013-11-04
   aircrackng = aircrack-ng; # added 2016-01-14
@@ -119,6 +115,7 @@ mapAliases (rec {
   libgnome_keyring = libgnome-keyring; # added 2018-02-25
   libgnome_keyring3 = libgnome-keyring3; # added 2018-02-25
   libgumbo = gumbo; # added 2018-01-21
+  libintlOrEmpty = stdenv.lib.optional (!stdenv.isLinux || hostPlatform.libc != "glibc") gettext; # added 2018-03-14
   libjson_rpc_cpp = libjson-rpc-cpp; # added 2017-02-28
   libmysql = mysql.connector-c; # added # 2017-12-28, this was a misnomer refering to libmysqlclient
   libtidy = html-tidy;  # added 2014-12-21
@@ -133,7 +130,6 @@ mapAliases (rec {
   man_db = man-db; # added 2016-05
   piwik = matomo; # added 2018-01-16
   midoriWrapper = midori; # added 2015-01
-  minc_tools = minc-tools; # 2017-12
   mlt-qt5 = libsForQt5.mlt;  # added 2015-12-19
   mobile_broadband_provider_info = mobile-broadband-provider-info; # added 2018-02-25
   module_init_tools = kmod; # added 2016-04-22
@@ -227,6 +223,7 @@ mapAliases (rec {
   vimprobable2Wrapper = vimprobable2; # added 2015-01
   virtviewer = virt-viewer; # added 2015-12-24
   vorbisTools = vorbis-tools; # added 2016-01-26
+  wineStaging = wine-staging; # added 2018-01-08
   winusb = woeusb; # added 2017-12-22
   x11 = xlibsWrapper; # added 2015-09
   xf86_video_nouveau = xorg.xf86videonouveau; # added 2015-09
@@ -238,6 +235,10 @@ mapAliases (rec {
   wineFull = winePackages.full;
   wineStable = winePackages.stable;
   wineUnstable = winePackages.unstable;
+
+  # added 2018-03-26
+  libva-full = libva;
+  libva1-full = libva1;
 
   inherit (ocaml-ng) # added 2016-09-14
     ocamlPackages_3_10_0 ocamlPackages_3_11_2 ocamlPackages_3_12_1

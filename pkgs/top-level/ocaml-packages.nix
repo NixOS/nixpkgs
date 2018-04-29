@@ -217,8 +217,6 @@ let
 
     easy-format = callPackage ../development/ocaml-modules/easy-format { };
 
-    eff = callPackage ../development/interpreters/eff { };
-
     eliom = callPackage ../development/ocaml-modules/eliom {
       lwt = lwt2;
       js_of_ocaml = js_of_ocaml_2;
@@ -333,6 +331,8 @@ let
     js_of_ocaml-ppx = callPackage ../development/tools/ocaml/js_of_ocaml/ppx.nix {};
 
     js_of_ocaml-ppx_deriving_json = callPackage ../development/tools/ocaml/js_of_ocaml/ppx_deriving_json.nix {};
+
+    js_of_ocaml-tyxml = callPackage ../development/tools/ocaml/js_of_ocaml/tyxml.nix {};
 
     jsonm = callPackage ../development/ocaml-modules/jsonm { };
 
@@ -1041,6 +1041,8 @@ in rec
   ocamlPackages_4_05 = mkOcamlPackages (callPackage ../development/compilers/ocaml/4.05.nix { }) (self: super: { });
 
   ocamlPackages_4_06 = mkOcamlPackages (callPackage ../development/compilers/ocaml/4.06.nix { }) (self: super: { });
+
+  ocamlPackages_4_07 = mkOcamlPackages (callPackage ../development/compilers/ocaml/4.07.nix { }) (self: super: { });
 
   ocamlPackages_latest = ocamlPackages_4_06;
 

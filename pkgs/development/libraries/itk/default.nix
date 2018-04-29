@@ -12,7 +12,9 @@ stdenv.mkDerivation rec {
     "-DBUILD_TESTING=OFF"
     "-DBUILD_EXAMPLES=OFF"
     "-DBUILD_SHARED_LIBS=ON"
+    "-DModule_ITKMINC=ON"
     "-DModule_ITKIOMINC=ON"
+    "-DModule_ITKIOTransformMINC=ON"
     "-DModule_ITKVtkGlue=ON"
     "-DModule_ITKReview=ON"
   ];

@@ -23,7 +23,9 @@
     xlink:href="https://github.com/NixOS/nixpkgs/pulls?q=is%3Apr+is%3Aopen+sort%3Aupdated-desc">most
     recently</link> and the <link
     xlink:href="https://github.com/NixOS/nixpkgs/pulls?q=is%3Apr+is%3Aopen+sort%3Aupdated-asc">least
-    recently</link> updated pull-requests.</para>
+        recently</link> updated pull-requests.
+  We highly encourage looking at <link xlink:href="https://github.com/NixOS/nixpkgs/pulls?q=is%3Apr+is%3Aopen+review%3Anone+status%3Asuccess+-label%3A%222.status%3A+work-in-progress%22+no%3Aproject+no%3Aassignee+no%3Amilestone">
+  this list of ready to merge, unreviewed pull requests</link>.</para>
 
 <para>When reviewing a pull request, please always be nice and polite.
   Controversial changes can lead to controversial opinions, but it is important

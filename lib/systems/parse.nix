@@ -34,7 +34,7 @@ rec {
 
   ################################################################################
 
-  types.openSignifiantByte = mkOptionType {
+  types.openSignificantByte = mkOptionType {
     name = "significant-byte";
     description = "Endianness";
     merge = mergeOneOption;
@@ -42,7 +42,7 @@ rec {
 
   types.significantByte = enum (attrValues significantBytes);
 
-  significantBytes = setTypes types.openSignifiantByte {
+  significantBytes = setTypes types.openSignificantByte {
     bigEndian = {};
     littleEndian = {};
   };
@@ -72,7 +72,7 @@ rec {
     armv6l   = { bits = 32; significantByte = littleEndian; family = "arm"; };
     armv7a   = { bits = 32; significantByte = littleEndian; family = "arm"; };
     armv7l   = { bits = 32; significantByte = littleEndian; family = "arm"; };
-    aarch64  = { bits = 64; significantByte = littleEndian; family = "aarch64"; };
+    aarch64  = { bits = 64; significantByte = littleEndian; family = "arm"; };
     i686     = { bits = 32; significantByte = littleEndian; family = "x86"; };
     x86_64   = { bits = 64; significantByte = littleEndian; family = "x86"; };
     mips     = { bits = 32; significantByte = bigEndian;    family = "mips"; };
@@ -201,7 +201,7 @@ rec {
 
   ################################################################################
 
-  types.system = mkOptionType {
+  types.parsedPlatform = mkOptionType {
     name = "system";
     description = "fully parsed representation of llvm- or nix-style platform tuple";
     merge = mergeOneOption;
@@ -215,7 +215,7 @@ rec {
   isSystem = isType "system";
 
   mkSystem = components:
-    assert types.system.check components;
+    assert types.parsedPlatform.check components;
     setType "system" components;
 
   mkSkeletonFromList = l: {

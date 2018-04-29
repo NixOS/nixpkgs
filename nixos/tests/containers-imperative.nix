@@ -15,7 +15,7 @@ import ./make-test.nix ({ pkgs, ...} : {
       # container available within the VM, because we don't have network access.
       virtualisation.pathsInNixDB = let
         emptyContainer = import ../lib/eval-config.nix {
-          inherit (config.nixpkgs) system;
+          inherit (config.nixpkgs.localSystem) system;
           modules = lib.singleton {
             containers.foo.config = {};
           };

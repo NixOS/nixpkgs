@@ -250,6 +250,46 @@ let
           Use imports or pkgs.lib.readFile if you don't want this data in your config file.
         '';
       };
+      
+      dnssec = mkEnableOption "DNSSEC";
+
+      dnssecPolicy = {
+        algorithm = mkOption {
+          type = types.str;
+          default = "RSASHA256";
+          description = "Which algorithm to use for DNSSEC";
+        };
+        keyttl = mkOption {
+          type = types.str;
+          default = "1h";
+          description = "TTL for dnssec records";
+        };
+        coverage = mkOption {
+          type = types.str;
+          default = "1y";
+          description = ''
+            The length of time to ensure that keys will be correct; no action will be taken to create new keys to be activated after this time.
+          '';
+        };
+        zsk = mkOption {
+          type = keyPolicy;
+          default = { keySize = 2048;
+                      prePublish = "1w";
+                      postPublish = "1w";
+                      rollPeriod = "1mo";
+                    };
+          description = "Key policy for zone signing keys";
+        };
+        ksk = mkOption {
+          type = keyPolicy;
+          default = { keySize = 4096;
+                      prePublish = "1mo";
+                      postPublish = "1mo";
+                      rollPeriod = "0";
+                    };
+          description = "Key policy for key signing keys";
+        };
+      };
 
       maxRefreshSecs = mkOption {
         type = types.nullOr types.int;
@@ -367,10 +407,61 @@ let
           and stats_noreset.
         '';
       };
-
     };
   };
 
+  keyPolicy = types.submodule {
+    options = {
+      keySize = mkOption {
+        type = types.int;
+        description = "Key size in bits";
+      };
+      prePublish = mkOption {
+        type = types.str;
+        description = "How long in advance to publish new keys";
+      };
+      postPublish = mkOption {
+        type = types.str;
+        description = "How long after deactivation to keep a key in the zone";
+      };
+      rollPeriod = mkOption {
+        type = types.str;
+        description = "How frequently to change keys";
+      };
+    };
+  };
+
+  dnssecZones = (filterAttrs (n: v: if v ? dnssec then v.dnssec else false) zoneConfigs);
+
+  dnssec = length (attrNames dnssecZones) != 0; 
+
+  signZones = optionalString dnssec ''
+    mkdir -p ${stateDir}/dnssec
+    chown ${username}:${username} ${stateDir}/dnssec
+    chmod 0600 ${stateDir}/dnssec
+
+    ${concatStrings (mapAttrsToList signZone dnssecZones)}
+  '';
+  signZone = name: zone: ''
+    ${pkgs.bind}/bin/dnssec-keymgr -g ${pkgs.bind}/bin/dnssec-keygen -s ${pkgs.bind}/bin/dnssec-settime -K ${stateDir}/dnssec -c ${policyFile name zone.dnssecPolicy} ${name}
+    ${pkgs.bind}/bin/dnssec-signzone -S -K ${stateDir}/dnssec -o ${name} -O full -N date ${stateDir}/zones/${name}
+    ${nsdPkg}/sbin/nsd-checkzone ${name} ${stateDir}/zones/${name}.signed && mv -v ${stateDir}/zones/${name}.signed ${stateDir}/zones/${name}
+  '';
+  policyFile = name: policy: pkgs.writeText "${name}.policy" ''
+    zone ${name} {
+      algorithm ${policy.algorithm};
+      key-size zsk ${toString policy.zsk.keySize};
+      key-size ksk ${toString policy.ksk.keySize};
+      keyttl ${policy.keyttl};
+      pre-publish zsk ${policy.zsk.prePublish};
+      pre-publish ksk ${policy.ksk.prePublish};
+      post-publish zsk ${policy.zsk.postPublish};
+      post-publish ksk ${policy.ksk.postPublish};
+      roll-period zsk ${policy.zsk.rollPeriod};
+      roll-period ksk ${policy.ksk.rollPeriod};
+      coverage ${policy.coverage};
+    };
+  '';
 in
 {
   # options are ordered alphanumerically
@@ -379,6 +470,14 @@ in
     enable = mkEnableOption "NSD authoritative DNS server";
 
     bind8Stats = mkEnableOption "BIND8 like statistics";
+
+    dnssecInterval = mkOption {
+      type = types.str;
+      default = "1h";
+      description = ''
+        How often to check whether dnssec key rollover is required
+      '';
+    };
 
     extraConfig = mkOption {
       type = types.str;
@@ -741,7 +840,6 @@ in
 
     };
 
-
     zones = mkOption {
       type = types.attrsOf zoneOptions;
       default = {};
@@ -785,7 +883,6 @@ in
         serverGroup1.
       '';
     };
-
   };
 
   config = mkIf cfg.enable {
@@ -832,9 +929,9 @@ in
         mkdir -m 0700 -p "${stateDir}/var"
 
         cat > "${stateDir}/don't touch anything in here" << EOF
-        Everything in this directory except NSD's state in var is
-        automatically generated and will be purged and redeployed
-        by the nsd.service pre-start script.
+        Everything in this directory except NSD's state in var and dnssec
+        is automatically generated and will be purged and redeployed by
+        the nsd.service pre-start script.
         EOF
 
         chown ${username}:${username} -R "${stateDir}/private"
@@ -845,6 +942,34 @@ in
         cp -rL "${nsdEnv}/zones" "${stateDir}/zones"
 
         ${copyKeys}
+      '';
+    };
+
+    nixpkgs.config = mkIf dnssec {
+      bind.enablePython = true;
+    };
+
+    systemd.timers."nsd-dnssec" = mkIf dnssec {
+      description = "Automatic DNSSEC key rollover";
+
+      wantedBy = [ "nsd.service" ];
+
+      timerConfig = {
+        OnActiveSec = cfg.dnssecInterval;
+        OnUnitActiveSec = cfg.dnssecInterval;
+      };
+    };
+
+    systemd.services."nsd-dnssec" = mkIf dnssec {
+      description = "DNSSEC key rollover";
+
+      wantedBy = [ "nsd.service" ];
+      before = [ "nsd.service" ];
+
+      script = signZones;
+
+      postStop = ''
+        ${pkgs.systemd}/bin/systemctl kill -s SIGHUP nsd.service
       '';
     };
 

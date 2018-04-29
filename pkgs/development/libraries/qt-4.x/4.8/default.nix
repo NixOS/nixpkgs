@@ -76,7 +76,6 @@ stdenv.mkDerivation rec {
         icu = icu.out;
         libXfixes = libXfixes.out;
         glibc = stdenv.cc.libc.out;
-        openglDriver = if libGLSupported then libGL.driverLink else "/no-such-path";
       })
       (fetchpatch {
         name = "fix-medium-font.patch";

@@ -115,11 +115,12 @@ let
       unknownModule mkOption;
     inherit (types) isType setType defaultTypeMerge defaultFunctor
       isOptionType mkOptionType;
-    inherit (debug) addErrorContextToAttrs traceIf traceVal
+    inherit (debug) addErrorContextToAttrs traceIf traceVal traceValFn
       traceXMLVal traceXMLValMarked traceSeq traceSeqN traceValSeq
-      traceValSeqN traceShowVal traceShowValMarked
-      showVal traceCall traceCall2 traceCall3 traceValIfNot runTests
-      testAllTrue strict traceCallXml attrNamesToStr;
+      traceValSeqFn traceValSeqN traceValSeqNFn traceShowVal
+      traceShowValMarked showVal traceCall traceCall2 traceCall3
+      traceValIfNot runTests testAllTrue traceCallXml
+      attrNamesToStr;
     inherit (misc) maybeEnv defaultMergeArg defaultMerge foldArgs
       defaultOverridableDelayableArgs composedArgsAndFun
       maybeAttrNullable maybeAttr ifEnable checkFlag getValue

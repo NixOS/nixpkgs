@@ -1,9 +1,11 @@
-{ fetchurl, stdenv, curl, openssl, zlib, expat, perl, python, gettext, cpio
+{ fetchurl, stdenv, buildPackages
+, curl, openssl, zlib, expat, perl, python, gettext, cpio
 , gnugrep, gnused, gawk, coreutils # needed at runtime by git-filter-branch etc
-, gzip, openssh, pcre2
+, openssh, pcre2
 , asciidoc, texinfo, xmlto, docbook2x, docbook_xsl, docbook_xml_dtd_45
 , libxslt, tcl, tk, makeWrapper, libiconv
-, svnSupport, subversionClient, perlLibs, smtpPerlLibs, gitwebPerlLibs
+, svnSupport, subversionClient, perlLibs, smtpPerlLibs
+, perlSupport ? true
 , guiSupport
 , withManual ? true
 , pythonSupport ? true
@@ -12,9 +14,12 @@
 , darwin
 }:
 
+assert sendEmailSupport -> perlSupport;
+assert svnSupport -> perlSupport;
+
 let
-  version = "2.17.0";
-  svn = subversionClient.override { perlBindings = true; };
+  version = "2.16.3";
+  svn = subversionClient.override { perlBindings = perlSupport; };
 in
 
 stdenv.mkDerivation {
@@ -22,8 +27,10 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "https://www.kernel.org/pub/software/scm/git/git-${version}.tar.xz";
-    sha256 = "1ismz7nsz8dgjmk782xr9s0mr2qh06f72pdcgbxfmnw1bvlya5p9";
+    sha256 = "0j1dwvg5llnj3g0fp8hdgpms4hp90qw9f6509vqw30dhwplrjpfn";
   };
+
+  outputs = [ "out" ] ++ stdenv.lib.optional perlSupport "gitweb";
 
   hardeningDisable = [ "format" ];
 
@@ -42,9 +49,11 @@ stdenv.mkDerivation {
     done
   '';
 
-  buildInputs = [curl openssl zlib expat gettext cpio makeWrapper libiconv perl]
+  nativeBuildInputs = [ gettext perl ]
     ++ stdenv.lib.optionals withManual [ asciidoc texinfo xmlto docbook2x
-         docbook_xsl docbook_xml_dtd_45 libxslt ]
+         docbook_xsl docbook_xml_dtd_45 libxslt ];
+  buildInputs = [curl openssl zlib expat cpio makeWrapper libiconv]
+    ++ stdenv.lib.optionals perlSupport [ perl ]
     ++ stdenv.lib.optionals guiSupport [tcl tk]
     ++ stdenv.lib.optionals withpcre2 [ pcre2 ]
     ++ stdenv.lib.optionals stdenv.isDarwin [ darwin.Security ];
@@ -54,13 +63,21 @@ stdenv.mkDerivation {
   NIX_LDFLAGS = stdenv.lib.optionalString (!stdenv.cc.isClang) "-lgcc_s"
               + stdenv.lib.optionalString (stdenv.isFreeBSD) "-lthr";
 
-  makeFlags = "prefix=\${out} PERL_PATH=${perl}/bin/perl SHELL_PATH=${stdenv.shell} "
-      + (if pythonSupport then "PYTHON_PATH=${python}/bin/python" else "NO_PYTHON=1")
-      + (if stdenv.isSunOS then " INSTALL=install NO_INET_NTOP= NO_INET_PTON=" else "")
-      + (if stdenv.isDarwin then " NO_APPLE_COMMON_CRYPTO=1" else " sysconfdir=/etc/ ")
-      # XXX: USE_PCRE2 might be useful in general, look into it
-      # XXX other alpine options?
-      + (if stdenv.hostPlatform.isMusl then "NO_SYS_POLL_H=1 NO_GETTEXT=YesPlease" else "");
+  configureFlags = stdenv.lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
+    "ac_cv_fread_reads_directories=yes"
+    "ac_cv_snprintf_returns_bogus=no"
+  ];
+
+  makeFlags = [
+    "prefix=\${out}"
+    "SHELL_PATH=${stdenv.shell}"
+  ]
+  ++ (if perlSupport then ["PERL_PATH=${perl}/bin/perl"] else ["NO_PERL=1"])
+  ++ (if pythonSupport then ["PYTHON_PATH=${python}/bin/python"] else ["NO_PYTHON=1"])
+  ++ stdenv.lib.optionals stdenv.isSunOS ["INSTALL=install" "NO_INET_NTOP=" "NO_INET_PTON="]
+  ++ (if stdenv.isDarwin then ["NO_APPLE_COMMON_CRYPTO=1"] else ["sysconfdir=/etc/"])
+  ++ stdenv.lib.optionals stdenv.hostPlatform.isMusl ["NO_SYS_POLL_H=1" "NO_GETTEXT=YesPlease"]
+  ++ stdenv.lib.optional withpcre2 "USE_LIBPCRE2=1";
 
   # build git-credential-osxkeychain if darwin
   postBuild = stdenv.lib.optionalString stdenv.isDarwin ''
@@ -73,9 +90,7 @@ stdenv.mkDerivation {
   # so that `SPARSE_FLAGS' corresponds to the current architecture...
   #doCheck = true;
 
-  installFlags = "NO_INSTALL_HARDLINKS=1"
-    + (if withpcre2 then " USE_LIBPCRE2=1" else "");
-
+  installFlags = "NO_INSTALL_HARDLINKS=1";
 
   preInstall = stdenv.lib.optionalString stdenv.isDarwin ''
     mkdir -p $out/bin
@@ -115,9 +130,10 @@ stdenv.mkDerivation {
       SCRIPT="$(cat <<'EOS'
         BEGIN{
           @a=(
-            '${perl}/bin/perl', '${gnugrep}/bin/grep', '${gnused}/bin/sed', '${gawk}/bin/awk',
+            '${gnugrep}/bin/grep', '${gnused}/bin/sed', '${gawk}/bin/awk',
             '${coreutils}/bin/cut', '${coreutils}/bin/basename', '${coreutils}/bin/dirname',
             '${coreutils}/bin/wc', '${coreutils}/bin/tr'
+            ${stdenv.lib.optionalString perlSupport ", '${perl}/bin/perl'"}
           );
         }
         foreach $c (@a) {
@@ -133,19 +149,12 @@ stdenv.mkDerivation {
       substituteInPlace $out/libexec/git-core/git-sh-i18n \
           --subst-var-by gettext ${gettext}
 
-      # gzip (and optionally bzip2, xz, zip) are runtime dependencies for
-      # gitweb.cgi, need to patch so that it's found
-      sed -i -e "s|'compressor' => \['gzip'|'compressor' => ['${gzip}/bin/gzip'|" \
-          $out/share/gitweb/gitweb.cgi
-      # Give access to CGI.pm and friends (was removed from perl core in 5.22)
-      for p in ${stdenv.lib.concatStringsSep " " gitwebPerlLibs}; do
-          sed -i -e "/use CGI /i use lib \"$p/lib/perl5/site_perl\";" \
-              "$out/share/gitweb/gitweb.cgi"
-      done
-
       # Also put git-http-backend into $PATH, so that we can use smart
       # HTTP(s) transports for pushing
       ln -s $out/libexec/git-core/git-http-backend $out/bin/git-http-backend
+    '' + stdenv.lib.optionalString perlSupport ''
+      # put in separate package for simpler maintenance
+      mv $out/share/gitweb $gitweb/
 
       # wrap perl commands
       gitperllib=$out/lib/perl5/site_perl
@@ -191,7 +200,7 @@ stdenv.mkDerivation {
        '')
 
    + stdenv.lib.optionalString withManual ''# Install man pages and Info manual
-       make -j $NIX_BUILD_CORES -l $NIX_BUILD_CORES PERL_PATH="${perl}/bin/perl" cmd-list.made install install-info \
+       make -j $NIX_BUILD_CORES -l $NIX_BUILD_CORES PERL_PATH="${buildPackages.perl}/bin/perl" cmd-list.made install install-info \
          -C Documentation ''
 
    + (if guiSupport then ''

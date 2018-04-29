@@ -4,7 +4,7 @@ with stdenv.lib;
 with pythonPackages;
 
 let
-  version = "1.4.0";
+  version = "1.5.0";
 in buildPythonApplication rec {
   inherit version;
   pname = "pantsbuild.pants";
@@ -12,7 +12,7 @@ in buildPythonApplication rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1jd041av1kipg4psbcwk70nwh0bsh5mkbjjcmnw4vrqdd09vg1gz";
+    sha256 = "7c0a1206594c615fce0a7f6daa4ea1028645bc20afa5599c2cf0ad7c06223fa7";
   };
 
   prePatch = ''

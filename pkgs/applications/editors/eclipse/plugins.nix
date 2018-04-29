@@ -530,18 +530,13 @@ rec {
     };
   };
 
-  spotbugs = buildEclipsePlugin rec {
+  spotbugs = buildEclipseUpdateSite rec {
     name = "spotbugs-${version}";
-    version = "3.1.2.r201802250230-59118d9";
+    version = "3.1.3";
 
-    srcFeature = fetchurl {
-      url = "https://spotbugs.github.io/eclipse/features/com.github.spotbugs.plugin.eclipse_${version}.jar";
-      sha256 = "1p0pz7znpfi5h1wr60sl8clkpd7rzkh7krmc0nxc6w43gkgkg9h4";
-    };
-
-    srcPlugin = fetchurl {
-      url = "https://spotbugs.github.io/eclipse/plugins/com.github.spotbugs.plugin.eclipse_${version}.jar";
-      sha256 = "1z3jjbcjif4qip1gx2dhfcm9fyhps96ms7z3ngbdcakgw7wai9v4";
+    src = fetchzip {
+      url = "https://github.com/spotbugs/spotbugs/releases/download/${version}/eclipsePlugin.zip";
+      sha256 = "01zrmk497bxzqgwgbpsvi5iz5qk9b4q949h4918abm54zvkgndlg";
     };
 
     meta = with stdenv.lib; {

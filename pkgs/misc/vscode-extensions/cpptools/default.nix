@@ -120,7 +120,7 @@ vscode-utils.buildVscodeMarketplaceExtension {
 
     meta = with stdenv.lib; {
       license = licenses.unfree;
-      maintainer = [ maintainers.jraygauthier ];
+      maintainers = [ maintainers.jraygauthier ];
       # A 32 bit linux would also be possible with some effort (specific download of binaries + 
       # patching of the elf files with 32 bit interpreter).
       platforms = [ "x86_64-linux" ];
