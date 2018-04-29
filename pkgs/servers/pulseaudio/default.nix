@@ -10,7 +10,7 @@
 
 , x11Support ? false
 
-, useSystemd ? true
+, useSystemd ? stdenv.isLinux
 
 , # Whether to support the JACK sound system as a backend.
   jackaudioSupport ? false
@@ -59,8 +59,8 @@ stdenv.mkDerivation rec {
     lib.optionals stdenv.isLinux [ libcap ];
 
   buildInputs =
-    [ libtool libsndfile speexdsp fftwFloat libasyncns webrtc-audio-processing ]
-    ++ lib.optionals stdenv.isLinux [ glib dbus ]
+    [ libtool libsndfile speexdsp fftwFloat ]
+    ++ lib.optionals stdenv.isLinux [ glib libasyncns webrtc-audio-processing ]
     ++ lib.optionals stdenv.isDarwin [ CoreServices AudioUnit Cocoa ]
     ++ lib.optional jackaudioSupport libjack2
     ++ lib.optionals x11Support [ xorg.xlibsWrapper xorg.libXtst xorg.libXi ]

@@ -121,7 +121,6 @@ mapAliases (rec {
   libjack2 = jack2Full; # added 2018-04-25
   libjson_rpc_cpp = libjson-rpc-cpp; # added 2017-02-28
   libmysql = mysql.connector-c; # added # 2017-12-28, this was a misnomer refering to libmysqlclient
-  libpulseaudio-vanilla = pulseaudioLight; # added 2018-04-25
   libtidy = html-tidy;  # added 2014-12-21
   libv4l = v4l_utils.dev; # added 2018-04-25
   links = links2; # added 2016-01-31
