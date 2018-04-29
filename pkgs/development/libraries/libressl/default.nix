@@ -19,7 +19,7 @@ let
 
     postFixup = ''
       moveToOutput "bin/nc" "$nc"
-      moveToOutput "share/man/man1/nc.1${lib.optionalString (!dontGzipMan) ".gz"}" "$nc"
+      moveToOutput "share/man/man1/nc.1${lib.optionalString (dontGzipMan==null) ".gz"}" "$nc"
     '';
 
     dontGzipMan = if stdenv.isDarwin then true else null; # not sure what's wrong
