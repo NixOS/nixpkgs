@@ -21387,5 +21387,5 @@ with pkgs;
                       mount wall hostname more sysctl;
 
   inherit (recurseIntoAttrs (callPackages ../os-specific/bsd { }))
-          netbsd openbsd;
+          netbsd;
 }
