@@ -166,18 +166,7 @@ rec {
     installPhase = "installPlugins src/gimp-lqr-plugin";
   };
 
-  gmic =
-    pluginDerivation rec {
-      inherit (pkgs.gmic) name src meta;
-
-      buildInputs = with pkgs; [ fftw opencv curl ];
-
-      sourceRoot = "${name}/src";
-
-      buildFlags = "gimp";
-
-      installPhase = "installPlugins gmic_gimp";
-  };
+  gmic = pkgs.gmic.gimpPlugin;
 
   ufraw = pkgs.ufraw.gimpPlugin;
 
