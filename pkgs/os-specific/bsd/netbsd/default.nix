@@ -381,19 +381,26 @@ in rec {
       # to build but need to look at how to implement stuff in
       # Linux. macOS is missing gettime. TODO try to get these
       # working.
-      substituteInPlace Makefile \
-        ${lib.optionalString stdenv.isDarwin "--replace adventure ''"} \
-        --replace atc "" \
-        --replace boggle "" \
-        --replace dm "" \
-        --replace fortune "" \
-        --replace hunt "" \
-        --replace larn "" \
-        --replace phantasia "" \
-        --replace rogue "" \
-        --replace sail "" \
-        --replace trek "" \
-        --replace dab ""
+      disableGame() {
+        substituteInPlace Makefile --replace $1 ""
+      }
+
+      disableGame atc
+      disableGame boggle
+      disableGame dm
+      disableGame fortune
+      disableGame hunt
+      disableGame larn
+      disableGame phantasia
+      disableGame rogue
+      disableGame sail
+      disableGame trek
+      disableGame dab
+      ${lib.optionalString stdenv.isDarwin "disableGame adventure"}
+      ${lib.optionalString stdenv.isDarwin "disableGame factor"}
+      ${lib.optionalString stdenv.isDarwin "disableGame gomoku"}
+      ${lib.optionalString stdenv.isDarwin "disableGame mille"}
+
       substituteInPlace Makefile.inc \
         --replace 2555 555 \
         --replace 2550 550
