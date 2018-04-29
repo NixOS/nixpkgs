@@ -491,6 +491,7 @@
   ./services/networking/i2pd.nix
   ./services/networking/i2p.nix
   ./services/networking/iodine.nix
+  ./services/networking/irati.nix
   ./services/networking/ircd-hybrid/default.nix
   ./services/networking/iwd.nix
   ./services/networking/keepalived/default.nix
