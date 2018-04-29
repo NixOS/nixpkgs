@@ -115,6 +115,7 @@ mapAliases (rec {
   libgnome_keyring = libgnome-keyring; # added 2018-02-25
   libgnome_keyring3 = libgnome-keyring3; # added 2018-02-25
   libgumbo = gumbo; # added 2018-01-21
+  libheimdal = heimdalFull; # added 2018-04-25
   libintlOrEmpty = stdenv.lib.optional (!stdenv.isLinux || hostPlatform.libc != "glibc") gettext; # added 2018-03-14
   libjson_rpc_cpp = libjson-rpc-cpp; # added 2017-02-28
   libmysql = mysql.connector-c; # added # 2017-12-28, this was a misnomer refering to libmysqlclient

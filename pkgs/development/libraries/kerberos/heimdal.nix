@@ -1,14 +1,8 @@
 { stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, python2, perl, yacc, flex
 , texinfo, perlPackages
 , openldap, libcap_ng, sqlite, openssl, db, libedit, pam
-
-# Extra Args
-, type ? ""
 }:
 
-let
-  libOnly = type == "lib";
-in
 with stdenv.lib;
 stdenv.mkDerivation rec {
   name = "${type}heimdal-${version}";
@@ -23,12 +17,10 @@ stdenv.mkDerivation rec {
 
   patches = [ ./heimdal-make-missing-headers.patch ];
 
-  nativeBuildInputs = [ autoreconfHook pkgconfig python2 perl yacc flex ]
-    ++ (with perlPackages; [ JSON ])
-    ++ optional (!libOnly) texinfo;
+  nativeBuildInputs = [ autoreconfHook pkgconfig python2 perl yacc flex texinfo ]
+    ++ (with perlPackages; [ JSON ]);
   buildInputs = optionals (!stdenv.isFreeBSD) [ libcap_ng db ]
-    ++ [ sqlite openssl libedit ]
-    ++ optionals (!libOnly) [ openldap pam ];
+    ++ [ sqlite openssl libedit openldap pam ];
 
   ## ugly, X should be made an option
   configureFlags = [
@@ -40,7 +32,6 @@ stdenv.mkDerivation rec {
     "--with-openssl=${openssl.dev}"
     "--without-x"
     "--with-berkeley-db=${db}"
-  ] ++ optionals (!libOnly) [
     "--with-openldap=${openldap.dev}"
   ] ++ optionals (!stdenv.isFreeBSD) [
     "--with-capng"
@@ -48,24 +39,6 @@ stdenv.mkDerivation rec {
 
   postUnpack = ''
     sed -i '/^DEFAULT_INCLUDES/ s,$, -I..,' source/cf/Makefile.am.common
-  '';
-
-  buildPhase = optionalString libOnly ''
-    (cd include; make -j $NIX_BUILD_CORES)
-    (cd lib; make -j $NIX_BUILD_CORES)
-    (cd tools; make -j $NIX_BUILD_CORES)
-    (cd include/hcrypto; make -j $NIX_BUILD_CORES)
-    (cd lib/hcrypto; make -j $NIX_BUILD_CORES)
-  '';
-
-  installPhase = optionalString libOnly ''
-    (cd include; make -j $NIX_BUILD_CORES install)
-    (cd lib; make -j $NIX_BUILD_CORES install)
-    (cd tools; make -j $NIX_BUILD_CORES install)
-    (cd include/hcrypto; make -j $NIX_BUILD_CORES install)
-    (cd lib/hcrypto; make -j $NIX_BUILD_CORES install)
-    rm -rf $out/{libexec,sbin,share}
-    find $out/bin -type f | grep -v 'krb5-config' | xargs rm
   '';
 
   # We need to build hcrypt for applications like samba
