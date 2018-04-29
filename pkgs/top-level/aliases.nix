@@ -123,6 +123,7 @@ mapAliases (rec {
   libmysql = mysql.connector-c; # added # 2017-12-28, this was a misnomer refering to libmysqlclient
   libpulseaudio-vanilla = pulseaudioLight; # added 2018-04-25
   libtidy = html-tidy;  # added 2014-12-21
+  libv4l = v4l_utils.dev; # added 2018-04-25
   links = links2; # added 2016-01-31
   lttngTools = lttng-tools;  # added 2014-07-31
   lttngUst = lttng-ust;  # added 2014-07-31

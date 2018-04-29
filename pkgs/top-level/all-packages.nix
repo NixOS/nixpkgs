@@ -10417,10 +10417,6 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) ApplicationServices CoreServices;
   };
 
-  libv4l = lowPrio (v4l_utils.override {
-    withUtils = false;
-  });
-
   libva = callPackage ../development/libraries/libva { };
   libva-minimal = libva.override { minimal = true; };
   libva-utils = callPackage ../development/libraries/libva-utils { };
