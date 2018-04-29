@@ -179,32 +179,7 @@ rec {
       installPhase = "installPlugins gmic_gimp";
   };
 
-  # this is more than a gimp plugin !
-  # either load the raw image with gimp (and the import dialog will popup)
-  # or use the binary
-  ufraw = pluginDerivation rec {
-    name = "ufraw-0.19.2";
-    buildInputs = with pkgs; [ gtkimageview lcms ];
-      # --enable-mime - install mime files, see README for more information
-      # --enable-extras - build extra (dcraw, nikon-curve) executables
-      # --enable-dst-correction - enable DST correction for file timestamps.
-      # --enable-contrast - enable the contrast setting option.
-      # --enable-interp-none: enable 'None' interpolation (mostly for debugging).
-      # --with-lensfun: use the lensfun library - experimental feature, read this before using it.
-      # --with-prefix=PREFIX - use also PREFIX as an input prefix for the build
-      # --with-dosprefix=PREFIX - PREFIX in the the prefix in dos format (needed only for ms-window
-    configureFlags = "--enable-extras --enable-dst-correction --enable-contrast";
-
-    src = fetchurl {
-      url = "mirror://sourceforge/ufraw/${name}.tar.gz";
-      sha256 = "1lxba7pb3vcsq94dwapg9bk9mb3ww6r3pvvcyb0ah5gh2sgzxgkk";
-    };
-    installPhase = "
-      installPlugins ufraw-gimp
-      mkdir -p $out/bin
-      cp ufraw $out/bin
-    ";
-  };
+  ufraw = pkgs.ufraw.gimpPlugin;
 
   gimplensfun = pluginDerivation rec {
     version = "0.2.4";
