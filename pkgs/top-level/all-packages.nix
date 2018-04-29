@@ -6093,8 +6093,6 @@ with pkgs;
     stripped = false;
   }));
 
-  gccApple = throw "gccApple is no longer supported";
-
   libstdcxxHook = makeSetupHook
     { substitutions = { gcc = gcc-unwrapped; }; }
     ../development/compilers/gcc/libstdc++-hook.sh;

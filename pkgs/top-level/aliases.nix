@@ -85,6 +85,7 @@ mapAliases (rec {
   foomatic_filters = foomatic-filters;  # 2016-08
   fuse_exfat = exfat;                   # 2015-09-11
   fuseki = apache-jena-fuseki; # added 2018-04-25
+  gccApple = throw "gccApple is no longer supported"; # added 2018-04-25
   gdb-multitarget = gdb; # added 2017-11-13
   gettextWithExpat = gettext; # 2016-02-19
   gflags = google-gflags; # added 2018-04-25
