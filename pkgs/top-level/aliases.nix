@@ -17,8 +17,17 @@ let
       dontDistribute alias
     else alias;
 
+  # Make sure that we are not shadowing something from
+  # all-packages.nix.
+  checkInPkgs = n: alias: if builtins.hasAttr n self
+                          then throw "Alias ${n} is still in all-packages.nix"
+                          else alias;
+
   mapAliases = aliases:
-    lib.mapAttrs (n: alias: removeDistribute (removeRecurseForDerivations alias)) aliases;
+    lib.mapAttrs (n: alias: removeDistribute
+                             (removeRecurseForDerivations
+                              (checkInPkgs n alias)))
+                     aliases;
 in
 
   ### Deprecated aliases - for backward compatibility
