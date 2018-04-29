@@ -139,6 +139,7 @@ rec {
       sha256 = "1zzvbczly7k456c0y6s92a1i8ph4ywmbvdl8i4rcc29l4qd2z8fw";
     };
     installPhase = "installPlugins src/texturize";
+    meta.broken = true; # https://github.com/lmanul/gimp-texturize/issues/1
   };
 
   waveletSharpen = pluginDerivation {
