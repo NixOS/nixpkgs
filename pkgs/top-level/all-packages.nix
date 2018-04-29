@@ -9538,6 +9538,12 @@ with pkgs;
   krb5Full = callPackage ../development/libraries/kerberos/krb5.nix {
     inherit (darwin) bootstrap_cmds;
   };
+  libkrb5 = krb5Full.override {
+    openldap = null;
+    libedit = null;
+    yacc = null;
+    fetchurl = fetchurlBoot;
+  };
 
   languageMachines = recurseIntoAttrs (import ../development/libraries/languagemachines/packages.nix { inherit callPackage; });
 

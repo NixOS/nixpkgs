@@ -120,7 +120,6 @@ mapAliases (rec {
   libintlOrEmpty = stdenv.lib.optional (!stdenv.isLinux || hostPlatform.libc != "glibc") gettext; # added 2018-03-14
   libjack2 = jack2Full; # added 2018-04-25
   libjson_rpc_cpp = libjson-rpc-cpp; # added 2017-02-28
-  libkrb5 = krb5Full; # added 2018-04-25
   libmysql = mysql.connector-c; # added # 2017-12-28, this was a misnomer refering to libmysqlclient
   libpulseaudio-vanilla = pulseaudioLight; # added 2018-04-25
   libtidy = html-tidy;  # added 2014-12-21
