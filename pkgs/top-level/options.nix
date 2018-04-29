@@ -1,10 +1,11 @@
-{lib, stdenv}:
+{lib, targetPlatform}:
 
 with lib;
 
-# Define some user flags. Note that none of these should be mutually
-# exclusive. For instance enabling X11 should not imply that Wayland
-# is disabled.
+# Define some user flags. Each one will be passed as an argument to
+# callPackage and can be used directly by packages to configure
+# themselves. Note that none of these should be mutually exclusive.
+# For instance enabling X11 should not imply that Wayland is disabled.
 
 {
 
@@ -19,7 +20,7 @@ with lib;
   };
 
   withX11 = mkOption {
-    default = stdenv.isLinux; # also BSDs?
+    default = targetPlatform.isLinux; # also BSDs?
     type = types.bool;
     description = ''
 
@@ -29,7 +30,7 @@ with lib;
   };
 
   withWayland = mkOption {
-    default = stdenv.isLinux; # also BSDs?
+    default = targetPlatform.isLinux; # also BSDs?
     type = types.bool;
     description = ''
 
@@ -39,7 +40,7 @@ with lib;
   };
 
   withAlsa = mkOption {
-    default = stdenv.isLinux;
+    default = targetPlatform.isLinux;
     type = types.bool;
     description = ''
 
@@ -49,7 +50,7 @@ with lib;
   };
 
   withPulseAudio = mkOption {
-    default = stdenv.isLinux;
+    default = targetPlatform.isLinux;
     type = types.bool;
     description = ''
 
@@ -78,7 +79,7 @@ with lib;
     '';
   };
 
-  withGTK = mkOption {
+  withGtk = mkOption {
     default = false;
     type = types.bool;
     description = ''
@@ -89,7 +90,7 @@ with lib;
   };
 
   withApple = mkOption {
-    default = stdenv.isDarwin;
+    default = targetPlatform.isDarwin;
     type = types.bool;
     description = ''
 
@@ -101,7 +102,7 @@ with lib;
   };
 
   withSystemd = mkOption {
-    default = stdenv.isLinux;
+    default = targetPlatform.isLinux;
     type = types.bool;
     description = ''
 

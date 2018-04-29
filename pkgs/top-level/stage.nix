@@ -119,12 +119,7 @@ let
   # Allow users to specify global use flags that are applied in all
   # packages.
   options = self: super:
-    let config' = (config // (if (config.headless or false)
-                              then { withGTK = false; withX11 = false;
-                                     withAlsa = false; withPulseAudio = false;
-                                     withJack = false; withWayland = false; }
-                              else {}));
-    in lib.mapAttrs (name: option: config'.${name} or option.default)
+    lib.mapAttrs (name: option: config.${name} or option.default)
               (import ./options.nix { inherit (self) lib stdenv; });
 
   # The complete chain of package set builders, applied from top to bottom.
