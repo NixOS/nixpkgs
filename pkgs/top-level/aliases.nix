@@ -167,6 +167,7 @@ mapAliases (rec {
   pidginwindowmerge = pidgin-window-merge; # added 2018-01-08
   postage = pgmanage; # added 2017-11-03
   poppler_qt5 = libsForQt5.poppler;  # added 2015-12-19
+  poppler_utils = poppler.bin; # added 2018-04-25
   PPSSPP = ppsspp; # added 2017-10-01
   prometheus-statsd-bridge = prometheus-statsd-exporter;  # added 2017-08-27
   qca-qt5 = libsForQt5.qca-qt5;  # added 2015-12-19

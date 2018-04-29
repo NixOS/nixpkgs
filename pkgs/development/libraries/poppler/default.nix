@@ -3,8 +3,7 @@
 , withData ? true, poppler_data
 , qt5Support ? false, qtbase ? null
 , introspectionSupport ? false, gobjectIntrospection ? null
-, utils ? false
-, minimal ? false, suffix ? "glib"
+, minimal ? false
 }:
 
 let # beware: updates often break cups-filters build
@@ -12,14 +11,14 @@ let # beware: updates often break cups-filters build
   mkFlag = optset: flag: "-DENABLE_${flag}=${if optset then "on" else "off"}";
 in
 stdenv.mkDerivation rec {
-  name = "poppler-${suffix}-${version}";
+  name = "poppler-${version}";
 
   src = fetchurl {
     url = "${meta.homepage}/poppler-${version}.tar.xz";
     sha256 = "04d1z1ygyb3llzc6s6c99wxafvljj2sc5b76djif34f7mzfqmk17";
   };
 
-  outputs = [ "out" "dev" ];
+  outputs = [ "out" "dev" "bin" ];
 
   buildInputs = [ libiconv libintl ] ++ lib.optional withData poppler_data;
 
@@ -40,7 +39,7 @@ stdenv.mkDerivation rec {
     (mkFlag (!minimal) "GLIB")
     (mkFlag (!minimal) "CPP")
     (mkFlag (!minimal) "LIBCURL")
-    (mkFlag utils "UTILS")
+    "-DENABLE_UTILS=on"
     (mkFlag qt5Support "QT5")
   ];
 

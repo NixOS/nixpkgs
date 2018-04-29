@@ -10997,12 +10997,9 @@ with pkgs;
 
   poppler_min = poppler.override { # TODO: maybe reduce even more
     minimal = true;
-    suffix = "min";
   };
 
   poppler_qt4 = callPackage ../development/libraries/poppler/qt4.nix { };
-
-  poppler_utils = poppler.override { suffix = "utils"; utils = true; };
 
   popt = callPackage ../development/libraries/popt { };
 
@@ -11227,7 +11224,6 @@ with pkgs;
     poppler = callPackage ../development/libraries/poppler {
       lcms = lcms2;
       qt5Support = true;
-      suffix = "qt5";
     };
 
     qca-qt5 = callPackage ../development/libraries/qca-qt5 { };
