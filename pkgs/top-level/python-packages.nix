@@ -8244,6 +8244,8 @@ in {
 
   pygraphviz = callPackage ../development/python-modules/pygraphviz { };
 
+  pymc3 = callPackage ../development/python-modules/pymc3 { };
+
   pympler = buildPythonPackage rec {
     pname = "Pympler";
     version = "0.4.3";
@@ -9673,24 +9675,7 @@ in {
     };
   };
 
-  patsy = buildPythonPackage rec {
-    name = "patsy-${version}";
-    version = "0.3.0";
-
-    src = pkgs.fetchurl{
-      url = "mirror://pypi/p/patsy/${name}.zip";
-      sha256 = "a55dd4ca09af4b9608b81f30322beb450510964c022708ab50e83a065ccf15f0";
-    };
-
-    buildInputs = with self; [ nose ];
-    propagatedBuildInputs = with self; [six numpy];
-
-    meta = {
-      description = "A Python package for describing statistical models";
-      homepage = "https://github.com/pydata/patsy";
-      license = licenses.bsd2;
-    };
-  };
+  patsy = callPackage ../development/python-modules/patsy { };
 
   paste = buildPythonPackage rec {
     name = "paste-${version}";
