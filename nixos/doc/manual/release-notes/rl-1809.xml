@@ -68,6 +68,15 @@ following incompatible changes:</para>
       points to the package which is bundled with the unfree <literal>libspotify</literal> package.
     </para>
   </listitem>
+  <listitem>
+    <para>
+      The <literal>netcat</literal> package is now taken directly from OpenBSD's
+      <literal>libressl</literal>, instead of relying on Debian's fork. The new
+      version should be very close to the old version, but there are some minor
+      differences. Importantly, flags like -b, -q, -C, and -Z are no longer
+      accepted by the nc command.
+    </para>
+  </listitem>
 </itemizedlist>
 
 </section>
