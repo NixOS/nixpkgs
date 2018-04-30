@@ -5316,6 +5316,8 @@ with pkgs;
 
   uget = callPackage ../tools/networking/uget { };
 
+  uget-integrator = callPackage ../tools/networking/uget-integrator { };
+
   uif2iso = callPackage ../tools/cd-dvd/uif2iso { };
 
   umlet = callPackage ../tools/misc/umlet { };
