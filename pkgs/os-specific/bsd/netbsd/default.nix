@@ -1,5 +1,5 @@
 { stdenv, hostPlatform, fetchcvs, lib, groff, mandoc, zlib, coreutils
-, yacc, flex, libressl, bash }:
+, yacc, flex, libressl, bash, more }:
 
 let
   fetchNetBSD = path: version: sha256: fetchcvs {
@@ -42,6 +42,7 @@ let
     LIBCURSES = "";
     LIBTERMINFO = "";
     LIBM = "";
+    LIBL = "";
     "LIBDO.terminfo" = "_external";
     "LIBDO.curses" = "_external";
     _GCC_CRTBEGIN = "";
@@ -370,12 +371,35 @@ in rec {
     version = "7.1.2";
   };
 
+  dict = netBSDDerivation {
+    path = "share/dict";
+    version = "7.1.2";
+    sha256 = "0nickhsjwgnr2h9nvwflvgfz93kqms5hzdnpyq02crpj35w98bh4";
+    preBuild = "mkdir -p $out/share/dict";
+    makeFlags = [ "BINDIR=/share" ];
+  };
+
   games = netBSDDerivation {
     path = "games";
     sha256 = "04wjsang8f8kxsifiayklbxaaxmm3vx9rfr91hfbxj4hk8gkqzy1";
     version = "7.1.2";
     patchPhase = ''
       sed -i '1i #include <time.h>' adventure/save.c
+
+      for f in $(find . -name pathnames.h); do
+        substituteInPlace $f \
+          --replace /usr/share/games $out/share/games \
+          --replace /usr/games $out/bin \
+          --replace /usr/libexec $out/libexec \
+          --replace /var/games $out/var/games \
+          --replace /usr/bin/more ${more}/bin/more \
+          --replace /usr/share/dict ${dict}/share/dict
+      done
+      substituteInPlace ching/ching/ching.sh \
+        --replace /usr/share $out/share \
+        --replace /usr/libexec $out/libexec
+      substituteInPlace hunt/huntd/driver.c \
+        --replace "(void) setpgrp(getpid(), getpid());" ""
 
       # Disable some games that don't build. They should be possible
       # to build but need to look at how to implement stuff in
@@ -386,16 +410,10 @@ in rec {
       }
 
       disableGame atc
-      disableGame boggle
       disableGame dm
-      disableGame fortune
-      disableGame hunt
-      disableGame larn
-      disableGame phantasia
-      disableGame rogue
-      disableGame sail
-      disableGame trek
       disableGame dab
+      ${lib.optionalString stdenv.isDarwin "disableGame sail"}
+      ${lib.optionalString stdenv.isDarwin "disableGame trek"}
       ${lib.optionalString stdenv.isDarwin "disableGame adventure"}
       ${lib.optionalString stdenv.isDarwin "disableGame factor"}
       ${lib.optionalString stdenv.isDarwin "disableGame gomoku"}
@@ -405,6 +423,17 @@ in rec {
         --replace 2555 555 \
         --replace 2550 550
     '';
+
+    # HACK strfile needs to be installed first & in the path
+    preBuild = ''
+      pushd fortune/strfile
+      mkdir -p $out/bin $out/share/man/man8 $out/share/man/html8
+      make
+      make BINDIR=/bin install
+      popd
+      export PATH=$out/bin:$PATH
+    '';
+
     NIX_CFLAGS_COMPILE = [
       "-D__noinline="
       "-D__scanflike(a,b)="
@@ -412,24 +441,29 @@ in rec {
       "-DOXTABS=XTABS"
       "-DRANDOM_MAX=RAND_MAX"
       "-DINFTIM=-1"
-      (if hostPlatform.isMusl then "-include sys/ttydefaults.h -include sys/file.h" else "")
+      (lib.optionalString hostPlatform.isMusl "-include sys/ttydefaults.h -include sys/file.h")
+      "-DBE32TOH(x)=((void)0)"
+      "-DBE64TOH(x)=((void)0)"
+      "-D__c99inline=__inline"
     ];
+
     postBuild = ''
       mkdir -p $out/usr/games $out/usr/share/games/ching \
+               $out/usr/share/games/fortune \
                $out/usr/share/games/quiz.db \
+               $out/usr/share/games/boggle \
                $out/usr/libexec/ching $out/var/games/hackdir
       touch $out/var/games/hackdir/perm
     '';
+
     preFixup = ''
       mkdir -p $out/bin
       mv $out/games/* $out/bin
       rmdir $out/games
     '';
+
     buildInputs = [ compat libcurses libterminfo libressl ];
-    extraPaths = [
-      (fetchNetBSD "share/dict" "7.1.2" "0nickhsjwgnr2h9nvwflvgfz93kqms5hzdnpyq02crpj35w98bh4")
-      who.src
-    ];
+    extraPaths = [ dict.src who.src ];
   };
 
   # finger = netBSDDerivation {
@@ -477,6 +511,17 @@ in rec {
     sha256 = "06plg0bjqgbb0aghpb9qlk8wkp1l2izdlr64vbr5laqyw8jg84zq";
     buildInputs = [ compat tic nbperf ];
     MKPIC = if stdenv.isDarwin then "no" else "yes";
+    patchPhase = ''
+      substituteInPlace term.c \
+        --replace /usr/share $out/share
+    '';
+    postBuild = ''
+      pushd $NETBSDSRCDIR/share/terminfo
+      mkdir -p $out/share/misc
+      make
+      make BINDIR=/share install
+      popd
+    '';
     extraPaths = [
       (fetchNetBSD "share/terminfo" "7.1.2" "1z5vzq8cw24j05r6df4vd6r57cvdbv7vbm4h962kplp14xrbg2h3")
     ];
