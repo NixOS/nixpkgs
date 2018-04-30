@@ -4286,6 +4286,8 @@ with pkgs;
 
   pdfmod = callPackage ../applications/misc/pdfmod { };
 
+  pdf-quench = callPackage ../applications/misc/pdf-quench { };
+
   jbig2enc = callPackage ../tools/graphics/jbig2enc { };
 
   pdfread = callPackage ../tools/graphics/pdfread {
