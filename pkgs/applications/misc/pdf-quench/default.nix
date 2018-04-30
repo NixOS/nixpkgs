@@ -12,16 +12,16 @@ pythonPackages.buildPythonApplication rec {
   };
 
   nativeBuildInputs = [ wrapGAppsHook ];
-  buildInputs = with pkgs; [ gtk3 gobjectIntrospection goocanvas2 (poppler.override { introspectionSupport = true; }) ];
+  buildInputs = with pkgs; [
+    gtk3
+    gobjectIntrospection
+    goocanvas2
+    (poppler.override { introspectionSupport = true; })
+  ];
   propagatedBuildInputs = with pythonPackages; [ pygobject3 pypdf2 ];
 
-  dontBuild = true;
+  format = "other";
   doCheck = false;
-
-  postPatch = ''
-    substituteInPlace src/pdf_quench.py \
-      --replace /usr/bin/python "${pythonPackages.python}/bin/python"
-    '';
 
   installPhase = ''
     install -D -T -m 755 src/pdf_quench.py $out/bin/pdf-quench
