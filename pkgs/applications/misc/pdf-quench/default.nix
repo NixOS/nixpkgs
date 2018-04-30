@@ -16,7 +16,7 @@ pythonPackages.buildPythonApplication rec {
     gtk3
     gobjectIntrospection
     goocanvas2
-    (poppler.override { introspectionSupport = true; })
+    poppler_gi
   ];
   propagatedBuildInputs = with pythonPackages; [ pygobject3 pypdf2 ];
 
