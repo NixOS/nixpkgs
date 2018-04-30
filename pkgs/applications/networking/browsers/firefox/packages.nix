@@ -18,10 +18,10 @@ rec {
 
   firefox = common rec {
     pname = "firefox";
-    version = "59.0.2";
+    version = "59.0.3";
     src = fetchurl {
-      url = "https://hg.mozilla.org/releases/mozilla-release/archive/239e434d6d2b8e1e2b697c3416d1e96d48fe98e5.tar.bz2";
-      sha512 = "3kfh224sfc9ig4733frnskcs49xzjkrs00lxllsvx1imm6f4sf117mqlvc7bhgrn8ldiqn6vaa5g6gd9b7awkk1g975bbzk9namb3yv";
+      url = "https://hg.mozilla.org/releases/mozilla-release/archive/6b51784853e47e091d213d421a19cb623af718f0.tar.bz2";
+      sha512 = "2dh2hp307iz90969i8r96hdmd0d2v2d5zjp0n3klsn789sd6b3jdznb4mc5ghpm2rpcl48rqakw6apvmhidcahc1zbc1fq6j6a86jqp";
     };
 
     patches = nixpkgsPatches ++ [
