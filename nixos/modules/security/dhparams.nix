@@ -10,7 +10,7 @@ let
         name = "bits";
         description = "integer of at least 16 bits";
       };
-      default = 4096;
+      default = 2048;
       description = ''
         The bit size for the prime that is used during a Diffie-Hellman
         key exchange.
