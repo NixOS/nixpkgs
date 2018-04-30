@@ -19,6 +19,6 @@ stdenv.mkDerivation {
     description = "A client and daemon for the Telnet protocol";
     homepage = ftp://ftp.suse.com/pub/people/kukuk/ipv6/;
     license = "BSD";
-    platforms = stdenv.lib.platforms.gnu;
+    platforms = stdenv.lib.platforms.gnu ++ stdenv.lib.platforms.linux;
   };
 }
