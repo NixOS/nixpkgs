@@ -18224,7 +18224,7 @@ with pkgs;
 
   vimNox = lowPrio (vim_configurable.override { source = "vim-nox"; });
 
-  qpdfview = callPackage ../applications/misc/qpdfview {};
+  qpdfview = libsForQt5.callPackage ../applications/misc/qpdfview {};
 
   qtile = callPackage ../applications/window-managers/qtile {
     inherit (xorg) libxcb;
