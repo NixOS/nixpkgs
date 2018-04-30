@@ -1358,6 +1358,8 @@ with pkgs;
 
   ps_mem = callPackage ../tools/system/ps_mem { };
 
+  psstop = callPackage ../tools/system/psstop { };
+
   parallel-rust = callPackage ../tools/misc/parallel-rust { };
 
   socklog = callPackage ../tools/system/socklog { };
