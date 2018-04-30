@@ -5218,7 +5218,7 @@ with pkgs;
 
   torsocks = callPackage ../tools/security/tor/torsocks.nix { };
 
-  toxvpn = callPackage ../tools/networking/toxvpn { };
+  toxvpn = callPackage ../tools/networking/toxvpn { libtoxcore = libtoxcore_0_1; };
 
   tpmmanager = callPackage ../applications/misc/tpmmanager { };
 
@@ -10360,9 +10360,12 @@ with pkgs;
 
   libtorrentRasterbar = callPackage ../development/libraries/libtorrent-rasterbar { };
 
+  # this is still the new version of the old API
   libtoxcore-new = callPackage ../development/libraries/libtoxcore/new-api.nix { };
 
-  libtoxcore = callPackage ../development/libraries/libtoxcore { };
+  inherit (callPackages ../development/libraries/libtoxcore {})
+    libtoxcore_0_1 libtoxcore_0_2;
+  libtoxcore = libtoxcore_0_2;
 
   libtap = callPackage ../development/libraries/libtap { };
 
@@ -17467,7 +17470,7 @@ with pkgs;
 
   qtbitcointrader = callPackage ../applications/misc/qtbitcointrader { };
 
-  qtox = libsForQt5.callPackage ../applications/networking/instant-messengers/qtox { ffmpeg = ffmpeg_2; };
+  qtox = libsForQt5.callPackage ../applications/networking/instant-messengers/qtox { };
 
   qtpass = libsForQt5.callPackage ../applications/misc/qtpass { };
 
