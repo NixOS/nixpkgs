@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, fetchpatch, pkgconfig, intltool, gperf, libcap, kmod
 , zlib, xz, pam, acl, cryptsetup, libuuid, m4, utillinux, libffi
 , glib, kbd, libxslt, coreutils, libgcrypt, libgpgerror, libidn2, libapparmor
-, audit, lz4, bzip2, kexectools, libmicrohttpd
+, audit, lz4, bzip2, kexectools, libmicrohttpd, pcre2
 , linuxHeaders ? stdenv.cc.libc.linuxHeaders
 , libseccomp, iptables, gnu-efi
 , autoreconfHook, gettext, docbook_xsl, docbook_xml_dtd_42, docbook_xml_dtd_45
@@ -43,7 +43,7 @@ in stdenv.mkDerivation rec {
   buildInputs =
     [ linuxHeaders libcap kmod xz pam acl
       /* cryptsetup */ libuuid glib libgcrypt libgpgerror libidn2
-      libmicrohttpd ] ++
+      libmicrohttpd pcre2 ] ++
       stdenv.lib.meta.enableIfAvailable kexectools ++
       stdenv.lib.meta.enableIfAvailable libseccomp ++
     [ libffi audit lz4 bzip2 libapparmor
