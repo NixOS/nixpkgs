@@ -224,6 +224,10 @@ with pkgs;
   # uses the curl from the previous bootstrap phase (e.g. a statically
   # linked curl in the case of stdenv-linux).
   fetchurlBoot = stdenv.fetchurlBoot;
+  krb5Boot = krb5.override {
+    fetchurl = fetchurlBoot;
+    openldap = null;
+  };
 
   fetchzip = callPackage ../build-support/fetchzip { };
 
@@ -1846,6 +1850,7 @@ with pkgs;
 
   curl = callPackage ../tools/networking/curl rec {
     fetchurl = fetchurlBoot;
+    kerberos = krb5Boot;
     http2Support = true;
     zlibSupport = true;
     sslSupport = zlibSupport;
@@ -8666,7 +8671,7 @@ with pkgs;
   cxxtest = callPackage ../development/libraries/cxxtest { };
 
   cyrus_sasl = callPackage ../development/libraries/cyrus-sasl {
-    kerberos = if stdenv.isFreeBSD then libheimdal else kerberos;
+    kerberos = if stdenv.isFreeBSD then libheimdal else krb5Boot;
   };
 
   # Make bdb5 the default as it is the last release under the custom
@@ -9540,12 +9545,7 @@ with pkgs;
     inherit (darwin) bootstrap_cmds;
   };
   krb5Full = krb5;
-  libkrb5 = krb5.override {
-    openldap = null;
-    libedit = null;
-    yacc = null;
-    fetchurl = fetchurlBoot;
-  };
+  libkrb5 = krb5;
 
   languageMachines = recurseIntoAttrs (import ../development/libraries/languagemachines/packages.nix { inherit callPackage; });
 
