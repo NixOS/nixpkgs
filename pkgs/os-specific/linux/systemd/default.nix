@@ -155,6 +155,14 @@ in stdenv.mkDerivation rec {
       --replace "SYSTEMD_CGROUP_AGENT_PATH" "_SYSTEMD_CGROUP_AGENT_PATH"
   '';
 
+  patches = [
+    # https://github.com/systemd/systemd/pull/8580
+    (fetchpatch {
+      url = https://github.com/systemd/systemd/pull/8580.patch;
+      sha256 = "1yp07hlpgqq0h2y0qc3kasswzkycz6p8d56d695ck1qa2f5bdfgn";
+    })
+  ];
+
   hardeningDisable = [ "stackprotector" ];
 
   NIX_CFLAGS_COMPILE =
