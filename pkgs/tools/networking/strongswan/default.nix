@@ -3,10 +3,14 @@
 , gmp, python, iptables, ldns, unbound, openssl, pcsclite
 , openresolv
 , systemd, pam
-
-, enableTNC            ? false, curl, trousers, sqlite, libxml2
+, curl
+, enableTNC            ? false, trousers, sqlite, libxml2
 , enableNetworkManager ? false, networkmanager
 }:
+
+# Note on curl support: If curl is built with gnutls as its backend, the
+# strongswan curl plugin may break.
+# See https://wiki.strongswan.org/projects/strongswan/wiki/Curl for more info.
 
 with stdenv.lib;
 
@@ -23,8 +27,8 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig autoreconfHook ];
   buildInputs =
-    [ gmp python iptables ldns unbound openssl pcsclite ]
-    ++ optionals enableTNC [ curl trousers sqlite libxml2 ]
+    [ curl gmp python iptables ldns unbound openssl pcsclite ]
+    ++ optionals enableTNC [ trousers sqlite libxml2 ]
     ++ optionals stdenv.isLinux [ systemd.dev pam ]
     ++ optionals enableNetworkManager [ networkmanager ];
 
@@ -61,12 +65,12 @@ stdenv.mkDerivation rec {
       "--enable-eap-mschapv2" "--enable-eap-radius" "--enable-xauth-eap" "--enable-ext-auth"
       "--enable-forecast" "--enable-connmark" "--enable-acert"
       "--enable-pkcs11" "--enable-eap-sim-pcsc" "--enable-dnscert" "--enable-unbound"
-      "--enable-af-alg" "--enable-xauth-pam" "--enable-chapoly" ]
+      "--enable-af-alg" "--enable-xauth-pam" "--enable-chapoly"
+      "--enable-curl" ]
     ++ optionals stdenv.isx86_64 [ "--enable-aesni" "--enable-rdrand" ]
     ++ optional (stdenv.system == "i686-linux") "--enable-padlock"
     ++ optionals enableTNC [
          "--disable-gmp" "--disable-aes" "--disable-md5" "--disable-sha1" "--disable-sha2" "--disable-fips-prf"
-         "--enable-curl"
          "--enable-eap-tnc" "--enable-eap-ttls" "--enable-eap-dynamic" "--enable-tnccs-20"
          "--enable-tnc-imc" "--enable-imc-os" "--enable-imc-attestation"
          "--enable-tnc-imv" "--enable-imv-attestation"
