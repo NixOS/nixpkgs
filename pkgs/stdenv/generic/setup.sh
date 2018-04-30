@@ -968,9 +968,11 @@ buildPhase() {
     # set to empty if unset
     : ${makeFlags=}
 
-    if [[ -z "$makeFlags" && ! ( -n "${makefile:-}" || -e Makefile || -e makefile || -e GNUmakefile ) ]]; then
+    if [[ -z "$makeFlags" && -z "${makefile:-}" && ! ( -e Makefile || -e makefile || -e GNUmakefile ) ]]; then
         echo "no Makefile, doing nothing"
     else
+        foundMakefile=1
+
         # See https://github.com/NixOS/nixpkgs/pull/1354#issuecomment-31260409
         makeFlags="SHELL=$SHELL $makeFlags"
 
@@ -994,18 +996,38 @@ buildPhase() {
 checkPhase() {
     runHook preCheck
 
-    # Old bash empty array hack
-    # shellcheck disable=SC2086
-    local flagsArray=(
-        ${enableParallelBuilding:+-j${NIX_BUILD_CORES} -l${NIX_BUILD_CORES}}
-        $makeFlags ${makeFlagsArray+"${makeFlagsArray[@]}"}
-        ${checkFlags:-VERBOSE=y} ${checkFlagsArray+"${checkFlagsArray[@]}"}
-        ${checkTarget:-check}
-    )
+    if [[ -z "${foundMakefile:-}" ]]; then
+        echo "no Makefile or custom buildPhase, doing nothing"
+        runHook postCheck
+        return
+    fi
 
-    echoCmd 'check flags' "${flagsArray[@]}"
-    make ${makefile:+-f $makefile} "${flagsArray[@]}"
-    unset flagsArray
+    if [[ -z "${checkTarget:-}" ]]; then
+        #TODO(@oxij): should flagsArray influence make -n?
+        if make -n ${makefile:+-f $makefile} check >/dev/null 2>&1; then
+            checkTarget=check
+        elif make -n ${makefile:+-f $makefile} test >/dev/null 2>&1; then
+            checkTarget=test
+        fi
+    fi
+
+    if [[ -z "${checkTarget:-}" ]]; then
+        echo "no check/test target in ${makefile:-Makefile}, doing nothing"
+    else
+        # Old bash empty array hack
+        # shellcheck disable=SC2086
+        local flagsArray=(
+            ${enableParallelBuilding:+-j${NIX_BUILD_CORES} -l${NIX_BUILD_CORES}}
+            $makeFlags ${makeFlagsArray+"${makeFlagsArray[@]}"}
+            ${checkFlags:-VERBOSE=y} ${checkFlagsArray+"${checkFlagsArray[@]}"}
+            ${checkTarget}
+        )
+
+        echoCmd 'check flags' "${flagsArray[@]}"
+        make ${makefile:+-f $makefile} "${flagsArray[@]}"
+
+        unset flagsArray
+    fi
 
     runHook postCheck
 }
@@ -1018,14 +1040,12 @@ installPhase() {
         mkdir -p "$prefix"
     fi
 
-    installTargets="${installTargets:-install}"
-
     # Old bash empty array hack
     # shellcheck disable=SC2086
     local flagsArray=(
-        $installTargets
         $makeFlags ${makeFlagsArray+"${makeFlagsArray[@]}"}
         $installFlags ${installFlagsArray+"${installFlagsArray[@]}"}
+        ${installTargets:-install}
     )
 
     echoCmd 'install flags' "${flagsArray[@]}"
@@ -1106,18 +1126,26 @@ fixupPhase() {
 installCheckPhase() {
     runHook preInstallCheck
 
-    # Old bash empty array hack
-    # shellcheck disable=SC2086
-    local flagsArray=(
-        ${enableParallelBuilding:+-j${NIX_BUILD_CORES} -l${NIX_BUILD_CORES}}
-        $makeFlags ${makeFlagsArray+"${makeFlagsArray[@]}"}
-        $installCheckFlags ${installCheckFlagsArray+"${installCheckFlagsArray[@]}"}
-        ${installCheckTarget:-installcheck}
-    )
+    if [[ -z "${foundMakefile:-}" ]]; then
+        echo "no Makefile or custom buildPhase, doing nothing"
+    #TODO(@oxij): should flagsArray influence make -n?
+    elif [[ -z "${installCheckTarget:-}" ]] \
+       && ! make -n ${makefile:+-f $makefile} ${installCheckTarget:-installcheck} >/dev/null 2>&1; then
+        echo "no installcheck target in ${makefile:-Makefile}, doing nothing"
+    else
+        # Old bash empty array hack
+        # shellcheck disable=SC2086
+        local flagsArray=(
+            ${enableParallelBuilding:+-j${NIX_BUILD_CORES} -l${NIX_BUILD_CORES}}
+            $makeFlags ${makeFlagsArray+"${makeFlagsArray[@]}"}
+            $installCheckFlags ${installCheckFlagsArray+"${installCheckFlagsArray[@]}"}
+            ${installCheckTarget:-installcheck}
+        )
 
-    echoCmd 'installcheck flags' "${flagsArray[@]}"
-    make ${makefile:+-f $makefile} "${flagsArray[@]}"
-    unset flagsArray
+        echoCmd 'installcheck flags' "${flagsArray[@]}"
+        make ${makefile:+-f $makefile} "${flagsArray[@]}"
+        unset flagsArray
+    fi
 
     runHook postInstallCheck
 }

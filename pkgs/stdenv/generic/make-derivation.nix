@@ -36,6 +36,9 @@ rec {
     , depsTargetTarget            ? [] #  1 ->  1
     , depsTargetTargetPropagated  ? [] #  1 ->  1
 
+    , checkInputs                 ? []
+    , installCheckInputs          ? []
+
     # Configure Phase
     , configureFlags ? []
     , # Target is not included by default because most programs don't care.
@@ -46,11 +49,13 @@ rec {
         (stdenv.hostPlatform != stdenv.buildPlatform)
         [ "build" "host" ]
 
+    # TODO(@Ericson2314): Make unconditional / resolve #33599
     # Check phase
-    , doCheck ? false
+    , doCheck ? config.doCheckByDefault or false
 
+    # TODO(@Ericson2314): Make unconditional / resolve #33599
     # InstallCheck phase
-    , doInstallCheck ? false
+    , doInstallCheck ? config.doCheckByDefault or false
 
     , crossConfig ? null
     , meta ? {}
@@ -99,7 +104,9 @@ rec {
         ]
         [
           (map (drv: drv.__spliced.hostHost or drv) depsHostHost)
-          (map (drv: drv.crossDrv or drv) buildInputs)
+          (map (drv: drv.crossDrv or drv) (buildInputs
+             ++ lib.optionals doCheck' checkInputs
+             ++ lib.optionals doInstallCheck' installCheckInputs))
         ]
         [
           (map (drv: drv.__spliced.targetTarget or drv) depsTargetTarget)
@@ -120,34 +127,43 @@ rec {
         ]
       ];
 
+      # TODO(@oxij, @Ericson2314): This is here to keep the old semantics, remove when
+      # no package has `doCheck = true`.
+      doCheck' = doCheck && stdenv.hostPlatform == stdenv.buildPlatform;
+      doInstallCheck' = doInstallCheck && stdenv.hostPlatform == stdenv.buildPlatform;
+
       outputs' =
         outputs ++
         (if separateDebugInfo then assert stdenv.hostPlatform.isLinux; [ "debug" ] else []);
 
+      computedSandboxProfile =
+        lib.concatMap (input: input.__propagatedSandboxProfile or [])
+          (stdenv.extraNativeBuildInputs
+           ++ stdenv.extraBuildInputs
+           ++ lib.concatLists dependencies);
+
+      computedPropagatedSandboxProfile =
+        lib.concatMap (input: input.__propagatedSandboxProfile or [])
+          (lib.concatLists propagatedDependencies);
+
+      computedImpureHostDeps =
+        lib.unique (lib.concatMap (input: input.__propagatedImpureHostDeps or [])
+          (stdenv.extraNativeBuildInputs
+           ++ stdenv.extraBuildInputs
+           ++ lib.concatLists dependencies));
+
+      computedPropagatedImpureHostDeps =
+        lib.unique (lib.concatMap (input: input.__propagatedImpureHostDeps or [])
+          (lib.concatLists propagatedDependencies));
+
       derivationArg =
         (removeAttrs attrs
           ["meta" "passthru" "crossAttrs" "pos"
+           "doCheck" "doInstallCheck"
+           "checkInputs" "installCheckInputs"
            "__impureHostDeps" "__propagatedImpureHostDeps"
            "sandboxProfile" "propagatedSandboxProfile"])
-        // (let
-          computedSandboxProfile =
-            lib.concatMap (input: input.__propagatedSandboxProfile or [])
-              (stdenv.extraNativeBuildInputs
-               ++ stdenv.extraBuildInputs
-               ++ lib.concatLists dependencies);
-          computedPropagatedSandboxProfile =
-            lib.concatMap (input: input.__propagatedSandboxProfile or [])
-              (lib.concatLists propagatedDependencies);
-          computedImpureHostDeps =
-            lib.unique (lib.concatMap (input: input.__propagatedImpureHostDeps or [])
-              (stdenv.extraNativeBuildInputs
-               ++ stdenv.extraBuildInputs
-               ++ lib.concatLists dependencies));
-          computedPropagatedImpureHostDeps =
-            lib.unique (lib.concatMap (input: input.__propagatedImpureHostDeps or [])
-              (lib.concatLists propagatedDependencies));
-        in
-        {
+        // {
           # A hack to make `nix-env -qa` and `nix search` ignore broken packages.
           # TODO(@oxij): remove this assert when something like NixOS/nix#1771 gets merged into nix.
           name = assert validity.handled; name + lib.optionalString
@@ -186,6 +202,13 @@ rec {
 
         } // lib.optionalAttrs (hardeningDisable != [] || hardeningEnable != []) {
           NIX_HARDENING_ENABLE = enabledHardeningOptions;
+        } // lib.optionalAttrs (outputs' != [ "out" ]) {
+          outputs = outputs';
+        } // lib.optionalAttrs doCheck' {
+          doCheck = true;
+        } // lib.optionalAttrs doInstallCheck' {
+          doInstallCheck = true;
+
         } // lib.optionalAttrs (stdenv.buildPlatform.isDarwin) {
           # TODO: remove lib.unique once nix has a list canonicalization primitive
           __sandboxProfile =
@@ -200,15 +223,7 @@ rec {
             "/bin/sh"
           ];
           __propagatedImpureHostDeps = computedPropagatedImpureHostDeps ++ __propagatedImpureHostDeps;
-        } // lib.optionalAttrs (outputs' != [ "out" ]) {
-          outputs = outputs';
-        } // lib.optionalAttrs (attrs ? doCheck) {
-          # TODO(@Ericson2314): Make unconditional / resolve #33599
-          doCheck = doCheck && (stdenv.hostPlatform == stdenv.buildPlatform);
-        } // lib.optionalAttrs (attrs ? doInstallCheck) {
-          # TODO(@Ericson2314): Make unconditional / resolve #33599
-          doInstallCheck = doInstallCheck && (stdenv.hostPlatform == stdenv.buildPlatform);
-        });
+        };
 
       validity = import ./check-meta.nix {
         inherit lib config meta;
