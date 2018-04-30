@@ -38,7 +38,7 @@ core-packages:
   - ghcjs-base-0
 
 default-package-overrides:
-  # LTS Haskell 11.6
+  # LTS Haskell 11.7
   - abstract-deque ==0.3
   - abstract-deque-tests ==0.3
   - abstract-par ==0.3.3
@@ -141,7 +141,7 @@ default-package-overrides:
   - avwx ==0.3.0.2
   - axiom ==0.4.6
   - b9 ==0.5.47
-  - backprop ==0.1.5.1
+  - backprop ==0.1.5.2
   - bank-holidays-england ==0.1.0.6
   - barrier ==0.1.1
   - base16-bytestring ==0.1.1.6
@@ -157,7 +157,7 @@ default-package-overrides:
   - basic-prelude ==0.7.0
   - bbdb ==0.8
   - bcrypt ==0.0.11
-  - beam-core ==0.7.2.0
+  - beam-core ==0.7.2.1
   - beam-migrate ==0.3.1.0
   - beam-sqlite ==0.3.2.0
   - bench ==1.0.9
@@ -242,7 +242,7 @@ default-package-overrides:
   - buffer-pipe ==0.0
   - butcher ==1.3.0.0
   - bv ==0.5
-  - bv-little ==0.1.0.0
+  - bv-little ==0.1.1
   - byteable ==0.1.1
   - bytedump ==1.0
   - byteorder ==1.0.4
@@ -306,7 +306,7 @@ default-package-overrides:
   - cipher-des ==0.0.6
   - cipher-rc4 ==0.1.4
   - circle-packing ==0.1.0.6
-  - cisco-spark-api ==0.1.0.2
+  - cisco-spark-api ==0.1.0.3
   - clang-compilation-database ==0.1.0.1
   - classyplate ==0.3.0.2
   - classy-prelude ==1.4.0
@@ -400,7 +400,7 @@ default-package-overrides:
   - crypto-cipher-tests ==0.0.11
   - crypto-cipher-types ==0.0.9
   - cryptocompare ==0.1.1
-  - crypto-enigma ==0.0.2.11
+  - crypto-enigma ==0.0.2.12
   - cryptohash ==0.11.9
   - cryptohash-cryptoapi ==0.1.4
   - cryptohash-md5 ==0.11.100.1
@@ -670,7 +670,7 @@ default-package-overrides:
   - foundation ==0.0.20
   - FPretty ==1.1
   - Frames ==0.3.0.2
-  - free ==5.0.1
+  - free ==5.0.2
   - freenect ==1.2.1
   - freer-simple ==1.1.0.0
   - freetype2 ==0.1.2
@@ -800,12 +800,12 @@ default-package-overrides:
   - haddock-library ==1.4.5
   - hailgun ==0.4.1.6
   - hailgun-simple ==0.1.0.0
-  - hakyll ==4.12.1.0
+  - hakyll ==4.12.2.0
   - half ==0.2.2.3
   - hamilton ==0.1.0.2
   - HandsomeSoup ==0.4.2
   - handwriting ==0.1.0.3
-  - hapistrano ==0.3.5.4
+  - hapistrano ==0.3.5.5
   - happstack-jmacro ==7.0.12
   - happstack-server ==7.5.1
   - happstack-server-tls ==7.1.6.5
@@ -906,7 +906,7 @@ default-package-overrides:
   - hmpfr ==0.4.4
   - hocilib ==0.2.0
   - Hoed ==0.5.1
-  - hOpenPGP ==2.6
+  - hOpenPGP ==2.6.1
   - hopfli ==0.2.2.1
   - hosc ==0.16
   - hostname ==1.0
@@ -931,8 +931,8 @@ default-package-overrides:
   - hsdns ==1.7.1
   - hsebaysdk ==0.4.0.0
   - hsemail ==2
-  - hset ==2.2.0
   - HSet ==0.0.1
+  - hset ==2.2.0
   - hsexif ==0.6.1.5
   - hs-GeoIP ==0.3
   - hsignal ==0.2.7.5
@@ -1013,7 +1013,7 @@ default-package-overrides:
   - hw-mquery ==0.1.0.1
   - hworker ==0.1.0.1
   - hw-parser ==0.0.0.3
-  - hw-prim ==0.5.0.2
+  - hw-prim ==0.5.0.3
   - hw-rankselect ==0.10.0.3
   - hw-rankselect-base ==0.2.0.2
   - hw-string-parse ==0.0.0.4
@@ -1046,7 +1046,7 @@ default-package-overrides:
   - immortal ==0.2.2.1
   - imprint ==0.0.1.0
   - include-file ==0.1.0.3
-  - incremental-parser ==0.2.5.3
+  - incremental-parser ==0.2.5.4
   - indentation-core ==0.0.0.1
   - indentation-parsec ==0.0.0.1
   - indents ==0.4.0.1
@@ -1285,6 +1285,7 @@ default-package-overrides:
   - mime-mail-ses ==0.4.1
   - mime-types ==0.1.0.7
   - minimorph ==0.1.6.1
+  - minio-hs ==1.0.0
   - miniutter ==0.4.7.0
   - mintty ==0.1.1
   - misfortune ==0.1.1.2
@@ -1468,7 +1469,7 @@ default-package-overrides:
   - pagination ==0.2.1
   - palette ==0.1.0.5
   - pandoc ==2.1.2
-  - pandoc-citeproc ==0.14.3
+  - pandoc-citeproc ==0.14.3.1
   - pandoc-types ==1.17.3.1
   - pango ==0.13.5.0
   - papillon ==0.1.0.5
@@ -1507,7 +1508,7 @@ default-package-overrides:
   - perf ==0.3.1.1
   - perfect-hash-generator ==0.2.0.6
   - persistable-record ==0.6.0.3
-  - persistable-types-HDBC-pg ==0.0.1.5
+  - persistable-types-HDBC-pg ==0.0.3.2
   - persistent ==2.8.2
   - persistent-mongoDB ==2.8.0
   - persistent-mysql ==2.8.1
@@ -1753,8 +1754,8 @@ default-package-overrides:
   - say ==0.1.0.0
   - sbp ==2.3.16
   - sbv ==7.5
-  - SCalendar ==1.1.0
   - scalendar ==1.2.0
+  - SCalendar ==1.1.0
   - scalpel ==0.5.1
   - scalpel-core ==0.5.1
   - scanner ==0.2
@@ -1887,6 +1888,7 @@ default-package-overrides:
   - Spock-core ==0.12.0.0
   - Spock-lucid ==0.4.0.1
   - Spock-worker ==0.3.1.0
+  - spoon ==0.3.1
   - spreadsheet ==0.1.3.7
   - sqlite-simple ==0.4.15.0
   - sql-words ==0.1.6.0
@@ -2012,7 +2014,7 @@ default-package-overrides:
   - test-framework-smallcheck ==0.2
   - test-framework-th ==0.2.4
   - testing-feat ==0.4.0.3
-  - texmath ==0.10.1.1
+  - texmath ==0.10.1.2
   - text ==1.2.3.0
   - text-binary ==0.2.1.1
   - text-conversions ==0.3.0
@@ -2140,8 +2142,8 @@ default-package-overrides:
   - union-find ==0.2
   - uniplate ==1.6.12
   - uniq-deep ==1.1.0.0
-  - Unique ==0.4.7.2
   - unique ==0
+  - Unique ==0.4.7.2
   - unit-constraint ==0.0.0
   - units-parser ==0.1.1.2
   - universe ==1.0
@@ -2154,7 +2156,7 @@ default-package-overrides:
   - unix-bytestring ==0.3.7.3
   - unix-compat ==0.5.0.1
   - unix-time ==0.3.8
-  - unliftio ==0.2.6.0
+  - unliftio ==0.2.7.0
   - unliftio-core ==0.1.1.0
   - unlit ==0.4.0.0
   - unordered-containers ==0.2.9.0
@@ -2232,7 +2234,7 @@ default-package-overrides:
   - wai-middleware-prometheus ==0.3.0
   - wai-middleware-rollbar ==0.10.0
   - wai-middleware-static ==0.8.2
-  - wai-middleware-throttle ==0.2.2.0
+  - wai-middleware-throttle ==0.2.2.1
   - wai-predicates ==0.10.0
   - wai-route ==0.3.1.2
   - wai-routing ==0.13.0
@@ -2241,7 +2243,7 @@ default-package-overrides:
   - wai-slack-middleware ==0.2.0
   - wai-transformers ==0.0.7
   - wai-websockets ==3.0.1.2
-  - warp ==3.2.19
+  - warp ==3.2.22
   - warp-tls ==3.2.4.3
   - wave ==0.1.5
   - wavefront ==0.7.1.2
@@ -2264,7 +2266,7 @@ default-package-overrides:
   - wide-word ==0.1.0.6
   - wikicfp-scraper ==0.1.0.9
   - wild-bind ==0.1.2.0
-  - wild-bind-x11 ==0.2.0.2
+  - wild-bind-x11 ==0.2.0.3
   - Win32 ==2.5.4.1
   - Win32-notify ==0.3.0.3
   - wire-streams ==0.1.1.0
@@ -2341,13 +2343,13 @@ default-package-overrides:
   - yesod-auth ==1.6.3
   - yesod-auth-fb ==1.9.0
   - yesod-auth-hashdb ==1.7
-  - yesod-bin ==1.6.0
-  - yesod-core ==1.6.3
+  - yesod-bin ==1.6.0.2
+  - yesod-core ==1.6.4
   - yesod-csp ==0.2.4.0
   - yesod-eventsource ==1.6.0
   - yesod-fb ==0.5.0
   - yesod-form ==1.6.1
-  - yesod-form-bootstrap4 ==0.1.0.2
+  - yesod-form-bootstrap4 ==0.1.1
   - yesod-gitrepo ==0.3.0
   - yesod-gitrev ==0.2.0.0
   - yesod-newsfeed ==1.6.1.0
@@ -2356,7 +2358,7 @@ default-package-overrides:
   - yesod-sitemap ==1.6.0
   - yesod-static ==1.6.0
   - yesod-table ==2.0.3
-  - yesod-test ==1.6.2
+  - yesod-test ==1.6.3
   - yesod-websockets ==0.3.0
   - yes-precure5-command ==5.5.3
   - yi-core ==0.17.1
