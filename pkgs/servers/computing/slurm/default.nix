@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, libtool, curl, python, munge, perl, pam, openssl
+{ stdenv, fetchurl, fetchpatch, pkgconfig, libtool, curl, python, munge, perl, pam, openssl
 , ncurses, mysql, gtk2, lua, hwloc, numactl
 }:
 
@@ -10,6 +10,10 @@ stdenv.mkDerivation rec {
     url = "https://download.schedmd.com/slurm/${name}.tar.bz2";
     sha256 = "1x3i6z03d9m46fvj1cslrapm1drvgyqch9pn4xf23kvbz4gkhaps";
   };
+
+  patches = [
+    ./CVE-2018-7033.patch
+  ];
 
   outputs = [ "out" "dev" ];
 
