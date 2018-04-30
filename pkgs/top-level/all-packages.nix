@@ -12921,8 +12921,11 @@ with pkgs;
 
   axis2 = callPackage ../servers/http/tomcat/axis2 { };
 
-  unifi = callPackage ../servers/unifi { };
-  unifiLTS = callPackage ../servers/unifi { useLTS=true; };
+  inherit (callPackages ../servers/unifi { })
+    unifiLTS
+    unifiStable
+    unifiTesting;
+  unifi = unifiStable;
 
   virtuoso6 = callPackage ../servers/sql/virtuoso/6.x.nix { };
 
