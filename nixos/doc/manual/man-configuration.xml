@@ -31,7 +31,8 @@ therein.</para>
 <para>You can use the following options in
 <filename>configuration.nix</filename>.</para>
 
-<xi:include href="options-db.xml" />
+<xi:include href="./generated/options-db.xml"
+            xpointer="configuration-variable-list" />
 
 </refsection>
 
