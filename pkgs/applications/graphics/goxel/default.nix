@@ -12,6 +12,8 @@ stdenv.mkDerivation rec {
     sha256 = "01022c43pmwiqb18rx9fz08xr99h6p03gw6bp0lay5z61g3xkz17";
   };
 
+  patches = [ ./disable-imgui_ini.patch ];
+
   nativeBuildInputs = [ scons pkgconfig wrapGAppsHook ];
   buildInputs = [ glfw3 gtk3 libpng12 ];
 
