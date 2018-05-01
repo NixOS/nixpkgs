@@ -1,6 +1,7 @@
 { stdenvNoCC, runCommand, awscli }:
 
 { s3url
+, name ? builtins.baseNameOf s3url
 , sha256
 , region ? "us-east-1"
 , credentials ? null # Default to looking at local EC2 metadata service
@@ -15,7 +16,7 @@ let
     AWS_SECRET_ACCESS_KEY = credentials.secret_access_key;
     AWS_SESSION_TOKEN = credentials.session_token ? null;
   };
-in runCommand "foo" ({
+in runCommand name ({
   nativeBuildInputs = [ awscli ];
   outputHashAlgo = "sha256";
   outputHash = sha256;
