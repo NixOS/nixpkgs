@@ -9255,15 +9255,15 @@ with pkgs;
 
   gtk-sharp-beans = callPackage ../development/libraries/gtk-sharp-beans { };
 
-  gtk-mac-integration = callPackage ../development/libraries/gtk-mac-integration { };
+  gtk-mac-integration = callPackage ../development/libraries/gtk-mac-integration {
+    gtk = gtk3;
+  };
 
-  gtk-mac-integration-gtk2 = gtk-macintegration.override {
+  gtk-mac-integration-gtk2 = gtk-mac-integration.override {
     gtk = gtk2;
   };
 
-  gtk-mac-integration-gtk3 = gtk-mac-integration.override {
-    gtk = gtk3;
-  };
+  gtk-mac-integration-gtk3 = gtk-mac-integration;
 
   gtk-mac-bundler = callPackage ../development/tools/gtk-mac-bundler {};
 
@@ -15925,7 +15925,7 @@ with pkgs;
   };
 
   graphicsmagick = callPackage ../applications/graphics/graphicsmagick { };
-  graphicsmagick_q16 = graphicsmagic.override { quantumdepth = 16; };
+  graphicsmagick_q16 = graphicsmagick.override { quantumdepth = 16; };
 
   grisbi = callPackage ../applications/office/grisbi { gtk = gtk2; };
 
