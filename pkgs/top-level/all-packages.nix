@@ -7471,9 +7471,9 @@ with pkgs;
   antlr4_7 = callPackage ../development/tools/parsing/antlr/4.7.nix { };
   antlr4 = antlr4_7;
 
-  ant = callPackage ../development/tools/build-managers/apache-ant { };
-
-  ant_1_9 = callPackage ../development/tools/build-managers/apache-ant/1.9.nix { };
+  apacheAnt = callPackage ../development/tools/build-managers/apache-ant { };
+  apacheAnt_1_9 = callPackage ../development/tools/build-managers/apache-ant/1.9.nix { };
+  ant = apacheAnt;
 
   apacheKafka_1_0 = apacheKafka.override { majorVersion = "1.0"; };
   apacheKafka_0_9 = apacheKafka.override { majorVersion = "0.9"; };
@@ -7851,7 +7851,8 @@ with pkgs;
 
   gnome-usage = callPackage ../applications/misc/gnome-usage {};
 
-  m4 = callPackage ../development/tools/misc/gnum4 { };
+  gnum4 = callPackage ../development/tools/misc/gnum4 { };
+  m4 = gnum4;
 
   gnumake382 = callPackage ../development/tools/build-managers/gnumake/3.82 { };
   gnumake3 = gnumake382;

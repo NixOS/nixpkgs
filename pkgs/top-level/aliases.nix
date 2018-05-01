@@ -40,8 +40,6 @@ mapAliases (rec {
   ag = silver-searcher; # added 2018-04-25
   aircrackng = aircrack-ng; # added 2016-01-14
   ammonite-repl = ammonite; # added 2017-05-02
-  apacheAnt = ant; # added 2018-04-25
-  apacheAnt_1_9 = ant_1_9; # added 2018-04-25
   arduino_core = arduino-core;  # added 2015-02-04
   asciidocFull = asciidoc-full;  # added 2014-06-22
   at_spi2_atk = at-spi2-atk; # added 2018-02-25
@@ -172,7 +170,6 @@ mapAliases (rec {
   lua5_sec = luaPackages.luasec; # added 2017-05-02
   lzma = xz; # added 2018-04-25
   m3d-linux = m33-linux; # added 2016-08-13
-  gnum4 = m4; # added 2018-04-25
   man_db = man-db; # added 2016-05
   manpages = man-pages; # added 2015-12-06
   midoriWrapper = midori; # added 2015-01
