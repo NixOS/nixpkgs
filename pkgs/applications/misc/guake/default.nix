@@ -24,6 +24,12 @@ in python3.pkgs.buildPythonApplication rec {
 
   PBR_VERSION = version; # pbr needs either .git directory, sdist, or env var
 
+  postPatch = ''
+    # unnecessary /usr/bin/env in Makefile
+    # https://github.com/Guake/guake/pull/1285
+    substituteInPlace "Makefile" --replace "/usr/bin/env python3" "python3"
+  '';
+
   makeFlags = [
     "prefix=$(out)"
   ];
