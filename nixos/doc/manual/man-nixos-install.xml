@@ -58,9 +58,6 @@
       <arg choice='plain'><option>--show-trace</option></arg>
     </arg>
     <arg>
-      <arg choice='plain'><option>--chroot</option></arg>
-    </arg>
-    <arg>
       <arg choice='plain'><option>--help</option></arg>
     </arg>
   </cmdsynopsis>
@@ -174,14 +171,6 @@ it.</para>
     <term><option>--show-trace</option></term>
     <listitem>
       <para>Causes Nix to print out a stack trace in case of Nix expression evaluation errors.</para>
-    </listitem>
-  </varlistentry>
-
-  <varlistentry>
-    <term><option>--chroot</option></term>
-    <listitem>
-      <para>Chroot into given installation. Any additional arguments passed are going to be executed inside the chroot.
-      </para>
     </listitem>
   </varlistentry>
 
