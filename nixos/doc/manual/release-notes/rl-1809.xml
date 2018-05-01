@@ -20,10 +20,21 @@ has the following highlights: </para>
 <itemizedlist>
   <listitem>
     <para>
-      TODO
+      User channels are now in the default <literal>NIX_PATH</literal>,
+      allowing users to use their personal <command>nix-channel</command>
+      defined channels in <command>nix-build</command> and
+      <command>nix-shell</command> commands, as well as in imports like
+      <code>import &lt;mychannel&gt;</code>.
     </para>
+    <para>For example</para>
+    <programlisting>
+$ nix-channel --add https://nixos.org/channels/nixpkgs-unstable nixpkgsunstable
+$ nix-channel --update
+$ nix-build '&lt;nixpkgsunstable&gt;' -A gitFull
+$ nix run -f '&lt;nixpkgsunstable&gt;' gitFull
+$ nix-instantiate -E '(import &lt;nixpkgsunstable&gt; {}).gitFull'
+</programlisting>
   </listitem>
-
 </itemizedlist>
 
 </section>
