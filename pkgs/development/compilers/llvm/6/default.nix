@@ -1,6 +1,6 @@
 { lowPrio, newScope, stdenv, targetPlatform, cmake, libstdcxxHook
 , libxml2, python2, isl, fetchurl, overrideCC, wrapCC, ccWrapperFun
-, darwin
+, darwin, hostLLVM
 }:
 
 let
@@ -23,7 +23,7 @@ let
     drv // { man = drv-manpages.out; /*outputs = drv.outputs ++ ["man"];*/ };
 
   llvm = callPackage ./llvm.nix {
-    inherit compiler-rt_src stdenv;
+    inherit compiler-rt_src stdenv hostLLVM;
   };
 
   clang-unwrapped = callPackage ./clang {

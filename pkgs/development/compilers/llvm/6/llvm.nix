@@ -18,6 +18,7 @@
 , enableSharedLibraries ? true
 , enableWasm ? true
 , darwin
+, hostLLVM
 }:
 
 let
@@ -41,7 +42,8 @@ in stdenv.mkDerivation (rec {
     ++ stdenv.lib.optional enableSharedLibraries "lib";
 
   nativeBuildInputs = [ cmake python ]
-    ++ stdenv.lib.optional enableManpages python.pkgs.sphinx;
+    ++ stdenv.lib.optional enableManpages python.pkgs.sphinx
+    ++ stdenv.lib.optional (stdenv.buildPlatform != stdenv.hostPlatform) hostLLVM;
 
   buildInputs = [ libxml2 libffi ]
     ++ stdenv.lib.optionals stdenv.isDarwin [ libcxxabi ];
@@ -114,8 +116,13 @@ in stdenv.mkDerivation (rec {
     "-DLLVM_HOST_TRIPLE=${stdenv.hostPlatform.config}"
     "-DLLVM_DEFAULT_TARGET_TRIPLE=${stdenv.targetPlatform.config}"
     "-DTARGET_TRIPLE=${stdenv.targetPlatform.config}"
-  ] ++ stdenv.lib.optional enableWasm
-   "-DLLVM_EXPERIMENTAL_TARGETS_TO_BUILD=WebAssembly"
+  ]
+  ++ stdenv.lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform)[
+    "-DCMAKE_CROSSCOMPILING=True"
+    "-DLLVM_TABLEGEN=${hostLLVM}/bin/llvm-tblgen"
+  ]
+  ++ stdenv.lib.optional enableWasm
+    "-DLLVM_EXPERIMENTAL_TARGETS_TO_BUILD=WebAssembly"
   ;
 
   postBuild = ''
