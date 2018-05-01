@@ -6,7 +6,7 @@ let
   cfg = config.virtualisation.virtualbox.host;
 
   virtualbox = pkgs.virtualbox.override {
-    inherit (cfg) enableHardening headless;
+    inherit (cfg) enableExtensionPack enableHardening headless;
   };
 
   kernelModules = config.boot.kernelPackages.virtualbox.override {
@@ -29,6 +29,8 @@ in
         </para></note>
       '';
     };
+
+    enableExtensionPack = mkEnableOption "VirtualBox extension pack";
 
     addNetworkInterface = mkOption {
       type = types.bool;
