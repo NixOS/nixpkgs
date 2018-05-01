@@ -16468,9 +16468,7 @@ with pkgs;
 
   khard = callPackage ../applications/misc/khard { };
 
-  kid3 = callPackage ../applications/audio/kid3 {
-    qt = qt4;
-  };
+  kid3 = libsForQt5.callPackage ../applications/audio/kid3 { };
 
   kile = libsForQt5.callPackage ../applications/editors/kile { };
 
