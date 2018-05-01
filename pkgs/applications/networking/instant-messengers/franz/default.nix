@@ -66,7 +66,7 @@ in stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A free messaging app that combines chat & messaging services into one application";
-    homepage = http://meetfranz.com;
+    homepage = https://meetfranz.com;
     license = licenses.free;
     maintainers = [ maintainers.gnidorah ];
     platforms = ["i686-linux" "x86_64-linux"];

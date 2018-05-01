@@ -43,7 +43,7 @@ rec {
     */
     name = "gap-2.6.0";
     src = fetchurl {
-      url = http://ftp.gimp.org/pub/gimp/plug-ins/v2.6/gap/gimp-gap-2.6.0.tar.bz2;
+      url = https://ftp.gimp.org/pub/gimp/plug-ins/v2.6/gap/gimp-gap-2.6.0.tar.bz2;
       sha256 = "1jic7ixcmsn4kx2cn32nc5087rk6g8xsrz022xy11yfmgvhzb0ql";
     };
     patchPhase = ''
@@ -53,7 +53,7 @@ rec {
     hardeningDisable = [ "format" ];
     meta = with stdenv.lib; {
       description = "The GIMP Animation Package";
-      homepage = http://www.gimp.org;
+      homepage = https://www.gimp.org;
       # The main code is given in GPLv3, but it has ffmpeg in it, and I think ffmpeg license
       # falls inside "free".
       license = with licenses; [ gpl3 free ];
