@@ -382,7 +382,7 @@ let
   };
 
 in rec {
-  inherit compat install netBSDDerivation fts make;
+  inherit compat install netBSDDerivation fts;
 
   getent = netBSDDerivation {
     path = "usr.bin/getent";
@@ -441,16 +441,17 @@ in rec {
       disableGame atc
       disableGame dm
       disableGame dab
-      ${lib.optionalString stdenv.isDarwin "disableGame sail"}
-      ${lib.optionalString stdenv.isDarwin "disableGame trek"}
+      disableGame sail
+      disableGame trek
+      ${lib.optionalString stdenv.isLinux "disableGame boggle"}
+      ${lib.optionalString stdenv.isLinux "disableGame hunt"}
+      ${lib.optionalString stdenv.isLinux "disableGame larn"}
+      ${lib.optionalString stdenv.isLinux "disableGame phantasia"}
+      ${lib.optionalString stdenv.isLinux "disableGame rogue"}
       ${lib.optionalString stdenv.isDarwin "disableGame adventure"}
       ${lib.optionalString stdenv.isDarwin "disableGame factor"}
       ${lib.optionalString stdenv.isDarwin "disableGame gomoku"}
       ${lib.optionalString stdenv.isDarwin "disableGame mille"}
-
-      substituteInPlace Makefile.inc \
-        --replace 2555 555 \
-        --replace 2550 550
     '';
 
     # HACK strfile needs to be installed first & in the path. The
