@@ -49,6 +49,6 @@ stdenv.mkDerivation rec {
     license = stdenv.lib.licenses.gpl2Plus;
 
     maintainers = [ ];
-    platforms = stdenv.lib.platforms.gnu;  # needs GTK+
+    platforms = stdenv.lib.platforms.gnu ++ stdenv.lib.platforms.linux;  # needs GTK+
   };
 }

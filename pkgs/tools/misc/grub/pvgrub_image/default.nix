@@ -37,6 +37,6 @@ stdenv.mkDerivation rec {
          Xen guests
       '';
 
-    platforms = platforms.gnu;
+    platforms = platforms.gnu ++ platforms.linux;
   };
 })
