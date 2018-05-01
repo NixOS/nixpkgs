@@ -3466,6 +3466,11 @@ with pkgs;
 
   libite = callPackage ../development/libraries/libite { };
 
+  liblangtag = callPackage ../development/libraries/liblangtag {
+    inherit (gnome2) gtkdoc;
+    inherit (gnome3) gnome-common;
+  };
+
   liblouis = callPackage ../development/libraries/liblouis { };
 
   liboauth = callPackage ../development/libraries/liboauth { };
