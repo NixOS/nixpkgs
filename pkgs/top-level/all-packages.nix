@@ -19775,6 +19775,10 @@ with pkgs;
 
   bcftools = callPackage ../applications/science/biology/bcftools { };
 
+  conglomerate = callPackage ../applications/science/biology/conglomerate {
+    inherit (perlPackages) GetoptTabular MNI-Perllib;
+  };
+
   dcm2niix = callPackage ../applications/science/biology/dcm2niix { };
 
   diamond = callPackage ../applications/science/biology/diamond { };
