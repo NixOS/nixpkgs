@@ -85,6 +85,7 @@ mapAliases (rec {
   etcdctl = etcd; # added 2018-04-25
   exfat-utils = exfat;                  # 2015-09-11
   fam = gamin; # added 2018-04-25
+  ffadoFull = ffado; # added 2018-05-01
   fftwFloat = fftwSinglePrec; # 2018-04-25
   firefox-esr-wrapper = firefox-esr;  # 2016-01
   firefox-wrapper = firefox;          # 2016-01
@@ -125,11 +126,13 @@ mapAliases (rec {
   gupnp_dlna = gupnp-dlna; # added 2018-02-25
   gupnp_igd = gupnp-igd; # added 2018-02-25
   gupnptools = gupnp-tools;  # added 2015-12-19
+  heimdalFull = heimdal; # added 2018-05-01
   hicolor_icon_theme = hicolor-icon-theme; # added 2018-02-25
   htmlTidy = html-tidy;  # added 2014-12-06
   iana_etc = iana-etc;  # added 2017-03-08
   idea = jetbrains; # added 2017-04-03
   inotifyTools = inotify-tools;
+  jack2Full = jack2; # added 2018-04-25
   joseki = apache-jena-fuseki; # added 2016-02-28
   json_glib = json-glib; # added 2018-02-25
   kdiff3-qt5 = kdiff3; # added 2017-02-18
@@ -149,6 +152,7 @@ mapAliases (rec {
   libcap_pam = if stdenv.isLinux then libcap.pam else null; # added 2016-04-29
   libcap_progs = libcap.out; # added 2016-04-29
   libdbusmenu_qt5 = libsForQt5.libdbusmenu;  # added 2015-12-19
+  libdbusmenu-glib = libdbusmenu; # added 2018-05-01
   libgnome_keyring = libgnome-keyring; # added 2018-02-25
   libgnome_keyring3 = libgnome-keyring3; # added 2018-02-25
   libgumbo = gumbo; # added 2018-01-21
@@ -217,6 +221,7 @@ mapAliases (rec {
   postage = pgmanage; # added 2017-11-03
   procps = procps-ng; # added 2018-04-25
   prometheus-statsd-bridge = prometheus-statsd-exporter;  # added 2017-08-27
+  pulseaudioLight = pulseaudio; # added 2018-04-25
   qca-qt5 = libsForQt5.qca-qt5;  # added 2015-12-19
   qt_gstreamer = qt-gstreamer;  # added 2017-02
   qt_gstreamer1 = qt-gstreamer1;  # added 2017-02
@@ -247,6 +252,7 @@ mapAliases (rec {
   skype = skypeforlinux; # added 2017-07-27
   slurm-llnl = slurm; # renamed July 2017
   slurm-llnl-full = slurm-full; # renamed July 2017
+  slurm-full = slurm; # added 2018-05-1
   smbclient = samba; # added 2018-04-25
   spaceOrbit = space-orbit; # addewd 2016-05-23
   speech_tools = speech-tools; # added 2018-04-25
@@ -256,6 +262,7 @@ mapAliases (rec {
   sqliteInteractive = sqlite-interactive;  # added 2014-12-06
   sshfs = sshfs-fuse; # added 2017-08-14
   sshfsFuse = sshfs-fuse; # added 2016-09
+  suil-qt5 = suil; # added 2018-05-01
   surf-webkit2 = surf; # added 2017-04-02
   system_config_printer = system-config-printer;  # added 2016-01-03
   systool = sysfsutils; # added 2018-04-25
@@ -293,6 +300,7 @@ mapAliases (rec {
   xbmc = kodi; # added 2018-04-25
   xbmcPlain = kodiPlain; # added 2018-04-25
   xbmcPlugins = kodiPlugins; # added 2018-04-25
+  xmonad_log_applet_gnome3 = xmonad_log_applet; # added 2018-05-01
   xf86_video_nouveau = xorg.xf86videonouveau; # added 2015-09
   xlibs = xorg; # added 2015-09
   yacc = bison; # added 2018-04-25
@@ -328,7 +336,7 @@ mapAliases (rec {
     gst-ffmpeg = pkgs.gst-ffmpeg;
   };
 } // (with ocaml-ng; { # added 2016-09-14
-  ocaml_3_08_0 = ocamlPackages_3_08_0.ocaml;
+p  ocaml_3_08_0 = ocamlPackages_3_08_0.ocaml;
   ocaml_3_10_0 = ocamlPackages_3_10_0.ocaml;
   ocaml_3_11_2 = ocamlPackages_3_11_2.ocaml;
   ocaml_3_12_1 = ocamlPackages_3_12_1.ocaml;

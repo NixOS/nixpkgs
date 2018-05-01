@@ -946,7 +946,6 @@ with pkgs;
   calamares = libsForQt5.callPackage ../tools/misc/calamares {
     python = python3;
     boost = pkgs.boost.override { python = python3; };
-    libyamlcpp = callPackage ../development/libraries/libyaml-cpp { inherit boost; };
   };
 
   capstone = callPackage ../development/libraries/capstone { };
@@ -1615,13 +1614,13 @@ with pkgs;
 
   ciopfs = callPackage ../tools/filesystems/ciopfs { };
 
-  citrix_receiver        = hiPrio citrix_receiver_13_9_0;
-  citrix_receiver_13_9_0 = callPackage ../applications/networking/remote/citrix-receiver { version = "13.9.0"; };
-  citrix_receiver_13_8_0 = callPackage ../applications/networking/remote/citrix-receiver { version = "13.8.0"; };
-  citrix_receiver_13_7_0 = callPackage ../applications/networking/remote/citrix-receiver { version = "13.7.0"; };
-  citrix_receiver_13_6_0 = callPackage ../applications/networking/remote/citrix-receiver { version = "13.6.0"; };
-  citrix_receiver_13_5_0 = callPackage ../applications/networking/remote/citrix-receiver { version = "13.5.0"; };
-  citrix_receiver_13_4_0 = callPackage ../applications/networking/remote/citrix-receiver { version = "13.4.0"; };
+  citrix_receiver = callPackage ../applications/networking/remote/citrix-receiver { };
+  citrix_receiver_13_9_0 = citrix_receiver.override { version = "13.9.0"; };
+  citrix_receiver_13_8_0 = citrix_receiver.override { version = "13.8.0"; };
+  citrix_receiver_13_7_0 = citrix_receiver.override { version = "13.7.0"; };
+  citrix_receiver_13_6_0 = citrix_receiver.override { version = "13.6.0"; };
+  citrix_receiver_13_5_0 = citrix_receiver.override { version = "13.5.0"; };
+  citrix_receiver_13_4_0 = citrix_receiver.override { version = "13.4.0"; };
 
   citra = libsForQt5.callPackage ../misc/emulators/citra { };
 
@@ -2339,7 +2338,7 @@ with pkgs;
   fontforge = lowPrio (callPackage ../tools/misc/fontforge {
     inherit (darwin.apple_sdk.frameworks) Carbon Cocoa;
   });
-  fontforge-gtk = callPackage ../tools/misc/fontforge {
+  fontforge-gtk = fontforge.override {
     withSpiro = true;
     withGTK = true;
     gtk2 = gtk2-x11;
@@ -2454,7 +2453,7 @@ with pkgs;
 
     gazebo7 = callPackage ../applications/science/robotics/gazebo { };
 
-    gazebo7-headless = callPackage ../applications/science/robotics/gazebo { withHeadless = true; };
+    gazebo7-headless = gazebo7.override { withHeadless = true; };
 
   };
 
@@ -3494,7 +3493,7 @@ with pkgs;
 
   libiberty = callPackage ../development/libraries/libiberty { };
 
-  libiberty_static = callPackage ../development/libraries/libiberty { staticBuild = true; };
+  libiberty_static = libiberty.override { staticBuild = true; };
 
   libibverbs = callPackage ../development/libraries/libibverbs { };
 
@@ -3970,7 +3969,7 @@ with pkgs;
 
   nmap = callPackage ../tools/security/nmap { };
 
-  nmap-graphical = callPackage ../tools/security/nmap {
+  nmap-graphical = nmap.override {
     graphicalSupport = true;
   };
 
@@ -5030,8 +5029,8 @@ with pkgs;
   });
 
   strongswan    = callPackage ../tools/networking/strongswan { };
-  strongswanTNC = callPackage ../tools/networking/strongswan { enableTNC = true; };
-  strongswanNM  = callPackage ../tools/networking/strongswan { enableNetworkManager = true; };
+  strongswanTNC = strongswan.override { enableTNC = true; };
+  strongswanNM  = strongswan.override { enableNetworkManager = true; };
 
   su = shadow.su;
 
@@ -6442,18 +6441,19 @@ with pkgs;
 
   hugs = callPackage ../development/interpreters/hugs { };
 
+  bootjdk = callPackage ../development/compilers/openjdk/bootstrap.nix { version = "10"; };
+
   openjdk8 =
     if stdenv.isDarwin then
       callPackage ../development/compilers/openjdk/darwin/8.nix { }
     else
       callPackage ../development/compilers/openjdk/8.nix {
-        bootjdk = callPackage ../development/compilers/openjdk/bootstrap.nix { version = "8"; };
+        bootjdk = bootjdk.override { version = "8"; };
         inherit (gnome2) GConf gnome_vfs;
       };
 
   openjdk10 =
       callPackage ../development/compilers/openjdk/10.nix {
-        bootjdk = callPackage ../development/compilers/openjdk/bootstrap.nix { version = "10"; };
         inherit (gnome2) GConf gnome_vfs;
       };
 
@@ -6676,7 +6676,7 @@ with pkgs;
    xlibsWrapper = null;
   };
 
-  mitschemeX11 = callPackage ../development/compilers/mit-scheme {
+  mitschemeX11 = mitscheme.override {
    texLive = texlive.combine { inherit (texlive) scheme-small; };
    texinfo = texinfo5;
    enableX11 = true;
@@ -7031,7 +7031,7 @@ with pkgs;
     gtk2 = gtk2-x11;
   };
 
-  lxappearance-gtk3 = callPackage ../desktops/lxde/core/lxappearance {
+  lxappearance-gtk3 = lxappearance.override {
     withGtk3 = true;
   };
 
@@ -7131,7 +7131,7 @@ with pkgs;
       octaveHg = lowPrio (callPackage ../development/interpreters/octave/hg.nix hgOctaveOptions);
   }) octave octaveHg;
 
-  octaveFull = (lowPrio (callPackage ../development/interpreters/octave {
+  octaveFull = (lowPrio (octave.override {
     qt = qt4;
     overridePlatforms = ["x86_64-linux" "x86_64-darwin"];
     openblas = if stdenv.isDarwin then openblasCompat else openblas;
@@ -7360,22 +7360,21 @@ with pkgs;
 
   amdadlsdk = callPackage ../development/misc/amdadl-sdk { };
 
-  amdappsdk26 = callPackage ../development/misc/amdapp-sdk {
+  amdappsdk26 = amdappsdk.override {
     version = "2.6";
   };
 
-  amdappsdk27 = callPackage ../development/misc/amdapp-sdk {
+  amdappsdk27 = amdappsdk.override {
     version = "2.7";
   };
 
-  amdappsdk28 = callPackage ../development/misc/amdapp-sdk {
+  amdappsdk28 = amdappsdk.override {
     version = "2.8";
   };
 
-  amdappsdk = amdappsdk28;
+  amdappsdk = callPackage ../development/misc/amdapp-sdk { };
 
-  amdappsdkFull = callPackage ../development/misc/amdapp-sdk {
-    version = "2.8";
+  amdappsdkFull = amdappsdk.override {
     samples = true;
   };
 
@@ -7476,11 +7475,11 @@ with pkgs;
 
   ant_1_9 = callPackage ../development/tools/build-managers/apache-ant/1.9.nix { };
 
-  apacheKafka = apacheKafka_1_0;
-  apacheKafka_0_9 = callPackage ../servers/apache-kafka { majorVersion = "0.9"; };
-  apacheKafka_0_10 = callPackage ../servers/apache-kafka { majorVersion = "0.10"; };
-  apacheKafka_0_11 = callPackage ../servers/apache-kafka { majorVersion = "0.11"; };
-  apacheKafka_1_0 = callPackage ../servers/apache-kafka { majorVersion = "1.0"; };
+  apacheKafka_1_0 = apacheKafka.override { majorVersion = "1.0"; };
+  apacheKafka_0_9 = apacheKafka.override { majorVersion = "0.9"; };
+  apacheKafka_0_10 = apacheKafka.override { majorVersion = "0.10"; };
+  apacheKafka_0_11 = apacheKafka.override { majorVersion = "0.11"; };
+  apacheKafka = callPackage ../servers/apache-kafka { };
 
   kt = callPackage ../tools/misc/kt {};
 
@@ -8163,7 +8162,7 @@ with pkgs;
   remake = callPackage ../development/tools/build-managers/remake { };
 
   retdec = callPackage ../development/tools/analysis/retdec { };
-  retdec-full = callPackage ../development/tools/analysis/retdec {
+  retdec-full = retdec.override {
     withPEPatterns = true;
   };
 
@@ -8994,7 +8993,7 @@ with pkgs;
     stdenv = crossLibcStdenv;
   };
 
-  muslCross = callPackage ../os-specific/linux/musl {
+  muslCross = musl.override {
     stdenv = crossLibcStdenv;
   };
 
@@ -9256,11 +9255,13 @@ with pkgs;
 
   gtk-sharp-beans = callPackage ../development/libraries/gtk-sharp-beans { };
 
-  gtk-mac-integration = callPackage ../development/libraries/gtk-mac-integration {
+  gtk-mac-integration = callPackage ../development/libraries/gtk-mac-integration { };
+
+  gtk-mac-integration-gtk2 = gtk-macintegration.override {
     gtk = gtk2;
   };
 
-  gtk-mac-integration-gtk3 = callPackage ../development/libraries/gtk-mac-integration {
+  gtk-mac-integration-gtk3 = gtk-mac-integration.override {
     gtk = gtk3;
   };
 
@@ -9290,8 +9291,8 @@ with pkgs;
 
   hamlib = callPackage ../development/libraries/hamlib { };
 
-  heimdalFull = callPackage ../development/libraries/kerberos/heimdal.nix { };
-  libheimdal = heimdalFull.override { type = "lib"; };
+  heimdal = callPackage ../development/libraries/kerberos/heimdal.nix { };
+  libheimdal = heimdal.override { type = "lib"; };
 
   harfbuzz = callPackage ../development/libraries/harfbuzz { };
   harfbuzz-icu = harfbuzz.override {
@@ -9344,7 +9345,7 @@ with pkgs;
 
   hwloc = callPackage ../development/libraries/hwloc {};
 
-  hwloc-nox = callPackage ../development/libraries/hwloc {
+  hwloc-nox = hwloc.override {
     x11Support = false;
   };
 
@@ -9544,8 +9545,9 @@ with pkgs;
 
   libaom = callPackage ../development/libraries/libaom { };
 
-  libappindicator-gtk2 = callPackage ../development/libraries/libappindicator { gtkVersion = "2"; };
-  libappindicator-gtk3 = callPackage ../development/libraries/libappindicator { gtkVersion = "3"; };
+  libappindicator-gtk2 = libappindicator.override { gtkVersion = "2"; };
+  libappindicator-gtk3 = libappindicator.override { gtkVersion = "3"; };
+  libappindicator = callPackage ../development/libraries/libappindicator { };
 
   libarchive = callPackage ../development/libraries/libarchive { };
 
@@ -9684,9 +9686,9 @@ with pkgs;
 
   libdbiDrivers = callPackage ../development/libraries/libdbi-drivers { };
 
-  libdbusmenu-glib = callPackage ../development/libraries/libdbusmenu { };
-  libdbusmenu-gtk2 = callPackage ../development/libraries/libdbusmenu { gtkVersion = "2"; };
-  libdbusmenu-gtk3 = callPackage ../development/libraries/libdbusmenu { gtkVersion = "3"; };
+  libdbusmenu = callPackage ../development/libraries/libdbusmenu { };
+  libdbusmenu-gtk2 = libdbusmenu.override { gtkVersion = "2"; };
+  libdbusmenu-gtk3 = libdbusmenu.override { gtkVersion = "3"; };
 
   libdbusmenu_qt = callPackage ../development/libraries/libdbusmenu-qt { };
 
@@ -9765,7 +9767,7 @@ with pkgs;
   libfilezilla = callPackage ../development/libraries/libfilezilla { };
 
   libfm = callPackage ../development/libraries/libfm { };
-  libfm-extra = callPackage ../development/libraries/libfm {
+  libfm-extra = libfm.override {
     extraOnly = true;
   };
 
@@ -9906,11 +9908,13 @@ with pkgs;
 
   libimobiledevice = callPackage ../development/libraries/libimobiledevice { };
 
-  libindicate-gtk2 = callPackage ../development/libraries/libindicate { gtkVersion = "2"; };
-  libindicate-gtk3 = callPackage ../development/libraries/libindicate { gtkVersion = "3"; };
+  libindicate-gtk2 = libindicate.override { gtkVersion = "2"; };
+  libindicate-gtk3 = libindicate.override { gtkVersion = "3"; };
+  libindicate = callPackage ../development/libraries/libindicate { };
 
-  libindicator-gtk2 = callPackage ../development/libraries/libindicator { gtkVersion = "2"; };
-  libindicator-gtk3 = callPackage ../development/libraries/libindicator { gtkVersion = "3"; };
+  libindicator-gtk2 = libindicator.override { gtkVersion = "2"; };
+  libindicator-gtk3 = libindicator.override { gtkVersion = "3"; };
+  libindicator = callPackage ../development/libraries/libindicator { };
 
   libiodbc = callPackage ../development/libraries/libiodbc {
     useGTK = config.libiodbc.gtk or false;
@@ -10501,7 +10505,7 @@ with pkgs;
 
   luabind = callPackage ../development/libraries/luabind { lua = lua5_1; };
 
-  luabind_luajit = callPackage ../development/libraries/luabind { lua = luajit; };
+  luabind_luajit = luabind.override { lua = luajit; };
 
   luaffi = callPackage ../development/libraries/luaffi { lua = lua5_1; };
 
@@ -10659,13 +10663,13 @@ with pkgs;
 
   notify-sharp = callPackage ../development/libraries/notify-sharp { };
 
-  ncurses5 = callPackage ../development/libraries/ncurses {
+  ncurses5 = ncurses.override {
     abiVersion = "5";
   };
-  ncurses6 = callPackage ../development/libraries/ncurses {
+  ncurses6 = ncurses.override {
     abiVersion = "6";
   };
-  ncurses = ncurses6;
+  ncurses = callPackage ../development/libraries/ncurses { };
 
   neardal = callPackage ../development/libraries/neardal { };
 
@@ -10989,7 +10993,7 @@ with pkgs;
   qbs = callPackage ../development/tools/build-managers/qbs { };
 
   qca2 = callPackage ../development/libraries/qca2 { qt = qt4; };
-  qca2-qt5 = callPackage ../development/libraries/qca2 { qt = qt5.qtbase; };
+  qca2-qt5 = qca2.override { qt = qt5.qtbase; };
 
   qimageblitz = callPackage ../development/libraries/qimageblitz {};
 
@@ -11487,17 +11491,16 @@ with pkgs;
 
   subtitleeditor = callPackage ../applications/video/subtitleeditor { };
 
-  suil-qt4 = callPackage ../development/libraries/audio/suil {
-    withQt4 = true;
-    withQt5 = false;
-  };
+  suil = callPackage ../development/libraries/audio/suil { };
 
-  suil-qt5 = callPackage ../development/libraries/audio/suil {
+  suil-qt5 = suil.override {
     withQt4 = false;
     withQt5 = true;
   };
-
-  suil = suil-qt4;
+  suil-qt4 = suil.override {
+    withQt4 = true;
+    withQt5 = false;
+  };
 
   sundials = callPackage ../development/libraries/sundials { };
 
@@ -11892,7 +11895,7 @@ with pkgs;
 
   zlog = callPackage ../development/libraries/zlog { };
 
-  zlibStatic = lowPrio (appendToName "static" (callPackage ../development/libraries/zlib {
+  zlibStatic = lowPrio (appendToName "static" (zlib.override {
     static = true;
   }));
 
@@ -12300,7 +12303,7 @@ with pkgs;
   fingerd_bsd = callPackage ../servers/fingerd/bsd-fingerd { };
 
   firebird = callPackage ../servers/firebird { icu = null; stdenv = overrideCC stdenv gcc5; };
-  firebirdSuper = callPackage ../servers/firebird { icu = icu58; superServer = true; stdenv = overrideCC stdenv gcc5; };
+  firebirdSuper = firebird.override { icu = icu58; superServer = true; stdenv = overrideCC stdenv gcc5; };
 
   fleet = callPackage ../servers/fleet { };
 
@@ -12418,7 +12421,7 @@ with pkgs;
   nginxModules = callPackage ../servers/http/nginx/modules.nix { };
 
   # We should move to dynmaic modules and create a nginxFull package with all modules
-  nginxShibboleth = callPackage ../servers/http/nginx/stable.nix {
+  nginxShibboleth = nginxStable.override {
     modules = [ nginxModules.rtmp nginxModules.dav nginxModules.moreheaders nginxModules.shibboleth ];
   };
 
@@ -12472,13 +12475,11 @@ with pkgs;
 
   # PulseAudio daemons
 
-  # Name is changed to prevent use in packages;
-  # please use libpulseaudio instead.
-  pulseaudioLight = callPackage ../servers/pulseaudio {
+  pulseaudio = callPackage ../servers/pulseaudio {
     inherit (darwin.apple_sdk.frameworks) CoreServices AudioUnit Cocoa;
   };
 
-  pulseaudioFull = callPackage ../servers/pulseaudio {
+  pulseaudioFull = pulseaudio.override {
     gconf = gnome3.gconf;
     x11Support = true;
     jackaudioSupport = true;
@@ -12491,7 +12492,7 @@ with pkgs;
   };
 
   # libpulse implementations
-  libpulseaudio-vanilla = callPackage ../servers/pulseaudio {
+  libpulseaudio-vanilla = pulseaudio.override {
     libOnly = true;
     inherit (darwin.apple_sdk.frameworks) CoreServices AudioUnit Cocoa;
   };
@@ -12598,8 +12599,8 @@ with pkgs;
   qboot = callPackage ../applications/virtualization/qboot { stdenv = stdenv_32bit; };
 
   OVMF = callPackage ../applications/virtualization/OVMF { seabios = null; openssl = null; };
-  OVMF-CSM = callPackage ../applications/virtualization/OVMF { openssl = null; };
-  #WIP: OVMF-secureBoot = callPackage ../applications/virtualization/OVMF { seabios = null; secureBoot = true; };
+  OVMF-CSM = OVMF.override { openssl = null; };
+  #WIP: OVMF-secureBoot = OVMF.override { seabios = null; secureBoot = true; };
 
   seabios = callPackage ../applications/virtualization/seabios { };
 
@@ -12791,8 +12792,6 @@ with pkgs;
   storm = callPackage ../servers/computing/storm { };
 
   slurm = callPackage ../servers/computing/slurm { gtk2 = null; };
-
-  slurm-full = appendToName "full" (callPackage ../servers/computing/slurm { });
 
   slurm-spank-x11 = callPackage ../servers/computing/slurm-spank-x11 { };
 
@@ -13056,10 +13055,10 @@ with pkgs;
 
   fatrace = callPackage ../os-specific/linux/fatrace { };
 
-  ffadoFull = callPackage ../os-specific/linux/ffado {
+  ffado = callPackage ../os-specific/linux/ffado {
     inherit (python2Packages) python pyqt4 dbus-python;
   };
-  libffado = ffadoFull.override { prefix = "lib"; };
+  libffado = ffado.override { prefix = "lib"; };
 
   fbterm = callPackage ../os-specific/linux/fbterm { };
 
@@ -13154,7 +13153,7 @@ with pkgs;
   iwd = callPackage ../os-specific/linux/iwd { };
 
   jfbview = callPackage ../os-specific/linux/jfbview { };
-  jfbpdf = callPackage ../os-specific/linux/jfbview {
+  jfbpdf = jfbview.override {
     imageSupport = false;
   };
 
@@ -13908,7 +13907,7 @@ with pkgs;
 
   sysvinit = callPackage ../os-specific/linux/sysvinit { };
 
-  sysvtools = callPackage ../os-specific/linux/sysvinit {
+  sysvtools = sysvinit.override {
     withoutInitTools = true;
   };
 
@@ -15013,7 +15012,7 @@ with pkgs;
   };
 
   codeblocks = callPackage ../applications/editors/codeblocks { };
-  codeblocksFull = callPackage ../applications/editors/codeblocks { contribPlugins = true; };
+  codeblocksFull = codeblocks.override { contribPlugins = true; };
 
   comical = callPackage ../applications/graphics/comical { };
 
@@ -15504,9 +15503,9 @@ with pkgs;
 
   fldigi = callPackage ../applications/audio/fldigi { };
 
-  flink = flink_1_4;
-  flink_1_3 = callPackage ../applications/networking/cluster/flink { version = "1.3"; };
-  flink_1_4 = callPackage ../applications/networking/cluster/flink { version = "1.4"; };
+  flink = callPackage ../applications/networking/cluster/flink { };
+  flink_1_3 = flink.override { version = "1.3"; };
+  flink_1_4 = flink.override { version = "1.4"; };
 
   fluidsynth = callPackage ../applications/audio/fluidsynth {
      inherit (darwin.apple_sdk.frameworks) AudioUnit CoreAudio CoreMIDI CoreServices;
@@ -15690,7 +15689,7 @@ with pkgs;
     desktopName = "Firefox";
   };
 
-  firefox-beta-bin-unwrapped = callPackage ../applications/networking/browsers/firefox-bin {
+  firefox-beta-bin-unwrapped = firefox-bin-unwrapped.override {
     channel = "beta";
     generated = import ../applications/networking/browsers/firefox-bin/beta_sources.nix;
     gconf = pkgs.gnome2.GConf;
@@ -15926,7 +15925,7 @@ with pkgs;
   };
 
   graphicsmagick = callPackage ../applications/graphics/graphicsmagick { };
-  graphicsmagick_q16 = callPackage ../applications/graphics/graphicsmagick { quantumdepth = 16; };
+  graphicsmagick_q16 = graphicsmagic.override { quantumdepth = 16; };
 
   grisbi = callPackage ../applications/office/grisbi { gtk = gtk2; };
 
@@ -16424,54 +16423,36 @@ with pkgs;
 
   libreoffice = hiPrio libreoffice-still;
 
-  libreoffice-fresh = lowPrio (callPackage ../applications/office/libreoffice/wrapper.nix
-    { libreoffice = callPackage ../applications/office/libreoffice {
-      inherit (perlPackages) ArchiveZip CompressZlib;
-      inherit (gnome2) GConf ORBit2 gnome_vfs;
-      inherit (gnome3) defaultIconTheme;
-      zip = zip.override { enableNLS = false; };
-      fontsConf = makeFontsConf {
-        fontDirectories = [
-          carlito dejavu_fonts
-          freefont_ttf xorg.fontmiscmisc
-          liberation_ttf_v1_binary
-          liberation_ttf_v2_binary
-        ];
-      };
-      clucene_core = clucene_core_2;
-      lcms = lcms2;
-      harfbuzz = harfbuzz.override {
-        withIcu = true; withGraphite2 = true;
-      };
-      # checking whether g++ supports C++14 or C++11... configure: error: no
-      # Still relevant: 2018-04-13
-      stdenv = overrideCC stdenv gcc5;
-  };});
+  libreoffice-unwrapped =callPackage ../applications/office/libreoffice {
+    inherit (perlPackages) ArchiveZip CompressZlib;
+    inherit (gnome2) GConf ORBit2 gnome_vfs;
+    inherit (gnome3) defaultIconTheme;
+    zip = zip.override { enableNLS = false; };
+    fontsConf = makeFontsConf {
+      fontDirectories = [
+        carlito dejavu_fonts
+        freefont_ttf xorg.fontmiscmisc
+        liberation_ttf_v1_binary
+        liberation_ttf_v2_binary
+      ];
+    };
+    clucene_core = clucene_core_2;
+    lcms = lcms2;
+    harfbuzz = harfbuzz.override {
+      withIcu = true; withGraphite2 = true;
+    };
+    # checking whether g++ supports C++14 or C++11... configure: error: no
+    # Still relevant: 2018-04-13
+    stdenv = overrideCC stdenv gcc5;
+  };
 
-  libreoffice-still = lowPrio (callPackage ../applications/office/libreoffice/wrapper.nix
-    { libreoffice = callPackage ../applications/office/libreoffice/still.nix {
-      inherit (perlPackages) ArchiveZip CompressZlib;
-      inherit (gnome2) GConf ORBit2 gnome_vfs;
-      inherit (gnome3) defaultIconTheme;
-      zip = zip.override { enableNLS = false; };
+  libreoffice-fresh = lowPrio (callPackage ../applications/office/libreoffice/wrapper.nix { libreoffice = libreoffice-unwrapped; });
+
+  libreoffice-still = lowPrio (callPackage ../applications/office/libreoffice/wrapper.nix {
+    libreoffice = libreoffice-unwrapped.override {
       poppler = poppler_0_61;
-      fontsConf = makeFontsConf {
-        fontDirectories = [
-          carlito dejavu_fonts
-          freefont_ttf xorg.fontmiscmisc
-          liberation_ttf_v1_binary
-          liberation_ttf_v2_binary
-        ];
-      };
-      clucene_core = clucene_core_2;
-      lcms = lcms2;
-      harfbuzz = harfbuzz.override {
-        withIcu = true; withGraphite2 = true;
-      };
-      # checking whether g++ supports C++14 or C++11... configure: error: no
-      # Still relevant: 2018-04-13; gcc6 is not enough!
-      stdenv = overrideCC stdenv gcc5;
-  };});
+    };
+  });
 
   liferea = callPackage ../applications/networking/newsreaders/liferea {
     inherit (gnome3) libpeas gsettings-desktop-schemas dconf;
@@ -16838,7 +16819,7 @@ with pkgs;
       libsForQt5.callPackage ../applications/audio/musescore { };
 
   mutt = callPackage ../applications/networking/mailreaders/mutt { };
-  mutt-with-sidebar = callPackage ../applications/networking/mailreaders/mutt {
+  mutt-with-sidebar = mutt.override {
     withSidebar = true;
   };
 
@@ -18285,7 +18266,7 @@ with pkgs;
 
   weechat-xmpp = callPackage ../applications/networking/instant-messengers/weechat-xmpp {};
 
-  westonLite = callPackage ../applications/window-managers/weston {
+  westonLite = weston.override {
     pango = null;
     freerdp = null;
     libunwind = null;
@@ -18580,21 +18561,21 @@ with pkgs;
     packages = self: [];
   };
 
-  xmonad_log_applet_gnome2 = callPackage ../applications/window-managers/xmonad/log-applet {
+  xmonad_log_applet_gnome2 = xmonad_log_applet.override {
     desktopSupport = "gnome2";
     inherit (xfce) libxfce4util xfce4-panel;
     gnome2_panel = gnome2.gnome_panel;
     GConf2 = gnome2.GConf;
   };
 
-  xmonad_log_applet_gnome3 = callPackage ../applications/window-managers/xmonad/log-applet {
+  xmonad_log_applet = callPackage ../applications/window-managers/xmonad/log-applet {
     desktopSupport = "gnome3";
     inherit (xfce) libxfce4util xfce4-panel;
     gnome2_panel = gnome2.gnome_panel;
     GConf2 = gnome2.GConf;
   };
 
-  xmonad_log_applet_xfce = callPackage ../applications/window-managers/xmonad/log-applet {
+  xmonad_log_applet_xfce = xmonad_log_applet.override {
     desktopSupport = "xfce4";
     inherit (xfce) libxfce4util xfce4-panel;
     gnome2_panel = gnome2.gnome_panel;
@@ -18896,13 +18877,13 @@ with pkgs;
 
   factorio = callPackage ../games/factorio { releaseType = "alpha"; };
 
-  factorio-experimental = callPackage ../games/factorio { releaseType = "alpha"; experimental = true; };
+  factorio-experimental = factorio.override { releaseType = "alpha"; experimental = true; };
 
-  factorio-headless = callPackage ../games/factorio { releaseType = "headless"; };
+  factorio-headless = factorio.override { releaseType = "headless"; };
 
-  factorio-headless-experimental = callPackage ../games/factorio { releaseType = "headless"; experimental = true; };
+  factorio-headless-experimental = factorio.override { releaseType = "headless"; experimental = true; };
 
-  factorio-demo = callPackage ../games/factorio { releaseType = "demo"; };
+  factorio-demo = factorio.override { releaseType = "demo"; };
 
   factorio-mods = callPackage ../games/factorio/mods.nix { };
 
@@ -18922,7 +18903,7 @@ with pkgs;
 
   freeciv = callPackage ../games/freeciv { };
 
-  freeciv_gtk = callPackage ../games/freeciv {
+  freeciv_gtk = freeciv.override {
     gtkClient = true;
     sdlClient = false;
   };
@@ -19134,7 +19115,7 @@ with pkgs;
 
   pokerth = callPackage ../games/pokerth { };
 
-  pokerth-server = with callPackage ../games/pokerth { }; server;
+  pokerth-server = pokerth.server;
 
   prboom = callPackage ../games/prboom { };
 
@@ -19401,7 +19382,7 @@ with pkgs;
     lua = lua5_2;
   };
 
-  worldofgoo_demo = callPackage ../games/worldofgoo {
+  worldofgoo_demo = worldofgoo.override {
     demo = true;
   };
 
@@ -19841,21 +19822,21 @@ with pkgs;
     cmake = cmakeCurses;
   };
 
-  gromacsMpi = lowPrio (callPackage ../applications/science/molecular-dynamics/gromacs {
+  gromacsMpi = lowPrio (gromacs.override {
     singlePrec = true;
     mpiEnabled = true;
     fftw = fftwSinglePrec;
     cmake = cmakeCurses;
   });
 
-  gromacsDouble = lowPrio (callPackage ../applications/science/molecular-dynamics/gromacs {
+  gromacsDouble = lowPrio (gromacs.override {
     singlePrec = false;
     mpiEnabled = false;
     fftw = fftw;
     cmake = cmakeCurses;
   });
 
-  gromacsDoubleMpi = lowPrio (callPackage ../applications/science/molecular-dynamics/gromacs {
+  gromacsDoubleMpi = lowPrio (gromacs.override {
     singlePrec = false;
     mpiEnabled = true;
     fftw = fftw;
@@ -20136,7 +20117,7 @@ with pkgs;
   maxima = callPackage ../applications/science/math/maxima {
     ecl = null;
   };
-  maxima-ecl = callPackage ../applications/science/math/maxima {
+  maxima-ecl = maxima.override {
     ecl = ecl_16_1_2;
     ecl-fasl = true;
     sbcl = null;
@@ -20291,7 +20272,7 @@ with pkgs;
   thepeg = callPackage ../development/libraries/physics/thepeg { };
 
   yoda = callPackage ../development/libraries/physics/yoda { };
-  yoda-with-root = lowPrio (callPackage ../development/libraries/physics/yoda {
+  yoda-with-root = lowPrio (yoda.override {
     withRootSupport = true;
   });
 
@@ -20510,11 +20491,11 @@ with pkgs;
   # using the new configuration style proposal which is unstable
   jack1 = callPackage ../misc/jackaudio/jack1.nix { };
 
-  jack2Full = callPackage ../misc/jackaudio {
+  jack2 = callPackage ../misc/jackaudio {
     libopus = libopus.override { withCustomModes = true; };
     inherit (darwin.apple_sdk.frameworks) AudioToolbox CoreAudio CoreFoundation;
   };
-  libjack2 = jack2Full.override { prefix = "lib"; };
+  libjack2 = jack2.override { prefix = "lib"; };
 
   keynav = callPackage ../tools/X11/keynav { };
 
@@ -20578,7 +20559,7 @@ with pkgs;
   nix-diff = haskell.lib.justStaticExecutables haskellPackages.nix-diff;
 
   nix-info = callPackage ../tools/nix/info { };
-  nix-info-tested = callPackage ../tools/nix/info { doCheck = true; };
+  nix-info-tested = nix-info.override { doCheck = true; };
 
   nix-index = callPackage ../tools/package-management/nix-index { };
 
@@ -21105,10 +21086,10 @@ with pkgs;
 
   spdlog = callPackage ../development/libraries/spdlog { };
 
-  dart = dart_stable;
-  dart_old = callPackage ../development/interpreters/dart { version = "1.16.1"; };
-  dart_stable = callPackage ../development/interpreters/dart { version = "1.24.3"; };
-  dart_dev = callPackage ../development/interpreters/dart { version = "2.0.0-dev.26.0"; };
+  dart = callPackage ../development/interpreters/dart { };
+  dart_stable = dart.override { version = "1.24.3"; };
+  dart_old = dart.override { version = "1.16.1"; };
+  dart_dev = dart.override { version = "2.0.0-dev.26.0"; };
 
   httrack = callPackage ../tools/backup/httrack { };
 
