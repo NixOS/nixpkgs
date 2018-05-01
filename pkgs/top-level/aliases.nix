@@ -112,13 +112,17 @@ mapAliases (rec {
   libcap_manpages = libcap.doc; # added 2016-04-29
   libcap_pam = if stdenv.isLinux then libcap.pam else null; # added 2016-04-29
   libcap_progs = libcap.out; # added 2016-04-29
+  libffado = ffadoFull; # added 2018-04-25
   libgnome_keyring = libgnome-keyring; # added 2018-02-25
   libgnome_keyring3 = libgnome-keyring3; # added 2018-02-25
   libgumbo = gumbo; # added 2018-01-21
+  libheimdal = heimdalFull; # added 2018-04-25
   libintlOrEmpty = stdenv.lib.optional (!stdenv.isLinux || hostPlatform.libc != "glibc") gettext; # added 2018-03-14
+  libjack2 = jack2Full; # added 2018-04-25
   libjson_rpc_cpp = libjson-rpc-cpp; # added 2017-02-28
   libmysql = mysql.connector-c; # added # 2017-12-28, this was a misnomer refering to libmysqlclient
   libtidy = html-tidy;  # added 2014-12-21
+  libv4l = v4l_utils.dev; # added 2018-04-25
   links = links2; # added 2016-01-31
   lttngTools = lttng-tools;  # added 2014-07-31
   lttngUst = lttng-ust;  # added 2014-07-31
@@ -162,6 +166,7 @@ mapAliases (rec {
   pidginwindowmerge = pidgin-window-merge; # added 2018-01-08
   postage = pgmanage; # added 2017-11-03
   poppler_qt5 = libsForQt5.poppler;  # added 2015-12-19
+  poppler_utils = poppler.bin; # added 2018-04-25
   PPSSPP = ppsspp; # added 2017-10-01
   prometheus-statsd-bridge = prometheus-statsd-exporter;  # added 2017-08-27
   qca-qt5 = libsForQt5.qca-qt5;  # added 2015-12-19
