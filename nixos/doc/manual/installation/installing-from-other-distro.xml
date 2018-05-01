@@ -154,7 +154,7 @@ $ sudo useradd -u 30000 -g nixbld -G nixbld nixbld</screen>
 $ sudo userdel nixbld
 $ sudo groupdel nixbld</screen>
 
-            <para>If you do not wish to keep the Nix package mananager
+            <para>If you do not wish to keep the Nix package manager
                 installed either, run something like <literal>sudo rm -rv
                     ~/.nix-* /nix</literal> and remove the line that the Nix
                 installer added to your <literal>~/.profile</literal>.</para>
