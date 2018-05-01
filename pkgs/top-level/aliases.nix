@@ -84,7 +84,6 @@ mapAliases (rec {
   exfat-utils = exfat;                  # 2015-09-11
   fam = gamin; # added 2018-04-25
   ffadoFull = ffado; # added 2018-05-01
-  fftwFloat = fftwSinglePrec; # 2018-04-25
   firefox-esr-wrapper = firefox-esr;  # 2016-01
   firefox-wrapper = firefox;          # 2016-01
   firefoxWrapper = firefox;           # 2015-09
