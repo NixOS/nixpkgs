@@ -5619,6 +5619,8 @@ with pkgs;
   varnishPackages = varnish5Packages;
   varnish = varnishPackages.varnish;
 
+  hitch = callPackage ../servers/hitch { };
+
   venus = callPackage ../tools/misc/venus {
     python = python27;
   };

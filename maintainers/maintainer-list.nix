@@ -1760,6 +1760,11 @@
     github = "tftio";
     name = "James Felix Black";
   };
+  jflanglois = {
+    email = "yourstruly@julienlanglois.me";
+    github = "jflanglois";
+    name = "Julien Langlois";
+  };
   jfrankenau = {
     email = "johannes@frankenau.net";
     github = "jfrankenau";
