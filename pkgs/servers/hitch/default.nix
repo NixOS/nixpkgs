@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ docutils libev openssl ];
 
-  outputs = [ "bin" "out" "doc" "man" ];
+  outputs = [ "out" "doc" "man" ];
 
   meta = with stdenv.lib; {
     description = "Hitch is a libev-based high performance SSL/TLS proxy by Varnish Software";
