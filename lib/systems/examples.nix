@@ -88,16 +88,36 @@ rec {
   #
 
   iphone64 = {
-    config = "aarch64-apple-darwin14";
-    arch = "arm64";
-    libc = "libSystem";
+    config = "aarch64-apple-ios";
+    # config = "aarch64-apple-darwin14";
+    sdkVer = "10.2";
+    useiOSPrebuilt = true;
     platform = {};
   };
 
   iphone32 = {
-    config = "arm-apple-darwin10";
-    arch = "armv7-a";
-    libc = "libSystem";
+    config = "armv7-apple-ios";
+    # config = "arm-apple-darwin10";
+    sdkVer = "10.2";
+    useiOSPrebuilt = true;
+    platform = {};
+  };
+
+  iphone64-simulator = {
+    config = "x86_64-apple-ios";
+    # config = "x86_64-apple-darwin14";
+    sdkVer = "10.2";
+    useiOSPrebuilt = true;
+    isiPhoneSimulator = true;
+    platform = {};
+  };
+
+  iphone32-simulator = {
+    config = "i686-apple-ios";
+    # config = "i386-apple-darwin11";
+    sdkVer = "10.2";
+    useiOSPrebuilt = true;
+    isiPhoneSimulator = true;
     platform = {};
   };
 
