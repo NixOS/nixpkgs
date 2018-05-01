@@ -25,7 +25,7 @@ buildPythonPackage rec {
   # result is "3L" instead of "3", so let's fix it in-place.
   #
   # Upstream issue: https://github.com/cython/cython/issues/1548
-  postPatch = lib.optionalString ((stdenv.isi686 || stdenv.isArm) && !isPy3k) ''
+  postPatch = lib.optionalString ((stdenv.isi686 || stdenv.isAarch32) && !isPy3k) ''
     sed -i -e 's/\(>>> *\)\(verify_resolution_GH1533()\)/\1int(\2)/' \
       tests/run/cpdef_enums.pyx
   '';

@@ -9,8 +9,8 @@ rec {
     isx86_64       = { cpu = cpuTypes.x86_64; };
     isPowerPC      = { cpu = cpuTypes.powerpc; };
     isx86          = { cpu = { family = "x86"; }; };
-    isArm          = { cpu = { family = "arm"; }; };
-    isAarch64      = { cpu = { family = "aarch64"; }; };
+    isAarch32      = { cpu = { family = "arm"; bits = 32; }; };
+    isAarch64      = { cpu = { family = "arm"; bits = 64; }; };
     isMips         = { cpu = { family = "mips"; }; };
     isRiscV        = { cpu = { family = "riscv"; }; };
     isWasm         = { cpu = { family = "wasm"; }; };
@@ -43,6 +43,9 @@ rec {
                        [ "x86" "arm" "aarch64" ];
     isSeccomputable = map (family: { kernel = kernels.linux; cpu.family = family; })
                         [ "x86" "arm" "aarch64" "mips" ];
+
+    # Deprecated after 18.03
+    isArm = isAarch32;
   };
 
   matchAnyAttrs = patterns:

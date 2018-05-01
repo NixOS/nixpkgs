@@ -41,7 +41,7 @@ rec {
     ]
     # The following patch is only required on ARM platforms and should be
     # included for the next ESR release >= 52.7.3esr
-    ++ lib.optional stdenv.isArm
+    ++ lib.optional stdenv.isAarch32
       (fetchpatch {
         name = "CVE-2018-5147-tremor.patch";
         url = https://hg.mozilla.org/releases/mozilla-esr52/rev/5cd5586a2f48;
