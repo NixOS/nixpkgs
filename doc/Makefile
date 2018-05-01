@@ -1,11 +1,16 @@
 MD_TARGETS=$(addsuffix .xml, $(basename $(wildcard ./*.md ./**/*.md)))
 
 .PHONY: all
-all: validate out/html/index.html out/epub/manual.epub
+all: validate format out/html/index.html out/epub/manual.epub
 
 .PHONY: debug
 debug:
 	nix-shell --run "xmloscopy --docbook5 ./manual.xml ./manual-full.xml"
+
+.PHONY: format
+format:
+	find . -iname '*.xml' -type f -print0 | xargs -0 -I{} -n1 \
+		xmlformat --config-file "$$XMLFORMAT_CONFIG" -i {}
 
 .PHONY: clean
 clean:
