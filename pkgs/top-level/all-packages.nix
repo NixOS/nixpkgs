@@ -4503,7 +4503,11 @@ with pkgs;
 
   rtaudio = callPackage ../development/libraries/audio/rtaudio { };
 
-  rtmidi = callPackage ../development/libraries/audio/rtmidi { };
+  rtmidi2 = callPackage ../development/libraries/audio/rtmidi/rtmidi2.nix { };
+  rtmidi3 = callPackage ../development/libraries/audio/rtmidi/rtmidi3.nix {
+    inherit (self) rtmidi2;
+  };
+  rtmidi = rtmidi2;
 
   openmpi = callPackage ../development/libraries/openmpi { };
 
@@ -5366,6 +5370,8 @@ with pkgs;
   };
 
   vcstool = callPackage ../development/tools/vcstool { };
+
+  vcvrack = callPackage ../applications/audio/vcvrack { };
 
   verilator = callPackage ../applications/science/electronics/verilator {};
 
