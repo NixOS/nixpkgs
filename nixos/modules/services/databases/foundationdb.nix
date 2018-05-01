@@ -4,6 +4,7 @@ with lib;
 
 let
   cfg = config.services.foundationdb;
+  pkg = cfg.package;
 
   # used for initial cluster configuration
   initialIpAddr = if (cfg.publicAddress != "auto") then cfg.publicAddress else "127.0.0.1";
@@ -24,7 +25,7 @@ let
     group         = ${cfg.group}
 
     [fdbserver]
-    command        = ${pkgs.foundationdb}/bin/fdbserver
+    command        = ${pkg}/bin/fdbserver
     public_address = ${cfg.publicAddress}:$ID
     listen_address = ${cfg.listenAddress}
     datadir        = ${cfg.dataDir}/$ID
@@ -36,7 +37,7 @@ let
     storage_memory = ${cfg.storageMemory}
 
     ${optionalString (cfg.tls != null) ''
-      tls_plugin           = ${pkgs.foundationdb}/libexec/plugins/FDBLibTLS.so
+      tls_plugin           = ${pkg}/libexec/plugins/FDBLibTLS.so
       tls_certificate_file = ${cfg.tls.certificate}
       tls_key_file         = ${cfg.tls.key}
       tls_verify_peers     = ${cfg.tls.allowedPeers}
@@ -50,7 +51,7 @@ let
     ${fdbServers cfg.serverProcesses}
 
     [backup_agent]
-    command = ${pkgs.foundationdb}/libexec/backup_agent
+    command = ${pkg}/libexec/backup_agent
     ${backupAgents cfg.backupProcesses}
   '';
 in
@@ -58,6 +59,14 @@ in
   options.services.foundationdb = {
 
     enable = mkEnableOption "FoundationDB Server";
+
+    package = mkOption {
+      type        = types.package;
+      description = ''
+        The FoundationDB package to use for this server. This must be specified by the user
+        in order to ensure migrations and upgrades are controlled appropriately.
+      '';
+    };
 
     publicAddress = mkOption {
       type        = types.str;
@@ -314,7 +323,7 @@ in
     meta.doc         = ./foundationdb.xml;
     meta.maintainers = with lib.maintainers; [ thoughtpolice ];
 
-    environment.systemPackages = [ pkgs.foundationdb ];
+    environment.systemPackages = [ pkg ];
 
     users.extraUsers = optionalAttrs (cfg.user == "foundationdb") (singleton
       { name        = "foundationdb";
@@ -368,7 +377,7 @@ in
           ReadWritePaths        = lib.concatStringsSep " " (map (x: "-" + x) rwpaths);
         };
 
-      path = [ pkgs.foundationdb pkgs.coreutils ];
+      path = [ pkg pkgs.coreutils ];
 
       preStart = ''
         rm -f ${cfg.pidfile}   && \

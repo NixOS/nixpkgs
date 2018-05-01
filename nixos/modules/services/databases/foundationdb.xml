@@ -12,7 +12,7 @@
 
 <para><emphasis>Maintainer:</emphasis> Austin Seipp</para>
 
-<para><emphasis>Default version:</emphasis> 5.1.x</para>
+<para><emphasis>Available version(s):</emphasis> 5.1.x</para>
 
 <para>FoundationDB (or "FDB") is a distributed, open source, high performance,
 transactional key-value store. It can store petabytes of data and deliver
@@ -26,8 +26,16 @@ exceptional performance while maintaining consistency and ACID semantics
 
 <programlisting>
 services.foundationdb.enable = true;
+services.foundationdb.package = pkgs.foundationdb51; # FoundationDB 5.1.x
 </programlisting>
 </para>
+
+<para>The <option>services.foundationdb.package</option> option is required,
+and must always be specified. Because FoundationDB network protocols and
+on-disk storage formats may change between (major) versions, and upgrades must
+be explicitly handled by the user, you must always manually specify this
+yourself so that the NixOS module will use the proper version. Note that minor,
+bugfix releases are always compatible.</para>
 
 <para>After running <command>nixos-rebuild</command>, you can verify whether
 FoundationDB is running by executing <command>fdbcli</command> (which is added
