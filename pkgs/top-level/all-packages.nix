@@ -288,7 +288,7 @@ with pkgs;
     ... # For hash agility
   }@args: fetchzip ({
     inherit name;
-    url = "https://gitlab.com/${owner}/${repo}/-/archive/${rev}/${repo}-${rev}.tar.gz";
+    url = "https://gitlab.com/api/v4/projects/${owner}%2F${repo}/repository/archive.tar.gz?sha=${rev}";
     meta.homepage = "https://gitlab.com/${owner}/${repo}/";
   } // removeAttrs args [ "owner" "repo" "rev" ]) // { inherit rev; };
 
@@ -784,6 +784,8 @@ with pkgs;
   bashburn = callPackage ../tools/cd-dvd/bashburn { };
 
   bashmount = callPackage ../tools/filesystems/bashmount {};
+
+  bat = callPackage ../tools/misc/bat { };
 
   bc = callPackage ../tools/misc/bc { };
 
@@ -2780,8 +2782,6 @@ with pkgs;
 
   gvolicon = callPackage ../tools/audio/gvolicon {};
 
-  gwyddion = callPackage ../applications/science/chemistry/gwyddion {};
-
   gzip = callPackage ../tools/compression/gzip { };
 
   gzrt = callPackage ../tools/compression/gzrt { };
@@ -3123,8 +3123,6 @@ with pkgs;
   jl = haskellPackages.callPackage ../development/tools/jl { };
 
   jmespath = callPackage ../development/tools/jmespath { };
-
-  jmol = callPackage ../applications/science/chemistry/jmol { };
 
   jmtpfs = callPackage ../tools/filesystems/jmtpfs { };
 
@@ -3753,8 +3751,6 @@ with pkgs;
   modemmanager = callPackage ../tools/networking/modem-manager {};
 
   modsecurity_standalone = callPackage ../tools/security/modsecurity { };
-
-  molden = callPackage ../applications/science/chemistry/molden { };
 
   molly-guard = callPackage ../os-specific/linux/molly-guard { };
 
@@ -7166,8 +7162,6 @@ with pkgs;
   }));
 
   ocropus = callPackage ../applications/misc/ocropus { };
-
-  octopus = callPackage ../applications/science/chemistry/octopus { openblas=openblasCompat; };
 
   inherit (callPackages ../development/interpreters/perl {}) perl perl522 perl524 perl526;
 
@@ -12451,6 +12445,8 @@ with pkgs;
 
   lwan = callPackage ../servers/http/lwan { };
 
+  labelImg = callPackage ../applications/science/machine-learning/labelimg { };
+
   mailman = callPackage ../servers/mail/mailman { };
 
   mattermost = callPackage ../servers/mattermost { };
@@ -12927,8 +12923,11 @@ with pkgs;
 
   axis2 = callPackage ../servers/http/tomcat/axis2 { };
 
-  unifi = callPackage ../servers/unifi { };
-  unifiLTS = callPackage ../servers/unifi { useLTS=true; };
+  inherit (callPackages ../servers/unifi { })
+    unifiLTS
+    unifiStable
+    unifiTesting;
+  unifi = unifiStable;
 
   virtuoso6 = callPackage ../servers/sql/virtuoso/6.x.nix { };
 
@@ -14857,10 +14856,6 @@ with pkgs;
 
   avidemux = libsForQt5.callPackage ../applications/video/avidemux { };
 
-  avogadro = callPackage ../applications/science/chemistry/avogadro {
-    eigen = eigen2;
-  };
-
   avrdudess = callPackage ../applications/misc/avrdudess { };
 
   avxsynth = callPackage ../applications/video/avxsynth {
@@ -15967,11 +15962,7 @@ with pkgs;
   gmrun = callPackage ../applications/misc/gmrun {};
 
   gnucash = callPackage ../applications/office/gnucash {
-    inherit (gnome2) libgnomeui libgtkhtml gtkhtml libbonoboui libgnomeprint libglade libart_lgpl;
-    gconf = gnome2.GConf;
-    guile = guile_1_8;
-    slibGuile = slibGuile.override { scheme = guile_1_8; };
-    goffice = goffice_0_8;
+    inherit (gnome3) dconf;
   };
 
   gnucash26 = lowPrio (callPackage ../applications/office/gnucash/2.6.nix {
@@ -17420,8 +17411,6 @@ with pkgs;
   puredata-with-plugins = plugins: callPackage ../applications/audio/puredata/wrapper.nix { inherit plugins; };
 
   puremapping = callPackage ../applications/audio/pd-plugins/puremapping { };
-
-  pymol = callPackage ../applications/science/chemistry/pymol { };
 
   pybitmessage = callPackage ../applications/networking/instant-messengers/pybitmessage { };
 
@@ -19753,6 +19742,22 @@ with pkgs;
 
   ### SCIENCE
 
+  ### SCIENCE/CHEMISTY
+
+  avogadro = callPackage ../applications/science/chemistry/avogadro {
+    eigen = eigen2;
+  };
+
+  gwyddion = callPackage ../applications/science/chemistry/gwyddion {};
+
+  jmol = callPackage ../applications/science/chemistry/jmol { };
+
+  molden = callPackage ../applications/science/chemistry/molden { };
+
+  octopus = callPackage ../applications/science/chemistry/octopus { openblas=openblasCompat; };
+
+  pymol = callPackage ../applications/science/chemistry/pymol { };
+
   ### SCIENCE/GEOMETRY
 
   drgeo = callPackage ../applications/science/geometry/drgeo {
@@ -19776,6 +19781,10 @@ with pkgs;
   bedtools = callPackage ../applications/science/biology/bedtools/default.nix { };
 
   bcftools = callPackage ../applications/science/biology/bcftools { };
+
+  conglomerate = callPackage ../applications/science/biology/conglomerate {
+    inherit (perlPackages) GetoptTabular MNI-Perllib;
+  };
 
   dcm2niix = callPackage ../applications/science/biology/dcm2niix { };
 
