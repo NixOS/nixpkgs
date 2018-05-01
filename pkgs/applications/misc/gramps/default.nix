@@ -51,7 +51,7 @@ in buildPythonApplication rec {
 
   meta = with stdenv.lib; {
     description = "Genealogy software";
-    homepage = http://gramps-project.org;
+    homepage = https://gramps-project.org;
     license = licenses.gpl2;
   };
 }
