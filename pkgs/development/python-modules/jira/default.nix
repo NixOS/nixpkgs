@@ -1,5 +1,5 @@
-{ lib, buildPythonPackage, fetchPypi, pytest, pytestrunner, pbr, glibcLocales
-, pytestcov
+{ lib, buildPythonPackage, fetchPypi, isPy3k
+, pytest, pytestrunner, pbr, glibcLocales , pytestcov
 , requests, requests_oauthlib, requests_toolbelt, defusedxml }:
 
 buildPythonPackage rec {
@@ -15,6 +15,8 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ requests requests_oauthlib requests_toolbelt defusedxml ];
 
   LC_ALL = "en_US.utf8";
+
+  disabled = !isPy3k;
 
   # no tests in release tarball
   doCheck = false;
