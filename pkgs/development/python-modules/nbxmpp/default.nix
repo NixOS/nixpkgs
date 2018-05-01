@@ -2,7 +2,7 @@
 
 buildPythonPackage rec {
   pname = "nbxmpp";
-  version = "0.6.4";
+  version = "0.6.5";
   name = "${pname}-${version}";
 
   # Tests aren't included in PyPI tarball.
@@ -10,7 +10,7 @@ buildPythonPackage rec {
     name = "${name}.tar.bz2";
     url = "https://dev.gajim.org/gajim/python-nbxmpp/repository/archive.tar.bz2?"
         + "ref=${name}";
-    sha256 = "0mikgksf01w82wnnm0phmzkijk2c93g24fzd59s71n3zy7f7dx3l";
+    sha256 = "0b7jw07s4mnp20gcg8raw4bhw2h1hxf75cbn4f2ynj69fbpfr38h";
   };
 
   propagatedBuildInputs = [ pyopenssl ];
