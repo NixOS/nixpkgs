@@ -41,7 +41,7 @@ let
     propagatedBuildInputs = [ boehmgc ];
 
     # Seems to be required when using std::atomic with 64-bit types
-    NIX_LDFLAGS = lib.optionalString (stdenv.system == "armv6l-linux") "-latomic";
+    NIX_LDFLAGS = lib.optionalString (stdenv.hostPlatform.system == "armv6l-linux") "-latomic";
 
     configureFlags =
       [ "--with-store-dir=${storeDir}"
