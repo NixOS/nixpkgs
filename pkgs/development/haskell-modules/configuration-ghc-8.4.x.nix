@@ -555,7 +555,7 @@ self: super: {
   });
 
   # Older versions don't compile.
-  brick = self.brick_0_36_2;
+  brick = self.brick_0_36_3;
   HaTeX = self.HaTeX_3_19_0_0;
   hpack = self.hpack_0_28_2;
   hspec-smallcheck = self.hspec-smallcheck_0_5_2;
