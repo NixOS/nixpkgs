@@ -12,15 +12,18 @@ interfaces.  However, you can configure an interface manually as
 follows:
 
 <programlisting>
-networking.interfaces.eth0.ipv4.addresses = [ { address = "192.168.1.2"; prefixLength = 24; } ];
+<link linkend="opt-networking.interfaces._name__.ipv4.addresses">networking.interfaces.eth0.ipv4.addresses</link> = [ {
+  address = "192.168.1.2";
+  prefixLength = 24;
+} ];
 </programlisting>
 
 Typically you’ll also want to set a default gateway and set of name
 servers:
 
 <programlisting>
-networking.defaultGateway = "192.168.1.1";
-networking.nameservers = [ "8.8.8.8" ];
+<xref linkend="opt-networking.defaultGateway"/> = "192.168.1.1";
+<xref linkend="opt-networking.nameservers"/> = [ "8.8.8.8" ];
 </programlisting>
 
 </para>
@@ -31,10 +34,10 @@ service
 The default gateway and name server configuration is performed by
 <literal>network-setup.service</literal>.</para></note>
 
-<para>The host name is set using <option>networking.hostName</option>:
+<para>The host name is set using <xref linkend="opt-networking.hostName"/>:
 
 <programlisting>
-networking.hostName = "cartman";
+<xref linkend="opt-networking.hostName"/> = "cartman";
 </programlisting>
 
 The default host name is <literal>nixos</literal>.  Set it to the

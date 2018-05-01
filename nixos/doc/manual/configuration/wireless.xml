@@ -15,12 +15,12 @@ section on wireless networks.</para>
 NixOS will start wpa_supplicant for you if you enable this setting:
 
 <programlisting>
-networking.wireless.enable = true;
+<xref linkend="opt-networking.wireless.enable"/> = true;
 </programlisting>
 
 NixOS lets you specify networks for wpa_supplicant declaratively:
 <programlisting>
-networking.wireless.networks = {
+<xref linkend="opt-networking.wireless.networks"/> = {
   echelon = {
     psk = "abcdefgh";
   };

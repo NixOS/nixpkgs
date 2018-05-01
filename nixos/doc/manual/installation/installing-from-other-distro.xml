@@ -111,7 +111,7 @@ $ nix-channel --add https://nixos.org/channels/nixos-<replaceable>version</repla
                 <literal>configuration.nix</literal>:</para>
 
             <programlisting>
-boot.loader.grub.extraEntries = ''
+<xref linkend="opt-boot.loader.grub.extraEntries"/> = ''
   menuentry "Ubuntu" {
     search --set=ubuntu --fs-uuid 3cc3e652-0c1f-4800-8451-033754f68e6e
     configfile "($ubuntu)/boot/grub/grub.cfg"
@@ -183,7 +183,9 @@ $ sudo groupdel nixbld</screen>
                 account with <literal>sudo passwd -l root</literal> if you use
                 <literal>sudo</literal>)</para>
 
-            <programlisting>users.extraUsers.root.initialHashedPassword = "";</programlisting>
+              <programlisting>
+<link linkend="opt-users.users._name__.initialHashedPassword">users.extraUsers.root.initialHashedPassword</link> = "";
+              </programlisting>
         </listitem>
 
         <listitem>
@@ -243,13 +245,15 @@ $ sudo groupdel nixbld</screen>
 
             <screen>
 $ sudo touch /etc/NIXOS
-$ sudo touch /etc/NIXOS_LUSTRATE</screen>
+$ sudo touch /etc/NIXOS_LUSTRATE
+            </screen>
 
             <para>Let's also make sure the NixOS configuration files are kept
                 once we reboot on NixOS:</para>
 
             <screen>
-$ echo etc/nixos | sudo tee -a /etc/NIXOS_LUSTRATE</screen>
+$ echo etc/nixos | sudo tee -a /etc/NIXOS_LUSTRATE
+            </screen>
         </listitem>
 
         <listitem>

@@ -30,8 +30,8 @@ line. For instance, to create a container that has
 
 <screen>
 # nixos-container create foo --config '
-  services.openssh.enable = true;
-  users.extraUsers.root.openssh.authorizedKeys.keys = ["ssh-dss AAAAB3N…"];
+  <xref linkend="opt-services.openssh.enable"/> = true;
+  <link linkend="opt-users.users._name__.openssh.authorizedKeys.keys">users.extraUsers.root.openssh.authorizedKeys.keys</link> = ["ssh-dss AAAAB3N…"];
 '
 </screen>
 
@@ -100,9 +100,9 @@ specify a new configuration on the command line:
 
 <screen>
 # nixos-container update foo --config '
-  services.httpd.enable = true;
-  services.httpd.adminAddr = "foo@example.org";
-  networking.firewall.allowedTCPPorts = [ 80 ];
+  <xref linkend="opt-services.httpd.enable"/> = true;
+  <xref linkend="opt-services.httpd.adminAddr"/> = "foo@example.org";
+  <xref linkend="opt-networking.firewall.allowedTCPPorts"/> = [ 80 ];
 '
 
 # curl http://$(nixos-container show-ip foo)/

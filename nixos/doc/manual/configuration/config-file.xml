@@ -28,9 +28,9 @@ form <literal><replaceable>name</replaceable> =
 <programlisting>
 { config, pkgs, ... }:
 
-{ services.httpd.enable = true;
-  services.httpd.adminAddr = "alice@example.org";
-  services.httpd.documentRoot = "/webroot";
+{ <xref linkend="opt-services.httpd.enable"/> = true;
+  <xref linkend="opt-services.httpd.adminAddr"/> = "alice@example.org";
+  <xref linkend="opt-services.httpd.documentRoot"/> = "/webroot";
 }
 </programlisting>
 
@@ -40,7 +40,7 @@ the document root.</para>
 
 <para>Sets can be nested, and in fact dots in option names are
 shorthand for defining a set containing another set.  For instance,
-<option>services.httpd.enable</option> defines a set named
+<xref linkend="opt-services.httpd.enable"/> defines a set named
 <varname>services</varname> that contains a set named
 <varname>httpd</varname>, which in turn contains an option definition
 named <varname>enable</varname> with value <literal>true</literal>.
@@ -89,7 +89,7 @@ The option value `services.httpd.enable' in `/etc/nixos/configuration.nix' is no
       <para>Strings are enclosed in double quotes, e.g.
 
 <programlisting>
-networking.hostName = "dexter";
+<xref linkend="opt-networking.hostName"/> = "dexter";
 </programlisting>
 
       Special characters can be escaped by prefixing them with a
@@ -99,7 +99,7 @@ networking.hostName = "dexter";
       single quotes</emphasis>, e.g.
 
 <programlisting>
-networking.extraHosts =
+<xref linkend="opt-networking.extraHosts"/> =
   ''
     127.0.0.2 other-localhost
     10.0.0.1 server
@@ -125,8 +125,8 @@ networking.extraHosts =
       <literal>false</literal>, e.g.
 
 <programlisting>
-networking.firewall.enable = true;
-networking.firewall.allowPing = false;
+<xref linkend="opt-networking.firewall.enable"/> = true;
+<xref linkend="opt-networking.firewall.allowPing"/> = false;
 </programlisting>
       </para>
     </listitem>
@@ -138,7 +138,7 @@ networking.firewall.allowPing = false;
       <para>For example,
 
 <programlisting>
-boot.kernel.sysctl."net.ipv4.tcp_keepalive_time" = 60;
+<xref linkend="opt-boot.kernel.sysctl"/>."net.ipv4.tcp_keepalive_time" = 60;
 </programlisting>
 
       (Note that here the attribute name
@@ -158,7 +158,7 @@ boot.kernel.sysctl."net.ipv4.tcp_keepalive_time" = 60;
       enclosed in braces, as in the option definition
 
 <programlisting>
-fileSystems."/boot" =
+<xref linkend="opt-fileSystems"/>."/boot" =
   { device = "/dev/sda1";
     fsType = "ext4";
     options = [ "rw" "data=ordered" "relatime" ];
@@ -175,7 +175,7 @@ fileSystems."/boot" =
       elements are separated by whitespace, like this:
 
 <programlisting>
-boot.kernelModules = [ "fuse" "kvm-intel" "coretemp" ];
+<xref linkend="opt-boot.kernelModules"/> = [ "fuse" "kvm-intel" "coretemp" ];
 </programlisting>
 
       List elements can be any other type, e.g. sets:
@@ -195,12 +195,12 @@ swapDevices = [ { device = "/dev/disk/by-label/swap"; } ];
       the function argument <varname>pkgs</varname>.  Typical uses:
 
 <programlisting>
-environment.systemPackages =
+<xref linkend="opt-environment.systemPackages"/> =
   [ pkgs.thunderbird
     pkgs.emacs
   ];
 
-postgresql.package = pkgs.postgresql90;
+<xref linkend="opt-services.postgresql.package"/> = pkgs.postgresql90;
 </programlisting>
 
       The latter option definition changes the default PostgreSQL
