@@ -138,7 +138,6 @@
       ngircd = 112;
       btsync = 113;
       minecraft = 114;
-      #monetdb = 115; # unused (not packaged), removed 2016-09-19
       vault = 115;
       rippled = 116;
       murmur = 117;
@@ -306,6 +305,7 @@
       monero = 287;
       ceph = 288;
       duplicati = 289;
+      monetdb = 290;
 
       # When adding a uid, make sure it doesn't match an existing gid. And don't use uids above 399!
 
@@ -424,7 +424,6 @@
       #ngircd = 112; # unused
       btsync = 113;
       #minecraft = 114; # unused
-      #monetdb = 115; # unused (not packaged), removed 2016-09-19
       vault = 115;
       #ripped = 116; # unused
       #murmur = 117; # unused
@@ -580,6 +579,7 @@
       monero = 287;
       ceph = 288;
       duplicati = 289;
+      monetdb = 290;
 
       # When adding a gid, make sure it doesn't match an existing
       # uid. Users and groups with the same name should have equal
