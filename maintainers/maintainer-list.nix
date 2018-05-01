@@ -3979,6 +3979,11 @@
     github = "vyp";
     name = "vyp";
   };
+  wchresta = {
+    email = "wchresta.nix@chrummibei.ch";
+    github = "wchresta";
+    name = "wchresta";
+  };
   wedens = {
     email = "kirill.wedens@gmail.com";
     name = "wedens";
