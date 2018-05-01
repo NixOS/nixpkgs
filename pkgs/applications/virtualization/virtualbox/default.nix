@@ -21,10 +21,10 @@ let
   buildType = "release";
   # Manually sha256sum the extensionPack file, must be hex!
   # Do not forget to update the hash in ./guest-additions/default.nix!
-  extpack = "355ea5fe047f751534720c65398b44290d53f389e0f5f66818f3f36746631d26";
-  extpackRev = "121009";
-  main = "ee2759d47b0b4ac81b8b671c9485c87fb2db12c097b3e7e69b94c1291a8084e8";
-  version = "5.2.8";
+  extpack = "5eef217dbe0a8e8caf383ea8db83344517af0f9093041b5345c8468a427b327b";
+  extpackRev = "122406";
+  main = "1k14ngz1gcz02qwbpzfp4kgxv8s24js8pwd5nyyqs6jpxx6557pd";
+  version = "5.2.10";
 
   # See https://github.com/NixOS/nixpkgs/issues/672 for details
   extensionPack = requireFile rec {
