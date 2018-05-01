@@ -17,9 +17,7 @@ in
 
 {
   options.virtualisation.virtualbox.host = {
-    enable = mkOption {
-      type = types.bool;
-      default = false;
+    enable = mkEnableOption "VirtualBox" // {
       description = ''
         Whether to enable VirtualBox.
 
