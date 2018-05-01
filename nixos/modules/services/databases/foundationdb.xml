@@ -254,7 +254,6 @@ only undergone fairly basic testing of all the available functionality.</para>
       </para></listitem>
   <listitem><para>Python bindings are not currently installed.</para></listitem>
   <listitem><para>Ruby bindings are not currently installed.</para></listitem>
-  <listitem><para>Java bindings are not currently installed.</para></listitem>
   <listitem><para>Go bindings are not currently installed.</para></listitem>
 </itemizedlist>
 
