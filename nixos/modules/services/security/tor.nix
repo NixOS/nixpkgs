@@ -39,7 +39,7 @@ let
     ''}
 
     ${optint "ControlPort" cfg.controlPort}
-    ${optionalString cfg.controlSocket.enable "ControlSocket ${torRunDirectory}/control GroupWritable RelaxDirModeCheck"}
+    ${optionalString cfg.controlSocket.enable "ControlPort unix:${torRunDirectory}/control GroupWritable RelaxDirModeCheck"}
   ''
   # Client connection config
   + optionalString cfg.client.enable ''
