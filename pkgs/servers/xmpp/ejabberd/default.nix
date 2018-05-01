@@ -28,7 +28,7 @@ in stdenv.mkDerivation rec {
   name = "ejabberd-${version}";
 
   src = fetchurl {
-    url = "http://www.process-one.net/downloads/ejabberd/${version}/${name}.tgz";
+    url = "https://www.process-one.net/downloads/ejabberd/${version}/${name}.tgz";
     sha256 = "01i2n8mlgw293jdf4172f9q8ca8m35vysjws791p7nynpfdb4cn6";
   };
 
@@ -111,7 +111,7 @@ in stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     description = "Open-source XMPP application server written in Erlang";
     license = licenses.gpl2;
-    homepage = http://www.ejabberd.im;
+    homepage = https://www.ejabberd.im;
     platforms = platforms.linux;
     maintainers = with maintainers; [ sander abbradar ];
     broken = withElixir;

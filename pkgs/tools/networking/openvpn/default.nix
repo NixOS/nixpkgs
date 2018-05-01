@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   version = "2.4.6";
 
   src = fetchurl {
-    url = "http://swupdate.openvpn.net/community/releases/${name}.tar.xz";
+    url = "https://swupdate.openvpn.net/community/releases/${name}.tar.xz";
     sha256 = "09lck4wmkas3iyrzaspin9gn3wiclqb1m9sf8diy7j8wakx38r2g";
   };
 
@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "A robust and highly flexible tunneling application";
-    homepage = http://openvpn.net/;
+    homepage = https://openvpn.net/;
     downloadPage = "https://openvpn.net/index.php/open-source/downloads.html";
     license = stdenv.lib.licenses.gpl2;
     maintainers = [ stdenv.lib.maintainers.viric ];
