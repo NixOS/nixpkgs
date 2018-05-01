@@ -5,7 +5,7 @@ all: manual-combined.xml format
 debug: generated manual-combined.xml
 
 manual-combined.xml: generated *.xml
-	rm ./manual-combined.xml
+	rm -f ./manual-combined.xml
 	nix-shell --packages xmloscopy \
 		--run "xmloscopy --docbook5 ./manual.xml ./manual-combined.xml"
 
