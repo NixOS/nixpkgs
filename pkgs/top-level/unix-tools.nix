@@ -13,18 +13,22 @@
 let
 
   singleBinary = cmd: providers: let
-      provider = "${lib.getBin providers.${hostPlatform.parsed.kernel.name}}/bin/${cmd}";
+      provider = lib.getBin providers.${hostPlatform.parsed.kernel.name};
     in runCommand cmd {
       meta.platforms = map (n: { kernel.name = n; }) (pkgs.lib.attrNames providers);
     } ''
-      mkdir -p $out/bin
+      mkdir -p $out/bin $out/share/man/man1
 
-      if ! [ -x "${provider}" ]; then
+      if ! [ -x "${provider}/bin/${cmd}" ]; then
         echo "Cannot find command ${cmd}"
         exit 1
       fi
 
-      cp "${provider}" "$out/bin/${cmd}"
+      cp "${provider}/bin/${cmd}" "$out/bin/${cmd}"
+
+      if [ -f "${provider}/share/man/man1/${cmd}.1.gz" ]; then
+        cp "${provider}/share/man/man1/${cmd}.1.gz" "$out/share/man/man1/${cmd}.1.gz"
+      fi
     '';
 
 in rec {
