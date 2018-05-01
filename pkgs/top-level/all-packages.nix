@@ -5736,6 +5736,8 @@ with pkgs;
 
   xml2 = callPackage ../tools/text/xml/xml2 { };
 
+  xmlformat = callPackage ../tools/text/xml/xmlformat { };
+
   xmlroff = callPackage ../tools/typesetting/xmlroff { };
 
   xmloscopy = callPackage ../tools/text/xml/xmloscopy { };
