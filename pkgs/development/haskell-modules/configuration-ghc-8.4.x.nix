@@ -191,20 +191,6 @@ self: super: {
   });
 
   singletons = super.singletons_2_4_1;
-
-  ## Upstreamed, awaiting a Hackage release
-  tar = overrideCabal super.tar (drv: {
-    ##     • No instance for (Semigroup (Entries e))
-    ##         arising from the superclasses of an instance declaration
-    ##     • In the instance declaration for ‘Monoid (Entries e)’
-    src = pkgs.fetchFromGitHub {
-      owner  = "haskell";
-      repo   = "tar";
-      rev    = "abf2ccb8f7da0514343a0b2624cabebe081bdfa8";
-      sha256 = "0s33lgrr574i1r7zc1jqahnwx3dv47ny30mbx5zfpdzjw0jdl5ny";
-    };
-  });
-
   th-desugar = super.th-desugar_1_8;
 
   ## Upstreamed, awaiting a Hackage release
