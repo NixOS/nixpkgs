@@ -2,7 +2,7 @@
 # Do not edit!
 
 {
-  version = "0.67.1";
+  version = "0.68.0";
   components = {
     "abode" = ps: with ps; [  ];
     "ads" = ps: with ps; [  ];
@@ -86,7 +86,7 @@
     "device_tracker.unifi" = ps: with ps; [ pyunifi ];
     "device_tracker.unifi_direct" = ps: with ps; [ pexpect ];
     "device_tracker.upc_connect" = ps: with ps; [ defusedxml ];
-    "device_tracker.xiaomi_miio" = ps: with ps; [  ];
+    "device_tracker.xiaomi_miio" = ps: with ps; [ construct ];
     "digital_ocean" = ps: with ps; [ digital-ocean ];
     "discovery" = ps: with ps; [ netdisco ];
     "dominos" = ps: with ps; [  ];
@@ -99,10 +99,12 @@
     "emulated_hue" = ps: with ps; [ aiohttp-cors ];
     "enocean" = ps: with ps; [  ];
     "envisalink" = ps: with ps; [  ];
+    "eufy" = ps: with ps; [  ];
     "fan.xiaomi_miio" = ps: with ps; [ construct ];
     "feedreader" = ps: with ps; [ feedparser ];
     "ffmpeg" = ps: with ps; [ ha-ffmpeg ];
     "folder_watcher" = ps: with ps; [ watchdog ];
+    "fritzbox" = ps: with ps; [  ];
     "frontend" = ps: with ps; [  ];
     "gc100" = ps: with ps; [  ];
     "goalfeed" = ps: with ps; [  ];
@@ -110,6 +112,7 @@
     "hdmi_cec" = ps: with ps; [  ];
     "hive" = ps: with ps; [  ];
     "homekit" = ps: with ps; [  ];
+    "homekit_controller" = ps: with ps; [  ];
     "homematic" = ps: with ps; [ pyhomematic ];
     "homematicip_cloud" = ps: with ps; [  ];
     "http" = ps: with ps; [ aiohttp-cors ];
@@ -166,6 +169,7 @@
     "media_extractor" = ps: with ps; [  ];
     "media_player.anthemav" = ps: with ps; [  ];
     "media_player.aquostv" = ps: with ps; [  ];
+    "media_player.blackbird" = ps: with ps; [  ];
     "media_player.bluesound" = ps: with ps; [ xmltodict ];
     "media_player.braviatv" = ps: with ps; [  ];
     "media_player.cast" = ps: with ps; [ PyChromecast ];
@@ -294,7 +298,6 @@
     "sensor.dovado" = ps: with ps; [  ];
     "sensor.dsmr" = ps: with ps; [  ];
     "sensor.dweet" = ps: with ps; [  ];
-    "sensor.ebox" = ps: with ps; [  ];
     "sensor.eddystone_temperature" = ps: with ps; [ construct ];
     "sensor.eliqonline" = ps: with ps; [  ];
     "sensor.envirophat" = ps: with ps; [  ];
@@ -354,6 +357,7 @@
     "sensor.serial" = ps: with ps; [  ];
     "sensor.serial_pm" = ps: with ps; [  ];
     "sensor.shodan" = ps: with ps; [  ];
+    "sensor.sht31" = ps: with ps; [  ];
     "sensor.sma" = ps: with ps; [  ];
     "sensor.snmp" = ps: with ps; [ pysnmp ];
     "sensor.sochain" = ps: with ps; [  ];
@@ -378,6 +382,7 @@
     "sensor.twitch" = ps: with ps; [  ];
     "sensor.uber" = ps: with ps; [  ];
     "sensor.ups" = ps: with ps; [  ];
+    "sensor.uscis" = ps: with ps; [  ];
     "sensor.vasttrafik" = ps: with ps; [  ];
     "sensor.waqi" = ps: with ps; [  ];
     "sensor.waze_travel_time" = ps: with ps; [  ];
@@ -434,7 +439,7 @@
     "twilio" = ps: with ps; [ twilio ];
     "upcloud" = ps: with ps; [  ];
     "updater" = ps: with ps; [ distro ];
-    "upnp" = ps: with ps; [ miniupnpc ];
+    "upnp" = ps: with ps; [  ];
     "usps" = ps: with ps; [  ];
     "vacuum.roomba" = ps: with ps; [  ];
     "vacuum.xiaomi_miio" = ps: with ps; [ construct ];

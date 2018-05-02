@@ -1,12 +1,12 @@
 { stdenv, curl, fetchFromGitHub, cjson, olm, luaffi }:
 
 stdenv.mkDerivation {
-  name = "weechat-matrix-bridge-2017-03-28";
+  name = "weechat-matrix-bridge-2018-01-10";
   src = fetchFromGitHub {
     owner = "torhve";
     repo = "weechat-matrix-protocol-script";
-    rev = "0052e7275ae149dc5241226391c9b1889ecc3c6b";
-    sha256 = "14x58jd44g08sfnp1gx74gq2na527v5jjpsvv1xx4b8mixwy20hi";
+    rev = "a8e4ce04665c09ee7f24d6b319cd85cfb56dfbd7";
+    sha256 = "0822xcxvwanwm8qbzqhn3f1m6hhxs29pyf8lnv6v29bl8136vcq3";
   };
 
   patches = [

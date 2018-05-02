@@ -24,7 +24,7 @@ manual.  Finally, you add it to
 <literal>environment.systemPackages</literal>, e.g.
 
 <programlisting>
-environment.systemPackages = [ pkgs.my-package ];
+<xref linkend="opt-environment.systemPackages"/> = [ pkgs.my-package ];
 </programlisting>
 
 and you run <command>nixos-rebuild</command>, specifying your own
@@ -41,7 +41,7 @@ Nixpkgs tree.  For instance, here is how you specify a build of the
 package directly in <filename>configuration.nix</filename>:
 
 <programlisting>
-environment.systemPackages =
+<xref linkend="opt-environment.systemPackages"/> =
   let
     my-hello = with pkgs; stdenv.mkDerivation rec {
       name = "hello-2.8";
@@ -57,7 +57,7 @@ environment.systemPackages =
 Of course, you can also move the definition of
 <literal>my-hello</literal> into a separate Nix expression, e.g.
 <programlisting>
-environment.systemPackages = [ (import ./my-hello.nix) ];
+<xref linkend="opt-environment.systemPackages"/> = [ (import ./my-hello.nix) ];
 </programlisting>
 where <filename>my-hello.nix</filename> contains:
 <programlisting>

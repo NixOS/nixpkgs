@@ -183,6 +183,7 @@ mapAliases (rec {
   mysqlWorkbench = mysql-workbench; # added 2017-01-19
   nagiosPluginsOfficial = monitoring-plugins;
   ncat = nmap;  # added 2016-01-26
+  netcat-openbsd = libressl.nc; # added 2018-04-25
   networkmanager_fortisslvpn = networkmanager-fortisslvpn; # added 2018-02-25
   networkmanager_iodine = networkmanager-iodine; # added 2018-02-25
   networkmanager_l2tp = networkmanager-l2tp; # added 2018-02-25

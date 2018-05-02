@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
 
     homepage = http://www.gnu.org/software/pies/;
 
-    platforms = stdenv.lib.platforms.gnu;
+    platforms = stdenv.lib.platforms.gnu ++ stdenv.lib.platforms.linux;
     maintainers = [ ];
   };
 }

@@ -1241,7 +1241,7 @@
     name = "Mabry Cervin";
   };
   eqyiel = {
-    email = "r@rkm.id.au";
+    email = "ruben@maher.fyi";
     github = "eqyiel";
     name = "Ruben Maher";
   };
@@ -1726,6 +1726,11 @@
     github = "jbedo";
     name = "Justin Bedő";
   };
+  jbgi = {
+    email = "jb@giraudeau.info";
+    github = "jbgi";
+    name = "Jean-Baptiste Giraudeau";
+  };
   jcumming = {
     email = "jack@mudshark.org";
     name = "Jack Cummings";
@@ -1754,6 +1759,11 @@
     email = "james@yamtime.com";
     github = "tftio";
     name = "James Felix Black";
+  };
+  jflanglois = {
+    email = "yourstruly@julienlanglois.me";
+    github = "jflanglois";
+    name = "Julien Langlois";
   };
   jfrankenau = {
     email = "johannes@frankenau.net";
@@ -2520,6 +2530,11 @@
     email = "fr.st-amour@gmail.com";
     github = "fstamour";
     name = "Francis St-Amour";
+  };
+  mrkkrp = {
+    email = "markkarpov92@gmail.com";
+    github = "mrkkrp";
+    name = "Mark Karpov";
   };
   mrVanDalo = {
     email = "contact@ingolf-wagner.de";
@@ -4039,7 +4054,7 @@
   xeji = {
     email = "xeji@cat3.de";
     github = "xeji";
-    name = "xeji";
+    name = "Uli Baum";
   };
   xnaveira = {
     email = "xnaveira@gmail.com";

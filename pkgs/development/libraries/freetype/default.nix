@@ -52,7 +52,7 @@ in stdenv.mkDerivation rec {
   configureFlags = [ "--disable-static" "--bindir=$(dev)/bin" ];
 
   # The asm for armel is written with the 'asm' keyword.
-  CFLAGS = optionalString stdenv.isArm "-std=gnu99";
+  CFLAGS = optionalString stdenv.isAarch32 "-std=gnu99";
 
   enableParallelBuilding = true;
 

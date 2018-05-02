@@ -79,7 +79,7 @@ in stdenv.mkDerivation rec {
     "-Dsystem-gid-max=499"
     # "-Dtime-epoch=1"
 
-    (if stdenv.isArm || stdenv.isAarch64 || !hostPlatform.isEfi then "-Dgnu-efi=false" else "-Dgnu-efi=true")
+    (if stdenv.isAarch32 || stdenv.isAarch64 || !hostPlatform.isEfi then "-Dgnu-efi=false" else "-Dgnu-efi=true")
     "-Defi-libdir=${toString gnu-efi}/lib"
     "-Defi-includedir=${toString gnu-efi}/include/efi"
     "-Defi-ldsdir=${toString gnu-efi}/lib"

@@ -64,8 +64,8 @@ stdenv.mkDerivation rec {
 
     # https://sourceware.org/bugzilla/show_bug.cgi?id=22868
     ./gold-symbol-visibility.patch
-
-  ] ++ stdenv.lib.optionals targetPlatform.isAarch64 [
+  ] ++ stdenv.lib.optional targetPlatform.isiOS ./support-ios.patch
+    ++ stdenv.lib.optionals targetPlatform.isAarch64 [
     # Version 2.30 introduced strict requirements on ELF relocations which cannot
     # be satisfied on aarch64 platform. Add backported fix from bugzilla.
     # https://sourceware.org/bugzilla/show_bug.cgi?id=22764
@@ -106,7 +106,7 @@ stdenv.mkDerivation rec {
   # TODO(@Ericson2314): Always pass "--target" and always targetPrefix.
   configurePlatforms =
     # TODO(@Ericson2314): Figure out what's going wrong with Arm
-    if buildPlatform == hostPlatform && hostPlatform == targetPlatform && targetPlatform.isArm
+    if buildPlatform == hostPlatform && hostPlatform == targetPlatform && targetPlatform.isAarch32
     then []
     else [ "build" "host" ] ++ stdenv.lib.optional (targetPlatform != hostPlatform) "target";
 

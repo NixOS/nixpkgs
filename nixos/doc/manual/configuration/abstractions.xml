@@ -11,7 +11,7 @@ to abstract.  Take, for instance, this Apache HTTP Server configuration:
 
 <programlisting>
 {
-  services.httpd.virtualHosts =
+  <xref linkend="opt-services.httpd.virtualHosts"/> =
     [ { hostName = "example.org";
         documentRoot = "/webroot";
         adminAddr = "alice@example.org";
@@ -43,7 +43,7 @@ let
     };
 in
 {
-  services.httpd.virtualHosts =
+  <xref linkend="opt-services.httpd.virtualHosts"/> =
     [ exampleOrgCommon
       (exampleOrgCommon // {
         enableSSL = true;
@@ -66,7 +66,7 @@ allowed.  Thus, you also could have written:
 
 <programlisting>
 {
-  services.httpd.virtualHosts =
+  <xref linkend="opt-services.httpd.virtualHosts"/> =
     let exampleOrgCommon = <replaceable>...</replaceable>; in
     [ exampleOrgCommon
       (exampleOrgCommon // { <replaceable>...</replaceable> })
@@ -86,7 +86,7 @@ the host name.  This can be done as follows:
 
 <programlisting>
 {
-  services.httpd.virtualHosts =
+  <xref linkend="opt-services.httpd.virtualHosts"/> =
     let
       makeVirtualHost = name:
         { hostName = name;
@@ -113,7 +113,7 @@ element in a list:
 
 <programlisting>
 {
-  services.httpd.virtualHosts =
+  <xref linkend="opt-services.httpd.virtualHosts"/> =
     let
       makeVirtualHost = <replaceable>...</replaceable>;
     in map makeVirtualHost
@@ -132,7 +132,7 @@ function that takes a <emphasis>set</emphasis> as its argument, like this:
 
 <programlisting>
 {
-  services.httpd.virtualHosts =
+  <xref linkend="opt-services.httpd.virtualHosts"/> =
     let
       makeVirtualHost = { name, root }:
         { hostName = name;

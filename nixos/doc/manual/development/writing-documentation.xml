@@ -18,12 +18,24 @@
 <para>
   The DocBook sources of the <xref linkend="book-nixos-manual"/> are in the
   <link xlink:href="https://github.com/NixOS/nixpkgs/tree/master/nixos/doc/manual"><filename>nixos/doc/manual</filename></link>
-  subdirectory of the Nixpkgs repository. If you make modifications to
-  the manual, it's important to build it before committing. You can do
-  that as follows:
-
-  <screen>nix-build nixos/release.nix -A manual.x86_64-linux</screen>
+  subdirectory of the Nixpkgs repository.
 </para>
+
+<para>
+  You can quickly validate your edits with <command>make</command>:
+</para>
+
+<screen>
+  $ cd /path/to/nixpkgs/nixos/doc/manual
+  $ make
+</screen>
+
+<para>
+  Once you are done making modifications to the manual, it's important
+  to build it before committing. You can do that as follows:
+</para>
+
+<screen>nix-build nixos/release.nix -A manual.x86_64-linux</screen>
 
 <para>
   When this command successfully finishes, it will tell you where the

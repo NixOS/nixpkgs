@@ -1,7 +1,7 @@
-{ stdenv, pythonPackages, fetchFromGitHub }:
+{ stdenv, python3Packages, fetchFromGitHub }:
 
-pythonPackages.buildPythonApplication rec {
-  name = "remarshal-${version}";
+python3Packages.buildPythonApplication rec {
+  pname = "remarshal";
   version = "0.7.0";
 
   src = fetchFromGitHub {
@@ -11,10 +11,8 @@ pythonPackages.buildPythonApplication rec {
     sha256 = "1wsgvzfp40lvly7nyyhv9prip4vi32rfc8kdji587jpw28zc1dfb";
   };
 
-  propagatedBuildInputs = with pythonPackages; [
-    dateutil
-    pytoml
-    pyyaml
+  propagatedBuildInputs = with python3Packages; [
+    dateutil pytoml pyyaml
   ];
 
   meta = with stdenv.lib; {

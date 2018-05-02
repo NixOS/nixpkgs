@@ -160,8 +160,9 @@ let
         sha256 = "0dc4cmd05qjqyihrd4qb34kz0jlapjgah8bzgnvxf9m4791w062z";
       })
     ] ++ optional enableWideVine ./patches/widevine.patch
-      ++ optionals (stdenv.isAarch64 && versionRange "65" "66") [
+      ++ optionals (stdenv.isAarch64 && versionRange "65" "67") [
         ./patches/skia_buildfix.patch
+        ./patches/neon_buildfix.patch
     ];
 
     postPatch = ''

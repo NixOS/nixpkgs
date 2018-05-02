@@ -355,7 +355,7 @@ with stdenv.lib;
   SECURITY_SELINUX_BOOTPARAM_VALUE 0 # Disable SELinux by default
   SECURITY_YAMA? y # Prevent processes from ptracing non-children processes
   DEVKMEM n # Disable /dev/kmem
-  ${optionalString (! stdenv.hostPlatform.isArm)
+  ${optionalString (! stdenv.hostPlatform.isAarch32)
     (if versionOlder version "3.14" then ''
         CC_STACKPROTECTOR? y # Detect buffer overflows on the stack
       '' else ''

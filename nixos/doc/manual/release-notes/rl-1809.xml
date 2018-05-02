@@ -20,10 +20,21 @@ has the following highlights: </para>
 <itemizedlist>
   <listitem>
     <para>
-      TODO
+      User channels are now in the default <literal>NIX_PATH</literal>,
+      allowing users to use their personal <command>nix-channel</command>
+      defined channels in <command>nix-build</command> and
+      <command>nix-shell</command> commands, as well as in imports like
+      <code>import &lt;mychannel&gt;</code>.
     </para>
+    <para>For example</para>
+    <programlisting>
+$ nix-channel --add https://nixos.org/channels/nixpkgs-unstable nixpkgsunstable
+$ nix-channel --update
+$ nix-build '&lt;nixpkgsunstable&gt;' -A gitFull
+$ nix run -f '&lt;nixpkgsunstable&gt;' gitFull
+$ nix-instantiate -E '(import &lt;nixpkgsunstable&gt; {}).gitFull'
+</programlisting>
   </listitem>
-
 </itemizedlist>
 
 </section>
@@ -58,9 +69,23 @@ following incompatible changes:</para>
 <itemizedlist>
   <listitem>
     <para>
+      <literal>lib.strict</literal> is removed. Use <literal>builtins.seq</literal> instead.
+    </para>
+  </listitem>
+  <listitem>
+    <para>
       The <literal>clementine</literal> package points now to the free derivation.
       <literal>clementineFree</literal> is removed now and <literal>clementineUnfree</literal>
       points to the package which is bundled with the unfree <literal>libspotify</literal> package.
+    </para>
+  </listitem>
+  <listitem>
+    <para>
+      The <literal>netcat</literal> package is now taken directly from OpenBSD's
+      <literal>libressl</literal>, instead of relying on Debian's fork. The new
+      version should be very close to the old version, but there are some minor
+      differences. Importantly, flags like -b, -q, -C, and -Z are no longer
+      accepted by the nc command.
     </para>
   </listitem>
 </itemizedlist>
@@ -77,6 +102,51 @@ following incompatible changes:</para>
 <itemizedlist>
   <listitem>
     <para>
+      <literal>lib.attrNamesToStr</literal> has been deprecated. Use
+      more specific concatenation (<literal>lib.concat(Map)StringsSep</literal>)
+      instead.
+    </para>
+  </listitem>
+  <listitem>
+    <para>
+      <literal>lib.addErrorContextToAttrs</literal> has been deprecated. Use
+      <literal>builtins.addErrorContext</literal> directly.
+    </para>
+  </listitem>
+  <listitem>
+    <para>
+      <literal>lib.showVal</literal> has been deprecated. Use
+      <literal>lib.traceSeqN</literal> instead.
+    </para>
+  </listitem>
+  <listitem>
+    <para>
+      <literal>lib.traceXMLVal</literal> has been deprecated. Use
+      <literal>lib.traceValFn builtins.toXml</literal> instead.
+    </para>
+  </listitem>
+  <listitem>
+    <para>
+      <literal>lib.traceXMLValMarked</literal> has been deprecated. Use
+      <literal>lib.traceValFn (x: str + builtins.toXML x)</literal> instead.
+    </para>
+  </listitem>
+  <listitem>
+    <para>
+      <literal>lib.traceValIfNot</literal> has been deprecated. Use
+      <literal>if/then/else</literal> and <literal>lib.traceValSeq</literal>
+      instead.
+    </para>
+  </listitem>
+  <listitem>
+    <para>
+      <literal>lib.traceCallXml</literal> has been deprecated. Please complain
+      if you use the function regularly.
+    </para>
+    <para>
+      The attribute <literal>lib.nixpkgsVersion</literal> has been deprecated in favor of
+      <literal>lib.version</literal>. Please refer to the discussion in
+      <link xlink:href="https://github.com/NixOS/nixpkgs/pull/39416#discussion_r183845745">NixOS/nixpkgs#39416</link> for further reference.
     </para>
   </listitem>
 </itemizedlist>

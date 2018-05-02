@@ -118,6 +118,7 @@ int main(gint argc, gchar **argv) {
     bind("/", prefix);
 
     fail_if(chroot(prefix));
+    fail_if(chdir("/"));
     fail_if(execvp(*argv, argv));
   }
 

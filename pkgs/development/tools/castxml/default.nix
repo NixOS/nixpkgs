@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = http://www.kitware.com;
+    homepage = https://www.kitware.com;
     license = licenses.asl20;
     description = "Abstract syntax tree XML output tool";
     platforms = platforms.unix;

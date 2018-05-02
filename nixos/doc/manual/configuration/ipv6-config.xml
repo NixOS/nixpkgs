@@ -11,14 +11,14 @@ is used to automatically assign IPv6 addresses to all interfaces.  You
 can disable IPv6 support globally by setting:
 
 <programlisting>
-networking.enableIPv6 = false;
+<xref linkend="opt-networking.enableIPv6"/> = false;
 </programlisting></para>
 
 <para>You can disable IPv6 on a single interface using a normal sysctl (in this
 example, we use interface <varname>eth0</varname>):
 
 <programlisting>
-boot.kernel.sysctl."net.ipv6.conf.eth0.disable_ipv6" = true;
+<xref linkend="opt-boot.kernel.sysctl"/>."net.ipv6.conf.eth0.disable_ipv6" = true;
 </programlisting>
 </para>
 
@@ -26,14 +26,17 @@ boot.kernel.sysctl."net.ipv6.conf.eth0.disable_ipv6" = true;
 DHCPv6. You can configure an interface manually:
 
 <programlisting>
-networking.interfaces.eth0.ipv6.addresses = [ { address = "fe00:aa:bb:cc::2"; prefixLength = 64; } ];
+<link linkend="opt-networking.interfaces._name__.ipv6.addresses">networking.interfaces.eth0.ipv6.addresses</link> = [ {
+  address = "fe00:aa:bb:cc::2";
+  prefixLength = 64;
+} ];
 </programlisting>
 </para>
 
 <para>For configuring a gateway, optionally with explicitly specified interface:
 
 <programlisting>
-networking.defaultGateway6 = {
+<xref linkend="opt-networking.defaultGateway6"/> = {
   address = "fe00::1";
   interface = "enp0s3";
 }

@@ -9,7 +9,7 @@ let
     homepage = http://torch.ch;
     license = stdenv.lib.licenses.bsd3;
     maintainers = with stdenv.lib.maintainers; [ smironov ];
-    platforms = stdenv.lib.platforms.gnu;
+    platforms = stdenv.lib.platforms.gnu ++ stdenv.lib.platforms.linux;
   };
 
   distro_src = src;

@@ -78,6 +78,9 @@ ${optionalString (versionAtLeast version "4.13") ''
 
 # Perform usercopy bounds checking.
 HARDENED_USERCOPY y
+${optionalString (versionAtLeast version "4.16") ''
+  HARDENED_USERCOPY_FALLBACK n
+''}
 
 # Randomize allocator freelists.
 SLAB_FREELIST_RANDOM y

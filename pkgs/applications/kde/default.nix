@@ -28,6 +28,7 @@ still shows most of the available features is in `./gwenview.nix`.
 {
   stdenv, lib, libsForQt5, fetchurl, recurseIntoAttrs,
   plasma5, attica, phonon,
+  okteta
 }:
 
 let
@@ -107,7 +108,6 @@ let
       kget = callPackage ./kget.nix {};
       kgpg = callPackage ./kgpg.nix {};
       khelpcenter = callPackage ./khelpcenter.nix {};
-      kholidays = callPackage ./kholidays.nix {};
       kidentitymanagement = callPackage ./kidentitymanagement.nix {};
       kig = callPackage ./kig.nix {};
       kimap = callPackage ./kimap.nix {};
@@ -152,7 +152,6 @@ let
       mbox-importer = callPackage ./mbox-importer.nix {};
       messagelib = callPackage ./messagelib.nix {};
       minuet = callPackage ./minuet.nix {};
-      okteta = callPackage ./okteta.nix {};
       okular = callPackage ./okular.nix {};
       pimcommon = callPackage ./pimcommon.nix {};
       pim-data-exporter = callPackage ./pim-data-exporter.nix {};
@@ -160,6 +159,9 @@ let
       print-manager = callPackage ./print-manager.nix {};
       spectacle = callPackage ./spectacle.nix {};
       syndication = callPackage ./syndication.nix {};
+      # Okteta was removed from kde applications and will now be released independently
+      # Lets keep an alias for compatibility reasons
+      inherit okteta;
     };
 
 in lib.makeScope libsForQt5.newScope packages

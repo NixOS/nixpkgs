@@ -22,8 +22,8 @@ use other modules by including them from
 { config, pkgs, ... }:
 
 { imports = [ ./vpn.nix ./kde.nix ];
-  services.httpd.enable = true;
-  environment.systemPackages = [ pkgs.emacs ];
+  <xref linkend="opt-services.httpd.enable"/> = true;
+  <xref linkend="opt-environment.systemPackages"/> = [ pkgs.emacs ];
   <replaceable>...</replaceable>
 }
 </programlisting>
@@ -35,25 +35,25 @@ latter might look like this:
 <programlisting>
 { config, pkgs, ... }:
 
-{ services.xserver.enable = true;
-  services.xserver.displayManager.sddm.enable = true;
-  services.xserver.desktopManager.plasma5.enable = true;
+{ <xref linkend="opt-services.xserver.enable"/> = true;
+  <xref linkend="opt-services.xserver.displayManager.sddm.enable"/> = true;
+  <xref linkend="opt-services.xserver.desktopManager.plasma5.enable"/> = true;
 }
 </programlisting>
 
 Note that both <filename>configuration.nix</filename> and
 <filename>kde.nix</filename> define the option
-<option>environment.systemPackages</option>.  When multiple modules
+<xref linkend="opt-environment.systemPackages"/>.  When multiple modules
 define an option, NixOS will try to <emphasis>merge</emphasis> the
 definitions.  In the case of
-<option>environment.systemPackages</option>, that’s easy: the lists of
+<xref linkend="opt-environment.systemPackages"/>, that’s easy: the lists of
 packages can simply be concatenated.  The value in
 <filename>configuration.nix</filename> is merged last, so for
 list-type options, it will appear at the end of the merged list. If
 you want it to appear first, you can use <varname>mkBefore</varname>:
 
 <programlisting>
-boot.kernelModules = mkBefore [ "kvm-intel" ];
+<xref linkend="opt-boot.kernelModules"/> = mkBefore [ "kvm-intel" ];
 </programlisting>
 
 This causes the <literal>kvm-intel</literal> kernel module to be
@@ -61,7 +61,7 @@ loaded before any other kernel modules.</para>
 
 <para>For other types of options, a merge may not be possible. For
 instance, if two modules define
-<option>services.httpd.adminAddr</option>,
+<xref linkend="opt-services.httpd.adminAddr"/>,
 <command>nixos-rebuild</command> will give an error:
 
 <screen>
@@ -72,7 +72,7 @@ When that happens, it’s possible to force one definition take
 precedence over the others:
 
 <programlisting>
-services.httpd.adminAddr = pkgs.lib.mkForce "bob@example.org";
+<xref linkend="opt-services.httpd.adminAddr"/> = pkgs.lib.mkForce "bob@example.org";
 </programlisting>
 
 </para>
@@ -89,15 +89,15 @@ wondering how it’s possible that the (indirect)
 is a “lazy” language — it only computes values when they are needed.
 This works as long as no individual configuration value depends on
 itself.</para></footnote>.  For example, here is a module that adds
-some packages to <option>environment.systemPackages</option> only if
-<option>services.xserver.enable</option> is set to
+some packages to <xref linkend="opt-environment.systemPackages"/> only if
+<xref linkend="opt-services.xserver.enable"/> is set to
 <literal>true</literal> somewhere else:
 
 <programlisting>
 { config, pkgs, ... }:
 
-{ environment.systemPackages =
-    if config.services.xserver.enable then
+{ <xref linkend="opt-environment.systemPackages"/> =
+    if config.<xref linkend="opt-services.xserver.enable"/> then
       [ pkgs.firefox
         pkgs.thunderbird
       ]
@@ -113,10 +113,10 @@ value of a configuration option is.  The command
 <option>nixos-option</option> allows you to find out:
 
 <screen>
-$ nixos-option services.xserver.enable
+$ nixos-option <xref linkend="opt-services.xserver.enable"/>
 true
 
-$ nixos-option boot.kernelModules
+$ nixos-option <xref linkend="opt-boot.kernelModules"/>
 [ "tun" "ipv6" "loop" <replaceable>...</replaceable> ]
 </screen>
 
@@ -130,10 +130,10 @@ typical use:
 <screen>
 $ nix-repl '&lt;nixpkgs/nixos>'
 
-nix-repl> config.networking.hostName
+nix-repl> config.<xref linkend="opt-networking.hostName"/>
 "mandark"
 
-nix-repl> map (x: x.hostName) config.services.httpd.virtualHosts
+nix-repl> map (x: x.hostName) config.<xref linkend="opt-services.httpd.virtualHosts"/>
 [ "example.org" "example.gov" ]
 </screen>
 

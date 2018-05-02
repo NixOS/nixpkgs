@@ -127,7 +127,7 @@ stdenv.mkDerivation ({
       (if cross ? float && cross.float == "soft" then "--without-fp" else "--with-fp")
     ] ++ lib.optionals (cross != null) [
       "--with-__thread"
-    ] ++ lib.optionals (cross == null && stdenv.isArm) [
+    ] ++ lib.optionals (cross == null && stdenv.isAarch32) [
       "--host=arm-linux-gnueabi"
       "--build=arm-linux-gnueabi"
 

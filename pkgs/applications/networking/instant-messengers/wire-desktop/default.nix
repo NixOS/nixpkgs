@@ -61,7 +61,7 @@ in
     };
 
     desktopItem = makeDesktopItem {
-      name = "Wire";
+      name = "wire-desktop";
       exec = "wire-desktop %U";
       icon = "wire-desktop";
       comment = "Secure messenger for everyone";

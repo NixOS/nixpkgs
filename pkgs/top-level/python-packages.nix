@@ -271,6 +271,8 @@ in {
 
   intelhex = callPackage ../development/python-modules/intelhex { };
 
+  jira = callPackage ../development/python-modules/jira { };
+
   lmtpd = callPackage ../development/python-modules/lmtpd { };
 
   logster = callPackage ../development/python-modules/logster { };
@@ -1201,6 +1203,8 @@ in {
   };
 
   datadog = callPackage ../development/python-modules/datadog {};
+
+  dataclasses = callPackage ../development/python-modules/dataclasses { };
 
   debian = callPackage ../development/python-modules/debian {};
 
@@ -2561,20 +2565,7 @@ in {
 
   fritzconnection = callPackage ../development/python-modules/fritzconnection { };
 
-  frozendict = buildPythonPackage rec {
-    name = "frozendict-0.5";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/f/frozendict/${name}.tar.gz";
-      sha256 = "0m4kg6hbadvf99if78nx01q7qnbyhdw3x4znl5dasgciyi54432n";
-    };
-
-    meta = {
-      homepage = https://github.com/slezica/python-frozendict;
-      description = "An immutable dictionary";
-      license = stdenv.lib.licenses.mit;
-    };
-  };
+  frozendict = callPackage ../development/python-modules/frozendict { };
 
   ftputil = callPackage ../development/python-modules/ftputil { };
 
@@ -6355,6 +6346,8 @@ in {
     propagatedBuildInputs = with self; [ requests webob ];
   };
 
+  hdbscan = callPackage ../development/python-modules/hdbscan { };
+
   hmmlearn = callPackage ../development/python-modules/hmmlearn { };
 
   hcs_utils = callPackage ../development/python-modules/hcs_utils { };
@@ -6423,21 +6416,7 @@ in {
 
   httpbin = callPackage ../development/python-modules/httpbin { };
 
-  httplib2 = buildPythonPackage rec {
-    name = "httplib2-0.9.2";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/h/httplib2/${name}.tar.gz";
-      sha256 = "126rsryvw9vhbf3qmsfw9lf4l4xm2srmgs439lgma4cpag4s3ay3";
-    };
-
-    meta = {
-      homepage = http://code.google.com/p/httplib2;
-      description = "A comprehensive HTTP client library";
-      license = licenses.mit;
-      maintainers = with maintainers; [ garbas ];
-    };
-  };
+  httplib2 = callPackage ../development/python-modules/httplib2 { };
 
   hvac = callPackage ../development/python-modules/hvac { };
 
@@ -8233,6 +8212,8 @@ in {
     };
   };
 
+  pytaglib = callPackage ../development/python-modules/pytaglib { };
+
   pyte = callPackage ../development/python-modules/pyte { };
 
   graphviz = buildPythonPackage rec {
@@ -8254,6 +8235,8 @@ in {
   };
 
   pygraphviz = callPackage ../development/python-modules/pygraphviz { };
+
+  pymc3 = callPackage ../development/python-modules/pymc3 { };
 
   pympler = buildPythonPackage rec {
     pname = "Pympler";
@@ -9684,24 +9667,7 @@ in {
     };
   };
 
-  patsy = buildPythonPackage rec {
-    name = "patsy-${version}";
-    version = "0.3.0";
-
-    src = pkgs.fetchurl{
-      url = "mirror://pypi/p/patsy/${name}.zip";
-      sha256 = "a55dd4ca09af4b9608b81f30322beb450510964c022708ab50e83a065ccf15f0";
-    };
-
-    buildInputs = with self; [ nose ];
-    propagatedBuildInputs = with self; [six numpy];
-
-    meta = {
-      description = "A Python package for describing statistical models";
-      homepage = "https://github.com/pydata/patsy";
-      license = licenses.bsd2;
-    };
-  };
+  patsy = callPackage ../development/python-modules/patsy { };
 
   paste = buildPythonPackage rec {
     name = "paste-${version}";
@@ -13069,13 +13035,13 @@ in {
   };
 
   TheanoWithoutCuda = self.Theano.override {
-    cudaSupport = true;
-    cudnnSupport = true;
+    cudaSupport = false;
+    cudnnSupport = false;
   };
 
   TheanoWithCuda = self.Theano.override {
-    cudaSupport = false;
-    cudnnSupport = false;
+    cudaSupport = true;
+    cudnnSupport = true;
   };
 
   thespian = callPackage ../development/python-modules/thespian { };
@@ -16650,20 +16616,7 @@ EOF
     };
   };
 
-  canonicaljson = buildPythonPackage rec {
-    name = "canonicaljson-${version}";
-    version = "1.0.0";
-
-    src = pkgs.fetchgit {
-      url = "https://github.com/matrix-org/python-canonicaljson.git";
-      rev = "refs/tags/v${version}";
-      sha256 = "0r82zlip93y169ijkn8xpbp0yr22mf92pni6dw420vb53l27sprq";
-    };
-
-    propagatedBuildInputs = with self; [
-      frozendict simplejson
-    ];
-  };
+  canonicaljson = callPackage ../development/python-modules/canonicaljson { };
 
   daemonize = buildPythonPackage rec {
     name = "daemonize-${version}";
@@ -17898,15 +17851,7 @@ EOF
     };
   };
 
-  rocket-errbot = buildPythonPackage rec {
-    name = "rocket-errbot-${version}";
-    version = "1.2.5";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/r/rocket-errbot/${name}.tar.gz";
-      sha256 = "181y1wqjvlry5xdzbliajvrxvswzh3myh795jnj1pm92r5grqzda";
-    };
-  };
+  rocket-errbot = callPackage ../development/python-modules/rocket-errbot {  };
 
   Yapsy = buildPythonPackage rec {
     name = "Yapsy-${version}";

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, boost, hepmc, lhapdf, pythia }:
+{ stdenv, fetchurl, boost, hepmc, lhapdf, pythia, makeWrapper }:
 
 stdenv.mkDerivation rec {
   name = "sacrifice-${version}";
@@ -10,6 +10,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ boost hepmc lhapdf pythia ];
+  nativeBuildInputs = [ makeWrapper ];
 
   patches = [
     ./compat.patch
@@ -26,6 +27,13 @@ stdenv.mkDerivation rec {
     "--with-HepMC=${hepmc}"
     "--with-pythia=${pythia}"
   ];
+
+  postInstall = if stdenv.isDarwin then ''
+    install_name_tool -add_rpath ${pythia}/lib "$out"/bin/run-pythia
+  '' else ''
+    wrapProgram $out/bin/run-pythia \
+      --prefix LD_LIBRARY_PATH : "${pythia}/lib"
+  '';
 
   enableParallelBuilding = true;
 

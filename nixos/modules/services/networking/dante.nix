@@ -6,6 +6,7 @@ let
   confFile = pkgs.writeText "dante-sockd.conf" ''
     user.privileged: root
     user.unprivileged: dante
+    logoutput: syslog
 
     ${cfg.config}
   '';
@@ -21,11 +22,10 @@ in
       enable = mkEnableOption "Dante SOCKS proxy";
 
       config = mkOption {
-        default     = null;
-        type        = types.nullOr types.str;
+        type        = types.lines;
         description = ''
-          Contents of Dante's configuration file
-          NOTE: user.privileged/user.unprivileged are set by the service
+          Contents of Dante's configuration file.
+          NOTE: user.privileged, user.unprivileged and logoutput are set by the service.
         '';
       };
     };
@@ -33,7 +33,7 @@ in
 
   config = mkIf cfg.enable {
     assertions = [
-      { assertion   = cfg.config != null;
+      { assertion   = cfg.config != "";
         message     = "please provide Dante configuration file contents";
       }
     ];
@@ -54,7 +54,8 @@ in
         Type        = "simple";
         ExecStart   = "${pkgs.dante}/bin/sockd -f ${confFile}";
         ExecReload  = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
-        Restart     = "always";
+        # Can crash sometimes; see https://github.com/NixOS/nixpkgs/pull/39005#issuecomment-381828708
+        Restart     = "on-failure";
       };
     };
   };

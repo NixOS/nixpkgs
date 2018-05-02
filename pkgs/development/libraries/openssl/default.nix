@@ -48,6 +48,8 @@ let
           then "./Configure mingw${toString hostPlatform.parsed.cpu.bits}"
         else if hostPlatform.isLinux
           then "./Configure linux-generic${toString hostPlatform.parsed.cpu.bits}"
+        else if hostPlatform.isiOS
+          then "./Configure ios${toString hostPlatform.parsed.cpu.bits}-cross"
         else
           throw "Not sure what configuration to use for ${hostPlatform.config}"
       );
