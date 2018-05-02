@@ -6086,6 +6086,7 @@ with pkgs;
   };
 
   gcc7Stdenv = overrideCC gccStdenv gcc7;
+  gcc8Stdenv = overrideCC gccStdenv gcc8;
 
   wrapCCMulti = cc:
     if system == "x86_64-linux" then let
@@ -21390,6 +21391,8 @@ with pkgs;
   tests = recurseIntoAttrs {
     cc-wrapper = callPackage ../test/cc-wrapper { };
     cc-wrapper-gcc = callPackage ../test/cc-wrapper { stdenv = gccStdenv; };
+    cc-wrapper-gcc7 = callPackage ../test/cc-wrapper { stdenv = gcc7Stdenv; };
+    cc-wrapper-gcc8 = callPackage ../test/cc-wrapper { stdenv = gcc8Stdenv; };
     cc-wrapper-clang = callPackage ../test/cc-wrapper { stdenv = llvmPackages.stdenv; };
     cc-wrapper-libcxx = callPackage ../test/cc-wrapper { stdenv = llvmPackages.libcxxStdenv; };
     cc-wrapper-clang-39 = callPackage ../test/cc-wrapper { stdenv = llvmPackages_39.stdenv; };
