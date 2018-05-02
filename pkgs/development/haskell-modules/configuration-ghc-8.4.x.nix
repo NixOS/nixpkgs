@@ -476,6 +476,7 @@ self: super: {
   pandoc = self.pandoc_2_2;
   pandoc-types = self.pandoc-types_1_17_4_2;
   dhall = self.dhall_1_13_0;
+  dhall_1_13_0 = doJailbreak super.dhall_1_13_0;  # support ansi-terminal 0.8.x
 
   # https://github.com/xmonad/xmonad/issues/155
   xmonad = addBuildDepend (appendPatch super.xmonad (pkgs.fetchpatch
