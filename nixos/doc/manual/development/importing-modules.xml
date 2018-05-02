@@ -3,13 +3,12 @@
          xmlns:xi="http://www.w3.org/2001/XInclude"
          version="5.0"
          xml:id="sec-importing-modules">
+ <title>Importing Modules</title>
 
-<title>Importing Modules</title>
-
-<para>
-  Sometimes NixOS modules need to be used in configuration but exist
-  outside of Nixpkgs. These modules can be imported:
-</para>
+ <para>
+  Sometimes NixOS modules need to be used in configuration but exist outside of
+  Nixpkgs. These modules can be imported:
+ </para>
 
 <programlisting>
 { config, lib, pkgs, ... }:
@@ -25,12 +24,11 @@
 }
 </programlisting>
 
-<para>
-  The environment variable <literal>NIXOS_EXTRA_MODULE_PATH</literal> is
-  an absolute path to a NixOS module that is included alongside the
-  Nixpkgs NixOS modules. Like any NixOS module, this module can import
-  additional modules:
-</para>
+ <para>
+  The environment variable <literal>NIXOS_EXTRA_MODULE_PATH</literal> is an
+  absolute path to a NixOS module that is included alongside the Nixpkgs NixOS
+  modules. Like any NixOS module, this module can import additional modules:
+ </para>
 
 <programlisting>
 # ./module-list/default.nix
@@ -55,5 +53,4 @@
   services.exampleModule1.enable = true;
 }
 </programlisting>
-
 </section>
