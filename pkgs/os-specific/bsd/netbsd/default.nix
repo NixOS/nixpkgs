@@ -583,7 +583,7 @@ in rec {
     path = "share/misc";
     version = "7.1.2";
     sha256 = "1vyn30js14nnadlls55mg7g1gz8h14l75rbrrh8lgn49qg289665";
-    makeFlags = [ "BINDIR=/share/misc" ];
+    makeFlags = [ "BINDIR=/share" ];
   };
 
 }
