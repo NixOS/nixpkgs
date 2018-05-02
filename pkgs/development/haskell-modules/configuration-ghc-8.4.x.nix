@@ -246,20 +246,6 @@ self: super: {
     };
   });
 
-  ## Unmerged.  PR: https://github.com/ivan-m/wl-pprint-text/pull/17
-  wl-pprint-text = overrideCabal super.wl-pprint-text (drv: {
-    ##     Ambiguous occurrence ‘<>’
-    ##     It could refer to either ‘PP.<>’,
-    ##                              imported from ‘Prelude.Compat’ at Text/PrettyPrint/Leijen/Text/Monadic.hs:73:1-36
-    src = pkgs.fetchFromGitHub {
-      owner  = "deepfire";
-      repo   = "wl-pprint-text";
-      rev    = "615b83d1e5be52d1448aa1ab2517b431a617027b";
-      sha256 = "1p67v9s878br0r152h4n37smqhkg78v8zxhf4qm6d035s4rzj76i";
-    };
-  });
-
-
   ## Non-code, configuration-only change
 
   adjunctions = overrideCabal super.adjunctions (drv: {
@@ -456,14 +442,16 @@ self: super: {
 
   # Older versions don't compile.
   brick = self.brick_0_36_3;
+  dhall = self.dhall_1_13_0;
+  dhall_1_13_0 = doJailbreak super.dhall_1_13_0;  # support ansi-terminal 0.8.x
   HaTeX = self.HaTeX_3_19_0_0;
   hpack = self.hpack_0_28_2;
   hspec-smallcheck = self.hspec-smallcheck_0_5_2;
   matrix = self.matrix_0_3_6_1;
   pandoc = self.pandoc_2_2;
   pandoc-types = self.pandoc-types_1_17_4_2;
-  dhall = self.dhall_1_13_0;
-  dhall_1_13_0 = doJailbreak super.dhall_1_13_0;  # support ansi-terminal 0.8.x
+  wl-pprint-text = self.wl-pprint-text_1_1_1_1;
+  base-compat = self.base-compat_0_10_1;
 
   # https://github.com/xmonad/xmonad/issues/155
   xmonad = addBuildDepend (appendPatch super.xmonad (pkgs.fetchpatch
