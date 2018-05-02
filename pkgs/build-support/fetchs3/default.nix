@@ -23,6 +23,7 @@ in runCommand name ({
   outputHashAlgo = "sha256";
   outputHash = sha256;
   outputHashMode = if recursiveHash then "recursive" else "flat";
+  AWS_DEFAULT_REGION = region;
 } // credentialAttrs) (if postFetch != null then ''
   downloadedFile="$(mktemp)"
   aws s3 cp ${s3url} $downloadedFile
