@@ -11,11 +11,13 @@
 }:
 
 let
-  credentialAttrs = stdenvNoCC.lib.optionalAttrs (credentials != null) {
-    AWS_ACCESS_KEY_ID = credentials.access_key_id;
-    AWS_SECRET_ACCESS_KEY = credentials.secret_access_key;
-    AWS_SESSION_TOKEN = credentials.session_token ? null;
+  mkCredentials = { access_key_id, secret_access_key, session_token ? null }: {
+    AWS_ACCESS_KEY_ID = access_key_id;
+    AWS_SECRET_ACCESS_KEY = secret_access_key;
+    AWS_SESSION_TOKEN = session_token;
   };
+
+  credentialAttrs = stdenvNoCC.lib.optionalAttrs (credentials != null) (mkCredentials credentials);
 in runCommand name ({
   nativeBuildInputs = [ awscli ];
   outputHashAlgo = "sha256";
