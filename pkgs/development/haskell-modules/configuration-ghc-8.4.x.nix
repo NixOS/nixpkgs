@@ -152,19 +152,6 @@ self: super: {
     prePatch        = "cd lambdacube-ir.haskell; ";
   });
 
-  ## Upstreamed, awaiting a Hackage release
-  simple-reflect = overrideCabal super.simple-reflect (drv: {
-    ##     • No instance for (Semigroup Expr)
-    ##         arising from the superclasses of an instance declaration
-    ##     • In the instance declaration for ‘Monoid Expr’
-    src = pkgs.fetchFromGitHub {
-      owner  = "twanvl";
-      repo   = "simple-reflect";
-      rev    = "c357e55da9a712dc5dbbfe6e36394e4ada2db310";
-      sha256 = "15q41b00l8y51xzhbj5zhddyh3gi7gvml033w8mm2fih458jf6yq";
-    };
-  });
-
   singletons = super.singletons_2_4_1;
   th-desugar = super.th-desugar_1_8;
 
