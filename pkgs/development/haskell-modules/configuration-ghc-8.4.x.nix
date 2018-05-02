@@ -215,19 +215,6 @@ self: super: {
     libraryHaskellDepends = (drv.libraryHaskellDepends or []) ++ (with self; [ insert-ordered-containers lens-family-core prettyprinter prettyprinter-ansi-terminal repline ]);
   });
 
-  ## Unmerged.  PR: https://github.com/gtk2hs/gtk2hs/pull/233
-  gtk2hs-buildtools = overrideCabal super.gtk2hs-buildtools (drv: {
-    ## Setup: Encountered missing dependencies:
-    ## Cabal >=1.24.0.0 && <2.1
-    src = pkgs.fetchFromGitHub {
-      owner  = "deepfire";
-      repo   = "gtk2hs";
-      rev    = "08c68d5afc22dd5761ec2c92ebf49c6d252e545b";
-      sha256 = "06prn5wqq8x225n9wlbyk60f50jyjj8fm2hf181dyqjpf8wq75xa";
-    };
-    prePatch        = "cd tools; ";
-  });
-
   ## Unmerged.  PR: https://github.com/gregorycollins/hashtables/pull/46
   hashtables = overrideCabal super.hashtables (drv: {
     ##     • No instance for (Semigroup Slot)
