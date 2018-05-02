@@ -6243,6 +6243,17 @@ with pkgs;
     isl = if !stdenv.isDarwin then isl_0_17 else null;
   }));
 
+  gcc8 = lowPrio (wrapCC (callPackage ../development/compilers/gcc/8 {
+    inherit noSysDirs;
+
+    # PGO seems to speed up compilation by gcc by ~10%, see #445 discussion
+    profiledCompiler = with stdenv; (!isDarwin && (isi686 || isx86_64));
+
+    libcCross = if targetPlatform != buildPlatform then libcCross else null;
+
+    isl = if !stdenv.isDarwin then isl_0_17 else null;
+  }));
+
   gcc-snapshot = lowPrio (wrapCC (callPackage ../development/compilers/gcc/snapshot {
     inherit noSysDirs;
 
