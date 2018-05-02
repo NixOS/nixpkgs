@@ -22,6 +22,7 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "HAVE_ICONV=1" ];
   buildFlags = [ "whois" ];
+  NIX_LDFLAGS = stdenv.lib.optionals stdenv.isDarwin [ "-L${libiconv}/lib/" "-liconv" ];
 
   installTargets = [ "install-whois" ];
 
