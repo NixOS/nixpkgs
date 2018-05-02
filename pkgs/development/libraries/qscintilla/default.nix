@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
     ++ (if withQt5 then [ qmake ] else [ qmake4Hook ]);
 
 
-  patches = [] ++ lib.optional withQt5 [ xcodePatch ];
+  patches = lib.optional (stdenv.isDarwin && withQt5) [ xcodePatch ];
 
   enableParallelBuilding = true;
 
