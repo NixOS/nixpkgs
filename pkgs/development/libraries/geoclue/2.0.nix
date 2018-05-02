@@ -5,11 +5,11 @@
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  name = "geoclue-2.4.7";
+  name = "geoclue-2.4.8";
 
   src = fetchurl {
     url = "http://www.freedesktop.org/software/geoclue/releases/2.4/${name}.tar.xz";
-    sha256 = "19hfmr8fa1js8ynazdyjxlyrqpjn6m1719ay70ilga4rayxrcyyi";
+    sha256 = "08yg1r7m0n9hwyvcy769qkmkf8lslqwv69cjfffwnc3zm5km25qj";
   };
 
   outputs = [ "out" "dev" ];

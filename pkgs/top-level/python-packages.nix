@@ -2079,6 +2079,8 @@ in {
 
   demjson = callPackage ../development/python-modules/demjson { };
 
+  deprecation = callPackage ../development/python-modules/deprecation { };
+
   derpconf = callPackage ../development/python-modules/derpconf { };
 
   deskcon = self.buildPythonPackage rec {

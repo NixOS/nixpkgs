@@ -34,6 +34,8 @@ stdenv.mkDerivation rec {
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
 
+  doCheck = false; # needs more tools
+
   installFlags = [ "ZIC=./zic-native" ];
 
   preInstall = ''

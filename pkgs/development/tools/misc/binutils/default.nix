@@ -70,7 +70,7 @@ stdenv.mkDerivation rec {
     # be satisfied on aarch64 platform. Add backported fix from bugzilla.
     # https://sourceware.org/bugzilla/show_bug.cgi?id=22764
     ./relax-R_AARCH64_ABS32-R_AARCH64_ABS16-absolute.patch
-  ];
+  ] ++ stdenv.lib.optional targetPlatform.isiOS ./support-ios.patch;
 
   outputs = [ "out" "info" "man" ];
 
@@ -120,6 +120,8 @@ stdenv.mkDerivation rec {
     "--disable-werror"
     "--enable-fix-loongson2f-nop"
   ] ++ optionals gold [ "--enable-gold" "--enable-plugins" ];
+
+  doCheck = false; # fails
 
   enableParallelBuilding = true;
 

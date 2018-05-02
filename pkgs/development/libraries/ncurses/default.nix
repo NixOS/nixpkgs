@@ -1,6 +1,6 @@
 { lib, stdenv, fetchurl, pkgconfig
 
-, abiVersion
+, abiVersion ? "6"
 , mouseSupport ? false
 , unicode ? true
 , enableStatic ? stdenv.hostPlatform.useAndroidPrebuilt

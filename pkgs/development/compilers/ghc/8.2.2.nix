@@ -170,6 +170,7 @@ stdenv.mkDerivation rec {
   stripDebugFlags = [ "-S" ] ++ stdenv.lib.optional (!targetPlatform.isDarwin) "--keep-file-symbols";
 
   checkTarget = "test";
+  doCheck = false; # fails with "testsuite/tests: No such file or directory.  Stop."
 
   # zsh and other shells are smart about `{ghc}` but bash isn't, and doesn't
   # treat that as a unary `{x,y,z,..}` repetition.

@@ -62,6 +62,7 @@ stdenv.mkDerivation rec {
   '';
 
   enableParallelBuilding = true;
+  doCheck = false; # fails with "No suitable file for testing purposes"
 
   meta = {
     description = "MIT Kerberos 5";

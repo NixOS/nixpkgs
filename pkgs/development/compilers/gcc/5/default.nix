@@ -168,7 +168,7 @@ let version = "5.5.0";
           "--disable-decimal-float" # No final libdecnumber (it may work only in 386)
         ]));
     stageNameAddon = if crossStageStatic then "-stage-static" else "-stage-final";
-    crossNameAddon = if targetPlatform != hostPlatform then "-${targetPlatform.config}" + stageNameAddon else "";
+    crossNameAddon = if targetPlatform != hostPlatform then "${targetPlatform.config}${stageNameAddon}-" else "";
 
     bootstrap = targetPlatform == hostPlatform;
 
@@ -178,7 +178,7 @@ in
 assert x11Support -> (filter (x: x == null) ([ gtk2 libart_lgpl ] ++ xlibs)) == [];
 
 stdenv.mkDerivation ({
-  name = "${name}${if stripped then "" else "-debug"}-${version}" + crossNameAddon;
+  name = crossNameAddon + "${name}${if stripped then "" else "-debug"}-${version}";
 
   builder = ../builder.sh;
 
@@ -399,6 +399,8 @@ stdenv.mkDerivation ({
   buildFlags = if bootstrap then
     (if profiledCompiler then "profiledbootstrap" else "bootstrap")
     else "";
+
+  doCheck = false; # requires a lot of tools, causes a dependency cycle for stdenv
 
   installTargets =
     if stripped

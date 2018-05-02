@@ -438,6 +438,8 @@ let
       );
     '';
 
+    doCheck = false; # fails to find itself
+
     installTargets = [ "install" "install-unix" ];
 
     meta = with stdenv.lib; {

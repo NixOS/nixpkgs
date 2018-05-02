@@ -3,7 +3,7 @@
 { stdenv, fetchurl, lib, file
 , pkgconfig, autoconf
 , glib, dbus-glib, libdbusmenu-glib
-, gtkVersion, gtk2 ? null, gtk3 ? null
+, gtkVersion ? "3", gtk2 ? null, gtk3 ? null
 , pythonPackages, gobjectIntrospection, vala, gnome-doc-utils
 , monoSupport ? false, mono ? null, gtk-sharp-2_0 ? null
  }:

@@ -67,7 +67,7 @@ let
 in
 
 let
-  version = "17.3.8";
+  version = "17.3.9";
   branch  = head (splitString "." version);
 in
 
@@ -81,7 +81,7 @@ let self = stdenv.mkDerivation {
       "ftp://ftp.freedesktop.org/pub/mesa/older-versions/${branch}.x/${version}/mesa-${version}.tar.xz"
       "https://mesa.freedesktop.org/archive/mesa-${version}.tar.xz"
     ];
-    sha256 = "1cd6a4ll5arla3kncxnw9196ak1v4rvnb098aa7lm3n4h7r9p7cg";
+    sha256 = "0yg4nvagg5y2fxyl3jjdgbi6gjqqw4z3j6pyzsac5q7h0pybbgn5";
   };
 
   prePatch = "patchShebangs .";
@@ -161,7 +161,7 @@ let self = stdenv.mkDerivation {
   doCheck = false;
 
   installFlags = [
-    "sysconfdir=\${out}/etc"
+    "sysconfdir=\${drivers}/etc"
     "localstatedir=\${TMPDIR}"
     "vendorjsondir=\${out}/share/glvnd/egl_vendor.d"
   ];

@@ -75,6 +75,8 @@ let
         wrapProgram $out/bin/initdb --prefix PATH ":" ${glibc.bin}/bin
       '';
 
+    doInstallCheck = false; # needs a running daemon?
+
     disallowedReferences = [ stdenv.cc ];
 
     passthru = {

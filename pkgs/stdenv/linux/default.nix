@@ -107,11 +107,6 @@ let
           # Having the proper 'platform' in all the stdenvs allows getting proper
           # linuxHeaders for example.
           inherit platform;
-
-          # stdenv.glibc is used by GCC build to figure out the system-level
-          # /usr/include directory.
-          # TODO: Remove this!
-          inherit (prevStage) glibc;
         };
         overrides = self: super: (overrides self super) // { fetchurl = thisStdenv.fetchurlBoot; };
       };
@@ -129,8 +124,6 @@ in
     __raw = true;
 
     gcc-unwrapped = null;
-    glibc = assert false; null;
-    musl = assert false; null;
     binutils = null;
     coreutils = null;
     gnugrep = null;
@@ -351,6 +344,7 @@ in
         concatMap (p: [ (getBin p) (getLib p) ])
           [ gzip bzip2 xz bash binutils.bintools coreutils diffutils findutils
             gawk gnumake gnused gnutar gnugrep gnupatch patchelf ed paxctl
+            texinfo
           ]
         # Library dependencies
         ++ map getLib (
@@ -369,7 +363,7 @@ in
         inherit (prevStage)
           gzip bzip2 xz bash coreutils diffutils findutils gawk
           gnumake gnused gnutar gnugrep gnupatch patchelf
-          attr acl paxctl zlib pcre;
+          attr acl paxctl zlib pcre texinfo;
         ${localSystem.libc} = getLibc prevStage;
       } // lib.optionalAttrs (super.targetPlatform == localSystem) {
         # Need to get rid of these when cross-compiling.

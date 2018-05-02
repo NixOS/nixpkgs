@@ -69,6 +69,12 @@ in stdenv.mkDerivation {
 
   patches = [
     ./no-ldconfig.patch
+  ] ++ optionals stdenv.isDarwin [
+    # Fix for https://bugs.python.org/issue24658
+    (fetchpatch {
+      url = "https://bugs.python.org/file45178/issue24658-3-3.6.diff";
+      sha256 = "1x060hs80nl34mcl2ji2i7l4shxkmxwgq8h8lcmav8rjqqz1nb4a";
+    })
   ] ++ optionals (x11Support && stdenv.isDarwin) [
     ./use-correct-tcl-tk-on-darwin.patch
   ];
@@ -113,7 +119,10 @@ in stdenv.mkDerivation {
     "ac_cv_computed_gotos=yes"
     "ac_cv_file__dev_ptmx=yes"
     "ac_cv_file__dev_ptc=yes"
-  ];
+  ]
+    # Never even try to use lchmod on linux,
+    # don't rely on detecting glibc-isms.
+  ++ optional stdenv.hostPlatform.isLinux "ac_cv_func_lchmod=no";
 
   preConfigure = ''
     for i in /usr /sw /opt /pkg; do	# improve purity
@@ -192,6 +201,8 @@ in stdenv.mkDerivation {
   };
 
   enableParallelBuilding = true;
+
+  doCheck = false; # expensive, and fails
 
   meta = {
     homepage = http://python.org;

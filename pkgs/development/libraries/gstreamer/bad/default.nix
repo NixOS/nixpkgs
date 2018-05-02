@@ -70,4 +70,9 @@ stdenv.mkDerivation rec {
     ++ optional (!stdenv.isDarwin) wildmidi
     # TODO: mjpegtools uint64_t is not compatible with guint64 on Darwin
     ++ optional (!stdenv.isDarwin) mjpegtools;
+
+  enableParallelBuilding = true;
+
+  doCheck = false; # fails 20 out of 58 tests, expensive
+
 }

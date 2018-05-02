@@ -66,6 +66,7 @@ stdenv.mkDerivation rec {
   # This is fixed here:
   # <http://git.savannah.gnu.org/cgit/guile.git/commit/?h=branch_release-1-8&id=a0aa1e5b69d6ef0311aeea8e4b9a94eae18a1aaf>.
   doCheck = false;
+  doInstallCheck = doCheck;
 
   setupHook = ./setup-hook.sh;
 

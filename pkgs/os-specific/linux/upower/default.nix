@@ -30,6 +30,8 @@ stdenv.mkDerivation rec {
 
   NIX_CFLAGS_LINK = "-lgcc_s";
 
+  doCheck = false; # fails with "env: './linux/integration-test': No such file or directory"
+
   installFlags = "historydir=$(TMPDIR)/foo";
 
   meta = {

@@ -1,4 +1,4 @@
-{ pkgs, buildEnv, runCommand, hostPlatform, lib }:
+{ pkgs, buildEnv, runCommand, hostPlatform, stdenv, lib }:
 
 # These are some unix tools that are commonly included in the /usr/bin
 # and /usr/sbin directory under more normal distributions. Along with
@@ -13,18 +13,22 @@
 let
 
   singleBinary = cmd: providers: let
-      provider = "${lib.getBin providers.${hostPlatform.parsed.kernel.name}}/bin/${cmd}";
+      provider = lib.getBin providers.${hostPlatform.parsed.kernel.name};
     in runCommand cmd {
       meta.platforms = map (n: { kernel.name = n; }) (pkgs.lib.attrNames providers);
     } ''
-      mkdir -p $out/bin
+      mkdir -p $out/bin $out/share/man/man1
 
-      if ! [ -x "${provider}" ]; then
+      if ! [ -x "${provider}/bin/${cmd}" ]; then
         echo "Cannot find command ${cmd}"
         exit 1
       fi
 
-      ln -s "${provider}" "$out/bin/${cmd}"
+      cp "${provider}/bin/${cmd}" "$out/bin/${cmd}"
+
+      if [ -f "${provider}/share/man/man1/${cmd}.1.gz" ]; then
+        cp "${provider}/share/man/man1/${cmd}.1.gz" "$out/share/man/man1/${cmd}.1.gz"
+      fi
     '';
 
 in rec {
@@ -47,6 +51,16 @@ in rec {
   };
   eject = singleBinary "eject" {
     linux = pkgs.utillinux;
+  };
+  getconf = singleBinary "getconf" {
+    linux = if hostPlatform.isMusl then pkgs.musl-getconf
+            else lib.getBin stdenv.cc.libc;
+    darwin = pkgs.darwin.system_cmds;
+  };
+  getent = singleBinary "getent" {
+    linux = if hostPlatform.isMusl then pkgs.musl-getent
+            # This may not be right on other platforms, but preserves existing behavior
+            else /* if hostPlatform.libc == "glibc" then */ pkgs.glibc.bin;
   };
   getopt = singleBinary "getopt" {
     linux = pkgs.utillinux;
