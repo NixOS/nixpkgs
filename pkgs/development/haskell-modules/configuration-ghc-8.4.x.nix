@@ -107,17 +107,6 @@ self: super: {
 
   ## On Hackage:
 
-  ## Upstreamed, awaiting a Hackage release
-  haskell-gi = overrideCabal super.haskell-gi (drv: {
-    ## Setup: Encountered missing dependencies:
-    ## haskell-gi-base ==0.20.*
-    src = pkgs.fetchFromGitHub {
-      owner  = "haskell-gi";
-      repo   = "haskell-gi";
-      rev    = "30d2e6415c5b57760f8754cd3003eb07483d60e6";
-      sha256 = "1l3qm97gcjih695hhj80rbpnd72prnc81lg5y373yj8jk9f6ypbr";
-    };
-  });
 
   ## Upstreamed, awaiting a Hackage release
   haskell-gi-base = overrideCabal super.haskell-gi-base (drv: {
