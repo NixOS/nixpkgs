@@ -504,7 +504,7 @@ stdenv.mkDerivation ({
       compiler used in the GNU system including the GNU/Linux variant.
     '';
 
-    maintainers = with stdenv.lib.maintainers; [ ];
+    maintainers = with stdenv.lib.maintainers; [ synthetica ];
 
     platforms =
       stdenv.lib.platforms.linux ++
