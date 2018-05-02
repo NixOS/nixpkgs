@@ -4,7 +4,6 @@ use strict;
 use warnings;
 use File::Basename;
 use File::Slurp;
-use Net::DBus;
 use Sys::Syslog qw(:standard :macros);
 use Cwd 'abs_path';
 
@@ -68,15 +67,17 @@ EOF
 $SIG{PIPE} = "IGNORE";
 
 sub getActiveUnits {
-    my $mgr = Net::DBus->system->get_service("org.freedesktop.systemd1")->get_object("/org/freedesktop/systemd1");
-    my $units = $mgr->ListUnitsByPatterns([], []);
+    # FIXME: use D-Bus or whatever to query this, since parsing the
+    # output of list-units is likely to break.
+    # Use current version of systemctl binary before daemon is reexeced.
+    my $lines = `LANG= /run/current-system/sw/bin/systemctl list-units --full --no-legend`;
     my $res = {};
-    for my $item (@$units) {
-        my ($id, $description, $load_state, $active_state, $sub_state,
-            $following, $unit_path, $job_id, $job_type, $job_path) = @$item;
-        next unless $following eq '';
-        next if $job_id == 0 and $active_state eq 'inactive';
-        $res->{$id} = { load => $load_state, state => $active_state, substate => $sub_state };
+    foreach my $line (split '\n', $lines) {
+        chomp $line;
+        last if $line eq "";
+        $line =~ /^(\S+)\s+(\S+)\s+(\S+)\s+(\S+)\s/ or next;
+        next if $1 eq "UNIT";
+        $res->{$1} = { load => $2, state => $3, substate => $4 };
     }
     return $res;
 }
