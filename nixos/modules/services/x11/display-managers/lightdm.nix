@@ -45,7 +45,7 @@ let
         greeter-user = ${config.users.users.lightdm.name}
         greeters-directory = ${cfg.greeter.package}
       ''}
-      sessions-directory = ${dmcfg.session.desktops}
+      sessions-directory = ${dmcfg.session.desktops}/share/xsessions
 
       [Seat:*]
       xserver-command = ${xserverWrapper}

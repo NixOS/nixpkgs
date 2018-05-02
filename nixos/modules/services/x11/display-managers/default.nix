@@ -186,9 +186,9 @@ let
       allowSubstitutes = false;
     }
     ''
-      mkdir -p "$out"
+      mkdir -p "$out/share/xsessions"
       ${concatMapStrings (n: ''
-        cat - > "$out/${n}.desktop" << EODESKTOP
+        cat - > "$out/share/xsessions/${n}.desktop" << EODESKTOP
         [Desktop Entry]
         Version=1.0
         Type=XSession
