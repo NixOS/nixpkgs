@@ -576,6 +576,7 @@
   ./services/networking/tftpd.nix
   ./services/networking/tox-bootstrapd.nix
   ./services/networking/toxvpn.nix
+  ./services/networking/tuntox.nix
   ./services/networking/tvheadend.nix
   ./services/networking/unbound.nix
   ./services/networking/unifi.nix
