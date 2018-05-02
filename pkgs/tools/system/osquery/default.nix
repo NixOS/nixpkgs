@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
 
   # this is what `osquery --help` will show as the version.
   OSQUERY_BUILD_VERSION = version;
-  OSQUERY_PLATFORM = "nixos;${builtins.readFile "${toString path}/.version"}";
+  OSQUERY_PLATFORM = "nixos;${stdenv.lib.version}";
 
   src = fetchFromGitHub {
     owner = "facebook";

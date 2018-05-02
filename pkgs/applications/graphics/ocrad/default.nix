@@ -29,6 +29,6 @@ stdenv.mkDerivation rec {
 
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ pSub ];
-    platforms = platforms.gnu;  # arbitrary choice
+    platforms = platforms.unix;
   };
 }

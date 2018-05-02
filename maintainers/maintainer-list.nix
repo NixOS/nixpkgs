@@ -1760,6 +1760,11 @@
     github = "tftio";
     name = "James Felix Black";
   };
+  jflanglois = {
+    email = "yourstruly@julienlanglois.me";
+    github = "jflanglois";
+    name = "Julien Langlois";
+  };
   jfrankenau = {
     email = "johannes@frankenau.net";
     github = "jfrankenau";
@@ -3978,6 +3983,11 @@
     email = "elisp.vim@gmail.com";
     github = "vyp";
     name = "vyp";
+  };
+  wchresta = {
+    email = "wchresta.nix@chrummibei.ch";
+    github = "wchresta";
+    name = "wchresta";
   };
   wedens = {
     email = "kirill.wedens@gmail.com";

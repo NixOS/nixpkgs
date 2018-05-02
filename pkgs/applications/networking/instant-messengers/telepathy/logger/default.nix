@@ -31,6 +31,6 @@ stdenv.mkDerivation rec {
     homepage = https://telepathy.freedesktop.org/components/telepathy-logger/;
     license = licenses.lgpl21;
     maintainers = with maintainers; [ jtojnar ];
-    platforms = platforms.gnu; # Arbitrary choice
+    platforms = platforms.gnu ++ platforms.linux; # Arbitrary choice
   };
 }

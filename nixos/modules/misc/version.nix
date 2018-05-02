@@ -5,8 +5,6 @@ with lib;
 let
   cfg = config.system.nixos;
 
-  releaseFile  = "${toString pkgs.path}/.version";
-  suffixFile   = "${toString pkgs.path}/.version-suffix";
   revisionFile = "${toString pkgs.path}/.git-revision";
   gitRepo      = "${toString pkgs.path}/.git";
   gitCommitId  = lib.substring 0 7 (commitIdFromGitRepo gitRepo);
@@ -25,14 +23,14 @@ in
     nixos.release = mkOption {
       readOnly = true;
       type = types.str;
-      default = fileContents releaseFile;
+      default = trivial.release;
       description = "The NixOS release (e.g. <literal>16.03</literal>).";
     };
 
     nixos.versionSuffix = mkOption {
       internal = true;
       type = types.str;
-      default = if pathExists suffixFile then fileContents suffixFile else "pre-git";
+      default = trivial.versionSuffix;
       description = "The NixOS version suffix (e.g. <literal>1160.f2d4ee1</literal>).";
     };
 

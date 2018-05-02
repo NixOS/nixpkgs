@@ -23,6 +23,6 @@ pythonPackages.buildPythonApplication rec {
 
   meta = {
     description = "A comic strip downloader and archiver";
-    homepage = http://dosage.rocks/;
+    homepage = https://dosage.rocks/;
   };
 }
