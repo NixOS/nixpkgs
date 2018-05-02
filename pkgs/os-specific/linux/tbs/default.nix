@@ -43,16 +43,21 @@ in stdenv.mkDerivation {
   buildFlags = [ "VER=${kernel.modDirVersion}" ];
   installFlags = [ "DESTDIR=$(out)" ];
 
-  hardeningDisable = [ "pic" "format" ];
+  hardeningDisable = [ "all" ];
 
   nativeBuildInputs = [ patchutils kmod perl perlPackages.ProcProcessTable ]
-  ++ lib.optional (lib.versionAtLeast kernel.version "4.14") [ libelf ];
+  ++ kernel.moduleBuildDependencies;
+
+   postInstall = ''
+    xz $out/lib/modules/${kernel.modDirVersion}/kernel/drivers/media/dvb-core/dvb-core.ko
+    xz $out/lib/modules/${kernel.modDirVersion}/kernel/drivers/media/v4l2-core/videodev.ko
+  '';
 
   meta = with lib; {
     homepage = https://www.tbsdtv.com/;
     description = "Linux driver for TBSDTV cards";
     license = licenses.gpl2;
     maintainers = with maintainers; [ ck3d ];
-    priority = 20;
+    priority = -1;
   };
 }
