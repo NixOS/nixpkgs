@@ -12394,6 +12394,8 @@ with pkgs;
 
   exim = callPackage ../servers/mail/exim { };
 
+  facette = callPackage ../servers/monitoring/facette { };
+
   fcgiwrap = callPackage ../servers/fcgiwrap { };
 
   felix = callPackage ../servers/felix { };
