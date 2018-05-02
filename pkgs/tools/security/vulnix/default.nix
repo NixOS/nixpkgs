@@ -9,9 +9,9 @@ pythonPackages.buildPythonApplication rec {
     sha256 = "0j6v6phq3naqnpvzxxnynsyv9y7bhig1gzvg594qpknqgyzj16bf";
   };
 
-  buildInputs =
-    [ ronn ] ++
-    (with pythonPackages; [ freezegun pytest pytestcov ]);
+  buildInputs = [ ronn ];
+
+  checkInputs = with pythonPackages; [ freezegun pytest pytestcov pytest-flake8 ];
 
   propagatedBuildInputs = [
     nix
@@ -26,11 +26,6 @@ pythonPackages.buildPythonApplication rec {
   ]);
 
   outputs = [ "out" "doc" ];
-
-  # pytest-flake8 is currently broken
-  # re-enable after it has been fixed
-  # https://github.com/NixOS/nixpkgs/issues/39206
-  patches = [ ./disable-flake8.patch ];
 
   postBuild = ''
     make -C doc
