@@ -8,6 +8,11 @@ in {
 
   imports = [ ../../../modules/virtualisation/amazon-image.nix ];
 
+  # Required to avoid kernel panics on KVM instances where nvme volume availability can get delayed
+  # https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/nvme-ebs-volumes.html#timeout-nvme-ebs-volumes
+  # TODO change value to 4294967295 when kernel is updated to 4.15 or later
+  config.boot.kernelParams = [ "nvme_core.io_timeout=255" ];
+
   options.amazonImage = {
     name = mkOption {
       type = types.str;
