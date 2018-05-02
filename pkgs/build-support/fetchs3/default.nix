@@ -20,9 +20,13 @@ let
   credentialAttrs = stdenvNoCC.lib.optionalAttrs (credentials != null) (mkCredentials credentials);
 in runCommand name ({
   nativeBuildInputs = [ awscli ];
+
   outputHashAlgo = "sha256";
   outputHash = sha256;
   outputHashMode = if recursiveHash then "recursive" else "flat";
+
+  preferLocalBuild = true;
+
   AWS_DEFAULT_REGION = region;
 } // credentialAttrs) (if postFetch != null then ''
   downloadedFile="$(mktemp)"
