@@ -1,12 +1,9 @@
-{ stdenv, lib, makeWrapper, fetchurl, dpkg,
-
-  alsaLib, atk, cairo, cups, dbus_daemon, expat, fontconfig, freetype, gdk_pixbuf, glib, gnome2, gtk2-x11,
-  nspr, nss,
-
-  libX11, libXScrnSaver, libXcomposite, libXcursor, libXdamage, libXext, libXfixes, libXi, libXrandr,
-  libXrender, libXtst, libxcb,
-
-  libudev0-shim, glibc, curl, openssl
+{ stdenv, lib, makeWrapper, fetchurl, dpkg
+, alsaLib, atk, cairo, cups, dbus_daemon, expat, fontconfig, freetype
+, gdk_pixbuf, glib, gnome2, gtk2-x11, nspr, nss
+, libX11, libXScrnSaver, libXcomposite, libXcursor, libXdamage, libXext
+, libXfixes, libXi, libXrandr, libXrender, libXtst, libxcb, nghttp2
+, libudev0-shim, glibc, curl, openssl
 }:
 
 let
@@ -15,14 +12,14 @@ let
     gtk2-x11 nspr nss stdenv.cc.cc.lib libX11 libXScrnSaver libXcomposite libXcursor libXdamage libXext libXfixes
     libXi libXrandr libXrender libXtst libxcb
   ];
-  runtimeLibs = lib.makeLibraryPath [ libudev0-shim glibc curl openssl ];
+  runtimeLibs = lib.makeLibraryPath [ libudev0-shim glibc curl openssl nghttp2 ];
 in stdenv.mkDerivation rec {
   name = "insomnia-${version}";
-  version = "5.16.0";
+  version = "5.16.1";
 
   src = fetchurl {
     url = "https://github.com/getinsomnia/insomnia/releases/download/v${version}/insomnia_${version}_amd64.deb";
-    sha256 = "1cpw63ibxaa08vms7fbxr5ap2yh4vcl8q3rjfn0ag1zkimz8cg2p";
+    sha256 = "0r1l7pfcnif8vw9jnxbh5p9sih6wvgjpx8rpfmnvw21pr8cm0zyp";
   };
 
   nativeBuildInputs = [ makeWrapper dpkg ];
