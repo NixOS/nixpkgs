@@ -45,7 +45,7 @@
 
     passthru = {
       fancyName = "MariaDB";
-      driver = "lib/libmyodbc3-3.51.12.so";
+      driver = "lib/libmaodbc.so";
     };
 
     meta = with stdenv.lib; {
