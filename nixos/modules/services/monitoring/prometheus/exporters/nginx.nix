@@ -39,7 +39,7 @@ in
           --nginx.scrape_uri '${cfg.scrapeUri}' \
           --telemetry.address ${cfg.listenAddress}:${toString cfg.port} \
           --telemetry.endpoint ${cfg.telemetryEndpoint} \
-          --insecure ${cfg.insecure} \
+          --insecure ${toString cfg.insecure} \
           ${concatStringsSep " \\\n  " cfg.extraFlags}
       '';
     };
