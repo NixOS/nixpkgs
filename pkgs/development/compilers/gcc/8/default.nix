@@ -57,12 +57,7 @@ let version = "8.1.0";
     enableParallelBuilding = true;
 
     patches =
-      [ # https://gcc.gnu.org/ml/gcc-patches/2018-02/msg00633.html
-        /* ./riscv-pthread-reentrant.patch */ # TODO: is this needed?
-        # https://gcc.gnu.org/ml/gcc-patches/2018-03/msg00297.html
-        /* ./riscv-no-relax.patch */
-      ]
-      ++ optional (targetPlatform != hostPlatform) ../libstdc++-target.patch
+         optional (targetPlatform != hostPlatform) ../libstdc++-target.patch
       ++ optional noSysDirs ../no-sys-dirs.patch
       /* ++ optional (hostPlatform != buildPlatform) (fetchpatch { # XXX: Refine when this should be applied
         url = "https://git.busybox.net/buildroot/plain/package/gcc/7.1.0/0900-remove-selftests.patch?id=11271540bfe6adafbc133caf6b5b902a816f5f02";
