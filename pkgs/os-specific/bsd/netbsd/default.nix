@@ -452,6 +452,11 @@ in rec {
       export PATH=$out/bin:$PATH
     '';
 
+    postInstall = ''
+      substituteInPlace $out/usr/share/games/quiz.db/index \
+        --replace /usr $out
+    '';
+
     NIX_CFLAGS_COMPILE = [
       "-D__noinline="
       "-D__scanflike(a,b)="
