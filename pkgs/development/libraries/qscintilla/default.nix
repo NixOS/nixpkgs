@@ -10,13 +10,13 @@ let xcodePatch =
 in
 stdenv.mkDerivation rec {
   pname = "qscintilla";
-  version = "2.10.3";
+  version = "2.9.4";
 
   name = "${pname}-${if withQt5 then "qt5" else "qt4"}-${version}";
 
   src = fetchurl {
     url = "mirror://sourceforge/pyqt/QScintilla2/QScintilla-${version}/QScintilla_gpl-${version}.zip";
-    sha256 = "0rsx0b0iz5yf3x594kzhi0c2wpbmknv9b0a3rmx5w37bvmpd6qav";
+    sha256 = "04678skipydx68zf52vznsfmll2v9aahr66g50lcqbr6xsmgr1yi";
   };
 
   buildInputs = [ (if withQt5 then qtbase else qt4) ]
