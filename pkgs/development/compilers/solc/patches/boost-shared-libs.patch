@@ -1,0 +1,24 @@
+diff --git a/libsolidity/CMakeLists.txt b/libsolidity/CMakeLists.txt
+index 97b01c83..0bdec4b4 100644
+--- a/libsolidity/CMakeLists.txt
++++ b/libsolidity/CMakeLists.txt
+@@ -28,7 +28,7 @@ else()
+ endif()
+ 
+ add_library(solidity ${sources} ${headers})
+-target_link_libraries(solidity PUBLIC evmasm devcore)
++target_link_libraries(solidity PUBLIC evmasm devcore ${Boost_FILESYSTEM_LIBRARY} ${Boost_SYSTEM_LIBRARY})
+ 
+ if (${Z3_FOUND})
+   target_link_libraries(solidity PUBLIC ${Z3_LIBRARY})
+diff --git a/lllc/CMakeLists.txt b/lllc/CMakeLists.txt
+index 5c480093..d6538ee2 100644
+--- a/lllc/CMakeLists.txt
++++ b/lllc/CMakeLists.txt
+@@ -1,5 +1,5 @@
+ add_executable(lllc main.cpp)
+-target_link_libraries(lllc PRIVATE lll)
++target_link_libraries(lllc PRIVATE lll ${Boost_SYSTEM_LIBRARY})
+ 
+ if (INSTALL_LLLC)
+ 	include(GNUInstallDirs)
