@@ -193,19 +193,6 @@ self: super: {
     libraryHaskellDepends = (drv.libraryHaskellDepends or []) ++ (with self; [ data-or ]);
   });
 
-  ## Unmerged.  PR: https://github.com/gregorycollins/hashtables/pull/46
-  hashtables = overrideCabal super.hashtables (drv: {
-    ##     • No instance for (Semigroup Slot)
-    ##         arising from the superclasses of an instance declaration
-    ##     • In the instance declaration for ‘Monoid Slot’
-    src = pkgs.fetchFromGitHub {
-      owner  = "deepfire";
-      repo   = "hashtables";
-      rev    = "b9eb4b10a50bd6250330422afecc065339a32412";
-      sha256 = "0l4nplpvnzzf397zyh7j2k6yiqb46k6bdy00m4zzvhlfp7p1xkaw";
-    };
-  });
-
   ## Unmerged.  PR: https://github.com/hanshoglund/monadplus/pull/3
   monadplus = overrideCabal super.monadplus (drv: {
     ##     • No instance for (Semigroup (Partial a b))
