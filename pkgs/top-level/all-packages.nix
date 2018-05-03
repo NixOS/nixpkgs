@@ -929,8 +929,8 @@ with pkgs;
       install -D $out/bin/${drv.pname} $exe
       rm -rf $out/{bin,lib,share}
       makeWrapper $exe $out/bin/${drv.pname} \
-        --prefix PATH ":" "${nix}/bin" \
-        --prefix PATH ":" "${nix-prefetch-scripts}/bin"
+        --prefix PATH ":" "${buildPackages.nix}/bin" \
+        --prefix PATH ":" "${buildPackages.nix-prefetch-scripts}/bin"
       mkdir -p $out/share/{bash-completion/completions,zsh/vendor-completions,fish/completions}
       $exe --bash-completion-script $exe >$out/share/bash-completion/completions/${drv.pname}
       $exe --zsh-completion-script $exe >$out/share/zsh/vendor-completions/_${drv.pname}
@@ -7259,7 +7259,7 @@ with pkgs;
 
   python27 = callPackage ../development/interpreters/python/cpython/2.7 {
     self = python27;
-    inherit (darwin) CF configd;
+    inherit (buildPackages.darwin) CF configd;
   };
   python34 = callPackage ../development/interpreters/python/cpython/3.4 {
     inherit (darwin) CF configd;

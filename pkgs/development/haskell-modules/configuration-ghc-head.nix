@@ -24,6 +24,8 @@ self: super: {
   ghc-prim = null;
   ghci = null;
   haskeline = null;
+  stm = null;
+
   hoopl = null;
   hpc = null;
   integer-gmp = null;
@@ -92,5 +94,6 @@ self: super: {
   test-framework = doJailbreak super.test-framework;
   atomic-primops = doJailbreak (appendPatch super.atomic-primops ./patches/atomic-primops-Cabal-1.25.patch);
   hashable = doJailbreak super.hashable;
-  stm = doJailbreak super.stm;
+#  haskeline = doJailbreak super.haskeline;
+#  stm = doJailbreak super.stm;
 }

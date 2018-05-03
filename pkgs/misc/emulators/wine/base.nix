@@ -6,8 +6,8 @@
   buildScript ? null, configureFlags ? ""
 }:
 
-assert stdenv.isLinux;
-assert stdenv.cc.cc.isGNU or false;
+assert stdenv.isLinux || stdenv.isDarwin;
+# assert stdenv.cc.cc.isGNU or false;
 
 with import ./util.nix { inherit lib; };
 
@@ -54,9 +54,14 @@ stdenv.mkDerivation ((lib.optionalAttrs (! isNull buildScript) {
   ++ lib.optionals xmlSupport    [ pkgs.libxml2 pkgs.libxslt ]
   ++ lib.optionals tlsSupport    [ pkgs.openssl pkgs.gnutls ]
   ++ lib.optionals openglSupport [ pkgs.libGLU_combined pkgs.mesa_noglu.osmesa pkgs.libdrm ]
-  ++ (with pkgs.xorg; [
-    libX11  libXi libXcursor libXrandr libXrender libXxf86vm libXcomposite libXext
-  ])));
+  ++ lib.optionals stdenv.isDarwin (with pkgs.buildPackages.darwin.apple_sdk.frameworks; [
+     CoreServices Foundation ForceFeedback AppKit OpenGL IOKit DiskArbitration Security
+     ApplicationServices AudioToolbox CoreAudio AudioUnit CoreMIDI OpenAL OpenCL Cocoa Carbon
+  ])
+  ++ lib.optionals stdenv.isLinux  (with pkgs.xorg; [
+     libXi libXcursor libXrandr libXrender libXxf86vm libXcomposite libXext
+  ])
+  ++ [ pkgs.xorg.libX11 ]));
 
   # Wine locates a lot of libraries dynamically through dlopen().  Add
   # them to the RPATH so that the user doesn't have to set them in
@@ -115,4 +120,6 @@ stdenv.mkDerivation ((lib.optionalAttrs (! isNull buildScript) {
     description = "An Open Source implementation of the Windows API on top of X, OpenGL, and Unix";
     maintainers = with stdenv.lib.maintainers; [ avnik raskin bendlas ];
   };
-})
+  } // lib.optionalAttrs stdenv.isDarwin {
+    hardeningDisable = [ "fortify" ];
+  })

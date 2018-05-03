@@ -19,9 +19,11 @@ in
 , buildTarget ? ""
 , buildTools ? [], libraryToolDepends ? [], executableToolDepends ? [], testToolDepends ? [], benchmarkToolDepends ? []
 , configureFlags ? []
+, buildFlags ? []
 , description ? ""
 , doCheck ? !isCross && (stdenv.lib.versionOlder "7.4" ghc.version)
 , doBenchmark ? false
+, doVerbose ? false
 , doHoogle ? true
 , editedCabalFile ? null
 , enableLibraryProfiling ? true
@@ -126,6 +128,8 @@ let
   crossCabalFlagsString =
     stdenv.lib.optionalString isCross (" " + stdenv.lib.concatStringsSep " " crossCabalFlags);
 
+  buildFlagsString = optionalString (buildFlags != []) (" " + concatStringsSep " " buildFlags);
+
   defaultConfigureFlags = [
     "--verbose" "--prefix=$out" "--libdir=\\$prefix/lib/\\$compiler" "--libsubdir=\\$pkgid"
     (optionalString enableSeparateDataOutput "--datadir=$data/share/${ghc.name}")
@@ -142,7 +146,9 @@ let
     (enableFeature enableExecutableProfiling (if versionOlder ghc.version "8" then "executable-profiling" else "profiling"))
     (enableFeature enableSharedLibraries "shared")
     (optionalString (versionAtLeast ghc.version "7.10") (enableFeature doCoverage "coverage"))
-    (optionalString (versionOlder "8.4" ghc.version) (enableFeature enableStaticLibraries "static"))
+    # --enable-static does not work on windows. This is a bug in GHC.
+    # --enable-static will pass -staticlib to ghc, which only works for mach-o and elf.
+    (optionalString (!hostPlatform.isWindows && versionOlder "8.4" ghc.version) (enableFeature enableStaticLibraries "static"))
     (optionalString (isGhcjs || versionOlder "7.4" ghc.version) (enableFeature enableSharedExecutables "executable-dynamic"))
     (optionalString (isGhcjs || versionOlder "7" ghc.version) (enableFeature doCheck "tests"))
     "--enable-library-vanilla"  # TODO: Should this be configurable?
@@ -168,7 +174,8 @@ let
   allPkgconfigDepends = pkgconfigDepends ++ libraryPkgconfigDepends ++ executablePkgconfigDepends ++
                         optionals doCheck testPkgconfigDepends ++ optionals doBenchmark benchmarkPkgconfigDepends;
 
-  nativeBuildInputs = [ ghc nativeGhc removeReferencesTo ] ++ optional (allPkgconfigDepends != []) pkgconfig ++
+  nativeBuildInputs = [ ghc removeReferencesTo ] ++ optional (!isCross && ghc != nativeGhc) nativeGhc
+                      ++ optional (allPkgconfigDepends != []) pkgconfig ++
                       buildTools ++ libraryToolDepends ++ executableToolDepends;
   propagatedBuildInputs = buildDepends ++ libraryHaskellDepends ++ executableHaskellDepends;
   otherBuildInputs = setupHaskellDepends ++ extraLibraries ++ librarySystemDepends ++ executableSystemDepends ++
@@ -182,7 +189,21 @@ let
 
   ghcEnv = ghc.withPackages (p: haskellBuildInputs);
 
-  setupCommand = "./Setup";
+  simpleSetup = buildHaskellPackages.setup {};
+  configureSetup = buildHaskellPackages.setup { setupHs = ''
+  import Distribution.Simple
+  main = defaultMainWithHooks autoconfUserHooks
+'';
+};
+
+  setupCommand = if isCross then ''
+  if [ -f configure ]; then
+    HS_SETUP=${configureSetup}
+  else
+    HS_SETUP=${simpleSetup}
+  fi
+  $HS_SETUP/Setup''
+  else "./Setup";
 
   ghcCommand' = if isGhcjs then "ghcjs" else "ghc";
   ghcCommand = "${ghc.targetPrefix}${ghcCommand'}";
@@ -203,7 +224,11 @@ stdenv.mkDerivation ({
   pos = builtins.unsafeGetAttrPos "pname" args;
 
   prePhases = ["setupCompilerEnvironmentPhase"];
-  preConfigurePhases = ["compileBuildDriverPhase"];
+
+  # when cross compiling, we only support Simple or Configure build-types.
+  # Custom build-types are silently ignored!  Hence we use the Setup
+  # derivations and don't need the compileBuildDriverPhase.
+  preConfigurePhases = optionals (!isCross) ["compileBuildDriverPhase"];
   preInstallPhases = ["haddockPhase"];
 
   inherit src;
@@ -224,7 +249,10 @@ stdenv.mkDerivation ({
     ${jailbreak-cabal}/bin/jailbreak-cabal ${pname}.cabal
   '' + postPatch;
 
-  setupCompilerEnvironmentPhase = ''
+  setupCompilerEnvironmentPhase =
+  (optionalString doVerbose ''
+    set -x
+  '') + ''
     runHook preSetupCompilerEnvironment
 
     echo "Build with ${ghc}."
@@ -232,13 +260,19 @@ stdenv.mkDerivation ({
 
     packageConfDir="$TMPDIR/package.conf.d"
     mkdir -p $packageConfDir
-
+  '' + (optionalString (isCross && setupHaskellDepends != []) ''
+      setupPackageConfDir="$TMPDIR/setup-package.conf.d"
+      mkdir -p $setupPackageConfDir
+  '') + ''
     setupCompileFlags="${concatStringsSep " " setupCompileFlags}"
     configureFlags="${concatStringsSep " " defaultConfigureFlags} $configureFlags"
 
     # host.*Pkgs defined in stdenv/setup.hs
     for p in "''${pkgsHostHost[@]}" "''${pkgsHostTarget[@]}"; do
-      if [ -d "$p/lib/${ghc.name}/package.conf.d" ]; then
+      ${optionalString doVerbose ''
+        echo $p
+        echo $p/lib/${ghc.name}/package.conf.d
+    ''}if [ -d "$p/lib/${ghc.name}/package.conf.d" ]; then
         cp -f "$p/lib/${ghc.name}/package.conf.d/"*.conf $packageConfDir/
         continue
       fi
@@ -253,7 +287,7 @@ stdenv.mkDerivation ({
   # only use the links hack if we're actually building dylibs. otherwise, the
   # "dynamic-library-dirs" point to nonexistent paths, and the ln command becomes
   # "ln -s $out/lib/links", which tries to recreate the links dir and fails
-  + (optionalString (stdenv.isDarwin && enableSharedLibraries) ''
+  + (optionalString (stdenv.isDarwin && (enableSharedLibraries || enableSharedExecutables)) ''
     # Work around a limit in the macOS Sierra linker on the number of paths
     # referenced by any one dynamic library:
     #
@@ -282,7 +316,11 @@ stdenv.mkDerivation ({
     done
 
     echo setupCompileFlags: $setupCompileFlags
-    ${nativeGhcCommand} $setupCompileFlags --make -o Setup -odir $TMPDIR -hidir $TMPDIR $i
+    ${optionalString (isCross && setupHaskellDepends != [])
+       ''
+       echo GHC_PACKAGE_PATH="$setupPackageConfDir:"
+       GHC_PACKAGE_PATH="$setupPackageConfDir:" ''
+    }${nativeGhcCommand} $setupCompileFlags --make -o Setup -odir $TMPDIR -hidir $TMPDIR $i${optionalString doVerbose " -v3"}
 
     runHook postCompileBuildDriver
   '';
@@ -310,7 +348,7 @@ stdenv.mkDerivation ({
 
   buildPhase = ''
     runHook preBuild
-    ${setupCommand} build ${buildTarget}${crossCabalFlagsString}
+    ${setupCommand} build ${buildTarget}${crossCabalFlagsString}${buildFlagsString}${optionalString doVerbose " -v3"}
     runHook postBuild
   '';
 
