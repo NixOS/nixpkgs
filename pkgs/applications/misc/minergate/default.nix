@@ -1,12 +1,10 @@
 { fetchurl, stdenv, dpkg, makeWrapper, fontconfig, freetype, openssl, xorg, xkeyboard_config }:
 
-assert stdenv.system == "x86_64-linux";
-
 stdenv.mkDerivation rec {
   version = "8.1";
   name = "minergate-${version}";
   src = fetchurl {
-  	url = "https://minergate.com/download/ubuntu";
+    url = "https://minergate.com/download/ubuntu";
     sha256 = "1dbbbb8e0735cde239fca9e82c096dcc882f6cecda20bba7c14720a614c16e13";
   };
 
@@ -15,12 +13,12 @@ stdenv.mkDerivation rec {
   phases = [ "installPhase" ];
 
   installPhase = ''
-    dpkg-deb -x $src $out    
+    dpkg-deb -x $src $out
     pgm=$out/opt/minergate/minergate
 
     interpreter=${stdenv.glibc}/lib/ld-linux-x86-64.so.2
     patchelf --set-interpreter "$interpreter" $pgm
-   
+
     wrapProgram $pgm --prefix LD_LIBRARY_PATH : ${stdenv.lib.makeLibraryPath [ fontconfig freetype openssl stdenv.cc.cc xorg.libX11 xorg.libxcb ]} --prefix "QT_XKB_CONFIG_ROOT" ":" "${xkeyboard_config}/share/X11/xkb"
 
     rm $out/usr/bin/minergate
@@ -35,5 +33,4 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ bfortz ];
     platforms = [ "x86_64-linux" ];
 };
-}	
-
+}

@@ -3,8 +3,6 @@
 , buildPlatform, hostPlatform
 }:
 
-assert stdenv.isLinux;
-
 let
   sendmail-script = writeScript "sendmail-script" ''
     #!/bin/sh
