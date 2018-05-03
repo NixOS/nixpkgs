@@ -4139,8 +4139,6 @@ with pkgs;
 
   update-resolv-conf = callPackage ../tools/networking/openvpn/update-resolv-conf.nix { };
 
-  open-pdf-presenter = callPackage ../applications/misc/open-pdf-presenter { };
-
   openvswitch = callPackage ../os-specific/linux/openvswitch { };
 
   optipng = callPackage ../tools/graphics/optipng {
@@ -11032,8 +11030,6 @@ with pkgs;
     minimal = true;
     suffix = "min";
   };
-
-  poppler_qt4 = callPackage ../development/libraries/poppler/qt4.nix { };
 
   poppler_utils = poppler.override { suffix = "utils"; utils = true; };
 
