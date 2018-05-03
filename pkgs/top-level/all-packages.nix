@@ -2525,6 +2525,8 @@ with pkgs;
 
   glmark2 = callPackage ../tools/graphics/glmark2 { };
 
+  glogg = callPackage ../applications/misc/glogg { };
+
   glxinfo = callPackage ../tools/graphics/glxinfo { };
 
   gmvault = callPackage ../tools/networking/gmvault { };
