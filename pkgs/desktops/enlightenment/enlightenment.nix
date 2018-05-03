@@ -1,6 +1,6 @@
 { stdenv, fetchurl, meson, ninja, pkgconfig, gettext, efl,
   xcbutilkeysyms, libXrandr, libXdmcp, libxcb, libffi, pam, alsaLib,
-  luajit, bzip2, libpthreadstubs, gdbm, libcap, libGLU,
+  luajit, bzip2, libpthreadstubs, gdbm, libcap, libGLU, mesa_noglu,
   xkeyboard_config, pcre
 }:
 
@@ -34,6 +34,7 @@ stdenv.mkDerivation rec {
     libpthreadstubs
     gdbm
     pcre
+    mesa_noglu
   ] ++
     stdenv.lib.optionals stdenv.isLinux [ libcap ];
 
