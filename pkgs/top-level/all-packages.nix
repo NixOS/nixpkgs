@@ -11366,7 +11366,8 @@ with pkgs;
     qca-qt5 = callPackage ../development/libraries/qca-qt5 { };
 
     qmltermwidget = callPackage ../development/libraries/qmltermwidget { };
-    qmlbox2d = libsForQt59.callPackage ../development/libraries/qmlbox2d { };
+
+    qmlbox2d = callPackage ../development/libraries/qmlbox2d { };
 
     qscintilla = callPackage ../development/libraries/qscintilla {
       withQt5 = true;
