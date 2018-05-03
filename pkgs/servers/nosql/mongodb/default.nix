@@ -1,5 +1,5 @@
-{ stdenv, fetchurl, fetchpatch, scons, boost, gperftools, pcre-cpp, snappy
-, zlib, libyamlcpp, sasl, openssl, libpcap, Security
+{ stdenv, fetchurl, fetchpatch, scons, boost, gperftools, pcre-cpp, snappy, zlib,
+  libyamlcpp, sasl, openssl, libpcap, wiredtiger, Security, python27, libtool, curl
 }:
 
 # Note:
@@ -7,7 +7,8 @@
 
 with stdenv.lib;
 
-let version = "3.4.10";
+let version = "4.0.4";
+    python = python27.withPackages (ps: with ps; [ pyyaml typing cheetah ]);
     system-libraries = [
       "pcre"
       #"asio" -- XXX use package?
@@ -19,6 +20,7 @@ let version = "3.4.10";
       #"stemmer"  -- not nice to package yet (no versioning, no makefile, no shared libs).
       "yaml"
     ] ++ optionals stdenv.isLinux [ "tcmalloc" ];
+    inherit (stdenv.lib) systems subtractLists;
 
 in stdenv.mkDerivation {
   pname = "mongodb";
@@ -26,14 +28,14 @@ in stdenv.mkDerivation {
 
   src = fetchurl {
     url = "https://fastdl.mongodb.org/src/mongodb-src-r${version}.tar.gz";
-    sha256 = "1wz2mhl9z0b1bdkg6m8v8mvw9k60mdv5ybq554xn3yjj9z500f24";
+    sha256 = "1qycwr9f99b5cy4nf54yv2y724xis3lwd2h6iv2pfp36qnhsvfh2";
   };
 
   nativeBuildInputs = [ scons ];
   buildInputs = [
     sasl boost gperftools pcre-cpp snappy
-    zlib libyamlcpp sasl openssl.dev openssl.out libpcap
-  ] ++ stdenv.lib.optionals stdenv.isDarwin [ Security ];
+    zlib libyamlcpp sasl openssl.dev openssl.out libpcap python curl
+  ] ++ stdenv.lib.optionals stdenv.isDarwin [ Security libtool ];
 
   patches =
     [
@@ -41,11 +43,6 @@ in stdenv.mkDerivation {
       # keeping dependencies to build inputs in the final output.
       # We remove the build flags from buildInfo data.
       ./forget-build-dependencies.patch
-      (fetchpatch {
-        url = https://projects.archlinux.org/svntogit/community.git/plain/trunk/boost160.patch?h=packages/mongodb;
-        name = "boost160.patch";
-        sha256 = "0bvsf3499zj55pzamwjmsssr6x63w434944w76273fr5rxwzcmh8";
-      })
     ];
 
   postPatch = ''
@@ -89,6 +86,11 @@ in stdenv.mkDerivation {
   preInstall = ''
     mkdir -p $out/lib
   '';
+
+  postInstall = ''
+    rm $out/bin/install_compass
+  '';
+
   prefixKey = "--prefix=";
 
   enableParallelBuilding = true;
@@ -98,9 +100,10 @@ in stdenv.mkDerivation {
   meta = {
     description = "A scalable, high-performance, open source NoSQL database";
     homepage = http://www.mongodb.org;
-    license = licenses.agpl3;
+    license = licenses.sspl;
+    broken = stdenv.hostPlatform.isAarch64; #g++ has internal compiler errors
 
     maintainers = with maintainers; [ bluescreen303 offline cstrahan ];
-    platforms = platforms.unix;
+    platforms = subtractLists systems.doubles.i686 systems.doubles.unix;
   };
 }
