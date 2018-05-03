@@ -70,6 +70,11 @@ in stdenv.mkDerivation {
     # Fix the desktop link
     substituteInPlace $out/share/applications/rocketchat.desktop \
       --replace /opt/Rocket.Chat+/rocketchat $out/bin/rocketchat
+
+    # Fix electron-updater warnings, must take exact same amount of
+    # characters, otherwise the aspar archive breaks
+    sed -i 's/    checkForUpdates();/\/\/  checkForUpdates();/' \
+        $out/lib/rocketchat/resources/app.asar
     
   '';
    
@@ -78,6 +83,7 @@ in stdenv.mkDerivation {
     homepage = https://rocket.chat;
     license = licenses.mit;
     platforms = [ "x86_64-linux" ];
+    maintainers = [ maintainers.hlolli ];
   };
 
 }
