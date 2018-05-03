@@ -214,6 +214,10 @@ stdenv.mkDerivation ({
 
   LANG = "en_US.UTF-8";         # GHC needs the locale configured during the Haddock phase.
 
+  # XXX: workaround for https://ghc.haskell.org/trac/ghc/ticket/11042.
+  LD_LIBRARY_PATH = stdenv.lib.makeLibraryPath (stdenv.lib.filter (x: x != null) systemBuildInputs);
+                    # ^^^ Internally uses `getOutput "lib"` (equiv. to getLib)
+
   prePatch = optionalString (editedCabalFile != null) ''
     echo "Replace Cabal file with edited version from ${newCabalFileUrl}."
     cp ${newCabalFile} ${pname}.cabal
