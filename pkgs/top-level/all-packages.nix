@@ -8638,6 +8638,8 @@ with pkgs;
 
   CoinMP = callPackage ../development/libraries/CoinMP { };
 
+  cointop = callPackage ../applications/misc/cointop { };
+
   commoncpp2 = callPackage ../development/libraries/commoncpp2 { };
 
   confuse = callPackage ../development/libraries/confuse { };
