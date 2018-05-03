@@ -1,6 +1,6 @@
-{ fetchurl, stdenv, pkgconfig, gnome3, python3, dconf, gobjectIntrospection
+{ fetchurl, stdenv, pkgconfig, gnome3, python3, gobjectIntrospection
 , intltool, libsoup, libxml2, libsecret, icu, sqlite
-, p11-kit, db, nspr, nss, libical, gperf, makeWrapper
+, p11-kit, db, nspr, nss, libical, gperf, wrapGAppsHook, glib-networking
 , vala, cmake, ninja, kerberos, openldap, webkitgtk, libaccounts-glib, json-glib }:
 
 stdenv.mkDerivation rec {
@@ -15,12 +15,12 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    cmake ninja pkgconfig intltool python3 gperf makeWrapper gobjectIntrospection vala
+    cmake ninja pkgconfig intltool python3 gperf wrapGAppsHook gobjectIntrospection vala
   ];
   buildInputs = with gnome3; [
     glib libsoup libxml2 gtk gnome-online-accounts
     gcr p11-kit libgweather libgdata libaccounts-glib json-glib
-    icu sqlite kerberos openldap webkitgtk
+    icu sqlite kerberos openldap webkitgtk glib-networking
   ];
 
   propagatedBuildInputs = [ libsecret nss nspr libical db ];
@@ -34,14 +34,6 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     cmakeFlags="-DINCLUDE_INSTALL_DIR=$dev/include $cmakeFlags"
-  '';
-
-  preFixup = ''
-    for f in $(find $out/libexec/ -type f -executable); do
-      wrapProgram "$f" \
-        --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH" \
-        --prefix GIO_EXTRA_MODULES : "${stdenv.lib.getLib dconf}/lib/gio/modules"
-    done
   '';
 
   passthru = {
