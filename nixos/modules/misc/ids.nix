@@ -306,6 +306,7 @@
       ceph = 288;
       duplicati = 289;
       monetdb = 290;
+      restic = 291;
 
       # When adding a uid, make sure it doesn't match an existing gid. And don't use uids above 399!
 
@@ -580,6 +581,7 @@
       ceph = 288;
       duplicati = 289;
       monetdb = 290;
+      restic = 291;
 
       # When adding a gid, make sure it doesn't match an existing
       # uid. Users and groups with the same name should have equal
