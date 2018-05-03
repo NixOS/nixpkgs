@@ -13,7 +13,7 @@ let
 minSdkVersion = "9.0";
 
 iosPlatformArch = { parsed, ... }: {
-  "arm"     = "armv7";
+  "armv7a"  = "armv7";
   "aarch64" = "arm64";
   "x86_64"  = "x86_64";
 }.${parsed.cpu.name};

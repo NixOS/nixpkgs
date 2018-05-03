@@ -2,15 +2,15 @@
 
 buildGoPackage rec {
   name = "gllvm-${version}";
-  version = "2018-04-28"; # ~= 1.0.2, but no release tags yet
+  version = "1.2.0";
 
   goPackagePath = "github.com/SRI-CSL/gllvm";
 
   src = fetchFromGitHub {
     owner = "SRI-CSL";
     repo = "gllvm";
-    rev = "7755cdabb9bd2c5115059c13dce986e4e38f624e";
-    sha256 = "0a7mzmshyl4m216cxnar0pzjq98n2678x0czqfxgfdga55xp5frl";
+    rev = "v${version}";
+    sha256 = "0779828kzw9ihdnw5r3h2fzzd8ml8cskyf5hmaqqksinjb7bm3is";
   };
 
   meta = with stdenv.lib; {

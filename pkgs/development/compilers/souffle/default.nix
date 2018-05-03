@@ -1,25 +1,27 @@
-{ stdenv, fetchFromGitHub, autoconf, automake, boost, bison, flex, openjdk, doxygen, perl, graphviz }:
+{ stdenv, fetchFromGitHub, autoconf, automake, boost, bison, flex, openjdk, doxygen, perl, graphviz, libtool, lsb-release, ncurses, zlib, sqlite }:
 
 stdenv.mkDerivation rec {
-  version = "1.0.0";
+  version = "1.2.0";
   name    = "souffle-${version}";
 
   src = fetchFromGitHub {
     owner  = "souffle-lang";
     repo   = "souffle";
     rev    = version;
-    sha256 = "13j14227dgxcm25z9iizcav563wg2ak9338pb03aqqz8yqxbmz4n";
+    sha256 = "1g8yvm40h102mab8lacpl1cwgqsw1js0s1yn4l84l9fjdvlh2ygd";
   };
 
   buildInputs = [
     autoconf automake boost bison flex openjdk
+    # Used for 1.2.0
+    libtool lsb-release ncurses zlib sqlite
     # Used for docs
     doxygen perl graphviz
   ];
 
   patchPhase = ''
     substituteInPlace configure.ac \
-      --replace "m4_esyscmd([git describe --tags --abbrev=0 | tr -d '\n'])" "${version}"
+      --replace "m4_esyscmd([git describe --tags --abbrev=0 --always | tr -d '\n'])" "${version}"
   '';
 
   # Without this, we get an obscure error about not being able to find a library version
@@ -29,17 +31,11 @@ stdenv.mkDerivation rec {
 
   preConfigure = "./bootstrap";
 
-  # in 1.0.0: parser.hh:40:0: error: unterminated #ifndef
-  enableParallelBuilding = false;
-
-  # See https://github.com/souffle-lang/souffle/issues/176
-  hardeningDisable = [ "fortify" ];
-
   meta = with stdenv.lib; {
     description = "A translator of declarative Datalog programs into the C++ language";
     homepage    = "http://souffle-lang.github.io/";
     platforms   = platforms.unix;
-    maintainers = with maintainers; [ copumpkin ];
+    maintainers = with maintainers; [ copumpkin wchresta ];
     license     = licenses.upl;
   };
 }

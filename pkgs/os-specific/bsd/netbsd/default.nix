@@ -1,5 +1,5 @@
 { stdenv, hostPlatform, fetchcvs, lib, groff, mandoc, zlib, coreutils
-, yacc, flex, libressl, bash, more }:
+, yacc, flex, libressl, bash, less, writeText }:
 
 let
   fetchNetBSD = path: version: sha256: fetchcvs {
@@ -30,12 +30,15 @@ let
     NOGCCERROR = "yes";
     LEX = "flex";
     MKUNPRIVED = "yes";
-    INSTPRIV = '' ''${INSTPRIV.unpriv}'';
     HOST_SH = "${bash}/bin/sh";
     OBJCOPY = if stdenv.isDarwin then "true" else "objcopy";
-    PRESERVE = "-p";
     MACHINE_ARCH = hostPlatform.parsed.cpu.name;
     MACHINE_CPU = hostPlatform.parsed.cpu.name;
+
+    INSTALL_FILE = "install -U -c";
+    INSTALL_DIR = "xinstall -U -d";
+    INSTALL_LINK = "install -U -l h";
+    INSTALL_SYMLINK = "install -U -l s";
 
     # libs will be provided by cc-wrapper
     LIBCRT0 = "";
@@ -106,27 +109,12 @@ let
       fi
     '';
 
-    # Need to create directories for xinstall to work. Unused ones
-    # will be removed in the postInstall.
-    preInstall = ''
-      mkdir -p $out$BINDIR $out$LIBDIR $out$INFODIR \
-               $out$DOCDIR $out$LOCALEDIR $out$INCSDIR
-      for i in 1 2 3 4 5 6 7 8 9; do
-        mkdir -p $out$MANDIR/man$i $out$MANDIR/html$i \
-                 $out$DOCDIR/reference/ref$i
-      done
-    '';
-
     preFixup = ''
       # Remove lingering /usr references
       if [ -d $out/usr ]; then
         cd $out/usr
         find . -type d -exec mkdir -p $out/\{} \;
         find . -type f -exec mv \{} $out/\{} \;
-      fi
-
-      if [ -f $out/METALOG ]; then
-        rm $out/METALOG
       fi
 
       find $out -type d -empty -delete
@@ -155,11 +143,11 @@ let
       ${make.postPatch}
     '';
     buildPhase = ''
-      runHook prePatch
+      runHook preBuild
 
       sh ./buildmake.sh
 
-      runHook postPatch
+      runHook postBuild
     '';
     installPhase = ''
       runHook preInstall
@@ -229,7 +217,14 @@ let
     ] ++ libutil.extraPaths ++ libc.extraPaths;
   };
 
-  install = netBSDDerivation {
+  # HACK to ensure parent directories exist. This emulates GNU
+  # install’s -D option. No alternative seems to exist in BSD install.
+  install = let binstall = writeText "binstall" ''
+    #!/usr/bin/env sh
+    for last in $@; do true; done
+    mkdir -p $(dirname $last)
+    xinstall "$@"
+  ''; in netBSDDerivation {
     path = "usr.bin/xinstall";
     version = "7.1.2";
     sha256 = "0nzhyh714m19h61m45gzc5dszkbafp5iaphbp5mza6w020fzf2y8";
@@ -240,13 +235,12 @@ let
       runHook preInstall
 
       install -D install.1 $out/share/man/man1/install.1
-      install -D xinstall $out/bin/install
-      ln -s $out/bin/install $out/bin/xinstall
-      ln -s $out/bin/install $out/bin/binstall
+      install -D xinstall $out/bin/xinstall
+      install -D -m 0550 ${binstall} $out/bin/binstall
+      ln -s $out/bin/binstall $out/bin/install
 
       runHook postInstall
     '';
-    # INSTALL_FILE = "install -D";
   };
 
   fts = netBSDDerivation {
@@ -332,6 +326,8 @@ let
       substituteInPlace $NETBSDSRCDIR/share/mk/bsd.prog.mk \
         --replace '-Wl,-dynamic-linker=''${_SHLINKER}' "" \
         --replace '-Wl,-rpath,''${SHLIBDIR}' ""
+      substituteInPlace $NETBSDSRCDIR/share/mk/bsd.lib.mk \
+        --replace '_INSTRANLIB=''${empty(PRESERVE):?-a "''${RANLIB} -t":}' '_INSTRANLIB='
     '' + lib.optionalString stdenv.isDarwin ''
       substituteInPlace $NETBSDSRCDIR/share/mk/bsd.sys.mk \
         --replace '-Wl,--fatal-warnings' "" \
@@ -343,10 +339,6 @@ let
         --replace '-Wl,--warn-shared-textrel' "" \
         --replace '-Wl,-Map=''${_LIB}.so.''${SHLIB_SOVERSION}.map' "" \
         --replace '-Wl,-rpath,''${SHLIBDIR}' ""
-    '';
-    preInstall = ''
-      mkdir -p $out$BINDIR $out$DOCDIR/reference/ref1/make \
-               $out$MANDIR/man1 $out$MANDIR/html1 $out/share/mk
     '';
     postInstall = ''
       (cd $NETBSDSRCDIR/share/mk && make FILESDIR=/share/mk install)
@@ -402,7 +394,6 @@ in rec {
     version = "7.1.2";
     sha256 = "0nickhsjwgnr2h9nvwflvgfz93kqms5hzdnpyq02crpj35w98bh4";
     makeFlags = [ "BINDIR=/share" ];
-    preInstall = "mkdir -p $out/share/dict";
   };
 
   games = netBSDDerivation {
@@ -410,20 +401,20 @@ in rec {
     sha256 = "04wjsang8f8kxsifiayklbxaaxmm3vx9rfr91hfbxj4hk8gkqzy1";
     version = "7.1.2";
     makeFlags = [ "BINDIR=/bin"
-                  "SCRIPTSDIR=/bin"
-                  "FILESDIR=/share/games" ];
+                  "SCRIPTSDIR=/bin" ];
     postPatch = ''
       sed -i '1i #include <time.h>' adventure/save.c
 
       for f in $(find . -name pathnames.h); do
         substituteInPlace $f \
-          --replace /usr/share/games/fortune $out/share/games \
           --replace /usr/share/games $out/share/games \
           --replace /usr/games $out/bin \
           --replace /usr/libexec $out/libexec \
-          --replace /usr/bin/more ${more}/bin/more \
+          --replace /usr/bin/more ${less}/bin/less \
           --replace /usr/share/dict ${dict}/share/dict
       done
+      substituteInPlace boggle/boggle/bog.h \
+        --replace /usr/share/games $out/share/games
       substituteInPlace ching/ching/ching.sh \
         --replace /usr/share $out/share \
         --replace /usr/libexec $out/libexec
@@ -457,9 +448,13 @@ in rec {
     # HACK strfile needs to be installed first & in the path. The
     # Makefile should do this for us but haven't gotten it to work
     preBuild = ''
-      mkdir -p $out/bin $out/share/man/man8 $out/share/man/html8
       (cd fortune/strfile && make && make BINDIR=/bin install)
       export PATH=$out/bin:$PATH
+    '';
+
+    postInstall = ''
+      substituteInPlace $out/usr/share/games/quiz.db/index \
+        --replace /usr $out
     '';
 
     NIX_CFLAGS_COMPILE = [
@@ -474,14 +469,6 @@ in rec {
       "-DBE64TOH(x)=((void)0)"
       "-D__c99inline=__inline"
     ];
-
-    preInstall = ''
-      mkdir -p $out/var/games/hackdir \
-               $out/share/games \
-               $out$DOCDIR/reference/ref6/rogue \
-               $out$MANDIR/man6 $out$MANDIR/html6
-      touch $out/var/games/hackdir/perm
-    '';
 
     buildInputs = [ compat libcurses libterminfo libressl ];
     extraPaths = [ dict.src who.src ];
@@ -543,7 +530,6 @@ in rec {
       substituteInPlace term.c --replace /usr/share $out/share
     '';
     postInstall = ''
-      mkdir -p $out/share/misc
       (cd $NETBSDSRCDIR/share/terminfo && make && make BINDIR=/share install)
     '';
     extraPaths = [
@@ -591,6 +577,13 @@ in rec {
       (fetchNetBSD "usr.bin/tic" "7.1.2" "1ghwsaag4gbwvgp3lfxscnh8hn27n8cscwmgjwp3bkx5vl85nfsa")
       (fetchNetBSD "tools/Makefile.host" "7.1.2" "076r3amivb6xranpvqjmg7x5ibj4cbxaa3z2w1fh47h7d55dw9w8")
     ];
+  };
+
+  misc = netBSDDerivation {
+    path = "share/misc";
+    version = "7.1.2";
+    sha256 = "1vyn30js14nnadlls55mg7g1gz8h14l75rbrrh8lgn49qg289665";
+    makeFlags = [ "BINDIR=/share" ];
   };
 
 }

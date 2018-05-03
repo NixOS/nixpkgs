@@ -3,8 +3,6 @@
 , useSystemd ? true, systemd, gobjectIntrospection
 }:
 
-assert stdenv.isLinux;
-
 stdenv.mkDerivation rec {
   name = "upower-0.99.7";
 

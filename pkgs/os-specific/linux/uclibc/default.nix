@@ -1,7 +1,6 @@
 {stdenv, fetchzip, linuxHeaders, libiconvReal, cross ? null, gccCross ? null,
 extraConfig ? ""}:
 
-assert stdenv.isLinux;
 assert cross != null -> gccCross != null;
 
 let

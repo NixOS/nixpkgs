@@ -13,8 +13,6 @@
 , withSelinux ? false, libselinux
 }:
 
-assert stdenv.isLinux;
-
 let
   pythonLxmlEnv = buildPackages.python3Packages.python.withPackages ( ps: with ps; [ python3Packages.lxml ]);
 

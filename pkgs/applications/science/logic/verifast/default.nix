@@ -1,7 +1,6 @@
 { stdenv, fetchurl, gtk2, gdk_pixbuf, atk, pango, glib, cairo, freetype
 , fontconfig, libxml2, gnome2 }:
 
-assert stdenv.isLinux;
 let
 
   libPath = stdenv.lib.makeLibraryPath

@@ -45,10 +45,10 @@
   eventmachine = {
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "075hdw0fgzldgss3xaqm2dk545736khcvv1fmzbf1sgdlkyh1v8z";
+      sha256 = "08477hl609rmmngwfy8dmsqz5zvsg8xrsrrk6xi70jf48majwli0";
       type = "gem";
     };
-    version = "1.2.5";
+    version = "1.2.6";
   };
   ffi = {
     source = {
@@ -78,10 +78,10 @@
     dependencies = ["activesupport" "nokogiri"];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "0hkx70z9ijgnncmrna9qdh9ajn9m7v146k91j257lrzyq2f6jdjd";
+      sha256 = "1fdnxi9lh88vjndk4g94pwa45awbzklqc9b38nhqqb3sxg6my6zp";
       type = "gem";
     };
-    version = "2.7.1";
+    version = "2.7.2";
   };
   "http_parser.rb" = {
     source = {
@@ -104,10 +104,10 @@
     dependencies = ["addressable" "colorator" "em-websocket" "i18n" "jekyll-sass-converter" "jekyll-watch" "kramdown" "liquid" "mercenary" "pathutil" "rouge" "safe_yaml"];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "0fdb3qfbpjhlz5vlx4aw7kg9iy4bvaa5k1v82fxapyjghs2zg8as";
+      sha256 = "01s1r5pjfdvk5r1pz3j4smz42jsfv5vvp4q7fg0mrzxn9xk2nvi6";
       type = "gem";
     };
-    version = "3.8.0";
+    version = "3.8.1";
   };
   jekyll-avatar = {
     dependencies = ["jekyll"];
@@ -119,13 +119,13 @@
     version = "0.6.0";
   };
   jekyll-mentions = {
-    dependencies = ["activesupport" "html-pipeline" "jekyll"];
+    dependencies = ["html-pipeline" "jekyll"];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "11rfn2w9d50szbwbn3pajswjgcg85714d4d052mq2p803zg1i3mn";
+      sha256 = "042z02j0chv679s8imciiy44fgxh9028q8n95w48i0xrfrhyzzfb";
       type = "gem";
     };
-    version = "1.3.0";
+    version = "1.4.0";
   };
   jekyll-sass-converter = {
     dependencies = ["sass"];
@@ -164,13 +164,13 @@
     version = "2.0.0";
   };
   jemoji = {
-    dependencies = ["activesupport" "gemoji" "html-pipeline" "jekyll"];
+    dependencies = ["gemoji" "html-pipeline" "jekyll"];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "0acmi7mgr844dmzgfi9flcqkkb0jh5l21h579cidxwf1409w588b";
+      sha256 = "0r6ja4bw2c50hb585cmqscbmm27982kkskyh7gk6j0mr70jqlz25";
       type = "gem";
     };
-    version = "0.9.0";
+    version = "0.10.0";
   };
   kramdown = {
     source = {

@@ -6,7 +6,6 @@
   buildScript ? null, configureFlags ? ""
 }:
 
-assert stdenv.isLinux;
 assert stdenv.cc.cc.isGNU or false;
 
 with import ./util.nix { inherit lib; };
@@ -83,7 +82,7 @@ stdenv.mkDerivation ((lib.optionalAttrs (! isNull buildScript) {
   # Add capability to ignore known failing tests
   # and enable doCheck
   doCheck = false;
-  
+
   postInstall = let
     links = prefix: pkg: "ln -s ${pkg} $out/${prefix}/${pkg.name}";
   in ''
@@ -100,7 +99,7 @@ stdenv.mkDerivation ((lib.optionalAttrs (! isNull buildScript) {
       fi
     done
   '';
-  
+
   enableParallelBuilding = true;
 
   # https://bugs.winehq.org/show_bug.cgi?id=43530

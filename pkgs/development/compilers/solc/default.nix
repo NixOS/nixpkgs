@@ -1,7 +1,9 @@
-{ stdenv, fetchzip, fetchurl, boost, cmake, z3 }:
+{ stdenv, fetchzip, fetchFromGitHub, boost, cmake, z3 }:
 
 let
-  version = "0.4.20";
+  version = "0.4.23";
+  rev = "124ca40dc525a987a88176c6e5170978e82fa290";
+  sha256 = "07l8rfqh95yrdmbxc4pfb77s06k5v65dk3rgdqscqmwchkndrmm0";
   jsoncppURL = https://github.com/open-source-parsers/jsoncpp/archive/1.7.7.tar.gz;
   jsoncpp = fetchzip {
     url = jsoncppURL;
@@ -12,33 +14,45 @@ in
 stdenv.mkDerivation {
   name = "solc-${version}";
 
-  # Cannot use `fetchFromGitHub' because of submodules
-  src = fetchurl {
-    url = "https://github.com/ethereum/solidity/releases/download/v${version}/solidity_${version}.tar.gz";
-    sha256 = "0jyqnykj537ksfsf2m6ww9vganmpa6yd5fmlfpa5qm1076kq7zd6";
+  src = fetchFromGitHub {
+    owner = "ethereum";
+    repo = "solidity";
+    inherit rev sha256;
   };
 
-  patchPhase = ''
+  patches = [
+    ./patches/boost-shared-libs.patch
+    ./patches/shared-libs-install.patch
+  ];
+
+  postPatch = ''
+    touch prerelease.txt
+    echo >commit_hash.txt "${rev}"
     substituteInPlace cmake/jsoncpp.cmake \
-      --replace '${jsoncppURL}' ${jsoncpp}
+      --replace "${jsoncppURL}" ${jsoncpp}
     substituteInPlace cmake/EthCompilerSettings.cmake \
-      --replace 'add_compile_options(-Werror)' ""
+      --replace "add_compile_options(-Werror)" ""
   '';
 
   cmakeFlags = [
     "-DBoost_USE_STATIC_LIBS=OFF"
+    "-DBUILD_SHARED_LIBS=ON"
+    "-DINSTALL_LLLC=ON"
+    "-DTESTS=OFF"
   ];
 
   nativeBuildInputs = [ cmake ];
   buildInputs = [ boost z3 ];
 
-  meta = {
+  outputs = [ "out" "dev" ];
+
+  meta = with stdenv.lib; {
     description = "Compiler for Ethereum smart contract language Solidity";
     longDescription = "This package also includes `lllc', the LLL compiler.";
     homepage = https://github.com/ethereum/solidity;
-    license = stdenv.lib.licenses.gpl3;
-    platforms = with stdenv.lib.platforms; linux ++ darwin;
-    maintainers = [ stdenv.lib.maintainers.dbrock ];
+    license = licenses.gpl3;
+    platforms = with platforms; linux ++ darwin;
+    maintainers = with maintainers; [ dbrock akru ];
     inherit version;
   };
 }

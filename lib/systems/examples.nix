@@ -96,7 +96,7 @@ rec {
   };
 
   iphone32 = {
-    config = "armv7-apple-ios";
+    config = "armv7a-apple-ios";
     # config = "arm-apple-darwin10";
     sdkVer = "10.2";
     useiOSPrebuilt = true;
