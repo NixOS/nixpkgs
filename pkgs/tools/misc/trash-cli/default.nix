@@ -1,7 +1,5 @@
-{ stdenv, fetchFromGitHub, fetchpatch, coreutils
-, python3, python3Packages, substituteAll }:
-
-assert stdenv.isLinux;
+{ stdenv, fetchFromGitHub, fetchpatch, python3, python3Packages
+, lib, makeWrapper, coreutils }:
 
 python3Packages.buildPythonApplication rec {
   name = "trash-cli-${version}";
@@ -16,12 +14,6 @@ python3Packages.buildPythonApplication rec {
   };
 
   patches = [
-    (substituteAll {
-      src = ./nix-paths.patch;
-      df = "${coreutils}/bin/df";
-      libc = "${stdenv.cc.libc.out}/lib/libc.so.6";
-    })
-
     # Fix build on Python 3.6.
     (fetchpatch {
       url = "https://github.com/andreafrancia/trash-cli/commit/a21b80d1e69783bb09376c3f60dd2f2a10578805.patch";
@@ -30,10 +22,19 @@ python3Packages.buildPythonApplication rec {
   ];
 
   buildInputs = with python3Packages; [ nose mock ];
+  nativeBuildInputs = [ makeWrapper ];
+
+  preFixup = ''
+    for bin in $out/bin/*; do
+      wrapProgram $bin \
+        --prefix PATH : ${lib.makeBinPath [ coreutils ]} \
+        --prefix DYLD_LIBRARY_PATH : ${lib.makeSearchPath "lib" (lib.optional (stdenv.hostPlatform.libc == "glibc") (lib.getDev stdenv.cc.libc))}
+    done
+  '';
 
   checkPhase = "nosetests";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = https://github.com/andreafrancia/trash-cli;
     description = "Command line tool for the desktop trash can";
     maintainers = [ maintainers.rycee ];
