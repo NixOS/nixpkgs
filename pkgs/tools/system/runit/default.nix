@@ -13,6 +13,10 @@ stdenv.mkDerivation rec {
     sha256 = "065s8w62r6chjjs6m9hapcagy33m75nlnxb69vg0f4ngn061dl3g";
   };
 
+  patches = [
+    ./fix-ar-ranlib.patch
+  ];
+
   outputs = [ "out" "man" ];
 
   sourceRoot = "admin/${name}";
@@ -34,8 +38,8 @@ stdenv.mkDerivation rec {
     cd src
 
     # Both of these are originally hard-coded to gcc
-    echo cc > conf-cc
-    echo cc > conf-ld
+    echo ${stdenv.cc.targetPrefix}cc > conf-cc
+    echo ${stdenv.cc.targetPrefix}cc > conf-ld
   '';
 
   installPhase = ''
