@@ -5811,6 +5811,8 @@ with pkgs;
 
   you-get = python3Packages.callPackage ../tools/misc/you-get { };
 
+  z = callPackage ../tools/misc/z {};
+
   zbackup = callPackage ../tools/backup/zbackup {};
 
   zbar = callPackage ../tools/graphics/zbar { };
