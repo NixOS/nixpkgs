@@ -3,7 +3,8 @@
   removefile, libresolv, Libnotify, libplatform, libpthread, mDNSResponder, launchd, libutil, version }:
 
 appleDerivation rec {
-  phases = [ "unpackPhase" "installPhase" ];
+  dontBuild = true;
+  dontConfigure = true;
 
   nativeBuildInputs = [ cpio ];
 
