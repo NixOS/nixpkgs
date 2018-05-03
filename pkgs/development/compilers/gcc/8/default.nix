@@ -12,12 +12,6 @@
 , libelf                      # optional, for link-time optimizations (LTO)
 , isl ? null # optional, for the Graphite optimization framework.
 , zlib ? null
-, pkgconfig ? null
-, gtk2 ? null, libart_lgpl ? null
-, libX11 ? null, libXt ? null, libSM ? null, libICE ? null, libXtst ? null
-, libXrender ? null, xproto ? null, renderproto ? null, xextproto ? null
-, libXrandr ? null, libXi ? null, inputproto ? null, randrproto ? null
-, x11Support ? false
 , enableMultilib ? false
 , enablePlugin ? hostPlatform == buildPlatform # Whether to support user-supplied plug-ins
 , name ? "gcc"
@@ -59,11 +53,6 @@ let version = "8.1.0";
         sha256 = ""; # TODO: uncomment and check hash when available.
       }) */
       ++ optional langFortran ../gfortran-driving.patch;
-
-    xlibs = [
-      libX11 libXt libSM libICE libXtst libXrender libXrandr libXi
-      xproto renderproto xextproto inputproto randrproto
-    ];
 
     /* Platform flags */
     platformFlags = let
@@ -149,9 +138,6 @@ let version = "8.1.0";
     bootstrap = targetPlatform == hostPlatform;
 
 in
-
-# We need all these X libraries when building AWT with GTK+.
-assert x11Support -> (filter (x: x == null) ([ gtk2 libart_lgpl ] ++ xlibs)) == [];
 
 stdenv.mkDerivation ({
   name = "${name}${if stripped then "" else "-debug"}-${version}" + crossNameAddon;
