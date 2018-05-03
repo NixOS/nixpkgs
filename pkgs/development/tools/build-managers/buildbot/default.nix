@@ -76,6 +76,9 @@ let
       ./skip_test_linux_distro.patch
     ];
 
+    # TimeoutErrors on slow machines -> aarch64
+    doCheck = !stdenv.isAarch64;
+
     postPatch = ''
       substituteInPlace buildbot/scripts/logwatcher.py --replace '/usr/bin/tail' "$(type -P tail)"
     '';

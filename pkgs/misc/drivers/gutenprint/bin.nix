@@ -1,7 +1,5 @@
 { stdenv, fetchurl, rpm, cpio, zlib }:
 
-assert stdenv.system == "x86_64-linux";
-
 /* usage: (sorry, its still impure but works!)
 
 impure directory:
@@ -23,7 +21,7 @@ sed -n 's/^ServerBin //p' $(sed -n 's/respawn.*-c \(.*''\) -F.*''/\1/p' /etc/eve
 then. I've tried that.
 
 TODO tidy this all up. Find source instead of binary. Fix paths ... Find out how to check ink levels etc
- 
+
 */
 
 stdenv.mkDerivation {
@@ -56,13 +54,13 @@ stdenv.mkDerivation {
       patchelf --interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
           --set-rpath $libPath $p
     done
-    
+
     mkdir $out/lib
     ln -s $out/cups/lib $out/lib/cups
   '';
 
   meta = {
     description = "Some additional CUPS drivers including Canon drivers";
-    platforms = stdenv.lib.platforms.linux;
+    platforms = [ "x86_64-linux" ];
   };
 }

@@ -12,7 +12,7 @@
 
 <para><emphasis>Maintainer:</emphasis> Austin Seipp</para>
 
-<para><emphasis>Default version:</emphasis> 5.1.x</para>
+<para><emphasis>Available version(s):</emphasis> 5.1.x</para>
 
 <para>FoundationDB (or "FDB") is a distributed, open source, high performance,
 transactional key-value store. It can store petabytes of data and deliver
@@ -26,8 +26,16 @@ exceptional performance while maintaining consistency and ACID semantics
 
 <programlisting>
 services.foundationdb.enable = true;
+services.foundationdb.package = pkgs.foundationdb51; # FoundationDB 5.1.x
 </programlisting>
 </para>
+
+<para>The <option>services.foundationdb.package</option> option is required,
+and must always be specified. Because FoundationDB network protocols and
+on-disk storage formats may change between (major) versions, and upgrades must
+be explicitly handled by the user, you must always manually specify this
+yourself so that the NixOS module will use the proper version. Note that minor,
+bugfix releases are always compatible.</para>
 
 <para>After running <command>nixos-rebuild</command>, you can verify whether
 FoundationDB is running by executing <command>fdbcli</command> (which is added
@@ -192,6 +200,44 @@ to a new node in order to connect, if it is not part of the cluster.</para>
 
 </section>
 
+<section><title>Client authorization and TLS</title>
+
+<para>By default, any user who can connect to a FoundationDB process with the
+correct cluster configuration can access anything. FoundationDB uses a
+pluggable design to transport security, and out of the box it supports a
+LibreSSL-based plugin for TLS support. This plugin not only does in-flight
+encryption, but also performs client authorization based on the given
+endpoint's certificate chain. For example, a FoundationDB server may be
+configured to only accept client connections over TLS, where the client TLS
+certificate is from organization <emphasis>Acme Co</emphasis> in the
+<emphasis>Research and Development</emphasis> unit.</para>
+
+<para>Configuring TLS with FoundationDB is done using the
+<option>services.foundationdb.tls</option> options in order to control the peer
+verification string, as well as the certificate and its private key.</para>
+
+<para>Note that the certificate and its private key must be accessible to the
+FoundationDB user account that the server runs under. These files are also NOT
+managed by NixOS, as putting them into the store may reveal private
+information.</para>
+
+<para>After you have a key and certificate file in place, it is not enough to
+simply set the NixOS module options -- you must also configure the
+<command>fdb.cluster</command> file to specify that a given set of coordinators
+use TLS. This is as simple as adding the suffix <command>:tls</command> to your
+cluster coordinator configuration, after the port number. For example, assuming
+you have a coordinator on localhost with the default configuration, simply
+specifying:</para>
+
+<programlisting>
+XXXXXX:XXXXXX@127.0.0.1:4500:tls
+</programlisting>
+
+<para>will configure all clients and server processes to use TLS from now
+on.</para>
+
+</section>
+
 <section><title>Backups and Disaster Recovery</title>
 
 <para>The usual rules for doing FoundationDB backups apply on NixOS as written
@@ -245,16 +291,12 @@ FoundationDB is not new software, but the NixOS compilation and integration has
 only undergone fairly basic testing of all the available functionality.</para>
 
 <itemizedlist>
-  <listitem><para>TLS plugin support is compiled in, but it's currently not
-      possible to specify the set of TLS certificate options in
-      <command>services.foundationdb</command></para></listitem>
   <listitem><para>There is no way to specify individual parameters for
       individual <command>fdbserver</command> processes. Currently, all server
       processes inherit all the global <command>fdbmonitor</command> settings.
       </para></listitem>
   <listitem><para>Python bindings are not currently installed.</para></listitem>
   <listitem><para>Ruby bindings are not currently installed.</para></listitem>
-  <listitem><para>Java bindings are not currently installed.</para></listitem>
   <listitem><para>Go bindings are not currently installed.</para></listitem>
 </itemizedlist>
 

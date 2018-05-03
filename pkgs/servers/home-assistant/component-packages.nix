@@ -2,7 +2,7 @@
 # Do not edit!
 
 {
-  version = "0.68.0";
+  version = "0.68.1";
   components = {
     "abode" = ps: with ps; [  ];
     "ads" = ps: with ps; [  ];
@@ -299,7 +299,6 @@
     "sensor.dsmr" = ps: with ps; [  ];
     "sensor.dweet" = ps: with ps; [  ];
     "sensor.eddystone_temperature" = ps: with ps; [ construct ];
-    "sensor.eliqonline" = ps: with ps; [  ];
     "sensor.envirophat" = ps: with ps; [  ];
     "sensor.etherscan" = ps: with ps; [  ];
     "sensor.fastdotcom" = ps: with ps; [  ];

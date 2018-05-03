@@ -108,31 +108,6 @@ self: super: {
   ## On Hackage:
 
   ## Upstreamed, awaiting a Hackage release
-  haskell-gi = overrideCabal super.haskell-gi (drv: {
-    ## Setup: Encountered missing dependencies:
-    ## haskell-gi-base ==0.20.*
-    src = pkgs.fetchFromGitHub {
-      owner  = "haskell-gi";
-      repo   = "haskell-gi";
-      rev    = "30d2e6415c5b57760f8754cd3003eb07483d60e6";
-      sha256 = "1l3qm97gcjih695hhj80rbpnd72prnc81lg5y373yj8jk9f6ypbr";
-    };
-  });
-
-  ## Upstreamed, awaiting a Hackage release
-  haskell-gi-base = overrideCabal super.haskell-gi-base (drv: {
-    ## Setup: Encountered missing dependencies:
-    ## haskell-gi-base ==0.21.*
-    src = pkgs.fetchFromGitHub {
-      owner  = "haskell-gi";
-      repo   = "haskell-gi";
-      rev    = "30d2e6415c5b57760f8754cd3003eb07483d60e6";
-      sha256 = "1l3qm97gcjih695hhj80rbpnd72prnc81lg5y373yj8jk9f6ypbr";
-    };
-    prePatch        = "cd base; ";
-  });
-
-  ## Upstreamed, awaiting a Hackage release
   http-api-data = overrideCabal super.http-api-data (drv: {
     ##     • No instance for (Semigroup Form)
     ##         arising from the 'deriving' clause of a data type declaration
@@ -177,34 +152,7 @@ self: super: {
     prePatch        = "cd lambdacube-ir.haskell; ";
   });
 
-  ## Upstreamed, awaiting a Hackage release
-  simple-reflect = overrideCabal super.simple-reflect (drv: {
-    ##     • No instance for (Semigroup Expr)
-    ##         arising from the superclasses of an instance declaration
-    ##     • In the instance declaration for ‘Monoid Expr’
-    src = pkgs.fetchFromGitHub {
-      owner  = "twanvl";
-      repo   = "simple-reflect";
-      rev    = "c357e55da9a712dc5dbbfe6e36394e4ada2db310";
-      sha256 = "15q41b00l8y51xzhbj5zhddyh3gi7gvml033w8mm2fih458jf6yq";
-    };
-  });
-
   singletons = super.singletons_2_4_1;
-
-  ## Upstreamed, awaiting a Hackage release
-  tar = overrideCabal super.tar (drv: {
-    ##     • No instance for (Semigroup (Entries e))
-    ##         arising from the superclasses of an instance declaration
-    ##     • In the instance declaration for ‘Monoid (Entries e)’
-    src = pkgs.fetchFromGitHub {
-      owner  = "haskell";
-      repo   = "tar";
-      rev    = "abf2ccb8f7da0514343a0b2624cabebe081bdfa8";
-      sha256 = "0s33lgrr574i1r7zc1jqahnwx3dv47ny30mbx5zfpdzjw0jdl5ny";
-    };
-  });
-
   th-desugar = super.th-desugar_1_8;
 
   ## Upstreamed, awaiting a Hackage release
@@ -243,54 +191,6 @@ self: super: {
     ## Setup: Encountered missing dependencies:
     ## data-or ==1.0.*
     libraryHaskellDepends = (drv.libraryHaskellDepends or []) ++ (with self; [ data-or ]);
-  });
-
-  ## Unmerged.  PR: https://github.com/dhall-lang/dhall-haskell/pull/321
-  dhall = overrideCabal super.dhall (drv: {
-    ##     • No instance for (Semigroup (Parser Builder))
-    ##         arising from a use of ‘<>’
-    ##       There are instances for similar types:
-    src = pkgs.fetchFromGitHub {
-      owner  = "deepfire";
-      repo   = "dhall-haskell";
-      rev    = "38f3d8c861e137da6d8ac8eab88aec1c359efcac";
-      sha256 = "1pya7lhdjsygk622k1g3whj0a7jqwyym26ikxbn1anxypnb0n2wy";
-    };
-    ## Setup: Encountered missing dependencies:
-    ## prettyprinter >=1.2.0.1 && <1.3
-    jailbreak       = true;
-    ## Setup: Encountered missing dependencies:
-    ## insert-ordered-containers -any,
-    ## lens-family-core -any,
-    ## prettyprinter-ansi-terminal -any,
-    ## repline -any
-    libraryHaskellDepends = (drv.libraryHaskellDepends or []) ++ (with self; [ insert-ordered-containers lens-family-core prettyprinter prettyprinter-ansi-terminal repline ]);
-  });
-
-  ## Unmerged.  PR: https://github.com/gtk2hs/gtk2hs/pull/233
-  gtk2hs-buildtools = overrideCabal super.gtk2hs-buildtools (drv: {
-    ## Setup: Encountered missing dependencies:
-    ## Cabal >=1.24.0.0 && <2.1
-    src = pkgs.fetchFromGitHub {
-      owner  = "deepfire";
-      repo   = "gtk2hs";
-      rev    = "08c68d5afc22dd5761ec2c92ebf49c6d252e545b";
-      sha256 = "06prn5wqq8x225n9wlbyk60f50jyjj8fm2hf181dyqjpf8wq75xa";
-    };
-    prePatch        = "cd tools; ";
-  });
-
-  ## Unmerged.  PR: https://github.com/gregorycollins/hashtables/pull/46
-  hashtables = overrideCabal super.hashtables (drv: {
-    ##     • No instance for (Semigroup Slot)
-    ##         arising from the superclasses of an instance declaration
-    ##     • In the instance declaration for ‘Monoid Slot’
-    src = pkgs.fetchFromGitHub {
-      owner  = "deepfire";
-      repo   = "hashtables";
-      rev    = "b9eb4b10a50bd6250330422afecc065339a32412";
-      sha256 = "0l4nplpvnzzf397zyh7j2k6yiqb46k6bdy00m4zzvhlfp7p1xkaw";
-    };
   });
 
   ## Unmerged.  PR: https://github.com/hanshoglund/monadplus/pull/3
@@ -345,20 +245,6 @@ self: super: {
       sha256 = "0lyrx4l57v15rvazrmw0nfka9iyxs4wyaasjj9y1525va9s1z4fr";
     };
   });
-
-  ## Unmerged.  PR: https://github.com/ivan-m/wl-pprint-text/pull/17
-  wl-pprint-text = overrideCabal super.wl-pprint-text (drv: {
-    ##     Ambiguous occurrence ‘<>’
-    ##     It could refer to either ‘PP.<>’,
-    ##                              imported from ‘Prelude.Compat’ at Text/PrettyPrint/Leijen/Text/Monadic.hs:73:1-36
-    src = pkgs.fetchFromGitHub {
-      owner  = "deepfire";
-      repo   = "wl-pprint-text";
-      rev    = "615b83d1e5be52d1448aa1ab2517b431a617027b";
-      sha256 = "1p67v9s878br0r152h4n37smqhkg78v8zxhf4qm6d035s4rzj76i";
-    };
-  });
-
 
   ## Non-code, configuration-only change
 
@@ -555,13 +441,17 @@ self: super: {
   });
 
   # Older versions don't compile.
-  brick = self.brick_0_36_2;
+  brick = self.brick_0_36_3;
+  dhall = self.dhall_1_13_0;
+  dhall_1_13_0 = doJailbreak super.dhall_1_13_0;  # support ansi-terminal 0.8.x
   HaTeX = self.HaTeX_3_19_0_0;
   hpack = self.hpack_0_28_2;
   hspec-smallcheck = self.hspec-smallcheck_0_5_2;
   matrix = self.matrix_0_3_6_1;
   pandoc = self.pandoc_2_2;
   pandoc-types = self.pandoc-types_1_17_4_2;
+  wl-pprint-text = self.wl-pprint-text_1_1_1_1;
+  base-compat = self.base-compat_0_10_1;
 
   # https://github.com/xmonad/xmonad/issues/155
   xmonad = addBuildDepend (appendPatch super.xmonad (pkgs.fetchpatch

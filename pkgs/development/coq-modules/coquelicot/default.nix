@@ -23,6 +23,8 @@ stdenv.mkDerivation {
     inherit (coq.meta) platforms;
   };
 
-  passthru = { inherit (ssreflect) compatibleCoqVersions; };
+  passthru = {
+    compatibleCoqVersions = v: builtins.elem v [ "8.5" "8.6" "8.7" ];
+  };
 
 }

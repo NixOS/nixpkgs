@@ -271,6 +271,8 @@ in {
 
   intelhex = callPackage ../development/python-modules/intelhex { };
 
+  jira = callPackage ../development/python-modules/jira { };
+
   lmtpd = callPackage ../development/python-modules/lmtpd { };
 
   logster = callPackage ../development/python-modules/logster { };
@@ -3880,36 +3882,6 @@ in {
 
   pomegranate = callPackage ../development/python-modules/pomegranate { };
 
-  poppler-qt4 = buildPythonPackage rec {
-    name = "poppler-qt4-${version}";
-    version = "0.18.1";
-    disabled = isPy3k || isPyPy;
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/p/python-poppler-qt4/" +
-            "python-poppler-qt4-${version}.tar.gz";
-      sha256 = "00e3f89f4e23a844844d082918a89c2cbb1e8231ecb011b81d592e7e3c33a74c";
-    };
-
-    propagatedBuildInputs = [ self.pyqt4 pkgs.pkgconfig pkgs.poppler_qt4 ];
-
-    preBuild = "${python}/bin/${python.executable} setup.py build_ext" +
-               " --include-dirs=${pkgs.poppler_qt4.dev}/include/poppler/";
-
-    NIX_CFLAGS_COMPILE = "-I${pkgs.poppler_qt4.dev}/include/poppler/";
-
-    meta = {
-      description = "A Python binding to Poppler-Qt4";
-      longDescription = ''
-        A Python binding to Poppler-Qt4 that aims for completeness
-        and for being actively maintained.
-      '';
-      license = licenses.lgpl21Plus;
-      maintainers = with maintainers; [ sepi ];
-      platforms = platforms.all;
-    };
-  };
-
   poppler-qt5 = callPackage ../development/python-modules/poppler-qt5 {
     inherit (pkgs.qt5) qtbase;
     inherit (pkgs.libsForQt5) poppler;
@@ -6122,11 +6094,11 @@ in {
 
   github3_py = buildPythonPackage rec {
     name = "github3.py-${version}";
-    version = "1.0.2";
+    version = "1.1.0";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/g/github3.py/${name}.tar.gz";
-      sha256 = "1g91a8q9w0dalf4y4v0g72zi7vfrxwpx639an28vvys20y5zlvwp";
+      sha256 = "1cxaqdqmz9w2afc0cw2jyv783fp0grydbik0frzj79azzkhyg4gf";
     };
 
     buildInputs = with self; [ unittest2 pytest mock betamax betamax-matchers dateutil ];
@@ -6412,21 +6384,7 @@ in {
 
   httpbin = callPackage ../development/python-modules/httpbin { };
 
-  httplib2 = buildPythonPackage rec {
-    name = "httplib2-0.9.2";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/h/httplib2/${name}.tar.gz";
-      sha256 = "126rsryvw9vhbf3qmsfw9lf4l4xm2srmgs439lgma4cpag4s3ay3";
-    };
-
-    meta = {
-      homepage = http://code.google.com/p/httplib2;
-      description = "A comprehensive HTTP client library";
-      license = licenses.mit;
-      maintainers = with maintainers; [ garbas ];
-    };
-  };
+  httplib2 = callPackage ../development/python-modules/httplib2 { };
 
   hvac = callPackage ../development/python-modules/hvac { };
 
@@ -17861,15 +17819,7 @@ EOF
     };
   };
 
-  rocket-errbot = buildPythonPackage rec {
-    name = "rocket-errbot-${version}";
-    version = "1.2.5";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/r/rocket-errbot/${name}.tar.gz";
-      sha256 = "181y1wqjvlry5xdzbliajvrxvswzh3myh795jnj1pm92r5grqzda";
-    };
-  };
+  rocket-errbot = callPackage ../development/python-modules/rocket-errbot {  };
 
   Yapsy = buildPythonPackage rec {
     name = "Yapsy-${version}";

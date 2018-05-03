@@ -48,8 +48,6 @@
 , gnupg
 }:
 
-assert stdenv.isLinux;
-
 let
 
   inherit (generated) version sources;

@@ -34,8 +34,6 @@
 , writeScript
 }:
 
-assert stdenv.system == "i686-linux" || stdenv.system == "x86_64-linux";
-
 let
   arch32 = "i686-linux";
   arch64 = "x86_64-linux";
@@ -140,7 +138,7 @@ stdenv.mkDerivation {
     homepage = http://www.mendeley.com;
     description = "A reference manager and academic social network";
     license = licenses.unfree;
-    platforms = platforms.linux;
+    platforms = [ "x86_64-linux" "i686-linux" ];
     maintainers  = with maintainers; [ dtzWill ];
   };
 

@@ -18,18 +18,19 @@ let
   #  systemd service must be provided by specifying either
   #  `serviceOpts.script` or `serviceOpts.serviceConfig.ExecStart`
   exporterOpts = {
-    blackbox = import ./exporters/blackbox.nix { inherit config lib pkgs; };
-    collectd = import ./exporters/collectd.nix { inherit config lib pkgs; };
-    dovecot  = import ./exporters/dovecot.nix  { inherit config lib pkgs; };
-    fritzbox = import ./exporters/fritzbox.nix { inherit config lib pkgs; };
-    json     = import ./exporters/json.nix     { inherit config lib pkgs; };
-    minio    = import ./exporters/minio.nix    { inherit config lib pkgs; };
-    nginx    = import ./exporters/nginx.nix    { inherit config lib pkgs; };
-    node     = import ./exporters/node.nix     { inherit config lib pkgs; };
-    postfix  = import ./exporters/postfix.nix  { inherit config lib pkgs; };
-    snmp     = import ./exporters/snmp.nix     { inherit config lib pkgs; };
-    unifi    = import ./exporters/unifi.nix    { inherit config lib pkgs; };
-    varnish  = import ./exporters/varnish.nix  { inherit config lib pkgs; };
+    blackbox  = import ./exporters/blackbox.nix  { inherit config lib pkgs; };
+    collectd  = import ./exporters/collectd.nix  { inherit config lib pkgs; };
+    dovecot   = import ./exporters/dovecot.nix   { inherit config lib pkgs; };
+    fritzbox  = import ./exporters/fritzbox.nix  { inherit config lib pkgs; };
+    json      = import ./exporters/json.nix      { inherit config lib pkgs; };
+    minio     = import ./exporters/minio.nix     { inherit config lib pkgs; };
+    nginx     = import ./exporters/nginx.nix     { inherit config lib pkgs; };
+    node      = import ./exporters/node.nix      { inherit config lib pkgs; };
+    postfix   = import ./exporters/postfix.nix   { inherit config lib pkgs; };
+    snmp      = import ./exporters/snmp.nix      { inherit config lib pkgs; };
+    surfboard = import ./exporters/surfboard.nix { inherit config lib pkgs; };
+    unifi     = import ./exporters/unifi.nix     { inherit config lib pkgs; };
+    varnish   = import ./exporters/varnish.nix   { inherit config lib pkgs; };
   };
 
   mkExporterOpts = ({ name, port }: {

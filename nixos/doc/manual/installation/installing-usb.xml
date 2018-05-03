@@ -3,17 +3,19 @@
          xmlns:xi="http://www.w3.org/2001/XInclude"
          version="5.0"
          xml:id="sec-booting-from-usb">
+ <title>Booting from a USB Drive</title>
 
-<title>Booting from a USB Drive</title>
+ <para>
+  For systems without CD drive, the NixOS live CD can be booted from a USB
+  stick. You can use the <command>dd</command> utility to write the image:
+  <command>dd if=<replaceable>path-to-image</replaceable>
+  of=<replaceable>/dev/sdb</replaceable></command>. Be careful about specifying
+  the correct drive; you can use the <command>lsblk</command> command to get a
+  list of block devices.
+ </para>
 
-<para>For systems without CD drive, the NixOS live CD can be booted from
-a USB stick. You can use the <command>dd</command> utility to write the image:
-<command>dd if=<replaceable>path-to-image</replaceable>
-of=<replaceable>/dev/sdb</replaceable></command>. Be careful about specifying the
-correct drive; you can use the <command>lsblk</command> command to get a list of
-block devices.</para>
-
-<para>On macOS:
+ <para>
+  On macOS:
 <programlisting>
 $ diskutil list
 [..]
@@ -24,36 +26,43 @@ $ diskutil unmountDisk diskN
 Unmount of all volumes on diskN was successful
 $ sudo dd bs=1m if=nix.iso of=/dev/rdiskN
 </programlisting>
-Using the 'raw' <command>rdiskN</command> device instead of <command>diskN</command>
-completes in minutes instead of hours. After <command>dd</command> completes, a GUI
-dialog "The disk you inserted was not readable by this computer" will pop up, which
-can be ignored.</para>
-         
-<para>The <command>dd</command> utility will write the image verbatim to the drive,
-making it the recommended option for both UEFI and non-UEFI installations. For
-non-UEFI installations, you can alternatively use
-<link xlink:href="http://unetbootin.sourceforge.net/">unetbootin</link>. If you
-cannot use <command>dd</command> for a UEFI installation, you can also mount the
-ISO, copy its contents verbatim to your drive, then either:
+  Using the 'raw' <command>rdiskN</command> device instead of
+  <command>diskN</command> completes in minutes instead of hours. After
+  <command>dd</command> completes, a GUI dialog "The disk you inserted was not
+  readable by this computer" will pop up, which can be ignored.
+ </para>
 
-<itemizedlist>
-  <listitem>
-    <para>Change the label of the disk partition to the label of the ISO
-    (visible with the blkid command), or</para>
-  </listitem>
-  <listitem>
-    <para>Edit <filename>loader/entries/nixos-livecd.conf</filename> on the drive
-    and change the <literal>root=</literal> field in the <literal>options</literal>
-    line to point to your drive (see the documentation on <literal>root=</literal>
-    in <link xlink:href="https://www.kernel.org/doc/Documentation/admin-guide/kernel-parameters.txt">
-    the kernel documentation</link> for more details).</para>
-  </listitem>
-  <listitem>
-    <para>If you want to load the contents of the ISO to ram after bootin
-    (So you can remove the stick after bootup) you can append the parameter
-    <literal>copytoram</literal> to the <literal>options</literal> field.</para>
-  </listitem>
-</itemizedlist>
-</para>
-
+ <para>
+  The <command>dd</command> utility will write the image verbatim to the drive,
+  making it the recommended option for both UEFI and non-UEFI installations.
+  For non-UEFI installations, you can alternatively use
+  <link xlink:href="http://unetbootin.sourceforge.net/">unetbootin</link>. If
+  you cannot use <command>dd</command> for a UEFI installation, you can also
+  mount the ISO, copy its contents verbatim to your drive, then either:
+  <itemizedlist>
+   <listitem>
+    <para>
+     Change the label of the disk partition to the label of the ISO (visible
+     with the blkid command), or
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     Edit <filename>loader/entries/nixos-livecd.conf</filename> on the drive
+     and change the <literal>root=</literal> field in the
+     <literal>options</literal> line to point to your drive (see the
+     documentation on <literal>root=</literal> in
+     <link xlink:href="https://www.kernel.org/doc/Documentation/admin-guide/kernel-parameters.txt">
+     the kernel documentation</link> for more details).
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     If you want to load the contents of the ISO to ram after bootin (So you
+     can remove the stick after bootup) you can append the parameter
+     <literal>copytoram</literal> to the <literal>options</literal> field.
+    </para>
+   </listitem>
+  </itemizedlist>
+ </para>
 </section>

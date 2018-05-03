@@ -1,7 +1,5 @@
 { stdenv, systemd, cryptsetup }:
 
-assert stdenv.isLinux;
-
 stdenv.lib.overrideDerivation systemd (p: {
   version = p.version;
   name = "systemd-cryptsetup-generator";
