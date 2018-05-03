@@ -1,7 +1,5 @@
 { stdenv, fetchurl, iptables, libuuid, pkgconfig }:
 
-assert stdenv.isLinux;
-
 stdenv.mkDerivation rec {
   name = "miniupnpd-2.0.20180422";
 

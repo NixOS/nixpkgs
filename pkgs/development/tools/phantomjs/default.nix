@@ -3,7 +3,6 @@
 let
   platforms = [ "i686-linux" "x86_64-linux" "x86_64-darwin" ];
 in
-assert lib.elem stdenv.system platforms;
 
 stdenv.mkDerivation rec {
   name = "phantomjs-1.9.8";

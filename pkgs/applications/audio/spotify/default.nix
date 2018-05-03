@@ -2,8 +2,6 @@
 , glib, pango, cairo, atk, gdk_pixbuf, gtk2, cups, nspr, nss, libpng, GConf
 , libgcrypt, systemd, fontconfig, dbus, expat, ffmpeg_0_10, curl, zlib, gnome2 }:
 
-assert stdenv.system == "x86_64-linux";
-
 let
   # Please update the stable branch!
   # Latest version number can be found at:

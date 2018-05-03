@@ -1,7 +1,5 @@
 { stdenv, fetchurl, fetchgit, go }:
 
-assert stdenv.isLinux && (stdenv.isi686 || stdenv.isx86_64 || stdenv.isAarch32);
-
 let
 
   # Code with BSD license
