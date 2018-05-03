@@ -14396,6 +14396,8 @@ with pkgs;
 
   ibm-plex = callPackage ../data/fonts/ibm-plex { };
 
+  iconpack-obsidian = callPackage ../data/icons/iconpack-obsidian { };
+
   inconsolata = callPackage ../data/fonts/inconsolata {};
   inconsolata-lgc = callPackage ../data/fonts/inconsolata/lgc.nix {};
 
