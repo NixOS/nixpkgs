@@ -227,6 +227,12 @@ $ nix-instantiate -E '(import &lt;nixpkgsunstable&gt; {}).gitFull'
      </para>
     </note>
    </listitem>
+   <listitem>
+    <para>
+     <literal>networking.networkmanager.useDnsmasq</literal> has been deprecated. Use
+     <literal>networking.networkmanager.dns</literal> instead.
+    </para>
+   </listitem>
   </itemizedlist>
  </section>
 </section>
