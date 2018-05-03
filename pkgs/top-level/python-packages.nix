@@ -3882,36 +3882,6 @@ in {
 
   pomegranate = callPackage ../development/python-modules/pomegranate { };
 
-  poppler-qt4 = buildPythonPackage rec {
-    name = "poppler-qt4-${version}";
-    version = "0.18.1";
-    disabled = isPy3k || isPyPy;
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/p/python-poppler-qt4/" +
-            "python-poppler-qt4-${version}.tar.gz";
-      sha256 = "00e3f89f4e23a844844d082918a89c2cbb1e8231ecb011b81d592e7e3c33a74c";
-    };
-
-    propagatedBuildInputs = [ self.pyqt4 pkgs.pkgconfig pkgs.poppler_qt4 ];
-
-    preBuild = "${python}/bin/${python.executable} setup.py build_ext" +
-               " --include-dirs=${pkgs.poppler_qt4.dev}/include/poppler/";
-
-    NIX_CFLAGS_COMPILE = "-I${pkgs.poppler_qt4.dev}/include/poppler/";
-
-    meta = {
-      description = "A Python binding to Poppler-Qt4";
-      longDescription = ''
-        A Python binding to Poppler-Qt4 that aims for completeness
-        and for being actively maintained.
-      '';
-      license = licenses.lgpl21Plus;
-      maintainers = with maintainers; [ sepi ];
-      platforms = platforms.all;
-    };
-  };
-
   poppler-qt5 = callPackage ../development/python-modules/poppler-qt5 {
     inherit (pkgs.qt5) qtbase;
     inherit (pkgs.libsForQt5) poppler;
