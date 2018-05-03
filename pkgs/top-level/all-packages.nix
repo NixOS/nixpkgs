@@ -4293,7 +4293,7 @@ with pkgs;
 
   fmodex = callPackage ../games/zandronum/fmod.nix { };
 
-  pdfmod = callPackage ../applications/misc/pdfmod { };
+  pdfmod = callPackage ../applications/misc/pdfmod { mono = mono4; };
 
   pdf-quench = callPackage ../applications/misc/pdf-quench { };
 
@@ -6723,7 +6723,9 @@ with pkgs;
 
   mlton = callPackage ../development/compilers/mlton { };
 
-  mono = mono58;
+  mono  = mono5;
+  mono5 = mono58;
+  mono4 = mono48;
 
   mono40 = lowPrio (callPackage ../development/compilers/mono/4.0.nix {
     inherit (darwin) libobjc;
@@ -9298,7 +9300,7 @@ with pkgs;
 
   gdk_pixbuf = callPackage ../development/libraries/gdk-pixbuf { };
 
-  gnome-sharp = callPackage ../development/libraries/gnome-sharp {};
+  gnome-sharp = callPackage ../development/libraries/gnome-sharp { mono = mono4; };
 
   granite = callPackage ../development/libraries/granite { };
   elementary-cmake-modules = callPackage ../development/libraries/elementary-cmake-modules { };
@@ -9432,7 +9434,7 @@ with pkgs;
 
   hydraAntLogger = callPackage ../development/libraries/java/hydra-ant-logger { };
 
-  hyena = callPackage ../development/libraries/hyena { };
+  hyena = callPackage ../development/libraries/hyena { mono = mono4; };
 
   icu58 = callPackage (import ../development/libraries/icu/58.nix fetchurl) ({
     nativeBuildRoot = buildPackages.icu58.override { buildRootOnly = true; };
