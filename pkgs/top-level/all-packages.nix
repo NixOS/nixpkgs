@@ -7259,7 +7259,10 @@ with pkgs;
   bundlerEnv = callPackage ../development/ruby-modules/bundler-env { };
   bundlerApp = callPackage ../development/ruby-modules/bundler-app { };
 
-  inherit (callPackage ../development/interpreters/ruby { inherit (darwin.apple_sdk.frameworks) Foundation; })
+  inherit (callPackage ../development/interpreters/ruby {
+    inherit (darwin) libiconv libobjc libunwind;
+    inherit (darwin.apple_sdk.frameworks) Foundation;
+  })
     ruby_2_3
     ruby_2_4
     ruby_2_5;
