@@ -101,6 +101,12 @@ $ nix-instantiate -E '(import &lt;nixpkgsunstable&gt; {}).gitFull'
      that can be mapped onto the YAML configuration defined in <link xlink:href="https://github.com/docker/distribution/blob/v2.6.2/docs/configuration.md">the <varname>docker/distribution</varname> docs</link>.
     </para>
    </listitem>
+   <listitem>
+    <para>
+     <literal>googleearth</literal> has been removed from Nixpkgs. Google does not provide
+     a stable URL for Nixpkgs to use to package this proprietary software.
+    </para>
+   </listitem>
   </itemizedlist>
  </section>
 
