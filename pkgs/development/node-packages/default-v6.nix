@@ -44,6 +44,16 @@ nodePackages // {
     dontNpmInstall = true; # We face an error with underscore not found, but the package will work fine if we ignore this.
   });
 
+  yarn = nodePackages.yarn.overrideAttrs (oldAttrs: {
+    src = pkgs.fetchFromGitHub {
+      owner = "yarnpkg";
+      repo = "yarn";
+      rev = "v${oldAttrs.version}";
+      sha256 = "1h1qcgyx53hxkmg1z34k9b8gc3w0l670mb3jgmqlcbs6vjlqxbr8";
+      fetchSubmodules = true; # Force fetchgit to get the actual source
+    };
+  });
+
   npm2nix = nodePackages."npm2nix-git://github.com/NixOS/npm2nix.git#5.12.0".override {
     postInstall = "npm run-script prepublish";
   };
