@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     runHook preInstall
-    install -d datafiles "$out/share/sympow/datafiles"
+    install -D datafiles/* --target-directory "$out/share/sympow/datafiles/"
     install *.gp "$out/share/sympow/"
     install -Dm755 sympow "$out/share/sympow/sympow"
     install -D new_data "$out/bin/new_data"
