@@ -891,7 +891,9 @@ with pkgs;
 
   btrfs-dedupe = callPackage ../tools/filesystems/btrfs-dedupe/default.nix {};
 
-  btrbk = callPackage ../tools/backup/btrbk { };
+  btrbk = callPackage ../tools/backup/btrbk {
+    asciidoc = asciidoc-full;
+  };
 
   buildtorrent = callPackage ../tools/misc/buildtorrent { };
 
