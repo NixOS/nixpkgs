@@ -5623,8 +5623,20 @@ in {
     };
   };
 
-  pytorch = callPackage ../development/python-modules/pytorch {
+  pytorch = let
+    # Fails with CUDA 9.1 and GCC 6.4:
+    # https://github.com/pytorch/pytorch/issues/5831
+    # https://devtalk.nvidia.com/default/topic/1028112
+    # We should be able to remove this when CUDA 9.2 is released.
+    cudatoolkit9 = pkgs.cudatoolkit9.override {
+      gcc6 = pkgs.gcc5;
+    };
+  in callPackage ../development/python-modules/pytorch {
     cudaSupport = pkgs.config.cudaSupport or false;
+    cudatoolkit = cudatoolkit9;
+    cudnn = pkgs.cudnn_cudatoolkit9.override {
+      inherit cudatoolkit9;
+    };
   };
 
   pytorchWithCuda = self.pytorch.override {
