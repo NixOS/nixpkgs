@@ -23,7 +23,7 @@ let
 
   cfg = config.virtualisation;
 
-  qemuGraphics = if cfg.graphics then "" else "-nographic";
+  qemuGraphics = lib.optionalString (!cfg.graphics) "-nographic";
   kernelConsole = if cfg.graphics then "" else "console=${qemuSerialDevice}";
   ttys = [ "tty1" "tty2" "tty3" "tty4" "tty5" "tty6" ];
 
