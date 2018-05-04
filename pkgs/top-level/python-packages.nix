@@ -5623,7 +5623,17 @@ in {
     };
   };
 
-  pytorch = callPackage ../development/python-modules/pytorch { };
+  pytorch = callPackage ../development/python-modules/pytorch {
+    cudaSupport = pkgs.config.cudaSupport or false;
+  };
+
+  pytorchWithCuda = self.pytorch.override {
+    cudaSupport = true;
+  };
+
+  pytorchWithoutCuda = self.pytorch.override {
+    cudaSupport = false;
+  };
 
   python2-pythondialog = buildPythonPackage rec {
     name = "python2-pythondialog-${version}";
