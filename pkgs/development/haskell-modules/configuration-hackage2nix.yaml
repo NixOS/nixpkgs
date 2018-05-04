@@ -2398,6 +2398,7 @@ extra-packages:
   - aws ^>= 0.18                        # pre-lts-11.x versions neeed by git-annex 6.20180227
   - binary > 0.7 && < 0.8               # keep a 7.x major release around for older compilers
   - binary > 0.8 && < 0.9               # keep a 8.x major release around for older compilers
+  - blank-canvas < 0.6.3                # more recent versions depend on base-compat-batteries == 0.10.* but we're on base-compat-0.9.*
   - Cabal == 1.18.*                     # required for cabal-install et al on old GHC versions
   - Cabal == 1.20.*                     # required for cabal-install et al on old GHC versions
   - Cabal == 1.24.*                     # required for jailbreak-cabal etc.
