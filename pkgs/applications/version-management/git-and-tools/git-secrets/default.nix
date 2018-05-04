@@ -10,20 +10,25 @@ in stdenv.mkDerivation {
   src = fetchFromGitHub {
     inherit repo;
     owner = "awslabs";
-    rev = "v${version}";
+    rev = "${version}";
     sha256 = "14jsm4ks3k5d9iq3jr23829izw040pqpmv7dz8fhmvx6qz8fybzg";
   };
 
-  buildInputs = [ makeWrapper ];
+  buildInputs = [ makeWrapper git];
 
+  # buildPhase = ''
+  #  make man # TODO: need rst2man.py
+  # '';
+  
   installPhase = ''
     install -D git-secrets $out/bin/git-secrets
 
     wrapProgram $out/bin/git-secrets \
       --prefix PATH : "${lib.makeBinPath [ git ]}"
 
-    mkdir $out/share
-    cp -r man $out/share
+    # TODO: see above note on rst2man.py
+    # mkdir $out/share
+    # cp -r man $out/share
   '';
 
   meta = {
