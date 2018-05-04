@@ -141,4 +141,7 @@ Promise.all(pkgs.map(updateResolvedSha1)).then(() => {
   if (!options['--no-nix']) {
     generateNix(json.object);
   }
-})
+}).catch((error) => {
+  console.error(error);
+  process.exit(1);
+});
