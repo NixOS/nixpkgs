@@ -1,9 +1,8 @@
 { stdenv, fetchurl, fetchFromGitHub, buildGoPackage }:
 
 let
-  version = "4.8.0";
+  version = "4.9.1";
   goPackagePath = "github.com/mattermost/mattermost-server";
-  buildFlags = "-ldflags \"-X '${goPackagePath}/model.BuildNumber=nixpkgs-${version}'\"";
 in
 
 buildGoPackage rec {
@@ -13,30 +12,23 @@ buildGoPackage rec {
     owner = "mattermost";
     repo = "mattermost-server";
     rev = "v${version}";
-    sha256 = "16yf4p0n3klgh0zw2ikbahj9cy1wcxbwg86pld0yz63cfvfz5ns4";
+    sha256 = "0fyy14hqvsdjh1liyj8i570askc2jqsxcw6jrz9b78mw6qncgg9p";
   };
 
   webApp = fetchurl {
     url = "https://releases.mattermost.com/${version}/mattermost-team-${version}-linux-amd64.tar.gz";
-    sha256 = "0ykp9apsv2514bircgay0xi0jigiai65cnb8q77v1qxjzdyx8s75";
+    sha256 = "139x1rfnv0p37ash5yph0ra7wsvlk7i2rmvgabvszh640ifdw70m";
   };
 
   inherit goPackagePath;
 
-  buildPhase = ''
-    runHook preBuild
-    cd go/src/${goPackagePath}/cmd/platform
-    go install ${buildFlags}
-    runHook postBuild
-  '';
-
-  preInstall = ''
-    mkdir -p $bin
-    tar --strip 1 -C $bin -xf $webApp
-  '';
-
   postInstall = ''
+    tar --strip 1 -C $bin -xf $webApp
     ln -s $bin/bin/platform $bin/bin/mattermost-platform
+  '';
+
+  postFixup = ''
+    patchelf --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker) $bin/bin/platform
   '';
 
   meta = with stdenv.lib; {
