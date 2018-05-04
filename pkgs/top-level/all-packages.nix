@@ -656,7 +656,8 @@ with pkgs;
   lastpass-cli = callPackage ../tools/security/lastpass-cli { };
 
   pass = callPackage ../tools/security/pass { };
-  pass-otp = callPackage ../tools/security/pass-otp { };
+
+  passExtensions = recurseIntoAttrs pass.extensions;
 
   gopass = callPackage ../tools/security/gopass { };
 
