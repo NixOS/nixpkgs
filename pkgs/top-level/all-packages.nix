@@ -5790,7 +5790,7 @@ with pkgs;
 
   yaft = callPackage ../applications/misc/yaft { };
 
-  yarn = callPackage ../development/tools/yarn  { };
+  yarn = nodePackages.yarn;
 
   yarn2nix = callPackage ../development/tools/yarn2nix { };
   inherit (yarn2nix) mkYarnPackage;

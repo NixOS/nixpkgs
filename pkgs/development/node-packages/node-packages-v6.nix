@@ -45233,10 +45233,10 @@ in
   yarn = nodeEnv.buildNodePackage {
     name = "yarn";
     packageName = "yarn";
-    version = "1.5.1";
+    version = "1.6.0";
     src = fetchurl {
-      url = "https://registry.npmjs.org/yarn/-/yarn-1.5.1.tgz";
-      sha1 = "e8680360e832ac89521eb80dad3a7bc27a40bab4";
+      url = "https://registry.npmjs.org/yarn/-/yarn-1.6.0.tgz";
+      sha1 = "9dfyapqmjm6yfp3hxhwps8ywhrwnzv4w";
     };
     buildInputs = globalBuildInputs;
     meta = {
