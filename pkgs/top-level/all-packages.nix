@@ -19735,6 +19735,8 @@ with pkgs;
 
   numix-sx-gtk-theme = callPackage ../misc/themes/numix-sx { };
 
+  theme-obsidian2 = callPackage ../misc/themes/obsidian2 { };
+
   onestepback = callPackage ../misc/themes/onestepback { };
 
   theme-vertex = callPackage ../misc/themes/vertex { };
