@@ -12407,8 +12407,6 @@ with pkgs;
   firebird = callPackage ../servers/firebird { icu = null; stdenv = overrideCC stdenv gcc5; };
   firebirdSuper = callPackage ../servers/firebird { icu = icu58; superServer = true; stdenv = overrideCC stdenv gcc5; };
 
-  fleet = callPackage ../servers/fleet { };
-
   foswiki = callPackage ../servers/foswiki { };
 
   frab = callPackage ../servers/web-apps/frab { };
