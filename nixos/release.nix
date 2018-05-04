@@ -320,6 +320,7 @@ in rec {
   tests.kernel-copperhead = callTest tests/kernel-copperhead.nix {};
   tests.kernel-latest = callTest tests/kernel-latest.nix {};
   tests.kernel-lts = callTest tests/kernel-lts.nix {};
+  tests.kernel-signed-modules = callTest tests/kernel-signed-modules.nix {};
   tests.kubernetes.dns = callSubTestsOnMatchingSystems ["x86_64-linux"] tests/kubernetes/dns.nix {};
   ## kubernetes.e2e should eventually replace kubernetes.rbac when it works
   #tests.kubernetes.e2e = callSubTestsOnMatchingSystems ["x86_64-linux"] tests/kubernetes/e2e.nix {};

@@ -158,6 +158,9 @@ let
                           if platform.kernelTarget == "zImage" || platform.kernelTarget == "Image.gz" then "zinstall" else
                           "install") ];
 
+      # don't strip signatures off modules; anyway strip is a noop when compression is enabled.
+      dontStrip = true;
+
       postInstall = (optionalString installsFirmware ''
         mkdir -p $out/lib/firmware
       '') + (if (platform ? kernelDTB && platform.kernelDTB) then ''

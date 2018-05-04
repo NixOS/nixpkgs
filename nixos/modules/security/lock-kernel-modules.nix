@@ -14,9 +14,20 @@ with lib;
         question to <option>boot.kernelModules</option>.
       '';
     };
+
+    security.enforceModuleSignature = mkOption {
+      type = types.bool;
+      default = false;
+      description = ''
+        Refuse to load any non signed kernel module.
+        Warning: currently nixpkgs signs upstream kernel modules only. This
+        means that this options will prevent you from loading any third party kernel
+        module (which is required by zfs or virtualbox for example).
+      '';
+    };
   };
 
-  config = mkIf config.security.lockKernelModules {
+  config = (mkIf config.security.lockKernelModules {
     boot.kernelModules = concatMap (x:
       if x.device != null
         then
@@ -40,5 +51,7 @@ with lib;
         ExecStart = "/bin/sh -c 'echo -n 1 >/proc/sys/kernel/modules_disabled'";
       };
     };
-  };
+  }) // (mkIf config.security.enforceModuleSignature {
+    boot.kernelParams = ["module.sig_enforce"];
+  });
 }
