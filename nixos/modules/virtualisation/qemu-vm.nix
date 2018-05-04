@@ -25,7 +25,6 @@ let
 
   qemuGraphics = lib.optionalString (!cfg.graphics) "-nographic";
   kernelConsole = if cfg.graphics then "" else "console=${qemuSerialDevice}";
-  ttys = [ "tty1" "tty2" "tty3" "tty4" "tty5" "tty6" ];
 
   # XXX: This is very ugly and in the future we really should use attribute
   # sets to build ALL of the QEMU flags instead of this mixed mess of Nix
