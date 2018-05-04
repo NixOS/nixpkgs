@@ -14,7 +14,6 @@ in stdenv.mkDerivation rec {
     sha256 = "70bb550cc14eca80b9825f4ae9bfbf7f076bb75777311be428bc30a7eb7a6f7e";
   };
 
-  phases = [ "unpackPhase" "patchPhase" "installPhase" "fixupPhase" ];
   outputs = [ "out" "toolchain" ];
 
 

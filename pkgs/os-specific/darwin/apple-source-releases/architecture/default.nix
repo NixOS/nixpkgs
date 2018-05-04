@@ -1,9 +1,7 @@
 { stdenv, appleDerivation }:
 
 appleDerivation {
-  phases = [ "unpackPhase" "installPhase" ];
-
-  postUnpack = ''
+  postPatch = ''
     substituteInPlace $sourceRoot/Makefile \
       --replace "/usr/include" "/include" \
       --replace "/usr/bin/" "" \

@@ -3,9 +3,6 @@
   removefile, libresolv, Libnotify, libplatform, libpthread, mDNSResponder, launchd, libutil, version }:
 
 appleDerivation rec {
-  dontBuild = true;
-  dontConfigure = true;
-
   nativeBuildInputs = [ cpio ];
 
   outputs = [ "out" "dev" ];
