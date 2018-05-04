@@ -4878,7 +4878,7 @@ with pkgs;
 
   simpleproxy = callPackage ../tools/networking/simpleproxy { };
 
-  simplescreenrecorder = callPackage ../applications/video/simplescreenrecorder { };
+  simplescreenrecorder = libsForQt5.callPackage ../applications/video/simplescreenrecorder { };
 
   sipsak = callPackage ../tools/networking/sipsak { };
 
