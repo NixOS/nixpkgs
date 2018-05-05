@@ -12431,8 +12431,6 @@ with pkgs;
   firebird = callPackage ../servers/firebird { icu = null; stdenv = overrideCC stdenv gcc5; };
   firebirdSuper = callPackage ../servers/firebird { icu = icu58; superServer = true; stdenv = overrideCC stdenv gcc5; };
 
-  fleet = callPackage ../servers/fleet { };
-
   foswiki = callPackage ../servers/foswiki { };
 
   frab = callPackage ../servers/web-apps/frab { };
@@ -17032,9 +17030,6 @@ with pkgs;
   ostinato = callPackage ../applications/networking/ostinato { };
 
   p4v = libsForQt5.callPackage ../applications/version-management/p4v { };
-
-  panamax_api = callPackage ../applications/networking/cluster/panamax/api { };
-  panamax_ui = callPackage ../applications/networking/cluster/panamax/ui { };
 
   partio = callPackage ../development/libraries/partio {};
 
