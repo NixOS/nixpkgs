@@ -29,7 +29,7 @@ let
   license_dir = "~/.config/houdini";
 in
 stdenv.mkDerivation rec {
-  version = "16.5.405";
+  version = "16.5.439";
   name = "houdini-runtime-${version}";
   src = requireFile rec {
     name = "houdini-${version}-linux_x86_64_gcc4.8.tar.gz";
