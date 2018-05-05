@@ -27,6 +27,7 @@ stdenv.mkDerivation rec {
     [ gstreamer gst_plugins_minimal gtk2
       keybinder xfconf libnotify
     ];
+  propagatedUserEnvPkgs = [ xfconf ];
 
   nativeBuildInputs = [ pkgconfig makeWrapper ];
 

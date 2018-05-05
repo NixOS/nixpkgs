@@ -24,6 +24,7 @@ stdenv.mkDerivation rec {
     (if withGtk3
     then [ gtk3 libxfce4ui_gtk3 xfce4panel_gtk3 ]
     else [ gtk  libxfce4ui      xfce4-panel      ]);
+  propagatedUserEnvPkgs = [ xfconf ];
 
   postPatch = lib.optionalString withGtk3 ''
     substituteInPlace configure --replace gio-2.0 gio-unix-2.0

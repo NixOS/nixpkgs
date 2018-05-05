@@ -15,6 +15,7 @@ stdenv.mkDerivation rec {
 
   buildInputs =
     [ pkgconfig intltool glib gtk libxfce4util libxfce4ui garcon xfconf ];
+  propagatedUserEnvPkgs = [ xfconf ];
 
   enableParallelBuilding = true;
 

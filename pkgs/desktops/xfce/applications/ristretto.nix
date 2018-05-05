@@ -18,6 +18,7 @@ stdenv.mkDerivation rec {
     [ pkgconfig intltool libexif gtk dbus-glib exo libxfce4util
       libxfce4ui xfconf hicolor-icon-theme makeWrapper
     ];
+  propagatedUserEnvPkgs = [ xfconf ];
 
   postInstall = ''
     wrapProgram "$out/bin/ristretto" \

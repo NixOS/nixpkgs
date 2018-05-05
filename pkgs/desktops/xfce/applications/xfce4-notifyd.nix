@@ -14,6 +14,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ intltool libnotify gtk libxfce4util libxfce4ui xfconf ];
+  propagatedUserEnvPkgs = [ xfconf ];
 
   preFixup = ''
     rm $out/share/icons/hicolor/icon-theme.cache

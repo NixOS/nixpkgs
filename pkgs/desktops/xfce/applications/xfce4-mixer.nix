@@ -32,6 +32,7 @@ stdenv.mkDerivation rec {
     [ pkgconfig intltool glib gstreamer gtk
       libxfce4util libxfce4ui xfce4-panel xfconf libunique makeWrapper
     ] ++ gst_plugins;
+  propagatedUserEnvPkgs = [ xfconf ];
 
   postInstall =
     ''

@@ -35,6 +35,7 @@ stdenv.mkDerivation rec {
       ++ optional withGtk3 gtk3;
 
   propagatedBuildInputs = [ (if withGtk3 then libxfce4ui_gtk3 else libxfce4ui) ];
+  propagatedUserEnvPkgs = [ xfconf ];
 
   configureFlags = optional withGtk3 "--enable-gtk3";
 

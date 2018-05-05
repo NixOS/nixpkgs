@@ -22,6 +22,7 @@ stdenv.mkDerivation rec {
     gtk dbus-glib libxfce4ui libxfce4util xfconf
     taglib libnotify
   ] ++ (with gst_all_1; [ gst-plugins-base gst-plugins-good gst-plugins-bad gst-plugins-ugly gst-libav]);
+  propagatedUserEnvPkgs = [ xfconf ];
 
   configureFlags = [ "--with-gstreamer=1.0" ];
 

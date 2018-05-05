@@ -20,6 +20,7 @@ stdenv.mkDerivation rec {
     ];
 
   nativeBuildInputs = [ pkgconfig ];
+  propagatedUserEnvPkgs = [ xfconf ];
 
   meta = with stdenv.lib; {
     homepage = https://launchpad.net/xfce4-volumed-pulse;

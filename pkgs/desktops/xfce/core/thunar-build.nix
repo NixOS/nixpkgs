@@ -27,6 +27,7 @@ stdenv.mkDerivation rec {
     gtk dbus-glib libstartup_notification libnotify libexif pcre udev
     exo libxfce4util xfconf xfce4-panel
   ];
+  propagatedUserEnvPkgs = [ xfconf ];
   # TODO: optionality?
 
   enableParallelBuilding = true;

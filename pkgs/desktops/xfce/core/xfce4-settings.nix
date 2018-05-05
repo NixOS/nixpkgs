@@ -39,6 +39,7 @@ stdenv.mkDerivation rec {
     xf86inputlibinput
     libxklavier
   ];
+  propagatedUserEnvPkgs = [ xfconf ];
 
   configureFlags = [ "--enable-pluggable-dialogs" "--enable-sound-settings" ];
 
