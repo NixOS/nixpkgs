@@ -217,6 +217,12 @@ in rec {
     filesToInstall = ["u-boot.bin"];
   };
 
+  ubootRaspberryPiZero = buildUBoot rec {
+    defconfig = "rpi_0_w_defconfig";
+    extraMeta.platforms = ["armv6l-linux"];
+    filesToInstall = ["u-boot.bin"];
+  };
+
   ubootSheevaplug = buildUBoot rec {
     defconfig = "sheevaplug_defconfig";
     extraMeta.platforms = ["armv5tel-linux"];
