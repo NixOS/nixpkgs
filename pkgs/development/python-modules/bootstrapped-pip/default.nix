@@ -14,14 +14,6 @@ let
     sha256 = "8010754433e3211b9cdbbf784b50f30e80bf40fc6b05eb5f865fab83300599b8";
   };
 
-  # TODO: Shouldn't be necessary anymore for pip >= 10!
-  # https://github.com/NixOS/nixpkgs/issues/26392
-  # https://github.com/pypa/setuptools/issues/885
-  pkg_resources = fetchurl {
-    url = "https://raw.githubusercontent.com/pypa/setuptools/v36.0.1/pkg_resources/__init__.py";
-    sha256 = "1wdnq3mammk75mifkdmmjx7yhnpydvnvi804na8ym4mj934l2jkv";
-  };
-
 in stdenv.mkDerivation rec {
   pname = "pip";
   version = "10.0.1";
@@ -38,8 +30,6 @@ in stdenv.mkDerivation rec {
     unzip -d $out/${python.sitePackages} $src
     unzip -d $out/${python.sitePackages} ${setuptools_source}
     unzip -d $out/${python.sitePackages} ${wheel_source}
-    # TODO: Shouldn't be necessary anymore for pip >= 10!
-    cp ${pkg_resources} $out/${python.sitePackages}/pip/_vendor/pkg_resources/__init__.py
   '';
 
   patchPhase = ''
