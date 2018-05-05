@@ -422,6 +422,9 @@ self: super: {
   # https://github.com/evanrinehart/mikmod/issues/1
   mikmod = addExtraLibrary super.mikmod pkgs.libmikmod;
 
+  haskell-gi = dontCheck super.haskell-gi;
+  gi-gdkx11 = super.gi-gdkx11.override { gdk-x11 = pkgs.gtk3; };
+
   # https://github.com/basvandijk/threads/issues/10
   threads = dontCheck super.threads;
 
