@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, cmake, gettext, libxml2, pkgconfig, txt2man, vala, wrapGAppsHook
-, gsettings-desktop-schemas, gtk3, keybinder3
+, gsettings-desktop-schemas, gtk3, keybinder3, ffmpeg
 }:
 
 stdenv.mkDerivation rec {
@@ -12,6 +12,10 @@ stdenv.mkDerivation rec {
     rev = version;
     sha256 = "1ihmq914g2h5iw86bigkkblzqimr50yq6z883lzq656xkcayd8gh";
   };
+
+  preConfigure = ''
+    gappsWrapperArgs+=(--prefix PATH : ${stdenv.lib.makeBinPath [ ffmpeg ]})
+  '';
 
   nativeBuildInputs = [ cmake gettext pkgconfig libxml2.bin txt2man vala wrapGAppsHook ];
 

@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, libpng, libjpeg }:
+{ stdenv, fetchgit, makeWrapper, file, libpng, libjpeg }:
 
 stdenv.mkDerivation rec {
   name = "farbfeld-${version}";
@@ -11,8 +11,12 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ libpng libjpeg ];
+  nativeBuildInputs = [ makeWrapper ];
 
   installFlags = "PREFIX=/ DESTDIR=$(out)";
+  postInstall = ''
+    wrapProgram "$out/bin/2ff" --prefix PATH : "${file}/bin"
+  '';
 
   meta = with stdenv.lib; {
     description = "Suckless image format with conversion tools";

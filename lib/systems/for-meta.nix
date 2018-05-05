@@ -7,7 +7,7 @@ in rec {
   all     = [ {} ]; # `{}` matches anything
   none    = [];
 
-  arm     = [ patterns.isArm ];
+  arm     = [ patterns.isAarch32 ];
   aarch64 = [ patterns.isAarch64 ];
   x86     = [ patterns.isx86 ];
   i686    = [ patterns.isi686 ];

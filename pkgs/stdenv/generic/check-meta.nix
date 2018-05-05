@@ -165,6 +165,8 @@ let
     isFcitxEngine = bool;
     isIbusEngine = bool;
     isGutenprint = bool;
+    # Hydra build timeout
+    timeout = int;
   };
 
   checkMetaAttr = k: v:
