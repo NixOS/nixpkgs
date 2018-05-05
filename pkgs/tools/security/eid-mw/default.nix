@@ -4,7 +4,7 @@
 
 stdenv.mkDerivation rec {
   name = "eid-mw-${version}";
-  version = "4.1.19";
+  version = "4.3.7";
 
   src = fetchFromGitHub {
     sha256 = "191c74kxfrfb894v8y4vi2iygyffjy9jjq5fj7cnnddgwai5n3c5";
@@ -58,5 +58,6 @@ stdenv.mkDerivation rec {
       and remove all ~/.pki and/or /etc/pki directories no longer needed.
     '';
     platforms = platforms.linux;
+    maintainers = with maintainers; [ bfortz ];
   };
 }
