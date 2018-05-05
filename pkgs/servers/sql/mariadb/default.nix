@@ -37,7 +37,7 @@ common = rec { # attributes common to both builds
     sed -i 's,[^"]*/var/log,/var/log,g' storage/mroonga/vendor/groonga/CMakeLists.txt
   '';
 
-  patches = [ ./cmake-includedir.patch ]
+  patches = [ ./cmake-includedir.patch ./include-dirs-path.patch ]
     ++ stdenv.lib.optional stdenv.cc.isClang ./clang-isfinite.patch;
 
   cmakeFlags = [
