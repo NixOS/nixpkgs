@@ -27,7 +27,7 @@ let
 
   # enable both serial console and tty0. select preferred console (last one) based on cfg.graphics
   kernelConsoles = let
-    consoles = [ "console=${qemuSerialDevice}" "console=tty0" ];
+    consoles = [ "console=${qemuSerialDevice},115200n8" "console=tty0" ];
     in lib.concatStringsSep " " (if cfg.graphics then consoles else reverseList consoles);
 
   # XXX: This is very ugly and in the future we really should use attribute
