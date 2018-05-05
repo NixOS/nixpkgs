@@ -17,6 +17,11 @@ in stdenv.mkDerivation rec {
 
   patches = [
     ./rtcwake-search-PATH-for-shutdown.patch
+    (fetchpatch {
+      name = "CVE-2018-7738.diff";
+      url = "https://github.com/karelzak/util-linux/commit/75f03badd7ed9.diff";
+      sha256 = "0b8x1s7b9bh9p8a99bpdgjbqzqwsvb7l7cf3yy83jip1c38p685w";
+    })
   ];
 
   outputs = [ "bin" "dev" "out" "man" ];
