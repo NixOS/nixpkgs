@@ -1,14 +1,14 @@
 { stdenv, fetchurl, system, makeWrapper, makeDesktopItem,
-  alsaLib, dbus, glib, gstreamer, fontconfig, freetype, libpulseaudio, libxml2,
-  libxslt, libGLU_combined, nspr, nss, sqlite, utillinux, zlib, xorg, udev, expat, libv4l }:
+  alsaLib, dbus, glib, fontconfig, freetype, libpulseaudio,
+  utillinux, zlib, xorg, udev, sqlite, expat, libv4l, procps }:
 
 let
 
-  version = "2.0.106600.0904";
+  version = "2.0.123200.0405";
   srcs = {
     x86_64-linux = fetchurl {
       url = "https://zoom.us/client/${version}/zoom_x86_64.tar.xz";
-      sha256 = "1dcr0rqgjingjqbqv37hqjhhwy8axnjyirrnmjk44b5xnh239w9s";
+      sha256 = "1ifwa2xf5mw1ll2j1f39qd7mpyxpc6xj3650dmlnxf525dsm573z";
     };
   };
 
@@ -17,25 +17,20 @@ in stdenv.mkDerivation {
 
   src = srcs.${system};
 
-  buildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
 
   libPath = stdenv.lib.makeLibraryPath [
     alsaLib
-    dbus
+    expat
     glib
-    gstreamer
-    fontconfig
     freetype
     libpulseaudio
-    libxml2
-    libxslt
-    nspr
-    nss
+    zlib
+    dbus
+    fontconfig
     sqlite
     utillinux
-    zlib
     udev
-    expat
 
     xorg.libX11
     xorg.libSM
@@ -79,6 +74,7 @@ in stdenv.mkDerivation {
     makeWrapper $packagePath/zoom $out/bin/zoom-us \
         --prefix LD_LIBRARY_PATH : "$packagePath:$libPath" \
         --prefix LD_PRELOAD : "${libv4l}/lib/v4l1compat.so" \
+        --prefix PATH : "${procps}/bin" \
         --set QT_PLUGIN_PATH "$packagePath/platforms" \
         --set QT_XKB_CONFIG_ROOT "${xorg.xkeyboardconfig}/share/X11/xkb" \
         --set QTCOMPOSE "${xorg.libX11.out}/share/X11/locale"
