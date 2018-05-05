@@ -13637,6 +13637,8 @@ with pkgs;
 
     facetimehd = callPackage ../os-specific/linux/facetimehd { };
 
+    irati = callPackage ../os-specific/linux/irati/module.nix { };
+
     jool = callPackage ../os-specific/linux/jool { };
 
     mba6x_bl = callPackage ../os-specific/linux/mba6x_bl { };
@@ -16439,6 +16441,10 @@ with pkgs;
   iptraf = callPackage ../applications/networking/iptraf { };
 
   iptraf-ng = callPackage ../applications/networking/iptraf-ng { };
+
+  irati = callPackage ../os-specific/linux/irati {
+    libssl = openssl;
+  };
 
   irssi = callPackage ../applications/networking/irc/irssi { };
 
