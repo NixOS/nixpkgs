@@ -24,7 +24,11 @@ let
   cfg = config.virtualisation;
 
   qemuGraphics = lib.optionalString (!cfg.graphics) "-nographic";
-  kernelConsole = if cfg.graphics then "" else "console=${qemuSerialDevice}";
+
+  # enable both serial console and tty0. select preferred console (last one) based on cfg.graphics
+  kernelConsoles = let
+    consoles = [ "console=${qemuSerialDevice}" "console=tty0" ];
+    in lib.concatStringsSep " " (if cfg.graphics then consoles else reverseList consoles);
 
   # XXX: This is very ugly and in the future we really should use attribute
   # sets to build ALL of the QEMU flags instead of this mixed mess of Nix
@@ -107,7 +111,7 @@ let
             ${mkDiskIfaceDriveFlag "0" "file=$NIX_DISK_IMAGE,cache=writeback,werror=report"} \
             -kernel ${config.system.build.toplevel}/kernel \
             -initrd ${config.system.build.toplevel}/initrd \
-            -append "$(cat ${config.system.build.toplevel}/kernel-params) init=${config.system.build.toplevel}/init regInfo=${regInfo}/registration ${kernelConsole} $QEMU_KERNEL_PARAMS" \
+            -append "$(cat ${config.system.build.toplevel}/kernel-params) init=${config.system.build.toplevel}/init regInfo=${regInfo}/registration ${kernelConsoles} $QEMU_KERNEL_PARAMS" \
           ''} \
           $extraDisks \
           ${qemuGraphics} \
@@ -247,9 +251,10 @@ in
         default = true;
         description =
           ''
-            Whether to run QEMU with a graphics window, or access
-            the guest computer serial port through the host tty.
-          '';
+            Whether to run QEMU with a graphics window, or in nographic mode.
+            Serial console will be enabled on both settings, but this will
+            change the preferred console.
+            '';
       };
 
     virtualisation.cores =
