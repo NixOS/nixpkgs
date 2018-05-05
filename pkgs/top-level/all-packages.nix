@@ -17948,6 +17948,8 @@ with pkgs;
     inherit sbcl lispPackages;
   };
 
+  sublime = callPackage ../applications/editors/sublime/2 { };
+
   sublime3Packages = recurseIntoAttrs (callPackage ../applications/editors/sublime/3/packages.nix { });
 
   sublime3 = sublime3Packages.sublime3;
