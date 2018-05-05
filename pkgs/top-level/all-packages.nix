@@ -14578,6 +14578,8 @@ with pkgs;
 
   powerline-go = callPackage ../tools/misc/powerline-go { };
 
+  powerline-rs = callPackage ../tools/misc/powerline-rs { };
+
   profont = callPackage ../data/fonts/profont { };
 
   proggyfonts = callPackage ../data/fonts/proggyfonts { };
