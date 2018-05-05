@@ -1,20 +1,29 @@
 { stdenv, fetchFromGitHub
 , autoreconfHook, pkgconfig
-, gtk3, nssTools, pcsclite }:
+, gtk3, nssTools, pcsclite
+, libxml2, libproxy 
+, openssl, curl }:
 
 stdenv.mkDerivation rec {
   name = "eid-mw-${version}";
-  version = "4.3.7";
+  version = "4.4.1";
 
   src = fetchFromGitHub {
-    sha256 = "191c74kxfrfb894v8y4vi2iygyffjy9jjq5fj7cnnddgwai5n3c5";
+    sha256 = "0an7xgj5rzl75kq6qfrmm886v639hhlh7c9yfs8iihc47wghpma8"; 
     rev = "v${version}";
     repo = "eid-mw";
     owner = "Fedict";
   };
 
   nativeBuildInputs = [ autoreconfHook pkgconfig ];
-  buildInputs = [ gtk3 pcsclite ];
+  buildInputs = [ gtk3 pcsclite libxml2 libproxy curl openssl ];
+  preConfigure = ''
+    mkdir openssl
+    ln -s ${openssl.out}/lib openssl
+    ln -s ${openssl.bin}/bin openssl
+    ln -s ${openssl.dev}/include openssl
+    export SSL_PREFIX=$(realpath openssl)
+    '';
 
   postPatch = ''
     sed 's@m4_esyscmd_s(.*,@[${version}],@' -i configure.ac
