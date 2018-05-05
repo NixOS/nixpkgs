@@ -37,8 +37,11 @@ function generateNix(lockedDependencies) {
 
   for (var depRange in lockedDependencies) {
     let dep = lockedDependencies[depRange];
-
     let depRangeParts = depRange.split('@');
+    if (depRangeParts[1].startsWith('file:')) {
+      throw new Error(`${depRange} is a local dependency`)
+    }
+
     let [url, sha1] = dep["resolved"].split("#");
     let file_name = path.basename(url)
 
