@@ -19,6 +19,8 @@
 , libxml2
 , libuuid
 , lang ? "en"
+, libGL
+, libGLU
 }:
 
 let
@@ -56,6 +58,8 @@ stdenv.mkDerivation rec {
     libxml2
     libuuid
     zlib
+    libGL
+    libGLU
   ] ++ (with xorg; [
     libX11
     libXext
