@@ -86,4 +86,5 @@ rec {
 
   parity = callPackage ./parity { };
   parity-beta = callPackage ./parity/beta.nix { };
+  parity-ui = callPackage ./parity-ui { };
 }
