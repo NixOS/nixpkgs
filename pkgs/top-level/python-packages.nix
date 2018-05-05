@@ -8828,6 +8828,8 @@ in {
     };
   };
 
+  orderedset = callPackage ../development/python-modules/orderedset { };
+
   python-otr = buildPythonPackage rec {
     name = "${pname}-${version}";
     pname = "python-otr";
