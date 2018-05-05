@@ -11229,6 +11229,8 @@ with pkgs;
 
     accounts-qt = callPackage ../development/libraries/accounts-qt { };
 
+    alkimia = callPackage ../development/libraries/alkimia { };
+
     fcitx-qt5 = callPackage ../tools/inputmethods/fcitx/fcitx-qt5.nix { };
 
     qgpgme = callPackage ../development/libraries/gpgme { };
@@ -16532,6 +16534,11 @@ with pkgs;
   kiwix = callPackage ../applications/misc/kiwix { };
 
   kmplayer = libsForQt5.callPackage ../applications/video/kmplayer { };
+
+  kmymoney = libsForQt5.callPackage ../applications/office/kmymoney {
+    inherit (kdeApplications) kidentitymanagement;
+    inherit (kdeFrameworks) kdewebkit;
+  };
 
   kodestudio = callPackage ../applications/editors/kodestudio { };
 
