@@ -15598,6 +15598,8 @@ with pkgs;
 
   epdfview = callPackage ../applications/misc/epdfview { };
 
+  epeg = callPackage ../applications/graphics/epeg/default.nix { };
+
   inherit (gnome3) epiphany;
 
   epic5 = callPackage ../applications/networking/irc/epic5 { };
