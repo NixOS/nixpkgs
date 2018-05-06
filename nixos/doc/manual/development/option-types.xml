@@ -22,6 +22,15 @@
 
   <variablelist>
    <varlistentry>
+    <term><varname>types.attrs</varname>
+    </term>
+    <listitem>
+     <para>
+      A free-form attribute set.
+     </para>
+    </listitem>
+   </varlistentry>
+   <varlistentry>
     <term><varname>types.bool</varname>
     </term>
     <listitem>
