@@ -27,8 +27,8 @@ stdenv.mkDerivation rec {
     ./install-dirs.patch
     ./systemd-service.patch
     (substituteAll {
-      name = "ckb-modprobe.patch";
-      src = ./ckb-modprobe.patch;
+      name = "ckb-next-modprobe.patch";
+      src = ./modprobe.patch;
       inherit kmod;
     })
   ];
