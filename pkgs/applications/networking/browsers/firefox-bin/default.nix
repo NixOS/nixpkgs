@@ -28,6 +28,7 @@
 , libcanberra-gtk2
 , libgnome
 , libgnomeui
+, libnotify
 , defaultIconTheme
 , libGLU_combined
 , nspr
@@ -112,6 +113,7 @@ stdenv.mkDerivation {
       libcanberra-gtk2
       libgnome
       libgnomeui
+      libnotify
       libGLU_combined
       nspr
       nss
