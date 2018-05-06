@@ -126,6 +126,18 @@ rec {
   */
   makePerlPath = makeSearchPathOutput "lib" "lib/perl5/site_perl";
 
+  /* Construct an XDG path. Suitable to use as XDG_DATA_DIRS.
+  */
+  makeXdgPath = makeSearchPathOutput "xdg" "share";
+
+  /* Construct a manual page path. Suitable to use as MANPATH.
+  */
+  makeManPath = makeSearchPathOutput "man" "share/man";
+  
+  /* Construct an info page path. Suitable to use as INFOPATH.
+  */
+  makeInfoPath = makeSearchPathOutput "info" "share/info";
+
   /* Depending on the boolean `cond', return either the given string
      or the empty string. Useful to concatenate against a bigger string.
 
