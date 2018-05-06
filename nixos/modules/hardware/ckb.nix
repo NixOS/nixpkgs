@@ -24,11 +24,11 @@ in
       environment.systemPackages = [ cfg.package ];
 
       systemd.services.ckb = {
-        description = "Corsair Keyboard Daemon";
+        description = "Corsair Keyboards and Mice Daemon";
         wantedBy = ["multi-user.target"];
         script = "${cfg.package}/bin/ckb-next-daemon";
         serviceConfig = {
-          Restart = "always";
+          Restart = "on-failure";
           StandardOutput = "syslog";
         };
       };
