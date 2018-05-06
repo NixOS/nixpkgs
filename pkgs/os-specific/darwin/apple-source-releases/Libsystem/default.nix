@@ -3,9 +3,12 @@
   removefile, libresolv, Libnotify, libplatform, libpthread, mDNSResponder, launchd, libutil, version }:
 
 appleDerivation rec {
-  phases = [ "unpackPhase" "installPhase" ];
+  dontBuild = true;
+  dontConfigure = true;
 
   nativeBuildInputs = [ cpio ];
+
+  outputs = [ "out" "dev" ];
 
   installPhase = ''
     export NIX_ENFORCE_PURITY=
