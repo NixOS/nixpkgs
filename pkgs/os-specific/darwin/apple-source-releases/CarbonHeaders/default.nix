@@ -1,6 +1,8 @@
 { stdenv, appleDerivation }:
 
 appleDerivation {
+  dontBuild = true;
+
   installPhase = ''
     mkdir -p $out/include
     cp MacTypes.h          $out/include

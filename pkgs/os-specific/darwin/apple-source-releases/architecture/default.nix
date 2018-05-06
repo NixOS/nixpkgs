@@ -1,12 +1,7 @@
 { stdenv, appleDerivation }:
 
 appleDerivation {
-  postPatch = ''
-    substituteInPlace $sourceRoot/Makefile \
-      --replace "/usr/include" "/include" \
-      --replace "/usr/bin/" "" \
-      --replace "/bin/" ""
-  '';
+  dontBuild = true;
 
   installPhase = ''
     export DSTROOT=$out
