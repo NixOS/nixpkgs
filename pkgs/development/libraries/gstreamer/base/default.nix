@@ -1,7 +1,7 @@
 { stdenv, fetchurl, fetchpatch, lib
 , pkgconfig, meson, ninja, gettext, gobjectIntrospection
 , python, gstreamer, orc, pango, libtheora, libvisual
-, libintl
+, libintl, libopus
 , enableX11 ? stdenv.isLinux, libXv
 , enableWayland ? stdenv.isLinux, wayland
 , enableAlsa ? stdenv.isLinux, alsaLib
@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
   # Introspection fails on my MacBook currently
   ++ lib.optional stdenv.isDarwin "--disable-introspection";
 
-  buildInputs = [ orc libtheora libintl ]
+  buildInputs = [ orc libtheora libintl libopus ]
     ++ lib.optional enableAlsa alsaLib
     ++ lib.optionals enableX11 [ libXv pango ]
     ++ lib.optional enableWayland wayland
