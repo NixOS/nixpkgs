@@ -3334,8 +3334,6 @@ with pkgs;
 
   motion = callPackage ../applications/video/motion { };
 
-  mkcast = callPackage ../applications/video/mkcast { };
-
   mtail = callPackage ../servers/monitoring/mtail { };
 
   multitail = callPackage ../tools/misc/multitail { };
@@ -5575,6 +5573,8 @@ with pkgs;
   xfstests = callPackage ../tools/misc/xfstests { };
 
   xprintidle-ng = callPackage ../tools/X11/xprintidle-ng {};
+
+  xscast = callPackage ../applications/video/xscast { };
 
   xsettingsd = callPackage ../tools/X11/xsettingsd { };
 
