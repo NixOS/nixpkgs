@@ -31,7 +31,7 @@ in
       systemd.services.ckb-next = {
         description = "Corsair Keyboards and Mice Daemon";
         wantedBy = ["multi-user.target"];
-        script = "${cfg.package}/bin/ckb-next-daemon";
+        script = "exec ${cfg.package}/bin/ckb-next-daemon";
         serviceConfig = {
           Restart = "on-failure";
           StandardOutput = "syslog";
