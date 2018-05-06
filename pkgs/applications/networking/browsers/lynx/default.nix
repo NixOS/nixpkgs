@@ -23,7 +23,10 @@ stdenv.mkDerivation rec {
 
   hardeningEnable = [ "pie" ];
 
-  configureFlags = [ "--enable-widec" ] ++ stdenv.lib.optional sslSupport "--with-ssl";
+  configureFlags = [
+    "--enable-widec"
+    "--enable-ipv6"
+  ] ++ stdenv.lib.optional sslSupport "--with-ssl";
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
   nativeBuildInputs = [ nukeReferences ]
