@@ -19943,7 +19943,7 @@ with pkgs;
     # great feature, but it's of limited use with pre-built binaries
     # coming from a central build farm.
     tolerateCpuTimingInaccuracy = true;
-    liblapack = liblapack_3_5_0WithoutAtlas;
+    liblapack = liblapackWithoutAtlas;
     withLapack = false;
   };
 
@@ -19966,10 +19966,7 @@ with pkgs;
   # without atlas. Etc.
   liblapackWithAtlas = callPackage ../development/libraries/science/math/liblapack {};
   liblapackWithoutAtlas = liblapackWithAtlas.override { atlas = null; };
-  liblapack_3_5_0WithAtlas = callPackage ../development/libraries/science/math/liblapack/3.5.0.nix {};
-  liblapack_3_5_0WithoutAtlas = liblapack_3_5_0WithAtlas.override { atlas = null; };
   liblapack = liblapackWithAtlas;
-  liblapack_3_5_0 = liblapack_3_5_0WithAtlas;
 
   liblbfgs = callPackage ../development/libraries/science/math/liblbfgs { };
 
