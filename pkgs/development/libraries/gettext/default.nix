@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   };
   patches = [ ./absolute-paths.diff ];
 
-  outputs = [ "out" "dev" "man" "doc" "info" ];
+  outputs = [ "out" "man" "doc" "info" ];
 
   hardeningDisable = [ "format" ];
 
