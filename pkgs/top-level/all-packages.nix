@@ -5139,6 +5139,8 @@ with pkgs;
 
   telepresence = callPackage ../tools/networking/telepresence { };
 
+  termplay = callPackage ../tools/misc/termplay { };
+
   tewisay = callPackage ../tools/misc/tewisay { };
 
   texmacs = if stdenv.isDarwin
