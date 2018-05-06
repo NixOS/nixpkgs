@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     patchShebangs $out/bin
 
     wrapProgram "$out/bin/xscast" \
-      --prefix PATH : ${stdenv.lib.makeBinPath [ ffmpeg dzen2 xorg.xwininfo xorg.xinput imagemagick ]}
+      --prefix PATH : ${stdenv.lib.makeBinPath [ ffmpeg dzen2 xorg.xwininfo xorg.xinput xorg.xmodmap imagemagick ]}
 
     runHook postInstall
   '';
