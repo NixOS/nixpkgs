@@ -137,6 +137,13 @@
      make sure to update your configuration if you want to keep <literal>proglodyte-wasm</literal>
     </para>
    </listitem>
+   <listitem>
+    <para>
+     Package <literal>ckb</literal> is renamed to <literal>ckb-next</literal>,
+     and options <literal>hardware.ckb.*</literal> are renamed to
+     <literal>hardware.ckb-next.*</literal>.
+    </para>
+   </listitem>
   </itemizedlist>
  </section>
 

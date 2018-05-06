@@ -34,7 +34,7 @@
   ./config/zram.nix
   ./hardware/all-firmware.nix
   ./hardware/brightnessctl.nix
-  ./hardware/ckb.nix
+  ./hardware/ckb-next.nix
   ./hardware/cpu/amd-microcode.nix
   ./hardware/cpu/intel-microcode.nix
   ./hardware/digitalbitbox.nix
