@@ -641,22 +641,9 @@ fi
 # Textual substitution functions.
 
 
-substitute() {
-    local input="$1"
-    local output="$2"
-    shift 2
-
-    if [ ! -f "$input" ]; then
-      echo "substitute(): ERROR: file '$input' does not exist" >&2
-      return 1
-    fi
-
-    local content
-    # read returns non-0 on EOF, so we want read to fail
-    if IFS='' read -r -N 0 content < "$input"; then
-        echo "substitute(): ERROR: File \"$input\" has null bytes, won't process" >&2
-        return 1
-    fi
+substituteStream() {
+    local var=$1
+    shift
 
     while (( "$#" )); do
         case "$1" in
@@ -671,7 +658,7 @@ substitute() {
                 shift 2
                 # check if the used nix attribute name is a valid bash name
                 if ! [[ "$varName" =~ ^[a-zA-Z_][a-zA-Z0-9_]*$ ]]; then
-                    echo "substitute(): ERROR: substitution variables must be valid Bash names, \"$varName\" isn't." >&2
+                    echo "substituteStream(): ERROR: substitution variables must be valid Bash names, \"$varName\" isn't." >&2
                     return 1
                 fi
                 pattern="@$varName@"
@@ -685,18 +672,41 @@ substitute() {
                 ;;
 
             *)
-                echo "substitute(): ERROR: Invalid command line argument: $1" >&2
+                echo "substituteStream(): ERROR: Invalid command line argument: $1" >&2
                 return 1
                 ;;
         esac
 
-        content="${content//"$pattern"/$replacement}"
+        eval "$var"'=${'"$var"'//"$pattern"/"$replacement"}'
     done
 
-    if [ -e "$output" ]; then chmod +w "$output"; fi
-    printf "%s" "$content" > "$output"
+    printf "%s" "${!var}"
 }
 
+consumeEntire() {
+    # read returns non-0 on EOF, so we want read to fail
+    if IFS='' read -r -N 0 $1; then
+        echo "consumeEntire(): ERROR: Input null bytes, won't process" >&2
+        return 1
+    fi
+}
+
+substitute() {
+    local input="$1"
+    local output="$2"
+    shift 2
+
+    if [ ! -f "$input" ]; then
+        echo "substitute(): ERROR: file '$input' does not exist" >&2
+        return 1
+    fi
+
+    local content
+    consumeEntire content < "$input"
+
+    if [ -e "$output" ]; then chmod +w "$output"; fi
+    substituteStream content "$@" > "$output"
+}
 
 substituteInPlace() {
     local fileName="$1"
@@ -704,20 +714,30 @@ substituteInPlace() {
     substitute "$fileName" "$fileName" "$@"
 }
 
-
-# Substitute all environment variables that start with a lowercase character and
-# are valid Bash names.
-substituteAll() {
-    local input="$1"
-    local output="$2"
-    local -a args=()
-
+_allFlags() {
     for varName in $(awk 'BEGIN { for (v in ENVIRON) if (v ~ /^[a-z][a-zA-Z0-9_]*$/) print v }'); do
         if (( "${NIX_DEBUG:-0}" >= 1 )); then
             printf "@%s@ -> %q\n" "${varName}" "${!varName}"
         fi
         args+=("--subst-var" "$varName")
     done
+}
+
+substituteAllStream() {
+    local -a args=()
+    _allFlags
+
+    substituteStream "$1" "${args[@]}"
+}
+
+# Substitute all environment variables that start with a lowercase character and
+# are valid Bash names.
+substituteAll() {
+    local input="$1"
+    local output="$2"
+
+    local -a args=()
+    _allFlags
 
     substitute "$input" "$output" "${args[@]}"
 }
@@ -1089,6 +1109,19 @@ fixupPhase() {
     if [ -n "${setupHook:-}" ]; then
         mkdir -p "${!outputDev}/nix-support"
         substituteAll "$setupHook" "${!outputDev}/nix-support/setup-hook"
+    fi
+
+    # TODO(@Ericson2314): Remove after https://github.com/NixOS/nixpkgs/pull/31414
+    if [ -n "${setupHooks:-}" ]; then
+        mkdir -p "${!outputDev}/nix-support"
+        local hook
+        for hook in $setupHooks; do
+            local content
+            consumeEntire content < "$hook"
+            substituteAllStream content >> "${!outputDev}/nix-support/setup-hook"
+            unset -v content
+        done
+        unset -v hook
     fi
 
     # Propagate user-env packages into the output with binaries, TODO?
