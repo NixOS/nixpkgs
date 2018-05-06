@@ -10,6 +10,14 @@
 # instance, if your program needs to use "ps", just list it as a build
 # input, not "procps" which requires Linux.
 
+# Utilities here should be listed in the POSIX standard. The
+# complete list is available at:
+# http://pubs.opengroup.org/onlinepubs/9699919799/utilities/contents.html
+
+# A few exceptions to the above rule exist including getent, mount,
+# umount, fdisk, fsck. These are included mainly because many UNIXy
+# operating systems include them by default and are widely used.
+
 let
 
   singleBinary = cmd: providers: let
