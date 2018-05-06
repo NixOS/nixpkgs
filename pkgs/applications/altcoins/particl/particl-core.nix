@@ -1,6 +1,4 @@
 { stdenv
-, autoconf
-, automake
 , autoreconfHook
 , boost
 , db48
@@ -14,6 +12,7 @@
 , zeromq
 , zlib
 , withGui
+, unixtools
 }:
 
 with stdenv.lib;
@@ -28,9 +27,10 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkgconfig autoreconfHook ];
-  buildInputs = [ openssl db48 boost zlib
-                  miniupnpc libevent zeromq ]
-                  ++ optionals stdenv.isLinux [ utillinux ];
+  buildInputs = [
+    openssl db48 boost zlib miniupnpc libevent zeromq
+    unixtools.hexdump
+  ];
 
   configureFlags = [ "--with-boost-libdir=${boost.out}/lib" ];
 
