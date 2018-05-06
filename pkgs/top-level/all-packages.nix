@@ -3334,8 +3334,6 @@ with pkgs;
 
   motion = callPackage ../applications/video/motion { };
 
-  mkcast = callPackage ../applications/video/mkcast { };
-
   mtail = callPackage ../servers/monitoring/mtail { };
 
   multitail = callPackage ../tools/misc/multitail { };
