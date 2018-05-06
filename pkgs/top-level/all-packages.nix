@@ -5574,6 +5574,8 @@ with pkgs;
 
   xprintidle-ng = callPackage ../tools/X11/xprintidle-ng {};
 
+  xscast = callPackage ../applications/video/xscast { };
+
   xsettingsd = callPackage ../tools/X11/xsettingsd { };
 
   xsensors = callPackage ../os-specific/linux/xsensors { };
