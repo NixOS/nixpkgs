@@ -377,6 +377,8 @@ lib.makeScope pkgs.newScope (self: with self; {
 
   gpaste = callPackage ./misc/gpaste { };
 
+  metacity = callPackage ./misc/metacity { };
+
   pidgin-im-gnome-shell-extension = callPackage ./misc/pidgin { };
 
   gtkhtml = callPackage ./misc/gtkhtml { };
