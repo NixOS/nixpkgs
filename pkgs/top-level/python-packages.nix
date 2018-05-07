@@ -18257,6 +18257,8 @@ EOF
   aiohue = callPackage ../development/python-modules/aiohue { };
 
   PyMVGLive = callPackage ../development/python-modules/pymvglive { };
+
+  coinmarketcap = callPackage ../development/python-modules/coinmarketcap { };
 });
 
 in fix' (extends overrides packages)
