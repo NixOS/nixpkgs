@@ -53,6 +53,7 @@ let
         targetLlvmLibraries.libcxxabi
         targetLlvmLibraries.compiler-rt
       ];
+      isCompilerRT = true;
       extraBuildCommands = ''
         rsrc="$out/resource-root"
         mkdir "$rsrc"
