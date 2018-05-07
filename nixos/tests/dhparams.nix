@@ -54,6 +54,13 @@ in import ./make-test.nix {
     security.dhparams.params.bar2.bits = 19;
   };
 
+  nodes.generation5 = {
+    imports = [ common ];
+    security.dhparams.defaultBitSize = 30;
+    security.dhparams.params.foo3 = {};
+    security.dhparams.params.bar3 = {};
+  };
+
   testScript = { nodes, ... }: let
     getParamPath = gen: name: let
       node = "generation${toString gen}";
@@ -125,6 +132,13 @@ in import ./make-test.nix {
         'expr match ${getParamPath 4 "foo2"} ${builtins.storeDir}',
         'expr match ${getParamPath 4 "bar2"} ${builtins.storeDir}',
       );
+    };
+
+    ${switchToGeneration 5}
+
+    subtest "check whether defaultBitSize works as intended", sub {
+      ${assertParamBits 5 "foo3" 30}
+      ${assertParamBits 5 "bar3" 30}
     };
   '';
 }

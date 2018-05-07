@@ -4,13 +4,15 @@ let
   inherit (lib) mkOption types;
   cfg = config.security.dhparams;
 
+  bitType = types.addCheck types.int (b: b >= 16) // {
+    name = "bits";
+    description = "integer of at least 16 bits";
+  };
+
   paramsSubmodule = { name, config, ... }: {
     options.bits = mkOption {
-      type = types.addCheck types.int (b: b >= 16) // {
-        name = "bits";
-        description = "integer of at least 16 bits";
-      };
-      default = 2048;
+      type = bitType;
+      default = cfg.defaultBitSize;
       description = ''
         The bit size for the prime that is used during a Diffie-Hellman
         key exchange.
@@ -70,6 +72,11 @@ in {
           existing ones won't be cleaned up. Of course this only applies if
           <option>security.dhparams.stateful</option> is
           <literal>true</literal>.</para></warning>
+
+          <note><title>For module implementers:</title><para>It's recommended
+          to not set a specific bit size here, so that users can easily
+          override this by setting
+          <option>security.dhparams.defaultBitSize</option>.</para></note>
         '';
       };
 
@@ -86,6 +93,16 @@ in {
           <note><para>If this is <literal>false</literal> the resulting store
           path will be non-deterministic and will be rebuilt every time the
           <package>openssl</package> package changes.</para></note>
+        '';
+      };
+
+      defaultBitSize = mkOption {
+        type = bitType;
+        default = 2048;
+        description = ''
+          This allows to override the default bit size for all of the
+          Diffie-Hellman parameters set in
+          <option>security.dhparams.params</option>.
         '';
       };
 
