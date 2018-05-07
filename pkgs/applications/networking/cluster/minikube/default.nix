@@ -1,10 +1,7 @@
-{ stdenv, buildGoPackage, fetchFromGitHub, fetchurl, go-bindata, kubernetes, libvirt, qemu, docker-machine-kvm,
+{ stdenv, buildGoPackage, fetchFromGitHub, fetchurl, go-bindata, libvirt, qemu, docker-machine-kvm,
   gpgme, makeWrapper, hostPlatform, vmnet }:
 
-let
-  binPath = [ kubernetes ]
-    ++ stdenv.lib.optionals stdenv.isLinux [ libvirt qemu docker-machine-kvm ]
-    ++ stdenv.lib.optionals stdenv.isDarwin [];
+let binPath = stdenv.lib.optionals stdenv.isLinux [ libvirt qemu docker-machine-kvm ];
 
   # Normally, minikube bundles localkube in its own binary via go-bindata. Unfortunately, it needs to make that localkube
   # a static linux binary, and our Linux nixpkgs go compiler doesn't seem to work when asking for a cgo binary that's static
@@ -38,9 +35,7 @@ in buildGoPackage rec {
     ./localkube.patch
   ];
 
-  # kubernetes is here only to shut up a loud warning when generating the completions below. minikube checks very eagerly
-  # that kubectl is on the $PATH, even if it doesn't use it at all to generate the completions
-  buildInputs = [ go-bindata makeWrapper kubernetes gpgme ] ++ stdenv.lib.optional hostPlatform.isDarwin vmnet;
+  buildInputs = [ go-bindata makeWrapper gpgme ] ++ stdenv.lib.optional hostPlatform.isDarwin vmnet;
   subPackages = [ "cmd/minikube" ];
 
   preBuild = ''
@@ -64,9 +59,9 @@ in buildGoPackage rec {
 
   postInstall = ''
     mkdir -p $bin/share/bash-completion/completions/
-    MINIKUBE_WANTUPDATENOTIFICATION=false HOME=$PWD $bin/bin/minikube completion bash > $bin/share/bash-completion/completions/minikube
+    MINIKUBE_WANTUPDATENOTIFICATION=false MINIKUBE_WANTKUBECTLDOWNLOADMSG=false HOME=$PWD $bin/bin/minikube completion bash > $bin/share/bash-completion/completions/minikube
     mkdir -p $bin/share/zsh/site-functions/
-    MINIKUBE_WANTUPDATENOTIFICATION=false HOME=$PWD $bin/bin/minikube completion zsh > $bin/share/zsh/site-functions/_minikube
+    MINIKUBE_WANTUPDATENOTIFICATION=false MINIKUBE_WANTKUBECTLDOWNLOADMSG=false HOME=$PWD $bin/bin/minikube completion zsh > $bin/share/zsh/site-functions/_minikube
   '';
 
   postFixup = "wrapProgram $bin/bin/${pname} --prefix PATH : ${stdenv.lib.makeBinPath binPath}";
