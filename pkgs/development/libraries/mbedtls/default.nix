@@ -12,8 +12,6 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ perl ];
 
-  patches = stdenv.lib.optionals stdenv.isDarwin [ ./darwin_dylib.patch ];
-
   postPatch = ''
     patchShebangs .
   '' + stdenv.lib.optionalString stdenv.isDarwin ''
@@ -34,15 +32,17 @@ stdenv.mkDerivation rec {
   ];
 
   postInstall = stdenv.lib.optionalString stdenv.isDarwin ''
-      install_name_tool -change libmbedcrypto.dylib $out/lib/libmbedcrypto.dylib $out/lib/libmbedtls.dylib
-      install_name_tool -change libmbedcrypto.dylib $out/lib/libmbedcrypto.dylib $out/lib/libmbedx509.dylib
-      install_name_tool -change libmbedx509.dylib $out/lib/libmbedx509.dylib $out/lib/libmbedtls.dylib
+    install_name_tool -change libmbedcrypto.dylib $out/lib/libmbedcrypto.dylib $out/lib/libmbedtls.dylib
+    install_name_tool -change libmbedcrypto.dylib $out/lib/libmbedcrypto.dylib $out/lib/libmbedx509.dylib
+    install_name_tool -change libmbedx509.dylib $out/lib/libmbedx509.dylib $out/lib/libmbedtls.dylib
 
-      for exe in $out/bin/*; do
-          install_name_tool -change libmbedtls.dylib $out/lib/libmbedtls.dylib $exe
-          install_name_tool -change libmbedx509.dylib $out/lib/libmbedx509.dylib $exe
-          install_name_tool -change libmbedcrypto.dylib $out/lib/libmbedcrypto.dylib $exe
-      done
+    for exe in $out/bin/*; do
+      if [[ $exe != *.sh ]]; then
+        install_name_tool -change libmbedtls.dylib $out/lib/libmbedtls.dylib $exe
+        install_name_tool -change libmbedx509.dylib $out/lib/libmbedx509.dylib $exe
+        install_name_tool -change libmbedcrypto.dylib $out/lib/libmbedcrypto.dylib $exe
+      fi
+    done
   '';
 
   doCheck = true;
