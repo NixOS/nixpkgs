@@ -1,4 +1,7 @@
-{ stdenv, fetchFromGitHub, autoconf, automake, boost, bison, flex, openjdk, doxygen, perl, graphviz, libtool, lsb-release, ncurses, zlib, sqlite }:
+{ stdenv, fetchFromGitHub
+, boost, bison, flex, openjdk, doxygen
+, perl, graphviz, libtool, ncurses, zlib, sqlite
+, autoreconfHook }:
 
 stdenv.mkDerivation rec {
   version = "1.2.0";
@@ -11,12 +14,10 @@ stdenv.mkDerivation rec {
     sha256 = "1g8yvm40h102mab8lacpl1cwgqsw1js0s1yn4l84l9fjdvlh2ygd";
   };
 
+  nativeBuildInputs = [ autoreconfHook bison flex ];
+
   buildInputs = [
-    autoconf automake boost bison flex openjdk
-    # Used for 1.2.0
-    libtool lsb-release ncurses zlib sqlite
-    # Used for docs
-    doxygen perl graphviz
+    boost openjdk ncurses zlib sqlite doxygen perl graphviz
   ];
 
   patchPhase = ''
@@ -28,8 +29,6 @@ stdenv.mkDerivation rec {
   # without saying what library it's looking for. Turns out it's searching global paths
   # for boost and failing there, so we tell it what's what here.
   configureFlags = [ "--with-boost-libdir=${boost}/lib" ];
-
-  preConfigure = "./bootstrap";
 
   meta = with stdenv.lib; {
     description = "A translator of declarative Datalog programs into the C++ language";
