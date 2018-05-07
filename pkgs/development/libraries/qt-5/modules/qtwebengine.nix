@@ -25,8 +25,8 @@ qtModule {
   name = "qtwebengine";
   qtInputs = [ qtdeclarative qtquickcontrols qtlocation qtwebchannel ];
   nativeBuildInputs = [
-    bison coreutils flex git gperf ninja pkgconfig python2 which gn xcbuild
-  ];
+    bison coreutils flex git gperf ninja pkgconfig python2 which gn
+  ] ++ optional stdenv.isDarwin xcbuild;
   dontUseXcbuild = true;
   doCheck = true;
   outputs = [ "bin" "dev" "out" ];
