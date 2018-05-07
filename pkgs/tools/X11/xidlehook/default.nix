@@ -1,4 +1,5 @@
-{ lib, rustPlatform, fetchFromGitHub, x11, xorg, libpulseaudio, pkgconfig, patchelf }:
+{ lib, rustPlatform, fetchFromGitHub, x11, xorg, libpulseaudio, pkgconfig, patchelf
+, stdenv}:
 
 rustPlatform.buildRustPackage rec {
   name = "xidlehook-${version}";
