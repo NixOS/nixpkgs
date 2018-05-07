@@ -8527,6 +8527,8 @@ with pkgs;
 
   backward-cpp = callPackage ../development/libraries/backward-cpp { };
 
+  bamf = callPackage ../development/libraries/bamf { };
+
   bctoolbox = callPackage ../development/libraries/bctoolbox {
     mbedtls = mbedtls_1_3;
   };
