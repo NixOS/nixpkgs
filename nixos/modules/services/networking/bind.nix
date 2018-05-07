@@ -27,6 +27,7 @@ let
         forwarders { ${concatMapStrings (entry: " ${entry}; ") cfg.forwarders} };
         directory "/var/run/named";
         pid-file "/var/run/named/named.pid";
+        ${cfg.extraOptions}
       };
 
       ${cfg.extraConfig}
@@ -139,6 +140,15 @@ in
         description = "
           Extra lines to be added verbatim to the generated named configuration file.
         ";
+      };
+
+      extraOptions = mkOption {
+        type = types.lines;
+        default = "";
+        description = ''
+          Extra lines to be added verbatim to the options section of the
+          generated named configuration file.
+        '';
       };
 
       configFile = mkOption {
