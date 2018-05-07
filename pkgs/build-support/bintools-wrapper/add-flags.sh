@@ -12,16 +12,7 @@ var_templates_bool=(
     NIX+DONT_SET_RPATH
 )
 
-declare -a role_infixes=()
-if [ "${NIX_BINTOOLS_WRAPPER_@infixSalt@_TARGET_BUILD:-}" ]; then
-    role_infixes+=(_BUILD_)
-fi
-if [ "${NIX_BINTOOLS_WRAPPER_@infixSalt@_TARGET_HOST:-}" ]; then
-    role_infixes+=(_)
-fi
-if [ "${NIX_BINTOOLS_WRAPPER_@infixSalt@_TARGET_TARGET:-}" ]; then
-    role_infixes+=(_TARGET_)
-fi
+accumulateRoles
 
 for var in "${var_templates_list[@]}"; do
     mangleVarList "$var" ${role_infixes[@]+"${role_infixes[@]}"}

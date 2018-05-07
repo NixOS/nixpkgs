@@ -14,18 +14,7 @@ var_templates_bool=(
     NIX+ENFORCE_NO_NATIVE
 )
 
-# Accumulate infixes for taking in the right input parameters. See setup-hook
-# for details.
-declare -a role_infixes=()
-if [ "${NIX_CC_WRAPPER_@infixSalt@_TARGET_BUILD:-}" ]; then
-    role_infixes+=(_BUILD_)
-fi
-if [ "${NIX_CC_WRAPPER_@infixSalt@_TARGET_HOST:-}" ]; then
-    role_infixes+=(_)
-fi
-if [ "${NIX_CC_WRAPPER_@infixSalt@_TARGET_TARGET:-}" ]; then
-    role_infixes+=(_TARGET_)
-fi
+accumulateRoles
 
 # We need to mangle names for hygiene, but also take parameters/overrides
 # from the environment.

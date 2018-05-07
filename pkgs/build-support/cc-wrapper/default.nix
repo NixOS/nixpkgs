@@ -191,7 +191,12 @@ stdenv.mkDerivation {
   propagatedBuildInputs = [ bintools ];
   depsTargetTargetPropagated = extraPackages;
 
-  setupHook = ./setup-hook.sh;
+  wrapperName = "CC_WRAPPER";
+
+  setupHooks = [
+    ../setup-hooks/role.bash
+    ./setup-hook.sh
+  ];
 
   postFixup =
     ''
@@ -277,7 +282,7 @@ stdenv.mkDerivation {
     + ''
       substituteAll ${./add-flags.sh} $out/nix-support/add-flags.sh
       substituteAll ${./add-hardening.sh} $out/nix-support/add-hardening.sh
-      substituteAll ${./utils.sh} $out/nix-support/utils.sh
+      substituteAll ${../wrapper-common/utils.bash} $out/nix-support/utils.bash
 
       ##
       ## Extra custom steps
@@ -288,7 +293,7 @@ stdenv.mkDerivation {
 
   inherit expand-response-params;
 
-  # for substitution in utils.sh
+  # for substitution in utils.bash
   expandResponseParams = "${expand-response-params}/bin/expand-response-params";
 
   meta =

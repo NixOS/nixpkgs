@@ -15,7 +15,7 @@ if [[ -n "@coreutils_bin@" && -n "@gnugrep_bin@" ]]; then
     PATH="@coreutils_bin@/bin:@gnugrep_bin@/bin"
 fi
 
-source @out@/nix-support/utils.sh
+source @out@/nix-support/utils.bash
 
 # Flirting with a layer violation here.
 if [ -z "${NIX_BINTOOLS_WRAPPER_@infixSalt@_FLAGS_SET:-}" ]; then
