@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     description = ''High-perfomance MySQL backup tool'';
     homepage = https://github.com/maxbube/mydumper;
     license = licenses.gpl3;
-    platforms = platforms.all;
+    platforms = platforms.linux;
     maintainers = with maintainers; [ izorkin ];
   };
 }
