@@ -131,8 +131,8 @@ let
   };
 
   makeCompat = name': value: buildEnv {
-      name = name' + "-compat";
-      paths = value;
+    name = name' + "-compat";
+    paths = value;
   };
 
   # Compatibility derivations
