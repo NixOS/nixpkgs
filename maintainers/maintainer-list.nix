@@ -998,6 +998,11 @@
     github = "demin-dmitriy";
     name = "Dmitriy Demin";
   };
+  demyanrogozhin = {
+    email = "demyan.rogozhin@gmail.com";
+    github = "demyanrogozhin";
+    name = "Demyan Rogozhin";
+  };
   derchris = {
     email = "derchris@me.com";
     github = "derchrisuk";
