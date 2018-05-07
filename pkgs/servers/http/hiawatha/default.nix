@@ -12,11 +12,11 @@ assert enableSSL -> openssl !=null;
 
 stdenv.mkDerivation rec {
   name = "hiawatha-${version}";
-  version = "10.7";
+  version = "10.8.1";
 
   src = fetchurl {
     url = "https://github.com/hsleisink/hiawatha/archive/v${version}.tar.gz";
-    sha256 = "1k0vgpfkmdxmkimq4ab70cqwhj5qwr4pzq7nnv957ah8cw2ijy1z";
+    sha256 = "1f2hlw2lp98b4dx87i7pz7h66vsy2g22b5adfrlij3kj0vfv61w8";
   };
 
   buildInputs =  [ cmake libxslt zlib libxml2 ] ++ stdenv.lib.optional enableSSL openssl ;
