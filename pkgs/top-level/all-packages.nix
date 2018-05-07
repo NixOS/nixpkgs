@@ -5772,6 +5772,8 @@ with pkgs;
 
   xiccd = callPackage ../tools/misc/xiccd { };
 
+  xidlehook = callPackage ../tools/X11/xidlehook {};
+
   xorriso = callPackage ../tools/cd-dvd/xorriso { };
 
   xpf = callPackage ../tools/text/xml/xpf {
