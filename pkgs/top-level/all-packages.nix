@@ -8623,6 +8623,8 @@ with pkgs;
 
   coin3d = callPackage ../development/libraries/coin3d { };
 
+  soxt = callPackage ../development/libraries/soxt { };
+
   CoinMP = callPackage ../development/libraries/CoinMP { };
 
   commoncpp2 = callPackage ../development/libraries/commoncpp2 { };
