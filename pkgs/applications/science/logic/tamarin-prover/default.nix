@@ -4,12 +4,12 @@
 }:
 
 let
-  version = "1.3.1";
+  version = "1.4.0";
   src = fetchFromGitHub {
     owner  = "tamarin-prover";
     repo   = "tamarin-prover";
-    rev    = "ab8a155452e9e9c57ccb4bbe1b94d7677ea5ce21";
-    sha256 = "02ycxxkcpc0dzybaq63viciydq1ik8wiv2blk8mvnz3ssxw3sjik";
+    rev    = "7ced07a69f8e93178f9a95797479277a736ae572";
+    sha256 = "02pyw22h90228g6qybjpdvpcm9d5lh96f5qwmy2hv2bylz05z3nn";
   };
 
   # tamarin has its own dependencies, but they're kept inside the repo,
@@ -80,7 +80,7 @@ mkDerivation (common "tamarin-prover" src // {
     wrapProgram $out/bin/tamarin-prover \
       --prefix PATH : ${lib.makeBinPath [ which maude graphviz sapic ]}
     # so that the package can be used as a vim plugin to install syntax coloration
-    install -Dt $out/share/vim-plugins/tamarin-prover/syntax/ etc/{spthy,sapic}.vim 
+    install -Dt $out/share/vim-plugins/tamarin-prover/syntax/ etc/{spthy,sapic}.vim
     install etc/filetype.vim -D $out/share/vim-plugins/tamarin-prover/ftdetect/tamarin.vim
   '';
 
@@ -89,7 +89,7 @@ mkDerivation (common "tamarin-prover" src // {
   executableHaskellDepends = (with haskellPackages; [
     base binary binary-orphans blaze-builder blaze-html bytestring
     cmdargs conduit containers monad-control deepseq directory fclabels file-embed
-    filepath gitrev http-types HUnit lifted-base mtl parsec process
+    filepath gitrev http-types HUnit lifted-base mtl monad-unlift parsec process
     resourcet safe shakespeare tamarin-prover-term
     template-haskell text threads time wai warp yesod-core yesod-static
   ]) ++ [ tamarin-prover-utils
