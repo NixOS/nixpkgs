@@ -21191,6 +21191,7 @@ with pkgs;
       fontconfigSupport = true;
       alsaSupport = true;
       openglSupport = true;
+      vulkanSupport = stdenv.isLinux;
       tlsSupport = true;
       cupsSupport = true;
       dbusSupport = true;
