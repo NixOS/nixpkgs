@@ -3,11 +3,11 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "ldb-1.1.31";
+  name = "ldb-1.3.3";
 
   src = fetchurl {
     url = "mirror://samba/ldb/${name}.tar.gz";
-    sha256 = "04d53e2ab5b35688f5ed7a4471f5b273da121016e1af0630b36a36506afaeb46"                                                                                                                                                             ;
+    sha256 = "14gsrm7dvyjpbpnc60z75j6fz2p187abm2h353lq95kx2bv70c1b"                                                                                                                                                             ;
   };
 
   outputs = [ "out" "dev" ];
