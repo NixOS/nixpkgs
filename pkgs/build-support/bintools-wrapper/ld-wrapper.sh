@@ -14,7 +14,7 @@ if [ -n "@coreutils_bin@" ]; then
     PATH="@coreutils_bin@/bin"
 fi
 
-source @out@/nix-support/utils.sh
+source @out@/nix-support/utils.bash
 
 if [ -z "${NIX_BINTOOLS_WRAPPER_@infixSalt@_FLAGS_SET:-}" ]; then
     source @out@/nix-support/add-flags.sh
