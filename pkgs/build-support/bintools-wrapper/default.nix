@@ -190,7 +190,12 @@ stdenv.mkDerivation {
 
   depsTargetTargetPropagated = extraPackages;
 
-  setupHook = ./setup-hook.sh;
+  wrapperName = "BINTOOLS_WRAPPER";
+
+  setupHooks = [
+    ../setup-hooks/role.bash
+    ./setup-hook.sh
+  ];
 
   postFixup =
     ''

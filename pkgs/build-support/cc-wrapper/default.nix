@@ -191,7 +191,12 @@ stdenv.mkDerivation {
   propagatedBuildInputs = [ bintools ];
   depsTargetTargetPropagated = extraPackages;
 
-  setupHook = ./setup-hook.sh;
+  wrapperName = "CC_WRAPPER";
+
+  setupHooks = [
+    ../setup-hooks/role.bash
+    ./setup-hook.sh
+  ];
 
   postFixup =
     ''
