@@ -38,6 +38,7 @@
 , "ionic"
 , "ios-deploy"
 , "istanbul"
+, "imapnotify"
 , "javascript-typescript-langserver"
 , "jayschema"
 , "jsdoc"

@@ -20553,6 +20553,15 @@ let
         sha512 = "2x2535hml3hmhh6qbsl9r97mpa264mbpvmv0lbsqsfkv3sfd8wv7zw1b68555qsj5c6ma4b66qkgdsrr6355lhbmz052hqzq2qx082h";
       };
     };
+    "printf-0.2.5" = {
+      name = "printf";
+      packageName = "printf";
+      version = "0.2.5";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/printf/-/printf-0.2.5.tgz";
+        sha1 = "c438ca2ca33e3927671db4ab69c0e52f936a4f0f";
+      };
+    };
     "private-0.1.8" = {
       name = "private";
       packageName = "private";
@@ -28699,6 +28708,15 @@ let
         sha1 = "496b2cc109eca8dbacfe2dc72b603c17c5870ad4";
       };
     };
+    "xenvar-0.5.1" = {
+      name = "xenvar";
+      packageName = "xenvar";
+      version = "0.5.1";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/xenvar/-/xenvar-0.5.1.tgz";
+        sha1 = "f82d2fedee63af76687b70115ce6274dc71310e9";
+      };
+    };
     "xhr-2.4.1" = {
       name = "xhr";
       packageName = "xhr";
@@ -34457,6 +34475,68 @@ in
       description = "Yet another JS code coverage tool that computes statement, line, function and branch coverage with module loader hooks to transparently add coverage when running tests. Supports all JS coverage use cases including unit tests, server side functional tests ";
       homepage = "https://github.com/gotwarlost/istanbul#readme";
       license = "BSD-3-Clause";
+    };
+    production = true;
+    bypassCache = false;
+  };
+  imapnotify = nodeEnv.buildNodePackage {
+    name = "imapnotify";
+    packageName = "imapnotify";
+    version = "0.4.1";
+    src = fetchurl {
+      url = "https://registry.npmjs.org/imapnotify/-/imapnotify-0.4.1.tgz";
+      sha512 = "0fn58ydrck0mwpq48pj2in6aql522avzyabrddq4ixykr1h29ha3cvh1v0mga8ghg1v9zpkii81qqac74qwm9ikr1kll616fcz0cc0s";
+    };
+    dependencies = [
+      sources."async-0.2.10"
+      sources."balanced-match-1.0.0"
+      sources."brace-expansion-1.1.11"
+      sources."bunyan-1.8.12"
+      sources."colors-0.6.2"
+      sources."concat-map-0.0.1"
+      sources."core-util-is-1.0.2"
+      sources."cycle-1.0.3"
+      sources."dtrace-provider-0.8.6"
+      sources."eyes-0.1.8"
+      sources."glob-6.0.4"
+      sources."imap-0.8.19"
+      sources."inflight-1.0.6"
+      sources."inherits-2.0.3"
+      sources."isarray-0.0.1"
+      sources."isstream-0.1.2"
+      sources."minimatch-3.0.4"
+      sources."minimist-0.0.10"
+      (sources."mkdirp-0.5.1" // {
+        dependencies = [
+          sources."minimist-0.0.8"
+        ];
+      })
+      sources."moment-2.22.1"
+      sources."mv-2.1.1"
+      sources."nan-2.10.0"
+      sources."ncp-2.0.0"
+      sources."once-1.4.0"
+      sources."optimist-0.6.1"
+      sources."path-is-absolute-1.0.1"
+      sources."pkginfo-0.3.1"
+      sources."printf-0.2.5"
+      sources."readable-stream-1.1.14"
+      sources."rimraf-2.4.5"
+      sources."safe-json-stringify-1.1.0"
+      sources."semver-5.3.0"
+      sources."stack-trace-0.0.10"
+      sources."string_decoder-0.10.31"
+      sources."utf7-1.0.2"
+      sources."winston-0.8.3"
+      sources."wordwrap-0.0.3"
+      sources."wrappy-1.0.2"
+      sources."xenvar-0.5.1"
+    ];
+    buildInputs = globalBuildInputs;
+    meta = {
+      description = "Execute scripts on new messages using IDLE imap command";
+      homepage = "https://github.com/a-sk/node-imapnotify#readme";
+      license = "MIT";
     };
     production = true;
     bypassCache = false;
