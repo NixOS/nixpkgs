@@ -18253,6 +18253,8 @@ EOF
   h11 = callPackage ../development/python-modules/h11 { };
 
   python-docx = callPackage ../development/python-modules/python-docx { };
+
+  aiohue = callPackage ../development/python-modules/aiohue { };
 });
 
 in fix' (extends overrides packages)
