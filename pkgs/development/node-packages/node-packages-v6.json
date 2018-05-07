@@ -19,6 +19,7 @@
 , "dnschain"
 , "docker-registry-server"
 , "elasticdump"
+, "elm-oracle"
 , "elm-test"
 , "emoj"
 , "eslint"
