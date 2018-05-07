@@ -25,8 +25,9 @@ stdenv.mkDerivation rec {
   installFlags = "PREFIX=\${out} SYSCONFDIR=\${out}/etc MANDIR=\${out}/share/man";
   postInstall = ''
     mv $out/bin/i3lock $out/bin/i3lock-color
+    mv $out/etc/pam.d/i3lock $out/etc/pam.d/i3lock-color
     mv $out/share/man/man1/i3lock.1 $out/share/man/man1/i3lock-color.1
-    sed -i 's/^\.B i3lock$/.B i3lock-color/' $out/share/man/man1/i3lock-color.1
+    sed -i 's/\(^\|\s\|"\)i3lock\(\s\|$\)/\1i3lock-color\2/g' $out/share/man/man1/i3lock-color.1
   '';
   meta = with stdenv.lib; {
     description = "A simple screen locker like slock";
