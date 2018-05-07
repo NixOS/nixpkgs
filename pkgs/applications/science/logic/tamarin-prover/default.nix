@@ -8,8 +8,8 @@ let
   src = fetchFromGitHub {
     owner  = "tamarin-prover";
     repo   = "tamarin-prover";
-    rev    = "120c7e706f3e1d4646b233faf2bc9936834ed9d3";
-    sha256 = "064blwjjwnkycwgsrdn1xkjya976wndpz9h5pjmgjqqirinc8c5x";
+    rev    = "ab8a155452e9e9c57ccb4bbe1b94d7677ea5ce21";
+    sha256 = "02ycxxkcpc0dzybaq63viciydq1ik8wiv2blk8mvnz3ssxw3sjik";
   };
 
   # tamarin has its own dependencies, but they're kept inside the repo,
@@ -65,6 +65,15 @@ mkDerivation (common "tamarin-prover" src // {
   enableSharedExecutables = false;
   postFixup = "rm -rf $out/lib $out/nix-support $out/share/doc";
 
+  # Fix problem with MonadBaseControl not being found
+  patchPhase = ''
+    sed -ie 's,\(import *\)Control\.Monad$,&\
+    \1Control.Monad.Trans.Control,' src/Web/Handler.hs
+
+    sed -ie 's~\( *, \)mtl~&\
+    \1monad-control~' tamarin-prover.cabal
+  '';
+
   # wrap the prover to be sure it can find maude, sapic, etc
   executableToolDepends = [ makeWrapper which maude graphviz sapic ];
   postInstall = ''
@@ -79,7 +88,7 @@ mkDerivation (common "tamarin-prover" src // {
 
   executableHaskellDepends = (with haskellPackages; [
     base binary binary-orphans blaze-builder blaze-html bytestring
-    cmdargs conduit containers deepseq directory fclabels file-embed
+    cmdargs conduit containers monad-control deepseq directory fclabels file-embed
     filepath gitrev http-types HUnit lifted-base mtl parsec process
     resourcet safe shakespeare tamarin-prover-term
     template-haskell text threads time wai warp yesod-core yesod-static
