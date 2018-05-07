@@ -13660,6 +13660,8 @@ with pkgs;
 
     prl-tools = callPackage ../os-specific/linux/prl-tools { };
 
+    rlite = callPackage ../os-specific/linux/rlite/module.nix { };
+
     sch_cake = callPackage ../os-specific/linux/sch_cake { };
 
     inherit (callPackage ../os-specific/linux/spl {})
@@ -20967,6 +20969,8 @@ with pkgs;
   });
 
   retrofe = callPackage ../misc/emulators/retrofe { };
+
+  rlite = callPackage ../os-specific/linux/rlite { };
 
   rpl = callPackage ../tools/text/rpl {
     pythonPackages = python3Packages;
