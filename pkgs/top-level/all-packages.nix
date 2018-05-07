@@ -2209,6 +2209,8 @@ with pkgs;
 
   exiftool = perlPackages.ImageExifTool;
 
+  ext4magic = callPackage ../tools/filesystems/ext4magic { };
+
   extundelete = callPackage ../tools/filesystems/extundelete { };
 
   expect = callPackage ../tools/misc/expect { };
