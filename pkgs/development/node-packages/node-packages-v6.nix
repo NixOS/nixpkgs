@@ -3514,13 +3514,13 @@ let
         sha1 = "8de37f5a300730c305fc3edd9f93348ee8a46288";
       };
     };
-    "bufferutil-3.0.4" = {
+    "bufferutil-3.0.5" = {
       name = "bufferutil";
       packageName = "bufferutil";
-      version = "3.0.4";
+      version = "3.0.5";
       src = fetchurl {
-        url = "https://registry.npmjs.org/bufferutil/-/bufferutil-3.0.4.tgz";
-        sha512 = "1q344kiig9b8ssskrp7r77kf3xk516bfcjlilgz0a8q5zflz35rnp8im2kx1y9smcp23hw2q1aqsi39i6cb7svzf40a7dk6h4ds54pf";
+        url = "https://registry.npmjs.org/bufferutil/-/bufferutil-3.0.5.tgz";
+        sha512 = "2b5ha7z8v5gkanyakrbax9k9d00cv9gs2nfnk5g4d16ljmpv40jv3pljawxmnw2jj04z57cqlzbw1w8wr5kyblin8c2jz7a2av09xfi";
       };
     };
     "bufferview-1.0.1" = {
@@ -12355,13 +12355,13 @@ let
         sha512 = "0jj1pdq3j9ak8cixn2kjp7ip8hf3xgnb85j4jr32yf9rry620v9072c0kk577mllfk1zl9wzs5ypwzbp7vbhf7j31d5rrqgwb0nldm1";
       };
     };
-    "iconv-lite-0.4.21" = {
+    "iconv-lite-0.4.22" = {
       name = "iconv-lite";
       packageName = "iconv-lite";
-      version = "0.4.21";
+      version = "0.4.22";
       src = fetchurl {
-        url = "https://registry.npmjs.org/iconv-lite/-/iconv-lite-0.4.21.tgz";
-        sha512 = "0myjcmxx7dn5liikg8d2zgwb433sk761dfxwwnszyam16rzv5dzva352jrvav7cnambn0ha8fzh6g6xhdhxsd20l5v1p65r6vvmazhj";
+        url = "https://registry.npmjs.org/iconv-lite/-/iconv-lite-0.4.22.tgz";
+        sha512 = "1fdqcacbfr3yxs5i2kj9kn06lgx2a9yfrdps0hsmw96p1slawiqp3qyfnqczp570wbbi5sr8valqyll05a5gzj3ahppnkl32waaf26l";
       };
     };
     "iconv-lite-0.4.8" = {
@@ -16829,13 +16829,13 @@ let
         sha512 = "1slngp5z9rczjirv9lpdwiv1ap4xmp28jxl4r0i5hpds1khlm89qp70ziz8k5h2vwjph6srjqi3gb2yrwwsnnwli6p8yxvlyx7nn80p";
       };
     };
-    "minipass-2.2.4" = {
+    "minipass-2.3.0" = {
       name = "minipass";
       packageName = "minipass";
-      version = "2.2.4";
+      version = "2.3.0";
       src = fetchurl {
-        url = "https://registry.npmjs.org/minipass/-/minipass-2.2.4.tgz";
-        sha512 = "3r74gps1yd2fabj46qd42hknvpkg4aqwg3cdz8xjn8aqww0rsk3nmbgh8p2h0rkjlpxihg1wnpfa4bmpgmnydlbhpb1rz5dcxcwhdc7";
+        url = "https://registry.npmjs.org/minipass/-/minipass-2.3.0.tgz";
+        sha512 = "1p0pbj1iwnzb7kkqbh5h0vd6byh1l6na1yx69qmbb0wbmwm0qc5g4hn4z6lr8wkzb4kybvd1hjm4hxd93nrdr8ydbqqd9wd1w9bcq4d";
       };
     };
     "minizlib-1.1.0" = {
@@ -17178,6 +17178,15 @@ let
       src = fetchurl {
         url = "https://registry.npmjs.org/mri/-/mri-1.1.0.tgz";
         sha1 = "5c0a3f29c8ccffbbb1ec941dcec09d71fa32f36a";
+      };
+    };
+    "mri-1.1.1" = {
+      name = "mri";
+      packageName = "mri";
+      version = "1.1.1";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/mri/-/mri-1.1.1.tgz";
+        sha1 = "85aa26d3daeeeedf80dc5984af95cc5ca5cad9f1";
       };
     };
     "ms-0.1.0" = {
@@ -20445,13 +20454,13 @@ let
         sha1 = "d9ae0ca85330e03962d93292f95a8b44c2ebf505";
       };
     };
-    "prebuild-install-2.5.3" = {
+    "prebuild-install-4.0.0" = {
       name = "prebuild-install";
       packageName = "prebuild-install";
-      version = "2.5.3";
+      version = "4.0.0";
       src = fetchurl {
-        url = "https://registry.npmjs.org/prebuild-install/-/prebuild-install-2.5.3.tgz";
-        sha512 = "3z8bc2sx9ibs343jllm11azqkcc7vxpf0skfm68dqwz9l59z381vbqip00sgpzg9di2zagjm3wbx65s6g2kg5kj8b1vp0vnqglkgcpy";
+        url = "https://registry.npmjs.org/prebuild-install/-/prebuild-install-4.0.0.tgz";
+        sha512 = "2ffx8smnrj269a2r9lsiv4s71rvzhanb3a3hqg1i8daznmhl0w9lfsylh9hw5si1agsmbsn0j2syp8sn9r7cwxm8ps9b80vwv2v5mpf";
       };
     };
     "precond-0.2.3" = {
@@ -20542,6 +20551,15 @@ let
       src = fetchurl {
         url = "https://registry.npmjs.org/prfun/-/prfun-2.1.5.tgz";
         sha512 = "2x2535hml3hmhh6qbsl9r97mpa264mbpvmv0lbsqsfkv3sfd8wv7zw1b68555qsj5c6ma4b66qkgdsrr6355lhbmz052hqzq2qx082h";
+      };
+    };
+    "printf-0.2.5" = {
+      name = "printf";
+      packageName = "printf";
+      version = "0.2.5";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/printf/-/printf-0.2.5.tgz";
+        sha1 = "c438ca2ca33e3927671db4ab69c0e52f936a4f0f";
       };
     };
     "private-0.1.8" = {
@@ -28690,6 +28708,15 @@ let
         sha1 = "496b2cc109eca8dbacfe2dc72b603c17c5870ad4";
       };
     };
+    "xenvar-0.5.1" = {
+      name = "xenvar";
+      packageName = "xenvar";
+      version = "0.5.1";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/xenvar/-/xenvar-0.5.1.tgz";
+        sha1 = "f82d2fedee63af76687b70115ce6274dc71310e9";
+      };
+    };
     "xhr-2.4.1" = {
       name = "xhr";
       packageName = "xhr";
@@ -32196,6 +32223,23 @@ in
     production = true;
     bypassCache = false;
   };
+  elm-oracle = nodeEnv.buildNodePackage {
+    name = "elm-oracle";
+    packageName = "elm-oracle";
+    version = "1.1.1";
+    src = fetchurl {
+      url = "https://registry.npmjs.org/elm-oracle/-/elm-oracle-1.1.1.tgz";
+      sha1 = "61f6d783221b4ad08e7d101d678b9d5a67d3961c";
+    };
+    buildInputs = globalBuildInputs;
+    meta = {
+      description = "Query for information about values in elm source files.";
+      homepage = "https://github.com/ElmCast/elm-oracle#readme";
+      license = "BSD-3-Clause";
+    };
+    production = true;
+    bypassCache = false;
+  };
   elm-test = nodeEnv.buildNodePackage {
     name = "elm-test";
     packageName = "elm-test";
@@ -32480,7 +32524,7 @@ in
       sources."has-to-string-tag-x-1.4.1"
       sources."home-or-tmp-2.0.0"
       sources."hosted-git-info-2.6.0"
-      sources."iconv-lite-0.4.21"
+      sources."iconv-lite-0.4.22"
       (sources."import-jsx-1.3.0" // {
         dependencies = [
           sources."ansi-regex-2.1.1"
@@ -32706,7 +32750,7 @@ in
       sources."graceful-fs-4.1.11"
       sources."has-ansi-2.0.0"
       sources."has-flag-3.0.0"
-      sources."iconv-lite-0.4.21"
+      sources."iconv-lite-0.4.22"
       sources."ignore-3.3.8"
       sources."imurmurhash-0.1.4"
       sources."inflight-1.0.6"
@@ -32889,7 +32933,7 @@ in
       sources."graceful-fs-4.1.11"
       sources."has-ansi-2.0.0"
       sources."has-flag-3.0.0"
-      sources."iconv-lite-0.4.21"
+      sources."iconv-lite-0.4.22"
       sources."ignore-3.3.8"
       sources."imurmurhash-0.1.4"
       sources."inflight-1.0.6"
@@ -34225,7 +34269,7 @@ in
       sources."mimic-fn-1.2.0"
       sources."minimatch-3.0.4"
       sources."minimist-1.2.0"
-      sources."minipass-2.2.4"
+      sources."minipass-2.3.0"
       sources."minizlib-1.1.0"
       sources."mkdirp-0.5.1"
       sources."ms-2.0.0"
@@ -34448,6 +34492,68 @@ in
       description = "Yet another JS code coverage tool that computes statement, line, function and branch coverage with module loader hooks to transparently add coverage when running tests. Supports all JS coverage use cases including unit tests, server side functional tests ";
       homepage = "https://github.com/gotwarlost/istanbul#readme";
       license = "BSD-3-Clause";
+    };
+    production = true;
+    bypassCache = false;
+  };
+  imapnotify = nodeEnv.buildNodePackage {
+    name = "imapnotify";
+    packageName = "imapnotify";
+    version = "0.4.1";
+    src = fetchurl {
+      url = "https://registry.npmjs.org/imapnotify/-/imapnotify-0.4.1.tgz";
+      sha512 = "0fn58ydrck0mwpq48pj2in6aql522avzyabrddq4ixykr1h29ha3cvh1v0mga8ghg1v9zpkii81qqac74qwm9ikr1kll616fcz0cc0s";
+    };
+    dependencies = [
+      sources."async-0.2.10"
+      sources."balanced-match-1.0.0"
+      sources."brace-expansion-1.1.11"
+      sources."bunyan-1.8.12"
+      sources."colors-0.6.2"
+      sources."concat-map-0.0.1"
+      sources."core-util-is-1.0.2"
+      sources."cycle-1.0.3"
+      sources."dtrace-provider-0.8.6"
+      sources."eyes-0.1.8"
+      sources."glob-6.0.4"
+      sources."imap-0.8.19"
+      sources."inflight-1.0.6"
+      sources."inherits-2.0.3"
+      sources."isarray-0.0.1"
+      sources."isstream-0.1.2"
+      sources."minimatch-3.0.4"
+      sources."minimist-0.0.10"
+      (sources."mkdirp-0.5.1" // {
+        dependencies = [
+          sources."minimist-0.0.8"
+        ];
+      })
+      sources."moment-2.22.1"
+      sources."mv-2.1.1"
+      sources."nan-2.10.0"
+      sources."ncp-2.0.0"
+      sources."once-1.4.0"
+      sources."optimist-0.6.1"
+      sources."path-is-absolute-1.0.1"
+      sources."pkginfo-0.3.1"
+      sources."printf-0.2.5"
+      sources."readable-stream-1.1.14"
+      sources."rimraf-2.4.5"
+      sources."safe-json-stringify-1.1.0"
+      sources."semver-5.3.0"
+      sources."stack-trace-0.0.10"
+      sources."string_decoder-0.10.31"
+      sources."utf7-1.0.2"
+      sources."winston-0.8.3"
+      sources."wordwrap-0.0.3"
+      sources."wrappy-1.0.2"
+      sources."xenvar-0.5.1"
+    ];
+    buildInputs = globalBuildInputs;
+    meta = {
+      description = "Execute scripts on new messages using IDLE imap command";
+      homepage = "https://github.com/a-sk/node-imapnotify#readme";
+      license = "MIT";
     };
     production = true;
     bypassCache = false;
@@ -35853,7 +35959,7 @@ in
       sources."has-flag-3.0.0"
       sources."has-unicode-2.0.1"
       sources."hosted-git-info-2.6.0"
-      sources."iconv-lite-0.4.21"
+      sources."iconv-lite-0.4.22"
       sources."imurmurhash-0.1.4"
       sources."indent-string-2.1.0"
       sources."inflight-1.0.6"
@@ -36087,10 +36193,10 @@ in
   less = nodeEnv.buildNodePackage {
     name = "less";
     packageName = "less";
-    version = "3.0.2";
+    version = "3.0.4";
     src = fetchurl {
-      url = "https://registry.npmjs.org/less/-/less-3.0.2.tgz";
-      sha512 = "1hs3nj50rw6qlk3hjkd6ynhdv7mdlawwl4jzl3d43kbijkych51dm15ccb1ra7i9pmaq13nm24rkzf3bxv3fcpcrqq499cp0lbyg2cj";
+      url = "https://registry.npmjs.org/less/-/less-3.0.4.tgz";
+      sha512 = "1qmi7lbjfq3w5ygilwf5sagk463c0j6kj2wsidzh6100v02bpfi05c8kbycf395hrdmmy5ffb5f0rsvkvqyhxw9hxrlyvnafc9b4x5b";
     };
     dependencies = [
       sources."ajv-5.5.2"
@@ -36150,7 +36256,7 @@ in
       sources."request-2.85.0"
       sources."safe-buffer-5.1.2"
       sources."sntp-2.1.0"
-      sources."source-map-0.5.7"
+      sources."source-map-0.6.1"
       sources."sshpk-1.14.1"
       sources."stringstream-0.0.5"
       sources."tough-cookie-2.3.4"
@@ -36976,7 +37082,7 @@ in
       sources."mime-db-1.33.0"
       sources."mime-types-2.1.18"
       sources."minimist-0.0.8"
-      sources."minipass-2.2.4"
+      sources."minipass-2.3.0"
       sources."minizlib-1.1.0"
       sources."mkdirp-0.5.1"
       sources."ncp-0.4.2"
@@ -37500,7 +37606,7 @@ in
       sources."gauge-2.7.4"
       sources."glob-7.1.2"
       sources."has-unicode-2.0.1"
-      sources."iconv-lite-0.4.21"
+      sources."iconv-lite-0.4.22"
       sources."ignore-walk-3.0.1"
       sources."inflight-1.0.6"
       sources."inherits-2.0.3"
@@ -37509,7 +37615,7 @@ in
       sources."isarray-1.0.0"
       sources."minimatch-3.0.4"
       sources."minimist-0.0.8"
-      sources."minipass-2.2.4"
+      sources."minipass-2.3.0"
       sources."minizlib-1.1.0"
       sources."mkdirp-0.5.1"
       sources."ms-2.0.0"
@@ -38106,7 +38212,7 @@ in
         ];
       })
       sources."mqtt-packet-5.5.0"
-      sources."mri-1.1.0"
+      sources."mri-1.1.1"
       sources."ms-2.0.0"
       (sources."multer-1.3.0" // {
         dependencies = [
@@ -38777,7 +38883,7 @@ in
       sources."hoek-4.2.1"
       sources."hosted-git-info-2.6.0"
       sources."https-proxy-agent-2.2.1"
-      sources."iconv-lite-0.4.21"
+      sources."iconv-lite-0.4.22"
       (sources."inquirer-3.3.0" // {
         dependencies = [
           sources."ansi-regex-3.0.0"
@@ -40699,7 +40805,7 @@ in
       sources."esprima-fb-13001.1001.0-dev-harmony-fb"
       sources."glob-5.0.15"
       sources."graceful-fs-4.1.11"
-      sources."iconv-lite-0.4.21"
+      sources."iconv-lite-0.4.22"
       sources."inflight-1.0.6"
       sources."inherits-2.0.3"
       (sources."jstransform-10.1.0" // {
@@ -43025,7 +43131,7 @@ in
       sources."hawk-6.0.2"
       sources."hoek-4.2.1"
       sources."http-signature-1.2.0"
-      sources."iconv-lite-0.4.21"
+      sources."iconv-lite-0.4.22"
       sources."ieee754-1.1.11"
       sources."inflight-1.0.6"
       sources."inherits-2.0.3"
@@ -43766,7 +43872,7 @@ in
       sources."buffer-fill-0.1.1"
       sources."buffer-from-1.0.0"
       sources."buffer-indexof-1.1.1"
-      (sources."bufferutil-3.0.4" // {
+      (sources."bufferutil-3.0.5" // {
         dependencies = [
           sources."simple-get-2.8.1"
         ];
@@ -43895,7 +44001,7 @@ in
       sources."piece-length-1.0.0"
       sources."pify-2.3.0"
       sources."plist-with-patches-0.5.1"
-      sources."prebuild-install-2.5.3"
+      sources."prebuild-install-4.0.0"
       sources."prettier-bytes-1.0.4"
       sources."process-nextick-args-2.0.0"
       sources."protobufjs-3.8.2"
@@ -44472,7 +44578,7 @@ in
       sources."http-proxy-agent-2.1.0"
       sources."http-signature-1.2.0"
       sources."https-proxy-agent-2.2.1"
-      sources."iconv-lite-0.4.21"
+      sources."iconv-lite-0.4.22"
       sources."ignore-3.3.8"
       sources."import-lazy-2.1.0"
       sources."imurmurhash-0.1.4"
@@ -45237,7 +45343,7 @@ in
       sources."http-cache-semantics-3.8.1"
       sources."http-signature-1.2.0"
       sources."humanize-string-1.0.2"
-      sources."iconv-lite-0.4.21"
+      sources."iconv-lite-0.4.22"
       sources."import-lazy-2.1.0"
       sources."imurmurhash-0.1.4"
       sources."indent-string-3.2.0"
