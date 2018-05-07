@@ -17088,6 +17088,8 @@ with pkgs;
 
   pijul = callPackage ../applications/version-management/pijul {};
 
+  plank = callPackage ../applications/misc/plank { };
+
   planner = callPackage ../applications/office/planner { };
 
   playonlinux = callPackage ../applications/misc/playonlinux {
