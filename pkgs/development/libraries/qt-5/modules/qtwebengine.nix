@@ -176,6 +176,12 @@ EOF
     Prefix = ..
     EOF
     paxmark m $out/libexec/QtWebEngineProcess
+  '' + ''
+    # Sometimes the darwin build succeeds, even though nothing was actually built
+    if [ ! -f "$out/lib/libQt5WebEngine${stdenv.hostPlatform.extensions.sharedLibrary}" ]; then
+      echo "Build did not produce expected output libQt5WebEngine.{so,dylib,..}"
+      exit 1;
+    fi
   '';
 
   meta = with lib; {
