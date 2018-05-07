@@ -13,6 +13,7 @@
 , systemd
 , enableProprietaryCodecs ? true
 , gn, darwin, openbsm
+, xcbuild
 , lib, stdenv # lib.optional, needsPax
 }:
 
@@ -24,8 +25,9 @@ qtModule {
   name = "qtwebengine";
   qtInputs = [ qtdeclarative qtquickcontrols qtlocation qtwebchannel ];
   nativeBuildInputs = [
-    bison coreutils flex git gperf ninja pkgconfig python2 which gn
+    bison coreutils flex git gperf ninja pkgconfig python2 which gn xcbuild
   ];
+  dontUseXcbuild = true;
   doCheck = true;
   outputs = [ "bin" "dev" "out" ];
 
@@ -64,7 +66,12 @@ qtModule {
     + optionalString stdenv.isDarwin ''
       # Remove annoying xcode check
       substituteInPlace mkspecs/features/platform.prf \
-        --replace "lessThan(QMAKE_XCODE_VERSION, 7.3)" false
+        --replace "lessThan(QMAKE_XCODE_VERSION, 7.3)" false \
+        --replace "/usr/bin/xcodebuild" "xcodebuild"
+
+      substituteInPlace src/3rdparty/chromium/build/mac_toolchain.py \
+        --replace "/usr/bin/xcode-select" "xcode-select"
+
       substituteInPlace src/core/config/mac_osx.pri \
         --replace /usr ${stdenv.cc} \
         --replace "isEmpty(QMAKE_MAC_SDK_VERSION)" false
