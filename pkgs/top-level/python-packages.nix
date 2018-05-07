@@ -18255,6 +18255,8 @@ EOF
   python-docx = callPackage ../development/python-modules/python-docx { };
 
   aiohue = callPackage ../development/python-modules/aiohue { };
+
+  PyMVGLive = callPackage ../development/python-modules/pymvglive { };
 });
 
 in fix' (extends overrides packages)
