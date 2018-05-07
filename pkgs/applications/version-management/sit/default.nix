@@ -15,6 +15,8 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "102haqix13nwcncng1s8qkw68spn6fhh3vysk2nbahw6f78zczqg";
 
+  patches = [ ./aarch64-eexist.patch ];
+
   meta = with stdenv.lib; {
     description = "Serverless Information Tracker";
     homepage = https://sit.sh/;
