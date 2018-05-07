@@ -17925,7 +17925,6 @@ with pkgs;
   };
 
   spotify = callPackage ../applications/audio/spotify {
-    inherit (gnome2) GConf;
     libgcrypt = libgcrypt_1_5;
     libpng = libpng12;
     curl = curl.override {
