@@ -1,6 +1,7 @@
-{ lib, rustPlatform, fetchFromGitHub, pkgconfig, file, perl, cmake, libgit2, openssl_1_1_0, libssh2, libzip }:
+{ lib, rustPlatform, fetchFromGitHub, pkgconfig, file, perl, cmake, openssl_1_1_0, libssh2, libgit2, libzip }:
 rustPlatform.buildRustPackage rec {
-  name = "powerline-rs-${version}";
+  pname = "powerline-rs";
+  name = "${pname}-${version}";
   version = "0.1.7";
 
   src = fetchFromGitHub {
@@ -14,8 +15,12 @@ rustPlatform.buildRustPackage rec {
   cargoSha256 = "184s432a6damzvl0lv6jar1iml9dq60r190aqjy44lcg938981zc";
 
   nativeBuildInputs = [ pkgconfig file perl cmake ];
-  buildInputs = [ libgit2 ];
-  propagatedBuildInputs = [ openssl_1_1_0 libssh2 libzip ];
+  buildInputs = [ openssl_1_1_0 libssh2 libgit2 libzip ];
+
+  postInstall = ''
+    install -Dm 755 "${pname}.bash" "$out/etc/bash_completion.d/${pname}"
+    install -Dm 755 "${pname}.fish" "$out/share/fish/vendor_completions.d/${pname}"
+  '';
 
   meta = with lib; {
     description = "powerline-shell rewritten in Rust, inspired by powerline-go";
