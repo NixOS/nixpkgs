@@ -3100,13 +3100,13 @@ let
         sha1 = "d96c92732076f072711b6b10fd7d4f65ad8ee23d";
       };
     };
-    "iconv-lite-0.4.21" = {
+    "iconv-lite-0.4.22" = {
       name = "iconv-lite";
       packageName = "iconv-lite";
-      version = "0.4.21";
+      version = "0.4.22";
       src = fetchurl {
-        url = "https://registry.npmjs.org/iconv-lite/-/iconv-lite-0.4.21.tgz";
-        sha512 = "0myjcmxx7dn5liikg8d2zgwb433sk761dfxwwnszyam16rzv5dzva352jrvav7cnambn0ha8fzh6g6xhdhxsd20l5v1p65r6vvmazhj";
+        url = "https://registry.npmjs.org/iconv-lite/-/iconv-lite-0.4.22.tgz";
+        sha512 = "1fdqcacbfr3yxs5i2kj9kn06lgx2a9yfrdps0hsmw96p1slawiqp3qyfnqczp570wbbi5sr8valqyll05a5gzj3ahppnkl32waaf26l";
       };
     };
     "iconv-lite-0.4.8" = {
@@ -4549,13 +4549,13 @@ let
         sha1 = "a35008b20f41383eec1fb914f4cd5df79a264284";
       };
     };
-    "minipass-2.2.4" = {
+    "minipass-2.3.0" = {
       name = "minipass";
       packageName = "minipass";
-      version = "2.2.4";
+      version = "2.3.0";
       src = fetchurl {
-        url = "https://registry.npmjs.org/minipass/-/minipass-2.2.4.tgz";
-        sha512 = "3r74gps1yd2fabj46qd42hknvpkg4aqwg3cdz8xjn8aqww0rsk3nmbgh8p2h0rkjlpxihg1wnpfa4bmpgmnydlbhpb1rz5dcxcwhdc7";
+        url = "https://registry.npmjs.org/minipass/-/minipass-2.3.0.tgz";
+        sha512 = "1p0pbj1iwnzb7kkqbh5h0vd6byh1l6na1yx69qmbb0wbmwm0qc5g4hn4z6lr8wkzb4kybvd1hjm4hxd93nrdr8ydbqqd9wd1w9bcq4d";
       };
     };
     "minizlib-1.1.0" = {
@@ -6646,13 +6646,13 @@ let
         sha1 = "a4316ccb0d40a77d30dadf91f0f4db7e475f948a";
       };
     };
-    "swagger-test-templates-1.4.3" = {
+    "swagger-test-templates-1.5.0" = {
       name = "swagger-test-templates";
       packageName = "swagger-test-templates";
-      version = "1.4.3";
+      version = "1.5.0";
       src = fetchurl {
-        url = "https://registry.npmjs.org/swagger-test-templates/-/swagger-test-templates-1.4.3.tgz";
-        sha1 = "e047473aec06b938992e427665cafdbb6a01cfc0";
+        url = "https://registry.npmjs.org/swagger-test-templates/-/swagger-test-templates-1.5.0.tgz";
+        sha512 = "0jmilcls10zf18f7nlcdn29qdf21bl4xsk1kzzayp5h92ljkwx3c9jyy3a3p2yrd6pjnzh0k5c4yih3kbv6nxcd2rpf5vlfm44lg06l";
       };
     };
     "swagger-tools-0.9.16" = {
@@ -7635,7 +7635,7 @@ in
       sources."formidable-1.2.1"
       sources."has-ansi-2.0.0"
       sources."has-flag-3.0.0"
-      sources."iconv-lite-0.4.21"
+      sources."iconv-lite-0.4.22"
       sources."inherits-2.0.3"
       (sources."inquirer-3.3.0" // {
         dependencies = [
@@ -8370,7 +8370,7 @@ in
       sources."gauge-2.7.4"
       sources."glob-7.1.2"
       sources."has-unicode-2.0.1"
-      sources."iconv-lite-0.4.21"
+      sources."iconv-lite-0.4.22"
       sources."ignore-walk-3.0.1"
       sources."inflight-1.0.6"
       sources."inherits-2.0.3"
@@ -8379,7 +8379,7 @@ in
       sources."isarray-1.0.0"
       sources."minimatch-3.0.4"
       sources."minimist-0.0.8"
-      sources."minipass-2.2.4"
+      sources."minipass-2.3.0"
       sources."minizlib-1.1.0"
       sources."mkdirp-0.5.1"
       sources."ms-2.0.0"
@@ -8650,7 +8650,7 @@ in
       sources."hawk-6.0.2"
       sources."hoek-4.2.1"
       sources."http-signature-1.2.0"
-      sources."iconv-lite-0.4.21"
+      sources."iconv-lite-0.4.22"
       sources."ieee754-1.1.11"
       sources."inflight-1.0.6"
       sources."inherits-2.0.3"
@@ -9281,7 +9281,7 @@ in
       sources."supports-color-2.0.0"
       sources."swagger-converter-0.2.0"
       sources."swagger-editor-2.10.5"
-      (sources."swagger-test-templates-1.4.3" // {
+      (sources."swagger-test-templates-1.5.0" // {
         dependencies = [
           sources."camelcase-1.2.1"
           sources."is-extglob-1.0.0"
