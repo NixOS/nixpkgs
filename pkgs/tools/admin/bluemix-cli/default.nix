@@ -1,20 +1,17 @@
-{ lib, stdenv, fetchzip }:
+{ lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
   name = "bluemix-cli-${version}";
   version = "0.6.6";
 
-  src = fetchzip {
-    url    = "https://clis.ng.bluemix.net/download/bluemix-cli/${version}/linux64";
-    sha256 = "1h3zh8x9681y2ag1wqp003kxlkf1qjnihh3h98wrbmr7f35rmp1x";
+  src = fetchurl {
+    name = "linux64.tar.gz";
+    url = "https://clis.ng.bluemix.net/download/bluemix-cli/${version}/linux64";
+    sha256 = "1swjawc4szqrl0wgjcb4na1hbxylaqp2mp53lxsbfbk1db0c3y85";
   };
 
   installPhase = ''
-    mkdir -p $out/bin
-    cp bin/bluemix $out/bin
-    cp bin/bluemix-analytics $out/bin
-    cp bin/cfcli/cf $out/bin
-    chmod 0755 $out/bin/*
+    install -m755 -D --target $out/bin bin/bluemix bin/bluemix-analytics bin/cfcli/cf
   '';
 
   meta = with lib; {
