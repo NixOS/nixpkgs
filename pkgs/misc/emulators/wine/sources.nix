@@ -46,7 +46,7 @@ in rec {
   };
 
   staging = fetchFromGitHub rec {
-    # https://github.com/wine-compholio/wine-staging/releases
+    # https://github.com/wine-staging/wine-staging/releases
     inherit (unstable) version;
     sha256 = "049cwllf4aybrhj4l2i3vd5jvagjz4d448404zkyy0lfxr08id3p";
     owner = "wine-staging";
