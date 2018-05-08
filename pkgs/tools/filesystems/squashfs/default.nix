@@ -38,5 +38,7 @@ stdenv.mkDerivation rec {
     homepage = http://squashfs.sourceforge.net/;
     description = "Tool for creating and unpacking squashfs filesystems";
     platforms = stdenv.lib.platforms.linux;
+    license = stdenv.lib.licenses.gpl2Plus;
+    maintainers = with stdenv.lib.maintainers; [ ruuda ];
   };
 }
