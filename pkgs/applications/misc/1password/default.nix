@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchzip }:
+{ stdenv, lib, fetchzip, makeWrapper }:
 
 let
   src =
@@ -14,14 +14,15 @@ let
 in stdenv.mkDerivation {
   name = "1password-0.4";
   inherit src;
+  nativeBuildInputs = [ makeWrapper ];
   installPhase = ''
     mkdir -p $out/bin
-    cp op $out/bin/op.wrapped
+    install -D op $out/share/1password/op
 
     # https://github.com/NixOS/patchelf/issues/66#issuecomment-267743051
-    echo "#!/bin/sh" > $out/bin/op
-    echo $(< $NIX_CC/nix-support/dynamic-linker) $out/bin/op.wrapped \"\$@\" >> $out/bin/op
-    chmod +x $out/bin/op
+    makeWrapper $(cat $NIX_CC/nix-support/dynamic-linker) $out/bin/op \
+      --argv0 op \
+      --add-flags $out/share/1password/op
   '';
   meta = with lib; {
     description = "1Password command-line tool";
