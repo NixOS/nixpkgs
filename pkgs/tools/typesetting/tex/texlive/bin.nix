@@ -30,9 +30,9 @@ let
 
     patches = [
       (fetchurl {
-        name = "texlive-poppler-0.59.patch";
-        url = https://git.archlinux.org/svntogit/packages.git/plain/trunk/texlive-poppler-0.59.patch?h=packages/texlive-bin&id=6308ec39bce2a4d735f6ff8a4e94473748d7b450;
-        sha256 = "1c4ikq4kxw48bi3i33bzpabrjvbk01fwjr2lz20gkc9kv8l0bg3n";
+        name = "texlive-poppler-0.64.patch";
+        url = https://git.archlinux.org/svntogit/packages.git/plain/trunk/texlive-poppler-0.64.patch?h=packages/texlive-bin&id=16f6759db9dc288ece13cac09756ccf10f91806e;
+        sha256 = "1wrhqa41s0yzp95x9c3cwplivawk98ycc4a6z123w7p5g5pns52q";
       })
     ];
 
