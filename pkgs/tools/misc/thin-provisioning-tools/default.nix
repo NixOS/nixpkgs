@@ -20,6 +20,8 @@ stdenv.mkDerivation rec {
       block-cache/io_engine.h unit-tests/io_engine_t.cc
   '';
 
+  enableParallelBuilding = true;
+
   meta = with stdenv.lib; {
     homepage = https://github.com/jthornber/thin-provisioning-tools/;
     description = "A suite of tools for manipulating the metadata of the dm-thin device-mapper target";
