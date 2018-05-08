@@ -102,15 +102,15 @@ print('sdk_version="10.10"')
 print('sdk_platform_path=""')
 print('sdk_build="17B41"')
 EOF
-
-    # Apple has some secret stuff they don't share with OpenBSM
-    substituteInPlace src/3rdparty/chromium/base/mac/mach_port_broker.mm \
-      --replace "audit_token_to_pid(msg.trailer.msgh_audit)" "msg.trailer.msgh_audit.val[5]"
-    substituteInPlace src/3rdparty/chromium/sandbox/mac/bootstrap_sandbox.cc \
-      --replace "audit_token_to_pid(msg.trailer.msgh_audit)" "msg.trailer.msgh_audit.val[5]"
     '';
 
-  NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin "-DMAC_OS_X_VERSION_MAX_ALLOWED=MAC_OS_X_VERSION_10_10 -DMAC_OS_X_VERSION_MIN_REQUIRED=MAC_OS_X_VERSION_10_10";
+  NIX_CFLAGS_COMPILE = lib.optionals stdenv.isDarwin [
+    "-DMAC_OS_X_VERSION_MAX_ALLOWED=MAC_OS_X_VERSION_10_10"
+    "-DMAC_OS_X_VERSION_MIN_REQUIRED=MAC_OS_X_VERSION_10_10"
+
+    # Apple has some secret stuff they don't share with OpenBSM
+    "-Daudit_token_to_pid(a)=(a.val[5])"
+  ];
 
   preConfigure = ''
     export NINJAFLAGS=-j$NIX_BUILD_CORES
