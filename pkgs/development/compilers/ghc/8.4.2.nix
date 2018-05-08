@@ -22,7 +22,7 @@
 
 , # Whether to build dynamic libs for the standard library (on the target
   # platform). Static libs are always built.
-  enableShared ? true
+  enableShared ? !targetPlatform.useAndroidPrebuilt
 
 , version ? "8.4.2"
 }:
