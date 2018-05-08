@@ -47,7 +47,7 @@ let
     eject = {
       linux = pkgs.utillinux;
     };
-    getconf = singleBinary "getconf" {
+    getconf = {
       linux = if hostPlatform.isMusl then pkgs.musl-getconf
               else lib.getBin stdenv.cc.libc;
       darwin = pkgs.darwin.system_cmds;
