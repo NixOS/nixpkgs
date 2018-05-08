@@ -19622,7 +19622,7 @@ with pkgs;
 
   wesnoth = callPackage ../games/wesnoth { };
 
-  wesnoth-dev = callPackage ../games/wesnoth/dev.nix { };
+  wesnoth-dev = wesnoth;
 
   widelands = callPackage ../games/widelands {
     lua = lua5_2;
