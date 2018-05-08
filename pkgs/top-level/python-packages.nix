@@ -1629,6 +1629,8 @@ in {
 
   contexter = callPackage ../development/python-modules/contexter { };
 
+  contextvars = callPackage ../development/python-modules/contextvars {};
+
   contextlib2 = callPackage ../development/python-modules/contextlib2 { };
 
   cookiecutter = callPackage ../development/python-modules/cookiecutter { };
