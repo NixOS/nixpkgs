@@ -5,6 +5,7 @@ with lib;
 let
   cfg = config.services.telnet;
 
+  user = "telnetd";
 in
 {
 
@@ -15,38 +16,54 @@ in
       type = types.bool;
       description = ''
         Enable telnetd.
+        Only use in trusted networks as there is no encryption.
       '';
     };
 
     port = mkOption {
-      default = 12345;
+      default = 23;
       type = types.int;
       description = ''
-        Port on which to listen.
+        Port to listen to.
       '';
     };
 
+    openFirewall = mkOption {
+      type = types.bool;
+      default = false;
+      description = ''
+        Whether to automatically open the specified ports in the firewall.
+      '';
+    };
   };
 
   config = mkIf config.services.telnet.enable {
 
-    networking.firewall.allowedUDPPorts =  [ cfg.port ];
+    networking.firewall.allowedTCPPorts = mkIf cfg.openFirewall [ cfg.port ];
 
-    users.extraUsers.telnetd.uid = config.ids.uids.telnetd;
-    users.extraGroups.telnetd.gid = config.ids.gids.telnetd;
+    users.extraUsers = singleton {
+      name = user;
+      description = "Telnet daemon";
+    };
+
+      users.extraGroups = singleton {
+        name = "telnetd";
+      };
 
 
     systemd.services.telnetd = {
       description = "Telnet server";
+      wantedBy = [ "multi-user.target" ];
 
       script = "${pkgs.busybox}/bin/telnetd -p ${toString cfg.port}";
+
       serviceConfig = {
-        User = "telnetd";
+        User = user;
         Group = "telnetd";
-        CapabilityBoundingSet = "CAP_NET_BIND_SERVICE";
-        # RuntimeDirectory = [ "telnetd" ];
+        CapabilityBoundingSet = "CAP_NET_BIND_SERVICE=+ep";
+        RuntimeDirectory = [ "telnetd" ];
+        Restart = "always";
       };
-      wantedBy = [ "multi-user.target" ];
     };
   };
 
