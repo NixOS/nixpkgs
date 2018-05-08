@@ -18,7 +18,7 @@ in buildGoPackage rec {
   };
 
   buildInputs = [ go-bindata makeWrapper gpgme ] ++ stdenv.lib.optional hostPlatform.isDarwin vmnet;
-  subPackages = [ "cmd/minikube" ];
+  subPackages = [ "cmd/minikube" ] ++ stdenv.lib.optional hostPlatform.isDarwin "cmd/drivers/hyperkit";
 
   preBuild = ''
     pushd go/src/${goPackagePath} >/dev/null
@@ -46,7 +46,11 @@ in buildGoPackage rec {
     MINIKUBE_WANTUPDATENOTIFICATION=false MINIKUBE_WANTKUBECTLDOWNLOADMSG=false HOME=$PWD $bin/bin/minikube completion zsh > $bin/share/zsh/site-functions/_minikube
   '';
 
-  postFixup = "wrapProgram $bin/bin/${pname} --prefix PATH : ${stdenv.lib.makeBinPath binPath}";
+  postFixup = ''
+    wrapProgram $bin/bin/${pname} --prefix PATH : $bin/bin:${stdenv.lib.makeBinPath binPath}
+  '' + stdenv.lib.optionalString hostPlatform.isDarwin ''
+    mv $bin/bin/hyperkit $bin/bin/docker-machine-driver-hyperkit
+  '';
 
   meta = with stdenv.lib; {
     homepage    = https://github.com/kubernetes/minikube;
