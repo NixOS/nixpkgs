@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "thin-provisioning-tools-${version}";
-  version = "0.7.5";
+  version = "0.7.6";
 
   src = fetchFromGitHub {
     owner = "jthornber";
     repo = "thin-provisioning-tools";
     rev = "v${version}";
-    sha256 = "1ibg5wxrbqg4pr3f6aacqm42fxpwn5q00j8ldy9mw4an3ck41cwa";
+    sha256 = "175mk3krfdmn43cjw378s32hs62gq8fmq549rjmyc651sz6jnj0g";
   };
 
   nativeBuildInputs = [ autoreconfHook ];
