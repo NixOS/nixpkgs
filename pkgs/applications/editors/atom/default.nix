@@ -34,6 +34,8 @@ stdenv.mkDerivation rec {
 
     rm -f $out/share/atom/resources/app.asar.unpacked/node_modules/dugite/git/bin/git
     ln -s ${pkgs.git}/bin/git $out/share/atom/resources/app.asar.unpacked/node_modules/dugite/git/bin/git
+    rm -f $out/share/atom/resources/app.asar.unpacked/node_modules/dugite/git/libexec/git-core/git
+    ln -s ${pkgs.git}/bin/git $out/share/atom/resources/app.asar.unpacked/node_modules/dugite/git/libexec/git-core/git
 
     find $out/share/atom -name "*.node" -exec patchelf --set-rpath "${atomEnv.libPath}:$out/share/atom" {} \;
 
@@ -45,7 +47,7 @@ stdenv.mkDerivation rec {
     description = "A hackable text editor for the 21st Century";
     homepage = https://atom.io/;
     license = licenses.mit;
-    maintainers = [ maintainers.offline maintainers.nequissimus ];
+    maintainers = [ maintainers.offline maintainers.nequissimus maintainers.ysndr ];
     platforms = [ "x86_64-linux" ];
   };
 }
