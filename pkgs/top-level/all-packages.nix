@@ -6850,7 +6850,7 @@ with pkgs;
 
   buildRustCrate = callPackage ../build-support/rust/build-rust-crate.nix { };
 
-  cargo-vendor = callPackage ../build-support/rust/cargo-vendor {};
+  cargo-vendor = callPackage ../build-support/rust/cargo-vendor { };
 
   carnix = (callPackage ../build-support/rust/carnix.nix { }).carnix { };
 
@@ -6874,6 +6874,8 @@ with pkgs;
     });
 
   cargo-edit = callPackage ../tools/package-management/cargo-edit { };
+
+  cargo-fuzz = callPackage ../development/tools/rust/cargo-fuzz { };
 
   rainicorn = callPackage ../development/tools/rust/rainicorn { };
   rustfmt = callPackage ../development/tools/rust/rustfmt { };
