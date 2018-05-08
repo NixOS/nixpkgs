@@ -8030,6 +8030,8 @@ with pkgs;
     gperf = gperf_3_0;
   };
 
+  kcgi = callPackage ../development/web/kcgi { };
+
   kcov = callPackage ../development/tools/analysis/kcov { };
 
   kube-aws = callPackage ../development/tools/kube-aws { };
