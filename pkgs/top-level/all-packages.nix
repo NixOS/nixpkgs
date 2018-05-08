@@ -16056,6 +16056,14 @@ with pkgs;
     inherit (gnome3) dconf;
   };
 
+  gnucash24 = callPackage ../applications/office/gnucash/2.4.nix {
+    inherit (gnome2) libgnomeui libgtkhtml gtkhtml libbonoboui libgnomeprint libglade libart_lgpl;
+    gconf = gnome2.GConf;
+    guile = guile_1_8;
+    slibGuile = slibGuile.override { scheme = guile_1_8; };
+    goffice = goffice_0_8;
+  };
+
   gnucash26 = lowPrio (callPackage ../applications/office/gnucash/2.6.nix {
     inherit (gnome2) libgnomecanvas;
     inherit (gnome3) dconf;
