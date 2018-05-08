@@ -145,6 +145,8 @@ self: super: builtins.intersectAttrs super {
   gtksourceview2 = addPkgconfigDepend super.gtksourceview2 pkgs.gtk2;
   gtk-traymanager = addPkgconfigDepend super.gtk-traymanager pkgs.gtk3;
   gi-gdkx11 = addPkgconfigDepend super.gi-gdkx11 pkgs.gtk3;
+  gi-dbusmenu = super.gi-dbusmenu.override { dbusmenu-glib = pkgs.libdbusmenu-glib; };
+  gi-dbusmenugtk3 = super.gi-dbusmenugtk3.override { dbusmenu-gtk3 = pkgs.libdbusmenu-gtk3; };
   taffybar = (addPkgconfigDepend super.taffybar pkgs.gtk3).override { dbus = self.dbus_1_0_1; };
 
   # Need WebkitGTK, not just webkit.
