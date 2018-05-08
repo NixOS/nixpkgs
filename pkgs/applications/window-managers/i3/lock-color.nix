@@ -29,8 +29,29 @@ stdenv.mkDerivation rec {
     sed -i 's/\(^\|\s\|"\)i3lock\(\s\|$\)/\1i3lock-color\2/g' $out/share/man/man1/i3lock-color.1
   '';
   meta = with stdenv.lib; {
-    description = "A simple screen locker like slock";
-    homepage = https://i3wm.org/i3lock/;
+    description = "A simple screen locker like slock, enhanced version with extra configuration options";
+    longDescription = ''
+      Simple screen locker. After locking, a colored background (default: white) or
+      a configurable image is shown, and a ring-shaped unlock-indicator gives feedback
+      for every keystroke. After entering your password, the screen is unlocked again.
+
+      i3lock-color is forked from i3lock (https://i3wm.org/i3lock/) with the following
+      enhancements / additional configuration options:
+
+      - indicator:
+        - shape: ring or bar
+        - size: configurable
+        - all colors: configurable
+        - all texts: configurable
+        - visibility: can be always visible, can be restricted to some screens
+
+      - background: optionally show a blurred screen instead of a single color
+
+      - more information: show text at configurable positions:
+        - clock: time/date with configurable format
+        - keyboard-layout
+    '';
+    homepage = http://github.com/PandorasFox/i3lock-color;
     maintainers = with maintainers; [ garbas malyn ];
     license = licenses.bsd3;
 
