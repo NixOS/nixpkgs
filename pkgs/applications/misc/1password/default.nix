@@ -1,8 +1,6 @@
-{ stdenv, lib, fetchzip, makeWrapper }:
+{ stdenv, fetchzip, makeWrapper }:
 
-let
-
-in stdenv.mkDerivation rec {
+stdenv.mkDerivation rec {
   name = "1password-${version}";
   version = "0.4";
   src = if stdenv.system == "i686-linux" then fetchzip {
@@ -14,6 +12,7 @@ in stdenv.mkDerivation rec {
     sha256 = "15cv8xi4slid9jicdmc5xx2r9ag63wcx1mn7hcgzxbxbhyrvwhyf";
     stripRoot = false;
   };
+
   nativeBuildInputs = [ makeWrapper ];
   installPhase = ''
     mkdir -p $out/bin
@@ -24,7 +23,8 @@ in stdenv.mkDerivation rec {
       --argv0 op \
       --add-flags $out/share/1password/op
   '';
-  meta = with lib; {
+
+  meta = with stdenv.lib; {
     description = "1Password command-line tool";
     homepage    = "https://blog.agilebits.com/2017/09/06/announcing-the-1password-command-line-tool-public-beta/";
     maintainers = with maintainers; [ joelburget ];
