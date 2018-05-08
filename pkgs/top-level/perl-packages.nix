@@ -15532,6 +15532,17 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
+  TypesSerialiser = buildPerlPackage rec {
+     name = "Types-Serialiser-1.0";
+     src = fetchurl {
+       url = mirror://cpan/authors/id/M/ML/MLEHMANN/Types-Serialiser-1.0.tar.gz;
+       sha256 = "03bk0hm5ys8k7265dkap825ybn2zmzb1hl0kf1jdm8yq95w39lvs";
+     };
+     propagatedBuildInputs = [ commonsense ];
+     meta = {
+     };
+  };
+
   UNIVERSALcan = buildPerlPackage {
     name = "UNIVERSAL-can-1.20140328";
     src = fetchurl {
