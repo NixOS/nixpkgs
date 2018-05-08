@@ -1,4 +1,5 @@
-{ lib, callPackage, stdenv, overrideCC, gcc5, fetchurl, fetchFromGitHub, fetchpatch }:
+{ lib, callPackage, stdenv, overrideCC, gcc5, fetchurl, fetchzip
+, fetchFromGitHub, fetchpatch }:
 
 let
 
@@ -19,9 +20,9 @@ rec {
   firefox = common rec {
     pname = "firefox";
     version = "59.0.3";
-    src = fetchurl {
+    src = fetchzip {
       url = "https://hg.mozilla.org/releases/mozilla-release/archive/6b51784853e47e091d213d421a19cb623af718f0.tar.bz2";
-      sha512 = "2dh2hp307iz90969i8r96hdmd0d2v2d5zjp0n3klsn789sd6b3jdznb4mc5ghpm2rpcl48rqakw6apvmhidcahc1zbc1fq6j6a86jqp";
+      sha512 = "0wcvs0lzdddbrxp8prg1w1g4xq9xqzvqlgs9r22zjblfnp703nw82zr09ys7jd63mr77g3rgglhi3d5k42aqrbmsx1r5dn5qqf5jlkz";
     };
 
     patches = nixpkgsPatches ++ [
