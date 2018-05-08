@@ -4,18 +4,16 @@
 
 assert odbcSupport -> unixODBC != null;
 
+# Work is in progress to move to cmake so revisit that later
+
 stdenv.mkDerivation rec {
   name = "freetds-${version}";
-  version = "1.00.80";
+  version = "1.00.91";
 
   src = fetchurl {
     url    = "http://www.freetds.org/files/stable/${name}.tar.bz2";
-    sha256 = "17s15avxcyhfk0zsj8rggizhpd2j2sa41w5xlnshzd2r3piqyl6k";
+    sha256 = "04c344xdvh2j36r01ph7yhy5rb1668il0z9vyphwdy6qqwywh622";
   };
-
-  configureFlags = [
-    "--with-tdsver=7.3"
-  ];
 
   buildInputs = [
     openssl

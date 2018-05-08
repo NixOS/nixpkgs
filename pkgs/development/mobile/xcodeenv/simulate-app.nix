@@ -16,7 +16,7 @@ stdenv.mkDerivation {
         echo "Please provide a UDID of a simulator:"
         read udid
     else
-        # If a parameter has been provided, consider that a device UDID an use that
+        # If a parameter has been provided, consider that a device UDID and use that
         udid="$1"
     fi
     

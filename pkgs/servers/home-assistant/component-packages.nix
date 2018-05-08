@@ -116,7 +116,7 @@
     "homematic" = ps: with ps; [ pyhomematic ];
     "homematicip_cloud" = ps: with ps; [  ];
     "http" = ps: with ps; [ aiohttp-cors ];
-    "hue" = ps: with ps; [  ];
+    "hue" = ps: with ps; [ aiohue ];
     "ifttt" = ps: with ps; [  ];
     "ihc" = ps: with ps; [  ];
     "image_processing.dlib_face_detect" = ps: with ps; [ face_recognition ];
@@ -285,7 +285,7 @@
     "sensor.bme680" = ps: with ps; [  ];
     "sensor.broadlink" = ps: with ps; [  ];
     "sensor.buienradar" = ps: with ps; [  ];
-    "sensor.coinmarketcap" = ps: with ps; [  ];
+    "sensor.coinmarketcap" = ps: with ps; [ coinmarketcap ];
     "sensor.cpuspeed" = ps: with ps; [  ];
     "sensor.crimereports" = ps: with ps; [  ];
     "sensor.cups" = ps: with ps; [ pycups ];
@@ -335,12 +335,12 @@
     "sensor.miflora" = ps: with ps; [  ];
     "sensor.modem_callerid" = ps: with ps; [  ];
     "sensor.mopar" = ps: with ps; [  ];
-    "sensor.mvglive" = ps: with ps; [  ];
+    "sensor.mvglive" = ps: with ps; [ PyMVGLive ];
     "sensor.nederlandse_spoorwegen" = ps: with ps; [  ];
     "sensor.neurio_energy" = ps: with ps; [  ];
     "sensor.nut" = ps: with ps; [  ];
     "sensor.openevse" = ps: with ps; [  ];
-    "sensor.openweathermap" = ps: with ps; [  ];
+    "sensor.openweathermap" = ps: with ps; [ pyowm ];
     "sensor.otp" = ps: with ps; [  ];
     "sensor.plex" = ps: with ps; [  ];
     "sensor.pocketcasts" = ps: with ps; [  ];
@@ -453,7 +453,7 @@
     "weather.buienradar" = ps: with ps; [  ];
     "weather.darksky" = ps: with ps; [  ];
     "weather.metoffice" = ps: with ps; [  ];
-    "weather.openweathermap" = ps: with ps; [  ];
+    "weather.openweathermap" = ps: with ps; [ pyowm ];
     "weather.yweather" = ps: with ps; [ yahooweather ];
     "wemo" = ps: with ps; [  ];
     "wink" = ps: with ps; [  ];

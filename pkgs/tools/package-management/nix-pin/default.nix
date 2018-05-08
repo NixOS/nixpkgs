@@ -1,20 +1,22 @@
-{ pkgs, stdenv, fetchFromGitHub, mypy, python3 }:
+{ lib, pkgs, stdenv, fetchFromGitHub, mypy, python3, nix, git, makeWrapper }:
 let self = stdenv.mkDerivation rec {
   name = "nix-pin-${version}";
-  version = "0.2.2";
+  version = "0.3.0";
   src = fetchFromGitHub {
     owner = "timbertson";
     repo = "nix-pin";
-    rev = "version-0.2.2";
-    sha256 = "1kw43kzy4m6lnnif51r2a8i4vcgr7d4vqb1c75p7pk2b9y3jwxsz";
+    rev = "version-0.3.0";
+    sha256 = "1kq50v8m8y1wji63b7y3wh6nv3ahvdxvvbsb07day2zzf5ysy8kj";
   };
-  buildInputs = [ python3 mypy ];
+  buildInputs = [ python3 mypy makeWrapper ];
   buildPhase = ''
     mypy bin/*
   '';
   installPhase = ''
     mkdir "$out"
     cp -r bin share "$out"
+    wrapProgram $out/bin/nix-pin \
+      --prefix PATH : "${lib.makeBinPath [ nix git ]}"
   '';
   passthru =
     let

@@ -3,11 +3,11 @@
 
 with builtins; buildDotnetPackage rec {
   baseName = "keepass";
-  version = "2.38";
+  version = "2.39";
 
   src = fetchurl {
     url = "mirror://sourceforge/keepass/KeePass-${version}-Source.zip";
-    sha256 = "0m33gfpvv01xc28k4rrc8llbyk6qanm9rsqcnv8ydms0cr78dbbk";
+    sha256 = "05mrbzlkr2h42cls6xhas76dg8kyic4fijwckrh0b0qv5pp71c11";
   };
 
   sourceRoot = ".";

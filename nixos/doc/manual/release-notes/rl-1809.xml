@@ -101,6 +101,12 @@ $ nix-instantiate -E '(import &lt;nixpkgsunstable&gt; {}).gitFull'
      that can be mapped onto the YAML configuration defined in <link xlink:href="https://github.com/docker/distribution/blob/v2.6.2/docs/configuration.md">the <varname>docker/distribution</varname> docs</link>.
     </para>
    </listitem>
+   <listitem>
+    <para>
+     <literal>googleearth</literal> has been removed from Nixpkgs. Google does not provide
+     a stable URL for Nixpkgs to use to package this proprietary software.
+    </para>
+   </listitem>
   </itemizedlist>
  </section>
 
@@ -167,6 +173,64 @@ $ nix-instantiate -E '(import &lt;nixpkgsunstable&gt; {}).gitFull'
      favor of <literal>lib.version</literal>. Please refer to the discussion in
      <link xlink:href="https://github.com/NixOS/nixpkgs/pull/39416#discussion_r183845745">NixOS/nixpkgs#39416</link>
      for further reference.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     The module for <option>security.dhparams</option> has two new options now:
+    </para>
+
+    <variablelist>
+     <varlistentry>
+      <term><option>security.dhparams.stateless</option></term>
+      <listitem><para>
+       Puts the generated Diffie-Hellman parameters into the Nix store instead
+       of managing them in a stateful manner in
+       <filename class="directory">/var/lib/dhparams</filename>.
+      </para></listitem>
+     </varlistentry>
+     <varlistentry>
+      <term><option>security.dhparams.defaultBitSize</option></term>
+      <listitem><para>
+       The default bit size to use for the generated Diffie-Hellman parameters.
+      </para></listitem>
+     </varlistentry>
+    </variablelist>
+
+    <note><para>
+     The path to the actual generated parameter files should now be queried
+     using
+     <literal>config.security.dhparams.params.<replaceable>name</replaceable>.path</literal>
+     because it might be either in the Nix store or in a directory configured
+     by <option>security.dhparams.path</option>.
+    </para></note>
+
+    <note>
+     <title>For developers:</title>
+     <para>
+      Module implementers should not set a specific bit size in order to let
+      users configure it by themselves if they want to have a different bit
+      size than the default (2048).
+     </para>
+     <para>
+      An example usage of this would be:
+<programlisting>
+{ config, ... }:
+
+{
+  security.dhparams.params.myservice = {};
+  environment.etc."myservice.conf".text = ''
+    dhparams = ${config.security.dhparams.params.myservice.path}
+  '';
+}
+</programlisting>
+     </para>
+    </note>
+   </listitem>
+   <listitem>
+    <para>
+     <literal>networking.networkmanager.useDnsmasq</literal> has been deprecated. Use
+     <literal>networking.networkmanager.dns</literal> instead.
     </para>
    </listitem>
   </itemizedlist>

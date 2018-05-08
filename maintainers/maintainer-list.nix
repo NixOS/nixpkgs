@@ -998,6 +998,11 @@
     github = "demin-dmitriy";
     name = "Dmitriy Demin";
   };
+  demyanrogozhin = {
+    email = "demyan.rogozhin@gmail.com";
+    github = "demyanrogozhin";
+    name = "Demyan Rogozhin";
+  };
   derchris = {
     email = "derchris@me.com";
     github = "derchrisuk";
@@ -1740,6 +1745,11 @@
     github = "jdagilliland";
     name = "Jason Gilliland";
   };
+  jD91mZM2 = {
+    email = "me@krake.one";
+    github = "jD91mZM2";
+    name = "jD91mZM2";
+  };
   jefdaj = {
     email = "jefdaj@gmail.com";
     github = "jefdaj";
@@ -1814,6 +1824,11 @@
     email = "joamaki@gmail.com";
     github = "joamaki";
     name = "Jussi Maki";
+  };
+  joelburget = {
+    email = "joelburget@gmail.com";
+    github = "joelburget";
+    name = "Joel Burget";
   };
   joelmo = {
     email = "joel.moberg@gmail.com";

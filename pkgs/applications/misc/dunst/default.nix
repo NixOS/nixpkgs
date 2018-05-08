@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, fetchpatch
+{ stdenv, fetchFromGitHub
 , pkgconfig, which, perl, libXrandr
 , cairo, dbus, systemd, gdk_pixbuf, glib, libX11, libXScrnSaver
 , libXinerama, libnotify, libxdg_basedir, pango, xproto, librsvg

@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, fetchFromBitbucket
+{ stdenv, fetchFromGitHub
 , pkgconfig, tcl, readline, libffi, python3, bison, flex
 }:
 
@@ -6,25 +6,25 @@ with builtins;
 
 stdenv.mkDerivation rec {
   name = "yosys-${version}";
-  version = "2018.03.21";
+  version = "2018.05.03";
 
   srcs = [
     (fetchFromGitHub {
       owner  = "yosyshq";
       repo   = "yosys";
-      rev    = "3f0070247590458c5ed28c5a7abfc3b9d1ec138b";
-      sha256 = "0rsnjk25asg7dkxcmim464rmxgvm7x7njmcp5nyl8y4iwn8i9p8v";
+      rev    = "a572b495387743a58111e7264917a497faa17ebf";
+      sha256 = "0q4xh4sy3n83c8il8lygzv0i6ca4qw36i2k6qz6giw0wd2pkibkb";
       name   = "yosys";
     })
 
     # NOTE: the version of abc used here is synchronized with
     # the one in the yosys Makefile of the version above;
     # keep them the same for quality purposes.
-    (fetchFromBitbucket {
-      owner  = "alanmi";
+    (fetchFromGitHub {
+      owner  = "berkeley-abc";
       repo   = "abc";
-      rev    = "6e3c24b3308a";
-      sha256 = "1i4wv0si4fb6dpv2yrpkp588mdlfrnx2s02q2fgra5apdm54c53w";
+      rev    = "f23ea8e33f6d5cc54f58bec6d9200483e5d8c704";
+      sha256 = "1xwmq3k5hfavdrs7zbqjxh35kr2pis4i6hhzrq7qzyzs0az0hls9";
       name   = "yosys-abc";
     })
   ];

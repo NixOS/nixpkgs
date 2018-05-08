@@ -1,8 +1,8 @@
 { stdenv, buildPackages, lib
 , fetchurl, fetchpatch, fetchFromSavannah, fetchFromGitHub
 , zlib, openssl, gdbm, ncurses, readline, groff, libyaml, libffi, autoreconfHook, bison
-, autoconf, darwin ? null
-, buildEnv, bundler, bundix, Foundation
+, autoconf, libiconv, libobjc, libunwind, Foundation
+, buildEnv, bundler, bundix
 } @ args:
 
 let
@@ -37,7 +37,7 @@ let
     isRuby25 = ver.majMin == "2.5";
     baseruby = self.override { useRailsExpress = false; };
     self = lib.makeOverridable (
-  { stdenv, buildPackages, lib
+      { stdenv, buildPackages, lib
       , fetchurl, fetchpatch, fetchFromSavannah, fetchFromGitHub
       , useRailsExpress ? true
       , zlib, zlibSupport ? true
@@ -48,8 +48,8 @@ let
       , libyaml, yamlSupport ? true
       , libffi, fiddleSupport ? true
       , autoreconfHook, bison, autoconf
-      , darwin ? null
-      , buildEnv, bundler, bundix, Foundation
+      , buildEnv, bundler, bundix
+      , libiconv, libobjc, libunwind, Foundation
       }:
       let rubySrc =
         if useRailsExpress then fetchFromGitHub {
@@ -93,9 +93,8 @@ let
           # support is not enabled, so add readline to the build inputs if curses
           # support is disabled (if it's enabled, we already have it) and we're
           # running on darwin
-          ++ (op (!cursesSupport && stdenv.isDarwin) readline)
-          ++ (op stdenv.isDarwin Foundation)
-          ++ (ops stdenv.isDarwin (with darwin; [ libiconv libobjc libunwind ]));
+          ++ op (!cursesSupport && stdenv.isDarwin) readline
+          ++ ops stdenv.isDarwin [ libiconv libobjc libunwind Foundation ];
 
         enableParallelBuilding = true;
 
@@ -135,8 +134,6 @@ let
           ]
           ++ op (stdenv.hostPlatform != stdenv.buildPlatform)
              "--with-baseruby=${buildRuby}";
-
-        doCheck = false; # expensive, fails
 
         preInstall = ''
           # Ruby installs gems here itself now.
