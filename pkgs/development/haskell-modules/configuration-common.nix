@@ -422,9 +422,6 @@ self: super: {
   # https://github.com/evanrinehart/mikmod/issues/1
   mikmod = addExtraLibrary super.mikmod pkgs.libmikmod;
 
-  # https://github.com/haskell-gi/haskell-gi/pull/163
-  haskell-gi = dontCheck super.haskell-gi;
-
   # https://github.com/basvandijk/threads/issues/10
   threads = dontCheck super.threads;
 
