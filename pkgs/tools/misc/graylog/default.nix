@@ -1,4 +1,4 @@
-{ stdenv, fetchurl }:
+{ stdenv, fetchurl, makeWrapper, jre_headless }:
 
 stdenv.mkDerivation rec {
   version = "2.4.4";
@@ -12,9 +12,13 @@ stdenv.mkDerivation rec {
   dontBuild = true;
   dontStrip = true;
 
+  buildInputs = [ makeWrapper ];
+  makeWrapperArgs = [ "--prefix" "PATH" ":" "${jre_headless}/bin" ];
+
   installPhase = ''
     mkdir -p $out
     cp -r {graylog.jar,lib,bin,plugin,data} $out
+    wrapProgram $out/bin/graylogctl $makeWrapperArgs
   '';
 
   meta = with stdenv.lib; {
