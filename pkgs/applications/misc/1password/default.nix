@@ -1,19 +1,19 @@
 { stdenv, lib, fetchzip, makeWrapper }:
 
 let
-  src =
-    if stdenv.system == "i686-linux" then fetchzip {
-      url = "https://cache.agilebits.com/dist/1P/op/pkg/v0.4/op_linux_386_v0.4.zip";
-      sha256 = "0mhlqvd3az50gnfil0xlq10855v3bg7yb05j6ndg4h2c551jrq41";
-      stripRoot = false;
-    } else fetchzip {
-      url = "https://cache.agilebits.com/dist/1P/op/pkg/v0.4/op_linux_amd64_v0.4.zip";
-      sha256 = "15cv8xi4slid9jicdmc5xx2r9ag63wcx1mn7hcgzxbxbhyrvwhyf";
-      stripRoot = false;
-    };
-in stdenv.mkDerivation {
-  name = "1password-0.4";
-  inherit src;
+
+in stdenv.mkDerivation rec {
+  name = "1password-${version}";
+  version = "0.4";
+  src = if stdenv.system == "i686-linux" then fetchzip {
+    url = "https://cache.agilebits.com/dist/1P/op/pkg/v${version}/op_linux_386_v${version}.zip";
+    sha256 = "0mhlqvd3az50gnfil0xlq10855v3bg7yb05j6ndg4h2c551jrq41";
+    stripRoot = false;
+  } else fetchzip {
+    url = "https://cache.agilebits.com/dist/1P/op/pkg/v${version}/op_linux_amd64_v${version}.zip";
+    sha256 = "15cv8xi4slid9jicdmc5xx2r9ag63wcx1mn7hcgzxbxbhyrvwhyf";
+    stripRoot = false;
+  };
   nativeBuildInputs = [ makeWrapper ];
   installPhase = ''
     mkdir -p $out/bin
