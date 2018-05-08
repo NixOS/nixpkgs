@@ -13801,6 +13801,8 @@ with pkgs;
 
   libraw1394 = callPackage ../development/libraries/libraw1394 { };
 
+  librealsense = callPackage ../development/libraries/librealsense { };
+
   libsass = callPackage ../development/libraries/libsass { };
 
   libsexy = callPackage ../development/libraries/libsexy { };
