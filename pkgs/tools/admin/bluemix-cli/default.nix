@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     homepage     = "https://console.bluemix.net/docs/cli/index.html";
     downloadPage = "https://console.bluemix.net/docs/cli/reference/bluemix_cli/download_cli.html#download_install";
     license      = licenses.unfree;
-    maintainers  = maintainers.tazjin;
+    maintainers  = [ maintainers.tazjin ];
     platforms    = [ "x86_64-linux" ];
   };
 }
