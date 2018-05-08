@@ -440,6 +440,8 @@ in {
 
   trustme = callPackage ../development/python-modules/trustme {};
 
+  trio = callPackage ../development/python-modules/trio {};
+
   tokenserver = callPackage ../development/python-modules/tokenserver {};
 
   toml = callPackage ../development/python-modules/toml { };
