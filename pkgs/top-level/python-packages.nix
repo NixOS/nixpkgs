@@ -303,6 +303,8 @@ in {
 
   oauthenticator = callPackage ../development/python-modules/oauthenticator { };
 
+  outcome = callPackage ../development/python-modules/outcome {};
+
   plantuml = callPackage ../tools/misc/plantuml { };
 
   Pmw = callPackage ../development/python-modules/Pmw { };
