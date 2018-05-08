@@ -3120,6 +3120,8 @@ in {
 
   imbalanced-learn = callPackage ../development/python-modules/imbalanced-learn { };
 
+  immutables = callPackage ../development/python-modules/immutables {};
+
   imread = buildPythonPackage rec {
     name = "python-imread-${version}";
     version = "0.6";
