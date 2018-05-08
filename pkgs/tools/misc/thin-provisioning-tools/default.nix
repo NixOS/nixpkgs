@@ -15,6 +15,11 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ expat libaio boost ];
 
+  postPatch = stdenv.lib.optional stdenv.hostPlatform.isMusl ''
+    sed -i -e '/PAGE_SIZE/d' -e '1i#include <limits.h>' \
+      block-cache/io_engine.h unit-tests/io_engine_t.cc
+  '';
+
   meta = with stdenv.lib; {
     homepage = https://github.com/jthornber/thin-provisioning-tools/;
     description = "A suite of tools for manipulating the metadata of the dm-thin device-mapper target";
