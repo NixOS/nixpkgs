@@ -153,6 +153,9 @@ let result = stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     license = licenses.unfree;
     platforms = [ "x86_64-linux" ]; # some inherit jre.meta.platforms
+    knownVulnerabilities = [
+      "Oracle Java 9 will not receive public updates as of March 2018. Use version 8 or 10 instead."
+    ];
   };
 
 }; in result
