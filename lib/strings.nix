@@ -82,7 +82,7 @@ rec {
        => "//bin"
   */
   makeSearchPath = subDir: packages:
-    concatStringsSep ":" (map (path: path + "/" + subDir) packages);
+    concatStringsSep ":" (map (path: path + "/" + subDir) (builtins.filter (x: x != null) packages));
 
   /* Construct a Unix-style search path, using given package output.
      If no output is found, fallback to `.out` and then to the default.
@@ -125,6 +125,18 @@ rec {
        => "/nix/store/n0m1fk9c960d8wlrs62sncnadygqqc6y-perl-Net-SMTP-1.25/lib/perl5/site_perl"
   */
   makePerlPath = makeSearchPathOutput "lib" "lib/perl5/site_perl";
+
+  /* Construct an XDG path. Suitable to use as XDG_DATA_DIRS.
+  */
+  makeXdgPath = makeSearchPathOutput "xdg" "share";
+
+  /* Construct a manual page path. Suitable to use as MANPATH.
+  */
+  makeManPath = makeSearchPathOutput "man" "share/man";
+  
+  /* Construct an info page path. Suitable to use as INFOPATH.
+  */
+  makeInfoPath = makeSearchPathOutput "info" "share/info";
 
   /* Depending on the boolean `cond', return either the given string
      or the empty string. Useful to concatenate against a bigger string.

@@ -80,7 +80,8 @@ let
     inherit (strings) concatStrings concatMapStrings concatImapStrings
       intersperse concatStringsSep concatMapStringsSep
       concatImapStringsSep makeSearchPath makeSearchPathOutput
-      makeLibraryPath makeBinPath makePerlPath optionalString
+      makeLibraryPath makeBinPath makePerlPath makeManPath makeInfoPath
+      makeXdgPath optionalString
       hasPrefix hasSuffix stringToCharacters stringAsChars escape
       escapeShellArg escapeShellArgs replaceChars lowerChars upperChars
       toLower toUpper addContextFrom splitString removePrefix
