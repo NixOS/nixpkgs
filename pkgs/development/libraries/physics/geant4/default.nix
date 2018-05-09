@@ -58,24 +58,22 @@ let
       inherit version src;
       name = "geant4-${version}";
 
-      multiThreadingFlag = if multiThreadingCapable then "-DGEANT4_BUILD_MULTITHREADED=${if enableMultiThreading then "ON" else "OFF"}" else "";
-
-      cmakeFlags = ''
-        ${multiThreadingFlag}
-        -DGEANT4_INSTALL_DATA=OFF
-        -DGEANT4_USE_GDML=${if enableGDML then "ON" else "OFF"}
-        -DGEANT4_USE_G3TOG4=${if enableG3toG4 then "ON" else "OFF"}
-        -DGEANT4_USE_QT=${if enableQT then "ON" else "OFF"}
-        -DGEANT4_USE_XM=${if enableXM then "ON" else "OFF"}
-        -DGEANT4_USE_OPENGL_X11=${if enableOpenGLX11 then "ON" else "OFF"}
-        -DGEANT4_USE_INVENTOR=${if enableInventor then "ON" else "OFF"}
-        -DGEANT4_USE_RAYTRACER_X11=${if enableRaytracerX11 then "ON" else "OFF"}
-        -DGEANT4_USE_SYSTEM_CLHEP=${if clhep != null then "ON" else "OFF"}
-        -DGEANT4_USE_SYSTEM_EXPAT=${if expat != null then "ON" else "OFF"}
-        -DGEANT4_USE_SYSTEM_ZLIB=${if zlib != null then "ON" else "OFF"}
-        -DINVENTOR_INCLUDE_DIR=${coin3d}/include
-        -DINVENTOR_LIBRARY_RELEASE=${coin3d}/lib/libCoin.so
-      '';
+      cmakeFlags = [
+        "-DGEANT4_INSTALL_DATA=OFF"
+        "-DGEANT4_USE_GDML=${if enableGDML then "ON" else "OFF"}"
+        "-DGEANT4_USE_G3TOG4=${if enableG3toG4 then "ON" else "OFF"}"
+        "-DGEANT4_USE_QT=${if enableQT then "ON" else "OFF"}"
+        "-DGEANT4_USE_XM=${if enableXM then "ON" else "OFF"}"
+        "-DGEANT4_USE_OPENGL_X11=${if enableOpenGLX11 then "ON" else "OFF"}"
+        "-DGEANT4_USE_INVENTOR=${if enableInventor then "ON" else "OFF"}"
+        "-DGEANT4_USE_RAYTRACER_X11=${if enableRaytracerX11 then "ON" else "OFF"}"
+        "-DGEANT4_USE_SYSTEM_CLHEP=${if clhep != null then "ON" else "OFF"}"
+        "-DGEANT4_USE_SYSTEM_EXPAT=${if expat != null then "ON" else "OFF"}"
+        "-DGEANT4_USE_SYSTEM_ZLIB=${if zlib != null then "ON" else "OFF"}"
+        "-DINVENTOR_INCLUDE_DIR=${coin3d}/include"
+        "-DINVENTOR_LIBRARY_RELEASE=${coin3d}/lib/libCoin.so"
+      ] ++ stdenv.lib.optional multiThreadingCapable
+        "-DGEANT4_BUILD_MULTITHREADED=${if enableMultiThreading then "ON" else "OFF"}";
 
       enableParallelBuilding = true;
       buildInputs = [ cmake clhep expat zlib xercesc qt motif libGLU_combined xlibsWrapper libXmu libXpm coin3d soxt ];
