@@ -3053,6 +3053,8 @@ with pkgs;
 
   innoextract = callPackage ../tools/archivers/innoextract { };
 
+  input-utils = callPackage ../os-specific/linux/input-utils { };
+
   intecture-agent = callPackage ../tools/admin/intecture/agent.nix { };
 
   intecture-auth = callPackage ../tools/admin/intecture/auth.nix { };
