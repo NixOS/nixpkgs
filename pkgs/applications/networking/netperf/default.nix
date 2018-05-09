@@ -17,6 +17,6 @@ stdenv.mkDerivation rec {
     license = "Hewlett-Packard BSD-like license";
 
     platforms = stdenv.lib.platforms.linux;
-    maintainers = [];
+    maintainers = [ stdenv.lib.maintainers.mmlb ];
   };
 }
