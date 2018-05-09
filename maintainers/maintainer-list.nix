@@ -2378,6 +2378,11 @@
     github = "meditans";
     name = "Carlo Nucera";
   };
+  megheaiulian  = {
+    email = "iulian.meghea@gmail.com";
+    github = "megheaiulian";
+    name = "Meghea Iulian";
+  };
   mehandes = {
     email = "niewskici@gmail.com";
     github = "mehandes";

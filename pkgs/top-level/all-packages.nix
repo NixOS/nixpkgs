@@ -1133,6 +1133,8 @@ with pkgs;
 
   dislocker = callPackage ../tools/filesystems/dislocker { };
 
+  distrobuilder = callPackage ../tools/virtualization/distrobuilder { };
+
   ditaa = callPackage ../tools/graphics/ditaa { };
 
   dino = callPackage ../applications/networking/instant-messengers/dino { };
