@@ -20,10 +20,17 @@ in stdenv.mkDerivation (args // {
 
   STACK_PLATFORM_VARIANT="nix";
   STACK_IN_NIX_SHELL=1;
-  STACK_IN_NIX_EXTRA_ARGS =
-    concatMap (pkg: ["--extra-lib-dirs=${getLib pkg}/lib"
-                     "--extra-include-dirs=${getDev pkg}/include"]) buildInputs ++
-    extraArgs;
+  STACK_IN_NIX_EXTRA_ARGS = extraArgs;
+  shellHook = ''
+    for pkg in ''${pkgsHostHost[@]} ''${pkgsHostBuild[@]} ''${pkgsHostTarget[@]}
+    do
+      [ -d "$pkg/lib" ] && \
+        export STACK_IN_NIX_EXTRA_ARGS+=" --extra-lib-dirs=$pkg/lib"
+      [ -d "$pkg/include" ] && \
+        export STACK_IN_NIX_EXTRA_ARGS+=" --extra-include-dirs=$pkg/include"
+    done
+  '';
+
 
   # XXX: workaround for https://ghc.haskell.org/trac/ghc/ticket/11042.
   LD_LIBRARY_PATH = makeLibraryPath (LD_LIBRARY_PATH ++ buildInputs);
