@@ -505,6 +505,6 @@ self: super: builtins.intersectAttrs super {
 
   # cabal2nix generates a dependency on base-compat, which is the wrong version
   base-compat-batteries = super.base-compat-batteries.override {
-    base-compat = pkgs.haskellPackages.base-compat_0_10_1;
+    base-compat = super.base-compat_0_10_1;
   };
 }
