@@ -43,32 +43,34 @@ in
 
     users.extraUsers = singleton {
       name = user;
+      group = "telnetd";
       description = "Telnet daemon";
     };
 
-      users.extraGroups = singleton {
-        name = "telnetd";
-      };
-
+    # users.extraGroups = singleton {
+    #   name = "telnetd";
+    # };
 
     systemd.services.telnetd = {
       description = "Telnet server";
       wantedBy = [ "multi-user.target" ];
 
-      script = "${pkgs.busybox}/bin/telnetd -p ${toString cfg.port}";
+      # binds by default to ipv6 ?
+      # script = "${pkgs.busybox}/bin/telnetd -p ${toString cfg.port} -b 127.0.0.1";
 
       serviceConfig = {
+        # defaults to ipv6 otherwise ?
+        ExecStart="${pkgs.busybox}/bin/telnetd -p ${toString cfg.port} -b 127.0.0.1";
         User = user;
         Group = "telnetd";
-        CapabilityBoundingSet = "CAP_NET_BIND_SERVICE=+ep";
-        RuntimeDirectory = [ "telnetd" ];
+        AmbientCapabilities="CAP_NET_BIND_SERVICE";
+        CapabilityBoundingSet = "CAP_NET_BIND_SERVICE=+eip";
+        # RuntimeDirectory = [ "telnetd" ];
         Restart = "always";
+        RestartSec = "500ms";
+        # StartLimitInterval = 86400;
+        StartLimitBurst = 5;
       };
     };
   };
-
-
-  meta.maintainers = with maintainers; [ teto ];
-
 }
-
