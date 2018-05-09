@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub }:
+{ glibc, libsmbios, stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
   name = "netperf-2.7.0";
@@ -10,6 +10,7 @@ stdenv.mkDerivation rec {
     sha256 = "034indn3hicwbvyzgw9f32bv2i7c5iv8b4a11imyn03pw97jzh10";
   };
 
+  buildInputs = [ glibc libsmbios ];
   meta = {
     description = "Benchmark to measure the performance of many different types of networking";
     homepage = http://www.netperf.org/netperf/;
