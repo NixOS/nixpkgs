@@ -3154,6 +3154,11 @@
     github = "rittelle";
     name = "Lennart Rittel";
   };
+  rkoe = {
+    email = "rk@simple-is-better.org";
+    github = "rkoe";
+    name = "Roland Koebler";
+  };
   rlupton20 = {
     email = "richard.lupton@gmail.com";
     github = "rlupton20";

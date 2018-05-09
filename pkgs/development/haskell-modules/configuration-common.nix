@@ -422,8 +422,7 @@ self: super: {
   # https://github.com/evanrinehart/mikmod/issues/1
   mikmod = addExtraLibrary super.mikmod pkgs.libmikmod;
 
-  # The doctest phase fails because it does not have a proper environment in
-  # which to run the commands it's ought to test.
+  # https://github.com/haskell-gi/haskell-gi/pull/163
   haskell-gi = dontCheck super.haskell-gi;
 
   # https://github.com/basvandijk/threads/issues/10

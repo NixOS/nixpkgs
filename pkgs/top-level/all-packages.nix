@@ -2214,6 +2214,8 @@ with pkgs;
 
   exiftool = perlPackages.ImageExifTool;
 
+  ext4magic = callPackage ../tools/filesystems/ext4magic { };
+
   extundelete = callPackage ../tools/filesystems/extundelete { };
 
   expect = callPackage ../tools/misc/expect { };
@@ -15937,6 +15939,14 @@ with pkgs;
     inherit (gnome3) dconf;
   };
 
+  gnucash24 = callPackage ../applications/office/gnucash/2.4.nix {
+    inherit (gnome2) libgnomeui libgtkhtml gtkhtml libbonoboui libgnomeprint libglade libart_lgpl;
+    gconf = gnome2.GConf;
+    guile = guile_1_8;
+    slibGuile = slibGuile.override { scheme = guile_1_8; };
+    goffice = goffice_0_8;
+  };
+
   gnucash26 = lowPrio (callPackage ../applications/office/gnucash/2.6.nix {
     inherit (gnome2) libgnomecanvas;
     inherit (gnome3) dconf;
@@ -16022,6 +16032,8 @@ with pkgs;
 
   graphicsmagick = callPackage ../applications/graphics/graphicsmagick { };
   graphicsmagick_q16 = graphicsmagick.override { quantumdepth = 16; };
+
+  graphicsmagick-imagemagick-compat = callPackage ../applications/graphics/graphicsmagick/compat.nix { };
 
   grisbi = callPackage ../applications/office/grisbi { gtk = gtk2; };
 
@@ -20386,7 +20398,9 @@ with pkgs;
 
   pythia = callPackage ../development/libraries/physics/pythia { };
 
-  rivet = callPackage ../development/libraries/physics/rivet { };
+  rivet = callPackage ../development/libraries/physics/rivet {
+    imagemagick = graphicsmagick-imagemagick-compat;
+  };
 
   thepeg = callPackage ../development/libraries/physics/thepeg { };
 
