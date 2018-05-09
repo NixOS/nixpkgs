@@ -10489,7 +10489,7 @@ with pkgs;
     else callPackage ../development/libraries/libunwind { };
 
   libuv = callPackage ../development/libraries/libuv {
-    inherit (darwin.apple_sdk.frameworks) ApplicationServices CoreServices;
+    inherit (buildPackages.darwin.apple_sdk.frameworks) ApplicationServices CoreServices;
   };
 
   libv4l = lowPrio (v4l_utils.override {
