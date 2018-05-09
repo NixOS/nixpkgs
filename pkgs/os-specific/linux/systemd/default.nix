@@ -17,6 +17,7 @@ let
   pythonLxmlEnv = buildPackages.python3Packages.python.withPackages ( ps: with ps; [ python3Packages.lxml ]);
 
 in stdenv.mkDerivation rec {
+  # To whoever updates this to 239: check the todo on line 173.
   version = "238";
   name = "systemd-${version}";
 
@@ -166,6 +167,12 @@ in stdenv.mkDerivation rec {
       "-USYSTEMD_CGROUP_AGENT_PATH" "-DSYSTEMD_CGROUP_AGENT_PATH=\"/run/current-system/systemd/lib/systemd/systemd-cgroups-agent\""
 
       "-USYSTEMD_BINARY_PATH" "-DSYSTEMD_BINARY_PATH=\"/run/current-system/systemd/lib/systemd/systemd\""
+
+
+      # Temporary flags to get this to compile under GCC8.
+      # TODO when updating (to systemd 239): remove this.
+      "-Wno-maybe-uninitialized"
+      "-Wno-error=format-truncation"
     ];
 
   postInstall = ''
