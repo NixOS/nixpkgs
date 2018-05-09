@@ -1,4 +1,4 @@
-{ glibc, libsmbios, stdenv, autoreconfHook, fetchFromGitHub }:
+{ libsmbios, stdenv, autoreconfHook, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
   name = "netperf-git";
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     sha256 = "0wfj9kkhar6jb5639f5wxpwsraxw4v9yzg71rsdidvj5fyncjjq2";
   };
 
-  buildInputs = [ glibc libsmbios ];
+  buildInputs = [ libsmbios ];
   nativeBuildInputs = [ autoreconfHook ];
   autoreconfPhase = ''
     autoreconf -i -I src/missing/m4
