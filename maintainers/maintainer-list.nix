@@ -2486,6 +2486,11 @@
     github = "mmahut";
     name = "Marek Mahut";
   };
+  mmlb = {
+    email = "me.mmlb@mmlb.me";
+    github = "mmlb";
+    name = "Manuel Mendez";
+  };
   moaxcp = {
     email = "moaxcp@gmail.com";
     github = "moaxcp";
