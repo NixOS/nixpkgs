@@ -450,6 +450,21 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
+  LinuxACL = buildPerlPackage rec {
+    name = "Linux-ACL-0.05";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/N/NA/NAZAROV/${name}.tar.gz";
+      sha256 = "312940c1f60f47c4fc93fa0a9d2a626425faa837040c8c2f1ad58ee09f62f371";
+    };
+    buildInputs = [ pkgs.acl ];
+    NIX_CFLAGS_LINK = "-L${pkgs.acl.out}/lib -lacl";
+    meta = {
+      maintainers = [ maintainers.limeytexan ];
+      description = "Perl extension for reading and setting Access Control Lists for files by libacl linux library";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   ListCompare = buildPerlPackage rec {
     name = "List-Compare-0.53";
     src = fetchurl {
