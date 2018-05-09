@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   doCheck = false; # tests take a very long time
   checkTarget = "test";
 
-  patches = [ ./install-on-freebsd.patch ] ;
+  patches = [ ./install-on-freebsd.patch ./windows.patch ] ;
 
   postInstall = "rm $out/lib/*.a";
 
