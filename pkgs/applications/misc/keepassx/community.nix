@@ -26,13 +26,13 @@ with stdenv.lib;
 
 stdenv.mkDerivation rec {
   name = "keepassxc-${version}";
-  version = "2.3.2";
+  version = "2.3.3";
 
   src = fetchFromGitHub {
     owner = "keepassxreboot";
     repo = "keepassxc";
     rev = "${version}";
-    sha256 = "13gf7rsan6fjkdr46xkr08d150nh194fkbzb4cazwd7rf05agw1y";
+    sha256 = "08cj1nxbjy2m80h3irnra2qha7fc5ahhzcgkyk9jv4zyys9xv998";
   };
 
   NIX_CFLAGS_COMPILE = stdenv.lib.optionalString stdenv.cc.isClang [
