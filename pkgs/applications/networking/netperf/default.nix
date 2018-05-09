@@ -1,7 +1,7 @@
 { libsmbios, stdenv, autoreconfHook, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
-  name = "netperf-git";
+  name = "netperf-20180504";
 
   src = fetchFromGitHub {
     owner = "HewlettPackard";
