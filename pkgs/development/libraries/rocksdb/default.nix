@@ -1,7 +1,7 @@
 { stdenv
 , fetchFromGitHub
 , fixDarwinDylibNames
-, which, perl
+, which, perl, cmake
 
 # Optional Arguments
 , snappy ? null, google-gflags ? null, zlib ? null, bzip2 ? null, lz4 ? null
@@ -32,6 +32,10 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ which perl snappy google-gflags ];
   buildInputs = [ zlib bzip2 lz4 malloc fixDarwinDylibNames ];
+
+  crossAttrs = {
+    nativeBuildInputs = [ which perl snappy google-gflags cmake ];
+  };
 
   postPatch = ''
     # Hack to fix typos
