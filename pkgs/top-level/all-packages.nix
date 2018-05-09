@@ -8561,6 +8561,8 @@ with pkgs;
 
   bicpl = callPackage ../development/libraries/science/biology/bicpl { };
 
+  bicgl = callPackage ../development/libraries/science/biology/bicgl { };
+
   # TODO(@Ericson2314): Build bionic libc from source
   bionic = assert hostPlatform.useAndroidPrebuilt;
     androidenv.androidndkPkgs.libraries;
