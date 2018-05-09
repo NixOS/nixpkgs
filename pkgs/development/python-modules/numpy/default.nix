@@ -14,8 +14,9 @@ buildPythonPackage rec {
   buildInputs = [ gfortran nose blas ];
 
   patches = lib.optionals (python.hasDistutilsCxxPatch or false) [
-    # See cpython 2.7 patches.
-    # numpy.distutils is used by cython during it's check phase
+    # We patch cpython/distutils to fix https://bugs.python.org/issue1222585
+    # Patching of numpy.distutils is needed to prevent it from undoing the
+    # patch to distutils.
     ./numpy-distutils-C++.patch
   ];
 
