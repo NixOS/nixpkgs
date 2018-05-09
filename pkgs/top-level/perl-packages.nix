@@ -11758,6 +11758,22 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
+  NetZooKeeper = buildPerlPackage rec {
+    name = "Net-ZooKeeper-0.41";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/M/MA/MAF/${name}.tar.gz";
+      sha256 = "91c177f30f82302eaf3173356eef05c21bc82163df752acb469177bd14a72db9";
+    };
+    buildInputs = [ pkgs.zookeeper_mt ];
+    NIX_CFLAGS_COMPILE = "-I${pkgs.zookeeper_mt}/include";
+    NIX_CFLAGS_LINK = "-L${pkgs.zookeeper_mt.out}/lib -lzookeeper_mt";
+    meta = {
+      maintainers = [ maintainers.limeytexan ];
+      homepage = https://github.com/mark-5/p5-net-zookeeper;
+      license = stdenv.lib.licenses.asl20;
+    };
+  };
+
   PackageConstants = buildPerlPackage {
     name = "Package-Constants-0.06";
     src = fetchurl {
