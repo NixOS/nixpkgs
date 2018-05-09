@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "s3fs";
-  version = "0.1.4";
+  version = "0.1.5";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "f19b2e81cfcf6f2849fa8195c366c6e81d2378400bab0611f461c4e55d4f6bed";
+    sha256 = "4fbab74d72ceeb1a6f249165bde7b1d1c4dd758390339f52c84f0832bc5117a7";
   };
 
   buildInputs = [ docutils ];
