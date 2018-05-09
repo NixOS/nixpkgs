@@ -47,7 +47,7 @@ in stdenv.mkDerivation rec {
   name = "opam-${version}";
   version = "1.2.2";
 
-  buildInputs = [ unzip curl ncurses ocaml makeWrapper];
+  buildInputs = [ unzip curl ncurses ocaml makeWrapper ];
 
   src = srcs.opam;
 
@@ -73,7 +73,7 @@ in stdenv.mkDerivation rec {
 
   postInstall = ''
     wrapProgram $out/bin/opam \
-      --suffix PATH : ${aspcud}/bin
+      --suffix PATH : ${aspcud}/bin:${unzip}/bin:${curl}/bin
   '';
 
   doCheck = false;

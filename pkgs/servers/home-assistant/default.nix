@@ -8,10 +8,10 @@ let
   py = python3.override {
     packageOverrides = self: super: {
       aiohttp = super.aiohttp.overridePythonAttrs (oldAttrs: rec {
-        version = "3.1.1";
+        version = "3.1.3";
         src = oldAttrs.src.override {
           inherit version;
-          sha256 = "dc5cab081d4b334d0440b019edf24fe1cb138b8114e0e22d2b0661284bc1775f";
+          sha256 = "9fcef0489e3335b200d31a9c1fb6ba80fdafe14cd82b971168c2f9fa1e4508ad";
         };
       });
       pytest = super.pytest.overridePythonAttrs (oldAttrs: rec {
@@ -58,7 +58,7 @@ let
   extraBuildInputs = extraPackages py.pkgs;
 
   # Don't forget to run parse-requirements.py after updating
-  hassVersion = "0.67.1";
+  hassVersion = "0.68.1";
 
 in with py.pkgs; buildPythonApplication rec {
   pname = "homeassistant";
@@ -73,7 +73,7 @@ in with py.pkgs; buildPythonApplication rec {
     owner = "home-assistant";
     repo = "home-assistant";
     rev = version;
-    sha256 = "02czbqdsdar8rjkr0r5g6j1x9caazcir2w1hp595z4cn90c0342f";
+    sha256 = "103py7hfdanr8zk3cl93rm7ngjz0n95kwjbphq7iy8l8hqpzs1m8";
   };
 
   propagatedBuildInputs = [

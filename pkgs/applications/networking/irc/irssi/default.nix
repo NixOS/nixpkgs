@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = {
-    homepage    = http://irssi.org;
+    homepage    = https://irssi.org;
     description = "A terminal based IRC client";
     platforms   = stdenv.lib.platforms.unix;
     maintainers = with stdenv.lib.maintainers; [ lovek323 ];

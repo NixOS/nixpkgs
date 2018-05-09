@@ -1,18 +1,16 @@
 { stdenv, fetchFromGitHub, perl }:
 
 stdenv.mkDerivation rec {
-  name = "mbedtls-2.8.0";
+  name = "mbedtls-2.9.0";
 
   src = fetchFromGitHub {
     owner = "ARMmbed";
     repo = "mbedtls";
     rev = name;
-    sha256 = "1pnwmy0qg8g9lz26fpr5fzpvrdjm59winxpwdjfp6d62qxdjbgmn";
+    sha256 = "1pb1my8wwa757hvd06qwidkj58fa1wayf16g98q600xhya5fj3vx";
   };
 
   nativeBuildInputs = [ perl ];
-
-  patches = stdenv.lib.optionals stdenv.isDarwin [ ./darwin_dylib.patch ];
 
   postPatch = ''
     patchShebangs .
@@ -34,15 +32,17 @@ stdenv.mkDerivation rec {
   ];
 
   postInstall = stdenv.lib.optionalString stdenv.isDarwin ''
-      install_name_tool -change libmbedcrypto.dylib $out/lib/libmbedcrypto.dylib $out/lib/libmbedtls.dylib
-      install_name_tool -change libmbedcrypto.dylib $out/lib/libmbedcrypto.dylib $out/lib/libmbedx509.dylib
-      install_name_tool -change libmbedx509.dylib $out/lib/libmbedx509.dylib $out/lib/libmbedtls.dylib
+    install_name_tool -change libmbedcrypto.dylib $out/lib/libmbedcrypto.dylib $out/lib/libmbedtls.dylib
+    install_name_tool -change libmbedcrypto.dylib $out/lib/libmbedcrypto.dylib $out/lib/libmbedx509.dylib
+    install_name_tool -change libmbedx509.dylib $out/lib/libmbedx509.dylib $out/lib/libmbedtls.dylib
 
-      for exe in $out/bin/*; do
-          install_name_tool -change libmbedtls.dylib $out/lib/libmbedtls.dylib $exe
-          install_name_tool -change libmbedx509.dylib $out/lib/libmbedx509.dylib $exe
-          install_name_tool -change libmbedcrypto.dylib $out/lib/libmbedcrypto.dylib $exe
-      done
+    for exe in $out/bin/*; do
+      if [[ $exe != *.sh ]]; then
+        install_name_tool -change libmbedtls.dylib $out/lib/libmbedtls.dylib $exe
+        install_name_tool -change libmbedx509.dylib $out/lib/libmbedx509.dylib $exe
+        install_name_tool -change libmbedcrypto.dylib $out/lib/libmbedcrypto.dylib $exe
+      fi
+    done
   '';
 
   doCheck = true;

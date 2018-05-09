@@ -25,7 +25,6 @@
 , setJavaClassPath
 }:
 
-assert stdenv.system == "x86_64-linux";
 assert swingSupport -> xorg != null;
 
 let

@@ -19,11 +19,11 @@ let
 
 in py.pkgs.buildPythonApplication rec {
   pname = "awscli";
-  version = "1.14.50";
+  version = "1.15.10";
 
   src = py.pkgs.fetchPypi {
     inherit pname version;
-    sha256 = "1yiwj7cl9r1k9226mdq6pcmrs044k7p3d133lzgv9rb1dgp4053c";
+    sha256 = "0nwpanbfx5h0bad8wwvvbhpjf9r6n885bbv2w8mw7vijdgclkq8x";
   };
 
   # No tests included
@@ -41,6 +41,12 @@ in py.pkgs.buildPythonApplication rec {
     groff
     less
   ];
+
+  postPatch = ''
+    for i in {py,cfg}; do
+      substituteInPlace setup.$i --replace "botocore==1.10.10" "botocore>=1.10.9,<=1.11"
+    done
+  '';
 
   postInstall = ''
     mkdir -p $out/etc/bash_completion.d

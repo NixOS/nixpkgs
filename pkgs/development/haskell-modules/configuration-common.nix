@@ -47,12 +47,12 @@ self: super: {
   hoogleLocal = { packages ? [] }: self.callPackage ./hoogle.nix { inherit packages; };
 
   # Break infinite recursions.
+  attoparsec-varword = super.attoparsec-varword.override { bytestring-builder-varword = dontCheck self.bytestring-builder-varword; };
   clock = dontCheck super.clock;
   Dust-crypto = dontCheck super.Dust-crypto;
   hasql-postgres = dontCheck super.hasql-postgres;
   hspec = super.hspec.override { stringbuilder = dontCheck self.stringbuilder; };
   hspec-core = super.hspec-core.override { silently = dontCheck self.silently; temporary = dontCheck self.temporary; };
-
   hspec-expectations = dontCheck super.hspec-expectations;
   HTTP = dontCheck super.HTTP;
   http-streams = dontCheck super.http-streams;
@@ -82,7 +82,7 @@ self: super: {
       name = "git-annex-${drv.version}-src";
       url = "git://git-annex.branchable.com/";
       rev = "refs/tags/" + drv.version;
-      sha256 = "011kiyy1anj99ab70npl5i7pcqri0pdk04s4cvdm39zyas5m9lbd";
+      sha256 = "05rygb8jm4nh7ggzihz6664hcgwkbqspi8gbpkpf7l7wwvzdm1rd";
     };
   })).overrideScope (self: super: {
     aws = dontCheck (self.aws_0_18);
@@ -422,6 +422,9 @@ self: super: {
   # https://github.com/evanrinehart/mikmod/issues/1
   mikmod = addExtraLibrary super.mikmod pkgs.libmikmod;
 
+  # https://github.com/haskell-gi/haskell-gi/pull/163
+  haskell-gi = dontCheck super.haskell-gi;
+
   # https://github.com/basvandijk/threads/issues/10
   threads = dontCheck super.threads;
 
@@ -634,6 +637,8 @@ self: super: {
 
   # Need newer versions of their dependencies than the ones we have in LTS-11.x.
   cabal2nix = super.cabal2nix.overrideScope (self: super: { hpack = self.hpack_0_28_2; hackage-db = self.hackage-db_2_0_1; });
+  dbus-hslogger = super.dbus-hslogger.overrideScope (self: super: { dbus = self.dbus_1_0_1; });
+  status-notifier-item = super.status-notifier-item.overrideScope (self: super: { dbus = self.dbus_1_0_1; });
 
   # https://github.com/bos/configurator/issues/22
   configurator = dontCheck super.configurator;
@@ -845,17 +850,8 @@ self: super: {
   # missing dependencies: Glob >=0.7.14 && <0.8, data-fix ==0.0.4
   stack2nix = doJailbreak super.stack2nix;
 
-  # Hacks to work around https://github.com/haskell/c2hs/issues/192.
-  c2hs = (overrideCabal super.c2hs {
-    version = "0.26.2-28-g8b79823";
-    doCheck = false;
-    src = pkgs.fetchFromGitHub {
-      owner = "deech";
-      repo = "c2hs";
-      rev = "8b79823c32e234c161baec67fdf7907952ca62b8";
-      sha256 = "0hyrcyssclkdfcw2kgcark8jl869snwnbrhr9k0a9sbpk72wp7nz";
-    };
-  });
+  # Work around https://github.com/haskell/c2hs/issues/192.
+  c2hs = dontCheck super.c2hs;
 
   # Needs pginit to function and pgrep to verify.
   tmp-postgres = overrideCabal super.tmp-postgres (drv: {
@@ -863,8 +859,8 @@ self: super: {
     testToolDepends = drv.testToolDepends or [] ++ [pkgs.procps];
   });
 
-  # https://github.com/fpco/stackage/issues/3126
-  stack = doJailbreak super.stack;
+  # Needs newer versions than what we have in LTS-11.x at the moment.
+  stack = super.stack.overrideScope (self: super: { hpack = self.hpack_0_28_2; });
 
   # These packages depend on each other, forming an infinite loop.
   scalendar = markBroken (super.scalendar.override { SCalendar = null; });
@@ -1030,6 +1026,9 @@ self: super: {
 
   # https://github.com/dmwit/encoding/pull/3
   encoding = appendPatch super.encoding ./patches/encoding-Cabal-2.0.patch;
+
+  # Work around overspecified constraint on github ==0.18.
+  github-backup = doJailbreak super.github-backup;
 
 }
 

@@ -24,8 +24,6 @@ let
     buildCore = monolithic || daemon;
 in
 
-assert stdenv.isLinux;
-
 assert monolithic -> !client && !daemon;
 assert client || daemon -> !monolithic;
 assert !buildClient -> !withKDE; # KDE is used by the client only

@@ -167,14 +167,13 @@
   ./services/backup/mysql-backup.nix
   ./services/backup/postgresql-backup.nix
   ./services/backup/restic.nix
+  ./services/backup/restic-rest-server.nix
   ./services/backup/rsnapshot.nix
   ./services/backup/tarsnap.nix
   ./services/backup/znapzend.nix
-  ./services/cluster/fleet.nix
   ./services/cluster/kubernetes/default.nix
   ./services/cluster/kubernetes/dns.nix
   ./services/cluster/kubernetes/dashboard.nix
-  ./services/cluster/panamax.nix
   ./services/computing/boinc/client.nix
   ./services/computing/torque/server.nix
   ./services/computing/torque/mom.nix
@@ -199,6 +198,7 @@
   ./services/databases/hbase.nix
   ./services/databases/influxdb.nix
   ./services/databases/memcached.nix
+  ./services/databases/monetdb.nix
   ./services/databases/mongodb.nix
   ./services/databases/mysql.nix
   ./services/databases/neo4j.nix
@@ -250,6 +250,7 @@
   ./services/hardware/illum.nix
   ./services/hardware/interception-tools.nix
   ./services/hardware/irqbalance.nix
+  ./services/hardware/lcd.nix
   ./services/hardware/nvidia-optimus.nix
   ./services/hardware/pcscd.nix
   ./services/hardware/pommed.nix
@@ -512,6 +513,7 @@
   ./services/networking/murmur.nix
   ./services/networking/namecoind.nix
   ./services/networking/nat.nix
+  ./services/networking/ndppd.nix
   ./services/networking/networkmanager.nix
   ./services/networking/nftables.nix
   ./services/networking/ngircd.nix
@@ -650,6 +652,7 @@
   ./services/web-servers/apache-httpd/default.nix
   ./services/web-servers/caddy.nix
   ./services/web-servers/fcgiwrap.nix
+  ./services/web-servers/hitch/default.nix
   ./services/web-servers/jboss/default.nix
   ./services/web-servers/lighttpd/cgit.nix
   ./services/web-servers/lighttpd/collectd.nix

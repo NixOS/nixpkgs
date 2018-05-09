@@ -10,7 +10,8 @@ let
   stateDirs = "/var/lib/NetworkManager /var/lib/dhclient /var/lib/misc";
 
   dns =
-    if cfg.useDnsmasq then "dnsmasq"
+    if cfg.dns == "none" then "none"
+    else if cfg.dns == "dnsmasq" then "dnsmasq"
     else if config.services.resolved.enable then "systemd-resolved"
     else if config.services.unbound.enable then "unbound"
     else "default";
@@ -205,14 +206,20 @@ in {
         };
       };
 
-      useDnsmasq = mkOption {
-        type = types.bool;
-        default = false;
+      dns = mkOption {
+        type = types.enum [ "auto" "dnsmasq" "none" ];
+        default = "auto";
         description = ''
-          Enable NetworkManager's dnsmasq integration. NetworkManager will run
-          dnsmasq as a local caching nameserver, using a "split DNS"
-          configuration if you are connected to a VPN, and then update
-          resolv.conf to point to the local nameserver.
+          Options:
+            - auto: Check for systemd-resolved, unbound, or use default.
+            - dnsmasq:
+              Enable NetworkManager's dnsmasq integration. NetworkManager will run
+              dnsmasq as a local caching nameserver, using a "split DNS"
+              configuration if you are connected to a VPN, and then update
+              resolv.conf to point to the local nameserver.
+            - none:
+              Disable NetworkManager's DNS integration completely.
+              It will not touch your /etc/resolv.conf.
         '';
       };
 

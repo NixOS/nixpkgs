@@ -79,8 +79,8 @@ stdenv.mkDerivation rec {
       })
       (fetchpatch {
         name = "fix-medium-font.patch";
-        url = "http://anonscm.debian.org/cgit/pkg-kde/qt/qt4-x11.git/plain/debian/patches/"
-          + "kubuntu_39_fix_medium_font.diff?id=21b342d71c19e6d68b649947f913410fe6129ea4";
+        url = "https://salsa.debian.org/qt-kde-team/qt/qt4-x11/raw/"
+          + "21b342d71c19e6d68b649947f913410fe6129ea4/debian/patches/kubuntu_39_fix_medium_font.diff";
         sha256 = "0bli44chn03c2y70w1n8l7ss4ya0b40jqqav8yxrykayi01yf95j";
       })
       (fetchpatch {

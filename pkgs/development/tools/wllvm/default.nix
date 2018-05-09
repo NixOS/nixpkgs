@@ -1,13 +1,13 @@
 { stdenv, python3Packages }:
 
 python3Packages.buildPythonApplication rec {
-  version = "1.1.5";
+  version = "1.2.0";
   pname = "wllvm";
   name = "${pname}-${version}";
 
   src = python3Packages.fetchPypi {
     inherit pname version;
-    sha256 = "02lnilhqz7mq0w6mp574rmjxiszp1wyla16jqr89r0z9vjg2j9rv";
+    sha256 = "1hriyv5gfkcxjqk71l3030qfy3scsjr3mp12hkxfknh65inlqs5z";
   };
 
   meta = with stdenv.lib; {

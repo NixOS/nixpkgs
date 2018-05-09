@@ -82,12 +82,14 @@ rec {
   git-radar = callPackage ./git-radar { };
 
   git-recent = callPackage ./git-recent {
-    utillinux = if stdenv.isLinux then utillinuxMinimal else null;
+    utillinux = if stdenv.isLinux then utillinuxMinimal else utillinux;
   };
 
   git-remote-hg = callPackage ./git-remote-hg { };
 
   git-secret = callPackage ./git-secret { };
+
+  git-secrets = callPackage ./git-secrets { };
 
   git-stree = callPackage ./git-stree { };
 

@@ -20,6 +20,7 @@ let
       };
     in (with pkgs; [
       zlib
+      git
     ]) ++ (with python.pkgs; [
       python
       setuptools

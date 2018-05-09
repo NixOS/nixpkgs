@@ -42,7 +42,7 @@ rec {
     isEfi          = map (family: { cpu.family = family; })
                        [ "x86" "arm" "aarch64" ];
 
-    # Deprecated
+    # Deprecated after 18.03
     isArm = isAarch32;
   };
 

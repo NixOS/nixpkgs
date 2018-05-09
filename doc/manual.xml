@@ -1,29 +1,24 @@
 <book xmlns="http://docbook.org/ns/docbook"
       xmlns:xi="http://www.w3.org/2001/XInclude">
-
-  <info>
-
-    <title>Nixpkgs Contributors Guide</title>
-
-    <subtitle>Version <xi:include href=".version" parse="text" /></subtitle>
-
-  </info>
-
-  <xi:include href="introduction.chapter.xml" />
-  <xi:include href="quick-start.xml" />
-  <xi:include href="stdenv.xml" />
-  <xi:include href="multiple-output.xml" />
-  <xi:include href="cross-compilation.xml" />
-  <xi:include href="configuration.xml" />
-  <xi:include href="functions.xml" />
-  <xi:include href="meta.xml" />
-  <xi:include href="languages-frameworks/index.xml" />
-  <xi:include href="platform-notes.xml" />
-  <xi:include href="package-notes.xml" />
-  <xi:include href="overlays.xml" />
-  <xi:include href="coding-conventions.xml" />
-  <xi:include href="submitting-changes.xml" />
-  <xi:include href="reviewing-contributions.xml" />
-  <xi:include href="contributing.xml" />
-
+ <info>
+  <title>Nixpkgs Contributors Guide</title>
+  <subtitle>Version <xi:include href=".version" parse="text" />
+  </subtitle>
+ </info>
+ <xi:include href="introduction.chapter.xml" />
+ <xi:include href="quick-start.xml" />
+ <xi:include href="stdenv.xml" />
+ <xi:include href="multiple-output.xml" />
+ <xi:include href="cross-compilation.xml" />
+ <xi:include href="configuration.xml" />
+ <xi:include href="functions.xml" />
+ <xi:include href="meta.xml" />
+ <xi:include href="languages-frameworks/index.xml" />
+ <xi:include href="platform-notes.xml" />
+ <xi:include href="package-notes.xml" />
+ <xi:include href="overlays.xml" />
+ <xi:include href="coding-conventions.xml" />
+ <xi:include href="submitting-changes.xml" />
+ <xi:include href="reviewing-contributions.xml" />
+ <xi:include href="contributing.xml" />
 </book>

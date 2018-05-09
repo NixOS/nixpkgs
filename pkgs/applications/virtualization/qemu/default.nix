@@ -21,8 +21,8 @@
 
 with stdenv.lib;
 let
-  version = "2.11.1";
-  sha256 = "1jrcff0szyjxc3vywyiclwdzk0xgq4cxvjbvmcfyjcpdrq9j5pyr";
+  version = "2.12.0";
+  sha256 = "17377xxbmwbrnh895a108z944pqi39hzrbw4jzgj8pcipi3s3x69";
   audio = optionalString (hasSuffix "linux" stdenv.system) "alsa,"
     + optionalString pulseSupport "pa,"
     + optionalString sdlSupport "sdl,";
@@ -69,11 +69,7 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "ga" ];
 
-  patches = [ ./no-etc-install.patch ./statfs-flags.patch (fetchpatch {
-    name = "glibc-2.27-memfd.patch";
-    url = "https://git.qemu.org/?p=qemu.git;a=patch;h=75e5b70e6b5dcc4f2219992d7cffa462aa406af0";
-    sha256 = "0gaz93kb33qc0jx6iphvny0yrd17i8zhcl3a9ky5ylc2idz0wiwa";
-  }) ]
+  patches = [ ./no-etc-install.patch ]
     ++ optional nixosTestRunner ./force-uid0-on-9p.patch
     ++ optional pulseSupport ./fix-hda-recording.patch
     ++ optionals stdenv.hostPlatform.isMusl [
@@ -99,6 +95,8 @@ stdenv.mkDerivation rec {
 
   preConfigure = ''
     unset CPP # intereferes with dependency calculation
+  '' + optionalString stdenv.hostPlatform.isMusl ''
+    NIX_CFLAGS_COMPILE+=" -D_LINUX_SYSINFO_H"
   '';
 
   configureFlags =
@@ -135,7 +133,7 @@ stdenv.mkDerivation rec {
   postInstall =
     if stdenv.isx86_64       then ''makeWrapper $out/bin/qemu-system-x86_64  $out/bin/qemu-kvm --add-flags "\$([ -e /dev/kvm ] && echo -enable-kvm)"''
     else if stdenv.isi686    then ''makeWrapper $out/bin/qemu-system-i386    $out/bin/qemu-kvm --add-flags "\$([ -e /dev/kvm ] && echo -enable-kvm)"''
-    else if stdenv.isAarch32     then ''makeWrapper $out/bin/qemu-system-arm     $out/bin/qemu-kvm --add-flags "\$([ -e /dev/kvm ] && echo -enable-kvm)"''
+    else if stdenv.isAarch32 then ''makeWrapper $out/bin/qemu-system-arm     $out/bin/qemu-kvm --add-flags "\$([ -e /dev/kvm ] && echo -enable-kvm)"''
     else if stdenv.isAarch64 then ''makeWrapper $out/bin/qemu-system-aarch64 $out/bin/qemu-kvm --add-flags "\$([ -e /dev/kvm ] && echo -enable-kvm)"''
     else "";
 

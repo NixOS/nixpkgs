@@ -4,6 +4,7 @@ with lib;
 
 let
   cfg = config.services.foundationdb;
+  pkg = cfg.package;
 
   # used for initial cluster configuration
   initialIpAddr = if (cfg.publicAddress != "auto") then cfg.publicAddress else "127.0.0.1";
@@ -24,7 +25,7 @@ let
     group         = ${cfg.group}
 
     [fdbserver]
-    command        = ${pkgs.foundationdb}/bin/fdbserver
+    command        = ${pkg}/bin/fdbserver
     public_address = ${cfg.publicAddress}:$ID
     listen_address = ${cfg.listenAddress}
     datadir        = ${cfg.dataDir}/$ID
@@ -35,6 +36,13 @@ let
     memory         = ${cfg.memory}
     storage_memory = ${cfg.storageMemory}
 
+    ${optionalString (cfg.tls != null) ''
+      tls_plugin           = ${pkg}/libexec/plugins/FDBLibTLS.so
+      tls_certificate_file = ${cfg.tls.certificate}
+      tls_key_file         = ${cfg.tls.key}
+      tls_verify_peers     = ${cfg.tls.allowedPeers}
+    ''}
+
     ${optionalString (cfg.locality.machineId    != null) "locality_machineid=${cfg.locality.machineId}"}
     ${optionalString (cfg.locality.zoneId       != null) "locality_zoneid=${cfg.locality.zoneId}"}
     ${optionalString (cfg.locality.datacenterId != null) "locality_dcid=${cfg.locality.datacenterId}"}
@@ -43,7 +51,7 @@ let
     ${fdbServers cfg.serverProcesses}
 
     [backup_agent]
-    command = ${pkgs.foundationdb}/libexec/backup_agent
+    command = ${pkg}/libexec/backup_agent
     ${backupAgents cfg.backupProcesses}
   '';
 in
@@ -51,6 +59,14 @@ in
   options.services.foundationdb = {
 
     enable = mkEnableOption "FoundationDB Server";
+
+    package = mkOption {
+      type        = types.package;
+      description = ''
+        The FoundationDB package to use for this server. This must be specified by the user
+        in order to ensure migrations and upgrades are controlled appropriately.
+      '';
+    };
 
     publicAddress = mkOption {
       type        = types.str;
@@ -188,6 +204,43 @@ in
       '';
     };
 
+    tls = mkOption {
+      default = null;
+      description = ''
+        FoundationDB Transport Security Layer (TLS) settings.
+      '';
+
+      type = types.nullOr (types.submodule ({
+        options = {
+          certificate = mkOption {
+            type = types.str;
+            description = ''
+              Path to the TLS certificate file. This certificate will
+              be offered to, and may be verified by, clients.
+            '';
+          };
+
+          key = mkOption {
+            type = types.str;
+            description = "Private key file for the certificate.";
+          };
+
+          allowedPeers = mkOption {
+            type = types.str;
+            default = "Check.Valid=1,Check.Unexpired=1";
+            description = ''
+	      "Peer verification string". This may be used to adjust which TLS
+              client certificates a server will accept, as a form of user
+              authorization; for example, it may only accept TLS clients who
+              offer a certificate abiding by some locality or organization name.
+
+              For more information, please see the FoundationDB documentation.
+            '';
+          };
+        };
+      }));
+    };
+
     locality = mkOption {
       default = {
         machineId    = null;
@@ -270,7 +323,7 @@ in
     meta.doc         = ./foundationdb.xml;
     meta.maintainers = with lib.maintainers; [ thoughtpolice ];
 
-    environment.systemPackages = [ pkgs.foundationdb ];
+    environment.systemPackages = [ pkg ];
 
     users.extraUsers = optionalAttrs (cfg.user == "foundationdb") (singleton
       { name        = "foundationdb";
@@ -324,34 +377,37 @@ in
           ReadWritePaths        = lib.concatStringsSep " " (map (x: "-" + x) rwpaths);
         };
 
-      path = [ pkgs.foundationdb pkgs.coreutils ];
+      path = [ pkg pkgs.coreutils ];
 
       preStart = ''
         rm -f ${cfg.pidfile}   && \
           touch ${cfg.pidfile} && \
           chown -R ${cfg.user}:${cfg.group} ${cfg.pidfile}
 
-        for x in "${cfg.logDir}" "${cfg.dataDir}" /etc/foundationdb; do
-          [ ! -d "$x" ] && mkdir -m 0700 -vp "$x" && chown -R ${cfg.user}:${cfg.group} "$x";
+        for x in "${cfg.logDir}" "${cfg.dataDir}"; do
+          [ ! -d "$x" ] && mkdir -m 0700 -vp "$x";
+          chown -R ${cfg.user}:${cfg.group} "$x";
         done
+
+        [ ! -d /etc/foundationdb ] && \
+          mkdir -m 0775 -vp /etc/foundationdb && \
+          chown -R ${cfg.user}:${cfg.group} "/etc/foundationdb"
 
         if [ ! -f /etc/foundationdb/fdb.cluster ]; then
             cf=/etc/foundationdb/fdb.cluster
             desc=$(tr -dc A-Za-z0-9 </dev/urandom 2>/dev/null | head -c8)
             rand=$(tr -dc A-Za-z0-9 </dev/urandom 2>/dev/null | head -c8)
             echo ''${desc}:''${rand}@${initialIpAddr}:${builtins.toString cfg.listenPortStart} > $cf
-            chmod 0660 $cf && chown -R ${cfg.user}:${cfg.group} $cf
+            chmod 0664 $cf && chown -R ${cfg.user}:${cfg.group} $cf
             touch "${cfg.dataDir}/.first_startup"
         fi
       '';
 
-      script = ''
-        exec fdbmonitor --lockfile ${cfg.pidfile} --conffile ${configFile};
-      '';
+      script = "exec fdbmonitor --lockfile ${cfg.pidfile} --conffile ${configFile}";
 
       postStart = ''
         if [ -e "${cfg.dataDir}/.first_startup" ]; then
-          fdbcli --exec "configure new single ssd"
+          fdbcli --exec "configure new single memory"
           rm -f "${cfg.dataDir}/.first_startup";
         fi
       '';

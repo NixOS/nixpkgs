@@ -18,8 +18,6 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [ "-DLIBMINC_DIR=${libminc}/lib/" "-DBICPL_DIR=${bicpl}/lib/" ];
 
-  checkPhase = "ctest --output-on-failure";  # still some weird test failures though
-
   postFixup = ''
     for p in $out/bin/*; do
       wrapProgram $p --prefix PERL5LIB : $PERL5LIB --set PATH "${stdenv.lib.makeBinPath [ coreutils minc_tools ]}";

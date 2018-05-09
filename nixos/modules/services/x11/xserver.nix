@@ -242,7 +242,7 @@ in
         default = [ "ati" "cirrus" "intel" "vesa" "vmware" "modesetting" ];
         example = [
           "ati_unfree" "amdgpu" "amdgpu-pro"
-          "nv" "nvidia" "nvidiaLegacy340" "nvidiaLegacy304" "nvidiaLegacy173"
+          "nv" "nvidia" "nvidiaLegacy340" "nvidiaLegacy304"
         ];
         description = ''
           The names of the video drivers the configuration

@@ -154,14 +154,10 @@ let
       (githubPatch "ba4141e451f4e0b1b19410b1b503bd32e150df06" "1cjxw1f9fin6z12b0mcxnxf2mdjb0n3chwz7mgvmp9yij8qhqnxj")
       (githubPatch "b34ed1e6524479d61ee944ebf6ca7389ea47e563" "1s13zw93nsyr259dzck6gbhg4x46qg5sg14djf4bvrrc6hlkiczw")
       (githubPatch "4f2b52281ce1649ea8347489443965ad33262ecc" "1g59izkicn9cpcphamdgrijs306h5b9i7i4pmy134asn1ifiax5z")
-      (fetchpatch {
-        ## see https://groups.google.com/a/chromium.org/forum/#!msg/chromium-packagers/So-ojMYOQdI/K66hndtdCAAJ
-        url = "https://bazaar.launchpad.net/~chromium-team/chromium-browser/bionic-stable/download/head:/addmissingblinktools-20180416203514-02f50sz15c2mn6ei-1/add-missing-blink-tools.patch";
-        sha256 = "0dc4cmd05qjqyihrd4qb34kz0jlapjgah8bzgnvxf9m4791w062z";
-      })
     ] ++ optional enableWideVine ./patches/widevine.patch
-      ++ optionals (stdenv.isAarch64 && versionRange "65" "66") [
+      ++ optionals (stdenv.isAarch64 && versionRange "65" "67") [
         ./patches/skia_buildfix.patch
+        ./patches/neon_buildfix.patch
     ];
 
     postPatch = ''

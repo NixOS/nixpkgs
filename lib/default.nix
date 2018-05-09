@@ -58,7 +58,7 @@ let
       replaceStrings seq stringLength sub substring tail;
     inherit (trivial) id const concat or and boolToString mergeAttrs
       flip mapNullable inNixShell min max importJSON warn info
-      nixpkgsVersion mod compare splitByAndCompare
+      nixpkgsVersion version mod compare splitByAndCompare
       functionArgs setFunctionArgs isFunction;
 
     inherit (fixedPoints) fix fix' extends composeExtensions

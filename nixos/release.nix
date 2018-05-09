@@ -124,7 +124,6 @@ let
         preferLocalBuild = true;
       };
 
-
 in rec {
 
   channel = import lib/make-channel.nix { inherit pkgs nixpkgs version versionSuffix; };
@@ -132,6 +131,7 @@ in rec {
   manual = buildFromConfig ({ pkgs, ... }: { }) (config: config.system.build.manual.manual);
   manualEpub = (buildFromConfig ({ pkgs, ... }: { }) (config: config.system.build.manual.manualEpub));
   manpages = buildFromConfig ({ pkgs, ... }: { }) (config: config.system.build.manual.manpages);
+  manualGeneratedSources = buildFromConfig ({ pkgs, ... }: { }) (config: config.system.build.manual.generatedSources);
   options = (buildFromConfig ({ pkgs, ... }: { }) (config: config.system.build.manual.optionsJSON)).x86_64-linux;
 
 
@@ -269,6 +269,7 @@ in rec {
   tests.containers-macvlans = callTest tests/containers-macvlans.nix {};
   tests.couchdb = callTest tests/couchdb.nix {};
   tests.deluge = callTest tests/deluge.nix {};
+  tests.dhparams = callTest tests/dhparams.nix {};
   tests.docker = callTestOnMatchingSystems ["x86_64-linux"] tests/docker.nix {};
   tests.docker-tools = callTestOnMatchingSystems ["x86_64-linux"] tests/docker-tools.nix {};
   tests.docker-tools-overlay = callTestOnMatchingSystems ["x86_64-linux"] tests/docker-tools-overlay.nix {};
@@ -284,7 +285,6 @@ in rec {
   tests.ferm = callTest tests/ferm.nix {};
   tests.firefox = callTest tests/firefox.nix {};
   tests.firewall = callTest tests/firewall.nix {};
-  tests.fleet = callTestOnMatchingSystems ["x86_64-linux"] tests/fleet.nix {};
   tests.fwupd = callTest tests/fwupd.nix {};
   #tests.gitlab = callTest tests/gitlab.nix {};
   tests.gitolite = callTest tests/gitolite.nix {};
@@ -297,6 +297,7 @@ in rec {
   tests.graphite = callTest tests/graphite.nix {};
   tests.hardened = callTest tests/hardened.nix { };
   tests.hibernate = callTest tests/hibernate.nix {};
+  tests.hitch = callTest tests/hitch {};
   tests.home-assistant = callTest tests/home-assistant.nix { };
   tests.hound = callTest tests/hound.nix {};
   tests.hocker-fetchdocker = callTest tests/hocker-fetchdocker {};
@@ -307,6 +308,7 @@ in rec {
   tests.influxdb = callTest tests/influxdb.nix {};
   tests.ipv6 = callTest tests/ipv6.nix {};
   tests.jenkins = callTest tests/jenkins.nix {};
+  tests.osquery = callTest tests/osquery.nix {};
   tests.plasma5 = callTest tests/plasma5.nix {};
   tests.plotinus = callTest tests/plotinus.nix {};
   tests.keymap = callSubTests tests/keymap.nix {};
@@ -358,7 +360,6 @@ in rec {
   tests.openldap = callTest tests/openldap.nix {};
   tests.owncloud = callTest tests/owncloud.nix {};
   tests.pam-oath-login = callTest tests/pam-oath-login.nix {};
-  #tests.panamax = callTestOnMatchingSystems ["x86_64-linux"] tests/panamax.nix {};
   tests.peerflix = callTest tests/peerflix.nix {};
   tests.php-pcre = callTest tests/php-pcre.nix {};
   tests.postgresql = callSubTests tests/postgresql.nix {};

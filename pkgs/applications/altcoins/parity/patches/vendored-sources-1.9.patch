@@ -1,10 +1,9 @@
 diff --git a/.cargo/config b/.cargo/config
 new file mode 100644
 index 000000000..0efb69724
---- /dev/null
+--- /dev/null 
 +++ b/.cargo/config
-@@ -0,0 +1,100 @@
-+
+@@ -0,0 +1,94 @@
 +[source."https://github.com/alexcrichton/mio-named-pipes"]
 +git = "https://github.com/alexcrichton/mio-named-pipes"
 +branch = "master"
@@ -27,6 +26,11 @@ index 000000000..0efb69724
 +
 +[source."https://github.com/nikvolf/tokio-named-pipes"]
 +git = "https://github.com/nikvolf/tokio-named-pipes"
++branch = "master"
++replace-with = "vendored-sources"
++
++[source."https://github.com/paritytech/app-dirs-rs"]
++git = "https://github.com/paritytech/app-dirs-rs"
 +branch = "master"
 +replace-with = "vendored-sources"
 +
@@ -82,16 +86,6 @@ index 000000000..0efb69724
 +
 +[source."https://github.com/paritytech/trezor-sys"]
 +git = "https://github.com/paritytech/trezor-sys"
-+branch = "master"
-+replace-with = "vendored-sources"
-+
-+[source."https://github.com/paritytech/wasm-utils"]
-+git = "https://github.com/paritytech/wasm-utils"
-+branch = "master"
-+replace-with = "vendored-sources"
-+
-+[source."https://github.com/paritytech/wasmi"]
-+git = "https://github.com/paritytech/wasmi"
 +branch = "master"
 +replace-with = "vendored-sources"
 +

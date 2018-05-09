@@ -77,7 +77,7 @@ let
   # for purity reasons this behavior should be avoided.
   wafVersion = "1.9.15";
   waf = fetchurl {
-    urls = [ "http://waf.io/waf-${wafVersion}"
+    urls = [ "https://waf.io/waf-${wafVersion}"
              "http://www.freehackers.org/~tnagy/release/waf-${wafVersion}" ];
     sha256 = "0qrnlv91cb0v221w8a0fi4wxm99q2hpz10rkyyk4akcsvww6xrw5";
   };
@@ -200,7 +200,7 @@ in stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A media player that supports many video formats (MPlayer and mplayer2 fork)";
-    homepage = http://mpv.io;
+    homepage = https://mpv.io;
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ AndersonTorres fuuzetsu fpletz ];
     platforms = platforms.darwin ++ platforms.linux;

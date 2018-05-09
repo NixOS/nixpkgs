@@ -64,12 +64,6 @@ in rec {
       buildLlvmPackages = buildPackages.llvmPackages_39;
       llvmPackages = pkgs.llvmPackages_39;
     };
-    ghc841 = callPackage ../development/compilers/ghc/8.4.1.nix rec {
-      bootPkgs = packages.ghc821Binary;
-      inherit (bootPkgs) alex happy;
-      buildLlvmPackages = buildPackages.llvmPackages_5;
-      llvmPackages = pkgs.llvmPackages_5;
-    };
     ghc842 = callPackage ../development/compilers/ghc/8.4.2.nix rec {
       bootPkgs = packages.ghc821Binary;
       inherit (bootPkgs) alex happy;
@@ -135,11 +129,6 @@ in rec {
       ghc = bh.compiler.ghc822;
       compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-8.2.x.nix { };
     };
-    ghc841 = callPackage ../development/haskell-modules {
-      buildHaskellPackages = bh.packages.ghc841;
-      ghc = bh.compiler.ghc841;
-      compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-8.4.x.nix { };
-    };
     ghc842 = callPackage ../development/haskell-modules {
       buildHaskellPackages = bh.packages.ghc842;
       ghc = bh.compiler.ghc842;
@@ -170,7 +159,7 @@ in rec {
         (name: ! builtins.elem name integerSimpleExcludes)
         (pkgs.lib.attrNames packages);
     in pkgs.lib.genAttrs integerSimpleGhcNames (name: packages."${name}".override {
-      ghc = compiler.integer-simple."${name}";
+      ghc = bh.compiler.integer-simple."${name}";
       overrides = _self : _super : {
         integer-simple = null;
         integer-gmp = null;

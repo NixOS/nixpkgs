@@ -1,4 +1,4 @@
-{ buildPythonPackage, fetchurl, glibcLocales, mock, pytest, botocore,
+{ stdenv, buildPythonPackage, fetchurl, glibcLocales, mock, pytest, botocore,
   testfixtures, pillow, six, twisted, w3lib, lxml, queuelib, pyopenssl,
   service-identity, parsel, pydispatcher, cssselect, lib }:
 buildPythonPackage rec {
@@ -20,8 +20,9 @@ buildPythonPackage rec {
     LC_ALL="en_US.UTF-8";
 
     checkPhase = ''
-      py.test --ignore=tests/test_linkextractors_deprecated.py --ignore=tests/test_proxy_connect.py
+      py.test --ignore=tests/test_linkextractors_deprecated.py --ignore=tests/test_proxy_connect.py ${lib.optionalString stdenv.isDarwin "--ignore=tests/test_utils_iterators.py"}
       # The ignored tests require mitmproxy, which depends on protobuf, but it's disabled on Python3
+      # Ignore iteration test, because lxml can't find encodings on darwin https://bugs.launchpad.net/lxml/+bug/707396
     '';
 
     src = fetchurl {
@@ -34,6 +35,6 @@ buildPythonPackage rec {
       homepage = http://scrapy.org/;
       license = licenses.bsd3;
       maintainers = with maintainers; [ drewkett ];
-      platforms = platforms.linux;
+      platforms = platforms.unix;
     };
 }

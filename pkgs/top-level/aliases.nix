@@ -138,6 +138,7 @@ mapAliases (rec {
   mupen64plus1_5 = mupen64plus; # added 2016-02-12
   mysqlWorkbench = mysql-workbench; # added 2017-01-19
   ncat = nmap;  # added 2016-01-26
+  netcat-openbsd = libressl.nc; # added 2018-04-25
   networkmanager_fortisslvpn = networkmanager-fortisslvpn; # added 2018-02-25
   networkmanager_iodine = networkmanager-iodine; # added 2018-02-25
   networkmanager_l2tp = networkmanager-l2tp; # added 2018-02-25
@@ -150,6 +151,7 @@ mapAliases (rec {
   openssh_with_kerberos = openssh; # added 2018-01-28
   owncloudclient = owncloud-client;  # added 2016-08
   p11_kit = p11-kit; # added 2018-02-25
+  pass-otp = pass.withExtensions (ext: [ext.pass-otp]); # added 2018-05-04
   pgp-tools = signing-party; # added 2017-03-26
   pidgin-with-plugins = pidgin; # added 2016-06
   pidginlatexSF = pidgin-latex; # added 2014-11-02
