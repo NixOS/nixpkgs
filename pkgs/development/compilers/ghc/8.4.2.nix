@@ -3,7 +3,7 @@
 
 # build-tools
 , bootPkgs, alex, happy
-, autoconf, automake, coreutils, fetchurl, perl, python3
+, autoconf, automake, coreutils, fetchurl, fetchpatch, perl, python3
 
 , libffi, libiconv ? null, ncurses
 
@@ -80,6 +80,13 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   outputs = [ "out" "doc" ];
+
+  patches = [(fetchpatch {
+    url = "https://git.haskell.org/hsc2hs.git/patch/738f3666c878ee9e79c3d5e819ef8b3460288edf";
+    sha256 = "0plzsbfaq6vb1023lsarrjglwgr9chld4q3m99rcfzx0yx5mibp3";
+    extraPrefix = "utils/hsc2hs/";
+    stripLen = 1;
+  })];
 
   postPatch = "patchShebangs .";
 
