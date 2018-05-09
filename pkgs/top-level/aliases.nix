@@ -117,9 +117,12 @@ mapAliases (rec {
   libgumbo = gumbo; # added 2018-01-21
   libintlOrEmpty = stdenv.lib.optional (!stdenv.isLinux || hostPlatform.libc != "glibc") gettext; # added 2018-03-14
   libjson_rpc_cpp = libjson-rpc-cpp; # added 2017-02-28
+  libiconvReal = glibiconv; # added 2018-05-06
   libmysql = mysql.connector-c; # added # 2017-12-28, this was a misnomer refering to libmysqlclient
   libtidy = html-tidy;  # added 2014-12-21
   links = links2; # added 2016-01-31
+  linux-pam = linux.pam; # added 2018-05-06
+  linuxquota = linux.quota; # added 2018-05-06
   lttngTools = lttng-tools;  # added 2014-07-31
   lttngUst = lttng-ust;  # added 2014-07-31
   lua5_sec = luaPackages.luasec; # added 2017-05-02

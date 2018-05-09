@@ -61,6 +61,9 @@ with pkgs;
     by Hydra.
   '';
 
+  # All of the tests in Nixpkgs
+  tests = recurseIntoAttrs (callPackages ../test { });
+
   ### Nixpkgs maintainer tools
 
   nix-generate-from-cpan = callPackage ../../maintainers/scripts/nix-generate-from-cpan.nix { };
@@ -68,6 +71,744 @@ with pkgs;
   nixpkgs-lint = callPackage ../../maintainers/scripts/nixpkgs-lint.nix { };
 
   common-updater-scripts = callPackage ../common-updater/scripts.nix { };
+
+  ### STANDARD ENVIRONMENT TOOLS
+  ###
+  ### Each of the below is implicitly depended on when you call
+  ### stdenv.mkDerivation. You do not need to specify them as
+  ### buildInputs. Note that since these are all part of the stdenv,
+  ### any changes to them will impact every other package in
+  ### all-packages.nix. Handle with care.
+  ###
+  ### The full list is set at pkgs/stdenv/common-path.nix and includes
+  ### the following:
+  ###
+  ###  coreutils
+  ###  findutils
+  ###  diffutils
+  ###  gnused
+  ###  gnugrep
+  ###  gawk
+  ###  gnutar
+  ###  gzip
+  ###  bzip2
+  ###  gnumake
+  ###  bash
+  ###  gnupatch
+  ###  xz
+
+  coreutils = callPackage ../tools/misc/coreutils {
+    aclSupport = stdenv.isLinux;
+    attrSupport = stdenv.isLinux;
+  };
+
+  coreutils-prefixed = coreutils.override { withPrefix = true; singleBinary = false; };
+
+  findutils = callPackage ../tools/misc/findutils { };
+
+  diffutils = callPackage ../tools/text/diffutils { };
+
+  gnused = callPackage ../tools/text/gnused { };
+  # This is an easy work-around for [:space:] problems.
+  gnused_422 = callPackage ../tools/text/gnused/422.nix { };
+
+  gnugrep = callPackage ../tools/text/gnugrep { };
+
+  gawk = callPackage ../tools/text/gawk {
+    inherit (darwin) locale;
+  };
+
+  gawkInteractive = appendToName "interactive"
+    (gawk.override { interactive = true; });
+
+  gnutar = callPackage ../tools/archivers/gnutar { };
+
+  gzip = callPackage ../tools/compression/gzip { };
+
+  bzip2 = callPackage ../tools/compression/bzip2 { };
+
+  gnumake382 = callPackage ../development/tools/build-managers/gnumake/3.82 { };
+  gnumake3 = gnumake382;
+  gnumake42 = callPackage ../development/tools/build-managers/gnumake/4.2 { };
+  gnumake = gnumake42;
+
+  runtimeShell = "${runtimeShellPackage}/bin/bash";
+  runtimeShellPackage = bash;
+
+  bash = lowPrio (callPackage ../shells/bash/4.4.nix { });
+
+  # WARNING: this attribute is used by nix-shell so it shouldn't be removed/renamed
+  bashInteractive = bash.override {
+    interactive = true;
+  };
+
+  gnupatch = callPackage ../tools/text/gnupatch { };
+  patch = gnupatch;
+
+  xz = callPackage ../tools/compression/xz { };
+  lzma = xz;
+
+  ### TOOLCHAINS
+  ###
+  ### We currently support 2 toolchains that are used to compile
+  ### Nixpkgs. They are GCC for Linux & LLVM for macOS.
+
+  wrapCCWith = { name ? "", cc, bintools, libc, extraBuildCommands ? "" }:
+      ccWrapperFun rec {
+    nativeTools = targetPlatform == hostPlatform && stdenv.cc.nativeTools or false;
+    nativeLibc = targetPlatform == hostPlatform && stdenv.cc.nativeLibc or false;
+    nativePrefix = stdenv.cc.nativePrefix or "";
+    noLibc = !nativeLibc && (libc == null);
+
+    isGNU = cc.isGNU or false;
+    isClang = cc.isClang or false;
+
+    inherit name cc bintools libc extraBuildCommands;
+  };
+
+  ccWrapperFun = callPackage ../build-support/cc-wrapper;
+  bintoolsWrapperFun = callPackage ../build-support/bintools-wrapper;
+
+  wrapCC = cc: wrapCCWith {
+    name = lib.optionalString (targetPlatform != hostPlatform) "gcc-cross-wrapper";
+    inherit cc;
+    # This should be the only bintools runtime dep with this sort of logic. The
+    # Others should instead delegate to the next stage's choice with
+    # `targetPackages.stdenv.cc.bintools`. This one is different just to
+    # provide the default choice, avoiding infinite recursion.
+    bintools = if targetPlatform.isDarwin then darwin.binutils else binutils;
+    libc = if targetPlatform != hostPlatform then libcCross else stdenv.cc.libc;
+  };
+
+  wrapBintoolsWith = { bintools, libc, extraBuildCommands ? "" }: bintoolsWrapperFun {
+    nativeTools = targetPlatform == hostPlatform && stdenv.cc.nativeTools or false;
+    nativeLibc = targetPlatform == hostPlatform && stdenv.cc.nativeLibc or false;
+    nativePrefix = stdenv.cc.nativePrefix or "";
+
+    noLibc = (libc == null);
+
+    inherit bintools libc extraBuildCommands;
+  };
+
+  wrapCCMulti = cc:
+    if system == "x86_64-linux" then let
+      # Binutils with glibc multi
+      bintools = cc.bintools.override {
+        libc = glibc_multi;
+      };
+    in lowPrio (wrapCCWith {
+      cc = cc.cc.override {
+        stdenv = overrideCC stdenv (wrapCCWith {
+          cc = cc.cc;
+          inherit bintools;
+          libc = glibc_multi;
+        });
+        profiledCompiler = false;
+        enableMultilib = true;
+      };
+      libc = glibc_multi;
+      inherit bintools;
+      extraBuildCommands = ''
+        echo "dontMoveLib64=1" >> $out/nix-support/setup-hook
+      '';
+  }) else throw "Multilib ${cc.name} not supported on ‘${system}’";
+
+  binutils-unwrapped = callPackage ../development/tools/misc/binutils {
+    # FHS sys dirs presumably only have stuff for the build platform
+    noSysDirs = (targetPlatform != buildPlatform) || noSysDirs;
+  };
+  binutils = wrapBintoolsWith {
+    libc = if targetPlatform != hostPlatform then libcCross else stdenv.cc.libc;
+    bintools = binutils-unwrapped;
+  };
+  binutils_nogold = lowPrio (wrapBintoolsWith {
+    libc = if targetPlatform != hostPlatform then libcCross else stdenv.cc.libc;
+    bintools = binutils-unwrapped.override {
+      gold = false;
+    };
+  });
+
+  #### GCC: GNU C Compiler
+  ####
+  #### This is the original Nix toolchain. It is used as the default
+  #### for Linux & MingW. You can force it to be used by other systems
+  #### with the attribute ‘gccStdenv’.
+
+  gcc = gcc7;
+  gcc-unwrapped = gcc.cc;
+  gccFun = callPackage ../development/compilers/gcc/7;
+
+  gccStdenv = if stdenv.cc.isGNU then stdenv else stdenv.override {
+    allowedRequisites = null;
+    cc = gcc;
+    # Remove libcxx/libcxxabi, and add clang for AS if on darwin (it uses
+    # clang's internal assembler).
+    extraBuildInputs = lib.optional hostPlatform.isDarwin clang.cc;
+  };
+
+  gcc7Stdenv = overrideCC gccStdenv gcc7;
+  gcc8Stdenv = overrideCC gccStdenv gcc8;
+
+  gcc_multi = wrapCCMulti gcc;
+
+  gccMultiStdenv = overrideCC stdenv gcc_multi;
+  clangMultiStdenv = overrideCC stdenv clang_multi;
+  multiStdenv = if stdenv.cc.isClang then clangMultiStdenv else gccMultiStdenv;
+
+  gcc_debug = lowPrio (wrapCC (gcc.cc.override {
+    stripped = false;
+  }));
+
+  libstdcxxHook = makeSetupHook
+    { substitutions = { gcc = gcc-unwrapped; }; }
+    ../development/compilers/gcc/libstdc++-hook.sh;
+
+  # The GCC used to build libc for the target platform. Normal gccs will be
+  # built with, and use, that cross-compiled libc.
+  gccCrossStageStatic = assert targetPlatform != buildPlatform; let
+    libcCross1 =
+      if targetPlatform.libc == "msvcrt" then targetPackages.windows.mingw_w64_headers
+      else if targetPlatform.libc == "libSystem" then darwin.xcode
+      else if targetPlatform.libc == "musl" then musl
+      else null;
+    binutils1 = wrapBintoolsWith {
+      bintools = binutils-unwrapped;
+      libc = libcCross1;
+    };
+    in wrapCCWith {
+      cc = gccFun {
+        # copy-pasted
+        inherit noSysDirs;
+        # PGO seems to speed up compilation by gcc by ~10%, see #445 discussion
+        profiledCompiler = with stdenv; (!isDarwin && (isi686 || isx86_64));
+        isl = if !stdenv.isDarwin then isl_0_17 else null;
+
+        # just for stage static
+        crossStageStatic = true;
+        langCC = false;
+        libcCross = libcCross1;
+        targetPackages.stdenv.cc.bintools = binutils1;
+        enableShared = false;
+      };
+      bintools = binutils1;
+      libc = libcCross1;
+  };
+
+  # Only needed for mingw builds
+  gccCrossMingw2 = assert targetPlatform != buildPlatform; wrapCCWith {
+    name = "gcc-cross-wrapper";
+    cc = gccCrossStageStatic.gcc;
+    libc = windows.mingw_headers2;
+    inherit binutils;
+  };
+
+  gcc48 = lowPrio (wrapCC (callPackage ../development/compilers/gcc/4.8 {
+    inherit noSysDirs;
+
+    # PGO seems to speed up compilation by gcc by ~10%, see #445 discussion
+    profiledCompiler = with stdenv; (!isSunOS && !isDarwin && (isi686 || isx86_64));
+
+    libcCross = if targetPlatform != buildPlatform then libcCross else null;
+
+    isl = if !stdenv.isDarwin then isl_0_14 else null;
+    cloog = if !stdenv.isDarwin then cloog else null;
+    texinfo = texinfo5; # doesn't validate since 6.1 -> 6.3 bump
+  }));
+
+  gcc49 = lowPrio (wrapCC (callPackage ../development/compilers/gcc/4.9 {
+    inherit noSysDirs;
+
+    # PGO seems to speed up compilation by gcc by ~10%, see #445 discussion
+    profiledCompiler = with stdenv; (!isDarwin && (isi686 || isx86_64));
+
+    libcCross = if targetPlatform != buildPlatform then libcCross else null;
+
+    isl = if !stdenv.isDarwin then isl_0_11 else null;
+
+    cloog = if !stdenv.isDarwin then cloog_0_18_0 else null;
+  }));
+
+  gcc5 = lowPrio (wrapCC (callPackage ../development/compilers/gcc/5 {
+    inherit noSysDirs;
+
+    # PGO seems to speed up compilation by gcc by ~10%, see #445 discussion
+    profiledCompiler = with stdenv; (!isDarwin && (isi686 || isx86_64));
+
+    libcCross = if targetPlatform != buildPlatform then libcCross else null;
+
+    isl = if !stdenv.isDarwin then isl_0_14 else null;
+  }));
+
+  gcc6 = lowPrio (wrapCC (callPackage ../development/compilers/gcc/6 {
+    inherit noSysDirs;
+
+    # PGO seems to speed up compilation by gcc by ~10%, see #445 discussion
+    profiledCompiler = with stdenv; (!isDarwin && (isi686 || isx86_64));
+
+    libcCross = if targetPlatform != buildPlatform then libcCross else null;
+
+    isl = if !stdenv.isDarwin then isl_0_14 else null;
+  }));
+
+  gcc7 = lowPrio (wrapCC (callPackage ../development/compilers/gcc/7 {
+    inherit noSysDirs;
+
+    # PGO seems to speed up compilation by gcc by ~10%, see #445 discussion
+    profiledCompiler = with stdenv; (!isDarwin && (isi686 || isx86_64));
+
+    libcCross = if targetPlatform != buildPlatform then libcCross else null;
+
+    isl = if !stdenv.isDarwin then isl_0_17 else null;
+  }));
+
+  gcc8 = lowPrio (wrapCC (callPackage ../development/compilers/gcc/8 {
+    inherit noSysDirs;
+
+    # PGO seems to speed up compilation by gcc by ~10%, see #445 discussion
+    profiledCompiler = with stdenv; (!isDarwin && (isi686 || isx86_64));
+
+    libcCross = if targetPlatform != buildPlatform then libcCross else null;
+
+    isl = if !stdenv.isDarwin then isl_0_17 else null;
+  }));
+
+  gcc-snapshot = lowPrio (wrapCC (callPackage ../development/compilers/gcc/snapshot {
+    inherit noSysDirs;
+
+    # PGO seems to speed up compilation by gcc by ~10%, see #445 discussion
+    profiledCompiler = with stdenv; (!isDarwin && (isi686 || isx86_64));
+
+    libcCross = if targetPlatform != buildPlatform then libcCross else null;
+
+    isl = isl_0_17;
+  }));
+
+  gfortran = gfortran7;
+
+  gfortran48 = wrapCC (gcc48.cc.override {
+    name = "gfortran";
+    langFortran = true;
+    langCC = false;
+    langC = false;
+    profiledCompiler = false;
+  });
+
+  gfortran49 = wrapCC (gcc49.cc.override {
+    name = "gfortran";
+    langFortran = true;
+    langCC = false;
+    langC = false;
+    profiledCompiler = false;
+  });
+
+  gfortran5 = wrapCC (gcc5.cc.override {
+    name = "gfortran";
+    langFortran = true;
+    langCC = false;
+    langC = false;
+    profiledCompiler = false;
+  });
+
+  gfortran6 = wrapCC (gcc6.cc.override {
+    name = "gfortran";
+    langFortran = true;
+    langCC = false;
+    langC = false;
+    profiledCompiler = false;
+  });
+
+  gfortran7 = wrapCC (gcc7.cc.override {
+    name = "gfortran";
+    langFortran = true;
+    langCC = false;
+    langC = false;
+    profiledCompiler = false;
+  });
+
+  gcj = gcj6;
+  gcj6 = wrapCC (gcc6.cc.override {
+    name = "gcj";
+    langJava = true;
+    langFortran = false;
+    langCC = false;
+    langC = false;
+    profiledCompiler = false;
+    inherit zip unzip zlib boehmgc gettext pkgconfig perl;
+    inherit (gnome2) libart_lgpl;
+  });
+
+  gccgo = gccgo6;
+  gccgo6 = wrapCC (gcc6.cc.override {
+    name = "gccgo6";
+    langCC = true; #required for go.
+    langC = true;
+    langGo = true;
+    profiledCompiler = false;
+  });
+
+  #### LLVM
+  ####
+  #### This is the toolchain used by default for the Darwin/macOS
+  #### standard environment. You can force it to be used on other
+  #### systems by using ‘clangStdenv’.
+
+  llvmPackages = recurseIntoAttrs llvmPackages_5;
+
+  llvmPackagesSelf = llvmPackages_34.override {
+    stdenv = libcxxStdenv;
+  };
+
+  llvmPackages_34 = callPackage ../development/compilers/llvm/3.4 ({
+    isl = isl_0_12;
+  } // stdenv.lib.optionalAttrs (stdenv.cc.isGNU && stdenv.hostPlatform.isi686) {
+    stdenv = overrideCC stdenv gcc6;
+  });
+
+  llvmPackages_35 = callPackage ../development/compilers/llvm/3.5 ({
+    isl = isl_0_14;
+  } // stdenv.lib.optionalAttrs (stdenv.cc.isGNU && stdenv.hostPlatform.isi686) {
+    stdenv = overrideCC stdenv gcc6;
+  });
+
+  llvmPackages_37 = callPackage ../development/compilers/llvm/3.7 ({
+    inherit (stdenvAdapters) overrideCC;
+  } // stdenv.lib.optionalAttrs (stdenv.cc.isGNU && stdenv.hostPlatform.isi686) {
+    stdenv = overrideCC stdenv gcc6;
+  });
+
+  llvmPackages_38 = callPackage ../development/compilers/llvm/3.8 ({
+    inherit (stdenvAdapters) overrideCC;
+  } // stdenv.lib.optionalAttrs (stdenv.cc.isGNU && stdenv.hostPlatform.isi686) {
+    stdenv = overrideCC stdenv gcc6;
+  });
+
+  llvmPackages_39 = callPackage ../development/compilers/llvm/3.9 ({
+    inherit (stdenvAdapters) overrideCC;
+  } // stdenv.lib.optionalAttrs (stdenv.cc.isGNU && stdenv.hostPlatform.isi686) {
+    stdenv = overrideCC stdenv gcc6;
+  });
+
+  llvmPackages_4 = callPackage ../development/compilers/llvm/4 ({
+    inherit (stdenvAdapters) overrideCC;
+  } // stdenv.lib.optionalAttrs (stdenv.cc.isGNU && stdenv.hostPlatform.isi686) {
+    stdenv = overrideCC stdenv gcc6;
+  });
+
+  llvmPackages_5 = callPackage ../development/compilers/llvm/5 ({
+    inherit (stdenvAdapters) overrideCC;
+  } // stdenv.lib.optionalAttrs stdenv.isDarwin {
+    cmake = cmake.override {
+      isBootstrap = true;
+      majorVersion = "3.9"; # 3.10.2: 'ApplicationServices/ApplicationServices.h' file not found
+    };
+    libxml2 = libxml2.override { pythonSupport = false; };
+    python2 = callPackage ../development/interpreters/python/cpython/2.7/boot.nix { inherit (darwin) CF configd; };
+  } // stdenv.lib.optionalAttrs (stdenv.cc.isGNU && stdenv.hostPlatform.isi686) {
+    stdenv = overrideCC stdenv gcc6; # with gcc-7: undefined reference to `__divmoddi4'
+  });
+
+  llvmPackages_6 = callPackage ../development/compilers/llvm/6 ({
+    inherit (stdenvAdapters) overrideCC;
+  } // stdenv.lib.optionalAttrs (stdenv.cc.isGNU && stdenv.hostPlatform.isi686) {
+    stdenv = overrideCC stdenv gcc6; # with gcc-7: undefined reference to `__divmoddi4'
+  });
+
+  clang = llvmPackages.clang;
+
+  clang-sierraHack = clang.override {
+    name = "clang-wrapper-with-reexport-hack";
+    bintools = darwin.binutils.override {
+      useMacosReexportHack = true;
+      bintools = darwin.binutils.bintools.override {
+        cctools = darwin.cctools.override {
+          enableDumpNormalizedLibArgs = true;
+        };
+      };
+    };
+  };
+
+  clang_6  = llvmPackages_6.clang;
+  clang_5  = llvmPackages_5.clang;
+  clang_4  = llvmPackages_4.clang;
+  clang_39 = llvmPackages_39.clang;
+  clang_38 = llvmPackages_38.clang;
+  clang_37 = llvmPackages_37.clang;
+  clang_35 = wrapCC llvmPackages_35.clang;
+  clang_34 = wrapCC llvmPackages_34.clang;
+  lld = llvmPackages.lld;
+  lld_4 = llvmPackages_4.lld;
+  lld_5 = llvmPackages_5.lld;
+  lld_6 = llvmPackages_6.lld;
+
+  lldb = llvmPackages.lldb;
+  lldb_4 = llvmPackages_4.lldb;
+  lldb_5 = llvmPackages_5.lldb;
+  lldb_6 = llvmPackages_6.lldb;
+
+  llvm = llvmPackages.llvm;
+
+  llvm_6  = llvmPackages_6.llvm;
+  llvm_5  = llvmPackages_5.llvm;
+  llvm_4  = llvmPackages_4.llvm;
+  llvm_39 = llvmPackages_39.llvm;
+  llvm_38 = llvmPackages_38.llvm;
+  llvm_37 = llvmPackages_37.llvm;
+  llvm_35 = llvmPackages_35.llvm;
+  llvm_34 = llvmPackages_34.llvm;
+
+  libcxx = llvmPackages.libcxx;
+  libcxxabi = llvmPackages.libcxxabi;
+
+  clang-tools = callPackage ../development/tools/clang-tools { };
+
+  clang-analyzer = callPackage ../development/tools/analysis/clang-analyzer { };
+
+  clangSelf = clangWrapSelf llvmPackagesSelf.clang;
+
+  wrapClangMulti = clang:
+    if system == "x86_64-linux" then
+      callPackage ../development/compilers/llvm/multi.nix {
+        inherit clang;
+        gcc32 = pkgsi686Linux.gcc;
+        gcc64 = pkgs.gcc;
+      }
+    else throw "Multilib ${clang.cc.name} not supported on '${system}'";
+
+  clang_multi = wrapClangMulti clang;
+
+  clangWrapSelf = build: ccWrapperFun {
+    cc = build;
+    isClang = true;
+    inherit stdenvNoCC;
+    inherit (targetPackages.stdenv.cc) bintools libc;
+    extraPackages = [ libcxx libcxxabi ];
+    nativeTools = false;
+    nativeLibc = false;
+  };
+
+  #Use this instead of stdenv to build with clang
+  clangStdenv = if stdenv.cc.isClang then stdenv else lowPrio llvmPackages.stdenv;
+  clang-sierraHack-stdenv = overrideCC stdenv clang-sierraHack;
+  libcxxStdenv = if stdenv.isDarwin then stdenv else lowPrio llvmPackages.libcxxStdenv;
+
+  ### Standard C Libraries
+  ###
+  ### These are the standard C libraries commonly referred to as
+  ### ‘libc’. Currently we use Glibc by default on Linux & libSystem
+  ### by default on macOS. Musl support is also available for Linux.
+
+  # We can choose:
+  libcCrossChooser = name:
+    # libc is hackily often used from the previous stage. This `or`
+    # hack fixes the hack, *sigh*.
+    /**/ if name == "glibc" then targetPackages.glibcCross or glibcCross
+    else if name == "bionic" then targetPackages.bionic
+    else if name == "uclibc" then uclibcCross
+    else if name == "musl" then targetPackages.muslCross or muslCross
+    else if name == "msvcrt" then targetPackages.windows.mingw_w64 or windows.mingw_w64
+    else if targetPlatform.useiOSPrebuilt then targetPackages.iosSdkPkgs.libraries
+    else if name == "libSystem" then darwin.xcode
+    else throw "Unknown libc";
+
+  libcCross = assert targetPlatform != buildPlatform; libcCrossChooser targetPlatform.libc;
+
+  # Can't just overrideCC, because then the stdenv-cross mkDerivation will be
+  # thrown away. TODO: find a better solution for this.
+  crossLibcStdenv = buildPackages.makeStdenvCross {
+    inherit (buildPackages.buildPackages) stdenv;
+    inherit buildPlatform hostPlatform targetPlatform;
+    cc = buildPackages.gccCrossStageStatic;
+  };
+
+  #### Glibc
+
+  glibc = callPackage ../development/libraries/glibc {
+    installLocales = config.glibc.locales or false;
+  };
+
+  glibc_memusage = callPackage ../development/libraries/glibc {
+    installLocales = false;
+    withGd = true;
+  };
+
+  # Being redundant to avoid cycles on boot. TODO: find a better way
+  glibcCross = callPackage ../development/libraries/glibc {
+    installLocales = config.glibc.locales or false;
+    stdenv = crossLibcStdenv;
+  };
+
+  # Only supported on Linux, using glibc
+  glibcLocales = callPackage ../development/libraries/glibc/locales.nix { };
+
+  glibcInfo = callPackage ../development/libraries/glibc/info.nix { };
+
+  glibc_multi = callPackage ../development/libraries/glibc/multi.nix {
+    glibc32 = pkgsi686Linux.glibc;
+  };
+
+  #### Musl
+
+  muslCross = musl.override {
+    stdenv = crossLibcStdenv;
+  };
+
+  musl = callPackage ../os-specific/linux/musl { };
+  musl-fts = callPackage ../os-specific/linux/musl/fts.nix { };
+  musl-getconf = callPackage ../os-specific/linux/musl/getconf.nix { };
+  musl-getent = callPackage ../os-specific/linux/musl/getent.nix { };
+
+  ### OPERATING SYSTEMS
+
+  netbsd = recurseIntoAttrs (callPackages ../os-specific/bsd/netbsd {});
+  windows = recurseIntoAttrs (callPackages ../os-specific/windows {});
+  gnu = recurseIntoAttrs (callPackage ../os-specific/gnu { inherit platform; });
+  darwin = callPackage ../os-specific/darwin {};
+  linux = callPackages ../os-specific/linux {};
+
+  ### COMPATIBILITY LAYERS
+  ###
+  ### These are attribute that have a compatibility layer. This means
+  ### that you will get a different package depending on your host
+  ### operating system. For instance, if your package needs the
+  ### ‘hexdump’ command, on Linux it will be provided by utillinux &
+  ### on macOS it will be provided shell_cmds. Referring to these
+  ### directly is almost always preferred because it is more portable
+  ### than referring to just the Linux version or just the macOS
+  ### version.
+
+  unixtools = recurseIntoAttrs (callPackages ./unix-tools.nix { });
+  inherit (unixtools) hexdump ps logger eject umount
+                      mount wall hostname more sysctl;
+
+  # GNU libc provides libiconv so systems with glibc don't need to build
+  # libiconv separately. Additionally, Apple forked/repackaged libiconv so we
+  # use that instead of the vanilla version on that OS.
+  #
+  # We also provide `glibiconv`, which will always be a standalone libiconv,
+  # just in case you want it regardless of platform.
+  libiconv =
+    if (hostPlatform.libc == "glibc" || hostPlatform.libc == "musl")
+      then glibcIconv (if hostPlatform != buildPlatform
+                       then libcCross
+                       else stdenv.cc.libc)
+    else if hostPlatform.isDarwin
+      then darwin.libiconv
+    else glibiconv;
+
+  glibcIconv = libc: let
+    inherit (builtins.parseDrvName libc.name) name version;
+    libcDev = lib.getDev libc;
+  in runCommand "${name}-iconv-${version}" {} ''
+    mkdir -p $out/include
+    ln -sv ${libcDev}/include/iconv.h $out/include
+  '';
+
+  # On non-GNU systems we need GNU Gettext for libintl.
+  libintl = if hostPlatform.libc != "glibc" then gettext else null;
+
+  utillinux = if stdenv.isLinux then linux.util-linux
+              else unixtools.utillinux;
+
+  utillinuxCurses = utillinux;
+
+  utillinuxMinimal = if stdenv.isLinux then appendToName "minimal" (utillinux.override {
+    minimal = true;
+    ncurses = null;
+    perl = null;
+    systemd = null;
+  }) else utillinux;
+
+  nettools = if stdenv.isLinux then linux.net-tools
+             else unixtools.nettools;
+
+  procps-ng = if stdenv.isLinux then linux.procps-ng
+              else unixtools.procps;
+  procps = procps-ng;
+
+  quota = if stdenv.isLinux then linux.quota else unixtools.quota;
+
+  # See https://github.com/NixOS/nixpkgs/issues/15849. I'm switching on isLinux because
+  # it looks like gnulib is broken on non-linux, so it seems likely that this would cause
+  # trouble on bsd and/or cygwin as well.
+  man = if stdenv.isLinux then man-db else man-old;
+
+  pam = if stdenv.isLinux then linux.pam else openpam;
+
+  pth = if stdenv.hostPlatform.isMusl then npth else gnupth;
+
+  libelf = if stdenv.isFreeBSD
+           then callPackage ../development/libraries/libelf-freebsd { }
+           else callPackage ../development/libraries/libelf { };
+
+  libuuid =
+    if targetPlatform != buildPlatform && targetPlatform.config == "i586-pc-gnu"
+    then (utillinuxMinimal // {
+      crossDrv = lib.overrideDerivation utillinuxMinimal.crossDrv (args: {
+        # `libblkid' fails to build on GNU/Hurd.
+        configureFlags = args.configureFlags
+          + " --disable-libblkid --disable-mount --disable-libmount"
+          + " --disable-fsck --enable-static --disable-partx";
+        doCheck = false;
+        CPPFLAGS =                    # ugly hack for ugly software!
+          lib.concatStringsSep " "
+            (map (v: "-D${v}=4096")
+                 [ "PATH_MAX" "MAXPATHLEN" "MAXHOSTNAMELEN" ]);
+      });
+    })
+    else if stdenv.isLinux
+    then utillinuxMinimal
+    else null;
+
+  ## libGL/libGLU/Mesa stuff
+  # Default libGL implementation, should provide headers and libGL.so/libEGL.so/... to link agains them
+  libGL = libGLDarwinOr mesa_noglu.stubs;
+
+  # Default libGLU
+  libGLU = libGLDarwinOr mesa_glu;
+
+  # Combined derivation, contains both libGL and libGLU
+  # Please, avoid using this attribute.  It was meant as transitional hack
+  # for packages that assume that libGLU and libGL live in the same prefix.
+  # libGLU_combined propagates both libGL and libGLU
+  libGLU_combined = libGLDarwinOr (buildEnv {
+    name = "libGLU-combined";
+    paths = [ libGL libGLU ];
+    extraOutputsToInstall = [ "dev" ];
+  });
+
+  # Default derivation with libGL.so.1 to link into /run/opengl-drivers (if need)
+  libGL_driver = libGLDarwinOr mesa_drivers;
+
+  libGLSupported = lib.elem system lib.platforms.mesaPlatforms;
+
+  libGLDarwinOr = alternative: if stdenv.isDarwin then libGLDarwin else alternative;
+
+  hurdPartedCross =
+    if targetPlatform != buildPlatform && targetPlatform.config == "i586-pc-gnu"
+    then (makeOverridable
+            ({ hurd }:
+              (parted.override {
+                # Needs the Hurd's libstore.
+                inherit hurd;
+
+                # The Hurd wants a libparted.a.
+                enableStatic = true;
+
+                gettext = null;
+                readline = null;
+                devicemapper = null;
+              }).crossDrv)
+           { hurd = gnu.hurdCrossIntermediate; })
+    else null;
+
+  getent =
+    if hostPlatform.isMusl then musl-getent
+    # This may not be right on other platforms, but preserves existing behavior
+    else /* if hostPlatform.libc == "glibc" then */ glibc.bin;
+
+  getconf =
+    if hostPlatform.isMusl then musl-getconf
+    else lib.getBin stdenv.cc.libc;
 
   ### BUILD SUPPORT
 
@@ -670,22 +1411,6 @@ with pkgs;
   oracle-instantclient = callPackage ../development/libraries/oracle-instantclient { };
 
   kwakd = callPackage ../servers/kwakd { };
-
-  kwm = callPackage ../os-specific/darwin/kwm { };
-
-  khd = callPackage ../os-specific/darwin/khd {
-    inherit (darwin.apple_sdk.frameworks) Carbon Cocoa;
-  };
-
-  reattach-to-user-namespace = callPackage ../os-specific/darwin/reattach-to-user-namespace {};
-
-  skhd = callPackage ../os-specific/darwin/skhd {
-    inherit (darwin.apple_sdk.frameworks) Carbon;
-  };
-
-  qes = callPackage ../os-specific/darwin/qes {
-    inherit (darwin.apple_sdk.frameworks) Carbon;
-  };
 
   xcodeenv = callPackage ../development/mobile/xcodeenv { };
 
@@ -1560,8 +2285,6 @@ with pkgs;
     inherit (llvmPackages) openmp;
   };
 
-  bzip2 = callPackage ../tools/compression/bzip2 { };
-
   cabextract = callPackage ../tools/archivers/cabextract { };
 
   cadaver = callPackage ../tools/networking/cadaver { };
@@ -1810,13 +2533,6 @@ with pkgs;
 
   cool-retro-term = libsForQt5.callPackage ../applications/misc/cool-retro-term { };
 
-  coreutils = callPackage ../tools/misc/coreutils {
-    aclSupport = stdenv.isLinux;
-    attrSupport = stdenv.isLinux;
-  };
-
-  coreutils-prefixed = coreutils.override { withPrefix = true; singleBinary = false; };
-
   corkscrew = callPackage ../tools/networking/corkscrew { };
 
   cowpatty = callPackage ../tools/security/cowpatty { };
@@ -1976,8 +2692,6 @@ with pkgs;
   };
 
   diffstat = callPackage ../tools/text/diffstat { };
-
-  diffutils = callPackage ../tools/text/diffutils { };
 
   dir2opus = callPackage ../tools/audio/dir2opus {
     inherit (pythonPackages) mutagen python wrapPython;
@@ -2307,8 +3021,6 @@ with pkgs;
 
   fileschanged = callPackage ../tools/misc/fileschanged { };
 
-  findutils = callPackage ../tools/misc/findutils { };
-
   finger_bsd = callPackage ../tools/networking/bsd-finger { };
 
   iprange = callPackage ../applications/networking/firehol/iprange.nix {};
@@ -2463,13 +3175,6 @@ with pkgs;
 
   gauge = callPackage ../development/tools/gauge { };
 
-  gawk = callPackage ../tools/text/gawk {
-    inherit (darwin) locale;
-  };
-
-  gawkInteractive = appendToName "interactive"
-    (gawk.override { interactive = true; });
-
   gawp = callPackage ../tools/misc/gawp { };
 
   gazeboSimulator = recurseIntoAttrs rec {
@@ -2599,11 +3304,7 @@ with pkgs;
     guile = guile_1_8;
   };
 
-  gnugrep = callPackage ../tools/text/gnugrep { };
-
   gnulib = callPackage ../development/tools/gnulib { };
-
-  gnupatch = callPackage ../tools/text/gnupatch { };
 
   gnupg1orig = callPackage ../tools/security/gnupg/1.nix { };
   gnupg1compat = callPackage ../tools/security/gnupg/1compat.nix { };
@@ -2622,12 +3323,6 @@ with pkgs;
 
   # must have AquaTerm installed separately
   gnuplot_aquaterm = gnuplot.override { aquaterm = true; };
-
-  gnused = callPackage ../tools/text/gnused { };
-  # This is an easy work-around for [:space:] problems.
-  gnused_422 = callPackage ../tools/text/gnused/422.nix { };
-
-  gnutar = callPackage ../tools/archivers/gnutar { };
 
   gnuvd = callPackage ../tools/misc/gnuvd { };
 
@@ -2800,8 +3495,6 @@ with pkgs;
   gvpe = callPackage ../tools/networking/gvpe { };
 
   gvolicon = callPackage ../tools/audio/gvolicon {};
-
-  gzip = callPackage ../tools/compression/gzip { };
 
   gzrt = callPackage ../tools/compression/gzrt { };
 
@@ -3547,8 +4240,6 @@ with pkgs;
 
   limesurvey = callPackage ../servers/limesurvey { };
 
-  linuxquota = callPackage ../tools/misc/linuxquota { };
-
   localtime = callPackage ../tools/system/localtime { };
 
   logcheck = callPackage ../tools/system/logcheck {
@@ -3595,10 +4286,6 @@ with pkgs;
 
   lzip = callPackage ../tools/compression/lzip { };
 
-  lzma = xz;
-
-  xz = callPackage ../tools/compression/xz { };
-
   lz4 = callPackage ../tools/compression/lz4 { };
 
   lzbench = callPackage ../tools/compression/lzbench { };
@@ -3637,11 +4324,6 @@ with pkgs;
   makemkv = callPackage ../applications/video/makemkv { };
 
   makerpm = callPackage ../development/tools/makerpm { };
-
-  # See https://github.com/NixOS/nixpkgs/issues/15849. I'm switching on isLinux because
-  # it looks like gnulib is broken on non-linux, so it seems likely that this would cause
-  # trouble on bsd and/or cygwin as well.
-  man = if stdenv.isLinux then man-db else man-old;
 
   man-old = callPackage ../tools/misc/man { };
 
@@ -4254,27 +4936,7 @@ with pkgs;
 
   pngout = callPackage ../tools/graphics/pngout { };
 
-  hurdPartedCross =
-    if targetPlatform != buildPlatform && targetPlatform.config == "i586-pc-gnu"
-    then (makeOverridable
-            ({ hurd }:
-              (parted.override {
-                # Needs the Hurd's libstore.
-                inherit hurd;
-
-                # The Hurd wants a libparted.a.
-                enableStatic = true;
-
-                gettext = null;
-                readline = null;
-                devicemapper = null;
-              }).crossDrv)
-           { hurd = gnu.hurdCrossIntermediate; })
-    else null;
-
   ipsecTools = callPackage ../os-specific/linux/ipsec-tools { flex = flex_2_5_35; };
-
-  patch = gnupatch;
 
   patchage = callPackage ../applications/audio/patchage { };
 
@@ -4569,8 +5231,6 @@ with pkgs;
   quicktun = callPackage ../tools/networking/quicktun { };
 
   quilt = callPackage ../development/tools/quilt { };
-
-  quota = if stdenv.isLinux then linuxquota else unixtools.quota;
 
   wiggle = callPackage ../development/tools/wiggle { };
 
@@ -5886,19 +6546,6 @@ with pkgs;
 
   ### SHELLS
 
-  runtimeShell = "${runtimeShellPackage}/bin/bash";
-  runtimeShellPackage = bash;
-
-  bash = lowPrio (callPackage ../shells/bash/4.4.nix {
-    texinfo = null;
-    interactive = stdenv.isCygwin; # patch for cygwin requires readline support
-  });
-
-  # WARNING: this attribute is used by nix-shell so it shouldn't be removed/renamed
-  bashInteractive = appendToName "interactive" (callPackage ../shells/bash/4.4.nix {
-    interactive = true;
-  });
-
   bash-completion = callPackage ../shells/bash/bash-completion { };
 
   nix-bash-completions = callPackage ../shells/bash/nix-bash-completions { };
@@ -5996,50 +6643,6 @@ with pkgs;
     inherit (darwin) cctools;
   };
 
-  clang = llvmPackages.clang;
-
-  clang-sierraHack = clang.override {
-    name = "clang-wrapper-with-reexport-hack";
-    bintools = darwin.binutils.override {
-      useMacosReexportHack = true;
-      bintools = darwin.binutils.bintools.override {
-        cctools = darwin.cctools.override {
-          enableDumpNormalizedLibArgs = true;
-        };
-      };
-    };
-  };
-
-  clang_6  = llvmPackages_6.clang;
-  clang_5  = llvmPackages_5.clang;
-  clang_4  = llvmPackages_4.clang;
-  clang_39 = llvmPackages_39.clang;
-  clang_38 = llvmPackages_38.clang;
-  clang_37 = llvmPackages_37.clang;
-  clang_35 = wrapCC llvmPackages_35.clang;
-  clang_34 = wrapCC llvmPackages_34.clang;
-
-  clang-tools = callPackage ../development/tools/clang-tools { };
-
-  clang-analyzer = callPackage ../development/tools/analysis/clang-analyzer { };
-
-  clangSelf = clangWrapSelf llvmPackagesSelf.clang;
-
-  clangWrapSelf = build: ccWrapperFun {
-    cc = build;
-    isClang = true;
-    inherit stdenvNoCC;
-    inherit (targetPackages.stdenv.cc) bintools libc;
-    extraPackages = [ libcxx libcxxabi ];
-    nativeTools = false;
-    nativeLibc = false;
-  };
-
-  #Use this instead of stdenv to build with clang
-  clangStdenv = if stdenv.cc.isClang then stdenv else lowPrio llvmPackages.stdenv;
-  clang-sierraHack-stdenv = overrideCC stdenv clang-sierraHack;
-  libcxxStdenv = if stdenv.isDarwin then stdenv else lowPrio llvmPackages.libcxxStdenv;
-
   clasp-common-lisp = callPackage ../development/compilers/clasp {};
 
   clean = callPackage ../development/compilers/clean { };
@@ -6092,265 +6695,9 @@ with pkgs;
   gerbil = callPackage ../development/compilers/gerbil { };
   gerbil-unstable = callPackage ../development/compilers/gerbil/unstable.nix { };
 
-  gccFun = callPackage ../development/compilers/gcc/7;
-  gcc = gcc7;
-  gcc-unwrapped = gcc.cc;
-
-  gccStdenv = if stdenv.cc.isGNU then stdenv else stdenv.override {
-    allowedRequisites = null;
-    cc = gcc;
-    # Remove libcxx/libcxxabi, and add clang for AS if on darwin (it uses
-    # clang's internal assembler).
-    extraBuildInputs = lib.optional hostPlatform.isDarwin clang.cc;
-  };
-
-  gcc7Stdenv = overrideCC gccStdenv gcc7;
-  gcc8Stdenv = overrideCC gccStdenv gcc8;
-
-  wrapCCMulti = cc:
-    if system == "x86_64-linux" then let
-      # Binutils with glibc multi
-      bintools = cc.bintools.override {
-        libc = glibc_multi;
-      };
-    in lowPrio (wrapCCWith {
-      cc = cc.cc.override {
-        stdenv = overrideCC stdenv (wrapCCWith {
-          cc = cc.cc;
-          inherit bintools;
-          libc = glibc_multi;
-        });
-        profiledCompiler = false;
-        enableMultilib = true;
-      };
-      libc = glibc_multi;
-      inherit bintools;
-      extraBuildCommands = ''
-        echo "dontMoveLib64=1" >> $out/nix-support/setup-hook
-      '';
-  }) else throw "Multilib ${cc.name} not supported on ‘${system}’";
-
-  wrapClangMulti = clang:
-    if system == "x86_64-linux" then
-      callPackage ../development/compilers/llvm/multi.nix {
-        inherit clang;
-        gcc32 = pkgsi686Linux.gcc;
-        gcc64 = pkgs.gcc;
-      }
-    else throw "Multilib ${clang.cc.name} not supported on '${system}'";
-
-  gcc_multi = wrapCCMulti gcc;
-  clang_multi = wrapClangMulti clang;
-
-  gccMultiStdenv = overrideCC stdenv gcc_multi;
-  clangMultiStdenv = overrideCC stdenv clang_multi;
-  multiStdenv = if stdenv.cc.isClang then clangMultiStdenv else gccMultiStdenv;
-
-  gcc_debug = lowPrio (wrapCC (gcc.cc.override {
-    stripped = false;
-  }));
-
-  gccApple = throw "gccApple is no longer supported";
-
-  libstdcxxHook = makeSetupHook
-    { substitutions = { gcc = gcc-unwrapped; }; }
-    ../development/compilers/gcc/libstdc++-hook.sh;
-
-  # Can't just overrideCC, because then the stdenv-cross mkDerivation will be
-  # thrown away. TODO: find a better solution for this.
-  crossLibcStdenv = buildPackages.makeStdenvCross {
-    inherit (buildPackages.buildPackages) stdenv;
-    inherit buildPlatform hostPlatform targetPlatform;
-    cc = buildPackages.gccCrossStageStatic;
-  };
-
-  # The GCC used to build libc for the target platform. Normal gccs will be
-  # built with, and use, that cross-compiled libc.
-  gccCrossStageStatic = assert targetPlatform != buildPlatform; let
-    libcCross1 =
-      if targetPlatform.libc == "msvcrt" then targetPackages.windows.mingw_w64_headers
-      else if targetPlatform.libc == "libSystem" then darwin.xcode
-      else if targetPlatform.libc == "musl" then musl
-      else null;
-    binutils1 = wrapBintoolsWith {
-      bintools = binutils-unwrapped;
-      libc = libcCross1;
-    };
-    in wrapCCWith {
-      name = "gcc-cross-wrapper";
-      cc = gccFun {
-        # copy-pasted
-        inherit noSysDirs;
-        # PGO seems to speed up compilation by gcc by ~10%, see #445 discussion
-        profiledCompiler = with stdenv; (!isDarwin && (isi686 || isx86_64));
-        isl = if !stdenv.isDarwin then isl_0_17 else null;
-
-        # just for stage static
-        crossStageStatic = true;
-        langCC = false;
-        libcCross = libcCross1;
-        targetPackages.stdenv.cc.bintools = binutils1;
-        enableShared = false;
-      };
-      bintools = binutils1;
-      libc = libcCross1;
-  };
-
-  # Only needed for mingw builds
-  gccCrossMingw2 = assert targetPlatform != buildPlatform; wrapCCWith {
-    name = "gcc-cross-wrapper";
-    cc = gccCrossStageStatic.gcc;
-    libc = windows.mingw_headers2;
-    inherit binutils;
-  };
-
-  gcc48 = lowPrio (wrapCC (callPackage ../development/compilers/gcc/4.8 {
-    inherit noSysDirs;
-
-    # PGO seems to speed up compilation by gcc by ~10%, see #445 discussion
-    profiledCompiler = with stdenv; (!isSunOS && !isDarwin && (isi686 || isx86_64));
-
-    libcCross = if targetPlatform != buildPlatform then libcCross else null;
-
-    isl = if !stdenv.isDarwin then isl_0_14 else null;
-    cloog = if !stdenv.isDarwin then cloog else null;
-    texinfo = texinfo5; # doesn't validate since 6.1 -> 6.3 bump
-  }));
-
-  gcc49 = lowPrio (wrapCC (callPackage ../development/compilers/gcc/4.9 {
-    inherit noSysDirs;
-
-    # PGO seems to speed up compilation by gcc by ~10%, see #445 discussion
-    profiledCompiler = with stdenv; (!isDarwin && (isi686 || isx86_64));
-
-    libcCross = if targetPlatform != buildPlatform then libcCross else null;
-
-    isl = if !stdenv.isDarwin then isl_0_11 else null;
-
-    cloog = if !stdenv.isDarwin then cloog_0_18_0 else null;
-  }));
-
-  gcc5 = lowPrio (wrapCC (callPackage ../development/compilers/gcc/5 {
-    inherit noSysDirs;
-
-    # PGO seems to speed up compilation by gcc by ~10%, see #445 discussion
-    profiledCompiler = with stdenv; (!isDarwin && (isi686 || isx86_64));
-
-    libcCross = if targetPlatform != buildPlatform then libcCross else null;
-
-    isl = if !stdenv.isDarwin then isl_0_14 else null;
-  }));
-
-  gcc6 = lowPrio (wrapCC (callPackage ../development/compilers/gcc/6 {
-    inherit noSysDirs;
-
-    # PGO seems to speed up compilation by gcc by ~10%, see #445 discussion
-    profiledCompiler = with stdenv; (!isDarwin && (isi686 || isx86_64));
-
-    libcCross = if targetPlatform != buildPlatform then libcCross else null;
-
-    isl = if !stdenv.isDarwin then isl_0_14 else null;
-  }));
-
-  gcc7 = lowPrio (wrapCC (callPackage ../development/compilers/gcc/7 {
-    inherit noSysDirs;
-
-    # PGO seems to speed up compilation by gcc by ~10%, see #445 discussion
-    profiledCompiler = with stdenv; (!isDarwin && (isi686 || isx86_64));
-
-    libcCross = if targetPlatform != buildPlatform then libcCross else null;
-
-    isl = if !stdenv.isDarwin then isl_0_17 else null;
-  }));
-
-  gcc8 = lowPrio (wrapCC (callPackage ../development/compilers/gcc/8 {
-    inherit noSysDirs;
-
-    # PGO seems to speed up compilation by gcc by ~10%, see #445 discussion
-    profiledCompiler = with stdenv; (!isDarwin && (isi686 || isx86_64));
-
-    libcCross = if targetPlatform != buildPlatform then libcCross else null;
-
-    isl = if !stdenv.isDarwin then isl_0_17 else null;
-  }));
-
-  gcc-snapshot = lowPrio (wrapCC (callPackage ../development/compilers/gcc/snapshot {
-    inherit noSysDirs;
-
-    # PGO seems to speed up compilation by gcc by ~10%, see #445 discussion
-    profiledCompiler = with stdenv; (!isDarwin && (isi686 || isx86_64));
-
-    libcCross = if targetPlatform != buildPlatform then libcCross else null;
-
-    isl = isl_0_17;
-  }));
-
-  gfortran = gfortran7;
-
-  gfortran48 = wrapCC (gcc48.cc.override {
-    name = "gfortran";
-    langFortran = true;
-    langCC = false;
-    langC = false;
-    profiledCompiler = false;
-  });
-
-  gfortran49 = wrapCC (gcc49.cc.override {
-    name = "gfortran";
-    langFortran = true;
-    langCC = false;
-    langC = false;
-    profiledCompiler = false;
-  });
-
-  gfortran5 = wrapCC (gcc5.cc.override {
-    name = "gfortran";
-    langFortran = true;
-    langCC = false;
-    langC = false;
-    profiledCompiler = false;
-  });
-
-  gfortran6 = wrapCC (gcc6.cc.override {
-    name = "gfortran";
-    langFortran = true;
-    langCC = false;
-    langC = false;
-    profiledCompiler = false;
-  });
-
-  gfortran7 = wrapCC (gcc7.cc.override {
-    name = "gfortran";
-    langFortran = true;
-    langCC = false;
-    langC = false;
-    profiledCompiler = false;
-  });
-
-  gcj = gcj6;
-  gcj6 = wrapCC (gcc6.cc.override {
-    name = "gcj";
-    langJava = true;
-    langFortran = false;
-    langCC = false;
-    langC = false;
-    profiledCompiler = false;
-    inherit zip unzip zlib boehmgc gettext pkgconfig perl;
-    inherit (gnome2) libart_lgpl;
-  });
-
   gnu-smalltalk = callPackage ../development/compilers/gnu-smalltalk {
     emacsSupport = config.emacsSupport or false;
   };
-
-  gccgo = gccgo6;
-  gccgo6 = wrapCC (gcc6.cc.override {
-    name = "gccgo6";
-    langCC = true; #required for go.
-    langC = true;
-    langGo = true;
-    profiledCompiler = false;
-  });
 
   gcl = callPackage ../development/compilers/gcl {
     gmp = gmp4;
@@ -6648,88 +6995,6 @@ with pkgs;
 
   lizardfs = callPackage ../tools/filesystems/lizardfs { };
 
-  lld = llvmPackages.lld;
-  lld_4 = llvmPackages_4.lld;
-  lld_5 = llvmPackages_5.lld;
-  lld_6 = llvmPackages_6.lld;
-
-  lldb = llvmPackages.lldb;
-  lldb_4 = llvmPackages_4.lldb;
-  lldb_5 = llvmPackages_5.lldb;
-  lldb_6 = llvmPackages_6.lldb;
-
-  llvm = llvmPackages.llvm;
-
-  llvm_6  = llvmPackages_6.llvm;
-  llvm_5  = llvmPackages_5.llvm;
-  llvm_4  = llvmPackages_4.llvm;
-  llvm_39 = llvmPackages_39.llvm;
-  llvm_38 = llvmPackages_38.llvm;
-  llvm_37 = llvmPackages_37.llvm;
-  llvm_35 = llvmPackages_35.llvm;
-  llvm_34 = llvmPackages_34.llvm;
-
-  llvmPackages = recurseIntoAttrs llvmPackages_5;
-
-  llvmPackagesSelf = llvmPackages_34.override {
-    stdenv = libcxxStdenv;
-  };
-
-  llvmPackages_34 = callPackage ../development/compilers/llvm/3.4 ({
-    isl = isl_0_12;
-  } // stdenv.lib.optionalAttrs (stdenv.cc.isGNU && stdenv.hostPlatform.isi686) {
-    stdenv = overrideCC stdenv gcc6;
-  });
-
-  llvmPackages_35 = callPackage ../development/compilers/llvm/3.5 ({
-    isl = isl_0_14;
-  } // stdenv.lib.optionalAttrs (stdenv.cc.isGNU && stdenv.hostPlatform.isi686) {
-    stdenv = overrideCC stdenv gcc6;
-  });
-
-  llvmPackages_37 = callPackage ../development/compilers/llvm/3.7 ({
-    inherit (stdenvAdapters) overrideCC;
-  } // stdenv.lib.optionalAttrs (stdenv.cc.isGNU && stdenv.hostPlatform.isi686) {
-    stdenv = overrideCC stdenv gcc6;
-  });
-
-  llvmPackages_38 = callPackage ../development/compilers/llvm/3.8 ({
-    inherit (stdenvAdapters) overrideCC;
-  } // stdenv.lib.optionalAttrs (stdenv.cc.isGNU && stdenv.hostPlatform.isi686) {
-    stdenv = overrideCC stdenv gcc6;
-  });
-
-  llvmPackages_39 = callPackage ../development/compilers/llvm/3.9 ({
-    inherit (stdenvAdapters) overrideCC;
-  } // stdenv.lib.optionalAttrs (stdenv.cc.isGNU && stdenv.hostPlatform.isi686) {
-    stdenv = overrideCC stdenv gcc6;
-  });
-
-  llvmPackages_4 = callPackage ../development/compilers/llvm/4 ({
-    inherit (stdenvAdapters) overrideCC;
-  } // stdenv.lib.optionalAttrs (stdenv.cc.isGNU && stdenv.hostPlatform.isi686) {
-    stdenv = overrideCC stdenv gcc6;
-  });
-
-  llvmPackages_5 = callPackage ../development/compilers/llvm/5 ({
-    inherit (stdenvAdapters) overrideCC;
-  } // stdenv.lib.optionalAttrs stdenv.isDarwin {
-    cmake = cmake.override {
-      isBootstrap = true;
-      majorVersion = "3.9"; # 3.10.2: 'ApplicationServices/ApplicationServices.h' file not found
-    };
-    libxml2 = libxml2.override { pythonSupport = false; };
-    python2 = callPackage ../development/interpreters/python/cpython/2.7/boot.nix { inherit (darwin) CF configd; };
-  } // stdenv.lib.optionalAttrs (stdenv.cc.isGNU && stdenv.hostPlatform.isi686) {
-    stdenv = overrideCC stdenv gcc6; # with gcc-7: undefined reference to `__divmoddi4'
-  });
-
-  llvmPackages_6 = callPackage ../development/compilers/llvm/6 ({
-    inherit (stdenvAdapters) overrideCC;
-  } // stdenv.lib.optionalAttrs (stdenv.cc.isGNU && stdenv.hostPlatform.isi686) {
-    stdenv = overrideCC stdenv gcc6; # with gcc-7: undefined reference to `__divmoddi4'
-  });
-
   manticore = callPackage ../development/compilers/manticore { };
 
   mentorToolchains = recurseIntoAttrs (
@@ -6976,43 +7241,6 @@ with pkgs;
   vs90wrapper = callPackage ../development/compilers/vs90wrapper { };
 
   wla-dx = callPackage ../development/compilers/wla-dx { };
-
-  wrapCCWith = { name ? "", cc, bintools, libc, extraBuildCommands ? "" }:
-      ccWrapperFun rec {
-    nativeTools = targetPlatform == hostPlatform && stdenv.cc.nativeTools or false;
-    nativeLibc = targetPlatform == hostPlatform && stdenv.cc.nativeLibc or false;
-    nativePrefix = stdenv.cc.nativePrefix or "";
-    noLibc = !nativeLibc && (libc == null);
-
-    isGNU = cc.isGNU or false;
-    isClang = cc.isClang or false;
-
-    inherit name cc bintools libc extraBuildCommands;
-  };
-
-  ccWrapperFun = callPackage ../build-support/cc-wrapper;
-  bintoolsWrapperFun = callPackage ../build-support/bintools-wrapper;
-
-  wrapCC = cc: wrapCCWith {
-    name = lib.optionalString (targetPlatform != hostPlatform) "gcc-cross-wrapper";
-    inherit cc;
-    # This should be the only bintools runtime dep with this sort of logic. The
-    # Others should instead delegate to the next stage's choice with
-    # `targetPackages.stdenv.cc.bintools`. This one is different just to
-    # provide the default choice, avoiding infinite recursion.
-    bintools = if targetPlatform.isDarwin then darwin.binutils else binutils;
-    libc = if targetPlatform != hostPlatform then libcCross else stdenv.cc.libc;
-  };
-
-  wrapBintoolsWith = { bintools, libc, extraBuildCommands ? "" }: bintoolsWrapperFun {
-    nativeTools = targetPlatform == hostPlatform && stdenv.cc.nativeTools or false;
-    nativeLibc = targetPlatform == hostPlatform && stdenv.cc.nativeLibc or false;
-    nativePrefix = stdenv.cc.nativePrefix or "";
-
-    noLibc = (libc == null);
-
-    inherit bintools libc extraBuildCommands;
-  };
 
   # prolog
   yap = callPackage ../development/compilers/yap { };
@@ -7612,21 +7840,6 @@ with pkgs;
 
   bin_replace_string = callPackage ../development/tools/misc/bin_replace_string { };
 
-  binutils-unwrapped = callPackage ../development/tools/misc/binutils {
-    # FHS sys dirs presumably only have stuff for the build platform
-    noSysDirs = (targetPlatform != buildPlatform) || noSysDirs;
-  };
-  binutils = wrapBintoolsWith {
-    libc = if targetPlatform != hostPlatform then libcCross else stdenv.cc.libc;
-    bintools = binutils-unwrapped;
-  };
-  binutils_nogold = lowPrio (wrapBintoolsWith {
-    libc = if targetPlatform != hostPlatform then libcCross else stdenv.cc.libc;
-    bintools = binutils-unwrapped.override {
-      gold = false;
-    };
-  });
-
   bison2 = callPackage ../development/tools/parsing/bison/2.x.nix { };
   bison3 = callPackage ../development/tools/parsing/bison/3.x.nix { };
   bison = bison3;
@@ -7784,9 +7997,6 @@ with pkgs;
 
   csslint = callPackage ../development/web/csslint { };
 
-  libcxx = llvmPackages.libcxx;
-  libcxxabi = llvmPackages.libcxxabi;
-
   librarian-puppet-go = callPackage ../development/tools/librarian-puppet-go { };
 
   libstdcxx5 = callPackage ../development/libraries/libstdc++5 { };
@@ -7937,11 +8147,6 @@ with pkgs;
   gnome-usage = callPackage ../applications/misc/gnome-usage {};
 
   gnum4 = callPackage ../development/tools/misc/gnum4 { };
-
-  gnumake382 = callPackage ../development/tools/build-managers/gnumake/3.82 { };
-  gnumake3 = gnumake382;
-  gnumake42 = callPackage ../development/tools/build-managers/gnumake/4.2 { };
-  gnumake = gnumake42;
 
   gnustep = recurseIntoAttrs (callPackage ../desktops/gnustep {});
 
@@ -9080,49 +9285,6 @@ with pkgs;
   glfw2 = callPackage ../development/libraries/glfw/2.x.nix { };
   glfw3 = callPackage ../development/libraries/glfw/3.x.nix { };
 
-  glibc = callPackage ../development/libraries/glibc {
-    installLocales = config.glibc.locales or false;
-  };
-
-  glibc_memusage = callPackage ../development/libraries/glibc {
-    installLocales = false;
-    withGd = true;
-  };
-
-  # Being redundant to avoid cycles on boot. TODO: find a better way
-  glibcCross = callPackage ../development/libraries/glibc {
-    installLocales = config.glibc.locales or false;
-    stdenv = crossLibcStdenv;
-  };
-
-  muslCross = callPackage ../os-specific/linux/musl {
-    stdenv = crossLibcStdenv;
-  };
-
-  # We can choose:
-  libcCrossChooser = name:
-    # libc is hackily often used from the previous stage. This `or`
-    # hack fixes the hack, *sigh*.
-    /**/ if name == "glibc" then targetPackages.glibcCross or glibcCross
-    else if name == "bionic" then targetPackages.bionic
-    else if name == "uclibc" then uclibcCross
-    else if name == "musl" then targetPackages.muslCross or muslCross
-    else if name == "msvcrt" then targetPackages.windows.mingw_w64 or windows.mingw_w64
-    else if targetPlatform.useiOSPrebuilt then targetPackages.iosSdkPkgs.libraries
-    else if name == "libSystem" then darwin.xcode
-    else throw "Unknown libc";
-
-  libcCross = assert targetPlatform != buildPlatform; libcCrossChooser targetPlatform.libc;
-
-  # Only supported on Linux, using glibc
-  glibcLocales = if hostPlatform.libc == "glibc" then callPackage ../development/libraries/glibc/locales.nix { } else null;
-
-  glibcInfo = callPackage ../development/libraries/glibc/info.nix { };
-
-  glibc_multi = callPackage ../development/libraries/glibc/multi.nix {
-    glibc32 = pkgsi686Linux.glibc;
-  };
-
   glm = callPackage ../development/libraries/glm { };
 
   globalplatform = callPackage ../development/libraries/globalplatform { };
@@ -9248,9 +9410,7 @@ with pkgs;
 
   gnu-config = callPackage ../development/libraries/gnu-config { };
 
-  gnu-efi = if hostPlatform.isEfi
-              then callPackage ../development/libraries/gnu-efi { }
-            else null;
+  gnu-efi = callPackage ../development/libraries/gnu-efi { };
 
   gnutls = callPackage
     (if stdenv.isDarwin
@@ -9872,10 +10032,6 @@ with pkgs;
 
   libedit = callPackage ../development/libraries/libedit { };
 
-  libelf = if stdenv.isFreeBSD
-  then callPackage ../development/libraries/libelf-freebsd { }
-  else callPackage ../development/libraries/libelf { };
-
   libetpan = callPackage ../development/libraries/libetpan { };
 
   libexecinfo = callPackage ../development/libraries/libexecinfo { };
@@ -10129,35 +10285,9 @@ with pkgs;
 
   libgsf = callPackage ../development/libraries/libgsf { };
 
-  # GNU libc provides libiconv so systems with glibc don't need to build
-  # libiconv separately. Additionally, Apple forked/repackaged libiconv so we
-  # use that instead of the vanilla version on that OS.
-  #
-  # We also provide `libiconvReal`, which will always be a standalone libiconv,
-  # just in case you want it regardless of platform.
-  libiconv =
-    if (hostPlatform.libc == "glibc" || hostPlatform.libc == "musl")
-      then glibcIconv (if hostPlatform != buildPlatform
-                       then libcCross
-                       else stdenv.cc.libc)
-    else if hostPlatform.isDarwin
-      then darwin.libiconv
-    else libiconvReal;
-
-  glibcIconv = libc: let
-    inherit (builtins.parseDrvName libc.name) name version;
-    libcDev = lib.getDev libc;
-  in runCommand "${name}-iconv-${version}" {} ''
-    mkdir -p $out/include
-    ln -sv ${libcDev}/include/iconv.h $out/include
-  '';
-
-  libiconvReal = callPackage ../development/libraries/libiconv {
+  glibiconv = callPackage ../development/libraries/libiconv {
     fetchurl = fetchurlBoot;
   };
-
-  # On non-GNU systems we need GNU Gettext for libintl.
-  libintl = if hostPlatform.libc != "glibc" then gettext else null;
 
   libid3tag = callPackage ../development/libraries/libid3tag {
     gperf = gperf_3_0;
@@ -10655,36 +10785,11 @@ with pkgs;
 
   mergerfs = callPackage ../tools/filesystems/mergerfs { };
 
-  ## libGL/libGLU/Mesa stuff
-
-  # Default libGL implementation, should provide headers and libGL.so/libEGL.so/... to link agains them
-  libGL = libGLDarwinOr mesa_noglu.stubs;
-
-  # Default libGLU
-  libGLU = libGLDarwinOr mesa_glu;
-
-  # Combined derivation, contains both libGL and libGLU
-  # Please, avoid using this attribute.  It was meant as transitional hack
-  # for packages that assume that libGLU and libGL live in the same prefix.
-  # libGLU_combined propagates both libGL and libGLU
-  libGLU_combined = libGLDarwinOr (buildEnv {
-    name = "libGLU-combined";
-    paths = [ libGL libGLU ];
-    extraOutputsToInstall = [ "dev" ];
-  });
-
-  # Default derivation with libGL.so.1 to link into /run/opengl-drivers (if need)
-  libGL_driver = libGLDarwinOr mesa_drivers;
-
-  libGLSupported = lib.elem system lib.platforms.mesaPlatforms;
-
   libGLDarwin = callPackage ../development/libraries/mesa-darwin {
     inherit (darwin.apple_sdk.frameworks) OpenGL;
     inherit (darwin.apple_sdk.libs) Xplugin;
     inherit (darwin) apple_sdk;
   };
-
-  libGLDarwinOr = alternative: if stdenv.isDarwin then libGLDarwin else alternative;
 
   mesa_noglu = callPackage ../development/libraries/mesa {
     # makes it slower, but during runtime we link against just mesa_drivers
@@ -11112,7 +11217,6 @@ with pkgs;
   flatbuffers = callPackage ../development/libraries/flatbuffers { };
 
   gnupth = callPackage ../development/libraries/pth { };
-  pth = if stdenv.hostPlatform.isMusl then npth else gnupth;
 
   ptlib = callPackage ../development/libraries/ptlib {};
 
@@ -13178,13 +13282,6 @@ with pkgs;
 
   crda = callPackage ../os-specific/linux/crda { };
 
-  # Darwin package set
-  #
-  # Even though this is a set of packages not single package, use `callPackage`
-  # not `callPackages` so the per-package callPackages don't have their
-  # `.override` clobbered. C.F. `llvmPackages` which does the same.
-  darwin = callPackage ./darwin-packages.nix { };
-
   devicemapper = lvm2;
 
   disk_indicator = callPackage ../os-specific/linux/disk-indicator { };
@@ -13218,25 +13315,6 @@ with pkgs;
   fwts = callPackage ../os-specific/linux/fwts { };
 
   libossp_uuid = callPackage ../development/libraries/libossp-uuid { };
-
-  libuuid =
-    if targetPlatform != buildPlatform && targetPlatform.config == "i586-pc-gnu"
-    then (utillinuxMinimal // {
-      crossDrv = lib.overrideDerivation utillinuxMinimal.crossDrv (args: {
-        # `libblkid' fails to build on GNU/Hurd.
-        configureFlags = args.configureFlags
-          + " --disable-libblkid --disable-mount --disable-libmount"
-          + " --disable-fsck --enable-static --disable-partx";
-        doCheck = false;
-        CPPFLAGS =                    # ugly hack for ugly software!
-          lib.concatStringsSep " "
-            (map (v: "-D${v}=4096")
-                 [ "PATH_MAX" "MAXPATHLEN" "MAXHOSTNAMELEN" ]);
-      });
-    })
-    else if stdenv.isLinux
-    then utillinuxMinimal
-    else null;
 
   light = callPackage ../os-specific/linux/light { };
 
@@ -13305,11 +13383,6 @@ with pkgs;
   };
 
   nmon = callPackage ../os-specific/linux/nmon { };
-
-  # GNU/Hurd core packages.
-  gnu = recurseIntoAttrs (callPackage ../os-specific/gnu {
-    inherit platform;
-  });
 
   hwdata = callPackage ../os-specific/linux/hwdata { };
 
@@ -13703,7 +13776,6 @@ with pkgs;
 
   # The current default kernel / kernel modules.
   linuxPackages = linuxPackages_4_14;
-  linux = linuxPackages.kernel;
 
   # Update this when adding the newest kernel major version!
   linuxPackages_latest = linuxPackages_4_16;
@@ -13745,7 +13817,7 @@ with pkgs;
   linuxPackages_testing_bcachefs = recurseIntoAttrs (linuxPackagesFor pkgs.linux_testing_bcachefs);
 
   # Build a kernel for Xen dom0
-  linuxPackages_xen_dom0 = recurseIntoAttrs (linuxPackagesFor (pkgs.linux.override { features.xen_dom0=true; }));
+  linuxPackages_xen_dom0 = recurseIntoAttrs (linuxPackagesFor (pkgs.linuxPackages.kernel.override { features.xen_dom0=true; }));
 
   linuxPackages_latest_xen_dom0 = recurseIntoAttrs (linuxPackagesFor (pkgs.linux_latest.override { features.xen_dom0=true; }));
 
@@ -13757,13 +13829,13 @@ with pkgs;
     };
   });
 
-  linuxPackages_hardened = recurseIntoAttrs (hardenedLinuxPackagesFor pkgs.linux);
+  linuxPackages_hardened = recurseIntoAttrs (hardenedLinuxPackagesFor pkgs.linuxPackages.kernel);
   linux_hardened = linuxPackages_hardened.kernel;
 
   linuxPackages_latest_hardened = recurseIntoAttrs (hardenedLinuxPackagesFor pkgs.linux_latest);
   linux_latest_hardened = linuxPackages_latest_hardened.kernel;
 
-  linuxPackages_xen_dom0_hardened = recurseIntoAttrs (hardenedLinuxPackagesFor (pkgs.linux.override { features.xen_dom0=true; }));
+  linuxPackages_xen_dom0_hardened = recurseIntoAttrs (hardenedLinuxPackagesFor (pkgs.linuxPackages.kernel.override { features.xen_dom0=true; }));
 
   linuxPackages_latest_xen_dom0_hardened = recurseIntoAttrs (hardenedLinuxPackagesFor (pkgs.linux_latest.override { features.xen_dom0=true; }));
 
@@ -13861,22 +13933,6 @@ with pkgs;
 
   multipath-tools = callPackage ../os-specific/linux/multipath-tools { };
 
-  musl = callPackage ../os-specific/linux/musl { };
-  musl-fts = callPackage ../os-specific/linux/musl/fts.nix { };
-  musl-getconf = callPackage ../os-specific/linux/musl/getconf.nix { };
-  musl-getent = callPackage ../os-specific/linux/musl/getent.nix { };
-  getent =
-    if hostPlatform.isMusl then musl-getent
-    # This may not be right on other platforms, but preserves existing behavior
-    else /* if hostPlatform.libc == "glibc" then */ glibc.bin;
-
-  getconf =
-    if hostPlatform.isMusl then musl-getconf
-    else lib.getBin stdenv.cc.libc;
-
-  nettools = if stdenv.isLinux then callPackage ../os-specific/linux/net-tools { }
-             else unixtools.nettools;
-
   nftables = callPackage ../os-specific/linux/nftables { };
 
   numactl = callPackage ../os-specific/linux/numactl { };
@@ -13935,8 +13991,6 @@ with pkgs;
 
   gogoclient = callPackage ../os-specific/linux/gogoclient { };
 
-  linux-pam = callPackage ../os-specific/linux/pam { };
-
   nss_ldap = callPackage ../os-specific/linux/nss_ldap { };
 
   odroid-xu3-bootloader = callPackage ../tools/misc/odroid-xu3-bootloader { };
@@ -13946,8 +14000,6 @@ with pkgs;
   openbsm = callPackage ../development/libraries/openbsm { };
 
   pagemon = callPackage ../os-specific/linux/pagemon { };
-
-  pam = if stdenv.isLinux then linux-pam else openpam;
 
   # pam_bioapi ( see http://www.thinkwiki.org/wiki/How_to_enable_the_fingerprint_reader )
 
@@ -14005,11 +14057,6 @@ with pkgs;
   powertop = callPackage ../os-specific/linux/powertop { };
 
   prayer = callPackage ../servers/prayer { };
-
-  procps = procps-ng;
-
-  procps-ng = if stdenv.isLinux then callPackage ../os-specific/linux/procps-ng { }
-              else unixtools.procps;
 
   watch = callPackage ../os-specific/linux/procps/watch.nix { };
 
@@ -14203,74 +14250,9 @@ with pkgs;
 
   usermount = callPackage ../os-specific/linux/usermount { };
 
-  utillinux = if stdenv.isLinux then callPackage ../os-specific/linux/util-linux { }
-              else unixtools.utillinux;
-
-  utillinuxCurses = utillinux;
-
-  utillinuxMinimal = if stdenv.isLinux then appendToName "minimal" (utillinux.override {
-    minimal = true;
-    ncurses = null;
-    perl = null;
-    systemd = null;
-  }) else utillinux;
-
   v4l_utils = qt5.callPackage ../os-specific/linux/v4l-utils { };
 
   vndr = callPackage ../development/tools/vndr { };
-
-  windows = rec {
-    cygwinSetup = callPackage ../os-specific/windows/cygwin-setup { };
-
-    jom = callPackage ../os-specific/windows/jom { };
-
-    w32api = callPackage ../os-specific/windows/w32api {
-      gccCross = gccCrossStageStatic;
-      binutils = binutils;
-    };
-
-    w32api_headers = w32api.override {
-      onlyHeaders = true;
-    };
-
-    mingw_runtime = callPackage ../os-specific/windows/mingwrt {
-      gccCross = gccCrossMingw2;
-      binutils = binutils;
-    };
-
-    mingw_runtime_headers = mingw_runtime.override {
-      onlyHeaders = true;
-    };
-
-    mingw_headers1 = buildEnv {
-      name = "mingw-headers-1";
-      paths = [ w32api_headers mingw_runtime_headers ];
-    };
-
-    mingw_headers2 = buildEnv {
-      name = "mingw-headers-2";
-      paths = [ w32api mingw_runtime_headers ];
-    };
-
-    mingw_headers3 = buildEnv {
-      name = "mingw-headers-3";
-      paths = [ w32api mingw_runtime ];
-    };
-
-    mingw_w64 = callPackage ../os-specific/windows/mingw-w64 {
-      stdenv = crossLibcStdenv;
-    };
-
-    mingw_w64_headers = callPackage ../os-specific/windows/mingw-w64/headers.nix { };
-
-    mingw_w64_pthreads = callPackage ../os-specific/windows/mingw-w64/pthreads.nix { };
-
-    pthreads = callPackage ../os-specific/windows/pthread-w32 {
-      mingw_headers = mingw_headers3;
-    };
-
-    wxMSW = callPackage ../os-specific/windows/wxMSW-2.8 { };
-  };
 
   wirelesstools = callPackage ../os-specific/linux/wireless-tools { };
 
@@ -18964,7 +18946,7 @@ with pkgs;
   amoeba = callPackage ../games/amoeba { };
   amoeba-data = callPackage ../games/amoeba/data.nix { };
 
-  andyetitmoves = if stdenv.isLinux then callPackage ../games/andyetitmoves {} else null;
+  andyetitmoves = callPackage ../games/andyetitmoves {};
 
   angband = callPackage ../games/angband { };
 
@@ -21358,6 +21340,11 @@ with pkgs;
 
   zxcvbn-c = callPackage ../development/libraries/zxcvbn-c { };
 
+  ### END OF all-packages.nix
+  ###
+  ### Everything below this line has not been alphebetized correctly.
+  ### Please move these to the proper place!
+
   snes9x-gtk = callPackage ../misc/emulators/snes9x-gtk { };
 
   openmsx = callPackage ../misc/emulators/openmsx {
@@ -21438,8 +21425,6 @@ with pkgs;
 
   check-uptime = callPackage ../servers/monitoring/plugins/uptime.nix { };
 
-  ghc-standalone-archive = callPackage ../os-specific/darwin/ghc-standalone-archive { inherit (darwin) cctools; };
-
   chrome-gnome-shell = callPackage  ../desktops/gnome-3/extensions/chrome-gnome-shell {};
   messenger-for-desktop = callPackage ../applications/networking/instant-messengers/messenger-for-desktop {};
 
@@ -21461,32 +21446,6 @@ with pkgs;
 
   openfst = callPackage ../development/libraries/openfst {};
 
-  # `recurseIntoAttrs` for sake of hydra, not nix-env
-  tests = recurseIntoAttrs {
-    cc-wrapper = callPackage ../test/cc-wrapper { };
-    cc-wrapper-gcc = callPackage ../test/cc-wrapper { stdenv = gccStdenv; };
-    cc-wrapper-gcc7 = callPackage ../test/cc-wrapper { stdenv = gcc7Stdenv; };
-    cc-wrapper-gcc8 = callPackage ../test/cc-wrapper { stdenv = gcc8Stdenv; };
-    cc-wrapper-clang = callPackage ../test/cc-wrapper { stdenv = llvmPackages.stdenv; };
-    cc-wrapper-libcxx = callPackage ../test/cc-wrapper { stdenv = llvmPackages.libcxxStdenv; };
-    cc-wrapper-clang-39 = callPackage ../test/cc-wrapper { stdenv = llvmPackages_39.stdenv; };
-    cc-wrapper-libcxx-39 = callPackage ../test/cc-wrapper { stdenv = llvmPackages_39.libcxxStdenv; };
-    cc-wrapper-clang-4 = callPackage ../test/cc-wrapper { stdenv = llvmPackages_4.stdenv; };
-    cc-wrapper-libcxx-4 = callPackage ../test/cc-wrapper { stdenv = llvmPackages_4.libcxxStdenv; };
-    cc-wrapper-clang-5 = callPackage ../test/cc-wrapper { stdenv = llvmPackages_5.stdenv; };
-    cc-wrapper-libcxx-5 = callPackage ../test/cc-wrapper { stdenv = llvmPackages_5.libcxxStdenv; };
-    cc-wrapper-clang-6 = callPackage ../test/cc-wrapper { stdenv = llvmPackages_6.stdenv; };
-    cc-wrapper-libcxx-6 = callPackage ../test/cc-wrapper { stdenv = llvmPackages_6.libcxxStdenv; };
-    stdenv-inputs = callPackage ../test/stdenv-inputs { };
-
-    cc-multilib-gcc = callPackage ../test/cc-wrapper/multilib.nix { stdenv = gccMultiStdenv; };
-    cc-multilib-clang = callPackage ../test/cc-wrapper/multilib.nix { stdenv = clangMultiStdenv; };
-
-    macOSSierraShared = callPackage ../test/macos-sierra-shared {};
-  };
-
-  duti = callPackage ../os-specific/darwin/duti {};
-
   dnstracer = callPackage ../tools/networking/dnstracer {
     inherit (darwin) libresolv;
   };
@@ -21507,11 +21466,4 @@ with pkgs;
 
   teseq = callPackage ../applications/misc/teseq {  };
 
-  # Unix tools
-  unixtools = recurseIntoAttrs (callPackages ./unix-tools.nix { });
-  inherit (unixtools) hexdump ps logger eject umount
-                      mount wall hostname more sysctl;
-
-  inherit (recurseIntoAttrs (callPackages ../os-specific/bsd { }))
-          netbsd;
 }
