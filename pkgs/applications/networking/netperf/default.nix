@@ -15,6 +15,7 @@ stdenv.mkDerivation rec {
   autoreconfPhase = ''
     autoreconf -i -I src/missing/m4
   '';
+  configureFlags = [ "--enable-demo" ];
   enableParallelBuilding = true;
 
   meta = {
