@@ -70,14 +70,20 @@ let
         "-DGEANT4_USE_SYSTEM_CLHEP=${if clhep != null then "ON" else "OFF"}"
         "-DGEANT4_USE_SYSTEM_EXPAT=${if expat != null then "ON" else "OFF"}"
         "-DGEANT4_USE_SYSTEM_ZLIB=${if zlib != null then "ON" else "OFF"}"
+      ] ++ stdenv.lib.optional multiThreadingCapable
+        "-DGEANT4_BUILD_MULTITHREADED=${if enableMultiThreading then "ON" else "OFF"}"
+        ++ stdenv.lib.optionals enableInventor [
         "-DINVENTOR_INCLUDE_DIR=${coin3d}/include"
         "-DINVENTOR_LIBRARY_RELEASE=${coin3d}/lib/libCoin.so"
-      ] ++ stdenv.lib.optional multiThreadingCapable
-        "-DGEANT4_BUILD_MULTITHREADED=${if enableMultiThreading then "ON" else "OFF"}";
+      ];
 
       enableParallelBuilding = true;
-      buildInputs = [ cmake clhep expat zlib xercesc qt motif libGLU_combined xlibsWrapper libXmu libXpm coin3d soxt ];
-      propagatedBuildInputs = [ clhep expat zlib xercesc qt motif libGLU_combined xlibsWrapper libXmu libXpm coin3d soxt ];
+      nativeBuildInputs =  [ cmake ];
+      buildInputs = [ clhep expat zlib libGLU_combined xlibsWrapper libXmu ]
+        ++ stdenv.lib.optionals enableGDML [ xercesc ]
+        ++ stdenv.lib.optionals enableXM [ motif ]
+        ++ stdenv.lib.optionals enableQT [ qt ]
+        ++ stdenv.lib.optionals enableInventor [ libXpm coin3d soxt ];
 
       postFixup = ''
         # Don't try to export invalid environment variables.
