@@ -30,8 +30,8 @@ stdenv.mkDerivation rec {
     sha256 = "15x2r7aib1xinwcchl32wghs8g96k4q5xgv6z97mxgp35475x01p";
   };
 
-  nativeBuildInputs = [ which perl ];
-  buildInputs = [ snappy google-gflags zlib bzip2 lz4 malloc fixDarwinDylibNames ];
+  nativeBuildInputs = [ which perl snappy google-gflags ];
+  buildInputs = [ zlib bzip2 lz4 malloc fixDarwinDylibNames ];
 
   postPatch = ''
     # Hack to fix typos

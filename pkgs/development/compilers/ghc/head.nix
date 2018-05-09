@@ -3,7 +3,7 @@
 
 # build-tools
 , bootPkgs, alex, happy
-, autoconf, automake, coreutils, fetchgit, perl, python3, m4
+, autoconf, automake, coreutils, fetchgit, perl, python3
 
 , libffi, libiconv ? null, ncurses
 
@@ -15,7 +15,7 @@
 
 , # If enabled, GHC will be built with the GPL-free but slower integer-simple
   # library instead of the faster but GPLed integer-gmp library.
-  enableIntegerSimple ? targetPlatform != hostPlatform, gmp ? null
+  enableIntegerSimple ? targetPlatform != hostPlatform, gmp ? null, m4
 
 , # If enabled, use -fPIC when compiling static libs.
   enableRelocatedStaticLibs ? targetPlatform != hostPlatform
@@ -155,7 +155,7 @@ stdenv.mkDerivation rec {
   # masss-rebuild.
   crossConfig = true;
 
-  nativeBuildInputs = [ ghc perl autoconf automake happy alex python3 m4 ];
+  nativeBuildInputs = [ ghc perl autoconf automake m4 happy alex python3 ];
 
   # For building runtime libs
   depsBuildTarget = toolsForTarget;
