@@ -11,21 +11,16 @@ rec {
 
   sheevaplug = rec {
     config = "armv5tel-unknown-linux-gnueabi";
-    float = "soft";
     platform = platforms.sheevaplug;
   };
 
   raspberryPi = rec {
     config = "armv6l-unknown-linux-gnueabihf";
-    float = "hard";
-    fpu = "vfp";
     platform = platforms.raspberrypi;
   };
 
   armv7l-hf-multiplatform = rec {
     config = "armv7a-unknown-linux-gnueabihf";
-    float = "hard";
-    fpu = "vfpv3-d16";
     platform = platforms.armv7l-hf-multiplatform;
   };
 
@@ -47,26 +42,24 @@ rec {
 
   pogoplug4 = rec {
     config = "armv5tel-unknown-linux-gnueabi";
-    float = "soft";
     platform = platforms.pogoplug4;
   };
 
   ben-nanonote = rec {
     config = "mipsel-unknown-linux-uclibc";
-    float = "soft";
     platform = {
       name = "ben_nanonote";
       kernelMajor = "2.6";
       kernelArch = "mips";
       gcc = {
         arch = "mips32";
+        float = "soft";
       };
     };
   };
 
   fuloongminipc = rec {
     config = "mipsel-unknown-linux-gnu";
-    float = "hard";
     platform = platforms.fuloong2f_n32;
   };
 

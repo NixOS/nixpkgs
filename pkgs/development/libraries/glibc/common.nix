@@ -127,7 +127,9 @@ stdenv.mkDerivation ({
     ] ++ lib.optionals withLinuxHeaders [
       "--enable-kernel=3.2.0" # can't get below with glibc >= 2.26
     ] ++ lib.optionals (cross != null) [
-      (if cross ? float && cross.float == "soft" then "--without-fp" else "--with-fp")
+      (if cross.platform.gcc.float or (cross.parsed.abi.float or "hard") == "soft"
+       then "--without-fp"
+       else "--with-fp")
     ] ++ lib.optionals (cross != null) [
       "--with-__thread"
     ] ++ lib.optionals (cross == null && stdenv.isAarch32) [
