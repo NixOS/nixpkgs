@@ -62,11 +62,4 @@ in stdenv.mkDerivation rec {
     wrapProgram "$dev/bin/freetype-config" \
       --set PKG_CONFIG_PATH "$PKG_CONFIG_PATH:$dev/lib/pkgconfig"
   '';
-
-  crossAttrs = stdenv.lib.optionalAttrs (hostPlatform.libc or null != "msvcrt") {
-    # Somehow it calls the unwrapped gcc, "i686-pc-linux-gnu-gcc", instead
-    # of gcc. I think it's due to the unwrapped gcc being in the PATH. I don't
-    # know why it's on the PATH.
-    configureFlags = "--disable-static CC_BUILD=gcc";
-  };
 }
