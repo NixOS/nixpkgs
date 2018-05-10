@@ -2064,6 +2064,19 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
+  ClassEHierarchy = buildPerlPackage rec {
+    name = "Class-EHierarchy-2.00";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/C/CO/CORLISS/Class-EHierarchy/${name}.tar.gz";
+      sha256 = "8498baaf7539eaa3422c6fe1055a0fc9a0c02e94dad0c63405373528e622bacb";
+    };
+    meta = {
+      description = "Base class for hierarchally ordered objects";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = [ maintainers.limeytexan ];
+    };
+  };
+
   ClassFactory = buildPerlPackage {
     name = "Class-Factory-1.06";
     src = fetchurl {
@@ -11952,6 +11965,25 @@ let self = _self // overrides; _self = with self; {
        license = with stdenv.lib.licenses; [ artistic2 ];
        homepage = "http://metacpan.org/release/Params-ValidationCompiler";
      };
+  };
+
+  Paranoid = buildPerlPackage rec {
+    name = "Paranoid-2.05";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/C/CO/CORLISS/Paranoid/${name}.tar.gz";
+      sha256 = "583dfa0279733531f360795ad1cf4aa652d537b2b0bbd3c6925d0c8d75cbb3df";
+    };
+    patches = [ ../development/perl-modules/Paranoid-blessed-path.patch ];
+    preConfigure = ''
+      # Capture the path used when compiling this module as the "blessed"
+      # system path, analogous to the module's own use of '/bin:/sbin'.
+      sed -i "s#__BLESSED_PATH__#${pkgs.coreutils}/bin#" lib/Paranoid.pm t/01_init_core.t
+    '';
+    meta = {
+      description = "General function library for safer, more secure programming";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = [ maintainers.limeytexan ];
+    };
   };
 
   PARDist = buildPerlPackage {
