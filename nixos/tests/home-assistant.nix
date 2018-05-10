@@ -65,12 +65,12 @@ in {
     $hass->waitUntilSucceeds("mosquitto_pub -V mqttv311 -t home-assistant/test -u homeassistant -P '${apiPassword}' -m let_there_be_light");
     $hass->succeed("curl http://localhost:8123/api/states/binary_sensor.mqtt_binary_sensor -H 'x-ha-access: ${apiPassword}' | grep -qF '\"state\": \"on\"'");
 
-    # Check that no errors were logged
-    $hass->fail("cat ${configDir}/home-assistant.log | grep -qF ERROR");
-
     # Print log to ease debugging
     my $log = $hass->succeed("cat ${configDir}/home-assistant.log");
     print "\n### home-assistant.log ###\n";
     print "$log\n";
+
+    # Check that no errors were logged
+    $hass->fail("cat ${configDir}/home-assistant.log | grep -qF ERROR");
   '';
 })
