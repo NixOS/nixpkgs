@@ -193,6 +193,9 @@ rec {
     musleabi = {};
     musleabihf = {};
     musl = {};
+    uclibceabihf = {};
+    uclibceabi = {};
+    uclibc = {};
 
     unknown = {};
   };
