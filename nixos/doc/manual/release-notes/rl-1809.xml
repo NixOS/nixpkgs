@@ -103,12 +103,6 @@ $ nix-instantiate -E '(import &lt;nixpkgsunstable&gt; {}).gitFull'
    </listitem>
    <listitem>
     <para>
-     <literal>googleearth</literal> has been removed from Nixpkgs. Google does not provide
-     a stable URL for Nixpkgs to use to package this proprietary software.
-    </para>
-   </listitem>
-   <listitem>
-    <para>
      <literal>gnucash</literal> has changed from version 2.4 to 3.x.
      If you've been using <literal>gnucash</literal> (version 2.4) instead of
      <literal>gnucash26</literal> (version 2.6) you must open your Gnucash 
