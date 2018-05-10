@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     description = "A C++ library to access PostgreSQL databases";
     homepage = http://pqxx.org/development/libpqxx/;
     license = lib.licenses.postgresql;
-    platforms = lib.platforms.linux;
+    platforms = with lib.platforms; linux ++ darwin;
     maintainers = [ lib.maintainers.eelco ];
   };
 }

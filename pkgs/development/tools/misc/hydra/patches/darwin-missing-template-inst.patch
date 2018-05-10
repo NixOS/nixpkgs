@@ -1,0 +1,12 @@
+diff --git a/src/hydra-queue-runner/hydra-queue-runner.cc b/src/hydra-queue-runner/hydra-queue-runner.cc
+index 85635823..2d1cda88 100644
+--- a/src/hydra-queue-runner/hydra-queue-runner.cc
++++ b/src/hydra-queue-runner/hydra-queue-runner.cc
+@@ -22,6 +22,7 @@ namespace nix {
+ 
+ template<> void toJSON<std::atomic<long>>(std::ostream & str, const std::atomic<long> & n) { str << n; }
+ template<> void toJSON<std::atomic<unsigned long>>(std::ostream & str, const std::atomic<unsigned long> & n) { str << n; }
++template<> void toJSON<std::atomic<unsigned long long>>(std::ostream & str, const std::atomic<unsigned long long> & n) { str << n; }
+ template<> void toJSON<double>(std::ostream & str, const double & n) { str << n; }
+ 
+ }

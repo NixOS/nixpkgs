@@ -1195,7 +1195,7 @@ let self = _self // overrides; _self = with self; {
     meta = {
       description = "A storage class for Catalyst Authentication using DBIx::Class";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
-      platforms = stdenv.lib.platforms.linux;
+      platforms = with stdenv.lib.platforms; linux ++ darwin;
     };
     buildInputs = [ TestWarn ];
   };
@@ -1319,7 +1319,7 @@ let self = _self // overrides; _self = with self; {
     meta = {
       description = "DBIx::Class::Schema Model Class";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
-      platforms = stdenv.lib.platforms.linux;
+      platforms = with stdenv.lib.platforms; linux ++ darwin;
     };
   };
 
@@ -1388,7 +1388,7 @@ let self = _self // overrides; _self = with self; {
     meta = {
       description = "Role based authorization for Catalyst based on Catalyst::Plugin::Authentication";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
-      platforms = stdenv.lib.platforms.linux;
+      platforms = with stdenv.lib.platforms; linux ++ darwin;
     };
   };
 
@@ -1433,7 +1433,7 @@ let self = _self // overrides; _self = with self; {
     propagatedBuildInputs = [ CatalystPluginSession GDSecurityImage ];
     meta = {
       description = "Create and validate Captcha for Catalyst";
-      platforms = stdenv.lib.platforms.linux;
+      platforms = with stdenv.lib.platforms; linux ++ darwin;
     };
   };
 
@@ -1552,7 +1552,7 @@ let self = _self // overrides; _self = with self; {
     };
     propagatedBuildInputs = [ CatalystPluginSession ];
     meta = {
-      platforms = stdenv.lib.platforms.linux;
+      platforms = with stdenv.lib.platforms; linux ++ darwin;
     };
   };
 
@@ -1564,7 +1564,7 @@ let self = _self // overrides; _self = with self; {
     };
     propagatedBuildInputs = [ CacheFastMmap CatalystPluginSession ];
     meta = {
-      platforms = stdenv.lib.platforms.linux;
+      platforms = with stdenv.lib.platforms; linux ++ darwin;
     };
   };
 
@@ -1592,7 +1592,7 @@ let self = _self // overrides; _self = with self; {
     meta = {
       description = "Display a stack trace on the debug screen";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
-      platforms = stdenv.lib.platforms.linux;
+      platforms = with stdenv.lib.platforms; linux ++ darwin;
     };
   };
 
@@ -1648,7 +1648,7 @@ let self = _self // overrides; _self = with self; {
     buildInputs = [ CatalystRuntime TestLongString TestSimple13 TestWWWMechanize TestWWWMechanizeCatalyst TextCSV XMLSimple ];
     meta = {
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
-      platforms = stdenv.lib.platforms.linux;
+      platforms = with stdenv.lib.platforms; linux ++ darwin;
     };
   };
 
@@ -1663,7 +1663,7 @@ let self = _self // overrides; _self = with self; {
     meta = {
       description = "JSON view for your data";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
-      platforms = stdenv.lib.platforms.linux;
+      platforms = with stdenv.lib.platforms; linux ++ darwin;
     };
   };
 
@@ -1677,7 +1677,7 @@ let self = _self // overrides; _self = with self; {
     meta = {
       description = "Template View Class";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
-      platforms = stdenv.lib.platforms.linux;
+      platforms = with stdenv.lib.platforms; linux ++ darwin;
     };
   };
 
@@ -1710,7 +1710,7 @@ let self = _self // overrides; _self = with self; {
     meta = {
       description = "Replace request base with value passed by HTTP proxy";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
-      platforms = stdenv.lib.platforms.linux;
+      platforms = with stdenv.lib.platforms; linux ++ darwin;
     };
   };
 
@@ -1729,7 +1729,7 @@ let self = _self // overrides; _self = with self; {
     meta = {
       description = "Replace the development server with Starman";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
-      platforms = stdenv.lib.platforms.linux;
+      platforms = with stdenv.lib.platforms; linux ++ darwin;
     };
   };
 
@@ -7714,7 +7714,7 @@ let self = _self // overrides; _self = with self; {
       homepage = http://search.cpan.org/perldoc?CPAN::Meta::Spec;
       description = "IO Interface to compressed data files/buffers";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
-      platforms = stdenv.lib.platforms.linux;
+      platforms = with stdenv.lib.platforms; linux ++ darwin;
     };
     # Same as CompressRawZlib
     doCheck = false && !stdenv.isDarwin;
@@ -13754,7 +13754,7 @@ let self = _self // overrides; _self = with self; {
     buildInputs = [ TestException ];
     propagatedBuildInputs = [ ClassAccessor ListMoreUtils RegexpCommon SQLTokenizer ];
     meta = {
-      platforms = stdenv.lib.platforms.linux;
+      platforms = with stdenv.lib.platforms; linux ++ darwin;
     };
   };
 
@@ -14400,7 +14400,7 @@ let self = _self // overrides; _self = with self; {
     };
     doCheck = false; # no `hostname' in stdenv
     meta = {
-      platforms = stdenv.lib.platforms.linux;
+      platforms = with stdenv.lib.platforms; linux ++ darwin;
     };
   };
 
@@ -16519,7 +16519,7 @@ let self = _self // overrides; _self = with self; {
       homepage = http://www.shlomifish.org/open-source/projects/docmake/;
       description = "Organize Data in Tables";
       license = stdenv.lib.licenses.isc;
-      platforms = stdenv.lib.platforms.linux;
+      platforms = with stdenv.lib.platforms; linux ++ darwin;
     };
   };
 

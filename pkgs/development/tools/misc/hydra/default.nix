@@ -64,15 +64,15 @@ let
   };
 in releaseTools.nixBuild rec {
   name = "hydra-${version}";
-  version = "2017-11-21";
+  version = "2018-03-16";
 
   inherit stdenv;
 
   src = fetchFromGitHub {
     owner = "NixOS";
     repo = "hydra";
-    rev = "b7bc4384b7b471d1ddf892cb03f16189a66d5a0d";
-    sha256 = "05g37z3ilazzqa5rqj5zljndwxjbvpc18xibh6jlwjwpvg3kpbbh";
+    rev = "df27358e11ad09fe3516a4e41d9fe1fd49f911a7";
+    sha256 = "0wmd6b8m4ck96ngi768ap5d506xlry68di18rz8das1cns1gyrdi";
   };
 
   buildInputs =
@@ -92,6 +92,10 @@ in releaseTools.nixBuild rec {
     # Clean up when building from a working tree.
     (cd $sourceRoot && (git ls-files -o --directory | xargs -r rm -rfv)) || true
   '';
+
+  patches = lib.optional (stdenv.isDarwin) [
+    ./patches/darwin-missing-template-inst.patch
+  ];
 
   configureFlags = [ "--with-docbook-xsl=${docbook_xsl}/xml/xsl/docbook" ];
 
@@ -130,7 +134,7 @@ in releaseTools.nixBuild rec {
   meta = with stdenv.lib; {
     description = "Nix-based continuous build system";
     license = licenses.gpl3;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ domenkozar ];
+    platforms = with platforms; linux ++ darwin;
+    maintainers = with maintainers; [ domenkozar periklis ];
   };
  }
