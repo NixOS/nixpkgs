@@ -50,23 +50,6 @@ let
 in rec {
   # We will carry all the supported versions
 
-  ansible_2_1 = generic {
-    version = "2.1.6.0";
-    sha256  = "0fhsmarjl9h401pm0gmcy68q80fiq544cxzcxyjzbnxr2a2cimz5";
-    py      = oldJinja;
-  };
-
-  ansible_2_2 = generic {
-    version = "2.2.3.0";
-    sha256  = "141aa76qy9hsc3h02yipyxg39maqq2r2c4nx53lm48kiy0fan66y";
-    py      = oldJinja;
-  };
-
-  ansible_2_3 = generic {
-    version = "2.3.3.0";
-    sha256  = "1yhaqgbx4zlwvi3cklnsqarjhhq28hgbvx603h07cjm1digp2ans";
-  };
-
   ansible_2_4 = generic {
     version = "2.4.4.0";
     sha256  = "0n1k6h0h6av74nw8vq98fmh6q4pq6brpwmx45282vh3bkdmpa0ib";

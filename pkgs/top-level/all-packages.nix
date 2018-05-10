@@ -7519,9 +7519,6 @@ with pkgs;
   augeas = callPackage ../tools/system/augeas { };
 
   inherit (callPackages ../tools/admin/ansible {})
-    ansible_2_1
-    ansible_2_2
-    ansible_2_3
     ansible_2_4
     ansible_2_5
     ansible2
