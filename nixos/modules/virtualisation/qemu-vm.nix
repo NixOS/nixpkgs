@@ -360,6 +360,15 @@ in
           type = types.enum [ "virtio" "scsi" "ide" ];
           description = "The interface used for the virtual hard disks.";
         };
+
+      guestAgent.enable =
+        mkOption {
+          default = true;
+          type = types.bool;
+          description = ''
+            Enable the Qemu guest agent.
+          '';
+        };
     };
 
     virtualisation.useBootLoader =
@@ -510,6 +519,8 @@ in
 
     # Don't run ntpd in the guest.  It should get the correct time from KVM.
     services.timesyncd.enable = false;
+
+    services.qemuGuest.enable = cfg.qemu.guestAgent.enable;
 
     system.build.vm = pkgs.runCommand "nixos-vm" { preferLocalBuild = true; }
       ''
