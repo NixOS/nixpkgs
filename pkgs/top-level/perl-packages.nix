@@ -11964,7 +11964,7 @@ let self = _self // overrides; _self = with self; {
     preConfigure = ''
       # Capture the path used when compiling this module as the "blessed"
       # system path, analogous to the module's own use of '/bin:/sbin'.
-      sed -i "s#__BLESSED_PATH__#$PATH#" lib/Paranoid.pm t/01_init_core.t
+      sed -i "s#__BLESSED_PATH__#${pkgs.coreutils}/bin#" lib/Paranoid.pm t/01_init_core.t
     '';
     meta = {
       description = "General function library for safer, more secure programming";
