@@ -2,7 +2,7 @@
   asciidoc, libxml2, libxslt, docbook_xml_xslt }:
 
 pythonPackages.buildPythonApplication rec {
-  version = "7.1.5";
+  version = "7.2.0";
   name = "offlineimap-${version}";
   namePrefix = "";
 
@@ -10,7 +10,7 @@ pythonPackages.buildPythonApplication rec {
     owner = "OfflineIMAP";
     repo = "offlineimap";
     rev = "v${version}";
-    sha256 = "0qm5vhzm8hkab2zs2l8ffg754wkws2nyd4pwb332v3zckf11flzd";
+    sha256 = "0xyvqgy36n0bb41c4ffldyrcnaja5gpwx2ngbnk3qs22ldb2n1sb";
   };
 
   postPatch = ''

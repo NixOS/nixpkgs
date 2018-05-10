@@ -1,10 +1,10 @@
 { stdenv, lib, fetchFromGitHub, fetchpatch, jansson }:
 
 stdenv.mkDerivation rec {
-  name = "jshon-20140712";
+  name = "jshon-20160111.2";
 
   rev = "a61d7f2f85f4627bc3facdf951746f0fd62334b7";
-  sha256 = "b0365e58553b9613a5636545c5bfd4ad05ab5024f192e1cb1d1824bae4e1a380";
+  sha256 = "1053w7jbl90q3p5y34pi4i8an1ddsjzwaib5cfji75ivamc5wdmh";
 
   src = fetchFromGitHub {
     inherit rev sha256;

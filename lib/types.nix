@@ -256,7 +256,7 @@ rec {
       functor = (defaultFunctor name) // { wrapped = elemType; };
     };
 
-    nonEmptyListOf = elemType: 
+    nonEmptyListOf = elemType:
       let list = addCheck (types.listOf elemType) (l: l != []);
       in list // { description = "non-empty " + list.description; };
 
@@ -280,15 +280,26 @@ rec {
     # List or attribute set of ...
     loaOf = elemType:
       let
-        convertIfList = defIdx: def:
+        convertAllLists = defs:
+          let
+            padWidth = stringLength (toString (length defs));
+            unnamedPrefix = i: "unnamed-" + fixedWidthNumber padWidth i + ".";
+          in
+            imap1 (i: convertIfList (unnamedPrefix i)) defs;
+
+        convertIfList = unnamedPrefix: def:
           if isList def.value then
-            { inherit (def) file;
-              value = listToAttrs (
-                imap1 (elemIdx: elem:
-                  { name = elem.name or "unnamed-${toString defIdx}.${toString elemIdx}";
-                    value = elem;
-                  }) def.value);
-            }
+            let
+              padWidth = stringLength (toString (length def.value));
+              unnamed = i: unnamedPrefix + fixedWidthNumber padWidth i;
+            in
+              { inherit (def) file;
+                value = listToAttrs (
+                  imap1 (elemIdx: elem:
+                    { name = elem.name or (unnamed elemIdx);
+                      value = elem;
+                    }) def.value);
+              }
           else
             def;
         listOnly = listOf elemType;
@@ -297,7 +308,7 @@ rec {
         name = "loaOf";
         description = "list or attribute set of ${elemType.description}s";
         check = x: isList x || isAttrs x;
-        merge = loc: defs: attrOnly.merge loc (imap1 convertIfList defs);
+        merge = loc: defs: attrOnly.merge loc (convertAllLists defs);
         getSubOptions = prefix: elemType.getSubOptions (prefix ++ ["<name?>"]);
         getSubModules = elemType.getSubModules;
         substSubModules = m: loaOf (elemType.substSubModules m);
@@ -419,16 +430,13 @@ rec {
       assert coercedType.getSubModules == null;
       mkOptionType rec {
         name = "coercedTo";
-        description = "${finalType.description} or ${coercedType.description}";
-        check = x: finalType.check x || coercedType.check x;
+        description = "${finalType.description} or ${coercedType.description} convertible to it";
+        check = x: finalType.check x || (coercedType.check x && finalType.check (coerceFunc x));
         merge = loc: defs:
           let
             coerceVal = val:
               if finalType.check val then val
-              else let
-                coerced = coerceFunc val;
-              in assert finalType.check coerced; coerced;
-
+              else coerceFunc val;
           in finalType.merge loc (map (def: def // { value = coerceVal def.value; }) defs);
         getSubOptions = finalType.getSubOptions;
         getSubModules = finalType.getSubModules;

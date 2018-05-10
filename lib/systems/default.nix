@@ -45,8 +45,17 @@ rec {
       };
       # Misc boolean options
       useAndroidPrebuilt = false;
+      useiOSPrebuilt = false;
+      isiPhoneSimulator = false;
     } // mapAttrs (n: v: v final.parsed) inspect.predicates
       // args;
   in assert final.useAndroidPrebuilt -> final.isAndroid;
+     assert lib.foldl
+       (pass: { assertion, message }:
+         if assertion final
+         then pass
+         else throw message)
+       true
+       (final.parsed.abi.assertions or []);
     final;
 }

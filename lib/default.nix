@@ -5,9 +5,11 @@
  */
 let
 
-  callLibs = file: import file { inherit lib; };
+  inherit (import ./fixed-points.nix {}) makeExtensible;
 
-  lib = rec {
+  lib = makeExtensible (self: let
+    callLibs = file: import file { lib = self; };
+  in with self; {
 
     # often used, or depending on very little
     trivial = callLibs ./trivial.nix;
@@ -21,7 +23,7 @@ let
 
     # packaging
     customisation = callLibs ./customisation.nix;
-    maintainers = import ./maintainers-list.nix;
+    maintainers = import ../maintainers/maintainer-list.nix;
     meta = callLibs ./meta.nix;
     sources = callLibs ./sources.nix;
     versions = callLibs ./versions.nix;
@@ -56,7 +58,7 @@ let
       replaceStrings seq stringLength sub substring tail;
     inherit (trivial) id const concat or and boolToString mergeAttrs
       flip mapNullable inNixShell min max importJSON warn info
-      nixpkgsVersion mod compare splitByAndCompare
+      nixpkgsVersion version mod compare splitByAndCompare
       functionArgs setFunctionArgs isFunction;
 
     inherit (fixedPoints) fix fix' extends composeExtensions
@@ -72,7 +74,7 @@ let
     inherit (lists) singleton foldr fold foldl foldl' imap0 imap1
       concatMap flatten remove findSingle findFirst any all count
       optional optionals toList range partition zipListsWith zipLists
-      reverseList listDfs toposort sort compareLists take drop sublist
+      reverseList listDfs toposort sort naturalSort compareLists take drop sublist
       last init crossLists unique intersectLists subtractLists
       mutuallyExclusive;
     inherit (strings) concatStrings concatMapStrings concatImapStrings
@@ -113,11 +115,12 @@ let
       unknownModule mkOption;
     inherit (types) isType setType defaultTypeMerge defaultFunctor
       isOptionType mkOptionType;
-    inherit (debug) addErrorContextToAttrs traceIf traceVal
+    inherit (debug) addErrorContextToAttrs traceIf traceVal traceValFn
       traceXMLVal traceXMLValMarked traceSeq traceSeqN traceValSeq
-      traceValSeqN traceShowVal traceShowValMarked
-      showVal traceCall traceCall2 traceCall3 traceValIfNot runTests
-      testAllTrue strict traceCallXml attrNamesToStr;
+      traceValSeqFn traceValSeqN traceValSeqNFn traceShowVal
+      traceShowValMarked showVal traceCall traceCall2 traceCall3
+      traceValIfNot runTests testAllTrue traceCallXml
+      attrNamesToStr;
     inherit (misc) maybeEnv defaultMergeArg defaultMerge foldArgs
       defaultOverridableDelayableArgs composedArgsAndFun
       maybeAttrNullable maybeAttr ifEnable checkFlag getValue
@@ -128,5 +131,5 @@ let
       mergeAttrsNoOverride mergeAttrByFunc mergeAttrsByFuncDefaults
       mergeAttrsByFuncDefaultsClean mergeAttrBy
       prepareDerivationArgs nixType imap overridableDelayableArgs;
-  };
+  });
 in lib

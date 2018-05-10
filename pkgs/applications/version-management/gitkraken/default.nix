@@ -7,18 +7,21 @@
 
 with stdenv.lib;
 
+let
+  curlWithGnuTls = curl.override { gnutlsSupport = true; sslSupport = false; };
+in
 stdenv.mkDerivation rec {
   name = "gitkraken-${version}";
-  version = "3.3.4";
+  version = "3.6.0";
 
   src = fetchurl {
     url = "https://release.gitkraken.com/linux/v${version}.deb";
-    sha256 = "1djrbpm1f258cicf65ddvndpxi1izmnc12253k1zwl77z4jjbwls";
+    sha256 = "0zrxw7rrlspm3ic847dy1ly4rlcdkizdr6m8nycmrxg4s98yxkb8";
   };
 
   libPath = makeLibraryPath [
     stdenv.cc.cc.lib
-    curl
+    curlWithGnuTls
     udev
     libX11
     libXext
@@ -84,7 +87,7 @@ stdenv.mkDerivation rec {
 
     find $out/share/gitkraken -name "*.node" -exec patchelf --set-rpath "${libPath}:$out/share/gitkraken" {} \;
 
-    rm $out/bin/gitkraken
+    mkdir $out/bin
     ln -s $out/share/gitkraken/gitkraken $out/bin/gitkraken
   '';
 

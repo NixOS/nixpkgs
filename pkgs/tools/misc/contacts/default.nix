@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     mkdir -p $out/bin
-    cp ./contacts-*/Build/Products/Default/contacts $out/bin
+    cp Products/Default/contacts $out/bin
   '';
 
   ## FIXME: the framework setup hook isn't adding these correctly

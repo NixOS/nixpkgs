@@ -70,7 +70,7 @@ in with self; {
   HelloRangesData = derive2 { name="HelloRangesData"; version="1.4.0"; sha256="1c7gfhwr9g6hv0p3s4yd8v9rhjp3jmrnzsqsqq4ysc2i24nf7drr"; depends=[]; };
   HiCDataHumanIMR90 = derive2 { name="HiCDataHumanIMR90"; version="0.112.0"; sha256="1qxg7650lbfbjl9p75clrybsdbzd0yzpi8pi2biv83jgqkkjrd0b"; depends=[]; };
   HiCDataLymphoblast = derive2 { name="HiCDataLymphoblast"; version="1.14.0"; sha256="0708xgm495a330h70yi2qd494h6gf0n46j016mw9bc4gzbb7aq9p"; depends=[]; };
-  Hiiragi2013 = derive2 { name="Hiiragi2013"; version="1.14.0"; sha256="0lah9l8gd5gs1wj68l9hqakcwha0rl88dg2p0zk92nff64jxn3pj"; depends=[affy Biobase boot clue cluster genefilter geneplotter gplots gtools KEGGREST lattice latticeExtra MASS mouse4302_db RColorBrewer xtable]; };
+  Hiiragi2013 = derive2 { name="Hiiragi2013"; version="1.14.1"; sha256="0b47hi6di0gy4f8bzhsjm5ag5jhqqsgh5h19h4lwr5jcg2710ang"; depends=[affy Biobase boot clue cluster genefilter geneplotter gplots gtools KEGGREST lattice latticeExtra MASS mouse4302_db RColorBrewer xtable]; };
   HumanAffyData = derive2 { name="HumanAffyData"; version="1.4.0"; sha256="0xgb3rrvgrx6sdwbb8gb1q8mgf0s2giih8l8d3hzvnxazh80qs8b"; depends=[Biobase ExperimentHub]; };
   IHWpaper = derive2 { name="IHWpaper"; version="1.6.0"; sha256="08gkdi1lra9mn1cbsqddqn3pwj3pfy2yfgzay5igr7n1akfmgh7k"; depends=[Biobase BiocGenerics BiocParallel cowplot DESeq2 dplyr fdrtool genefilter ggplot2 IHW qvalue Rcpp SummarizedExperiment]; };
   ITALICSData = derive2 { name="ITALICSData"; version="2.16.0"; sha256="1rrfxc3hzlq2i0z5j432w3s33ln56i91a06q49piisz06vviz6yv"; depends=[]; };
@@ -260,7 +260,7 @@ in with self; {
   lungExpression = derive2 { name="lungExpression"; version="0.16.0"; sha256="09v9r6rmfcqprqd1rx53sa4dhjjmg6d9649vlhfhzkyc73yknwmb"; depends=[Biobase]; };
   lydata = derive2 { name="lydata"; version="1.4.0"; sha256="0dflfp14gdjgy7qf3my0vas5zbg77l16li7xgv1924cry11w2dxx"; depends=[]; };
   mAPKLData = derive2 { name="mAPKLData"; version="1.10.0"; sha256="1bfx4imb5yg17n0g1ag436zlks4jcp8ga0xj9wyh9bhx4miwyay4"; depends=[]; };
-  mammaPrintData = derive2 { name="mammaPrintData"; version="1.14.0"; sha256="0ks72wnagdvnbilqcsvl5lbhgh64fhbfys0da03336f1z16f5lv9"; depends=[]; };
+  mammaPrintData = derive2 { name="mammaPrintData"; version="1.14.2"; sha256="04ymimgj8ng5qgvq0cglmhcxv7a3jqx9a2zyg8lwiwzpyip18inx"; depends=[]; };
   maqcExpression4plex = derive2 { name="maqcExpression4plex"; version="1.22.0"; sha256="0hn20i11vl9x23mx283aki097r1a8rspagac821kmlwghyab1mxq"; depends=[]; };
   metaMSdata = derive2 { name="metaMSdata"; version="1.14.0"; sha256="1iygqxymvb98cm325bmdqb34n9b4k1vdzdyzcq8a0gh1dvs2m0iw"; depends=[]; };
   methyvimData = derive2 { name="methyvimData"; version="1.0.0"; sha256="1b2mvcawafkr15py8h9j10w5givifi99h9clbdmkgfyixbbh0m94"; depends=[minfi]; };
@@ -287,7 +287,7 @@ in with self; {
   pcaGoPromoter_Hs_hg19 = derive2 { name="pcaGoPromoter.Hs.hg19"; version="1.14.0"; sha256="137lj4j0hlz3mkwyf334xr3bpm9j2jg1cd2sw9203kx6hvk92i2z"; depends=[]; };
   pcaGoPromoter_Mm_mm9 = derive2 { name="pcaGoPromoter.Mm.mm9"; version="1.14.0"; sha256="0kb62bm1a8m88g59v6553qg69rmv0gh0wy4yfkqvn2sgz51zk4r4"; depends=[]; };
   pcaGoPromoter_Rn_rn4 = derive2 { name="pcaGoPromoter.Rn.rn4"; version="1.14.0"; sha256="0b3cak7nzd6qxr7gnly4246gjdhxyp8h0w5dr1xsgwd9zy1k0psw"; depends=[]; };
-  pcxnData = derive2 { name="pcxnData"; version="1.0.0"; sha256="0bkzqac0b2x1f398bflv077dp6nb3ysdf75jcwxpj4nwyhcb7n4f"; depends=[]; };
+  pcxnData = derive2 { name="pcxnData"; version="2.0.0"; sha256="10qhw7v1nzf4y9xhd34jiimcyi6lgjy6y9zc6kzk80hm6qiry8j2"; depends=[]; };
   pd_atdschip_tiling = derive2 { name="pd.atdschip.tiling"; version="0.16.0"; sha256="1ilwm4nx232dll01xqqvagq3qi6qa060v84y20ihxhfwdm46z0ci"; depends=[Biostrings DBI IRanges oligo oligoClasses RSQLite S4Vectors]; };
   pepDat = derive2 { name="pepDat"; version="0.112.0"; sha256="15v4yk9cpnz2k16ka4iyc61ji5ck9mlkabgzxalwfnz77ri23mk0"; depends=[GenomicRanges]; };
   plasFIA = derive2 { name="plasFIA"; version="1.6.0"; sha256="0p3pbjm5ww24ax7h72m38l0rcm01w5a4h8j5rsgynczvfv9jlwjq"; depends=[proFIA]; };

@@ -13,4 +13,5 @@ mkDerivation {
   executableHaskellDepends = [ base bytestring network ];
   description = "accepts TCP connections and echoes the client's IP address back to it";
   license = stdenv.lib.licenses.lgpl3;
+  broken = true; # 2018-04-10
 }

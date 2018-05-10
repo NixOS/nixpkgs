@@ -1,6 +1,5 @@
-{ stdenv, fetchurl, qt5, gstreamer, gstreamermm, gst_plugins_bad
-, gst_plugins_base, gst_plugins_good, ffmpeg, guvcview, automoc4
-, cmake, libxml2, gettext, pkgconfig, libgphoto2, gphoto2, v4l_utils
+{ stdenv, fetchurl, qt5, ffmpeg, guvcview, automoc4
+, cmake, ninja, libxml2, gettext, pkgconfig, libgphoto2, gphoto2, v4l_utils
 , libv4l, pcre }:
 
 stdenv.mkDerivation rec {
@@ -13,11 +12,9 @@ stdenv.mkDerivation rec {
     sha256 = "1vbiznwyc05jqg0dpmgxmvf7kdzmlck0i8v2c5d69kgrdnaypcrf";
   };
 
-  buildInputs = [ qt5.qtbase gstreamer gstreamermm gst_plugins_bad gst_plugins_good
-                  gst_plugins_base ffmpeg guvcview v4l_utils libv4l pcre
-		];
+  buildInputs = [ qt5.qtbase ffmpeg guvcview v4l_utils libv4l pcre ];
 
-  nativeBuildInputs = [ pkgconfig cmake gettext libgphoto2 gphoto2 libxml2 libv4l ];
+  nativeBuildInputs = [ pkgconfig cmake ninja gettext libgphoto2 gphoto2 libxml2 libv4l ];
 
   meta = with stdenv.lib; {
     homepage = http://www.qstopmotion.org;
@@ -31,6 +28,6 @@ stdenv.mkDerivation rec {
 
     license = stdenv.lib.licenses.gpl2Plus;
     maintainers = [ maintainers.leenaars ];
-    platforms = stdenv.lib.platforms.gnu;
+    platforms = stdenv.lib.platforms.gnu ++ stdenv.lib.platforms.linux;
   };
 }

@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
       a Miscellaneous section.
     '';
 
-    platforms = platforms.gnu;
+    platforms = platforms.gnu ++ platforms.linux;
     maintainers = with maintainers; [ pSub ];
   };
 }

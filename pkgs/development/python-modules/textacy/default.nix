@@ -25,11 +25,11 @@
 buildPythonPackage rec {
   name = "${pname}-${version}";
   pname = "textacy";
-  version = "0.5.0";
+  version = "0.6.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "6fc4603fd52c386081b063ef7aa15ca77e5e937a3064b197359659fccfdeb406";
+    sha256 = "70ebd8f6536c1536132c997988a4f27731a2db5a7ca7bab29fb33746b444959f";
   };
 
   disabled = isPy27; # 2.7 requires backports.csv

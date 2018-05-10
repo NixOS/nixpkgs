@@ -16,7 +16,11 @@ stdenv.mkDerivation rec {
   buildInputs = [ qt5.qtbase qt5.qtsvg ];
 
   preConfigure = ''
-    cmakeFlags+=" -DQTXDGX_ICONENGINEPLUGIN_INSTALL_PATH=$out/$qtPluginPrefix"
+    cmakeFlagsArray+=(
+    "-DQTXDGX_ICONENGINEPLUGIN_INSTALL_PATH=$out/$qtPluginPrefix"
+    "-DCMAKE_INSTALL_INCLUDEDIR=include"
+    "-DCMAKE_INSTALL_LIBDIR=lib"
+    )
   '';
 
   meta = with stdenv.lib; {

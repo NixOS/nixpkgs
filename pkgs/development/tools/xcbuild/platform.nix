@@ -258,6 +258,27 @@ let
       };
       PackageTypes = [ "com.apple.package-type.wrapper.application" ];
     }
+    {
+      Type = "ProductType";
+      Identifier = "com.apple.product-type.framework";
+      Name = "Bundle";
+      DefaultBuildProperties = {
+        FULL_PRODUCT_NAME = "$(WRAPPER_NAME)";
+        MACH_O_TYPE = "mh_bundle";
+        WRAPPER_PREFIX = "";
+        WRAPPER_SUFFIX = ".$(WRAPPER_EXTENSION)";
+        WRAPPER_EXTENSION = "bundle";
+        WRAPPER_NAME = "$(WRAPPER_PREFIX)$(PRODUCT_NAME)$(WRAPPER_SUFFIX)";
+        FRAMEWORK_FLAG_PREFIX = "-framework";
+        LIBRARY_FLAG_PREFIX = "-l";
+        LIBRARY_FLAG_NOSPACE = "YES";
+        STRIP_STYLE = "non-global";
+      };
+      PackageTypes = [ "com.apple.package-type.wrapper" ];
+      IsWrapper = "YES";
+      HasInfoPlist = "YES";
+      HasInfoPlistStrings = "YES";
+    }
   ];
 
 in

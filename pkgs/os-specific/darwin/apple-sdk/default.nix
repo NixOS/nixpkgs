@@ -210,6 +210,13 @@ in rec {
       ];
     });
 
+    CoreMIDI = stdenv.lib.overrideDerivation super.CoreMIDI (drv: {
+      __propagatedImpureHostDeps = drv.__propagatedImpureHostDeps ++ [
+        "/System/Library/PrivateFrameworks/"
+      ];
+      setupHook = ./private-frameworks-setup-hook.sh;
+    });
+
     Security = stdenv.lib.overrideDerivation super.Security (drv: {
       setupHook = ./security-setup-hook.sh;
     });

@@ -1,4 +1,5 @@
 { stdenv, fetchurl, python2Packages
+, fetchpatch
 , withSFTP ? true
  }:
 
@@ -17,8 +18,15 @@ python2Packages.buildPythonApplication rec {
   propagatedBuildInputs = []
   ++ stdenv.lib.optionals withSFTP [ python2Packages.paramiko ];
 
-  # Bazaar can't find the certificates alone
-  patches = [ ./add_certificates.patch ];
+  patches = [
+    # Bazaar can't find the certificates alone
+    ./add_certificates.patch
+    (fetchpatch {
+      url = "https://bazaar.launchpad.net/~brz/brz/trunk/revision/6754";
+      sha256 = "0mdqa9w1p6cmli6976v4wi0sw9r4p5prkj7lzfd1877wk11c9c73";
+      name = "CVE-2017-14176.patch";
+    })
+  ];
   postPatch = ''
     substituteInPlace bzrlib/transport/http/_urllib2_wrappers.py \
       --subst-var-by certPath /etc/ssl/certs/ca-certificates.crt

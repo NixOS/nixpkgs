@@ -1,26 +1,26 @@
-{ stdenv, fetchFromGitHub, perl, python2Packages, sqlite, gpsbabel
+{ stdenv, fetchFromGitHub, perl, python, sqlite, gpsbabel
 , withWebKit ? false }:
 
 let
 
   # Pytrainer needs a matplotlib with GTK backend. Also ensure we are
   # using the pygtk with glade support as needed by pytrainer.
-  matplotlibGtk = python2Packages.matplotlib.override {
+  matplotlibGtk = python.pkgs.matplotlib.override {
     enableGtk2 = true;
-    pygtk = python2Packages.pyGtkGlade;
+    pygtk = python.pkgs.pyGtkGlade;
   };
 
 in
 
-python2Packages.buildPythonApplication rec {
+python.pkgs.buildPythonApplication rec {
   name = "pytrainer-${version}";
-  version = "1.12.0";
+  version = "1.12.1";
 
   src = fetchFromGitHub {
     owner = "pytrainer";
     repo = "pytrainer";
     rev = "v${version}";
-    sha256 = "09pfddjaqdpy3r27h21xvsvh04sb8hppinskxlahdqb3vjzkr581";
+    sha256 = "0rzf8kks96qzlknh6g3b9pjq04j7qk6rmz58scp7sck8xz9rjbwx";
   };
 
   namePrefix = "";
@@ -40,7 +40,7 @@ python2Packages.buildPythonApplication rec {
       --replace "'mysqlclient'," ""
   '';
 
-  propagatedBuildInputs = with python2Packages; [
+  propagatedBuildInputs = with python.pkgs; [
     dateutil lxml matplotlibGtk pyGtkGlade sqlalchemy sqlalchemy_migrate psycopg2
   ] ++ stdenv.lib.optional withWebKit [ pywebkitgtk ];
 
@@ -49,6 +49,10 @@ python2Packages.buildPythonApplication rec {
   # This package contains no binaries to patch or strip.
   dontPatchELF = true;
   dontStrip = true;
+
+  checkPhase = ''
+    ${python.interpreter} -m unittest discover
+  '';
 
   meta = with stdenv.lib; {
     homepage = https://github.com/pytrainer/pytrainer/wiki;

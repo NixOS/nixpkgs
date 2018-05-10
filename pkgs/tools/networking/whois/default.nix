@@ -18,8 +18,6 @@ stdenv.mkDerivation rec {
     for i in Makefile po/Makefile; do
       substituteInPlace $i --replace "prefix = /usr" "prefix = $out"
     done
-
-    substituteInPlace Makefile --replace "DEFS += HAVE_ICONV" "DEFS += HAVE_ICONV\nwhois_LDADD += -liconv"
   '';
 
   makeFlags = [ "HAVE_ICONV=1" ];
@@ -39,6 +37,6 @@ stdenv.mkDerivation rec {
     homepage = https://packages.qa.debian.org/w/whois.html;
     license = licenses.gpl2;
     maintainers = with maintainers; [ fpletz ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

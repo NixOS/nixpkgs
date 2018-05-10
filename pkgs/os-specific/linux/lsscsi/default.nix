@@ -1,7 +1,5 @@
 { stdenv, fetchurl }:
 
-assert stdenv.isLinux;
-
 stdenv.mkDerivation {
   name = "lsscsi-0.28";
 

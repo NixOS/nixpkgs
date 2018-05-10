@@ -3,11 +3,11 @@
 
 stdenv.mkDerivation rec {
   name = "five-or-more-${version}";
-  version = "3.26.0";
+  version = "3.28.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/five-or-more/${gnome3.versionBranch version}/${name}.tar.xz";
-    sha256 = "7c24f7f2603df99299d38b40b14c005aaad88820113ed71e4b3765ac3b027772";
+    sha256 = "1fy4a7qdjqvabm0cl45d6xlx6hy4paxvm0b2paifff73bl250d5c";
   };
 
   passthru = {

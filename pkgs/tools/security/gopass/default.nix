@@ -1,4 +1,4 @@
-{ stdenv, buildGoPackage, fetchFromGitHub, git, gnupg, makeWrapper }:
+{ stdenv, buildGoPackage, fetchFromGitHub, git, gnupg, xclip, makeWrapper }:
 
 buildGoPackage rec {
   version = "1.6.11";
@@ -18,7 +18,18 @@ buildGoPackage rec {
   wrapperPath = with stdenv.lib; makeBinPath ([
     git
     gnupg
+    xclip
   ]);
+
+  postInstall = ''
+    mkdir -p \
+      $bin/share/bash-completion/completions \
+      $bin/share/zsh/site-functions \
+      $bin/share/fish/vendor_completions.d
+    $bin/bin/gopass completion bash > $bin/share/bash-completion/completions/_gopass
+    $bin/bin/gopass completion zsh  > $bin/share/zsh/site-functions/_gopass
+    $bin/bin/gopass completion fish > $bin/share/fish/vendor_completions.d/gopass.fish
+  '';
 
   postFixup = ''
     wrapProgram $bin/bin/gopass \

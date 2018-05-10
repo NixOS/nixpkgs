@@ -4,11 +4,11 @@
 
 stdenv.mkDerivation rec {
   name = "gnome-desktop-${version}";
-  version = "3.26.2";
+  version = "3.28.1";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-desktop/${gnome3.versionBranch version}/${name}.tar.xz";
-    sha256 = "f7561a7a313fc474b2c390cd9696df1f5c1e1556080e43f4afe042b1060e5f2a";
+    sha256 = "16nbgrp0hihvrsa6kmqk0z8y7ajravyagmkmq1nnwn27psi9g8vq";
   };
 
   passthru = {

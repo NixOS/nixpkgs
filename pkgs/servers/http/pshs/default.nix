@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "pshs-${version}";
-  version = "0.3.2";
+  version = "0.3.3";
 
   src = fetchFromGitHub {
     owner = "mgorny";
     repo = "pshs";
     rev = "v${version}";
-    sha256 = "1ffdyv5qiqdg3jq8y91fsml046g88d7fyy2k81yii11jw3yx2js0";
+    sha256 = "04l03myh99npl78y8nss053gnc7k8q60vdbdpml19sshmwaw3fgi";
   };
 
   nativeBuildInputs = [ autoreconfHook pkgconfig ];

@@ -1,22 +1,25 @@
-{ stdenv, fetchurl, qt4, qmake4Hook, poppler_qt4, zlib, pkgconfig, poppler }:
+{ stdenv, fetchurl, qtbase, qtscript, qmake, zlib, pkgconfig, poppler }:
 
 stdenv.mkDerivation rec {
   pname = "texmaker";
-  version = "4.5";
+  version = "5.0.2";
   name = "${pname}-${version}";
 
   src = fetchurl {
     url = "http://www.xm1math.net/texmaker/${name}.tar.bz2";
-    sha256 = "056njk6j8wma23mlp7xa3rgfaxx0q8ynwx8wkmj7iy0b85p9ds9c";
+    sha256 = "0y81mjm89b99pr9svcwpaf4iz2q9pc9hjas5kiwd1pbgl5vqskm9";
   };
 
-  buildInputs = [ qt4 poppler_qt4 zlib ];
-  nativeBuildInputs = [ pkgconfig poppler qmake4Hook ];
+  buildInputs = [ qtbase qtscript poppler zlib ];
+  nativeBuildInputs = [ pkgconfig poppler qmake ];
   NIX_CFLAGS_COMPILE="-I${poppler.dev}/include/poppler";
 
   preConfigure = ''
-    qmakeFlags="$qmakeFlags DESKTOPDIR=$out/share/applications ICONDIR=$out/share/pixmaps"
+    qmakeFlags="$qmakeFlags DESKTOPDIR=$out/share/applications ICONDIR=$out/share/pixmaps METAINFODIR=$out/share/metainfo"
   '';
+
+
+  enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
     description = "TeX and LaTeX editor";

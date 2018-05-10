@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, autoreconfHook
-, pkgconfig, libuuid, e2fsprogs
+, pkgconfig, libuuid, e2fsprogs, nilfs-utils, ntfs3g
 }:
 
 stdenv.mkDerivation rec {
@@ -15,8 +15,21 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoreconfHook pkgconfig ];
   buildInputs = [
-    e2fsprogs libuuid stdenv.cc.libc
+    e2fsprogs libuuid stdenv.cc.libc nilfs-utils ntfs3g 
     (stdenv.lib.getOutput "static" stdenv.cc.libc)
+  ];
+
+  configureFlags = [
+    "--enable-xfs"
+    "--enable-extfs"
+    "--enable-hfsp"
+    "--enable-fat"
+    "--enable-exfat"
+    "--enable-ntfs"
+    "--enable-btrfs"
+    "--enable-minix"
+    "--enable-f2fs"
+    "--enable-nilfs2"
   ];
 
   enableParallelBuilding = true;

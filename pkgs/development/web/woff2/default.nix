@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
 
-  buildInputs = [ brotli ];
+  propagatedBuildInputs = [ brotli ];
 
   # without this binaries only get built if shared libs are disable
   patchPhase = ''

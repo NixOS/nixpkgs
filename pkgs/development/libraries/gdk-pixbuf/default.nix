@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgconfig, glib, libtiff, libjpeg, libpng, libX11, gnome3
-, jasper, libintlOrEmpty, gobjectIntrospection, doCheck ? false }:
+, jasper, gobjectIntrospection, doCheck ? false }:
 
 let
   pname = "gdk-pixbuf";
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   # !!! We might want to factor out the gdk-pixbuf-xlib subpackage.
-  buildInputs = [ libX11 gobjectIntrospection ] ++ libintlOrEmpty;
+  buildInputs = [ libX11 gobjectIntrospection ];
 
   nativeBuildInputs = [ pkgconfig ];
 
@@ -52,6 +52,9 @@ stdenv.mkDerivation rec {
       packageName = pname;
       attrPath = "gdk_pixbuf";
     };
+
+    # gdk_pixbuf_moduledir variable from gdk-pixbuf-2.0.pc
+    moduleDir = "lib/gdk-pixbuf-2.0/2.10.0/loaders";
   };
 
   meta = with stdenv.lib; {
@@ -61,4 +64,3 @@ stdenv.mkDerivation rec {
     platforms = platforms.unix;
   };
 }
-

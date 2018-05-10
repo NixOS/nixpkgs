@@ -1,0 +1,8 @@
+--- a/setup.py
++++ b/setup.py
+@@ -5,1 +5,1 @@
+-    'bumps>=0.7.5.9', 'periodictable>=1.5.0', 'pyparsing<2.0.0',
++    'bumps>=0.7.5.9', 'periodictable>=1.5.0',
+-- 
+2.15.0
+

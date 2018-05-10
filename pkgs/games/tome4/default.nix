@@ -32,7 +32,8 @@ in stdenv.mkDerivation rec {
     libGLU openal libpng libvorbis SDL2 SDL2_ttf SDL2_image
   ];
 
-  enableParallelBuilding = true;
+  # disable parallel building as it caused sporadic build failures
+  enableParallelBuilding = false;
 
   NIX_CFLAGS_COMPILE = [
     "-I${SDL2_image}/include/SDL2"
@@ -81,6 +82,6 @@ in stdenv.mkDerivation rec {
     homepage = https://te4.org/;
     license = licenses.gpl3;
     maintainers = with maintainers; [ chattered peterhoeg ];
-    platforms = platforms.linux;
+    platforms = subtractLists ["aarch64-linux"] platforms.linux;
   };
 }

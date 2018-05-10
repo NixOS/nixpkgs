@@ -279,7 +279,7 @@ in {
       tokenAuthFile = mkOption {
         description = ''
           Kubernetes apiserver token authentication file. See
-          <link xlink:href="http://kubernetes.io/docs/admin/authentication.html"/>
+          <link xlink:href="https://kubernetes.io/docs/admin/authentication.html"/>
         '';
         default = null;
         type = types.nullOr types.path;
@@ -288,7 +288,7 @@ in {
       basicAuthFile = mkOption {
         description = ''
           Kubernetes apiserver basic authentication file. See
-          <link xlink:href="http://kubernetes.io/docs/admin/authentication.html"/>
+          <link xlink:href="https://kubernetes.io/docs/admin/authentication.html"/>
         '';
         default = pkgs.writeText "users" ''
           kubernetes,admin,0
@@ -299,7 +299,7 @@ in {
       authorizationMode = mkOption {
         description = ''
           Kubernetes apiserver authorization mode (AlwaysAllow/AlwaysDeny/ABAC/RBAC). See
-          <link xlink:href="http://kubernetes.io/docs/admin/authorization.html"/>
+          <link xlink:href="https://kubernetes.io/docs/admin/authorization.html"/>
         '';
         default = ["RBAC" "Node"];
         type = types.listOf (types.enum ["AlwaysAllow" "AlwaysDeny" "ABAC" "RBAC" "Node"]);
@@ -308,7 +308,7 @@ in {
       authorizationPolicy = mkOption {
         description = ''
           Kubernetes apiserver authorization policy file. See
-          <link xlink:href="http://kubernetes.io/docs/admin/authorization.html"/>
+          <link xlink:href="https://kubernetes.io/docs/admin/authorization.html"/>
         '';
         default = [];
         type = types.listOf types.attrs;
@@ -332,7 +332,7 @@ in {
       runtimeConfig = mkOption {
         description = ''
           Api runtime configuration. See
-          <link xlink:href="http://kubernetes.io/docs/admin/cluster-management.html"/>
+          <link xlink:href="https://kubernetes.io/docs/admin/cluster-management.html"/>
         '';
         default = "authentication.k8s.io/v1beta1=true";
         example = "api/all=false,api/v1=true";
@@ -342,7 +342,7 @@ in {
       admissionControl = mkOption {
         description = ''
           Kubernetes admission control plugins to use. See
-          <link xlink:href="http://kubernetes.io/docs/admin/admission-controllers/"/>
+          <link xlink:href="https://kubernetes.io/docs/admin/admission-controllers/"/>
         '';
         default = ["NamespaceLifecycle" "LimitRanger" "ServiceAccount" "ResourceQuota" "DefaultStorageClass" "DefaultTolerationSeconds" "NodeRestriction"];
         example = [
@@ -766,7 +766,7 @@ in {
           rm /opt/cni/bin/* || true
           ${concatMapStrings (package: ''
             echo "Linking cni package: ${package}"
-            ln -fs ${package.plugins}/* /opt/cni/bin
+            ln -fs ${package}/bin/* /opt/cni/bin
           '') cfg.kubelet.cni.packages}
         '';
         serviceConfig = {
@@ -828,7 +828,7 @@ in {
       };
 
       # Allways include cni plugins
-      services.kubernetes.kubelet.cni.packages = [pkgs.cni];
+      services.kubernetes.kubelet.cni.packages = [pkgs.cni-plugins];
 
       boot.kernelModules = ["br_netfilter"];
 

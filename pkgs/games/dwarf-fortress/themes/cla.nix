@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     cp -r data raw $out
   '';
 
-  passthru.dfVersion = "0.44.05";
+  passthru.dfVersion = "0.44.09";
 
   preferLocalBuild = true;
 

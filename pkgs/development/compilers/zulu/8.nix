@@ -4,11 +4,11 @@
 , swingSupport ? true }:
 
 let
-  version = "8.21.0.1";
-  openjdk = "8.0.131";
+  version = "8.28.0.1";
+  openjdk = "8.0.163";
 
-  sha256_linux = "0cr1wvk1ifdq69ia8sr6171yzciba8l5x7dszwa5g2v0vmmqq88p";
-  sha256_darwin = "0xq9bdzbdq8wq48gj6j56bw30l2iafz6sy1wdhrf92n9bnz5qmw7";
+  sha256_linux = "1z8s3a948nvv92wybnhkyr27ipibcy45k0zv5h5gp37ynd91df45";
+  sha256_darwin = "0i0prjijsgg0yyycplpp9rlfl428126rqz7bb31pchrhi6jhk699";
 
   platform = if stdenv.isDarwin then "macosx" else "linux";
   hash = if stdenv.isDarwin then sha256_darwin else sha256_linux;

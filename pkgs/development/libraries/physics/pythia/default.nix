@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "pythia-${version}";
-  version = "8.226";
+  version = "8.235";
 
   src = fetchurl {
     url = "http://home.thep.lu.se/~torbjorn/pythia8/pythia${builtins.replaceStrings ["."] [""] version}.tgz";
-    sha256 = "1jfjkq78d1llrrm2k5pgsl92a5z8af9rx3n83rzv28lxrqdjix4g";
+    sha256 = "17cfgs7v469pdnnzvlmdagcdhi0h419znqmaws90l9d8cmhhsbz8";
   };
 
   buildInputs = [ boost fastjet hepmc zlib rsync lhapdf ];
@@ -18,6 +18,7 @@ stdenv.mkDerivation rec {
   configureFlags = [
     "--enable-shared"
     "--with-hepmc2=${hepmc}"
+    "--with-lhapdf6=${lhapdf}"
   ];
 
   enableParallelBuilding = true;

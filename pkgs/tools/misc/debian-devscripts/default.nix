@@ -54,7 +54,8 @@ in stdenv.mkDerivation rec {
       wrapProgram "$i" \
         --prefix PERL5LIB : "$PERL5LIB" \
         --prefix PERL5LIB : "$out/share/devscripts" \
-        --prefix PYTHONPATH : "$out/lib/python3.4/site-packages"
+        --prefix PYTHONPATH : "$out/lib/python3.4/site-packages" \
+        --prefix PATH : "${dpkg}/bin"
     done
   '';
 

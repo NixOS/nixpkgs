@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, fetchFromBitbucket
+{ stdenv, fetchFromGitHub
 , pkgconfig, tcl, readline, libffi, python3, bison, flex
 }:
 
@@ -6,25 +6,25 @@ with builtins;
 
 stdenv.mkDerivation rec {
   name = "yosys-${version}";
-  version = "2018.02.14";
+  version = "2018.05.03";
 
   srcs = [
     (fetchFromGitHub {
       owner  = "yosyshq";
       repo   = "yosys";
-      rev    = "c1abd3b02cab235334342f3520e2535eb74c5792";
-      sha256 = "0pzrplv4p0qzy115rg19lxv4w274iby337zfd7hhlinnpx3gzqvw";
+      rev    = "a572b495387743a58111e7264917a497faa17ebf";
+      sha256 = "0q4xh4sy3n83c8il8lygzv0i6ca4qw36i2k6qz6giw0wd2pkibkb";
       name   = "yosys";
     })
 
     # NOTE: the version of abc used here is synchronized with
     # the one in the yosys Makefile of the version above;
     # keep them the same for quality purposes.
-    (fetchFromBitbucket {
-      owner  = "alanmi";
+    (fetchFromGitHub {
+      owner  = "berkeley-abc";
       repo   = "abc";
-      rev    = "6e3c24b3308a";
-      sha256 = "1i4wv0si4fb6dpv2yrpkp588mdlfrnx2s02q2fgra5apdm54c53w";
+      rev    = "f23ea8e33f6d5cc54f58bec6d9200483e5d8c704";
+      sha256 = "1xwmq3k5hfavdrs7zbqjxh35kr2pis4i6hhzrq7qzyzs0az0hls9";
       name   = "yosys-abc";
     })
   ];
@@ -35,14 +35,18 @@ stdenv.mkDerivation rec {
   buildInputs = [ tcl readline libffi python3 bison flex ];
 
   patchPhase = ''
+    substituteInPlace ../yosys-abc/Makefile \
+      --replace 'CC   := gcc' ""
     substituteInPlace ./Makefile \
+      --replace 'CXX = clang' "" \
+      --replace 'ABCMKARGS = CC="$(CXX)"' 'ABCMKARGS =' \
       --replace 'echo UNKNOWN' 'echo ${substring 0 10 (elemAt srcs 0).rev}'
   '';
 
   preBuild = ''
     chmod -R u+w ../yosys-abc
     ln -s ../yosys-abc abc
-    make config-gcc
+    make config-${if stdenv.cc.isClang or false then "clang" else "gcc"}
     echo 'ABCREV := default' >> Makefile.conf
     makeFlags="PREFIX=$out $makeFlags"
   '';
@@ -61,6 +65,6 @@ stdenv.mkDerivation rec {
     homepage    = http://www.clifford.at/yosys/;
     license     = stdenv.lib.licenses.isc;
     maintainers = with stdenv.lib.maintainers; [ shell thoughtpolice ];
-    platforms   = stdenv.lib.platforms.linux;
+    platforms   = stdenv.lib.platforms.unix;
   };
 }

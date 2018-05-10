@@ -4,6 +4,7 @@ args@{ source ? "default", callPackage, fetchurl, stdenv, ncurses, pkgconfig, ge
 , composableDerivation, writeText, lib, config, glib, gtk2, gtk3, python, perl, tcl, ruby
 , libX11, libXext, libSM, libXpm, libXt, libXaw, libXau, libXmu
 , libICE
+, vimPlugins
 
 # apple frameworks
 , CoreServices, CoreData, Cocoa, Foundation, libobjc, cf-private
@@ -80,6 +81,11 @@ composableDerivation {
     flags = {
         ftNix = {
           patches = [ ./ft-nix-support.patch ];
+          preConfigure = ''
+            cp ${vimPlugins.vim-nix.src}/ftplugin/nix.vim runtime/ftplugin/nix.vim
+            cp ${vimPlugins.vim-nix.src}/indent/nix.vim runtime/indent/nix.vim
+            cp ${vimPlugins.vim-nix.src}/syntax/nix.vim runtime/syntax/nix.vim
+          '';
         };
       }
       // edf {

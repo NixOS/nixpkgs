@@ -1,5 +1,5 @@
 { stdenv, fetchurl, fetchFromGitHub, fetchpatch, pkgconfig, libiconv
-, libintlOrEmpty, expat, zlib, libpng, pixman, fontconfig, freetype, xorg
+, libintl, expat, zlib, libpng, pixman, fontconfig, freetype, xorg
 , gobjectSupport ? true, glib
 , xcbSupport ? true # no longer experimental since 1.12
 , glSupport ? true, libGL ? null # libGLU_combined is no longer a big dependency
@@ -34,7 +34,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     pkgconfig
     libiconv
-  ] ++ libintlOrEmpty ++ optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
+    libintl
+  ] ++ optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
     CoreGraphics
     CoreText
     ApplicationServices
