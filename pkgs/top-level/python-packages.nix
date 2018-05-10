@@ -5537,6 +5537,8 @@ in {
 
   flask_oauthlib = callPackage ../development/python-modules/flask-oauthlib { };
 
+  flask-oldsessions = callPackage ../development/python-modules/flask-oldsessions { };
+
   flask_principal = callPackage ../development/python-modules/flask-principal { };
 
   flask-pymongo = callPackage ../development/python-modules/Flask-PyMongo { };
