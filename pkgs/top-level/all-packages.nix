@@ -482,6 +482,8 @@ with pkgs;
     inherit (xorg) libXcursor libXxf86vm libXi;
   };
 
+  alkimia = libsForQt5.callPackage ../development/libraries/alkimia { };
+
   amazon-glacier-cmd-interface = callPackage ../tools/backup/amazon-glacier-cmd-interface { };
 
   ammonite = callPackage ../development/tools/ammonite {};
