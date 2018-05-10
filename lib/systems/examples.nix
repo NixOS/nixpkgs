@@ -11,22 +11,19 @@ rec {
 
   sheevaplug = rec {
     config = "armv5tel-unknown-linux-gnueabi";
-    arch = "armv5tel";
     float = "soft";
     platform = platforms.sheevaplug;
   };
 
   raspberryPi = rec {
     config = "armv6l-unknown-linux-gnueabihf";
-    arch = "armv6l";
     float = "hard";
     fpu = "vfp";
     platform = platforms.raspberrypi;
   };
 
   armv7l-hf-multiplatform = rec {
-    config = "arm-unknown-linux-gnueabihf";
-    arch = "armv7-a";
+    config = "armv7a-unknown-linux-gnueabihf";
     float = "hard";
     fpu = "vfpv3-d16";
     platform = platforms.armv7l-hf-multiplatform;
@@ -34,13 +31,11 @@ rec {
 
   aarch64-multiplatform = rec {
     config = "aarch64-unknown-linux-gnu";
-    arch = "aarch64";
     platform = platforms.aarch64-multiplatform;
   };
 
   aarch64-android-prebuilt = rec {
     config = "aarch64-unknown-linux-android";
-    arch = "aarch64";
     platform = platforms.aarch64-multiplatform;
     useAndroidPrebuilt = true;
   };
@@ -51,7 +46,6 @@ rec {
   };
 
   pogoplug4 = rec {
-    arch = "armv5tel";
     config = "armv5tel-unknown-linux-gnueabi";
     float = "soft";
     platform = platforms.pogoplug4;
@@ -59,7 +53,6 @@ rec {
 
   ben-nanonote = rec {
     config = "mipsel-unknown-linux-uclibc";
-    arch = "mips";
     float = "soft";
     platform = {
       name = "ben_nanonote";
@@ -73,7 +66,6 @@ rec {
 
   fuloongminipc = rec {
     config = "mipsel-unknown-linux-gnu";
-    arch = "mips";
     float = "hard";
     platform = platforms.fuloong2f_n32;
   };
@@ -142,7 +134,6 @@ rec {
   # 32 bit mingw-w64
   mingw32 = {
     config = "i686-pc-mingw32";
-    arch = "x86"; # Irrelevant
     libc = "msvcrt"; # This distinguishes the mingw (non posix) toolchain
     platform = {};
   };
@@ -151,7 +142,6 @@ rec {
   mingwW64 = {
     # That's the triplet they use in the mingw-w64 docs.
     config = "x86_64-pc-mingw32";
-    arch = "x86_64"; # Irrelevant
     libc = "msvcrt"; # This distinguishes the mingw (non posix) toolchain
     platform = {};
   };

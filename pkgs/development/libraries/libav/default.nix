@@ -118,7 +118,7 @@ let
         "--cross-prefix=${stdenv.cc.targetPrefix}"
         "--enable-cross-compile"
         "--target_os=linux"
-        "--arch=${hostPlatform.arch}"
+        "--arch=${hostPlatform.parsed.cpu.name}"
         ];
     };
 
