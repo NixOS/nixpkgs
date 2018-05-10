@@ -179,6 +179,7 @@ let
     # PORTING AIDS
       kdelibs4support = callPackage ./kdelibs4support {};
       khtml = callPackage ./khtml.nix {};
+      kdewebkit = callPackage ./kdewebkit.nix {};
       kjs = callPackage ./kjs.nix {};
       kjsembed = callPackage ./kjsembed.nix {};
       kmediaplayer = callPackage ./kmediaplayer.nix {};
