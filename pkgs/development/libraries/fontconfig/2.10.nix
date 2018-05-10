@@ -17,22 +17,12 @@ stdenv.mkDerivation rec {
   buildInputs = [ expat ];
 
   configureFlags = [
+    "--with-arch=${hostPlatform.parsed.cpu.name}"
     "--sysconfdir=/etc"
     "--with-cache-dir=/var/cache/fontconfig"
     "--disable-docs"
     "--with-default-fonts="
   ];
-
-  # We should find a better way to access the arch reliably.
-  crossArch = if stdenv.hostPlatform != stdenv.buildPlatform
-    then hostPlatform.parsed.cpu.name
-    else null;
-
-  preConfigure = ''
-    if test -n "$crossConfig"; then
-      configureFlags="$configureFlags --with-arch=$crossArch";
-    fi
-  '';
 
   enableParallelBuilding = true;
 
