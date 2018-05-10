@@ -5199,6 +5199,8 @@ with pkgs;
 
   tiny8086 = callPackage ../applications/virtualization/8086tiny { };
 
+  tio = callPackage ../tools/misc/tio { };
+
   tldr = callPackage ../tools/misc/tldr { };
 
   tldr-hs = haskellPackages.tldr;
@@ -8845,6 +8847,10 @@ with pkgs;
   ffmpeg_3_4 = callPackage ../development/libraries/ffmpeg/3.4.nix {
     inherit (darwin.apple_sdk.frameworks) Cocoa CoreMedia;
   };
+  ffmpeg_4 = callPackage ../development/libraries/ffmpeg/4.nix {
+    inherit (darwin.apple_sdk.frameworks) Cocoa CoreMedia;
+  };
+
   # Aliases
   ffmpeg_0 = ffmpeg_0_10;
   ffmpeg_1 = ffmpeg_1_2;

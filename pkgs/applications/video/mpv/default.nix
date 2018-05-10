@@ -1,5 +1,5 @@
 { stdenv, fetchurl, fetchFromGitHub, fetchpatch, makeWrapper
-, docutils, perl, pkgconfig, python3, which, ffmpeg
+, docutils, perl, pkgconfig, python3, which, ffmpeg_4
 , freefont_ttf, freetype, libass, libpthreadstubs
 , lua, luasocket, libuchardet, libiconv ? null, darwin
 
@@ -83,21 +83,14 @@ let
   };
 in stdenv.mkDerivation rec {
   name = "mpv-${version}";
-  version = "0.27.2";
+  version = "0.28.2";
 
   src = fetchFromGitHub {
     owner = "mpv-player";
     repo  = "mpv";
     rev    = "v${version}";
-    sha256 = "1ivyyqajkxq5c1zxp0dm7pljvianhgvwl3dbghgpzyrch59k5wnr";
+    sha256 = "0bldxhqjz7z9fgvx4k40l49awpay17fscp8ypswb459yicy8npmg";
   };
-
-  patches = [
-    (fetchpatch {
-      url = "https://github.com/mpv-player/mpv/commit/2ecf240b1cd20875991a5b18efafbe799864ff7f.patch";
-      sha256 = "1sr0770rvhsgz8d7ysr9qqp4g9gwdhgj8g3rgnz90wl49lgrykhb";
-    })
-  ];
 
   postPatch = ''
     patchShebangs ./TOOLS/
@@ -131,7 +124,7 @@ in stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    ffmpeg freetype libass libpthreadstubs
+    ffmpeg_4 freetype libass libpthreadstubs
     lua luasocket libuchardet
   ] ++ optional alsaSupport        alsaLib
     ++ optional xvSupport          libXv

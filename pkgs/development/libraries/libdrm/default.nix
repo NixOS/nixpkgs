@@ -22,9 +22,9 @@ stdenv.mkDerivation rec {
   configureFlags = [ "--enable-install-test-programs" ]
     ++ stdenv.lib.optionals (stdenv.isAarch32 || stdenv.isAarch64)
       [ "--enable-tegra-experimental-api" "--enable-etnaviv-experimental-api" ]
-    ++ stdenv.lib.optional stdenv.isDarwin "-C";
-
-  crossAttrs.configureFlags = configureFlags ++ [ "--disable-intel" ];
+    ++ stdenv.lib.optional stdenv.isDarwin "-C"
+    ++ stdenv.lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) "--disable-intel"
+    ;
 
   meta = {
     homepage = https://dri.freedesktop.org/libdrm/;
