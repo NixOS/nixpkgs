@@ -57,6 +57,20 @@ rec {
     platform = platforms.pogoplug4;
   };
 
+  ben-nanonote = rec {
+    config = "mipsel-unknown-linux-uclibc";
+    arch = "mips";
+    float = "soft";
+    platform = {
+      name = "ben_nanonote";
+      kernelMajor = "2.6";
+      kernelArch = "mips";
+      gcc = {
+        arch = "mips32";
+      };
+    };
+  };
+
   fuloongminipc = rec {
     config = "mipsel-unknown-linux-gnu";
     arch = "mips";
