@@ -8527,6 +8527,8 @@ with pkgs;
 
   backward-cpp = callPackage ../development/libraries/backward-cpp { };
 
+  bamf = callPackage ../development/libraries/bamf { };
+
   bctoolbox = callPackage ../development/libraries/bctoolbox {
     mbedtls = mbedtls_1_3;
   };
@@ -17096,6 +17098,8 @@ with pkgs;
   pig = callPackage ../applications/networking/cluster/pig { };
 
   pijul = callPackage ../applications/version-management/pijul {};
+
+  plank = callPackage ../applications/misc/plank { };
 
   planner = callPackage ../applications/office/planner { };
 
