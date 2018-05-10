@@ -22,7 +22,6 @@ let
   version = "2.26";
   patchSuffix = "-131";
   sha256 = "1ggnj1hzjym7sn93rbwydcqd562q73lsb7g7kd199g6j9j9hlkp5";
-  cross = if buildPlatform != hostPlatform then hostPlatform else null;
 in
 
 assert withLinuxHeaders -> linuxHeaders != null;
@@ -31,9 +30,6 @@ assert withGd -> gd != null && libpng != null;
 stdenv.mkDerivation ({
   inherit  installLocales;
   linuxHeaders = if withLinuxHeaders then linuxHeaders else null;
-
-  # The host/target system.
-  crossConfig = if cross != null then cross.config else null;
 
   inherit (stdenv) is64bit;
 
@@ -126,13 +122,12 @@ stdenv.mkDerivation ({
        else "--disable-profile")
     ] ++ lib.optionals withLinuxHeaders [
       "--enable-kernel=3.2.0" # can't get below with glibc >= 2.26
-    ] ++ lib.optionals (cross != null) [
-      (if cross.platform.gcc.float or (cross.parsed.abi.float or "hard") == "soft"
+    ] ++ lib.optionals (hostPlatform != buildPlatform) [
+      (if hostPlatform.platform.gcc.float or (hostPlatform.parsed.abi.float or "hard") == "soft"
        then "--without-fp"
        else "--with-fp")
-    ] ++ lib.optionals (cross != null) [
       "--with-__thread"
-    ] ++ lib.optionals (cross == null && stdenv.isAarch32) [
+    ] ++ lib.optionals (hostPlatform == buildPlatform && hostPlatform.isAarch32) [
       "--host=arm-linux-gnueabi"
       "--build=arm-linux-gnueabi"
 
@@ -183,7 +178,7 @@ stdenv.mkDerivation ({
     }
 
 
-  '' + lib.optionalString (cross != null) ''
+  '' + lib.optionalString (hostPlatform != buildPlatform) ''
     sed -i s/-lgcc_eh//g "../$sourceRoot/Makeconfig"
 
     cat > config.cache << "EOF"
@@ -215,7 +210,7 @@ stdenv.mkDerivation ({
   } // meta;
 }
 
-// lib.optionalAttrs (cross != null) {
+// lib.optionalAttrs (hostPlatform != buildPlatform) {
   preInstall = null; # clobber the native hook
 
   dontStrip = true;
