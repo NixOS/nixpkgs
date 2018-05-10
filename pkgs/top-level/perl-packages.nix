@@ -11954,6 +11954,25 @@ let self = _self // overrides; _self = with self; {
      };
   };
 
+  Paranoid = buildPerlPackage rec {
+    name = "Paranoid-2.05";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/C/CO/CORLISS/Paranoid/${name}.tar.gz";
+      sha256 = "583dfa0279733531f360795ad1cf4aa652d537b2b0bbd3c6925d0c8d75cbb3df";
+    };
+    patches = [ ../development/perl-modules/Paranoid-blessed-path.patch ];
+    preConfigure = ''
+      # Capture the path used when compiling this module as the "blessed"
+      # system path, analogous to the module's own use of '/bin:/sbin'.
+      sed -i "s#__BLESSED_PATH__#$PATH#" lib/Paranoid.pm t/01_init_core.t
+    '';
+    meta = {
+      description = "General function library for safer, more secure programming";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = [ maintainers.limeytexan ];
+    };
+  };
+
   PARDist = buildPerlPackage {
     name = "PAR-Dist-0.49";
     src = fetchurl {
