@@ -7518,13 +7518,14 @@ with pkgs;
 
   augeas = callPackage ../tools/system/augeas { };
 
-  ansible_2_1 = callPackage ../tools/admin/ansible/2.1.nix {};
-  ansible_2_2 = callPackage ../tools/admin/ansible/2.2.nix {};
-  ansible_2_3 = callPackage ../tools/admin/ansible/2.3.nix {};
-  ansible_2_4 = callPackage ../tools/admin/ansible/2.4.nix {};
-  ansible_2_5 = callPackage ../tools/admin/ansible/2.5.nix {};
-  ansible  = ansible_2_4;
-  ansible2 = ansible_2_4;
+  inherit (callPackages ../tools/admin/ansible {})
+    ansible_2_1
+    ansible_2_2
+    ansible_2_3
+    ansible_2_4
+    ansible_2_5
+    ansible2
+    ansible;
 
   ansible-lint = callPackage ../development/tools/ansible-lint {};
 
