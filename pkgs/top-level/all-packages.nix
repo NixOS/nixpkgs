@@ -5512,28 +5512,14 @@ with pkgs;
 
   x11_ssh_askpass = callPackage ../tools/networking/x11-ssh-askpass { };
 
-  xbursttools = assert stdenv ? glibc; callPackage ../tools/misc/xburst-tools rec {
+  xbursttools = callPackage ../tools/misc/xburst-tools {
     # It needs a cross compiler for mipsel to build the firmware it will
     # load into the Ben Nanonote
-    crossPrefix = "mipsel-unknown-linux-gnu";
     gccCross =
       let
         pkgsCross = nixpkgsFun {
           # Ben Nanonote system
-          crossSystem = {
-            config = crossPrefix;
-            arch = "mips";
-            float = "soft";
-            libc = "uclibc";
-            platform = {
-              name = "ben_nanonote";
-              kernelMajor = "2.6";
-              kernelArch = "mips";
-            };
-            gcc = {
-              arch = "mips32";
-            };
-          };
+          crossSystem = lib.systems.examples.ben-nanonote;
         };
       in
         pkgsCross.buildPackages.gccCrossStageStatic;
