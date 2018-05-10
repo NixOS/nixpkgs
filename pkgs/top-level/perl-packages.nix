@@ -450,20 +450,6 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  ListCompare = buildPerlPackage rec {
-    name = "List-Compare-0.53";
-    src = fetchurl {
-      url = "mirror://cpan/authors/id/J/JK/JKEENAN/${name}.tar.gz";
-      sha256 = "fdbf4ff67b3135d44475fef7fcac0cd4706407d5720d26dca914860eb10f8550";
-    };
-    buildInputs = [ IOCaptureOutput ];
-    meta = {
-      homepage = http://thenceforward.net/perl/modules/List-Compare/;
-      description = "Compare elements of two or more lists";
-      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
-    };
-  };
-
   ArchiveCpio = buildPerlPackage rec {
     name = "Archive-Cpio-0.10";
     src = fetchurl {
@@ -8524,6 +8510,21 @@ let self = _self // overrides; _self = with self; {
     doCheck = false;
   };
 
+  LinuxACL = buildPerlPackage rec {
+    name = "Linux-ACL-0.05";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/N/NA/NAZAROV/${name}.tar.gz";
+      sha256 = "312940c1f60f47c4fc93fa0a9d2a626425faa837040c8c2f1ad58ee09f62f371";
+    };
+    buildInputs = [ pkgs.acl ];
+    NIX_CFLAGS_LINK = "-L${pkgs.acl.out}/lib -lacl";
+    meta = {
+      maintainers = [ maintainers.limeytexan ];
+      description = "Perl extension for reading and setting Access Control Lists for files by libacl linux library";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   LinuxDistribution = buildPerlModule {
     name = "Linux-Distribution-0.23";
     src = fetchurl {
@@ -8568,6 +8569,20 @@ let self = _self // overrides; _self = with self; {
     src = pkgs.fetchurl {
       url = mirror://cpan/authors/id/D/DA/DAVIDO/List-BinarySearch-0.20.tar.gz;
       sha256 = "1piyl65m38bwqaap13wkgs033wiwb6m5zmr5va86ya4696cir7wd";
+    };
+  };
+
+  ListCompare = buildPerlPackage rec {
+    name = "List-Compare-0.53";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/J/JK/JKEENAN/${name}.tar.gz";
+      sha256 = "fdbf4ff67b3135d44475fef7fcac0cd4706407d5720d26dca914860eb10f8550";
+    };
+    buildInputs = [ IOCaptureOutput ];
+    meta = {
+      homepage = http://thenceforward.net/perl/modules/List-Compare/;
+      description = "Compare elements of two or more lists";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
 
@@ -11755,6 +11770,22 @@ let self = _self // overrides; _self = with self; {
     meta = {
       description = "Perl SSH client package implemented on top of OpenSSH";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
+  NetZooKeeper = buildPerlPackage rec {
+    name = "Net-ZooKeeper-0.41";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/M/MA/MAF/${name}.tar.gz";
+      sha256 = "91c177f30f82302eaf3173356eef05c21bc82163df752acb469177bd14a72db9";
+    };
+    buildInputs = [ pkgs.zookeeper_mt ];
+    NIX_CFLAGS_COMPILE = "-I${pkgs.zookeeper_mt}/include";
+    NIX_CFLAGS_LINK = "-L${pkgs.zookeeper_mt.out}/lib -lzookeeper_mt";
+    meta = {
+      maintainers = [ maintainers.limeytexan ];
+      homepage = https://github.com/mark-5/p5-net-zookeeper;
+      license = stdenv.lib.licenses.asl20;
     };
   };
 

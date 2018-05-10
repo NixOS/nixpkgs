@@ -1,4 +1,5 @@
-{ stdenv, fetchFromGitHub, cmake, pkgconfig, git
+{ stdenv, fetchFromGitHub, fetchpatch
+, cmake, pkgconfig, git
 , boost, miniupnpc, openssl, unbound, cppzmq
 , zeromq, pcsclite, readline
 , CoreData, IOKit, PCSC
@@ -20,6 +21,14 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ cmake pkgconfig git ];
+
+  patches = [
+    # fix daemon crash, remove with 0.12.1.0 update
+    (fetchpatch {
+      url    = "https://github.com/monero-project/monero/commit/08343ab.diff";
+      sha256 = "0f1snrl2mk2czwk1ysympzr8ismjx39fcqgy13276vcmw0cfqi83";
+    })
+  ];
 
   buildInputs = [
     boost miniupnpc openssl unbound

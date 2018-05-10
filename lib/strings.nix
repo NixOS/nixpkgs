@@ -82,7 +82,7 @@ rec {
        => "//bin"
   */
   makeSearchPath = subDir: packages:
-    concatStringsSep ":" (map (path: path + "/" + subDir) packages);
+    concatStringsSep ":" (map (path: path + "/" + subDir) (builtins.filter (x: x != null) packages));
 
   /* Construct a Unix-style search path, using given package output.
      If no output is found, fallback to `.out` and then to the default.

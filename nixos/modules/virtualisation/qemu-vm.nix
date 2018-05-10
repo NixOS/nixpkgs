@@ -25,10 +25,7 @@ let
 
   qemuGraphics = lib.optionalString (!cfg.graphics) "-nographic";
 
-  # enable both serial console and tty0. select preferred console (last one) based on cfg.graphics
-  kernelConsoles = let
-    consoles = [ "console=${qemuSerialDevice},115200n8" "console=tty0" ];
-    in lib.concatStringsSep " " (if cfg.graphics then consoles else reverseList consoles);
+  consoles = lib.concatMapStringsSep " " (c: "console=${c}") cfg.qemu.consoles;
 
   # XXX: This is very ugly and in the future we really should use attribute
   # sets to build ALL of the QEMU flags instead of this mixed mess of Nix
@@ -111,7 +108,7 @@ let
             ${mkDiskIfaceDriveFlag "0" "file=$NIX_DISK_IMAGE,cache=writeback,werror=report"} \
             -kernel ${config.system.build.toplevel}/kernel \
             -initrd ${config.system.build.toplevel}/initrd \
-            -append "$(cat ${config.system.build.toplevel}/kernel-params) init=${config.system.build.toplevel}/init regInfo=${regInfo}/registration ${kernelConsoles} $QEMU_KERNEL_PARAMS" \
+            -append "$(cat ${config.system.build.toplevel}/kernel-params) init=${config.system.build.toplevel}/init regInfo=${regInfo}/registration ${consoles} $QEMU_KERNEL_PARAMS" \
           ''} \
           $extraDisks \
           ${qemuGraphics} \
@@ -336,6 +333,23 @@ in
           description = "Options passed to QEMU.";
         };
 
+      consoles = mkOption {
+        type = types.listOf types.str;
+        default = let
+          consoles = [ "${qemuSerialDevice},115200n8" "tty0" ];
+        in if cfg.graphics then consoles else reverseList consoles;
+        example = [ "console=tty1" ];
+        description = ''
+          The output console devices to pass to the kernel command line via the
+          <literal>console</literal> parameter, the primary console is the last
+          item of this list.
+
+          By default it enables both serial console and
+          <literal>tty0</literal>. The preferred console (last one) is based on
+          the value of <option>virtualisation.graphics</option>.
+        '';
+      };
+
       networkingOptions =
         mkOption {
           default = [
@@ -359,6 +373,15 @@ in
           example = "scsi";
           type = types.enum [ "virtio" "scsi" "ide" ];
           description = "The interface used for the virtual hard disks.";
+        };
+
+      guestAgent.enable =
+        mkOption {
+          default = true;
+          type = types.bool;
+          description = ''
+            Enable the Qemu guest agent.
+          '';
         };
     };
 
@@ -510,6 +533,8 @@ in
 
     # Don't run ntpd in the guest.  It should get the correct time from KVM.
     services.timesyncd.enable = false;
+
+    services.qemuGuest.enable = cfg.qemu.guestAgent.enable;
 
     system.build.vm = pkgs.runCommand "nixos-vm" { preferLocalBuild = true; }
       ''

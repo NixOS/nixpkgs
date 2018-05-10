@@ -441,7 +441,7 @@ self: super: {
   });
 
   # Older versions don't compile.
-  brick = self.brick_0_36_3;
+  brick = self.brick_0_37;
   dhall = self.dhall_1_13_0;
   dhall_1_13_0 = doJailbreak super.dhall_1_13_0;  # support ansi-terminal 0.8.x
   HaTeX = self.HaTeX_3_19_0_0;

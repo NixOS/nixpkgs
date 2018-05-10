@@ -3239,6 +3239,11 @@
     github = "rushmorem";
     name = "Rushmore Mushambi";
   };
+  ruuda = {
+    email = "dev+nix@veniogames.com";
+    github = "ruuda";
+    name = "Ruud van Asseldonk";
+  };
   rvl = {
     email = "dev+nix@rodney.id.au";
     github = "rvl";

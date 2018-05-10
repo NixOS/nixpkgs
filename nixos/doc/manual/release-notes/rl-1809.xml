@@ -107,6 +107,17 @@ $ nix-instantiate -E '(import &lt;nixpkgsunstable&gt; {}).gitFull'
      a stable URL for Nixpkgs to use to package this proprietary software.
     </para>
    </listitem>
+   <listitem>
+    <para>
+     <literal>gnucash</literal> has changed from version 2.4 to 3.x.
+     If you've been using <literal>gnucash</literal> (version 2.4) instead of
+     <literal>gnucash26</literal> (version 2.6) you must open your Gnucash 
+     data file(s) with <literal>gnucash26</literal> and then save them to
+     upgrade the file format. Then you may use your data file(s) with
+     Gnucash 3.x. See the upgrade <link xlink:href="https://wiki.gnucash.org/wiki/FAQ#Using_Different_Versions.2C_Up_And_Downgrade">documentation</link>.
+     Gnucash 2.4 is still available under the attribute <literal>gnucash24</literal>.
+    </para>
+   </listitem>
   </itemizedlist>
  </section>
 
