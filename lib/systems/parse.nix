@@ -192,7 +192,15 @@ rec {
   abis = setTypes types.openAbi {
     android = {};
     cygnus = {};
-    gnu = {};
+    gnu = {
+      assertions = [
+        { assertion = platform: !platform.isAarch32;
+          message = ''
+            The "gnu" ABI is ambiguous on 32-bit ARM. Use "gnueabi" or "gnueabihf" instead.
+          '';
+        }
+      ];
+    };
     msvc = {};
     eabi = {};
     androideabi = {};
@@ -270,7 +278,7 @@ rec {
       kernel = getKernel args.kernel;
       abi =
         /**/ if args ? abi       then getAbi args.abi
-        else if isLinux   parsed then abis.gnu
+        else if isLinux   parsed then (if isAarch32 parsed then abis.gnueabi else abis.gnu)
         else if isWindows parsed then abis.gnu
         else                     abis.unknown;
     };
