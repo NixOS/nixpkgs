@@ -1,7 +1,7 @@
 { stdenv, fetchurl, vala, atk, cairo, glib, gnome3, gtk3, libwnck3
 , libX11, libXfixes, libXi, pango, intltool, pkgconfig, libxml2
 , bamf, gdk_pixbuf, libdbusmenu-gtk3, file
-, wrapGAppsHook, gobjectIntrospection }:
+, wrapGAppsHook, autoreconfHook, gobjectIntrospection }:
 
 stdenv.mkDerivation rec {
   pname = "plank";
@@ -19,6 +19,7 @@ stdenv.mkDerivation rec {
     libxml2 # xmllint
     wrapGAppsHook
     gobjectIntrospection
+    autoreconfHook
   ];
 
   buildInputs = [ vala atk cairo glib gnome3.gnome-menus
