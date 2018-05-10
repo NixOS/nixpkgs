@@ -1,5 +1,5 @@
 { stdenv, buildPackages
-, fetchzip, linuxHeaders, libiconvReal
+, fetchurl, linuxHeaders, libiconvReal
 , buildPlatform, hostPlatform
 , extraConfig ? ""
 }:
@@ -49,18 +49,17 @@ let
     UCLIBC_HAS_FPU n
   '';
 
-  name = "uclibc-0.9.34-pre-20150131";
-  rev = "343f6b8f1f754e397632b0552e4afe586c8b392b";
-
+  version = "1.0.30";
 in
 
 stdenv.mkDerivation {
-  inherit name;
+  name = "uclibc-ng-${version}";
+  inherit version;
 
-  src = fetchzip {
-    name = name + "-source";
-    url = "http://git.uclibc.org/uClibc/snapshot/uClibc-${rev}.tar.bz2";
-    sha256 = "1kgylzpid7da5i7wz7slh5q9rnq1m8bv5h9ilm76g0xwc2iwlhbw";
+  src = fetchurl {
+    url = "https://downloads.uclibc-ng.org/releases/${version}/uClibc-ng-${version}.tar.bz2";
+    # from "${url}.sha256";
+    sha256 = "3e0f057f24882823d697126015aa4d7d48fa2542be3939985cb3c26dcbcab5a8";
   };
 
   # 'ftw' needed to build acl, a coreutils dependency
@@ -107,11 +106,10 @@ stdenv.mkDerivation {
   };
 
   meta = with stdenv.lib; {
-    homepage = http://www.uclibc.org/;
+    homepage = "https://uclibc-ng.org";
     description = "A small implementation of the C library";
     maintainers = with maintainers; [ rasendubi ];
     license = licenses.lgpl2;
     platforms = platforms.linux;
-    broken = hostPlatform.isAarch64;
   };
 }
