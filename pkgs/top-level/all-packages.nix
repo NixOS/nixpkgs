@@ -1300,6 +1300,10 @@ with pkgs;
 
   klaus = callPackage ../servers/web-apps/klaus { };
 
+  kmymoney = libsForQt5.callPackage ../applications/office/kmymoney {
+    inherit (kdeFrameworks) kdewebkit kinit;
+  };
+
   lcdproc = callPackage ../servers/monitoring/lcdproc { };
 
   languagetool = callPackage ../tools/text/languagetool {  };
