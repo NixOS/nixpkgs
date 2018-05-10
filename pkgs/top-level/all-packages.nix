@@ -611,6 +611,8 @@ with pkgs;
 
   bonfire = callPackage ../tools/misc/bonfire { };
 
+  cloud-sql-proxy = callPackage ../tools/misc/cloud-sql-proxy { };
+
   container-linux-config-transpiler = callPackage ../development/tools/container-linux-config-transpiler { };
 
   cconv = callPackage ../tools/text/cconv { };
@@ -3052,6 +3054,8 @@ with pkgs;
   infamousPlugins = callPackage ../applications/audio/infamousPlugins { };
 
   innoextract = callPackage ../tools/archivers/innoextract { };
+
+  input-utils = callPackage ../os-specific/linux/input-utils { };
 
   intecture-agent = callPackage ../tools/admin/intecture/agent.nix { };
 
@@ -11500,6 +11504,8 @@ with pkgs;
   simgear = callPackage ../development/libraries/simgear { };
 
   simp_le = callPackage ../tools/admin/simp_le { };
+
+  simpleitk = callPackage ../development/libraries/simpleitk { lua = lua51Packages.lua; };
 
   sfml = callPackage ../development/libraries/sfml { };
   csfml = callPackage ../development/libraries/csfml { };

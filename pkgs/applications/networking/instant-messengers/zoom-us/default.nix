@@ -1,6 +1,6 @@
 { stdenv, fetchurl, system, makeWrapper, makeDesktopItem,
   alsaLib, dbus, glib, fontconfig, freetype, libpulseaudio,
-  utillinux, zlib, xorg, udev, sqlite, expat, libv4l, procps }:
+  utillinux, zlib, xorg, udev, sqlite, expat, libv4l, procps, libGL }:
 
 let
 
@@ -24,6 +24,7 @@ in stdenv.mkDerivation {
     expat
     glib
     freetype
+    libGL
     libpulseaudio
     zlib
     dbus
