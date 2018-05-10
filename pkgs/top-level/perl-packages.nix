@@ -2064,6 +2064,19 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
+  ClassEHierarchy = buildPerlPackage rec {
+    name = "Class-EHierarchy-2.00";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/C/CO/CORLISS/Class-EHierarchy/${name}.tar.gz";
+      sha256 = "8498baaf7539eaa3422c6fe1055a0fc9a0c02e94dad0c63405373528e622bacb";
+    };
+    meta = {
+      description = "Base class for hierarchally ordered objects";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = [ maintainers.limeytexan ];
+    };
+  };
+
   ClassFactory = buildPerlPackage {
     name = "Class-Factory-1.06";
     src = fetchurl {
