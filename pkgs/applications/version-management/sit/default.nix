@@ -1,23 +1,27 @@
-{ stdenv, fetchFromGitHub, rustPlatform }:
+{ stdenv, fetchFromGitHub, rustPlatform, cmake, libzip }:
 
 rustPlatform.buildRustPackage rec {
   name = "sit-${version}";
-  version = "0.1.3";
+  version = "0.3.2";
 
   src = fetchFromGitHub {
     owner = "sit-it";
     repo = "sit";
     rev = "v${version}";
-    sha256 = "1ysy1lhb7fxy02a3c9xk2awa49svnfa8bqcz2aj4x56r2f8vhj0h";
+    sha256 = "0lhl4rrfmsi76498mg5si2xagl8l2pi5d92dxhsyzszpwn5jdp57";
   };
 
-  cargoSha256 = "1y8a8a9jn9f374sy5fs1snmpiqyckqc0aw7idwnpfr912c1zzrxw";
+  buildInputs = [ cmake libzip ];
+
+  cargoSha256 = "102haqix13nwcncng1s8qkw68spn6fhh3vysk2nbahw6f78zczqg";
+
+  patches = [ ./aarch64-isel.patch ];
 
   meta = with stdenv.lib; {
-    description = "SCM-agnostic, file-based, offline-first, immutable issue tracker";
-    homepage = http://sit-it.org/;
+    description = "Serverless Information Tracker";
+    homepage = https://sit.sh/;
     license = with licenses; [ asl20 /* or */ mit ];
-    maintainers = with maintainers; [ dywedir ];
+    maintainers = with maintainers; [ dywedir yrashk ];
     platforms = platforms.all;
   };
 }

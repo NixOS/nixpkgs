@@ -1,18 +1,28 @@
-{ fetchurl, stdenv, smartmontools, gtkmm2, libglademm, pkgconfig, pcre }:
+{ fetchurl, stdenv, smartmontools, autoreconfHook, gettext, gtkmm3, pkgconfig, wrapGAppsHook, pcre-cpp, gnome3 }:
 
 stdenv.mkDerivation rec {
-  version="0.8.7";
+  version="1.1.3";
   name = "gsmartcontrol-${version}";
 
   src = fetchurl {
-    url = "http://artificialtime.com/gsmartcontrol/gsmartcontrol-${version}.tar.bz2";
-    sha256 = "1ipykzqpfvlr84j38hr7q2cag4imrn1gql10slp8bfrs4h1si3vh";
+    url = "mirror://sourceforge/gsmartcontrol/gsmartcontrol-${version}.tar.bz2";
+    sha256 = "1a8j7dkml9zvgpk83xcdajfz7g6mmpmm5k86dl5sjc24zb7n4kxn";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ smartmontools gtkmm2 libglademm pcre ];
+  patches = [
+    ./fix-paths.patch
+  ];
 
-  #installTargets = "install datainstall";
+  nativeBuildInputs = [ autoreconfHook gettext pkgconfig wrapGAppsHook ];
+  buildInputs = [ gtkmm3 pcre-cpp gnome3.adwaita-icon-theme ];
+
+  enableParallelBuilding = true;
+
+  preFixup = ''
+    gappsWrapperArgs+=(
+      --prefix PATH : "${stdenv.lib.makeBinPath [ smartmontools ]}"
+    )
+  '';
 
   meta = {
     description = "Hard disk drive health inspection tool";
@@ -25,7 +35,7 @@ stdenv.mkDerivation rec {
       It allows you to inspect the drive's SMART data to determine its health,
       as well as run various tests on it.
     '';
-    homepage = http://gsmartcontrol.sourceforge.net/;
+    homepage = https://gsmartcontrol.sourceforge.io/;
     license = stdenv.lib.licenses.gpl2Plus;
     maintainers = with stdenv.lib.maintainers; [qknight];
     platforms = with stdenv.lib.platforms; linux;

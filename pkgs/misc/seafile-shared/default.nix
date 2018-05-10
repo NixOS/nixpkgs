@@ -30,6 +30,6 @@ stdenv.mkDerivation rec {
     description = "Shared components of Seafile: seafile-daemon, libseafile, libseafile python bindings, manuals, and icons";
     license = licenses.gpl3;
     platforms = platforms.linux;
-    maintainers = [ maintainers.calrama ];
+    maintainers = [ ];
   };
 }

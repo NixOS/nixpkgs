@@ -24,6 +24,6 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "A Telepathy connection manager based on libpurple";
-    platforms = stdenv.lib.platforms.gnu; # Random choice
+    platforms = stdenv.lib.platforms.gnu ++ stdenv.lib.platforms.linux; # Random choice
   };
 }

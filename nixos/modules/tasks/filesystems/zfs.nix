@@ -305,6 +305,8 @@ in
         }
       ];
 
+      virtualisation.lxd.zfsSupport = true;
+
       boot = {
         kernelModules = [ "spl" "zfs" ] ;
         extraModulePackages = with packages; [ spl zfs ];
@@ -452,7 +454,7 @@ in
                               }) snapshotNames);
 
       systemd.timers = let
-                         timer = name: if name == "frequent" then "*:15,30,45" else name;
+                         timer = name: if name == "frequent" then "*:0,15,30,45" else name;
                        in builtins.listToAttrs (map (snapName:
                             {
                               name = "zfs-snapshot-${snapName}";

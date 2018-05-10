@@ -4,6 +4,8 @@ with lib;
 
 let
   cfg = config.services.gitea;
+  pg = config.services.postgresql;
+  usePostgresql = cfg.database.type == "postgres";
   configFile = pkgs.writeText "app.ini" ''
     APP_NAME = ${cfg.appName}
     RUN_USER = ${cfg.user}
@@ -16,6 +18,9 @@ let
     USER = ${cfg.database.user}
     PASSWD = #dbpass#
     PATH = ${cfg.database.path}
+    ${optionalString usePostgresql ''
+      SSL_MODE = disable
+    ''}
 
     [repository]
     ROOT = ${cfg.repositoryRoot}
@@ -34,6 +39,10 @@ let
     [security]
     SECRET_KEY = #secretkey#
     INSTALL_LOCK = true
+
+    [log]
+    ROOT_PATH = ${cfg.log.rootPath}
+    LEVEL = ${cfg.log.level}
 
     ${cfg.extraConfig}
   '';
@@ -60,6 +69,19 @@ in
         description = "gitea data directory.";
       };
 
+      log = {
+        rootPath = mkOption {
+          default = "${cfg.stateDir}/log";
+          type = types.str;
+          description = "Root path for log files.";
+        };
+        level = mkOption {
+          default = "Trace";
+          type = types.enum [ "Trace" "Debug" "Info" "Warn" "Error" "Critical" ];
+          description = "General log level.";
+        };
+      };
+
       user = mkOption {
         type = types.str;
         default = "gitea";
@@ -82,7 +104,7 @@ in
 
         port = mkOption {
           type = types.int;
-          default = 3306;
+          default = (if !usePostgresql then 3306 else pg.port);
           description = "Database host port.";
         };
 
@@ -122,6 +144,15 @@ in
           type = types.str;
           default = "${cfg.stateDir}/data/gitea.db";
           description = "Path to the sqlite3 database file.";
+        };
+
+        createDatabase = mkOption {
+          type = types.bool;
+          default = true;
+          description = ''
+            Whether to create a local postgresql database automatically.
+            This only applies if database type "postgres" is selected.
+          '';
         };
       };
 
@@ -186,10 +217,11 @@ in
   };
 
   config = mkIf cfg.enable {
+    services.postgresql.enable = mkIf usePostgresql (mkDefault true);
 
     systemd.services.gitea = {
       description = "gitea";
-      after = [ "network.target" ];
+      after = [ "network.target" "postgresql.service" ];
       wantedBy = [ "multi-user.target" ];
       path = [ pkgs.gitea.bin ];
 
@@ -231,12 +263,31 @@ in
           mkdir -p ${cfg.stateDir}/conf
           cp -r ${pkgs.gitea.out}/locale ${cfg.stateDir}/conf/locale
         fi
+      '' + optionalString (usePostgresql && cfg.database.createDatabase) ''
+        if ! test -e "${cfg.stateDir}/db-created"; then
+          echo "CREATE ROLE ${cfg.database.user}
+                  WITH ENCRYPTED PASSWORD '$(head -n1 ${cfg.database.passwordFile})'
+                  NOCREATEDB NOCREATEROLE LOGIN"   |
+            ${pkgs.sudo}/bin/sudo -u ${pg.superUser} ${pg.package}/bin/psql
+          ${pkgs.sudo}/bin/sudo -u ${pg.superUser} \
+            ${pg.package}/bin/createdb             \
+            --owner=${cfg.database.user}           \
+            --encoding=UTF8                        \
+            --lc-collate=C                         \
+            --lc-ctype=C                           \
+            --template=template0                   \
+            ${cfg.database.name}
+          touch "${cfg.stateDir}/db-created"
+        fi
+      '' + ''
+        chown ${cfg.user} -R ${cfg.stateDir}
       '';
 
       serviceConfig = {
         Type = "simple";
         User = cfg.user;
         WorkingDirectory = cfg.stateDir;
+        PermissionsStartOnly = true;
         ExecStart = "${pkgs.gitea.bin}/bin/gitea web";
         Restart = "always";
       };
@@ -253,6 +304,7 @@ in
         description = "Gitea Service";
         home = cfg.stateDir;
         createHome = true;
+        useDefaultShell = true;
       };
     };
 

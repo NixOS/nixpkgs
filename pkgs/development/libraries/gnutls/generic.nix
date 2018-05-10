@@ -40,9 +40,7 @@ stdenv.mkDerivation {
 
   enableParallelBuilding = true;
 
-  buildInputs = [ lzo lzip libtasn1 libidn p11-kit zlib gmp autogen libunistring unbound ]
-    ++ lib.optional (stdenv.isFreeBSD || stdenv.isDarwin) libiconv
-    ++ lib.optional stdenv.isDarwin gettext
+  buildInputs = [ lzo lzip libtasn1 libidn p11-kit zlib gmp autogen libunistring unbound gettext libiconv ]
     ++ lib.optional (tpmSupport && stdenv.isLinux) trousers
     ++ lib.optional guileBindings guile
     ++ buildInputs;

@@ -35,6 +35,8 @@ in {
   extraMeta ? {},
   # Whether to utilize the controversial import-from-derivation feature to parse the config
   allowImportFromDerivation ? false,
+  # ignored
+  features ? null,
 
   hostPlatform
 }:

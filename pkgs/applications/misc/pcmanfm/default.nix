@@ -7,10 +7,10 @@ let
   inherit (stdenv.lib) optional;
 in
 stdenv.mkDerivation rec {
-  name = "pcmanfm-1.2.5";
+  name = "pcmanfm-1.3.0";
   src = fetchurl {
     url = "mirror://sourceforge/pcmanfm/${name}.tar.xz";
-    sha256 = "0rxdh0dfzc84l85c54blq42gczygq8adhr3l9hqzy1dp530cm1hc";
+    sha256 = "1ywgfyklms5hqkapsbjps4kyx20ac0d1qk16ww74yagkyfdkwsas";
   };
 
   buildInputs = [ glib gtk libfm' libX11 pango gnome3.defaultIconTheme ];

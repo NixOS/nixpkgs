@@ -9,17 +9,15 @@
 , libsoup, json-glib, libseccomp
 , libiptcdata }:
 
-stdenv.mkDerivation rec {
-  name = "tracker-miners-${version}";
+let
+  pname = "tracker-miners";
   version = "2.0.4";
+in stdenv.mkDerivation rec {
+  name = "${pname}-${version}";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/tracker-miners/${gnome3.versionBranch version}/${name}.tar.xz";
+    url = "mirror://gnome/sources/${pname}/${gnome3.versionBranch version}/${name}.tar.xz";
     sha256 = "0mp9m2waii583sjgr61m1ni6py6dry11r0rzidgvw1g4cxhn89j6";
-  };
-
-  passthru = {
-    updateScript = gnome3.updateScript { packageName = "tracker-miners"; attrPath = "gnome3.tracker-miners"; };
   };
 
   NIX_CFLAGS_COMPILE = "-I${poppler.dev}/include/poppler";
@@ -27,7 +25,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   nativeBuildInputs = [ vala pkgconfig intltool itstool libxslt wrapGAppsHook ];
-  # TODO: add libgrss, libenca
+  # TODO: add libgrss, libenca, libosinfo
   buildInputs = [
     bzip2 evolution-data-server exempi flac giflib glib gnome3.totem-pl-parser
     gnome3.tracker gst_all_1.gst-plugins-base gst_all_1.gstreamer icu
@@ -45,6 +43,13 @@ stdenv.mkDerivation rec {
       inherit (gnome3) tracker;
     })
   ];
+
+  passthru = {
+    updateScript = gnome3.updateScript {
+      packageName = pname;
+      attrPath = "gnome3.${pname}";
+    };
+  };
 
   meta = with stdenv.lib; {
     homepage = https://wiki.gnome.org/Projects/Tracker;

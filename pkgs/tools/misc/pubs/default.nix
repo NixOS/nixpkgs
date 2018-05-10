@@ -1,7 +1,24 @@
-{ stdenv, fetchFromGitHub, python3Packages }:
+{ stdenv, fetchFromGitHub, python3 }:
 
-python3Packages.buildPythonApplication rec {
-  name = "pubs-${version}";
+let
+  python3Packages = (python3.override {
+    packageOverrides = self: super: {
+      # https://github.com/pubs/pubs/issues/131
+      pyfakefs = super.pyfakefs.overridePythonAttrs (oldAttrs: rec {
+        version = "3.3";
+        src = self.fetchPypi {
+          pname = "pyfakefs";
+          inherit version;
+          sha256 = "e3e198dea5e0d5627b73ba113fd0b139bb417da6bc15d920b2c873143d2f12a6";
+        };
+        postPatch = "";
+        doCheck = false;
+      });
+    };
+  }).pkgs;
+
+in python3Packages.buildPythonApplication rec {
+  pname = "pubs";
   version = "0.7.0";
 
   src = fetchFromGitHub {
@@ -13,8 +30,9 @@ python3Packages.buildPythonApplication rec {
 
   propagatedBuildInputs = with python3Packages; [
     dateutil configobj bibtexparser pyyaml requests beautifulsoup4
-    pyfakefs ddt
   ];
+
+  checkInputs = with python3Packages; [ pyfakefs ddt ];
 
   preCheck = ''
     # API tests require networking
@@ -29,6 +47,5 @@ python3Packages.buildPythonApplication rec {
     homepage = https://github.com/pubs/pubs;
     license = licenses.lgpl3;
     maintainers = with maintainers; [ gebner ];
-    platforms = platforms.all;
   };
 }

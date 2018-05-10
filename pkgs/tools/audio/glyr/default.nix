@@ -15,16 +15,12 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake pkgconfig ];
   buildInputs = [ sqlite glib curl ];
 
-  configurePhase = ''
-    cmake -DCMAKE_INSTALL_PREFIX=$out
-  '';
-
   meta = with stdenv.lib; {
     license = licenses.lgpl3;
     description = "A music related metadata searchengine";
     homepage = https://github.com/sahib/glyr;
     maintainers = [ maintainers.sternenseemann ];
-    platforms = platforms.linux; # TODO macOS would be possible
+    platforms = platforms.unix;
   };
 }
 

@@ -1,19 +1,27 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
+, pytest
 , freezegun
 }:
 
 buildPythonPackage rec {
   pname = "cached-property";
-  version = "1.3.1";
+  version = "1.4.2";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "6562f0be134957547421dda11640e8cadfa7c23238fc4e0821ab69efdb1095f3";
+  # conftest.py is missing in PyPI tarball
+  src = fetchFromGitHub {
+    owner = "pydanny";
+    repo = pname;
+    rev = version;
+    sha256 = "0gjmgfilhljkx2b60cjikwh55jg2jwxhwi8hgkrzdnzk465ywhrw";
   };
 
-  checkInputs = [ freezegun ];
+  checkInputs = [ pytest freezegun ];
+
+  checkPhase = ''
+    py.test
+  '';
 
   meta = {
     description = "A decorator for caching properties in classes";

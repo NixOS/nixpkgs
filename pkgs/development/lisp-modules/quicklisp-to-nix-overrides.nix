@@ -158,4 +158,9 @@ $out/lib/common-lisp/query-fs"
     deps = pkgs.lib.filter (x: x.name != quicklisp-to-nix-packages.buildnode-xhtml.name) x.deps;
     parasites = pkgs.lib.filter (x: x!= "buildnode-test") x.parasites;
   };
+  postmodern = x: {
+    overrides = y : (x.overrides y) // {
+      meta.broken = true; # 2018-04-10
+    };
+  };
 }

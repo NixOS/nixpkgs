@@ -1,23 +1,22 @@
-{ stdenv, fetchurl, xlibsWrapper, libGL }:
+{ stdenv, fetchurl, libGL, libX11 }:
 
-let version = "8.3.0"; in
-
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   name = "glxinfo-${version}";
+  version = "8.3.0";
 
   src = fetchurl {
-    url = "ftp://ftp.freedesktop.org/pub/libGLU_combined/demos/${version}/mesa-demos-${version}.tar.bz2";
+    url = "ftp://ftp.freedesktop.org/pub/mesa/demos/${version}/mesa-demos-${version}.tar.bz2";
     sha256 = "1vqb7s5m3fcg2csbiz45mha1pys2xx6rhw94fcyvapqdpm5iawy1";
   };
 
-  buildInputs = [ xlibsWrapper libGL ];
+  buildInputs = [ libX11 libGL ];
 
   configurePhase = "true";
 
   buildPhase = "
     cd src/xdemos
-    gcc glxinfo.c glinfo_common.c -o glxinfo -lGL -lX11
-    gcc glxgears.c -o glxgears -lGL -lX11
+    $CC glxinfo.c glinfo_common.c -o glxinfo -lGL -lX11
+    $CC glxgears.c -o glxgears -lGL -lX11 -lm
   ";
 
   installPhase = "
@@ -25,7 +24,11 @@ stdenv.mkDerivation {
     cp glxinfo glxgears $out/bin/
   ";
 
-  meta = {
-    platforms = stdenv.lib.platforms.linux;
+  meta = with stdenv.lib; {
+    description = "Test utilities for OpenGL";
+    homepage = https://www.mesa3d.org/;
+    license = licenses.mit;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ abbradar ];
   };
 }

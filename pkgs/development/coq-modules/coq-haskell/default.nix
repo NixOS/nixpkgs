@@ -1,6 +1,6 @@
 { stdenv, fetchgit, coq, ssreflect }:
 
-let param =
+let params =
   {
     "8.5" = {
       version = "20171215";
@@ -19,9 +19,9 @@ let param =
       rev = "e2cf8b270c2efa3b56fab1ef6acc376c2c3de968";
       sha256 = "09dq1vvshhlhgjccrhqgbhnq2hrys15xryfszqq11rzpgvl2zgdv";
     };
-
-  }."${coq.coq-version}"
-; in
+  };
+  param = params."${coq.coq-version}";
+in
 
 stdenv.mkDerivation rec {
 
@@ -48,4 +48,7 @@ stdenv.mkDerivation rec {
     platforms = coq.meta.platforms;
   };
 
+  passthru = {
+    compatibleCoqVersions = v: builtins.hasAttr v params;
+  };
 }

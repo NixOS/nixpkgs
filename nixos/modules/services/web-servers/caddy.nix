@@ -25,8 +25,8 @@ in {
     };
 
     ca = mkOption {
-      default = "https://acme-v01.api.letsencrypt.org/directory";
-      example = "https://acme-staging.api.letsencrypt.org/directory";
+      default = "https://acme-v02.api.letsencrypt.org/directory";
+      example = "https://acme-staging-v02.api.letsencrypt.org/directory";
       type = types.string;
       description = "Certificate authority ACME server. The default (Let's Encrypt production server) should be fine for most people.";
     };

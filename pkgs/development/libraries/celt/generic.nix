@@ -1,5 +1,6 @@
 { stdenv, version, src
 , liboggSupport ? true, libogg ? null # if disabled only the library will be built
+, prePatch ? ""
 , ...
 }:
 
@@ -9,6 +10,8 @@ stdenv.mkDerivation rec {
   name = "celt-${version}";
 
   inherit src;
+
+  inherit prePatch;
 
   buildInputs = []
     ++ stdenv.lib.optional liboggSupport libogg;

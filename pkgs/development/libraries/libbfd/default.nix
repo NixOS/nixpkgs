@@ -1,17 +1,15 @@
 { stdenv, buildPackages
-, fetchurl, fetchpatch, gnu-config, autoreconfHook264, bison
+, fetchurl, fetchpatch, gnu-config, autoreconfHook264, bison, binutils-unwrapped
 , libiberty, zlib
 }:
 
-let inherit (buildPackages.buildPackages) binutils-raw; in
-
 stdenv.mkDerivation rec {
   name = "libbfd-${version}";
-  inherit (binutils-raw.bintools) version src;
+  inherit (binutils-unwrapped) version src;
 
   outputs = [ "out" "dev" ];
 
-  patches = binutils-raw.bintools.patches ++ [
+  patches = binutils-unwrapped.patches ++ [
     ../../tools/misc/binutils/build-components-separately.patch
     (fetchpatch {
       url = "https://raw.githubusercontent.com/mxe/mxe/e1d4c144ee1994f70f86cf7fd8168fe69bd629c6/src/bfd-1-disable-subdir-doc.patch";

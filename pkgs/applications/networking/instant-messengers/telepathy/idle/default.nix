@@ -21,6 +21,6 @@ stdenv.mkDerivation rec {
   meta = {
     description = "IRC connection manager for the Telepathy framework";
     license = stdenv.lib.licenses.lgpl21;
-    platforms = stdenv.lib.platforms.gnu;
+    platforms = stdenv.lib.platforms.gnu ++ stdenv.lib.platforms.linux;
   };
 }

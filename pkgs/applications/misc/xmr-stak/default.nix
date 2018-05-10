@@ -1,19 +1,24 @@
-{ stdenv, lib, fetchFromGitHub, cmake, libuv, libmicrohttpd, openssl
+{ stdenv, stdenvGcc6, lib
+, fetchFromGitHub, cmake, libuv, libmicrohttpd, openssl
 , opencl-headers, ocl-icd, hwloc, cudatoolkit
 , devDonationLevel ? "0.0"
 , cudaSupport ? false
-, openclSupport ? false
+, openclSupport ? true
 }:
 
-stdenv.mkDerivation rec {
+let
+  stdenv' = if cudaSupport then stdenvGcc6 else stdenv;
+in
+
+stdenv'.mkDerivation rec {
   name = "xmr-stak-${version}";
-  version = "2.2.0";
+  version = "2.4.3";
 
   src = fetchFromGitHub {
     owner = "fireice-uk";
     repo = "xmr-stak";
-    rev = "v${version}";
-    sha256 = "0n21y37d8khgfk9965mrhnh6y5ag7w0s6as1fmf76yx6vajvajsn";
+    rev = "${version}";
+    sha256 = "0plks4yyd9gjnfg7sfsgsvdgczkbghf5xjwb8bzv01f0fndn10r1";
   };
 
   NIX_CFLAGS_COMPILE = "-O3";

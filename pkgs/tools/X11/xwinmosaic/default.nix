@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, gtk2, cmake, pkgconfig }:
+{ stdenv, fetchgit, gtk2, cmake, pkgconfig, libXdamage }:
 
 stdenv.mkDerivation rec {
   version = "0.4.2";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkgconfig cmake ];
-  buildInputs = [ gtk2 ];
+  buildInputs = [ gtk2 libXdamage ];
 
   meta = {
     inherit version;

@@ -13,7 +13,7 @@ let
   };
 
   disableScript = pkgs.writeScript "audit-disable" ''
-    #!${pkgs.stdenv.shell} -eu
+    #!${pkgs.runtimeShell} -eu
     # Explicitly disable everything, as otherwise journald might start it.
     auditctl -D
     auditctl -e 0 -a task,never
@@ -23,7 +23,7 @@ let
   # put in the store like this. At the same time, it doesn't feel like a huge deal and working
   # around that is a pain so I'm leaving it like this for now.
   startScript = pkgs.writeScript "audit-start" ''
-    #!${pkgs.stdenv.shell} -eu
+    #!${pkgs.runtimeShell} -eu
     # Clear out any rules we may start with
     auditctl -D
 
@@ -43,7 +43,7 @@ let
   '';
 
   stopScript = pkgs.writeScript "audit-stop" ''
-    #!${pkgs.stdenv.shell} -eu
+    #!${pkgs.runtimeShell} -eu
     # Clear the rules
     auditctl -D
 

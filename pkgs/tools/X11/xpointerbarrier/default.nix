@@ -1,13 +1,13 @@
 { stdenv, xorg, fetchFromGitHub }:
 stdenv.mkDerivation rec {
   name = "xpointerbarrier-${version}";
-  version = "17.10";
+  version = "17.11";
 
   src = fetchFromGitHub {
     owner = "vain";
     repo = "xpointerbarrier";
     rev = "v${version}";
-    sha256 = "0p4qc7ggndf74d2xdf38659prx3r3lfi5jc8nmqx52c9fqdshcrk";
+    sha256 = "0s6bd58xjyc2nqzjq6aglx6z64x9xavda3i6p8vrmxqmcpik54nm";
   };
 
   buildInputs = [ xorg.libX11 xorg.libXfixes xorg.libXrandr ];

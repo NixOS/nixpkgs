@@ -1,14 +1,14 @@
 { stdenv, fetchFromGitHub, cmake, boost, gmp, mpfr }:
 
 stdenv.mkDerivation rec {
-  version = "4.11";
+  version = "4.12";
   name = "cgal-" + version;
 
   src = fetchFromGitHub {
     owner = "CGAL";
     repo = "releases";
     rev = "CGAL-${version}";
-    sha256 = "126r06aba5h8l73xmm5mwmxkir7sy122jn2j18cd4gz3z9p23npr";
+    sha256 = "0n4yvg2rkrlb1bwhykrg4iyqg4whxadcs441k10xx0r75i6220mn";
   };
 
   # note: optional component libCGAL_ImageIO would need zlib and opengl;

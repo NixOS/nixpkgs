@@ -83,6 +83,8 @@ let
 
     WebInterface ${if cfg.webInterface then "Yes" else "No"}
 
+    LogLevel ${cfg.logLevel}
+
     ${cfg.extraConf}
   '';
 
@@ -124,7 +126,7 @@ in
 
       listenAddresses = mkOption {
         type = types.listOf types.str;
-        default = [ "127.0.0.1:631" ];
+        default = [ "localhost:631" ];
         example = [ "*:631" ];
         description = ''
           A list of addresses and ports on which to listen.
@@ -165,6 +167,15 @@ in
         '';
       };
 
+      logLevel = mkOption {
+        type = types.str;
+        default = "info";
+        example = "debug";
+        description = ''
+          Specifies the cupsd logging verbosity.
+        '';
+      };
+
       extraFilesConf = mkOption {
         type = types.lines;
         default = "";
@@ -180,7 +191,7 @@ in
         example =
           ''
             BrowsePoll cups.example.com
-            LogLevel debug
+            MaxCopies 42
           '';
         description = ''
           Extra contents of the configuration file of the CUPS daemon
@@ -321,7 +332,10 @@ in
             ''}
           '';
 
-          serviceConfig.PrivateTmp = true;
+          serviceConfig = {
+            PrivateTmp = true;
+            RuntimeDirectory = [ "cups" ];
+          };
       };
 
     systemd.services.cups-browsed = mkIf avahiEnabled
@@ -342,8 +356,6 @@ in
 
     services.printing.extraConf =
       ''
-        LogLevel info
-
         DefaultAuthType Basic
 
         <Location />

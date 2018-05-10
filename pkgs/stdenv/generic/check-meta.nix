@@ -8,7 +8,8 @@ let
   # for why this defaults to false, but I (@copumpkin) want to default it to true soon.
   shouldCheckMeta = config.checkMeta or false;
 
-  allowUnfree = config.allowUnfree or false || builtins.getEnv "NIXPKGS_ALLOW_UNFREE" == "1";
+  allowUnfree = config.allowUnfree or false
+    || builtins.getEnv "NIXPKGS_ALLOW_UNFREE" == "1";
 
   whitelist = config.whitelistedLicenses or [];
   blacklist = config.blacklistedLicenses or [];
@@ -35,9 +36,11 @@ let
   hasBlacklistedLicense = assert areLicenseListsValid; attrs:
     hasLicense attrs && builtins.elem attrs.meta.license blacklist;
 
-  allowBroken = config.allowBroken or false || builtins.getEnv "NIXPKGS_ALLOW_BROKEN" == "1";
+  allowBroken = config.allowBroken or false
+    || builtins.getEnv "NIXPKGS_ALLOW_BROKEN" == "1";
 
-  allowUnsupportedSystem = config.allowUnsupportedSystem or false;
+  allowUnsupportedSystem = config.allowUnsupportedSystem or false
+    || builtins.getEnv "NIXPKGS_ALLOW_UNSUPPORTED_SYSTEM" == "1";
 
   isUnfree = licenses: lib.lists.any (l:
     !l.free or true || l == "unfree" || l == "unfree-redistributable") licenses;
@@ -75,6 +78,7 @@ let
   remediation = {
     unfree = remediate_whitelist "Unfree";
     broken = remediate_whitelist "Broken";
+    unsupported = remediate_whitelist "UnsupportedSystem";
     blacklisted = x: "";
     insecure = remediate_insecure;
     unknown-meta = x: "";
@@ -142,9 +146,9 @@ let
     homepage = either (listOf str) str;
     downloadPage = str;
     license = either (listOf lib.types.attrs) (either lib.types.attrs str);
-    maintainers = listOf str;
+    maintainers = listOf (attrsOf str);
     priority = int;
-    platforms = listOf (either str lib.systems.parsed.types.system);
+    platforms = listOf (either str lib.systems.parsedPlatform.types.system);
     hydraPlatforms = listOf str;
     broken = bool;
 
@@ -165,6 +169,9 @@ let
     isFcitxEngine = bool;
     isIbusEngine = bool;
     isGutenprint = bool;
+    badPlatforms = platforms;
+    # Hydra build timeout
+    timeout = int;
   };
 
   checkMetaAttr = k: v:
@@ -173,8 +180,10 @@ let
     else "key '${k}' is unrecognized; expected one of: \n\t      [${lib.concatMapStringsSep ", " (x: "'${x}'") (lib.attrNames metaTypes)}]";
   checkMeta = meta: if shouldCheckMeta then lib.remove null (lib.mapAttrsToList checkMetaAttr meta) else [];
 
-  checkPlatform = attrs:
-    lib.any (lib.meta.platformMatch hostPlatform) attrs.meta.platforms;
+  checkPlatform = attrs: let
+      anyMatch = lib.any (lib.meta.platformMatch hostPlatform);
+    in  anyMatch (attrs.meta.platforms or lib.platforms.all) &&
+      ! anyMatch (attrs.meta.badPlatforms or []);
 
   # Check if a derivation is valid, that is whether it passes checks for
   # e.g brokenness or license.
@@ -189,8 +198,8 @@ let
       { valid = false; reason = "blacklisted"; errormsg = "has a blacklisted license (‘${showLicense attrs.meta.license}’)"; }
     else if !allowBroken && attrs.meta.broken or false then
       { valid = false; reason = "broken"; errormsg = "is marked as broken"; }
-    else if !allowUnsupportedSystem && !allowBroken && attrs.meta.platforms or null != null && !(checkPlatform attrs) then
-      { valid = false; reason = "broken"; errormsg = "is not supported on ‘${hostPlatform.config}’"; }
+    else if !allowUnsupportedSystem && !(checkPlatform attrs) then
+      { valid = false; reason = "unsupported"; errormsg = "is not supported on ‘${hostPlatform.config}’"; }
     else if !(hasAllowedInsecure attrs) then
       { valid = false; reason = "insecure"; errormsg = "is marked as insecure"; }
     else let res = checkMeta (attrs.meta or {}); in if res != [] then

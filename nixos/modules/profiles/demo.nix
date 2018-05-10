@@ -10,4 +10,10 @@
       password = "demo";
       uid = 1000;
     };
+
+  services.xserver.displayManager.sddm.autoLogin = {
+    enable = true;
+    relogin = true;
+    user = "demo";
+  };
 }

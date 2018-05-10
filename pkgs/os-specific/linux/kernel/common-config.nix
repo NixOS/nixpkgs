@@ -32,7 +32,6 @@ with stdenv.lib;
   # Debugging.
   DEBUG_KERNEL y
   DYNAMIC_DEBUG y
-  BACKTRACE_SELF_TEST n
   DEBUG_DEVRES n
   DEBUG_STACK_USAGE n
   DEBUG_STACKOVERFLOW n
@@ -116,7 +115,6 @@ with stdenv.lib;
   # Enable various subsystems.
   ACCESSIBILITY y # Accessibility support
   AUXDISPLAY y # Auxiliary Display support
-  DONGLE y # Serial dongle support
   HIPPI y
   MTD_COMPLEX_MAPPINGS y # needed for many devices
   SCSI_LOWLEVEL y # enable lots of SCSI devices
@@ -125,6 +123,9 @@ with stdenv.lib;
   SPI y # needed for many devices
   SPI_MASTER y
   WAN y
+  ${optionalString (versionOlder version "4.17") ''
+    DONGLE y # Serial dongle support
+  ''}
 
   # Networking options.
   NET y
@@ -135,6 +136,7 @@ with stdenv.lib;
   NETFILTER y
   NETFILTER_ADVANCED y
   CGROUP_BPF? y # Required by systemd per-cgroup firewalling
+  CGROUP_NET_PRIO y # Required by systemd
   IP_ROUTE_VERBOSE y
   IP_MROUTE_MULTIPLE_TABLES y
   IP_VS_PROTO_TCP y
@@ -420,7 +422,9 @@ with stdenv.lib;
   ${optionalString (versionAtLeast version "4.3") ''
     IDLE_PAGE_TRACKING y
   ''}
-  IRDA_ULTRA y # Ultra (connectionless) protocol
+  ${optionalString (versionOlder version "4.17") ''
+    IRDA_ULTRA y # Ultra (connectionless) protocol
+  ''}
   JOYSTICK_IFORCE_232? y # I-Force Serial joysticks and wheels
   JOYSTICK_IFORCE_USB? y # I-Force USB joysticks and wheels
   JOYSTICK_XPAD_FF? y # X-Box gamepad rumble support
@@ -640,43 +644,46 @@ with stdenv.lib;
   # This menu disables all/most of them on >= 4.16
   RUNTIME_TESTING_MENU? n
   # For older kernels, painstakingly disable each symbol.
-  ARM_KPROBES_TEST? n
-  ASYNC_RAID6_TEST? n
-  ATOMIC64_SELFTEST? n
-  BACKTRACE_SELF_TEST? n
+  ${optionalString (versionOlder version "4.16") ''
+    ARM_KPROBES_TEST? n
+    ASYNC_RAID6_TEST? n
+    ATOMIC64_SELFTEST? n
+    BACKTRACE_SELF_TEST? n
+    INTERVAL_TREE_TEST? n
+    PERCPU_TEST? n
+    RBTREE_TEST? n
+    TEST_BITMAP? n
+    TEST_BPF? n
+    TEST_FIRMWARE? n
+    TEST_HASH? n
+    TEST_HEXDUMP? n
+    TEST_KMOD? n
+    TEST_KSTRTOX? n
+    TEST_LIST_SORT? n
+    TEST_LKM? n
+    TEST_PARMAN? n
+    TEST_PRINTF? n
+    TEST_RHASHTABLE? n
+    TEST_SORT? n
+    TEST_STATIC_KEYS? n
+    TEST_STRING_HELPERS? n
+    TEST_UDELAY? n
+    TEST_USER_COPY? n
+    TEST_UUID? n
+  ''}
+
   CRC32_SELFTEST? n
   CRYPTO_TEST? n
   DRM_DEBUG_MM_SELFTEST? n
   EFI_TEST? n
   GLOB_SELFTEST? n
-  INTERVAL_TREE_TEST? n
   LNET_SELFTEST? n
   LOCK_TORTURE_TEST? n
   MTD_TESTS? n
   NOTIFIER_ERROR_INJECTION? n
-  PERCPU_TEST? n
-  RBTREE_TEST? n
   RCU_PERF_TEST? n
   RCU_TORTURE_TEST? n
   TEST_ASYNC_DRIVER_PROBE? n
-  TEST_BITMAP? n
-  TEST_BPF? n
-  TEST_FIRMWARE? n
-  TEST_HASH? n
-  TEST_HEXDUMP? n
-  TEST_KMOD? n
-  TEST_KSTRTOX? n
-  TEST_LIST_SORT? n
-  TEST_LKM? n
-  TEST_PARMAN? n
-  TEST_PRINTF? n
-  TEST_RHASHTABLE? n
-  TEST_SORT? n
-  TEST_STATIC_KEYS? n
-  TEST_STRING_HELPERS? n
-  TEST_UDELAY? n
-  TEST_USER_COPY? n
-  TEST_UUID? n
   WW_MUTEX_SELFTEST? n
   XZ_DEC_TEST? n
 

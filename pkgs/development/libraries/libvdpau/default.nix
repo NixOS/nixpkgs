@@ -1,7 +1,8 @@
-{ stdenv, fetchurl, pkgconfig, xorg, libGL }:
+{ stdenv, fetchurl, pkgconfig, xorg, libGL_driver }:
 
 stdenv.mkDerivation rec {
-  name = "libvdpau-1.1.1";
+  name = "libvdpau-${version}";
+  version = "1.1.1";
 
   src = fetchurl {
     url = "https://people.freedesktop.org/~aplattner/vdpau/${name}.tar.bz2";
@@ -16,7 +17,7 @@ stdenv.mkDerivation rec {
   propagatedBuildInputs = [ xorg.libX11 ];
 
   configureFlags = stdenv.lib.optional stdenv.isLinux
-    "--with-module-dir=${libGL.driverLink}/lib/vdpau";
+    "--with-module-dir=${libGL_driver.driverLink}/lib/vdpau";
 
   installFlags = [ "moduledir=$(out)/lib/vdpau" ];
 

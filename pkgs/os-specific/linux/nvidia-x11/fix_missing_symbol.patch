@@ -1,0 +1,19 @@
+https://devtalk.nvidia.com/default/topic/1030082/linux/kernel-4-16-rc1-breaks-latest-drivers-unknown-symbol-swiotlb_map_sg_attrs-/
+--- a/kernel/common/inc/nv-linux.h~     2018-01-25 06:09:41.000000000 +0100
++++ b/kernel/common/inc/nv-linux.h      2018-03-05 13:58:17.746725638 +0100
+@@ -1209,6 +1209,7 @@ static inline NvU32 nv_alloc_init_flags(
+ static inline NvBool nv_dma_maps_swiotlb(struct pci_dev *dev)
+ {
+     NvBool swiotlb_in_use = NV_FALSE;
++#if 0
+ #if defined(CONFIG_SWIOTLB)
+   #if defined(NV_DMA_OPS_PRESENT) || defined(NV_GET_DMA_OPS_PRESENT)
+     /*
+@@ -1251,7 +1252,7 @@ static inline NvBool nv_dma_maps_swiotlb
+     swiotlb_in_use = (swiotlb == 1);
+   #endif
+ #endif
+-
++#endif
+     return swiotlb_in_use;
+ }

@@ -1,18 +1,18 @@
-{ stdenv, fetchurl, fetchpatch, glib, libxml2, pkgconfig, gnome3
-, gnomeSupport ? true, libgnome-keyring3, sqlite, glib-networking, gobjectIntrospection
-, valaSupport ? true, vala_0_38
-, libintlOrEmpty
-, intltool, python }:
+{ stdenv, fetchurl, glib, libxml2, pkgconfig, gnome3
+, gnomeSupport ? true, sqlite, glib-networking, gobjectIntrospection
+, valaSupport ? true, vala_0_40
+, intltool, python3 }:
+
 let
   pname = "libsoup";
-  version = "2.60.2";
+  version = "2.62.0";
 in
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${gnome3.versionBranch version}/${name}.tar.xz";
-    sha256 = "7263cfe18872e2e652c196f5667e514616d9c97c861dfca82a65a55f45f0da01";
+    sha256 = "1b5aff1igbsx1h4v3wmkffvzgiy8rscibqka7fmjf2lxs7l7lz5b";
   };
 
   prePatch = ''
@@ -22,29 +22,19 @@ stdenv.mkDerivation rec {
      substituteInPlace libsoup/Makefile.in --replace "\$(DESTDIR)\$(vapidir)" "\$(DESTDIR)\$(girdir)/../vala/vapi"
   '';
 
-  patches = [
-    # remove for >= 2.60.3
-    (fetchpatch {
-      name = "buffer-overflow.patch"; # https://bugzilla.gnome.org/show_bug.cgi?id=788037
-      url = "https://git.gnome.org/browse/libsoup/patch/?id=b79689833ba";
-      sha256 = "1azbk540mbm4c6ip54ixbg9d6w7nkls9y81fzm3csq9a5786r3d3";
-    })
-  ];
-
   outputs = [ "out" "dev" ];
 
-  buildInputs = libintlOrEmpty ++ [ intltool python sqlite ]
-    ++ stdenv.lib.optionals valaSupport [ vala_0_38 ];
-  nativeBuildInputs = [ pkgconfig ];
-  propagatedBuildInputs = [ glib libxml2 gobjectIntrospection ]
-    ++ stdenv.lib.optionals gnomeSupport [ libgnome-keyring3 ];
+  buildInputs = [ python3 sqlite ];
+  nativeBuildInputs = [ pkgconfig intltool gobjectIntrospection ]
+    ++ stdenv.lib.optionals valaSupport [ vala_0_40 ];
+  propagatedBuildInputs = [ glib libxml2 ];
 
   # glib-networking is a runtime dependency, not a compile-time dependency
-  configureFlags = "--disable-tls-check"
-    + " --enable-vala=${if valaSupport then "yes" else "no"}"
-    + stdenv.lib.optionalString (!gnomeSupport) " --without-gnome";
-
-  NIX_CFLAGS_COMPILE = stdenv.lib.optionalString stdenv.isDarwin "-lintl";
+  configureFlags = [
+    "--disable-tls-check"
+    "--enable-vala=${if valaSupport then "yes" else "no"}"
+    "--with-gnome=${if gnomeSupport then "yes" else "no"}"
+  ];
 
   passthru = {
     propagatedUserEnvPackages = [ glib-networking.out ];

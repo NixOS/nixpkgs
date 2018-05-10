@@ -15,6 +15,12 @@ stdenv.mkDerivation {
     "-DDYND_BUILD_BENCHMARKS=OFF"
   ];
 
+  # added to fix build with gcc7
+  NIX_CFLAGS_COMPILE = [
+    "-Wno-error=implicit-fallthrough"
+    "-Wno-error=nonnull"
+  ];
+
   buildInputs = [ cmake ];
 
   outputs = [ "out" "dev" ];
@@ -24,5 +30,6 @@ stdenv.mkDerivation {
     description = "C++ dynamic ndarray library, with Python exposure.";
     homepage = http://libdynd.org;
     license = licenses.bsd2;
+    platforms = platforms.linux;
   };
 }

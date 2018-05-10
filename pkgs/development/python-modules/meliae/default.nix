@@ -35,7 +35,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Python Memory Usage Analyzer";
-    homepage = http://launchpad.net/meliae;
+    homepage = https://launchpad.net/meliae;
     license = licenses.gpl3;
     maintainers = with maintainers; [ xvapx ];
   };

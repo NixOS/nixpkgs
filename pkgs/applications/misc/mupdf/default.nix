@@ -14,35 +14,19 @@ let
 
 
 in stdenv.mkDerivation rec {
-  version = "1.12.0";
+  version = "1.13.0";
   name = "mupdf-${version}";
 
   src = fetchurl {
-    url = "http://mupdf.com/downloads/archive/${name}-source.tar.gz";
-    sha256 = "0mc7a92zri27lk17wdr2iffarbfi4lvrmxhc53sz84hm5yl56qsw";
+    url = "https://mupdf.com/downloads/archive/${name}-source.tar.gz";
+    sha256 = "02faww5bnjw76k6igrjzwf0lnw4xd9ckc8d6ilc3c4gfrdi6j707";
   };
 
   patches = [
-    # Compatibility with new openjpeg
-    (fetchpatch {
-      name = "mupdf-1.12-openjpeg-version.patch";
-      url = "https://git.archlinux.org/svntogit/community.git/plain/trunk/0001-mupdf-openjpeg.patch?h=packages/mupdf&id=a910cd33a2b311712f83710dc042fbe80c104306";
-      sha256 = "05i9v2ia586jyjqdb7g68ss4vkfwgp6cwhagc8zzggsba83azyqk";
-    })
-    (fetchpatch {
-      name = "CVE-2018-6544.1.patch";
-      url = "http://git.ghostscript.com/?p=mupdf.git;a=commitdiff_plain;h=b03def134988da8c800adac1a38a41a1f09a1d89;hp=26527eef77b3e51c2258c8e40845bfbc015e405d";
-      sha256 = "1rlmjibl73ls8xfpsz69axa3lw5l47vb0a1dsjqziszsld4lpj5i";
-    })
-    (fetchpatch {
-      name = "CVE-2018-6544.2.patch";
-      url = "http://git.ghostscript.com/?p=mupdf.git;a=patch;h=26527eef77b3e51c2258c8e40845bfbc015e405d;hp=ab98356f959c7a6e94b1ec10f78dd2c33ed3f3e7";
-      sha256 = "1brcc029s5zmd6ya0d9qk3mh9qwx5g6vhsf1j8h879092sya5627";
-    })
   ]
 
   # Use shared libraries to decrease size
-  ++ stdenv.lib.optional (!stdenv.isDarwin) ./mupdf-1.12-shared_libs-1.patch
+  ++ stdenv.lib.optional (!stdenv.isDarwin) ./mupdf-1.13-shared_libs-1.patch
 
   ++ stdenv.lib.optional stdenv.isDarwin ./darwin.patch
   ;

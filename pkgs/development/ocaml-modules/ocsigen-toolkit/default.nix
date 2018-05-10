@@ -1,14 +1,14 @@
-{ stdenv, fetchurl, buildOcaml, ocaml, eliom, opam }:
+{ stdenv, fetchurl, buildOcaml, ocaml, opam
+, calendar, eliom, js_of_ocaml-ppx_deriving_json
+}:
 
 buildOcaml rec
 {
  name = "ocsigen-toolkit";
- version = "1.0.0";
+ version = "1.1.0";
 
- propagatedBuildInputs = [ eliom ];
+ propagatedBuildInputs = [ calendar eliom js_of_ocaml-ppx_deriving_json ];
  buildInputs = [ opam ];
-
- createFindlibDestdir = true;
 
  installPhase =
   ''
@@ -18,7 +18,7 @@ buildOcaml rec
   '';
 
   src = fetchurl {
-    sha256 = "0wm4fnss7vlkd03ybgfrk63kpip6m6p6kdqjn3f64n11256mwzj2";
+    sha256 = "1i5806gaqqllgsgjz3lf9fwlffqg3vfl49msmhy7xvq2sncbxp8a";
     url = "https://github.com/ocsigen/${name}/archive/${version}.tar.gz";
   };
 

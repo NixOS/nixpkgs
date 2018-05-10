@@ -5,13 +5,13 @@
 
 stdenv.mkDerivation rec {
   name = "shotcut-${version}";
-  version = "17.11";
+  version = "18.03.06";
 
   src = fetchFromGitHub {
     owner = "mltframework";
     repo = "shotcut";
     rev = "v${version}";
-    sha256 = "1bw2cjpzycddxi9b21haiaslv0ikia85wwgkfm2xl2m15w5j8510";
+    sha256 = "1b8hfym89i1nmrx80y16z06zsff5qba7gpga8jydnw1lmcscdash";
   };
 
   enableParallelBuilding = true;
@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = https://shotcut.org;
     license = licenses.gpl3;
-    maintainers = [ maintainers.goibhniu ];
+    maintainers = with maintainers; [ goibhniu woffs ];
     platforms = platforms.linux;
   };
 }
