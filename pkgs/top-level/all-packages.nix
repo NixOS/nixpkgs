@@ -12001,6 +12001,8 @@ with pkgs;
     czmq = czmq3;
   };
 
+  zmqpp = callPackage ../development/libraries/zmqpp { };
+
   zig = callPackage ../development/compilers/zig {
     llvmPackages = llvmPackages_6;
   };

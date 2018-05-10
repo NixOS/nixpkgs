@@ -1,5 +1,7 @@
-{stdenv, libiconv, fetchurl, zlib, openssl, tcl, readline, sqlite, ed, which
-, tcllib, withJson ? true}:
+{ stdenv
+, libiconv, fetchurl, zlib, openssl, tcl, readline, sqlite, ed, which
+, tcllib, withJson ? true
+}:
 
 stdenv.mkDerivation rec {
   name = "fossil-${version}";
@@ -18,11 +20,11 @@ stdenv.mkDerivation rec {
              ++ stdenv.lib.optional stdenv.isDarwin libiconv;
   nativeBuildInputs = [ tcl ];
 
-  doCheck = true;
+  doCheck = stdenv.hostPlatform == stdenv.buildPlatform;
 
   checkTarget = "test";
 
-  preCheck = ''
+  preCheck = stdenv.lib.optional doCheck ''
     export TCLLIBPATH="${tcllib}/lib/tcllib${tcllib.version}"
   '';
   configureFlags = if withJson then  "--json" else  "";
@@ -35,11 +37,6 @@ stdenv.mkDerivation rec {
     mkdir -p $out/bin
     INSTALLDIR=$out/bin make install
   '';
-
-  crossAttrs = {
-    doCheck = false;
-    makeFlags = [ "TCC=$CC" ];
-  };
 
   meta = {
     description = "Simple, high-reliability, distributed software configuration management";
