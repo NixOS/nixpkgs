@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, autoreconfHook, freetds, readline }:
+{ stdenv, fetchurl, autoreconfHook, freetds, readline, libiconv }:
 
 let
   mainVersion = "2.5";
@@ -17,11 +17,13 @@ in stdenv.mkDerivation rec {
 
     substituteInPlace src/cmd_connect.c \
       --replace CS_TDS_80 CS_TDS_73
+  '' + stdenv.lib.optionalString stdenv.isDarwin ''
+    substituteInPlace configure --replace "libct.so" "libct.dylib"
   '';
 
   enableParallelBuilding = true;
 
-  buildInputs = [ freetds readline ];
+  buildInputs = [ freetds readline libiconv ];
 
   nativeBuildInputs = [ autoreconfHook ];
 

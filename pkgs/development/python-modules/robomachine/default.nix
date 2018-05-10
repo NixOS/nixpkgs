@@ -1,16 +1,15 @@
-{ stdenv, fetchurl, buildPythonPackage, pyparsing, argparse, robotframework }:
+{ stdenv, fetchPypi, buildPythonPackage, pyparsing, argparse, robotframework, allpairspy }:
 
 buildPythonPackage rec {
-  pname = "robomachine";
+  pname = "RoboMachine";
   version = "0.8.0";
-  name = pname + "-" + version;
 
-  src = fetchurl {
-    url = "mirror://pypi/R/RoboMachine/RoboMachine-0.6.tar.gz";
+  src = fetchPypi {
+    inherit pname version;
     sha256 = "242cfd9be0f7591138eaeba03c9c190f894ce045e1767ab7b90eca330259fc45";
   };
 
-  propagatedBuildInputs = [ pyparsing argparse robotframework ];
+  propagatedBuildInputs = [ pyparsing argparse robotframework allpairspy ];
 
   # Remove Windows .bat files
   postInstall = ''

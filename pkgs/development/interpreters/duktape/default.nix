@@ -2,10 +2,10 @@
 
 stdenv.mkDerivation rec {
   name = "duktape-${version}";
-  version = "2.2.0";
+  version = "2.2.1";
   src = fetchurl {
     url = "http://duktape.org/duktape-${version}.tar.xz";
-    sha256 = "050csp065ll67dck94s0vdad5r5ck4jwsz1fn1y0fcvn88325xv2";
+    sha256 = "1wp7mpkhizknq72ivdbkzps4radi1daqzjcjp1i54c2k4pnjxgis";
   };
 
   buildPhase = ''
@@ -16,7 +16,8 @@ stdenv.mkDerivation rec {
     install -d $out/bin
     install -m755 duk $out/bin/
     install -d $out/lib
-    install -m755 libduktape* $out/lib/
+    install -d $out/include
+    make -f Makefile.sharedlibrary install INSTALL_PREFIX=$out
   '';
   enableParallelBuilding = true;
 

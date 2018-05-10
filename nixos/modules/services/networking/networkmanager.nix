@@ -10,7 +10,8 @@ let
   stateDirs = "/var/lib/NetworkManager /var/lib/dhclient /var/lib/misc";
 
   dns =
-    if cfg.useDnsmasq then "dnsmasq"
+    if cfg.dns == "none" then "none"
+    else if cfg.dns == "dnsmasq" then "dnsmasq"
     else if config.services.resolved.enable then "systemd-resolved"
     else if config.services.unbound.enable then "unbound"
     else "default";
@@ -135,8 +136,7 @@ in {
         default = { inherit networkmanager modemmanager wpa_supplicant
                             networkmanager-openvpn networkmanager-vpnc
                             networkmanager-openconnect networkmanager-fortisslvpn
-                            networkmanager-pptp networkmanager-l2tp
-                            networkmanager-iodine; };
+                            networkmanager-l2tp networkmanager-iodine; };
         internal = true;
       };
 
@@ -206,14 +206,20 @@ in {
         };
       };
 
-      useDnsmasq = mkOption {
-        type = types.bool;
-        default = false;
+      dns = mkOption {
+        type = types.enum [ "auto" "dnsmasq" "none" ];
+        default = "auto";
         description = ''
-          Enable NetworkManager's dnsmasq integration. NetworkManager will run
-          dnsmasq as a local caching nameserver, using a "split DNS"
-          configuration if you are connected to a VPN, and then update
-          resolv.conf to point to the local nameserver.
+          Options:
+            - auto: Check for systemd-resolved, unbound, or use default.
+            - dnsmasq:
+              Enable NetworkManager's dnsmasq integration. NetworkManager will run
+              dnsmasq as a local caching nameserver, using a "split DNS"
+              configuration if you are connected to a VPN, and then update
+              resolv.conf to point to the local nameserver.
+            - none:
+              Disable NetworkManager's DNS integration completely.
+              It will not touch your /etc/resolv.conf.
         '';
       };
 
@@ -267,8 +273,6 @@ in {
       message = "You can not use networking.networkmanager with networking.wireless";
     }];
 
-    boot.kernelModules = [ "ppp_mppe" ]; # Needed for most (all?) PPTP VPN connections.
-
     environment.etc = with cfg.basePackages; [
       { source = configFile;
         target = "NetworkManager/NetworkManager.conf";
@@ -284,9 +288,6 @@ in {
       }
       { source = "${networkmanager-fortisslvpn}/etc/NetworkManager/VPN/nm-fortisslvpn-service.name";
         target = "NetworkManager/VPN/nm-fortisslvpn-service.name";
-      }
-      { source = "${networkmanager-pptp}/etc/NetworkManager/VPN/nm-pptp-service.name";
-        target = "NetworkManager/VPN/nm-pptp-service.name";
       }
       { source = "${networkmanager-l2tp}/etc/NetworkManager/VPN/nm-l2tp-service.name";
         target = "NetworkManager/VPN/nm-l2tp-service.name";

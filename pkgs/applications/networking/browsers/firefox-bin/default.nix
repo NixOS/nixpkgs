@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, config, wrapGAppsHook
+{ lib, stdenv, fetchurl, config, wrapGAppsHook
 , alsaLib
 , atk
 , cairo
@@ -12,8 +12,6 @@
 , gdk_pixbuf
 , glib
 , glibc
-, gst-plugins-base
-, gstreamer
 , gtk2
 , gtk3
 , kerberos
@@ -30,6 +28,7 @@
 , libcanberra-gtk2
 , libgnome
 , libgnomeui
+, libnotify
 , defaultIconTheme
 , libGLU_combined
 , nspr
@@ -47,8 +46,6 @@
 , gnugrep
 , gnupg
 }:
-
-assert stdenv.isLinux;
 
 let
 
@@ -87,7 +84,7 @@ stdenv.mkDerivation {
   libPath = stdenv.lib.makeLibraryPath
     [ stdenv.cc.cc
       alsaLib
-      alsaLib.dev
+      (lib.getDev alsaLib)
       atk
       cairo
       curl
@@ -100,8 +97,6 @@ stdenv.mkDerivation {
       gdk_pixbuf
       glib
       glibc
-      gst-plugins-base
-      gstreamer
       gtk2
       gtk3
       kerberos
@@ -118,13 +113,14 @@ stdenv.mkDerivation {
       libcanberra-gtk2
       libgnome
       libgnomeui
+      libnotify
       libGLU_combined
       nspr
       nss
       pango
       libheimdal
       libpulseaudio
-      libpulseaudio.dev
+      (lib.getDev libpulseaudio)
       systemd
     ] + ":" + stdenv.lib.makeSearchPathOutput "lib" "lib64" [
       stdenv.cc.cc
@@ -174,6 +170,8 @@ stdenv.mkDerivation {
 
   passthru.ffmpegSupport = true;
   passthru.gssSupport = true;
+  # update with:
+  # $ nix-shell maintainers/scripts/update.nix --argstr package firefox-bin-unwrapped
   passthru.updateScript = import ./update.nix {
     inherit name channel writeScript xidel coreutils gnused gnugrep gnupg curl;
     baseUrl =

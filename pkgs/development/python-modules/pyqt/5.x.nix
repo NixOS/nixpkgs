@@ -6,9 +6,10 @@
 
 let
   pname = "PyQt";
-  version = "5.10";
+  version = "5.10.1";
 
   inherit (pythonPackages) buildPythonPackage python dbus-python sip;
+
 in buildPythonPackage {
   pname = pname;
   version = version;
@@ -24,16 +25,18 @@ in buildPythonPackage {
 
   src = fetchurl {
     url = "mirror://sourceforge/pyqt/PyQt5/PyQt-${version}/PyQt5_gpl-${version}.tar.gz";
-    sha256 = "0l2zy6b7bfjxmg4bb8yikg6i8iy2xdwmvk7knfmrzfpqbmkycbrl";
+    sha256 = "1vz9c4v0k8azk2b08swwybrshzw32x8djjpq13mf9v15x1qyjclr";
   };
 
-  nativeBuildInputs = [ pkgconfig qmake ];
+  outputs = [ "out" "dev" ];
 
-  buildInputs = [
-    lndir qtbase qtsvg qtwebkit qtwebengine dbus_libs
+  nativeBuildInputs = [ pkgconfig qmake lndir ];
+
+  buildInputs = [ dbus_libs ];
+
+  propagatedBuildInputs = [
+    sip qtbase qtsvg qtwebkit qtwebengine
   ] ++ lib.optional withWebSockets qtwebsockets ++ lib.optional withConnectivity qtconnectivity;
-
-  propagatedBuildInputs = [ sip ];
 
   configurePhase = ''
     runHook preConfigure

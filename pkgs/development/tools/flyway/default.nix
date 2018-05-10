@@ -23,7 +23,7 @@
         description = "Evolve your Database Schema easily and reliably across all your instances";
         homepage = "https://flywaydb.org/";
         license = licenses.asl20;
-        platforms = platforms.linux;
+        platforms = platforms.unix;
         maintainers = [ maintainers.cmcdragonkai ];
       };
     }

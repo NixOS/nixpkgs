@@ -6,11 +6,11 @@ with stdenv.lib;
 stdenv.mkDerivation rec{
 
   name = "freecell-solver-${version}";
-  version = "4.16.0";
+  version = "4.18.0";
 
   src = fetchurl {
     url = "http://fc-solve.shlomifish.org/downloads/fc-solve/${name}.tar.xz";
-    sha256 = "1ihrmxbsli7c1lm5gw9xgrakyn4nsmaj1zgk5gza2ywnfpgdb0ac";
+    sha256 = "1cmaib69pijmcpvgjvrdry8j4xys8l906l80b8z21vvyhdwrfdnn";
   };
 
   nativeBuildInputs = [ pkgconfig ];

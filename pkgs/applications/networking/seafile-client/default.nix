@@ -5,14 +5,14 @@
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  version = "6.1.5";
+  version = "6.1.7";
   name = "seafile-client-${version}";
 
   src = fetchFromGitHub {
     owner = "haiwen";
     repo = "seafile-client";
     rev = "v${version}";
-    sha256 = "1ahz55cw2p3s78x5f77drz4h2jhknfzpkk83qd0ggma31q1pnpl9";
+    sha256 = "1wf258sxn4pqdn1xypqwlxbnls771k2c6whpbinpns3knv5zvgaq";
   };
 
   nativeBuildInputs = [ pkgconfig cmake makeWrapper ];
@@ -32,6 +32,6 @@ stdenv.mkDerivation rec {
     description = "Desktop client for Seafile, the Next-generation Open Source Cloud Storage";
     license = licenses.asl20;
     platforms = platforms.linux;
-    maintainers = [ maintainers.calrama ];
+    maintainers = with maintainers; [ dotlambda ];
   };
 }

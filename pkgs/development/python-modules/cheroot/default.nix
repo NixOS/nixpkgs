@@ -1,6 +1,6 @@
 { stdenv, fetchPypi, buildPythonPackage
 , more-itertools, six
-, coverage, codecov, pytest, pytestcov, pytest-sugar, portend
+, pytest, pytestcov, portend
 , backports_unittest-mock, setuptools_scm }:
 
 buildPythonPackage rec {
@@ -16,7 +16,7 @@ buildPythonPackage rec {
 
   buildInputs = [ setuptools_scm ];
 
-  checkInputs = [ coverage codecov pytest pytestcov pytest-sugar portend backports_unittest-mock  ];
+  checkInputs = [ pytest pytestcov portend backports_unittest-mock ];
 
   checkPhase = ''
     py.test cheroot

@@ -1,8 +1,31 @@
-{ buildPythonPackage, fetchFromGitHub, lib, numpy, pyyaml, cffi, cmake,
-  git, stdenv }:
+{ buildPythonPackage,
+  cudaSupport ? false, cudatoolkit ? null, cudnn ? null,
+  fetchFromGitHub, fetchpatch, lib, numpy, pyyaml, cffi, cmake,
+  git, stdenv, linkFarm, symlinkJoin,
+  utillinux, which }:
 
-buildPythonPackage rec {
-  version = "0.2.0";
+assert cudnn == null || cudatoolkit != null;
+assert !cudaSupport || cudatoolkit != null;
+
+let
+  cudatoolkit_joined = symlinkJoin {
+    name = "${cudatoolkit.name}-unsplit";
+    paths = [ cudatoolkit.out cudatoolkit.lib ];
+  };
+
+  # Normally libcuda.so.1 is provided at runtime by nvidia-x11 via
+  # LD_LIBRARY_PATH=/run/opengl-driver/lib.  We only use the stub
+  # libcuda.so from cudatoolkit for running tests, so that we don’t have
+  # to recompile pytorch on every update to nvidia-x11 or the kernel.
+  cudaStub = linkFarm "cuda-stub" [{
+    name = "libcuda.so.1";
+    path = "${cudatoolkit}/lib/stubs/libcuda.so";
+  }];
+  cudaStubEnv = lib.optionalString cudaSupport
+    "LD_LIBRARY_PATH=${cudaStub}\${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH} ";
+
+in buildPythonPackage rec {
+  version = "0.3.1";
   pname = "pytorch";
   name = "${pname}-${version}";
 
@@ -10,18 +33,41 @@ buildPythonPackage rec {
     owner  = "pytorch";
     repo   = "pytorch";
     rev    = "v${version}";
-    sha256 = "1s3f46ga1f4lfrcj3lpvvhgkdr1pi8i2hjd9xj9qiz3a9vh2sj4n";
+    fetchSubmodules = true;
+    sha256 = "1k8fr97v5pf7rni5cr2pi21ixc3pdj3h3lkz28njbjbgkndh7mr3";
   };
 
-  checkPhase = ''
-    ${stdenv.shell} test/run_test.sh
+  patches = [
+    (fetchpatch {
+      # make sure stdatomic.h is included when checking for ATOMIC_INT_LOCK_FREE
+      # Fixes this test failure:
+      # RuntimeError: refcounted file mapping not supported on your system at /tmp/nix-build-python3.6-pytorch-0.3.0.drv-0/source/torch/lib/TH/THAllocator.c:525
+      url = "https://github.com/pytorch/pytorch/commit/502aaf39cf4a878f9e4f849e5f409573aa598aa9.patch";
+      stripLen = 3;
+      extraPrefix = "torch/lib/";
+      sha256 = "1miz4lhy3razjwcmhxqa4xmlcmhm65lqyin1czqczj8g16d3f62f";
+    })
+  ];
+
+  postPatch = ''
+    substituteInPlace test/run_test.sh --replace \
+      "INIT_METHOD='file://'\$TEMP_DIR'/shared_init_file' \$PYCMD ./test_distributed.py" \
+      "echo Skipped for Nix package"
+  '';
+
+  preConfigure = lib.optionalString cudaSupport ''
+    export CC=${cudatoolkit.cc}/bin/gcc
+  '' + lib.optionalString (cudaSupport && cudnn != null) ''
+    export CUDNN_INCLUDE_DIR=${cudnn}/include
   '';
 
   buildInputs = [
      cmake
      git
      numpy.blas
-  ];
+     utillinux
+     which
+  ] ++ lib.optionals cudaSupport [cudatoolkit_joined cudnn];
 
   propagatedBuildInputs = [
     cffi
@@ -29,8 +75,8 @@ buildPythonPackage rec {
     pyyaml
   ];
 
-  preConfigure = ''
-    export NO_CUDA=1
+  checkPhase = ''
+    ${cudaStubEnv}${stdenv.shell} test/run_test.sh
   '';
 
   meta = {

@@ -1,6 +1,6 @@
 { stdenv, fetchurl, pkgconfig, wrapGAppsHook, gtk2, gnome2, gnome3,
   libstartup_notification, libgtop, perl, perlXMLParser,
-  autoreconfHook, intltool, gtk-doc, docbook_xsl, xauth, sudo
+  autoreconfHook, intltool, docbook_xsl, xauth, sudo
 }:
 
 stdenv.mkDerivation rec {
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    pkgconfig autoreconfHook intltool gtk-doc docbook_xsl wrapGAppsHook
+    pkgconfig autoreconfHook intltool docbook_xsl wrapGAppsHook
   ];
 
   buildInputs = [
@@ -66,6 +66,10 @@ stdenv.mkDerivation rec {
   preConfigure = ''
     intltoolize --force --copy --automake
   '';
+
+  configureFlags = [
+    "--disable-gtk-doc"
+  ];
 
   meta = {
     description = "A library for integration of su into applications";

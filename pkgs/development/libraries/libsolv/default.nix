@@ -1,14 +1,14 @@
 { stdenv, fetchFromGitHub, cmake, zlib, expat, rpm, db }:
 
 stdenv.mkDerivation rec {
-  rev  = "0.6.32";
+  rev  = "0.6.34";
   name = "libsolv-${rev}";
 
   src = fetchFromGitHub {
     inherit rev;
     owner  = "openSUSE";
     repo   = "libsolv";
-    sha256 = "0gqvnnc1s5n0yj82ia6w2wjhhn8hpl6wm4lki2kzvjqjgla45fnq";
+    sha256 = "1knr48dilg8kscbmpjvd7m2krvgcdq0f9vpbqcgmxxa969mzrcy7";
   };
 
   cmakeFlags = "-DENABLE_RPMMD=true -DENABLE_RPMDB=true -DENABLE_PUBKEY=true -DENABLE_RPMDB_BYRPMHEADER=true";

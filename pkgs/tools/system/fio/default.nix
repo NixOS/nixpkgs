@@ -1,8 +1,8 @@
 { stdenv, fetchFromGitHub, libaio, python, zlib }:
 
 let
-  version = "3.5";
-  sha256 = "1h6qwvn0h3xz98420a19v8isfjkfnac9vvx8hsw8q4ycb35r8n3h";
+  version = "3.6";
+  sha256 = "1dilsn6r958skq1kpknm13fdzw7whb3bqa3wwnn2j9gba28599pq";
 in
 
 stdenv.mkDerivation rec {
@@ -15,11 +15,15 @@ stdenv.mkDerivation rec {
     inherit sha256;
   };
 
-  buildInputs = [ libaio python zlib ];
+  buildInputs = [ python zlib ]
+    ++ stdenv.lib.optional (!stdenv.isDarwin) libaio;
 
   enableParallelBuilding = true;
 
   postPatch = ''
+    substituteInPlace Makefile \
+      --replace "mandir = /usr/share/man" "mandir = \$(prefix)/man" \
+      --replace "sharedir = /usr/share/fio" "sharedir = \$(prefix)/share/fio"
     substituteInPlace tools/plot/fio2gnuplot --replace /usr/share/fio $out/share/fio
   '';
 

@@ -1,7 +1,21 @@
-{ stdenv, makeWrapper, requireFile, unzip, openjdk }:
+{ stdenv, makeDesktopItem, makeWrapper, requireFile, unzip, openjdk }:
 
-stdenv.mkDerivation rec {
-  version = "17.4.0.355.2349";
+let
+  version = "17.4.1.054.0712";
+
+  desktopItem = makeDesktopItem {
+    name = "sqldeveloper";
+    exec = "sqldeveloper";
+    icon = "sqldeveloper";
+    desktopName = "Oracle SQL Developer";
+    genericName = "Oracle SQL Developer";
+    comment = "Oracle's Oracle DB GUI client";
+    categories = "Application;Development;";
+  };
+in
+  stdenv.mkDerivation rec {
+
+  inherit version;
   name = "sqldeveloper-${version}";
 
   src = requireFile rec {
@@ -33,7 +47,7 @@ stdenv.mkDerivation rec {
         nix-prefetch-url --type sha256 file:///path/to/${name}
     '';
     # obtained by `sha256sum sqldeveloper-${version}-no-jre.zip`
-    sha256 = "70add9b5c998583416e3d127aeb63dde8e3d0489036982026b930c85496c7850";
+    sha256 = "7e92ca94d02489002db291c96f1d67f9b2501a8967ff3457103fcf60c1eb154a";
   };
 
   buildInputs = [ makeWrapper unzip ];
@@ -51,6 +65,10 @@ stdenv.mkDerivation rec {
     cd $out
     unzip ${src}
     mv sqldeveloper $out/lib/${name}
+
+    install -D -m 444 $out/lib/$name/icon.png $out/share/pixmaps/sqldeveloper.png
+    mkdir -p $out/share/applications
+    cp ${desktopItem}/share/applications/* $out/share/applications
   '';
 
   meta = with stdenv.lib; {

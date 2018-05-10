@@ -1,34 +1,34 @@
-{ stdenv, intltool, fetchurl, vala, libgtop
-, pkgconfig, gtk3, glib
-, bash, wrapGAppsHook, itstool, libxml2
-, gnome3, librsvg, gdk_pixbuf, file }:
+{ stdenv, gettext, fetchurl, vala, desktop-file-utils
+, meson, ninja, pkgconfig, gtk3, glib, libxml2
+, wrapGAppsHook, itstool, gnome3 }:
 
-stdenv.mkDerivation rec {
-  name = "baobab-${version}";
-  version = "3.26.1";
+let
+  pname = "baobab";
+  version = "3.28.0";
+in stdenv.mkDerivation rec {
+  name = "${pname}-${version}";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/baobab/${gnome3.versionBranch version}/${name}.tar.xz";
-    sha256 = "7a59ab5945f5d90725231b10d85a1893403f56660b1627c111d2b4eeb1ef787e";
+    url = "mirror://gnome/sources/${pname}/${gnome3.versionBranch version}/${name}.tar.xz";
+    sha256 = "0qsx7vx5c3n4yxlxbr11sppw7qwcv9z3g45b5xb9y7wxw5lv42sk";
   };
 
-  passthru = {
-    updateScript = gnome3.updateScript { packageName = "baobab"; };
-  };
+  nativeBuildInputs = [ meson ninja pkgconfig vala gettext itstool libxml2 desktop-file-utils wrapGAppsHook ];
+  buildInputs = [ gtk3 glib gnome3.defaultIconTheme ];
 
   doCheck = true;
 
-  NIX_CFLAGS_COMPILE = "-I${gnome3.glib.dev}/include/gio-unix-2.0";
-
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ vala gtk3 glib libgtop intltool itstool libxml2
-                  wrapGAppsHook file gdk_pixbuf gnome3.defaultIconTheme librsvg ];
+  passthru = {
+    updateScript = gnome3.updateScript {
+      packageName = pname;
+    };
+  };
 
   meta = with stdenv.lib; {
-    homepage = https://wiki.gnome.org/Apps/Baobab;
-    description = "Graphical application to analyse disk usage in any Gnome environment";
-    maintainers = gnome3.maintainers;
+    description = "Graphical application to analyse disk usage in any GNOME environment";
+    homepage = https://wiki.gnome.org/Apps/DiskUsageAnalyzer;
     license = licenses.gpl2;
+    maintainers = gnome3.maintainers;
     platforms = platforms.linux;
   };
 }

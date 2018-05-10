@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
   ] ++ stdenv.lib.optionals (ghostscript != null) [
     "--with-gs=${ghostscript}/bin/gs"
   ] ++ stdenv.lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
-    "ac_cv_path_PERL=${perl}/bin/perl"
+    "ac_cv_path_PERL=${buildPackages.perl}/bin/perl"
   ];
 
   doCheck = true;
@@ -103,6 +103,8 @@ stdenv.mkDerivation rec {
     substituteInPlace $perl/bin/grog \
       --replace $out/lib/groff/grog $perl/lib/groff/grog
 
+  '' + stdenv.lib.optionalString (stdenv.buildPlatform != stdenv.hostPlatform) ''
+    find $perl/ -type f -print0 | xargs --null sed -i 's|${buildPackages.perl}|${perl}|'
   '';
 
   meta = with stdenv.lib; {

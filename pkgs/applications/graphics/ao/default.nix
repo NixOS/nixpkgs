@@ -36,5 +36,6 @@ stdenv.mkDerivation rec {
     license = stdenv.lib.licenses.gpl2Plus ; # Some parts can be extracted and used under LGPL2+
     maintainers = [stdenv.lib.maintainers.raskin];
     platforms = stdenv.lib.platforms.linux;
+    broken = true; # 2018-04-10
   };
 }

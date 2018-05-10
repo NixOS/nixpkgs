@@ -22,6 +22,7 @@ let
    "8.7.0"     = "1h18b7xpnx3ix9vsi5fx4zdcbxy7bhra7gd5c5yzxmk53cgf1p9m";
    "8.7.1"     = "0gjn59jkbxwrihk8fx9d823wjyjh5m9gvj9l31nv6z6bcqhgdqi8";
    "8.7.2"     = "0a0657xby8wdq4aqb2xsxp3n7pmc2w4yxjmrb2l4kccs1aqvaj4w";
+   "8.8.0" = "13a4fka22hdxsjk11mgjb9ffzplfxyxp1sg5v1c8nk1grxlscgw8";
   }."${version}";
   coq-version = builtins.substring 0 3 version;
   camlp5 = ocamlPackages.camlp5_strict;
@@ -33,11 +34,9 @@ let
 self = stdenv.mkDerivation {
   name = "coq-${version}";
 
-  inherit coq-version;
-  inherit camlp5;
-  inherit (ocamlPackages) ocaml;
   passthru = {
-    inherit (ocamlPackages) findlib;
+    inherit coq-version camlp5;
+    inherit (ocamlPackages) ocaml findlib num;
     emacsBufferSetup = pkgs: ''
       ; Propagate coq paths to children
       (inherit-local-permanent coq-prog-name "${self}/bin/coqtop")
@@ -92,7 +91,7 @@ self = stdenv.mkDerivation {
   };
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ ocamlPackages.ocaml ocamlPackages.findlib camlp5 ncurses ]
+  buildInputs = [ ocamlPackages.ocaml ocamlPackages.findlib camlp5 ncurses ocamlPackages.num ]
   ++ stdenv.lib.optional buildIde ocamlPackages.lablgtk;
 
   postPatch = ''
@@ -116,7 +115,6 @@ self = stdenv.mkDerivation {
 
   preConfigure = ''
     configureFlagsArray=(
-      -opt
       ${ideFlags}
     )
   '';
@@ -125,8 +123,11 @@ self = stdenv.mkDerivation {
 
   buildFlags = "revision coq coqide bin/votour";
 
+  createFindlibDestdir = true;
+
   postInstall = ''
     cp bin/votour $out/bin/
+    ln -s $out/lib/coq $OCAMLFIND_DESTDIR/coq
   '';
 
   meta = with stdenv.lib; {

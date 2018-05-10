@@ -3,11 +3,11 @@
 
 stdenv.mkDerivation rec {
   name = "nzbget-${version}";
-  version = "19.0";
+  version = "19.1";
 
   src = fetchurl {
     url = "http://github.com/nzbget/nzbget/releases/download/v${version}/nzbget-${version}-src.tar.gz";
-    sha256 = "08kgi4zmh4h1pvxh8x4c3ydf9xl2s6ncm579f0wdm2zknvpf0j16";
+    sha256 = "1rjwv555zc2hiagf00k8l1pzav91qglsnqbqkyy3pmn2d8sl5pq6";
   };
 
   nativeBuildInputs = [ pkgconfig ];

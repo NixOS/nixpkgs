@@ -4,13 +4,13 @@ let
   inherit (pythonPackages) buildPythonApplication pyqt4 sip pyinotify python mock;
 in buildPythonApplication rec {
   name = "git-cola-${version}";
-  version = "3.0";
+  version = "3.1";
 
   src = fetchFromGitHub {
     owner = "git-cola";
     repo = "git-cola";
     rev = "v${version}";
-    sha256 = "0jc360agrlhp1w9i725ffksvc6v95jnzzppjvza7ssip65gplrkx";
+    sha256 = "1xzm8694zndl2pb4nanzhldn7wrsc1gjd5ldjncidw1msp9fczq1";
   };
 
   buildInputs = [ git gettext ];

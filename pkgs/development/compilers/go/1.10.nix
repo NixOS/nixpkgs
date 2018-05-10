@@ -25,18 +25,17 @@ in
 
 stdenv.mkDerivation rec {
   name = "go-${version}";
-  version = "1.10";
+  version = "1.10.1";
 
   src = fetchFromGitHub {
     owner = "golang";
     repo = "go";
     rev = "go${version}";
-    sha256 = "1dzs1mz3zxgg1qyi2lrlxdz1lsvazxvmj9cb69pgqnwjlh3jpw0l";
+    sha256 = "1wqwy52ibb343a4v7b9q26xa6r5jk4khfxd90wbpcayws8cxly8m";
   };
 
   # perl is used for testing go vet
-  nativeBuildInputs = [ perl which pkgconfig patch makeWrapper ]
-    ++ optionals stdenv.isLinux [ procps ];
+  nativeBuildInputs = [ perl which pkgconfig patch makeWrapper procps ];
   buildInputs = [ cacert pcre ]
     ++ optionals stdenv.isLinux [ stdenv.cc.libc.out ]
     ++ optionals (stdenv.hostPlatform.libc == "glibc") [ stdenv.cc.libc.static ];
@@ -77,6 +76,10 @@ stdenv.mkDerivation rec {
     sed -i '/TestRespectSetgidDir/areturn' src/cmd/go/internal/work/build_test.go
     # Remove cert tests that conflict with NixOS's cert resolution
     sed -i '/TestEnvVars/areturn' src/crypto/x509/root_unix_test.go
+    # TestWritevError hangs sometimes
+    sed -i '/TestWritevError/areturn' src/net/writev_test.go
+    # TestVariousDeadlines fails sometimes
+    sed -i '/TestVariousDeadlines/areturn' src/net/timeout_test.go
 
     sed -i 's,/etc/protocols,${iana-etc}/etc/protocols,' src/net/lookup_unix.go
     sed -i 's,/etc/services,${iana-etc}/etc/services,' src/net/port_unix.go

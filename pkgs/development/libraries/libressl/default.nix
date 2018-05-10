@@ -1,4 +1,4 @@
-{ stdenv, fetchurl }:
+{ stdenv, fetchurl, lib }:
 
 let
 
@@ -11,13 +11,20 @@ let
       inherit sha256;
     };
 
+    configureFlags = [ "--enable-nc" ];
+
     enableParallelBuilding = true;
 
-    outputs = [ "bin" "dev" "out" "man" ];
+    outputs = [ "bin" "dev" "out" "man" "nc" ];
+
+    postFixup = ''
+      moveToOutput "bin/nc" "$nc"
+      moveToOutput "share/man/man1/nc.1${lib.optionalString (dontGzipMan==null) ".gz"}" "$nc"
+    '';
 
     dontGzipMan = if stdenv.isDarwin then true else null; # not sure what's wrong
 
-    meta = with stdenv.lib; {
+    meta = with lib; {
       description = "Free TLS/SSL implementation";
       homepage    = "http://www.libressl.org";
       platforms   = platforms.all;

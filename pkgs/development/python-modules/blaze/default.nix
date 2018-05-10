@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchurl
+, fetchFromGitHub
 , pytest
 , contextlib2
 , cytoolz
@@ -27,9 +27,11 @@ buildPythonPackage rec {
   pname = "blaze";
   version = "0.11.3";
 
-  src = fetchurl {
-    url = "https://github.com/blaze/blaze/archive/${version}.tar.gz";
-    sha256 = "075gqc9d7g284z4nfwv5zbq99ln22w25l4lcndjg3v10kmsjadww";
+  src = fetchFromGitHub {
+    owner = pname;
+    repo = pname;
+    rev = version;
+    sha256 = "0w916k125058p40cf7i090f75pgv3cqdb8vwjzqhb9r482fa6717";
   };
 
   checkInputs = [ pytest ];

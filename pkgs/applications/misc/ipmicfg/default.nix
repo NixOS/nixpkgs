@@ -15,9 +15,10 @@ stdenv.mkDerivation rec {
     mkdir -p "$out/bin" "$out/opt/ipmicfg"
     cp Linux/64bit/* "$out/opt/ipmicfg"
 
-    patchelf "$out/opt/ipmicfg/IPMICFG-Linux.x86_64" \
+    patchelf \
        --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
-       --set-rpath "${stdenv.lib.makeLibraryPath [ stdenv.cc.cc ]}"
+       --set-rpath "${stdenv.lib.makeLibraryPath [ stdenv.cc.cc ]}" \
+       "$out/opt/ipmicfg/IPMICFG-Linux.x86_64"
 
     ln -s "$out/opt/ipmicfg/IPMICFG-Linux.x86_64" "$out/bin/ipmicfg"
   '';

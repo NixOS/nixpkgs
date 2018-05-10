@@ -11,8 +11,6 @@
 , libpciaccess
 }:
 
-assert stdenv.isLinux;
-
 stdenv.mkDerivation {
   name = "xf86-input-multitouch-20110312";
 

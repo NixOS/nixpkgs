@@ -404,10 +404,10 @@ in [...]
       user service for Emacs daemon, add the following to your
       <filename>configuration.nix</filename>:
 
-      <programlisting><![CDATA[
-services.emacs.enable = true;
-services.emacs.package = import /home/cassou/.emacs.d { pkgs = pkgs; };
-]]></programlisting>
+<programlisting>
+<xref linkend="opt-services.emacs.enable"/> = true;
+<xref linkend="opt-services.emacs.package"/> = import /home/cassou/.emacs.d { pkgs = pkgs; };
+</programlisting>
     </para>
 
     <para>
@@ -462,7 +462,7 @@ emacsclient --create-frame --tty  # opens a new frame on the current terminal
     <!--<title><command>emacsclient</command> as the Default Editor</title>-->
 
     <para>
-      If <varname>services.emacs.defaultEditor</varname> is
+      If <xref linkend="opt-services.emacs.defaultEditor"/> is
       <literal>true</literal>, the <varname>EDITOR</varname> variable
       will be set to a wrapper script which launches
       <command>emacsclient</command>.
@@ -497,10 +497,10 @@ emacsclient --create-frame --tty  # opens a new frame on the current terminal
       Emacs daemon is not wanted for all users, it is possible to
       install the service but not globally enable it:
 
-      <programlisting><![CDATA[
-services.emacs.enable = false;
-services.emacs.install = true;
-]]></programlisting>
+<programlisting>
+<xref linkend="opt-services.emacs.enable"/> = false;
+<xref linkend="opt-services.emacs.install"/> = true;
+</programlisting>
     </para>
 
     <para>
@@ -582,7 +582,7 @@ services.emacs.install = true;
     <para>
       To install the DocBook 5.0 schemas, either add
       <varname>pkgs.docbook5</varname> to
-      <varname>environment.systemPackages</varname> (<link
+      <xref linkend="opt-environment.systemPackages"/> (<link
       linkend="sec-declarative-package-mgmt">NixOS</link>), or run
       <literal>nix-env -i pkgs.docbook5</literal>
       (<link linkend="sec-ad-hoc-packages">Nix</link>).

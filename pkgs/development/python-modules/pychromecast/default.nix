@@ -2,12 +2,12 @@
 
 buildPythonPackage rec {
   pname = "PyChromecast";
-  version = "2.0.0";
+  version = "2.1.0";
   name = pname + "-" + version;
 
   src = fetchurl {
     url    = "mirror://pypi/p/pychromecast/${name}.tar.gz";
-    sha256 = "1cp1ssfb8zk4sz74nsnf72b7dd5fzkwc4qdgc7rq8nfr4v611w6c";
+    sha256 = "a18fee9bf32f62fcb539783c3888e811015c1f6377bcdb383b13d6537691f336";
   };
 
   propagatedBuildInputs = [ requests six zeroconf protobuf ];

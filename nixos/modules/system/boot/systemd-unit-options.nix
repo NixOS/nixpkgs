@@ -217,7 +217,7 @@ in rec {
 
     environment = mkOption {
       default = {};
-      type = types.attrs; # FIXME
+      type = with types; attrsOf (nullOr (either str package));
       example = { PATH = "/foo/bar/bin"; LANG = "nl_NL.UTF-8"; };
       description = "Environment variables passed to the service's processes.";
     };

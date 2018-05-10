@@ -1,4 +1,4 @@
-{stdenv, fetchurl, openssl, nettools, iproute, procps}:
+{stdenv, fetchurl, openssl, nettools, iproute, sysctl}:
 
 let baseName = "gogoclient";
     version  = "1.2";
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
       --replace "/sbin/ifconfig" "${nettools}/bin/ifconfig" \
       --replace "/sbin/route"    "${nettools}/bin/route" \
       --replace "/sbin/ip"       "${iproute}/sbin/ip" \
-      --replace "/sbin/sysctl"   "${procps}/sbin/sysctl"
+      --replace "/sbin/sysctl"   "${sysctl}/bin/sysctl"
     sed -i -e 's/^.*Exec \$route -A.*$/& metric 128/' $out/template/linux.sh
   '';
 

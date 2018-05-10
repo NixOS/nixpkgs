@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
     description = "Fast block device synchronizing tool";
     homepage = https://github.com/TargetHolding/bdsync;
     license = licenses.gpl2;
-    platforms = platforms.all;
+    platforms = platforms.linux;
     maintainers = with maintainers; [ jluttine ];
   };
 

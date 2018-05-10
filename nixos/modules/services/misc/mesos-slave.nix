@@ -188,7 +188,7 @@ in {
       description = "Mesos Slave";
       wantedBy = [ "multi-user.target" ];
       after = [ "network.target" ];
-      path = [ pkgs.stdenv.shellPackage ];
+      path = [ pkgs.runtimeShellPackage ];
       serviceConfig = {
         ExecStart = ''
           ${pkgs.mesos}/bin/mesos-slave \
@@ -213,7 +213,7 @@ in {
         PermissionsStartOnly = true;
       };
       preStart = ''
-        mkdir -m 0700 -p ${cfg.workDir}
+        mkdir -m 0701 -p ${cfg.workDir}
       '';
     };
   };
