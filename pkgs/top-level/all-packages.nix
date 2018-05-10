@@ -19806,9 +19806,11 @@ with pkgs;
 
   numix-sx-gtk-theme = callPackage ../misc/themes/numix-sx { };
 
-  theme-obsidian2 = callPackage ../misc/themes/obsidian2 { };
-
   onestepback = callPackage ../misc/themes/onestepback { };
+
+  theme-jade1 = callPackage ../misc/themes/jade1 { };
+
+  theme-obsidian2 = callPackage ../misc/themes/obsidian2 { };
 
   theme-vertex = callPackage ../misc/themes/vertex { };
 
