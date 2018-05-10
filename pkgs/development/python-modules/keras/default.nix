@@ -1,12 +1,11 @@
 { stdenv, lib, buildPythonPackage, fetchPypi
 , pytest, pytestcov, pytestpep8, pytest_xdist
-, six, numpy, scipy, pyyaml
+, six, numpy, scipy, pyyaml, h5py
 }:
 
 buildPythonPackage rec {
   pname = "Keras";
   version = "2.1.6";
-  name = "${pname}-${version}";
 
   src = fetchPypi {
     inherit pname version;
@@ -21,7 +20,7 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
-    six pyyaml numpy scipy
+    six pyyaml numpy scipy h5py
   ];
 
   # Couldn't get tests working
