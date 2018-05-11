@@ -5,13 +5,13 @@
 
 stdenv.mkDerivation rec {
   pname = "wesnoth";
-  version = "1.14.0";
+  version = "1.14.1";
 
   name = "${pname}-${version}";
 
   src = fetchurl {
     url = "mirror://sourceforge/sourceforge/${pname}/${name}.tar.bz2";
-    sha256 = "09niq53y17faizhmd98anx3dha7hvacvj9a0a64lg8wn915cm0bw";
+    sha256 = "1mzrnbv71b4s41c5x8clhb53l8lidiwzny1hl828228pvys5bxkb";
   };
 
   nativeBuildInputs = [ cmake pkgconfig ];
