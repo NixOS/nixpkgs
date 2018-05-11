@@ -438,6 +438,8 @@ in {
     hdf5 = pkgs.hdf5.override { zlib = pkgs.zlib; };
   };
 
+  trustme = callPackage ../development/python-modules/trustme {};
+
   tokenserver = callPackage ../development/python-modules/tokenserver {};
 
   toml = callPackage ../development/python-modules/toml { };
