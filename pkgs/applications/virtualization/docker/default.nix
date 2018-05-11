@@ -209,10 +209,10 @@ rec {
     tiniSha256 = "0zj4kdis1vvc6dwn4gplqna0bs7v6d1y2zc8v80s3zi018inhznw";
   };
 
-  docker_18_04 = dockerGen rec {
-    version = "18.04.0-ce";
-    rev = "3d479c0af67cb9ea43a9cfc1bf2ef097e06a3470"; # git commit
-    sha256 = "1askbk8b92cdv7vlm688g2f1v2xjhmx77578318x76dydfql3jfl";
+  docker_18_05 = dockerGen rec {
+    version = "18.05.0-ce";
+    rev = "f150324782643a5268a04e7d1a675587125da20e"; # git commit
+    sha256 = "0vgh03qwlfm25sm3yaa6vf5ap2ag575f814ccgcrp5zlcal13r0z";
     runcRev = "4fc53a81fb7c994640722ac585fa9ca548971871";
     runcSha256 = "1ikqw39jn8dzb4snc4pcg3z85jb67ivskdhx028k17ss29bf4062";
     containerdRev = "773c489c9c1b21a6d78b5c538cd395416ec50f88";
