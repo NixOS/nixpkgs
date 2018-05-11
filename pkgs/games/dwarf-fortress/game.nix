@@ -9,7 +9,7 @@ with lib;
 
 let
   baseVersion = "44";
-  patchVersion = "10";
+  patchVersion = "09";
   dfVersion = "0.${baseVersion}.${patchVersion}";
 
   libpath = makeLibraryPath [ stdenv.cc.cc stdenv.cc.libc dwarf-fortress-unfuck SDL ];
@@ -29,7 +29,7 @@ let
     };
     "x86_64-darwin" = fetchurl {
       url = "${homepage}df_${baseVersion}_${patchVersion}_osx.tar.bz2";
-      sha256 = "1wpa45d81q8f5mhqmaxvdkz93k6cm3pg7vpsqjjjsp5s961gd74g";
+      sha256 = "01dss8g9lmi8majp6lxcfw166ydz4himkz6am5pi29gixaf4vfqs";
     };
   };
 
