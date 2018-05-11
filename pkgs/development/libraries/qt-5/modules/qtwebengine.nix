@@ -12,7 +12,7 @@
 , pciutils
 , systemd
 , enableProprietaryCodecs ? true
-, gn, darwin, openbsm
+, gn, darwin, openbsm, cups
 , xcbuild
 , lib, stdenv # lib.optional, needsPax
 }:
@@ -185,6 +185,7 @@ EOF
 
     openbsm
     libunwind
+    cups
   ]);
 
   dontUseNinjaBuild = true;
