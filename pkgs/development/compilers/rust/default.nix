@@ -6,15 +6,17 @@
 
 let
   rustPlatform = recurseIntoAttrs (makeRustPlatform (callPackage ./bootstrap.nix {}));
-  version = "1.25.0";
-  cargoVersion = "0.26.0";
+  version = "1.26.1";
+  cargoVersion = "1.26.1";
   src = fetchurl {
     url = "https://static.rust-lang.org/dist/rustc-${version}-src.tar.gz";
-    sha256 = "0baxjr99311lvwdq0s38bipbnj72pn6fgbk6lcq7j555xq53mxpf";
+    sha256 = "1w0da0cysvzxqyn0ap0aprzlm006185yk5lq3v0b4hzcv0drd9vh";
   };
 in rec {
   rustc = callPackage ./rustc.nix {
     inherit stdenv llvm targets targetPatches targetToolchains rustPlatform version src;
+
+    patches = [];
 
     forceBundledLLVM = true;
 
@@ -25,11 +27,6 @@ in rec {
     # So we do the same.
     # 2. Tests run out of memory for i686
     doCheck = !stdenv.isAarch64 && !stdenv.isi686;
-
-    patches = [
-      ./patches/0001-Disable-fragile-tests-libstd-net-tcp-on-Darwin-Linux.patch
-    ] ++ stdenv.lib.optional stdenv.needsPax ./patches/grsec.patch;
-
   };
 
   cargo = callPackage ./cargo.nix rec {
