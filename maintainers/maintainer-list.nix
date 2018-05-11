@@ -3021,6 +3021,11 @@
     email = "philipp@xndr.de";
     name = "Philipp Steinpaß";
   };
+  psyanticy = {
+    email = "iuns@outlook.fr";
+    github = "Assassinkin";
+    name = "Psyanticy";
+  };
   puffnfresh = {
     email = "brian@brianmckenna.org";
     github = "puffnfresh";
