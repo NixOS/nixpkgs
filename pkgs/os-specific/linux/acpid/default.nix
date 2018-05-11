@@ -10,6 +10,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoreconfHook ];
 
+  # remove when https://sourceforge.net/p/acpid2/code/merge-requests/1/ is merged
   postPatch = ''
     substituteInPlace configure.ac \
       --replace "AC_FUNC_MALLOC" "" \
