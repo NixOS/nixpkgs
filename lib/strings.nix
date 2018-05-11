@@ -414,6 +414,39 @@ rec {
   */
   enableFeature = enable: feat: "--${if enable then "enable" else "disable"}-${feat}";
 
+  /* Create an --{enable-<feat>=<value>,disable-<feat>} string that can be passed to
+     standard GNU Autoconf scripts.
+
+     Example:
+       enableFeature true "shared" "foo"
+       => "--enable-shared=foo"
+       enableFeature false "shared" (throw "ignored")
+       => "--disable-shared"
+  */
+  enableFeatureAs = enable: feat: value: enableFeature enable feat + optionalString enable "=${value}";
+
+  /* Create an --{with,without}-<feat> string that can be passed to
+     standard GNU Autoconf scripts.
+
+     Example:
+       withFeature true "shared"
+       => "--with-shared"
+       withFeature false "shared"
+       => "--without-shared"
+  */
+  withFeature = with_: feat: "--${if with_ then "with" else "without"}-${feat}";
+
+  /* Create an --{with-<feat>=<value>,without-<feat>} string that can be passed to
+     standard GNU Autoconf scripts.
+
+     Example:
+       with_Feature true "shared" "foo"
+       => "--with-shared=foo"
+       with_Feature false "shared" (throw "ignored")
+       => "--without-shared"
+  */
+  withFeatureAs = with_: feat: value: withFeature with_ feat + optionalString with_ "=${value}";
+
   /* Create a fixed width string with additional prefix to match
      required width.
 
