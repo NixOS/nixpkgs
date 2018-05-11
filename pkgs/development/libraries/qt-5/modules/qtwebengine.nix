@@ -68,9 +68,25 @@ qtModule {
       substituteInPlace mkspecs/features/platform.prf \
         --replace "lessThan(QMAKE_XCODE_VERSION, 7.3)" false \
         --replace "/usr/bin/xcodebuild" "xcodebuild"
-
+      substituteInPlace src/3rdparty/chromium/sandbox/mac/seatbelt.cc \
+        --replace "<sandbox.h>" '"${darwin.apple_sdk.sdk}/include/sandbox.h"'
       substituteInPlace src/3rdparty/chromium/build/mac_toolchain.py \
         --replace "/usr/bin/xcode-select" "xcode-select"
+
+      substituteInPlace src/3rdparty/chromium/sandbox/mac/xpc_message_server.cc \
+        --replace "audit_token_to_pid(token)" "(token.val[5])"
+      substituteInPlace src/3rdparty/chromium/base/mac/mach_port_broker.mm \
+        --replace "audit_token_to_pid(msg.trailer.msgh_audit)" "(msg.trailer.msgh_audit.val[5])"
+      substituteInPlace src/3rdparty/chromium/sandbox/mac/bootstrap_sandbox.cc \
+        --replace "audit_token_to_pid(msg.trailer.msgh_audit)" "(msg.trailer.msgh_audit.val[5])"
+      substituteInPlace src/3rdparty/chromium/sandbox/mac/mach_message_server.cc \
+        --replace "audit_token_to_pid(trailer->msgh_audit)" "(trailer->msgh_audit.val[5])"
+      substituteInPlace src/3rdparty/chromium/sandbox/mac/mach_message_server.cc \
+        --replace "audit_token_to_pid(token)" "(token.val[5])"
+      substituteInPlace src/3rdparty/chromium/third_party/crashpad/crashpad/util/mach/mach_message.cc \
+        --replace "audit_token_to_pid(audit_trailer->msgh_audit)" "(audit_trailer->msgh_audit.val[5])"
+
+
 
       substituteInPlace src/core/config/mac_osx.pri \
         --replace /usr ${stdenv.cc} \
@@ -107,9 +123,6 @@ EOF
   NIX_CFLAGS_COMPILE = lib.optionals stdenv.isDarwin [
     "-DMAC_OS_X_VERSION_MAX_ALLOWED=MAC_OS_X_VERSION_10_10"
     "-DMAC_OS_X_VERSION_MIN_REQUIRED=MAC_OS_X_VERSION_10_10"
-
-    # Apple has some secret stuff they don't share with OpenBSM
-    "-Daudit_token_to_pid(a)=(a.val[5])"
   ];
 
   preConfigure = ''
