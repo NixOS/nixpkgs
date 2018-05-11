@@ -776,8 +776,6 @@ with pkgs;
 
   backblaze-b2 = python.pkgs.callPackage ../development/tools/backblaze-b2 { };
 
-  backup = callPackage ../tools/backup/backup { };
-
   bar = callPackage ../tools/system/bar {};
 
   base16-builder = callPackage ../misc/base16-builder { };
