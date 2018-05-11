@@ -384,6 +384,27 @@ rec {
     kernelTarget = "zImage";
   };
 
+  # https://developer.android.com/ndk/guides/abis#armeabi
+  armv5te-android = {
+    name = "armeabi";
+    gcc = {
+      arch = "armv5te";
+      float = "soft";
+      float-abi = "soft";
+    };
+  };
+
+  # https://developer.android.com/ndk/guides/abis#v7a
+  armv7a-android =  {
+    name = "armeabi-v7a";
+    gcc = {
+      arch = "armv7-a";
+      float = "hard";
+      float-abi = "softfp";
+      fpu = "vfpv3-d16";
+    };
+  };
+
   armv7l-hf-multiplatform = {
     name = "armv7l-hf-multiplatform";
     kernelMajor = "2.6"; # Using "2.6" enables 2.6 kernel syscalls in glibc.

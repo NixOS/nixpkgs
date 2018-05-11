@@ -29,6 +29,18 @@ rec {
     platform = platforms.aarch64-multiplatform;
   };
 
+  armv5te-android-prebuilt = rec {
+    config = "armv5tel-unknown-linux-androideabi";
+    platform = platforms.armv5te-android;
+    useAndroidPrebuilt = true;
+  };
+
+  armv7a-android-prebuilt = rec {
+    config = "armv7a-unknown-linux-androideabi";
+    platform = platforms.armv7a-android;
+    useAndroidPrebuilt = true;
+  };
+
   aarch64-android-prebuilt = rec {
     config = "aarch64-unknown-linux-android";
     platform = platforms.aarch64-multiplatform;
