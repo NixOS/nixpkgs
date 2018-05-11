@@ -39,12 +39,12 @@ rec {
     };
   } {};
 
-  firefox-esr = common rec {
+  firefox-esr-52 = common rec {
     pname = "firefox-esr";
-    version = "52.7.4esr";
+    version = "52.8.0esr";
     src = fetchurl {
       url = "mirror://mozilla/firefox/releases/${version}/source/firefox-${version}.source.tar.xz";
-      sha512 = "971ac97a749e5d322fec95ca1e86af5b633deab37d2d8fb49ab129c7ba20753a802c620315bc5b92a0a7ab7afe00e71aca04b3238670c4732d8e6816c645f53a";
+      sha512 = "4136fa582e4ffd754d46a79bdb562bd12da4d013d87dfe40fa92addf377e95f5f642993c8b783edd5290089619beeb5a907a0810b68b8808884f087986977df1";
     };
 
     patches = nixpkgsPatches
@@ -57,6 +57,27 @@ rec {
         sha256 = "0mdqa9w1p6cmli6976v4wi0sw9r4p5prkj7lzfd1877wk11c9c73";
       })
     ;
+
+    meta = firefox.meta // {
+      description = "A web browser built from Firefox Extended Support Release source tree";
+    };
+    updateScript = callPackage ./update.nix {
+      attrPath = "firefox-esr-unwrapped";
+      versionSuffix = "esr";
+    };
+  } {};
+
+  firefox-esr-60 = common rec {
+    pname = "firefox-esr";
+    version = "60.0esr";
+    src = fetchurl {
+      url = "mirror://mozilla/firefox/releases/${version}/source/firefox-${version}.source.tar.xz";
+      sha512 = "20whvk4spdi4yb3alb492c1jca60p4p70mgj2bypa7r8fgjqn57pyh9rcvnci61asar0zvmlihq46ywzrijm1804iw8c4wmlv7qy8dv";
+    };
+
+    patches = nixpkgsPatches ++ [
+      ./no-buildconfig.patch
+    ];
 
     meta = firefox.meta // {
       description = "A web browser built from Firefox Extended Support Release source tree";
