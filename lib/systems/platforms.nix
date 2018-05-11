@@ -20,6 +20,10 @@ rec {
     kernelAutoModules = false;
   };
 
+  ##
+  ## ARM
+  ##
+
   pogoplug4 = {
     name = "pogoplug4";
 
@@ -372,84 +376,6 @@ rec {
     kernelBaseConfig = "guruplug_defconfig";
   };
 
-  fuloong2f_n32 = {
-    name = "fuloong2f_n32";
-    kernelMajor = "2.6";
-    kernelBaseConfig = "lemote2f_defconfig";
-    kernelArch = "mips";
-    kernelAutoModules = false;
-    kernelExtraConfig = ''
-      MIGRATION n
-      COMPACTION n
-
-      # nixos mounts some cgroup
-      CGROUPS y
-
-      BLK_DEV_RAM y
-      BLK_DEV_INITRD y
-      BLK_DEV_CRYPTOLOOP m
-      BLK_DEV_DM m
-      DM_CRYPT m
-      MD y
-      REISERFS_FS m
-      EXT4_FS m
-      USB_STORAGE_CYPRESS_ATACB m
-
-      IP_PNP y
-      IP_PNP_DHCP y
-      IP_PNP_BOOTP y
-      NFS_FS y
-      ROOT_NFS y
-      TUN m
-      NFS_V4 y
-      NFS_V4_1 y
-      NFS_FSCACHE y
-      NFSD m
-      NFSD_V2_ACL y
-      NFSD_V3 y
-      NFSD_V3_ACL y
-      NFSD_V4 y
-
-      # Fail to build
-      DRM n
-      SCSI_ADVANSYS n
-      USB_ISP1362_HCD n
-      SND_SOC n
-      SND_ALI5451 n
-      FB_SAVAGE n
-      SCSI_NSP32 n
-      ATA_SFF n
-      SUNGEM n
-      IRDA n
-      ATM_HE n
-      SCSI_ACARD n
-      BLK_DEV_CMD640_ENHANCED n
-
-      FUSE_FS m
-
-      # Needed for udev >= 150
-      SYSFS_DEPRECATED_V2 n
-
-      VGA_CONSOLE n
-      VT_HW_CONSOLE_BINDING y
-      SERIAL_8250_CONSOLE y
-      FRAMEBUFFER_CONSOLE y
-      EXT2_FS y
-      EXT3_FS y
-      REISERFS_FS y
-      MAGIC_SYSRQ y
-
-      # The kernel doesn't boot at all, with FTRACE
-      FTRACE n
-    '';
-    kernelTarget = "vmlinux";
-    gcc = {
-      arch = "loongson2f";
-      float = "hard";
-      abi = "n32";
-    };
-  };
-
   beaglebone = armv7l-hf-multiplatform // {
     name = "beaglebone";
     kernelBaseConfig = "bb.org_defconfig";
@@ -536,6 +462,102 @@ rec {
       arch = "armv8-a";
     };
   };
+
+  ##
+  ## MIPS
+  ##
+
+  ben_nanonote = {
+    name = "ben_nanonote";
+    kernelMajor = "2.6";
+    kernelArch = "mips";
+    gcc = {
+      arch = "mips32";
+      float = "soft";
+    };
+  };
+
+  fuloong2f_n32 = {
+    name = "fuloong2f_n32";
+    kernelMajor = "2.6";
+    kernelBaseConfig = "lemote2f_defconfig";
+    kernelArch = "mips";
+    kernelAutoModules = false;
+    kernelExtraConfig = ''
+      MIGRATION n
+      COMPACTION n
+
+      # nixos mounts some cgroup
+      CGROUPS y
+
+      BLK_DEV_RAM y
+      BLK_DEV_INITRD y
+      BLK_DEV_CRYPTOLOOP m
+      BLK_DEV_DM m
+      DM_CRYPT m
+      MD y
+      REISERFS_FS m
+      EXT4_FS m
+      USB_STORAGE_CYPRESS_ATACB m
+
+      IP_PNP y
+      IP_PNP_DHCP y
+      IP_PNP_BOOTP y
+      NFS_FS y
+      ROOT_NFS y
+      TUN m
+      NFS_V4 y
+      NFS_V4_1 y
+      NFS_FSCACHE y
+      NFSD m
+      NFSD_V2_ACL y
+      NFSD_V3 y
+      NFSD_V3_ACL y
+      NFSD_V4 y
+
+      # Fail to build
+      DRM n
+      SCSI_ADVANSYS n
+      USB_ISP1362_HCD n
+      SND_SOC n
+      SND_ALI5451 n
+      FB_SAVAGE n
+      SCSI_NSP32 n
+      ATA_SFF n
+      SUNGEM n
+      IRDA n
+      ATM_HE n
+      SCSI_ACARD n
+      BLK_DEV_CMD640_ENHANCED n
+
+      FUSE_FS m
+
+      # Needed for udev >= 150
+      SYSFS_DEPRECATED_V2 n
+
+      VGA_CONSOLE n
+      VT_HW_CONSOLE_BINDING y
+      SERIAL_8250_CONSOLE y
+      FRAMEBUFFER_CONSOLE y
+      EXT2_FS y
+      EXT3_FS y
+      REISERFS_FS y
+      MAGIC_SYSRQ y
+
+      # The kernel doesn't boot at all, with FTRACE
+      FTRACE n
+    '';
+    kernelTarget = "vmlinux";
+    gcc = {
+      arch = "loongson2f";
+      float = "hard";
+      abi = "n32";
+    };
+  };
+
+  ##
+  ## Other
+  ##
 
   riscv-multiplatform = bits: {
     name = "riscv-multiplatform";
