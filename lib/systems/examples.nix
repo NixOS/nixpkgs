@@ -47,15 +47,7 @@ rec {
 
   ben-nanonote = rec {
     config = "mipsel-unknown-linux-uclibc";
-    platform = {
-      name = "ben_nanonote";
-      kernelMajor = "2.6";
-      kernelArch = "mips";
-      gcc = {
-        arch = "mips32";
-        float = "soft";
-      };
-    };
+    platform = platforms.ben_nanonote;
   };
 
   fuloongminipc = rec {
