@@ -20462,6 +20462,8 @@ EOF
   wsproto = callPackage ../development/python-modules/wsproto { };
 
   h11 = callPackage ../development/python-modules/h11 { };
+
+  prometheus_client = callPackage ../development/python-modules/prometheus_client { };
 });
 
 in fix' (extends overrides packages)
