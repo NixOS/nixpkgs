@@ -199,8 +199,16 @@ rec {
     msvc         = {};
     eabi         = {};
 
-    androideabi  = {};
-    android      = {};
+    androideabi  = { float = "hard"; };
+    android      = {
+      assertions = [
+        { assertion = platform: !platform.isAarch32;
+          message = ''
+            The "android" ABI is not for 32-bit ARM. Use "androideabi" instead.
+          '';
+        }
+      ];
+    };
 
     gnueabi      = { float = "soft"; };
     gnueabihf    = { float = "hard"; };
