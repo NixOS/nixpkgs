@@ -6,6 +6,11 @@ with lib;
 let
   cfg = config.services.flatpak;
 in {
+  meta = {
+    doc = ./flatpak.xml;
+    maintainers = pkgs.flatpak.meta.maintainers;
+  };
+
   ###### interface
   options = {
     services.flatpak = {
