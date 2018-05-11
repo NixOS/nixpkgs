@@ -47,6 +47,8 @@ stdenv.mkDerivation rec {
     name = "dwarf-fortress-init";
     src = ./dwarf-fortress-init.in;
     inherit env;
+    exe = if stdenv.isLinux then "libs/Dwarf_Fortress"
+                             else "dwarfort.exe";
   };
 
   runDF = ./dwarf-fortress.in;

@@ -1,9 +1,9 @@
 { stdenv, fetchFromGitHub, fetchpatch, pkgconfig, intltool, gperf, libcap, kmod
 , zlib, xz, pam, acl, cryptsetup, libuuid, m4, utillinux, libffi
 , glib, kbd, libxslt, coreutils, libgcrypt, libgpgerror, libidn2, libapparmor
-, audit, lz4, bzip2, kexectools, libmicrohttpd, pcre2
+, audit, lz4, bzip2, libmicrohttpd, pcre2
 , linuxHeaders ? stdenv.cc.libc.linuxHeaders
-, libseccomp, iptables, gnu-efi
+, iptables, gnu-efi
 , autoreconfHook, gettext, docbook_xsl, docbook_xml_dtd_42, docbook_xml_dtd_45
 , ninja, meson, python3Packages, glibcLocales
 , patchelf
@@ -11,6 +11,8 @@
 , hostPlatform
 , buildPackages
 , withSelinux ? false, libselinux
+, withLibseccomp ? libseccomp.meta.available, libseccomp
+, withKexectools ? kexectools.meta.available, kexectools
 }:
 
 let
@@ -42,13 +44,13 @@ in stdenv.mkDerivation rec {
     [ linuxHeaders libcap kmod xz pam acl
       /* cryptsetup */ libuuid glib libgcrypt libgpgerror libidn2
       libmicrohttpd pcre2 ] ++
-      stdenv.lib.meta.enableIfAvailable kexectools ++
-      stdenv.lib.meta.enableIfAvailable libseccomp ++
+      stdenv.lib.optional withKexectools kexectools ++
+      stdenv.lib.optional withLibseccomp libseccomp ++
     [ libffi audit lz4 bzip2 libapparmor
       iptables gnu-efi
       # This is actually native, but we already pull it from buildPackages
       pythonLxmlEnv
-    ] ++ stdenv.lib.optionals withSelinux [ libselinux ];
+    ] ++ stdenv.lib.optional withSelinux libselinux;
 
   #dontAddPrefix = true;
 

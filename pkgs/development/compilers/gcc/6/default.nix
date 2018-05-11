@@ -89,22 +89,6 @@ let version = "6.4.0";
 
     javaAwtGtk = langJava && x11Support;
 
-    /* Platform flags */
-    platformFlags = let
-        gccArch = targetPlatform.platform.gcc.arch or null;
-        gccCpu = targetPlatform.platform.gcc.cpu or null;
-        gccAbi = targetPlatform.platform.gcc.abi or null;
-        gccFpu = targetPlatform.platform.gcc.fpu or null;
-        gccFloat = targetPlatform.platform.gcc.float or null;
-        gccMode = targetPlatform.platform.gcc.mode or null;
-      in
-        optional (gccArch != null) "--with-arch=${gccArch}" ++
-        optional (gccCpu != null) "--with-cpu=${gccCpu}" ++
-        optional (gccAbi != null) "--with-abi=${gccAbi}" ++
-        optional (gccFpu != null) "--with-fpu=${gccFpu}" ++
-        optional (gccFloat != null) "--with-float=${gccFloat}" ++
-        optional (gccMode != null) "--with-mode=${gccMode}";
-
     /* Cross-gcc settings (build == host != target) */
     crossMingw = targetPlatform != hostPlatform && targetPlatform.libc == "msvcrt";
     crossDarwin = targetPlatform != hostPlatform && targetPlatform.libc == "libSystem";
@@ -385,7 +369,7 @@ stdenv.mkDerivation ({
     optional javaAwtGtk "--enable-java-awt=gtk" ++
     optional (langJava && javaAntlr != null) "--with-antlr-jar=${javaAntlr}" ++
 
-    platformFlags ++
+    (import ../common/platform-flags.nix { inherit (stdenv) lib targetPlatform; }) ++
     optional (targetPlatform != hostPlatform) crossConfigureFlags ++
     optional (!bootstrap) "--disable-bootstrap" ++
 

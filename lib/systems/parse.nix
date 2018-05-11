@@ -190,9 +190,16 @@ rec {
   types.abi = enum (attrValues abis);
 
   abis = setTypes types.openAbi {
-    android = {};
-    cygnus = {};
-    gnu = {
+    cygnus       = {};
+    msvc         = {};
+    eabi         = {};
+
+    androideabi  = {};
+    android      = {};
+
+    gnueabi      = { float = "soft"; };
+    gnueabihf    = { float = "hard"; };
+    gnu          = {
       assertions = [
         { assertion = platform: !platform.isAarch32;
           message = ''
@@ -201,17 +208,14 @@ rec {
         }
       ];
     };
-    msvc = {};
-    eabi = {};
-    androideabi = {};
-    gnueabi = {};
-    gnueabihf = {};
-    musleabi = {};
-    musleabihf = {};
-    musl = {};
-    uclibceabihf = {};
-    uclibceabi = {};
-    uclibc = {};
+
+    musleabi     = { float = "soft"; };
+    musleabihf   = { float = "hard"; };
+    musl         = {};
+
+    uclibceabihf = { float = "soft"; };
+    uclibceabi   = { float = "hard"; };
+    uclibc       = {};
 
     unknown = {};
   };

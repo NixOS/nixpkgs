@@ -256,7 +256,7 @@
     "nuheat" = ps: with ps; [  ];
     "nuimo_controller" = ps: with ps; [  ];
     "pilight" = ps: with ps; [  ];
-    "prometheus" = ps: with ps; [  ];
+    "prometheus" = ps: with ps; [ prometheus_client ];
     "python_script" = ps: with ps; [  ];
     "qwikswitch" = ps: with ps; [  ];
     "rainbird" = ps: with ps; [  ];

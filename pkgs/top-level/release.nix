@@ -110,7 +110,10 @@ let
               jobs.tests.cc-wrapper-gcc7.x86_64-linux
               jobs.tests.cc-wrapper-gcc7.x86_64-darwin
               jobs.tests.cc-wrapper-gcc8.x86_64-linux
-              jobs.tests.cc-wrapper-gcc8.x86_64-darwin
+
+              # broken see issue #40038
+              # jobs.tests.cc-wrapper-gcc8.x86_64-darwin
+
               jobs.tests.cc-wrapper-clang.x86_64-linux
               jobs.tests.cc-wrapper-clang.x86_64-darwin
               jobs.tests.cc-wrapper-libcxx.x86_64-linux

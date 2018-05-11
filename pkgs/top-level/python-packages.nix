@@ -1629,6 +1629,8 @@ in {
 
   contexter = callPackage ../development/python-modules/contexter { };
 
+  contextvars = callPackage ../development/python-modules/contextvars {};
+
   contextlib2 = callPackage ../development/python-modules/contextlib2 { };
 
   cookiecutter = callPackage ../development/python-modules/cookiecutter { };
@@ -3121,6 +3123,8 @@ in {
   };
 
   imbalanced-learn = callPackage ../development/python-modules/imbalanced-learn { };
+
+  immutables = callPackage ../development/python-modules/immutables {};
 
   imread = buildPythonPackage rec {
     name = "python-imread-${version}";
@@ -18247,6 +18251,8 @@ EOF
   coinmarketcap = callPackage ../development/python-modules/coinmarketcap { };
 
   pyowm = callPackage ../development/python-modules/pyowm { };
+
+  prometheus_client = callPackage ../development/python-modules/prometheus_client { };
 });
 
 in fix' (extends overrides packages)

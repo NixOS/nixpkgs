@@ -25,7 +25,6 @@ rec {
 
     gcc = {
       arch = "armv5te";
-      float = "soft";
     };
 
     kernelMajor = "2.6";
@@ -158,7 +157,6 @@ rec {
     kernelDTB = true; # Beyond 3.10
     gcc = {
       arch = "armv5te";
-      float = "soft";
     };
   };
 
@@ -336,7 +334,6 @@ rec {
     gcc = {
       cpu = "cortex-a9";
       fpu = "vfpv3";
-      float = "hard";
     };
   };
 
@@ -363,7 +360,6 @@ rec {
     gcc = {
       cpu = "cortex-a9";
       fpu = "neon";
-      float = "hard";
     };
   };
 
@@ -449,6 +445,7 @@ rec {
     kernelTarget = "vmlinux";
     gcc = {
       arch = "loongson2f";
+      float = "hard";
       abi = "n32";
     };
   };
@@ -498,7 +495,6 @@ rec {
       # and the above page suggests NEON is only an improvement with hand-written assembly.
       arch = "armv7-a";
       fpu = "vfpv3-d16";
-      float = "hard";
 
       # For Raspberry Pi the 2 the best would be:
       #   cpu = "cortex-a7";

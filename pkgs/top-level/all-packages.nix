@@ -61,6 +61,8 @@ with pkgs;
     by Hydra.
   '';
 
+  tests = recurseIntoAttrs (callPackages ../test {});
+
   ### Nixpkgs maintainer tools
 
   nix-generate-from-cpan = callPackage ../../maintainers/scripts/nix-generate-from-cpan.nix { };
@@ -773,8 +775,6 @@ with pkgs;
   azureus = callPackage ../tools/networking/p2p/azureus { };
 
   backblaze-b2 = python.pkgs.callPackage ../development/tools/backblaze-b2 { };
-
-  backup = callPackage ../tools/backup/backup { };
 
   bar = callPackage ../tools/system/bar {};
 
@@ -13355,11 +13355,6 @@ with pkgs;
         kernelPatches.p9_fixes
         kernelPatches.cpu-cgroup-v2."4.9"
         kernelPatches.modinst_arg_list_too_long
-      ]
-      ++ lib.optionals ((platform.kernelArch or null) == "mips")
-      [ kernelPatches.mips_fpureg_emu
-        kernelPatches.mips_fpu_sigill
-        kernelPatches.mips_ext3_n32
       ];
   };
 
@@ -13374,11 +13369,6 @@ with pkgs;
       [ kernelPatches.bridge_stp_helper
         kernelPatches.cpu-cgroup-v2."4.4"
         kernelPatches.modinst_arg_list_too_long
-      ]
-      ++ lib.optionals ((platform.kernelArch or null) == "mips")
-      [ kernelPatches.mips_fpureg_emu
-        kernelPatches.mips_fpu_sigill
-        kernelPatches.mips_ext3_n32
       ];
   };
 
@@ -13387,11 +13377,6 @@ with pkgs;
       [ kernelPatches.bridge_stp_helper
         kernelPatches.cpu-cgroup-v2."4.9"
         kernelPatches.modinst_arg_list_too_long
-      ]
-      ++ lib.optionals ((platform.kernelArch or null) == "mips")
-      [ kernelPatches.mips_fpureg_emu
-        kernelPatches.mips_fpu_sigill
-        kernelPatches.mips_ext3_n32
       ];
   };
 
@@ -13402,11 +13387,6 @@ with pkgs;
         # when adding a new linux version
         kernelPatches.cpu-cgroup-v2."4.11"
         kernelPatches.modinst_arg_list_too_long
-      ]
-      ++ lib.optionals ((platform.kernelArch or null) == "mips")
-      [ kernelPatches.mips_fpureg_emu
-        kernelPatches.mips_fpu_sigill
-        kernelPatches.mips_ext3_n32
       ];
   };
 
@@ -13418,11 +13398,6 @@ with pkgs;
         # kernelPatches.cpu-cgroup-v2."4.11"
         kernelPatches.modinst_arg_list_too_long
         kernelPatches.bcm2835_mmal_v4l2_camera_driver # Only needed for 4.16!
-      ]
-      ++ lib.optionals ((platform.kernelArch or null) == "mips")
-      [ kernelPatches.mips_fpureg_emu
-        kernelPatches.mips_fpu_sigill
-        kernelPatches.mips_ext3_n32
       ];
   };
 
@@ -13430,10 +13405,6 @@ with pkgs;
     kernelPatches = [
       kernelPatches.bridge_stp_helper
       kernelPatches.modinst_arg_list_too_long
-    ] ++ lib.optionals ((platform.kernelArch or null) == "mips") [
-      kernelPatches.mips_fpureg_emu
-      kernelPatches.mips_fpu_sigill
-      kernelPatches.mips_ext3_n32
     ];
   };
 
@@ -13441,11 +13412,6 @@ with pkgs;
     kernelPatches =
       [ kernelPatches.bridge_stp_helper
         kernelPatches.modinst_arg_list_too_long
-      ]
-      ++ lib.optionals ((platform.kernelArch or null) == "mips")
-      [ kernelPatches.mips_fpureg_emu
-        kernelPatches.mips_fpu_sigill
-        kernelPatches.mips_ext3_n32
       ];
   };
 
@@ -15228,10 +15194,10 @@ with pkgs;
   # go 1.9 pin until https://github.com/moby/moby/pull/35739
   inherit (callPackage ../applications/virtualization/docker { go = go_1_9; })
     docker_18_03
-    docker_18_04;
+    docker_18_05;
 
   docker = docker_18_03;
-  docker-edge = docker_18_04;
+  docker-edge = docker_18_05;
 
   docker-proxy = callPackage ../applications/virtualization/docker/proxy.nix { };
 
@@ -16059,6 +16025,8 @@ with pkgs;
   gnome-mpv = callPackage ../applications/video/gnome-mpv { };
 
   gollum = callPackage ../applications/misc/gollum { };
+
+  googleearth = callPackage ../applications/misc/googleearth { };
 
   google-chrome = callPackage ../applications/networking/browsers/google-chrome { gconf = gnome2.GConf; };
 
@@ -21317,30 +21285,6 @@ with pkgs;
   xtermcontrol = callPackage ../applications/misc/xtermcontrol {};
 
   openfst = callPackage ../development/libraries/openfst {};
-
-  # `recurseIntoAttrs` for sake of hydra, not nix-env
-  tests = recurseIntoAttrs {
-    cc-wrapper = callPackage ../test/cc-wrapper { };
-    cc-wrapper-gcc = callPackage ../test/cc-wrapper { stdenv = gccStdenv; };
-    cc-wrapper-gcc7 = callPackage ../test/cc-wrapper { stdenv = gcc7Stdenv; };
-    cc-wrapper-gcc8 = callPackage ../test/cc-wrapper { stdenv = gcc8Stdenv; };
-    cc-wrapper-clang = callPackage ../test/cc-wrapper { stdenv = llvmPackages.stdenv; };
-    cc-wrapper-libcxx = callPackage ../test/cc-wrapper { stdenv = llvmPackages.libcxxStdenv; };
-    cc-wrapper-clang-39 = callPackage ../test/cc-wrapper { stdenv = llvmPackages_39.stdenv; };
-    cc-wrapper-libcxx-39 = callPackage ../test/cc-wrapper { stdenv = llvmPackages_39.libcxxStdenv; };
-    cc-wrapper-clang-4 = callPackage ../test/cc-wrapper { stdenv = llvmPackages_4.stdenv; };
-    cc-wrapper-libcxx-4 = callPackage ../test/cc-wrapper { stdenv = llvmPackages_4.libcxxStdenv; };
-    cc-wrapper-clang-5 = callPackage ../test/cc-wrapper { stdenv = llvmPackages_5.stdenv; };
-    cc-wrapper-libcxx-5 = callPackage ../test/cc-wrapper { stdenv = llvmPackages_5.libcxxStdenv; };
-    cc-wrapper-clang-6 = callPackage ../test/cc-wrapper { stdenv = llvmPackages_6.stdenv; };
-    cc-wrapper-libcxx-6 = callPackage ../test/cc-wrapper { stdenv = llvmPackages_6.libcxxStdenv; };
-    stdenv-inputs = callPackage ../test/stdenv-inputs { };
-
-    cc-multilib-gcc = callPackage ../test/cc-wrapper/multilib.nix { stdenv = gccMultiStdenv; };
-    cc-multilib-clang = callPackage ../test/cc-wrapper/multilib.nix { stdenv = clangMultiStdenv; };
-
-    macOSSierraShared = callPackage ../test/macos-sierra-shared {};
-  };
 
   duti = callPackage ../os-specific/darwin/duti {};
 

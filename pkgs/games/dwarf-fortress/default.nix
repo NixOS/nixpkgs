@@ -1,4 +1,4 @@
-{ pkgs, pkgsi686Linux }:
+{ pkgs, pkgsi686Linux, stdenv }:
 
 let
   callPackage = pkgs.newScope self;
@@ -13,7 +13,9 @@ let
 
     soundSense = callPackage ./soundsense.nix { };
 
-    dwarf-fortress-unfuck = callPackage ./unfuck.nix { };
+    # unfuck is linux-only right now, we will just use it there
+    dwarf-fortress-unfuck = if stdenv.isLinux then callPackage ./unfuck.nix { }
+                                              else null;
 
     dwarf-fortress = callPackage ./wrapper {
       themes = {

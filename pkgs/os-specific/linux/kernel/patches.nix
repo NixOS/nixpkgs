@@ -31,21 +31,6 @@ rec {
       patch = ./p9-fixes.patch;
     };
 
-  mips_fpureg_emu =
-    { name = "mips-fpureg-emulation";
-      patch = ./mips-fpureg-emulation.patch;
-    };
-
-  mips_fpu_sigill =
-    { name = "mips-fpu-sigill";
-      patch = ./mips-fpu-sigill.patch;
-    };
-
-  mips_ext3_n32 =
-    { name = "mips-ext3-n32";
-      patch = ./mips-ext3-n32.patch;
-    };
-
   modinst_arg_list_too_long =
     { name = "modinst-arglist-too-long";
       patch = ./modinst-arg-list-too-long.patch;
