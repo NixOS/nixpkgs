@@ -1,9 +1,31 @@
-{ stdenv, buildGoPackage, fetchFromGitHub, fetchurl, go-bindata, kubernetes, libvirt, qemu, docker-machine-kvm,
+{ stdenv, buildGoPackage, fetchFromGitHub, fetchurl, go-bindata, kubernetes, libvirt, pkgconfig, qemu, docker-machine-kvm,
   gpgme, makeWrapper, hostPlatform, vmnet }:
 
 let
+  version = "0.26.0";
+  src = fetchFromGitHub {
+    owner  = "kubernetes";
+    repo   = "minikube";
+    rev    = "v${version}";
+    sha256 = "1wc2gvmgb59yh0ldm2plvh6s8mvxvysrxp6w75z16ii86jmi3wr6";
+  };
+
+  docker-machine-kvm2 = buildGoPackage rec {
+    pname = "docker-machine-kvm2";
+    name = "${pname}-${version}";
+    inherit src;
+    inherit version;
+
+    buildInputs = [ pkgconfig ];
+    propagatedBuildInputs = [ libvirt ];
+
+    goPackagePath = "k8s.io/minikube";
+    subPackages = [ "cmd/drivers/kvm" ];
+    postInstall = "mv $bin/bin/kvm $bin/bin/docker-machine-driver-kvm2";
+  };
+
   binPath = [ kubernetes ]
-    ++ stdenv.lib.optionals stdenv.isLinux [ libvirt qemu docker-machine-kvm ]
+    ++ stdenv.lib.optionals stdenv.isLinux [ libvirt qemu docker-machine-kvm docker-machine-kvm2 ]
     ++ stdenv.lib.optionals stdenv.isDarwin [];
 
   # Normally, minikube bundles localkube in its own binary via go-bindata. Unfortunately, it needs to make that localkube
@@ -23,16 +45,10 @@ let
 in buildGoPackage rec {
   pname   = "minikube";
   name    = "${pname}-${version}";
-  version = "0.26.0";
+  inherit src;
+  inherit version;
 
   goPackagePath = "k8s.io/minikube";
-
-  src = fetchFromGitHub {
-    owner  = "kubernetes";
-    repo   = "minikube";
-    rev    = "v${version}";
-    sha256 = "1wc2gvmgb59yh0ldm2plvh6s8mvxvysrxp6w75z16ii86jmi3wr6";
-  };
 
   patches = [
     ./localkube.patch
