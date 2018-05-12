@@ -1,13 +1,6 @@
 { stdenv, fetchurl, nspr, perl, zlib, sqlite, fixDarwinDylibNames }:
 
 let
-
-  # Fix aarch64 build, shouldn't be needed after 3.35
-  aarch64Patch = fetchurl {
-    url = https://hg.mozilla.org/projects/nss/raw-rev/74e679158d1b;
-    sha256 = "1lhs4h32mb2al3z461yylk227nid769di1pdjr7p0kqm2z1qm3jq";
-  };
-
   nssPEM = fetchurl {
     url = http://dev.gentoo.org/~polynomial-c/mozilla/nss-3.15.4-pem-support-20140109.patch.xz;
     sha256 = "10ibz6y0hknac15zr6dw4gv9nb5r5z9ym6gq18j3xqx7v7n3vpdw";
@@ -29,8 +22,6 @@ in stdenv.mkDerivation rec {
 
   prePatch = ''
     xz -d < ${nssPEM} | patch -p1
-  '' + stdenv.lib.optionalString stdenv.isAarch64 ''
-      (cd nss && patch -p1 < ${aarch64Patch})
   '';
 
   patches =

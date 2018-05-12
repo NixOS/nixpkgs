@@ -18,10 +18,10 @@ rec {
 
   firefox = common rec {
     pname = "firefox";
-    version = "59.0.2";
+    version = "60.0";
     src = fetchurl {
-      url = "https://hg.mozilla.org/releases/mozilla-release/archive/239e434d6d2b8e1e2b697c3416d1e96d48fe98e5.tar.bz2";
-      sha512 = "3kfh224sfc9ig4733frnskcs49xzjkrs00lxllsvx1imm6f4sf117mqlvc7bhgrn8ldiqn6vaa5g6gd9b7awkk1g975bbzk9namb3yv";
+      url = "mirror://mozilla/firefox/releases/${version}/source/firefox-${version}.source.tar.xz";
+      sha512 = "3ya0rq50cwryza7d56mm3g2h7kayh17vry565qvaq7wsi9gcd4cbjk4z7a1s4bdka0xsxg2l7v0zkaj666nbllky2462svbi8imdhb3";
     };
 
     patches = nixpkgsPatches ++ [
@@ -39,15 +39,36 @@ rec {
     };
   } {};
 
-  firefox-esr = common rec {
+  firefox-esr-52 = common rec {
     pname = "firefox-esr";
-    version = "52.7.3esr";
+    version = "52.8.0esr";
     src = fetchurl {
       url = "mirror://mozilla/firefox/releases/${version}/source/firefox-${version}.source.tar.xz";
-      sha512 = "31y3qrslg61724vmly6gr1lqcrqgpkh3zsl8riax45gizfcp3qbgkvmd5wwfn9fiwjqi6ww3i08j51wxrfxcxznv7c6qzsvzzc30mgw";
+      sha512 = "4136fa582e4ffd754d46a79bdb562bd12da4d013d87dfe40fa92addf377e95f5f642993c8b783edd5290089619beeb5a907a0810b68b8808884f087986977df1";
     };
 
     patches = nixpkgsPatches;
+
+    meta = firefox.meta // {
+      description = "A web browser built from Firefox Extended Support Release source tree";
+    };
+    updateScript = callPackage ./update.nix {
+      attrPath = "firefox-esr-unwrapped";
+      versionSuffix = "esr";
+    };
+  } {};
+
+  firefox-esr-60 = common rec {
+    pname = "firefox-esr";
+    version = "60.0esr";
+    src = fetchurl {
+      url = "mirror://mozilla/firefox/releases/${version}/source/firefox-${version}.source.tar.xz";
+      sha512 = "20whvk4spdi4yb3alb492c1jca60p4p70mgj2bypa7r8fgjqn57pyh9rcvnci61asar0zvmlihq46ywzrijm1804iw8c4wmlv7qy8dv";
+    };
+
+    patches = nixpkgsPatches ++ [
+      ./no-buildconfig.patch
+    ];
 
     meta = firefox.meta // {
       description = "A web browser built from Firefox Extended Support Release source tree";
