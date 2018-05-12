@@ -21,10 +21,10 @@ let
   buildType = "release";
   # Manually sha256sum the extensionPack file, must be hex!
   # Do not forget to update the hash in ./guest-additions/default.nix!
-  extpack = "5eef217dbe0a8e8caf383ea8db83344517af0f9093041b5345c8468a427b327b";
-  extpackRev = "122406";
-  main = "1k14ngz1gcz02qwbpzfp4kgxv8s24js8pwd5nyyqs6jpxx6557pd";
-  version = "5.2.10";
+  extpack = "4c36d129f17dcab2bb37292022f1b1adfefa5f32a3161b0d5d40784bc8acf4d0";
+  extpackRev = "122591";
+  main = "0n1lip8lkz4qqq5ml47xldsx41919ncfh060i7yj51bhas604q6s";
+  version = "5.2.12";
 
   # See https://github.com/NixOS/nixpkgs/issues/672 for details
   extensionPack = requireFile rec {
@@ -94,7 +94,9 @@ in stdenv.mkDerivation {
 
   patches =
      optional enableHardening ./hardened.patch
-  ++ [ ./qtx11extras.patch ./kernpcidev.patch ];
+  ++ [ ./qtx11extras.patch ];
+
+
 
   postPatch = ''
     sed -i -e 's|/sbin/ifconfig|${nettools}/bin/ifconfig|' \
