@@ -313,10 +313,7 @@ in rec {
   tests.plotinus = callTest tests/plotinus.nix {};
   tests.keymap = callSubTests tests/keymap.nix {};
   tests.initrdNetwork = callTest tests/initrd-network.nix {};
-  tests.kafka_0_9 = callTest tests/kafka_0_9.nix {};
-  tests.kafka_0_10 = callTest tests/kafka_0_10.nix {};
-  tests.kafka_0_11 = callTest tests/kafka_0_11.nix {};
-  tests.kafka_1_0 = callTest tests/kafka_1_0.nix {};
+  tests.kafka = callSubTests tests/kafka.nix {};
   tests.kernel-copperhead = callTest tests/kernel-copperhead.nix {};
   tests.kernel-latest = callTest tests/kernel-latest.nix {};
   tests.kernel-lts = callTest tests/kernel-lts.nix {};
