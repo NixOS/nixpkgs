@@ -32,6 +32,6 @@ stdenv.mkDerivation rec {
     homepage = http://jikasei.me/font/rounded-mgenplus/;
     license = licenses.ofl;
     platforms = platforms.all;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ mnacamura ];
   };
 }
