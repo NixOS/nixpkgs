@@ -65,14 +65,14 @@ rec {
     bintools = binutils;
     libc = targetAndroidndkPkgs.libraries;
     extraBuildCommands = lib.optionalString targetPlatform.isAarch32 (let
-        p = targetPlatform.platform.gcc or {};
-        float = p.float or (targetPlatform.parsed.abi.float or null);
+        p =  targetPlatform.platform.gcc or {}
+          // targetPlatform.parsed.abi;
         flags = lib.concatLists [
           (lib.optional (p ? arch) "-march=${p.arch}")
           (lib.optional (p ? cpu) "-mcpu=${p.cpu}")
           (lib.optional (p ? abi) "-mabi=${p.abi}")
           (lib.optional (p ? fpu) "-mfpu=${p.fpu}")
-          (lib.optional (float != null) "-mfloat=${float}")
+          (lib.optional (p ? float) "-mfloat=${p.float}")
           (lib.optional (p ? float-abi) "-mfloat-abi=${p.float-abi}")
           (lib.optional (p ? mode) "-mmode=${p.mode}")
         ];
