@@ -75,6 +75,7 @@ let
 
     cmakeFlags = [
       "-DLUA_PRG=${luaPackages.lua}/bin/lua"
+      "-DGPERF_PRG=${gperf}/bin/gperf"
     ];
 
     # triggers on buffer overflow bug while running tests
