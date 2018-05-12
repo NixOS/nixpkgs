@@ -3,17 +3,9 @@
 appleDerivation {
   dontBuild = true;
 
-  postPatch = ''
-    substituteInPlace $sourceRoot/Makefile \
-      --replace "/usr/include" "/include" \
-      --replace "/usr/bin/" "" \
-      --replace "/bin/" ""
-  '';
+  installFlags = [ "EXPORT_DSTDIR=/include/architecture" ];
 
-  installPhase = ''
-    export DSTROOT=$out
-    make install
-  '';
+  DSTROOT = "$(out)";
 
   meta = with stdenv.lib; {
     maintainers = with maintainers; [ copumpkin ];
