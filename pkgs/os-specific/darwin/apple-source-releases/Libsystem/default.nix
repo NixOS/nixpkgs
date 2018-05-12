@@ -3,16 +3,9 @@
   removefile, libresolv, Libnotify, libplatform, libpthread, mDNSResponder, launchd, libutil, version }:
 
 appleDerivation rec {
+  phases = [ "unpackPhase" "installPhase" ];
+
   nativeBuildInputs = [ cpio ];
-
-  outputs = [ "out" "dev" ];
-
-  bundledHeaders = map stdenv.lib.getDev [ Libc Libm Libinfo dyld architecture
-                                           libclosure CarbonHeaders libdispatch
-                                           ncurses CommonCrypto copyfile
-                                           removefile libresolv Libnotify
-                                           libplatform mDNSResponder launchd
-                                           libutil libpthread ];
 
   installPhase = ''
     export NIX_ENFORCE_PURITY=
@@ -24,9 +17,12 @@ appleDerivation rec {
     cp ${xnu}/Library/Frameworks/Kernel.framework/Versions/A/Headers/Availability*.h $out/include
     cp ${xnu}/Library/Frameworks/Kernel.framework/Versions/A/Headers/stdarg.h        $out/include
 
-    for dep in $bundledHeaders; do
+    for dep in ${Libc} ${Libm} ${Libinfo} ${dyld} ${architecture} ${libclosure} ${CarbonHeaders} \
+               ${libdispatch} ${ncurses.dev} ${CommonCrypto} ${copyfile} ${removefile} ${libresolv} \
+               ${Libnotify} ${libplatform} ${mDNSResponder} ${launchd} ${libutil} ${libpthread}; do
       (cd $dep/include && find . -name '*.h' | cpio -pdm $out/include)
     done
+
 
     (cd ${cctools.dev}/include/mach-o && find . -name '*.h' | cpio -pdm $out/include/mach-o)
 

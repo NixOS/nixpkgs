@@ -225,7 +225,7 @@ in rec {
     allowedRequisites =
       [ bootstrapTools ] ++
       (with pkgs; [ xz.bin xz.out libcxx libcxxabi ]) ++
-      (with pkgs.darwin; [ dyld Libsystem Libsystem.dev CF ICU locale ]);
+      (with pkgs.darwin; [ dyld Libsystem CF ICU locale ]);
 
     overrides = persistent;
   };
@@ -263,7 +263,7 @@ in rec {
     allowedRequisites =
       [ bootstrapTools ] ++
       (with pkgs; [ xz.bin xz.out bash libcxx libcxxabi ]) ++
-      (with pkgs.darwin; [ dyld ICU Libsystem Libsystem.dev locale ]);
+      (with pkgs.darwin; [ dyld ICU Libsystem locale ]);
 
     overrides = persistent;
   };
@@ -383,7 +383,7 @@ in rec {
       binutils.bintools darwin.binutils darwin.binutils.bintools
       cc.expand-response-params
     ]) ++ (with pkgs.darwin; [
-      dyld Libsystem Libsystem.dev CF cctools ICU libiconv locale
+      dyld Libsystem CF cctools ICU libiconv locale
     ]);
 
     overrides = self: super:
