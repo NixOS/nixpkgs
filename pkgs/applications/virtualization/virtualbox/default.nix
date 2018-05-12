@@ -94,7 +94,9 @@ in stdenv.mkDerivation {
 
   patches =
      optional enableHardening ./hardened.patch
-  ++ [ ./qtx11extras.patch ./kernpcidev.patch ];
+  ++ [ ./qtx11extras.patch ];
+
+
 
   postPatch = ''
     sed -i -e 's|/sbin/ifconfig|${nettools}/bin/ifconfig|' \
