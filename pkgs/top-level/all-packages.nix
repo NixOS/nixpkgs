@@ -1062,6 +1062,8 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Foundation AddressBook;
   };
 
+  compsize = callPackage ../os-specific/linux/compsize { };
+
   coturn = callPackage ../servers/coturn { };
 
   coursier = callPackage ../development/tools/coursier {};

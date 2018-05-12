@@ -43,6 +43,11 @@
     github = "ChengCat";
     name = "Yucheng Zhang";
   };
+  CrazedProgrammer = {
+    email = "crazedprogrammer@gmail.com";
+    github = "CrazedProgrammer";
+    name = "CrazedProgrammer";
+  };
   CrystalGamma = {
     email = "nixos@crystalgamma.de";
     github = "CrystalGamma";
