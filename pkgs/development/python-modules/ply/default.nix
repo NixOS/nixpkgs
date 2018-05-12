@@ -6,11 +6,11 @@
 
 buildPythonPackage rec {
   pname = "ply";
-  version = "3.8";
+  version = "3.11";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "e7d1bdff026beb159c9942f7a17e102c375638d9478a7ecd4cc0c76afd8de0b8";
+    sha256 = "00c7c1aaa88358b9c765b6d3000c6eec0ba42abca5351b095321aef446081da3";
   };
 
   checkPhase = ''
