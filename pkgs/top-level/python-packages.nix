@@ -14241,18 +14241,9 @@ in {
 
   tqdm = callPackage ../development/python-modules/tqdm { };
 
-  smmap = buildPythonPackage rec {
-    name = "smmap-0.9.0";
-    disabled = isPyPy;  # This fails the tests if built with pypy
-    meta.maintainers = with maintainers; [ ];
+  smmap = callPackage ../development/python-modules/smmap { };
 
-    buildInputs = with self; [ nosexcover ];
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/s/smmap/${name}.tar.gz";
-      sha256 = "0qlx25f6n2n9ff37w9gg62f217fzj16xlbh0pkz0lpxxjys64aqf";
-    };
-  };
+  smmap2 = callPackage ../development/python-modules/smmap2 { };
 
   traits = buildPythonPackage rec {
     name = "traits-${version}";
