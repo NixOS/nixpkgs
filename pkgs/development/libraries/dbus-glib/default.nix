@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     configureFlagsArray+=("--exec-prefix=$dev")
   '';
 
-  doCheck = true;
+  doCheck = false;
 
   passthru = { inherit dbus glib; };
 
