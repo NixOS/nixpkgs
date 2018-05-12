@@ -2506,6 +2506,11 @@
     github = "mmlb";
     name = "Manuel Mendez";
   };
+  mnacamura = {
+    email = "m.nacamura@gmail.com";
+    github = "mnacamura";
+    name = "Mitsuhiro Nakamura";
+  };
   moaxcp = {
     email = "moaxcp@gmail.com";
     github = "moaxcp";

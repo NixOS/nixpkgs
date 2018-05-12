@@ -4712,6 +4712,8 @@ with pkgs;
 
   rnv = callPackage ../tools/text/xml/rnv { };
 
+  rounded-mgenplus = callPackage ../data/fonts/rounded-mgenplus { };
+
   roundup = callPackage ../tools/misc/roundup { };
 
   routino = callPackage ../tools/misc/routino { };
