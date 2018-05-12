@@ -8,7 +8,7 @@
 , generateManPage ? false
 , ffmpegSupport ? true
 , rtmpSupport ? true
-, phantomjsSupport ? !targetPlatform.isDarwin # phantomjs2 is broken on darwin
+, phantomjsSupport ? false
 , hlsEncryptedSupport ? true
 , makeWrapper }:
 
