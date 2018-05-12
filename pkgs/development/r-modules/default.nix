@@ -392,7 +392,7 @@ let
     nat = [ pkgs.which ];
     nat_nblast = [ pkgs.which ];
     nat_templatebrains = [ pkgs.which ];
-    pbdZMQ = lib.optionals stdenv.isDarwin [ pkgs.binutils.bintools ];
+    pbdZMQ = lib.optionals stdenv.isDarwin [ pkgs.darwin.binutils ];
     RMark = [ pkgs.which ];
     RPushbullet = [ pkgs.which ];
     qtpaint = [ pkgs.cmake ];
@@ -409,7 +409,7 @@ let
     fftw = [ pkgs.pkgconfig ];
     geoCount = [ pkgs.pkgconfig ];
     gdtools = [ pkgs.pkgconfig ];
-    JuniperKernel = lib.optionals stdenv.isDarwin [ pkgs.binutils.bintools ];
+    JuniperKernel = lib.optionals stdenv.isDarwin [ pkgs.darwin.binutils ];
     kza = [ pkgs.pkgconfig ];
     magick = [ pkgs.pkgconfig ];
     mwaved = [ pkgs.pkgconfig ];
@@ -759,7 +759,7 @@ let
     JuniperKernel = old.JuniperKernel.overrideDerivation (attrs: {
       postPatch = ''
         for file in {R,src}/*.R; do
-            sed -i 's#system("which \(otool\|install_name_tool\)"[^)]*)#"${pkgs.binutils.bintools}/bin/\1"#g' $file
+            sed -i 's#system("which \(otool\|install_name_tool\)"[^)]*)#"${pkgs.darwin.cctools}/bin/\1"#g' $file
         done
       '';
       preConfigure = ''
@@ -774,7 +774,7 @@ let
     pbdZMQ = old.pbdZMQ.overrideDerivation (attrs: {
       postPatch = lib.optionalString stdenv.isDarwin ''
         for file in R/*.{r,r.in}; do
-            sed -i 's#system("which \(\w\+\)"[^)]*)#"${pkgs.binutils.bintools}/bin/\1"#g' $file
+            sed -i 's#system("which \(\w\+\)"[^)]*)#"${pkgs.darwin.cctools}/bin/\1"#g' $file
         done
       '';
     });
