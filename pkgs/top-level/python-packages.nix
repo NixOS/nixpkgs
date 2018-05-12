@@ -2824,30 +2824,7 @@ in {
 
   gitdb2 = callPackage ../development/python-modules/gitdb2 { };
 
-  GitPython = buildPythonPackage rec {
-    version = "2.0.8";
-    name = "GitPython-${version}";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/G/GitPython/GitPython-${version}.tar.gz";
-      sha256 = "7c03d1130f903aafba6ae5b89ccf8eb433a995cd3120cbb781370e53fc4eb222";
-    };
-
-    buildInputs = with self; [ mock nose ];
-    propagatedBuildInputs = with self; [ gitdb ];
-
-    # All tests error with
-    # InvalidGitRepositoryError: /tmp/nix-build-python2.7-GitPython-1.0.1.drv-0/GitPython-1.0.1
-    # Maybe due to being in a chroot?
-    doCheck = false;
-
-    meta = {
-      description = "Python Git Library";
-      maintainers = with maintainers; [ ];
-      homepage = https://github.com/gitpython-developers/GitPython;
-      license = licenses.bsd3;
-    };
-  };
+  GitPython = callPackage ../development/python-modules/GitPython { };
 
   git-annex-adapter = callPackage ../development/python-modules/git-annex-adapter {
     inherit (pkgs.gitAndTools) git-annex;
