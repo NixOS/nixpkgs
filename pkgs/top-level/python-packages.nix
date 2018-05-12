@@ -18202,6 +18202,7 @@ EOF
 
   gast = callPackage ../development/python-modules/gast { };
 
+  IBMQuantumExperience = callPackage ../development/python-modules/ibmquantumexperience { };
 });
 
 in fix' (extends overrides packages)
