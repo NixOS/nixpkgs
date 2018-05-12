@@ -1636,7 +1636,8 @@ with pkgs;
 
   ciopfs = callPackage ../tools/filesystems/ciopfs { };
 
-  citrix_receiver        = hiPrio citrix_receiver_13_9_0;
+  citrix_receiver        = hiPrio citrix_receiver_13_9_1;
+  citrix_receiver_13_9_1 = callPackage ../applications/networking/remote/citrix-receiver { version = "13.9.1"; };
   citrix_receiver_13_9_0 = callPackage ../applications/networking/remote/citrix-receiver { version = "13.9.0"; };
   citrix_receiver_13_8_0 = callPackage ../applications/networking/remote/citrix-receiver { version = "13.8.0"; };
   citrix_receiver_13_7_0 = callPackage ../applications/networking/remote/citrix-receiver { version = "13.7.0"; };
