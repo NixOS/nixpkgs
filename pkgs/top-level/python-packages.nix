@@ -18205,6 +18205,8 @@ EOF
   IBMQuantumExperience = callPackage ../development/python-modules/ibmquantumexperience { };
 
   qiskit = callPackage ../development/python-modules/qiskit { };
+
+  qasm2image = callPackage ../development/python-modules/qasm2image { };
 });
 
 in fix' (extends overrides packages)
