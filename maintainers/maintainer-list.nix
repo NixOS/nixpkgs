@@ -2928,6 +2928,11 @@
     github = "panaeon";
     name = "Vitalii Voloshyn";
   };
+  pandaman = {
+    email = "kointosudesuyo@infoseek.jp";
+    github = "pandaman64";
+    name = "pandaman";
+  };
   paperdigits = {
     email = "mica@silentumbrella.com";
     github = "paperdigits";
