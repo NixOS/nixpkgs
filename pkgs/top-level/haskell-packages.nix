@@ -95,6 +95,13 @@ in rec {
       stage0 = ../development/compilers/ghcjs-ng/8.2/stage0.nix;
       ghcjsDepOverrides = callPackage ../development/compilers/ghcjs-ng/8.2/dep-overrides.nix {};
     };
+    ghcjs84 = callPackage ../development/compilers/ghcjs-ng rec {
+      bootPkgs = packages.ghc842;
+      inherit (bootPkgs) alex happy;
+      ghcjsSrcJson = ../development/compilers/ghcjs-ng/8.4/git.json;
+      stage0 = ../development/compilers/ghcjs-ng/8.4/stage0.nix;
+      ghcjsDepOverrides = callPackage ../development/compilers/ghcjs-ng/8.4/dep-overrides.nix {};
+    };
 
     # The integer-simple attribute set contains all the GHC compilers
     # build with integer-simple instead of integer-gmp.
@@ -167,6 +174,12 @@ in rec {
       buildHaskellPackages = ghc.bootPkgs;
       ghc = bh.compiler.ghcjs82;
       compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-8.2.x.nix { };
+      packageSetConfig = callPackage ../development/haskell-modules/configuration-ghcjs.nix { };
+    };
+    ghcjs84 = callPackage ../development/haskell-modules rec {
+      buildHaskellPackages = ghc.bootPkgs;
+      ghc = bh.compiler.ghcjs84;
+      compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-8.4.x.nix { };
       packageSetConfig = callPackage ../development/haskell-modules/configuration-ghcjs.nix { };
     };
 
