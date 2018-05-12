@@ -2820,31 +2820,9 @@ in {
 
   gpy = callPackage ../development/python-modules/gpy { };
 
-  gitdb = buildPythonPackage rec {
-    name = "gitdb-0.6.4";
+  gitdb = callPackage ../development/python-modules/gitdb { };
 
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/g/gitdb/${name}.tar.gz";
-      sha256 = "0n4n2c7rxph9vs2l6xlafyda5x1mdr8xy16r9s3jwnh3pqkvrsx3";
-    };
-
-    buildInputs = with self; [ nose ];
-    propagatedBuildInputs = with self; [ smmap ];
-
-    checkPhase = ''
-      nosetests
-    '';
-
-    doCheck = false; # Bunch of tests fail because they need an actual git repo
-
-    meta = {
-      description = "Git Object Database";
-      maintainers = with maintainers; [ ];
-      homepage = https://github.com/gitpython-developers/gitdb;
-      license = licenses.bsd3;
-    };
-
-  };
+  gitdb2 = callPackage ../development/python-modules/gitdb2 { };
 
   GitPython = buildPythonPackage rec {
     version = "2.0.8";
