@@ -15744,7 +15744,7 @@ with pkgs;
   firefox = wrapFirefox firefox-unwrapped { };
   firefox-esr-52 = wrapFirefox firefox-esr-52-unwrapped { };
   firefox-esr-60 = wrapFirefox firefox-esr-60-unwrapped { };
-  firefox-esr = firefox-esr-52;
+  firefox-esr = firefox-esr-60;
 
   firefox-bin-unwrapped = callPackage ../applications/networking/browsers/firefox-bin {
     channel = "release";
