@@ -245,7 +245,6 @@ rec {
     gcc = {
       arch = "armv6";
       fpu = "vfp";
-      float = "hard";
       # TODO(@Ericson2314) what is this and is it a good idea? It was
       # used in some cross compilation examples but not others.
       #
