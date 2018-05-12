@@ -198,8 +198,10 @@ let
       tar -xJf ${freetype_source}
 
       # remove unused third-party
+      # in third_party/crashpad third_party/zlib contains just a header-adapter
       for lib in ${toString gnSystemLibraries}; do
         find -type f -path "*third_party/$lib/*"     \
+            \! -path "*third_party/crashpad/crashpad/third_party/zlib/*"  \
             \! -path "*third_party/$lib/chromium/*"  \
             \! -path "*third_party/$lib/google/*"    \
             \! -path "*base/third_party/icu/*"       \
