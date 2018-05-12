@@ -59,6 +59,7 @@ in stdenv.mkDerivation rec {
     })
     (substituteAll {
       src = ./fix-paths.patch;
+      inherit (gnome3) libgnomekbd;
       inherit unzip;
     })
   ];
