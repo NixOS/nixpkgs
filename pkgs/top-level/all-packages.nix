@@ -21119,6 +21119,8 @@ with pkgs;
 
   tup = callPackage ../development/tools/build-managers/tup { };
 
+  trufflehog = callPackage ../tools/security/trufflehog { };
+
   tvheadend = callPackage ../servers/tvheadend { };
 
   ums = callPackage ../servers/ums { };
