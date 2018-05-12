@@ -17,14 +17,8 @@ stdenv.mkDerivation rec {
   name = "ncurses-${version}" + lib.optionalString (abiVersion == "5") "-abi5-compat";
 
   src = fetchurl {
-    urls = [
-      # Remove this mirror on next upgrade, it's only needed because upstream took ncurses-6.0-20171125.tgz down!
-      "http://bld1.alpinelinux.org/distfiles/v3.5/ncurses-${version}.tgz"
-
-      "ftp://ftp.invisible-island.net/ncurses/current/ncurses-${version}.tgz"
-      "https://invisible-mirror.net/archives/ncurses/current/ncurses-${version}.tgz"
-    ];
-    sha256 = "11adzj0k82nlgpfrflabvqn2m7fmhp2y6pd7ivmapynxqb9vvb92";
+    url = https://github.com/mirror/ncurses/archive/8d3ea9021573747ecd129228ba7782a03243f62c.tar.gz;
+    sha256 = "0pn5zksizs2h127zfxnf48f7f9ac4lgi6h8jhr1h8hl994s3bp32";
   };
 
   patches = lib.optional (!stdenv.cc.isClang) ./clang.patch;
