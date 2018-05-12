@@ -199,7 +199,7 @@ rec {
     msvc         = {};
     eabi         = {};
 
-    androideabi  = { float = "hard"; };
+    androideabi  = {};
     android      = {
       assertions = [
         { assertion = platform: !platform.isAarch32;
