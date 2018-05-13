@@ -38,11 +38,16 @@ buildPythonApplication rec {
         ++ optional phantomjsSupport phantomjs2;
     in [ ''--prefix PATH : "${makeBinPath packagesToBinPath}"'' ];
 
+  postInstall = ''
+    mkdir -p $out/share/zsh/site-functions
+    cp youtube-dl.zsh $out/share/zsh/site-functions/_youtube-dl
+  '';
+
   # Requires network
   doCheck = false;
 
   meta = {
-    homepage = http://rg3.github.io/youtube-dl/;
+    homepage = https://rg3.github.io/youtube-dl/;
     repositories.git = https://github.com/rg3/youtube-dl.git;
     description = "Command-line tool to download videos from YouTube.com and other sites";
     longDescription = ''
