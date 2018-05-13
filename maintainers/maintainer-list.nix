@@ -43,6 +43,11 @@
     github = "ChengCat";
     name = "Yucheng Zhang";
   };
+  CrazedProgrammer = {
+    email = "crazedprogrammer@gmail.com";
+    github = "CrazedProgrammer";
+    name = "CrazedProgrammer";
+  };
   CrystalGamma = {
     email = "nixos@crystalgamma.de";
     github = "CrystalGamma";
@@ -2501,6 +2506,11 @@
     github = "mmlb";
     name = "Manuel Mendez";
   };
+  mnacamura = {
+    email = "m.nacamura@gmail.com";
+    github = "mnacamura";
+    name = "Mitsuhiro Nakamura";
+  };
   moaxcp = {
     email = "moaxcp@gmail.com";
     github = "moaxcp";
@@ -3770,6 +3780,11 @@
     email = "jonathan@titanous.com";
     github = "titanous";
     name = "Jonathan Rudenberg";
+  };
+  tmplt = {
+    email = "tmplt@dragons.rocks";
+    github = "tmplt";
+    name = "Viktor";
   };
   tnias = {
     email = "phil@grmr.de";

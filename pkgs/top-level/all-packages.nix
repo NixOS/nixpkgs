@@ -1061,6 +1061,8 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Foundation AddressBook;
   };
 
+  compsize = callPackage ../os-specific/linux/compsize { };
+
   coturn = callPackage ../servers/coturn { };
 
   coursier = callPackage ../development/tools/coursier {};
@@ -4706,6 +4708,8 @@ with pkgs;
   rng_tools = callPackage ../tools/security/rng-tools { };
 
   rnv = callPackage ../tools/text/xml/rnv { };
+
+  rounded-mgenplus = callPackage ../data/fonts/rounded-mgenplus { };
 
   roundup = callPackage ../tools/misc/roundup { };
 
@@ -8651,6 +8655,8 @@ with pkgs;
   cogl = callPackage ../development/libraries/cogl { };
 
   coin3d = callPackage ../development/libraries/coin3d { };
+
+  soxt = callPackage ../development/libraries/soxt { };
 
   CoinMP = callPackage ../development/libraries/CoinMP { };
 
