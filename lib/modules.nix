@@ -647,7 +647,17 @@ rec {
      result of the change function
   */
   mkChangedOptionModule = from: to: changeFn:
-    mkMergedOptionModule [ from ] to changeFn;
+    { config, options, ... }:
+    { options = setAttrByPath from (mkOption {
+        visible = false;
+      });
+      config =
+        let opt = getAttrFromPath from options; in {
+          warnings =
+            optional opt.isDefined
+              "The option `${showOption from}' defined in ${showFiles opt.files} has been changed to `${showOption to}' that has a different type. Please read `${showOption to}' documentation and update your configuration accordingly.";
+        } // setAttrByPath to (mkIf opt.isDefined (changeFn config));
+    };
 
   /* Like ‘mkRenamedOptionModule’, but doesn't show a warning. */
   mkAliasOptionModule = from: to: doRename {
