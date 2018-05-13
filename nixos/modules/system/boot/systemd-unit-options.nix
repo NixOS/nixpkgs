@@ -217,7 +217,7 @@ in rec {
 
     environment = mkOption {
       default = {};
-      type = with types; attrsOf (nullOr (either str package));
+      type = with types; attrsOf (nullOr (either str (either path package)));
       example = { PATH = "/foo/bar/bin"; LANG = "nl_NL.UTF-8"; };
       description = "Environment variables passed to the service's processes.";
     };
