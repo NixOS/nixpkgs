@@ -308,10 +308,22 @@ in
         type = types.nullOr types.path;
         example = literalExample "./my-background.png";
         description = ''
-          Background image used for GRUB.  It must be a 640x480,
+          Background image used for GRUB.
+          Set to <literal>null</literal> to run GRUB in text mode.
+
+          <note><para>
+          For grub 1:
+          It must be a 640x480,
           14-colour image in XPM format, optionally compressed with
-          <command>gzip</command> or <command>bzip2</command>.  Set to
-          <literal>null</literal> to run GRUB in text mode.
+          <command>gzip</command> or <command>bzip2</command>.
+          </para></note>
+
+          <note><para>
+          For grub 2:
+          File must be one of .png, .tga, .jpg, or .jpeg. JPEG images must
+          not be progressive.
+          The image will be scaled if necessary to fit the screen.
+          </para></note>
         '';
       };
 
