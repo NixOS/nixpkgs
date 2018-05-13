@@ -242,6 +242,9 @@ stdenv.mkDerivation ({
       if [ -d "$p/lib" ]; then
         configureFlags+=" --extra-lib-dirs=$p/lib"
       fi
+      if [[ -d "$p/Library/Frameworks" ]]; then
+        configureFlags+=" --extra-framework-dirs=$p/Library/Frameworks"
+      fi
     done
   '' + (optionalString stdenv.isDarwin ''
     # Work around a limit in the macOS Sierra linker on the number of paths
