@@ -248,6 +248,9 @@ stdenv.mkDerivation ({
       if [ -d "$p/lib" ]; then
         configureFlags+=" --extra-lib-dirs=$p/lib"
       fi
+      if [[ -d "$p/Library/Frameworks" ]]; then
+        configureFlags+=" --extra-framework-dirs=$p/Library/Frameworks"
+      fi
     done
   ''
   # only use the links hack if we're actually building dylibs. otherwise, the
