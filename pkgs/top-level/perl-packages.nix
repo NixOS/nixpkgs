@@ -6462,10 +6462,9 @@ let self = _self // overrides; _self = with self; {
     patches = [ ../development/perl-modules/gd-options-passthrough-and-fontconfig.patch ];
 
     # otherwise "cc1: error: -Wformat-security ignored without -Wformat [-Werror=format-security]"
-    NIX_CFLAGS_COMPILE = [ "-Wno-error=format-security" ];
+    hardeningDisable = [ "format" ];
 
-    # tests fail
-    doCheck = false;
+    doCheck = false; # fails 1 out of 13 tests
 
     makeMakerFlags = "--lib_png_path=${pkgs.libpng.out} --lib_jpeg_path=${pkgs.libjpeg.out} --lib_zlib_path=${pkgs.zlib.out} --lib_ft_path=${pkgs.freetype.out} --lib_fontconfig_path=${pkgs.fontconfig.lib} --lib_xpm_path=${pkgs.xorg.libXpm.out}";
   };
