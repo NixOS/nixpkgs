@@ -186,6 +186,7 @@ stdenv.mkDerivation {
       else throw "unknown emulation for platform: " + targetPlatform.config;
     in targetPlatform.platform.bfdEmulation or (fmt + sep + arch);
 
+  strictDeps = true;
   depsTargetTargetPropagated = extraPackages;
 
   setupHook = ./setup-hook.sh;
