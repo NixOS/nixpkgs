@@ -1,6 +1,8 @@
-{ fetchurl, stdenv, libtool, readline, gmp, pkgconfig, boehmgc, libunistring
-, libffi, gawk, makeWrapper, fetchpatch, coverageAnalysis ? null, gnu ? null
-, hostPlatform
+{ stdenv, buildPackages
+, buildPlatform, hostPlatform
+, fetchpatch, fetchurl, makeWrapper, gawk, pkgconfig
+, libffi, libtool, readline, gmp, boehmgc, libunistring
+, coverageAnalysis ? null, gnu ? null
 }:
 
 # Do either a coverage analysis build or a standard build.
@@ -19,18 +21,21 @@
   outputs = [ "out" "dev" "info" ];
   setOutputFlags = false; # $dev gets into the library otherwise
 
+  depsBuildBuild = [ buildPackages.stdenv.cc ]
+    ++ stdenv.lib.optional (hostPlatform != buildPlatform)
+                           buildPackages.buildPackages.guile_2_0;
   nativeBuildInputs = [ makeWrapper gawk pkgconfig ];
   buildInputs = [ readline libtool libunistring libffi ];
-  propagatedBuildInputs = [ gmp boehmgc ]
 
-    # XXX: These ones aren't normally needed here, but since
-    # `libguile-2.0.la' reads `-lltdl -lunistring', adding them here will add
+  propagatedBuildInputs = [
+    gmp boehmgc
+
+    # XXX: These ones aren't normally needed here, but `libguile*.la' has '-l'
+    # flags for them without corresponding '-L' flags. Adding them here will add
     # the needed `-L' flags.  As for why the `.la' file lacks the `-L' flags,
     # see below.
-    ++ [ libtool libunistring ];
-
-  # A native Guile 2.0 is needed to cross-build Guile.
-  selfNativeBuildInput = true;
+    libtool libunistring
+  ];
 
   enableParallelBuilding = true;
 
@@ -40,6 +45,7 @@
       url = "http://git.savannah.gnu.org/cgit/guile.git/patch/?id=2fbde7f02adb8c6585e9baf6e293ee49cd23d4c4";
       sha256 = "0p6c1lmw1iniq03z7x5m65kg3lq543kgvdb4nrxsaxjqf3zhl77v";
     })
+    ./riscv.patch
   ] ++
     (stdenv.lib.optional (coverageAnalysis != null) ./gcov-file-name.patch);
 
@@ -67,11 +73,12 @@
 
   postInstall = ''
     wrapProgram $out/bin/guile-snarf --prefix PATH : "${gawk}/bin"
-
+  ''
     # XXX: See http://thread.gmane.org/gmane.comp.lib.gnulib.bugs/18903 for
     # why `--with-libunistring-prefix' and similar options coming from
     # `AC_LIB_LINKFLAGS_BODY' don't work on NixOS/x86_64.
-    sed -i "$out/lib/pkgconfig/guile-2.0.pc"    \
+  + ''
+    sed -i "$out/lib/pkgconfig/guile"-*.pc    \
         -e "s|-lunistring|-L${libunistring}/lib -lunistring|g ;
             s|^Cflags:\(.*\)$|Cflags: -I${libunistring}/include \1|g ;
             s|-lltdl|-L${libtool.lib}/lib -lltdl|g ;
@@ -84,15 +91,6 @@
   doCheck = false;
 
   setupHook = ./setup-hook-2.0.sh;
-
-  crossAttrs.preConfigure =
-    stdenv.lib.optionalString (hostPlatform.isHurd)
-       # On GNU, libgc depends on libpthread, but the cross linker doesn't
-       # know where to find libpthread, which leads to erroneous test failures
-       # in `configure', where `-pthread' and `-lpthread' aren't explicitly
-       # passed.  So it needs some help (XXX).
-       "export LDFLAGS=-Wl,-rpath-link=${gnu.libpthreadCross}/lib";
-
 
   meta = {
     description = "Embeddable Scheme implementation";
