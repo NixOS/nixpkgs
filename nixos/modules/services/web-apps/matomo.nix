@@ -54,6 +54,20 @@ in {
         '';
       };
 
+      periodicArchiveProcessing = mkOption {
+        type = types.bool;
+        default = true;
+        description = ''
+          Enable periodic archive processing, which generates aggregated reports from the visits.
+
+          This means that you can safely disable browser triggers for Matomo archiving,
+          and safely enable to delete old visitor logs.
+          Before deleting visitor logs,
+          make sure though that you run <literal>systemctl start matomo-archive-processing.service</literal>
+          at least once without errors if you have already collected data before.
+        '';
+      };
+
       phpfpmProcessManagerConfig = mkOption {
         type = types.str;
         default = ''
@@ -132,16 +146,17 @@ in {
       requires = [ databaseService ];
       after = [ databaseService ];
       path = [ cfg.package ];
+      environment.PIWIK_USER_PATH = dataDir;
       serviceConfig = {
         Type = "oneshot";
         User = user;
         # hide especially config.ini.php from other
         UMask = "0007";
         # TODO: might get renamed to MATOMO_USER_PATH in future versions
-        Environment = "PIWIK_USER_PATH=${dataDir}";
         # chown + chmod in preStart needs root
         PermissionsStartOnly = true;
       };
+
       # correct ownership and permissions in case they're not correct anymore,
       # e.g. after restoring from backup or moving from another system.
       # Note that ${dataDir}/config/config.ini.php might contain the MySQL password.
@@ -167,6 +182,37 @@ in {
               matomo-console core:update --yes
             fi
       '';
+    };
+
+    # If this is run regularly via the timer,
+    # 'Browser trigger archiving' can be disabled in Matomo UI > Settings > General Settings.
+    systemd.services.matomo-archive-processing = {
+      description = "Archive Matomo reports";
+      # the archiving can only work if the database is already up and running
+      requires = [ databaseService ];
+      after = [ databaseService ];
+
+      # TODO: might get renamed to MATOMO_USER_PATH in future versions
+      environment.PIWIK_USER_PATH = dataDir;
+      serviceConfig = {
+        Type = "oneshot";
+        User = user;
+        UMask = "0007";
+        CPUSchedulingPolicy = "idle";
+        IOSchedulingClass = "idle";
+        ExecStart = "${cfg.package}/bin/matomo-console core:archive --url=https://${user}.${fqdn}";
+      };
+    };
+
+    systemd.timers.matomo-archive-processing = mkIf cfg.periodicArchiveProcessing {
+      description = "Automatically archive Matomo reports every hour";
+
+      wantedBy = [ "timers.target" ];
+      timerConfig = {
+        OnCalendar = "hourly";
+        Persistent = "yes";
+        AccuracySec = "10m";
+      };
     };
 
     systemd.services.${phpExecutionUnit} = {

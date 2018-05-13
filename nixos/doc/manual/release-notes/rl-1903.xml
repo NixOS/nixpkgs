@@ -276,6 +276,23 @@
      <option>services.matomo.package</option> which determines the used
      Matomo version.
     </para>
+    <para>
+     The Matomo module now also comes with the systemd service <literal>matomo-archive-processing.service</literal>
+     and a timer that automatically triggers archive processing every hour.
+     This means that you can safely
+     <link xlink:href="https://matomo.org/docs/setup-auto-archiving/#disable-browser-triggers-for-matomo-archiving-and-limit-matomo-reports-to-updating-every-hour">
+      disable browser triggers for Matomo archiving
+     </link> at <literal>Administration > System > General Settings</literal>.
+    </para>
+    <para>
+     Additionally, you can enable to
+     <link xlink:href="https://matomo.org/docs/privacy/#step-2-delete-old-visitors-logs">
+      delete old visitor logs
+     </link> at <literal>Administration > System > Privacy</literal>,
+     but make sure that you run <literal>systemctl start matomo-archive-processing.service</literal>
+     at least once without errors if you have already collected data before,
+     so that the reports get archived before the source data gets deleted.
+    </para>
    </listitem>
    <listitem>
     <para>
