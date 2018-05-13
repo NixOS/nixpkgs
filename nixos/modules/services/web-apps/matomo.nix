@@ -23,20 +23,24 @@ in {
   options = {
     services.matomo = {
       # NixOS PR for database setup: https://github.com/NixOS/nixpkgs/pull/6963
-      # matomo issue for automatic matomo setup: https://github.com/matomo-org/matomo/issues/10257
-      # TODO: find a nice way to do this when more NixOS MySQL and / or matomo automatic setup stuff is implemented.
+      # Matomo issue for automatic Matomo setup: https://github.com/matomo-org/matomo/issues/10257
+      # TODO: find a nice way to do this when more NixOS MySQL and / or Matomo automatic setup stuff is implemented.
       enable = mkOption {
         type = types.bool;
         default = false;
         description = ''
-          Enable matomo web analytics with php-fpm backend.
+          Enable Matomo web analytics with php-fpm backend.
           Either the nginx option or the webServerUser option is mandatory.
         '';
       };
 
       package = mkOption {
         type = types.package;
-        description = "Matomo package to use";
+        description = ''
+          Matomo package for the service to use.
+          This can be used to point to newer releases from nixos-unstable,
+          as they don't get backported if they are not security-relevant.
+        '';
         default = pkgs.matomo;
         defaultText = "pkgs.matomo";
       };
@@ -47,7 +51,7 @@ in {
         example = "lighttpd";
         # TODO: piwik.php might get renamed to matomo.php in future releases
         description = ''
-          Name of the web server user that forwards requests to the ${phpSocket} fastcgi socket for matomo if the nginx
+          Name of the web server user that forwards requests to the ${phpSocket} fastcgi socket for Matomo if the nginx
           option is not used. Either this option or the nginx option is mandatory.
           If you want to use another webserver than nginx, you need to set this to that server's user
           and pass fastcgi requests to `index.php` and `piwik.php` to this socket.
@@ -83,7 +87,7 @@ in {
           catch_workers_output = yes
         '';
         description = ''
-          Settings for phpfpm's process manager. You might need to change this depending on the load for matomo.
+          Settings for phpfpm's process manager. You might need to change this depending on the load for Matomo.
         '';
       };
 
@@ -93,7 +97,7 @@ in {
             (import ../web-servers/nginx/vhost-options.nix { inherit config lib; })
             {
               # enable encryption by default,
-              # as sensitive login and matomo data should not be transmitted in clear text.
+              # as sensitive login and Matomo data should not be transmitted in clear text.
               options.forceSSL.default = true;
               options.enableACME.default = true;
             }
@@ -108,7 +112,7 @@ in {
           enableACME = false;
         };
         description = ''
-            With this option, you can customize an nginx virtualHost which already has sensible defaults for matomo.
+            With this option, you can customize an nginx virtualHost which already has sensible defaults for Matomo.
             Either this option or the webServerUser option is mandatory.
             Set this to {} to just enable the virtualHost if you don't need any customization.
             If enabled, then by default, the <option>serverName</option> is
@@ -138,8 +142,8 @@ in {
     };
     users.groups.${user} = {};
 
-    systemd.services.matomo_setup_update = {
-      # everything needs to set up and up to date before matomo php files are executed
+    systemd.services.matomo-setup-update = {
+      # everything needs to set up and up to date before Matomo php files are executed
       requiredBy = [ "${phpExecutionUnit}.service" ];
       before = [ "${phpExecutionUnit}.service" ];
       # the update part of the script can only work if the database is already up and running
@@ -161,7 +165,7 @@ in {
       # e.g. after restoring from backup or moving from another system.
       # Note that ${dataDir}/config/config.ini.php might contain the MySQL password.
       preStart = ''
-        # migrate data from piwik to matomo folder
+        # migrate data from piwik to Matomo folder
         if [ -d ${deprecatedDataDir} ]; then
           echo "Migrating from ${deprecatedDataDir} to ${dataDir}"
           mv -T ${deprecatedDataDir} ${dataDir}
@@ -170,7 +174,7 @@ in {
         chmod -R ug+rwX,o-rwx ${dataDir}
         '';
       script = ''
-            # Use User-Private Group scheme to protect matomo data, but allow administration / backup via matomo group
+            # Use User-Private Group scheme to protect Matomo data, but allow administration / backup via 'matomo' group
             # Copy config folder
             chmod g+s "${dataDir}"
             cp -r "${cfg.package}/config" "${dataDir}/"
@@ -216,7 +220,7 @@ in {
     };
 
     systemd.services.${phpExecutionUnit} = {
-      # stop phpfpm on package upgrade, do database upgrade via matomo_setup_update, and then restart
+      # stop phpfpm on package upgrade, do database upgrade via matomo-setup-update, and then restart
       restartTriggers = [ cfg.package ];
       # stop config.ini.php from getting written with read permission for others
       serviceConfig.UMask = "0007";
@@ -246,13 +250,13 @@ in {
       # https://fralef.me/piwik-hardening-with-nginx-and-php-fpm.html
       # https://github.com/perusio/piwik-nginx
       "${user}.${fqdn}" = mkMerge [ cfg.nginx {
-        # don't allow to override the root easily, as it will almost certainly break matomo.
+        # don't allow to override the root easily, as it will almost certainly break Matomo.
         # disadvantage: not shown as default in docs.
         root = mkForce "${cfg.package}/share";
 
         # define locations here instead of as the submodule option's default
         # so that they can easily be extended with additional locations if required
-        # without needing to redefine the matomo ones.
+        # without needing to redefine the Matomo ones.
         # disadvantage: not shown as default in docs.
         locations."/" = {
           index = "index.php";
