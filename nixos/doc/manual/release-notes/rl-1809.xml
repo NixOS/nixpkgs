@@ -233,6 +233,14 @@ $ nix-instantiate -E '(import &lt;nixpkgsunstable&gt; {}).gitFull'
      <literal>networking.networkmanager.dns</literal> instead.
     </para>
    </listitem>
+   <listitem>
+    <para>
+     <literal>services.rmilter</literal> has been deprecated and corresponding package removed.
+     rspamd now listens on a UNIX socket by default. Use <literal>services.rspamd.postfix.enable</literal>
+     instead of <literal>services.rmilter.postfix.enable</literal> for quick Postfix integration.
+    </para>
+   </listitem>
+
   </itemizedlist>
  </section>
 </section>

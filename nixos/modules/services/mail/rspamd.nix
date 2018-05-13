@@ -18,7 +18,7 @@ let
       };
       mode = mkOption {
         type = types.str;
-        default = "0644";
+        default = "0660";
         description = "Mode to set on unix socket";
       };
       owner = mkOption {
@@ -60,6 +60,7 @@ let
         type = types.nullOr (types.enum [
           "normal" "controller" "fuzzy_storage" "proxy" "lua"
         ]);
+        default = null;
         description = "The type of this worker";
       };
       bindSockets = mkOption {
@@ -99,19 +100,23 @@ let
         description = "Additional entries to put verbatim into worker section of rspamd config file.";
       };
     };
-    config = mkIf (name == "normal" || name == "controller" || name == "fuzzy") {
-      type = mkDefault name;
-      includes = mkDefault [ "$CONFDIR/worker-${name}.inc" ];
-      bindSockets = mkDefault (if name == "normal"
-        then [{
-              socket = "/run/rspamd/rspamd.sock";
-              mode = "0660";
-              owner = cfg.user;
-              group = cfg.group;
-            }]
-        else if name == "controller"
-        then [ "localhost:11334" ]
-        else [] );
+    config = mkIf (name == "normal" || name == "controller" || name == "fuzzy" || name == "rspamd_proxy") {
+      includes = mkDefault [ "$CONFDIR/worker-${if name == "rspamd_proxy" then "proxy" else name}.inc" ];
+      bindSockets =
+        let unixSocket = name: {
+          socket = "/run/rspamd/${name}.sock";
+          owner = cfg.user;
+          group = cfg.group;
+        }; in mkDefault (
+          if name == "normal" then [ (unixSocket "rspamd") ]
+          else if name == "controller" then [ (unixSocket "controller") ]
+          else if name == "rspamd_proxy" then [ (unixSocket "proxy") ]
+          else [] );
+      extraConfig = mkIf (name == "rspamd_proxy") (mkDefault ''
+        upstream "local" {
+          self_scan = yes;
+        }
+      '');
     };
   };
 
@@ -146,23 +151,22 @@ let
       in (imap (idx: e: "bind_socket = \"systemd:${toString (systemd + idx - 1)}\";") (listenStreams each.socket))
     else "bind_socket = \"${each.rawEntry}\";") socks));
 
-  rspamdConfFile = pkgs.writeText "rspamd.conf"
+  rspamdConf = pkgs.symlinkJoin {
+    name = "rspamd-conf";
+    paths =
+      let
+        makeConfigs = prefix: attrs: mapAttrsToList (name: text: pkgs.writeTextFile { inherit name text; destination = "/${prefix}/${name}"; }) attrs;
+        localFiles = makeConfigs "local.d" cfg.locals;
+        overrideFiles = makeConfigs "override.d" cfg.overrides;
+      in [ rspamdConfFile ] ++ localFiles ++ overrideFiles;
+  };
+
+  rspamdConfFile = pkgs.writeTextDir "rspamd.conf.override"
     ''
-      .include "$CONFDIR/common.conf"
-
-      options {
-        pidfile = "$RUNDIR/rspamd.pid";
-        .include "$CONFDIR/options.inc"
-      }
-
-      logging {
-        type = "syslog";
-        .include "$CONFDIR/logging.inc"
-      }
-
       ${concatStringsSep "\n" (mapAttrsToList (name: value: ''
-        worker ${optionalString (value.name != "normal" && value.name != "controller") "${value.name}"} {
-          type = "${value.type}";
+        worker ${optionalString (value.name != null) ''"${value.name}"''} {
+          ${optionalString (value.type != null)
+            ''type = "${value.type}";''}
           ${optionalString (value.enable != null)
             "enabled = ${if value.enable != false then "yes" else "no"};"}
           ${mkBindSockets value.enable value.bindSockets}
@@ -212,19 +216,35 @@ in
         '';
       };
 
+      locals = mkOption {
+        type = with types; attrsOf lines;
+        default = {};
+        description = ''
+          Local configuration files, written into <filename>/etc/rspamd/local.d/{name}</filename>.
+        '';
+      };
+
+      overrides = mkOption {
+        type = with types; attrsOf lines;
+        default = {};
+        description = ''
+          Overridden configuration files, written into <filename>/etc/rspamd/override.d/{name}</filename>.
+        '';
+      };
+
       workers = mkOption {
         type = with types; attrsOf (submodule workerOpts);
         description = ''
-          Attribute set of workers to start.
+	  Attribute set of workers to start. By default, controller and
+          self-scanning proxy worker are started.
         '';
         default = {
-          normal = {};
           controller = {};
+          rspamd_proxy = {};
         };
         example = literalExample ''
           {
             normal = {
-              includes = [ "$CONFDIR/worker-normal.inc" ];
               bindSockets = [{
                 socket = "/run/rspamd/rspamd.sock";
                 mode = "0660";
@@ -233,7 +253,6 @@ in
               }];
             };
             controller = {
-              includes = [ "$CONFDIR/worker-controller.inc" ];
               bindSockets = [ "[::1]:11334" ];
             };
           }
@@ -263,7 +282,15 @@ in
         description = ''
           Group to use when no root privileges are required.
         '';
-       };
+      };
+
+      postfix = {
+        enable = mkOption {
+          type = types.bool;
+          default = false;
+          description = "Add rspamd milter proxy to postfix main.conf";
+        };
+      };
     };
   };
 
@@ -271,8 +298,6 @@ in
   ###### implementation
 
   config = mkIf cfg.enable {
-
-    services.rspamd.socketActivation = mkDefault (!opts.bindSocket.isDefined && !opts.bindUISocket.isDefined);
 
     assertions = [ {
       assertion = !cfg.socketActivation || !(opts.bindSocket.isDefined || opts.bindUISocket.isDefined);
@@ -294,20 +319,44 @@ in
       gid = config.ids.gids.rspamd;
     };
 
-    environment.etc."rspamd.conf".source = rspamdConfFile;
+    services.rspamd = {
+      socketActivation = mkDefault (!opts.bindSocket.isDefined && !opts.bindUISocket.isDefined);
+
+      workers = mkIf cfg.postfix.enable {
+        controller = {};
+        rspamd_proxy = {
+          bindSockets = [ {
+            socket = "/var/lib/postfix/queue/private/rspamd";
+            owner = "rspamd";
+            group = "postfix";
+          } ];
+        };
+      };
+
+      overrides."logging.inc" = mkDefault ''
+        type = "syslog";
+      '';
+    };
+
+    services.postfix.extraConfig = mkIf cfg.postfix.enable ''
+      smtpd_milters = unix:private/rspamd
+      non_smtpd_milters = $smtpd_milters
+      milter_protocol = 6
+    '';
+
+    environment.etc."rspamd".source = rspamdConf;
 
     systemd.services.rspamd = {
       description = "Rspamd Service";
 
       wantedBy = mkIf (!cfg.socketActivation) [ "multi-user.target" ];
-      after = [ "network.target" ] ++
-       (if cfg.socketActivation then allSocketNames else []);
-      requires = mkIf cfg.socketActivation allSocketNames;
+      after = [ "network.target" ];
+      restartTriggers = [ rspamdConf ];
 
       serviceConfig = {
-        ExecStart = "${pkgs.rspamd}/bin/rspamd ${optionalString cfg.debug "-d"} --user=${cfg.user} --group=${cfg.group} --pid=/run/rspamd.pid -c ${rspamdConfFile} -f";
-        Restart = "always";
-        RuntimeDirectory = "rspamd";
+        ExecStart = "${pkgs.rspamd}/bin/rspamd ${optionalString cfg.debug "-d"} --user=${cfg.user} --group=${cfg.group} --pid=/run/rspamd.pid -f";
+        Restart = "on-failure";
+        RuntimeDirectory = mkIf (!cfg.socketActivation) "rspamd";
         PrivateTmp = true;
         Sockets = mkIf cfg.socketActivation (concatStringsSep " " allSocketNames);
       };
@@ -323,6 +372,7 @@ in
         value = {
           description = "Rspamd socket ${toString each.index} for worker ${each.name}";
           wantedBy = [ "sockets.target" ];
+          after = optional (each.name == "rspamd_proxy") "postfix.service";
           listenStreams = (listenStreams each.value.socket);
           socketConfig = {
             BindIPv6Only = mkIf (isIPv6Socket each.value.socket) "ipv6-only";
@@ -334,8 +384,11 @@ in
         };
       }) allMappedSockets));
   };
-  imports = [
-    (mkRenamedOptionModule [ "services" "rspamd" "bindSocket" ] [ "services" "rspamd" "workers" "normal" "bindSockets" ])
-    (mkRenamedOptionModule [ "services" "rspamd" "bindUISocket" ] [ "services" "rspamd" "workers" "controller" "bindSockets" ])
-  ];
+
+  imports =
+    let mkMappedOptionModule = from: to: changeFn: mkChangedOptionModule from to (config: changeFn config (getAttrFromPath from config));
+    in [
+      (mkMappedOptionModule [ "services" "rspamd" "bindSocket" ] [ "services" "rspamd" "workers" ] (config: value: { normal.bindSockets = value; }))
+      (mkMappedOptionModule [ "services" "rspamd" "bindUISocket" ] [ "services" "rspamd" "workers" ] (config: value: { controller.bindSockets = value; }))
+    ];
 }
