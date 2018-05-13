@@ -20,12 +20,15 @@ rec {
     kernelAutoModules = false;
   };
 
+  ##
+  ## ARM
+  ##
+
   pogoplug4 = {
     name = "pogoplug4";
 
     gcc = {
       arch = "armv5te";
-      float = "soft";
     };
 
     kernelMajor = "2.6";
@@ -158,7 +161,6 @@ rec {
     kernelDTB = true; # Beyond 3.10
     gcc = {
       arch = "armv5te";
-      float = "soft";
     };
   };
 
@@ -243,7 +245,6 @@ rec {
     gcc = {
       arch = "armv6";
       fpu = "vfp";
-      float = "hard";
       # TODO(@Ericson2314) what is this and is it a good idea? It was
       # used in some cross compilation examples but not others.
       #
@@ -336,7 +337,6 @@ rec {
     gcc = {
       cpu = "cortex-a9";
       fpu = "vfpv3";
-      float = "hard";
     };
   };
 
@@ -363,7 +363,6 @@ rec {
     gcc = {
       cpu = "cortex-a9";
       fpu = "neon";
-      float = "hard";
     };
   };
 
@@ -374,6 +373,128 @@ rec {
     # patch.
 
     kernelBaseConfig = "guruplug_defconfig";
+  };
+
+  beaglebone = armv7l-hf-multiplatform // {
+    name = "beaglebone";
+    kernelBaseConfig = "bb.org_defconfig";
+    kernelAutoModules = false;
+    kernelExtraConfig = ""; # TBD kernel config
+    kernelTarget = "zImage";
+  };
+
+  # https://developer.android.com/ndk/guides/abis#armeabi
+  armv5te-android = {
+    name = "armeabi";
+    gcc = {
+      arch = "armv5te";
+      float = "soft";
+      float-abi = "soft";
+    };
+  };
+
+  # https://developer.android.com/ndk/guides/abis#v7a
+  armv7a-android =  {
+    name = "armeabi-v7a";
+    gcc = {
+      arch = "armv7-a";
+      float = "hard";
+      float-abi = "softfp";
+      fpu = "vfpv3-d16";
+    };
+  };
+
+  armv7l-hf-multiplatform = {
+    name = "armv7l-hf-multiplatform";
+    kernelMajor = "2.6"; # Using "2.6" enables 2.6 kernel syscalls in glibc.
+    kernelBaseConfig = "multi_v7_defconfig";
+    kernelArch = "arm";
+    kernelDTB = true;
+    kernelAutoModules = true;
+    kernelPreferBuiltin = true;
+    kernelTarget = "zImage";
+    kernelExtraConfig = ''
+      # Serial port for Raspberry Pi 3. Upstream forgot to add it to the ARMv7 defconfig.
+      SERIAL_8250_BCM2835AUX y
+      SERIAL_8250_EXTENDED y
+      SERIAL_8250_SHARE_IRQ y
+
+      # Fix broken sunxi-sid nvmem driver.
+      TI_CPTS y
+
+      # Hangs ODROID-XU4
+      ARM_BIG_LITTLE_CPUIDLE n
+    '';
+    gcc = {
+      # Some table about fpu flags:
+      # http://community.arm.com/servlet/JiveServlet/showImage/38-1981-3827/blogentry-103749-004812900+1365712953_thumb.png
+      # Cortex-A5: -mfpu=neon-fp16
+      # Cortex-A7 (rpi2): -mfpu=neon-vfpv4
+      # Cortex-A8 (beaglebone): -mfpu=neon
+      # Cortex-A9: -mfpu=neon-fp16
+      # Cortex-A15: -mfpu=neon-vfpv4
+
+      # More about FPU:
+      # https://wiki.debian.org/ArmHardFloatPort/VfpComparison
+
+      # vfpv3-d16 is what Debian uses and seems to be the best compromise: NEON is not supported in e.g. Scaleway or Tegra 2,
+      # and the above page suggests NEON is only an improvement with hand-written assembly.
+      arch = "armv7-a";
+      fpu = "vfpv3-d16";
+
+      # For Raspberry Pi the 2 the best would be:
+      #   cpu = "cortex-a7";
+      #   fpu = "neon-vfpv4";
+    };
+  };
+
+  aarch64-multiplatform = {
+    name = "aarch64-multiplatform";
+    kernelMajor = "2.6"; # Using "2.6" enables 2.6 kernel syscalls in glibc.
+    kernelBaseConfig = "defconfig";
+    kernelArch = "arm64";
+    kernelDTB = true;
+    kernelAutoModules = true;
+    kernelPreferBuiltin = true;
+    kernelExtraConfig = ''
+      # Raspberry Pi 3 stuff. Not needed for kernels >= 4.10.
+      ARCH_BCM2835 y
+      BCM2835_MBOX y
+      BCM2835_WDT y
+      RASPBERRYPI_FIRMWARE y
+      RASPBERRYPI_POWER y
+      SERIAL_8250_BCM2835AUX y
+      SERIAL_8250_EXTENDED y
+      SERIAL_8250_SHARE_IRQ y
+
+      # Cavium ThunderX stuff.
+      PCI_HOST_THUNDER_ECAM y
+
+      # Nvidia Tegra stuff.
+      PCI_TEGRA y
+
+      # The default (=y) forces us to have the XHCI firmware available in initrd,
+      # which our initrd builder can't currently do easily.
+      USB_XHCI_TEGRA m
+    '';
+    kernelTarget = "Image";
+    gcc = {
+      arch = "armv8-a";
+    };
+  };
+
+  ##
+  ## MIPS
+  ##
+
+  ben_nanonote = {
+    name = "ben_nanonote";
+    kernelMajor = "2.6";
+    kernelArch = "mips";
+    gcc = {
+      arch = "mips32";
+      float = "soft";
+    };
   };
 
   fuloong2f_n32 = {
@@ -449,97 +570,14 @@ rec {
     kernelTarget = "vmlinux";
     gcc = {
       arch = "loongson2f";
+      float = "hard";
       abi = "n32";
     };
   };
 
-  beaglebone = armv7l-hf-multiplatform // {
-    name = "beaglebone";
-    kernelBaseConfig = "bb.org_defconfig";
-    kernelAutoModules = false;
-    kernelExtraConfig = ""; # TBD kernel config
-    kernelTarget = "zImage";
-  };
-
-  armv7l-hf-multiplatform = {
-    name = "armv7l-hf-multiplatform";
-    kernelMajor = "2.6"; # Using "2.6" enables 2.6 kernel syscalls in glibc.
-    kernelBaseConfig = "multi_v7_defconfig";
-    kernelArch = "arm";
-    kernelDTB = true;
-    kernelAutoModules = true;
-    kernelPreferBuiltin = true;
-    kernelTarget = "zImage";
-    kernelExtraConfig = ''
-      # Serial port for Raspberry Pi 3. Upstream forgot to add it to the ARMv7 defconfig.
-      SERIAL_8250_BCM2835AUX y
-      SERIAL_8250_EXTENDED y
-      SERIAL_8250_SHARE_IRQ y
-
-      # Fix broken sunxi-sid nvmem driver.
-      TI_CPTS y
-
-      # Hangs ODROID-XU4
-      ARM_BIG_LITTLE_CPUIDLE n
-    '';
-    gcc = {
-      # Some table about fpu flags:
-      # http://community.arm.com/servlet/JiveServlet/showImage/38-1981-3827/blogentry-103749-004812900+1365712953_thumb.png
-      # Cortex-A5: -mfpu=neon-fp16
-      # Cortex-A7 (rpi2): -mfpu=neon-vfpv4
-      # Cortex-A8 (beaglebone): -mfpu=neon
-      # Cortex-A9: -mfpu=neon-fp16
-      # Cortex-A15: -mfpu=neon-vfpv4
-
-      # More about FPU:
-      # https://wiki.debian.org/ArmHardFloatPort/VfpComparison
-
-      # vfpv3-d16 is what Debian uses and seems to be the best compromise: NEON is not supported in e.g. Scaleway or Tegra 2,
-      # and the above page suggests NEON is only an improvement with hand-written assembly.
-      arch = "armv7-a";
-      fpu = "vfpv3-d16";
-      float = "hard";
-
-      # For Raspberry Pi the 2 the best would be:
-      #   cpu = "cortex-a7";
-      #   fpu = "neon-vfpv4";
-    };
-  };
-
-  aarch64-multiplatform = {
-    name = "aarch64-multiplatform";
-    kernelMajor = "2.6"; # Using "2.6" enables 2.6 kernel syscalls in glibc.
-    kernelBaseConfig = "defconfig";
-    kernelArch = "arm64";
-    kernelDTB = true;
-    kernelAutoModules = true;
-    kernelPreferBuiltin = true;
-    kernelExtraConfig = ''
-      # Raspberry Pi 3 stuff. Not needed for kernels >= 4.10.
-      ARCH_BCM2835 y
-      BCM2835_MBOX y
-      BCM2835_WDT y
-      RASPBERRYPI_FIRMWARE y
-      RASPBERRYPI_POWER y
-      SERIAL_8250_BCM2835AUX y
-      SERIAL_8250_EXTENDED y
-      SERIAL_8250_SHARE_IRQ y
-
-      # Cavium ThunderX stuff.
-      PCI_HOST_THUNDER_ECAM y
-
-      # Nvidia Tegra stuff.
-      PCI_TEGRA y
-
-      # The default (=y) forces us to have the XHCI firmware available in initrd,
-      # which our initrd builder can't currently do easily.
-      USB_XHCI_TEGRA m
-    '';
-    kernelTarget = "Image";
-    gcc = {
-      arch = "armv8-a";
-    };
-  };
+  ##
+  ## Other
+  ##
 
   riscv-multiplatform = bits: {
     name = "riscv-multiplatform";

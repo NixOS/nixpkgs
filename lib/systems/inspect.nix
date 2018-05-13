@@ -36,6 +36,7 @@ rec {
 
     isAndroid      = [ { abi = abis.android; } { abi = abis.androideabi; } ];
     isMusl         = with abis; map (a: { abi = a; }) [ musl musleabi musleabihf ];
+    isUClibc       = with abis; map (a: { abi = a; }) [ uclibc uclibceabi uclibceabihf ];
 
     isKexecable    = map (family: { kernel = kernels.linux; cpu.family = family; })
                        [ "x86" "arm" "aarch64" "mips" ];

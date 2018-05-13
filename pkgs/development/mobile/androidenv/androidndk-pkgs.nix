@@ -15,7 +15,12 @@ let
     "x86_64-unknown-linux-gnu" = {
       double = "linux-x86_64";
     };
-    "arm-unknown-linux-androideabi" = {
+    "armv5tel-unknown-linux-androideabi" = {
+      arch = "arm";
+      triple = "arm-linux-androideabi";
+      gccVer = "4.8";
+    };
+    "armv7a-unknown-linux-androideabi" = {
       arch = "arm";
       triple = "arm-linux-androideabi";
       gccVer = "4.8";
@@ -59,9 +64,29 @@ rec {
     cc = binaries;
     bintools = binutils;
     libc = targetAndroidndkPkgs.libraries;
-    extraBuildCommands =
+    extraBuildCommands = lib.optionalString targetPlatform.isAarch32 (let
+        p =  targetPlatform.platform.gcc or {}
+          // targetPlatform.parsed.abi;
+        flags = lib.concatLists [
+          (lib.optional (p ? arch) "-march=${p.arch}")
+          (lib.optional (p ? cpu) "-mcpu=${p.cpu}")
+          (lib.optional (p ? abi) "-mabi=${p.abi}")
+          (lib.optional (p ? fpu) "-mfpu=${p.fpu}")
+          (lib.optional (p ? float) "-mfloat=${p.float}")
+          (lib.optional (p ? float-abi) "-mfloat-abi=${p.float-abi}")
+          (lib.optional (p ? mode) "-mmode=${p.mode}")
+        ];
+      in ''
+        sed -E -i \
+          $out/bin/${targetPlatform.config}-cc \
+          $out/bin/${targetPlatform.config}-c++ \
+          $out/bin/${targetPlatform.config}-gcc \
+          $out/bin/${targetPlatform.config}-g++ \
+          -e '130i    extraBefore+=(-Wl,--fix-cortex-a8)' \
+          -e 's|^(extraBefore=)\(\)$|\1(${builtins.toString flags})|'
+      '')
       # GCC 4.9 is the first relase with "-fstack-protector"
-      lib.optionalString (lib.versionOlder targetInfo.gccVer "4.9") ''
+      + lib.optionalString (lib.versionOlder targetInfo.gccVer "4.9") ''
         sed -E \
         -i $out/nix-support/add-hardening.sh \
         -e 's|(-fstack-protector)-strong|\1|g'
@@ -76,7 +101,7 @@ rec {
   libraries = {
     name = "bionic-prebuilt";
     type = "derivation";
-    outPath = "${buildAndroidndk}/libexec/${buildAndroidndk.name}/platforms/android-21/arch-${hostInfo.arch}/usr/";
+    outPath = "${buildAndroidndk}/libexec/${buildAndroidndk.name}/platforms/android-${hostPlatform.sdkVer}/arch-${hostInfo.arch}/usr/";
     drvPath = throw "fake derivation, build ${buildAndroidndk} to use";
   };
 }

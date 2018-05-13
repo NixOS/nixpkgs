@@ -29,7 +29,7 @@ assert stdenv.system == "x86_64-linux";
 assert swingSupport -> xorg != null;
 
 let
-  version = "9.0.4";
+  version = "10.0.1";
 
   downloadUrlBase = http://www.oracle.com/technetwork/java/javase/downloads;
 
@@ -51,20 +51,20 @@ let result = stdenv.mkDerivation rec {
     if packageType == "JDK" then
       requireFile {
         name = "jdk-${version}_linux-x64_bin.tar.gz";
-        url =  "${downloadUrlBase}/jdk9-downloads-3848520.html";
-        sha256 = "18nsjn64wkfmyb09wf2k7lvhazf83cs3dyichr038vl1gs3ymi4h";
+        url =  "${downloadUrlBase}/jdk10-downloads-4416644.html";
+        sha256 = "1975s6cn2lxb8jmxp236afvq6hhxqrx5jix8aqm46f5gwr2xd3mf";
       }
     else if packageType == "JRE" then
       requireFile {
         name = "jre-${version}_linux-x64_bin.tar.gz";
-        url = "${downloadUrlBase}/jre9-downloads-3848532.html";
-        sha256 = "01fp079mr04nniyf06w8vd47qxr6rly1lbh8dqkddb8fp9h6a79k";
+        url = "${downloadUrlBase}/jre10-downloads-4417026.html";
+        sha256 = "11pb8cwzmalc6ax735m84g13jh1mrfc8g84b5qypnmqjjdv6fpiq";
       }
     else if packageType == "ServerJRE" then
       requireFile {
         name = "serverjre-${version}_linux-x64_bin.tar.gz";
-        url = "${downloadUrlBase}/server-jre9-downloads-3848530.html";
-        sha256 = "1jlpa4mn306hx0p9jcw3i6cpdvnng29dwjsymgcan56810q6p6yj";
+        url = "${downloadUrlBase}/sjre10-downloads-4417025.html";
+        sha256 = "0hvfqgr22sq9zyqc496vqgg5ail189h3a4pazp39i8n86brd48lw";
       }
     else abort "unknown package Type ${packageType}";
 
@@ -153,9 +153,6 @@ let result = stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     license = licenses.unfree;
     platforms = [ "x86_64-linux" ]; # some inherit jre.meta.platforms
-    knownVulnerabilities = [
-      "Oracle Java 9 will not receive public updates as of March 2018. Use version 8 or 10 instead."
-    ];
   };
 
 }; in result
