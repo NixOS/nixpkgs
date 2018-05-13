@@ -16,14 +16,15 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ cmake pkgconfig perl ];
-  buildInputs = [ glib gmime libevent libmagic luajit openssl pcre sqlite ragel icu libfann];
+  buildInputs = [ glib gmime libevent libmagic luajit openssl pcre sqlite ragel icu libfann ];
 
-  cmakeFlags = ''
-    -DDEBIAN_BUILD=ON
-    -DRUNDIR=/var/run/rspamd
-    -DDBDIR=/var/lib/rspamd
-    -DLOGDIR=/var/log/rspamd
-  '';
+  cmakeFlags = [
+    "-DDEBIAN_BUILD=ON"
+    "-DRUNDIR=/var/run/rspamd"
+    "-DDBDIR=/var/lib/rspamd"
+    "-DLOGDIR=/var/log/rspamd"
+    "-DLOCAL_CONFDIR=/etc/rspamd"
+  ];
 
   meta = with stdenv.lib; {
     homepage = https://github.com/vstakhov/rspamd;
