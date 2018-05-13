@@ -6462,7 +6462,7 @@ let self = _self // overrides; _self = with self; {
     patches = [ ../development/perl-modules/gd-options-passthrough-and-fontconfig.patch ];
 
     # otherwise "cc1: error: -Wformat-security ignored without -Wformat [-Werror=format-security]"
-    hardeningDisable = [ "format" ];
+    NIX_CFLAGS_COMPILE = [ "-Wno-error=format-security" ];
 
     # tests fail
     doCheck = false;
