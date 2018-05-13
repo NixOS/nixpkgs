@@ -18,8 +18,6 @@
 , python-setup-hook
 # Some proprietary libs assume UCS2 unicode, especially on darwin :(
 , ucsEncoding ? 4
-# For the Python package set
-, pkgs, packageOverrides ? (self: super: {})
 }:
 
 assert x11Support -> tcl != null
@@ -227,7 +225,7 @@ in stdenv.mkDerivation {
       '';
 
     passthru = let
-      pythonPackages = callPackage ../../../../../top-level/python-packages.nix {python=self; overrides=packageOverrides;};
+      pythonPackages = callPackage ../../../../../top-level/python-packages.nix { python=self; };
     in rec {
       inherit libPrefix sitePackages x11Support hasDistutilsCxxPatch ucsEncoding;
       executable = libPrefix;

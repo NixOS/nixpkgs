@@ -6,10 +6,11 @@
 #
 # For more details, please see the Python section in the Nixpkgs manual.
 
-{ pkgs
+{ config
+, pkgs
 , stdenv
 , python
-, overrides ? (self: super: {})
+, overrides ? config.pythonPackageOverrides or (self: super: {})
 }:
 
 with pkgs.lib;
