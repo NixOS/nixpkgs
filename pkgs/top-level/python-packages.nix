@@ -12986,6 +12986,7 @@ in {
   Theano = callPackage ../development/python-modules/Theano rec {
     cudaSupport = pkgs.config.cudaSupport or false;
     cudnnSupport = cudaSupport;
+    inherit (pkgs.linuxPackages) nvidia_x11;
   };
 
   TheanoWithoutCuda = self.Theano.override {
