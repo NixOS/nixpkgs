@@ -56,6 +56,8 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ unzip ];
 
+  # src is producing multiple folder on unzip so we must
+  # override unpackCmd to extract it into newly created folder
   unpackCmd = ''
     mkdir out
     unzip $curSrc -d out
