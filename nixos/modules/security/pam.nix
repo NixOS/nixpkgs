@@ -36,13 +36,21 @@ let
         '';
       };
 
-      u2fAuth = mkOption {
-        default = config.security.pam.enableU2F;
+      u2f.enable = mkOption {
+        default = config.security.pam.u2f.enable;
         type = types.bool;
         description = ''
           If set, users listed in
           <filename>~/.config/Yubico/u2f_keys</filename> are able to log in
           with the associated U2F key.
+        '';
+      };
+
+      u2f.options = mkOption {
+        default = config.security.pam.u2f.options;
+        type = types.str;
+        description = ''
+          Options provided to the U2F PAM module.
         '';
       };
 
@@ -290,8 +298,8 @@ let
               "auth sufficient ${pkgs.pam_ssh_agent_auth}/libexec/pam_ssh_agent_auth.so file=~/.ssh/authorized_keys:~/.ssh/authorized_keys2:/etc/ssh/authorized_keys.d/%u"}
           ${optionalString cfg.fprintAuth
               "auth sufficient ${pkgs.fprintd}/lib/security/pam_fprintd.so"}
-          ${optionalString cfg.u2fAuth
-              "auth sufficient ${pkgs.pam_u2f}/lib/security/pam_u2f.so"}
+          ${optionalString cfg.u2f.enable
+              "auth sufficient ${pkgs.pam_u2f}/lib/security/pam_u2f.so ${cfg.u2f.options}"}
           ${optionalString cfg.usbAuth
               "auth sufficient ${pkgs.pam_usb}/lib/security/pam_usb.so"}
           ${let oath = config.security.pam.oath; in optionalString cfg.oathAuth
@@ -493,10 +501,19 @@ in
       '';
     };
 
-    security.pam.enableU2F = mkOption {
+    security.pam.u2f.enable = mkOption {
       default = false;
       description = ''
         Enable the U2F PAM module.
+      '';
+    };
+
+    security.pam.u2f.options = mkOption {
+      type = types.str;
+      default = "";
+      example = "authfile=/etc/u2f_mappings cue";
+      description = ''
+        Parameters to supply to the U2F PAM module.
       '';
     };
 
@@ -529,7 +546,7 @@ in
       ++ optionals config.krb5.enable [pam_krb5 pam_ccreds]
       ++ optionals config.security.pam.enableOTPW [ pkgs.otpw ]
       ++ optionals config.security.pam.oath.enable [ pkgs.oathToolkit ]
-      ++ optionals config.security.pam.enableU2F [ pkgs.pam_u2f ];
+      ++ optionals config.security.pam.u2f.enable [ pkgs.pam_u2f ];
 
     boot.supportedFilesystems = optionals config.security.pam.enableEcryptfs [ "ecryptfs" ];
 
