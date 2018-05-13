@@ -10947,7 +10947,8 @@ with pkgs;
 
   inherit (callPackages ../development/libraries/libressl { })
     libressl_2_5
-    libressl_2_6;
+    libressl_2_6
+    libressl_2_7;
 
   libressl = libressl_2_5;
 
