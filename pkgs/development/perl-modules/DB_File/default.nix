@@ -12,7 +12,7 @@ buildPerlPackage rec {
     cat > config.in <<EOF
     PREFIX = size_t
     HASH = u_int32_t
-    LIB = ${db}/lib
+    LIB = ${db.lib}/lib
     INCLUDE = ${db}/include
     EOF
   '';
