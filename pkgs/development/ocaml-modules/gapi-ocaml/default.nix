@@ -1,5 +1,9 @@
 { stdenv, fetchFromGitHub, ocaml, findlib, jbuilder, opam, ocurl, cryptokit, ocaml_extlib, yojson, ocamlnet, xmlm }:
 
+if !stdenv.lib.versionAtLeast ocaml.version "4.02"
+then throw "gapi-ocaml is not available for OCaml ${ocaml.version}"
+else
+
 stdenv.mkDerivation rec {
   name = "gapi-ocaml-${version}";
   version = "0.3.6";

@@ -68,17 +68,17 @@ rec {
 
   cpuTypes = with significantBytes; setTypes types.openCpuType {
     arm      = { bits = 32; significantByte = littleEndian; family = "arm"; };
-    armv5tel = { bits = 32; significantByte = littleEndian; family = "arm"; };
-    armv6m   = { bits = 32; significantByte = littleEndian; family = "arm"; };
-    armv6l   = { bits = 32; significantByte = littleEndian; family = "arm"; };
-    armv7a   = { bits = 32; significantByte = littleEndian; family = "arm"; };
-    armv7r   = { bits = 32; significantByte = littleEndian; family = "arm"; };
-    armv7m   = { bits = 32; significantByte = littleEndian; family = "arm"; };
-    armv7l   = { bits = 32; significantByte = littleEndian; family = "arm"; };
-    armv8a   = { bits = 32; significantByte = littleEndian; family = "arm"; };
-    armv8r   = { bits = 32; significantByte = littleEndian; family = "arm"; };
-    armv8m   = { bits = 32; significantByte = littleEndian; family = "arm"; };
-    aarch64  = { bits = 64; significantByte = littleEndian; family = "arm"; };
+    armv5tel = { bits = 32; significantByte = littleEndian; family = "arm"; version = "5"; };
+    armv6m   = { bits = 32; significantByte = littleEndian; family = "arm"; version = "6"; };
+    armv6l   = { bits = 32; significantByte = littleEndian; family = "arm"; version = "6"; };
+    armv7a   = { bits = 32; significantByte = littleEndian; family = "arm"; version = "7"; };
+    armv7r   = { bits = 32; significantByte = littleEndian; family = "arm"; version = "7"; };
+    armv7m   = { bits = 32; significantByte = littleEndian; family = "arm"; version = "7"; };
+    armv7l   = { bits = 32; significantByte = littleEndian; family = "arm"; version = "7"; };
+    armv8a   = { bits = 32; significantByte = littleEndian; family = "arm"; version = "8"; };
+    armv8r   = { bits = 32; significantByte = littleEndian; family = "arm"; version = "8"; };
+    armv8m   = { bits = 32; significantByte = littleEndian; family = "arm"; version = "8"; };
+    aarch64  = { bits = 64; significantByte = littleEndian; family = "arm"; version = "8"; };
 
     i686     = { bits = 32; significantByte = littleEndian; family = "x86"; };
     x86_64   = { bits = 64; significantByte = littleEndian; family = "x86"; };
@@ -200,7 +200,15 @@ rec {
     eabi         = {};
 
     androideabi  = {};
-    android      = {};
+    android      = {
+      assertions = [
+        { assertion = platform: !platform.isAarch32;
+          message = ''
+            The "android" ABI is not for 32-bit ARM. Use "androideabi" instead.
+          '';
+        }
+      ];
+    };
 
     gnueabi      = { float = "soft"; };
     gnueabihf    = { float = "hard"; };
@@ -287,7 +295,12 @@ rec {
       kernel = getKernel args.kernel;
       abi =
         /**/ if args ? abi       then getAbi args.abi
-        else if isLinux   parsed then (if isAarch32 parsed then abis.gnueabi else abis.gnu)
+        else if isLinux   parsed then
+          if isAarch32 parsed then
+            if lib.versionAtLeast (parsed.cpu.version or "0") "6"
+            then abis.gnueabihf
+            else abis.gnueabi
+          else abis.gnu
         else if isWindows parsed then abis.gnu
         else                     abis.unknown;
     };

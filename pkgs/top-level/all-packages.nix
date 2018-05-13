@@ -1132,6 +1132,8 @@ with pkgs;
 
   dislocker = callPackage ../tools/filesystems/dislocker { };
 
+  distrobuilder = callPackage ../tools/virtualization/distrobuilder { };
+
   ditaa = callPackage ../tools/graphics/ditaa { };
 
   dino = callPackage ../applications/networking/instant-messengers/dino { };
@@ -1636,6 +1638,7 @@ with pkgs;
   ciopfs = callPackage ../tools/filesystems/ciopfs { };
 
   citrix_receiver = callPackage ../applications/networking/remote/citrix-receiver { };
+  citrix_receiver_13_9_1 = citrix_receiver.override { version = "13.9.1"; };
   citrix_receiver_13_9_0 = citrix_receiver.override { version = "13.9.0"; };
   citrix_receiver_13_8_0 = citrix_receiver.override { version = "13.8.0"; };
   citrix_receiver_13_7_0 = citrix_receiver.override { version = "13.7.0"; };
@@ -7510,13 +7513,11 @@ with pkgs;
 
   augeas = callPackage ../tools/system/augeas { };
 
-  ansible_2_1 = callPackage ../tools/admin/ansible/2.1.nix {};
-  ansible_2_2 = callPackage ../tools/admin/ansible/2.2.nix {};
-  ansible_2_3 = callPackage ../tools/admin/ansible/2.3.nix {};
-  ansible_2_4 = callPackage ../tools/admin/ansible/2.4.nix {};
-  ansible_2_5 = callPackage ../tools/admin/ansible/2.5.nix {};
-  ansible  = ansible_2_4;
-  ansible2 = ansible_2_4;
+  inherit (callPackages ../tools/admin/ansible {})
+    ansible_2_4
+    ansible_2_5
+    ansible2
+    ansible;
 
   ansible-lint = callPackage ../development/tools/ansible-lint {};
 
@@ -12962,7 +12963,7 @@ with pkgs;
     inherit clangStdenv fetchurl fetchgit fetchpatch stdenv intltool freetype fontconfig
       libxslt expat libpng zlib perl mesa_drivers spice-protocol libunwind
       dbus libuuid openssl gperf m4 libevdev tradcpp libinput mcpp makeWrapper autoreconfHook
-      autoconf automake libtool mtdev pixman libGL
+      autoconf automake libtool mtdev pixman libGL libGLU
       cairo epoxy;
     inherit (buildPackages) pkgconfig xmlto asciidoc flex bison;
     inherit (darwin) apple_sdk cf-private libobjc;
@@ -13686,6 +13687,8 @@ with pkgs;
   libraw = callPackage ../development/libraries/libraw { };
 
   libraw1394 = callPackage ../development/libraries/libraw1394 { };
+
+  librealsense = callPackage ../development/libraries/librealsense { };
 
   libsass = callPackage ../development/libraries/libsass { };
 
@@ -15986,8 +15989,6 @@ with pkgs;
   gnunet = callPackage ../applications/networking/p2p/gnunet { };
 
   gnunet_git = lowPrio (callPackage ../applications/networking/p2p/gnunet/git.nix { });
-
-  gnunet_svn = lowPrio (callPackage ../applications/networking/p2p/gnunet/svn.nix { });
 
   gocr = callPackage ../applications/graphics/gocr { };
 

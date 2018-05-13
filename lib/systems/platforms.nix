@@ -245,7 +245,6 @@ rec {
     gcc = {
       arch = "armv6";
       fpu = "vfp";
-      float = "hard";
       # TODO(@Ericson2314) what is this and is it a good idea? It was
       # used in some cross compilation examples but not others.
       #
@@ -382,6 +381,27 @@ rec {
     kernelAutoModules = false;
     kernelExtraConfig = ""; # TBD kernel config
     kernelTarget = "zImage";
+  };
+
+  # https://developer.android.com/ndk/guides/abis#armeabi
+  armv5te-android = {
+    name = "armeabi";
+    gcc = {
+      arch = "armv5te";
+      float = "soft";
+      float-abi = "soft";
+    };
+  };
+
+  # https://developer.android.com/ndk/guides/abis#v7a
+  armv7a-android =  {
+    name = "armeabi-v7a";
+    gcc = {
+      arch = "armv7-a";
+      float = "hard";
+      float-abi = "softfp";
+      fpu = "vfpv3-d16";
+    };
   };
 
   armv7l-hf-multiplatform = {

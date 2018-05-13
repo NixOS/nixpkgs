@@ -676,6 +676,11 @@
     github = "bramd";
     name = "Bram Duvigneau";
   };
+  brian-dawn = {
+    email = "brian.t.dawn@gmail.com";
+    github = "brian-dawn";
+    name = "Brian Dawn";
+  };
   bstrik = {
     email = "dutchman55@gmx.com";
     github = "bstrik";
@@ -2373,6 +2378,11 @@
     github = "meditans";
     name = "Carlo Nucera";
   };
+  megheaiulian  = {
+    email = "iulian.meghea@gmail.com";
+    github = "megheaiulian";
+    name = "Meghea Iulian";
+  };
   mehandes = {
     email = "niewskici@gmail.com";
     github = "mehandes";
@@ -2485,6 +2495,11 @@
     email = "marek.mahut@gmail.com";
     github = "mmahut";
     name = "Marek Mahut";
+  };
+  mmlb = {
+    email = "me.mmlb@mmlb.me";
+    github = "mmlb";
+    name = "Manuel Mendez";
   };
   moaxcp = {
     email = "moaxcp@gmail.com";
