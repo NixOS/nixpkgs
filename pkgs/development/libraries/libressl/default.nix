@@ -26,7 +26,7 @@ let
 
     meta = with lib; {
       description = "Free TLS/SSL implementation";
-      homepage    = "http://www.libressl.org";
+      homepage    = "https://www.libressl.org";
       platforms   = platforms.all;
       maintainers = with maintainers; [ thoughtpolice wkennington fpletz globin ];
     };
