@@ -14880,6 +14880,8 @@ with pkgs;
 
   autotrace = callPackage ../applications/graphics/autotrace {};
 
+  avocode = callPackage ../applications/graphics/avocode {};
+
   milkytracker = callPackage ../applications/audio/milkytracker { };
 
   schismtracker = callPackage ../applications/audio/schismtracker { };
