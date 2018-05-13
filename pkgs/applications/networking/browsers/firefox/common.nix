@@ -28,7 +28,9 @@
 # WARNING: NEVER set any of the options below to `true` by default.
 # Set to `privacySupport` or `false`.
 
-, webrtcSupport ? !privacySupport
+# webrtcSupport breaks the aarch64 build on version >= 60.
+# https://bugzilla.mozilla.org/show_bug.cgi?id=1434589
+, webrtcSupport ? (if lib.versionAtLeast version "60" && stdenv.isAarch64 then false else !privacySupport)
 , geolocationSupport ? !privacySupport
 , googleAPISupport ? geolocationSupport
 , crashreporterSupport ? false
