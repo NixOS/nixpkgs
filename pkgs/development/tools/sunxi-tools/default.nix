@@ -13,14 +13,11 @@ stdenv.mkDerivation {
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ libusb zlib ];
 
-  buildPhase = ''
-    make tools misc
-  '';
+  makeFlags = [ "PREFIX=$(out)" ];
 
-  installPhase = ''
-    mkdir -p $out/bin
-    cp bin2fex fex2bin phoenix_info sunxi-bootinfo sunxi-fel sunxi-fexc sunxi-nand-image-builder sunxi-nand-part sunxi-pio $out/bin
-  '';
+  buildFlags = [ "tools" "misc" ];
+
+  installTargets = [ "install-tools" "install-misc" ];
 
   meta = with stdenv.lib; {
     description = "Tools for Allwinner A10 devices";
