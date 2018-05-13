@@ -4,7 +4,7 @@
 , libxml2, libxslt, docbook_xsl, docbook_xml_dtd_42, samba, libmtp
 , gnomeSupport ? false, gnome, makeWrapper
 , libimobiledevice, libbluray, libcdio-paranoia, libnfs, openssh
-, libsecret, libgdata
+, libsecret, libgdata, python3
 # Remove when switching back to meson
 , autoreconfHook, lzma, bzip2
 }:
@@ -27,6 +27,10 @@ stdenv.mkDerivation rec {
     url = "mirror://gnome/sources/${pname}/${gnome3.versionBranch version}/${name}.tar.xz";
     sha256 = "1xq105596sk9yram5a143b369wpaiiwc9gz86n0j1kfr7nipkqn4";
   };
+
+  postPatch = ''
+    patchShebangs test test-driver
+  '';
 
   # Uncomment when switching back to meson
   # postPatch = ''
@@ -72,6 +76,10 @@ stdenv.mkDerivation rec {
   # ];
 
   enableParallelBuilding = true;
+
+  checkInputs = [ python3 ];
+  doCheck = false; # fails with "ModuleNotFoundError: No module named 'gi'"
+  doInstallCheck = doCheck;
 
   preFixup = ''
     for f in $out/libexec/*; do
