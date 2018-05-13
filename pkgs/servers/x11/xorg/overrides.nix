@@ -492,7 +492,7 @@ in
       if (!isDarwin)
       then {
         outputs = [ "out" "dev" ];
-        buildInputs = commonBuildInputs ++ [ makeWrapper args.libdrm args.mesa_noglu ];
+        buildInputs = commonBuildInputs ++ [ args.libdrm args.mesa_noglu ];
         propagatedBuildInputs = [ libpciaccess args.epoxy ] ++ commonPropagatedBuildInputs ++ lib.optionals stdenv.isLinux [
           args.udev
         ];
