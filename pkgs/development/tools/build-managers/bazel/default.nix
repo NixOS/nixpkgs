@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/bazelbuild/bazel/";
     description = "Build tool that builds code quickly and reliably";
     license = licenses.asl20;
-    maintainers = [ maintainers.philandstuff ];
+    maintainers = [ maintainers.mboes ];
     platforms = platforms.linux ++ platforms.darwin;
   };
 
