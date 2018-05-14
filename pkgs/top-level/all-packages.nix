@@ -2332,6 +2332,8 @@ with pkgs;
 
   flashrom = callPackage ../tools/misc/flashrom { };
 
+  flent = python3Packages.callPackage ../applications/networking/flent { };
+
   flpsed = callPackage ../applications/editors/flpsed { };
 
   fluentd = callPackage ../tools/misc/fluentd { };
