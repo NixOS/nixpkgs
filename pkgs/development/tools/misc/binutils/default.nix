@@ -104,11 +104,7 @@ stdenv.mkDerivation rec {
     else "-static-libgcc";
 
   # TODO(@Ericson2314): Always pass "--target" and always targetPrefix.
-  configurePlatforms =
-    # TODO(@Ericson2314): Figure out what's going wrong with Arm
-    if buildPlatform == hostPlatform && hostPlatform == targetPlatform && targetPlatform.isAarch32
-    then []
-    else [ "build" "host" ] ++ stdenv.lib.optional (targetPlatform != hostPlatform) "target";
+  configurePlatforms = [ "build" "host" ] ++ stdenv.lib.optional (targetPlatform != hostPlatform) "target";
 
   configureFlags = [
     "--enable-targets=all" "--enable-64-bit-bfd"
