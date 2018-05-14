@@ -129,6 +129,9 @@ in
     users.extraUsers.root.initialHashedPassword = mkOverride 150 "";
 
     services.xserver.displayManager.job.logToJournal = true;
+
+    # set default stateVersion to avoid warnings during eval
+    system.nixos.stateVersion = mkDefault "18.03";
   };
 
 }

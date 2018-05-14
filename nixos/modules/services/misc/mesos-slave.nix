@@ -187,7 +187,7 @@ in {
     systemd.services.mesos-slave = {
       description = "Mesos Slave";
       wantedBy = [ "multi-user.target" ];
-      after = [ "network.target" ];
+      after = [ "network.target" ] ++ optionals cfg.withDocker [ "docker.service" ] ;
       path = [ pkgs.runtimeShellPackage ];
       serviceConfig = {
         ExecStart = ''

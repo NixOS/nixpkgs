@@ -476,8 +476,6 @@ in
         dri2proto dri3proto kbproto xineramaproto resourceproto scrnsaverproto videoproto
         libXfont2
       ];
-      # fix_segfault: https://bugs.freedesktop.org/show_bug.cgi?id=91316
-      commonPatches = [ ];
       # XQuartz requires two compilations: the first to get X / XQuartz,
       # and the second to get Xvfb, Xnest, etc.
       darwinOtherX = overrideDerivation xorgserver (oldAttrs: {
@@ -494,11 +492,10 @@ in
       if (!isDarwin)
       then {
         outputs = [ "out" "dev" ];
-        buildInputs = [ makeWrapper args.libdrm ] ++ commonBuildInputs;
+        buildInputs = commonBuildInputs ++ [ args.libdrm args.mesa_noglu ];
         propagatedBuildInputs = [ libpciaccess args.epoxy ] ++ commonPropagatedBuildInputs ++ lib.optionals stdenv.isLinux [
           args.udev
         ];
-        patches = commonPatches;
         prePatch = stdenv.lib.optionalString stdenv.hostPlatform.isMusl ''
           export CFLAGS+=" -D__uid_t=uid_t -D__gid_t=gid_t"
         '';
@@ -515,6 +512,7 @@ in
         ] ++ lib.optionals stdenv.hostPlatform.isMusl [
           "--disable-tls"
         ];
+
         postInstall = ''
           rm -fr $out/share/X11/xkb/compiled # otherwise X will try to write in it
           ( # assert() keeps runtime reference xorgserver-dev in xf86-video-intel and others
@@ -538,7 +536,7 @@ in
         ];
 
         # XQuartz patchset
-        patches = commonPatches ++ [
+        patches = [
           (args.fetchpatch {
             url = "https://github.com/XQuartz/xorg-server/commit/e88fd6d785d5be477d5598e70d105ffb804771aa.patch";
             sha256 = "1q0a30m1qj6ai924afz490xhack7rg4q3iig2gxsjjh98snikr1k";

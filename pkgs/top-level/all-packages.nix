@@ -10895,9 +10895,10 @@ with pkgs;
 
   inherit (callPackages ../development/libraries/libressl { })
     libressl_2_5
-    libressl_2_6;
+    libressl_2_6
+    libressl_2_7;
 
-  libressl = libressl_2_5;
+  libressl = libressl_2_7;
 
   boringssl = callPackage ../development/libraries/boringssl { };
 
@@ -14772,6 +14773,8 @@ with pkgs;
   audio-recorder = callPackage ../applications/audio/audio-recorder { };
 
   autotrace = callPackage ../applications/graphics/autotrace {};
+
+  avocode = callPackage ../applications/graphics/avocode {};
 
   milkytracker = callPackage ../applications/audio/milkytracker { };
 

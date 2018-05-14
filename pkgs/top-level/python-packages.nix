@@ -7116,6 +7116,7 @@ in {
   libgpuarray = callPackage ../development/python-modules/libgpuarray {
     clblas = pkgs.clblas.override { boost = self.boost; };
     cudaSupport = pkgs.config.cudaSupport or false;
+    inherit (pkgs.linuxPackages) nvidia_x11;
   };
 
   librepo = toPythonModule (pkgs.librepo.override {
@@ -12987,6 +12988,7 @@ in {
   Theano = callPackage ../development/python-modules/Theano rec {
     cudaSupport = pkgs.config.cudaSupport or false;
     cudnnSupport = cudaSupport;
+    inherit (pkgs.linuxPackages) nvidia_x11;
   };
 
   TheanoWithoutCuda = self.Theano.override {
