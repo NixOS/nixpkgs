@@ -151,12 +151,7 @@ stdenv.mkDerivation ({
     ;
 
   postPatch =
-    if (stdenv.system == "i586-pc-gnu"
-        || (libcCross != null                  # e.g., building `gcc.crossDrv'
-            && libcCross ? crossConfig
-            && libcCross.crossConfig == "i586-pc-gnu")
-        || (targetPlatform != hostPlatform && targetPlatform.config == "i586-pc-gnu"
-            && libcCross != null))
+    if targetPlatform.isHurd
     then
       # On GNU/Hurd glibc refers to Hurd & Mach headers and libpthread is not
       # in glibc, so add the right `-I' flags to the default spec string.
