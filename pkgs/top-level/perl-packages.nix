@@ -5865,13 +5865,12 @@ let self = _self // overrides; _self = with self; {
   };
 
   FileCopyRecursive = buildPerlPackage rec {
-    name = "File-Copy-Recursive-0.40";
+    name = "File-Copy-Recursive-0.44";
     src = fetchurl {
       url = "mirror://cpan/authors/id/D/DM/DMUEY/${name}.tar.gz";
-      sha256 = "18amrqvdjlb4hc7mblbwb63q96ql1rnlb5saknsvrxqfjcxr5f78";
+      sha256 = "1r3frbl61kr7ig9bzd60fka772cd504v3kx9kgnwvcy1inss06df";
     };
-    propagatedBuildInputs = [ PathTiny ];
-    buildInputs = [ TestDeep TestException TestFile TestWarn ];
+    buildInputs = [ PathTiny TestDeep TestFatal TestFile TestWarnings ];
   };
 
   FileDesktopEntry = buildPerlPackage rec {
