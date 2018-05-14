@@ -539,6 +539,8 @@ in {
 
   asyncio = callPackage ../development/python-modules/asyncio {};
 
+  asyncssh = callPackage ../development/python-modules/asyncssh { };
+
   python-fontconfig = callPackage ../development/python-modules/python-fontconfig { };
 
   funcsigs = callPackage ../development/python-modules/funcsigs { };
