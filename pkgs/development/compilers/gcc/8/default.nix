@@ -439,6 +439,9 @@ stdenv.mkDerivation ({
       stdenv.lib.platforms.linux ++
       stdenv.lib.platforms.freebsd ++
       stdenv.lib.platforms.darwin;
+
+    # See #40038
+    broken = stdenv.isDarwin;
   };
 }
 
