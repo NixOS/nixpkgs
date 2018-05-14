@@ -677,6 +677,7 @@ rec {
       { options = setAttrByPath from (mkOption {
           description = "Alias of <option>${showOption to}</option>.";
           apply = x: use (toOf config);
+          inherit visible;
         });
         config = {
           warnings =
