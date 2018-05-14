@@ -19927,6 +19927,8 @@ with pkgs;
     inherit (perlPackages) GetoptTabular MNI-Perllib;
   };
 
+  minimap2 = callPackage ../applications/science/biology/minimap2 { };
+
   ncbi_tools = callPackage ../applications/science/biology/ncbi-tools { };
 
   paml = callPackage ../applications/science/biology/paml { };
