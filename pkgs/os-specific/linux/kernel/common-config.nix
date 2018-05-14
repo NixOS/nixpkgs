@@ -636,6 +636,11 @@ with stdenv.lib;
     X86_X2APIC y
     IRQ_REMAP y
   ''}
+  
+  # needed for iwd WPS support (wpa_supplicant replacement)
+  ${optionalString (versionAtLeast version "4.7") ''
+    CONFIG_KEY_DH_OPERATIONS y
+  ''}
 
   # Disable the firmware helper fallback, udev doesn't implement it any more
   FW_LOADER_USER_HELPER_FALLBACK? n
