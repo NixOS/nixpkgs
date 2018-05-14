@@ -15773,6 +15773,8 @@ with pkgs;
 
   goldendict = libsForQt5.callPackage ../applications/misc/goldendict { };
 
+  gomuks = callPackage ../applications/networking/instant-messengers/gomuks { };
+
   inherit (ocamlPackages) google-drive-ocamlfuse;
 
   google-musicmanager = callPackage ../applications/audio/google-musicmanager { };
