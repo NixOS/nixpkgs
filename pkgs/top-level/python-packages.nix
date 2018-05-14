@@ -6782,24 +6782,7 @@ in {
 
   iso8601 = callPackage ../development/python-modules/iso8601 { };
 
-  isort = buildPythonPackage rec {
-    name = "${pname}-${version}";
-    pname = "isort";
-    version = "4.2.5";
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/i/${pname}/${name}.tar.gz";
-      sha256 = "0p7a6xaq7zxxq5vr5gizshnsbk2afm70apg97xwfdxiwyi201cjn";
-    };
-    buildInputs = with self; [ mock pytest ];
-    # No tests distributed
-    doCheck = false;
-    meta = {
-      description = "A Python utility / library to sort Python imports";
-      homepage = https://github.com/timothycrosley/isort;
-      license = licenses.mit;
-      maintainers = with maintainers; [ couchemar nand0p ];
-    };
-  };
+  isort = callPackage ../development/python-modules/isort {};
 
   jabberbot = callPackage ../development/python-modules/jabberbot {};
 
