@@ -3,13 +3,13 @@
 
 stdenv.mkDerivation rec {
   name = "folly-${version}";
-  version = "2017.11.06.00";
+  version = "2018.04.23.00";
 
   src = fetchFromGitHub {
     owner = "facebook";
     repo = "folly";
     rev = "v${version}";
-    sha256 = "11sn4gwqw94ygc2s4bzqy5k67v3rr20gy375brdcrl5rv0r2hhc0";
+    sha256 = "0wfp4pxi71bi3bz3h5jxsvdd5wa8q6wqdgsx0jvyvaiiy7v884sv";
   };
 
   nativeBuildInputs = [ autoreconfHook python pkgconfig ];

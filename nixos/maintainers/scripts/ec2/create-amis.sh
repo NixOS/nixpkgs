@@ -6,7 +6,7 @@
 set -e
 set -o pipefail
 
-version=$(nix-instantiate --eval --strict '<nixpkgs>' -A lib.nixpkgsVersion | sed s/'"'//g)
+version=$(nix-instantiate --eval --strict '<nixpkgs>' -A lib.version | sed s/'"'//g)
 major=${version:0:5}
 echo "NixOS version is $version ($major)"
 

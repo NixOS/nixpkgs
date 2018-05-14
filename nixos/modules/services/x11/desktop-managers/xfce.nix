@@ -128,7 +128,7 @@ in
         # Set GTK_DATA_PREFIX so that GTK+ can find the Xfce themes.
         export GTK_DATA_PREFIX=${config.system.path}
 
-        ${pkgs.stdenv.shell} ${pkgs.xfce.xinitrc} &
+        ${pkgs.runtimeShell} ${pkgs.xfce.xinitrc} &
         waitPID=$!
       '';
     }];

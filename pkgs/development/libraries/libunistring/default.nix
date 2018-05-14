@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "libunistring-${version}";
-  version = "0.9.8";
+  version = "0.9.9";
 
   src = fetchurl {
     url = "mirror://gnu/libunistring/${name}.tar.gz";
-    sha256 = "1x9wnpzg7vxyjpnzab6vw0afbcijfbd57qrrkqrppynh0nyz54mp";
+    sha256 = "0jm8pr469y7ybb90ll8k1585rciqm8ckzif0laipqhp5z440rsgm";
   };
 
   outputs = [ "out" "dev" "info" "doc" ];

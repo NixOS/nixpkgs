@@ -1,15 +1,15 @@
-{ mkDerivation, base, bytestring, Cabal, containers, deepseq, Diff
-, directory, filepath, ShellCheck, stdenv, tasty, tasty-golden
-, transformers, fetchFromGitHub
+{ mkDerivation, ansi-terminal, base, bytestring, Cabal, containers
+, deepseq, Diff, directory, filepath, ShellCheck, stdenv, tasty
+, tasty-golden, transformers, fetchFromGitHub
 }:
 mkDerivation {
-  pname = "make-travis-yml";
+  pname = "haskell-ci";
   version = "0";
   src = fetchFromGitHub {
     owner = "haskell-CI";
     repo = "haskell-ci";
-    rev = "36b2ee58b9fd160d606608832625b2b6c32aec43";
-    sha256 = "16g99jh5bszvfvb7mmyhl95mkf1l3ydyax8d9py91hi3m8r0c2x0";
+    rev = "105005cde6bde903e477e5b9724d02bdea06bae4";
+    sha256 = "1l76782aa29mi88a2brvkyi6k0v33rpihxlskx99mak06bjrmnhh";
   };
   isLibrary = true;
   isExecutable = true;
@@ -19,8 +19,8 @@ mkDerivation {
   ];
   executableHaskellDepends = [ base ];
   testHaskellDepends = [
-    base bytestring Diff directory filepath tasty tasty-golden
-    transformers
+    ansi-terminal base bytestring Diff directory filepath tasty
+    tasty-golden transformers
   ];
   homepage = "https://github.com/haskell-CI/haskell-ci";
   description = "Script generator for Travis-CI";

@@ -4,12 +4,12 @@
 { stdenv, fetchFromGitHub, cmake, gtest }:
 stdenv.mkDerivation rec {
   name = "easyloggingpp-${version}";
-  version = "9.96.0";
+  version = "9.96.4";
   src = fetchFromGitHub {
     owner = "muflihun";
     repo = "easyloggingpp";
     rev = "v${version}";
-    sha256 = "134arh13rksfsxa80h6xw104458ihzp1mpblz5sprx5gxkq7yqfv";
+    sha256 = "0l0b8cssxkj0wlfqjj8hfnfvrjcxa81h947d54w86iadrilrsprb";
   };
 
   nativeBuildInputs = [cmake];

@@ -4,12 +4,12 @@
 }:
 
 let
-  version = "1.3.0";
+  version = "1.4.0";
   src = fetchFromGitHub {
     owner  = "tamarin-prover";
     repo   = "tamarin-prover";
-    rev    = "8e823691ad3325bce8921617b013735523d74557";
-    sha256 = "0rr2syl9xhv17bwky5p39mhn0bypr24h8pld1xidxv87vy7vk7nr";
+    rev    = "7ced07a69f8e93178f9a95797479277a736ae572";
+    sha256 = "02pyw22h90228g6qybjpdvpcm9d5lh96f5qwmy2hv2bylz05z3nn";
   };
 
   # tamarin has its own dependencies, but they're kept inside the repo,
@@ -65,19 +65,31 @@ mkDerivation (common "tamarin-prover" src // {
   enableSharedExecutables = false;
   postFixup = "rm -rf $out/lib $out/nix-support $out/share/doc";
 
+  # Fix problem with MonadBaseControl not being found
+  patchPhase = ''
+    sed -ie 's,\(import *\)Control\.Monad$,&\
+    \1Control.Monad.Trans.Control,' src/Web/Handler.hs
+
+    sed -ie 's~\( *, \)mtl~&\
+    \1monad-control~' tamarin-prover.cabal
+  '';
+
   # wrap the prover to be sure it can find maude, sapic, etc
   executableToolDepends = [ makeWrapper which maude graphviz sapic ];
   postInstall = ''
     wrapProgram $out/bin/tamarin-prover \
       --prefix PATH : ${lib.makeBinPath [ which maude graphviz sapic ]}
+    # so that the package can be used as a vim plugin to install syntax coloration
+    install -Dt $out/share/vim-plugins/tamarin-prover/syntax/ etc/{spthy,sapic}.vim
+    install etc/filetype.vim -D $out/share/vim-plugins/tamarin-prover/ftdetect/tamarin.vim
   '';
 
   checkPhase = "./dist/build/tamarin-prover/tamarin-prover test";
 
   executableHaskellDepends = (with haskellPackages; [
     base binary binary-orphans blaze-builder blaze-html bytestring
-    cmdargs conduit containers deepseq directory fclabels file-embed
-    filepath gitrev http-types HUnit lifted-base mtl parsec process
+    cmdargs conduit containers monad-control deepseq directory fclabels file-embed
+    filepath gitrev http-types HUnit lifted-base mtl monad-unlift parsec process
     resourcet safe shakespeare tamarin-prover-term
     template-haskell text threads time wai warp yesod-core yesod-static
   ]) ++ [ tamarin-prover-utils

@@ -1,9 +1,7 @@
 { lib, stdenv, fetchurl, pkgconfig, glib, gdk_pixbuf, pango, cairo, libxml2, libgsf
-, bzip2, libcroco, libintlOrEmpty, darwin, rust, gnome3
+, bzip2, libcroco, libintl, darwin, rust, gnome3
 , withGTK ? false, gtk3 ? null
-, gobjectIntrospection ? null, enableIntrospection ? false }:
-
-# no introspection by default, it's too big
+, vala, gobjectIntrospection }:
 
 let
   pname = "librsvg";
@@ -17,21 +15,18 @@ stdenv.mkDerivation rec {
     sha256 = "0c550a0bffef768a436286116c03d9f6cd3f97f5021c13e7f093b550fac12562";
   };
 
-  NIX_LDFLAGS = if stdenv.isDarwin then "-lintl" else null;
-
   outputs = [ "out" "dev" ];
 
-  buildInputs = [ libxml2 libgsf bzip2 libcroco pango libintlOrEmpty ]
-    ++ stdenv.lib.optional enableIntrospection gobjectIntrospection;
+  buildInputs = [ libxml2 libgsf bzip2 libcroco pango libintl ];
 
   propagatedBuildInputs = [ glib gdk_pixbuf cairo ] ++ lib.optional withGTK gtk3;
 
-  nativeBuildInputs = [ pkgconfig rust.rustc rust.cargo ]
+  nativeBuildInputs = [ pkgconfig rust.rustc rust.cargo vala gobjectIntrospection ]
     ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
       ApplicationServices
     ]);
 
-  configureFlags = [ "--enable-introspection=auto" ]
+  configureFlags = [ "--enable-introspection" "--enable-vala" ]
     ++ stdenv.lib.optional stdenv.isDarwin "--disable-Bsymbolic";
 
   NIX_CFLAGS_COMPILE

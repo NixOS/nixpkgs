@@ -1,7 +1,9 @@
 { stdenv, fetchurl, openssl, libcap, curl, which
 , eventlog, pkgconfig, glib, python, systemd, perl
 , riemann_c_client, protobufc, pcre, libnet
-, json_c, libuuid, libivykis, mongoc, rabbitmq-c }:
+, json_c, libuuid, libivykis, mongoc, rabbitmq-c
+, libesmtp
+}:
 
 let
   pname = "syslog-ng";
@@ -9,11 +11,11 @@ in
 
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";
-  version = "3.13.2";
+  version = "3.15.1";
 
   src = fetchurl {
     url = "https://github.com/balabit/${pname}/releases/download/${name}/${name}.tar.gz";
-    sha256 = "1s6kg91sb8h2w4n60v22zis6pl2rggarpjjp00c81039jggk2gcs";
+    sha256 = "1vzrg6s30wc2as2s42h7a1qvyxqx26nq895r9y75aasfcwlbvnm2";
   };
 
   nativeBuildInputs = [ pkgconfig which ];
@@ -36,12 +38,14 @@ stdenv.mkDerivation rec {
     libivykis
     mongoc
     rabbitmq-c
+    libesmtp
   ];
 
   configureFlags = [
     "--enable-manpages"
     "--enable-dynamic-linking"
     "--enable-systemd"
+    "--enable-smtp"
     "--with-ivykis=system"
     "--with-librabbitmq-client=system"
     "--with-mongoc=system"

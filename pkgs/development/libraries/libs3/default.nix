@@ -1,16 +1,19 @@
 { stdenv, fetchFromGitHub, curl, libxml2 }:
 
 stdenv.mkDerivation {
-  name = "libs3-2015-04-23";
+  name = "libs3-2017-06-01";
 
   src = fetchFromGitHub {
     owner = "bji";
     repo = "libs3";
-    rev = "11a4e976c28ba525e7d61fbc3867c345a2af1519";
-    sha256 = "0xjjwyw14sk9am6s2m25hxi55vmsrc2yiawd6ln2lvg59xjcr48i";
+    rev = "fd8b149044e429ad30dc4c918f0713cdd40aadd2";
+    sha256 = "0a4c9rsd3wildssvnvph6cd11adn0p3rd4l02z03lvxkjhm20gw3";
   };
 
   buildInputs = [ curl libxml2 ];
+
+  # added to fix build with gcc7, review on update
+  NIX_CFLAGS_COMPILE = [ "-Wno-error=format-truncation" ];
 
   DESTDIR = "\${out}";
 

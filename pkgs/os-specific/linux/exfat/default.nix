@@ -6,13 +6,13 @@ assert lib.versionAtLeast kernel.version  "4.2" || lib.versionOlder kernel.versi
 
 stdenv.mkDerivation rec {
   name = "exfat-nofuse-${version}-${kernel.version}";
-  version = "2017-06-19";
+  version = "2018-04-16";
 
   src = fetchFromGitHub {
     owner = "dorimanx";
     repo = "exfat-nofuse";
-    rev = "de4c760bc9a05ead83bc3ec6eec6cf1fb106f523";
-    sha256 = "0v979d8sbcb70lakm4jal2ck3gspkdgq9108k127f7ph08vf8djm";
+    rev = "01c30ad52625a7261e1b0d874553b6ca7af25966";
+    sha256 = "0n1ibamf1yj8iqapc86lfscnky9p07ngsi4f2kpv3d5r2s6mzsh6";
   };
 
   hardeningDisable = [ "pic" ];

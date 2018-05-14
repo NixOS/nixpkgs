@@ -56,12 +56,10 @@ stdenv.mkDerivation {
     patch -Np1 -i "${gcc47Patch}"
   '';
 
-  configureFlags = "--with-gtk --with-lua=${lua}";
-  CPPFLAGS = "-DNDEBUG";
-  CFLAGS = "-O2 -fsigned-char";
-  CXXFLAGS = "-O2 -fsigned-char";
-  GTK_CFLAGS = "-I${gtk2.dev}/include/gtk-2.0 -I${gtk2.out}/lib/gtk-2.0/include -I${glib.dev}/include/glib-2.0 -I${glib.out}/lib/glib-2.0/include -I${cairo.dev}/include/cairo -I${pango.dev}/include/pango-1.0 -I${gdk_pixbuf.dev}/include/gdk-pixbuf-2.0 -I${atk.dev}/include/atk-1.0 -I${gtkglext}/include/gtkglext-1.0 -I${gtkglext}/lib/gtkglext-1.0/include";
-  GTK_LIBS = "-lgtk-x11-2.0 -lgtkglext-x11-1.0 -lcairo -lgdk_pixbuf-2.0 -lpango-1.0 -lgobject-2.0";
+  configureFlags = [
+    "--with-gtk"
+    "--with-lua=${lua}"
+  ];
 
   installPhase = ''make MKDIR_P="mkdir -p" install'';
 
@@ -69,7 +67,7 @@ stdenv.mkDerivation {
 
   meta = {
     description = "Free space simulation";
-    homepage = http://www.shatters.net/celestia/;
+    homepage = https://celestia.space/;
     license = stdenv.lib.licenses.gpl2;
 
     platforms = stdenv.lib.platforms.linux;

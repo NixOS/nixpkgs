@@ -3,11 +3,11 @@
 , ldns, libedit, yasm, which, lua, libopus, libsndfile }:
 
 stdenv.mkDerivation rec {
-  name = "freeswitch-1.6.15";
+  name = "freeswitch-1.6.20";
 
   src = fetchurl {
     url = "http://files.freeswitch.org/freeswitch-releases/${name}.tar.bz2";
-    sha256 = "071g7229shr9srwzspx29fcx3ccj3rwakkydpc4vdf1q3lldd2ld";
+    sha256 = "0hqz68abs5x5vzf1mndcvdi35nrhmnklzdrnrk8dyvzvz67hp2ah";
   };
   postPatch = ''
     patchShebangs     libs/libvpx/build/make/rtcd.pl

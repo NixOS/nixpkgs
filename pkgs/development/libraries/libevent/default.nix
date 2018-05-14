@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, findutils
+{ stdenv, fetchurl, findutils, fixDarwinDylibNames
 , sslSupport? true, openssl
 }:
 
@@ -26,6 +26,7 @@ stdenv.mkDerivation rec {
   buildInputs = []
     ++ stdenv.lib.optional sslSupport openssl
     ++ stdenv.lib.optional stdenv.isCygwin findutils
+    ++ stdenv.lib.optional stdenv.isDarwin fixDarwinDylibNames
     ;
 
   postInstall = stdenv.lib.optionalString sslSupport ''

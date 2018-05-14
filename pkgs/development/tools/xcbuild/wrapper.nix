@@ -46,6 +46,9 @@ stdenv.mkDerivation {
       ln -s $file
     done
 
+    mkdir $out/usr
+    ln -s $out/bin $out/usr/bin
+
     mkdir -p $out/Library/Xcode/
     ln -s ${xcbuild}/Library/Xcode/Specifications $out/Library/Xcode/Specifications
 

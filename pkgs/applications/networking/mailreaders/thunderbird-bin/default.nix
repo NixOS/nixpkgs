@@ -43,8 +43,6 @@
 , gnupg
 }:
 
-assert stdenv.isLinux;
-
 # imports `version` and `sources`
 with (import ./release_sources.nix);
 

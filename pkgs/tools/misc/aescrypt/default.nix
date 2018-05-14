@@ -21,8 +21,6 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ libiconv ];
 
-  NIX_LDFLAGS = stdenv.lib.optionalString stdenv.isDarwin "-liconv";
-
   meta = with stdenv.lib; {
     description = "Encrypt files with Advanced Encryption Standard (AES)";
     homepage    = https://www.aescrypt.com/;

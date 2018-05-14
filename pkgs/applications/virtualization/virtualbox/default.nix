@@ -21,10 +21,10 @@ let
   buildType = "release";
   # Manually sha256sum the extensionPack file, must be hex!
   # Do not forget to update the hash in ./guest-additions/default.nix!
-  extpack = "70584a70b666e9332ae2c6be0e64da4b8e3a27124801156577f205750bdde4f5";
-  extpackRev = "120293";
-  main = "1rx45ivwk89ghjc5zdd7c7j92w0w3930xj7l1zhwrvshxs454w7y";
-  version = "5.2.6";
+  extpack = "4c36d129f17dcab2bb37292022f1b1adfefa5f32a3161b0d5d40784bc8acf4d0";
+  extpackRev = "122591";
+  main = "0n1lip8lkz4qqq5ml47xldsx41919ncfh060i7yj51bhas604q6s";
+  version = "5.2.12";
 
   # See https://github.com/NixOS/nixpkgs/issues/672 for details
   extensionPack = requireFile rec {
@@ -94,8 +94,6 @@ in stdenv.mkDerivation {
 
   patches =
      optional enableHardening ./hardened.patch
-     # https://www.virtualbox.org/pipermail/vbox-dev/2017-December/014888.html
-  ++ optional headless [ ./HostServices-SharedClipboard-x11-stub.cpp-use-RT_NOR.patch ]
   ++ [ ./qtx11extras.patch ];
 
 

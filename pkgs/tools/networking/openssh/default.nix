@@ -21,12 +21,12 @@ in
 with stdenv.lib;
 stdenv.mkDerivation rec {
   name = "openssh-${version}";
-  version = if hpnSupport then "7.5p1" else "7.6p1";
+  version = if hpnSupport then "7.6p1" else "7.6p1";
 
   src = if hpnSupport then
       fetchurl {
-        url = "https://github.com/rapier1/openssh-portable/archive/hpn-KitchenSink-7_5_P1.tar.gz";
-        sha256 = "1hasdcfjl6xf5nbbbvqyyq5v7ad10nywrq89j7naxz9wln58nhnn";
+        url = "https://github.com/rapier1/openssh-portable/archive/hpn-KitchenSink-7_6_P1.tar.gz";
+        sha256 = "15b1zjk9f3jlxji1vpqfla40cnzy8hv2clk925cvpgz7lqgv4a1d";
       }
     else
       fetchurl {

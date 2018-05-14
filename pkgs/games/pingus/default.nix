@@ -1,5 +1,5 @@
-{stdenv, fetchurl, scons, SDL, SDL_image, boost, libpng, SDL_mixer, pkgconfig
-, libGLU_combined}:
+{stdenv, fetchurl, fetchpatch, scons, SDL, SDL_image, boost, libpng, SDL_mixer
+, pkgconfig, libGLU_combined}:
 let
   s = # Generated upstream information
   rec {
@@ -18,6 +18,13 @@ stdenv.mkDerivation rec {
   src = fetchurl {
     inherit (s) url sha256;
   };
+  patches = [
+    # fix build with gcc7
+    (fetchpatch {
+      url = https://github.com/Pingus/pingus/commit/df6e2f445d3e2925a94d22faeb17be9444513e92.patch;
+      sha256 = "0nqyhznnnvpgfa6rfv8rapjfpw99b67n97jfqp9r3hpib1b3ja6p";
+    })
+  ];
   makeFlags = '' PREFIX="$(out)" '';
   meta = {
     inherit (s) version;

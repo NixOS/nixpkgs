@@ -149,7 +149,7 @@ in buildPythonPackage rec {
     homepage = http://tensorflow.org;
     license = licenses.asl20;
     maintainers = with maintainers; [ jyp abbradar ];
-    platforms = with platforms; if cudaSupport then linux else linux ++ darwin;
+    platforms = platforms.linux;
     broken = !(xlaSupport -> cudaSupport);
   };
 }
