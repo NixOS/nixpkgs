@@ -1,24 +1,38 @@
-{ fetchurl, stdenv, pkgconfig, gnome3, intltool, libsoup, json-glib }:
+{ fetchurl, stdenv, meson, ninja, pkgconfig, gettext, gtk-doc, docbook_xsl, gobjectIntrospection, gnome3, libsoup, json-glib }:
 
 stdenv.mkDerivation rec {
   name = "geocode-glib-${version}";
-  version = "3.24.0";
+  version = "3.25.4.1";
+
+  outputs = [ "out" "dev" "installedTests" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/geocode-glib/${gnome3.versionBranch version}/${name}.tar.xz";
-    sha256 = "19c1fef4fd89eb4bfe6decca45ac45a2eca9bb7933be560ce6c172194840c35e";
+    sha256 = "0y6p5l2jrr78p7l4hijjhclzbap005y6h06g3aiglg9i5hk6j0gi";
   };
+
+  nativeBuildInputs = with gnome3; [ meson ninja pkgconfig gettext gtk-doc docbook_xsl gobjectIntrospection ];
+  buildInputs = with gnome3; [ glib libsoup json-glib ];
+
+  patches = [
+    ./installed-tests-path.patch
+  ];
+
+  postPatch = ''
+    substituteInPlace geocode-glib/tests/meson.build --subst-var-by "installedTests" "$installedTests"
+  '';
 
   passthru = {
-    updateScript = gnome3.updateScript { packageName = "geocode-glib"; attrPath = "gnome3.geocode-glib"; };
+    updateScript = gnome3.updateScript {
+      packageName = "geocode-glib";
+      attrPath = "gnome3.geocode-glib";
+    };
   };
-
-  buildInputs = with gnome3;
-    [ intltool pkgconfig glib libsoup json-glib ];
 
   meta = with stdenv.lib; {
-    platforms = platforms.linux;
+    description = "A convenience library for the geocoding and reverse geocoding using Nominatim service";
+    license = licenses.lgpl2Plus;
     maintainers = gnome3.maintainers;
+    platforms = platforms.linux;
   };
-
 }

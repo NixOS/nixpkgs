@@ -3,7 +3,7 @@
 , ncurses, glib, gtk2, libsndfile, zlib
 }:
 
-let dfVersion = "0.44.05"; in
+let dfVersion = "0.44.09"; in
 
 stdenv.mkDerivation {
   name = "dwarf_fortress_unfuck-${dfVersion}";

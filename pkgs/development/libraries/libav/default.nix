@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, yasm, bzip2, zlib, perl
+{ stdenv, fetchurl, pkgconfig, yasm, bzip2, zlib, perl, bash
 , mp3Support    ? true,   lame      ? null
 , speexSupport  ? true,   speex     ? null
 , theoraSupport ? true,   libtheora ? null
@@ -45,7 +45,11 @@ let
       ++ optional (vpxSupport && hasPrefix "0.8." version) ./vpxenc-0.8.17-libvpx-1.5.patch
       ;
 
-    preConfigure = "patchShebangs doc/texi2pod.pl";
+    postPatch = ''
+      patchShebangs .
+      # another shebang was hidden in a here document text
+      substituteInPlace ./configure --replace "#! /bin/sh" "#!${bash}/bin/sh"
+    '';
 
     configureFlags =
       assert stdenv.lib.all (x: x!=null) buildInputs;
@@ -71,8 +75,8 @@ let
       ++ optional freetypeSupport "--enable-libfreetype"
       ;
 
-  nativeBuildInputs = [ pkgconfig ];
-    buildInputs = [ lame yasm zlib bzip2 SDL ]
+  nativeBuildInputs = [ pkgconfig perl ];
+    buildInputs = [ lame yasm zlib bzip2 SDL bash ]
       ++ [ perl ] # for install-man target
       ++ optional mp3Support lame
       ++ optional speexSupport speex
@@ -94,6 +98,7 @@ let
 
     # alltools to build smaller tools, incl. aviocat, ismindex, qt-faststart, etc.
     buildFlags = "all alltools install-man";
+
 
     postInstall = ''
       moveToOutput bin "$bin"

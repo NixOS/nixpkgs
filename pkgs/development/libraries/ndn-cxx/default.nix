@@ -45,5 +45,6 @@ stdenv.mkDerivation {
     license = licenses.lgpl3;
     platforms = stdenv.lib.platforms.unix;
     maintainers = [ maintainers.sjmackenzie ];
+    broken = true; # 2018-04-11
   };
 }

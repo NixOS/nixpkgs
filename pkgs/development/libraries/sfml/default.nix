@@ -3,14 +3,14 @@
 }:
 
 let
-  version = "2.4.2";
+  version = "2.5.0";
 in
 
 stdenv.mkDerivation rec {
   name = "sfml-${version}";
   src = fetchurl {
     url = "https://github.com/SFML/SFML/archive/${version}.tar.gz";
-    sha256 = "cf268fb487e4048c85e5b2f53d62596854762c98cba1c1b61ccd91f78253ef4b";
+    sha256 = "1x3yvhdrln5b6h4g5r4mds76gq8zsxw6icxqpwqkmxsqcq5yviab";
   };
   buildInputs = [ cmake libX11 freetype libjpeg openal flac libvorbis glew
                   libXrandr libXrender udev xcbutilimage

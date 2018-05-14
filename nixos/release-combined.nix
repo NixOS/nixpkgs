@@ -52,17 +52,19 @@ in rec {
         (all nixos.dummy)
         (all nixos.manual)
 
-        nixos.iso_minimal.x86_64-linux
-        nixos.iso_minimal.i686-linux
-        nixos.iso_graphical.x86_64-linux
-        nixos.ova.x86_64-linux
+        nixos.iso_minimal.x86_64-linux or []
+        nixos.iso_minimal.i686-linux or []
+        nixos.iso_graphical.x86_64-linux or []
+        nixos.ova.x86_64-linux or []
 
         #(all nixos.tests.containers)
-        nixos.tests.chromium.x86_64-linux
+        (all nixos.tests.containers-imperative)
+        (all nixos.tests.containers-ipv4)
+        nixos.tests.chromium.x86_64-linux or []
         (all nixos.tests.firefox)
         (all nixos.tests.firewall)
         (all nixos.tests.gnome3)
-        nixos.tests.installer.zfsroot.x86_64-linux # ZFS is 64bit only
+        nixos.tests.installer.zfsroot.x86_64-linux or [] # ZFS is 64bit only
         (all nixos.tests.installer.lvm)
         (all nixos.tests.installer.luksroot)
         (all nixos.tests.installer.separateBoot)
@@ -81,7 +83,7 @@ in rec {
         (all nixos.tests.boot.uefiUsb)
         (all nixos.tests.boot-stage1)
         (all nixos.tests.hibernate)
-        nixos.tests.docker.x86_64-linux
+        nixos.tests.docker.x86_64-linux or []
         (all nixos.tests.ecryptfs)
         (all nixos.tests.env)
         (all nixos.tests.ipv6)
@@ -98,6 +100,7 @@ in rec {
         (all nixos.tests.misc)
         (all nixos.tests.mutableUsers)
         (all nixos.tests.nat.firewall)
+        (all nixos.tests.nat.firewall-conntrack)
         (all nixos.tests.nat.standalone)
         (all nixos.tests.networking.scripted.loopback)
         (all nixos.tests.networking.scripted.static)
@@ -112,6 +115,10 @@ in rec {
         (all nixos.tests.nfs4)
         (all nixos.tests.openssh)
         (all nixos.tests.php-pcre)
+        (all nixos.tests.predictable-interface-names.predictable)
+        (all nixos.tests.predictable-interface-names.unpredictable)
+        (all nixos.tests.predictable-interface-names.predictableNetworkd)
+        (all nixos.tests.predictable-interface-names.unpredictableNetworkd)
         (all nixos.tests.printing)
         (all nixos.tests.proxy)
         (all nixos.tests.sddm.default)

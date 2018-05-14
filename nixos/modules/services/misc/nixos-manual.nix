@@ -23,7 +23,7 @@ let
     options =
       let
         scrubbedEval = evalModules {
-          modules = [ { nixpkgs.system = config.nixpkgs.system; } ] ++ baseModules;
+          modules = [ { nixpkgs.localSystem = config.nixpkgs.localSystem; } ] ++ baseModules;
           args = (config._module.args) // { modules = [ ]; };
           specialArgs = { pkgs = scrubDerivations "pkgs" pkgs; };
         };
@@ -43,7 +43,7 @@ let
 
   helpScript = pkgs.writeScriptBin "nixos-help"
     ''
-      #! ${pkgs.stdenv.shell} -e
+      #! ${pkgs.runtimeShell} -e
       browser="$BROWSER"
       if [ -z "$browser" ]; then
         browser="$(type -P xdg-open || true)"
@@ -112,10 +112,10 @@ in
 
     system.build.manual = manual;
 
-    environment.systemPackages =
-      [ manual.manual helpScript ]
-      ++ optionals config.services.xserver.enable [desktopItem pkgs.nixos-icons]
-      ++ optional config.programs.man.enable manual.manpages;
+    environment.systemPackages = []
+      ++ optionals config.services.xserver.enable [ desktopItem pkgs.nixos-icons ]
+      ++ optional  config.documentation.man.enable manual.manpages
+      ++ optionals config.documentation.doc.enable [ manual.manual helpScript ];
 
     boot.extraTTYs = mkIf cfg.showManual ["tty${toString cfg.ttyNumber}"];
 

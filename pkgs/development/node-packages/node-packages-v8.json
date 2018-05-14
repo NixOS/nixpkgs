@@ -1,6 +1,7 @@
 [
   "bower"
 , "coffee-script"
+, "create-cycle-app"
 , "dat"
 , "grunt-cli"
 , "mocha"
@@ -11,5 +12,9 @@
 , "pnpm"
 , "semver"
 , "sloc"
+, "vue-cli"
+, "swagger"
 , "npm"
+, "three"
+, "mathjax"
 ]

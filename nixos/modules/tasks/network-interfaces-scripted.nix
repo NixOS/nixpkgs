@@ -68,8 +68,7 @@ let
              (hasAttr dev cfg.macvlans) ||
              (hasAttr dev cfg.sits) ||
              (hasAttr dev cfg.vlans) ||
-             (hasAttr dev cfg.vswitches) ||
-             (hasAttr dev cfg.wlanInterfaces)
+             (hasAttr dev cfg.vswitches)
           then [ "${dev}-netdev.service" ]
           else optional (dev != null && dev != "lo" && !config.boot.isContainer) (subsystemDevice dev);
 
@@ -192,7 +191,7 @@ let
                     if out=$(ip addr add "${cidr}" dev "${i.name}" 2>&1); then
                       echo "done"
                     elif ! echo "$out" | grep "File exists" >/dev/null 2>&1; then
-                      echo "failed"
+                      echo "'ip addr add "${cidr}" dev "${i.name}"' failed: $out"
                       exit 1
                     fi
                   ''
@@ -213,7 +212,7 @@ let
                      if out=$(ip route add "${cidr}" ${options} ${via} dev "${i.name}" 2>&1); then
                        echo "done"
                      elif ! echo "$out" | grep "File exists" >/dev/null 2>&1; then
-                       echo "failed"
+                       echo "'ip route add "${cidr}" ${options} ${via} dev "${i.name}"' failed: $out"
                        exit 1
                      fi
                   ''

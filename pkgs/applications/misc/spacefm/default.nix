@@ -4,13 +4,13 @@
 
 stdenv.mkDerivation rec {
   name = "spacefm-${version}";
-  version = "1.0.5";
+  version = "1.0.6";
 
   src = fetchFromGitHub {
     owner = "IgnorantGuru";
     repo = "spacefm";
     rev = "${version}";
-    sha256 = "06askkrwls09d1x382zjrmnvcm0ghfgz4cms2qbhdkazfyy0ff65";
+    sha256 = "089r6i40lxcwzp60553b18f130asspnzqldlpii53smz52kvpirx";
   };
 
   configureFlags = [
@@ -24,6 +24,10 @@ stdenv.mkDerivation rec {
   postInstall = ''
     rm -f $out/etc/spacefm/spacefm.conf
     ln -s /etc/spacefm/spacefm.conf $out/etc/spacefm/spacefm.conf
+  '';
+
+  preFixup = ''
+    gappsWrapperArgs+=(--prefix XDG_DATA_DIRS : "${shared-mime-info}/share")
   '';
 
   nativeBuildInputs = [ pkgconfig ];

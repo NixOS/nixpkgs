@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, qt4, qmake4Hook }:
+{ stdenv, fetchurl, qt4, qmake4Hook, AGL }:
 
 stdenv.mkDerivation rec {
   name = "libqglviewer-2.6.3";
@@ -9,7 +9,8 @@ stdenv.mkDerivation rec {
     sha256 = "00jdkyk4wg1356c3ar6nk3hyp494ya3yvshq9m57kfmqpn3inqdy";
   };
 
-  buildInputs = [ qt4 qmake4Hook ];
+  buildInputs = [ qt4 qmake4Hook ]
+    ++ stdenv.lib.optional stdenv.isDarwin AGL;
 
   postPatch =
     ''

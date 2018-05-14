@@ -4,8 +4,6 @@
   libX11, libXcursor, libXrandr, libxcb, libXi, libSM, libICE,
   libXrender, libXcomposite }:
 
-assert stdenv.system == "x86_64-linux";
-
 let version = "2017-SP2"; in
 stdenv.mkDerivation {
   name = "draftsight-${version}";
@@ -71,6 +69,6 @@ stdenv.mkDerivation {
     homepage = https://www.3ds.com/products-services/draftsight-cad-software/;
     license = stdenv.lib.licenses.unfree;
     maintainers = with maintainers; [ hodapp ];
-    platforms = platforms.linux;
+    platforms = [ "x86_64-linux" ];
   };
 }

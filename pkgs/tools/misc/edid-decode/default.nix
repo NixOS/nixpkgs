@@ -17,7 +17,7 @@ in stdenv.mkDerivation rec {
 
   meta = {
     description = "EDID decoder and conformance tester";
-    homepage = http://cgit.freedesktop.org/xorg/app/edid-decode/;
+    homepage = https://cgit.freedesktop.org/xorg/app/edid-decode/;
     license = stdenv.lib.licenses.mit;
     maintainers = [ stdenv.lib.maintainers.chiiruno ];
     platforms = stdenv.lib.platforms.all;

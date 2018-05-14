@@ -1,6 +1,6 @@
 { cairo, cmake, fetchgit, libXdmcp, libpthreadstubs, libxcb, pcre, pkgconfig
 , python2 , stdenv, xcbproto, xcbutil, xcbutilimage, xcbutilrenderutil
-, xcbutilwm, xcbutilxrm, fetchpatch
+, xcbutilwm, xcbutilxrm, fetchpatch, makeWrapper
 
 # optional packages-- override the variables ending in 'Support' to enable or
 # disable modules
@@ -52,7 +52,14 @@ stdenv.mkDerivation rec {
       (if i3Support || i3GapsSupport then jsoncpp else null)
       (if i3Support then i3 else null)
       (if i3GapsSupport then i3-gaps else null)
+
+      (if i3Support || i3GapsSupport then makeWrapper else null)
     ];
+
+    fixupPhase = if (i3Support || i3GapsSupport) then ''
+    wrapProgram $out/bin/polybar \
+      --prefix PATH : "${if i3Support then i3 else i3-gaps}/bin"
+  '' else null;
 
     nativeBuildInputs = [
       cmake pkgconfig

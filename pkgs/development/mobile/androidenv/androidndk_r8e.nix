@@ -3,8 +3,6 @@
 , platformTools
 }:
 
-assert stdenv.isLinux;
-
 stdenv.mkDerivation rec {
   name = "android-ndk-r8e";
 

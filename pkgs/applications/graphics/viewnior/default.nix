@@ -38,6 +38,6 @@ stdenv.mkDerivation rec {
 
     maintainers = [ stdenv.lib.maintainers.smironov ];
 
-    platforms = stdenv.lib.platforms.gnu;
+    platforms = stdenv.lib.platforms.gnu ++ stdenv.lib.platforms.linux;
   };
 }

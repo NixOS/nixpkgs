@@ -1,11 +1,11 @@
 { stdenv, fetchurl, fox, pkgconfig, gettext, xlibsWrapper, gcc, intltool, file, libpng }:
 
 stdenv.mkDerivation rec {
-  name = "xfe-1.37";
+  name = "xfe-1.42";
 
   src = fetchurl {
     url = "mirror://sourceforge/xfe/${name}.tar.gz";
-    sha256 = "1g9a0bpny2m7ixgxpqjh0wvh2x6d0lpj6682zn5dfqwan4j2xfsd";
+    sha256 = "1v1v0vcbnm30kpyd3rj8f56yh7lfnwy7nbs9785wi229b29fiqx1";
   };
 
   nativeBuildInputs = [ pkgconfig ];

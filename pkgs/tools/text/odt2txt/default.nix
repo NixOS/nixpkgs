@@ -12,8 +12,6 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ zlib libiconv ];
 
-  NIX_LDFLAGS = stdenv.lib.optionalString stdenv.isDarwin "-liconv";
-
   meta = {
     description = "Simple .odt to .txt converter";
     homepage = http://stosberg.net/odt2txt;

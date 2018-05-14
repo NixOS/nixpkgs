@@ -30,10 +30,17 @@ with lib;
 
     boot.initrd.postDeviceCommands = ''
       rootDevice="${config.fileSystems."/".device}"
-      if [ -e "$rootDevice" ]; then
+      if waitDevice "$rootDevice"; then
         rootDevice="$(readlink -f "$rootDevice")"
-        parentDevice="$(lsblk -npo PKNAME "$rootDevice")"
-        TMPDIR=/run sh $(type -P growpart) "$parentDevice" "''${rootDevice#$parentDevice}"
+        parentDevice="$rootDevice"
+        while [ "''${parentDevice%[0-9]}" != "''${parentDevice}" ]; do
+          parentDevice="''${parentDevice%[0-9]}";
+        done
+        partNum="''${rootDevice#''${parentDevice}}"
+        if [ "''${parentDevice%[0-9]p}" != "''${parentDevice}" ] && [ -b "''${parentDevice%p}" ]; then
+          parentDevice="''${parentDevice%p}"
+        fi
+        TMPDIR=/run sh $(type -P growpart) "$parentDevice" "$partNum"
         udevadm settle
       fi
     '';

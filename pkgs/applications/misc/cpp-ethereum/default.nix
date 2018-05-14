@@ -80,5 +80,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3;
     maintainers = with maintainers; [ artuuge ];
     platforms = platforms.linux;
+    broken = true; # 2018-04-10
   };
 }

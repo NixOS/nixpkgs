@@ -1,26 +1,31 @@
-{ stdenv, fetchurl, which, qt4, xlibsWrapper, libpulseaudio, fftwSinglePrec
-, lame, zlib, libGLU_combined, alsaLib, freetype, perl, pkgconfig
-, libX11, libXv, libXrandr, libXvMC, libXinerama, libXxf86vm, libXmu
-, yasm, libuuid, taglib, libtool, autoconf, automake, file
+{ stdenv, fetchFromGitHub, which, qtbase, qtwebkit, qtscript, xlibsWrapper
+, libpulseaudio, fftwSinglePrec , lame, zlib, libGLU_combined, alsaLib, freetype
+, perl, pkgconfig , libX11, libXv, libXrandr, libXvMC, libXinerama, libXxf86vm
+, libXmu , yasm, libuuid, taglib, libtool, autoconf, automake, file, exiv2
+, linuxHeaders
 }:
 
 stdenv.mkDerivation rec {
   name = "mythtv-${version}";
-  version = "0.27.4";
+  version = "29.1";
 
-  src = fetchurl {
-    url = "https://github.com/MythTV/mythtv/archive/v${version}.tar.gz";
-    sha256 = "0nrn4fbkkzh43n7jgbv21i92sb4z4yacwj9yj6m3hjbffzy4ywqz";
+  src = fetchFromGitHub {
+    owner = "MythTV";
+    repo = "mythtv";
+    rev = "v${version}";
+    sha256 = "0pjxv4bmq8h285jsr02svgaa03614arsyk12fn9d4rndjsi2cc3x";
   };
 
-  sourceRoot = "${name}/mythtv";
+  setSourceRoot = ''sourceRoot=$(echo */mythtv)'';
 
   buildInputs = [
-    freetype qt4 lame zlib xlibsWrapper libGLU_combined perl alsaLib libpulseaudio fftwSinglePrec
-    libX11 libXv libXrandr libXvMC libXmu libXinerama libXxf86vm libXmu
-    libuuid taglib
+    freetype qtbase qtwebkit qtscript lame zlib xlibsWrapper libGLU_combined
+    perl alsaLib libpulseaudio fftwSinglePrec libX11 libXv libXrandr libXvMC
+    libXmu libXinerama libXxf86vm libXmu libuuid taglib exiv2
   ];
   nativeBuildInputs = [ pkgconfig which yasm libtool autoconf automake file ];
+
+  configureFlags = [ "--dvb-path=${linuxHeaders}/include" ];
 
   meta = with stdenv.lib; {
     homepage = https://www.mythtv.org/;

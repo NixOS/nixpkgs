@@ -271,6 +271,11 @@ in
   };
 
   libxshmfence = attrs: attrs // {
+    name = "libxshmfence-1.3";
+    src = args.fetchurl {
+      url = mirror://xorg/individual/lib/libxshmfence-1.3.tar.bz2;
+      sha256 = "1ir0j92mnd1nk37mrv9bz5swnccqldicgszvfsh62jd14q6k115q";
+    };
     outputs = [ "out" "dev" ]; # mainly to avoid propagation
   };
 
@@ -400,7 +405,7 @@ in
   };
 
   xdriinfo = attrs: attrs // {
-    buildInputs = attrs.buildInputs ++ [args.mesa];
+    buildInputs = attrs.buildInputs ++ [args.libGL];
   };
 
   xvinfo = attrs: attrs // {
@@ -429,8 +434,9 @@ in
   xorgserver = with xorg; attrs_passed:
     # exchange attrs if abiCompat is set
     let
+      version = (builtins.parseDrvName attrs_passed.name).version;
       attrs = with args;
-        if (args.abiCompat == null) then attrs_passed
+        if (args.abiCompat == null || lib.hasPrefix args.abiCompat version) then attrs_passed
         else if (args.abiCompat == "1.17") then {
           name = "xorg-server-1.17.4";
           builder = ./builder.sh;
@@ -450,16 +456,16 @@ in
             };
             nativeBuildInputs = [ pkgconfig ];
             buildInputs = [ dri2proto dri3proto renderproto libdrm openssl libX11 libXau libXaw libxcb xcbutil xcbutilwm xcbutilimage xcbutilkeysyms xcbutilrenderutil libXdmcp libXfixes libxkbfile libXmu libXpm libXrender libXres libXt ];
-            postPatch = "sed '1i#include <malloc.h>' -i include/os.h";
+            postPatch = stdenv.lib.optionalString stdenv.isLinux "sed '1i#include <malloc.h>' -i include/os.h";
             meta.platforms = stdenv.lib.platforms.unix;
-        } else throw "unsupported xorg abiCompat: ${args.abiCompat}";
+        } else throw "unsupported xorg abiCompat ${args.abiCompat} for ${attrs_passed.name}";
 
     in attrs //
     (let
       version = (builtins.parseDrvName attrs.name).version;
       commonBuildInputs = attrs.buildInputs ++ [ xtrans ];
       commonPropagatedBuildInputs = [
-        args.zlib args.mesa args.dbus
+        args.zlib args.libGL args.libGLU args.dbus
         xf86bigfontproto glproto xf86driproto
         compositeproto scrnsaverproto resourceproto
         xf86dgaproto
@@ -470,8 +476,6 @@ in
         dri2proto dri3proto kbproto xineramaproto resourceproto scrnsaverproto videoproto
         libXfont2
       ];
-      # fix_segfault: https://bugs.freedesktop.org/show_bug.cgi?id=91316
-      commonPatches = [ ];
       # XQuartz requires two compilations: the first to get X / XQuartz,
       # and the second to get Xvfb, Xnest, etc.
       darwinOtherX = overrideDerivation xorgserver (oldAttrs: {
@@ -488,11 +492,10 @@ in
       if (!isDarwin)
       then {
         outputs = [ "out" "dev" ];
-        buildInputs = [ makeWrapper ] ++ commonBuildInputs;
+        buildInputs = commonBuildInputs ++ [ args.libdrm args.mesa_noglu ];
         propagatedBuildInputs = [ libpciaccess args.epoxy ] ++ commonPropagatedBuildInputs ++ lib.optionals stdenv.isLinux [
           args.udev
         ];
-        patches = commonPatches;
         prePatch = stdenv.lib.optionalString stdenv.hostPlatform.isMusl ''
           export CFLAGS+=" -D__uid_t=uid_t -D__gid_t=gid_t"
         '';
@@ -506,11 +509,12 @@ in
           "--with-xkb-path=${xorg.xkeyboardconfig}/share/X11/xkb"
           "--with-xkb-output=$out/share/X11/xkb/compiled"
           "--enable-glamor"
+        ] ++ lib.optionals stdenv.hostPlatform.isMusl [
+          "--disable-tls"
         ];
+
         postInstall = ''
           rm -fr $out/share/X11/xkb/compiled # otherwise X will try to write in it
-          wrapProgram $out/bin/Xvfb \
-            --set XORG_DRI_DRIVER_PATH ${args.mesa}/lib/dri
           ( # assert() keeps runtime reference xorgserver-dev in xf86-video-intel and others
             cd "$dev"
             for f in include/xorg/*.h; do
@@ -520,6 +524,7 @@ in
         '';
         passthru.version = version; # needed by virtualbox guest additions
       } else {
+        nativeBuildInputs = attrs.nativeBuildInputs ++ [ args.autoreconfHook xorg.utilmacros xorg.fontutil ];
         buildInputs = commonBuildInputs ++ [
           args.bootstrap_cmds args.automake args.autoconf
           args.apple_sdk.libs.Xplugin
@@ -529,16 +534,31 @@ in
         propagatedBuildInputs = commonPropagatedBuildInputs ++ [
           libAppleWM applewmproto
         ];
-        # Patches can be pulled from the server-*-apple branches of:
-        # http://cgit.freedesktop.org/~jeremyhu/xserver/
-        patches = commonPatches ++ [
-          ./darwin/0002-sdksyms.sh-Use-CPPFLAGS-not-CFLAGS.patch
-          ./darwin/0004-Use-old-miTrapezoids-and-miTriangles-routines.patch
-          ./darwin/0006-fb-Revert-fb-changes-that-broke-XQuartz.patch
-          ./darwin/private-extern.patch
-          ./darwin/bundle_main.patch
-          ./darwin/stub.patch
+
+        # XQuartz patchset
+        patches = [
+          (args.fetchpatch {
+            url = "https://github.com/XQuartz/xorg-server/commit/e88fd6d785d5be477d5598e70d105ffb804771aa.patch";
+            sha256 = "1q0a30m1qj6ai924afz490xhack7rg4q3iig2gxsjjh98snikr1k";
+            name = "use-cppflags-not-cflags.patch";
+          })
+          (args.fetchpatch {
+            url = "https://github.com/XQuartz/xorg-server/commit/75ee9649bcfe937ac08e03e82fd45d9e18110ef4.patch";
+            sha256 = "1vlfylm011y00j8mig9zy6gk9bw2b4ilw2qlsc6la49zi3k0i9fg";
+            name = "use-old-mitrapezoids-and-mitriangles-routines.patch";
+          })
+          (args.fetchpatch {
+            url = "https://github.com/XQuartz/xorg-server/commit/c58f47415be79a6564a9b1b2a62c2bf866141e73.patch";
+            sha256 = "19sisqzw8x2ml4lfrwfvavc2jfyq2bj5xcf83z89jdxg8g1gdd1i";
+            name = "revert-fb-changes-1.patch";
+          })
+          (args.fetchpatch {
+            url = "https://github.com/XQuartz/xorg-server/commit/56e6f1f099d2821e5002b9b05b715e7b251c0c97.patch";
+            sha256 = "0zm9g0g1jvy79sgkvy0rjm6ywrdba2xjd1nsnjbxjccckbr6i396";
+            name = "revert-fb-changes-2.patch";
+          })
         ];
+
         configureFlags = [
           # note: --enable-xquartz is auto
           "CPPFLAGS=-I${./darwin/dri}"

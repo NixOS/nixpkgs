@@ -1,25 +1,25 @@
-{ stdenv, fetchzip, jre }:
+{ stdenv, fetchzip, makeWrapper, jre }:
 
 stdenv.mkDerivation rec {
-  version = "2.5.1";
+  version = "2.6.1";
   name = "jbake-${version}";
 
   src = fetchzip {
-    url = "http://jbake.org/files/jbake-${version}-bin.zip";
-    sha256 = "1ib5gvz6sl7k0ywx22anhz69i40wc6jj5lxjxj2aa14qf4lrw912";
+    url = "https://dl.bintray.com/jbake/binary/${name}-bin.zip";
+    sha256 = "0zlh2azmv8gj3c4d4ndivar31wd42nmvhxq6xhn09cib9kffxbc7";
   };
 
-  buildInputs = [ jre ];
+  buildInputs = [ makeWrapper jre ];
 
   installPhase = ''
-    substituteInPlace bin/jbake --replace "java" "${jre}/bin/java" 
     mkdir -p $out
     cp -vr * $out
+    wrapProgram $out/bin/jbake --set JAVA_HOME "${jre}"
   '';
 
   meta = with stdenv.lib; {
     description = "JBake is a Java based, open source, static site/blog generator for developers & designers";
-    homepage = "http://jbake.org/";
+    homepage = "https://jbake.org/";
     license = licenses.mit;
     maintainers = with maintainers; [ moaxcp ];
   };

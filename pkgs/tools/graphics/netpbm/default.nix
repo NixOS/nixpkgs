@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
   name = "netpbm-10.77.02";
 
   src = fetchsvn {
-    url = "svn://svn.code.sf.net/p/netpbm/code/advanced";
+    url = "https://svn.code.sf.net/p/netpbm/code/advanced";
     rev = 2883;
     sha256 = "1lxa5gasmqrwgihkk8ij7vb9kgdw3d5mp25kydkrf6x4wibg1w5f";
   };

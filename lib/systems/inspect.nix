@@ -3,6 +3,9 @@ with import ./parse.nix { inherit lib; };
 with lib.attrsets;
 with lib.lists;
 
+let abis_ = abis; in
+let abis = lib.mapAttrs (_: abi: builtins.removeAttrs abi [ "assertions" ]) abis_; in
+
 rec {
   patterns = rec {
     isi686         = { cpu = cpuTypes.i686; };
@@ -21,9 +24,11 @@ rec {
     isLittleEndian = { cpu = { significantByte = significantBytes.littleEndian; }; };
 
     isBSD          = { kernel = { families = { inherit (kernelFamilies) bsd; }; }; };
+    isDarwin       = { kernel = { families = { inherit (kernelFamilies) darwin; }; }; };
     isUnix         = [ isBSD isDarwin isLinux isSunOS isHurd isCygwin ];
 
-    isDarwin       = { kernel = kernels.darwin; };
+    isMacOS        = { kernel = kernels.macos; };
+    isiOS          = { kernel = kernels.ios; };
     isLinux        = { kernel = kernels.linux; };
     isSunOS        = { kernel = kernels.solaris; };
     isFreeBSD      = { kernel = kernels.freebsd; };
@@ -38,12 +43,8 @@ rec {
     isMusl         = with abis; map (a: { abi = a; }) [ musl musleabi musleabihf ];
     isUClibc       = with abis; map (a: { abi = a; }) [ uclibc uclibceabi uclibceabihf ];
 
-    isKexecable    = map (family: { kernel = kernels.linux; cpu.family = family; })
-                       [ "x86" "arm" "aarch64" "mips" ];
     isEfi          = map (family: { cpu.family = family; })
                        [ "x86" "arm" "aarch64" ];
-    isSeccomputable = map (family: { kernel = kernels.linux; cpu.family = family; })
-                        [ "x86" "arm" "aarch64" "mips" ];
 
     # Deprecated after 18.03
     isArm = isAarch32;

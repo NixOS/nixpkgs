@@ -29,11 +29,11 @@ let
 in
 stdenv.mkDerivation rec {
   name = "openttd-${version}";
-  version = "1.7.2";
+  version = "1.8.0";
 
   src = fetchurl {
     url = "http://binaries.openttd.org/releases/${version}/${name}-source.tar.xz";
-    sha256 = "1m29s6shnp7c9qh7pzdbvhy7i5awyzn1hr39xkinrpwgvsxa0lgy";
+    sha256 = "0zq8xdg0k92p3s4j9x76591zaqz7k9ra69q008m209vdfffjvly2";
   };
 
   nativeBuildInputs = [ pkgconfig makeWrapper ];

@@ -96,6 +96,7 @@ rec {
             echo creating
             singularity image.create -s $((1 + size * 4 / 1024 + ${toString extraSpace})) $out
             echo importing
+            mkdir -p /var/singularity/mnt/container
             tar -c . | singularity image.import $out
           '');
 

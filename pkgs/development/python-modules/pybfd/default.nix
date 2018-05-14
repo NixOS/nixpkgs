@@ -1,7 +1,8 @@
 { lib, fetchFromGitHub, buildPythonPackage, isPyPy, isPy3k, libbfd, libopcodes }:
 
 buildPythonPackage rec {
-  name = "pybfd-0.1.1.2017-12-31";
+  pname = "pybfd";
+  version = "-0.1.1.2017-12-31";
 
   disabled = isPyPy || isPy3k;
 

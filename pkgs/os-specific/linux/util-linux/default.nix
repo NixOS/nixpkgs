@@ -30,7 +30,8 @@ in stdenv.mkDerivation rec {
 
   crossAttrs = {
     # Work around use of `AC_RUN_IFELSE'.
-    preConfigure = "export scanf_cv_type_modifier=ms";
+    preConfigure = "export scanf_cv_type_modifier=ms" + lib.optionalString (systemd != null)
+      "\nconfigureFlags+=\" --with-systemd --with-systemdsystemunitdir=$bin/lib/systemd/system/\"";
   };
 
   preConfigure = lib.optionalString (systemd != null) ''

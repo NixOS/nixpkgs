@@ -4,7 +4,7 @@ stdenv.mkDerivation (rec {
   name = "gamin-0.1.10";
 
   src = fetchurl {
-    url = "http://www.gnome.org/~veillard/gamin/sources/${name}.tar.gz";
+    url = "https://www.gnome.org/~veillard/gamin/sources/${name}.tar.gz";
     sha256 = "18cr51y5qacvs2fc2p1bqv32rs8bzgs6l67zhasyl45yx055y218";
   };
 

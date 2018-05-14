@@ -1,5 +1,5 @@
---- a/find-daemon.glade
-+++ b/find-daemon.glade
+--- a/glade/find-daemon.glade
++++ b/glade/find-daemon.glade
 @@ -112,6 +112,7 @@
                    <object class="GtkEntry" id="vsyncthing_binary">
                      <property name="visible">True</property>
@@ -16,6 +16,24 @@
                      <property name="receives_default">True</property>
                      <property name="use_underline">True</property>
                      <property name="yalign">0.51999998092651367</property>
+--- a/glade/ui-settings.glade
++++ b/glade/ui-settings.glade
+@@ -943,6 +943,7 @@
+                     <property name="label" translatable="yes">_Browse...</property>
+                     <property name="visible">True</property>
+                     <property name="can_focus">True</property>
++                    <property name="sensitive">False</property>
+                     <property name="receives_default">True</property>
+                     <property name="use_underline">True</property>
+                     <property name="yalign">0.51999998092651367</property>
+@@ -974,6 +975,7 @@
+                   <object class="GtkEntry" id="vsyncthing_binary">
+                     <property name="visible">True</property>
+                     <property name="can_focus">True</property>
++                    <property name="sensitive">False</property>
+                     <property name="hexpand">True</property>
+                     <signal name="changed" handler="cb_check_value" swapped="no"/>
+                   </object>
 --- a/syncthing_gtk/configuration.py
 +++ b/syncthing_gtk/configuration.py
 @@ -168,6 +168,8 @@
@@ -57,21 +75,3 @@
  		self.add_page(GenerateKeysPage())
  		self.add_page(HttpSettingsPage())
  		self.add_page(SaveSettingsPage())
---- a/ui-settings.glade
-+++ b/ui-settings.glade
-@@ -943,6 +943,7 @@
-                     <property name="label" translatable="yes">_Browse...</property>
-                     <property name="visible">True</property>
-                     <property name="can_focus">True</property>
-+                    <property name="sensitive">False</property>
-                     <property name="receives_default">True</property>
-                     <property name="use_underline">True</property>
-                     <property name="yalign">0.51999998092651367</property>
-@@ -974,6 +975,7 @@
-                   <object class="GtkEntry" id="vsyncthing_binary">
-                     <property name="visible">True</property>
-                     <property name="can_focus">True</property>
-+                    <property name="sensitive">False</property>
-                     <property name="hexpand">True</property>
-                     <signal name="changed" handler="cb_check_value" swapped="no"/>
-                   </object>

@@ -4,11 +4,11 @@
 buildPythonPackage rec {
   name = "${pname}-${version}";
   pname = "ws4py";
-  version = "0.4.3";
+  version = "0.5.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "ee12b58384bab8bfdcd1c76dcd6852047aec163af17175fc0f73e255d107dd7a";
+    sha256 = "29d073d7f2e006373e6a848b1d00951a1107eb81f3742952be905429dc5a5483";
   };
 
   checkInputs = [ pytest mock git ];

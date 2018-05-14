@@ -1,12 +1,12 @@
 { stdenv, fetchurl, gawk, alsaLib, ncurses }:
 
 stdenv.mkDerivation rec {
-  name = "speech_tools-${version}";
-  version = "2.1";
+  name = "speech_tools-${version}.0";
+  version = "2.5";
 
   src = fetchurl {
     url = "http://www.festvox.org/packed/festival/${version}/${name}-release.tar.gz";
-    sha256 = "1s9bkfgdgyas8v2cr7x3dg0ck1xf9mn1q6a73gwy524sjb6nfqgz";
+    sha256 = "1k2xh13miyv48gh06rgsq2vj25xwj7z6vwq9ilsn8i7ig3nrgzg4";
   };
 
   buildInputs = [ alsaLib ncurses ];
@@ -14,6 +14,10 @@ stdenv.mkDerivation rec {
   preConfigure = ''
     sed -e s@/usr/bin/@@g -i $( grep -rl '/usr/bin/' . )
     sed -re 's@/bin/(rm|printf|uname)@\1@g' -i $( grep -rl '/bin/' . )
+
+    # c99 makes isnan valid for float and double
+    substituteInPlace include/EST_math.h \
+      --replace '__isnanf(X)' 'isnan(X)'
   '';
 
   installPhase = ''
@@ -26,16 +30,17 @@ stdenv.mkDerivation rec {
     done
   '';
 
+  doCheck = true;
+
+  checkTarget = "test";
+
   meta = with stdenv.lib; {
-    broken = true;
     description = "Text-to-speech engine";
-    maintainers = with maintainers;
-    [
-      raskin
-    ];
+    maintainers = with maintainers; [ raskin ];
     platforms = platforms.linux;
     license = licenses.free;
   };
+
   passthru = {
     updateInfo = {
       downloadPage = "http://www.festvox.org/packed/festival/";

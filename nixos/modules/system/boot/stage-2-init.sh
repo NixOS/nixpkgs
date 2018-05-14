@@ -43,7 +43,7 @@ if [ ! -e /proc/1 ]; then
         local options="$3"
         local fsType="$4"
 
-        mkdir -m 0755 -p "$mountPoint"
+        install -m 0755 -d "$mountPoint"
         mount -n -t "$fsType" -o "$options" "$device" "$mountPoint"
     }
     source @earlyMountScript@
@@ -71,7 +71,7 @@ fi
 
 
 # Provide a /etc/mtab.
-mkdir -m 0755 -p /etc
+install -m 0755 -d /etc
 test -e /etc/fstab || touch /etc/fstab # to shut up mount
 rm -f /etc/mtab* # not that we care about stale locks
 ln -s /proc/mounts /etc/mtab
@@ -79,8 +79,8 @@ ln -s /proc/mounts /etc/mtab
 
 # More special file systems, initialise required directories.
 [ -e /proc/bus/usb ] && mount -t usbfs usbfs /proc/bus/usb # UML doesn't have USB by default
-mkdir -m 01777 -p /tmp
-mkdir -m 0755 -p /var/{log,lib,db} /nix/var /etc/nixos/ \
+install -m 01777 -d /tmp
+install -m 0755 -d /var/{log,lib,db} /nix/var /etc/nixos/ \
     /run/lock /home /bin # for the /bin/sh symlink
 
 

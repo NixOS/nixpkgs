@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, lib, xlibs }:
+{ stdenv, fetchurl, lib, xorg }:
 
 let
   name = "scilab-bin-${ver}";
@@ -33,12 +33,12 @@ stdenv.mkDerivation rec {
 
   libPath = lib.makeLibraryPath [
     stdenv.cc.cc
-    xlibs.libX11
-    xlibs.libXext
-    xlibs.libXi
-    xlibs.libXrender
-    xlibs.libXtst
-    xlibs.libXxf86vm
+    xorg.libX11
+    xorg.libXext
+    xorg.libXi
+    xorg.libXrender
+    xorg.libXtst
+    xorg.libXxf86vm
   ];
 
   phases = [ "unpackPhase" "fixupPhase" "installPhase" ];

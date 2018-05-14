@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
          for computational linguistics and natural language processing.
       '';
 
-    homepage = http://wordnet.princeton.edu/;
+    homepage = https://wordnet.princeton.edu/;
 
     maintainers = [ ];
     platforms = with stdenv.lib.platforms; linux ++ darwin;

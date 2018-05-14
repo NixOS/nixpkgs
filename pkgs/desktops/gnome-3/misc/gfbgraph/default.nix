@@ -1,5 +1,5 @@
 { stdenv, intltool, fetchurl, pkgconfig, glib
-, gnome3, libsoup, json-glib }:
+, gnome3, libsoup, json-glib, gobjectIntrospection }:
 
 let
   pname = "gfbgraph";
@@ -7,14 +7,18 @@ let
 in stdenv.mkDerivation rec {
   name = "${pname}-${version}";
 
+  outputs = [ "out" "dev" "devdoc" ];
+
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${gnome3.versionBranch version}/${name}.tar.xz";
     sha256 = "1dp0v8ia35fxs9yhnqpxj3ir5lh018jlbiwifjfn8ayy7h47j4fs";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkgconfig gobjectIntrospection ];
   buildInputs = [ glib gnome3.gnome-online-accounts ];
   propagatedBuildInputs = [ libsoup json-glib gnome3.rest ];
+
+  configureFlags = [ "--enable-introspection" ];
 
   enableParallelBuilding = true;
 

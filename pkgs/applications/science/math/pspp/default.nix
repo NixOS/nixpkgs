@@ -35,6 +35,6 @@ stdenv.mkDerivation rec {
       more traditional syntax commands.
     '';
 
-    platforms = stdenv.lib.platforms.linux;
+    platforms = stdenv.lib.platforms.unix;
   };
 }

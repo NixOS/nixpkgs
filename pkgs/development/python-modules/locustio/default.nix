@@ -26,7 +26,7 @@ buildPythonPackage rec {
   buildInputs = [ mock unittest2 ];
 
   meta = {
-    homepage = http://locust.io/;
+    homepage = https://locust.io/;
     description = "A load testing tool";
   };
 }
