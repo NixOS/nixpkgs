@@ -96,7 +96,7 @@ let
       "Description" "DHCP" "DHCPServer" "IPForward" "IPMasquerade" "IPv4LL" "IPv4LLRoute"
       "LLMNR" "MulticastDNS" "Domains" "Bridge" "Bond" "IPv6PrivacyExtensions"
     ])
-    (assertValueOneOf "DHCP" ["both" "none" "v4" "v6"])
+    (assertValueOneOf "DHCP" ["yes" "no" "ipv4" "ipv6"])
     (assertValueOneOf "DHCPServer" boolValues)
     (assertValueOneOf "IPForward" ["yes" "no" "ipv4" "ipv6"])
     (assertValueOneOf "IPMasquerade" boolValues)
