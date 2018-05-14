@@ -10127,10 +10127,10 @@ let self = _self // overrides; _self = with self; {
     };
   };
   Mojolicious = buildPerlPackage rec {
-    name = "Mojolicious-7.71";
+    name = "Mojolicious-7.77";
     src = fetchurl {
       url = "mirror://cpan/authors/id/S/SR/SRI/${name}.tar.gz";
-      sha256 = "25d8ab46fd7c340abcbbe740f690c197df6ff40a9c3dddf907629211bf3ad905";
+      sha256 = "b6416de94938ee621e355c36fd837704dd7cf15846148dfbbfb82e8710af846b";
     };
     meta = {
       homepage = http://mojolicious.org;
