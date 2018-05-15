@@ -1,4 +1,4 @@
-{ mkDerivation, lib, fetchFromGitHub, cmake, python3, qtbase, qtquickcontrols, curaengine }:
+{ mkDerivation, lib, fetchFromGitHub, cmake, python3, qtbase, qtquickcontrols2, curaengine }:
 
 mkDerivation rec {
   name = "cura-${version}";
@@ -11,7 +11,7 @@ mkDerivation rec {
     sha256 = "0yaya0ww92qjm7g31q85m5f95nwdapldjx1kdf1ar4yzwh4r15rp";
   };
 
-  buildInputs = [ qtbase qtquickcontrols ];
+  buildInputs = [ qtbase qtquickcontrols2 ];
   propagatedBuildInputs = with python3.pkgs; [ uranium zeroconf pyserial numpy-stl ];
   nativeBuildInputs = [ cmake python3.pkgs.wrapPython ];
 
