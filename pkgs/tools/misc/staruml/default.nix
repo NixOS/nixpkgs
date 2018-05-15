@@ -1,11 +1,12 @@
 { stdenv, fetchurl, makeWrapper
 , dpkg, patchelf
-, gtk2, glib, gdk_pixbuf, alsaLib, nss, nspr, GConf, cups, libgcrypt, dbus, systemd }:
+, gtk2, glib, gdk_pixbuf, alsaLib, nss, nspr, GConf, cups, libgcrypt, dbus, systemd
+, libXdamage }:
 
 let
   inherit (stdenv) lib;
   LD_LIBRARY_PATH = lib.makeLibraryPath
-    [ glib gtk2 gdk_pixbuf alsaLib nss nspr GConf cups libgcrypt dbus ];
+    [ glib gtk2 gdk_pixbuf alsaLib nss nspr GConf cups libgcrypt dbus libXdamage ];
 in
 stdenv.mkDerivation rec {
   version = "2.8.1";
@@ -34,17 +35,17 @@ stdenv.mkDerivation rec {
     mkdir $out
     mv opt/staruml $out/bin
 
-    ${patchelf}/bin/patchelf \
-      --interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
-      $out/bin/StarUML
-
     mkdir -p $out/lib
-
     ln -s ${stdenv.cc.cc.lib}/lib/libstdc++.so.6 $out/lib/
     ln -s ${systemd.lib}/lib/libudev.so.1 $out/lib/libudev.so.0
 
-    wrapProgram $out/bin/StarUML \
-      --prefix LD_LIBRARY_PATH : $out/lib:${LD_LIBRARY_PATH}
+    for binary in StarUML Brackets-node; do
+      ${patchelf}/bin/patchelf \
+        --interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
+        $out/bin/$binary
+      wrapProgram $out/bin/$binary \
+        --prefix LD_LIBRARY_PATH : $out/lib:${LD_LIBRARY_PATH}
+    done
   '';
 
   meta = with stdenv.lib; {
