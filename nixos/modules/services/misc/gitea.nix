@@ -164,6 +164,30 @@ in
         };
       };
 
+      dump = {
+        enable = mkOption {
+          type = types.bool;
+          default = false;
+          description = ''
+            Enable a timer that runs gitea dump to generate backup-files of the
+            current gitea database and repositories.
+          '';
+        };
+
+        interval = mkOption {
+          type = types.str;
+          default = "04:31";
+          example = "hourly";
+          description = ''
+            Run a gitea dump at this interval. Runs by default at 04:31 every day.
+
+            The format is described in
+            <citerefentry><refentrytitle>systemd.time</refentrytitle>
+            <manvolnum>7</manvolnum></citerefentry>.
+          '';
+        };
+      };
+
       appName = mkOption {
         type = types.str;
         default = "gitea: Gitea Service";
@@ -326,5 +350,32 @@ in
         name = "gitea-database-password";
         text = cfg.database.password;
       })));
+
+    systemd.services.gitea-dump = {
+       description = "gitea dump";
+       after = [ "gitea.service" ];
+       wantedBy = [ "default.target" ];
+       path = [ gitea.bin ];
+
+       environment = {
+         USER = cfg.user;
+         HOME = cfg.stateDir;
+         GITEA_WORK_DIR = cfg.stateDir;
+       };
+
+       serviceConfig = {
+         Type = "oneshot";
+         User = cfg.user;
+         ExecStart = "${gitea.bin}/bin/gitea dump";
+         WorkingDirectory = cfg.stateDir;
+       };
+    };
+
+    systemd.timers.gitea-dump = {
+      description = "Update timer for gitea-dump";
+      partOf = [ "gitea-dump.service" ];
+      wantedBy = [ "timers.target" ];
+      timerConfig.OnCalendar = cfg.dump.interval;
+    };
   };
 }
