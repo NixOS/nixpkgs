@@ -26,7 +26,7 @@ let
   isPy35 = python.pythonVersion == "3.5";
   isPy36 = python.pythonVersion == "3.6";
   isPy37 = python.pythonVersion == "3.7";
-  isPyPy = python.executable == "pypy";
+  isPyPy = strings.substring 0 4 python.executable == "pypy";
   isPy3k = strings.substring 0 1 python.pythonVersion == "3";
 
   callPackage = pkgs.newScope self;
