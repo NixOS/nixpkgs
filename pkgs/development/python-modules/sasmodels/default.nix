@@ -1,19 +1,25 @@
-{lib, fetchgit, buildPythonPackage, pytest, numpy, scipy, matplotlib, docutils}:
+{ lib, fetchFromGitHub, buildPythonPackage, pytest, numpy, scipy, matplotlib, docutils
+, pyopencl, opencl-headers
+}:
 
 buildPythonPackage rec {
-  pname = "sasmodels";
-  version = "0.96";
+  pname = "sasmodels-unstable";
+  version = "2018-04-27";
 
-  buildInputs = [pytest];
-  propagatedBuildInputs = [docutils matplotlib numpy scipy];
-
-  preCheck = ''export HOME=$(mktemp -d)'';
-
-  src = fetchgit {
-    url = "https://github.com/SasView/sasmodels.git";
-    rev = "v${version}";
-    sha256 = "11qaaqdc23qzb75zs48fkypksmcb332vl0pkjqr5bijxxymgm7nw";
+  src = fetchFromGitHub {
+    owner = "SasView";
+    repo = "sasmodels";
+    rev = "33969b656596e8b6cc8ce934cd1f8062f7b11cf2";
+    sha256 = "00rvhafg08qvx0k9mzn1ppdkc9i5yfn2gr3hidrf416srf8zgb85";
   };
+
+  buildInputs = [ opencl-headers ];
+  checkInputs = [ pytest ];
+  propagatedBuildInputs = [ docutils matplotlib numpy scipy pyopencl ];
+
+  checkPhase = ''
+    HOME=$(mktemp -d) py.test -c ./pytest.ini
+  '';
 
   meta = {
     description = "Library of small angle scattering models";

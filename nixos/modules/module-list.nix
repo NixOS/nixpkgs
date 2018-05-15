@@ -9,6 +9,7 @@
   ./config/fonts/ghostscript.nix
   ./config/gnu.nix
   ./config/i18n.nix
+  ./config/iproute2.nix
   ./config/krb5/default.nix
   ./config/ldap.nix
   ./config/networking.nix
@@ -167,14 +168,13 @@
   ./services/backup/mysql-backup.nix
   ./services/backup/postgresql-backup.nix
   ./services/backup/restic.nix
+  ./services/backup/restic-rest-server.nix
   ./services/backup/rsnapshot.nix
   ./services/backup/tarsnap.nix
   ./services/backup/znapzend.nix
-  ./services/cluster/fleet.nix
   ./services/cluster/kubernetes/default.nix
   ./services/cluster/kubernetes/dns.nix
   ./services/cluster/kubernetes/dashboard.nix
-  ./services/cluster/panamax.nix
   ./services/computing/boinc/client.nix
   ./services/computing/torque/server.nix
   ./services/computing/torque/mom.nix
@@ -215,6 +215,7 @@
   ./services/desktops/accountsservice.nix
   ./services/desktops/dleyna-renderer.nix
   ./services/desktops/dleyna-server.nix
+  ./services/desktops/flatpak.nix
   ./services/desktops/geoclue2.nix
   ./services/desktops/pipewire.nix
   ./services/desktops/gnome3/at-spi2-core.nix
@@ -514,6 +515,7 @@
   ./services/networking/murmur.nix
   ./services/networking/namecoind.nix
   ./services/networking/nat.nix
+  ./services/networking/ndppd.nix
   ./services/networking/networkmanager.nix
   ./services/networking/nftables.nix
   ./services/networking/ngircd.nix
@@ -649,6 +651,7 @@
   ./services/web-apps/tt-rss.nix
   ./services/web-apps/selfoss.nix
   ./services/web-apps/quassel-webserver.nix
+  ./services/web-apps/youtrack.nix
   ./services/web-servers/apache-httpd/default.nix
   ./services/web-servers/caddy.nix
   ./services/web-servers/fcgiwrap.nix
@@ -780,6 +783,7 @@
   ./virtualisation/hyperv-guest.nix
   ./virtualisation/openvswitch.nix
   ./virtualisation/parallels-guest.nix
+  ./virtualisation/qemu-guest-agent.nix
   ./virtualisation/rkt.nix
   ./virtualisation/virtualbox-guest.nix
   ./virtualisation/virtualbox-host.nix

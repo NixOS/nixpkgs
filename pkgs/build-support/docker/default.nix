@@ -32,28 +32,42 @@ rec {
     inherit pkgs buildImage pullImage shadowSetup buildImageWithNixDb;
   };
 
-  pullImage =
-    let
-      fixName = name: builtins.replaceStrings ["/" ":"] ["-" "-"] name;
-    in {
-      imageName,
+  pullImage = let
+    fixName = name: builtins.replaceStrings ["/" ":"] ["-" "-"] name;
+  in
+    { imageName
       # To find the digest of an image, you can use skopeo:
       # skopeo inspect docker://docker.io/nixos/nix:1.11 | jq -r '.Digest'
       # sha256:20d9485b25ecfd89204e843a962c1bd70e9cc6858d65d7f5fadc340246e2116b
-      imageDigest,
-      sha256,
+    , imageDigest
+    , sha256
       # This used to set a tag to the pulled image
-      finalImageTag ? "latest",
-      name ? (fixName "docker-image-${imageName}-${finalImageTag}.tar") }:
-      runCommand name {
-        impureEnvVars=pkgs.stdenv.lib.fetchers.proxyImpureEnvVars;
-        outputHashMode="flat";
-        outputHashAlgo="sha256";
-        outputHash=sha256;
-      }
-      ''
-        ${pkgs.skopeo}/bin/skopeo copy docker://${imageName}@${imageDigest} docker-archive://$out:${imageName}:${finalImageTag}
-      '';
+    , finalImageTag ? "latest"
+    , name ? fixName "docker-image-${imageName}-${finalImageTag}.tar"
+    }:
+
+    runCommand name {
+      impureEnvVars = pkgs.stdenv.lib.fetchers.proxyImpureEnvVars;
+      outputHashMode = "flat";
+      outputHashAlgo = "sha256";
+      outputHash = sha256;
+
+      # One of the dependencies of Skopeo uses a hardcoded /var/tmp for storing
+      # big image files, which is not available in sandboxed builds.
+      nativeBuildInputs = lib.singleton (pkgs.skopeo.overrideAttrs (drv: {
+        postPatch = (drv.postPatch or "") + ''
+          sed -i -e 's!/var/tmp!/tmp!g' \
+            vendor/github.com/containers/image/storage/storage_image.go \
+            vendor/github.com/containers/image/internal/tmpdir/tmpdir.go
+        '';
+      }));
+      SSL_CERT_FILE = "${pkgs.cacert.out}/etc/ssl/certs/ca-bundle.crt";
+
+      sourceURL = "docker://${imageName}@${imageDigest}";
+      destNameTag = "${imageName}:${finalImageTag}";
+    } ''
+      skopeo copy "$sourceURL" "docker-archive://$out:$destNameTag"
+    '';
 
   # We need to sum layer.tar, not a directory, hence tarsum instead of nix-hash.
   # And we cannot untar it, because then we cannot preserve permissions ecc.

@@ -1,13 +1,9 @@
-# Handbrake normally uses its own copies of the libraries it uses, for better
-# control over library patches.
+# Upstream distributes HandBrake with bundle of according versions of libraries and patches to them.
 #
-# This derivation patches HB so it doesn't do that. The relevant patches
-# are added to the Nix packages and proposed upstream instead. In several cases
-# upstream already incorporated these patches.
-# This has the benefits of providing improvements to other packages,
-# making licenses more clear and reducing compile time/install size.
+# Derivation patches HandBrake to use our closure.
 #
-# Only tested on Linux
+
+# TODO: Release 1.2.0 would switch LibAV to FFmpeg.
 
 { stdenv, lib, fetchurl,
   python2, pkgconfig, yasm, harfbuzz, zlib,
@@ -34,7 +30,7 @@ stdenv.mkDerivation rec {
   };
 
   patched_libav_12 = libav_12.overrideAttrs (super: {
-    # 2018-04-26: HandBrake compilation (1.1.0) requires a patch of LibAV (12.3) from HandBrake team. This patch not went LibAV upstream.
+    # NOTE: 2018-04-26: HandBrake compilation (1.1.0) requires a patch of LibAV (12.3) from HandBrake team. This patch not went LibAV upstream.
     patches = (super.patches or []) ++ [(
       fetchurl {
         url = ''https://raw.githubusercontent.com/HandBrake/HandBrake/9e1f245708a157231c427c0ef9b91729d59a30e1/contrib/ffmpeg/A21-mp4-sdtp.patch'';
@@ -107,7 +103,6 @@ stdenv.mkDerivation rec {
     '';
     license = licenses.gpl2;
     maintainers = with maintainers; [ Anton-Latukha wmertens ];
-    # Not tested on anything else
     platforms = platforms.linux;
   };
 }

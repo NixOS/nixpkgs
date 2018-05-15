@@ -449,6 +449,10 @@ in
           <varname>item</varname>, and <varname>value</varname>
           attribute.  The syntax and semantics of these attributes
           must be that described in the limits.conf(5) man page.
+
+          Note that these limits do not apply to systemd services,
+          whose limits can be changed via <option>systemd.extraConfig</option>
+          instead.
        '';
     };
 

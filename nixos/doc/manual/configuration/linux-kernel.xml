@@ -50,9 +50,9 @@ nixpkgs.config.packageOverrides = pkgs:
 <xref linkend="opt-boot.kernelModules"/> = [ "fuse" "kvm-intel" "coretemp" ];
 </programlisting>
   If the module is required early during the boot (e.g. to mount the root file
-  system), you can use <xref linkend="opt-boot.initrd.extraKernelModules"/>:
+  system), you can use <xref linkend="opt-boot.initrd.kernelModules"/>:
 <programlisting>
-<xref linkend="opt-boot.initrd.extraKernelModules"/> = [ "cifs" ];
+<xref linkend="opt-boot.initrd.kernelModules"/> = [ "cifs" ];
 </programlisting>
   This causes the specified modules and their dependencies to be added to the
   initial ramdisk.

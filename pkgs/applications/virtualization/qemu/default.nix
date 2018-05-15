@@ -133,7 +133,7 @@ stdenv.mkDerivation rec {
   postInstall =
     if stdenv.isx86_64       then ''makeWrapper $out/bin/qemu-system-x86_64  $out/bin/qemu-kvm --add-flags "\$([ -e /dev/kvm ] && echo -enable-kvm)"''
     else if stdenv.isi686    then ''makeWrapper $out/bin/qemu-system-i386    $out/bin/qemu-kvm --add-flags "\$([ -e /dev/kvm ] && echo -enable-kvm)"''
-    else if stdenv.isAarch32     then ''makeWrapper $out/bin/qemu-system-arm     $out/bin/qemu-kvm --add-flags "\$([ -e /dev/kvm ] && echo -enable-kvm)"''
+    else if stdenv.isAarch32 then ''makeWrapper $out/bin/qemu-system-arm     $out/bin/qemu-kvm --add-flags "\$([ -e /dev/kvm ] && echo -enable-kvm)"''
     else if stdenv.isAarch64 then ''makeWrapper $out/bin/qemu-system-aarch64 $out/bin/qemu-kvm --add-flags "\$([ -e /dev/kvm ] && echo -enable-kvm)"''
     else "";
 

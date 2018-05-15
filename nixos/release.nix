@@ -198,6 +198,7 @@ in rec {
         modules = singleton ({ config, pkgs, ... }:
           { fileSystems."/".device  = mkDefault "/dev/sda1";
             boot.loader.grub.device = mkDefault "/dev/sda";
+            system.nixos.stateVersion = mkDefault "18.03";
           });
       }).config.system.build.toplevel;
       preferLocalBuild = true;
@@ -269,6 +270,7 @@ in rec {
   tests.containers-macvlans = callTest tests/containers-macvlans.nix {};
   tests.couchdb = callTest tests/couchdb.nix {};
   tests.deluge = callTest tests/deluge.nix {};
+  tests.dhparams = callTest tests/dhparams.nix {};
   tests.docker = callTestOnMatchingSystems ["x86_64-linux"] tests/docker.nix {};
   tests.docker-tools = callTestOnMatchingSystems ["x86_64-linux"] tests/docker-tools.nix {};
   tests.docker-tools-overlay = callTestOnMatchingSystems ["x86_64-linux"] tests/docker-tools-overlay.nix {};
@@ -283,8 +285,8 @@ in rec {
   tests.env = callTest tests/env.nix {};
   tests.ferm = callTest tests/ferm.nix {};
   tests.firefox = callTest tests/firefox.nix {};
+  tests.flatpak = callTest tests/flatpak.nix {};
   tests.firewall = callTest tests/firewall.nix {};
-  tests.fleet = callTestOnMatchingSystems ["x86_64-linux"] tests/fleet.nix {};
   tests.fwupd = callTest tests/fwupd.nix {};
   #tests.gitlab = callTest tests/gitlab.nix {};
   tests.gitolite = callTest tests/gitolite.nix {};
@@ -313,10 +315,7 @@ in rec {
   tests.plotinus = callTest tests/plotinus.nix {};
   tests.keymap = callSubTests tests/keymap.nix {};
   tests.initrdNetwork = callTest tests/initrd-network.nix {};
-  tests.kafka_0_9 = callTest tests/kafka_0_9.nix {};
-  tests.kafka_0_10 = callTest tests/kafka_0_10.nix {};
-  tests.kafka_0_11 = callTest tests/kafka_0_11.nix {};
-  tests.kafka_1_0 = callTest tests/kafka_1_0.nix {};
+  tests.kafka = callSubTests tests/kafka.nix {};
   tests.kernel-copperhead = callTest tests/kernel-copperhead.nix {};
   tests.kernel-latest = callTest tests/kernel-latest.nix {};
   tests.kernel-lts = callTest tests/kernel-lts.nix {};
@@ -348,6 +347,7 @@ in rec {
   tests.networking.scripted = callSubTests tests/networking.nix { networkd = false; };
   # TODO: put in networking.nix after the test becomes more complete
   tests.networkingProxy = callTest tests/networking-proxy.nix {};
+  tests.nexus = callTest tests/nexus.nix { };
   tests.nfs3 = callTest tests/nfs.nix { version = 3; };
   tests.nfs4 = callTest tests/nfs.nix { version = 4; };
   tests.nginx = callTest tests/nginx.nix { };
@@ -360,7 +360,6 @@ in rec {
   tests.openldap = callTest tests/openldap.nix {};
   tests.owncloud = callTest tests/owncloud.nix {};
   tests.pam-oath-login = callTest tests/pam-oath-login.nix {};
-  #tests.panamax = callTestOnMatchingSystems ["x86_64-linux"] tests/panamax.nix {};
   tests.peerflix = callTest tests/peerflix.nix {};
   tests.php-pcre = callTest tests/php-pcre.nix {};
   tests.postgresql = callSubTests tests/postgresql.nix {};
@@ -399,6 +398,7 @@ in rec {
   tests.virtualbox = callSubTestsOnMatchingSystems ["x86_64-linux"] tests/virtualbox.nix {};
   tests.wordpress = callTest tests/wordpress.nix {};
   tests.xautolock = callTest tests/xautolock.nix {};
+  tests.xdg-desktop-portal = callTest tests/xdg-desktop-portal.nix {};
   tests.xfce = callTest tests/xfce.nix {};
   tests.xmonad = callTest tests/xmonad.nix {};
   tests.xrdp = callTest tests/xrdp.nix {};

@@ -3,6 +3,9 @@ with import ./parse.nix { inherit lib; };
 with lib.attrsets;
 with lib.lists;
 
+let abis_ = abis; in
+let abis = lib.mapAttrs (_: abi: builtins.removeAttrs abi [ "assertions" ]) abis_; in
+
 rec {
   patterns = rec {
     isi686         = { cpu = cpuTypes.i686; };
@@ -38,6 +41,7 @@ rec {
 
     isAndroid      = [ { abi = abis.android; } { abi = abis.androideabi; } ];
     isMusl         = with abis; map (a: { abi = a; }) [ musl musleabi musleabihf ];
+    isUClibc       = with abis; map (a: { abi = a; }) [ uclibc uclibceabi uclibceabihf ];
 
     isEfi          = map (family: { cpu.family = family; })
                        [ "x86" "arm" "aarch64" ];

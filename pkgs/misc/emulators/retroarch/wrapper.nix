@@ -21,6 +21,10 @@ stdenv.mkDerivation {
 
     ln -s -t $out ${retroarch}/share
 
+    if [ -d ${retroarch}/Applications ]; then
+      ln -s -t $out ${retroarch}/Applications
+    fi
+
     makeWrapper ${retroarch}/bin/retroarch $out/bin/retroarch \
       --suffix-each LD_LIBRARY_PATH ':' "$cores" \
       --add-flags "-L $out/lib/ --menu" \

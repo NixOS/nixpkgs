@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "blobfuse-${version}";
-  version = "1.0.1-RC-Preview";
+  version = "1.0.2";
 
   src = fetchFromGitHub {
     owner  = "Azure";
     repo   = "azure-storage-fuse";
     rev    = "v${version}";
-    sha256 = "143rxgfmprir4a7frrv8llkv61jxzq50w2v8wn32vx6gl6vci1zs";
+    sha256 = "1qh04z1fsj1l6l12sz9yl2sy9hwlrnzac54hwrr7wvsgv90n9gbp";
   };
 
   buildInputs = [ curl gnutls libgcrypt libuuid fuse ];

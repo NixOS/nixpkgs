@@ -1,11 +1,12 @@
 { lib, stdenv, fetchurl, fetchFromGitHub, perl, curl, bzip2, sqlite, openssl ? null, xz
 , pkgconfig, boehmgc, perlPackages, libsodium, aws-sdk-cpp, brotli, boost
 , autoreconfHook, autoconf-archive, bison, flex, libxml2, libxslt, docbook5, docbook5_xsl
-, libseccomp, busybox-sandbox-shell
+, busybox-sandbox-shell
 , hostPlatform, buildPlatform
 , storeDir ? "/nix/store"
 , stateDir ? "/nix/var"
 , confDir ? "/etc"
+, withLibseccomp ? libseccomp.meta.available, libseccomp
 }:
 
 let
@@ -30,7 +31,7 @@ let
     buildInputs = [ curl openssl sqlite xz bzip2 ]
       ++ lib.optional (stdenv.isLinux || stdenv.isDarwin) libsodium
       ++ lib.optionals is20 [ brotli ] # Since 1.12
-      ++ lib.meta.enableIfAvailable libseccomp
+      ++ lib.optional withLibseccomp libseccomp
       ++ lib.optional ((stdenv.isLinux || stdenv.isDarwin) && is20)
           (aws-sdk-cpp.override {
             apis = ["s3"];

@@ -217,10 +217,7 @@ let
 
     easy-format = callPackage ../development/ocaml-modules/easy-format { };
 
-    eliom = callPackage ../development/ocaml-modules/eliom {
-      lwt = lwt2;
-      js_of_ocaml = js_of_ocaml_2;
-    };
+    eliom = callPackage ../development/ocaml-modules/eliom { };
 
     enumerate = callPackage ../development/ocaml-modules/enumerate { };
 
@@ -504,7 +501,7 @@ let
 
     ocplib-simplex = callPackage ../development/ocaml-modules/ocplib-simplex { };
 
-    ocsigen_server = callPackage ../development/ocaml-modules/ocsigen-server { lwt = lwt2; };
+    ocsigen_server = callPackage ../development/ocaml-modules/ocsigen-server { };
 
     ocsigen-start = callPackage ../development/ocaml-modules/ocsigen-start { };
 
@@ -1046,5 +1043,10 @@ in rec
 
   ocamlPackages_latest = ocamlPackages_4_06;
 
-  ocamlPackages = ocamlPackages_4_05;
+  ocamlPackages =
+    # OCaml 4.05 is broken on aarch64
+    if system == "aarch64-linux" then
+      ocamlPackages_4_06
+    else
+      ocamlPackages_4_05;
 }

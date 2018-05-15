@@ -17,6 +17,7 @@
     pkgs.ddrescue
     pkgs.ccrypt
     pkgs.cryptsetup # needed for dm-crypt volumes
+    pkgs.mkpasswd # for generating password files
 
     # Some networking tools.
     pkgs.fuse

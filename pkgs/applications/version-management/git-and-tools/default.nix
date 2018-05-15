@@ -89,6 +89,8 @@ rec {
 
   git-secret = callPackage ./git-secret { };
 
+  git-secrets = callPackage ./git-secrets { };
+
   git-stree = callPackage ./git-stree { };
 
   git2cl = callPackage ./git2cl { };

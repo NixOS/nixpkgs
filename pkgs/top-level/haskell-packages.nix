@@ -159,7 +159,7 @@ in rec {
         (name: ! builtins.elem name integerSimpleExcludes)
         (pkgs.lib.attrNames packages);
     in pkgs.lib.genAttrs integerSimpleGhcNames (name: packages."${name}".override {
-      ghc = compiler.integer-simple."${name}";
+      ghc = bh.compiler.integer-simple."${name}";
       overrides = _self : _super : {
         integer-simple = null;
         integer-gmp = null;

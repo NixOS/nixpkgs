@@ -2,7 +2,7 @@
 # Do not edit!
 
 {
-  version = "0.68.1";
+  version = "0.69.1";
   components = {
     "abode" = ps: with ps; [  ];
     "ads" = ps: with ps; [  ];
@@ -116,7 +116,7 @@
     "homematic" = ps: with ps; [ pyhomematic ];
     "homematicip_cloud" = ps: with ps; [  ];
     "http" = ps: with ps; [ aiohttp-cors ];
-    "hue" = ps: with ps; [  ];
+    "hue" = ps: with ps; [ aiohue ];
     "ifttt" = ps: with ps; [  ];
     "ihc" = ps: with ps; [  ];
     "image_processing.dlib_face_detect" = ps: with ps; [ face_recognition ];
@@ -165,6 +165,7 @@
     "lock.sesame" = ps: with ps; [  ];
     "lutron" = ps: with ps; [  ];
     "lutron_caseta" = ps: with ps; [  ];
+    "matrix" = ps: with ps; [ matrix-client ];
     "maxcube" = ps: with ps; [  ];
     "media_extractor" = ps: with ps; [  ];
     "media_player.anthemav" = ps: with ps; [  ];
@@ -239,7 +240,6 @@
     "notify.lametric" = ps: with ps; [  ];
     "notify.mailgun" = ps: with ps; [  ];
     "notify.mastodon" = ps: with ps; [  ];
-    "notify.matrix" = ps: with ps; [ matrix-client ];
     "notify.message_bird" = ps: with ps; [  ];
     "notify.pushbullet" = ps: with ps; [ pushbullet ];
     "notify.pushetta" = ps: with ps; [  ];
@@ -256,11 +256,12 @@
     "nuheat" = ps: with ps; [  ];
     "nuimo_controller" = ps: with ps; [  ];
     "pilight" = ps: with ps; [  ];
-    "prometheus" = ps: with ps; [  ];
+    "prometheus" = ps: with ps; [ prometheus_client ];
     "python_script" = ps: with ps; [  ];
     "qwikswitch" = ps: with ps; [  ];
     "rainbird" = ps: with ps; [  ];
     "raincloud" = ps: with ps; [  ];
+    "rainmachine" = ps: with ps; [  ];
     "raspihats" = ps: with ps; [  ];
     "recorder" = ps: with ps; [ sqlalchemy ];
     "remember_the_milk" = ps: with ps; [ httplib2 ];
@@ -285,7 +286,7 @@
     "sensor.bme680" = ps: with ps; [  ];
     "sensor.broadlink" = ps: with ps; [  ];
     "sensor.buienradar" = ps: with ps; [  ];
-    "sensor.coinmarketcap" = ps: with ps; [  ];
+    "sensor.coinmarketcap" = ps: with ps; [ coinmarketcap ];
     "sensor.cpuspeed" = ps: with ps; [  ];
     "sensor.crimereports" = ps: with ps; [  ];
     "sensor.cups" = ps: with ps; [ pycups ];
@@ -299,6 +300,7 @@
     "sensor.dsmr" = ps: with ps; [  ];
     "sensor.dweet" = ps: with ps; [  ];
     "sensor.eddystone_temperature" = ps: with ps; [ construct ];
+    "sensor.eliqonline" = ps: with ps; [  ];
     "sensor.envirophat" = ps: with ps; [  ];
     "sensor.etherscan" = ps: with ps; [  ];
     "sensor.fastdotcom" = ps: with ps; [  ];
@@ -333,18 +335,20 @@
     "sensor.mfi" = ps: with ps; [  ];
     "sensor.mhz19" = ps: with ps; [  ];
     "sensor.miflora" = ps: with ps; [  ];
+    "sensor.mitemp_bt" = ps: with ps; [  ];
     "sensor.modem_callerid" = ps: with ps; [  ];
     "sensor.mopar" = ps: with ps; [  ];
-    "sensor.mvglive" = ps: with ps; [  ];
+    "sensor.mvglive" = ps: with ps; [ PyMVGLive ];
     "sensor.nederlandse_spoorwegen" = ps: with ps; [  ];
     "sensor.neurio_energy" = ps: with ps; [  ];
     "sensor.nut" = ps: with ps; [  ];
     "sensor.openevse" = ps: with ps; [  ];
-    "sensor.openweathermap" = ps: with ps; [  ];
+    "sensor.openweathermap" = ps: with ps; [ pyowm ];
     "sensor.otp" = ps: with ps; [  ];
     "sensor.plex" = ps: with ps; [  ];
     "sensor.pocketcasts" = ps: with ps; [  ];
     "sensor.pollen" = ps: with ps; [  ];
+    "sensor.postnl" = ps: with ps; [  ];
     "sensor.pushbullet" = ps: with ps; [ pushbullet ];
     "sensor.qnap" = ps: with ps; [  ];
     "sensor.ripple" = ps: with ps; [  ];
@@ -360,6 +364,7 @@
     "sensor.sma" = ps: with ps; [  ];
     "sensor.snmp" = ps: with ps; [ pysnmp ];
     "sensor.sochain" = ps: with ps; [  ];
+    "sensor.socialblade" = ps: with ps; [  ];
     "sensor.speedtest" = ps: with ps; [  ];
     "sensor.spotcrime" = ps: with ps; [  ];
     "sensor.sql" = ps: with ps; [ sqlalchemy ];
@@ -412,7 +417,6 @@
     "switch.netio" = ps: with ps; [  ];
     "switch.orvibo" = ps: with ps; [  ];
     "switch.rachio" = ps: with ps; [  ];
-    "switch.rainmachine" = ps: with ps; [  ];
     "switch.rpi_rf" = ps: with ps; [  ];
     "switch.snmp" = ps: with ps; [ pysnmp ];
     "switch.thinkingcleaner" = ps: with ps; [  ];
@@ -453,7 +457,7 @@
     "weather.buienradar" = ps: with ps; [  ];
     "weather.darksky" = ps: with ps; [  ];
     "weather.metoffice" = ps: with ps; [  ];
-    "weather.openweathermap" = ps: with ps; [  ];
+    "weather.openweathermap" = ps: with ps; [ pyowm ];
     "weather.yweather" = ps: with ps; [ yahooweather ];
     "wemo" = ps: with ps; [  ];
     "wink" = ps: with ps; [  ];

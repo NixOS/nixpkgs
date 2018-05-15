@@ -67,6 +67,7 @@ let
       akonadi = callPackage ./akonadi {};
       akonadi-calendar = callPackage ./akonadi-calendar.nix {};
       akonadi-contacts = callPackage ./akonadi-contacts.nix {};
+      akonadi-import-wizard = callPackage ./akonadi-import-wizard.nix {};
       akonadi-mime = callPackage ./akonadi-mime.nix {};
       akonadi-notes = callPackage ./akonadi-notes.nix {};
       akonadi-search = callPackage ./akonadi-search.nix {};
@@ -101,6 +102,7 @@ let
       kdenetwork-filesharing = callPackage ./kdenetwork-filesharing.nix {};
       kdenlive = callPackage ./kdenlive.nix {};
       kdepim-runtime = callPackage ./kdepim-runtime.nix {};
+      kdepim-addons = callPackage ./kdepim-addons.nix {};
       kdepim-apps-libs = callPackage ./kdepim-apps-libs {};
       kdf = callPackage ./kdf.nix {};
       kdialog = callPackage ./kdialog.nix {};
