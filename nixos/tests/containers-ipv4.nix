@@ -21,6 +21,7 @@ import ./make-test.nix ({ pkgs, ...} : {
               services.httpd.adminAddr = "foo@example.org";
               networking.firewall.allowedTCPPorts = [ 80 ];
               networking.firewall.allowPing = true;
+              system.nixos.stateVersion = "18.03";
             };
         };
 

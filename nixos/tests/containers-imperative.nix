@@ -17,7 +17,9 @@ import ./make-test.nix ({ pkgs, ...} : {
         emptyContainer = import ../lib/eval-config.nix {
           inherit (config.nixpkgs.localSystem) system;
           modules = lib.singleton {
-            containers.foo.config = {};
+            containers.foo.config = {
+              system.nixos.stateVersion = "18.03";
+            };
           };
         };
       in [ pkgs.stdenv emptyContainer.config.containers.foo.path pkgs.libxslt ];
