@@ -13868,23 +13868,13 @@ with pkgs;
 
     jom = callPackage ../os-specific/windows/jom { };
 
-    w32api = callPackage ../os-specific/windows/w32api {
-      gccCross = gccCrossStageStatic;
-      binutils = binutils;
-    };
+    w32api = callPackage ../os-specific/windows/w32api { };
 
-    w32api_headers = w32api.override {
-      onlyHeaders = true;
-    };
+    w32api_headers = callPackage ../os-specific/windows/w32api/headers { };
 
-    mingw_runtime = callPackage ../os-specific/windows/mingwrt {
-      gccCross = gccCrossMingw2;
-      binutils = binutils;
-    };
+    mingw_runtime = callPackage ../os-specific/windows/mingwrt { };
 
-    mingw_runtime_headers = mingw_runtime.override {
-      onlyHeaders = true;
-    };
+    mingw_runtime_headers = callPackage ../os-specific/windows/mingwrt/headers.nix { };
 
     mingw_headers1 = buildEnv {
       name = "mingw-headers-1";
