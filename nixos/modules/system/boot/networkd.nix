@@ -94,7 +94,7 @@ let
   checkNetwork = checkUnitConfig "Network" [
     (assertOnlyFields [
       "Description" "DHCP" "DHCPServer" "IPForward" "IPMasquerade" "IPv4LL" "IPv4LLRoute"
-      "LLMNR" "MulticastDNS" "Domains" "Bond" "IPv6PrivacyExtensions"
+      "LLMNR" "MulticastDNS" "Domains" "IPv6PrivacyExtensions"
       "IPv6AcceptRA" "LinkLocalAddressing"
     ])
     (assertValueOneOf "DHCP" ["yes" "no" "ipv4" "ipv6"])
@@ -474,6 +474,16 @@ let
       '';
     };
 
+    bond = mkOption {
+      default = [ ];
+      type = types.listOf types.str;
+      description = ''
+        A list of bond interfaces to be added to the network section of the
+        unit.  See <citerefentry><refentrytitle>systemd.network</refentrytitle>
+        <manvolnum>5</manvolnum></citerefentry> for details.
+      '';
+    };
+
     vlan = mkOption {
       default = [ ];
       type = types.listOf types.str;
@@ -633,6 +643,7 @@ let
           ${concatStringsSep "\n" (map (s: "DNS=${s}") def.dns)}
           ${concatStringsSep "\n" (map (s: "NTP=${s}") def.ntp)}
           ${concatStringsSep "\n" (map (s: "Bridge=${s}") def.bridge)}
+          ${concatStringsSep "\n" (map (s: "Bond=${s}") def.bond)}
           ${concatStringsSep "\n" (map (s: "VLAN=${s}") def.vlan)}
           ${concatStringsSep "\n" (map (s: "MACVLAN=${s}") def.macvlan)}
           ${concatStringsSep "\n" (map (s: "VXLAN=${s}") def.vxlan)}
