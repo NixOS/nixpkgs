@@ -215,13 +215,37 @@ rec {
     useInstantApps = true;
   };
 
+  androidndk_10e = import ./androidndk.nix {
+    inherit (buildPackages)
+      p7zip makeWrapper;
+    inherit (pkgs)
+      stdenv fetchurl zlib ncurses lib python3
+      coreutils file findutils gawk gnugrep gnused jdk which;
+    inherit platformTools;
+    version = "10e";
+    sha256 = "032j3sgk93bjbkny84i17ph61dhjmsax9ddqng1zbi2p7dgl0pzf";
+  };
+
+  androidndk_16b = import ./androidndk.nix {
+    inherit (buildPackages)
+      p7zip makeWrapper;
+    inherit (pkgs)
+      stdenv fetchurl zlib ncurses lib python3
+      coreutils file findutils gawk gnugrep gnused jdk which;
+    inherit platformTools;
+    version = "16b";
+    sha256 = "00frcnvpcsngv00p6l2vxj4cwi2mwcm9lnjvm3zv4wrp6pss9pmw";
+  };
+
   androidndk = import ./androidndk.nix {
     inherit (buildPackages)
       p7zip makeWrapper;
     inherit (pkgs)
-      stdenv fetchurl zlib ncurses lib
+      stdenv fetchurl zlib ncurses lib python3
       coreutils file findutils gawk gnugrep gnused jdk which;
     inherit platformTools;
+    version = "17";
+    sha256 = "1jj3zy958zsidywqd5nwdyrnr72rf9zhippkl8rbqxfy8wxq2gds";
   };
 
   androidndk_r8e = import ./androidndk_r8e.nix {

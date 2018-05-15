@@ -1,14 +1,14 @@
 { stdenv, fetchurl, zlib, ncurses, p7zip, lib, makeWrapper
 , coreutils, file, findutils, gawk, gnugrep, gnused, jdk, which
-, platformTools
+, platformTools, python3, version, sha256
 }:
 
 stdenv.mkDerivation rec {
-  name = "android-ndk-r10e";
+  name = "android-ndk-r${version}";
 
   src = if stdenv.system == "x86_64-linux" then fetchurl {
-      url = "http://dl.google.com/android/ndk/${name}-linux-x86_64.bin";
-      sha256 = "0nhxixd0mq4ib176ya0hclnlbmhm8f2lab6i611kiwbzyqinfb8h";
+      url = "https://dl.google.com/android/repository/${name}-linux-x86_64.zip";
+      inherit sha256;
     } else throw "platform ${stdenv.system} not supported!";
 
   phases = "buildPhase";
@@ -27,8 +27,7 @@ stdenv.mkDerivation rec {
     runtime_paths = (lib.makeBinPath [
       coreutils file findutils
       gawk gnugrep gnused
-      jdk
-      which
+      jdk python3 which
     ]) + ":${platformTools}/platform-tools";
   in ''
     set -x
@@ -38,9 +37,22 @@ stdenv.mkDerivation rec {
 
     # so that it doesn't fail because of read-only permissions set
     cd -
-    patch -p1 \
-        --no-backup-if-mismatch \
-        -d $out/libexec/${name} < ${ ./make-standalone-toolchain.patch }
+    ${if (version == "10e") then
+        ''
+          patch -p1 \
+            --no-backup-if-mismatch \
+            -d $out/libexec/${name} < ${ ./make-standalone-toolchain_r10e.patch }
+        ''
+      else
+        ''
+          patchShebangs ${pkg_path}/build/tools/make-standalone-toolchain.sh
+
+          patch -p1 \
+            --no-backup-if-mismatch \
+            -d $out/libexec/${name} < ${ ./. + builtins.toPath ("/make_standalone_toolchain.py_" + "${version}" + ".patch") }
+          wrapProgram ${pkg_path}/build/tools/make_standalone_toolchain.py --prefix PATH : "${runtime_paths}"
+        ''
+    }
     cd ${pkg_path}
 
     find $out \( \
@@ -49,29 +61,31 @@ stdenv.mkDerivation rec {
         \) -exec patchelf --set-interpreter ${stdenv.cc.libc.out}/lib/ld-*so.? \
                           --set-rpath ${stdenv.lib.makeLibraryPath [ zlib.out ncurses ]} {} \;
     # fix ineffective PROGDIR / MYNDKDIR determination
-    for i in ndk-build ndk-gdb ndk-gdb-py
+    for i in ndk-build ${lib.optionalString (version == "10e") "ndk-gdb ndk-gdb-py"}
     do
         sed -i -e ${sed_script_1} $i
     done
-    sed -i -e ${sed_script_2} ndk-which
-    # a bash script
-    patchShebangs ndk-which
+    ${lib.optionalString (version == "10e") ''
+      sed -i -e ${sed_script_2} ndk-which
+      # a bash script
+      patchShebangs ndk-which
+    ''}
     # wrap
-    for i in ndk-build ndk-gdb ndk-gdb-py ndk-which
+    for i in ndk-build ${lib.optionalString (version == "10e") "ndk-gdb ndk-gdb-py ndk-which"}
     do
         wrapProgram "$(pwd)/$i" --prefix PATH : "${runtime_paths}"
     done
     # make some executables available in PATH
     mkdir -pv ${bin_path}
     for i in \
-        ndk-build ndk-depends ndk-gdb ndk-gdb-py ndk-gdb.py ndk-stack ndk-which
+        ndk-build ${lib.optionalString (version == "10e") "ndk-depends ndk-gdb ndk-gdb-py ndk-gdb.py ndk-stack ndk-which"}
     do
         ln -sf ${pkg_path}/$i ${bin_path}/$i
     done
   '';
 
-    meta = {
-        platforms = stdenv.lib.platforms.linux;
-        hydraPlatforms = [];
-    };
+  meta = {
+    platforms = stdenv.lib.platforms.linux;
+    hydraPlatforms = [];
+  };
 }
