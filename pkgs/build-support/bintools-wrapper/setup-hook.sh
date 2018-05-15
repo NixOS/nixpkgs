@@ -8,7 +8,7 @@ set -u
 # native compile.
 #
 # TODO(@Ericson2314): No native exception
-[[ -z ${crossConfig-} ]] || (( "$hostOffset" < 0 )) || return 0
+[[ -z ${strictDeps-} ]] || (( "$hostOffset" < 0 )) || return 0
 
 bintoolsWrapper_addLDVars () {
     # See ../setup-hooks/role.bash

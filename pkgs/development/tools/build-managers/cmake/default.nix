@@ -80,19 +80,23 @@ stdenv.mkDerivation rec {
     configureFlags="--parallel=''${NIX_BUILD_CORES:-1} $configureFlags"
   '';
 
-  configureFlags = [ "--docdir=share/doc/${name}" ]
-    ++ (if useSharedLibraries then [ "--no-system-jsoncpp" "--system-libs" ] else [ "--no-system-libs" ]) # FIXME: cleanup
-    ++ optional (useQt4 || withQt5) "--qt-gui"
-    ++ ["--"]
-    ++ optionals (!useNcurses) [ "-DBUILD_CursesDialog=OFF" ]
-    ++ optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
-      "-DCMAKE_CXX_COMPILER=${stdenv.cc.targetPrefix}c++"
-      "-DCMAKE_C_COMPILER=${stdenv.cc.targetPrefix}cc"
-      "-DCMAKE_AR=${getBin stdenv.cc.bintools.bintools}/bin/${stdenv.cc.targetPrefix}ar"
-      "-DCMAKE_RANLIB=${getBin stdenv.cc.bintools.bintools}/bin/${stdenv.cc.targetPrefix}ranlib"
-      "-DCMAKE_STRIP=${getBin stdenv.cc.bintools.bintools}/bin/${stdenv.cc.targetPrefix}strip"
-      # TODO: Why are ar and friends not provided by the bintools wrapper?
-    ];
+  configureFlags = [
+    "--docdir=share/doc/${name}"
+    # We should set the proper `CMAKE_SYSTEM_NAME`.
+    # http://www.cmake.org/Wiki/CMake_Cross_Compiling
+    #
+    # Unfortunately cmake seems to expect absolute paths for ar, ranlib, and
+    # strip. Otherwise they are taken to be relative to the source root of the
+    # package being built.
+    "-DCMAKE_CXX_COMPILER=${stdenv.cc.targetPrefix}c++"
+    "-DCMAKE_C_COMPILER=${stdenv.cc.targetPrefix}cc"
+    "-DCMAKE_AR=${getBin stdenv.cc.bintools.bintools}/bin/${stdenv.cc.targetPrefix}ar"
+    "-DCMAKE_RANLIB=${getBin stdenv.cc.bintools.bintools}/bin/${stdenv.cc.targetPrefix}ranlib"
+    "-DCMAKE_STRIP=${getBin stdenv.cc.bintools.bintools}/bin/${stdenv.cc.targetPrefix}strip"
+   ] ++ (if useSharedLibraries then [ "--no-system-jsoncpp" "--system-libs" ] else [ "--no-system-libs" ]) # FIXME: cleanup
+     ++ optional (useQt4 || withQt5) "--qt-gui"
+     ++ ["--"]
+     ++ optionals (!useNcurses) [ "-DBUILD_CursesDialog=OFF" ];
 
   dontUseCmakeConfigure = true;
   enableParallelBuilding = true;

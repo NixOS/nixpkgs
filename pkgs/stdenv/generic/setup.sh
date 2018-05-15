@@ -501,7 +501,7 @@ activatePackage() {
     # the transition, we do include everything in thatcase.
     #
     # TODO(@Ericson2314): Don't special-case native compilation
-    if [[ ( -z "${crossConfig-}" ||  "$hostOffset" -le -1 ) && -d "$pkg/bin" ]]; then
+    if [[ ( -z "${strictDeps-}" ||  "$hostOffset" -le -1 ) && -d "$pkg/bin" ]]; then
         addToSearchPath _PATH "$pkg/bin"
     fi
 
@@ -551,7 +551,7 @@ _addToEnv() {
         for depTargetOffset in "${allPlatOffsets[@]}"; do
             (( "$depHostOffset" <= "$depTargetOffset" )) || continue
             local hookRef="${hookVar}[$depTargetOffset - $depHostOffset]"
-            if [[ -z "${crossConfig-}" ]]; then
+            if [[ -z "${strictDeps-}" ]]; then
                 # Apply environment hooks to all packages during native
                 # compilation to ease the transition.
                 #

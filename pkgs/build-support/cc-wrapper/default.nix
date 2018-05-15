@@ -188,6 +188,7 @@ stdenv.mkDerivation {
       wrap ${targetPrefix}gccgo ${./cc-wrapper.sh} $ccPath/${targetPrefix}gccgo
     '';
 
+  strictDeps = true;
   propagatedBuildInputs = [ bintools ];
   depsTargetTargetPropagated = extraPackages;
 

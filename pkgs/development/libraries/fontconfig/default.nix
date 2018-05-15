@@ -45,6 +45,8 @@ stdenv.mkDerivation rec {
     "--disable-docs"
     # just <1MB; this is what you get when loading config fails for some reason
     "--with-default-fonts=${dejavu_fonts.minimal}"
+  ] ++ stdenv.lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+    "--with-arch=${hostPlatform.parsed.cpu.name}"
   ];
 
   enableParallelBuilding = true;

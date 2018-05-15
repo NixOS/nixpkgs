@@ -22,6 +22,8 @@ stdenv.mkDerivation rec {
     "--with-cache-dir=/var/cache/fontconfig"
     "--disable-docs"
     "--with-default-fonts="
+  ] ++ stdenv.lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+    "--with-arch=${hostPlatform.parsed.cpu.name}"
   ];
 
   enableParallelBuilding = true;
