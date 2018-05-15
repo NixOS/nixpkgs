@@ -117,7 +117,11 @@
 
   <itemizedlist>
    <listitem>
-    <para />
+    <para>
+     The <option>services.matomo</option> module gained the option
+     <option>services.matomo.package</option> which determines the used
+     Matomo version.
+    </para>
    </listitem>
   </itemizedlist>
  </section>
