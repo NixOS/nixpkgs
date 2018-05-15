@@ -757,7 +757,7 @@ let
     });
 
     JuniperKernel = old.JuniperKernel.overrideDerivation (attrs: {
-      postPatch = ''
+      postPatch = lib.optionalString stdenv.isDarwin ''
         for file in {R,src}/*.R; do
             sed -i 's#system("which \(otool\|install_name_tool\)"[^)]*)#"${pkgs.darwin.cctools}/bin/\1"#g' $file
         done
