@@ -6,16 +6,10 @@
 stdenv.mkDerivation rec {
   name = "android-ndk-r10e";
 
-  src = if stdenv.system == "i686-linux"
-    then fetchurl {
-      url = "http://dl.google.com/android/ndk/${name}-linux-x86.bin";
-      sha256 = "1xbxra5v3bm6cmxyx8yyya5r93jh5m064aibgwd396xdm8jpvc4j";
-    }
-    else if stdenv.system == "x86_64-linux" then fetchurl {
+  src = if stdenv.system == "x86_64-linux" then fetchurl {
       url = "http://dl.google.com/android/ndk/${name}-linux-x86_64.bin";
       sha256 = "0nhxixd0mq4ib176ya0hclnlbmhm8f2lab6i611kiwbzyqinfb8h";
-    }
-    else throw "platform ${stdenv.system} not supported!";
+    } else throw "platform ${stdenv.system} not supported!";
 
   phases = "buildPhase";
 
