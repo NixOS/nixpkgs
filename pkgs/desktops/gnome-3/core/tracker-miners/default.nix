@@ -114,6 +114,10 @@ stdenv.mkDerivation rec {
   postInstall = ''
     ${glib.dev}/bin/glib-compile-schemas $out/share/glib-2.0/schemas
   '';
+  
+  postFixup = ''
+    rm $out/share/tracker/miners/org.freedesktop.Tracker1.Miner.RSS.service
+  '';
 
   meta = with stdenv.lib; {
     homepage = https://wiki.gnome.org/Projects/Tracker;
