@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
     description = "A hackable text editor for the 21st Century";
     homepage = https://atom.io/;
     license = licenses.mit;
-    maintainers = [ maintainers.offline maintainers.nequissimus maintainers.ysndr ];
+    maintainers = with maintainers; [ offline nequissimus synthetica ysndr ];
     platforms = [ "x86_64-linux" ];
   };
 }
