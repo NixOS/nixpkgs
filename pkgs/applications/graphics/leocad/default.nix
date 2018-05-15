@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "CAD program for creating virtual LEGO models";
-    homepage = http://www.leocad.org/;
+    homepage = https://www.leocad.org/;
     license = licenses.gpl2;
     platforms = platforms.linux;
   };

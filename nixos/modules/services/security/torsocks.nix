@@ -23,7 +23,7 @@ let
   wrapTorsocks = name: server: pkgs.writeTextFile {
     name = name;
     text = ''
-        #!${pkgs.stdenv.shell}
+        #!${pkgs.runtimeShell}
         TORSOCKS_CONF_FILE=${pkgs.writeText "torsocks.conf" (configFile server)} ${pkgs.torsocks}/bin/torsocks "$@"
     '';
     executable = true;

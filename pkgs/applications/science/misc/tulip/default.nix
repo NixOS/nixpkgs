@@ -33,6 +33,6 @@ stdenv.mkDerivation rec {
     license = stdenv.lib.licenses.gpl3Plus;
 
     maintainers = [ ];
-    platforms = stdenv.lib.platforms.gnu;  # arbitrary choice
+    platforms = stdenv.lib.platforms.gnu ++ stdenv.lib.platforms.linux;  # arbitrary choice
   };
 }

@@ -1,11 +1,11 @@
 { stdenv, fetchurl, pkgconfig, libpthreadstubs, libpciaccess, valgrind-light }:
 
 stdenv.mkDerivation rec {
-  name = "libdrm-2.4.89";
+  name = "libdrm-2.4.92";
 
   src = fetchurl {
     url = "http://dri.freedesktop.org/libdrm/${name}.tar.bz2";
-    sha256 = "629f9782aabbb4809166de5f24d26fe0766055255038f16935602d89f136a02e";
+    sha256 = "1yirzx8hmlvv6r0l7lb3zxmgy5la2mri9al0k16xqfg19pdqzr79";
   };
 
   outputs = [ "out" "dev" "bin" ];
@@ -22,9 +22,9 @@ stdenv.mkDerivation rec {
   configureFlags = [ "--enable-install-test-programs" ]
     ++ stdenv.lib.optionals (stdenv.isAarch32 || stdenv.isAarch64)
       [ "--enable-tegra-experimental-api" "--enable-etnaviv-experimental-api" ]
-    ++ stdenv.lib.optional stdenv.isDarwin "-C";
-
-  crossAttrs.configureFlags = configureFlags ++ [ "--disable-intel" ];
+    ++ stdenv.lib.optional stdenv.isDarwin "-C"
+    ++ stdenv.lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) "--disable-intel"
+    ;
 
   meta = {
     homepage = https://dri.freedesktop.org/libdrm/;

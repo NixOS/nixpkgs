@@ -2,11 +2,11 @@
 
 let
   name = "wp-cli-${version}";
-  version = "1.5.0";
+  version = "1.5.1";
 
   src = fetchurl {
     url    = "https://github.com/wp-cli/wp-cli/releases/download/v${version}/${name}.phar";
-    sha256 = "17dgbcalvz5gw6xqgcywh6jrybj0qlglm16cgbshjsp6axwxa5gn";
+    sha256 = "1lnjbl6rcv32g6akj4552ncyqmbsawmx1dnbmxr0rjj7wr8484f1";
   };
 
   completion = fetchurl {

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, gcc, glibc, m4, coreutils }:
+{ stdenv, fetchurl, bootstrap_cmds, coreutils, glibc, m4 }:
 
 let
   options = rec {
@@ -27,18 +27,10 @@ let
       runtime = "dx86cl64";
       kernel = "darwinx8664";
     };
-    i686-darwin = {
-      arch = "darwinx86";
-      sha256 = x86_64-darwin.sha256;
-      runtime = "dx86cl";
-      kernel = "darwinx8632";
-    };
     armv6l-linux = armv7l-linux;
   };
-  cfg = options.${stdenv.system};
+  cfg = options."${stdenv.system}" or (throw "missing source url for platform ${stdenv.system}");
 in
-
-assert builtins.hasAttr stdenv.system options;
 
 stdenv.mkDerivation rec {
   name     = "ccl-${version}";
@@ -49,7 +41,7 @@ stdenv.mkDerivation rec {
     sha256 = cfg.sha256;
   };
 
-  buildInputs = if stdenv.isDarwin then [ m4 ] else [ gcc glibc m4 ];
+  buildInputs = if stdenv.isDarwin then [ bootstrap_cmds m4 ] else [ glibc m4 ];
 
   CCL_RUNTIME = cfg.runtime;
   CCL_KERNEL = cfg.kernel;
@@ -58,7 +50,6 @@ stdenv.mkDerivation rec {
     substituteInPlace lisp-kernel/${CCL_KERNEL}/Makefile \
       --replace "M4 = gm4"   "M4 = m4" \
       --replace "dtrace"     "/usr/sbin/dtrace" \
-      --replace "mig"        "/usr/bin/mig" \
       --replace "/bin/rm"    "${coreutils}/bin/rm" \
       --replace "/bin/echo"  "${coreutils}/bin/echo"
 

@@ -33,8 +33,7 @@ buildLinux (rec {
     DEFAULT_MPTCP_PM default
 
     # MPTCP scheduler selection.
-    # Disabled as the only non-default is the useless round-robin.
-    MPTCP_SCHED_ADVANCED n
+    MPTCP_SCHED_ADVANCED y
     DEFAULT_MPTCP_SCHED default
 
     # Smarter TCP congestion controllers

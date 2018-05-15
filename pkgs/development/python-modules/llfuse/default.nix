@@ -4,12 +4,12 @@
 
 buildPythonPackage rec {
   pname = "llfuse";
-  version = "1.3.2";
+  version = "1.3.4";
   name = pname + "-" + version;
 
   src = fetchurl {
     url = "mirror://pypi/l/llfuse/${name}.tar.bz2";
-    sha256 = "96252a286a2be25810904d969b330ef2a57c2b9c18c5b503bbfbae40feb2bb63";
+    sha256 = "50396c5f3c49c3145e696e5b62df4fcca8b66634788020fba7b6932a858c78c2";
   };
 
   nativeBuildInputs = [ pkgconfig ];

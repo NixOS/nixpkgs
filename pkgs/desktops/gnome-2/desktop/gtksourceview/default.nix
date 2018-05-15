@@ -38,4 +38,9 @@ stdenv.mkDerivation rec {
   preConfigure = optionalString stdenv.isDarwin ''
     intltoolize --force
   '';
+
+  NIX_LDFLAGS = stdenv.lib.optionalString stdenv.isDarwin "-lintl";
+
+  doCheck = false; # requires X11 daemon
+
 }

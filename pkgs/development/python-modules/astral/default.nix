@@ -1,19 +1,21 @@
-{ stdenv, buildPythonPackage, fetchPypi, pytz, pytest }:
+{ stdenv, buildPythonPackage, fetchPypi, pytz, requests, pytest }:
 
 buildPythonPackage rec {
   pname = "astral";
-  version = "1.5";
+  version = "1.6.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "527628fbfe90c1596c3950ff84ebd07ecc10c8fb1044c903a0519b5057700cb6";
+    sha256 = "ab0c08f2467d35fcaeb7bad15274743d3ac1ad18b5391f64a0058a9cd192d37d";
   };
 
-  propagatedBuildInputs = [ pytz ];
+  propagatedBuildInputs = [ pytz requests ];
 
   checkInputs = [ pytest ];
   checkPhase = ''
-    py.test -k "not test_GoogleLocator"
+    # https://github.com/sffjunkie/astral/pull/13
+    touch src/test/.api_key
+    py.test -m "not webtest"
   '';
 
   meta = with stdenv.lib; {

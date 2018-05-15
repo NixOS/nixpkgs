@@ -66,7 +66,7 @@ let
     let
 
       thisStdenv = import ../generic {
-        name = "stdenv-linux-boot";
+        name = "${name}-stdenv-linux";
         buildPlatform = localSystem;
         hostPlatform = localSystem;
         targetPlatform = localSystem;
@@ -88,7 +88,9 @@ let
         cc = if isNull prevStage.gcc-unwrapped
              then null
              else lib.makeOverridable (import ../../build-support/cc-wrapper) {
+          name = "${name}-gcc-wrapper";
           nativeTools = false;
+          propagateDoc = false;
           nativeLibc = false;
           buildPackages = lib.optionalAttrs (prevStage ? stdenv) {
             inherit (prevStage) stdenv;
@@ -98,7 +100,6 @@ let
           isGNU = true;
           libc = getLibc prevStage;
           inherit (prevStage) coreutils gnugrep;
-          name = name;
           stdenvNoCC = prevStage.ccWrapperStdenv;
         };
 
@@ -106,11 +107,6 @@ let
           # Having the proper 'platform' in all the stdenvs allows getting proper
           # linuxHeaders for example.
           inherit platform;
-
-          # stdenv.glibc is used by GCC build to figure out the system-level
-          # /usr/include directory.
-          # TODO: Remove this!
-          inherit (prevStage) glibc;
         };
         overrides = self: super: (overrides self super) // { fetchurl = thisStdenv.fetchurlBoot; };
       };
@@ -128,8 +124,6 @@ in
     __raw = true;
 
     gcc-unwrapped = null;
-    glibc = assert false; null;
-    musl = assert false; null;
     binutils = null;
     coreutils = null;
     gnugrep = null;
@@ -138,7 +132,7 @@ in
   # Build a dummy stdenv with no GCC or working fetchurl.  This is
   # because we need a stdenv to build the GCC wrapper and fetchurl.
   (prevStage: stageFun prevStage {
-    name = null;
+    name = "bootstrap-stage0";
 
     overrides = self: super: {
       # We thread stage0's stdenv through under this name so downstream stages
@@ -152,7 +146,7 @@ in
       # create a dummy Glibc here, which will be used in the stdenv of
       # stage1.
       ${localSystem.libc} = self.stdenv.mkDerivation {
-        name = "bootstrap-${localSystem.libc}";
+        name = "bootstrap-stage0-${localSystem.libc}";
         buildCommand = ''
           mkdir -p $out
           ln -s ${bootstrapTools}/lib $out/lib
@@ -164,13 +158,13 @@ in
       };
       gcc-unwrapped = bootstrapTools;
       binutils = import ../../build-support/bintools-wrapper {
+        name = "bootstrap-stage0-binutils-wrapper";
         nativeTools = false;
         nativeLibc = false;
         buildPackages = { };
         libc = getLibc self;
         inherit (self) stdenvNoCC coreutils gnugrep;
         bintools = bootstrapTools;
-        name = "bootstrap-binutils-wrapper";
       };
       coreutils = bootstrapTools;
       gnugrep = bootstrapTools;
@@ -189,7 +183,7 @@ in
   # simply re-export those packages in the middle stage(s) using the
   # overrides attribute and the inherit syntax.
   (prevStage: stageFun prevStage {
-    name = "bootstrap-gcc-wrapper";
+    name = "bootstrap-stage1";
 
     # Rebuild binutils to use from stage2 onwards.
     overrides = self: super: {
@@ -213,7 +207,7 @@ in
   # 2nd stdenv that contains our own rebuilt binutils and is used for
   # compiling our own Glibc.
   (prevStage: stageFun prevStage {
-    name = "bootstrap-gcc-wrapper";
+    name = "bootstrap-stage2";
 
     overrides = self: super: {
       inherit (prevStage)
@@ -234,7 +228,7 @@ in
   # one uses the rebuilt Glibc from stage2.  It still uses the recent
   # binutils and rest of the bootstrap tools, including GCC.
   (prevStage: stageFun prevStage {
-    name = "bootstrap-gcc-wrapper";
+    name = "bootstrap-stage3";
 
     overrides = self: super: rec {
       inherit (prevStage)
@@ -262,7 +256,7 @@ in
   # Construct a fourth stdenv that uses the new GCC.  But coreutils is
   # still from the bootstrap tools.
   (prevStage: stageFun prevStage {
-    name = "";
+    name = "bootstrap-stage4";
 
     overrides = self: super: {
       # Zlib has to be inherited and not rebuilt in this stage,
@@ -291,7 +285,6 @@ in
         bintools = self.binutils;
         libc = getLibc self;
         inherit (self) stdenvNoCC coreutils gnugrep;
-        name = "";
         shell = self.bash + "/bin/bash";
       };
     };
@@ -310,6 +303,8 @@ in
   (prevStage: {
     inherit config overlays;
     stdenv = import ../generic rec {
+      name = "stdenv-linux";
+
       buildPlatform = localSystem;
       hostPlatform = localSystem;
       targetPlatform = localSystem;
@@ -349,6 +344,7 @@ in
         concatMap (p: [ (getBin p) (getLib p) ])
           [ gzip bzip2 xz bash binutils.bintools coreutils diffutils findutils
             gawk gnumake gnused gnutar gnugrep gnupatch patchelf ed paxctl
+            texinfo
           ]
         # Library dependencies
         ++ map getLib (
@@ -360,7 +356,6 @@ in
         ++  [ /*propagated from .dev*/ linuxHeaders
             binutils gcc gcc.cc gcc.cc.lib gcc.expand-response-params
           ]
-          ++ lib.optional (localSystem.libc == "musl") libiconv
           ++ lib.optionals (!localSystem.isx86)
             [ prevStage.updateAutotoolsGnuConfigScriptsHook prevStage.gnu-config ];
 
@@ -368,11 +363,11 @@ in
         inherit (prevStage)
           gzip bzip2 xz bash coreutils diffutils findutils gawk
           gnumake gnused gnutar gnugrep gnupatch patchelf
-          attr acl paxctl zlib pcre;
+          attr acl paxctl zlib pcre texinfo;
         ${localSystem.libc} = getLibc prevStage;
       } // lib.optionalAttrs (super.targetPlatform == localSystem) {
         # Need to get rid of these when cross-compiling.
-        inherit (prevStage) binutils binutils-raw;
+        inherit (prevStage) binutils binutils-unwrapped;
         gcc = cc;
       };
     };

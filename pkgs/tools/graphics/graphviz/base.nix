@@ -23,8 +23,9 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     libpng libjpeg expat yacc libtool fontconfig gd gts libdevil flex pango
+    gettext
   ] ++ optionals (xorg != null) (with xorg; [ libXrender libXaw libXpm ])
-    ++ optionals (stdenv.isDarwin) [ ApplicationServices gettext ];
+    ++ optionals (stdenv.isDarwin) [ ApplicationServices ];
 
   hardeningDisable = [ "fortify" ];
 
@@ -41,6 +42,13 @@ stdenv.mkDerivation rec {
       substituteInPlace $f --replace "-lstdc++" "-lc++"
     done
   '';
+
+  # ''
+  #   substituteInPlace rtest/rtest.sh \
+  #     --replace "/bin/ksh" "${mksh}/bin/mksh"
+  # '';
+
+  doCheck = false; # fails with "Graphviz test suite requires ksh93" which is not in nixpkgs
 
   preAutoreconf = "./autogen.sh";
 

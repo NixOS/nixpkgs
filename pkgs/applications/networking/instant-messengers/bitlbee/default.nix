@@ -50,6 +50,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Plus;
 
     maintainers = with maintainers; [ wkennington pSub ];
-    platforms = platforms.gnu;  # arbitrary choice
+    platforms = platforms.gnu ++ platforms.linux;  # arbitrary choice
   };
 }

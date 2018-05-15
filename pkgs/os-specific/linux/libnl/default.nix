@@ -19,6 +19,8 @@ stdenv.mkDerivation {
       sha256 = "0dd7xxikib201i99k2if066hh7gwf2i4ffckrjplq6lr206jn00r";
     });
 
+  enableParallelBuilding = true;
+
   nativeBuildInputs = [ autoreconfHook bison flex pkgconfig ];
 
   meta = with lib; {

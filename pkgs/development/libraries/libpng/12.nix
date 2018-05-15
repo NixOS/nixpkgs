@@ -18,11 +18,6 @@ stdenv.mkDerivation rec {
 
   passthru = { inherit zlib; };
 
-  crossAttrs = stdenv.lib.optionalAttrs (hostPlatform.libc == "libSystem") {
-    propagatedBuildInputs = [];
-    passthru = {};
-  };
-
   configureFlags = "--enable-static";
 
   postInstall = ''mv "$out/bin" "$dev/bin"'';

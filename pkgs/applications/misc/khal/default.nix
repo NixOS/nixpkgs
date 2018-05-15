@@ -40,6 +40,6 @@ buildPythonApplication rec {
     homepage = http://lostpackets.de/khal/;
     description = "CLI calendar application";
     license = licenses.mit;
-    maintainers = with maintainers; [ matthiasbeyer jgeerds ];
+    maintainers = with maintainers; [ jgeerds ];
   };
 }

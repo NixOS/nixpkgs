@@ -1,11 +1,12 @@
 { stdenv, fetchurl, libiconv }:
 
 stdenv.mkDerivation rec {
-  name = "idnkit-1.0";
+  name = "idnkit-${version}";
+  version = "2.3";
 
   src = fetchurl {
-    url = "http://www.nic.ad.jp/ja/idn/idnkit/download/sources/${name}-src.tar.gz";
-    sha256 = "1z4i6fmyv67sflmjg763ymcxrcv84rbj1kv15im0s655h775zk8n";
+    url = "https://jprs.co.jp/idn/${name}.tar.bz2";
+    sha256 = "0zp9yc84ff5s0g2i6v9yfyza2n2x4xh0kq7hjd3anhh0clbp3l16";
   };
 
   buildInputs = [ libiconv ];

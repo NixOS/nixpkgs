@@ -4,7 +4,7 @@ let
     inherit stdenv cacert git rust cargo-vendor;
   };
 in
-{ name, cargoSha256 ? null
+{ name, cargoSha256 ? "unset"
 , src ? null
 , srcs ? null
 , sourceRoot ? null
@@ -17,7 +17,7 @@ in
 , cargoVendorDir ? null
 , ... } @ args:
 
-assert cargoVendorDir == null -> cargoSha256 != null;
+assert cargoVendorDir == null -> cargoSha256 != "unset";
 
 let
   lib = stdenv.lib;
@@ -91,7 +91,7 @@ in stdenv.mkDerivation (args // {
   installPhase = args.installPhase or ''
     runHook preInstall
     mkdir -p $out/bin
-    find target/release -maxdepth 1 -executable -exec cp "{}" $out/bin \;
+    find target/release -maxdepth 1 -executable -type f -exec cp "{}" $out/bin \;
     runHook postInstall
   '';
 

@@ -14,9 +14,7 @@ in {
   ];
 
   # Create the tarball
-  system.build.tarball = import ../../lib/make-system-tarball.nix {
-    inherit (pkgs) stdenv perl xz pathsFromGraph;
-
+  system.build.tarball = pkgs.callPackage ../../lib/make-system-tarball.nix {
     contents = [];
     extraArgs = "--owner=0";
 

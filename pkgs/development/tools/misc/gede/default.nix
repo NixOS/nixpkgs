@@ -1,26 +1,24 @@
-{ stdenv, fetchurl, makeWrapper, python, qt4, ctags, gdb }:
+{ stdenv, fetchurl, makeWrapper, python, qmake, ctags, gdb }:
 
 stdenv.mkDerivation rec {
   name = "gede-${version}";
-  version = "2.0.4";
+  version = "2.6.1";
 
   src = fetchurl {
     url = "http://gede.acidron.com/uploads/source/${name}.tar.xz";
-    sha256 = "0ip86ss35sc330p4aykv5qj74jbdwh38i928w1bxb6g3w0xmfqba";
+    sha256 = "0jallpchl3c3i90hwic4n7n0ggk5wra0fki4by9ag26ln0k42c4r";
   };
 
-  nativeBuildInputs = [ makeWrapper python ];
+  nativeBuildInputs = [ qmake makeWrapper python ];
 
-  buildInputs = [ qt4 ];
+  buildInputs = [ ctags ];
 
-  postPatch = ''
-    sed -i build.py -e 's,qmake-qt4,qmake,'
-  '';
+  dontUseQmakeConfigure = true;
 
   buildPhase = ":";
 
   installPhase = ''
-    python build.py install --prefix="$out"
+    python build.py install --verbose --prefix="$out"
     wrapProgram $out/bin/gede \
       --prefix PATH : ${stdenv.lib.makeBinPath [ ctags gdb ]}
   '';

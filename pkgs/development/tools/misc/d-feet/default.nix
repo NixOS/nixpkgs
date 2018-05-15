@@ -2,14 +2,14 @@
 , python3Packages, wrapGAppsHook, gnome3, libwnck3, gobjectIntrospection }:
 
 let
-  version = "${major}.13";
-  major = "0.3";
+  pname = "d-feet";
+  version = "0.3.13";
 in python3Packages.buildPythonApplication rec {
-  name = "d-feet-${version}";
+  name = "${pname}-${version}";
   format = "other";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/d-feet/${major}/d-feet-${version}.tar.xz";
+    url = "mirror://gnome/sources/d-feet/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
     sha256 = "1md3lzs55sg04ds69dbginpxqvgg3qnf1lfx3vmsxph6bbd2y6ll";
   };
 
@@ -17,6 +17,14 @@ in python3Packages.buildPythonApplication rec {
   buildInputs = [ glib gtk3 gnome3.defaultIconTheme libwnck3 gobjectIntrospection ];
 
   propagatedBuildInputs = with python3Packages; [ pygobject3 pep8 ];
+
+  passthru = {
+    updateScript = gnome3.updateScript {
+      packageName = pname;
+      attrPath = "dfeet";
+      versionPolicy = "none";
+    };
+  };
 
   meta = {
     description = "D-Feet is an easy to use D-Bus debugger";
@@ -26,7 +34,7 @@ in python3Packages.buildPythonApplication rec {
       and invoke methods on those interfaces.
     '';
 
-    homepage = https://wiki.gnome.org/action/show/Apps/DFeet;
+    homepage = https://wiki.gnome.org/Apps/DFeet;
     platforms = stdenv.lib.platforms.all;
     license = stdenv.lib.licenses.gpl2;
     maintainers = with stdenv.lib.maintainers; [ ktosiek ];

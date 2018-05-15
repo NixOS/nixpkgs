@@ -1,7 +1,6 @@
 { stdenv, fetchurl, nspr, perl, zlib, sqlite, fixDarwinDylibNames }:
 
 let
-
   nssPEM = fetchurl {
     url = http://dev.gentoo.org/~polynomial-c/mozilla/nss-3.15.4-pem-support-20140109.patch.xz;
     sha256 = "10ibz6y0hknac15zr6dw4gv9nb5r5z9ym6gq18j3xqx7v7n3vpdw";
@@ -9,11 +8,11 @@ let
 
 in stdenv.mkDerivation rec {
   name = "nss-${version}";
-  version = "3.34.1";
+  version = "3.36.1";
 
   src = fetchurl {
-    url = "mirror://mozilla/security/nss/releases/NSS_3_34_1_RTM/src/${name}.tar.gz";
-    sha256 = "186x33wsk4mzjz7dzbn8p0py9a0nzkgzpfkdv4rlyy5gghv5vhd3";
+    url = "mirror://mozilla/security/nss/releases/NSS_3_36_1_RTM/src/${name}.tar.gz";
+    sha256 = "1zrb49mp7cy3snnday1zv8d76h1mgppbcwxnlkqsgxlga8fl89b0";
   };
 
   buildInputs = [ perl zlib sqlite ]

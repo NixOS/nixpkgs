@@ -40,7 +40,9 @@
   pulseaudioSupport ? false,
   udevSupport ? false,
   xineramaSupport ? false,
-  xmlSupport ? false }:
+  xmlSupport ? false,
+  vulkanSupport ? false,
+}:
 
 let wine-build = build: release:
       lib.getAttr build (callPackage ./packages.nix {
@@ -51,17 +53,14 @@ let wine-build = build: release:
                   netapiSupport cursesSupport vaSupport pcapSupport v4lSupport saneSupport
                   gsmSupport gphoto2Support ldapSupport fontconfigSupport alsaSupport
                   pulseaudioSupport xineramaSupport gtkSupport openclSupport xmlSupport tlsSupport
-                  openglSupport gstreamerSupport udevSupport;
+                  openglSupport gstreamerSupport udevSupport vulkanSupport;
         };
       });
 
 in if wineRelease == "staging" then
-  let wineUnstable = wine-build wineBuild "unstable"; in
-    # wine staging is not yet at 3.0, using unstable
-    # FIXME update winestaging sources
-    wineUnstable
-    # callPackage ./staging.nix {
-    #   inherit libtxc_dxtn_Name wineUnstable;
-    # }
+  callPackage ./staging.nix {
+    inherit libtxc_dxtn_Name;
+    wineUnstable = wine-build wineBuild "unstable";
+  }
 else
   wine-build wineBuild wineRelease

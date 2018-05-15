@@ -12,18 +12,18 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkgconfig intltool iconnamingutils ];
 
   buildInputs = [ librsvg hicolor-icon-theme ];
-  
+
   postInstall = ''
     for theme in "$out"/share/icons/*; do
       "${gtk3.out}/bin/gtk-update-icon-cache" "$theme"
     done
   '';
-  
+
   meta = {
     description = "Icon themes from MATE";
     homepage = http://mate-desktop.org;
     license = stdenv.lib.licenses.lgpl3;
-    platforms = stdenv.lib.platforms.unix;
+    platforms = stdenv.lib.platforms.linux;
     maintainers = [ stdenv.lib.maintainers.romildo ];
   };
 }

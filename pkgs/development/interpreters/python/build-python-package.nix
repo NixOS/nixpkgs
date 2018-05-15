@@ -2,6 +2,7 @@
 # and can build packages that use distutils, setuptools or flit.
 
 { lib
+, config
 , python
 , wrapPython
 , setuptools
@@ -19,7 +20,7 @@ let
   wheel-specific = import ./build-python-package-wheel.nix { };
   common = import ./build-python-package-common.nix { inherit python bootstrapped-pip; };
   mkPythonDerivation = import ./mk-python-derivation.nix {
-    inherit lib python wrapPython setuptools unzip ensureNewerSourcesForZipFilesHook toPythonModule namePrefix;
+    inherit lib config python wrapPython setuptools unzip ensureNewerSourcesForZipFilesHook toPythonModule namePrefix;
   };
 in
 

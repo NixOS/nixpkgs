@@ -1,25 +1,24 @@
-{ fetchurl, stdenv, intltool, libintlOrEmpty, pkgconfig, glib, json-glib, libsoup, geoip
-, dbus, dbus-glib, modemmanager, avahi, glib-networking, wrapGAppsHook
+{ fetchurl, stdenv, intltool, pkgconfig, glib, json-glib, libsoup, geoip
+, dbus, dbus-glib, modemmanager, avahi, glib-networking, wrapGAppsHook, gobjectIntrospection
 }:
 
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  name = "geoclue-2.4.7";
+  name = "geoclue-2.4.8";
 
   src = fetchurl {
     url = "http://www.freedesktop.org/software/geoclue/releases/2.4/${name}.tar.xz";
-    sha256 = "19hfmr8fa1js8ynazdyjxlyrqpjn6m1719ay70ilga4rayxrcyyi";
+    sha256 = "08yg1r7m0n9hwyvcy769qkmkf8lslqwv69cjfffwnc3zm5km25qj";
   };
 
   outputs = [ "out" "dev" ];
 
   nativeBuildInputs = [
-    pkgconfig intltool wrapGAppsHook
+    pkgconfig intltool wrapGAppsHook gobjectIntrospection
   ];
 
-  buildInputs = libintlOrEmpty ++
-   [ glib json-glib libsoup geoip
+  buildInputs = [ glib json-glib libsoup geoip
      dbus dbus-glib avahi
    ] ++ optionals (!stdenv.isDarwin) [ modemmanager ];
 
@@ -29,7 +28,7 @@ stdenv.mkDerivation rec {
      substituteInPlace configure --replace "-Werror" ""
   '';
 
-  configureFlags = [ "--with-systemdsystemunitdir=$(out)/etc/systemd/system" ] ++
+  configureFlags = [ "--with-systemdsystemunitdir=$(out)/etc/systemd/system" "--enable-introspection" ] ++
                    optionals stdenv.isDarwin [
                        "--disable-silent-rules"
                        "--disable-3g-source"
@@ -37,14 +36,13 @@ stdenv.mkDerivation rec {
                        "--disable-modem-gps-source"
                        "--disable-nmea-source" ];
 
-  NIX_CFLAGS_COMPILE = optionalString stdenv.isDarwin " -lintl";
-
   postInstall = ''
     sed -i $dev/lib/pkgconfig/libgeoclue-2.0.pc -e "s|includedir=.*|includedir=$dev/include|"
   '';
 
   meta = with stdenv.lib; {
     description = "Geolocation framework and some data providers";
+    homepage = https://freedesktop.org/wiki/Software/GeoClue/;
     maintainers = with maintainers; [ raskin garbas ];
     platforms = with platforms; linux ++ darwin;
     license = licenses.lgpl2;

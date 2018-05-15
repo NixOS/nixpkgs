@@ -15,17 +15,24 @@
 , libgpuarray
 , cudaSupport ? false, cudatoolkit
 , cudnnSupport ? false, cudnn
+, nvidia_x11
 }:
 
 assert cudnnSupport -> cudaSupport;
 
+assert cudaSupport -> nvidia_x11 != null
+                   && cudatoolkit != null
+                   && cudnn != null;
+
 let
   extraFlags =
     lib.optionals cudaSupport [ "-I ${cudatoolkit}/include" "-L ${cudatoolkit}/lib" ]
-    ++ lib.optionals cudnnSupport [ "-I ${cudnn}/include" "-L ${cudnn}/lib" ];
+    ++ lib.optionals cudnnSupport [ "-I ${cudnn}/include" "-L ${cudnn}/lib" ]
+    ++ lib.optionals cudaSupport [ "-I ${libgpuarray}/include" "-L ${libgpuarray}/lib" ];
 
   gcc_ = writeScriptBin "g++" ''
     #!${stdenv.shell}
+    export NIX_CC_WRAPPER_${stdenv.cc.infixSalt}_TARGET_HOST=1
     export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE ${toString extraFlags}"
     exec ${gcc}/bin/g++ "$@"
   '';

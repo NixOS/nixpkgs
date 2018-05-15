@@ -9,13 +9,15 @@ args:
 let
   args_ = {
 
-    qmakeFlags =
-      (args.qmakeFlags or [])
-      ++ [ ("CONFIG+=" + (if debug then "debug" else "release")) ];
+    qmakeFlags = [ ("CONFIG+=" + (if debug then "debug" else "release")) ]
+              ++ (args.qmakeFlags or []);
 
     NIX_CFLAGS_COMPILE =
       optional (!debug) "-DQT_NO_DEBUG"
       ++ lib.toList (args.NIX_CFLAGS_COMPILE or []);
+
+    configureFlags = [ "-no-framework" ]
+                  ++ (args.configureFlags or []);
 
     cmakeFlags =
       (args.cmakeFlags or [])

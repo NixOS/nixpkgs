@@ -15,11 +15,11 @@ assert guiSupport -> pinentry != null;
 stdenv.mkDerivation rec {
   name = "gnupg-${version}";
 
-  version = "2.2.4";
+  version = "2.2.7";
 
   src = fetchurl {
     url = "mirror://gnupg/gnupg/${name}.tar.bz2";
-    sha256 = "1v7j8v2ww1knknbrhw3svfrqkmf9ll58iq0dczbsdpqgg1j3w6j0";
+    sha256 = "0vlpis0q7gvq9mhdc43hkyn3cdriz4mwgj20my3gyzpgwqg3cnyr";
   };
 
   nativeBuildInputs = [ pkgconfig ];
@@ -27,8 +27,6 @@ stdenv.mkDerivation rec {
     libgcrypt libassuan libksba libiconv npth gettext texinfo
     readline libusb gnutls adns openldap zlib bzip2 sqlite
   ];
-
-  NIX_LDFLAGS = stdenv.lib.optionalString stdenv.isDarwin "-lintl";
 
   patches = [
     ./fix-libusb-include-path.patch

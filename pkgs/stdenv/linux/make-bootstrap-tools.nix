@@ -88,7 +88,7 @@ in with pkgs; rec {
     '' else throw "unsupported libc for bootstrap tools")
     + ''
         # Copy coreutils, bash, etc.
-        cp ${coreutilsMinimal.out}/bin/* $out/bin
+        cp -d ${coreutilsMinimal.out}/bin/* $out/bin
         (cd $out/bin && rm vdir dir sha*sum pinky factor pathchk runcon shuf who whoami shred users)
 
         cp ${bash.out}/bin/bash $out/bin
@@ -136,8 +136,6 @@ in with pkgs; rec {
         cp -d ${libmpc.out}/lib/libmpc*.so* $out/lib
         cp -d ${zlib.out}/lib/libz.so* $out/lib
         cp -d ${libelf}/lib/libelf.so* $out/lib
-      '' + lib.optionalString (hostPlatform.libc == "musl") ''
-        cp -d ${libiconv.out}/lib/libiconv*.so* $out/lib
 
       '' + lib.optionalString (hostPlatform != buildPlatform) ''
         # These needed for cross but not native tools because the stdenv

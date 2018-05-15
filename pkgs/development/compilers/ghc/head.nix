@@ -22,7 +22,7 @@
 
 , # Whether to build dynamic libs for the standard library (on the target
   # platform). Static libs are always built.
-  enableShared ? true
+  enableShared ? !targetPlatform.useAndroidPrebuilt
 
 , version ? "8.5.20180118"
 }:
@@ -50,6 +50,8 @@ let
   '' + stdenv.lib.optionalString enableRelocatedStaticLibs ''
     GhcLibHcOpts += -fPIC
     GhcRtsHcOpts += -fPIC
+  '' + stdenv.lib.optionalString targetPlatform.useAndroidPrebuilt ''
+    EXTRA_CC_OPTS += -std=gnu99
   '';
 
   # Splicer will pull out correct variations

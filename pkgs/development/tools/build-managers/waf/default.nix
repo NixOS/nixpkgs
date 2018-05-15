@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "waf-${version}";
-  version = "2.0.4";
+  version = "2.0.6";
 
   src = fetchurl {
     url = "https://waf.io/waf-${version}.tar.bz2";
-    sha256 = "0zmnwgccq5j7ipfi2j0k5s40q27krp1m6v2bd650axgzdbpa7ain";
+    sha256 = "1wyl0jl10i0p2rj49sig5riyppgkqlkqmbvv35d5bqxri3y4r38q";
   };
 
   buildInputs = [ python2 ];

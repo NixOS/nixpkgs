@@ -14,6 +14,11 @@ stdenv.mkDerivation rec {
     sha256 = "0y1ij745r4p48mxq84rax40p10ln7fc7m243p8k8sia519i3dxfc";
   };
 
+  setupHooks = [
+    ../../../build-support/setup-hooks/role.bash
+    ./setup-hook.sh
+  ];
+
   postPatch =
     lib.optionalString ((hostPlatform != buildPlatform && hostPlatform.libc == "msvcrt") || stdenv.cc.nativeLibc)
       ''

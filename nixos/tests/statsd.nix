@@ -35,6 +35,6 @@ with lib;
   testScript = ''
     $statsd1->start();
     $statsd1->waitForUnit("statsd.service");
-    $statsd1->succeed("nc -z 127.0.0.1 8126");
+    $statsd1->waitUntilSucceeds("nc -z 127.0.0.1 8126");
   '';
 })

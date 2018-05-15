@@ -51,8 +51,9 @@ if [[ ! -e $mountPoint/etc/NIXOS ]]; then
     exit 126
 fi
 
-mkdir -m 0755 -p "$mountPoint/dev"
+mkdir -m 0755 -p "$mountPoint/dev" "$mountPoint/sys"
 mount --rbind /dev "$mountPoint/dev"
+mount --rbind /sys "$mountPoint/sys"
 
 # Run the activation script. Set $LOCALE_ARCHIVE to supress some Perl locale warnings.
 LOCALE_ARCHIVE=$system/sw/lib/locale/locale-archive chroot "$mountPoint" "$system/activate" >&2 || true

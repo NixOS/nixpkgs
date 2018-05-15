@@ -2,32 +2,34 @@
 , makeWrapper, makeDesktopItem
 , qtbase, qmake, qtmultimedia, qttools
 , qtgraphicaleffects, qtdeclarative
-, qtlocation, qtquickcontrols, qtwebchannel
+, qtlocation, qtquickcontrols2, qtwebchannel
 , qtwebengine, qtx11extras, qtxmlpatterns
 , monero, unbound, readline, boost, libunwind
+, pcsclite, zeromq, cppzmq, pkgconfig
 }:
 
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
   name = "monero-gui-${version}";
-  version = "0.11.1.0";
+  version = "0.12.0.0";
 
   src = fetchFromGitHub {
     owner  = "monero-project";
     repo   = "monero-gui";
     rev    = "v${version}";
-    sha256 = "01d7apwrv8j8bh7plvvhlnll3ransaha3n6rx19nkgvfn319hswq";
+    sha256 = "1mg5ival8a2wdp14yib4wzqax4xyvd40zjy9anhszljds1439jhl";
   };
 
-  nativeBuildInputs = [ qmake ];
+  nativeBuildInputs = [ qmake pkgconfig ];
 
   buildInputs = [
     qtbase qtmultimedia qtgraphicaleffects
-    qtdeclarative qtlocation qtquickcontrols
+    qtdeclarative qtlocation qtquickcontrols2
     qtwebchannel qtwebengine qtx11extras
     qtxmlpatterns monero unbound readline
-    boost libunwind makeWrapper
+    boost libunwind pcsclite zeromq cppzmq
+    makeWrapper
   ];
 
   patches = [

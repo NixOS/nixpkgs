@@ -47,7 +47,7 @@ with stdenv;
       important in data management. The development infrastructure supports exhaustive
       testing on supported platforms; plug-in support for microservices, storage resources,
       drivers, and databases; and extensive documentation, training and support services.'';
-    homepage = http://irods.org;
+    homepage = https://irods.org;
     license = stdenv.lib.licenses.bsd3;
     maintainers = [ stdenv.lib.maintainers.bzizou ];
     platforms = stdenv.lib.platforms.all;

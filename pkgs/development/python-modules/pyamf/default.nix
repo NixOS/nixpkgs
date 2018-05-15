@@ -1,9 +1,11 @@
-{ stdenv, fetchPypi, buildPythonPackage, defusedxml }:
+{ stdenv, fetchPypi, buildPythonPackage, isPy3k, defusedxml }:
 
 buildPythonPackage rec {
-  name = "${pname}-${version}";
   pname = "PyAMF";
   version = "0.8.0";
+
+  # according to setup.py
+  disabled = isPy3k;
 
   src = fetchPypi {
     inherit pname version;

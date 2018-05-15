@@ -6,10 +6,11 @@ die() {
     exit 1
 }
 
-# Usage: update-source-hash <attr> <version> [<new-source-hash>]
+# Usage: update-source-hash <attr> <version> [<new-source-hash>] [<new-source-url>]
 attr=$1
 newVersion=$2
 newHash=$3
+newUrl=$4
 
 nixFile=$(nix-instantiate --eval --strict -A "$attr.meta.position" | sed -re 's/^"(.*):[0-9]+"$/\1/')
 if [ ! -f "$nixFile" ]; then
@@ -27,6 +28,12 @@ if [ $(grep -c "$oldHash" "$nixFile") != 1 ]; then
     die "Couldn't locate old source hash '$oldHash' (or it appeared more than once) in '$nixFile'!"
 fi
 
+oldUrl=$(nix-instantiate --eval -E "with import ./. {}; builtins.elemAt $attr.src.drvAttrs.urls 0" | tr -d '"')
+
+if [ -z "$oldUrl" ]; then
+    die "Couldn't evaluate source url from '$attr.name'!"
+fi
+
 drvName=$(nix-instantiate --eval -E "with import ./. {}; (builtins.parseDrvName $attr.name).name" | tr -d '"')
 oldVersion=$(nix-instantiate --eval -E "with import ./. {}; $attr.version or (builtins.parseDrvName $attr.name).version" | tr -d '"')
 
@@ -41,6 +48,7 @@ fi
 
 # Escape regex metacharacter that are allowed in store path names
 oldVersion=$(echo "$oldVersion" | sed -re 's|[.+]|\\&|g')
+oldUrl=$(echo "$oldUrl" | sed -re 's|[${}.+]|\\&|g')
 
 if [ $(grep -c -E "^\s*(let\b)?\s*version\s*=\s*\"$oldVersion\"" "$nixFile") = 1 ]; then
     pattern="/\bversion\b\s*=/ s|\"$oldVersion\"|\"$newVersion\"|"
@@ -54,6 +62,15 @@ fi
 sed -i.bak "$nixFile" -re "$pattern"
 if cmp -s "$nixFile" "$nixFile.bak"; then
     die "Failed to replace version '$oldVersion' to '$newVersion' in '$attr'!"
+fi
+
+# Replace new URL
+if [ -n "$newUrl" ]; then
+    sed -i "$nixFile" -re "s|\"$oldUrl\"|\"$newUrl\"|"
+
+    if cmp -s "$nixFile" "$nixFile.bak"; then
+        die "Failed to replace source URL '$oldUrl' to '$newUrl' in '$attr'!"
+    fi
 fi
 
 case "$oldHashAlgo" in
@@ -74,7 +91,7 @@ fi
 if [ -z "$newHash" ]; then
     nix-build --no-out-link -A "$attr.src" 2>"$attr.fetchlog" >/dev/null || true
     # FIXME: use nix-build --hash here once https://github.com/NixOS/nix/issues/1172 is fixed
-    newHash=$(egrep -v "killing process|dependencies couldn't be built" "$attr.fetchlog" | tail -n2 | sed "s~output path .* has .* hash \(.*\) when .* was expected\|fixed-output derivation produced path '.*' with .* hash '\(.*\)' instead of the expected hash '.*'~\1\2~" | head -n1)
+    newHash=$(egrep -v "killing process|dependencies couldn't be built" "$attr.fetchlog" | tail -n2 | sed "s~output path .* has .* hash ‘\(.*\)’ when .* was expected\|fixed-output derivation produced path '.*' with .* hash '\(.*\)' instead of the expected hash '.*'~\1\2~" | head -n1)
 fi
 
 if [ -z "$newHash" ]; then

@@ -4,13 +4,16 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "1.4.2";
-  name = "rofi-${version}";
+  version = "1.5.1";
+  name = "rofi-unwrapped-${version}";
 
   src = fetchurl {
-    url = "https://github.com/DaveDavenport/rofi/releases/download/${version}/${name}.tar.gz";
-    sha256 = "0ys7grazqz5hw3nx2393df54ykcd5gw0zn66kik5fvzijpg3qfcx";
+    url = "https://github.com/DaveDavenport/rofi/releases/download/${version}/rofi-${version}.tar.gz";
+    sha256 = "1dc33zf33z38jcxb0lxpyd31waalpf6d4cd9z5f9m5qphdk1g679";
   };
+
+  # config.patch may be removed in the future - https://github.com/DaveDavenport/rofi/pull/781
+  patches = [ ./config.patch ];
 
   preConfigure = ''
     patchShebangs "script"
@@ -18,17 +21,22 @@ stdenv.mkDerivation rec {
     sed -i 's/~root/~nobody/g' test/helper-expand.c
   '';
 
+  postFixup = ''
+    substituteInPlace "$out"/bin/rofi-theme-selector \
+        --replace "%ROFIOUT%" "$out/share"
+  '';
+
   nativeBuildInputs = [ autoreconfHook pkgconfig ];
   buildInputs = [ libxkbcommon pango cairo git bison flex librsvg check
     libstartup_notification libxcb xcbutil xcbutilwm xcbutilxrm which
   ];
-  doCheck = true;
+  doCheck = false;
 
   meta = with stdenv.lib; {
     description = "Window switcher, run dialog and dmenu replacement";
     homepage = https://davedavenport.github.io/rofi;
     license = licenses.mit;
-    maintainers = with maintainers; [ mbakke garbas ];
+    maintainers = with maintainers; [ mbakke garbas ma27 ];
     platforms = with platforms; unix;
   };
 }

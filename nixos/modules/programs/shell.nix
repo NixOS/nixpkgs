@@ -40,7 +40,7 @@ in
 
           # Subscribe the root user to the NixOS channel by default.
           if [ "$USER" = root -a ! -e $HOME/.nix-channels ]; then
-              echo "${config.system.defaultChannel} nixos" > $HOME/.nix-channels
+              echo "${config.system.nixos.defaultChannel} nixos" > $HOME/.nix-channels
           fi
 
           # Create the per-user garbage collector roots directory.

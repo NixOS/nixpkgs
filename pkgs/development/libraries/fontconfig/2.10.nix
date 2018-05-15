@@ -17,6 +17,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ expat ];
 
   configureFlags = [
+    "--with-arch=${hostPlatform.parsed.cpu.name}"
     "--sysconfdir=/etc"
     "--with-cache-dir=/var/cache/fontconfig"
     "--disable-docs"

@@ -5,7 +5,8 @@
 # script that sets up the right environment variables so that the
 # compiler and the linker just "work".
 
-{ name ? "", stdenvNoCC, nativeTools, noLibc ? false, nativeLibc, nativePrefix ? ""
+{ name ? ""
+, stdenvNoCC, nativeTools, propagateDoc ? !nativeTools, noLibc ? false, nativeLibc, nativePrefix ? ""
 , bintools ? null, libc ? null
 , coreutils ? null, shell ? stdenvNoCC.shell, gnugrep ? null
 , extraPackages ? [], extraBuildCommands ? ""
@@ -15,7 +16,7 @@
 
 with stdenvNoCC.lib;
 
-assert nativeTools -> nativePrefix != "";
+assert nativeTools -> !propagateDoc && nativePrefix != "";
 assert !nativeTools ->
   bintools != null && coreutils != null && gnugrep != null;
 assert !(nativeLibc && noLibc);
@@ -52,6 +53,7 @@ let
   dynamicLinker =
     /**/ if libc == null then null
     else if targetPlatform.libc == "musl"             then "${libc_lib}/lib/ld-musl-*"
+    else if targetPlatform.libc == "bionic"           then "/system/bin/linker"
     else if targetPlatform.system == "i686-linux"     then "${libc_lib}/lib/ld-linux.so.2"
     else if targetPlatform.system == "x86_64-linux"   then "${libc_lib}/lib/ld-linux-x86-64.so.2"
     # ARM with a wildcard, which can be "" or "-armhf".
@@ -72,7 +74,7 @@ in
 
 stdenv.mkDerivation {
   name = targetPrefix
-    + (if name != "" then name else "${bintoolsName}-wrapper")
+    + (if name != "" then name else stdenv.lib.removePrefix targetPrefix "${bintoolsName}-wrapper")
     + (stdenv.lib.optionalString (bintools != null && bintoolsVersion != "") "-${bintoolsVersion}");
 
   preferLocalBuild = true;
@@ -83,7 +85,7 @@ stdenv.mkDerivation {
 
   inherit targetPrefix infixSalt;
 
-  outputs = [ "out" "info" "man" ];
+  outputs = [ "out" ] ++ optionals propagateDoc [ "man" "info" ];
 
   passthru = {
     inherit bintools libc nativeTools nativeLibc nativePrefix;
@@ -111,7 +113,7 @@ stdenv.mkDerivation {
     ''
       set -u
 
-      mkdir -p $out/bin {$out,$info,$man}/nix-support
+      mkdir -p $out/bin $out/nix-support
 
       wrap() {
         local dst="$1"
@@ -189,7 +191,12 @@ stdenv.mkDerivation {
   strictDeps = true;
   depsTargetTargetPropagated = extraPackages;
 
-  setupHook = ./setup-hook.sh;
+  wrapperName = "BINTOOLS_WRAPPER";
+
+  setupHooks = [
+    ../setup-hooks/role.bash
+    ./setup-hook.sh
+  ];
 
   postFixup =
     ''
@@ -245,28 +252,27 @@ stdenv.mkDerivation {
     '')
 
     + optionalString (!nativeTools) ''
-
       ##
       ## User env support
       ##
 
       # Propagate the underling unwrapped bintools so that if you
-      # install the wrapper, you get tools like objdump, the manpages,
-      # etc. as well (same for any binaries of libc).
+      # install the wrapper, you get tools like objdump (same for any
+      # binaries of libc).
       printWords ${bintools_bin} ${if libc == null then "" else libc_bin} > $out/nix-support/propagated-user-env-packages
+    ''
 
+    + optionalString propagateDoc ''
       ##
       ## Man page and info support
       ##
 
-      printWords ${bintools.info or ""} \
-        >> $info/nix-support/propagated-build-inputs
-      printWords ${bintools.man or ""} \
-        >> $man/nix-support/propagated-build-inputs
+      mkdir -p $man/nix-support $info/nix-support
+      printWords ${bintools.man or ""} >> $man/nix-support/propagated-build-inputs
+      printWords ${bintools.info or ""} >> $info/nix-support/propagated-build-inputs
     ''
 
     + ''
-
       ##
       ## Hardening support
       ##
@@ -289,18 +295,18 @@ stdenv.mkDerivation {
       set +u
       substituteAll ${./add-flags.sh} $out/nix-support/add-flags.sh
       substituteAll ${./add-hardening.sh} $out/nix-support/add-hardening.sh
-      substituteAll ${../cc-wrapper/utils.sh} $out/nix-support/utils.sh
+      substituteAll ${../wrapper-common/utils.bash} $out/nix-support/utils.bash
 
       ##
       ## Extra custom steps
       ##
-
     ''
+
     + extraBuildCommands;
 
   inherit dynamicLinker expand-response-params;
 
-  # for substitution in utils.sh
+  # for substitution in utils.bash
   expandResponseParams = "${expand-response-params}/bin/expand-response-params";
 
   meta =

@@ -2,5 +2,8 @@
 
 source @dfInit@
 
+export DYLD_LIBRARY_PATH="$env_dir/libs"
+export DYLD_FRAMEWORK_PATH="$env_dir/libs"
+
 cd "$DF_DIR"
-exec "$env_dir/libs/Dwarf_Fortress" "$@"
+exec "$exe" "$@"

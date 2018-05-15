@@ -5,10 +5,13 @@
 , fetchurl
 , findutils
 , file
+, fontsConf
 , git
 , glxinfo
 , gnugrep
+, gnused
 , gnutar
+, gtk2, gnome_vfs, glib, GConf
 , gzip
 , fontconfig
 , freetype
@@ -29,7 +32,6 @@
 , writeTextFile
 , xkeyboard_config
 , zlib
-, fontsConf
 }:
 
 let
@@ -56,6 +58,7 @@ let
           findutils
           gnugrep
           which
+          gnused
 
           # For Android emulator
           file
@@ -95,6 +98,11 @@ let
           libpulseaudio
           libX11
 
+          # For GTKLookAndFeel
+          gtk2
+          gnome_vfs
+          glib
+          GConf
         ]}" \
         --set QT_XKB_CONFIG_ROOT "${xkeyboard_config}/share/X11/xkb" \
         --set FONTCONFIG_FILE ${fontsConf}
@@ -106,6 +114,7 @@ let
   # environment is used as a work around for that.
   fhsEnv = buildFHSUserEnv {
     name = "${pname}-fhs-env";
+    multiPkgs = pkgs: [ pkgs.ncurses5 ];
   };
 
 in

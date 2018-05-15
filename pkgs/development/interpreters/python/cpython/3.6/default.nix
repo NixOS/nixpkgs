@@ -27,7 +27,7 @@ with stdenv.lib;
 
 let
   majorVersion = "3.6";
-  minorVersion = "4";
+  minorVersion = "5";
   minorVersionSuffix = "";
   pythonVersion = majorVersion;
   version = "${majorVersion}.${minorVersion}${minorVersionSuffix}";
@@ -42,6 +42,8 @@ let
   nativeBuildInputs =
     optional (stdenv.hostPlatform != stdenv.buildPlatform) buildPackages.python3;
 
+  hasDistutilsCxxPatch = !(stdenv.cc.isGNU or false);
+
 in stdenv.mkDerivation {
   name = "python3-${version}";
   pythonVersion = majorVersion;
@@ -51,7 +53,7 @@ in stdenv.mkDerivation {
 
   src = fetchurl {
     url = "https://www.python.org/ftp/python/${majorVersion}.${minorVersion}/Python-${version}.tar.xz";
-    sha256 = "1fna7g8jxzl4kd2pqmmqhva5724c5m920x3fsrpsgskaylmr76qm";
+    sha256 = "19l7inxm056jjw33zz97z0m02hsi7jnnx5kyb76abj5ml4xhad7l";
   };
 
   NIX_LDFLAGS = optionalString stdenv.isLinux "-lgcc_s";
@@ -69,6 +71,24 @@ in stdenv.mkDerivation {
 
   patches = [
     ./no-ldconfig.patch
+  ] ++ optionals stdenv.isDarwin [
+    # Fix for https://bugs.python.org/issue24658
+    (fetchpatch {
+      url = "https://bugs.python.org/file45178/issue24658-3-3.6.diff";
+      sha256 = "1x060hs80nl34mcl2ji2i7l4shxkmxwgq8h8lcmav8rjqqz1nb4a";
+    })
+  ] ++ optionals (x11Support && stdenv.isDarwin) [
+    ./use-correct-tcl-tk-on-darwin.patch
+  ] ++ optionals hasDistutilsCxxPatch [
+    # Fix for http://bugs.python.org/issue1222585
+    # Upstream distutils is calling C compiler to compile C++ code, which
+    # only works for GCC and Apple Clang. This makes distutils to call C++
+    # compiler when needed.
+    (fetchpatch {
+      url = "https://bugs.python.org/file47046/python-3.x-distutils-C++.patch";
+      sha256 = "0dgdn9k2kmw4wh90vdnjcrnn97ylxgx7mbn9l87fwz6j501jqvk8";
+      extraPrefix = "";
+    })
   ];
 
   postPatch = ''
@@ -111,7 +131,10 @@ in stdenv.mkDerivation {
     "ac_cv_computed_gotos=yes"
     "ac_cv_file__dev_ptmx=yes"
     "ac_cv_file__dev_ptc=yes"
-  ];
+  ]
+    # Never even try to use lchmod on linux,
+    # don't rely on detecting glibc-isms.
+  ++ optional stdenv.hostPlatform.isLinux "ac_cv_func_lchmod=no";
 
   preConfigure = ''
     for i in /usr /sw /opt /pkg; do	# improve purity
@@ -120,6 +143,9 @@ in stdenv.mkDerivation {
     ${optionalString stdenv.isDarwin ''
        export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -msse2"
        export MACOSX_DEPLOYMENT_TARGET=10.6
+     ''
+     + optionalString stdenv.hostPlatform.isMusl ''
+      export NIX_CFLAGS_COMPILE+=" -DTHREAD_STACK_SIZE=0x100000"
      ''}
   '';
 
@@ -175,7 +201,7 @@ in stdenv.mkDerivation {
   passthru = let
     pythonPackages = callPackage ../../../../../top-level/python-packages.nix {python=self; overrides=packageOverrides;};
   in rec {
-    inherit libPrefix sitePackages x11Support;
+    inherit libPrefix sitePackages x11Support hasDistutilsCxxPatch;
     executable = "${libPrefix}m";
     buildEnv = callPackage ../../wrapper.nix { python = self; inherit (pythonPackages) requiredPythonModules; };
     withPackages = import ../../with-packages.nix { inherit buildEnv pythonPackages;};
@@ -187,6 +213,8 @@ in stdenv.mkDerivation {
   };
 
   enableParallelBuilding = true;
+
+  doCheck = false; # expensive, and fails
 
   meta = {
     homepage = http://python.org;

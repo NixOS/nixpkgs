@@ -3,12 +3,12 @@
 
 buildPythonPackage rec {
   name = "${pname}-${version}";
-  version = "0.12.2";
+  version = "0.12.4";
   pname = "Flask";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1hfs2jr2m5lr51xd4gblb28rncd0xrpycz6c07cyqsbv4dhl9x29";
+    sha256 = "2ea22336f6d388b4b242bc3abf8a01244a8aa3e236e7407469ef78c16ba355dd";
   };
 
   checkInputs = [ pytest ];

@@ -8,19 +8,19 @@
 , generateManPage ? false
 , ffmpegSupport ? true
 , rtmpSupport ? true
-, phantomjsSupport ? !targetPlatform.isDarwin # phantomjs2 is broken on darwin
+, phantomjsSupport ? false
 , hlsEncryptedSupport ? true
 , makeWrapper }:
 
 with stdenv.lib;
 buildPythonApplication rec {
 
-  name = "youtube-dl-${version}";
-  version = "2018.03.03";
+  pname = "youtube-dl";
+  version = "2018.05.09";
 
   src = fetchurl {
-    url = "https://yt-dl.org/downloads/${version}/${name}.tar.gz";
-    sha256 = "1x0m5whrcs7589z8rildgy0zmxfvzbnx89pag7013qvfrpb63858";
+    url = "https://yt-dl.org/downloads/${version}/${pname}-${version}.tar.gz";
+    sha256 = "0sl4bi2jls3417rd62awbqdq1b6wskkjbfwpnyw4a61qarfxid1d";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -38,11 +38,16 @@ buildPythonApplication rec {
         ++ optional phantomjsSupport phantomjs2;
     in [ ''--prefix PATH : "${makeBinPath packagesToBinPath}"'' ];
 
+  postInstall = ''
+    mkdir -p $out/share/zsh/site-functions
+    cp youtube-dl.zsh $out/share/zsh/site-functions/_youtube-dl
+  '';
+
   # Requires network
   doCheck = false;
 
   meta = {
-    homepage = http://rg3.github.io/youtube-dl/;
+    homepage = https://rg3.github.io/youtube-dl/;
     repositories.git = https://github.com/rg3/youtube-dl.git;
     description = "Command-line tool to download videos from YouTube.com and other sites";
     longDescription = ''

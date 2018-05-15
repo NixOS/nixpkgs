@@ -1,18 +1,18 @@
 { fetchurl, stdenv, perl, makeWrapper, procps }:
 
 stdenv.mkDerivation rec {
-  name = "parallel-20180122";
+  name = "parallel-20180422";
 
   src = fetchurl {
     url = "mirror://gnu/parallel/${name}.tar.bz2";
-    sha256 = "1wkbppb4mc56grl6jsp803sf0hm7mg5ff7qmxalp7sd0vxqw41p9";
+    sha256 = "0xsfpbxwgd4197gra981iv0nmjfk58c0d88dxx6dh6yrqz523klx";
   };
 
   nativeBuildInputs = [ makeWrapper perl ];
 
   postInstall = ''
     wrapProgram $out/bin/parallel \
-      ${if stdenv.isLinux then ("--prefix PATH \":\" ${procps}/bin") else ""} \
+      --prefix PATH : "${procps}/bin" \
       --prefix PATH : "${perl}/bin" \
   '';
 

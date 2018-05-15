@@ -1,6 +1,6 @@
 { lib, stdenv, fetchurl, pkgconfig
 
-, abiVersion
+, abiVersion ? "6"
 , mouseSupport ? false
 , unicode ? true
 , enableStatic ? stdenv.hostPlatform.useAndroidPrebuilt
@@ -13,18 +13,12 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "6.0-20171125";
+  version = "6.1";
   name = "ncurses-${version}" + lib.optionalString (abiVersion == "5") "-abi5-compat";
 
   src = fetchurl {
-    urls = [
-      # Remove this mirror on next upgrade, it's only needed because upstream took ncurses-6.0-20171125.tgz down!
-      "http://bld1.alpinelinux.org/distfiles/v3.5/ncurses-${version}.tgz"
-
-      "ftp://ftp.invisible-island.net/ncurses/current/ncurses-${version}.tgz"
-      "https://invisible-mirror.net/archives/ncurses/current/ncurses-${version}.tgz"
-    ];
-    sha256 = "11adzj0k82nlgpfrflabvqn2m7fmhp2y6pd7ivmapynxqb9vvb92";
+    url = "mirror://gnu/ncurses/ncurses-${version}.tar.gz";
+    sha256 = "05qdmbmrrn88ii9f66rkcmcyzp1kb1ymkx7g040lfkd1nkp7w1da";
   };
 
   patches = lib.optional (!stdenv.cc.isClang) ./clang.patch;
@@ -78,7 +72,9 @@ stdenv.mkDerivation rec {
   # When building a wide-character (Unicode) build, create backward
   # compatibility links from the the "normal" libraries to the
   # wide-character libraries (e.g. libncurses.so to libncursesw.so).
-  postFixup = ''
+  postFixup = let
+    abiVersion-extension = if stdenv.isDarwin then "${abiVersion}.$dylibtype" else "$dylibtype.${abiVersion}"; in
+  ''
     # Determine what suffixes our libraries have
     suffix="$(awk -F': ' 'f{print $3; f=0} /default library suffix/{f=1}' config.log)"
     libs="$(ls $dev/lib/pkgconfig | tr ' ' '\n' | sed "s,\(.*\)$suffix\.pc,\1,g")"
@@ -101,12 +97,12 @@ stdenv.mkDerivation rec {
         for dylibtype in so dll dylib; do
           if [ -e "$out/lib/lib''${library}$suffix.$dylibtype" ]; then
             ln -svf lib''${library}$suffix.$dylibtype $out/lib/lib$library$newsuffix.$dylibtype
-            ln -svf lib''${library}$suffix.$dylibtype.${abiVersion} $out/lib/lib$library$newsuffix.$dylibtype.${abiVersion}
+            ln -svf lib''${library}$suffix.${abiVersion-extension} $out/lib/lib$library$newsuffix.${abiVersion-extension}
             if [ "ncurses" = "$library" ]
             then
               # make libtinfo symlinks
               ln -svf lib''${library}$suffix.$dylibtype $out/lib/libtinfo$newsuffix.$dylibtype
-              ln -svf lib''${library}$suffix.$dylibtype.${abiVersion} $out/lib/libtinfo$newsuffix.$dylibtype.${abiVersion}
+              ln -svf lib''${library}$suffix.${abiVersion-extension} $out/lib/libtinfo$newsuffix.${abiVersion-extension}
             fi
           fi
         done
@@ -127,6 +123,8 @@ stdenv.mkDerivation rec {
     moveToOutput "bin/tic" "$out"
     moveToOutput "bin/tput" "$out"
     moveToOutput "bin/tset" "$out"
+    moveToOutput "bin/captoinfo" "$out"
+    moveToOutput "bin/infotocap" "$out"
   '';
 
   preFixup = lib.optionalString (!hostPlatform.isCygwin) ''

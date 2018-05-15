@@ -4,12 +4,21 @@
 
 buildPythonPackage rec {
   pname = "moto";
-  version = "1.2.0";
+  version = "1.3.3";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "c42b894cdf35412c95f0c6b40309cf802436e049cd172dc5db7516c7b845191b";
+    sha256 = "45d14aca2b06b0083d5e82cfd770ebca0ba77b5070aec6928670240939a78681";
   };
+
+  postPatch = ''
+    # dateutil upper bound was just to keep compatibility with Python 2.6
+    # see https://github.com/spulec/moto/pull/1519 and https://github.com/boto/botocore/pull/1402
+    # regarding aws-xray-sdk: https://github.com/spulec/moto/commit/31eac49e1555c5345021a252cb0c95043197ea16
+    substituteInPlace setup.py \
+      --replace "python-dateutil<2.7.0" "python-dateutil<3.0.0" \
+      --replace "aws-xray-sdk<0.96," "aws-xray-sdk"
+  '';
 
   propagatedBuildInputs = [
     aws-xray-sdk

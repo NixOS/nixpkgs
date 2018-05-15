@@ -35,7 +35,7 @@ runCommand "nixpkgs-metrics"
       [[ -n $x ]] || exit 1
       echo "$name.allocations $x B" >> $out/nix-support/hydra-metrics
 
-      x=$(sed -e 's/.*values allocated: \([0-9]\+\) .*/\1/ ; t ; d' stats)
+      x=$(sed -e 's/.*values allocated count: \([0-9]\+\).*/\1/ ; t ; d' stats)
       [[ -n $x ]] || exit 1
       echo "$name.values $x" >> $out/nix-support/hydra-metrics
     }

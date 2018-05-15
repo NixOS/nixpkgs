@@ -1,20 +1,20 @@
-{ stdenv, fetchurl, pkgconfig, gst-plugins-base, bzip2, libva, wayland
+{ stdenv, fetchurl, meson, ninja, pkgconfig, gst-plugins-base, bzip2, libva, wayland
 , libdrm, udev, xorg, libGLU_combined, yasm, gstreamer, gst-plugins-bad, nasm
 , libvpx, python
 }:
 
 stdenv.mkDerivation rec {
   name = "gst-vaapi-${version}";
-  version = "1.12.4";
+  version = "1.14.0";
 
   src = fetchurl {
     url = "${meta.homepage}/src/gstreamer-vaapi/gstreamer-vaapi-${version}.tar.xz";
-    sha256 = "1jg9nvc8000yi2bcl3wn2yh2hwl7yvlwldj6778w8c0z5qj7fb8w";
+    sha256 = "1whxk428badv8ibji00sn6hj17cp8l9n93rr948bz2gjbq41zqz4";
   };
 
   outputs = [ "out" "dev" ];
 
-  nativeBuildInputs = [ pkgconfig bzip2 ];
+  nativeBuildInputs = [ meson ninja pkgconfig bzip2 ];
 
   buildInputs = [
     gstreamer gst-plugins-base gst-plugins-bad libva wayland libdrm udev
@@ -22,11 +22,10 @@ stdenv.mkDerivation rec {
     xorg.libICE libGLU_combined nasm libvpx python
   ];
 
-  preConfigure = "
+  preConfigure = ''
     export GST_PLUGIN_PATH_1_0=$out/lib/gstreamer-1.0
     mkdir -p $GST_PLUGIN_PATH_1_0
-    ";
-  configureFlags = "--disable-builtin-libvpx --with-gstreamer-api=1.0";
+  '';
 
   meta = {
     homepage = https://gstreamer.freedesktop.org;

@@ -1,52 +1,45 @@
-{ stdenv, fetchurl }:
+{ stdenv, lib, fetchurl, alsaLib, libpulseaudio, undmg }:
 
-assert (stdenv.system == "x86_64-linux") || (stdenv.system == "i686-linux");
 let
   bits = stdenv.lib.optionalString (stdenv.system == "x86_64-linux") "64";
+  libPath = lib.makeLibraryPath [ stdenv.cc.cc alsaLib libpulseaudio ];
 
-  libPath = stdenv.lib.makeLibraryPath
-    [ stdenv.cc.libc stdenv.cc.cc ] + ":${stdenv.cc.cc.lib}/lib64";
-  patchLib = x: "patchelf --set-rpath ${libPath} ${x}";
-
-  src =
-    (if (bits == "64") then
-      fetchurl {
-        url = "http://zandronum.com/essentials/fmod/fmodapi42416linux64.tar.gz";
-        sha256 = "0hkwlzchzzgd7fanqznbv5bs53z2qy8iiv9l2y77l4sg1jwmlm6y";
-      }
-    else
-      fetchurl {
-        url = "http://zandronum.com/essentials/fmod/fmodapi42416linux.tar.gz";
-        sha256 = "13diw3ax2slkr99mwyjyc62b8awc30k0z08cvkpk2p3i1j6f85m5";
-      }
-    );
 in
 stdenv.mkDerivation rec {
-  inherit src;
+  name = "fmod-${version}";
+  version = "4.44.64";
+  shortVersion = builtins.replaceStrings [ "." ] [ "" ] version;
 
-  name    = "fmod-${version}";
-  version = "4.24.16";
+  src = fetchurl (if stdenv.isLinux then {
+    url = "https://zdoom.org/files/fmod/fmodapi${shortVersion}linux.tar.gz";
+    sha256 = "047hk92xapwwqj281f4zwl0ih821rrliya70gfj82sdfjh9lz8i1";
+  } else {
+    url = "https://zdoom.org/files/fmod/fmodapi${shortVersion}mac-installer.dmg";
+    sha256 = "1m1y4cpcwpkl8x31d3s68xzp107f343ma09w2437i2adn5y7m8ii";
+  });
+
+  nativeBuildInputs = [ undmg ];
 
   dontStrip = true;
   dontPatchELF = true;
   dontBuild = true;
 
-  makeFlags = [ "DESTLIBDIR=$(out)/lib" "DESTHDRDIR=$(out)/include" ];
-
-  preInstall = ''
-    mkdir -p $out/lib
-  '';
-
-  postInstall = ''
-    mv $out/lib/libfmodex${bits}-${version}.so $out/lib/libfmodex.so
-    mv $out/lib/libfmodexp${bits}-${version}.so $out/lib/libfmodexp.so
+  installPhase = lib.optionalString stdenv.isLinux ''
+    install -Dm755 api/lib/libfmodex${bits}-${version}.so $out/lib/libfmodex-${version}.so
+    ln -s libfmodex-${version}.so $out/lib/libfmodex.so
+    patchelf --set-rpath ${libPath} $out/lib/libfmodex.so
+  '' + lib.optionalString stdenv.isDarwin ''
+    install -D api/lib/libfmodex.dylib $out/lib/libfmodex.dylib
+    install -D api/lib/libfmodexL.dylib $out/lib/libfmodexL.dylib
+  '' + ''
+    cp -r api/inc $out/include
   '';
 
   meta = with stdenv.lib; {
     description = "Programming library and toolkit for the creation and playback of interactive audio";
-    homepage    = "http://www.fmod.org/";
+    homepage    = http://www.fmod.org/;
     license     = licenses.unfreeRedistributable;
-    platforms   = platforms.linux;
-    maintainers = [ stdenv.lib.maintainers.lassulus ];
+    platforms   = [ "x86_64-linux" "i686-linux" "x86_64-darwin" ];
+    maintainers = [ maintainers.lassulus ];
   };
 }

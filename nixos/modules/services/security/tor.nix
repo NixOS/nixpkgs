@@ -5,6 +5,7 @@ with lib;
 let
   cfg = config.services.tor;
   torDirectory = "/var/lib/tor";
+  torRunDirectory = "/run/tor";
 
   opt    = name: value: optionalString (value != null) "${name} ${value}";
   optint = name: value: optionalString (value != null && value != 0)    "${name} ${toString value}";
@@ -38,6 +39,7 @@ let
     ''}
 
     ${optint "ControlPort" cfg.controlPort}
+    ${optionalString cfg.controlSocket.enable "ControlSocket ${torRunDirectory}/control GroupWritable RelaxDirModeCheck"}
   ''
   # Client connection config
   + optionalString cfg.client.enable ''
@@ -138,6 +140,17 @@ in
           If set, Tor will accept connections on the specified port
           and allow them to control the tor process.
         '';
+      };
+
+      controlSocket = {
+        enable = mkOption {
+          type = types.bool;
+          default = false;
+          description = ''
+            Wheter to enable Tor control socket. Control socket is created
+            in <literal>${torRunDirectory}/control</literal>
+          '';
+        };
       };
 
       client = {
@@ -690,14 +703,10 @@ in
         after    = [ "network.target" ];
         restartTriggers = [ torRcFile ];
 
-        # Translated from the upstream contrib/dist/tor.service.in
-        preStart = ''
-          install -o tor -g tor -d ${torDirectory}/onion
-          ${pkgs.tor}/bin/tor -f ${torRcFile} --verify-config
-        '';
-
         serviceConfig =
           { Type         = "simple";
+            # Translated from the upstream contrib/dist/tor.service.in
+            ExecStartPre = "${pkgs.tor}/bin/tor -f ${torRcFile} --verify-config";
             ExecStart    = "${pkgs.tor}/bin/tor -f ${torRcFile} --RunAsDaemon 0";
             ExecReload   = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
             KillSignal   = "SIGINT";
@@ -712,11 +721,13 @@ in
             #   DeviceAllow /dev/urandom r
             # .. but we can't specify DeviceAllow multiple times. 'closed'
             # is close enough.
+            RuntimeDirectory        = "tor";
+            StateDirectory          = [ "tor" "tor/onion" ];
             PrivateTmp              = "yes";
             DevicePolicy            = "closed";
             InaccessibleDirectories = "/home";
             ReadOnlyDirectories     = "/";
-            ReadWriteDirectories    = torDirectory;
+            ReadWriteDirectories    = [torDirectory torRunDirectory];
             NoNewPrivileges         = "yes";
           };
       };

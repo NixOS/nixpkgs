@@ -1,6 +1,6 @@
 { stdenv, fetchurl, pkgconfig, intltool
 , gtk, dbus-glib, libstartup_notification, libnotify, libexif, pcre, udev
-, exo, libxfce4util, xfconf, xfce4panel, wrapGAppsHook
+, exo, libxfce4util, xfconf, xfce4-panel, wrapGAppsHook
 }:
 
 stdenv.mkDerivation rec {
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     intltool
     gtk dbus-glib libstartup_notification libnotify libexif pcre udev
-    exo libxfce4util xfconf xfce4panel
+    exo libxfce4util xfconf xfce4-panel
   ];
   # TODO: optionality?
 

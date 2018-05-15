@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgconfig, intltool, gtk, libxml2, libsoup, upower,
-libxfce4ui, libxfce4util, xfce4panel }:
+libxfce4ui, libxfce4util, xfce4-panel }:
 
 stdenv.mkDerivation rec {
   name = "${p_name}-${ver_maj}.${ver_min}";
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkgconfig intltool ];
 
   buildInputs = [ gtk libxml2 libsoup upower libxfce4ui libxfce4util
-   xfce4panel ];
+   xfce4-panel ];
 
   enableParallelBuilding = true;
 

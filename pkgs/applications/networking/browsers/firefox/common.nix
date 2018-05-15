@@ -213,6 +213,7 @@ stdenv.mkDerivation (rec {
   ++ extraMakeFlags;
 
   enableParallelBuilding = true;
+  doCheck = false; # "--disable-tests" above
 
   preInstall = ''
     # The following is needed for startup cache creation on grsecurity kernels.
@@ -221,7 +222,7 @@ stdenv.mkDerivation (rec {
 
   postInstall = ''
     # For grsecurity kernels
-    paxmark m $out/lib/firefox-[0-9]*/{firefox,firefox-bin,plugin-container}
+    paxmark m $out/lib/firefox*/{firefox,firefox-bin,plugin-container}
 
     # Remove SDK cruft. FIXME: move to a separate output?
     rm -rf $out/share/idl $out/include $out/lib/firefox-devel-*
@@ -233,8 +234,8 @@ stdenv.mkDerivation (rec {
   postFixup = ''
     # Fix notifications. LibXUL uses dlopen for this, unfortunately; see #18712.
     patchelf --set-rpath "${lib.getLib libnotify
-      }/lib:$(patchelf --print-rpath "$out"/lib/firefox-*/libxul.so)" \
-        "$out"/lib/firefox-*/libxul.so
+      }/lib:$(patchelf --print-rpath "$out"/lib/firefox*/libxul.so)" \
+        "$out"/lib/firefox*/libxul.so
   '';
 
   doInstallCheck = true;

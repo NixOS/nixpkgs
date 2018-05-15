@@ -1,11 +1,13 @@
-{ stdenv, fetchPypi, buildPythonPackage }:
+{ stdenv, fetchPypi, buildPythonPackage, user-agents }:
 
 buildPythonPackage rec {
   pname = "home-assistant-frontend";
-  version = "20180209.0";
+  version = "20180509.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "b85f0e833871408a95619ae38d5344701a6466e8f7b5530e718ccc260b68d3ed";
+    sha256 = "11d9c4a07565358e6ee001f5c57c8393b4aaadac0d993a0a39a0387a33644fba";
   };
+
+  propagatedBuildInputs = [ user-agents ];
 }

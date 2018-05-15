@@ -15,7 +15,9 @@ pythonPackages.buildPythonApplication rec {
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace dnspython3 dnspython
+      --replace dnspython3 dnspython \
+      --replace 'cryptography<2.1.0' cryptography \
+      --replace 'pyOpenSSL<17.3.0' pyOpenSSL
   '';
 
   # tests folder is not included in release

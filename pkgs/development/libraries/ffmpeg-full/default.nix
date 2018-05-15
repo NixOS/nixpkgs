@@ -119,7 +119,7 @@
 #, utvideo ? null # Ut Video de/encoder
 , vid-stab ? null # Video stabilization
 #, vo-aacenc ? null # AAC encoder
-#, vo-amrwbenc ? null # AMR-WB encoder
+, vo-amrwbenc ? null # AMR-WB encoder
 , wavpack ? null # Wavpack encoder
 , x264 ? null # H.264/AVC encoder
 , x265 ? null # H.265/HEVC encoder
@@ -249,7 +249,10 @@ stdenv.mkDerivation rec {
       --replace /usr/local/lib/frei0r-1 ${frei0r}/lib/frei0r-1
   '';
 
+  configurePlatforms = [];
   configureFlags = [
+    "--target_os=${hostPlatform.parsed.kernel.name}"
+    "--arch=${hostPlatform.parsed.cpu.name}"
     /*
      *  Licensing flags
      */
@@ -371,8 +374,6 @@ stdenv.mkDerivation rec {
     #(enableFeature quvi "libquvi")
     (enableFeature (rtmpdump != null) "librtmp")
     #(enableFeature (schroedinger != null) "libschroedinger")
-    #(enableFeature (shine != null) "libshine")
-    (enableFeature (samba != null && gplLicensing && version3Licensing) "libsmbclient")
     (enableFeature (SDL2 != null) "sdl2")
     (enableFeature (soxr != null) "libsoxr")
     (enableFeature (speex != null) "libspeex")
@@ -380,7 +381,7 @@ stdenv.mkDerivation rec {
     #(enableFeature (utvideo != null && gplLicensing) "libutvideo")
     (enableFeature (vid-stab != null && gplLicensing) "libvidstab") # Actual min. version 2.0
     #(enableFeature (vo-aacenc != null && version3Licensing) "libvo-aacenc")
-    #(enableFeature (vo-amrwbenc != null && version3Licensing) "libvo-amrwbenc")
+    (enableFeature (vo-amrwbenc != null && version3Licensing) "libvo-amrwbenc")
     (enableFeature (wavpack != null) "libwavpack")
     (enableFeature (x264 != null && gplLicensing) "libx264")
     (enableFeature (x265 != null && gplLicensing) "libx265")
@@ -396,6 +397,9 @@ stdenv.mkDerivation rec {
     (enableFeature optimizationsDeveloper "optimizations")
     (enableFeature extraWarningsDeveloper "extra-warnings")
     (enableFeature strippingDeveloper "stripping")
+  ] ++ optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+    "--cross-prefix=${stdenv.cc.targetPrefix}"
+    "--enable-cross-compile"
   ];
 
   nativeBuildInputs = [ perl pkgconfig texinfo yasm ];
@@ -405,7 +409,8 @@ stdenv.mkDerivation rec {
     libjack2 ladspaH lame libass libbluray libbs2b libcaca libdc1394 libmodplug
     libogg libopus libssh libtheora libvdpau libvorbis libvpx libwebp libX11
     libxcb libXv lzma openal openjpeg_1 libpulseaudio rtmpdump opencore-amr
-    samba SDL2 soxr speex vid-stab wavpack x264 x265 xavs xvidcore zeromq4 zlib
+    samba SDL2 soxr speex vid-stab vo-amrwbenc wavpack x264 x265 xavs xvidcore
+    zeromq4 zlib
   ] ++ optional openglExtlib libGLU_combined
     ++ optionals nonfreeLicensing [ fdk_aac openssl ]
     ++ optional ((isLinux || isFreeBSD) && libva != null) libva
@@ -431,20 +436,7 @@ stdenv.mkDerivation rec {
     done
   '';
 
-
   enableParallelBuilding = true;
-
-  /* Cross-compilation is untested, consider this an outline, more work
-     needs to be done to portions of the build to get it to work correctly */
-  crossAttrs = {
-    configurePlatforms = [];
-    configureFlags = configureFlags ++ [
-      "--cross-prefix=${stdenv.cc.targetPrefix}"
-      "--enable-cross-compile"
-      "--target_os=${hostPlatform.parsed.kernel.name}"
-      "--arch=${hostPlatform.parsed.cpu.name}"
-    ];
-  };
 
   meta = with stdenv.lib; {
     description = "A complete, cross-platform solution to record, convert and stream audio and video";
