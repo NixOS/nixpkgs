@@ -1,0 +1,575 @@
+diff --git a/scripts/docs/jekyll.bzl b/scripts/docs/jekyll.bzl
+index 3552f4a23b..e14da174f5 100644
+--- a/scripts/docs/jekyll.bzl
++++ b/scripts/docs/jekyll.bzl
+@@ -38,7 +38,8 @@ def _impl(ctx):
+     outputs = [source],
+     command = ("mkdir -p %s\n" % (source.path)) +
+     "\n".join([
+-      "tar xf %s -C %s" % (src.path, source.path) for src in ctx.files.srcs])
++      "tar xf %s -C %s" % (src.path, source.path) for src in ctx.files.srcs]),
++    use_default_shell_env=True,
+   )
+   ctx.actions.run(
+     inputs = [source],
+diff --git a/scripts/packages/bazel.sh b/scripts/packages/bazel.sh
+index 43bc593f85..c4c0c5336b 100755
+--- a/scripts/packages/bazel.sh
++++ b/scripts/packages/bazel.sh
+@@ -57,7 +57,7 @@ function get_realpath() {
+ 
+         echo "${current}"
+     else
+-        readlink -f "$1"
++        <~>coreutils<~>/bin/readlink -f "$1"
+     fi
+ }
+ 
+diff --git a/scripts/packages/self_extract_binary.bzl b/scripts/packages/self_extract_binary.bzl
+index 75f19279c3..5f10eab3f0 100644
+--- a/scripts/packages/self_extract_binary.bzl
++++ b/scripts/packages/self_extract_binary.bzl
+@@ -60,6 +60,7 @@ def _self_extract_binary(ctx):
+               "(d=${PWD}; cd ${tmpdir}; zip -rq ${d}/%s *)" % zip_artifact.path,
+               ]),
+       mnemonic = "ZipBin",
++      use_default_shell_env=True,
+   )
+   ctx.action(
+       inputs = [ctx.file.launcher, zip_artifact],
+@@ -71,6 +72,7 @@ def _self_extract_binary(ctx):
+           "zip -qA %s" % ctx.outputs.executable.path
+       ]),
+       mnemonic = "BuildSelfExtractable",
++      use_default_shell_env=True,
+   )
+ 
+ self_extract_binary = rule(
+diff --git a/src/main/java/com/google/devtools/build/lib/analysis/CommandHelper.java b/src/main/java/com/google/devtools/build/lib/analysis/CommandHelper.java
+index 85dfc7a043..607e051315 100644
+--- a/src/main/java/com/google/devtools/build/lib/analysis/CommandHelper.java
++++ b/src/main/java/com/google/devtools/build/lib/analysis/CommandHelper.java
+@@ -306,6 +306,6 @@ public final class CommandHelper {
+   private PathFragment shellPath(Map<String, String> executionInfo) {
+     // Use vanilla /bin/bash for actions running on mac machines.
+     return executionInfo.containsKey(ExecutionRequirements.REQUIRES_DARWIN)
+-        ? PathFragment.create("/bin/bash") : ruleContext.getConfiguration().getShellExecutable();
++        ? PathFragment.create("<~>bash<~>/bin/bash") : ruleContext.getConfiguration().getShellExecutable();
+   }
+ }
+diff --git a/src/main/java/com/google/devtools/build/lib/bazel/rules/BazelConfiguration.java b/src/main/java/com/google/devtools/build/lib/bazel/rules/BazelConfiguration.java
+index bde1dcce8c..095fd87292 100644
+--- a/src/main/java/com/google/devtools/build/lib/bazel/rules/BazelConfiguration.java
++++ b/src/main/java/com/google/devtools/build/lib/bazel/rules/BazelConfiguration.java
+@@ -106,7 +106,7 @@ public class BazelConfiguration extends Fragment {
+           .put(OS.WINDOWS, PathFragment.create("c:/tools/msys64/usr/bin/bash.exe"))
+           .put(OS.FREEBSD, PathFragment.create("/usr/local/bin/bash"))
+           .build();
+-  private static final PathFragment FALLBACK_SHELL = PathFragment.create("/bin/bash");
++  private static final PathFragment FALLBACK_SHELL = PathFragment.create("<~>bash<~>/bin/bash");
+ 
+   private final OS os;
+   private final boolean useStrictActionEnv;
+@@ -147,7 +147,7 @@ public class BazelConfiguration extends Fragment {
+     } else {
+       // The previous implementation used System.getenv (which uses the server's environment), and
+       // fell back to a hard-coded "/bin:/usr/bin" if PATH was not set.
+-      builder.put("PATH", null);
++      builder.put("PATH", "<~>bash<~>/bin:<~>coreutils<~>/bin:<~>gnused<~>/bin:<~>gnugrep<~>/bin:<~>perl<~>/bin:<~>zip<~>/bin:<~>unzip<~>/bin:<~>python<~>/bin:<~>findutils<~>/bin:<~>diffutils<~>/bin:<~>gawk<~>/bin");
+       builder.put("LD_LIBRARY_PATH", null);
+     }
+   }
+diff --git a/src/main/java/com/google/devtools/build/lib/rules/objc/ObjcRuleClasses.java b/src/main/java/com/google/devtools/build/lib/rules/objc/ObjcRuleClasses.java
+index 4cb6fe3953..f66cab899d 100644
+--- a/src/main/java/com/google/devtools/build/lib/rules/objc/ObjcRuleClasses.java
++++ b/src/main/java/com/google/devtools/build/lib/rules/objc/ObjcRuleClasses.java
+@@ -210,7 +210,7 @@ public class ObjcRuleClasses {
+    */
+   static SpawnAction.Builder spawnBashOnDarwinActionBuilder(String cmd) {
+     return spawnOnDarwinActionBuilder()
+-        .setShellCommand(ImmutableList.of("/bin/bash", "-c", cmd));
++        .setShellCommand(ImmutableList.of("<~>bash<~>/bin/bash", "-c", cmd));
+   }
+ 
+   /**
+diff --git a/src/main/java/com/google/devtools/build/lib/util/CommandBuilder.java b/src/main/java/com/google/devtools/build/lib/util/CommandBuilder.java
+index d60fd94dc4..c6d0089708 100644
+--- a/src/main/java/com/google/devtools/build/lib/util/CommandBuilder.java
++++ b/src/main/java/com/google/devtools/build/lib/util/CommandBuilder.java
+@@ -46,7 +46,7 @@ import java.util.Map;
+  */
+ public final class CommandBuilder {
+ 
+-  private static final ImmutableList<String> SHELLS = ImmutableList.of("/bin/sh", "/bin/bash");
++  private static final ImmutableList<String> SHELLS = ImmutableList.of("<~>bash<~>/bin/sh", "<~>bash<~>/bin/bash");
+ 
+   private static final Splitter ARGV_SPLITTER = Splitter.on(CharMatcher.anyOf(" \t"));
+ 
+diff --git a/src/test/java/com/google/devtools/build/lib/bazel/rules/BazelConfigurationTest.java b/src/test/java/com/google/devtools/build/lib/bazel/rules/BazelConfigurationTest.java
+index f4ce424f9e..02ccce7e3f 100644
+--- a/src/test/java/com/google/devtools/build/lib/bazel/rules/BazelConfigurationTest.java
++++ b/src/test/java/com/google/devtools/build/lib/bazel/rules/BazelConfigurationTest.java
+@@ -35,7 +35,7 @@ public class BazelConfigurationTest {
+   public void getShellExecutableUnset() {
+     BazelConfiguration.Options o = Options.getDefaults(BazelConfiguration.Options.class);
+     assertThat(new BazelConfiguration(OS.LINUX, o).getShellExecutable())
+-        .isEqualTo(PathFragment.create("/bin/bash"));
++        .isEqualTo(PathFragment.create("<~>bash<~>/bin/bash"));
+     assertThat(new BazelConfiguration(OS.FREEBSD, o).getShellExecutable())
+         .isEqualTo(PathFragment.create("/usr/local/bin/bash"));
+     assertThat(new BazelConfiguration(OS.WINDOWS, o).getShellExecutable())
+diff --git a/src/test/java/com/google/devtools/build/lib/bazel/rules/genrule/GenRuleConfiguredTargetTest.java b/src/test/java/com/google/devtools/build/lib/bazel/rules/genrule/GenRuleConfiguredTargetTest.java
+index e0f16892e0..d21a19425a 100644
+--- a/src/test/java/com/google/devtools/build/lib/bazel/rules/genrule/GenRuleConfiguredTargetTest.java
++++ b/src/test/java/com/google/devtools/build/lib/bazel/rules/genrule/GenRuleConfiguredTargetTest.java
+@@ -651,7 +651,7 @@ public class GenRuleConfiguredTargetTest extends BuildViewTestCase {
+     assertThat(action.getExecutionInfo().keySet()).contains("requires-darwin");
+     // requires-darwin causes /bin/bash to be hard-coded, see CommandHelper.shellPath().
+     assertThat(action.getCommandFilename())
+-        .isEqualTo("/bin/bash");
++        .isEqualTo("<~>bash<~>/bin/bash");
+   }
+ 
+   @Test
+diff --git a/src/test/java/com/google/devtools/build/lib/shell/CommandLargeInputsTest.java b/src/test/java/com/google/devtools/build/lib/shell/CommandLargeInputsTest.java
+index 9884be2adb..e0fb42d6b5 100644
+--- a/src/test/java/com/google/devtools/build/lib/shell/CommandLargeInputsTest.java
++++ b/src/test/java/com/google/devtools/build/lib/shell/CommandLargeInputsTest.java
+@@ -116,7 +116,7 @@ public class CommandLargeInputsTest {
+ 
+   @Test
+   public void testStdoutInterleavedWithStdErr() throws Exception {
+-    final Command command = new Command(new String[]{"/bin/bash",
++    final Command command = new Command(new String[]{"<~>bash<~>/bin/bash",
+       "-c", "for i in $( seq 0 999); do (echo OUT$i >&1) && (echo ERR$i  >&2); done"
+     });
+     ByteArrayOutputStream out = new ByteArrayOutputStream();
+diff --git a/src/test/java/com/google/devtools/build/lib/shell/CommandTest.java b/src/test/java/com/google/devtools/build/lib/shell/CommandTest.java
+index c7e887dd3b..532cdd98b4 100644
+--- a/src/test/java/com/google/devtools/build/lib/shell/CommandTest.java
++++ b/src/test/java/com/google/devtools/build/lib/shell/CommandTest.java
+@@ -293,12 +293,12 @@ public class CommandTest {
+     for (int exit : new int[] { -1, -2, -3 }) {
+       int expected = 256 + exit;
+       try {
+-        String[] args = { "/bin/bash", "-c", "exit " + exit };
++        String[] args = { "<~>bash<~>/bin/bash", "-c", "exit " + exit };
+         new Command(args).execute();
+         fail("Should have exited with status " + expected);
+       } catch (BadExitStatusException e) {
+         assertThat(e).hasMessageThat().isEqualTo("Process exited with status " + expected);
+-        checkCommandElements(e, "/bin/bash", "-c", "exit " + exit);
++        checkCommandElements(e, "<~>bash<~>/bin/bash", "-c", "exit " + exit);
+         TerminationStatus status = e.getResult().getTerminationStatus();
+         assertThat(status.success()).isFalse();
+         assertThat(status.exited()).isTrue();
+@@ -361,7 +361,7 @@ public class CommandTest {
+   public void testFlushing() throws Exception {
+     final Command command = new Command(
+         // On darwin, /bin/sh does not support -n for the echo builtin.
+-        new String[] {"/bin/bash", "-c", "echo -n Foo; sleep 0.1; echo Bar"});
++        new String[] {"<~>bash<~>/bin/bash", "-c", "echo -n Foo; sleep 0.1; echo Bar"});
+     // We run this command, passing in a special output stream that records when each flush()
+     // occurs. We test that a flush occurs after writing "Foo" and that another flush occurs after
+     // writing "Bar\n".
+diff --git a/src/test/java/com/google/devtools/build/lib/skylark/SkylarkRuleImplementationFunctionsTest.java b/src/test/java/com/google/devtools/build/lib/skylark/SkylarkRuleImplementationFunctionsTest.java
+index 6734c793a8..39cafc88b0 100644
+--- a/src/test/java/com/google/devtools/build/lib/skylark/SkylarkRuleImplementationFunctionsTest.java
++++ b/src/test/java/com/google/devtools/build/lib/skylark/SkylarkRuleImplementationFunctionsTest.java
+@@ -610,7 +610,7 @@ public class SkylarkRuleImplementationFunctionsTest extends SkylarkTestCase {
+         "  execution_requirements={'requires-darwin': ''})");
+     @SuppressWarnings("unchecked")
+     List<String> argv = (List<String>) (List<?>) (MutableList) lookup("argv");
+-    assertMatches("argv[0]", "^/bin/bash$", argv.get(0));
++    assertMatches("argv[0]", "^<~>bash<~>/bin/bash$", argv.get(0));
+   }
+ 
+   @Test
+diff --git a/src/test/java/com/google/devtools/build/lib/standalone/StandaloneSpawnStrategyTest.java b/src/test/java/com/google/devtools/build/lib/standalone/StandaloneSpawnStrategyTest.java
+index 6a46b8832e..378939d3db 100644
+--- a/src/test/java/com/google/devtools/build/lib/standalone/StandaloneSpawnStrategyTest.java
++++ b/src/test/java/com/google/devtools/build/lib/standalone/StandaloneSpawnStrategyTest.java
+@@ -239,7 +239,7 @@ public class StandaloneSpawnStrategyTest {
+     }
+     Spawn spawn = new SimpleSpawn(
+         new ActionsTestUtil.NullAction(),
+-        ImmutableList.of("/usr/bin/env"),
++        ImmutableList.of("<~>coreutils<~>/bin/env"),
+         /*environment=*/ ImmutableMap.of("foo", "bar", "baz", "boo"),
+         /*executionInfo=*/ ImmutableMap.of(),
+         /*inputs=*/ ImmutableList.of(),
+diff --git a/src/test/shell/integration/linux-sandbox_test.sh b/src/test/shell/integration/linux-sandbox_test.sh
+index f7ea4dca77..8a16a1cf3c 100755
+--- a/src/test/shell/integration/linux-sandbox_test.sh
++++ b/src/test/shell/integration/linux-sandbox_test.sh
+@@ -73,38 +73,38 @@ function test_user_switched_to_nobody() {
+ }
+ 
+ function test_exit_code() {
+-  $linux_sandbox $SANDBOX_DEFAULT_OPTS -- /bin/bash -c "exit 71" &> $TEST_log || code=$?
++  $linux_sandbox $SANDBOX_DEFAULT_OPTS -- <~>bash<~>/bin/bash -c "exit 71" &> $TEST_log || code=$?
+   assert_equals 71 "$code"
+ }
+ 
+ function test_signal_death() {
+-  $linux_sandbox $SANDBOX_DEFAULT_OPTS -- /bin/bash -c 'kill -ABRT $$' &> $TEST_log || code=$?
++  $linux_sandbox $SANDBOX_DEFAULT_OPTS -- <~>bash<~>/bin/bash -c 'kill -ABRT $$' &> $TEST_log || code=$?
+   assert_equals 134 "$code" # SIGNAL_BASE + SIGABRT = 128 + 6
+ }
+ 
+ # Tests that even when the child catches SIGTERM and exits with code 0, that the sandbox exits with
+ # code 142 (telling us about the expired timeout).
+ function test_signal_catcher() {
+-  $linux_sandbox $SANDBOX_DEFAULT_OPTS -T 2 -t 3 -- /bin/bash -c \
++  $linux_sandbox $SANDBOX_DEFAULT_OPTS -T 2 -t 3 -- <~>bash<~>/bin/bash -c \
+     'trap "echo later; exit 0" SIGINT SIGTERM SIGALRM; sleep 1000' &> $TEST_log || code=$?
+   assert_equals 142 "$code" # SIGNAL_BASE + SIGALRM = 128 + 14
+   expect_log "^later$"
+ }
+ 
+ function test_basic_timeout() {
+-  $linux_sandbox $SANDBOX_DEFAULT_OPTS -T 3 -t 3 -- /bin/bash -c "echo before; sleep 1000; echo after" &> $TEST_log && fail
++  $linux_sandbox $SANDBOX_DEFAULT_OPTS -T 3 -t 3 -- <~>bash<~>/bin/bash -c "echo before; sleep 1000; echo after" &> $TEST_log && fail
+   expect_log "^before$" ""
+ }
+ 
+ function test_timeout_grace() {
+-  $linux_sandbox $SANDBOX_DEFAULT_OPTS -T 2 -t 3 -- /bin/bash -c \
++  $linux_sandbox $SANDBOX_DEFAULT_OPTS -T 2 -t 3 -- <~>bash<~>/bin/bash -c \
+     'trap "echo -n before; sleep 1; echo -n after; exit 0" SIGINT SIGTERM SIGALRM; sleep 1000' &> $TEST_log || code=$?
+   assert_equals 142 "$code" # SIGNAL_BASE + SIGALRM = 128 + 14
+   expect_log "^beforeafter$"
+ }
+ 
+ function test_timeout_kill() {
+-  $linux_sandbox $SANDBOX_DEFAULT_OPTS -T 2 -t 3 -- /bin/bash -c \
++  $linux_sandbox $SANDBOX_DEFAULT_OPTS -T 2 -t 3 -- <~>bash<~>/bin/bash -c \
+     'trap "echo before; sleep 1000; echo after; exit 0" SIGINT SIGTERM SIGALRM; sleep 1000' &> $TEST_log || code=$?
+   assert_equals 142 "$code" # SIGNAL_BASE + SIGALRM = 128 + 14
+   expect_log "^before$"
+@@ -201,7 +201,7 @@ function test_mount_additional_paths_multiple_sources_mount_to_one_target() {
+ }
+ 
+ function test_redirect_output() {
+-  $linux_sandbox $SANDBOX_DEFAULT_OPTS -l $OUT -L $ERR -- /bin/bash -c "echo out; echo err >&2" &> $TEST_log || code=$?
++  $linux_sandbox $SANDBOX_DEFAULT_OPTS -l $OUT -L $ERR -- <~>bash<~>/bin/bash -c "echo out; echo err >&2" &> $TEST_log || code=$?
+   assert_equals "out" "$(cat $OUT)"
+   assert_equals "err" "$(cat $ERR)"
+ }
+@@ -210,7 +210,7 @@ function test_tmp_is_writable() {
+   # If /tmp is not writable on the host, it won't be inside the sandbox.
+   test -w /tmp || return 0
+ 
+-  $linux_sandbox $SANDBOX_DEFAULT_OPTS -w /tmp -- /bin/bash -c "rm -f $(mktemp --tmpdir=/tmp)" \
++  $linux_sandbox $SANDBOX_DEFAULT_OPTS -w /tmp -- <~>bash<~>/bin/bash -c "rm -f $(mktemp --tmpdir=/tmp)" \
+     &> $TEST_log || fail
+ }
+ 
+@@ -219,7 +219,7 @@ function test_dev_shm_is_writable() {
+   test -w /dev/shm || return 0
+ 
+   # /dev/shm is often a symlink to /run/shm, thus we use readlink to get the canonical path.
+-  $linux_sandbox $SANDBOX_DEFAULT_OPTS -w "$(readlink -f /dev/shm)" -- /bin/bash -c "rm -f $(mktemp --tmpdir=/dev/shm)" \
++  $linux_sandbox $SANDBOX_DEFAULT_OPTS -w "$(<~>coreutils<~>/bin/readlink -f /dev/shm)" -- <~>bash<~>/bin/bash -c "rm -f $(mktemp --tmpdir=/dev/shm)" \
+     &> $TEST_log || fail
+ }
+ 
+diff --git a/third_party/grpc/build_defs.bzl b/third_party/grpc/build_defs.bzl
+index 1369eea480..d55a74f9d6 100644
+--- a/third_party/grpc/build_defs.bzl
++++ b/third_party/grpc/build_defs.bzl
+@@ -32,7 +32,8 @@ def _gensource_impl(ctx):
+   ctx.action(
+       command = "cp '%s' '%s'" % (srcdotjar.path, ctx.outputs.srcjar.path),
+       inputs = [srcdotjar],
+-      outputs = [ctx.outputs.srcjar])
++      outputs = [ctx.outputs.srcjar],
++      use_default_shell_env=True)
+ 
+ _java_grpc_gensource = rule(
+     attrs = {
+diff --git a/tools/build_defs/pkg/pkg.bzl b/tools/build_defs/pkg/pkg.bzl
+index 24840eefbd..b39758312a 100644
+--- a/tools/build_defs/pkg/pkg.bzl
++++ b/tools/build_defs/pkg/pkg.bzl
+@@ -160,7 +160,9 @@ def _pkg_deb_impl(ctx):
+   ctx.action(
+       command = "ln -s %s %s" % (ctx.outputs.deb.basename, ctx.outputs.out.path),
+       inputs = [ctx.outputs.deb],
+-      outputs = [ctx.outputs.out])
++      outputs = [ctx.outputs.out],
++      use_default_shell_env=True,
++      )
+ 
+ # A rule for creating a tar file, see README.md
+ _real_pkg_tar = rule(
+diff --git a/tools/cpp/osx_cc_wrapper.sh b/tools/cpp/osx_cc_wrapper.sh
+index 207bcefd78..d2663b4b44 100755
+--- a/tools/cpp/osx_cc_wrapper.sh
++++ b/tools/cpp/osx_cc_wrapper.sh
+@@ -67,10 +67,10 @@ function get_library_path() {
+ # and multi-level symlinks.
+ function get_realpath() {
+     local previous="$1"
+-    local next=$(readlink "${previous}")
++    local next=$(<~>coreutils<~>/bin/readlink "${previous}")
+     while [ -n "${next}" ]; do
+         previous="${next}"
+-        next=$(readlink "${previous}")
++        next=$(<~>coreutils<~>/bin/readlink "${previous}" | <~>gnused<~>/bin/sed -e 's/\n//g')
+     done
+     echo "${previous}"
+ }
+@@ -78,7 +78,7 @@ function get_realpath() {
+ # Get the path of a lib inside a tool
+ function get_otool_path() {
+     # the lib path is the path of the original lib relative to the workspace
+-    get_realpath $1 | sed 's|^.*/bazel-out/|bazel-out/|'
++    get_realpath $1 | <~>gnused<~>/bin/sed 's|^.*/bazel-out/|bazel-out/|'
+ }
+ 
+ # Do replacements in the output
+@@ -101,4 +101,3 @@ for rpath in ${RPATHS}; do
+         fi
+     done
+ done
+-
+diff --git a/tools/cpp/osx_cc_wrapper.sh.tpl b/tools/cpp/osx_cc_wrapper.sh.tpl
+index 4c85cd9b6b..e428cfd12e 100644
+--- a/tools/cpp/osx_cc_wrapper.sh.tpl
++++ b/tools/cpp/osx_cc_wrapper.sh.tpl
+@@ -69,10 +69,10 @@ function get_library_path() {
+ # and multi-level symlinks.
+ function get_realpath() {
+     local previous="$1"
+-    local next=$(readlink "${previous}")
++    local next=$(<~>coreutils<~>/bin/readlink "${previous}")
+     while [ -n "${next}" ]; do
+         previous="${next}"
+-        next=$(readlink "${previous}")
++        next=$(<~>coreutils<~>/bin/readlink "${previous}" | <~>gnused<~>/bin/sed -e 's/\n//g')
+     done
+     echo "${previous}"
+ }
+@@ -80,7 +80,7 @@ function get_realpath() {
+ # Get the path of a lib inside a tool
+ function get_otool_path() {
+     # the lib path is the path of the original lib relative to the workspace
+-    get_realpath $1 | sed 's|^.*/bazel-out/|bazel-out/|'
++    get_realpath $1 | <~>gnused<~>/bin/sed 's|^.*/bazel-out/|bazel-out/|'
+ }
+ 
+ # Do replacements in the output
+@@ -103,4 +103,3 @@ for rpath in ${RPATHS}; do
+         fi
+     done
+ done
+-
+diff --git a/tools/test/collect_coverage.sh b/tools/test/collect_coverage.sh
+index d4251395b3..1a99c1fa66 100755
+--- a/tools/test/collect_coverage.sh
++++ b/tools/test/collect_coverage.sh
+@@ -38,7 +38,7 @@ if [[ -z "$COVERAGE_MANIFEST" ]]; then
+   echo --
+   echo Coverage runner: \$COVERAGE_MANIFEST is not set
+   echo Current environment:
+-  env | sort
++  <~>coreutils<~>/bin/env | <~>coreutils<~>/bin/sort
+   exit 1
+ fi
+ 
+@@ -58,7 +58,7 @@ if ! [[ $COVERAGE_DIR == $ROOT* ]]; then
+   COVERAGE_DIR=$ROOT/$COVERAGE_DIR
+ fi
+ 
+-mkdir -p "$COVERAGE_DIR"
++<~>coreutils<~>/bin/mkdir -p "$COVERAGE_DIR"
+ COVERAGE_OUTPUT_FILE=${COVERAGE_OUTPUT_FILE:-"$COVERAGE_DIR/_coverage.dat"}
+ # make COVERAGE_OUTPUT_FILE an absolute path
+ if ! [[ $COVERAGE_OUTPUT_FILE == $ROOT* ]]; then
+@@ -95,7 +95,7 @@ cd "$TEST_SRCDIR/$TEST_WORKSPACE"
+ TEST_STATUS=$?
+ 
+ # always create output files
+-touch $COVERAGE_OUTPUT_FILE
++<~>coreutils<~>/bin/touch $COVERAGE_OUTPUT_FILE
+ 
+ if [[ $TEST_STATUS -ne 0 ]]; then
+   echo --
+@@ -112,18 +112,18 @@ cd $ROOT
+ # NB: This is here just so that we don't regress. Do not add support for new
+ # coverage features here. Implement it instead properly in LcovMerger.
+ if [[ "$COVERAGE_LEGACY_MODE" ]]; then
+-  cat "${COVERAGE_MANIFEST}" | grep ".gcno$" | while read path; do
+-    mkdir -p "${COVERAGE_DIR}/$(dirname ${path})"
+-    cp "${ROOT}/${path}" "${COVERAGE_DIR}/${path}"
++  <~>coreutils<~>/bin/cat "${COVERAGE_MANIFEST}" | <~>gnugrep<~>/bin/grep ".gcno$" | while read path; do
++    <~>coreutils<~>/bin/mkdir -p "${COVERAGE_DIR}/$(dirname ${path})"
++    <~>coreutils<~>/bin/cp "${ROOT}/${path}" "${COVERAGE_DIR}/${path}"
+   done
+ 
+   # Unfortunately, lcov messes up the source file names if it can't find the
+   # files at their relative paths. Workaround by creating empty source files
+   # according to the manifest (i.e., only for files that are supposed to be
+   # instrumented).
+-  cat "${COVERAGE_MANIFEST}" | egrep ".(cc|h)$" | while read path; do
+-    mkdir -p "${COVERAGE_DIR}/$(dirname ${path})"
+-    touch "${COVERAGE_DIR}/${path}"
++  <~>coreutils<~>/bin/cat "${COVERAGE_MANIFEST}" | <~>gnugrep<~>/bin/egrep ".(cc|h)$" | while read path; do
++    <~>coreutils<~>/bin/mkdir -p "${COVERAGE_DIR}/$(dirname ${path})"
++    <~>coreutils<~>/bin/touch "${COVERAGE_DIR}/${path}"
+   done
+ 
+   # Run lcov over the .gcno and .gcda files to generate the lcov tracefile.
+@@ -131,7 +131,7 @@ if [[ "$COVERAGE_LEGACY_MODE" ]]; then
+ 
+   # The paths are all wrong, because they point to /tmp. Fix up the paths to
+   # point to the exec root instead (${ROOT}).
+-  sed -i -e "s*${COVERAGE_DIR}*${ROOT}*g" "${COVERAGE_OUTPUT_FILE}"
++  <~>gnused<~>/bin/sed -i -e "s*${COVERAGE_DIR}*${ROOT}*g" "${COVERAGE_OUTPUT_FILE}"
+ 
+   exit $TEST_STATUS
+ fi
+diff --git a/tools/test/test-setup.sh b/tools/test/test-setup.sh
+index 23dbbe5b44..9ca184750c 100755
+--- a/tools/test/test-setup.sh
++++ b/tools/test/test-setup.sh
+@@ -68,7 +68,7 @@ fi
+ # The test shard status file is only set for sharded tests.
+ if [[ -n "$TEST_SHARD_STATUS_FILE" ]]; then
+   is_absolute "$TEST_SHARD_STATUS_FILE" || TEST_SHARD_STATUS_FILE="$PWD/$TEST_SHARD_STATUS_FILE"
+-  mkdir -p "$(dirname "$TEST_SHARD_STATUS_FILE")"
++  <~>coreutils<~>/bin/mkdir -p "$(dirname "$TEST_SHARD_STATUS_FILE")"
+ fi
+ 
+ is_absolute "$RUNFILES_DIR" || RUNFILES_DIR="$PWD/$RUNFILES_DIR"
+@@ -78,13 +78,13 @@ is_absolute "$JAVA_RUNFILES" || JAVA_RUNFILES="$PWD/$JAVA_RUNFILES"
+ is_absolute "$PYTHON_RUNFILES" || PYTHON_RUNFILES="$PWD/$PYTHON_RUNFILES"
+ 
+ # Create directories for undeclared outputs and their annotations
+-mkdir -p "$(dirname "$XML_OUTPUT_FILE")" \
++<~>coreutils<~>/bin/mkdir -p "$(dirname "$XML_OUTPUT_FILE")" \
+     "$TEST_UNDECLARED_OUTPUTS_DIR" \
+     "$TEST_UNDECLARED_OUTPUTS_ANNOTATIONS_DIR"
+ 
+ # Create the test temp directory, which may not exist on the remote host when
+ # doing a remote build.
+-mkdir -p "$TEST_TMPDIR"
++<~>coreutils<~>/bin/mkdir -p "$TEST_TMPDIR"
+ 
+ # Unexport environment variables related to undeclared test outputs that are
+ # only supposed to be used in this script.
+@@ -118,7 +118,7 @@ else
+     if is_absolute "$1" ; then
+       echo "$1"
+     else
+-      echo "$(grep "^$1 " "${RUNFILES_MANIFEST_FILE}" | sed 's/[^ ]* //')"
++      echo "$(grep "^$1 " "${RUNFILES_MANIFEST_FILE}" | <~>gnused<~>/bin/sed 's/[^ ]* //')"
+     fi
+   }
+ fi
+@@ -150,8 +150,8 @@ function encode_output_file {
+   if [ -f "$1" ]; then
+     # Replace invalid XML characters and invalid sequence in CDATA
+     # cf. https://stackoverflow.com/a/7774512/4717701
+-    perl -CSDA -pe's/[^\x9\xA\xD\x20-\x{D7FF}\x{E000}-\x{FFFD}\x{10000}-\x{10FFFF}]+/?/g;' "$1" \
+-      | sed 's|]]>|]]>]]<![CDATA[>|g'
++    <~>perl<~>/bin/perl -CSDA -pe's/[^\x9\xA\xD\x20-\x{D7FF}\x{E000}-\x{FFFD}\x{10000}-\x{10FFFF}]+/?/g;' "$1" \
++      | <~>gnused<~>/bin/sed 's|]]>|]]>]]<![CDATA[>|g'
+   fi
+ }
+ 
+@@ -180,7 +180,7 @@ function write_xml_output_file {
+       ((shard_num=TEST_SHARD_INDEX+1))
+       test_name="${test_name}"_shard_"$shard_num"/"$TEST_TOTAL_SHARDS"
+     fi
+-    cat <<EOF >${XML_OUTPUT_FILE}
++    <~>coreutils<~>/bin/cat <<EOF >${XML_OUTPUT_FILE}
+ <?xml version="1.0" encoding="UTF-8"?>
+ <testsuites>
+   <testsuite name="$test_name" tests="1" failures="0" errors="${errors}">
+@@ -190,7 +190,7 @@ function write_xml_output_file {
+ </testsuites>
+ EOF
+   fi
+-  rm -f "${XML_OUTPUT_FILE}.log"
++  <~>coreutils<~>/bin/rm -f "${XML_OUTPUT_FILE}.log"
+ }
+ 
+ # The path of this command-line is usually relative to the exec-root,
+@@ -213,7 +213,7 @@ else
+ fi
+ 
+ exitCode=0
+-signals="$(trap -l | sed -E 's/[0-9]+\)//g')"
++signals="$(trap -l | <~>gnused<~>/bin/sed -E 's/[0-9]+\)//g')"
+ for signal in $signals; do
+   trap "write_xml_output_file ${signal}" ${signal}
+ done
+@@ -223,10 +223,10 @@ start=$(date +%s)
+ dummy=1 &
+ pid=$!
+ has_tail=true
+-tail -fq --pid $pid -s 0.001 /dev/null &> /dev/null || has_tail=false
++<~>coreutils<~>/bin/tail -fq --pid $pid -s 0.001 /dev/null &> /dev/null || has_tail=false
+ 
+ if [ "$has_tail" == true ] && [  -z "$no_echo" ]; then
+-  touch "${XML_OUTPUT_FILE}.log"
++  <~>coreutils<~>/bin/touch "${XML_OUTPUT_FILE}.log"
+   if [ -z "$COVERAGE_DIR" ]; then
+     ("${TEST_PATH}" "$@" &>"${XML_OUTPUT_FILE}.log") &
+     pid=$!
+@@ -234,14 +234,14 @@ if [ "$has_tail" == true ] && [  -z "$no_echo" ]; then
+     ("$1" "$TEST_PATH" "${@:3}" &> "${XML_OUTPUT_FILE}.log") &
+     pid=$!
+   fi
+-  tail -fq --pid $pid -s 0.001 "${XML_OUTPUT_FILE}.log"
++  <~>coreutils<~>/bin/tail -fq --pid $pid -s 0.001 "${XML_OUTPUT_FILE}.log"
+   wait $pid
+   exitCode=$?
+ else
+   if [ -z "$COVERAGE_DIR" ]; then
+-    "${TEST_PATH}" "$@" 2> >(tee -a "${XML_OUTPUT_FILE}.log" >&2) 1> >(tee -a "${XML_OUTPUT_FILE}.log") 2>&1 || exitCode=$?
++    "${TEST_PATH}" "$@" 2> >(<~>coreutils<~>/bin/tee -a "${XML_OUTPUT_FILE}.log" >&2) 1> >(<~>coreutils<~>/bin/tee -a "${XML_OUTPUT_FILE}.log") 2>&1 || exitCode=$?
+   else
+-    "$1" "$TEST_PATH" "${@:3}" 2> >(tee -a "${XML_OUTPUT_FILE}.log" >&2) 1> >(tee -a "${XML_OUTPUT_FILE}.log") 2>&1 || exitCode=$?
++    "$1" "$TEST_PATH" "${@:3}" 2> >(<~>coreutils<~>/bin/tee -a "${XML_OUTPUT_FILE}.log" >&2) 1> >(<~>coreutils<~>/bin/tee -a "${XML_OUTPUT_FILE}.log") 2>&1 || exitCode=$?
+   fi
+ fi
+ 
+@@ -252,7 +252,7 @@ write_xml_output_file
+ 
+ # Add all of the files from the undeclared outputs directory to the manifest.
+ if [[ -n "$TEST_UNDECLARED_OUTPUTS_DIR" && -n "$TEST_UNDECLARED_OUTPUTS_MANIFEST" ]]; then
+-  undeclared_outputs="$(find -L "$TEST_UNDECLARED_OUTPUTS_DIR" -type f | sort)"
++  undeclared_outputs="$(find -L "$TEST_UNDECLARED_OUTPUTS_DIR" -type f | <~>coreutils<~>/bin/sort)"
+   # Only write the manifest if there are any undeclared outputs.
+   if [[ ! -z "$undeclared_outputs" ]]; then
+     # For each file, write a tab-separated line with name (relative to
+@@ -262,7 +262,7 @@ if [[ -n "$TEST_UNDECLARED_OUTPUTS_DIR" && -n "$TEST_UNDECLARED_OUTPUTS_MANIFEST
+       rel_path="${undeclared_output#$TEST_UNDECLARED_OUTPUTS_DIR/}"
+       # stat has different flags for different systems. -c is supported by GNU,
+       # and -f by BSD (and thus OSX). Try both.
+-      file_size="$(stat -f%z "$undeclared_output" 2>/dev/null || stat -c%s "$undeclared_output" 2>/dev/null || echo "Could not stat $undeclared_output")"
++      file_size="$(stat -f%z "$undeclared_output" 2>/dev/null || <~>coreutils<~>/bin/stat -c%s "$undeclared_output" 2>/dev/null || echo "Could not stat $undeclared_output")"
+       file_type="$(file -L -b --mime-type "$undeclared_output")"
+ 
+       printf "$rel_path\t$file_size\t$file_type\n"
+@@ -280,7 +280,7 @@ if [[ -n "$TEST_UNDECLARED_OUTPUTS_ANNOTATIONS" && \
+       -d "$TEST_UNDECLARED_OUTPUTS_ANNOTATIONS_DIR" ]]; then
+   (
+    shopt -s failglob
+-   cat "$TEST_UNDECLARED_OUTPUTS_ANNOTATIONS_DIR"/*.part > "$TEST_UNDECLARED_OUTPUTS_ANNOTATIONS"
++   <~>coreutils<~>/bin/cat "$TEST_UNDECLARED_OUTPUTS_ANNOTATIONS_DIR"/*.part > "$TEST_UNDECLARED_OUTPUTS_ANNOTATIONS"
+   ) 2> /dev/null
+ fi
+ 
+@@ -288,7 +288,7 @@ fi
+ if [[ -n "$TEST_UNDECLARED_OUTPUTS_ZIP" ]] && cd "$TEST_UNDECLARED_OUTPUTS_DIR"; then
+   (
+    shopt -s dotglob failglob
+-   zip -qr "$TEST_UNDECLARED_OUTPUTS_ZIP" -- *
++   <~>zip<~>/bin/zip -qr "$TEST_UNDECLARED_OUTPUTS_ZIP" -- *
+   ) 2> /dev/null
+ fi
+ 
