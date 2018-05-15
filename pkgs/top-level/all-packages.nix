@@ -16077,6 +16077,8 @@ with pkgs;
 
   moe =  callPackage ../applications/editors/moe { };
 
+  multibootusb = callPackage ../applications/misc/multibootusb {};
+
   praat = callPackage ../applications/audio/praat { };
 
   quvi = callPackage ../applications/video/quvi/tool.nix {
