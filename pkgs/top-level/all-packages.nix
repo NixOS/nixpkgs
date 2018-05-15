@@ -5156,8 +5156,6 @@ with pkgs;
 
   teamviewer = libsForQt5.callPackage ../applications/networking/remote/teamviewer { };
 
-  telnet = callPackage ../tools/networking/telnet { };
-
   telegraf = callPackage ../servers/monitoring/telegraf { };
 
   teleport = callPackage ../servers/teleport {};
