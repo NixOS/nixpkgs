@@ -20797,6 +20797,8 @@ with pkgs;
 
   helm = callPackage ../applications/audio/helm { };
 
+  helmfile = callPackage ../applications/networking/cluster/helmfile { };
+
   heptio-ark = callPackage ../applications/networking/cluster/heptio-ark { };
 
   hplip = callPackage ../misc/drivers/hplip { };
