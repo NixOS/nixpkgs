@@ -52,7 +52,8 @@ in {
       wantedBy = [ "multi-user.target" ];
 
       serviceConfig = {
-        ExecStart="${pkgs.busybox}/bin/telnetd -p ${toString cfg.port} -F";
+        ExecStart="${pkgs.busybox}/bin/telnetd -p ${toString cfg.port}";
+        Type="forking";
         User = "telnetd";
         Group = "telnetd";
         AmbientCapabilities = "cap_net_bind_service";
