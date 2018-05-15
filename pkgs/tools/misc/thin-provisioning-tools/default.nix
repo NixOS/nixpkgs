@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, expat, libaio, boost }:
+{ stdenv, fetchFromGitHub, fetchpatch, autoreconfHook, expat, libaio, boost }:
 
 stdenv.mkDerivation rec {
   name = "thin-provisioning-tools-${version}";
@@ -15,10 +15,19 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ expat libaio boost ];
 
-  postPatch = stdenv.lib.optional stdenv.hostPlatform.isMusl ''
-    sed -i -e '/PAGE_SIZE/d' -e '1i#include <limits.h>' \
-      block-cache/io_engine.h unit-tests/io_engine_t.cc
-  '';
+  patches = [
+    (fetchpatch {
+      # a) Fix build if limits.h provides definition for PAGE_SIZE, as musl does w/musl per XSI[1] although it's apparently optional [2].
+      #    This value is only provided when it's known to be a constant, to avoid the need to discover the value dynamically.
+      # b) If not using system-provided (kernel headers, or libc headers, or something) use the POSIX approach of querying the value
+      #    dynamically using sysconf(_SC_PAGE_SIZE) instead of hardcoded value that hopefully is correct.
+      # [1] http://pubs.opengroup.org/onlinepubs/9699919799/basedefs/limits.h.html
+      # [2] http://www.openwall.com/lists/musl/2015/09/11/8
+      url = "https://raw.githubusercontent.com/voidlinux/void-packages/a0ece13ad7ab2aae760e09e41e0459bd999a3695/srcpkgs/thin-provisioning-tools/patches/musl.patch";
+      sha256 = "1m8r3vhrnsy8drgs0svs3fgpi3mmxzdcqsv6bmvc0j52cvfqvhvy";
+      extraPrefix = ""; # empty means add 'a/' and 'b/'
+    })
+  ];
 
   enableParallelBuilding = true;
 
