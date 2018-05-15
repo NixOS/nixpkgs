@@ -3845,6 +3845,8 @@ in {
 
   podcastparser = callPackage ../development/python-modules/podcastparser { };
 
+  podcats = callPackage ../development/python-modules/podcats { };
+
   pomegranate = callPackage ../development/python-modules/pomegranate { };
 
   poppler-qt5 = callPackage ../development/python-modules/poppler-qt5 {
