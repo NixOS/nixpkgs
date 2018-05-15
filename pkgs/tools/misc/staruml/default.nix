@@ -8,16 +8,16 @@ let
     [ glib gtk2 gdk_pixbuf alsaLib nss nspr GConf cups libgcrypt dbus ];
 in
 stdenv.mkDerivation rec {
-  version = "2.6.0";
+  version = "2.8.1";
   name = "staruml-${version}";
 
   src =
     if stdenv.system == "i686-linux" then fetchurl {
       url = "http://staruml.io/download/release/v${version}/StarUML-v${version}-32-bit.deb";
-      sha256 = "684d7ce7827a98af5bf17bf68d18f934fd970f13a2112a121b1f1f76d6387849";
+      sha256 = "0vb3k9m3l6pmsid4shlk0xdjsriq3gxzm8q7l04didsppg0vvq1n";
     } else fetchurl {
       url = "http://staruml.io/download/release/v${version}/StarUML-v${version}-64-bit.deb";
-      sha256 = "36e0bdc1bb57b7d808a007a3fafb1b38662d5b0793424d5ad4f51a3a6a9a636d";
+      sha256 = "05gzrnlssjkhyh0wv019d4r7p40lxnsa1sghazll6f233yrqmxb0";
     };
 
   buildInputs = [ dpkg ];
