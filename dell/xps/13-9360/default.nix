@@ -1,42 +1,26 @@
 { lib, pkgs, ... }:
-let
-  firmware_qca6174 = pkgs.callPackage ./firmware_qca6174.nix {};
-in
+
 {
   imports = [
-    ../../../common/cpu/intel
+    ../../../common/cpu/intel/kaby-lake
     ../../../common/pc/laptop
   ];
-  boot.kernelModules = ["kvm-intel"]; # should this be in common/cpu/intel?
-  boot = {
-    loader = {
-      systemd-boot.enable = lib.mkDefault true;
-      efi.canTouchEfiVariables = lib.mkDefault true;
-    };
 
-    kernelPackages = lib.mkDefault pkgs.linuxPackages_latest;
-    initrd.availableKernelModules = [ "xhci_pci" "nvme" "usb_storage" "sd_mod" "rtsx_pci_sdmmc" ];
-    # touchpad goes over i2c
-    blacklistedKernelModules = [ "psmouse" ];
+  boot.blacklistedKernelModules = [ "psmouse" ]; # touchpad goes over i2c
 
-    kernelParams = [ "i915.enable_fbc=1" "i915.enable_psr=2" ];
+  # TODO: decide on boot loader policy
+  boot.loader = {
+    efi.canTouchEfiVariables = lib.mkDefault true;
+    systemd-boot.enable = lib.mkDefault true;
   };
   
-  # intel huc, guc. qca6174 (old?)
-  hardware.enableRedistributableFirmware = true;
+  hardware.firmware = lib.mkBefore [ pkgs.qca6174-firmware ];
 
-  # 4k screen, use bigger console font
-  i18n.consoleFont = "latarcyrheb-sun32";
+  # TODO: move to general HiDPI profile
+  i18n.consoleFont = lib.mkDefault "latarcyrheb-sun32"; # 4K screen, use bigger console font
 
-  # touchpad
-  services.xserver.libinput.enable = lib.mkDefault true;
-
-  networking.wireless.enable = lib.mkDefault true;
-  hardware.bluetooth.enable = lib.mkDefault true;
-  
-  services.thermald.enable = lib.mkDefault true;
-
-  # optional: without it, firmware crashes happened
-  hardware.firmware = lib.mkBefore [ firmware_qca6174 ];
-
+  # TODO: upstream to NixOS/nixpkgs
+  nixpkgs.overlays = [(final: previous: {
+    qca6174-firmware = final.callPackage ./qca6174-firmware.nix {};
+  })];
 }
