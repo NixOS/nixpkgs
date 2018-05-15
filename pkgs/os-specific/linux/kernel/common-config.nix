@@ -639,7 +639,7 @@ with stdenv.lib;
   
   # needed for iwd WPS support (wpa_supplicant replacement)
   ${optionalString (versionAtLeast version "4.7") ''
-    CONFIG_KEY_DH_OPERATIONS y
+    KEY_DH_OPERATIONS y
   ''}
 
   # Disable the firmware helper fallback, udev doesn't implement it any more
