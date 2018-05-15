@@ -484,6 +484,16 @@ let
       '';
     };
 
+    vrf = mkOption {
+      default = [ ];
+      type = types.listOf types.str;
+      description = ''
+        A list of vrf interfaces to be added to the network section of the
+        unit.  See <citerefentry><refentrytitle>systemd.network</refentrytitle>
+        <manvolnum>5</manvolnum></citerefentry> for details.
+      '';
+    };
+
     vlan = mkOption {
       default = [ ];
       type = types.listOf types.str;
@@ -644,6 +654,7 @@ let
           ${concatStringsSep "\n" (map (s: "NTP=${s}") def.ntp)}
           ${concatStringsSep "\n" (map (s: "Bridge=${s}") def.bridge)}
           ${concatStringsSep "\n" (map (s: "Bond=${s}") def.bond)}
+          ${concatStringsSep "\n" (map (s: "VRF=${s}") def.vrf)}
           ${concatStringsSep "\n" (map (s: "VLAN=${s}") def.vlan)}
           ${concatStringsSep "\n" (map (s: "MACVLAN=${s}") def.macvlan)}
           ${concatStringsSep "\n" (map (s: "VXLAN=${s}") def.vxlan)}
