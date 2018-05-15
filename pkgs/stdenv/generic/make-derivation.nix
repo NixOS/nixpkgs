@@ -52,7 +52,8 @@ rec {
     # InstallCheck phase
     , doInstallCheck ? false
 
-    , crossConfig ? null
+    , # TODO(@Ericson2314): Make always true and remove
+      strictDeps ? stdenv.hostPlatform != stdenv.buildPlatform
     , meta ? {}
     , passthru ? {}
     , pos ? # position used in error messages and for meta.position
@@ -155,6 +156,8 @@ rec {
           inherit (stdenv) system;
           userHook = config.stdenv.userHook or null;
           __ignoreNulls = true;
+
+          inherit strictDeps;
 
           depsBuildBuild              = lib.elemAt (lib.elemAt dependencies 0) 0;
           nativeBuildInputs           = lib.elemAt (lib.elemAt dependencies 0) 1;

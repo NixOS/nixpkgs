@@ -16,12 +16,19 @@ stdenv.mkDerivation rec {
 
   LDFLAGS = if stdenv.isSunOS then "-lm -lmd -lmp -luutil -lnvpair -lnsl -lidmap -lavl -lsec" else "";
 
-  configureFlags = [ "--disable-csharp" "--with-xz" ]
+  configureFlags = [
+     "--disable-csharp" "--with-xz"
      # avoid retaining reference to CF during stdenv bootstrap
-     ++ lib.optionals stdenv.isDarwin [
-            "gt_cv_func_CFPreferencesCopyAppValue=no"
-            "gt_cv_func_CFLocaleCopyCurrent=no"
-        ];
+  ] ++ lib.optionals stdenv.isDarwin [
+    "gt_cv_func_CFPreferencesCopyAppValue=no"
+    "gt_cv_func_CFLocaleCopyCurrent=no"
+  ] ++ stdenv.lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+    # On cross building, gettext supposes that the wchar.h from libc
+    # does not fulfill gettext needs, so it tries to work with its
+    # own wchar.h file, which does not cope well with the system's
+    # wchar.h and stddef.h (gcc-4.3 - glibc-2.9)
+    "gl_cv_func_wcwidth_works=yes"
+  ];
 
   postPatch = ''
    substituteAllInPlace gettext-runtime/src/gettext.sh.in
@@ -31,17 +38,6 @@ stdenv.mkDerivation rec {
   '' + lib.optionalString hostPlatform.isCygwin ''
     sed -i -e "s/\(cldr_plurals_LDADD = \)/\\1..\/gnulib-lib\/libxml_rpl.la /" gettext-tools/src/Makefile.in
     sed -i -e "s/\(libgettextsrc_la_LDFLAGS = \)/\\1..\/gnulib-lib\/libxml_rpl.la /" gettext-tools/src/Makefile.in
-  '';
-
-  # On cross building, gettext supposes that the wchar.h from libc
-  # does not fulfill gettext needs, so it tries to work with its
-  # own wchar.h file, which does not cope well with the system's
-  # wchar.h and stddef.h (gcc-4.3 - glibc-2.9)
-  preConfigure = ''
-    if test -n "$crossConfig"; then
-      echo gl_cv_func_wcwidth_works=yes > cachefile
-      configureFlags="$configureFlags --cache-file=`pwd`/cachefile"
-    fi
   '';
 
   nativeBuildInputs = [ xz xz.bin ];
