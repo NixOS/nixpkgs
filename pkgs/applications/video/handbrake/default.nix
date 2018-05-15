@@ -100,6 +100,6 @@ stdenv.mkDerivation rec {
     '';
     license = licenses.gpl2;
     maintainers = with maintainers; [ Anton-Latukha wmertens ];
-    platforms = platforms.linux;
+    platforms = with platforms; unix;
   };
 }
