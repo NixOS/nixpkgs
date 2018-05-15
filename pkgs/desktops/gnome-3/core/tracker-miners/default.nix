@@ -115,6 +115,7 @@ stdenv.mkDerivation rec {
     ${glib.dev}/bin/glib-compile-schemas $out/share/glib-2.0/schemas
   '';
   
+  # https://bugzilla.gnome.org/show_bug.cgi?id=796145
   postFixup = ''
     rm $out/share/tracker/miners/org.freedesktop.Tracker1.Miner.RSS.service
   '';
