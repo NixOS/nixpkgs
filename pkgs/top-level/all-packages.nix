@@ -7950,7 +7950,8 @@ in
   python = python2;
   python2 = python27;
   python3 = python37;
-  pypy = pypy27;
+  pypy = pypy2;
+  pypy2 = pypy27;
 
   # Python interpreter that is build with all modules, including tkinter.
   # These are for compatibility and should not be used inside Nixpkgs.
@@ -7989,6 +7990,11 @@ in
     python = python27.override{x11Support=true;};
     db = db.override { dbmSupport = true; };
   };
+  pypy3 = callPackage ../development/interpreters/python/pypy/3 {
+    self = pypy3;
+    python = python27;
+    db = db.override { dbmSupport = true; };
+  };
 
   # Python package sets.
   python27Packages = lib.hiPrioSet (recurseIntoAttrs python27.pkgs);
@@ -7996,6 +8002,9 @@ in
   python36Packages = python36.pkgs;
   python37Packages = recurseIntoAttrs python37.pkgs;
   pypyPackages = pypy.pkgs;
+  pypy2Packages = pypy2.pkgs;
+  pypy27Packages = pypy27.pkgs;
+  pypy3Packages = pypy3.pkgs;
 
   update-python-libraries = callPackage ../development/interpreters/python/update-python-libraries { };
 

@@ -256,6 +256,11 @@
     github = "AndrewMorsillo";
     name = "Andrew Morsillo";
   };
+  andersk = {
+    email = "andersk@mit.edu";
+    github = "andersk";
+    name = "Anders Kaseorg";
+  };
   AndersonTorres = {
     email = "torres.anderson.85@protonmail.com";
     github = "AndersonTorres";
