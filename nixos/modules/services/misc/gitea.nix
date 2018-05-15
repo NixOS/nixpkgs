@@ -4,6 +4,7 @@ with lib;
 
 let
   cfg = config.services.gitea;
+  gitea = cfg.package;
   pg = config.services.postgresql;
   usePostgresql = cfg.database.type == "postgres";
   configFile = pkgs.writeText "app.ini" ''
@@ -55,6 +56,13 @@ in
         default = false;
         type = types.bool;
         description = "Enable Gitea Service.";
+      };
+
+      package = mkOption {
+        default = pkgs.gitea;
+        type = types.package;
+        defaultText = "pkgs.gitea";
+        description = "gitea derivation to use";
       };
 
       useWizard = mkOption {
@@ -203,7 +211,7 @@ in
 
       staticRootPath = mkOption {
         type = types.str;
-        default = "${pkgs.gitea.data}";
+        default = "${gitea.data}";
         example = "/var/lib/gitea/data";
         description = "Upper level of template and static files path.";
       };
@@ -223,7 +231,7 @@ in
       description = "gitea";
       after = [ "network.target" "postgresql.service" ];
       wantedBy = [ "multi-user.target" ];
-      path = [ pkgs.gitea.bin ];
+      path = [ gitea.bin ];
 
       preStart = let
         runConfig = "${cfg.stateDir}/custom/conf/app.ini";
@@ -253,7 +261,7 @@ in
         HOOKS=$(find ${cfg.repositoryRoot} -mindepth 4 -maxdepth 4 -type f -wholename "*git/hooks/*")
         if [ "$HOOKS" ]
         then
-          sed -ri 's,/nix/store/[a-z0-9.-]+/bin/gitea,${pkgs.gitea.bin}/bin/gitea,g' $HOOKS
+          sed -ri 's,/nix/store/[a-z0-9.-]+/bin/gitea,${gitea.bin}/bin/gitea,g' $HOOKS
           sed -ri 's,/nix/store/[a-z0-9.-]+/bin/env,${pkgs.coreutils}/bin/env,g' $HOOKS
           sed -ri 's,/nix/store/[a-z0-9.-]+/bin/bash,${pkgs.bash}/bin/bash,g' $HOOKS
           sed -ri 's,/nix/store/[a-z0-9.-]+/bin/perl,${pkgs.perl}/bin/perl,g' $HOOKS
@@ -261,7 +269,7 @@ in
         if [ ! -d ${cfg.stateDir}/conf/locale ]
         then
           mkdir -p ${cfg.stateDir}/conf
-          cp -r ${pkgs.gitea.out}/locale ${cfg.stateDir}/conf/locale
+          cp -r ${gitea.out}/locale ${cfg.stateDir}/conf/locale
         fi
       '' + optionalString (usePostgresql && cfg.database.createDatabase) ''
         if ! test -e "${cfg.stateDir}/db-created"; then
@@ -288,7 +296,7 @@ in
         User = cfg.user;
         WorkingDirectory = cfg.stateDir;
         PermissionsStartOnly = true;
-        ExecStart = "${pkgs.gitea.bin}/bin/gitea web";
+        ExecStart = "${gitea.bin}/bin/gitea web";
         Restart = "always";
       };
 
