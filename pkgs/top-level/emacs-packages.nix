@@ -385,9 +385,9 @@ let
 in
   lib.makeScope newScope (self:
     {}
+    // elpaPackages self
     // melpaStablePackages self
     // melpaPackages self
-    // elpaPackages self
     // orgPackages self
     // packagesFun self
   )

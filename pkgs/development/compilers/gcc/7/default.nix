@@ -57,16 +57,18 @@ let version = "7.3.0";
     enableParallelBuilding = true;
 
     patches =
-      [ ]
+      [ # https://gcc.gnu.org/ml/gcc-patches/2018-02/msg00633.html
+        ./riscv-pthread-reentrant.patch
+        # https://gcc.gnu.org/ml/gcc-patches/2018-03/msg00297.html
+        ./riscv-no-relax.patch
+      ]
       ++ optional (targetPlatform != hostPlatform) ../libstdc++-target.patch
       ++ optional noSysDirs ../no-sys-dirs.patch
       ++ optional (hostPlatform != buildPlatform) (fetchpatch { # XXX: Refine when this should be applied
         url = "https://git.busybox.net/buildroot/plain/package/gcc/7.1.0/0900-remove-selftests.patch?id=11271540bfe6adafbc133caf6b5b902a816f5f02";
         sha256 = "0mrvxsdwip2p3l17dscpc1x8vhdsciqw1z5q9i6p5g9yg1cqnmgs";
       })
-      ++ optional langFortran ../gfortran-driving.patch
-         # https://gcc.gnu.org/ml/gcc-patches/2018-02/msg00633.html
-      ++ optional targetPlatform.isRiscV ./riscv-pthread-reentrant.patch;
+      ++ optional langFortran ../gfortran-driving.patch;
 
     javaEcj = fetchurl {
       # The `$(top_srcdir)/ecj.jar' file is automatically picked up at
@@ -90,22 +92,6 @@ let version = "7.3.0";
     ];
 
     javaAwtGtk = langJava && x11Support;
-
-    /* Platform flags */
-    platformFlags = let
-        gccArch = targetPlatform.platform.gcc.arch or null;
-        gccCpu = targetPlatform.platform.gcc.cpu or null;
-        gccAbi = targetPlatform.platform.gcc.abi or null;
-        gccFpu = targetPlatform.platform.gcc.fpu or null;
-        gccFloat = targetPlatform.platform.gcc.float or null;
-        gccMode = targetPlatform.platform.gcc.mode or null;
-      in
-        optional (gccArch != null) "--with-arch=${gccArch}" ++
-        optional (gccCpu != null) "--with-cpu=${gccCpu}" ++
-        optional (gccAbi != null) "--with-abi=${gccAbi}" ++
-        optional (gccFpu != null) "--with-fpu=${gccFpu}" ++
-        optional (gccFloat != null) "--with-float=${gccFloat}" ++
-        optional (gccMode != null) "--with-mode=${gccMode}";
 
     /* Cross-gcc settings (build == host != target) */
     crossMingw = targetPlatform != hostPlatform && targetPlatform.libc == "msvcrt";
@@ -212,12 +198,13 @@ stdenv.mkDerivation ({
       --replace "-install_name \\\$rpath/\\\$soname" "-install_name $lib/lib/\\\$soname"
   '';
 
-  postPatch =
-    if (hostPlatform.isHurd
-        || (libcCross != null                  # e.g., building `gcc.crossDrv'
-            && libcCross ? crossConfig
-            && libcCross.crossConfig == "i586-pc-gnu")
-        || (crossGNU && libcCross != null))
+  postPatch = ''
+    configureScripts=$(find . -name configure)
+    for configureScript in $configureScripts; do
+      patchShebangs $configureScript
+    done
+  '' + (
+    if targetPlatform.isHurd
     then
       # On GNU/Hurd glibc refers to Hurd & Mach headers and libpthread is not
       # in glibc, so add the right `-I' flags to the default spec string.
@@ -271,7 +258,7 @@ stdenv.mkDerivation ({
             sed -i gcc/config/linux.h -e '1i#undef LOCAL_INCLUDE_DIR'
         ''
         )
-    else null;
+    else "");
 
   # TODO(@Ericson2314): Make passthru instead. Weird to avoid mass rebuild,
   crossStageStatic = targetPlatform == hostPlatform || crossStageStatic;
@@ -320,7 +307,7 @@ stdenv.mkDerivation ({
   # TODO(@Ericson2314): Always pass "--target" and always prefix.
   configurePlatforms =
     # TODO(@Ericson2314): Figure out what's going wrong with Arm
-    if buildPlatform == hostPlatform && hostPlatform == targetPlatform && targetPlatform.isArm
+    if buildPlatform == hostPlatform && hostPlatform == targetPlatform && targetPlatform.isAarch32
     then []
     else [ "build" "host" ] ++ stdenv.lib.optional (targetPlatform != hostPlatform) "target";
 
@@ -382,8 +369,7 @@ stdenv.mkDerivation ({
     optional javaAwtGtk "--enable-java-awt=gtk" ++
     optional (langJava && javaAntlr != null) "--with-antlr-jar=${javaAntlr}" ++
 
-
-    platformFlags ++
+    (import ../common/platform-flags.nix { inherit (stdenv) lib targetPlatform; }) ++
     optional (targetPlatform != hostPlatform) crossConfigureFlags ++
     optional (!bootstrap) "--disable-bootstrap" ++
 

@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, mingw_headers }:
+{ fetchurl, stdenv, mingw_header, hostPlatform, buildPlatform }:
 
 # This file is tweaked for cross-compilation only.
 assert hostPlatform != buildPlatform;

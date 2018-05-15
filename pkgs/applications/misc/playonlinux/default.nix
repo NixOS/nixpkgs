@@ -21,8 +21,6 @@
 , curl
 }:
 
-assert stdenv.isLinux;
-
 let
   version = "4.2.12";
 

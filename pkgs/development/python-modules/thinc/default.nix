@@ -28,12 +28,17 @@
 buildPythonPackage rec {
   pname = "thinc";
   version = "6.10.2";
-  name = pname + "-" + version;
 
   src = fetchPypi {
     inherit pname version;
     sha256 = "0xia81wvfrhyriywab184s49g8rpl42vcf5fy3x6xxw50a2yn7cs";
   };
+
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace "msgpack-python==" "msgpack-python>=" \
+      --replace "msgpack-numpy==" "msgpack-numpy>="
+  '';
 
   propagatedBuildInputs = [
    cython

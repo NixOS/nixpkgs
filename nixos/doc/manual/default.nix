@@ -102,13 +102,18 @@ let
     </section>
   '';
 
+  generatedSources = runCommand "generated-docbook" {} ''
+    mkdir $out
+    ln -s ${modulesDoc} $out/modules.xml
+    ln -s ${optionsDocBook} $out/options-db.xml
+    printf "%s" "${version}" > $out/version
+  '';
+
   copySources =
     ''
       cp -prd $sources/* . # */
+      ln -s ${generatedSources} ./generated
       chmod -R u+w .
-      ln -s ${modulesDoc} configuration/modules.xml
-      ln -s ${optionsDocBook} options-db.xml
-      printf "%s" "${version}" > version
     '';
 
   toc = builtins.toFile "toc.xml"
@@ -124,11 +129,12 @@ let
   manualXsltprocOptions = toString [
     "--param section.autolabel 1"
     "--param section.label.includes.component.label 1"
-    "--stringparam html.stylesheet style.css"
+    "--stringparam html.stylesheet 'style.css overrides.css highlightjs/mono-blue.css'"
+    "--stringparam html.script './highlightjs/highlight.pack.js ./highlightjs/loader.js'"
     "--param xref.with.number.and.title 1"
     "--param toc.section.depth 3"
     "--stringparam admon.style ''"
-    "--stringparam callout.graphics.extension .gif"
+    "--stringparam callout.graphics.extension .svg"
     "--stringparam current.docid manual"
     "--param chunk.section.depth 0"
     "--param chunk.first.sections 1"
@@ -223,6 +229,7 @@ let
     '';
 
 in rec {
+  inherit generatedSources;
 
   # The NixOS options in JSON format.
   optionsJSON = runCommand "options-json"
@@ -260,9 +267,11 @@ in rec {
         ${manual-combined}/manual-combined.xml
 
       mkdir -p $dst/images/callouts
-      cp ${docbook5_xsl}/xml/xsl/docbook/images/callouts/*.gif $dst/images/callouts/
+      cp ${docbook5_xsl}/xml/xsl/docbook/images/callouts/*.svg $dst/images/callouts/
 
-      cp ${./style.css} $dst/style.css
+      cp ${../../../doc/style.css} $dst/style.css
+      cp ${../../../doc/overrides.css} $dst/overrides.css
+      cp -r ${pkgs.documentation-highlighter} $dst/highlightjs
 
       mkdir -p $out/nix-support
       echo "nix-build out $out" >> $out/nix-support/hydra-build-products
@@ -286,7 +295,7 @@ in rec {
         ${manual-combined}/manual-combined.xml
 
       mkdir -p $dst/epub/OEBPS/images/callouts
-      cp -r ${docbook5_xsl}/xml/xsl/docbook/images/callouts/*.gif $dst/epub/OEBPS/images/callouts # */
+      cp -r ${docbook5_xsl}/xml/xsl/docbook/images/callouts/*.svg $dst/epub/OEBPS/images/callouts # */
       echo "application/epub+zip" > mimetype
       manual="$dst/nixos-manual.epub"
       zip -0Xq "$manual" mimetype

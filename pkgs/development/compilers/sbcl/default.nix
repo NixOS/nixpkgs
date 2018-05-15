@@ -9,11 +9,11 @@
 
 stdenv.mkDerivation rec {
   name    = "sbcl-${version}";
-  version = "1.4.4";
+  version = "1.4.7";
 
   src = fetchurl {
     url    = "mirror://sourceforge/project/sbcl/sbcl/${version}/${name}-source.tar.bz2";
-    sha256 = "1k6v5b8qv7vyxvh8asx6phf2hbapx5pp5p5j47hgnq123fwnh4fa";
+    sha256 = "1wmxly94pn8527092hyzg5mq58mg7qlc46nm31f268wb2dm67rvm";
   };
 
   patchPhase = ''
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
                (setf features (remove x features))))
     ''
     + (if threadSupport then "(enable :sb-thread)" else "(disable :sb-thread)")
-    + stdenv.lib.optionalString stdenv.isArm "(enable :arm)"
+    + stdenv.lib.optionalString stdenv.isAarch32 "(enable :arm)"
     + ''
       )) " > customize-target-features.lisp
 

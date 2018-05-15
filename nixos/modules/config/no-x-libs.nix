@@ -32,7 +32,6 @@ with lib;
       networkmanager-l2tp = pkgs.networkmanager-l2tp.override { withGnome = false; };
       networkmanager-openconnect = pkgs.networkmanager-openconnect.override { withGnome = false; };
       networkmanager-openvpn = pkgs.networkmanager-openvpn.override { withGnome = false; };
-      networkmanager-pptp = pkgs.networkmanager-pptp.override { withGnome = false; };
       networkmanager-vpnc = pkgs.networkmanager-vpnc.override { withGnome = false; };
       networkmanager-iodine = pkgs.networkmanager-iodine.override { withGnome = false; };
       pinentry = pkgs.pinentry_ncurses;

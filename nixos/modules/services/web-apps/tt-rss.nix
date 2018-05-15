@@ -466,10 +466,10 @@ let
       '';
     };
 
-    services.nginx = {
+    # NOTE: No configuration is done if not using virtual host
+    services.nginx = mkIf (cfg.virtualHost != null) {
       enable = true;
-      # NOTE: No configuration is done if not using virtual host
-      virtualHosts = mkIf (cfg.virtualHost != null) {
+      virtualHosts = {
         "${cfg.virtualHost}" = {
           root = "${cfg.root}";
 

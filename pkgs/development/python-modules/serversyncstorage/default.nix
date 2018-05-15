@@ -35,4 +35,8 @@ buildPythonPackage rec {
     pyramid sqlalchemy simplejson mozsvc cornice pyramid_hawkauth pymysql
     pymysqlsa umemcache WSGIProxy requests pybrowserid
   ];
+
+  meta = {
+    broken = true; # 2018-11-04
+  };
 }

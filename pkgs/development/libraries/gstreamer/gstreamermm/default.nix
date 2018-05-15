@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     description = "C++ interface for GStreamer";
     homepage = https://gstreamer.freedesktop.org/bindings/cplusplus.html;
     license = licenses.lgpl21Plus;
-    platforms = platforms.unix;
+    platforms = platforms.linux;
     maintainers = with maintainers; [ romildo ];
   };
 

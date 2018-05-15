@@ -20,12 +20,12 @@
 
 mkDerivation rec {
   pname = "yakuake";
-  version = "3.0.4";
+  version = "3.0.5";
   name = "${pname}-${version}";
 
     src = fetchurl {
       url = "http://download.kde.org/stable/${pname}/${version}/src/${name}.tar.xz";
-      sha256 = "1q31p1cqhz8b2bikqjrr7fww86kaq723ib4ys2zwablfa1ybbqhh";
+      sha256 = "021a9mnghffv2mrdl987mn7wbg8bk6bnf6xz8kn2nwsqxp9kpqh8";
     };
 
     buildInputs = [

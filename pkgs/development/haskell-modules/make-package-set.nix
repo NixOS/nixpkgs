@@ -136,13 +136,26 @@ let
     src    = "${component}/${name}.cabal";
   };
 
+  # Adds a nix file as an input to the haskell derivation it
+  # produces. This is useful for callHackage / callCabal2nix to
+  # prevent the generated default.nix from being garbage collected
+  # (requiring it to be frequently rebuilt), which can be an
+  # annoyance.
+  callPackageKeepDeriver = src: args:
+    overrideCabal (self.callPackage src args) (orig: {
+      preConfigure = ''
+        # Generated from ${src}
+        ${orig.preConfigure or ""}
+      '';
+    });
+
 in package-set { inherit pkgs stdenv callPackage; } self // {
 
     inherit mkDerivation callPackage haskellSrc2nix hackage2nix;
 
     inherit (haskellLib) packageSourceOverrides;
 
-    callHackage = name: version: self.callPackage (self.hackage2nix name version);
+    callHackage = name: version: callPackageKeepDeriver (self.hackage2nix name version);
 
     # Creates a Haskell package from a source package by calling cabal2nix on the source.
     callCabal2nix = name: src: args: let
@@ -155,10 +168,8 @@ in package-set { inherit pkgs stdenv callPackage; } self // {
                 then pkgs.lib.cleanSourceWith { inherit src filter; }
               else src;
       };
-    in overrideCabal (self.callPackage expr args) (orig: {
+    in overrideCabal (callPackageKeepDeriver expr args) (orig: {
          inherit src;
-         preConfigure =
-           "# Generated from ${expr}\n${orig.preConfigure or ""}";
        });
 
     # : { root : Path

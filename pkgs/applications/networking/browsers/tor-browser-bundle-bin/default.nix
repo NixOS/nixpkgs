@@ -98,7 +98,7 @@ let
   fteLibPath = makeLibraryPath [ stdenv.cc.cc gmp ];
 
   # Upstream source
-  version = "7.5.1";
+  version = "7.5.4";
 
   lang = "en-US";
 
@@ -108,7 +108,7 @@ let
         "https://github.com/TheTorProject/gettorbrowser/releases/download/v${version}/tor-browser-linux64-${version}_${lang}.tar.xz"
         "https://dist.torproject.org/torbrowser/${version}/tor-browser-linux64-${version}_${lang}.tar.xz"
       ];
-      sha256 = "1c5mrc10gm5nklirzwflg7lrdr1v36354g9lgxnjk432izhwb1s0";
+      sha256 = "1d5q2vc7kyd2wizl4551yf54rcagh3y2xf1lzvrswxq4kasii3h9";
     };
 
     "i686-linux" = fetchurl {
@@ -116,7 +116,7 @@ let
         "https://github.com/TheTorProject/gettorbrowser/releases/download/v${version}/tor-browser-linux32-${version}_${lang}.tar.xz"
         "https://dist.torproject.org/torbrowser/${version}/tor-browser-linux32-${version}_${lang}.tar.xz"
       ];
-      sha256 = "0d274f3qhbf1cid3fmpk9s482bjvgcig3q7gdklv9va89bpxzsa6";
+      sha256 = "18v7ykv23gsylvn9mlkp5547yz3y833i9h126r7195wsqdshizdj";
     };
   };
 in
@@ -340,7 +340,7 @@ stdenv.mkDerivation rec {
       \
       TMPDIR="\''${TMPDIR:-/tmp}" \
       HOME="\$HOME" \
-      XAUTHORITY="\$XAUTHORITY" \
+      XAUTHORITY="\''${XAUTHORITY:-}" \
       DISPLAY="\$DISPLAY" \
       DBUS_SESSION_BUS_ADDRESS="\$DBUS_SESSION_BUS_ADDRESS" \
       \

@@ -10,6 +10,8 @@ pythonPackages.buildPythonApplication rec {
   };
 
   postPatch = ''
+    # drop upper bound of acme requirement
+    sed -ri "s/'(acme>=[^,]+),<[^']+'/'\1'/" setup.py
     substituteInPlace simp_le.py \
       --replace "/bin/sh" "${bash}/bin/sh"
   '';

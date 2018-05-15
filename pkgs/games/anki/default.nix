@@ -28,7 +28,7 @@ let
     qt4 = pyqt4.qt;
 
 in buildPythonApplication rec {
-    version = "2.0.50";
+    version = "2.0.51";
     name = "anki-${version}";
 
     src = fetchurl {
@@ -37,7 +37,7 @@ in buildPythonApplication rec {
         # "http://ankisrs.net/download/mirror/${name}.tgz"
         # "http://ankisrs.net/download/mirror/archive/${name}.tgz"
       ];
-      sha256 = "05hq1f9m4vv3zpv7d05m4y6d82ibp1kk0gpwp73vza1ffq0wdcip";
+      sha256 = "17prfkz9hbz1sdb62ddi6m4jwsb50n08myhai997x8d0r0xxilw0";
     };
 
     propagatedBuildInputs = [ pyqt4 sqlalchemy pyaudio beautifulsoup httplib2 ]

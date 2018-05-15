@@ -321,11 +321,11 @@ in rec {
       darwin = super.darwin // {
         inherit (darwin) dyld ICU Libsystem libiconv;
       } // lib.optionalAttrs (super.targetPlatform == localSystem) {
-        inherit (darwin) cctools;
+        inherit (darwin) binutils cctools;
       };
     } // lib.optionalAttrs (super.targetPlatform == localSystem) {
       # Need to get rid of these when cross-compiling.
-      inherit binutils binutils-raw;
+      inherit binutils binutils-unwrapped;
     };
   in import ../generic rec {
     name = "stdenv-darwin";
@@ -380,7 +380,7 @@ in rec {
       bzip2.bin llvmPackages.llvm llvmPackages.llvm.lib zlib.out zlib.dev libffi.out coreutils ed diffutils gnutar
       gzip ncurses.out ncurses.dev ncurses.man gnused bash gawk
       gnugrep llvmPackages.clang-unwrapped llvmPackages.clang-unwrapped.lib patch pcre.out gettext
-      binutils-raw.bintools binutils binutils.bintools
+      binutils.bintools darwin.binutils darwin.binutils.bintools
       cc.expand-response-params
     ]) ++ (with pkgs.darwin; [
       dyld Libsystem CF cctools ICU libiconv locale

@@ -3,13 +3,13 @@
 
 stdenv.mkDerivation rec {
   name = "umockdev-${version}";
-  version = "0.11.1";
+  version = "0.11.3";
 
   src = fetchFromGitHub {
     owner = "martinpitt";
     repo = "umockdev";
     rev = version;
-    sha256 ="0cmswac8m7zfvk6cb8k5iisqr7arnn1yhcmasri072yz0pmr6dr0";
+    sha256 ="1z101yw7clxz39im3y435s3rj1gna3kp0fkj9wd62vxqvk68lhik";
   };
 
   buildInputs = [ glib systemd libgudev ];

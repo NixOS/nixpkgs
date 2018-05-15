@@ -51,6 +51,6 @@ stdenv.mkDerivation rec {
     license = licenses.bsd3;
     homepage = http://smarden.org/runit;
     maintainers = with maintainers; [ rickynils joachifm ];
-    platforms = platforms.unix;
+    platforms = platforms.linux;
   };
 }

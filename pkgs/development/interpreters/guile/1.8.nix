@@ -24,18 +24,18 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ makeWrapper gawk pkgconfig ];
   buildInputs = [ readline libtool ];
 
-  propagatedBuildInputs = [ gmp ];
+  propagatedBuildInputs = [
+    gmp
+
+    # XXX: These ones aren't normally needed here, but `libguile*.la' has '-l'
+    # flags for them without corresponding '-L' flags. Adding them here will add
+    # the needed `-L' flags.  As for why the `.la' file lacks the `-L' flags,
+    # see below.
+    libtool
+  ];
+
 
   patches = [ ./cpp-4.5.patch ];
-
-
-  postInstall = ''
-    wrapProgram $out/bin/guile-snarf --prefix PATH : "${gawk}/bin"
-  '';
-
-  preBuild = ''
-    sed -e '/lt_dlinit/a  lt_dladdsearchdir("'$out/lib'");' -i libguile/dynl.c
-  '';
 
   # Guile needs patching to preset results for the configure tests
   # about pthreads, which work only in native builds.
@@ -43,6 +43,22 @@ stdenv.mkDerivation rec {
     if test -n "$crossConfig"; then
       configureFlags="--with-threads=no $configureFlags"
     fi
+  '';
+
+  preBuild = ''
+    sed -e '/lt_dlinit/a  lt_dladdsearchdir("'$out/lib'");' -i libguile/dynl.c
+  '';
+
+
+  postInstall = ''
+    wrapProgram $out/bin/guile-snarf --prefix PATH : "${gawk}/bin"
+  ''
+    # XXX: See http://thread.gmane.org/gmane.comp.lib.gnulib.bugs/18903 for
+    # why `--with-libunistring-prefix' and similar options coming from
+    # `AC_LIB_LINKFLAGS_BODY' don't work on NixOS/x86_64.
+  + ''
+    sed -i "$out/lib/pkgconfig/guile"-*.pc    \
+        -e "s|-lltdl|-L${libtool.lib}/lib -lltdl|g"
   '';
 
   # One test fails.

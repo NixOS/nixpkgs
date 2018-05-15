@@ -59,7 +59,7 @@ let
     INITRD /boot/${config.system.boot.loader.initrdFile}
 
     # A variant to boot with verbose logging to the console
-    LABEL boot-nomodeset
+    LABEL boot-debug
     MENU LABEL NixOS ${config.system.nixos.label}${config.isoImage.appendToMenuLabel} (debug)
     LINUX /boot/${config.system.boot.loader.kernelFile}
     APPEND init=${config.system.build.toplevel}/init ${toString config.boot.kernelParams} loglevel=7
@@ -73,7 +73,8 @@ let
     APPEND ${toString config.boot.loader.grub.memtest86.params}
   '';
 
-  isolinuxCfg = baseIsolinuxCfg + (optionalString config.boot.loader.grub.memtest86.enable isolinuxMemtest86Entry);
+  isolinuxCfg = concatStringsSep "\n"
+    ([ baseIsolinuxCfg ] ++ optional config.boot.loader.grub.memtest86.enable isolinuxMemtest86Entry);
 
   # The EFI boot image.
   efiDir = pkgs.runCommand "efi-directory" {} ''

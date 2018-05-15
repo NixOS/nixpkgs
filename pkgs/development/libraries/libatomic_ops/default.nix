@@ -2,20 +2,17 @@
 
 stdenv.mkDerivation rec {
   name = "libatomic_ops-${version}";
-  version = "7.6.2";
+  version = "7.6.4";
 
   src = fetchurl {
     urls = [
       "http://www.ivmaisoft.com/_bin/atomic_ops/libatomic_ops-${version}.tar.gz"
       "https://github.com/ivmai/libatomic_ops/releases/download/v${version}/libatomic_ops-${version}.tar.gz"
     ];
-    sha256 ="1rif2hjscq5mh639nsnjhb90c01gnmy1sbmj6x6hsn1xmpnj95r1";
+    sha256 = "0knxncsjhbknlyy6lx7ycxhpzfk3sykhvicgxyp0rmsxd1d3v0jv";
   };
 
   outputs = [ "out" "dev" "doc" ];
-
-  # https://github.com/ivmai/libatomic_ops/pull/32
-  patches = if hostPlatform.isRiscV then [ ./riscv.patch ] else null;
 
   nativeBuildInputs = stdenv.lib.optionals stdenv.isCygwin [ autoconf automake libtool ];
 

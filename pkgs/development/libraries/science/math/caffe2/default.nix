@@ -137,7 +137,7 @@ stdenv.mkDerivation rec {
       algorithms. You can bring your creations to scale using the power of GPUs in the
       cloud or to the masses on mobile with Caffe2's cross-platform libraries.
     '';
-    platforms = with stdenv.lib.platforms; linux ++ darwin;
+    platforms = with stdenv.lib.platforms; linux;
     license = stdenv.lib.licenses.asl20;
     maintainers = with stdenv.lib.maintainers; [ yuriaisaka ];
   };

@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
     or (throw "cannot bootstrap GHC on this platform"));
 
   nativeBuildInputs = [ perl ];
-  buildInputs = stdenv.lib.optionals (stdenv.targetPlatform.isArm || stdenv.targetPlatform.isAarch64) [ llvm_39 ];
+  buildInputs = stdenv.lib.optionals (stdenv.targetPlatform.isAarch32 || stdenv.targetPlatform.isAarch64) [ llvm_39 ];
 
   # Cannot patchelf beforehand due to relative RPATHs that anticipate
   # the final install location/
@@ -158,5 +158,6 @@ stdenv.mkDerivation rec {
   passthru = { targetPrefix = ""; };
 
   meta.license = stdenv.lib.licenses.bsd3;
-  meta.platforms = ["x86_64-linux" "i686-linux" "x86_64-darwin" "armv7l-linux" "aarch64-linux"];
+  # AArch64 should work in theory but eventually some builds start segfaulting
+  meta.platforms = ["x86_64-linux" "i686-linux" "x86_64-darwin" "armv7l-linux" /* "aarch64-linux" */];
 }

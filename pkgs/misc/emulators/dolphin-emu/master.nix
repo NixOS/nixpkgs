@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, pkgconfig, cmake, bluez, ffmpeg, libao, libGLU_combined, gtk2, glib
-, pcre, gettext, libpthreadstubs, libXrandr, libXext, libSM, readline
+, pcre, gettext, libpthreadstubs, libXrandr, libXext, libXxf86vm, libXinerama, libSM, readline
 , openal, libXdmcp, portaudio, libusb, libevdev
 , libpulseaudio ? null
 , curl
@@ -20,12 +20,12 @@ assert dolphin-wxgui || dolphin-qtgui;
 assert !(dolphin-wxgui && dolphin-qtgui);
 
 stdenv.mkDerivation rec {
-  name = "dolphin-emu-20171218";
+  name = "dolphin-emu-20180430";
   src = fetchFromGitHub {
     owner = "dolphin-emu";
     repo = "dolphin";
-    rev = "438e8b64a4b080370c7a65ed23af52838a4e7aaa";
-    sha256 = "0rrd0g1vg9jk1p4wdr6w2z34cabb7pgmpwfcl2a372ark3vi4ysc";
+    rev = "ad098283c023b0f5f0d314c646bc5d5756c35e3d";
+    sha256 = "17fv3vz0nc5jax1bbl4wny1kzsshbbhms82dxd8rzcwwvd2ad1g7";
   };
 
   cmakeFlags = [
@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake pkgconfig ];
 
   buildInputs = [ curl ffmpeg libao libGLU_combined gtk2 glib pcre
-                  gettext libpthreadstubs libXrandr libXext libSM readline openal
+                  gettext libpthreadstubs libXrandr libXext libXxf86vm libXinerama libSM readline openal
                   libXdmcp portaudio libusb libpulseaudio libpng hidapi
                 ] ++ stdenv.lib.optionals stdenv.isDarwin [ wxGTK CoreBluetooth cf-private ForceFeedback IOKit OpenGL ]
                   ++ stdenv.lib.optionals stdenv.isLinux  [ bluez libevdev  ]

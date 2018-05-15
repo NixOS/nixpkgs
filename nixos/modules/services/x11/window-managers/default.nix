@@ -62,9 +62,7 @@ in
         example = "wmii";
         description = "Default window manager loaded if none have been chosen.";
         apply = defaultWM:
-          if defaultWM == "none" && cfg.session != []  then
-            (head cfg.session).name
-          else if any (w: w.name == defaultWM) cfg.session then
+          if any (w: w.name == defaultWM) cfg.session then
             defaultWM
           else
             throw "Default window manager (${defaultWM}) not found.";

@@ -1,5 +1,5 @@
 { stdenv, fetchurl, fetchFromGitHub, fetchpatch, makeWrapper
-, docutils, perl, pkgconfig, python3, which, ffmpeg
+, docutils, perl, pkgconfig, python3, which, ffmpeg_4
 , freefont_ttf, freetype, libass, libpthreadstubs
 , lua, luasocket, libuchardet, libiconv ? null, darwin
 
@@ -32,6 +32,7 @@
 , youtubeSupport     ? true,  youtube-dl    ? null
 , vaapiSupport       ? true,  libva         ? null
 , drmSupport         ? true,  libdrm        ? null
+, openalSupport      ? true,  openalSoft   ? null
 , vapoursynthSupport ? false, vapoursynth   ? null
 , archiveSupport     ? false, libarchive    ? null
 , jackaudioSupport   ? false, libjack2      ? null
@@ -59,6 +60,7 @@ assert dvdnavSupport      -> available libdvdnav;
 assert bluraySupport      -> available libbluray;
 assert speexSupport       -> available speex;
 assert theoraSupport      -> available libtheora;
+assert openalSupport      -> available openalSoft;
 assert pulseSupport       -> available libpulseaudio;
 assert bs2bSupport        -> available libbs2b;
 assert cacaSupport        -> available libcaca;
@@ -75,27 +77,20 @@ let
   # for purity reasons this behavior should be avoided.
   wafVersion = "1.9.15";
   waf = fetchurl {
-    urls = [ "http://waf.io/waf-${wafVersion}"
+    urls = [ "https://waf.io/waf-${wafVersion}"
              "http://www.freehackers.org/~tnagy/release/waf-${wafVersion}" ];
     sha256 = "0qrnlv91cb0v221w8a0fi4wxm99q2hpz10rkyyk4akcsvww6xrw5";
   };
 in stdenv.mkDerivation rec {
   name = "mpv-${version}";
-  version = "0.27.2";
+  version = "0.28.2";
 
   src = fetchFromGitHub {
     owner = "mpv-player";
     repo  = "mpv";
     rev    = "v${version}";
-    sha256 = "1ivyyqajkxq5c1zxp0dm7pljvianhgvwl3dbghgpzyrch59k5wnr";
+    sha256 = "0bldxhqjz7z9fgvx4k40l49awpay17fscp8ypswb459yicy8npmg";
   };
-
-  patches = [
-    (fetchpatch {
-      url = "https://github.com/mpv-player/mpv/commit/2ecf240b1cd20875991a5b18efafbe799864ff7f.patch";
-      sha256 = "1sr0770rvhsgz8d7ysr9qqp4g9gwdhgj8g3rgnz90wl49lgrykhb";
-    })
-  ];
 
   postPatch = ''
     patchShebangs ./TOOLS/
@@ -113,6 +108,7 @@ in stdenv.mkDerivation rec {
     (enableFeature archiveSupport "libarchive")
     (enableFeature dvdreadSupport "dvdread")
     (enableFeature dvdnavSupport "dvdnav")
+    (enableFeature openalSupport "openal")
     (enableFeature vaapiSupport "vaapi")
     (enableFeature waylandSupport "wayland")
     (enableFeature stdenv.isLinux "dvbin")
@@ -128,7 +124,7 @@ in stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    ffmpeg freetype libass libpthreadstubs
+    ffmpeg_4 freetype libass libpthreadstubs
     lua luasocket libuchardet
   ] ++ optional alsaSupport        alsaLib
     ++ optional xvSupport          libXv
@@ -143,6 +139,8 @@ in stdenv.mkDerivation rec {
     ++ optional vdpauSupport       libvdpau
     ++ optional speexSupport       speex
     ++ optional bs2bSupport        libbs2b
+    ++ optional openalSupport      openalSoft
+    ++ optional (openalSupport && stdenv.isDarwin) darwin.apple_sdk.frameworks.OpenAL
     ++ optional libpngSupport      libpng
     ++ optional youtubeSupport     youtube-dl
     ++ optional sdl2Support        SDL2
@@ -195,7 +193,7 @@ in stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A media player that supports many video formats (MPlayer and mplayer2 fork)";
-    homepage = http://mpv.io;
+    homepage = https://mpv.io;
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ AndersonTorres fuuzetsu fpletz ];
     platforms = platforms.darwin ++ platforms.linux;

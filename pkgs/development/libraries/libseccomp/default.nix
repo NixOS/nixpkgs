@@ -25,6 +25,7 @@ stdenv.mkDerivation rec {
     homepage    = "https://github.com/seccomp/libseccomp";
     license     = licenses.lgpl21;
     platforms   = platforms.linux;
+    badPlatforms = platforms.riscv;
     maintainers = with maintainers; [ thoughtpolice wkennington ];
   };
 }

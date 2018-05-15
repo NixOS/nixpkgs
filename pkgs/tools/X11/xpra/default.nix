@@ -12,11 +12,11 @@ let
   inherit (python2Packages) python cython buildPythonApplication;
 in buildPythonApplication rec {
   name = "xpra-${version}";
-  version = "2.2.4";
+  version = "2.2.6";
 
   src = fetchurl {
     url = "http://xpra.org/src/${name}.tar.xz";
-    sha256 = "0v8yflvisk94bfj0zg4ggdfwrig0f3ss9kjnws3zflsr33cb2hxy";
+    sha256 = "1zyynghhzjbgnmzcibm17wpj9f7jy31d7dr373li8cwg2yl2swyz";
   };
 
   nativeBuildInputs = [ pkgconfig ];

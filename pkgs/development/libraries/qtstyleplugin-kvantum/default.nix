@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "qtstyleplugin-kvantum-${version}";
-  version = "0.10.4";
+  version = "0.10.6";
 
   src = fetchFromGitHub {
     owner = "tsujan";
     repo = "Kvantum";
-    rev = "0527bb03f2252269fd382e11181a34ca72c96b4b";
-    sha256 = "0ky44s1fgqxraywagx1mv07yz76ppgiz3prq447db78wkwqg2d8p";
+    rev = "a6daa1a6df3c5d4abc7ea39ef7028ddea2addbf6";
+    sha256 = "1zns4x95h0ydiwx8yw0bmyg4lc2sy7annmdrg66sx753x3177zxp";
   };
 
   nativeBuildInputs = [ qmake qttools ];
@@ -16,15 +16,16 @@ stdenv.mkDerivation rec {
 
   postUnpack = "sourceRoot=\${sourceRoot}/Kvantum";
 
-  postInstall= ''
-    mkdir -p $out/$qtPluginPrefix/styles
-    mv $NIX_QT5_TMP/$qtPluginPrefix/styles/libkvantum.so $out/$qtPluginPrefix/styles/libkvantum.so
+  postPatch = ''
+    # Fix plugin dir
+    substituteInPlace style/style.pro \
+      --replace "\$\$[QT_INSTALL_PLUGINS]" "$out/$qtPluginPrefix"
   '';
 
   meta = with stdenv.lib; {
     description = "SVG-based Qt5 theme engine plus a config tool and extra themes";
     homepage = "https://github.com/tsujan/Kvantum";
-    license = licenses.gpl2;
+    license = licenses.gpl3;
     platforms = platforms.linux;
     maintainers = [ maintainers.bugworm ];
   };

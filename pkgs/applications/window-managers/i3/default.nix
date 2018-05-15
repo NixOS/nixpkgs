@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
   version = "4.15";
 
   src = fetchurl {
-    url = "http://i3wm.org/downloads/${name}.tar.bz2";
+    url = "https://i3wm.org/downloads/${name}.tar.bz2";
     sha256 = "09jk70hsdxab24lqvj2f30ijrkbv3f6q9xi5dcsax1dw3x6m4z91";
   };
 
@@ -57,7 +57,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A tiling window manager";
-    homepage    = "http://i3wm.org";
+    homepage    = "https://i3wm.org";
     maintainers = with maintainers; [ garbas modulistic fpletz ];
     license     = licenses.bsd3;
     platforms   = platforms.all;

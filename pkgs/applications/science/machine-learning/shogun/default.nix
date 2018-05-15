@@ -52,6 +52,10 @@ stdenv.mkDerivation rec {
     ++ (optional (opencvSupport) "-DOpenCV=ON")
     ;
 
+  # Previous attempts to fix parallel builds (see patch above) were not entirely successful.
+  # Sporadic build failures still exist. Dislable parallel builds for now.
+  enableParallelBuilding = false;
+
   meta = with stdenv.lib; {
     description = "A toolbox which offers a wide range of efficient and unified machine learning methods";
     homepage = "http://shogun-toolbox.org/";

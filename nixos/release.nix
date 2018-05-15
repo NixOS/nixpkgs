@@ -55,6 +55,17 @@ let
     }).config.system.build.isoImage);
 
 
+  makeSdImage =
+    { module, maintainers ? ["dezgeg"], system }:
+
+    with import nixpkgs { inherit system; };
+
+    hydraJob ((import lib/eval-config.nix {
+      inherit system;
+      modules = [ module versionModule ];
+    }).config.system.build.sdImage);
+
+
   makeSystemTarball =
     { module, maintainers ? ["viric"], system }:
 
@@ -113,7 +124,6 @@ let
         preferLocalBuild = true;
       };
 
-
 in rec {
 
   channel = import lib/make-channel.nix { inherit pkgs nixpkgs version versionSuffix; };
@@ -121,6 +131,7 @@ in rec {
   manual = buildFromConfig ({ pkgs, ... }: { }) (config: config.system.build.manual.manual);
   manualEpub = (buildFromConfig ({ pkgs, ... }: { }) (config: config.system.build.manual.manualEpub));
   manpages = buildFromConfig ({ pkgs, ... }: { }) (config: config.system.build.manual.manpages);
+  manualGeneratedSources = buildFromConfig ({ pkgs, ... }: { }) (config: config.system.build.manual.generatedSources);
   options = (buildFromConfig ({ pkgs, ... }: { }) (config: config.system.build.manual.optionsJSON)).x86_64-linux;
 
 
@@ -155,6 +166,14 @@ in rec {
     inherit system;
   });
 
+  sd_image = forMatchingSystems [ "armv6l-linux" "armv7l-linux" "aarch64-linux" ] (system: makeSdImage {
+    module = {
+        armv6l-linux = ./modules/installer/cd-dvd/sd-image-raspberrypi.nix;
+        armv7l-linux = ./modules/installer/cd-dvd/sd-image-armv7l-multiplatform.nix;
+        aarch64-linux = ./modules/installer/cd-dvd/sd-image-aarch64.nix;
+      }.${system};
+    inherit system;
+  });
 
   # A bootable VirtualBox virtual appliance as an OVA file (i.e. packaged OVF).
   ova = forMatchingSystems [ "x86_64-linux" ] (system:
@@ -179,6 +198,7 @@ in rec {
         modules = singleton ({ config, pkgs, ... }:
           { fileSystems."/".device  = mkDefault "/dev/sda1";
             boot.loader.grub.device = mkDefault "/dev/sda";
+            system.nixos.stateVersion = mkDefault "18.03";
           });
       }).config.system.build.toplevel;
       preferLocalBuild = true;
@@ -249,8 +269,11 @@ in rec {
   tests.containers-hosts = callTest tests/containers-hosts.nix {};
   tests.containers-macvlans = callTest tests/containers-macvlans.nix {};
   tests.couchdb = callTest tests/couchdb.nix {};
+  tests.deluge = callTest tests/deluge.nix {};
+  tests.dhparams = callTest tests/dhparams.nix {};
   tests.docker = callTestOnMatchingSystems ["x86_64-linux"] tests/docker.nix {};
   tests.docker-tools = callTestOnMatchingSystems ["x86_64-linux"] tests/docker-tools.nix {};
+  tests.docker-tools-overlay = callTestOnMatchingSystems ["x86_64-linux"] tests/docker-tools-overlay.nix {};
   tests.docker-edge = callTestOnMatchingSystems ["x86_64-linux"] tests/docker-edge.nix {};
   tests.dovecot = callTest tests/dovecot.nix {};
   tests.dnscrypt-proxy = callTestOnMatchingSystems ["x86_64-linux"] tests/dnscrypt-proxy.nix {};
@@ -262,8 +285,8 @@ in rec {
   tests.env = callTest tests/env.nix {};
   tests.ferm = callTest tests/ferm.nix {};
   tests.firefox = callTest tests/firefox.nix {};
+  tests.flatpak = callTest tests/flatpak.nix {};
   tests.firewall = callTest tests/firewall.nix {};
-  tests.fleet = callTestOnMatchingSystems ["x86_64-linux"] tests/fleet.nix {};
   tests.fwupd = callTest tests/fwupd.nix {};
   #tests.gitlab = callTest tests/gitlab.nix {};
   tests.gitolite = callTest tests/gitolite.nix {};
@@ -276,27 +299,30 @@ in rec {
   tests.graphite = callTest tests/graphite.nix {};
   tests.hardened = callTest tests/hardened.nix { };
   tests.hibernate = callTest tests/hibernate.nix {};
+  tests.hitch = callTest tests/hitch {};
   tests.home-assistant = callTest tests/home-assistant.nix { };
   tests.hound = callTest tests/hound.nix {};
   tests.hocker-fetchdocker = callTest tests/hocker-fetchdocker {};
   tests.i3wm = callTest tests/i3wm.nix {};
+  tests.iftop = callTest tests/iftop.nix {};
   tests.initrd-network-ssh = callTest tests/initrd-network-ssh {};
   tests.installer = callSubTests tests/installer.nix {};
   tests.influxdb = callTest tests/influxdb.nix {};
   tests.ipv6 = callTest tests/ipv6.nix {};
   tests.jenkins = callTest tests/jenkins.nix {};
+  tests.osquery = callTest tests/osquery.nix {};
   tests.plasma5 = callTest tests/plasma5.nix {};
   tests.plotinus = callTest tests/plotinus.nix {};
   tests.keymap = callSubTests tests/keymap.nix {};
   tests.initrdNetwork = callTest tests/initrd-network.nix {};
-  tests.kafka_0_9 = callTest tests/kafka_0_9.nix {};
-  tests.kafka_0_10 = callTest tests/kafka_0_10.nix {};
-  tests.kafka_0_11 = callTest tests/kafka_0_11.nix {};
-  tests.kafka_1_0 = callTest tests/kafka_1_0.nix {};
+  tests.kafka = callSubTests tests/kafka.nix {};
   tests.kernel-copperhead = callTest tests/kernel-copperhead.nix {};
   tests.kernel-latest = callTest tests/kernel-latest.nix {};
   tests.kernel-lts = callTest tests/kernel-lts.nix {};
-  tests.kubernetes = callSubTestsOnMatchingSystems ["x86_64-linux"] tests/kubernetes/default.nix {};
+  tests.kubernetes.dns = callSubTestsOnMatchingSystems ["x86_64-linux"] tests/kubernetes/dns.nix {};
+  ## kubernetes.e2e should eventually replace kubernetes.rbac when it works
+  #tests.kubernetes.e2e = callSubTestsOnMatchingSystems ["x86_64-linux"] tests/kubernetes/e2e.nix {};
+  tests.kubernetes.rbac = callSubTestsOnMatchingSystems ["x86_64-linux"] tests/kubernetes/rbac.nix {};
   tests.latestKernel.login = callTest tests/login.nix { latestKernel = true; };
   tests.ldap = callTest tests/ldap.nix {};
   #tests.lightdm = callTest tests/lightdm.nix {};
@@ -321,6 +347,7 @@ in rec {
   tests.networking.scripted = callSubTests tests/networking.nix { networkd = false; };
   # TODO: put in networking.nix after the test becomes more complete
   tests.networkingProxy = callTest tests/networking-proxy.nix {};
+  tests.nexus = callTest tests/nexus.nix { };
   tests.nfs3 = callTest tests/nfs.nix { version = 3; };
   tests.nfs4 = callTest tests/nfs.nix { version = 4; };
   tests.nginx = callTest tests/nginx.nix { };
@@ -333,7 +360,6 @@ in rec {
   tests.openldap = callTest tests/openldap.nix {};
   tests.owncloud = callTest tests/owncloud.nix {};
   tests.pam-oath-login = callTest tests/pam-oath-login.nix {};
-  #tests.panamax = callTestOnMatchingSystems ["x86_64-linux"] tests/panamax.nix {};
   tests.peerflix = callTest tests/peerflix.nix {};
   tests.php-pcre = callTest tests/php-pcre.nix {};
   tests.postgresql = callSubTests tests/postgresql.nix {};
@@ -344,8 +370,9 @@ in rec {
   tests.predictable-interface-names = callSubTests tests/predictable-interface-names.nix {};
   tests.printing = callTest tests/printing.nix {};
   tests.prometheus = callTest tests/prometheus.nix {};
+  tests.prosody = callTest tests/prosody.nix {};
   tests.proxy = callTest tests/proxy.nix {};
-  # tests.quagga = callTest tests/quagga.nix {};
+  tests.quagga = callTest tests/quagga.nix {};
   tests.quake3 = callTest tests/quake3.nix {};
   tests.rabbitmq = callTest tests/rabbitmq.nix {};
   tests.radicale = callTest tests/radicale.nix {};
@@ -359,16 +386,19 @@ in rec {
   tests.smokeping = callTest tests/smokeping.nix {};
   tests.snapper = callTest tests/snapper.nix {};
   tests.statsd = callTest tests/statsd.nix {};
+  tests.strongswan-swanctl = callTest tests/strongswan-swanctl.nix {};
   tests.sudo = callTest tests/sudo.nix {};
   tests.systemd = callTest tests/systemd.nix {};
   tests.switchTest = callTest tests/switch-test.nix {};
   tests.taskserver = callTest tests/taskserver.nix {};
   tests.tomcat = callTest tests/tomcat.nix {};
+  tests.transmission = callTest tests/transmission.nix {};
   tests.udisks2 = callTest tests/udisks2.nix {};
   tests.vault = callTest tests/vault.nix {};
   tests.virtualbox = callSubTestsOnMatchingSystems ["x86_64-linux"] tests/virtualbox.nix {};
   tests.wordpress = callTest tests/wordpress.nix {};
   tests.xautolock = callTest tests/xautolock.nix {};
+  tests.xdg-desktop-portal = callTest tests/xdg-desktop-portal.nix {};
   tests.xfce = callTest tests/xfce.nix {};
   tests.xmonad = callTest tests/xmonad.nix {};
   tests.xrdp = callTest tests/xrdp.nix {};

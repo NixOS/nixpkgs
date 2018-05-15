@@ -15,13 +15,13 @@ in
 
 stdenv.mkDerivation rec {
   name = "${package}-${version}";
-  version = "0.5.4";
+  version = "0.5.5";
 
   src = fetchFromGitHub {
     repo = "JFBView";
     owner = "jichu4n";
     rev = version;
-    sha256 = "0p12b5n07yfkmfswjdb3a4c5c50jcphl030n3i71djcq4jjvrxlw";
+    sha256 = "1w844ha9lp49ik79yfislib34455nl9gcksbx22hiz30gmqwzakz";
   };
 
   hardeningDisable = [ "format" ];
@@ -64,7 +64,5 @@ stdenv.mkDerivation rec {
     homepage = https://seasonofcode.com/pages/jfbview.html;
     license = licenses.asl20;
     platforms = platforms.linux;
-    # incompatible with latest mupdf, see https://github.com/jichu4n/JFBView/issues/17
-    broken = true;
   };
 }

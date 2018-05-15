@@ -8,9 +8,6 @@ self: super: {
   inherit (pkgs) llvmPackages;
 
   # Disable GHC 8.4.x core libraries.
-  #
-  # Verify against:
-  # ls /nix/store/wnh3kxra586h9wvxrn62g4lmsri2akds-ghc-8.4.20180115/lib/ghc-8.4.20180115/ -1 | sort | grep -e '-' | grep -Ev '(txt|h|targets)$'
   array = null;
   base = null;
   binary = null;
@@ -20,12 +17,11 @@ self: super: {
   deepseq = null;
   directory = null;
   filepath = null;
-  bin-package-db = null;
   ghc-boot = null;
   ghc-boot-th = null;
   ghc-compact = null;
-  ghci = null;
   ghc-prim = null;
+  ghci = null;
   haskeline = null;
   hpc = null;
   integer-gmp = null;
@@ -33,6 +29,7 @@ self: super: {
   parsec = null;
   pretty = null;
   process = null;
+  rts = null;
   stm = null;
   template-haskell = null;
   terminfo = null;
@@ -45,17 +42,6 @@ self: super: {
   ## Shadowed:
 
   ## Needs bump to a versioned attribute
-  ##     • No instance for (GHC.Base.Semigroup BV)
-  ##         arising from the superclasses of an instance declaration
-  ##     • In the instance declaration for ‘Monoid BV’
-  bv = super.bv_0_5;
-
-  ## Needs bump to a versioned attribute
-  ## Setup: Encountered missing dependencies:
-  ## template-haskell >=2.5 && <2.13
-  deriving-compat = super.deriving-compat_0_4_1;
-
-  ## Needs bump to a versioned attribute
   ## Issue: https://github.com/sol/doctest/issues/189
   doctest = overrideCabal super.doctest_0_15_0 (drv: {
     ## Setup: Encountered missing dependencies:
@@ -65,11 +51,6 @@ self: super: {
     ## QuickCheck >=2.11.3
     doCheck         = false;
   });
-
-  ## Needs bump to a versioned attribute
-  ## Setup: Encountered missing dependencies:
-  ## free >=4.9 && <5
-  either = super.either_5;
 
   ## Needs bump to a versioned attribute
   ## Setup: Encountered missing dependencies:
@@ -127,66 +108,6 @@ self: super: {
   ## On Hackage:
 
   ## Upstreamed, awaiting a Hackage release
-  cabal-install = overrideCabal super.cabal-install (drv: {
-    ## Setup: Encountered missing dependencies:
-    ## Cabal >=2.0.1.0 && <2.1, base >=4.5 && <4.11
-    src = pkgs.fetchFromGitHub {
-      owner  = "haskell";
-      repo   = "cabal";
-      rev    = "728ad1a1e066da453ae13ee479629c00d8c2f32d";
-      sha256 = "0943xpva0fjlx8fanqvb6bg7myim2pki7q8hz3q0ijnf73bgzf7p";
-    };
-    prePatch        = "cd cabal-install; ";
-    ## Setup: Encountered missing dependencies:
-    ## network >=2.4 && <2.6, resolv >=0.1.1 && <0.2
-    libraryHaskellDepends = (drv.libraryHaskellDepends or []) ++ (with self; [ network resolv ]);
-  });
-
-  ## Upstreamed, awaiting a Hackage release
-  hackage-security = overrideCabal super.hackage-security (drv: {
-    ## Setup: Encountered missing dependencies:
-    ## Cabal >=1.14 && <1.26,
-    ## directory >=1.1.0.2 && <1.3,
-    ## time >=1.2 && <1.7
-    src = pkgs.fetchFromGitHub {
-      owner  = "haskell";
-      repo   = "hackage-security";
-      rev    = "21519f4f572b9547485285ebe44c152e1230fd76";
-      sha256 = "1ijwmps4pzyhsxfhc8mrnc3ldjvpisnmr457vvhgymwhdrr95k0z";
-    };
-    prePatch        = "cd hackage-security; ";
-    ## https://github.com/haskell/hackage-security/issues/211
-    jailbreak       = true;
-    ## error: while evaluating ‘overrideCabal’ at nixpkgs://pkgs/development/haskell-modules/lib.nix:37:24, called from /home/deepfire/nixpkgs/pkgs/development/haskell-modules/configuration-ghc-8.4.x.nix:217:22:
-    editedCabalFile = null;
-  });
-
-  ## Upstreamed, awaiting a Hackage release
-  haskell-gi = overrideCabal super.haskell-gi (drv: {
-    ## Setup: Encountered missing dependencies:
-    ## haskell-gi-base ==0.20.*
-    src = pkgs.fetchFromGitHub {
-      owner  = "haskell-gi";
-      repo   = "haskell-gi";
-      rev    = "30d2e6415c5b57760f8754cd3003eb07483d60e6";
-      sha256 = "1l3qm97gcjih695hhj80rbpnd72prnc81lg5y373yj8jk9f6ypbr";
-    };
-  });
-
-  ## Upstreamed, awaiting a Hackage release
-  haskell-gi-base = overrideCabal super.haskell-gi-base (drv: {
-    ## Setup: Encountered missing dependencies:
-    ## haskell-gi-base ==0.21.*
-    src = pkgs.fetchFromGitHub {
-      owner  = "haskell-gi";
-      repo   = "haskell-gi";
-      rev    = "30d2e6415c5b57760f8754cd3003eb07483d60e6";
-      sha256 = "1l3qm97gcjih695hhj80rbpnd72prnc81lg5y373yj8jk9f6ypbr";
-    };
-    prePatch        = "cd base; ";
-  });
-
-  ## Upstreamed, awaiting a Hackage release
   http-api-data = overrideCabal super.http-api-data (drv: {
     ##     • No instance for (Semigroup Form)
     ##         arising from the 'deriving' clause of a data type declaration
@@ -231,56 +152,8 @@ self: super: {
     prePatch        = "cd lambdacube-ir.haskell; ";
   });
 
-  ## Upstreamed, awaiting a Hackage release
-  simple-reflect = overrideCabal super.simple-reflect (drv: {
-    ##     • No instance for (Semigroup Expr)
-    ##         arising from the superclasses of an instance declaration
-    ##     • In the instance declaration for ‘Monoid Expr’
-    src = pkgs.fetchFromGitHub {
-      owner  = "twanvl";
-      repo   = "simple-reflect";
-      rev    = "c357e55da9a712dc5dbbfe6e36394e4ada2db310";
-      sha256 = "15q41b00l8y51xzhbj5zhddyh3gi7gvml033w8mm2fih458jf6yq";
-    };
-  });
-
-  ## Upstreamed, awaiting a Hackage release
-  singletons = overrideCabal super.singletons (drv: {
-    ## Setup: Encountered missing dependencies:
-    ## th-desugar ==1.7.*
-    src = pkgs.fetchFromGitHub {
-      owner  = "goldfirere";
-      repo   = "singletons";
-      rev    = "23aa4bdaf05ce025a2493b35ec3c26cc94e3fdce";
-      sha256 = "0hw12v4z8jxmykc3j8z6g27swmfpxv40bgnx7nl0ialpwbz9mz27";
-    };
-  });
-
-  ## Upstreamed, awaiting a Hackage release
-  tar = overrideCabal super.tar (drv: {
-    ##     • No instance for (Semigroup (Entries e))
-    ##         arising from the superclasses of an instance declaration
-    ##     • In the instance declaration for ‘Monoid (Entries e)’
-    src = pkgs.fetchFromGitHub {
-      owner  = "haskell";
-      repo   = "tar";
-      rev    = "abf2ccb8f7da0514343a0b2624cabebe081bdfa8";
-      sha256 = "0s33lgrr574i1r7zc1jqahnwx3dv47ny30mbx5zfpdzjw0jdl5ny";
-    };
-  });
-
-  ## Upstreamed, awaiting a Hackage release
-  th-desugar = overrideCabal super.th-desugar (drv: {
-    ##     • Could not deduce (MonadIO (DsM q))
-    ##         arising from the 'deriving' clause of a data type declaration
-    ##       from the context: Quasi q
-    src = pkgs.fetchFromGitHub {
-      owner  = "goldfirere";
-      repo   = "th-desugar";
-      rev    = "4ca98c6492015e6ad063d3ad1a2ad6c4f0a56837";
-      sha256 = "1n3myd3gia9qsgdvrwqa023d3g7wkrhyv0wc8czwzz0lj9xzh7lw";
-    };
-  });
+  singletons = super.singletons_2_4_1;
+  th-desugar = super.th-desugar_1_8;
 
   ## Upstreamed, awaiting a Hackage release
   websockets = overrideCabal super.websockets (drv: {
@@ -318,71 +191,6 @@ self: super: {
     ## Setup: Encountered missing dependencies:
     ## data-or ==1.0.*
     libraryHaskellDepends = (drv.libraryHaskellDepends or []) ++ (with self; [ data-or ]);
-  });
-
-  ## Unmerged.  PR: https://github.com/dhall-lang/dhall-haskell/pull/321
-  dhall = overrideCabal super.dhall (drv: {
-    ##     • No instance for (Semigroup (Parser Builder))
-    ##         arising from a use of ‘<>’
-    ##       There are instances for similar types:
-    src = pkgs.fetchFromGitHub {
-      owner  = "deepfire";
-      repo   = "dhall-haskell";
-      rev    = "38f3d8c861e137da6d8ac8eab88aec1c359efcac";
-      sha256 = "1pya7lhdjsygk622k1g3whj0a7jqwyym26ikxbn1anxypnb0n2wy";
-    };
-    ## Setup: Encountered missing dependencies:
-    ## prettyprinter >=1.2.0.1 && <1.3
-    jailbreak       = true;
-    ## Setup: Encountered missing dependencies:
-    ## insert-ordered-containers -any,
-    ## lens-family-core -any,
-    ## prettyprinter-ansi-terminal -any,
-    ## repline -any
-    libraryHaskellDepends = (drv.libraryHaskellDepends or []) ++ (with self; [ insert-ordered-containers lens-family-core prettyprinter prettyprinter-ansi-terminal repline ]);
-  });
-
-  ## Unmerged.  PR: https://github.com/gtk2hs/gtk2hs/pull/233
-  gtk2hs-buildtools = overrideCabal super.gtk2hs-buildtools (drv: {
-    ## Setup: Encountered missing dependencies:
-    ## Cabal >=1.24.0.0 && <2.1
-    src = pkgs.fetchFromGitHub {
-      owner  = "deepfire";
-      repo   = "gtk2hs";
-      rev    = "08c68d5afc22dd5761ec2c92ebf49c6d252e545b";
-      sha256 = "06prn5wqq8x225n9wlbyk60f50jyjj8fm2hf181dyqjpf8wq75xa";
-    };
-    prePatch        = "cd tools; ";
-  });
-
-  ## Unmerged.  PR: https://github.com/gregorycollins/hashtables/pull/46
-  hashtables = overrideCabal super.hashtables (drv: {
-    ##     • No instance for (Semigroup Slot)
-    ##         arising from the superclasses of an instance declaration
-    ##     • In the instance declaration for ‘Monoid Slot’
-    src = pkgs.fetchFromGitHub {
-      owner  = "deepfire";
-      repo   = "hashtables";
-      rev    = "b9eb4b10a50bd6250330422afecc065339a32412";
-      sha256 = "0l4nplpvnzzf397zyh7j2k6yiqb46k6bdy00m4zzvhlfp7p1xkaw";
-    };
-  });
-
-  ## Unmerged.  PR: https://github.com/sol/hpack/pull/277
-  ## Issue: https://github.com/sol/hpack/issues/276
-  hpack = overrideCabal super.hpack (drv: {
-    ##     • No instance for (Semigroup Dependencies)
-    ##         arising from the 'deriving' clause of a data type declaration
-    ##       Possible fix:
-    src = pkgs.fetchFromGitHub {
-      owner  = "deepfire";
-      repo   = "hpack";
-      rev    = "acce0cffcc1d165a0fd9f0b83878dfbd622ea0d6";
-      sha256 = "1wv0ya1gb1hwd9w8g4z5aig694q3arsqhxv0d4wcp270xnq9ja8y";
-    };
-    ## Setup: Encountered missing dependencies:
-    ## http-client -any, http-client-tls -any, http-types -any
-    libraryHaskellDepends = (drv.libraryHaskellDepends or []) ++ (with self; [ http-client http-client-tls http-types ]);
   });
 
   ## Unmerged.  PR: https://github.com/hanshoglund/monadplus/pull/3
@@ -437,20 +245,6 @@ self: super: {
       sha256 = "0lyrx4l57v15rvazrmw0nfka9iyxs4wyaasjj9y1525va9s1z4fr";
     };
   });
-
-  ## Unmerged.  PR: https://github.com/ivan-m/wl-pprint-text/pull/17
-  wl-pprint-text = overrideCabal super.wl-pprint-text (drv: {
-    ##     Ambiguous occurrence ‘<>’
-    ##     It could refer to either ‘PP.<>’,
-    ##                              imported from ‘Prelude.Compat’ at Text/PrettyPrint/Leijen/Text/Monadic.hs:73:1-36
-    src = pkgs.fetchFromGitHub {
-      owner  = "deepfire";
-      repo   = "wl-pprint-text";
-      rev    = "615b83d1e5be52d1448aa1ab2517b431a617027b";
-      sha256 = "1p67v9s878br0r152h4n37smqhkg78v8zxhf4qm6d035s4rzj76i";
-    };
-  });
-
 
   ## Non-code, configuration-only change
 
@@ -646,49 +440,38 @@ self: super: {
     jailbreak       = true;
   });
 
-  # Fix missing semigroup instance for Journal.
-  hledger-lib = appendPatch super.hledger-lib (pkgs.fetchpatch
-    { url = https://github.com/simonmichael/hledger/pull/718.patch;
-      sha256 = "1gcs9j934wvk9hbn27zm42dnvf4x1gxr54li4kdw3zi3160y2l5c";
-      stripLen = 1;
-    });
-
-  # Fix missing semigroup instance.
-  data-inttrie = appendPatch super.data-inttrie (pkgs.fetchpatch
-    { url = https://github.com/luqui/data-inttrie/pull/5.patch;
-      sha256 = "1wwdzrbsjqb7ih4nl28sq5bbj125mxf93a74yh4viv5gmxwj606a";
-    });
-
-  # https://github.com/jgm/pandoc-types/issues/37
-  pandoc-types = self.pandoc-types_1_17_4_2;
-
-  ## Need latest git version to support current haddock-library versions.
-  pandoc = overrideSrc super.pandoc {
-    version = "2.1.2-git";
-    src = pkgs.fetchFromGitHub {
-      owner  = "jgm";
-      repo   = "pandoc";
-      rev    = "fad8d0d67ff4736e1af554d2bfcf1688aa28c8ec";
-      sha256 = "1sgfnyi2ma8vf91dw9ax9xbbjfcja1q5q9vcwa1rhh05jv8j036a";
-    };
-  };
-
-  # Fix missing semigroup instance.
-  json = appendPatch super.json (pkgs.fetchpatch
-    { url = https://github.com/GaloisInc/json/commit/9292150bbe02c2d126ad6a876242578b1a9d1bf2.patch;
-      sha256 = "1xw2gab0wzhszgcbjhg98kkzgnbfn9n3bx1qlk6g7ir6hhwppm9z";
-    });
-
   # Older versions don't compile.
-  brick = self.brick_0_35;
-  timezone-olson = self.timezone-olson_0_1_9;
+  brick = self.brick_0_37;
+  dhall = self.dhall_1_13_0;
+  dhall_1_13_0 = doJailbreak super.dhall_1_13_0;  # support ansi-terminal 0.8.x
+  HaTeX = self.HaTeX_3_19_0_0;
+  hpack = self.hpack_0_28_2;
+  hspec-smallcheck = self.hspec-smallcheck_0_5_2;
   matrix = self.matrix_0_3_6_1;
-  getopt-generics = self.getopt-generics_0_13_0_2;
+  pandoc = self.pandoc_2_2;
+  pandoc-types = self.pandoc-types_1_17_4_2;
+  wl-pprint-text = self.wl-pprint-text_1_1_1_1;
+  base-compat = self.base-compat_0_10_1;
 
   # https://github.com/xmonad/xmonad/issues/155
   xmonad = addBuildDepend (appendPatch super.xmonad (pkgs.fetchpatch
     { url = https://github.com/xmonad/xmonad/pull/153/commits/c96a59fa0de2f674e60befd0f57e67b93ea7dcf6.patch;
       sha256 = "1mj3k0w8aqyy71kmc71vzhgxmr4h6i5b3sykwflzays50grjm5jp";
     })) self.semigroups;
+
+  # https://github.com/xmonad/xmonad-contrib/issues/235
+  xmonad-contrib = doJailbreak (appendPatch super.xmonad-contrib ./patches/xmonad-contrib-ghc-8.4.1-fix.patch);
+
+  # Contributed by Bertram Felgenhauer <int-e@gmx.de>.
+  arrows = appendPatch super.arrows (pkgs.fetchpatch {
+    url = https://raw.githubusercontent.com/lambdabot/lambdabot/ghc-8.4.1/patches/arrows-0.4.4.1.patch;
+    sha256 = "0j859vclcfnz8n2mw466mv00kjsa9gdbrppjc1m3b68jbypdmfvr";
+  });
+
+  # Contributed by Bertram Felgenhauer <int-e@gmx.de>.
+  flexible-defaults = appendPatch super.flexible-defaults (pkgs.fetchpatch {
+    url = https://raw.githubusercontent.com/lambdabot/lambdabot/ghc-8.4.1/patches/flexible-defaults-0.0.1.2.patch;
+    sha256 = "1bpsqq80h6nxm04wddgcgyzn0fjfsmhccmqb211jqswv5209znx8";
+  });
 
 }

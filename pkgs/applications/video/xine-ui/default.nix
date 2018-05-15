@@ -2,11 +2,11 @@
 , lirc, shared-mime-info, libjpeg }:
 
 stdenv.mkDerivation rec {
-  name = "xine-ui-0.99.9";
+  name = "xine-ui-0.99.10";
   
   src = fetchurl {
     url = "mirror://sourceforge/xine/${name}.tar.xz";
-    sha256 = "18liwmkbj75xs9bipw3vr67a7cwmdfcp04v5lph7nsjlkwhq1lcd";
+    sha256 = "0i3jzhiipfs5p1jbxviwh42zcfzag6iqc6yycaan0vrqm90an86a";
   };
   
   nativeBuildInputs = [ pkgconfig shared-mime-info ];

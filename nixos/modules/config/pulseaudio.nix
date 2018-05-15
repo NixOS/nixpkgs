@@ -214,6 +214,8 @@ in {
     (mkIf cfg.enable {
       environment.systemPackages = [ overriddenPackage ];
 
+      sound.enable = true;
+
       environment.etc = [
         { target = "asound.conf";
           source = alsaConf; }

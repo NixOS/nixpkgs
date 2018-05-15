@@ -1,5 +1,5 @@
 { stdenv, fetchurl, glib, flex, bison, pkgconfig, libffi, python
-, libintlOrEmpty, cctools, cairo, gnome3
+, libintl, cctools, cairo, gnome3
 , substituteAll, nixStoreDir ? builtins.storeDir
 , x11Support ? true
 }:
@@ -9,7 +9,7 @@
 
 let
   pname = "gobject-introspection";
-  version = "1.54.1";
+  version = "1.56.0";
 in
 with stdenv.lib;
 stdenv.mkDerivation rec {
@@ -17,16 +17,15 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${gnome3.versionBranch version}/${name}.tar.xz";
-    sha256 = "0zl7pfkzkm07733391b4f3cwjbnvb1nwvpmajf5bajh6bxgfv3dq";
+    sha256 = "1y50pbn5qqbcv2h9rkz96wvv5jls2gma9bkqjq6wapmaszx5jw0d";
   };
 
   outputs = [ "out" "dev" ];
   outputBin = "dev";
   outputMan = "dev"; # tiny pages
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkgconfig libintl ];
   buildInputs = [ flex bison python setupHook/*move .gir*/ ]
-    ++ libintlOrEmpty
     ++ stdenv.lib.optional stdenv.isDarwin cctools;
   propagatedBuildInputs = [ libffi glib ];
 

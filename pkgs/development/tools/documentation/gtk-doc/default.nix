@@ -7,11 +7,11 @@ in
 
 stdenv.mkDerivation rec {
   name = "gtk-doc-${version}";
-  version = "1.27";
+  version = "1.28";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gtk-doc/${version}/${name}.tar.xz";
-    sha256 = "0vwsdl61nvnmqswlz5j9m4hg7qirhazwcikcnqf9nx0c13vx6sz2";
+    sha256 = "05apmwibkmn1icx05l8aw241lhymcx01zvk5i499cb150bijj7li";
   };
 
   patches = [

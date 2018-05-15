@@ -25,16 +25,16 @@ in
         type = types.bool;
         description = ''
           Enable in-memory compressed swap space provided by the zram kernel
-          module. It is recommended to enable only for kernel 3.14 or higher.
+          module.
+          See https://www.kernel.org/doc/Documentation/blockdev/zram.txt
         '';
       };
 
       numDevices = mkOption {
-        default = 4;
+        default = 1;
         type = types.int;
         description = ''
-          Number of zram swap devices to create. It should be equal to the
-          number of CPU cores your system has.
+          Number of zram swap devices to create.
         '';
       };
 

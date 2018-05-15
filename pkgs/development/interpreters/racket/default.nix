@@ -74,7 +74,7 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     for p in $(ls $out/bin/) ; do
-      wrapProgram $out/bin/$p --set LD_LIBRARY_PATH "${LD_LIBRARY_PATH}";
+      wrapProgram $out/bin/$p --prefix LD_LIBRARY_PATH ":" "${LD_LIBRARY_PATH}";
     done
   '';
 

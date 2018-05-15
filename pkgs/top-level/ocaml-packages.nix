@@ -217,12 +217,7 @@ let
 
     easy-format = callPackage ../development/ocaml-modules/easy-format { };
 
-    eff = callPackage ../development/interpreters/eff { };
-
-    eliom = callPackage ../development/ocaml-modules/eliom {
-      lwt = lwt2;
-      js_of_ocaml = js_of_ocaml_2;
-    };
+    eliom = callPackage ../development/ocaml-modules/eliom { };
 
     enumerate = callPackage ../development/ocaml-modules/enumerate { };
 
@@ -326,9 +321,15 @@ let
 
     js_of_ocaml-compiler = callPackage ../development/tools/ocaml/js_of_ocaml/compiler.nix {};
 
+    js_of_ocaml-lwt = callPackage ../development/tools/ocaml/js_of_ocaml/lwt.nix {};
+
     js_of_ocaml-ocamlbuild = callPackage ../development/tools/ocaml/js_of_ocaml/ocamlbuild.nix {};
 
     js_of_ocaml-ppx = callPackage ../development/tools/ocaml/js_of_ocaml/ppx.nix {};
+
+    js_of_ocaml-ppx_deriving_json = callPackage ../development/tools/ocaml/js_of_ocaml/ppx_deriving_json.nix {};
+
+    js_of_ocaml-tyxml = callPackage ../development/tools/ocaml/js_of_ocaml/tyxml.nix {};
 
     jsonm = callPackage ../development/ocaml-modules/jsonm { };
 
@@ -366,15 +367,17 @@ let
 
     lru = callPackage ../development/ocaml-modules/lru { };
 
-    lwt2 = callPackage ../development/ocaml-modules/lwt { };
+    lwt2 = callPackage ../development/ocaml-modules/lwt/legacy.nix { };
 
     lwt3 = if lib.versionOlder "4.02" ocaml.version
-      then callPackage ../development/ocaml-modules/lwt {
-        version = "3.0.0";
-      }
+      then callPackage ../development/ocaml-modules/lwt { }
       else throw "lwt3 is not available for OCaml ${ocaml.version}";
 
     ocaml_lwt = if lib.versionOlder "4.02" ocaml.version then lwt3 else lwt2;
+
+    lwt_ppx = callPackage ../development/ocaml-modules/lwt/ppx.nix {
+      lwt = lwt3;
+    };
 
     lwt_react = callPackage ../development/ocaml-modules/lwt_react {
       lwt = lwt3;
@@ -498,7 +501,7 @@ let
 
     ocplib-simplex = callPackage ../development/ocaml-modules/ocplib-simplex { };
 
-    ocsigen_server = callPackage ../development/ocaml-modules/ocsigen-server { lwt = lwt2; };
+    ocsigen_server = callPackage ../development/ocaml-modules/ocsigen-server { };
 
     ocsigen-start = callPackage ../development/ocaml-modules/ocsigen-start { };
 
@@ -650,7 +653,9 @@ let
 
     ssl = callPackage ../development/ocaml-modules/ssl { };
 
-    stog = callPackage ../applications/misc/stog { };
+    stog = callPackage ../applications/misc/stog {
+      ocaml_lwt = lwt2;
+    };
 
     stringext = callPackage ../development/ocaml-modules/stringext { };
 
@@ -1034,7 +1039,14 @@ in rec
 
   ocamlPackages_4_06 = mkOcamlPackages (callPackage ../development/compilers/ocaml/4.06.nix { }) (self: super: { });
 
+  ocamlPackages_4_07 = mkOcamlPackages (callPackage ../development/compilers/ocaml/4.07.nix { }) (self: super: { });
+
   ocamlPackages_latest = ocamlPackages_4_06;
 
-  ocamlPackages = ocamlPackages_4_05;
+  ocamlPackages =
+    # OCaml 4.05 is broken on aarch64
+    if system == "aarch64-linux" then
+      ocamlPackages_4_06
+    else
+      ocamlPackages_4_05;
 }

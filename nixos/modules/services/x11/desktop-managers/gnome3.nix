@@ -120,6 +120,7 @@ in {
     services.xserver.libinput.enable = mkDefault true; # for controlling touchpad settings via gnome control center
     services.udev.packages = [ pkgs.gnome3.gnome-settings-daemon ];
     systemd.packages = [ pkgs.gnome3.vino ];
+    services.flatpak.extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
 
     # If gnome3 is installed, build vim for gtk3 too.
     nixpkgs.config.vim.gui = "gtk3";
@@ -182,8 +183,7 @@ in {
       { inherit (pkgs) networkmanager modemmanager wpa_supplicant;
         inherit (pkgs.gnome3) networkmanager-openvpn networkmanager-vpnc
                               networkmanager-openconnect networkmanager-fortisslvpn
-                              networkmanager-pptp networkmanager-iodine
-                              networkmanager-l2tp; };
+                              networkmanager-iodine networkmanager-l2tp; };
 
     # Needed for themes and backgrounds
     environment.pathsToLink = [ "/share" ];

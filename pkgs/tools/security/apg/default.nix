@@ -10,7 +10,10 @@ stdenv.mkDerivation rec {
   '';
   makeFlags = stdenv.lib.optionals stdenv.isDarwin ["CC=cc"];
 
-  patches = [ ./apg.patch ];
+  patches = [
+    ./apg.patch
+    ./phony-install-target.patch
+  ];
 
   postPatch = stdenv.lib.optionalString stdenv.isDarwin ''
     sed -i -e 's|APG_CLIBS += -lcrypt|APG_CLIBS += -L${openssl.out}/lib -lcrypto|' Makefile
@@ -64,6 +67,6 @@ stdenv.mkDerivation rec {
     homepage = http://www.adel.nursat.kz/apg/;
     license = stdenv.lib.licenses.bsd3;
     maintainers = with stdenv.lib.maintainers; [ astsmtl ];
-    platforms = stdenv.lib.platforms.linux;
+    platforms = stdenv.lib.platforms.unix;
   };
 }

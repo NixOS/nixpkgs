@@ -40,13 +40,13 @@ let
 in
 stdenv.mkDerivation rec {
   name = "radiotray-ng-${version}";
-  version = "0.2.1";
+  version = "0.2.2";
 
   src = fetchFromGitHub {
     owner = "ebruck";
     repo = "radiotray-ng";
     rev = "v${version}";
-    sha256 = "0hqg6vn8hv5pic96klf1d9vj8fibrgiqnqb5vwrg3wvakx0y32kr";
+    sha256 = "0q8k7nsjm6m0r0zs1br60niaqlwvd3myqalb5sqijzanx41aq2l6";
   };
 
   nativeBuildInputs = [ cmake pkgconfig wrapGAppsHook makeWrapper ];
@@ -78,7 +78,8 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  doCheck = true;
+ # XXX: as of 0.2.2, tries to download gmock instead of checking for provided
+  doCheck = false;
 
   checkPhase = "ctest";
 

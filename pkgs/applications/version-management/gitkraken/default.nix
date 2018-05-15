@@ -12,11 +12,11 @@ let
 in
 stdenv.mkDerivation rec {
   name = "gitkraken-${version}";
-  version = "3.4.0";
+  version = "3.6.0";
 
   src = fetchurl {
     url = "https://release.gitkraken.com/linux/v${version}.deb";
-    sha256 = "0jj3a02bz30xa7p4migyhvxd9s0cllymsp1rdh2pbh40p79g1fp1";
+    sha256 = "0zrxw7rrlspm3ic847dy1ly4rlcdkizdr6m8nycmrxg4s98yxkb8";
   };
 
   libPath = makeLibraryPath [
@@ -87,7 +87,7 @@ stdenv.mkDerivation rec {
 
     find $out/share/gitkraken -name "*.node" -exec patchelf --set-rpath "${libPath}:$out/share/gitkraken" {} \;
 
-    rm $out/bin/gitkraken
+    mkdir $out/bin
     ln -s $out/share/gitkraken/gitkraken $out/bin/gitkraken
   '';
 

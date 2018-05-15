@@ -3,8 +3,8 @@
 with lib;
 
 let
-  bluez-bluetooth = pkgs.bluez;
   cfg = config.hardware.bluetooth;
+  bluez-bluetooth = cfg.package;
 
 in {
 
@@ -19,6 +19,16 @@ in {
         type    = types.bool;
         default = true;
         description = "Whether to power up the default Bluetooth controller on boot.";
+      };
+
+      package = mkOption {
+        type = types.package;
+        default = pkgs.bluez;
+        defaultText = "pkgs.bluez";
+        example = "pkgs.bluez.override { enableMidi = true; }";
+        description = ''
+          Which BlueZ package to use.
+        '';
       };
 
       extraConfig = mkOption {

@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgconfig, flex, bison, libxslt, autoconf, graphviz
-, glib, libiconv, libintlOrEmpty, libtool, expat
+, glib, libiconv, libintl, libtool, expat
 }:
 
 let
@@ -16,7 +16,7 @@ let
 
     nativeBuildInputs = [ pkgconfig flex bison libxslt ] ++ extraNativeBuildInputs;
 
-    buildInputs = [ glib libiconv ] ++ libintlOrEmpty ++ extraBuildInputs;
+    buildInputs = [ glib libiconv libintl ] ++ extraBuildInputs;
 
     meta = with stdenv.lib; {
       description = "Compiler for GObject type system";
@@ -70,6 +70,14 @@ in rec {
     minor   = "4";
     sha256  = "1sg5gaq3jhgr9vzh2ypiw475167k150wmyglymr7wwqppmikmcrc";
     extraNativeBuildInputs = [ autoconf ] ++ stdenv.lib.optionals stdenv.isDarwin [ libtool expat ];
+    extraBuildInputs = [ graphviz ];
+  };
+
+  vala_0_40 = generic {
+    major   = "0.40";
+    minor   = "0";
+    sha256  = "0wcfljl55a9qvslfcc4sf76wdpwgn83n96b7fgb7r49ib35qz20m";
+    extraNativeBuildInputs = stdenv.lib.optionals stdenv.isDarwin [ expat ];
     extraBuildInputs = [ graphviz ];
   };
 

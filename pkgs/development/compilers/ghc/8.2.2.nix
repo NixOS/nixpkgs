@@ -4,6 +4,7 @@
 # build-tools
 , bootPkgs, alex, happy, hscolour
 , autoconf, autoreconfHook, automake, coreutils, fetchurl, fetchpatch, perl, python3, sphinx
+, runCommand
 
 , libffi, libiconv ? null, ncurses
 
@@ -25,7 +26,7 @@
   enableShared ?
     !(targetPlatform.isDarwin
       # On iOS, dynamic linking is not supported
-      && (targetPlatform.isAarch64 || targetPlatform.isArm))
+      && (targetPlatform.isAarch64 || targetPlatform.isAarch32))
 , # Whether to backport https://phabricator.haskell.org/D4388 for
   # deterministic profiling symbol names, at the cost of a slightly
   # non-standard GHC API
@@ -89,6 +90,7 @@ stdenv.mkDerivation rec {
       url = "https://git.haskell.org/ghc.git/commitdiff_plain/2fc8ce5f0c8c81771c26266ac0b150ca9b75c5f3";
       sha256 = "03253ci40np1v6k0wmi4aypj3nmj3rdyvb1k6rwqipb30nfc719f";
     })
+    (import ./abi-depends-determinism.nix { inherit fetchpatch runCommand; })
   ] ++ stdenv.lib.optional deterministicProfiling
     (fetchpatch { # Backport of https://phabricator.haskell.org/D4388 for more determinism
       url = "https://github.com/shlevy/ghc/commit/fec1b8d3555c447c0d8da0e96b659be67c8bb4bc.patch";
@@ -107,7 +109,7 @@ stdenv.mkDerivation rec {
     export CC="${targetCC}/bin/${targetCC.targetPrefix}cc"
     export CXX="${targetCC}/bin/${targetCC.targetPrefix}cxx"
     # Use gold to work around https://sourceware.org/bugzilla/show_bug.cgi?id=16177
-    export LD="${targetCC.bintools}/bin/${targetCC.bintools.targetPrefix}ld${stdenv.lib.optionalString targetPlatform.isArm ".gold"}"
+    export LD="${targetCC.bintools}/bin/${targetCC.bintools.targetPrefix}ld${stdenv.lib.optionalString targetPlatform.isAarch32 ".gold"}"
     export AS="${targetCC.bintools.bintools}/bin/${targetCC.bintools.targetPrefix}as"
     export AR="${targetCC.bintools.bintools}/bin/${targetCC.bintools.targetPrefix}ar"
     export NM="${targetCC.bintools.bintools}/bin/${targetCC.bintools.targetPrefix}nm"
@@ -136,7 +138,7 @@ stdenv.mkDerivation rec {
     "--with-iconv-includes=${libiconv}/include" "--with-iconv-libraries=${libiconv}/lib"
   ] ++ stdenv.lib.optionals (targetPlatform != hostPlatform) [
     "--enable-bootstrap-with-devel-snapshot"
-  ] ++ stdenv.lib.optionals (targetPlatform.isArm) [
+  ] ++ stdenv.lib.optionals (targetPlatform.isAarch32) [
     "CFLAGS=-fuse-ld=gold"
     "CONF_GCC_LINKER_OPTS_STAGE1=-fuse-ld=gold"
     "CONF_GCC_LINKER_OPTS_STAGE2=-fuse-ld=gold"

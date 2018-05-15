@@ -110,7 +110,7 @@ in {
 
   config =
     let
-      units = mapAttrs' (n: v: nameValuePair "${n}.nspawn" (instanceToUnit n v)) cfg;
+      units = mapAttrs' (n: v: let nspawnFile = "${n}.nspawn"; in nameValuePair nspawnFile (instanceToUnit nspawnFile v)) cfg;
     in mkIf (cfg != {}) {
 
       environment.etc."systemd/nspawn".source = generateUnits "nspawn" units [] [];
