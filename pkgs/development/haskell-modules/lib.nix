@@ -185,6 +185,8 @@ rec {
 
   disableHardening = drv: flags: overrideCabal drv (drv: { hardeningDisable = flags; });
 
+  doHpack = drv: overrideCabal drv (drv: { doHpack = true; });
+
   /* Let Nix strip the binary files.
    * This removes debugging symbols.
    */
