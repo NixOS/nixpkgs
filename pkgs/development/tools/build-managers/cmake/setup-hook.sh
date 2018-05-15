@@ -38,7 +38,7 @@ cmakeConfigurePhase() {
     cmakeFlags="-DCMAKE_CXX_COMPILER=$CXX $cmakeFlags"
     cmakeFlags="-DCMAKE_C_COMPILER=$CC $cmakeFlags"
     cmakeFlags="-DCMAKE_AR=$(command -v $AR) $cmakeFlags"
-    cmakeFlags="-DCMAKE_RANLIB=$(command -v $RANLAB) $cmakeFlags"
+    cmakeFlags="-DCMAKE_RANLIB=$(command -v $RANLIB) $cmakeFlags"
     cmakeFlags="-DCMAKE_STRIP=$(command -v $STRIP) $cmakeFlags"
 
     # on macOS we want to prefer Unix-style headers to Frameworks

@@ -82,6 +82,10 @@ stdenv.mkDerivation rec {
 
   configureFlags = [
     "--docdir=share/doc/${name}"
+  ] ++ (if useSharedLibraries then [ "--no-system-jsoncpp" "--system-libs" ] else [ "--no-system-libs" ]) # FIXME: cleanup
+    ++ optional (useQt4 || withQt5) "--qt-gui"
+    ++ [
+    "--"
     # We should set the proper `CMAKE_SYSTEM_NAME`.
     # http://www.cmake.org/Wiki/CMake_Cross_Compiling
     #
@@ -93,10 +97,7 @@ stdenv.mkDerivation rec {
     "-DCMAKE_AR=${getBin stdenv.cc.bintools.bintools}/bin/${stdenv.cc.targetPrefix}ar"
     "-DCMAKE_RANLIB=${getBin stdenv.cc.bintools.bintools}/bin/${stdenv.cc.targetPrefix}ranlib"
     "-DCMAKE_STRIP=${getBin stdenv.cc.bintools.bintools}/bin/${stdenv.cc.targetPrefix}strip"
-   ] ++ (if useSharedLibraries then [ "--no-system-jsoncpp" "--system-libs" ] else [ "--no-system-libs" ]) # FIXME: cleanup
-     ++ optional (useQt4 || withQt5) "--qt-gui"
-     ++ ["--"]
-     ++ optionals (!useNcurses) [ "-DBUILD_CursesDialog=OFF" ];
+  ] ++ optionals (!useNcurses) [ "-DBUILD_CursesDialog=OFF" ];
 
   dontUseCmakeConfigure = true;
   enableParallelBuilding = true;
