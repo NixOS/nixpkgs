@@ -1,5 +1,5 @@
 { stdenv, buildPerlPackage, fetchurl
-, perl, perlPackages }:
+, perl, perlPackages, fetchpatch }:
 
 buildPerlPackage rec {
   name = "slimserver-${version}";
@@ -9,6 +9,11 @@ buildPerlPackage rec {
     url = "https://github.com/Logitech/slimserver/archive/${version}.tar.gz";
     sha256 = "0szp5zkmx2b5lncsijf97asjnl73fyijkbgbwkl1i7p8qnqrb4mp";
   };
+
+  patches = [ (fetchpatch {
+    url = "https://github.com/Logitech/slimserver/pull/204.patch";
+    sha256 = "0n1c8nsbvqkmwj5ivkcxh1wkqqm1lwymmfz9i47ih6ifj06hkpxk";
+  } ) ];
 
   buildInputs = [
     perl
