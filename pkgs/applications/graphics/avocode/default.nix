@@ -5,11 +5,11 @@
 
 stdenv.mkDerivation rec {
   name = "avocode-${version}";
-  version = "2.26.0";
+  version = "2.26.1";
 
   src = fetchurl {
     url = "https://media.avocode.com/download/avocode-app/${version}/avocode-${version}-linux.zip";
-    sha256 = "11d3nlshyzh5aqf5vsvnjwhr9qn8a2kd848x0ylv91y9p9njgsl5";
+    sha256 = "0npwwz5m4klswc32fs82icpqqfx9v4786sksiwykj75dsznyv3x8";
   };
 
   libPath = stdenv.lib.makeLibraryPath (with xorg; with gnome2; [
@@ -81,9 +81,9 @@ stdenv.mkDerivation rec {
   '';
 
   postFixup = ''
+    patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" $out/avocode
     for file in $(find $out -type f \( -perm /0111 -o -name \*.so\* \) ); do
-      patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" $out/avocode
-        patchelf --set-rpath ${libPath}:$out/ $file
+      patchelf --set-rpath ${libPath}:$out/ $file
     done
   '';
 
