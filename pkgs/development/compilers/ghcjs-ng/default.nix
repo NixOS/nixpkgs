@@ -35,7 +35,7 @@ let
     ]);
 
     targetPrefix = "";
-    inherit (passthru.bootPkgs.ghcjs) version;
+    inherit (bootGhcjs) version;
     isGhcjs = true;
 
     # Relics of the old GHCJS build system
@@ -43,15 +43,24 @@ let
     mkStage2 = _: {};
   };
 
+  bootGhcjs = haskellLib.justStaticExecutables passthru.bootPkgs.ghcjs;
   libexec =
-    if builtins.compareVersions passthru.bootPkgs.ghcjs.version "8.3" <= 0
-      then "${passthru.bootPkgs.ghcjs}/bin"
-      else "${passthru.bootPkgs.ghcjs}/libexec/${stdenv.system}-${passthru.bootPkgs.ghc.name}/${passthru.bootPkgs.ghcjs.name}";
+    if builtins.compareVersions bootGhcjs.version "8.3" <= 0
+      then "${bootGhcjs}/bin"
+      else "${bootGhcjs}/libexec/${stdenv.system}-${passthru.bootPkgs.ghc.name}/${bootGhcjs.name}";
 
 in stdenv.mkDerivation {
     name = "ghcjs";
     src = passthru.configuredSrc;
-    nativeBuildInputs = [passthru.bootPkgs.ghcjs passthru.bootPkgs.ghc cabal-install nodejs makeWrapper xorg.lndir gmp];
+    nativeBuildInputs = [
+      bootGhcjs
+      passthru.bootPkgs.ghc
+      cabal-install
+      nodejs
+      makeWrapper
+      xorg.lndir
+      gmp
+    ];
     phases = ["unpackPhase" "buildPhase"];
     buildPhase = ''
       export HOME=$TMP
@@ -61,7 +70,7 @@ in stdenv.mkDerivation {
       mkdir -p $out/libexec
       lndir ${libexec} $out/bin
 
-      wrapProgram $out/bin/ghcjs --add-flags "-B$out/libexec"
+      wrapProgram $out/bin/ghcjs --add-flags "-B$out/libexec -dcore-lint"
       wrapProgram $out/bin/haddock-ghcjs --add-flags "-B$out/libexec"
       wrapProgram $out/bin/ghcjs-pkg --add-flags "--global-package-db=$out/libexec/package.conf.d"
 
