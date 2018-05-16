@@ -10532,6 +10532,7 @@ with pkgs;
   libvpx-git = callPackage ../development/libraries/libvpx/git.nix { };
 
   libvterm = callPackage ../development/libraries/libvterm { };
+  libvterm-neovim = callPackage ../development/libraries/libvterm-neovim { };
 
   libvorbis = callPackage ../development/libraries/libvorbis { };
 
