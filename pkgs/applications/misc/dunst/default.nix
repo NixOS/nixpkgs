@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub
+{ stdenv, fetchFromGitHub, makeWrapper
 , pkgconfig, which, perl, libXrandr
 , cairo, dbus, systemd, gdk_pixbuf, glib, libX11, libXScrnSaver
 , libXinerama, libnotify, libxdg_basedir, pango, xproto, librsvg
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     sha256 = "1kqlshaflp306yrjjmc28pghi1y5p24vdx4bxf8i4n9khdawb514";
   };
 
-  nativeBuildInputs = [ perl pkgconfig which systemd ];
+  nativeBuildInputs = [ perl pkgconfig which systemd makeWrapper ];
 
   buildInputs = [
     cairo dbus gdk_pixbuf glib libX11 libXScrnSaver
@@ -30,6 +30,11 @@ stdenv.mkDerivation rec {
     "SERVICEDIR_DBUS=$(out)/share/dbus-1/services"
     "SERVICEDIR_SYSTEMD=$(out)/lib/systemd/user"
   ];
+
+  postInstall = ''
+    wrapProgram $out/bin/dunst \
+      --set GDK_PIXBUF_MODULE_FILE "$GDK_PIXBUF_MODULE_FILE"
+  '';
 
   meta = with stdenv.lib; {
     description = "Lightweight and customizable notification daemon";
