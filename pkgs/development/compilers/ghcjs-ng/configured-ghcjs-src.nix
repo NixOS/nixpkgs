@@ -20,6 +20,7 @@ runCommand "configured-ghcjs-src" {
     autoconf
     automake
     python3
+    gcc
     ghc
     happy
     alex
