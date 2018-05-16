@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, emacs, neovim-libvterm }:
+{ stdenv, fetchFromGitHub, cmake, emacs, libvterm-neovim }:
 
 let
   emacsSources = stdenv.mkDerivation {
@@ -29,7 +29,7 @@ in stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ cmake ];
-  buildInputs = [ emacs neovim-libvterm ];
+  buildInputs = [ emacs libvterm-neovim ];
 
   cmakeFlags = [ "-DEMACS_SOURCE=${emacsSources}" ];
 
