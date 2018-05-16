@@ -15063,6 +15063,8 @@ with pkgs;
 
   bspwm-unstable = callPackage ../applications/window-managers/bspwm/unstable.nix { };
 
+  btops = callPackage ../applications/window-managers/btops { };
+
   bvi = callPackage ../applications/editors/bvi { };
 
   bviplus = callPackage ../applications/editors/bviplus { };
