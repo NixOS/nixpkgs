@@ -19,6 +19,7 @@ stdenv.mkDerivation rec {
     mkdir -p $out/{bin,share/man/man1}
     substitute ${src} $out/bin/vcal \
       --replace /usr/bin/perl ${perl}/bin/perl
+    chmod 0755 $out/bin/*
     pod2man -n vcal ${src} > $out/share/man/man1/vcal.1
 
     runHook postInstall
