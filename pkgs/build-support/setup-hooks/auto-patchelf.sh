@@ -103,11 +103,6 @@ autoPatchelfFile() {
     local interpreter="$(< "$NIX_CC/nix-support/dynamic-linker")"
     if isExecutable "$toPatch"; then
         patchelf --set-interpreter "$interpreter" "$toPatch"
-        if [ -n "$runtimeDependencies" ]; then
-            for dep in $runtimeDependencies; do
-                rpath="$rpath${rpath:+:}$dep/lib"
-            done
-        fi
     fi
 
     echo "searching for dependencies of $toPatch" >&2
@@ -156,6 +151,14 @@ autoPatchelf() {
     cachedDependencies+=(
         $(find "$prefix" \! -type d \( -name '*.so' -o -name '*.so.*' \))
     )
+    # Also add all runtime dependencies
+    if [ -n "$runtimeDependencies" ]; then
+        for dep in $runtimeDependencies; do
+            cachedDependencies+=(
+                $(find "$dep/lib" \! -type d \( -name '*.so' -o -name '*.so.*' \))
+            )
+        done
+    fi
     local elffile
 
     # Here we actually have a subshell, which also means that
