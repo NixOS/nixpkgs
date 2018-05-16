@@ -11,16 +11,13 @@ isExecutable() {
 }
 
 findElfs() {
-    find "$1" -type f -exec "$SHELL" -c '
-        while [ -n "$1" ]; do
-            mimeType="$(file -b -N --mime-type "$1")"
-            if [ "$mimeType" = application/x-executable \
-              -o "$mimeType" = application/x-sharedlib ]; then
-                echo "$1"
-            fi
-            shift
-        done
-    ' -- {} +
+    find "$1" -type f | while IFS='' read -r file; do
+        mimeType="$(file -b -N --mime-type "$file")"
+        if [ "$mimeType" = application/x-executable \
+            -o "${mimeType}" = application/x-sharedlib ]; then
+            echo "${file}"
+        fi
+    done
 }
 
 # We cache dependencies so that we don't need to search through all of them on
