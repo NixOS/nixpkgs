@@ -18620,6 +18620,7 @@ with pkgs;
       ++ optionals (config.kodi.enableHyperLauncher or false)
            (with hyper-launcher; [ plugin service pdfreader ])
       ++ optional (config.kodi.enableJoystick or false) joystick
+      ++ optional (config.kodi.enableOSMCskin or false) osmc-skin
       ++ optional (config.kodi.enableSVTPlay or false) svtplay
       ++ optional (config.kodi.enableSteamController or false) steam-controller
       ++ optional (config.kodi.enableSteamLauncher or false) steam-launcher
