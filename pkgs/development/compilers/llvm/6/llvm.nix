@@ -18,6 +18,7 @@
 , enableSharedLibraries ? true
 , enableWasm ? true
 , darwin
+, buildPackages
 }:
 
 let
@@ -36,6 +37,30 @@ in stdenv.mkDerivation (rec {
     unpackFile ${compiler-rt_src}
     mv compiler-rt-* $sourceRoot/projects/compiler-rt
   '';
+
+  # When cross-compiling we provide a second set of cmake flags for "native",
+  # the following handles this and generates string suitable for passing in.
+  crossNativeFlags = let
+    getPrefixed = pkg: prefix: name: "${stdenv.lib.getBin pkg}/bin/${prefix}${name}";
+    getBuildCCBin = getPrefixed buildPackages.stdenv.cc stdenv.cc.nativePrefix;
+    getBuildBin = getPrefixed buildPackages.stdenv.cc.bintools.bintools stdenv.cc.nativePrefix;
+    genCMakeFlag = n: v: "-D${n}=${v}";
+    nativeFlags = stdenv.lib.mapAttrsToList genCMakeFlag {
+      # Toolchain
+      CMAKE_C_COMPILER = getBuildCCBin "cc";
+      CMAKE_CXX_COMPILER = getBuildCCBin "c++";
+      CMAKE_AR = getBuildBin "ar";
+      CMAKE_RANLIB = getBuildBin "ranlib";
+      CMAKE_STRIP = getBuildBin "strip";
+
+      # Disable LLVM bits that are unneeded or cause breakage
+      COMPILER_RT_INCLUDE_TESTS = "OFF";
+      LLVM_INCLUDE_TESTS = "OFF";
+      LLVM_BUILD_RUNTIME = "OFF";
+      # Don't try to build compiler-rt in the native variant
+      LLVM_BUILD_EXTERNAL_COMPILER_RT = "ON";
+    };
+  in stdenv.lib.concatStringsSep ";" nativeFlags;
 
   outputs = [ "out" "python" ]
     ++ stdenv.lib.optional enableSharedLibraries "lib";
@@ -110,10 +135,16 @@ in stdenv.mkDerivation (rec {
     "-DLLVM_ENABLE_LIBCXX=ON"
     "-DCAN_TARGET_i386=false"
   ]
-  ++ stdenv.lib.optionals stdenv.hostPlatform.isMusl [
+  ++ stdenv.lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform || stdenv.hostPlatform.isMusl) [
     "-DLLVM_HOST_TRIPLE=${stdenv.hostPlatform.config}"
     "-DLLVM_DEFAULT_TARGET_TRIPLE=${stdenv.targetPlatform.config}"
     "-DTARGET_TRIPLE=${stdenv.targetPlatform.config}"
+  ]
+  ++ stdenv.lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+    "-DCMAKE_CROSSCOMPILING=ON" # inferred when setting CMAKE_SYSTEM_NAME, but is satisfying to do so explicitly
+    "-DCMAKE_SYSTEM_NAME=Linux" # FIXME: set this appropriately so isn't limited to linux
+    # Specify set of cmake flags to use for "NATIVE", generated earlier.
+    "-DCROSS_TOOLCHAIN_FLAGS_NATIVE=${crossNativeFlags}"
   ] ++ stdenv.lib.optional enableWasm
    "-DLLVM_EXPERIMENTAL_TARGETS_TO_BUILD=WebAssembly"
   ;
