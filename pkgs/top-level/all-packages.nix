@@ -6728,8 +6728,10 @@ with pkgs;
 
   llvmPackages_6 = callPackage ../development/compilers/llvm/6 ({
     inherit (stdenvAdapters) overrideCC;
-  } // stdenv.lib.optionalAttrs (stdenv.cc.isGNU && stdenv.hostPlatform.isi686) {
-    stdenv = overrideCC stdenv gcc6; # with gcc-7: undefined reference to `__divmoddi4'
+  } // stdenv.lib.optionalAttrs (stdenv.cc.isGNU) {
+    stdenv = overrideCC stdenv (if stdenv.hostPlatform.isi686 then gcc6 else gcc7);
+    # with gcc-7 on i686: undefined reference to `__divmoddi4'
+    # Failing tests with gcc8.
   });
 
   manticore = callPackage ../development/compilers/manticore { };
