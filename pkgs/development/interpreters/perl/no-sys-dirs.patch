@@ -1,7 +1,7 @@
-diff -ru -x '*~' -x '*.rej' perl-5.20.0-orig/Configure perl-5.20.0/Configure
---- perl-5.20.0-orig/Configure	2014-05-26 15:34:18.000000000 +0200
-+++ perl-5.20.0/Configure	2014-06-25 10:43:35.368285986 +0200
-@@ -106,15 +106,7 @@
+diff -Naur perl-5.22.3-orig/Configure perl-5.22.3-modified/Configure
+--- perl-5.22.3-orig/Configure	2016-04-09 00:45:19.000000000 +0300
++++ perl-5.22.3-modified/Configure	2017-07-01 13:57:29.000000000 +0300
+@@ -108,15 +108,7 @@
  fi
  
  : Proper PATH setting
@@ -18,17 +18,17 @@ diff -ru -x '*~' -x '*.rej' perl-5.20.0-orig/Configure perl-5.20.0/Configure
  
  for p in $paths
  do
-@@ -1337,8 +1329,7 @@
+@@ -1405,8 +1397,7 @@
  archname=''
  : Possible local include directories to search.
  : Set locincpth to "" in a hint file to defeat local include searches.
 -locincpth="/usr/local/include /opt/local/include /usr/gnu/include"
 -locincpth="$locincpth /opt/gnu/include /usr/GNU/include /opt/GNU/include"
-+locincpth=""
++locincpth=''
  :
  : no include file wanted by default
  inclwanted=''
-@@ -1349,17 +1340,12 @@
+@@ -1417,17 +1408,12 @@
  
  libnames=''
  : change the next line if compiling for Xenix/286 on Xenix/386
@@ -37,7 +37,7 @@ diff -ru -x '*~' -x '*.rej' perl-5.20.0-orig/Configure perl-5.20.0/Configure
  : Possible local library directories to search.
 -loclibpth="/usr/local/lib /opt/local/lib /usr/gnu/lib"
 -loclibpth="$loclibpth /opt/gnu/lib /usr/GNU/lib /opt/GNU/lib"
-+loclibpth=""
++loclibpth=''
  
  : general looking path for locating libraries
 -glibpth="/lib /usr/lib $xlibpth"
@@ -45,12 +45,12 @@ diff -ru -x '*~' -x '*.rej' perl-5.20.0-orig/Configure perl-5.20.0/Configure
 -test -f /usr/shlib/libc.so && glibpth="/usr/shlib $glibpth"
 -test -f /shlib/libc.so     && glibpth="/shlib $glibpth"
 -test -d /usr/lib64         && glibpth="$glibpth /lib64 /usr/lib64 /usr/local/lib64"
-+glibpth=""
++glibpth=''
  
  : Private path used by Configure to find libraries.  Its value
  : is prepended to libpth. This variable takes care of special
-@@ -1391,8 +1377,6 @@
- libswanted="$libswanted m crypt sec util c cposix posix ucb bsd BSD"
+@@ -1459,8 +1445,6 @@
+ libswanted="$libswanted sun m crypt sec util c cposix posix ucb bsd BSD"
  : We probably want to search /usr/shlib before most other libraries.
  : This is only used by the lib/ExtUtils/MakeMaker.pm routine extliblist.
 -glibpth=`echo " $glibpth " | sed -e 's! /usr/shlib ! !'`
@@ -58,7 +58,7 @@ diff -ru -x '*~' -x '*.rej' perl-5.20.0-orig/Configure perl-5.20.0/Configure
  : Do not use vfork unless overridden by a hint file.
  usevfork=false
  
-@@ -2446,7 +2430,6 @@
+@@ -2514,7 +2498,6 @@
  zip
  "
  pth=`echo $PATH | sed -e "s/$p_/ /g"`
@@ -66,7 +66,7 @@ diff -ru -x '*~' -x '*.rej' perl-5.20.0-orig/Configure perl-5.20.0/Configure
  for file in $loclist; do
  	eval xxx=\$$file
  	case "$xxx" in
-@@ -4936,7 +4919,7 @@
+@@ -5003,7 +4986,7 @@
  : Set private lib path
  case "$plibpth" in
  '') if ./mips; then
@@ -75,7 +75,7 @@ diff -ru -x '*~' -x '*.rej' perl-5.20.0-orig/Configure perl-5.20.0/Configure
      fi;;
  esac
  case "$libpth" in
-@@ -8600,13 +8583,8 @@
+@@ -8839,13 +8822,8 @@
  echo " "
  case "$sysman" in
  '')
@@ -91,7 +91,7 @@ diff -ru -x '*~' -x '*.rej' perl-5.20.0-orig/Configure perl-5.20.0/Configure
  	;;
  esac
  if $test -d "$sysman"; then
-@@ -19900,9 +19878,10 @@
+@@ -20736,9 +20714,10 @@
  case "$full_ar" in
  '') full_ar=$ar ;;
  esac
@@ -103,11 +103,10 @@ diff -ru -x '*~' -x '*.rej' perl-5.20.0-orig/Configure perl-5.20.0/Configure
  
  : see what type gids are declared as in the kernel
  echo " "
-Only in perl-5.20.0/: Configure.orig
-diff -ru -x '*~' -x '*.rej' perl-5.20.0-orig/ext/Errno/Errno_pm.PL perl-5.20.0/ext/Errno/Errno_pm.PL
---- perl-5.20.0-orig/ext/Errno/Errno_pm.PL	2014-05-26 15:34:20.000000000 +0200
-+++ perl-5.20.0/ext/Errno/Errno_pm.PL	2014-06-25 10:31:24.317970047 +0200
-@@ -126,11 +126,7 @@
+diff -Naur perl-5.22.3-orig/ext/Errno/Errno_pm.PL perl-5.22.3-modified/ext/Errno/Errno_pm.PL
+--- perl-5.22.3-orig/ext/Errno/Errno_pm.PL	2015-10-17 15:38:37.000000000 +0300
++++ perl-5.22.3-modified/ext/Errno/Errno_pm.PL	2017-07-01 13:59:10.000000000 +0300
+@@ -116,11 +116,7 @@
  	if ($dep =~ /(\S+errno\.h)/) {
  	     $file{$1} = 1;
  	}
@@ -120,25 +119,24 @@ diff -ru -x '*~' -x '*.rej' perl-5.20.0-orig/ext/Errno/Errno_pm.PL perl-5.20.0/e
      # When cross-compiling we may store a path for gcc's "sysroot" option:
      my $sysroot = $Config{sysroot} || '';
  	# Some Linuxes have weird errno.hs which generate
-Only in perl-5.20.0/ext/Errno: Errno_pm.PL.orig
-diff -ru -x '*~' -x '*.rej' perl-5.20.0-orig/hints/freebsd.sh perl-5.20.0/hints/freebsd.sh
---- perl-5.20.0-orig/hints/freebsd.sh	2014-01-31 22:55:51.000000000 +0100
-+++ perl-5.20.0/hints/freebsd.sh	2014-06-25 10:25:53.263964680 +0200
+diff -Naur perl-5.22.3-orig/hints/freebsd.sh perl-5.22.3-modified/hints/freebsd.sh
+--- perl-5.22.3-orig/hints/freebsd.sh	2015-10-17 15:32:14.000000000 +0300
++++ perl-5.22.3-modified/hints/freebsd.sh	2017-07-01 14:00:46.000000000 +0300
 @@ -119,21 +119,21 @@
          objformat=`/usr/bin/objformat`
          if [ x$objformat = xaout ]; then
              if [ -e /usr/lib/aout ]; then
 -                libpth="/usr/lib/aout /usr/local/lib /usr/lib"
 -                glibpth="/usr/lib/aout /usr/local/lib /usr/lib"
-+                libpth=""
-+                glibpth=""
++                libpth=''
++                glibpth=''
              fi
              lddlflags='-Bshareable'
          else
 -            libpth="/usr/lib /usr/local/lib"
 -            glibpth="/usr/lib /usr/local/lib"
-+            libpth=""
-+            glibpth=""
++            libpth=''
++            glibpth=''
              ldflags="-Wl,-E "
              lddlflags="-shared "
          fi
@@ -147,14 +145,14 @@ diff -ru -x '*~' -x '*.rej' perl-5.20.0-orig/hints/freebsd.sh perl-5.20.0/hints/
  *)
 -       libpth="/usr/lib /usr/local/lib"
 -       glibpth="/usr/lib /usr/local/lib"
-+       libpth=""
-+       glibpth=""
++       libpth=''
++       glibpth=''
         ldflags="-Wl,-E "
          lddlflags="-shared "
          cccdlflags='-DPIC -fPIC'
-diff -ru -x '*~' -x '*.rej' perl-5.20.0-orig/hints/linux.sh perl-5.20.0/hints/linux.sh
---- perl-5.20.0-orig/hints/linux.sh	2014-05-26 15:34:20.000000000 +0200
-+++ perl-5.20.0/hints/linux.sh	2014-06-25 10:33:47.354883843 +0200
+diff -Naur perl-5.22.3-orig/hints/linux.sh perl-5.22.3-modified/hints/linux.sh
+--- perl-5.22.3-orig/hints/linux.sh	2015-10-17 15:32:14.000000000 +0300
++++ perl-5.22.3-modified/hints/linux.sh	2017-07-01 14:01:54.000000000 +0300
 @@ -150,25 +150,6 @@
      ;;
  esac
@@ -181,8 +179,8 @@ diff -ru -x '*~' -x '*.rej' perl-5.20.0-orig/hints/linux.sh perl-5.20.0/hints/li
  case "$plibpth" in
  '') plibpth=`LANG=C LC_ALL=C $gcc $ccflags $ldflags -print-search-dirs | grep libraries |
  	cut -f2- -d= | tr ':' $trnl | grep -v 'gcc' | sed -e 's:/$::'`
-@@ -178,32 +159,6 @@
-     ;;
+@@ -195,32 +176,6 @@
+   ;;
  esac
  
 -case "$libc" in
@@ -214,7 +212,7 @@ diff -ru -x '*~' -x '*.rej' perl-5.20.0-orig/hints/linux.sh perl-5.20.0/hints/li
  # Are we using ELF?  Thanks to Kenneth Albanowski <kjahds@kjahds.com>
  # for this test.
  cat >try.c <<'EOM'
-@@ -367,33 +322,6 @@
+@@ -384,33 +339,6 @@
  	;;
  esac
  
