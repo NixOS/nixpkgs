@@ -4,6 +4,8 @@ gatherLibraries() {
     autoPatchelfLibs+=("$1/lib")
 }
 
+# This error is ignored, because $targetOffset is not defined in this script.
+# shellcheck disable=SC2154
 addEnvHooks "$targetOffset" gatherLibraries
 
 isExecutable() {
@@ -11,13 +13,13 @@ isExecutable() {
 }
 
 findElfs() {
-    find "$1" -type f | while IFS='' read -r file; do
+    while IFS='' read -r -d $'\0' file; do
         mimeType="$(file -b -N --mime-type "$file")"
-        if [ "$mimeType" = application/x-executable \
-            -o "${mimeType}" = application/x-sharedlib ]; then
-            echo "${file}"
+        if [ "$mimeType" = application/x-executable ] || \
+            [ "$mimeType" = application/x-sharedlib ]; then
+            echo "$file"
         fi
-    done
+    done < <(find "$1" -type f -print0)
 }
 
 # We cache dependencies so that we don't need to search through all of them on
@@ -44,7 +46,6 @@ populateCacheWithRecursiveDeps() {
     local so found foundso
     for so in "${cachedDependencies[@]}"; do
         for found in $(getDepsFromSo "$so"); do
-            local libdir="${found%/*}"
             local base="${found##*/}"
             local soname="${base%.so*}"
             for foundso in "${found%/*}/$soname".so*; do
@@ -98,9 +99,9 @@ findDependency() {
 }
 
 autoPatchelfFile() {
-    local dep rpath="" toPatch="$1"
+    local dep interpreter missing rpath="" toPatch="$1"
 
-    local interpreter="$(< "$NIX_CC/nix-support/dynamic-linker")"
+    interpreter="$(< "$NIX_CC/nix-support/dynamic-linker")"
     if isExecutable "$toPatch"; then
         patchelf --set-interpreter "$interpreter" "$toPatch"
     fi
@@ -111,7 +112,7 @@ autoPatchelfFile() {
     # clear the RPATH first.
     patchelf --remove-rpath "$toPatch"
 
-    local missing="$(
+    missing="$(
         ldd "$toPatch" 2> /dev/null | \
             sed -n -e 's/^[\t ]*\([^ ]\+\) => not found.*/\1/p'
     )"
@@ -148,17 +149,21 @@ autoPatchelf() {
 
     # Add all shared objects of the current output path to the start of
     # cachedDependencies so that it's choosen first in findDependency.
-    cachedDependencies+=(
-        $(find "$prefix" \! -type d \( -name '*.so' -o -name '*.so.*' \))
-    )
+    # This error is ignored, because $prefix is not defined in this script.
+    # shellcheck disable=SC2154
+    while IFS='' read -r -d $'\0' file; do
+        cachedDependencies+=("$file")
+    done < <(find "$prefix" \! -type d \( -name '*.so' -o -name '*.so.*' \) -print0)
+
     # Also add all runtime dependencies
-    if [ -n "$runtimeDependencies" ]; then
+    if [ -n "${runtimeDependencies:-}" ]; then
         for dep in $runtimeDependencies; do
-            cachedDependencies+=(
-                $(find "$dep/lib" \! -type d \( -name '*.so' -o -name '*.so.*' \))
-            )
+            while IFS='' read -r -d $'\0' file; do
+                cachedDependencies+=("$file")
+            done < <(find "$dep/lib" \! -type d \( -name '*.so' -o -name '*.so.*' \) -print0)
         done
     fi
+
     local elffile
 
     # Here we actually have a subshell, which also means that
