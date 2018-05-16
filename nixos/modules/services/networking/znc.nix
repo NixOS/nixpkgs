@@ -41,15 +41,15 @@ let
 
   in concatStringsSep "\n" (toLines cfg);
 
-  semanticConfigType = with types; let
+  semanticTypes = rec {
     zncAtom = either (either int bool) str;
     zncList = listOf zncAtom;
     zncAttr = attrsOf (nullOr semanticConfigType);
     zncAll = either (either zncAtom zncList) zncAttr;
-  in attrsOf (zncAll // {
-    description = "znc value (atoms (str, int, bool), list of atoms, or attrsets of znc values)";
-  });
-
+    zncConf = attrsOf (zncAll // {
+      description = "znc value (atoms (str, int, bool), list of atoms, or attrsets of znc values)";
+    });
+  };
 
   defaultUser = "znc"; # Default user to own process.
 
@@ -156,7 +156,7 @@ let
 
       modulePackages = mkOption {
         type = types.listOf types.package;
-        default = [];
+        #default = [];
         example = [ "pkgs.zncModules.push" "pkgs.zncModules.fish" ];
         description = ''
           External ZNC modules to build.
@@ -410,28 +410,29 @@ in
         User = cfg.user;
         Group = cfg.group;
         Restart = "always";
+        ExecStart = "${pkgs.znc}/bin/znc --foreground --datadir ${cfg.dataDir} ${toString cfg.extraFlags}";
         ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
         ExecStop   = "${pkgs.coreutils}/bin/kill -INT $MAINPID";
       };
       preStart = ''
-        ${pkgs.coreutils}/bin/mkdir -p ${cfg.dataDir}/configs
+        mkdir -p ${cfg.dataDir}/configs
 
         # If mutable, regenerate conf file every time.
         ${optionalString (!cfg.mutable) ''
-          ${pkgs.coreutils}/bin/echo "znc is set to be system-managed. Now deleting old znc.conf file to be regenerated."
-          ${pkgs.coreutils}/bin/rm -f ${cfg.dataDir}/configs/znc.conf
+          echo "znc is set to be system-managed. Now deleting old znc.conf file to be regenerated."
+          rm -f ${cfg.dataDir}/configs/znc.conf
         ''}
 
         # Ensure essential files exist.
         if [[ ! -f ${cfg.dataDir}/configs/znc.conf ]]; then
-            ${pkgs.coreutils}/bin/echo "No znc.conf file found in ${cfg.dataDir}. Creating one now."
-            ${pkgs.coreutils}/bin/cp --no-clobber ${zncConfFile} ${cfg.dataDir}/configs/znc.conf
-            ${pkgs.coreutils}/bin/chmod u+rw ${cfg.dataDir}/configs/znc.conf
-            ${pkgs.coreutils}/bin/chown ${cfg.user} ${cfg.dataDir}/configs/znc.conf
+            echo "No znc.conf file found in ${cfg.dataDir}. Creating one now."
+            cp --no-clobber ${zncConfFile} ${cfg.dataDir}/configs/znc.conf
+            chmod u+rw ${cfg.dataDir}/configs/znc.conf
+            chown ${cfg.user} ${cfg.dataDir}/configs/znc.conf
         fi
 
         if [[ ! -f ${cfg.dataDir}/znc.pem ]]; then
-          ${pkgs.coreutils}/bin/echo "No znc.pem file found in ${cfg.dataDir}. Creating one now."
+          echo "No znc.pem file found in ${cfg.dataDir}. Creating one now."
           ${pkgs.znc}/bin/znc --makepem --datadir ${cfg.dataDir}
         fi
 
@@ -439,7 +440,6 @@ in
         rm ${cfg.dataDir}/modules || true
         ln -fs ${modules}/lib/znc ${cfg.dataDir}/modules
       '';
-      script = "${pkgs.znc}/bin/znc --foreground --datadir ${cfg.dataDir} ${toString cfg.extraFlags}";
     };
 
     users.users = optional (cfg.user == defaultUser)
