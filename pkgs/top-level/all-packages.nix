@@ -21209,7 +21209,7 @@ with pkgs;
     pythonPackages = python3Packages;
   };
 
-  winePackages = rec {
+  winePackages = recurseIntoAttrs rec {
     minimal = callPackage ../misc/emulators/wine {
       wineRelease = config.wine.release or "stable";
       wineBuild = config.wine.build or "wine32";
