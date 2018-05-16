@@ -3,11 +3,11 @@
 
 buildPerlPackage rec {
   name = "slimserver-${version}";
-  version = "7.9.0";
+  version = "7.9.1";
 
   src = fetchurl {
     url = "https://github.com/Logitech/slimserver/archive/${version}.tar.gz";
-    sha256 = "07rhqipg7m28x0nqdd83nyzi88dp9cf8rr2pamdyrfcwyp1h1b44";
+    sha256 = "0szp5zkmx2b5lncsijf97asjnl73fyijkbgbwkl1i7p8qnqrb4mp";
   };
 
   buildInputs = [
