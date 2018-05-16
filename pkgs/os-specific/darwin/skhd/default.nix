@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "skhd-${version}";
-  version = "0.0.12";
+  version = "0.1.1";
 
   src = fetchFromGitHub {
     owner = "koekeishiya";
     repo = "skhd";
     rev = "v${version}";
-    sha256 = "09ihfd7cfqnfv095skn6rbrmjji61skwgg36b6s055fycrlbyp0h";
+    sha256 = "1wh7v90ydh27gbaiwn2r6ncx6yiic4mph3w9vi1282nz2q02zxss";
   };
 
   buildInputs = [ Carbon ];

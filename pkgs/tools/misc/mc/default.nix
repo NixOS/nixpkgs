@@ -11,8 +11,12 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ perl glib slang zip unzip file gettext libX11 libICE
-    libssh2 openssl ] ++ stdenv.lib.optionals (!stdenv.isDarwin) [ e2fsprogs gpm ];
+
+  buildInputs = [
+    perl glib slang zip unzip file gettext libX11 libICE libssh2 openssl
+  ] ++ stdenv.lib.optionals (!stdenv.isDarwin) [ e2fsprogs gpm ];
+
+  enableParallelBuilding = true;
 
   configureFlags = [ "--enable-vfs-smb" ];
 

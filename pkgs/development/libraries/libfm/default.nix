@@ -9,11 +9,11 @@ stdenv.mkDerivation rec {
   name = if extraOnly
     then "libfm-extra-${version}"
     else "libfm-${version}";
-  version = "1.3.0";
+  version = "1.3.0.2";
 
   src = fetchurl {
     url = "mirror://sourceforge/pcmanfm/libfm-${version}.tar.xz";
-    sha256 = "151jyy8ipmp2h829gd9s4s429qafv1zxl7j6zaj1k1gzm9s5rmnb";
+    sha256 = "0wkwbi1nyvqza3r1dhrq846axiiq0fy0dqgngnagh76fjrwnzl0q";
   };
 
   nativeBuildInputs = [ pkgconfig ];

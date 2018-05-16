@@ -28,11 +28,18 @@ let
           sha256 = "af7315c9fa99e0bfd195a21106c82c81619b42f0bd9b6e287b797c6b6b6a9918";
         };
       });
-      astral = super.astral.overridePythonAttrs (oldAttrs: rec {
-        version = "1.6";
+      attrs = super.attrs.overridePythonAttrs (oldAttrs: rec {
+        version = "18.1.0";
         src = oldAttrs.src.override {
           inherit version;
-          sha256 = "874b397ddbf0a4c1d8d644b21c2481e8a96b61343f820ad52d8a322d61a15083";
+          sha256 = "e0d0eb91441a3b53dab4d9b743eafc1ac44476296a2053b6ca3af0b139faf87b";
+        };
+      });
+      astral = super.astral.overridePythonAttrs (oldAttrs: rec {
+        version = "1.6.1";
+        src = oldAttrs.src.override {
+          inherit version;
+          sha256 = "ab0c08f2467d35fcaeb7bad15274743d3ac1ad18b5391f64a0058a9cd192d37d";
         };
       });
       async-timeout = super.async-timeout.overridePythonAttrs (oldAttrs: rec {
@@ -40,6 +47,15 @@ let
         src = oldAttrs.src.override {
           inherit version;
           sha256 = "00cff4d2dce744607335cba84e9929c3165632da2d27970dbc55802a0c7873d0";
+        };
+      });
+      # used by check_config script
+      # can be unpinned once https://github.com/home-assistant/home-assistant/issues/11917 is resolved
+      colorlog = super.colorlog.overridePythonAttrs (oldAttrs: rec {
+        version = "3.1.4";
+        src = oldAttrs.src.override {
+          inherit version;
+          sha256 = "418db638c9577f37f0fae4914074f395847a728158a011be2a193ac491b9779d";
         };
       });
       hass-frontend = super.callPackage ./frontend.nix { };
@@ -58,7 +74,7 @@ let
   extraBuildInputs = extraPackages py.pkgs;
 
   # Don't forget to run parse-requirements.py after updating
-  hassVersion = "0.68.1";
+  hassVersion = "0.69.1";
 
 in with py.pkgs; buildPythonApplication rec {
   pname = "homeassistant";
@@ -73,7 +89,7 @@ in with py.pkgs; buildPythonApplication rec {
     owner = "home-assistant";
     repo = "home-assistant";
     rev = version;
-    sha256 = "103py7hfdanr8zk3cl93rm7ngjz0n95kwjbphq7iy8l8hqpzs1m8";
+    sha256 = "1y74zq1nah9k6rif8k384ri11h1f23ggr613f7qnn0107b23asr4";
   };
 
   propagatedBuildInputs = [
@@ -91,8 +107,7 @@ in with py.pkgs; buildPythonApplication rec {
     # The components' dependencies are not included, so they cannot be tested
     py.test --ignore tests/components
     # Some basic components should be tested however
-    # test_not_log_password fails because nothing is logged at all
-    py.test -k "not test_not_log_password" \
+    py.test \
       tests/components/{group,http} \
       tests/components/test_{api,configurator,demo,discovery,frontend,init,introduction,logger,script,shell_command,system_log,websocket_api}.py
   '';

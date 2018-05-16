@@ -1,5 +1,5 @@
 { stdenv, fetchurl, substituteAll, pkgconfig, meson, ninja, gettext, gnome3, wrapGAppsHook, packagekit, ostree
-, glib, appstream-glib, libsoup, polkit, isocodes, gspell, libxslt, gobjectIntrospection
+, glib, appstream-glib, libsoup, polkit, isocodes, gspell, libxslt, gobjectIntrospection, flatpak
 , json-glib, libsecret, valgrind-light, docbook_xsl, docbook_xml_dtd_42, gtk-doc, desktop-file-utils }:
 
 stdenv.mkDerivation rec {
@@ -27,11 +27,10 @@ stdenv.mkDerivation rec {
     gnome3.gtk glib packagekit appstream-glib libsoup
     gnome3.gsettings-desktop-schemas gnome3.gnome-desktop
     gspell json-glib libsecret ostree
-    polkit
+    polkit flatpak
   ];
 
   mesonFlags = [
-    "-Denable-flatpak=false"
     "-Denable-rpm=false"
     "-Denable-fwupd=false"
     "-Denable-oauth=false"

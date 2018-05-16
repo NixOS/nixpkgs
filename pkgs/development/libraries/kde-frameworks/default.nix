@@ -155,6 +155,7 @@ let
       kded = callPackage ./kded.nix {};
       kdesignerplugin = callPackage ./kdesignerplugin.nix {};
       kdesu = callPackage ./kdesu.nix {};
+      kdewebkit = callPackage ./kdewebkit.nix {};
       kemoticons = callPackage ./kemoticons.nix {};
       kglobalaccel = callPackage ./kglobalaccel.nix {};
       kiconthemes = callPackage ./kiconthemes {};

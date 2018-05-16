@@ -1,4 +1,4 @@
-{ version, sha256Hash, maintainers }:
+{ version, sha256Hash }:
 
 { stdenv, fetchFromGitHub, fetchpatch
 , fusePackages, utillinux, gettext
@@ -28,10 +28,7 @@ in stdenv.mkDerivation rec {
         url = "https://github.com/libfuse/libfuse/commit/914871b20a901e3e1e981c92bc42b1c93b7ab81b.patch";
         sha256 = "1w4j6f1awjrycycpvmlv0x5v9gprllh4dnbjxl4dyl2jgbkaw6pa";
       })
-    ++ stdenv.lib.optional isFuse3 ./fuse3-install.patch
-    # TODO: Only relevant for 3.2.2 (opened an upstream issue)
-    ++ stdenv.lib.optional isFuse3 ./fuse3-fix-version.patch;
-
+    ++ stdenv.lib.optional isFuse3 ./fuse3-install.patch;
 
   nativeBuildInputs = if isFuse3
     then [ meson ninja pkgconfig ]
@@ -76,10 +73,10 @@ in stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = {
+  meta = with stdenv.lib; {
     inherit (src.meta) homepage;
     description = "Kernel module and library that allows filesystems to be implemented in user space";
-    platforms = stdenv.lib.platforms.linux;
-    inherit maintainers;
+    platforms = platforms.linux;
+    maintainers = [ maintainers.primeos ];
   };
 }

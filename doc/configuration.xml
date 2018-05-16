@@ -378,7 +378,7 @@
     myPackages = pkgs.buildEnv {
       name = "my-packages";
       paths = [ aspell bc coreutils ffmpeg nixUnstable emscripten jq nox silver-searcher ];
-      pathsToLink = [ "/share/man" "/share/doc" /bin" ];
+      pathsToLink = [ "/share/man" "/share/doc" "/bin" ];
       extraOutputsToInstall = [ "man" "doc" ];
     };
   };
@@ -416,7 +416,7 @@ cp ${myProfile} $out/etc/profile.d/my-profile.sh
         nox
         silver-searcher
       ];
-      pathsToLink = [ "/share/man" "/share/doc" /bin" "/etc" ];
+      pathsToLink = [ "/share/man" "/share/doc" "/bin" "/etc" ];
       extraOutputsToInstall = [ "man" "doc" ];
     };
   };

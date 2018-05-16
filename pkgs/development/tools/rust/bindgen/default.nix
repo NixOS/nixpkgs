@@ -4,13 +4,13 @@
 
 rustPlatform.buildRustPackage rec {
   name = "rust-bindgen-${version}";
-  version = "0.36.0";
+  version = "0.36.1";
 
   src = fetchFromGitHub {
     owner = "rust-lang-nursery";
     repo = "rust-bindgen";
     rev = "v${version}";
-    sha256 = "1bpya490qh2jvq99mdlcifj6mgn3yxr0sqas6y5xw842b46g6hi6";
+    sha256 = "0y99dvkbkd4vhac26dmc3bwf6z2m85p2il7mndvv8liam012pkbz";
   };
 
   nativeBuildInputs = [ makeWrapper ];

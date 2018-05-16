@@ -10,11 +10,11 @@ with stdenv.lib;
 
 stdenv.mkDerivation rec {
   name = "qbittorrent-${version}";
-  version = "4.0.4";
+  version = "4.1.0";
 
   src = fetchurl {
     url = "mirror://sourceforge/qbittorrent/${name}.tar.xz";
-    sha256 = "13sw0sdw2agm49plp9xvkg6wva274drpvgz76dqj4j2kfxx9s2jk";
+    sha256 = "0fdr74sc31x421sb69vlgal1hxpccjxxk8hrrzz9f5bg4jv895pw";
   };
 
   nativeBuildInputs = [ pkgconfig which ];

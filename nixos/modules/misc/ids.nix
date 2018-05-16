@@ -190,7 +190,7 @@
       cadvisor = 167;
       nylon = 168;
       apache-kafka = 169;
-      panamax = 170;
+      #panamax = 170; # unused
       exim = 172;
       #fleet = 173; # unused
       #input = 174; # unused
@@ -306,6 +306,7 @@
       ceph = 288;
       duplicati = 289;
       monetdb = 290;
+      restic = 291;
 
       # When adding a uid, make sure it doesn't match an existing gid. And don't use uids above 399!
 
@@ -473,9 +474,9 @@
       #chronos = 164; # unused
       gitlab = 165;
       nylon = 168;
-      panamax = 170;
+      #panamax = 170; # unused
       exim = 172;
-      fleet = 173;
+      #fleet = 173; # unused
       input = 174;
       sddm = 175;
       tss = 176;
@@ -580,6 +581,7 @@
       ceph = 288;
       duplicati = 289;
       monetdb = 290;
+      restic = 291;
 
       # When adding a gid, make sure it doesn't match an existing
       # uid. Users and groups with the same name should have equal

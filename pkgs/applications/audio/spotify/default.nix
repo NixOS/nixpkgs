@@ -1,6 +1,6 @@
 { fetchurl, stdenv, dpkg, xorg, alsaLib, makeWrapper, openssl, freetype
-, glib, pango, cairo, atk, gdk_pixbuf, gtk2, cups, nspr, nss, libpng, GConf
-, libgcrypt, systemd, fontconfig, dbus, expat, ffmpeg_0_10, curl, zlib, gnome2 }:
+, glib, pango, cairo, atk, gdk_pixbuf, gtk2, cups, nspr, nss, libpng
+, libgcrypt, systemd, fontconfig, dbus, expat, ffmpeg_0_10, curl, zlib, gnome3 }:
 
 let
   # Please update the stable branch!
@@ -20,7 +20,6 @@ let
     ffmpeg_0_10
     fontconfig
     freetype
-    GConf
     gdk_pixbuf
     glib
     gtk2
@@ -93,7 +92,7 @@ stdenv.mkDerivation {
       librarypath="${stdenv.lib.makeLibraryPath deps}:$libdir"
       wrapProgram $out/share/spotify/spotify \
         --prefix LD_LIBRARY_PATH : "$librarypath" \
-        --prefix PATH : "${gnome2.zenity}/bin"
+        --prefix PATH : "${gnome3.zenity}/bin"
 
       # Desktop file
       mkdir -p "$out/share/applications/"

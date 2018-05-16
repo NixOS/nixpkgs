@@ -75,20 +75,20 @@ let cfg = config.documentation; in
     (mkIf cfg.man.enable {
       environment.systemPackages = [ pkgs.man-db ];
       environment.pathsToLink = [ "/share/man" ];
-      environment.extraOutputsToInstall = [ "man" ] ++ optional cfg.dev.enable [ "devman" ];
+      environment.extraOutputsToInstall = [ "man" ] ++ optional cfg.dev.enable "devman";
     })
 
     (mkIf cfg.info.enable {
       environment.systemPackages = [ pkgs.texinfoInteractive ];
       environment.pathsToLink = [ "/share/info" ];
-      environment.extraOutputsToInstall = [ "info" ] ++ optional cfg.dev.enable [ "devinfo" ];
+      environment.extraOutputsToInstall = [ "info" ] ++ optional cfg.dev.enable "devinfo";
     })
 
     (mkIf cfg.doc.enable {
       # TODO(@oxij): put it here and remove from profiles?
       # environment.systemPackages = [ pkgs.w3m ]; # w3m-nox?
       environment.pathsToLink = [ "/share/doc" ];
-      environment.extraOutputsToInstall = [ "doc" ] ++ optional cfg.dev.enable [ "devdoc" ];
+      environment.extraOutputsToInstall = [ "doc" ] ++ optional cfg.dev.enable "devdoc";
     })
 
   ]);

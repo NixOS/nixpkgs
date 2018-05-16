@@ -476,7 +476,7 @@ Additional information.
      <para>
       It's only for non-breaking mass-rebuild commits. That means it's not to
       be used for testing, and changes must have been well tested already.
-      <link xlink:href="http://comments.gmane.org/gmane.linux.distributions.nixos/13447">Read
+      <link xlink:href="https://web.archive.org/web/20160528180406/http://comments.gmane.org/gmane.linux.distributions.nixos/13447">Read
       policy here</link>.
      </para>
     </listitem>

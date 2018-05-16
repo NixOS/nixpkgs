@@ -502,9 +502,10 @@ self: super: builtins.intersectAttrs super {
 
   # Tests require a browser: https://github.com/ku-fpg/blank-canvas/issues/73
   blank-canvas = dontCheck super.blank-canvas;
+  blank-canvas_0_6_2 = dontCheck super.blank-canvas_0_6_2;
 
   # cabal2nix generates a dependency on base-compat, which is the wrong version
   base-compat-batteries = super.base-compat-batteries.override {
-    base-compat = pkgs.haskellPackages.base-compat_0_10_1;
+    base-compat = super.base-compat_0_10_1;
   };
 }

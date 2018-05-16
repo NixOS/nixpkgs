@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ gnome3.glib libxml2 bc ];
 
-  buildInputs = [ gnome3.gnome-themes-standard gdk_pixbuf librsvg ];
+  buildInputs = [ gnome3.gnome-themes-extra gdk_pixbuf librsvg ];
 
   propagatedUserEnvPkgs = [ gtk-engine-murrine ];
 
@@ -25,7 +25,8 @@ stdenv.mkDerivation rec {
       -e "s|if .*which gnome-shell.*;|if true;|" \
       -e "s|CURRENT_GS_VERSION=.*$|CURRENT_GS_VERSION=${gnome3.version}|"
     mkdir -p $out/share/themes
-    ./install.sh --dest $out/share/themes
+    # name is used internally by the package installation script
+    name= ./install.sh --dest $out/share/themes
     rm $out/share/themes/*/COPYING
   '';
 

@@ -14,8 +14,8 @@
     fetch = {
       type = "git";
       url = "https://github.com/shirou/gopsutil";
-      rev = "63047d776e07105e370af46ecbd0ae96850f5ef2";
-      sha256 = "0204f0gx3fd8ya6rb478a7a4gr2v4i3m71148iv3jrdfvr5q5aaw";
+      rev = "57f370e13068146efe1cb7129f79e5d51da8a242";
+      sha256 = "1ij0bbnfjj65afin8vhccr3cxvg6r0awmvcvb2ilza5wbbsslggb";
     };
   }
   {
@@ -23,8 +23,8 @@
     fetch = {
       type = "git";
       url = "https://go.googlesource.com/crypto";
-      rev = "2b6c08872f4b66da917bb4ce98df4f0307330f78";
-      sha256 = "07wgdhs7ac3qmx0lfr4zazg2l159jqbwmn7jx49rr9811vivl1yh";
+      rev = "2d027ae1dddd4694d54f7a8b6cbe78dca8720226";
+      sha256 = "1fdab3scp9fm88jxwjw8a3hh5ykx6ads3zcacgy48k2n6b0rqrdw";
     };
   }
   {
@@ -32,8 +32,8 @@
     fetch = {
       type = "git";
       url = "https://go.googlesource.com/sys";
-      rev = "79b0c6888797020a994db17c8510466c72fe75d9";
-      sha256 = "0aydjw886c4dwcjg7ssb7xp39ag1529nh3ly1la71rqjr94cjnag";
+      rev = "9950ad118b73f9207b991f01920a3509c68f7f2b";
+      sha256 = "1607m89kpdxgc2lj14mrp02bg7c42g1zv0fzrl5961gvm5qzbjja";
     };
   }
   {
@@ -41,8 +41,8 @@
     fetch = {
       type = "git";
       url = "https://go.googlesource.com/text";
-      rev = "7922cc490dd5a7dbaa7fd5d6196b49db59ac042f";
-      sha256 = "06sicjc24hv7v9p1l6psaq87w4lycx3mjixd6gsd1wnd4jhqvlnr";
+      rev = "7dd2c8130f5e924233f5543598300651c386d431";
+      sha256 = "0ja6skzplirb7dgf5d4wi0navinf8j5iakak020lwm7287wnpcrg";
     };
   }
   {

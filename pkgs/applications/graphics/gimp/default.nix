@@ -43,11 +43,12 @@ in stdenv.mkDerivation rec {
   nativeBuildInputs = [ autoreconfHook pkgconfig intltool gettext wrapPython ];
   propagatedBuildInputs = [ gegl ]; # needed by gimp-2.0.pc
   buildInputs = [
-    babl gegl gtk2 glib gdk_pixbuf pango cairo gexiv2 harfbuzz isocodes libgudev
+    babl gegl gtk2 glib gdk_pixbuf pango cairo gexiv2 harfbuzz isocodes
     freetype fontconfig lcms libpng libjpeg poppler poppler_data libtiff openexr
     libmng librsvg libwmf zlib libzip ghostscript aalib shared-mime-info libwebp
     python pygtk libexif xorg.libXpm glib-networking libmypaint mypaint-brushes
-  ] ++ stdenv.lib.optionals stdenv.isDarwin [ AppKit Cocoa gtk-mac-integration ];
+  ] ++ stdenv.lib.optionals stdenv.isDarwin [ AppKit Cocoa gtk-mac-integration ]
+    ++ stdenv.lib.optionals stdenv.isLinux [ libgudev ];
 
   pythonPath = [ pygtk ];
 

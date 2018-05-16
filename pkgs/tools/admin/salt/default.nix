@@ -19,11 +19,11 @@ let
 in
 python2Packages.buildPythonApplication rec {
   pname = "salt";
-  version = "2017.7.4";
+  version = "2018.3.0";
 
   src = python2Packages.fetchPypi {
     inherit pname version;
-    sha256 = "15xfvclk3ns8vk17j7bfy4alq7ab5x3y3jnpqzp5583bfyak0mqx";
+    sha256 = "0cbbnmaynnpfknmppzlz04mqw4d3d2ay1dqrli11b5pnzli5v950";
   };
 
   propagatedBuildInputs = with python2Packages; [

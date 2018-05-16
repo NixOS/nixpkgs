@@ -23,9 +23,9 @@ let
 
   cfg = config.virtualisation;
 
-  qemuGraphics = if cfg.graphics then "" else "-nographic";
-  kernelConsole = if cfg.graphics then "" else "console=${qemuSerialDevice}";
-  ttys = [ "tty1" "tty2" "tty3" "tty4" "tty5" "tty6" ];
+  qemuGraphics = lib.optionalString (!cfg.graphics) "-nographic";
+
+  consoles = lib.concatMapStringsSep " " (c: "console=${c}") cfg.qemu.consoles;
 
   # XXX: This is very ugly and in the future we really should use attribute
   # sets to build ALL of the QEMU flags instead of this mixed mess of Nix
@@ -108,7 +108,7 @@ let
             ${mkDiskIfaceDriveFlag "0" "file=$NIX_DISK_IMAGE,cache=writeback,werror=report"} \
             -kernel ${config.system.build.toplevel}/kernel \
             -initrd ${config.system.build.toplevel}/initrd \
-            -append "$(cat ${config.system.build.toplevel}/kernel-params) init=${config.system.build.toplevel}/init regInfo=${regInfo}/registration ${kernelConsole} $QEMU_KERNEL_PARAMS" \
+            -append "$(cat ${config.system.build.toplevel}/kernel-params) init=${config.system.build.toplevel}/init regInfo=${regInfo}/registration ${consoles} $QEMU_KERNEL_PARAMS" \
           ''} \
           $extraDisks \
           ${qemuGraphics} \
@@ -248,9 +248,10 @@ in
         default = true;
         description =
           ''
-            Whether to run QEMU with a graphics window, or access
-            the guest computer serial port through the host tty.
-          '';
+            Whether to run QEMU with a graphics window, or in nographic mode.
+            Serial console will be enabled on both settings, but this will
+            change the preferred console.
+            '';
       };
 
     virtualisation.cores =
@@ -332,6 +333,23 @@ in
           description = "Options passed to QEMU.";
         };
 
+      consoles = mkOption {
+        type = types.listOf types.str;
+        default = let
+          consoles = [ "${qemuSerialDevice},115200n8" "tty0" ];
+        in if cfg.graphics then consoles else reverseList consoles;
+        example = [ "console=tty1" ];
+        description = ''
+          The output console devices to pass to the kernel command line via the
+          <literal>console</literal> parameter, the primary console is the last
+          item of this list.
+
+          By default it enables both serial console and
+          <literal>tty0</literal>. The preferred console (last one) is based on
+          the value of <option>virtualisation.graphics</option>.
+        '';
+      };
+
       networkingOptions =
         mkOption {
           default = [
@@ -355,6 +373,15 @@ in
           example = "scsi";
           type = types.enum [ "virtio" "scsi" "ide" ];
           description = "The interface used for the virtual hard disks.";
+        };
+
+      guestAgent.enable =
+        mkOption {
+          default = true;
+          type = types.bool;
+          description = ''
+            Enable the Qemu guest agent.
+          '';
         };
     };
 
@@ -506,6 +533,8 @@ in
 
     # Don't run ntpd in the guest.  It should get the correct time from KVM.
     services.timesyncd.enable = false;
+
+    services.qemuGuest.enable = cfg.qemu.guestAgent.enable;
 
     system.build.vm = pkgs.runCommand "nixos-vm" { preferLocalBuild = true; }
       ''
