@@ -1,4 +1,4 @@
-{ stdenv, fetchurl
+{ stdenv, fetchurl, cmake, xercesc
 
 # The target version of Geant4
 , geant4
@@ -8,30 +8,23 @@
 , boost
 }:
 
+let
+  # g4py does not support MT and will fail to build against MT geant
+  geant4_nomt = geant4.override { enableMultiThreading = false; };
+in
+
 stdenv.mkDerivation rec {
-  inherit (geant4) version src;
+  inherit (geant4_nomt) version src;
   name = "g4py-${version}";
 
-  # ./configure overwrites $PATH, which clobbers everything.
-  patches = [ ./configure.patch ];
-  patchFlags = "-p0";
+  sourceRoot = "geant4.10.04.p01/environments/g4py";
 
-  configurePhase = ''
-    export PYTHONPATH=$PYTHONPATH:${geant4}/lib64:$prefix
+  nativeBuildInputs = [ cmake ];
+  buildInputs = [ geant4_nomt xercesc boost python ];
 
-    source ${geant4}/share/Geant4-*/geant4make/geant4make.sh
-    cd environments/g4py
-
-    ./configure linux64 --prefix=$prefix \
-                        --with-g4install-dir=${geant4} \
-                        --with-python-incdir=${python}/include/python${python.majorVersion} \
-                        --with-python-libdir=${python}/lib \
-                        --with-boost-incdir=${boost.dev}/include \
-                        --with-boost-libdir=${boost.out}/lib
-  '';
+  GEANT4_INSTALL = geant4_nomt;
 
   enableParallelBuilding = true;
-  buildInputs = [ geant4 boost python ];
 
   setupHook = ./setup-hook.sh;
 
