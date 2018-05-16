@@ -3,11 +3,11 @@
 
 stdenv.mkDerivation rec {
   name = "chirp-daily-${version}";
-  version = "20180412";
+  version = "20180512";
 
   src = fetchurl {
     url = "https://trac.chirp.danplanet.com/chirp_daily/daily-${version}/${name}.tar.gz";
-    sha256 = "17wpxqzifz6grw9xzg9q9vr58vm2xd50fhd64c3ngdhxcnq2dpj9";
+    sha256 = "111pijr0v36n3yg0p58mgvfxvz088axnxvgfhs8cblssi931mimm";
   };
 
   nativeBuildInputs = [ makeWrapper ];
