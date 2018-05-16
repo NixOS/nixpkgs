@@ -3,11 +3,9 @@
 # Derivation patches HandBrake to use our closure.
 #
 
-# TODO: Release 1.2.0 would switch LibAV to FFmpeg.
-
 { stdenv, lib, fetchurl,
   python2, pkgconfig, yasm, harfbuzz, zlib,
-  autoconf, automake, cmake, libtool, m4, jansson,
+  autoconf, automake, libtool, m4, jansson,
   libass, libiconv, libsamplerate, fribidi, libxml2, bzip2,
   libogg, libopus, libtheora, libvorbis, libdvdcss, a52dec,
   lame, libdvdread, libdvdnav, libbluray,
@@ -21,6 +19,7 @@
 }:
 
 stdenv.mkDerivation rec {
+  # TODO: Release 1.2.0 would switch LibAV to FFmpeg.
   version = "1.1.0";
   name = "handbrake-${version}";
 
@@ -40,7 +39,7 @@ stdenv.mkDerivation rec {
   });
 
   nativeBuildInputs = [
-    cmake python2 pkgconfig yasm autoconf automake libtool m4
+    python2 pkgconfig yasm autoconf automake libtool m4
   ] ++ lib.optionals useGtk [ intltool wrapGAppsHook ];
 
   buildInputs = [
@@ -54,8 +53,6 @@ stdenv.mkDerivation rec {
     libgudev
   ] ++ (if useFfmpeg then [ ffmpeg ] else [ patched_libav_12 ])
   ++ lib.optional useFdk fdk_aac;
-
-  dontUseCmakeConfigure = true;
 
   enableParallelBuilding = true;
 
@@ -103,6 +100,6 @@ stdenv.mkDerivation rec {
     '';
     license = licenses.gpl2;
     maintainers = with maintainers; [ Anton-Latukha wmertens ];
-    platforms = platforms.linux;
+    platforms = with platforms; unix;
   };
 }

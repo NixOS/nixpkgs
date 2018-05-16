@@ -2305,6 +2305,10 @@ with pkgs;
 
   flashbench = callPackage ../os-specific/linux/flashbench { };
 
+  flatpak = callPackage ../development/libraries/flatpak { };
+
+  flatpak-builder = callPackage ../development/tools/flatpak-builder { };
+
   figlet = callPackage ../tools/misc/figlet { };
 
   file = callPackage ../tools/misc/file { };
@@ -5147,8 +5151,6 @@ with pkgs;
   ted = callPackage ../tools/typesetting/ted { };
 
   teamviewer = libsForQt5.callPackage ../applications/networking/remote/teamviewer { };
-
-  telnet = callPackage ../tools/networking/telnet { };
 
   telegraf = callPackage ../servers/monitoring/telegraf { };
 
@@ -15962,6 +15964,8 @@ with pkgs;
 
   moe =  callPackage ../applications/editors/moe { };
 
+  multibootusb = callPackage ../applications/misc/multibootusb {};
+
   praat = callPackage ../applications/audio/praat { };
 
   quvi = callPackage ../applications/video/quvi/tool.nix {
@@ -18558,6 +18562,10 @@ with pkgs;
   compton-git = callPackage ../applications/window-managers/compton/git.nix { };
 
   xdaliclock = callPackage ../tools/misc/xdaliclock {};
+
+  xdg-desktop-portal = callPackage ../development/libraries/xdg-desktop-portal { };
+
+  xdg-desktop-portal-gtk = callPackage ../development/libraries/xdg-desktop-portal-gtk { };
 
   xdg-user-dirs = callPackage ../tools/X11/xdg-user-dirs { };
 

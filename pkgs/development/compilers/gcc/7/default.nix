@@ -325,6 +325,7 @@ stdenv.mkDerivation ({
       "--with-gnu-as" "--without-gnu-ld"
     ]
     ++ optional (targetPlatform == hostPlatform && targetPlatform.libc == "musl") "--disable-libsanitizer"
+    ++ optional (targetPlatform.isAarch64) "--enable-fix-cortex-a53-843419"
   ;
 
   targetConfig = if targetPlatform != hostPlatform then targetPlatform.config else null;

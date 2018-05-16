@@ -9,6 +9,7 @@
   ./config/fonts/ghostscript.nix
   ./config/gnu.nix
   ./config/i18n.nix
+  ./config/iproute2.nix
   ./config/krb5/default.nix
   ./config/ldap.nix
   ./config/networking.nix
@@ -214,6 +215,7 @@
   ./services/desktops/accountsservice.nix
   ./services/desktops/dleyna-renderer.nix
   ./services/desktops/dleyna-server.nix
+  ./services/desktops/flatpak.nix
   ./services/desktops/geoclue2.nix
   ./services/desktops/pipewire.nix
   ./services/desktops/gnome3/at-spi2-core.nix
@@ -649,6 +651,7 @@
   ./services/web-apps/tt-rss.nix
   ./services/web-apps/selfoss.nix
   ./services/web-apps/quassel-webserver.nix
+  ./services/web-apps/youtrack.nix
   ./services/web-servers/apache-httpd/default.nix
   ./services/web-servers/caddy.nix
   ./services/web-servers/fcgiwrap.nix
