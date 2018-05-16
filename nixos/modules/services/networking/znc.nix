@@ -5,6 +5,52 @@ with lib;
 let
   cfg = config.services.znc;
 
+
+  # Converts a semantic config to a string
+  semanticToString = cfg: let
+
+    getAttrs = set: sort (a: b:
+      # Attributes should be last
+      if builtins.isAttrs set.${a}
+      then if builtins.isAttrs set.${b} then a < b else false
+      else if builtins.isAttrs set.${b} then true else a < b
+    ) (builtins.attrNames set);
+
+    toLines = set: flatten (map (name: let
+      value = set.${name};
+      atom = val: {
+        bool = "${name} = ${if val then "true" else "false"}";
+        string = if name == "extraConfig" then val else "${name} = ${val}";
+        int = "${name} = ${toString val}";
+      };
+      forType = atom value // {
+
+        set = map (subname: let
+          subvalue = value.${subname};
+        in if subvalue == null then [] else [
+          "<${name} ${subname}>"
+          (map (line: "\t${line}") (toLines subvalue))
+          "</${name}>"
+        ]) (builtins.attrNames value);
+
+        list = map (elem: (atom elem).${builtins.typeOf elem}) value;
+
+      }; in
+        forType.${builtins.typeOf value}
+    ) (getAttrs set));
+
+  in concatStringsSep "\n" (toLines cfg);
+
+  semanticConfigType = with types; let
+    zncAtom = either (either int bool) str;
+    zncList = listOf zncAtom;
+    zncAttr = attrsOf (nullOr semanticConfigType);
+    zncAll = either (either zncAtom zncList) zncAttr;
+  in attrsOf (zncAll // {
+    description = "znc value (atoms (str, int, bool), list of atoms, or attrsets of znc values)";
+  });
+
+
   defaultUser = "znc"; # Default user to own process.
 
   # Default user and pass:
@@ -12,13 +58,13 @@ let
   # pw=nixospass
 
   defaultUserName = "znc";
-  defaultPassBlock = "
-        <Pass password>
-                Method = sha256
-                Hash = e2ce303c7ea75c571d80d8540a8699b46535be6a085be3414947d638e48d9e93
-                Salt = l5Xryew4g*!oa(ECfX2o
-        </Pass>
-  ";
+  defaultPassBlock = {
+    Pass.password = {
+      Method = "sha256";
+      Hash = "e2ce303c7ea75c571d80d8540a8699b46535be6a085be3414947d638e48d9e93";
+      Salt = "l5Xryew4g*!oa(ECfX2o";
+    };
+  };
 
   modules = pkgs.buildEnv {
     name = "znc-modules";
@@ -27,47 +73,41 @@ let
 
   # Keep znc.conf in nix store, then symlink or copy into `dataDir`, depending on `mutable`.
   notNull = a: ! isNull a;
-  mkZncConf = confOpts: ''
-    Version = 1.6.3
-    ${concatMapStrings (n: "LoadModule = ${n}\n") confOpts.modules}
-
-    <Listener l>
-            Port = ${toString confOpts.port}
-            IPv4 = true
-            IPv6 = true
-            SSL = ${boolToString confOpts.useSSL}
-    </Listener>
-
-    <User ${confOpts.userName}>
-            ${confOpts.passBlock}
-            Admin = true
-            Nick = ${confOpts.nick}
-            AltNick = ${confOpts.nick}_
-            Ident = ${confOpts.nick}
-            RealName = ${confOpts.nick}
-            ${concatMapStrings (n: "LoadModule = ${n}\n") confOpts.userModules}
-
-            ${ lib.concatStringsSep "\n" (lib.mapAttrsToList (name: net: ''
-              <Network ${name}>
-                  ${concatMapStrings (m: "LoadModule = ${m}\n") net.modules}
-                  Server = ${net.server} ${lib.optionalString net.useSSL "+"}${toString net.port} ${net.password}
-                  ${concatMapStrings (c: "<Chan #${c}>\n</Chan>\n") net.channels}
-                  ${lib.optionalString net.hasBitlbeeControlChannel ''
-                    <Chan &bitlbee>
-                    </Chan>
-                  ''}
-                  ${net.extraConf}
-              </Network>
-              '') confOpts.networks) }
-    </User>
-    ${confOpts.extraZncConf}
-  '';
+  toSemantic = confOpts: {
+    Version = "1.6.3";
+    LoadModule = confOpts.modules;
+    Listener.l = {
+      Port = confOpts.port;
+      IPv4 = true;
+      IPv6 = true;
+      SSL = confOpts.useSSL;
+    };
+    User.${confOpts.userName} = {
+      Admin = true;
+      Nick = confOpts.nick;
+      AltNick = confOpts.nick + "_";
+      Ident = confOpts.nick;
+      RealName = confOpts.nick;
+      LoadModule = confOpts.userModules;
+      Network = mapAttrs (name: net: {
+        LoadModule = net.modules;
+        Server = "${net.server} ${optionalString net.useSSL "+"}${toString net.port} ${net.password}";
+        Chan = optionalAttrs net.hasBitlbeeControlChannel { "&bitlbee" = {}; } //
+          listToAttrs (map (n: { name = n; value = {}; }) net.channels);
+        extraConfig = net.extraConf;
+      }) confOpts.networks;
+      extraConfig = ''
+        ${confOpts.passBlock}
+        ${confOpts.extraZncConf}
+      '';
+    };
+  };
 
   zncConfFile = pkgs.writeTextFile {
     name = "znc.conf";
     text = if cfg.zncConf != ""
       then cfg.zncConf
-      else mkZncConf cfg.confOptions;
+      else semanticToString (toSemantic cfg.confOptions);
   };
 
   networkOpts = { ... }: {
