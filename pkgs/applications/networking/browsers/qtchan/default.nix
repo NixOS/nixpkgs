@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, qt5 }:
+{ stdenv, fetchFromGitHub, qt, makeWrapper }:
 
 stdenv.mkDerivation rec {
   name = "qtchan-${version}";
@@ -12,12 +12,19 @@ stdenv.mkDerivation rec {
   };
 
   enableParallelBuilding = true;
-  nativeBuildInputs = [ qt5.qmake ];
-  buildInputs = [ qt5.qtbase ];
+  nativeBuildInputs = [ qt.qmake makeWrapper ];
+  buildInputs = [ qt.qtbase ];
+
+  qmakeFlags = [ "CONFIG-=app_bundle" ];
 
   installPhase = ''
     mkdir -p $out/bin
     cp qtchan $out/bin
+  '';
+
+  preFixup = ''
+    wrapProgram $out/bin/qtchan \
+      --suffix QT_PLUGIN_PATH : ${qt.qtbase.bin}/${qt.qtbase.qtPluginPrefix}
   '';
 
   meta = with stdenv.lib; {
@@ -25,6 +32,6 @@ stdenv.mkDerivation rec {
     homepage    = "https://github.com/siavash119/qtchan";
     license     = licenses.mit;
     maintainers = with maintainers; [ chiiruno ];
-    platforms   = platforms.linux;
+    platforms   = platforms.unix;
   };
 }
