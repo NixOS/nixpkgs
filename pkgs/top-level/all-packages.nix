@@ -6969,6 +6969,8 @@ with pkgs;
 
   bupc = callPackage ../development/compilers/bupc { };
 
+  urn = callPackage ../development/compilers/urn { };
+
   urweb = callPackage ../development/compilers/urweb { };
 
   inherit (callPackage ../development/compilers/vala { })
