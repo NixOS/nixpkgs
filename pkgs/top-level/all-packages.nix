@@ -10811,7 +10811,7 @@ with pkgs;
   ncurses6 = callPackage ../development/libraries/ncurses {
     abiVersion = "6";
   };
-  ncurses = ncurses6;
+  ncurses = if hostPlatform.useiOSPrebuilt then null else ncurses6;
 
   neardal = callPackage ../development/libraries/neardal { };
 
