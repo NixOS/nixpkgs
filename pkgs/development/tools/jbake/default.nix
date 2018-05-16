@@ -17,6 +17,12 @@ stdenv.mkDerivation rec {
     wrapProgram $out/bin/jbake --set JAVA_HOME "${jre}"
   '';
 
+  checkPhase = ''
+    export JAVA_HOME=${jre}
+    bin/jbake | grep -q "${version}" || (echo "jbake did not return correct version"; exit 1)
+  '';
+  doCheck = true;
+
   meta = with stdenv.lib; {
     description = "JBake is a Java based, open source, static site/blog generator for developers & designers";
     homepage = "https://jbake.org/";

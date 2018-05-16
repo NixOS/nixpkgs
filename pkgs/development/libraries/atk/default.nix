@@ -34,8 +34,6 @@ stdenv.mkDerivation rec {
     glib
   ];
 
-  NIX_LDFLAGS = if stdenv.isDarwin then "-lintl" else null;
-
   doCheck = true;
 
   passthru = {

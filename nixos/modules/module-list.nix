@@ -102,6 +102,7 @@
   ./programs/qt5ct.nix
   ./programs/rootston.nix
   ./programs/screen.nix
+  ./programs/sedutil.nix
   ./programs/slock.nix
   ./programs/shadow.nix
   ./programs/shell.nix
@@ -382,6 +383,7 @@
   ./services/misc/sundtek.nix
   ./services/misc/svnserve.nix
   ./services/misc/synergy.nix
+  ./services/misc/sysprof.nix
   ./services/misc/taskserver
   ./services/misc/tzupdate.nix
   ./services/misc/uhub.nix
@@ -568,6 +570,7 @@
   ./services/networking/strongswan.nix
   ./services/networking/strongswan-swanctl/module.nix
   ./services/networking/stunnel.nix
+  ./services/networking/stubby.nix
   ./services/networking/supplicant.nix
   ./services/networking/supybot.nix
   ./services/networking/syncthing.nix
