@@ -1,8 +1,6 @@
 { stdenv, callPackage }:
-
-let
-  inherit (callPackage ./common.nix {}) name src;
-
+with stdenv.lib;
+let inherit (callPackage ./common.nix {}) name src;
 in stdenv.mkDerivation {
   name = name + "-pthreads";
   inherit src;
@@ -10,4 +8,6 @@ in stdenv.mkDerivation {
   preConfigure = ''
     cd mingw-w64-libraries/winpthreads
   '';
+
+  hardeningDisable = [ "stackprotector" ];
 }
