@@ -9,7 +9,11 @@ stdenv.mkDerivation rec {
     sha256 = "1n7lqmv77kg28drahvxzybwl9v4hzwi8i7xkpgliclfcp5ff909b";
   };
 
-  NIX_CFLAGS_COMPILE = "-O3";
+  NIX_CFLAGS_COMPILE = [
+    "-O3"
+    # See: https://github.com/acpica/acpica/issues/387:
+    "-Wno-error=format-overflow"
+  ];
 
   buildFlags = "iasl";
 
