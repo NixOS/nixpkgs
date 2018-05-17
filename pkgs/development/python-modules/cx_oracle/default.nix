@@ -16,7 +16,7 @@ buildPythonPackage rec {
   patches = [ ./0001-odpi-src-dpiOci.c-nixify-libclntsh.so-dlopen.patch ];
 
   postPatch = ''
-    substituteInPlace odpi/src/dpiOci.c --replace @libclntsh@ ${oracle-instantclient}/lib/libclntsh.so";
+    substituteInPlace odpi/src/dpiOci.c --replace @libclntsh@ "${oracle-instantclient}/lib/libclntsh.so";
   '';
 
   # Check need an Oracle database to run
