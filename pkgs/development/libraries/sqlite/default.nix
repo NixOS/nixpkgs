@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, interactive ? false, readline ? null, ncurses ? null }:
+{ lib, stdenv, fetchurl, zlib, interactive ? false, readline ? null, ncurses ? null }:
 
 assert interactive -> readline != null && ncurses != null;
 
@@ -13,7 +13,7 @@ stdenv.mkDerivation {
   outputs = [ "bin" "dev" "out" ];
   separateDebugInfo = stdenv.isLinux;
 
-  buildInputs = lib.optionals interactive [ readline ncurses ];
+  buildInputs = [ zlib ] ++ lib.optionals interactive [ readline ncurses ];
 
   configureFlags = [ "--enable-threadsafe" ] ++ lib.optional interactive "--enable-readline";
 
