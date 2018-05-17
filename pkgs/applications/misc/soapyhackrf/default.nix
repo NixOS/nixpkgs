@@ -3,7 +3,7 @@
 } :
 
 let
-  version = "0.3.2";
+  version = "0.3.3";
 
 in stdenv.mkDerivation {
   name = "soapyhackrf-${version}";
@@ -12,7 +12,7 @@ in stdenv.mkDerivation {
     owner = "pothosware";
     repo = "SoapyHackRF";
     rev = "soapy-hackrf-${version}";
-    sha256 = "1sgx2nk8yrzfwisjfs9mw0xwc47bckzi17p42s2pbv7zcxzpb66p";
+    sha256 = "1awn89z462500gb3fjb7x61b1znkjri9n1d39bqfip1qk4s11pxc";
   };
 
   nativeBuildInputs = [ cmake pkgconfig ];
