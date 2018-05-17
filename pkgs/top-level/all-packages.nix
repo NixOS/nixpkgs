@@ -784,6 +784,8 @@ with pkgs;
 
   basex = callPackage ../tools/text/xml/basex { };
 
+  bashplotlib = callPackage ../tools/misc/bashplotlib { };
+
   babeld = callPackage ../tools/networking/babeld { };
 
   badvpn = callPackage ../tools/networking/badvpn {};
