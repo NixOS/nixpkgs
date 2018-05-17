@@ -34,8 +34,10 @@ in stdenv.mkDerivation rec {
   srcSqlplus = (requireSource version "1" "sqlplus" "303e82820a10f78e401e2b07d4eebf98b25029454d79f06c46e5f9a302ce5552");
   srcOdbc = optionalString odbcSupport (requireSource version "2" "odbc" "e870c84d2d4be6f77c0760083b82b7ffbb15a4bf5c93c4e6c84f36d6ed4dfdf1");
 
-  buildInputs = [ glibc patchelf rpmextract ] ++
+  buildInputs = [ glibc ] ++
     optional odbcSupport unixODBC;
+
+  nativeBuildInputs = [ rpmextract patchelf ];
 
   buildCommand = ''
     mkdir -p "${name}"
