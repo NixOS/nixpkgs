@@ -13,6 +13,7 @@
 , makeWrapper
 , xorg
 , gmp
+, pkgconfig
 , lib
 , ghcjsDepOverrides ? (_:_:{})
 }:
@@ -60,6 +61,7 @@ in stdenv.mkDerivation {
       makeWrapper
       xorg.lndir
       gmp
+      pkgconfig
     ];
     phases = ["unpackPhase" "buildPhase"];
     buildPhase = ''
