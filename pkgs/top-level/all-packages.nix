@@ -17693,6 +17693,8 @@ with pkgs;
 
   ricochet = libsForQt5.callPackage ../applications/networking/instant-messengers/ricochet { };
 
+  ries = callPackage ../applications/science/math/ries { };
+
   ripser = callPackage ../applications/science/math/ripser { };
 
   rkt = callPackage ../applications/virtualization/rkt { };
