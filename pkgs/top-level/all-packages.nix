@@ -6894,6 +6894,7 @@ with pkgs;
     });
 
   cargo-edit = callPackage ../tools/package-management/cargo-edit { };
+  cargo-release = callPackage ../tools/package-management/cargo-release { };
 
   cargo-fuzz = callPackage ../development/tools/rust/cargo-fuzz { };
 
