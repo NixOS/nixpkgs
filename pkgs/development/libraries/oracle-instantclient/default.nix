@@ -1,4 +1,4 @@
-{ stdenv, requireFile, glibc, patchelf, rpmextract, libaio, odbcSupport ? false, unixODBC }:
+{ stdenv, requireFile, glibc, patchelf, rpmextract, libaio, makeWrapper, odbcSupport ? false, unixODBC }:
 
 assert odbcSupport -> unixODBC != null;
 
@@ -35,7 +35,7 @@ in stdenv.mkDerivation rec {
   buildInputs = [ glibc ] ++
     optional odbcSupport unixODBC;
 
-  nativeBuildInputs = [ rpmextract patchelf ];
+  nativeBuildInputs = [ rpmextract patchelf makeWrapper ];
 
   buildCommand = ''
     mkdir -p "${name}"
@@ -70,6 +70,7 @@ in stdenv.mkDerivation rec {
       patchelf --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker) \
                --force-rpath --set-rpath "$out/lib:${libaio}/lib" \
                $exe
+      wrapProgram $exe --prefix LD_LIBRARY_PATH ":" $out/lib
     done
   '';
 
