@@ -372,7 +372,6 @@ let self = _self // overrides; _self = with self; {
     };
     postInstall =
       ''
-        sed -e "1 s|\(.*\)|\1 -I $out/lib/perl5/site_perl|" -i $out/bin/st
         ($out/bin/st --help || true) | grep Usage
       '';
     meta = {
