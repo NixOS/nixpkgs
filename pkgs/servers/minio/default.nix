@@ -1,6 +1,6 @@
-{ stdenv, buildGoPackage, fetchFromGitHub }:
+{ stdenv, buildGo110Package, fetchFromGitHub }:
 
-buildGoPackage rec {
+buildGo110Package rec {
   name = "minio-${version}";
 
   version = "2018-05-11T00-29-24Z";
