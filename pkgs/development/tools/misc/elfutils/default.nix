@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, m4, zlib, bzip2, bison, flex, gettext, xz, setupDebugInfoDirs }:
+{ lib, stdenv, fetchurl, m4, zlib, bzip2, bison, flex, gettext, xz, setupDebugInfoDirs, fetchpatch }:
 
 # TODO: Look at the hardcoded paths to kernel, modules etc.
 stdenv.mkDerivation rec {
@@ -10,7 +10,14 @@ stdenv.mkDerivation rec {
     sha256 = "0rp0r54z44is49c594qy7hr211nhb00aa5y7z74vsybbaxslg10z";
   };
 
-  patches = ./debug-info-from-env.patch;
+  patches = [
+    ./debug-info-from-env.patch
+    (fetchpatch {
+      name = "0001-Ensure-that-packed-structs-follow-the-gcc-memory-lay.patch";
+      url = http://git.openembedded.org/openembedded-core/plain/meta/recipes-devtools/elfutils/files/0001-Ensure-that-packed-structs-follow-the-gcc-memory-lay.patch?id=49aae1d75ff1c6a9643c30a8cc5776a2ffa83dd3;
+      sha256 = "09y4x1yaqm84w7cy1sf57a6g8ah49b0349dsj2a81wy4flw8ih5j";
+    })
+    ];
 
   hardeningDisable = [ "format" ];
 
