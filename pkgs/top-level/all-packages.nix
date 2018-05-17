@@ -20260,6 +20260,8 @@ with pkgs;
     texinfo = texinfo4;
   };
 
+  form = callPackage ../applications/science/math/form { };
+
   fricas = callPackage ../applications/science/math/fricas { };
 
   gap = callPackage ../applications/science/math/gap { };
