@@ -36,6 +36,7 @@ let
     ]);
 
     targetPrefix = "";
+    inherit bootGhcjs;
     inherit (bootGhcjs) version;
     isGhcjs = true;
 
