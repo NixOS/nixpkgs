@@ -1,11 +1,11 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation {
-  name = "lsscsi-0.28";
+  name = "lsscsi-0.29";
 
   src = fetchurl {
-    url = "http://sg.danny.cz/scsi/lsscsi-0.28.tgz";
-    sha256 = "0l6xz8545lnfd9f4z974ar1pbzfdkr6c8r56zjrcaazl3ad00p82";
+    url = "http://sg.danny.cz/scsi/lsscsi-0.29.tgz";
+    sha256 = "0538fjgxky03yn7mzyslkyi2af3yy5llsnjjcgjx73x08wd6hv5n";
   };
 
   preConfigure = ''
