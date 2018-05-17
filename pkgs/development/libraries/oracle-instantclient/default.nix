@@ -1,6 +1,4 @@
-{ stdenv, requireFile, libelf, gcc, glibc, patchelf, unzip, rpmextract, libaio
-, odbcSupport ? false, unixODBC
-}:
+{ stdenv, requireFile, glibc, patchelf, rpmextract, libaio, odbcSupport ? false, unixODBC }:
 
 assert odbcSupport -> unixODBC != null;
 
