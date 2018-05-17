@@ -13978,6 +13978,8 @@ with pkgs;
 
   gotests = callPackage ../development/tools/gotests { };
 
+  quicktemplate = callPackage ../development/tools/quicktemplate { };
+
   gogoclient = callPackage ../os-specific/linux/gogoclient { };
 
   linux-pam = callPackage ../os-specific/linux/pam { };
