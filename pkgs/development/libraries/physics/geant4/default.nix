@@ -1,54 +1,39 @@
-{ enableMultiThreading ? false
+{ enableMultiThreading ? true
 , enableG3toG4         ? false
 , enableInventor       ? false
 , enableGDML           ? false
 , enableQT             ? false
 , enableXM             ? false
-, enableOpenGLX11      ? false
+, enableOpenGLX11      ? true
 , enableRaytracerX11   ? false
 
 # Standard build environment with cmake.
 , stdenv, fetchurl, cmake
 
 # Optional system packages, otherwise internal GEANT4 packages are used.
-, clhep ? null
-, expat ? null
-, zlib  ? null
+, clhep ? null # not packaged currently
+, expat
+, zlib
 
 # For enableGDML.
-, xercesc ? null
+, xercesc
 
 # For enableQT.
-, qt ? null # qt4SDK or qt5SDK
+, qtbase
 
 # For enableXM.
-, motif ? null # motif or lesstif
+, motif
 
 # For enableInventor
 , coin3d
 , soxt
-, libXpm ? null
+, libXpm
 
 # For enableQT, enableXM, enableOpenGLX11, enableRaytracerX11.
-, libGLU_combined ? null
-, xlibsWrapper ? null
-, libXmu ? null
+, libGLU_combined
+, xlibsWrapper
+, libXmu
 }:
-
-# G4persistency library with support for GDML
-assert enableGDML -> xercesc != null;
-
-# If enableQT, Qt4/5 User Interface and Visualization drivers.
-assert enableQT -> qt != null;
-
-# Motif User Interface and Visualisation drivers.
-assert enableXM -> motif != null;
-
-# OpenGL/X11 User Interface and Visualisation drivers.
-assert enableQT || enableXM || enableOpenGLX11 || enableRaytracerX11 -> libGLU_combined   != null;
-assert enableQT || enableXM || enableOpenGLX11 || enableRaytracerX11 -> xlibsWrapper    != null;
-assert enableQT || enableXM || enableOpenGLX11 || enableRaytracerX11 -> libXmu != null;
-assert enableInventor -> libXpm != null;
 
 stdenv.mkDerivation rec {
   version = "10.4.1";
@@ -82,7 +67,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ clhep expat zlib libGLU_combined xlibsWrapper libXmu ]
     ++ stdenv.lib.optionals enableGDML [ xercesc ]
     ++ stdenv.lib.optionals enableXM [ motif ]
-    ++ stdenv.lib.optionals enableQT [ qt ]
+    ++ stdenv.lib.optionals enableQT [ qtbase ]
     ++ stdenv.lib.optionals enableInventor [ libXpm coin3d soxt ];
 
   postFixup = ''
