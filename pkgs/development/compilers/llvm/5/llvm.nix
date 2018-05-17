@@ -17,6 +17,7 @@
 , enableManpages ? false
 , enableSharedLibraries ? true
 , darwin
+, crossFlags
 }:
 
 let
@@ -111,10 +112,17 @@ in stdenv.mkDerivation (rec {
     "-DLLVM_ENABLE_LIBCXX=ON"
     "-DCAN_TARGET_i386=false"
   ]
-  ++ stdenv.lib.optionals stdenv.hostPlatform.isMusl [
+  ++ stdenv.lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform || stdenv.hostPlatform.isMusl) [
     "-DLLVM_HOST_TRIPLE=${stdenv.hostPlatform.config}"
     "-DLLVM_DEFAULT_TARGET_TRIPLE=${stdenv.targetPlatform.config}"
     "-DTARGET_TRIPLE=${stdenv.targetPlatform.config}"
+  ]
+  ++ stdenv.lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+    "-DCMAKE_CROSSCOMPILING=ON" # inferred when setting CMAKE_SYSTEM_NAME, but is satisfying to do so explicitly
+    "-DCMAKE_SYSTEM_NAME=Linux" # FIXME: set this appropriately so isn't limited to linux
+
+    # Pass in the set of flags used for "native" configuration
+    "-DCROSS_TOOLCHAIN_FLAGS_NATIVE=${crossFlags}"
   ];
 
   postBuild = ''

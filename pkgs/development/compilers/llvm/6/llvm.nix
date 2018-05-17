@@ -27,7 +27,6 @@ let
   # Used when creating a version-suffixed symlink of libLLVM.dylib
   shortVersion = with stdenv.lib;
     concatStringsSep "." (take 2 (splitString "." release_version));
-
 in stdenv.mkDerivation (rec {
   name = "llvm-${version}";
 
