@@ -1,4 +1,5 @@
-{ stdenv, lib, fetchFromGitHub, fetchpatch, autoreconfHook, bison, flex, pkgconfig }:
+{ stdenv, file, lib, fetchFromGitHub, fetchpatch, autoreconfHook, bison, flex, pkgconfig
+, pythonSupport ? true, swig ? null, python}:
 
 stdenv.mkDerivation rec {
   name = "libnl-${version}";
@@ -11,7 +12,7 @@ stdenv.mkDerivation rec {
     sha256 = "1bqf1f5glwf285sa98k5pkj9gg79lliixk1jk85j63v5510fbagp";
   };
 
-  outputs = [ "bin" "dev" "out" "man" ];
+  outputs = [ "bin" "dev" "out" "man" ] ++ lib.optional pythonSupport "py";
 
   patches = stdenv.lib.optional stdenv.hostPlatform.isMusl
     (fetchpatch {
@@ -21,7 +22,22 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  nativeBuildInputs = [ autoreconfHook bison flex pkgconfig ];
+  nativeBuildInputs = [ autoreconfHook bison flex pkgconfig file ]
+    ++ lib.optional pythonSupport swig;
+
+  postBuild = lib.optionalString (pythonSupport) ''
+      cd python
+      ${python}/bin/python setup.py install --prefix=../pythonlib
+      cd -
+  '';
+
+  postFixup = lib.optionalString pythonSupport ''
+    mv "pythonlib/" "$py"
+  '';
+
+  passthru = {
+    inherit pythonSupport;
+  };
 
   meta = with lib; {
     inherit version;
