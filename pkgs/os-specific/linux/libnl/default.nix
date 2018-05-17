@@ -1,14 +1,14 @@
 { stdenv, lib, fetchFromGitHub, fetchpatch, autoreconfHook, bison, flex, pkgconfig }:
 
-let version = "3.3.0"; in
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   name = "libnl-${version}";
+  version = "3.4.0";
 
   src = fetchFromGitHub {
     repo = "libnl";
     owner = "thom311";
     rev = "libnl${lib.replaceStrings ["."] ["_"] version}";
-    sha256 = "1796kyq2lkhz2802v9kp32vlxf8ynlyqgyw9nhmry3qh5d0ahcsv";
+    sha256 = "1bqf1f5glwf285sa98k5pkj9gg79lliixk1jk85j63v5510fbagp";
   };
 
   outputs = [ "bin" "dev" "out" "man" ];

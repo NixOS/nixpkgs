@@ -6951,6 +6951,9 @@ in {
 
   pylru = callPackage ../development/python-modules/pylru { };
 
+  libnl-python = disabledIf isPy3k
+    (toPythonModule (pkgs.libnl.override{pythonSupport=true; inherit python; })).py;
+
   lark-parser = callPackage ../development/python-modules/lark-parser { };
 
   lazy-object-proxy = buildPythonPackage rec {
