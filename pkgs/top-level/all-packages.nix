@@ -11651,6 +11651,8 @@ with pkgs;
 
   sqlite3_analyzer = lowPrio (callPackage ../development/libraries/sqlite/sqlite3_analyzer.nix { });
 
+  sqlar = callPackage ../development/libraries/sqlite/sqlar.nix { };
+
   sqlite-interactive = appendToName "interactive" (sqlite.override { interactive = true; }).bin;
 
   sqlite-jdbc = callPackage ../servers/sql/sqlite/jdbc { };
