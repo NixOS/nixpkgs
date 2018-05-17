@@ -1,7 +1,7 @@
 { stdenv, fetchzip }:
 
 let
-  version = "3.002";
+  version = "3.003";
 in fetchzip rec {
   name = "hack-font-${version}";
 
@@ -12,7 +12,7 @@ in fetchzip rec {
     unzip -j $downloadedFile \*.ttf -d $out/share/fonts/hack
   '';
 
-  sha256 = "11f3hl4nvxq6pvsmwr1c1r5wrxhrp7ixr5bshrz2dmqn7l8bxa63";
+  sha256 = "1l6ih6v7dqali5c7zh6z2xnbf9h2wz0ag6fdgszmqd5lnhw39v6s";
 
   meta = with stdenv.lib; {
     description = "A typeface designed for source code";
