@@ -215,13 +215,37 @@ rec {
     useInstantApps = true;
   };
 
+  androidndk_10e = import ./androidndk.nix {
+    inherit (buildPackages)
+      p7zip makeWrapper;
+    inherit (pkgs)
+      stdenv fetchurl zlib ncurses lib python3
+      coreutils file findutils gawk gnugrep gnused jdk which;
+    inherit platformTools;
+    version = "10e";
+    sha256 = "032j3sgk93bjbkny84i17ph61dhjmsax9ddqng1zbi2p7dgl0pzf";
+  };
+
+  androidndk_16b = import ./androidndk.nix {
+    inherit (buildPackages)
+      p7zip makeWrapper;
+    inherit (pkgs)
+      stdenv fetchurl zlib ncurses lib python3
+      coreutils file findutils gawk gnugrep gnused jdk which;
+    inherit platformTools;
+    version = "16b";
+    sha256 = "00frcnvpcsngv00p6l2vxj4cwi2mwcm9lnjvm3zv4wrp6pss9pmw";
+  };
+
   androidndk = import ./androidndk.nix {
     inherit (buildPackages)
       p7zip makeWrapper;
     inherit (pkgs)
-      stdenv fetchurl zlib ncurses lib
+      stdenv fetchurl zlib ncurses lib python3
       coreutils file findutils gawk gnugrep gnused jdk which;
     inherit platformTools;
+    version = "17";
+    sha256 = "1jj3zy958zsidywqd5nwdyrnr72rf9zhippkl8rbqxfy8wxq2gds";
   };
 
   androidndk_r8e = import ./androidndk_r8e.nix {
@@ -256,5 +280,20 @@ rec {
     buildAndroidndk = buildPackages.buildPackages.androidenv.androidndk;
     inherit androidndk;
     targetAndroidndkPkgs = targetPackages.androidenv.androidndkPkgs;
+  };
+
+  androidndkPkgs_10e = import ./androidndk-pkgs.nix {
+    inherit (buildPackages)
+      makeWrapper;
+    inherit (pkgs)
+      lib hostPlatform targetPlatform
+      runCommand wrapBintoolsWith wrapCCWith;
+    # buildPackages.foo rather than buildPackages.buildPackages.foo would work,
+    # but for splicing messing up on infinite recursion for the variants we
+    # *dont't* use. Using this workaround, but also making a test to ensure
+    # these two really are the same.
+    buildAndroidndk = buildPackages.buildPackages.androidenv.androidndk_10e;
+    androidndk = androidndk_10e;
+    targetAndroidndkPkgs = targetPackages.androidenv.androidndkPkgs_10e;
   };
 }
