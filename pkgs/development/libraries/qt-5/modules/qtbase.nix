@@ -327,6 +327,10 @@ stdenv.mkDerivation {
         ]
         ++ lib.optional withGtk3 "-gtk"
         ++ lib.optional (compareVersion "5.9.0" >= 0) "-inotify"
+        ++ lib.optionals (compareVersion "5.10.0" >= 0) [
+          "-no-feature-renameat2"
+          "-no-feature-getentropy"
+        ]
     );
 
   enableParallelBuilding = true;
