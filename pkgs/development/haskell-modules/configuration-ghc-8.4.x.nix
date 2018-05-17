@@ -451,7 +451,7 @@ self: super: {
   hpack = self.hpack_0_28_2;
   hspec-smallcheck = self.hspec-smallcheck_0_5_2;
   matrix = self.matrix_0_3_6_1;
-  pandoc = self.pandoc_2_2;
+  pandoc = self.pandoc_2_2_1;
   pandoc-types = self.pandoc-types_1_17_4_2;
   wl-pprint-text = self.wl-pprint-text_1_2_0_0;
   base-compat = self.base-compat_0_10_1;
