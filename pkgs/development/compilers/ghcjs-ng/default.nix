@@ -77,10 +77,12 @@ in stdenv.mkDerivation {
       wrapProgram $out/bin/haddock-ghcjs --add-flags "-B$out/libexec"
       wrapProgram $out/bin/ghcjs-pkg --add-flags "--global-package-db=$out/libexec/package.conf.d"
 
-      env PATH=$out/bin:$PATH $out/bin/ghcjs-boot -j $NIX_BUILD_CORES --with-ghcjs-bin $out/bin
+      env PATH=$out/bin:$PATH $out/bin/ghcjs-boot -j1 --with-ghcjs-bin $out/bin
     '';
 
-    enableParallelBuilding = true;
+    # We hard code -j1 as a temporary workaround for
+    # https://github.com/ghcjs/ghcjs/issues/654
+    # enableParallelBuilding = true;
 
     inherit passthru;
 
