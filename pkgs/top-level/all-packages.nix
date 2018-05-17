@@ -12607,6 +12607,8 @@ with pkgs;
 
   mediatomb = callPackage ../servers/mediatomb { };
 
+  meguca = callPackage ../servers/meguca/default.nix { };
+
   memcached = callPackage ../servers/memcached {};
 
   meteor = callPackage ../servers/meteor/default.nix { };
