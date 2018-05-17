@@ -1036,8 +1036,8 @@ self: super: {
   vulkan = super.vulkan.override { vulkan = pkgs.vulkan-loader; };
 
   # Builds only with the latest version of indexed-list-literals.
-  vector-sized_1_0_1_0 = super.vector-sized_1_0_1_0.override {
-    indexed-list-literals = self.indexed-list-literals_0_2_0_0;
+  vector-sized_1_0_2_0 = super.vector-sized_1_0_2_0.override {
+    indexed-list-literals = self.indexed-list-literals_0_2_1_1;
   };
 
   # https://github.com/dmwit/encoding/pull/3
