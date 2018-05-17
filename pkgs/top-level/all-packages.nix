@@ -13937,6 +13937,8 @@ with pkgs;
 
   dep = callPackage ../development/tools/dep { };
 
+  easyjson = callPackage ../development/tools/easyjson { };
+
   go-bindata = callPackage ../development/tools/go-bindata { };
 
   go-bindata-assetfs = callPackage ../development/tools/go-bindata-assetfs { };
