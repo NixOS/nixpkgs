@@ -6160,7 +6160,12 @@ with pkgs;
   crossLibcStdenv = buildPackages.makeStdenvCross {
     inherit (buildPackages.buildPackages) stdenv;
     inherit buildPlatform hostPlatform targetPlatform;
-    cc = buildPackages.gccCrossStageStatic;
+    cc = buildPackages.gcc7-ng-msvcrt; #gccCrossStageStatic;
+  };
+  crossLibcStdenvNolibc = buildPackages.makeStdenvCross {
+    inherit (buildPackages.buildPackages) stdenv;
+    inherit buildPlatform hostPlatform targetPlatform;
+    cc = buildPackages.gcc7-ng-nolibc; #gccCrossStageStatic;
   };
 
   # The GCC used to build libc for the target platform. Normal gccs will be
@@ -6261,6 +6266,50 @@ with pkgs;
 
     isl = if !stdenv.isDarwin then isl_0_17 else null;
   }));
+
+  # the idea is the following:
+  # - build binutils with the build-cc, and build-libc
+  # - prebuild gcc with the build-cc, and build-libc
+  # == Now we have a gcc that targets the target
+  # - install gcc from the prebuilt-gcc.
+  # - build libc (msvcrt) with the gcc we just built
+  #   - link the mingw-headers into a mingw symlink
+  #     into the msvcrt result.
+  # == Now we also have a libc that targets the target.
+  # - using the msvcrt we just built, set --sysroot
+  #   and build winpthreads
+  # - finish building the rest of gcc. (libgcc, ...)
+
+  gcc7-ng-prebuilt =
+    let libc = targetPackages.windows.mingw_w64_headers;
+        bintools = wrapBintoolsWith { bintools = binutils-unwrapped; libc = libc; };
+    in callPackage ../development/compilers/gcc/7/default-ng-prebuilt.nix { binutils = bintools; };
+
+  gcc7-ng-nolibc =
+    let libc = targetPackages.windows.mingw_w64_headers;
+        bintools = wrapBintoolsWith { bintools = binutils-unwrapped; libc = libc; };
+    in wrapCCWith {
+     cc = callPackage ../development/compilers/gcc/7/default-ng.nix { gcc-prebuilt = gcc7-ng-prebuilt; component = "gcc"; };
+     libc = libc;
+     bintools = bintools;
+  };
+
+  gcc7-ng-msvcrt =
+    let libc = targetPackages.windows.mingw_w64;
+        bintools = wrapBintoolsWith { bintools = binutils-unwrapped; libc = libc; };
+    in wrapCCWith {
+     cc = callPackage ../development/compilers/gcc/7/default-ng.nix { gcc-prebuilt = gcc7-ng-prebuilt; component = "gcc"; };
+     libc = libc;
+     bintools = bintools;
+  };
+
+  # this is a rather convoluted setup to achive the following:
+  # still use the build machiens CC, yet build a target library.
+  gcc7-ng-libgcc = callPackage ../development/compilers/gcc/7/default-ng.nix { gcc-prebuilt = buildPackages.gcc7-ng-prebuilt; component = "target-libgcc";
+    stdenv = buildPackages.stdenv; #crossLibcStdenv;
+    extraBuildInputs = [ windows.mingw_w64 buildPackages.binutils-unwrapped windows.mingw_w64_pthreads ];
+    inherit (buildPackages) gmp mpfr libmpc;
+  };
 
   gcc8 = lowPrio (wrapCC (callPackage ../development/compilers/gcc/8 {
     inherit noSysDirs;
@@ -11433,7 +11482,7 @@ with pkgs;
 
   rlog = callPackage ../development/libraries/rlog { };
 
-  rocksdb = callPackage ../development/libraries/rocksdb { jemalloc = jemalloc450; };
+  rocksdb = callPackage ../development/libraries/rocksdb { stdenv = overrideCC stdenv gcc7-ng-msvcrt; jemalloc = jemalloc450; };
 
   rocksdb_lite = rocksdb.override { enableLite = true; };
 
@@ -14227,12 +14276,14 @@ with pkgs;
     };
 
     mingw_w64 = callPackage ../os-specific/windows/mingw-w64 {
-      stdenv = crossLibcStdenv;
+      stdenv = crossLibcStdenvNolibc;
     };
 
     mingw_w64_headers = callPackage ../os-specific/windows/mingw-w64/headers.nix { };
 
-    mingw_w64_pthreads = callPackage ../os-specific/windows/mingw-w64/pthreads.nix { };
+    mingw_w64_pthreads = callPackage ../os-specific/windows/mingw-w64/pthreads.nix {
+      stdenv = crossLibcStdenv;
+    };
 
     pthreads = callPackage ../os-specific/windows/pthread-w32 {
       mingw_headers = mingw_headers3;

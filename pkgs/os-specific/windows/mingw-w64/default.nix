@@ -1,21 +1,21 @@
-{ stdenv, callPackage, targetPlatform }:
+{ stdenv, callPackage, targetPlatform, windows }:
 with stdenv.lib;
 let inherit (callPackage ./common.nix {}) name src;
 in stdenv.mkDerivation {
-#  buildInputs = [ windows.mingw_w64_headers ];
 
   name = name + "-msvcrt";
   inherit src;
 
+  buildInputs = [ windows.mingw_w64_headers ];
+
   dontStrip = true;
   hardeningDisable = [ "stackprotector" "fortify" ];
 
-  # https://sourceforge.net/p/mingw-w64/wiki2/Cross%20Win32%20and%20Win64%20compiler/
-  # specifies that the headers should be in
-  prefix = "\${out}/${targetPlatform.config}";
+  preConfigure = ''
+    cd mingw-w64-crt
+  '';
 
-  configureFlags = [
-    "--enable-idl"
-    "--enable-secure-api"
-  ];
+  postInstall = ''
+    ln -s ${windows.mingw_w64_headers} $out/mingw
+  '';
 }

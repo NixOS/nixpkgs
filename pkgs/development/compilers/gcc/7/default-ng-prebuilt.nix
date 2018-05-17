@@ -6,8 +6,10 @@
 , langGo ? false
 # build deps
 , gmp, mpfr, libmpc
+, binutils
 , extraBuildInputs ? []
 , extraConfigureFlags ? []
+, threadModel ? "posix"
 , ... }:
 
 with stdenv.lib;
@@ -24,8 +26,19 @@ in stdenv.mkDerivation ({
 
   buildInputs = [
     gmp mpfr libmpc #libelf
-    stdenv.cc.bintools # For linking code at run-time
+    binutils
   ] ++ extraBuildInputs;
+
+  # bould out of tree. We don't use `pwd` in the `configureScript` so
+  # that we do not hardcode the build location.  We are going to re-use
+  # the build folder in a different derivation again when actually
+  # installing `gcc`, `libgcc`, ...
+  preConfigure = ''
+    mkdir ../build
+    cd ../build
+
+    configureScript="../$sourceRoot/configure"
+  '';
 
   configurePlatforms = [ "build" "host" ] ++ optional (targetPlatform != hostPlatform) "target";
 
@@ -50,12 +63,12 @@ in stdenv.mkDerivation ({
       "--with-mpfr-lib=${mpfr.out}/lib"
       "--with-mpc=${libmpc}"
 
-      "--with-threads=posix"
+      "--enable-threads=posix"
 
       # we need to ensure that we set the proper assembler and linker. If we don't
       # we can't change this at runtime anymore -- m(
-      "--with-as=${targetPackages.stdenv.cc.bintools}/bin/${targetPlatform.config}-as"
-      "--with-ld=${targetPackages.stdenv.cc.bintools}/bin/${targetPlatform.config}-ld"
+      "--with-as=${binutils}/bin/${targetPlatform.config}-as"
+      "--with-ld=${binutils}/bin/${targetPlatform.config}-ld"
     ] ++ extraConfigureFlags;
 
   # don't fail with: error: format string is not a string literal (potentially insecure) [-Werror,-Wformat-security]
@@ -64,7 +77,10 @@ in stdenv.mkDerivation ({
 
   makeFlags = [ "all-gcc" ];
   # installTargets = "install-${component}";
-  installPhase = "mkdir -p $out && tar -czf $out/prebuilt.tar.gz .";
+  installPhase = ''
+    cd ..
+    mkdir -p $out && tar -czf $out/prebuilt.tar.gz "$sourceRoot" build
+  '';
   fixpuPhase = "";
   dontPatchShebangs = true;
 })
