@@ -73,7 +73,7 @@ in stdenv.mkDerivation {
       mkdir -p $out/libexec
       lndir ${libexec} $out/bin
 
-      wrapProgram $out/bin/ghcjs --add-flags "-B$out/libexec -dcore-lint"
+      wrapProgram $out/bin/ghcjs --add-flags "-B$out/libexec"
       wrapProgram $out/bin/haddock-ghcjs --add-flags "-B$out/libexec"
       wrapProgram $out/bin/ghcjs-pkg --add-flags "--global-package-db=$out/libexec/package.conf.d"
 
