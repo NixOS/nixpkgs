@@ -45,7 +45,7 @@ rec {
 
   aarch64-android-prebuilt = rec {
     config = "aarch64-unknown-linux-android";
-    sdkVer = "21";
+    sdkVer = "24";
     platform = platforms.aarch64-multiplatform;
     useAndroidPrebuilt = true;
   };

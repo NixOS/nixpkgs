@@ -98,10 +98,19 @@ rec {
   # We use androidndk from the previous stage, else we waste time or get cycles
   # cross-compiling packages to wrap incorrectly wrap binaries we don't include
   # anyways.
-  libraries = {
-    name = "bionic-prebuilt";
-    type = "derivation";
-    outPath = "${buildAndroidndk}/libexec/${buildAndroidndk.name}/platforms/android-${hostPlatform.sdkVer}/arch-${hostInfo.arch}/usr/";
-    drvPath = throw "fake derivation, build ${buildAndroidndk} to use";
-  };
+  libraries =
+    let
+      includePath = if buildAndroidndk.version == "10e" then
+          "${buildAndroidndk}/libexec/${buildAndroidndk.name}/platforms/android-${hostPlatform.sdkVer}/arch-${hostInfo.arch}/usr/include/"
+        else
+          "${buildAndroidndk}/libexec/${buildAndroidndk.name}/sysroot/usr/include";
+      libPath = "${buildAndroidndk}/libexec/${buildAndroidndk.name}/platforms/android-${hostPlatform.sdkVer}/arch-${hostInfo.arch}/usr/lib/";
+    in
+    runCommand "bionic-prebuilt" {} ''
+      mkdir -p $out
+      cp -r ${includePath} $out/include
+      chmod +w $out/include
+      ${lib.optionalString (lib.versionOlder buildAndroidndk.version "10e") "ln -s $out/include/${targetInfo.triple}/asm $out/include/asm"}
+      ln -s ${libPath} $out/lib
+    '';
 }
