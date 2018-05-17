@@ -105,6 +105,9 @@ self: super: {
   ## hspec-discover ==2.4.8
   hspec-discover = super.hspec-discover_2_5_0;
 
+  # https://github.com/jcristovao/enclosed-exceptions/issues/12
+  enclosed-exceptions = dontCheck super.enclosed-exceptions;
+
   ## On Hackage:
 
   ## Upstreamed, awaiting a Hackage release
@@ -450,7 +453,7 @@ self: super: {
   matrix = self.matrix_0_3_6_1;
   pandoc = self.pandoc_2_2;
   pandoc-types = self.pandoc-types_1_17_4_2;
-  wl-pprint-text = self.wl-pprint-text_1_1_1_1;
+  wl-pprint-text = self.wl-pprint-text_1_2_0_0;
   base-compat = self.base-compat_0_10_1;
 
   # https://github.com/xmonad/xmonad/issues/155
