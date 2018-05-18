@@ -253,6 +253,8 @@ in {
 
   globus-sdk = callPackage ../development/python-modules/globus-sdk { };
 
+  goocalendar = callPackage ../development/python-modules/goocalendar { };
+
   gssapi = callPackage ../development/python-modules/gssapi { };
 
   h5py = callPackage ../development/python-modules/h5py {
