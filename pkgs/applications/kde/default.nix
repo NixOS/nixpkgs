@@ -140,6 +140,7 @@ let
       libgravatar = callPackage ./libgravatar.nix {};
       libkcddb = callPackage ./libkcddb.nix {};
       libkdcraw = callPackage ./libkdcraw.nix {};
+      libkdegames = callPackage ./libkdegames.nix {};
       libkdepim = callPackage ./libkdepim.nix {};
       libkexiv2 = callPackage ./libkexiv2.nix {};
       libkgapi = callPackage ./libkgapi.nix {};
