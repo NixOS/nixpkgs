@@ -23,10 +23,8 @@
 
 , # Whether to build dynamic libs for the standard library (on the target
   # platform). Static libs are always built.
-  enableShared ?
-    !(targetPlatform.isDarwin
-      # On iOS, dynamic linking is not supported
-      && (targetPlatform.isAarch64 || targetPlatform.isAarch32))
+  enableShared ? true
+
 , # Whether to backport https://phabricator.haskell.org/D4388 for
   # deterministic profiling symbol names, at the cost of a slightly
   # non-standard GHC API
@@ -153,7 +151,10 @@ stdenv.mkDerivation rec {
   # masss-rebuild.
   crossConfig = true;
 
-  nativeBuildInputs = [ alex autoconf autoreconfHook automake ghc happy hscolour perl python3 sphinx ];
+  nativeBuildInputs = [
+    autoconf autoreconfHook automake perl python3 sphinx
+    ghc alex happy hscolour
+  ];
 
   # For building runtime libs
   depsBuildTarget = toolsForTarget;
