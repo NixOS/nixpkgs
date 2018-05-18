@@ -24,10 +24,10 @@ rec {
 
   firefox = common rec {
     pname = "firefox";
-    version = "60.0";
+    version = "60.0.1";
     src = fetchurl {
       url = "mirror://mozilla/firefox/releases/${version}/source/firefox-${version}.source.tar.xz";
-      sha512 = "3ya0rq50cwryza7d56mm3g2h7kayh17vry565qvaq7wsi9gcd4cbjk4z7a1s4bdka0xsxg2l7v0zkaj666nbllky2462svbi8imdhb3";
+      sha512 = "083bhfh32dy1cz4c4wn92i2lnl9mqikkd9dlkwd5i6clyjb9pc6d5g87kvb8si0n6jll4alyhw792j56a7gmzny3d93068hr4zyh3qn";
     };
 
     patches = nixpkgsPatches ++ [
