@@ -32,13 +32,13 @@ let
       ${caConf}
     '';
 
-  strongswanConf = {setup, connections, ca, secrets, managePlugins, enabledPlugins}: toFile "strongswan.conf" ''
+  strongswanConf = {setup, connections, ca, secretsFile, managePlugins, enabledPlugins}: toFile "strongswan.conf" ''
     charon {
       ${if managePlugins then "load_modular = no" else ""}
       ${if managePlugins then ("load = " + (concatStringsSep " " enabledPlugins)) else ""}
       plugins {
         stroke {
-          secrets_file = ${ipsecSecrets secrets}
+          secrets_file = ${secretsFile}
         }
       }
     }
@@ -135,7 +135,18 @@ in
     };
   };
 
-  config = with cfg; mkIf enable {
+
+  config = with cfg;
+  let
+    secretsFile = ipsecSecrets cfg.secrets;
+  in
+  mkIf enable
+    {
+
+    # here we should use the default strongswan ipsec.secrets and
+    # append to it (default one is empty so not a pb for now)
+    environment.etc."ipsec.secrets".source = secretsFile;
+
     systemd.services.strongswan = {
       description = "strongSwan IPSec Service";
       wantedBy = [ "multi-user.target" ];
@@ -143,11 +154,15 @@ in
       wants = [ "keys.target" ];
       after = [ "network-online.target" "keys.target" ];
       environment = {
-        STRONGSWAN_CONF = strongswanConf { inherit setup connections ca secrets managePlugins enabledPlugins; };
+        STRONGSWAN_CONF = strongswanConf { inherit setup connections ca secretsFile managePlugins enabledPlugins; };
       };
       serviceConfig = {
         ExecStart  = "${pkgs.strongswan}/sbin/ipsec start --nofork";
       };
+      preStart = ''
+        # with 'nopeerdns' setting, ppp writes into this folder
+        mkdir -m 700 -p /etc/ppp
+      '';
     };
   };
 }

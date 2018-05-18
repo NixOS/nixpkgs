@@ -1,12 +1,12 @@
 {stdenv, fetchurl, flex, bison, libpcap, libdnet, libnfnetlink, libnetfilter_queue}:
 
 stdenv.mkDerivation rec {
-  name = "daq-2.0.6";
+  name = "daq-2.2.2";
 
   src = fetchurl {
     name = "${name}.tar.gz";
     url = "https://snort.org/downloads/archive/snort/${name}.tar.gz";
-    sha256 = "1jz7gc9n6sr677ssv61qvcxybdrmsll4z7g6hsmax2p0fc91s3ml";
+    sha256 = "0yvzscy7vqj7s5rccza0f7p6awghfm3yaxihx1h57lqspg51in3w";
   };
 
   buildInputs = [ flex bison libpcap libdnet libnfnetlink libnetfilter_queue];

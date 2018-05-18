@@ -1,6 +1,6 @@
 { stdenv, lib, fetchurl, pkgconfig, gtk3, itstool, gst_all_1, libxml2, libnotify
-, libcanberra_gtk3, intltool, makeWrapper, dvdauthor, libburn, libisofs
-, vcdimager, wrapGAppsHook, hicolor_icon_theme }:
+, libcanberra-gtk3, intltool, makeWrapper, dvdauthor, libburn, libisofs
+, vcdimager, wrapGAppsHook, hicolor-icon-theme }:
 
 # libdvdcss is "too old" (in fast "too new"), see https://bugs.launchpad.net/ubuntu/+source/brasero/+bug/611590
 
@@ -20,8 +20,8 @@ in stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig itstool intltool wrapGAppsHook ];
 
-  buildInputs = [ gtk3 libxml2 libnotify libcanberra_gtk3 libburn libisofs
-                  hicolor_icon_theme
+  buildInputs = [ gtk3 libxml2 libnotify libcanberra-gtk3 libburn libisofs
+                  hicolor-icon-theme
                   gst_all_1.gstreamer gst_all_1.gst-plugins-base
                   gst_all_1.gst-plugins-good gst_all_1.gst-plugins-bad
                   gst_all_1.gst-plugins-ugly gst_all_1.gst-libav ];

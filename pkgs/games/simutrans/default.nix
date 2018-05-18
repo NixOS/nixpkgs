@@ -163,7 +163,7 @@ let
       homepage = http://www.simutrans.com/;
       license = with licenses; [ artistic1 gpl1Plus ];
       maintainers = with maintainers; [ kkallio vcunat phile314 ];
-      platforms = with platforms; linux ++ darwin;
+      platforms = with platforms; linux; # TODO: ++ darwin;
     };
   };
 

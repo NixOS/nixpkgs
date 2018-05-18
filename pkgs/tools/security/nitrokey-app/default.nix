@@ -1,16 +1,18 @@
-{ stdenv, cmake, fetchgit, hidapi, libusb1, pkgconfig, qt5 }:
+{ stdenv, bash-completion, cmake, fetchgit, hidapi, libusb1, pkgconfig, qt5 }:
 
 stdenv.mkDerivation rec {
   name = "nitrokey-app";
-  version = "1.1";
+  version = "1.2";
 
+  # We use fetchgit instead of fetchFromGitHub because of necessary git submodules
   src = fetchgit {
     url = "https://github.com/Nitrokey/nitrokey-app.git";
     rev = "refs/tags/v${version}";
-    sha256 = "11pz1p5qgghkr5f8s2wg34zqhxk2vq465i73w1h479j88x35rdp0";
+    sha256 = "0mm6vlgxlmpahmmcn4awnfpx5rx5bj8m44cywhgxlmz012x73hzi";
   };
 
   buildInputs = [
+    bash-completion
     hidapi
     libusb1
     qt5.qtbase
@@ -20,7 +22,7 @@ stdenv.mkDerivation rec {
     cmake
     pkgconfig
   ];
-  cmakeFlags = "-DHAVE_LIBAPPINDICATOR=NO";
+  cmakeFlags = "-DCMAKE_BUILD_TYPE=Release";
 
   meta = with stdenv.lib; {
     description      = "Provides extra functionality for the Nitrokey Pro and Storage";

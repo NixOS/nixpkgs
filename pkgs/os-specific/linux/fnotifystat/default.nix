@@ -2,10 +2,10 @@
 
 stdenv.mkDerivation rec {
   name = "fnotifystat-${version}";
-  version = "0.01.17";
+  version = "0.02.00";
   src = fetchurl {
     url = "http://kernel.ubuntu.com/~cking/tarballs/fnotifystat/fnotifystat-${version}.tar.gz";
-    sha256 = "0ncfbrpyb3ak49nrdr4cb3w082n9s181lizfqx51zi9rdgkj1vm3";
+    sha256 = "0sfzmggfhhhp3vxn1s61b5bacr2hz6r7y699n3nysdciaa2scgdq";
   };
   installFlags = [ "DESTDIR=$(out)" ];
   postInstall = ''

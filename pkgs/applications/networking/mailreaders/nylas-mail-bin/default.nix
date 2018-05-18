@@ -5,7 +5,7 @@
 , coreutils
 , cups
 , dbus
-, desktop_file_utils
+, desktop-file-utils
 , expat
 , fontconfig
 , freetype
@@ -14,7 +14,7 @@
 , glib
 , gnome2
 , libgcrypt
-, libgnome_keyring
+, libgnome-keyring
 , libnotify
 , makeWrapper
 , nodejs
@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
     coreutils
     cups
     dbus
-    desktop_file_utils
+    desktop-file-utils
     expat
     fontconfig
     freetype
@@ -58,7 +58,7 @@ stdenv.mkDerivation rec {
     glib
     gnome2.GConf
     gnome2.gtk
-    libgnome_keyring
+    libgnome-keyring
     libnotify
     nodejs
     nspr
@@ -82,7 +82,7 @@ stdenv.mkDerivation rec {
   ];
 
 
-  buildInputs = [ gnome2.gnome_keyring ];
+  buildInputs = [ gnome2.gnome-keyring ];
 
   nativeBuildInputs = [ makeWrapper ];
 
@@ -111,7 +111,7 @@ stdenv.mkDerivation rec {
       --set-rpath $binrp:$out/lib:${stdenv.cc.cc.lib}/lib:${lib.makeLibraryPath propagatedBuildInputs } \
       $out/share/nylas-mail/nylas
 
-    wrapProgram $out/share/nylas-mail/nylas --set LD_LIBRARY_PATH "${xorg.libxkbfile}/lib:${pkgs.gnome3.libgnome_keyring}/lib";
+    wrapProgram $out/share/nylas-mail/nylas --set LD_LIBRARY_PATH "${xorg.libxkbfile}/lib:${pkgs.gnome3.libgnome-keyring}/lib";
 
     # Fix path to bash so apm can install plugins.
     substituteInPlace $out/share/nylas-mail/resources/apm/bin/apm \

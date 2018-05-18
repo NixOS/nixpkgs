@@ -23,7 +23,6 @@ stdenv.mkDerivation rec {
     description = "A command line editor for id3v2 tags";
     homepage = http://id3v2.sourceforge.net/;
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ nckx ];
     platforms = with platforms; unix;
   };
 }

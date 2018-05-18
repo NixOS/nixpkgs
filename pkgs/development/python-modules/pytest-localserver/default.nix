@@ -10,11 +10,11 @@
 buildPythonPackage rec {
   pname = "pytest-localserver";
   name = "${pname}-${version}";
-  version = "0.3.7";
+  version = "0.4.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1c11hn61n06ms0wmw6536vs5k4k9hlndxsb3p170nva56a9dfa6q";
+    sha256 = "a72af60a1ec8f73668a7884c86baf1fbe48394573cb4fa36709887217736c021";
   };
 
   propagatedBuildInputs = [ werkzeug ];

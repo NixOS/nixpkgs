@@ -1,0 +1,54 @@
+--- a/src/corelib/thread/qthread_unix.cpp.orig	2015-11-23 19:05:40.000000000 +0100
++++ b/src/corelib/thread/qthread_unix.cpp	2015-11-24 11:22:31.000000000 +0100
+@@ -79,6 +79,7 @@
+ #endif
+ 
++#include <sys/resource.h> // getrlimit/setrlimit
+ #if defined(Q_OS_MAC)
+ # ifdef qDebug
+ #   define old_qDebug qDebug
+ #   undef qDebug
+@@ -649,6 +650,43 @@
+ #endif // QT_HAS_THREAD_PRIORITY_SCHEDULING
+ 
+ 
++    if (d->stackSize == 0) {
++        // Fix the default (too small) stack size for threads on OS X,
++        // which also affects the thread pool.
++        // See also:
++        // https://bugreports.qt.io/browse/QTBUG-2568
++        // This fix can also be found in Chromium:
++        // https://chromium.googlesource.com/chromium/src.git/+/master/base/threading/platform_thread_mac.mm#186
++
++        // The Mac OS X default for a pthread stack size is 512kB.
++        // Libc-594.1.4/pthreads/pthread.c's pthread_attr_init uses
++        // DEFAULT_STACK_SIZE for this purpose.
++        //
++        // 512kB isn't quite generous enough for some deeply recursive threads that
++        // otherwise request the default stack size by specifying 0. Here, adopt
++        // glibc's behavior as on Linux, which is to use the current stack size
++        // limit (ulimit -s) as the default stack size. See
++        // glibc-2.11.1/nptl/nptl-init.c's __pthread_initialize_minimal_internal. To
++        // avoid setting the limit below the Mac OS X default or the minimum usable
++        // stack size, these values are also considered. If any of these values
++        // can't be determined, or if stack size is unlimited (ulimit -s unlimited),
++        // stack_size is left at 0 to get the system default.
++        //
++        // Mac OS X normally only applies ulimit -s to the main thread stack. On
++        // contemporary OS X and Linux systems alike, this value is generally 8MB
++        // or in that neighborhood.
++        size_t default_stack_size = 0;
++        struct rlimit stack_rlimit;
++        if (pthread_attr_getstacksize(&attr, &default_stack_size) == 0 &&
++            getrlimit(RLIMIT_STACK, &stack_rlimit) == 0 &&
++            stack_rlimit.rlim_cur != RLIM_INFINITY) {
++            default_stack_size =
++                    std::max(std::max(default_stack_size,
++                                      static_cast<size_t>(PTHREAD_STACK_MIN)),
++                             static_cast<size_t>(stack_rlimit.rlim_cur));
++        }
++        d->stackSize = default_stack_size;
++    }
+     if (d->stackSize > 0) {
+ #if defined(_POSIX_THREAD_ATTR_STACKSIZE) && (_POSIX_THREAD_ATTR_STACKSIZE-0 > 0)
+         int code = pthread_attr_setstacksize(&attr, d->stackSize);

@@ -13,7 +13,7 @@
 , miniupnpc
 , libmicrohttpd
 , gmp
-, mesa
+, libGLU_combined
 , extraCmakeFlags ? []
 }:
 stdenv.mkDerivation rec {
@@ -69,7 +69,7 @@ stdenv.mkDerivation rec {
     miniupnpc
     libmicrohttpd
     gmp
-    mesa
+    libGLU_combined
   ];
 
   dontStrip = true;
@@ -80,5 +80,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3;
     maintainers = with maintainers; [ artuuge ];
     platforms = platforms.linux;
+    broken = true; # 2018-04-10
   };
 }

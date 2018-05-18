@@ -1,0 +1,19 @@
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -19,6 +19,7 @@
+ # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+ #
+ 
++cmake_minimum_required(VERSION 3.7)
+ project(Wireshark C CXX)
+ 
+ # Updated by make-version.pl
+@@ -40,7 +41,7 @@
+ 	# Needed for GREATER_EQUAL operator
+ 	cmake_minimum_required(VERSION 3.7)
+ else()
+-	cmake_minimum_required(VERSION 2.8.8)
++	cmake_minimum_required(VERSION 3.7)
+ endif()
+ 
+ # Needs to be set after cmake_minimum_required or cmake_policy(VERSION)

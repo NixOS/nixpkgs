@@ -16,6 +16,8 @@ with stdenv.lib; stdenv.mkDerivation rec {
     optional (stdver != null) "stdver=${stdver}"
   );
 
+  patches = stdenv.lib.optional stdenv.hostPlatform.isMusl ./glibc-struct-mallinfo.patch;
+
   installPhase = ''
     mkdir -p $out/{lib,share/doc}
     cp "build/"*release*"/"*${stdenv.hostPlatform.extensions.sharedLibrary}* $out/lib/

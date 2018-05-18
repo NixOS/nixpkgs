@@ -2,13 +2,13 @@
 
 buildPythonPackage rec {
   pname = "pyodbc";
-  version = "4.0.21";
+  version = "4.0.23";
   name = "${pname}-${version}";
   disabled = isPyPy;  # use pypypdbc instead
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "9655f84ca9e5cb2dfffff705601017420c840d55271ba62dd44f05383eff0329";
+    sha256 = "bb33d032c1f25781db64e2e4fecf77047fab2ddde42a6cd9496e3c66fb8e9f66";
   };
 
   buildInputs = [ libiodbc ];

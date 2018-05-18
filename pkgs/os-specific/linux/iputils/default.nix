@@ -4,8 +4,6 @@
 , libidn, nettle
 , SGMLSpm, libgcrypt }:
 
-assert stdenv ? glibc;
-
 let
   time = "20161105";
 in
@@ -23,28 +21,35 @@ stdenv.mkDerivation rec {
       -i doc/Makefile
   '';
 
-  makeFlags = "USE_GNUTLS=no";
+  # Disable idn usage w/musl: https://github.com/iputils/iputils/pull/111
+  makeFlags = [ "USE_GNUTLS=no" ] ++ stdenv.lib.optional stdenv.hostPlatform.isMusl "USE_IDN=no";
 
+  depsBuildBuild = [ opensp SGMLSpm docbook_sgml_dtd_31 ];
   buildInputs = [
-    libsysfs opensp openssl libcap docbook_sgml_dtd_31 SGMLSpm libgcrypt libidn nettle
-  ];
+    libsysfs openssl libcap libgcrypt nettle
+  ] ++ stdenv.lib.optional (!stdenv.hostPlatform.isMusl) libidn;
 
-  buildFlags = "man all ninfod";
+  # ninfod probably could build on cross, but the Makefile doesn't pass --host etc to the sub configure...
+  buildFlags = "man all" + stdenv.lib.optionalString (!stdenv.isCross) " ninfod";
 
   installPhase =
     ''
       mkdir -p $out/bin
-      cp -p ping tracepath clockdiff arping rdisc ninfod/ninfod $out/bin/
+      cp -p ping tracepath clockdiff arping rdisc rarpd $out/bin/
+      if [ -x ninfod/ninfod ]; then
+        cp -p ninfod/ninfod $out/bin
+      fi
 
       mkdir -p $out/share/man/man8
       cp -p \
-        doc/clockdiff.8 doc/arping.8 doc/ping.8 doc/rdisc.8 doc/tracepath.8 doc/ninfod.8 \
+        doc/clockdiff.8 doc/arping.8 doc/ping.8 doc/rdisc.8 doc/rarpd.8 doc/tracepath.8 doc/ninfod.8 \
         $out/share/man/man8
     '';
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = https://github.com/iputils/iputils;
     description = "A set of small useful utilities for Linux networking";
-    platforms = stdenv.lib.platforms.linux;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ lheckemann ];
   };
 }

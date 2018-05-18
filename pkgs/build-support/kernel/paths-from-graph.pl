@@ -1,3 +1,5 @@
+# NOTE: this script is deprecated. Use closureInfo instead.
+
 # Parses a /nix/store/*-closure file and prints
 # various information.
 # By default, the nodes in the graph are printed to stdout.

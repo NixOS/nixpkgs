@@ -1,0 +1,20 @@
+commit a5381e8aaa67647a4ba0fb41b951125ae309b078
+Author: Shea Levy <shea@shealevy.com>
+Date:   Sat Feb 24 08:35:54 2018 -0500
+
+    Makefile: Don't hard-code CC and CXX.
+    
+    These variables should be provided by the Make implementation and the
+    build environment. In particular, this fixes cross-compilation of
+    gptfdisk.
+
+diff --git a/Makefile b/Makefile
+index a3576b3..d76fab4 100644
+--- a/Makefile
++++ b/Makefile
+@@ -1,5 +1,3 @@
+-CC=gcc
+-CXX=g++
+ CFLAGS+=-D_FILE_OFFSET_BITS=64
+ #CXXFLAGS+=-Wall -D_FILE_OFFSET_BITS=64 -D USE_UTF16
+ CXXFLAGS+=-Wall -D_FILE_OFFSET_BITS=64

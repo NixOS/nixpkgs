@@ -2,7 +2,7 @@
 
 buildGoPackage rec {
   name = "phraseapp-client-${version}";
-  version = "1.4.5";
+  version = "1.6.0";
 
   goPackagePath = "github.com/phrase/phraseapp-client";
   subPackages = [ "." ];
@@ -11,7 +11,7 @@ buildGoPackage rec {
     owner = "phrase";
     repo = "phraseapp-client";
     rev = version;
-    sha256 = "0zky7jcs7h6zmvkb0na4la6h7g63jlrziifqk831fd1gspdzgajp";
+    sha256 = "0rgwl0rgkci045hg36s0q8jwkni1hzapqpi0mc0gk3rl7nagw622";
   };
 
   meta = with stdenv.lib; {

@@ -5,13 +5,13 @@
 
 mkDerivation rec {
   name = "qlcplus-${version}";
-  version = "4.11.0";
+  version = "4.11.2";
 
   src = fetchFromGitHub {
     owner = "mcallegari";
     repo = "qlcplus";
     rev = "QLC+_${version}";
-    sha256 = "0a45ww341yjx9k54j5s8b5wj83rgbwxkdvgy0v5jbbdf9m78ifrg";
+    sha256 = "0ry7j8d5mm3h3mzd49xqlagnldmfhfr6plwk73pz62hxr4j58s6w";
   };
 
   nativeBuildInputs = [ qmake pkgconfig ];
@@ -34,5 +34,6 @@ mkDerivation rec {
     maintainers = [ maintainers.globin ];
     license = licenses.asl20;
     platforms = platforms.all;
+    homepage = "http://www.qlcplus.org/";
   };
 }

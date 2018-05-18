@@ -1,14 +1,14 @@
 { stdenv, lib, buildPlatform, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "gdbm-1.13";
+  name = "gdbm-1.14.1";
 
   src = fetchurl {
     url = "mirror://gnu/gdbm/${name}.tar.gz";
-    sha256 = "0lx201q20dvc70f8a3c9s7s18z15inlxvbffph97ngvrgnyjq9cx";
+    sha256 = "0pxwz3jlwvglq2mrbxvrjgr8pa0aj73p3v9sxmdlj570zw0gzknd";
   };
 
-  doCheck = stdenv.buildPlatform == stdenv.hostPlatform;
+  doCheck = true; # not cross;
 
   # Linking static stubs on cygwin requires correct ordering.
   # Consider upstreaming this.

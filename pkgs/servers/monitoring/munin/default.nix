@@ -3,14 +3,14 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "2.0.34";
+  version = "2.0.37";
   name = "munin-${version}";
 
   src = fetchFromGitHub {
     owner = "munin-monitoring";
     repo = "munin";
     rev = version;
-    sha256 = "0mb5m0nc3nr9781d3s99sjdssmvkv37gxyplzr6d73i4hi31m7fr";
+    sha256 = "10niyzckx90dwdr4d7vj07d1qjy3nk7xzp30nqnlxzbaww7n5v78";
   };
 
   buildInputs = [ 

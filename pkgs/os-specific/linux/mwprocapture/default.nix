@@ -5,9 +5,6 @@ with stdenv.lib;
 # The Magewell Pro Capture drivers are not supported for kernels older than 3.2
 assert versionAtLeast kernel.version "3.2.0";
 
-# this package currently only supports x86 and x86_64, as I have no ARM device to test on
-assert (stdenv.system == "x86_64-linux") || (stdenv.system == "i686-linux");
-
 let
   bits =
   if stdenv.is64bit then "64"
@@ -18,15 +15,16 @@ let
 in
 stdenv.mkDerivation rec {
   name = "mwprocapture-1.2.${version}-${kernel.version}";
-  version = "3589";
+  version = "3773";
 
   src = fetchurl {
-    url = "http://www.magewell.com/files/ProCaptureForLinux_${version}.tar.gz";
-    sha256 = "1arwnwrq52rs8g9zfxw8saip40vc3201sf7qnbqd2p23h8vzwb8i";
+    url = "http://www.magewell.com/files/drivers/ProCaptureForLinux_${version}.tar.gz";
+    sha256 = "1ri7c4l4xgkhpz0f15jra1p7mpzi8ir6lpwjm7q7hc9m4cvxcs1g";
   };
 
-  patches = [] ++ optional (versionAtLeast kernel.version "4.13") ./linux_4_13_fix.patch
-               ++ optional (versionAtLeast kernel.version "4.14") ./linux_4_14_fix.patch;
+  nativeBuildInputs = [ kernel.moduleBuildDependencies ];
+
+  patches = [ ./linux_4_14_fix.patch ];
 
   preConfigure =
   ''

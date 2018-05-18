@@ -1,23 +1,23 @@
 { stdenv, fetchurl, pkgconfig, openssl, libjpeg, zlib, lz4, freetype, fontconfig
-, fribidi, SDL2, SDL, mesa, giflib, libpng, libtiff, glib, gst_all_1, libpulseaudio
+, fribidi, SDL2, SDL, libGL, giflib, libpng, libtiff, glib, gst_all_1, libpulseaudio
 , libsndfile, xorg, libdrm, libxkbcommon, udev, utillinux, dbus, bullet, luajit
 , python27Packages, openjpeg, doxygen, expat, harfbuzz, jbig2dec, librsvg
 , dbus_libs, alsaLib, poppler, ghostscript, libraw, libspectre, xineLib, libwebp
-, curl, libinput, systemd, writeText
+, curl, libinput, systemd, mesa_noglu, writeText
 }:
 
 stdenv.mkDerivation rec {
   name = "efl-${version}";
-  version = "1.20.6";
+  version = "1.20.7";
 
   src = fetchurl {
     url = "http://download.enlightenment.org/rel/libs/efl/${name}.tar.xz";
-    sha256 = "1h9jkb1pkp2g6ld7ra9mxgblx3x5id4162ja697klx9mfjkpxijn";
+    sha256 = "1zkn5ix81xck3n84dxvkjh4alwc6zj8x989d0zqi5c6ppijvgadh";
   };
 
   nativeBuildInputs = [ pkgconfig ];
 
-  buildInputs = [ openssl zlib lz4 freetype fontconfig SDL mesa
+  buildInputs = [ openssl zlib lz4 freetype fontconfig SDL libGL mesa_noglu
     giflib libpng libtiff glib gst_all_1.gstreamer gst_all_1.gst-plugins-base gst_all_1.gst-plugins-good
     gst_all_1.gst-libav libpulseaudio libsndfile xorg.libXcursor xorg.printproto
     xorg.libX11 udev systemd ];
@@ -68,6 +68,12 @@ stdenv.mkDerivation rec {
     modules=$(for i in "$out/include/"*/; do printf ' -I''${includedir}/'`basename $i`; done)
     substituteInPlace "$out/lib/pkgconfig/efl.pc" --replace 'Cflags: -I''${includedir}/efl-1' \
       'Cflags: -I''${includedir}/eina-1/eina'"$modules"
+  '';
+
+  # EFL applications depend on libcurl, although it is linked at
+  # runtime by hand in code (it is dlopened).
+  postFixup = ''
+    patchelf --add-needed ${curl.out}/lib/libcurl.so $out/lib/libecore_con.so
   '';
 
   enableParallelBuilding = true;

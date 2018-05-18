@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Simple Theorem Prover";
-    maintainers = with maintainers; [ mornfall ];
+    maintainers = with maintainers; [ ];
     platforms = platforms.linux;
     license = licenses.mit;
   };

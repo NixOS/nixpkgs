@@ -1,27 +1,24 @@
-{ stdenv, fetchurl, pkgconfig, intltool, glib, itstool, libxml2, mate, libnotify, libcanberra_gtk3, dbus_glib, upower, gnome3, libtool, wrapGAppsHook }:
+{ stdenv, fetchurl, pkgconfig, intltool, glib, itstool, libxml2, mate, libnotify, libcanberra-gtk3, dbus-glib, upower, gnome3, libtool, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
   name = "mate-power-manager-${version}";
-  version = "${major-ver}.${minor-ver}";
-  major-ver = "1.18";
-  minor-ver = "0";
+  version = "1.20.1";
 
   src = fetchurl {
-    url = "http://pub.mate-desktop.org/releases/${major-ver}/${name}.tar.xz";
-    sha256 = "1gmka9ybxvkrdjaga1md6pbw6q1cx5yxb58ai5315a0f5p45y36x";
+    url = "http://pub.mate-desktop.org/releases/${mate.getRelease version}/${name}.tar.xz";
+    sha256 = "1s46jvjcrai6xb2k0dy7i121b9ihfl5h3y5809fg9fzrbvw6bafn";
   };
 
   buildInputs = [
      glib
      itstool
      libxml2
-     libcanberra_gtk3
+     libcanberra-gtk3
      gnome3.gtk
-     gnome3.libgnome_keyring
+     gnome3.libgnome-keyring
      libnotify
-     dbus_glib
+     dbus-glib
      upower
-
      mate.mate-panel
   ];
 

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, gtk2, SDL, nasm, zlib, libpng, mesa }:
+{ stdenv, fetchurl, pkgconfig, gtk2, SDL, nasm, zlib, libpng, libGLU_combined }:
 
 stdenv.mkDerivation { 
   name = "gens-gs-7";
@@ -9,14 +9,14 @@ stdenv.mkDerivation {
   };
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ gtk2 SDL nasm zlib libpng mesa ];
+  buildInputs = [ gtk2 SDL nasm zlib libpng libGLU_combined ];
 
   # Work around build failures on recent GTK+.
   # See http://ubuntuforums.org/showthread.php?p=10535837
   NIX_CFLAGS_COMPILE = "-UGTK_DISABLE_DEPRECATED -UGSEAL_ENABLE";
 
   meta = {
-    homepage = http://segaretro.org/Gens/GS;
+    homepage = https://segaretro.org/Gens/GS;
     description = "A Genesis/Mega Drive emulator";
     platforms = [ "i686-linux" ];
     maintainers = [ stdenv.lib.maintainers.eelco ];

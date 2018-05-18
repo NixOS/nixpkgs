@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "pmenu-${version}";
-  version = "2017-04-10";
+  version = "2018-01-01";
 
   src = fetchFromGitLab {
     owner = "o9000";
     repo = "pmenu";
-    rev = "87fec9ddf594f1046d03348de2bafcfa6e94cfd1";
-    sha256 = "0ynhml46bi5k52v7fw2pjpcac9dswkmlvh6gynvnyqjp4p153fl4";
+    rev = "f98a5bdf20deb0b7f0543e5ce6a8f5574f695e07";
+    sha256 = "131nqafbmbfpgsgss27pz4cyb9fb29m5h1ai1fyvcn286rr9dnp2";
   };
 
   nativeBuildInputs = [ python2Packages.wrapPython ];

@@ -1,0 +1,29 @@
+--- libnet-1.1.6.orig/src/libnet_link_linux.c
++++ libnet-1.1.6/src/libnet_link_linux.c
+@@ -30,26 +30,15 @@
+ #include <sys/time.h>
+ 
+ #include <net/if.h>
+-#if (__GLIBC__)
+ #include <netinet/if_ether.h>
+ #include <net/if_arp.h>
+-#else
+-#include <linux/if_arp.h>
+-#include <linux/if_ether.h>
+-#endif
+ 
+ #if (HAVE_PACKET_SOCKET)
+ #ifndef SOL_PACKET
+ #define SOL_PACKET 263
+ #endif  /* SOL_PACKET */
+-#if __GLIBC__ >= 2 && __GLIBC_MINOR >= 1
+ #include <netpacket/packet.h>
+ #include <net/ethernet.h>     /* the L2 protocols */
+-#else
+-#include <asm/types.h>
+-#include <linux/if_packet.h>
+-#include <linux/if_ether.h>   /* The L2 protocols */
+-#endif
+ #endif  /* HAVE_PACKET_SOCKET */
+ 
+ #include "../include/libnet.h"

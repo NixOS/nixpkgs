@@ -1,21 +1,21 @@
-{ stdenv, fetchurl, mesa_glu, xlibsWrapper, libXmu, libXi
+{ stdenv, fetchurl, libGLU, xlibsWrapper, libXmu, libXi
 , buildPlatform, hostPlatform
 }:
 
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  name = "glew-2.0.0";
+  name = "glew-2.1.0";
 
   src = fetchurl {
     url = "mirror://sourceforge/glew/${name}.tgz";
-    sha256 = "0r37fg2s1f0jrvwh6c8cz5x6v4wqmhq42qm15cs9qs349q5c6wn5";
+    sha256 = "159wk5dc0ykjbxvag5i1m2mhp23zkk6ra04l26y3jc3nwvkr3ph4";
   };
 
   outputs = [ "bin" "out" "dev" "doc" ];
 
   buildInputs = [ xlibsWrapper libXmu libXi ];
-  propagatedBuildInputs = [ mesa_glu ]; # GL/glew.h includes GL/glu.h
+  propagatedBuildInputs = [ libGLU ]; # GL/glew.h includes GL/glu.h
 
   patchPhase = ''
     sed -i 's|lib64|lib|' config/Makefile.linux

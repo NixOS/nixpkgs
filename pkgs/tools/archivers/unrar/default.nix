@@ -10,7 +10,10 @@ stdenv.mkDerivation rec {
   };
 
   postPatch = ''
-    sed 's/^CXX=g++/#CXX/' -i makefile
+    substituteInPlace makefile \
+      --replace "CXX=" "#CXX=" \
+      --replace "STRIP=" "#STRIP=" \
+      --replace "AR=" "#AR="
   '';
 
   buildPhase = ''

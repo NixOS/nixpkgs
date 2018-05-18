@@ -1,29 +1,27 @@
 { fetchPypi, buildPythonPackage, lib
-, requests, beautifulsoup4, six
+, requests, beautifulsoup4, six, lxml
 , pytestrunner, requests-mock, pytestcov, pytest
 }:
 
-
 buildPythonPackage rec {
-  name = "${pname}-${version}";
   pname = "MechanicalSoup";
-  version = "0.8.0";
+  version = "0.10.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "38a6ca35428196be94f87f8f036ee4a88b1418d1f77e5634ad92acfaa22c28da";
+    sha256 = "22423efd025c3eedb06f41d3ff1127174a59f40dc560e82dce143956976195bf";
   };
 
   checkInputs = [ pytest pytestrunner requests-mock pytestcov ];
 
-  propagatedBuildInputs = [ requests beautifulsoup4 six ];
+  propagatedBuildInputs = [ lxml requests beautifulsoup4 six ];
 
   # Requires network
   doCheck = false;
 
   postPatch = ''
     # Is in setup_requires but not used in setup.py...
-    substituteInPlace setup.py --replace "'pytest-runner'," ""
+    substituteInPlace setup.py --replace "'pytest-runner'" ""
   '';
 
   meta = with lib; {

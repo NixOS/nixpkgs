@@ -1,12 +1,12 @@
 { stdenv, fetchurl, pkgconfig, qt4, alsaLib }:
 
 stdenv.mkDerivation rec {
-  version = "0.3.0";
+  version = "0.4.0";
   name = "qmidiroute-${version}";
 
   src = fetchurl {
     url = "mirror://sourceforge/project/alsamodular/QMidiRoute/${version}/${name}.tar.gz";
-    sha256 = "11bfjz14z37v6hk2xyg4vrw423b5h3qgcbviv07g00ws1fgjygm2";
+    sha256 = "0vmjwarsxr5540rafhmdcc62yarf0w2l05bjjl9s28zzr5m39z3n";
   };
 
   nativeBuildInputs = [ pkgconfig ];

@@ -2,18 +2,18 @@
 
 python2Packages.buildPythonApplication rec {
     name = "tortoisehg-${version}";
-    version = "4.3.1";
+    version = "4.5.2";
 
     src = fetchurl {
       url = "https://bitbucket.org/tortoisehg/targz/downloads/${name}.tar.gz";
-      sha256 = "0lxppjdqjmwl5y8fmp2am0my7a3mks811yg4fff7cx0569hdp62n";
+      sha256 = "0q12zjpgafdch4ns31k4afy25g837xm7v2qwj62806l2dz4rm4h9";
     };
 
     pythonPath = with python2Packages; [ pyqt4 mercurial qscintilla iniparse ];
 
     propagatedBuildInputs = with python2Packages; [ qscintilla iniparse ];
 
-    doCheck = true;
+    doCheck = false; # tests fail with "thg: cannot connect to X server"
     dontStrip = true;
     buildPhase = "";
     installPhase = ''

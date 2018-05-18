@@ -1,6 +1,6 @@
 {
-stdenv, fetchFromGitHub, cmake
-,qtbase, qttools, python, mesa
+stdenv, fetchFromGitHub, cmake, makeWrapper
+,qtbase, qttools, python, libGLU_combined
 ,libXt, qtx11extras, qtxmlpatterns
 }:
 
@@ -18,11 +18,11 @@ stdenv.mkDerivation rec {
     fetchSubmodules = true;
   };
 
-   cmakeFlags = [
-     "-DPARAVIEW_ENABLE_PYTHON=ON"
-     "-DPARAVIEW_INSTALL_DEVELOPMENT_FILES=ON"
-     "-DPARAVIEW_ENABLE_EMBEDDED_DOCUMENTATION=OFF"
-   ];
+  cmakeFlags = [
+    "-DPARAVIEW_ENABLE_PYTHON=ON"
+    "-DPARAVIEW_INSTALL_DEVELOPMENT_FILES=ON"
+    "-DPARAVIEW_ENABLE_EMBEDDED_DOCUMENTATION=OFF"
+  ];
 
   # During build, binaries are called that rely on freshly built
   # libraries.  These reside in build/lib, and are not found by
@@ -35,11 +35,13 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     cmake
+    makeWrapper
   ];
 
   buildInputs = [
     python
-    mesa
+    python.pkgs.numpy
+    libGLU_combined
     libXt
     qtbase
     qtx11extras
@@ -47,6 +49,16 @@ stdenv.mkDerivation rec {
     qtxmlpatterns
   ];
 
+  # Paraview links into the Python library, resolving symbolic links on the way,
+  # so we need to put the correct sitePackages (with numpy) back on the path
+  postInstall = ''
+    wrapProgram $out/bin/paraview \
+      --set PYTHONPATH "${python.pkgs.numpy}/${python.sitePackages}"
+    wrapProgram $out/bin/pvbatch \
+      --set PYTHONPATH "${python.pkgs.numpy}/${python.sitePackages}"
+    wrapProgram $out/bin/pvpython \
+      --set PYTHONPATH "${python.pkgs.numpy}/${python.sitePackages}"
+  '';
 
   meta = {
     homepage = http://www.paraview.org/;

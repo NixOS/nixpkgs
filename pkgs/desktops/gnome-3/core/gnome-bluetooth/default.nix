@@ -1,12 +1,22 @@
 { stdenv, fetchurl, gnome3, meson, ninja, pkgconfig, gtk3, intltool, glib
-, udev, itstool, libxml2, wrapGAppsHook, libnotify, libcanberra_gtk3 }:
+, udev, itstool, libxml2, wrapGAppsHook, libnotify, libcanberra-gtk3, gobjectIntrospection }:
 
 stdenv.mkDerivation rec {
-  inherit (import ./src.nix fetchurl) name src;
+  name = "gnome-bluetooth-${version}";
+  version = "3.28.0";
 
-  nativeBuildInputs = [ meson ninja intltool itstool pkgconfig libxml2 wrapGAppsHook ];
-  buildInputs = [ glib gtk3 udev libnotify libcanberra_gtk3
-                  gnome3.defaultIconTheme gnome3.gsettings_desktop_schemas ];
+  src = fetchurl {
+    url = "mirror://gnome/sources/gnome-bluetooth/${gnome3.versionBranch version}/${name}.tar.xz";
+    sha256 = "0q7yzklrlayj99risj096mr5x35anx94wvr6nbf6pwbvvzv7453p";
+  };
+
+  passthru = {
+    updateScript = gnome3.updateScript { packageName = "gnome-bluetooth"; attrPath = "gnome3.gnome-bluetooth"; };
+  };
+
+  nativeBuildInputs = [ meson ninja intltool itstool pkgconfig libxml2 wrapGAppsHook gobjectIntrospection ];
+  buildInputs = [ glib gtk3 udev libnotify libcanberra-gtk3
+                  gnome3.defaultIconTheme gnome3.gsettings-desktop-schemas ];
 
   postPatch = ''
     chmod +x meson_post_install.py # patchShebangs requires executable file

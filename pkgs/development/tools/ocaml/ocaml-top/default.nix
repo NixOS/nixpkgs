@@ -22,7 +22,7 @@ stdenv.mkDerivation {
   inherit (jbuilder) installPhase;
 
   meta = {
-    homepage = http://www.typerex.org/ocaml-top.html;
+    homepage = https://www.typerex.org/ocaml-top.html;
     license = stdenv.lib.licenses.gpl3;
     description = "A simple cross-platform OCaml code editor built for top-level evaluation";
     platforms = ocamlPackages.ocaml.meta.platforms or [];

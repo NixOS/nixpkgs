@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, fetchpatch
 , cmake, ccid, qttools, qttranslations
-, pkgconfig, pcsclite, hicolor_icon_theme 
+, pkgconfig, pcsclite, hicolor-icon-theme 
 }:
 
 stdenv.mkDerivation rec {
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ cmake ccid qttools pcsclite qttranslations
-                  hicolor_icon_theme
+                  hicolor-icon-theme
                 ];
   
   meta = with stdenv.lib; {

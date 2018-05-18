@@ -4,11 +4,11 @@
 
 stdenv.mkDerivation rec {
   name = "slurm-${version}";
-  version = "17.02.9";
+  version = "17.11.5";
 
   src = fetchurl {
     url = "https://download.schedmd.com/slurm/${name}.tar.bz2";
-    sha256 = "0w8v7fzbn7b3f9kg6lcj2jpkzln3vcv9s2cz37xbdifz0m2p1x7s";
+    sha256 = "07ghyyz12k4rksm06xf7dshwp1ndm13zphdbqja99401q4xwbx9r";
   };
 
   outputs = [ "out" "dev" ];
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig libtool ];
   buildInputs = [
-    curl python munge perl pam openssl mysql.lib ncurses gtk2 lua hwloc numactl
+    curl python munge perl pam openssl mysql.connector-c ncurses gtk2 lua hwloc numactl
   ];
 
   configureFlags =

@@ -1,8 +1,11 @@
-{ stdenv, fetchFromGitHub, pkgs, python3Packages, glfw, libunistring, harfbuzz, fontconfig, zlib, pkgconfig, ncurses, imagemagick, makeWrapper, xsel, libstartup_notification }:
+{ stdenv, fetchFromGitHub, pkgs, python3Packages, glfw, libunistring, harfbuzz,
+  fontconfig, zlib, pkgconfig, ncurses, imagemagick, makeWrapper, xsel,
+  libstartup_notification, libX11, libXrandr, libXinerama, libXcursor,
+  libxkbcommon, libXi, libXext }:
 
 with python3Packages;
 buildPythonApplication rec {
-  version = "0.5.1";
+  version = "0.9.1";
   name = "kitty-${version}";
   format = "other";
 
@@ -10,10 +13,13 @@ buildPythonApplication rec {
     owner = "kovidgoyal";
     repo = "kitty";
     rev = "v${version}";
-    sha256 = "0zs5b1sxi2f1lgpjs1qvd15gz6m1wfpyqskyyr0vmm4ch3rgp5zz";
+    sha256 = "08j2k3852c64z4mgh1j0dgdj6c2alkckpav67lzg1lxsz3w2izh2";
   };
 
-  buildInputs = [ fontconfig glfw ncurses libunistring harfbuzz ];
+  buildInputs = [
+    fontconfig glfw ncurses libunistring harfbuzz libX11
+    libXrandr libXinerama libXcursor libxkbcommon libXi libXext
+  ];
 
   nativeBuildInputs = [ pkgconfig ];
 
@@ -38,6 +44,7 @@ buildPythonApplication rec {
     homepage = https://github.com/kovidgoyal/kitty;
     description = "A modern, hackable, featureful, OpenGL based terminal emulator";
     license = licenses.gpl3;
+    platforms = platforms.linux;
     maintainers = with maintainers; [ tex ];
   };
 }

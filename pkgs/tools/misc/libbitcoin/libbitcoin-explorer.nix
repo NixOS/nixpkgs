@@ -3,7 +3,7 @@
 
 let
   pname = "libbitcoin-explorer";
-  version = "3.4.0";
+  version = "3.5.0";
 
 in stdenv.mkDerivation {
   name = "${pname}-${version}";
@@ -12,7 +12,7 @@ in stdenv.mkDerivation {
     owner = "libbitcoin";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0rxiimklzqyp9vswznz9aia71dn6jxm2pxx5ljlhzs5rs583cj00";
+    sha256 = "033nrdzrha4kypxk4biixjsbjd16r4m2mjvpid4gdj5hzbbj1p93";
   };
 
   nativeBuildInputs = [ autoreconfHook pkgconfig ];

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, fetchpatch, pkgconfig, libtool
+{ lib, stdenv, fetchFromGitHub, fetchpatch, pkgconfig, libtool
 , bzip2, zlib, libX11, libXext, libXt, fontconfig, freetype, ghostscript, libjpeg
 , lcms2, openexr, libpng, librsvg, libtiff, libxml2, openjpeg, libwebp
 , ApplicationServices
@@ -14,8 +14,8 @@ let
     else throw "ImageMagick is not supported on this platform.";
 
   cfg = {
-    version = "7.0.7-14";
-    sha256 = "04hpc9i6fp09iy0xkidlfhfqr7zg45izqqj5fx93n3dxalq65xqw";
+    version = "7.0.7-29";
+    sha256 = "0jfpfydz50zxs776knz6w2f5g0l4nhivp9g1fz4cf5clgjcpa3z6";
     patches = [];
   };
 in
@@ -24,13 +24,10 @@ stdenv.mkDerivation rec {
   name = "imagemagick-${version}";
   inherit (cfg) version;
 
-  src = fetchurl {
-    urls = [
-      "mirror://imagemagick/releases/ImageMagick-${version}.tar.xz"
-      # the original source above removes tarballs quickly
-      "http://distfiles.macports.org/ImageMagick/ImageMagick-${version}.tar.xz"
-      "https://bintray.com/homebrew/mirror/download_file?file_path=imagemagick-${version}.tar.xz"
-    ];
+  src = fetchFromGitHub {
+    owner = "ImageMagick";
+    repo = "ImageMagick";
+    rev = cfg.version;
     inherit (cfg) sha256;
   };
 

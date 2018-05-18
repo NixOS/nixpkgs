@@ -33,9 +33,20 @@ sub new {
         $startCommand =
             "qemu-kvm -m 384 " .
             "-net nic,model=virtio \$QEMU_OPTS ";
-        my $iface = $args->{hdaInterface} || "virtio";
-        $startCommand .= "-drive file=" . Cwd::abs_path($args->{hda}) . ",if=$iface,werror=report "
-            if defined $args->{hda};
+
+        if (defined $args->{hda}) {
+            if ($args->{hdaInterface} eq "scsi") {
+                $startCommand .= "-drive id=hda,file="
+                               . Cwd::abs_path($args->{hda})
+                               . ",werror=report,if=none "
+                               . "-device scsi-hd,drive=hda ";
+            } else {
+                $startCommand .= "-drive file=" . Cwd::abs_path($args->{hda})
+                               . ",if=" . $args->{hdaInterface}
+                               . ",werror=report ";
+            }
+        }
+
         $startCommand .= "-cdrom $args->{cdrom} "
             if defined $args->{cdrom};
         $startCommand .= "-device piix3-usb-uhci -drive id=usbdisk,file=$args->{usb},if=none,readonly -device usb-storage,drive=usbdisk "
@@ -362,8 +373,8 @@ sub mustFail {
 
 
 sub getUnitInfo {
-    my ($self, $unit) = @_;
-    my ($status, $lines) = $self->execute("systemctl --no-pager show '$unit'");
+    my ($self, $unit, $user) = @_;
+    my ($status, $lines) = $self->systemctl("--no-pager show \"$unit\"", $user);
     return undef if $status != 0;
     my $info = {};
     foreach my $line (split '\n', $lines) {
@@ -371,6 +382,16 @@ sub getUnitInfo {
         $info->{$1} = $2;
     }
     return $info;
+}
+
+sub systemctl {
+    my ($self, $q, $user) = @_;
+    if ($user) {
+        $q =~ s/'/\\'/g;
+        return $self->execute("su -l $user -c \$'XDG_RUNTIME_DIR=/run/user/`id -u` systemctl --user $q'");
+    }
+
+    return $self->execute("systemctl $q");
 }
 
 # Fail if the given systemd unit is not in the "active" state.
@@ -387,16 +408,16 @@ sub requireActiveUnit {
 
 # Wait for a systemd unit to reach the "active" state.
 sub waitForUnit {
-    my ($self, $unit) = @_;
+    my ($self, $unit, $user) = @_;
     $self->nest("waiting for unit ‘$unit’", sub {
         retry sub {
-            my $info = $self->getUnitInfo($unit);
+            my $info = $self->getUnitInfo($unit, $user);
             my $state = $info->{ActiveState};
             die "unit ‘$unit’ reached state ‘$state’\n" if $state eq "failed";
             if ($state eq "inactive") {
                 # If there are no pending jobs, then assume this unit
                 # will never reach active state.
-                my ($status, $jobs) = $self->execute("systemctl list-jobs --full 2>&1");
+                my ($status, $jobs) = $self->systemctl("list-jobs --full 2>&1", $user);
                 if ($jobs =~ /No jobs/) {  # FIXME: fragile
                     # Handle the case where the unit may have started
                     # between the previous getUnitInfo() and
@@ -430,14 +451,14 @@ sub waitForFile {
 }
 
 sub startJob {
-    my ($self, $jobName) = @_;
-    $self->execute("systemctl start $jobName");
+    my ($self, $jobName, $user) = @_;
+    $self->systemctl("start $jobName", $user);
     # FIXME: check result
 }
 
 sub stopJob {
-    my ($self, $jobName) = @_;
-    $self->execute("systemctl stop $jobName");
+    my ($self, $jobName, $user) = @_;
+    $self->systemctl("stop $jobName", $user);
 }
 
 
@@ -602,7 +623,7 @@ sub waitForX {
     my ($self, $regexp) = @_;
     $self->nest("waiting for the X11 server", sub {
         retry sub {
-            my ($status, $out) = $self->execute("journalctl -b SYSLOG_IDENTIFIER=systemd | grep 'session opened'");
+            my ($status, $out) = $self->execute("journalctl -b SYSLOG_IDENTIFIER=systemd | grep 'Reached target Current graphical'");
             return 0 if $status != 0;
             ($status, $out) = $self->execute("[ -e /tmp/.X11-unix/X0 ]");
             return 1 if $status == 0;

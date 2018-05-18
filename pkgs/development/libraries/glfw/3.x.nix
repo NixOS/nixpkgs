@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, cmake, mesa_noglu, libXrandr, libXinerama, libXcursor, libX11
+{ stdenv, lib, fetchFromGitHub, cmake, libGL, libXrandr, libXinerama, libXcursor, libX11
 , darwin, fixDarwinDylibNames
 }:
 
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  propagatedBuildInputs = [ mesa_noglu ];
+  propagatedBuildInputs = [ libGL ];
 
   nativeBuildInputs = [ cmake ];
 

@@ -1,6 +1,6 @@
 { lib, bundlerEnv, git}:
 bundlerEnv {
-  name = "homesick-1.1.3";
+  name = "homesick-1.1.6";
 
   gemdir = ./.;
 

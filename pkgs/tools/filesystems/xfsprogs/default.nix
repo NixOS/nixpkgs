@@ -30,6 +30,7 @@ stdenv.mkDerivation rec {
     (gentooPatch "xfsprogs-4.12.0-sharedlibs.patch" "1i081749x91jvlrw84l4a3r081vqcvn6myqhnqbnfcfhd64h12bq")
     (gentooPatch "xfsprogs-4.7.0-libxcmd-link.patch" "1lvy1ajzml39a631a7jqficnzsd40bzkca7hkxv1ybiqyp8sf55s")
     (gentooPatch "xfsprogs-4.9.0-underlinking.patch" "1r7l8jphspy14i43zbfnjrnyrdm4cpgyfchblascxylmans0gci7")
+    ./glibc-2.27.patch
   ];
 
   preConfigure = ''

@@ -1,20 +1,18 @@
-{ lib, fetchPypi, buildPythonPackage, protobuf, hidapi, ecdsa, mnemonic
-, requests
+{ lib, fetchPypi, buildPythonPackage,
+  protobuf, hidapi, ecdsa, mnemonic, requests, pyblake2, click, libusb1, rlp
 }:
 
 buildPythonPackage rec {
   name = "${pname}-${version}";
   pname = "trezor";
-  version = "0.7.16";
+  version = "0.9.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "6bdb69fc125ba705854e21163be6c7da3aa17c2a3a84f40b6d8a3f6e4a8cb314";
+    sha256 = "a481191011bade98f1e9f1201e7c72a83945050657bbc90dc4ac32dc8b8b46a4";
   };
 
-  propagatedBuildInputs = [ protobuf hidapi requests mnemonic ];
-
-  buildInputs = [ ecdsa ];
+  propagatedBuildInputs = [ protobuf hidapi ecdsa mnemonic requests pyblake2 click libusb1 rlp ];
 
   # There are no actual tests: "ImportError: No module named tests"
   doCheck = false;

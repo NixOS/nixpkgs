@@ -138,6 +138,7 @@ rec {
                 , sha1 ? null
                 , url ? null
                 , message ? null
+                , hashMode ? "flat"
                 } :
     assert (message != null) || (url != null);
     assert (sha256 != null) || (sha1 != null);
@@ -158,6 +159,7 @@ rec {
     in
     stdenv.mkDerivation {
       name = name_;
+      outputHashMode = hashMode;
       outputHashAlgo = hashAlgo;
       outputHash = hash;
       preferLocalBuild = true;
@@ -170,6 +172,7 @@ rec {
         ***
 
         _EOF_
+        exit 1
       '';
     };
 

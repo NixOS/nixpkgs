@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, glib, dbus, dbus_glib }:
+{ stdenv, fetchurl, pkgconfig, glib, dbus, dbus-glib }:
 
 stdenv.mkDerivation rec {
   name = "eggdbus-0.6";
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
   };
   
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ glib dbus dbus_glib ];
+  buildInputs = [ glib dbus dbus-glib ];
 
   meta = {
     homepage = https://hal.freedesktop.org/releases/;

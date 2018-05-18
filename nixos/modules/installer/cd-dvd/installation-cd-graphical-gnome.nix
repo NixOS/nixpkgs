@@ -69,7 +69,7 @@ with lib;
   in ''
     mkdir -p /root/Desktop
     ln -sfT ${desktopFile} /root/Desktop/nixos-manual.desktop
-    cp ${pkgs.gnome3.gnome_terminal}/share/applications/gnome-terminal.desktop /root/Desktop/gnome-terminal.desktop
+    cp ${pkgs.gnome3.gnome-terminal}/share/applications/gnome-terminal.desktop /root/Desktop/gnome-terminal.desktop
     chmod a+rx /root/Desktop/gnome-terminal.desktop
     cp ${pkgs.gparted}/share/applications/gparted.desktop /root/Desktop/gparted.desktop
     chmod a+rx /root/Desktop/gparted.desktop

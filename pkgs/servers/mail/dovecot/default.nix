@@ -1,25 +1,26 @@
-{ stdenv, lib, fetchurl, perl, pkgconfig, systemd, openssl
-, bzip2, zlib, inotify-tools, pam, libcap
-, clucene_core_2, icu, openldap
+{ stdenv, lib, fetchurl, fetchpatch, perl, pkgconfig, systemd, openssl
+, bzip2, zlib, lz4, inotify-tools, pam, libcap
+, clucene_core_2, icu, openldap, libsodium, libstemmer
 # Auth modules
-, withMySQL ? false, libmysql
+, withMySQL ? false, mysql
 , withPgSQL ? false, postgresql
 , withSQLite ? true, sqlite
 }:
 
 stdenv.mkDerivation rec {
-  name = "dovecot-2.2.33.2";
+  name = "dovecot-2.3.1";
 
   nativeBuildInputs = [ perl pkgconfig ];
-  buildInputs = [ openssl bzip2 zlib clucene_core_2 icu openldap ]
+  buildInputs =
+    [ openssl bzip2 zlib lz4 clucene_core_2 icu openldap libsodium libstemmer ]
     ++ lib.optionals (stdenv.isLinux) [ systemd pam libcap inotify-tools ]
-    ++ lib.optional withMySQL libmysql
+    ++ lib.optional withMySQL mysql.connector-c
     ++ lib.optional withPgSQL postgresql
     ++ lib.optional withSQLite sqlite;
 
   src = fetchurl {
-    url = "http://dovecot.org/releases/2.2/${name}.tar.gz";
-    sha256 = "117f9i62liz2pm96zi2lpldzlj2knzj7g410zhifwmlsc1w3n7py";
+    url = "http://dovecot.org/releases/2.3/${name}.tar.gz";
+    sha256 = "14zva4f8k64x86sm9n21cp2yvrpph6k6k52bm22a00pxjwdq50q8";
   };
 
   preConfigure = ''
@@ -58,6 +59,7 @@ stdenv.mkDerivation rec {
     "--with-ssl=openssl"
     "--with-zlib"
     "--with-bzlib"
+    "--with-lz4"
     "--with-ldap"
     "--with-lucene"
     "--with-icu"
@@ -68,9 +70,9 @@ stdenv.mkDerivation rec {
     ++ lib.optional withSQLite "--with-sqlite";
 
   meta = {
-    homepage = http://dovecot.org/;
+    homepage = https://dovecot.org/;
     description = "Open source IMAP and POP3 email server written with security primarily in mind";
-    maintainers = with stdenv.lib.maintainers; [viric peti rickynils];
+    maintainers = with stdenv.lib.maintainers; [ viric peti rickynils fpletz ];
     platforms = stdenv.lib.platforms.unix;
   };
 }

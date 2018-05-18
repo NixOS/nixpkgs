@@ -32,7 +32,6 @@ stdenv.mkDerivation rec {
       generally all that is of interest to the user).
       As with top, the items are displayed in order from most to least active.
     '';
-    maintainers = with maintainers; [ nckx ];
     platforms = platforms.linux;
   };
 }

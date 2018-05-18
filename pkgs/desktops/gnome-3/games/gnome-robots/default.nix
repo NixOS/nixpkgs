@@ -1,13 +1,23 @@
 { stdenv, fetchurl, pkgconfig, gnome3, gtk3, wrapGAppsHook
-, librsvg, libcanberra_gtk3, intltool, itstool, libxml2, libgames-support
+, librsvg, libcanberra-gtk3, intltool, itstool, libxml2, libgames-support
 , libgee}:
 
 stdenv.mkDerivation rec {
-  inherit (import ./src.nix fetchurl) name src;
+  name = "gnome-robots-${version}";
+  version = "3.22.3";
+
+  src = fetchurl {
+    url = "mirror://gnome/sources/gnome-robots/${gnome3.versionBranch version}/${name}.tar.xz";
+    sha256 = "0dzcjd7rdmlzgr6rmljhrbccwif8wj0cr1xcrrj7malj33098wwk";
+  };
+
+  passthru = {
+    updateScript = gnome3.updateScript { packageName = "gnome-robots"; attrPath = "gnome3.gnome-robots"; };
+  };
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
-    gtk3 wrapGAppsHook intltool itstool librsvg libcanberra_gtk3
+    gtk3 wrapGAppsHook intltool itstool librsvg libcanberra-gtk3
     libxml2 gnome3.defaultIconTheme libgames-support libgee
   ];
 

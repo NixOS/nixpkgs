@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   version = "1.2.0";
-  name = "varnish-rtstatus-${version}";
+  name = "${varnish.name}-rtstatus-${version}";
 
   src = fetchurl {
     url = "https://download.varnish-software.com/libvmod-rtstatus/libvmod-rtstatus-${version}.tar.gz";

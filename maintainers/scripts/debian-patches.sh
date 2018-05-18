@@ -4,11 +4,13 @@
 # Usage $0 debian-patches.txt debian-patches.nix
 # An example input and output files can be found in applications/graphics/xara/
 
-DEB_URL=http://patch-tracker.debian.org/patch/series/dl
+DEB_URL=https://sources.debian.org/data/main
 declare -a deb_patches
 mapfile -t deb_patches < $1
 
-prefix="${DEB_URL}/${deb_patches[0]}"
+# First letter
+deb_prefix="${deb_patches[0]:0:1}"
+prefix="${DEB_URL}/${deb_prefix}/${deb_patches[0]}/debian/patches"
 
 if [[ -n "$2" ]]; then
     exec 1> $2

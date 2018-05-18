@@ -1,17 +1,18 @@
-{ stdenv, fetchFromGitHub, ncurses, boost, asciidoc, docbook_xsl, libxslt }:
+{ stdenv, fetchFromGitHub, ncurses, boost, asciidoc, docbook_xsl, libxslt, pkgconfig }:
 
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
   name = "kakoune-unstable-${version}";
-  version = "2017-04-12";
+  version = "2018-03-22";
   src = fetchFromGitHub {
     repo = "kakoune";
     owner = "mawww";
-    rev = "7482d117cc85523e840dff595134dcb9cdc62207";
-    sha256 = "08j611y192n9vln9i94ldlvz3k0sg79dkmfc0b1vczrmaxhpgpfh";
+    rev = "f8e297acef1be0657b779fea5256f606a6c6a3a3";
+    sha256 = "14xmw3lkwzppm9bns55nmyb1lfihzhdyisf6xjqlszdj4mcf94jl";
   };
-  buildInputs = [ ncurses boost asciidoc docbook_xsl libxslt ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ ncurses asciidoc docbook_xsl libxslt ];
 
   postPatch = ''
     export PREFIX=$out

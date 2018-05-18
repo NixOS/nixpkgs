@@ -35,6 +35,5 @@ buildPythonPackage rec {
     '';
     homepage = https://github.com/jonathanslenders/python-prompt-toolkit;
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ nckx ];
   };
 }

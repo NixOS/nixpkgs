@@ -1,19 +1,19 @@
 { stdenv, fetchurl, SDL2, ftgl, pkgconfig, libpng, libjpeg, pcre
-, SDL2_image, freetype, glew, mesa, boost, glm
+, SDL2_image, freetype, glew, libGLU_combined, boost, glm
 }:
 
 stdenv.mkDerivation rec {
-  version = "0.47";
+  version = "0.48";
   name = "gource-${version}";
 
   src = fetchurl {
     url = "https://github.com/acaudwell/Gource/releases/download/${name}/${name}.tar.gz";
-    sha256 = "1llqwdnfa1pff8bxk27qsqff1fcg0a9kfdib0rn7p28vl21n1cgj";
+    sha256 = "04qxcm05qiyr9rg2kv6abfy7kkzqr8ziw4iyp1d14lniv93m61dp";
   };
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
-    glew SDL2 ftgl libpng libjpeg pcre SDL2_image mesa
+    glew SDL2 ftgl libpng libjpeg pcre SDL2_image libGLU_combined
     boost glm freetype
   ];
 

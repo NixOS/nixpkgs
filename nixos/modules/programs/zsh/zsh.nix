@@ -36,8 +36,9 @@ in
       shellAliases = mkOption {
         default = config.environment.shellAliases;
         description = ''
-          Set of aliases for zsh shell. See <option>environment.shellAliases</option>
-          for an option format description.
+          Set of aliases for zsh shell. Overrides the default value taken from
+           <option>environment.shellAliases</option>.
+          See <option>environment.shellAliases</option> for an option format description.
         '';
         type = types.attrs; # types.attrsOf types.stringOrPath;
       };
@@ -107,8 +108,6 @@ in
         if [ -n "$__ETC_ZSHENV_SOURCED" ]; then return; fi
         export __ETC_ZSHENV_SOURCED=1
 
-        . ${config.system.build.setEnvironment}
-
         ${cfge.shellInit}
 
         ${cfg.shellInit}
@@ -127,6 +126,8 @@ in
         # Only execute this file once per shell.
         if [ -n "$__ETC_ZPROFILE_SOURCED" ]; then return; fi
         __ETC_ZPROFILE_SOURCED=1
+
+        ${config.system.build.setEnvironment.text}
 
         ${cfge.loginShellInit}
 

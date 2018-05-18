@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   patches = [
     (fetchpatch {
-      url = "https://sources.debian.net/data/main/n/ntfs-3g/1:2016.2.22AR.1-4/debian/patches/0003-CVE-2017-0358.patch";
+      url = "https://sources.debian.org/data/main/n/ntfs-3g/1:2016.2.22AR.1+dfsg-1/debian/patches/0003-CVE-2017-0358.patch";
       sha256 = "0hd05q9q06r18k8pmppvch1sslzqln5fvqj51d5r72g4mnpavpj3";
     })
   ];
@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
     '';
 
   meta = with stdenv.lib; {
-    homepage = http://www.tuxera.com/community/open-source-ntfs-3g/;
+    homepage = https://www.tuxera.com/community/open-source-ntfs-3g/;
     description = "FUSE-based NTFS driver with full write support";
     maintainers = with maintainers; [ dezgeg ];
     platforms = platforms.linux;

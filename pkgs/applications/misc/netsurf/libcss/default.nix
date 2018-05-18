@@ -27,6 +27,8 @@ stdenv.mkDerivation rec {
     "NSSHARED=${buildsystem}/share/netsurf-buildsystem"
   ];
 
+  NIX_CFLAGS_COMPILE=[ "-Wno-error=implicit-fallthrough" ];
+
   meta = with stdenv.lib; {
     homepage = http://www.netsurf-browser.org/;
     description = "Cascading Style Sheets library for netsurf browser";

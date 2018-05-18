@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
     homepage = https://geolite.maxmind.com/download/geoip;
     license = licenses.cc-by-sa-30;
     platforms = platforms.all;
-    maintainers = with maintainers; [ nckx fpletz ];
+    maintainers = with maintainers; [ fpletz ];
   };
 
   builder = ./builder.sh;

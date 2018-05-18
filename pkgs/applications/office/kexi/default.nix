@@ -4,17 +4,17 @@
   breeze-icons, karchive, kcodecs, kcompletion, kconfig, kconfigwidgets, kcoreaddons,
   kcrash, kguiaddons, ki18n, kiconthemes, kitemviews, kio, ktexteditor, ktextwidgets,
   kwidgetsaddons, kxmlgui,
-  kdb, kproperty, kreport, lcms2, libmysql, marble, postgresql
+  kdb, kproperty, kreport, lcms2, mysql, marble, postgresql
 }:
 
 mkDerivation rec {
   pname = "kexi";
-  version = "3.0.2";
+  version = "3.1.0";
   name = "${pname}-${version}";
 
   src = fetchurl {
     url = "mirror://kde/stable/${pname}/src/${name}.tar.xz";
-    sha256 = "1fjvjifi5ygx5gs2lzfg22j0x3r7kl4wk5jll09r8gc3dfxaiblf";
+    sha256 = "1ysj44qq75wglw4d080l3gfw47695gapf29scxhb1g3py55csmbd";
   };
 
   nativeBuildInputs = [ extra-cmake-modules kdoctools ];
@@ -24,7 +24,7 @@ mkDerivation rec {
     breeze-icons karchive kcodecs kcompletion kconfig kconfigwidgets kcoreaddons
     kcrash kguiaddons ki18n kiconthemes kitemviews kio ktexteditor ktextwidgets
     kwidgetsaddons kxmlgui
-    kdb kproperty kreport lcms2 libmysql marble postgresql
+    kdb kproperty kreport lcms2 mysql.connector-c marble postgresql
   ];
 
   propagatedUserEnvPkgs = [ kproperty ];

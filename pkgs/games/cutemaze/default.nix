@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "cutemaze-${version}";
-  version = "1.2.1";
+  version = "1.2.2";
 
   src = fetchurl {
     url = "https://gottcode.org/cutemaze/${name}-src.tar.bz2";
-    sha256 = "841f2a208770c9de6009fed64e24a059a878686c444c4b572c56b564e4cfa66e";
+    sha256 = "1a2jmkm7fjzdrvzgvbqfq20k0vvpwfcycagsm0haxb3fpv86950y";
   };
 
   nativeBuildInputs = [ qmake qttools ];

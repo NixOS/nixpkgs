@@ -18,5 +18,6 @@ with lib;
       "opt/chrome/native-messaging-hosts/com.dannyvankooten.browserpass.json".source = "${pkgs.browserpass}/etc/chrome-host.json";
       "opt/chrome/policies/managed/com.dannyvankooten.browserpass.json".source = "${pkgs.browserpass}/etc/chrome-policy.json";
     };
+    nixpkgs.config.firefox.enableBrowserpass = true;
   };
 }

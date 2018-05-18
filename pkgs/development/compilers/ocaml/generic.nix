@@ -7,17 +7,21 @@ let
   real_url = if url == null then
     "http://caml.inria.fr/pub/distrib/ocaml-${versionNoPatch}/ocaml-${version}.tar.xz"
   else url;
-  safeX11 = stdenv: !(stdenv.isArm || stdenv.isMips);
+  safeX11 = stdenv: !(stdenv.isAarch32 || stdenv.isMips);
 in
 
-{ stdenv, fetchurl, ncurses, buildEnv, libX11, xproto, useX11 ? safeX11 stdenv }:
+{ stdenv, fetchurl, ncurses, buildEnv
+, libX11, xproto, useX11 ? safeX11 stdenv
+, flambdaSupport ? false
+}:
 
-assert useX11 -> !stdenv.isArm && !stdenv.isMips;
+assert useX11 -> !stdenv.isAarch32 && !stdenv.isMips;
+assert flambdaSupport -> stdenv.lib.versionAtLeast version "4.03";
 
 let
    useNativeCompilers = !stdenv.isMips;
-   inherit (stdenv.lib) optionals optionalString;
-   name = "ocaml-${version}";
+   inherit (stdenv.lib) optional optionals optionalString;
+   name = "ocaml${optionalString flambdaSupport "+flambda"}-${version}";
 in
 
 stdenv.mkDerivation (args // rec {
@@ -36,10 +40,13 @@ stdenv.mkDerivation (args // rec {
 
   prefixKey = "-prefix ";
   configureFlags = optionals useX11 [ "-x11lib" x11lib
-                                      "-x11include" x11inc ];
+                                      "-x11include" x11inc ]
+  ++ optional flambdaSupport "-flambda"
+  ;
 
   buildFlags = "world" + optionalString useNativeCompilers " bootstrap world.opt";
-  buildInputs = [ncurses] ++ optionals useX11 [ libX11 xproto ];
+  buildInputs = optional (!stdenv.lib.versionAtLeast version "4.07") ncurses
+    ++ optionals useX11 [ libX11 xproto ];
   installTargets = "install" + optionalString useNativeCompilers " installopt";
   preConfigure = optionalString (!stdenv.lib.versionAtLeast version "4.04") ''
     CAT=$(type -tp cat)

@@ -20,13 +20,16 @@ stdenv.mkDerivation rec {
     mv helmholtz~/src/Makefile .
     rm -rf helmholtz~/src/
     rm helmholtz~/helmholtz~.pd_darwin
+    rm helmholtz~/helmholtz~.pd_linux
     rm helmholtz~/helmholtz~.dll
     rm -rf __MACOSX
   '';
 
   patchPhase = ''
+    mkdir -p $out/helmholtz~
     sed -i "s@current: pd_darwin@current: pd_linux@g" Makefile
     sed -i "s@-Wl@@g" Makefile
+    sed -i "s@\$(NAME).pd_linux \.\./\$(NAME).pd_linux@helmholtz~.pd_linux $out/helmholtz~/@g" Makefile
   '';
 
   installPhase = ''

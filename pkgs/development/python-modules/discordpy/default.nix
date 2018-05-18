@@ -1,5 +1,5 @@
 { lib
-, fetchurl
+, fetchPypi
 , buildPythonPackage
 , pythonOlder
 , withVoice ? true, libopus
@@ -9,14 +9,12 @@
 , pynacl
 }:
 
-let
+buildPythonPackage rec {
   pname = "discord.py";
   version = "0.16.12";
-in buildPythonPackage rec {
-  name = "${pname}-${version}";
 
-  src = fetchurl {
-    url = "mirror://pypi/${builtins.substring 0 1 pname}/${pname}/${name}.tar.gz";
+  src = fetchPypi {
+    inherit pname version;
     sha256 = "17fb8814100fbaf7a79468baa432184db6cef3bbea4ad194fe297c7407d50108";
   };
 
@@ -38,5 +36,9 @@ in buildPythonPackage rec {
     description = "A python wrapper for the Discord API";
     homepage    = "https://discordpy.rtfd.org/";
     license     = lib.licenses.mit;
+
+    # discord.py requires websockets<4.0
+    # See https://github.com/Rapptz/discord.py/issues/973
+    broken = true;
   };
 }

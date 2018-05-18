@@ -1,5 +1,5 @@
 { lib, stdenv, fetchurl, fetchcvs, makeWrapper, makeDesktopItem, jdk, jre, ant
-, gtk3, gsettings_desktop_schemas, p7zip, libXxf86vm }:
+, gtk3, gsettings-desktop-schemas, p7zip, libXxf86vm }:
 
 let
 
@@ -36,7 +36,7 @@ let
       patchelf --set-rpath ${libXxf86vm}/lib lib/java3d-1.6/linux/i586/libnativewindow_x11.so
     '';
 
-    buildInputs = [ ant jdk jre makeWrapper p7zip gtk3 gsettings_desktop_schemas ];
+    buildInputs = [ ant jdk jre makeWrapper p7zip gtk3 gsettings-desktop-schemas ];
 
     buildPhase = ''
       ant furniture textures help
@@ -54,7 +54,7 @@ let
       cp "${sweethome3dItem}/share/applications/"* $out/share/applications
 
       makeWrapper ${jre}/bin/java $out/bin/$exec \
-        --prefix XDG_DATA_DIRS : "$XDG_ICON_DIRS:${gtk3.out}/share:${gsettings_desktop_schemas}/share:$out/share:$GSETTINGS_SCHEMAS_PATH" \
+        --prefix XDG_DATA_DIRS : "$XDG_ICON_DIRS:${gtk3.out}/share:${gsettings-desktop-schemas}/share:$out/share:$GSETTINGS_SCHEMAS_PATH" \
         --add-flags "-jar $out/share/java/${module}-${version}.jar -cp $out/share/java/Furniture.jar:$out/share/java/Textures.jar:$out/share/java/Help.jar ${if stdenv.system == "x86_64-linux" then "-d64" else "-d32"}"
     '';
 

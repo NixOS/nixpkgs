@@ -10,7 +10,7 @@ mkDerivation {
     license = [ lib.licenses.lgpl21 ];
     maintainers = kdepimTeam;
   };
-  nativeBuildInputs = [ extra-cmake-modules ki18n ];
-  buildInputs = [ kcodecs qtbase ];
+  nativeBuildInputs = [ extra-cmake-modules ];
+  buildInputs = [ kcodecs ki18n qtbase ];
   outputs = [ "out" "dev" ];
 }

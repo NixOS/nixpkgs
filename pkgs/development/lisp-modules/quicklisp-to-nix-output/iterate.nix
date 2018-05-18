@@ -1,7 +1,7 @@
 args @ { fetchurl, ... }:
 rec {
   baseName = ''iterate'';
-  version = ''20160825-darcs'';
+  version = ''20180131-darcs'';
 
   parasites = [ "iterate/tests" ];
 
@@ -10,8 +10,8 @@ rec {
   deps = [ ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/iterate/2016-08-25/iterate-20160825-darcs.tgz'';
-    sha256 = ''0kvz16gnxnkdz0fy1x8y5yr28nfm7i2qpvix7mgwccdpjmsb4pgm'';
+    url = ''http://beta.quicklisp.org/archive/iterate/2018-01-31/iterate-20180131-darcs.tgz'';
+    sha256 = ''05jlwd59w13k4n9x7a0mszdv7i78cbmx93w2p1yzsi30593rh9hj'';
   };
 
   packageName = "iterate";
@@ -21,8 +21,8 @@ rec {
 }
 /* (SYSTEM iterate DESCRIPTION
     Jonathan Amsterdam's iterator/gatherer/accumulator facility SHA256
-    0kvz16gnxnkdz0fy1x8y5yr28nfm7i2qpvix7mgwccdpjmsb4pgm URL
-    http://beta.quicklisp.org/archive/iterate/2016-08-25/iterate-20160825-darcs.tgz
-    MD5 e73ff4898ce4831ff2a28817f32de86e NAME iterate FILENAME iterate DEPS NIL
-    DEPENDENCIES NIL VERSION 20160825-darcs SIBLINGS NIL PARASITES
+    05jlwd59w13k4n9x7a0mszdv7i78cbmx93w2p1yzsi30593rh9hj URL
+    http://beta.quicklisp.org/archive/iterate/2018-01-31/iterate-20180131-darcs.tgz
+    MD5 40a1776b445e42463c2c6f754468fb83 NAME iterate FILENAME iterate DEPS NIL
+    DEPENDENCIES NIL VERSION 20180131-darcs SIBLINGS NIL PARASITES
     (iterate/tests)) */

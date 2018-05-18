@@ -1,19 +1,17 @@
-{ stdenv, fetchurl, pkgconfig, intltool, libtool, libxml2, libcanberra_gtk3, gnome3, mate, wrapGAppsHook }:
+{ stdenv, fetchurl, pkgconfig, intltool, libtool, libxml2, libcanberra-gtk3, gnome3, mate, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
   name = "mate-media-${version}";
-  version = "${major-ver}.${minor-ver}";
-  major-ver = "1.18";
-  minor-ver = "0";
+  version = "1.20.0";
 
   src = fetchurl {
-    url = "http://pub.mate-desktop.org/releases/${major-ver}/${name}.tar.xz";
-    sha256 = "0v19aipqj24367mx82ghkvgnxy1505zd35h50pi30fws36b6plll";
+    url = "http://pub.mate-desktop.org/releases/${mate.getRelease version}/${name}.tar.xz";
+    sha256 = "09vbw7nc91ljnxm5sbrch0w7zzn2i6qjb1b50q402niwr5b0zicr";
   };
 
   buildInputs = [
     libxml2
-    libcanberra_gtk3
+    libcanberra-gtk3
     gnome3.gtk
     mate.libmatemixer
     mate.mate-desktop

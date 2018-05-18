@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, autoreconfHook
+{ stdenv, fetchurl, fetchpatch, autoreconfHook
 , IOKit ? null , ApplicationServices ? null }:
 
 let
@@ -20,7 +20,14 @@ in stdenv.mkDerivation rec {
     sha256 = "0m1hllbb78rr6cxkbalmz1gqkl0psgq8rrmv4gwcmz34n07kvx2i";
   };
 
-  patches = [ ./smartmontools.patch ];
+  patches = [ ./smartmontools.patch ]
+    # https://www.smartmontools.org/changeset/4603
+    ++ stdenv.lib.optional stdenv.hostPlatform.isMusl (fetchpatch {
+      name = "musl-canonicalize_file_name.patch";
+      url = "https://www.smartmontools.org/changeset/4603?format=diff&new=4603";
+      sha256 = "06s9pcd95snjkrbfrsjby2lln3lnwjd21bgabmvr4p7fx19b75zp";
+      stripLen = 2;
+    });
   postPatch = "cp -v ${driverdb} drivedb.h";
 
   nativeBuildInputs = [ autoreconfHook ];

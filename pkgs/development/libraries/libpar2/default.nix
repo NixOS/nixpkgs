@@ -15,6 +15,8 @@ stdenv.mkDerivation rec {
 
   patches = [ ./libpar2-0.4-external-verification.patch ];
 
+  CXXFLAGS = stdenv.lib.optionalString stdenv.cc.isClang "-std=c++11";
+
   meta = {
     homepage = http://parchive.sourceforge.net/;
     license = stdenv.lib.licenses.gpl2Plus;

@@ -2,7 +2,7 @@
 , pcre, libevent, gd, curl, libxml2, icu, flex, bison, openssl, zlib, php
 , expat, libcap, oniguruma, libdwarf, libmcrypt, tbb, gperftools, glog, libkrb5
 , bzip2, openldap, readline, libelf, uwimap, binutils, cyrus_sasl, pam, libpng
-, libxslt, freetype, gdb, git, perl, mariadb, gmp, libyaml, libedit
+, libxslt, freetype, gdb, git, perl, mysql, gmp, libyaml, libedit
 , libvpx, imagemagick, fribidi, gperf, which, ocamlPackages
 }:
 
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs =
-    [ cmake pkgconfig boost libunwind mariadb.client libmemcached pcre gdb git perl
+    [ cmake pkgconfig boost libunwind mysql.connector-c libmemcached pcre gdb git perl
       libevent gd curl libxml2 icu flex bison openssl zlib php expat libcap
       oniguruma libdwarf libmcrypt tbb gperftools bzip2 openldap readline
       libelf uwimap binutils cyrus_sasl pam glog libpng libxslt libkrb5
@@ -53,12 +53,13 @@ stdenv.mkDerivation rec {
       hphp/runtime/ext/std/*.cpp \
       hphp/runtime/ext_zend_compat/php-src/main/*.cpp \
       hphp/runtime/ext_zend_compat/php-src/main/*.h
+    sed '1i#include <functional>' -i third-party/mcrouter/src/mcrouter/lib/cycles/Cycles.h
     patchShebangs .
   '';
 
   meta = {
     description = "High-performance JIT compiler for PHP/Hack";
-    homepage    = "http://hhvm.com";
+    homepage    = "https://hhvm.com";
     license     = "PHP/Zend";
     platforms   = [ "x86_64-linux" ];
     maintainers = [ stdenv.lib.maintainers.thoughtpolice ];

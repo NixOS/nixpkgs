@@ -1,6 +1,6 @@
 { stdenv, fetchurl, cmake, ccid, qttools, qttranslations, pkgconfig, pcsclite
-, hicolor_icon_theme, libdigidocpp, opensc, shared_mime_info, openldap
-, gettext, desktop_file_utils, makeWrapper }:
+, hicolor-icon-theme, libdigidocpp, opensc, shared-mime-info, openldap
+, gettext, desktop-file-utils, makeWrapper }:
 
 stdenv.mkDerivation rec {
 
@@ -27,8 +27,8 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ cmake ccid qttools pcsclite qttranslations
-                  hicolor_icon_theme libdigidocpp opensc shared_mime_info
-                  openldap gettext desktop_file_utils makeWrapper
+                  hicolor-icon-theme libdigidocpp opensc shared-mime-info
+                  openldap gettext desktop-file-utils makeWrapper
                 ];
 
   enableParallelBuilding = true;

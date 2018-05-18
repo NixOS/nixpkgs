@@ -1,5 +1,5 @@
 { stdenv, fetchurl, python, pkgconfig, popt, atk, libX11, libICE, xorg, libXi
-, intltool, dbus_glib, at_spi2_core, libSM }:
+, intltool, dbus-glib, at-spi2-core, libSM }:
 
 stdenv.mkDerivation rec {
   versionMajor = "2.26";
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig intltool ];
   buildInputs = [ python popt atk libX11 libICE xorg.libXtst libXi
-                  dbus_glib at_spi2_core libSM ];
+                  dbus-glib at-spi2-core libSM ];
 
   meta = with stdenv.lib; {
     platforms = platforms.unix;

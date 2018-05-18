@@ -18,13 +18,13 @@ top-level attribute to `top-level/all-packages.nix`.
 {
   newScope,
   stdenv, fetchurl, makeSetupHook, makeWrapper,
-  bison, cups ? null, harfbuzz, mesa, perl,
+  bison, cups ? null, harfbuzz, libGL, perl,
   gstreamer, gst-plugins-base, gtk3, dconf,
 
   # options
   developerBuild ? false,
   decryptSslTraffic ? false,
-  debug ? null,
+  debug ? false,
 }:
 
 with stdenv.lib;
@@ -37,7 +37,7 @@ let
   srcs = import ./srcs.nix { inherit fetchurl; inherit mirror; };
 
   patches = {
-    qtbase = [ ./qtbase.patch ];
+    qtbase = [ ./qtbase.patch ] ++ optional stdenv.isDarwin ./qtbase-darwin.patch;
     qtdeclarative = [ ./qtdeclarative.patch ];
     qtscript = [ ./qtscript.patch ];
     qtserialport = [ ./qtserialport.patch ];
@@ -66,7 +66,7 @@ let
       qtbase = callPackage ../modules/qtbase.nix {
         inherit (srcs.qtbase) src version;
         patches = patches.qtbase;
-        inherit bison cups harfbuzz mesa;
+        inherit bison cups harfbuzz libGL;
         withGtk3 = true; inherit dconf gtk3;
         inherit developerBuild decryptSslTraffic;
       };
@@ -91,6 +91,7 @@ let
       qtsvg = callPackage ../modules/qtsvg.nix {};
       qttools = callPackage ../modules/qttools.nix {};
       qttranslations = callPackage ../modules/qttranslations.nix {};
+      qtvirtualkeyboard = callPackage ../modules/qtvirtualkeyboard.nix {};
       qtwayland = callPackage ../modules/qtwayland.nix {};
       qtwebchannel = callPackage ../modules/qtwebchannel.nix {};
       qtwebengine = callPackage ../modules/qtwebengine.nix {};
@@ -100,10 +101,11 @@ let
       qtxmlpatterns = callPackage ../modules/qtxmlpatterns.nix {};
 
       env = callPackage ../qt-env.nix {};
-      full = env "qt-${qtbase.version}" ([
+      full = env "qt-full-${qtbase.version}" ([
         qtcharts qtconnectivity qtdeclarative qtdoc qtgraphicaleffects
-        qtimageformats qtlocation qtmultimedia qtquickcontrols qtscript
-        qtsensors qtserialport qtsvg qttools qttranslations qtwebsockets
+        qtimageformats qtlocation qtmultimedia qtquickcontrols qtquickcontrols2
+        qtscript qtsensors qtserialport qtsvg qttools qttranslations
+        qtvirtualkeyboard qtwebchannel qtwebengine qtwebkit qtwebsockets
         qtx11extras qtxmlpatterns
       ] ++ optional (!stdenv.isDarwin) qtwayland
         ++ optional (stdenv.isDarwin) qtmacextras);

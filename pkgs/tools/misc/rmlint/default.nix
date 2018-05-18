@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub,
-  gettext, glib, json_glib, libelf, pkgconfig, scons, sphinx, utillinux }:
+  gettext, glib, json-glib, libelf, pkgconfig, scons, sphinx, utillinux }:
 
 with stdenv.lib;
 stdenv.mkDerivation rec {
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   configurePhase = "scons config";
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ gettext glib json_glib libelf scons sphinx utillinux ];
+  buildInputs = [ gettext glib json-glib libelf scons sphinx utillinux ];
 
   buildPhase = "scons";
 

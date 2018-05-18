@@ -32,7 +32,7 @@ stdenv.mkDerivation {
     inherit sha256;
   }) fonts;
 
-  buildInputs = [cabextract];
+  nativeBuildInputs = [cabextract];
 
   buildCommand = ''
     for i in $exes; do

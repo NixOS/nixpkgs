@@ -14,7 +14,6 @@ stdenv.mkDerivation rec {
 
   buildPhase = ''
     faust2jaqt -time -vec -t 99999 MBdistortion.dsp
-    sed -i "s|\[ *scale *: *log *\]||g ; s|\btgroup\b|hgroup|g" "MBdistortion.dsp"
     faust2lv2 -time -vec -gui -t 99999 MBdistortion.dsp
   '';
 

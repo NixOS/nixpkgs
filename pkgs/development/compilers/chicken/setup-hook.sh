@@ -4,4 +4,4 @@ addChickenRepositoryPath() {
     export CHICKEN_INCLUDE_PATH="$1/share;$CHICKEN_INCLUDE_PATH"
 }
 
-envHooks=(${envHooks[@]} addChickenRepositoryPath)
+addEnvHooks "$targetOffset" addChickenRepositoryPath

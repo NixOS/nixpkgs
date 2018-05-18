@@ -1,29 +1,33 @@
 { stdenv, lib, fetchurl, boost, cmake, ffmpeg, gettext, glew
 , ilmbase, libXi, libX11, libXext, libXrender
 , libjpeg, libpng, libsamplerate, libsndfile
-, libtiff, mesa, openal, opencolorio, openexr, openimageio, openjpeg_1, python
+, libtiff, libGLU_combined, openal, opencolorio, openexr, openimageio, openjpeg_1, pythonPackages
 , zlib, fftw, opensubdiv, freetype, jemalloc, ocl-icd
 , jackaudioSupport ? false, libjack2
 , cudaSupport ? false, cudatoolkit
 , colladaSupport ? true, opencollada
+, enableNumpy ? false, makeWrapper
 }:
 
 with lib;
 
+let python = pythonPackages.python; in
+
 stdenv.mkDerivation rec {
-  name = "blender-2.79";
+  name = "blender-2.79b";
 
   src = fetchurl {
     url = "http://download.blender.org/source/${name}.tar.gz";
-    sha256 = "16f84mdzkmwjmqahjj64kbyk4kagdj4mcr8qjazs1952d7kh7pm9";
+    sha256 = "1g4kcdqmf67srzhi3hkdnr4z1ph4h9sza1pahz38mrj998q4r52c";
   };
 
   buildInputs =
     [ boost cmake ffmpeg gettext glew ilmbase
       libXi libX11 libXext libXrender
-      freetype libjpeg libpng libsamplerate libsndfile libtiff mesa openal
+      freetype libjpeg libpng libsamplerate libsndfile libtiff libGLU_combined openal
       opencolorio openexr openimageio openjpeg_1 python zlib fftw jemalloc
       (opensubdiv.override { inherit cudaSupport; })
+      makeWrapper
     ]
     ++ optional jackaudioSupport libjack2
     ++ optional cudaSupport cudatoolkit
@@ -69,6 +73,12 @@ stdenv.mkDerivation rec {
   NIX_LDFLAGS = optionalString cudaSupport "-rpath ${stdenv.cc.cc.lib}/lib";
 
   enableParallelBuilding = true;
+
+  postInstall = optionalString enableNumpy
+    ''
+      wrapProgram $out/bin/blender \
+        --prefix PYTHONPATH : ${pythonPackages.numpy}/lib/python${python.majorVersion}/site-packages
+    '';
 
   meta = with stdenv.lib; {
     description = "3D Creation/Animation/Publishing System";

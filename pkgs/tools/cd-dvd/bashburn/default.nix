@@ -59,6 +59,5 @@ stdenv.mkDerivation rec {
     homepage = http://bashburn.dose.se/;
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ nckx ];
   };
 }

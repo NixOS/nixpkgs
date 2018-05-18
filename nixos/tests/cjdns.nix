@@ -12,7 +12,6 @@ let
       # the sequence of address assignment less stochastic.
       networking.useDHCP = false;
 
-      networking.interfaces.eth1.prefixLength = 24;
       # CJDNS output is incompatible with the XML log.
       systemd.services.cjdns.serviceConfig.StandardOutput = "null";
       #networking.firewall.enable = true;
@@ -49,7 +48,9 @@ import ./make-test.nix ({ pkgs, ...} : {
 
           { imports = [ basicConfig ];
 
-          networking.interfaces.eth1.ipAddress = "192.168.0.2";
+          networking.interfaces.eth1.ipv4.addresses = [
+            { address = "192.168.0.2"; prefixLength = 24; }
+          ];
 
           services.cjdns =
             { UDPInterface =
@@ -76,7 +77,9 @@ import ./make-test.nix ({ pkgs, ...} : {
             CJDNS_ADMIN_PASSWORD=FOOBAR
           '';
 
-          networking.interfaces.eth1.ipAddress = "192.168.0.1";
+          networking.interfaces.eth1.ipv4.addresses = [
+            { address = "192.168.0.1"; prefixLength = 24; }
+          ];
 
           services.cjdns =
             { authorizedPasswords = [ carolPassword ];

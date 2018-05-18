@@ -4,7 +4,7 @@
 
 let
   # if you bump version, update pkgs.tortoisehg too or ping maintainer
-  version = "4.3.2";
+  version = "4.5.2";
   name = "mercurial-${version}";
   inherit (python2Packages) docutils hg-git dulwich python;
 in python2Packages.buildPythonApplication {
@@ -13,17 +13,17 @@ in python2Packages.buildPythonApplication {
 
   src = fetchurl {
     url = "https://mercurial-scm.org/release/${name}.tar.gz";
-    sha256 = "0j6djq584rcj9ghz59ddqzrfq49lykg3wqwap5fnzp9apa4gcnqg";
+    sha256 = "14732hhw2ibvy5khqxjc8a983z3rib5vp9lqfbws80lm3kyryjm4";
   };
 
   inherit python; # pass it so that the same version can be used in hg2git
 
-  buildInputs = [ makeWrapper docutils unzip ];
+  buildInputs = [ makeWrapper docutils unzip ]
+    ++ stdenv.lib.optionals stdenv.isDarwin [ ApplicationServices ];
 
-  propagatedBuildInputs = [ hg-git dulwich ]
-    ++ stdenv.lib.optionals stdenv.isDarwin [ ApplicationServices cf-private ];
+  propagatedBuildInputs = [ hg-git dulwich ];
 
-  makeFlags = "PREFIX=$(out)";
+  makeFlags = [ "PREFIX=$(out)" ];
 
   postInstall = (stdenv.lib.optionalString guiSupport
     ''
@@ -34,9 +34,9 @@ in python2Packages.buildPythonApplication {
       hgk=$out/lib/${python.libPrefix}/site-packages/hgext/hgk.py
       EOF
       # setting HG so that hgk can be run itself as well (not only hg view)
-      WRAP_TK=" --set TK_LIBRARY \"${tk}/lib/${tk.libPrefix}\"
-                --set HG \"$out/bin/hg\"
-                --prefix PATH : \"${tk}/bin\" "
+      WRAP_TK=" --set TK_LIBRARY ${tk}/lib/${tk.libPrefix}
+                --set HG $out/bin/hg
+                --prefix PATH : ${tk}/bin "
     '') +
     ''
       for i in $(cd $out/bin && ls); do

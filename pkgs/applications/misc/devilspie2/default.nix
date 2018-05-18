@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "devilspie2-${version}";
-  version = "0.42";
+  version = "0.43";
 
   src = fetchurl {
     url = "http://download.savannah.gnu.org/releases/devilspie2/devilspie2_${version}-src.tar.gz";
-    sha256 = "119zb9x5i3y4cp30h4113psqxb5d7zxiyijpq02g8kds1wqvrx8i";
+    sha256 = "0a7qjl2qd4099kkkbwa1y2fk48s21jlr409lf9mij7mlc9yc3zzc";
   };
 
   nativeBuildInputs = [ intltool pkgconfig ];

@@ -1,5 +1,5 @@
 { stdenv, fetchurl, boehmgc, zlib, sqlite, pcre, cmake, pkgconfig
-, git, apacheHttpd, apr, aprutil, mariadb, mbedtls, openssl, pkgs, gtk2, libpthreadstubs
+, git, apacheHttpd, apr, aprutil, mysql, mbedtls, openssl, pkgs, gtk2, libpthreadstubs
 }:
 
 stdenv.mkDerivation rec {
@@ -7,14 +7,14 @@ stdenv.mkDerivation rec {
   version = "2.2.0";
 
   src = fetchurl {
-    url = "http://nekovm.org/media/neko-${version}-src.tar.gz";
+    url = "https://nekovm.org/media/neko-${version}-src.tar.gz";
     sha256 = "1qv47zaa0vzhjlq5wb71627n7dbsxpc1gqpg0hsngjxnbnh1q46g";
   };
 
   nativeBuildInputs = [ cmake pkgconfig git ];
   buildInputs =
     [ boehmgc zlib sqlite pcre apacheHttpd apr aprutil
-      mariadb.client mbedtls openssl libpthreadstubs ]
+      mysql.connector-c mbedtls openssl libpthreadstubs ]
       ++ stdenv.lib.optional stdenv.isLinux gtk2
       ++ stdenv.lib.optionals stdenv.isDarwin [ pkgs.darwin.apple_sdk.frameworks.Security
                                                 pkgs.darwin.apple_sdk.frameworks.Carbon];

@@ -52,17 +52,20 @@ rec {
 
   # Pull in some builtins not included elsewhere.
   inherit (builtins)
-    pathExists readFile isBool isFunction
+    pathExists readFile isBool
     isInt add sub lessThan
     seq deepSeq genericClosure;
 
   inherit (lib.strings) fileContents;
 
+  release = fileContents ../.version;
+  versionSuffix = let suffixFile = ../.version-suffix; in
+    if pathExists suffixFile then fileContents suffixFile else "pre-git";
+
   # Return the Nixpkgs version number.
-  nixpkgsVersion =
-    let suffixFile = ../.version-suffix; in
-    fileContents ../.version
-    + (if pathExists suffixFile then fileContents suffixFile else "pre-git");
+  version = release + versionSuffix;
+
+  nixpkgsVersion = builtins.trace "`lib.nixpkgsVersion` is deprecated, use `lib.version` instead!" version;
 
   # Whether we're being called by nix-shell.
   inNixShell = builtins.getEnv "IN_NIX_SHELL" != "";
@@ -83,9 +86,9 @@ rec {
 
   /* C-style comparisons
 
-     a < b  => -1
-     a == b => 0
-     a > b  => 1
+     a < b,  compare a b => -1
+     a == b, compare a b => 0
+     a > b,  compare a b => 1
   */
   compare = a: b:
     if a < b
@@ -94,12 +97,23 @@ rec {
          then 1
          else 0;
 
-  /* Split type into two subtypes by predicate `p`, assume
+  /* Split type into two subtypes by predicate `p`, take all elements
+     of the first subtype to be less than all the elements of the
+     second subtype, compare elements of a single subtype with `yes`
+     and `no` respectively.
 
-       forall x y . x < y if p x == true && p y == false
+     Example:
 
-     compare elements of the same subtype with `yes` and `no`
-     comparisons respectively.
+       let cmp = splitByAndCompare (hasPrefix "foo") compare compare; in
+
+       cmp "a" "z" => -1
+       cmp "fooa" "fooz" => -1
+
+       cmp "f" "a" => 1
+       cmp "fooa" "a" => -1
+       # while
+       compare "fooa" "a" => 1
+
   */
   splitByAndCompare = p: yes: no: a: b:
     if p a
@@ -124,4 +138,29 @@ rec {
   */
   warn = msg: builtins.trace "WARNING: ${msg}";
   info = msg: builtins.trace "INFO: ${msg}";
+
+  # | Add metadata about expected function arguments to a function.
+  # The metadata should match the format given by
+  # builtins.functionArgs, i.e. a set from expected argument to a bool
+  # representing whether that argument has a default or not.
+  # setFunctionArgs : (a → b) → Map String Bool → (a → b)
+  #
+  # This function is necessary because you can't dynamically create a
+  # function of the { a, b ? foo, ... }: format, but some facilities
+  # like callPackage expect to be able to query expected arguments.
+  setFunctionArgs = f: args:
+    { # TODO: Should we add call-time "type" checking like built in?
+      __functor = self: f;
+      __functionArgs = args;
+    };
+
+  # | Extract the expected function arguments from a function.
+  # This works both with nix-native { a, b ? foo, ... }: style
+  # functions and functions with args set with 'setFunctionArgs'. It
+  # has the same return type and semantics as builtins.functionArgs.
+  # setFunctionArgs : (a → b) → Map String Bool.
+  functionArgs = f: f.__functionArgs or (builtins.functionArgs f);
+
+  isFunction = f: builtins.isFunction f ||
+    (f ? __functor && isFunction (f.__functor f));
 }

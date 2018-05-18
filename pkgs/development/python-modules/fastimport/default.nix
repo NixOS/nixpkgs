@@ -1,11 +1,11 @@
-{ stdenv, buildPythonPackage, python, fetchurl }:
+{ stdenv, buildPythonPackage, python, fetchPypi}:
 
 buildPythonPackage rec {
-  name = "fastimport-${version}";
+  pname = "fastimport";
   version = "0.9.6";
 
-  src = fetchurl {
-    url = "mirror://pypi/f/fastimport/${name}.tar.gz";
+  src = fetchPypi {
+    inherit pname version;
     sha256 = "1aqjsin4rmqm7ln4j0p73fzxifws6c6ikgyhav7r137m2ixsxl43";
   };
 

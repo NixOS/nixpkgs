@@ -20,6 +20,6 @@ stdenv.mkDerivation rec {
     homepage = https://sourceforge.net/projects/acpiclient/;
     license = stdenv.lib.licenses.gpl2Plus;
     platforms = platforms.linux;
-    maintainers = [ maintainers.mornfall ];
+    maintainers = [ ];
   };
 }

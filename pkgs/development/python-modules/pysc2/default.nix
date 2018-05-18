@@ -18,8 +18,8 @@
 }:
 
 buildPythonPackage rec {
+  pname = "PySC2";
   version = "1.2";
-  name = "PySC2-${version}";
 
   src = fetchFromGitHub {
     owner = "deepmind";

@@ -1,19 +1,19 @@
 { stdenv, fetchurl, fetchpatch, cmake, pcre, pkgconfig, python2
-, libX11, libXpm, libXft, libXext, mesa, zlib, libxml2, lz4, lzma, gsl, xxHash
+, libX11, libXpm, libXft, libXext, libGLU_combined, zlib, libxml2, lz4, lzma, gsl, xxHash
 , Cocoa, OpenGL, noSplash ? false }:
 
 stdenv.mkDerivation rec {
   name = "root-${version}";
-  version = "6.10.08";
+  version = "6.12.06";
 
   src = fetchurl {
     url = "https://root.cern.ch/download/root_v${version}.source.tar.gz";
-    sha256 = "12mddl6pqwwc9nr4jqzp6h1jm4zycazd3v88dz306m1nmk97dlic";
+    sha256 = "1557b9sdragsx9i15qh6lq7fn056bgi87d31kxdl4vl0awigvp5f";
   };
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ cmake pcre python2 zlib libxml2 lz4 lzma gsl xxHash ]
-    ++ stdenv.lib.optionals (!stdenv.isDarwin) [ libX11 libXpm libXft libXext mesa ]
+    ++ stdenv.lib.optionals (!stdenv.isDarwin) [ libX11 libXpm libXft libXext libGLU_combined ]
     ++ stdenv.lib.optionals (stdenv.isDarwin) [ Cocoa OpenGL ]
     ;
 

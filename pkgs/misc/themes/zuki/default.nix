@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "zuki-themes-${version}";
-  version = "3.24-2";
+  version = "3.28-1";
 
   src = fetchFromGitHub {
     owner = "lassekongo83";
     repo = "zuki-themes";
     rev = "v${version}";
-    sha256 = "1js92qq1zi3iq40nl6n0m52hhhn9ql9i7y8ycg8vw3w0v8xyb4km";
+    sha256 = "1if39k8vgk4cpshl625vdf8lz6jgicgybd5nilycj66sf1k5jgb9";
   };
 
   buildInputs = [ gdk_pixbuf gtk_engines ];
@@ -19,14 +19,14 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     install -dm 755 $out/share/themes
-    cp -va Zuki* $out/share/themes/
+    cp -a Zuki* $out/share/themes/
   '';
 
   meta = {
-    description = "A selection of themes for GTK3, gnome-shell and more";
+    description = "Themes for GTK3, gnome-shell and more";
     homepage = https://github.com/lassekongo83/zuki-themes;
     license = stdenv.lib.licenses.gpl3;
-    platforms = stdenv.lib.platforms.unix;
+    platforms = stdenv.lib.platforms.linux;
     maintainers = [ stdenv.lib.maintainers.romildo ];
   };
 }

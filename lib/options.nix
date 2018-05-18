@@ -14,7 +14,7 @@ rec {
     , defaultText ? null # Textual representation of the default, for in the manual.
     , example ? null # Example value used in the manual.
     , description ? null # String describing the option.
-    , relatedPackages ? null # Related packages used in the manual.
+    , relatedPackages ? null # Related packages used in the manual (see `genRelatedPackages` in ../nixos/doc/manual/default.nix).
     , type ? null # Option type, providing type-checking and value merging.
     , apply ? null # Function that converts the option value to something else.
     , internal ? null # Whether the option is for NixOS developers only.
@@ -85,6 +85,7 @@ rec {
     concatMap (opt:
       let
         docOption = rec {
+          loc = opt.loc;
           name = showOption opt.loc;
           description = opt.description or (throw "Option `${name}' has no description.");
           declarations = filter (x: x != unknownModule) opt.declarations;

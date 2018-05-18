@@ -2,7 +2,17 @@
 , librsvg, intltool, itstool, libxml2, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
-  inherit (import ./src.nix fetchurl) name src;
+  name = "tali-${version}";
+  version = "3.22.0";
+
+  src = fetchurl {
+    url = "mirror://gnome/sources/tali/${gnome3.versionBranch version}/${name}.tar.xz";
+    sha256 = "5ba17794d6fb06b794daaffa62a6aaa372b7de8886ce5ec596c37e62bb71728b";
+  };
+
+  passthru = {
+    updateScript = gnome3.updateScript { packageName = "tali"; attrPath = "gnome3.tali"; };
+  };
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ gtk3 gnome3.defaultIconTheme gdk_pixbuf librsvg

@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = http://www.argtable.org/;
+    homepage = https://www.argtable.org/;
     description = "A Cross-Platform, Single-File, ANSI C Command-Line Parsing Library";
     license = licenses.bsd3;
     maintainers = with maintainers; [ artuuge ];

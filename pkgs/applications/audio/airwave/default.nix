@@ -1,4 +1,4 @@
-{ stdenv, cmake, fetchFromGitHub, file, gcc_multi, libX11, makeWrapper
+{ stdenv, multiStdenv, cmake, fetchFromGitHub, file, libX11, makeWrapper
 , overrideCC, qt5, requireFile, unzip, wine
 }:
 
@@ -12,8 +12,6 @@ let
     rev = version;
     sha256 = "1ban59skw422mak3cp57lj27hgq5d3a4f6y79ysjnamf8rpz9x4s";
   };
-
-  stdenv_multi = overrideCC stdenv gcc_multi;
 
   vst-sdk = stdenv.mkDerivation rec {
     name = "vstsdk368_08_11_2017_build_121";
@@ -38,7 +36,7 @@ let
 
 in
 
-stdenv_multi.mkDerivation {
+multiStdenv.mkDerivation {
   name = "airwave-${version}";
 
   src = airwave-src;
@@ -54,7 +52,7 @@ stdenv_multi.mkDerivation {
     # For airwave-host-32.exe.so, point wineg++ to 32-bit versions of
     # these libraries, as $NIX_LDFLAGS contains only 64-bit ones.
     substituteInPlace src/host/CMakeLists.txt --replace '-m32' \
-      '-m32 -L${wine-xembed}/lib -L${wine-xembed}/lib/wine -L${stdenv_multi.cc.libc.out}/lib/32'
+      '-m32 -L${wine-xembed}/lib -L${wine-xembed}/lib/wine -L${multiStdenv.cc.libc.out}/lib/32'
   '';
 
   # libstdc++.so link gets lost in 64-bit executables during

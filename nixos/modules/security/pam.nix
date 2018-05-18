@@ -46,6 +46,18 @@ let
         '';
       };
 
+      googleAuthenticator = {
+        enable = mkOption {
+          default = false;
+          type = types.bool;
+          description = ''
+            If set, users with enabled Google Authenticator (created
+            <filename>~/.google_authenticator</filename>) will be required
+            to provide Google Authenticator token to log in.
+          '';
+        };
+      };
+
       usbAuth = mkOption {
         default = config.security.pam.usb.enable;
         type = types.bool;
@@ -222,6 +234,22 @@ let
           password, KDE will prompt separately after login.
         '';
       };
+      sssdStrictAccess = mkOption {
+        default = false;
+        type = types.bool;
+        description = "enforce sssd access control";
+      };
+
+      enableGnomeKeyring = mkOption {
+        default = false;
+        type = types.bool;
+        description = ''
+          If enabled, pam_gnome_keyring will attempt to automatically unlock the
+          user's default Gnome keyring upon login. If the user login password does
+          not match their keyring password, Gnome Keyring will prompt separately
+          after login.
+        '';
+      };
 
       text = mkOption {
         type = types.nullOr types.lines;
@@ -241,11 +269,13 @@ let
       text = mkDefault
         (''
           # Account management.
-          account sufficient pam_unix.so
+          account ${if cfg.sssdStrictAccess then "required" else "sufficient"} pam_unix.so
           ${optionalString use_ldap
               "account sufficient ${pam_ldap}/lib/security/pam_ldap.so"}
-          ${optionalString config.services.sssd.enable
+          ${optionalString (config.services.sssd.enable && cfg.sssdStrictAccess==false)
               "account sufficient ${pkgs.sssd}/lib/security/pam_sss.so"}
+          ${optionalString (config.services.sssd.enable && cfg.sssdStrictAccess)
+              "account [default=bad success=ok user_unknown=ignore] ${pkgs.sssd}/lib/security/pam_sss.so"}
           ${optionalString config.krb5.enable
               "account sufficient ${pam_krb5}/lib/security/pam_krb5.so"}
 
@@ -273,7 +303,12 @@ let
           # prompts the user for password so we run it once with 'required' at an
           # earlier point and it will run again with 'sufficient' further down.
           # We use try_first_pass the second time to avoid prompting password twice
-          (optionalString (cfg.unixAuth && (config.security.pam.enableEcryptfs || cfg.pamMount || cfg.enableKwallet)) ''
+          (optionalString (cfg.unixAuth &&
+          (config.security.pam.enableEcryptfs
+            || cfg.pamMount
+            || cfg.enableKwallet
+            || cfg.enableGnomeKeyring
+            || cfg.googleAuthenticator.enable)) ''
               auth required pam_unix.so ${optionalString cfg.allowNullPassword "nullok"} likeauth
               ${optionalString config.security.pam.enableEcryptfs
                 "auth optional ${pkgs.ecryptfs}/lib/security/pam_ecryptfs.so unwrap"}
@@ -282,6 +317,10 @@ let
               ${optionalString cfg.enableKwallet
                 ("auth optional ${pkgs.plasma5.kwallet-pam}/lib/security/pam_kwallet5.so" +
                  " kwalletd=${pkgs.libsForQt5.kwallet.bin}/bin/kwalletd5")}
+              ${optionalString cfg.enableGnomeKeyring
+                ("auth optional ${pkgs.gnome3.gnome-keyring}/lib/security/pam_gnome_keyring.so")}
+              ${optionalString cfg.googleAuthenticator.enable
+                  "auth required ${pkgs.googleAuthenticator}/lib/security/pam_google_authenticator.so no_increment_hotp"}
             '') + ''
           ${optionalString cfg.unixAuth
               "auth sufficient pam_unix.so ${optionalString cfg.allowNullPassword "nullok"} likeauth try_first_pass"}
@@ -351,6 +390,10 @@ let
           ${optionalString (cfg.enableKwallet)
               ("session optional ${pkgs.plasma5.kwallet-pam}/lib/security/pam_kwallet5.so" +
                " kwalletd=${pkgs.libsForQt5.kwallet.bin}/bin/kwalletd5")}
+          ${optionalString (cfg.enableGnomeKeyring)
+              "session optional ${pkgs.gnome3.gnome-keyring}/lib/security/pam_gnome_keyring.so auto_start"}
+          ${optionalString (config.virtualisation.lxc.lxcfs.enable)
+               "session optional ${pkgs.lxc}/lib/security/pam_cgfs.so -c all"}
         '');
     };
 
@@ -406,6 +449,10 @@ in
           <varname>item</varname>, and <varname>value</varname>
           attribute.  The syntax and semantics of these attributes
           must be that described in the limits.conf(5) man page.
+
+          Note that these limits do not apply to systemd services,
+          whose limits can be changed via <option>systemd.extraConfig</option>
+          instead.
        '';
     };
 

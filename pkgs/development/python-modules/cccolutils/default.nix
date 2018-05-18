@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi, krb5Full, nose, GitPython, mock, git }:
+{ stdenv, buildPythonPackage, fetchPypi, isPy3k, krb5Full, nose, GitPython, mock, git }:
 
 buildPythonPackage rec {
   pname = "CCColUtils";
@@ -9,9 +9,11 @@ buildPythonPackage rec {
     inherit pname version;
     sha256 = "1gwcq4xan9as1j3q9k2zqrywxp46qx0ljwxbck9id2fvilds6ck3";
   };
+
   buildInputs = [ krb5Full ];
   propagatedBuildInputs = [ nose GitPython mock git ];
-  doCheck = false;
+
+  doCheck = isPy3k; # needs unpackaged module to run tests on python2
 
   meta = with stdenv.lib; {
     description = "Python Kerberos 5 Credential Cache Collection Utilities";

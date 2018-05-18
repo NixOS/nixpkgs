@@ -2,32 +2,29 @@
 
 stdenv.mkDerivation rec {
   name = "qtpass-${version}";
-  version = "1.1.6";
+  version = "1.2.1";
 
   src = fetchFromGitHub {
     owner  = "IJHack";
     repo   = "QtPass";
     rev    = "v${version}";
-    sha256 = "0jq5a1cvqvsjwld0nldl6kmcz9g59hiccmbg98xwji04n8174y7j";
+    sha256 = "0pp38b3fifkfwqcb6vi194ccgb8j3zc8j8jq8ww5ib0wvhldzsg8";
   };
+
+  patches = [ ./hidpi.patch ];
 
   buildInputs = [ git gnupg pass qtbase qtsvg qttools ];
 
   nativeBuildInputs = [ makeWrapper qmake ];
 
-  preConfigure = ''
-    qmakeFlags="$qmakeFlags DESTDIR=$out"
-  '';
-
-  installPhase = ''
-    mkdir $out/bin
-    mv $out/qtpass $out/bin
-    install -D {,$out/share/applications/}qtpass.desktop
-    install -D artwork/icon.svg $out/share/icons/hicolor/scalable/apps/qtpass-icon.svg
-    runHook postInstall
+  postPatch = ''
+    substituteInPlace qtpass.pro --replace "SUBDIRS += src tests main" "SUBDIRS += src main"
+    substituteInPlace qtpass.pro --replace "main.depends = tests" "main.depends = src"
   '';
 
   postInstall = ''
+    install -D qtpass.desktop $out/share/applications/qtpass.desktop
+    install -D artwork/icon.svg $out/share/icons/hicolor/scalable/apps/qtpass-icon.svg
     wrapProgram $out/bin/qtpass \
       --suffix PATH : ${git}/bin \
       --suffix PATH : ${gnupg}/bin \

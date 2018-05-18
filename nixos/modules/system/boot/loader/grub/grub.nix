@@ -40,7 +40,7 @@ let
     { splashImage = f cfg.splashImage;
       grub = f grub;
       grubTarget = f (grub.grubTarget or "");
-      shell = "${pkgs.stdenv.shell}";
+      shell = "${pkgs.runtimeShell}";
       fullName = (builtins.parseDrvName realGrub.name).name;
       fullVersion = (builtins.parseDrvName realGrub.name).version;
       grubEfi = f grubEfi;
@@ -110,7 +110,7 @@ in
 
       device = mkOption {
         default = "";
-        example = "/dev/hda";
+        example = "/dev/disk/by-id/wwn-0x500001234567890a";
         type = types.str;
         description = ''
           The device on which the GRUB boot loader will be installed.
@@ -123,7 +123,7 @@ in
 
       devices = mkOption {
         default = [];
-        example = [ "/dev/hda" ];
+        example = [ "/dev/disk/by-id/wwn-0x500001234567890a" ];
         type = types.listOf types.str;
         description = ''
           The devices on which the boot loader, GRUB, will be
@@ -135,8 +135,8 @@ in
       mirroredBoots = mkOption {
         default = [ ];
         example = [
-          { path = "/boot1"; devices = [ "/dev/sda" ]; }
-          { path = "/boot2"; devices = [ "/dev/sdb" ]; }
+          { path = "/boot1"; devices = [ "/dev/disk/by-id/wwn-0x500001234567890a" ]; }
+          { path = "/boot2"; devices = [ "/dev/disk/by-id/wwn-0x500009876543210a" ]; }
         ];
         description = ''
           Mirror the boot configuration to multiple partitions and install grub
@@ -178,7 +178,7 @@ in
 
             devices = mkOption {
               default = [ ];
-              example = [ "/dev/sda" "/dev/sdb" ];
+              example = [ "/dev/disk/by-id/wwn-0x500001234567890a" "/dev/disk/by-id/wwn-0x500009876543210a" ];
               type = types.listOf types.str;
               description = ''
                 The path to the devices which will have the GRUB MBR written.
@@ -536,9 +536,9 @@ in
             btrfsprogs = pkgs.btrfs-progs;
           };
         in pkgs.writeScript "install-grub.sh" (''
-        #!${pkgs.stdenv.shell}
+        #!${pkgs.runtimeShell}
         set -e
-        export PERL5LIB=${makePerlPath (with pkgs.perlPackages; [ FileSlurp XMLLibXML XMLSAX ListCompare ])}
+        export PERL5LIB=${makePerlPath (with pkgs.perlPackages; [ FileSlurp XMLLibXML XMLSAX XMLSAXBase ListCompare ])}
         ${optionalString cfg.enableCryptodisk "export GRUB_ENABLE_CRYPTODISK=y"}
       '' + flip concatMapStrings cfg.mirroredBoots (args: ''
         ${pkgs.perl}/bin/perl ${install-grub-pl} ${grubConfig args} $@

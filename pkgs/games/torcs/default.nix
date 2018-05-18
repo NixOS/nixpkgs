@@ -1,4 +1,4 @@
-{ fetchpatch, fetchurl, stdenv, mesa_glu, freeglut, libX11, plib, openal, freealut, libXrandr, xproto,
+{ fetchpatch, fetchurl, stdenv, libGLU, freeglut, libX11, plib, openal, freealut, libXrandr, xproto,
 libXext, libSM, libICE, libXi, libXt, libXrender, libXxf86vm, libvorbis,
 libpng, zlib, bash, makeWrapper }:
 
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     sed -i -e s,/bin/bash,`type -P bash`, src/linux/torcs.in
   '';
 
-  buildInputs = [ mesa_glu freeglut libX11 plib openal freealut libXrandr xproto
+  buildInputs = [ libGLU freeglut libX11 plib openal freealut libXrandr xproto
     libXext libSM libICE libXi libXt libXrender libXxf86vm libpng zlib libvorbis makeWrapper ];
 
   installTargets = "install datainstall";

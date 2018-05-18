@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "MIME handling library";
-    homepage    = http://codesink.org/mimetic_mime_library.html;
+    homepage    = http://www.codesink.org/mimetic_mime_library.html;
     license     = licenses.mit;
     maintainers = with maintainers; [ leenaars];
     platforms = platforms.linux;

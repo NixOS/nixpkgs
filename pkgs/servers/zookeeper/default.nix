@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "zookeeper-${version}";
-  version = "3.4.10";
+  version = "3.4.12";
 
   src = fetchurl {
     url = "mirror://apache/zookeeper/${name}/${name}.tar.gz";
-    sha256 = "09rz4ac31932yxyyc8gqrnq1zxb9ahibrq51wbz13b24w0a58zvz";
+    sha256 = "1fcljn2741jw1jvjrk5a0xr8rk69wjwrq522wrc5nmjhj0qzk1n6";
   };
 
   buildInputs = [ makeWrapper jre ];

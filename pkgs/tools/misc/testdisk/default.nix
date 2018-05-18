@@ -1,11 +1,11 @@
 { stdenv, fetchurl, ncurses, libjpeg, e2fsprogs, zlib, openssl, libuuid, ntfs3g }:
 
 stdenv.mkDerivation {
-  name = "testdisk-7.0";
+  name = "testdisk-7.1";
 
   src = fetchurl {
     url = http://www.cgsecurity.org/testdisk-7.0.tar.bz2;
-    sha256 = "00bb3b6b22e6aba88580eeb887037aef026968c21a87b5f906c6652cbee3442d";
+    sha256 = "0ba4wfz2qrf60vwvb1qsq9l6j0pgg81qgf7fh22siaz649mkpfq0";
   };
 
   buildInputs = [ ncurses libjpeg zlib openssl libuuid ]
@@ -14,7 +14,7 @@ stdenv.mkDerivation {
   enableParallelBuilding = true;
 
   meta = {
-    homepage = http://www.cgsecurity.org/wiki/TestDisk;
+    homepage = https://www.cgsecurity.org/wiki/TestDisk;
     license = stdenv.lib.licenses.gpl2Plus;
     platforms = stdenv.lib.platforms.all;
     maintainers = [ stdenv.lib.maintainers.eelco ];

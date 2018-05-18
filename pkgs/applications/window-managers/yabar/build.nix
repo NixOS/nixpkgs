@@ -2,7 +2,6 @@
 , xcbutilwm, alsaLib, wirelesstools, asciidoc, libxslt, makeWrapper, docbook_xsl
 , configFile ? null, lib
 , rev, sha256, version
-, playerctl
 }:
 
 stdenv.mkDerivation {
@@ -21,7 +20,6 @@ stdenv.mkDerivation {
   buildInputs = [
     cairo gdk_pixbuf libconfig pango xcbutilwm docbook_xsl
     alsaLib wirelesstools asciidoc libxslt makeWrapper
-    playerctl
   ];
 
   postPatch = ''
@@ -30,7 +28,7 @@ stdenv.mkDerivation {
       --replace "a2x" "${asciidoc}/bin/a2x --no-xmllint"
   '';
 
-  makeFlags = [ "DESTDIR=$(out)" "PREFIX=/" "PLAYERCTL=1" ];
+  makeFlags = [ "DESTDIR=$(out)" "PREFIX=/" ];
 
   postInstall = ''
     mkdir -p $out/share/yabar/examples

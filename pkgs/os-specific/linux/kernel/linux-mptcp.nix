@@ -1,9 +1,10 @@
-{ stdenv, hostPlatform, fetchFromGitHub, perl, buildLinux, ... } @ args:
+{ stdenv, buildPackages, hostPlatform, fetchFromGitHub, perl, buildLinux, ... } @ args:
 
-import ./generic.nix (rec {
+buildLinux (rec {
   mptcpVersion = "0.93";
   modDirVersion = "4.9.60";
   version = "${modDirVersion}-mptcp_v${mptcpVersion}";
+  # autoModules= true;
 
   extraMeta = {
     branch = "4.4";
@@ -32,8 +33,7 @@ import ./generic.nix (rec {
     DEFAULT_MPTCP_PM default
 
     # MPTCP scheduler selection.
-    # Disabled as the only non-default is the useless round-robin.
-    MPTCP_SCHED_ADVANCED n
+    MPTCP_SCHED_ADVANCED y
     DEFAULT_MPTCP_SCHED default
 
     # Smarter TCP congestion controllers
@@ -43,4 +43,4 @@ import ./generic.nix (rec {
     TCP_CONG_BALIA m
 
   '' + (args.extraConfig or "");
-} // args // (args.argsOverride or {}))
+} // args)

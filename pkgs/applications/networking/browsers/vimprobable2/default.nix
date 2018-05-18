@@ -1,5 +1,5 @@
-{ stdenv, fetchurl, makeWrapper, glib, glib_networking, gtk2, libsoup, libX11, perl,
-  pkgconfig, webkit, gsettings_desktop_schemas }:
+{ stdenv, fetchurl, makeWrapper, glib, glib-networking, gtk2, libsoup, libX11, perl,
+  pkgconfig, webkit, gsettings-desktop-schemas }:
 
 stdenv.mkDerivation rec {
   version = "1.4.2";
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ makeWrapper gtk2 libsoup libX11 perl webkit gsettings_desktop_schemas ];
+  buildInputs = [ makeWrapper gtk2 libsoup libX11 perl webkit gsettings-desktop-schemas ];
 
   hardeningDisable = [ "format" ];
 
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
 
   preFixup = ''
     wrapProgram "$out/bin/vimprobable2" \
-      --prefix GIO_EXTRA_MODULES : "${glib_networking.out}/lib/gio/modules" \
+      --prefix GIO_EXTRA_MODULES : "${glib-networking.out}/lib/gio/modules" \
       --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH"
   '';
 

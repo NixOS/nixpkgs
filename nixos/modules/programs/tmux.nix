@@ -156,6 +156,15 @@ in {
         type = types.str;
         description = "Set the $TERM variable.";
       };
+
+      secureSocket = mkOption {
+        default = true;
+        type = types.bool;
+        description = ''
+          Store tmux socket under /run, which is more secure than /tmp, but as a
+          downside it doesn't survive user logout.
+        '';
+      };
     };
   };
 
@@ -168,7 +177,7 @@ in {
       systemPackages = [ pkgs.tmux ];
 
       variables = {
-        TMUX_TMPDIR = ''''${XDG_RUNTIME_DIR:-"/run/user/\$(id -u)"}'';
+        TMUX_TMPDIR = lib.optional cfg.secureSocket ''''${XDG_RUNTIME_DIR:-"/run/user/\$(id -u)"}'';
       };
     };
   };

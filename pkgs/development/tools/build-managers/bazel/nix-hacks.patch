@@ -1,8 +1,7 @@
-diff --git a/src/main/java/com/google/devtools/build/lib/rules/repository/RepositoryDelegatorFunction.java b/src/main/java/com/google/devtools/build/lib/rules/repository/RepositoryDelegatorFunction.java
-index eafa09fb5..d2d5e40e8 100644
---- a/src/main/java/com/google/devtools/build/lib/rules/repository/RepositoryDelegatorFunction.java
-+++ b/src/main/java/com/google/devtools/build/lib/rules/repository/RepositoryDelegatorFunction.java
-@@ -287,21 +287,8 @@ public final class RepositoryDelegatorFunction implements SkyFunction {
+diff -Naur a/src/main/java/com/google/devtools/build/lib/rules/repository/RepositoryDelegatorFunction.java b/src/main/java/com/google/devtools/build/lib/rules/repository/RepositoryDelegatorFunction.java
+--- a/src/main/java/com/google/devtools/build/lib/rules/repository/RepositoryDelegatorFunction.java	1980-01-01 00:00:00.000000000 -0500
++++ b/src/main/java/com/google/devtools/build/lib/rules/repository/RepositoryDelegatorFunction.java	2018-01-18 08:17:22.420459162 -0500
+@@ -287,21 +287,8 @@
            markerData.put(key, value);
          }
        }
@@ -25,11 +24,10 @@ index eafa09fb5..d2d5e40e8 100644
  
      } catch (IOException e) {
        throw new RepositoryFunctionException(e, Transience.TRANSIENT);
-diff --git a/src/main/java/com/google/devtools/build/lib/shell/JavaSubprocessFactory.java b/src/main/java/com/google/devtools/build/lib/shell/JavaSubprocessFactory.java
-index a7ebc8f7a..40f2049fa 100644
---- a/src/main/java/com/google/devtools/build/lib/shell/JavaSubprocessFactory.java
-+++ b/src/main/java/com/google/devtools/build/lib/shell/JavaSubprocessFactory.java
-@@ -129,7 +129,6 @@ public class JavaSubprocessFactory implements SubprocessFactory {
+diff -Naur a/src/main/java/com/google/devtools/build/lib/shell/JavaSubprocessFactory.java b/src/main/java/com/google/devtools/build/lib/shell/JavaSubprocessFactory.java
+--- a/src/main/java/com/google/devtools/build/lib/shell/JavaSubprocessFactory.java	1980-01-01 00:00:00.000000000 -0500
++++ b/src/main/java/com/google/devtools/build/lib/shell/JavaSubprocessFactory.java	2018-01-18 08:17:53.274877980 -0500
+@@ -129,7 +129,6 @@
      ProcessBuilder builder = new ProcessBuilder();
      builder.command(params.getArgv());
      if (params.getEnv() != null) {
@@ -37,15 +35,3 @@ index a7ebc8f7a..40f2049fa 100644
        builder.environment().putAll(params.getEnv());
      }
  
-diff --git a/src/main/java/com/google/devtools/build/lib/worker/Worker.java b/src/main/java/com/google/devtools/build/lib/worker/Worker.java
-index 0268d1b2b..637364657 100644
---- a/src/main/java/com/google/devtools/build/lib/worker/Worker.java
-+++ b/src/main/java/com/google/devtools/build/lib/worker/Worker.java
-@@ -77,7 +77,6 @@ class Worker {
-         new ProcessBuilder(command)
-             .directory(workDir.getPathFile())
-             .redirectError(Redirect.appendTo(logFile.getPathFile()));
--    processBuilder.environment().clear();
-     processBuilder.environment().putAll(workerKey.getEnv());
- 
-     this.process = processBuilder.start();

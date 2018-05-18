@@ -3,14 +3,14 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "19.6";
+  version = "19.9";
   name = "dlib-${version}";
 
   src = fetchFromGitHub {
     owner = "davisking";
     repo = "dlib";
     rev ="v${version}";
-    sha256 = "1nlx4z53jnk7wysaxrzbyyqb65m45rw4g1fagazl2jvwh1qn49ds";
+    sha256 = "0lc54r928j9dg7f2wn25m887z24d31wrc14v2hn6aknp1z084lrc";
   };
 
   postPatch = ''
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
     homepage = http://www.dlib.net;
     license = licenses.boost;
     maintainers = with maintainers; [ christopherpoole ];
-    platforms = platforms.all;
+    platforms = platforms.linux;
   };
 }
 

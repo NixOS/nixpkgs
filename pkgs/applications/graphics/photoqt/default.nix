@@ -7,7 +7,7 @@ stdenv.mkDerivation rec {
   version = "1.5.1";
 
   src = fetchurl {
-    url = "http://photoqt.org/pkgs/photoqt-${version}.tar.gz";
+    url = "https://photoqt.org/pkgs/photoqt-${version}.tar.gz";
     sha256 = "17kkpzkmzfnigs26jjyd75iy58qffjsclif81cmviq73lzmqy0b1";
   };
 
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = {
-    homepage = http://photoqt.org/;
+    homepage = https://photoqt.org/;
     description = "Simple, yet powerful and good looking image viewer";
     license = stdenv.lib.licenses.gpl2Plus;
     platforms = stdenv.lib.platforms.unix;

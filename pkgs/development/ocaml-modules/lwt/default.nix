@@ -1,57 +1,36 @@
-{ stdenv, buildOcaml, fetchzip, which, cryptopp, ocaml, findlib, ocamlbuild, camlp4
-, react, ssl, libev, pkgconfig, ncurses, glib
-, ppx_tools, result, cppo
-, ppxSupport ? stdenv.lib.versionAtLeast ocaml.version "4.02"
-, version ? if stdenv.lib.versionAtLeast ocaml.version "4.02" then "2.7.1" else "2.6.0"
+{ stdenv, fetchzip, pkgconfig, ncurses, libev, jbuilder
+, ocaml, findlib, camlp4, cppo
+, ocaml-migrate-parsetree, ppx_tools_versioned, result
 }:
 
-if !stdenv.lib.versionAtLeast ocaml.version "4"
-then throw "lwt is not available for OCaml ${ocaml.version}"
-else
-
-let sha256 = {
-  "3.0.0" = "0wwhnl9hppixcsdisinj1wmffx0nv6hkpm01z9qvkngkrazi3i88";
-  "2.7.1" = "0w7f59havrl2fsnvs84lm7wlqpsrldg80gy5afpnpr21zkw22g8w";
-  "2.6.0" = "0f1h83zh60rspm4fxd96z9h5bkhq1n1q968hgq92sq4a6bfi1c2w";
-}."${version}"; in
-
-let optionals = stdenv.lib.optionals (!stdenv.lib.versionAtLeast version "3"); in
-
-buildOcaml rec {
-  name = "lwt";
-  inherit version;
+stdenv.mkDerivation rec {
+  version = "3.3.0";
+  name = "ocaml${ocaml.version}-lwt-${version}";
 
   src = fetchzip {
     url = "https://github.com/ocsigen/lwt/archive/${version}.tar.gz";
-    inherit sha256;
+    sha256 = "0n87hcyl4svy0risj439wyfq6bl77qxq3nraqgdr1qbz5lskbq2j";
   };
 
+  preConfigure = ''
+    ocaml src/util/configure.ml -use-libev true -use-camlp4 true
+  '';
+
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ which cryptopp ocaml findlib ocamlbuild glib ncurses camlp4 cppo ]
-  ++ stdenv.lib.optional ppxSupport ppx_tools;
+  buildInputs = [ ncurses ocaml findlib jbuilder camlp4 cppo
+    ocaml-migrate-parsetree ppx_tools_versioned ];
+  propagatedBuildInputs = [ libev result ];
 
-  propagatedBuildInputs = [ result ]
-  ++ optionals [ react ssl ]
-  ++ [ libev ];
+  installPhase = ''
+    ocaml src/util/install_filter.ml
+    ${jbuilder.installPhase}
+  '';
 
-  configureScript = "ocaml setup.ml -configure";
-  prefixKey = "--prefix ";
-  configureFlags =
-  optionals [ "--enable-glib" "--enable-ssl" "--enable-react" ]
-  ++ [ "--enable-camlp4" ]
-  ++ [ (if ppxSupport then "--enable-ppx" else "--disable-ppx") ];
-
-  createFindlibDestdir = true;
-
-  hasSharedObjects = true;
-
-  meta = with stdenv.lib; {
-    homepage = http://ocsigen.org/lwt;
-    description = "Lightweight thread library for Objective Caml";
-    license = licenses.lgpl21;
-    platforms = ocaml.meta.platforms or [];
-    maintainers = with maintainers; [
-      z77z vbgl gal_bolle
-    ];
+  meta = {
+    homepage = "https://ocsigen.org/lwt/";
+    description = "A cooperative threads library for OCaml";
+    maintainers = [ stdenv.lib.maintainers.vbgl ];
+    license = stdenv.lib.licenses.lgpl21;
+    inherit (ocaml.meta) platforms;
   };
 }

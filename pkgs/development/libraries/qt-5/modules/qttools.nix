@@ -1,4 +1,4 @@
-{ qtModule, lib, qtbase }:
+{ qtModule, stdenv, lib, qtbase }:
 
 with lib;
 
@@ -28,6 +28,8 @@ qtModule {
     "bin/qhelpgenerator"
     "bin/qtplugininfo"
     "bin/qthelpconverter"
+  ] ++ optionals stdenv.isDarwin [
+    "bin/macdeployqt"
   ];
 
   setupHook = ../hooks/qttools-setup-hook.sh;

@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "uriparser-${version}";
-  version = "0.8.4";
+  version = "0.8.5";
 
   src = fetchurl {
     url = "mirror://sourceforge/project/uriparser/Sources/${version}/${name}.tar.bz2";
-    sha256 = "08vvcmg4mcpi2gyrq043c9mfcy3mbrw6lhp86698hx392fjcsz6f";
+    sha256 = "1p9c6lr39rjl4bbzi7wl2nsg72gcz8qhicxh9v043qyr0dfcvsjq";
   };
 
 

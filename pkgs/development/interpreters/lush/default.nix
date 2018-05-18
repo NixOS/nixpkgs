@@ -1,4 +1,4 @@
-{stdenv, fetchurl, libX11, xproto, indent, readline, gsl, freeglut, mesa, SDL
+{stdenv, fetchurl, libX11, xproto, indent, readline, gsl, freeglut, libGLU_combined, SDL
 , blas, libbfd, intltool, gettext, zlib, libSM}:
 
 stdenv.mkDerivation rec {
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [
-    libX11 libSM xproto indent readline gsl freeglut mesa SDL blas libbfd
+    libX11 libSM xproto indent readline gsl freeglut libGLU_combined SDL blas libbfd
     intltool gettext zlib
   ];
 

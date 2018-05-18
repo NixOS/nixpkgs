@@ -3,14 +3,22 @@
 , wrapGAppsHook, gnome3 }:
 
 stdenv.mkDerivation rec {
-  inherit (import ./src.nix fetchurl) name src;
+  name = "gnome-font-viewer-${version}";
+  version = "3.28.0";
+
+  src = fetchurl {
+    url = "mirror://gnome/sources/gnome-font-viewer/${gnome3.versionBranch version}/${name}.tar.xz";
+    sha256 = "16mp22f255b8zqnnlqh25n6v79b9bd0gmli9ywqyapa0cfai09x3";
+  };
+
+  passthru = {
+    updateScript = gnome3.updateScript { packageName = "gnome-font-viewer"; attrPath = "gnome3.gnome-font-viewer"; };
+  };
 
   doCheck = true;
 
-  checkPhase = "meson test";
-
   nativeBuildInputs = [ meson ninja pkgconfig gettext wrapGAppsHook libxml2 ];
-  buildInputs = [ gtk3 glib gnome3.gnome_desktop gnome3.defaultIconTheme ];
+  buildInputs = [ gtk3 glib gnome3.gnome-desktop gnome3.defaultIconTheme ];
 
   # Do not run meson-postinstall.sh
   preConfigure = "sed -i '2,$ d'  meson-postinstall.sh";

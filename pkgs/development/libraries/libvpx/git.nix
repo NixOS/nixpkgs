@@ -43,11 +43,11 @@
 }:
 
 let
-  inherit (stdenv) isi686 isx86_64 isArm is64bit isMips isDarwin isCygwin;
+  inherit (stdenv) isi686 isx86_64 isAarch32 is64bit isMips isDarwin isCygwin;
   inherit (stdenv.lib) enableFeature optional optionals;
 in
 
-assert isi686 || isx86_64 || isArm || isMips; # Requires ARM with floating point support
+assert isi686 || isx86_64 || isAarch32 || isMips; # Requires ARM with floating point support
 
 assert vp8DecoderSupport || vp8EncoderSupport || vp9DecoderSupport || vp9EncoderSupport;
 assert internalStatsSupport && (vp9DecoderSupport || vp9EncoderSupport) -> postprocSupport;
@@ -180,7 +180,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "WebM VP8/VP9 codec SDK";
-    homepage    = http://www.webmproject.org/;
+    homepage    = https://www.webmproject.org/;
     license     = licenses.bsd3;
     maintainers = with maintainers; [ codyopel ];
     platforms   = platforms.all;

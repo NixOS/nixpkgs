@@ -1,29 +1,27 @@
-{ stdenv, pkgs, fetchgit, pkgconfig, attr, libuuid, libscrypt, libsodium, keyutils, liburcu, zlib, libaio }:
+{ stdenv, pkgs, fetchgit, pkgconfig, attr, libuuid, libscrypt, libsodium
+, keyutils, liburcu, zlib, libaio, zstd }:
 
 stdenv.mkDerivation rec {
-  name = "bcachefs-tools-unstable-2017-08-28";
+  name = "bcachefs-tools-unstable-2018-04-10";
 
   src = fetchgit {
     url = "https://evilpiepirate.org/git/bcachefs-tools.git";
-    rev = "b1814f2dd0c6b61a12a2ebb67a13d406d126b227";
-    sha256 = "05ba1h09rrqj6vjr3q37ybca3nbrmnifmffdyk83622l28fpv350";
+    rev = "c598d91dcb0c7e95abdacb2711898ae14ab52ca1";
+    sha256 = "1mglw6p1145nryn8babkg2hj778kqa0vrzjbdp9kxjlyb3fksmff";
   };
 
+  enableParallelBuilding = true;
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ attr libuuid libscrypt libsodium keyutils liburcu zlib libaio ];
-
-  preConfigure = ''
-    substituteInPlace cmd_migrate.c --replace /usr/include/dirent.h ${stdenv.lib.getDev stdenv.cc.libc}/include/dirent.h
-  '';
+  buildInputs = [ attr libuuid libscrypt libsodium keyutils liburcu zlib libaio zstd ];
+  patches = [ ./Makefile.patch ];
 
   installFlags = [ "PREFIX=$(out)" ];
 
   meta = with stdenv.lib; {
     description = "Tool for managing bcachefs filesystems";
-    homepage = http://bcachefs.org/;
+    homepage = https://bcachefs.org/;
     license = licenses.gpl2;
-    maintainers = with maintainers; [ davidak ];
+    maintainers = with maintainers; [ davidak chiiruno];
     platforms = platforms.linux;
   };
 }
-

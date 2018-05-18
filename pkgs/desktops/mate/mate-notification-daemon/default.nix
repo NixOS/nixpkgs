@@ -1,15 +1,13 @@
-{ stdenv, fetchurl, pkgconfig, intltool, dbus_glib, libcanberra_gtk3,
-  libnotify, libwnck3, gnome3, wrapGAppsHook }:
+{ stdenv, fetchurl, pkgconfig, intltool, dbus-glib, libcanberra-gtk3,
+  libnotify, libwnck3, gnome3, mate, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
   name = "mate-notification-daemon-${version}";
-  version = "${major-ver}.${minor-ver}";
-  major-ver = "1.18";
-  minor-ver = "0";
+  version = "1.20.0";
 
   src = fetchurl {
-    url = "http://pub.mate-desktop.org/releases/${major-ver}/${name}.tar.xz";
-    sha256 = "0rhhv99ipxy7l4fdgwvqp3g0c3d4njq0fhkag2vs1nwc6kx0h7sc";
+    url = "http://pub.mate-desktop.org/releases/${mate.getRelease version}/${name}.tar.xz";
+    sha256 = "0dq457npzid20yfwigdh8gfqgf5wv8p6jhbxfnzybam9xidlqc5f";
   };
 
   nativeBuildInputs = [
@@ -19,8 +17,8 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    dbus_glib
-    libcanberra_gtk3
+    dbus-glib
+    libcanberra-gtk3
     libnotify
     libwnck3
     gnome3.gtk

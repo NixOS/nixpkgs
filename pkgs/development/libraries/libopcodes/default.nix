@@ -1,15 +1,15 @@
 { stdenv, buildPackages
-, fetchurl, autoreconfHook264, bison, binutils-raw
+, fetchurl, autoreconfHook264, bison, binutils-unwrapped
 , libiberty, libbfd
 }:
 
 stdenv.mkDerivation rec {
   name = "libopcodes-${version}";
-  inherit (binutils-raw.bintools) version src;
+  inherit (binutils-unwrapped) version src;
 
   outputs = [ "out" "dev" ];
 
-  patches = binutils-raw.bintools.patches ++ [
+  patches = binutils-unwrapped.patches ++ [
     ../../tools/misc/binutils/build-components-separately.patch
   ];
 
@@ -19,7 +19,8 @@ stdenv.mkDerivation rec {
     find . ../include/opcode -type f -exec sed {} -i -e 's/"bfd.h"/<bfd.h>/' \;
   '';
 
-  nativeBuildInputs = [ autoreconfHook264 bison buildPackages.stdenv.cc ];
+  depsBuildBuild = [ buildPackages.stdenv.cc ];
+  nativeBuildInputs = [ autoreconfHook264 bison ];
   buildInputs = [ libiberty ];
   # dis-asm.h includes bfd.h
   propagatedBuildInputs = [ libbfd ];

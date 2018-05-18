@@ -7,33 +7,20 @@
 , idris
 }:
 
-let
-  date = "2017-11-11";
-in
 build-idris-package {
-  name = "specdris-${date}";
+  name = "specdris";
+  version = "2018-01-23";
 
   src = fetchgit {
     url = "https://github.com/pheymann/specdris";
-    rev = "88b80334b8e0b6601324e2410772d35022fc8eaa";
-    sha256 = "4813c4be1d4c3dd1dad35964b085f83cf9fb44b16824257c72b468d4bafd0e4f";
+    rev = "625f88f5e118e53f30bcf5e5f3dcf48eb268ac21";
+    sha256 = "1gc717xf4i7z75aqazy5wqm7b1dqfyx5pprdypxz1h3980m67fsa";
   };
 
-  propagatedBuildInputs = [ prelude base effects ];
+  idrisDeps = [ prelude base effects idris ];
 
-  buildPhase = ''
-    ${idris}/bin/idris --build specdris.ipkg
-  '';
-
-  checkPhase = ''
-      cd test/
-      ${idris}/bin/idris --testpkg test.ipkg
-      cd ../
-    '';
-
-  installPhase = ''
-    ${idris}/bin/idris --install specdris.ipkg --ibcsubdir $IBCSUBDIR
-  '';
+  # tests use a different ipkg and directory structure
+  doCheck = false;
 
   meta = {
     description = "A testing library for Idris";

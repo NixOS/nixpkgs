@@ -1,22 +1,34 @@
-{ stdenv
-, fetchurl, autoreconfHook264, bison, binutils-raw
+{ stdenv, buildPackages
+, fetchurl, fetchpatch, gnu-config, autoreconfHook264, bison, binutils-unwrapped
 , libiberty, zlib
 }:
 
 stdenv.mkDerivation rec {
   name = "libbfd-${version}";
-  inherit (binutils-raw.bintools) version src;
+  inherit (binutils-unwrapped) version src;
 
   outputs = [ "out" "dev" ];
 
-  patches = binutils-raw.bintools.patches ++ [
+  patches = binutils-unwrapped.patches ++ [
     ../../tools/misc/binutils/build-components-separately.patch
+    (fetchpatch {
+      url = "https://raw.githubusercontent.com/mxe/mxe/e1d4c144ee1994f70f86cf7fd8168fe69bd629c6/src/bfd-1-disable-subdir-doc.patch";
+      sha256 = "0pzb3i74d1r7lhjan376h59a7kirw15j7swwm8pz3zy9lkdqkj6q";
+    })
   ];
 
   # We just want to build libbfd
   postPatch = ''
     cd bfd
   '';
+
+  postAutoreconf = ''
+    echo "Updating config.guess and config.sub from ${gnu-config}"
+    cp -f ${gnu-config}/config.{guess,sub} ../
+  '';
+
+  # We update these ourselves
+  dontUpdateAutotoolsGnuConfigScripts = true;
 
   nativeBuildInputs = [ autoreconfHook264 bison ];
   buildInputs = [ libiberty zlib ];

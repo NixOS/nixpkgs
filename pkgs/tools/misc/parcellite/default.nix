@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, autoreconfHook
-, gtk2, hicolor_icon_theme, intltool, pkgconfig
+, gtk2, hicolor-icon-theme, intltool, pkgconfig
 , which, wrapGAppsHook, xdotool }:
 
 stdenv.mkDerivation rec {
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ autoreconfHook intltool pkgconfig wrapGAppsHook ];
-  buildInputs = [ gtk2 hicolor_icon_theme ];
+  buildInputs = [ gtk2 hicolor-icon-theme ];
 
   preFixup = ''
     # Need which and xdotool on path to fix auto-pasting.

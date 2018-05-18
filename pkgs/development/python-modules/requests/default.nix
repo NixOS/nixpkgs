@@ -3,7 +3,6 @@
 , pytest }:
 
 buildPythonPackage rec {
-  name = "${pname}-${version}";
   pname = "requests";
   version = "2.18.4";
 

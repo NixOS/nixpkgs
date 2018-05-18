@@ -1,7 +1,9 @@
 # General list operations.
 { lib }:
 with lib.trivial;
-
+let
+  inherit (lib.strings) toInt;
+in
 rec {
 
   inherit (builtins) head tail length isList elemAt concatLists filter elem genList;
@@ -409,6 +411,25 @@ rec {
               then compareLists cmp (tail a) (tail b)
               else rel;
 
+  /* Sort list using "Natural sorting".
+     Numeric portions of strings are sorted in numeric order.
+
+     Example:
+       naturalSort ["disk11" "disk8" "disk100" "disk9"]
+       => ["disk8" "disk9" "disk11" "disk100"]
+       naturalSort ["10.46.133.149" "10.5.16.62" "10.54.16.25"]
+       => ["10.5.16.62" "10.46.133.149" "10.54.16.25"]
+       naturalSort ["v0.2" "v0.15" "v0.0.9"]
+       => [ "v0.0.9" "v0.2" "v0.15" ]
+  */
+  naturalSort = lst:
+    let
+      vectorise = s: map (x: if isList x then toInt (head x) else x) (builtins.split "(0|[1-9][0-9]*)" s);
+      prepared = map (x: [ (vectorise x) x ]) lst; # remember vectorised version for O(n) regex splits
+      less = a: b: (compareLists compare (head a) (head b)) < 0;
+    in
+      map (x: elemAt x 1) (sort less prepared);
+
   /* Return the first (at most) N elements of a list.
 
      Example:
@@ -464,8 +485,12 @@ rec {
   init = list: assert list != []; take (length list - 1) list;
 
 
-  /* FIXME(zimbatm) Not used anywhere
-   */
+  /* return the image of the cross product of some lists by a function
+
+    Example:
+      crossLists (x:y: "${toString x}${toString y}") [[1 2] [3 4]]
+      => [ "13" "14" "23" "24" ]
+  */
   crossLists = f: foldl (fs: args: concatMap (f: map f args) fs) [f];
 
 

@@ -9,12 +9,11 @@
 
 buildPythonPackage rec {
   pname = "cytoolz";
-  version = "0.8.2";
-  name = "${pname}-${version}";
+  version = "0.9.0.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "476a2ad176de5eaef80499b7b43d4f72ba6d23df33d349088dae315e9b31c552";
+    sha256 = "84cc06fa40aa310f2df79dd440fc5f84c3e20f01f9f7783fc9c38d0a11ba00e5";
   };
 
   # Extension types
@@ -29,7 +28,7 @@ buildPythonPackage rec {
   '';
 
   meta = {
-    homepage = "http://github.com/pytoolz/cytoolz/";
+    homepage = "https://github.com/pytoolz/cytoolz/";
     description = "Cython implementation of Toolz: High performance functional utilities";
     license = "licenses.bsd3";
     maintainers = with lib.maintainers; [ fridh ];

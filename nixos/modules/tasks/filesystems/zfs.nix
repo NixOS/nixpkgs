@@ -24,7 +24,11 @@ let
 
   kernel = config.boot.kernelPackages;
 
-  packages = if config.boot.zfs.enableUnstable then {
+  packages = if config.boot.zfs.enableLegacyCrypto then {
+    spl = kernel.splLegacyCrypto;
+    zfs = kernel.zfsLegacyCrypto;
+    zfsUser = pkgs.zfsLegacyCrypto;
+  } else if config.boot.zfs.enableUnstable then {
     spl = kernel.splUnstable;
     zfs = kernel.zfsUnstable;
     zfsUser = pkgs.zfsUnstable;
@@ -72,6 +76,27 @@ in
           version will have already passed an extensive test suite, but it is
           more likely to hit an undiscovered bug compared to running a released
           version of ZFS on Linux.
+          '';
+      };
+
+      enableLegacyCrypto = mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          Enabling this option will allow you to continue to use the old format for
+          encrypted datasets. With the inclusion of stability patches the format of
+          encrypted datasets has changed. They can still be accessed and mounted but
+          in read-only mode mounted. It is highly recommended to convert them to
+          the new format.
+
+          This option is only for convenience to people that cannot convert their
+          datasets to the new format yet and it will be removed in due time.
+
+          For migration strategies from old format to this new one, check the Wiki:
+          https://nixos.wiki/wiki/NixOS_on_ZFS#Encrypted_Dataset_Format_Change
+
+          See https://github.com/zfsonlinux/zfs/pull/6864 for more details about
+          the stability patches.
           '';
       };
 
@@ -280,6 +305,8 @@ in
         }
       ];
 
+      virtualisation.lxd.zfsSupport = true;
+
       boot = {
         kernelModules = [ "spl" "zfs" ] ;
         extraModulePackages = with packages; [ spl zfs ];
@@ -427,7 +454,7 @@ in
                               }) snapshotNames);
 
       systemd.timers = let
-                         timer = name: if name == "frequent" then "*:15,30,45" else name;
+                         timer = name: if name == "frequent" then "*:0,15,30,45" else name;
                        in builtins.listToAttrs (map (snapName:
                             {
                               name = "zfs-snapshot-${snapName}";

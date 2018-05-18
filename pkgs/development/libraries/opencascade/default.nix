@@ -1,4 +1,4 @@
-{stdenv, fetchurl, mesa, tcl, tk, file, libXmu, cmake, libtool, qt4,
+{stdenv, fetchurl, libGLU_combined, tcl, tk, file, libXmu, cmake, libtool, qt4,
 ftgl, freetype}:
 
 stdenv.mkDerivation rec {
@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     sha256 = "0vpmnb0k5y2f7lpmwx9pg9yfq24zjvnsak5alzacncfm1hv9b6cd";
   };
 
-  buildInputs = [ mesa tcl tk file libXmu libtool qt4 ftgl freetype cmake ];
+  buildInputs = [ libGLU_combined tcl tk file libXmu libtool qt4 ftgl freetype cmake ];
 
   # Fix for glibc 2.26
   postPatch = ''

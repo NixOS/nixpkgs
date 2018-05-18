@@ -1,21 +1,25 @@
-{ stdenv, fetchurl, intltool, pkgconfig, glib, libnotify, gtk3, libgee
-, keybinder3, json_glib, zeitgeist, vala_0_34, hicolor_icon_theme
+{ stdenv, fetchurl, gettext, pkgconfig, glib, libnotify, gtk3, libgee
+, keybinder3, json-glib, zeitgeist, vala_0_38, hicolor-icon-theme, gobjectIntrospection
 }:
 
 let
-  version = "0.2.99.2";
+  version = "0.2.99.4";
 in stdenv.mkDerivation rec {
   name = "synapse-${version}";
 
   src = fetchurl {
     url = "https://launchpad.net/synapse-project/0.3/${version}/+download/${name}.tar.xz";
-    sha256 = "04cnsmwf9xa52dh7rpb4ia715c0ls8jg1p7llc9yf3lbg1m0bvzv";
+    sha256 = "1g6x9knb4jy1d8zgssjhzkgac583137pibisy9whjs8mckaj4k1j";
   };
 
-  nativeBuildInputs = [ pkgconfig intltool vala_0_34 ];
+  nativeBuildInputs = [
+    pkgconfig gettext vala_0_38
+    # For setup hook
+    gobjectIntrospection
+  ];
   buildInputs = [
-    glib libnotify gtk3 libgee keybinder3 json_glib zeitgeist
-    hicolor_icon_theme
+    glib libnotify gtk3 libgee keybinder3 json-glib zeitgeist
+    hicolor-icon-theme
   ];
 
   meta = with stdenv.lib; {

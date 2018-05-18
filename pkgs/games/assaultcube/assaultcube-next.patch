@@ -1,0 +1,11 @@
+--- 1.1.0.4/source/src/Makefile
++++ 1.1.0.4/source/src/Makefile
+@@ -6,7 +6,7 @@
+ # found to have been caused by the g++ compiler in the past. This seems to have
+ # been fixed now by relaxing the optimization that g++ does, so although we'll
+ # continue using clang++ (just in case), you can use g++ if you prefer.
+-CXX=clang++
++#CXX=clang++
+
+ # Changing this to ACDEBUG=yes will compile a debug version of AssaultCube.
+ ACDEBUG=no

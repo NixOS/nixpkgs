@@ -1,16 +1,26 @@
 { stdenv, fetchurl, pkgconfig, gnome3, gtk3, wrapGAppsHook
-, intltool, itstool, libxml2, systemd }:
+, gettext, itstool, libxml2, libxslt, docbook_xsl, docbook_xml_dtd_43, systemd }:
 
 stdenv.mkDerivation rec {
-  inherit (import ./src.nix fetchurl) name src;
+  name = "gnome-logs-${version}";
+  version = "3.28.2";
+
+  src = fetchurl {
+    url = "mirror://gnome/sources/gnome-logs/${gnome3.versionBranch version}/${name}.tar.xz";
+    sha256 = "0qqmw55rrxdz2n9xwn85nm7j9y9i85fxlxjfgv683mbpdyv0gbg0";
+  };
 
   configureFlags = [ "--disable-tests" ];
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [
-    gtk3 wrapGAppsHook intltool itstool libxml2
-    systemd gnome3.gsettings_desktop_schemas gnome3.defaultIconTheme
-  ];
+  nativeBuildInputs = [ pkgconfig wrapGAppsHook gettext itstool libxml2 libxslt docbook_xsl docbook_xml_dtd_43 ];
+  buildInputs = [ gtk3 systemd gnome3.gsettings-desktop-schemas gnome3.defaultIconTheme ];
+
+  passthru = {
+    updateScript = gnome3.updateScript {
+      packageName = "gnome-logs";
+      attrPath = "gnome3.gnome-logs";
+    };
+  };
 
   meta = with stdenv.lib; {
     homepage = https://wiki.gnome.org/Apps/Logs;

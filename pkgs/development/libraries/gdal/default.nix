@@ -8,12 +8,12 @@
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  version = "2.2.1";
+  version = "2.2.4";
   name = "gdal-${version}";
 
   src = fetchurl {
     url = "http://download.osgeo.org/gdal/${version}/${name}.tar.xz";
-    sha256 = "0rk0p0k787whzzdl8m1f9wcrm7h9bf1pny3z96d93b4383arhw4j";
+    sha256 = "0y1237m2wilxgrsd0cdjpbf1zj9z954sd8518g53hlmkmk8v27j4";
   };
 
   buildInputs = [ unzip libjpeg libtiff libpng proj openssl sqlite
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     "--with-poppler=${poppler.dev}" # optional
     "--with-libz=${zlib.dev}"       # optional
     "--with-pg=${postgresql}/bin/pg_config"
-    "--with-mysql=${mysql.lib.dev}/bin/mysql_config"
+    "--with-mysql=${mysql.connector-c or mysql}/bin/mysql_config"
     "--with-geotiff=${libgeotiff}"
     "--with-sqlite3=${sqlite.dev}"
     "--with-spatialite=${libspatialite}"

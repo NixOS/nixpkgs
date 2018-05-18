@@ -1,6 +1,6 @@
 { stdenv, fetchurl, fetchpatch, pkgconfig, libxml2, xorg, glib, pango
 , intltool, libgnome, libgnomecanvas, libbonoboui, GConf, libtool
-, gnome_vfs, libgnome_keyring, libglade }:
+, gnome_vfs, libgnome-keyring, libglade }:
 
 stdenv.mkDerivation rec {
   name = "libgnomeui-${minVer}.5";
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig intltool ];
   buildInputs =
-    [ xorg.xlibsWrapper libxml2 GConf pango glib libgnome_keyring libglade libtool ];
+    [ xorg.xlibsWrapper libxml2 GConf pango glib libgnome-keyring libglade libtool ];
 
   propagatedBuildInputs = [ libgnome libbonoboui libgnomecanvas gnome_vfs ];
 }

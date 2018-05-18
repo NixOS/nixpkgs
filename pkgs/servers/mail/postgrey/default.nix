@@ -8,12 +8,12 @@ let
     policy-test-flags = mk-perl-flags (with perlPackages; [
       ParseSyslog
     ]);
-    version = "1.36";
+    version = "1.37";
     name = "postgrey-${version}";
 in runCommand name {
   src = fetchurl {
     url = "http://postgrey.schweikert.ch/pub/${name}.tar.gz";
-    sha256 = "09jzb246ki988389r9gryigriv9sravk40q75fih5n0q4p2ghax2";
+    sha256 = "1xx51xih4711vrvc6d57il9ccallbljj5zhgqdb07jzmz11rakgz";
   };
   meta = with stdenv.lib; {
     description = "A postfix policy server to provide greylisting";

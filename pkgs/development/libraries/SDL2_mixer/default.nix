@@ -1,5 +1,6 @@
 { stdenv, lib, fetchurl, autoreconfHook, pkgconfig, which
 , SDL2, libogg, libvorbis, smpeg2, flac, libmodplug
+, CoreServices, AudioUnit, AudioToolbox
 , enableNativeMidi ? false, fluidsynth ? null }:
 
 stdenv.mkDerivation rec {
@@ -17,6 +18,8 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoreconfHook pkgconfig which ];
 
+  buildInputs = stdenv.lib.optionals stdenv.isDarwin [ CoreServices AudioUnit AudioToolbox ];
+
   propagatedBuildInputs = [ SDL2 libogg libvorbis fluidsynth smpeg2 flac libmodplug ];
 
   configureFlags = [ "--disable-music-ogg-shared" ]
@@ -24,7 +27,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "SDL multi-channel audio mixer library";
-    platforms = platforms.linux;
+    platforms = platforms.unix;
     homepage = https://www.libsdl.org/projects/SDL_mixer/;
     maintainers = with maintainers; [ MP2E ];
     license = licenses.zlib;

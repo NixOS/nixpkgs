@@ -78,10 +78,10 @@ vmTools.runInLinuxImage (stdenv.mkDerivation (
         header "Generated DEB package: $i"
         dpkg-deb --info "$i"
         pkgName=$(dpkg-deb -W "$i" | awk '{print $1}')
-        dpkg -i "$i"
         echo "file deb $i" >> $out/nix-support/hydra-build-products
         stopNest
       done
+      dpkg -i $out/debs/*.deb
 
       for i in $extraDebs; do
         echo "file deb-extra $(ls $i/debs/*.deb | sort | head -1)" >> $out/nix-support/hydra-build-products

@@ -23,6 +23,8 @@ let
       fi
     '';
 
+  udhcpcArgs = toString cfg.udhcpc.extraArgs;
+
 in
 
 {
@@ -40,6 +42,20 @@ in
         kernel documentation</link>.  Otherwise, if
         <option>networking.useDHCP</option> is enabled, an IP address
         is acquired using DHCP.
+
+        You should add the module(s) required for your network card to
+        boot.initrd.availableKernelModules. lspci -v -s &lt;ethernet controller&gt;
+        will tell you which.
+      '';
+    };
+
+    boot.initrd.network.udhcpc.extraArgs = mkOption {
+      default = [];
+      type = types.listOf types.str;
+      description = ''
+        Additional command-line arguments passed verbatim to udhcpc if
+        <option>boot.initrd.network.enable</option> and <option>networking.useDHCP</option>
+        are enabled.
       '';
     };
 
@@ -87,7 +103,7 @@ in
 
           # Acquire a DHCP lease.
           echo "acquiring IP address via DHCP..."
-          udhcpc --quit --now --script ${udhcpcScript} && hasNetwork=1
+          udhcpc --quit --now --script ${udhcpcScript} ${udhcpcArgs} && hasNetwork=1
         fi
       ''
 

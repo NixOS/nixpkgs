@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, texinfo, libXext, xextproto, libX11, xproto
 , libXpm, libXt, libXcursor, alsaLib, cmake, zlib, libpng, libvorbis
 , libXxf86dga, libXxf86misc, xf86dgaproto, xf86miscproto
-, xf86vidmodeproto, libXxf86vm, openal, mesa, kbproto, libjpeg, flac
+, xf86vidmodeproto, libXxf86vm, openal, libGLU_combined, kbproto, libjpeg, flac
 , inputproto, libXi, fixesproto, libXfixes, freetype, libopus, libtheora
 , physfs, enet, pkgconfig, gtk2, pcre, libpulseaudio, libpthreadstubs
 , libXdmcp
@@ -9,19 +9,19 @@
 
 stdenv.mkDerivation rec {
   name = "allegro-${version}";
-  version = "5.2.3.0";
+  version = "5.2.4.0";
 
   src = fetchFromGitHub {
     owner = "liballeg";
     repo = "allegro5";
     rev = version;
-    sha256 = "0bx240x0filalfarylqjgqf3g80c7dhzhy4m162swjlg0vjpgblr";
+    sha256 = "01y3hirn5b08f188nnhb2cbqj4vzysr7l2qpz2208srv8arzmj2d";
   };
 
   buildInputs = [
     texinfo libXext xextproto libX11 xproto libXpm libXt libXcursor
     alsaLib cmake zlib libpng libvorbis libXxf86dga libXxf86misc
-    xf86dgaproto xf86miscproto xf86vidmodeproto libXxf86vm openal mesa
+    xf86dgaproto xf86miscproto xf86vidmodeproto libXxf86vm openal libGLU_combined
     kbproto libjpeg flac
     inputproto libXi fixesproto libXfixes
     enet libtheora freetype physfs libopus pkgconfig gtk2 pcre libXdmcp

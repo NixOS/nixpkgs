@@ -7,14 +7,19 @@
 
 stdenv.mkDerivation rec {
   name = "petsc-${version}";
-  version = "3.7.6";
+  version = "3.8.4";
 
   src = fetchurl {
     url = "http://ftp.mcs.anl.gov/pub/petsc/release-snapshots/petsc-${version}.tar.gz";
-    sha256 = "0jfl35lrhzvv982z6h1v5rcp39g0x16ca43rm9dx91wm6i8y13iw";
+    sha256 = "1iy49gagxncx09d88kxnwkj876p35683mpfk33x37165si6xqy4z";
   };
 
   nativeBuildInputs = [ blas gfortran.cc.lib liblapack python ];
+
+  prePatch = stdenv.lib.optionalString stdenv.isDarwin ''
+    substituteInPlace config/install.py \
+      --replace /usr/bin/install_name_tool install_name_tool
+  '';
 
   preConfigure = ''
     patchShebangs .

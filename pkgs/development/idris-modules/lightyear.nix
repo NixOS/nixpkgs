@@ -7,11 +7,11 @@
 , idris
 }:
 
-let
-  date = "2017-09-10";
-in
-build-idris-package {
-  name = "lightyear-${date}";
+build-idris-package  {
+  name = "lightyear";
+  version = "2017-09-10";
+
+  idrisDeps = [ prelude base effects ];
 
   src = fetchFromGitHub {
     owner = "ziman";
@@ -20,13 +20,11 @@ build-idris-package {
     sha256 = "05x66abhpbdm6yr0afbwfk6w04ysdk78gylj5alhgwhy4jqakv29";
   };
 
-  propagatedBuildInputs = [ prelude base effects ];
-
   meta = {
     description = "Parser combinators for Idris";
     homepage = https://github.com/ziman/lightyear;
     license = lib.licenses.bsd2;
-    maintainers = [ lib.maintainers.siddharthist ];
+    maintainers = with lib.maintainers; [ siddharthist brainrape ];
     inherit (idris.meta) platforms;
   };
 }

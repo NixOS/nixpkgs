@@ -20,7 +20,7 @@ fetchzip {
       See https://github.com/tonsky/FiraCode/issues/211.
     '';
     license = licenses.ofl;
-    maintainers = [ maintainers.profpatsch ];
+    maintainers = [ maintainers.Profpatsch ];
     homepage = "https://github.com/tonsky/FiraCode/issues/211#issuecomment-239058632";
   };
 }

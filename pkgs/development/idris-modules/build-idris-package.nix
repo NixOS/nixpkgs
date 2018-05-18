@@ -1,41 +1,46 @@
 # Build an idris package
-#
-# args: Additional arguments to pass to mkDerivation. Generally should include at least
-#       name and src.
-{ stdenv, idris, gmp }: args: stdenv.mkDerivation ({
-  preHook = ''
-    # Library import path
-    export IDRIS_LIBRARY_PATH=$PWD/idris-libs
-    mkdir -p $IDRIS_LIBRARY_PATH
+{ stdenv, idrisPackages, gmp }:
+  { idrisDeps ? []
+  , name
+  , version
+  , src
+  , meta
+  , extraBuildInputs ? []
+  , postUnpack ? ""
+  , doCheck ? true
+  }:
+let
+  idris-with-packages = idrisPackages.with-packages idrisDeps;
+in
+stdenv.mkDerivation ({
 
-    # Library install path
-    export IBCSUBDIR=$out/lib/${idris.name}
-    mkdir -p $IBCSUBDIR
+  name = "${name}-${version}";
 
-    addIdrisLibs () {
-      if [ -d $1/lib/${idris.name} ]; then
-        ln -sv $1/lib/${idris.name}/* $IDRIS_LIBRARY_PATH
-      fi
-    }
+  inherit postUnpack src doCheck meta;
 
-    envHooks+=(addIdrisLibs)
+
+  # Some packages use the style
+  # opts = -i ../../path/to/package
+  # rather than the declarative pkgs attribute so we have to rewrite the path.
+  postPatch = ''
+    sed -i *.ipkg -e "/^opts/ s|-i \\.\\./|-i ${idris-with-packages}/libs/|g"
   '';
 
   buildPhase = ''
-    ${idris}/bin/idris --build *.ipkg
+    ${idris-with-packages}/bin/idris --build *.ipkg
   '';
-
-  doCheck = true;
 
   checkPhase = ''
     if grep -q test *.ipkg; then
-      ${idris}/bin/idris --testpkg *.ipkg
+      ${idris-with-packages}/bin/idris --testpkg *.ipkg
     fi
   '';
 
   installPhase = ''
-    ${idris}/bin/idris --install *.ipkg --ibcsubdir $IBCSUBDIR
+    ${idris-with-packages}/bin/idris --install *.ipkg --ibcsubdir $out/libs
   '';
 
-  buildInputs = [ gmp ];
-} // args)
+  buildInputs = [ gmp ] ++ extraBuildInputs;
+
+  propagatedBuildInputs = idrisDeps;
+})

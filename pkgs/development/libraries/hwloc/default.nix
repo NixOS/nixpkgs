@@ -1,19 +1,18 @@
 { stdenv, fetchurl, pkgconfig, expat, ncurses, pciutils, numactl
-, cairo, libX11
-, x11Support ? (!stdenv.isCygwin)
+, x11Support ? false, libX11 ? null, cairo ? null
 }:
+
+assert x11Support -> libX11 != null && cairo != null;
 
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  name = "hwloc-1.11.8";
+  name = "hwloc-1.11.10";
 
   src = fetchurl {
     url = "http://www.open-mpi.org/software/hwloc/v1.11/downloads/${name}.tar.bz2";
-    sha256 = "0karxv4r1r8sa7ki5aamlxdvyvz0bvzq4gdhq0yi5nc4a0k11vzc";
+    sha256 = "1ryibcng40xcq22lsj85fn2vcvrksdx9rr3wwxpq8dw37lw0is1b";
   };
-
-  hardeningDisable = [ "format" ];
 
   configureFlags = [
     "--localstatedir=/var"
@@ -75,8 +74,8 @@ stdenv.mkDerivation rec {
 
     # http://www.open-mpi.org/projects/hwloc/license.php
     license = licenses.bsd3;
-    homepage = http://www.open-mpi.org/projects/hwloc/;
-    maintainers = [ ];
+    homepage = https://www.open-mpi.org/projects/hwloc/;
+    maintainers = with maintainers; [ fpletz ];
     platforms = platforms.all;
   };
 }

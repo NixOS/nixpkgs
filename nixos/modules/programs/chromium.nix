@@ -36,6 +36,7 @@ in
             "chlffgpmiacpedhhbkiomidkjlcfhogd" # pushbullet
             "mbniclmhobmnbdlbpiphghaielnnpgdp" # lightshot
             "gcbommkclmclpchllfjekcdonpmejbdp" # https everywhere
+            "cjpalhdlnbpafiamejdnhcphjbkeiagm" # ublock origin
           ]
         '';
       };
@@ -52,8 +53,7 @@ in
         description = "Chromium default search provider url.";
         default = null;
         example =
-          "https://encrypted.google.com/search?q={searchTerms}&{google:RLZ}{google:originalQueryForSuggestion}{google:assistedQueryStats}{google:searchFieldtrialParameter}{google:
-        ↪searchClient}{google:sourceId}{google:instantExtendedEnabledParameter}ie={inputEncoding}";
+          "https://encrypted.google.com/search?q={searchTerms}&{google:RLZ}{google:originalQueryForSuggestion}{google:assistedQueryStats}{google:searchFieldtrialParameter}{google:searchClient}{google:sourceId}{google:instantExtendedEnabledParameter}ie={inputEncoding}";
       };
 
       defaultSearchProviderSuggestURL = mkOption {
@@ -79,7 +79,11 @@ in
   ###### implementation
 
   config = lib.mkIf cfg.enable {
+    # for chromium
     environment.etc."chromium/policies/managed/default.json".text = builtins.toJSON defaultProfile;
     environment.etc."chromium/policies/managed/extra.json".text = builtins.toJSON cfg.extraOpts;
+    # for google-chrome https://www.chromium.org/administrators/linux-quick-start
+    environment.etc."opt/chrome/policies/managed/default.json".text = builtins.toJSON defaultProfile;
+    environment.etc."opt/chrome/policies/managed/extra.json".text = builtins.toJSON cfg.extraOpts;
   };
 }

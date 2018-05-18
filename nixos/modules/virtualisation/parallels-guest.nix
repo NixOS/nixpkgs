@@ -3,9 +3,7 @@
 with lib;
 
 let
-
-  prl-tools = config.boot.kernelPackages.prl-tools;
-
+  prl-tools = config.hardware.parallels.package;
 in
 
 {
@@ -22,6 +20,26 @@ in
         '';
       };
 
+      autoMountShares = mkOption {
+        type = types.bool;
+        default = true;
+        description = ''
+          Control prlfsmountd service. When this service is running, shares can not be manually
+          mounted through `mount -t prl_fs ...` as this service will remount and trample any set options.
+          Recommended to enable for simple file sharing, but extended share use such as for code should
+          disable this to manually mount shares.
+        '';
+      };
+
+      package = mkOption {
+        type = types.package;
+        default = config.boot.kernelPackages.prl-tools;
+        defaultText = "config.boot.kernelPackages.prl-tools";
+        example = literalExample "config.boot.kernelPackages.prl-tools";
+        description = ''
+          Defines which package to use for prl-tools. Override to change the version.
+        '';
+      };
     };
 
   };
@@ -67,7 +85,7 @@ in
       };
     };
 
-    systemd.services.prlfsmountd = {
+    systemd.services.prlfsmountd = mkIf config.hardware.parallels.autoMountShares {
       description = "Parallels Shared Folders Daemon";
       wantedBy = [ "multi-user.target" ];
       serviceConfig = rec {

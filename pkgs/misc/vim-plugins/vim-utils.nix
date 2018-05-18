@@ -224,7 +224,7 @@ let
           else if builtins.isAttrs x && builtins ? out then toNix "${x}" # a derivation
           else if builtins.isAttrs x then "{${lib.concatStringsSep ", " (lib.mapAttrsToList (n: v: "${toNix n}: ${toNix v}") x)}}"
           else if builtins.isList x then "[${lib.concatMapStringsSep ", " toNix x}]"
-          else throw "turning ${lib.showVal x} into a VimL thing not implemented yet";
+          else throw "turning ${lib.generators.toPretty {} x} into a VimL thing not implemented yet";
 
       in assert builtins.hasAttr "vim-addon-manager" knownPlugins;
       ''
@@ -325,11 +325,14 @@ rec {
 
   # add a customize option to a vim derivation
   makeCustomizable = vim: vim // {
-    customize = {name, vimrcConfig}: vimWithRC {
+    customize = { name, vimrcConfig }: vimWithRC {
       vimExecutable = "${vim}/bin/vim";
       inherit name;
       vimrcFile = vimrcFile vimrcConfig;
     };
+
+    override = f: makeCustomizable (vim.override f);
+    overrideAttrs = f: makeCustomizable (vim.overrideAttrs f);
   };
 
   pluginnames2Nix = {name, namefiles} : vim_configurable.customize {

@@ -28,10 +28,16 @@ qtModule {
   preConfigure = ''
     QMAKEPATH="$PWD/Tools/qmake''${QMAKEPATH:+:}$QMAKEPATH"
     fixQtBuiltinPaths . '*.pr?'
+    # Fix hydra's "Log limit exceeded"
+    export qmakeFlags="$qmakeFlags CONFIG+=silent"
   '';
 
   NIX_CFLAGS_COMPILE =
-    optionals flashplayerFix
+    # with gcc7 this warning blows the log over Hydra's limit
+    [ "-Wno-expansion-to-defined" ]
+    # with clang this warning blows the log over Hydra's limit
+    ++ optional stdenv.isDarwin "-Wno-inconsistent-missing-override"
+    ++ optionals flashplayerFix
       [
         ''-DNIXPKGS_LIBGTK2="${getLib gtk2}/lib/libgtk-x11-2.0"''
         ''-DNIXPKGS_LIBGDK2="${getLib gdk_pixbuf}/lib/libgdk-x11-2.0"''

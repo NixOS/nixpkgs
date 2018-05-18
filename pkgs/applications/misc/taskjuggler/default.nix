@@ -7,6 +7,7 @@ bundlerEnv {
   gemdir = ./.;
 
   meta = {
+    broken = true; # needs ruby 2.0
     description = "A modern and powerful project management tool";
     homepage    = http://taskjuggler.org/;
     license     = lib.licenses.gpl2;

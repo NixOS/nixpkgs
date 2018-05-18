@@ -1,15 +1,20 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "chkrootkit-0.51";
+  name = "chkrootkit-0.52";
 
   src = fetchurl {
     url = "ftp://ftp.pangeia.com.br/pub/seg/pac/${name}.tar.gz";
-    sha256 = "0y0kbhy8156y8zli0wcqbakb9rprzl1w7jn0kw3xjfgzrgsncqgn";
+    sha256 = "04d2yxpy99y90rvrlc9fqmlffs6iyfbghxbhvv12j1xfr2ww0y65";
   };
 
   # TODO: a lazy work-around for linux build failure ...
   makeFlags = [ "STATIC=" ];
+
+   postPatch = ''
+    substituteInPlace chkrootkit \
+      --replace " ./" " $out/bin/"
+   '';
 
   installPhase = ''
     mkdir -p $out/sbin

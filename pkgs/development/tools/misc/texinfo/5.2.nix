@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, ncurses, perl, xz, procps, interactive ? false }:
+{ stdenv, buildPackages, fetchurl, ncurses, perl, xz, procps, interactive ? false }:
 
 with stdenv.lib;
 
@@ -10,9 +10,16 @@ stdenv.mkDerivation rec {
     sha256 = "1njfwh2z34r2c4r0iqa7v24wmjzvsfyz4vplzry8ln3479lfywal";
   };
 
+  # We need a native compiler to build perl XS extensions
+  # when cross-compiling.
+  depsBuildBuild = [ buildPackages.stdenv.cc perl ];
+
   buildInputs = [ perl xz.bin ]
     ++ optional interactive ncurses
     ++ optional doCheck procps; # for tests
+
+  configureFlags = [ "PERL=${buildPackages.perl}/bin/perl" ]
+    ++ stdenv.lib.optional stdenv.isSunOS "AWK=${gawk}/bin/awk";
 
   preInstall = ''
     installFlags="TEXMF=$out/texmf-dist";

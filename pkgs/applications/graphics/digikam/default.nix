@@ -1,4 +1,4 @@
-{ mkDerivation, lib, fetchurl, cmake, doxygen, extra-cmake-modules, wrapGAppsHook, fetchpatch
+{ mkDerivation, lib, fetchFromGitHub, cmake, doxygen, extra-cmake-modules, wrapGAppsHook, fetchpatch
 
 # For `digitaglinktree`
 , perl, sqlite
@@ -34,7 +34,7 @@
 , libqtav
 , libusb1
 , marble
-, mesa
+, libGLU_combined
 , mysql
 , opencv3
 , pcre
@@ -50,11 +50,13 @@
 
 mkDerivation rec {
   name    = "digikam-${version}";
-  version = "5.7.0";
+  version = "5.9.0";
 
-  src = fetchurl {
-    url = "mirror://kde/stable/digikam/${name}.tar.xz";
-    sha256 = "1xah079g47fih8l9qy1ifppfvmq5yms5y1z54nvxdyz8nsszy19n";
+  src = fetchFromGitHub {
+    owner  = "KDE";
+    repo   = "digikam";
+    rev    = "v${version}";
+    sha256 = "09diw273h9i7rss89ba82yrfy6jb2njv3k0dknrrg7bb998vrw2d";
   };
 
   nativeBuildInputs = [ cmake doxygen extra-cmake-modules kdoctools wrapGAppsHook ];
@@ -74,8 +76,7 @@ mkDerivation rec {
     liblqr1
     libqtav
     libusb1
-    mesa
-    mysql
+    libGLU_combined
     opencv3
     pcre
 
@@ -112,24 +113,10 @@ mkDerivation rec {
       --replace "/usr/bin/sqlite3" "${sqlite}/bin/sqlite3"
   '';
 
-  patches = [
-    # fix Qt-5.9.3 empty album problem
-    (fetchpatch {
-      url = "https://cgit.kde.org/digikam.git/patch/?id=855ba5b7d4bc6337234720a72ea824ddd3b32e5b";
-      sha256 = "0zk8p182piy6xn9v0mhwawya9ciq596vql1qc3lgnx371a97mmni";
-    })
-  ];
-
-  patchFlags = "-d core -p1";
-
-  # `en make -f core/utilities/assistants/expoblending/CMakeFiles/expoblending_src.dir/build.make core/utilities/assistants/expoblending/CMakeFiles/expoblending_src.dir/manager/expoblendingthread.cpp.o`:
-  # digikam_version.h:37:24: fatal error: gitversion.h: No such file or directory
-  enableParallelBuilding = false;
-
   meta = with lib; {
     description = "Photo Management Program";
     license = licenses.gpl2;
-    homepage = http://www.digikam.org;
+    homepage = https://www.digikam.org;
     maintainers = with maintainers; [ the-kenny ];
     platforms = platforms.linux;
   };

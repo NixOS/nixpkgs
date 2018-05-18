@@ -1,24 +1,23 @@
-{ stdenv, fetchurl, pkgconfig, intltool, gtk3, dbus_glib, gupnp, mate, imagemagick }:
+{ stdenv, fetchurl, pkgconfig, intltool, gtk3, dbus-glib, gupnp, mate, imagemagick, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
   name = "caja-extensions-${version}";
-  version = "${major-ver}.${minor-ver}";
-  major-ver = "1.18";
-  minor-ver = "1";
+  version = "1.20.0";
 
   src = fetchurl {
-    url = "http://pub.mate-desktop.org/releases/${major-ver}/${name}.tar.xz";
-    sha256 = "0hgala7zkfsa60jflq3s4n9yd11dhfdcla40l83cmgc3r1az7cmw";
+    url = "http://pub.mate-desktop.org/releases/${mate.getRelease version}/${name}.tar.xz";
+    sha256 = "1abi7s31mx7v8x0f747bmb3s8hrv8fv007pflv2n545yvn0m1dpj";
   };
 
   nativeBuildInputs = [
     pkgconfig
     intltool
+    wrapGAppsHook
   ];
 
   buildInputs = [
     gtk3
-    dbus_glib
+    dbus-glib
     gupnp
     mate.caja
     mate.mate-desktop

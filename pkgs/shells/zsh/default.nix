@@ -1,11 +1,11 @@
 { stdenv, fetchurl, ncurses, pcre }:
 
 let
-  version = "5.4.2";
+  version = "5.5.1";
 
   documentation = fetchurl {
     url = "mirror://sourceforge/zsh/zsh-${version}-doc.tar.gz";
-    sha256 = "1703g6vfz2vpb866wgl71nvg0ynjq0zvrjwkqbv7v6q3606jbmn3";
+    sha256 = "0bm9n7lycdzvw5hmgi4a920pqbb5yxvmyhfxx8jbign2hzgf7g01";
   };
 
 in
@@ -15,20 +15,24 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "mirror://sourceforge/zsh/zsh-${version}.tar.gz";
-    sha256 = "1jdcfinzmki2w963msvsanv29vqqfmdfm4rncwpw0r3zqnrcsywm";
+    sha256 = "10705qnnr3p416bwfjaip9r7yw187vczzjrk60yg79dfwy4slk3p";
   };
 
   buildInputs = [ ncurses pcre ];
 
+  configureFlags = [
+    "--enable-maildir-support"
+    "--enable-multibyte"
+    "--with-tcsetpgrp"
+    "--enable-pcre"
+  ];
   preConfigure = ''
-    configureFlags="--enable-maildir-support --enable-multibyte --enable-zprofile=$out/etc/zprofile --with-tcsetpgrp --enable-pcre"
+    configureFlagsArray+=(--enable-zprofile=$out/etc/zprofile)
   '';
 
   # the zsh/zpty module is not available on hydra
   # so skip groups Y Z
-  checkFlagsArray = ''
-    (TESTNUM=A TESTNUM=B TESTNUM=C TESTNUM=D TESTNUM=E TESTNUM=V TESTNUM=W)
-  '';
+  checkFlags = map (T: "TESTNUM=${T}") (stdenv.lib.stringToCharacters "ABCDEVW");
 
   # XXX: think/discuss about this, also with respect to nixos vs nix-on-X
   postInstall = ''

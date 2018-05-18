@@ -15,6 +15,6 @@ stdenv.mkDerivation rec {
     description = "Comparing files on a word by word basis";
     license = stdenv.lib.licenses.gpl3Plus;
     maintainers = [ stdenv.lib.maintainers.eelco ];
-    platforms = stdenv.lib.platforms.linux;
+    platforms = stdenv.lib.platforms.unix;
   };
 }

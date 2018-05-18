@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, openconnect, file, gawk,
+{ stdenv, fetchurl, fetchpatch, pkgconfig, openconnect, file, gawk,
   openvpn, vpnc, glib, dbus, iptables, gnutls, polkit,
   wpa_supplicant, readline6, pptp, ppp }:
 
@@ -15,6 +15,14 @@ stdenv.mkDerivation rec {
                   wpa_supplicant readline6 pptp ppp ];
 
   nativeBuildInputs = [ pkgconfig file gawk ];
+
+  patches = [
+    (fetchpatch {
+      name = "header-include.patch";
+      url = "https://git.kernel.org/pub/scm/network/connman/connman.git/patch/?id=bdfb3526466f8fb8f13d9259037d8f42c782ce24";
+      sha256 = "0q6ysy2xvvcmkcbw1y29x90g7g7kih7v95k1xbxdcxkras5yl8nf";
+    })
+  ];
 
   preConfigure = ''
     export WPASUPPLICANT=${wpa_supplicant}/sbin/wpa_supplicant
@@ -44,6 +52,7 @@ stdenv.mkDerivation rec {
     "--enable-datafiles"
     "--enable-pptp"
     "--with-pptp=${pptp}/sbin/pptp"
+    "--enable-iwd"
   ];
 
   postInstall = ''

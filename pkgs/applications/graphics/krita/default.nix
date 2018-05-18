@@ -9,11 +9,11 @@
 
 mkDerivation rec {
   name = "krita-${version}";
-  version = "3.3.2";
+  version = "4.0.2";
 
   src = fetchurl {
-    url = https://download.kde.org/stable/krita/3.3.2/krita-3.3.2.1.tar.xz;
-    sha256 = "0i3l27cfi1h486m74xf4ynk0pwx32xaqraa91a0g1bpj1jxf2mg5";
+    url = "https://download.kde.org/stable/krita/${version}/${name}.tar.gz";
+    sha256 = "136nia6z8l9czk3ls2c9dpk617cvfilfhx0s838g5nrqxh4kn0cf";
   };
 
   nativeBuildInputs = [ cmake extra-cmake-modules ];
@@ -29,7 +29,7 @@ mkDerivation rec {
   NIX_CFLAGS_COMPILE = [ "-I${ilmbase.dev}/include/OpenEXR" ];
 
   meta = with lib; {
-    description = "A free an open source painting application";
+    description = "A free and open source painting application";
     homepage = https://krita.org/;
     maintainers = with maintainers; [ abbradar ];
     platforms = platforms.linux;

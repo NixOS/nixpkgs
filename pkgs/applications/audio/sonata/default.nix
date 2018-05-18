@@ -19,16 +19,14 @@ in buildPythonApplication rec {
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
     intltool wrapGAppsHook
-    gnome3.gnome_themes_standard gnome3.defaultIconTheme
-    gnome3.gsettings_desktop_schemas
+    gnome3.defaultIconTheme
+    gnome3.gsettings-desktop-schemas
   ];
 
   postPatch = ''
     # Remove "Local MPD" tab which is not suitable for NixOS.
     sed -i '/localmpd/d' sonata/consts.py
   '';
-
-  propagatedUserEnvPkgs = [ gnome3.gnome_themes_standard ];
 
   propagatedBuildInputs = [
     gobjectIntrospection gtk3 pygobject3

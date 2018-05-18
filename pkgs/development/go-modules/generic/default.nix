@@ -98,7 +98,7 @@ go.stdenv.mkDerivation (
     rmdir goPath
 
   '') + (lib.optionalString (extraSrcPaths != []) ''
-    ${rsync}/bin/rsync -a ${lib.concatMapStrings (p: "${p}/src") extraSrcPaths} go
+    ${rsync}/bin/rsync -a ${lib.concatMapStringsSep " " (p: "${p}/src") extraSrcPaths} go
 
   '') + ''
     export GOPATH=$NIX_BUILD_TOP/go:$GOPATH
@@ -195,6 +195,9 @@ go.stdenv.mkDerivation (
   preFixup = preFixup + ''
     find $bin/bin -type f -exec ${removeExpr removeReferences} '{}' + || true
   '';
+
+  # Disable go cache, which is not reused in nix anyway
+  GOCACHE = "off";
 
   shellHook = ''
     d=$(mktemp -d "--suffix=-$name")

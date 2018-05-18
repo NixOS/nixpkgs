@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchurl
+, fetchFromGitHub
 , pytest
 , contextlib2
 , cytoolz
@@ -25,12 +25,13 @@
 
 buildPythonPackage rec {
   pname = "blaze";
-  version = "0.11.0";
-  name = "${pname}-${version}";
+  version = "0.11.3";
 
-  src = fetchurl {
-    url = "https://github.com/blaze/blaze/archive/${version}.tar.gz";
-    sha256 = "07zrrxkmdqk84xvdmp29859zcfzlpx5pz6g62l28nqp6n6a7yq9a";
+  src = fetchFromGitHub {
+    owner = pname;
+    repo = pname;
+    rev = version;
+    sha256 = "0w916k125058p40cf7i090f75pgv3cqdb8vwjzqhb9r482fa6717";
   };
 
   checkInputs = [ pytest ];
@@ -56,13 +57,8 @@ buildPythonPackage rec {
     toolz
   ];
 
-  # Failing test
-  # ERROR collecting blaze/tests/test_interactive.py
-  # E   networkx.exception.NetworkXNoPath: node <class 'list'> not
-  # reachable from <class 'dask.array.core.Array'>
-  doCheck = false;
-
   checkPhase = ''
+    rm pytest.ini # Not interested in coverage
     py.test blaze/tests
   '';
 

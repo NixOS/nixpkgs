@@ -15,15 +15,15 @@ let
   # instead, we download localkube ourselves and shove it into the minikube binary. The versions URL that minikube uses is
   # currently https://storage.googleapis.com/minikube/k8s_releases.json
 
-  localkube-version = "1.8.0";
+  localkube-version = "1.10.0";
   localkube-binary = fetchurl {
     url = "https://storage.googleapis.com/minikube/k8sReleases/v${localkube-version}/localkube-linux-amd64";
-    sha256 = "09mv1g9i0d14brvvp2wxgmfqvgp0na5dbm4z76a660q1fxszvgqc";
+    sha256 = "02lkl2g274689h07pkcwnxn04swy6aa3f2z77n421mx38bbq2kpd";
   };
 in buildGoPackage rec {
   pname   = "minikube";
   name    = "${pname}-${version}";
-  version = "0.24.1";
+  version = "0.26.0";
 
   goPackagePath = "k8s.io/minikube";
 
@@ -31,7 +31,7 @@ in buildGoPackage rec {
     owner  = "kubernetes";
     repo   = "minikube";
     rev    = "v${version}";
-    sha256 = "18b5ic4lcn84hq2ji5alyx58x9vi0b03544i5xzfgn3h2k78kynk";
+    sha256 = "1wc2gvmgb59yh0ldm2plvh6s8mvxvysrxp6w75z16ii86jmi3wr6";
   };
 
   patches = [

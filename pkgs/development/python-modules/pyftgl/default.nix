@@ -1,5 +1,5 @@
 { stdenv, buildPythonPackage, fetchFromGitHub, isPy3k
-, boost, freetype, ftgl, mesa }:
+, boost, freetype, ftgl, libGLU_combined }:
 
 buildPythonPackage rec {
   pname = "pyftgl";
@@ -17,7 +17,7 @@ buildPythonPackage rec {
     sed -i "s,'boost_python','boost_python3',g" setup.py
   '';
 
-  buildInputs = [ boost freetype ftgl mesa ];
+  buildInputs = [ boost freetype ftgl libGLU_combined ];
 
   meta = with stdenv.lib; {
     description = "Python bindings for FTGL (FreeType for OpenGL)";

@@ -69,7 +69,7 @@ in
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
       serviceConfig =
-        { ExecStart = "${pkg}/bin/tox-bootstrapd ${cfgFile}";
+        { ExecStart = "${pkg}/bin/tox-bootstrapd --config=${cfgFile}";
           Type = "forking";
           inherit PIDFile;
           User = "tox-bootstrapd";

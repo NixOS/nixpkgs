@@ -1,10 +1,10 @@
-{ fetchurl, fetchpatch, stdenv, meson, ninja, pkgconfig, gnome3, json_glib, libcroco, gettext, libsecret
-, python3Packages, libsoup, polkit, clutter, networkmanager, docbook_xsl , docbook_xsl_ns, at_spi2_core
-, libstartup_notification, telepathy_glib, telepathy_logger, libXtst, p11_kit, unzip, glibcLocales
-, sqlite, libgweather, libcanberra_gtk3, librsvg, geoclue2, perl, docbook_xml_dtd_42
+{ fetchurl, fetchpatch, substituteAll, stdenv, meson, ninja, pkgconfig, gnome3, json-glib, libcroco, gettext, libsecret
+, python3Packages, libsoup, polkit, clutter, networkmanager, docbook_xsl , docbook_xsl_ns, at-spi2-core
+, libstartup_notification, telepathy-glib, telepathy-logger, libXtst, unzip, glibcLocales, shared-mime-info
+, libgweather, libcanberra-gtk3, librsvg, geoclue2, perl, docbook_xml_dtd_42, desktop-file-utils
 , libpulseaudio, libical, nss, gobjectIntrospection, gstreamer, wrapGAppsHook
 , accountsservice, gdk_pixbuf, gdm, upower, ibus, networkmanagerapplet
-, gst_all_1 }:
+, sassc, systemd, gst_all_1 }:
 
 # http://sources.gentoo.org/cgi-bin/viewvc.cgi/gentoo-x86/gnome-base/gnome-shell/gnome-shell-3.10.2.1.ebuild?revision=1.3&view=markup
 
@@ -12,28 +12,39 @@ let
   pythonEnv = python3Packages.python.withPackages ( ps: with ps; [ pygobject3 ] );
 
 in stdenv.mkDerivation rec {
-  inherit (import ./src.nix fetchurl) name src;
+  name = "gnome-shell-${version}";
+  version = "3.28.2";
+
+  src = fetchurl {
+    url = "mirror://gnome/sources/gnome-shell/${gnome3.versionBranch version}/${name}.tar.xz";
+    sha256 = "1b9n89ij2g5nqaqp7a13jnqcd8qa2v9p55rbi71al3xvqk091ri7";
+  };
 
   # Needed to find /etc/NetworkManager/VPN
   mesonFlags = [ "--sysconfdir=/etc" ];
 
   LANG = "en_US.UTF-8";
 
-  nativeBuildInputs = [ meson ninja gettext docbook_xsl docbook_xsl_ns docbook_xml_dtd_42 perl wrapGAppsHook glibcLocales ];
-  buildInputs = with gnome3;
-    [ gsettings_desktop_schemas gnome_keyring gnome-menus glib gcr json_glib accountsservice
-      libcroco libsecret pkgconfig libsoup polkit gdk_pixbuf
-      (librsvg.override { enableIntrospection = true; })
-      clutter networkmanager libstartup_notification telepathy_glib
-      libXtst p11_kit networkmanagerapplet gjs mutter libpulseaudio caribou evolution_data_server
-      libical nss gtk gstreamer gdm
-      libcanberra_gtk3 gnome_control_center geoclue2
-      defaultIconTheme sqlite gnome3.gnome-bluetooth
-      libgweather # not declared at build time, but typelib is needed at runtime
-      gnome3.gnome-clocks # schemas needed
-      at_spi2_core upower ibus gnome_desktop telepathy_logger gnome3.gnome_settings_daemon
-      gst_all_1.gst-plugins-good # recording
-      gobjectIntrospection (stdenv.lib.getLib dconf) ];
+  nativeBuildInputs = [
+    meson ninja pkgconfig gettext docbook_xsl docbook_xsl_ns docbook_xml_dtd_42 perl wrapGAppsHook glibcLocales
+    sassc desktop-file-utils
+  ];
+  buildInputs = with gnome3; [
+    systemd caribou
+    gsettings-desktop-schemas gnome-keyring glib gcr json-glib accountsservice
+    libcroco libsecret libsoup polkit gdk_pixbuf librsvg
+    clutter networkmanager libstartup_notification telepathy-glib
+    libXtst gjs mutter libpulseaudio evolution-data-server
+    libical gtk gstreamer gdm libcanberra-gtk3 geoclue2
+    defaultIconTheme gnome3.gnome-bluetooth
+    gnome3.gnome-clocks # schemas needed
+    at-spi2-core upower ibus gnome-desktop telepathy-logger gnome3.gnome-settings-daemon
+    gst_all_1.gst-plugins-good # recording
+    gobjectIntrospection
+
+    # not declared at build time, but typelib is needed at runtime
+    libgweather networkmanagerapplet
+  ];
   propagatedUserEnvPkgs = [
     # Needed to support on-screen keyboard used with touch screen devices
     # see https://github.com/NixOS/nixpkgs/issues/25968
@@ -46,7 +57,11 @@ in stdenv.mkDerivation rec {
       url = https://bug787864.bugzilla-attachments.gnome.org/attachment.cgi?id=360016;
       sha256 = "1dmahd8ysbzh33rxglba0fbq127aw9h14cl2a2bw9913vjxhxijm";
     })
-    ./fix-paths.patch
+    (substituteAll {
+      src = ./fix-paths.patch;
+      inherit (gnome3) libgnomekbd;
+      inherit unzip;
+    })
   ];
 
   postPatch = ''
@@ -54,27 +69,34 @@ in stdenv.mkDerivation rec {
 
     substituteInPlace src/gnome-shell-extension-tool.in --replace "@PYTHON@" "${pythonEnv}/bin/python"
     substituteInPlace src/gnome-shell-perf-tool.in --replace "@PYTHON@" "${pythonEnv}/bin/python"
-    substituteInPlace js/ui/extensionDownloader.js --replace "unzip" "${unzip}/bin/unzip"
   '';
 
   postInstall = ''
     glib-compile-schemas $out/share/glib-2.0/schemas
   '';
 
-  postFixup = ''
-    # Patched meson does not add internal libraries to rpath
-    patchelf --set-rpath "$out/lib/gnome-shell:$(patchelf --print-rpath $out/bin/.gnome-shell-wrapped)" $out/bin/.gnome-shell-wrapped
+  preFixup = ''
+    gappsWrapperArgs+=(
+      # Until glib’s xdgmime is patched
+      # Fixes “Failed to load resource:///org/gnome/shell/theme/noise-texture.png: Unrecognized image file format”
+      --prefix XDG_DATA_DIRS : "${shared-mime-info}/share"
+    )
   '';
-
-  enableParallelBuilding = true;
 
   passthru = {
     mozillaPlugin = "/lib/mozilla/plugins";
+    updateScript = gnome3.updateScript {
+      packageName = "gnome-shell";
+      attrPath = "gnome3.gnome-shell";
+    };
   };
 
   meta = with stdenv.lib; {
-    platforms = platforms.linux;
+    description = "Core user interface for the GNOME 3 desktop";
+    homepage = https://wiki.gnome.org/Projects/GnomeShell;
+    license = licenses.gpl2Plus;
     maintainers = gnome3.maintainers;
+    platforms = platforms.linux;
   };
 
 }

@@ -12,10 +12,10 @@ stdenv.mkDerivation rec {
   };
 
   preConfigure = ''
-    export CPPFLAGS="-I${getDev mysql.client}/include/mysql"
-    export LDFLAGS="-L${getLib mysql.client}/lib/mysql -L${getLib postgresql}/lib"
+    export CPPFLAGS="-I${mysql.connector-c}/include/mysql"
+    export LDFLAGS="-L${mysql.connector-c}/lib/mysql -L${postgresql}/lib"
     configureFlagsArray=(--with-backends="mysql pgsql sqlite3")
   '';
 
-  buildInputs = [ readline mysql.client postgresql sqlite ];
+  buildInputs = [ readline mysql.connector-c postgresql sqlite ];
 }

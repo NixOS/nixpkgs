@@ -1,4 +1,4 @@
-{stdenv, fetchsvn, SDL, mesa, openal, libvorbis, freealut, SDL_image, popt}:
+{stdenv, fetchsvn, SDL, libGLU_combined, openal, libvorbis, freealut, SDL_image, popt}:
 
 stdenv.mkDerivation rec {
   name = "blackshades-elite-svn-29";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   NIX_LDFLAGS = "-lSDL_image";
   NIX_CFLAGS_COMPILE = "-fpermissive";
 
-  buildInputs = [ SDL SDL_image mesa openal libvorbis freealut popt ];
+  buildInputs = [ SDL SDL_image libGLU_combined openal libvorbis freealut popt ];
 
   patchPhase = ''
     sed -i -e s,Data/,$out/opt/$name/Data/,g \

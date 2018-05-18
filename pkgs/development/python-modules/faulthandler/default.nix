@@ -1,13 +1,12 @@
-{ stdenv, fetchPypi, buildPythonPackage }:
+{ stdenv, fetchPypi, buildPythonPackage, fetchpatch }:
 
 buildPythonPackage rec {
-  name = "${pname}-${version}";
   pname = "faulthandler";
-  version = "2.6";
+  version = "3.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0zywq3jaznddvqc3hnfrlv24wmpyq4xgajk9xhv6578qw1rpfj2r";
+    sha256 = "83301ffab03c86b291677b64b5cec7026f412cbda5ebd27e4cb3338452c40021";
   };
 
   meta = {

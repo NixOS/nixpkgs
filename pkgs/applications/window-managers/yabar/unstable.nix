@@ -1,10 +1,18 @@
-{ callPackage, attrs ? {} }:
+{ playerctl, libxkbcommon, callPackage, attrs ? {} }:
 
 let
-  overrides = {
-    version = "unstable-2017-10-12";
+  pkg = callPackage ./build.nix ({
+    version = "unstable-2018-01-18";
 
-    rev    = "cbecc7766e37f29d50705da0a82dc76ce7c3b86e";
-    sha256 = "1wprjas3k14rxfl06mgr0xq2ra735w1c7dq4xrdvii887wnl37xb";
-  } // attrs;
-in callPackage ./build.nix overrides
+    rev    = "c516e8e78d39dd2b339acadc4c175347171150bb";
+    sha256 = "1p9lx78cayyn7qc2q66id2xfs76jyddnqv2x1ypsvixaxwcvqgdb";
+  } // attrs);
+in pkg.overrideAttrs (o: {
+  buildInputs = o.buildInputs ++ [
+    playerctl libxkbcommon
+  ];
+
+  makeFlags = o.makeFlags ++ [
+    "PLAYERCTL=1"
+  ];
+})

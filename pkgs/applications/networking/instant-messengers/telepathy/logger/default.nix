@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, dbus_glib, libxml2, sqlite, telepathy_glib, pkgconfig
+{ stdenv, fetchurl, dbus-glib, libxml2, sqlite, telepathy-glib, pkgconfig
 , gnome3, makeWrapper, intltool, libxslt, gobjectIntrospection, dbus_libs }:
 
 stdenv.mkDerivation rec {
@@ -7,15 +7,15 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "http://telepathy.freedesktop.org/releases/${project}/${name}.tar.bz2";
-    sha256 = "18i00l8lnp5dghqmgmpxnn0is2a20pkisxy0sb78hnd2dz0z6xnl";
+    sha256 = "1bjx85k7jyfi5pvl765fzc7q2iz9va51anrc2djv7caksqsdbjlg";
   };
 
   nativeBuildInputs = [
     makeWrapper pkgconfig intltool libxslt gobjectIntrospection
   ];
   buildInputs = [
-    dbus_glib libxml2 sqlite telepathy_glib
-    dbus_libs telepathy_glib.python
+    dbus-glib libxml2 sqlite telepathy-glib
+    dbus_libs telepathy-glib.python
   ];
 
   configureFlags = "--enable-call";
@@ -31,6 +31,6 @@ stdenv.mkDerivation rec {
     homepage = https://telepathy.freedesktop.org/components/telepathy-logger/;
     license = licenses.lgpl21;
     maintainers = with maintainers; [ jtojnar ];
-    platforms = platforms.gnu; # Arbitrary choice
+    platforms = platforms.gnu ++ platforms.linux; # Arbitrary choice
   };
 }

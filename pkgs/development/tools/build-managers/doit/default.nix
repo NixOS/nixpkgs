@@ -3,14 +3,14 @@
 let
 
   name = "doit";
-  version = "0.30.3";
+  version = "0.31.1";
 
 in python3Packages.buildPythonApplication {
   name = "${name}-${version}";
 
   src = fetchurl {
     url = "mirror://pypi/d/${name}/${name}-${version}.tar.gz";
-    sha256 = "1fcsslc3mc4bszq5xdqbxv37720s1s31d6pbfwc2iyxk1x2wi219";
+    sha256 = "1spm8vfjh4kvalaj0i2ggbdln1yy5k68d8mfwfnpqlzxxx4ikl5s";
   };
 
   buildInputs = with python3Packages; [ mock pytest ];

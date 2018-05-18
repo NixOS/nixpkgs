@@ -1,5 +1,5 @@
 { fetchFromGitHub, stdenv, autoconf, automake, pkgconfig, m4, curl,
-mesa, libXmu, libXi, freeglut, libjpeg, libtool, wxGTK, xcbutil,
+libGLU_combined, libXmu, libXi, freeglut, libjpeg, libtool, wxGTK, xcbutil,
 sqlite, gtk2, patchelf, libXScrnSaver, libnotify, libX11, libxcb }:
 
 let
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ libtool automake autoconf m4 pkgconfig ];
 
   buildInputs = [
-    curl mesa libXmu libXi freeglut libjpeg wxGTK sqlite gtk2 libXScrnSaver
+    curl libGLU_combined libXmu libXi freeglut libjpeg wxGTK sqlite gtk2 libXScrnSaver
     libnotify patchelf libX11 libxcb xcbutil
   ];
 

@@ -1,9 +1,19 @@
 { stdenv, fetchurl, pkgconfig, intltool, glib, gobjectIntrospection
   # just for passthru
-, gnome3, gtk3, gsettings_desktop_schemas }:
+, gnome3, gtk3, gsettings-desktop-schemas }:
 
 stdenv.mkDerivation rec {
-  inherit (import ./src.nix fetchurl) name src;
+  name = "gsettings-desktop-schemas-${version}";
+  version = "3.28.0";
+
+  src = fetchurl {
+    url = "mirror://gnome/sources/gsettings-desktop-schemas/${gnome3.versionBranch version}/${name}.tar.xz";
+    sha256 = "0rwidacwrxlc54x90h9g3wx2zlisc4vm49vmxi15azmpj1vwvd2c";
+  };
+
+  passthru = {
+    updateScript = gnome3.updateScript { packageName = "gsettings-desktop-schemas"; };
+  };
 
   preInstall = ''
     mkdir -p $out/share/gsettings-schemas/${name}/glib-2.0/schemas
