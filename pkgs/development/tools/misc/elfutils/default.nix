@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, m4, zlib, bzip2, bison, flex, gettext, xz, setupDebugInfoDirs, fetchpatch }:
+{ lib, stdenv, fetchurl, m4, zlib, bzip2, bison, flex, gettext, xz, setupDebugInfoDirs }:
 
 # TODO: Look at the hardcoded paths to kernel, modules etc.
 stdenv.mkDerivation rec {
@@ -12,12 +12,14 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./debug-info-from-env.patch
-    (fetchpatch {
-      name = "0001-Ensure-that-packed-structs-follow-the-gcc-memory-lay.patch";
+
+    /* For gcc8. Fixes -Werror=packed-not-aligned errors.
+    incorporated in upstream, so can probably be removed at next update */
+    (fetchurl {
       url = http://git.openembedded.org/openembedded-core/plain/meta/recipes-devtools/elfutils/files/0001-Ensure-that-packed-structs-follow-the-gcc-memory-lay.patch?id=49aae1d75ff1c6a9643c30a8cc5776a2ffa83dd3;
-      sha256 = "09y4x1yaqm84w7cy1sf57a6g8ah49b0349dsj2a81wy4flw8ih5j";
+      sha256 = "11sg2dn3vjvgq2fb9n8pgw1ajvs3gliks7djg1794wxlfg0rvifb";
     })
-    ];
+  ];
 
   hardeningDisable = [ "format" ];
 
