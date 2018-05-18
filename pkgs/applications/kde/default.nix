@@ -127,6 +127,7 @@ let
       konsole = callPackage ./konsole.nix {};
       kontact = callPackage ./kontact.nix {};
       kontactinterface = callPackage ./kontactinterface.nix {};
+      konquest = callPackage ./konquest.nix {};
       korganizer = callPackage ./korganizer.nix {};
       kpimtextedit = callPackage ./kpimtextedit.nix {};
       ksmtp = callPackage ./ksmtp {};
