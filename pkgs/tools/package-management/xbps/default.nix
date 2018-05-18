@@ -32,6 +32,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     homepage = https://github.com/voidlinux/xbps;
     description = "The X Binary Package System";
+    platforms = platforms.linux; # known to not work on Darwin, at least
     license = licenses.bsd2;
     maintainers = with maintainers; [ dtzWill ];
   };
