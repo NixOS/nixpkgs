@@ -59,17 +59,17 @@ rec {
       description = "A web browser built from Firefox Extended Support Release source tree";
     };
     updateScript = callPackage ./update.nix {
-      attrPath = "firefox-esr-unwrapped";
+      attrPath = "firefox-esr-52-unwrapped";
       versionSuffix = "esr";
     };
   } {};
 
   firefox-esr-60 = common rec {
     pname = "firefox-esr";
-    version = "60.0esr";
+    version = "60.0.1esr";
     src = fetchurl {
       url = "mirror://mozilla/firefox/releases/${version}/source/firefox-${version}.source.tar.xz";
-      sha512 = "20whvk4spdi4yb3alb492c1jca60p4p70mgj2bypa7r8fgjqn57pyh9rcvnci61asar0zvmlihq46ywzrijm1804iw8c4wmlv7qy8dv";
+      sha512 = "2kswaf2d8qbhx1ry4ai7y2hr8cprpm00wwdr9qwpdr31m7w0jzndh0fn7jn1f57s42j6jk0jg78d34x10p2rvdii8hrbbr9q9sw8v4b";
     };
 
     patches = nixpkgsPatches ++ [
@@ -80,7 +80,7 @@ rec {
       description = "A web browser built from Firefox Extended Support Release source tree";
     };
     updateScript = callPackage ./update.nix {
-      attrPath = "firefox-esr-unwrapped";
+      attrPath = "firefox-esr-60-unwrapped";
       versionSuffix = "esr";
     };
   } {};
