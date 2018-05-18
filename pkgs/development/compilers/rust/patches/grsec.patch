@@ -1,7 +1,7 @@
 diff --git a/src/test/run-make/relocation-model/Makefile b/src/test/run-make/relocation-model/Makefile
 index b22f34f..c6489bd 100644
---- a/src/test/run-make/relocation-model/Makefile
-+++ b/src/test/run-make/relocation-model/Makefile
+--- a/src/test/run-make-fulldeps/relocation-model/Makefile
++++ b/src/test/run-make-fulldeps/relocation-model/Makefile
 @@ -2,9 +2,11 @@
  
  all: others
