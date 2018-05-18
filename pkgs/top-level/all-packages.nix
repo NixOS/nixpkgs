@@ -10766,10 +10766,10 @@ with pkgs;
 
   notify-sharp = callPackage ../development/libraries/notify-sharp { };
 
-  ncurses5 = ncursesReal.override {
+  ncurses5 = ncurses.override {
     abiVersion = "5";
   };
-  ncurses6 = ncursesReal.override {
+  ncurses6 = ncurses.override {
     abiVersion = "6";
   };
   ncurses =
