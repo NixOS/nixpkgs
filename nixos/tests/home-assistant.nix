@@ -71,6 +71,7 @@ in {
     print "$log\n";
 
     # Check that no errors were logged
-    $hass->fail("cat ${configDir}/home-assistant.log | grep -qF ERROR");
+    # The timer can get out of sync due to Hydra's load, so this error is ignored
+    $hass->fail("cat ${configDir}/home-assistant.log | grep -vF 'Timer got out of sync' | grep -qF ERROR");
   '';
 })
