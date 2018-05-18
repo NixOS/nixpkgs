@@ -58,6 +58,11 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./urw-font-files.patch
+    (fetchpatch {
+      name = "CVE-2018-10194.patch";
+      url = "http://git.ghostscript.com/?p=ghostpdl.git;a=patch;h=39b1e54b2968620723bf32e96764c88797714879;hp=fb4c58a0e097e39547dde3d46893ce1b05d19539";
+      sha256 = "0zdd22gj0b8zf1rfzd3f6hxqwkfn3q3qgb2fhzclfw009mlszknx";
+    })
   ];
 
   preConfigure = ''
