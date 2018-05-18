@@ -223,6 +223,8 @@ in {
 
   bugseverywhere = callPackage ../applications/version-management/bugseverywhere {};
 
+  cdecimal = callPackage ../development/python-modules/cdecimal { };
+
   dendropy = callPackage ../development/python-modules/dendropy { };
 
   dbf = callPackage ../development/python-modules/dbf { };
