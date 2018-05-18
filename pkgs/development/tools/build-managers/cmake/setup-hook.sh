@@ -22,7 +22,7 @@ cmakeConfigurePhase() {
     if [ -z "$dontUseCmakeBuildDir" ]; then
         mkdir -p build
         cd build
-        cmakeDir=..
+        cmakeDir=${cmakeDir:-..}
     fi
 
     if [ -z "$dontAddPrefix" ]; then
