@@ -5500,6 +5500,8 @@ with pkgs;
 
   whois = callPackage ../tools/networking/whois { };
 
+  wireguard-tools = callPackage ../tools/networking/wireguard-tools { };
+
   woff2 = callPackage ../development/web/woff2 { };
 
   woof = callPackage ../tools/misc/woof { };
