@@ -23,11 +23,12 @@ stdenv.mkDerivation rec {
 
   patches = optional hostPlatform.isCygwin ./coreutils-8.23-4.cygwin.patch;
 
-  # The test tends to fail on btrfs and maybe other unusual filesystems.
+  # The test tends to fail on btrfs, f2fs and maybe other unusual filesystems.
   postPatch = optionalString (!hostPlatform.isDarwin) ''
     sed '2i echo Skipping dd sparse test && exit 0' -i ./tests/dd/sparse.sh
     sed '2i echo Skipping cp sparse test && exit 0' -i ./tests/cp/sparse.sh
     sed '2i echo Skipping rm deep-2 test && exit 0' -i ./tests/rm/deep-2.sh
+    sed '2i echo Skipping du threshold test && exit 0' -i ./tests/du/threshold.sh
     sed '2i echo Skipping du long-from-unreadable test && exit 0' -i ./tests/du/long-from-unreadable.sh
     sed '2i echo Skipping chmod setgid test && exit 0' -i ./tests/chmod/setgid.sh
     substituteInPlace ./tests/install/install-C.sh \
