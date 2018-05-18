@@ -839,6 +839,8 @@ with pkgs;
 
   blink = callPackage ../applications/networking/instant-messengers/blink { };
 
+  blockhash = callPackage ../tools/graphics/blockhash { };
+
   bluemix-cli = callPackage ../tools/admin/bluemix-cli { };
 
   libqmatrixclient = libsForQt5.callPackage ../development/libraries/libqmatrixclient { };
@@ -3161,7 +3163,7 @@ with pkgs;
   jing-trang = callPackage ../tools/text/xml/jing-trang { };
 
   jira-cli = callPackage ../development/tools/jira_cli { };
- 
+
   jl = haskellPackages.callPackage ../development/tools/jl { };
 
   jmespath = callPackage ../development/tools/jmespath { };
