@@ -26,13 +26,13 @@ in
 let pname = if set != null then "iosevka-${set}" else "iosevka"; in
 
 let
-  version = "1.14.2";
+  version = "1.14.3";
   name = "${pname}-${version}";
   src = fetchFromGitHub {
     owner = "be5invis";
     repo ="Iosevka";
     rev = "v${version}";
-    sha256 = "18vh5rjffqgiliyfia40lh7cygz6fv3rwgq28fxl26i9sc95qsqd";
+    sha256 = "0ba8hwxi88bp2jb9xfhk95nnlv8ykl74cv62xr4ybzm3b8ahpwqf";
   };
 in
 
