@@ -402,6 +402,8 @@ in {
 
   pytest-tornado = callPackage ../development/python-modules/pytest-tornado { };
 
+  python-language-server = callPackage ../development/python-modules/python-language-server { };
+
   python-sql = callPackage ../development/python-modules/python-sql { };
 
   python-stdnum = callPackage ../development/python-modules/python-stdnum { };
@@ -3235,6 +3237,8 @@ in {
       license = stdenv.lib.licenses.bsd2; # "Modified BSD license, says pypi"
     };
   };
+
+  json-rpc = callPackage ../development/python-modules/json-rpc {};
 
   jsonrpclib = buildPythonPackage rec {
     name = "jsonrpclib-${version}";
