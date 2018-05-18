@@ -297,8 +297,11 @@ rec {
   # This is useful to build environments for developing on that
   # package.
   getHaskellBuildInputs = p:
-    (p.override { mkDerivation = extractBuildInputs p.compiler;
-                }).haskellBuildInputs;
+    (overrideCabal p (args: {
+      passthru = (args.passthru or {}) // {
+        _getHaskellBuildInputs = extractBuildInputs p.compiler args;
+      };
+    }))._getHaskellBuildInputs;
 
   # Under normal evaluation, simply return the original package. Under
   # nix-shell evaluation, return a nix-shell optimized environment.
