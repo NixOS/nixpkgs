@@ -784,6 +784,8 @@ with pkgs;
 
   basex = callPackage ../tools/text/xml/basex { };
 
+  bashplotlib = callPackage ../tools/misc/bashplotlib { };
+
   babeld = callPackage ../tools/networking/babeld { };
 
   badvpn = callPackage ../tools/networking/badvpn {};
@@ -3155,6 +3157,8 @@ with pkgs;
   jing = self.jing-trang;
   jing-trang = callPackage ../tools/text/xml/jing-trang { };
 
+  jira-cli = callPackage ../development/tools/jira_cli { };
+ 
   jl = haskellPackages.callPackage ../development/tools/jl { };
 
   jmespath = callPackage ../development/tools/jmespath { };
@@ -6882,6 +6886,7 @@ with pkgs;
     });
 
   cargo-edit = callPackage ../tools/package-management/cargo-edit { };
+  cargo-release = callPackage ../tools/package-management/cargo-release { };
 
   cargo-fuzz = callPackage ../development/tools/rust/cargo-fuzz { };
 
@@ -7549,11 +7554,12 @@ with pkgs;
   apacheAnt_1_9 = callPackage ../development/tools/build-managers/apache-ant/1.9.nix { };
   ant = apacheAnt;
 
-  apacheKafka_1_0 = apacheKafka.override { majorVersion = "1.0"; };
-  apacheKafka_0_9 = apacheKafka.override { majorVersion = "0.9"; };
-  apacheKafka_0_10 = apacheKafka.override { majorVersion = "0.10"; };
-  apacheKafka_0_11 = apacheKafka.override { majorVersion = "0.11"; };
-  apacheKafka = callPackage ../servers/apache-kafka { };
+  apacheKafka = apacheKafka_1_1;
+  apacheKafka_0_9 = callPackage ../servers/apache-kafka { majorVersion = "0.9"; };
+  apacheKafka_0_10 = callPackage ../servers/apache-kafka { majorVersion = "0.10"; };
+  apacheKafka_0_11 = callPackage ../servers/apache-kafka { majorVersion = "0.11"; };
+  apacheKafka_1_0 = callPackage ../servers/apache-kafka { majorVersion = "1.0"; };
+  apacheKafka_1_1 = callPackage ../servers/apache-kafka { majorVersion = "1.1"; };
 
   kt = callPackage ../tools/misc/kt {};
 
@@ -11589,6 +11595,8 @@ with pkgs;
   sqlite = lowPrio (callPackage ../development/libraries/sqlite { });
 
   sqlite3_analyzer = lowPrio (callPackage ../development/libraries/sqlite/sqlite3_analyzer.nix { });
+
+  sqlar = callPackage ../development/libraries/sqlite/sqlar.nix { };
 
   sqlite-interactive = appendToName "interactive" (sqlite.override { interactive = true; }).bin;
 
@@ -17559,6 +17567,8 @@ with pkgs;
 
   ricochet = libsForQt5.callPackage ../applications/networking/instant-messengers/ricochet { };
 
+  ries = callPackage ../applications/science/math/ries { };
+
   ripser = callPackage ../applications/science/math/ripser { };
 
   rkt = callPackage ../applications/virtualization/rkt { };
@@ -19212,6 +19222,8 @@ with pkgs;
   openxcom = callPackage ../games/openxcom { };
 
   orthorobot = callPackage ../games/orthorobot { love = love_0_7; };
+
+  pacvim = callPackage ../games/pacvim { };
 
   performous = callPackage ../games/performous { };
 
@@ -21064,54 +21076,7 @@ with pkgs;
     pythonPackages = python3Packages;
   };
 
-  winePackages = rec {
-    minimal = callPackage ../misc/emulators/wine {
-      wineRelease = config.wine.release or "stable";
-      wineBuild = config.wine.build or "wine32";
-    };
-
-    base = minimal.override {
-      pngSupport = true;
-      jpegSupport = true;
-      tiffSupport = true;
-      gettextSupport = true;
-      fontconfigSupport = true;
-      alsaSupport = true;
-      openglSupport = true;
-      vulkanSupport = stdenv.isLinux;
-      tlsSupport = true;
-      cupsSupport = true;
-      dbusSupport = true;
-      cairoSupport = true;
-      cursesSupport = true;
-      saneSupport = true;
-      pulseaudioSupport = config.pulseaudio or stdenv.isLinux;
-      udevSupport = true;
-      xineramaSupport = true;
-      xmlSupport = true;
-    };
-
-    full = base.override {
-      gtkSupport = true;
-      gstreamerSupport = true;
-      colorManagementSupport = true;
-      mpg123Support = true;
-      openalSupport = true;
-      openclSupport = true;
-      odbcSupport = true;
-      netapiSupport = true;
-      vaSupport = true;
-      pcapSupport = true;
-      v4lSupport = true;
-      gsmSupport = true;
-      gphoto2Support = true;
-      ldapSupport = true;
-    };
-
-    stable = base.override { wineRelease = "stable"; };
-    unstable = base.override { wineRelease = "unstable"; };
-    staging = base.override { wineRelease = "staging"; };
-  };
+  winePackages = recurseIntoAttrs (callPackage ./wine-packages.nix { });
 
   wine = winePackages.full;
 

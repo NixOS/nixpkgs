@@ -365,14 +365,13 @@ let self = _self // overrides; _self = with self; {
   };
 
   AppSt = buildPerlPackage rec {
-    name = "App-St-1.1.2";
+    name = "App-St-1.1.4";
     src = fetchurl {
-      url = https://github.com/nferraz/st/archive/v1.1.2.tar.gz;
-      sha256 = "1j1iwcxl16m4x5kl1vcv0linb93r55ndh3jm0w6qf459jl4x38s6";
+      url = https://github.com/nferraz/st/archive/v1.1.4.tar.gz;
+      sha256 = "1f4bqm4jiazcxgzzja1i48671za96621k0s3ln87cdacgvv1can0";
     };
     postInstall =
       ''
-        sed -e "1 s|\(.*\)|\1 -I $out/lib/perl5/site_perl|" -i $out/bin/st
         ($out/bin/st --help || true) | grep Usage
       '';
     meta = {

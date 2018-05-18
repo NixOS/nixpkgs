@@ -989,9 +989,9 @@
     name = "Davor Babic";
   };
   dbohdan = {
-    email = "danyil.bohdan@gmail.com";
+    email = "dbohdan@dbohdan.com";
     github = "dbohdan";
-    name = "Danyil Bohdan";
+    name = "D. Bohdan";
   };
   dbrock = {
     email = "daniel@brockman.se";
@@ -1482,6 +1482,11 @@
     email = "georgerw@gmail.com";
     github = "georgewhewell";
     name = "George Whewell";
+  };
+  gerschtli = {
+    email = "tobias.happ@gmx.de";
+    github = "Gerschtli";
+    name = "Tobias Happ";
   };
   gilligan = {
     email = "tobias.pflug@gmail.com";
@@ -3050,6 +3055,11 @@
   pstn = {
     email = "philipp@xndr.de";
     name = "Philipp Steinpaß";
+  };
+  psyanticy = {
+    email = "iuns@outlook.fr";
+    github = "Assassinkin";
+    name = "Psyanticy";
   };
   puffnfresh = {
     email = "brian@brianmckenna.org";

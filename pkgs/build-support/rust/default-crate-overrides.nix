@@ -3,7 +3,7 @@
   libsodium, postgresql, ... }:
 
 let
-  inherit (darwin.apple_sdk.frameworks) CoreFoundation;
+  inherit (darwin.apple_sdk.frameworks) CoreFoundation Security;
 in
 {
   cargo = attrs: {
@@ -19,7 +19,8 @@ in
     crateBin = [ { name = "cargo-vendor"; path = "src/main.rs"; } ];
   };
   curl-sys = attrs: {
-    buildInputs = [ pkgconfig curl ];
+    buildInputs = [ pkgconfig zlib ];
+    propagatedBuiltInputs = [ curl ];
   };
   libgit2-sys = attrs: {
     LIBGIT2_SYS_USE_PKG_CONFIG = true;
@@ -68,5 +69,8 @@ in
   };
   pq-sys = attr: {
     buildInputs = [ pkgconfig postgresql ];
+  };
+  security-framework-sys = attr: {
+    propagatedBuildInputs = [ Security ];
   };
 }

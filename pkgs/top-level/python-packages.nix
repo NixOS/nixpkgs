@@ -277,6 +277,8 @@ in {
 
   logster = callPackage ../development/python-modules/logster { };
 
+  mail-parser = callPackage ../development/python-modules/mail-parser {  };
+
   mpi4py = callPackage ../development/python-modules/mpi4py {
     mpi = pkgs.openmpi;
   };
@@ -2951,6 +2953,8 @@ in {
 
   };
 
+  hiro = callPackage ../development/python-modules/hiro {};
+
   hglib = callPackage ../development/python-modules/hglib {};
 
   humanize = buildPythonPackage rec {
@@ -5029,6 +5033,7 @@ in {
     };
   };
 
+  keyrings-alt = callPackage ../development/python-modules/keyrings-alt {};
 
   SPARQLWrapper = buildPythonPackage rec {
     name = "SPARQLWrapper-${version}";
