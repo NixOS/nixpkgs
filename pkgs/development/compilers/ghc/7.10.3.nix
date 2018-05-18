@@ -68,7 +68,6 @@ let
   targetCC = builtins.head toolsForTarget;
 
 in
-
 stdenv.mkDerivation rec {
   version = "7.10.3";
   name = "${targetPrefix}ghc-${version}";
@@ -87,6 +86,8 @@ stdenv.mkDerivation rec {
     ./relocation.patch
   ];
 
+  postPatch = "patchShebangs .";
+
   # GHC is a bit confused on its cross terminology.
   preConfigure = ''
     for env in $(env | grep '^TARGET_' | sed -E 's|\+?=.*||'); do
@@ -103,6 +104,7 @@ stdenv.mkDerivation rec {
     export RANLIB="${targetCC.bintools.bintools}/bin/${targetCC.bintools.targetPrefix}ranlib"
     export READELF="${targetCC.bintools.bintools}/bin/${targetCC.bintools.targetPrefix}readelf"
     export STRIP="${targetCC.bintools.bintools}/bin/${targetCC.bintools.targetPrefix}strip"
+
     echo -n "${buildMK}" > mk/build.mk
     sed -i -e 's|-isysroot /Developer/SDKs/MacOSX10.5.sdk||' configure
   '' + stdenv.lib.optionalString (!stdenv.isDarwin) ''
@@ -135,7 +137,8 @@ stdenv.mkDerivation rec {
   crossConfig = true;
 
   nativeBuildInputs = [
-    ghc perl libxml2 libxslt docbook_xsl docbook_xml_dtd_45 docbook_xml_dtd_42 hscolour
+    perl libxml2 libxslt docbook_xsl docbook_xml_dtd_45 docbook_xml_dtd_42
+    ghc hscolour
   ];
 
   # For building runtime libs

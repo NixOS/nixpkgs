@@ -3,7 +3,7 @@
 
 # build-tools
 , bootPkgs, alex, happy
-, autoconf, automake, coreutils, fetchurl, fetchpatch, perl, python3
+, autoconf, automake, coreutils, fetchurl, fetchpatch, perl, python3, m4
 
 , libffi, libiconv ? null, ncurses
 
@@ -15,7 +15,7 @@
 
 , # If enabled, GHC will be built with the GPL-free but slower integer-simple
   # library instead of the faster but GPLed integer-gmp library.
-  enableIntegerSimple ? false, gmp ? null, m4
+  enableIntegerSimple ? false, gmp ? null
 
 , # If enabled, use -fPIC when compiling static libs.
   enableRelocatedStaticLibs ? targetPlatform != hostPlatform
@@ -24,7 +24,6 @@
   # platform). Static libs are always built.
   enableShared ? !targetPlatform.useAndroidPrebuilt
 
-, version ? "8.4.2"
 }:
 
 assert !enableIntegerSimple -> gmp != null;
@@ -69,7 +68,7 @@ let
 
 in
 stdenv.mkDerivation rec {
-  inherit version;
+  version = "8.4.2";
   name = "${targetPrefix}ghc-${version}";
 
   src = fetchurl {
@@ -143,7 +142,10 @@ stdenv.mkDerivation rec {
   # masss-rebuild.
   crossConfig = true;
 
-  nativeBuildInputs = [ ghc perl autoconf automake m4 happy alex python3 ];
+  nativeBuildInputs = [
+    perl autoconf automake m4 python3
+    ghc alex happy
+  ];
 
   # For building runtime libs
   depsBuildTarget = toolsForTarget;

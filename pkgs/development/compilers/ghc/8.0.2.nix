@@ -86,6 +86,8 @@ stdenv.mkDerivation rec {
   ] ++ stdenv.lib.optional stdenv.isLinux ./ghc-no-madv-free.patch
     ++ stdenv.lib.optional stdenv.isDarwin ./ghc-8.0.2-no-cpp-warnings.patch;
 
+  postPatch = "patchShebangs .";
+
   # GHC is a bit confused on its cross terminology.
   preConfigure = ''
     for env in $(env | grep '^TARGET_' | sed -E 's|\+?=.*||'); do
@@ -102,6 +104,7 @@ stdenv.mkDerivation rec {
     export RANLIB="${targetCC.bintools.bintools}/bin/${targetCC.bintools.targetPrefix}ranlib"
     export READELF="${targetCC.bintools.bintools}/bin/${targetCC.bintools.targetPrefix}readelf"
     export STRIP="${targetCC.bintools.bintools}/bin/${targetCC.bintools.targetPrefix}strip"
+
     echo -n "${buildMK}" > mk/build.mk
     sed -i -e 's|-isysroot /Developer/SDKs/MacOSX10.5.sdk||' configure
   '' + stdenv.lib.optionalString (!stdenv.isDarwin) ''
@@ -133,7 +136,10 @@ stdenv.mkDerivation rec {
   # masss-rebuild.
   crossConfig = true;
 
-  nativeBuildInputs = [ ghc perl hscolour sphinx ];
+  nativeBuildInputs = [
+    perl sphinx
+    ghc hscolour
+  ];
 
   # For building runtime libs
   depsBuildTarget = toolsForTarget;

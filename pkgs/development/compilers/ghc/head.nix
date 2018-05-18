@@ -3,7 +3,7 @@
 
 # build-tools
 , bootPkgs, alex, happy
-, autoconf, automake, coreutils, fetchgit, perl, python3
+, autoconf, automake, coreutils, fetchgit, perl, python3, m4
 
 , libffi, libiconv ? null, ncurses
 
@@ -141,7 +141,10 @@ stdenv.mkDerivation rec {
   # masss-rebuild.
   crossConfig = true;
 
-  nativeBuildInputs = [ ghc perl autoconf automake happy alex python3 ];
+  nativeBuildInputs = [
+    perl autoconf automake m4 python3
+    ghc alex happy
+  ];
 
   # For building runtime libs
   depsBuildTarget = toolsForTarget;
