@@ -28,11 +28,15 @@ let
     # temperatures are read from the file.
     #
     # For example:
-    # sensor /proc/acpi/ibm/thermal (0, 0, 10)
+    # tp_thermal /proc/acpi/ibm/thermal (0, 0, 10)
     # will add a fixed value of 10 °C the 3rd value read from that file. Check out
     # http://www.thinkwiki.org/wiki/Thermal_Sensors to find out how much you may
     # want to add to certain temperatures.
     
+
+    ${cfg.fan}
+    ${cfg.sensors}
+
     #  Syntax:
     #  (LEVEL, LOW, HIGH)
     #  LEVEL is the fan level to use (0-7 with thinkpad_acpi)
@@ -41,8 +45,6 @@ let
     #  All numbers are integers.
     #
 
-    sensor ${cfg.sensor} (0, 10, 15, 2, 10, 5, 0, 3, 0, 3)
-    
     ${cfg.levels}
   '';
 
@@ -59,10 +61,42 @@ in {
         '';
       };
 
-      sensor = mkOption {
-        default = "/proc/acpi/ibm/thermal";
+      sensors = mkOption {
+        default = ''
+          tp_thermal /proc/acpi/ibm/thermal (0,0,10)
+        '';
         description =''
-          Sensor used by thinkfan
+          thinkfan can read temperatures from three possible sources:
+
+            /proc/acpi/ibm/thermal
+              Which is provided by the thinkpad_acpi kernel
+              module (keyword tp_thermal)
+
+            /sys/class/hwmon/*/temp*_input
+              Which may be provided by any hwmon drivers (keyword
+              hwmon)
+
+            S.M.A.R.T. (since 0.9 and requires the USE_ATASMART compilation flag)
+              Which reads the temperature directly from the hard
+              disk using libatasmart (keyword atasmart)
+          Multiple sensors may be added, in which case they will be
+          numbered in their order of appearance.
+        '';
+      };
+
+      fan = mkOption {
+        default = "tp_fan /proc/acpi/ibm/fan";
+        description =''
+          Specifies the fan we want to use.
+          On anything other than a Thinkpad you'll probably
+          use some PWM control file in /sys/class/hwmon.
+          Remember that fan levels range from 0 to 255 and that
+          they're just a number, not including the word "level"
+          as seen below.
+          A sysfs fan would be specified like this:
+            pwm_fan /sys/class/hwmon/hwmon2/device/pwm1
+
+          Remember you can only have one fan.
         '';
       };
 
@@ -77,7 +111,12 @@ in {
           (127,   80,     32767)
         '';
         description =''
-          Sensor used by thinkfan
+					Syntax:
+					(LEVEL, LOW, HIGH)
+					LEVEL is the fan level to use (0-7 with thinkpad_acpi)
+					LOW is the temperature at which to step down to the previous level
+					HIGH is the temperature at which to step up to the next level
+					All numbers are integers.
         '';
       };
 
