@@ -19,6 +19,7 @@ buildPythonPackage rec {
   checkPhase = ''
     py.test
   '';
+
   meta = with stdenv.lib; {
     description = "ModernGL: High performance rendering for Python 3";
     homepage = https://github.com/cprogrammer1994/ModernGL;
