@@ -215,6 +215,8 @@ let
 
     dtoa = callPackage ../development/ocaml-modules/dtoa { };
 
+    earley = callPackage ../development/ocaml-modules/earley { };
+
     easy-format = callPackage ../development/ocaml-modules/easy-format { };
 
     eliom = callPackage ../development/ocaml-modules/eliom { };
