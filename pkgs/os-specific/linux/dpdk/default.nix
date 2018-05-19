@@ -1,24 +1,22 @@
-{ stdenv, lib, kernel, fetchurl, pkgconfig, libvirt }:
-
-assert lib.versionAtLeast kernel.version "3.18";
+{ stdenv, kernel, fetchurl, pkgconfig, numactl }:
 
 stdenv.mkDerivation rec {
   name = "dpdk-${version}-${kernel.version}";
-  version = "17.05.1";
+  version = "17.11.2";
 
   src = fetchurl {
     url = "http://fast.dpdk.org/rel/dpdk-${version}.tar.xz";
-    sha256 = "1w3nx5cqf8z600bdlbwz7brmdb5yn233qrqvv24kbmmxhbwp7qld";
+    sha256 = "19m5l3jkrns8r1zbjb6ry18w50ff36kbl5b5g6pfcp9p57sfisd2";
   };
 
   nativeBuildInputs = [ pkgconfig ] ++ kernel.moduleBuildDependencies;
-  buildInputs = [ libvirt ];
+  buildInputs = [ numactl ];
 
   RTE_KERNELDIR = "${kernel.dev}/lib/modules/${kernel.modDirVersion}/build";
   RTE_TARGET = "x86_64-native-linuxapp-gcc";
 
   # we need sse3 instructions to build
-  NIX_CFLAGS_COMPILE = [ "-march=core2" ];
+  NIX_CFLAGS_COMPILE = [ "-msse3" ];
 
   enableParallelBuilding = true;
   outputs = [ "out" "kmod" ];
