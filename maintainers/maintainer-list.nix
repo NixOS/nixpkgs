@@ -1236,6 +1236,11 @@
     github = "ElvishJerricco";
     name = "Will Fancher";
   };
+  emmanuelrosa = {
+      email = "emmanuel_rosa@aol.com";
+      github = "emmanuelrosa";
+      name = "Emmanuel Rosa";
+  };
   endgame = {
     email = "jack@jackkelly.name";
     github = "endgame";
