@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, runCommand
+{ stdenv, fetchurl, runCommand, getconf
 , erlang, python, libxml2, libxslt, xmlto
 , docbook_xml_dtd_45, docbook_xsl, zip, unzip, rsync
 
@@ -6,10 +6,14 @@
 }:
 
 let
-  # we only need that one glibc binary (28k instead of 2.7M)
-  getconf = runCommand "getconf" {} ''
-    install -D ${stdenv.lib.getBin stdenv.cc.libc}/bin/getconf $out/bin/getconf
-  '';
+  # we only need that one glibc binary (28k instead of 2.7M). However, on
+  # non-Linux systems this may not work.
+  getconfSmall =
+    if stdenv.isLinux
+    then runCommand "getconf" {} ''
+      install -D ${stdenv.lib.getBin stdenv.cc.libc}/bin/getconf $out/bin/getconf
+    ''
+    else getconf;
 
 in stdenv.mkDerivation rec {
   name = "rabbitmq-server-${version}";
@@ -29,7 +33,7 @@ in stdenv.mkDerivation rec {
   postPatch = with stdenv.lib; ''
     # patch the path to getconf
     substituteInPlace deps/rabbit_common/src/vm_memory_monitor.erl \
-      --replace "getconf PAGESIZE" "${getconf}/bin/getconf PAGESIZE"
+      --replace "getconf PAGESIZE" "${getconfSmall}/bin/getconf PAGESIZE"
   '';
 
   preBuild = ''
@@ -59,7 +63,7 @@ in stdenv.mkDerivation rec {
     # patched into a source file above;
     # needs to be explicitely passed to not be stripped by fixup
     mkdir -p $out/nix-support
-    echo "${getconf}" > $out/nix-support/dont-strip-getconf
+    echo "${getconfSmall}" > $out/nix-support/dont-strip-getconf
 
     '';
 
