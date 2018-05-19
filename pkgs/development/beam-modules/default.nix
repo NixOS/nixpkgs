@@ -64,8 +64,9 @@ let
                        debugInfo = true;
                      };
 
-        lfe = lfe_1_2;
+        lfe = lfe_1_3;
         lfe_1_2 = lib.callLFE ../interpreters/lfe/1.2.nix { inherit erlang buildRebar3 buildHex; };
+        lfe_1_3 = lib.callLFE ../interpreters/lfe/1.3.nix { inherit erlang buildRebar3 buildHex; };
 
         # We list all base hex packages for beam tooling explicitly to ensure
         # tha the tooling does not break during hex-packages.nix updates.

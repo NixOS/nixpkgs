@@ -1447,7 +1447,7 @@ with pkgs;
   mcrypt = callPackage ../tools/misc/mcrypt { };
 
   mongodb-compass = callPackage ../tools/misc/mongodb-compass { };
-  
+
   mongodb-tools = callPackage ../tools/misc/mongodb-tools { };
 
   mozlz4a = callPackage ../tools/compression/mozlz4a {
@@ -3168,7 +3168,7 @@ with pkgs;
   jing-trang = callPackage ../tools/text/xml/jing-trang { };
 
   jira-cli = callPackage ../development/tools/jira_cli { };
- 
+
   jl = haskellPackages.callPackage ../development/tools/jl { };
 
   jmespath = callPackage ../development/tools/jmespath { };
@@ -7087,7 +7087,7 @@ with pkgs;
     erlang erlangR18 erlangR19 erlangR20
     erlang_odbc erlang_javac erlang_odbc_javac erlang_nox erlang_basho_R16B02
     elixir elixir_1_6 elixir_1_5 elixir_1_4 elixir_1_3
-    lfe lfe_1_2;
+    lfe lfe_1_2 lfe_1_3;
 
   inherit (beam.packages.erlang)
     rebar rebar3-open rebar3

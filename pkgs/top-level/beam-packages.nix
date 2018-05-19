@@ -54,7 +54,7 @@ rec {
     # `beam.packages.erlangR19.elixir`.
     inherit (packages.erlang) elixir elixir_1_6 elixir_1_5 elixir_1_4 elixir_1_3;
 
-    inherit (packages.erlang) lfe lfe_1_2;
+    inherit (packages.erlang) lfe lfe_1_2 lfe_1_3;
   };
 
   # Helper function to generate package set with a specific Erlang version.
