@@ -51,15 +51,33 @@ stdenv.mkDerivation rec {
       --suffix PATH : ${lib.makeBinPath [ stdenv.cc ]}
   '';
 
-  postPatch = ''
-    substituteInPlace ./tests/async/tioselectors.nim --replace "/bin/sleep" "sleep"
-    substituteInPlace ./tests/osproc/tworkingdir.nim --replace "/usr/bin" "${coreutils}/bin"
-    substituteInPlace ./tests/stdlib/ttimes.nim --replace "/usr/share/zoneinfo" "${tzdata}/share/zoneinfo"
-  '';
+  postPatch =
+    let disableTest = ''sed -i '1i discard \"\"\"\n  disabled: true\n\"\"\"\n\n' '';
+        disableCompile = ''sed -i -e 's/^/#/' '';
+    in ''
+      substituteInPlace ./tests/async/tioselectors.nim --replace "/bin/sleep" "sleep"
+      substituteInPlace ./tests/osproc/tworkingdir.nim --replace "/usr/bin" "${coreutils}/bin"
+      substituteInPlace ./tests/stdlib/ttimes.nim --replace "/usr/share/zoneinfo" "${tzdata}/share/zoneinfo"
+
+      # disable supposedly broken tests
+      ${disableTest} ./tests/errmsgs/tproper_stacktrace2.nim
+      ${disableTest} ./tests/vm/trgba.nim
+
+      # disable tests requiring network access (not available in the build container)
+      ${disableTest} ./tests/stdlib/thttpclient.nim
+      ${disableTest} ./tests/cpp/tasync_cpp.nim
+      ${disableTest} ./tests/niminaction/Chapter7/Tweeter/src/tweeter.nim
+
+      # disable tests requiring un-downloadable dependencies (using nimble, which isn't available in the fetch phase)
+      ${disableCompile} ./tests/manyloc/keineschweine/keineschweine.nim
+      ${disableTest} ./tests/manyloc/keineschweine/keineschweine.nim
+      ${disableCompile} ./tests/manyloc/nake/nakefile.nim
+      ${disableTest} ./tests/manyloc/nake/nakefile.nim
+      ${disableCompile} ./tests/manyloc/named_argument_bug/main.nim
+      ${disableTest} ./tests/manyloc/named_argument_bug/main.nim
+    '';
 
   checkPhase = ''
-    ./bin/nimble --nimbleDir:./nimbledir --accept --verbose install zip opengl sdl1 jester@#head niminst
-    echo "nimblepath=\"./nimbledir/pkgs/\" >> ./config/nim.cfg
     ./koch tests
   '';
 
