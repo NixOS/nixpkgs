@@ -8149,6 +8149,8 @@ with pkgs;
 
   oprofile = callPackage ../development/tools/profiling/oprofile { };
 
+  p4merge = callPackage ../development/tools/misc/p4merge { };
+
   pahole = callPackage ../development/tools/misc/pahole {};
 
   panopticon = callPackage ../development/tools/analysis/panopticon {};
