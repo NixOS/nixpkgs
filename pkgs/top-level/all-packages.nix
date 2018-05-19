@@ -21474,4 +21474,7 @@ with pkgs;
 
   inherit (recurseIntoAttrs (callPackages ../os-specific/bsd { }))
           netbsd;
+
+  yrd = callPackage ../tools/networking/yrd { };
+
 }
