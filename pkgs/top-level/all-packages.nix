@@ -16263,6 +16263,7 @@ with pkgs;
   hledger = haskell.lib.justStaticExecutables haskellPackages.hledger;
   hledger-ui = haskell.lib.justStaticExecutables haskellPackages.hledger-ui;
   hledger-web = haskell.lib.justStaticExecutables haskellPackages.hledger-web;
+  hledger-api = haskell.lib.justStaticExecutables haskellPackages.hledger-api;
 
   homebank = callPackage ../applications/office/homebank {
     gtk = gtk3;

@@ -647,6 +647,7 @@
   ./services/web-apps/atlassian/crowd.nix
   ./services/web-apps/atlassian/jira.nix
   ./services/web-apps/frab.nix
+  ./services/web-apps/hledger.nix
   ./services/web-apps/mattermost.nix
   ./services/web-apps/nexus.nix
   ./services/web-apps/pgpkeyserver-lite.nix
