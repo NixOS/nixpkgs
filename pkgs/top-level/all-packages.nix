@@ -2974,6 +2974,8 @@ with pkgs;
 
   hping = callPackage ../tools/networking/hping { };
 
+  html-proofer = callPackage ../tools/misc/html-proofer { };
+
   htpdate = callPackage ../tools/networking/htpdate { };
 
   http-prompt = callPackage ../tools/networking/http-prompt { };
