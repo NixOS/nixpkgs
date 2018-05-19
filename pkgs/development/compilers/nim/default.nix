@@ -1,6 +1,6 @@
 # based on https://github.com/nim-lang/Nim/blob/v0.18.0/.travis.yml
 
-{ stdenv, lib, fetchurl, makeWrapper, nodejs, openssl, pcre, readline, sqlite, boehmgc, sfml, tzdata, coreutils }:
+{ stdenv, lib, fetchurl, makeWrapper, nodejs-slim-8_x, openssl, pcre, readline, sqlite, boehmgc, sfml, tzdata, coreutils }:
 
 stdenv.mkDerivation rec {
   name = "nim-${version}";
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
   #    as part of building it, so it cannot be read-only
 
   buildInputs = [
-    makeWrapper nodejs tzdata coreutils
+    makeWrapper nodejs-slim-8_x tzdata coreutils
     openssl pcre readline sqlite boehmgc sfml
   ];
 
