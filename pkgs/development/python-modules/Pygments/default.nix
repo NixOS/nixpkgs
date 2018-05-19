@@ -2,6 +2,7 @@
 , buildPythonPackage
 , fetchPypi
 , docutils
+, pillow
 }:
 
 buildPythonPackage rec {
@@ -14,7 +15,7 @@ buildPythonPackage rec {
     sha256 = "1k78qdvir1yb1c634nkv6rbga8wv4289xarghmsbbvzhvr311bnv";
   };
 
-  propagatedBuildInputs = [ docutils ];
+  propagatedBuildInputs = [ docutils pillow ];
 
   # Circular dependency with sphinx
   doCheck = false;
