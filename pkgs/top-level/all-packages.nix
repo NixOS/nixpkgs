@@ -6913,7 +6913,8 @@ with pkgs;
   rustfmt = callPackage ../development/tools/rust/rustfmt { };
   rustracer = callPackage ../development/tools/rust/racer { };
   rustracerd = callPackage ../development/tools/rust/racerd { };
-  rust-bindgen = callPackage ../development/tools/rust/bindgen { };
+  rust-bindgen = callPackage ../development/tools/rust/bindgen/wrapper.nix { };
+  rust-bindgen-unwrapped = callPackage ../development/tools/rust/bindgen { };
   rustup = callPackage ../development/tools/rust/rustup {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
