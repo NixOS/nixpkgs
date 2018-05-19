@@ -1451,7 +1451,7 @@ with pkgs;
   mcrypt = callPackage ../tools/misc/mcrypt { };
 
   mongodb-compass = callPackage ../tools/misc/mongodb-compass { };
-  
+
   mongodb-tools = callPackage ../tools/misc/mongodb-tools { };
 
   mozlz4a = callPackage ../tools/compression/mozlz4a {
@@ -1467,7 +1467,7 @@ with pkgs;
   };
 
   antibody = callPackage ../shells/zsh/antibody { };
-  
+
   antigen = callPackage ../shells/zsh/antigen { };
 
   apparix = callPackage ../tools/misc/apparix { };
@@ -17445,6 +17445,8 @@ with pkgs;
   purple-discord = callPackage ../applications/networking/instant-messengers/pidgin-plugins/purple-discord { };
 
   purple-hangouts = callPackage ../applications/networking/instant-messengers/pidgin-plugins/purple-hangouts { };
+
+  purple-lurch = callPackage ../applications/networking/instant-messengers/pidgin-plugins/purple-lurch { };
 
   purple-matrix = callPackage ../applications/networking/instant-messengers/pidgin-plugins/purple-matrix { };
 
