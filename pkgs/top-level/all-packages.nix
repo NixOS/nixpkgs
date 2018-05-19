@@ -844,6 +844,8 @@ with pkgs;
 
   blink = callPackage ../applications/networking/instant-messengers/blink { };
 
+  blockhash = callPackage ../tools/graphics/blockhash { };
+
   bluemix-cli = callPackage ../tools/admin/bluemix-cli { };
 
   libqmatrixclient = libsForQt5.callPackage ../development/libraries/libqmatrixclient { };
