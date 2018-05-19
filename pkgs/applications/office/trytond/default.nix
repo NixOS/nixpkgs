@@ -4,11 +4,11 @@
 with stdenv.lib;
 
 python2Packages.buildPythonApplication rec {
-  name = "trytond-${version}";
-  version = "4.6.2";
-  src = fetchurl {
-    url = "mirror://pypi/t/trytond/${name}.tar.gz";
-    sha256 = "0asc3pd37h8ky8j66iqxr0fv0k6mpjcwxwm0xgm5hrdi32l5cdda";
+  pname = "trytond";
+  version = "4.8.0";
+  src = python2Packages.fetchPypi {
+    inherit pname version;
+    sha256 = "114c0ea15b8395117bf8c669b7da8af4961001297fbd034c780a42a40e079e3a";
   };
 
   # Tells the tests which database to use
@@ -25,12 +25,15 @@ python2Packages.buildPythonApplication rec {
     relatorio
     werkzeug
     wrapt
+    ipaddress
 
     # extra dependencies
     bcrypt
     pydot
     python-Levenshtein
     simplejson
+    cdecimal
+    html2text
   ] ++ stdenv.lib.optional withPostgresql psycopg2);
   meta = {
     description = "The server of the Tryton application platform";
@@ -44,6 +47,6 @@ python2Packages.buildPythonApplication rec {
     '';
     homepage = http://www.tryton.org/;
     license = licenses.gpl3Plus;
-    maintainers = [ maintainers.johbo ];
+    maintainers = with maintainers; [ udono johbo ];
   };
 }
