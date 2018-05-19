@@ -5511,6 +5511,8 @@ with pkgs;
 
   whois = callPackage ../tools/networking/whois { };
 
+  wireguard-tools = callPackage ../tools/networking/wireguard-tools { };
+
   woff2 = callPackage ../development/web/woff2 { };
 
   woof = callPackage ../tools/misc/woof { };
@@ -18556,8 +18558,6 @@ with pkgs;
   wings = callPackage ../applications/graphics/wings {
     erlang = erlangR18;
   };
-
-  wireguard = callPackage ../os-specific/linux/wireguard { };
 
   alsamixer.app = callPackage ../applications/window-managers/windowmaker/dockapps/alsamixer.app.nix { };
 
