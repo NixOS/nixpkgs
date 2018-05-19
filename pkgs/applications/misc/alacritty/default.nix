@@ -50,18 +50,18 @@ let
   ];
 in buildRustPackage rec {
   name = "alacritty-unstable-${version}";
-  version = "2018-04-16";
+  version = "2018-05-09";
 
   # At the moment we cannot handle git dependencies in buildRustPackage.
   # This fork only replaces rust-fontconfig/libfontconfig with a git submodules.
   src = fetchgit {
     url = https://github.com/Mic92/alacritty.git;
     rev = "rev-${version}";
-    sha256 = "14qsfaij631pk0gxrhmp594f72v0z7kzymf4hnqv4k5w9xlxciwx";
+    sha256 = "0mgi4niy40zz80k2ammbzdw9d8flvfkwlxkjnbpwrrldd0sj8dlz";
     fetchSubmodules = true;
   };
 
-  cargoSha256 = "0gg28fbx0kisv7hqxgzqhv4z4ikk074djfjlj90nmmi4nddp017p";
+  cargoSha256 = "0d6bqfnwqfxqllrf00p1djlxdvnhrahgnyqv842qjn94j3wf0fym";
 
   nativeBuildInputs = [
     cmake
@@ -77,32 +77,20 @@ in buildRustPackage rec {
       --replace Command::new\(\"xclip\"\) Command::new\(\"${xclip}/bin/xclip\"\)
   '';
 
-  postBuild = if stdenv.isDarwin
-    then ''
-      make app
-    ''
-    else "";
-
-  patchRPathLibs = if stdenv.isDarwin then "" else ''
-    patchelf --set-rpath "${stdenv.lib.makeLibraryPath rpathLibs}" $out/bin/alacritty
-  '';
-
-  copyDarwinApp = if stdenv.isDarwin
-    then ''
-      mkdir $out/Applications
-      cp -r target/release/osx/Alacritty.app $out/Applications/Alacritty.app
-    ''
-    else "";
+  postBuild = lib.optionalString stdenv.isDarwin "make app";
 
   installPhase = ''
     runHook preInstall
 
     install -D target/release/alacritty $out/bin/alacritty
-    ${patchRPathLibs}
 
+  '' + (if stdenv.isDarwin then ''
+    mkdir $out/Applications
+    cp -r target/release/osx/Alacritty.app $out/Applications/Alacritty.app
+  '' else ''
     install -D Alacritty.desktop $out/share/applications/alacritty.desktop
-
-    ${copyDarwinApp}
+    patchelf --set-rpath "${stdenv.lib.makeLibraryPath rpathLibs}" $out/bin/alacritty
+  '') + ''
 
     runHook postInstall
   '';
