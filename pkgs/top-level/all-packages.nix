@@ -4019,6 +4019,8 @@ with pkgs;
 
   nitrogen = callPackage ../tools/X11/nitrogen {};
 
+  nms = callPackage ../tools/misc/nms { };
+
   notify-desktop = callPackage ../tools/misc/notify-desktop {};
 
   nkf = callPackage ../tools/text/nkf {};
