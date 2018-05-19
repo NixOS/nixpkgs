@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, makeWrapper, nodejs, openssl, pcre, readline, sqlite }:
+{ stdenv, lib, fetchurl, makeWrapper, nodejs, openssl, pcre, readline, sqlite, boehmgc, sfml }:
 
 stdenv.mkDerivation rec {
   name = "nim-${version}";
@@ -18,6 +18,10 @@ stdenv.mkDerivation rec {
     "-lpcre"
     "-lreadline"
     "-lsqlite3"
+    "-lgc"
+#    "-lsfml-graphics"
+#    "-lsfml-window"
+#    "-lsfml-system"
   ];
 
   # 1. nodejs is only needed for tests
@@ -25,12 +29,12 @@ stdenv.mkDerivation rec {
   #    used for bootstrapping, but koch insists on moving the nim compiler around
   #    as part of building it, so it cannot be read-only
 
-  buildInputs  = [
+  buildInputs = [
     makeWrapper nodejs
-    openssl pcre readline sqlite
+    openssl pcre readline sqlite boehmgc sfml
   ];
 
-  buildPhase   = ''
+  buildPhase = ''
     sh build.sh
     ./bin/nim c koch
     ./koch boot  -d:release \
@@ -48,7 +52,16 @@ stdenv.mkDerivation rec {
       --suffix PATH : ${lib.makeBinPath [ stdenv.cc ]}
   '';
 
-  checkPhase = "./koch tests";
+  postPatch = ''
+    substituteInPlace ./tests/async/tioselectors.nim --replace "/bin/sleep" "sleep"
+    substituteInPlace ./tests/osproc/tworkingdir.nim --replace "/usr/bin/" "/run/current-system/sw/bin/"
+  '';
+
+  checkPhase = ''
+    ./bin/nimble --nimbleDir:./nimbledir --accept --verbose install zip opengl sdl1 jester@#head niminst
+    echo "nimblepath=\"./nimbledir/pkgs/\" >> ./config/nim.cfg
+    ./koch tests
+  '';
 
   meta = with stdenv.lib; {
     description = "Statically typed, imperative programming language";
