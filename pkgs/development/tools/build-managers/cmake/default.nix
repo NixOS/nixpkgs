@@ -1,6 +1,6 @@
 { stdenv, fetchurl, pkgconfig
 , bzip2, curl, expat, libarchive, xz, zlib, libuv, rhash
-, majorVersion ? "3.10"
+, majorVersion ? "3.11"
 # darwin attributes
 , ps
 , isBootstrap ? false
@@ -17,6 +17,10 @@ with stdenv.lib;
 
 with (
   {
+    "3.11" = {
+      minorVersion = "2";
+      sha256 = "0j2jpx94lnqx5w59i9xihl56hf6ghk04438rqhh7lk1bryxj5g2y";
+    };
     "3.10" = {
       minorVersion = "2";
       sha256 = "80d0faad4ab56de07aa21a7fc692c88c4ce6156d42b0579c6962004a70a3218b";
