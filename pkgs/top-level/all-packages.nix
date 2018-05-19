@@ -18544,8 +18544,6 @@ with pkgs;
     erlang = erlangR18;
   };
 
-  wireguard = callPackage ../os-specific/linux/wireguard { };
-
   alsamixer.app = callPackage ../applications/window-managers/windowmaker/dockapps/alsamixer.app.nix { };
 
   wllvm = callPackage  ../development/tools/wllvm { };
