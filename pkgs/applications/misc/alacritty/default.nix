@@ -1,4 +1,5 @@
 { stdenv,
+  lib,
   fetchgit,
   rustPlatform,
   cmake,
@@ -14,7 +15,15 @@
   libXi,
   libXrandr,
   libGL,
-  xclip }:
+  xclip,
+  # Darwin Frameworks
+  AppKit,
+  CoreFoundation,
+  CoreGraphics,
+  CoreServices,
+  CoreText,
+  Foundation,
+  OpenGL }:
 
 with rustPlatform;
 
@@ -29,6 +38,15 @@ let
     libXrandr
     libGL
     libXi
+  ];
+  darwinFrameworks = [
+    AppKit
+    CoreFoundation
+    CoreGraphics
+    CoreServices
+    CoreText
+    Foundation
+    OpenGL
   ];
 in buildRustPackage rec {
   name = "alacritty-unstable-${version}";
@@ -51,20 +69,40 @@ in buildRustPackage rec {
     pkgconfig
   ];
 
-  buildInputs = rpathLibs;
+  buildInputs = rpathLibs
+             ++ lib.optionals stdenv.isDarwin darwinFrameworks;
 
   postPatch = ''
     substituteInPlace copypasta/src/x11.rs \
       --replace Command::new\(\"xclip\"\) Command::new\(\"${xclip}/bin/xclip\"\)
   '';
 
+  postBuild = if stdenv.isDarwin
+    then ''
+      make app
+    ''
+    else "";
+
+  patchRPathLibs = if stdenv.isDarwin then "" else ''
+    patchelf --set-rpath "${stdenv.lib.makeLibraryPath rpathLibs}" $out/bin/alacritty
+  '';
+
+  copyDarwinApp = if stdenv.isDarwin
+    then ''
+      mkdir $out/Applications
+      cp -r target/release/osx/Alacritty.app $out/Applications/Alacritty.app
+    ''
+    else "";
+
   installPhase = ''
     runHook preInstall
 
     install -D target/release/alacritty $out/bin/alacritty
-    patchelf --set-rpath "${stdenv.lib.makeLibraryPath rpathLibs}" $out/bin/alacritty
+    ${patchRPathLibs}
 
     install -D Alacritty.desktop $out/share/applications/alacritty.desktop
+
+    ${copyDarwinApp}
 
     runHook postInstall
   '';
@@ -76,6 +114,5 @@ in buildRustPackage rec {
     homepage = https://github.com/jwilm/alacritty;
     license = with licenses; [ asl20 ];
     maintainers = with maintainers; [ mic92 ];
-    platforms = platforms.linux;
   };
 }
