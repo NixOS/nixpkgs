@@ -11273,6 +11273,8 @@ in {
     inherit (pkgs) fetchurl systemd;
   };
 
+  pynmea2 = callPackage ../development/python-modules/pynmea2 {};
+
   pynzb = buildPythonPackage (rec {
     name = "pynzb-0.1.0";
 
