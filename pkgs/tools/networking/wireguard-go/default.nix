@@ -13,7 +13,7 @@ buildGoPackage rec {
 
   goDeps = ./deps.nix;
 
-  patchPhase = ''
+  postPatch = ''
     # Replace local imports so that go tools do not trip on them
     find . -name '*.go' -exec sed -i '/import (/,/)/s@"./@"${goPackagePath}/@' {} \;
   '';
