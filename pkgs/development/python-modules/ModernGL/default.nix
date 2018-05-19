@@ -1,32 +1,29 @@
-{  buildPythonPackage, python, glibcLocales, fetchPypi, sphinx }:
+{ stdenv, buildPythonPackage, fetchFromGitHub, isPy3k, sphinx, libGLU_combined, libX11, pytest, pycodestyle, numpy }:
 
 buildPythonPackage rec {
   pname = "ModernGL";
-  version = "4.1.2";
+  version = "5.2.1";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "290ae98a8f5d3ff7b32418d5f8c25e3800abc7985327053e15aeeb5b88a4d56d";
+  src = fetchFromGitHub {
+    owner = "cprogrammer1994";
+    repo = pname;
+    rev = version;
+    sha256 = "1ap1b3isvvxbjxr741l6r3m30ki2dj2yqswb33928iawfpamqc4g";
   };
 
-  #LC_ALL = "en_US.utf-8";
+  disabled = !isPy3k;
 
-  # ipaddress is part of the standard library of Python 3.3+
-  #prePatch = lib.optionalString (!pythonOlder "3.3") ''
-  #  substituteInPlace requirements.txt \
-  #    --replace "ipaddress" ""
-  #'';
+  propagatedBuildInputs = [ sphinx libGLU_combined libX11 ];
+  checkInputs = [ pytest pycodestyle numpy ];
 
-  #nativeBuildInputs = [ glibcLocales ];
-  propagatedBuildInputs = [ sphinx ];
-
-  # Taken from .travis.yml
- # checkPhase = ''
- #   ${python.interpreter} tests/test_main.py
- #   ${python.interpreter} -m mailparser -v
- #   ${python.interpreter} -m mailparser -h
- #   ${python.interpreter} -m mailparser -f tests/mails/mail_malformed_3 -j
- #   cat tests/mails/mail_malformed_3 | ${python.interpreter} -m mailparser -k -j
- # '';
+  checkPhase = ''
+    py.test
+  '';
+  meta = with stdenv.lib; {
+    description = "ModernGL: High performance rendering for Python 3";
+    homepage = https://github.com/cprogrammer1994/ModernGL;
+    license = licenses.mit;
+    maintainers = with maintainers; [ psyanticy ];
+  };
 
 }
