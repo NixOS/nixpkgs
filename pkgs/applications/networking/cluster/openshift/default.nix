@@ -69,12 +69,8 @@ in stdenv.mkDerivation rec {
   installPhase = ''
     mkdir -p "$out/bin"
     cp -a "_output/local/bin/$(go env GOOS)/$(go env GOARCH)/"* "$out/bin/"
-    mkdir -p "$out/etc/bash_completion.d"
-    cp -a contrib/completions/bash/oc "$out/etc/bash_completion.d"
-    cp -a contrib/completions/bash/openshift "$out/etc/bash_completion.d"
-    mkdir -p "$out/share/zsh/site-functions"
-    cp -a contrib/completions/zsh/oc "$out/share/zsh/site-functions"
-    cp -a contrib/completions/zsh/openshift "$out/share/zsh/site-functions"
+    install -D -t "$out/etc/bash_completion.d" contrib/completions/bash/*
+    install -D -t "$out/share/zsh/site-functions" contrib/completions/zsh/*
   '';
 
   preFixup = ''
