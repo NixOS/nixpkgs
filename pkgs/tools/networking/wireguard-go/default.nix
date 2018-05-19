@@ -1,4 +1,4 @@
-{ stdenv, buildGoPackage, fetchurl }:
+{ stdenv, buildGoPackage, fetchzip }:
 
 buildGoPackage rec {
   name = "wireguard-go-${version}";
@@ -6,9 +6,9 @@ buildGoPackage rec {
 
   goPackagePath = "wireguard-go";
 
-  src = fetchurl {
+  src = fetchzip {
     url = "https://git.zx2c4.com/wireguard-go/snapshot/wireguard-go-${version}.tar.xz";
-    sha256 = "1bn49a67m2ab0l9lq3zh2mfbbppmyg34klqi3069sjn6lg2hlajs";
+    sha256 = "1i1w4vj8w353b92nfhs92k0f7fifrwi067qfmgckdk0kk76nv2id";
   };
 
   goDeps = ./deps.nix;
