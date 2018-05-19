@@ -36,6 +36,7 @@ let
       paco = callPackage ../development/coq-modules/paco {};
       QuickChick = callPackage ../development/coq-modules/QuickChick {};
       ssreflect = callPackage ../development/coq-modules/ssreflect { };
+      stdpp = callPackage ../development/coq-modules/stdpp { };
       tlc = callPackage ../development/coq-modules/tlc {};
     };
 

@@ -223,6 +223,8 @@ in {
 
   bugseverywhere = callPackage ../applications/version-management/bugseverywhere {};
 
+  cdecimal = callPackage ../development/python-modules/cdecimal { };
+
   dendropy = callPackage ../development/python-modules/dendropy { };
 
   dbf = callPackage ../development/python-modules/dbf { };
@@ -252,6 +254,8 @@ in {
   diff-match-patch = callPackage ../development/python-modules/diff-match-patch { };
 
   globus-sdk = callPackage ../development/python-modules/globus-sdk { };
+
+  goocalendar = callPackage ../development/python-modules/goocalendar { };
 
   gssapi = callPackage ../development/python-modules/gssapi { };
 

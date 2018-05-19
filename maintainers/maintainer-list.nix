@@ -3895,6 +3895,11 @@
     github = "typetetris";
     name = "Eric Wolf";
   };
+  udono = {
+    email = "udono@virtual-things.biz";
+    github = "udono";
+    name = "Udo Spallek";
+  };
   unode = {
     email = "alves.rjc@gmail.com";
     github = "unode";

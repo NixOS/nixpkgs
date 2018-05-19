@@ -24,9 +24,10 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     description = "A fast replacement for PGAdmin";
     longDescription = ''
-      At the heart of Postage is a modern, fast, event-based C-binary, built in
-      the style of NGINX and Node.js. This heart makes Postage as fast as any
-      PostgreSQL interface can hope to be.
+      At the heart of pgManage is a modern, fast, event-based C-binary, built in
+      the style of NGINX and Node.js. This heart makes pgManage as fast as any
+      PostgreSQL interface can hope to be. (Note: pgManage replaces Postage,
+      which is no longer maintained.)
     '';
     homepage = https://github.com/pgManage/pgManage;
     license = licenses.postgresql;
