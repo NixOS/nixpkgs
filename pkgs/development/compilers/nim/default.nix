@@ -1,6 +1,6 @@
 # based on https://github.com/nim-lang/Nim/blob/v0.18.0/.travis.yml
 
-{ stdenv, lib, fetchurl, makeWrapper, nodejs, openssl, pcre, readline, sqlite, boehmgc, sfml, tzdata }:
+{ stdenv, lib, fetchurl, makeWrapper, nodejs, openssl, pcre, readline, sqlite, boehmgc, sfml, tzdata, coreutils }:
 
 stdenv.mkDerivation rec {
   name = "nim-${version}";
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
   #    as part of building it, so it cannot be read-only
 
   buildInputs = [
-    makeWrapper nodejs tzdata
+    makeWrapper nodejs tzdata coreutils
     openssl pcre readline sqlite boehmgc sfml
   ];
 
@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace ./tests/async/tioselectors.nim --replace "/bin/sleep" "sleep"
-    substituteInPlace ./tests/osproc/tworkingdir.nim --replace "/usr/bin/" "/run/current-system/sw/bin/"
+    substituteInPlace ./tests/osproc/tworkingdir.nim --replace "/usr/bin" "${coreutils}/bin"
     substituteInPlace ./tests/stdlib/ttimes.nim --replace "/usr/share/zoneinfo" "${tzdata}/share/zoneinfo"
   '';
 
