@@ -4,13 +4,13 @@
 stdenv.mkDerivation rec {
   name = "lastpass-cli-${version}";
 
-  version = "1.3.0";
+  version = "1.3.1";
 
   src = fetchFromGitHub {
     owner = "lastpass";
     repo = "lastpass-cli";
     rev = "v${version}";
-    sha256 = "0k3vnlibv05wnn6qn3qjlcyj2s07di7zkmdnijd6cp1hfk76z2r5";
+    sha256 = "11drzmfdvb8ydw1dxaz9zz8rk0jjqmfv076vydz05qqvgx59s38h";
   };
 
   nativeBuildInputs = [ asciidoc cmake docbook_xsl pkgconfig ];
