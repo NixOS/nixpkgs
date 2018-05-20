@@ -3,11 +3,11 @@
 # Note that this does not provide the ngspice command-line utility. For that see
 # the ngspice derivation.
 stdenv.mkDerivation {
-  name = "libngspice-26";
+  name = "libngspice-27";
 
   src = fetchurl {
-    url = "mirror://sourceforge/ngspice/ngspice-26.tar.gz";
-    sha256 = "51e230c8b720802d93747bc580c0a29d1fb530f3dd06f213b6a700ca9a4d0108";
+    url = "mirror://sourceforge/ngspice/ngspice-27.tar.gz";
+    sha256 = "15862npsy5sj56z5yd1qiv3y0fgicrzj7wwn8hbcy89fgbawf20c";
   };
 
   nativeBuildInputs = [ flex bison ];
