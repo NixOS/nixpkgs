@@ -1466,6 +1466,8 @@ with pkgs;
     utillinux = utillinuxMinimal;
   };
 
+  antibody = callPackage ../shells/zsh/antibody { };
+  
   antigen = callPackage ../shells/zsh/antigen { };
 
   apparix = callPackage ../tools/misc/apparix { };
