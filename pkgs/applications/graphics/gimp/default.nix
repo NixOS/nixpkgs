@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, autoreconfHook, pkgconfig, intltool, babl, gegl, gtk2, glib, gdk_pixbuf, isocodes
+{ stdenv, fetchurl, autoreconfHook, pkgconfig, intltool, babl, gegl, gtk2, glib, gdk_pixbuf, isocodes
 , pango, cairo, freetype, fontconfig, lcms, libpng, libjpeg, poppler, poppler_data, libtiff
 , libmng, librsvg, libwmf, zlib, libzip, ghostscript, aalib, shared-mime-info
 , python2Packages, libexif, gettext, xorg, glib-networking, libmypaint, gexiv2
@@ -9,36 +9,12 @@ let
   inherit (python2Packages) pygtk wrapPython python;
 in stdenv.mkDerivation rec {
   name = "gimp-${version}";
-  version = "2.10.0";
+  version = "2.10.2";
 
   src = fetchurl {
     url = "http://download.gimp.org/pub/gimp/v${stdenv.lib.versions.majorMinor version}/${name}.tar.bz2";
-    sha256 = "1qkxaigbfkx26xym5nzrgfrmn97cbnhn63v1saaha2nbi3xrdk3z";
+    sha256 = "1srkqd9cx1xmny7cyk3b6f14dknb3fd77whm38vlvr7grnpbmc0w";
   };
-
-  patches = [
-    # fix rpath of python library https://bugzilla.gnome.org/show_bug.cgi?id=795620
-    (fetchurl {
-      url = https://bugzilla.gnome.org/attachment.cgi?id=371482;
-      sha256 = "18bysndh61pvlv255xapdrfpsl5ivm51wp1w7xgk9vky9z2y3llc";
-    })
-
-    # fix absolute paths stored in configuration
-    (fetchpatch {
-      url = https://git.gnome.org/browse/gimp/patch/?id=0fce8fdb3c056acead8322c976a96fb6fba793b6;
-      sha256 = "09845i3bdpdbf13razr04ksvwydxcvzhjwlb4dfgdv5q203g2ris";
-    })
-    (fetchpatch {
-      url = https://git.gnome.org/browse/gimp/patch/?id=f6b586237cb8c912c1503f8e6086edd17f07d4df;
-      sha256 = "0s68885ip2wgjvsl5vqi2f1xhxdjpzqprifzgdl1vnv6gqmfy3bh";
-    })
-
-    # fix pc file (needed e.g. for building plug-ins)
-    (fetchpatch {
-      url = https://git.gnome.org/browse/gimp/patch/?id=7e19906827d301eb70275dba089849a632a0eabe;
-      sha256 = "0cbjfbwvzg2hqihg3rpsga405v7z2qahj22dfqn2jrb2gbhrjcp1";
-    })
-  ];
 
   nativeBuildInputs = [ autoreconfHook pkgconfig intltool gettext wrapPython ];
   propagatedBuildInputs = [ gegl ]; # needed by gimp-2.0.pc
@@ -80,6 +56,8 @@ in stdenv.mkDerivation rec {
 
   configureFlags = [
     "--without-webkit" # old version is required
+    "--with-bug-report-url=https://github.com/NixOS/nixpkgs/issues/new"
+    "--with-icc-directory=/var/run/current-system/sw/share/color/icc"
   ];
 
   doCheck = true;
