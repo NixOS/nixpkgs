@@ -14155,6 +14155,7 @@ with pkgs;
     ubootQemuAarch64
     ubootQemuArm
     ubootRaspberryPi
+    ubootRaspberryPiZeroW
     ubootRaspberryPi2
     ubootRaspberryPi3_32bit
     ubootRaspberryPi3_64bit
