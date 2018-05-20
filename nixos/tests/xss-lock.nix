@@ -20,6 +20,6 @@ with lib;
 
     $machine->fail("pgrep xlock");
     $machine->succeed("su -l alice -c 'xset dpms force standby'");
-    $machine->succeed("pgrep xlock");
+    $machine->waitUntilSucceeds("pgrep xlock");
   '';
 })
