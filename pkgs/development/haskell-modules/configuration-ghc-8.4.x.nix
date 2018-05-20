@@ -408,6 +408,9 @@ self: super: {
     jailbreak       = true;
   });
 
+  # https://github.com/jcristovao/enclosed-exceptions/issues/12
+  enclosed-exceptions = dontCheck super.enclosed-exceptions;
+
   # Older versions don't compile.
   base-compat = self.base-compat_0_10_1;
   brick = self.brick_0_37;
