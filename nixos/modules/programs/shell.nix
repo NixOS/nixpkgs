@@ -24,13 +24,13 @@ in
       ''
         # Set up the per-user profile.
         mkdir -m 0755 -p "$NIX_USER_PROFILE_DIR"
-        if test "$(stat --printf '%u' "$NIX_USER_PROFILE_DIR")" != "$(id -u)"; then
+        if [ "$(stat --printf '%u' "$NIX_USER_PROFILE_DIR")" != "$(id -u)" ]; then
             echo "WARNING: bad ownership on $NIX_USER_PROFILE_DIR" >&2
         fi
 
-        if test -w "$HOME"; then
-          if ! test -L "$HOME/.nix-profile"; then
-              if test "$USER" != root; then
+        if [ -w "$HOME" ]; then
+          if ! [ -L "$HOME/.nix-profile" ]; then
+              if [ "$USER" != root ]; then
                   ln -s "$NIX_USER_PROFILE_DIR/profile" "$HOME/.nix-profile"
               else
                   # Root installs in the system-wide profile by default.
@@ -46,7 +46,7 @@ in
           # Create the per-user garbage collector roots directory.
           NIX_USER_GCROOTS_DIR="/nix/var/nix/gcroots/per-user/$USER"
           mkdir -m 0755 -p "$NIX_USER_GCROOTS_DIR"
-          if test "$(stat --printf '%u' "$NIX_USER_GCROOTS_DIR")" != "$(id -u)"; then
+          if [ "$(stat --printf '%u' "$NIX_USER_GCROOTS_DIR")" != "$(id -u)" ]; then
               echo "WARNING: bad ownership on $NIX_USER_GCROOTS_DIR" >&2
           fi
 
