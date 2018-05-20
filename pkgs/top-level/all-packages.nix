@@ -10119,6 +10119,8 @@ with pkgs;
     mysql = mysql57;
   };
 
+  libnatpmp = callPackage ../development/libraries/libnatpmp { };
+
   libnatspec = callPackage ../development/libraries/libnatspec { };
 
   libndp = callPackage ../development/libraries/libndp { };
@@ -18069,6 +18071,10 @@ with pkgs;
   sunvox = callPackage ../applications/audio/sunvox { };
 
   swh_lv2 = callPackage ../applications/audio/swh-lv2 { };
+
+  swift-im = libsForQt5.callPackage ../applications/networking/instant-messengers/swift-im {
+    inherit (gnome2) GConf;
+  };
 
   sylpheed = callPackage ../applications/networking/mailreaders/sylpheed { };
 
