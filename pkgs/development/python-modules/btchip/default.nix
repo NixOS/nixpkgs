@@ -10,7 +10,7 @@ buildPythonPackage rec {
     sha256 = "16g9l3rpxpvvkdx08mgy0ligvsfcpzdrh4hplj104cpprrbsqd6v";
   };
 
-  buildInputs = [ hidapi pyscard ecdsa ];
+  propagatedBuildInputs = [ hidapi pyscard ecdsa ];
 
   meta = with stdenv.lib; {
     description = "Python communication library for Ledger Hardware Wallet products";
