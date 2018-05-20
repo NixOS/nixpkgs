@@ -95,6 +95,18 @@ let
         cp -pdv $1 $out/bin
       }
 
+      copy_libs () {
+          # Copy all of the needed libraries
+          echo "Copying libs for executable $1"
+          for LIB in $(${findLibs}/bin/find-libs $1); do
+            TGT="$out/lib/$(basename $LIB)"
+            if [ ! -f "$TGT" ]; then
+              SRC="$(readlink -e $LIB)"
+              cp -pdv "$SRC" "$TGT"
+            fi
+          done
+      }
+
       # Copy BusyBox.
       for BIN in ${pkgs.busybox}/{s,}bin/*; do
         copy_bin_and_libs $BIN
@@ -142,18 +154,14 @@ let
       ${config.boot.initrd.extraUtilsCommands}
 
       # Copy ld manually since it isn't detected correctly
-      cp -pv ${pkgs.glibc.out}/lib/ld*.so.? $out/lib
+      for LIB in $(ls ${pkgs.glibc.out}/lib/ld*.so.?); do
+        if [[ ! -f $out/lib/$(basename $LIB) ]]; then
+          cp -pv $LIB $out/lib;
+        fi
+      done
 
-      # Copy all of the needed libraries
       find $out/bin $out/lib -type f | while read BIN; do
-        echo "Copying libs for executable $BIN"
-        for LIB in $(${findLibs}/bin/find-libs $BIN); do
-          TGT="$out/lib/$(basename $LIB)"
-          if [ ! -f "$TGT" ]; then
-            SRC="$(readlink -e $LIB)"
-            cp -pdv "$SRC" "$TGT"
-          fi
-        done
+        copy_libs $BIN
       done
 
       # Strip binaries further than normal.
