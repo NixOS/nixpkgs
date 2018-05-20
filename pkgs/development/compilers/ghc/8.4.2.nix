@@ -22,7 +22,10 @@
 
 , # Whether to build dynamic libs for the standard library (on the target
   # platform). Static libs are always built.
-  enableShared ? !targetPlatform.useAndroidPrebuilt
+  enableShared ? !targetPlatform.isWindows && !targetPlatform.useAndroidPrebuilt
+
+, # Whetherto build terminfo.
+  enableTerminfo ? !targetPlatform.isWindows
 
 , # What flavour to build. An empty string indicates no
   # specific flavour and falls back to ghc default values.
@@ -60,7 +63,7 @@ let
   '';
 
   # Splicer will pull out correct variations
-  libDeps = platform: [ ncurses ]
+  libDeps = platform: stdenv.lib.optional enableTerminfo [ ncurses ]
     ++ stdenv.lib.optional (!enableIntegerSimple) gmp
     ++ stdenv.lib.optional (platform.libc != "glibc") libiconv;
 
