@@ -14632,7 +14632,9 @@ with pkgs;
 
   powerline-go = callPackage ../tools/misc/powerline-go { };
 
-  powerline-rs = callPackage ../tools/misc/powerline-rs { };
+  powerline-rs = callPackage ../tools/misc/powerline-rs {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
 
   profont = callPackage ../data/fonts/profont { };
 
