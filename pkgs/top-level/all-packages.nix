@@ -484,6 +484,7 @@ with pkgs;
 
   alacritty = callPackage ../applications/misc/alacritty {
     inherit (xorg) libXcursor libXxf86vm libXi;
+    inherit (darwin.apple_sdk.frameworks) AppKit CoreFoundation CoreGraphics CoreServices CoreText Foundation OpenGL;
   };
 
   amazon-glacier-cmd-interface = callPackage ../tools/backup/amazon-glacier-cmd-interface { };
@@ -683,6 +684,8 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Carbon Cocoa;
   };
 
+  m-cli = callPackage ../os-specific/darwin/m-cli { };
+
   reattach-to-user-namespace = callPackage ../os-specific/darwin/reattach-to-user-namespace {};
 
   skhd = callPackage ../os-specific/darwin/skhd {
@@ -840,6 +843,8 @@ with pkgs;
   bitbucket-cli = python2Packages.bitbucket-cli;
 
   blink = callPackage ../applications/networking/instant-messengers/blink { };
+
+  blockhash = callPackage ../tools/graphics/blockhash { };
 
   bluemix-cli = callPackage ../tools/admin/bluemix-cli { };
 
@@ -1460,6 +1465,8 @@ with pkgs;
     utillinux = utillinuxMinimal;
   };
 
+  antibody = callPackage ../shells/zsh/antibody { };
+  
   antigen = callPackage ../shells/zsh/antigen { };
 
   apparix = callPackage ../tools/misc/apparix { };
@@ -2968,6 +2975,8 @@ with pkgs;
 
   hping = callPackage ../tools/networking/hping { };
 
+  html-proofer = callPackage ../tools/misc/html-proofer { };
+
   htpdate = callPackage ../tools/networking/htpdate { };
 
   http-prompt = callPackage ../tools/networking/http-prompt { };
@@ -3160,7 +3169,7 @@ with pkgs;
   jing-trang = callPackage ../tools/text/xml/jing-trang { };
 
   jira-cli = callPackage ../development/tools/jira_cli { };
- 
+
   jl = haskellPackages.callPackage ../development/tools/jl { };
 
   jmespath = callPackage ../development/tools/jmespath { };
@@ -4011,6 +4020,8 @@ with pkgs;
   nilfs-utils = callPackage ../tools/filesystems/nilfs-utils {};
 
   nitrogen = callPackage ../tools/X11/nitrogen {};
+
+  nms = callPackage ../tools/misc/nms { };
 
   notify-desktop = callPackage ../tools/misc/notify-desktop {};
 
@@ -5498,6 +5509,8 @@ with pkgs;
 
   whois = callPackage ../tools/networking/whois { };
 
+  wireguard-tools = callPackage ../tools/networking/wireguard-tools { };
+
   woff2 = callPackage ../development/web/woff2 { };
 
   woof = callPackage ../tools/misc/woof { };
@@ -5711,6 +5724,8 @@ with pkgs;
   wimlib = callPackage ../tools/archivers/wimlib { };
 
   wipe = callPackage ../tools/security/wipe { };
+
+  wireguard-go = callPackage ../tools/networking/wireguard-go { };
 
   wkhtmltopdf = callPackage ../tools/graphics/wkhtmltopdf {
     overrideDerivation = lib.overrideDerivation;
@@ -15636,6 +15651,8 @@ with pkgs;
 
   ganttproject-bin = callPackage ../applications/misc/ganttproject-bin { };
 
+  gauche = callPackage ../development/interpreters/gauche { };
+
   gcal = callPackage ../applications/misc/gcal { };
 
   geany = callPackage ../applications/editors/geany { };
@@ -18409,8 +18426,6 @@ with pkgs;
   wings = callPackage ../applications/graphics/wings {
     erlang = erlangR18;
   };
-
-  wireguard = callPackage ../os-specific/linux/wireguard { };
 
   alsamixer.app = callPackage ../applications/window-managers/windowmaker/dockapps/alsamixer.app.nix { };
 

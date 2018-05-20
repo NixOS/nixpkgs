@@ -38,7 +38,7 @@ core-packages:
   - ghcjs-base-0
 
 default-package-overrides:
-  # LTS Haskell 11.8
+  # LTS Haskell 11.9
   - abstract-deque ==0.3
   - abstract-deque-tests ==0.3
   - abstract-par ==0.3.3
@@ -94,7 +94,7 @@ default-package-overrides:
   - amqp ==0.18.1
   - annotated-wl-pprint ==0.7.0
   - ansigraph ==0.3.0.5
-  - ansi-terminal ==0.8.0.3
+  - ansi-terminal ==0.8.0.4
   - ansi-wl-pprint ==0.6.8.2
   - ANum ==0.2.0.2
   - apecs ==0.2.4.7
@@ -291,7 +291,7 @@ default-package-overrides:
   - Chart-cairo ==1.8.3
   - chaselev-deque ==0.5.0.5
   - ChasingBottoms ==1.3.1.4
-  - chatwork ==0.1.3.2
+  - chatwork ==0.1.3.3
   - cheapskate ==0.1.1
   - cheapskate-highlight ==0.1.0.0
   - cheapskate-lucid ==0.1.0.0
@@ -526,7 +526,7 @@ default-package-overrides:
   - doctest-driver-gen ==0.2.0.2
   - do-list ==1.0.1
   - dom-parser ==3.0.0
-  - dotenv ==0.5.2.4
+  - dotenv ==0.5.2.5
   - dotnet-timespan ==0.0.1.0
   - double-conversion ==2.0.2.0
   - download ==0.3.2.6
@@ -906,7 +906,7 @@ default-package-overrides:
   - hmpfr ==0.4.4
   - hocilib ==0.2.0
   - Hoed ==0.5.1
-  - hOpenPGP ==2.6.1
+  - hOpenPGP ==2.6.2
   - hopfli ==0.2.2.1
   - hosc ==0.16
   - hostname ==1.0
@@ -937,9 +937,9 @@ default-package-overrides:
   - hs-GeoIP ==0.3
   - hsignal ==0.2.7.5
   - hsinstall ==1.6
-  - HSlippyMap ==3.0
+  - HSlippyMap ==3.0.1
   - hslogger ==1.2.10
-  - hslua ==0.9.5.1
+  - hslua ==0.9.5.2
   - hslua-aeson ==0.3.0.1
   - hslua-module-text ==0.1.2.1
   - hsndfile ==0.8.0
@@ -1051,7 +1051,7 @@ default-package-overrides:
   - indentation-parsec ==0.0.0.1
   - indents ==0.4.0.1
   - indexed-list-literals ==0.1.0.1
-  - inflections ==0.4.0.1
+  - inflections ==0.4.0.3
   - influxdb ==1.3.0.1
   - ini ==0.3.6
   - inline-c ==0.6.0.6
@@ -1087,7 +1087,7 @@ default-package-overrides:
   - IPv6DB ==0.2.6
   - ipython-kernel ==0.9.0.2
   - irc ==0.6.1.0
-  - irc-client ==1.1.0.2
+  - irc-client ==1.1.0.3
   - irc-conduit ==0.3.0.1
   - irc-ctcp ==0.1.3.0
   - irc-dcc ==2.0.1
@@ -1101,7 +1101,7 @@ default-package-overrides:
   - ix-shapable ==0.1.0
   - jack ==0.7.1.3
   - javascript-extras ==0.3.2.0
-  - jmacro ==0.6.14
+  - jmacro ==0.6.15
   - jmacro-rpc ==0.3.2
   - jmacro-rpc-happstack ==0.3.2
   - jmacro-rpc-snap ==0.3
@@ -1287,7 +1287,7 @@ default-package-overrides:
   - minimorph ==0.1.6.1
   - minio-hs ==1.0.0
   - miniutter ==0.4.7.0
-  - mintty ==0.1.1
+  - mintty ==0.1.2
   - misfortune ==0.1.1.2
   - miso ==0.14.0.0
   - missing-foreign ==0.1.1
@@ -1315,7 +1315,7 @@ default-package-overrides:
   - monadloc ==0.7.1
   - monad-logger ==0.3.28.5
   - monad-logger-json ==0.1.0.0
-  - monad-logger-prefix ==0.1.9
+  - monad-logger-prefix ==0.1.10
   - monad-logger-syslog ==0.1.4.0
   - monad-loops ==0.4.3
   - monad-memo ==0.4.1
@@ -1358,7 +1358,7 @@ default-package-overrides:
   - murmur-hash ==0.1.0.9
   - mustache ==2.3.0
   - mutable-containers ==0.3.4
-  - mwc-probability ==2.0.2
+  - mwc-probability ==2.0.3
   - mwc-random ==0.13.6.0
   - mwc-random-accelerate ==0.1.0.0
   - mysql ==0.1.5
@@ -1653,7 +1653,7 @@ default-package-overrides:
   - raaz ==0.2.0
   - rainbow ==0.28.0.4
   - rainbox ==0.18.0.10
-  - rakuten ==0.1.1.1
+  - rakuten ==0.1.1.2
   - ramus ==0.1.2
   - random ==1.1
   - random-fu ==0.2.7.0
@@ -1731,6 +1731,7 @@ default-package-overrides:
   - rfc5051 ==0.1.0.3
   - riak ==1.1.2.4
   - riak-protobuf ==0.23.0.0
+  - rio ==0.1.2.0
   - rng-utils ==0.3.0
   - roles ==0.2.0.0
   - rollbar-hs ==0.2.0.0
@@ -1754,13 +1755,13 @@ default-package-overrides:
   - say ==0.1.0.0
   - sbp ==2.3.16
   - sbv ==7.5
-  - SCalendar ==1.1.0
   - scalendar ==1.2.0
+  - SCalendar ==1.1.0
   - scalpel ==0.5.1
   - scalpel-core ==0.5.1
   - scanner ==0.2
   - schematic ==0.4.2.0
-  - scientific ==0.3.6.0
+  - scientific ==0.3.6.2
   - scotty ==0.11.1
   - scrypt ==0.5.0
   - sdl2 ==2.4.0.1
@@ -1798,7 +1799,7 @@ default-package-overrides:
   - servant-github-webhook ==0.4.1.0
   - servant-js ==0.9.3.2
   - servant-JuicyPixels ==0.3.0.3
-  - servant-kotlin ==0.1.1.0
+  - servant-kotlin ==0.1.1.1
   - servant-lucid ==0.8
   - servant-mock ==0.8.4
   - servant-pandoc ==0.5.0.0
@@ -1951,7 +1952,7 @@ default-package-overrides:
   - sum-type-boilerplate ==0.1.1
   - sundown ==0.6
   - superbuffer ==0.3.1.1
-  - svg-builder ==0.1.0.2
+  - svg-builder ==0.1.1
   - svg-tree ==0.6.2.2
   - swagger ==0.3.0
   - swagger2 ==2.2.1
@@ -2128,7 +2129,7 @@ default-package-overrides:
   - ua-parser ==0.7.4.1
   - uglymemo ==0.1.0.1
   - unbounded-delays ==0.1.1.0
-  - unbound-generics ==0.3.2
+  - unbound-generics ==0.3.3
   - unboxed-ref ==0.4.0.0
   - uncertain ==0.3.1.0
   - unexceptionalio ==0.3.0
@@ -2258,7 +2259,7 @@ default-package-overrides:
   - web-routes-th ==0.22.6.3
   - web-routes-wai ==0.24.3.1
   - webrtc-vad ==0.1.0.3
-  - websockets ==0.12.4.0
+  - websockets ==0.12.4.1
   - websockets-rpc ==0.6.0
   - websockets-simple ==0.0.6.3
   - websockets-snap ==0.10.2.5
@@ -2305,7 +2306,7 @@ default-package-overrides:
   - x509-validation ==1.6.10
   - Xauth ==0.1
   - xdg-basedir ==0.2.2
-  - xeno ==0.3.3
+  - xeno ==0.3.4
   - xenstore ==0.1.1
   - xhtml ==3000.2.2
   - xls ==0.1.1
@@ -2333,7 +2334,7 @@ default-package-overrides:
   - xturtle ==0.2.0.0
   - xxhash ==0.0.2
   - xxhash-ffi ==0.2.0.0
-  - yaml ==0.8.29
+  - yaml ==0.8.30
   - Yampa ==0.10.7
   - YampaSynth ==0.2
   - yeshql ==3.0.1.3
@@ -2343,7 +2344,7 @@ default-package-overrides:
   - yesod-auth-fb ==1.9.0
   - yesod-auth-hashdb ==1.7
   - yesod-bin ==1.6.0.2
-  - yesod-core ==1.6.4
+  - yesod-core ==1.6.5
   - yesod-csp ==0.2.4.0
   - yesod-eventsource ==1.6.0
   - yesod-fb ==0.5.0

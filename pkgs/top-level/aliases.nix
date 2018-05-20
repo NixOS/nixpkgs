@@ -295,6 +295,7 @@ mapAliases (rec {
   vorbisTools = vorbis-tools; # added 2016-01-26
   wineStaging = wine-staging; # added 2018-01-08
   winusb = woeusb; # added 2017-12-22
+  wireguard = wireguard-tools; # added 2018-05-19
   x11 = xlibsWrapper; # added 2015-09
   xbmc = kodi; # added 2018-04-25
   xbmcPlain = kodiPlain; # added 2018-04-25

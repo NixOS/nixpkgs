@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "x2goclient-${version}";
-  version = "4.1.0.0";
+  version = "4.1.1.1";
 
   src = fetchurl {
     url = "http://code.x2go.org/releases/source/x2goclient/${name}.tar.gz";
-    sha256 = "0sibrj4qppww7mirdixrqrknkyq3g97s64186h88j8k66sy1anab";
+    sha256 = "0jzlwn0v8b123h5l7hrhs35x2z6mb98zg1s0shqb4yfp2g641yp3";
   };
 
   buildInputs = [ cups libssh libXpm nxproxy openldap openssh qt4 ];
@@ -14,6 +14,7 @@ stdenv.mkDerivation rec {
 
   patchPhase = ''
      substituteInPlace Makefile \
+       --replace "SHELL=/bin/bash" "SHELL=$SHELL" \
        --replace "lrelease-qt4" "${qt4}/bin/lrelease" \
        --replace "qmake-qt4" "${qt4}/bin/qmake" \
        --replace "-o root -g root" ""

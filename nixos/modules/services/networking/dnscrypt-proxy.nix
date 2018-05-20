@@ -192,6 +192,7 @@ in
     security.apparmor.profiles = singleton (pkgs.writeText "apparmor-dnscrypt-proxy" ''
       ${pkgs.dnscrypt-proxy}/bin/dnscrypt-proxy {
         /dev/null rw,
+        /dev/random r,
         /dev/urandom r,
 
         /etc/passwd r,
@@ -211,6 +212,9 @@ in
         ${getLib pkgs.gcc.cc}/lib/libssp.so.* mr,
         ${getLib pkgs.libsodium}/lib/libsodium.so.* mr,
         ${getLib pkgs.systemd}/lib/libsystemd.so.* mr,
+        ${getLib pkgs.utillinuxMinimal.out}/lib/libmount.so.* mr,
+        ${getLib pkgs.utillinuxMinimal.out}/lib/libblkid.so.* mr,
+        ${getLib pkgs.utillinuxMinimal.out}/lib/libuuid.so.* mr,
         ${getLib pkgs.xz}/lib/liblzma.so.* mr,
         ${getLib pkgs.libgcrypt}/lib/libgcrypt.so.* mr,
         ${getLib pkgs.libgpgerror}/lib/libgpg-error.so.* mr,

@@ -82,7 +82,7 @@ self: super: {
       name = "git-annex-${drv.version}-src";
       url = "git://git-annex.branchable.com/";
       rev = "refs/tags/" + drv.version;
-      sha256 = "05rygb8jm4nh7ggzihz6664hcgwkbqspi8gbpkpf7l7wwvzdm1rd";
+      sha256 = "1w0gzqk70ymlpvh9zqkg1cd3ipaw4n85k4zsf49xl6kjp4vbcmwj";
     };
   })).overrideScope (self: super: {
     aws = dontCheck (self.aws_0_18);
@@ -1036,8 +1036,8 @@ self: super: {
   vulkan = super.vulkan.override { vulkan = pkgs.vulkan-loader; };
 
   # Builds only with the latest version of indexed-list-literals.
-  vector-sized_1_0_1_0 = super.vector-sized_1_0_1_0.override {
-    indexed-list-literals = self.indexed-list-literals_0_2_0_0;
+  vector-sized_1_0_2_0 = super.vector-sized_1_0_2_0.override {
+    indexed-list-literals = self.indexed-list-literals_0_2_1_1;
   };
 
   # https://github.com/dmwit/encoding/pull/3
