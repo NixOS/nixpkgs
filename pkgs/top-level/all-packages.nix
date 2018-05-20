@@ -13814,6 +13814,10 @@ with pkgs;
 
   buildLinux = attrs: callPackage ../os-specific/linux/kernel/generic.nix attrs;
 
+  dpdk = callPackage ../os-specific/linux/dpdk {
+    kernel = null; # dpdk modules are in linuxPackages.dpdk.kmod
+  };
+
   keyutils = callPackage ../os-specific/linux/keyutils { };
 
   libselinux = callPackage ../os-specific/linux/libselinux { };
