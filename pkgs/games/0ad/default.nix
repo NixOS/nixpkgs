@@ -1,10 +1,10 @@
-{ newScope }:
+{ wxGTK, newScope }:
 
 let
   callPackage = newScope self;
 
   self = {
-    zeroad-unwrapped = callPackage ./game.nix { };
+    zeroad-unwrapped = callPackage ./game.nix { inherit wxGTK; };
 
     zeroad-data = callPackage ./data.nix { };
 
