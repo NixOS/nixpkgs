@@ -13073,6 +13073,8 @@ with pkgs;
 
   wallabag = callPackage ../servers/web-apps/wallabag { };
 
+  webmetro = callPackage ../servers/webmetro { };
+
   winstone = callPackage ../servers/http/winstone { };
 
   xinetd = callPackage ../servers/xinetd { };
