@@ -25,7 +25,7 @@ in
         # Set up the per-user profile.
         mkdir -m 0755 -p "$NIX_USER_PROFILE_DIR"
         if [ "$(stat --printf '%u' "$NIX_USER_PROFILE_DIR")" != "$(id -u)" ]; then
-            echo "WARNING: bad ownership on $NIX_USER_PROFILE_DIR" >&2
+            echo "WARNING: bad ownership on $NIX_USER_PROFILE_DIR, should be $(id -u)" >&2
         fi
 
         if [ -w "$HOME" ]; then
@@ -47,7 +47,7 @@ in
           NIX_USER_GCROOTS_DIR="/nix/var/nix/gcroots/per-user/$USER"
           mkdir -m 0755 -p "$NIX_USER_GCROOTS_DIR"
           if [ "$(stat --printf '%u' "$NIX_USER_GCROOTS_DIR")" != "$(id -u)" ]; then
-              echo "WARNING: bad ownership on $NIX_USER_GCROOTS_DIR" >&2
+              echo "WARNING: bad ownership on $NIX_USER_GCROOTS_DIR, should be $(id -u)" >&2
           fi
 
           # Set up a default Nix expression from which to install stuff.
