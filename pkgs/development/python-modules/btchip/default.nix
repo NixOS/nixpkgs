@@ -12,6 +12,9 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ hidapi pyscard ecdsa ];
 
+  # tests requires hardware
+  doCheck = false;
+
   meta = with stdenv.lib; {
     description = "Python communication library for Ledger Hardware Wallet products";
     homepage = "https://github.com/LedgerHQ/btchip-python";
