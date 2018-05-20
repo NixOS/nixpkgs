@@ -6,11 +6,11 @@ in
 
 stdenv.mkDerivation rec {
   name = "wireguard-tools-${version}";
-  version = "0.0.20180514";
+  version = "0.0.20180519";
 
   src = fetchzip {
     url    = "https://git.zx2c4.com/WireGuard/snapshot/WireGuard-${version}.tar.xz";
-    sha256 = "15z0s1i8qyq1fpw8j6rky53ffrpp3f49zn1022jwdslk4g0ncaaj";
+    sha256 = "0pd04ia0wcm0f6di4gx5kflccc5j35d72j38l8jqpj8vinl6l070";
   };
 
   preConfigure = "cd src";
