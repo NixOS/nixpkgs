@@ -1,4 +1,4 @@
-{ stdenv, lib, kernel, fetchurl, pkgconfig, numactl }:
+{ stdenv, lib, kernel, fetchurl, pkgconfig, numactl, shared ? false }:
 
 let
 
@@ -25,9 +25,14 @@ in stdenv.mkDerivation rec {
   NIX_CFLAGS_COMPILE = [ "-msse3" ];
   hardeningDisable = [ "pic" ];
 
-  postPatch = lib.optionalString (!mod) ''
-    # Do not build kernel modules.
+  postPatch = ''
     cat >>config/defconfig_$RTE_TARGET <<EOF
+# Build static or shared libraries.
+CONFIG_RTE_BUILD_SHARED_LIB=${if shared then "y" else "n"}
+EOF
+  '' + lib.optionalString (!mod) ''
+    cat >>config/defconfig_$RTE_TARGET <<EOF
+# Do not build kernel modules.
 CONFIG_RTE_EAL_IGB_UIO=n
 CONFIG_RTE_KNI_KMOD=n
 EOF
