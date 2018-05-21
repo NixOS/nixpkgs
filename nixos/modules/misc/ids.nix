@@ -317,6 +317,10 @@
       restic = 291;
       openvpn = 292;
       meguca = 293;
+      yarn = 294;
+      hdfs = 295;
+      mapred = 296;
+      hadoop = 297;
 
       # When adding a uid, make sure it doesn't match an existing gid. And don't use uids above 399!
 
@@ -594,6 +598,10 @@
       restic = 291;
       openvpn = 292;
       meguca = 293;
+      yarn = 294;
+      hdfs = 295;
+      mapred = 296;
+      hadoop = 297;
 
       # When adding a gid, make sure it doesn't match an existing
       # uid. Users and groups with the same name should have equal

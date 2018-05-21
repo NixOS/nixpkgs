@@ -299,6 +299,8 @@ in rec {
   tests.gnome3-gdm = callTest tests/gnome3-gdm.nix {};
   tests.grafana = callTest tests/grafana.nix {};
   tests.graphite = callTest tests/graphite.nix {};
+  tests.hadoop.hdfs = callTestOnMatchingSystems [ "x86_64-linux" ] tests/hadoop/hdfs.nix {};
+  tests.hadoop.yarn = callTestOnMatchingSystems [ "x86_64-linux" ] tests/hadoop/yarn.nix {};
   tests.hardened = callTest tests/hardened.nix { };
   tests.haproxy = callTest tests/haproxy.nix {};
   tests.hibernate = callTest tests/hibernate.nix {};
