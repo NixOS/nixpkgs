@@ -29,7 +29,6 @@ in
     inherit (darwin) libobjc maloader;
     stdenv = if stdenv.isDarwin then stdenv else pkgs.libcxxStdenv;
     libcxxabi = pkgs.libcxxabi;
-    xctoolchain = darwin.xcode.toolchain;
   };
 
   cf-private = callPackage ../os-specific/darwin/cf-private {
