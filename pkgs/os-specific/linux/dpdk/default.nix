@@ -40,7 +40,7 @@ EOF
   installTargets = [ "install-runtime" "install-sdk" "install-kmod" ]; # skip install-doc
 
   installFlags = [
-    "prefix=$(out)" "datadir=$(out)" "includedir=$(out)/include"
+    "prefix=$(out)"
   ] ++ lib.optionals mod [
     "kerneldir=$(kmod)/lib/modules/${kver}"
   ];

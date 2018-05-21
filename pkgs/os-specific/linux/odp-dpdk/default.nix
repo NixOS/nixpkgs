@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ autoreconfHook pkgconfig ];
   buildInputs = [ dpdk libconfig libpcap numactl openssl ];
 
-  RTE_SDK = dpdk;
+  RTE_SDK = "${dpdk}/share/dpdk";
   RTE_TARGET = "x86_64-native-linuxapp-gcc";
 
   dontDisableStatic = true;
