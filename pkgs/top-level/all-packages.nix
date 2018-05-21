@@ -17096,6 +17096,7 @@ with pkgs;
       else null;
   };
 
+  # TODO: we should probably merge these 2
   musescore =
     if stdenv.isDarwin then
       callPackage ../applications/audio/musescore/darwin.nix { }
