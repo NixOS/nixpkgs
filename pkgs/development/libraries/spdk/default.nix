@@ -15,6 +15,10 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ cunit dpdk libaio libuuid numactl openssl ];
 
+  postPatch = ''
+    patchShebangs .
+  '';
+
   configureFlags = [ "--with-dpdk=${dpdk}" ];
 
   NIX_CFLAGS_COMPILE = [ "-mssse3" ]; # Necessary to compile.
