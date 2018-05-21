@@ -1,20 +1,24 @@
-{ stdenv, fetchurl, fetchpatch, gtk-doc, pkgconfig, gobjectIntrospection, intltool
+{ stdenv, fetchFromGitHub, fetchpatch, gtk-doc, pkgconfig, gobjectIntrospection, intltool
 , libgudev, polkit, appstream-glib, gusb, sqlite, libarchive, glib-networking
 , libsoup, help2man, gpgme, libxslt, elfutils, libsmbios, efivar, glibcLocales
-, fwupdate, libyaml, valgrind, meson, libuuid, colord, docbook_xml_dtd_43, docbook_xsl
+, fwupdate, libyaml, vala, valgrind, meson, libuuid, colord, docbook_xml_dtd_43, docbook_xsl
 , ninja, gcab, gnutls, python3, wrapGAppsHook, json-glib
 , shared-mime-info, umockdev
 }:
+
 let
   # Updating? Keep $out/etc synchronized with passthru.filesInstalledToEtc
-  version = "1.0.5";
+  version = "1.0.7";
   python = python3.withPackages (p: with p; [ pygobject3 pycairo pillow ]);
   installedTestsPython = python3.withPackages (p: with p; [ pygobject3 requests ]);
+
 in stdenv.mkDerivation {
   name = "fwupd-${version}";
-  src = fetchurl {
-    url = "https://people.freedesktop.org/~hughsient/releases/fwupd-${version}.tar.xz";
-    sha256 = "0wm195vkf6x1kg1dz0sbfwpdcn9f6638l7vyzplcfrb3v07pqxpq";
+  src = fetchFromGitHub {
+    owner = "hughsie";
+    repo = "fwupd";
+    rev = version;
+    sha256 = "1j6h8bf4nv7i2prv6kk545hfwczrb04bvj2zgy14kmzlr8a52187";
   };
 
   outputs = [ "out" "devdoc" "man" "installedTests" ];
@@ -22,7 +26,9 @@ in stdenv.mkDerivation {
   nativeBuildInputs = [
     meson ninja gtk-doc pkgconfig gobjectIntrospection intltool glibcLocales shared-mime-info
     valgrind gcab docbook_xml_dtd_43 docbook_xsl help2man libxslt python wrapGAppsHook
+    vala
   ];
+
   buildInputs = [
     polkit appstream-glib gusb sqlite libarchive libsoup elfutils libsmbios fwupdate libyaml
     libgudev colord gpgme libuuid gnutls glib-networking efivar json-glib umockdev
@@ -32,10 +38,6 @@ in stdenv.mkDerivation {
 
   patches = [
     ./fix-missing-deps.patch
-    (fetchpatch {
-      url = https://github.com/hughsie/fwupd/commit/767210e4b1401d5d5bb7ac1e7c052a60b6529d88.patch;
-      sha256 = "00adfabxpgdg74jx7i6jihhh8njjk2r7v3fxqs4scj3vn06k5fmw";
-    })
   ];
 
   postPatch = ''
@@ -45,6 +47,14 @@ in stdenv.mkDerivation {
 
     patchShebangs .
     substituteInPlace data/installed-tests/fwupdmgr.test.in --subst-var-by installedtestsdir "$installedTests/share/installed-tests/fwupd"
+
+    # If building in a sandbox, we don't have /etc/os-release available, so the
+    # tests will fail. Instead we replace /usr/lib/os-release which we do not have on
+    # NixOS with a file in /tmp that we can write to for the tests.
+    # This is very ugly.
+    substituteInPlace libfwupd/fwupd-common.c \
+      --replace /usr/lib/os-release /tmp/os-release
+    echo "NAME=NixOS" > /tmp/os-release
   '';
 
   doCheck = true;
@@ -83,8 +93,8 @@ in stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     homepage = https://fwupd.org/;
-    maintainers = with maintainers; [];
     license = [ licenses.gpl2 ];
+    maintainers = with maintainers; [];
     platforms = platforms.linux;
   };
 }
