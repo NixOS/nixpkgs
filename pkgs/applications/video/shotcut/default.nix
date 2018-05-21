@@ -3,15 +3,18 @@
 , qtgraphicaleffects, libmlt
 , qmake, makeWrapper }:
 
+assert stdenv.lib.versionAtLeast libmlt.version "6.8.0";
+assert stdenv.lib.versionAtLeast mlt.version "6.8.0";
+
 stdenv.mkDerivation rec {
   name = "shotcut-${version}";
-  version = "18.03.06";
+  version = "18.05.08";
 
   src = fetchFromGitHub {
     owner = "mltframework";
     repo = "shotcut";
     rev = "v${version}";
-    sha256 = "1b8hfym89i1nmrx80y16z06zsff5qba7gpga8jydnw1lmcscdash";
+    sha256 = "1qm1ycsx93qpw2vga25m3cr82vzqla1qqardjiln3iqfa0m93qsk";
   };
 
   enableParallelBuilding = true;
