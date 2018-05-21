@@ -86,7 +86,8 @@ stdenv.mkDerivation rec {
     sha256 = "0plzsbfaq6vb1023lsarrjglwgr9chld4q3m99rcfzx0yx5mibp3";
     extraPrefix = "utils/hsc2hs/";
     stripLen = 1;
-  })];
+  })]
+    ++ stdenv.lib.optional stdenv.isDarwin ./backport-dylib-command-size-limit.patch;
 
   postPatch = "patchShebangs .";
 
