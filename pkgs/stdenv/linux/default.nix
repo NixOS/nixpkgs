@@ -107,11 +107,6 @@ let
           # Having the proper 'platform' in all the stdenvs allows getting proper
           # linuxHeaders for example.
           inherit platform;
-
-          # stdenv.glibc is used by GCC build to figure out the system-level
-          # /usr/include directory.
-          # TODO: Remove this!
-          inherit (prevStage) glibc;
         };
         overrides = self: super: (overrides self super) // { fetchurl = thisStdenv.fetchurlBoot; };
       };
@@ -129,8 +124,6 @@ in
     __raw = true;
 
     gcc-unwrapped = null;
-    glibc = assert false; null;
-    musl = assert false; null;
     binutils = null;
     coreutils = null;
     gnugrep = null;
@@ -256,7 +249,7 @@ in
     };
     extraNativeBuildInputs = [ prevStage.patchelf prevStage.paxctl ] ++
       # Many tarballs come with obsolete config.sub/config.guess that don't recognize aarch64.
-      lib.optional localSystem.isAarch64 prevStage.updateAutotoolsGnuConfigScriptsHook;
+      lib.optional (!localSystem.isx86) prevStage.updateAutotoolsGnuConfigScriptsHook;
   })
 
 
@@ -297,7 +290,7 @@ in
     };
     extraNativeBuildInputs = [ prevStage.patchelf prevStage.xz ] ++
       # Many tarballs come with obsolete config.sub/config.guess that don't recognize aarch64.
-      lib.optional localSystem.isAarch64 prevStage.updateAutotoolsGnuConfigScriptsHook;
+      lib.optional (!localSystem.isx86) prevStage.updateAutotoolsGnuConfigScriptsHook;
   })
 
   # Construct the final stdenv.  It uses the Glibc and GCC, and adds
@@ -329,7 +322,7 @@ in
 
       extraNativeBuildInputs = [ prevStage.patchelf prevStage.paxctl ] ++
         # Many tarballs come with obsolete config.sub/config.guess that don't recognize aarch64.
-        lib.optional localSystem.isAarch64 prevStage.updateAutotoolsGnuConfigScriptsHook;
+        lib.optional (!localSystem.isx86) prevStage.updateAutotoolsGnuConfigScriptsHook;
 
       cc = prevStage.gcc;
 
@@ -351,6 +344,7 @@ in
         concatMap (p: [ (getBin p) (getLib p) ])
           [ gzip bzip2 xz bash binutils.bintools coreutils diffutils findutils
             gawk gnumake gnused gnutar gnugrep gnupatch patchelf ed paxctl
+            texinfo
           ]
         # Library dependencies
         ++ map getLib (
@@ -362,14 +356,14 @@ in
         ++  [ /*propagated from .dev*/ linuxHeaders
             binutils gcc gcc.cc gcc.cc.lib gcc.expand-response-params
           ]
-          ++ lib.optionals localSystem.isAarch64
+          ++ lib.optionals (!localSystem.isx86)
             [ prevStage.updateAutotoolsGnuConfigScriptsHook prevStage.gnu-config ];
 
       overrides = self: super: {
         inherit (prevStage)
           gzip bzip2 xz bash coreutils diffutils findutils gawk
           gnumake gnused gnutar gnugrep gnupatch patchelf
-          attr acl paxctl zlib pcre;
+          attr acl paxctl zlib pcre texinfo;
         ${localSystem.libc} = getLibc prevStage;
       } // lib.optionalAttrs (super.targetPlatform == localSystem) {
         # Need to get rid of these when cross-compiling.

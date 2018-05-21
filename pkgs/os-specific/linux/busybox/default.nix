@@ -98,6 +98,8 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+  doCheck = false; # tries to access the net
+
   meta = with stdenv.lib; {
     description = "Tiny versions of common UNIX utilities in a single small executable";
     homepage = https://busybox.net/;

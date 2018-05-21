@@ -193,7 +193,7 @@ let
         after = [ "network.target" ];
         wantedBy = [ "multi-user.target" ];
         environment.DEVICE = name;
-        path = with pkgs; [ kmod iproute wireguard ];
+        path = with pkgs; [ kmod iproute wireguard-tools ];
 
         serviceConfig = {
           Type = "oneshot";
@@ -279,7 +279,7 @@ in
   config = mkIf (cfg.interfaces != {}) {
 
     boot.extraModulePackages = [ kernel.wireguard ];
-    environment.systemPackages = [ pkgs.wireguard ];
+    environment.systemPackages = [ pkgs.wireguard-tools ];
 
     systemd.services = mapAttrs' generateUnit cfg.interfaces;
 

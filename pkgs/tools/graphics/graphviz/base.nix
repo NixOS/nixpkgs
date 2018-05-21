@@ -43,6 +43,13 @@ stdenv.mkDerivation rec {
     done
   '';
 
+  # ''
+  #   substituteInPlace rtest/rtest.sh \
+  #     --replace "/bin/ksh" "${mksh}/bin/mksh"
+  # '';
+
+  doCheck = false; # fails with "Graphviz test suite requires ksh93" which is not in nixpkgs
+
   preAutoreconf = "./autogen.sh";
 
   postFixup = optionalString (xorg != null) ''

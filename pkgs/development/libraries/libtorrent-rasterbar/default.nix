@@ -27,6 +27,8 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+  doCheck = false; # fails to link
+
   meta = with stdenv.lib; {
     homepage = http://www.rasterbar.com/products/libtorrent/;
     description = "A C++ BitTorrent implementation focusing on efficiency and scalability";

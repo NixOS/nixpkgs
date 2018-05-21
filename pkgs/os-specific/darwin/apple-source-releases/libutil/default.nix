@@ -2,8 +2,6 @@
 
 # all symbols are located in libSystem
 appleDerivation {
-  phases = [ "unpackPhase" "installPhase" ];
-
   installPhase = ''
     mkdir -p $out/include
     cp *.h $out/include

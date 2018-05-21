@@ -29,6 +29,8 @@ stdenv.mkDerivation rec {
     ++ stdenv.lib.optional stdenv.isDarwin fixDarwinDylibNames
     ;
 
+  doCheck = false; # needs the net
+
   postInstall = stdenv.lib.optionalString sslSupport ''
     moveToOutput "lib/libevent_openssl*" "$openssl"
     substituteInPlace "$dev/lib/pkgconfig/libevent_openssl.pc" \

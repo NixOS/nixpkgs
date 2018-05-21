@@ -1,3 +1,18 @@
+# Accumulate infixes for taking in the right input parameters with the `mangle*`
+# functions below. See setup-hook for details.
+accumulateRoles() {
+    declare -ga role_infixes=()
+    if [ "${NIX_@wrapperName@_@infixSalt@_TARGET_BUILD:-}" ]; then
+        role_infixes+=(_BUILD_)
+    fi
+    if [ "${NIX_@wrapperName@_@infixSalt@_TARGET_HOST:-}" ]; then
+        role_infixes+=(_)
+    fi
+    if [ "${NIX_@wrapperName@_@infixSalt@_TARGET_TARGET:-}" ]; then
+        role_infixes+=(_TARGET_)
+    fi
+}
+
 mangleVarList() {
     local var="$1"
     shift

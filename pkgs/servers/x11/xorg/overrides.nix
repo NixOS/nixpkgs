@@ -5,11 +5,9 @@ let
   inherit (stdenv) lib isDarwin;
   inherit (lib) overrideDerivation;
 
-  setMalloc0ReturnsNullCrossCompiling = ''
-    if test -n "$crossConfig"; then
-      configureFlags="$configureFlags --enable-malloc0returnsnull";
-    fi
-  '';
+  malloc0ReturnsNullCrossFlag = stdenv.lib.optional
+    (stdenv.hostPlatform != stdenv.buildPlatform)
+    "--enable-malloc0returnsnull";
 
   gitRelease = { libName, version, rev, sha256 } : attrs : attrs // {
     name = libName + "-" + version;
@@ -101,7 +99,9 @@ in
 
   libX11 = attrs: attrs // {
     outputs = [ "out" "dev" "man" ];
-    preConfigure = setMalloc0ReturnsNullCrossCompiling + ''
+    configureFlags = attrs.configureFlags or []
+      ++ malloc0ReturnsNullCrossFlag;
+    preConfigure = ''
       sed 's,^as_dummy.*,as_dummy="\$PATH",' -i configure
     '';
     postInstall =
@@ -138,16 +138,19 @@ in
 
   libXxf86vm = attrs: attrs // {
     outputs = [ "out" "dev" ];
-    preConfigure = setMalloc0ReturnsNullCrossCompiling;
+    configureFlags = attrs.configureFlags or []
+      ++ malloc0ReturnsNullCrossFlag;
   };
 
   # Propagate some build inputs because of header file dependencies.
   # Note: most of these are in Requires.private, so maybe builder.sh
   # should propagate them automatically.
   libXt = attrs: attrs // {
-    preConfigure = setMalloc0ReturnsNullCrossCompiling + ''
+    preConfigure = ''
       sed 's,^as_dummy.*,as_dummy="\$PATH",' -i configure
     '';
+    configureFlags = attrs.configureFlags or []
+      ++ malloc0ReturnsNullCrossFlag;
     propagatedBuildInputs = [ xorg.libSM ];
     CPP = stdenv.lib.optionalString stdenv.isDarwin "clang -E -";
     outputs = [ "out" "dev" "devdoc" ];
@@ -188,7 +191,8 @@ in
   libXft = attrs: attrs // {
     outputs = [ "out" "dev" ];
     propagatedBuildInputs = [ xorg.libXrender args.freetype args.fontconfig ];
-    preConfigure = setMalloc0ReturnsNullCrossCompiling;
+    configureFlags = attrs.configureFlags or []
+      ++ malloc0ReturnsNullCrossFlag;
     # the include files need ft2build.h, and Requires.private isn't enough for us
     postInstall = ''
       sed "/^Requires:/s/$/, freetype2/" -i "$dev/lib/pkgconfig/xft.pc"
@@ -198,7 +202,8 @@ in
   libXext = attrs: attrs // {
     outputs = [ "out" "dev" "man" "doc" ];
     propagatedBuildInputs = [ xorg.xproto xorg.libXau ];
-    preConfigure = setMalloc0ReturnsNullCrossCompiling;
+    configureFlags = attrs.configureFlags or []
+      ++ malloc0ReturnsNullCrossFlag;
   };
 
   libXfixes = attrs: attrs // {
@@ -221,7 +226,8 @@ in
 
   libXrandr = attrs: attrs // {
     outputs = [ "out" "dev" ];
-    preConfigure = setMalloc0ReturnsNullCrossCompiling;
+    configureFlags = attrs.configureFlags or []
+      ++ malloc0ReturnsNullCrossFlag;
     propagatedBuildInputs = [xorg.libXrender];
   };
 
@@ -232,8 +238,9 @@ in
 
   libXrender = attrs: attrs // {
     outputs = [ "out" "dev" "doc" ];
+    configureFlags = attrs.configureFlags or []
+      ++ malloc0ReturnsNullCrossFlag;
     propagatedBuildInputs = [ xorg.renderproto ];
-    preConfigure = setMalloc0ReturnsNullCrossCompiling;
   };
 
   libXres = attrs: attrs // {
@@ -594,6 +601,10 @@ in
 
   twm = attrs: attrs // {
     nativeBuildInputs = attrs.nativeBuildInputs ++ [args.bison args.flex];
+  };
+
+  xauth = attrs: attrs // {
+    doCheck = false; # fails
   };
 
   xcursorthemes = attrs: attrs // {

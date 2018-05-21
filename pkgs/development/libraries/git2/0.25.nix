@@ -25,6 +25,8 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+  doCheck = false; # hangs. or very expensive?
+
   meta = {
     description = "The Git linkable library";
     homepage = https://libgit2.github.com/;

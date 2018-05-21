@@ -108,17 +108,15 @@ let
       #  include_next "unistd.h"
       #endif
       EOF
-    '' + stdenv.lib.optionalString (!stdenv.isDarwin) ''
-      sed -i -e 's|clang++|& -I${libcxx}/include/c++/v1|' cctools/autogen.sh
-    '' + stdenv.lib.optionalString useOld ''
+
       cd cctools
+    '' + stdenv.lib.optionalString (!stdenv.isDarwin) ''
+      sed -i -e 's|clang++|& -I${libcxx}/include/c++/v1|' autogen.sh
     '';
 
     # TODO: this builds an ld without support for LLVM's LTO. We need to teach it, but that's rather
     # hairy to handle during bootstrap. Perhaps it could be optional?
-    preConfigure = stdenv.lib.optionalString (!useOld) ''
-      cd cctools
-    '' + ''
+    preConfigure = ''
       sh autogen.sh
     '';
 

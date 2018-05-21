@@ -1997,6 +1997,11 @@
     github = "kini";
     name = "Keshav Kini";
   };
+  kirelagin = {
+    email = "kirelagin@gmail.com";
+    github = "kirelagin";
+    name = "Kirill Elagin";
+  };
   kkallio = {
     email = "tierpluspluslists@gmail.com";
     name = "Karn Kallio";
@@ -3894,6 +3899,11 @@
     email = "ericwolf42@mail.com";
     github = "typetetris";
     name = "Eric Wolf";
+  };
+  udono = {
+    email = "udono@virtual-things.biz";
+    github = "udono";
+    name = "Udo Spallek";
   };
   unode = {
     email = "alves.rjc@gmail.com";
