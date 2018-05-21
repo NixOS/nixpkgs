@@ -1,9 +1,10 @@
-{ stdenv, buildGoPackage, fetchgit, pkgconfig, ffmpeg-full, graphicsmagick, ghostscript, quicktemplate, go-bindata, easyjson, nodePackages, cmake, emscripten }:
+{ stdenv, buildGoPackage, fetchgit, pkgconfig, ffmpeg-full, graphicsmagick, ghostscript, quicktemplate,
+  go-bindata, easyjson, nodePackages, cmake, emscripten }:
 
 buildGoPackage rec {
   name = "meguca-unstable-${version}";
-  version = "2018-05-17";
-  rev = "3107c78d95de3b64556f761d3b6dcfd5c590e0ec";
+  version = "2018-05-20";
+  rev = "0432df41f30795cad5dc9d135ab620d5da7c7b04";
   goPackagePath = "github.com/bakape/meguca";
   goDeps = ./server_deps.nix;
   enableParallelBuilding = true;
@@ -13,7 +14,7 @@ buildGoPackage rec {
   src = fetchgit {
     inherit rev;
     url = "https://github.com/bakape/meguca";
-    sha256 = "1rvkr5af5d4rlyxylynnpn76hvxq9xd7j8q6mffn6qj6j5p4qg4p";
+    sha256 = "0fahk5ykpah14pwgmgiajps2y3pn96wa4z34rcphkwy549ycxxd0";
     fetchSubmodules = true;
   };
 

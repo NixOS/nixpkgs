@@ -11,7 +11,7 @@ in
 
     baseDir = mkOption {
       type = types.path;
-      default = "/var/lib/meguca";
+      default = "/run/meguca";
       description = "Location where meguca stores it's database and links.";
     };
 
@@ -19,6 +19,12 @@ in
       type = types.str;
       default = "meguca";
       description = "Password for the meguca database.";
+    };
+
+    passwordFile = mkOption {
+      type = types.path;
+      default = "/run/keys/meguca-password-file";
+      description = "Password file for the meguca database.";
     };
 
     reverseProxy = mkOption {
@@ -40,15 +46,21 @@ in
     };
 
     cacheSize = mkOption {
-      type = types.nullOr types.str;
+      type = types.nullOr types.int;
       default = null;
       description = "Cache size in MB.";
     };
 
     postgresArgs = mkOption {
-      type = types.nullOr types.str;
-      default = null;
+      type = types.str;
+      default = "user=meguca password=" + cfg.password + " dbname=meguca sslmode=disable";
       description = "Postgresql connection arguments.";
+    };
+
+    postgresArgsFile = mkOption {
+      type = types.path;
+      default = "/run/keys/meguca-postgres-args";
+      description = "Postgresql connection arguments file.";
     };
 
     compressTraffic = mkOption {
@@ -74,6 +86,16 @@ in
     security.sudo.enable = cfg.enable == true;
     services.postgresql.enable = cfg.enable == true;
 
+    services.meguca.passwordFile = mkDefault (toString (pkgs.writeTextFile {
+      name = "meguca-password-file";
+      text = cfg.password;
+    }));
+
+    services.meguca.postgresArgsFile = mkDefault (toString (pkgs.writeTextFile {
+      name = "meguca-postgres-args";
+      text = cfg.postgresArgs;
+    }));
+
     systemd.services.meguca = {
       description = "meguca";
       after = [ "network.target" "postgresql.service" ];
@@ -83,30 +105,43 @@ in
         # Ensure folder exists and links are correct or create them
         mkdir -p ${cfg.baseDir}
         ln -sf ${pkgs.meguca}/share/meguca/www ${cfg.baseDir}
-        chown -R meguca:meguca ${cfg.baseDir}
 
         # Ensure the database is correct or create it
-        ${pkgs.sudo}/bin/sudo -u ${postgres.superUser} ${postgres.package}/bin/createuser -SDR meguca || true
-        ${pkgs.sudo}/bin/sudo -u ${postgres.superUser} ${postgres.package}/bin/psql -c "ALTER ROLE meguca WITH PASSWORD '${cfg.password}';" || true
-        ${pkgs.sudo}/bin/sudo -u ${postgres.superUser} ${postgres.package}/bin/createdb -T template0 -E UTF8 -O meguca meguca || true
+        ${pkgs.sudo}/bin/sudo -u ${postgres.superUser} ${postgres.package}/bin/createuser \
+          -SDR meguca || true
+        ${pkgs.sudo}/bin/sudo -u ${postgres.superUser} ${postgres.package}/bin/psql \
+          -c "ALTER ROLE meguca WITH PASSWORD '$(cat ${cfg.passwordFile})';" || true
+        ${pkgs.sudo}/bin/sudo -u ${postgres.superUser} ${postgres.package}/bin/createdb \
+          -T template0 -E UTF8 -O meguca meguca || true
       '';
+
+    script = ''
+      cd ${cfg.baseDir}
+
+      ${pkgs.meguca}/bin/meguca -d "$(cat ${cfg.postgresArgsFile})"\
+        ${optionalString (cfg.reverseProxy != null) " -R ${cfg.reverseProxy}"}\
+        ${optionalString (cfg.sslCertificate != null) " -S ${cfg.sslCertificate}"}\
+        ${optionalString (cfg.listenAddress != null) " -a ${cfg.listenAddress}"}\
+        ${optionalString (cfg.cacheSize != null) " -c ${toString cfg.cacheSize}"}\
+        ${optionalString (cfg.compressTraffic) " -g"}\
+        ${optionalString (cfg.assumeReverseProxy) " -r"}\
+        ${optionalString (cfg.httpsOnly) " -s"} start
+    '';
 
       serviceConfig = {
         PermissionsStartOnly = true;
         Type = "forking";
         User = "meguca";
         Group = "meguca";
-        WorkingDirectory = "${cfg.baseDir}";
-        ExecStart = ''${pkgs.meguca}/bin/meguca${if cfg.reverseProxy != null then " -R ${cfg.reverseProxy}" else ""}${if cfg.sslCertificate != null then " -S ${cfg.sslCertificate}" else ""}${if cfg.listenAddress != null then " -a ${cfg.listenAddress}" else ""}${if cfg.cacheSize != null then " -c ${cfg.cacheSize}" else ""}${if cfg.postgresArgs != null then " -d  ${cfg.postgresArgs}" else ""}${if cfg.compressTraffic then " -g" else ""}${if cfg.assumeReverseProxy then " -r" else ""}${if cfg.httpsOnly then " -s" else ""} start'';
+        RuntimeDirectory = "meguca";
         ExecStop = "${pkgs.meguca}/bin/meguca stop";
-        ExecRestart = "${pkgs.meguca}/bin/meguca restart";
       };
     };
 
     users = {
       extraUsers.meguca = {
         description = "meguca server service user";
-        home = "${cfg.baseDir}";
+        home = cfg.baseDir;
         createHome = true;
         group = "meguca";
         uid = config.ids.uids.meguca;
@@ -119,5 +154,5 @@ in
     };
   };
 
-  meta.maintainers = [ maintainers.chiiruno ];
+  meta.maintainers = with maintainers; [ chiiruno ];
 }
