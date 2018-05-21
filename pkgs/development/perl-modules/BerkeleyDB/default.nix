@@ -9,7 +9,7 @@ buildPerlPackage rec {
   };
 
   preConfigure = ''
-    echo "LIB = ${db}/lib" > config.in
-    echo "INCLUDE = ${db}/include" >> config.in
+    echo "LIB = ${db.out}/lib" > config.in
+    echo "INCLUDE = ${db.dev}/include" >> config.in
   '';
 }
