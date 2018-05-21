@@ -19218,7 +19218,7 @@ with pkgs;
 
   freeciv = callPackage ../games/freeciv { };
 
-  freeciv_gtk = callPackage ../games/freeciv {
+  freeciv_gtk = freeciv.override {
     gtkClient = true;
     sdlClient = false;
   };

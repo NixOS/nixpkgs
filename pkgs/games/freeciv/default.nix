@@ -8,14 +8,11 @@
 let
   inherit (stdenv.lib) optional optionals;
 
-  sdlName = if sdlClient then "-sdl" else "";
-  gtkName = if gtkClient then "-gtk" else "";
-
   name = "freeciv";
   version = "2.5.11";
 in
 stdenv.mkDerivation {
-  name = "${name}${sdlName}${gtkName}-${version}";
+  name = "${name}-${version}";
   inherit version;
 
   src = fetchurl {
