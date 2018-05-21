@@ -1,15 +1,15 @@
-{ stdenv, buildGoPackage, fetchFromGitHub }:
+{ stdenv, buildGo110Package, fetchFromGitHub }:
 
-buildGoPackage rec {
+buildGo110Package rec {
   name = "minio-${version}";
 
-  version = "2018-02-09T22-40-05Z";
+  version = "2018-05-11T00-29-24Z";
 
   src = fetchFromGitHub {
     owner = "minio";
     repo = "minio";
     rev = "RELEASE.${version}";
-    sha256 = "0qxrzmkm5hza5xbx9dkrgadwjg3hykwf79hix3s0laqyksmpj9mk";
+    sha256 = "01jw1djfs0jbhsx9pmx3kj31mfhrw45lr1i4lwkmh8k7fxn8w13x";
   };
 
   goPackagePath = "github.com/minio/minio";
