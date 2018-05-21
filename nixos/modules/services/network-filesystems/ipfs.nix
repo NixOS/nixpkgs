@@ -186,6 +186,16 @@ in {
         default = [];
       };
 
+      localDiscovery = mkOption {
+        type = types.bool;
+        description = ''Whether to enable local discovery for the ipfs daemon.
+          This will prevent ipfs to scan ports on your local network. Some hosting services will ban you if you do.
+
+          This option only has an effect before you initialized ipfs your machine.
+        '';
+        default = true;
+      };
+
       serviceFdlimit = mkOption {
         type = types.nullOr types.int;
         default = null;
@@ -232,7 +242,8 @@ in {
       '';
       script = ''
         if [[ ! -f ${cfg.dataDir}/config ]]; then
-          ipfs init ${optionalString cfg.emptyRepo "-e"}
+          ipfs init ${optionalString cfg.emptyRepo "-e"} \
+            ${optionalString (! cfg.localDiscovery) "--profile=server"}
         fi
       '';
 
