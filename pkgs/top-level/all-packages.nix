@@ -21135,6 +21135,8 @@ with pkgs;
     hasktags = haskellPackages.hasktags;
   };
 
+  spdk = callPackage ../misc/drivers/spdk { };
+
   splix = callPackage ../misc/cups/drivers/splix { };
 
   steamcontroller = callPackage ../misc/drivers/steamcontroller { };
