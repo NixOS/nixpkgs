@@ -18196,6 +18196,8 @@ EOF
   prometheus_client = callPackage ../development/python-modules/prometheus_client { };
 
   pysdl2 = callPackage ../development/python-modules/pysdl2 { };
+
+  pyogg = callPackage ../development/python-modules/pyogg { };
 });
 
 in fix' (extends overrides packages)
