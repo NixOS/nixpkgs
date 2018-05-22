@@ -360,7 +360,9 @@ rec {
     extraCommands ? ""
   }:
     # Generate an executable script from the `runAsRoot` text.
-    let runAsRootScript = shellScript "run-as-root.sh" runAsRoot;
+    let
+      runAsRootScript = shellScript "run-as-root.sh" runAsRoot;
+      extraCommandsScript = shellScript "extra-commands.sh" extraCommands;
     in runWithOverlay {
       name = "docker-layer-${name}";
 
@@ -398,7 +400,7 @@ rec {
       '';
 
       postUmount = ''
-        (cd layer; eval "${extraCommands}")
+        (cd layer; ${extraCommandsScript})
 
         echo "Packing layer..."
         mkdir $out
