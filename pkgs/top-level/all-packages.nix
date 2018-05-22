@@ -6056,18 +6056,6 @@ with pkgs;
 
   clang-analyzer = callPackage ../development/tools/analysis/clang-analyzer { };
 
-  clangSelf = clangWrapSelf llvmPackagesSelf.clang;
-
-  clangWrapSelf = build: ccWrapperFun {
-    cc = build;
-    isClang = true;
-    inherit stdenvNoCC;
-    inherit (targetPackages.stdenv.cc) bintools libc;
-    extraPackages = [ libcxx libcxxabi ];
-    nativeTools = false;
-    nativeLibc = false;
-  };
-
   #Use this instead of stdenv to build with clang
   clangStdenv = if stdenv.cc.isClang then stdenv else lowPrio llvmPackages.stdenv;
   clang-sierraHack-stdenv = overrideCC stdenv clang-sierraHack;
@@ -6703,10 +6691,6 @@ with pkgs;
   llvm_34 = llvmPackages_34.llvm;
 
   llvmPackages = recurseIntoAttrs llvmPackages_5;
-
-  llvmPackagesSelf = llvmPackages_34.override {
-    stdenv = libcxxStdenv;
-  };
 
   llvmPackages_34 = callPackage ../development/compilers/llvm/3.4 ({
     isl = isl_0_12;
