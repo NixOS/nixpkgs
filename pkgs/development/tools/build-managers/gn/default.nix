@@ -69,7 +69,7 @@ in stdenv.mkDerivation {
 
   patches = [
     (fetchpatch {
-      url = "https://raw.githubusercontent.com/Eloston/ungoogled-chromium/master/resources/patches/ungoogled-chromium/macos/fix-gn-bootstrap.patch";
+      url = "https://raw.githubusercontent.com/Eloston/ungoogled-chromium/3375fbc7b865dafe1230431a1e3f9bffd27ec184/resources/patches/ungoogled-chromium/macos/fix-gn-bootstrap.patch";
       sha256 = "1h8jgxznm7zrxlzb4wcfx4zx4lyvfrmpd0r7cd7h0s23wn8ibb3a";
     })
   ];

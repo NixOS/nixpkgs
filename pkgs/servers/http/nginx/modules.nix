@@ -15,6 +15,15 @@
     inputs = [ pkgs.brotli ];
   };
 
+  ipscrub = {
+    src = fetchFromGitHub {
+      owner = "masonicboom";
+      repo = "ipscrub";
+      rev = "99230f66d5afe1f929cf4ed217901acb6206f620";
+      sha256 = "0mfrwkg4srql38w713pg6qxi0h4hgy8inkvgc9cm80bwlv2ng9s1";
+    } + "/ipscrub";
+  };
+
   rtmp ={
     src = fetchFromGitHub {
       owner = "arut";

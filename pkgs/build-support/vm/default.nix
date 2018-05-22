@@ -92,7 +92,7 @@ rec {
 
     echo "loading kernel modules..."
     for i in $(cat ${modulesClosure}/insmod-list); do
-      insmod $i
+      insmod $i || echo "warning: unable to load $i"
     done
 
     mount -t devtmpfs devtmpfs /dev

@@ -1,12 +1,12 @@
 { lib, stdenv, fetchFromGitHub, pandoc, man }:
 stdenv.mkDerivation rec {
   name = "git-ftp-${version}";
-  version = "1.4.0";
+  version = "1.5.1";
   src = fetchFromGitHub {
     owner = "git-ftp";
     repo = "git-ftp";
     rev = version;
-    sha256 = "0n8q1azamf10qql8f8c4ppbd3iisy460gwxx09v5d9hji5md27s3";
+    sha256 = "0nh2f58rwwfzmglm75fmmm10470a80q0vsihc2msa8xswngihg22";
   };
 
   dontBuild = true;

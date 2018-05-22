@@ -13,11 +13,11 @@
 stdenv.mkDerivation rec {
   name = "${product}-${version}";
   product = "vivaldi";
-  version = "1.14.1077.45-1";
+  version = "1.15.1147.42-1";
 
   src = fetchurl {
     url = "https://downloads.vivaldi.com/stable/${product}-stable_${version}_amd64.deb";
-    sha256 = "0b4iviar927jx6xqyrzgzb3p4p617zm4an1np8jnldadq2a0p56d";
+    sha256 = "15cajvn2sv05qdp3y538n2xvyy3il49q8zi5928z1mfirjz3dlwh";
   };
 
   unpackPhase = ''

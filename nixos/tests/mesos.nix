@@ -66,9 +66,11 @@ import ./make-test.nix ({ pkgs, ...} : rec {
   testScript =
     ''
       startAll;
+      $master->waitForUnit("zookeeper.service");
       $master->waitForUnit("mesos-master.service");
+      $slave->waitForUnit("docker.service");
       $slave->waitForUnit("mesos-slave.service");
-
+      $master->waitForOpenPort(2181);
       $master->waitForOpenPort(5050);
       $slave->waitForOpenPort(5051);
 

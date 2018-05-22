@@ -432,11 +432,11 @@ rec {
 
   jsonedit = buildEclipsePlugin rec {
     name = "jsonedit-${version}";
-    version = "1.1.0";
+    version = "1.1.1";
 
     srcFeature = fetchurl {
       url = "https://boothen.github.io/Json-Eclipse-Plugin/features/jsonedit-feature_${version}.jar";
-      sha256 = "1qqbzh9sv0s9p0irim7kimvzdkw0hg6yv090bz5ifpzqdxc4v9r5";
+      sha256 = "0zkg8d8x3l5jpfxi0mz9dn62wmy4fjgpwdikj280fvsklmcw5b86";
     };
 
     srcPlugins =
@@ -448,13 +448,13 @@ rec {
           };
       in
         map fetch [
-          { n = "core"; h = "1fl4api6j0wp4vfbyabxqsrjvvpclp8p3b4xnxxpn4v8g12q526m"; }
-          { n = "editor"; h = "1kn15qampdlpxblj2bv94b3bb15qfwng27lk0n578585yqmb3p66"; }
-          { n = "folding"; h = "1qnzdx4xx9ma3p6lg1ab8xf3nik1yrww33nksi0j3vnvh8i9ihdm"; }
-          { n = "model"; h = "0n8855ma1h2as0skrrp2qy3sdkmnhl5vlqxcjv8xlc3faa72174a"; }
-          { n = "outline"; h = "07i2spmzghs49pkxl8z9c29n6l38x26v20prkh4a7i1rf9whg1q8"; }
-          { n = "preferences"; h = "0d1m8pb903wpc4vvhsp0gx0h65r432ax898wif3a23c5wxj4nh9i"; }
-          { n = "text"; h = "0z80d9qgpbx88jrq8b4r478lrcrf52gxqkl94l13wrk7rszjpldh"; }
+          { n = "core"; h = "0svs0aswnhl26cqw6bmw30cisx4cr50kc5njg272sy5c1dqjm1zq"; }
+          { n = "editor"; h = "1q62dinrbb18aywbvii4mlr7rxa20rdsxxd6grix9y8h9776q4l5"; }
+          { n = "folding"; h = "1qh4ijfb1gl9xza5ydi87v1kyima3a9sh7lncwdy1way3pdhln1y"; }
+          { n = "model"; h = "1pr6k2pdfdwx8jqs7gx7wzn3gxsql3sk6lnjha8m15lv4al6d4kj"; }
+          { n = "outline"; h = "1jgr2g16j3id8v367jbgd6kx6g2w636fbzmd8jvkvkh7y1jgjqxm"; }
+          { n = "preferences"; h = "027fhaqa5xbil6dmhvkbpha3pgw6dpmc2im3nlliyds57mdmdb1h"; }
+          { n = "text"; h = "0clywylyidrxlqs0n816nhgjmk1c3xl7sn904ki4q050amfy0wb2"; }
         ];
 
     propagatedBuildInputs = [ antlr-runtime_4_7 ];
@@ -470,12 +470,12 @@ rec {
 
   jdt = buildEclipseUpdateSite rec {
     name = "jdt-${version}";
-    version = "4.7.2";
+    version = "4.7.3a";
 
     src = fetchzip {
       stripRoot = false;
-      url = https://www.eclipse.org/downloads/download.php?r=1&nf=1&file=/eclipse/downloads/drops4/R-4.7.2-201711300510/org.eclipse.jdt-4.7.2.zip;
-      sha256 = "1yzqnjs88cdyyqv8f1g8fbfyccci29f3pzxxvaz7szxicwzn59mz";
+      url = https://www.eclipse.org/downloads/download.php?r=1&nf=1&file=/eclipse/downloads/drops4/R-4.7.3a-201803300640/org.eclipse.jdt-4.7.3a.zip;
+      sha256 = "10dndhqz894xf79zz07dlmkn7k33mn42nbmycr78xz6d2jy8cscx";
     };
 
     meta = with stdenv.lib; {

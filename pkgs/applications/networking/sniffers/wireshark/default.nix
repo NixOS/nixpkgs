@@ -82,6 +82,11 @@ in stdenv.mkDerivation {
 
   enableParallelBuilding = true;
 
+  shellHook = ''
+    # to be able to run the resulting binary
+    export WIRESHARK_RUN_FROM_BUILD_DIRECTORY=1
+  '';
+
   meta = with stdenv.lib; {
     homepage = https://www.wireshark.org/;
     description = "Powerful network protocol analyzer";

@@ -20,10 +20,6 @@ stdenv.mkDerivation rec {
     touch NEWS ChangeLog AUTHORS
   '';
 
-  crossAttrs = {
-    configureFlags = "--with-ppl=${ppl.crossDrv}";
-  };
-
   doCheck = true;
 
   meta = {

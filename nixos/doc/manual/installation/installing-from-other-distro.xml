@@ -47,7 +47,7 @@
     Short version:
    </para>
 <screen>
-$ bash &lt;(curl https://nixos.org/nix/install)
+$ curl https://nixos.org/nix/install | sh
 $ . $HOME/.nix-profile/etc/profile.d/nix.sh # …or open a fresh shell</screen>
    <para>
     More details in the

@@ -58,6 +58,8 @@ in rec {
         nixos.ova.x86_64-linux or []
 
         #(all nixos.tests.containers)
+        (all nixos.tests.containers-imperative)
+        (all nixos.tests.containers-ipv4)
         nixos.tests.chromium.x86_64-linux or []
         (all nixos.tests.firefox)
         (all nixos.tests.firewall)
@@ -98,6 +100,7 @@ in rec {
         (all nixos.tests.misc)
         (all nixos.tests.mutableUsers)
         (all nixos.tests.nat.firewall)
+        (all nixos.tests.nat.firewall-conntrack)
         (all nixos.tests.nat.standalone)
         (all nixos.tests.networking.scripted.loopback)
         (all nixos.tests.networking.scripted.static)
@@ -112,6 +115,10 @@ in rec {
         (all nixos.tests.nfs4)
         (all nixos.tests.openssh)
         (all nixos.tests.php-pcre)
+        (all nixos.tests.predictable-interface-names.predictable)
+        (all nixos.tests.predictable-interface-names.unpredictable)
+        (all nixos.tests.predictable-interface-names.predictableNetworkd)
+        (all nixos.tests.predictable-interface-names.unpredictableNetworkd)
         (all nixos.tests.printing)
         (all nixos.tests.proxy)
         (all nixos.tests.sddm.default)

@@ -138,6 +138,7 @@ rec {
                 , sha1 ? null
                 , url ? null
                 , message ? null
+                , hashMode ? "flat"
                 } :
     assert (message != null) || (url != null);
     assert (sha256 != null) || (sha1 != null);
@@ -156,13 +157,14 @@ rec {
       hash = if sha256 != null then sha256 else sha1;
       name_ = if name == null then baseNameOf (toString url) else name;
     in
-    stdenv.mkDerivation {
+    stdenvNoCC.mkDerivation {
       name = name_;
+      outputHashMode = hashMode;
       outputHashAlgo = hashAlgo;
       outputHash = hash;
       preferLocalBuild = true;
       builder = writeScript "restrict-message" ''
-        source ${stdenv}/setup
+        source ${stdenvNoCC}/setup
         cat <<_EOF_
 
         ***

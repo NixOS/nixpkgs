@@ -33,7 +33,7 @@ let
 in
 stdenv.mkDerivation rec {
   name = "slic3r-prusa-edition-${version}";
-  version = "1.39.1";
+  version = "1.39.2";
 
   enableParallelBuilding = true;
 
@@ -89,7 +89,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "prusa3d";
     repo = "Slic3r";
-    sha256 = "0frkjgzmiy788ijkcqz3baxcrncqmk9s2vcd99hb8p2q13cg51ff";
+    sha256 = "0vbqkmd2yqi469ijqm4wyzjmq9w1kwiy8av1kchm4429z5hpmxcd";
     rev = "version_${version}";
   };
 

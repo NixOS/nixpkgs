@@ -56,14 +56,12 @@ let
           mkdir -vp $out/{bin,libexec/plugins} $lib/{lib,share/java} $dev/include/foundationdb
 
           cp -v ./lib/libfdb_c.so     $lib/lib
-          cp -v ./lib/libfdb_java.so  $lib/lib
-
           cp -v ./lib/libFDBLibTLS.so $out/libexec/plugins/FDBLibTLS.so
 
           cp -v ./bindings/c/foundationdb/fdb_c.h           $dev/include/foundationdb
           cp -v ./bindings/c/foundationdb/fdb_c_options.g.h $dev/include/foundationdb
 
-          cp -v ./bindings/java/foundationdb-client.jar     $lib/share/java
+          cp -v ./bindings/java/foundationdb-client.jar     $lib/share/java/fdb-java.jar
 
           for x in fdbbackup fdbcli fdbserver fdbmonitor; do
             cp -v "./bin/$x" $out/bin;

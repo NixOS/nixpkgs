@@ -103,7 +103,7 @@ stdenv.mkDerivation rec {
       "--enable-ffmpeg"
       "--disable-ffplay"
       (ifMinVer "0.6" "--enable-ffprobe")
-      "--disable-ffserver"
+      (if reqMin "4" then null else "--disable-ffserver")
     # Libraries
       (ifMinVer "0.6" "--enable-avcodec")
       (ifMinVer "0.6" "--enable-avdevice")
@@ -176,7 +176,7 @@ stdenv.mkDerivation rec {
       "--cross-prefix=${stdenv.cc.targetPrefix}"
       "--enable-cross-compile"
       "--target_os=${hostPlatform.parsed.kernel.name}"
-      "--arch=${hostPlatform.arch}"
+      "--arch=${hostPlatform.parsed.cpu.name}"
     ];
   };
 

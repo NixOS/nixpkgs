@@ -1,5 +1,5 @@
-{ stdenv, fetchurl, fetchpatch, texlive, bison, flex
-, gmp, mpfr, pari, ntl, gsl, blas, mpfi, liblapackWithAtlas
+{ stdenv, fetchurl, fetchpatch, texlive, bison, flex, liblapackWithoutAtlas
+, gmp, mpfr, pari, ntl, gsl, blas, mpfi
 , readline, gettext, libpng, libao, gfortran, perl
 , enableGUI ? false, libGLU_combined ? null, xorg ? null, fltk ? null
 }:
@@ -37,11 +37,12 @@ stdenv.mkDerivation rec {
 
   # perl is only needed for patchShebangs fixup.
   buildInputs = [
-    gmp mpfr pari ntl gsl blas mpfi liblapackWithAtlas
+    gmp mpfr pari ntl gsl blas mpfi
     readline gettext libpng libao perl
     # gfortran.cc default output contains static libraries compiled without -fPIC
     # we want libgfortran.so.3 instead
     (stdenv.lib.getLib gfortran.cc)
+    liblapackWithoutAtlas
   ] ++ stdenv.lib.optionals enableGUI [
     libGLU_combined fltk xorg.libX11
   ];

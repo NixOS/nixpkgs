@@ -76,6 +76,10 @@ stdenv.mkDerivation rec {
     sed -i '/TestRespectSetgidDir/areturn' src/cmd/go/internal/work/build_test.go
     # Remove cert tests that conflict with NixOS's cert resolution
     sed -i '/TestEnvVars/areturn' src/crypto/x509/root_unix_test.go
+    # TestWritevError hangs sometimes
+    sed -i '/TestWritevError/areturn' src/net/writev_test.go
+    # TestVariousDeadlines fails sometimes
+    sed -i '/TestVariousDeadlines/areturn' src/net/timeout_test.go
 
     sed -i 's,/etc/protocols,${iana-etc}/etc/protocols,' src/net/lookup_unix.go
     sed -i 's,/etc/services,${iana-etc}/etc/services,' src/net/port_unix.go

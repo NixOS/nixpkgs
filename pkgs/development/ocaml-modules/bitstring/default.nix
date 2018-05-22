@@ -1,26 +1,31 @@
-{ stdenv, fetchurl, buildOcaml, time, autoconf, automake }:
+{ stdenv, fetchFromGitHub, ocaml, findlib, jbuilder
+, ppx_tools_versioned
+, ounit
+}:
 
-buildOcaml rec {
-  name = "bitstring";
-  version = "2.1.1";
-  src = fetchurl {
-    url = http://github.com/xguerin/bitstring/archive/v2.1.1.tar.gz;
-    sha256 = "0vy8ibrxccii1jbsk5q6yh1kxjigqvi7lhhcmizvd5gfhf7mfyc8";
+stdenv.mkDerivation rec {
+  name = "ocaml${ocaml.version}-bitstring-${version}";
+  version = "3.0.0";
+  src = fetchFromGitHub {
+    owner = "xguerin";
+    repo = "bitstring";
+    rev = "v${version}";
+    sha256 = "0r49qax7as48jgknzaq6p9rbpmrvnmlic713wzz5bj60j5h0396f";
   };
 
-  patches = [ ./camlp4-git.patch ./srcdir.patch ];
+  buildInputs = [ ocaml findlib jbuilder ppx_tools_versioned ounit ];
 
-  buildInputs = [time autoconf automake];
+  buildPhase = "jbuilder build";
+
   doCheck = true;
+  checkPhase = "jbuilder runtest";
 
-  createFindlibDestdir = true;
-  hasSharedObjects = true;
-
-  preConfigure = "./bootstrap";
+  inherit (jbuilder) installPhase;
 
   meta = with stdenv.lib; {
     description = "This library adds Erlang-style bitstrings and matching over bitstrings as a syntax extension and library for OCaml";
     homepage = https://github.com/xguerin/bitstring;
+    inherit (ocaml.meta) platforms;
     license = licenses.lgpl21Plus;
     maintainers = [ maintainers.maurer ];
   };

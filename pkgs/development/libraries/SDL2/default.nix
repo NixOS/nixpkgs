@@ -19,15 +19,6 @@ with lib;
 assert !stdenv.isDarwin -> alsaSupport || pulseaudioSupport;
 assert openglSupport -> (stdenv.isDarwin || x11Support && libGL != null);
 
-let
-
-  configureFlagsFun = attrs: [
-    "--disable-oss"
-  ] ++ optional (!x11Support) "--without-x"
-    ++ optional alsaSupport "--with-alsa-prefix=${attrs.alsaLib.out}/lib";
-
-in
-
 stdenv.mkDerivation rec {
   name = "SDL2-${version}";
   version = "2.0.8";
@@ -61,11 +52,10 @@ stdenv.mkDerivation rec {
   #   pointer-constraints-unstable-v1-client-protocol.h: No such file or directory
   enableParallelBuilding = false;
 
-  configureFlags = configureFlagsFun { inherit alsaLib; };
-
-  crossAttrs = {
-    configureFlags = configureFlagsFun { alsaLib = alsaLib.crossDrv; };
-  };
+  configureFlags = [
+    "--disable-oss"
+  ] ++ optional (!x11Support) "--without-x"
+    ++ optional alsaSupport "--with-alsa-prefix=${alsaLib.out}/lib";
 
   postInstall = ''
     moveToOutput lib/libSDL2main.a "$dev"

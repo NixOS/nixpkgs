@@ -15,4 +15,6 @@
 , "vue-cli"
 , "swagger"
 , "npm"
+, "three"
+, "mathjax"
 ]

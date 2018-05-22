@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, pythonPackages, makeWrapper, gettext, git }:
 
 let
-  inherit (pythonPackages) buildPythonApplication pyqt4 sip pyinotify python mock;
+  inherit (pythonPackages) buildPythonApplication pyqt5 sip pyinotify python mock;
 in buildPythonApplication rec {
   name = "git-cola-${version}";
   version = "3.1";
@@ -14,7 +14,7 @@ in buildPythonApplication rec {
   };
 
   buildInputs = [ git gettext ];
-  propagatedBuildInputs = [ pyqt4 sip pyinotify ];
+  propagatedBuildInputs = [ pyqt5 sip pyinotify ];
 
   doCheck = false;
 

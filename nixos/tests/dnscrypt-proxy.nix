@@ -26,7 +26,8 @@ import ./make-test.nix ({ pkgs, ... }: {
     $client->waitForUnit("dnsmasq");
 
     # The daemon is socket activated; sending a single ping should activate it.
+    $client->fail("systemctl is-active dnscrypt-proxy");
     $client->execute("${pkgs.iputils}/bin/ping -c1 example.com");
-    $client->succeed("systemctl is-active dnscrypt-proxy");
+    $client->waitUntilSucceeds("systemctl is-active dnscrypt-proxy");
   '';
 })

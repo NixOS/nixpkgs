@@ -38,6 +38,7 @@ let
       ${toString (flip mapAttrsToList upstream.servers (name: server: ''
         server ${name} ${optionalString server.backup "backup"};
       ''))}
+      ${upstream.extraConfig}
     }
   ''));
 
@@ -491,6 +492,13 @@ in
                 Defines the address and other parameters of the upstream servers.
               '';
               default = {};
+            };
+            extraConfig = mkOption {
+              type = types.lines;
+              default = "";
+              description = ''
+                These lines go to the end of the upstream verbatim.
+              '';
             };
           };
         });

@@ -8,15 +8,15 @@
 }:
 
 let
-  majorVersion = "3.0";
-  minorVersion = "1";
+  majorVersion = "3.1";
+  minorVersion = "0";
 
 in stdenv.mkDerivation rec {
   name = "openmpi-${majorVersion}.${minorVersion}";
 
   src = fetchurl {
     url = "http://www.open-mpi.org/software/ompi/v${majorVersion}/downloads/${name}.tar.bz2";
-    sha256 = "0pbqrm5faf57nasy1s81wqivl7zvxmv8lzjh8hvb0f3qxv8m0d36";
+    sha256 = "0v7hrmf1z5d1rmm0z5gi79l536j3z5s5b0kf9q5rr1fc4i0h8p5j";
   };
 
   postPatch = ''

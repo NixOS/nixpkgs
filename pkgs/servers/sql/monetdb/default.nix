@@ -1,4 +1,6 @@
-{ stdenv, fetchurl, pkgconfig, bison, openssl }:
+{ stdenv, fetchurl, pkgconfig
+, bison, openssl, readline
+}:
 
 let
   version = "11.29.3";
@@ -12,7 +14,7 @@ in stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ bison openssl ];
+  buildInputs = [ bison openssl readline ];
 
   meta = with stdenv.lib; {
     description = "An open source database system";

@@ -1,6 +1,5 @@
-{stdenv, fetchurl, zlib, openssl, libre, librem, pkgconfig
-, cairo, mpg123, gstreamer, gst-ffmpeg, gst-plugins-base, gst-plugins-bad
-, gst-plugins-good, alsaLib, SDL, libv4l, celt, libsndfile, srtp, ffmpeg
+{stdenv, fetchurl, zlib, openssl, libre, librem, pkgconfig, gst_all_1
+, cairo, mpg123, alsaLib, SDL, libv4l, celt, libsndfile, srtp, ffmpeg
 , gsm, speex, portaudio, spandsp, libuuid, ccache, libvpx
 }:
 stdenv.mkDerivation rec {
@@ -11,11 +10,10 @@ stdenv.mkDerivation rec {
     sha256 = "02bf4fwirf3b7h3cr1jqm0xsjzza4fi9kg88424js2l0xywwzpgf";
   };
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [zlib openssl libre librem
-    cairo mpg123 gstreamer gst-ffmpeg gst-plugins-base gst-plugins-bad gst-plugins-good
+  buildInputs = [zlib openssl libre librem cairo mpg123
     alsaLib SDL libv4l celt libsndfile srtp ffmpeg gsm speex portaudio spandsp libuuid
     ccache libvpx
-    ];
+  ] ++ (with gst_all_1; [ gstreamer gst-libav gst-plugins-base gst-plugins-bad gst-plugins-good ]);
   makeFlags = [
     "LIBRE_MK=${libre}/share/re/re.mk"
     "LIBRE_INC=${libre}/include/re"
@@ -26,7 +24,7 @@ stdenv.mkDerivation rec {
     "CCACHE_DISABLE=1"
 
     "USE_ALSA=1" "USE_AMR=1" "USE_CAIRO=1" "USE_CELT=1"
-    "USE_CONS=1" "USE_EVDEV=1" "USE_FFMPEG=1"  "USE_GSM=1" "USE_GST=1"
+    "USE_CONS=1" "USE_EVDEV=1" "USE_FFMPEG=1"  "USE_GSM=1" "USE_GST1=1"
     "USE_L16=1" "USE_MPG123=1" "USE_OSS=1" "USE_PLC=1" "USE_VPX=1"
     "USE_PORTAUDIO=1" "USE_SDL=1" "USE_SNDFILE=1" "USE_SPEEX=1"
     "USE_SPEEX_AEC=1" "USE_SPEEX_PP=1" "USE_SPEEX_RESAMP=1" "USE_SRTP=1"

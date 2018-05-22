@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "caja-${version}";
-  version = "1.21.0";
+  version = "1.21.1";
 
   src = fetchurl {
     url = "http://pub.mate-desktop.org/releases/${mate.getRelease version}/${name}.tar.xz";
-    sha256 = "0v8zx5rzqh1zkwizkpdckmwm6004cv9sbjghzgz3049xzcqm371g";
+    sha256 = "013lmngnm0i2746qrkkyhg62kyh4cjdd0i634cz5fm7ah65ylxg4";
   };
 
   nativeBuildInputs = [
