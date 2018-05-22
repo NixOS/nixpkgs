@@ -101,19 +101,9 @@ in stdenv.mkDerivation rec {
     mesonFlagsArray+=(-Ddbussystemservicedir=$out/share/dbus-1/system-services)
     mesonFlagsArray+=(-Dpamconfdir=$out/etc/pam.d)
     mesonFlagsArray+=(-Drootprefix=$out)
-    mesonFlagsArray+=(-Dlibdir=$lib/lib)
     mesonFlagsArray+=(-Drootlibdir=$lib/lib)
-    mesonFlagsArray+=(-Dmandir=$man/lib)
-    mesonFlagsArray+=(-Dincludedir=$dev/include)
     mesonFlagsArray+=(-Dpkgconfiglibdir=$dev/lib/pkgconfig)
     mesonFlagsArray+=(-Dpkgconfigdatadir=$dev/share/pkgconfig)
-
-    # FIXME: Why aren't includedir and libdir picked up from mesonFlags while other options are?
-    substituteInPlace meson.build \
-      --replace "includedir = join_paths(prefixdir, get_option('includedir'))" \
-                "includedir = '$dev/include'" \
-      --replace "libdir = join_paths(prefixdir, get_option('libdir'))" \
-                "libdir = '$lib/lib'"
 
     export LC_ALL="en_US.UTF-8";
     # FIXME: patch this in systemd properly (and send upstream).
