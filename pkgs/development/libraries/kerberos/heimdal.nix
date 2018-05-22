@@ -39,7 +39,8 @@ stdenv.mkDerivation rec {
     "--with-libedit=${libedit}"
     "--with-openssl=${openssl.dev}"
     "--without-x"
-    "--with-berkeley-db=${db}"
+    "--with-berkeley-db"
+    "--with-berkeley-db-include=${db.out}/include"
   ] ++ optionals (!libOnly) [
     "--with-openldap=${openldap.dev}"
   ] ++ optionals (!stdenv.isFreeBSD) [
