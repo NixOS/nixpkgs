@@ -70,7 +70,7 @@ in {
                 resources = {
                   limits = {
                     cpu = "100m";
-                    memory = "50Mi";
+                    memory = "250Mi";
                   };
                   requests = {
                     cpu = "100m";
