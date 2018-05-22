@@ -2,7 +2,7 @@
 
 assert jdk != null;
 
-let version = "3.5.2"; in
+let version = "3.5.3"; in
 stdenv.mkDerivation rec {
   name = "apache-maven-${version}";
 
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://apache/maven/maven-3/${version}/binaries/${name}-bin.tar.gz";
-    sha256 = "1zza5kjf69hnx41gy3yhvsk1kz259nig5njcmzjbsr8a75p1yyvh";
+    sha256 = "0244mpziz4rw35x2cahsqlxpnygvi6qpll16g4kx87db7wvmcadm";
   };
 
   buildInputs = [ makeWrapper ];
