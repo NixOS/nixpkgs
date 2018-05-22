@@ -16352,8 +16352,8 @@ EOF
     };
   };
 
-  # For backwards compatibility. Please use nixpkgs.udiskie instead.
-  udiskie = toPythonModule (pkgs.udiskie.override { pythonPackages = self; });
+  # added 2018-05-23, can be removed once 18.09 is branched off
+  udiskie = throw "pythonPackages.udiskie has been replaced by udiskie";
 
   # Should be bumped along with EFL!
   pythonefl = buildPythonPackage rec {
