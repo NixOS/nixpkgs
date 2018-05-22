@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, pkgconfig, qt5, lxqt, libfm, menu-cache, lxmenu-data }:
+{ stdenv, fetchFromGitHub, cmake, pkgconfig, lxqt-build-tools, qt5, libfm-qt, menu-cache, lxmenu-data }:
 
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";
@@ -15,15 +15,15 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     cmake
     pkgconfig
-    lxqt.lxqt-build-tools
+    lxqt-build-tools
   ];
 
   buildInputs = [
     qt5.qtbase
     qt5.qttools
     qt5.qtx11extras
-    lxqt.libfm-qt
-    libfm
+    libfm-qt
+    libfm-qt
     menu-cache
     lxmenu-data
   ];
