@@ -10,7 +10,10 @@ let
     "ghc821Binary"
     "ghcCross"
     "ghcjs"
-    "ghcjsHEAD"
+    "ghcjs710"
+    "ghcjs80"
+    "ghcjs82"
+    "ghcjs84"
     "integer-simple"
   ];
 
@@ -19,7 +22,10 @@ let
     inherit pkgs;
   };
 
-  callPackage = newScope { inherit haskellLib; };
+  callPackage = newScope {
+    inherit haskellLib;
+    overrides = pkgs.haskell.packageOverrides;
+  };
 
   bootstrapPackageSet = self: super: {
     mkDerivation = drv: super.mkDerivation (drv // {
@@ -61,12 +67,6 @@ in rec {
       buildLlvmPackages = buildPackages.llvmPackages_39;
       llvmPackages = pkgs.llvmPackages_39;
     };
-    ghc841 = callPackage ../development/compilers/ghc/8.4.1.nix rec {
-      bootPkgs = packages.ghc821Binary;
-      inherit (bootPkgs) alex happy;
-      buildLlvmPackages = buildPackages.llvmPackages_5;
-      llvmPackages = pkgs.llvmPackages_5;
-    };
     ghc842 = callPackage ../development/compilers/ghc/8.4.2.nix rec {
       bootPkgs = packages.ghc821Binary;
       inherit (bootPkgs) alex happy;
@@ -79,13 +79,27 @@ in rec {
       buildLlvmPackages = buildPackages.llvmPackages_5;
       llvmPackages = pkgs.llvmPackages_5;
     };
-    ghcjs = packages.ghc7103.callPackage ../development/compilers/ghcjs {
+    ghcjs = compiler.ghcjs82;
+    ghcjs710 = packages.ghc7103.callPackage ../development/compilers/ghcjs {
       bootPkgs = packages.ghc7103;
       inherit (pkgs) cabal-install;
     };
-    ghcjsHEAD = packages.ghc802.callPackage ../development/compilers/ghcjs/head.nix {
+    ghcjs80 = packages.ghc802.callPackage ../development/compilers/ghcjs/head.nix {
       bootPkgs = packages.ghc802;
       inherit (pkgs) cabal-install;
+    };
+    ghcjs82 = callPackage ../development/compilers/ghcjs-ng rec {
+      bootPkgs = packages.ghc822;
+      inherit (bootPkgs) alex happy;
+      ghcjsSrcJson = ../development/compilers/ghcjs-ng/8.2/git.json;
+      stage0 = ../development/compilers/ghcjs-ng/8.2/stage0.nix;
+    };
+    ghcjs84 = callPackage ../development/compilers/ghcjs-ng rec {
+      bootPkgs = packages.ghc842;
+      inherit (bootPkgs) alex happy;
+      ghcjsSrcJson = ../development/compilers/ghcjs-ng/8.4/git.json;
+      stage0 = ../development/compilers/ghcjs-ng/8.4/stage0.nix;
+      ghcjsDepOverrides = callPackage ../development/compilers/ghcjs-ng/8.4/dep-overrides.nix {};
     };
 
     # The integer-simple attribute set contains all the GHC compilers
@@ -98,6 +112,9 @@ in rec {
       integerSimpleGhcNames
       (name: compiler."${name}".override { enableIntegerSimple = true; }));
   };
+
+  # Default overrides that are applied to all package sets.
+  packageOverrides = self : super : {};
 
   # Always get compilers from `buildPackages`
   packages = let bh = buildPackages.haskell; in {
@@ -129,11 +146,6 @@ in rec {
       ghc = bh.compiler.ghc822;
       compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-8.2.x.nix { };
     };
-    ghc841 = callPackage ../development/haskell-modules {
-      buildHaskellPackages = bh.packages.ghc841;
-      ghc = bh.compiler.ghc841;
-      compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-8.4.x.nix { };
-    };
     ghc842 = callPackage ../development/haskell-modules {
       buildHaskellPackages = bh.packages.ghc842;
       ghc = bh.compiler.ghc842;
@@ -144,16 +156,29 @@ in rec {
       ghc = bh.compiler.ghcHEAD;
       compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-head.nix { };
     };
-    ghcjs = callPackage ../development/haskell-modules rec {
+    ghcjs = packages.ghcjs82;
+    ghcjs710 = callPackage ../development/haskell-modules rec {
       buildHaskellPackages = ghc.bootPkgs;
       ghc = bh.compiler.ghcjs;
       compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-7.10.x.nix { };
       packageSetConfig = callPackage ../development/haskell-modules/configuration-ghcjs.nix { };
     };
-    ghcjsHEAD = callPackage ../development/haskell-modules rec {
+    ghcjs80 = callPackage ../development/haskell-modules rec {
       buildHaskellPackages = ghc.bootPkgs;
       ghc = bh.compiler.ghcjsHEAD;
       compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-8.0.x.nix { };
+      packageSetConfig = callPackage ../development/haskell-modules/configuration-ghcjs.nix { };
+    };
+    ghcjs82 = callPackage ../development/haskell-modules rec {
+      buildHaskellPackages = ghc.bootPkgs;
+      ghc = bh.compiler.ghcjs82;
+      compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-8.2.x.nix { };
+      packageSetConfig = callPackage ../development/haskell-modules/configuration-ghcjs.nix { };
+    };
+    ghcjs84 = callPackage ../development/haskell-modules rec {
+      buildHaskellPackages = ghc.bootPkgs;
+      ghc = bh.compiler.ghcjs84;
+      compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-8.4.x.nix { };
       packageSetConfig = callPackage ../development/haskell-modules/configuration-ghcjs.nix { };
     };
 
@@ -164,7 +189,7 @@ in rec {
         (name: ! builtins.elem name integerSimpleExcludes)
         (pkgs.lib.attrNames packages);
     in pkgs.lib.genAttrs integerSimpleGhcNames (name: packages."${name}".override {
-      ghc = compiler.integer-simple."${name}";
+      ghc = bh.compiler.integer-simple."${name}";
       overrides = _self : _super : {
         integer-simple = null;
         integer-gmp = null;

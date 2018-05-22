@@ -1,12 +1,10 @@
-{ config, lib, pkgs, ... }:
+{ options, config, lib, pkgs, ... }:
 
 with lib;
 
 let
   cfg = config.system.nixos;
 
-  releaseFile  = "${toString pkgs.path}/.version";
-  suffixFile   = "${toString pkgs.path}/.version-suffix";
   revisionFile = "${toString pkgs.path}/.git-revision";
   gitRepo      = "${toString pkgs.path}/.git";
   gitCommitId  = lib.substring 0 7 (commitIdFromGitRepo gitRepo);
@@ -14,44 +12,29 @@ in
 
 {
 
-  options.system = {
+  options.system.nixos = {
 
-    # XXX: Reintroduce old options to make nixops before 1.6 able to evaluate configurations
-    # XXX: Remove after nixops has been bumped to a compatible version
-    nixosVersion = mkOption {
-      readOnly = true;
-      internal = true;
-      type = types.str;
-      default = config.system.nixos.version;
-    };
-    nixosVersionSuffix = mkOption {
-      readOnly = true;
-      internal = true;
-      type = types.str;
-      default = config.system.nixos.versionSuffix;
-    };
-
-    nixos.version = mkOption {
+    version = mkOption {
       internal = true;
       type = types.str;
       description = "The full NixOS version (e.g. <literal>16.03.1160.f2d4ee1</literal>).";
     };
 
-    nixos.release = mkOption {
+    release = mkOption {
       readOnly = true;
       type = types.str;
-      default = fileContents releaseFile;
+      default = trivial.release;
       description = "The NixOS release (e.g. <literal>16.03</literal>).";
     };
 
-    nixos.versionSuffix = mkOption {
+    versionSuffix = mkOption {
       internal = true;
       type = types.str;
-      default = if pathExists suffixFile then fileContents suffixFile else "pre-git";
+      default = trivial.versionSuffix;
       description = "The NixOS version suffix (e.g. <literal>1160.f2d4ee1</literal>).";
     };
 
-    nixos.revision = mkOption {
+    revision = mkOption {
       internal = true;
       type = types.str;
       default = if pathIsDirectory gitRepo then commitIdFromGitRepo gitRepo
@@ -60,7 +43,7 @@ in
       description = "The Git revision from which this NixOS configuration was built.";
     };
 
-    nixos.codeName = mkOption {
+    codeName = mkOption {
       readOnly = true;
       type = types.str;
       description = "The NixOS release code name (e.g. <literal>Emu</literal>).";
@@ -92,6 +75,9 @@ in
   };
 
   config = {
+
+    warnings = lib.optional (options.system.nixos.stateVersion.highestPrio > 1000)
+      "You don't have `system.nixos.stateVersion` explicitly set. Expect things to break.";
 
     system.nixos = {
       # These defaults are set here rather than up there so that

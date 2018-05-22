@@ -194,6 +194,8 @@
 
     union_type = callPackage ./union_type.nix {};
 
+    vdom = callPackage ./vdom.nix {};
+
     vecspace = callPackage ./vecspace.nix {};
 
     webgl = callPackage ./webgl.nix {};

@@ -102,13 +102,18 @@ let
     </section>
   '';
 
+  generatedSources = runCommand "generated-docbook" {} ''
+    mkdir $out
+    ln -s ${modulesDoc} $out/modules.xml
+    ln -s ${optionsDocBook} $out/options-db.xml
+    printf "%s" "${version}" > $out/version
+  '';
+
   copySources =
     ''
       cp -prd $sources/* . # */
+      ln -s ${generatedSources} ./generated
       chmod -R u+w .
-      ln -s ${modulesDoc} configuration/modules.xml
-      ln -s ${optionsDocBook} options-db.xml
-      printf "%s" "${version}" > version
     '';
 
   toc = builtins.toFile "toc.xml"
@@ -224,6 +229,7 @@ let
     '';
 
 in rec {
+  inherit generatedSources;
 
   # The NixOS options in JSON format.
   optionsJSON = runCommand "options-json"

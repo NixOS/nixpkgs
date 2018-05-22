@@ -34,7 +34,7 @@ common = rec { # attributes common to both builds
     sed -i 's,[^"]*/var/log,/var/log,g' storage/mroonga/vendor/groonga/CMakeLists.txt
   '';
 
-  patches = [ ./cmake-includedir.patch ]
+  patches = [ ./cmake-includedir.patch ./include-dirs-path.patch ]
     ++ stdenv.lib.optional stdenv.cc.isClang ./clang-isfinite.patch;
 
   cmakeFlags = [
@@ -123,7 +123,7 @@ everything = stdenv.mkDerivation (common // {
   buildInputs = common.buildInputs ++ [
     xz lzo lz4 bzip2 snappy
     libxml2 boost judy libevent cracklib
-  ] ++ optional (stdenv.isLinux && !stdenv.isArm) numactl;
+  ] ++ optional (stdenv.isLinux && !stdenv.isAarch32) numactl;
 
   cmakeFlags = common.cmakeFlags ++ [
     "-DMYSQL_DATADIR=/var/lib/mysql"

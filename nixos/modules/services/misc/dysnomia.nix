@@ -158,7 +158,7 @@ in
 
     services.dysnomia.properties = {
       hostname = config.networking.hostName;
-      system = if config.nixpkgs.system == "" then builtins.currentSystem else config.nixpkgs.system;
+      inherit (config.nixpkgs.localSystem) system;
 
       supportedTypes = (import "${pkgs.stdenv.mkDerivation {
         name = "supportedtypes";

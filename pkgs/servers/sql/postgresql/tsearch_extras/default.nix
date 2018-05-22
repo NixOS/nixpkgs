@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "tsearch-extras-${version}";
-  version = "0.2";
+  version = "0.3";
 
   src = fetchFromGitHub {
     owner = "zulip";
     repo = "tsearch_extras";
     rev = version;
-    sha256 = "1ivg9zn7f1ks31ixxwywifwhzxn6py8s5ky1djyxnb0s60zckfjg";
+    sha256 = "0i3i99lw80jwd4xflgdqabxmn1dnm1gm7dzf1mqv2drllxcy3yix";
   };
 
   nativenativeBuildInputs = [ pkgconfig ];

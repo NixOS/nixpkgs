@@ -1,7 +1,21 @@
-{ stdenv, makeWrapper, requireFile, unzip, openjdk }:
+{ stdenv, makeDesktopItem, makeWrapper, requireFile, unzip, openjdk }:
 
-stdenv.mkDerivation rec {
+let
   version = "17.4.1.054.0712";
+
+  desktopItem = makeDesktopItem {
+    name = "sqldeveloper";
+    exec = "sqldeveloper";
+    icon = "sqldeveloper";
+    desktopName = "Oracle SQL Developer";
+    genericName = "Oracle SQL Developer";
+    comment = "Oracle's Oracle DB GUI client";
+    categories = "Application;Development;";
+  };
+in
+  stdenv.mkDerivation rec {
+
+  inherit version;
   name = "sqldeveloper-${version}";
 
   src = requireFile rec {
@@ -51,6 +65,10 @@ stdenv.mkDerivation rec {
     cd $out
     unzip ${src}
     mv sqldeveloper $out/lib/${name}
+
+    install -D -m 444 $out/lib/$name/icon.png $out/share/pixmaps/sqldeveloper.png
+    mkdir -p $out/share/applications
+    cp ${desktopItem}/share/applications/* $out/share/applications
   '';
 
   meta = with stdenv.lib; {

@@ -3,14 +3,17 @@ with import ./parse.nix { inherit lib; };
 with lib.attrsets;
 with lib.lists;
 
+let abis_ = abis; in
+let abis = lib.mapAttrs (_: abi: builtins.removeAttrs abi [ "assertions" ]) abis_; in
+
 rec {
   patterns = rec {
     isi686         = { cpu = cpuTypes.i686; };
     isx86_64       = { cpu = cpuTypes.x86_64; };
     isPowerPC      = { cpu = cpuTypes.powerpc; };
     isx86          = { cpu = { family = "x86"; }; };
-    isArm          = { cpu = { family = "arm"; }; };
-    isAarch64      = { cpu = { family = "aarch64"; }; };
+    isAarch32      = { cpu = { family = "arm"; bits = 32; }; };
+    isAarch64      = { cpu = { family = "arm"; bits = 64; }; };
     isMips         = { cpu = { family = "mips"; }; };
     isRiscV        = { cpu = { family = "riscv"; }; };
     isWasm         = { cpu = { family = "wasm"; }; };
@@ -38,9 +41,13 @@ rec {
 
     isAndroid      = [ { abi = abis.android; } { abi = abis.androideabi; } ];
     isMusl         = with abis; map (a: { abi = a; }) [ musl musleabi musleabihf ];
+    isUClibc       = with abis; map (a: { abi = a; }) [ uclibc uclibceabi uclibceabihf ];
 
     isEfi          = map (family: { cpu.family = family; })
                        [ "x86" "arm" "aarch64" ];
+
+    # Deprecated after 18.03
+    isArm = isAarch32;
   };
 
   matchAnyAttrs = patterns:

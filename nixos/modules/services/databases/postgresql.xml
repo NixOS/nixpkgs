@@ -23,15 +23,15 @@
 <filename>configuration.nix</filename>:
 
 <programlisting>
-services.postgresql.enable = true;
-services.postgresql.package = pkgs.postgresql94;
+<xref linkend="opt-services.postgresql.enable"/> = true;
+<xref linkend="opt-services.postgresql.package"/> = pkgs.postgresql94;
 </programlisting>
 
 Note that you are required to specify the desired version of
 PostgreSQL (e.g. <literal>pkgs.postgresql94</literal>). Since
 upgrading your PostgreSQL version requires a database dump and reload
 (see below), NixOS cannot provide a default value for
-<option>services.postgresql.package</option> such as the most recent
+<xref linkend="opt-services.postgresql.package"/> such as the most recent
 release of PostgreSQL.</para>
 
 <!--
@@ -49,10 +49,10 @@ alice=>
 
 <para>By default, PostgreSQL stores its databases in
 <filename>/var/db/postgresql</filename>. You can override this using
-<option>services.postgresql.dataDir</option>, e.g.
+<xref linkend="opt-services.postgresql.dataDir"/>, e.g.
 
 <programlisting>
-services.postgresql.dataDir = "/data/postgresql";
+<xref linkend="opt-services.postgresql.dataDir"/> = "/data/postgresql";
 </programlisting>
 
 </para>
@@ -69,7 +69,7 @@ services.postgresql.dataDir = "/data/postgresql";
 
 <section><title>Options</title>
 
-<para>FIXME: auto-generated list of module options.</para>
+  <para>A complete list of options for the PostgreSQL module may be found <link linkend="opt-services.postgresql.enable">here</link>.</para>
 
 </section>
 

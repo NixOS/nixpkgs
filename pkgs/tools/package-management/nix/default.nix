@@ -1,12 +1,13 @@
 { lib, stdenv, fetchurl, fetchFromGitHub, perl, curl, bzip2, sqlite, openssl ? null, xz
 , pkgconfig, boehmgc, perlPackages, libsodium, aws-sdk-cpp, brotli, boost
 , autoreconfHook, autoconf-archive, bison, flex, libxml2, libxslt, docbook5, docbook5_xsl
-, libseccomp, busybox-sandbox-shell
+, busybox-sandbox-shell
 , hostPlatform, buildPlatform
 , storeDir ? "/nix/store"
 , stateDir ? "/nix/var"
 , confDir ? "/etc"
 , fromGit ? false
+, withLibseccomp ? libseccomp.meta.available, libseccomp
 }:
 
 let
@@ -31,7 +32,7 @@ let
     buildInputs = [ curl openssl sqlite xz bzip2 ]
       ++ lib.optional (stdenv.isLinux || stdenv.isDarwin) libsodium
       ++ lib.optionals is20 [ brotli ] # Since 1.12
-      ++ lib.meta.enableIfAvailable libseccomp
+      ++ lib.optional withLibseccomp libseccomp
       ++ lib.optional ((stdenv.isLinux || stdenv.isDarwin) && is20)
           (aws-sdk-cpp.override {
             apis = ["s3"];
@@ -42,7 +43,7 @@ let
     propagatedBuildInputs = [ boehmgc ];
 
     # Seems to be required when using std::atomic with 64-bit types
-    NIX_LDFLAGS = lib.optionalString (stdenv.system == "armv6l-linux") "-latomic";
+    NIX_LDFLAGS = lib.optionalString (stdenv.hostPlatform.system == "armv6l-linux") "-latomic";
 
     configureFlags =
       [ "--with-store-dir=${storeDir}"
@@ -133,10 +134,10 @@ in rec {
   }) // { perl-bindings = nixStable; };
 
   nixStable = (common rec {
-    name = "nix-2.0";
+    name = "nix-2.0.2";
     src = fetchurl {
       url = "http://nixos.org/releases/nix/${name}/${name}.tar.xz";
-      sha256 = "7024d327314bf92c1d3e6cccd944929828a44b24093954036bfb0115a92f5a14";
+      sha256 = "2d2984410f73d759485526e594ce41b9819fafa4676f4f85a93dbdd5352a1435";
     };
   }) // { perl-bindings = perl-bindings { nix = nixStable; }; };
 

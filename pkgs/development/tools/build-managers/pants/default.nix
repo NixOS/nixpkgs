@@ -4,7 +4,7 @@ with stdenv.lib;
 with pythonPackages;
 
 let
-  version = "1.5.0";
+  version = "1.6.0";
 in buildPythonApplication rec {
   inherit version;
   pname = "pantsbuild.pants";
@@ -12,7 +12,7 @@ in buildPythonApplication rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "7c0a1206594c615fce0a7f6daa4ea1028645bc20afa5599c2cf0ad7c06223fa7";
+    sha256 = "0ahvcj33xribypgyh515mb3ack1djr0cq27nlyk0qhwgwv6acfnj";
   };
 
   prePatch = ''
@@ -27,7 +27,7 @@ in buildPythonApplication rec {
     twitter-common-collections setproctitle ansicolors packaging pathspec
     scandir twitter-common-dirutil psutil requests pystache pex docutils
     markdown pygments twitter-common-confluence fasteners pywatchman
-    futures cffi subprocess32 contextlib2 faulthandler pyopenssl
+    futures cffi subprocess32 contextlib2 faulthandler pyopenssl wheel
   ];
 
   meta = {

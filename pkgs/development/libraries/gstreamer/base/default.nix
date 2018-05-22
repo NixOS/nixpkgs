@@ -1,17 +1,22 @@
-{ stdenv, fetchurl, fetchpatch, pkgconfig, meson
-, ninja, gettext, gobjectIntrospection, python
-, gstreamer, orc, alsaLib, libXv, pango, libtheora
-, wayland, cdparanoia, libvisual, libintl
-}:
+{ stdenv, fetchurl, fetchpatch, lib
+, pkgconfig, meson, ninja, gettext, gobjectIntrospection
+, python, gstreamer, orc, pango, libtheora, libvisual
+, libintl
+, enableX11 ? stdenv.isLinux, libXv
+, enableWayland ? stdenv.isLinux, wayland
+, enableAlsa ? stdenv.isLinux, alsaLib
+, enableCocoa ? false, darwin
+, enableCdparanoia ? (!stdenv.isDarwin), cdparanoia }:
 
 stdenv.mkDerivation rec {
   name = "gst-plugins-base-1.14.0";
 
-  meta = {
+  meta = with lib; {
     description = "Base plugins and helper libraries";
     homepage = https://gstreamer.freedesktop.org;
-    license = stdenv.lib.licenses.lgpl2Plus;
-    platforms = stdenv.lib.platforms.unix;
+    license = licenses.lgpl2Plus;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ matthewbauer ];
   };
 
   src = fetchurl {
@@ -21,19 +26,32 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "dev" ];
 
-  nativeBuildInputs = [
-    pkgconfig python meson ninja gettext gobjectIntrospection
-  ];
+  nativeBuildInputs = [ pkgconfig python gettext gobjectIntrospection ]
 
-  buildInputs = [
-    orc libXv pango libtheora cdparanoia libintl wayland
+  # Broken meson with Darwin. Should hopefully be fixed soon. Tracking
+  # in https://bugzilla.gnome.org/show_bug.cgi?id=781148.
+  ++ lib.optionals (!stdenv.isDarwin) [ meson ninja ];
+
+  # TODO How to pass these to Meson?
+  configureFlags = [
+    "--enable-x11=${if enableX11 then "yes" else "no"}"
+    "--enable-wayland=${if enableWayland then "yes" else "no"}"
+    "--enable-cocoa=${if enableCocoa then "yes" else "no"}"
   ]
-  ++ stdenv.lib.optional stdenv.isLinux alsaLib
-  ++ stdenv.lib.optional (!stdenv.isDarwin) libvisual;
+
+  # Introspection fails on my MacBook currently
+  ++ lib.optional stdenv.isDarwin "--disable-introspection";
+
+  buildInputs = [ orc libtheora libintl ]
+    ++ lib.optional enableAlsa alsaLib
+    ++ lib.optionals enableX11 [ libXv pango ]
+    ++ lib.optional enableWayland wayland
+    ++ lib.optional enableCocoa darwin.apple_sdk.frameworks.Cocoa
+    ++ lib.optional enableCdparanoia cdparanoia;
 
   propagatedBuildInputs = [ gstreamer ];
 
-  preConfigure = ''
+  postPatch = ''
     patchShebangs .
   '';
 

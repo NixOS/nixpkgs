@@ -42,14 +42,14 @@ let
 
     translations = fetchSrc {
       name = "translations";
-      sha256 = "1fx9xkf1ppap77b8zdr8qawbikgp607z5w9b7jk3rilcqs7xbkwl";
+      sha256 = "1cx537akvil4ci4lc9gnz83xmhxyjjrpv9xcibkif6vhdck539la";
     };
 
     # TODO: dictionaries
 
     help = fetchSrc {
       name = "help";
-      sha256 = "0zphmhl4a8pd5l7ma4bzhrwgbv037j8p5m1ilvb1blgbqv53v38a";
+      sha256 = "00a7iqknww28z0ifcjrx529p2nxqsa4gjavk75rwykvcfyn9x686";
     };
 
   };
@@ -184,7 +184,7 @@ in stdenv.mkDerivation rec {
     done
 
     cp -r sysui/desktop/icons  "$out/share"
-    sed -re 's@Icon=libreofficedev[0-9.]*-?@Icon=@' -i "$out/share/applications/"*.desktop
+    sed -re 's@Icon=libreoffice(dev)?[0-9.]*-?@Icon=@' -i "$out/share/applications/"*.desktop
   '';
 
   configureFlags = [

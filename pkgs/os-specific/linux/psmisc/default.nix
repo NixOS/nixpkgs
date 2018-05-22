@@ -1,7 +1,5 @@
 {stdenv, fetchurl, ncurses}:
 
-assert stdenv.isLinux;
-
 stdenv.mkDerivation rec {
   name = "psmisc-23.1";
 

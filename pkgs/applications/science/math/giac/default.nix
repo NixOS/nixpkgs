@@ -1,5 +1,5 @@
-{ stdenv, fetchurl, texlive, bison, flex
-, gmp, mpfr, pari, ntl, gsl, blas, mpfi, liblapackWithAtlas
+{ stdenv, fetchurl, fetchpatch, texlive, bison, flex, liblapackWithoutAtlas
+, gmp, mpfr, pari, ntl, gsl, blas, mpfi
 , readline, gettext, libpng, libao, gfortran, perl
 , enableGUI ? false, libGLU_combined ? null, xorg ? null, fltk ? null
 }:
@@ -16,6 +16,15 @@ stdenv.mkDerivation rec {
     sha256 = "0dv5p5y6gkrsmz3xa7fw87rjyabwdwk09mqb09kb7gai9n9dgayk";
   };
 
+  patches = stdenv.lib.optionals (!enableGUI) [
+    # when enableGui is false, giac is compiled without fltk. That means some
+    # outputs differ in the make check. Patch around this:
+    (fetchpatch {
+      url    = "https://git.sagemath.org/sage.git/plain/build/pkgs/giac/patches/nofltk-check.patch?id=7553a3c8dfa7bcec07241a07e6a4e7dcf5bb4f26";
+      sha256 = "0xkmfc028vg5w6va04gp2x2iv31n8v4shd6vbyvk4blzgfmpj2cw";
+    })
+  ];
+
   postPatch = ''
     for i in doc/*/Makefile*; do
       substituteInPlace "$i" --replace "/bin/cp" "cp";
@@ -28,19 +37,21 @@ stdenv.mkDerivation rec {
 
   # perl is only needed for patchShebangs fixup.
   buildInputs = [
-    gmp mpfr pari ntl gsl blas mpfi liblapackWithAtlas
+    gmp mpfr pari ntl gsl blas mpfi
     readline gettext libpng libao perl
     # gfortran.cc default output contains static libraries compiled without -fPIC
     # we want libgfortran.so.3 instead
     (stdenv.lib.getLib gfortran.cc)
+    liblapackWithoutAtlas
   ] ++ stdenv.lib.optionals enableGUI [
     libGLU_combined fltk xorg.libX11
   ];
 
-  outputs = [ "out" ];
+  outputs = [ "out" "doc" ];
+
+  doCheck = true;
 
   enableParallelBuilding = true;
-  hardeningDisable = [ "format" "bindnow" "relro" ];
 
   configureFlags = [
     "--enable-gc" "--enable-png" "--enable-gsl" "--enable-lapack"
@@ -57,6 +68,13 @@ stdenv.mkDerivation rec {
     for file in $(find $out -name Makefile) ; do
       sed -i "s@/nix/store/[^/]*/bin/@@" "$file" ;
     done;
+
+    # reference cycle
+    rm "$out/share/giac/doc/el/"{casinter,tutoriel}/Makefile
+
+    mkdir -p "$doc/share/giac"
+    mv "$out/share/giac/doc" "$doc/share/giac"
+    mv "$out/share/giac/examples" "$doc/share/giac"
   '';
 
   meta = with stdenv.lib; {

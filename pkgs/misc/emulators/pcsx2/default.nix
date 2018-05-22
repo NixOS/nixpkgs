@@ -2,8 +2,6 @@
 , makeWrapper, perl, pkgconfig, portaudio, SDL2, soundtouch, stdenv
 , wxGTK30, zlib }:
 
-assert stdenv.isi686;
-
 stdenv.mkDerivation rec {
   name = "pcsx2-${version}";
   version = "1.4.0";

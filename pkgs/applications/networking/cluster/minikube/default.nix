@@ -23,7 +23,7 @@ let
 in buildGoPackage rec {
   pname   = "minikube";
   name    = "${pname}-${version}";
-  version = "0.26.0";
+  version = "0.27.0";
 
   goPackagePath = "k8s.io/minikube";
 
@@ -31,7 +31,7 @@ in buildGoPackage rec {
     owner  = "kubernetes";
     repo   = "minikube";
     rev    = "v${version}";
-    sha256 = "1wc2gvmgb59yh0ldm2plvh6s8mvxvysrxp6w75z16ii86jmi3wr6";
+    sha256 = "00gj8x5p0vxwy0y0g5nnddmq049h7zxvhb73lb4gii5mghr9mkws";
   };
 
   patches = [

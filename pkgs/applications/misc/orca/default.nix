@@ -1,5 +1,5 @@
 { stdenv, lib, pkgconfig, fetchurl, buildPythonApplication
-, autoreconfHook, wrapGAppsHook
+, autoreconfHook, wrapGAppsHook, gobjectIntrospection
 , intltool, yelp-tools, itstool, libxmlxx3
 , python, pygobject3, gtk3, gnome3, substituteAll
 , at-spi2-atk, at-spi2-core, pyatspi, dbus, dbus-python, pyxdg
@@ -10,7 +10,7 @@
 with lib;
 let
   pname = "orca";
-  version = "3.28.0";
+  version = "3.28.1";
 in buildPythonApplication rec {
   name = "${pname}-${version}";
 
@@ -18,7 +18,7 @@ in buildPythonApplication rec {
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${gnome3.versionBranch version}/${name}.tar.xz";
-    sha256 = "1jy2zxs50ah1rg4zgiaj2l2sm1zyyvs37phws0hwmy3xd90ljfc2";
+    sha256 = "04l5ccn7wf175gyq3blfpx0yh70ny06n161297jwc9idf951852g";
   };
 
   patches = [
@@ -30,11 +30,12 @@ in buildPythonApplication rec {
 
   nativeBuildInputs = [
     autoreconfHook wrapGAppsHook pkgconfig libxmlxx3
-    intltool yelp-tools itstool
+    intltool yelp-tools itstool gobjectIntrospection
   ];
 
   propagatedBuildInputs = [
-    pygobject3 pyatspi dbus-python pyxdg brltty liblouis speechd gst-python setproctitle
+    # TODO: re-add liblouis when it is fixed
+    pygobject3 pyatspi dbus-python pyxdg brltty speechd gst-python setproctitle
   ];
 
   buildInputs = [

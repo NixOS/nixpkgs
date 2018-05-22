@@ -223,6 +223,8 @@ in {
 
   bugseverywhere = callPackage ../applications/version-management/bugseverywhere {};
 
+  cdecimal = callPackage ../development/python-modules/cdecimal { };
+
   dendropy = callPackage ../development/python-modules/dendropy { };
 
   dbf = callPackage ../development/python-modules/dbf { };
@@ -253,6 +255,8 @@ in {
 
   globus-sdk = callPackage ../development/python-modules/globus-sdk { };
 
+  goocalendar = callPackage ../development/python-modules/goocalendar { };
+
   gssapi = callPackage ../development/python-modules/gssapi { };
 
   h5py = callPackage ../development/python-modules/h5py {
@@ -271,9 +275,13 @@ in {
 
   intelhex = callPackage ../development/python-modules/intelhex { };
 
+  jira = callPackage ../development/python-modules/jira { };
+
   lmtpd = callPackage ../development/python-modules/lmtpd { };
 
   logster = callPackage ../development/python-modules/logster { };
+
+  mail-parser = callPackage ../development/python-modules/mail-parser {  };
 
   mpi4py = callPackage ../development/python-modules/mpi4py {
     mpi = pkgs.openmpi;
@@ -301,6 +309,8 @@ in {
 
   oauthenticator = callPackage ../development/python-modules/oauthenticator { };
 
+  outcome = callPackage ../development/python-modules/outcome {};
+
   plantuml = callPackage ../tools/misc/plantuml { };
 
   Pmw = callPackage ../development/python-modules/Pmw { };
@@ -309,13 +319,15 @@ in {
 
   pyaes = callPackage ../development/python-modules/pyaes { };
 
+  pyairvisual = callPackage ../development/python-modules/pyairvisual { };
+
   pyamf = callPackage ../development/python-modules/pyamf { };
 
   pyarrow = callPackage ../development/python-modules/pyarrow {
     inherit (pkgs) arrow-cpp cmake pkgconfig;
   };
 
-  pyatspi = disabledIf (!isPy3k) (callPackage ../development/python-modules/pyatspi { });
+  pyatspi = callPackage ../development/python-modules/pyatspi { };
 
   pyaxmlparser = callPackage ../development/python-modules/pyaxmlparser { };
 
@@ -433,6 +445,10 @@ in {
   tables = callPackage ../development/python-modules/tables {
     hdf5 = pkgs.hdf5.override { zlib = pkgs.zlib; };
   };
+
+  trustme = callPackage ../development/python-modules/trustme {};
+
+  trio = callPackage ../development/python-modules/trio {};
 
   tokenserver = callPackage ../development/python-modules/tokenserver {};
 
@@ -1190,6 +1206,8 @@ in {
 
   cysignals = callPackage ../development/python-modules/cysignals { };
 
+  cypari2 = callPackage ../development/python-modules/cypari2 { };
+
   dlib = buildPythonPackage rec {
     inherit (pkgs.dlib) name src nativeBuildInputs meta;
 
@@ -1199,6 +1217,8 @@ in {
   };
 
   datadog = callPackage ../development/python-modules/datadog {};
+
+  dataclasses = callPackage ../development/python-modules/dataclasses { };
 
   debian = callPackage ../development/python-modules/debian {};
 
@@ -1622,6 +1642,8 @@ in {
   consul = callPackage ../development/python-modules/consul { };
 
   contexter = callPackage ../development/python-modules/contexter { };
+
+  contextvars = callPackage ../development/python-modules/contextvars {};
 
   contextlib2 = callPackage ../development/python-modules/contextlib2 { };
 
@@ -2557,20 +2579,7 @@ in {
 
   fritzconnection = callPackage ../development/python-modules/fritzconnection { };
 
-  frozendict = buildPythonPackage rec {
-    name = "frozendict-0.5";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/f/frozendict/${name}.tar.gz";
-      sha256 = "0m4kg6hbadvf99if78nx01q7qnbyhdw3x4znl5dasgciyi54432n";
-    };
-
-    meta = {
-      homepage = https://github.com/slezica/python-frozendict;
-      description = "An immutable dictionary";
-      license = stdenv.lib.licenses.mit;
-    };
-  };
+  frozendict = callPackage ../development/python-modules/frozendict { };
 
   ftputil = callPackage ../development/python-modules/ftputil { };
 
@@ -2819,56 +2828,11 @@ in {
 
   gpy = callPackage ../development/python-modules/gpy { };
 
-  gitdb = buildPythonPackage rec {
-    name = "gitdb-0.6.4";
+  gitdb = callPackage ../development/python-modules/gitdb { };
 
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/g/gitdb/${name}.tar.gz";
-      sha256 = "0n4n2c7rxph9vs2l6xlafyda5x1mdr8xy16r9s3jwnh3pqkvrsx3";
-    };
+  gitdb2 = callPackage ../development/python-modules/gitdb2 { };
 
-    buildInputs = with self; [ nose ];
-    propagatedBuildInputs = with self; [ smmap ];
-
-    checkPhase = ''
-      nosetests
-    '';
-
-    doCheck = false; # Bunch of tests fail because they need an actual git repo
-
-    meta = {
-      description = "Git Object Database";
-      maintainers = with maintainers; [ ];
-      homepage = https://github.com/gitpython-developers/gitdb;
-      license = licenses.bsd3;
-    };
-
-  };
-
-  GitPython = buildPythonPackage rec {
-    version = "2.0.8";
-    name = "GitPython-${version}";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/G/GitPython/GitPython-${version}.tar.gz";
-      sha256 = "7c03d1130f903aafba6ae5b89ccf8eb433a995cd3120cbb781370e53fc4eb222";
-    };
-
-    buildInputs = with self; [ mock nose ];
-    propagatedBuildInputs = with self; [ gitdb ];
-
-    # All tests error with
-    # InvalidGitRepositoryError: /tmp/nix-build-python2.7-GitPython-1.0.1.drv-0/GitPython-1.0.1
-    # Maybe due to being in a chroot?
-    doCheck = false;
-
-    meta = {
-      description = "Python Git Library";
-      maintainers = with maintainers; [ ];
-      homepage = https://github.com/gitpython-developers/GitPython;
-      license = licenses.bsd3;
-    };
-  };
+  GitPython = callPackage ../development/python-modules/GitPython { };
 
   git-annex-adapter = callPackage ../development/python-modules/git-annex-adapter {
     inherit (pkgs.gitAndTools) git-annex;
@@ -2992,6 +2956,8 @@ in {
 
 
   };
+
+  hiro = callPackage ../development/python-modules/hiro {};
 
   hglib = callPackage ../development/python-modules/hglib {};
 
@@ -3126,6 +3092,8 @@ in {
   };
 
   imbalanced-learn = callPackage ../development/python-modules/imbalanced-learn { };
+
+  immutables = callPackage ../development/python-modules/immutables {};
 
   imread = buildPythonPackage rec {
     name = "python-imread-${version}";
@@ -3887,37 +3855,9 @@ in {
 
   podcastparser = callPackage ../development/python-modules/podcastparser { };
 
+  podcats = callPackage ../development/python-modules/podcats { };
+
   pomegranate = callPackage ../development/python-modules/pomegranate { };
-
-  poppler-qt4 = buildPythonPackage rec {
-    name = "poppler-qt4-${version}";
-    version = "0.18.1";
-    disabled = isPy3k || isPyPy;
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/p/python-poppler-qt4/" +
-            "python-poppler-qt4-${version}.tar.gz";
-      sha256 = "00e3f89f4e23a844844d082918a89c2cbb1e8231ecb011b81d592e7e3c33a74c";
-    };
-
-    propagatedBuildInputs = [ self.pyqt4 pkgs.pkgconfig pkgs.poppler_qt4 ];
-
-    preBuild = "${python}/bin/${python.executable} setup.py build_ext" +
-               " --include-dirs=${pkgs.poppler_qt4.dev}/include/poppler/";
-
-    NIX_CFLAGS_COMPILE = "-I${pkgs.poppler_qt4.dev}/include/poppler/";
-
-    meta = {
-      description = "A Python binding to Poppler-Qt4";
-      longDescription = ''
-        A Python binding to Poppler-Qt4 that aims for completeness
-        and for being actively maintained.
-      '';
-      license = licenses.lgpl21Plus;
-      maintainers = with maintainers; [ sepi ];
-      platforms = platforms.all;
-    };
-  };
 
   poppler-qt5 = callPackage ../development/python-modules/poppler-qt5 {
     inherit (pkgs.qt5) qtbase;
@@ -5097,6 +5037,7 @@ in {
     };
   };
 
+  keyrings-alt = callPackage ../development/python-modules/keyrings-alt {};
 
   SPARQLWrapper = buildPythonPackage rec {
     name = "SPARQLWrapper-${version}";
@@ -5531,6 +5472,10 @@ in {
 
   flask_assets = callPackage ../development/python-modules/flask-assets { };
 
+  flask-autoindex = callPackage ../development/python-modules/flask-autoindex { };
+
+  flask-babel = callPackage ../development/python-modules/flask-babel { };
+
   flask_cache = buildPythonPackage rec {
     name = "Flask-Cache-0.13.1";
 
@@ -5579,6 +5524,8 @@ in {
   flask-restplus = callPackage ../development/python-modules/flask-restplus { };
 
   flask_script = callPackage ../development/python-modules/flask-script { };
+
+  flask-silk = callPackage ../development/python-modules/flask-silk { };
 
   flask_sqlalchemy = buildPythonPackage rec {
     name = "Flask-SQLAlchemy-${version}";
@@ -5654,7 +5601,29 @@ in {
     };
   };
 
-  pytorch = callPackage ../development/python-modules/pytorch { };
+  pytorch = let
+    # Fails with CUDA 9.1 and GCC 6.4:
+    # https://github.com/pytorch/pytorch/issues/5831
+    # https://devtalk.nvidia.com/default/topic/1028112
+    # We should be able to remove this when CUDA 9.2 is released.
+    cudatoolkit9 = pkgs.cudatoolkit9.override {
+      gcc6 = pkgs.gcc5;
+    };
+  in callPackage ../development/python-modules/pytorch {
+    cudaSupport = pkgs.config.cudaSupport or false;
+    cudatoolkit = cudatoolkit9;
+    cudnn = pkgs.cudnn_cudatoolkit9.override {
+      inherit cudatoolkit9;
+    };
+  };
+
+  pytorchWithCuda = self.pytorch.override {
+    cudaSupport = true;
+  };
+
+  pytorchWithoutCuda = self.pytorch.override {
+    cudaSupport = false;
+  };
 
   python2-pythondialog = buildPythonPackage rec {
     name = "python2-pythondialog-${version}";
@@ -6014,6 +5983,8 @@ in {
 
   geopandas = callPackage ../development/python-modules/geopandas { };
 
+  geojson = callPackage ../development/python-modules/geojson { };
+
   gevent-websocket = buildPythonPackage rec {
     name = "gevent-websocket-0.9.3";
 
@@ -6125,11 +6096,11 @@ in {
 
   github3_py = buildPythonPackage rec {
     name = "github3.py-${version}";
-    version = "1.0.2";
+    version = "1.1.0";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/g/github3.py/${name}.tar.gz";
-      sha256 = "1g91a8q9w0dalf4y4v0g72zi7vfrxwpx639an28vvys20y5zlvwp";
+      sha256 = "1cxaqdqmz9w2afc0cw2jyv783fp0grydbik0frzj79azzkhyg4gf";
     };
 
     buildInputs = with self; [ unittest2 pytest mock betamax betamax-matchers dateutil ];
@@ -6345,6 +6316,8 @@ in {
     propagatedBuildInputs = with self; [ requests webob ];
   };
 
+  hdbscan = callPackage ../development/python-modules/hdbscan { };
+
   hmmlearn = callPackage ../development/python-modules/hmmlearn { };
 
   hcs_utils = callPackage ../development/python-modules/hcs_utils { };
@@ -6413,21 +6386,7 @@ in {
 
   httpbin = callPackage ../development/python-modules/httpbin { };
 
-  httplib2 = buildPythonPackage rec {
-    name = "httplib2-0.9.2";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/h/httplib2/${name}.tar.gz";
-      sha256 = "126rsryvw9vhbf3qmsfw9lf4l4xm2srmgs439lgma4cpag4s3ay3";
-    };
-
-    meta = {
-      homepage = http://code.google.com/p/httplib2;
-      description = "A comprehensive HTTP client library";
-      license = licenses.mit;
-      maintainers = with maintainers; [ garbas ];
-    };
-  };
+  httplib2 = callPackage ../development/python-modules/httplib2 { };
 
   hvac = callPackage ../development/python-modules/hvac { };
 
@@ -6805,24 +6764,7 @@ in {
 
   iso8601 = callPackage ../development/python-modules/iso8601 { };
 
-  isort = buildPythonPackage rec {
-    name = "${pname}-${version}";
-    pname = "isort";
-    version = "4.2.5";
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/i/${pname}/${name}.tar.gz";
-      sha256 = "0p7a6xaq7zxxq5vr5gizshnsbk2afm70apg97xwfdxiwyi201cjn";
-    };
-    buildInputs = with self; [ mock pytest ];
-    # No tests distributed
-    doCheck = false;
-    meta = {
-      description = "A Python utility / library to sort Python imports";
-      homepage = https://github.com/timothycrosley/isort;
-      license = licenses.mit;
-      maintainers = with maintainers; [ couchemar nand0p ];
-    };
-  };
+  isort = callPackage ../development/python-modules/isort {};
 
   jabberbot = callPackage ../development/python-modules/jabberbot {};
 
@@ -7137,6 +7079,7 @@ in {
   libgpuarray = callPackage ../development/python-modules/libgpuarray {
     clblas = pkgs.clblas.override { boost = self.boost; };
     cudaSupport = pkgs.config.cudaSupport or false;
+    inherit (pkgs.linuxPackages) nvidia_x11;
   };
 
   librepo = toPythonModule (pkgs.librepo.override {
@@ -7633,6 +7576,8 @@ in {
   };
 
   micawber = callPackage ../development/python-modules/micawber { };
+
+  milksnake = callPackage ../development/python-modules/milksnake { };
 
   minimock = buildPythonPackage rec {
     version = "1.2.8";
@@ -8221,6 +8166,8 @@ in {
     };
   };
 
+  pytaglib = callPackage ../development/python-modules/pytaglib { };
+
   pyte = callPackage ../development/python-modules/pyte { };
 
   graphviz = buildPythonPackage rec {
@@ -8242,6 +8189,8 @@ in {
   };
 
   pygraphviz = callPackage ../development/python-modules/pygraphviz { };
+
+  pymc3 = callPackage ../development/python-modules/pymc3 { };
 
   pympler = buildPythonPackage rec {
     pname = "Pympler";
@@ -9116,46 +9065,7 @@ in {
 
   plone-testing = callPackage ../development/python-modules/plone-testing { };
 
-  ply = buildPythonPackage (rec {
-    name = "ply-3.8";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/p/ply/${name}.tar.gz";
-      sha256 = "e7d1bdff026beb159c9942f7a17e102c375638d9478a7ecd4cc0c76afd8de0b8";
-    };
-
-    checkPhase = ''
-      ${python.interpreter} test/testlex.py
-      ${python.interpreter} test/testyacc.py
-    '';
-
-    # Test suite appears broken
-    doCheck = false;
-
-    meta = {
-      homepage = http://www.dabeaz.com/ply/;
-
-      description = "PLY (Python Lex-Yacc), an implementation of the lex and yacc parsing tools for Python";
-
-      longDescription = ''
-        PLY is an implementation of lex and yacc parsing tools for Python.
-        In a nutshell, PLY is nothing more than a straightforward lex/yacc
-        implementation.  Here is a list of its essential features: It's
-        implemented entirely in Python; It uses LR-parsing which is
-        reasonably efficient and well suited for larger grammars; PLY
-        provides most of the standard lex/yacc features including support for
-        empty productions, precedence rules, error recovery, and support for
-        ambiguous grammars; PLY is straightforward to use and provides very
-        extensive error checking; PLY doesn't try to do anything more or less
-        than provide the basic lex/yacc functionality.  In other words, it's
-        not a large parsing framework or a component of some larger system.
-      '';
-
-      license = licenses.bsd3;
-
-      maintainers = [ ];
-    };
-  });
+  ply = callPackage ../development/python-modules/ply { };
 
   plyvel = buildPythonPackage (rec {
     name = "plyvel-0.9";
@@ -9672,24 +9582,7 @@ in {
     };
   };
 
-  patsy = buildPythonPackage rec {
-    name = "patsy-${version}";
-    version = "0.3.0";
-
-    src = pkgs.fetchurl{
-      url = "mirror://pypi/p/patsy/${name}.zip";
-      sha256 = "a55dd4ca09af4b9608b81f30322beb450510964c022708ab50e83a065ccf15f0";
-    };
-
-    buildInputs = with self; [ nose ];
-    propagatedBuildInputs = with self; [six numpy];
-
-    meta = {
-      description = "A Python package for describing statistical models";
-      homepage = "https://github.com/pydata/patsy";
-      license = licenses.bsd2;
-    };
-  };
+  patsy = callPackage ../development/python-modules/patsy { };
 
   paste = buildPythonPackage rec {
     name = "paste-${version}";
@@ -11611,11 +11504,15 @@ in {
       sha256 = "9b47c5c3a094fa518ca88aeed35ae75834d53e4285512c61879f67a48c94ddaf";
     };
     propagatedBuildInputs = [ pkgs.libGLU_combined pkgs.freeglut self.pillow ];
-    patchPhase = ''
-      sed -i "s|util.find_library( name )|name|" OpenGL/platform/ctypesloader.py
-      sed -i "s|'GL',|'libGL.so',|" OpenGL/platform/glx.py
-      sed -i "s|'GLU',|'${pkgs.libGLU_combined}/lib/libGLU.so',|" OpenGL/platform/glx.py
-      sed -i "s|'glut',|'${pkgs.freeglut}/lib/libglut.so',|" OpenGL/platform/glx.py
+    patchPhase = let
+      ext = stdenv.hostPlatform.extensions.sharedLibrary; in ''
+      substituteInPlace OpenGL/platform/glx.py \
+        --replace "'GL'" "'${pkgs.libGL}/lib/libGL${ext}'" \
+        --replace "'GLU'" "'${pkgs.libGLU}/lib/libGLU${ext}'" \
+        --replace "'glut'" "'${pkgs.freeglut}/lib/libglut${ext}'"
+      substituteInPlace OpenGL/platform/darwin.py \
+        --replace "'OpenGL'" "'${pkgs.libGL}/lib/libGL${ext}'" \
+        --replace "'GLUT'" "'${pkgs.freeglut}/lib/libglut${ext}'"
     '';
     meta = {
       homepage = http://pyopengl.sourceforge.net/;
@@ -13054,16 +12951,17 @@ in {
   Theano = callPackage ../development/python-modules/Theano rec {
     cudaSupport = pkgs.config.cudaSupport or false;
     cudnnSupport = cudaSupport;
+    inherit (pkgs.linuxPackages) nvidia_x11;
   };
 
   TheanoWithoutCuda = self.Theano.override {
-    cudaSupport = true;
-    cudnnSupport = true;
+    cudaSupport = false;
+    cudnnSupport = false;
   };
 
   TheanoWithCuda = self.Theano.override {
-    cudaSupport = false;
-    cudnnSupport = false;
+    cudaSupport = true;
+    cudnnSupport = true;
   };
 
   thespian = callPackage ../development/python-modules/thespian { };
@@ -13138,15 +13036,7 @@ in {
     };
   };
 
-  timeout-decorator = buildPythonPackage rec {
-    name    = "timeout-decorator-${version}";
-    version = "0.3.2";
-
-    src = pkgs.fetchurl {
-      url    = "http://pypi.python.org/packages/source/t/timeout-decorator/${name}.tar.gz";
-      sha256 = "1x9l8bwdk72if2d5h5mi4lcaidbsmyh0iz114cfyyj1rzz5rxqaf";
-    };
-  };
+  timeout-decorator = callPackage ../development/python-modules/timeout-decorator { };
 
   pid = buildPythonPackage rec {
     name = "pid-${version}";
@@ -14308,18 +14198,9 @@ in {
 
   tqdm = callPackage ../development/python-modules/tqdm { };
 
-  smmap = buildPythonPackage rec {
-    name = "smmap-0.9.0";
-    disabled = isPyPy;  # This fails the tests if built with pypy
-    meta.maintainers = with maintainers; [ ];
+  smmap = callPackage ../development/python-modules/smmap { };
 
-    buildInputs = with self; [ nosexcover ];
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/s/smmap/${name}.tar.gz";
-      sha256 = "0qlx25f6n2n9ff37w9gg62f217fzj16xlbh0pkz0lpxxjys64aqf";
-    };
-  };
+  smmap2 = callPackage ../development/python-modules/smmap2 { };
 
   traits = buildPythonPackage rec {
     name = "traits-${version}";
@@ -14744,6 +14625,8 @@ in {
   update_checker = callPackage ../development/python-modules/update_checker {};
 
   uritemplate = callPackage ../development/python-modules/uritemplate { };
+
+  uproot = callPackage ../development/python-modules/uproot {};
 
   uptime = buildPythonPackage rec {
     name = "uptime-${version}";
@@ -16638,20 +16521,7 @@ EOF
     };
   };
 
-  canonicaljson = buildPythonPackage rec {
-    name = "canonicaljson-${version}";
-    version = "1.0.0";
-
-    src = pkgs.fetchgit {
-      url = "https://github.com/matrix-org/python-canonicaljson.git";
-      rev = "refs/tags/v${version}";
-      sha256 = "0r82zlip93y169ijkn8xpbp0yr22mf92pni6dw420vb53l27sprq";
-    };
-
-    propagatedBuildInputs = with self; [
-      frozendict simplejson
-    ];
-  };
+  canonicaljson = callPackage ../development/python-modules/canonicaljson { };
 
   daemonize = buildPythonPackage rec {
     name = "daemonize-${version}";
@@ -17886,15 +17756,7 @@ EOF
     };
   };
 
-  rocket-errbot = buildPythonPackage rec {
-    name = "rocket-errbot-${version}";
-    version = "1.2.5";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/r/rocket-errbot/${name}.tar.gz";
-      sha256 = "181y1wqjvlry5xdzbliajvrxvswzh3myh795jnj1pm92r5grqzda";
-    };
-  };
+  rocket-errbot = callPackage ../development/python-modules/rocket-errbot {  };
 
   Yapsy = buildPythonPackage rec {
     name = "Yapsy-${version}";
@@ -18283,6 +18145,8 @@ EOF
 
   pyspark = callPackage ../development/python-modules/pyspark { };
 
+  pysensors = callPackage ../development/python-modules/pysensors { };
+
   sseclient = callPackage ../development/python-modules/sseclient { };
 
   warrant = callPackage ../development/python-modules/warrant { };
@@ -18314,6 +18178,20 @@ EOF
   h11 = callPackage ../development/python-modules/h11 { };
 
   python-docx = callPackage ../development/python-modules/python-docx { };
+
+  aiohue = callPackage ../development/python-modules/aiohue { };
+
+  PyMVGLive = callPackage ../development/python-modules/pymvglive { };
+
+  coinmarketcap = callPackage ../development/python-modules/coinmarketcap { };
+
+  pyowm = callPackage ../development/python-modules/pyowm { };
+
+  prometheus_client = callPackage ../development/python-modules/prometheus_client { };
+
+  pysdl2 = callPackage ../development/python-modules/pysdl2 { };
+
+  pyogg = callPackage ../development/python-modules/pyogg { };
 });
 
 in fix' (extends overrides packages)

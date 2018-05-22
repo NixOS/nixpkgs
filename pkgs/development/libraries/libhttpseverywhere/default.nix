@@ -3,13 +3,13 @@
 
 let
   pname = "libhttpseverywhere";
-  version = "0.8.2";
+  version = "0.8.3";
 in stdenv.mkDerivation rec {
   name = "${pname}-${version}";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${gnome3.versionBranch version}/${name}.tar.xz";
-    sha256 = "0vcnimlfcscyvjbh845xbnjb9qc8x0mliaqz2gczxxpakxrbl3gh";
+    sha256 = "1jmn6i4vsm89q1axlq4ajqkzqmlmjaml9xhw3h9jnal46db6y00w";
   };
 
   nativeBuildInputs = [ gnome3.vala gobjectIntrospection meson ninja pkgconfig ];

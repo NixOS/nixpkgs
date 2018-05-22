@@ -48,13 +48,6 @@ let cfg = config.ec2; in
     boot.loader.grub.extraPerEntryConfig = mkIf (!cfg.hvm) "root (hd0)";
     boot.loader.timeout = 0;
 
-    boot.initrd.postDeviceCommands =
-      ''
-        # Force udev to exit to prevent random "Device or resource busy
-        # while trying to open /dev/xvda" errors from fsck.
-        udevadm control --exit || true
-      '';
-
     boot.initrd.network.enable = true;
 
     # Mount all formatted ephemeral disks and activate all swap devices.

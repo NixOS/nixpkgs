@@ -1,20 +1,20 @@
-{ stdenv, fetchurl, dpkg, lib, glib, dbus, makeWrapper, gnome2, atk, cairo
+{ stdenv, fetchurl, dpkg, lib, glib, dbus, makeWrapper, gnome2, gtk3, atk, cairo
 , freetype, fontconfig, nspr, nss, xorg, alsaLib, cups, expat, udev }:
 
 stdenv.mkDerivation rec {
   name = "typora-${version}";
-  version = "0.9.44";
+  version = "0.9.48";
 
   src =
     if stdenv.system == "x86_64-linux" then
       fetchurl {
         url = "https://www.typora.io/linux/typora_${version}_amd64.deb";
-        sha256 = "9442c090bf2619d270890228abd7dabb9e217c0b200615f8ed3cb255efd122d5";
+        sha256 = "36a7c5f855306bcbe3364d12aca94c2f6d013a013e59b46f89df81496ec11800";
       }
     else
       fetchurl {
         url = "https://www.typora.io/linux/typora_${version}_i386.deb";
-        sha256 = "ae228ca946d03940b85df30c995c4de3f942a780e32d4dcab872dec671c66ef3";
+        sha256 = "7197c526918a791b15b701846f9f2f1747a5b8ceac77c4cba691ee6d74d07d1d";
       }
     ;
 
@@ -25,6 +25,7 @@ stdenv.mkDerivation rec {
       gnome2.gdk_pixbuf
       gnome2.pango
       expat
+      gtk3
       atk
       nspr
       nss

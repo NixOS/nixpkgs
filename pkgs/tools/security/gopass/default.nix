@@ -1,4 +1,4 @@
-{ stdenv, buildGoPackage, fetchFromGitHub, git, gnupg, makeWrapper }:
+{ stdenv, buildGoPackage, fetchFromGitHub, git, gnupg, xclip, makeWrapper }:
 
 buildGoPackage rec {
   version = "1.6.11";
@@ -18,6 +18,7 @@ buildGoPackage rec {
   wrapperPath = with stdenv.lib; makeBinPath ([
     git
     gnupg
+    xclip
   ]);
 
   postInstall = ''

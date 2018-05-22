@@ -93,33 +93,33 @@ let
 in {
 
   postgresql93 = common {
-    version = "9.3.21";
+    version = "9.3.22";
     psqlSchema = "9.3";
-    sha256 = "1q2038rvqa00rpk8sjbnwb19x64fcyjphw9x087432hq918vrfmr";
+    sha256 = "06p9rk2bav41ybp8ra1bpf44avw9kl5s1wyql21n5awvlm5fs60v";
   };
 
   postgresql94 = common {
-    version = "9.4.16";
+    version = "9.4.17";
     psqlSchema = "9.4";
-    sha256 = "10ay2cy3m4g66jwvxknc0f0w6mv2v7vm0dzkq92s9n7446v65g6w";
+    sha256 = "1inpkwbr2xappz3kq3jr3hsn6mwn167nijcx406q8aq56p9hqcks";
   };
 
   postgresql95 = common {
-    version = "9.5.11";
+    version = "9.5.12";
     psqlSchema = "9.5";
-    sha256 = "1pf8fwx8a6vn344b80a1bf2p4hjg06sh69kb2qwswxbsw9scv0l1";
+    sha256 = "167nlrpsnqz63gafgn21j4yc2f5g1mpfkz8qxjxk2xs6crf6zs02";
   };
 
   postgresql96 = common {
-    version = "9.6.7";
+    version = "9.6.8";
     psqlSchema = "9.6";
-    sha256 = "1ii4lrw8sncnz5g0fss1011shjhmbajzzhxx4f0bgsniq7rkvgif";
+    sha256 = "0w7bwf19wbdd3jjbjv03cnx56qka4801srcbsayk9v792awv7zga";
   };
 
   postgresql100 = common {
-    version = "10.2";
+    version = "10.3";
     psqlSchema = "10.0";
-    sha256 = "1bav2iyi93h866skrrlqlvsp4sfv1sfww1s305zpzffxcadh0cpy";
+    sha256 = "06lkcwsf851z49zqcws5yc77s2yrbaazf2nvbk38hpp31rw6i8kf";
   };
 
 }

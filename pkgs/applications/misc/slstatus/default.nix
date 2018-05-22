@@ -4,12 +4,12 @@ with stdenv.lib;
 
 stdenv.mkDerivation rec {
   name = "slstatus-${version}";
-  version = "unstable-2018-03-28";
+  version = "unstable-2018-04-16";
 
   src = fetchgit {
     url = https://git.suckless.org/slstatus;
-    rev = "faa52bdcc0221de2d8fae950e409a8ac5e05bfcd";
-    sha256 = "0i8k7gjvx51y0mwxjlqhyk2dpvkb2d3y8x4l6ckdnyiy5632pn76";
+    rev = "97ef7c2a1d67bb2c9c379e657fbc8e35acd6aafb";
+    sha256 = "1777hgl10imk0l2sgnqgbkfchv1mpxrd82ninzwp7f1rgwchz36v";
   };
 
   configFile = optionalString (conf!=null) (writeText "config.def.h" conf);

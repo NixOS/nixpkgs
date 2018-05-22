@@ -1,6 +1,6 @@
 { stdenv, fetchurl, pkgconfig, libxml2, gtk, intltool, GConf, libsoup, libtasn1, nettle, gmp }:
 
-assert stdenv.isLinux;
+assert stdenv ? glibc;
 
 stdenv.mkDerivation rec {
   name = "libgweather-2.30.3";

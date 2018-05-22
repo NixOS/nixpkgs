@@ -131,6 +131,8 @@ rec {
    */
   appendConfigureFlag = drv: x: overrideCabal drv (drv: { configureFlags = (drv.configureFlags or []) ++ [x]; });
 
+  appendBuildFlag = drv: x: overrideCabal drv (drv: { buildFlags = (drv.buildFlags or []) ++ [x]; });
+  appendBuildFlags = drv: xs: overrideCabal drv (drv: { buildFlags = (drv.buildFlags or []) ++ xs; });
   /* removeConfigureFlag drv x is a Haskell package like drv, but with
      all cabal configure arguments that are equal to x removed.
 
@@ -297,8 +299,11 @@ rec {
   # This is useful to build environments for developing on that
   # package.
   getHaskellBuildInputs = p:
-    (p.override { mkDerivation = extractBuildInputs p.compiler;
-                }).haskellBuildInputs;
+    (overrideCabal p (args: {
+      passthru = (args.passthru or {}) // {
+        _getHaskellBuildInputs = extractBuildInputs p.compiler args;
+      };
+    }))._getHaskellBuildInputs;
 
   # Under normal evaluation, simply return the original package. Under
   # nix-shell evaluation, return a nix-shell optimized environment.

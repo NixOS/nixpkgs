@@ -5,18 +5,18 @@ let
   pidginHg = fetchhg {
     url = "https://bitbucket.org/pidgin/main";
     # take from VERSION file
-    rev = "c9b74a765767";
-    sha256 = "07bjz87jpslsb4gdqvcwp79mkahls2mfhlmpaa5w6n4xqhahw4j3";
+    rev = "9ff9acf9fa14";
+    sha256 = "06imlhsps4wrjgjb92zpaxprxfxl2pjb2x9pl859c8cryssrz2jv";
   };
 
 in stdenv.mkDerivation rec {
-  name = "purple-facebook-0.9.3";
+  name = "purple-facebook-0.9.5";
 
   src = fetchFromGitHub {
     owner = "dequis";
     repo = "purple-facebook";
-    rev = "v0.9.3-c9b74a765767";
-    sha256 = "10ncvg0arcxnd3cpb0nxry1plbws0mw9vhzjrhb40sv2i563dywb";
+    rev = "v0.9.5-9ff9acf9fa14";
+    sha256 = "0a1860bkzrmyxahm9rlxi80z335w491wzdaqaw6j9ccavbymhwhs";
   };
 
   postPatch = ''

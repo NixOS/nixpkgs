@@ -17,6 +17,16 @@ let
     sha256 = "14igk6k00bnpfw660qhswagyhvr0gfqg4q55dxvaaq7ikfkrir71";
   };
 
+  # iconv tool, implemented by musl author.
+  # Original: http://git.etalabs.net/cgit/noxcuse/plain/src/iconv.c?id=02d288d89683e99fd18fe9f54d4e731a6c474a4f
+  # We use copy from Alpine which fixes error messages, see:
+  # https://git.alpinelinux.org/cgit/aports/commit/main/musl/iconv.c?id=a3d97e95f766c9c378194ee49361b375f093b26f
+  iconv_c = fetchurl {
+    name = "iconv.c";
+    url = "https://git.alpinelinux.org/cgit/aports/plain/main/musl/iconv.c?id=a3d97e95f766c9c378194ee49361b375f093b26f";
+    sha256 = "1mzxnc2ncq8lw9x6n7p00fvfklc9p3wfv28m68j0dfz5l8q2k6pp";
+  };
+
 in
 stdenv.mkDerivation rec {
   name    = "musl-${version}";
@@ -41,6 +51,13 @@ stdenv.mkDerivation rec {
       --replace -fno-asynchronous-unwind-tables ""
   '';
 
+  patches = [
+    # Minor touchup to build system making dynamic linker symlink relative
+    (fetchurl {
+      url = https://raw.githubusercontent.com/openwrt/openwrt/87606e25afac6776d1bbc67ed284434ec5a832b4/toolchain/musl/patches/300-relative.patch;
+      sha256 = "0hfadrycb60sm6hb6by4ycgaqc9sgrhh42k39v8xpmcvdzxrsq2n";
+    })
+  ];
   preConfigure = ''
     configureFlagsArray+=("--syslibdir=$out/lib")
   '';
@@ -58,6 +75,8 @@ stdenv.mkDerivation rec {
   dontDisableStatic = true;
   separateDebugInfo = true;
 
+  NIX_DONT_SET_RPATH = true;
+
   postInstall = ''
     # Not sure why, but link in all but scsi directory as that's what uclibc/glibc do.
     # Apparently glibc provides scsi itself?
@@ -68,7 +87,7 @@ stdenv.mkDerivation rec {
     mkdir -p $out/bin
 
     # Create 'ldd' symlink, builtin
-    ln -s $out/lib/libc.so $out/bin/ldd
+    ln -rs $out/lib/libc.so $out/bin/ldd
 
     # (impure) cc wrapper around musl for interactive usuage
     for i in musl-gcc musl-clang ld.musl-clang; do
@@ -77,6 +96,14 @@ stdenv.mkDerivation rec {
     moveToOutput lib/musl-gcc.specs $dev
     substituteInPlace $dev/bin/musl-gcc \
       --replace $out/lib/musl-gcc.specs $dev/lib/musl-gcc.specs
+
+    # provide 'iconv' utility, using just-built headers, libc/ldso
+    $CC ${iconv_c} -o $out/bin/iconv \
+      -I$dev/include \
+      -L$out/lib -Wl,-rpath=$out/lib \
+      -lc \
+      -B $out/lib \
+      -Wl,-dynamic-linker=$(ls $out/lib/ld-*)
   '' + lib.optionalString useBSDCompatHeaders ''
     install -D ${queue_h} $dev/include/sys/queue.h
     install -D ${cdefs_h} $dev/include/sys/cdefs.h

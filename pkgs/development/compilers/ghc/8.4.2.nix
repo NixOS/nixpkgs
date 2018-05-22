@@ -3,7 +3,7 @@
 
 # build-tools
 , bootPkgs, alex, happy
-, autoconf, automake, coreutils, fetchgit, fetchpatch, perl, python3
+, autoconf, automake, coreutils, fetchurl, fetchpatch, perl, python3, m4
 
 , libffi, libiconv ? null, ncurses
 
@@ -15,16 +15,21 @@
 
 , # If enabled, GHC will be built with the GPL-free but slower integer-simple
   # library instead of the faster but GPLed integer-gmp library.
-  enableIntegerSimple ? false, gmp ? null, m4
+  enableIntegerSimple ? false, gmp ? null
 
 , # If enabled, use -fPIC when compiling static libs.
   enableRelocatedStaticLibs ? targetPlatform != hostPlatform
 
 , # Whether to build dynamic libs for the standard library (on the target
   # platform). Static libs are always built.
-  enableShared ? true
+  enableShared ? !targetPlatform.isWindows && !targetPlatform.useAndroidPrebuilt
 
-, version ? "8.4.2"
+, # Whetherto build terminfo.
+  enableTerminfo ? !targetPlatform.isWindows
+
+, # What flavour to build. An empty string indicates no
+  # specific flavour and falls back to ghc default values.
+  ghcFlavour ? stdenv.lib.optionalString (targetPlatform != hostPlatform) "perf-cross"
 }:
 
 assert !enableIntegerSimple -> gmp != null;
@@ -38,11 +43,14 @@ let
     "${targetPlatform.config}-";
 
   buildMK = ''
+    BuildFlavour = ${ghcFlavour}
+    ifneq \"\$(BuildFlavour)\" \"\"
+    include mk/flavours/\$(BuildFlavour).mk
+    endif
     DYNAMIC_GHC_PROGRAMS = ${if enableShared then "YES" else "NO"}
   '' + stdenv.lib.optionalString enableIntegerSimple ''
     INTEGER_LIBRARY = integer-simple
   '' + stdenv.lib.optionalString (targetPlatform != hostPlatform) ''
-    BuildFlavour = perf-cross
     Stage1Only = YES
     HADDOCK_DOCS = NO
     BUILD_SPHINX_HTML = NO
@@ -50,12 +58,14 @@ let
   '' + stdenv.lib.optionalString enableRelocatedStaticLibs ''
     GhcLibHcOpts += -fPIC
     GhcRtsHcOpts += -fPIC
+  '' + stdenv.lib.optionalString targetPlatform.useAndroidPrebuilt ''
+    EXTRA_CC_OPTS += -std=gnu99
   '';
 
   # Splicer will pull out correct variations
-  libDeps = platform: [ ncurses ]
+  libDeps = platform: stdenv.lib.optional enableTerminfo [ ncurses ]
     ++ stdenv.lib.optional (!enableIntegerSimple) gmp
-    ++ stdenv.lib.optional (platform.libc != "glibc") libiconv;
+    ++ stdenv.lib.optional (platform.libc != "glibc" && !targetPlatform.isWindows) libiconv;
 
   toolsForTarget =
     if hostPlatform == buildPlatform then
@@ -67,19 +77,25 @@ let
 
 in
 stdenv.mkDerivation rec {
-  inherit version;
-  inherit (src) rev;
+  version = "8.4.2";
   name = "${targetPrefix}ghc-${version}";
 
-  src = fetchgit {
-    url = "git://git.haskell.org/ghc.git";
-    rev = "6d7eecff7948ad77854f834f55b4d4f942276ad3";
-    sha256 = "0aqy5x0b6qxhyvxw1q9pssf1xvhbyviglqkjrx4gvhbr3nax3wxp";
+  src = fetchurl {
+    url = "https://downloads.haskell.org/~ghc/${version}/ghc-${version}-src.tar.xz";
+    sha256 = "0yq4y0smn92sksnjjva28b8847krxizns6rm50j3pgq69br35k01";
   };
 
   enableParallelBuilding = true;
 
   outputs = [ "out" "doc" ];
+
+  patches = [(fetchpatch {
+    url = "https://git.haskell.org/hsc2hs.git/patch/738f3666c878ee9e79c3d5e819ef8b3460288edf";
+    sha256 = "0plzsbfaq6vb1023lsarrjglwgr9chld4q3m99rcfzx0yx5mibp3";
+    extraPrefix = "utils/hsc2hs/";
+    stripLen = 1;
+  })]
+    ++ stdenv.lib.optional stdenv.isDarwin ./backport-dylib-command-size-limit.patch;
 
   postPatch = "patchShebangs .";
 
@@ -93,7 +109,7 @@ stdenv.mkDerivation rec {
     export CC="${targetCC}/bin/${targetCC.targetPrefix}cc"
     export CXX="${targetCC}/bin/${targetCC.targetPrefix}cxx"
     # Use gold to work around https://sourceware.org/bugzilla/show_bug.cgi?id=16177
-    export LD="${targetCC.bintools}/bin/${targetCC.bintools.targetPrefix}ld${stdenv.lib.optionalString targetPlatform.isArm ".gold"}"
+    export LD="${targetCC.bintools}/bin/${targetCC.bintools.targetPrefix}ld${stdenv.lib.optionalString targetPlatform.isAarch32 ".gold"}"
     export AS="${targetCC.bintools.bintools}/bin/${targetCC.bintools.targetPrefix}as"
     export AR="${targetCC.bintools.bintools}/bin/${targetCC.bintools.targetPrefix}ar"
     export NM="${targetCC.bintools.bintools}/bin/${targetCC.bintools.targetPrefix}nm"
@@ -102,9 +118,6 @@ stdenv.mkDerivation rec {
     export STRIP="${targetCC.bintools.bintools}/bin/${targetCC.bintools.targetPrefix}strip"
 
     echo -n "${buildMK}" > mk/build.mk
-    echo ${version} >VERSION
-    echo ${src.rev} >GIT_COMMIT_ID
-    ./boot
     sed -i -e 's|-isysroot /Developer/SDKs/MacOSX10.5.sdk||' configure
   '' + stdenv.lib.optionalString (!stdenv.isDarwin) ''
     export NIX_LDFLAGS+=" -rpath $out/lib/ghc-${version}"
@@ -121,11 +134,11 @@ stdenv.mkDerivation rec {
     "--with-curses-includes=${ncurses.dev}/include" "--with-curses-libraries=${ncurses.out}/lib"
   ] ++ stdenv.lib.optional (targetPlatform == hostPlatform && ! enableIntegerSimple) [
     "--with-gmp-includes=${gmp.dev}/include" "--with-gmp-libraries=${gmp.out}/lib"
-  ] ++ stdenv.lib.optional (targetPlatform == hostPlatform && hostPlatform.libc != "glibc") [
+  ] ++ stdenv.lib.optional (targetPlatform == hostPlatform && hostPlatform.libc != "glibc" && !targetPlatform.isWindows) [
     "--with-iconv-includes=${libiconv}/include" "--with-iconv-libraries=${libiconv}/lib"
   ] ++ stdenv.lib.optionals (targetPlatform != hostPlatform) [
     "--enable-bootstrap-with-devel-snapshot"
-  ] ++ stdenv.lib.optionals (targetPlatform.isArm) [
+  ] ++ stdenv.lib.optionals (targetPlatform.isAarch32) [
     "CFLAGS=-fuse-ld=gold"
     "CONF_GCC_LINKER_OPTS_STAGE1=-fuse-ld=gold"
     "CONF_GCC_LINKER_OPTS_STAGE2=-fuse-ld=gold"
@@ -139,7 +152,10 @@ stdenv.mkDerivation rec {
   # masss-rebuild.
   crossConfig = true;
 
-  nativeBuildInputs = [ ghc perl autoconf automake m4 happy alex python3 ];
+  nativeBuildInputs = [
+    perl autoconf automake m4 python3
+    ghc alex happy
+  ];
 
   # For building runtime libs
   depsBuildTarget = toolsForTarget;
@@ -161,7 +177,7 @@ stdenv.mkDerivation rec {
   # zsh and other shells are smart about `{ghc}` but bash isn't, and doesn't
   # treat that as a unary `{x,y,z,..}` repetition.
   postInstall = ''
-    paxmark m $out/lib/${name}/bin/${if targetPlatform != hostPlatform then "ghc" else "{ghc,haddock}"}
+    paxmark m $out/lib/${name}/bin/*
 
     # Install the bash completion file.
     install -D -m 444 utils/completion/ghc.bash $out/share/bash-completion/completions/${targetPrefix}ghc

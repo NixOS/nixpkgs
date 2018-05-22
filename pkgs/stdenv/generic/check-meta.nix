@@ -148,7 +148,7 @@ let
     license = either (listOf lib.types.attrs) (either lib.types.attrs str);
     maintainers = listOf (attrsOf str);
     priority = int;
-    platforms = listOf (either str lib.systems.parsed.types.system);
+    platforms = listOf (either str lib.systems.parsedPlatform.types.system);
     hydraPlatforms = listOf str;
     broken = bool;
 
@@ -170,6 +170,8 @@ let
     isIbusEngine = bool;
     isGutenprint = bool;
     badPlatforms = platforms;
+    # Hydra build timeout
+    timeout = int;
   };
 
   checkMetaAttr = k: v:

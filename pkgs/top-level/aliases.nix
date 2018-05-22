@@ -24,10 +24,6 @@ in
   ### Deprecated aliases - for backward compatibility
 
 mapAliases (rec {
-  _2048-in-terminal = "2048-in-terminal"; # added 2017-01-16
-  _2bwm = "2bwm"; # added 2017-01-16
-  _389-ds-base = "389-ds-base"; # added 2017-01-16
-  _90secondportraits = "90secondsportraits"; # added 2017-01-16
   accounts-qt = libsForQt5.accounts-qt; # added 2015-12-19
   adobeReader = adobe-reader; # added 2013-11-04
   aircrackng = aircrack-ng; # added 2016-01-14
@@ -134,7 +130,6 @@ mapAliases (rec {
   man_db = man-db; # added 2016-05
   piwik = matomo; # added 2018-01-16
   midoriWrapper = midori; # added 2015-01
-  minc_tools = minc-tools; # 2017-12
   mlt-qt5 = libsForQt5.mlt;  # added 2015-12-19
   mobile_broadband_provider_info = mobile-broadband-provider-info; # added 2018-02-25
   module_init_tools = kmod; # added 2016-04-22
@@ -143,6 +138,7 @@ mapAliases (rec {
   mupen64plus1_5 = mupen64plus; # added 2016-02-12
   mysqlWorkbench = mysql-workbench; # added 2017-01-19
   ncat = nmap;  # added 2016-01-26
+  netcat-openbsd = libressl.nc; # added 2018-04-25
   networkmanager_fortisslvpn = networkmanager-fortisslvpn; # added 2018-02-25
   networkmanager_iodine = networkmanager-iodine; # added 2018-02-25
   networkmanager_l2tp = networkmanager-l2tp; # added 2018-02-25
@@ -155,6 +151,7 @@ mapAliases (rec {
   openssh_with_kerberos = openssh; # added 2018-01-28
   owncloudclient = owncloud-client;  # added 2016-08
   p11_kit = p11-kit; # added 2018-02-25
+  pass-otp = pass.withExtensions (ext: [ext.pass-otp]); # added 2018-05-04
   pgp-tools = signing-party; # added 2017-03-26
   pidgin-with-plugins = pidgin; # added 2016-06
   pidginlatexSF = pidgin-latex; # added 2014-11-02
@@ -203,6 +200,7 @@ mapAliases (rec {
   sshfsFuse = sshfs-fuse; # added 2016-09
   surf-webkit2 = surf; # added 2017-04-02
   tahoelafs = tahoe-lafs; # added 2018-03-26
+  telnet = inetutils; # added 2018-05-15
   system_config_printer = system-config-printer;  # added 2016-01-03
   telepathy_farstream = telepathy-farstream; # added 2018-02-25
   telepathy_gabble = telepathy-gabble; # added 2018-02-25
@@ -228,7 +226,9 @@ mapAliases (rec {
   vimprobable2Wrapper = vimprobable2; # added 2015-01
   virtviewer = virt-viewer; # added 2015-12-24
   vorbisTools = vorbis-tools; # added 2016-01-26
+  wineStaging = wine-staging; # added 2018-01-08
   winusb = woeusb; # added 2017-12-22
+  wireguard = wireguard-tools; # added 2018-05-19
   x11 = xlibsWrapper; # added 2015-09
   xf86_video_nouveau = xorg.xf86videonouveau; # added 2015-09
   xlibs = xorg; # added 2015-09

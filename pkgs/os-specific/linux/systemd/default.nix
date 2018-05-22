@@ -1,9 +1,9 @@
 { stdenv, fetchFromGitHub, fetchpatch, pkgconfig, intltool, gperf, libcap, kmod
 , zlib, xz, pam, acl, cryptsetup, libuuid, m4, utillinux, libffi
 , glib, kbd, libxslt, coreutils, libgcrypt, libgpgerror, libidn2, libapparmor
-, audit, lz4, bzip2, kexectools, libmicrohttpd
+, audit, lz4, bzip2, libmicrohttpd
 , linuxHeaders ? stdenv.cc.libc.linuxHeaders
-, libseccomp, iptables, gnu-efi
+, iptables, gnu-efi
 , autoreconfHook, gettext, docbook_xsl, docbook_xml_dtd_42, docbook_xml_dtd_45
 , ninja, meson, python3Packages, glibcLocales
 , patchelf
@@ -11,9 +11,9 @@
 , hostPlatform
 , buildPackages
 , withSelinux ? false, libselinux
+, withLibseccomp ? libseccomp.meta.available, libseccomp
+, withKexectools ? kexectools.meta.available, kexectools
 }:
-
-assert stdenv.isLinux;
 
 let
   pythonLxmlEnv = buildPackages.python3Packages.python.withPackages ( ps: with ps; [ python3Packages.lxml ]);
@@ -44,13 +44,13 @@ in stdenv.mkDerivation rec {
     [ linuxHeaders libcap kmod xz pam acl
       /* cryptsetup */ libuuid glib libgcrypt libgpgerror libidn2
       libmicrohttpd ] ++
-      stdenv.lib.meta.enableIfAvailable kexectools ++
-      stdenv.lib.meta.enableIfAvailable libseccomp ++
+      stdenv.lib.optional withKexectools kexectools ++
+      stdenv.lib.optional withLibseccomp libseccomp ++
     [ libffi audit lz4 bzip2 libapparmor
       iptables gnu-efi
       # This is actually native, but we already pull it from buildPackages
       pythonLxmlEnv
-    ] ++ stdenv.lib.optionals withSelinux [ libselinux ];
+    ] ++ stdenv.lib.optional withSelinux libselinux;
 
   #dontAddPrefix = true;
 
@@ -79,7 +79,7 @@ in stdenv.mkDerivation rec {
     "-Dsystem-gid-max=499"
     # "-Dtime-epoch=1"
 
-    (if stdenv.isArm || stdenv.isAarch64 || !hostPlatform.isEfi then "-Dgnu-efi=false" else "-Dgnu-efi=true")
+    (if stdenv.isAarch32 || stdenv.isAarch64 || !hostPlatform.isEfi then "-Dgnu-efi=false" else "-Dgnu-efi=true")
     "-Defi-libdir=${toString gnu-efi}/lib"
     "-Defi-includedir=${toString gnu-efi}/include/efi"
     "-Defi-ldsdir=${toString gnu-efi}/lib"

@@ -1,5 +1,5 @@
 { stdenv, buildPackages
-, fetchurl, zlib
+, fetchurl, zlib, autoreconfHook264
 , buildPlatform, hostPlatform, targetPlatform
 , noSysDirs, gold ? true, bison ? null
 }:
@@ -64,12 +64,22 @@ stdenv.mkDerivation rec {
 
     # https://sourceware.org/bugzilla/show_bug.cgi?id=22868
     ./gold-symbol-visibility.patch
+  ] ++ stdenv.lib.optional targetPlatform.isiOS ./support-ios.patch
+    ++ stdenv.lib.optionals targetPlatform.isAarch64 [
+    # Version 2.30 introduced strict requirements on ELF relocations which cannot
+    # be satisfied on aarch64 platform. Add backported fix from bugzilla.
+    # https://sourceware.org/bugzilla/show_bug.cgi?id=22764
+    ./relax-R_AARCH64_ABS32-R_AARCH64_ABS16-absolute.patch
   ];
 
   outputs = [ "out" "info" "man" ];
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
-  nativeBuildInputs = [ bison ];
+  nativeBuildInputs = [
+    bison
+  ] ++ stdenv.lib.optionals targetPlatform.isiOS [
+    autoreconfHook264
+  ];
   buildInputs = [ zlib ];
 
   inherit noSysDirs;
@@ -96,7 +106,7 @@ stdenv.mkDerivation rec {
   # TODO(@Ericson2314): Always pass "--target" and always targetPrefix.
   configurePlatforms =
     # TODO(@Ericson2314): Figure out what's going wrong with Arm
-    if buildPlatform == hostPlatform && hostPlatform == targetPlatform && targetPlatform.isArm
+    if buildPlatform == hostPlatform && hostPlatform == targetPlatform && targetPlatform.isAarch32
     then []
     else [ "build" "host" ] ++ stdenv.lib.optional (targetPlatform != hostPlatform) "target";
 

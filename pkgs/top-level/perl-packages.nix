@@ -365,14 +365,13 @@ let self = _self // overrides; _self = with self; {
   };
 
   AppSt = buildPerlPackage rec {
-    name = "App-St-1.1.2";
+    name = "App-St-1.1.4";
     src = fetchurl {
-      url = https://github.com/nferraz/st/archive/v1.1.2.tar.gz;
-      sha256 = "1j1iwcxl16m4x5kl1vcv0linb93r55ndh3jm0w6qf459jl4x38s6";
+      url = https://github.com/nferraz/st/archive/v1.1.4.tar.gz;
+      sha256 = "1f4bqm4jiazcxgzzja1i48671za96621k0s3ln87cdacgvv1can0";
     };
     postInstall =
       ''
-        sed -e "1 s|\(.*\)|\1 -I $out/lib/perl5/site_perl|" -i $out/bin/st
         ($out/bin/st --help || true) | grep Usage
       '';
     meta = {
@@ -447,20 +446,6 @@ let self = _self // overrides; _self = with self; {
       homepage = https://github.com/dwburke/perl-Array-FIFO;
       description = "A Simple limitable FIFO array, with sum and average methods";
       license = stdenv.lib.licenses.artistic2;
-    };
-  };
-
-  ListCompare = buildPerlPackage rec {
-    name = "List-Compare-0.53";
-    src = fetchurl {
-      url = "mirror://cpan/authors/id/J/JK/JKEENAN/${name}.tar.gz";
-      sha256 = "fdbf4ff67b3135d44475fef7fcac0cd4706407d5720d26dca914860eb10f8550";
-    };
-    buildInputs = [ IOCaptureOutput ];
-    meta = {
-      homepage = http://thenceforward.net/perl/modules/List-Compare/;
-      description = "Compare elements of two or more lists";
-      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
 
@@ -2075,6 +2060,19 @@ let self = _self // overrides; _self = with self; {
     src = fetchurl {
       url = mirror://cpan/authors/id/T/TM/TMTM/Class-Data-Inheritable-0.08.tar.gz;
       sha256 = "0jpi38wy5xh6p1mg2cbyjjw76vgbccqp46685r27w8hmxb7gwrwr";
+    };
+  };
+
+  ClassEHierarchy = buildPerlPackage rec {
+    name = "Class-EHierarchy-2.00";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/C/CO/CORLISS/Class-EHierarchy/${name}.tar.gz";
+      sha256 = "8498baaf7539eaa3422c6fe1055a0fc9a0c02e94dad0c63405373528e622bacb";
+    };
+    meta = {
+      description = "Base class for hierarchally ordered objects";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = [ maintainers.limeytexan ];
     };
   };
 
@@ -7572,6 +7570,18 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
+  iCalParser = buildPerlPackage rec {
+    name = "iCal-Parser-1.21";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/R/RI/RIXED/${name}.tar.gz";
+      sha256 = "0d7939a644a8e67017ec7239d3d9604f3986bb9a4ff80be68fe7299ebfd2270c";
+    };
+    propagatedBuildInputs = [ DateTimeFormatICal FreezeThaw IOString TextvFileasData ];
+    meta = {
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   "if" = null;
 
   # For backwards compatibility.
@@ -8512,6 +8522,21 @@ let self = _self // overrides; _self = with self; {
     doCheck = false;
   };
 
+  LinuxACL = buildPerlPackage rec {
+    name = "Linux-ACL-0.05";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/N/NA/NAZAROV/${name}.tar.gz";
+      sha256 = "312940c1f60f47c4fc93fa0a9d2a626425faa837040c8c2f1ad58ee09f62f371";
+    };
+    buildInputs = [ pkgs.acl ];
+    NIX_CFLAGS_LINK = "-L${pkgs.acl.out}/lib -lacl";
+    meta = {
+      maintainers = [ maintainers.limeytexan ];
+      description = "Perl extension for reading and setting Access Control Lists for files by libacl linux library";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   LinuxDistribution = buildPerlModule {
     name = "Linux-Distribution-0.23";
     src = fetchurl {
@@ -8559,6 +8584,20 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
+  ListCompare = buildPerlPackage rec {
+    name = "List-Compare-0.53";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/J/JK/JKEENAN/${name}.tar.gz";
+      sha256 = "fdbf4ff67b3135d44475fef7fcac0cd4706407d5720d26dca914860eb10f8550";
+    };
+    buildInputs = [ IOCaptureOutput ];
+    meta = {
+      homepage = http://thenceforward.net/perl/modules/List-Compare/;
+      description = "Compare elements of two or more lists";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   ListMoreUtils = buildPerlPackage rec {
     name = "List-MoreUtils-0.428";
     src = fetchurl {
@@ -8580,6 +8619,9 @@ let self = _self // overrides; _self = with self; {
        url = mirror://cpan/authors/id/R/RE/REHSACK/List-MoreUtils-XS-0.428.tar.gz;
        sha256 = "0bfndmnkqaaf3gffprak143bzplxd69c368jxgr7rzlx88hyd7wx";
      };
+     preConfigure = ''
+       export LD=$CC
+     '';
      propagatedBuildInputs = [ XSLoader ];
      meta = {
        description = "Provide the stuff missing in List::Util in XS";
@@ -9622,6 +9664,8 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
+  MNI-Perllib = pkgs.callPackage ../development/perl-modules/MNI {};
+
   Mo = buildPerlPackage rec {
      name = "Mo-0.40";
      src = fetchurl {
@@ -9649,6 +9693,7 @@ let self = _self // overrides; _self = with self; {
 
   ModernPerl = buildPerlModule {
     name = "Modern-Perl-1.20170117";
+
     src = fetchurl {
       url = mirror://cpan/authors/id/C/CH/CHROMATIC/Modern-Perl-1.20170117.tar.gz;
       sha256 = "5df2a83461163212db22b9c3353606a1a123616820fe50675041c34f004b3628";
@@ -11740,6 +11785,22 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
+  NetZooKeeper = buildPerlPackage rec {
+    name = "Net-ZooKeeper-0.41";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/M/MA/MAF/${name}.tar.gz";
+      sha256 = "91c177f30f82302eaf3173356eef05c21bc82163df752acb469177bd14a72db9";
+    };
+    buildInputs = [ pkgs.zookeeper_mt ];
+    NIX_CFLAGS_COMPILE = "-I${pkgs.zookeeper_mt}/include";
+    NIX_CFLAGS_LINK = "-L${pkgs.zookeeper_mt.out}/lib -lzookeeper_mt";
+    meta = {
+      maintainers = [ maintainers.limeytexan ];
+      homepage = https://github.com/mark-5/p5-net-zookeeper;
+      license = stdenv.lib.licenses.asl20;
+    };
+  };
+
   PackageConstants = buildPerlPackage {
     name = "Package-Constants-0.06";
     src = fetchurl {
@@ -11905,6 +11966,25 @@ let self = _self // overrides; _self = with self; {
      };
   };
 
+  Paranoid = buildPerlPackage rec {
+    name = "Paranoid-2.05";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/C/CO/CORLISS/Paranoid/${name}.tar.gz";
+      sha256 = "583dfa0279733531f360795ad1cf4aa652d537b2b0bbd3c6925d0c8d75cbb3df";
+    };
+    patches = [ ../development/perl-modules/Paranoid-blessed-path.patch ];
+    preConfigure = ''
+      # Capture the path used when compiling this module as the "blessed"
+      # system path, analogous to the module's own use of '/bin:/sbin'.
+      sed -i "s#__BLESSED_PATH__#${pkgs.coreutils}/bin#" lib/Paranoid.pm t/01_init_core.t
+    '';
+    meta = {
+      description = "General function library for safer, more secure programming";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = [ maintainers.limeytexan ];
+    };
+  };
+
   PARDist = buildPerlPackage {
     name = "PAR-Dist-0.49";
     src = fetchurl {
@@ -11978,6 +12058,20 @@ let self = _self // overrides; _self = with self; {
        description = "parses local .pm files as PAUSE does";
        license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
      };
+  };
+
+  ParsePlainConfig = buildPerlPackage rec {
+    name = "Parse-PlainConfig-3.05";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/C/CO/CORLISS/Parse-PlainConfig/${name}.tar.gz";
+      sha256 = "6b78a8552398b0d2d7063505c93b3cfed0432c5b2cf6e00b8e51febf411c1efa";
+    };
+    propagatedBuildInputs = [ ClassEHierarchy Paranoid ];
+    meta = {
+      description = "Parser/Generator of human-readable conf files";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = [ maintainers.limeytexan ];
+    };
   };
 
   ParsePMFile = buildPerlPackage rec {
@@ -16221,6 +16315,21 @@ let self = _self // overrides; _self = with self; {
     meta = {
       description = "Perform diffs on files and record sets";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
+  TextFormat = buildPerlPackage rec {
+    name = "Text-Format-0.60";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/S/SH/SHLOMIF/${name}.tar.gz";
+      sha256 = "664f313570604624ff9e1fc9b26b6d04e06897b3e4eac83089fc0905a692a2b8";
+    };
+    buildInputs = [ ModuleBuild ];
+    meta = {
+      homepage = http://www.shlomifish.org/open-source/projects/Text-Format/;
+      description = "Format text";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = with maintainers; [ bcdarwin ];
     };
   };
 

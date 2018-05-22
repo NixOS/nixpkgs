@@ -15,7 +15,6 @@ bundlerApp {
     "asciidoctor-latex"
     "asciidoctor-pdf"
     "asciidoctor-safe"
-    "asciidoctor-mathematical"
   ];
 
   gemConfig = {

@@ -178,6 +178,8 @@ let
     };
   };
 
+  emacs-libvterm = callPackage ../applications/editors/emacs-modes/emacs-libvterm { };
+
   evil-jumper = melpaBuild rec {
     pname   = "evil-jumper";
     version = "20151017";

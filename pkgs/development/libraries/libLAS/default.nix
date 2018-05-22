@@ -14,6 +14,8 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [
     "-DGDAL_CONFIG=${gdal}/bin/gdal-config"
+    "-DWITH_LASZIP=ON"
+    "-DLASZIP_INCLUDE_DIR=${LASzip}/include"
   ];
 
   postFixup = stdenv.lib.optionalString stdenv.isDarwin ''
@@ -22,7 +24,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "LAS 1.0/1.1/1.2 ASPRS LiDAR data translation toolset";
-    homepage = http://www.liblas.org;
+    homepage = https://www.liblas.org;
     license = stdenv.lib.licenses.bsd3;
     platforms = stdenv.lib.platforms.unix;
     maintainers = [ stdenv.lib.maintainers.michelk ];

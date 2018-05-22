@@ -1839,9 +1839,9 @@ let
       sha256 = "0z56ifw3xiq9dychv8chg1cny0hq4v3c1r9pqcybk5fp7nzw9jpq";
     };
     nativeBuildInputs = [ pkgconfig ];
-    buildInputs = [ fontsproto libGL libdrm udev randrproto renderproto videoproto xextproto xf86driproto xorgserver xproto ];
+    buildInputs = [ fontsproto mesa_noglu libGL libdrm udev randrproto renderproto videoproto xextproto xf86driproto xorgserver xproto ];
     meta.platforms = stdenv.lib.platforms.unix;
-  }) // {inherit fontsproto libGL libdrm udev randrproto renderproto videoproto xextproto xf86driproto xorgserver xproto ;};
+  }) // {inherit fontsproto mesa_noglu libGL libdrm udev randrproto renderproto videoproto xextproto xf86driproto xorgserver xproto ;};
 
   xf86videoark = (mkDerivation "xf86videoark" {
     name = "xf86-video-ark-0.7.5";

@@ -33,17 +33,17 @@ else
 
 let
   defaultGalliumDrivers =
-    if stdenv.isArm
+    if stdenv.isAarch32
     then ["nouveau" "freedreno" "vc4" "etnaviv" "imx"]
     else if stdenv.isAarch64
     then ["nouveau" "vc4" ]
     else ["svga" "i915" "r300" "r600" "radeonsi" "nouveau"];
   defaultDriDrivers =
-    if (stdenv.isArm || stdenv.isAarch64)
+    if (stdenv.isAarch32 || stdenv.isAarch64)
     then ["nouveau"]
     else ["i915" "i965" "nouveau" "radeon" "r200"];
   defaultVulkanDrivers =
-    if (stdenv.isArm || stdenv.isAarch64)
+    if (stdenv.isAarch32 || stdenv.isAarch64)
     then []
     else ["intel"] ++ lib.optional enableRadv "radeon";
 in
@@ -125,7 +125,8 @@ let self = stdenv.mkDerivation {
     "--enable-gles1"
     "--enable-gles2"
     "--enable-glx"
-    "--enable-glx-tls"
+    # https://bugs.freedesktop.org/show_bug.cgi?id=35268
+    (enableFeature (!stdenv.hostPlatform.isMusl) "glx-tls")
     "--enable-gallium-osmesa" # used by wine
     "--enable-llvm"
     "--enable-egl"

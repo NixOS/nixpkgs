@@ -1,4 +1,4 @@
-{ stdenv, targetPlatform, fetchurl, buildPythonApplication
+{ stdenv, targetPlatform, fetchurl, buildPythonPackage
 , zip, ffmpeg, rtmpdump, phantomjs2, atomicparsley, pycryptodome, pandoc
 # Pandoc is required to build the package's man page. Release tarballs contain a
 # formatted man page already, though, it will still be installed. We keep the
@@ -8,19 +8,19 @@
 , generateManPage ? false
 , ffmpegSupport ? true
 , rtmpSupport ? true
-, phantomjsSupport ? !targetPlatform.isDarwin # phantomjs2 is broken on darwin
+, phantomjsSupport ? false
 , hlsEncryptedSupport ? true
 , makeWrapper }:
 
 with stdenv.lib;
-buildPythonApplication rec {
+buildPythonPackage rec {
 
   pname = "youtube-dl";
-  version = "2018.03.26.1";
+  version = "2018.05.18";
 
   src = fetchurl {
     url = "https://yt-dl.org/downloads/${version}/${pname}-${version}.tar.gz";
-    sha256 = "1sbapwx2zdhprvmljqs6rzxnhiyfpxgin7qyjdrg6h25hhq63vss";
+    sha256 = "11r0hv6885w8k4m307kvf9545vr5a3ym9bf7szghvbcgmgc8lm5w";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -38,11 +38,16 @@ buildPythonApplication rec {
         ++ optional phantomjsSupport phantomjs2;
     in [ ''--prefix PATH : "${makeBinPath packagesToBinPath}"'' ];
 
+  postInstall = ''
+    mkdir -p $out/share/zsh/site-functions
+    cp youtube-dl.zsh $out/share/zsh/site-functions/_youtube-dl
+  '';
+
   # Requires network
   doCheck = false;
 
   meta = {
-    homepage = http://rg3.github.io/youtube-dl/;
+    homepage = https://rg3.github.io/youtube-dl/;
     repositories.git = https://github.com/rg3/youtube-dl.git;
     description = "Command-line tool to download videos from YouTube.com and other sites";
     longDescription = ''

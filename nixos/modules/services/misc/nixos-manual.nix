@@ -23,7 +23,7 @@ let
     options =
       let
         scrubbedEval = evalModules {
-          modules = [ { nixpkgs.system = config.nixpkgs.system; } ] ++ baseModules;
+          modules = [ { nixpkgs.localSystem = config.nixpkgs.localSystem; } ] ++ baseModules;
           args = (config._module.args) // { modules = [ ]; };
           specialArgs = { pkgs = scrubDerivations "pkgs" pkgs; };
         };

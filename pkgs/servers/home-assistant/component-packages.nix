@@ -2,7 +2,7 @@
 # Do not edit!
 
 {
-  version = "0.67.0";
+  version = "0.69.1";
   components = {
     "abode" = ps: with ps; [  ];
     "ads" = ps: with ps; [  ];
@@ -86,7 +86,7 @@
     "device_tracker.unifi" = ps: with ps; [ pyunifi ];
     "device_tracker.unifi_direct" = ps: with ps; [ pexpect ];
     "device_tracker.upc_connect" = ps: with ps; [ defusedxml ];
-    "device_tracker.xiaomi_miio" = ps: with ps; [  ];
+    "device_tracker.xiaomi_miio" = ps: with ps; [ construct ];
     "digital_ocean" = ps: with ps; [ digital-ocean ];
     "discovery" = ps: with ps; [ netdisco ];
     "dominos" = ps: with ps; [  ];
@@ -99,10 +99,12 @@
     "emulated_hue" = ps: with ps; [ aiohttp-cors ];
     "enocean" = ps: with ps; [  ];
     "envisalink" = ps: with ps; [  ];
+    "eufy" = ps: with ps; [  ];
     "fan.xiaomi_miio" = ps: with ps; [ construct ];
     "feedreader" = ps: with ps; [ feedparser ];
     "ffmpeg" = ps: with ps; [ ha-ffmpeg ];
     "folder_watcher" = ps: with ps; [ watchdog ];
+    "fritzbox" = ps: with ps; [  ];
     "frontend" = ps: with ps; [  ];
     "gc100" = ps: with ps; [  ];
     "goalfeed" = ps: with ps; [  ];
@@ -110,10 +112,11 @@
     "hdmi_cec" = ps: with ps; [  ];
     "hive" = ps: with ps; [  ];
     "homekit" = ps: with ps; [  ];
+    "homekit_controller" = ps: with ps; [  ];
     "homematic" = ps: with ps; [ pyhomematic ];
     "homematicip_cloud" = ps: with ps; [  ];
     "http" = ps: with ps; [ aiohttp-cors ];
-    "hue" = ps: with ps; [  ];
+    "hue" = ps: with ps; [ aiohue ];
     "ifttt" = ps: with ps; [  ];
     "ihc" = ps: with ps; [  ];
     "image_processing.dlib_face_detect" = ps: with ps; [ face_recognition ];
@@ -162,10 +165,12 @@
     "lock.sesame" = ps: with ps; [  ];
     "lutron" = ps: with ps; [  ];
     "lutron_caseta" = ps: with ps; [  ];
+    "matrix" = ps: with ps; [ matrix-client ];
     "maxcube" = ps: with ps; [  ];
-    "media_extractor" = ps: with ps; [  ];
+    "media_extractor" = ps: with ps; [ youtube-dl-light ];
     "media_player.anthemav" = ps: with ps; [  ];
     "media_player.aquostv" = ps: with ps; [  ];
+    "media_player.blackbird" = ps: with ps; [  ];
     "media_player.bluesound" = ps: with ps; [ xmltodict ];
     "media_player.braviatv" = ps: with ps; [  ];
     "media_player.cast" = ps: with ps; [ PyChromecast ];
@@ -235,7 +240,6 @@
     "notify.lametric" = ps: with ps; [  ];
     "notify.mailgun" = ps: with ps; [  ];
     "notify.mastodon" = ps: with ps; [  ];
-    "notify.matrix" = ps: with ps; [ matrix-client ];
     "notify.message_bird" = ps: with ps; [  ];
     "notify.pushbullet" = ps: with ps; [ pushbullet ];
     "notify.pushetta" = ps: with ps; [  ];
@@ -252,11 +256,12 @@
     "nuheat" = ps: with ps; [  ];
     "nuimo_controller" = ps: with ps; [  ];
     "pilight" = ps: with ps; [  ];
-    "prometheus" = ps: with ps; [  ];
+    "prometheus" = ps: with ps; [ prometheus_client ];
     "python_script" = ps: with ps; [  ];
     "qwikswitch" = ps: with ps; [  ];
     "rainbird" = ps: with ps; [  ];
     "raincloud" = ps: with ps; [  ];
+    "rainmachine" = ps: with ps; [  ];
     "raspihats" = ps: with ps; [  ];
     "recorder" = ps: with ps; [ sqlalchemy ];
     "remember_the_milk" = ps: with ps; [ httplib2 ];
@@ -271,7 +276,7 @@
     "satel_integra" = ps: with ps; [  ];
     "scene.hunterdouglas_powerview" = ps: with ps; [  ];
     "scsgate" = ps: with ps; [  ];
-    "sensor.airvisual" = ps: with ps; [  ];
+    "sensor.airvisual" = ps: with ps; [ pyairvisual ];
     "sensor.alpha_vantage" = ps: with ps; [  ];
     "sensor.bbox" = ps: with ps; [  ];
     "sensor.bh1750" = ps: with ps; [  ];
@@ -281,7 +286,7 @@
     "sensor.bme680" = ps: with ps; [  ];
     "sensor.broadlink" = ps: with ps; [  ];
     "sensor.buienradar" = ps: with ps; [  ];
-    "sensor.coinmarketcap" = ps: with ps; [  ];
+    "sensor.coinmarketcap" = ps: with ps; [ coinmarketcap ];
     "sensor.cpuspeed" = ps: with ps; [  ];
     "sensor.crimereports" = ps: with ps; [  ];
     "sensor.cups" = ps: with ps; [ pycups ];
@@ -294,7 +299,6 @@
     "sensor.dovado" = ps: with ps; [  ];
     "sensor.dsmr" = ps: with ps; [  ];
     "sensor.dweet" = ps: with ps; [  ];
-    "sensor.ebox" = ps: with ps; [  ];
     "sensor.eddystone_temperature" = ps: with ps; [ construct ];
     "sensor.eliqonline" = ps: with ps; [  ];
     "sensor.envirophat" = ps: with ps; [  ];
@@ -331,18 +335,20 @@
     "sensor.mfi" = ps: with ps; [  ];
     "sensor.mhz19" = ps: with ps; [  ];
     "sensor.miflora" = ps: with ps; [  ];
+    "sensor.mitemp_bt" = ps: with ps; [  ];
     "sensor.modem_callerid" = ps: with ps; [  ];
     "sensor.mopar" = ps: with ps; [  ];
-    "sensor.mvglive" = ps: with ps; [  ];
+    "sensor.mvglive" = ps: with ps; [ PyMVGLive ];
     "sensor.nederlandse_spoorwegen" = ps: with ps; [  ];
     "sensor.neurio_energy" = ps: with ps; [  ];
     "sensor.nut" = ps: with ps; [  ];
     "sensor.openevse" = ps: with ps; [  ];
-    "sensor.openweathermap" = ps: with ps; [  ];
+    "sensor.openweathermap" = ps: with ps; [ pyowm ];
     "sensor.otp" = ps: with ps; [  ];
     "sensor.plex" = ps: with ps; [  ];
     "sensor.pocketcasts" = ps: with ps; [  ];
     "sensor.pollen" = ps: with ps; [  ];
+    "sensor.postnl" = ps: with ps; [  ];
     "sensor.pushbullet" = ps: with ps; [ pushbullet ];
     "sensor.qnap" = ps: with ps; [  ];
     "sensor.ripple" = ps: with ps; [  ];
@@ -354,9 +360,11 @@
     "sensor.serial" = ps: with ps; [  ];
     "sensor.serial_pm" = ps: with ps; [  ];
     "sensor.shodan" = ps: with ps; [  ];
+    "sensor.sht31" = ps: with ps; [  ];
     "sensor.sma" = ps: with ps; [  ];
     "sensor.snmp" = ps: with ps; [ pysnmp ];
     "sensor.sochain" = ps: with ps; [  ];
+    "sensor.socialblade" = ps: with ps; [  ];
     "sensor.speedtest" = ps: with ps; [  ];
     "sensor.spotcrime" = ps: with ps; [  ];
     "sensor.sql" = ps: with ps; [ sqlalchemy ];
@@ -378,6 +386,7 @@
     "sensor.twitch" = ps: with ps; [  ];
     "sensor.uber" = ps: with ps; [  ];
     "sensor.ups" = ps: with ps; [  ];
+    "sensor.uscis" = ps: with ps; [  ];
     "sensor.vasttrafik" = ps: with ps; [  ];
     "sensor.waqi" = ps: with ps; [  ];
     "sensor.waze_travel_time" = ps: with ps; [  ];
@@ -408,7 +417,6 @@
     "switch.netio" = ps: with ps; [  ];
     "switch.orvibo" = ps: with ps; [  ];
     "switch.rachio" = ps: with ps; [  ];
-    "switch.rainmachine" = ps: with ps; [  ];
     "switch.rpi_rf" = ps: with ps; [  ];
     "switch.snmp" = ps: with ps; [ pysnmp ];
     "switch.thinkingcleaner" = ps: with ps; [  ];
@@ -434,7 +442,7 @@
     "twilio" = ps: with ps; [ twilio ];
     "upcloud" = ps: with ps; [  ];
     "updater" = ps: with ps; [ distro ];
-    "upnp" = ps: with ps; [ miniupnpc ];
+    "upnp" = ps: with ps; [  ];
     "usps" = ps: with ps; [  ];
     "vacuum.roomba" = ps: with ps; [  ];
     "vacuum.xiaomi_miio" = ps: with ps; [ construct ];
@@ -449,7 +457,7 @@
     "weather.buienradar" = ps: with ps; [  ];
     "weather.darksky" = ps: with ps; [  ];
     "weather.metoffice" = ps: with ps; [  ];
-    "weather.openweathermap" = ps: with ps; [  ];
+    "weather.openweathermap" = ps: with ps; [ pyowm ];
     "weather.yweather" = ps: with ps; [ yahooweather ];
     "wemo" = ps: with ps; [  ];
     "wink" = ps: with ps; [  ];

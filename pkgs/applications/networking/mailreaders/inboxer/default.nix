@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   name = "inboxer-${version}";
-  version = "1.0.4";
+  version = "1.1.2";
 
   meta = with stdenv.lib; {
     description = "Unofficial, free and open-source Google Inbox Desktop App";
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://github.com/denysdovhan/inboxer/releases/download/v${version}/inboxer_${version}_amd64.deb";
-    sha256 = "0i6qmrnga80q8s6dabfgh0fcdnc2wpj948za04zi1ajv4fjwjh0n";
+    sha256 = "100185j10dj044mg5p9xlq7fj7n7xki9qw5xn845dgq0dpj8rkrm";
   };
 
   unpackPhase = ''

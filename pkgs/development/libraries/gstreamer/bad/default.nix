@@ -13,13 +13,7 @@
 assert faacSupport -> faac != null;
 
 let
-  inherit (stdenv.lib) optional optionalString;
-
-  # OpenJPEG version is hardcoded in package source
-  openJpegVersion = with stdenv;
-    lib.concatStringsSep "." (lib.lists.take 2
-      (lib.splitString "." (lib.getVersion openjpeg)));
-
+  inherit (stdenv.lib) optional;
 in
 stdenv.mkDerivation rec {
   name = "gst-plugins-bad-1.14.0";
@@ -35,6 +29,7 @@ stdenv.mkDerivation rec {
     '';
     license     = licenses.lgpl2Plus;
     platforms   = platforms.linux ++ platforms.darwin;
+    maintainers = with maintainers; [ matthewbauer ];
   };
 
   preConfigure = ''
@@ -75,6 +70,4 @@ stdenv.mkDerivation rec {
     ++ optional (!stdenv.isDarwin) wildmidi
     # TODO: mjpegtools uint64_t is not compatible with guint64 on Darwin
     ++ optional (!stdenv.isDarwin) mjpegtools;
-
-  enableParallelBuilding = true;
 }

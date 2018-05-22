@@ -12,8 +12,6 @@
 , gdk_pixbuf
 , glib
 , glibc
-, gst-plugins-base
-, gstreamer
 , gtk2
 , gtk3
 , kerberos
@@ -30,6 +28,7 @@
 , libcanberra-gtk2
 , libgnome
 , libgnomeui
+, libnotify
 , defaultIconTheme
 , libGLU_combined
 , nspr
@@ -47,8 +46,6 @@
 , gnugrep
 , gnupg
 }:
-
-assert stdenv.isLinux;
 
 let
 
@@ -100,8 +97,6 @@ stdenv.mkDerivation {
       gdk_pixbuf
       glib
       glibc
-      gst-plugins-base
-      gstreamer
       gtk2
       gtk3
       kerberos
@@ -118,6 +113,7 @@ stdenv.mkDerivation {
       libcanberra-gtk2
       libgnome
       libgnomeui
+      libnotify
       libGLU_combined
       nspr
       nss
