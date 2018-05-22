@@ -17,17 +17,13 @@ stdenv.mkDerivation rec {
     sed -e '/^env[.]Append(BUILDERS/ienv.Append(ENV={"PATH":os.environ["PATH"]})' \
         -e '/^env[.]Append(BUILDERS/ienv.Append(ENV={"NIX_CFLAGS_COMPILE":os.environ["NIX_CFLAGS_COMPILE"]})' \
         -e '/^env[.]Append(BUILDERS/ienv.Append(ENV={"NIX_LDFLAGS":os.environ["NIX_LDFLAGS"]})' \
-        -e 's,$OPENSSL/lib,${openssl.out}/lib,' \
-        -e 's,$OPENSSL/include,${openssl.dev}/include,' \
       -i SConstruct
   '';
 
   buildPhase = ''
     scons PREFIX="$out" OPENSSL="${openssl}" ZLIB="${zlib}" APR="$(echo "${apr.dev}"/bin/*-config)" CFLAGS="-I${zlib.dev}/include" \
-      LINKFLAGS="-L${zlib.out}/lib -L${expat}/lib -L${openldap}/lib -L${libiconv}/lib" \
-        APU="$(echo "${aprutil.dev}"/bin/*-config)" CC="${
-          if stdenv.cc.isClang then "clang" else "${stdenv.cc}/bin/gcc"
-        }" ${
+      LINKFLAGS="-L${zlib.out}/lib -L${openldap}/lib -L${libiconv}/lib" \
+        APU="$(echo "${aprutil.dev}"/bin/*-config)" CC=$CC ${
           if (stdenv.isDarwin || stdenv.isCygwin) then "" else "GSSAPI=\"${kerberos.dev}\""
         }
   '';
