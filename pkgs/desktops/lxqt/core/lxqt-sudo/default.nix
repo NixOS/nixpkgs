@@ -6,7 +6,7 @@ stdenv.mkDerivation rec {
   version = "0.12.0";
 
   src = fetchFromGitHub {
-    owner = "lxde";
+    owner = "lxqt";
     repo = pname;
     rev = version;
     sha256 = "0ql436yb51qwbnj5gbzvqi4rqx4zkmja5rdjs6yavb1x8ggn1jv6";
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "GUI frontend for sudo/su";
-    homepage = https://github.com/lxde/lxqt-sudo;
+    homepage = https://github.com/lxqt/lxqt-sudo;
     license = licenses.lgpl21;
     platforms = with platforms; unix;
     maintainers = with maintainers; [ romildo ];

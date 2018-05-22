@@ -7,7 +7,7 @@ stdenv.mkDerivation rec {
   version = "0.12.0";
 
   src = fetchFromGitHub {
-    owner = "lxde";
+    owner = "lxqt";
     repo = pname;
     rev = version;
     sha256 = "1852vfbkbpw49i8ad682jhqmnskmc9a90qwpalipgak7m64azg3j";
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
   
   meta = with stdenv.lib; {
     description = "Core utility library for all LXQt components";
-    homepage = https://github.com/lxde/liblxqt;
+    homepage = https://github.com/lxqt/liblxqt;
     license = licenses.lgpl21Plus;
     platforms = with platforms; unix;
     maintainers = with maintainers; [ romildo ];

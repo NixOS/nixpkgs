@@ -6,7 +6,7 @@ stdenv.mkDerivation rec {
   version = "0.13.0";
 
   src = fetchFromGitHub {
-    owner = "lxde";
+    owner = "lxqt";
     repo = pname;
     rev = version;
     sha256 = "0xnhdxx45fmbi5dqic3j2f7yq01s0xysimafj5zqs0a29zw3i4m0";
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "File manager and desktop icon manager (Qt port of PCManFM and libfm)";
-    homepage = https://github.com/lxde/pcmanfm-qt;
+    homepage = https://github.com/lxqt/pcmanfm-qt;
     license = licenses.gpl2;
     platforms = with platforms; unix;
     maintainers = with maintainers; [ romildo ];

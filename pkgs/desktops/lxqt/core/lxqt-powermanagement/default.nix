@@ -6,7 +6,7 @@ stdenv.mkDerivation rec {
   version = "0.12.0";
 
   src = fetchFromGitHub {
-    owner = "lxde";
+    owner = "lxqt";
     repo = pname;
     rev = version;
     sha256 = "1fxklxmvjaykdpf0nj6cpgwx4yf52087g25k1zdak9n0l9n7hm8d";
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Power management module for LXQt";
-    homepage = https://github.com/lxde/lxqt-powermanagement;
+    homepage = https://github.com/lxqt/lxqt-powermanagement;
     license = licenses.lgpl21;
     platforms = with platforms; unix;
     maintainers = with maintainers; [ romildo ];

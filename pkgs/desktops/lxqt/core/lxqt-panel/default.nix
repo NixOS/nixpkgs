@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   version = "0.12.0";
 
   src = fetchFromGitHub {
-    owner = "lxde";
+    owner = "lxqt";
     repo = pname;
     rev = version;
     sha256 = "01xmnb17jpydyfvxwaa6kymzdasnyd94z62gjah8y4pzsmykcr4x";
@@ -63,7 +63,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "The LXQt desktop panel";
-    homepage = https://github.com/lxde/lxqt-panel;
+    homepage = https://github.com/lxqt/lxqt-panel;
     license = licenses.lgpl21;
     platforms = with platforms; unix;
     maintainers = with maintainers; [ romildo ];

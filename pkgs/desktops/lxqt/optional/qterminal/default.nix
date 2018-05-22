@@ -6,7 +6,7 @@ stdenv.mkDerivation rec {
   version = "0.9.0";
 
   src = fetchFromGitHub {
-    owner = "lxde";
+    owner = "lxqt";
     repo = pname;
     rev = version;
     sha256 = "1z9wlyj5i192jfq3dcxjf8wzx9x332f19c9ll7zv69cq21kyy9wn";
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A lightweight Qt-based terminal emulator";
-    homepage = https://github.com/lxde/qterminal;
+    homepage = https://github.com/lxqt/qterminal;
     license = licenses.gpl2;
     platforms = with platforms; unix;
     maintainers = with maintainers; [ romildo ];

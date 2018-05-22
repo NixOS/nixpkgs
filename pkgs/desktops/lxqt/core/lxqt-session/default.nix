@@ -6,7 +6,7 @@ stdenv.mkDerivation rec {
   version = "0.12.0";
 
   src = fetchFromGitHub {
-    owner = "lxde";
+    owner = "lxqt";
     repo = pname;
     rev = version;
     sha256 = "03gi9svxqsfjhk5ifbaalq9i44ggx8afwms1hb312czqn82wrszb";
@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "An alternative session manager ported from the original razor-session";
-    homepage = https://github.com/lxde/lxqt-session;
+    homepage = https://github.com/lxqt/lxqt-session;
     license = licenses.lgpl21;
     platforms = with platforms; unix;
     maintainers = with maintainers; [ romildo ];

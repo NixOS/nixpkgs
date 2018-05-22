@@ -6,7 +6,7 @@ stdenv.mkDerivation rec {
   version = "0.12.0";
 
   src = fetchFromGitHub {
-    owner = "lxde";
+    owner = "lxqt";
     repo = pname;
     rev = version;
     sha256 = "0dg3gm5m19dc4jarh8xcn0mcnpgxzz7nhy5dzm8chddaa6pdm7vi";
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "LXQt system administration tool";
-    homepage = https://github.com/lxde/lxqt-admin;
+    homepage = https://github.com/lxqt/lxqt-admin;
     license = licenses.lgpl21;
     platforms = with platforms; unix;
     maintainers = with maintainers; [ romildo ];

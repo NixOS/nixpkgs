@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   version = "0.12.0";
 
   src = fetchFromGitHub {
-    owner = "lxde";
+    owner = "lxqt";
     repo = pname;
     rev = version;
     sha256 = "1hxz5bxxi118g255aqb3da767va0wd25y671lk2w9r1641j8zf2d";
@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "The LXQt PolicyKit agent";
-    homepage = https://github.com/lxde/lxqt-policykit;
+    homepage = https://github.com/lxqt/lxqt-policykit;
     license = licenses.lgpl21;
     platforms = with platforms; unix;
     maintainers = with maintainers; [ romildo ];
