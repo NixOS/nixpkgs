@@ -35,7 +35,7 @@ let
 
   mkUniquePkgs = pkgs: fastUnique (a: b: a < b) # highlighting hack: >
     # here we deal with those dummy packages needed for hyphenation filtering
-    (map (p: if lib.isDerivation p then builtins.toPath p else "") pkgs);
+    (map (p: if lib.isDerivation p then p.outPath else "") pkgs);
 
 in buildEnv {
   name = "texlive-${extraName}-${bin.texliveYear}";

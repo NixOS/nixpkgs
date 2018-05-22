@@ -61,7 +61,7 @@ in
       '';
     }];
 
-    security.wrappers = (import (builtins.toPath "${e.enlightenment}/e-wrappers.nix")).security.wrappers;
+    security.wrappers = (import "${e.enlightenment}/e-wrappers.nix").security.wrappers;
 
     environment.etc = singleton
       { source = xcfg.xkbDir;
