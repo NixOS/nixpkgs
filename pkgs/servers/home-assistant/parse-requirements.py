@@ -25,6 +25,13 @@ GENERAL_PREFIX = '# homeassistant.'
 COMPONENT_PREFIX = GENERAL_PREFIX + 'components.'
 PKG_SET = 'python3Packages'
 
+# If some requirements are matched by multiple python packages,
+# the following can be used to choose one of them
+PKG_PREFERENCES = {
+    # Use python3Packages.youtube-dl-light instead of python3Packages.youtube-dl
+    'youtube-dl': 'youtube-dl-light'
+}
+
 def get_version():
     with open(os.path.dirname(sys.argv[0]) + '/default.nix') as f:
         m = re.search('hassVersion = "([\\d\\.]+)";', f.read())
@@ -59,7 +66,7 @@ output = subprocess.check_output(['nix-env', '-f', os.path.dirname(sys.argv[0]) 
 packages = json.loads(output)
 
 def name_to_attr_path(req):
-    attr_paths = []
+    attr_paths = set()
     names = [req]
     # E.g. python-mpd2 is actually called python3.6-mpd2
     # instead of python-3.6-python-mpd2 inside Nixpkgs
@@ -71,11 +78,18 @@ def name_to_attr_path(req):
         pattern = re.compile('^python\\d\\.\\d-{}-\\d'.format(name), re.I)
         for attr_path, package in packages.items():
             if pattern.match(package['name']):
-                attr_paths.append(attr_path)
+                attr_paths.add(attr_path)
+    if len(attr_paths) > 1:
+        for to_replace, replacement in PKG_PREFERENCES.items():
+            try:
+                attr_paths.remove(PKG_SET + '.' + to_replace)
+                attr_paths.add(PKG_SET + '.' + replacement)
+            except KeyError:
+                pass
     # Let's hope there's only one derivation with a matching name
     assert(len(attr_paths) <= 1)
-    if attr_paths:
-        return attr_paths[0]
+    if len(attr_paths) == 1:
+        return attr_paths.pop()
     else:
         return None
 
@@ -86,14 +100,11 @@ build_inputs = {}
 for component, reqs in OrderedDict(sorted(requirements.items())).items():
     attr_paths = []
     for req in reqs:
-        try:
-            name = req.split('==')[0]
-            attr_path = name_to_attr_path(name)
-            if attr_path is not None:
-                # Add attribute path without "python3Packages." prefix
-                attr_paths.append(attr_path[len(PKG_SET + '.'):])
-        except RequirementParseError:
-            continue
+        name = req.split('==')[0]
+        attr_path = name_to_attr_path(name)
+        if attr_path is not None:
+            # Add attribute path without "python3Packages." prefix
+            attr_paths.append(attr_path[len(PKG_SET + '.'):])
     else:
         build_inputs[component] = attr_paths
 
