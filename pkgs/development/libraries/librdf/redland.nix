@@ -28,7 +28,10 @@ stdenv.mkDerivation rec {
 
   configureFlags =
     [ "--with-threads" ]
-    ++ stdenv.lib.optional withBdb "--with-bdb=${db}";
+    ++ stdenv.lib.optionals withBdb [
+      "--with-bdb-include=${db.out}/include"
+      "--with-bdb-lib=${db.lib}/lib"
+    ];
 
   # Fix broken DT_NEEDED in lib/redland/librdf_storage_sqlite.so.
   NIX_CFLAGS_LINK = "-lraptor2";
