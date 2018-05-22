@@ -319,6 +319,8 @@ in {
 
   pyaes = callPackage ../development/python-modules/pyaes { };
 
+  pyairvisual = callPackage ../development/python-modules/pyairvisual { };
+
   pyamf = callPackage ../development/python-modules/pyamf { };
 
   pyarrow = callPackage ../development/python-modules/pyarrow {
