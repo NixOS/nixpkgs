@@ -225,6 +225,8 @@ in {
 
   cdecimal = callPackage ../development/python-modules/cdecimal { };
 
+  clustershell = callPackage ../development/python-modules/clustershell { };
+
   dendropy = callPackage ../development/python-modules/dendropy { };
 
   dbf = callPackage ../development/python-modules/dbf { };
