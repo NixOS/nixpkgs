@@ -1,46 +1,44 @@
-{ stdenv, lib, fetchzip, libmnl, useSystemd ? stdenv.isLinux }:
+{ stdenv, fetchzip, libmnl ? null, makeWrapper ? null, wireguard-go ? null }:
 
-let
-  inherit (lib) optional optionalString;
-in
+with stdenv.lib;
 
 stdenv.mkDerivation rec {
   name = "wireguard-tools-${version}";
   version = "0.0.20180519";
 
   src = fetchzip {
-    url    = "https://git.zx2c4.com/WireGuard/snapshot/WireGuard-${version}.tar.xz";
+    url = "https://git.zx2c4.com/WireGuard/snapshot/WireGuard-${version}.tar.xz";
     sha256 = "0pd04ia0wcm0f6di4gx5kflccc5j35d72j38l8jqpj8vinl6l070";
   };
 
-  preConfigure = "cd src";
+  sourceRoot = "source/src/tools";
 
-  buildInputs = optional stdenv.isLinux libmnl;
-
-  enableParallelBuilding = true;
+  nativeBuildInputs = [ (optional stdenv.isDarwin makeWrapper) ];
+  buildInputs = [ (optional stdenv.isLinux libmnl) ];
 
   makeFlags = [
-    "WITH_BASHCOMPLETION=yes"
-    "WITH_WGQUICK=yes"
-    "WITH_SYSTEMDUNITS=${if useSystemd then "yes" else "no"}"
     "DESTDIR=$(out)"
     "PREFIX=/"
-    "-C" "tools"
+    "WITH_BASHCOMPLETION=yes"
+    "WITH_SYSTEMDUNITS=yes"
+    "WITH_WGQUICK=yes"
   ];
 
-  buildPhase = "make tools";
-
-  postInstall = optionalString useSystemd ''
+  postFixup = ''
     substituteInPlace $out/lib/systemd/system/wg-quick@.service \
       --replace /usr/bin $out/bin
+  '' + optionalString stdenv.isDarwin ''
+    for f in $out/bin/*; do
+      wrapProgram $f --prefix PATH : ${wireguard-go}/bin
+    done
   '';
 
   meta = with stdenv.lib; {
-    homepage     = https://www.wireguard.com/;
+    description = "Tools for the WireGuard secure network tunnel";
     downloadPage = https://git.zx2c4.com/WireGuard/refs/;
-    description  = "Tools for the WireGuard secure network tunnel";
-    maintainers  = with maintainers; [ ericsagnes mic92 zx2c4 ];
-    license      = licenses.gpl2;
-    platforms    = platforms.unix;
+    homepage = https://www.wireguard.com/;
+    license = licenses.gpl2;
+    maintainers = with maintainers; [ ericsagnes mic92 zx2c4 ];
+    platforms = platforms.unix;
   };
 }
