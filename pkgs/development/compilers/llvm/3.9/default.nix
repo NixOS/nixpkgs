@@ -1,4 +1,4 @@
-{ newScope, stdenv, libstdcxxHook, isl, fetchurl, overrideCC, wrapCC, ccWrapperFun, darwin }:
+{ newScope, stdenv, libstdcxxHook, isl, fetchurl, overrideCC, wrapCCWith, darwin }:
 let
   callPackage = newScope (self // { inherit stdenv isl version fetch; });
 
@@ -26,17 +26,13 @@ let
 
     clang = if stdenv.cc.isGNU then self.libstdcxxClang else self.libcxxClang;
 
-    libstdcxxClang = ccWrapperFun {
+    libstdcxxClang = wrapCCWith {
       cc = self.clang-unwrapped;
-      /* FIXME is this right? */
-      inherit (stdenv.cc) bintools libc nativeTools nativeLibc;
       extraPackages = [ libstdcxxHook ];
     };
 
-    libcxxClang = ccWrapperFun {
+    libcxxClang = wrapCCWith {
       cc = self.clang-unwrapped;
-      /* FIXME is this right? */
-      inherit (stdenv.cc) bintools libc nativeTools nativeLibc;
       extraPackages = [ self.libcxx self.libcxxabi ];
     };
 

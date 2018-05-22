@@ -1,5 +1,5 @@
 { lowPrio, newScope, stdenv, targetPlatform, cmake, libstdcxxHook
-, libxml2, python2, isl, fetchurl, overrideCC, wrapCC, ccWrapperFun
+, libxml2, python2, isl, fetchurl, overrideCC, wrapCCWith
 , darwin
 }:
 
@@ -40,17 +40,13 @@ let
 
     clang = if stdenv.cc.isGNU then self.libstdcxxClang else self.libcxxClang;
 
-    libstdcxxClang = ccWrapperFun {
+    libstdcxxClang = wrapCCWith {
       cc = self.clang-unwrapped;
-      /* FIXME is this right? */
-      inherit (stdenv.cc) bintools libc nativeTools nativeLibc;
       extraPackages = [ libstdcxxHook ];
     };
 
-    libcxxClang = ccWrapperFun {
+    libcxxClang = wrapCCWith {
       cc = self.clang-unwrapped;
-      /* FIXME is this right? */
-      inherit (stdenv.cc) bintools libc nativeTools nativeLibc;
       extraPackages = [ self.libcxx self.libcxxabi ];
     };
 

@@ -6996,42 +6996,46 @@ with pkgs;
 
   wla-dx = callPackage ../development/compilers/wla-dx { };
 
-  wrapCCWith = { name ? "", cc, bintools, libc, extraBuildCommands ? "" }:
-      ccWrapperFun rec {
+  wrapCCWith =
+    { cc
+    , # This should be the only bintools runtime dep with this sort of logic. The
+      # Others should instead delegate to the next stage's choice with
+      # `targetPackages.stdenv.cc.bintools`. This one is different just to
+      # provide the default choice, avoiding infinite recursion.
+      bintools ? if targetPlatform.isDarwin then darwin.binutils else binutils
+    , libc ? bintools.libc
+    , ...
+    } @ extraArgs:
+      callPackage ../build-support/cc-wrapper (let self = {
     nativeTools = targetPlatform == hostPlatform && stdenv.cc.nativeTools or false;
     nativeLibc = targetPlatform == hostPlatform && stdenv.cc.nativeLibc or false;
     nativePrefix = stdenv.cc.nativePrefix or "";
-    noLibc = !nativeLibc && (libc == null);
+    noLibc = !self.nativeLibc && (self.libc == null);
 
     isGNU = cc.isGNU or false;
     isClang = cc.isClang or false;
 
-    inherit name cc bintools libc extraBuildCommands;
-  };
-
-  ccWrapperFun = callPackage ../build-support/cc-wrapper;
-  bintoolsWrapperFun = callPackage ../build-support/bintools-wrapper;
+    inherit cc bintools libc;
+  } // extraArgs; in self);
 
   wrapCC = cc: wrapCCWith {
-    name = lib.optionalString (targetPlatform != hostPlatform) "gcc-cross-wrapper";
     inherit cc;
-    # This should be the only bintools runtime dep with this sort of logic. The
-    # Others should instead delegate to the next stage's choice with
-    # `targetPackages.stdenv.cc.bintools`. This one is different just to
-    # provide the default choice, avoiding infinite recursion.
-    bintools = if targetPlatform.isDarwin then darwin.binutils else binutils;
-    libc = if targetPlatform != hostPlatform then libcCross else stdenv.cc.libc;
   };
 
-  wrapBintoolsWith = { bintools, libc, extraBuildCommands ? "" }: bintoolsWrapperFun {
+  wrapBintoolsWith =
+    { bintools
+    , libc ? if targetPlatform != hostPlatform then libcCross else stdenv.cc.libc
+    , ...
+    } @ extraArgs:
+      callPackage ../build-support/bintools-wrapper (let self = {
     nativeTools = targetPlatform == hostPlatform && stdenv.cc.nativeTools or false;
     nativeLibc = targetPlatform == hostPlatform && stdenv.cc.nativeLibc or false;
     nativePrefix = stdenv.cc.nativePrefix or "";
 
-    noLibc = (libc == null);
+    noLibc = (self.libc == null);
 
-    inherit bintools libc extraBuildCommands;
-  };
+    inherit bintools libc;
+  } // extraArgs; in self);
 
   # prolog
   yap = callPackage ../development/compilers/yap { };
@@ -7637,11 +7641,9 @@ with pkgs;
     noSysDirs = (targetPlatform != buildPlatform) || noSysDirs;
   };
   binutils = wrapBintoolsWith {
-    libc = if targetPlatform != hostPlatform then libcCross else stdenv.cc.libc;
     bintools = binutils-unwrapped;
   };
   binutils_nogold = lowPrio (wrapBintoolsWith {
-    libc = if targetPlatform != hostPlatform then libcCross else stdenv.cc.libc;
     bintools = binutils-unwrapped.override {
       gold = false;
     };
