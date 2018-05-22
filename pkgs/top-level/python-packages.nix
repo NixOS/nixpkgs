@@ -13034,15 +13034,7 @@ in {
     };
   };
 
-  timeout-decorator = buildPythonPackage rec {
-    name    = "timeout-decorator-${version}";
-    version = "0.3.2";
-
-    src = pkgs.fetchurl {
-      url    = "http://pypi.python.org/packages/source/t/timeout-decorator/${name}.tar.gz";
-      sha256 = "1x9l8bwdk72if2d5h5mi4lcaidbsmyh0iz114cfyyj1rzz5rxqaf";
-    };
-  };
+  timeout-decorator = callPackage ../development/python-modules/timeout-decorator { };
 
   pid = buildPythonPackage rec {
     name = "pid-${version}";
