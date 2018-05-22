@@ -1,12 +1,11 @@
 { stdenv, fetchgit, pidgin, glib, libxml2 }:
 
 stdenv.mkDerivation rec {
-  name = "purple-xmpp-upload-${version}";
-  version = "178096cbfc9df165c2dc1677666439969d212b37";
+  name = "purple-xmpp-upload-2017-12-31";
 
   src = fetchgit {
     url = "https://github.com/Junker/purple-xmpp-http-upload";
-    rev = version;
+    rev = "178096cbfc9df165c2dc1677666439969d212b37";
     sha256 = "12l9rqlgb4i50xxrfnvwz9sqfk0d3c0m6l09mnvfixqi8illyvlp";
   };
 
