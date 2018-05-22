@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, pkgconfig, qt5, xorg, lxqt, libfm, libexif }:
+{ stdenv, fetchFromGitHub, cmake, pkgconfig, qt5, xorg, lxqt-build-tools, libfm-qt, libexif }:
 
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     cmake
     pkgconfig
-    lxqt.lxqt-build-tools
+    lxqt-build-tools
   ];
 
   buildInputs = [
@@ -23,10 +23,9 @@ stdenv.mkDerivation rec {
     qt5.qttools
     qt5.qtx11extras
     qt5.qtsvg
-    lxqt.libfm-qt
+    libfm-qt
     xorg.libpthreadstubs
     xorg.libXdmcp
-    libfm
     libexif
   ];
 
