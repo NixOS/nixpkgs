@@ -1,5 +1,7 @@
 { newScope, stdenv, libstdcxxHook, cmake, libxml2, python2, isl, fetchurl
 , overrideCC, wrapCCWith, darwin
+, buildLlvmPackages # ourself, but from the previous stage, for cross
+, targetLlvmPackages # ourself, but from the next stage, for cross
 }:
 
 let
@@ -34,7 +36,7 @@ let
 
     libcxxClang = wrapCCWith {
       cc = self.clang-unwrapped;
-      extraPackages = [ self.libcxx self.libcxxabi ];
+      extraPackages = [ targetLlvmPackages.libcxx targetLlvmPackages.libcxxabi ];
     };
 
     stdenv = stdenv.override (drv: {
@@ -44,7 +46,7 @@ let
 
     libcxxStdenv = stdenv.override (drv: {
       allowedRequisites = null;
-      cc = self.libcxxClang;
+      cc = buildLlvmPackages.libcxxClang;
     });
 
     lldb = callPackage ./lldb.nix {};

@@ -6706,30 +6706,40 @@ with pkgs;
 
   llvmPackages_37 = callPackage ../development/compilers/llvm/3.7 ({
     inherit (stdenvAdapters) overrideCC;
+    buildLlvmPackages = buildPackages.llvmPackages_37;
+    targetLlvmPackages = targetPackages.llvmPackages_37;
   } // stdenv.lib.optionalAttrs (stdenv.cc.isGNU && stdenv.hostPlatform.isi686) {
     stdenv = overrideCC stdenv gcc6;
   });
 
   llvmPackages_38 = callPackage ../development/compilers/llvm/3.8 ({
     inherit (stdenvAdapters) overrideCC;
+    buildLlvmPackages = buildPackages.llvmPackages_38;
+    targetLlvmPackages = targetPackages.llvmPackages_38;
   } // stdenv.lib.optionalAttrs (stdenv.cc.isGNU && stdenv.hostPlatform.isi686) {
     stdenv = overrideCC stdenv gcc6;
   });
 
   llvmPackages_39 = callPackage ../development/compilers/llvm/3.9 ({
     inherit (stdenvAdapters) overrideCC;
+    buildLlvmPackages = buildPackages.llvmPackages_39;
+    targetLlvmPackages = targetPackages.llvmPackages_39;
   } // stdenv.lib.optionalAttrs (stdenv.cc.isGNU && stdenv.hostPlatform.isi686) {
     stdenv = overrideCC stdenv gcc6;
   });
 
   llvmPackages_4 = callPackage ../development/compilers/llvm/4 ({
     inherit (stdenvAdapters) overrideCC;
+    buildLlvmPackages = buildPackages.llvmPackages_4;
+    targetLlvmPackages = targetPackages.llvmPackages_4;
   } // stdenv.lib.optionalAttrs (stdenv.cc.isGNU && stdenv.hostPlatform.isi686) {
     stdenv = overrideCC stdenv gcc6;
   });
 
   llvmPackages_5 = callPackage ../development/compilers/llvm/5 ({
     inherit (stdenvAdapters) overrideCC;
+    buildLlvmPackages = buildPackages.llvmPackages_5;
+    targetLlvmPackages = targetPackages.llvmPackages_5;
   } // stdenv.lib.optionalAttrs stdenv.isDarwin {
     cmake = cmake.override {
       isBootstrap = true;
@@ -6743,6 +6753,8 @@ with pkgs;
 
   llvmPackages_6 = callPackage ../development/compilers/llvm/6 ({
     inherit (stdenvAdapters) overrideCC;
+    buildLlvmPackages = buildPackages.llvmPackages_6;
+    targetLlvmPackages = targetPackages.llvmPackages_6;
   } // stdenv.lib.optionalAttrs (stdenv.cc.isGNU && stdenv.hostPlatform.isi686) {
     stdenv = overrideCC stdenv gcc6; # with gcc-7: undefined reference to `__divmoddi4'
   });
