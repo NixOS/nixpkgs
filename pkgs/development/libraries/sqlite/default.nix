@@ -4,13 +4,17 @@ assert interactive -> readline != null && ncurses != null;
 
 with stdenv.lib;
 
+let
+  archiveVersion = import ./archive-version.nix stdenv.lib;
+in
+
 stdenv.mkDerivation rec {
   name = "sqlite-${version}";
   version = "3.23.1";
 
   # NB! Make sure to update analyzer.nix src (in the same directory).
   src = fetchurl {
-    url = https://sqlite.org/2018/sqlite-autoconf-3230100.tar.gz;
+    url = "https://sqlite.org/2018/sqlite-autoconf-${archiveVersion version}.tar.gz";
     sha256 = "09ggapjhqjb2pzk0wkfczil77plijg3d77m2bpzlwx2y7ql2p14j";
   };
 
