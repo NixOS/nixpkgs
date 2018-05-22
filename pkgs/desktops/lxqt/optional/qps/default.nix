@@ -6,7 +6,7 @@ stdenv.mkDerivation rec {
   version = "1.10.17";
 
   src = fetchFromGitHub {
-    owner = "QtDesktop";
+    owner = "lxqt";
     repo = pname;
     rev = version;
     sha256 = "1d5r6w9wsxjdrzq2hllrj2n1d9azy6g05hg0w0s6pikrmn1yl0a3";
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "The Qt process manager";
-    homepage = https://github.com/QtDesktop/qps;
+    homepage = https://github.com/lxqt/qps;
     license = licenses.gpl2;
     maintainers = with maintainers; [ romildo ];
     platforms = with platforms; unix;

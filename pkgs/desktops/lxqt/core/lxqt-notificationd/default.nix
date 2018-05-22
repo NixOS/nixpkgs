@@ -6,7 +6,7 @@ stdenv.mkDerivation rec {
   version = "0.12.0";
 
   src = fetchFromGitHub {
-    owner = "lxde";
+    owner = "lxqt";
     repo = pname;
     rev = version;
     sha256 = "0pmpdqgnb2dfxw5lirh89j8hnrwwcn2zc64byg4zi0xdvq6qms43";
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "The LXQt notification daemon";
-    homepage = https://github.com/lxde/lxqt-notificationd;
+    homepage = https://github.com/lxqt/lxqt-notificationd;
     license = licenses.lgpl21;
     platforms = with platforms; unix;
     maintainers = with maintainers; [ romildo ];

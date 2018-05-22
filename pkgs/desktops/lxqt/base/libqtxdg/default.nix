@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
   version = "3.1.0";
 
   src = fetchFromGitHub {
-    owner = "lxde";
+    owner = "lxqt";
     repo = "libqtxdg";
     rev = version;
     sha256 = "03kdrx5sgrl93yband87n30i0k2mv6dknwdw2adz45j5z9rhd3z6";
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Qt implementation of freedesktop.org xdg specs";
-    homepage = https://github.com/lxde/libqtxdg;
+    homepage = https://github.com/lxqt/libqtxdg;
     license = licenses.lgpl21;
     platforms = with platforms; unix;
     maintainers = with maintainers; [ romildo ];

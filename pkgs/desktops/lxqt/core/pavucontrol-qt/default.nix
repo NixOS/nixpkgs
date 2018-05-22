@@ -6,7 +6,7 @@ stdenv.mkDerivation rec {
   version = "0.4.0";
 
   src = fetchFromGitHub {
-    owner = "lxde";
+    owner = "lxqt";
     repo = pname;
     rev = version;
     sha256 = "1bxqpasfvaagbq8azl7536z2zk2725xg7jkvad5xh95zq1gb4hgk";
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A Pulseaudio mixer in Qt (port of pavucontrol)";
-    homepage = https://github.com/lxde/pavucontrol-qt;
+    homepage = https://github.com/lxqt/pavucontrol-qt;
     license = licenses.gpl2;
     platforms = with platforms; linux;
     maintainers = with maintainers; [ romildo ];

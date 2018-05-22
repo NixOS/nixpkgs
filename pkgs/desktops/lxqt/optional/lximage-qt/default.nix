@@ -6,7 +6,7 @@ stdenv.mkDerivation rec {
   version = "0.7.0";
 
   src = fetchFromGitHub {
-    owner = "lxde";
+    owner = "lxqt";
     repo = pname;
     rev = version;
     sha256 = "1slmaic9cmj5lqa5kwc1qfbbycwh8840wnkg0nxc99ls0aazlpzi";
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "The image viewer and screenshot tool for lxqt";
-    homepage = https://github.com/lxde/lximage-qt;
+    homepage = https://github.com/lxqt/lximage-qt;
     license = licenses.gpl2;
     platforms = with platforms; unix;
     maintainers = with maintainers; [ romildo ];
