@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, qt5, lxqt }:
+{ stdenv, fetchFromGitHub, cmake, lxqt-build-tools, qtermwidget, qt5 }:
 
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";
@@ -14,14 +14,14 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     cmake
-    lxqt.lxqt-build-tools
+    lxqt-build-tools
   ];
 
   buildInputs = [
     qt5.qtbase
     qt5.qttools
     qt5.qtx11extras
-    lxqt.qtermwidget
+    qtermwidget
   ];
 
   cmakeFlags = [ "-DPULL_TRANSLATIONS=NO" ];
