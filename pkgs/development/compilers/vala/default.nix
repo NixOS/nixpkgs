@@ -37,12 +37,6 @@ let
 
 in rec {
 
-  vala_0_23 = generic {
-    major   = "0.23";
-    minor   = "3";
-    sha256  = "101xjbc818g4849n9a80c2aai13zakj7mpnd7470xnkvz5jwqq96";
-  };
-
   vala_0_26 = generic {
     major   = "0.26";
     minor   = "2";
