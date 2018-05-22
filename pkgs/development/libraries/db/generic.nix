@@ -20,7 +20,7 @@ stdenv.mkDerivation (rec {
 
   patches = extraPatches;
 
-  outputs = [ "out" "lib" ];
+  outputs = [ "bin" "out" "dev" ];
 
   configureFlags =
     [
