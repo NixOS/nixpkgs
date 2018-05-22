@@ -1,10 +1,14 @@
-{ lib, stdenv, fetchurl, zlib, interactive ? false, readline ? null, ncurses ? null }:
+{ stdenv, fetchurl, zlib, interactive ? false, readline ? null, ncurses ? null }:
 
 assert interactive -> readline != null && ncurses != null;
 
-stdenv.mkDerivation {
-  name = "sqlite-3.23.1";
+with stdenv.lib;
 
+stdenv.mkDerivation rec {
+  name = "sqlite-${version}";
+  version = "3.23.1";
+
+  # NB! Make sure to update analyzer.nix src (in the same directory).
   src = fetchurl {
     url = https://sqlite.org/2018/sqlite-autoconf-3230100.tar.gz;
     sha256 = "09ggapjhqjb2pzk0wkfczil77plijg3d77m2bpzlwx2y7ql2p14j";
@@ -13,9 +17,9 @@ stdenv.mkDerivation {
   outputs = [ "bin" "dev" "out" ];
   separateDebugInfo = stdenv.isLinux;
 
-  buildInputs = [ zlib ] ++ lib.optionals interactive [ readline ncurses ];
+  buildInputs = [ zlib ] ++ optionals interactive [ readline ncurses ];
 
-  configureFlags = [ "--enable-threadsafe" ] ++ lib.optional interactive "--enable-readline";
+  configureFlags = [ "--enable-threadsafe" ] ++ optional interactive "--enable-readline";
 
   NIX_CFLAGS_COMPILE = [
     "-DSQLITE_ENABLE_COLUMN_METADATA"
@@ -59,9 +63,10 @@ stdenv.mkDerivation {
   '';
 
   meta = {
-    homepage = http://www.sqlite.org/;
     description = "A self-contained, serverless, zero-configuration, transactional SQL database engine";
-    platforms = stdenv.lib.platforms.unix;
-    maintainers = with stdenv.lib.maintainers; [ eelco np ];
+    downloadPage = http://sqlite.org/download.html;
+    homepage = http://www.sqlite.org/;
+    maintainers = with maintainers; [ eelco np ];
+    platforms = platforms.unix;
   };
 }
