@@ -7688,6 +7688,8 @@ with pkgs;
     guile = guile_2_0;
   };
 
+  inav = callPackage ../development/misc/stm32/inav { };
+
   pharo-vms = callPackage ../development/pharo/vm { };
   pharo = pharo-vms.multi-vm-wrapper;
   pharo-cog32 = pharo-vms.cog32;
