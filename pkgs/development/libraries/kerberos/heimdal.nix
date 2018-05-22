@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, python2, perl, yacc, flex
 , texinfo, perlPackages
 , openldap, libcap_ng, sqlite, openssl, db, libedit, pam
-
+, CoreFoundation, Security, SystemConfiguration
 # Extra Args
 , type ? ""
 }:
@@ -26,8 +26,9 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ autoreconfHook pkgconfig python2 perl yacc flex ]
     ++ (with perlPackages; [ JSON ])
     ++ optional (!libOnly) texinfo;
-  buildInputs = optionals (!stdenv.isFreeBSD) [ libcap_ng db ]
-    ++ [ sqlite openssl libedit ]
+  buildInputs = optionals (stdenv.isLinux) [ libcap_ng ]
+    ++ [ db sqlite openssl libedit ]
+    ++ optionals (stdenv.isDarwin) [ CoreFoundation Security SystemConfiguration ]
     ++ optionals (!libOnly) [ openldap pam ];
 
   ## ugly, X should be made an option
@@ -43,7 +44,7 @@ stdenv.mkDerivation rec {
     "--with-berkeley-db-include=${db.dev}/include"
   ] ++ optionals (!libOnly) [
     "--with-openldap=${openldap.dev}"
-  ] ++ optionals (!stdenv.isFreeBSD) [
+  ] ++ optionals (stdenv.isLinux) [
     "--with-capng"
   ];
 
@@ -93,7 +94,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "An implementation of Kerberos 5 (and some more stuff)";
     license = licenses.bsd3;
-    platforms = platforms.linux ++ platforms.freebsd;
+    platforms = platforms.unix;
     maintainers = with maintainers; [ wkennington ];
   };
 
