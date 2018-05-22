@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
     ++ optional stdenv.isFreeBSD cyrus_sasl;
 
   postInstall = ''
-    for f in $out/lib/*.la $out/lib/apr-util-1/*.la; do
+    for f in $out/lib/*.la $out/lib/apr-util-1/*.la $dev/bin/apu-1-config; do
       substituteInPlace $f \
         --replace "${expat.dev}/lib" "${expat.out}/lib" \
         --replace "${db.dev}/lib" "${db.out}/lib" \
