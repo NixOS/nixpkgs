@@ -14856,8 +14856,9 @@ with pkgs;
     gconf = gnome2.GConf;
   };
 
-  atom = callPackage ../applications/editors/atom { };
-  atom-beta = callPackage ../applications/editors/atom/beta.nix { };
+  atomPackages = callPackage ../applications/editors/atom { };
+
+  inherit (atomPackages) atom atom-beta;
 
   aseprite = callPackage ../applications/editors/aseprite { };
   aseprite-unfree = aseprite.override { unfree = true; };
