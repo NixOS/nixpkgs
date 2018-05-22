@@ -13,6 +13,7 @@ let
       ${optionalString (cfg.nodeName != null) ''nodeName=${cfg.nodeName}''}
       ${optionalString (cfg.partitionName != null) ''partitionName=${cfg.partitionName}''}
       PlugStackConfig=${plugStackConfig}
+      ProctrackType=${cfg.procTrackType}
       ${cfg.extraConfig}
     '';
 
@@ -100,6 +101,16 @@ in
           from within an interactive session or a batch job. This activates the
           slurm-spank-x11 module. Note that this requires 'services.openssh.forwardX11'
           to be enabled on the compute nodes.
+        '';
+      };
+
+      procTrackType = mkOption {
+        type = types.string;
+        default = "proctrack/linuxproc";
+        description = ''
+          Plugin to be used for process tracking on a job step basis.
+          The slurmd daemon uses this mechanism to identify all processes
+          which are children of processes it spawns for a user job step.
         '';
       };
 
