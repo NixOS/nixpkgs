@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     homepage     = https://www.wireguard.com/;
     downloadPage = https://git.zx2c4.com/WireGuard/refs/;
-    description  = " Tools for the WireGuard secure network tunnel";
+    description  = "Tools for the WireGuard secure network tunnel";
     maintainers  = with maintainers; [ ericsagnes mic92 zx2c4 ];
     license      = licenses.gpl2;
     platforms    = platforms.unix;
