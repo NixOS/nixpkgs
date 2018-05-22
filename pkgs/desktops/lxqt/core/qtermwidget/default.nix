@@ -3,13 +3,13 @@
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";
   pname = "qtermwidget";
-  version = "0.8.0";
+  version = "0.9.0";
 
   src = fetchFromGitHub {
     owner = "lxde";
     repo = pname;
     rev = version;
-    sha256 = "14yjz6b1l2yd7sfsxjv26yg5153fpyq23443kswkgkd9jh32gxj4";
+    sha256 = "0awp33cnkpi9brpx01mz5hwj7j2lq1wdi8cabk3wassd99vvxdxz";
   };
 
   nativeBuildInputs = [ cmake lxqt.lxqt-build-tools ];

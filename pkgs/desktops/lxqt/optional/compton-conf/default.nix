@@ -3,13 +3,13 @@
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";
   pname = "compton-conf";
-  version = "0.3.0";
+  version = "0.4.0";
 
   src = fetchFromGitHub {
     owner = "lxde";
     repo = pname;
     rev = version;
-    sha256 = "1p1y7g5psczx1dgh6gd1h5iga8rylvczkwlfirzrh0rfl45dajgb";
+    sha256 = "1r187fx1vivzq1gcwwawax36mnlmfig5j1ba4s4wfdi3q2wcq7mw";
   };
 
   nativeBuildInputs = [

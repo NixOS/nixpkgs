@@ -3,13 +3,13 @@
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";
   pname = "lxqt-notificationd";
-  version = "0.12.0";
+  version = "0.13.0";
 
   src = fetchFromGitHub {
     owner = "lxde";
     repo = pname;
     rev = version;
-    sha256 = "0pmpdqgnb2dfxw5lirh89j8hnrwwcn2zc64byg4zi0xdvq6qms43";
+    sha256 = "0vjpl3ipc0hrz255snkp99h6xrlid490ml8jb588rdpfina66sp1";
   };
 
   nativeBuildInputs = [

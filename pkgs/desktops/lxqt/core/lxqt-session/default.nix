@@ -3,13 +3,13 @@
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";
   pname = "lxqt-session";
-  version = "0.12.0";
+  version = "0.13.0";
 
   src = fetchFromGitHub {
     owner = "lxde";
     repo = pname;
     rev = version;
-    sha256 = "03gi9svxqsfjhk5ifbaalq9i44ggx8afwms1hb312czqn82wrszb";
+    sha256 = "0ngcrkmfpahii4yibsh03b8v8af93hhqm42kk1nnhczc8dg49mhs";
   };
 
   nativeBuildInputs = [
