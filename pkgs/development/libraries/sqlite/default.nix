@@ -1,29 +1,40 @@
-{ stdenv, fetchurl, zlib, interactive ? false, readline ? null, ncurses ? null }:
+{ stdenv, fetchzip, tcl, zlib, interactive ? false, readline ? null, ncurses ? null }:
 
 assert interactive -> readline != null && ncurses != null;
 
 with stdenv.lib;
 
 let
-  archiveVersion = import ./archive-version.nix stdenv.lib;
+  archiveVersion = version:
+    let
+      segments = splitString "." version;
+      major = head segments;
+      minor = concatMapStrings (fixedWidthNumber 2) (tail segments);
+    in
+    major + minor + "00";
 in
 
 stdenv.mkDerivation rec {
   name = "sqlite-${version}";
   version = "3.23.1";
 
-  # NB! Make sure to update analyzer.nix src (in the same directory).
-  src = fetchurl {
-    url = "https://sqlite.org/2018/sqlite-autoconf-${archiveVersion version}.tar.gz";
-    sha256 = "09ggapjhqjb2pzk0wkfczil77plijg3d77m2bpzlwx2y7ql2p14j";
+  src = fetchzip {
+    url = "https://sqlite.org/2018/sqlite-src-${archiveVersion version}.zip";
+    sha256 = "1dshxmiqdiympg1i2jsz3x543zmcgzhn78lpsjc0546rir0s0zk0";
   };
 
   outputs = [ "bin" "dev" "out" ];
   separateDebugInfo = stdenv.isLinux;
 
-  buildInputs = [ zlib ] ++ optionals interactive [ readline ncurses ];
+  nativeBuildInputs = [ tcl ];
+  buildInputs = [ zlib ]
+    ++ optionals interactive [ readline ncurses ];
 
-  configureFlags = [ "--enable-threadsafe" ] ++ optional interactive "--enable-readline";
+  configureFlags = [
+    "--disable-tcl"
+    "--enable-threadsafe"
+    (optional interactive "--enable-readline")
+  ];
 
   NIX_CFLAGS_COMPILE = [
     "-DSQLITE_ENABLE_COLUMN_METADATA"
@@ -61,9 +72,9 @@ stdenv.mkDerivation rec {
     # Necessary for FTS5 on Linux
     export NIX_LDFLAGS="$NIX_LDFLAGS -lm"
 
-    echo ""
+    echo
     echo "NIX_CFLAGS_COMPILE = $NIX_CFLAGS_COMPILE"
-    echo ""
+    echo
   '';
 
   meta = {
