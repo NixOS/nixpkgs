@@ -10,10 +10,10 @@
 }:
 
 let
-
   sh = busybox-sandbox-shell;
 
-  common = { name, suffix ? "", src, fromGit ? fromGit }: stdenv.mkDerivation rec {
+  fromGit' = fromGit;
+  common = { name, suffix ? "", src, fromGit ? fromGit' }: stdenv.mkDerivation rec {
     inherit name src;
     version = lib.getVersion name;
 
