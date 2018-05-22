@@ -16,7 +16,7 @@ stdenv.mkDerivation {
     mkdir -p $out/lib
     $(for coreDir in $cores
     do
-      $(ln -s $coreDir/*.so $out/lib/.)
+      $(ln -s $coreDir/* $out/lib/.)
     done)
 
     ln -s -t $out ${retroarch}/share

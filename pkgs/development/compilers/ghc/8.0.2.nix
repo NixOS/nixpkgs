@@ -91,7 +91,8 @@ stdenv.mkDerivation rec {
       extraPrefix = "libraries/Cabal/";
     })
   ] ++ stdenv.lib.optional stdenv.isLinux ./ghc-no-madv-free.patch
-    ++ stdenv.lib.optional stdenv.isDarwin ./ghc-8.0.2-no-cpp-warnings.patch;
+    ++ stdenv.lib.optional stdenv.isDarwin ./ghc-8.0.2-no-cpp-warnings.patch
+    ++ stdenv.lib.optional stdenv.isDarwin ./backport-dylib-command-size-limit.patch;
 
   postPatch = "patchShebangs .";
 

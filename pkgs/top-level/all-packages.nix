@@ -7433,7 +7433,9 @@ with pkgs;
   spidermonkey_1_8_5 = callPackage ../development/interpreters/spidermonkey/1.8.5.nix { };
   spidermonkey_17 = callPackage ../development/interpreters/spidermonkey/17.nix { };
   spidermonkey_31 = callPackage ../development/interpreters/spidermonkey/31.nix { };
-  spidermonkey_38 = callPackage ../development/interpreters/spidermonkey/38.nix { };
+  spidermonkey_38 = callPackage ../development/interpreters/spidermonkey/38.nix {
+    inherit (darwin) libobjc;
+  };
   spidermonkey_52 = callPackage ../development/interpreters/spidermonkey/52.nix { };
   spidermonkey = spidermonkey_31;
 
@@ -11508,7 +11510,9 @@ with pkgs;
 
   simpleitk = callPackage ../development/libraries/simpleitk { lua = lua51Packages.lua; };
 
-  sfml = callPackage ../development/libraries/sfml { };
+  sfml = callPackage ../development/libraries/sfml {
+    inherit (darwin.apple_sdk.frameworks) IOKit Foundation AppKit OpenAL;
+  };
   csfml = callPackage ../development/libraries/csfml { };
 
   shapelib = callPackage ../development/libraries/shapelib { };
@@ -14802,8 +14806,9 @@ with pkgs;
     gconf = gnome2.GConf;
   };
 
-  atom = callPackage ../applications/editors/atom { };
-  atom-beta = callPackage ../applications/editors/atom/beta.nix { };
+  atomPackages = callPackage ../applications/editors/atom { };
+
+  inherit (atomPackages) atom atom-beta;
 
   aseprite = callPackage ../applications/editors/aseprite { };
   aseprite-unfree = aseprite.override { unfree = true; };
@@ -14980,7 +14985,6 @@ with pkgs;
   bombono = callPackage ../applications/video/bombono {};
 
   bomi = libsForQt5.callPackage ../applications/video/bomi {
-    youtube-dl = pythonPackages.youtube-dl;
     pulseSupport = config.pulseaudio or true;
     ffmpeg = ffmpeg_2;
   };
@@ -16910,7 +16914,6 @@ with pkgs;
 
   mpv = callPackage ../applications/video/mpv rec {
     inherit (luaPackages) luasocket;
-    youtube-dl = pythonPackages.youtube-dl;
     waylandSupport     = stdenv.isLinux;
     alsaSupport        = !stdenv.isDarwin;
     pulseSupport       = !stdenv.isDarwin;
@@ -17335,6 +17338,8 @@ with pkgs;
   purple-plugin-pack = callPackage ../applications/networking/instant-messengers/pidgin-plugins/purple-plugin-pack { };
 
   purple-vk-plugin = callPackage ../applications/networking/instant-messengers/pidgin-plugins/purple-vk-plugin { };
+
+  purple-xmpp-http-upload = callPackage ../applications/networking/instant-messengers/pidgin-plugins/purple-xmpp-http-upload { };
 
   telegram-purple = callPackage ../applications/networking/instant-messengers/pidgin-plugins/telegram-purple { };
 
@@ -18824,7 +18829,9 @@ with pkgs;
 
   yoshimi = callPackage ../applications/audio/yoshimi { };
 
-  inherit (pythonPackages) youtube-dl;
+  youtube-dl = with pythonPackages; toPythonApplication youtube-dl;
+
+  youtube-dl-light = with pythonPackages; toPythonApplication youtube-dl-light;
 
   youtube-viewer = perlPackages.WWWYoutubeViewer;
 
@@ -20764,6 +20771,8 @@ with pkgs;
   nix-delegate = haskell.lib.justStaticExecutables haskellPackages.nix-delegate;
   nix-deploy = haskell.lib.justStaticExecutables haskellPackages.nix-deploy;
   nix-diff = haskell.lib.justStaticExecutables haskellPackages.nix-diff;
+
+  nix-du = callPackage ../tools/package-management/nix-du { };
 
   nix-info = callPackage ../tools/nix/info { };
   nix-info-tested = nix-info.override { doCheck = true; };

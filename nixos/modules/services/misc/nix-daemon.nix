@@ -344,7 +344,7 @@ in
         default =
           [
             "$HOME/.nix-defexpr/channels"
-            "nixpkgs=/nix/var/nix/profiles/per-user/root/channels/nixos/nixpkgs"
+            "nixpkgs=/nix/var/nix/profiles/per-user/root/channels/nixos"
             "nixos-config=/etc/nixos/configuration.nix"
             "/nix/var/nix/profiles/per-user/root/channels"
           ];
