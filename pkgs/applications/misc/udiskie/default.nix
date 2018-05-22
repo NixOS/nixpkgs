@@ -5,7 +5,6 @@
 , docopt
 , pygobject3
 , pyyaml
-, ...
 }:
 
 buildPythonApplication rec {
