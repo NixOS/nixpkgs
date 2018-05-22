@@ -30,7 +30,7 @@ in stdenv.mkDerivation rec {
     [ dpdk libpcap numactl ]
     ++ stdenv.lib.optionals withGtk [gtk2];
 
-  RTE_SDK = "${dpdk}";
+  RTE_SDK = "${dpdk}/share/dpdk";
   RTE_TARGET = "x86_64-native-linuxapp-gcc";
   GUI = stdenv.lib.optionalString withGtk "true";
 

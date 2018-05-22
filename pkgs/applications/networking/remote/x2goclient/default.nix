@@ -1,4 +1,5 @@
-{ stdenv, fetchurl, cups, libssh, libXpm, nxproxy, openldap, openssh, makeWrapper, qt4 }:
+{ stdenv, fetchurl, cups, libssh, libXpm, nxproxy, openldap, openssh,
+makeWrapper, qtbase, qtsvg, qtx11extras, qttools, phonon }:
 
 stdenv.mkDerivation rec {
   name = "x2goclient-${version}";
@@ -9,18 +10,19 @@ stdenv.mkDerivation rec {
     sha256 = "0jzlwn0v8b123h5l7hrhs35x2z6mb98zg1s0shqb4yfp2g641yp3";
   };
 
-  buildInputs = [ cups libssh libXpm nxproxy openldap openssh qt4 ];
+  buildInputs = [ cups libssh libXpm nxproxy openldap openssh
+                  qtbase qtsvg qtx11extras qttools phonon ];
   nativeBuildInputs = [ makeWrapper ];
 
   patchPhase = ''
      substituteInPlace Makefile \
        --replace "SHELL=/bin/bash" "SHELL=$SHELL" \
-       --replace "lrelease-qt4" "${qt4}/bin/lrelease" \
-       --replace "qmake-qt4" "${qt4}/bin/qmake" \
+       --replace "lrelease-qt4" "${qttools.dev}/bin/lrelease" \
+       --replace "qmake-qt4" "${qtbase.dev}/bin/qmake" \
        --replace "-o root -g root" ""
   '';
 
-  makeFlags = [ "PREFIX=$(out)" "ETCDIR=$(out)/etc" ];
+  makeFlags = [ "PREFIX=$(out)" "ETCDIR=$(out)/etc" "build_client" "build_man" ];
 
   enableParallelBuilding = true;
 

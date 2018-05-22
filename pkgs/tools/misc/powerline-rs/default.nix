@@ -1,4 +1,4 @@
-{ lib, rustPlatform, fetchFromGitHub, pkgconfig, file, perl, cmake, openssl_1_1_0, libssh2, libgit2, libzip }:
+{ stdenv, lib, rustPlatform, fetchFromGitHub, pkgconfig, file, perl, curl, cmake, openssl_1_1_0, libssh2, libgit2, libzip, Security }:
 rustPlatform.buildRustPackage rec {
   pname = "powerline-rs";
   name = "${pname}-${version}";
@@ -14,8 +14,8 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "184s432a6damzvl0lv6jar1iml9dq60r190aqjy44lcg938981zc";
 
-  nativeBuildInputs = [ pkgconfig file perl cmake ];
-  buildInputs = [ openssl_1_1_0 libssh2 libgit2 libzip ];
+  nativeBuildInputs = [ pkgconfig file perl cmake curl ];
+  buildInputs = [ openssl_1_1_0 libssh2 libgit2 libzip ] ++ lib.optional stdenv.isDarwin Security;
 
   postInstall = ''
     install -Dm 755 "${pname}.bash" "$out/etc/bash_completion.d/${pname}"

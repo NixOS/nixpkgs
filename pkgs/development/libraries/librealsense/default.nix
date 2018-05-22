@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "librealsense-${version}";
-  version = "2.11.0";
+  version = "2.11.1";
 
   src = fetchFromGitHub {
     owner = "IntelRealSense";
     repo = "librealsense";
     rev = "v${version}";
-    sha256 = "11vzs2m6jh9v1xbffr2k541pymmih6g4w641mp8rll8qzqfh89i0";
+    sha256 = "1r27pdisg4hl4x23lrmykqfdc5agrc4pi161mhvzd1vjfkjrxbid";
   };
 
   buildInputs = [

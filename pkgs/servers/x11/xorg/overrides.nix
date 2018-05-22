@@ -661,6 +661,12 @@ in
     ];
   };
 
+  xorgcffiles = attrs: attrs // {
+    postInstall = stdenv.lib.optionalString stdenv.isDarwin ''
+      substituteInPlace $out/lib/X11/config/darwin.cf --replace "/usr/bin/" ""
+    '';
+  };
+
   xwd = attrs: attrs // {
     buildInputs = with xorg; attrs.buildInputs ++ [libXt libxkbfile];
   };
