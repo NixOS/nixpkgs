@@ -6757,6 +6757,9 @@ with pkgs;
   rustracer = callPackage ../development/tools/rust/racer { };
   rustracerd = callPackage ../development/tools/rust/racerd { };
   rust-bindgen = callPackage ../development/tools/rust/bindgen { };
+  rust-cbindgen = callPackage ../development/tools/rust/cbindgen {
+    rustPlatform = recurseIntoAttrs (makeRustPlatform rust_1_29);
+  };
   rustup = callPackage ../development/tools/rust/rustup {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
