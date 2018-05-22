@@ -11623,7 +11623,7 @@ with pkgs;
 
   sqlite = lowPrio (callPackage ../development/libraries/sqlite { });
 
-  sqlite3_analyzer = lowPrio (callPackage ../development/libraries/sqlite/sqlite3_analyzer.nix { });
+  sqlite-analyzer = lowPrio (callPackage ../development/libraries/sqlite/analyzer.nix { });
 
   sqlar = callPackage ../development/libraries/sqlite/sqlar.nix { };
 

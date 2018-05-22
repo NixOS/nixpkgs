@@ -257,6 +257,7 @@ mapAliases (rec {
   speedtest_cli = speedtest-cli;  # added 2015-02-17
   spice_gtk = spice-gtk; # added 2018-02-25
   spice_protocol = spice-protocol; # added 2018-02-25
+  sqlite3_analyzer = sqlite-analyzer; # added 2018-05-22
   sqliteInteractive = sqlite-interactive;  # added 2014-12-06
   sshfs = sshfs-fuse; # added 2017-08-14
   sshfsFuse = sshfs-fuse; # added 2016-09
