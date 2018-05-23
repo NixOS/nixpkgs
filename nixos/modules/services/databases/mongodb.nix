@@ -142,7 +142,7 @@ in
         };
 
         preStart = let
-          cfg_ = cfg // { enableAuth = false; };
+          cfg_ = cfg // { enableAuth = false; bind_ip = "127.0.0.1"; };
         in ''
           rm ${cfg.dbpath}/mongod.lock || true
           if ! test -e ${cfg.dbpath}; then
