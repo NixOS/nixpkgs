@@ -20,7 +20,7 @@ in
 , buildTools ? [], libraryToolDepends ? [], executableToolDepends ? [], testToolDepends ? [], benchmarkToolDepends ? []
 , configureFlags ? []
 , description ? ""
-, doCheck ? !isCross && (stdenv.lib.versionOlder "7.4" ghc.version)
+, doCheck ? !isCross && stdenv.lib.versionOlder "7.4" ghc.version
 , doBenchmark ? false
 , doHoogle ? true
 , editedCabalFile ? null
@@ -172,7 +172,7 @@ let
                       buildTools ++ libraryToolDepends ++ executableToolDepends;
   propagatedBuildInputs = buildDepends ++ libraryHaskellDepends ++ executableHaskellDepends;
   otherBuildInputs = setupHaskellDepends ++ extraLibraries ++ librarySystemDepends ++ executableSystemDepends ++
-                     optionals (allPkgconfigDepends != []) allPkgconfigDepends ++
+                     allPkgconfigDepends ++
                      optionals doCheck (testDepends ++ testHaskellDepends ++ testSystemDepends ++ testToolDepends) ++
                      optionals doBenchmark (benchmarkDepends ++ benchmarkHaskellDepends ++ benchmarkSystemDepends ++ benchmarkToolDepends);
   allBuildInputs = propagatedBuildInputs ++ otherBuildInputs;
