@@ -6,6 +6,7 @@
 , wrapBintoolsWith
 , wrapCCWith
 , buildIosSdk, targetIosSdkPkgs
+, xcode
 }:
 
 let
@@ -21,11 +22,10 @@ iosPlatformArch = { parsed, ... }: {
 in
 
 rec {
-  # TODO(kmicklas): Make a pure version of this for each supported SDK version.
   sdk = rec {
     name = "ios-sdk";
     type = "derivation";
-    outPath = "/Applications/Xcode.app/Contents/Developer/Platforms/iPhone${sdkType}.platform/Developer/SDKs/iPhone${sdkType}${version}.sdk";
+    outPath = xcode + "/Contents/Developer/Platforms/iPhone${sdkType}.platform/Developer/SDKs/iPhone${sdkType}${version}.sdk";
 
     sdkType = if targetPlatform.isiPhoneSimulator then "Simulator" else "OS";
     version = targetPlatform.sdkVer;
