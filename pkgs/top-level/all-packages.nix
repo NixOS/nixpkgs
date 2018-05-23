@@ -18552,6 +18552,12 @@ with pkgs;
     imlib2 = imlib2-nox;
   };
 
+  # Version without X11 or graphics
+  w3m-nographics = w3m.override {
+    x11Support = false;
+    graphicsSupport = false;
+  };
+
   # Version for batch text processing, not a good browser
   w3m-batch = w3m.override {
     graphicsSupport = false;
