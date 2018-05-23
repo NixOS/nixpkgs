@@ -33,8 +33,7 @@ stdenv.mkDerivation rec {
   configureFlags = [
     "--disable-tcl"
     "--enable-threadsafe"
-    (optional interactive "--enable-readline")
-  ];
+  ] ++ optional interactive "--enable-readline";
 
   NIX_CFLAGS_COMPILE = [
     "-DSQLITE_ENABLE_COLUMN_METADATA"
