@@ -23,11 +23,10 @@
 
 , # Whether to build dynamic libs for the standard library (on the target
   # platform). Static libs are always built.
-  enableShared ? true
-
-, # What flavour to build. An empty string indicates no
-  # specific flavour and falls back to ghc default values.
-  ghcFlavour ? stdenv.lib.optionalString (targetPlatform != hostPlatform) "perf-cross"
+  enableShared ?
+    !(targetPlatform.isDarwin
+      # On iOS, dynamic linking is not supported
+      && (targetPlatform.isAarch64 || targetPlatform.isAarch32))
 , # Whether to backport https://phabricator.haskell.org/D4388 for
   # deterministic profiling symbol names, at the cost of a slightly
   # non-standard GHC API
@@ -45,14 +44,11 @@ let
     "${targetPlatform.config}-";
 
   buildMK = ''
-    BuildFlavour = ${ghcFlavour}
-    ifneq \"\$(BuildFlavour)\" \"\"
-    include mk/flavours/\$(BuildFlavour).mk
-    endif
     DYNAMIC_GHC_PROGRAMS = ${if enableShared then "YES" else "NO"}
   '' + stdenv.lib.optionalString enableIntegerSimple ''
     INTEGER_LIBRARY = integer-simple
   '' + stdenv.lib.optionalString (targetPlatform != hostPlatform) ''
+    BuildFlavour = perf-cross
     Stage1Only = YES
     HADDOCK_DOCS = NO
     BUILD_SPHINX_HTML = NO
@@ -157,10 +153,7 @@ stdenv.mkDerivation rec {
   # masss-rebuild.
   crossConfig = true;
 
-  nativeBuildInputs = [
-    autoconf autoreconfHook automake perl python3 sphinx
-    ghc alex happy hscolour
-  ];
+  nativeBuildInputs = [ alex autoconf autoreconfHook automake ghc happy hscolour perl python3 sphinx ];
 
   # For building runtime libs
   depsBuildTarget = toolsForTarget;
@@ -182,7 +175,7 @@ stdenv.mkDerivation rec {
   # zsh and other shells are smart about `{ghc}` but bash isn't, and doesn't
   # treat that as a unary `{x,y,z,..}` repetition.
   postInstall = ''
-    paxmark m $out/lib/${name}/bin/*
+    paxmark m $out/lib/${name}/bin/${if targetPlatform != hostPlatform then "ghc" else "{ghc,haddock}"}
 
     # Install the bash completion file.
     install -D -m 444 utils/completion/ghc.bash $out/share/bash-completion/completions/${targetPrefix}ghc
