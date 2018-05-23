@@ -40,12 +40,12 @@ in {
 
     systemd.packages = [ pkgs.flatpak pkgs.xdg-desktop-portal ] ++ cfg.extraPortals;
 
-    environment.variables = {
-      PATH = [
-        "$HOME/.local/share/flatpak/exports/bin"
-        "/var/lib/flatpak/exports/bin"
-      ];
+    environment.profiles = [
+      "$HOME/.local/share/flatpak/exports"
+      "/var/lib/flatpak/exports"
+    ];
 
+    environment.variables = {
       XDG_DESKTOP_PORTAL_PATH = map (p: "${p}/share/xdg-desktop-portal/portals") cfg.extraPortals;
     };
   };

@@ -5,18 +5,17 @@
 , docopt
 , pygobject3
 , pyyaml
-, ...
 }:
 
 buildPythonApplication rec {
   name = "udiskie-${version}";
-  version = "1.7.3";
+  version = "1.7.4";
 
   src = fetchFromGitHub {
     owner = "coldfix";
     repo = "udiskie";
     rev = version;
-    sha256 = "1yv1faq81n3vspf3jprcs5v21l2fchy3m3pc7lk8jb0xqlnh60x4";
+    sha256 = "0r3m8y6ppkl8p1lhr89sfk9v2la1zn0rbmr6hy860j7b22yvnkrn";
   };
 
   buildInputs = [

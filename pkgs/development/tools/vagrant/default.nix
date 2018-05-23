@@ -1,29 +1,36 @@
-{ lib, buildRubyGem, bundlerEnv, ruby, libarchive }:
-
-
-# To update vagrant, visit the Gemfile and re-run bundix.
+{ lib, fetchurl, buildRubyGem, bundlerEnv, ruby, libarchive }:
 
 let
-  gemset = import ./gemset.nix;
-  inherit (gemset.vagrant) version;
+  version = "2.1.1";
+  url = "https://github.com/hashicorp/vagrant/archive/v${version}.tar.gz";
+  sha256 = "0kgsb33f3wh6x4450x74wri6z78ky92sfrv7ba7h7zmxsadb6m4b";
 
   deps = bundlerEnv rec {
-    name = "vagrant-${version}";
+    name = "${pname}-${version}";
     pname = "vagrant";
     inherit version;
 
     inherit ruby;
     gemdir = ./.;
+    gemset = lib.recursiveUpdate (import ./gemset.nix) {
+      vagrant = {
+        source = {
+          type = "url";
+          inherit url sha256;
+        };
+        inherit version;
+      };
+    };
   };
 
 in buildRubyGem rec {
   name = "${gemName}-${version}";
   gemName = "vagrant";
+  inherit version;
 
   doInstallCheck = true;
   dontBuild = false;
-
-  inherit (deps.gems.vagrant) src;
+  src = fetchurl { inherit url sha256; };
 
   patches = [
     ./unofficial-installation-nowarn.patch

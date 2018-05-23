@@ -140,6 +140,11 @@
     github = "roosemberth";
     name = "Roosembert (Roosemberth) Palacios";
   };
+  Scriptkiddi = {
+    email = "nixos@scriptkiddi.de";
+    github = "scriptkiddi";
+    name = "Fritz Otlinghaus";
+  };
   SShrike = {
     email = "severen@shrike.me";
     github = "severen";

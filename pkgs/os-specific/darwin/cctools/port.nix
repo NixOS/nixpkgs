@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, makeWrapper, autoconf, automake, libtool_2, autoreconfHook
-, llvm, libcxx, libcxxabi, clang, libuuid
-, libobjc ? null, maloader ? null, xctoolchain ? null
+, libcxx, libcxxabi, libuuid
+, libobjc ? null, maloader ? null
 , hostPlatform, targetPlatform
 , enableDumpNormalizedLibArgs ? false
 }:
@@ -22,7 +22,7 @@ let
 in
 
 # Non-Darwin alternatives
-assert (!hostPlatform.isDarwin) -> (maloader != null && xctoolchain != null);
+assert (!hostPlatform.isDarwin) -> maloader != null;
 
 assert enableDumpNormalizedLibArgs -> (!useOld);
 
@@ -57,8 +57,6 @@ let
       autoreconfHook
     ];
     buildInputs = [ libuuid ] ++
-      # Only need llvm and clang if the stdenv isn't already clang-based (TODO: just make a stdenv.cc.isClang)
-      stdenv.lib.optionals (!stdenv.isDarwin) [ llvm clang ] ++
       stdenv.lib.optionals stdenv.isDarwin [ libcxxabi libobjc ];
 
     patches = [
@@ -80,9 +78,6 @@ let
 
     # TODO(@Ericson2314): Always pass "--target" and always targetPrefix.
     configurePlatforms = [ "build" "host" ] ++ stdenv.lib.optional (targetPlatform != hostPlatform) "target";
-    configureFlags = stdenv.lib.optionals (!stdenv.isDarwin) [
-      "CXXFLAGS=-I${libcxx}/include/c++/v1"
-    ];
 
     postPatch = ''
       sed -i -e 's/addStandardLibraryDirectories = true/addStandardLibraryDirectories = false/' cctools/ld64/src/ld/Options.cpp
@@ -110,8 +105,6 @@ let
       EOF
 
       cd cctools
-    '' + stdenv.lib.optionalString (!stdenv.isDarwin) ''
-      sed -i -e 's|clang++|& -I${libcxx}/include/c++/v1|' autogen.sh
     '';
 
     # TODO: this builds an ld without support for LLVM's LTO. We need to teach it, but that's rather
@@ -126,21 +119,12 @@ let
       popd
     '';
 
-    postInstall =
-      if hostPlatform.isDarwin
-      then ''
-        cat >$out/bin/dsymutil << EOF
-        #!${stdenv.shell}
-        EOF
-        chmod +x $out/bin/dsymutil
-      ''
-      else ''
-        for tool in dyldinfo dwarfdump dsymutil; do
-          ${makeWrapper}/bin/makeWrapper "${maloader}/bin/ld-mac" "$out/bin/${targetPlatform.config}-$tool" \
-            --add-flags "${xctoolchain}/bin/$tool"
-          ln -s "$out/bin/${targetPlatform.config}-$tool" "$out/bin/$tool"
-        done
-      '';
+    postInstall = ''
+      cat >$out/bin/dsymutil << EOF
+      #!${stdenv.shell}
+      EOF
+      chmod +x $out/bin/dsymutil
+    '';
 
     passthru = {
       inherit targetPrefix;
