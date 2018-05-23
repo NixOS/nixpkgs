@@ -63,7 +63,12 @@ in
       enableAuth = mkOption {
         type = types.bool;
         default = false;
-        description = "Enable client authentication. Creates a default superuser with username root/password root!";
+        description = "Enable client authentication. Creates a default superuser with username root!";
+      };
+      initialRootPassword = mkOption {
+        type = types.nullOr types.string;
+        default = null;
+        description = "Password for the root user if auth is enabled.";
       };
 
       dbpath = mkOption {
@@ -107,6 +112,11 @@ in
   ###### implementation
 
   config = mkIf config.services.mongodb.enable {
+    assertions = [
+      { assertion = !cfg.enableAuth || cfg.initialRootPassword != null;
+        message = "`enableAuth` requires `initialRootPassword` to be set.";
+      }
+    ];
 
     users.users.mongodb = mkIf (cfg.user == "mongodb")
       { name = "mongodb";
@@ -154,7 +164,7 @@ in
             db.createUser(
               {
                 user: "root",
-                pwd: "root",
+                pwd: "${cfg.initialRootPassword}",
                 roles: [
                   { role: "userAdminAnyDatabase", db: "admin" },
                   { role: "dbAdminAnyDatabase", db: "admin" },
@@ -170,7 +180,7 @@ in
         postStart = ''
             if test -e "${cfg.dbpath}/.first_startup"; then
               ${optionalString (cfg.initialScript != null) ''
-                ${mongodb}/bin/mongo -u root -p root admin "${cfg.initialScript}"
+                ${mongodb}/bin/mongo -u root -p ${cfg.initialRootPassword} admin "${cfg.initialScript}"
               ''}
               rm -f "${cfg.dbpath}/.first_startup"
             fi
