@@ -1,4 +1,4 @@
-{ stdenv, targetPlatform, fetchurl, buildPythonApplication
+{ stdenv, targetPlatform, fetchurl, buildPythonPackage
 , zip, ffmpeg, rtmpdump, phantomjs2, atomicparsley, pycryptodome, pandoc
 # Pandoc is required to build the package's man page. Release tarballs contain a
 # formatted man page already, though, it will still be installed. We keep the
@@ -13,7 +13,7 @@
 , makeWrapper }:
 
 with stdenv.lib;
-buildPythonApplication rec {
+buildPythonPackage rec {
 
   pname = "youtube-dl";
   version = "2018.05.18";

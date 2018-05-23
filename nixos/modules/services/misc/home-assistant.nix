@@ -128,9 +128,17 @@ in {
         you might need to specify it in <literal>extraPackages</literal>.
       '';
     };
+
+    openFirewall = mkOption {
+      default = false;
+      type = types.bool;
+      description = "Whether to open the firewall for the specified port.";
+    };
   };
 
   config = mkIf cfg.enable {
+    networking.firewall.allowedTCPPorts = mkIf cfg.openFirewall [ cfg.port ];
+
     systemd.services.home-assistant = {
       description = "Home Assistant";
       after = [ "network.target" ];

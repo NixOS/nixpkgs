@@ -167,7 +167,7 @@
     "lutron_caseta" = ps: with ps; [  ];
     "matrix" = ps: with ps; [ matrix-client ];
     "maxcube" = ps: with ps; [  ];
-    "media_extractor" = ps: with ps; [  ];
+    "media_extractor" = ps: with ps; [ youtube-dl-light ];
     "media_player.anthemav" = ps: with ps; [  ];
     "media_player.aquostv" = ps: with ps; [  ];
     "media_player.blackbird" = ps: with ps; [  ];
@@ -276,7 +276,7 @@
     "satel_integra" = ps: with ps; [  ];
     "scene.hunterdouglas_powerview" = ps: with ps; [  ];
     "scsgate" = ps: with ps; [  ];
-    "sensor.airvisual" = ps: with ps; [  ];
+    "sensor.airvisual" = ps: with ps; [ pyairvisual ];
     "sensor.alpha_vantage" = ps: with ps; [  ];
     "sensor.bbox" = ps: with ps; [  ];
     "sensor.bh1750" = ps: with ps; [  ];

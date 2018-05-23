@@ -269,6 +269,8 @@ let
 
     higlo = callPackage ../development/ocaml-modules/higlo { };
 
+    imagelib = callPackage ../development/ocaml-modules/imagelib { };
+
     inotify = callPackage ../development/ocaml-modules/inotify { };
 
     integers = callPackage ../development/ocaml-modules/integers { };
