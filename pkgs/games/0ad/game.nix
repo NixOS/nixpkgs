@@ -2,8 +2,9 @@
 , pkgconfig, spidermonkey_38, boost, icu, libxml2, libpng, libsodium
 , libjpeg, zlib, curl, libogg, libvorbis, enet, miniupnpc
 , openal, libGLU_combined, xproto, libX11, libXcursor, nspr, SDL2
-, gloox, nvidia-texture-tools
+, gloox, nvidia-texture-tools, premake5
 , withEditor ? true, wxGTK ? null
+, CoreServices
 }:
 
 assert withEditor -> wxGTK != null;
@@ -17,14 +18,15 @@ stdenv.mkDerivation rec {
     sha256 = "0qz1sg4n5y766qwgi63drrrx6k17kk0rcnn9a4a9crllk2vf78fg";
   };
 
-  nativeBuildInputs = [ python2 perl pkgconfig ];
+  nativeBuildInputs = [ python2 perl pkgconfig premake5 ];
 
   buildInputs = [
     spidermonkey_38 boost icu libxml2 libpng libjpeg
     zlib curl libogg libvorbis enet miniupnpc openal
     libGLU_combined xproto libX11 libXcursor nspr SDL2 gloox
     nvidia-texture-tools libsodium
-  ] ++ lib.optional withEditor wxGTK;
+  ] ++ lib.optional withEditor wxGTK
+    ++ lib.optionals stdenv.isDarwin [ CoreServices ];
 
   NIX_CFLAGS_COMPILE = [
     "-I${xproto}/include/X11"
@@ -40,35 +42,27 @@ stdenv.mkDerivation rec {
   '';
 
   configurePhase = ''
-    # Delete shipped libraries which we don't need.
-    rm -rf libraries/source/{enet,miniupnpc,nvtt,spidermonkey}
-
     # Workaround invalid pkgconfig name for mozjs
     mkdir pkgconfig
     ln -s ${spidermonkey_38}/lib/pkgconfig/* pkgconfig/mozjs-38.pc
     PKG_CONFIG_PATH="$PWD/pkgconfig:$PKG_CONFIG_PATH"
 
     # Update Makefiles
-    pushd build/workspaces
-    ./update-workspaces.sh \
+    (cd build/premake && premake5 \
+      --file="premake5.lua" \
+      --outpath="../.." \
       --with-system-nvtt \
       --with-system-mozjs38 \
-      ${lib.optionalString withEditor "--enable-atlas"} \
+      ${lib.optionalString withEditor "--atlas"} \
       --bindir="$out"/bin \
       --libdir="$out"/lib/0ad \
       --without-tests \
-      -j $NIX_BUILD_CORES
-    popd
-
-    # Move to the build directory.
-    pushd build/workspaces/gcc
+      gmake)
   '';
 
   enableParallelBuilding = true;
 
   installPhase = ''
-    popd
-
     # Copy executables.
     install -Dm755 binaries/system/pyrogenesis "$out"/bin/0ad
     ${lib.optionalString withEditor ''
@@ -93,6 +87,6 @@ stdenv.mkDerivation rec {
       gpl2 lgpl21 mit cc-by-sa-30
       licenses.zlib # otherwise masked by pkgs.zlib
     ];
-    platforms = subtractLists platforms.i686 platforms.linux;
+    platforms = platforms.unix;
   };
 }
