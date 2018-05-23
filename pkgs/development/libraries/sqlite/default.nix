@@ -31,6 +31,7 @@ stdenv.mkDerivation rec {
     ++ optionals interactive [ readline ncurses ];
 
   configureFlags = [
+    # Disables libtclsqlite.so, tcl is still required for the build itself:
     "--disable-tcl"
     "--enable-threadsafe"
   ] ++ optional interactive "--enable-readline";
