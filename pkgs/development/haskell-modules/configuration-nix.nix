@@ -128,7 +128,7 @@ self: super: builtins.intersectAttrs super {
 
   # Prevents needing to add security_tool as a build tool to all of x509-system's
   # dependencies.
-  x509-system = if pkgs.stdenv.targetPlatform.isDarwin && !pkgs.stdenv.cc.nativeLibc
+  x509-system = if pkgs.stdenv.isDarwin && !pkgs.stdenv.cc.nativeLibc
     then let inherit (pkgs.darwin) security_tool;
       in pkgs.lib.overrideDerivation (addBuildDepend super.x509-system security_tool) (drv: {
         postPatch = (drv.postPatch or "") + ''
