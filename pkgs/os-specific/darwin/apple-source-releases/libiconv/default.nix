@@ -18,7 +18,10 @@ appleDerivation {
       -Wl,-reexport_library -Wl,$out/lib/libcharset.dylib
   '';
 
-  setupHook = ../../../../development/libraries/libiconv/setup-hook.sh;
+  setupHooks = [
+    ../../../../build-support/setup-hooks/role.bash
+    ../../../../development/libraries/libiconv/setup-hook.sh
+  ];
 
   meta = {
     platforms = stdenv.lib.platforms.darwin;
