@@ -1,9 +1,9 @@
 { lib, fetchurl, buildRubyGem, bundlerEnv, ruby, libarchive }:
 
 let
-  version = "2.0.2";
+  version = "2.1.1";
   url = "https://github.com/hashicorp/vagrant/archive/v${version}.tar.gz";
-  sha256 = "1sjfwgy2y6q5s1drd8h8xgz2a0sv1l3kx9jilgc02hlcdz070iir";
+  sha256 = "0kgsb33f3wh6x4450x74wri6z78ky92sfrv7ba7h7zmxsadb6m4b";
 
   deps = bundlerEnv rec {
     name = "${pname}-${version}";
