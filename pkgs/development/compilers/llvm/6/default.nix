@@ -1,10 +1,11 @@
 { lowPrio, newScope, stdenv, targetPlatform, cmake, libstdcxxHook
 , libxml2, python2, isl, fetchurl, overrideCC, wrapCC, ccWrapperFun
 , darwin
+, buildPackages
 }:
 
 let
-  callPackage = newScope (self // { inherit stdenv cmake libxml2 python2 isl release_version version fetch; });
+  callPackage = newScope (self // { inherit stdenv cmake libxml2 python2 isl release_version version fetch crossFlags; });
 
   release_version = "6.0.0";
   version = release_version; # differentiating these is important for rc's
@@ -12,6 +13,10 @@ let
   fetch = name: sha256: fetchurl {
     url = "http://releases.llvm.org/${release_version}/${name}-${version}.src.tar.xz";
     inherit sha256;
+  };
+  crossFlags = import ../cross-flags.nix {
+    inherit (stdenv) lib;
+    buildCC = buildPackages.stdenv.cc;
   };
 
   compiler-rt_src = fetch "compiler-rt" "16m7rvh3w6vq10iwkjrr1nn293djld3xm62l5zasisaprx117k6h";
