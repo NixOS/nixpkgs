@@ -646,6 +646,11 @@ with pkgs;
 
   genymotion = callPackage ../development/mobile/genymotion { };
 
+  gams = callPackage ../tools/misc/gams {
+    licenseFile = config.gams.licenseFile or null;
+    optgamsFile = config.gams.optgamsFile or null;
+  };
+
   git-fire = callPackage ../tools/misc/git-fire { };
 
   gitless = callPackage ../applications/version-management/gitless/default.nix { };
