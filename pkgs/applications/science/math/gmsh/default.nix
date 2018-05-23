@@ -15,10 +15,12 @@ stdenv.mkDerivation {
   # that is supposed to work without Fortran but didn't for me.
   patches = [ ./CMakeLists.txt.patch ];
 
-  buildInputs = [ cmake blas liblapack gfortran gmm fltk libjpeg zlib libGLU_combined
+  buildInputs = [ cmake blas liblapack gmm fltk libjpeg zlib libGLU_combined
     libGLU xorg.libXrender xorg.libXcursor xorg.libXfixes xorg.libXext
     xorg.libXft xorg.libXinerama xorg.libX11 xorg.libSM xorg.libICE
   ];
+
+  nativeBuildInputs = [ gfortran ];
 
   enableParallelBuilding = true;
 
