@@ -353,7 +353,7 @@ rec {
     };
 
     meta = with stdenv.lib; {
-      homepage = https://github.com/omsc/skin.osmc;
+      homepage = https://github.com/osmc/skin.osmc;
       description = "The default skin for OSMC";
       platforms = platforms.all;
       maintainers = with maintainers; [ worldofpeace ];
