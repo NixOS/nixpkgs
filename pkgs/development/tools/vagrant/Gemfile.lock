@@ -1,9 +1,9 @@
 GIT
   remote: https://github.com/hashicorp/vagrant.git
-  revision: 6a6805f284dff05207e359acdfb1ca8443b78751
-  tag: v2.0.4
+  revision: b95e42ad6f0b6c8a92adf1d6f43537492947567d
+  tag: v2.1.1
   specs:
-    vagrant (2.0.4)
+    vagrant (2.1.1)
       childprocess (~> 0.6.0)
       erubis (~> 2.7.0)
       hashicorp-checkpoint (~> 0.1.5)

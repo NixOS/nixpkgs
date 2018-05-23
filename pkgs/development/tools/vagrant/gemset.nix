@@ -282,12 +282,12 @@
     dependencies = ["childprocess" "erubis" "hashicorp-checkpoint" "i18n" "listen" "log4r" "net-scp" "net-sftp" "net-ssh" "rb-kqueue" "rest-client" "ruby_dep" "wdm" "win32-file" "win32-file-security" "winrm" "winrm-elevated" "winrm-fs"];
     source = {
       fetchSubmodules = false;
-      rev = "6a6805f284dff05207e359acdfb1ca8443b78751";
-      sha256 = "07c7r4xk0md9hkbcnij0kp7acxz0li9ak1ah7lmh52j10gq4cjmw";
+      rev = "b95e42ad6f0b6c8a92adf1d6f43537492947567d";
+      sha256 = "0q07y38icp71cj5v3m7fibgrk8v8k5ik34v8wmrcpd75zd8sdyh1";
       type = "git";
       url = "https://github.com/hashicorp/vagrant.git";
     };
-    version = "2.0.4";
+    version = "2.1.1";
   };
   wdm = {
     source = {
