@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation rec {
   name = "redshift-${version}";
-  version = "1.11";
+  version = "1.12";
 
   src = fetchFromGitHub {
     owner = "jonls";
     repo = "redshift";
     rev = "v${version}";
-    sha256 = "0jfi4wqklqw2rm0r2xwalyzir88zkdvqj0z5id0l5v20vsrfiiyj";
+    sha256 = "12cb4gaqkybp4bkkns8pam378izr2mwhr2iy04wkprs2v92j7bz6";
   };
 
   patches = [
