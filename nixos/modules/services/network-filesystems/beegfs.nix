@@ -31,7 +31,7 @@ let
     connPortShift = ${toString cfg.connPortShift}
     storeAllowFirstRunInit = false
 
-    ${cfg.mgmtd.extraConfig}
+    ${cfg.meta.extraConfig}
   '';
 
   configStorage = name: cfg: pkgs.writeText "storage-${name}.conf" ''
