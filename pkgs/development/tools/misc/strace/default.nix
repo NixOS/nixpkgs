@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   depsBuildBuild = [ buildPackages.stdenv.cc ];
   nativeBuildInputs = [ perl ];
 
-  buildInputs = stdenv.lib.optional libunwind.supportsHost [ libunwind ]; # support -k
+  buildInputs = stdenv.lib.optional libunwind.supportsHost libunwind; # support -k
 
   configureFlags = stdenv.lib.optional (stdenv.hostPlatform.isAarch64 || stdenv.hostPlatform.isRiscV) "--enable-mpers=check";
 
