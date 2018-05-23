@@ -16,13 +16,13 @@ with lib;
 
 stdenv.mkDerivation rec {
   name = "kubernetes-${version}";
-  version = "1.10.0";
+  version = "1.10.3";
 
   src = fetchFromGitHub {
     owner = "kubernetes";
     repo = "kubernetes";
     rev = "v${version}";
-    sha256 = "0k6m55p0q8qscg8l7y1ymmp5vc3i07znqk61g4hs1gx0dj3id6mc";
+    sha256 = "1la9cdf5a67kg72xn4bn5mib1caiv5vxsjmnxqsmx0m7vhbv5i4n";
   };
 
   # go > 1.10 should be fixed by https://github.com/kubernetes/kubernetes/pull/60597
