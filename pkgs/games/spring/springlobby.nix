@@ -1,46 +1,67 @@
 { stdenv, fetchurl, cmake, wxGTK30, openal, pkgconfig, curl, libtorrentRasterbar
 , libpng, libX11, gettext, bash, gawk, boost, libnotify, gtk2, doxygen
-, makeWrapper, glib, minizip, alure, pcre, jsoncpp, buildFHSUserEnv, SDL2, libGLU, curlFull }:
-let
-  version = "0.264";
+, makeWrapper, glib, minizip, alure, pcre, jsoncpp, buildFHSUserEnv, SDL2
+, libGLU, curlFull }:
 
-  meta = with stdenv.lib; {
-    homepage = http://springlobby.info/;
-    repositories.git = git://github.com/springlobby/springlobby.git;
-    description = "Cross-platform lobby client for the Spring RTS project";
-    license = licenses.gpl2;
-    maintainers = with maintainers; [ phreedom qknight domenkozar ];
-    platforms = platforms.linux;
-  };
+let
   springlobby = stdenv.mkDerivation rec {
     name = "springlobby-${version}";
-    inherit version;
-    inherit meta;
+    version = "0.264";
 
     src = fetchurl {
       url = "http://www.springlobby.info/tarballs/springlobby-${version}.tar.bz2";
       sha256 = "5d3c98169a4c9106dd6f112823cfa0e44846cedca3920050151472bfb75561c4";
     };
 
-    nativeBuildInputs = [ pkgconfig ];
+    nativeBuildInputs = [
+      cmake
+      doxygen
+      makeWrapper
+      pkgconfig
+    ];
+    
     buildInputs = [
-      cmake wxGTK30 openal curl gettext libtorrentRasterbar pcre jsoncpp
-      boost libpng libX11 libnotify gtk2 doxygen makeWrapper glib minizip alure
+      alure
+      boost
+      curl
+      doxygen
+      gettext
+      glib
+      gtk2
+      jsoncpp
+      libX11
+      libnotify
+      libpng
+      libtorrentRasterbar
+      minizip
+      openal
+      pcre
+      wxGTK30
     ];
 
-    patches = [ ./revert_58b423e.patch ]; # Allows springLobby to continue using system installed spring until #707 is fixed
+    patches = [
+      # Allows springLobby to continue using system installed spring until
+      # https://github.com/springlobby/springlobby/issues/707 is fixed:
+      ./revert_58b423e.patch
+    ];
 
     enableParallelBuilding = true;
 
-    postInstall = ''
-      wrapProgram $out/bin/springlobby
-    '';
-
+    postInstall = "wrapProgram $out/bin/springlobby";
+    
+    meta = with stdenv.lib; {
+      description = "Cross-platform lobby client for the Spring RTS project";
+      homepage = http://springlobby.info/;
+      license = licenses.gpl2Plus;
+      maintainers = with maintainers; [ phreedom qknight domenkozar ];
+      platforms = platforms.linux;
+    };
   };
 in
-  buildFHSUserEnv {
-    name = "springlobby";
-    targetPkgs = pkgs: [ springlobby SDL2 libGLU openal curlFull ];
-    runScript = "springlobby";
-    inherit meta;
-  }
+
+buildFHSUserEnv {
+  name = "springlobby";
+  targetPkgs = _: [ curlFull libGLU openal SDL2 springlobby ];
+  runScript = "springlobby";
+  inherit (springlobby) meta;
+}
