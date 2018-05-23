@@ -1,5 +1,7 @@
 { newScope, stdenv, libstdcxxHook, cmake, libxml2, python2, isl, fetchurl
-, overrideCC, wrapCC, ccWrapperFun, darwin
+, overrideCC, wrapCCWith, darwin
+, buildLlvmPackages # ourself, but from the previous stage, for cross
+, targetLlvmPackages # ourself, but from the next stage, for cross
 }:
 
 let
@@ -27,18 +29,14 @@ let
 
     clang = if stdenv.cc.isGNU then self.libstdcxxClang else self.libcxxClang;
 
-    libstdcxxClang = ccWrapperFun {
+    libstdcxxClang = wrapCCWith {
       cc = self.clang-unwrapped;
-      /* FIXME is this right? */
-      inherit (stdenv.cc) bintools libc nativeTools nativeLibc;
       extraPackages = [ libstdcxxHook ];
     };
 
-    libcxxClang = ccWrapperFun {
+    libcxxClang = wrapCCWith {
       cc = self.clang-unwrapped;
-      /* FIXME is this right? */
-      inherit (stdenv.cc) bintools libc nativeTools nativeLibc;
-      extraPackages = [ self.libcxx self.libcxxabi ];
+      extraPackages = [ targetLlvmPackages.libcxx targetLlvmPackages.libcxxabi ];
     };
 
     stdenv = stdenv.override (drv: {
@@ -48,7 +46,7 @@ let
 
     libcxxStdenv = stdenv.override (drv: {
       allowedRequisites = null;
-      cc = self.libcxxClang;
+      cc = buildLlvmPackages.libcxxClang;
     });
 
     lldb = callPackage ./lldb.nix {};
