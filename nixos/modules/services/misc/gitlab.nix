@@ -129,6 +129,7 @@ let
         };
       };
       extra = {};
+      uploads.storage_path = cfg.statePath;
     };
   };
 
@@ -565,13 +566,9 @@ in {
 
         ${pkgs.openssl}/bin/openssl rand -hex 32 > ${cfg.statePath}/config/gitlab_shell_secret
 
-        # The uploads directory is hardcoded somewhere deep in rails. It is
-        # symlinked in the gitlab package to /run/gitlab/uploads to make it
-        # configurable
         mkdir -p /run/gitlab
-        mkdir -p ${cfg.statePath}/{log,uploads}
+        mkdir -p ${cfg.statePath}/log
         ln -sf ${cfg.statePath}/log /run/gitlab/log
-        ln -sf ${cfg.statePath}/uploads /run/gitlab/uploads
         ln -sf ${cfg.statePath}/tmp /run/gitlab/tmp
         ln -sf $GITLAB_SHELL_CONFIG_PATH /run/gitlab/shell-config.yml
         chown -R ${cfg.user}:${cfg.group} /run/gitlab
@@ -587,6 +584,8 @@ in {
           ln -sf ${smtpSettings} ${cfg.statePath}/config/initializers/smtp_settings.rb
         ''}
         ln -sf ${cfg.statePath}/config /run/gitlab/config
+        rm ${cfg.statePath}/lib
+        ln -sf ${pkgs.gitlab}/share/gitlab/lib ${cfg.statePath}/lib
         cp ${cfg.packages.gitlab}/share/gitlab/VERSION ${cfg.statePath}/VERSION
 
         # JSON is a subset of YAML
@@ -638,10 +637,6 @@ in {
         chmod -R ug+rwX,o-rwx ${cfg.statePath}/repositories
         chmod -R ug-s ${cfg.statePath}/repositories
         find ${cfg.statePath}/repositories -type d -print0 | xargs -0 chmod g+s
-        chmod 770 ${cfg.statePath}/uploads
-        chown -R ${cfg.user} ${cfg.statePath}/uploads
-        find ${cfg.statePath}/uploads -type f -exec chmod 0644 {} \;
-        find ${cfg.statePath}/uploads -type d -not -path ${cfg.statePath}/uploads -exec chmod 0770 {} \;
       '';
 
       serviceConfig = {
