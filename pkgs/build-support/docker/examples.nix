@@ -124,4 +124,16 @@ rec {
     fromImage = nixFromDockerHub;
     contents = [ pkgs.hello ];
   };
+
+  # 8. regression test for erroneous use of eval and string expansion.
+  # See issue #34779 and PR #40947 for details.
+  runAsRootExtraCommands = pkgs.dockerTools.buildImage {
+    name = "runAsRootExtraCommands";
+    contents = [ pkgs.coreutils ];
+    # The parens here are to create problematic bash to embed and eval. In case
+    # this is *embedded* into the script (with nix expansion) the initial quotes
+    # will close the string and the following parens are unexpected
+    runAsRoot = ''echo "(runAsRoot)" > runAsRoot'';
+    extraCommands = ''echo "(extraCommand)" > extraCommands'';
+  };
 }
