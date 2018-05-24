@@ -1,4 +1,6 @@
-{ stdenv, lib, fetchurl, libX11, libXext, libXcursor, libXrandr, libjack2, alsaLib, releasePath ? null }:
+{ stdenv, fetchurl, libX11, libXext, libXcursor, libXrandr, libjack2, alsaLib, releasePath ? null }:
+
+with stdenv.lib;
 
 # To use the full release version:
 # 1) Sign into https://backstage.renoise.com and download the appropriate (x86 or x86_64) version
@@ -7,7 +9,7 @@
 # Note: Renoise creates an individual build for each license which screws somewhat with the
 # use of functions like requireFile as the hash will be different for every user.
 let
-  srcVersion = version: lib.replaceStrings ["."] ["_"] version;
+  urlVersion = replaceStrings [ "." ] [ "_" ];
 in
 
 stdenv.mkDerivation rec {
@@ -18,15 +20,15 @@ stdenv.mkDerivation rec {
     if stdenv.system == "x86_64-linux" then
         if builtins.isNull releasePath then
         fetchurl {
-           url = "http://files.renoise.com/demo/Renoise_${srcVersion version}_Demo_x86_64.tar.bz2";
-           sha256 = "0pan68fr22xbj7a930y29527vpry3f07q3i9ya4fp6g7aawffsga";
+          url = "http://files.renoise.com/demo/Renoise_${urlVersion version}_Demo_x86_64.tar.bz2";
+          sha256 = "0pan68fr22xbj7a930y29527vpry3f07q3i9ya4fp6g7aawffsga";
         }
         else
         releasePath
     else if stdenv.system == "i686-linux" then
         if builtins.isNull releasePath then
         fetchurl {
-          url = "http://files.renoise.com/demo/Renoise_${srcVersion version}_Demo_x86.tar.bz2";
+          url = "http://files.renoise.com/demo/Renoise_${urlVersion version}_Demo_x86.tar.bz2";
           sha256 = "1lccjj4k8hpqqxxham5v01v2rdwmx3c5kgy1p9lqvzqma88k4769";
         }
         else
@@ -56,7 +58,7 @@ stdenv.mkDerivation rec {
     patchelf --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker) --set-rpath $out/lib $out/renoise
   '';
 
-  meta = with stdenv.lib; {
+  meta = {
     description = "Modern tracker-based DAW";
     homepage = http://www.renoise.com/;
     license = licenses.unfree;
