@@ -1,0 +1,28 @@
+From eb77f6a4621795367a39cdd30957903af9dbb815 Mon Sep 17 00:00:00 2001
+From: Alan Modra <amodra@gmail.com>
+Date: Sat, 27 Jan 2018 08:19:33 +1030
+Subject: [PATCH] PR22741, objcopy segfault on fuzzed COFF object
+
+	PR 22741
+	* coffgen.c (coff_pointerize_aux): Ensure auxent tagndx is in
+	range before converting to a symbol table pointer.
+---
+ bfd/coffgen.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/bfd/coffgen.c b/bfd/coffgen.c
+index b2410873d0..4f90eaddd9 100644
+--- a/bfd/coffgen.c
++++ b/bfd/coffgen.c
+@@ -1555,7 +1555,8 @@ coff_pointerize_aux (bfd *abfd,
+     }
+   /* A negative tagndx is meaningless, but the SCO 3.2v4 cc can
+      generate one, so we must be careful to ignore it.  */
+-  if (auxent->u.auxent.x_sym.x_tagndx.l > 0)
++  if ((unsigned long) auxent->u.auxent.x_sym.x_tagndx.l
++      < obj_raw_syment_count (abfd))
+     {
+       auxent->u.auxent.x_sym.x_tagndx.p =
+ 	table_base + auxent->u.auxent.x_sym.x_tagndx.l;
+-- 
+2.16.2

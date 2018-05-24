@@ -1,0 +1,232 @@
+From d957f81cb38d7e82ae546cd03265ee3087ba8a85 Mon Sep 17 00:00:00 2001
+From: Alan Modra <amodra@gmail.com>
+Date: Tue, 13 Feb 2018 14:09:48 +1030
+Subject: [PATCH] PR22836, "-r -s" doesn't work with -g3 using GCC 7
+
+This fixes the case where all of a group is removed with ld -r, the
+situation in the PR, and failures where part of a group is removed
+that contain relocs.
+
+bfd/
+	PR 22836
+	* elf.c (_bfd_elf_fixup_group_sections): Account for removed
+	relocation sections.  If size reduces to just the flag word,
+	remove that too and mark with SEC_EXCLUDE.
+	* elflink.c (bfd_elf_final_link): Strip empty group sections.
+binutils/
+	* testsuite/binutils-all/group-7.s,
+	* testsuite/binutils-all/group-7a.d,
+	* testsuite/binutils-all/group-7b.d,
+	* testsuite/binutils-all/group-7c.d: New tests.
+	* testsuite/binutils-all/objcopy.exp: Run them.
+ld/
+	* testsuite/ld-elf/pr22836-2.d,
+	* testsuite/ld-elf/pr22836-2.s: New test.
+
+(cherry picked from commit 6e5e9d58c1eeef5677c90886578a895cb8c164c5)
+---
+ bfd/ChangeLog                               | 11 +++++++++++
+ bfd/elf.c                                   | 25 +++++++++++++++++++++----
+ bfd/elflink.c                               |  7 +++++++
+ binutils/ChangeLog                          | 12 ++++++++++++
+ binutils/testsuite/binutils-all/group-7.s   |  6 ++++++
+ binutils/testsuite/binutils-all/group-7a.d  | 16 ++++++++++++++++
+ binutils/testsuite/binutils-all/group-7b.d  | 19 +++++++++++++++++++
+ binutils/testsuite/binutils-all/group-7c.d  |  8 ++++++++
+ binutils/testsuite/binutils-all/objcopy.exp |  3 +++
+ ld/ChangeLog                                |  9 +++++++++
+ ld/testsuite/ld-elf/pr22836-2.d             |  7 +++++++
+ ld/testsuite/ld-elf/pr22836-2.s             |  7 +++++++
+ 12 files changed, 126 insertions(+), 4 deletions(-)
+ create mode 100644 binutils/testsuite/binutils-all/group-7.s
+ create mode 100644 binutils/testsuite/binutils-all/group-7a.d
+ create mode 100644 binutils/testsuite/binutils-all/group-7b.d
+ create mode 100644 binutils/testsuite/binutils-all/group-7c.d
+ create mode 100644 ld/testsuite/ld-elf/pr22836-2.d
+ create mode 100644 ld/testsuite/ld-elf/pr22836-2.s
+
+diff --git a/bfd/elf.c b/bfd/elf.c
+index 325bdd5..e95c8a9 100644
+--- a/bfd/elf.c
++++ b/bfd/elf.c
+@@ -7579,7 +7579,16 @@ _bfd_elf_fixup_group_sections (bfd *ibfd, asection *discarded)
+ 	       but the SHT_GROUP section is, then adjust its size.  */
+ 	    else if (s->output_section == discarded
+ 		     && isec->output_section != discarded)
+-	      removed += 4;
++	      {
++		struct bfd_elf_section_data *elf_sec = elf_section_data (s);
++		removed += 4;
++		if (elf_sec->rel.hdr != NULL
++		    && (elf_sec->rel.hdr->sh_flags & SHF_GROUP) != 0)
++		  removed += 4;
++		if (elf_sec->rela.hdr != NULL
++		    && (elf_sec->rela.hdr->sh_flags & SHF_GROUP) != 0)
++		  removed += 4;
++	      }
+ 	    s = elf_next_in_group (s);
+ 	    if (s == first)
+ 	      break;
+@@ -7589,18 +7598,26 @@ _bfd_elf_fixup_group_sections (bfd *ibfd, asection *discarded)
+ 	    if (discarded != NULL)
+ 	      {
+ 		/* If we've been called for ld -r, then we need to
+-		   adjust the input section size.  This function may
+-		   be called multiple times, so save the original
+-		   size.  */
++		   adjust the input section size.  */
+ 		if (isec->rawsize == 0)
+ 		  isec->rawsize = isec->size;
+ 		isec->size = isec->rawsize - removed;
++		if (isec->size <= 4)
++		  {
++		    isec->size = 0;
++		    isec->flags |= SEC_EXCLUDE;
++		  }
+ 	      }
+ 	    else
+ 	      {
+ 		/* Adjust the output section size when called from
+ 		   objcopy. */
+ 		isec->output_section->size -= removed;
++		if (isec->output_section->size <= 4)
++		  {
++		    isec->output_section->size = 0;
++		    isec->output_section->flags |= SEC_EXCLUDE;
++		  }
+ 	      }
+ 	  }
+       }
+diff --git a/bfd/elflink.c b/bfd/elflink.c
+index 72aa3ac..69cb5ab 100644
+--- a/bfd/elflink.c
++++ b/bfd/elflink.c
+@@ -11618,6 +11618,13 @@ bfd_elf_final_link (bfd *abfd, struct bfd_link_info *info)
+ 	  else
+ 	    o->flags |= SEC_EXCLUDE;
+ 	}
++      else if ((o->flags & SEC_GROUP) != 0 && o->size == 0)
++	{
++	  /* Remove empty group section from linker output.  */
++	  o->flags |= SEC_EXCLUDE;
++	  bfd_section_list_remove (abfd, o);
++	  abfd->section_count--;
++	}
+     }
+ 
+   /* Count up the number of relocations we will output for each output
+diff --git a/binutils/testsuite/binutils-all/group-7.s b/binutils/testsuite/binutils-all/group-7.s
+new file mode 100644
+index 0000000..5028afc
+--- /dev/null
++++ b/binutils/testsuite/binutils-all/group-7.s
+@@ -0,0 +1,6 @@
++	.section        .data.foo,"awG",%progbits,foo,comdat
++here:
++	.dc.a	here
++
++	.section        .data2.foo,"awG",%progbits,foo,comdat
++	.dc.a	0
+diff --git a/binutils/testsuite/binutils-all/group-7a.d b/binutils/testsuite/binutils-all/group-7a.d
+new file mode 100644
+index 0000000..fa8db60
+--- /dev/null
++++ b/binutils/testsuite/binutils-all/group-7a.d
+@@ -0,0 +1,16 @@
++#name: copy removing reloc group member
++#source: group-7.s
++#PROG: objcopy
++#DUMPPROG: readelf
++#objcopy: --remove-section .data.foo
++#readelf: -Sg --wide
++
++#...
++  \[[ 0-9]+\] \.group[ \t]+GROUP[ \t]+.*
++#...
++  \[[ 0-9]+\] \.data2\.foo[ \t]+PROGBITS[ \t0-9a-f]+WAG.*
++#...
++COMDAT group section \[[ 0-9]+\] `\.group' \[foo\] contains 1 section.*
++   \[Index\]    Name
++   \[[ 0-9]+\]   \.data2\.foo
++#pass
+diff --git a/binutils/testsuite/binutils-all/group-7b.d b/binutils/testsuite/binutils-all/group-7b.d
+new file mode 100644
+index 0000000..b674545
+--- /dev/null
++++ b/binutils/testsuite/binutils-all/group-7b.d
+@@ -0,0 +1,19 @@
++#name: copy removing non-reloc group member
++#source: group-7.s
++#PROG: objcopy
++#DUMPPROG: readelf
++#objcopy: --remove-section .data2.foo
++#readelf: -Sg --wide
++
++#...
++  \[[ 0-9]+\] \.group[ \t]+GROUP[ \t]+.*
++#...
++  \[[ 0-9]+\] \.data\.foo[ \t]+PROGBITS[ \t0-9a-f]+WAG.*
++#...
++  \[[ 0-9]+\] \.rela?\.data\.foo[ \t]+RELA?[ \t0-9a-f]+IG.*
++#...
++COMDAT group section \[[ 0-9]+\] `\.group' \[foo\] contains 2 sections:
++   \[Index\]    Name
++   \[[ 0-9]+\]   \.data\.foo
++   \[[ 0-9]+\]   \.rela?\.data\.foo
++#pass
+diff --git a/binutils/testsuite/binutils-all/group-7c.d b/binutils/testsuite/binutils-all/group-7c.d
+new file mode 100644
+index 0000000..83e9115
+--- /dev/null
++++ b/binutils/testsuite/binutils-all/group-7c.d
+@@ -0,0 +1,8 @@
++#name: copy removing reloc and non-reloc group member
++#source: group-7.s
++#PROG: objcopy
++#DUMPPROG: readelf
++#objcopy: -R .data.foo -R .data2.foo
++#readelf: -g --wide
++
++There are no section groups in this file\.
+diff --git a/binutils/testsuite/binutils-all/objcopy.exp b/binutils/testsuite/binutils-all/objcopy.exp
+index 377f88c..f4a7692 100644
+--- a/binutils/testsuite/binutils-all/objcopy.exp
++++ b/binutils/testsuite/binutils-all/objcopy.exp
+@@ -1051,6 +1051,9 @@ if [is_elf_format] {
+     objcopy_test_readelf "GNU_MBIND section" mbind1.s
+     run_dump_test "group-5"
+     run_dump_test "group-6"
++    run_dump_test "group-7a"
++    run_dump_test "group-7b"
++    run_dump_test "group-7c"
+     run_dump_test "copy-1"
+     run_dump_test "note-1"
+     if [is_elf64 tmpdir/bintest.o] {
+diff --git a/ld/testsuite/ld-elf/pr22836-2.d b/ld/testsuite/ld-elf/pr22836-2.d
+new file mode 100644
+index 0000000..10133e4
+--- /dev/null
++++ b/ld/testsuite/ld-elf/pr22836-2.d
+@@ -0,0 +1,7 @@
++#source: pr22836-2.s
++#ld: -r -S
++#readelf: -g --wide
++
++group section \[[ 0-9]+\] `\.group' \[foo\] contains 1 section.*
++   \[Index\]    Name
++   \[[ 0-9]+\]   \.comment
+diff --git a/ld/testsuite/ld-elf/pr22836-2.s b/ld/testsuite/ld-elf/pr22836-2.s
+new file mode 100644
+index 0000000..77cd83a
+--- /dev/null
++++ b/ld/testsuite/ld-elf/pr22836-2.s
+@@ -0,0 +1,7 @@
++	.section	.debug_macro,"G",%progbits,foo
++	.long	.LASF0
++.LASF0:
++	.string	"__STDC__ 1"
++
++	.section	.comment,"G",%progbits,foo
++	.asciz "hi"
+-- 
+2.9.3

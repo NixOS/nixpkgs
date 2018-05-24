@@ -1,0 +1,68 @@
+From e3d435293f0dd45247e8057574389f322f5fe5a2 Mon Sep 17 00:00:00 2001
+From: Alan Modra <amodra@gmail.com>
+Date: Fri, 18 May 2018 17:09:45 +0930
+Subject: [PATCH] PR23199, Invalid SHT_GROUP entry leads to group confusion
+
+This patch prevents elf_next_in_group list pointer confusion when
+SHT_GROUP sections specify other SHT_GROUP sections in their list of
+group sections.
+
+	PR 23199
+	* elf.c (setup_group): Formatting.  Check that SHT_GROUP entries
+	don't point at other SHT_GROUP sections.  Set shdr corresponding
+	to invalid entry, to NULL rather than section 0.  Identify
+	SHT_GROUP section index when reporting an error.  Cope with NULL
+	shdr pointer.
+
+(cherry picked from commit 4bba0fb1c6d391a217c25e44398a7e1c7090155f)
+---
+ bfd/elf.c     | 17 +++++++++++------
+ 1 file changed, 11 insertions(+), 6 deletions(-)
+
+diff --git a/bfd/elf.c b/bfd/elf.c
+index e95c8a9..f657ec4 100644
+--- a/bfd/elf.c
++++ b/bfd/elf.c
+@@ -627,7 +627,8 @@ setup_group (bfd *abfd, Elf_Internal_Shdr *hdr, asection *newsect)
+ 	      bfd_alloc2 (abfd, num_group, sizeof (Elf_Internal_Shdr *));
+ 	  if (elf_tdata (abfd)->group_sect_ptr == NULL)
+ 	    return FALSE;
+-	  memset (elf_tdata (abfd)->group_sect_ptr, 0, num_group * sizeof (Elf_Internal_Shdr *));
++	  memset (elf_tdata (abfd)->group_sect_ptr, 0,
++		  num_group * sizeof (Elf_Internal_Shdr *));
+ 	  num_group = 0;
+ 
+ 	  for (i = 0; i < shnum; i++)
+@@ -706,13 +707,16 @@ setup_group (bfd *abfd, Elf_Internal_Shdr *hdr, asection *newsect)
+ 			      |= SEC_LINK_ONCE | SEC_LINK_DUPLICATES_DISCARD;
+ 			  break;
+ 			}
+-		      if (idx >= shnum)
++		      if (idx < shnum)
++			dest->shdr = elf_elfsections (abfd)[idx];
++		      if (idx >= shnum
++			  || dest->shdr->sh_type == SHT_GROUP)
+ 			{
+ 			  _bfd_error_handler
+-			    (_("%B: invalid SHT_GROUP entry"), abfd);
+-			  idx = 0;
++			    (_("%B: invalid entry in SHT_GROUP section [%u]"),
++			     abfd, i);
++			  dest->shdr = NULL;
+ 			}
+-		      dest->shdr = elf_elfsections (abfd)[idx];
+ 		    }
+ 		}
+ 	    }
+@@ -778,7 +782,8 @@ setup_group (bfd *abfd, Elf_Internal_Shdr *hdr, asection *newsect)
+ 		idx = (Elf_Internal_Group *) shdr->contents;
+ 		n_elt = shdr->sh_size / 4;
+ 		while (--n_elt != 0)
+-		  if ((s = (++idx)->shdr->bfd_section) != NULL
++		  if ((++idx)->shdr != NULL
++		      && (s = idx->shdr->bfd_section) != NULL
+ 		      && elf_next_in_group (s) != NULL)
+ 		    break;
+ 		if (n_elt != 0)
+-- 
+2.9.3

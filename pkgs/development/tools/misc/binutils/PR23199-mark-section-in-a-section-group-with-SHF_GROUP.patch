@@ -1,0 +1,41 @@
+From e2bcabadb8bc02d971b30644d91a70ec4c4b825d Mon Sep 17 00:00:00 2001
+From: "H.J. Lu" <hjl.tools@gmail.com>
+Date: Mon, 21 May 2018 19:25:19 -0700
+Subject: [PATCH] Mark section in a section group with SHF_GROUP
+
+All sections in a section group should be marked with SHF_GROUP.  But
+some tools generate broken objects without SHF_GROUP.  This patch fixes
+them up for objcopy and strip.
+
+	PR binutils/23199
+	* elf.c (setup_group): Mark section in a section group with
+	SHF_GROUP.
+
+(cherry picked from commit bae363f1146378207e1dffe5f23845644a1d0b7a)
+---
+ bfd/elf.c     | 10 +++++++++-
+ 1 file changed, 9 insertions(+), 1 deletion(-)
+
+diff --git a/bfd/elf.c b/bfd/elf.c
+index f657ec4..3f76640 100644
+--- a/bfd/elf.c
++++ b/bfd/elf.c
+@@ -708,7 +708,15 @@ setup_group (bfd *abfd, Elf_Internal_Shdr *hdr, asection *newsect)
+ 			  break;
+ 			}
+ 		      if (idx < shnum)
+-			dest->shdr = elf_elfsections (abfd)[idx];
++			{
++			  dest->shdr = elf_elfsections (abfd)[idx];
++			  /* PR binutils/23199: All sections in a
++			     section group should be marked with
++			     SHF_GROUP.  But some tools generate
++			     broken objects without SHF_GROUP.  Fix
++			     them up here.  */
++			  dest->shdr->sh_flags |= SHF_GROUP;
++			}
+ 		      if (idx >= shnum
+ 			  || dest->shdr->sh_type == SHT_GROUP)
+ 			{
+-- 
+2.9.3

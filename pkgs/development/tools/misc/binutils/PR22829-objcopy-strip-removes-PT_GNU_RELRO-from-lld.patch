@@ -1,0 +1,144 @@
+From 3b56a1358768563d9cf320559ebdedfb30f122dd Mon Sep 17 00:00:00 2001
+From: Alan Modra <amodra@gmail.com>
+Date: Mon, 12 Feb 2018 13:06:07 +1030
+Subject: [PATCH] PR22829, objcopy/strip removes PT_GNU_RELRO from lld binaries
+
+lld lays out the relro segment differently to GNU ld, not bothering to
+include the first few bytes of .got.plt and padding out to a page at
+the end of the segment.  This patch teaches binutils to recognize the
+different (and somewhat inferior) layout as valid.
+
+bfd/
+	PR 22829
+	* elf.c (assign_file_positions_for_non_load_sections): Rewrite
+	PT_GNU_RELRO setup.
+ld/
+	* testsuite/ld-x86-64/pr14207.d: Adjust relro p_filesz.
+
+(cherry picked from commit f2731e0c374e5323ce4cdae2bcc7b7fe22da1a6f)
+---
+ bfd/elf.c                        | 78 ++++++++++++++++++++++++++--------------
+ ld/testsuite/ld-x86-64/pr14207.d |  2 +-
+ 2 files changed, 52 insertions(+), 28 deletions(-)
+
+diff --git a/bfd/elf.c b/bfd/elf.c
+index bbaab26918..f5a230cd77 100644
+--- a/bfd/elf.c
++++ b/bfd/elf.c
+@@ -5826,50 +5826,74 @@ assign_file_positions_for_non_load_sections (bfd *abfd,
+     {
+       if (p->p_type == PT_GNU_RELRO)
+ 	{
+-	  const Elf_Internal_Phdr *lp;
+-	  struct elf_segment_map *lm;
++	  bfd_vma start, end;
+ 
+ 	  if (link_info != NULL)
+ 	    {
+ 	      /* During linking the range of the RELRO segment is passed
+-		 in link_info.  */
++		 in link_info.  Note that there may be padding between
++		 relro_start and the first RELRO section.  */
++	      start = link_info->relro_start;
++	      end = link_info->relro_end;
++	    }
++	  else if (m->count != 0)
++	    {
++	      if (!m->p_size_valid)
++		abort ();
++	      start = m->sections[0]->vma;
++	      end = start + m->p_size;
++	    }
++	  else
++	    {
++	      start = 0;
++	      end = 0;
++	    }
++
++	  if (start < end)
++	    {
++	      struct elf_segment_map *lm;
++	      const Elf_Internal_Phdr *lp;
++	      unsigned int i;
++
++	      /* Find a LOAD segment containing a section in the RELRO
++		 segment.  */
+ 	      for (lm = elf_seg_map (abfd), lp = phdrs;
+ 		   lm != NULL;
+ 		   lm = lm->next, lp++)
+ 		{
+ 		  if (lp->p_type == PT_LOAD
+-		      && lp->p_vaddr < link_info->relro_end
+ 		      && lm->count != 0
+-		      && lm->sections[0]->vma >= link_info->relro_start)
++		      && lm->sections[lm->count - 1]->vma >= start
++		      && lm->sections[0]->vma < end)
+ 		    break;
+ 		}
+-
+ 	      BFD_ASSERT (lm != NULL);
+-	    }
+-	  else
+-	    {
+-	      /* Otherwise we are copying an executable or shared
+-		 library, but we need to use the same linker logic.  */
+-	      for (lp = phdrs; lp < phdrs + count; ++lp)
++
++	      /* Find the section starting the RELRO segment.  */
++	      for (i = 0; i < lm->count; i++)
+ 		{
+-		  if (lp->p_type == PT_LOAD
+-		      && lp->p_paddr == p->p_paddr)
++		  asection *s = lm->sections[i];
++		  if (s->vma >= start
++		      && s->vma < end
++		      && s->size != 0)
+ 		    break;
+ 		}
+-	    }
++	      BFD_ASSERT (i < lm->count);
++
++	      p->p_vaddr = lm->sections[i]->vma;
++	      p->p_paddr = lm->sections[i]->lma;
++	      p->p_offset = lm->sections[i]->filepos;
++	      p->p_memsz = end - p->p_vaddr;
++	      p->p_filesz = p->p_memsz;
++
++	      /* The RELRO segment typically ends a few bytes into
++		 .got.plt but other layouts are possible.  In cases
++		 where the end does not match any loaded section (for
++		 instance is in file padding), trim p_filesz back to
++		 correspond to the end of loaded section contents.  */
++	      if (p->p_filesz > lp->p_vaddr + lp->p_filesz - p->p_vaddr)
++		p->p_filesz = lp->p_vaddr + lp->p_filesz - p->p_vaddr;
+ 
+-	  if (lp < phdrs + count)
+-	    {
+-	      p->p_vaddr = lp->p_vaddr;
+-	      p->p_paddr = lp->p_paddr;
+-	      p->p_offset = lp->p_offset;
+-	      if (link_info != NULL)
+-		p->p_filesz = link_info->relro_end - lp->p_vaddr;
+-	      else if (m->p_size_valid)
+-		p->p_filesz = m->p_size;
+-	      else
+-		abort ();
+-	      p->p_memsz = p->p_filesz;
+ 	      /* Preserve the alignment and flags if they are valid. The
+ 	         gold linker generates RW/4 for the PT_GNU_RELRO section.
+ 		 It is better for objcopy/strip to honor these attributes
+diff --git a/ld/testsuite/ld-x86-64/pr14207.d b/ld/testsuite/ld-x86-64/pr14207.d
+index f6558e7cd7..41f92b8bd8 100644
+--- a/ld/testsuite/ld-x86-64/pr14207.d
++++ b/ld/testsuite/ld-x86-64/pr14207.d
+@@ -13,7 +13,7 @@ Program Headers:
+   LOAD           0x000000 0x0000000000000000 0x0000000000000000 0x0001c8 0x0001c8 R   0x200000
+   LOAD           0x000b.8 0x0000000000200b.8 0x0000000000200b.8 0x0004.0 0x000c.8 RW  0x200000
+   DYNAMIC        0x000b.0 0x0000000000200b.0 0x0000000000200b.0 0x0001.0 0x0001.0 RW  0x8
+-  GNU_RELRO      0x000b.8 0x0000000000200b.8 0x0000000000200b.8 0x0004.8 0x0004.8 R   0x1
++  GNU_RELRO      0x000b.8 0x0000000000200b.8 0x0000000000200b.8 0x0004.0 0x0004.8 R   0x1
+ 
+  Section to Segment mapping:
+   Segment Sections...
+-- 
+2.16.2

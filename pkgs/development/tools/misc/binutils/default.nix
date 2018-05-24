@@ -64,6 +64,21 @@ stdenv.mkDerivation rec {
 
     # https://sourceware.org/bugzilla/show_bug.cgi?id=22868
     ./gold-symbol-visibility.patch
+
+    # https://sourceware.org/bugzilla/show_bug.cgi?id=22741
+    ./PR22741-objcopy-segfault-on-fuzzed-COFF-object.patch
+
+    # https://sourceware.org/bugzilla/show_bug.cgi?id=22829
+    ./PR22829-objcopy-strip-removes-PT_GNU_RELRO-from-lld.patch
+
+    # https://sourceware.org/bugzilla/show_bug.cgi?id=22836
+    ./PR22836-r-s-doesnt-work-with-g3-using-GCC-7.patch
+
+    # https://sourceware.org/bugzilla/show_bug.cgi?id=23199
+    ./PR23199-invalid-SHT_group-entry-leads-to-group-confusion.patch
+
+    # https://sourceware.org/bugzilla/show_bug.cgi?id=23199
+    ./PR23199-mark-section-in-a-section-group-with-SHF_GROUP.patch
   ] ++ stdenv.lib.optional targetPlatform.isiOS ./support-ios.patch
     ++ stdenv.lib.optionals targetPlatform.isAarch64 [
     # Version 2.30 introduced strict requirements on ELF relocations which cannot
