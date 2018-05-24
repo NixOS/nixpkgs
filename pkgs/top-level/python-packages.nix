@@ -4782,6 +4782,8 @@ in {
 
   django_extensions = callPackage ../development/python-modules/django-extensions { };
 
+  django-gravatar2 = callPackage ../development/python-modules/django-gravatar2 { };
+
   django_guardian = callPackage ../development/python-modules/django_guardian { };
 
   django-ipware = callPackage ../development/python-modules/django-ipware { };
