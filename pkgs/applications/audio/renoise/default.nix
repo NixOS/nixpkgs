@@ -9,7 +9,7 @@
 let fileversion = "3_1_0";
 in
 stdenv.mkDerivation rec {
-  name = "renoise";
+  name = "renoise-${lib.replaceStrings ["_"] ["."] fileversion}";
   buildInputs = [ libX11 libXext libXcursor libXrandr alsaLib libjack2 ];
 
   src =

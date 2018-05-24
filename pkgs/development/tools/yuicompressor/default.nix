@@ -1,10 +1,10 @@
 { stdenv, fetchurl, makeWrapper, jre }:
 
 stdenv.mkDerivation rec {
-  name = "yuicompressor";
+  name = "yuicompressor-${version}";
   version = "2.4.8";
   src = fetchurl {
-    url = "http://github.com/yui/yuicompressor/releases/download/v${version}/${name}-${version}.jar";
+    url = "http://github.com/yui/yuicompressor/releases/download/v${version}/${name}.jar";
     sha256 = "1qjxlak9hbl9zd3dl5ks0w4zx5z64wjsbk7ic73r1r45fasisdrh";
   };
 
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   buildCommand = ''
     mkdir -p $out/{bin,lib}
     ln -s $src $out/lib/yuicompressor.jar
-    makeWrapper ${jre}/bin/java $out/bin/${name} --add-flags \
+    makeWrapper ${jre}/bin/java $out/bin/yuicompressor --add-flags \
      "-cp $out/lib/yuicompressor.jar com.yahoo.platform.yui.compressor.YUICompressor"
   '';
 }

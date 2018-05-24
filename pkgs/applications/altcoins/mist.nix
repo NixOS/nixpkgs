@@ -25,7 +25,7 @@ let
     categories = "Network;";
   };
 
-  mist = stdenv.mkDerivation {
+  mist = stdenv.lib.appendToName "unwrapped" (stdenv.mkDerivation {
     inherit name version;
 
     src = {
@@ -53,10 +53,10 @@ let
         --set-rpath "${atomEnv.libPath}:$out/lib/mist" \
         $out/lib/mist/mist
     '';
-  };
+  });
 in
 buildFHSUserEnv {
-  name = "mist";
+  name = "mist-${stdenv.lib.getVersion mist}";
 
   targetPkgs = pkgs: with pkgs; [
      mist

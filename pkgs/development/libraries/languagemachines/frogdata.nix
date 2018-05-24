@@ -9,7 +9,7 @@ let
 in
 
 stdenv.mkDerivation {
-  name = "frogdata";
+  name = "frogdata-${release.version}";
   version = release.version;
   src = fetchurl { inherit (release) url sha256;
                    name = "frogdata-${release.version}.tar.gz"; };

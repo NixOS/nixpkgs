@@ -57,6 +57,8 @@ let
       in
       stdenv.mkDerivation (args // {
 
+        name = "${args.name}-${lua.luaversion}";
+
         inherit preBuild postInstall;
 
         inherit luadeps runtimeDeps;

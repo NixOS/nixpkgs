@@ -10,7 +10,7 @@ let
     sha256 = "0wksqma41z36dbv6w6iplkjfdm0ha3njp222fakyh4lismajr71p";
   };
 in stdenv.mkDerivation {
-  name = "gitweb";
+  name = "gitweb-${stdenv.lib.getVersion git}";
 
   src = git.gitweb;
 

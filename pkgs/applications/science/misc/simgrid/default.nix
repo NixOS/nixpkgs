@@ -19,14 +19,13 @@ in
 stdenv.mkDerivation rec {
   major_version = "3";
   minor_version = "17";
-  version = "v${major_version}.${minor_version}";
-  tagged_version = "${major_version}_${minor_version}";
-  name = "simgrid";
+  version = "${major_version}.${minor_version}";
+  name = "simgrid-${version}";
 
   src = fetchFromGitHub {
     owner = "simgrid";
     repo = "simgrid";
-    rev = "v3_17";
+    rev = "v${major_version}_${minor_version}";
     sha256 = "0ffs9w141qhw571jsa9sch1cnr332vs4sgj6dsiij2mc24m6wpb4";
     #rev = "master";
     #sha256 = "0qvh1jzc2lpnp8234kjx1x4g1a5kfdn6kb15vhk160qgvj98nyqm";

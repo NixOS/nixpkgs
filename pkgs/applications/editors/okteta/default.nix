@@ -9,9 +9,9 @@
 let
   version = "17.12.3";
 in mkDerivation rec {
-  name = "okteta";
+  name = "okteta-${version}";
   src = fetchurl {
-    url    = "mirror://kde/stable/applications/${version}/src/${name}-${version}.tar.xz";
+    url    = "mirror://kde/stable/applications/${version}/src/${name}.tar.xz";
     sha256 = "03wsv83l1cay2dpcsksad124wzan7kh8zxdw1h0yicn398kdbck4";
   };
   meta = {
