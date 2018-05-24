@@ -14,7 +14,6 @@ let
     inherit sha256;
   };
 
-  compiler-rt_src = fetch "compiler-rt" "16m7rvh3w6vq10iwkjrr1nn293djld3xm62l5zasisaprx117k6h";
   clang-tools-extra_src = fetch "clang-tools-extra" "1ll9v6r29xfdiywbn9iss49ad39ah3fk91wiv0sr6k6k9i544fq5";
 
   # Add man output without introducing extra dependencies.
@@ -27,7 +26,6 @@ let
   in {
 
     llvm = overrideManOutput (callPackage ./llvm.nix {
-      inherit compiler-rt_src;
       inherit (targetLlvmLibraries) libcxxabi;
     });
     clang-unwrapped = overrideManOutput (callPackage ./clang {
@@ -43,11 +41,28 @@ let
     libstdcxxClang = wrapCCWith {
       cc = tools.clang-unwrapped;
       extraPackages = [ libstdcxxHook ];
+      extraBuildCommands = stdenv.lib.optionalString stdenv.targetPlatform.isLinux ''
+        echo "--gcc-toolchain=${tools.clang-unwrapped.gcc}" >> $out/nix-support/cc-cflags
+      '';
     };
 
-    libcxxClang = wrapCCWith {
+    libcxxClang = wrapCCWith rec {
       cc = tools.clang-unwrapped;
-      extraPackages = [ targetLlvmLibraries.libcxx targetLlvmLibraries.libcxxabi ];
+      extraPackages = [
+        targetLlvmLibraries.libcxx
+        targetLlvmLibraries.libcxxabi
+        targetLlvmLibraries.compiler-rt
+      ];
+      isCompilerRT = true;
+      extraBuildCommands = ''
+        rsrc="$out/resource-root"
+        mkdir "$rsrc"
+        ln -s "${cc}/lib/clang/${release_version}/include" "$rsrc"
+        ln -s "${targetLlvmLibraries.compiler-rt.out}/lib" "$rsrc/lib"
+        echo "-resource-dir=$rsrc" >> $out/nix-support/cc-cflags
+      '' + stdenv.lib.optionalString stdenv.targetPlatform.isLinux ''
+        echo "--gcc-toolchain=${tools.clang-unwrapped.gcc}" >> $out/nix-support/cc-cflags
+      '';
     };
 
     lld = callPackage ./lld.nix {};
@@ -58,6 +73,8 @@ let
   libraries = let
     callPackage = newScope (libraries // buildLlvmTools // { inherit stdenv cmake libxml2 python2 isl release_version version fetch; });
   in {
+
+    compiler-rt = callPackage ./compiler-rt.nix {};
 
     stdenv = overrideCC stdenv buildLlvmTools.clang;
 

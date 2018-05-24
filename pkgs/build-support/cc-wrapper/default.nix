@@ -9,7 +9,7 @@
 , stdenvNoCC, nativeTools, propagateDoc ? !nativeTools, noLibc ? false, nativeLibc, nativePrefix ? ""
 , cc ? null, libc ? null, bintools, coreutils ? null, shell ? stdenvNoCC.shell
 , extraPackages ? [], extraBuildCommands ? ""
-, isGNU ? false, isClang ? cc.isClang or false, gnugrep ? null
+, isGNU ? false, isClang ? cc.isClang or false, isCompilerRT ? false, gnugrep ? null
 , buildPackages ? {}
 }:
 
@@ -90,7 +90,7 @@ stdenv.mkDerivation {
     # Binutils, and Apple's "cctools"; "bintools" as an attempt to find an
     # unused middle-ground name that evokes both.
     inherit bintools;
-    inherit libc nativeTools nativeLibc nativePrefix isGNU isClang default_cxx_stdlib_compile;
+    inherit libc nativeTools nativeLibc nativePrefix isGNU isClang isCompilerRT default_cxx_stdlib_compile;
 
     emacsBufferSetup = pkgs: ''
       ; We should handle propagation here too
