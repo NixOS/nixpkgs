@@ -906,7 +906,7 @@ in {
             ${optionalString (cfg.etcd.keyFile != null)
               "--etcd-keyfile=${cfg.etcd.keyFile}"} \
             --insecure-port=${toString cfg.apiserver.port} \
-            --bind-address=0.0.0.0 \
+            --bind-address=${toString cfg.apiserver.address} \
             ${optionalString (cfg.apiserver.advertiseAddress != null)
               "--advertise-address=${cfg.apiserver.advertiseAddress}"} \
             --allow-privileged=${boolToString cfg.apiserver.allowPrivileged}\
