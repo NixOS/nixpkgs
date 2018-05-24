@@ -145,6 +145,9 @@ in
       }
     ];
 
+    # make man 8 dnscrypt-proxy work
+    environment.systemPackages = [ pkgs.dnscrypt-proxy ];
+
     users.users.dnscrypt-proxy = {
       description = "dnscrypt-proxy daemon user";
       isSystemUser = true;
