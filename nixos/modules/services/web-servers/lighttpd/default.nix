@@ -74,8 +74,6 @@ let
     pkgs.writeText "lighttpd.conf" ''
       server.document-root = "${cfg.document-root}"
       server.port = ${toString cfg.port}
-      server.username = "lighttpd"
-      server.groupname = "lighttpd"
 
       # As for why all modules are loaded here, instead of having small
       # server.modules += () entries in each sub-service extraConfig snippet,
@@ -240,7 +238,13 @@ in
       description = "Lighttpd Web Server";
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
-      serviceConfig.ExecStart = "${pkgs.lighttpd}/sbin/lighttpd -D -f ${configFile}";
+      serviceConfig = {
+        RuntimeDirectory = "lighttpd";
+        User = "lighttpd";
+        Group = "lighttpd";
+        ExecStart = "${pkgs.lighttpd}/sbin/lighttpd -D -f ${configFile}";
+        AmbientCapabilities = if (cfg.port < 1024) then "cap_net_bind_service" else "";
+      };
       # SIGINT => graceful shutdown
       serviceConfig.KillSignal = "SIGINT";
     };

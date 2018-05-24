@@ -249,11 +249,6 @@ in
           }
         '';
 
-        systemd.services.lighttpd.preStart = ''
-          mkdir -p /run/lighttpd
-          chown lighttpd.lighttpd /run/lighttpd
-        '';
-
         systemd.services.lighttpd.wants = [ "mongodb.service" "docker.service" ];
         systemd.services.lighttpd.after = [ "mongodb.service" "docker.service" ];
       }
