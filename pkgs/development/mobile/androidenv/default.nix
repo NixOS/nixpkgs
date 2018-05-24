@@ -219,7 +219,7 @@ rec {
     inherit (buildPackages)
       p7zip makeWrapper;
     inherit (pkgs)
-      stdenv fetchurl zlib ncurses lib python3
+      stdenv fetchurl zlib ncurses5 lib python3 libcxx
       coreutils file findutils gawk gnugrep gnused jdk which;
     inherit platformTools;
     version = "10e";
@@ -230,7 +230,7 @@ rec {
     inherit (buildPackages)
       p7zip makeWrapper;
     inherit (pkgs)
-      stdenv fetchurl zlib ncurses lib python3
+      stdenv fetchurl zlib ncurses5 lib python3 libcxx
       coreutils file findutils gawk gnugrep gnused jdk which;
     inherit platformTools;
     version = "16b";
@@ -241,7 +241,7 @@ rec {
     inherit (buildPackages)
       p7zip makeWrapper;
     inherit (pkgs)
-      stdenv fetchurl zlib ncurses lib python3
+      stdenv fetchurl zlib ncurses5 lib python3 libcxx
       coreutils file findutils gawk gnugrep gnused jdk which;
     inherit platformTools;
     version = "17";

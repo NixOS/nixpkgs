@@ -1,6 +1,6 @@
-{ stdenv, fetchurl, zlib, ncurses, p7zip, lib, makeWrapper
+{ stdenv, fetchurl, zlib, ncurses5, p7zip, lib, makeWrapper
 , coreutils, file, findutils, gawk, gnugrep, gnused, jdk, which
-, platformTools, python3, version, sha256
+, platformTools, python3, libcxx, version, sha256
 }:
 
 stdenv.mkDerivation rec {
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   phases = "buildPhase";
 
-  nativeBuildInputs = [ p7zip makeWrapper ];
+  nativeBuildInputs = [ p7zip makeWrapper file ];
 
   buildCommand = let
     bin_path = "$out/bin";
@@ -33,8 +33,13 @@ stdenv.mkDerivation rec {
   in ''
     set -x
     mkdir -pv $out/libexec
+    mkdir -pv $out/lib64
+    ln -s ${ncurses5.out}/lib/libncursesw.so.5 $out/lib64/libtinfo.so.5
+    ln -s ${ncurses5.out}/lib/libncurses.so.5 $out/lib64/libncurses.so.5
     cd $out/libexec
     7z x $src
+
+    patchShebangs ${pkg_path}
 
     # so that it doesn't fail because of read-only permissions set
     cd -
@@ -46,8 +51,6 @@ stdenv.mkDerivation rec {
         ''
       else
         ''
-          patchShebangs ${pkg_path}/build/tools/make-standalone-toolchain.sh
-
           patch -p1 \
             --no-backup-if-mismatch \
             -d $out/libexec/${name} < ${ ./. + builtins.toPath ("/make_standalone_toolchain.py_" + "${version}" + ".patch") }
@@ -60,17 +63,13 @@ stdenv.mkDerivation rec {
         \( -type f -a -name "*.so*" \) -o \
         \( -type f -a -perm -0100 \) \
         \) -exec patchelf --set-interpreter ${stdenv.cc.libc.out}/lib/ld-*so.? \
-                          --set-rpath ${stdenv.lib.makeLibraryPath [ zlib.out ncurses ]} {} \;
+                          --set-rpath $out/lib64:${stdenv.lib.makeLibraryPath [ libcxx.out zlib.out ncurses5 ]} {} \;
     # fix ineffective PROGDIR / MYNDKDIR determination
     for i in ndk-build ${lib.optionalString (version == "10e") "ndk-gdb ndk-gdb-py"}
     do
         sed -i -e ${sed_script_1} $i
     done
-    ${lib.optionalString (version == "10e") ''
-      sed -i -e ${sed_script_2} ndk-which
-      # a bash script
-      patchShebangs ndk-which
-    ''}
+
     # wrap
     for i in ndk-build ${lib.optionalString (version == "10e") "ndk-gdb ndk-gdb-py ndk-which"}
     do
