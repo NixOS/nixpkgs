@@ -39,7 +39,7 @@ in
             Wether to enable the slurm control daemon.
             Note that the standard authentication method is "munge".
             The "munge" service needs to be provided with a password file in order for
-            slurm to work properly (see <literal>services.munge.password<literal>).
+            slurm to work properly (see <literal>services.munge.password</literal>).
           '';
         };
       };
