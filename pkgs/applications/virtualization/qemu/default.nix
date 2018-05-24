@@ -1,7 +1,7 @@
 { lib, stdenv, fetchurl, fetchpatch, python3Packages, zlib, pkg-config, glib, buildPackages
-, pixman, vde2, alsa-lib, texinfo, flex
+, pixman, vde2, alsa-lib, texinfo, flex, runCommandCC
 , bison, lzo, snappy, libaio, libtasn1, gnutls, nettle, curl, ninja, meson, sigtool
-, makeWrapper, removeReferencesTo
+, makeWrapper, removeReferencesTo, ffmpeg_4
 , attr, libcap, libcap_ng, socat, libslirp
 , CoreServices, Cocoa, Hypervisor, rez, setfile, vmnet
 , guestAgentSupport ? with stdenv.hostPlatform; isLinux || isNetBSD || isOpenBSD || isSunOS || isWindows
@@ -41,6 +41,17 @@
 
 let
   hexagonSupport = hostCpuTargets == null || lib.elem "hexagon" hostCpuTargets;
+
+  videoEncoder = runCommandCC "nixos-test-encode-video" {
+    nativeBuildInputs = [ pkg-config ];
+    buildInputs = [ ffmpeg_4 zlib ];
+    pkgconfigLibs = [
+      "libavformat" "libavcodec" "libavutil" "libswscale" "zlib"
+    ];
+  } ''
+    $CC -Wall $(pkg-config $pkgconfigLibs --libs --cflags) \
+      ${./encode-video.c} -o "$out"
+  '';
 in
 
 stdenv.mkDerivation (finalAttrs: {
@@ -246,6 +257,9 @@ stdenv.mkDerivation (finalAttrs: {
   # Add a ‘qemu-kvm’ wrapper for compatibility/convenience.
   postInstall = ''
     ln -s $out/bin/qemu-system-${stdenv.hostPlatform.qemuArch} $out/bin/qemu-kvm
+  '' + lib.optionalString nixosTestRunner ''
+    install -vD ${lib.escapeShellArg videoEncoder} \
+      "$out/bin/nixos-test-encode-video"
   '';
 
   passthru = {
