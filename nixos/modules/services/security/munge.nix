@@ -35,20 +35,21 @@ in
 
     environment.systemPackages = [ pkgs.munge ];
 
-    systemd.services.munged = { 
+    systemd.services.munged = {
       wantedBy = [ "multi-user.target" ];
       after = [ "network.target" ];
 
-      path = [ pkgs.munge pkgs.coreutils ];
+      path = with pkgs; [ munge coreutils ];
 
       preStart = ''
         chmod 0700 ${cfg.password}
-        mkdir -p /var/lib/munge -m 0711
-        mkdir -p /var/log/munge -m 0700
-        mkdir -p /run/munge -m 0755
       '';
 
       serviceConfig = {
+        RuntimeDirectory = "munge";
+        StateDirectory = "munge";
+        LogDirectory = "munge";
+        Type = "forking";
         ExecStart = "${pkgs.munge}/bin/munged --syslog --key-file ${cfg.password}";
         PIDFile = "/run/munge/munged.pid";
         ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
