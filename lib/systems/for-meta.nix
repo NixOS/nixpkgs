@@ -3,6 +3,8 @@ let
   inherit (lib.systems) parse;
   inherit (lib.systems.inspect) patterns;
 
+  abis = lib.mapAttrs (_: abi: builtins.removeAttrs abi [ "assertions" ]) parse.abis;
+
 in rec {
   all     = [ {} ]; # `{}` matches anything
   none    = [];
@@ -19,7 +21,7 @@ in rec {
   darwin  = [ patterns.isDarwin ];
   freebsd = [ patterns.isFreeBSD ];
   # Should be better, but MinGW is unclear, and HURD is bit-rotted.
-  gnu     = [ { kernel = parse.kernels.linux; abi = parse.abis.gnu; } ];
+  gnu     = [ { kernel = parse.kernels.linux; abi = abis.gnu; } ];
   illumos = [ patterns.isSunOS ];
   linux   = [ patterns.isLinux ];
   netbsd  = [ patterns.isNetBSD ];
