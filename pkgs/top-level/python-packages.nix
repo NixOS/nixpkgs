@@ -4713,6 +4713,8 @@ in {
     };
   };
 
+  django-allauth = callPackage ../development/python-modules/django-allauth { };
+
   django_appconf = callPackage ../development/python-modules/django_appconf { };
 
   django_colorful = buildPythonPackage rec {
