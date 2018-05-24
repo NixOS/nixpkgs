@@ -38,10 +38,16 @@ let
 
     clang = if stdenv.cc.isGNU then tools.libstdcxxClang else tools.libcxxClang;
 
-    libstdcxxClang = wrapCCWith {
+    libstdcxxClang = wrapCCWith rec {
       cc = tools.clang-unwrapped;
-      extraPackages = [ libstdcxxHook ];
-      extraBuildCommands = stdenv.lib.optionalString stdenv.targetPlatform.isLinux ''
+      extraPackages = [ libstdcxxHook targetLlvmLibraries.compiler-rt ];
+      extraBuildCommands = ''
+        rsrc="$out/resource-root"
+        mkdir "$rsrc"
+        ln -s "${cc}/lib/clang/${release_version}/include" "$rsrc"
+        ln -s "${targetLlvmLibraries.compiler-rt.out}/lib" "$rsrc/lib"
+        echo "-resource-dir=$rsrc" >> $out/nix-support/cc-cflags
+      '' + stdenv.lib.optionalString stdenv.targetPlatform.isLinux ''
         echo "--gcc-toolchain=${tools.clang-unwrapped.gcc}" >> $out/nix-support/cc-cflags
       '';
     };
@@ -53,7 +59,6 @@ let
         targetLlvmLibraries.libcxxabi
         targetLlvmLibraries.compiler-rt
       ];
-      isCompilerRT = true;
       extraBuildCommands = ''
         rsrc="$out/resource-root"
         mkdir "$rsrc"
