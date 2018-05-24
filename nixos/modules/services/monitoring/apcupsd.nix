@@ -150,8 +150,8 @@ in
     systemd.services.apcupsd = {
       description = "APC UPS Daemon";
       wantedBy = [ "multi-user.target" ];
-      preStart = "mkdir -p /run/apcupsd/";
       serviceConfig = {
+        RuntimeDirectory = "apcupsd";
         ExecStart = "${pkgs.apcupsd}/bin/apcupsd -b -f ${configFile} -d1";
         # TODO: When apcupsd has initiated a shutdown, systemd always ends up
         # waiting for it to stop ("A stop job is running for UPS daemon"). This
