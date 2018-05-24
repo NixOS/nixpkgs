@@ -62,15 +62,15 @@ in
   assert kernel != null;
 {
     splStable = common {
-      version = "0.7.8";
-      sha256 = "0ypyy7ij280n7rly6ifrvna9k55gxwdx9a7lalf4r1ka714379fi";
-      patches = [ ./install_prefix-0.7.8.patch ];
+      version = "0.7.9";
+      sha256 = "0540m1dv9jvrzk9kw61glg0h0cwj976mr9zb42y3nh17k47ywff0";
+      patches = [ ./install_prefix-0.7.9.patch ];
     };
 
     splUnstable = common {
-      version = "2018-04-10";
-      rev = "9125f8f5bdb36bfbd2d816d30b6b29b9f89ae3d8";
-      sha256 = "00zrbca906rzjd62m4khiw3sdv8x18dapcmvkyaawripwvzc4iri";
+      version = "2018-05-07";
+      rev = "1149b62d20b7ed9d8ae25d5da7a06213d79b7602";
+      sha256 = "07qlx7l23y696gzyy7ynly7n1141w66y21gkmxiia2xwldj8klkx";
       patches = [ ./install_prefix.patch ];
     };
 
