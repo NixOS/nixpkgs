@@ -32,12 +32,20 @@ in
     services.slurm = {
 
       server = {
-        enable = mkEnableOption "slurm control daemon";
-
+        enable = mkOption {
+          type = types.bool;
+          default = false;
+          description = ''
+            Wether to enable the slurm control daemon.
+            Note that the standard authentication method is "munge".
+            The "munge" service needs to be provided with a password file in order for
+            slurm to work properly (see <literal>services.munge.password<literal>).
+          '';
+        };
       };
 
       client = {
-        enable = mkEnableOption "slurm rlient daemon";
+        enable = mkEnableOption "slurm client daemon";
 
       };
 
@@ -160,6 +168,8 @@ in
   in mkIf (cfg.client.enable || cfg.server.enable) {
 
     environment.systemPackages = [ wrappedSlurm ];
+
+    services.munge.enable = mkDefault true;
 
     systemd.services.slurmd = mkIf (cfg.client.enable) {
       path = with pkgs; [ wrappedSlurm coreutils ]
