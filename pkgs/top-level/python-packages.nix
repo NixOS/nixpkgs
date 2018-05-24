@@ -11272,6 +11272,8 @@ in {
 
   pyls-mypy = callPackage ../development/python-modules/pyls-mypy {};
 
+  pyls-isort = callPackage ../development/python-modules/pyls-isort {};
+
   pyudev = callPackage ../development/python-modules/pyudev {
     inherit (pkgs) fetchurl systemd;
   };
