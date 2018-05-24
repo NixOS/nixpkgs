@@ -38,6 +38,8 @@ in stdenv.mkDerivation rec {
     sha256 = "1iqxvgpsqibqw3vk79158l2pnb6y4pjhjp2d6724lm5rpz4825lx";
   };
 
+  patches = [ ./40103-iostat-fix.patch ];
+
   buildInputs = [
     python
     unzip
@@ -59,6 +61,7 @@ in stdenv.mkDerivation rec {
     mkdir -p $out/bin
     cp -R $src $out/agent
     chmod u+w -R $out
+    (cd $out/agent; patchPhase)
     PYTHONPATH=$out/agent:$PYTHONPATH
     ln -s $out/agent/agent.py $out/bin/dd-agent
     ln -s $out/agent/dogstatsd.py $out/bin/dogstatsd
