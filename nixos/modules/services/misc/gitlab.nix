@@ -511,12 +511,7 @@ in {
         openssh
         gitlab-workhorse
       ];
-      preStart = ''
-        mkdir -p /run/gitlab
-        chown ${cfg.user}:${cfg.group} /run/gitlab
-      '';
       serviceConfig = {
-        PermissionsStartOnly = true; # preStart must be run as root
         Type = "simple";
         User = cfg.user;
         Group = cfg.group;
@@ -568,7 +563,6 @@ in {
         # The uploads directory is hardcoded somewhere deep in rails. It is
         # symlinked in the gitlab package to /run/gitlab/uploads to make it
         # configurable
-        mkdir -p /run/gitlab
         mkdir -p ${cfg.statePath}/{log,uploads}
         ln -sf ${cfg.statePath}/log /run/gitlab/log
         ln -sf ${cfg.statePath}/uploads /run/gitlab/uploads
@@ -645,6 +639,7 @@ in {
       '';
 
       serviceConfig = {
+        RuntimeDirectory = "gitlab";
         PermissionsStartOnly = true; # preStart must be run as root
         Type = "simple";
         User = cfg.user;
