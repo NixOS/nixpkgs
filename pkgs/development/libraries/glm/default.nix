@@ -1,12 +1,12 @@
 { stdenv, fetchurl, fetchzip, cmake }:
 
 stdenv.mkDerivation rec {
-  version = "0.9.8.5";
+  version = "0.9.9.0";
   name = "glm-${version}";
 
   src = fetchzip {
     url = "https://github.com/g-truc/glm/releases/download/${version}/${name}.zip";
-    sha256 = "0dkfj4hin3am9fxgcvwr5gj0h9y52x7wa03lfwb3q0bvaj1rsly2";
+    sha256 = "0ycpr2l3mg12lyjh74wg82s4qk283cc7dr9csih007hd8hg5gjs0";
   };
 
   nativeBuildInputs = [ cmake ];
