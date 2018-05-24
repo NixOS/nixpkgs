@@ -408,6 +408,10 @@ in {
 
   pytest-tornado = callPackage ../development/python-modules/pytest-tornado { };
 
+  python-openid = callPackage (if isPy3k
+    then ../development/python-modules/python3-openid
+    else ../development/python-modules/python-openid) { };
+
   python-sql = callPackage ../development/python-modules/python-sql { };
 
   python-stdnum = callPackage ../development/python-modules/python-stdnum { };
