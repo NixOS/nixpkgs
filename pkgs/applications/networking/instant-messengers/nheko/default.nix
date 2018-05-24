@@ -1,4 +1,7 @@
-{ stdenv, fetchFromGitHub, fetchurl, cmake, doxygen, lmdb, qt5 }:
+{
+  lib, stdenv, fetchFromGitHub, fetchurl,
+  cmake, doxygen, lmdb, qt5, qtmacextras
+}:
 
 let
   json_hpp = fetchurl {
@@ -60,6 +63,22 @@ stdenv.mkDerivation rec {
   # a dependency is updated, so that the fetches up there can be updated too
   patches = [ ./external-deps.patch ];
 
+  # If, on Darwin, you encounter the error
+  #   error: must specify at least one argument for '...' parameter of variadic
+  #   macro [-Werror,-Wgnu-zero-variadic-macro-arguments]
+  # Then adding this parameter is likely the fix you want.
+  #
+  # However, it looks like either cmake doesn't honor this CFLAGS variable, or
+  # darwin's compiler doesn't have the same syntax as gcc for turning off
+  # -Werror selectively.
+  #
+  # Anyway, this is something that will have to be debugged with access to a
+  # darwin-based OS. Sorry about that!
+  #
+  #preConfigure = lib.optionalString stdenv.isDarwin ''
+  #  export CFLAGS=-Wno-error=gnu-zero-variadic-macro-arguments
+  #'';
+
   cmakeFlags = [
     "-DMATRIX_STRUCTS_LIBRARY=${matrix-structs}/lib/static/libmatrix_structs.a"
     "-DMATRIX_STRUCTS_INCLUDE_DIR=${matrix-structs}/include/matrix_structs"
@@ -71,7 +90,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     lmdb lmdbxx matrix-structs qt5.qtbase qt5.qtmultimedia qt5.qttools tweeny
-  ];
+  ] ++ lib.optional stdenv.isDarwin qtmacextras;
 
   enableParallelBuilding = true;
 
