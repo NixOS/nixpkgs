@@ -128,12 +128,17 @@ stdenv.mkDerivation (finalAttrs: {
       revert = true;
     })
   ]
-  ++ lib.optional nixosTestRunner ./force-uid0-on-9p.patch;
+  ++ lib.optionals nixosTestRunner [
+    ./force-uid0-on-9p.patch
+    ./nixos-test-ui.patch
+  ];
 
   postPatch = ''
     # Otherwise tries to ensure /var/run exists.
     sed -i "/install_emptydir(get_option('localstatedir') \/ 'run')/d" \
         qga/meson.build
+  '' + lib.optionalString nixosTestRunner ''
+    cat ${./nixos-test-ui.c} > ui/nixos-test.c
   '';
 
   preConfigure = ''
