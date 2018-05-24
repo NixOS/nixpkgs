@@ -35,26 +35,26 @@ let
     ${cfg.preHook}
   '' + optionalString cfg.doInit ''
     # Run borg init if the repo doesn't exist yet
-    if ! borg list ${cfg.extraArgs} > /dev/null; then
-      borg init ${cfg.extraArgs} \
+    if ! borg list $extraArgs > /dev/null; then
+      borg init $extraArgs \
         --encryption ${cfg.encryption.mode} \
         $extraInitArgs
       ${cfg.postInit}
     fi
   '' + ''
-    borg create ${cfg.extraArgs} \
+    borg create $extraArgs \
       --compression ${cfg.compression} \
       --exclude-from ${mkExcludeFile cfg} \
       $extraCreateArgs \
       "::$archiveName$archiveSuffix" \
       ${escapeShellArgs cfg.paths}
   '' + optionalString cfg.appendFailedSuffix ''
-    borg rename ${cfg.extraArgs} \
+    borg rename $extraArgs \
       "::$archiveName$archiveSuffix" "$archiveName"
   '' + ''
     ${cfg.postCreate}
   '' + optionalString (cfg.prune.keep != { }) ''
-    borg prune ${cfg.extraArgs} \
+    borg prune $extraArgs \
       ${mkKeepArgs cfg} \
       --prefix ${escapeShellArg cfg.prune.prefix} \
       $extraPruneArgs
@@ -93,7 +93,7 @@ let
       };
       environment = {
         BORG_REPO = cfg.repo;
-        inherit (cfg) extraInitArgs extraCreateArgs extraPruneArgs;
+        inherit (cfg) extraArgs extraInitArgs extraCreateArgs extraPruneArgs;
       } // (mkPassEnv cfg) // cfg.environment;
       inherit (cfg) startAt;
     };
@@ -463,7 +463,7 @@ in {
               service has. Handle with care.
             '';
             default = "";
-            example = "--remote-path=borg1";
+            example = "--remote-path=/path/to/borg";
           };
 
           extraInitArgs = mkOption {
