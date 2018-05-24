@@ -40,22 +40,14 @@ stdenv.mkDerivation rec {
   buildInputs = [ expat ];
 
   configureFlags = [
+    "--with-arch=${hostPlatform.parsed.cpu.name}"
     "--with-cache-dir=/var/cache/fontconfig" # otherwise the fallback is in $out/
     "--disable-docs"
     # just <1MB; this is what you get when loading config fails for some reason
     "--with-default-fonts=${dejavu_fonts.minimal}"
+  ] ++ stdenv.lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+    "--with-arch=${hostPlatform.parsed.cpu.name}"
   ];
-
-  # We should find a better way to access the arch reliably.
-  crossArch = if stdenv.hostPlatform != stdenv.buildPlatform
-    then hostPlatform.parsed.cpu.name
-    else null;
-
-  preConfigure = ''
-    if test -n "$crossConfig"; then
-      configureFlags="$configureFlags --with-arch=$crossArch";
-    fi
-  '';
 
   enableParallelBuilding = true;
 

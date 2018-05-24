@@ -314,6 +314,8 @@ stdenv.mkDerivation ({
     runHook postBuild
   '';
 
+  inherit doCheck;
+
   checkPhase = ''
     runHook preCheck
     ${setupCommand} test ${testTarget}
@@ -428,7 +430,6 @@ stdenv.mkDerivation ({
 // optionalAttrs (postConfigure != "")  { inherit postConfigure; }
 // optionalAttrs (preBuild != "")       { inherit preBuild; }
 // optionalAttrs (postBuild != "")      { inherit postBuild; }
-// optionalAttrs (doCheck)              { inherit doCheck; }
 // optionalAttrs (doBenchmark)          { inherit doBenchmark; }
 // optionalAttrs (checkPhase != "")     { inherit checkPhase; }
 // optionalAttrs (preCheck != "")       { inherit preCheck; }

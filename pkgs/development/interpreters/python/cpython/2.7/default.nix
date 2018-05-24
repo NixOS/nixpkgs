@@ -31,7 +31,7 @@ with stdenv.lib;
 
 let
   majorVersion = "2.7";
-  minorVersion = "14";
+  minorVersion = "15";
   minorVersionSuffix = "";
   pythonVersion = majorVersion;
   version = "${majorVersion}.${minorVersion}${minorVersionSuffix}";
@@ -40,7 +40,7 @@ let
 
   src = fetchurl {
     url = "https://www.python.org/ftp/python/${majorVersion}.${minorVersion}/Python-${version}.tar.xz";
-    sha256 = "0rka541ys16jwzcnnvjp2v12m4cwgd2jp6wj4kj511p715pb5zvi";
+    sha256 = "0x2mvz9dp11wj7p5ccvmk9s0hzjk2fa1m462p395l4r6bfnb3n92";
   };
 
   hasDistutilsCxxPatch = !(stdenv.cc.isGNU or false);
@@ -57,8 +57,6 @@ let
       # patch python to put zero timestamp into pyc
       # if DETERMINISTIC_BUILD env var is set
       ./deterministic-build.patch
-
-      ./properly-detect-curses.patch
 
     ] ++ optionals (x11Support && stdenv.isDarwin) [
       ./use-correct-tcl-tk-on-darwin.patch
@@ -140,7 +138,10 @@ let
     "ac_cv_computed_gotos=yes"
     "ac_cv_file__dev_ptmx=yes"
     "ac_cv_file__dev_ptc=yes"
-  ];
+  ]
+    # Never even try to use lchmod on linux,
+    # don't rely on detecting glibc-isms.
+  ++ optional hostPlatform.isLinux "ac_cv_func_lchmod=no";
 
   postConfigure = if hostPlatform.isCygwin then ''
     sed -i Makefile -e 's,PYTHONPATH="$(srcdir),PYTHONPATH="$(abs_srcdir),'
@@ -240,6 +241,8 @@ in stdenv.mkDerivation {
     };
 
     enableParallelBuilding = true;
+
+    doCheck = false; # expensive, and fails
 
     meta = {
       homepage = http://python.org;

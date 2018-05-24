@@ -9,7 +9,7 @@ let
     name = "clang-${version}";
 
     unpackPhase = ''
-      unpackFile ${fetch "cfe" "1zyh4dggxd55lnfg73c8fybnkssqcaa6bq2h4bzimnnj1jdnqpqk"}
+      unpackFile ${fetch "cfe" "0018520c4qxf5hgjdqgpz2dgl3faf4gsz87fdlb8zdmx99rfk77s"}
       mv cfe-${version}* clang
       sourceRoot=$PWD/clang
       unpackFile ${clang-tools-extra_src}
@@ -50,10 +50,12 @@ let
 
     outputs = [ "out" "lib" "python" ];
 
-    # Clang expects to find LLVMgold in its own prefix
-    # Clang expects to find sanitizer libraries in its own prefix
     postInstall = ''
-      ln -sv ${llvm}/lib/LLVMgold.so $out/lib
+      # Clang expects to find LLVMgold in its own prefix
+      if [ -e ${llvm}/lib/LLVMgold.so ]; then
+        ln -sv ${llvm}/lib/LLVMgold.so $out/lib
+      fi
+      # Clang expects to find sanitizer libraries in its own prefix
       ln -sv ${llvm}/lib/clang/${release_version}/lib $out/lib/clang/${release_version}/
       ln -sv $out/bin/clang $out/bin/cpp
 

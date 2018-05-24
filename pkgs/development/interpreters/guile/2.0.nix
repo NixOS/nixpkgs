@@ -89,6 +89,7 @@
   # make check doesn't work on darwin
   # On Linuxes+Hydra the tests are flaky; feel free to investigate deeper.
   doCheck = false;
+  doInstallCheck = doCheck;
 
   setupHook = ./setup-hook-2.0.sh;
 

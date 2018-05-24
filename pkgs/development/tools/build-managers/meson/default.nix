@@ -2,13 +2,13 @@
   targetPrefix = lib.optionalString stdenv.isCross
                    (targetPlatform.config + "-");
 in python3Packages.buildPythonApplication rec {
-  version = "0.45.1";
+  version = "0.46.1";
   pname = "meson";
   name = "${pname}-${version}";
 
   src = python3Packages.fetchPypi {
     inherit pname version;
-    sha256 = "154kxx49dbw7p30qfg1carb3mgqxx9hyy1r0yzfsg07hz1n2sq14";
+    sha256 = "1jdxs2mkniy1hpdjc4b4jb95axsjp6j5fzphmm6d4gqmqyykjvqc";
   };
 
   postFixup = ''
@@ -43,10 +43,6 @@ in python3Packages.buildPythonApplication rec {
       src = ./fix-rpath.patch;
       inherit (builtins) storeDir;
     })
-
-    # No one will ever need more than 128 bytes of data structure
-    # https://github.com/mesonbuild/meson/issues/3113
-    ./overly-strict-size-check.patch
   ];
 
   setupHook = ./setup-hook.sh;

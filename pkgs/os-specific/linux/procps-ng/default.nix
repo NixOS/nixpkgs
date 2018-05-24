@@ -1,38 +1,17 @@
-{ lib, stdenv, fetchFromGitLab, fetchpatch, ncurses, libtool, gettext, autoconf, automake, pkgconfig }:
+{ lib, stdenv, fetchurl, ncurses, pkgconfig }:
 
 stdenv.mkDerivation rec {
   name = "procps-${version}";
-  version = "3.3.13";
+  version = "3.3.14";
 
-  src = fetchFromGitLab {
-    owner ="procps-ng";
-    repo = "procps";
-    rev = "v${version}";
-    sha256 = "0r3h9adhqi5fi62lx65z839fww35lfh2isnknhkaw71xndjpzr0q";
+  # The project's releases are on SF, but git repo on gitlab.
+  src = fetchurl {
+    url = "mirror://sourceforge/procps-ng/procps-ng-${version}.tar.xz";
+    sha256 = "0v3j6rkzzscqds37i105cxx3q4dk04rsgpqfd5p7hzcvk59h5njy";
   };
 
   buildInputs = [ ncurses ];
-  nativeBuildInputs = [ libtool gettext autoconf automake pkgconfig ];
-
-  # https://gitlab.com/procps-ng/procps/issues/88
-  # Patches needed for musl and glibc 2.28
-  patches = [
-    (fetchpatch {
-      url = "https://gitlab.com/procps-ng/procps/uploads/f91ff094be1e4638aeffb67bdbb751ba/numa.h.diff";
-      sha256 = "16r537d2wfrvbv6dg9vyfck8n31xa58903mnssw1s4kb5ap83yd5";
-      extraPrefix = "";
-    })
-    (fetchpatch {
-      url = "https://gitlab.com/procps-ng/procps/uploads/6a7bdea4d82ba781451316fda74192ae/libio_detection.diff";
-      sha256 = "0qp0j60kiycjsv213ih10imjirmxz8zja3rk9fq5lr5xf7k2lr3p";
-    })
-  ];
-
-  # autoreconfHook doesn't quite get, what procps-ng buildprocss does
-  # with po/Makefile.in.in and stuff.
-  preConfigure = ''
-    ./autogen.sh
-  '';
+  nativeBuildInputs = [ pkgconfig ];
 
   makeFlags = "usrbin_execdir=$(out)/bin";
 

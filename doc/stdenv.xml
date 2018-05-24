@@ -1164,6 +1164,14 @@ passthru = {
      </listitem>
     </varlistentry>
     <varlistentry>
+      <term><varname>checkInputs</varname>
+      </term>
+      <listitem><para>
+        A list of dependencies used by the phase. This gets included in
+        <varname>buildInputs</varname> when <varname>doCheck</varname> is set.
+      </para></listitem>
+    </varlistentry>
+    <varlistentry>
      <term><varname>makeFlags</varname>
      </term>
      <listitem>
@@ -1645,6 +1653,15 @@ set debug-file-directory ~/.nix-profile/lib/debug
        won't run on the platform used to build it.
       </para>
      </listitem>
+    </varlistentry>
+    <varlistentry>
+      <term><varname>installCheckInputs</varname>
+      </term>
+      <listitem><para>
+        A list of dependencies used by the phase. This gets included in
+        <varname>buildInputs</varname> when <varname>doInstallCheck</varname>
+        is set.
+      </para></listitem>
     </varlistentry>
     <varlistentry>
      <term><varname>preInstallCheck</varname>

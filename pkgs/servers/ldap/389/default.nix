@@ -36,7 +36,9 @@ stdenv.mkDerivation rec {
     "--sysconfdir=/etc"
     "--localstatedir=/var"
     "--with-openldap"
-    "--with-db=${db}"
+    "--with-db"
+    "--with-db-inc=${db.dev}/include"
+    "--with-db-lib=${db.out}/lib"
     "--with-sasl=${cyrus_sasl.dev}"
     "--with-netsnmp=${net_snmp}"
   ];

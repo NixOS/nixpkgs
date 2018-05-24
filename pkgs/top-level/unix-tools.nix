@@ -1,4 +1,5 @@
-{ pkgs, buildEnv, runCommand, hostPlatform, lib }:
+{ pkgs, buildEnv, runCommand, hostPlatform, lib
+, stdenv }:
 
 # These are some unix tools that are commonly included in the /usr/bin
 # and /usr/sbin directory under more normal distributions. Along with
@@ -45,6 +46,16 @@ let
     };
     eject = {
       linux = pkgs.utillinux;
+    };
+    getconf = {
+      linux = if hostPlatform.isMusl then pkgs.musl-getconf
+              else lib.getBin stdenv.cc.libc;
+      darwin = pkgs.darwin.system_cmds;
+    };
+    getent = {
+      linux = if hostPlatform.isMusl then pkgs.musl-getent
+              # This may not be right on other platforms, but preserves existing behavior
+              else /* if hostPlatform.libc == "glibc" then */ pkgs.glibc.bin;
     };
     getopt = {
       linux = pkgs.utillinux;

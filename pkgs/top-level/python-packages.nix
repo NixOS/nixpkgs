@@ -2097,6 +2097,8 @@ in {
 
   demjson = callPackage ../development/python-modules/demjson { };
 
+  deprecation = callPackage ../development/python-modules/deprecation { };
+
   derpconf = callPackage ../development/python-modules/derpconf { };
 
   deskcon = self.buildPythonPackage rec {
@@ -6953,6 +6955,9 @@ in {
   pylast = callPackage ../development/python-modules/pylast { };
 
   pylru = callPackage ../development/python-modules/pylru { };
+
+  libnl-python = disabledIf isPy3k
+    (toPythonModule (pkgs.libnl.override{pythonSupport=true; inherit python; })).py;
 
   lark-parser = callPackage ../development/python-modules/lark-parser { };
 
@@ -14261,25 +14266,7 @@ in {
 
   TurboCheetah = callPackage ../development/python-modules/TurboCheetah { };
 
-  tweepy = buildPythonPackage (rec {
-    name = "tweepy-3.5.0";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/t/tweepy/${name}.tar.gz";
-      sha256 = "0n2shilamgwhzmvf534xg7f6hrnznbixyl5pw2f5a3f391gwy37h";
-    };
-
-    doCheck = false;
-    propagatedBuildInputs = with self; [ requests six requests_oauthlib ];
-
-    meta = {
-      homepage = "https://github.com/tweepy/tweepy";
-      description = "Twitter library for python";
-      license = licenses.mit;
-      maintainers = with maintainers; [ garbas ];
-      platforms = platforms.linux;
-    };
-  });
+  tweepy = callPackage ../development/python-modules/tweepy { };
 
   twiggy = buildPythonPackage rec {
     name = "Twiggy-${version}";

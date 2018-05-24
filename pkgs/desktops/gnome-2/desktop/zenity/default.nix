@@ -13,4 +13,6 @@ stdenv.mkDerivation {
   buildInputs = [ gtk libglade libxml2 libxslt libX11 docbook_xml_dtd_412 ];
 
   nativeBuildInputs = [ pkgconfig intltool gnome-doc-utils which ];
+
+  doCheck = false; # fails, tries to access the net
 }

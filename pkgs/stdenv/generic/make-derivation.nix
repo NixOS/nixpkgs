@@ -36,6 +36,9 @@ rec {
     , depsTargetTarget            ? [] #  1 ->  1
     , depsTargetTargetPropagated  ? [] #  1 ->  1
 
+    , checkInputs                 ? []
+    , installCheckInputs          ? []
+
     # Configure Phase
     , configureFlags ? []
     , # Target is not included by default because most programs don't care.
@@ -46,13 +49,16 @@ rec {
         (stdenv.hostPlatform != stdenv.buildPlatform)
         [ "build" "host" ]
 
+    # TODO(@Ericson2314): Make unconditional / resolve #33599
     # Check phase
-    , doCheck ? false
+    , doCheck ? config.doCheckByDefault or false
 
+    # TODO(@Ericson2314): Make unconditional / resolve #33599
     # InstallCheck phase
-    , doInstallCheck ? false
+    , doInstallCheck ? config.doCheckByDefault or false
 
-    , crossConfig ? null
+    , # TODO(@Ericson2314): Make always true and remove
+      strictDeps ? stdenv.hostPlatform != stdenv.buildPlatform
     , meta ? {}
     , passthru ? {}
     , pos ? # position used in error messages and for meta.position
@@ -74,6 +80,11 @@ rec {
     # TODO(@Ericson2314): Make this more modular, and not O(n^2).
     let
       supportedHardeningFlags = [ "fortify" "stackprotector" "pie" "pic" "strictoverflow" "format" "relro" "bindnow" ];
+      defaultHardeningFlags = lib.remove "pie" supportedHardeningFlags;
+      enabledHardeningOptions =
+        if builtins.elem "all" hardeningDisable
+        then []
+        else lib.subtractLists hardeningDisable (defaultHardeningFlags ++ hardeningEnable);
       # hardeningDisable additionally supports "all".
       erroneousHardeningFlags = lib.subtractLists supportedHardeningFlags (hardeningEnable ++ lib.remove "all" hardeningDisable);
     in if builtins.length erroneousHardeningFlags != 0
@@ -94,7 +105,9 @@ rec {
         ]
         [
           (map (drv: drv.__spliced.hostHost or drv) depsHostHost)
-          (map (drv: drv.crossDrv or drv) buildInputs)
+          (map (drv: drv.crossDrv or drv) (buildInputs
+             ++ lib.optionals doCheck' checkInputs
+             ++ lib.optionals doInstallCheck' installCheckInputs))
         ]
         [
           (map (drv: drv.__spliced.targetTarget or drv) depsTargetTarget)
@@ -115,34 +128,43 @@ rec {
         ]
       ];
 
+      # TODO(@oxij, @Ericson2314): This is here to keep the old semantics, remove when
+      # no package has `doCheck = true`.
+      doCheck' = doCheck && stdenv.hostPlatform == stdenv.buildPlatform;
+      doInstallCheck' = doInstallCheck && stdenv.hostPlatform == stdenv.buildPlatform;
+
       outputs' =
         outputs ++
         (if separateDebugInfo then assert stdenv.hostPlatform.isLinux; [ "debug" ] else []);
 
+      computedSandboxProfile =
+        lib.concatMap (input: input.__propagatedSandboxProfile or [])
+          (stdenv.extraNativeBuildInputs
+           ++ stdenv.extraBuildInputs
+           ++ lib.concatLists dependencies);
+
+      computedPropagatedSandboxProfile =
+        lib.concatMap (input: input.__propagatedSandboxProfile or [])
+          (lib.concatLists propagatedDependencies);
+
+      computedImpureHostDeps =
+        lib.unique (lib.concatMap (input: input.__propagatedImpureHostDeps or [])
+          (stdenv.extraNativeBuildInputs
+           ++ stdenv.extraBuildInputs
+           ++ lib.concatLists dependencies));
+
+      computedPropagatedImpureHostDeps =
+        lib.unique (lib.concatMap (input: input.__propagatedImpureHostDeps or [])
+          (lib.concatLists propagatedDependencies));
+
       derivationArg =
         (removeAttrs attrs
           ["meta" "passthru" "crossAttrs" "pos"
+           "doCheck" "doInstallCheck"
+           "checkInputs" "installCheckInputs"
            "__impureHostDeps" "__propagatedImpureHostDeps"
            "sandboxProfile" "propagatedSandboxProfile"])
-        // (let
-          computedSandboxProfile =
-            lib.concatMap (input: input.__propagatedSandboxProfile or [])
-              (stdenv.extraNativeBuildInputs
-               ++ stdenv.extraBuildInputs
-               ++ lib.concatLists dependencies);
-          computedPropagatedSandboxProfile =
-            lib.concatMap (input: input.__propagatedSandboxProfile or [])
-              (lib.concatLists propagatedDependencies);
-          computedImpureHostDeps =
-            lib.unique (lib.concatMap (input: input.__propagatedImpureHostDeps or [])
-              (stdenv.extraNativeBuildInputs
-               ++ stdenv.extraBuildInputs
-               ++ lib.concatLists dependencies));
-          computedPropagatedImpureHostDeps =
-            lib.unique (lib.concatMap (input: input.__propagatedImpureHostDeps or [])
-              (lib.concatLists propagatedDependencies));
-        in
-        {
+        // {
           # A hack to make `nix-env -qa` and `nix search` ignore broken packages.
           # TODO(@oxij): remove this assert when something like NixOS/nix#1771 gets merged into nix.
           name = assert validity.handled; name + lib.optionalString
@@ -155,6 +177,8 @@ rec {
           inherit (stdenv) system;
           userHook = config.stdenv.userHook or null;
           __ignoreNulls = true;
+
+          inherit strictDeps;
 
           depsBuildBuild              = lib.elemAt (lib.elemAt dependencies 0) 0;
           nativeBuildInputs           = lib.elemAt (lib.elemAt dependencies 0) 1;
@@ -179,6 +203,15 @@ rec {
             ++ optional (elem "host"   configurePlatforms) "--host=${stdenv.hostPlatform.config}"
             ++ optional (elem "target" configurePlatforms) "--target=${stdenv.targetPlatform.config}";
 
+        } // lib.optionalAttrs (hardeningDisable != [] || hardeningEnable != []) {
+          NIX_HARDENING_ENABLE = enabledHardeningOptions;
+        } // lib.optionalAttrs (outputs' != [ "out" ]) {
+          outputs = outputs';
+        } // lib.optionalAttrs doCheck' {
+          doCheck = true;
+        } // lib.optionalAttrs doInstallCheck' {
+          doInstallCheck = true;
+
         } // lib.optionalAttrs (stdenv.buildPlatform.isDarwin) {
           # TODO: remove lib.unique once nix has a list canonicalization primitive
           __sandboxProfile =
@@ -193,15 +226,7 @@ rec {
             "/bin/sh"
           ];
           __propagatedImpureHostDeps = computedPropagatedImpureHostDeps ++ __propagatedImpureHostDeps;
-        } // lib.optionalAttrs (outputs' != [ "out" ]) {
-          outputs = outputs';
-        } // lib.optionalAttrs (attrs ? doCheck) {
-          # TODO(@Ericson2314): Make unconditional / resolve #33599
-          doCheck = doCheck && (stdenv.hostPlatform == stdenv.buildPlatform);
-        } // lib.optionalAttrs (attrs ? doInstallCheck) {
-          # TODO(@Ericson2314): Make unconditional / resolve #33599
-          doInstallCheck = doInstallCheck && (stdenv.hostPlatform == stdenv.buildPlatform);
-        });
+        };
 
       validity = import ./check-meta.nix {
         inherit lib config meta;

@@ -6,7 +6,7 @@
 }:
 
 let
-  release_version = "5.0.1";
+  release_version = "5.0.2";
   version = release_version; # differentiating these is important for rc's
 
   fetch = name: sha256: fetchurl {
@@ -14,8 +14,8 @@ let
     inherit sha256;
   };
 
-  compiler-rt_src = fetch "compiler-rt" "1nlmm0b3wpdwxkldqp1klzv3rpqf94q2a248xgqb7aapyhbi9paf";
-  clang-tools-extra_src = fetch "clang-tools-extra" "09fjii7w43kvxvsxxs6gig9vz95vnvx1779rqd36h8kksvws3bcs";
+  compiler-rt_src = fetch "compiler-rt" "0ipd4jdxpczgr2w6lzrabymz6dhzj69ywmyybjjc1q397zgrvziy";
+  clang-tools-extra_src = fetch "clang-tools-extra" "018b3fiwah8f8br5i26qmzh6sjvzchpn358sn8v079m49f2jldm3";
 
   # Add man output without introducing extra dependencies.
   overrideManOutput = drv:
