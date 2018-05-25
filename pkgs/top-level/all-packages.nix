@@ -14013,6 +14013,8 @@ with pkgs;
   radeontop = callPackage ../os-specific/linux/radeontop { };
 
   raspberrypifw = callPackage ../os-specific/linux/firmware/raspberrypi {};
+  raspberrypiWirelessFirmware = callPackage ../os-specific/linux/firmware/raspberrypi-wireless { };
+
   raspberrypi-tools = callPackage ../os-specific/linux/firmware/raspberrypi/tools.nix {};
 
   regionset = callPackage ../os-specific/linux/regionset { };
