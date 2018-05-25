@@ -105,7 +105,7 @@ components = parse_components(version=version)
 build_inputs = {}
 for component in sorted(components.keys()):
     attr_paths = []
-    for req in get_reqs(components, component):
+    for req in sorted(get_reqs(components, component)):
         name = req.split('==')[0]
         attr_path = name_to_attr_path(name)
         if attr_path is not None:

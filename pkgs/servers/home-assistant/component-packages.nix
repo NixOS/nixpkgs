@@ -219,7 +219,7 @@
     "climate.vera" = ps: with ps; [  ];
     "climate.wink" = ps: with ps; [  ];
     "climate.zwave" = ps: with ps; [  ];
-    "cloud" = ps: with ps; [ warrant aiohttp-cors ];
+    "cloud" = ps: with ps; [ aiohttp-cors warrant ];
     "cloud.auth_api" = ps: with ps; [  ];
     "cloud.const" = ps: with ps; [  ];
     "cloud.http_api" = ps: with ps; [  ];
@@ -308,7 +308,7 @@
     "device_tracker.netgear" = ps: with ps; [  ];
     "device_tracker.nmap_tracker" = ps: with ps; [  ];
     "device_tracker.owntracks" = ps: with ps; [ libnacl paho-mqtt ];
-    "device_tracker.owntracks_http" = ps: with ps; [ libnacl aiohttp-cors ];
+    "device_tracker.owntracks_http" = ps: with ps; [ aiohttp-cors libnacl ];
     "device_tracker.ping" = ps: with ps; [  ];
     "device_tracker.sky_hub" = ps: with ps; [  ];
     "device_tracker.snmp" = ps: with ps; [ pysnmp ];
@@ -541,7 +541,7 @@
     "map" = ps: with ps; [  ];
     "matrix" = ps: with ps; [ matrix-client ];
     "maxcube" = ps: with ps; [  ];
-    "media_extractor" = ps: with ps; [ youtube-dl-light aiohttp-cors ];
+    "media_extractor" = ps: with ps; [ aiohttp-cors youtube-dl-light ];
     "media_player" = ps: with ps; [ aiohttp-cors ];
     "media_player.anthemav" = ps: with ps; [  ];
     "media_player.apple_tv" = ps: with ps; [  ];
@@ -565,7 +565,7 @@
     "media_player.gstreamer" = ps: with ps; [  ];
     "media_player.hdmi_cec" = ps: with ps; [  ];
     "media_player.itunes" = ps: with ps; [  ];
-    "media_player.kodi" = ps: with ps; [ jsonrpc-websocket jsonrpc-async ];
+    "media_player.kodi" = ps: with ps; [ jsonrpc-async jsonrpc-websocket ];
     "media_player.lg_netcast" = ps: with ps; [  ];
     "media_player.liveboxplaytv" = ps: with ps; [  ];
     "media_player.mediaroom" = ps: with ps; [  ];
@@ -684,7 +684,7 @@
     "persistent_notification" = ps: with ps; [  ];
     "pilight" = ps: with ps; [  ];
     "plant" = ps: with ps; [  ];
-    "prometheus" = ps: with ps; [ prometheus_client aiohttp-cors ];
+    "prometheus" = ps: with ps; [ aiohttp-cors prometheus_client ];
     "proximity" = ps: with ps; [  ];
     "python_script" = ps: with ps; [  ];
     "qwikswitch" = ps: with ps; [  ];
@@ -1108,7 +1108,7 @@
     "timer" = ps: with ps; [  ];
     "toon" = ps: with ps; [  ];
     "tradfri" = ps: with ps; [  ];
-    "tts" = ps: with ps; [ mutagen aiohttp-cors ];
+    "tts" = ps: with ps; [ aiohttp-cors mutagen ];
     "tts.amazon_polly" = ps: with ps; [ boto3 ];
     "tts.baidu" = ps: with ps; [  ];
     "tts.demo" = ps: with ps; [  ];
@@ -1163,7 +1163,7 @@
     "zone.const" = ps: with ps; [  ];
     "zone.zone" = ps: with ps; [  ];
     "zoneminder" = ps: with ps; [  ];
-    "zwave" = ps: with ps; [ python_openzwave pydispatcher ];
+    "zwave" = ps: with ps; [ pydispatcher python_openzwave ];
     "zwave.const" = ps: with ps; [  ];
     "zwave.discovery_schemas" = ps: with ps; [  ];
     "zwave.node_entity" = ps: with ps; [  ];
