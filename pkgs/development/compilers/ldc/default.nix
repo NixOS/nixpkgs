@@ -1,6 +1,6 @@
 { stdenv, fetchgit, fetchurl, cmake, llvm, curl, tzdata
 , python, libconfig, lit, gdb, unzip, darwin, bash
-, callPackage, makeWrapper, targetPackages
+, callPackage
 , bootstrapVersion ? false
 , version ? "1.7.0"
 , ldcSha256 ? "1g8qvmlzvsp030z2rw6lis4kclsd9mlmnbim5kas0k1yr9063m3w"
@@ -125,7 +125,7 @@ let
             --replace "tzName == \"+VERSION\"" "baseName(tzName) == \"leapseconds\" || tzName == \"+VERSION\""
     '';
 
-    nativeBuildInputs = [ cmake makeWrapper llvm bootstrapLdc python lit gdb unzip ]
+    nativeBuildInputs = [ cmake llvm bootstrapLdc python lit gdb unzip ]
 
     ++ stdenv.lib.optional (bootstrapVersion) [
       libconfig
@@ -136,7 +136,7 @@ let
     ]);
 
 
-    buildInputs = [ curl tzdata ];
+    buildInputs = [ curl tzdata stdenv.cc ];
 
     preConfigure = ''
       cmakeFlagsArray=("-DINCLUDE_INSTALL_DIR=$out/include/dlang/ldc"
@@ -159,19 +159,13 @@ let
     doCheck = true;
 
     checkPhase = ''
-      # Build and run LDC D unittests.
-      ctest --output-on-failure -R "ldc2-unittest"
-      # Run LIT testsuite.
-      ctest -V -R "lit-tests"
-      # Run DMD testsuite.
-      DMD_TESTSUITE_MAKE_ARGS=-j$NIX_BUILD_CORES ctest -V -R "dmd-testsuite"
+	# Build and run LDC D unittests.
+	ctest --output-on-failure -R "ldc2-unittest"
+	# Run LIT testsuite.
+	ctest -V -R "lit-tests"
+	# Run DMD testsuite.
+	DMD_TESTSUITE_MAKE_ARGS=-j$NIX_BUILD_CORES ctest -V -R "dmd-testsuite"
     '';
-
-    postInstall = ''
-      wrapProgram $out/bin/ldc2 \
-          --prefix PATH ":" "${targetPackages.stdenv.cc}/bin" \
-          --set-default CC "${targetPackages.stdenv.cc}/bin/cc"
-     '';
 
     meta = with stdenv.lib; {
       description = "The LLVM-based D compiler";
