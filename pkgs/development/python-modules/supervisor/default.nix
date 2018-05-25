@@ -11,7 +11,7 @@ buildPythonPackage rec {
     sha256 = "0wp62z9xprvz2krg02xnbwcnq6pxfq3byd8cxx8c2d8xznih28i1";
   };
 
-  buildInputs = [ mock ];
+  checkInputs = [ mock ];
 
   propagatedBuildInputs = [ meld3 ];
 
@@ -21,6 +21,7 @@ buildPythonPackage rec {
   meta = {
     description = "A system for controlling process state under UNIX";
     homepage = http://supervisord.org/;
+    license = lib.licenses.free; # http://www.repoze.org/LICENSE.txt
     maintainers = with lib.maintainers; [ zimbatm ];
   };
 }
