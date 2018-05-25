@@ -3,7 +3,7 @@
 }:
 
 stdenv.mkDerivation {
-  name = "nitrokey-udev-rules";
+  name = "nitrokey-udev-rules-${stdenv.lib.getVersion nitrokey-app}";
 
   inherit (nitrokey-app) src;
 

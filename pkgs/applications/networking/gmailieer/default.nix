@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, python3Packages }:
 
 python3Packages.buildPythonApplication rec {
-  name = "gmailieer";
+  name = "gmailieer-${version}";
   version = "0.6";
 
   src = fetchFromGitHub {

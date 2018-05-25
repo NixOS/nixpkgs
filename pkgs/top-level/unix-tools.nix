@@ -12,9 +12,11 @@
 # input, not "procps" which requires Linux.
 
 let
+  version = "1003.1-2008";
+
   singleBinary = cmd: providers: let
       provider = "${lib.getBin providers.${hostPlatform.parsed.kernel.name}}/bin/${cmd}";
-    in runCommand cmd {
+    in runCommand "${cmd}-${version}" {
       meta.platforms = map (n: { kernel.name = n; }) (pkgs.lib.attrNames providers);
     } ''
       mkdir -p $out/bin
@@ -29,7 +31,7 @@ let
 
   # more is unavailable in darwin
   # just use less
-  more_compat = runCommand "more" {} ''
+  more_compat = runCommand "more-${version}" {} ''
     mkdir -p $out/bin
     ln -s ${pkgs.less}/bin/less $out/bin/more
   '';
@@ -142,7 +144,7 @@ let
   };
 
   makeCompat = name': value: buildEnv {
-    name = name' + "-compat";
+    name = name' + "-compat-${version}";
     paths = value;
   };
 
