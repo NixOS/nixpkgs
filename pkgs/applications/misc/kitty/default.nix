@@ -5,7 +5,7 @@
 
 with python3Packages;
 buildPythonApplication rec {
-  version = "0.9.1";
+  version = "0.10.1";
   name = "kitty-${version}";
   format = "other";
 
@@ -13,7 +13,7 @@ buildPythonApplication rec {
     owner = "kovidgoyal";
     repo = "kitty";
     rev = "v${version}";
-    sha256 = "08j2k3852c64z4mgh1j0dgdj6c2alkckpav67lzg1lxsz3w2izh2";
+    sha256 = "1xwrrj0g70hh8zsjbd05x0js776xlf7c6mdsmrqlw4y7jfnlgl45";
   };
 
   buildInputs = [
