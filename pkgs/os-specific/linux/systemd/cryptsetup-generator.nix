@@ -2,7 +2,7 @@
 
 stdenv.lib.overrideDerivation systemd (p: {
   version = p.version;
-  name = "systemd-cryptsetup-generator";
+  name = "systemd-cryptsetup-generator-${p.version}";
 
   nativeBuildInputs = p.nativeBuildInputs ++ [ cryptsetup ];
   outputs = [ "out" ];
