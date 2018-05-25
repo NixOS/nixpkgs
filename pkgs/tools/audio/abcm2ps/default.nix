@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "abcm2ps-${version}";
-  version = "8.13.21";
+  version = "8.13.22";
 
   src = fetchFromGitHub {
     owner = "leesavide";
     repo = "abcm2ps";
     rev = "v${version}";
-    sha256 = "03r98xdw2vdwsi726i0zb7p0ljp3fpzjl1nhzfwz57m3zmqvz6r1";
+    sha256 = "0csfg7aj9zg369q3c3bg18f24lk1j0356a90zlbrz7y5p668g3pv";
   };
 
   prePatch = ''
