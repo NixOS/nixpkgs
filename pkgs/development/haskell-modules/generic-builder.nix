@@ -212,6 +212,9 @@ let
     if [ -d "$p/lib" ]; then
       configureFlags+=" --extra-lib-dirs=$p/lib"
     fi
+  ''
+  # It is not clear why --extra-framework-dirs does work fine on Linux
+  + optionalString (!buildPlatform.isDarwin || versionAtLeast nativeGhc.version "8.0") ''
     if [[ -d "$p/Library/Frameworks" ]]; then
       configureFlags+=" --extra-framework-dirs=$p/Library/Frameworks"
     fi
