@@ -589,7 +589,7 @@
     "media_player.songpal" = ps: with ps; [  ];
     "media_player.sonos" = ps: with ps; [  ];
     "media_player.soundtouch" = ps: with ps; [ libsoundtouch ];
-    "media_player.spotify" = ps: with ps; [ aiohttp-cors ];
+    "media_player.spotify" = ps: with ps; [ aiohttp-cors spotipy ];
     "media_player.squeezebox" = ps: with ps; [  ];
     "media_player.ue_smart_radio" = ps: with ps; [  ];
     "media_player.universal" = ps: with ps; [  ];
