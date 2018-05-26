@@ -56,9 +56,10 @@ stdenv.mkDerivation rec {
     done;
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "Utility to detect other OSs on a set of drives";
     homepage = http://packages.debian.org/source/sid/os-prober;
-    license = stdenv.lib.licenses.gpl2Plus;
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ symphorien ];
   };
 }
