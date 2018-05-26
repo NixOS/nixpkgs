@@ -23,6 +23,10 @@
 , # Whether to build dynamic libs for the standard library (on the target
   # platform). Static libs are always built.
   enableShared ? true
+
+, # What flavour to build. An empty string indicates no
+  # specific flavour and falls back to ghc default values.
+  ghcFlavour ? stdenv.lib.optionalString (targetPlatform != hostPlatform) "perf-cross"
 }:
 
 assert !enableIntegerSimple -> gmp != null;
@@ -36,11 +40,14 @@ let
     "${targetPlatform.config}-";
 
   buildMK = ''
+    BuildFlavour = ${ghcFlavour}
+    ifneq \"\$(BuildFlavour)\" \"\"
+    include mk/flavours/\$(BuildFlavour).mk
+    endif
     DYNAMIC_GHC_PROGRAMS = ${if enableShared then "YES" else "NO"}
   '' + stdenv.lib.optionalString enableIntegerSimple ''
     INTEGER_LIBRARY = integer-simple
   '' + stdenv.lib.optionalString (targetPlatform != hostPlatform) ''
-    BuildFlavour = perf-cross
     Stage1Only = YES
     HADDOCK_DOCS = NO
   '' + stdenv.lib.optionalString enableRelocatedStaticLibs ''
@@ -87,6 +94,8 @@ stdenv.mkDerivation rec {
     ++ stdenv.lib.optional stdenv.isDarwin ./ghc-8.0.2-no-cpp-warnings.patch
     ++ stdenv.lib.optional stdenv.isDarwin ./backport-dylib-command-size-limit.patch;
 
+  postPatch = "patchShebangs .";
+
   # GHC is a bit confused on its cross terminology.
   preConfigure = ''
     for env in $(env | grep '^TARGET_' | sed -E 's|\+?=.*||'); do
@@ -103,6 +112,7 @@ stdenv.mkDerivation rec {
     export RANLIB="${targetCC.bintools.bintools}/bin/${targetCC.bintools.targetPrefix}ranlib"
     export READELF="${targetCC.bintools.bintools}/bin/${targetCC.bintools.targetPrefix}readelf"
     export STRIP="${targetCC.bintools.bintools}/bin/${targetCC.bintools.targetPrefix}strip"
+
     echo -n "${buildMK}" > mk/build.mk
     sed -i -e 's|-isysroot /Developer/SDKs/MacOSX10.5.sdk||' configure
   '' + stdenv.lib.optionalString (!stdenv.isDarwin) ''
@@ -132,7 +142,10 @@ stdenv.mkDerivation rec {
   # Make sure we never relax`$PATH` and hooks support for compatability.
   strictDeps = true;
 
-  nativeBuildInputs = [ ghc perl hscolour sphinx ];
+  nativeBuildInputs = [
+    perl sphinx
+    ghc hscolour
+  ];
 
   # For building runtime libs
   depsBuildTarget = toolsForTarget;
@@ -149,10 +162,11 @@ stdenv.mkDerivation rec {
   # that in turn causes GHCi to abort
   stripDebugFlags = [ "-S" ] ++ stdenv.lib.optional (!targetPlatform.isDarwin) "--keep-file-symbols";
 
-  # zsh and other shells are smart about `{ghc}` but bash isn't, and doesn't
-  # treat that as a unary `{x,y,z,..}` repetition.
   postInstall = ''
-    paxmark m $out/lib/${name}/bin/${if targetPlatform != hostPlatform then "ghc" else "{ghc,haddock}"}
+    for bin in "$out"/lib/${name}/bin/*; do
+      isELF "$bin" || continue
+      paxmark m "$bin"
+    done
 
     # Install the bash completion file.
     install -D -m 444 utils/completion/ghc.bash $out/share/bash-completion/completions/${targetPrefix}ghc

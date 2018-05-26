@@ -29,7 +29,6 @@
     # Hardware-related tools.
     pkgs.sdparm
     pkgs.hdparm
-    pkgs.dmraid
     pkgs.smartmontools # for diagnosing hard disks
     pkgs.pciutils
     pkgs.usbutils

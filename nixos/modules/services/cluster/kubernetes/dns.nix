@@ -7,20 +7,23 @@ let
 
   k8s-dns-kube-dns = pkgs.dockerTools.pullImage {
     imageName = "gcr.io/google_containers/k8s-dns-kube-dns-amd64";
-    imageTag = version;
+    finalImageTag = version;
     sha256 = "0q97xfqrigrfjl2a9cxl5in619py0zv44gch09jm8gqjkxl80imp";
+    imageDigest = "sha256:40790881bbe9ef4ae4ff7fe8b892498eecb7fe6dcc22661402f271e03f7de344";
   };
 
   k8s-dns-dnsmasq-nanny = pkgs.dockerTools.pullImage {
     imageName = "gcr.io/google_containers/k8s-dns-dnsmasq-nanny-amd64";
-    imageTag = version;
+    finalImageTag = version;
     sha256 = "051w5ca4qb88mwva4hbnh9xzlsvv7k1mbk3wz50lmig2mqrqqx6c";
+    imageDigest = "sha256:aeeb994acbc505eabc7415187cd9edb38cbb5364dc1c2fc748154576464b3dc2";
   };
 
   k8s-dns-sidecar = pkgs.dockerTools.pullImage {
     imageName = "gcr.io/google_containers/k8s-dns-sidecar-amd64";
-    imageTag = version;
+    finalImageTag = version;
     sha256 = "1z0d129bcm8i2cqq36x5jhnrv9hirj8c6kjrmdav8vgf7py78vsm";
+    imageDigest = "sha256:97074c951046e37d3cbb98b82ae85ed15704a290cce66a8314e7f846404edde9";
   };
 
   cfg = config.services.kubernetes.addons.dns;

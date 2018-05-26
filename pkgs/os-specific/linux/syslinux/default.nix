@@ -50,6 +50,9 @@ stdenv.mkDerivation rec {
   postInstall = ''
     wrapProgram $out/bin/syslinux \
       --prefix PATH : "${mtools}/bin"
+
+    # Delete com32 headers to save space, nobody seems to be using them
+    rm -rf $out/share/syslinux/com32
   '';
 
   meta = with stdenv.lib; {

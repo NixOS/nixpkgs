@@ -99,7 +99,7 @@ in
 
     services.nixosManual.browser = mkOption {
       type = types.path;
-      default = "${pkgs.w3m-nox}/bin/w3m";
+      default = "${pkgs.w3m-nographics}/bin/w3m";
       description = ''
         Browser used to show the manual.
       '';

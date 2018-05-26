@@ -34,7 +34,7 @@ with lib;
 
     environment.etc."systemd/timesyncd.conf".text = ''
       [Time]
-      NTP=${concatStringsSep " " config.services.ntp.servers}
+      NTP=${concatStringsSep " " config.services.timesyncd.servers}
     '';
 
     users.extraUsers.systemd-timesync.uid = config.ids.uids.systemd-timesync;

@@ -19,6 +19,7 @@ in
 , buildTarget ? ""
 , buildTools ? [], libraryToolDepends ? [], executableToolDepends ? [], testToolDepends ? [], benchmarkToolDepends ? []
 , configureFlags ? []
+, buildFlags ? []
 , description ? ""
 , doCheck ? !isCross && stdenv.lib.versionOlder "7.4" ghc.version
 , doBenchmark ? false
@@ -31,7 +32,7 @@ in
 , enableSharedExecutables ? false
 , enableSharedLibraries ? ((ghc.isGhcjs or false) || stdenv.lib.versionOlder "7.7" ghc.version)
 , enableDeadCodeElimination ? (!stdenv.isDarwin)  # TODO: use -dead_strip for darwin
-, enableStaticLibraries ? true
+, enableStaticLibraries ? !hostPlatform.isWindows
 , enableHsc2hsViaAsm ? hostPlatform.isWindows && stdenv.lib.versionAtLeast ghc.version "8.4"
 , extraLibraries ? [], librarySystemDepends ? [], executableSystemDepends ? []
 , homepage ? "http://hackage.haskell.org/package/${pname}"
@@ -67,6 +68,10 @@ in
 } @ args:
 
 assert editedCabalFile != null -> revision != null;
+
+# --enable-static does not work on windows. This is a bug in GHC.
+# --enable-static will pass -staticlib to ghc, which only works for mach-o and elf.
+assert hostPlatform.isWindows -> enableStaticLibraries == false;
 
 let
 
@@ -126,6 +131,8 @@ let
   crossCabalFlagsString =
     stdenv.lib.optionalString isCross (" " + stdenv.lib.concatStringsSep " " crossCabalFlags);
 
+  buildFlagsString = optionalString (buildFlags != []) (" " + concatStringsSep " " buildFlags);
+
   defaultConfigureFlags = [
     "--verbose" "--prefix=$out" "--libdir=\\$prefix/lib/\\$compiler" "--libsubdir=\\$pkgid"
     (optionalString enableSeparateDataOutput "--datadir=$data/share/${ghc.name}")
@@ -169,18 +176,22 @@ let
                         optionals doCheck testPkgconfigDepends ++ optionals doBenchmark benchmarkPkgconfigDepends;
 
   nativeBuildInputs = [ ghc nativeGhc removeReferencesTo ] ++ optional (allPkgconfigDepends != []) pkgconfig ++
+                      setupHaskellDepends ++
                       buildTools ++ libraryToolDepends ++ executableToolDepends;
   propagatedBuildInputs = buildDepends ++ libraryHaskellDepends ++ executableHaskellDepends;
-  otherBuildInputs = setupHaskellDepends ++ extraLibraries ++ librarySystemDepends ++ executableSystemDepends ++
+  otherBuildInputs = extraLibraries ++ librarySystemDepends ++ executableSystemDepends ++
                      allPkgconfigDepends ++
                      optionals doCheck (testDepends ++ testHaskellDepends ++ testSystemDepends ++ testToolDepends) ++
                      optionals doBenchmark (benchmarkDepends ++ benchmarkHaskellDepends ++ benchmarkSystemDepends ++ benchmarkToolDepends);
+
   allBuildInputs = propagatedBuildInputs ++ otherBuildInputs;
 
   haskellBuildInputs = stdenv.lib.filter isHaskellPkg allBuildInputs;
   systemBuildInputs = stdenv.lib.filter isSystemPkg allBuildInputs;
 
-  ghcEnv = ghc.withPackages (p: haskellBuildInputs);
+  # When not cross compiling, also include Setup.hs dependencies.
+  ghcEnv = ghc.withPackages (p:
+    haskellBuildInputs ++ stdenv.lib.optional (!isCross) setupHaskellDepends);
 
   setupCommand = "./Setup";
 
@@ -189,6 +200,25 @@ let
   ghcCommandCaps= toUpper ghcCommand';
 
   nativeGhcCommand = "${nativeGhc.targetPrefix}ghc";
+
+  buildPkgDb = ghcName: ''
+    if [ -d "$p/lib/${ghcName}/package.conf.d" ]; then
+      cp -f "$p/lib/${ghcName}/package.conf.d/"*.conf $packageConfDir/
+      continue
+    fi
+    if [ -d "$p/include" ]; then
+      configureFlags+=" --extra-include-dirs=$p/include"
+    fi
+    if [ -d "$p/lib" ]; then
+      configureFlags+=" --extra-lib-dirs=$p/lib"
+    fi
+  ''
+  # It is not clear why --extra-framework-dirs does work fine on Linux
+  + optionalString (!buildPlatform.isDarwin || versionAtLeast nativeGhc.version "8.0") ''
+    if [[ -d "$p/Library/Frameworks" ]]; then
+      configureFlags+=" --extra-framework-dirs=$p/Library/Frameworks"
+    fi
+  '';
 
 in
 
@@ -230,30 +260,37 @@ stdenv.mkDerivation ({
     echo "Build with ${ghc}."
     ${optionalString (hasActiveLibrary && hyperlinkSource) "export PATH=${hscolour}/bin:$PATH"}
 
+  '' + (optionalString (setupHaskellDepends != []) ''
+    setupPackageConfDir="$TMPDIR/setup-package.conf.d"
+    mkdir -p $setupPackageConfDir
+  '') + ''
     packageConfDir="$TMPDIR/package.conf.d"
     mkdir -p $packageConfDir
 
     setupCompileFlags="${concatStringsSep " " setupCompileFlags}"
     configureFlags="${concatStringsSep " " defaultConfigureFlags} $configureFlags"
+  ''
+  # We build the Setup.hs on the *build* machine, and as such should only add
+  # dependencies for the build machine.
+  #
+  # pkgs* arrays defined in stdenv/setup.hs
+  + (optionalString (setupHaskellDepends != []) ''
+    for p in "''${pkgsBuildBuild[@]}" "''${pkgsBuildHost[@]}" "''${pkgsBuildTarget[@]}"; do
+      ${buildPkgDb nativeGhc.name}
+    done
+    ${nativeGhcCommand}-pkg --${nativePackageDbFlag}="$setupPackageConfDir" recache
+  '')
 
-    # host.*Pkgs defined in stdenv/setup.hs
+    # For normal components
+  + ''
     for p in "''${pkgsHostHost[@]}" "''${pkgsHostTarget[@]}"; do
-      if [ -d "$p/lib/${ghc.name}/package.conf.d" ]; then
-        cp -f "$p/lib/${ghc.name}/package.conf.d/"*.conf $packageConfDir/
-        continue
-      fi
-      if [ -d "$p/include" ]; then
-        configureFlags+=" --extra-include-dirs=$p/include"
-      fi
-      if [ -d "$p/lib" ]; then
-        configureFlags+=" --extra-lib-dirs=$p/lib"
-      fi
+      ${buildPkgDb ghc.name}
     done
   ''
   # only use the links hack if we're actually building dylibs. otherwise, the
   # "dynamic-library-dirs" point to nonexistent paths, and the ln command becomes
   # "ln -s $out/lib/links", which tries to recreate the links dir and fails
-  + (optionalString (stdenv.isDarwin && enableSharedLibraries) ''
+  + (optionalString (stdenv.isDarwin && (enableSharedLibraries || enableSharedExecutables)) ''
     # Work around a limit in the macOS Sierra linker on the number of paths
     # referenced by any one dynamic library:
     #
@@ -282,7 +319,11 @@ stdenv.mkDerivation ({
     done
 
     echo setupCompileFlags: $setupCompileFlags
-    ${nativeGhcCommand} $setupCompileFlags --make -o Setup -odir $TMPDIR -hidir $TMPDIR $i
+    ${optionalString (setupHaskellDepends != [])
+       ''
+       echo GHC_PACKAGE_PATH="$setupPackageConfDir:"
+       GHC_PACKAGE_PATH="$setupPackageConfDir:" ''
+    }${nativeGhcCommand} $setupCompileFlags --make -o Setup -odir $TMPDIR -hidir $TMPDIR $i
 
     runHook postCompileBuildDriver
   '';
@@ -310,7 +351,7 @@ stdenv.mkDerivation ({
 
   buildPhase = ''
     runHook preBuild
-    ${setupCommand} build ${buildTarget}${crossCabalFlagsString}
+    ${setupCommand} build ${buildTarget}${crossCabalFlagsString}${buildFlagsString}
     runHook postBuild
   '';
 
