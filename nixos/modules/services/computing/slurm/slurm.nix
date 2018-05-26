@@ -134,6 +134,8 @@ in
           from within an interactive session or a batch job. This activates the
           slurm-spank-x11 module. Note that this option also enables
           'services.openssh.forwardX11' on the client.
+
+          This option requires slurm to be compiled without native X11 support.
         '';
       };
 
