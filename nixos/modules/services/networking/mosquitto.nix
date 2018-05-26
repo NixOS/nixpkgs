@@ -48,8 +48,8 @@ in
       enable = mkEnableOption "Enable the MQTT Mosquitto broker.";
 
       host = mkOption {
-        default = "127.0.0.1";
-        example = "0.0.0.0";
+        default = "::1";
+        example = "::";
         type = types.string;
         description = ''
           Host to listen on without SSL.
@@ -87,7 +87,7 @@ in
         };
 
         host = mkOption {
-          default = "0.0.0.0";
+          default = "::";
           example = "localhost";
           type = types.string;
           description = ''
