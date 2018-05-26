@@ -10,8 +10,9 @@ let
 
   image = pkgs.dockerTools.pullImage {
     imageName = name;
-    imageTag = version;
+    finalImageTag = version;
     sha256 = "11h0fz3wxp0f10fsyqaxjm7l2qg7xws50dv5iwlck5gb1fjmajad";
+    imageDigest = "sha256:e7984d10351601080bbc146635d51f0cfbea31ca6f0df323cf7a58cf2f6a68df";
   };
 in {
   options.services.kubernetes.addons.dashboard = {
@@ -70,7 +71,7 @@ in {
                 resources = {
                   limits = {
                     cpu = "100m";
-                    memory = "50Mi";
+                    memory = "250Mi";
                   };
                   requests = {
                     cpu = "100m";

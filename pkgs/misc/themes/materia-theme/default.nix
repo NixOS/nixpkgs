@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "materia-theme-${version}";
-  version = "20180321";
+  version = "20180519";
 
   src = fetchFromGitHub {
     owner = "nana-4";
     repo = "materia-theme";
     rev = "v${version}";
-    sha256 = "1nj9ylg9g74smd2kdyzlamdw9cg0f3jz77vn5898drjyscw5qpp6";
+    sha256 = "0javva2a3kmwb7xss2zmbpc988gagrkjgxncy7i1jifyvbnamf70";
   };
 
   nativeBuildInputs = [ gnome3.glib libxml2 bc ];
@@ -25,8 +25,7 @@ stdenv.mkDerivation rec {
       -e "s|if .*which gnome-shell.*;|if true;|" \
       -e "s|CURRENT_GS_VERSION=.*$|CURRENT_GS_VERSION=${gnome3.version}|"
     mkdir -p $out/share/themes
-    # name is used internally by the package installation script
-    name= ./install.sh --dest $out/share/themes
+    ./install.sh --dest $out/share/themes
     rm $out/share/themes/*/COPYING
   '';
 

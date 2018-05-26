@@ -46,10 +46,10 @@
     dependencies = ["unf"];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "12hs8yijhak7p2hf1xkh98g0mnp5phq3mrrhywzaxpwz1gw5r3kf";
+      sha256 = "0abdlwb64ns7ssmiqhdwgl27ly40x2l27l8hs8hn0z4kb3zd2x3v";
       type = "gem";
     };
-    version = "0.5.20170404";
+    version = "0.5.20180417";
   };
   erubis = {
     source = {
@@ -70,10 +70,19 @@
   ffi = {
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "034f52xf7zcqgbvwbl20jwdyjwznvqnwpbaps9nk18v9lgb1dpx0";
+      sha256 = "0zw6pbyvmj8wafdc7l5h7w20zkp1vbr2805ql5d941g2b20pk4zr";
       type = "gem";
     };
-    version = "1.9.18";
+    version = "1.9.23";
+  };
+  ffi-win32-extensions = {
+    dependencies = ["ffi"];
+    source = {
+      remotes = ["https://rubygems.org"];
+      sha256 = "1ywkkbr3bpi2ais2jr8yrsqwwrm48jg262anmdkcb9if95vajx7l";
+      type = "gem";
+    };
+    version = "1.0.3";
   };
   gssapi = {
     dependencies = ["ffi"];
@@ -397,16 +406,16 @@
     version = "0.0.7.5";
   };
   vagrant = {
-    dependencies = ["childprocess" "erubis" "hashicorp-checkpoint" "i18n" "listen" "log4r" "net-scp" "net-sftp" "net-ssh" "rb-kqueue" "rest-client" "ruby_dep" "wdm" "winrm" "winrm-elevated" "winrm-fs"];
+    dependencies = ["childprocess" "erubis" "hashicorp-checkpoint" "i18n" "listen" "log4r" "net-scp" "net-sftp" "net-ssh" "rb-kqueue" "rest-client" "ruby_dep" "wdm" "win32-file" "win32-file-security" "winrm" "winrm-elevated" "winrm-fs"];
   };
   vagrant-spec = {
     dependencies = ["childprocess" "log4r" "rspec" "thor"];
     source = {
       fetchSubmodules = false;
-      rev = "7ac8b4191de578e345b29acaf62ecc72c8e73be1";
-      sha256 = "0qybgxdnndx7xfmhyjcj46b2mv78d98yk30d68ppmfnmm3jx590h";
+      rev = "9413ab298407114528766efefd1fb1ff24589636";
+      sha256 = "1z77m3p6x82hipa7y4i71zafy0rdfajw2vhqdxczjmrlwp0pvisl";
       type = "git";
-      url = "https://github.com/mitchellh/vagrant-spec.git";
+      url = "https://github.com/hashicorp/vagrant-spec.git";
     };
     version = "0.0.1";
   };
@@ -426,6 +435,33 @@
       type = "gem";
     };
     version = "2.3.2";
+  };
+  win32-file = {
+    dependencies = ["ffi" "ffi-win32-extensions" "win32-file-stat"];
+    source = {
+      remotes = ["https://rubygems.org"];
+      sha256 = "0mjylzv4bbnxyjqf7hnd9ghcs5xr2sv8chnmkqdi2cc6pya2xax0";
+      type = "gem";
+    };
+    version = "0.8.1";
+  };
+  win32-file-security = {
+    dependencies = ["ffi" "ffi-win32-extensions"];
+    source = {
+      remotes = ["https://rubygems.org"];
+      sha256 = "0lpq821a1hrxmm0ki5c34wijzhn77g4ny76v698ixwg853y2ir9r";
+      type = "gem";
+    };
+    version = "1.0.10";
+  };
+  win32-file-stat = {
+    dependencies = ["ffi" "ffi-win32-extensions"];
+    source = {
+      remotes = ["https://rubygems.org"];
+      sha256 = "0lc3yajcb8xxabvj9qian938k60ixydvs3ixl5fldi0nlvnvk468";
+      type = "gem";
+    };
+    version = "1.5.5";
   };
   winrm = {
     dependencies = ["builder" "erubis" "gssapi" "gyoku" "httpclient" "logging" "nori" "rubyntlm"];

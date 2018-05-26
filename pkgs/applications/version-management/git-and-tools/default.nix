@@ -67,7 +67,9 @@ rec {
 
   git-crypt = callPackage ./git-crypt { };
 
-  git-dit = callPackage ./git-dit { };
+  git-dit = callPackage ./git-dit {
+    inherit (darwin.apple_sdk.frameworks) CoreFoundation Security;
+  };
 
   git-extras = callPackage ./git-extras { };
 

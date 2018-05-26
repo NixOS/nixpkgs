@@ -4,6 +4,8 @@ stdenv.mkDerivation rec {
   name = "efivar-${version}";
   version = "35";
 
+  outputs = [ "bin" "out" "dev" "man" ];
+
   src = fetchFromGitHub {
     owner = "rhinstaller";
     repo = "efivar";
@@ -17,6 +19,10 @@ stdenv.mkDerivation rec {
   makeFlags = [
     "prefix=$(out)"
     "libdir=$(out)/lib"
+    "bindir=$(bin)/bin"
+    "mandir=$(man)/share/man"
+    "includedir=$(dev)/include"
+    "PCDIR=$(dev)/lib/pkgconfig"
   ];
 
   meta = with stdenv.lib; {

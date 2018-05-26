@@ -20,7 +20,7 @@ in with src; {
     geckos = [ gecko64 ];
     monos =  [ mono ];
     configureFlags = [ "--enable-win64" ];
-    platforms = [ "x86_64-linux" ];
+    platforms = [ "x86_64-linux" "x86_64-darwin" ];
   };
   wineWow = callPackage ./base.nix {
     name = "wine-wow-${version}";

@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
     description = "unix-like reverse engineering framework and commandline tools";
     homepage = http://radare.org/;
     license = stdenv.lib.licenses.gpl2Plus;
-    maintainers = with stdenv.lib.maintainers; [raskin makefu];
+    maintainers = with stdenv.lib.maintainers; [raskin makefu mic92];
     platforms = with stdenv.lib.platforms; linux;
     inherit version;
   };

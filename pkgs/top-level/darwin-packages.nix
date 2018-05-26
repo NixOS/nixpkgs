@@ -29,7 +29,6 @@ in
     inherit (darwin) libobjc maloader;
     stdenv = if stdenv.isDarwin then stdenv else pkgs.libcxxStdenv;
     libcxxabi = pkgs.libcxxabi;
-    xctoolchain = darwin.xcode.toolchain;
   };
 
   cf-private = callPackage ../os-specific/darwin/cf-private {
@@ -48,6 +47,7 @@ in
   iosSdkPkgs = darwin.callPackage ../os-specific/darwin/ios-sdk-pkgs {
     buildIosSdk = buildPackages.darwin.iosSdkPkgs.sdk;
     targetIosSdkPkgs = targetPackages.darwin.iosSdkPkgs;
+    xcode = darwin.xcode_8_2;
     inherit (pkgs.llvmPackages) clang-unwrapped;
   };
 
@@ -69,7 +69,7 @@ in
 
   usr-include = callPackage ../os-specific/darwin/usr-include { };
 
-  xcode = callPackage ../os-specific/darwin/xcode { };
+  inherit (callPackages ../os-specific/darwin/xcode { } ) xcode_8_1 xcode_8_2 xcode_9_1 xcode_9_2;
 
   CoreSymbolication = callPackage ../os-specific/darwin/CoreSymbolication { };
 

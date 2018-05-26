@@ -299,12 +299,16 @@ else {
         copy $font, "$bootPath/converted-font.pf2" or die "cannot copy $font to $bootPath\n";
     }
     if ($splashImage) {
-        # FIXME: GRUB 1.97 doesn't resize the background image if it
-        # doesn't match the video resolution.
-        copy $splashImage, "$bootPath/background.png" or die "cannot copy $splashImage to $bootPath\n";
+        # Keeps the image's extension.
+        my ($filename, $dirs, $suffix) = fileparse($splashImage, qr"\..[^.]*$");
+        # The module for jpg is jpeg.
+        if ($suffix eq ".jpg") {
+            $suffix = ".jpeg";
+        }
+        copy $splashImage, "$bootPath/background$suffix" or die "cannot copy $splashImage to $bootPath\n";
         $conf .= "
-            insmod png
-            if background_image " . $grubBoot->path . "/background.png; then
+            insmod " . substr($suffix, 1) . "
+            if background_image " . $grubBoot->path . "/background$suffix; then
               set color_normal=white/black
               set color_highlight=black/white
             else

@@ -3632,6 +3632,7 @@ let self = _self // overrides; _self = with self; {
     patchPhase = ''
       sed -i "s#/bin/date#${pkgs.coreutils}/bin/date#" lib/Date/Manip/TZ.pm
     '';
+    doCheck = !stdenv.isi686; # build freezes during tests on i686
     meta = {
       description = "Date manipulation routines";
     };
@@ -12058,6 +12059,20 @@ let self = _self // overrides; _self = with self; {
        description = "parses local .pm files as PAUSE does";
        license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
      };
+  };
+
+  ParsePlainConfig = buildPerlPackage rec {
+    name = "Parse-PlainConfig-3.05";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/C/CO/CORLISS/Parse-PlainConfig/${name}.tar.gz";
+      sha256 = "6b78a8552398b0d2d7063505c93b3cfed0432c5b2cf6e00b8e51febf411c1efa";
+    };
+    propagatedBuildInputs = [ ClassEHierarchy Paranoid ];
+    meta = {
+      description = "Parser/Generator of human-readable conf files";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = [ maintainers.limeytexan ];
+    };
   };
 
   ParsePMFile = buildPerlPackage rec {

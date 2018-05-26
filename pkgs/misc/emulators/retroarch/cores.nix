@@ -22,9 +22,9 @@ let
       COREDIR="$out/lib/retroarch/cores"
       mkdir -p $out/bin
       mkdir -p $COREDIR
-      mv ${d2u core}_libretro.so $COREDIR/.
+      mv ${d2u core}_libretro${stdenv.hostPlatform.extensions.sharedLibrary} $COREDIR/.
       makeWrapper ${retroarch}/bin/retroarch $out/bin/retroarch-${core} \
-        --add-flags "-L $COREDIR/${d2u core}_libretro.so $@"
+        --add-flags "-L $COREDIR/${d2u core}_libretro${stdenv.hostPlatform.extensions.sharedLibrary} $@"
     '';
 
     enableParallelBuilding = true;
@@ -39,7 +39,7 @@ let
       homepage = https://www.libretro.com/;
       inherit license;
       maintainers = with maintainers; [ edwtjo hrdinka MP2E ];
-      platforms = platforms.linux;
+      platforms = platforms.unix;
     };
   } // a);
 
@@ -178,7 +178,7 @@ in with stdenv.lib.licenses;
     buildPhase = ''
       cd svn-current/trunk \
       && make -f makefile.libretro \
-      && mv fbalpha2012_libretro.so fba_libretro.so
+      && mv fbalpha2012_libretro${stdenv.hostPlatform.extensions.sharedLibrary} fba_libretro${stdenv.hostPlatform.extensions.sharedLibrary}
     '';
   };
 
@@ -412,7 +412,7 @@ in with stdenv.lib.licenses;
   }).override {
     buildPhase = ''
       make -f Makefile.libretro
-      mv snes9x2010_libretro.so snes9x_next_libretro.so
+      mv snes9x2010_libretro${stdenv.hostPlatform.extensions.sharedLibrary} snes9x_next_libretro${stdenv.hostPlatform.extensions.sharedLibrary}
     '';
   };
 

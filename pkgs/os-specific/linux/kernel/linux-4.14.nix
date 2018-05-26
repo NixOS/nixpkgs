@@ -3,13 +3,13 @@
 with stdenv.lib;
 
 buildLinux (args // rec {
-  version = "4.14.41";
+  version = "4.14.43";
 
   # branchVersion needs to be x.y
   extraMeta.branch = concatStrings (intersperse "." (take 2 (splitString "." version)));
 
   src = fetchurl {
     url = "mirror://kernel/linux/kernel/v4.x/linux-${version}.tar.xz";
-    sha256 = "0vffv1iqcvrzvhs534czdjhj7702gr01pyn9idr8dj85kdx19wfc";
+    sha256 = "0jkikvjsrz7wk1zx57brzhhs15gbx022f1as4mn0017az7wc0gqk";
   };
 } // (args.argsOverride or {}))

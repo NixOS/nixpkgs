@@ -1,6 +1,6 @@
-{ stdenv, fetchPypi, buildPythonApplication, lxml, typed-ast, psutil }:
+{ stdenv, fetchPypi, buildPythonPackage, lxml, typed-ast, psutil, isPy3k }:
 
-buildPythonApplication rec {
+buildPythonPackage rec {
   pname = "mypy";
   version = "0.600";
 
@@ -11,6 +11,8 @@ buildPythonApplication rec {
     inherit pname version;
     sha256 = "1pd3kkz435wlvi9fwqbi3xag5zs59jcjqi6c9gzdjdn23friq9dw";
   };
+
+  disabled = !isPy3k;
 
   propagatedBuildInputs = [ lxml typed-ast psutil ];
 

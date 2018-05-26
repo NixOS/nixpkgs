@@ -223,6 +223,8 @@ in {
 
   bugseverywhere = callPackage ../applications/version-management/bugseverywhere {};
 
+  cdecimal = callPackage ../development/python-modules/cdecimal { };
+
   dendropy = callPackage ../development/python-modules/dendropy { };
 
   dbf = callPackage ../development/python-modules/dbf { };
@@ -252,6 +254,8 @@ in {
   diff-match-patch = callPackage ../development/python-modules/diff-match-patch { };
 
   globus-sdk = callPackage ../development/python-modules/globus-sdk { };
+
+  goocalendar = callPackage ../development/python-modules/goocalendar { };
 
   gssapi = callPackage ../development/python-modules/gssapi { };
 
@@ -314,6 +318,8 @@ in {
   py_stringmatching = callPackage ../development/python-modules/py_stringmatching { };
 
   pyaes = callPackage ../development/python-modules/pyaes { };
+
+  pyairvisual = callPackage ../development/python-modules/pyairvisual { };
 
   pyamf = callPackage ../development/python-modules/pyamf { };
 
@@ -401,6 +407,10 @@ in {
   };
 
   pytest-tornado = callPackage ../development/python-modules/pytest-tornado { };
+
+  python-openid = callPackage (if isPy3k
+    then ../development/python-modules/python3-openid
+    else ../development/python-modules/python-openid) { };
 
   python-sql = callPackage ../development/python-modules/python-sql { };
 
@@ -540,6 +550,8 @@ in {
   astor = callPackage ../development/python-modules/astor {};
 
   asyncio = callPackage ../development/python-modules/asyncio {};
+
+  asyncssh = callPackage ../development/python-modules/asyncssh { };
 
   python-fontconfig = callPackage ../development/python-modules/python-fontconfig { };
 
@@ -4701,6 +4713,8 @@ in {
     };
   };
 
+  django-allauth = callPackage ../development/python-modules/django-allauth { };
+
   django_appconf = callPackage ../development/python-modules/django_appconf { };
 
   django_colorful = buildPythonPackage rec {
@@ -4767,6 +4781,8 @@ in {
   };
 
   django_extensions = callPackage ../development/python-modules/django-extensions { };
+
+  django-gravatar2 = callPackage ../development/python-modules/django-gravatar2 { };
 
   django_guardian = callPackage ../development/python-modules/django_guardian { };
 
@@ -5152,6 +5168,7 @@ in {
     };
   };
 
+  effect = callPackage ../development/python-modules/effect {};
 
   elpy = buildPythonPackage rec {
     name = "elpy-${version}";
@@ -5976,6 +5993,8 @@ in {
   };
 
   geopandas = callPackage ../development/python-modules/geopandas { };
+
+  geojson = callPackage ../development/python-modules/geojson { };
 
   gevent-websocket = buildPythonPackage rec {
     name = "gevent-websocket-0.9.3";
@@ -8069,6 +8088,8 @@ in {
 
   mysqlclient = callPackage ../development/python-modules/mysqlclient { };
 
+  mypy = callPackage ../development/python-modules/mypy { };
+
   mwclient = buildPythonPackage rec {
     version = "0.8.3";
     pname = "mwclient";
@@ -9877,25 +9898,7 @@ in {
 
   pybase64 = callPackage ../development/python-modules/pybase64 { };
 
-  pylibconfig2 = buildPythonPackage rec {
-    name = "pylibconfig2-${version}";
-    version = "0.2.4";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/p/pylibconfig2/${name}.tar.gz";
-      sha256 = "0kyg6gldj6hi2jhc5xhi834bb2mcaiy24dvfik963shnldqr7kqg";
-    };
-
-    doCheck = false;
-
-    propagatedBuildInputs = with self ; [ pyparsing ];
-
-    meta = {
-      homepage = https://github.com/heinzK1X/pylibconfig2;
-      description = "Pure python library for libconfig syntax";
-      license = licenses.gpl3;
-    };
-  };
+  pylibconfig2 = callPackage ../development/python-modules/pylibconfig2 { };
 
   pylibmc = callPackage ../development/python-modules/pylibmc {};
 
@@ -11265,9 +11268,17 @@ in {
     buildInputs = with self; [ pyasn1 pycrypto ];
   };
 
+  python-language-server = callPackage ../development/python-modules/python-language-server {};
+
+  pyls-mypy = callPackage ../development/python-modules/pyls-mypy {};
+
+  pyls-isort = callPackage ../development/python-modules/pyls-isort {};
+
   pyudev = callPackage ../development/python-modules/pyudev {
     inherit (pkgs) fetchurl systemd;
   };
+
+  pynmea2 = callPackage ../development/python-modules/pynmea2 {};
 
   pynzb = buildPythonPackage (rec {
     name = "pynzb-0.1.0";
@@ -13028,15 +13039,7 @@ in {
     };
   };
 
-  timeout-decorator = buildPythonPackage rec {
-    name    = "timeout-decorator-${version}";
-    version = "0.3.2";
-
-    src = pkgs.fetchurl {
-      url    = "http://pypi.python.org/packages/source/t/timeout-decorator/${name}.tar.gz";
-      sha256 = "1x9l8bwdk72if2d5h5mi4lcaidbsmyh0iz114cfyyj1rzz5rxqaf";
-    };
-  };
+  timeout-decorator = callPackage ../development/python-modules/timeout-decorator { };
 
   pid = buildPythonPackage rec {
     name = "pid-${version}";
@@ -16350,8 +16353,8 @@ EOF
     };
   };
 
-  # For backwards compatibility. Please use nixpkgs.udiskie instead.
-  udiskie = toPythonModule (pkgs.udiskie.override { pythonPackages = self; });
+  # added 2018-05-23, can be removed once 18.09 is branched off
+  udiskie = throw "pythonPackages.udiskie has been replaced by udiskie";
 
   # Should be bumped along with EFL!
   pythonefl = buildPythonPackage rec {
@@ -18188,6 +18191,10 @@ EOF
   pyowm = callPackage ../development/python-modules/pyowm { };
 
   prometheus_client = callPackage ../development/python-modules/prometheus_client { };
+
+  pysdl2 = callPackage ../development/python-modules/pysdl2 { };
+
+  pyogg = callPackage ../development/python-modules/pyogg { };
 });
 
 in fix' (extends overrides packages)

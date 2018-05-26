@@ -19,8 +19,9 @@ in
     crateBin = [ { name = "cargo-vendor"; path = "src/main.rs"; } ];
   };
   curl-sys = attrs: {
-    buildInputs = [ pkgconfig zlib ];
-    propagatedBuiltInputs = [ curl ];
+    buildInputs = [ pkgconfig zlib curl ];
+    propagatedBuildInputs = [ curl zlib ];
+    extraLinkFlags = ["-L${zlib.out}/lib"];
   };
   libgit2-sys = attrs: {
     LIBGIT2_SYS_USE_PKG_CONFIG = true;

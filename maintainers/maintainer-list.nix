@@ -140,6 +140,11 @@
     github = "roosemberth";
     name = "Roosembert (Roosemberth) Palacios";
   };
+  Scriptkiddi = {
+    email = "nixos@scriptkiddi.de";
+    github = "scriptkiddi";
+    name = "Fritz Otlinghaus";
+  };
   SShrike = {
     email = "severen@shrike.me";
     github = "severen";
@@ -1236,6 +1241,11 @@
     github = "ElvishJerricco";
     name = "Will Fancher";
   };
+  emmanuelrosa = {
+      email = "emmanuel_rosa@aol.com";
+      github = "emmanuelrosa";
+      name = "Emmanuel Rosa";
+  };
   endgame = {
     email = "jack@jackkelly.name";
     github = "endgame";
@@ -1996,6 +2006,11 @@
     email = "keshav.kini@gmail.com";
     github = "kini";
     name = "Keshav Kini";
+  };
+  kirelagin = {
+    email = "kirelagin@gmail.com";
+    github = "kirelagin";
+    name = "Kirill Elagin";
   };
   kkallio = {
     email = "tierpluspluslists@gmail.com";
@@ -3894,6 +3909,11 @@
     email = "ericwolf42@mail.com";
     github = "typetetris";
     name = "Eric Wolf";
+  };
+  udono = {
+    email = "udono@virtual-things.biz";
+    github = "udono";
+    name = "Udo Spallek";
   };
   unode = {
     email = "alves.rjc@gmail.com";

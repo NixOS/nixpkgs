@@ -47,7 +47,7 @@ let makeDeps = dependencies:
     '';
 
     configureCrate =
-      { crateName, crateVersion, crateAuthors, build, libName, crateFeatures, colors, libPath, release, buildDependencies, completeDeps, completeBuildDeps, verbose, dependencies, workspace_member }:
+      { crateName, crateVersion, crateAuthors, build, libName, crateFeatures, colors, libPath, release, buildDependencies, completeDeps, completeBuildDeps, verbose, dependencies, workspace_member, extraLinkFlags }:
       let version_ = lib.splitString "-" crateVersion;
           versionPre = if lib.tail version_ == [] then "" else builtins.elemAt version_ 1;
           version = lib.splitString "." (lib.head version_);
@@ -79,6 +79,8 @@ let makeDeps = dependencies:
 
       mkdir -p target/{deps,lib,build,buildDeps}
       chmod uga+w target -R
+      echo ${extraLinkFlags} > target/link
+      echo ${extraLinkFlags} > target/link.final
       for i in ${completeDepsDir}; do
         symlink_dependency $i target/deps
       done
@@ -421,9 +423,11 @@ stdenv.mkDerivation (rec {
       if lib.attrByPath ["plugin"] false crate then "dylib" else
       (crate.type or "lib");
     colors = lib.attrByPath [ "colors" ] "always" crate;
+    extraLinkFlags = builtins.concatStringsSep " " (crate.extraLinkFlags or []);
     configurePhase = configureCrate {
       inherit crateName dependencies buildDependencies completeDeps completeBuildDeps
               crateFeatures libName build workspace_member release libPath crateVersion
+              extraLinkFlags
               crateAuthors verbose colors;
     };
     extraRustcOpts = if crate ? extraRustcOpts then crate.extraRustcOpts else [];
