@@ -70,8 +70,6 @@ let
       "systemd-journald.socket"
       "systemd-journald.service"
       "systemd-journal-flush.service"
-      "systemd-journal-gatewayd.socket"
-      "systemd-journal-gatewayd.service"
       "systemd-journal-catalog-update.service"
       "systemd-journald-audit.socket"
       "systemd-journald-dev-log.socket"
@@ -160,8 +158,10 @@ let
       "systemd-binfmt.service"
       "systemd-exit.service"
       "systemd-update-done.service"
-    ]
-    ++ cfg.additionalUpstreamSystemUnits;
+    ] ++ optionals config.services.journald.enableHttpGateway [
+      "systemd-journal-gatewayd.socket"
+      "systemd-journal-gatewayd.service"
+    ] ++ cfg.additionalUpstreamSystemUnits;
 
   upstreamSystemWants =
     [ "sysinit.target.wants"
