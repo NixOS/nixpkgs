@@ -1,5 +1,6 @@
 { stdenv, fetchurl, fetchFromSavannah, autogen, flex, bison, python, autoconf, automake
 , gettext, ncurses, libusb, freetype, qemu, devicemapper, unifont, pkgconfig
+, fuse # only needed for grub-mount
 , zfs ? null
 , efiSupport ? false
 , zfsSupport ? true
@@ -47,7 +48,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ bison flex python pkgconfig ];
-  buildInputs = [ ncurses libusb freetype gettext devicemapper ]
+  buildInputs = [ ncurses libusb freetype gettext devicemapper fuse ]
     ++ optional doCheck qemu
     ++ optional zfsSupport zfs;
 
@@ -83,7 +84,8 @@ stdenv.mkDerivation rec {
 
   patches = [ ./fix-bash-completion.patch ];
 
-  configureFlags = optional zfsSupport "--enable-libzfs"
+  configureFlags = [ "--enable-grub-mount" ] # dep of os-prober
+    ++ optional zfsSupport "--enable-libzfs"
     ++ optionals efiSupport [ "--with-platform=efi" "--target=${efiSystemsBuild.${stdenv.system}.target}" "--program-prefix=" ]
     ++ optionals xenSupport [ "--with-platform=xen" "--target=${efiSystemsBuild.${stdenv.system}.target}"];
 
