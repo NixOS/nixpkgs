@@ -241,6 +241,18 @@ $ nix-instantiate -E '(import &lt;nixpkgsunstable&gt; {}).gitFull'
      <literal>networking.networkmanager.dns</literal> instead.
     </para>
    </listitem>
+   <listitem>
+    <para>
+     The option <varname>services.kubernetes.apiserver.admissionControl</varname>
+     was renamed to <varname>services.kubernetes.apiserver.enableAdmissionPlugins</varname>.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     Recommented way to access the Kubernetes Dashboard is with HTTPS (TLS)
+     Therefore; public service port for the dashboard has changed to 443 (container port 8443) and scheme to https.
+    </para>
+   </listitem>
   </itemizedlist>
  </section>
 </section>
