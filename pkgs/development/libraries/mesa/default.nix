@@ -34,10 +34,10 @@ else
 let
   defaultGalliumDrivers =
     if stdenv.isAarch32
-    then ["nouveau" "freedreno" "vc4" "etnaviv" "imx"]
+    then ["virgl" "nouveau" "freedreno" "vc4" "etnaviv" "imx"]
     else if stdenv.isAarch64
-    then ["nouveau" "vc4" ]
-    else ["svga" "i915" "r300" "r600" "radeonsi" "nouveau"];
+    then ["virgl" "nouveau" "vc4" ]
+    else ["virgl" "svga" "i915" "r300" "r600" "radeonsi" "nouveau"];
   defaultDriDrivers =
     if (stdenv.isAarch32 || stdenv.isAarch64)
     then ["nouveau"]
