@@ -156,16 +156,16 @@ in rec {
 
   tor-browser-7-5 = common (rec {
     pname = "tor-browser";
-    version = "7.5.2";
+    version = "7.5.4";
     isTorBrowserLike = true;
 
     # FIXME: fetchFromGitHub is not ideal, unpacked source is >900Mb
     src = fetchFromGitHub {
       owner = "SLNOS";
       repo  = "tor-browser";
-      # branch "tor-browser-52.7.3esr-7.5-1-slnos";
-      rev   = "62e77aa47d90c10cfc9c6f3b7358a6bdc3167182";
-      sha256 = "09pyqicv6z0h4lmjdybx56gj3l28gkl0bbpk0pnmlzcyr9vng7zj";
+      # branch "tor-browser-52.8.0esr-7.5-1-slnos"
+      rev   = "dbaabe129d2982bee00a753146fbe610fec0ca50";
+      sha256 = "0j60vz18bwabqbzv0r1id3vcyh3832mzx6cg5r7x5c03s5hn40a4";
     };
 
     patches = nixpkgsPatches;
@@ -180,9 +180,9 @@ in rec {
     src = fetchFromGitHub {
       owner = "SLNOS";
       repo  = "tor-browser";
-      # branch "tor-browser-52.7.0esr-8.0-1-slnos";
-      rev   = "58314ccb043882e830ee9a21c37a92d6e0d34e94";
-      sha256 = "09gb7chw2kly53b599xwpi75azj00957rnxly9fqv8zi3n5k2pdb";
+      # branch "tor-browser-52.8.0esr-8.0-1-slnos";
+      rev   = "5d7e9e1cacbf70840f8f1a9aafe99f354f9ad0ca";
+      sha256 = "0cwxwwc4m7331bbp3id694ffwxar0j5kfpgpn9l1z36rmgv92n21";
     };
 
     patches = nixpkgsPatches;

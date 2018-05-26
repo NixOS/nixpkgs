@@ -7,7 +7,7 @@
     "cmd/kube-apiserver"
     "cmd/kube-controller-manager"
     "cmd/kube-proxy"
-    "plugin/cmd/kube-scheduler"
+    "cmd/kube-scheduler"
     "test/e2e/e2e.test"
   ]
 }:
@@ -16,16 +16,16 @@ with lib;
 
 stdenv.mkDerivation rec {
   name = "kubernetes-${version}";
-  version = "1.9.7";
+  version = "1.10.3";
 
   src = fetchFromGitHub {
     owner = "kubernetes";
     repo = "kubernetes";
     rev = "v${version}";
-    sha256 = "1dykh48c6bvypg51mlxjdyrggpjq597mjj83xgj1pfadsy6pp9bh";
+    sha256 = "1la9cdf5a67kg72xn4bn5mib1caiv5vxsjmnxqsmx0m7vhbv5i4n";
   };
 
-  # go > 1.10 should be fixed by https://github.com/kubernetes/kubernetes/pull/60373
+  # Build using golang v1.9 in accordance with https://github.com/kubernetes/kubernetes/blob/master/CHANGELOG-1.10.md#external-dependencies
   buildInputs = [ removeReferencesTo makeWrapper which go_1_9 rsync go-bindata ];
 
   outputs = ["out" "man" "pause"];
@@ -70,7 +70,7 @@ stdenv.mkDerivation rec {
     description = "Production-Grade Container Scheduling and Management";
     license = licenses.asl20;
     homepage = https://kubernetes.io;
-    maintainers = with maintainers; [offline];
+    maintainers = with maintainers; [johanot offline];
     platforms = platforms.unix;
   };
 }

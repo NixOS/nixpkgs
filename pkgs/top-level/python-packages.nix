@@ -9107,13 +9107,13 @@ in {
   });
 
   osc = buildPythonPackage {
-    name = "osc-0.159.0-4-g2d44589";
+    name = "osc-0.162.0-55-gb730f88";
     disabled = isPy3k;
     src = pkgs.fetchFromGitHub {
       owner = "openSUSE";
       repo = "osc";
-      rev = "2d44589886845af7da911aaec9403344e396cd91";
-      sha256 = "0s8p7gkp64w6r5rnxpbvl2dgb5p85kq2skcqm6qxn5ddadhw2sfz";
+      rev = "b730f880cfe85a8547f569355a21706f27ebfa78";
+      sha256 = "0hh9j5zd2kc0804d2jmf1q3w5xm9l9s69hhgysbncrv5fw0414lh";
     };
     buildInputs = with pkgs; [ bashInteractive ]; # needed for bash-completion helper
     propagatedBuildInputs = with self; [ urlgrabber m2crypto pyyaml ];

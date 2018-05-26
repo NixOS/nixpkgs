@@ -7,14 +7,14 @@
 
 assert spellChecking -> gtkspell3 != null;
 
-let version = "0.144"; in
+let version = "0.145"; in
 
 stdenv.mkDerivation {
   name = "pan-${version}";
 
   src = fetchurl {
     url = "http://pan.rebelbase.com/download/releases/${version}/source/pan-${version}.tar.bz2";
-    sha256 = "0l07y75z8jxhbmfv28slw81gjncs7i89x7fq44zif7xhq5vy7yli";
+    sha256 = "1b4wamv33hprghcjk903bpvnd233yxyrm18qnh13alc8h1553nk8";
   };
 
   nativeBuildInputs = [ pkgconfig makeWrapper ];
