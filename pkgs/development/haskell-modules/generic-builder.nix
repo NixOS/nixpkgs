@@ -225,7 +225,7 @@ in
 assert allPkgconfigDepends != [] -> pkgconfig != null;
 
 stdenv.mkDerivation ({
-  name = "${pname}-${version}";
+  name = "haskell-${pname}-${version}";
 
   outputs = [ "out" ] ++ (optional enableSeparateDataOutput "data") ++ (optional enableSeparateDocOutput "doc");
   setOutputFlags = false;
