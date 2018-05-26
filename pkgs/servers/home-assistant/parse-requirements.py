@@ -1,16 +1,16 @@
 #! /usr/bin/env nix-shell
 #! nix-shell -i python3 -p "python3.withPackages (ps: with ps; [ requests pyyaml pytz pip jinja2 voluptuous typing aiohttp async-timeout astral certifi attrs ])"
 #
-# This script downloads https://github.com/home-assistant/home-assistant/blob/master/requirements_all.txt.
-# This file contains lines of the form
+# This script downloads Home Assistant's source tarball.
+# Inside the homeassistant/components directory, each component has an associated .py file,
+# specifying required packages and other components it depends on:
 #
-#     # homeassistant.components.foo
-#     # homeassistant.components.bar
-#     foobar==1.2.3
+# REQUIREMENTS = [ 'package==1.2.3' ]
+# DEPENDENCIES = [ 'component' ]
 #
-# i.e. it lists dependencies and the components that require them.
-# By parsing the file, a dictionary mapping component to dependencies is created.
-# For all of these dependencies, Nixpkgs' python3Packages are searched for appropriate names.
+# By parsing the files, a dictionary mapping component to requirements and dependencies is created.
+# For all of these requirements and the dependencies' requirements,
+# Nixpkgs' python3Packages are searched for appropriate names.
 # Then, a Nix attribute set mapping component name to dependencies is created.
 
 from urllib.request import urlopen
