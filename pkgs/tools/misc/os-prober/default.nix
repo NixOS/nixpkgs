@@ -14,8 +14,8 @@ stdenv.mkDerivation rec {
   version = "1.76";
   name = "os-prober-${version}";
   src = fetchurl {
-    url = "mirror://debian/pool/main/o/os-prober/os-prober_${version}.tar.xz";
-    sha256 = "1vb45i76bqivlghrq7m3n07qfmmq4wxrkplqx8gywj011rhq19fk";
+    url = "https://salsa.debian.org/philh/os-prober/-/archive/${version}/os-prober-${version}.tar.bz2";
+    sha256 = "07rw3092pckh21vx6y4hzqcn3wn4cqmwxaaiq100lncnhmszg11g";
   };
 
   buildInputs = [ makeWrapper ];
