@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, SDL, ncurses, libtcod, binutils }:
+{ stdenv, fetchurl, SDL, ncurses, libtcod }:
 
 stdenv.mkDerivation rec {
   name = "brogue-${version}";

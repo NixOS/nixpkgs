@@ -1,37 +1,36 @@
-{ stdenv, fetchurl, pkgconfig, cmake, zlib, python, libssh2, openssl, curl, http-parser, libiconv }:
+{ stdenv, fetchFromGitHub, pkgconfig, cmake
+, zlib, python, libssh2, openssl, curl, http-parser
+, libiconv, Security
+}:
 
 stdenv.mkDerivation (rec {
-  version = "0.25.1";
   name = "libgit2-${version}";
+  version = "0.26.0";
+  # keep the version in sync with pythonPackages.pygit2 and gnome3.libgit2-glib
 
-  src = fetchurl {
-    name = "${name}.tar.gz";
-    url = "https://github.com/libgit2/libgit2/tarball/v${version}";
-    sha256 = "100bah8picqjzyhpw4wd7z5vyidcb8aggin50bhbpn607h8n8bml";
+  src = fetchFromGitHub {
+    owner = "libgit2";
+    repo = "libgit2";
+    rev = "v${version}";
+    sha256 = "0zrrmfkfhd2xb4879z5khjb6xsdklrm01f1lscrs2ks68v25fk78";
   };
 
-  # TODO: `cargo` (rust's package manager) surfaced a serious bug in
-  # libgit2 when the `Security.framework` transport is used on Darwin.
-  # The upstream issue is tracked at
-  # https://github.com/libgit2/libgit2/issues/3885 - feel free to
-  # remove this patch as soon as it's resolved (i.E. when cargo is
-  # working fine without this patch)
-  patches = stdenv.lib.optionals stdenv.isDarwin [
-    ./disable-security.framework.patch
-  ];
-
-  cmakeFlags = "-DTHREADSAFE=ON";
+  cmakeFlags = [ "-DTHREADSAFE=ON" ];
 
   nativeBuildInputs = [ cmake python pkgconfig ];
-  buildInputs = [ zlib libssh2 openssl http-parser curl ];
 
-  meta = {
+  buildInputs = [ zlib libssh2 openssl http-parser curl ]
+    ++ stdenv.lib.optional stdenv.isDarwin Security;
+
+  propagatedBuildInputs = stdenv.lib.optional (!stdenv.isLinux) [ libiconv ];
+
+  enableParallelBuilding = true;
+
+  meta = with stdenv.lib; {
     description = "The Git linkable library";
     homepage = https://libgit2.github.com/;
-    license = stdenv.lib.licenses.gpl2;
-    platforms = with stdenv.lib.platforms; all;
+    license = licenses.gpl2;
+    platforms = with platforms; all;
   };
 } // stdenv.lib.optionalAttrs (!stdenv.isLinux) {
-  NIX_LDFLAGS = "-liconv";
-  propagatedBuildInputs = [ libiconv ];
 })

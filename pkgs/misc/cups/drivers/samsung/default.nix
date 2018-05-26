@@ -94,6 +94,5 @@ in stdenv.mkDerivation rec {
     # Tested on linux-x86_64. Might work on linux-i386.
     # Probably won't work on anything else.
     platforms = platforms.linux;
-    maintainers = with maintainers; [ nckx ];
   };
 }

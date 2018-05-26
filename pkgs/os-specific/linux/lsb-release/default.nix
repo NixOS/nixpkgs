@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, perl, getopt }:
+{ stdenv, fetchurl, perl, coreutils, getopt, makeWrapper }:
 
 stdenv.mkDerivation rec {
   version = "1.4";
@@ -16,7 +16,14 @@ stdenv.mkDerivation rec {
 
   installFlags = [ "prefix=$(out)" ];
 
-  buildInputs = [ perl getopt ];
+  nativeBuildInputs  = [ makeWrapper perl ];
+
+  buildInputs = [ coreutils getopt ];
+
+  # Ensure utilities used are available
+  preFixup = ''
+    wrapProgram $out/bin/lsb_release --prefix PATH : ${stdenv.lib.makeBinPath [ coreutils getopt ]}
+  '';
 
   meta = {
     description = "Prints certain LSB (Linux Standard Base) and Distribution information";

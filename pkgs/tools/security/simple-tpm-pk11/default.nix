@@ -1,27 +1,29 @@
-{ stdenv, fetchgit, trousers, openssl, opencryptoki, automake, autoconf, libtool }:
+{ stdenv, fetchFromGitHub, trousers, openssl, opencryptoki, autoreconfHook, libtool }:
 
 stdenv.mkDerivation rec {
-  name = "simple-tpm-pk11-2016-07-12";
+  name = "simple-tpm-pk11-${version}";
+  version = "0.06";
 
-  src = fetchgit {
-    url = "https://github.com/ThomasHabets/simple-tpm-pk11";
-    rev = "6f1f7a6b96ac82965e977cfecb88d930f1d70243";
-    sha256 = "06vf3djp29slh7hrh4hlh3npyl277fy7d77jv9mxa1sk1idjklxc";
+  src = fetchFromGitHub {
+    owner = "ThomasHabets";
+    repo = "simple-tpm-pk11";
+    rev = version;
+    sha256 = "0vpbaklr4r1a2am0pqcm6m41ph22mkcrq33y8ab5h8qkhkvhd6a6";
   };
 
-  buildInputs = [ trousers openssl opencryptoki automake autoconf libtool ];
+  nativeBuildInputs = [ autoreconfHook libtool ];
+  buildInputs = [ trousers openssl opencryptoki ];
 
-  preConfigure = "sh bootstrap.sh";
+  enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
     description = "Simple PKCS11 provider for TPM chips";
     longDescription = ''
       A simple library for using the TPM chip to secure SSH keys.
-      '';
+    '';
     homepage    = https://github.com/ThomasHabets/simple-tpm-pk11;
-    license     = stdenv.lib.licenses.asl20;
-    maintainers = with stdenv.lib; [ maintainers.tstrobel ];
+    license     = licenses.asl20;
+    maintainers = with maintainers; [ tstrobel ];
     platforms   = platforms.unix;
   };
 }
-

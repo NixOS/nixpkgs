@@ -1,0 +1,5 @@
+--- a/src/zope/testrunner/tests/testrunner-test-selection.txt
++++ b/src/zope/testrunner/tests/testrunner-test-selection.txt
+@@ -235 +235 @@ and by test within the module using the --test (-t) option:
+-    >>> sys.argv = 'test -u  -vv -ssample1 -m_one -mtest1 -tx0 -ty0'.split()
++    >>> sys.argv = 'test -u  -vv -ssample1 -m_one -mtest1 -t_x0 -t_y0'.split()

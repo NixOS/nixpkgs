@@ -1,9 +1,9 @@
 { stdenv, lib, fetchFromGitHub, cmake, pkgconfig
-, alsaLib, ffmpeg_2, glib, openssl, pcre, zlib
+, alsaLib, ffmpeg, glib, openssl, pcre, zlib
 , libX11, libXcursor, libXdamage, libXext, libXi, libXinerama, libXrandr, libXrender, libXv
 , libxkbcommon, libxkbfile
 , wayland
-, gstreamer, gst-plugins-base, gst-plugins-good
+, gstreamer, gst-plugins-base, gst-plugins-good, libunwind, orc
 , libpulseaudio ? null
 , cups ? null
 , pcsclite ? null
@@ -13,14 +13,14 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "freerdp-git-${version}";
-  version = "20170724";
+  name = "freerdp-${version}";
+  version = "2.0.0-rc2";
 
   src = fetchFromGitHub {
     owner  = "FreeRDP";
     repo   = "FreeRDP";
-    rev    = "2.0.0-rc0";
-    sha256 = "0ngwdy0lfv2k59z1z8yq1wj5zbhqigpyfqbgh38m9p35yzh33lv1";
+    rev    = version;
+    sha256 = "01cm9g4xqihnnc5d2w1zs8gabkv59p7fyjwi1cwpzv6s198xwbfs";
   };
 
   # outputs = [ "bin" "out" "dev" ];
@@ -35,8 +35,8 @@ stdenv.mkDerivation rec {
   '';
 
   buildInputs = with lib; [
-    alsaLib cups ffmpeg_2 glib openssl pcre pcsclite libpulseaudio zlib
-    gstreamer gst-plugins-base gst-plugins-good
+    alsaLib cups ffmpeg glib openssl pcre pcsclite libpulseaudio zlib
+    gstreamer gst-plugins-base gst-plugins-good libunwind orc
     libX11 libXcursor libXdamage libXext libXi libXinerama libXrandr libXrender libXv
     libxkbcommon libxkbfile
     wayland
@@ -46,17 +46,19 @@ stdenv.mkDerivation rec {
     cmake pkgconfig
   ];
 
+  enableParallelBuilding = true;
+
   doCheck = false;
 
   cmakeFlags = with lib; [
     "-DCMAKE_INSTALL_LIBDIR=lib"
     "-DWITH_CUNIT=OFF"
     "-DWITH_OSS=OFF"
-  ] ++ optional (libpulseaudio != null) "-DWITH_PULSE=ON"
-    ++ optional (cups != null)          "-DWITH_CUPS=ON"
-    ++ optional (pcsclite != null)      "-DWITH_PCSC=ON"
-    ++ optional buildServer             "-DWITH_SERVER=ON"
-    ++ optional optimize                "-DWITH_SSE2=ON";
+  ] ++ optional (libpulseaudio != null)       "-DWITH_PULSE=ON"
+    ++ optional (cups != null)                "-DWITH_CUPS=ON"
+    ++ optional (pcsclite != null)            "-DWITH_PCSC=ON"
+    ++ optional buildServer                   "-DWITH_SERVER=ON"
+    ++ optional (optimize && stdenv.isx86_64) "-DWITH_SSE2=ON";
 
   meta = with lib; {
     description = "A Remote Desktop Protocol Client";

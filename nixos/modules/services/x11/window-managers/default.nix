@@ -12,6 +12,7 @@ in
     ./afterstep.nix
     ./bspwm.nix
     ./dwm.nix
+    ./evilwm.nix
     ./exwm.nix
     ./fluxbox.nix
     ./fvwm.nix

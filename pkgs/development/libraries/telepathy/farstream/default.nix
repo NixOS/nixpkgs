@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, telepathy_glib, farstream, dbus_glib }:
+{ stdenv, fetchurl, pkgconfig, telepathy-glib, farstream, dbus-glib }:
 
 stdenv.mkDerivation rec {
   name = "${pname}-0.6.2";
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "02ky12bb92prr5f6xmvmfq4yz2lj33li6nj4829a98hk5pr9k83g";
   };
 
-  propagatedBuildInputs = [ dbus_glib telepathy_glib farstream ];
+  propagatedBuildInputs = [ dbus-glib telepathy-glib farstream ];
   nativeBuildInputs = [ pkgconfig ];
 
   meta = {

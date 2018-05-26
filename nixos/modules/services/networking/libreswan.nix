@@ -17,7 +17,7 @@ let
       else substring (head nonchars).ind (add 1 (sub (last nonchars).ind (head nonchars).ind)) str;
   indent = str: concatStrings (concatMap (s: ["  " (trim [" " "\t"] s) "\n"]) (splitString "\n" str));
   configText = indent (toString cfg.configSetup);
-  connectionText = concatStrings (mapAttrsToList (n: v: 
+  connectionText = concatStrings (mapAttrsToList (n: v:
     ''
       conn ${n}
       ${indent v}
@@ -27,7 +27,7 @@ let
     ''
       config setup
       ${configText}
-      
+
       ${connectionText}
     '';
 
@@ -93,6 +93,9 @@ in
         "${pkgs.libreswan}"
         "${pkgs.iproute}"
         "${pkgs.procps}"
+        "${pkgs.nssTools}"
+        "${pkgs.iptables}"
+        "${pkgs.nettools}"
       ];
 
       wants = [ "network-online.target" ];

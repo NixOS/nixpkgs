@@ -8,6 +8,19 @@ stdenv.mkDerivation {
     sha256 = "12bz57asdcfsz3zr9i9nska0fb6h3z2aizy412qjqkixkginbz7v";
   };
 
+  patches = let
+    patchURL = https://anonscm.debian.org/cgit/debian-science/packages/freeimage.git/plain/debian/patches;
+  in [
+    (fetchurl {
+      url = patchURL + "/Fix-CVE-2015-0852.patch";
+      sha256 = "1vxdck4i5qi5j6i3cjja0gfy79mmbf0lq2qdrnqdsl4kclbvw2c8";
+    })
+    (fetchurl {
+      url = patchURL + "/Fix-CVE-2016-5684.patch";
+      sha256 = "14ffgqbnwg28r6sjvm3z89zbnnm9ghbc81hdhrzxlyk3vwvd6cw3";
+    })
+  ];
+
   buildInputs = [ unzip ] ++ stdenv.lib.optional stdenv.isDarwin darwin.cctools;
 
   prePatch = if stdenv.isDarwin

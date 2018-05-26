@@ -1,8 +1,9 @@
 { lib, fetchurl, buildPythonPackage, numpy }:
 
 buildPythonPackage rec {
-  name = "hmmlearn-${version}";
+  pname = "hmmlearn";
   version = "0.2.0";
+  name = pname + "-" + version;
 
   src = fetchurl {
     url = "mirror://pypi/h/hmmlearn/${name}.tar.gz";
@@ -15,7 +16,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Hidden Markov Models in Python with scikit-learn like API";
-    homepage    = "https://github.com/hmmlearn/hmmlearn";
+    homepage    = https://github.com/hmmlearn/hmmlearn;
     license     = licenses.bsd3;
     maintainers = with maintainers; [ abbradar ];
     platforms   = platforms.unix;

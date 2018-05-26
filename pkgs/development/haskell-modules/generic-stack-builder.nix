@@ -1,4 +1,4 @@
-{ stdenv, ghc, pkgconfig, glibcLocales, cacert }@depArgs:
+{ stdenv, ghc, pkgconfig, glibcLocales, cacert, stack }@depArgs:
 
 with stdenv.lib;
 
@@ -6,22 +6,35 @@ with stdenv.lib;
 , extraArgs ? []
 , LD_LIBRARY_PATH ? []
 , ghc ? depArgs.ghc
+, stack ? depArgs.stack
 , ...
 }@args:
 
-stdenv.mkDerivation (args // {
+let stackCmd = "stack --internal-re-exec-version=${stack.version}";
+
+    # Add all dependencies in buildInputs including propagated ones to
+    # STACK_IN_NIX_EXTRA_ARGS.
+    addStackArgsHook = ''
+for pkg in ''${pkgsHostHost[@]} ''${pkgsHostBuild[@]} ''${pkgsHostTarget[@]}
+do
+  [ -d "$pkg/lib" ] && \
+    export STACK_IN_NIX_EXTRA_ARGS+=" --extra-lib-dirs=$pkg/lib"
+  [ -d "$pkg/include" ] && \
+    export STACK_IN_NIX_EXTRA_ARGS+=" --extra-include-dirs=$pkg/include"
+done
+    '';
+in stdenv.mkDerivation (args // {
 
   buildInputs =
     buildInputs ++
     optional stdenv.isLinux glibcLocales ++
-    [ ghc pkgconfig ];
+    [ ghc pkgconfig stack ];
 
   STACK_PLATFORM_VARIANT="nix";
   STACK_IN_NIX_SHELL=1;
-  STACK_IN_NIX_EXTRA_ARGS =
-    concatMap (pkg: ["--extra-lib-dirs=${getLib pkg}/lib"
-                     "--extra-include-dirs=${getDev pkg}/include"]) buildInputs ++
-    extraArgs;
+  STACK_IN_NIX_EXTRA_ARGS = extraArgs;
+  shellHook = addStackArgsHook;
+
 
   # XXX: workaround for https://ghc.haskell.org/trac/ghc/ticket/11042.
   LD_LIBRARY_PATH = makeLibraryPath (LD_LIBRARY_PATH ++ buildInputs);
@@ -37,15 +50,16 @@ stdenv.mkDerivation (args // {
 
   configurePhase = args.configurePhase or ''
     export STACK_ROOT=$NIX_BUILD_TOP/.stack
+    ${addStackArgsHook}
   '';
 
-  buildPhase = args.buildPhase or "stack build";
+  buildPhase = args.buildPhase or "${stackCmd} build";
 
-  checkPhase = args.checkPhase or "stack test";
+  checkPhase = args.checkPhase or "${stackCmd} test";
 
   doCheck = args.doCheck or true;
 
   installPhase = args.installPhase or ''
-    stack --local-bin-path=$out/bin build --copy-bins
+    ${stackCmd} --local-bin-path=$out/bin build --copy-bins
   '';
 })

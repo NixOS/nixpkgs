@@ -1,4 +1,4 @@
-{ stdenv, fetchzip, ocaml, findlib, ocamlbuild, opam, topkg, astring }:
+{ stdenv, fetchzip, ocaml, findlib, ocamlbuild, topkg, astring }:
 
 stdenv.mkDerivation {
   name = "ocaml${ocaml.version}-ocb-stubblr-0.1.0";
@@ -10,7 +10,7 @@ stdenv.mkDerivation {
 
   patches = [ ./pkg-config.patch ];
 
-  buildInputs = [ ocaml findlib ocamlbuild opam topkg ];
+  buildInputs = [ ocaml findlib ocamlbuild topkg ];
 
   propagatedBuildInputs = [ astring ];
 

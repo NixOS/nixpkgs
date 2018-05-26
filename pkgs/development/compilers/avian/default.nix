@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, zlib, jdk }:
+{ stdenv, fetchFromGitHub, zlib, jdk, CoreServices, Foundation }:
 
 stdenv.mkDerivation rec {
   name = "avian-${version}";
@@ -11,10 +11,16 @@ stdenv.mkDerivation rec {
     sha256 = "1j2y45cpqk3x6a743mgpg7z3ivwm7qc9jy6xirvay7ah1qyxmm48";
   };
 
-  buildInputs = [
-    zlib
-    jdk
-  ];
+  buildInputs = [ zlib jdk ]
+    ++ stdenv.lib.optionals stdenv.isDarwin [ CoreServices Foundation ];
+
+  NIX_CFLAGS_COMPILE = stdenv.lib.optionalString stdenv.cc.isClang "-Wno-error";
+
+  postPatch = ''
+    substituteInPlace makefile \
+        --replace 'g++' 'c++' \
+        --replace 'gcc' 'cc'
+  '';
 
   installPhase = ''
     mkdir -p $out/bin
@@ -32,5 +38,6 @@ stdenv.mkDerivation rec {
     homepage = https://readytalk.github.io/avian/;
     license = stdenv.lib.licenses.isc;
     platforms = stdenv.lib.platforms.all;
+    maintainers = [ stdenv.lib.maintainers.earldouglas ];
   };
 }

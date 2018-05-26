@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchFromGitHub, pkgconfig, cmake, libyamlcppWithoutBoost,
+{ stdenv, fetchurl, fetchFromGitHub, pkgconfig, cmake, libyamlcpp,
   libevdev, libudev }:
 
 let
@@ -12,8 +12,8 @@ in stdenv.mkDerivation {
     sha256 = "14g4pphvylqdb922va322z1pbp12ap753hcf7zf9sii1ikvif83j";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ cmake libevdev libudev libyamlcppWithoutBoost ];
+  nativeBuildInputs = [ cmake pkgconfig ];
+  buildInputs = [ libevdev libudev libyamlcpp ];
 
   prePatch = ''
     substituteInPlace CMakeLists.txt --replace \
@@ -27,7 +27,7 @@ in stdenv.mkDerivation {
     description = "A minimal composable infrastructure on top of libudev and libevdev";
     homepage = "https://gitlab.com/interception/linux/tools";
     license = stdenv.lib.licenses.gpl3;
-    maintainers = stdenv.lib.maintainers.vyp;
+    maintainers = [ stdenv.lib.maintainers.vyp ];
     platforms = stdenv.lib.platforms.linux;
   };
 }

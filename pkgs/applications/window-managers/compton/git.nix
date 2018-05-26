@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, asciidoc, dbus, docbook_xml_dtd_45,
-  docbook_xml_xslt, libconfig, libdrm, libxml2, libxslt, mesa, pcre,
+  docbook_xml_xslt, libconfig, libdrm, libxml2, libxslt, libGLU_combined, pcre,
   pkgconfig, libXcomposite, libXdamage, libXext, libXfixes, libXinerama,
   libXrandr, libXrender, xwininfo }:
 
@@ -33,7 +33,7 @@ stdenv.mkDerivation {
     libdrm
     libxml2
     libxslt
-    mesa
+    libGLU_combined
     pcre
   ];
 

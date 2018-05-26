@@ -10,9 +10,9 @@ let
   settingsDir = "${homeDir}";
   sessionFile = "${homeDir}/aria2.session";
   downloadDir = "${homeDir}/Downloads";
-  
+
   rangesToStringList = map (x: builtins.toString x.from +"-"+ builtins.toString x.to);
-  
+
   settingsFile = pkgs.writeText "aria2.conf"
   ''
     dir=${cfg.downloadDir}
@@ -110,12 +110,12 @@ in
         mkdir -m 0770 -p "${homeDir}"
         chown aria2:aria2 "${homeDir}"
         if [[ ! -d "${config.services.aria2.downloadDir}" ]]
-        then 
+        then
           mkdir -m 0770 -p "${config.services.aria2.downloadDir}"
           chown aria2:aria2 "${config.services.aria2.downloadDir}"
         fi
         if [[ ! -e "${sessionFile}" ]]
-        then 
+        then
           touch "${sessionFile}"
           chown aria2:aria2 "${sessionFile}"
         fi

@@ -1,14 +1,14 @@
 { stdenv, fetchurl, pkgconfig, libpthreadstubs, libpciaccess, valgrind-light }:
 
 stdenv.mkDerivation rec {
-  name = "libdrm-2.4.83";
+  name = "libdrm-2.4.91";
 
   src = fetchurl {
     url = "http://dri.freedesktop.org/libdrm/${name}.tar.bz2";
-    sha256 = "1minzvsyz5hgm6ixpj8ysa6jsv7vm8qc8nx390jxdsk0v9ljd983";
+    sha256 = "0068dn47c478vm1lyyhy02gilrpsma0xmcblhvs0dzqyrk80wjk3";
   };
 
-  outputs = [ "out" "dev" ];
+  outputs = [ "out" "dev" "bin" ];
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ libpthreadstubs libpciaccess valgrind-light ];
@@ -19,11 +19,12 @@ stdenv.mkDerivation rec {
   preConfigure = stdenv.lib.optionalString stdenv.isDarwin
     "echo : \\\${ac_cv_func_clock_gettime=\'yes\'} > config.cache";
 
-  configureFlags = [ ]
-    ++ stdenv.lib.optionals (stdenv.isArm || stdenv.isAarch64) [ "--enable-tegra-experimental-api" "--enable-etnaviv-experimental-api" ]
-    ++ stdenv.lib.optional stdenv.isDarwin "-C";
-
-  crossAttrs.configureFlags = configureFlags ++ [ "--disable-intel" ];
+  configureFlags = [ "--enable-install-test-programs" ]
+    ++ stdenv.lib.optionals (stdenv.isAarch32 || stdenv.isAarch64)
+      [ "--enable-tegra-experimental-api" "--enable-etnaviv-experimental-api" ]
+    ++ stdenv.lib.optional stdenv.isDarwin "-C"
+    ++ stdenv.lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) "--disable-intel"
+    ;
 
   meta = {
     homepage = https://dri.freedesktop.org/libdrm/;

@@ -18,12 +18,12 @@ let
       sha256 = "0iwa8wyydcpjss6d1jy4jibqxpvzph4vmaxwwmndpsqy1fz64y9i";
     })
   ];
-  buildInputs = [
+  nativeBuildInputs = [
   ];
 in
 stdenv.mkDerivation {
   name = "tempora-lgc";
-  inherit buildInputs;
+  inherit nativeBuildInputs;
   inherit srcs;
   phases = "installPhase";
   installPhase = ''

@@ -1,27 +1,23 @@
-{ stdenv, fetchFromGitHub, cmake, qt5, libXfixes, libXtst, git
+{ stdenv, fetchFromGitHub, cmake, qtbase, qtscript, qtwebkit, libXfixes, libXtst, git
 , webkitSupport ? true
 }:
 
 stdenv.mkDerivation rec {
   name = "CopyQ-${version}";
-  version = "3.0.3";
+  version = "3.3.1";
 
   src  = fetchFromGitHub {
     owner = "hluk";
     repo = "CopyQ";
     rev = "v${version}";
-    sha256 = "0wpxqrg4mn8xjsrwsmlhh731s2kr6afnzpqif1way0gi7fqr73jl";
+    sha256 = "1jjb979dwdnkjca95yxzapbjpd6hr97hxz7sn614whvdv4vvpnyc";
   };
-
-  patches = [
-    ./cmake-modules.patch
-  ];
 
   nativeBuildInputs = [ cmake ];
 
   buildInputs = [
-    git qt5.full libXfixes libXtst
-  ] ++ stdenv.lib.optional webkitSupport qt5.qtwebkit;
+    git qtbase qtscript libXfixes libXtst
+  ] ++ stdenv.lib.optional webkitSupport qtwebkit;
 
   meta = with stdenv.lib; {
     homepage    = https://hluk.github.io/CopyQ;

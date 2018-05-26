@@ -3,16 +3,18 @@
 stdenv.mkDerivation rec {
   name = "${product}-${version}";
   product = "uncrustify";
-  version = "0.64";
+  version = "0.67";
 
   src = fetchFromGitHub {
     owner = product;
     repo = product;
     rev = name;
-    sha256 = "0gvgv44aqrh7cmj4ji8dpbhp47cklvajlc3s9d9z24x96dhp2v97";
+    sha256 = "0hf8c93aj1hjg6cc77x6p7nf7ddp8mn4b6a9gpcrvmx8w81afpd3";
   };
 
   nativeBuildInputs = [ cmake ];
+
+  enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
     description = "Source code beautifier for C, C++, C#, ObjectiveC, D, Java, Pawn and VALA";

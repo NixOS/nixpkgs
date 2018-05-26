@@ -4,11 +4,11 @@
 
 stdenv.mkDerivation rec {
   name = "slurm-${version}";
-  version = "17.02.6";
+  version = "17.11.5";
 
   src = fetchurl {
-    url = "https://www.schedmd.com/downloads/latest/slurm-17.02.6.tar.bz2";
-    sha256 = "1sp4xg15jc569r6dh61svgk2fmy3ndcgr5358yryajslf1w14mzh";
+    url = "https://download.schedmd.com/slurm/${name}.tar.bz2";
+    sha256 = "07ghyyz12k4rksm06xf7dshwp1ndm13zphdbqja99401q4xwbx9r";
   };
 
   outputs = [ "out" "dev" ];
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig libtool ];
   buildInputs = [
-    curl python munge perl pam openssl mysql.lib ncurses gtk2 lua hwloc numactl
+    curl python munge perl pam openssl mysql.connector-c ncurses gtk2 lua hwloc numactl
   ];
 
   configureFlags =
@@ -37,6 +37,8 @@ stdenv.mkDerivation rec {
   postInstall = ''
     rm -f $out/lib/*.la $out/lib/slurm/*.la
   '';
+
+  enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
     homepage = http://www.schedmd.com/;

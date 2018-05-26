@@ -4,7 +4,6 @@
 buildPythonPackage rec {
   pname = "pypandoc";
   version = "1.4";
-  name = "${pname}-${version}";
 
   src = fetchPypi {
     inherit pname version;
@@ -27,6 +26,8 @@ buildPythonPackage rec {
     description = "Thin wrapper for pandoc";
     homepage = https://github.com/bebraw/pypandoc;
     license = licenses.mit;
-    maintainers = with maintainers; [ bennofs kristoff3r ];
+    maintainers = with maintainers; [ bennofs ];
+
+    broken = true; # incompatible with pandoc v2
   };
 }

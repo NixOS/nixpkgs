@@ -1,16 +1,26 @@
-{ stdenv, fetchurl, ocaml, findlib, ocamlbuild, camlp4 }:
+{ stdenv, fetchFromGitHub, ocaml, findlib, ocamlbuild, camlp4 }:
 
 let
   pname = "ulex";
+  param =
+    if stdenv.lib.versionAtLeast ocaml.version "4.02" then {
+      version = "1.2";
+      sha256 = "08yf2x9a52l2y4savjqfjd2xy4pjd1rpla2ylrr9qrz1drpfw4ic";
+    } else {
+      version = "1.1";
+      sha256 = "0cmscxcmcxhlshh4jd0lzw5ffzns12x3bj7h27smbc8waxkwffhl";
+    };
 in
 
 stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
-  version = "1.1";
+  name = "ocaml${ocaml.version}-${pname}-${version}";
+  inherit (param) version;
 
-  src = fetchurl {
-    url = "http://www.cduce.org/download/${pname}-${version}.tar.gz";
-    sha256 = "0fjlkwps14adfgxdrbb4yg65fhyimplvjjs1xqj5np197cig67x0";
+  src = fetchFromGitHub {
+    owner = "whitequark";
+    repo = pname;
+    rev = "v${version}";
+    inherit (param) sha256;
   };
 
   createFindlibDestdir = true;
@@ -21,7 +31,7 @@ stdenv.mkDerivation rec {
   buildFlags = "all all.opt";
 
   meta = {
-    homepage = http://www.cduce.org/download.html;
+    inherit (src.meta) homepage;
     description = "A lexer generator for Unicode and OCaml";
     license = stdenv.lib.licenses.mit;
     platforms = ocaml.meta.platforms or [];

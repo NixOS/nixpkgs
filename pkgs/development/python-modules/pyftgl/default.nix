@@ -1,17 +1,23 @@
-{ stdenv, buildPythonPackage, fetchFromGitHub
-, boost, freetype, ftgl, mesa }:
+{ stdenv, buildPythonPackage, fetchFromGitHub, isPy3k
+, boost, freetype, ftgl, libGLU_combined }:
 
 buildPythonPackage rec {
-  name = "pyftgl-0.4b";
+  pname = "pyftgl";
+  version = "0.4b";
+  name = pname + "-" + version;
 
   src = fetchFromGitHub {
     owner = "umlaeute";
-    repo = "pyftgl";
-    rev = "0.4b";
+    repo = name;
+    rev = version;
     sha256 = "12zcjv4cwwjihiaf74kslrdmmk4bs47h7006gyqfwdfchfjdgg4r";
   };
 
-  buildInputs = [ boost freetype ftgl mesa ];
+  postPatch = stdenv.lib.optional isPy3k ''
+    sed -i "s,'boost_python','boost_python3',g" setup.py
+  '';
+
+  buildInputs = [ boost freetype ftgl libGLU_combined ];
 
   meta = with stdenv.lib; {
     description = "Python bindings for FTGL (FreeType for OpenGL)";

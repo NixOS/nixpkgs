@@ -16,7 +16,7 @@ let
   src_platform2 = fetchgit {
     url = "https://chromium.googlesource.com/chromiumos/platform2";
     rev = "e999e989eaa71c3db7314fc7b4e20829b2b5473b";
-    sha256 = "bb43ef7918ec6219711cbba3ce91236413738f1341261a1845256b3d6cc9f843";
+    sha256 = "15n1bsv6r7cny7arx0hdb223xzzbk7vkxg2r7xajhl4nsj39adjh";
   };
 
 in

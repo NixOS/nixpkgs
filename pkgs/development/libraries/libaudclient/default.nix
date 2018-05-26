@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, glib, dbus_glib }:
+{ stdenv, fetchurl, pkgconfig, glib, dbus-glib }:
 
 stdenv.mkDerivation rec {
   name = "libaudclient-3.5-rc2";
@@ -10,11 +10,11 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ glib dbus_glib ];
+  buildInputs = [ glib dbus-glib ];
 
   meta = with stdenv.lib; {
     description = "Legacy D-Bus client library for Audacious";
-    homepage = http://audacious-media-player.org/;
+    homepage = https://audacious-media-player.org/;
     license = licenses.bsd2;
     maintainers = with maintainers; [ pSub ];
     platforms = with platforms; unix;

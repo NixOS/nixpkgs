@@ -22,7 +22,7 @@ let
   else if stdenv.system == "i686-linux" then
     "x86"
   else
-    abort "Unsupported platform";
+    throw "Unsupported platform ${stdenv.system}";
 
 in
   stdenv.mkDerivation rec {

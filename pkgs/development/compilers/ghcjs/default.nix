@@ -1,6 +1,5 @@
-{ bootPkgs }:
+{ bootPkgs, cabal-install }:
 
 bootPkgs.callPackage ./base.nix {
-  inherit bootPkgs;
-  broken = true;  # https://hydra.nixos.org/build/62184741
+  inherit bootPkgs cabal-install;
 }

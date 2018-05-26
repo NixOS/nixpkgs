@@ -1,12 +1,12 @@
-{ stdenv, fetchurl, rpmextract, makeWrapper, patchelf, qt4, zlib, libX11, libXt, libSM, libICE, libXext, mesa }:
+{ stdenv, fetchurl, rpmextract, makeWrapper, patchelf, qt4, zlib, libX11, libXt, libSM, libICE, libXext, libGLU_combined }:
 
 with stdenv.lib;
 stdenv.mkDerivation {
   name = "aliza";
   src = fetchurl {
     # Hosted on muoniurn's google drive
-    url = "https://drive.google.com/uc?export=download&id=0B0s_Yf4jjfZ4WUJaSERHN3FsNFE";
-    sha256 = "1nfp3ghjnfxmxiclg76gcn7a3mhvi6h7s5wmd9v9l6w8lfq9vj5h";
+    url = "https://drive.google.com/uc?export=download&id=1zMYfSUqMaYuvuF41zAFUC5ndR55wD7Ip";
+    sha256 = "0prlmzz8qbqqkr0plk781afq25dvy4pv89vlgccpim79psqlchl3";
     name = "aliza.rpm";
   };
 
@@ -26,7 +26,7 @@ stdenv.mkDerivation {
   '';
 
   postInstall = let
-    libs = stdenv.lib.makeLibraryPath [ qt4 zlib stdenv.cc.cc libSM libICE libX11 libXext libXt mesa ];
+    libs = stdenv.lib.makeLibraryPath [ qt4 zlib stdenv.cc.cc libSM libICE libX11 libXext libXt libGLU_combined ];
   in ''
     ${patchelf}/bin/patchelf \
       --interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \

@@ -2,28 +2,22 @@
 
 stdenv.mkDerivation rec {
   name = "trinity-${version}";
-  version = "1.6";
+  version = "1.8-git-2017-02-13";
 
   src = fetchFromGitHub {
     owner = "kernelslacker";
     repo = "trinity";
-    rev = "v${version}";
-    sha256 = "1jwgsjjbngn2dsnkflyigy3ajd0szksl30dlaiy02jc6mqi3nr0p";
+    rev = "2989c11ce77bc7bec23da62987e2c3a0dd8a83c9";
+    sha256 = "19asyrypjhx2cgjdmwfvmgc0hk3xg00zvgkl89vwxngdb40bkwfq";
   };
 
-  patches = stdenv.lib.singleton (fetchurl {
-    url = "https://github.com/kernelslacker/trinity/commit/b0e66a2d084ffc210bc1fc247efb4d177e9f7e3d.patch";
-    sha256 = "0468fdzbsj3n3k43qm8hf56pa020qn57ripcykv9jfwp215lf0an";
-  });
+  # Fails on 32-bit otherwise
+  NIX_CFLAGS_COMPILE = "-Wno-error";
 
   postPatch = ''
-    patchShebangs ./configure.sh
+    patchShebangs ./configure
     patchShebangs ./scripts/
-    substituteInPlace Makefile --replace '/usr/bin/wc' 'wc'
-    substituteInPlace configure.sh --replace '/usr/include/linux' '${linuxHeaders}/include/linux'
   '';
-
-  configurePhase = "./configure.sh";
 
   enableParallelBuilding = true;
 

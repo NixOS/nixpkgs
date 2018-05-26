@@ -1,5 +1,5 @@
-{ stdenv, fetchurl, docbook_xsl, dbus_libs, dbus_glib, expat, gettext
-, gsettings_desktop_schemas, gdk_pixbuf, gtk2, gtk3, hicolor_icon_theme
+{ stdenv, fetchurl, docbook_xsl, dbus_libs, dbus-glib, expat, gettext
+, gsettings-desktop-schemas, gdk_pixbuf, gtk2, gtk3, hicolor-icon-theme
 , imagemagick, itstool, librsvg, libtool, libxslt, lockfile, makeWrapper
 , pkgconfig, python, pythonPackages, vte
 , wrapGAppsHook}:
@@ -22,11 +22,11 @@ in stdenv.mkDerivation rec {
 
   buildInputs =
     [ docbook_xsl expat imagemagick itstool librsvg libtool libxslt
-      makeWrapper python pythonPackages.lockfile dbus_libs dbus_glib
-      gdk_pixbuf gsettings_desktop_schemas gtk3
-      hicolor_icon_theme vte ];
+      makeWrapper python pythonPackages.lockfile dbus_libs dbus-glib
+      gdk_pixbuf gsettings-desktop-schemas gtk3
+      hicolor-icon-theme vte ];
 
-  NIX_CFLAGS_COMPILE = [ "-I${dbus_glib.dev}/include/dbus-1.0"
+  NIX_CFLAGS_COMPILE = [ "-I${dbus-glib.dev}/include/dbus-1.0"
                          "-I${dbus_libs.dev}/include/dbus-1.0"
                          "-I${dbus_libs.lib}/lib/dbus-1.0/include" ];
 

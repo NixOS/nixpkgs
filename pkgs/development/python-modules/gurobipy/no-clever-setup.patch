@@ -1,0 +1,55 @@
+diff -Naur a/setup.py b/setup.py
+--- a/setup.py	2017-12-22 10:52:43.730264611 -0500
++++ b/setup.py	2017-12-22 10:53:27.660104199 -0500
+@@ -15,30 +15,6 @@
+ from distutils.command.install import install
+ import os,sys,shutil
+ 
+-class GurobiClean(Command):
+-    description = "remove the build directory"
+-    user_options = []
+-    def initialize_options(self):
+-        self.cwd = None
+-    def finalize_options(self):
+-        self.cwd = os.path.dirname(os.path.realpath(__file__))
+-    def run(self):
+-        assert os.getcwd() == self.cwd, 'Must be run from setup.py directory: %s' % self.cwd
+-        build_dir = os.path.join(os.getcwd(), "build")
+-        if os.path.exists(build_dir):
+-            print('removing %s' % build_dir)
+-            shutil.rmtree(build_dir)
+-
+-class GurobiInstall(install):
+-
+-    # Calls the default run command, then deletes the build area
+-    # (equivalent to "setup clean --all").
+-    def run(self):
+-        install.run(self)
+-        c = GurobiClean(self.distribution)
+-        c.finalize_options()
+-        c.run()
+-
+ License = """
+     This software is covered by the Gurobi End User License Agreement.
+     By completing the Gurobi installation process and using the software,
+@@ -79,20 +55,4 @@
+       packages = ['gurobipy'],
+       package_dir={'gurobipy' : srcpath },
+       package_data = {'gurobipy' : [srcfile] },
+-      cmdclass={'install' : GurobiInstall, 
+-                'clean'   : GurobiClean }
+       )
+-
+-if os.name == 'posix' and sys.platform == 'darwin': # update Mac paths
+-  verstr = sys.version[:3]
+-  default = '/Library/Frameworks/Python.framework/Versions/%s/Python' % verstr
+-  default = '/System'+default if verstr == '2.7' else default
+-  modified = sys.prefix + '/Python'
+-  if default != modified:
+-    import subprocess
+-    from distutils.sysconfig import get_python_lib
+-    sitelib = get_python_lib() + '/gurobipy/gurobipy.so'
+-    if not os.path.isfile(modified): # Anaconda
+-      libver = verstr if verstr == '2.7' else verstr+'m'
+-      modified = sys.prefix + '/lib/libpython%s.dylib' % libver # For Anaconda
+-    subprocess.call(('install_name_tool', '-change', default, modified, sitelib))

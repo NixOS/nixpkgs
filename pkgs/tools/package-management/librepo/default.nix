@@ -1,33 +1,30 @@
-{ stdenv, fetchFromGitHub, cmake, python2, pkgconfig, expat, glib, pcre, openssl, curl, check, attr, gpgme }:
+{ stdenv, fetchFromGitHub, cmake, python, pkgconfig, expat, glib, pcre, openssl, curl, check, attr, gpgme }:
 
 stdenv.mkDerivation rec {
-  version = "1.7.20";
+  version = "1.8.1";
   name = "librepo-${version}";
 
   src = fetchFromGitHub {
     owner  = "rpm-software-management";
     repo   = "librepo";
-    rev    = name;
-    sha256 = "17fgj2wifn2qxmh1p285fbwys0xbvwbnmxsdfvqyr5njpyl2s99h";
+    rev    = version;
+    sha256 = "11rypnxjgsc2klyg294ndxy1cyp0nyk00zpjhcvqkhp58vvkkv12";
   };
-
-  patchPhase = ''
-    substituteInPlace librepo/python/python2/CMakeLists.txt \
-      --replace ' ''${PYTHON_INSTALL_DIR}' " $out/lib/python2.7/site-packages"
-  '';
 
   nativeBuildInputs = [ cmake pkgconfig ];
 
-  buildInputs = [ python2 expat glib pcre openssl curl check attr gpgme ];
+  cmakeFlags="-DPYTHON_DESIRED=${stdenv.lib.substring 0 1 python.pythonVersion}";
+
+  buildInputs = [ python expat glib pcre openssl curl check attr gpgme ];
 
   # librepo/fastestmirror.h includes curl/curl.h, and pkg-config specfile refers to others in here
   propagatedBuildInputs = [ curl gpgme expat ];
 
   meta = with stdenv.lib; {
     description = "Library providing C and Python (libcURL like) API for downloading linux repository metadata and packages";
+    homepage    = https://rpm-software-management.github.io/librepo/;
     license     = licenses.lgpl2Plus;
     platforms   = platforms.linux;
     maintainers = with maintainers; [ copumpkin ];
   };
 }
-

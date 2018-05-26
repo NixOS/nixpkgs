@@ -1,11 +1,13 @@
 { stdenv, fetchurl, libelf }:
 
 let
-  version = "20161124";
+  version = "20180129";
   src = fetchurl {
     url = "http://www.prevanders.net/libdwarf-${version}.tar.gz";
-    sha512 = "38e480bce5ae8273fd585ec1d8ba94dc3e865a0ef3fcfcf38b5d92fa1ce41f8b"
-           + "8c95a7cf8a6e69e7c6f638a3cc56ebbfb37b6317047309725fa17e7929096799";
+    # Upstream displays this hash broken into three parts:
+    sha512 = "02f8024bb9959c91a1fe322459f7587a589d096595"
+           + "6d643921a173e6f9e0a184db7aef66f0fd2548d669"
+           + "5be7f9ee368f1cc8940cea4ddda01ff99d28bbf1fe58";
   };
   meta = {
     homepage = https://www.prevanders.net/dwarf.html;

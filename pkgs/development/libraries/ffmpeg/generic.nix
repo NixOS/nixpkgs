@@ -3,12 +3,12 @@
 , libtheora, libva, libvorbis, libvpx, lzma, libpulseaudio, soxr
 , x264, x265, xvidcore, zlib, libopus
 , hostPlatform
-, openglSupport ? false, mesa ? null
+, openglSupport ? false, libGLU_combined ? null
 # Build options
 , runtimeCpuDetectBuild ? true # Detect CPU capabilities at runtime
 , multithreadBuild ? true # Multithreading via pthreads/win32 threads
-, sdlSupport ? !stdenv.isArm, SDL ? null, SDL2 ? null
-, vdpauSupport ? !stdenv.isArm, libvdpau ? null
+, sdlSupport ? !stdenv.isAarch32, SDL ? null, SDL2 ? null
+, vdpauSupport ? !stdenv.isAarch32, libvdpau ? null
 # Developer options
 , debugDeveloper ? false
 , optimizationsDeveloper ? true
@@ -42,7 +42,7 @@
  */
 
 let
-  inherit (stdenv) icCygwin isDarwin isFreeBSD isLinux isArm;
+  inherit (stdenv) icCygwin isDarwin isFreeBSD isLinux isAarch32;
   inherit (stdenv.lib) optional optionals enableFeature;
 
   cmpVer = builtins.compareVersions;
@@ -55,12 +55,12 @@ let
   verFix = withoutFix: fixVer: withFix: if reqMatch fixVer then withFix else withoutFix;
 
   # Disable dependency that needs fixes before it will work on Darwin or Arm
-  disDarwinOrArmFix = origArg: minVer: fixArg: if ((isDarwin || isArm) && reqMin minVer) then fixArg else origArg;
+  disDarwinOrArmFix = origArg: minVer: fixArg: if ((isDarwin || isAarch32) && reqMin minVer) then fixArg else origArg;
 
-  vaapiSupport = reqMin "0.6" && ((isLinux || isFreeBSD) && !isArm);
+  vaapiSupport = reqMin "0.6" && ((isLinux || isFreeBSD) && !isAarch32);
 in
 
-assert openglSupport -> mesa != null;
+assert openglSupport -> libGLU_combined != null;
 
 stdenv.mkDerivation rec {
 
@@ -103,7 +103,7 @@ stdenv.mkDerivation rec {
       "--enable-ffmpeg"
       "--disable-ffplay"
       (ifMinVer "0.6" "--enable-ffprobe")
-      "--disable-ffserver"
+      (if reqMin "4" then null else "--disable-ffserver")
     # Libraries
       (ifMinVer "0.6" "--enable-avcodec")
       (ifMinVer "0.6" "--enable-avdevice")
@@ -152,9 +152,9 @@ stdenv.mkDerivation rec {
   buildInputs = [
     bzip2 fontconfig freetype gnutls libiconv lame libass libogg libtheora
     libvdpau libvorbis lzma soxr x264 x265 xvidcore zlib libopus
-  ] ++ optional openglSupport mesa
-    ++ optionals (!isDarwin && !isArm) [ libvpx libpulseaudio ] # Need to be fixed on Darwin and ARM
-    ++ optional ((isLinux || isFreeBSD) && !isArm) libva
+  ] ++ optional openglSupport libGLU_combined
+    ++ optionals (!isDarwin && !isAarch32) [ libvpx libpulseaudio ] # Need to be fixed on Darwin and ARM
+    ++ optional ((isLinux || isFreeBSD) && !isAarch32) libva
     ++ optional isLinux alsaLib
     ++ optionals isDarwin darwinFrameworks
     ++ optional vdpauSupport libvdpau
@@ -173,10 +173,10 @@ stdenv.mkDerivation rec {
   crossAttrs = {
     configurePlatforms = [];
     configureFlags = configureFlags ++ [
-      "--cross-prefix=${stdenv.cc.prefix}"
+      "--cross-prefix=${stdenv.cc.targetPrefix}"
       "--enable-cross-compile"
-      "--target_os=${hostPlatform.parsed.kernel}"
-      "--arch=${hostPlatform.arch}"
+      "--target_os=${hostPlatform.parsed.kernel.name}"
+      "--arch=${hostPlatform.parsed.cpu.name}"
     ];
   };
 

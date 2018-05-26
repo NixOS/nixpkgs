@@ -1,8 +1,10 @@
+# pcre functionality is tested in nixos/tests/php-pcre.nix
+
 { lib, stdenv, fetchurl, composableDerivation, autoconf, automake, flex, bison
 , mysql, libxml2, readline, zlib, curl, postgresql, gettext
-, openssl, pkgconfig, sqlite, config, libjpeg, libpng, freetype
+, openssl, pcre, pkgconfig, sqlite, config, libjpeg, libpng, freetype
 , libxslt, libmcrypt, bzip2, icu, openldap, cyrus_sasl, libmhash, freetds
-, uwimap, pam, gmp, apacheHttpd, libiconv, systemd }:
+, uwimap, pam, gmp, apacheHttpd, libiconv, systemd, libsodium }:
 
 let
 
@@ -10,7 +12,8 @@ let
     { version, sha256 }:
 
     let php7 = lib.versionAtLeast version "7.0";
-        mysqlHeaders = mysql.lib.dev or mysql;
+        mysqlndSupport = config.php.mysqlnd or false;
+        mysqlBuildInputs = lib.optional (!mysqlndSupport) mysql.connector-c;
 
     in composableDerivation.composableDerivation {} (fixed: {
 
@@ -20,9 +23,11 @@ let
 
       enableParallelBuilding = true;
 
-  nativeBuildInputs = [ pkgconfig ];
-      buildInputs = [ flex bison ]
+      nativeBuildInputs = [ pkgconfig ];
+      buildInputs = [ flex bison pcre ]
         ++ lib.optional stdenv.isLinux systemd;
+
+      CXXFLAGS = lib.optional stdenv.cc.isClang "-std=c++11";
 
       flags = {
 
@@ -50,7 +55,7 @@ let
 
         ldap = {
           configureFlags = [
-            "--with-ldap"
+            "--with-ldap=/invalid/path"
             "LDAP_DIR=${openldap.dev}"
             "LDAP_INCDIR=${openldap.dev}/include"
             "LDAP_LIBDIR=${openldap.out}/lib"
@@ -110,13 +115,13 @@ let
         };
 
         mysql = {
-          configureFlags = ["--with-mysql"];
-          buildInputs = [ mysqlHeaders ];
+          configureFlags = ["--with-mysql${if mysqlndSupport then "=mysqlnd" else ""}"];
+          buildInputs = mysqlBuildInputs;
         };
 
         mysqli = {
-          configureFlags = ["--with-mysqli=${mysqlHeaders}/bin/mysql_config"];
-          buildInputs = [ mysqlHeaders ];
+          configureFlags = ["--with-mysqli=${if mysqlndSupport then "mysqlnd" else "${mysql.connector-c}/bin/mysql_config"}"];
+          buildInputs = mysqlBuildInputs;
         };
 
         mysqli_embedded = {
@@ -126,8 +131,8 @@ let
         };
 
         pdo_mysql = {
-          configureFlags = ["--with-pdo-mysql=${mysqlHeaders}"];
-          buildInputs = [ mysqlHeaders ];
+          configureFlags = ["--with-pdo-mysql=${if mysqlndSupport then "mysqlnd" else mysql.connector-c}"];
+          buildInputs = mysqlBuildInputs;
         };
 
         bcmath = {
@@ -220,6 +225,11 @@ let
         calendar = {
           configureFlags = ["--enable-calendar"];
         };
+
+        sodium = {
+          configureFlags = ["--with-sodium=${libsodium.dev}"];
+          buildInputs = [libsodium];
+        };
       };
 
       cfg = {
@@ -259,6 +269,7 @@ let
         mssqlSupport = (!php7) && (config.php.mssql or (!stdenv.isDarwin));
         ztsSupport = config.php.zts or false;
         calendarSupport = config.php.calendar or true;
+        sodiumSupport = (lib.versionAtLeast version "7.2") && config.php.sodium or true;
       };
 
       hardeningDisable = [ "bindnow" ];
@@ -283,6 +294,7 @@ let
 
       configureFlags = [
         "--with-config-file-scan-dir=/etc/php.d"
+        "--with-pcre-regex=${pcre.dev} PCRE_LIBDIR=${pcre}"
       ] ++ lib.optional stdenv.isDarwin "--with-iconv=${libiconv}"
         ++ lib.optional stdenv.isLinux  "--with-fpm-systemd";
 
@@ -307,7 +319,7 @@ let
         description = "An HTML-embedded scripting language";
         homepage = http://www.php.net/;
         license = licenses.php301;
-        maintainers = with maintainers; [ globin ];
+        maintainers = with maintainers; [ globin etu ];
         platforms = platforms.all;
         outputsToInstall = [ "out" "dev" ];
       };
@@ -326,17 +338,22 @@ let
 
 in {
   php56 = generic {
-    version = "5.6.31";
-    sha256 = "03xixkvfp64bqp97p8vlj3hp63bpjw7hc16b7fgm7w35rdlp2fcg";
+    version = "5.6.36";
+    sha256 = "0ahp9vk33dpsqgld0gg4npff67v0l39hs3wk5dm6h3lablzhwsk2";
   };
 
   php70 = generic {
-    version = "7.0.24";
-    sha256 = "06fgpljz6xpxxkpf4cv9rqz8g504l9ikbw5aq0hqh5sgd611kycv";
+    version = "7.0.30";
+    sha256 = "0l0bhnlgxmfl7mrdykmxfl53simxsksdcnbg5ymqz6r31i03hgr1";
   };
 
   php71 = generic {
-    version = "7.1.9";
-    sha256 = "1blvzm2js8mrdbmwks0v6nlb5wj4789ixzmlxm1l8z6xvw8cqk9i";
+    version = "7.1.17";
+    sha256 = "1kyvg1dvn2zddlc7apl8c74wlwz45rxx10fr1s4z6l1cannf6971";
+  };
+
+  php72 = generic {
+    version = "7.2.5";
+    sha256 = "0cb0g64mzkir81js27vjwqr8vh043f62ynqvds5n4ygsivx0x0pk";
   };
 }

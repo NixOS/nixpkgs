@@ -3,13 +3,13 @@
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";
   pname = "pcmanfm-qt";
-  version = "0.11.3";
+  version = "0.12.0";
 
-  srcs = fetchFromGitHub {
+  src = fetchFromGitHub {
     owner = "lxde";
     repo = pname;
     rev = version;
-    sha256 = "04vhfhjmz1a4rhkpb6y35hwg565047rp53rcxf4pdn0i9f6zhr4f";
+    sha256 = "050h5w1wph35l5m69qbxzvc96y7y0bg1m7flqdadrp688pbnzcxb";
   };
 
   nativeBuildInputs = [
@@ -29,6 +29,13 @@ stdenv.mkDerivation rec {
   ];
 
   cmakeFlags = [ "-DPULL_TRANSLATIONS=NO" ];
+
+  postPatch = ''
+    for dir in autostart config; do
+      substituteInPlace $dir/CMakeLists.txt \
+        --replace "DESTINATION \"\''${LXQT_ETC_XDG_DIR}" "DESTINATION \"etc/xdg"
+    done
+  '';
 
   meta = with stdenv.lib; {
     description = "File manager and desktop icon manager (Qt port of PCManFM and libfm)";

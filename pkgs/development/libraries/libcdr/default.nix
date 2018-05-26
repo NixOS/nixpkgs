@@ -1,14 +1,14 @@
-{ stdenv, fetchurl, libwpg, libwpd, lcms, pkgconfig, librevenge, icu, boost }:
+{ stdenv, fetchurl, libwpg, libwpd, lcms, pkgconfig, librevenge, icu, boost, cppunit }:
 
 stdenv.mkDerivation rec {
-  name = "libcdr-0.1.1";
+  name = "libcdr-0.1.4";
 
   src = fetchurl {
-    url = "http://dev-www.libreoffice.org/src/${name}.tar.bz2";
-    sha256 = "0javd72wmaqd6vprsh3clm393b3idjdjzbb7vyn44li7yaxppzkj";
+    url = "http://dev-www.libreoffice.org/src/${name}.tar.xz";
+    sha256 = "0vd6likgk51j46llybkx4wq3674xzrhp0k82220pkx9x1aqfi9z7";
   };
 
-  buildInputs = [ libwpg libwpd lcms librevenge icu boost ];
+  buildInputs = [ libwpg libwpd lcms librevenge icu boost cppunit ];
 
   nativeBuildInputs = [ pkgconfig ];
 

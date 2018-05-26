@@ -89,7 +89,7 @@ in {
 
     environment.systemPackages = [ pkgs.sshguard pkgs.iptables pkgs.ipset ];
 
-    environment.etc."sshguard.conf".text = let 
+    environment.etc."sshguard.conf".text = let
         list_services = ( name:  "-t ${name} ");
       in ''
         BACKEND="${pkgs.sshguard}/libexec/sshg-fw-ipset"
@@ -133,6 +133,7 @@ in {
             ReadOnlyDirectories = "/";
             ReadWriteDirectories = "/run/sshguard /var/lib/sshguard";
             RuntimeDirectory = "sshguard";
+            StateDirectory = "sshguard";
             CapabilityBoundingSet = "CAP_NET_ADMIN CAP_NET_RAW";
          };
       };

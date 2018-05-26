@@ -4,7 +4,7 @@ stdenv.mkDerivation rec {
   name = "screengrab-${version}";
   version = "1.97";
 
-  srcs = fetchFromGitHub {
+  src = fetchFromGitHub {
     owner = "QtDesktop";
     repo = "screengrab";
     rev = version;
@@ -23,10 +23,6 @@ stdenv.mkDerivation rec {
     xorg.libpthreadstubs
     xorg.libXdmcp
   ];
-
-  cmakeFlags = [ "-DSG_USE_SYSTEM_QXT=ON" "-DCMAKE_INSTALL_LIBDIR=lib" ];
-
-  NIX_CFLAGS_COMPILE = [ "-std=c++11" ];
 
   meta = with stdenv.lib; {
     description = "Crossplatform tool for fast making screenshots";

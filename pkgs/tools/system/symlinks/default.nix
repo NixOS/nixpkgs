@@ -2,27 +2,26 @@
 
 stdenv.mkDerivation rec {
   name = "symlinks-${version}";
-  version = "1.4";
+  version = "1.4.3";
 
   src = fetchurl {
-    url = "http://www.ibiblio.org/pub/Linux/utils/file/${name}.tar.gz";
-    sha256 = "1683psyi8jwq6anhnkwwyaf7pfksf19v04fignd6vi52s2fnifxh";
+    url = "https://github.com/brandt/symlinks/archive/v${version}.tar.gz";
+    sha256 = "1cihrd3dap52z1msdhhgda7b7wy1l5ysfvyba8yxb3zjk0l5n417";
   };
 
+  buildFlags = [ "CC=${stdenv.cc}/bin/cc" ];
+
   installPhase = ''
-    mkdir -p $out/bin
-    mkdir -p $out/share/man
-    cp symlinks $out/bin/
-    cp symlinks.8 $out/share/man/
+    mkdir -p $out/bin $out/share/man/man8
+    cp symlinks $out/bin
+    cp symlinks.8 $out/share/man/man8
   '';
 
-  # No license is mentioned in the code but
-  # http://www.ibiblio.org/pub/Linux/utils/file/symlinks.lsm
-  # and other package managers list it as
-  # "(c) Mark Lord, freely distributable"
   meta = with stdenv.lib; {
-    description = "A symbolic link maintenance utility";
-    maintainers = [ maintainers.goibhniu ];
-    platforms = platforms.linux;
+    description = "Find and remedy problematic symbolic links on a system";
+    homepage = "https://github.com/brandt/symlinks";
+    license = licenses.mit;
+    maintainers = with maintainers; [ goibhniu ckauhaus ];
+    platforms = platforms.unix;
   };
 }

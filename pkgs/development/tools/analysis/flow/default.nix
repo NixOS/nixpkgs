@@ -1,16 +1,17 @@
-{ stdenv, fetchFromGitHub, lib, ocaml, libelf, cf-private, CoreServices, findlib, camlp4, sedlex, ocamlbuild }:
+{ stdenv, fetchFromGitHub, lib, ocaml, libelf, cf-private, CoreServices,
+  findlib, camlp4, sedlex, ocamlbuild, lwt_ppx, wtf8, dtoa }:
 
 with lib;
 
 stdenv.mkDerivation rec {
-  version = "0.56.0";
+  version = "0.72.0";
   name = "flow-${version}";
 
   src = fetchFromGitHub {
     owner = "facebook";
     repo = "flow";
     rev = "v${version}";
-    sha256 = "0979hcz5qqblcnkc4whkklzdhm4f45gzfl6y4zp0wbq0qi1gv7x4";
+    sha256 = "1lfnl1crwkygzbv3l85n30dqsfz627xrnmn4z3zxh7lazir5h8b8";
   };
 
   installPhase = ''
@@ -18,8 +19,9 @@ stdenv.mkDerivation rec {
     cp bin/flow $out/bin/
   '';
 
-  buildInputs = [ ocaml libelf findlib camlp4 sedlex ocamlbuild ]
-    ++ optionals stdenv.isDarwin [ cf-private CoreServices ];
+  buildInputs = [
+    ocaml libelf findlib camlp4 sedlex ocamlbuild lwt_ppx wtf8 dtoa
+  ] ++ optionals stdenv.isDarwin [ cf-private CoreServices ];
 
   meta = with stdenv.lib; {
     description = "A static type checker for JavaScript";

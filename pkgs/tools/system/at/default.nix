@@ -1,4 +1,7 @@
-{ fetchurl, stdenv, bison, flex, pam, sendmailPath ? "/run/wrappers/bin/sendmail" }:
+{ stdenv, fetchurl, fetchpatch, bison, flex, pam
+, sendmailPath ? "/run/wrappers/bin/sendmail"
+, atWrapperPath ? "/run/wrappers/bin/at"
+}:
 
 stdenv.mkDerivation rec {
   name = "at-${version}";
@@ -10,10 +13,17 @@ stdenv.mkDerivation rec {
     sha256 = "1fgsrqpx0r6qcjxmlsqnwilydhfxn976c870mjc0n1bkmcy94w88";
   };
 
-  patches = [ ./install.patch ];
+  patches = [
+    ./install.patch
+    (fetchpatch {
+      url = "https://raw.githubusercontent.com/riscv/riscv-poky/master/meta/recipes-extended/at/at/0001-remove-glibc-assumption.patch";
+      sha256 = "1rk4hskp0c1jqkanzdxf873i6jgki3xhrm609fsam8an8sl1njnm";
+    })
+  ];
 
-  buildInputs =
-    [ bison flex pam ];
+  nativeBuildInputs = [ bison flex ];
+
+  buildInputs = [ pam ];
 
   preConfigure =
     ''
@@ -29,6 +39,13 @@ stdenv.mkDerivation rec {
        --with-jobdir=/var/spool/atjobs --with-atspool=/var/spool/atspool
        --with-daemon_username=atd --with-daemon_groupname=atd
     '';
+
+  # Ensure that "batch" can invoke the setuid "at" wrapper, if it exists, or
+  # else we get permission errors (on NixOS). "batch" is a shell script, so
+  # when the kernel executes it it drops setuid perms.
+  postInstall = ''
+    sed -i "6i test -x ${atWrapperPath} && exec ${atWrapperPath} -qb now  # exec doesn't return" "$out/bin/batch"
+  '';
 
   meta = {
     description = ''The classical Unix `at' job scheduling command'';

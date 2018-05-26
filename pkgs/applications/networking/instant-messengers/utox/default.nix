@@ -1,33 +1,41 @@
-{ stdenv, fetchFromGitHub, cmake, pkgconfig, libtoxcore, filter-audio, dbus, libvpx, libX11, openal, freetype, libv4l
-, libXrender, fontconfig, libXext, libXft, utillinux, git, libsodium }:
+{ stdenv, lib, fetchFromGitHub, check, cmake, pkgconfig
+, libtoxcore, filter-audio, dbus, libvpx, libX11, openal, freetype, libv4l
+, libXrender, fontconfig, libXext, libXft, utillinux, libsodium, libopus }:
 
 stdenv.mkDerivation rec {
   name = "utox-${version}";
-  # >= 0.14 should have unit tests and dbus support
-  version = "0.13.1";
+
+  version = "0.17.0";
 
   src = fetchFromGitHub {
     owner  = "uTox";
     repo   = "uTox";
     rev    = "v${version}";
-    sha256 = "07aa92isknxf7531jr9kgk89wl5rvv34jrvir043fs9xvim5zq99";
+    sha256 = "12wbq883il7ikldayh8hm0cjfrkp45vn05xx9s1jbfz6gmkidyar";
+    fetchSubmodules = true;
   };
 
   buildInputs = [
     libtoxcore dbus libvpx libX11 openal freetype
     libv4l libXrender fontconfig libXext libXft filter-audio
-    libsodium
+    libsodium libopus
   ];
 
   nativeBuildInputs = [
-    cmake git pkgconfig
+    check cmake pkgconfig
   ];
 
   cmakeFlags = [
-    "-DENABLE_UPDATER=OFF"
-  ];
+    "-DENABLE_AUTOUPDATE=OFF"
+  ] ++ lib.optional (doCheck) "-DENABLE_TESTS=ON";
 
-  doCheck = false;
+  doCheck = stdenv.isLinux;
+
+  checkPhase = ''
+    runHook preCheck
+    ctest -VV
+    runHook postCheck
+  '';
 
   meta = with stdenv.lib; {
     description = "Lightweight Tox client";

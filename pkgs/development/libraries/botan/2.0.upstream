@@ -1,5 +1,5 @@
-url http://botan.randombit.net/download.html
-version_link 'Botan-[0-9]+[.][0-9]*[02468]([.][0-9]+)?[.](tgz|tbz|tbz2|tar[.]bz2)$'
+url https://botan.randombit.net/
+version_link 'Botan-[0-9]+([.][0-9]+)*[.](tgz|tbz|tbz2|tar[.]bz2)$'
 ensure_version
 attribute_name botan2
 do_overwrite(){

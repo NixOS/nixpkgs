@@ -40,11 +40,6 @@
 , coreutils
 , libiconv
 
-, ghcjsNodePkgs ? callPackage ../../../top-level/node-packages.nix {
-    generated = ./node-packages-generated.nix;
-    self = ghcjsNodePkgs;
-  }
-
 , version ? "0.2.0"
 , ghcjsSrc ? fetchFromGitHub {
     owner = "ghcjs";
@@ -178,7 +173,11 @@ in mkDerivation (rec {
     isCross = true;
     isGhcjs = true;
     inherit nodejs ghcjsBoot;
-    inherit (ghcjsNodePkgs) "socket.io";
+    socket-io = pkgs.nodePackages."socket.io";
+    haskellCompilerName = "ghcjs";
+
+    # let us assume ghcjs is never actually cross compiled
+    targetPrefix = "";
 
     inherit stage1Packages;
     mkStage2 = stage2 {
@@ -190,6 +189,7 @@ in mkDerivation (rec {
   description = "A Haskell to JavaScript compiler that uses the GHC API";
   license = stdenv.lib.licenses.bsd3;
   platforms = ghc.meta.platforms;
-  maintainers = with stdenv.lib.maintainers; [ jwiegley cstrahan dmjio ];
+  maintainers = with stdenv.lib.maintainers; [ jwiegley cstrahan dmjio elvishjerricco ];
+  hydraPlatforms = if broken then [] else ghc.meta.platforms;
   inherit broken;
 })

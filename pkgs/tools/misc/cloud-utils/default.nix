@@ -6,7 +6,7 @@
 stdenv.mkDerivation rec {
   # NOTICE: if you bump this, make sure to run
   # $ nix-build nixos/release-combined.nix -A nixos.tests.ec2-nixops
-  # growpart is needed in initrd in nixos/modules/virtualisation/grow-partition.nix
+  # growpart is needed in initrd in nixos/system/boot/grow-partition.nix
   name = "cloud-utils-${version}";
   version = "0.30";
   src = fetchurl {

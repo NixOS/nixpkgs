@@ -31,6 +31,7 @@ let
       pkgs.nano
       pkgs.ncurses
       pkgs.netcat
+      pkgs.nix-info
       config.programs.ssh.package
       pkgs.perl
       pkgs.procps
@@ -108,7 +109,6 @@ in
         "/sbin"
         "/share/applications"
         "/share/desktop-directories"
-        "/share/doc"
         "/share/emacs"
         "/share/icons"
         "/share/menus"

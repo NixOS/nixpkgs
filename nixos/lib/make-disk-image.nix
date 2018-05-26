@@ -13,10 +13,16 @@
   # grafted in the file system at path `target'.
 , contents ? []
 
-, # Whether the disk should be partitioned (with a single partition
-  # containing the root filesystem) or contain the root filesystem
-  # directly.
-  partitioned ? true
+, # Type of partition table to use; either "legacy", "efi", or "none".
+  # For "efi" images, the GPT partition table is used and a mandatory ESP
+  #   partition of reasonable size is created in addition to the root partition.
+  #   If `installBootLoader` is true, GRUB will be installed in EFI mode.
+  # For "legacy", the msdos partition table is used and a single large root
+  #   partition is created. If `installBootLoader` is true, GRUB will be
+  #   installed in legacy mode.
+  # For "none", no partition table is created. Enabling `installBootLoader`
+  #   most likely fails as GRUB will probably refuse to install.
+  partitionTableType ? "legacy"
 
   # Whether to invoke switch-to-configuration boot during image creation
 , installBootLoader ? true
@@ -33,21 +39,53 @@
 
 , name ? "nixos-disk-image"
 
-, format ? "raw"
+, # Disk image format, one of qcow2, qcow2-compressed, vpc, raw.
+  format ? "raw"
 }:
+
+assert partitionTableType == "legacy" || partitionTableType == "efi" || partitionTableType == "none";
+# We use -E offset=X below, which is only supported by e2fsprogs
+assert partitionTableType != "none" -> fsType == "ext4";
 
 with lib;
 
-let
-  extensions = {
+let format' = format; in let
+
+  format = if format' == "qcow2-compressed" then "qcow2" else format';
+
+  compress = optionalString (format' == "qcow2-compressed") "-c";
+
+  filename = "nixos." + {
     qcow2 = "qcow2";
     vpc   = "vhd";
     raw   = "img";
-  };
+  }.${format};
 
-  nixpkgs = lib.cleanSource pkgs.path;
+  rootPartition = { # switch-case
+    legacy = "1";
+    efi = "2";
+  }.${partitionTableType};
 
-  channelSources = pkgs.runCommand "nixos-${config.system.nixosVersion}" {} ''
+  partitionDiskScript = { # switch-case
+    legacy = ''
+      parted --script $diskImage -- \
+        mklabel msdos \
+        mkpart primary ext4 1MiB -1
+    '';
+    efi = ''
+      parted --script $diskImage -- \
+        mklabel gpt \
+        mkpart ESP fat32 8MiB 256MiB \
+        set 1 boot on \
+        mkpart primary ext4 256MiB -1
+    '';
+    none = "";
+  }.${partitionTableType};
+
+  nixpkgs = cleanSource pkgs.path;
+
+  # FIXME: merge with channel.nix / make-channel.nix.
+  channelSources = pkgs.runCommand "nixos-${config.system.nixos.version}" {} ''
     mkdir -p $out
     cp -prd ${nixpkgs} $out/nixos
     chmod -R u+w $out/nixos
@@ -55,16 +93,19 @@ let
       ln -s . $out/nixos/nixpkgs
     fi
     rm -rf $out/nixos/.git
-    echo -n ${config.system.nixosVersionSuffix} > $out/nixos/.version-suffix
+    echo -n ${config.system.nixos.versionSuffix} > $out/nixos/.version-suffix
   '';
 
-  metaClosure = pkgs.writeText "meta" ''
-    ${config.system.build.toplevel}
-    ${config.nix.package.out}
-    ${channelSources}
-  '';
-
-  prepareImageInputs = with pkgs; [ rsync utillinux parted e2fsprogs lkl fakeroot config.system.build.nixos-prepare-root ] ++ stdenv.initialPath;
+  binPath = with pkgs; makeBinPath (
+    [ rsync
+      utillinux
+      parted
+      e2fsprogs
+      lkl
+      config.system.build.nixos-install
+      config.system.build.nixos-enter
+      nix
+    ] ++ stdenv.initialPath);
 
   # I'm preserving the line below because I'm going to search for it across nixpkgs to consolidate
   # image building logic. The comment right below this now appears in 4 different places in nixpkgs :)
@@ -72,22 +113,35 @@ let
   sources = map (x: x.source) contents;
   targets = map (x: x.target) contents;
 
+  closureInfo = pkgs.closureInfo { rootPaths = [ config.system.build.toplevel channelSources ]; };
+
   prepareImage = ''
-    export PATH=${pkgs.lib.makeSearchPathOutput "bin" "bin" prepareImageInputs}
+    export PATH=${binPath}
+
+    # Yes, mkfs.ext4 takes different units in different contexts. Fun.
+    sectorsToKilobytes() {
+      echo $(( ( "$1" * 512 ) / 1024 ))
+    }
+
+    sectorsToBytes() {
+      echo $(( "$1" * 512  ))
+    }
 
     mkdir $out
     diskImage=nixos.raw
     truncate -s ${toString diskSize}M $diskImage
 
-    ${if partitioned then ''
-      parted $diskImage -- mklabel msdos mkpart primary ext4 1M -1s
-      offset=$((2048*512))
+    ${partitionDiskScript}
+
+    ${if partitionTableType != "none" then ''
+      # Get start & length of the root partition in sectors to $START and $SECTORS.
+      eval $(partx $diskImage -o START,SECTORS --nr ${rootPartition} --pairs)
+
+      mkfs.${fsType} -F -L nixos $diskImage -E offset=$(sectorsToBytes $START) $(sectorsToKilobytes $SECTORS)K
     '' else ''
-      offset=0
+      mkfs.${fsType} -F -L nixos $diskImage
     ''}
 
-    mkfs.${fsType} -F -L nixos -E offset=$offset $diskImage
-  
     root="$PWD/root"
     mkdir -p $root
 
@@ -120,37 +174,38 @@ let
       fi
     done
 
-    # TODO: Nix really likes to chown things it creates to its current user...
-    fakeroot nixos-prepare-root $root ${channelSources} ${config.system.build.toplevel} closure
+    export HOME=$TMPDIR
+
+    # Provide a Nix database so that nixos-install can copy closures.
+    export NIX_STATE_DIR=$TMPDIR/state
+    nix-store --load-db < ${closureInfo}/registration
+
+    echo "running nixos-install..."
+    nixos-install --root $root --no-bootloader --no-root-passwd \
+      --system ${config.system.build.toplevel} --channel ${channelSources} --substituters ""
 
     echo "copying staging root to image..."
-    cptofs ${pkgs.lib.optionalString partitioned "-P 1"} -t ${fsType} -i $diskImage $root/* /
+    cptofs -p ${optionalString (partitionTableType != "none") "-P ${rootPartition}"} -t ${fsType} -i $diskImage $root/* /
   '';
 in pkgs.vmTools.runInLinuxVM (
   pkgs.runCommand name
     { preVM = prepareImage;
-      buildInputs = with pkgs; [ utillinux e2fsprogs ];
-      exportReferencesGraph = [ "closure" metaClosure ];
+      buildInputs = with pkgs; [ utillinux e2fsprogs dosfstools ];
       postVM = ''
         ${if format == "raw" then ''
-          mv $diskImage $out/nixos.img
-          diskImage=$out/nixos.img
+          mv $diskImage $out/${filename}
         '' else ''
-          ${pkgs.qemu}/bin/qemu-img convert -f raw -O ${format} $diskImage $out/nixos.${extensions.${format}}
-          diskImage=$out/nixos.${extensions.${format}}
+          ${pkgs.qemu}/bin/qemu-img convert -f raw -O ${format} ${compress} $diskImage $out/${filename}
         ''}
+        diskImage=$out/${filename}
         ${postVM}
       '';
       memSize = 1024;
     }
     ''
-      ${if partitioned then ''
-        . /sys/class/block/vda1/uevent
-        mknod /dev/vda1 b $MAJOR $MINOR
-        rootDisk=/dev/vda1
-      '' else ''
-        rootDisk=/dev/vda
-      ''}
+      export PATH=${binPath}:$PATH
+
+      rootDisk=${if partitionTableType != "none" then "/dev/vda${rootPartition}" else "/dev/vda"}
 
       # Some tools assume these exist
       ln -s vda /dev/xvda
@@ -160,21 +215,22 @@ in pkgs.vmTools.runInLinuxVM (
       mkdir $mountPoint
       mount $rootDisk $mountPoint
 
+      # Create the ESP and mount it. Unlike e2fsprogs, mkfs.vfat doesn't support an
+      # '-E offset=X' option, so we can't do this outside the VM.
+      ${optionalString (partitionTableType == "efi") ''
+        mkdir -p /mnt/boot
+        mkfs.vfat -n ESP /dev/vda1
+        mount /dev/vda1 /mnt/boot
+      ''}
+
       # Install a configuration.nix
       mkdir -p /mnt/etc/nixos
       ${optionalString (configFile != null) ''
         cp ${configFile} /mnt/etc/nixos/configuration.nix
       ''}
 
-      mount --rbind /dev  $mountPoint/dev
-      mount --rbind /proc $mountPoint/proc
-      mount --rbind /sys  $mountPoint/sys
-
       # Set up core system link, GRUB, etc.
-      NIXOS_INSTALL_BOOTLOADER=1 chroot $mountPoint /nix/var/nix/profiles/system/bin/switch-to-configuration boot
-
-      # TODO: figure out if I should activate, but for now I won't
-      # chroot $mountPoint /nix/var/nix/profiles/system/activate
+      NIXOS_INSTALL_BOOTLOADER=1 nixos-enter --root $mountPoint -- /nix/var/nix/profiles/system/bin/switch-to-configuration boot
 
       # The above scripts will generate a random machine-id and we don't want to bake a single ID into all our images
       rm -f $mountPoint/etc/machine-id

@@ -6,7 +6,7 @@
 set -e
 set -o pipefail
 
-version=$(nix-instantiate --eval --strict '<nixpkgs>' -A lib.nixpkgsVersion | sed s/'"'//g)
+version=$(nix-instantiate --eval --strict '<nixpkgs>' -A lib.version | sed s/'"'//g)
 major=${version:0:5}
 echo "NixOS version is $version ($major)"
 
@@ -18,7 +18,7 @@ rm -f ec2-amis.nix
 
 types="hvm"
 stores="ebs"
-regions="eu-west-1 eu-west-2 eu-central-1 us-east-1 us-east-2 us-west-1 us-west-2 ca-central-1 ap-southeast-1 ap-southeast-2 ap-northeast-1 ap-northeast-2 sa-east-1 ap-south-1"
+regions="eu-west-1 eu-west-2 eu-west-3 eu-central-1 us-east-1 us-east-2 us-west-1 us-west-2 ca-central-1 ap-southeast-1 ap-southeast-2 ap-northeast-1 ap-northeast-2 sa-east-1 ap-south-1"
 
 for type in $types; do
     link=$stateDir/$type

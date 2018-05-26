@@ -17,7 +17,7 @@ stdenv.mkDerivation {
   createFindlibDestdir = true;
 
   meta = with stdenv.lib; {
-    homepage = http://github.com/mlin/ocaml-sqlite3EZ;
+    homepage = https://github.com/mlin/ocaml-sqlite3EZ;
     description = "A thin wrapper for sqlite3-ocaml with a simplified interface";
     license = licenses.mit;
     maintainers = [ maintainers.vbgl ];

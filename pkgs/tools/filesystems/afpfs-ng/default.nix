@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     description = "A client implementation of the Apple Filing Protocol";
     license     = licenses.gpl2;
     maintainers = with maintainers; [ rnhmjoj ];
-    platform    = platforms.linux;
+    platforms   = platforms.linux;
   };
 
 }

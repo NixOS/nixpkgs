@@ -1,15 +1,22 @@
-{ stdenv, fetchurl, openssl, python2, zlib, libuv, v8, utillinux, http-parser
-, pkgconfig, runCommand, which, libtool, fetchpatch
-, callPackage
+{ stdenv, fetchurl, openssl, python2, zlib, libuv, utillinux, http-parser
+, pkgconfig, which
+# Updater dependencies
+, writeScript, coreutils, gnugrep, jq, curl, common-updater-scripts, nix
+, gnupg
 , darwin ? null
-, enableNpm ? true
 }:
 
 with stdenv.lib;
 
+{ enableNpm ? true, version, sha256, patches } @args:
+
 let
 
   inherit (darwin.apple_sdk.frameworks) CoreServices ApplicationServices;
+
+
+
+  baseName = if enableNpm then "nodejs" else "nodejs-slim";
 
   sharedLibDeps = { inherit openssl zlib libuv; } // (optionalAttrs (!stdenv.isDarwin) { inherit http-parser; });
 
@@ -22,15 +29,28 @@ let
      */
   ]) (builtins.attrNames sharedLibDeps);
 
+  copyLibHeaders =
+    map
+      (name: "${getDev sharedLibDeps.${name}}/include/*")
+      (builtins.attrNames sharedLibDeps);
+
   extraConfigFlags = optionals (!enableNpm) [ "--without-npm" ];
 in
 
-  rec {
+  stdenv.mkDerivation {
+    inherit version;
+
+    name = "${baseName}-${version}";
+
+    src = fetchurl {
+      url = "http://nodejs.org/dist/v${version}/node-v${version}.tar.xz";
+      inherit sha256;
+    };
 
     buildInputs = optionals stdenv.isDarwin [ CoreServices ApplicationServices ]
     ++ [ python2 which zlib libuv openssl ]
     ++ optionals stdenv.isLinux [ utillinux http-parser ]
-    ++ optionals stdenv.isDarwin [ pkgconfig libtool ];
+    ++ optionals stdenv.isDarwin [ pkgconfig darwin.cctools ];
 
     configureFlags = sharedConfigureFlags ++ [ "--without-dtrace" ] ++ extraConfigFlags;
 
@@ -40,10 +60,11 @@ in
 
     passthru.interpreterName = "nodejs";
 
-
     setupHook = ./setup-hook.sh;
 
-    patches = optionals stdenv.isDarwin [ ./no-xcode.patch ];
+    pos = builtins.unsafeGetAttrPos "version" args;
+
+    inherit patches;
 
     preBuild = optionalString stdenv.isDarwin ''
       sed -i -e "s|tr1/type_traits|type_traits|g" \
@@ -59,17 +80,26 @@ in
       paxmark m $out/bin/node
       PATH=$out/bin:$PATH patchShebangs $out
 
-      ${optionalString enableNpm '' 
+      ${optionalString enableNpm ''
         mkdir -p $out/share/bash-completion/completions/
         $out/bin/npm completion > $out/share/bash-completion/completions/npm
       ''}
+
+      # install the missing headers for node-gyp
+      cp -r ${concatStringsSep " " copyLibHeaders} $out/include/node
     '';
+
+    passthru.updateScript = import ./update.nix {
+      inherit writeScript coreutils gnugrep jq curl common-updater-scripts gnupg nix;
+      inherit (stdenv) lib;
+      majorVersion = with stdenv.lib; elemAt (splitString "." version) 0;
+    };
 
     meta = {
       description = "Event-driven I/O framework for the V8 JavaScript engine";
       homepage = https://nodejs.org;
       license = licenses.mit;
-      maintainers = with maintainers; [ goibhniu havvy gilligan cko ];
+      maintainers = with maintainers; [ goibhniu gilligan cko ];
       platforms = platforms.linux ++ platforms.darwin;
     };
 

@@ -5,13 +5,13 @@ make_glib_find_gsettings_schemas() {
         addToSearchPath GSETTINGS_SCHEMAS_PATH "$1/share/gsettings-schemas/"*
     fi
 }
-envHooks+=(make_glib_find_gsettings_schemas)
+addEnvHooks "$hostOffset" make_glib_find_gsettings_schemas
 
 # Install gschemas, if any, in a package-specific directory
 glibPreInstallPhase() {
   installFlagsArray+=("gsettingsschemadir=${!outputLib}/share/gsettings-schemas/$name/glib-2.0/schemas/")
 }
-preInstallPhases+=(glibPreInstallPhase)
+preInstallPhases+=" glibPreInstallPhase"
 
 glibPreFixupPhase() {
     # Move gschemas in case the install flag didn't help
@@ -22,5 +22,4 @@ glibPreFixupPhase() {
 
     addToSearchPath GSETTINGS_SCHEMAS_PATH "${!outputLib}/share/gsettings-schemas/$name"
 }
-preFixupPhases+=(glibPreFixupPhase)
-
+preFixupPhases+=" glibPreFixupPhase"

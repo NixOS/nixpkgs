@@ -1,12 +1,14 @@
 { stdenv, fetchurl, ocaml, findlib, ocamlbuild }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
 
-  name = "ansiterminal-0.6.5";
+  version = "0.7";
+
+  name = "ocaml${ocaml.version}-ansiterminal-${version}";
 
   src = fetchurl {
-    url = "https://forge.ocamlcore.org/frs/download.php/1206/ANSITerminal-0.6.5.tar.gz";
-    sha256 = "1j9kflv2i16vf9hy031cl6z8hv6791mjbhnd9bw07y1pswdlx1r6";
+    url = "https://github.com/Chris00/ANSITerminal/releases/download/${version}/ANSITerminal-${version}.tar.gz";
+    sha256 = "03pqfxvw9pa9720l8i5fgxky1qx70kw6wxbczd5i50xi668lh0i9";
   };
 
   buildInputs = [ ocaml findlib ocamlbuild ];
@@ -20,7 +22,7 @@ stdenv.mkDerivation {
   createFindlibDestdir = true;
 
   meta = with stdenv.lib; {
-    homepage = https://forge.ocamlcore.org/projects/ansiterminal;
+    homepage = "https://github.com/Chris00/ANSITerminal";
     description = "A module allowing to use the colors and cursor movements on ANSI terminals";
     longDescription = ''
       ANSITerminal is a module allowing to use the colors and cursor

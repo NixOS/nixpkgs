@@ -4,14 +4,14 @@
 
 stdenv.mkDerivation rec {
   name = "alsa-tools-${version}";
-  version = "1.1.3";
+  version = "1.1.6";
 
   src = fetchurl {
     urls = [
       "ftp://ftp.alsa-project.org/pub/tools/${name}.tar.bz2"
       "http://alsa.cybermirror.org/tools/${name}.tar.bz2"
     ];
-    sha256 = "02b75fyfmm9m2iz59d3xa97cas4f697a4pzdxn1i64kjd36iv3yq";
+    sha256 = "09rjb6hw1mn9y1jfdfj5djncgc2cr5wfps83k56rf6k4zg14v76n";
   };
 
   nativeBuildInputs = [ pkgconfig ];

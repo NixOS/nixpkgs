@@ -70,8 +70,8 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     wrapProgram $out/bin/awesome \
-      --prefix LUA_CPATH ";" '"${lgi}/lib/lua/${lua.luaversion}/?.so"' \
-      --prefix LUA_PATH ";" '"${lgi}/share/lua/${lua.luaversion}/?.lua;${lgi}/share/lua/${lua.luaversion}/lgi/?.lua"' \
+      --prefix LUA_CPATH ";" "${lgi}/lib/lua/${lua.luaversion}/?.so" \
+      --prefix LUA_PATH ";" "${lgi}/share/lua/${lua.luaversion}/?.lua;${lgi}/share/lua/${lua.luaversion}/lgi/?.lua" \
       --prefix GI_TYPELIB_PATH : "$GI_TYPELIB_PATH" \
       --prefix LD_LIBRARY_PATH : "$LD_LIBRARY_PATH" \
       --prefix PATH : "${stdenv.lib.makeBinPath [ compton unclutter procps iproute coreutils curl alsaUtils findutils xterm ]}"

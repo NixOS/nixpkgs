@@ -6,23 +6,21 @@ assert lib.versionAtLeast (lib.getVersion ocaml) "4.02";
 let ocamlVersion = (builtins.parseDrvName (ocaml.name)).version;
 in stdenv.mkDerivation rec {
   name = "llpp-${version}";
-  version = "25-git-2017-01-18";
+  version = "2018-03-02";
 
   src = fetchgit {
     url = "git://repo.or.cz/llpp.git";
-    rev = "22740b9bca1c60ef18cf90538994ce4981539901";
-    sha256 = "0yg8z2zwhg2f5il2i1clx3b7hl088ncpk686rfxlvwyjg3qs3mv4";
+    rev = "0ab1fbbf142b6df6d6bae782e3af2ec50f32dec9";
+    sha256 = "1h0hrmxwm7ripgp051788p8ad0q38dc9nvjx87mdwlkwk9qc0dis";
     fetchSubmodules = false;
   };
 
   nativeBuildInputs = [ pkgconfig makeWrapper ninja ];
-  buildInputs = [ ocaml findlib mupdf gtk3 jbig2dec # lablgl
-    openjpeg mujs openssl freetype ncurses ];
+  buildInputs = [ ocaml findlib mupdf gtk3 jbig2dec openjpeg mujs openssl freetype ncurses ];
 
   dontStrip = true;
 
   configurePhase = ''
-    sed -i -e 's+fz_set_use_document_css (state.ctx, usedoccss);+/* fz_set_use_document_css (state.ctx, usedoccss); */+' link.c
     sed -i -e 's+ocamlc --version+ocamlc -version+' build.sh
     sed -i -e 's+-I \$srcdir/mupdf/include -I \$srcdir/mupdf/thirdparty/freetype/include+-I ${freetype.dev}/include+' build.sh
     sed -i -e 's+-lmupdf +-lfreetype -lz -lharfbuzz -ljbig2dec -lopenjp2 -ljpeg -lmupdf +' build.sh
@@ -32,7 +30,6 @@ in stdenv.mkDerivation rec {
   buildPhase = ''
     sh ./build.sh build
   '';
-#        --prefix CAML_LD_LIBRARY_PATH ":" "${lablgl}/lib/ocaml/${ocamlVersion}/site-lib/lablgl" \
 
   installPhase = ''
     install -d $out/bin $out/lib

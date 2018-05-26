@@ -1,24 +1,24 @@
 {stdenv, system, fetchurl, dpkg, openssl, xorg
-, glib, mesa, libpulseaudio, zlib, dbus, fontconfig, freetype
+, glib, libGLU_combined, libpulseaudio, zlib, dbus, fontconfig, freetype
 , gtk2, pango, atk, cairo, gdk_pixbuf, jasper, xkeyboardconfig
 , makeWrapper , makeDesktopItem, python, pythonPackages, lib
 , libredirect, lsof}:
-assert system == "i686-linux" || system == "x86_64-linux";
+
 let
-  all_data = (with builtins; fromJSON (readFile ./data.json));
+  all_data = builtins.fromJSON (builtins.readFile ./data.json);
   system_map = {
     i686-linux = "i386";
     x86_64-linux = "amd64";
   };
 
-  data = (with builtins; getAttr (getAttr system system_map) all_data);
+  data = all_data.${system_map.${system} or (throw "Unsupported platform")};
 
   baseUrl = http://repo.sinew.in;
 
   # used of both wrappers and libpath
   libPath = lib.makeLibraryPath (with xorg; [
     openssl
-    mesa
+    libGLU_combined
     fontconfig
     freetype
     libpulseaudio
@@ -54,7 +54,7 @@ let
       description = "a well known password manager";
       homepage = https://www.enpass.io/;
       license = lib.licenses.unfree;
-      platforms = lib.platforms.linux;
+      platforms = [ "x86_64-linux" "i686-linux"];
     };
 
     buildInputs = [makeWrapper dpkg];
@@ -67,12 +67,13 @@ let
       cp -r usr/* $out
       rm $out/bin/runenpass.sh
       cp $out/bin/EnpassHelper/EnpassHelper{,.untampered}
+      cp $out/bin/EnpassHelper/EnpassNMHost{,.untampered}
 
       sed \
-      	-i s@/opt/Enpass/bin/runenpass.sh@$out/bin/Enpass@ \
-      	$out/share/applications/enpass.desktop
+        -i s@/opt/Enpass/bin/runenpass.sh@$out/bin/Enpass@ \
+        $out/share/applications/enpass.desktop
 
-      for i in $out/bin/{Enpass,EnpassHelper/EnpassHelper}; do
+      for i in $out/bin/{Enpass,EnpassHelper/{EnpassHelper,EnpassNMHost}}; do
         patchelf --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker) $i
       done
 
@@ -85,8 +86,15 @@ let
         --set QT_XKB_CONFIG_ROOT "${xkeyboardconfig}/share/X11/xkb" \
         --set HIDE_TOOLBAR_LINE 0 \
         --set LD_PRELOAD "${libredirect}/lib/libredirect.so" \
-        --set NIX_REDIRECTS "$out/bin/EnpassHelper/EnpassHelper=$out/bin/EnpassHelper/EnpassHelper.untampered" \
+        --set NIX_REDIRECTS "$out/bin/EnpassHelper/EnpassHelper=$out/bin/EnpassHelper/EnpassHelper.untampered:$out/bin/EnpassHelper/EnpassNMHost=$out/bin/EnpassHelper/EnpassNMHost.untampered" \
         --prefix PATH : ${lsof}/bin
+
+      makeWrapper $out/bin/EnpassHelper/{EnpassNMHost,runNativeMessaging.sh} \
+        --set LD_LIBRARY_PATH "${libPath}:$out/lib:$out/plugins/sqldrivers" \
+        --set QT_PLUGIN_PATH "$out/plugins" \
+        --set QT_QPA_PLATFORM_PLUGIN_PATH "$out/plugins/platforms" \
+        --set QT_XKB_CONFIG_ROOT "${xkeyboardconfig}/share/X11/xkb" \
+        --set HIDE_TOOLBAR_LINE 0
     '';
   };
   updater = {

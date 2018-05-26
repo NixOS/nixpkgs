@@ -33,8 +33,8 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Extract URLs from text";
-    homepage = http://packages.qa.debian.org/u/urlview.html;
-    licencse = stdenv.lib.licenses.gpl2;
+    homepage = https://packages.qa.debian.org/u/urlview.html;
+    license = stdenv.lib.licenses.gpl2;
     platforms = with stdenv.lib.platforms; linux ++ darwin;
   };
 }

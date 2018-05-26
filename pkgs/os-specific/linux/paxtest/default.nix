@@ -19,6 +19,6 @@ stdenv.mkDerivation rec {
     description = "Test various memory protection measures";
     license     = licenses.gpl2;
     platforms   = platforms.linux;
-    maintainer  = with maintainers; [ copumpkin joachifm ];
+    maintainers = with maintainers; [ copumpkin joachifm ];
   };
 }

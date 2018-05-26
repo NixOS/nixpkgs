@@ -1,4 +1,4 @@
-{ stdenv, nixUnstable, perlPackages, buildEnv, releaseTools, fetchFromGitHub
+{ stdenv, nix, perlPackages, buildEnv, releaseTools, fetchFromGitHub
 , makeWrapper, autoconf, automake, libtool, unzip, pkgconfig, sqlite, libpqxx
 , gitAndTools, mercurial, darcs, subversion, bazaar, openssl, bzip2, libxslt
 , guile, perl, postgresql, aws-sdk-cpp, nukeReferences, git, boehmgc
@@ -27,6 +27,7 @@ let
         CatalystViewDownload
         CatalystViewJSON
         CatalystViewTT
+        CatalystXRoleApplicator
         CatalystXScriptServerStarman
         CryptRandPasswd
         DBDPg
@@ -39,6 +40,7 @@ let
         FileSlurp
         IOCompress
         IPCRun
+        JSONAny
         JSONXS
         LWP
         LWPProtocolHttps
@@ -54,46 +56,35 @@ let
         TextDiff
         TextTable
         XMLSimple
-        nixUnstable
-        nixUnstable.perl-bindings
+        nix
+        nix.perl-bindings
         git
         boehmgc
       ];
   };
 in releaseTools.nixBuild rec {
   name = "hydra-${version}";
-  version = "2017-09-14";
+  version = "2017-11-21";
 
   inherit stdenv;
 
   src = fetchFromGitHub {
     owner = "NixOS";
     repo = "hydra";
-    rev = "b828224fee451ad26e87cfe4eeb9c0704ee1062b";
-    sha256 = "05xv10ldsa1rahxbbgh5kwvl1dv4yvc8idczpifgb55fgqj8zazm";
+    rev = "b7bc4384b7b471d1ddf892cb03f16189a66d5a0d";
+    sha256 = "05g37z3ilazzqa5rqj5zljndwxjbvpc18xibh6jlwjwpvg3kpbbh";
   };
 
   buildInputs =
     [ makeWrapper autoconf automake libtool unzip nukeReferences pkgconfig sqlite libpqxx
       gitAndTools.topGit mercurial darcs subversion bazaar openssl bzip2 libxslt
       guile # optional, for Guile + Guix support
-      perlDeps perl nixUnstable
+      perlDeps perl nix
       postgresql # for running the tests
-      (lib.overrideDerivation (aws-sdk-cpp.override {
-        apis = ["s3"];
-        customMemoryManagement = false;
-      }) (attrs: {
-        src = fetchFromGitHub {
-          owner = "edolstra";
-          repo = "aws-sdk-cpp";
-          rev = "local";
-          sha256 = "1vhgsxkhpai9a7dk38q4r239l6dsz2jvl8hii24c194lsga3g84h";
-        };
-      }))
     ];
 
   hydraPath = lib.makeBinPath (
-    [ sqlite subversion openssh nixUnstable coreutils findutils pixz
+    [ sqlite subversion openssh nix coreutils findutils pixz
       gzip bzip2 lzma gnutar unzip git gitAndTools.topGit mercurial darcs gnused bazaar
     ] ++ lib.optionals stdenv.isLinux [ rpm dpkg cdrkit ] );
 
@@ -128,7 +119,7 @@ in releaseTools.nixBuild rec {
             --prefix PATH ':' $out/bin:$hydraPath \
             --set HYDRA_RELEASE ${version} \
             --set HYDRA_HOME $out/libexec/hydra \
-            --set NIX_RELEASE ${nixUnstable.name or "unknown"}
+            --set NIX_RELEASE ${nix.name or "unknown"}
     done
   ''; # */
 

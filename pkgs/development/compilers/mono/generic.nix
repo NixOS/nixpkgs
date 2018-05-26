@@ -1,10 +1,19 @@
-{ stdenv, fetchurl, bison, pkgconfig, glib, gettext, perl, libgdiplus, libX11, callPackage, ncurses, zlib, withLLVM ? false, cacert, Foundation, libobjc, python, version, sha256 }:
+{ stdenv, fetchurl, bison, pkgconfig, glib, gettext, perl, libgdiplus, libX11
+, callPackage, ncurses, zlib
+, cacert, Foundation, libobjc, python
+
+, version, sha256
+, withLLVM ? false
+, enableParallelBuilding ? true
+, meta ? {}
+}:
 
 let
   llvm     = callPackage ./llvm.nix { };
-in
-stdenv.mkDerivation rec {
   name = "mono-${version}";
+in
+stdenv.mkDerivation {
+  inherit name;
 
   src = fetchurl {
     inherit sha256;
@@ -39,9 +48,6 @@ stdenv.mkDerivation rec {
   # Attempt to fix this error when running "mcs --version":
   # The file /nix/store/xxx-mono-2.4.2.1/lib/mscorlib.dll is an invalid CIL image
   dontStrip = true;
-
-  # Parallel building doesn't work, as shows http://hydra.nixos.org/build/2983601
-  enableParallelBuilding = false;
 
   # We want pkg-config to take priority over the dlls in the Mono framework and the GAC
   # because we control pkg-config
@@ -79,11 +85,13 @@ stdenv.mkDerivation rec {
     ln -s $out/bin/mcs $out/bin/gmcs
   '';
 
+  inherit enableParallelBuilding;
+
   meta = {
     homepage = http://mono-project.com/;
     description = "Cross platform, open source .NET development framework";
-    platforms = with stdenv.lib.platforms; darwin ++ linux;
+    platforms = stdenv.lib.platforms.x86;
     maintainers = with stdenv.lib.maintainers; [ viric thoughtpolice obadz vrthra ];
     license = stdenv.lib.licenses.free; # Combination of LGPL/X11/GPL ?
-  };
+  } // meta;
 }

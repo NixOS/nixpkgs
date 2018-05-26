@@ -12,8 +12,10 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkgconfig which perl ];
-  buildInputs = [ openssl zlib snappy ];
-  propagatedBuildInputs = [ libbson ];
+  buildInputs = [ openssl zlib ];
+  propagatedBuildInputs = [ libbson snappy ];
+
+  enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
     description = "The official C client library for MongoDB";

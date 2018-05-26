@@ -6,7 +6,7 @@
 with lib;
 let
   mergeHook = pkgs.writeScript "rdnssd-merge-hook" ''
-    #! ${pkgs.stdenv.shell} -e
+    #! ${pkgs.runtimeShell} -e
     ${pkgs.openresolv}/bin/resolvconf -u
   '';
 in

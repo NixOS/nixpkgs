@@ -48,7 +48,22 @@ with lib;
     enableACME = mkOption {
       type = types.bool;
       default = false;
-      description = "Whether to ask Let's Encrypt to sign a certificate for this vhost.";
+      description = ''
+        Whether to ask Let's Encrypt to sign a certificate for this vhost.
+        Alternately, you can use an existing certificate through <option>useACMEHost</option>.
+      '';
+    };
+
+    useACMEHost = mkOption {
+      type = types.nullOr types.str;
+      default = null;
+      description = ''
+        A host of an existing Let's Encrypt certificate to use.
+        This is useful if you have many subdomains and want to avoid hitting the
+        <link xlink:href="https://letsencrypt.org/docs/rate-limits/">rate limit</link>.
+        Alternately, you can generate a certificate through <option>enableACME</option>.
+        <emphasis>Note that this option does not create any certificates, nor it does add subdomains to existing ones – you will need to create them manually using  <xref linkend="opt-security.acme.certs"/>.</emphasis>
+      '';
     };
 
     acmeRoot = mkOption {
@@ -114,6 +129,20 @@ with lib;
       description = "Path to server SSL certificate key.";
     };
 
+    http2 = mkOption {
+      type = types.bool;
+      default = true;
+      description = ''
+        Whether to enable HTTP 2.
+        Note that (as of writing) due to nginx's implementation, to disable
+        HTTP 2 you have to disable it on all vhosts that use a given
+        IP address / port.
+        If there is one server block configured to enable http2,then it is
+        enabled for all server blocks on this IP.
+        See https://stackoverflow.com/a/39466948/263061.
+      '';
+    };
+
     root = mkOption {
       type = types.nullOr types.path;
       default = null;
@@ -142,10 +171,10 @@ with lib;
     globalRedirect = mkOption {
       type = types.nullOr types.str;
       default = null;
-      example = http://newserver.example.org/;
+      example = "newserver.example.org";
       description = ''
         If set, all requests for this host are redirected permanently to
-        the given URL.
+        the given hostname.
       '';
     };
 
@@ -162,6 +191,14 @@ with lib;
 
         WARNING: This is implemented to store the password in plain text in the
         nix store.
+      '';
+    };
+
+    basicAuthFile = mkOption {
+      type = types.nullOr types.path;
+      default = null;
+      description = ''
+        Basic Auth password file for a vhost.
       '';
     };
 

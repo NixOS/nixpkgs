@@ -20,6 +20,6 @@ in fetchzip {
     description = "A font with ligatures for Haskell code based off Source Code Pro";
     license = licenses.ofl;
     platforms = platforms.all;
-    maintainers = with maintainers; [ davidrusu profpatsch ];
+    maintainers = with maintainers; [ davidrusu Profpatsch ];
   };
 }

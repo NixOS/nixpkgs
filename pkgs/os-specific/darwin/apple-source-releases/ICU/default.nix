@@ -3,6 +3,8 @@
 appleDerivation {
   nativeBuildInputs = [ cctools ];
 
+  patches = [ ./clang-5.patch ];
+
   postPatch = ''
     substituteInPlace makefile \
       --replace /usr/bin/ "" \

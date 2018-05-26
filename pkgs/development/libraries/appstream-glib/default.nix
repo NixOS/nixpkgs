@@ -1,44 +1,53 @@
-{ stdenv, fetchFromGitHub, pkgconfig, gettext, gtk3, intltool, glib
-, gtk_doc, autoconf, automake, libtool, libarchive
-, gobjectIntrospection, sqlite, libsoup, gcab, attr, acl, docbook_xsl
-, libuuid, json_glib, autoconf-archive, meson, gperf, ninja, gdk_pixbuf
+{ stdenv, fetchFromGitHub, substituteAll, pkgconfig, gettext, gtk3, glib
+, gtk-doc, libarchive, gobjectIntrospection, libxslt, pngquant
+, sqlite, libsoup, gcab, attr, acl, docbook_xsl, docbook_xml_dtd_42
+, libuuid, json-glib, meson, gperf, ninja
 }:
-let rpath = stdenv.lib.makeLibraryPath
-      [ libuuid.out
-        glib
-        libsoup
-        gdk_pixbuf
-        libarchive.lib
-        gcab
-      ];
-in stdenv.mkDerivation rec {
-  name = "appstream-glib-0.7.2";
+stdenv.mkDerivation rec {
+  name = "appstream-glib-0.7.8";
+
+  outputs = [ "out" "dev" "man" "installedTests" ];
+  outputBin = "dev";
 
   src = fetchFromGitHub {
     owner = "hughsie";
     repo = "appstream-glib";
     rev = stdenv.lib.replaceStrings ["." "-"] ["_" "_"] name;
-    sha256 = "1jvwfida12d2snc8p9lpbpqzrixw2naaiwfmsrldwkrxsj3i19pl";
+    sha256 = "10hcl3sl3g8ajg9mssq3g4dbzz0d4b2ybimrcq71cpycqrqhilhx";
   };
 
-  nativeBuildInputs = [ meson pkgconfig ninja ];
-  buildInputs = [ glib gtk_doc gettext sqlite libsoup
-                  gcab attr acl docbook_xsl libuuid json_glib
-                  libarchive gobjectIntrospection gperf ];
+  nativeBuildInputs = [
+    meson pkgconfig ninja gtk-doc libxslt docbook_xsl docbook_xml_dtd_42
+  ];
+  buildInputs = [
+    glib gettext sqlite libsoup
+    gcab attr acl libuuid json-glib
+    libarchive gobjectIntrospection gperf
+  ];
   propagatedBuildInputs = [ gtk3 ];
-  mesonFlags = [ "-Denable-rpm=false" "-Denable-stemmer=false" "-Denable-dep11=false" ];
 
-  postFixup = ''
-    for elf in "$out"/bin/* "$out"/lib/*.so; do
-      patchelf --set-rpath '${rpath}':"$out/lib" "$elf"
-    done
+  patches = [
+    (substituteAll {
+      src = ./paths.patch;
+      pngquant= "${pngquant}/bin/pngquant";
+    })
+  ];
+
+  mesonFlags = [
+    "-Drpm=false"
+    "-Dstemmer=false"
+    "-Ddep11=false"
+  ];
+
+  postInstall = ''
+    moveToOutput "share/installed-tests" "$installedTests"
   '';
 
   meta = with stdenv.lib; {
     description = "Objects and helper methods to read and write AppStream metadata";
-    homepage    = https://github.com/hughsie/appstream-glib;
-    license     = licenses.lgpl21Plus;
-    platforms   = platforms.linux;
+    homepage = https://people.freedesktop.org/~hughsient/appstream-glib/;
+    license = licenses.lgpl2Plus;
+    platforms = platforms.linux;
     maintainers = with maintainers; [ lethalman matthewbauer ];
   };
 }

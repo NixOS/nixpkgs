@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
   makeFlags = "WMII_HGVERSION=hg${rev}";
 
   meta = {
-    homepage = https://code.google.com/archive/p/wmii/;
+    homepage = https://suckless.org/; # https://wmii.suckless.org/ does not exist anymore
     description = "A small window manager controlled by a 9P filesystem";
     maintainers = with stdenv.lib.maintainers; [ kovirobi ];
     license = stdenv.lib.licenses.mit;

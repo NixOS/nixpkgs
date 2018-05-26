@@ -32,5 +32,6 @@ in stdenv.mkDerivation ({
     homepage = http://cdemu.sourceforge.net/;
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
+    maintainers = with stdenv.lib.maintainers; [ bendlas ];
   };
 } // drvParams)

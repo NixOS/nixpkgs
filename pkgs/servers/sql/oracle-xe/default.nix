@@ -1,7 +1,5 @@
 { stdenv, makeWrapper, requireFile, patchelf, rpmextract, libaio }:
 
-assert stdenv.system == "x86_64-linux";
-
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
@@ -70,7 +68,7 @@ stdenv.mkDerivation rec {
       makeWrapper "$i" "$out/bin/''${i##*/}" \
         --set ORACLE_HOME "$out/libexec/oracle" \
         --set ORACLE_SID XE \
-        --set NLS_LANG '$("'"$out"'/libexec/oracle/bin/nls_lang.sh")' \
+        --run "export NLS_LANG=\$($out/libexec/oracle/bin/nls_lang.sh)" \
         --prefix PATH : "$out/libexec/oracle/bin"
     done
   '';
@@ -79,5 +77,6 @@ stdenv.mkDerivation rec {
     description = "Oracle Database Express Edition";
     homepage = http://www.oracle.com/technetwork/products/express-edition/;
     license = licenses.unfree;
+    platforms = [ "x86_64-linux" ];
   };
 }

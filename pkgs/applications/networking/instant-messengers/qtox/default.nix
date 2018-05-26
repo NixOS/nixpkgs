@@ -1,42 +1,48 @@
-{ mkDerivation, lib, fetchFromGitHub, cmake, pkgconfig,
-  libtoxcore,
-  libpthreadstubs, libXdmcp, libXScrnSaver,
-  qtbase, qtsvg, qttools, qttranslations,
-  ffmpeg, filter-audio, libsodium, libopus,
-  libvpx, openal, opencv, pcre, qrencode, sqlcipher }:
+{ stdenv, mkDerivation, lib, fetchFromGitHub, cmake, pkgconfig
+, libtoxcore
+, libpthreadstubs, libXdmcp, libXScrnSaver
+, qtbase, qtsvg, qttools, qttranslations
+, ffmpeg, filter-audio, libexif, libsodium, libopus
+, libvpx, openal, pcre, qrencode, sqlcipher
+, AVFoundation ? null }:
 
-mkDerivation rec {
+let
+  version = "1.15.0";
+  rev = "v${version}";
+
+in mkDerivation rec {
   name = "qtox-${version}";
-  version = "1.11.0";
 
   src = fetchFromGitHub {
-    owner  = "tux3";
+    owner  = "qTox";
     repo   = "qTox";
-    rev    = "v${version}";
-    sha256 = "0h8v359h1xn2xm6xa9q56mjiw58ap1bpiwx1dxxmphjildxadwck";
+    sha256 = "1garwnlmg452b0bwx36rsh08s15q3zylb26l01iiwg4l9vcaldh9";
+    inherit rev;
   };
 
   buildInputs = [
     libtoxcore
     libpthreadstubs libXdmcp libXScrnSaver
-    qtbase qtsvg qttools qttranslations
-    ffmpeg filter-audio libopus libsodium
-    libvpx openal opencv pcre qrencode sqlcipher
-  ];
+    qtbase qtsvg qttranslations
+    ffmpeg filter-audio libexif libopus libsodium
+    libvpx openal pcre qrencode sqlcipher
+  ] ++ lib.optionals stdenv.isDarwin [ AVFoundation] ;
 
-  nativeBuildInputs = [ cmake pkgconfig ];
+  nativeBuildInputs = [ cmake pkgconfig qttools ];
 
   enableParallelBuilding = true;
 
   cmakeFlags = [
-    "-DGIT_DESCRIBE=${version}"
+    "-DGIT_DESCRIBE=${rev}"
     "-DENABLE_STATUSNOTIFIER=False"
     "-DENABLE_GTK_SYSTRAY=False"
     "-DENABLE_APPINDICATOR=False"
+    "-DTIMESTAMP=1"
   ];
 
   meta = with lib; {
     description = "Qt Tox client";
+    homepage    = https://tox.chat;
     license     = licenses.gpl3;
     maintainers = with maintainers; [ viric jgeerds akaWolf peterhoeg ];
     platforms   = platforms.all;

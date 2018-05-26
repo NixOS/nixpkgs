@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, ocaml, findlib, ocamlbuild, topkg, opam, uutf }:
+{ stdenv, fetchurl, ocaml, findlib, ocamlbuild, topkg, uutf }:
 
 let version = "1.0.1"; in
 
@@ -10,12 +10,10 @@ stdenv.mkDerivation {
     sha256 = "1176dcmxb11fnw49b7yysvkjh0kpzx4s48lmdn5psq9vshp5c29w";
   };
 
-  buildInputs = [ ocaml findlib ocamlbuild topkg opam ];
+  buildInputs = [ ocaml findlib ocamlbuild topkg ];
   propagatedBuildInputs = [ uutf ];
 
   unpackCmd = "tar xjf $src";
-
-  createFindlibDestdir = true;
 
   inherit (topkg) buildPhase installPhase;
 

@@ -5,7 +5,7 @@
 buildPythonPackage rec {
   pname = "premailer";
   name = "${pname}-${version}";
-  version = "3.0.1";
+  version = "3.1.1";
 
   meta = {
     description = "Turns CSS blocks into style attributes ";
@@ -15,7 +15,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0cmlvqx1dvy16k5q5ylmr43nlfpb9k2zl3q7s4kzhf0lml4wqwaf";
+    sha256 = "fd07dadc47345f7d44a0587bd65a37c45886f19c44b3ec94904761e4b2d39124";
   };
 
   buildInputs = [ mock nose ];

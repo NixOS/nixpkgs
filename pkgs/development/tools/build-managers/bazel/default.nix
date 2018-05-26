@@ -1,8 +1,12 @@
-{ stdenv, lib, fetchurl, jdk, zip, unzip, bash, writeScriptBin, coreutils, makeWrapper, which, python }:
+{ stdenv, lib, fetchurl, jdk, zip, unzip, bash, writeScriptBin, coreutils, makeWrapper, which, python
+# Always assume all markers valid (don't redownload dependencies).
+# Also, don't clean up environment variables.
+, enableNixHacks ? false
+}:
 
 stdenv.mkDerivation rec {
 
-  version = "0.6.1";
+  version = "0.12.0";
 
   meta = with stdenv.lib; {
     homepage = "https://github.com/bazelbuild/bazel/";
@@ -16,10 +20,12 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://github.com/bazelbuild/bazel/releases/download/${version}/bazel-${version}-dist.zip";
-    sha256 = "19rb1lh6v2gi8xlxhdmhydp16i1bgmvb510i053rfy0jlmh1znns";
+    sha256 = "3b3e7dc76d145046fdc78db7cac9a82bc8939d3b291e53a7ce85315feb827754";
   };
 
   sourceRoot = ".";
+
+  patches = lib.optional enableNixHacks ./nix-hacks.patch;
 
   # Bazel expects several utils to be available in Bash even without PATH. Hence this hack.
 
@@ -74,7 +80,6 @@ stdenv.mkDerivation rec {
   '';
 
   # Bazel expects gcc and java to be in the path.
-
   installPhase = ''
     mkdir -p $out/bin
     mv output/bazel $out/bin
@@ -82,6 +87,12 @@ stdenv.mkDerivation rec {
     mkdir -p $out/share/bash-completion/completions $out/share/zsh/site-functions
     mv output/bazel-complete.bash $out/share/bash-completion/completions/
     cp scripts/zsh_completion/_bazel $out/share/zsh/site-functions/
+  '';
+
+  # Save paths to hardcoded dependencies so Nix can detect them.
+  postFixup = ''
+    mkdir -p $out/nix-support
+    echo "${customBash} ${coreutils}" > $out/nix-support/depends
   '';
 
   dontStrip = true;

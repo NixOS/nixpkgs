@@ -10,9 +10,15 @@ let
     config = builtins.removeAttrs config [ "replaceStdenv" ];
   };
 
-in bootStages ++ [
+in lib.init bootStages ++ [
 
-  # Build Packages
+  # Regular native packages
+  (somePrevStage: lib.last bootStages somePrevStage // {
+    # It's OK to change the built-time dependencies
+    allowCustomOverrides = true;
+  })
+
+  # Build tool Packages
   (vanillaPackages: {
     inherit config overlays;
     selfBuild = false;
@@ -33,8 +39,12 @@ in bootStages ++ [
       buildPlatform = localSystem;
       hostPlatform = crossSystem;
       targetPlatform = crossSystem;
-      cc = if crossSystem.useiOSCross or false
-           then buildPackages.darwin.ios-cross
+      cc = if crossSystem.useiOSPrebuilt or false
+             then buildPackages.darwin.iosSdkPkgs.clang
+           else if (crossSystem.useAndroidPrebuilt && crossSystem.is32bit)
+             then buildPackages.androidenv.androidndkPkgs_10e.gcc
+           else if (crossSystem.useAndroidPrebuilt && crossSystem.is64bit)
+             then buildPackages.androidenv.androidndkPkgs.gcc
            else buildPackages.gcc;
     };
   })

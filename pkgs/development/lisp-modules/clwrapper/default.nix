@@ -1,4 +1,4 @@
-{stdenv, fetchurl, asdf, which, lisp ? null}:
+{stdenv, fetchurl, asdf, which, bash, lisp ? null}:
 stdenv.mkDerivation {
   name = "cl-wrapper-script";
 
@@ -11,6 +11,7 @@ stdenv.mkDerivation {
     substituteAll ${./common-lisp.sh} "$out"/bin/common-lisp.sh
     substituteAll "${./build-with-lisp.sh}" "$out/bin/build-with-lisp.sh"
     substituteAll "${./cl-wrapper.sh}" "$out/bin/cl-wrapper.sh"
+    patchShebangs "$out/bin"
     chmod a+x "$out"/bin/*
 
     substituteAll "${./setup-hook.sh}" "setup-hook-parsed"
@@ -35,7 +36,7 @@ stdenv.mkDerivation {
 
   buildInputs = [which];
 
-  inherit asdf lisp;
+  inherit asdf lisp bash;
   stdenv_shell = stdenv.shell;
 
   setupHook = ./setup-hook.sh;

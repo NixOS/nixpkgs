@@ -1,8 +1,8 @@
 { stdenv, fetchFromGitHub, bc, python, fuse, libarchive }:
 
 stdenv.mkDerivation rec {
-  name = "lkl-2017-08-09";
-  rev  = "083cdeece0577635d523244dcf0da86074e23e4e";
+  name = "lkl-2018-03-10";
+  rev  = "8772a4da6064444c5b70766b806fe272b0287c31";
 
   outputs = [ "dev" "lib" "out" ];
 
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     inherit rev;
     owner  = "lkl";
     repo   = "linux";
-    sha256 = "1fyh0p54jgsqywswj40zbw64jbqx2w10wax1k3j2szzlhjrv9x1a";
+    sha256 = "1m6gh4zcx1q7rv05d0knjpk3ivk2b3kc0kwjndciadqc45kws4wh";
   };
 
   # Fix a /usr/bin/env reference in here that breaks sandboxed builds
@@ -27,7 +27,8 @@ stdenv.mkDerivation rec {
     sed -i $out/bin/lkl-hijack.sh \
         -e "s,LD_LIBRARY_PATH=.*,LD_LIBRARY_PATH=$lib/lib,"
 
-    cp tools/lkl/{cptofs,cpfromfs,fs2tar,lklfuse} $out/bin
+    cp tools/lkl/{cptofs,fs2tar,lklfuse} $out/bin
+    ln -s cptofs $out/bin/cpfromfs
     cp -r tools/lkl/include $dev/
     cp tools/lkl/liblkl*.{a,so} $lib/lib
   '';
@@ -49,7 +50,7 @@ stdenv.mkDerivation rec {
       overhead
     '';
     homepage    = https://github.com/lkl/linux/;
-    platforms   = [ "x86_64-linux" ]; # Darwin probably works too but I haven't tested it
+    platforms   = [ "x86_64-linux" "aarch64-linux" ]; # Darwin probably works too but I haven't tested it
     license     = licenses.gpl2;
     maintainers = with maintainers; [ copumpkin ];
   };

@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoreconfHook pkgconfig ];
 
-  buildInputs = [ gtk-engine-murrine ];
+  propagatedUserEnvPkgs = [ gtk-engine-murrine ];
 
   configureFlags = [ "--disable-unity" ];
 

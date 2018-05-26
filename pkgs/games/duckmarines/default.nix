@@ -2,7 +2,7 @@
 
 let
   pname = "duckmarines";
-  version = "1.0b";
+  version = "1.0c";
 
   icon = fetchurl {
     url = "http://tangramgames.dk/img/thumb/duckmarines.png";

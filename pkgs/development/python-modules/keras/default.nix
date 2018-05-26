@@ -1,23 +1,16 @@
-{ stdenv
-, buildPythonPackage
-, fetchPypi
-, pytest
-, pytestcov
-, pytestpep8
-, pytest_xdist
-, six
-, Theano
-, pyyaml
+{ stdenv, lib, buildPythonPackage, fetchPypi
+, pytest, pytestcov, pytestpep8, pytest_xdist
+, six, numpy, scipy, pyyaml
 }:
 
 buildPythonPackage rec {
   pname = "Keras";
-  version = "2.0.8";
+  version = "2.1.5";
   name = "${pname}-${version}";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "899dc6aaed366f20100b9f80cf1093ea5b43eecc74afd1dc63a4e48dfa776ab9";
+    sha256 = "907ad29add1fff27342a9f4fe3e60003d450d3af41a38f22f629c7736fc8399d";
   };
 
   checkInputs = [
@@ -28,7 +21,7 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
-    six Theano pyyaml
+    six pyyaml numpy scipy
   ];
 
   # Couldn't get tests working

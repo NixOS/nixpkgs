@@ -2,26 +2,21 @@
 
 rustPlatform.buildRustPackage rec {
   name = "tokei-${version}";
-  version = "6.1.2";
+  version = "7.0.0";
 
   src = fetchFromGitHub {
     owner = "Aaronepower";
     repo = "tokei";
     rev = "v${version}";
-    sha256 = "1bzs3mr6f9bna39b9ddwwq0raas07nbn106mnq3widxg59i0gxhd";
+    sha256 = "1c8m2arhy58ky8pzj0dp3w9gpacia9jwmayi0il640l4fm8nr734";
   };
 
-  depsSha256 = "1cz93mrpxmyrza0ipdyg2a6mynl66plpsb446wxnmmy7y7zd6xbf";
-
-  installPhase = ''
-    mkdir -p $out/bin
-    cp -p target/release/tokei $out/bin/
-  '';
+  cargoSha256 = "1cl4fjbvrw7zhpb8rxj566ddlxbj9vdsb1cp7mh6llmvaia2vgks";
 
   meta = with stdenv.lib; {
     description = "Count code, quickly";
     homepage = https://github.com/Aaronepower/tokei;
-    license = licenses.mit;
+    license = with licenses; [ asl20 /* or */ mit ];
     maintainers = with maintainers; [ gebner ];
     platforms = platforms.all;
   };

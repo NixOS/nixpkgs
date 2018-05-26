@@ -11,7 +11,7 @@
 
 let
 
-  shouldUsePkg = pkg: if pkg != null && stdenv.lib.any (x: x == stdenv.system) pkg.meta.platforms then pkg else null;
+  shouldUsePkg = pkg: if pkg != null && pkg.meta.available then pkg else null;
 
   libOnly = prefix == "lib";
 
@@ -25,11 +25,11 @@ let
 in
 stdenv.mkDerivation rec {
   name = "${prefix}ffado-${version}";
-  version = "2.3.0";
+  version = "2.4.0";
 
   src = fetchurl {
     url = "http://www.ffado.org/files/libffado-${version}.tgz";
-    sha256 = "122z8gya60nyg47i738z2yr4qcjyk2xix4kwhf5ybkmp23kcgqqq";
+    sha256 = "14rprlcd0gpvg9kljh0zzjzd2rc9hbqqpjidshxxjvvfh4r00f4f";
   };
 
   nativeBuildInputs = [ scons pkgconfig which makeWrapper python ];
@@ -41,9 +41,8 @@ stdenv.mkDerivation rec {
     optXdg_utils libxmlxx glibmm
   ];
 
-  patches = [ ./gcc6.patch ];
-
   postPatch = ''
+    sed '1iimport sys' -i SConstruct
     # SConstruct checks cpuinfo and an objdump of /bin/mount to determine the appropriate arch
     # Let's just skip this and tell it which to build
     sed '/def is_userspace_32bit(cpuinfo):/a\

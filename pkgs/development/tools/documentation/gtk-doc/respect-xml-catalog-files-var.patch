@@ -1,0 +1,13 @@
+--- a/m4/gtkdoc_jh_check_xml_catalog.m4
++++ b/m4/gtkdoc_jh_check_xml_catalog.m4
+@@ -5,8 +5,8 @@
+ [
+ 	AC_REQUIRE([JH_PATH_XML_CATALOG],[JH_PATH_XML_CATALOG(,[:])])dnl
+ 	AC_MSG_CHECKING([for ifelse([$2],,[$1],[$2]) in XML catalog])
+-	if $jh_found_xmlcatalog && \
+-		AC_RUN_LOG([$XMLCATALOG --noout "$XML_CATALOG_FILE" "$1" >&2]); then
++	# empty argument forces libxml to use XML_CATALOG_FILES variable
++	if AC_RUN_LOG([$XMLCATALOG --noout "" "$1" >&2]); then
+ 		AC_MSG_RESULT([found])
+ 		ifelse([$3],,,[$3])
+ 	else

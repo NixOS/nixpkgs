@@ -1,5 +1,5 @@
 { stdenv
-, fetchurl
+, fetchPypi
 , buildPythonPackage
 , python
 , llvm
@@ -10,21 +10,20 @@
 
 buildPythonPackage rec {
   pname = "llvmlite";
-  name = "${pname}-${version}";
-  version = "0.19.0";
+  version = "0.22.0";
 
   disabled = isPyPy;
 
-  src = fetchurl {
-    url = "mirror://pypi/${builtins.substring 0 1 pname}/${pname}/${name}.tar.gz";
-    sha256 = "fbaeb3d584e0f6bac82a33776e9b5f0b5b4a3415a03edeff5d66f6176f0edbe2";
+  src = fetchPypi {
+    inherit pname version;
+    sha256 = "a0a875f3d502f41f4a24444aa98fbf076a6bf36e2a0b3b4481b22e1c4a3acdc2";
   };
 
   propagatedBuildInputs = [ llvm ] ++ stdenv.lib.optional (pythonOlder "3.4") enum34;
 
   # Disable static linking
   # https://github.com/numba/llvmlite/issues/93
-  patchPhase = ''
+  postPatch = ''
     substituteInPlace ffi/Makefile.linux --replace "-static-libstdc++" ""
 
     substituteInPlace llvmlite/tests/test_binding.py --replace "test_linux" "nope"

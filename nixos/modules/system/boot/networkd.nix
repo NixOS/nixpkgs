@@ -94,7 +94,7 @@ let
   checkNetwork = checkUnitConfig "Network" [
     (assertOnlyFields [
       "Description" "DHCP" "DHCPServer" "IPForward" "IPMasquerade" "IPv4LL" "IPv4LLRoute"
-      "LLMNR" "MulticastDNS" "Domains" "Bridge" "Bond"
+      "LLMNR" "MulticastDNS" "Domains" "Bridge" "Bond" "IPv6PrivacyExtensions"
     ])
     (assertValueOneOf "DHCP" ["both" "none" "v4" "v6"])
     (assertValueOneOf "DHCPServer" boolValues)
@@ -104,6 +104,7 @@ let
     (assertValueOneOf "IPv4LLRoute" boolValues)
     (assertValueOneOf "LLMNR" boolValues)
     (assertValueOneOf "MulticastDNS" boolValues)
+    (assertValueOneOf "IPv6PrivacyExtensions" ["yes" "no" "prefer-public" "kernel"])
   ];
 
   checkAddress = checkUnitConfig "Address" [
@@ -145,12 +146,13 @@ let
   # .network files have a [Link] section with different options than in .netlink files
   checkNetworkLink = checkUnitConfig "Link" [
     (assertOnlyFields [
-      "MACAddress" "MTUBytes" "ARP" "Unmanaged"
+      "MACAddress" "MTUBytes" "ARP" "Unmanaged" "RequiredForOnline"
     ])
     (assertMacAddress "MACAddress")
     (assertByteFormat "MTUBytes")
     (assertValueOneOf "ARP" boolValues)
     (assertValueOneOf "Unmanaged" boolValues)
+    (assertValueOneOf "RquiredForOnline" boolValues)
   ];
 
 
@@ -700,7 +702,6 @@ in
 
     systemd.additionalUpstreamSystemUnits = [
       "systemd-networkd.service" "systemd-networkd-wait-online.service"
-      "org.freedesktop.network1.busname"
     ];
 
     systemd.network.units = mapAttrs' (n: v: nameValuePair "${n}.link" (linkToUnit n v)) cfg.links
@@ -712,6 +713,9 @@ in
     systemd.services.systemd-networkd = {
       wantedBy = [ "multi-user.target" ];
       restartTriggers = map (f: f.source) (unitFiles);
+      # prevent race condition with interface renaming (#39069)
+      requires = [ "systemd-udev-settle.service" ];
+      after = [ "systemd-udev-settle.service" ];
     };
 
     systemd.services.systemd-networkd-wait-online = {

@@ -1,12 +1,12 @@
 { stdenv, fetchurl, qmake, qtscript, qtwebkit }:
 
 stdenv.mkDerivation rec {
-  version = "17.5.0";
+  version = "18.3.0";
   name = "smtube-${version}";
 
   src = fetchurl {
     url = "mirror://sourceforge/smtube/SMTube/${version}/${name}.tar.bz2";
-    sha256 = "13m0ll18n1da8i4r4b7gn0jjz9dgrkkyk9mpfas4rgnjw92m5jld";
+    sha256 = "05r7xmzc7i95nwzgcn7p0kwlhybryf7f0dpadgdnbz6xinz9a0mb";
   };
 
   makeFlags = [

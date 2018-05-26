@@ -41,7 +41,8 @@ self: super: {
 
   gtk2hs-buildtools = super.gtk2hs-buildtools.override { Cabal = self.Cabal_1_24_2_0; };
 
-  megaparsec = addBuildDepend super.megaparsec self.fail;
+  # https://github.com/mrkkrp/megaparsec/issues/282
+  megaparsec = addBuildDepend (dontCheck super.megaparsec) self.fail;
 
   Extra = appendPatch super.Extra (pkgs.fetchpatch {
     url = "https://github.com/seereason/sr-extra/commit/29787ad4c20c962924b823d02a7335da98143603.patch";
@@ -157,15 +158,11 @@ self: super: {
   haddock-api = self.haddock-api_2_16_1;
   haddock-library = self.haddock-library_1_2_1;
 
-  # lens-family-th >= 0.5.0.0 is GHC 8.0 only
-  lens-family-th = self.lens-family-th_0_4_1_0;
-
   # The tests in vty-ui do not build, but vty-ui itself builds.
   vty-ui = enableCabalFlag super.vty-ui "no-tests";
 
   # https://github.com/fpco/stackage/issues/1112
-  vector-algorithms = addBuildDepends (dontCheck super.vector-algorithms)
-    [ self.mtl self.mwc-random ];
+  vector-algorithms = addBuildDepends (dontCheck super.vector-algorithms) [ self.mtl self.mwc-random ];
 
   # vector with ghc < 8.0 needs semigroups
   vector = addBuildDepend super.vector self.semigroups;
@@ -176,42 +173,61 @@ self: super: {
   # https://github.com/thoughtpolice/hs-ed25519/issues/13
   ed25519 = dontCheck super.ed25519;
 
-  # https://github.com/well-typed/hackage-security/issues/157
-  # https://github.com/well-typed/hackage-security/issues/158
-  hackage-security = dontHaddock (dontCheck super.hackage-security);
-
   # Breaks a dependency cycle between QuickCheck and semigroups
   hashable = dontCheck super.hashable;
   unordered-containers = dontCheck super.unordered-containers;
 
   # GHC versions prior to 8.x require additional build inputs.
-  dependent-map = addBuildDepend super.dependent-map self.semigroups;
-  distributive = addBuildDepend (dontCheck super.distributive) self.semigroups;
-  mono-traversable = addBuildDepend super.mono-traversable self.semigroups;
-  attoparsec = addBuildDepends super.attoparsec (with self; [semigroups fail]);
-  Glob = addBuildDepends super.Glob (with self; [semigroups]);
   aeson = disableCabalFlag (addBuildDepend super.aeson self.semigroups) "old-locale";
+  ansi-wl-pprint = addBuildDepend super.ansi-wl-pprint self.semigroups;
+  attoparsec = addBuildDepends super.attoparsec (with self; [semigroups fail]);
   bytes = addBuildDepend super.bytes self.doctest;
   case-insensitive = addBuildDepend super.case-insensitive self.semigroups;
+  cmdargs = addBuildDepend super.cmdargs self.semigroups;
+  contravariant = addBuildDepend super.contravariant self.semigroups;
+  dependent-map = addBuildDepend super.dependent-map self.semigroups;
+  distributive = addBuildDepend (dontCheck super.distributive) self.semigroups;
+  Glob = addBuildDepends super.Glob (with self; [semigroups]);
   hoauth2 = overrideCabal super.hoauth2 (drv: { testDepends = (drv.testDepends or []) ++ [ self.wai self.warp ]; });
   hslogger = addBuildDepend super.hslogger self.HUnit;
   intervals = addBuildDepends super.intervals (with self; [doctest QuickCheck]);
   lens = addBuildDepend super.lens self.generic-deriving;
-  optparse-applicative = addBuildDepend super.optparse-applicative self.semigroups;
+  mono-traversable = addBuildDepend super.mono-traversable self.semigroups;
+  natural-transformation = addBuildDepend super.natural-transformation self.semigroups;
+  optparse-applicative = addBuildDepends super.optparse-applicative [self.semigroups self.fail];
+  parsec = addBuildDepends super.parsec [self.fail self.semigroups];
+  parser-combinators = addBuildDepend super.parser-combinators self.semigroups;
   QuickCheck = addBuildDepend super.QuickCheck self.semigroups;
+  reflection = addBuildDepend super.reflection self.semigroups;
   semigroups = addBuildDepends (dontCheck super.semigroups) (with self; [hashable tagged text unordered-containers]);
+  tar = addBuildDepend super.tar self.semigroups;
   texmath = addBuildDepend super.texmath self.network-uri;
   yesod-auth-oauth2 = overrideCabal super.yesod-auth-oauth2 (drv: { testDepends = (drv.testDepends or []) ++ [ self.load-env self.yesod ]; });
-  natural-transformation = addBuildDepend super.natural-transformation self.semigroups;
-  # cereal must have `fail` in pre-ghc-8.0.x versions
-  # also tests require bytestring>=0.10.8.1
-  cereal = dontCheck (addBuildDepend super.cereal self.fail);
 
-  # Moved out from common as no longer the case for GHC8
-  ghc-mod = super.ghc-mod.override { cabal-helper = self.cabal-helper_0_6_3_1; };
+  # cereal must have `fail` in pre-ghc-8.0.x versions and tests require
+  # bytestring>=0.10.8.1.
+  cereal = dontCheck (addBuildDepend super.cereal self.fail);
 
   # The test suite requires Cabal 1.24.x or later to compile.
   comonad = dontCheck super.comonad;
   semigroupoids = dontCheck super.semigroupoids;
+
+  # Newer versions require base >=4.9 && <5.
+  colour = self.colour_2_3_3;
+
+  # https://github.com/atzedijkstra/chr/issues/1
+  chr-pretty = doJailbreak super.chr-pretty;
+  chr-parse = doJailbreak super.chr-parse;
+
+  # The autogenerated Nix expressions don't take into
+  # account `if impl(ghc >= x.y)`, which is a common method to depend
+  # on `semigroups` or `fail` when building with GHC < 8.0.
+  system-filepath = addBuildDepend super.system-filepath self.semigroups;
+  haskell-src-exts = addBuildDepend super.haskell-src-exts self.semigroups;
+  free = addBuildDepend super.free self.fail;
+
+  # Newer versions don't build without base-4.9
+  resourcet = self.resourcet_1_1_11;
+  conduit = self.conduit_1_2_13_1;
 
 }

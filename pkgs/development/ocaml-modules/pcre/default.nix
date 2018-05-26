@@ -1,20 +1,18 @@
-{stdenv, buildOcaml, fetchurl, pcre, ocaml, findlib}:
+{ stdenv, fetchurl, pcre, ocaml, findlib, ocamlbuild }:
 
-buildOcaml {
-  name = "pcre";
-  version = "7.1.1";
+stdenv.mkDerivation rec {
+  name = "ocaml${ocaml.version}-pcre-${version}";
+  version = "7.2.3";
 
   src = fetchurl {
-    url = https://github.com/mmottl/pcre-ocaml/releases/download/v7.1.1/pcre-ocaml-7.1.1.tar.gz;
-    sha256 = "0nj4gb6hjjjmz5gnl9cjrh4w82rw8cvbwnk0hxhfgfd25p9k50n3";
+    url = "https://github.com/mmottl/pcre-ocaml/releases/download/v${version}/pcre-ocaml-${version}.tar.gz";
+    sha256 = "0rj6dw79px4sj2kq0iss2nzq3rnsn9wivvc0f44wa1mppr6njfb3";
   };
 
-  buildInputs = [ocaml findlib];
+  buildInputs = [ ocaml findlib ocamlbuild ];
   propagatedBuildInputs = [pcre];
 
   createFindlibDestdir = true;
-
-  hasSharedObjects = true;
 
   configurePhase = "true";	# Skip configure phase
 

@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "pgtap-${version}";
-  version = "0.97.0";
+  version = "0.98.0";
 
   src = fetchFromGitHub {
     owner = "theory";
     repo = "pgtap";
     rev = "v${version}";
-    sha256 = "1vzc8pxzi0rbywmrvx7i5awngsvzcz75i4jl9bk2vqr223chax6f";
+    sha256 = "17r3b409k05pbypmwdwgm1fl669jc6a1391szyxizx784k44a369";
   };
 
   nativeBuildInputs = [ postgresql perl perlPackages.TAPParserSourceHandlerpgTAP which ];

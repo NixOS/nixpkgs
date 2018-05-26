@@ -1,14 +1,18 @@
-{ stdenv, fetchurl, libpulseaudio, python3Packages, extraLibs ? [] }:
+{ stdenv, fetchFromGitHub, libpulseaudio, python3Packages, extraLibs ? [] }:
 
 python3Packages.buildPythonApplication rec {
-  name = "${pname}-${version}";
-  version = "3.35";
+  # i3pystatus moved to rolling release:
+  # https://github.com/enkore/i3pystatus/issues/584
+  version = "unstable-2018-04-11";
   pname = "i3pystatus";
   disabled = !python3Packages.isPy3k;
 
-  src = fetchurl {
-    url = "mirror://pypi/i/${pname}/${name}.tar.gz";
-    sha256 = "0g5m05rbqvq1qrspm6fyzky9xfhaz5pvc4hfzgdxrzijn8nfc860";
+  src = fetchFromGitHub
+  {
+    owner = "enkore";
+    repo = "i3pystatus";
+    rev = "3efbd56bb7a851f16173ec6f0eef472b6e96c7cc";
+    sha256 = "0r4mc23chxlaym7jcjnflw7mn5nbw3q8q4ix0nim7lh98yfndd3b";
   };
 
   propagatedBuildInputs = with python3Packages; [ keyring colour netifaces praw psutil basiciw ] ++
@@ -16,7 +20,8 @@ python3Packages.buildPythonApplication rec {
 
   libpulseaudioPath = stdenv.lib.makeLibraryPath [ libpulseaudio ];
   ldWrapperSuffix = "--suffix LD_LIBRARY_PATH : \"${libpulseaudioPath}\"";
-  makeWrapperArgs = [ ldWrapperSuffix ]; # libpulseaudio.so is loaded manually
+  # LC_TIME != C results in locale.Error: unsupported locale setting
+  makeWrapperArgs = [ "--set LC_TIME C" ldWrapperSuffix ]; # libpulseaudio.so is loaded manually
 
   postInstall = ''
     makeWrapper ${python3Packages.python.interpreter} $out/bin/${pname}-python-interpreter \

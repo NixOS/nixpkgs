@@ -1,25 +1,33 @@
-{ stdenv, fetchurl, autoconf, vala_0_32, pkgconfig, glib, gobjectIntrospection, gnome3 }:
+{ stdenv, fetchurl, autoconf, vala, pkgconfig, glib, gobjectIntrospection, gnome3 }:
 let
-  ver_maj = "0.18";
-  ver_min = "0";
+  pname = "libgee";
+  version = "0.20.1";
 in
 stdenv.mkDerivation rec {
-  name = "libgee-${ver_maj}.${ver_min}";
+  name = "${pname}-${version}";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/libgee/${ver_maj}/${name}.tar.xz";
-    sha256 = "16a34js81w9m2bw4qd8csm4pcgr3zq5z87867j4b8wfh6zwrxnaa";
+    url = "mirror://gnome/sources/${pname}/${gnome3.versionBranch version}/${name}.tar.xz";
+    sha256 = "0c26x8gi3ivmhlbqcmiag4jwrkvcy28ld24j55nqr3jikb904a5v";
   };
 
   doCheck = true;
 
   patches = [ ./fix_introspection_paths.patch ];
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ autoconf vala_0_32 glib gobjectIntrospection ];
+  nativeBuildInputs = [ pkgconfig autoconf vala gobjectIntrospection ];
+  buildInputs = [ glib ];
+
+  passthru = {
+    updateScript = gnome3.updateScript {
+      packageName = pname;
+      attrPath = "gnome3.${pname}";
+    };
+  };
 
   meta = with stdenv.lib; {
     description = "Utility library providing GObject-based interfaces and classes for commonly used data structures";
+    homepage = https://wiki.gnome.org/Projects/Libgee;
     license = licenses.lgpl21Plus;
     platforms = platforms.unix;
     maintainers = gnome3.maintainers;

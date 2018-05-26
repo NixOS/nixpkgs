@@ -3,12 +3,12 @@ library(data.table)
 library(parallel)
 cl <- makeCluster(10)
 
-rVersion <- paste(R.Version()$major, strsplit(R.Version()$minor, ".", fixed=TRUE)[[1]][1], sep=".")
+biocVersion <- 3.6
 snapshotDate <- Sys.Date()-1
 
-mirrorUrls <- list( bioc=paste0("http://bioconductor.statistik.tu-dortmund.de/packages/", rVersion, "/bioc/src/contrib/")
-                  , "bioc-annotation"=paste0("http://bioconductor.statistik.tu-dortmund.de/packages/", rVersion, "/data/annotation/src/contrib/")
-                  , "bioc-experiment"=paste0("http://bioconductor.statistik.tu-dortmund.de/packages/", rVersion, "/data/experiment/src/contrib/")
+mirrorUrls <- list( bioc=paste0("http://bioconductor.statistik.tu-dortmund.de/packages/", biocVersion, "/bioc/src/contrib/")
+                  , "bioc-annotation"=paste0("http://bioconductor.statistik.tu-dortmund.de/packages/", biocVersion, "/data/annotation/src/contrib/")
+                  , "bioc-experiment"=paste0("http://bioconductor.statistik.tu-dortmund.de/packages/", biocVersion, "/data/experiment/src/contrib/")
                   , cran=paste0("http://mran.revolutionanalytics.com/snapshot/", snapshotDate, "/src/contrib/")
                   )
 
@@ -81,7 +81,7 @@ cat("{ self, derive }:\n")
 cat("let derive2 = derive ")
 if (mirrorType == "cran") { cat("{ snapshot = \"", paste(snapshotDate), "\"; }", sep="")
 } else if (mirrorType == "irkernel") { cat("{}")
-} else { cat("{ rVersion = \"", rVersion, "\"; }", sep="") }
+} else { cat("{ biocVersion = \"", biocVersion, "\"; }", sep="") }
 cat(";\n")
 cat("in with self; {\n")
 cat(paste(nix, collapse="\n"), "\n", sep="")

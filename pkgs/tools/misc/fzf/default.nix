@@ -2,7 +2,7 @@
 
 buildGoPackage rec {
   name = "fzf-${version}";
-  version = "0.17.0";
+  version = "0.17.3";
   rev = "${version}";
 
   goPackagePath = "github.com/junegunn/fzf";
@@ -11,7 +11,7 @@ buildGoPackage rec {
     inherit rev;
     owner = "junegunn";
     repo = "fzf";
-    sha256 = "0cj9vvrsrxj7752fxww1bkflz9rap0n4hhwd6shs0qbss1awwqk9";
+    sha256 = "1wsyykvnss5r0sx344kjbprnb87849462p9rg9xj37cp7qzciwdn";
   };
 
   outputs = [ "bin" "out" "man" ];
@@ -23,8 +23,13 @@ buildGoPackage rec {
   goDeps = ./deps.nix;
 
   patchPhase = ''
-    sed -i -e "s|expand('<sfile>:h:h').'/bin/fzf'|'$bin/bin/fzf'|" plugin/fzf.vim
-    sed -i -e "s|expand('<sfile>:h:h').'/bin/fzf-tmux'|'$bin/bin/fzf-tmux'|" plugin/fzf.vim
+    sed -i -e "s|expand('<sfile>:h:h')|'$bin'|" plugin/fzf.vim
+
+    # Original and output files can't be the same
+    if cmp -s $src/plugin/fzf.vim plugin/fzf.vim; then
+      echo "Vim plugin patch not applied properly. Aborting" && \
+      exit 1
+    fi
   '';
 
   preInstall = ''

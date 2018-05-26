@@ -5,11 +5,11 @@
 buildPythonPackage rec {
   name = "${pname}-${version}";
   pname = "zetup";
-  version = "0.2.34";
+  version = "0.2.42";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0k4lm51b5qjy7yxy3n5z8vc5hlvjcsfsvwjgqzkr0pisysar1kpf";
+    sha256 = "6c9e25249f3014ed2162398772ccf1a5e8a4e9e66c74e3c7f6683945a6a3d84c";
   };
 
   checkPhase = ''

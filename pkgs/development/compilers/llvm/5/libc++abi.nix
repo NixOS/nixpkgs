@@ -3,7 +3,7 @@
 stdenv.mkDerivation {
   name = "libc++abi-${version}";
 
-  src = fetch "libcxxabi" "04c9dfmrr8diih73x0wq99dk9xb99mg0bvsnbhx5q912xg3ihs8p";
+  src = fetch "libcxxabi" "0m78yr4arlz2b9m96xcygk15m2pbz8i10snk78i3q7pjnwn1a9as";
 
   nativeBuildInputs = [ cmake ];
   buildInputs = stdenv.lib.optional (!stdenv.isDarwin && !stdenv.isFreeBSD) libunwind;
@@ -14,6 +14,8 @@ stdenv.mkDerivation {
     export cmakeFlags="-DLLVM_PATH=$PWD/$(ls -d llvm-*) -DLIBCXXABI_LIBCXX_PATH=$PWD/$(ls -d libcxx-*)"
   '' + stdenv.lib.optionalString stdenv.isDarwin ''
     export TRIPLE=x86_64-apple-darwin
+  '' + stdenv.lib.optionalString stdenv.hostPlatform.isMusl ''
+    patch -p1 -d $(ls -d libcxx-*) -i ${../libcxx-0001-musl-hacks.patch}
   '';
 
   installPhase = if stdenv.isDarwin

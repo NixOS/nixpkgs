@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, ncurses }:
+{ writeText, stdenv, fetchurl, ncurses }:
 
 let
   version = "0.6.1";
@@ -12,6 +12,32 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ ncurses ];
+
+  # gcc7 has some issues with inline functions
+  patches = [
+    (writeText "gcc7.patch"
+    ''
+    --- a/src/bwm-ng.c
+    +++ b/src/bwm-ng.c
+    @@ -27,5 +27,5 @@
+     /* handle interrupt signal */
+     void sigint(int sig) FUNCATTR_NORETURN;
+    -inline void init(void);
+    +static inline void init(void);
+     
+     /* clear stuff and exit */
+    --- a/src/options.c
+    +++ b/src/options.c
+    @@ -35,5 +35,5 @@
+     inline int str2output_type(char *optarg);
+     #endif
+    -inline int str2out_method(char *optarg);
+    +static inline int str2out_method(char *optarg);
+     inline int str2in_method(char *optarg);
+
+    '')
+  ];
+
 
   # This code uses inline in the gnu89 sense: see http://clang.llvm.org/compatibility.html#inline
   NIX_CFLAGS_COMPILE = if stdenv.cc.isClang then "-std=gnu89" else null;

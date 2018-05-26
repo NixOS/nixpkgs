@@ -14,49 +14,49 @@ let
    * The JRE libraries are in directories that depend on the CPU.
    */
   architecture =
-    if stdenv.system == "i686-linux" then
+    if stdenv.hostPlatform.system == "i686-linux" then
       "i386"
-    else if stdenv.system == "x86_64-linux" then
+    else if stdenv.hostPlatform.system == "x86_64-linux" then
       "amd64"
     else
       throw "openjdk requires i686-linux or x86_64 linux";
 
-  update = "144";
-  build = "01";
+  update = "172";
+  build = "11";
   baseurl = "http://hg.openjdk.java.net/jdk8u/jdk8u";
   repover = "jdk8u${update}-b${build}";
   paxflags = if stdenv.isi686 then "msp" else "m";
   jdk8 = fetchurl {
              url = "${baseurl}/archive/${repover}.tar.gz";
-             sha256 = "08b7ia2ifvcl8xnpflf019ak3xcbdjnxcy1mhfp3nbfsbk2sia45";
+             sha256 = "08mgfqbbgnx9n6prczwm4m8pgsakya45iai1gfslqnb0adh33jpi";
           };
   langtools = fetchurl {
              url = "${baseurl}/langtools/archive/${repover}.tar.gz";
-             sha256 = "0g7q6ljvn79psrcak3l4imd27w047ngavn9jcn3xwivg5wppsfks";
+             sha256 = "0dph17mpr5ni280z8rmiwlw0v46dnzyph6fq132xvxiw2i1203zg";
           };
   hotspot = fetchurl {
              url = "${baseurl}/hotspot/archive/${repover}.tar.gz";
-             sha256 = "1hbbzf0m2a78dm8pyvc11jwfpj7q67pvjrp3hf0cnc38k9mzrn8q";
+             sha256 = "181ixh75xjvlj0l3a58d9iqf50ivq77993yzfv0463dm44h6b8pp";
           };
   corba = fetchurl {
              url = "${baseurl}/corba/archive/${repover}.tar.gz";
-             sha256 = "1znc0prsb814ggm6qjgbsykm864mwypnxgi9w9f9riq8gs0578gh";
+             sha256 = "097azhdmr7ph1gvlzjgx6s2hyxmi2s5293d5hs23dl5i9f55b6x8";
           };
   jdk = fetchurl {
              url = "${baseurl}/jdk/archive/${repover}.tar.gz";
-             sha256 = "0gx5md1v1jmqhdwcc7smpf46sgp4alvb6jz3n6yjlcyfzk92yi78";
+             sha256 = "1lvk2brd9yclzd7cdk1kvnv4mbdxzjxd595pqhdaxdxxr5anhsvm";
           };
   jaxws = fetchurl {
              url = "${baseurl}/jaxws/archive/${repover}.tar.gz";
-             sha256 = "0ad9w7gnwlpdssw2p3kfny02mmvzc6z8i2n7qq0177ml48c88iji";
+             sha256 = "0cl4b4c2qjyhlsa5khlxinilfaj6ai1mzji3y0263klc8q6bglwa";
           };
   jaxp = fetchurl {
              url = "${baseurl}/jaxp/archive/${repover}.tar.gz";
-             sha256 = "14yzbbishsyrzmymws6mnndqj6hvs69ivfdbjhgwi0wl23g9siym";
+             sha256 = "00s6wm62v7gmkwy46js0lisijng40lnxscndczbgfvvz2q9zz4q1";
           };
   nashorn = fetchurl {
              url = "${baseurl}/nashorn/archive/${repover}.tar.gz";
-             sha256 = "175q29n4bfmm1cyyga7x58zhh6ann9rm3wibw0scrhgy23lx052x";
+             sha256 = "0ab0rrmmf145nh4mibvknjni4whvzmk6fsnl7ihcn8m0zi6zyfra";
           };
   openjdk8 = stdenv.mkDerivation {
     name = "openjdk-8u${update}b${build}";
@@ -93,7 +93,7 @@ let
       ./004_add-fontconfig.patch
       ./005_enable-infinality.patch
     ] ++ lib.optionals (!minimal && enableGnome2) [
-      ./swing-use-gtk.patch
+      ./swing-use-gtk-jdk8.patch
     ];
 
     preConfigure = ''
@@ -206,13 +206,13 @@ let
     preFixup = ''
       prefix=$jre stripDirs "$stripDebugList" "''${stripDebugFlags:--S}"
       patchELF $jre
-      propagatedNativeBuildInputs+=" $jre"
+      propagatedBuildInputs+=" $jre"
 
       # Propagate the setJavaClassPath setup hook from the JRE so that
       # any package that depends on the JRE has $CLASSPATH set up
       # properly.
       mkdir -p $jre/nix-support
-      printWords ${setJavaClassPath} > $jre/nix-support/propagated-native-build-inputs
+      printWords ${setJavaClassPath} > $jre/nix-support/propagated-build-inputs
 
       # Set JAVA_HOME automatically.
       mkdir -p $out/nix-support

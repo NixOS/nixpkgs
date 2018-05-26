@@ -1,5 +1,8 @@
-{ stdenv, fetchurl, binutils, popt, zlib, pkgconfig, linuxHeaders, coreutils
-, libiberty_static, withGUI ? false , qt4 ? null}:
+{ stdenv, buildPackages
+, fetchurl, pkgconfig
+, libbfd, popt, zlib, linuxHeaders, libiberty_static
+, withGUI ? false, qt4 ? null
+}:
 
 # libX11 is needed because the Qt build stuff automatically adds `-lX11'.
 assert withGUI -> qt4 != null;
@@ -14,12 +17,12 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace opjitconv/opjitconv.c \
-      --replace "/bin/rm" "${coreutils}/bin/rm" \
-      --replace "/bin/cp" "${coreutils}/bin/cp"
+      --replace "/bin/rm" "${buildPackages.coreutils}/bin/rm" \
+      --replace "/bin/cp" "${buildPackages.coreutils}/bin/cp"
   '';
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ binutils zlib popt linuxHeaders libiberty_static ]
+  buildInputs = [ libbfd zlib popt linuxHeaders libiberty_static ]
     ++ stdenv.lib.optionals withGUI [ qt4 ];
 
   configureFlags = [

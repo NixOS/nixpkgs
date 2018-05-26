@@ -1,7 +1,5 @@
 { stdenv, fetchurl, flex, systemd, perl }:
 
-assert stdenv.isLinux;
-
 stdenv.mkDerivation rec {
   name = "drbd-8.4.4";
 
@@ -18,7 +16,7 @@ stdenv.mkDerivation rec {
 
   preConfigure =
     ''
-      export PATH=${systemd.udev.bin}/sbin:$PATH
+      export PATH=${systemd}/sbin:$PATH
       substituteInPlace user/Makefile.in \
         --replace /sbin '$(sbindir)'
       substituteInPlace user/legacy/Makefile.in \

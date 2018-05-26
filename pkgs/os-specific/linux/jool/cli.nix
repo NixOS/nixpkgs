@@ -9,7 +9,9 @@ stdenv.mkDerivation {
 
   src = sourceAttrs.src;
 
-  sourceRoot = "Jool-v${sourceAttrs.version}-src/usr";
+  setSourceRoot = ''
+    sourceRoot=$(echo */usr)
+  '';
 
   nativeBuildInputs = [ autoreconfHook pkgconfig ];
   buildInputs = [ libnl ];

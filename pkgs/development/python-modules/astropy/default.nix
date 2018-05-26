@@ -1,23 +1,24 @@
 { lib
 , fetchPypi
 , buildPythonPackage
+, isPy3k
 , numpy
 , pytest }:
 
 buildPythonPackage rec {
-  
   pname = "astropy";
-  version = "2.0.1";
+  version = "3.0.1";
 
-  name = "${pname}-${version}";
+  disabled = !isPy3k; # according to setup.py
+
   doCheck = false; #Some tests are failing. More importantly setup.py hangs on completion. Needs fixing with a proper shellhook.
+
   src = fetchPypi {
     inherit pname version;
-    sha256 = "25e0881a392a2e03b4a705cf9592f01894d23f64797323b21387efa8ea9ec03e";
+    sha256 = "c35f4433c14ddfcaf2407cc815385f3d85396727e9a1e660cf66a7c4f5dd1067";
   };
 
   propagatedBuildInputs = [ pytest numpy ]; # yes it really has pytest in install_requires
-
 
   meta = {
     description = "Astronomy/Astrophysics library for Python";

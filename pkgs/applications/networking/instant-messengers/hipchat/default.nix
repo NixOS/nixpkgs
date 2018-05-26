@@ -1,10 +1,10 @@
 { stdenv, fetchurl, xorg, freetype, fontconfig, openssl, glib, nss, nspr, expat
 , alsaLib, dbus, zlib, libxml2, libxslt, makeWrapper, xkeyboard_config, systemd
-, mesa_noglu, xcbutilkeysyms, xdg_utils, libtool }:
+, libGL, xcbutilkeysyms, xdg_utils, libtool }:
 
 let
 
-  version = "4.29.4.1662";
+  version = "4.30.4.1672";
 
   rpath = stdenv.lib.makeLibraryPath [
     xdg_utils
@@ -37,14 +37,14 @@ let
     expat
     xcbutilkeysyms
     systemd
-    mesa_noglu
+    libGL
   ] + ":${stdenv.cc.cc.lib}/lib64";
 
   src =
     if stdenv.system == "x86_64-linux" then
       fetchurl {
         url = "https://atlassian.artifactoryonline.com/atlassian/hipchat-apt-client/pool/HipChat4-${version}-Linux.deb";
-        sha256 = "1cz9zv9aj8xdrjs6dgi7fpm4q9l9find4m8l0nmvac2s4r60vw6y";
+        sha256 = "1xrwndhbyhcmjcg8h1ib8lp1g51f7jxdhc6p7776zmhlfw94n3rx";
       }
     else
       throw "HipChat is not supported on ${stdenv.system}";
@@ -78,8 +78,8 @@ stdenv.mkDerivation {
       --replace /opt/HipChat4/bin/HipChat4 $out/bin/hipchat
 
     makeWrapper $d/HipChat.bin $out/bin/hipchat \
-      --set HIPCHAT_LD_LIBRARY_PATH '"$LD_LIBRARY_PATH"' \
-      --set HIPCHAT_QT_PLUGIN_PATH '"$QT_PLUGIN_PATH"' \
+      --run 'export HIPCHAT_LD_LIBRARY_PATH=$LD_LIBRARY_PATH' \
+      --run 'export HIPCHAT_QT_PLUGIN_PATH=$QT_PLUGIN_PATH' \
       --set QT_XKB_CONFIG_ROOT ${xkeyboard_config}/share/X11/xkb \
       --set QTWEBENGINEPROCESS_PATH $d/QtWebEngineProcess
 

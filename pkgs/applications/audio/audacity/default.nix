@@ -1,5 +1,5 @@
 { stdenv, fetchurl, wxGTK30, pkgconfig, file, gettext, gtk2, glib, zlib, perl, intltool,
-  libogg, libvorbis, libmad, libjack2, lv2, lilv, serd, sord, sratom, suil, alsaLib, libsndfile, soxr, flac, lame, fetchpatch,
+  libogg, libvorbis, libmad, libjack2, lv2, lilv, serd, sord, sratom, suil, alsaLib, libsndfile, soxr, flac, lame,
   expat, libid3tag, ffmpeg, soundtouch, /*, portaudio - given up fighting their portaudio.patch */
   autoconf, automake, libtool
   }:
@@ -7,21 +7,13 @@
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  version = "2.1.3";
+  version = "2.2.2";
   name = "audacity-${version}";
 
   src = fetchurl {
     url = "https://github.com/audacity/audacity/archive/Audacity-${version}.tar.gz";
-    sha256 = "11mx7gb4dbqrgfp7hm0154x3m76ddnmhf2675q5zkxn7jc5qfc6b";
+    sha256 = "18q7i77ynihx7xp45lz2lv0k0wrh6736pcrivlpwrxjgbvyqx7km";
   };
-  patches = [
-    (fetchpatch {
-      name = "new-ffmpeg.patch";
-      url = "https://projects.archlinux.org/svntogit/packages.git/plain/trunk"
-        + "/audacity-ffmpeg.patch?h=packages/audacity&id=0c1e35798d4d70692";
-      sha256 = "19fr674mw844zmkp1476yigkcnmb6zyn78av64ccdwi3p68i00rf";
-    })
-  ];
 
   preConfigure = /* we prefer system-wide libs */ ''
     autoreconf -vi # use system libraries

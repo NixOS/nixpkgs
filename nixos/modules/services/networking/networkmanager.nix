@@ -10,7 +10,8 @@ let
   stateDirs = "/var/lib/NetworkManager /var/lib/dhclient /var/lib/misc";
 
   dns =
-    if cfg.useDnsmasq then "dnsmasq"
+    if cfg.dns == "none" then "none"
+    else if cfg.dns == "dnsmasq" then "dnsmasq"
     else if config.services.resolved.enable then "systemd-resolved"
     else if config.services.unbound.enable then "unbound"
     else "default";
@@ -32,6 +33,11 @@ let
     ipv6.ip6-privacy=2
     ethernet.cloned-mac-address=${cfg.ethernet.macAddress}
     wifi.cloned-mac-address=${cfg.wifi.macAddress}
+    ${optionalString (cfg.wifi.powersave != null)
+      ''wifi.powersave=${if cfg.wifi.powersave then "3" else "2"}''}
+
+    [device]
+    wifi.scan-rand-mac-address=${if cfg.wifi.scanRandMacAddress then "yes" else "no"}
   '';
 
   /*
@@ -128,10 +134,9 @@ in {
       basePackages = mkOption {
         type = types.attrsOf types.package;
         default = { inherit networkmanager modemmanager wpa_supplicant
-                            networkmanager_openvpn networkmanager_vpnc
-                            networkmanager_openconnect networkmanager_fortisslvpn
-                            networkmanager_pptp networkmanager_l2tp
-                            networkmanager_iodine; };
+                            networkmanager-openvpn networkmanager-vpnc
+                            networkmanager-openconnect networkmanager-fortisslvpn
+                            networkmanager-l2tp networkmanager-iodine; };
         internal = true;
       };
 
@@ -179,16 +184,42 @@ in {
       };
 
       ethernet.macAddress = macAddressOpt;
-      wifi.macAddress = macAddressOpt;
 
-      useDnsmasq = mkOption {
-        type = types.bool;
-        default = false;
+      wifi = {
+        macAddress = macAddressOpt;
+
+        powersave = mkOption {
+          type = types.nullOr types.bool;
+          default = null;
+          description = ''
+            Whether to enable Wi-Fi power saving.
+          '';
+        };
+
+        scanRandMacAddress = mkOption {
+          type = types.bool;
+          default = true;
+          description = ''
+            Whether to enable MAC address randomization of a Wi-Fi device
+            during scanning.
+          '';
+        };
+      };
+
+      dns = mkOption {
+        type = types.enum [ "auto" "dnsmasq" "none" ];
+        default = "auto";
         description = ''
-          Enable NetworkManager's dnsmasq integration. NetworkManager will run
-          dnsmasq as a local caching nameserver, using a "split DNS"
-          configuration if you are connected to a VPN, and then update
-          resolv.conf to point to the local nameserver.
+          Options:
+            - auto: Check for systemd-resolved, unbound, or use default.
+            - dnsmasq:
+              Enable NetworkManager's dnsmasq integration. NetworkManager will run
+              dnsmasq as a local caching nameserver, using a "split DNS"
+              configuration if you are connected to a VPN, and then update
+              resolv.conf to point to the local nameserver.
+            - none:
+              Disable NetworkManager's DNS integration completely.
+              It will not touch your /etc/resolv.conf.
         '';
       };
 
@@ -216,6 +247,19 @@ in {
           A list of scripts which will be executed in response to  network  events.
         '';
       };
+
+      enableStrongSwan = mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          Enable the StrongSwan plugin.
+          </para><para>
+          If you enable this option the
+          <literal>networkmanager_strongswan</literal> plugin will be added to
+          the <option>networking.networkmanager.packages</option> option
+          so you don't need to to that yourself.
+        '';
+      };
     };
   };
 
@@ -229,34 +273,29 @@ in {
       message = "You can not use networking.networkmanager with networking.wireless";
     }];
 
-    boot.kernelModules = [ "ppp_mppe" ]; # Needed for most (all?) PPTP VPN connections.
-
     environment.etc = with cfg.basePackages; [
       { source = configFile;
         target = "NetworkManager/NetworkManager.conf";
       }
-      { source = "${networkmanager_openvpn}/etc/NetworkManager/VPN/nm-openvpn-service.name";
+      { source = "${networkmanager-openvpn}/etc/NetworkManager/VPN/nm-openvpn-service.name";
         target = "NetworkManager/VPN/nm-openvpn-service.name";
       }
-      { source = "${networkmanager_vpnc}/etc/NetworkManager/VPN/nm-vpnc-service.name";
+      { source = "${networkmanager-vpnc}/etc/NetworkManager/VPN/nm-vpnc-service.name";
         target = "NetworkManager/VPN/nm-vpnc-service.name";
       }
-      { source = "${networkmanager_openconnect}/etc/NetworkManager/VPN/nm-openconnect-service.name";
+      { source = "${networkmanager-openconnect}/etc/NetworkManager/VPN/nm-openconnect-service.name";
         target = "NetworkManager/VPN/nm-openconnect-service.name";
       }
-      { source = "${networkmanager_fortisslvpn}/etc/NetworkManager/VPN/nm-fortisslvpn-service.name";
+      { source = "${networkmanager-fortisslvpn}/etc/NetworkManager/VPN/nm-fortisslvpn-service.name";
         target = "NetworkManager/VPN/nm-fortisslvpn-service.name";
       }
-      { source = "${networkmanager_pptp}/etc/NetworkManager/VPN/nm-pptp-service.name";
-        target = "NetworkManager/VPN/nm-pptp-service.name";
-      }
-      { source = "${networkmanager_l2tp}/etc/NetworkManager/VPN/nm-l2tp-service.name";
+      { source = "${networkmanager-l2tp}/etc/NetworkManager/VPN/nm-l2tp-service.name";
         target = "NetworkManager/VPN/nm-l2tp-service.name";
       }
       { source = "${networkmanager_strongswan}/etc/NetworkManager/VPN/nm-strongswan-service.name";
         target = "NetworkManager/VPN/nm-strongswan-service.name";
       }
-      { source = "${networkmanager_iodine}/etc/NetworkManager/VPN/nm-iodine-service.name";
+      { source = "${networkmanager-iodine}/etc/NetworkManager/VPN/nm-iodine-service.name";
         target = "NetworkManager/VPN/nm-iodine-service.name";
       }
     ] ++ optional (cfg.appendNameservers == [] || cfg.insertNameservers == [])
@@ -297,6 +336,7 @@ in {
 
       preStart = ''
         mkdir -m 700 -p /etc/NetworkManager/system-connections
+        mkdir -m 700 -p /etc/ipsec.d
         mkdir -m 755 -p ${stateDirs}
       '';
     };
@@ -308,13 +348,13 @@ in {
       wireless.enable = lib.mkDefault false;
     };
 
-    powerManagement.resumeCommands = ''
-      ${config.systemd.package}/bin/systemctl restart network-manager
-    '';
-
     security.polkit.extraConfig = polkitConf;
 
-    services.dbus.packages = cfg.packages;
+    networking.networkmanager.packages =
+      mkIf cfg.enableStrongSwan [ pkgs.networkmanager_strongswan ];
+
+    services.dbus.packages =
+      optional cfg.enableStrongSwan pkgs.strongswanNM ++ cfg.packages;
 
     services.udev.packages = cfg.packages;
   };

@@ -21,8 +21,8 @@
 , libiconv, postgresql, v8_3_16_14, clang, sqlite, zlib, imagemagick
 , pkgconfig , ncurses, xapian_1_2_22, gpgme, utillinux, fetchpatch, tzdata, icu, libffi
 , cmake, libssh2, openssl, mysql, darwin, git, perl, pcre, gecode_3, curl
-, libmsgpack, qt48, libsodium, snappy, libossp_uuid, lxc, libpcap, xlibs, gtk2, buildRubyGem
-, re2
+, libmsgpack, qt48, libsodium, snappy, libossp_uuid, lxc, libpcap, xorg, gtk2, buildRubyGem
+, cairo, re2, rake, gobjectIntrospection, gdk_pixbuf
 }@args:
 
 let
@@ -31,8 +31,7 @@ let
   rainbow_rake = buildRubyGem {
     name = "rake";
     gemName = "rake";
-    remotes = ["https://rubygems.org"];
-    sha256 = "01j8fc9bqjnrsxbppncai05h43315vmz9fwg28qdsgcjw9ck1d7n";
+    source.sha256 = "01j8fc9bqjnrsxbppncai05h43315vmz9fwg28qdsgcjw9ck1d7n";
     type = "gem";
     version = "12.0.0";
   };
@@ -41,7 +40,7 @@ in
 {
   atk = attrs: {
     nativeBuildInputs = [ pkgconfig ];
-    buildInputs = [ gtk2 pcre ];
+    buildInputs = [ gtk2 pcre rake ];
   };
 
   bundler = attrs:
@@ -61,7 +60,12 @@ in
 
   cairo = attrs: {
     nativeBuildInputs = [ pkgconfig ];
-    buildInputs = [ gtk2 pcre xlibs.libpthreadstubs xlibs.libXdmcp];
+    buildInputs = [ gtk2 pcre xorg.libpthreadstubs xorg.libXdmcp];
+  };
+
+  cairo-gobject = attrs: {
+    nativeBuildInputs = [ pkgconfig ];
+    buildInputs = [ cairo pcre xorg.libpthreadstubs xorg.libXdmcp ];
   };
 
   capybara-webkit = attrs: {
@@ -71,7 +75,7 @@ in
   charlock_holmes = attrs: {
     buildInputs = [ which icu zlib ];
   };
-  
+
   curb = attrs: {
     buildInputs = [ curl ];
   };
@@ -84,6 +88,18 @@ in
     '';
   };
 
+  ethon = attrs: {
+    dontBuild = false;
+    postPatch = ''
+      substituteInPlace lib/ethon/curls/settings.rb \
+        --replace "libcurl" "${curl.out}/lib/libcurl${stdenv.hostPlatform.extensions.sharedLibrary}"
+    '';
+  };
+
+  do_sqlite3 = attrs: {
+    buildInputs = [ sqlite ];
+  };
+
   eventmachine = attrs: {
     buildInputs = [ openssl ];
   };
@@ -93,13 +109,18 @@ in
     buildInputs = [ libffi ];
   };
 
+  gdk_pixbuf2 = attrs: {
+    nativeBuildInputs = [ pkgconfig ];
+    buildInputs = [ rake gdk_pixbuf ];
+  };
+
   gpgme = attrs: {
     buildInputs = [ gpgme ];
   };
 
   gio2 = attrs: {
     nativeBuildInputs = [ pkgconfig ];
-    buildInputs = [ gtk2 pcre ];
+    buildInputs = [ gtk2 pcre gobjectIntrospection ];
   };
 
   gitlab-markup = attrs: { meta.priority = 1; };
@@ -111,17 +132,21 @@ in
 
   gtk2 = attrs: {
     nativeBuildInputs = [ pkgconfig ];
-    buildInputs = [ gtk2 pcre xlibs.libpthreadstubs xlibs.libXdmcp];
+    buildInputs = [ gtk2 pcre xorg.libpthreadstubs xorg.libXdmcp];
     # CFLAGS must be set for this gem to detect gdkkeysyms.h correctly
     CFLAGS = "-I${gtk2.dev}/include/gtk-2.0 -I/non-existent-path";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
-  gobject-introspection = attrs: { buildInputs = [ gtk2 pcre ]; };
+  gobject-introspection = attrs: {
+    nativeBuildInputs = [ pkgconfig ];
+    buildInputs = [ gobjectIntrospection gtk2 pcre ];
+  };
 
   grpc = attrs: {
-  nativeBuildInputs = [ pkgconfig ];
+    nativeBuildInputs = [ pkgconfig ];
     buildInputs = [ openssl ];
+    hardeningDisable = [ "format" ];
+    NIX_CFLAGS_COMPILE = [ "-Wno-error=stringop-overflow" "-Wno-error=implicit-fallthrough" ];
   };
 
   hitimes = attrs: {
@@ -155,11 +180,11 @@ in
   };
 
   mysql = attrs: {
-    buildInputs = [ mysql.lib zlib openssl ];
+    buildInputs = [ mysql.connector-c zlib openssl ];
   };
 
   mysql2 = attrs: {
-    buildInputs = [ mysql.lib zlib openssl ];
+    buildInputs = [ mysql.connector-c zlib openssl ];
   };
 
   ncursesw = attrs: {
@@ -183,9 +208,16 @@ in
     ] ++ lib.optional stdenv.isDarwin "--with-iconv-dir=${libiconv}";
   };
 
+  oxidized = attrs: {
+    postInstall = ''
+      cd "$(cat "$out/nix-support/gem-meta/install-path")"
+      patch -p1 < ${../../../tools/admin/oxidized/temporary-x-series.patch}
+    '';
+  };
+
   pango = attrs: {
   nativeBuildInputs = [ pkgconfig ];
-    buildInputs = [ gtk2 xlibs.libXdmcp pcre xlibs.libpthreadstubs ];
+    buildInputs = [ gtk2 xorg.libXdmcp pcre xorg.libpthreadstubs ];
   };
 
   patron = attrs: {
@@ -239,8 +271,9 @@ in
     ];
   };
   rugged = attrs: {
-  nativeBuildInputs = [ pkgconfig ];
+    nativeBuildInputs = [ pkgconfig ];
     buildInputs = [ cmake openssl libssh2 zlib ];
+    dontUseCmakeConfigure = true;
   };
 
   scrypt = attrs:

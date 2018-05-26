@@ -1,21 +1,26 @@
-{ stdenv, fetchFromGitHub, cmake, lxqt-build-tools, qtbase, qttools, qtsvg, kwindowsystem, liblxqt, libqtxdg, lxqt-common, qtx11extras }:
+{ stdenv, fetchFromGitHub, cmake, lxqt-build-tools, qtbase, qttools, qtsvg, kwindowsystem, liblxqt, libqtxdg, qtx11extras }:
 
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";
   pname = "lxqt-notificationd";
-  version = "0.11.1";
+  version = "0.12.0";
 
-  srcs = fetchFromGitHub {
+  src = fetchFromGitHub {
     owner = "lxde";
     repo = pname;
     rev = version;
-    sha256 = "1n39zjczzhqn73vfyjngybmk9w8j1z3vjkaq80rf2hk89vwsm0wc";
+    sha256 = "0pmpdqgnb2dfxw5lirh89j8hnrwwcn2zc64byg4zi0xdvq6qms43";
   };
 
   nativeBuildInputs = [
     cmake
     lxqt-build-tools
   ];
+
+  postPatch = ''
+    substituteInPlace autostart/CMakeLists.txt \
+      --replace "DESTINATION \"\''${LXQT_ETC_XDG_DIR}" "DESTINATION \"etc/xdg"
+  '';
 
   buildInputs = [
     qtbase
@@ -24,7 +29,6 @@ stdenv.mkDerivation rec {
     kwindowsystem
     liblxqt
     libqtxdg
-    lxqt-common
     qtx11extras
   ];
 

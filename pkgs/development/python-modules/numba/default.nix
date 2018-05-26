@@ -1,5 +1,5 @@
 { stdenv
-, fetchurl
+, fetchPypi
 , python
 , buildPythonPackage
 , isPy27
@@ -14,13 +14,12 @@
 }:
 
 buildPythonPackage rec {
-  version = "0.34.0";
+  version = "0.37.0";
   pname = "numba";
-  name = "${pname}-${version}";
 
-  src = fetchurl {
-    url = "mirror://pypi/n/numba/${name}.tar.gz";
-    sha256 = "4f86df9212cb2678598e6583973ef1df978f3e3ba497b4dc6f91848887710577";
+  src = fetchPypi {
+    inherit pname version;
+    sha256 = "c62121b2d384d8b4d244ef26c1cf8bb5cb819278a80b893bf41918ad6d391258";
   };
 
   NIX_CFLAGS_COMPILE = stdenv.lib.optionalString stdenv.isDarwin "-I${libcxx}/include/c++/v1";
@@ -29,7 +28,7 @@ buildPythonPackage rec {
 
   # Copy test script into $out and run the test suite.
   checkPhase = ''
-    python -m numba.runtests
+    ${python.interpreter} -m numba.runtests
   '';
   # ImportError: cannot import name '_typeconv'
   doCheck = false;

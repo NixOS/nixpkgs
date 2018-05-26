@@ -14,11 +14,11 @@ assert selinuxSupport -> libselinux != null && libsepol != null;
 with lib;
 
 stdenv.mkDerivation rec {
-  name = "coreutils-8.28";
+  name = "coreutils-8.29";
 
   src = fetchurl {
     url = "mirror://gnu/coreutils/${name}.tar.xz";
-    sha256 = "0r8c1bgm68kl70j1lgd0rv12iykw6143k4m9a56xip9rc2hv25qi";
+    sha256 = "0plm1zs9il6bb5mk881qvbghq4glc8ybbgakk2lfzb0w64fgml4j";
   };
 
   patches = optional hostPlatform.isCygwin ./coreutils-8.23-4.cygwin.patch;

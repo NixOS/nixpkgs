@@ -52,7 +52,7 @@ stdenv.mkDerivation rec{
       fontforge help2man groff makeWrapper t1utils
     ];
 
-  enableParallelBuilding = true;
+  #enableParallelBuilding = true; # fatal error: parser.hh: No such file or directory
 
   meta = with stdenv.lib; {
     description = "Music typesetting system";

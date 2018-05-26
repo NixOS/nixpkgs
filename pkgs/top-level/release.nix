@@ -47,6 +47,8 @@ let
               jobs.nix-repl.x86_64-darwin
               jobs.nix.x86_64-darwin
               jobs.nox.x86_64-darwin
+              jobs.nix-info.x86_64-darwin
+              jobs.nix-info-tested.x86_64-darwin
               jobs.openssh.x86_64-darwin
               jobs.openssl.x86_64-darwin
               jobs.postgresql.x86_64-darwin
@@ -88,15 +90,30 @@ let
               # Needed by travis-ci to test PRs
               jobs.nox.x86_64-linux
               jobs.nox.x86_64-darwin
+              # Needed for support
+              jobs.nix-info.x86_64-linux
+              jobs.nix-info.x86_64-darwin
+              jobs.nix-info-tested.x86_64-linux
+              jobs.nix-info-tested.x86_64-darwin
               # Ensure that X11/GTK+ are in order.
               jobs.thunderbird.x86_64-linux
               # Ensure that basic stuff works on darwin
               jobs.git.x86_64-darwin
               jobs.mysql.x86_64-darwin
               jobs.vim.x86_64-darwin
+              # Ensure that UI stuff works on darwin
+              jobs.inkscape.x86_64-darwin
+              jobs.qt5.qtmultimedia.x86_64-darwin
 
               jobs.tests.cc-wrapper.x86_64-linux
               jobs.tests.cc-wrapper.x86_64-darwin
+              jobs.tests.cc-wrapper-gcc7.x86_64-linux
+              jobs.tests.cc-wrapper-gcc7.x86_64-darwin
+              jobs.tests.cc-wrapper-gcc8.x86_64-linux
+
+              # broken see issue #40038
+              # jobs.tests.cc-wrapper-gcc8.x86_64-darwin
+
               jobs.tests.cc-wrapper-clang.x86_64-linux
               jobs.tests.cc-wrapper-clang.x86_64-darwin
               jobs.tests.cc-wrapper-libcxx.x86_64-linux
@@ -105,6 +122,20 @@ let
               jobs.tests.cc-wrapper-clang-39.x86_64-darwin
               jobs.tests.cc-wrapper-libcxx-39.x86_64-linux
               jobs.tests.cc-wrapper-libcxx-39.x86_64-darwin
+              jobs.tests.cc-wrapper-clang-4.x86_64-linux
+              jobs.tests.cc-wrapper-clang-4.x86_64-darwin
+              jobs.tests.cc-wrapper-libcxx-4.x86_64-linux
+              jobs.tests.cc-wrapper-libcxx-4.x86_64-darwin
+              jobs.tests.cc-wrapper-clang-5.x86_64-linux
+              jobs.tests.cc-wrapper-clang-5.x86_64-darwin
+              jobs.tests.cc-wrapper-libcxx-5.x86_64-linux
+              jobs.tests.cc-wrapper-libcxx-6.x86_64-darwin
+              jobs.tests.cc-wrapper-clang-6.x86_64-linux
+              jobs.tests.cc-wrapper-clang-6.x86_64-darwin
+              jobs.tests.cc-wrapper-libcxx-6.x86_64-linux
+              jobs.tests.cc-wrapper-libcxx-6.x86_64-darwin
+              jobs.tests.cc-multilib-gcc.x86_64-linux
+              jobs.tests.cc-multilib-clang.x86_64-linux
               jobs.tests.stdenv-inputs.x86_64-linux
               jobs.tests.stdenv-inputs.x86_64-darwin
               jobs.tests.macOSSierraShared.x86_64-darwin
@@ -114,7 +145,10 @@ let
       stdenvBootstrapTools = with lib;
         genAttrs systemsWithAnySupport
           (system: {
-            inherit (import ../stdenv/linux/make-bootstrap-tools.nix { inherit system; })
+            inherit
+              (import ../stdenv/linux/make-bootstrap-tools.nix {
+                localSystem = { inherit system; };
+              })
               dist test;
           })
         # darwin is special in this

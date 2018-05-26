@@ -2,7 +2,7 @@
 , p7zip, pkgconfig
 , libX11, libXv
 , udev
-, mesa, SDL
+, libGLU_combined, SDL
 , libao, openal, libpulseaudio
 , gtk2, gtksourceview }:
 
@@ -10,12 +10,12 @@ with stdenv.lib;
 stdenv.mkDerivation rec {
 
   name = "higan-${version}";
-  version = "104";
+  version = "106";
   sourceName = "higan_v${version}-source";
 
   src = fetchurl {
     urls = [ "http://download.byuu.org/${sourceName}.7z" ];
-    sha256 = "0i2ma8zjjxadq4368n4m41vhmrb62na6s7pi219ajdsb96x0091l";
+    sha256 = "063dzp9wrdnbvagraxi31xg0154y2gf67rrd0mnc8h104cgzjr35";
     curlOpts = "--user-agent 'Mozilla/5.0'"; # the good old user-agent trick...
   };
 
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   postPatch = "sed '1i#include <cmath>' -i higan/fc/ppu/ppu.cpp";
 
   buildInputs =
-  [ p7zip pkgconfig libX11 libXv udev mesa SDL libao openal libpulseaudio gtk2 gtksourceview ];
+  [ p7zip pkgconfig libX11 libXv udev libGLU_combined SDL libao openal libpulseaudio gtk2 gtksourceview ];
 
   unpackPhase = ''
     7z x $src
@@ -73,7 +73,7 @@ stdenv.mkDerivation rec {
           Game Boy, Game Boy Color, Game Boy Advance;
         - Sega's Master System, Game Gear, Mega Drive;
         - NEC's PC Engine, SuperGrafx;
-        - Bandai' WonderSwan, WonderSwan Color.
+        - Bandai's WonderSwan, WonderSwan Color.
     '';
     homepage = https://byuu.org/higan/;
     license = licenses.gpl3Plus;
@@ -81,8 +81,3 @@ stdenv.mkDerivation rec {
     platforms = with platforms; unix;
   };
 }
-
-#
-# TODO:
-#   - fix the BML and BIOS paths - maybe submitting
-#     a custom patch to upstream would not be a bad idea...

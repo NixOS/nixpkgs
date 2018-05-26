@@ -4,17 +4,17 @@
 
 stdenv.mkDerivation rec {
   name    = "ostinato-${version}";
-  version = "0.8";
+  version = "0.9";
 
   src = fetchFromGitHub  {
     owner  = "pstavirs";
     repo   = "ostinato";
     rev    = "v${version}";
-    sha256 = "1b5a5gypcy9i03mj6md3lkrq05rqmdyhfykrr1z0sv8n3q48xca3";
+    sha256 = "109gxj6djdsk7rp1nxpx39kfi75xfl9p9qgffh1cpcdpbsbvq5bx";
   };
 
   ostinatoIcon = fetchurl {
-    url = "http://ostinato.org/images/site-logo.png";
+    url = "https://ostinato.org/images/site-logo.png";
     sha256 = "f5c067823f2934e4d358d76f65a343efd69ad783a7aeabd7ab4ce3cd03490d70";
   };
 
@@ -53,6 +53,10 @@ stdenv.mkDerivation rec {
     AwkPath=${gawk}/bin/awk
     EOF
   '';
+
+  # `cd common; qmake ostproto.pro; make pdmlreader.o`:
+  # pdmlprotocol.h:23:25: fatal error: protocol.pb.h: No such file or directory
+  enableParallelBuilding = false;
 
   meta = with stdenv.lib; {
     description = "A packet traffic generator and analyzer";

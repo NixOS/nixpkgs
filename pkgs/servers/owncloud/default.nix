@@ -32,11 +32,6 @@ let
 
 in {
 
-  owncloud705 = common {
-    versiona = "7.0.5";
-    sha256 = "1j21b7ljvbhni9l0b1cpzlhsjy36scyas1l1j222mqdg2srfsi9y";
-  };
-
   owncloud70 = common {
     versiona = "7.0.15";
     sha256 = "1b2a0fccxlkqyyzsymx7qw8qbhsks3i6h1ybvxv8nn8hgw33nqv7";

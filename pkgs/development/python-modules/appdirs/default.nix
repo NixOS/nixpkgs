@@ -15,7 +15,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "A python module for determining appropriate platform-specific dirs";
-    homepage = http://github.com/ActiveState/appdirs;
+    homepage = https://github.com/ActiveState/appdirs;
     license = lib.licenses.mit;
   };
 }

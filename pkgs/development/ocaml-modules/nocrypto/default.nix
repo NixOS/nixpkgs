@@ -1,11 +1,11 @@
-{ stdenv, fetchFromGitHub, ocaml, findlib, ocamlbuild, opam, topkg
+{ stdenv, fetchFromGitHub, ocaml, findlib, ocamlbuild, topkg
 , cpuid, ocb-stubblr
-, cstruct, zarith, ocaml_oasis, ppx_sexp_conv, sexplib
-, lwt ? null
+, cstruct, zarith, ppx_sexp_conv, sexplib
+, cstruct-lwt ? null
 }:
 
 with stdenv.lib;
-let withLwt = lwt != null; in
+let withLwt = cstruct-lwt != null; in
 
 stdenv.mkDerivation rec {
   name = "ocaml${ocaml.version}-nocrypto-${version}";
@@ -18,17 +18,15 @@ stdenv.mkDerivation rec {
     sha256 = "0nhnlpbqh3mf9y2cxivlvfb70yfbdpvg6jslzq64xblpgjyg443p";
   };
 
-  buildInputs = [ ocaml ocaml_oasis findlib ocamlbuild topkg opam cpuid ocb-stubblr
+  buildInputs = [ ocaml findlib ocamlbuild topkg cpuid ocb-stubblr
     ppx_sexp_conv ];
-  propagatedBuildInputs = [ cstruct zarith sexplib ] ++ optional withLwt lwt;
+  propagatedBuildInputs = [ cstruct zarith sexplib ] ++ optional withLwt cstruct-lwt;
 
   buildPhase = ''
     LD_LIBRARY_PATH=${cpuid}/lib/ocaml/${ocaml.version}/site-lib/stubslibs/ \
     ${topkg.buildPhase} --with-lwt ${boolToString withLwt}
   '';
   inherit (topkg) installPhase;
-
-  createFindlibDestdir = true;
 
   meta = {
     homepage = https://github.com/mirleft/ocaml-nocrypto;

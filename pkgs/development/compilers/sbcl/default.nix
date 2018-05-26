@@ -9,11 +9,11 @@
 
 stdenv.mkDerivation rec {
   name    = "sbcl-${version}";
-  version = "1.4.0";
+  version = "1.4.7";
 
   src = fetchurl {
     url    = "mirror://sourceforge/project/sbcl/sbcl/${version}/${name}-source.tar.bz2";
-    sha256 = "0s87ax5hg9hz6b8kc9yrjckgz56s9iv96l2dcq216cbqkykrrm88";
+    sha256 = "1wmxly94pn8527092hyzg5mq58mg7qlc46nm31f268wb2dm67rvm";
   };
 
   patchPhase = ''
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
                (setf features (remove x features))))
     ''
     + (if threadSupport then "(enable :sb-thread)" else "(disable :sb-thread)")
-    + stdenv.lib.optionalString stdenv.isArm "(enable :arm)"
+    + stdenv.lib.optionalString stdenv.isAarch32 "(enable :arm)"
     + ''
       )) " > customize-target-features.lisp
 
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
     # SBCL checks whether files are up-to-date in many places..
     # Unfortunately, same timestamp is not good enough
     sed -e 's@> x y@>= x y@' -i contrib/sb-aclrepl/repl.lisp
-    sed -e '/(date)/i((= date 2208988801) 2208988800)' -i contrib/asdf/asdf.lisp
+    #sed -e '/(date)/i((= date 2208988801) 2208988800)' -i contrib/asdf/asdf.lisp
     sed -i src/cold/slam.lisp -e \
       '/file-write-date input/a)'
     sed -i src/cold/slam.lisp -e \
@@ -91,7 +91,7 @@ stdenv.mkDerivation rec {
 
   # Specifying $SBCL_HOME is only truly needed with `purgeNixReferences = true`.
   setupHook = writeText "setupHook.sh" ''
-    envHooks+=(_setSbclHome)
+    addEnvHooks "$targetOffset" _setSbclHome
     _setSbclHome() {
       export SBCL_HOME='@out@/lib/sbcl/'
     }

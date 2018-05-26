@@ -20,7 +20,6 @@ in {
         # TODO slrumd port and slurmctld port should be configurations and
         # automatically allowed by the  firewall.
         networking.firewall.enable = false;
-        services.munge.enable = true;
         services.slurm = slurmconfig;
       };
     in {
@@ -28,7 +27,6 @@ in {
       { config, pkgs, ...}:
       {
         networking.firewall.enable = false;
-        services.munge.enable = true;
         services.slurm = {
           server.enable = true;
         } // slurmconfig;

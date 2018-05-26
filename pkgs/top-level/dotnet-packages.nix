@@ -219,7 +219,7 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
   SmartIrc4net = fetchNuGet {
     baseName = "SmartIrc4net";
     version = "0.4.5.1";
-    sha256 = "1k6zc6xsqfzj7nc9479d32akj6d37jq6i1qirmz1i66p52zb5hm1";
+    sha256 = "1d531sj39fvwmj2wgplqfify301y3cwp7kwr9ai5hgrq81jmjn2b";
     outputFiles = [ "lib/*" ];
   };
 
@@ -331,12 +331,19 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
 
   Dafny = buildDotnetPackage rec {
     baseName = "Dafny";
-    version = "1.9.8";
+    version = "2.1.0";
 
     src = fetchurl {
       url = "https://github.com/Microsoft/dafny/archive/v${version}.tar.gz";
-      sha256 = "0n4pk4cv7d2zsn4xmyjlxvpfl9avq79r06c7kzmrng24p3k4qj6s";
+      sha256 = "1iyhy0zpi6wvqif7826anzgdipgsy5bk775ds9qqwfw27j7x6fy5";
     };
+
+    postPatch = ''
+      sed -i \
+        -e 's/ Visible="False"//' \
+        -e "s/Exists(\$(CodeContractsInstallDir))/Exists('\$(CodeContractsInstallDir)')/" \
+        Source/*/*.csproj
+    '';
 
     preBuild = ''
       ln -s ${pkgs.z3} Binaries/z3
@@ -345,7 +352,7 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
     buildInputs = [ Boogie ];
 
     xBuildFiles = [ "Source/Dafny.sln" ];
-    xBuildFlags = [ ];
+    xBuildFlags = [ "/p:Configuration=Checked" "/p:Platform=Any CPU" "/t:Rebuild" ];
 
     outputFiles = [ "Binaries/*" ];
 
@@ -715,7 +722,7 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
 
     meta = {
       description = "Math.NET Numerics is an opensource numerical library for .Net, Silverlight and Mono";
-      homepage = http://numerics.mathdotnet.com/;
+      homepage = https://numerics.mathdotnet.com/;
       license = stdenv.lib.licenses.mit;
       maintainers = with stdenv.lib.maintainers; [ obadz ];
       platforms = with stdenv.lib.platforms; linux;
@@ -872,7 +879,7 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
 
     meta = {
       description = "Popular high-performance JSON framework for .NET";
-      homepage = "http://www.newtonsoft.com/json";
+      homepage = "https://www.newtonsoft.com/json";
       license = stdenv.lib.licenses.mit;
       maintainers = with stdenv.lib.maintainers; [ obadz ];
       platforms = with stdenv.lib.platforms; linux;
@@ -881,13 +888,13 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
 
   Nuget = buildDotnetPackage {
     baseName = "Nuget";
-    version = "2.8.5";
+    version = "3.4.3";
 
     src = fetchFromGitHub {
       owner = "mono";
       repo = "nuget-binary";
-      rev = "da1f2102f8172df6f7a1370a4998e3f88b91c047";
-      sha256 = "1hbnckc4gvqkknf8gh1k7iwqb4vdzifdjd19i60fnczly5v8m1c3";
+      rev = "1f3025c2eb13bfcb56b47ddd77329ac3d9911d1c";
+      sha256 = "01snk05hcrp5i2ys3p1y34r05q1b460q6wb8p3vwpba2q2czdax5";
     };
 
     buildInputs = [ unzip ];
@@ -896,7 +903,7 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
 
     outputFiles = [ "*" ];
     dllFiles = [ "NuGet*.dll" ];
-    exeFiles = [ "NuGet.exe" ];
+    exeFiles = [ "nuget.exe" ];
   };
 
   Paket = buildDotnetPackage rec {

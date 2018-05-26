@@ -1,32 +1,36 @@
-{ stdenv, fetchFromGitHub, pkgconfig, autoconf, automake, libiconv
-, drake, ruby, docbook_xsl, file, xdg_utils, gettext, expat, qt5, boost
-, libebml, zlib, libmatroska, libogg, libvorbis, flac, libxslt
+{ stdenv, fetchFromGitLab, pkgconfig, autoconf, automake, libiconv
+, drake, ruby, docbook_xsl, file, xdg_utils, gettext, expat, boost
+, libebml, zlib, libmatroska, libogg, libvorbis, flac, libxslt, cmark
 , withGUI ? true
+  , qtbase ? null
+  , qtmultimedia ? null
 }:
 
-assert withGUI -> qt5 != null;
+assert withGUI -> qtbase != null && qtmultimedia != null;
 
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
   name = "mkvtoolnix-${version}";
-  version = "15.0.0";
+  version = "23.0.0";
 
-  src = fetchFromGitHub {
-    owner = "mbunkus";
-    repo = "mkvtoolnix";
-    rev = "release-${version}";
-    sha256 = "06n0hbp484zpsjvnzp6p0nzzssym3illxdicn3y1jf8gy971rxi0";
+  src = fetchFromGitLab {
+    owner  = "mbunkus";
+    repo   = "mkvtoolnix";
+    rev    = "release-${version}";
+    sha256 = "13n2jvwws87bws483dncvhf9vqsjy3l0lxh7x741g71075299w73";
   };
 
-  nativeBuildInputs = [ pkgconfig autoconf automake gettext drake ruby docbook_xsl libxslt ];
+  nativeBuildInputs = [
+    pkgconfig autoconf automake gettext
+    drake ruby docbook_xsl libxslt
+  ];
 
   buildInputs = [
-    expat file xdg_utils boost libebml zlib libmatroska libogg
-    libvorbis flac
-  ]
-  ++ optional stdenv.isDarwin libiconv
-  ++ optionals withGUI [qt5.qtbase qt5.qtmultimedia];
+    expat file xdg_utils boost libebml zlib
+    libmatroska libogg libvorbis flac cmark
+  ] ++ optional  stdenv.isDarwin libiconv
+    ++ optionals withGUI [ qtbase qtmultimedia ];
 
   preConfigure = "./autogen.sh; patchShebangs .";
   buildPhase   = "drake -j $NIX_BUILD_CORES";

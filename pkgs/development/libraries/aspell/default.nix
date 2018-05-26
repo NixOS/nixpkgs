@@ -1,4 +1,6 @@
-{stdenv, fetchurl, perl}:
+{ stdenv, fetchurl, fetchpatch, perl
+, searchNixProfiles ? true
+}:
 
 stdenv.mkDerivation rec {
   name = "aspell-0.60.6.1";
@@ -8,11 +10,19 @@ stdenv.mkDerivation rec {
     sha256 = "1qgn5psfyhbrnap275xjfrzppf5a83fb67gpql0kfqv37al869gm";
   };
 
-  patchPhase = ''
+  patches = [
+    (fetchpatch { # remove in >= 0.60.7
+      name = "gcc-7.patch";
+      url = "https://github.com/GNUAspell/aspell/commit/8089fa02122fed0a.diff";
+      sha256 = "1b3p1zy2lqr2fknddckm58hyk95hw4scf6hzjny1v9iaic2p37ix";
+    })
+  ] ++ stdenv.lib.optional searchNixProfiles ./data-dirs-from-nix-profiles.patch;
+
+  postPatch = ''
     patch interfaces/cc/aspell.h < ${./clang.patch}
   '';
 
-  buildInputs = [ perl ];
+  nativeBuildInputs = [ perl ];
 
   doCheck = true;
 
@@ -21,28 +31,6 @@ stdenv.mkDerivation rec {
       --enable-pkglibdir=$out/lib/aspell
       --enable-pkgdatadir=$out/lib/aspell
     );
-  '';
-
-  postInstall = ''
-    local prog="$out/bin/aspell"
-    local hidden="$out/bin/.aspell-wrapped"
-    mv "$prog" "$hidden"
-    cat > "$prog" <<END
-    #! $SHELL -e
-    if [ -z "\$ASPELL_CONF" ]; then
-      for p in \$NIX_PROFILES; do
-        if [ -d "\$p/lib/aspell" ]; then
-          ASPELL_CONF="data-dir \$p/lib/aspell"
-        fi
-      done
-      if [ -z "\$ASPELL_CONF" ] && [ -d "\$HOME/.nix-profile/lib/aspell" ]; then
-        ASPELL_CONF="data-dir \$HOME/.nix-profile/lib/aspell"
-      fi
-      export ASPELL_CONF
-    fi
-    exec "$hidden" "\$@"
-    END
-    chmod +x "$prog"
   '';
 
   meta = {

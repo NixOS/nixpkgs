@@ -19,11 +19,11 @@ let
   inherit (stdenv.lib) optional;
 in
 stdenv.mkDerivation rec {
-  name = "gawk-4.1.4";
+  name = "gawk-4.2.1";
 
   src = fetchurl {
     url = "mirror://gnu/gawk/${name}.tar.xz";
-    sha256 = "0rn2mmjxm767zliqzd67j7h2ncjn4j0321c60y9fy3grs3i89qak";
+    sha256 = "0lam2zf3n7ak4pig8w46lhx9hzx50kj2v2yj1616mm26wy2rf4fi";
   };
 
   # When we do build separate interactive version, it makes sense to always include man.
@@ -40,6 +40,8 @@ stdenv.mkDerivation rec {
     (if withSigsegv then "--with-libsigsegv-prefix=${libsigsegv}" else "--without-libsigsegv")
     (if interactive then "--with-readline=${readline.dev}" else "--without-readline")
   ];
+
+  makeFlags = "AR=${stdenv.cc.targetPrefix}ar";
 
   inherit doCheck;
 

@@ -1,26 +1,31 @@
-{ stdenv, fetchFromGitHub }:
+{ stdenv, fetchFromGitHub, gtk3 }:
 
 stdenv.mkDerivation rec {
   name = "papirus-icon-theme-${version}";
-  version = "20170715";
+  version = "20180401";
 
   src = fetchFromGitHub {
     owner = "PapirusDevelopmentTeam";
     repo = "papirus-icon-theme";
-    rev = "${version}";
-    sha256 = "0mpmgpjwc7azhypvrlnxaa0c4jc6g7vgy242apxrn8jcv9ndmwyk";
+    rev = version;
+    sha256 = "1cbzv3igc6j05h0mq2850fwfd8sxxwixzgmhh85mc1k326rvncil";
   };
 
-  dontBuild = true;
+  nativeBuildInputs = [ gtk3 ];
 
   installPhase = ''
-     install -dm 755 $out/share/icons
-     cp -dr Papirus{,-Dark,-Light} $out/share/icons/
-     cp -dr ePapirus $out/share/icons/
+     mkdir -p $out/share/icons
+     mv {,e}Papirus* $out/share/icons
+  '';
+
+  postFixup = ''
+    for theme in $out/share/icons/*; do
+      gtk-update-icon-cache $theme
+    done
   '';
 
   meta = with stdenv.lib; {
-    description = "Papirus icon theme for Linux";
+    description = "Papirus icon theme";
     homepage = https://github.com/PapirusDevelopmentTeam/papirus-icon-theme;
     license = licenses.lgpl3;
     platforms = platforms.all;

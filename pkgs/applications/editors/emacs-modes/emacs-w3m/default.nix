@@ -56,6 +56,6 @@ stdenv.mkDerivation rec {
 
     homepage = http://emacs-w3m.namazu.org/;
 
-    maintainers = [ stdenv.lib.maintainers.mornfall ];
+    maintainers = [ ];
   };
 }

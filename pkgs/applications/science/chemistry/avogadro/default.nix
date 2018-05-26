@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, cmake, qt4, zlib, eigen, openbabel, pkgconfig, mesa, libX11, doxygen }:
+{ stdenv, fetchurl, cmake, qt4, zlib, eigen, openbabel, pkgconfig, libGLU_combined, libX11, doxygen }:
 
 stdenv.mkDerivation rec {
   name = "avogadro-1.1.1";
@@ -8,11 +8,11 @@ stdenv.mkDerivation rec {
     sha256 = "050ag9p4vg7jg8hj1wqfv7lsm6ar2isxjw2vw85s49vsl7g7nvzy";
   };
 
-  buildInputs = [ qt4 eigen zlib openbabel mesa libX11 ];
+  buildInputs = [ qt4 eigen zlib openbabel libGLU_combined libX11 ];
 
   nativeBuildInputs = [ cmake pkgconfig doxygen ];
 
-  NIX_CFLAGS_COMPILE = "-include ${mesa}/include/GL/glu.h";
+  NIX_CFLAGS_COMPILE = "-include ${libGLU_combined}/include/GL/glu.h";
 
   meta = {
     description = "Molecule editor and visualizer";

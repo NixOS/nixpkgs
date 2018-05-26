@@ -15,17 +15,12 @@
 }:
 
 buildPythonPackage rec {
-  name = "${pname}-${version}";
   pname = "pecan";
-  version = "1.2.1";
-
-  patches = [
-    ./python36_test_fix.patch
-  ];
+  version = "1.3.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0ikc32rd2hr8j2jxc0mllvdjvxydx3fwfp3z8sdxmkzdkixlb5cd";
+    sha256 = "24f06cf88a488b75f433e62b33c1c97e4575d0cd91eec9eec841a81cecfd6de3";
   };
 
   propagatedBuildInputs = [ singledispatch logutils ];
@@ -35,6 +30,6 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Pecan";
-    homepage = "http://github.com/pecan/pecan";
+    homepage = "https://github.com/pecan/pecan";
   };
 }

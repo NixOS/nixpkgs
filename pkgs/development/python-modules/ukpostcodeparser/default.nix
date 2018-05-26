@@ -2,12 +2,12 @@
 
 buildPythonPackage rec {
   pname = "UkPostcodeParser";
-  version = "1.1.1";
+  version = "1.1.2";
   name = "${pname}-${version}";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "b7a7ac19d48897637c7aaa2f2970288f1c260e4a99140bf04c6086cf65576c6b";
+    sha256 = "930264efa293db80af0103a4fe9c161b06365598d24bb6fe5403f3f57c70530e";
   };
 
   doCheck = false;

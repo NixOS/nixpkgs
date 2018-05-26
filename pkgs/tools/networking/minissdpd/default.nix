@@ -2,10 +2,10 @@
 
 stdenv.mkDerivation rec {
   name = "minissdpd-${version}";
-  version = "1.5.20160301";
+  version = "1.5.20180223";
 
   src = fetchurl {
-    sha256 = "053icnb25jg2vvjxirkznks3ipbbdjxac278y19rk2w9cirgi9lv";
+    sha256 = "1c47h1zil04jnbxiaaci2rm8jij47zp5156v48hb6m87nh4l5adv";
     url = "http://miniupnp.free.fr/files/download.php?file=${name}.tar.gz";
     name = "${name}.tar.gz";
   };
@@ -31,6 +31,5 @@ stdenv.mkDerivation rec {
     downloadPage = http://miniupnp.free.fr/files/;
     license = licenses.bsd3;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ nckx ];
   };
 }

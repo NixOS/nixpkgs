@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgconfig, which
-, boost, libtorrentRasterbar, qtbase, qttools
+, boost, libtorrentRasterbar, qtbase, qttools, qtsvg
 , debugSupport ? false # Debugging
 , guiSupport ? true, dbus_libs ? null # GUI (disable to run headless)
 , webuiSupport ? true # WebUI
@@ -10,21 +10,20 @@ with stdenv.lib;
 
 stdenv.mkDerivation rec {
   name = "qbittorrent-${version}";
-  version = "3.3.16";
+  version = "4.1.0";
 
   src = fetchurl {
     url = "mirror://sourceforge/qbittorrent/${name}.tar.xz";
-    sha256 = "0mxyn2pajvb55bhcaz55v64p2xzy15p0yy174s62b5y3f8cac27a";
+    sha256 = "0fdr74sc31x421sb69vlgal1hxpccjxxk8hrrzz9f5bg4jv895pw";
   };
 
   nativeBuildInputs = [ pkgconfig which ];
 
-  buildInputs = [ boost libtorrentRasterbar qtbase qttools ]
+  buildInputs = [ boost libtorrentRasterbar qtbase qttools qtsvg ]
     ++ optional guiSupport dbus_libs;
 
-  preConfigure = ''
-    export QT_QMAKE=$(dirname "$QMAKE")
-  '';
+  # Otherwise qm_gen.pri assumes lrelease-qt5, which does not exist.
+  QMAKE_LRELEASE = "lrelease";
 
   configureFlags = [
     "--with-boost-libdir=${boost.out}/lib"
@@ -37,7 +36,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Free Software alternative to µtorrent";
-    homepage    = http://www.qbittorrent.org/;
+    homepage    = https://www.qbittorrent.org/;
     license     = licenses.gpl2;
     platforms   = platforms.linux;
     maintainers = with maintainers; [ viric ];

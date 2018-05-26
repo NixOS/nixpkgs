@@ -1,6 +1,6 @@
 { stdenv, fetchsvn, boost, cmake, ffmpeg, freeglut, glib,
   gtk2, libjpeg, libpng, libpthreadstubs, libvorbis, libXau, libXdmcp,
-  libXmu, mesa, openal, pixman, pkgconfig, python27, SDL }:
+  libXmu, libGLU_combined, openal, pixman, pkgconfig, python27, SDL }:
 
 stdenv.mkDerivation {
   name = "privateer-1.03";
@@ -14,7 +14,7 @@ stdenv.mkDerivation {
 
   buildInputs =
     [ boost cmake ffmpeg freeglut glib gtk2 libjpeg libpng
-      libpthreadstubs libvorbis libXau libXdmcp libXmu mesa openal
+      libpthreadstubs libvorbis libXau libXdmcp libXmu libGLU_combined openal
       pixman pkgconfig python27 SDL ];
 
   patches = [ ./0001-fix-VSFile-constructor.patch ];

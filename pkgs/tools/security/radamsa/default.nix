@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "radamsa-${version}";
-  version = "0.4";
+  version = "0.5";
 
   src = fetchurl {
-    url = "http://haltp.org/download/${name}.tar.gz";
-    sha256 = "1xs9dsrq6qrf104yi9x21scpr73crfikbi8q9njimiw5c1y6alrv";
+    url = "https://github.com/aoh/radamsa/releases/download/v${version}/${name}.tar.gz";
+    sha256 = "1d2chp45fbdb2v5zpsx6gh3bv8fhcjv0zijz10clcznadnm8c6p2";
   };
 
   patchPhase = ''
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "A general purpose fuzzer";
     longDescription = "Radamsa is a general purpose data fuzzer. It reads data from given sample files, or standard input if none are given, and outputs modified data. It is usually used to generate malformed data for testing programs.";
-    homepage = http://github.com/aoh/radamsa;
+    homepage = https://github.com/aoh/radamsa;
     maintainers = [ stdenv.lib.maintainers.markWot ];
     platforms = stdenv.lib.platforms.all;
   };

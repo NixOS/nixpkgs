@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "libsvm-${version}";
-  version = "3.20";
+  version = "3.22";
 
   src = fetchurl {
-    url = "http://www.csie.ntu.edu.tw/~cjlin/libsvm/libsvm-${version}.tar.gz";
-    sha256 = "1gj5v5zp1qnsnv0iwxq0ikhf8262d3s5dq6syr6yqkglps0284hg";
+    url = "https://www.csie.ntu.edu.tw/~cjlin/libsvm/libsvm-${version}.tar.gz";
+    sha256 = "0zd7s19y5vb7agczl6456bn45cj1y64739sslaskw1qk7dywd0bd";
   };
 
   buildPhase = ''
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A library for support vector machines";
-    homepage = http://www.csie.ntu.edu.tw/~cjlin/libsvm/;
+    homepage = https://www.csie.ntu.edu.tw/~cjlin/libsvm/;
     license = licenses.bsd3;
     maintainers = [ maintainers.spwhitt ];
     platforms = platforms.unix;

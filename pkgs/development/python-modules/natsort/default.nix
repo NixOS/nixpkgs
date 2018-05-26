@@ -4,7 +4,6 @@
 , fetchPypi
 , hypothesis
 , pytestcache
-, pytestcov
 , pytestflakes
 , pytestpep8
 , pytest
@@ -14,14 +13,12 @@
 }:
 
 buildPythonPackage rec {
-  name = "${pname}-${version}";
   pname = "natsort";
-  version = "5.1.0";
+  version = "5.2.0";
 
-  buildInputs = [
+  checkInputs = [
     hypothesis
     pytestcache
-    pytestcov
     pytestflakes
     pytestpep8
     pytest
@@ -34,16 +31,13 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "5db0fd17c9f8ef3d54962a6e46159ce4807c630f0931169cd15ce54f2ac395b9";
+    sha256 = "c960082d2145b04723041c4b85092546560538e29664dd197a1344d5b090bc91";
   };
-
-  # do not run checks on nix_run_setup.py
-  patches = [ ./setup.patch ];
 
   # testing based on project's tox.ini
   checkPhase = ''
     pytest --doctest-modules natsort
-    pytest --flakes --pep8 --cov natsort --cov-report term-missing
+    pytest --flakes --pep8
   '';
 
   meta = {

@@ -35,6 +35,9 @@ let
     SECRET_KEY = #secretkey#
     INSTALL_LOCK = true
 
+    [log]
+    ROOT_PATH = ${cfg.stateDir}/log
+
     ${cfg.extraConfig}
   '';
 in

@@ -1,28 +1,43 @@
-From e9d82bfbc49993a5be2c93f6b72a969630587f26 Mon Sep 17 00:00:00 2001
-From: Thomas Tuegel <ttuegel@gmail.com>
-Date: Mon, 23 Nov 2015 06:56:28 -0600
-Subject: [PATCH 1/2] ignore config mtime
-
----
- src/common/ConfigReader.cpp | 5 -----
- 1 file changed, 5 deletions(-)
-
 diff --git a/src/common/ConfigReader.cpp b/src/common/ConfigReader.cpp
-index cfc9940..5bf5a6a 100644
+index 4b5983c..911c511 100644
 --- a/src/common/ConfigReader.cpp
 +++ b/src/common/ConfigReader.cpp
-@@ -138,11 +138,6 @@ namespace SDDM {
-         QString currentSection = QStringLiteral(IMPLICIT_SECTION);
+@@ -147,16 +147,13 @@ namespace SDDM {
+         // * m_path (classic fallback /etc/sddm.conf)
  
-         QFile in(m_path);
--        QDateTime modificationTime = QFileInfo(in).lastModified();
--        if (modificationTime <= m_fileModificationTime) {
+         QStringList files;
+-        QDateTime latestModificationTime = QFileInfo(m_path).lastModified();
+ 
+         if (!m_sysConfigDir.isEmpty()) {
+             //include the configDir in modification time so we also reload on any files added/removed
+             QDir dir(m_sysConfigDir);
+             if (dir.exists()) {
+-                latestModificationTime = std::max(latestModificationTime,  QFileInfo(m_sysConfigDir).lastModified());
+                 foreach (const QFileInfo &file, dir.entryInfoList(QDir::Files | QDir::NoDotAndDotDot, QDir::LocaleAware)) {
+                     files << (file.absoluteFilePath());
+-                    latestModificationTime = std::max(latestModificationTime, file.lastModified());
+                 }
+             }
+         }
+@@ -164,21 +161,14 @@ namespace SDDM {
+             //include the configDir in modification time so we also reload on any files added/removed
+             QDir dir(m_configDir);
+             if (dir.exists()) {
+-                latestModificationTime = std::max(latestModificationTime,  QFileInfo(m_configDir).lastModified());
+                 foreach (const QFileInfo &file, dir.entryInfoList(QDir::Files | QDir::NoDotAndDotDot, QDir::LocaleAware)) {
+                     files << (file.absoluteFilePath());
+-                    latestModificationTime = std::max(latestModificationTime, file.lastModified());
+                 }
+             }
+         }
+ 
+         files << m_path;
+ 
+-        if (latestModificationTime <= m_fileModificationTime) {
 -            return;
 -        }
--        m_fileModificationTime = modificationTime;
- 
-         in.open(QIODevice::ReadOnly);
-         while (!in.atEnd()) {
--- 
-2.6.3
-
+-        m_fileModificationTime = latestModificationTime;
+-
+         foreach (const QString &filepath, files) {
+             loadInternal(filepath);
+         }

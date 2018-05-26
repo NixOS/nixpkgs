@@ -25,11 +25,13 @@ let
       ssl_cert = <${cfg.sslServerCert}
       ssl_key = <${cfg.sslServerKey}
       ${optionalString (!(isNull cfg.sslCACert)) ("ssl_ca = <" + cfg.sslCACert)}
+      ssl_dh = <${config.security.dhparams.params.dovecot2.path}
       disable_plaintext_auth = yes
     '')
 
     ''
       default_internal_user = ${cfg.user}
+      default_internal_group = ${cfg.group}
       ${optionalString (cfg.mailUser != null) "mail_uid = ${cfg.mailUser}"}
       ${optionalString (cfg.mailGroup != null) "mail_gid = ${cfg.mailGroup}"}
 
@@ -62,14 +64,14 @@ let
       }
     '')
 
-    ''
+    (optionalString (cfg.mailboxes != []) ''
       protocol imap {
         namespace inbox {
           inbox=yes
           ${concatStringsSep "\n" (map mailboxConfig cfg.mailboxes)}
         }
       }
-    ''
+    '')
 
     (optionalString cfg.enableQuota ''
       mail_plugins = $mail_plugins quota
@@ -104,7 +106,7 @@ let
   };
 
   mailboxConfig = mailbox: ''
-    mailbox ${mailbox.name} {
+    mailbox "${mailbox.name}" {
       auto = ${toString mailbox.auto}
   '' + optionalString (mailbox.specialUse != null) ''
       special_use = \${toString mailbox.specialUse}
@@ -113,7 +115,7 @@ let
   mailboxes = { lib, pkgs, ... }: {
     options = {
       name = mkOption {
-        type = types.str;
+        type = types.strMatching ''[^"]+'';
         example = "Spam";
         description = "The name of the mailbox.";
       };
@@ -296,10 +298,13 @@ in
 
 
   config = mkIf cfg.enable {
-
     security.pam.services.dovecot2 = mkIf cfg.enablePAM {};
 
-    services.dovecot2.protocols =
+    security.dhparams = mkIf (! isNull cfg.sslServerCert) {
+      enable = true;
+      params.dovecot2 = {};
+    };
+   services.dovecot2.protocols =
      optional cfg.enableImap "imap"
      ++ optional cfg.enablePop3 "pop3"
      ++ optional cfg.enableLmtp "lmtp";

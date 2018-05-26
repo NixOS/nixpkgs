@@ -1,0 +1,37 @@
+diff -Naur a/src/main/java/com/google/devtools/build/lib/rules/repository/RepositoryDelegatorFunction.java b/src/main/java/com/google/devtools/build/lib/rules/repository/RepositoryDelegatorFunction.java
+--- a/src/main/java/com/google/devtools/build/lib/rules/repository/RepositoryDelegatorFunction.java	1980-01-01 00:00:00.000000000 -0500
++++ b/src/main/java/com/google/devtools/build/lib/rules/repository/RepositoryDelegatorFunction.java	2018-01-18 08:17:22.420459162 -0500
+@@ -287,21 +287,8 @@
+           markerData.put(key, value);
+         }
+       }
+-      boolean result = false;
+-      if (markerRuleKey.equals(ruleKey)) {
+-        result = handler.verifyMarkerData(rule, markerData, env);
+-        if (env.valuesMissing()) {
+-          return null;
+-        }
+-      }
+ 
+-      if (result) {
+-        return new Fingerprint().addString(content).digestAndReset();
+-      } else {
+-        // So that we are in a consistent state if something happens while fetching the repository
+-        markerPath.delete();
+-        return null;
+-      }
++      return new Fingerprint().addString(content).digestAndReset();
+ 
+     } catch (IOException e) {
+       throw new RepositoryFunctionException(e, Transience.TRANSIENT);
+diff -Naur a/src/main/java/com/google/devtools/build/lib/shell/JavaSubprocessFactory.java b/src/main/java/com/google/devtools/build/lib/shell/JavaSubprocessFactory.java
+--- a/src/main/java/com/google/devtools/build/lib/shell/JavaSubprocessFactory.java	1980-01-01 00:00:00.000000000 -0500
++++ b/src/main/java/com/google/devtools/build/lib/shell/JavaSubprocessFactory.java	2018-01-18 08:17:53.274877980 -0500
+@@ -129,7 +129,6 @@
+     ProcessBuilder builder = new ProcessBuilder();
+     builder.command(params.getArgv());
+     if (params.getEnv() != null) {
+-      builder.environment().clear();
+       builder.environment().putAll(params.getEnv());
+     }
+ 

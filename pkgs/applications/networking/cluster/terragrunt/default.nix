@@ -1,16 +1,16 @@
-{ stdenv, lib, buildGoPackage, fetchFromGitHub, terraform, makeWrapper }:
+{ stdenv, lib, buildGoPackage, fetchFromGitHub, terraform-full, makeWrapper }:
 
 buildGoPackage rec {
   name = "terragrunt-${version}";
-  version = "0.13.0";
+  version = "0.14.6";
 
   goPackagePath = "github.com/gruntwork-io/terragrunt";
 
   src = fetchFromGitHub {
-    rev    = "v${version}";
     owner  = "gruntwork-io";
     repo   = "terragrunt";
-    sha256 = "18jbz3vchdp5f3f4grl968k706fdcvj71syf7qmriwdyw4ns83wv";
+    rev    = "v${version}";
+    sha256 = "14zg1h76wfg6aa78llcnza7kapnl5ks6m2vg73b90azfi49fmkwz";
   };
 
   goDeps = ./deps.nix;
@@ -23,7 +23,7 @@ buildGoPackage rec {
 
   postInstall = ''
     wrapProgram $bin/bin/terragrunt \
-      --set TERRAGRUNT_TFPATH ${lib.getBin terraform}/bin/terraform
+      --set TERRAGRUNT_TFPATH ${lib.getBin terraform-full}/bin/terraform
   '';
 
   meta = with stdenv.lib; {

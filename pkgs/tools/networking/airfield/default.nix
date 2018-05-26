@@ -1,39 +1,70 @@
-{ stdenv, fetchgit, callPackage, python, utillinux }:
+{ stdenv, fetchFromGitHub, callPackage, python, utillinux
+, pkgs, makeWrapper, buildEnv
+, nodejs
+}:
 
-with stdenv.lib;
-
-let 
-  nodePackages = callPackage (import ../../../top-level/node-packages.nix) {
-    neededNatives = [python] ++ optional (stdenv.isLinux) utillinux;
-    self = nodePackages;
-    generated = ./package.nix;
+let
+  nodePackages = import ./node.nix {
+    inherit pkgs;
+    system = stdenv.system;
   };
 
-in nodePackages.buildNodePackage rec {
+  runtimeEnv = buildEnv {
+    name = "airfield-runtime";
+    paths = with nodePackages; [
+      nodePackages."express-3.0.5" nodePackages."swig-0.14.0"
+      nodePackages."consolidate-0.10.0" redis connect-redis
+      async request
+    ];
+  };
+
   name = "airfield-${version}";
-  version = "5ae816562a";
+  version = "2015-01-04";
 
-  src = [(fetchgit {
-    url = https://github.com/emblica/airfield.git;
-    rev = version;
-    sha256 = "0rv05pq0xdm0d977dc3hg6dam78acymzrdvkxs8ga8xj4vfs5npk";
-  })];
+  src = stdenv.mkDerivation {
+    name = "${name}-src";
+    inherit version;
 
-  deps = (filter (v: nixType v == "derivation") (attrValues nodePackages));
+    src = fetchFromGitHub {
+      owner = "emblica";
+      repo = "airfield";
+      rev = "f021b19a35be3db9be7780318860f3b528c48641";
+      sha256 = "1xk69x89kgg98hm7c2ysyfmg7pkvgkpg4wym6v5cmdkdid08fsgs";
+    };
 
-  preInstall = ''
-    substituteInPlace node_modules/Airfield/airfield.js \
-        --replace "'./settings'" "process.env.NODE_CONFIG"
+    dontBuild = true;
+
+    installPhase = ''
+      mkdir $out
+      cp -R . $out
+    '';
+  };
+in stdenv.mkDerivation {
+  inherit name version src;
+
+  buildInputs = [ makeWrapper nodejs ];
+
+  dontBuild = true;
+
+  installPhase = ''
+    mkdir -p $out/bin
+    cat >$out/bin/airfield <<EOF
+      #!${stdenv.shell}/bin/sh
+      ${nodejs}/bin/node ${src}/airfield.js
+    EOF
   '';
 
-  passthru.names = ["Airfield"];
+  postFixup = ''
+    chmod +x $out/bin/airfield
+    wrapProgram $out/bin/airfield \
+      --set NODE_PATH "${runtimeEnv}/lib/node_modules"
+  '';
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "A web-interface for hipache-proxy";
     license = licenses.mit;
     homepage = https://github.com/emblica/airfield;
-    maintainers = with maintainers; [offline];
+    maintainers = with maintainers; [ offline ma27 ];
     platforms = platforms.linux;
-    broken = true;
   };
 }

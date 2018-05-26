@@ -1,14 +1,18 @@
-{ lib, stdenv, fetchurl, postgresql, python2, gnused }:
+{ lib, stdenv, fetchFromGitHub, postgresql, doxygen, xmlto, python2, gnused }:
 
 stdenv.mkDerivation rec {
-  name = "libpqxx-4.0.1";
+  name = "libpqxx-${version}";
+  version = "6.2.3";
 
-  src = fetchurl {
-    url = "http://pqxx.org/download/software/libpqxx/${name}.tar.gz";
-    sha256 = "0f6wxspp6rx12fkasanb0z2g2gc8dhcfwnxagx8wwqbpg6ifsz09";
+  src = fetchFromGitHub {
+    owner = "jtv";
+    repo = "libpqxx";
+    rev = version;
+    sha256 = "130mkkq46l23aaxfc2bnlf9mi3qxfn5465ziz0048bxymbxa7b58";
   };
 
-  buildInputs = [ postgresql python2 gnused ];
+  nativeBuildInputs = [ gnused python2 ];
+  buildInputs = [ postgresql doxygen xmlto ];
 
   preConfigure = ''
     patchShebangs .

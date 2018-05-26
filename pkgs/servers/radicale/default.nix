@@ -1,8 +1,8 @@
 { stdenv, fetchFromGitHub, python3Packages }:
 
 let
-  version = "2.1.6";
-  sha256 = "1x76nvxjhjpagniyh075hqia4sl06972alnhi7628cjrq3pr4v9i";
+  version = "2.1.9";
+  sha256 = "1sywxn7j9bq39qwq74h327crc44j9049cykai1alv44agx8s1nhz";
 in
 
 python3Packages.buildPythonApplication {
@@ -21,6 +21,7 @@ python3Packages.buildPythonApplication {
   propagatedBuildInputs = with python3Packages; [
     vobject
     passlib
+    pytz
   ];
 
   meta = with stdenv.lib; {

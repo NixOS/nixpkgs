@@ -4,7 +4,7 @@ let
   platform =
     if stdenv.system == "x86_64-linux" then "64bit"
     else if stdenv.system == "i686-linux" then "32bit"
-         else abort "Unsupported platform";
+         else throw "Unsupported system: ${stdenv.system}";
 
   libPath = lib.makeLibraryPath [ cups ];
 in
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   dontStrip = true;
 
   src = fetchzip {
-    # this side does not like curl -> override useragent
+    # this site does not like curl -> override useragent
     curlOpts = "-A ''";
     url = "http://cdn.kyostatics.net/dlc/ru/driver/all/linuxdrv_1_1203_fs-1x2xmfp.-downloadcenteritem-Single-File.downloadcenteritem.tmp/LinuxDrv_1.1203_FS-1x2xMFP.zip";
     sha256 = "0z1pbgidkibv4j21z0ys8cq1lafc6687syqa07qij2qd8zp15wiz";

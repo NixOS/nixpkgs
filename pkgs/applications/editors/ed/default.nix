@@ -2,7 +2,7 @@
 , buildPlatform, hostPlatform
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (rec {
   name = "ed-${version}";
   version = "1.14.2";
 
@@ -11,27 +11,9 @@ stdenv.mkDerivation rec {
     sha256 = "1nqhk3n1s1p77g2bjnj55acicsrlyb2yasqxqwpx0w0djfx64ygm";
   };
 
-  unpackCmd = "tar --lzip -xf";
-
   nativeBuildInputs = [ lzip ];
 
-  /* FIXME: Tests currently fail on Darwin:
-
-       building test scripts for ed-1.5...
-       testing ed-1.5...
-       *** Output e1.o of script e1.ed is incorrect ***
-       *** Output r3.o of script r3.ed is incorrect ***
-       make: *** [check] Error 127
-
-    */
-  doCheck = !(hostPlatform.isDarwin || hostPlatform != buildPlatform);
-
-  installFlags = [ "DESTDIR=$(out)" ];
-
-  configureFlags = [
-    "--exec-prefix=${stdenv.cc.prefix}"
-    "CC=${stdenv.cc.prefix}cc"
-  ];
+  doCheck = true; # not cross;
 
   meta = {
     description = "An implementation of the standard Unix editor";
@@ -54,4 +36,9 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     platforms = stdenv.lib.platforms.unix;
   };
-}
+} // stdenv.lib.optionalAttrs (hostPlatform != buildPlatform) {
+  # This may be moved above during a stdenv rebuild.
+  preConfigure = ''
+    configureFlagsArray+=("CC=$CC")
+  '';
+})

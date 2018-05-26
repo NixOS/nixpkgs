@@ -25,6 +25,5 @@ stdenv.mkDerivation rec {
     homepage = http://www.clex.sk;
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ nckx ];
   };
 }

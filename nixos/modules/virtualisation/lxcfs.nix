@@ -28,13 +28,9 @@ in {
 
   ###### implementation
   config = mkIf cfg.enable {
-    services.cgmanager.enable = true;
-
     systemd.services.lxcfs = {
       description = "FUSE filesystem for LXC";
       wantedBy = [ "multi-user.target" ];
-      requires = [ "cgmanager.service" ];
-      after = [ "cgmanager.service" ];
       before = [ "lxc.service" ];
       restartIfChanged = false;
       serviceConfig = {

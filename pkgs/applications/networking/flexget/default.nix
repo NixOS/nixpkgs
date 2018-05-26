@@ -1,75 +1,72 @@
-{ lib
-, fetchFromGitHub
-, python
-, transmission
-, deluge
-, config
+{ lib, python
+, delugeSupport ? true, deluge ? null
 }:
 
-with python.pkgs;
+assert delugeSupport -> deluge != null;
 
-buildPythonApplication rec {
-  version = "2.10.82";
-  name = "FlexGet-${version}";
+# Flexget have been a trouble maker in the past,
+# if you see flexget breaking when updating packages, don't worry.
+# The current state is that we have no active maintainers for this package.
+# -- Mic92
 
-  src = fetchFromGitHub {
-    owner = "Flexget";
-    repo = "Flexget";
-    rev = version;
-    sha256 = "15508ihswfjbkzhf1f0qhn2ar1aiibz2ggp5d6r33icy8xwhpv09";
+let
+  python' = python.override { inherit packageOverrides; };
+
+  packageOverrides = self: super: {
+    sqlalchemy = super.sqlalchemy.overridePythonAttrs (old: rec {
+      version = "1.1.10";
+      src = old.src.override {
+        inherit version;
+        sha256 = "1lvb14qclrx0qf6qqx8a8hkx5akk5lk3dvcqz8760v9hya52pnfv";
+      };
+    });
   };
 
-  doCheck = true;
-  # test_regexp requires that HOME exist, test_filesystem requires a
-  # unicode-capable filesystem (and setting LC_ALL doesn't work).
-  # setlocale: LC_ALL: cannot change locale (en_US.UTF-8)
+in
+
+with python'.pkgs;
+
+buildPythonApplication rec {
+  pname = "FlexGet";
+  version = "2.13.5";
+
+  src = fetchPypi {
+    inherit pname version;
+    sha256 = "1lkmxwy7k4zlcqpigwk8skc2zi8a70vrw21pz80wvmf9yg0wc9z9";
+  };
+
   postPatch = ''
-    sed -i '/def test_non_ascii/i\    import pytest\
-        @pytest.mark.skip' flexget/tests/test_filesystem.py
-
-    substituteInPlace requirements.txt \
-      --replace "chardet==3.0.3" "chardet" \
-      --replace "rebulk==0.8.2" "rebulk" \
-      --replace "cherrypy==10.2.2" "cherrypy" \
-      --replace "portend==1.8" "portend" \
-      --replace "sqlalchemy==1.1.10" "sqlalchemy" \
-      --replace "zxcvbn-python==4.4.15" "zxcvbn-python" \
-      --replace "flask-cors==3.0.2" "flask-cors" \
-      --replace "certifi==2017.4.17" "certifi"
+    # remove dependency constraints
+    sed 's/==\([0-9]\.\?\)\+//' -i requirements.txt
   '';
 
-  checkPhase = ''
-    export HOME=.
-    py.test --disable-pytest-warnings -k "not test_quality_failures \
-                                          and not test_group_quality \
-                                          and not crash_report \
-                                          and not test_multi_episode \
-                                          and not test_double_episodes \
-                                          and not test_inject_force \
-                                          and not test_double_prefered \
-                                          and not test_double"
-  '';
+  # ~400 failures
+  doCheck = false;
 
-  buildInputs = [ pytest mock vcrpy pytest-catchlog boto3 ];
   propagatedBuildInputs = [
-    feedparser sqlalchemy pyyaml chardet
-    beautifulsoup4 html5lib PyRSS2Gen pynzb
-    rpyc jinja2 jsonschema requests dateutil jsonschema
+    feedparser sqlalchemy pyyaml
+    chardet beautifulsoup4 html5lib
+    PyRSS2Gen pynzb rpyc jinja2
+    jsonschema requests dateutil
     pathpy guessit_2_0 APScheduler
     terminaltables colorclass
-    cherrypy flask flask-restful flask-restplus
-    flask-compress flask_login flask-cors
-    pyparsing safe future zxcvbn-python
-    werkzeug tempora cheroot rebulk portend
+    cherrypy flask flask-restful
+    flask-restplus flask-compress
+    flask_login flask-cors safe
+    pyparsing future zxcvbn-python
+    werkzeug tempora cheroot rebulk
+    portend transmissionrpc aniso8601
+    babelfish certifi click futures
+    idna itsdangerous markupsafe
+    plumbum pytz six tzlocal urllib3
+    webencodings werkzeug zxcvbn-python
   ] ++ lib.optional (pythonOlder "3.4") pathlib
-    # enable deluge and transmission plugin support, if they're installed
-    ++ lib.optional (config.deluge or false) deluge
-    ++ lib.optional (transmission != null) transmissionrpc;
+    ++ lib.optional delugeSupport deluge;
 
-  meta = {
-    homepage = https://flexget.com/;
+  meta = with lib; {
+    homepage    = https://flexget.com/;
     description = "Multipurpose automation tool for content like torrents";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ domenkozar tari ];
+    license     = licenses.mit;
+    maintainers = with maintainers; [ ];
   };
 }

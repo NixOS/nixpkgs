@@ -12,15 +12,14 @@ let
     GnuPGInterface ListMoreUtils ModuleRuntime Moo MooXHandlesVia MooXlate
     RoleTiny SubExporterProgressive SubQuote TypeTiny XSLoader
   ];
-in
-stdenv.mkDerivation rec {
+in stdenv.mkDerivation rec {
   pname = "signing-party";
-  version = "2.5";
+  version = "2.7";
   name = "${pname}-${version}";
 
   src = fetchurl {
     url = "mirror://debian/pool/main/s/${pname}/${pname}_${version}.orig.tar.gz";
-    sha256 = "1y2bxk01qiwaqaily0s6zi10ssv7l35vksib6fxzyl76pp693nv2";
+    sha256 = "0znklgvxn7k7p6q7r8chcj86zmzildjamr3qlqfxkj5m7yziqr21";
   };
 
   sourceRoot = ".";

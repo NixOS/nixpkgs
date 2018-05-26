@@ -5,7 +5,7 @@
 stdenv.mkDerivation {
   name = "fossil-archive" + (if name != null then "-${name}" else "");
   builder = ./builder.sh;
-  buildInputs = [fossil];
+  nativeBuildInputs = [fossil];
 
   # Envvar docs are hard to find. A link for the future:
   # https://www.fossil-scm.org/index.html/doc/trunk/www/env-opts.md

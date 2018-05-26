@@ -1,15 +1,16 @@
-{ stdenv, fetchFromGitHub, fetchpatch, pkgconfig, gtk2, gtk3, libXinerama, libSM, libXxf86vm
+{ stdenv, fetchFromGitHub, fetchurl, fetchpatch, pkgconfig
+, gtk2, gtk3, libXinerama, libSM, libXxf86vm
 , xf86vidmodeproto , gstreamer, gst-plugins-base, GConf, setfile
-, withMesa ? true, mesa_glu ? null, mesa_noglu ? null
+, withMesa ? true, libGLU ? null, libGL ? null
 , compat24 ? false, compat26 ? true, unicode ? true
 , withGtk2 ? true
-, withWebKit ? false, webkitgtk24x-gtk2 ? null, webkitgtk216x ? null
+, withWebKit ? false, webkitgtk24x-gtk2 ? null, webkitgtk ? null
 , AGL ? null, Carbon ? null, Cocoa ? null, Kernel ? null, QTKit ? null
 }:
 
 
-assert withMesa -> mesa_glu != null && mesa_noglu != null;
-assert withWebKit -> (if withGtk2 then webkitgtk24x-gtk2 else webkitgtk216x) != null;
+assert withMesa -> libGLU != null && libGL != null;
+assert withWebKit -> (if withGtk2 then webkitgtk24x-gtk2 else webkitgtk) != null;
 
 with stdenv.lib;
 
@@ -29,17 +30,22 @@ stdenv.mkDerivation {
   buildInputs =
     [ (if withGtk2 then gtk2 else gtk3) libXinerama libSM libXxf86vm xf86vidmodeproto gstreamer
       gst-plugins-base GConf ]
-    ++ optional withMesa mesa_glu
-    ++ optional withWebKit (if withGtk2 then webkitgtk24x-gtk2 else webkitgtk216x)
+    ++ optional withMesa libGLU
+    ++ optional withWebKit (if withGtk2 then webkitgtk24x-gtk2 else webkitgtk)
     ++ optionals stdenv.isDarwin [ setfile Carbon Cocoa Kernel QTKit ];
 
   nativeBuildInputs = [ pkgconfig ];
 
   propagatedBuildInputs = optional stdenv.isDarwin AGL;
 
-  patches =
+  patches = [
+    (fetchurl { # https://trac.wxwidgets.org/ticket/17942
+      url = "https://trac.wxwidgets.org/raw-attachment/ticket/17942/"
+          + "fix_assertion_using_hide_in_destroy.diff";
+      sha256 = "009y3dav79wiig789vkkc07g1qdqprg1544lih79199kb1h64lvy";
+    })
     # "Add support for WebKit2GTK+ in wxWebView". Will be in 3.0.4
-    optional (!withGtk2) (fetchpatch {
+  ] ++ optional (!withGtk2) (fetchpatch {
       url = "https://github.com/wxWidgets/wxWidgets/commit/ec6e54bc893fb7516731ca9c71e0d0bbc5ae9ff7.patch";
       sha256 = "0gxd83xajm7gdv9rdzyvqwa2p5nz29nr23i0zx2dgfpsvz2qjp3q";
     });
@@ -56,7 +62,7 @@ stdenv.mkDerivation {
     ++ optionals withWebKit
       ["--enable-webview" "--enable-webview-webkit"];
 
-  SEARCH_LIB = "${mesa_glu.out}/lib ${mesa_noglu.out}/lib ";
+  SEARCH_LIB = "${libGLU.out}/lib ${libGL.out}/lib ";
 
   preConfigure = "
     substituteInPlace configure --replace 'SEARCH_INCLUDE=' 'DUMMY_SEARCH_INCLUDE='

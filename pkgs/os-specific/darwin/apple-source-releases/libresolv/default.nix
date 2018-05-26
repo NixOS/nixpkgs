@@ -33,7 +33,7 @@ appleDerivation {
     cc -I. -c res_send.c
     cc -I. -c res_sendsigned.c
     cc -I. -c res_update.c
-    cc -dynamiclib -install_name $out/lib/libresolv.9.dylib -o libresolv.9.dylib *.o
+    cc -dynamiclib -install_name $out/lib/libresolv.9.dylib -current_version 1.0.0 -compatibility_version 1.0.0 -o libresolv.9.dylib *.o
   '';
 
   installPhase = ''

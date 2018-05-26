@@ -3,11 +3,11 @@
 
 stdenv.mkDerivation rec {
   name = "libqalculate-${version}";
-  version = "2.1.0";
+  version = "2.5.0";
 
   src = fetchurl {
     url = "https://github.com/Qalculate/libqalculate/archive/v${version}.tar.gz";
-    sha256 = "036f284bssvavyz6pgpcdafvxa59h2wdrh8xl7nmxxnw9v7n2n7l";
+    sha256 = "0xs2qjr93k43p6j126xj20fgb1n2jv56rhgc211yv1l46crbqxfv";
   };
 
   outputs = [ "out" "dev" "doc" ];
@@ -25,6 +25,9 @@ stdenv.mkDerivation rec {
     substituteInPlace libqalculate/Calculator.cc \
       --replace 'commandline = "gnuplot"' 'commandline = "${gnuplot}/bin/gnuplot"' \
       --replace '"gnuplot -"' '"${gnuplot}/bin/gnuplot -"'
+  '' + stdenv.lib.optionalString stdenv.cc.isClang ''
+    substituteInPlace src/qalc.cc \
+      --replace 'printf(_("aborted"))' 'printf("%s", _("aborted"))'
   '';
 
   preBuild = ''

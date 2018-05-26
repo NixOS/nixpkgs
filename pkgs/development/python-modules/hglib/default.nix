@@ -2,12 +2,12 @@
 
 buildPythonPackage rec {
   pname = "python-hglib";
-  version = "2.4";
+  version = "2.5";
   name = "${pname}-${version}";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0qll9cc9ndqizby00gxdcf6d0cysdhjkr8670a4ffrk55bcnwgb9";
+    sha256 = "fee180bb6796e5d2d25158b2d3c9f048648e427dd28b23a58d369adb14dd67cb";
   };
 
   checkInputs = [ nose ];

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, cmake, bash, unzip, glibc, openssl, gcc, mesa, freetype, xorg, alsaLib, cairo, libuuid, makeWrapper, ... }:
+{ stdenv, fetchurl, cmake, bash, unzip, glibc, openssl, gcc, libGLU_combined, freetype, xorg, alsaLib, cairo, libuuid, makeWrapper, ... }:
 
 { name, src, ... }:
 
@@ -47,9 +47,9 @@ stdenv.mkDerivation rec {
     ln -s "${pharo-share}/lib/"*.sources $prefix/lib/$name
   '';
 
-  LD_LIBRARY_PATH = stdenv.lib.makeLibraryPath [ cairo mesa freetype openssl libuuid alsaLib xorg.libICE xorg.libSM ];
+  LD_LIBRARY_PATH = stdenv.lib.makeLibraryPath [ cairo libGLU_combined freetype openssl libuuid alsaLib xorg.libICE xorg.libSM ];
   nativeBuildInputs = [ unzip cmake gcc makeWrapper ];
-  buildInputs = [ bash glibc openssl mesa freetype xorg.libX11 xorg.libICE xorg.libSM alsaLib cairo pharo-share ];
+  buildInputs = [ bash glibc openssl libGLU_combined freetype xorg.libX11 xorg.libICE xorg.libSM alsaLib cairo pharo-share ];
 
   meta = {
     description = "Clean and innovative Smalltalk-inspired environment";
@@ -70,9 +70,9 @@ stdenv.mkDerivation rec {
     license = stdenv.lib.licenses.mit;
     maintainers = [ stdenv.lib.maintainers.lukego ];
     # Pharo VM sources are packaged separately for darwin (OS X)
-    platforms = with stdenv.lib;
-                  intersectLists
-                    platforms.mesaPlatforms
-                    (subtractLists platforms.darwin platforms.unix);
+    platforms = stdenv.lib.filter
+      (system: with stdenv.lib.systems.elaborate { inherit system; };
+         isUnix && !isDarwin)
+      stdenv.lib.platforms.mesaPlatforms;
   };
 }

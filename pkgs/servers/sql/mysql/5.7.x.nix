@@ -3,13 +3,14 @@
 
 # Note: zlib is not required; MySQL can use an internal zlib.
 
-stdenv.mkDerivation rec {
+let
+self = stdenv.mkDerivation rec {
   name = "mysql-${version}";
-  version = "5.7.19";
+  version = "5.7.20";
 
   src = fetchurl {
     url = "mirror://mysql/MySQL-5.7/${name}.tar.gz";
-    sha256 = "1c8y54yk756179nx4dgg79dijmjdq5n8l057cnqsg70pjdpyfl9y";
+    sha256 = "11v4g3igigv3zvknv67qml8in6fjrbs2vnr3q6bg6f62nydm95sk";
   };
 
   preConfigure = stdenv.lib.optional stdenv.isDarwin ''
@@ -22,15 +23,20 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+  outputs = [ "out" "static" ];
+
   cmakeFlags = [
     "-DWITH_SSL=yes"
-    "-DWITH_READLINE=yes"
     "-DWITH_EMBEDDED_SERVER=yes"
+    "-DWITH_UNITTEST=no"
     "-DWITH_ZLIB=yes"
+    "-DWITH_ARCHIVE_STORAGE_ENGINE=yes"
+    "-DWITH_BLACKHOLE_STORAGE_ENGINE=yes"
+    "-DWITH_FEDERATED_STORAGE_ENGINE=yes"
+    "-DCMAKE_VERBOSE_MAKEFILE=yes"
     "-DHAVE_IPV6=yes"
     "-DMYSQL_UNIX_ADDR=/run/mysqld/mysqld.sock"
     "-DMYSQL_DATADIR=/var/lib/mysql"
-    "-DINSTALL_SYSCONFDIR=etc/mysql"
     "-DINSTALL_INFODIR=share/mysql/docs"
     "-DINSTALL_MANDIR=share/man"
     "-DINSTALL_PLUGINDIR=lib/mysql/plugin"
@@ -43,6 +49,7 @@ stdenv.mkDerivation rec {
     "-DINSTALL_SHAREDIR=share/mysql"
   ];
 
+  CXXFLAGS = "-fpermissive";
   NIX_LDFLAGS = stdenv.lib.optionalString stdenv.isLinux "-lgcc_s";
 
   prePatch = ''
@@ -50,15 +57,22 @@ stdenv.mkDerivation rec {
   '';
   postInstall = ''
     sed -i -e "s|basedir=\"\"|basedir=\"$out\"|" $out/bin/mysql_install_db
-    rm -r $out/mysql-test "$out"/lib/*.a
-    rm $out/share/man/man1/mysql-test-run.pl.1
+    install -vD $out/lib/*.a -t $static/lib
+    rm -r $out/mysql-test
+    rm $out/share/man/man1/mysql-test-run.pl.1 $out/lib/*.a
+    ln -s libmysqlclient${stdenv.hostPlatform.extensions.sharedLibrary} $out/lib/libmysqlclient_r${stdenv.hostPlatform.extensions.sharedLibrary}
   '';
 
-  passthru.mysqlVersion = "5.7";
+  passthru = {
+    client = self;
+    connector-c = self;
+    server = self;
+    mysqlVersion = "5.7";
+  };
 
   meta = {
-    homepage = http://www.mysql.com/;
+    homepage = https://www.mysql.com/;
     description = "The world's most popular open source database";
     platforms = stdenv.lib.platforms.unix;
   };
-}
+}; in self

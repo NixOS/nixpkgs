@@ -22,6 +22,5 @@ stdenv.mkDerivation rec {
     homepage = https://www.colordiff.org/;
     license = licenses.gpl3;
     platforms = platforms.linux ++ platforms.darwin;
-    maintainers = with maintainers; [ nckx ];
   };
 }

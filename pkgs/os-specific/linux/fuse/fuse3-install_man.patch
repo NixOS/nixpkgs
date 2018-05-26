@@ -1,8 +1,0 @@
---- a/doc/meson.build	1970-01-01 01:00:01.000000000 +0100
-+++ b/doc/meson.build	2017-09-22 01:53:01.859190506 +0200
-@@ -1,5 +1,4 @@
- # Attention, emacs, please use -*- mode: python -*-
- # (even though this isn't actually Python code)
- 
--install_man('fusermount3.1', 'mount.fuse.8')
- 

@@ -109,9 +109,5 @@ in
 
   };
 
-  config = {
-    services.xserver.displayManager.session = cfg.session.list;
-    environment.systemPackages =
-      mkIf cfg.session.needBGPackages [ pkgs.feh ]; # xsetroot via xserver.enable
-  };
+  config.services.xserver.displayManager.session = cfg.session.list;
 }

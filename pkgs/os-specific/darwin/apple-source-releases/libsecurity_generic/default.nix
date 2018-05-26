@@ -10,7 +10,7 @@ name: version: sha256: args: let
 
       patchPhase = ''
         # allows including <Security/some-private-header.h>
-        ln -s ${pkgs.darwin.osx_private_sdk}/PrivateSDK10.9.sparse.sdk/System/Library/Frameworks/Security.framework/Versions/A/PrivateHeaders Security
+        cp -R ${pkgs.darwin.osx_private_sdk}/include/SecurityPrivateHeaders Security
 
         grep -Rl MacErrors.h . | while read file; do
           substituteInPlace "''$file" --replace \

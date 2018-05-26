@@ -1,9 +1,9 @@
-{ stdenv, appleDerivation, fetchzip, bootstrap_cmds, bison, flex, gnum4, unifdef, perl }:
+{ stdenv, appleDerivation, fetchzip, bootstrap_cmds, bison, flex, gnum4, unifdef, perl, python }:
 
 appleDerivation {
   phases = [ "unpackPhase" "patchPhase" "installPhase" ];
 
-  buildInputs = [ bootstrap_cmds bison flex gnum4 unifdef perl ];
+  buildInputs = [ bootstrap_cmds bison flex gnum4 unifdef perl python ];
 
   patchPhase = ''
     substituteInPlace Makefile \
@@ -127,8 +127,4 @@ appleDerivation {
     mkdir $out/Library/PrivateFrameworks
     mv $out/Library/Frameworks/IOKit.framework $out/Library/PrivateFrameworks
   '';
-
-  meta = {
-    platforms = stdenv.lib.platforms.darwin;
-  };
 }

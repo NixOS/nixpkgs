@@ -55,8 +55,6 @@ stdenv.mkDerivation ({
 
 (if cross != null
  then {
-   crossConfig = cross.config;
-
    # Tell gcc where to find `crt1.o' et al.  This is specified in two
    # different ways: one for gcc as run from `configure', and one for linking
    # libpthread.so (by default `libtool --mode=link' swallows `-B', hence

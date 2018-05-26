@@ -1,25 +1,46 @@
 { stdenv, fetchurl
-, gmp, readline, libX11, libpthreadstubs, tex, perl }:
+, gmp, readline, libX11, tex, perl
+, withThread ? true, libpthreadstubs
+}:
+
+assert withThread -> libpthreadstubs != null;
 
 stdenv.mkDerivation rec {
 
   name = "pari-${version}";
-  version = "2.9.1";
+  version = "2.9.5";
 
   src = fetchurl {
     url = "http://pari.math.u-bordeaux.fr/pub/pari/unix/${name}.tar.gz";
-    sha256 = "0rq7wz9df1xs4acdzzb5dapx8vs6m5py39n2wynw2qv4d2b0ylfw";
+    sha256 = "05z6y5iwdzcdggbrkic9cy9vy9wmk5qxc21cb4lqnbqxnhjihibb";
   };
 
-  buildInputs = [ gmp readline libX11 libpthreadstubs tex perl ];
+  buildInputs = [
+    gmp
+    readline
+    libX11
+    tex
+    perl
+  ] ++ stdenv.lib.optionals withThread [
+    libpthreadstubs
+  ];
 
   configureScript = "./Configure";
-  configureFlags =
-    "--mt=pthread" +
-    "--with-gmp=${gmp.dev} " +
-    "--with-readline=${readline.dev}";
+  configureFlags = [
+    "--with-gmp=${gmp.dev}"
+    "--with-readline=${readline.dev}"
+  ] ++ stdenv.lib.optional stdenv.isDarwin "--host=x86_64-darwin"
+  ++ stdenv.lib.optional withThread "--mt=pthread";
 
-  makeFlags = "all";
+  preConfigure = ''
+    export LD=$CC
+  '';
+
+  postConfigure = stdenv.lib.optionalString stdenv.isDarwin ''
+    echo 'echo x86_64-darwin' > config/arch-osname
+  '';
+
+  makeFlags = [ "all" ];
 
   meta = with stdenv.lib; {
     description = "Computer algebra system for high-performance number theory computations";
@@ -36,12 +57,12 @@ stdenv.mkDerivation rec {
        Bordeaux I, France), PARI is now under the GPL and maintained by Karim
        Belabas with the help of many volunteer contributors.
 
-       - PARI is a C library, allowing fast computations.  
+       - PARI is a C library, allowing fast computations.
        - gp is an easy-to-use interactive shell giving access to the
           PARI functions.
        - GP is the name of gp's scripting language.
-       - gp2c, the GP-to-C compiler, combines the best of both worlds 
-          by compiling GP scripts to the C language and transparently loading 
+       - gp2c, the GP-to-C compiler, combines the best of both worlds
+          by compiling GP scripts to the C language and transparently loading
           the resulting functions into gp. (gp2c-compiled scripts will typically
           run 3 or 4 times faster.) gp2c currently only understands a subset
            of the GP language.
@@ -50,7 +71,7 @@ stdenv.mkDerivation rec {
     downloadPage = "http://pari.math.u-bordeaux.fr/download.html";
     license     = licenses.gpl2Plus;
     maintainers = with maintainers; [ ertes raskin AndersonTorres ];
-    platforms   = platforms.linux;
+    platforms   = platforms.linux ++ platforms.darwin;
     updateWalker = true;
   };
 }

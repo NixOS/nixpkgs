@@ -6,7 +6,7 @@ stdenv.mkDerivation rec {
   pname = "qt-gstreamer";
 
   src = fetchurl {
-    url = "http://gstreamer.freedesktop.org/src/${pname}/${name}.tar.bz2";
+    url = "https://gstreamer.freedesktop.org/src/${pname}/${name}.tar.bz2";
     sha256 = "1pqg9sxzk8sdrf7pazb5v21hasqai9i4l203gbdqz29w2ll1ybsl";
   };
 

@@ -13,14 +13,17 @@ let
 
   apcu40 = assert !isPhp7; buildPecl {
     name = "apcu-4.0.7";
-
     sha256 = "1mhbz56mbnq7dryf2d64l84lj3fpr5ilmg2424glans3wcg772hp";
+    buildInputs = [ pkgs.pcre ];
   };
 
   apcu51 = assert isPhp7; buildPecl {
-    name = "apcu-5.1.2";
-
-    sha256 = "0r5pfbjbmdj46h20jm3iqmy969qd27ajyf0phjhgykv6j0cqjlgd";
+    name = "apcu-5.1.8";
+    sha256 = "01dfbf0245d8cc0f51ba16467a60b5fad08e30b28df7846e0dd213da1143ecce";
+    buildInputs = [ pkgs.pcre ];
+    doCheck = true;
+    checkTarget = "test";
+    checkFlagsArray = ["REPORT_EXIT_STATUS=1" "NO_INTERACTION=1"];
   };
 
   ast = assert isPhp7; buildPecl {
@@ -33,7 +36,7 @@ let
     name = "couchbase-${version}";
     version = "2.3.4";
 
-    buildInputs = [ pkgs.libcouchbase pcs ];
+    buildInputs = [ pkgs.libcouchbase pkgs.zlib igbinary pcs ];
 
     src = pkgs.fetchFromGitHub {
       owner = "couchbase";
@@ -57,8 +60,50 @@ let
                if test -r $i/include/libcouchbase/couchbase.h; then
                  LIBCOUCHBASE_DIR=$i
                  AC_MSG_RESULT(found in $i)
+        @@ -154,6 +154,8 @@ COUCHBASE_FILES=" \
+             igbinary_inc_path="$phpincludedir"
+           elif test -f "$phpincludedir/ext/igbinary/igbinary.h"; then
+             igbinary_inc_path="$phpincludedir"
+        +  elif test -f "${igbinary.dev}/include/ext/igbinary/igbinary.h"; then
+        +    igbinary_inc_path="${igbinary.dev}/include"
+           fi
+           if test "$igbinary_inc_path" = ""; then
+             AC_MSG_WARN([Cannot find igbinary.h])
       '')
     ];
+  };
+
+  php_excel = assert isPhp7; buildPecl rec {
+    name = "php_excel";
+    version = "1.0.2";
+    phpVersion = "php7";
+
+    buildInputs = [ pkgs.libxl ];
+
+    src = pkgs.fetchurl {
+      url = "https://github.com/iliaal/${name}/releases/download/Excel-1.0.2-PHP7/excel-${version}-${phpVersion}.tgz";
+      sha256 = "0dpvih9gpiyh1ml22zi7hi6kslkilzby00z1p8x248idylldzs2n";
+    };
+
+    configureFlags = [ "--with-excel" "--with-libxl-incdir=${pkgs.libxl}/include_c" "--with-libxl-libdir=${pkgs.libxl}/lib" ];
+  };
+
+  igbinary = buildPecl {
+    name = "igbinary-2.0.4";
+
+    configureFlags = [ "--enable-igbinary" ];
+
+    makeFlags = [ "phpincludedir=$(dev)/include" ];
+
+    outputs = [ "out" "dev" ];
+
+    sha256 = "0a55l4f0bgbf3f6sh34njd14niwagg829gfkvb8n5fs69xqab67d";
+  };
+
+  mailparse = assert isPhp7; buildPecl {
+    name = "mailparse-3.0.2";
+
+    sha256 = "0fw447ralqihsjnn0fm2hkaj8343cvb90v0d1wfclgz49256y6nq";
   };
 
   imagick = buildPecl {
@@ -66,6 +111,7 @@ let
     sha256 = "0siyxpszjz6s095s2g2854bhprjq49rf22v6syjiwvndg1pc9fsh";
     configureFlags = "--with-imagick=${pkgs.imagemagick.dev}";
     nativeBuildInputs = [ pkgs.pkgconfig ];
+    buildInputs = [ pkgs.pcre ];
   };
 
   # No support for PHP 7 yet
@@ -133,7 +179,7 @@ let
     buildInputs = [ pkgs.spidermonkey_1_8_5 ];
   };
 
-  xdebug = if isPhp7 then xdebug25 else xdebug23;
+  xdebug = if isPhp7 then xdebug26 else xdebug23;
 
   xdebug23 = assert !isPhp7; buildPecl {
     name = "xdebug-2.3.1";
@@ -144,10 +190,10 @@ let
     checkTarget = "test";
   };
 
-  xdebug25 = buildPecl {
-    name = "xdebug-2.5.0";
+  xdebug26 = assert isPhp7; buildPecl {
+    name = "xdebug-2.6.0";
 
-    sha256 = "03c9y25a3gc3kpav0cdgmhjixcaly6974hx7wgihi0wlchgavmlb";
+    sha256 = "1p6b54ypi5lq4ka3pyy2gswdf1d5vjb9y8lp9fqcp3zn7g04q9mm";
 
     doCheck = true;
     checkTarget = "test";
@@ -248,22 +294,16 @@ let
     buildInputs = [ pkgs.geoip ];
   };
 
-  redis = if isPhp7 then redisPhp7 else redis22;
+  redis = if isPhp7 then redis31 else redis22;
 
   redis22 = assert !isPhp7; buildPecl {
     name = "redis-2.2.7";
     sha256 = "00n9dpk9ak0bl35sbcd3msr78sijrxdlb727nhg7f2g7swf37rcm";
   };
 
-  # Not released yet
-  redisPhp7 = assert isPhp7; buildPecl rec {
-    name = "redis-php7";
-
-    src = fetchgit {
-      url = "https://github.com/phpredis/phpredis";
-      rev = "4a37e47d0256581ce2f7a3b15b5bb932add09f36";
-      sha256 = "1qm2ifa0zf95l1g967iiabmja17srpwz73lfci7z13ffdw1ayhfd";
-    };
+  redis31 = assert isPhp7; buildPecl {
+    name = "redis-3.1.4";
+    sha256 = "0rgjdrqfif8pfn3ipk1v4gyjkkdcdrdk479qbpda89w25vaxzsxd";
   };
 
   v8 = assert isPhp7; buildPecl rec {
@@ -288,12 +328,13 @@ let
 
   composer = pkgs.stdenv.mkDerivation rec {
     name = "composer-${version}";
-    version = "1.5.1";
+    version = "1.6.3";
 
     src = pkgs.fetchurl {
       url = "https://getcomposer.org/download/${version}/composer.phar";
-      sha256 = "107v8hdgmi2s15zsd9ffrr3jyw01qkwv174y9gw9fbpdrjwffi97";
+      sha256 = "1dna9ng77nw002l7hq60b6vz0f1snmnsxj1l7cg4f877msxppjsj";
     };
+
     unpackPhase = ":";
 
     buildInputs = [ pkgs.makeWrapper ];
@@ -313,13 +354,100 @@ let
     };
   };
 
+  box = pkgs.stdenv.mkDerivation rec {
+    name = "box-${version}";
+    version = "2.7.5";
+
+    src = pkgs.fetchurl {
+      url = "https://github.com/box-project/box2/releases/download/${version}/box-${version}.phar";
+      sha256 = "1zmxdadrv0i2l8cz7xb38gnfmfyljpsaz2nnkjzqzksdmncbgd18";
+    };
+
+    phases = [ "installPhase" ];
+    buildInputs = [ pkgs.makeWrapper ];
+
+    installPhase = ''
+      mkdir -p $out/bin
+      install -D $src $out/libexec/box/box.phar
+      makeWrapper ${php}/bin/php $out/bin/box \
+        --add-flags "-d phar.readonly=0 $out/libexec/box/box.phar"
+    '';
+
+    meta = with pkgs.lib; {
+      description = "An application for building and managing Phars";
+      license = licenses.mit;
+      homepage = https://box-project.github.io/box2/;
+      maintainers = with maintainers; [ jtojnar ];
+    };
+  };
+
+  php-cs-fixer = pkgs.stdenv.mkDerivation rec {
+    name = "php-cs-fixer-${version}";
+    version = "2.11.1";
+
+    src = pkgs.fetchurl {
+      url = "https://github.com/FriendsOfPHP/PHP-CS-Fixer/releases/download/v${version}/php-cs-fixer.phar";
+      sha256 = "1270s5y7bgcml452lngq4fqn3a1mx15gfgmgcczjiiv0fxir446b";
+    };
+
+    phases = [ "installPhase" ];
+    buildInputs = [ pkgs.makeWrapper ];
+
+    installPhase = ''
+      mkdir -p $out/bin
+      install -D $src $out/libexec/php-cs-fixer/php-cs-fixer.phar
+      makeWrapper ${php}/bin/php $out/bin/php-cs-fixer \
+        --add-flags "$out/libexec/php-cs-fixer/php-cs-fixer.phar"
+    '';
+
+    meta = with pkgs.lib; {
+      description = "A tool to automatically fix PHP coding standards issues";
+      license = licenses.mit;
+      homepage = http://cs.sensiolabs.org/;
+      maintainers = with maintainers; [ jtojnar ];
+    };
+  };
+
+  php-parallel-lint = pkgs.stdenv.mkDerivation rec {
+    name = "php-parallel-lint-${version}";
+    version = "1.0.0";
+
+    src = pkgs.fetchFromGitHub {
+      owner = "JakubOnderka";
+      repo = "PHP-Parallel-Lint";
+      rev = "v${version}";
+      sha256 = "16nv8yyk2z3l213dg067l6di4pigg5rd8yswr5xgd18jwbys2vnw";
+    };
+
+    buildInputs = [ pkgs.makeWrapper composer box ];
+
+    buildPhase = ''
+      composer dump-autoload
+      box build
+    '';
+
+    installPhase = ''
+      mkdir -p $out/bin
+      install -D parallel-lint.phar $out/libexec/php-parallel-lint/php-parallel-lint.phar
+      makeWrapper ${php}/bin/php $out/bin/php-parallel-lint \
+        --add-flags "$out/libexec/php-parallel-lint/php-parallel-lint.phar"
+    '';
+
+    meta = with pkgs.lib; {
+      description = "This tool check syntax of PHP files faster than serial check with fancier output";
+      license = licenses.bsd2;
+      homepage = https://github.com/JakubOnderka/PHP-Parallel-Lint;
+      maintainers = with maintainers; [ jtojnar ];
+    };
+  };
+
   phpcs = pkgs.stdenv.mkDerivation rec {
     name = "phpcs-${version}";
-    version = "2.6.0";
+    version = "3.2.3";
 
     src = pkgs.fetchurl {
       url = "https://github.com/squizlabs/PHP_CodeSniffer/releases/download/${version}/phpcs.phar";
-      sha256 = "02mlv44x508rnkzkwiyh7lg2ah7aqyxcq65q9ycj06czm0xdzs41";
+      sha256 = "193axz56j1kyq458q0y38m99bx31jjjldfg6bv71vgm6zh4rvvs1";
     };
 
     phases = [ "installPhase" ];
@@ -336,17 +464,17 @@ let
       description = "PHP coding standard tool";
       license = licenses.bsd3;
       homepage = https://squizlabs.github.io/PHP_CodeSniffer/;
-      maintainers = with maintainers; [ javaguirre ];
+      maintainers = with maintainers; [ javaguirre etu ];
     };
   };
 
   phpcbf = pkgs.stdenv.mkDerivation rec {
     name = "phpcbf-${version}";
-    version = "2.6.0";
+    version = "3.2.3";
 
     src = pkgs.fetchurl {
       url = "https://github.com/squizlabs/PHP_CodeSniffer/releases/download/${version}/phpcbf.phar";
-      sha256 = "1ijf52cgd85ypvw431nnmzij6156ryhfvmajpkr7plfw0iccqc5j";
+      sha256 = "00p0l01shxx1h6g26j2dbfrp9j7im541das4xps4wrsvc4h4da9l";
     };
 
     phases = [ "installPhase" ];
@@ -363,7 +491,7 @@ let
       description = "PHP coding standard beautifier and fixer";
       license = licenses.bsd3;
       homepage = https://squizlabs.github.io/PHP_CodeSniffer/;
-      maintainers = with maintainers; [ cmcdragonkai ];
+      maintainers = with maintainers; [ cmcdragonkai etu ];
     };
   };
 }; in self

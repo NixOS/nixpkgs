@@ -1,6 +1,6 @@
 {
-  mkDerivation, lib, fetchurl, extra-cmake-modules, kdoctools, makeWrapper,
-  boost, qtwebkit, qtx11extras, shared_mime_info,
+  mkDerivation, lib, fetchurl, fetchpatch, extra-cmake-modules, kdoctools, makeWrapper,
+  boost, qtwebkit, qtx11extras, shared-mime-info,
   breeze-icons, kactivities, karchive, kcodecs, kcompletion, kconfig, kconfigwidgets,
   kcoreaddons, kdbusaddons, kdiagram, kguiaddons, khtml, ki18n,
   kiconthemes, kitemviews, kjobwidgets, kcmutils, kdelibs4support, kio, kross,
@@ -15,18 +15,20 @@
 
 mkDerivation rec {
   pname = "calligra";
-  version = "3.0.1";
+  version = "3.1.0";
   name = "${pname}-${version}";
 
   src = fetchurl {
     url = "mirror://kde/stable/${pname}/${version}/${name}.tar.xz";
-    sha256 = "1cjdd7sx1zhas6lhw0dzhrnki790jkf93f88wn6z9yrww32dsas5";
+    sha256 = "0w782k0hprpb6viixnqz34sp0z5csv3prdby46z22qqkcipcs638";
   };
+
+  enableParallelBuilding = true;
 
   nativeBuildInputs = [ extra-cmake-modules kdoctools makeWrapper ];
 
   buildInputs = [
-    boost qtwebkit qtx11extras shared_mime_info
+    boost qtwebkit qtx11extras shared-mime-info
     kactivities karchive kcodecs kcompletion kconfig kconfigwidgets kcoreaddons
     kdbusaddons kdiagram kguiaddons khtml ki18n kiconthemes kitemviews
     kjobwidgets kcmutils kdelibs4support kio kross knotifications knotifyconfig kparts

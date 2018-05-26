@@ -1,29 +1,26 @@
 { stdenv, fetchPypi, buildPythonPackage, isPy3k, execnet, pytest, setuptools_scm, pytest-forked }:
 
 buildPythonPackage rec {
-  name = "${pname}-${version}";
   pname = "pytest-xdist";
-  version = "1.20.0";
+  version = "1.22.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "7924d45c2430191fe3679a58116c74ceea13307d7822c169d65fd59a24b3a4fe";
+    sha256 = "e8f5744acc270b3e7d915bdb4d5f471670f049b6fbd163d4cbd52203b075d30f";
   };
 
-  buildInputs = [ pytest setuptools_scm pytest-forked];
+  nativeBuildInputs = [ setuptools_scm ];
+  buildInputs = [ pytest pytest-forked ];
   propagatedBuildInputs = [ execnet ];
 
-  postPatch = ''
-    rm testing/acceptance_test.py testing/test_remote.py testing/test_slavemanage.py
-  '';
-
   checkPhase = ''
-    py.test testing
+    # Excluded tests access file system
+    py.test testing -k "not test_distribution_rsyncdirs_example \
+                    and not test_rsync_popen_with_path \
+                    and not test_popen_rsync_subdir \
+                    and not test_init_rsync_roots \
+                    and not test_rsyncignore"
   '';
-
-  # Only test on 3.x
-  # INTERNALERROR> AttributeError: 'NoneType' object has no attribute 'getconsumer'
-  doCheck = isPy3k;
 
   meta = with stdenv.lib; {
     description = "py.test xdist plugin for distributed testing and loop-on-failing modes";

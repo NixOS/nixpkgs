@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "quiterss-${version}";
-  version = "0.18.8";
+  version = "0.18.10";
 
   src = fetchFromGitHub {
     owner = "QuiteRSS";
     repo = "quiterss";
     rev = "${version}";
-    sha256 = "09mdxpv04zycrip1p5w6947348xfraicijddvxsr7d498r59b7ff";
+    sha256 = "1bv5aw6fscrwlycirvzm6fvbwmg8lbd1ycldkwbvybhjyfjaxkpm";
   };
 
   nativeBuildInputs = [ pkgconfig qmake ];

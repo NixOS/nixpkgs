@@ -26,7 +26,7 @@ fetchzip {
   meta = {
     description = "Some TrueType fonts from Microsoft Windows Vista (Calibri, Cambria, Candara, Consolas, Constantia, Corbel)";
     homepage = http://www.microsoft.com/typography/ClearTypeFonts.mspx;
-    binaryDistribution = false; # haven't read the EULA, but we probably can't redistribute these files, so...
+    license = stdenv.lib.licenses.unfree; # haven't read the EULA, but we probably can't redistribute these files, so...
 
     # Set a non-zero priority to allow easy overriding of the
     # fontconfig configuration files.

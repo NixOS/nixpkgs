@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, zlib, glib, xorg, dbus, fontconfig,
+{ stdenv, fetchurl, zlib, glib, xorg, dbus, fontconfig, libGL,
   freetype, xkeyboard_config, makeDesktopItem, makeWrapper }:
 
 stdenv.mkDerivation rec {
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   };
 
   desktopItem = makeDesktopItem {
-    name = "Robo3T";
+    name = "robo3t";
     exec = "robo3t";
     icon = icon;
     comment = "Query GUI for mongodb";
@@ -41,6 +41,7 @@ stdenv.mkDerivation rec {
     dbus
     fontconfig
     freetype
+    libGL
   ];
 
   installPhase = ''
@@ -58,7 +59,7 @@ stdenv.mkDerivation rec {
     mkdir -p $out/share/icons
     cp ${icon} $out/share/icons/robomongo.png
 
-    patchelf --set-interpreter ${stdenv.glibc}/lib/ld-linux-x86-64.so.2 $BASEDIR/bin/robo3t
+    patchelf --set-interpreter ${stdenv.cc.libc}/lib/ld-linux-x86-64.so.2 $BASEDIR/bin/robo3t
 
     mkdir $out/bin
 
@@ -70,7 +71,7 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = https://robomongo.org/;
     description = "Query GUI for mongodb";
-    platforms = stdenv.lib.intersectLists stdenv.lib.platforms.linux stdenv.lib.platforms.x86_64;
+    platforms = [ "x86_64-linux" ];
     license = stdenv.lib.licenses.gpl3;
     maintainers = [ stdenv.lib.maintainers.eperuffo ];
   };

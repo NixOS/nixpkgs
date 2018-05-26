@@ -42,6 +42,8 @@ in
 
   config = mkIf cfg.enable {
 
+    # Not wrapping "batch" because it's a shell script (kernel drops perms
+    # anyway) and it's patched to invoke the "at" setuid wrapper.
     security.wrappers = builtins.listToAttrs (
       map (program: { name = "${program}"; value = {
       source = "${at}/bin/${program}";
@@ -49,7 +51,7 @@ in
       group = "atd";
       setuid = true;
       setgid = true;
-    };}) [ "at" "atq" "atrm" "batch" ]);
+    };}) [ "at" "atq" "atrm" ]);
 
     environment.systemPackages = [ at ];
 

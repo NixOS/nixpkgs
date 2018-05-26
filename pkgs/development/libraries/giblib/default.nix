@@ -8,8 +8,24 @@ stdenv.mkDerivation rec {
     sha256 = "1b4bmbmj52glq0s898lppkpzxlprq9aav49r06j2wx4dv3212rhp";
   };
 
+  outputs = [ "out" "dev" ];
+  setOutputFlags = false;
+
+  preConfigure = ''
+    configureFlagsArray+=(
+      --includedir=$dev/include
+    )
+  '';
+
   buildInputs = [ xlibsWrapper ];
   propagatedBuildInputs = [ imlib2 ];
+
+  postFixup = ''
+    moveToOutput bin/giblib-config "$dev"
+
+    # Doesn't contain useful stuff
+    rm -rf $out/share/doc
+  '';
 
   meta = {
     homepage = http://linuxbrit.co.uk/giblib/;

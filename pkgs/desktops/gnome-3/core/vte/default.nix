@@ -1,14 +1,23 @@
 { stdenv, fetchurl, intltool, pkgconfig
-, gnome3, ncurses, gobjectIntrospection, vala_0_32, libxml2, gnutls
-, fetchFromGitHub, autoconf, automake, libtool, gtk_doc, gperf, pcre2
+, gnome3, ncurses, gobjectIntrospection, vala, libxml2, gnutls
+, fetchFromGitHub, autoconf, automake, libtool, gtk-doc, gperf, pcre2
 }:
 
 stdenv.mkDerivation rec {
-  inherit (import ./src.nix fetchurl) name src;
+  name = "vte-${version}";
+  version = "0.52.1";
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ gobjectIntrospection intltool gnome3.glib
-                  gnome3.gtk3 ncurses vala_0_32 libxml2 gperf ];
+  src = fetchurl {
+    url = "mirror://gnome/sources/vte/${gnome3.versionBranch version}/${name}.tar.xz";
+    sha256 = "1lva70inb5y8p42rg95fb88z2ybwcz0lybla3ixbgp2sj0s4rzdh";
+  };
+
+  passthru = {
+    updateScript = gnome3.updateScript { packageName = "vte"; attrPath = "gnome3.vte"; };
+  };
+
+  nativeBuildInputs = [ gobjectIntrospection intltool pkgconfig vala gperf libxml2 ];
+  buildInputs = [ gnome3.glib gnome3.gtk3 ncurses ];
 
   propagatedBuildInputs = [ gnutls pcre2 ];
 

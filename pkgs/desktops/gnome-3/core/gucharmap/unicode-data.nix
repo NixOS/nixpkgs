@@ -1,4 +1,4 @@
-{fetchurl, stdenv}:
+{ fetchurl, stdenv, gnome3 }:
 stdenv.mkDerivation {
   name = "unicode-data-10.0.0";
   srcs = [

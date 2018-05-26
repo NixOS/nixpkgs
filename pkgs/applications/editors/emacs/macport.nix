@@ -6,7 +6,7 @@
 stdenv.mkDerivation rec {
   emacsVersion = "25.3";
   emacsName = "emacs-${emacsVersion}";
-  macportVersion = "6.7";
+  macportVersion = "6.8";
   name = "emacs-mac-${emacsVersion}-${macportVersion}";
 
   builder = ./builder.sh;
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
 
   macportSrc = fetchurl {
     url = "ftp://ftp.math.s.chiba-u.ac.jp/emacs/${emacsName}-mac-${macportVersion}.tar.gz";
-    sha256 = "0fivrasvigszr31w8wg8kb808hmqv2cc8klrm9n0hdxwg5fs5d0y";
+    sha256 = "167lgl76jz1bq6whb9ajshhw5v9bbw9ci4lji4qlmd5nrwnb7kqg";
   };
 
   hiresSrc = fetchurl {

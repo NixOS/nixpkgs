@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
   version = "1.0";
 
   src = fetchurl {
-    url = "http://ftop.googlecode.com/files/${name}.tar.bz2";
+    url = "https://storage.googleapis.com/google-code-archive-downloads/v2/code.google.com/ftop/${name}.tar.bz2";
     sha256 = "3a705f4f291384344cd32c3dd5f5f6a7cd7cea7624c83cb7e923966dbcd47f82";
   };
 
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Show progress of open files and file systems";
-    homepage = https://code.google.com/p/ftop/;
+    homepage = https://code.google.com/archive/p/ftop/;
     license = licenses.gpl3Plus;
     longDescription = ''
       ftop is to files what top is to processes. The progress of all open files
@@ -32,7 +32,6 @@ stdenv.mkDerivation rec {
       generally all that is of interest to the user).
       As with top, the items are displayed in order from most to least active.
     '';
-    maintainers = with maintainers; [ nckx ];
     platforms = platforms.linux;
   };
 }

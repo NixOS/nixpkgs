@@ -6,11 +6,11 @@
 buildPythonPackage rec {
   name = "${pname}-${version}";
   pname = "Shapely";
-  version = "1.5.15";
+  version = "1.6.4.post1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0lfqxb3kpdn0g9zzlhzg79yc8iyy4fpsk0p5nd80gar1mmhr8pg7";
+    sha256 = "30df7572d311514802df8dc0e229d1660bc4cbdcf027a8281e79c5fc2fcf02f2";
   };
 
   buildInputs = [ geos glibcLocales cython ];
@@ -27,13 +27,12 @@ buildPythonPackage rec {
     libc = if stdenv.isDarwin then "libc.dylib" else "libc.so.6";
   in ''
     sed -i "s|_lgeos = load_dll('geos_c', fallbacks=.*)|_lgeos = load_dll('geos_c', fallbacks=['${geos}/lib/libgeos_c${stdenv.hostPlatform.extensions.sharedLibrary}'])|" shapely/geos.py
-    sed -i "s|free = load_dll('c').free|free = load_dll('c', fallbacks=['${stdenv.cc.libc}/lib/${stdenv.cc.libc}']).free|" shapely/geos.py
+    sed -i "s|free = load_dll('c').free|free = load_dll('c', fallbacks=['${stdenv.cc.libc}/lib/${libc}']).free|" shapely/geos.py
   '';
 
-  # tests/test_voctorized fails because the vectorized extension is not
-  # available in when running tests
+  # Disable the tests that improperly try to use the built extensions
   checkPhase = ''
-    py.test --ignore tests/test_vectorized.py
+    py.test -k 'not test_vectorized and not test_fallbacks' tests
   '';
 
   meta = with stdenv.lib; {

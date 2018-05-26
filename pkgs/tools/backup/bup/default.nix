@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, fetchurl, makeWrapper
+{ stdenv, fetchFromGitHub, makeWrapper
 , perl, pandoc, python2Packages, git
 , par2cmdline ? null, par2Support ? true
 }:
@@ -19,7 +19,12 @@ stdenv.mkDerivation rec {
     sha256 = "0wdr399jf64zzzsdvldhrwvnh5xpbghjvslr1j2cwr5y4i36znxf";
   };
 
-  buildInputs = [ git python2Packages.python ];
+  buildInputs = [
+    git
+    (python2Packages.python.withPackages
+      (p: with p; [ setuptools tornado ]
+        ++ stdenv.lib.optionals (!stdenv.isDarwin) [ pyxattr pylibacl fuse ]))
+  ];
   nativeBuildInputs = [ pandoc perl makeWrapper ];
 
   postPatch = ''
@@ -41,11 +46,7 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     wrapProgram $out/bin/bup \
-      --prefix PATH : ${git}/bin \
-      --prefix PYTHONPATH : ${concatStringsSep ":" (map (x: "$(toPythonPath ${x})")
-        (with python2Packages;
-         [ setuptools tornado ]
-         ++ stdenv.lib.optionals (!stdenv.isDarwin) [ pyxattr pylibacl fuse ]))}
+      --prefix PATH : ${git}/bin
   '';
 
   meta = {

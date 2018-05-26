@@ -1,6 +1,6 @@
 /* hunspell dictionaries */
 
-{ stdenv, fetchurl, fetchFromGitHub, unzip, coreutils, bash, which, zip }:
+{ stdenv, fetchurl, fetchFromGitHub, unzip, coreutils, bash, which, zip, ispell, perl, hunspell }:
 
 
 let
@@ -58,6 +58,51 @@ let
         bash -x ./make_dict.sh -l ${dictFileName} -2
         unzip ${dictFileName}.zip \
           ${dictFileName}.dic ${dictFileName}.aff ${readmeFile}
+      '';
+    };
+
+  mkDictFromDSSO =
+    { shortName, shortDescription, dictFileName }:
+    mkDict rec {
+      inherit dictFileName;
+      version = "2.40";
+      # Should really use a string function or something
+      _version = "2-40";
+      name = "hunspell-dict-${shortName}-dsso-${version}";
+      _name = "ooo_swedish_dict_${_version}";
+      readmeFile = "LICENSE_en_US.txt";
+      src = fetchurl {
+        url = "https://extensions.libreoffice.org/extensions/swedish-spelling-dictionary-den-stora-svenska-ordlistan/${version}/@@download/file/${_name}.oxt";
+        sha256 = "b982881cc75f5c4af1199535bd4735ee476bdc48edf63e3f05fb4f715654a7bc";
+      };
+      meta = with stdenv.lib; {
+        longDescription = ''
+        Svensk ordlista baserad på DSSO (den stora svenska ordlistan) och Göran
+        Anderssons (goran@init.se) arbete med denna. Ordlistan hämtas från
+        LibreOffice då dsso.se inte längre verkar vara med oss.
+        '';
+        description = "Hunspell dictionary for ${shortDescription} from LibreOffice";
+        license = licenses.lgpl3;
+        platforms = platforms.all;
+      };
+      buildInputs = [ unzip ];
+      phases = "unpackPhase installPhase";
+      sourceRoot = ".";
+      unpackCmd = ''
+      unzip $src dictionaries/${dictFileName}.dic dictionaries/${dictFileName}.aff $readmeFile
+      '';
+      installPhase = ''
+        # hunspell dicts
+        install -dm755 "$out/share/hunspell"
+        install -m644 dictionaries/${dictFileName}.dic "$out/share/hunspell/"
+        install -m644 dictionaries/${dictFileName}.aff "$out/share/hunspell/"
+        # myspell dicts symlinks
+        install -dm755 "$out/share/myspell/dicts"
+        ln -sv "$out/share/hunspell/${dictFileName}.dic" "$out/share/myspell/dicts/"
+        ln -sv "$out/share/hunspell/${dictFileName}.aff" "$out/share/myspell/dicts/"
+        # docs
+        install -dm755 "$out/share/doc"
+        install -m644 ${readmeFile} $out/share/doc/${name}.txt
       '';
     };
 
@@ -164,6 +209,42 @@ let
         longDescription = longDescription;
         license = licenses.gpl2;
         maintainers = with maintainers; [ zalakain ];
+        platforms = platforms.all;
+      };
+    };
+
+  mkDictFromJ3e =
+    { shortName, shortDescription, dictFileName }:
+    stdenv.mkDerivation rec {
+      name = "hunspell-dict-${shortName}-j3e-${version}";
+      version = "20161207";
+
+      src = fetchurl {
+        url = "https://j3e.de/ispell/igerman98/dict/igerman98-${version}.tar.bz2";
+        sha256 = "1a3055hp2bc4q4nlg3gmg0147p3a1zlfnc65xiv2v9pyql1nya8p";
+      };
+
+      buildInputs = [ ispell perl hunspell ];
+
+      phases = ["unpackPhase" "installPhase"];
+      installPhase = ''
+        patchShebangs bin
+        make hunspell/${dictFileName}.aff hunspell/${dictFileName}.dic
+        # hunspell dicts
+        install -dm755 "$out/share/hunspell"
+        install -m644 hunspell/${dictFileName}.dic "$out/share/hunspell/"
+        install -m644 hunspell/${dictFileName}.aff "$out/share/hunspell/"
+        # myspell dicts symlinks
+        install -dm755 "$out/share/myspell/dicts"
+        ln -sv "$out/share/hunspell/${dictFileName}.dic" "$out/share/myspell/dicts/"
+        ln -sv "$out/share/hunspell/${dictFileName}.aff" "$out/share/myspell/dicts/"
+      '';
+
+      meta = with stdenv.lib; {
+        homepage = https://www.j3e.de/ispell/igerman98/index_en.html;
+        description = shortDescription;
+        license = with licenses; [ gpl2 gpl3 ];
+        maintainers = with maintainers; [ timor ];
         platforms = platforms.all;
       };
     };
@@ -426,5 +507,40 @@ in {
         sha256 = "0lw193jr7ldvln5x5z9p21rz1by46h0say9whfcw2kxs9vprd5b3";
       })
     ];
+  };
+
+  /* SWEDISH */
+  
+  sv-se = mkDictFromDSSO rec {
+    shortName = "sv-se";
+    dictFileName = "sv_SE";
+    shortDescription = "Swedish (Sweden)";
+  };
+
+  # Finlandian Swedish (hello Linus Torvalds)
+  sv-fi = mkDictFromDSSO rec {
+    shortName = "sv-fi";
+    dictFileName = "sv_FI";
+    shortDescription = "Swedish (Finland)";
+  };
+  
+  /* GERMAN */
+
+  de-de = mkDictFromJ3e {
+    shortName = "de-de";
+    shortDescription = "German (Germany)";
+    dictFileName = "de_DE";
+  };
+
+  de-at = mkDictFromJ3e {
+    shortName = "de-at";
+    shortDescription = "German (Austria)";
+    dictFileName = "de_AT";
+  };
+
+  de-ch = mkDictFromJ3e {
+    shortName = "de-ch";
+    shortDescription = "German (Switzerland)";
+    dictFileName = "de_CH";
   };
 }

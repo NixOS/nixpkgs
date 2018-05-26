@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub
-, freetype, harfbuzz, jbig2dec, libjpeg, libX11, mujs, mupdf, ncurses, openjpeg
+, freetype, harfbuzz, jbig2dec, libjpeg, libX11, mupdf, ncurses, openjpeg
 , openssl
 
 , imageSupport ? true, imlib2 ? null }:
@@ -15,26 +15,22 @@ in
 
 stdenv.mkDerivation rec {
   name = "${package}-${version}";
-  version = "0.5.4";
+  version = "0.5.5";
 
   src = fetchFromGitHub {
     repo = "JFBView";
     owner = "jichu4n";
     rev = version;
-    sha256 = "0p12b5n07yfkmfswjdb3a4c5c50jcphl030n3i71djcq4jjvrxlw";
+    sha256 = "1w844ha9lp49ik79yfislib34455nl9gcksbx22hiz30gmqwzakz";
   };
 
   hardeningDisable = [ "format" ];
 
   buildInputs = [
-    freetype harfbuzz jbig2dec libjpeg libX11 mujs mupdf ncurses openjpeg
+    freetype harfbuzz jbig2dec libjpeg libX11 mupdf ncurses openjpeg
     openssl
   ] ++ stdenv.lib.optionals imageSupport [
     imlib2
-  ];
-
-  patches = [
-    ./mupdf-1.9.patch
   ];
 
   configurePhase = ''
@@ -68,6 +64,5 @@ stdenv.mkDerivation rec {
     homepage = https://seasonofcode.com/pages/jfbview.html;
     license = licenses.asl20;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ nckx ];
   };
 }

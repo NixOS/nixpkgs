@@ -48,6 +48,15 @@ in
             Name of the theme to be used by oh-my-zsh.
           '';
         };
+
+        cacheDir = mkOption {
+          default = "$HOME/.cache/oh-my-zsh";
+          type = types.str;
+          description = ''
+            Cache directory to be used by `oh-my-zsh`.
+            Without this option it would default to the read-only nix store.
+          '';
+        };
       };
     };
 
@@ -73,6 +82,13 @@ in
         ${optionalString (stringLength(cfg.theme) > 0)
           "ZSH_THEME=\"${cfg.theme}\""
         }
+
+        ${optionalString (cfg.cacheDir != null) ''
+          if [[ ! -d "${cfg.cacheDir}" ]]; then
+            mkdir -p "${cfg.cacheDir}"
+          fi
+          ZSH_CACHE_DIR=${cfg.cacheDir}
+        ''}
 
         source $ZSH/oh-my-zsh.sh
       '';

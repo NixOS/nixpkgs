@@ -220,7 +220,7 @@ in
     '';
 
     services.xserver.displayManager.job = {
-      logsXsession = true;
+      logToFile = true;
 
       execCmd = ''
         ${optionalString (cfg.pulseaudio)

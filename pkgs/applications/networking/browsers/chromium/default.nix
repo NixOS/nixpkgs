@@ -1,5 +1,5 @@
 { newScope, stdenv, makeWrapper, makeDesktopItem, ed
-, glib, gtk3, gnome3, gsettings_desktop_schemas
+, glib, gtk3, gnome3, gsettings-desktop-schemas
 
 # package customization
 , channel ? "stable"
@@ -35,7 +35,7 @@ let
   };
 
   desktopItem = makeDesktopItem {
-    name = "chromium";
+    name = "chromium-browser";
     exec = "chromium %U";
     icon = "chromium";
     comment = "An open source web browser from Google";
@@ -75,7 +75,7 @@ in stdenv.mkDerivation {
     makeWrapper ed
 
     # needed for GSETTINGS_SCHEMAS_PATH
-    gsettings_desktop_schemas glib gtk3
+    gsettings-desktop-schemas glib gtk3
 
     # needed for XDG_ICON_DIRS
     gnome3.defaultIconTheme
@@ -90,7 +90,7 @@ in stdenv.mkDerivation {
     mkdir -p "$out/bin"
 
     eval makeWrapper "${browserBinary}" "$out/bin/chromium" \
-      ${commandLineArgs} \
+      --add-flags ${escapeShellArg (escapeShellArg commandLineArgs)} \
       ${concatMapStringsSep " " getWrapperFlags chromium.plugins.enabled}
 
     ed -v -s "$out/bin/chromium" << EOF
@@ -117,13 +117,19 @@ in stdenv.mkDerivation {
     ln -s "$out/bin/chromium" "$out/bin/chromium-browser"
 
     mkdir -p "$out/share/applications"
-    for f in '${chromium.browser}'/share/*; do
+    for f in '${chromium.browser}'/share/*; do # hello emacs */
       ln -s -t "$out/share/" "$f"
     done
     cp -v "${desktopItem}/share/applications/"* "$out/share/applications"
   '';
 
-  inherit (chromium.browser) meta packageName;
+  inherit (chromium.browser) packageName;
+  meta = chromium.browser.meta // {
+    broken = if enableWideVine then
+          builtins.trace "WARNING: WideVine is not functional, please only use for testing"
+             true
+        else false;
+  };
 
   passthru = {
     inherit (chromium) upstream-info browser;

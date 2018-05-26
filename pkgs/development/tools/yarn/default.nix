@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "yarn-${version}";
-  version = "1.0.1";
+  version = "1.7.0";
 
   src = fetchzip {
     url = "https://github.com/yarnpkg/yarn/releases/download/v${version}/yarn-v${version}.tar.gz";
-    sha256 = "1adp5wzxbq5glxbmqfvmjn3vld93mvl65y4bmhjn8clzj7n25piq";
+    sha256 = "00fxihv9ih40k6f21a7hb6vkx4h4m6ks0fbai5h9ssi0p4m5j3by";
   };
 
   buildInputs = [makeWrapper nodejs];

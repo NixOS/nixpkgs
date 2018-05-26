@@ -1,27 +1,24 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "bchunk-1.2.0";
+  name = "bchunk-${version}";
+  version = "1.2.2";
 
   src = fetchurl {
     url = "http://he.fi/bchunk/${name}.tar.gz";
-    sha256 = "0pcbyx3689cbl23dcij497hb3q5f1wmki7cxic5nzldx71g9vp5g";
+    sha256 = "12dxx98kbpc5z4dgni25280088bhlsb677rp832r82zzc1drpng7";
   };
 
-  preConfigure =
-    ''
-      substituteInPlace Makefile \
-        --replace "-o root -g root" "" \
-        --replace "-o bin -g bin" ""
-    '';
+  makeFlags = stdenv.lib.optionals stdenv.cc.isClang [ "CC=cc" "LD=cc" ];
 
-  makeFlags = "PREFIX=$(out) MAN_DIR=$(out)/share/man";
+  installPhase = ''
+    install -Dt $out/bin bchunk
+    install -Dt $out/share/man/man1 bchunk.1
+  '';
 
-  preInstall = "mkdir -p $out/bin $out/share/man/man1";
-
-  meta = {
+  meta = with stdenv.lib; {
     homepage = http://he.fi/bchunk/;
-    description = "A program that converts CD-ROM images in BIN/CUE format into a set of ISO and CDR tracks";
-    platforms = stdenv.lib.platforms.linux;
+    description = "A program that converts CD images in BIN/CUE format into a set of ISO and CDR tracks";
+    platforms = platforms.unix;
   };
 }

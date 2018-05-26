@@ -1,15 +1,12 @@
 { stdenv, fetchurl, readline, ncurses }:
 
-let
-  version = "1.22";
-in
 stdenv.mkDerivation rec {
-
-  name = "hstr-${version}";
+  name    = "hstr-${version}";
+  version = "1.25";
 
   src = fetchurl {
     url = "https://github.com/dvorka/hstr/releases/download/${version}/hh-${version}-src.tgz";
-    sha256 = "09rh510x8qc5jbpnfzazbv9wc3bqmf5asydcl2wijpqm5bi21iqp";
+    sha256 = "10njj0a3s5czv497wk3whka3gxr7vmhabs12vaw7kgb07h4ssnhg";
   };
 
   buildInputs = [ readline ncurses ];
@@ -18,7 +15,7 @@ stdenv.mkDerivation rec {
     homepage = https://github.com/dvorka/hstr;
     description = "Shell history suggest box - easily view, navigate, search and use your command history";
     license = stdenv.lib.licenses.asl20;
-    maintainers = [ stdenv.lib.maintainers.matthiasbeyer ];
+    maintainers = with stdenv.lib.maintainers; [ ];
     platforms = with stdenv.lib.platforms; linux; # Cannot test others
   };
 

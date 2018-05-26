@@ -17,13 +17,17 @@
 
 buildPythonPackage rec {
     pname = "ZODB";
-    version = "5.2.4";
+    version = "5.4.0";
     name = "${pname}-${version}";
 
     src = fetchPypi {
       inherit pname version;
-      sha256 = "1pya0inkkxaqmi14gp796cidf894nz64n603zk670jj9xz0wkhgc";
+      sha256 = "0b306042f4f0d558a477d65c34b0dd6e7604c6e583f55dfda52befa2fa13e076";
     };
+
+    patches = [
+      ./ZODB-5.3.0-fix-tests.patch
+    ];
 
     propagatedBuildInputs = [
       manuel
@@ -41,7 +45,7 @@ buildPythonPackage rec {
 
     meta = with stdenv.lib; {
       description = "Zope Object Database: object database and persistence";
-      homepage = http://pypi.python.org/pypi/ZODB;
+      homepage = https://pypi.python.org/pypi/ZODB;
       license = licenses.zpl21;
       maintainers = with maintainers; [ goibhniu ];
     };

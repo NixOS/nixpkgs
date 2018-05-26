@@ -1,9 +1,9 @@
-{ fetchgit, fetchFromGitHub, bootPkgs }:
+{ fetchgit, fetchFromGitHub, bootPkgs, cabal-install }:
 
 bootPkgs.callPackage ./base.nix {
   version = "0.2.020170323";
 
-  inherit bootPkgs;
+  inherit bootPkgs cabal-install;
 
   ghcjsSrc = fetchFromGitHub {
     owner = "ghcjs";
@@ -45,4 +45,6 @@ bootPkgs.callPackage ./base.nix {
     "unix"
   ];
   stage2 = import ./head_stage2.nix;
+
+  patches = [ ./ghcjs-head.patch ];
 }

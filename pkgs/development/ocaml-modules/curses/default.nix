@@ -13,6 +13,9 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ ocaml findlib ];
 
+  # Fix build for recent ncurses versions
+  NIX_CFLAGS_COMPILE = [ "-DNCURSES_INTERNALS=1" ];
+
   createFindlibDestdir = true;
 
   postPatch = ''
@@ -27,6 +30,5 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2;
     maintainers = [ maintainers.volth ];
     platforms = ocaml.meta.platforms or [];
-    broken = true;
   };
 }

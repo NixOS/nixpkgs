@@ -25,6 +25,7 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ pSub ];
     platforms = with platforms; linux;
     updateWalker = true;
+    downloadPage = "http://mcabber.com/files/";
     downloadURLRegexp = "mcabber-[0-9.]+[.]tar[.][a-z0-9]+$";
   };
 }

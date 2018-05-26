@@ -3,11 +3,11 @@ let
   s = # Generated upstream information
   rec {
     baseName="firejail";
-    version="0.9.48";
+    version="0.9.54";
     name="${baseName}-${version}";
-    hash="02a74nx8p2gbpd6ffnr52p02pxxllw3yy5fy4083a77r3wia8zb3";
-    url="https://vorboss.dl.sourceforge.net/project/firejail/firejail/firejail-0.9.48.tar.xz";
-    sha256="02a74nx8p2gbpd6ffnr52p02pxxllw3yy5fy4083a77r3wia8zb3";
+    hash="0mkpqlhi1vxiwd1pmlsk02vpydy1gj61k1gi3zlz6qw84xa6i6ff";
+    url="https://vorboss.dl.sourceforge.net/project/firejail/firejail/firejail-0.9.54.tar.xz";
+    sha256="0mkpqlhi1vxiwd1pmlsk02vpydy1gj61k1gi3zlz6qw84xa6i6ff";
   };
   buildInputs = [
     which

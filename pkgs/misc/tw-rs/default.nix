@@ -14,7 +14,7 @@ rustPlatform.buildRustPackage rec {
   buildInputs = [ perl zlib openssl ]
     ++ stdenv.lib.optional stdenv.isDarwin curl;
 
-  depsSha256 = "1lg1jh6f9w28i94vaj62r859g6raalxmxabvw7av6sqr0hr56p05";
+  cargoSha256 = "0c3324b7z77kiwc6whbppfmrli254fr1nyd0vpsxvpc0av3279jg";
 
   meta = with stdenv.lib; {
     description = "Twitter command-line interface written in rust";

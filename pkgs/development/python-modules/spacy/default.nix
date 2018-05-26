@@ -1,14 +1,13 @@
-{ stdenv
+{ lib
 , pkgs
 , buildPythonPackage
 , python
 , fetchPypi
-, fetchFromGitHub
-, pytest 
-, cython
-, cymem
+, pythonOlder
+, html5lib
+, pytest
 , preshed
-, pathlib2
+, ftfy
 , numpy
 , murmurhash
 , plac
@@ -16,58 +15,61 @@
 , ujson
 , dill
 , requests
-, ftfy
 , thinc
-, pip
+, regex
+, cymem
+, pathlib
+, msgpack-python
+, msgpack-numpy
 }:
-let
-  enableDebugging = true;
-  regexLocked = buildPythonPackage rec {
-    name = "${pname}-${version}";
-    pname = "regex";
-    version = "2017.04.05";
 
-    src = fetchPypi {
-      inherit pname version;      
-      sha256 = "0c95gf3jzz8mv52lkgq0h7sbasjwvdhghm4s0phmy5k9sr78f4fq";
-    };
+buildPythonPackage rec {
+  pname = "spacy";
+  version = "2.0.9";
+
+  src = fetchPypi {
+    inherit pname version;
+    sha256 = "1ihkhflhyz67bp73kfjqfrbcgdxi2msz5asbrh0pkk590c4vmms5";
   };
-in buildPythonPackage rec {
-  name = "spacy-${version}";
-  version = "1.8.2";
 
-  src = fetchFromGitHub {
-    owner = "explosion";
-    repo = "spaCy";
-    rev = "v${version}";
-    sha256 = "0v3bmmar31a6968y4wl0lmgnc3829l2mnwd8s959m4pqw1y1w648";    
-  };  
+  prePatch = ''
+    substituteInPlace setup.py \
+      --replace "html5lib==" "html5lib>=" \
+      --replace "regex==" "regex>=" \
+      --replace "ftfy==" "ftfy>=" \
+      --replace "msgpack-python==" "msgpack-python>=" \
+      --replace "msgpack-numpy==" "msgpack-numpy>=" \
+      --replace "pathlib" "pathlib; python_version<\"3.4\""
+  '';
 
   propagatedBuildInputs = [
-   cython
-   cymem
-   pathlib2
-   preshed
    numpy
    murmurhash
+   cymem
+   preshed
+   thinc
    plac
    six
+   html5lib
    ujson
    dill
    requests
-   regexLocked
+   regex
    ftfy
-   thinc
-   pytest
-   pip
+   msgpack-python
+   msgpack-numpy
+  ] ++ lib.optional (pythonOlder "3.4") pathlib;
+
+  checkInputs = [
+    pytest
   ];
 
   doCheck = false;
   # checkPhase = ''
   #   ${python.interpreter} -m pytest spacy/tests --vectors --models --slow
-  # '';  
-  
-  meta = with stdenv.lib; {
+  # '';
+
+  meta = with lib; {
     description = "Industrial-strength Natural Language Processing (NLP) with Python and Cython";
     homepage = https://github.com/explosion/spaCy;
     license = licenses.mit;

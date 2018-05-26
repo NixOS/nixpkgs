@@ -22,10 +22,13 @@ stdenv.mkDerivation {
   prePatch = ''
     sed -e '/curl.types.h/d' -i *.{c,h,hpp,cpp}
   '';
+
+  patches = [ ./pointer_int_comparison.patch ];
+  patchFlags = [ "-p1" "--binary" ]; # patch has dos style eol
       
   meta = with stdenv.lib; {
     description = "Open Street Map viewer";
-    homepage = http://sourceforge.net/projects/gosmore/;
+    homepage = https://sourceforge.net/projects/gosmore/;
     maintainers = with maintainers; [
       raskin
     ];

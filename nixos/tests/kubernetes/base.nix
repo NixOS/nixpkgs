@@ -1,14 +1,13 @@
 { system ? builtins.currentSystem }:
 
 with import ../../lib/testing.nix { inherit system; };
-with import ../../lib/qemu-flags.nix;
 with pkgs.lib;
 
 let
   mkKubernetesBaseTest =
     { name, domain ? "my.zyx", test, machines
     , pkgs ? import <nixpkgs> { inherit system; }
-    , certs ? import ./certs.nix { inherit pkgs; externalDomain = domain; }
+    , certs ? import ./certs.nix { inherit pkgs; externalDomain = domain; kubelets = attrNames machines; }
     , extraConfiguration ? null }:
     let
       masterName = head (filter (machineName: any (role: role == "master") machines.${machineName}.roles) (attrNames machines));
@@ -25,7 +24,7 @@ let
         { config, pkgs, lib, nodes, ... }:
           mkMerge [
             {
-              virtualisation.memorySize = mkDefault 768;
+              virtualisation.memorySize = mkDefault 1536;
               virtualisation.diskSize = mkDefault 4096;
               networking = {
                 inherit domain extraHosts;

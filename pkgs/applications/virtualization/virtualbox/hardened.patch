@@ -24,7 +24,7 @@ index 8bd42bc..2c23d3e 100644
 +++ b/include/iprt/path.h
 @@ -1064,6 +1064,15 @@ RTDECL(int) RTPathCalcRelative(char *pszPathDst, size_t cbPathDst,
  RTDECL(int) RTPathExecDir(char *pszPath, size_t cchPath);
- 
+
  /**
 + * Gets the path to the NixOS setuid wrappers directory.
 + *
@@ -44,7 +44,7 @@ index 043653e..1070280 100644
 +++ b/include/iprt/process.h
 @@ -327,6 +327,16 @@ RTR3DECL(const char *) RTProcShortName(void);
  RTR3DECL(char *) RTProcGetExecutablePath(char *pszExecPath, size_t cbExecPath);
- 
+
  /**
 + * Gets the path to the NixOS setuid wrappers directory.
 + *
@@ -63,13 +63,13 @@ diff --git a/src/VBox/HostDrivers/Support/SUPR3HardenedVerify.cpp b/src/VBox/Hos
 index ce0f288..6193108 100644
 --- a/src/VBox/HostDrivers/Support/SUPR3HardenedVerify.cpp
 +++ b/src/VBox/HostDrivers/Support/SUPR3HardenedVerify.cpp
-@@ -1489,9 +1489,9 @@ static int supR3HardenedVerifyFsObject(PCSUPR3HARDENEDFSOBJSTATE pFsObjState, bo
+@@ -1502,9 +1502,9 @@ static int supR3HardenedVerifyFsObject(PCSUPR3HARDENEDFSOBJSTATE pFsObjState, bo
          bool fBad = !fRelaxed || pFsObjState->Stat.st_gid != 2 /*bin*/ || suplibHardenedStrCmp(pszPath, "/usr/lib/iconv");
- #else
+ # else
          NOREF(fRelaxed);
 -        bool fBad = true;
 +        bool fBad = !(fDir && pFsObjState->Stat.st_mode & S_ISVTX && !suplibHardenedStrCmp(pszPath, "/nix/store"));
- #endif
+ # endif
 -        if (fBad)
 +        if (fBad && suplibHardenedStrCmp(pszPath, "/nix/store"))
              return supR3HardenedSetError3(VERR_SUPLIB_WRITE_NON_SYS_GROUP, pErrInfo,
@@ -80,7 +80,7 @@ index 320c569..9bfe41f 100644
 --- a/src/VBox/Main/src-server/MachineImpl.cpp
 +++ b/src/VBox/Main/src-server/MachineImpl.cpp
 @@ -7543,7 +7543,7 @@ HRESULT Machine::i_launchVMProcess(IInternalSessionControl *aControl,
- 
+
      /* get the path to the executable */
      char szPath[RTPATH_MAX];
 -    RTPathAppPrivateArch(szPath, sizeof(szPath) - 1);
@@ -93,7 +93,7 @@ index 1e38d99..5e43dda 100644
 --- a/src/VBox/Main/src-server/NetworkServiceRunner.cpp
 +++ b/src/VBox/Main/src-server/NetworkServiceRunner.cpp
 @@ -85,7 +85,7 @@ int NetworkServiceRunner::start(bool aKillProcOnStop)
- 
+
      /* get the path to the executable */
      char exePathBuf[RTPATH_MAX];
 -    const char *exePath = RTProcGetExecutablePath(exePathBuf, RTPATH_MAX);
@@ -107,7 +107,7 @@ index 98dc91a..43a819f 100644
 +++ b/src/VBox/Main/src-server/generic/NetIf-generic.cpp
 @@ -47,7 +47,7 @@ static int NetIfAdpCtl(const char * pcszIfName, const char *pszAddr, const char
      const char *args[] = { NULL, pcszIfName, pszAddr, pszOption, pszMask, NULL };
- 
+
      char szAdpCtl[RTPATH_MAX];
 -    int rc = RTPathExecDir(szAdpCtl, sizeof(szAdpCtl) - sizeof("/" VBOXNETADPCTL_NAME));
 +    int rc = RTPathSuidDir(szAdpCtl, sizeof(szAdpCtl) - sizeof("/" VBOXNETADPCTL_NAME));
@@ -125,7 +125,7 @@ index 98dc91a..43a819f 100644
          LogRel(("NetIfAdpCtlOut: Failed to get program path, rc=%Rrc\n", rc));
 @@ -201,7 +201,7 @@ int NetIfCreateHostOnlyNetworkInterface(VirtualBox *pVirtualBox,
              progress.queryInterfaceTo(aProgress);
- 
+
              char szAdpCtl[RTPATH_MAX];
 -            int rc = RTPathExecDir(szAdpCtl, sizeof(szAdpCtl) - sizeof("/" VBOXNETADPCTL_NAME " add"));
 +            int rc = RTPathSuidDir(szAdpCtl, sizeof(szAdpCtl) - sizeof("/" VBOXNETADPCTL_NAME " add"));
@@ -138,8 +138,8 @@ index 944848e..744a261 100644
 +++ b/src/VBox/Runtime/r3/path.cpp
 @@ -81,6 +81,12 @@ RTDECL(int) RTPathExecDir(char *pszPath, size_t cchPath)
  }
- 
- 
+
+
 +RTDECL(int) RTPathSuidDir(char *pszPath, size_t cchPath)
 +{
 +    return RTStrCopy(pszPath, cchPath, "/run/wrappers/bin");
@@ -156,7 +156,7 @@ index 2aab645..9795f21 100644
 @@ -111,6 +111,26 @@ RTR3DECL(char *) RTProcGetExecutablePath(char *pszExecPath, size_t cbExecPath)
      return NULL;
  }
- 
+
 +/*
 + * Note the / at the end! This is important, because the functions using this
 + * will cut off everything after the rightmost / as this function is analogous
@@ -177,6 +177,6 @@ index 2aab645..9795f21 100644
 +    return NULL;
 +}
 +
- 
+
  RTR3DECL(const char *) RTProcShortName(void)
  {

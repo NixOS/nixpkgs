@@ -2,7 +2,7 @@
   makeWrapper, libXScrnSaver, libxkbfile, libsecret }:
 
 let
-  version = "1.17.1";
+  version = "1.23.1";
   channel = "stable";
 
   plat = {
@@ -12,9 +12,9 @@ let
   }.${stdenv.system};
 
   sha256 = {
-    "i686-linux" = "09nvibfn2z5cxjcdxqa2xy63jqwpvfgk7hdy1pc0mnpszz6kn4v7";
-    "x86_64-linux" = "1fb3hil7dggnz7hks1i806ckd3wl5g0a2syjdbh9dx5iqarp2782";
-    "x86_64-darwin" = "1vgbsmbcsdxc0h0ny61a3rhbwxzrfzkxl47sy3w410xcqlv8ad2v";
+    "i686-linux" = "0vqaxyg6r6mfm1gz8j7wxgg426hjsmv2ybyi8rfjcm9s8d23y9n6";
+    "x86_64-linux" = "0zycl8zqf5yiqq6k6mr28a20yg37whb8iw527pavvm74knzx3lgk";
+    "x86_64-darwin" = "03r2cvim7swq1fjxh6m9f7rifww3hddnyzpzniqb5132nnq4mrmc";
   }.${stdenv.system};
 
   archive_fmt = if stdenv.system == "x86_64-darwin" then "zip" else "tar.gz";
@@ -79,7 +79,7 @@ in
 
       patchelf \
         --set-rpath "${rpath}" \
-        $out/lib/vscode/resources/app/node_modules/keytar/build/Release/keytar.node
+        $out/lib/vscode/resources/app/node_modules.asar.unpacked/keytar/build/Release/keytar.node
 
       ln -s ${lib.makeLibraryPath [libsecret]}/libsecret-1.so.0 $out/lib/vscode/libsecret-1.so.0
     '';

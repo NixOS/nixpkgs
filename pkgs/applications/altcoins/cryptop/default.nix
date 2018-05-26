@@ -1,16 +1,15 @@
-{ lib, python2}:
+{ lib, buildPythonApplication, fetchPypi, requests, requests-cache }:
 
-python2.pkgs.buildPythonApplication rec {
+buildPythonApplication rec {
   pname = "cryptop";
-  version = "0.1.0";
-  name = "${pname}-${version}";
+  version = "0.2.0";
 
-  src = python2.pkgs.fetchPypi {
+  src = fetchPypi {
     inherit pname version;
-    sha256 = "00glnlyig1aajh30knc5rnfbamwfxpg29js2db6mymjmfka8lbhh";
+    sha256 = "0akrrz735vjfrm78plwyg84vabj0x3qficq9xxmy9kr40fhdkzpb";
   };
 
-  propagatedBuildInputs = [ python2.pkgs.requests ];
+  propagatedBuildInputs = [ requests requests-cache ];
 
   # No tests in archive
   doCheck = false;

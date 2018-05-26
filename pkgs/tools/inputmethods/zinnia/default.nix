@@ -11,7 +11,9 @@ stdenv.mkDerivation rec {
     sha256 = "1izjy5qw6swg0rs2ym2i72zndb90mwrfbd1iv8xbpwckbm4899lg";
   };
 
-  setSourceRoot = "export sourceRoot=$(echo zinnia-*/zinnia/)";
+  setSourceRoot = ''
+    sourceRoot=$(echo */zinnia)
+  '';
 
   meta = with stdenv.lib; {
     description = "Online hand recognition system with machine learning";

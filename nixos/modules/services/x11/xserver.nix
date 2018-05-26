@@ -240,7 +240,10 @@ in
         type = types.listOf types.str;
         # !!! We'd like "nv" here, but it segfaults the X server.
         default = [ "ati" "cirrus" "intel" "vesa" "vmware" "modesetting" ];
-        example = [ "vesa" ];
+        example = [
+          "ati_unfree" "amdgpu" "amdgpu-pro"
+          "nv" "nvidia" "nvidiaLegacy340" "nvidiaLegacy304"
+        ];
         description = ''
           The names of the video drivers the configuration
           supports. They will be tried in order until one that
@@ -539,7 +542,7 @@ in
           knownVideoDrivers;
       in optional (driver != null) ({ inherit name; modules = []; driverName = name; } // driver));
 
-    nixpkgs.config.xorg = optionalAttrs (elem "vboxvideo" cfg.videoDrivers) { abiCompat = "1.18"; };
+    nixpkgs.config = optionalAttrs (elem "vboxvideo" cfg.videoDrivers) { xorg.abiCompat = "1.18"; };
 
     assertions = [
       { assertion = config.security.polkit.enable;
@@ -564,6 +567,22 @@ in
             target = "X11/xkb";
           }
         ])
+      # localectl looks into 00-keyboard.conf
+      ++ [
+        {
+          text = ''
+            Section "InputClass"
+              Identifier "Keyboard catchall"
+              MatchIsKeyboard "on"
+              Option "XkbModel" "${cfg.xkbModel}"
+              Option "XkbLayout" "${cfg.layout}"
+              Option "XkbOptions" "${cfg.xkbOptions}"
+              Option "XkbVariant" "${cfg.xkbVariant}"
+            EndSection
+          '';
+          target = "X11/xorg.conf.d/00-keyboard.conf";
+        }
+      ]
       # Needed since 1.18; see https://bugs.freedesktop.org/show_bug.cgi?id=89023#c5
       ++ (let cfgPath = "/X11/xorg.conf.d/10-evdev.conf"; in
         [{
@@ -610,9 +629,7 @@ in
 
         environment =
           {
-            XORG_DRI_DRIVER_PATH = "/run/opengl-driver/lib/dri"; # !!! Depends on the driver selected at runtime.
-            LD_LIBRARY_PATH = concatStringsSep ":" (
-              [ "${xorg.libX11.out}/lib" "${xorg.libXext.out}/lib" "/run/opengl-driver/lib" ]
+            LD_LIBRARY_PATH = concatStringsSep ":" ([ "/run/opengl-driver/lib" ]
               ++ concatLists (catAttrs "libPath" cfg.drivers));
           } // cfg.displayManager.job.environment;
 
@@ -681,16 +698,6 @@ in
         Section "Monitor"
           Identifier "Monitor[0]"
           ${cfg.monitorSection}
-        EndSection
-
-        Section "InputClass"
-          Identifier "Keyboard catchall"
-          MatchIsKeyboard "on"
-          Option "XkbRules" "base"
-          Option "XkbModel" "${cfg.xkbModel}"
-          Option "XkbLayout" "${cfg.layout}"
-          Option "XkbOptions" "${cfg.xkbOptions}"
-          Option "XkbVariant" "${cfg.xkbVariant}"
         EndSection
 
         # Additional "InputClass" sections

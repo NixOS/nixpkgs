@@ -21,8 +21,6 @@ let
 
 in
 
-assert stdenv.system == "i686-linux" || stdenv.system == "x86_64-linux";
-
 stdenv.mkDerivation rec {
   pname = "saleae-logic";
   version = "1.2.10";
@@ -42,7 +40,7 @@ stdenv.mkDerivation rec {
         sha256 = "1skx2pfnic7pyss7c69qb7kg2xvflpxf112xkf9awk516dw1w4h7";
       }
     else
-      abort "Saleae Logic software requires i686-linux or x86_64-linux";
+      throw "Saleae Logic software requires i686-linux or x86_64-linux";
 
   desktopItem = makeDesktopItem {
     name = "saleae-logic";
@@ -93,7 +91,7 @@ stdenv.mkDerivation rec {
     description = "Software for Saleae logic analyzers";
     homepage = http://www.saleae.com/;
     license = licenses.unfree;
-    platforms = platforms.linux;
+    platforms = [ "x86_64-linux" "i686-linux" ];
     maintainers = [ maintainers.bjornfor ];
   };
 }

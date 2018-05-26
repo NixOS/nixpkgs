@@ -32,6 +32,6 @@ in python2Packages.buildPythonApplication rec {
   meta = with stdenv.lib; {
     homepage = https://www.claudiokuenzler.com/nagios-plugins/;
     license = licenses.gpl2;
-    maintainer = with maintainers; [ peterhoeg ];
+    maintainers = with maintainers; [ peterhoeg ];
   };
 }

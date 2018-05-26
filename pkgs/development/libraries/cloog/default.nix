@@ -59,6 +59,6 @@ stdenv.mkDerivation rec {
        make[3]: *** [Box.lo] Error 1
 
     */
-    platforms = with stdenv.lib.platforms; allBut cygwin;
+    platforms = stdenv.lib.platforms.unix; # Once had cygwin problems
   };
 }

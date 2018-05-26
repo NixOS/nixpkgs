@@ -1,11 +1,11 @@
 { stdenv, fetchurl, tcl, tcllib }:
 
 stdenv.mkDerivation {
-  name = "tcl2048-0.3.1";
+  name = "tcl2048-0.4.0";
 
   src = fetchurl {
-    url = https://raw.githubusercontent.com/dbohdan/2048-tcl/v0.3.1/2048.tcl;
-    sha256 = "44e325328784c4e91cecc0a9cc00e32d733da713adf2fad1c081542f38af3361";
+    url = https://raw.githubusercontent.com/dbohdan/2048.tcl/v0.4.0/2048.tcl;
+    sha256 = "53f5503efd7f029b2614b0f9b1e3aac6c0342735a3c9b811d74a5135fee3e89e";
   };
 
   phases = "installPhase";
@@ -25,7 +25,7 @@ stdenv.mkDerivation {
   '';
 
   meta = {
-    homepage = https://github.com/dbohdan/2048-tcl;
+    homepage = https://github.com/dbohdan/2048.tcl;
     description = "The game of 2048 implemented in Tcl";
     license = stdenv.lib.licenses.mit;
     platforms = stdenv.lib.platforms.all;

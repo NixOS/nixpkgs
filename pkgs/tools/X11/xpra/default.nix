@@ -11,11 +11,12 @@ with lib;
 let
   inherit (python2Packages) python cython buildPythonApplication;
 in buildPythonApplication rec {
-  name = "xpra-2.0.2";
-  namePrefix = "";
+  name = "xpra-${version}";
+  version = "2.3";
+
   src = fetchurl {
     url = "http://xpra.org/src/${name}.tar.xz";
-    sha256 = "09hzgbsj9v5qyh41rbz968ipi7016jk66b60vm6piryna9kbnha3";
+    sha256 = "0kq0ambpy8r7m3wxdp79cgxgnl9yfmr19lv88f617gnv0sp0aarp";
   };
 
   nativeBuildInputs = [ pkgconfig ];
@@ -50,7 +51,7 @@ in buildPythonApplication rec {
 
   preBuild = ''
     export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE $(pkg-config --cflags gtk+-2.0) $(pkg-config --cflags pygtk-2.0) $(pkg-config --cflags xtst)"
-    substituteInPlace xpra/server/auth/pam.py --replace "/lib/libpam.so.1" "${pam}/lib/libpam.so"
+    substituteInPlace xpra/server/auth/pam_auth.py --replace "/lib/libpam.so.1" "${pam}/lib/libpam.so"
   '';
   setupPyBuildFlags = ["--with-Xdummy" "--without-strict"];
 
@@ -74,6 +75,8 @@ in buildPythonApplication rec {
 
   meta = {
     homepage = http://xpra.org/;
+    downloadPage = "https://xpra.org/src/";
+    downloadURLRegexp = "xpra-.*[.]tar[.]xz$";
     description = "Persistent remote applications for X";
     platforms = platforms.linux;
     maintainers = with maintainers; [ tstrobel offline ];

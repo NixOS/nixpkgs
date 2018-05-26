@@ -6,7 +6,6 @@ let
     featureGates = ["AllAlpha"];
     flannel.enable = true;
     addons.dashboard.enable = true;
-    verbose = true;
 
     caFile = "${certs.master}/ca.pem";
     apiserver = {
@@ -29,8 +28,8 @@ let
       tlsKeyFile = "${certs.worker}/kubelet-key.pem";
       hostname = "${config.networking.hostName}.${config.networking.domain}";
       kubeconfig = {
-        certFile = "${certs.worker}/apiserver-client-kubelet.pem";
-        keyFile = "${certs.worker}/apiserver-client-kubelet-key.pem";
+        certFile = "${certs.worker}/apiserver-client-kubelet-${config.networking.hostName}.pem";
+        keyFile = "${certs.worker}/apiserver-client-kubelet-${config.networking.hostName}-key.pem";
       };
     };
     controllerManager = {

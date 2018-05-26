@@ -1,18 +1,18 @@
 { stdenv, fetchFromGitLab, pkgconfig, cmake, gettext, cairo, pango, pcre
 , glib, imlib2, gtk2, libXinerama, libXrender, libXcomposite, libXdamage
 , libX11, libXrandr, librsvg, libpthreadstubs, libXdmcp
-, libstartup_notification, hicolor_icon_theme, wrapGAppsHook
+, libstartup_notification, hicolor-icon-theme, wrapGAppsHook
 }:
 
 stdenv.mkDerivation rec {
   name = "tint2-${version}";
-  version = "15.2";
+  version = "16.4";
 
   src = fetchFromGitLab {
     owner = "o9000";
     repo = "tint2";
     rev = version;
-    sha256 = "1lfk3zcgmmlby353gs70gpi0m28nx2c20wxqgaw7268a69r5cz7a";
+    sha256 = "1h9l45zimai2hqfcf2y98g4i03imhmvm3mlsld9x99i650kxr5jm";
   };
 
   enableParallelBuilding = true;
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ cairo pango pcre glib imlib2 gtk2 libXinerama libXrender
     libXcomposite libXdamage libX11 libXrandr librsvg libpthreadstubs
-    libXdmcp libstartup_notification hicolor_icon_theme ];
+    libXdmcp libstartup_notification hicolor-icon-theme ];
 
   postPatch = ''
     substituteInPlace CMakeLists.txt --replace /etc $out/etc

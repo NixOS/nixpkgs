@@ -1,22 +1,16 @@
-GIT
-  remote: git://github.com/peterhoeg/archive-tar-minitar.git
-  revision: dae32ca550a87dba32597115ae18805db4782ebe
-  specs:
-    archive-tar-minitar (0.5.2.1)
-
 GEM
   remote: https://rubygems.org/
   specs:
     arr-pm (0.0.10)
       cabin (> 0)
-    backports (3.6.8)
-    cabin (0.8.1)
-    childprocess (0.5.9)
+    backports (3.10.3)
+    cabin (0.9.0)
+    childprocess (0.8.0)
       ffi (~> 1.0, >= 1.0.11)
-    clamp (1.0.0)
-    ffi (1.9.14)
-    fpm (1.6.2)
-      archive-tar-minitar
+    clamp (1.0.1)
+    dotenv (2.2.1)
+    ffi (1.9.18)
+    fpm (1.9.3)
       arr-pm (~> 0.0.10)
       backports (>= 2.6.2)
       cabin (>= 0.6.0)
@@ -24,29 +18,30 @@ GEM
       clamp (~> 1.0.0)
       ffi
       json (>= 1.7.7, < 2.0)
-      pleaserun (~> 0.0.24)
+      pleaserun (~> 0.0.29)
       ruby-xz
+      stud
     insist (1.0.0)
     io-like (0.3.0)
-    json (1.8.3)
+    json (1.8.6)
     mustache (0.99.8)
-    pleaserun (0.0.24)
+    pleaserun (0.0.30)
       cabin (> 0)
       clamp
+      dotenv
       insist
       mustache (= 0.99.8)
       stud
     ruby-xz (0.2.3)
       ffi (~> 1.9)
       io-like (~> 0.3)
-    stud (0.0.22)
+    stud (0.0.23)
 
 PLATFORMS
   ruby
 
 DEPENDENCIES
-  archive-tar-minitar (>= 0.5.2.1)!
   fpm
 
 BUNDLED WITH
-   1.14.3
+   1.14.6

@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "gnome-shell-extension-topicons-plus-${version}";
-  version = "20";
+  version = "21";
 
   src = fetchFromGitHub {
     owner = "phocean";
     repo = "TopIcons-plus";
-    rev = "01535328bd43ecb3f2c71376de6fc8d1d8a88577";
-    sha256 = "0pwpg72ihgj2jl9pg63y0hibdsl27srr3mab881w0gh17vwyixzi";
+    rev = "v${version}";
+    sha256 = "15p61krd7lcmgr1d4s2ydfjy3pyq79pq5100xzy6dln1538901m3";
   };
 
   buildInputs = [ glib ];

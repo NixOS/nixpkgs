@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, SDL2 }:
+{ stdenv, darwin, fetchurl, SDL2 }:
 
 stdenv.mkDerivation rec {
   name = "SDL2_net-${version}";
@@ -9,6 +9,8 @@ stdenv.mkDerivation rec {
     sha256 = "08cxc1bicmyk89kiks7izw1rlx5ng5n6xpy8fy0zxni3b9z8mkhm";
   };
 
+  buildInputs = stdenv.lib.optional stdenv.isDarwin darwin.libobjc;
+
   propagatedBuildInputs = [ SDL2 ];
 
   meta = with stdenv.lib; {
@@ -16,6 +18,6 @@ stdenv.mkDerivation rec {
     homepage = https://www.libsdl.org/projects/SDL_net;
     license = licenses.zlib;
     maintainers = with maintainers; [ MP2E ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

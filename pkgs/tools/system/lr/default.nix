@@ -2,22 +2,22 @@
 
 stdenv.mkDerivation rec {
   name = "lr-${version}";
-  version = "0.4";
+  version = "1.4";
 
   src = fetchFromGitHub {
     owner = "chneukirchen";
     repo = "lr";
     rev = "v${version}";
-    sha256 = "16qp0791s652yi86x472wwr62w6nhiyb1i662d85y5zyfagdf7dd";
+    sha256 = "0lwnd5whq5f0czhqgaj4y6myzw4wssk6bji4z3dck95c8rpvg05a";
   };
 
   makeFlags = "PREFIX=$(out)";
 
-  meta = {
-    homepage = http://github.com/chneukirchen/lr;
+  meta = with stdenv.lib; {
+    homepage = https://github.com/chneukirchen/lr;
     description = "List files recursively";
-    license = stdenv.lib.licenses.mit;
-    platforms = stdenv.lib.platforms.all;
-    maintainers = [ stdenv.lib.maintainers.globin ];
+    license = licenses.mit;
+    platforms = platforms.all;
+    maintainers = [ maintainers.globin ];
   };
 }

@@ -1,22 +1,32 @@
-{ stdenv, fetchurl, cairo, colord, glib, gtk3, gusb, intltool, itstool
-, libusb1, libxml2, pkgconfig, sane-backends, vala_0_32, wrapGAppsHook
-, gnome3 }:
+{ stdenv, fetchurl, meson, ninja, pkgconfig, gettext, itstool, wrapGAppsHook
+, cairo, gdk_pixbuf, colord, glib, gtk, gusb, packagekit, libwebp
+, libxml2, sane-backends, vala, gnome3, gobjectIntrospection }:
 
 stdenv.mkDerivation rec {
-  inherit (import ./src.nix fetchurl) name src;
+  name = "simple-scan-${version}";
+  version = "3.28.1";
 
-  buildInputs = [ cairo colord glib gnome3.defaultIconTheme gusb gtk3 libusb1 libxml2 sane-backends vala_0_32 ];
-  nativeBuildInputs = [ intltool itstool pkgconfig wrapGAppsHook ];
+  src = fetchurl {
+    url = "mirror://gnome/sources/simple-scan/${gnome3.versionBranch version}/${name}.tar.xz";
+    sha256 = "140vz94vml0vf6kiw3sg436qfvajk21x6q86smvycgf24qfyvk6a";
+  };
 
-  configureFlags = [ "--disable-packagekit" ];
+  passthru = {
+    updateScript = gnome3.updateScript { packageName = "simple-scan"; };
+  };
 
-  patchPhase = ''
+  buildInputs = [ cairo gdk_pixbuf colord glib gnome3.defaultIconTheme gusb
+                gtk libwebp packagekit sane-backends vala ];
+  nativeBuildInputs = [
+    meson ninja gettext itstool pkgconfig wrapGAppsHook libxml2
+    # For setup hook
+    gobjectIntrospection
+  ];
+
+  postPatch = ''
+    patchShebangs data/meson_compile_gschema.py
+
     sed -i -e 's#Icon=scanner#Icon=simple-scan#g' ./data/simple-scan.desktop.in
-  '';
-
-  preBuild = ''
-    # Clean up stale .c files referencing packagekit headers as of 3.20.0:
-    make clean
   '';
 
   postInstall = ''
@@ -51,7 +61,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = https://launchpad.net/simple-scan;
     license = licenses.gpl3Plus;
+    maintainers = gnome3.maintainers;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ nckx ];
   };
 }

@@ -1,25 +1,18 @@
 { stdenv, fetchurl, perl, texinfo }:
 
 stdenv.mkDerivation rec {
-  name = "libtasn1-4.12";
+  name = "libtasn1-4.13";
 
   src = fetchurl {
     url = "mirror://gnu/libtasn1/${name}.tar.gz";
-    sha256 = "0ls7jdq3y5fnrwg0pzhq11m21r8pshac2705bczz6mqjc8pdllv7";
+    sha256 = "1jlc1iahj8k3haz28j55nzg7sgni5h41vqy461i1bpbx6668wlky";
   };
-
-  patches = [
-    (fetchurl {
-      name = "CVE-2017-9310.patch";
-      url = "https://git.savannah.gnu.org/gitweb/?p=libtasn1.git;a=patch;h=d8d805e1f2e6799bb2dff4871a8598dc83088a39";
-      sha256 = "1v5w0dazp9qc2v7pc8b6g7s4dz5ak10hzrn35hx66q76yzrrzp7i";
-    })
-  ];
 
   outputs = [ "out" "dev" "devdoc" ];
   outputBin = "dev";
 
-  buildInputs = [ perl texinfo ];
+  nativeBuildInputs = [ texinfo ];
+  buildInputs = [ perl ];
 
   doCheck = true;
 

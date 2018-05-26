@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   createFindlibDestdir = true;
 
   meta = {
-    homepage = http://sourceforge.net/projects/ocamlfuse;
+    homepage = https://sourceforge.net/projects/ocamlfuse;
     description = "OCaml bindings for FUSE";
     license = stdenv.lib.licenses.gpl2;
     platforms = stdenv.lib.platforms.linux;

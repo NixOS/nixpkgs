@@ -5,10 +5,13 @@
 , fetchurl
 , findutils
 , file
+, fontsConf
 , git
 , glxinfo
 , gnugrep
+, gnused
 , gnutar
+, gtk2, gnome_vfs, glib, GConf
 , gzip
 , fontconfig
 , freetype
@@ -29,12 +32,11 @@
 , writeTextFile
 , xkeyboard_config
 , zlib
-, fontsConf
 }:
 
 let
   androidStudio = stdenv.mkDerivation {
-    name = "${pname}";
+    name = "${pname}-${version}";
 
     src = fetchurl {
       url = "https://dl.google.com/dl/android/studio/ide-zips/${version}/android-studio-ide-${build}-linux.zip";
@@ -48,6 +50,7 @@ let
     installPhase = ''
       cp -r . $out
       wrapProgram $out/bin/studio.sh \
+        --set ANDROID_EMULATOR_USE_SYSTEM_LIBS 1 \
         --set PATH "${stdenv.lib.makeBinPath [
 
           # Checked in studio.sh
@@ -55,6 +58,7 @@ let
           findutils
           gnugrep
           which
+          gnused
 
           # For Android emulator
           file
@@ -68,7 +72,6 @@ let
 
           # Runtime stuff
           git
-
         ]}" \
         --prefix LD_LIBRARY_PATH : "${stdenv.lib.makeLibraryPath [
 
@@ -95,6 +98,11 @@ let
           libpulseaudio
           libX11
 
+          # For GTKLookAndFeel
+          gtk2
+          gnome_vfs
+          glib
+          GConf
         ]}" \
         --set QT_XKB_CONFIG_ROOT "${xkeyboard_config}/share/X11/xkb" \
         --set FONTCONFIG_FILE ${fontsConf}
@@ -106,6 +114,7 @@ let
   # environment is used as a work around for that.
   fhsEnv = buildFHSUserEnv {
     name = "${pname}-fhs-env";
+    multiPkgs = pkgs: [ pkgs.ncurses5 ];
   };
 
 in

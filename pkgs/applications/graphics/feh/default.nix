@@ -6,11 +6,11 @@ with stdenv.lib;
 
 stdenv.mkDerivation rec {
   name = "feh-${version}";
-  version = "2.21";
+  version = "2.26.3";
 
   src = fetchurl {
     url = "https://feh.finalrewind.org/${name}.tar.bz2";
-    sha256 = "0azgpr4al2pi4858z4xh4lfz84cvzxw3n426fn7rz6cdj34q212j";
+    sha256 = "08aagymgajcvciagwy2zdxhicvdfnjmd2xyx9bqjy7l1n16ydwrz";
   };
 
   outputs = [ "out" "man" "doc" ];
@@ -20,9 +20,9 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ xorg.libX11 xorg.libXinerama imlib2 libjpeg libpng curl libexif ];
 
-  preBuild = ''
-    makeFlags="PREFIX=$out exif=1"
-  '';
+  makeFlags = [
+    "PREFIX=$(out)" "exif=1"
+  ] ++ optional stdenv.isDarwin "verscmp=0";
 
   postBuild = ''
     pushd man

@@ -2,16 +2,14 @@
 , libpthreadstubs, libxcb, libXdmcp, qtsvg, qttools, qtwebengine, qtx11extras, kwallet, openssl }:
 
 stdenv.mkDerivation rec {
-  # Last qupvilla release is 2.1.2 so we add the .1 although it isn't actually a
-  # release but it is basically 2.1.2 with the falkon name
-  name = "falkon-${version}.1";
-  version = "2.1.2";
+  name = "falkon-${version}";
+  version = "3.0.1";
 
   src = fetchFromGitHub {
     owner  = "KDE";
     repo   = "falkon";
-    rev    = "eecaf2e9d6b572a7f7d2e6dc324e3d79b61c31db";
-    sha256 = "01r5aw10jd0qz7xvad0cqzjbnsj7vwblh54wbq4x1m6xbkp6xcgy";
+    rev    = "v${version}";
+    sha256 = "1ay1ljrdjcfqwjv4rhf4psh3dfihnvhpmpqcayd3p9lh57x7fh41";
   };
 
   preConfigure = ''
@@ -20,8 +18,6 @@ stdenv.mkDerivation rec {
     export GNOME_INTEGRATION=false
     export FALKON_PREFIX=$out
   '';
-
-  dontUseCmakeConfigure = true;
 
   buildInputs = [
     libpthreadstubs libxcb libXdmcp

@@ -20,7 +20,7 @@ let
       '';
     };
     # WARNING: DON'T DO THIS IN PRODUCTION!
-    # This puts secrets (albeit hashed) directly into the Nix store for ease of testing.
+    # This puts unhashed secrets directly into the Nix store for ease of testing.
     environment.etc."radicale/htpasswd".source = pkgs.runCommand "htpasswd" {} ''
       ${pkgs.apacheHttpd}/bin/htpasswd -bcB "$out" ${user} ${password}
     '';
@@ -43,7 +43,7 @@ in
             });
           })
         ];
-        system.stateVersion = "17.03";
+        system.nixos.stateVersion = "17.03";
       };
       radicale1_export = lib.recursiveUpdate radicale1 {
         services.radicale.extraArgs = [
@@ -54,7 +54,7 @@ in
         services.radicale.extraArgs = [ "--verify-storage" ];
       };
       radicale2 = lib.recursiveUpdate (common args) {
-        system.stateVersion = "17.09";
+        system.nixos.stateVersion = "17.09";
       };
     };
 

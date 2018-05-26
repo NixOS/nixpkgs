@@ -6,7 +6,7 @@
 , cursorSupport ? true, libXcursor ? null
 , threadSupport ? true
 , mysqlSupport ? false, mysql ? null
-, openglSupport ? false, mesa ? null, libXmu ? null
+, openglSupport ? false, libGLU_combined ? null, libXmu ? null
 , xlibsWrapper, xextproto, zlib, libjpeg, libpng, which
 }:
 
@@ -15,7 +15,7 @@ assert xrenderSupport -> xftSupport && libXrender != null;
 assert xrandrSupport -> libXrandr != null && randrproto != null;
 assert cursorSupport -> libXcursor != null;
 assert mysqlSupport -> mysql != null;
-assert openglSupport -> mesa != null && libXmu != null;
+assert openglSupport -> libGLU_combined != null && libXmu != null;
 
 stdenv.mkDerivation {
   name = "qt-3.3.8";
@@ -40,7 +40,7 @@ stdenv.mkDerivation {
     -qt-gif
     -I${xextproto}/include
     ${if openglSupport then "-dlopen-opengl
-      -L${mesa}/lib -I${mesa}/include
+      -L${libGLU_combined}/lib -I${libGLU_combined}/include
       -L${libXmu.out}/lib -I${libXmu.dev}/include" else ""}
     ${if threadSupport then "-thread" else "-no-thread"}
     ${if xrenderSupport then "-xrender -L${libXrender.out}/lib -I${libXrender.dev}/include" else "-no-xrender"}
@@ -49,7 +49,7 @@ stdenv.mkDerivation {
       -I${randrproto}/include" else "-no-xrandr"}
     ${if xineramaSupport then "-xinerama -L${libXinerama.out}/lib -I${libXinerama.dev}/include" else "-no-xinerama"}
     ${if cursorSupport then "-L${libXcursor.out}/lib -I${libXcursor.dev}/include" else ""}
-    ${if mysqlSupport then "-qt-sql-mysql -L${stdenv.lib.getLib mysql.client}/lib/mysql -I${mysql.client}/include/mysql" else ""}
+    ${if mysqlSupport then "-qt-sql-mysql -L${mysql.connector-c}/lib/mysql -I${mysql.connector-c}/include/mysql" else ""}
     ${if xftSupport then "-xft
       -L${libXft.out}/lib -I${libXft.dev}/include
       -L${libXft.freetype.out}/lib -I${libXft.freetype.dev}/include

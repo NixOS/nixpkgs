@@ -1,15 +1,19 @@
-{ stdenv, fetchurl, SDL, ffmpeg, frei0r, libjack2, libdv, libsamplerate
+{ stdenv, fetchFromGitHub, SDL, ffmpeg, frei0r, libjack2, libdv, libsamplerate
 , libvorbis, libxml2, makeWrapper, movit, pkgconfig, sox, qtbase, qtsvg
 , fftw, vid-stab, opencv3, ladspa-sdk
 }:
 
+let inherit (stdenv.lib) getDev; in
+
 stdenv.mkDerivation rec {
   name = "mlt-${version}";
-  version = "6.4.1";
+  version = "6.8.0";
 
-  src = fetchurl {
-    url = "https://github.com/mltframework/mlt/archive/v${version}.tar.gz";
-    sha256 = "10m3ry0b2pvqx3bk34qh5dq337nn8pkc2gzfyhsj4nv9abskln47";
+  src = fetchFromGitHub {
+    owner = "mltframework";
+    repo = "mlt";
+    rev = "v${version}";
+    sha256 = "0hmxlz3i9yasw5jdkrczak8shzlnpi1acaahn50lvgg9b14kg7b8";
   };
 
   buildInputs = [
@@ -26,6 +30,10 @@ stdenv.mkDerivation rec {
     "--avformat-swscale" "--enable-gpl" "--enable-gpl" "--enable-gpl3"
     "--enable-opengl"
   ];
+
+  # mlt is unable to cope with our multi-prefix Qt build
+  # because it does not use CMake or qmake.
+  NIX_CFLAGS_COMPILE = [ "-I${getDev qtsvg}/include/QtSvg" ];
 
   CXXFLAGS = "-std=c++11";
 
@@ -51,7 +59,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Open source multimedia framework, designed for television broadcasting";
-    homepage = http://www.mltframework.org/;
+    homepage = https://www.mltframework.org/;
     license = licenses.gpl3;
     maintainers = [ maintainers.goibhniu ];
     platforms = platforms.linux;

@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, pkgconfig, cmake
+{ stdenv, fetchFromGitHub, fetchpatch, pkgconfig, cmake
 
 # dependencies
 , glib, libXinerama
@@ -27,6 +27,7 @@
 
 , wirelessSupport     ? true      , wirelesstools ? null
 , nvidiaSupport       ? false     , libXNVCtrl ? null
+, pulseSupport        ? false     , libpulseaudio ? null
 
 , curlSupport         ? true      , curl ? null
 , rssSupport          ? curlSupport
@@ -54,6 +55,7 @@ assert luaCairoSupport || luaImlib2Support
 
 assert wirelessSupport     -> wirelesstools != null;
 assert nvidiaSupport       -> libXNVCtrl != null;
+assert pulseSupport        -> libpulseaudio != null;
 
 assert curlSupport         -> curl != null;
 assert rssSupport          -> curlSupport && libxml2 != null;
@@ -64,13 +66,13 @@ with stdenv.lib;
 
 stdenv.mkDerivation rec {
   name = "conky-${version}";
-  version = "1.10.6";
+  version = "1.10.8";
 
   src = fetchFromGitHub {
     owner = "brndnmtthws";
     repo = "conky";
     rev = "v${version}";
-    sha256 = "15j8h251v9jpdg6h6wn1vb45pkk806pf9s5n3rdrps9r185w8hn8";
+    sha256 = "18kxjmaplqvn81vmvybvpc9qczm7wgcgd4af3a8vsqdv77cn5bwq";
   };
 
   postPatch = ''
@@ -80,18 +82,14 @@ stdenv.mkDerivation rec {
     # Drop examples, since they contain non-ASCII characters that break docbook2x :(
     sed -i 's/ Example: .*$//' doc/config_settings.xml
 
-    substituteInPlace cmake/Docbook.cmake \
-      --replace "http://docbook.sourceforge.net/release/xsl/current/html/docbook.xsl" "${docbook_xsl}/xml/xsl/docbook/html/docbook.xsl"
-    substituteInPlace doc/docs.xml \
-      --replace "http://www.oasis-open.org/docbook/xml/4.4/docbookx.dtd" "${docbook_xml_dtd_44}/xml/dtd/docbook/docbookx.dtd"
     substituteInPlace cmake/Conky.cmake --replace "#set(RELEASE true)" "set(RELEASE true)"
   '';
 
   NIX_LDFLAGS = "-lgcc_s";
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ glib cmake libXinerama ]
-    ++ optionals docsSupport        [ docbook2x libxslt man less ]
+  nativeBuildInputs = [ cmake pkgconfig ];
+  buildInputs = [ glib libXinerama ]
+    ++ optionals docsSupport        [ docbook2x docbook_xsl docbook_xml_dtd_44 libxslt man less ]
     ++ optional  ncursesSupport     ncurses
     ++ optional  x11Support         xlibsWrapper
     ++ optional  xdamageSupport     libXdamage
@@ -104,6 +102,7 @@ stdenv.mkDerivation rec {
     ++ optional  rssSupport         libxml2
     ++ optional  weatherXoapSupport libxml2
     ++ optional  nvidiaSupport      libXNVCtrl
+    ++ optional  pulseSupport       libpulseaudio
     ;
 
   cmakeFlags = []
@@ -123,7 +122,12 @@ stdenv.mkDerivation rec {
     ++ optional weatherXoapSupport  "-DBUILD_WEATHER_XOAP=ON"
     ++ optional wirelessSupport     "-DBUILD_WLAN=ON"
     ++ optional nvidiaSupport       "-DBUILD_NVIDIA=ON"
+    ++ optional pulseSupport        "-DBUILD_PULSEAUDIO=ON"
     ;
+
+  # `make -f src/CMakeFiles/conky.dir/build.make src/CMakeFiles/conky.dir/conky.cc.o`:
+  # src/conky.cc:137:23: fatal error: defconfig.h: No such file or directory
+  enableParallelBuilding = false;
 
   meta = with stdenv.lib; {
     homepage = http://conky.sourceforge.net/;

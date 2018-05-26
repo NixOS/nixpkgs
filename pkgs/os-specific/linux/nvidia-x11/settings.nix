@@ -1,6 +1,6 @@
 nvidia_x11: sha256:
 
-{ stdenv, lib, fetchurl, pkgconfig, m4, jansson, gtk2, dbus, gtk3, libXv, libXrandr, libvdpau, libXext
+{ stdenv, lib, fetchurl, pkgconfig, m4, jansson, gtk2, dbus, gtk3, libXv, libXrandr, libXext, libXxf86vm, libvdpau
 , librsvg, wrapGAppsHook
 , withGtk2 ? false, withGtk3 ? true
 }:
@@ -41,10 +41,8 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig m4 ];
 
-  buildInputs = [ jansson libXv libXrandr libvdpau nvidia_x11 gtk2 dbus ]
+  buildInputs = [ jansson libXv libXrandr libXext libXxf86vm libvdpau nvidia_x11 gtk2 dbus ]
              ++ lib.optionals withGtk3 [ gtk3 librsvg wrapGAppsHook ];
-
-  NIX_LDFLAGS = [ "-lvdpau" "-lXrandr" "-lXv" "-lnvidia-ml" ];
 
   makeFlags = [ "NV_USE_BUNDLED_LIBJANSSON=0" ];
   installFlags = [ "PREFIX=$(out)" ];
@@ -73,7 +71,7 @@ stdenv.mkDerivation rec {
   binaryName = if withGtk3 then ".nvidia-settings-wrapped" else "nvidia-settings";
 
   postFixup = ''
-    patchelf --set-rpath "$(patchelf --print-rpath $out/bin/$binaryName):$out/lib" \
+    patchelf --set-rpath "$(patchelf --print-rpath $out/bin/$binaryName):$out/lib:${libXv}/lib" \
       $out/bin/$binaryName
   '';
 
@@ -85,7 +83,7 @@ stdenv.mkDerivation rec {
     homepage = http://www.nvidia.com/object/unix.html;
     description = "Settings application for NVIDIA graphics cards";
     license = licenses.unfreeRedistributable;
-    platforms = platforms.linux;
+    platforms = nvidia_x11.meta.platforms;
     maintainers = with maintainers; [ abbradar ];
   };
 }

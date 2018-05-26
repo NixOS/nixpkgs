@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
       "exec guile" "exec ${guile}/bin/guile"
   '';
 
-  doCheck = true;
+  doCheck = !stdenv.isDarwin;
 
   meta = with stdenv.lib; {
     description = "Checks syntax and semantics in a Guile program or module";

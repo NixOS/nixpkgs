@@ -19,7 +19,7 @@ in pythonPackages.buildPythonPackage rec {
   propagatedBuildInputs = with pythonPackages; [
     raven psutil jsonschema # tox for check
     # Runtime dependencies
-    sip pyqt5
+    sip (pyqt5.override { withWebSockets = true; })
   ];
 
   doCheck = false; # Failing

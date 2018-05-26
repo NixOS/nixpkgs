@@ -6,7 +6,7 @@
 # renderers
 , enableAGG    ? true,  agg   ? null
 , enableCairo  ? false, cairo ? null
-, enableOpenGL ? false, mesa  ? null
+, enableOpenGL ? false, libGLU_combined  ? null
 
 # GUI toolkits
 , enableGTK ? true,  gtk2 ? null, gnome2 ? null, gnome3 ? null
@@ -49,7 +49,7 @@ in
 # renderers
 assert enableAGG    -> available agg;
 assert enableCairo  -> available cairo;
-assert enableOpenGL -> available mesa;
+assert enableOpenGL -> available libGLU_combined;
 
 # GUI toolkits
 assert enableGTK -> all available [ gtk2 gnome2.gtkglext gnome3.gconf ];
@@ -62,7 +62,7 @@ assert enableGstreamer -> all available [ gst-plugins-base gst-plugins-ugly gst-
 
 # misc
 assert enableJemalloc -> available jemalloc;
-assert enableHwAccel  -> available mesa;
+assert enableHwAccel  -> available libGLU_combined;
 assert enablePlugins  -> all available [ xulrunner npapi_sdk ];
 
 assert length toolkits  == 0 -> throw "at least one GUI toolkit must be enabled";
@@ -90,11 +90,11 @@ stdenv.mkDerivation rec {
     libpng libjpeg giflib pango atk
   ] ++ optional  enableAGG       agg
     ++ optional  enableCairo     cairo
-    ++ optional  enableOpenGL    mesa
+    ++ optional  enableOpenGL    libGLU_combined
     ++ optional  enableQt        qt4
     ++ optional  enableFFmpeg    ffmpeg_2
     ++ optional  enableJemalloc  jemalloc
-    ++ optional  enableHwAccel   mesa
+    ++ optional  enableHwAccel   libGLU_combined
     ++ optionals enablePlugins   [ xulrunner npapi_sdk ]
     ++ optionals enableGTK       [ gtk2 gnome2.gtkglext gnome3.gconf ]
     ++ optionals enableGstreamer [ gst-plugins-base gst-plugins-ugly gst-ffmpeg ];

@@ -6,11 +6,11 @@ rubyVersion = callPackage ../ruby/ruby-version.nix {} "2" "3" "3" "";
 jruby = stdenv.mkDerivation rec {
   name = "jruby-${version}";
 
-  version = "9.1.12.0";
+  version = "9.1.17.0";
 
   src = fetchurl {
     url = "https://s3.amazonaws.com/jruby.org/downloads/${version}/jruby-bin-${version}.tar.gz";
-    sha256 = "15x5w4awy8h6xfkbj0p4xnb68xzfrss1rf2prk0kzk5kyjakrcnx";
+    sha256 = "1mfzs3mcpx8gmzidilzhpsxhgbblsflq35ww199m46pgiyzzf8ka";
   };
 
   buildInputs = [ makeWrapper ];
@@ -36,7 +36,7 @@ jruby = stdenv.mkDerivation rec {
          addToSearchPath GEM_PATH \$1/${passthru.gemPath}
        }
 
-       envHooks+=(addGemPath)
+       addEnvHooks "$hostOffset" addGemPath
      EOF
   '';
 

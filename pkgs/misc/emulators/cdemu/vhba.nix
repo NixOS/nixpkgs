@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, kernel }:
+{ stdenv, fetchurl, kernel, libelf }:
 
 stdenv.mkDerivation rec {
   name = "vhba-${version}";
@@ -10,6 +10,7 @@ stdenv.mkDerivation rec {
   };
 
   makeFlags = [ "KDIR=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build" "INSTALL_MOD_PATH=$(out)" ];
+  nativeBuildInputs = kernel.moduleBuildDependencies;
 
   hardeningDisable = [ "pic" ];
 
@@ -17,6 +18,7 @@ stdenv.mkDerivation rec {
     description = "Provides a Virtual (SCSI) HBA";
     homepage = http://cdemu.sourceforge.net/about/vhba/;
     platforms = platforms.linux;
-    licenses = licenses.gpl2Plus;
+    license = licenses.gpl2Plus;
+    maintainers = with stdenv.lib.maintainers; [ bendlas ];
   };
 }

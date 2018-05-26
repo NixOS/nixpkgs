@@ -4,41 +4,30 @@
 
 let
   pythonPackages = python3Packages;
-  yarl = if (!stable) then pythonPackages.yarl
-    else (stdenv.lib.overrideDerivation pythonPackages.yarl (oldAttrs:
-      rec {
-        pname = "yarl";
-        version = "0.9.8";
-        name = "${pname}-${version}";
-        src = pythonPackages.fetchPypi {
-          inherit pname version;
-          sha256 = "1v2dsmr7bqp0yx51pwhbxyvzza8m2f88prsnbd926mi6ah38p0d7";
-        };
-      }));
-  aiohttp = if (!stable) then pythonPackages.aiohttp
-    else (stdenv.lib.overrideDerivation pythonPackages.aiohttp (oldAttrs:
+  aiohttp = (stdenv.lib.overrideDerivation pythonPackages.aiohttp
+    (oldAttrs:
       rec {
         pname = "aiohttp";
-        version = "1.3.5";
-        name = "${pname}-${version}";
+        version = "2.3.10";
         src = pythonPackages.fetchPypi {
           inherit pname version;
-          sha256 = "0hpqdiaifgyfqmxkyzwypwvrnvz5rqzgzylzhihfidc5ldfs856d";
+          sha256 = "8adda6583ba438a4c70693374e10b60168663ffa6564c5c75d3c7a9055290964";
         };
-        propagatedBuildInputs = [ yarl ]
-          ++ (with pythonPackages; [ async-timeout chardet multidict ]);
       }));
-  aiohttp-cors = if (!stable) then pythonPackages.aiohttp-cors
-    else (stdenv.lib.overrideDerivation pythonPackages.aiohttp-cors (oldAttrs:
+  aiohttp-cors = (stdenv.lib.overrideDerivation pythonPackages.aiohttp-cors
+    (oldAttrs:
       rec {
         pname = "aiohttp-cors";
-        version = "0.5.1";
+        version = "0.5.3";
         name = "${pname}-${version}";
         src = pythonPackages.fetchPypi {
           inherit pname version;
-          sha256 = "0szma27ri25fq4nwwvs36myddggw3jz4pyzmq63yz4xpw0jjdxck";
+          sha256 = "11b51mhr7wjfiikvj3nc5s8c7miin2zdhl3yrzcga4mbpkj892in";
         };
-        propagatedBuildInputs = [ aiohttp ];
+        propagatedBuildInputs = [ aiohttp ]
+          ++ stdenv.lib.optional
+               (pythonPackages.pythonOlder "3.5")
+               pythonPackages.typing;
       }));
 in pythonPackages.buildPythonPackage rec {
   name = "${pname}-${version}";
@@ -51,21 +40,18 @@ in pythonPackages.buildPythonPackage rec {
     sha256 = sha256Hash;
   };
 
-  propagatedBuildInputs = [ yarl aiohttp aiohttp-cors ]
+  propagatedBuildInputs = [ aiohttp-cors ]
     ++ (with pythonPackages; [
+      yarl aiohttp multidict
       jinja2 psutil zipstream raven jsonschema typing
       prompt_toolkit
     ]);
-
-  postPatch = stdenv.lib.optionalString (!stable) ''
-    sed -i 's/yarl>=0.11,<0.12/yarl/g' requirements.txt
-  '';
 
   # Requires network access
   doCheck = false;
 
   postInstall = ''
-    rm $out/bin/gns3loopback # For windows only
+    rm $out/bin/gns3loopback # For Windows only
   '';
   meta = with stdenv.lib; {
     description = "Graphical Network Simulator 3 server (${branch} release)";

@@ -1,6 +1,7 @@
 { stdenv, fetchurl, openssl, zlib, asciidoc, libxml2, libxslt
 , docbook_xml_xslt, pkgconfig, luajit
 , gzip, bzip2, xz
+, python, wrapPython, pygments, markdown
 }:
 
 stdenv.mkDerivation rec {
@@ -20,10 +21,11 @@ stdenv.mkDerivation rec {
     sha256 = "0wc64dzcxrzgi6kwcljz6y3cwm3ajdgf6aws7g58azbhvl1jk04l";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkgconfig ] ++ [ python wrapPython ];
   buildInputs = [
     openssl zlib asciidoc libxml2 libxslt docbook_xml_xslt luajit
   ];
+  pythonPath = [ pygments markdown ];
 
   postPatch = ''
     sed -e 's|"gzip"|"${gzip}/bin/gzip"|' \
@@ -50,6 +52,8 @@ stdenv.mkDerivation rec {
     a2x --no-xmllint -f manpage cgitrc.5.txt
     mkdir -p "$out/share/man/man5"
     cp cgitrc.5 "$out/share/man/man5"
+
+    wrapPythonProgramsIn "$out/lib/cgit/filters" "$out $pythonPath"
   '';
 
   meta = {

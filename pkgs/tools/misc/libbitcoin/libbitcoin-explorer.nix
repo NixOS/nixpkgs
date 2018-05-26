@@ -1,24 +1,27 @@
-{ stdenv, lib, fetchurl, pkgconfig, autoreconfHook
-, boost, libbitcoin-client }:
+{ stdenv, lib, fetchFromGitHub, pkgconfig, autoreconfHook
+, boost, libbitcoin-client, libbitcoin-network }:
 
 let
   pname = "libbitcoin-explorer";
-  version = "2.2.0";
+  version = "3.5.0";
 
 in stdenv.mkDerivation {
   name = "${pname}-${version}";
 
-  src = fetchurl {
-    url = "https://github.com/libbitcoin/libbitcoin-explorer/archive/v${version}.tar.gz";
-    sha256 = "00123vw7rxk0ypdfzk0xwk8q55ll31000mkjqdzl915krsbkbfvp";
+  src = fetchFromGitHub {
+    owner = "libbitcoin";
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "033nrdzrha4kypxk4biixjsbjd16r4m2mjvpid4gdj5hzbbj1p93";
   };
 
   nativeBuildInputs = [ autoreconfHook pkgconfig ];
-  buildInputs = [ ];
+  buildInputs = [ libbitcoin-client libbitcoin-network ];
 
-  propagatedBuildInputs = [ libbitcoin-client ];
+  enableParallelBuilding = true;
 
   configureFlags = [
+    "--with-tests=no"
     "--with-boost=${boost.dev}"
     "--with-boost-libdir=${boost.out}/lib"
     "--with-bash-completiondir=$out/share/bash-completion/completions"
@@ -28,10 +31,9 @@ in stdenv.mkDerivation {
     description = "Bitcoin command line tool";
     homepage = https://github.com/libbitcoin/libbitcoin-explorer;
     platforms = platforms.linux ++ platforms.darwin;
-    maintainers = with maintainers; [ chris-martin ];
+    maintainers = with maintainers; [ chris-martin asymmetric ];
 
-    # https://wiki.unsystem.net/en/index.php/Libbitcoin/License
-    # AGPL with an additional clause
+    # AGPL with a lesser clause
     license = licenses.agpl3;
   };
 }

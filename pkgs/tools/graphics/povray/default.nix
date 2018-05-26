@@ -1,20 +1,20 @@
 { stdenv, fetchFromGitHub, autoconf, automake, boost
-, zlib, libpng, libjpeg, libtiff
+, zlib, libpng, libjpeg, libtiff, x11, SDL
 }:
 
 stdenv.mkDerivation rec {
   name = "povray-${version}";
-  version = "3.7.0.3";
+  version = "3.7.0.7";
 
   src = fetchFromGitHub {
     owner = "POV-Ray";
     repo = "povray";
     rev = "v${version}";
-    sha256 = "0mzkgk3gn8jfrw1fq0z3kqbysdfq8nwdl8a28l18v8gzb31bblhq";
+    sha256 = "0gqbc4ycjfqpnixzzqxlygmargk6sm77b0k3xzff9dxdrak3xng7";
   };
 
 
-  buildInputs = [ autoconf automake boost zlib libpng libjpeg libtiff ];
+  buildInputs = [ autoconf automake boost zlib libpng libjpeg libtiff x11 SDL ];
 
   # the installPhase wants to put files into $HOME. I let it put the files
   # to $TMPDIR, so they don't get into the $out
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
                  sed -i -e 's/^povgroup.*/povgroup=nogroup/' Makefile.{am,in}
                '';
 
-  configureFlags = [ "COMPILED_BY='nix'" "--with-boost-thread=boost_thread" ];
+  configureFlags = [ "COMPILED_BY='nix'" "--with-boost-thread=boost_thread" "--with-x" ];
 
   enableParallelBuilding = true;
   

@@ -8,7 +8,18 @@ in {
 
   imports = [ ../../../modules/virtualisation/amazon-image.nix ];
 
+  # Required to provide good EBS experience,
+  # https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/nvme-ebs-volumes.html#timeout-nvme-ebs-volumes
+  # TODO change value to 4294967295 when kernel is updated to 4.15 or later
+  config.boot.kernelParams = [ "nvme_core.io_timeout=255" ];
+
   options.amazonImage = {
+    name = mkOption {
+      type = types.str;
+      description = "The name of the generated derivation";
+      default = "nixos-disk-image";
+    };
+
     contents = mkOption {
       example = literalExample ''
         [ { source = pkgs.memtest86 + "/memtest.bin";
@@ -38,9 +49,9 @@ in {
 
   config.system.build.amazonImage = import ../../../lib/make-disk-image.nix {
     inherit lib config;
-    inherit (cfg) contents format;
+    inherit (cfg) contents format name;
     pkgs = import ../../../.. { inherit (pkgs) system; }; # ensure we use the regular qemu-kvm package
-    partitioned = config.ec2.hvm;
+    partitionTableType = if config.ec2.hvm then "legacy" else "none";
     diskSize = cfg.sizeMB;
     configFile = pkgs.writeText "configuration.nix"
       ''

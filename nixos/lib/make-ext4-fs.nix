@@ -7,23 +7,22 @@
 , volumeLabel
 }:
 
+let
+  sdClosureInfo = pkgs.closureInfo { rootPaths = storePaths; };
+in
+
 pkgs.stdenv.mkDerivation {
   name = "ext4-fs.img";
 
-  buildInputs = with pkgs; [e2fsprogs libfaketime perl];
-
-  # For obtaining the closure of `storePaths'.
-  exportReferencesGraph =
-    map (x: [("closure-" + baseNameOf x) x]) storePaths;
+  nativeBuildInputs = with pkgs; [e2fsprogs.bin libfaketime perl];
 
   buildCommand =
     ''
       # Add the closures of the top-level store objects.
-      storePaths=$(perl ${pkgs.pathsFromGraph} closure-*)
+      storePaths=$(cat ${sdClosureInfo}/store-paths)
 
-      # Also include a manifest of the closures in a format suitable
-      # for nix-store --load-db.
-      printRegistration=1 perl ${pkgs.pathsFromGraph} closure-* > nix-path-registration
+      # Also include a manifest of the closures in a format suitable for nix-store --load-db.
+      cp ${sdClosureInfo}/registration nix-path-registration
 
       # Make a crude approximation of the size of the target image.
       # If the script starts failing, increase the fudge factors here.
@@ -82,6 +81,13 @@ pkgs.stdenv.mkDerivation {
       if egrep -q 'Could not allocate|File not found' errorlog; then
         cat errorlog
         echo "--- Failed to create EXT4 image of $bytes bytes (numInodes=$numInodes, numDataBlocks=$numDataBlocks) ---"
+        return 1
+      fi
+
+      # I have ended up with corrupted images sometimes, I suspect that happens when the build machine's disk gets full during the build.
+      if ! fsck.ext4 -n -f $out; then
+        echo "--- Fsck failed for EXT4 image of $bytes bytes (numInodes=$numInodes, numDataBlocks=$numDataBlocks) ---"
+        cat errorlog
         return 1
       fi
     '';

@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, pythonPackages }:
+{ stdenv, fetchFromGitHub, pythonPackages, openssh, rsync }:
 
 pythonPackages.buildPythonApplication rec {
   name = "pssh-${version}";
@@ -11,6 +11,15 @@ pythonPackages.buildPythonApplication rec {
     sha256 = "0nawarxczfwajclnlsimhqkpzyqb1byvz9nsl54mi1bp80z5i4jq";
   };
 
+  postPatch = ''
+    for f in bin/*; do
+      substituteInPlace $f \
+        --replace "'ssh'" "'${openssh}/bin/ssh'" \
+        --replace "'scp'" "'${openssh}/bin/scp'" \
+        --replace "'rsync'" "'${rsync}/bin/rsync'"
+    done
+  '';
+
   meta = with stdenv.lib; {
     description = "Parallel SSH Tools";
     longDescription = ''
@@ -19,7 +28,7 @@ pythonPackages.buildPythonApplication rec {
     '';
     inherit (src.meta) homepage;
     license = licenses.bsd3;
-    platforms = platforms.linux;
+    platforms = platforms.linux ++ platforms.darwin;
     maintainers = with maintainers; [ chris-martin ];
   };
 }

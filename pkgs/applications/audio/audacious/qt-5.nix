@@ -1,26 +1,31 @@
 {
-  mkDerivation, lib, fetchurl,
+  mkDerivation, lib, fetchurl, fetchpatch,
   gettext, pkgconfig,
   qtbase,
   alsaLib, curl, faad2, ffmpeg, flac, fluidsynth, gdk_pixbuf, lame, libbs2b,
-  libcddb, libcdio082, libcue, libjack2, libmad, libmcs, libmms, libmodplug,
+  libcddb, libcdio, libcue, libjack2, libmad, libmms, libmodplug,
   libmowgli, libnotify, libogg, libpulseaudio, libsamplerate, libsidplayfp,
   libsndfile, libvorbis, libxml2, lirc, mpg123, neon, qtmultimedia, soxr,
   wavpack
 }:
 
 let
-  version = "3.8.2";
+  version = "3.9";
   sources = {
     "audacious-${version}" = fetchurl {
       url = "http://distfiles.audacious-media-player.org/audacious-${version}.tar.bz2";
-      sha256 = "14xyvmxdax0aj1gqcz8z23cjcavsysyh6b3lkiczkv4vrqf4gwdx";
+      sha256 = "0pmhrhsjhqnrq3zh4rhfys5jas53ph5ijkq010dxg1n779kl901d";
     };
 
     "audacious-plugins-${version}" = fetchurl {
       url = "http://distfiles.audacious-media-player.org/audacious-plugins-${version}.tar.bz2";
-      sha256 = "1m7xln93zc4qvb1fi83icyd5x2r6azqlvs5nigjz8az3l2kzrknp";
+      sha256 = "1f17r7ar0mngcf7z41s6xh073vjafw3i7iy9ijb0cd6bi48g5xwb";
     };
+  };
+
+  qt510_plugins_patch = fetchpatch {
+    url = "https://github.com/audacious-media-player/audacious-plugins/commit/971f7ff7c3d8a0b9b420bf4fd19ab97755607637.patch";
+    sha256 = "15fy37syj9ygl2ibkkz3g3b9wd22vk9bjfmvqhhkpxphry2zwb17";
   };
 in
 
@@ -33,13 +38,15 @@ mkDerivation {
 
   nativeBuildInputs = [ gettext pkgconfig ];
 
+  inherit qt510_plugins_patch;
+
   buildInputs = [
     # Core dependencies
     qtbase
 
     # Plugin dependencies
     alsaLib curl faad2 ffmpeg flac fluidsynth gdk_pixbuf lame libbs2b libcddb
-    libcdio082 libcue libjack2 libmad libmcs libmms libmodplug libmowgli
+    libcdio libcue libjack2 libmad libmms libmodplug libmowgli
     libnotify libogg libpulseaudio libsamplerate libsidplayfp libsndfile
     libvorbis libxml2 lirc mpg123 neon qtmultimedia soxr wavpack
   ];
@@ -55,6 +62,10 @@ mkDerivation {
     for (( i=0 ; i < ''${#sourceFiles[*]} ; i++ )); do
 
       (
+        # only patch the plugins
+        if [ "$i" -eq "1" ]; then
+          patches=( $qt510_plugins_patch )
+        fi
         src=''${sourceFiles[$i]}
         sourceRoot=''${sourceRoots[$i]}
         source $stdenv/setup
@@ -70,7 +81,7 @@ mkDerivation {
 
   meta = with lib; {
     description = "Audio player";
-    homepage = http://audacious-media-player.org/;
+    homepage = https://audacious-media-player.org/;
     maintainers = with maintainers; [ ttuegel ];
     platforms = with platforms; linux;
     license = with licenses; [

@@ -4,6 +4,7 @@ use strict;
 use warnings;
 use File::Basename;
 use File::Slurp;
+use Net::DBus;
 use Sys::Syslog qw(:standard :macros);
 use Cwd 'abs_path';
 
@@ -15,6 +16,10 @@ my $restartListFile = "/run/systemd/restart-list";
 my $reloadListFile = "/run/systemd/reload-list";
 
 my $action = shift @ARGV;
+
+if ("@localeArchive@" ne "") {
+    $ENV{LOCALE_ARCHIVE} = "@localeArchive@";
+}
 
 if (!defined $action || ($action ne "switch" && $action ne "boot" && $action ne "test" && $action ne "dry-activate")) {
     print STDERR <<EOF;
@@ -63,16 +68,15 @@ EOF
 $SIG{PIPE} = "IGNORE";
 
 sub getActiveUnits {
-    # FIXME: use D-Bus or whatever to query this, since parsing the
-    # output of list-units is likely to break.
-    my $lines = `LANG= systemctl list-units --full --no-legend`;
+    my $mgr = Net::DBus->system->get_service("org.freedesktop.systemd1")->get_object("/org/freedesktop/systemd1");
+    my $units = $mgr->ListUnitsByPatterns([], []);
     my $res = {};
-    foreach my $line (split '\n', $lines) {
-        chomp $line;
-        last if $line eq "";
-        $line =~ /^(\S+)\s+(\S+)\s+(\S+)\s+(\S+)\s/ or next;
-        next if $1 eq "UNIT";
-        $res->{$1} = { load => $2, state => $3, substate => $4 };
+    for my $item (@$units) {
+        my ($id, $description, $load_state, $active_state, $sub_state,
+            $following, $unit_path, $job_id, $job_type, $job_path) = @$item;
+        next unless $following eq '';
+        next if $job_id == 0 and $active_state eq 'inactive';
+        $res->{$id} = { load => $load_state, state => $active_state, substate => $sub_state };
     }
     return $res;
 }
@@ -262,7 +266,8 @@ while (my ($unit, $state) = each %{$activePrev}) {
 
 sub pathToUnitName {
     my ($path) = @_;
-    open my $cmd, "-|", "@systemd@/bin/systemd-escape", "--suffix=mount", "-p", $path
+    # Use current version of systemctl binary before daemon is reexeced.
+    open my $cmd, "-|", "/run/current-system/sw/bin/systemd-escape", "--suffix=mount", "-p", $path
         or die "Unable to escape $path!\n";
     my $escaped = join "", <$cmd>;
     chomp $escaped;
@@ -364,7 +369,8 @@ syslog(LOG_NOTICE, "switching to system configuration $out");
 if (scalar (keys %unitsToStop) > 0) {
     print STDERR "stopping the following units: ", join(", ", @unitsToStopFiltered), "\n"
         if scalar @unitsToStopFiltered;
-    system("systemctl", "stop", "--", sort(keys %unitsToStop)); # FIXME: ignore errors?
+    # Use current version of systemctl binary before daemon is reexeced.
+    system("/run/current-system/sw/bin/systemctl", "stop", "--", sort(keys %unitsToStop)); # FIXME: ignore errors?
 }
 
 print STDERR "NOT restarting the following changed units: ", join(", ", sort(keys %unitsToSkip)), "\n"

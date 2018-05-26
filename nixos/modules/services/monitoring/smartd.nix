@@ -14,10 +14,10 @@ let
   nx = cfg.notifications.x11;
 
   smartdNotify = pkgs.writeScript "smartd-notify.sh" ''
-    #! ${pkgs.stdenv.shell}
+    #! ${pkgs.runtimeShell}
     ${optionalString nm.enable ''
       {
-      cat << EOF
+      ${pkgs.coreutils}/bin/cat << EOF
       From: smartd on ${host} <root>
       To: undisclosed-recipients:;
       Subject: SMART error on $SMARTD_DEVICESTRING: $SMARTD_FAILTYPE
@@ -30,7 +30,7 @@ let
     ''}
     ${optionalString nw.enable ''
       {
-      cat << EOF
+      ${pkgs.coreutils}/bin/cat << EOF
       Problem detected with disk: $SMARTD_DEVICESTRING
       Warning message from smartd is:
 
@@ -41,7 +41,7 @@ let
     ${optionalString nx.enable ''
       export DISPLAY=${nx.display}
       {
-      cat << EOF
+      ${pkgs.coreutils}/bin/cat << EOF
       Problem detected with disk: $SMARTD_DEVICESTRING
       Warning message from smartd is:
 
@@ -64,7 +64,7 @@ let
        "DEVICESCAN ${notifyOpts}${cfg.defaults.autodetected}"}
   '';
 
-  smartdOpts = { name, ... }: {
+  smartdDeviceOpts = { name, ... }: {
 
     options = {
 
@@ -105,6 +105,18 @@ in
 
           Set to false to monitor the devices listed in
           <option>services.smartd.devices</option> only.
+        '';
+      };
+
+      extraOptions = mkOption {
+        default = [];
+        type = types.listOf types.str;
+        example = ["-A /var/log/smartd/" "--interval=3600"];
+        description = ''
+          Extra command-line options passed to the <literal>smartd</literal>
+          daemon on startup.
+
+          (See <literal>man 8 smartd</literal>.)
         '';
       };
 
@@ -197,7 +209,7 @@ in
       devices = mkOption {
         default = [];
         example = [ { device = "/dev/sda"; } { device = "/dev/sdb"; options = "-d sat"; } ];
-        type = with types; listOf (submodule smartdOpts);
+        type = with types; listOf (submodule smartdDeviceOpts);
         description = "List of devices to monitor.";
       };
 
@@ -222,7 +234,7 @@ in
 
       path = [ pkgs.nettools ]; # for hostname and dnsdomanname calls in smartd
 
-      serviceConfig.ExecStart = "${pkgs.smartmontools}/sbin/smartd --no-fork --configfile=${smartdConf}";
+      serviceConfig.ExecStart = "${pkgs.smartmontools}/sbin/smartd ${lib.concatStringsSep " " cfg.extraOptions} --no-fork --configfile=${smartdConf}";
     };
 
   };

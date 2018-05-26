@@ -1,11 +1,11 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "libexttextcat-3.4.1";
+  name = "libexttextcat-3.4.5";
 
   src = fetchurl {
     url = "http://dev-www.libreoffice.org/src/libexttextcat/${name}.tar.xz";
-    sha256 = "0g1spzpsfbv3y8k9m1v53imz18437q93iq101hind7m4x00j6wpl";
+    sha256 = "1j6sjwkyhqvsgyw938bxxfwkzzi1mahk66g5342lv6j89jfvrz8k";
   };
 
   meta = {

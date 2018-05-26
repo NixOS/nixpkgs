@@ -10,6 +10,7 @@ let
 in
 {
   imports = [
+    ../../profiles/base.nix
     ../../profiles/installation-device.nix
     ./sd-image.nix
   ];
@@ -20,12 +21,10 @@ in
       "it cannot be cross compiled";
   };
 
-  # Needed by RPi firmware
-  nixpkgs.config.allowUnfree = true;
-
   boot.loader.grub.enable = false;
   boot.loader.generic-extlinux-compatible.enable = true;
 
+  boot.consoleLogLevel = lib.mkDefault 7;
   boot.kernelPackages = pkgs.linuxPackages_rpi;
 
   # FIXME: this probably should be in installation-device.nix

@@ -1,22 +1,35 @@
 { stdenv, fetchFromGitHub, autoreconfHook
-, pkgconfig, libuuid, e2fsprogs
+, pkgconfig, libuuid, e2fsprogs, nilfs-utils, ntfs3g
 }:
 
 stdenv.mkDerivation rec {
   name = "partclone-${version}";
-  version = "0.2.89";
+  version = "0.3.11";
 
   src = fetchFromGitHub {
     owner = "Thomas-Tsai";
     repo = "partclone";
     rev = version;
-    sha256 = "0gw47pchqshhm00yf34qgxh6bh2jfryv0sm7ghwn77bv5gzwr481";
+    sha256 = "0bv15i0gxym4dv48rgaavh8p94waryn1l6viis6qh5zm9cd08skg";
   };
 
   nativeBuildInputs = [ autoreconfHook pkgconfig ];
   buildInputs = [
-    e2fsprogs libuuid stdenv.cc.libc
+    e2fsprogs libuuid stdenv.cc.libc nilfs-utils ntfs3g 
     (stdenv.lib.getOutput "static" stdenv.cc.libc)
+  ];
+
+  configureFlags = [
+    "--enable-xfs"
+    "--enable-extfs"
+    "--enable-hfsp"
+    "--enable-fat"
+    "--enable-exfat"
+    "--enable-ntfs"
+    "--enable-btrfs"
+    "--enable-minix"
+    "--enable-f2fs"
+    "--enable-nilfs2"
   ];
 
   enableParallelBuilding = true;

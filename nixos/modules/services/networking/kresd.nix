@@ -43,7 +43,16 @@ in
       type = with types; listOf str;
       default = [ "::1" "127.0.0.1" ];
       description = ''
-        What addresses the server should listen on.
+        What addresses the server should listen on. (UDP+TCP 53)
+      '';
+    };
+    listenTLS = mkOption {
+      type = with types; listOf str;
+      default = [];
+      example = [ "198.51.100.1:853" "[2001:db8::1]:853" "853" ];
+      description = ''
+        Addresses on which kresd should provide DNS over TLS (see RFC 7858).
+        For detailed syntax see ListenStream in man systemd.socket.
       '';
     };
     # TODO: perhaps options for more common stuff like cache size or forwarding
@@ -72,6 +81,19 @@ in
         (iface: if elem ":" (stringToCharacters iface) then "[${iface}]:53" else "${iface}:53")
         cfg.interfaces;
       socketConfig.ListenDatagram = listenStreams;
+      socketConfig.FreeBind = true;
+    };
+
+    systemd.sockets.kresd-tls = mkIf (cfg.listenTLS != []) rec {
+      wantedBy = [ "sockets.target" ];
+      before = wantedBy;
+      partOf = [ "kresd.socket" ];
+      listenStreams = cfg.listenTLS;
+      socketConfig = {
+        FileDescriptorName = "tls";
+        FreeBind = true;
+        Service = "kresd.service";
+      };
     };
 
     systemd.sockets.kresd-control = rec {
@@ -82,20 +104,11 @@ in
       socketConfig = {
         FileDescriptorName = "control";
         Service = "kresd.service";
-        SocketMode = "0660"; # only root user/group may connect
+        SocketMode = "0660"; # only root user/group may connect and control kresd
       };
     };
 
-    # Create the cacheDir; tmpfiles don't work on nixos-rebuild switch.
-    systemd.services.kresd-cachedir = {
-      serviceConfig.Type = "oneshot";
-      script = ''
-        if [ ! -d '${cfg.cacheDir}' ]; then
-          mkdir -p '${cfg.cacheDir}'
-          chown kresd:kresd '${cfg.cacheDir}'
-        fi
-      '';
-    };
+    systemd.tmpfiles.rules = [ "d '${cfg.cacheDir}' 0770 kresd kresd - -" ];
 
     systemd.services.kresd = {
       description = "Knot-resolver daemon";
@@ -104,16 +117,17 @@ in
         User = "kresd";
         Type = "notify";
         WorkingDirectory = cfg.cacheDir;
+        Restart = "on-failure";
+        Sockets = [ "kresd.socket" "kresd-control.socket" ]
+          ++ optional (cfg.listenTLS != []) "kresd-tls.socket";
       };
 
+      # Trust anchor goes from dns-root-data by default.
       script = ''
-        exec '${package}/bin/kresd' --config '${configFile}' \
-          -k '${cfg.cacheDir}/root.key'
+        exec '${package}/bin/kresd' --config '${configFile}' --forks=1
       '';
 
-      after = [ "kresd-cachedir.service" ];
-      requires = [ "kresd.socket" "kresd-cachedir.service" ];
-      wantedBy = [ "sockets.target" ];
+      requires = [ "kresd.socket" ];
     };
   };
 }

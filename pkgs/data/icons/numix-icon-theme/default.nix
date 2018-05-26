@@ -1,24 +1,28 @@
-{ stdenv, fetchFromGitHub }:
+{ stdenv, fetchFromGitHub, gtk3, hicolor-icon-theme }:
 
 stdenv.mkDerivation rec {
-  version = "2017-09-17";
-
-  package-name = "numix-icon-theme";
-
-  name = "${package-name}-${version}";
+  name = "${pname}-${version}";
+  pname = "numix-icon-theme";
+  version = "17-12-25";
 
   src = fetchFromGitHub {
     owner = "numixproject";
-    repo = package-name;
-    rev = "d0e7da93520e521bf7df7cffa3620c10a8400a7f";
-    sha256 = "1my43kv9yz9vdn51zhd13c8zavba17cqrmxkmhpx0c8xldjqfp3i";
+    repo = pname;
+    rev = version;
+    sha256 = "0q3hpq2jc9iwnzzqpb12g1qzjsw4ckhdqkfqf6nirl87r5drkv6j";
   };
 
-  dontBuild = true;
+  nativeBuildInputs = [ gtk3 hicolor-icon-theme ];
 
   installPhase = ''
-    install -dm 755 $out/share/icons
-    cp -dr --no-preserve='ownership' Numix{,-Light} $out/share/icons/
+    mkdir -p $out/share/icons
+    mv Numix{,-Light} $out/share/icons
+  '';
+
+  postFixup = ''
+    for theme in $out/share/icons/*; do
+      gtk-update-icon-cache $theme
+    done
   '';
 
   meta = with stdenv.lib; {

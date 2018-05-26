@@ -1,27 +1,55 @@
-{ stdenv, fetchurl, pkgconfig, intltool, gnome3, wrapGAppsHook, packagekit
-, appstream-glib, libsoup, polkit, attr, acl, libyaml, isocodes, gtkspell3
-, json_glib, libsecret, valgrind-light }:
+{ stdenv, fetchurl, substituteAll, pkgconfig, meson, ninja, gettext, gnome3, wrapGAppsHook, packagekit, ostree
+, glib, appstream-glib, libsoup, polkit, isocodes, gspell, libxslt, gobjectIntrospection, flatpak
+, json-glib, libsecret, valgrind-light, docbook_xsl, docbook_xml_dtd_42, gtk-doc, desktop-file-utils }:
 
 stdenv.mkDerivation rec {
-  inherit (import ./src.nix fetchurl) name src;
+  name = "gnome-software-${version}";
+  version = "3.28.2";
 
-  nativeBuildInputs = [ pkgconfig intltool wrapGAppsHook ];
-  buildInputs = [ gnome3.gtk packagekit appstream-glib libsoup
-                  gnome3.gsettings_desktop_schemas gnome3.gnome_desktop
-                  gtkspell3 json_glib libsecret
-                  polkit attr acl libyaml valgrind-light ];
-  propagatedBuildInputs = [ isocodes ];
+  src = fetchurl {
+    url = "mirror://gnome/sources/gnome-software/${gnome3.versionBranch version}/${name}.tar.xz";
+    sha256 = "1s19p50nrkvxg4sb7bkn9ccajgaj251y9iz20bkn31ysq19ih03w";
+  };
 
-  postInstall = ''
-    mkdir -p $out/share/xml/
-    ln -s ${isocodes}/share/xml/iso-codes $out/share/xml/iso-codes
-  '';
+  patches = [
+    (substituteAll {
+      src = ./fix-paths.patch;
+      inherit isocodes;
+    })
+  ];
+
+  nativeBuildInputs = [
+    meson ninja pkgconfig gettext wrapGAppsHook libxslt docbook_xml_dtd_42
+    valgrind-light docbook_xsl gtk-doc desktop-file-utils gobjectIntrospection
+  ];
+
+  buildInputs = [
+    gnome3.gtk glib packagekit appstream-glib libsoup
+    gnome3.gsettings-desktop-schemas gnome3.gnome-desktop
+    gspell json-glib libsecret ostree
+    polkit flatpak
+  ];
+
+  mesonFlags = [
+    "-Denable-rpm=false"
+    "-Denable-fwupd=false"
+    "-Denable-oauth=false"
+    "-Denable-ubuntu-reviews=false"
+    "-Denable-gudev=false"
+  ];
+
+  passthru = {
+    updateScript = gnome3.updateScript {
+      packageName = "gnome-software";
+      attrPath = "gnome3.gnome-software";
+    };
+  };
 
   meta = with stdenv.lib; {
-    homepage = https://www.freedesktop.org/software/PackageKit/;
-    platforms = platforms.linux;
-    maintainers = gnome3.maintainers;
+    description = "Software store that lets you install and update applications and system extensions";
+    homepage = https://wiki.gnome.org/Apps/Software;
     license = licenses.gpl2;
-    description = "GNOME Software lets you install and update applications and system extensions.";
+    maintainers = gnome3.maintainers;
+    platforms = platforms.linux;
   };
 }

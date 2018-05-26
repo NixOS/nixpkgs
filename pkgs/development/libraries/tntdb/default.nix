@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     sha256 = "0js79dbvkic30bzw1pf26m64vs2ssw2sbj55w1dc0sy69dlv4fh9";
   };
 
-  buildInputs = [ cxxtools postgresql mysql sqlite zlib openssl ];
+  buildInputs = [ cxxtools postgresql mysql.connector-c sqlite zlib openssl ];
 
   enableParallelBuilding = true;
 

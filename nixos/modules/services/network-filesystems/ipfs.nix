@@ -14,7 +14,7 @@ let
     (optionalString (cfg.defaultMode == "norouting") "--routing=none")
   ] ++ cfg.extraFlags);
 
-  defaultDataDir = if versionAtLeast config.system.stateVersion "17.09" then
+  defaultDataDir = if versionAtLeast config.system.nixos.stateVersion "17.09" then
     "/var/lib/ipfs" else
     "/var/lib/ipfs/.ipfs";
 
@@ -39,8 +39,6 @@ let
     # NB: migration must be performed prior to pre-start, else we get the failure message!
     preStart = ''
       ipfs repo fsck # workaround for BUG #4212 (https://github.com/ipfs/go-ipfs/issues/4214)
-      ipfs --local config Addresses.API ${cfg.apiAddress}
-      ipfs --local config Addresses.Gateway ${cfg.gatewayAddress}
     '' + optionalString cfg.autoMount ''
       ipfs --local config Mounts.FuseAllowOther --json true
       ipfs --local config Mounts.IPFS ${cfg.ipfsMountDir}
@@ -56,7 +54,11 @@ let
               EOF
               ipfs --local config --json "${concatStringsSep "." path}" "$value"
             '')
-            cfg.extraConfig)
+            ({ Addresses.API = cfg.apiAddress;
+               Addresses.Gateway = cfg.gatewayAddress;
+               Addresses.Swarm = cfg.swarmAddress;
+            } //
+            cfg.extraConfig))
         );
     serviceConfig = {
       ExecStart = "${wrapped}/bin/ipfs daemon ${ipfsFlags}";
@@ -140,6 +142,12 @@ in {
         description = "Where IPFS exposes its API to";
       };
 
+      swarmAddress = mkOption {
+        type = types.listOf types.str;
+        default = [ "/ip4/0.0.0.0/tcp/4001" "/ip6/::/tcp/4001" ];
+        description = "Where IPFS listens for incoming p2p connections";
+      };
+
       enableGC = mkOption {
         type = types.bool;
         default = false;
@@ -176,6 +184,14 @@ in {
         type = types.listOf types.str;
         description = "Extra flags passed to the IPFS daemon";
         default = [];
+      };
+
+      localDiscovery = mkOption {
+        type = types.bool;
+        description = ''Whether to enable local discovery for the ipfs daemon.
+          This will allow ipfs to scan ports on your local network. Some hosting services will ban you if you do this.
+        '';
+        default = true;
       };
 
       serviceFdlimit = mkOption {
@@ -224,7 +240,13 @@ in {
       '';
       script = ''
         if [[ ! -f ${cfg.dataDir}/config ]]; then
-          ipfs init ${optionalString cfg.emptyRepo "-e"}
+          ipfs init ${optionalString cfg.emptyRepo "-e"} \
+            ${optionalString (! cfg.localDiscovery) "--profile=server"}
+        else
+          ${if cfg.localDiscovery
+            then "ipfs config profile apply local-discovery"
+            else "ipfs config profile apply server"
+          }
         fi
       '';
 

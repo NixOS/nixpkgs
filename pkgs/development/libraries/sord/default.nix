@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, python, serd }:
+{ stdenv, fetchurl, pkgconfig, python, serd, pcre }:
 
 stdenv.mkDerivation rec {
   name = "sord-${version}";
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ python serd ];
+  buildInputs = [ python serd pcre ];
 
   configurePhase = "${python.interpreter} waf configure --prefix=$out";
 

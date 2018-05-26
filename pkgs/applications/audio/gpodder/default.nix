@@ -1,58 +1,67 @@
-{ stdenv, fetchurl, fetchpatch, python2Packages, mygpoclient, intltool
-, ipodSupport ? false, libgpod
-, gnome3
+{ stdenv, fetchFromGitHub, python3, python3Packages, intltool
+, glibcLocales, gnome3, gtk3, wrapGAppsHook
+, ipodSupport ? false, libgpod, gobjectIntrospection
 }:
 
-python2Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   name = "gpodder-${version}";
+  version = "3.10.1";
 
-  version = "3.9.3";
+  format = "other";
 
-  src = fetchurl {
-    url = "http://gpodder.org/src/${name}.tar.gz";
-    sha256 = "1s83m90dic2zphwwv6wrvqx950y12v5sakm7q5nj5bnh5k9l2hgl";
+  src = fetchFromGitHub {
+    owner = "gpodder";
+    repo = "gpodder";
+    rev = version;
+    sha256 = "1cqhm5h0kkdb2m691dbj8i3bixl7bw0iww2pl6k1jkz8mgafyd9d";
   };
-
-  patches = [
-    (fetchpatch {
-     sha256 = "1xkl1wnp46546jrzsnb9p0yj23776byg3nvsqwbblhqbsfipl48w";
-     name = "Fix-soundcloud-feeds.patch";
-     url = "https://github.com/gpodder/gpodder/commit/e7f34ad090cd276d75c0cd8d92ed97243d75db38.patch";
-    })
-    (fetchpatch {
-     sha256 = "1jlldbinlxis1pi9p2lyczgbcv8nmdj66fxll6ph0klln0w8gvg4";
-     name = "use-https-urls-for-soundcloud.patch";
-     url = "https://github.com/gpodder/gpodder/commit/ef915dd3b6828174bf4f6f0911da410d9aca1b67.patch";
-    })
-    (fetchpatch {
-     sha256 = "1l37ihzk7gfqcl5nnphv0sv80psm6fsg4qkxn6abc6v476axyj9b";
-     name = "updates-soundcloud-support-to-recognize-https";
-     url = "https://github.com/gpodder/gpodder/commit/5c1507671d93096ad0118f908c20dd1f182a72e0.patch";
-    })
-  ];
 
   postPatch = with stdenv.lib; ''
     sed -i -re 's,^( *gpodder_dir *= *).*,\1"'"$out"'",' bin/gpodder
-
-    makeWrapperArgs="--suffix XDG_DATA_DIRS : '${concatStringsSep ":" [
-      "${gnome3.gnome_themes_standard}/share"
-      "$XDG_ICON_DIRS"
-      "$GSETTINGS_SCHEMAS_PATH"
-    ]}'"
   '';
 
-  buildInputs = [
-    intltool python2Packages.coverage python2Packages.minimock
-    gnome3.gnome_themes_standard gnome3.defaultIconTheme
-    gnome3.gsettings_desktop_schemas
+  nativeBuildInputs = [
+    intltool
+    wrapGAppsHook
+    glibcLocales
   ];
 
-  propagatedBuildInputs = with python2Packages; [
-    feedparser dbus-python mygpoclient pygtk eyeD3 podcastparser html5lib
+  buildInputs = [
+    python3
+    gobjectIntrospection
+    gnome3.defaultIconTheme
+  ];
+
+  checkInputs = with python3Packages; [
+    coverage minimock
+  ];
+
+  doCheck = true;
+
+  propagatedBuildInputs = with python3Packages; [
+    feedparser
+    dbus-python
+    mygpoclient
+    pygobject3
+    eyeD3
+    podcastparser
+    html5lib
+    gtk3
   ] ++ stdenv.lib.optional ipodSupport libgpod;
 
-  checkPhase = ''
-    LC_ALL=C python -m gpodder.unittests
+  makeFlags = [
+    "PREFIX=$(out)"
+    "share/applications/gpodder-url-handler.desktop"
+    "share/applications/gpodder.desktop"
+    "share/dbus-1/services/org.gpodder.service"
+  ];
+
+  preBuild = ''
+    export LC_ALL="en_US.UTF-8"
+  '';
+
+  installCheckPhase = ''
+    LC_ALL=C PYTHONPATH=./src:$PYTHONPATH python3 -m gpodder.unittests
   '';
 
   meta = with stdenv.lib; {

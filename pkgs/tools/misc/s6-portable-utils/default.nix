@@ -4,11 +4,11 @@ with stdenv.lib;
 
 stdenv.mkDerivation rec {
   name = "s6-portable-utils-${version}";
-  version = "2.1.0.0";
+  version = "2.2.1.1";
 
   src = fetchurl {
     url = "http://www.skarnet.org/software/s6-portable-utils/${name}.tar.gz";
-    sha256 = "0khw5ljmlghvl4hyrf4vd0hl5rrmsspchi8w4xgniwfip6vlbqfd";
+    sha256 = "0ca5iiq3n6isj64jb81xpwjzjx1q8jg145nnnn91ra2qqk93kqka";
   };
 
   dontDisableStatic = true;

@@ -13,7 +13,7 @@ let
 
   askPasswordWrapper = pkgs.writeScript "ssh-askpass-wrapper"
     ''
-      #! ${pkgs.stdenv.shell} -e
+      #! ${pkgs.runtimeShell} -e
       export DISPLAY="$(systemctl --user show-environment | ${pkgs.gnused}/bin/sed 's/^DISPLAY=\(.*\)/\1/; t; d')"
       exec ${askPassword}
     '';
@@ -148,11 +148,11 @@ in
           [
             {
               hostNames = [ "myhost" "myhost.mydomain.com" "10.10.1.4" ];
-              publicKeyFile = "./pubkeys/myhost_ssh_host_dsa_key.pub";
+              publicKeyFile = ./pubkeys/myhost_ssh_host_dsa_key.pub;
             }
             {
               hostNames = [ "myhost2" ];
-              publicKeyFile = "./pubkeys/myhost2_ssh_host_dsa_key.pub";
+              publicKeyFile = ./pubkeys/myhost2_ssh_host_dsa_key.pub;
             }
           ]
         '';

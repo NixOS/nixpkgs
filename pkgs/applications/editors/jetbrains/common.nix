@@ -1,5 +1,6 @@
 { stdenv, fetchurl, makeDesktopItem, makeWrapper, patchelf, p7zip
-, coreutils, gnugrep, which, git, python, unzip }:
+, coreutils, gnugrep, which, git, python, unzip, libsecret
+}:
 
 { name, product, version, src, wmClass, jdk, meta } @ attrs:
 
@@ -65,7 +66,7 @@ with stdenv; lib.makeOverridable mkDerivation rec {
       --prefix PATH : "$out/libexec/${name}:${stdenv.lib.makeBinPath [ jdk coreutils gnugrep which git ]}" \
       --prefix LD_LIBRARY_PATH : "${stdenv.lib.makeLibraryPath [
         # Some internals want libstdc++.so.6
-        stdenv.cc.cc.lib
+        stdenv.cc.cc.lib libsecret
       ]}" \
       --set JDK_HOME "$jdk" \
       --set ${hiName}_JDK "$jdk" \

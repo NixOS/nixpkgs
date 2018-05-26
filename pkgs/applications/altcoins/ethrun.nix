@@ -13,12 +13,13 @@ buildRustPackage rec {
     sha256 = "1w651g4p2mc4ljp20l8lwvfx3l3fzyp6gf2izr85vyb1wjbaccqn";
   };
 
-  depsSha256 = "14x8pbjgkz0g724lnvd9mi2alqd6fipjljw6xsraf9gqwijn1knq";
+  cargoSha256 = "14x8pbjgkz0g724lnvd9mi2alqd6fipjljw6xsraf9gqwijn1kn0";
 
   meta = {
     description = "Directly run Ethereum bytecode";
     homepage = https://github.com/dapphub/ethrun/;
     maintainers = [stdenv.lib.maintainers.dbrock];
+    broken = true; # mark temporary as broken
     inherit version;
   };
 }

@@ -1,22 +1,34 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, fetchpatch
 , rtl-sdr
-, pypandoc
-, pandoc
+, m2r
 }:
 
 buildPythonPackage rec {
   pname = "pyrtlsdr";
-  version = "0.2.5";
-  name = "${pname}-${version}";
+  version = "0.2.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "dd041143b68628c713c2227c78c40b0b4a0cb5d08df116f7bdc5f83c529be0e4";
+    sha256 = "7942fe2e7821d09206002ea7e820e694094b3f964885123eb6eee1167f39b8da";
   };
 
-  buildInputs = [ pypandoc pandoc ];
+  # Replace pypandoc dependency by m2r
+  # See https://github.com/roger-/pyrtlsdr/pull/78
+  patches = [
+    (fetchpatch {
+      url = "${meta.homepage}/commit/2b7df0b.patch";
+      sha256 = "04h5z80969jgdgrf98b9ps56sybms09xacvmj6rwcfrmanli8rgf";
+    })
+    (fetchpatch {
+      url = "${meta.homepage}/commit/97dc3d0.patch";
+      sha256 = "1v1j0n91jwpsiam2j34yj71z4h39cvk4gi4565zgjrzsq6xr93i0";
+    })
+  ];
+
+  nativeBuildInputs = [ m2r ];
 
   postPatch = ''
     sed "s|driver_files =.*|driver_files = ['${rtl-sdr}/lib/librtlsdr.so']|" -i rtlsdr/librtlsdr.py
@@ -31,5 +43,5 @@ buildPythonPackage rec {
     license = licenses.gpl3;
     platforms = platforms.linux;
     maintainers = with maintainers; [ bjornfor ];
- };
+  };
 }

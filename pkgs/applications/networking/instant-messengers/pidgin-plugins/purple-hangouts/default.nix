@@ -1,16 +1,16 @@
-{ stdenv, fetchhg, pidgin, glib, json_glib, protobuf, protobufc }:
+{ stdenv, fetchhg, pidgin, glib, json-glib, protobuf, protobufc }:
 
 stdenv.mkDerivation rec {
   name = "purple-hangouts-hg-${version}";
-  version = "2016-12-22";
+  version = "2018-03-28";
 
   src = fetchhg {
     url = "https://bitbucket.org/EionRobb/purple-hangouts/";
-    rev = "754e3bb971cfe913b90c7fd028fe47a42f9e83cb";
-    sha256 = "0b826hj5jgfdckzh9wyycxxhpyxhrhxm3n0mhaf3f57gqarriics";
+    rev = "0e137e6bf9e95c5a0bd282f3ad4a5bd00a6968ab";
+    sha256 = "04vjgz6qyd9ilv1c6n08r45vc683vxs1rgfwhh65pag6q4rbzlb9";
   };
 
-  buildInputs = [ pidgin glib json_glib protobuf protobufc ];
+  buildInputs = [ pidgin glib json-glib protobuf protobufc ];
 
   installPhase = ''
     install -Dm755 -t $out/lib/pidgin/ libhangouts.so

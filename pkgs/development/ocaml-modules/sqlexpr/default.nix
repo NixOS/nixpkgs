@@ -1,4 +1,4 @@
-{ stdenv, buildOcaml, fetchurl, ocaml_batteries, csv, ocaml_lwt, ocaml_sqlite3, estring }:
+{ stdenv, buildOcaml, fetchurl, batteries, csv, ocaml_lwt, ocaml_sqlite3, estring }:
 
 buildOcaml rec {
   name = "sqlexpr";
@@ -9,10 +9,10 @@ buildOcaml rec {
     sha256 = "02pi0xxr3xzalwpvcaq96k57wz2vxj20l2mga1a4d2ddvhran8kr";
   };
 
-  propagatedBuildInputs = [ ocaml_batteries csv ocaml_lwt ocaml_sqlite3 estring ];
+  propagatedBuildInputs = [ batteries csv ocaml_lwt ocaml_sqlite3 estring ];
 
   meta = with stdenv.lib; {
-    homepage = http://github.com/mfp/ocaml-sqlexpr;
+    homepage = https://github.com/mfp/ocaml-sqlexpr;
     description = "Type-safe, convenient SQLite database access";
     license = licenses.lgpl21;
   };

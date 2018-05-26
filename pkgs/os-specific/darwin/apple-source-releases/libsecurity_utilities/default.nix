@@ -4,9 +4,12 @@ appleDerivation {
     libauto
     libobjc
     IOKit
+  ];
+  propagatedBuildInputs = [
     sqlite
     apple_sdk.frameworks.PCSC
   ];
+  NIX_LDFLAGS = "-framework PCSC";
   patchPhase = ''
     substituteInPlace lib/errors.h --replace \
       '<CoreServices/../Frameworks/CarbonCore.framework/Headers/MacTypes.h>' \
@@ -17,9 +20,8 @@ appleDerivation {
     substituteInPlace lib/powerwatch.h --replace \
       '<IOKit/pwr_mgt/IOPMLibPrivate.h>' \
       '"${IOKit}/Library/Frameworks/IOKit.framework/Headers/pwr_mgt/IOPMLibPrivate.h"'
-
-    cp ${osx_private_sdk}/PrivateSDK10.9.sparse.sdk/usr/include/security_utilities/utilities_dtrace.h lib
-    cp -R ${osx_private_sdk}/PrivateSDK10.9.sparse.sdk/usr/local/include/bsm lib
+    cp -R ${osx_private_sdk}/include/bsm lib
+    cp ${osx_private_sdk}/include/utilities_dtrace.h lib
   '' + stdenv.lib.optionalString (!stdenv.cc.nativeLibc) ''
     substituteInPlace lib/vproc++.cpp --replace /usr/local/include/vproc_priv.h ${stdenv.libc}/include/vproc_priv.h
   '';

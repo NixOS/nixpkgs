@@ -6,31 +6,36 @@
 
 let
   rustPlatform = recurseIntoAttrs (makeRustPlatform (callPackage ./bootstrap.nix {}));
-  version = "1.17.0";
-in
-rec {
+  version = "1.25.0";
+  cargoVersion = "0.26.0";
+  src = fetchurl {
+    url = "https://static.rust-lang.org/dist/rustc-${version}-src.tar.gz";
+    sha256 = "0baxjr99311lvwdq0s38bipbnj72pn6fgbk6lcq7j555xq53mxpf";
+  };
+in rec {
   rustc = callPackage ./rustc.nix {
-    inherit llvm targets targetPatches targetToolchains rustPlatform version;
+    inherit stdenv llvm targets targetPatches targetToolchains rustPlatform version src;
+
+    forceBundledLLVM = true;
 
     configureFlags = [ "--release-channel=stable" ];
 
-    src = fetchurl {
-      url = "https://static.rust-lang.org/dist/rustc-${version}-src.tar.gz";
-      sha256 = "4baba3895b75f2492df6ce5a28a916307ecd1c088dc1fd02dbfa8a8e86174f87";
-    };
+    # 1. Upstream is not running tests on aarch64:
+    # see https://github.com/rust-lang/rust/issues/49807#issuecomment-380860567
+    # So we do the same.
+    # 2. Tests run out of memory for i686
+    doCheck = !stdenv.isAarch64 && !stdenv.isi686;
 
     patches = [
-      ./patches/darwin-disable-fragile-tcp-tests.patch
+      ./patches/0001-Disable-fragile-tests-libstd-net-tcp-on-Darwin-Linux.patch
     ] ++ stdenv.lib.optional stdenv.needsPax ./patches/grsec.patch;
 
   };
 
   cargo = callPackage ./cargo.nix rec {
-    version = "0.18.0";
-    srcRev = "fe7b0cdcf5ca7aab81630706ce40b70f6aa2e666";
-    srcSha = "164iywv1l3v87b0pznf5kkzxigd6w19myv9d7ka4c65zgrk9n9px";
-    depsSha256 = "1mrgd8ib48vxxbhkvsqqq4p19sc6b74x3cd8p6lhhlm6plrajrvm";
-
+    version = cargoVersion;
+    inherit src;
+    inherit stdenv;
     inherit rustc; # the rustc that will be wrapped by cargo
     inherit rustPlatform; # used to build cargo
   };

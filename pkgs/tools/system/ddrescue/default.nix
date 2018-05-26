@@ -6,16 +6,17 @@
 let inherit (stdenv.lib) optionals; in
 
 stdenv.mkDerivation rec {
-  name = "ddrescue-1.22";
+  name = "ddrescue-1.23";
 
   src = fetchurl {
     url = "mirror://gnu/ddrescue/${name}.tar.lz";
-    sha256 = "19qhx9ggkkjl0g3a88g501wmybkj1y4n5lm5kp0km0blh0p7p189";
+    sha256 = "13cd6c0x91zq10vdlyl6r5rib47bmsn5sshmkin3igwj8pa2vbm9";
   };
 
   nativeBuildInputs = [ lzip ];
 
-  doCheck = hostPlatform == buildPlatform;
+  doCheck = true; # not cross;
+  configureFlags = [ "CXX=${stdenv.cc.targetPrefix}c++" ];
 
   meta = with stdenv.lib; {
     description = "GNU ddrescue, a data recovery tool";

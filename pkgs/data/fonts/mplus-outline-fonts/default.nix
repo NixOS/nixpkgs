@@ -1,7 +1,7 @@
 { stdenv, fetchzip }:
 
 let
-  version = "062";
+  version = "063";
 in fetchzip rec {
   name = "mplus-${version}";
 
@@ -13,7 +13,7 @@ in fetchzip rec {
     cp *.ttf $out/share/fonts/truetype
   '';
 
-  sha256 = "0zm1snq5r584rz90yv5lndsqgchdaxq2185vrk7849ch4k5vd23z";
+  sha256 = "0d485l2ihxfk039rrrnfviamlbj13cwky0c752m4ikwvgiqiq94y";
 
   meta = with stdenv.lib; {
     description = "M+ Outline Fonts";

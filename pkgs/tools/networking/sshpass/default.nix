@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = {
-    homepage = http://sourceforge.net/projects/sshpass/;
+    homepage = https://sourceforge.net/projects/sshpass/;
     description = "Non-interactive ssh password auth";
     maintainers = [ stdenv.lib.maintainers.madjar ];
     platforms = stdenv.lib.platforms.unix;

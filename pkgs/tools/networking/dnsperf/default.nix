@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, bind, libseccomp, zlib }:
+{ stdenv, fetchurl, bind, libseccomp, zlib, openssl }:
 
 stdenv.mkDerivation rec {
   name = "dnsperf-${version}";
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "man" "doc" ];
 
-  buildInputs = [ bind libseccomp zlib ];
+  buildInputs = [ bind libseccomp zlib openssl ];
 
   postInstall = ''
     mkdir -p "$out/share/doc/"

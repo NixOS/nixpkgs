@@ -1,18 +1,18 @@
-{ mkDerivation, lib, fetchFromGitHub, cmake, python3, qtbase, curaengine }:
+{ mkDerivation, lib, fetchFromGitHub, cmake, python3, qtbase, qtquickcontrols, curaengine }:
 
 mkDerivation rec {
   name = "cura-${version}";
-  version = "2.6.1";
+  version = "3.2.1";
 
   src = fetchFromGitHub {
     owner = "Ultimaker";
     repo = "Cura";
     rev = version;
-    sha256 = "03rsw6nafg3y9if2dlnzsj6c9x3x7cv6gs4a1w84jaq4p1f8fcsd";
+    sha256 = "0yaya0ww92qjm7g31q85m5f95nwdapldjx1kdf1ar4yzwh4r15rp";
   };
 
-  buildInputs = [ qtbase ];
-  propagatedBuildInputs = with python3.pkgs; [ uranium zeroconf pyserial ];
+  buildInputs = [ qtbase qtquickcontrols ];
+  propagatedBuildInputs = with python3.pkgs; [ uranium zeroconf pyserial numpy-stl ];
   nativeBuildInputs = [ cmake python3.pkgs.wrapPython ];
 
   cmakeFlags = [ "-DURANIUM_DIR=${python3.pkgs.uranium.src}" ];

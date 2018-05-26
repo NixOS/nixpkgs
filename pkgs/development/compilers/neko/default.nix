@@ -1,52 +1,31 @@
-{ stdenv, fetchurl, fetchpatch, boehmgc, zlib, sqlite, pcre, cmake, pkgconfig
-, git, apacheHttpd, apr, aprutil, mariadb, mbedtls, openssl, pkgs, gtk2
+{ stdenv, fetchurl, boehmgc, zlib, sqlite, pcre, cmake, pkgconfig
+, git, apacheHttpd, apr, aprutil, mysql, mbedtls, openssl, pkgs, gtk2, libpthreadstubs
 }:
 
 stdenv.mkDerivation rec {
   name = "neko-${version}";
-  version = "2.1.0";
+  version = "2.2.0";
 
   src = fetchurl {
-    url = "http://nekovm.org/media/neko-${version}-src.tar.gz";
-    sha256 = "15ng9ad0jspnhj38csli1pvsv3nxm75f0nlps7i10194jvzdb4qc";
+    url = "https://nekovm.org/media/neko-${version}-src.tar.gz";
+    sha256 = "1qv47zaa0vzhjlq5wb71627n7dbsxpc1gqpg0hsngjxnbnh1q46g";
   };
 
-  # Patches backported with reference to https://github.com/HaxeFoundation/neko/issues/131
-  # They can probably be removed when bumping to next version
-  patches = [
-    (fetchpatch {
-      url = "https://github.com/HaxeFoundation/neko/commit/"
-          + "a8c71ad97faaccff6c6e9e09eba2d5efd022f8dc.patch";
-      sha256 = "0mnx15cdjs8mnl01mhc9z2gpzh4d1q0ygqnjackrqxz6x235ydyp";
-    })
-    (fetchpatch {
-      url = "https://github.com/HaxeFoundation/neko/commit/"
-          + "fe87462d9c7a6ee27e28f5be5e4fc0ac87b34574.patch";
-      sha256 = "1jbmq6j32vg3qv20dbh82cp54886lgrh7gkcqins8a2y4l4dl3sc";
-    })
-    # https://github.com/HaxeFoundation/neko/pull/165
-    (fetchpatch {
-      url = "https://github.com/HaxeFoundation/neko/commit/"
-          + "c6d9c6d796200990b3b6a53a4dc716c9192398e6.patch";
-      sha256 = "1pq0qhhb9gbhc3zbgylwp0amhwsz0q0ggpj6v2xgv0hfy7d63rcd";
-    })
-  ];
-
+  nativeBuildInputs = [ cmake pkgconfig git ];
   buildInputs =
-    [ boehmgc zlib sqlite pcre cmake pkgconfig git apacheHttpd apr aprutil
-      mariadb.client mbedtls openssl ]
+    [ boehmgc zlib sqlite pcre apacheHttpd apr aprutil
+      mysql.connector-c mbedtls openssl libpthreadstubs ]
       ++ stdenv.lib.optional stdenv.isLinux gtk2
       ++ stdenv.lib.optionals stdenv.isDarwin [ pkgs.darwin.apple_sdk.frameworks.Security
                                                 pkgs.darwin.apple_sdk.frameworks.Carbon];
   cmakeFlags = [ "-DRUN_LDCONFIG=OFF" ];
-  prePatch = ''
-    sed -i -e '/allocated = strdup/s|"[^"]*"|"'"$out/lib/neko:$out/bin"'"|' vm/load.c
-  '';
 
-  checkPhase = ''
+  installCheckPhase = ''
     bin/neko bin/test.n
   '';
 
+  doInstallCheck = true;
+  dontPatchELF = true;
   dontStrip = true;
 
   meta = with stdenv.lib; {
@@ -57,4 +36,3 @@ stdenv.mkDerivation rec {
     platforms = platforms.linux ++ platforms.darwin;
   };
 }
-

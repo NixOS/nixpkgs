@@ -1,7 +1,7 @@
 { stdenv, fetchurl, makeDesktopItem
 , jre, libX11, libXext, libXcursor, libXrandr, libXxf86vm
 , openjdk
-, mesa, openal
+, libGLU_combined, openal
 , useAlsa ? false, alsaOss ? null }:
 with stdenv.lib;
 
@@ -36,7 +36,7 @@ in stdenv.mkDerivation {
     cat > $out/bin/minecraft << EOF
     #!${stdenv.shell}
 
-    export LD_LIBRARY_PATH=\$LD_LIBRARY_PATH:${makeLibraryPath [ libX11 libXext libXcursor libXrandr libXxf86vm mesa openal ]}
+    export LD_LIBRARY_PATH=\$LD_LIBRARY_PATH:${makeLibraryPath [ libX11 libXext libXcursor libXrandr libXxf86vm libGLU_combined openal ]}
     ${if useAlsa then "${alsaOss}/bin/aoss" else "" } \
       ${jre}/bin/java -jar $out/minecraft.jar
     EOF

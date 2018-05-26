@@ -61,6 +61,16 @@ checkConfigError() {
 checkConfigOutput "false" config.enable ./declare-enable.nix
 checkConfigError 'The option .* defined in .* does not exist.' config.enable ./define-enable.nix
 
+# Check integer types.
+# unsigned
+checkConfigOutput "42" config.value ./declare-int-unsigned-value.nix ./define-value-int-positive.nix
+checkConfigError 'The option value .* in .* is not of type.*unsigned integer.*' config.value ./declare-int-unsigned-value.nix ./define-value-int-negative.nix
+# positive
+checkConfigError 'The option value .* in .* is not of type.*positive integer.*' config.value ./declare-int-positive-value.nix ./define-value-int-zero.nix
+# between
+checkConfigOutput "42" config.value ./declare-int-between-value.nix ./define-value-int-positive.nix
+checkConfigError 'The option value .* in .* is not of type.*between.*-21 and 43.*inclusive.*' config.value ./declare-int-between-value.nix ./define-value-int-negative.nix
+
 # Check mkForce without submodules.
 set -- config.enable ./declare-enable.nix ./define-enable.nix
 checkConfigOutput "true" "$@"
@@ -126,7 +136,18 @@ checkConfigOutput "true" "$@" ./define-module-check.nix
 # Check coerced value.
 checkConfigOutput "\"42\"" config.value ./declare-coerced-value.nix
 checkConfigOutput "\"24\"" config.value ./declare-coerced-value.nix ./define-value-string.nix
-checkConfigError 'The option value .* in .* is not a string or integer.' config.value ./declare-coerced-value.nix ./define-value-list.nix
+checkConfigError 'The option value .* in .* is not.*string or signed integer convertible to it' config.value ./declare-coerced-value.nix ./define-value-list.nix
+
+# Check coerced value with unsound coercion
+checkConfigOutput "12" config.value ./declare-coerced-value-unsound.nix
+checkConfigError 'The option value .* in .* is not.*8 bit signed integer.* or string convertible to it' config.value ./declare-coerced-value-unsound.nix ./define-value-string-bigint.nix
+checkConfigError 'unrecognised JSON value' config.value ./declare-coerced-value-unsound.nix ./define-value-string-arbitrary.nix
+
+# Check loaOf with long list.
+checkConfigOutput "1 2 3 4 5 6 7 8 9 10" config.result ./loaOf-with-long-list.nix
+
+# Check loaOf with many merges of lists.
+checkConfigOutput "1 2 3 4 5 6 7 8 9 10" config.result ./loaOf-with-many-list-merges.nix
 
 cat <<EOF
 ====== module tests ======

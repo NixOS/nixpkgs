@@ -1,27 +1,19 @@
 { stdenv, fetchFromGitHub, fetchpatch, autoreconfHook, pkgconfig, boost, libevent
-, double_conversion, glog, google-gflags, python, libiberty, openssl }:
+, double-conversion, glog, google-gflags, python, libiberty, openssl }:
 
 stdenv.mkDerivation rec {
   name = "folly-${version}";
-  version = "2017.07.24.00";
+  version = "2018.05.21.00";
 
   src = fetchFromGitHub {
     owner = "facebook";
     repo = "folly";
     rev = "v${version}";
-    sha256 = "1cmqrm9yjxrw4xr1kcgzl0s7vcvp125wcgb0cz7whssgj11mf169";
+    sha256 = "0x8qa0g0rj4bmy5cra7f0ch0srq34d8d04f1c59q93xd6ggkr52w";
   };
 
-  patches = [
-    # Fix compilation
-    (fetchpatch {
-      url = "https://github.com/facebook/folly/commit/9fc87c83d93f092859823ec32289ed1b6abeb683.patch";
-      sha256 = "0ix0grqlzm16hwa4rjbajjck8kr9lksh6c3gn7p3ihbbchsmlhvl";
-    })
-  ];
-
   nativeBuildInputs = [ autoreconfHook python pkgconfig ];
-  buildInputs = [ libiberty boost libevent double_conversion glog google-gflags openssl ];
+  buildInputs = [ libiberty boost libevent double-conversion glog google-gflags openssl ];
 
   postPatch = "cd folly";
   preBuild = ''

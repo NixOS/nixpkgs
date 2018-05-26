@@ -1,4 +1,4 @@
-{ stdenv, fetchurl }:
+{ stdenv, fetchurl, libresolv }:
 
 stdenv.mkDerivation rec {
   version = "1.9";
@@ -12,6 +12,10 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "man" ];
 
   setOutputFlags = false;
+
+  buildInputs = [] ++ stdenv.lib.optionals stdenv.isDarwin [ libresolv ];
+
+  NIX_LDFLAGS = stdenv.lib.optionalString stdenv.isDarwin "-lresolv";
 
   meta = with stdenv.lib; {
     description = "Dnstracer determines where a given Domain Name Server (DNS) gets its information from, and follows the chain of DNS servers back to the servers which know the data.";

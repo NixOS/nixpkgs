@@ -41,7 +41,7 @@ in
       name = "lxqt";
       bgSupport = true;
       start = ''
-        exec ${pkgs.lxqt.lxqt-common}/bin/startlxqt
+        exec ${pkgs.lxqt.lxqt-session}/bin/startlxqt
       '';
     };
 
@@ -61,6 +61,8 @@ in
 
     environment.variables.GIO_EXTRA_MODULES = [ "${pkgs.gvfs}/lib/gio/modules" ];
 
+    services.upower.enable = config.powerManagement.enable;
   };
+
 
 }

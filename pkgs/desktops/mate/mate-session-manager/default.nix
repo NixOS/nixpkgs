@@ -1,31 +1,32 @@
-{ stdenv, fetchurl, pkgconfig, intltool, itstool, dbus_glib, systemd, xtrans, xorg, gnome3, mate, hicolor_icon_theme, wrapGAppsHook }:
+{ stdenv, fetchurl, pkgconfig, intltool, xtrans, dbus-glib, systemd,
+  libSM, libXtst, gtk3, hicolor-icon-theme, mate,
+  wrapGAppsHook
+}:
 
 stdenv.mkDerivation rec {
   name = "mate-session-manager-${version}";
-  version = "${major-ver}.${minor-ver}";
-  major-ver = "1.18";
-  minor-ver = "1";
+  version = "1.20.0";
 
   src = fetchurl {
-    url = "http://pub.mate-desktop.org/releases/${major-ver}/${name}.tar.xz";
-    sha256 = "0i0xq6041x2qmb26x9bawx0qpfkgjn6x9w3phnm9s7rc4s0z20ll";
+    url = "http://pub.mate-desktop.org/releases/${mate.getRelease version}/${name}.tar.xz";
+    sha256 = "0vzr6y9shw4zb3ddfrj0nn7yqggpq9sv6h33p0xxdx71ydl40p2g";
   };
 
   nativeBuildInputs = [
     pkgconfig
     intltool
+    xtrans
     wrapGAppsHook
   ];
 
   buildInputs = [
-    dbus_glib
+    dbus-glib
     systemd
-    xtrans
-    hicolor_icon_theme
-    xorg.libSM
-    gnome3.gtk3
-    gnome3.gsettings_desktop_schemas
+    libSM
+    libXtst
+    gtk3
     mate.mate-desktop
+    hicolor-icon-theme
   ];
 
   meta = with stdenv.lib; {

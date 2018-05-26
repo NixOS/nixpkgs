@@ -1,7 +1,7 @@
 { stdenv, lib, fetchurl, writeText
 , xproto, libX11, libXext, libXrandr
 # default header can be obtained from
-# http://git.suckless.org/slock/tree/config.def.h
+# https://git.suckless.org/slock/tree/config.def.h
 , conf ? null }:
 
 with stdenv.lib;
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
   name = "slock-1.4";
 
   src = fetchurl {
-    url = "http://dl.suckless.org/tools/${name}.tar.gz";
+    url = "https://dl.suckless.org/tools/${name}.tar.gz";
     sha256 = "0sif752303dg33f14k6pgwq2jp1hjyhqv6x4sy3sj281qvdljf5m";
   };
 
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    homepage = http://tools.suckless.org/slock;
+    homepage = https://tools.suckless.org/slock;
     description = "Simple X display locker";
     longDescription = ''
       Simple X display locker. This is the simplest X screen locker.

@@ -26,7 +26,7 @@ existing packages here and modify it as necessary.
 
 {
   libsForQt5, lib, fetchurl,
-  gconf,
+  gconf, gsettings-desktop-schemas,
   debug ? false,
 }:
 
@@ -58,11 +58,7 @@ let
                     # Propagate $dev so that this setup hook is propagated
                     # But only if there is a separate $dev output
                     if [ "$outputDev" != out ]; then
-                        if [ -n "$crossConfig" ]; then
-                          propagatedBuildInputs="$propagatedBuildInputs @dev@"
-                        else
-                          propagatedNativeBuildInputs="$propagatedNativeBuildInputs @dev@"
-                        fi
+                        propagatedBuildInputs="$propagatedBuildInputs @dev@"
                     fi
                 fi
               '';
@@ -104,13 +100,12 @@ let
     in {
       bluedevil = callPackage ./bluedevil.nix {};
       breeze-gtk = callPackage ./breeze-gtk.nix {};
-      breeze-qt4 = callPackage ./breeze-qt4.nix {};
       breeze-qt5 = callPackage ./breeze-qt5.nix {};
       breeze-grub = callPackage ./breeze-grub.nix {};
       breeze-plymouth = callPackage ./breeze-plymouth {};
       kactivitymanagerd = callPackage ./kactivitymanagerd.nix {};
       kde-cli-tools = callPackage ./kde-cli-tools.nix {};
-      kde-gtk-config = callPackage ./kde-gtk-config {};
+      kde-gtk-config = callPackage ./kde-gtk-config { inherit gsettings-desktop-schemas; };
       kdecoration = callPackage ./kdecoration.nix {};
       kdeplasma-addons = callPackage ./kdeplasma-addons.nix {};
       kgamma5 = callPackage ./kgamma5.nix {};
@@ -130,15 +125,18 @@ let
       milou = callPackage ./milou.nix {};
       oxygen = callPackage ./oxygen.nix {};
       plasma-desktop = callPackage ./plasma-desktop {};
-      plasma-integration = callPackage ./plasma-integration.nix {};
+      plasma-integration = callPackage ./plasma-integration {};
       plasma-nm = callPackage ./plasma-nm {};
       plasma-pa = callPackage ./plasma-pa.nix { inherit gconf; };
+      plasma-vault = callPackage ./plasma-vault {};
       plasma-workspace = callPackage ./plasma-workspace {};
       plasma-workspace-wallpapers = callPackage ./plasma-workspace-wallpapers.nix {};
       polkit-kde-agent = callPackage ./polkit-kde-agent.nix {};
       powerdevil = callPackage ./powerdevil.nix {};
-      startkde = callPackage ./startkde {};
+      sddm-kcm = callPackage ./sddm-kcm.nix {};
       systemsettings = callPackage ./systemsettings.nix {};
+      user-manager = callPackage ./user-manager.nix {};
+      xdg-desktop-portal-kde = callPackage ./xdg-desktop-portal-kde.nix {};
     };
 in
 lib.makeScope libsForQt5.newScope packages

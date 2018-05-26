@@ -1,22 +1,23 @@
 { stdenv, buildPythonPackage, fetchPypi
-, mesa, xorg, freetype, fontconfig}:
+, libGLU_combined, xorg, freetype, fontconfig, future}:
 
 buildPythonPackage rec {
-  version = "1.2.4";
+  version = "1.3.1";
   pname = "pyglet";
-  name = "${pname}-${version}";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "9f62ffbbcf2b202d084bf158685e77d28b8f4f5f2738f4c5e63a947a07503445";
+    sha256 = "0a73280fa3949ea4890fee28f625c10b1e10a7cda390a08b6bce4740948167cd";
   };
 
-  patchPhase = let
-    libs = [ mesa xorg.libX11 freetype fontconfig ];
+  postPatch = let
+    libs = [ libGLU_combined xorg.libX11 freetype fontconfig ];
     paths = builtins.concatStringsSep "," (map (l: "\"${l}/lib\"") libs);
   in "sed -i -e 's|directories\.extend.*lib[^]]*|&,${paths}|' pyglet/lib.py";
 
   doCheck = false;
+
+  propagatedBuildInputs = [ future ];
 
   meta = with stdenv.lib; {
     homepage = "http://www.pyglet.org/";

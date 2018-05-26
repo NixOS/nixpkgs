@@ -37,8 +37,9 @@ in {
       hardware.firmware = with pkgs; [
         firmwareLinuxNonfree
         intel2200BGFirmware
-        rtl8723bs-firmware
         rtl8192su-firmware
+      ] ++ optionals (versionOlder config.boot.kernelPackages.kernel.version "4.13") [
+        rtl8723bs-firmware
       ];
     })
     (mkIf cfg.enableAllFirmware {

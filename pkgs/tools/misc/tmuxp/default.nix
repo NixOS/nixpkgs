@@ -1,26 +1,29 @@
-{ stdenv, fetchurl, pythonPackages }:
+{ stdenv, fetchurl, python }:
 
-pythonPackages.buildPythonApplication rec {
-  name = "tmuxp-${version}";
-  version = "1.3.1";
+with python.pkgs;
 
-  namePrefix = "";
+buildPythonApplication rec {
+  pname = "tmuxp";
+  version = "1.4.0";
 
-  src = fetchurl {
-    url = "mirror://pypi/t/tmuxp/${name}.tar.gz";
-    sha256 = "189mxnb2pxj3wjijn56j8y5x1r23fil00fn2q7d6bd13vgr0f85s";
+  src = fetchPypi {
+    inherit pname version;
+    sha256 = "1ghi6w0cfgs94zlz304q37h3lga2jalfm0hqi3g2060zfdnb96n7";
   };
 
-  patchPhase = ''
+  postPatch = ''
     sed -i 's/==.*$//' requirements/base.txt requirements/test.txt
   '';
 
-  buildInputs = with pythonPackages; [
-    pytest_29
+  checkInputs = [
+    pytest
     pytest-rerunfailures
   ];
 
-  propagatedBuildInputs = with pythonPackages; [
+  # No tests in archive
+  doCheck = false;
+
+  propagatedBuildInputs = [
     click colorama kaptan libtmux
   ];
 

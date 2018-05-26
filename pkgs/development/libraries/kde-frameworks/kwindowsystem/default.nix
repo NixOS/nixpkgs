@@ -1,6 +1,7 @@
 {
   mkDerivation, lib, copyPathsToStore,
   extra-cmake-modules,
+  libpthreadstubs, libXdmcp,
   qtbase, qttools, qtx11extras
 }:
 
@@ -11,7 +12,7 @@ mkDerivation {
     broken = builtins.compareVersions qtbase.version "5.7.0" < 0;
   };
   nativeBuildInputs = [ extra-cmake-modules ];
-  buildInputs = [ qttools qtx11extras ];
+  buildInputs = [ libpthreadstubs libXdmcp qttools qtx11extras ];
   propagatedBuildInputs = [ qtbase ];
   patches = copyPathsToStore (lib.readPathsFromFile ./. ./series);
   preConfigure = ''

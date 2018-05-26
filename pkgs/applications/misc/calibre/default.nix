@@ -5,28 +5,20 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "3.9.0";
+  version = "3.23.0";
   name = "calibre-${version}";
 
   src = fetchurl {
     url = "https://download.calibre-ebook.com/${version}/${name}.tar.xz";
-    sha256 = "0zsf1czw8bz41nk9f55vxwncf0chxdflyhjj2khw9da67ph6yknx";
+    sha256 = "0ds3i3dhkgpwa3c1lcq4zjmiaza8k9and0lbqqw4i6jrnpk691f9";
   };
 
   patches = [
     # Patches from Debian that:
     # - disable plugin installation (very insecure)
+    ./disable_plugins.patch
     # - switches the version update from enabled to disabled by default
-    (fetchpatch {
-      name = "disable_plugins.patch";
-      url = "http://bazaar.launchpad.net/~calibre-packagers/calibre/debian/download/head:/disable_plugins.py-20111220183043-dcl08ccfagjxt1dv-1/disable_plugins.py";
-      sha256 = "19spdx52dhbrfn9lm084yl3cfwm6f90imd51k97sf7flmpl569pk";
-    })
-    (fetchpatch {
-      name = "no_updates_dialog.patch";
-      url = "http://bazaar.launchpad.net/~calibre-packagers/calibre/debian/download/head:/no_updates_dialog.pa-20081231120426-rzzufl0zo66t3mtc-16/no_updates_dialog.patch";
-      sha256 = "16xwa2fa47jvs954fjrwr8rhh89aljgi1d1wrfxa40sknlmfwxif";
-    })
+    ./no_updates_dialog.patch
     # the unrar patch is not from debian
   ] ++ stdenv.lib.optional (!unrarSupport) ./dont_build_unrar_plugin.patch;
 
@@ -49,7 +41,7 @@ stdenv.mkDerivation rec {
     poppler_utils libpng imagemagick libjpeg
     fontconfig podofo qtbase chmlib icu sqlite libusb1 libmtp xdg_utils wrapGAppsHook
   ] ++ (with python2Packages; [
-    apsw cssselect cssutils dateutil html5-parser lxml mechanize netifaces pillow
+    apsw cssselect cssutils dateutil dnspython html5-parser lxml mechanize netifaces pillow
     python pyqt5 sip
     regex msgpack
     # the following are distributed with calibre, but we use upstream instead

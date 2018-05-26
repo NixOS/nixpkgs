@@ -1,0 +1,29 @@
+diff --git a/cli/cli_config.ml b/cli/cli_config.ml
+index 991ee77..59a0edb 100644
+--- a/cli/cli_config.ml
++++ b/cli/cli_config.ml
+@@ -207,7 +207,9 @@ let configure term () =
+     ask above "CA file: " (fun x -> x) (fun x -> if Sys.file_exists x then `Ok x else `Invalid) term >>= fun trust_anchor ->
+     Lwt_unix.access trust_anchor [ Unix.F_OK ; Unix.R_OK ] >>= fun () ->
+     X509_lwt.certs_of_pem trust_anchor >>= fun tas ->
+-    (match X509.Validation.valid_cas ~time:(Unix.time ()) tas with
++    let time = match Ptime.of_float_s (Unix.time ())
++      with Some time -> time | None -> assert false in
++    (match X509.Validation.valid_cas ~time tas with
+      | [] -> Lwt.fail (Invalid_argument "trust anchor file is empty!")
+      | _ -> Lwt.return (`Trust_anchor trust_anchor))
+   | Some fp -> Lwt.return (`Fingerprint fp) ) >>= fun authenticator ->
+diff --git a/cli/cli_state.ml b/cli/cli_state.ml
+index d5db502..91540c9 100644
+--- a/cli/cli_state.ml
++++ b/cli/cli_state.ml
+@@ -262,7 +262,8 @@ module Connect = struct
+           (match config.Xconfig.authenticator with
+            | `Trust_anchor x -> X509_lwt.authenticator (`Ca_file x)
+            | `Fingerprint fp ->
+-             let time = Unix.gettimeofday () in
++             let time = match Ptime.of_float_s (Unix.gettimeofday ())
++               with Some time -> time | None -> assert false in
+              let fp =
+                Nocrypto.Uncommon.Cs.of_hex
+                  (String.map (function ':' -> ' ' | x -> x) fp)

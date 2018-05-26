@@ -1,5 +1,8 @@
 {fetchurl, optionalAttrs, system}:
-
+# This file preloads all the archives which Arduino's build/build.xml
+# would otherwise try to download itself. When updating this for a new
+# version of Arduino, check build.xml for version numbers and new
+# urls.
 {
   "build/shared/reference-1.6.6-3.zip" = fetchurl {
     url = "https://downloads.arduino.cc/reference-1.6.6-3.zip";
@@ -21,17 +24,17 @@
     url = "https://github.com/arduino-libraries/Bridge/archive/1.6.3.zip";
     sha256 = "1lha5wkzz63bgcn7bhx4rmgsh9ywa47lffycpyz6qjnl1pvm5mmj";
   };
-  "build/Robot_Control-1.0.3.zip" = fetchurl {
-    url = "https://github.com/arduino-libraries/Robot_Control/archive/1.0.3.zip";
-    sha256 = "1pc3b8skbpx7j32jnxa67mfqhnsmfz3876pc9mdyzpsad4mmcn62";
+  "build/Robot_Control-1.0.4.zip" = fetchurl {
+    url = "https://github.com/arduino-libraries/Robot_Control/archive/1.0.4.zip";
+    sha256 = "1pkabrghx3h8l60x571vwkbhfm02nhyn5x2vqz4vhx9cczr70zq7";
   };
-  "build/Robot_Motor-1.0.2.zip" = fetchurl {
-    url = "https://github.com/arduino-libraries/Robot_Motor/archive/1.0.2.zip";
-    sha256 = "0da21kfzy07kk2qnkprs3lj214fgkcjxlkk3hdp306jfv8ilmvy2";
+  "build/Robot_Motor-1.0.3.zip" = fetchurl {
+    url = "https://github.com/arduino-libraries/Robot_Motor/archive/1.0.3.zip";
+    sha256 = "1pkvrimg77jrhdsz4l81y59hv50h6cl7hvhk9w8ac7ckg70lvxkw";
   };
-  "build/RobotIRremote-1.0.2.zip" = fetchurl {
-    url = "https://github.com/arduino-libraries/RobotIRremote/archive/1.0.2.zip";
-    sha256 = "0wkya7dy4x0xyi7wn5aghmr1gj0d0wszd61pq18zgfdspz1gi6xn";
+  "build/RobotIRremote-2.0.0.zip" = fetchurl {
+    url = "https://github.com/arduino-libraries/RobotIRremote/archive/2.0.0.zip";
+    sha256 = "0j5smap74j8p3wc6k0h73b1skj4gkr7r25jbjh1j1cg052dxri86";
   };
   "build/SpacebrewYun-1.0.1.zip" = fetchurl {
     url = "https://github.com/arduino-libraries/SpacebrewYun/archive/1.0.1.zip";
@@ -61,9 +64,13 @@
     url = "https://github.com/arduino-libraries/Servo/archive/1.1.2.zip";
     sha256 = "14k1883qrx425wnm0r8kszzq32yvvs3jwxf3g7ybp7v0ga0q47l7";
   };
-  "build/Adafruit_CircuitPlayground-1.6.4.zip" = fetchurl {
-    url = "https://github.com/Adafruit/Adafruit_CircuitPlayground/archive/1.6.4.zip";
-    sha256 = "1ph7m0l1sfx9db56n2h6vi78pn3zyah813lfhqiqghncx34amrhj";
+  "build/LiquidCrystal-1.0.7.zip" = fetchurl {
+    url = "https://github.com/arduino-libraries/LiquidCrystal/archive/1.0.7.zip";
+    sha256 = "1wrxrqz3n4yrj9j1a2b7pdd7a1rlyi974ra7crv5amjng8817x9n";
+  };
+  "build/Adafruit_CircuitPlayground-1.6.8.zip" = fetchurl {
+    url = "https://github.com/Adafruit/Adafruit_CircuitPlayground/archive/1.6.8.zip";
+    sha256 = "0zm667xiaygx8v1ygcls43s6qd5n7pf21n0998n1z7nf18s35j41";
   };
   "build/libastylej-2.05.1-3.zip" = fetchurl {
     url = "https://downloads.arduino.cc/libastylej-2.05.1-3.zip";
@@ -73,9 +80,9 @@
     url = "https://downloads.arduino.cc/liblistSerials/liblistSerials-1.4.0.zip";
     sha256 = "129mfbyx7snq3znzhkfbdjiifdr85cwk6wjn8l9ia0wynszs5zyv";
   };
-  "build/shared/WiFi101-Updater-ArduinoIDE-Plugin-0.9.0.zip" = fetchurl {
-    url = "https://github.com/arduino-libraries/WiFi101-FirmwareUpdater-Plugin/releases/download/v0.9.0/WiFi101-Updater-ArduinoIDE-Plugin-0.9.0.zip";
-    sha256 = "1nkk87q2l3bs9y387hdxzgqllm0lqpmc5kdmr6my4hjz5lcpgbza";
+  "build/shared/WiFi101-Updater-ArduinoIDE-Plugin-0.9.1.zip" = fetchurl {
+    url = "https://github.com/arduino-libraries/WiFi101-FirmwareUpdater-Plugin/releases/download/v0.9.1/WiFi101-Updater-ArduinoIDE-Plugin-0.9.1.zip";
+    sha256 = "15przp8z1dp6lamcvqdx4daq6fqi3c1algc3sbinyh25pm69pq74";
   };
 }
 // optionalAttrs (system == "x86_64-linux") {

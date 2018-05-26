@@ -11,6 +11,10 @@ python2Packages.buildPythonApplication rec {
     name = name + "-src";
   };
 
+  checkInputs = with python2Packages; [
+    unittest2
+  ];
+
   meta = with stdenv.lib; {
     homepage = https://github.com/ejwa/gitinspector;
     description = "Statistical analysis tool for git repositories";

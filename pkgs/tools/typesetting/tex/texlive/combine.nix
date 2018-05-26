@@ -12,9 +12,11 @@ let
       (bin.core.doc // { pname = "core"; tlType = "doc"; })
     ];
   };
+  partition = builtins.partition or (pred: l:
+    { right = builtins.filter pred l; wrong = builtins.filter (e: !(pred e)) l; });
   pkgList = rec {
     all = lib.filter pkgFilter (combinePkgs pkgSet);
-    splitBin = lib.partition (p: p.tlType == "bin") all;
+    splitBin = partition (p: p.tlType == "bin") all;
     bin = mkUniquePkgs splitBin.right
       ++ lib.optional
           (lib.any (p: p.tlType == "run" && p.pname == "pdfcrop") splitBin.wrong)
@@ -201,7 +203,7 @@ in buildEnv {
 
     perl `type -P mktexlsr.pl` ./share/texmf
     texlinks.sh "$out/bin" && wrapBin
-    perl `type -P fmtutil.pl` --sys --refresh | grep '^fmtutil' # too verbose
+    (perl `type -P fmtutil.pl` --sys --refresh || true) | grep '^fmtutil' # too verbose
     #texlinks.sh "$out/bin" && wrapBin # do we need to regenerate format links?
     perl `type -P updmap.pl` --sys --syncwithtrees --force
     perl `type -P mktexlsr.pl` ./share/texmf-* # to make sure

@@ -1,6 +1,5 @@
-{ stdenv, fetchFromGitHub, cmake, pkgconfig, vlc
-, withQt4 ? false, qt4
-, withQt5 ? true, qtbase, qtmultimedia, qtsvg, qttools
+{ stdenv, fetchFromGitHub, fetchpatch, cmake, pkgconfig, vlc
+, qtbase, qtmultimedia, qtsvg, qttools
 
 # Cantata doesn't build with cdparanoia enabled so we disable that
 # default for now until I (or someone else) figure it out.
@@ -18,11 +17,6 @@
 , withHttpServer ? true
 , withStreams ? true
 }:
-
-# One and only one front-end.
-assert withQt5 -> withQt4 == false;
-assert withQt4 -> withQt5 == false;
-assert withQt4 || withQt5;
 
 # Inter-dependencies.
 assert withCddb -> withCdda && withTaglib;
@@ -51,9 +45,16 @@ in stdenv.mkDerivation rec {
     sha256 = "1b633chgfs8rya78bzzck5zijna15d1y4nmrz4dcjp862ks5y5q6";
   };
 
-  buildInputs = [ vlc ]
-    ++ stdenv.lib.optional  withQt4 qt4
-    ++ stdenv.lib.optionals withQt5 [ qtbase qtmultimedia qtsvg qttools ]
+  patches = [
+    # patch is needed for 2.2.0 with qt 5.10 (doesn't harm earlier versions)
+    (fetchpatch {
+      url    = "https://github.com/CDrummond/cantata/commit/4da7a9128f2c5eaf23ae2a5006d300dc4f21fc6a.patch";
+      sha256 = "1z21ax3542z7hm628xv110lmplaspb407jzgfk16xkphww5qyphj";
+      name   = "fix_qt_510.patch";
+    })
+
+  ];
+  buildInputs = [ vlc qtbase qtmultimedia qtsvg ]
     ++ stdenv.lib.optionals withTaglib [ taglib taglib_extras ]
     ++ stdenv.lib.optionals withReplaygain [ ffmpeg speex mpg123 ]
     ++ stdenv.lib.optional  withCdda cdparanoia
@@ -63,12 +64,11 @@ in stdenv.mkDerivation rec {
     ++ stdenv.lib.optional  withMusicbrainz libmusicbrainz5
     ++ stdenv.lib.optional  withUdisks udisks2;
 
-  nativeBuildInputs = [ cmake pkgconfig ];
+  nativeBuildInputs = [ cmake pkgconfig qttools ];
 
   enableParallelBuilding = true;
 
   cmakeFlags = stdenv.lib.flatten [
-    (fstat withQt5            "QT5")
     (fstats withTaglib        [ "TAGLIB" "TAGLIB_EXTRAS" ])
     (fstats withReplaygain    [ "FFMPEG" "MPG123" "SPEEXDSP" ])
     (fstat withCdda           "CDPARANOIA")

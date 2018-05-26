@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, openssl, gnupg1compat, makeWrapper }:
+{ fetchFromGitHub, git, gnupg1compat, makeWrapper, openssl, stdenv }:
 
 stdenv.mkDerivation rec {
 
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     make install PREFIX=$out
-    wrapProgram $out/bin/* --prefix PATH : ${gnupg1compat}/bin
+    wrapProgram $out/bin/* --prefix PATH : $out/bin:${git}/bin:${gnupg1compat}/bin
   '';
 
   meta = with stdenv.lib; {

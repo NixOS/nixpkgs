@@ -1,16 +1,16 @@
 { stdenv, fetchFromGitHub, cmake, pkgconfig, wrapGAppsHook
-, glib, gtk3, gettext, libxkbfile, libgnome_keyring, libX11
+, glib, gtk3, gettext, libxkbfile, libgnome-keyring, libX11
 , freerdp, libssh, libgcrypt, gnutls, makeDesktopItem
 , pcre, webkitgtk, libdbusmenu-gtk3, libappindicator-gtk3
 , libvncserver, libpthreadstubs, libXdmcp, libxkbcommon
-, libsecret, spice_protocol, spice_gtk, epoxy, at_spi2_core
-, openssl, gsettings_desktop_schemas
+, libsecret, spice-protocol, spice-gtk, epoxy, at-spi2-core
+, openssl, gsettings-desktop-schemas
 # The themes here are soft dependencies; only icons are missing without them.
-, hicolor_icon_theme, adwaita-icon-theme
+, hicolor-icon-theme, adwaita-icon-theme
 }:
 
 let
-  version = "1.2.0-rcgit.17";
+  version = "1.2.0-rcgit.24";
 
   desktopItem = makeDesktopItem {
     name = "remmina";
@@ -29,17 +29,17 @@ in stdenv.mkDerivation {
     owner  = "FreeRDP";
     repo   = "Remmina";
     rev    = "v${version}";
-    sha256 = "1vfg8sfpj83ircp7ny6xsbn2ba5xbp3xrdl5wwyfcg1zrpdmi7f1";
+    sha256 = "1x7kygl9a5nh7rf2gfrk0wwv23mbw7rrjms402l3zp1w53hrhwmg";
   };
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ cmake wrapGAppsHook gsettings_desktop_schemas
-                  glib gtk3 gettext libxkbfile libgnome_keyring libX11
+  buildInputs = [ cmake wrapGAppsHook gsettings-desktop-schemas
+                  glib gtk3 gettext libxkbfile libgnome-keyring libX11
                   freerdp libssh libgcrypt gnutls
                   pcre webkitgtk libdbusmenu-gtk3 libappindicator-gtk3
                   libvncserver libpthreadstubs libXdmcp libxkbcommon
-                  libsecret spice_protocol spice_gtk epoxy at_spi2_core
-                  openssl hicolor_icon_theme adwaita-icon-theme ];
+                  libsecret spice-protocol spice-gtk epoxy at-spi2-core
+                  openssl hicolor-icon-theme adwaita-icon-theme ];
 
   cmakeFlags = [
     "-DWITH_VTE=OFF"

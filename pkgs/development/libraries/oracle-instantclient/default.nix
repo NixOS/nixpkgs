@@ -1,13 +1,11 @@
-{ stdenv, requireFile, libelf, gcc, glibc, patchelf, unzip, rpmextract, libaio
-, odbcSupport ? false, unixODBC
-}:
+{ stdenv, requireFile, autoPatchelfHook, rpmextract, libaio, makeWrapper, odbcSupport ? false, unixODBC }:
 
 assert odbcSupport -> unixODBC != null;
 
-let optional = stdenv.lib.optional;
-    optionalString  = stdenv.lib.optionalString;
-    requireSource = version: part: hash: (requireFile rec {
-      name = "oracle-instantclient12.1-${part}-${version}.x86_64.rpm";
+let
+    baseVersion = "12.2";
+    requireSource = version: rel: part: hash: (requireFile rec {
+      name = "oracle-instantclient${baseVersion}-${part}-${version}-${rel}.x86_64.rpm";
       message = ''
         This Nix expression requires that ${name} already
         be part of the store. Download the file
@@ -24,57 +22,29 @@ let optional = stdenv.lib.optional;
       sha256 = hash;
     });
 in stdenv.mkDerivation rec {
-  version = "12.1.0.2.0-1";
+  version = "${baseVersion}.0.1.0";
   name = "oracle-instantclient-${version}";
 
-  srcBase = (requireSource version "basic" "f0e51e247cc3f210b950fd939ab1f696de9ca678d1eb179ba49ac73acb9a20ed");
-  srcDevel = (requireSource version "devel" "13b638882f07d6cfc06c85dc6b9eb5cac37064d3d594194b6b09d33483a08296");
-  srcSqlplus = (requireSource version "sqlplus" "16d87w1lii0ag47c8srnr7v4wfm9q4hy6gka8m3v6gp9cc065vam");
-  srcOdbc = optionalString odbcSupport (requireSource version "odbc" "d3aa1a4957a2f15ced05921dab551ba823aa7925d8fcb58d5b3a7f624e4df063");
+  buildInputs = [ libaio stdenv.cc.cc.lib ] ++ stdenv.lib.optional odbcSupport unixODBC;
+  nativeBuildInputs = [ autoPatchelfHook makeWrapper rpmextract ];
 
-  buildInputs = [ glibc patchelf rpmextract ] ++
-    optional odbcSupport unixODBC;
+  srcs = [
+    (requireSource version "1" "basic" "43c4bfa938af741ae0f9964a656f36a0700849f5780a2887c8e9f1be14fe8b66")
+    (requireSource version "1" "devel" "4c7ad8d977f9f908e47c5e71ce56c2a40c7dc83cec8a5c106b9ff06d45bb3442")
+    (requireSource version "1" "sqlplus" "303e82820a10f78e401e2b07d4eebf98b25029454d79f06c46e5f9a302ce5552")
+  ] ++ stdenv.lib.optional odbcSupport (requireSource version "2" "odbc" "e870c84d2d4be6f77c0760083b82b7ffbb15a4bf5c93c4e6c84f36d6ed4dfdf1");
 
-  buildCommand = ''
-    mkdir -p "${name}"
-    cd "${name}"
-    ${rpmextract}/bin/rpmextract "${srcBase}"
-    ${rpmextract}/bin/rpmextract "${srcDevel}"
-    ${rpmextract}/bin/rpmextract "${srcSqlplus}"
-    ${optionalString odbcSupport ''
-        ${rpmextract}/bin/rpmextract "${srcOdbc}"
-    ''}
+  unpackCmd = "rpmextract $curSrc";
 
+  installPhase = ''
     mkdir -p "$out/"{bin,include,lib,"share/${name}/demo/"}
-    mv "usr/share/oracle/12.1/client64/demo/"* "$out/share/${name}/demo/"
-    mv "usr/include/oracle/12.1/client64/"* "$out/include/"
-    mv "usr/lib/oracle/12.1/client64/lib/"* "$out/lib/"
-    mv "usr/lib/oracle/12.1/client64/bin/"* "$out/bin/"
-    ln -s "$out/bin/sqlplus" "$out/bin/sqlplus64"
 
-    for lib in $out/lib/lib*.so; do
-      test -f $lib || continue
-      chmod +x $lib
-      patchelf --force-rpath --set-rpath "$out/lib:${libaio}/lib" \
-               $lib
-    done
-
-    for lib in $out/lib/libsqora*; do
-      test -f $lib || continue
-      chmod +x $lib
-      patchelf --force-rpath --set-rpath "$out/lib:${unixODBC}/lib" \
-               $lib
-    done
-
-    for exe in $out/bin/sqlplus; do
-      patchelf --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker) \
-               --force-rpath --set-rpath "$out/lib:${libaio}/lib" \
-               $exe
-    done
+    install -Dm755 lib/oracle/${baseVersion}/client64/bin/* $out/bin
+    ln -s $out/bin/sqlplus $out/bin/sqlplus64
+    install -Dm644 lib/oracle/${baseVersion}/client64/lib/* $out/lib
+    install -Dm644 include/oracle/${baseVersion}/client64/* $out/include
+    install -Dm644 share/oracle/${baseVersion}/client64/demo/* $out/share/${name}/demo
   '';
-
-  dontStrip = true;
-  dontPatchELF = true;
 
   meta = with stdenv.lib; {
     description = "Oracle instant client libraries and sqlplus CLI";
@@ -84,7 +54,8 @@ in stdenv.mkDerivation rec {
       command line SQL client.
     '';
     license = licenses.unfree;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ pesterhazy ];
+    platforms = [ "x86_64-linux" ];
+    maintainers = with maintainers; [ pesterhazy flokli ];
+    hydraPlatforms = [];
   };
 }

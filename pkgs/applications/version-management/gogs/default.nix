@@ -7,13 +7,13 @@ with stdenv.lib;
 
 buildGoPackage rec {
   name = "gogs-${version}";
-  version = "0.11.29";
+  version = "0.11.34";
 
   src = fetchFromGitHub {
     owner = "gogits";
     repo = "gogs";
     rev = "v${version}";
-    sha256 = "1xn1b4dxf7r8kagps3yvp31zskfxn50k1gfic9abl4kjwpwk78c0";
+    sha256 = "15xwcw3k7wbahdgp796gly79qkka21p7kvm84zfjgcsjjri0kdnz";
   };
 
   patches = [ ./static-root-path.patch ];
@@ -29,9 +29,7 @@ buildGoPackage rec {
 
   outputs = [ "bin" "out" "data" ];
 
-  postInstall = stdenv.lib.optionalString stdenv.isDarwin ''
-    install_name_tool -delete_rpath $out/lib $bin/bin/gogs
-  '' + ''
+  postInstall = ''
     mkdir $data
     cp -R $src/{public,templates} $data
 

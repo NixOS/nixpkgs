@@ -1,24 +1,24 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, gtk_doc, gobjectIntrospection
+{ stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, gtk-doc, gobjectIntrospection
 , libgsystem, xz, e2fsprogs, libsoup, gpgme, which, autoconf, automake, libtool, fuse
-, libcap, yacc, libxslt, docbook_xsl, docbook_xml_dtd_42
+, libarchive, libcap, bzip2, yacc, libxslt, docbook_xsl, docbook_xml_dtd_42
 }:
 
 let
   libglnx-src = fetchFromGitHub {
     owner  = "GNOME";
     repo   = "libglnx";
-    rev    = "50a0feaba03ffa5a1980d3a14487276b8f49f8a6";
-    sha256 = "1rn5jdh84y1yfpqmvidx82lkm0jr7scjzdrps57r37ksxvrk3ibs";
+    rev    = "0c82203cd459a35cc3f471e3205355e9fb79160f";
+    sha256 = "0xbrv7q6b2ygrbr0yr7p01zpryw45643qfwnlw0z2yv515qs7isc";
   };
 
   bsdiff-src = fetchFromGitHub {
     owner  = "mendsley";
     repo   = "bsdiff";
-    rev    = "7d70d8f4ff48345bc76e314c9d98da91f78873fa";
-    sha256 = "0ai2kykj8i4bqcy3gry36r3n4ax0fldncfhksl5b293nf2fihnws";
+    rev    = "1edf9f656850c0c64dae260960fabd8249ea9c60";
+    sha256 = "1h71d2h2d3anp4msvpaff445rnzdxii3id2yglqk7af9i43kdsn1";
   };
 
-  version = "2017.9";
+  version = "2018.4";
 in stdenv.mkDerivation {
   name = "ostree-${version}";
 
@@ -26,15 +26,15 @@ in stdenv.mkDerivation {
     rev    = "v${version}";
     owner  = "ostreedev";
     repo   = "ostree";
-    sha256 = "1040xcw8qcs6xq8x4wg47hha3915qzb6lndb38wjyn6wzl1680q3";
+    sha256 = "00jgj6vcjpz1akfbmf82q1bcs3njrmvdgy4c2gnn24vkmh9yr0lr";
   };
 
   nativeBuildInputs = [
-    autoconf automake libtool pkgconfig gtk_doc gobjectIntrospection which yacc
+    autoconf automake libtool pkgconfig gtk-doc gobjectIntrospection which yacc
     libxslt docbook_xsl docbook_xml_dtd_42
   ];
 
-  buildInputs = [ libgsystem xz e2fsprogs libsoup gpgme fuse libcap ];
+  buildInputs = [ libgsystem xz e2fsprogs libsoup gpgme fuse libarchive libcap bzip2 ];
 
   prePatch = ''
     rmdir libglnx bsdiff
@@ -50,7 +50,7 @@ in stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "Git for operating system binaries";
-    homepage    = "http://live.gnome.org/OSTree/";
+    homepage    = https://ostree.readthedocs.io/en/latest/;
     license     = licenses.lgpl2Plus;
     platforms   = platforms.linux;
     maintainers = with maintainers; [ copumpkin ];

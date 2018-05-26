@@ -23,7 +23,7 @@ appleDerivation rec {
       (cd $dep/include && find . -name '*.h' | cpio -pdm $out/include)
     done
 
-    (cd ${cctools}/include/mach-o && find . -name '*.h' | cpio -pdm $out/include/mach-o)
+    (cd ${cctools.dev}/include/mach-o && find . -name '*.h' | cpio -pdm $out/include/mach-o)
 
     cat <<EOF > $out/include/TargetConditionals.h
     #ifndef __TARGETCONDITIONALS__
@@ -113,7 +113,6 @@ appleDerivation rec {
     install_name_tool \
       -id $out/lib/libresolv.9.dylib \
       -change "$resolv_libSystem" $out/lib/libSystem.dylib \
-      -delete_rpath ${libresolv}/lib \
       $out/lib/libresolv.9.dylib
     ln -s libresolv.9.dylib $out/lib/libresolv.dylib
   '';

@@ -4,13 +4,13 @@
 
 stdenv.mkDerivation rec {
   name = "zeal-${version}";
-  version = "0.4.0";
+  version = "0.6.0";
 
   src = fetchFromGitHub {
     owner  = "zealdocs";
     repo   = "zeal";
     rev    = "v${version}";
-    sha256 = "1mfcw843g4slr79bvidb5s88m7a3swr9by6srdn233b88j8mqwzl";
+    sha256 = "0zsrb89jz04b8in1d69p7mg001yayyljc47vdlvm48cjbhvxwj0k";
   };
 
   # while ads can be disabled from the user settings, by default they are not so
@@ -32,9 +32,9 @@ stdenv.mkDerivation rec {
       Zeal is a simple offline API documentation browser inspired by Dash (macOS
       app), available for Linux and Windows.
     '';
-    homepage    = http://zealdocs.org/;
+    homepage    = https://zealdocs.org/;
     license     = licenses.gpl3;
-    maintainers = with maintainers; [ skeidel ];
+    maintainers = with maintainers; [ skeidel peterhoeg ];
     platforms   = platforms.linux;
   };
 }

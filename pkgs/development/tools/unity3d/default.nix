@@ -1,5 +1,5 @@
 { stdenv, lib, fetchurl, makeWrapper, fakeroot, file, getopt
-, gtk2, gdk_pixbuf, glib, mesa_glu, postgresql, nss, nspr, udev
+, gtk2, gdk_pixbuf, glib, libGLU, postgresql, nss, nspr, udev
 , alsaLib, GConf, cups, libcap, fontconfig, freetype, pango
 , cairo, dbus, expat, zlib, libpng12, nodejs, gnutar, gcc, gcc_32bit
 , libX11, libXcursor, libXdamage, libXfixes, libXrender, libXi
@@ -9,7 +9,7 @@
 
 let
   libPath64 = lib.makeLibraryPath [
-    gcc.cc gtk2 gdk_pixbuf glib mesa_glu postgresql nss nspr
+    gcc.cc gtk2 gdk_pixbuf glib libGLU postgresql nss nspr
     alsaLib GConf cups libcap fontconfig freetype pango
     cairo dbus expat zlib libpng12 udev
     libX11 libXcursor libXdamage libXfixes libXrender libXi

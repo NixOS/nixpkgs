@@ -13,11 +13,6 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkgconfig qmake ];
   buildInputs = [ gtk2 ];
 
-  installPhase = ''
-    make INSTALL_ROOT=$NIX_QT5_TMP install
-    mv $NIX_QT5_TMP/$NIX_QT5_TMP $out
-  '';
-
   meta = with stdenv.lib; {
     description = "Additional style plugins for Qt5, including BB10, GTK+, Cleanlooks, Motif, Plastique";
     homepage = http://blog.qt.io/blog/2012/10/30/cleaning-up-styles-in-qt5-and-adding-fusion/;

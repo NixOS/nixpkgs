@@ -11,85 +11,6 @@ Index: grantleetheme-17.04.0/src/grantleetheme_p.h
      QString author;
      QString email;
  
-Index: grantleetheme-17.04.0/src/grantleetheme.cpp
-===================================================================
---- grantleetheme-17.04.0.orig/src/grantleetheme.cpp
-+++ grantleetheme-17.04.0/src/grantleetheme.cpp
-@@ -45,7 +45,7 @@ ThemePrivate::ThemePrivate(const ThemePr
-     , description(other.description)
-     , name(other.name)
-     , dirName(other.dirName)
--    , absolutePath(other.absolutePath)
-+    , absolutePaths(other.absolutePaths)
-     , author(other.author)
-     , email(other.email)
-     , loader(other.loader)
-@@ -63,12 +63,15 @@ void ThemePrivate::setupEngine()
- 
- void ThemePrivate::setupLoader()
- {
--    // Get the parent dir with themes, we set the theme directory separately
--    QDir dir(absolutePath);
--    dir.cdUp();
-+    QStringList templateDirs;
-+    for (const QString& path : absolutePaths) {
-+        QDir dir(path);
-+        dir.cdUp();
-+        templateDirs << dir.absolutePath();
-+    }
- 
-     loader = QSharedPointer<Grantlee::FileSystemTemplateLoader>::create();
--    loader->setTemplateDirs({ dir.absolutePath() });
-+    loader->setTemplateDirs(templateDirs);
-     loader->setTheme(dirName);
- 
-     if (!sEngine) {
-@@ -122,7 +123,7 @@ Theme::Theme(const QString &themePath, c
-     KConfigGroup group(&config, QStringLiteral("Desktop Entry"));
-     if (group.isValid()) {
-         d->dirName = dirName;
--        d->absolutePath = themePath;
-+        d->absolutePaths = QStringList(themePath);
-         d->name = group.readEntry("Name", QString());
-         d->description = group.readEntry("Description", QString());
-         d->themeFileName = group.readEntry("FileName", QString());
-@@ -141,7 +142,7 @@ Theme::~Theme()
- 
- bool Theme::operator==(const Theme &other) const
- {
--    return isValid() && other.isValid() && d->absolutePath == other.absolutePath();
-+    return isValid() && other.isValid() && d->absolutePaths == other.absolutePaths();
- }
- 
- Theme &Theme::operator=(const Theme &other)
-@@ -185,7 +186,12 @@ QString Theme::dirName() const
- 
- QString Theme::absolutePath() const
- {
--    return d->absolutePath;
-+    return d->absolutePaths.first();
-+}
-+
-+QStringList Theme::absolutePaths() const
-+{
-+    return d->absolutePaths;
- }
- 
- QString Theme::author() const
-@@ -224,6 +230,13 @@ QString Theme::render(const QString &tem
-     return result;
- }
- 
-+void Theme::addThemeDir(const QString& path)
-+{
-+    QDir dir(path);
-+    dir.cdUp();
-+    d->absolutePaths << dir.absolutePath();
-+}
-+
- void Theme::addPluginPath(const QString &path)
- {
-     if (!ThemePrivate::sEngine) {
 Index: grantleetheme-17.04.0/src/grantleetheme.h
 ===================================================================
 --- grantleetheme-17.04.0.orig/src/grantleetheme.h
@@ -153,3 +74,80 @@ Index: grantleetheme-17.04.0/src/grantleethememanager.cpp
                      }
                  }
              }
+--- src/grantleetheme.cpp.orig	2017-12-22 16:11:39.863598126 +0300
++++ ./src/grantleetheme.cpp	2017-12-22 16:16:14.045664607 +0300
+@@ -46,7 +46,7 @@ ThemePrivate::ThemePrivate(const ThemePr
+     , description(other.description)
+     , name(other.name)
+     , dirName(other.dirName)
+-    , absolutePath(other.absolutePath)
++    , absolutePaths(other.absolutePaths)
+     , author(other.author)
+     , email(other.email)
+     , loader(other.loader)
+@@ -64,12 +64,15 @@ void ThemePrivate::setupEngine()
+ 
+ void ThemePrivate::setupLoader()
+ {
+-    // Get the parent dir with themes, we set the theme directory separately
+-    QDir dir(absolutePath);
+-    dir.cdUp();
++    QStringList templateDirs;
++    for (const QString& path : absolutePaths) {
++        QDir dir(path);
++        dir.cdUp();
++        templateDirs << dir.absolutePath();
++    }
+ 
+     loader = QSharedPointer<GrantleeTheme::QtResourceTemplateLoader>::create();
+-    loader->setTemplateDirs({ dir.absolutePath() });
++    loader->setTemplateDirs(templateDirs);
+     loader->setTheme(dirName);
+ 
+     if (!sEngine) {
+@@ -121,7 +124,7 @@ Theme::Theme(const QString &themePath, c
+     KConfigGroup group(&config, QStringLiteral("Desktop Entry"));
+     if (group.isValid()) {
+         d->dirName = dirName;
+-        d->absolutePath = themePath;
++        d->absolutePaths = QStringList(themePath);
+         d->name = group.readEntry("Name", QString());
+         d->description = group.readEntry("Description", QString());
+         d->themeFileName = group.readEntry("FileName", QString());
+@@ -140,7 +143,7 @@ Theme::~Theme()
+ 
+ bool Theme::operator==(const Theme &other) const
+ {
+-    return isValid() && other.isValid() && d->absolutePath == other.absolutePath();
++    return isValid() && other.isValid() && d->absolutePaths == other.absolutePaths();
+ }
+ 
+ Theme &Theme::operator=(const Theme &other)
+@@ -184,7 +187,12 @@ QString Theme::dirName() const
+ 
+ QString Theme::absolutePath() const
+ {
+-    return d->absolutePath;
++    return d->absolutePaths.first();
++}
++
++QStringList Theme::absolutePaths() const
++{
++    return d->absolutePaths;
+ }
+ 
+ QString Theme::author() const
+@@ -223,6 +231,13 @@ QString Theme::render(const QString &tem
+     return result;
+ }
+ 
++void Theme::addThemeDir(const QString& path)
++{
++    QDir dir(path);
++    dir.cdUp();
++    d->absolutePaths << dir.absolutePath();
++}
++
+ void Theme::addPluginPath(const QString &path)
+ {
+     if (!ThemePrivate::sEngine) {
