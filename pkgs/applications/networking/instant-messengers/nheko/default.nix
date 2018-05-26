@@ -1,4 +1,7 @@
-{ stdenv, fetchFromGitHub, fetchurl, cmake, doxygen, lmdb, qt5 }:
+{
+  lib, stdenv, fetchFromGitHub, fetchurl,
+  cmake, doxygen, lmdb, qt5, qtmacextras
+}:
 
 let
   json_hpp = fetchurl {
@@ -17,8 +20,8 @@ let
     src = fetchFromGitHub {
       owner = "mujx";
       repo = "matrix-structs";
-      rev = "690080daa3bc1984297c4d7103cde9ea07e2e0b7";
-      sha256 = "0l6mncpdbjmrzp5a3q1jv0sxf7bwl5ljslrcjca1j2bjjbqb61bz";
+      rev = "5e57c2385a79b6629d1998fec4a7c0baee23555e";
+      sha256 = "112b7gnvr04g1ak7fnc7ch7w2n825j4qkw0jb49xx06ag93nb6m6";
     };
 
     postUnpack = ''
@@ -47,18 +50,34 @@ let
 in
 stdenv.mkDerivation rec {
   name = "nheko-${version}";
-  version = "0.4.0";
+  version = "0.4.2";
 
   src = fetchFromGitHub {
     owner = "mujx";
     repo = "nheko";
     rev = "v${version}";
-    sha256 = "1yg6bk193mqj99x3sy0f20x3ggpl0ahrp36w6hhx7pyw5qm17342";
+    sha256 = "1z9dbvcgwafxr131a8447qkx97x8l93k32xa8xvajgvjlimqphqk";
   };
 
   # This patch is likely not strictly speaking needed, but will help detect when
   # a dependency is updated, so that the fetches up there can be updated too
   patches = [ ./external-deps.patch ];
+
+  # If, on Darwin, you encounter the error
+  #   error: must specify at least one argument for '...' parameter of variadic
+  #   macro [-Werror,-Wgnu-zero-variadic-macro-arguments]
+  # Then adding this parameter is likely the fix you want.
+  #
+  # However, it looks like either cmake doesn't honor this CFLAGS variable, or
+  # darwin's compiler doesn't have the same syntax as gcc for turning off
+  # -Werror selectively.
+  #
+  # Anyway, this is something that will have to be debugged with access to a
+  # darwin-based OS. Sorry about that!
+  #
+  #preConfigure = lib.optionalString stdenv.isDarwin ''
+  #  export CFLAGS=-Wno-error=gnu-zero-variadic-macro-arguments
+  #'';
 
   cmakeFlags = [
     "-DMATRIX_STRUCTS_LIBRARY=${matrix-structs}/lib/static/libmatrix_structs.a"
@@ -71,7 +90,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     lmdb lmdbxx matrix-structs qt5.qtbase qt5.qtmultimedia qt5.qttools tweeny
-  ];
+  ] ++ lib.optional stdenv.isDarwin qtmacextras;
 
   enableParallelBuilding = true;
 

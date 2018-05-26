@@ -384,6 +384,7 @@ in rec {
   tests.sddm = callSubTests tests/sddm.nix {};
   tests.simple = callTest tests/simple.nix {};
   tests.slim = callTest tests/slim.nix {};
+  tests.slurm = callTest tests/slurm.nix {};
   tests.smokeping = callTest tests/smokeping.nix {};
   tests.snapper = callTest tests/snapper.nix {};
   tests.statsd = callTest tests/statsd.nix {};

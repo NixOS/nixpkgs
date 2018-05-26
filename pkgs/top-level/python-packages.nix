@@ -408,6 +408,10 @@ in {
 
   pytest-tornado = callPackage ../development/python-modules/pytest-tornado { };
 
+  python-openid = callPackage (if isPy3k
+    then ../development/python-modules/python3-openid
+    else ../development/python-modules/python-openid) { };
+
   python-sql = callPackage ../development/python-modules/python-sql { };
 
   python-stdnum = callPackage ../development/python-modules/python-stdnum { };
@@ -4711,6 +4715,8 @@ in {
     };
   };
 
+  django-allauth = callPackage ../development/python-modules/django-allauth { };
+
   django_appconf = callPackage ../development/python-modules/django_appconf { };
 
   django_colorful = buildPythonPackage rec {
@@ -4777,6 +4783,8 @@ in {
   };
 
   django_extensions = callPackage ../development/python-modules/django-extensions { };
+
+  django-gravatar2 = callPackage ../development/python-modules/django-gravatar2 { };
 
   django_guardian = callPackage ../development/python-modules/django_guardian { };
 
@@ -8085,6 +8093,8 @@ in {
 
   mysqlclient = callPackage ../development/python-modules/mysqlclient { };
 
+  mypy = callPackage ../development/python-modules/mypy { };
+
   mwclient = buildPythonPackage rec {
     version = "0.8.3";
     pname = "mwclient";
@@ -11263,9 +11273,17 @@ in {
     buildInputs = with self; [ pyasn1 pycrypto ];
   };
 
+  python-language-server = callPackage ../development/python-modules/python-language-server {};
+
+  pyls-mypy = callPackage ../development/python-modules/pyls-mypy {};
+
+  pyls-isort = callPackage ../development/python-modules/pyls-isort {};
+
   pyudev = callPackage ../development/python-modules/pyudev {
     inherit (pkgs) fetchurl systemd;
   };
+
+  pynmea2 = callPackage ../development/python-modules/pynmea2 {};
 
   pynzb = buildPythonPackage (rec {
     name = "pynzb-0.1.0";

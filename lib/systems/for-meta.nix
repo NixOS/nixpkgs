@@ -3,6 +3,8 @@ let
   inherit (lib.systems) parse;
   inherit (lib.systems.inspect) patterns;
 
+  abis = lib.mapAttrs (_: abi: builtins.removeAttrs abi [ "assertions" ]) parse.abis;
+
 in rec {
   all     = [ {} ]; # `{}` matches anything
   none    = [];

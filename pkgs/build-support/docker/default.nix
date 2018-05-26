@@ -52,15 +52,7 @@ rec {
       outputHashAlgo = "sha256";
       outputHash = sha256;
 
-      # One of the dependencies of Skopeo uses a hardcoded /var/tmp for storing
-      # big image files, which is not available in sandboxed builds.
-      nativeBuildInputs = lib.singleton (pkgs.skopeo.overrideAttrs (drv: {
-        postPatch = (drv.postPatch or "") + ''
-          sed -i -e 's!/var/tmp!/tmp!g' \
-            vendor/github.com/containers/image/storage/storage_image.go \
-            vendor/github.com/containers/image/internal/tmpdir/tmpdir.go
-        '';
-      }));
+      nativeBuildInputs = lib.singleton (pkgs.skopeo);
       SSL_CERT_FILE = "${pkgs.cacert.out}/etc/ssl/certs/ca-bundle.crt";
 
       sourceURL = "docker://${imageName}@${imageDigest}";
@@ -360,7 +352,9 @@ rec {
     extraCommands ? ""
   }:
     # Generate an executable script from the `runAsRoot` text.
-    let runAsRootScript = shellScript "run-as-root.sh" runAsRoot;
+    let
+      runAsRootScript = shellScript "run-as-root.sh" runAsRoot;
+      extraCommandsScript = shellScript "extra-commands.sh" extraCommands;
     in runWithOverlay {
       name = "docker-layer-${name}";
 
@@ -398,7 +392,7 @@ rec {
       '';
 
       postUmount = ''
-        (cd layer; eval "${extraCommands}")
+        (cd layer; ${extraCommandsScript})
 
         echo "Packing layer..."
         mkdir $out

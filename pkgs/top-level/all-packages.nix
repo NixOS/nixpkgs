@@ -1288,6 +1288,8 @@ with pkgs;
 
   goa = callPackage ../development/tools/goa { };
 
+  gohai = callPackage ../tools/system/gohai { };
+
   gorilla-bin = callPackage ../tools/security/gorilla-bin { };
 
   gosu = callPackage ../tools/misc/gosu { };
@@ -4229,6 +4231,8 @@ with pkgs;
 
   owncloud-client = libsForQt5.callPackage ../applications/networking/owncloud-client { };
 
+  oxidized = callPackage ../tools/admin/oxidized { };
+
   oxipng = callPackage ../tools/graphics/oxipng { };
 
   p2pvc = callPackage ../applications/video/p2pvc {};
@@ -6454,7 +6458,7 @@ with pkgs;
   };
 
   fstar = callPackage ../development/compilers/fstar {
-    ocamlPackages = ocaml-ng.ocamlPackages_4_02;
+    ocamlPackages = ocaml-ng.ocamlPackages_4_06;
   };
 
   dotnetPackages = recurseIntoAttrs (callPackage ./dotnet-packages.nix {});
@@ -6918,6 +6922,7 @@ with pkgs;
   rustracer = callPackage ../development/tools/rust/racer { };
   rustracerd = callPackage ../development/tools/rust/racerd { };
   rust-bindgen = callPackage ../development/tools/rust/bindgen { };
+  rust-cbindgen = callPackage ../development/tools/rust/cbindgen { };
   rustup = callPackage ../development/tools/rust/rustup {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
@@ -8470,7 +8475,7 @@ with pkgs;
 
   grabserial = callPackage ../development/tools/grabserial { };
 
-  mypy = python3Packages.callPackage ../development/tools/mypy { };
+  mypy = python3Packages.mypy;
 
   ### DEVELOPMENT / LIBRARIES
 
@@ -17130,7 +17135,7 @@ with pkgs;
 
   nedit = callPackage ../applications/editors/nedit { };
 
-  nheko = callPackage ../applications/networking/instant-messengers/nheko { };
+  nheko = libsForQt5.callPackage ../applications/networking/instant-messengers/nheko { };
 
   nomacs = libsForQt5.callPackage ../applications/graphics/nomacs { };
 
@@ -18413,6 +18418,12 @@ with pkgs;
     imlib2 = imlib2-nox;
   };
 
+  # Version without X11 or graphics
+  w3m-nographics = w3m.override {
+    x11Support = false;
+    graphicsSupport = false;
+  };
+
   # Version for batch text processing, not a good browser
   w3m-batch = w3m.override {
     graphicsSupport = false;
@@ -18567,6 +18578,7 @@ with pkgs;
       ++ optionals (config.kodi.enableHyperLauncher or false)
            (with hyper-launcher; [ plugin service pdfreader ])
       ++ optional (config.kodi.enableJoystick or false) joystick
+      ++ optional (config.kodi.enableOSMCskin or false) osmc-skin
       ++ optional (config.kodi.enableSVTPlay or false) svtplay
       ++ optional (config.kodi.enableSteamController or false) steam-controller
       ++ optional (config.kodi.enableSteamLauncher or false) steam-launcher

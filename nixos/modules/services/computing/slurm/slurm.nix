@@ -13,6 +13,7 @@ let
       ${optionalString (cfg.nodeName != null) ''nodeName=${cfg.nodeName}''}
       ${optionalString (cfg.partitionName != null) ''partitionName=${cfg.partitionName}''}
       PlugStackConfig=${plugStackConfig}
+      ProctrackType=${cfg.procTrackType}
       ${cfg.extraConfig}
     '';
 
@@ -31,12 +32,20 @@ in
     services.slurm = {
 
       server = {
-        enable = mkEnableOption "slurm control daemon";
-
+        enable = mkOption {
+          type = types.bool;
+          default = false;
+          description = ''
+            Wether to enable the slurm control daemon.
+            Note that the standard authentication method is "munge".
+            The "munge" service needs to be provided with a password file in order for
+            slurm to work properly (see <literal>services.munge.password</literal>).
+          '';
+        };
       };
 
       client = {
-        enable = mkEnableOption "slurm rlient daemon";
+        enable = mkEnableOption "slurm client daemon";
 
       };
 
@@ -103,6 +112,16 @@ in
         '';
       };
 
+      procTrackType = mkOption {
+        type = types.string;
+        default = "proctrack/linuxproc";
+        description = ''
+          Plugin to be used for process tracking on a job step basis.
+          The slurmd daemon uses this mechanism to identify all processes
+          which are children of processes it spawns for a user job step.
+        '';
+      };
+
       extraConfig = mkOption {
         default = "";
         type = types.lines;
@@ -149,6 +168,8 @@ in
   in mkIf (cfg.client.enable || cfg.server.enable) {
 
     environment.systemPackages = [ wrappedSlurm ];
+
+    services.munge.enable = mkDefault true;
 
     systemd.services.slurmd = mkIf (cfg.client.enable) {
       path = with pkgs; [ wrappedSlurm coreutils ]
