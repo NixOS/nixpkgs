@@ -200,6 +200,12 @@ in rec {
     filesToInstall = ["u-boot.bin"];
   };
 
+  ubootRaspberryPiZeroW = buildUBoot rec {
+    defconfig = "rpi_0_w_defconfig";
+    extraMeta.platforms = ["armv6l-linux"];
+    filesToInstall = ["u-boot.bin"];
+  };
+
   ubootRaspberryPi2 = buildUBoot rec {
     defconfig = "rpi_2_defconfig";
     extraMeta.platforms = ["armv7l-linux"];
