@@ -6,7 +6,6 @@ let
     featureGates = ["AllAlpha"];
     flannel.enable = true;
     addons.dashboard.enable = true;
-    verbose = true;
 
     caFile = "${certs.master}/ca.pem";
     apiserver = {

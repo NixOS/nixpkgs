@@ -24,7 +24,7 @@ let
         { config, pkgs, lib, nodes, ... }:
           mkMerge [
             {
-              virtualisation.memorySize = mkDefault 768;
+              virtualisation.memorySize = mkDefault 1536;
               virtualisation.diskSize = mkDefault 4096;
               networking = {
                 inherit domain extraHosts;
