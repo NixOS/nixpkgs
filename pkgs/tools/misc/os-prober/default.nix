@@ -1,13 +1,11 @@
 { stdenv, fetchurl, makeWrapper,
-systemd, # udevadm
-busybox,
-coreutils, # os-prober desn't seem to work with pure busybox
-devicemapper, # lvs
-# optional dependencies
-cryptsetup ? null,
-libuuid ? null, # blkid and blockdev
-dmraid ? null,
-ntfs3g ? null
+# optional dependencies, the command(s) they provide
+coreutils,  # mktemp
+grub2,      # grub-mount and grub-probe
+cryptsetup, # cryptsetup
+libuuid,    # blkid and blockdev
+libudev,    # udevadm udevinfo
+ntfs3g      # ntfs3g
 }:
 
 stdenv.mkDerivation rec {
@@ -21,12 +19,9 @@ stdenv.mkDerivation rec {
   buildInputs = [ makeWrapper ];
   installPhase = ''
     # executables
-    mkdir -p $out/bin
-    mkdir -p $out/lib
-    mkdir -p $out/share
-    cp os-prober linux-boot-prober $out/bin
-    cp newns $out/lib
-    cp common.sh $out/share
+    install -Dt $out/bin os-prober linux-boot-prober
+    install -Dt $out/lib newns
+    install -Dt $out/share common.sh
 
     # probes
     case "${stdenv.system}" in
@@ -36,8 +31,7 @@ stdenv.mkDerivation rec {
         *) ARCH=other;;
     esac;
     for probes in os-probes os-probes/mounted os-probes/init linux-boot-probes linux-boot-probes/mounted; do
-      mkdir -p $out/lib/$probes;
-      cp $probes/common/* $out/lib/$probes;
+      install -Dt $out/lib/$probes $probes/common/*;
       if [ -e "$probes/$ARCH" ]; then
         mkdir -p $out/lib/$probes
         cp -r $probes/$ARCH/* $out/lib/$probes;
@@ -57,14 +51,7 @@ stdenv.mkDerivation rec {
     done;
     for file in $out/bin/*; do
       wrapProgram $file \
-        --set LVM_SYSTEM_DIR ${devicemapper} \
-        --suffix PATH : "$out/bin${builtins.foldl' (x: y: x + ":" + y) "" (
-          map (x: (toString x) + "/bin") (
-            builtins.filter (x: x!=null)
-              [ devicemapper systemd coreutils cryptsetup libuuid dmraid ntfs3g busybox ]
-            )
-          )
-        }" \
+        --suffix PATH : ${stdenv.lib.makeBinPath [ grub2 libudev coreutils cryptsetup libuuid ntfs3g ]} \
         --run "[ -d /var/lib/os-prober ] || mkdir /var/lib/os-prober"
     done;
   '';
