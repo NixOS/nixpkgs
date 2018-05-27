@@ -38,4 +38,6 @@ stdenv.mkDerivation rec {
   preConfigure = optionalString stdenv.isDarwin ''
     intltoolize --force
   '';
+
+  doCheck = false; # requires X11 daemon
 }

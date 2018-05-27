@@ -1,10 +1,10 @@
 { stdenv, fetchurl, cmake, protobuf }:
 stdenv.mkDerivation rec {
-  name = "jumanpp";
+  name = "jumanpp-${version}";
   version = "2.0.0-rc2";
 
   src = fetchurl {
-    url = "https://github.com/ku-nlp/${name}/releases/download/v${version}/${name}-${version}.tar.xz";
+    url = "https://github.com/ku-nlp/${name}/releases/download/v${version}/${name}.tar.xz";
     sha256 = "17fzmd0f5m9ayfhsr0mg7hjp3pg1mhbgknhgyd8v87x46g8bg6qp";
   };
   buildInputs = [ cmake protobuf ];

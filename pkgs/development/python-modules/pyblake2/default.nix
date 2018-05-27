@@ -5,12 +5,12 @@
 
 buildPythonPackage rec {
   pname = "pyblake2";
-  version = "1.1.1";
+  version = "1.1.2";
   name = "${pname}-${version}";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "8ec8e9087d13c99b354ab6d8b4cadb1758633db5946ff95a6bc7ac538b6d7b3d";
+    sha256 = "5ccc7eb02edb82fafb8adbb90746af71460fbc29aa0f822526fc976dff83e93f";
   };
 
   # requires setting up sphinx doctest

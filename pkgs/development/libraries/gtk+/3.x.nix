@@ -63,6 +63,8 @@ stdenv.mkDerivation rec {
     "--enable-wayland-backend"
   ];
 
+  doCheck = false; # needs X11
+
   postInstall = optionalString (!stdenv.isDarwin) ''
     substituteInPlace "$out/lib/gtk-3.0/3.0.0/printbackends/libprintbackend-cups.la" \
       --replace '-L${gmp.dev}/lib' '-L${gmp.out}/lib'

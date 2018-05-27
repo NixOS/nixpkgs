@@ -119,6 +119,8 @@ stdenv.mkDerivation rec {
     ++ optional openGLSupport "--enable-opengl"
     ++ optional virglSupport "--enable-virglrenderer";
 
+  doCheck = false; # tries to access /dev
+
   postFixup =
     ''
       for exe in $out/bin/qemu-system-* ; do

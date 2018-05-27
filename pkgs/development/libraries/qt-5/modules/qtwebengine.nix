@@ -31,6 +31,10 @@ qtModule {
 
   enableParallelBuilding = true;
 
+  # ninja builds some components with -Wno-format,
+  # which cannot be set at the same time as -Wformat-security
+  hardeningDisable = [ "format" ];
+
   postPatch =
     # Patch Chromium build tools
     ''

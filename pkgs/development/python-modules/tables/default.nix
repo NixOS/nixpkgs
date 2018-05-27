@@ -2,13 +2,13 @@
 , cython, bzip2, lzo, numpy, numexpr, hdf5, six, c-blosc }:
 
 buildPythonPackage rec {
-  version = "3.4.2";
+  version = "3.4.3";
   pname = "tables";
   name = "${pname}-${version}";
 
   src = fetchurl {
     url = "mirror://pypi/t/tables/${name}.tar.gz";
-    sha256 = "fdbbea4edb6bad0ac0e53fc7bc6970e78e12eef4944aa4146bcdcb573201676c";
+    sha256 = "b6aafe47154e2140c0a91bb38ebdb6ba67a24dd86263f1c294af8c11cb7deed4";
   };
 
   buildInputs = [ hdf5 cython bzip2 lzo c-blosc ];

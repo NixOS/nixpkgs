@@ -167,7 +167,10 @@ let
     sha256 = "17phkfafybxwhzng44k5bhmag6i55br53ky1nwcmw583kg2fa86z";
     version = "7.1.2";
 
-    setupHook = ./compat-setup-hook.sh;
+    setupHooks = [
+      ../../../build-support/setup-hooks/role.bash
+      ./compat-setup-hook.sh
+    ];
 
     # override defaults to prevent infinite recursion
     nativeBuildInputs = [ makeMinimal ];
@@ -270,7 +273,10 @@ let
 
       runHook postInstall
     '';
-    setupHook = ./fts-setup-hook.sh;
+    setupHooks = [
+      ../../../build-support/setup-hooks/role.bash
+      ./fts-setup-hook.sh
+    ];
   };
 
   stat = netBSDDerivation {

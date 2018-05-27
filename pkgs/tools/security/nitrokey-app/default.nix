@@ -1,7 +1,7 @@
 { stdenv, bash-completion, cmake, fetchgit, hidapi, libusb1, pkgconfig, qt5 }:
 
 stdenv.mkDerivation rec {
-  name = "nitrokey-app";
+  name = "nitrokey-app-${version}";
   version = "1.2";
 
   # We use fetchgit instead of fetchFromGitHub because of necessary git submodules

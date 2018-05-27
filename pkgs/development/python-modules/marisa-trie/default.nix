@@ -8,11 +8,11 @@
 
 buildPythonPackage rec {
   pname = "marisa-trie";
-  version = "0.7.4";
+  version = "0.7.5";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1n4pxnaranbh3x2fcqxwh8j1z2918vy7i4q1z4jn75m9rkm5h8ia";
+    sha256 = "c73bc25d868e8c4ea7aa7f1e19892db07bba2463351269b05340ccfa06eb2baf";
   };
 
   postPatch = ''

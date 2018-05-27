@@ -29,7 +29,10 @@ stdenv.mkDerivation {
   # Clang expects to find LLVMgold in its own prefix
   # Clang expects to find sanitizer libraries in its own prefix
   postInstall = ''
-    ln -sv ${llvm}/lib/LLVMgold.so $out/lib
+    if [ -e ${llvm}/lib/LLVMgold.so ]; then
+      ln -sv ${llvm}/lib/LLVMgold.so $out/lib
+    fi
+
     ln -sv ${llvm}/lib/clang/${version}/lib $out/lib/clang/${version}/
   '';
 

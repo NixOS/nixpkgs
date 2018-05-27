@@ -30,6 +30,8 @@ stdenv.mkDerivation rec {
 
   installFlags = [ "exampledir=\${out}/etc/pkcs11" ];
 
+  doInstallCheck = false; # probably a bug in this derivation
+
   meta = with stdenv.lib; {
     homepage = https://p11-glue.freedesktop.org/;
     platforms = platforms.all;

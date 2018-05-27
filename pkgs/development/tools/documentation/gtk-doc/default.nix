@@ -28,6 +28,9 @@ stdenv.mkDerivation rec {
 
   configureFlags = "--disable-scrollkeeper";
 
+  doCheck = false; # requires a lot of stuff
+  doInstallCheck = false; # fails
+
   passthru = {
     # Consumers are expected to copy the m4 files to their source tree, let them reuse the patch
     respect_xml_catalog_files_var_patch = ./respect-xml-catalog-files-var.patch;

@@ -51,7 +51,7 @@ let
 
   in
   stdenv.mkDerivation {
-      inherit name;
+      name = "neovim-${stdenv.lib.getVersion neovim}";
       buildCommand = let bin="${neovim}/bin/nvim"; in ''
         if [ ! -x "${bin}" ]
         then

@@ -3,12 +3,12 @@
 
 buildPythonPackage rec {
   pname = "pip-tools";
-  version = "1.11.0";
+  version = "2.0.2";
   name = pname + "-" + version;
 
   src = fetchurl {
     url = "mirror://pypi/p/pip-tools/${name}.tar.gz";
-    sha256 = "ba427b68443466c389e3b0b0ef55f537ab39344190ea980dfebb333d0e6a50a3";
+    sha256 = "f11fc3bf1d87a0b4a68d4d595f619814e2396e92d75d7bdd2500edbf002ea6de";
   };
 
   LC_ALL = "en_US.UTF-8";
@@ -22,6 +22,8 @@ buildPythonPackage rec {
     "test_generate_hashes_without_interfering_with_each_other"
     "test_realistic_complex_sub_dependencies"
     "test_generate_hashes_with_editable"
+    "test_filter_pip_markes"
+    "test_get_hashes_local_repository_cache_miss"
     # Expect specific version of "six":
     "test_editable_package"
     "test_input_file_without_extension"

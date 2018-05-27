@@ -50,15 +50,14 @@ stdenv.mkDerivation rec {
     "ac_cv_path_PERL=${buildPackages.perl}/bin/perl"
   ];
 
-  doCheck = true;
-
-  crossAttrs = {
+  makeFlags = stdenv.lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
     # Trick to get the build system find the proper 'native' groff
     # http://www.mail-archive.com/bug-groff@gnu.org/msg01335.html
-    preBuild = ''
-      makeFlags="GROFF_BIN_PATH=${buildPackages.groff}/bin GROFFBIN=${buildPackages.groff}/bin/groff"
-    '';
-  };
+    "GROFF_BIN_PATH=${buildPackages.groff}/bin"
+    "GROFFBIN=${buildPackages.groff}/bin/groff"
+  ];
+
+  doCheck = true;
 
   # Remove example output with (random?) colors and creation date
   # to avoid non-determinism in the output.
