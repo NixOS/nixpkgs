@@ -1,9 +1,9 @@
-{stdenv, lib, remarshal, runCommand, crystal, zlib, openssl, duktape}:
+{stdenv, lib, fetchgit, crystal, zlib, openssl, duktape}:
 let
   crystalPackages = lib.mapAttrs (name: src:
     stdenv.mkDerivation {
       name = lib.replaceStrings ["/"] ["-"] name;
-      src = fetchGit src;
+      src = fetchgit src;
       phases = "installPhase";
       installPhase = ''cp -r $src $out'';
       passthru = { libName = name; };
@@ -30,9 +30,10 @@ in
 stdenv.mkDerivation rec {
   version = "2018-05-27";
   name = "mint-${version}";
-  src = fetchGit {
+  src = fetchgit {
     url = "https://github.com/mint-lang/mint.git";
     rev = "a3f0c86f54b8b3a18dda5c39c2089bdb1d774b4f";
+    sha256 = "1bgs6jkwfc2ksq4gj55cl3h2l5g25f5bwlsjryiw9cbx5k4bp1kz";
   };
 
   buildInputs = [ crystal zlib openssl duktape ];
