@@ -8,11 +8,11 @@
 stdenv.mkDerivation rec {
 
   name = "spring-${version}";
-  version = "103.0";
+  version = "104.0";
 
   src = fetchurl {
     url = "mirror://sourceforge/springrts/spring_${version}_src.tar.lzma";
-    sha256 = "1fmnwk8ig36429pkp1rafzg4hyzp7i6mwy27p7fdxrdj1q4blx9l";
+    sha256 = "05pclcbw7v481pqz7bgirlk37494hy4hx4jghhnlzhdaz1cvzc6f";
   };
 
   # The cmake included module correcly finds nix's glew, however
