@@ -13423,27 +13423,7 @@ in {
     };
   };
 
-  supervisor = buildPythonPackage rec {
-    name = "supervisor-3.1.4";
-
-    disabled = isPy3k;
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/s/supervisor/${name}.tar.gz";
-      sha256 = "0kk0sv7780m4dzmrcb2m284krz907jh8jp7khz5a79qryy4m1xw2";
-    };
-
-    buildInputs = with self; [ mock ];
-    propagatedBuildInputs = with self; [ meld3 ];
-
-    # failing tests when building under chroot as root user doesn't exist
-    doCheck = false;
-
-    meta = {
-      description = "A system for controlling process state under UNIX";
-      homepage = http://supervisord.org/;
-    };
-  };
+  supervisor = callPackage ../development/python-modules/supervisor {};
 
   subprocess32 = callPackage ../development/python-modules/subprocess32 { };
 
