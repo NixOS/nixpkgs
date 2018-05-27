@@ -33,7 +33,6 @@
 
 buildPythonPackage rec {
   pname = "bokeh";
-  name = "${pname}${version}";
   version = "0.12.15";
 
   src = fetchPypi {
