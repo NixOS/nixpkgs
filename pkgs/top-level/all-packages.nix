@@ -12550,6 +12550,8 @@ with pkgs;
 
   mediatomb = callPackage ../servers/mediatomb { };
 
+  meguca = callPackage ../servers/meguca/default.nix { };
+
   memcached = callPackage ../servers/memcached {};
 
   meteor = callPackage ../servers/meteor/default.nix { };
@@ -13852,6 +13854,8 @@ with pkgs;
 
   dep = callPackage ../development/tools/dep { };
 
+  easyjson = callPackage ../development/tools/easyjson { };
+
   go-bindata = callPackage ../development/tools/go-bindata { };
 
   go-bindata-assetfs = callPackage ../development/tools/go-bindata-assetfs { };
@@ -13890,6 +13894,8 @@ with pkgs;
   go-langserver = callPackage ../development/tools/go-langserver { };
 
   gotests = callPackage ../development/tools/gotests { };
+
+  quicktemplate = callPackage ../development/tools/quicktemplate { };
 
   gogoclient = callPackage ../os-specific/linux/gogoclient { };
 
