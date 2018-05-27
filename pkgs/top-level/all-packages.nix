@@ -21763,6 +21763,12 @@ with pkgs;
 
   cernlib = callPackage ../development/libraries/physics/cernlib { };
 
+  dce = callPackage ../development/libraries/science/networking/ns3/dce.nix {
+    # python=python3;
+  };
+
+  dce-quagga = dce.override { withQuagga = true; };
+
   g4py = callPackage ../development/libraries/physics/geant4/g4py { };
 
   hepmc = callPackage ../development/libraries/physics/hepmc { };

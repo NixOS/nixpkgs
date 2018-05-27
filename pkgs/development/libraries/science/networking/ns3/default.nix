@@ -62,14 +62,14 @@ stdenv.mkDerivation rec {
     patchShebangs doc/ns3_html_theme/get_version.sh
   '';
 
-  configureScript = "${python.interpreter} ./waf configure";
+  configureScript = "${pythonEnv.interpreter} ./waf configure";
 
   configureFlags = with stdenv.lib; [
       "--enable-modules=${stdenv.lib.concatStringsSep "," modules}"
       "--with-python=${pythonEnv.interpreter}"
   ]
   ++ optional (build_profile != null) "--build-profile=${build_profile}"
-  ++ optional generateBindings [  ]
+  ++ optional generateBindings "--apiscan=all"
   ++ optional withExamples " --enable-examples "
   ++ optional doCheck " --enable-tests "
   ;
