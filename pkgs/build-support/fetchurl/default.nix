@@ -53,7 +53,14 @@
 , passthru ? {}
 } @ args:
 # Fallback to fetchurlCurl when arguments are used that are not supported by the Nix-builtin fetchurl.
-if curlOpts != "" || netrcPhase != null || postFetch != "" || downloadToTemp || showURLs || urls != [] || (lib.strings.hasPrefix "mirror:" url) then
+if curlOpts != ""
+|| netrcPhase != null
+|| postFetch != ""
+|| downloadToTemp
+|| showURLs
+|| urls != []
+|| (lib.strings.hasPrefix "mirror:" url)
+then
   fetchurlCurl args
 else
 let
