@@ -120,7 +120,7 @@ in rec {
         '';
         initialPath  = [ bootstrapTools ];
 
-        fetchurlBoot = import ../../build-support/fetchurl {
+        fetchurlBoot = import ../../build-support/fetchurl/curl.nix {
           inherit lib;
           stdenvNoCC = stage0.stdenv;
           curl = bootstrapTools;

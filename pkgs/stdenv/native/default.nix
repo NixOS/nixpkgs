@@ -139,7 +139,7 @@ in
       inherit stdenvNoCC;
     };
 
-    fetchurl = import ../../build-support/fetchurl {
+    fetchurl = import ../../build-support/fetchurl/curl.nix {
       inherit lib stdenvNoCC;
       # Curl should be in /usr/bin or so.
       curl = null;

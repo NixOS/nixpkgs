@@ -206,12 +206,16 @@ with pkgs;
 
   fetchhg = callPackage ../build-support/fetchhg { };
 
-  # `fetchurl' downloads a file from the network.
-  fetchurl = import ../build-support/fetchurl {
+  fetchurlCurl = import ../build-support/fetchurl/curl.nix {
     inherit lib stdenvNoCC;
     # On darwin, libkrb5 needs bootstrap_cmds which would require
     # converting many packages to fetchurl_boot to avoid evaluation cycles.
     curl = buildPackages.curl.override (lib.optionalAttrs stdenv.isDarwin { gssSupport = false; });
+  };
+
+  # `fetchurl' downloads a file from the network.
+  fetchurl = import ../build-support/fetchurl/default.nix {
+    inherit system lib fetchurlCurl;
   };
 
   fetchRepoProject = callPackage ../build-support/fetchrepoproject { };
