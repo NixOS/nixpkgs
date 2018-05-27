@@ -45,8 +45,8 @@ let
     };
   };
 
-in stdenv.mkDerivation {
-  name = "gn";
+in stdenv.mkDerivation rec {
+  name = "gn-${version}";
   version = "20180423";
   sourceRoot = ".";
 

@@ -56,6 +56,8 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+  doCheck = false; # needs root
+
   postInstall =
     ''
     rm -f $out/share/doc/sudo/ChangeLog

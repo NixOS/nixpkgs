@@ -57,6 +57,9 @@ stdenv.mkDerivation rec {
     ./bootstrap --skip-git --gnulib-srcdir=./gnulib
   '';
 
+  doCheck = false; # tries to wget some fonts
+  doInstallCheck = doCheck;
+
   postInstall =
     # get rid of the runtime dependency on python
     lib.optionalString (!withPython) ''
@@ -72,4 +75,3 @@ stdenv.mkDerivation rec {
     license = stdenv.lib.licenses.bsd3;
   };
 }
-

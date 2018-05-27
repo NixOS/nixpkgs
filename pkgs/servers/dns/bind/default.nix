@@ -67,6 +67,8 @@ stdenv.mkDerivation rec {
     done
   '';
 
+  doCheck = false; # requires root and the net
+
   meta = {
     homepage = http://www.isc.org/software/bind;
     description = "Domain name server";

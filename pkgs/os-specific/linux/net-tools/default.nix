@@ -15,6 +15,8 @@ stdenv.mkDerivation rec {
     '';
 
   makeFlags = [
+    "CC=${stdenv.cc.targetPrefix}cc"
+    "AR=${stdenv.cc.targetPrefix}ar"
     "BASEDIR=$(out)"
     "mandir=/share/man"
     "HAVE_ARP_TOOLS=1"

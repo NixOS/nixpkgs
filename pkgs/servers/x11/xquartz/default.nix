@@ -95,7 +95,7 @@ let
     ];
   };
 in stdenv.mkDerivation {
-  name = "xquartz";
+  name = "xquartz-${stdenv.lib.getVersion xorg.xorgserver}";
 
   buildInputs = [ ruby makeWrapper ];
 

@@ -1,7 +1,7 @@
 { stdenv, fetchurl, unzip }:
 
 stdenv.mkDerivation rec {
-  name = "adobe-flex-sdk-4.0.0.14159-mpl";
+  name = "adobe-flex-sdk-4.0.0.14159";
 
   src = fetchurl {
     # This is the open source distribution

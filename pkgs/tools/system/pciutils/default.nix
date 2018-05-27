@@ -11,7 +11,14 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ zlib kmod which ];
 
-  makeFlags = [ "SHARED=yes" "PREFIX=\${out}" "STRIP=" "HOST=${stdenv.hostPlatform.system}" "CROSS_COMPILE=${stdenv.cc.targetPrefix}" ];
+  makeFlags = [
+    "SHARED=yes"
+    "PREFIX=\${out}"
+    "STRIP="
+    "HOST=${stdenv.hostPlatform.system}"
+    "CROSS_COMPILE=${stdenv.cc.targetPrefix}"
+    "DNS=yes"
+  ];
 
   installTargets = "install install-lib";
 
@@ -26,4 +33,3 @@ stdenv.mkDerivation rec {
     maintainers = [ maintainers.vcunat ]; # not really, but someone should watch it
   };
 }
-

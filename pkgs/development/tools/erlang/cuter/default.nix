@@ -2,7 +2,7 @@
 , beamPackages, z3, python27 }:
 
 stdenv.mkDerivation rec {
-  name = "cuter";
+  name = "cuter-${version}";
   version = "0.1";
 
   src = fetchFromGitHub {

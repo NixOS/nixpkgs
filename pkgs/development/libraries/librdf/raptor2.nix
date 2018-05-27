@@ -17,6 +17,6 @@ stdenv.mkDerivation rec {
     homepage = http://librdf.org/raptor;
     license = with stdenv.lib.licenses; [ lgpl21 asl20 ];
     maintainers = with stdenv.lib.maintainers; [ marcweber ];
-    platforms = stdenv.lib.platforms.linux;
+    platforms = stdenv.lib.platforms.unix;
   };
 }

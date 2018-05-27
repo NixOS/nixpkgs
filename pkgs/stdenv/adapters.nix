@@ -87,8 +87,6 @@ rec {
                  (hostPlatform.isAarch64 || hostPlatform.isMips || hostPlatform.libc == "musl")
                  pkgs.updateAutotoolsGnuConfigScriptsHook
             ;
-
-          crossConfig = hostPlatform.config;
         } // args.crossAttrs or {});
   };
 

@@ -1,6 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, libpcap, enableStatic ? false
-, hostPlatform
-}:
+{ stdenv, fetchurl, fetchpatch, libpcap }:
 
 stdenv.mkDerivation rec {
   name = "tcpdump-${version}";
@@ -20,11 +18,9 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ libpcap ];
 
-  crossAttrs = {
-    LDFLAGS = if enableStatic then "-static" else "";
-    configureFlags = [ "ac_cv_linux_vers=2" ] ++ (stdenv.lib.optional
-      (hostPlatform.platform.kernelMajor or null == "2.4") "--disable-ipv6");
-  };
+  configureFlags = stdenv.lib.optional
+    (stdenv.hostPlatform != stdenv.buildPlatform)
+    "ac_cv_linux_vers=2";
 
   meta = {
     description = "Network sniffer";

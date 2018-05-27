@@ -53,6 +53,9 @@ stdenv.mkDerivation {
       "-Wno-error=unused-const-variable" "-Wno-error=misleading-indentation"
     ];
 
+  doCheck = false; # requires "sparse"
+  doInstallCheck = false; # same
+
   separateDebugInfo = true;
   installFlags = "install install-man ASCIIDOC8=1 prefix=$(out)";
 
