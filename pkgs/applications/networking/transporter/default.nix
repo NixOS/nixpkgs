@@ -62,7 +62,7 @@ in stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    description = "Simple file sharing app for elementary OS";
+    description = "Simple magic-wormhole client";
     homepage    = https://github.com/bleakgrey/Transporter;
     license     = licenses.gpl3;
     maintainers = with maintainers; [ worldofpeace ];
