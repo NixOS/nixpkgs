@@ -1,5 +1,5 @@
 #! /usr/bin/env nix-shell
-#! nix-shell -i python3 -p "python3.withPackages(ps: with ps; [ packaging requests toolz ])" -p git
+#! nix-shell -i python3 -p "python3.withPackages(ps: with ps; [ packaging requests toolz PyGithub nix-prefetch-github ])" -p git
 
 """
 Update a Python package expression by passing in the `.nix` file, or the directory containing it.
@@ -24,6 +24,8 @@ from packaging.version import InvalidVersion
 from packaging.specifiers import SpecifierSet
 import collections
 import subprocess
+from github import Github, GithubException
+from nix_prefetch_github import nix_prefetch_github
 
 INDEX = "https://pypi.io/pypi"
 """url of PyPI"""
@@ -35,6 +37,8 @@ PRERELEASES = False
 
 import logging
 logging.basicConfig(level=logging.INFO)
+
+github = Github()
 
 
 class Version(_Version, collections.abc.Sequence):
@@ -60,10 +64,19 @@ def _get_values(attribute, text):
 
     :returns: List of matches.
     """
+    # Find occurences of 'attribute = "string";'
     regex = '{}\s+=\s+"(.*)";'.format(attribute)
     regex = re.compile(regex)
     values = regex.findall(text)
-    return values
+    # Replace ${var} in string
+    regex = re.compile('\\${([^}]+)}')
+    for i, value in enumerate(values):
+        for var in regex.findall(value):
+            values[i] = value.replace('${' + var + '}', _get_unique_value(var, text))
+    # Find occurences of 'attribute = var;'
+    regex = '{}\s+=\s+([a-zA-Z0-9_-]+);'.format(attribute)
+    regex = re.compile(regex)
+    return values + [_get_unique_value(var, text) for var in regex.findall(text)]
 
 def _get_unique_value(attribute, text):
     """Match attribute in text and return unique match.
@@ -147,7 +160,7 @@ def _determine_latest_version(current_version, target, versions):
     return (max(sorted(versions))).raw_version
 
 
-def _get_latest_version_pypi(package, extension, current_version, target):
+def _get_latest_version_pypi(text, package, extension, current_version, target):
     """Get latest version and hash from PyPI."""
     url = "{}/{}/json".format(INDEX, package)
     json = _fetch_page(url)
@@ -169,7 +182,24 @@ def _get_latest_version_pypi(package, extension, current_version, target):
     return version, sha256
 
 
-def _get_latest_version_github(package, extension, current_version, target):
+def _get_latest_version_github(text, package, extension, current_version, target):
+    owner = _get_unique_value('owner', text)
+    repo = _get_unique_value('repo', text)
+    try:
+        # "Draft releases and prereleases are not returned by this endpoint"
+        # https://developer.github.com/v3/repos/releases/#get-the-latest-release
+        release = github.get_user(owner).get_repo(repo).get_latest_release()
+        tag = release.tag_name
+        # TODO: more fine-grained parsing, possibly using the info from the 'rev' attribute
+        if tag[0] == 'v':
+            version = tag[1:]
+        else:
+            version = tag
+        sha256 = nix_prefetch_github(owner=owner, repo=repo, rev=tag)['sha256']
+        return version, sha256
+    except GithubException:
+        # TODO: Some repos have no releases, only tags
+        pass
     raise ValueError("updating from GitHub is not yet supported.")
 
 
@@ -208,7 +238,7 @@ def _determine_extension(text, fetcher):
     If we use:
     - fetchPypi, we check if format is specified.
     - fetchurl, we determine the extension from the url.
-    - fetchFromGitHub we simply use `.tar.gz`.
+    - fetchFromGitHub, we simply use None (no need to specify in fetcher).
     """
     if fetcher == 'fetchPypi':
         try:
@@ -235,7 +265,7 @@ def _determine_extension(text, fetcher):
             raise ValueError('url does not point to PyPI.')
 
     elif fetcher == 'fetchFromGitHub':
-        raise ValueError('updating from GitHub is not yet implemented.')
+        extension = None
 
     return extension
 
@@ -257,7 +287,7 @@ def _update_package(path, target):
 
     extension = _determine_extension(text, fetcher)
 
-    new_version, new_sha256 = FETCHERS[fetcher](pname, extension, version, target)
+    new_version, new_sha256 = FETCHERS[fetcher](text, pname, extension, version, target)
 
     if new_version == version:
         logging.info("Path {}: no update available for {}.".format(path, pname))
