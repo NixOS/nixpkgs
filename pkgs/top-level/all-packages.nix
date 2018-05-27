@@ -20236,6 +20236,12 @@ with pkgs;
 
   tptp = callPackage ../applications/science/logic/tptp {};
 
+  celf = callPackage ../applications/science/logic/celf {
+    smlnj = if stdenv.isDarwin
+      then smlnjBootstrap
+      else smlnj;
+  };
+
   twelf = callPackage ../applications/science/logic/twelf {
     smlnj = if stdenv.isDarwin
       then smlnjBootstrap
