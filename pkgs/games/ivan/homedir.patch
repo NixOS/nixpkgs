@@ -1,0 +1,75 @@
+diff --git a/FeLib/Include/hscore.h b/FeLib/Include/hscore.h
+index 4caf3ff..1a02845 100644
+--- a/FeLib/Include/hscore.h
++++ b/FeLib/Include/hscore.h
+@@ -31,11 +31,11 @@ class festring;
+ class highscore
+ {
+  public:
+-  highscore(cfestring& = HIGH_SCORE_FILENAME);
++  highscore();
+   truth Add(long, cfestring&);
+   void Draw() const;
+-  void Save(cfestring& = HIGH_SCORE_FILENAME) const;
+-  void Load(cfestring& = HIGH_SCORE_FILENAME);
++  void Save() const;
++  void Load();
+   truth LastAddFailed() const;
+   void AddToFile(highscore*) const;
+   truth MergeToFile(highscore*) const;
+diff --git a/FeLib/Source/hscore.cpp b/FeLib/Source/hscore.cpp
+index 2e5318d..ff9c174 100644
+--- a/FeLib/Source/hscore.cpp
++++ b/FeLib/Source/hscore.cpp
+@@ -23,7 +23,7 @@ cfestring& highscore::GetEntry(int I) const { return Entry[I]; }
+ long highscore::GetScore(int I) const { return Score[I]; }
+ long highscore::GetSize() const { return Entry.size(); }
+ 
+-highscore::highscore(cfestring& File) : LastAdd(0xFF), Version(HIGH_SCORE_VERSION) { Load(File); }
++highscore::highscore() : LastAdd(0xFF), Version(HIGH_SCORE_VERSION) { Load(); }
+ 
+ truth highscore::Add(long NewScore, cfestring& NewEntry,
+                      time_t NewTime, long NewRandomID)
+@@ -98,8 +98,12 @@ void highscore::Draw() const
+   List.Draw();
+ }
+ 
+-void highscore::Save(cfestring& File) const
++void highscore::Save() const
+ {
++  std::string buffer(getenv("HOME"));
++  buffer.append("/.ivan/ivan-highscore.scores");
++  cfestring& File = buffer.c_str();
++
+   outputfile HighScore(File);
+   long CheckSum = HIGH_SCORE_VERSION + LastAdd;
+   for(ushort c = 0; c < Score.size(); ++c)
+@@ -112,8 +116,12 @@ void highscore::Save(cfestring& File) const
+ }
+ 
+ /* This function needs much more error handling */
+-void highscore::Load(cfestring& File)
++void highscore::Load()
+ {
++  std::string buffer(getenv("HOME"));
++  buffer.append("/.ivan/ivan-highscore.scores");
++  cfestring& File = buffer.c_str();
++
+   {
+     inputfile HighScore(File, 0, false);
+ 
+diff --git a/Main/Source/game.cpp b/Main/Source/game.cpp
+index 8927305..c18e790 100644
+--- a/Main/Source/game.cpp
++++ b/Main/Source/game.cpp
+@@ -2380,7 +2380,9 @@ festring game::GetDataDir()
+ festring game::GetBoneDir()
+ {
+ #ifdef UNIX
+-  return LOCAL_STATE_DIR "/Bones/";
++  festring BoneDir;
++  BoneDir << getenv("HOME") << "/.ivan/Bones/";
++  return BoneDir;
+ #endif
+ 
+ #if defined(WIN32) || defined(__DJGPP__)
