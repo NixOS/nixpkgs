@@ -170,7 +170,8 @@ rec {
     kernelBaseConfig = "bcm2835_defconfig";
     kernelDTB = true;
     kernelArch = "arm";
-    kernelAutoModules = false;
+    kernelAutoModules = true;
+    kernelPreferBuiltin = true;
     kernelExtraConfig = ''
       # Disable OABI to have seccomp_filter (required for systemd)
       # https://github.com/raspberrypi/firmware/issues/651
