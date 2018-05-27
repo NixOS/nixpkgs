@@ -82,8 +82,8 @@ let
     xdg_utils yasm minizip libwebp
     libusb1 re2 zlib
     ffmpeg libxslt libxml2
-    # harfbuzz-icu # in versions over 63 harfbuzz and freetype are being built together
-                   # so we can't build with one from system and other from source
+    # harfbuzz # in versions over 63 harfbuzz and freetype are being built together
+               # so we can't build with one from system and other from source
   ];
 
   # build paths and release info
