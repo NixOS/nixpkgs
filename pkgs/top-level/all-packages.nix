@@ -10562,6 +10562,8 @@ with pkgs;
 
   libvdpau-va-gl = callPackage ../development/libraries/libvdpau-va-gl { };
 
+  libversion = callPackage ../development/libraries/libversion { };
+
   libvirt = callPackage ../development/libraries/libvirt { };
 
   libvirt-glib = callPackage ../development/libraries/libvirt-glib { };
