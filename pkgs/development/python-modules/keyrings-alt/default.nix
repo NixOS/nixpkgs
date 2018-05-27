@@ -1,5 +1,5 @@
-{ stdenv, buildPythonPackage, fetchPypi, six
-, pytest, unittest2, mock, keyring, setuptools_scm
+{ stdenv, buildPythonPackage, fetchPypi, pythonOlder, six
+, pytest, pytest-flake8, backports_unittest-mock, keyring, setuptools_scm
 }:
 
 buildPythonPackage rec {
@@ -15,8 +15,12 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ six ];
 
   # Fails with "ImportError: cannot import name mock"
-  doCheck = false;
-  checkInputs = [ pytest unittest2 mock keyring ];
+  #doCheck = false;
+  checkInputs = [ pytest pytest-flake8 keyring ] ++ stdenv.lib.optional (pythonOlder "3.3") backports_unittest-mock;
+
+  checkPhase = ''
+    py.test
+  '';
 
   meta = with stdenv.lib; {
     license = licenses.mit;
