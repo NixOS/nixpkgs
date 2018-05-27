@@ -102,6 +102,7 @@
   ./programs/less.nix
   ./programs/light.nix
   ./programs/mosh.nix
+  ./programs/mininet.nix
   ./programs/mtr.nix
   ./programs/nano.nix
   ./programs/npm.nix
