@@ -1,4 +1,4 @@
-{ system, lib, fetchurlCurl }:
+{ system, stdenvNoCC, lib, fetchurlCurl }:
 { # URL to fetch.
   url ? ""
 
@@ -66,7 +66,7 @@ let
     else throw "fetchurl requires a hash for fixed-output derivation: ${url}";
   name_ = baseNameOf (toString url);
 in
-derivation {
+stdenvNoCC.mkDerivation {
   builder = "builtin:fetchurl";
   preferLocalBuild = true;
   impureEnvVars = [
@@ -84,4 +84,7 @@ derivation {
   outputHashMode = if (recursiveHash || executable) then "recursive" else "flat";
   urls = [ url ];
   name = name_;
+
+  inherit meta;
+  inherit passthru;
 }

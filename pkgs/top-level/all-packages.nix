@@ -215,7 +215,7 @@ with pkgs;
 
   # `fetchurl' downloads a file from the network.
   fetchurl = import ../build-support/fetchurl/default.nix {
-    inherit system lib fetchurlCurl;
+    inherit system lib stdenvNoCC fetchurlCurl;
   };
 
   fetchRepoProject = callPackage ../build-support/fetchrepoproject { };
