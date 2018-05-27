@@ -18195,6 +18195,8 @@ EOF
   pysdl2 = callPackage ../development/python-modules/pysdl2 { };
 
   pyogg = callPackage ../development/python-modules/pyogg { };
+
+  rubymarshal = callPackage ../development/python-modules/rubymarshal { };
 });
 
 in fix' (extends overrides packages)
