@@ -1,11 +1,19 @@
-{ python3
+{ buildPythonPackage
 , fetchFromGitHub
+, isPy3k
 , stdenv
+, attrs
+, click
+, effect
+, jinja2
+, requests
 }:
 
-python3.pkgs.buildPythonApplication rec {
+buildPythonPackage rec {
   pname = "nix-prefetch-github";
   version = "1.3";
+
+  disabled = !isPy3k;
 
   src = fetchFromGitHub {
     owner = "seppeljordan";
@@ -14,7 +22,7 @@ python3.pkgs.buildPythonApplication rec {
     sha256 = "1rinbv1q4q8m27ih6l81w1lsmwn6cz7q3iyjiycklywpi8684dh6";
   };
 
-  propagatedBuildInputs = with python3.pkgs; [
+  propagatedBuildInputs = [
     attrs
     click
     effect

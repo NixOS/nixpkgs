@@ -3660,6 +3660,8 @@ in {
 
   Nikola = callPackage ../development/python-modules/Nikola { };
 
+  nix-prefetch-github = callPackage ../development/python-modules/nix-prefetch-github { };
+
   nxt-python = buildPythonPackage rec {
     version = "unstable-20160819";
     pname = "nxt-python";

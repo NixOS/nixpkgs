@@ -20811,7 +20811,7 @@ with pkgs;
 
   nix-pin = callPackage ../tools/package-management/nix-pin { };
 
-  nix-prefetch-github = callPackage ../build-support/nix-prefetch-github {};
+  nix-prefetch-github = with python3.pkgs; toPythonApplication nix-prefetch-github;
 
   inherit (callPackages ../tools/package-management/nix-prefetch-scripts { })
     nix-prefetch-bzr
