@@ -1,13 +1,14 @@
 { stdenv, autoreconfHook, pkgconfig, fetchFromGitHub, dbus, dleyna-core, glib }:
 
 stdenv.mkDerivation rec {
-  name = "dleyna-connector-dbus";
+  pname = "dleyna-connector-dbus";
+  name = "${pname}-${version}";
   version = "0.3.0";
 
   src = fetchFromGitHub {
     owner = "01org";
-    repo = name;
-    rev = "${version}";
+    repo = pname;
+    rev = version;
     sha256 = "0vziq5gwjm79yl2swch2mz6ias20nvfddf5cqgk9zbg25cb9m117";
   };
 

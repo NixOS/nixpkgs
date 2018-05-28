@@ -117,7 +117,7 @@ in if configure == null then weechat else
         ln -s $plugin $out/plugins
       done
     '';
-  in (writeScriptBin "weechat" ''
+  in (writeScriptBin weechat.name ''
     #!${stdenv.shell}
     export WEECHAT_EXTRA_LIBDIR=${pluginsDir}
     ${lib.concatMapStringsSep "\n" (p: lib.optionalString (p ? extraEnv) p.extraEnv) plugins}

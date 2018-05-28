@@ -1,13 +1,14 @@
 { stdenv, autoreconfHook, pkgconfig, fetchFromGitHub, dleyna-connector-dbus, dleyna-core, gssdp, gupnp, gupnp-av, gupnp-dlna, libsoup, makeWrapper }:
 
 stdenv.mkDerivation rec {
-  name = "dleyna-renderer";
+  pname = "dleyna-renderer";
+  name = "${pname}-${version}";
   version = "0.6.0";
 
   src = fetchFromGitHub {
     owner = "01org";
-    repo = name;
-    rev = "${version}";
+    repo = pname;
+    rev = version;
     sha256 = "0jy54aq8hgrvzchrvfzqaj4pcn0cfhafl9bv8a9p6j82yjk4pvpp";
   };
 

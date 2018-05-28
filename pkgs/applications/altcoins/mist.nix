@@ -56,7 +56,7 @@ let
   });
 in
 buildFHSUserEnv {
-  name = "mist-${stdenv.lib.getVersion mist}";
+  inherit name;
 
   targetPkgs = pkgs: with pkgs; [
      mist

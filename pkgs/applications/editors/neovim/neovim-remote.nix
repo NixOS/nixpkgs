@@ -4,13 +4,13 @@ with stdenv.lib;
 
 pythonPackages.buildPythonPackage rec {
   name = "neovim-remote-${version}";
-  version = "v1.8.6";
+  version = "1.8.6";
   disabled = !pythonPackages.isPy3k;
 
   src = fetchFromGitHub {
     owner = "mhinz";
     repo = "neovim-remote";
-    rev = version;
+    rev = "v${version}";
     sha256 = "0x01zpmxi37jr7j2az2bd8902h7zhkpg6kpvc8xmll9f7703zz2l";
   };
 

@@ -7,7 +7,7 @@ stdenv.mkDerivation rec {
   # We use fetchgit instead of fetchFromGitHub because of necessary git submodules
   src = fetchgit {
     url = "https://github.com/Nitrokey/nitrokey-app.git";
-    rev = "refs/tags/v${version}";
+    rev = "v${version}";
     sha256 = "0mm6vlgxlmpahmmcn4awnfpx5rx5bj8m44cywhgxlmz012x73hzi";
   };
 
