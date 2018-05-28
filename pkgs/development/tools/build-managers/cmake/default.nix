@@ -57,6 +57,8 @@ stdenv.mkDerivation rec {
 
   # Don't search in non-Nix locations such as /usr, but do search in our libc.
   patches = [ ./search-path-3.9.patch ]
+    # Don't depend on frameworks.
+    ++ optional useSharedLibraries ./application-services.patch  # TODO: remove conditional
     ++ optional stdenv.isCygwin ./3.2.2-cygwin.patch;
 
   outputs = [ "out" ];
@@ -101,7 +103,9 @@ stdenv.mkDerivation rec {
     "-DCMAKE_AR=${getBin stdenv.cc.bintools.bintools}/bin/${stdenv.cc.targetPrefix}ar"
     "-DCMAKE_RANLIB=${getBin stdenv.cc.bintools.bintools}/bin/${stdenv.cc.targetPrefix}ranlib"
     "-DCMAKE_STRIP=${getBin stdenv.cc.bintools.bintools}/bin/${stdenv.cc.targetPrefix}strip"
-  ] ++ optionals (!useNcurses) [ "-DBUILD_CursesDialog=OFF" ];
+  ]
+    # Avoid depending on frameworks.
+    ++ optional (!useNcurses) "-DBUILD_CursesDialog=OFF";
 
   dontUseCmakeConfigure = true;
   enableParallelBuilding = true;
