@@ -159,13 +159,13 @@ in rec {
     ghcjs = packages.ghcjs82;
     ghcjs710 = callPackage ../development/haskell-modules rec {
       buildHaskellPackages = ghc.bootPkgs;
-      ghc = bh.compiler.ghcjs;
+      ghc = bh.compiler.ghcjs710;
       compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-7.10.x.nix { };
       packageSetConfig = callPackage ../development/haskell-modules/configuration-ghcjs.nix { };
     };
     ghcjs80 = callPackage ../development/haskell-modules rec {
       buildHaskellPackages = ghc.bootPkgs;
-      ghc = bh.compiler.ghcjsHEAD;
+      ghc = bh.compiler.ghcjs80;
       compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-8.0.x.nix { };
       packageSetConfig = callPackage ../development/haskell-modules/configuration-ghcjs.nix { };
     };
