@@ -84,7 +84,8 @@ stdenv.mkDerivation rec {
 
   # The fixDarwinDylibNames hook doesn't patch binaries.
   preFixup = stdenv.lib.optionalString stdenv.isDarwin ''
-    install_name_tool -change "@rpath/libgdk_pixbuf-2.0.0.dylib" "$out/lib/libgdk_pixbuf-2.0.0.dylib" $out/bin/gdk-pixbuf-thumbnailer
+    install_name_tool -change "@rpath/libgdk_pixbuf-2.0.0.dylib" "$dev/lib/libgdk_pixbuf-2.0.0.dylib" $out/bin/gdk-pixbuf-thumbnailer
+    install_name_tool -change "@rpath/libgdk_pixbuf-2.0.0.dylib" "$out/lib/libgdk_pixbuf-2.0.0.dylib" $dev/bin/gdk-pixbuf-thumbnailer
   '';
 
   # The tests take an excessive amount of time (> 1.5 hours) and memory (> 6 GB).
