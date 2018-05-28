@@ -9117,7 +9117,7 @@ in {
       sha256 = "0hh9j5zd2kc0804d2jmf1q3w5xm9l9s69hhgysbncrv5fw0414lh";
     };
     buildInputs = with pkgs; [ bashInteractive ]; # needed for bash-completion helper
-    propagatedBuildInputs = with self; [ urlgrabber m2crypto pyyaml ];
+    propagatedBuildInputs = with self; [ urlgrabber m2crypto pyyaml lxml ];
     postInstall = ''
       ln -s $out/bin/osc-wrapper.py $out/bin/osc
       install -D -m444 osc.fish $out/etc/fish/completions/osc.fish
