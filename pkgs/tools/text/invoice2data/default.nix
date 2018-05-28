@@ -1,10 +1,10 @@
-{ stdenv, pythonPackages, xpdf, imagemagick, tesseract }:
+{ stdenv, python3Packages, xpdf, imagemagick, tesseract }:
 
-pythonPackages.buildPythonPackage rec {
+python3Packages.buildPythonPackage rec {
   pname = "invoice2data";
   version = "0.2.93";
 
-  src = pythonPackages.fetchPypi {
+  src = python3Packages.fetchPypi {
     inherit pname version;
     sha256 = "1phz0a8jxg074k0im7shrrdfvdps7bn1fa4zwcf8q3sa2iig26l4";
   };
@@ -12,7 +12,7 @@ pythonPackages.buildPythonPackage rec {
   makeWrapperArgs = ["--prefix" "PATH" ":" "${stdenv.lib.makeBinPath [ imagemagick xpdf tesseract ]}" ];
 
   # pdfminer is an optional way to parse PDF files, but it has some issues at the moment. also, pdfminer.six will needed to be packaged too.
-  propagatedBuildInputs = with pythonPackages; [ unidecode dateparser pyyaml pillow chardet ];
+  propagatedBuildInputs = with python3Packages; [ unidecode dateparser pyyaml pillow chardet ];
 
   # Tests fails even when ran manually on my ubuntu machine !!
   doCheck = false;
@@ -23,5 +23,4 @@ pythonPackages.buildPythonPackage rec {
     license = licenses.mit;
     maintainers = with maintainers; [ psyanticy ];
   };
-
 }
