@@ -1,3 +1,4 @@
+from abc import ABCMeta, abstractmethod
 from contextlib import _GeneratorContextManager, nullcontext
 from pathlib import Path
 from queue import Queue
@@ -132,7 +133,7 @@ def retry(fn: Callable, timeout: int = 900) -> None:
         raise Exception(f"action timed out after {timeout} seconds")
 
 
-class StartCommand:
+class StartCommand(metaclass=ABCMeta):
     """The Base Start Command knows how to append the necessary
     runtime qemu options as determined by a particular test driver
     run. Any such start command is expected to happily receive and
@@ -140,6 +141,11 @@ class StartCommand:
     """
 
     _cmd: str
+
+    @property
+    @abstractmethod
+    def machine_name(self) -> str:
+        raise NotImplementedError("No machine_name property defined")
 
     def cmd(
         self,
@@ -150,7 +156,9 @@ class StartCommand:
         display_opts = ""
         display_available = any(x in os.environ for x in ["DISPLAY", "WAYLAND_DISPLAY"])
         if not display_available:
-            display_opts += " -nographic"
+            capture_file = Path(os.environ.get("out", Path.cwd()))
+            capture_file /= f"{self.machine_name}.video"
+            display_opts += f" -nixos-test {shlex.quote(str(capture_file))}"
 
         # qemu options
         qemu_opts = (
@@ -234,8 +242,11 @@ class LegacyStartCommand(StartCommand):
     Legacy.
     """
 
+    machine_name: str
+
     def __init__(
         self,
+        machine_name: str,
         netBackendArgs: Optional[str] = None,
         netFrontendArgs: Optional[str] = None,
         hda: Optional[Tuple[Path, str]] = None,
@@ -245,6 +256,8 @@ class LegacyStartCommand(StartCommand):
         qemuBinary: Optional[str] = None,
         qemuFlags: Optional[str] = None,
     ):
+        self.machine_name = machine_name
+
         if qemuBinary is not None:
             self._cmd = qemuBinary
         else:
@@ -379,6 +392,7 @@ class Machine:
             hda_arg_path: Path = Path(hda_arg)
             hda = (hda_arg_path, args.get("hdaInterface", ""))
         return LegacyStartCommand(
+            machine_name=args.get("name", "machine"),
             netBackendArgs=args.get("netBackendArgs"),
             netFrontendArgs=args.get("netFrontendArgs"),
             hda=hda,
