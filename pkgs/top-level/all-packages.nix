@@ -3369,6 +3369,10 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) CoreServices;
   };
 
+  medfile = callPackage ../development/libraries/medfile {
+    hdf5 = hdf5_1_8;
+  };
+
   memtester = callPackage ../tools/system/memtester { };
 
   minergate = callPackage ../applications/misc/minergate { };
