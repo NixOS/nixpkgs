@@ -1,7 +1,7 @@
 { stdenv, fetchurl, which, ocsigen_server, ocsigen_deriving, ocaml, camlp4,
   js_of_ocaml, lwt_react, cryptokit,
   ipaddr, ocamlnet, lwt_ssl, ocaml_pcre,
-  opam, ppx_tools, ppx_deriving, findlib
+  opaline, ppx_tools, ppx_deriving, findlib
 , js_of_ocaml-ocamlbuild, js_of_ocaml-ppx, js_of_ocaml-ppx_deriving_json
 , js_of_ocaml-lwt
 , js_of_ocaml-tyxml
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec
 
   patches = [ ./camlp4.patch ];
 
-  buildInputs = [ ocaml which findlib js_of_ocaml-ocamlbuild js_of_ocaml-ppx_deriving_json opam ppx_tools
+  buildInputs = [ ocaml which findlib js_of_ocaml-ocamlbuild js_of_ocaml-ppx_deriving_json opaline ppx_tools
     ocsigen_deriving
   ];
 
@@ -40,7 +40,7 @@ stdenv.mkDerivation rec
     ppx_deriving
   ];
 
-  installPhase = "opam-installer -i --prefix=$out --libdir=$OCAMLFIND_DESTDIR";
+  installPhase = "opaline -prefix $out -libdir $OCAMLFIND_DESTDIR";
 
   setupHook = [ ./setup-hook.sh ];
 
