@@ -1,5 +1,5 @@
-{ stdenv, fetchurl, dpkg, lib, glib, dbus, makeWrapper, gnome2, gnome3, gtk3, atk, cairo
-, freetype, fontconfig, nspr, nss, xorg, alsaLib, cups, expat, udev, wrapGAppsHook }:
+{ stdenv, fetchurl, dpkg, lib, glib, dbus, makeWrapper, gnome3, gtk3, atk, cairo, pango
+, gdk_pixbuf, freetype, fontconfig, nspr, nss, xorg, alsaLib, cups, expat, udev, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
   name = "typora-${version}";
@@ -20,10 +20,9 @@ stdenv.mkDerivation rec {
 
     rpath = stdenv.lib.makeLibraryPath [
       alsaLib
-      gnome2.GConf
-      gnome2.gtk
-      gnome2.gdk_pixbuf
-      gnome2.pango
+      gnome3.gconf
+      gdk_pixbuf
+      pango
       gnome3.defaultIconTheme
       expat
       gtk3
