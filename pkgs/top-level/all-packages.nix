@@ -2138,7 +2138,7 @@ with pkgs;
 
   mcrcon = callPackage ../tools/networking/mcrcon {};
 
-  standard-tar = callPackages ../tools/archivers/star {};
+  s-tar = callPackages ../tools/archivers/s-tar {};
 
   tealdeer = callPackage ../tools/misc/tealdeer/default.nix { };
 

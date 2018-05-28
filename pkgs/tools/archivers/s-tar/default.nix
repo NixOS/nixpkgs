@@ -1,10 +1,10 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "star-${version}";
+  name = "s-tar-${version}";
   version = "1.5.3";
   src = fetchurl {
-    url = "mirror://sourceforge/s-tar/${name}.tar.bz2";
+    url = "mirror://sourceforge/s-tar/star-${version}.tar.bz2";
     sha256 = "0nsg3adv8lwqsbizicgmyxx8w26d1f4almprkcb08cd87s1l40q7";
   };
 
