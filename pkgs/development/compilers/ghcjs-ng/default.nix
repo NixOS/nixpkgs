@@ -16,6 +16,7 @@
 , pkgconfig
 , gcc
 , lib
+, nodePackages
 , ghcjsDepOverrides ? (_:_:{})
 }:
 
@@ -40,6 +41,8 @@ let
     inherit bootGhcjs;
     inherit (bootGhcjs) version;
     isGhcjs = true;
+
+    socket-io = nodePackages."socket.io";
 
     # Relics of the old GHCJS build system
     stage1Packages = [];
