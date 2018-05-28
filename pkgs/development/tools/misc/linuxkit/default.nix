@@ -2,8 +2,8 @@
 
 buildGoPackage rec {
   name = "linuxkit-${version}";
-  version = "2017-07-08";
-  rev = "8ca19a84d5281b1b15c7a48c21e5786943b47f1c";
+  version = "2017-09-08";
+  rev = "c793ea973cdfb98888d9d972d567cb988936263a";
 
   goPackagePath = "github.com/linuxkit/linuxkit";
 
@@ -11,7 +11,7 @@ buildGoPackage rec {
     owner = "linuxkit";
     repo = "linuxkit";
     inherit rev;
-    sha256 = "150y7hnjhi81iik7np27y5466ldaackq72mpi7vmybbl7vr1wgw4";
+    sha256 = "1bncj7hbwhmsl53qdh0zhkxrr4irchh92nh5i9ydisp23qzfkzh1";
   };
 
   subPackages = [ "src/cmd/linuxkit" ];
