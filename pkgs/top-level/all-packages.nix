@@ -15833,7 +15833,7 @@ with pkgs;
   wireshark-qt = wireshark;
 
   # The GTK UI is deprecated by upstream. You probably want the QT version.
-  wireshark-gtk = wireshark.override { withGtk = true; };
+  wireshark-gtk = wireshark.override { withGtk = true; withQt = false; };
   wireshark-cli = wireshark.override { withGtk = false; withQt = false; };
 
   fbida = callPackage ../applications/graphics/fbida { };
