@@ -23,7 +23,7 @@ let
       inherit system;
       pkgs = import ./.. { inherit system; };
       callTest = config: {
-        ${system} = hydraJob config.test;
+        ${system} = hydraJob config.test.videos;
       };
     } // {
       # for typechecking of the scripts and evaluation of
