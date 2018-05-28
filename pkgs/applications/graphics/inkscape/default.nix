@@ -51,9 +51,7 @@ stdenv.mkDerivation rec {
     libvisio libcdr libexif potrace python2Env icu
   ];
 
-  # To avoid non-deterministic build failure using make.
-  # When switching back to cmake turn parallel back on, see #40046.
-  enableParallelBuilding = false;
+  enableParallelBuilding = true;
 
   preConfigure = ''
     intltoolize -f
