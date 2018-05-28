@@ -14,18 +14,17 @@ with stdenv.lib;
 
 let
   optionOnOff = option: "${if option then "on" else "off"}";
-  urlVersion = replaceStrings ["."] ["_"];
 in
 
 stdenv.mkDerivation rec {
   name = "simgrid-${version}";
-  version = "3.17";
+  version = "3.19.1";
 
   src = fetchFromGitHub {
     owner = "simgrid";
     repo = "simgrid";
-    rev = "v${urlVersion version}";
-    sha256 = "0ffs9w141qhw571jsa9sch1cnr332vs4sgj6dsiij2mc24m6wpb4";
+    rev = "v${version}";
+    sha256 = "0vpgcp40xv20hcpslx5wz2mf2phaq41f7x8yr0bm7mknqd3zwxih";
   };
 
   nativeBuildInputs = [ cmake perl elfutils python3 boost valgrind ]
