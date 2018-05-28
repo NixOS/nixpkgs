@@ -112,7 +112,9 @@ with pkgs;
 
   buildMaven = callPackage ../build-support/build-maven.nix {};
 
-  castxml = callPackage ../development/tools/castxml { };
+  castxml = callPackage ../development/tools/castxml {
+     stdenv = clangStdenv;
+  };
 
   cmark = callPackage ../development/libraries/cmark { };
 
@@ -21716,7 +21718,14 @@ with pkgs;
 
   megam = callPackage ../applications/science/misc/megam { };
 
-  ns-3 = callPackage ../development/libraries/science/networking/ns3 { };
+  ns-3 = callPackage ../development/libraries/science/networking/ns3 {
+    # generates
+#/nix/store/ng5kbr6kmh979qaachifbsbblydrcmqc-gcc-7.3.0/include/c++/7.3.0/ext/hash_map:60:10: fatal error: 'backward_warning.h' file not found
+##include "backward_warning.h"
+#         ^~~~~~~~~~~~~~~~~~~~
+
+#        stdenv = clangStdenv;
+  };
 
   root = callPackage ../applications/science/misc/root {
     inherit (darwin.apple_sdk.frameworks) Cocoa OpenGL;

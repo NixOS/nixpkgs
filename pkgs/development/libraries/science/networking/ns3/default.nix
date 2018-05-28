@@ -55,7 +55,13 @@ stdenv.mkDerivation rec {
     ++ stdenv.lib.optional enableDoxygen [ doxygen graphviz imagemagick ]
     ++ stdenv.lib.optional withManual [ dia tetex ghostscript texlive.combined.scheme-medium ];
 
-  propagatedBuildInputs = [ gcc6 pythonEnv ];
+  propagatedBuildInputs = [
+    stdenv.cc
+    # gcc6
+    pythonEnv
+  ];
+
+
 
   postPatch = ''
     patchShebangs ./waf

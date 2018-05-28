@@ -28,7 +28,9 @@ stdenv.mkDerivation rec {
     llvmPackages.llvm
   ] ++ stdenv.lib.optionals withMan [ pythonPackages.sphinx ];
 
-  propagatedbuildInputs = [ llvmPackages.libclang ];
+  propagatedbuildInputs = [ llvmPackages.libclang
+    llvmPackages.libcxx
+  ];
 
   # 97% tests passed, 96 tests failed out of 2866
   # mostly because it checks command line and nix append -isystem and all
