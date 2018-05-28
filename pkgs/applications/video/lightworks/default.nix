@@ -77,7 +77,7 @@ let
 
 # Lightworks expects some files in /usr/share/lightworks
 in buildFHSUserEnv rec {
-  name = "lightworks-${stdenv.lib.getVersion lightworks}";
+  name = lightworks.name;
 
   targetPkgs = pkgs: [
       lightworks

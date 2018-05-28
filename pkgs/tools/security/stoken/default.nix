@@ -4,12 +4,12 @@
 
 stdenv.mkDerivation rec {
   pname = "stoken";
-  version = "v0.90";
+  version = "0.90";
   name = "${pname}-${version}";
   src = fetchFromGitHub {
     owner = "cernekee";
     repo = pname;
-    rev = version;
+    rev = "v${version}";
     sha256 = "1k7wn8pmp7dv646g938dsr99090lsphl7zy4m9x7qbh2zlnnf9af";
   };
 
