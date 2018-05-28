@@ -18168,6 +18168,9 @@ EOF
   pyogg = callPackage ../development/python-modules/pyogg { };
 
   rubymarshal = callPackage ../development/python-modules/rubymarshal { };
+
+  radio_beam = callPackage ../development/python-modules/radio_beam { };
+
 });
 
 in fix' (extends overrides packages)
