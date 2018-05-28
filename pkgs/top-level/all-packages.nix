@@ -15382,12 +15382,29 @@ with pkgs;
 
   elvis = callPackage ../applications/editors/elvis { };
 
-  emacs = emacs25;
-  emacsPackages = emacs25Packages;
-  emacsPackagesNg = emacs25PackagesNg;
-  emacsMelpa = emacs25PackagesNg; # for backward compatibility
+  emacs = emacs26;
+  emacsPackages = emacs26Packages;
+  emacsPackagesNg = emacs26PackagesNg;
 
-  emacs25 = callPackage ../applications/editors/emacs {
+  emacs26 = callPackage ../applications/editors/emacs {
+    # use override to enable additional features
+    libXaw = xorg.libXaw;
+    Xaw3d = null;
+    gconf = null;
+    alsaLib = null;
+    imagemagick = null;
+    acl = null;
+    gpm = null;
+    inherit (darwin.apple_sdk.frameworks) AppKit CoreWLAN GSS Kerberos ImageIO;
+  };
+
+  emacs26-nox = lowPrio (appendToName "nox" (emacs26.override {
+    withX = false;
+    withGTK2 = false;
+    withGTK3 = false;
+  }));
+
+  emacs25 = callPackage ../applications/editors/emacs/25.nix {
     # use override to enable additional features
     libXaw = xorg.libXaw;
     Xaw3d = null;
@@ -15556,6 +15573,7 @@ with pkgs;
   };
 
   emacs25Packages = emacsPackagesGen emacs25 pkgs.emacs25Packages;
+  emacs26Packages = emacsPackagesGen emacs26 pkgs.emacs26Packages;
 
   emacsPackagesNgGen = emacs: import ./emacs-packages.nix {
     inherit lib newScope stdenv;
@@ -15579,8 +15597,9 @@ with pkgs;
   };
 
   emacs25PackagesNg = emacsPackagesNgGen emacs25;
-
   emacs25WithPackages = emacs25PackagesNg.emacsWithPackages;
+  emacs26PackagesNg = emacsPackagesNgGen emacs26;
+  emacs26WithPackages = emacs26PackagesNg.emacsWithPackages;
   emacsWithPackages = emacsPackagesNg.emacsWithPackages;
 
   inherit (gnome3) empathy;
