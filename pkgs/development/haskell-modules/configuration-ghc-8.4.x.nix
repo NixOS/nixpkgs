@@ -290,14 +290,6 @@ self: super: {
     jailbreak       = true;
   });
 
-  jailbreak-cabal = super.jailbreak-cabal.override {
-    ##     • No instance for (Semigroup CDialect)
-    ##         arising from the superclasses of an instance declaration
-    ##     • In the instance declaration for ‘Monoid CDialect’
-    ## Undo the override in `configuration-common.nix`: GHC 8.4 bumps Cabal to 2.1:
-    Cabal = self.Cabal;
-  };
-
   kan-extensions = overrideCabal super.kan-extensions (drv: {
     ## Setup: Encountered missing dependencies:
     ## free ==4.*
