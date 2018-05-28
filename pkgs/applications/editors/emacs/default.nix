@@ -40,6 +40,12 @@ stdenv.mkDerivation rec {
     ./clean-env.patch
   ];
 
+  postPatch = lib.optionalString srcRepo ''
+    rm -fr .git
+  '';
+
+  CFLAGS = "-DMAC_OS_X_VERSION_MAX_ALLOWED=101200";
+
   nativeBuildInputs = [ pkgconfig ]
     ++ lib.optionals srcRepo [ autoconf automake texinfo ]
     ++ lib.optional (withX && (withGTK3 || withXwidgets)) wrapGAppsHook;
