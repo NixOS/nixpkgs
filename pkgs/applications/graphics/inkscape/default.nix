@@ -4,7 +4,6 @@
 , gsl, python2, poppler, imagemagick, libwpg, librevenge
 , libvisio, libcdr, libexif, potrace, autoreconfHook
 , intltool
-, icu # Not needed for building with CMake
 , lib
 }:
 
@@ -28,13 +27,6 @@ stdenv.mkDerivation rec {
     patchShebangs share/extensions
     patchShebangs fix-roff-punct
 
-    # XXX: Not needed for CMake:
-    patchShebangs share/filters
-    patchShebangs share/palettes
-    patchShebangs share/patterns
-    patchShebangs share/symbols
-    patchShebangs share/templates
-
     # Python is used at run-time to execute scripts, e.g., those from
     # the "Effects" menu.
     substituteInPlace src/extension/implementation/script.cpp \
@@ -46,7 +38,7 @@ stdenv.mkDerivation rec {
     perl perlXMLParser libXft libpng zlib popt boehmgc
     libxml2 libxslt glib gtkmm2 glibmm libsigcxx lcms boost gettext
     makeWrapper gsl poppler imagemagick libwpg librevenge
-    libvisio libcdr libexif potrace python2Env icu
+    libvisio libcdr libexif potrace python2Env
   ];
 
   enableParallelBuilding = true;
