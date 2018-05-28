@@ -413,7 +413,7 @@ self: super: {
 
   # Older versions don't compile.
   base-compat = self.base-compat_0_10_1;
-  brick = self.brick_0_37;
+  brick = self.brick_0_37_1;
   dhall = self.dhall_1_13_0;
   dhall_1_13_0 = doJailbreak super.dhall_1_13_0;  # support ansi-terminal 0.8.x
   HaTeX = self.HaTeX_3_19_0_0;
