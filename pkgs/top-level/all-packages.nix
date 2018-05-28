@@ -3370,6 +3370,8 @@ with pkgs;
 
   minergate = callPackage ../applications/misc/minergate { };
 
+  minergate-cli = callPackage ../applications/misc/minergate-cli { };
+
   minidlna = callPackage ../tools/networking/minidlna { };
 
   minisign = callPackage ../tools/security/minisign { };
