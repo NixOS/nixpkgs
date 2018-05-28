@@ -172,6 +172,7 @@ static void nixos_test_cleanup(void)
     "# please use the 'nixos-test-encode-video' binary from the\n" \
     "# 'qemu_test' package to encode it into another video format.\n" \
     "#\n"
+#define HEADER_SIZE sizeof(HEADER) - 1
 
 static void nixos_test_display_init(DisplayState *ds, DisplayOptions *o)
 {
@@ -195,9 +196,11 @@ static void nixos_test_display_init(DisplayState *ds, DisplayOptions *o)
      * with it.
      */
     if (lseek(outfd, 0, SEEK_END) == 0) {
-        if (qemu_write_full(outfd, HEADER, sizeof(HEADER) -1) != sizeof HEADER)
+        if (qemu_write_full(outfd, HEADER, HEADER_SIZE) != HEADER_SIZE) {
             fprintf(stderr, "Unable to write video file header to '%s'.\n",
                     o->capture_file);
+            exit(1);
+        }
     }
 
     /* We're using gzip here because we have a lot of repetition in frame data
