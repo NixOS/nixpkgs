@@ -309,7 +309,17 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
       sha256 = "1mjnf96hbn9abgzyvmrfxlhnm213290xb9wca7rnnl12i4fa4ahl";
     };
 
-    buildInputs = [ dotnetPackages.NUnitRunners ];
+    # emulate `nuget restore Source/Boogie.sln`
+    # which installs in $srcdir/Source/packages
+    preBuild = ''
+      mkdir -p Source/packages/NUnit.2.6.3
+      ln -sn ${dotnetPackages.NUnit}/lib/dotnet/NUnit Source/packages/NUnit.2.6.3/lib
+    '';
+
+    buildInputs = [
+      dotnetPackages.NUnit
+      dotnetPackages.NUnitRunners
+    ];
 
     xBuildFiles = [ "Source/Boogie.sln" ];
 
