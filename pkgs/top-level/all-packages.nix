@@ -18180,7 +18180,7 @@ with pkgs;
 
   terminator = callPackage ../applications/misc/terminator { };
 
-  terminus = callPackage ../applications/misc/terminus { inherit (gnome2) GConf; };
+  terminus = callPackage ../applications/misc/terminus { };
 
   lxterminal = callPackage ../applications/misc/lxterminal {
     vte = gnome3.vte;
