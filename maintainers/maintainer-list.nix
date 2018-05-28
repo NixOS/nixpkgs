@@ -4141,6 +4141,11 @@
     github = "wscott";
     name = "Wayne Scott";
   };
+  wucke13 = {
+    email = "info@wucke13.de";
+    github = "wucke13";
+    name = "Wucke";
+  };
   wyvie = {
     email = "elijahrum@gmail.com";
     github = "wyvie";

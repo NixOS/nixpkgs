@@ -1,5 +1,5 @@
-{ stdenv, fetchurl, dpkg, lib, glib, dbus, makeWrapper, gnome2, gtk3, atk, cairo
-, freetype, fontconfig, nspr, nss, xorg, alsaLib, cups, expat, udev }:
+{ stdenv, fetchurl, dpkg, lib, glib, dbus, makeWrapper, gnome2, gnome3, gtk3, atk, cairo
+, freetype, fontconfig, nspr, nss, xorg, alsaLib, cups, expat, udev, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
   name = "typora-${version}";
@@ -24,6 +24,7 @@ stdenv.mkDerivation rec {
       gnome2.gtk
       gnome2.gdk_pixbuf
       gnome2.pango
+      gnome3.defaultIconTheme
       expat
       gtk3
       atk
@@ -51,6 +52,9 @@ stdenv.mkDerivation rec {
       xorg.libXScrnSaver
   ];
 
+  nativeBuildInputs = [ wrapGAppsHook ];
+
+  dontWrapGApps = true;
 
   buildInputs = [ dpkg makeWrapper ];
 
@@ -72,7 +76,13 @@ stdenv.mkDerivation rec {
       --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
       --set-rpath "$out/share/typora:${rpath}" "$out/share/typora/Typora"
 
-    ln -s "$out/share/typora/Typora" "$out/bin/typora"
+    makeWrapper $out/share/typora/Typora $out/bin/typora
+
+    wrapProgram $out/bin/typora \
+      "''${gappsWrapperArgs[@]}" \
+      --suffix XDG_DATA_DIRS : "${gtk3}/share/gsettings-schemas/${gtk3.name}/" \
+      --set XDG_RUNTIME_DIR "XDG-RUNTIME-DIR" \
+      --prefix XDG_DATA_DIRS : "${gnome3.defaultIconTheme}/share"
 
     # Fix the desktop link
     substituteInPlace $out/share/applications/typora.desktop \

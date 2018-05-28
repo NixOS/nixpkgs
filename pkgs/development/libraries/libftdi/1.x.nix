@@ -22,6 +22,10 @@ stdenv.mkDerivation rec {
     ++ optionals pythonSupport [ python swig ]
     ++ optionals docSupport [ doxygen ];
 
+  preBuild = stdenv.lib.optionalString docSupport ''
+    make doc_i
+  '';
+
   propagatedBuildInputs = [ libusb1 ];
 
   postInstall = ''

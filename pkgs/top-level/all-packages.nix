@@ -2146,6 +2146,8 @@ with pkgs;
 
   mcrcon = callPackage ../tools/networking/mcrcon {};
 
+  s-tar = callPackages ../tools/archivers/s-tar {};
+
   tealdeer = callPackage ../tools/misc/tealdeer/default.nix { };
 
   uudeview = callPackage ../tools/misc/uudeview { };
@@ -10519,6 +10521,8 @@ with pkgs;
 
   libvdpau-va-gl = callPackage ../development/libraries/libvdpau-va-gl { };
 
+  libversion = callPackage ../development/libraries/libversion { };
+
   libvirt = callPackage ../development/libraries/libvirt { };
 
   libvirt-glib = callPackage ../development/libraries/libvirt-glib { };
@@ -12548,6 +12552,8 @@ with pkgs;
 
   mediatomb = callPackage ../servers/mediatomb { };
 
+  meguca = callPackage ../servers/meguca/default.nix { };
+
   memcached = callPackage ../servers/memcached {};
 
   meteor = callPackage ../servers/meteor/default.nix { };
@@ -13850,6 +13856,8 @@ with pkgs;
 
   dep = callPackage ../development/tools/dep { };
 
+  easyjson = callPackage ../development/tools/easyjson { };
+
   go-bindata = callPackage ../development/tools/go-bindata { };
 
   go-bindata-assetfs = callPackage ../development/tools/go-bindata-assetfs { };
@@ -13888,6 +13896,8 @@ with pkgs;
   go-langserver = callPackage ../development/tools/go-langserver { };
 
   gotests = callPackage ../development/tools/gotests { };
+
+  quicktemplate = callPackage ../development/tools/quicktemplate { };
 
   gogoclient = callPackage ../os-specific/linux/gogoclient { };
 
