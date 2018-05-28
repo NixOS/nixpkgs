@@ -45,10 +45,11 @@
 /nixos/modules/installer/tools/nixos-option.sh        @nbp
 
 # Python-related code and docs
-/pkgs/top-level/python-packages.nix     @FRidh
-/pkgs/development/interpreters/python   @FRidh
-/pkgs/development/python-modules        @FRidh
-/doc/languages-frameworks/python.md     @FRidh
+/maintainers/scripts/update-python-libraries	@FRidh
+/pkgs/top-level/python-packages.nix     	@FRidh
+/pkgs/development/interpreters/python   	@FRidh
+/pkgs/development/python-modules        	@FRidh
+/doc/languages-frameworks/python.md     	@FRidh
 
 # Haskell
 /pkgs/development/compilers/ghc                       @peti
