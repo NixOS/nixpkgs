@@ -9,6 +9,7 @@ buildPythonPackage rec {
   };
 
   buildInputs = [ setuptools_scm ];
+  propagatedBuildInputs = [ cxxfilt pygccxml ];
 
   checkInputs = [ pygccxml ];
 

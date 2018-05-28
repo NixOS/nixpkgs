@@ -21,7 +21,7 @@
 , dia, tetex ? null, ghostscript ? null, texlive ? null
 
 # generates python bindings
-, generateBindings ? false, ncurses ? null
+, pythonSupport ? false, ncurses ? null
 
 # All modules can be enabled by choosing 'all_modules'.
 # we include here the DCE mandatory ones
@@ -33,7 +33,7 @@
 let
   pythonEnv = python.withPackages(ps:
     stdenv.lib.optional withManual ps.sphinx
-    ++ stdenv.lib.optionals generateBindings (with ps;[ pybindgen pygccxml ])
+    ++ stdenv.lib.optionals pythonSupport (with ps;[ pybindgen pygccxml ])
   );
 in
 stdenv.mkDerivation rec {
@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
   };
 
   # ncurses is a hidden dependency of waf when checking python
-  buildInputs = lib.optionals generateBindings [ castxml ncurses ]
+  buildInputs = lib.optionals pythonSupport [ castxml ncurses ]
     ++ stdenv.lib.optional enableDoxygen [ doxygen graphviz imagemagick ]
     ++ stdenv.lib.optional withManual [ dia tetex ghostscript texlive.combined.scheme-medium ];
 
@@ -69,7 +69,7 @@ stdenv.mkDerivation rec {
       "--with-python=${pythonEnv.interpreter}"
   ]
   ++ optional (build_profile != null) "--build-profile=${build_profile}"
-  ++ optional generateBindings "--apiscan=all"
+  ++ optional pythonSupport "--apiscan=all"
   ++ optional withExamples " --enable-examples "
   ++ optional doCheck " --enable-tests "
   ;

@@ -282,6 +282,8 @@ in {
 
   cozy = callPackage ../development/python-modules/cozy { };
 
+  cxxfilt = callPackage ../development/python-modules/cxxfilt { };
+
   dendropy = callPackage ../development/python-modules/dendropy { };
 
   dependency-injector = callPackage ../development/python-modules/dependency-injector { };
