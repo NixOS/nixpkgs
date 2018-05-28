@@ -18171,6 +18171,8 @@ EOF
 
   radio_beam = callPackage ../development/python-modules/radio_beam { };
 
+  spectral-cube = callPackage ../development/python-modules/spectral-cube { };
+
 });
 
 in fix' (extends overrides packages)
