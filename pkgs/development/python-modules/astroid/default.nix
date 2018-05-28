@@ -6,11 +6,11 @@
 buildPythonPackage rec {
   name = "${pname}-${version}";
   pname = "astroid";
-  version = "1.6.3";
+  version = "1.6.4";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "35cfae47aac19c7b407b7095410e895e836f2285ccf1220336afba744cc4c5f2";
+    sha256 = "dea42ae6e0b789b543f728ddae7ddb6740ba33a49fb52c4a4d9cb7bb4aa6ec09";
   };
 
   propagatedBuildInputs = [ logilab_common six lazy-object-proxy wrapt ]
