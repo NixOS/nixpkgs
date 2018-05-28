@@ -32,6 +32,9 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ninja pkgconfig ];
 
+  # Not sure when and how to pass it.  It seems an upstream bug anyway.
+  CXXFLAGS = stdenv.lib.optionalString stdenv.cc.isClang "-std=c++11";
+
   cmakeFlags = [
     (mkFlag true "XPDF_HEADERS")
     (mkFlag (!minimal) "GLIB")
