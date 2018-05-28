@@ -5,7 +5,7 @@ The `buildPhase` and `installPhase` attributes can be reused directly
 in many cases. When more fine-grained control on how to run the “topkg”
 build system is required, the attribute `run` can be used.
 */
-{ stdenv, fetchurl, ocaml, findlib, ocamlbuild, result, opam }:
+{ stdenv, fetchurl, ocaml, findlib, ocamlbuild, result, opaline }:
 
 if !stdenv.lib.versionAtLeast ocaml.version "4.01"
 then throw "topkg is not available for OCaml ${ocaml.version}"
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
   unpackCmd = "tar xjf ${src}";
   buildPhase = "${run} build";
   createFindlibDestdir = true;
-  installPhase = "${opam}/bin/opam-installer -i --prefix=$out --libdir=$OCAMLFIND_DESTDIR";
+  installPhase = "${opaline}/bin/opaline -prefix $out -libdir $OCAMLFIND_DESTDIR";
 
   passthru = { inherit run; };
 
