@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, dpkg, makeDesktopItem, gnome3, atk, cairo, pango, gdk_pixbuf, glib
+{ stdenv, lib, fetchurl, dpkg, makeDesktopItem, gnome3, gtk2, atk, cairo, pango, gdk_pixbuf, glib
 , freetype, fontconfig, dbus, libnotify, libX11, xorg, libXi, libXcursor, libXdamage
 , libXrandr, libXcomposite, libXext, libXfixes, libXrender, libXtst, libXScrnSaver
 , nss, nspr, alsaLib, cups, expat, udev, xdg_utils, hunspell
@@ -16,7 +16,7 @@ let
     gdk_pixbuf
     glib
     gnome3.gconf
-    gnome3.gtk2
+    gtk2
     pango
     hunspell
     libnotify
