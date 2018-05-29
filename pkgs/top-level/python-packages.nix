@@ -2268,6 +2268,7 @@ in {
 
   edward = callPackage ../development/python-modules/edward { };
 
+  elasticsearch_5 = callPackage ../development/python-modules/elasticsearch/5.x.nix { };
   elasticsearch_6 = callPackage ../development/python-modules/elasticsearch/6.x.nix { };
   elasticsearch = self.elasticsearch_6;
 
