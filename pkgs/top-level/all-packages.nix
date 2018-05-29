@@ -21486,7 +21486,6 @@ with pkgs;
   ghc-standalone-archive = callPackage ../os-specific/darwin/ghc-standalone-archive { inherit (darwin) cctools; };
 
   chrome-gnome-shell = callPackage  ../desktops/gnome-3/extensions/chrome-gnome-shell {};
-  messenger-for-desktop = callPackage ../applications/networking/instant-messengers/messenger-for-desktop {};
 
   NSPlist = callPackage ../development/libraries/NSPlist {};
 
