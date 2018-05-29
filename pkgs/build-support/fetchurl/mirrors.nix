@@ -368,7 +368,6 @@ rec {
 
   # MySQL mirrors
   mysql = [
-    http://mysql.mirrors.pair.com/Downloads/
     http://cdn.mysql.com/Downloads/
   ];
 
