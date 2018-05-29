@@ -17,6 +17,8 @@ stdenv.mkDerivation rec {
     cd src
   '';
 
+  hardeningDisable = [ "format" ];
+
   meta = with stdenv.lib; {
     description = "A library to parse proxy auto-config (PAC) files";
     homepage = http://pacparser.manugarg.com/;
