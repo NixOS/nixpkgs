@@ -311,6 +311,8 @@ in {
 
   outcome = callPackage ../development/python-modules/outcome {};
 
+  pdfminer_six = callPackage ../development/python-modules/pdfminer_six { };
+
   plantuml = callPackage ../tools/misc/plantuml { };
 
   Pmw = callPackage ../development/python-modules/Pmw { };
