@@ -17204,6 +17204,8 @@ with pkgs;
 
   oblogout = callPackage ../tools/X11/oblogout { };
 
+  obs-linuxbrowser = callPackage ../applications/video/obs-studio/linuxbrowser.nix { };
+
   obs-studio = libsForQt5.callPackage ../applications/video/obs-studio {
     alsaSupport = stdenv.isLinux;
     pulseaudioSupport = config.pulseaudio or true;
