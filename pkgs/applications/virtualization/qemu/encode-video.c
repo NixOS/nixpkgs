@@ -538,6 +538,31 @@ static bool skip_header(int fd)
     return false;
 }
 
+static int get_thread_count(void)
+{
+    int threadcount;
+    char *tmp;
+
+    /* Use the value from NIX_BUILD_CORES and fall back to av_cpu_count() if
+     * it's either unset (when not within a Nix build process) or it's 0.
+     */
+    if ((tmp = getenv("NIX_BUILD_CORES")) == NULL)
+        threadcount = av_cpu_count();
+    else if ((threadcount = atoi(tmp)) == 0)
+        threadcount = av_cpu_count();
+
+    /* Use a maximum of 16 threads, otherwise libvpx bails out with a warning
+     * like this:
+     *
+     *   Application has requested 48 threads. Using a thread count greater
+     *   than 16 is not recommended.
+     */
+    if (threadcount > 16)
+        threadcount = 16;
+
+    return threadcount;
+}
+
 /* Small helper macro to ensure that error handling doesn't clutter up
  * readability.
  */
@@ -628,7 +653,7 @@ int main(int argc, char **argv)
     context->codec_id = fcontext->oformat->video_codec;
     context->time_base = (AVRational){1, 1000};
 
-    DICT_SET_INT(threads, av_cpu_count());
+    DICT_SET_INT(threads, get_thread_count());
 
     switch (context->codec_id) {
         case AV_CODEC_ID_VP8:
