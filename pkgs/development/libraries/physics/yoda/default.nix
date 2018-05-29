@@ -23,6 +23,8 @@ stdenv.mkDerivation rec {
     done
   '';
 
+  hardeningDisable = [ "format" ];
+
   meta = {
     description = "Provides small set of data analysis (specifically histogramming) classes";
     license     = stdenv.lib.licenses.gpl2;
