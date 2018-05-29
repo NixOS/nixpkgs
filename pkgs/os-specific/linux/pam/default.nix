@@ -33,21 +33,6 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  crossAttrs = {
-    propagatedBuildInputs = [ flex.crossDrv cracklib.crossDrv ];
-    preConfigure = preConfigure + ''
-      $crossConfig-ar x ${flex.crossDrv}/lib/libfl.a
-      mv libyywrap.o libyywrap-target.o
-      ar x ${flex}/lib/libfl.a
-      mv libyywrap.o libyywrap-host.o
-      export LDFLAGS="$LDFLAGS $PWD/libyywrap-target.o"
-      sed -e 's/@CC@/gcc/' -i doc/specs/Makefile.in
-    '';
-    postConfigure = ''
-      sed -e "s@ $PWD/libyywrap-target.o@ $PWD/libyywrap-host.o@" -i doc/specs/Makefile
-    '';
-  };
-
   postInstall = ''
     mv -v $out/sbin/unix_chkpwd{,.orig}
     ln -sv /run/wrappers/bin/unix_chkpwd $out/sbin/unix_chkpwd

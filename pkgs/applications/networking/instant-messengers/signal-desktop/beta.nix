@@ -83,5 +83,10 @@ in
       platforms   = [
         "x86_64-linux"
       ];
+      # Marked as broken on 2018-04-17. Reason: The most recent version is
+      # 1.8.0-beta.1, while this is still 1.1.0-beta.5 (2017-12-09). The stable
+      # package (signal-desktop) should be used instead (currently at version
+      # 1.7.1, i.e. up-to-date).
+      broken = true;
     };
   }

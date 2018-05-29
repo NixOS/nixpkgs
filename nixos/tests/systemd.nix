@@ -46,6 +46,8 @@ import ./make-test.nix {
 
   testScript = ''
     $machine->waitForX;
+    # wait for user services
+    $machine->waitForUnit("default.target","alice");
 
     # Regression test for https://github.com/NixOS/nixpkgs/issues/35415
     subtest "configuration files are recognized by systemd", sub {

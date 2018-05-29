@@ -386,6 +386,10 @@ in {
 
     services.nginx.enable = true;
     services.nginx.recommendedProxySettings = true;
+    # This fixes the test on i686
+    services.nginx.commonHttpConfig = ''
+      server_names_hash_bucket_size 64;
+    '';
     services.nginx.virtualHosts.${wfeDomain} = {
       onlySSL = true;
       enableACME = false;

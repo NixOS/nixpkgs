@@ -280,15 +280,26 @@ rec {
     # List or attribute set of ...
     loaOf = elemType:
       let
-        convertIfList = defIdx: def:
+        convertAllLists = defs:
+          let
+            padWidth = stringLength (toString (length defs));
+            unnamedPrefix = i: "unnamed-" + fixedWidthNumber padWidth i + ".";
+          in
+            imap1 (i: convertIfList (unnamedPrefix i)) defs;
+
+        convertIfList = unnamedPrefix: def:
           if isList def.value then
-            { inherit (def) file;
-              value = listToAttrs (
-                imap1 (elemIdx: elem:
-                  { name = elem.name or "unnamed-${toString defIdx}.${toString elemIdx}";
-                    value = elem;
-                  }) def.value);
-            }
+            let
+              padWidth = stringLength (toString (length def.value));
+              unnamed = i: unnamedPrefix + fixedWidthNumber padWidth i;
+            in
+              { inherit (def) file;
+                value = listToAttrs (
+                  imap1 (elemIdx: elem:
+                    { name = elem.name or (unnamed elemIdx);
+                      value = elem;
+                    }) def.value);
+              }
           else
             def;
         listOnly = listOf elemType;
@@ -297,7 +308,7 @@ rec {
         name = "loaOf";
         description = "list or attribute set of ${elemType.description}s";
         check = x: isList x || isAttrs x;
-        merge = loc: defs: attrOnly.merge loc (imap1 convertIfList defs);
+        merge = loc: defs: attrOnly.merge loc (convertAllLists defs);
         getSubOptions = prefix: elemType.getSubOptions (prefix ++ ["<name?>"]);
         getSubModules = elemType.getSubModules;
         substSubModules = m: loaOf (elemType.substSubModules m);

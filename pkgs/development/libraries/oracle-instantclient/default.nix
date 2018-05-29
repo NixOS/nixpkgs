@@ -1,10 +1,6 @@
-{ stdenv, requireFile, libelf, gcc, glibc, patchelf, unzip, rpmextract, libaio
-, odbcSupport ? false, unixODBC
-}:
+{ stdenv, requireFile, autoPatchelfHook, rpmextract, libaio, makeWrapper, odbcSupport ? false, unixODBC }:
 
 assert odbcSupport -> unixODBC != null;
-
-with stdenv.lib;
 
 let
     baseVersion = "12.2";
@@ -29,52 +25,26 @@ in stdenv.mkDerivation rec {
   version = "${baseVersion}.0.1.0";
   name = "oracle-instantclient-${version}";
 
-  srcBase = (requireSource version "1" "basic" "43c4bfa938af741ae0f9964a656f36a0700849f5780a2887c8e9f1be14fe8b66");
-  srcDevel = (requireSource version "1" "devel" "4c7ad8d977f9f908e47c5e71ce56c2a40c7dc83cec8a5c106b9ff06d45bb3442");
-  srcSqlplus = (requireSource version "1" "sqlplus" "303e82820a10f78e401e2b07d4eebf98b25029454d79f06c46e5f9a302ce5552");
-  srcOdbc = optionalString odbcSupport (requireSource version "2" "odbc" "e870c84d2d4be6f77c0760083b82b7ffbb15a4bf5c93c4e6c84f36d6ed4dfdf1");
+  buildInputs = [ libaio stdenv.cc.cc.lib ] ++ stdenv.lib.optional odbcSupport unixODBC;
+  nativeBuildInputs = [ autoPatchelfHook makeWrapper rpmextract ];
 
-  buildInputs = [ glibc patchelf rpmextract ] ++
-    optional odbcSupport unixODBC;
+  srcs = [
+    (requireSource version "1" "basic" "43c4bfa938af741ae0f9964a656f36a0700849f5780a2887c8e9f1be14fe8b66")
+    (requireSource version "1" "devel" "4c7ad8d977f9f908e47c5e71ce56c2a40c7dc83cec8a5c106b9ff06d45bb3442")
+    (requireSource version "1" "sqlplus" "303e82820a10f78e401e2b07d4eebf98b25029454d79f06c46e5f9a302ce5552")
+  ] ++ stdenv.lib.optional odbcSupport (requireSource version "2" "odbc" "e870c84d2d4be6f77c0760083b82b7ffbb15a4bf5c93c4e6c84f36d6ed4dfdf1");
 
-  buildCommand = ''
-    mkdir -p "${name}"
-    cd "${name}"
-    ${rpmextract}/bin/rpmextract "${srcBase}"
-    ${rpmextract}/bin/rpmextract "${srcDevel}"
-    ${rpmextract}/bin/rpmextract "${srcSqlplus}"
-    '' + optionalString odbcSupport ''${rpmextract}/bin/rpmextract ${srcOdbc}
-    '' + ''
+  unpackCmd = "rpmextract $curSrc";
+
+  installPhase = ''
     mkdir -p "$out/"{bin,include,lib,"share/${name}/demo/"}
-    mv "usr/share/oracle/${baseVersion}/client64/demo/"* "$out/share/${name}/demo/"
-    mv "usr/include/oracle/${baseVersion}/client64/"* "$out/include/"
-    mv "usr/lib/oracle/${baseVersion}/client64/lib/"* "$out/lib/"
-    mv "usr/lib/oracle/${baseVersion}/client64/bin/"* "$out/bin/"
-    ln -s "$out/bin/sqlplus" "$out/bin/sqlplus64"
 
-    for lib in $out/lib/lib*.so; do
-      test -f $lib || continue
-      chmod +x $lib
-      patchelf --force-rpath --set-rpath "$out/lib:${libaio}/lib" \
-               $lib
-    done
-
-    for lib in $out/lib/libsqora*; do
-      test -f $lib || continue
-      chmod +x $lib
-      patchelf --force-rpath --set-rpath "$out/lib:${unixODBC}/lib" \
-               $lib
-    done
-
-    for exe in $out/bin/sqlplus; do
-      patchelf --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker) \
-               --force-rpath --set-rpath "$out/lib:${libaio}/lib" \
-               $exe
-    done
+    install -Dm755 lib/oracle/${baseVersion}/client64/bin/* $out/bin
+    ln -s $out/bin/sqlplus $out/bin/sqlplus64
+    install -Dm644 lib/oracle/${baseVersion}/client64/lib/* $out/lib
+    install -Dm644 include/oracle/${baseVersion}/client64/* $out/include
+    install -Dm644 share/oracle/${baseVersion}/client64/demo/* $out/share/${name}/demo
   '';
-
-  dontStrip = true;
-  dontPatchELF = true;
 
   meta = with stdenv.lib; {
     description = "Oracle instant client libraries and sqlplus CLI";
@@ -85,6 +55,7 @@ in stdenv.mkDerivation rec {
     '';
     license = licenses.unfree;
     platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [ pesterhazy ];
+    maintainers = with maintainers; [ pesterhazy flokli ];
+    hydraPlatforms = [];
   };
 }

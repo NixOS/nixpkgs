@@ -91,6 +91,17 @@ let
       x86hash   = "117fwynpxfnrw98933y8z8v2q4g6ycs1sngvpbki2qj09bjkwmag";
       x64suffix = "102";
       x86suffix = "102";
+      homepage  = https://www.citrix.com/downloads/citrix-receiver/linux/receiver-for-linux-latest.html; # This version has disappeared from Citrix's website... *sigh*
+    };
+
+    "13.9.1" = {
+      major     = "13";
+      minor     = "9";
+      patch     = "1";
+      x64hash   = "A9A9157CE8C287E8AA11447A0E3C3AB7C227330E9D8882C6F7B938A4DD5925BC";
+      x86hash   = "A93E9770FD10FDD3586A2D47448559EA037265717A7000B9BD2B1DCCE7B0A483";
+      x64suffix = "6";
+      x86suffix = "6";
       homepage  = https://www.citrix.com/downloads/citrix-receiver/linux/receiver-for-linux-latest.html;
     };
   };

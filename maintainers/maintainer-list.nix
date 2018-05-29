@@ -68,6 +68,11 @@
     github = "FireyFly";
     name = "Jonas Höglund";
   };
+  Fresheyeball = {
+    email = "fresheyeball@gmail.com";
+    github = "fresheyeball";
+    name = "Isaac Shapira";
+  };
   Gonzih = {
     email = "gonzih@gmail.com";
     github = "Gonzih";
@@ -3441,6 +3446,11 @@
     email = "octavian.cerna@gmail.com";
     github = "tavyc";
     name = "Octavian Cerna";
+  };
+  tazjin = {
+    email = "mail@tazj.in";
+    github = "tazjin";
+    name = "Vincent Ambo";
   };
   teh = {
     email = "tehunger@gmail.com";

@@ -1,0 +1,27 @@
+From 355b9d812efdfbd041e14b365258b69c81689981 Mon Sep 17 00:00:00 2001
+From: Florian Klink <flokli@flokli.de>
+Date: Thu, 17 May 2018 18:37:40 +0200
+Subject: [PATCH] odpi/src/dpiOci.c: nixify libclntsh.so dlopen
+
+---
+ odpi/src/dpiOci.c | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/odpi/src/dpiOci.c b/odpi/src/dpiOci.c
+index 76b9867..22c2987 100644
+--- a/odpi/src/dpiOci.c
++++ b/odpi/src/dpiOci.c
+@@ -1575,6 +1575,10 @@ static int dpiOci__loadLib(dpiError *error)
+             }
+         }
+     }
++    if(!dpiOciLibHandle) {
++        dpiOciLibHandle = dlopen("@libclntsh@", RTLD_LAZY);
++    }
++
+ #endif
+ 
+     if (!dpiOciLibHandle) {
+-- 
+2.16.3
+

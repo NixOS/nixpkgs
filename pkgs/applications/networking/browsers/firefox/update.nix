@@ -28,7 +28,5 @@ writeScript "update-${attrPath}" ''
            sort --version-sort | \
            tail -n 1`
 
-  shasum=`curl --silent $url$version/SHA512SUMS | grep 'source\.tar\.xz' | cut -d ' ' -f 1`
-
-  update-source-version ${attrPath} "$version" "$shasum"
+  update-source-version ${attrPath} "$version"
 ''

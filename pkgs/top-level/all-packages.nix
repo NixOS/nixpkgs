@@ -1240,6 +1240,8 @@ with pkgs;
 
   goa = callPackage ../development/tools/goa { };
 
+  gohai = callPackage ../tools/system/gohai { };
+
   gorilla-bin = callPackage ../tools/security/gorilla-bin { };
 
   gosu = callPackage ../tools/misc/gosu { };
@@ -1595,7 +1597,8 @@ with pkgs;
 
   ciopfs = callPackage ../tools/filesystems/ciopfs { };
 
-  citrix_receiver        = hiPrio citrix_receiver_13_9_0;
+  citrix_receiver        = hiPrio citrix_receiver_13_9_1;
+  citrix_receiver_13_9_1 = callPackage ../applications/networking/remote/citrix-receiver { version = "13.9.1"; };
   citrix_receiver_13_9_0 = callPackage ../applications/networking/remote/citrix-receiver { version = "13.9.0"; };
   citrix_receiver_13_8_0 = callPackage ../applications/networking/remote/citrix-receiver { version = "13.8.0"; };
   citrix_receiver_13_7_0 = callPackage ../applications/networking/remote/citrix-receiver { version = "13.7.0"; };
@@ -4381,6 +4384,8 @@ with pkgs;
 
   pytrainer = callPackage ../applications/misc/pytrainer { };
 
+  pywal = callPackage ../tools/graphics/pywal {};
+
   remarshal = callPackage ../development/tools/remarshal { };
 
   rtaudio = callPackage ../development/libraries/audio/rtaudio { };
@@ -5522,28 +5527,14 @@ with pkgs;
 
   x11_ssh_askpass = callPackage ../tools/networking/x11-ssh-askpass { };
 
-  xbursttools = assert stdenv ? glibc; callPackage ../tools/misc/xburst-tools rec {
+  xbursttools = callPackage ../tools/misc/xburst-tools {
     # It needs a cross compiler for mipsel to build the firmware it will
     # load into the Ben Nanonote
-    crossPrefix = "mipsel-unknown-linux-gnu";
     gccCross =
       let
         pkgsCross = nixpkgsFun {
           # Ben Nanonote system
-          crossSystem = {
-            config = crossPrefix;
-            arch = "mips";
-            float = "soft";
-            libc = "uclibc";
-            platform = {
-              name = "ben_nanonote";
-              kernelMajor = "2.6";
-              kernelArch = "mips";
-            };
-            gcc = {
-              arch = "mips32";
-            };
-          };
+          crossSystem = lib.systems.examples.ben-nanonote;
         };
       in
         pkgsCross.buildPackages.gccCrossStageStatic;
@@ -8992,7 +8983,7 @@ with pkgs;
     # hack fixes the hack, *sigh*.
     /**/ if name == "glibc" then targetPackages.glibcCross or glibcCross
     else if name == "bionic" then targetPackages.bionic
-    else if name == "uclibc" then uclibcCross
+    else if name == "uclibc" then targetPackages.uclibcCross
     else if name == "musl" then targetPackages.muslCross or muslCross
     else if name == "msvcrt" then targetPackages.windows.mingw_w64 or windows.mingw_w64
     else if name == "libSystem" then darwin.xcode
@@ -12059,6 +12050,10 @@ with pkgs;
     go = go_1_9;
   };
 
+  buildGo110Package = callPackage ../development/go-modules/generic {
+    go = go_1_10;
+  };
+
   buildGoPackage = buildGo19Package;
 
   go2nix = callPackage ../development/tools/go2nix { };
@@ -12875,7 +12870,7 @@ with pkgs;
     inherit clangStdenv fetchurl fetchgit fetchpatch stdenv intltool freetype fontconfig
       libxslt expat libpng zlib perl mesa_drivers spice-protocol libunwind
       dbus libuuid openssl gperf m4 libevdev tradcpp libinput mcpp makeWrapper autoreconfHook
-      autoconf automake libtool mtdev pixman
+      autoconf automake libtool mtdev pixman libGL libGLU
       cairo epoxy;
     inherit (buildPackages) pkgconfig xmlto asciidoc flex bison;
     inherit (darwin) apple_sdk cf-private libobjc;
@@ -13339,6 +13334,21 @@ with pkgs;
       ];
   };
 
+  linux_4_16 = callPackage ../os-specific/linux/kernel/linux-4.16.nix {
+    kernelPatches =
+      [ kernelPatches.bridge_stp_helper
+        # See pkgs/os-specific/linux/kernel/cpu-cgroup-v2-patches/README.md
+        # when adding a new linux version
+        # kernelPatches.cpu-cgroup-v2."4.11"
+        kernelPatches.modinst_arg_list_too_long
+      ]
+      ++ lib.optionals ((platform.kernelArch or null) == "mips")
+      [ kernelPatches.mips_fpureg_emu
+        kernelPatches.mips_fpu_sigill
+        kernelPatches.mips_ext3_n32
+      ];
+  };
+
   linux_testing = callPackage ../os-specific/linux/kernel/linux-testing.nix {
     kernelPatches = [
       kernelPatches.bridge_stp_helper
@@ -13530,7 +13540,7 @@ with pkgs;
   linux = linuxPackages.kernel;
 
   # Update this when adding the newest kernel major version!
-  linuxPackages_latest = linuxPackages_4_15;
+  linuxPackages_latest = linuxPackages_4_16;
   linux_latest = linuxPackages_latest.kernel;
 
   # Build the kernel modules for the some of the kernels.
@@ -13541,6 +13551,7 @@ with pkgs;
   linuxPackages_4_9 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_4_9);
   linuxPackages_4_14 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_4_14);
   linuxPackages_4_15 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_4_15);
+  linuxPackages_4_16 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_4_16);
   # Don't forget to update linuxPackages_latest!
 
   # Intentionally lacks recurseIntoAttrs, as -rc kernels will quite likely break out-of-tree modules and cause failed Hydra builds.
@@ -13980,10 +13991,9 @@ with pkgs;
 
   uclibc = callPackage ../os-specific/linux/uclibc { };
 
-  uclibcCross = lowPrio (callPackage ../os-specific/linux/uclibc {
-    gccCross = gccCrossStageStatic;
-    cross = assert targetPlatform != buildPlatform; targetPlatform;
-  });
+  uclibcCross = callPackage ../os-specific/linux/uclibc {
+    stdenv = crossLibcStdenv;
+  };
 
   udev = systemd;
   libudev = udev;
@@ -14029,23 +14039,13 @@ with pkgs;
 
     jom = callPackage ../os-specific/windows/jom { };
 
-    w32api = callPackage ../os-specific/windows/w32api {
-      gccCross = gccCrossStageStatic;
-      binutils = binutils;
-    };
+    w32api = callPackage ../os-specific/windows/w32api { };
 
-    w32api_headers = w32api.override {
-      onlyHeaders = true;
-    };
+    w32api_headers = callPackage ../os-specific/windows/w32api/headers { };
 
-    mingw_runtime = callPackage ../os-specific/windows/mingwrt {
-      gccCross = gccCrossMingw2;
-      binutils = binutils;
-    };
+    mingw_runtime = callPackage ../os-specific/windows/mingwrt { };
 
-    mingw_runtime_headers = mingw_runtime.override {
-      onlyHeaders = true;
-    };
+    mingw_runtime_headers = callPackage ../os-specific/windows/mingwrt/headers.nix { };
 
     mingw_headers1 = buildEnv {
       name = "mingw-headers-1";
@@ -15150,10 +15150,10 @@ with pkgs;
   # go 1.9 pin until https://github.com/moby/moby/pull/35739
   inherit (callPackage ../applications/virtualization/docker { go = go_1_9; })
     docker_18_03
-    docker_18_04;
+    docker_18_05;
 
   docker = docker_18_03;
-  docker-edge = docker_18_04;
+  docker-edge = docker_18_05;
 
   docker-proxy = callPackage ../applications/virtualization/docker/proxy.nix { };
 
@@ -15686,11 +15686,14 @@ with pkgs;
   });
 
   firefox-unwrapped = firefoxPackages.firefox;
-  firefox-esr-unwrapped = firefoxPackages.firefox-esr;
+  firefox-esr-52-unwrapped = firefoxPackages.firefox-esr-52;
+  firefox-esr-60-unwrapped = firefoxPackages.firefox-esr-60;
   tor-browser-unwrapped = firefoxPackages.tor-browser;
 
   firefox = wrapFirefox firefox-unwrapped { };
-  firefox-esr = wrapFirefox firefox-esr-unwrapped { };
+  firefox-esr-52 = wrapFirefox firefox-esr-52-unwrapped { };
+  firefox-esr-60 = wrapFirefox firefox-esr-60-unwrapped { };
+  firefox-esr = firefox-esr-52;
 
   firefox-bin-unwrapped = callPackage ../applications/networking/browsers/firefox-bin {
     channel = "release";
@@ -20495,6 +20498,8 @@ with pkgs;
   nix-template-rpm = callPackage ../build-support/templaterpm { inherit (pythonPackages) python toposort; };
 
   nix-repl = callPackage ../tools/package-management/nix-repl { nix = nix1; };
+
+  nix-review = callPackage ../tools/package-management/nix-review { };
 
   nix-serve = callPackage ../tools/package-management/nix-serve { };
 

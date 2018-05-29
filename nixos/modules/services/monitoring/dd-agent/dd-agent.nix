@@ -57,7 +57,7 @@ let
     instances:
       - use_mount: no
   '';
-  
+
   networkConfig = pkgs.writeText "network.yaml" ''
     init_config:
 
@@ -68,13 +68,13 @@ let
           - lo
           - lo0
   '';
-  
+
   postgresqlConfig = pkgs.writeText "postgres.yaml" cfg.postgresqlConfig;
   nginxConfig = pkgs.writeText "nginx.yaml" cfg.nginxConfig;
   mongoConfig = pkgs.writeText "mongo.yaml" cfg.mongoConfig;
   jmxConfig = pkgs.writeText "jmx.yaml" cfg.jmxConfig;
   processConfig = pkgs.writeText "process.yaml" cfg.processConfig;
-  
+
   etcfiles =
     let
       defaultConfd = import ./dd-agent-defaults.nix;
@@ -150,7 +150,7 @@ in {
       default = null;
       type = types.uniq (types.nullOr types.string);
     };
-    
+
     mongoConfig = mkOption {
       description = "MongoDB integration configuration";
       default = null;
@@ -166,7 +166,7 @@ in {
     processConfig = mkOption {
       description = ''
         Process integration configuration
- 
+
         See http://docs.datadoghq.com/integrations/process/
       '';
       default = null;
@@ -190,7 +190,7 @@ in {
 
     systemd.services.dd-agent = {
       description = "Datadog agent monitor";
-      path = [ pkgs."dd-agent" pkgs.python pkgs.sysstat pkgs.procps ];
+      path = [ pkgs."dd-agent" pkgs.python pkgs.sysstat pkgs.procps pkgs.gohai ];
       wantedBy = [ "multi-user.target" ];
       serviceConfig = {
         ExecStart = "${pkgs.dd-agent}/bin/dd-agent foreground";

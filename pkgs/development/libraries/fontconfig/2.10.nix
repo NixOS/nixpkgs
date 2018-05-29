@@ -24,7 +24,9 @@ stdenv.mkDerivation rec {
   ];
 
   # We should find a better way to access the arch reliably.
-  crossArch = hostPlatform.arch or null;
+  crossArch = if stdenv.hostPlatform != stdenv.buildPlatform
+    then hostPlatform.parsed.cpu.name
+    else null;
 
   preConfigure = ''
     if test -n "$crossConfig"; then

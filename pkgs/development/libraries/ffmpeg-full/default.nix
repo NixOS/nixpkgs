@@ -442,7 +442,7 @@ stdenv.mkDerivation rec {
       "--cross-prefix=${stdenv.cc.targetPrefix}"
       "--enable-cross-compile"
       "--target_os=${hostPlatform.parsed.kernel.name}"
-      "--arch=${hostPlatform.arch}"
+      "--arch=${hostPlatform.parsed.cpu.name}"
     ];
   };
 

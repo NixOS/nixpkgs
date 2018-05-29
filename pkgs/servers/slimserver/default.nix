@@ -1,5 +1,5 @@
-{ stdenv, buildPerlPackage, fetchurl
-, perl, perlPackages }:
+{ stdenv, buildPerlPackage, fetchurl, makeWrapper
+, perl, perlPackages, flac, faad2, sox, lame, monkeysAudio, wavpack }:
 
 buildPerlPackage rec {
   name = "slimserver-${version}";
@@ -11,6 +11,7 @@ buildPerlPackage rec {
   };
 
   buildInputs = [
+    makeWrapper
     perl
     perlPackages.AnyEvent
     perlPackages.AudioScan
@@ -70,17 +71,19 @@ buildPerlPackage rec {
 
   preConfigurePhase = "";
 
-  buildPhase = "
+  buildPhase = ''
     mv lib tmp
     mkdir -p lib/perl5/site_perl
     mv CPAN_used/* lib/perl5/site_perl
     cp -rf tmp/* lib/perl5/site_perl
-  ";
+  '';
 
   doCheck = false;
 
   installPhase = ''
     cp -r . $out
+    wrapProgram $out/slimserver.pl \
+      --prefix PATH : "${stdenv.lib.makeBinPath [ lame flac faad2 sox monkeysAudio wavpack ]}"
   '';
 
   outputs = [ "out" ];

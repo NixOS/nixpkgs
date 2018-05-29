@@ -194,7 +194,7 @@ in
     }
     // lib.optionalAttrs (config.services.postgresql.enable) { postgresql-database = {
       } // lib.optionalAttrs (cfg.enableAuthentication) {
-        postgresqlUsername = "postgres";
+        postgresqlUsername = "root";
       };
     }
     // lib.optionalAttrs (config.services.tomcat.enable) { tomcat-webapplication = {
