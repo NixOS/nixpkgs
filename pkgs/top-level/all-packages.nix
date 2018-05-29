@@ -13548,7 +13548,9 @@ with pkgs;
 
     batman_adv = callPackage ../os-specific/linux/batman-adv {};
 
-    bcc = callPackage ../os-specific/linux/bcc { };
+    bcc = callPackage ../os-specific/linux/bcc {
+      python = python3;
+    };
 
     bbswitch = callPackage ../os-specific/linux/bbswitch {};
 
