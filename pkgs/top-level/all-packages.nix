@@ -2060,8 +2060,6 @@ with pkgs;
 
   eid-mw = callPackage ../tools/security/eid-mw { };
 
-  eid-viewer = callPackage ../tools/security/eid-viewer { };
-
   mcrcon = callPackage ../tools/networking/mcrcon {};
 
   uudeview = callPackage ../tools/misc/uudeview { };
