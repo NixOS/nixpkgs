@@ -759,6 +759,8 @@ let
       "LUA_CMOD_INSTALLDIR=$(out)/lib/lua/${lua.luaversion}"
     ];
 
+    hardeningDisable = [ "fortify" ];
+
     meta = with stdenv.lib; {
       description = "Lua bindings for libmpack";
       homepage = "https://github.com/libmpack/libmpack-lua";
