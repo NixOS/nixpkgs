@@ -64,6 +64,9 @@ stdenv.mkDerivation rec {
     rm "$out/share/icons/hicolor/icon-theme.cache"
   '';
 
+  # 0.92.3 complains about an invalid conversion from const char * to char *
+  NIX_CFLAGS_COMPILE = " -fpermissive ";
+
   meta = with lib; {
     license = "GPL";
     homepage = https://www.inkscape.org;
