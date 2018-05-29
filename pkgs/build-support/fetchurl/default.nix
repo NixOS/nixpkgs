@@ -74,7 +74,7 @@ let
   name_ = baseNameOf (toString url);
 in
 stdenvNoCC.mkDerivation {
-  builder = "builtin:fetchurl";
+  realBuilder = "builtin:fetchurl";
   preferLocalBuild = true;
   impureEnvVars = [
     # We borrow these environment variables from the caller to allow
