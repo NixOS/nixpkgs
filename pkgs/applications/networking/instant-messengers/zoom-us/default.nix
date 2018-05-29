@@ -104,6 +104,7 @@ in stdenv.mkDerivation {
 
   meta = {
     homepage = https://zoom.us/;
+    releaseNews = "https://support.zoom.us/hc/en-us/articles/205759689-New-Updates-for-Linux";
     description = "zoom.us video conferencing application";
     license = stdenv.lib.licenses.unfree;
     platforms = builtins.attrNames srcs;

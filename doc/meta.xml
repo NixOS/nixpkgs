@@ -14,7 +14,7 @@ meta = with stdenv.lib; {
     GNU Hello is a program that prints "Hello, world!" when you run it.
     It is fully customizable.
   '';
-  homepage = http://www.gnu.org/software/hello/manual/;
+  homepage = https://www.gnu.org/software/hello/manual/;
   license = licenses.gpl3Plus;
   maintainers = [ maintainers.eelco ];
   platforms = platforms.all;
@@ -35,11 +35,11 @@ $ nix-env -qa hello --json
     "hello": {
         "meta": {
             "description": "A program that produces a familiar, friendly greeting",
-            "homepage": "http://www.gnu.org/software/hello/manual/",
+            "homepage": "https://www.gnu.org/software/hello/manual/",
             "license": {
                 "fullName": "GNU General Public License version 3 or later",
                 "shortName": "GPLv3+",
-                "url": "http://www.fsf.org/licensing/licenses/gpl.html"
+                "url": "https://www.fsf.org/licensing/licenses/gpl.html"
             },
             "longDescription": "GNU Hello is a program that prints \"Hello, world!\" when you run it.\nIt is fully customizable.\n",
             "maintainers": [
@@ -131,7 +131,7 @@ hello-2.3  A program that produces a familiar, friendly greeting
     <listitem>
      <para>
       The package’s homepage. Example:
-      <literal>http://www.gnu.org/software/hello/manual/</literal>
+      <literal>https://www.gnu.org/software/hello/</literal>
      </para>
     </listitem>
    </varlistentry>
@@ -141,7 +141,17 @@ hello-2.3  A program that produces a familiar, friendly greeting
     <listitem>
      <para>
       The page where a link to the current version can be found. Example:
-      <literal>http://ftp.gnu.org/gnu/hello/</literal>
+      <literal>https://ftp.gnu.org/gnu/hello/</literal>
+     </para>
+    </listitem>
+   </varlistentry>
+   <varlistentry>
+    <term><varname>releaseNews</varname>
+    </term>
+    <listitem>
+     <para>
+      The package’s release news page. May be a link to RSS news feed. Example:
+      <literal>https://savannah.gnu.org/news/atom.php?group=hello</literal>
      </para>
     </listitem>
    </varlistentry>
