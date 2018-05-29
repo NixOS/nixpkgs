@@ -2268,7 +2268,8 @@ in {
 
   edward = callPackage ../development/python-modules/edward { };
 
-  elasticsearch = callPackage ../development/python-modules/elasticsearch { };
+  elasticsearch_6 = callPackage ../development/python-modules/elasticsearch/6.x.nix { };
+  elasticsearch = self.elasticsearch_6;
 
   elasticsearchdsl = buildPythonPackage (rec {
     name = "elasticsearch-dsl-0.0.9";
