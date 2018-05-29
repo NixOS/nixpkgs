@@ -52,7 +52,7 @@ let
     hitori gnome-taquin
   ];
 
-  inherit (pkgs) atk glib gobjectIntrospection gtk2 webkitgtk gtk3 gtkmm3 libcanberra-gtk2
+  inherit (pkgs) atk glib gobjectIntrospection webkitgtk gtk3 gtkmm3
     libgtop libgudev libhttpseverywhere librsvg libsecret gdk_pixbuf gtksourceview gtksourceview4
     easytag meld orca rhythmbox shotwell gnome-usage
     clutter clutter-gst clutter-gtk cogl gtkvnc libdazzle;
@@ -421,7 +421,6 @@ let
   gnome_themes_standard = gnome-themes-standard; # added 2018-02-25
   gnome-tweak-tool = gnome-tweaks; # added 2018-03-21
   gsettings_desktop_schemas = gsettings-desktop-schemas; # added 2018-02-25
-  libcanberra_gtk2 = libcanberra-gtk2; # added 2018-02-25
   libgames-support = libgnome-games-support; # added 2018-03-14
   libgnome_keyring = libgnome-keyring; # added 2018-02-25
   inherit (pkgs) rarian; # added 2018-04-25
