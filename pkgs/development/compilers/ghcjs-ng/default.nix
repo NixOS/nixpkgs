@@ -14,7 +14,9 @@
 , xorg
 , gmp
 , pkgconfig
+, gcc
 , lib
+, nodePackages
 , ghcjsDepOverrides ? (_:_:{})
 }:
 
@@ -40,6 +42,8 @@ let
     inherit (bootGhcjs) version;
     isGhcjs = true;
 
+    socket-io = nodePackages."socket.io";
+
     # Relics of the old GHCJS build system
     stage1Packages = [];
     mkStage2 = _: {};
@@ -49,7 +53,7 @@ let
   libexec =
     if builtins.compareVersions bootGhcjs.version "8.3" <= 0
       then "${bootGhcjs}/bin"
-      else "${bootGhcjs}/libexec/${stdenv.system}-${passthru.bootPkgs.ghc.name}/${bootGhcjs.name}";
+      else "${bootGhcjs}/libexec/${builtins.replaceStrings ["darwin"] ["osx"] stdenv.system}-${passthru.bootPkgs.ghc.name}/${bootGhcjs.name}";
 
 in stdenv.mkDerivation {
     name = "ghcjs";
@@ -63,6 +67,8 @@ in stdenv.mkDerivation {
       xorg.lndir
       gmp
       pkgconfig
+    ] ++ lib.optionals stdenv.isDarwin [
+      gcc # https://github.com/ghcjs/ghcjs/issues/663
     ];
     phases = ["unpackPhase" "buildPhase"];
     buildPhase = ''
