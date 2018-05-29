@@ -1,6 +1,6 @@
 { stdenv, fetchurl, dpkg, makeWrapper
-, alsaLib, atk, cairo, cups, curl, dbus, expat, fontconfig, freetype, glib, glibc, gnome3
-, libnotify, libpulseaudio, libsecret, libstdcxx5, libv4l, nspr, nss, pango, systemd, xorg }:
+, alsaLib, atk, cairo, cups, curl, dbus, expat, fontconfig, freetype, gdk_pixbuf, glib, glibc, gnome3
+, gtk2, libnotify, libpulseaudio, libsecret, libstdcxx5, libv4l, nspr, nss, pango, systemd, xorg }:
 
 let
 
@@ -23,8 +23,8 @@ let
     libsecret
 
     gnome3.gconf
-    gnome3.gdk_pixbuf
-    gnome3.gtk2
+    gdk_pixbuf
+    gtk2
     
 
     gnome3.gnome-keyring
