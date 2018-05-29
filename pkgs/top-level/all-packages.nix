@@ -10354,6 +10354,8 @@ with pkgs;
 
   libmx = callPackage ../development/libraries/libmx { };
 
+  libndctl = callPackage ../development/libraries/libndctl { };
+
   libnet = callPackage ../development/libraries/libnet { };
 
   libnetfilter_conntrack = callPackage ../development/libraries/libnetfilter_conntrack { };
