@@ -328,11 +328,23 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
     postInstall = ''
         mkdir -pv "$out/lib/dotnet/${baseName}"
         ln -sv "${pkgs.z3}/bin/z3" "$out/lib/dotnet/${baseName}/z3.exe"
+
+        # so that this derivation can be used as a vim plugin to install syntax highlighting
+        vimdir=$out/share/vim-plugins/boogie
+        install -Dt $vimdir/syntax/ Util/vim/syntax/boogie.vim
+        mkdir $vimdir/ftdetect
+        echo 'au BufRead,BufNewFile *.bpl set filetype=boogie' > $vimdir/ftdetect/bpl.vim
     '';
 
     meta = with stdenv.lib; {
       description = "An intermediate verification language";
       homepage = "https://github.com/boogie-org/boogie";
+      longDescription = ''
+        Boogie is an intermediate verification language (IVL), intended as a
+        layer on which to build program verifiers for other languages.
+
+        This derivation may be used as a vim plugin to provide syntax highlighting.
+      '';
       license = licenses.mspl;
       maintainers = [ maintainers.taktoa ];
       platforms = with platforms; (linux ++ darwin);
