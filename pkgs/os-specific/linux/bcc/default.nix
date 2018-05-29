@@ -1,7 +1,10 @@
 { stdenv, fetchFromGitHub, fetchpatch, makeWrapper, cmake, llvmPackages, kernel
 , flex, bison, elfutils, python, pythonPackages, luajit, netperf, iperf, libelf
 , systemtap
+, pythonSupport ? true
 }:
+
+with stdenv;
 
 stdenv.mkDerivation rec {
   version = "0.5.0";
@@ -13,6 +16,8 @@ stdenv.mkDerivation rec {
     rev = "v${version}";
     sha256 = "0bb3244xll5sqx0lvrchg71qy2zg0yj6r5h4v5fvrg1fjhaldys9";
   };
+
+  outputs = [ "out" ] ++ lib.optional pythonSupport "py";
 
   buildInputs = [
     llvmPackages.llvm llvmPackages.clang-unwrapped kernel
@@ -28,6 +33,11 @@ stdenv.mkDerivation rec {
     })
   ];
 
+  postPatch = lib.optionalString pythonSupport ''
+    substituteInPlace src/python/bcc/libbcc.py --replace \
+      "libbcc.so.0" "$out/lib/libbcc.so.0"
+  '';
+
   nativeBuildInputs = [ makeWrapper cmake flex bison ]
     # libelf is incompatible with elfutils-libelf
     ++ stdenv.lib.filter (x: x != libelf) kernel.moduleBuildDependencies;
@@ -37,6 +47,7 @@ stdenv.mkDerivation rec {
       "-DREVISION=${version}"
       "-DENABLE_USDT=ON"
       "-DENABLE_CPP_API=ON"
+      "-DPYTHON_CMD=${python.interpreter}"
     ];
 
   postInstall = ''
@@ -47,13 +58,17 @@ stdenv.mkDerivation rec {
 
     find $out/share/bcc/tools -type f -executable -print0 | \
     while IFS= read -r -d ''$'\0' f; do
-      pythonLibs="$out/lib/python2.7/site-packages:${pythonPackages.netaddr}/lib/${python.libPrefix}/site-packages"
+      pythonLibs="${if pythonSupport then "$py" else "$out"}/lib/python2.7/site-packages:${pythonPackages.netaddr}/lib/${python.libPrefix}/site-packages"
       rm -f $out/bin/$(basename $f)
       makeWrapper $f $out/bin/$(basename $f) \
         --prefix LD_LIBRARY_PATH : $out/lib \
         --prefix PYTHONPATH : "$pythonLibs"
     done
-  '';
+  ''
+  + lib.optionalString pythonSupport ''
+    moveToOutput lib/python2.7 "$py"
+  ''
+  ;
 
   meta = with stdenv.lib; {
     description = "Dynamic Tracing Tools for Linux";

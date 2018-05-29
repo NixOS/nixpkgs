@@ -211,6 +211,8 @@ in {
 
   bayespy = callPackage ../development/python-modules/bayespy { };
 
+  bcc-python = (toPythonModule (pkgs.linuxPackages.bcc.override{pythonSupport=true; inherit python;})).py;
+
   bitcoinlib = callPackage ../development/python-modules/bitcoinlib { };
 
   bitcoin-price-api = callPackage ../development/python-modules/bitcoin-price-api { };
