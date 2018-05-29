@@ -168,6 +168,8 @@ stdenv.mkDerivation rec {
   # that in turn causes GHCi to abort
   stripDebugFlags = [ "-S" ] ++ stdenv.lib.optional (!targetPlatform.isDarwin) "--keep-file-symbols";
 
+  hardeningDisable = [ "format" ];
+
   checkTarget = "test";
 
   postInstall = ''
