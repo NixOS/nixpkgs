@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchFromGitHub, six, pycryptodome, chardet, nose, pytest }:
+{ stdenv, buildPythonPackage, python, fetchFromGitHub, six, pycryptodome, chardet, nose, pytest }:
 
 buildPythonPackage rec {
   pname = "pdfminer_six";
@@ -15,13 +15,7 @@ buildPythonPackage rec {
   
   checkInputs = [ nose pytest ];
   checkPhase = ''
-    # some crappy hack to ensure the test do not fail for python3
-    # for some reason importing from the folder tools fails :\
-    cp tools/dumppdf.py tests/
-    cp tools/pdf2txt.py tests/
-    sed -i '/from tools import dumppdf/c\    import dumppdf' tests/test_tools_dumppdf.py
-    sed -i '/import tools.pdf2txt as pdf2txt/c\import pdf2txt as pdf2txt' tests/test_tools_pdf2txt.py
-    pytest
+    ${python.interpreter} -m pytest
   '';
 
   meta = with stdenv.lib; {
