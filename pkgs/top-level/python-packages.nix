@@ -1325,7 +1325,7 @@ in {
     #setupPyBuildFlags = [ "--berkeley-db=${pkgs.db}" ];
     # We can also use a variable
     preConfigure = ''
-      export BERKELEYDB_DIR=${pkgs.db};
+      export BERKELEYDB_DIR=${pkgs.db.dev};
     '';
 
     meta = {
