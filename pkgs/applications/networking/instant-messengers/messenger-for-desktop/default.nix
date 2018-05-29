@@ -1,6 +1,6 @@
 {
   stdenv, fetchurl, dpkg, alsaLib, atk, cairo, pango, cups, curl, dbus, expat,
-  fontconfig, freetype, glib, gnome3, libnotify, nspr, nss, systemd, xorg
+  fontconfig, freetype, glib, gnome3, gtk2, gdk_pixbuf, libnotify, nspr, nss, systemd, xorg
 }:
 
 with stdenv.lib;
@@ -21,8 +21,8 @@ let
     freetype
     glib
     gnome3.gconf
-    gnome3.gdk_pixbuf
-    gnome3.gtk2
+    gdk_pixbuf
+    gtk2
     pango
     libnotify
     nspr
