@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
     # Add missing test file bug753605-atsize.jpg
     (fetchpatch {
       url = https://git.gnome.org/browse/gdk-pixbuf/patch/?id=87f8f4bf01dfb9982c1ef991e4060a5e19fdb7a7;
-      sha256 = "1slzywwnrzfx3zjzdsxrvp4g2q4skmv50pdfmyccp41j7bfyb2j0";
+      sha256 = "0mdqa9w1p6cmli6976v4wi0sw9r4p5prkj7lzfd1877wk11c9c73";
     })
 
     # Move installed tests to a separate output
