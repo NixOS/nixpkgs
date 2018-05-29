@@ -3930,6 +3930,11 @@
     github = "uralbash";
     name = "Svintsov Dmitry";
   };
+  uri-canva = {
+    email = "uri@canva.com";
+    github = "uri-canva";
+    name = "Uri Baghin";
+  };
   utdemir = {
     email = "me@utdemir.com";
     github = "utdemir";
