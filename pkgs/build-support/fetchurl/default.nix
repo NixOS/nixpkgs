@@ -71,7 +71,12 @@ let
     else if sha256 != "" then { outputHashAlgo = "sha256"; outputHash = sha256; }
     else if sha1   != "" then { outputHashAlgo = "sha1";   outputHash = sha1; }
     else throw "fetchurl requires a hash for fixed-output derivation: ${url}";
-  name_ = baseNameOf (toString url);
+  name_ = let
+      components = lib.strings.splitString "/" url;
+      filenameWithQuery = lib.last components;
+      firstComponent = sep: str: builtins.head (lib.strings.splitString sep str);
+      filename = firstComponent "&" (firstComponent "?" filenameWithQuery);
+    in filename;
 in
 stdenvNoCC.mkDerivation {
   realBuilder = "builtin:fetchurl";
