@@ -16259,8 +16259,7 @@ with pkgs;
 
   hydrogen = callPackage ../applications/audio/hydrogen { };
 
-  hyper = callPackage ../applications/misc/hyper { inherit (gnome2) GConf; };
-  hyperterm = self.hyper;
+  hyper = callPackage ../applications/misc/hyper { };
 
   hyper-haskell-server-with-packages = callPackage ../development/tools/haskell/hyper-haskell/server.nix {
     inherit (haskellPackages) ghcWithPackages;
