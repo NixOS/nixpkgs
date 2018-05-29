@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, boost, sqlite, zlib }:
+{ stdenv, fetchurl, boost, sqlite }:
 
 stdenv.mkDerivation rec {
   name = "vsqlite-${version}";
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "17fkj0d2jh0xkjpcayhs1xvbnh1d69f026i7vs1zqnbiwbkpz237";
   };
 
-  buildInputs = [ boost sqlite zlib ];
+  buildInputs = [ boost sqlite ];
 
   prePatch = stdenv.lib.optionalString stdenv.isDarwin ''
     substituteInPlace Makefile.in \
