@@ -15,7 +15,9 @@ stdenv.mkDerivation {
 
   buildInputs = [ ruby gems zip ];
 
-  patchPhase = "patchShebangs ./ui/scripts/dist.sh";
+  patches = [ ./ui-lock.patch ];
+
+  postPatch = "patchShebangs ./ui/scripts/dist.sh";
 
   buildPhase = ''
     # Build ui static files
