@@ -161,7 +161,16 @@ in {
           User = cfg.user;
           Group = cfg.group;
           WorkingDirectory = "~";
+          PermissionsStartOnly = true;
         };
+        
+        preStart = ''
+          if [ ! -d ${cfg.notebookDir} ]; then
+            mkdir -p ${cfg.notebookDir}
+          fi
+          chown ${cfg.user}:${cfg.group} ${cfg.notebookDir}
+        '';
+        
       };
     })
     (mkIf (cfg.enable && (cfg.group == "jupyter")) {
