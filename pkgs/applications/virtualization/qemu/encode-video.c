@@ -7,6 +7,11 @@
 
 #include <zlib.h>
 
+/* This is needed in order to distinguish between real errors and read failures
+ * indicating EOF, so that we can exit gracefully if errors happen.
+ */
+static bool is_error;
+
 struct bound_info {
     uint32_t width;
     uint32_t height;
@@ -65,18 +70,27 @@ static void *alloc_read(gzFile ifile, size_t len)
     void *buf;
     int i, readlen;
 
+    is_error = false;
+
     if ((buf = malloc(len)) == NULL) {
         fprintf(stderr, "Unable to allocate buffer for "
                 "intermediate video packet: %s\n", strerror(errno));
+        is_error = true;
         return NULL;
     }
 
     for (i = 0; i < len; i += readlen) {
         readlen = gzread(ifile, buf + i, len - i);
         if (readlen <= 0) {
-            fprintf(stderr, "Unable to read intermediate video packet with "
-                    "size %zu\n", len - i);
             free(buf);
+            /* Don't print an error because we want to make sure that whenever
+             * the stream ends prematurely, we still do have a valid video.
+             */
+            if (readlen < 0) {
+                fprintf(stderr, "Unable to read %zu bytes from input file.",
+                        len - i);
+                is_error = true;
+            }
             return NULL;
         }
     }
@@ -151,6 +165,7 @@ static struct packet_switch *parse_switch(gzFile ifile)
     if ((out = malloc(sizeof(struct packet_switch))) == NULL) {
         fprintf(stderr, "Unable to allocate packet_switch: %s\n",
                 strerror(errno));
+        is_error = true;
         free(buf);
         return NULL;
     }
@@ -171,6 +186,7 @@ static struct packet_switch *parse_switch(gzFile ifile)
         default:
             fprintf(stderr, "Unknown pixel format %d in switch directive.\n",
                     tmp_format);
+            is_error = true;
             free(out);
             return NULL;
     }
@@ -199,6 +215,7 @@ static struct packet_update *parse_update(gzFile ifile, uint8_t bpp)
     if ((out = malloc(sizeof(struct packet_update))) == NULL) {
         fprintf(stderr, "Unable to allocate packet_update: %s\n",
                 strerror(errno));
+        is_error = true;
         free(buf);
         return NULL;
     }
@@ -238,8 +255,12 @@ static struct bound_info *get_bounds(gzFile ifile)
         opcode = gzgetc(ifile);
         switch (opcode) {
             case 'S':
-                if ((sw = parse_switch(ifile)) == NULL)
-                    return NULL;
+                if ((sw = parse_switch(ifile)) == NULL) {
+                    if (is_error)
+                        return NULL;
+                    else
+                        goto eof;
+                }
                 bpp = sw->bpp;
                 if (sw->width > width)
                     width = sw->width;
@@ -248,27 +269,32 @@ static struct bound_info *get_bounds(gzFile ifile)
                 free(sw);
                 break;
             case 'U':
-                if ((up = parse_update(ifile, bpp)) == NULL)
-                    return NULL;
+                if ((up = parse_update(ifile, bpp)) == NULL) {
+                    if (is_error)
+                        return NULL;
+                    else
+                        goto eof;
+                }
                 if (start_time == 0)
                     start_time = up->timestamp;
                 if (gzseek(ifile, up->datalen, SEEK_CUR) == -1) {
-                    fputs("Unable to skip framedata\n", stderr);
                     free(up);
-                    return NULL;
+                    goto eof;
                 }
                 free(up);
                 frames++;
                 break;
             case -1:
                 if (gzeof(ifile))
-                    break;
+                    goto eof;
             default:
                 fprintf(stderr, "Unknown opcode 0x%02x when parsing "
                         "intermediate format.\n", opcode);
                 return NULL;
         }
     }
+
+eof:
 
     if (width == 0 || height == 0) {
         fprintf(stderr, "Couldn't get size after processing %zu frames.\n",
@@ -377,8 +403,12 @@ static bool encode_frames(gzFile ifile, AVCodecContext *context,
                     free(sw);
                 }
 
-                if ((sw = parse_switch(ifile)) == NULL)
-                    goto out_err;
+                if ((sw = parse_switch(ifile)) == NULL) {
+                    if (is_error)
+                        goto out_err;
+                    else
+                        goto out;
+                }
 
                 /* We need to reinitialise this for *every* switch packet, not
                  * only for surfaces that have the target video size, because
@@ -402,12 +432,16 @@ static bool encode_frames(gzFile ifile, AVCodecContext *context,
                 if (sw == NULL)
                     continue;
 
-                if ((up = parse_update(ifile, sw->bpp)) == NULL)
-                    goto out_err;
+                if ((up = parse_update(ifile, sw->bpp)) == NULL) {
+                    if (is_error)
+                        goto out_err;
+                    else
+                        goto out;
+                }
 
                 if ((data = alloc_read(ifile, up->datalen)) == NULL) {
                     free(up);
-                    goto out_err;
+                    goto out;
                 }
 
                 if (!convert_endian(data, up->w * up->h, sw->bpp)) {
@@ -443,7 +477,7 @@ static bool encode_frames(gzFile ifile, AVCodecContext *context,
                 break;
             case -1:
                 if (gzeof(ifile))
-                    break;
+                    goto out;
             default:
                 fprintf(stderr, "Unknown opcode 0x%02x when parsing "
                         "intermediate format.\n", opcode);
