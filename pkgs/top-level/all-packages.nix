@@ -113,7 +113,8 @@ with pkgs;
   buildMaven = callPackage ../build-support/build-maven.nix {};
 
   castxml = callPackage ../development/tools/castxml {
-     stdenv = clangStdenv;
+    # stdenv = llvmPackages.libcxxStdenv; # fails
+    stdenv = clangStdenv;
   };
 
   cmark = callPackage ../development/libraries/cmark { };
@@ -21723,8 +21724,9 @@ with pkgs;
 #/nix/store/ng5kbr6kmh979qaachifbsbblydrcmqc-gcc-7.3.0/include/c++/7.3.0/ext/hash_map:60:10: fatal error: 'backward_warning.h' file not found
 ##include "backward_warning.h"
 #         ^~~~~~~~~~~~~~~~~~~~
+    stdenv = llvmPackages.libcxxStdenv; # fails
 
-#        stdenv = clangStdenv;
+       # stdenv = clangStdenv;
   };
 
   root = callPackage ../applications/science/misc/root {

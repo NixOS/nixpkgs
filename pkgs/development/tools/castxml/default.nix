@@ -24,11 +24,12 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     cmake
-    llvmPackages.clang-unwrapped
+    # need to keep it for cmake to find the LLVM_DIR
     llvmPackages.llvm
   ] ++ stdenv.lib.optionals withMan [ pythonPackages.sphinx ];
 
-  propagatedbuildInputs = [ llvmPackages.libclang
+  propagatedbuildInputs = [
+    llvmPackages.libclang
     llvmPackages.libcxx
   ];
 
