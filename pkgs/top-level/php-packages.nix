@@ -74,14 +74,14 @@ let
   };
 
   php_excel = assert isPhp7; buildPecl rec {
-    name = "php_excel";
+    name = "php_excel-${version}";
     version = "1.0.2";
     phpVersion = "php7";
 
     buildInputs = [ pkgs.libxl ];
 
     src = pkgs.fetchurl {
-      url = "https://github.com/iliaal/${name}/releases/download/Excel-1.0.2-PHP7/excel-${version}-${phpVersion}.tgz";
+      url = "https://github.com/iliaal/php_excel/releases/download/Excel-1.0.2-PHP7/excel-${version}-${phpVersion}.tgz";
       sha256 = "0dpvih9gpiyh1ml22zi7hi6kslkilzby00z1p8x248idylldzs2n";
     };
 

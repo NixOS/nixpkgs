@@ -4,7 +4,7 @@ let
   py = python27Packages;
 in
 stdenv.mkDerivation rec {
-  name = "cura-lulzbot";
+  name = "cura-lulzbot-${version}";
   version = "15.02.1-1.03-5064";
 
   src =

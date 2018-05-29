@@ -1,9 +1,6 @@
 { stdenv, fetchurl, autoreconfHook, pkgconfig, perl, python, libxml2Python, libxslt, which
-, docbook_xml_dtd_43, docbook_xsl, gnome-doc-utils, dblatex, gettext, itstool }:
-
-let
-  pythonEnv = python.withPackages (ps: with ps; [ six ]);
-in
+, docbook_xml_dtd_43, docbook_xsl, gnome-doc-utils, dblatex, gettext, itstool
+}:
 
 stdenv.mkDerivation rec {
   name = "gtk-doc-${version}";
@@ -22,11 +19,17 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoreconfHook ];
   buildInputs =
-   [ pkgconfig perl pythonEnv libxml2Python libxslt docbook_xml_dtd_43 docbook_xsl
-     gnome-doc-utils dblatex gettext which itstool
-   ];
+    [ pkgconfig perl python libxml2Python libxslt docbook_xml_dtd_43 docbook_xsl
+      gnome-doc-utils dblatex gettext which itstool
+    ];
 
-  configureFlags = "--disable-scrollkeeper";
+  configureFlags = [ "--disable-scrollkeeper" ];
+
+  # Make six available for binaries, python.withPackages creates a wrapper
+  # but scripts are not allowed in shebangs so we link it into sys.path.
+  postInstall = ''
+    ln -s ${python.pkgs.six}/lib/python2.7/site-packages/* $out/share/gtk-doc/python/
+  '';
 
   doCheck = false; # requires a lot of stuff
   doInstallCheck = false; # fails

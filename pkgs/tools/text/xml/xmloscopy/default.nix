@@ -6,7 +6,7 @@ docbook5
 }:
 stdenv.mkDerivation rec {
   name = "xmloscopy-${version}";
-  version = "v0.1.2";
+  version = "0.1.2";
 
   buildInputs = [
     makeWrapper
@@ -27,12 +27,12 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "grahamc";
     repo = "xmloscopy";
-    rev = version;
+    rev = "v${version}";
     sha256 = "07fcnf1vv0x72lksl1v0frmlh73gca199ldqqbgdjpybjdffz456";
   };
 
   installPhase = ''
-    sed -i "s/hard to say/${version}/" ./xmloscopy
+    sed -i "s/hard to say/v${version}/" ./xmloscopy
     type -P shellcheck && shellcheck ./xmloscopy
     chmod +x ./xmloscopy
     patchShebangs ./xmloscopy

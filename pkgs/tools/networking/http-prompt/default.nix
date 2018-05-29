@@ -1,8 +1,9 @@
 { stdenv, fetchFromGitHub, pythonPackages, httpie }:
 
 pythonPackages.buildPythonApplication rec {
+  pname = "http-prompt";
   version = "0.11.1";
-  name = "http-prompt";
+  name = "${pname}-${version}";
 
   src = fetchFromGitHub {
     rev = "v${version}";
@@ -21,7 +22,7 @@ pythonPackages.buildPythonApplication rec {
   ];
 
   checkPhase = ''
-    $out/bin/${name} --version | grep -q "${version}"
+    $out/bin/${pname} --version | grep -q "${version}"
   '';
 
   meta = with stdenv.lib; {

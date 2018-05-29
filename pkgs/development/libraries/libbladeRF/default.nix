@@ -3,7 +3,7 @@
 
 stdenv.mkDerivation rec {
   version = "1.9.0";
-  name = "libbladeRF-v${version}";
+  name = "libbladeRF-${version}";
 
   src = fetchFromGitHub {
     owner = "Nuand";

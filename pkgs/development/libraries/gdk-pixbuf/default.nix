@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchgit, fetchpatch, meson, ninja, pkgconfig, gettext, python3, libxml2, libxslt, docbook_xsl
+{ stdenv, fetchurl, fetchgit, fetchpatch, fixDarwinDylibNames, meson, ninja, pkgconfig, gettext, python3, libxml2, libxslt, docbook_xsl
 , docbook_xml_dtd_43, gtk-doc, glib, libtiff, libjpeg, libpng, libX11, gnome3
 , jasper, gobjectIntrospection, doCheck ? false, makeWrapper }:
 
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   #   sha256 = "0d534ysa6n9prd17wwzisq7mj6qkhwh8wcf8qgin1ar3hbs5ry7z";
   # };
   src = fetchgit {
-    url = https://git.gnome.org/browse/gdk-pixbuf;
+    url = https://gitlab.gnome.org/GNOME/gdk-pixbuf.git;
     rev = version;
     sha256 = "18lwqg63vyap2m1mw049rnb8fm869429xbf7636a2n21gs3d3jwv";
   };
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
 
     # Add missing test file bug753605-atsize.jpg
     (fetchpatch {
-      url = https://git.gnome.org/browse/gdk-pixbuf/patch/?id=87f8f4bf01dfb9982c1ef991e4060a5e19fdb7a7;
+      url = https://gitlab.gnome.org/GNOME/gdk-pixbuf/commit/87f8f4bf01dfb9982c1ef991e4060a5e19fdb7a7.patch;
       sha256 = "1slzywwnrzfx3zjzdsxrvp4g2q4skmv50pdfmyccp41j7bfyb2j0";
     })
 
@@ -53,7 +53,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     meson ninja pkgconfig gettext python3 libxml2 libxslt docbook_xsl docbook_xml_dtd_43
     gtk-doc gobjectIntrospection makeWrapper
-  ];
+  ]
+    ++ stdenv.lib.optional stdenv.isDarwin fixDarwinDylibNames;
 
   propagatedBuildInputs = [ glib libtiff libjpeg libpng jasper ];
 
@@ -80,6 +81,13 @@ stdenv.mkDerivation rec {
       # We need to install 'loaders.cache' in lib/gdk-pixbuf-2.0/2.10.0/
       $dev/bin/gdk-pixbuf-query-loaders --update-cache
     '';
+
+  # The fixDarwinDylibNames hook doesn't patch binaries.
+  preFixup = stdenv.lib.optionalString stdenv.isDarwin ''
+    for f in $out/bin/* $dev/bin/*; do
+        install_name_tool -change "@rpath/libgdk_pixbuf-2.0.0.dylib" "$out/lib/libgdk_pixbuf-2.0.0.dylib" $f
+    done
+  '';
 
   # The tests take an excessive amount of time (> 1.5 hours) and memory (> 6 GB).
   inherit doCheck;

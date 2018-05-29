@@ -2,12 +2,12 @@
 
 stdenv.mkDerivation rec {
   name = "wxHexEditor-${version}";
-  version = "v0.24";
+  version = "0.24";
 
   src = fetchFromGitHub {
     repo = "wxHexEditor";
     owner = "EUA";
-    rev = version;
+    rev = "v${version}";
     sha256 = "08xnhaif8syv1fa0k6lc3jm7yg2k50b02lyds8w0jyzh4xi5crqj";
   };
 

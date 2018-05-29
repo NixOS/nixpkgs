@@ -2,10 +2,10 @@
 
 stdenv.mkDerivation rec {
   name = "blink1-${version}";
-  version = "v1.98";
+  version = "1.98";
 
   src = fetchurl {
-    url = "https://github.com/todbot/blink1/archive/${version}.tar.gz";
+    url = "https://github.com/todbot/blink1/archive/v${version}.tar.gz";
     sha256 = "05hbnp20cdvyyqf6jr01waz1ycis20qzsd8hn27snmn6qd48igrb";
   };
 

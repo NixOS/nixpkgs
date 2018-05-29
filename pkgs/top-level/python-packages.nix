@@ -2819,9 +2819,10 @@ in {
   };
 
   gnutls = buildPythonPackage rec {
-    name = "python-gnutls";
+    pname = "python-gnutls";
+    version = "3.0.0";
     src = pkgs.fetchurl {
-      url = "mirror://pypi/p/python-gnutls/python-gnutls-3.0.0.tar.gz";
+      url = "mirror://pypi/p/python-gnutls/${pname}-${version}.tar.gz";
       sha256 = "1yrdxcj5rzvz8iglircz6icvyggz5fmdcd010n6w3j60yp4p84kc";
     };
 
@@ -9116,7 +9117,7 @@ in {
       sha256 = "0hh9j5zd2kc0804d2jmf1q3w5xm9l9s69hhgysbncrv5fw0414lh";
     };
     buildInputs = with pkgs; [ bashInteractive ]; # needed for bash-completion helper
-    propagatedBuildInputs = with self; [ urlgrabber m2crypto pyyaml ];
+    propagatedBuildInputs = with self; [ urlgrabber m2crypto pyyaml lxml ];
     postInstall = ''
       ln -s $out/bin/osc-wrapper.py $out/bin/osc
       install -D -m444 osc.fish $out/etc/fish/completions/osc.fish
@@ -10375,7 +10376,7 @@ in {
   };
 
   pybcrypt = buildPythonPackage rec {
-    name = "pybcrypt";
+    pname = "pybcrypt";
     version = "0.4";
 
     src = pkgs.fetchurl {

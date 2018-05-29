@@ -35,7 +35,7 @@ in
 , enableStaticLibraries ? !hostPlatform.isWindows
 , enableHsc2hsViaAsm ? hostPlatform.isWindows && stdenv.lib.versionAtLeast ghc.version "8.4"
 , extraLibraries ? [], librarySystemDepends ? [], executableSystemDepends ? []
-, homepage ? "http://hackage.haskell.org/package/${pname}"
+, homepage ? "https://hackage.haskell.org/package/${pname}"
 , platforms ? with stdenv.lib.platforms; unix ++ windows # GHC can cross-compile
 , hydraPlatforms ? null
 , hyperlinkSource ? true

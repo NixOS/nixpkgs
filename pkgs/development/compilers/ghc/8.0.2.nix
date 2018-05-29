@@ -162,6 +162,8 @@ stdenv.mkDerivation rec {
   # that in turn causes GHCi to abort
   stripDebugFlags = [ "-S" ] ++ stdenv.lib.optional (!targetPlatform.isDarwin) "--keep-file-symbols";
 
+  hardeningDisable = [ "format" ];
+
   postInstall = ''
     for bin in "$out"/lib/${name}/bin/*; do
       isELF "$bin" || continue

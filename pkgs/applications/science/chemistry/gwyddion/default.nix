@@ -3,7 +3,7 @@
 with stdenv.lib;
 
 stdenv.mkDerivation {
-  name = "gwyddion";
+  name = "gwyddion-${version}";
   version = "2.48";
   src = fetchurl {
     url = "http://sourceforge.net/projects/gwyddion/files/gwyddion/2.48/gwyddion-2.48.tar.xz";

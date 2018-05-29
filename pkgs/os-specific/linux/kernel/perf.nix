@@ -31,6 +31,8 @@ stdenv.mkDerivation {
 
   makeFlags = ["prefix=$(out)" "WERROR=0"] ++ kernel.makeFlags;
 
+  hardeningDisable = [ "format" ];
+
   # perf refers both to newt and slang
   nativeBuildInputs = [
     asciidoc xmlto docbook_xsl docbook_xml_dtd_45 libxslt

@@ -77,6 +77,8 @@ stdenv.mkDerivation rec {
       configureFlags="--parallel=''${NIX_BUILD_CORES:-1} $configureFlags"
     '';
 
+  hardeningDisable = [ "format" ];
+
   meta = {
     homepage = https://cmake.org;
     description = "Cross-Platform Makefile Generator";

@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, libtool, autoconf, automake }:
 
 stdenv.mkDerivation rec {
-  version = "v0.99.4";
+  version = "0.99.4";
   name = "fastjson-${version}";
   src = fetchFromGitHub {
     repo = "libfastjson";

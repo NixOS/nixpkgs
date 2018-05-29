@@ -2,13 +2,12 @@
 
 buildPythonPackage rec {
   pname = "podcats";
-  version = "v0.5.0";
-  name = "${pname}-${version}";
+  version = "0.5.0";
 
   src = fetchFromGitHub {
     owner = "jakubroztocil";
     repo = "podcats";
-    rev = version;
+    rev = "v${version}";
     sha256 = "0zjdgry5n209rv19kj9yaxy7c7zq5gxr488izrgs4sc75vdzz8xc";
   };
 

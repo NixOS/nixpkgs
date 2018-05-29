@@ -21,7 +21,10 @@ in stdenv.mkDerivation {
     # Use CC, CXX, and LD from environment
     ./2.6.2-cxx.patch
   ];
+
   preConfigure = "export LD=${if stdenv.isDarwin then "clang++" else "g++"}";
+
+  hardeningDisable = [ "format" ];
 
   NIX_CFLAGS_COMPILE =
     stdenv.lib.optional stdenv.isDarwin "-mmacosx-version-min=10.9";

@@ -172,6 +172,8 @@ stdenv.mkDerivation rec {
 
   checkTarget = "test";
 
+  hardeningDisable = [ "format" ];
+
   postInstall = ''
     for bin in "$out"/lib/${name}/bin/*; do
       isELF "$bin" || continue
