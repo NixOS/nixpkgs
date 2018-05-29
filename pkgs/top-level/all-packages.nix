@@ -21720,13 +21720,9 @@ with pkgs;
   megam = callPackage ../applications/science/misc/megam { };
 
   ns-3 = callPackage ../development/libraries/science/networking/ns3 {
-    # generates
-#/nix/store/ng5kbr6kmh979qaachifbsbblydrcmqc-gcc-7.3.0/include/c++/7.3.0/ext/hash_map:60:10: fatal error: 'backward_warning.h' file not found
-##include "backward_warning.h"
-#         ^~~~~~~~~~~~~~~~~~~~
-    stdenv = llvmPackages.libcxxStdenv; # fails
-
-       # stdenv = clangStdenv;
+    # can't find pyembed with it
+    # stdenv = llvmPackages.libcxxStdenv; # fails
+    # stdenv = clangStdenv;
   };
 
   root = callPackage ../applications/science/misc/root {

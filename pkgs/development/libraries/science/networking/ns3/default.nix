@@ -56,8 +56,7 @@ stdenv.mkDerivation rec {
     ++ stdenv.lib.optional withManual [ dia tetex ghostscript texlive.combined.scheme-medium ];
 
   propagatedBuildInputs = [
-    stdenv.cc
-    # gcc6
+    # stdenv.cc ?
     pythonEnv
   ];
 
