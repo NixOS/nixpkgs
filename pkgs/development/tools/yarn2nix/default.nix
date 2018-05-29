@@ -56,6 +56,7 @@ let
     yarnFlags ? defaultYarnFlags,
     pkgConfig ? {},
     preBuild ? "",
+    postBuild ? "",
   }:
     let
       offlineCache = importOfflineCache yarnNix;
@@ -74,8 +75,8 @@ let
       ) (builtins.attrNames pkgConfig));
     in
     stdenv.mkDerivation {
-      inherit name preBuild;
-      phases = ["configurePhase" "buildPhase"];
+      inherit name preBuild postBuild;
+      phases = ["configurePhase" "buildPhase" "installPhase"];
       buildInputs = [ yarn nodejs ] ++ extraBuildInputs;
 
       configurePhase = ''
@@ -99,6 +100,10 @@ let
 
         ${lib.concatStringsSep "\n" postInstall}
 
+        runHook postBuild
+      '';
+
+      installPhase = ''
         mkdir $out
         mv node_modules $out/
         patchShebangs $out
@@ -124,6 +129,7 @@ let
     yarnNix ? mkYarnNix yarnLock,
     yarnFlags ? defaultYarnFlags,
     yarnPreBuild ? "",
+    yarnPostBuild ? "",
     pkgConfig ? {},
     extraBuildInputs ? [],
     publishBinsFor ? null,
@@ -136,6 +142,7 @@ let
       deps = mkYarnModules {
         name = "${pname}-modules-${version}";
         preBuild = yarnPreBuild;
+        postBuild = yarnPostBuild;
         inherit packageJSON yarnLock yarnNix yarnFlags pkgConfig;
       };
       publishBinsFor_ = unlessNull publishBinsFor [pname];
