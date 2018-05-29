@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, dpkg, gnome3, atk, glib, pango, gdk_pixbuf, cairo
+{ stdenv, lib, fetchurl, dpkg, gnome3, gtk2, atk, glib, pango, gdk_pixbuf, cairo
 , freetype, fontconfig, dbus, libXi, libXcursor, libXdamage, libXrandr
 , libXcomposite, libXext, libXfixes, libXrender, libX11, libXtst, libXScrnSaver
 , libxcb, makeWrapper, nodejs
@@ -6,7 +6,7 @@
 
 let
   libPath = stdenv.lib.makeLibraryPath [
-    stdenv.cc.cc gnome3.gtk2 atk glib pango gdk_pixbuf cairo freetype fontconfig dbus
+    stdenv.cc.cc gtk2 atk glib pango gdk_pixbuf cairo freetype fontconfig dbus
     libXi libXcursor libXdamage libXrandr libXcomposite libXext libXfixes libxcb
     libXrender libX11 libXtst libXScrnSaver gnome3.gconf nss nspr alsaLib cups expat libudev libpulseaudio
   ];
