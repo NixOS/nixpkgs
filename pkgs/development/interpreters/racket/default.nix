@@ -58,7 +58,9 @@ stdenv.mkDerivation rec {
 
   preConfigure = ''
     unset AR
-    substituteInPlace src/configure --replace /usr/bin/uname ${coreutils}/bin/uname
+    for f in src/configure src/racket/src/string.c; do
+      substituteInPlace "$f" --replace /usr/bin/uname ${coreutils}/bin/uname
+    done
     mkdir src/build
     cd src/build
   '';
