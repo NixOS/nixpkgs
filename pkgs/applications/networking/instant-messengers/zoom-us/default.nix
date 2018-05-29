@@ -1,19 +1,21 @@
 { stdenv, fetchurl, system, makeWrapper, makeDesktopItem,
   alsaLib, dbus, glib, fontconfig, freetype, libpulseaudio,
-  utillinux, zlib, xorg, udev, sqlite, expat, libv4l, procps, libGL }:
+  utillinux, zlib, xorg, udev, sqlite, expat, libv4l, procps, libGL,
+  nss, nspr }:
 
 let
 
-  version = "2.0.123200.0405";
+  version = "2.1.103753.0521";
   srcs = {
     x86_64-linux = fetchurl {
       url = "https://zoom.us/client/${version}/zoom_x86_64.tar.xz";
-      sha256 = "1ifwa2xf5mw1ll2j1f39qd7mpyxpc6xj3650dmlnxf525dsm573z";
+      sha256 = "17ph0gi8x4h24afczvfj9dvcy737mjq7zzblh6ysfdqzbqb1bpjj";
     };
   };
 
 in stdenv.mkDerivation {
   name = "zoom-us-${version}";
+  inherit version;
 
   src = srcs.${system};
 
@@ -32,6 +34,8 @@ in stdenv.mkDerivation {
     sqlite
     utillinux
     udev
+    nspr
+    nss
 
     xorg.libX11
     xorg.libSM
