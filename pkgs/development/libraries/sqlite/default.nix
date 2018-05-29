@@ -66,6 +66,11 @@ stdenv.mkDerivation rec {
     echo ""
   '';
 
+  postInstall = ''
+    # Do not contaminate dependent libtool-based projects with sqlite dependencies.
+    sed -i $out/lib/libsqlite3.la -e "s/dependency_libs=.*/dependency_libs='''/"
+  '';
+
   meta = {
     description = "A self-contained, serverless, zero-configuration, transactional SQL database engine";
     downloadPage = http://sqlite.org/download.html;
