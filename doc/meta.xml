@@ -131,7 +131,7 @@ hello-2.3  A program that produces a familiar, friendly greeting
     <listitem>
      <para>
       The package’s homepage. Example:
-      <literal>https://www.gnu.org/software/hello/</literal>
+      <literal>https://www.gnu.org/software/hello/manual/</literal>
      </para>
     </listitem>
    </varlistentry>
