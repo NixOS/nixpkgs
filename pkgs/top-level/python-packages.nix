@@ -2272,6 +2272,7 @@ in {
   elasticsearch_6 = callPackage ../development/python-modules/elasticsearch/6.x.nix { };
   elasticsearch = self.elasticsearch_6;
 
+  elasticsearch-dsl_5 = callPackage ../development/python-modules/elasticsearch-dsl/5.x.nix { };
   elasticsearch-dsl_6 = callPackage ../development/python-modules/elasticsearch-dsl/6.x.nix { };
   elasticsearch-dsl = self.elasticsearch-dsl_6;
   elasticsearchdsl = self.elasticsearch-dsl; # alias
