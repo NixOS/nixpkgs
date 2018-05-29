@@ -22,9 +22,9 @@ in rec {
   freebsd = [ patterns.isFreeBSD ];
   # Should be better, but MinGW is unclear, and HURD is bit-rotted.
   gnu     = [
-    { kernel = parse.kernels.linux; abi = parse.abis.gnu; }
-    { kernel = parse.kernels.linux; abi = parse.abis.gnueabi; }
-    { kernel = parse.kernels.linux; abi = parse.abis.gnueabihf; }
+    { kernel = parse.kernels.linux; abi = abis.gnu; }
+    { kernel = parse.kernels.linux; abi = abis.gnueabi; }
+    { kernel = parse.kernels.linux; abi = abis.gnueabihf; }
   ];
   illumos = [ patterns.isSunOS ];
   linux   = [ patterns.isLinux ];
