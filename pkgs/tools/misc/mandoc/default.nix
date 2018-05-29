@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "mandoc-${version}";
-  version = "1.13.4";
+  version = "1.14.3";
 
   src = fetchurl {
-    url = "http://mdocml.bsd.lv/snapshots/mdocml-${version}.tar.gz";
-    sha256 = "1vz0g5nvjbz1ckrg9cn6ivlnb13bcl1r6nc4yzb7300qvfnw2m8a";
+    url = "http://mdocml.bsd.lv/snapshots/${name}.tar.gz";
+    sha256 = "0a4mv4pk6939v544dbfjvxwvi13r6c66i45nskm6j5ccjmkqy30b";
   };
 
   buildInputs = [ zlib ];
