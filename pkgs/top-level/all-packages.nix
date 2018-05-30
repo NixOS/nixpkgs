@@ -19618,7 +19618,9 @@ with pkgs;
 
   warzone2100 = libsForQt5.callPackage ../games/warzone2100 { };
 
-  wesnoth = callPackage ../games/wesnoth { };
+  wesnoth = callPackage ../games/wesnoth {
+    inherit (darwin.apple_sdk.frameworks) Cocoa Foundation;
+  };
 
   wesnoth-dev = wesnoth;
 
