@@ -65,6 +65,10 @@ let
     XauthPath=${pkgs.xorg.xauth}/bin/xauth
     DisplayCommand=${Xsetup}
     DisplayStopCommand=${Xstop}
+    EnableHidpi=${if cfg.enableHidpi then "true" else "false"}
+
+    [Wayland]
+    EnableHidpi=${if cfg.enableHidpi then "true" else "false"}
 
     ${optionalString cfg.autoLogin.enable ''
     [Autologin]
@@ -92,6 +96,17 @@ in
         default = false;
         description = ''
           Whether to enable sddm as the display manager.
+        '';
+      };
+
+      enableHidpi = mkOption {
+        type = types.bool;
+        default = true;
+        description = ''
+          Whether to enable automatic HiDPI mode.
+          </para>
+          <para>
+          Versions up to 0.17 are broken so this only works from 0.18 onwards.
         '';
       };
 
