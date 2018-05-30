@@ -3099,6 +3099,8 @@ with pkgs;
 
   intecture-cli = callPackage ../tools/admin/intecture/cli.nix { };
 
+  invoice2data  = callPackage ../tools/text/invoice2data  { };
+
   iodine = callPackage ../tools/networking/iodine { };
 
   ioping = callPackage ../tools/system/ioping { };
