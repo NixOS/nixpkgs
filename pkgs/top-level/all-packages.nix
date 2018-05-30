@@ -1427,7 +1427,7 @@ with pkgs;
     czmq = czmq3;
   };
 
-  rsyslog-light = callPackage ../tools/system/rsyslog {
+  rsyslog-light = rsyslog.override {
     libkrb5 = null;
     systemd = null;
     jemalloc = null;
@@ -2779,7 +2779,7 @@ with pkgs;
     zfsSupport = false;
   };
 
-  grub2_xen = callPackage ../tools/misc/grub/2.0x.nix {
+  grub2_xen = grub2_full.override {
     xenSupport = true;
   };
 
@@ -2952,9 +2952,9 @@ with pkgs;
 
   heaptrack = libsForQt5.callPackage ../development/tools/profiling/heaptrack {};
 
-  heimdall = libsForQt5.callPackage ../tools/misc/heimdall { enableGUI = false; };
+  heimdall = libsForQt5.callPackage ../tools/misc/heimdall { };
 
-  heimdall-gui = libsForQt5.callPackage ../tools/misc/heimdall { enableGUI = true; };
+  heimdall-gui = heimdall.override { enableGUI = true; };
 
   hevea = callPackage ../tools/typesetting/hevea { };
 
