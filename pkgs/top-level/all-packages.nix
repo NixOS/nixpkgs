@@ -3158,6 +3158,8 @@ with pkgs;
   isync = callPackage ../tools/networking/isync { };
   isyncUnstable = callPackage ../tools/networking/isync/unstable.nix { };
 
+  ivan = callPackage ../games/ivan { };
+
   jaaa = callPackage ../applications/audio/jaaa { };
 
   jackett = callPackage ../servers/jackett {
