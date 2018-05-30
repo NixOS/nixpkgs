@@ -12639,6 +12639,8 @@ with pkgs;
 
   mlmmj = callPackage ../servers/mail/mlmmj { };
 
+  morty = callPackage ../servers/web-apps/morty { };
+
   myserver = callPackage ../servers/http/myserver { };
 
   nas = callPackage ../servers/nas { };
