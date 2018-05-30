@@ -100,7 +100,6 @@ nibbles
 optima
 parenscript
 pcall
-pgloader
 plump
 proc-parse
 prove
@@ -108,6 +107,7 @@ prove
 query-fs
 quri
 salza2
+simple-date
 smart-buffer
 split-sequence
 static-vectors
