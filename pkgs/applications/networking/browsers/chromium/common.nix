@@ -143,6 +143,8 @@ let
       # https://git.archlinux.org/svntogit/packages.git/tree/trunk?h=packages/chromium
       # for updated patches and hints about build flags
     # (gentooPatch "<patch>" "0000000000000000000000000000000000000000000000000000000000000000")
+      ./patches/fix-openh264.patch
+      ./patches/fix-freetype.patch
     ]  ++ optionals (versionRange "66" "68") [
       ./patches/nix_plugin_paths_52.patch
     ]  ++ optionals (versionAtLeast version "68") [
