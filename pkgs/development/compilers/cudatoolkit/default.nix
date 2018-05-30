@@ -192,6 +192,13 @@ in {
     gcc = gcc5;
   };
 
+  cudatoolkit_9_0 = common {
+    version = "9.0.176.1";
+    url = "https://developer.nvidia.com/compute/cuda/9.0/Prod/local_installers/cuda_9.0.176_384.81_linux-run";
+    sha256 = "0308rmmychxfa4inb1ird9bpgfppgr9yrfg1qp0val5azqik91ln";
+    gcc = gcc6;
+  };
+
   cudatoolkit_9 = common {
     version = "9.1.85.1";
     url = "https://developer.nvidia.com/compute/cuda/9.1/Prod/local_installers/cuda_9.1.85_387.26_linux";
