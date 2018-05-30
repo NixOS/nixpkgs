@@ -17580,11 +17580,11 @@ EOF
   tensorflow =
     if stdenv.isDarwin
     then callPackage ../development/python-modules/tensorflow/bin.nix { }
-    else callPackage ../development/python-modules/tensorflow rec {
+    else callPackage ../development/python-modules/tensorflow/bin.nix rec {
       cudaSupport = pkgs.config.cudaSupport or false;
       inherit (pkgs.linuxPackages) nvidia_x11;
-      cudatoolkit = pkgs.cudatoolkit_9;
-      cudnn = pkgs.cudnn_cudatoolkit_9;
+      cudatoolkit = pkgs.cudatoolkit_9_0;
+      cudnn = pkgs.cudnn_cudatoolkit_9_0;
     };
 
   tensorflowWithoutCuda = self.tensorflow.override {
