@@ -76,7 +76,8 @@ let
       filenameWithQuery = lib.last components;
       firstComponent = sep: str: builtins.head (lib.strings.splitString sep str);
       filename = firstComponent "&" (firstComponent "?" filenameWithQuery);
-    in filename;
+      filenameOrDefault = if filename == "" then "file" else filename;
+    in filenameOrDefault;
 in
 stdenvNoCC.mkDerivation {
   realBuilder = "builtin:fetchurl";
