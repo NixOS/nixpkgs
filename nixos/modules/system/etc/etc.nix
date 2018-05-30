@@ -17,11 +17,11 @@ let
     allowSubstitutes = false;
 
     /* !!! Use toXML. */
-    sources = map (x: x.source) etc';
-    targets = map (x: x.target) etc';
-    modes = map (x: x.mode) etc';
-    users  = map (x: x.user) etc';
-    groups  = map (x: x.group) etc';
+    sources = map (x: escapeShellArg x.source) etc';
+    targets = map (x: escapeShellArg x.target) etc';
+    modes = map (x: escapeShellArg x.mode) etc';
+    users  = map (x: escapeShellArg x.user) etc';
+    groups  = map (x: escapeShellArg x.group) etc';
   };
 
 in
