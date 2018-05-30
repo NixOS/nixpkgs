@@ -14943,6 +14943,8 @@ with pkgs;
     ffmpeg = ffmpeg_1;
   };
 
+  barrier = callPackage ../applications/misc/barrier {};
+
   banshee = callPackage ../applications/audio/banshee {
     gconf = pkgs.gnome2.GConf;
     libgpod = pkgs.libgpod.override { monoSupport = true; };
