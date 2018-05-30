@@ -18,7 +18,7 @@ assert sendEmailSupport -> perlSupport;
 assert svnSupport -> perlSupport;
 
 let
-  version = "2.17.0";
+  version = "2.17.1";
   svn = subversionClient.override { perlBindings = perlSupport; };
 in
 
@@ -27,7 +27,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "https://www.kernel.org/pub/software/scm/git/git-${version}.tar.xz";
-    sha256 = "1ismz7nsz8dgjmk782xr9s0mr2qh06f72pdcgbxfmnw1bvlya5p9";
+    sha256 = "0pm6bdnrrm165k3krnazxcxadifk2gqi30awlbcf9fism1x6w4vr";
   };
 
   outputs = [ "out" ] ++ stdenv.lib.optional perlSupport "gitweb";

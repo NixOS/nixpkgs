@@ -311,6 +311,8 @@ in {
 
   outcome = callPackage ../development/python-modules/outcome {};
 
+  pdfminer = callPackage ../development/python-modules/pdfminer_six { };
+
   plantuml = callPackage ../tools/misc/plantuml { };
 
   Pmw = callPackage ../development/python-modules/Pmw { };
@@ -1323,7 +1325,7 @@ in {
     #setupPyBuildFlags = [ "--berkeley-db=${pkgs.db}" ];
     # We can also use a variable
     preConfigure = ''
-      export BERKELEYDB_DIR=${pkgs.db};
+      export BERKELEYDB_DIR=${pkgs.db.dev};
     '';
 
     meta = {
@@ -3788,28 +3790,6 @@ in {
       homepage = https://github.com/joeyespo/path-and-address;
       license = licenses.mit;
       maintainers = with maintainers; [ koral];
-    };
-  };
-
-
-  pdfminer = buildPythonPackage rec {
-    version = "20140328";
-    name = "pdfminer-${version}";
-
-    disabled = ! isPy27;
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/p/pdfminer/pdfminer-${version}.tar.gz";
-      sha256 = "0qpjv4b776dwvpf5a7v19g41qsz97bv0qqsyvm7a31k50n9pn65s";
-    };
-
-    propagatedBuildInputs = with self; [  ];
-
-    meta = {
-      description = "Tool for extracting information from PDF documents";
-      homepage = http://euske.github.io/pdfminer/index.html;
-      license = licenses.mit;
-      maintainers = with maintainers; [ ];
     };
   };
 

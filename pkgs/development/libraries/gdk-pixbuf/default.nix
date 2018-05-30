@@ -82,10 +82,14 @@ stdenv.mkDerivation rec {
       $dev/bin/gdk-pixbuf-query-loaders --update-cache
     '';
 
-  # The fixDarwinDylibNames hook doesn't patch binaries.
+  # The fixDarwinDylibNames hook doesn't patch library references or binaries.
   preFixup = stdenv.lib.optionalString stdenv.isDarwin ''
+    for f in $(find $out/lib -name '*.dylib'); do
+        install_name_tool -change @rpath/libgdk_pixbuf-2.0.0.dylib $out/lib/libgdk_pixbuf-2.0.0.dylib $f
+    done
+
     for f in $out/bin/* $dev/bin/*; do
-        install_name_tool -change "@rpath/libgdk_pixbuf-2.0.0.dylib" "$out/lib/libgdk_pixbuf-2.0.0.dylib" $f
+        install_name_tool -change @rpath/libgdk_pixbuf-2.0.0.dylib $out/lib/libgdk_pixbuf-2.0.0.dylib $f
     done
   '';
 
