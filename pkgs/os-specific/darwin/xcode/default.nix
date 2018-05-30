@@ -23,7 +23,7 @@ let requireXcode = version: sha256:
       message  = ''
         Unfortunately, we cannot download ${name} automatically.
         Please go to ${url}
-        to download it yourself, and add it to the Nix store by running the following commands."
+        to download it yourself, and add it to the Nix store by running the following commands.
         Note: download (~ 5GB), extraction and storing of Xcode will take a while
 
         ${unxip}
