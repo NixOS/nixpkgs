@@ -13175,7 +13175,7 @@ with pkgs;
     pulseSupport = config.pulseaudio or false;
   } // config.conky or {});
 
-  conntrack_tools = callPackage ../os-specific/linux/conntrack-tools { };
+  conntrack-tools = callPackage ../os-specific/linux/conntrack-tools { };
 
   coredns = callPackage ../servers/dns/coredns { };
 
