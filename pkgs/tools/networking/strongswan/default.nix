@@ -16,11 +16,11 @@ with stdenv.lib;
 
 stdenv.mkDerivation rec {
   name = "strongswan-${version}";
-  version = "5.6.2";
+  version = "5.6.3";
 
   src = fetchurl {
     url = "http://download.strongswan.org/${name}.tar.bz2";
-    sha256 = "14ifqay54brw2b2hbmm517bxw8bs9631d7jm4g139igkxcq0m9p0";
+    sha256 = "095zg7h7qwsc456sqgwb1lhhk29ac3mk5z9gm6xja1pl061driy3";
   };
 
   dontPatchELF = true;
