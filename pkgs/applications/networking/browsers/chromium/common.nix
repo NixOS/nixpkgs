@@ -145,23 +145,9 @@ let
     # (gentooPatch "<patch>" "0000000000000000000000000000000000000000000000000000000000000000")
     ]  ++ optionals (versionRange "66" "68") [
       ./patches/nix_plugin_paths_52.patch
-    ]  ++ optionals (versionRange "66" "67") [
-      (gentooPatch "chromium-webrtc-r0.patch" "0wp4zivbv2wpgiwmiznbq1aw4w98mvwjvdy36cpfmnvr8yw430pd")
-      (gentooPatch "chromium-ffmpeg-r1.patch" "1k8agaqsvg0w0s6s5wh346ih02cc86vr0vwyshw2q9vafa0jvmq4")
-      # GCC 7 fixes
-      (githubPatch "f64fadcd79aebe5ed893ecbf258d1123609d28f8" "1h255w1v327r08cnifs19s4bwmkinqjmdmbwihddc5dyl43sjnvv")
-      (githubPatch "ede5178322ccd297b0ad82ae4c59119ceaab9ea5" "0rsal0dy0yhgs4lhn8h1vy1s77xcssy4f5wals7hvrz5m08jqizj")
-      (githubPatch "7d721f438acb38db556ae9a9e6e8b718bd503216" "13lzvxm63zq3rd8p387ylq4bm9wr4r09vk2w4p81f838pf0v1kbj")
-      (githubPatch "ba4141e451f4e0b1b19410b1b503bd32e150df06" "1cjxw1f9fin6z12b0mcxnxf2mdjb0n3chwz7mgvmp9yij8qhqnxj")
-      (githubPatch "b34ed1e6524479d61ee944ebf6ca7389ea47e563" "1s13zw93nsyr259dzck6gbhg4x46qg5sg14djf4bvrrc6hlkiczw")
-      (githubPatch "4f2b52281ce1649ea8347489443965ad33262ecc" "1g59izkicn9cpcphamdgrijs306h5b9i7i4pmy134asn1ifiax5z")
     ]  ++ optionals (versionAtLeast version "68") [
       ./patches/nix_plugin_paths_68.patch
-    ] ++ optional enableWideVine ./patches/widevine.patch
-      ++ optionals (stdenv.isAarch64 && versionRange "65" "67") [
-        ./patches/skia_buildfix.patch
-        ./patches/neon_buildfix.patch
-    ];
+    ] ++ optional enableWideVine ./patches/widevine.patch;
 
     postPatch = ''
       # We want to be able to specify where the sandbox is via CHROME_DEVEL_SANDBOX
