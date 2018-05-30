@@ -10691,9 +10691,7 @@ with pkgs;
 
   nix-plugins = callPackage ../development/libraries/nix-plugins { };
 
-  nix-plugins_4 = callPackage ../development/libraries/nix-plugins/4.nix {
-    nix = nixUnstable;
-  };
+  nix-plugins_4 = callPackage ../development/libraries/nix-plugins/4.nix {};
 
   nlohmann_json = callPackage ../development/libraries/nlohmann_json { };
 
