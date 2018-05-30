@@ -248,6 +248,7 @@ in rec {
   tests.avahi = callTest tests/avahi.nix {};
   tests.beegfs = callTest tests/beegfs.nix {};
   tests.bittorrent = callTest tests/bittorrent.nix {};
+  tests.bind = callTest tests/bind.nix {};
   tests.blivet = callTest tests/blivet.nix {};
   tests.boot = callSubTests tests/boot.nix {};
   tests.boot-stage1 = callTest tests/boot-stage1.nix {};

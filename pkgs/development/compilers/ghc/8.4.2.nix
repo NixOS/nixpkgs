@@ -2,7 +2,7 @@
 , buildPlatform, hostPlatform, targetPlatform
 
 # build-tools
-, bootPkgs, alex, happy
+, bootPkgs, alex, happy, hscolour
 , autoconf, automake, coreutils, fetchurl, fetchpatch, perl, python3, m4
 
 , libffi, libiconv ? null, ncurses
@@ -152,7 +152,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     perl autoconf automake m4 python3
-    ghc alex happy
+    ghc alex happy hscolour
   ];
 
   # For building runtime libs

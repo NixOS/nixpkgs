@@ -2,7 +2,7 @@
 , buildPlatform, hostPlatform, targetPlatform
 
 # build-tools
-, bootPkgs, alex, happy
+, bootPkgs, alex, happy, hscolour
 , autoconf, automake, coreutils, fetchgit, perl, python3, m4
 
 , libffi, libiconv ? null, ncurses
@@ -150,7 +150,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     perl autoconf automake m4 python3
-    ghc alex happy
+    ghc alex happy hscolour
   ];
 
   # For building runtime libs
@@ -167,6 +167,8 @@ stdenv.mkDerivation rec {
   # required, because otherwise all symbols from HSffi.o are stripped, and
   # that in turn causes GHCi to abort
   stripDebugFlags = [ "-S" ] ++ stdenv.lib.optional (!targetPlatform.isDarwin) "--keep-file-symbols";
+
+  hardeningDisable = [ "format" ];
 
   checkTarget = "test";
 
