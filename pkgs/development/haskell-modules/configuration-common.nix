@@ -347,6 +347,7 @@ self: super: {
   itanium-abi = dontCheck super.itanium-abi;
   katt = dontCheck super.katt;
   language-slice = dontCheck super.language-slice;
+  language-nix = overrideCabal super.language-nix (drv: { broken = pkgs.stdenv.isLinux && pkgs.stdenv.isi686; }); # Tests crash on 32-bit linux; see https://github.com/peti/language-nix/issues/4
   ldap-client = dontCheck super.ldap-client;
   lensref = dontCheck super.lensref;
   lucid = dontCheck super.lucid; #https://github.com/chrisdone/lucid/issues/25
