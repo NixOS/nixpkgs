@@ -15,7 +15,7 @@ stdenv.mkDerivation {
 
   buildInputs = [ ruby gems zip ];
 
-  patches = [ ./ui-lock.patch ];
+  patches = [ ./ui-no-bundler.patch ];
 
   postPatch = "patchShebangs ./ui/scripts/dist.sh";
 
