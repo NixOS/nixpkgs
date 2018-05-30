@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = {
-    description = "Free Software alternative to µtorrent";
+    description = "Featureful free software BitTorrent client";
     homepage    = https://www.qbittorrent.org/;
     license     = licenses.gpl2;
     platforms   = platforms.linux;
