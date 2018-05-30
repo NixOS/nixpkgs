@@ -1,11 +1,11 @@
 { stdenv, fetchFromGitHub, pkgconfig
 , boost, libtorrentRasterbar, qtbase, qttools, qtsvg
 , debugSupport ? false # Debugging
-, guiSupport ? true, dbus_libs ? null # GUI (disable to run headless)
+, guiSupport ? true, dbus ? null # GUI (disable to run headless)
 , webuiSupport ? true # WebUI
 }:
 
-assert guiSupport -> (dbus_libs != null);
+assert guiSupport -> (dbus != null);
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
@@ -13,26 +13,27 @@ stdenv.mkDerivation rec {
   version = "4.1.1";
 
   src = fetchFromGitHub {
-    rev = "release-${version}";
     owner = "qbittorrent";
     repo = "qbittorrent";
+    rev = "release-${version}";
     sha256 = "09bf1jr2sfdps8cb154gjw7zhdcpsamhnfbgacdmkfyd7qgcbykf";
   };
 
+  # NOTE: 2018-05-31: CMake is working but it is not officially supported
   nativeBuildInputs = [ pkgconfig ];
 
   buildInputs = [ boost libtorrentRasterbar qtbase qttools qtsvg ]
-    ++ optional guiSupport dbus_libs;
+    ++ optional guiSupport dbus; # D(esktop)-Bus depends on GUI support
 
   # Otherwise qm_gen.pri assumes lrelease-qt5, which does not exist.
   QMAKE_LRELEASE = "lrelease";
 
   configureFlags = [
     "--with-boost-libdir=${boost.out}/lib"
-    "--with-boost=${boost.dev}"
-    (if guiSupport then "" else "--disable-gui")
-    (if webuiSupport then "" else "--disable-webui")
-  ] ++ optional debugSupport "--enable-debug";
+    "--with-boost=${boost.dev}" ]
+    ++ optionals (!guiSupport) [ "--disable-gui" "--enable-systemd" ] # Also place qbittorrent-nox systemd service files
+    ++ optional (!webuiSupport) "--disable-webui"
+    ++ optional debugSupport "--enable-debug";
 
   enableParallelBuilding = true;
 
