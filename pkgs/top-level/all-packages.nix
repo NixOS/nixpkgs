@@ -1324,6 +1324,8 @@ with pkgs;
 
   interlock = callPackage ../servers/interlock {};
 
+  invoice2data  = callPackage ../tools/text/invoice2data  { };
+
   jbuilder = callPackage ../development/tools/ocaml/jbuilder { };
 
   kapacitor = callPackage ../servers/monitoring/kapacitor { };
