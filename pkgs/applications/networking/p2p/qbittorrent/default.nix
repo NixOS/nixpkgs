@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, which
+{ stdenv, fetchFromGitHub, pkgconfig, which
 , boost, libtorrentRasterbar, qtbase, qttools, qtsvg
 , debugSupport ? false # Debugging
 , guiSupport ? true, dbus_libs ? null # GUI (disable to run headless)
@@ -12,9 +12,11 @@ stdenv.mkDerivation rec {
   name = "qbittorrent-${version}";
   version = "4.1.0";
 
-  src = fetchurl {
-    url = "mirror://sourceforge/qbittorrent/${name}.tar.xz";
-    sha256 = "0fdr74sc31x421sb69vlgal1hxpccjxxk8hrrzz9f5bg4jv895pw";
+  src = fetchFromGitHub {
+    rev = "release-${version}";
+    owner = "qbittorrent";
+    repo = "qbittorrent";
+    sha256 = "0l4gam4x4ikrwsrkllz65xqhkkax2rawn094g2s0s7ppzylx1rbw";
   };
 
   nativeBuildInputs = [ pkgconfig which ];
