@@ -21461,4 +21461,6 @@ with pkgs;
 
   yrd = callPackage ../tools/networking/yrd { };
 
+  powershell = callPackage ../shells/powershell { };
+
 }
