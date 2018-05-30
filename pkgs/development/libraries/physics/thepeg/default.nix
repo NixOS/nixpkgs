@@ -13,6 +13,7 @@ stdenv.mkDerivation rec {
 
   configureFlags = [
     "--with-hepmc=${hepmc}"
+    "--with-rivet=${rivet}"
     "--without-javagui"
   ];
 
