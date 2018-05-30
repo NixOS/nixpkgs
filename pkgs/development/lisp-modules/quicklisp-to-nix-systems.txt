@@ -61,6 +61,8 @@ xembed
 command-line-arguments
 css-lite
 css-selectors
+css-selectors-simple-tree
+css-selectors-stp
 cxml
 dbd-mysql
 dbd-postgres
