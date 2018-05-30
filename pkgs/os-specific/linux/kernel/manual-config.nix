@@ -170,8 +170,8 @@ let
         fi
         make modules_install $makeFlags "''${makeFlagsArray[@]}" \
           $installFlags "''${installFlagsArray[@]}"
-        unlink $out/lib/modules/${modDirVersion}/build
-        unlink $out/lib/modules/${modDirVersion}/source
+        unlink $out/lib/modules/$actualModDirVersion/build
+        unlink $out/lib/modules/$actualModDirVersion/source
 
         mkdir -p $dev/lib/modules/${modDirVersion}/build
         cp -dpR .. $dev/lib/modules/${modDirVersion}/source
