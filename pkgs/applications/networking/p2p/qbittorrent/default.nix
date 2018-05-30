@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, pkgconfig, which
+{ stdenv, fetchFromGitHub, pkgconfig
 , boost, libtorrentRasterbar, qtbase, qttools, qtsvg
 , debugSupport ? false # Debugging
 , guiSupport ? true, dbus_libs ? null # GUI (disable to run headless)
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     sha256 = "09bf1jr2sfdps8cb154gjw7zhdcpsamhnfbgacdmkfyd7qgcbykf";
   };
 
-  nativeBuildInputs = [ pkgconfig which ];
+  nativeBuildInputs = [ pkgconfig ];
 
   buildInputs = [ boost libtorrentRasterbar qtbase qttools qtsvg ]
     ++ optional guiSupport dbus_libs;
