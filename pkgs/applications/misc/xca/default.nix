@@ -14,7 +14,7 @@ mkDerivation rec {
 
   postPatch = ''
     substituteInPlace doc/code2html \
-      --replace /usr/bin/perl ${perl}/bin/per l
+      --replace /usr/bin/perl ${perl}/bin/perl
   '';
 
   buildInputs = [ libtool openssl qtbase qttools ];
