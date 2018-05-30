@@ -3,7 +3,7 @@
 {
   passthru.videos = pkgs.runCommand "vm-test-run-${config.name}-videos" {
     src = config.test;
-    nativeBuildInputs = [ pkgs.qemu_test ];
+    nativeBuildInputs = [ pkgs.qemu_test.tools ];
   } ''
     mkdir -p "$out/nix-support"
     if [ -e "$src/nix-support/hydra-build-products" ]; then

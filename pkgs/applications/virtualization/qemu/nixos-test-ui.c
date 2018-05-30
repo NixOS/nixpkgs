@@ -170,7 +170,7 @@ static void nixos_test_cleanup(void)
     "#\n" \
     "# In order to get this into a format that's actually watchable,\n" \
     "# please use the 'nixos-test-encode-video' binary from the\n" \
-    "# 'qemu_test' package to encode it into another video format.\n" \
+    "# 'qemu_test.tools' package to encode it into another video format.\n" \
     "#\n"
 #define HEADER_SIZE sizeof(HEADER) - 1
 
