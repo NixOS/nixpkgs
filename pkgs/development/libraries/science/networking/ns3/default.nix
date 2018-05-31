@@ -21,7 +21,8 @@
 , dia, tetex ? null, ghostscript ? null, texlive ? null
 
 # generates python bindings
-, pythonSupport ? false, ncurses ? null
+# TODO turn false afterwards
+, pythonSupport ? true, ncurses ? null
 
 # All modules can be enabled by choosing 'all_modules'.
 # we include here the DCE mandatory ones

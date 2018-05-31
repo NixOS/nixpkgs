@@ -21719,10 +21719,12 @@ with pkgs;
 
   megam = callPackage ../applications/science/misc/megam { };
 
-  ns-3 = callPackage ../development/libraries/science/networking/ns3 {
+  ns-3 = callPackage ../development/libraries/science/networking/ns3 { };
+
+  ns3clang = ns-3.override {
     # can't find pyembed with it
     # stdenv = llvmPackages.libcxxStdenv; # fails
-    # stdenv = clangStdenv;
+    stdenv = clangStdenv;
   };
 
   root = callPackage ../applications/science/misc/root {
