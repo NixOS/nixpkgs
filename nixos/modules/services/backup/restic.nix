@@ -14,7 +14,15 @@ with lib;
             Read the repository password from a file.
           '';
           example = "/etc/nixos/restic-password";
+        };
 
+        s3CredentialsFile = mkOption {
+          type = with types; nullOr str;
+          description = ''
+            file containing the AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY
+            for an S3-hosted repository, in the format of an EnvironmentFile
+            as described by systemd.exec(5)
+          '';
         };
 
         repository = mkOption {
@@ -134,6 +142,8 @@ with lib;
             Type = "oneshot";
             ExecStart = "${resticCmd} backup ${concatStringsSep " " backup.extraBackupArgs} ${concatStringsSep " " backup.paths}";
             User = backup.user;
+          } // optionalAttrs (backup.s3CredentialsFile != null) {
+            EnvironmentFile = backup.s3CredentialsFile;
           };
         } // optionalAttrs backup.initialize {
           preStart = ''
