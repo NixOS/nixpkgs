@@ -23,6 +23,7 @@ self: super: {
   ghc-prim = null;
   ghci = null;
   haskeline = null;
+  hoopl = null;
   hpc = null;
   integer-gmp = null;
   mtl = null;
