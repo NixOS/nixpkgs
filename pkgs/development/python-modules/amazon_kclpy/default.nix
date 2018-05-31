@@ -28,7 +28,7 @@ buildPythonPackage rec {
   meta = with stdenv.lib; {
     description = "Amazon Kinesis Client Library for Python";
     homepage = https://github.com/awslabs/amazon-kinesis-client-python;
-    license = licenses.asl;
+    license = licenses.amazonsl;
     maintainers = with maintainers; [ psyanticy ];
   };
 }
