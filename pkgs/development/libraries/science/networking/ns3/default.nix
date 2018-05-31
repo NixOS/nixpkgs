@@ -75,10 +75,14 @@ stdenv.mkDerivation rec {
       "--with-python=${pythonEnv.interpreter}"
   ]
   ++ optional (build_profile != null) "--build-profile=${build_profile}"
-  ++ optional pythonSupport "--apiscan=all"
+  # maybe do it afterwards ? not needed , it's done automatically
+  # ++ optional pythonSupport "--apiscan=all"
   ++ optional withExamples " --enable-examples "
   ++ optional doCheck " --enable-tests "
   ;
+
+  # to prevent fatal error: 'backward_warning.h' file not found
+  CXXFLAGS = "-D_GLIBCXX_PERMIT_BACKWARD_HASH";
 
   postBuild = with stdenv.lib; let flags = concatStringsSep ";" (
       optional enableDoxygen "./waf doxygen"
@@ -95,7 +99,8 @@ stdenv.mkDerivation rec {
     ${pythonEnv.interpreter} ./test.py
   '';
 
-  hardeningDisable = [ "fortify" ];
+  # strictoverflow prevents clang from discovering pyembed when bindings
+  hardeningDisable = [ "fortify" "strictoverflow"];
 
   meta = {
     homepage = http://www.nsnam.org;
