@@ -205,6 +205,7 @@ let
       install -D $NETBSDSRCDIR/include/rpc/types.h $out/include/rpc/types.h
       install -D $NETBSDSRCDIR/include/utmpx.h $out/include/utmpx.h
       install -D $NETBSDSRCDIR/include/tzfile.h $out/include/tzfile.h
+      install -D $NETBSDSRCDIR/sys/sys/tree.h $out/include/sys/tree.h
 
       mkdir -p $out/lib/pkgconfig
       substitute ${./libbsd-overlay.pc} $out/lib/pkgconfig/libbsd-overlay.pc \
