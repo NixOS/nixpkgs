@@ -13,6 +13,9 @@ buildPerlPackage rec {
 
   makeMakerFlags = "POSTGRES_HOME=${postgresql}";
 
+  # tests freeze in a sandbox
+  doCheck = false;
+
   meta = {
     homepage = http://search.cpan.org/dist/DBD-Pg/;
     description = "DBI PostgreSQL interface";
