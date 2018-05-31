@@ -3,7 +3,7 @@ source $stdenv/setup
 mkdir -p $out/etc
 
 set -f
-eval "sources_=($sources)"
+sources_=($sources)
 eval "targets_=($targets)"
 eval "modes_=($modes)"
 eval "users_=($users)"
