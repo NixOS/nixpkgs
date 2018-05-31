@@ -109,9 +109,7 @@ rec {
     inherit (darwin) Security;
   };
 
-  hubUnstable = callPackage ./hub/unstable.nix {
-    inherit (darwin) Security;
-  };
+  hubUnstable = throw "use gitAndTools.hub instead";
 
   qgit = qt5.callPackage ./qgit { };
 
