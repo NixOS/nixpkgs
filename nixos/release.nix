@@ -289,7 +289,7 @@ in rec {
   tests.flatpak = callTest tests/flatpak.nix {};
   tests.firewall = callTest tests/firewall.nix {};
   tests.fwupd = callTest tests/fwupd.nix {};
-  #tests.gdk-pixbuf = callTest tests/gdk-pixbuf.nix {};
+  tests.gdk-pixbuf = callTest tests/gdk-pixbuf.nix {};
   #tests.gitlab = callTest tests/gitlab.nix {};
   tests.gitolite = callTest tests/gitolite.nix {};
   tests.gjs = callTest tests/gjs.nix {};
