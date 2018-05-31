@@ -1,0 +1,96 @@
+diff -ruN gildas-src-may18a.orig/admin/gildas-env.sh gildas-src-may18a/admin/gildas-env.sh
+--- gildas-src-may18a.orig/admin/gildas-env.sh	2018-04-24 18:20:08.000000000 +0200
++++ gildas-src-may18a/admin/gildas-env.sh	2018-05-04 16:39:18.982253471 +0200
+@@ -430,7 +430,7 @@
+         # dot (e.g. so.3 is not counted), because e.g. /usr/lib64/liblapack.so.3
+         # is useless and can not be found by the linker on command lines like
+         # "-L/usr/lib -llapack"
+-        occurences=`\ls ${2}/${1}* 2> /dev/null | \grep -v "${2}/${1}.*\." | \wc -l`
++        occurences=`\ls -l ${2}/${1}{so,a,h} 2> /dev/null | \wc -l`
+         if [ ${occurences} -ge 1 ]; then
+             \return 0
+         else
+@@ -458,11 +458,9 @@
+     SDM_MISSING=
+     #
+     for DIR in $GAGENV_SEARCH_PATH; do
+-        if file_present "liblapack." "${DIR}"; then
++        if file_present "libopenblas." "${DIR}"; then
+             LAPACK_PRESENT=yes
+             LAPACK_LIB_DIR=$DIR
+-        fi
+-        if file_present "libblas." "${DIR}"; then
+             BLAS_PRESENT=yes
+             BLAS_LIB_DIR=$DIR
+         fi
+@@ -493,7 +491,7 @@
+     X11_LIB=no
+     #
+     for DIR in $INC_PATH; do
+-        if file_present "X.h" "${DIR}/X11"; then
++        if file_present "X." "${DIR}/X11"; then
+             X11_INC=yes
+             X11_INC_DIR=$DIR
+         fi
+diff -ruN gildas-src-may18a.orig/admin/Makefile.build gildas-src-may18a/admin/Makefile.build
+--- gildas-src-may18a.orig/admin/Makefile.build	2018-03-19 17:48:07.000000000 +0100
++++ gildas-src-may18a/admin/Makefile.build	2018-05-04 16:39:18.982253471 +0200
+@@ -398,9 +398,7 @@
+ # only the shared libraries are installed (i.e. the corresponding archive
+ # libraries are missing).
+ 
+--lblas:
+-
+--llapack:
++-lopenblas:
+ 
+ -lslatec:
+ 
+diff -ruN gildas-src-may18a.orig/admin/Makefile.def gildas-src-may18a/admin/Makefile.def
+--- gildas-src-may18a.orig/admin/Makefile.def	2018-03-21 17:53:34.000000000 +0100
++++ gildas-src-may18a/admin/Makefile.def	2018-05-04 16:41:59.233518207 +0200
+@@ -206,7 +206,7 @@
+ ###########################################################################
+ # Other defaults
+ 
+-LINEAR = lapack
++LINEAR = openblas
+ GLOBAL_DIRTY = $(builddir) *~ TAGS ChangeLog* Makefile.bak
+ 
+ ###########################################################################
+@@ -515,7 +515,7 @@
+ ###########################################################################
+ # Kernel libraries
+ 
+-LEGACY_LIBS = -lslatec -llapack -lblas
++LEGACY_LIBS = -lslatec -lopenblas
+ _GAG_LIBS = -lggui -lgcore -lgio -lgfits -lgwcs -lgmath -lgsys -lginc
+ ifndef GAG_WIN32
+   GAG_LIBS = $(_GAG_LIBS)
+diff -ruN gildas-src-may18a.orig/legacy/slatec/Makefile gildas-src-may18a/legacy/slatec/Makefile
+--- gildas-src-may18a.orig/legacy/slatec/Makefile	2014-12-09 11:31:56.000000000 +0100
++++ gildas-src-may18a/legacy/slatec/Makefile	2018-05-04 16:39:18.982253471 +0200
+@@ -24,7 +24,7 @@
+ U-all.o V-all.o W-all.o X-all.o Y-all.o Z-all.o d1mach.o i1mach.o pimach.o  \
+ r1mach.o dummy.o P-all.o P-value.o Dp-1vlu.o 
+ 
+-LIB_DEPENDS = -llapack -lblas
++LIB_DEPENDS = -lopenblas
+ 
+ ifeq ($(GAG_COMPILER_FKIND),ifc)
+   OPTION_FFLAGS = 
+diff -ruN gildas-src-may18a.orig/packages/clic/lib/Makefile gildas-src-may18a/packages/clic/lib/Makefile
+--- gildas-src-may18a.orig/packages/clic/lib/Makefile	2018-01-16 11:53:15.000000000 +0100
++++ gildas-src-may18a/packages/clic/lib/Makefile	2018-05-04 16:39:18.982253471 +0200
+@@ -56,9 +56,9 @@
+ sg_line_table.o table_passband.o clic_index.o clic_blank.o
+ 
+ # Mathematical library dependency
+-ifeq ($(LINEAR),lapack)
++ifeq ($(LINEAR),openblas)
+   LINEAR_LIB_OBJECTS = singular.o mth_lapack.o
+-  LINEAR_LIB_DEPENDS = -llapack -lblas
++  LINEAR_LIB_DEPENDS = -lopenblas
+ else 
+   ifeq ($(LINEAR),nag)
+     LINEAR_LIB_OBJECTS = mth_nag.o
