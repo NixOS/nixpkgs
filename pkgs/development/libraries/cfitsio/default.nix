@@ -8,7 +8,7 @@
     sha256 = "07fghxh5fl8nqk3q0dh8rvc83npnm0hisxzcj16a6r7gj5pmp40l";
   };
 
-  patches = [ ./darwin-curl-config.patch ./darwin-universal.patch ];
+  patches = [ ./darwin-curl-config.patch ./darwin-rpath-universal.patch ];
 
   # Shared-only build
   buildFlags = "shared";
