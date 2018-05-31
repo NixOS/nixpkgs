@@ -1,6 +1,9 @@
 { stdenv }:
-
-stdenv.mkDerivation {
+with stdenv.lib;
+let
+  # Sanitizer headers aren't available in older libc++ stdenvs due to a bug
+  sanitizersBroken = stdenv.cc.isClang && builtins.compareVersions (getVersion stdenv.cc.name) "6.0.0" < 0;
+in stdenv.mkDerivation {
   name = "cc-wrapper-test";
 
   buildCommand = ''
@@ -15,7 +18,7 @@ stdenv.mkDerivation {
     $CXX -o cxx-check ${./cxx-main.cc}
     ./cxx-check
 
-    ${stdenv.lib.optionalString (stdenv.isDarwin && stdenv.cc.isClang) ''
+    ${optionalString (stdenv.isDarwin && stdenv.cc.isClang) ''
       printf "checking whether compiler can build with CoreFoundation.framework... " >&2
       mkdir -p foo/lib
       $CC -framework CoreFoundation -o core-foundation-check ${./core-foundation-main.c}
@@ -31,7 +34,7 @@ stdenv.mkDerivation {
     printf "checking whether compiler uses NIX_LDFLAGS... " >&2
     mkdir -p foo/lib
     $CC -shared \
-      ${stdenv.lib.optionalString stdenv.isDarwin "-Wl,-install_name,@rpath/libfoo.dylib"} \
+      ${optionalString stdenv.isDarwin "-Wl,-install_name,@rpath/libfoo.dylib"} \
       -DVALUE=42 \
       -o foo/lib/libfoo${stdenv.hostPlatform.extensions.sharedLibrary} \
       ${./foo.c}
@@ -39,11 +42,14 @@ stdenv.mkDerivation {
     NIX_LDFLAGS="-L$NIX_BUILD_TOP/foo/lib -rpath $NIX_BUILD_TOP/foo/lib" $CC -lfoo -o ldflags-check ${./ldflags-main.c}
     ./ldflags-check
 
-    $CC -o sanitizers -fsanitize=address,undefined ${./sanitizers.c}
-    ./sanitizers
+    ${optionalString (!sanitizersBroken) ''
+      printf "checking whether sanitizers are fully functional... ">&2
+      $CC -o sanitizers -fsanitize=address,undefined ${./sanitizers.c}
+      ./sanitizers
+    ''}
 
     touch $out
   '';
 
-  meta.platforms = stdenv.lib.platforms.all;
+  meta.platforms = platforms.all;
 }
