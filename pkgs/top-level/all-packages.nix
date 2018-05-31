@@ -15647,7 +15647,7 @@ with pkgs;
   eterm = callPackage ../applications/misc/eterm { };
 
   etherape = callPackage ../applications/networking/sniffers/etherape {
-    inherit (gnome2) gnomedocutils libgnome libglade libgnomeui scrollkeeper;
+    inherit (gnome2) libgnomecanvas libglade;
   };
 
   evilvte = callPackage ../applications/misc/evilvte {
