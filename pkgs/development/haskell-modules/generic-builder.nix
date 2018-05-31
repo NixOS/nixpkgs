@@ -183,7 +183,7 @@ let
                       setupHaskellDepends ++
                       buildTools ++ libraryToolDepends ++ executableToolDepends;
   propagatedBuildInputs = buildDepends ++ libraryHaskellDepends ++ executableHaskellDepends ++ libraryFrameworkDepends;
-  otherBuildInputs = setupHaskellDepends ++ extraLibraries ++ librarySystemDepends ++ executableSystemDepends ++ executableFrameworkDepends ++
+  otherBuildInputs = extraLibraries ++ librarySystemDepends ++ executableSystemDepends ++ executableFrameworkDepends ++
                      allPkgconfigDepends ++
                      optionals doCheck (testDepends ++ testHaskellDepends ++ testSystemDepends ++ testToolDepends ++ testFrameworkDepends) ++
                      optionals doBenchmark (benchmarkDepends ++ benchmarkHaskellDepends ++ benchmarkSystemDepends ++ benchmarkToolDepends ++ benchmarkFrameworkDepends);
