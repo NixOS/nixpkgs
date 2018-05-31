@@ -18129,6 +18129,8 @@ EOF
 
   voluptuous = callPackage ../development/python-modules/voluptuous { };
 
+  voluptuous-serialize = callPackage ../development/python-modules/voluptuous-serialize { };
+
   pysigset = callPackage ../development/python-modules/pysigset { };
 
   us = callPackage ../development/python-modules/us { };
