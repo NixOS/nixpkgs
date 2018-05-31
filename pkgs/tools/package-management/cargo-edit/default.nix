@@ -1,6 +1,6 @@
-{ stdenv, darwin, defaultCrateOverrides, fetchFromGitHub }:
+{ stdenv, pkgs, darwin, defaultCrateOverrides, fetchFromGitHub }:
 
-((import ./cargo-edit.nix).cargo_edit {}).override {
+((import ./cargo-edit.nix { inherit pkgs; }).cargo_edit {}).override {
   crateOverrides = defaultCrateOverrides // {
     cargo-edit = attrs: rec {
       name = "cargo-edit-${version}";
