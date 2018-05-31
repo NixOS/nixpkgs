@@ -1,28 +1,27 @@
-{ stdenv, fetchFromGitHub, rustPlatform, makeWrapper, zlib, openssl }:
+{ stdenv, fetchFromGitHub, rustPlatform, makeWrapper, pkgconfig, openssl }:
 
 with rustPlatform;
 
 buildRustPackage rec {
   name = "cargo-edit-${version}";
-  version = "0.1.6";
+  version = "0.3.0-beta.1";
 
   src = fetchFromGitHub {
     owner = "killercup";
     repo = "cargo-edit";
     rev = "v${version}";
-    sha256 = "16wvix2zkpzl1hhlsvd6mkps8fw5k4n2dvjk9m10gg27pixmiync";
+    sha256 = "0a6gg940jqnxp7yypgf7qcv9071dsxy9h8mzpfkkk8pa1m2lp4q7";
   };
 
-  buildInputs = [ zlib openssl ];
+  buildInputs = [ pkgconfig openssl ];
 
-  cargoSha256 = "1m4yb7472g1n900dh3xqvdcywk3v01slj3bkk7bk7a9p5x1kyjfn";
+  cargoSha256 = "169lx50nspv2hmmg3r03bda2nbmn2f6k0f6ps8l8jbqja6cjz4sr";
 
   meta = with stdenv.lib; {
     description = "A utility for managing cargo dependencies from the command line";
     homepage = https://github.com/killercup/cargo-edit;
     license = with licenses; [ mit ];
-    maintainers = with maintainers; [ jb55 ];
+    maintainers = with maintainers; [ jb55 jD91mZM2 ];
     platforms = platforms.all;
-    broken = true;
   };
 }
