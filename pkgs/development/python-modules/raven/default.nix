@@ -4,13 +4,13 @@
 
 buildPythonPackage rec {
   pname = "raven";
-  version = "6.8.0";
+  version = "6.9.0";
 
   src = fetchFromGitHub {
     owner = "getsentry";
     repo = "raven-python";
     rev = version;
-    sha256 = "0d052nns0pf1bsazapnnrylvair37vhnjaifsdldddqv05ccfc57";
+    sha256 = "1kggp34i8gqi47khca2v5n2i32zrg66m1pga6c00yqmlbv74d84v";
   };
 
   # way too many dependencies to run tests
