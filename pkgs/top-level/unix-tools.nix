@@ -50,12 +50,12 @@ let
       linux = pkgs.utillinux;
     };
     getconf = {
-      linux = if hostPlatform.isGNU then lib.getBin pkgs.glibc
+      linux = if hostPlatform.libc == "glibc" then lib.getBin pkgs.glibc
               else pkgs.netbsd.getconf;
       darwin = pkgs.darwin.system_cmds;
     };
     getent = {
-      linux = if hostPlatform.isGNU then lib.getBin pkgs.glibc
+      linux = if hostPlatform.libc == "glibc" then lib.getBin pkgs.glibc
               else pkgs.netbsd.getent;
       darwin = pkgs.netbsd.getent;
     };
