@@ -402,7 +402,7 @@
     "http.real_ip" = ps: with ps; [  ];
     "http.static" = ps: with ps; [  ];
     "http.view" = ps: with ps; [  ];
-    "hue" = ps: with ps; [ aiohue ];
+    "hue" = ps: with ps; [ aiohue voluptuous-serialize ];
     "hue.bridge" = ps: with ps; [  ];
     "hue.config_flow" = ps: with ps; [  ];
     "hue.const" = ps: with ps; [  ];
@@ -459,7 +459,7 @@
     "light.hive" = ps: with ps; [  ];
     "light.homekit_controller" = ps: with ps; [  ];
     "light.homematic" = ps: with ps; [ pyhomematic ];
-    "light.hue" = ps: with ps; [ aiohue ];
+    "light.hue" = ps: with ps; [ aiohue voluptuous-serialize ];
     "light.hyperion" = ps: with ps; [  ];
     "light.iglo" = ps: with ps; [  ];
     "light.ihc" = ps: with ps; [  ];
