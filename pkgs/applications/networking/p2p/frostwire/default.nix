@@ -52,8 +52,15 @@ in stdenv.mkDerivation {
   buildPhase = ''
     export GRADLE_USER_HOME=$(mktemp -d)
     ( cd desktop
+
+      # disable auto-update (anyway it won't update frostwire installed in nix store)
+      substituteInPlace src/com/frostwire/gui/updates/UpdateManager.java \
+        --replace 'um.checkForUpdates' '// um.checkForUpdates'
+
+      # fix path to mplayer
       substituteInPlace src/com/frostwire/gui/player/MediaPlayerLinux.java \
         --replace /usr/bin/mplayer ${mplayer}/bin/mplayer
+
       substituteInPlace build.gradle \
         --replace 'mavenCentral()' 'mavenLocal(); maven { url uri("${deps}") }'
       gradle --offline --no-daemon build
@@ -66,8 +73,8 @@ in stdenv.mkDerivation {
     cp desktop/build/libs/frostwire.jar $out/share/java/frostwire.jar
 
     cp ${ { x86_64-darwin = "desktop/lib/native/*.dylib";
-            x86_64-linux  = "desktop/lib/native/libjlibtorrent.so";
-            i686-linux    = "desktop/lib/native/libjlibtorrentx86.so";
+            x86_64-linux  = "desktop/lib/native/lib{jlibtorrent,SystemUtilities}.so";
+            i686-linux    = "desktop/lib/native/lib{jlibtorrent,SystemUtilities}X86.so";
           }.${stdenv.system} or (throw "unsupported system ${stdenv.system}")
         } $out/lib
 
