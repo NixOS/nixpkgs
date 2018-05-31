@@ -1682,6 +1682,8 @@ with pkgs;
 
   colordiff = callPackage ../tools/text/colordiff { };
 
+  compy = callPackage ../tools/networking/compy { };
+
   concurrencykit = callPackage ../development/libraries/concurrencykit { };
 
   connect = callPackage ../tools/networking/connect { };
