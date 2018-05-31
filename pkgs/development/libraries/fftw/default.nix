@@ -5,7 +5,7 @@ with lib;
 assert elem precision [ "single" "double" "long-double" "quad-precision" ];
 
 let
-  version = "3.3.7";
+  version = "3.3.8";
   withDoc = stdenv.cc.isGNU;
 in
 
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "ftp://ftp.fftw.org/pub/fftw/fftw-${version}.tar.gz";
-    sha256 = "0wsms8narnbhfsa8chdflv2j9hzspvflblnqdn7hw8x5xdzrnq1v";
+    sha256 = "00z3k8fq561wq2khssqg0kallk0504dzlx989x3vvicjdqpjc4v1";
   };
 
   outputs = [ "out" "dev" "man" ]
