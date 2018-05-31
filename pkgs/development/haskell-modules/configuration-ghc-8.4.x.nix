@@ -136,6 +136,8 @@ self: super: {
     };
   });
 
+  ## Bounds related: it wants base-compat 0.9.
+  criterion = super.criterion_1_4_1_0;
 
   ## Unmerged
 
