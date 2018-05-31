@@ -2,16 +2,15 @@
 
 stdenv.mkDerivation rec {
   name = "scdoc-${version}";
-  version = "1.3.3";
+  version = "1.3.4";
 
   src = fetchurl {
     url = "https://git.sr.ht/~sircmpwn/scdoc/snapshot/scdoc-${version}.tar.xz";
-    sha256 = "1xkfsrzpbm68522b1dml9dghnwb5dlwpf91c1i4y51rgv3hdgwdj";
+    sha256 = "131f6sd4azpc988kwzlrc9c4x98abhfnxr5wpk7i427ha84g89yb";
   };
 
   postPatch = ''
     substituteInPlace Makefile \
-      --replace "VERSION=1.2.3" "VERSION=${version}" \
       --replace "-static" "" \
       --replace "/usr/local" "$out"
   '';
