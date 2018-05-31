@@ -939,7 +939,8 @@ self: super: {
   haddock-api = super.haddock-api.override { haddock-library = self.haddock-library_1_4_4; };
 
   # Jailbreak "unix-compat >=0.1.2 && <0.5".
-  darcs = overrideCabal super.darcs (drv: { preConfigure = "sed -i -e 's/unix-compat .*,/unix-compat,/' -e 's/fgl .*,/fgl,/' darcs.cabal"; });
+  # Jailbreak "graphviz >=2999.18.1 && <2999.20".
+  darcs = overrideCabal super.darcs (drv: { preConfigure = "sed -i -e 's/unix-compat .*,/unix-compat,/' -e 's/fgl .*,/fgl,/' -e 's/graphviz .*,/graphviz,/' darcs.cabal"; });
 
   # https://github.com/Twinside/Juicy.Pixels/issues/149
   JuicyPixels = dontHaddock super.JuicyPixels;
