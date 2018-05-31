@@ -17,9 +17,9 @@ for ((i = 0; i < ${#targets_[@]}; i++)); do
     if [[ "$source" =~ '*' ]]; then
 
         # If the source name contains '*', perform globbing.
-        mkdir -p $out/etc/$target
+        mkdir -p "$out/etc/$target"
         for fn in $source; do
-            ln -s "$fn" $out/etc/$target/
+            ln -s "$fn" "$out/etc/$target/"
         done
 
     else
