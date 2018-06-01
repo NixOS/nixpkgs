@@ -60,6 +60,6 @@ stdenv.mkDerivation rec {
     description = "Simple Linux Utility for Resource Management";
     platforms = platforms.linux;
     license = licenses.gpl2;
-    maintainers = [ maintainers.jagajaga ];
+    maintainers = with maintainers; [ jagajaga markuskowa ];
   };
 }
