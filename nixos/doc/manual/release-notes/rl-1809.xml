@@ -53,10 +53,12 @@ $ nix-instantiate -E '(import &lt;nixpkgsunstable&gt; {}).gitFull'
 
   <itemizedlist>
    <listitem>
-     <para>When enabled the <literal>iproute2</literal> will copy the files
-       expected by ip route (e.g., <filename>rt_tables</filename>) in
-       <filename>/run/iproute2</filename>. This allows to write aliases for
-       routing tables for instance.</para>
+    <para>
+     When enabled the <literal>iproute2</literal> will copy the files expected
+     by ip route (e.g., <filename>rt_tables</filename>) in
+     <filename>/run/iproute2</filename>. This allows to write aliases for
+     routing tables for instance.
+    </para>
    </listitem>
   </itemizedlist>
  </section>
@@ -99,20 +101,24 @@ $ nix-instantiate -E '(import &lt;nixpkgsunstable&gt; {}).gitFull'
    </listitem>
    <listitem>
     <para>
-     The <varname>services.docker-registry.extraConfig</varname> object doesn't contain
-     environment variables anymore. Instead it needs to provide an object structure
-     that can be mapped onto the YAML configuration defined in <link xlink:href="https://github.com/docker/distribution/blob/v2.6.2/docs/configuration.md">the <varname>docker/distribution</varname> docs</link>.
+     The <varname>services.docker-registry.extraConfig</varname> object doesn't
+     contain environment variables anymore. Instead it needs to provide an
+     object structure that can be mapped onto the YAML configuration defined in
+     <link xlink:href="https://github.com/docker/distribution/blob/v2.6.2/docs/configuration.md">the
+     <varname>docker/distribution</varname> docs</link>.
     </para>
    </listitem>
    <listitem>
     <para>
-     <literal>gnucash</literal> has changed from version 2.4 to 3.x.
-     If you've been using <literal>gnucash</literal> (version 2.4) instead of
-     <literal>gnucash26</literal> (version 2.6) you must open your Gnucash 
-     data file(s) with <literal>gnucash26</literal> and then save them to
-     upgrade the file format. Then you may use your data file(s) with
-     Gnucash 3.x. See the upgrade <link xlink:href="https://wiki.gnucash.org/wiki/FAQ#Using_Different_Versions.2C_Up_And_Downgrade">documentation</link>.
-     Gnucash 2.4 is still available under the attribute <literal>gnucash24</literal>.
+     <literal>gnucash</literal> has changed from version 2.4 to 3.x. If you've
+     been using <literal>gnucash</literal> (version 2.4) instead of
+     <literal>gnucash26</literal> (version 2.6) you must open your Gnucash data
+     file(s) with <literal>gnucash26</literal> and then save them to upgrade
+     the file format. Then you may use your data file(s) with Gnucash 3.x. See
+     the upgrade
+     <link xlink:href="https://wiki.gnucash.org/wiki/FAQ#Using_Different_Versions.2C_Up_And_Downgrade">documentation</link>.
+     Gnucash 2.4 is still available under the attribute
+     <literal>gnucash24</literal>.
     </para>
    </listitem>
   </itemizedlist>
@@ -128,9 +134,9 @@ $ nix-instantiate -E '(import &lt;nixpkgsunstable&gt; {}).gitFull'
   <itemizedlist>
    <listitem>
     <para>
-     <literal>dockerTools.pullImage</literal> relies on image digest
-     instead of image tag to download the image. The
-     <literal>sha256</literal> of a pulled image has to be updated.
+     <literal>dockerTools.pullImage</literal> relies on image digest instead of
+     image tag to download the image. The <literal>sha256</literal> of a pulled
+     image has to be updated.
     </para>
    </listitem>
    <listitem>
@@ -187,32 +193,40 @@ $ nix-instantiate -E '(import &lt;nixpkgsunstable&gt; {}).gitFull'
     <para>
      The module for <option>security.dhparams</option> has two new options now:
     </para>
-
     <variablelist>
      <varlistentry>
-      <term><option>security.dhparams.stateless</option></term>
-      <listitem><para>
-       Puts the generated Diffie-Hellman parameters into the Nix store instead
-       of managing them in a stateful manner in
-       <filename class="directory">/var/lib/dhparams</filename>.
-      </para></listitem>
+      <term>
+       <option>security.dhparams.stateless</option>
+      </term>
+      <listitem>
+       <para>
+        Puts the generated Diffie-Hellman parameters into the Nix store instead
+        of managing them in a stateful manner in
+        <filename class="directory">/var/lib/dhparams</filename>.
+       </para>
+      </listitem>
      </varlistentry>
      <varlistentry>
-      <term><option>security.dhparams.defaultBitSize</option></term>
-      <listitem><para>
-       The default bit size to use for the generated Diffie-Hellman parameters.
-      </para></listitem>
+      <term>
+       <option>security.dhparams.defaultBitSize</option>
+      </term>
+      <listitem>
+       <para>
+        The default bit size to use for the generated Diffie-Hellman
+        parameters.
+       </para>
+      </listitem>
      </varlistentry>
     </variablelist>
-
-    <note><para>
-     The path to the actual generated parameter files should now be queried
-     using
-     <literal>config.security.dhparams.params.<replaceable>name</replaceable>.path</literal>
-     because it might be either in the Nix store or in a directory configured
-     by <option>security.dhparams.path</option>.
-    </para></note>
-
+    <note>
+     <para>
+      The path to the actual generated parameter files should now be queried
+      using
+      <literal>config.security.dhparams.params.<replaceable>name</replaceable>.path</literal>
+      because it might be either in the Nix store or in a directory configured
+      by <option>security.dhparams.path</option>.
+     </para>
+    </note>
     <note>
      <title>For developers:</title>
      <para>
@@ -237,20 +251,23 @@ $ nix-instantiate -E '(import &lt;nixpkgsunstable&gt; {}).gitFull'
    </listitem>
    <listitem>
     <para>
-     <literal>networking.networkmanager.useDnsmasq</literal> has been deprecated. Use
-     <literal>networking.networkmanager.dns</literal> instead.
+     <literal>networking.networkmanager.useDnsmasq</literal> has been
+     deprecated. Use <literal>networking.networkmanager.dns</literal> instead.
     </para>
    </listitem>
    <listitem>
     <para>
-     The option <varname>services.kubernetes.apiserver.admissionControl</varname>
-     was renamed to <varname>services.kubernetes.apiserver.enableAdmissionPlugins</varname>.
+     The option
+     <varname>services.kubernetes.apiserver.admissionControl</varname> was
+     renamed to
+     <varname>services.kubernetes.apiserver.enableAdmissionPlugins</varname>.
     </para>
    </listitem>
    <listitem>
     <para>
      Recommented way to access the Kubernetes Dashboard is with HTTPS (TLS)
-     Therefore; public service port for the dashboard has changed to 443 (container port 8443) and scheme to https.
+     Therefore; public service port for the dashboard has changed to 443
+     (container port 8443) and scheme to https.
     </para>
    </listitem>
   </itemizedlist>
