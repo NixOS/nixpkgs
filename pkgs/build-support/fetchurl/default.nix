@@ -52,8 +52,10 @@
   # Passthru information, if any.
 , passthru ? {}
 } @ args:
-# Fallback to fetchurlCurl when arguments are used that are not supported by the Nix-builtin fetchurl.
-if curlOpts != ""
+# Fallback to fetchurlCurl when builtin:fetchurl is not supported
+# or arguments are used that are not supported by the Nix-builtin fetchurl.
+if (builtins.compareVersions "2.0" builtins.nixVersion >= 0)
+|| curlOpts != ""
 || netrcPhase != null
 || postFetch != ""
 || downloadToTemp
