@@ -18,13 +18,18 @@ in stdenv.mkDerivation rec {
 
   buildInputs = [ pythonEnv ];
 
+  patchPhase = ''
+    sed -i -e 's|$0|${pass}/bin/pass|' import.bash
+  '';
+
   dontBuild = true;
 
   installFlags = [ "PREFIX=$(out)" ];
 
   postFixup = ''
     wrapProgram $out/lib/password-store/extensions/import.bash \
-      --prefix PATH : "${pythonEnv}/bin"
+      --prefix PATH : "${pythonEnv}/bin" \
+      --run "export PREFIX"
   '';
 
   meta = with stdenv.lib; {
