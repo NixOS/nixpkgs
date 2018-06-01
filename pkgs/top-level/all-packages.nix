@@ -13870,6 +13870,8 @@ with pkgs;
 
   dep = callPackage ../development/tools/dep { };
 
+  dep2nix = callPackage ../development/tools/dep2nix { };
+
   easyjson = callPackage ../development/tools/easyjson { };
 
   go-bindata = callPackage ../development/tools/go-bindata { };
