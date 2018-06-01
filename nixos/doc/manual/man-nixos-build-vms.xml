@@ -12,14 +12,22 @@
   </refname><refpurpose>build a network of virtual machines from a network of NixOS configurations</refpurpose>
  </refnamediv>
  <refsynopsisdiv>
-  <cmdsynopsis><command>nixos-build-vms</command>
-   <arg><option>--show-trace</option>
+  <cmdsynopsis>
+   <command>nixos-build-vms</command> 
+   <arg>
+    <option>--show-trace</option>
    </arg>
-   <arg><option>--no-out-link</option>
+    
+   <arg>
+    <option>--no-out-link</option>
    </arg>
-   <arg><option>--help</option>
+    
+   <arg>
+    <option>--help</option>
    </arg>
-   <arg choice="plain"><replaceable>network.nix</replaceable>
+    
+   <arg choice="plain">
+    <replaceable>network.nix</replaceable>
    </arg>
   </cmdsynopsis>
  </refsynopsisdiv>
@@ -77,7 +85,8 @@
   </para>
   <variablelist>
    <varlistentry>
-    <term><option>--show-trace</option>
+    <term>
+     <option>--show-trace</option>
     </term>
     <listitem>
      <para>
@@ -86,7 +95,8 @@
     </listitem>
    </varlistentry>
    <varlistentry>
-    <term><option>--no-out-link</option>
+    <term>
+     <option>--no-out-link</option>
     </term>
     <listitem>
      <para>
@@ -95,7 +105,8 @@
     </listitem>
    </varlistentry>
    <varlistentry>
-    <term><option>-h</option>, <option>--help</option>
+    <term>
+     <option>-h</option>, <option>--help</option>
     </term>
     <listitem>
      <para>
