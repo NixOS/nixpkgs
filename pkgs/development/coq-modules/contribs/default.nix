@@ -21,11 +21,18 @@ let mkContrib = repo: revs: param:
     };
   }; in
 {
-  aac-tactics = mkContrib "aac-tactics" [ ] {
-    version = "v8.6.0-7-g54913f4";
-    rev = "54913f44939623986ce3e01e3faf31efa9059ca6";
-    sha256 = "0bb6y7nqs4gyv1ybzhbdg6hb2hyfxc7bmkg6zl43l14641zhv247";
-  };
+  aac-tactics = mkContrib "aac-tactics" [ "8.7" "8.8" ] {
+    "8.7" = {
+      version = "20180530";
+      rev = "f01df35e1d796ce1fdc7ba3d670ce5d63c95d544";
+      sha256 = "1bwvnbd5ws1plgj147blcrvyycf3gg3fz3rm2mckln8z3sfxyq2k";
+    };
+    "8.8" = {
+      version = "20180530";
+      rev = "86ac28259030649ef51460e4de2441c8a1017751";
+      sha256 = "09bbk2a7pn0j76mmapl583f8a20zqd3a1m9lkml8rpwml692bzi9";
+    };
+  }."${coq.coq-version}";
 
   abp = mkContrib "abp" [ "8.5" "8.6" "8.7" ] {
     version = "v8.6.0";
