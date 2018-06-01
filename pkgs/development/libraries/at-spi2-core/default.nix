@@ -1,4 +1,5 @@
-{ stdenv, fetchurl, python, pkgconfig, popt, gettext, dbus-glib
+{ stdenv, fetchurl, pkgconfig, gettext, meson, ninja
+, python, popt, dbus-glib
 , libX11, xextproto, libSM, libICE, libXtst, libXi, gobjectIntrospection }:
 
 stdenv.mkDerivation rec {
@@ -14,14 +15,11 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "dev" ];
 
-  nativeBuildInputs = [ pkgconfig gettext gobjectIntrospection ];
+  nativeBuildInputs = [ meson ninja pkgconfig gettext gobjectIntrospection ];
   buildInputs = [
     python popt dbus-glib
     libX11 xextproto libSM libICE libXtst libXi
   ];
-
-  # ToDo: on non-NixOS we create a symlink from there?
-  configureFlags = "--with-dbus-daemondir=/run/current-system/sw/bin/";
 
   doCheck = false; # needs dbus daemon
 
