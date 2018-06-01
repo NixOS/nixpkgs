@@ -382,6 +382,8 @@ in {
     callPackage = pkgs.callPackage;
   };
 
+  pykdtree = callPackage ../development/python-modules/pykdtree { };
+
   pyparser = callPackage ../development/python-modules/pyparser { };
 
   pyqt4 = callPackage ../development/python-modules/pyqt/4.x.nix {
