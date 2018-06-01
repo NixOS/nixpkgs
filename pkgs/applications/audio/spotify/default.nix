@@ -7,7 +7,7 @@ let
   # Latest version number can be found at:
   # http://repository-origin.spotify.com/pool/non-free/s/spotify-client/
   # Be careful not to pick the testing version.
-  version = "1.0.79.223.g92622cc2-21";
+  version = "1.0.80.480.g51b03ac3-13";
 
   deps = [
     alsaLib
