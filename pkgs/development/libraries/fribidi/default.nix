@@ -1,20 +1,23 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, pkgconfig }:
+{ stdenv
+, fetchurl
+
+, meson
+, ninja
+, pkgconfig
+}:
 
 stdenv.mkDerivation rec {
-  name = "fribidi-${version}";
-  version = "1.0.3";
+  name = "${pname}-${version}";
+  pname = "fribidi";
+  version = "1.0.4";
 
-  src = fetchFromGitHub {
-    owner = "fribidi";
-    repo = "fribidi";
-    rev = "v${version}";
-    sha256 = "02483nscxc695j9b92clcdf0xb7xkfjry09kqdkkhkzl3vdcj039";
+  # NOTE: 2018-06-06 v1.0.4: Only URL tarball has "Have pre-generated man pages: true", which works-around upstream usage of some rare ancient `c2man` fossil application.
+  src = fetchurl {
+    url = "https://github.com/${pname}/${pname}/releases/download/v${version}/${name}.tar.bz2";
+    sha256 = "1gipy8fjyn6i4qrhima02x8xs493d21f22dijp88nk807razxgcl";
   };
 
-  # FIXME: Please build with Meson after https://github.com/fribidi/fribidi/issues/79 solved
-  nativeBuildInputs = [ autoreconfHook pkgconfig ];
-
-  # Configure script checks for glib, but it is only used for tests.
+  nativeBuildInputs = [ meson ninja pkgconfig ];
 
   outputs = [ "out" "devdoc" ];
 
