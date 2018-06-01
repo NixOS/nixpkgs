@@ -6873,6 +6873,8 @@ with pkgs;
     ocamlPackages = ocamlPackages_4_02;
   };
 
+  opaline = callPackage ../development/tools/ocaml/opaline { };
+
   opam = callPackage ../development/tools/ocaml/opam { };
 
   picat = callPackage ../development/compilers/picat {
