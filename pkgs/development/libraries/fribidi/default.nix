@@ -2,15 +2,16 @@
 
 stdenv.mkDerivation rec {
   name = "fribidi-${version}";
-  version = "0.19.7";
+  version = "1.0.3";
 
   src = fetchFromGitHub {
     owner = "fribidi";
     repo = "fribidi";
-    rev = version;
-    sha256 = "10q5jfch5qzrj2w4fbkr086ank66plx8hp7ra9a01irj80pbk96d";
+    rev = "v${version}";
+    sha256 = "02483nscxc695j9b92clcdf0xb7xkfjry09kqdkkhkzl3vdcj039";
   };
 
+  # FIXME: Please build with Meson after https://github.com/fribidi/fribidi/issues/79 solved
   nativeBuildInputs = [ autoreconfHook pkgconfig ];
 
   # Configure script checks for glib, but it is only used for tests.
