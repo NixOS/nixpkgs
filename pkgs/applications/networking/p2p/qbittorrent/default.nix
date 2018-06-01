@@ -1,44 +1,47 @@
-{ stdenv, fetchurl, pkgconfig, which
+{ stdenv, fetchFromGitHub, pkgconfig
 , boost, libtorrentRasterbar, qtbase, qttools, qtsvg
 , debugSupport ? false # Debugging
-, guiSupport ? true, dbus_libs ? null # GUI (disable to run headless)
+, guiSupport ? true, dbus ? null # GUI (disable to run headless)
 , webuiSupport ? true # WebUI
 }:
 
-assert guiSupport -> (dbus_libs != null);
+assert guiSupport -> (dbus != null);
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
   name = "qbittorrent-${version}";
-  version = "4.1.0";
+  version = "4.1.1";
 
-  src = fetchurl {
-    url = "mirror://sourceforge/qbittorrent/${name}.tar.xz";
-    sha256 = "0fdr74sc31x421sb69vlgal1hxpccjxxk8hrrzz9f5bg4jv895pw";
+  src = fetchFromGitHub {
+    owner = "qbittorrent";
+    repo = "qbittorrent";
+    rev = "release-${version}";
+    sha256 = "09bf1jr2sfdps8cb154gjw7zhdcpsamhnfbgacdmkfyd7qgcbykf";
   };
 
-  nativeBuildInputs = [ pkgconfig which ];
+  # NOTE: 2018-05-31: CMake is working but it is not officially supported
+  nativeBuildInputs = [ pkgconfig ];
 
   buildInputs = [ boost libtorrentRasterbar qtbase qttools qtsvg ]
-    ++ optional guiSupport dbus_libs;
+    ++ optional guiSupport dbus; # D(esktop)-Bus depends on GUI support
 
   # Otherwise qm_gen.pri assumes lrelease-qt5, which does not exist.
   QMAKE_LRELEASE = "lrelease";
 
   configureFlags = [
     "--with-boost-libdir=${boost.out}/lib"
-    "--with-boost=${boost.dev}"
-    (if guiSupport then "" else "--disable-gui")
-    (if webuiSupport then "" else "--disable-webui")
-  ] ++ optional debugSupport "--enable-debug";
+    "--with-boost=${boost.dev}" ]
+    ++ optionals (!guiSupport) [ "--disable-gui" "--enable-systemd" ] # Also place qbittorrent-nox systemd service files
+    ++ optional (!webuiSupport) "--disable-webui"
+    ++ optional debugSupport "--enable-debug";
 
   enableParallelBuilding = true;
 
   meta = {
-    description = "Free Software alternative to µtorrent";
+    description = "Featureful free software BitTorrent client";
     homepage    = https://www.qbittorrent.org/;
     license     = licenses.gpl2;
     platforms   = platforms.linux;
-    maintainers = with maintainers; [ viric ];
+    maintainers = with maintainers; [ Anton-Latukha viric ];
   };
 }
