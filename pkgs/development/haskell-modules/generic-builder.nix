@@ -35,6 +35,10 @@ in
 , enableStaticLibraries ? !hostPlatform.isWindows
 , enableHsc2hsViaAsm ? hostPlatform.isWindows && stdenv.lib.versionAtLeast ghc.version "8.4"
 , extraLibraries ? [], librarySystemDepends ? [], executableSystemDepends ? []
+# On macOS, statically linking against system frameworks is not supported;
+# see https://developer.apple.com/library/content/qa/qa1118/_index.html
+# They must be propagated to the environment of any executable linking with the library
+, libraryFrameworkDepends ? [], executableFrameworkDepends ? []
 , homepage ? "https://hackage.haskell.org/package/${pname}"
 , platforms ? with stdenv.lib.platforms; unix ++ windows # GHC can cross-compile
 , hydraPlatforms ? null
@@ -47,8 +51,8 @@ in
 , doHaddock ? !(ghc.isHaLVM or false)
 , passthru ? {}
 , pkgconfigDepends ? [], libraryPkgconfigDepends ? [], executablePkgconfigDepends ? [], testPkgconfigDepends ? [], benchmarkPkgconfigDepends ? []
-, testDepends ? [], testHaskellDepends ? [], testSystemDepends ? []
-, benchmarkDepends ? [], benchmarkHaskellDepends ? [], benchmarkSystemDepends ? []
+, testDepends ? [], testHaskellDepends ? [], testSystemDepends ? [], testFrameworkDepends ? []
+, benchmarkDepends ? [], benchmarkHaskellDepends ? [], benchmarkSystemDepends ? [], benchmarkFrameworkDepends ? []
 , testTarget ? ""
 , broken ? false
 , preCompileBuildDriver ? "", postCompileBuildDriver ? ""
@@ -178,11 +182,11 @@ let
   nativeBuildInputs = [ ghc nativeGhc removeReferencesTo ] ++ optional (allPkgconfigDepends != []) pkgconfig ++
                       setupHaskellDepends ++
                       buildTools ++ libraryToolDepends ++ executableToolDepends;
-  propagatedBuildInputs = buildDepends ++ libraryHaskellDepends ++ executableHaskellDepends;
-  otherBuildInputs = extraLibraries ++ librarySystemDepends ++ executableSystemDepends ++
+  propagatedBuildInputs = buildDepends ++ libraryHaskellDepends ++ executableHaskellDepends ++ libraryFrameworkDepends;
+  otherBuildInputs = extraLibraries ++ librarySystemDepends ++ executableSystemDepends ++ executableFrameworkDepends ++
                      allPkgconfigDepends ++
-                     optionals doCheck (testDepends ++ testHaskellDepends ++ testSystemDepends ++ testToolDepends) ++
-                     optionals doBenchmark (benchmarkDepends ++ benchmarkHaskellDepends ++ benchmarkSystemDepends ++ benchmarkToolDepends);
+                     optionals doCheck (testDepends ++ testHaskellDepends ++ testSystemDepends ++ testToolDepends ++ testFrameworkDepends) ++
+                     optionals doBenchmark (benchmarkDepends ++ benchmarkHaskellDepends ++ benchmarkSystemDepends ++ benchmarkToolDepends ++ benchmarkFrameworkDepends);
 
   allBuildInputs = propagatedBuildInputs ++ otherBuildInputs;
 

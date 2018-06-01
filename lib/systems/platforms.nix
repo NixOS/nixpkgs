@@ -167,171 +167,24 @@ rec {
   raspberrypi = {
     name = "raspberrypi";
     kernelMajor = "2.6";
-    kernelBaseConfig = "bcmrpi_defconfig";
+    kernelBaseConfig = "bcm2835_defconfig";
     kernelDTB = true;
     kernelArch = "arm";
     kernelAutoModules = false;
     kernelExtraConfig = ''
-      BLK_DEV_RAM y
-      BLK_DEV_INITRD y
-      BLK_DEV_CRYPTOLOOP m
-      BLK_DEV_DM m
-      DM_CRYPT m
-      MD y
-      REISERFS_FS m
-      BTRFS_FS y
-      XFS_FS m
-      JFS_FS y
-      EXT4_FS y
-
-      IP_PNP y
-      IP_PNP_DHCP y
-      NFS_FS y
-      ROOT_NFS y
-      TUN m
-      NFS_V4 y
-      NFS_V4_1 y
-      NFS_FSCACHE y
-      NFSD m
-      NFSD_V2_ACL y
-      NFSD_V3 y
-      NFSD_V3_ACL y
-      NFSD_V4 y
-      NETFILTER y
-      IP_NF_IPTABLES y
-      IP_NF_FILTER y
-      IP_NF_MATCH_ADDRTYPE y
-      IP_NF_TARGET_LOG y
-      IP_NF_MANGLE y
-      IPV6 m
-      VLAN_8021Q m
-
-      CIFS y
-      CIFS_XATTR y
-      CIFS_POSIX y
-      CIFS_FSCACHE y
-      CIFS_ACL y
-
-      ZRAM m
-
       # Disable OABI to have seccomp_filter (required for systemd)
       # https://github.com/raspberrypi/firmware/issues/651
       OABI_COMPAT n
-
-      # Fail to build
-      DRM n
-      SCSI_ADVANSYS n
-      USB_ISP1362_HCD n
-      SND_SOC n
-      SND_ALI5451 n
-      FB_SAVAGE n
-      SCSI_NSP32 n
-      ATA_SFF n
-      SUNGEM n
-      IRDA n
-      ATM_HE n
-      SCSI_ACARD n
-      BLK_DEV_CMD640_ENHANCED n
-
-      FUSE_FS m
-
-      # nixos mounts some cgroup
-      CGROUPS y
-
-      # Latencytop
-      LATENCYTOP y
     '';
     kernelTarget = "zImage";
     gcc = {
       arch = "armv6";
       fpu = "vfp";
-      # TODO(@Ericson2314) what is this and is it a good idea? It was
-      # used in some cross compilation examples but not others.
-      #
-      # abi = "aapcs-linux";
     };
   };
 
-  raspberrypi2 = armv7l-hf-multiplatform // {
-    name = "raspberrypi2";
-    kernelBaseConfig = "bcm2709_defconfig";
-    kernelDTB = true;
-    kernelAutoModules = false;
-    kernelExtraConfig = ''
-      BLK_DEV_RAM y
-      BLK_DEV_INITRD y
-      BLK_DEV_CRYPTOLOOP m
-      BLK_DEV_DM m
-      DM_CRYPT m
-      MD y
-      REISERFS_FS m
-      BTRFS_FS y
-      XFS_FS m
-      JFS_FS y
-      EXT4_FS y
-
-      IP_PNP y
-      IP_PNP_DHCP y
-      NFS_FS y
-      ROOT_NFS y
-      TUN m
-      NFS_V4 y
-      NFS_V4_1 y
-      NFS_FSCACHE y
-      NFSD m
-      NFSD_V2_ACL y
-      NFSD_V3 y
-      NFSD_V3_ACL y
-      NFSD_V4 y
-      NETFILTER y
-      IP_NF_IPTABLES y
-      IP_NF_FILTER y
-      IP_NF_MATCH_ADDRTYPE y
-      IP_NF_TARGET_LOG y
-      IP_NF_MANGLE y
-      IPV6 m
-      VLAN_8021Q m
-
-      CIFS y
-      CIFS_XATTR y
-      CIFS_POSIX y
-      CIFS_FSCACHE y
-      CIFS_ACL y
-
-      ZRAM m
-
-      # Disable OABI to have seccomp_filter (required for systemd)
-      # https://github.com/raspberrypi/firmware/issues/651
-      OABI_COMPAT n
-
-      # Fail to build
-      DRM n
-      SCSI_ADVANSYS n
-      USB_ISP1362_HCD n
-      SND_SOC n
-      SND_ALI5451 n
-      FB_SAVAGE n
-      SCSI_NSP32 n
-      ATA_SFF n
-      SUNGEM n
-      IRDA n
-      ATM_HE n
-      SCSI_ACARD n
-      BLK_DEV_CMD640_ENHANCED n
-
-      FUSE_FS m
-
-      # nixos mounts some cgroup
-      CGROUPS y
-
-      # Latencytop
-      LATENCYTOP y
-
-      # Disable the common config Xen, it doesn't build on ARM
-      XEN? n
-    '';
-    kernelTarget = "zImage";
-  };
+  # Legacy attribute, for compatibility with existing configs only.
+  raspberrypi2 = armv7l-hf-multiplatform;
 
   scaleway-c1 = armv7l-hf-multiplatform // {
     gcc = {
@@ -424,6 +277,10 @@ rec {
 
       # Hangs ODROID-XU4
       ARM_BIG_LITTLE_CPUIDLE n
+
+      # Disable OABI to have seccomp_filter (required for systemd)
+      # https://github.com/raspberrypi/firmware/issues/651
+      OABI_COMPAT n
     '';
     gcc = {
       # Some table about fpu flags:

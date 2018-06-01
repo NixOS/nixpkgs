@@ -63,7 +63,7 @@ stdenv.mkDerivation rec {
     "-Djasper=true"
     "-Dx11=true"
     "-Dgir=${if gobjectIntrospection != null then "true" else "false"}"
-  ];
+  ] ++ stdenv.lib.optional stdenv.isDarwin "-Dbuiltin_loaders=all";
 
   postPatch = ''
     chmod +x build-aux/* # patchShebangs only applies to executables

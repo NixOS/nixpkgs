@@ -22,7 +22,10 @@ import ./make-test.nix ({ pkgs, ...} : {
             };
           };
         };
-      in [ pkgs.stdenv emptyContainer.config.containers.foo.path pkgs.libxslt ];
+      in [
+        pkgs.stdenv pkgs.stdenvNoCC emptyContainer.config.containers.foo.path
+        pkgs.libxslt
+      ];
     };
 
   testScript =

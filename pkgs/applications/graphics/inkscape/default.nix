@@ -2,15 +2,8 @@
 , libpng, zlib, popt, boehmgc, libxml2, libxslt, glib, gtkmm2
 , glibmm, libsigcxx, lcms, boost, gettext, makeWrapper
 , gsl, python2, poppler, imagemagick, libwpg, librevenge
-, libvisio, libcdr, libexif, potrace, autoreconfHook
-, intltool
-, icu # Not needed for building with CMake
-, lib
+, libvisio, libcdr, libexif, potrace, cmake
 }:
-
-# Note that originally this Nix expression used CMake to build but
-# this led to errors on MacOS of "Too many arguments". Inkscape
-# supports autoconf and we will use this for now on.
 
 let
   python2Env = python2.withPackages(ps: with ps; [ numpy lxml ]);
@@ -24,18 +17,15 @@ stdenv.mkDerivation rec {
     sha256 = "1chng2yw8dsjxc9gf92aqv7plj11cav8ax321wmakmv5bb09cch6";
   };
 
+  unpackPhase = ''
+    cp $src ${name}.tar.bz2
+    tar xvjf ${name}.tar.bz2 > /dev/null
+    cd ${name}
+  '';
+
   postPatch = ''
     patchShebangs share/extensions
     patchShebangs fix-roff-punct
-
-    # XXX: Not needed for CMake:
-    ${lib.optionalString (!stdenv.isDarwin) ''
-      patchShebangs share/filters
-      patchShebangs share/palettes
-      patchShebangs share/patterns
-      patchShebangs share/symbols
-      patchShebangs share/templates
-    ''}
 
     # Python is used at run-time to execute scripts, e.g., those from
     # the "Effects" menu.
@@ -43,31 +33,28 @@ stdenv.mkDerivation rec {
       --replace '"python-interpreter", "python"' '"python-interpreter", "${python2Env}/bin/python"'
   '';
 
-  nativeBuildInputs = [ pkgconfig autoreconfHook intltool ];
+  nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
     perl perlXMLParser libXft libpng zlib popt boehmgc
     libxml2 libxslt glib gtkmm2 glibmm libsigcxx lcms boost gettext
     makeWrapper gsl poppler imagemagick libwpg librevenge
-    libvisio libcdr libexif potrace python2Env icu
+    libvisio libcdr libexif potrace cmake python2Env
   ];
 
-  # To avoid non-deterministic build failure using make.
-  # When switching back to cmake turn parallel back on, see #40046.
-  enableParallelBuilding = false;
-
-  preConfigure = ''
-    intltoolize -f
-  '';
+  enableParallelBuilding = true;
 
   postInstall = ''
     # Make sure PyXML modules can be found at run-time.
     rm "$out/share/icons/hicolor/icon-theme.cache"
+  '' + stdenv.lib.optionalString stdenv.isDarwin ''
+    install_name_tool -change $out/lib/libinkscape_base.dylib $out/lib/inkscape/libinkscape_base.dylib $out/bin/inkscape
+    install_name_tool -change $out/lib/libinkscape_base.dylib $out/lib/inkscape/libinkscape_base.dylib $out/bin/inkview
   '';
 
   # 0.92.3 complains about an invalid conversion from const char * to char *
   NIX_CFLAGS_COMPILE = " -fpermissive ";
 
-  meta = with lib; {
+  meta = with stdenv.lib; {
     license = "GPL";
     homepage = https://www.inkscape.org;
     description = "Vector graphics editor";
@@ -78,6 +65,5 @@ stdenv.mkDerivation rec {
 
       If you want to import .eps files install ps2edit.
     '';
-    maintainers = with maintainers; [ matthewbauer ];
   };
 }

@@ -1,7 +1,7 @@
 args @ { fetchurl, ... }:
 rec {
   baseName = ''clx'';
-  version = ''20171227-git'';
+  version = ''20180430-git'';
 
   parasites = [ "clx/test" ];
 
@@ -10,8 +10,8 @@ rec {
   deps = [ args."fiasco" ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/clx/2017-12-27/clx-20171227-git.tgz'';
-    sha256 = ''159kwwilyvaffjdz7sbwwd4cncfa8kxndc7n3adml9ivbvaz2wri'';
+    url = ''http://beta.quicklisp.org/archive/clx/2018-04-30/clx-20180430-git.tgz'';
+    sha256 = ''18ghhirnx0js7q1samwyah990nmgqbas7b1y0wy0fqynaznaz9x3'';
   };
 
   packageName = "clx";
@@ -21,8 +21,8 @@ rec {
 }
 /* (SYSTEM clx DESCRIPTION
     An implementation of the X Window System protocol in Lisp. SHA256
-    159kwwilyvaffjdz7sbwwd4cncfa8kxndc7n3adml9ivbvaz2wri URL
-    http://beta.quicklisp.org/archive/clx/2017-12-27/clx-20171227-git.tgz MD5
-    40642f49e26b88859376efe2e5330a24 NAME clx FILENAME clx DEPS
-    ((NAME fiasco FILENAME fiasco)) DEPENDENCIES (fiasco) VERSION 20171227-git
+    18ghhirnx0js7q1samwyah990nmgqbas7b1y0wy0fqynaznaz9x3 URL
+    http://beta.quicklisp.org/archive/clx/2018-04-30/clx-20180430-git.tgz MD5
+    bf9c1d6b1b2856ddbd4bf2fa75bbc309 NAME clx FILENAME clx DEPS
+    ((NAME fiasco FILENAME fiasco)) DEPENDENCIES (fiasco) VERSION 20180430-git
     SIBLINGS NIL PARASITES (clx/test)) */

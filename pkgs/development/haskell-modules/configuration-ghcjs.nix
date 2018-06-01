@@ -50,7 +50,7 @@ self: super:
   haskeline = self.haskeline_0_7_3_1;
   hoopl = self.hoopl_3_10_2_1;
   hpc = self.hpc_0_6_0_2;
-  terminfo = self.terminfo_0_4_0_2;
+  terminfo = self.terminfo_0_4_1_1;
   xhtml = self.xhtml_3000_2_1;
 
 ## OTHER PACKAGES

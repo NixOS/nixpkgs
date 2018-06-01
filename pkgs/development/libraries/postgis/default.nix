@@ -44,8 +44,8 @@
 
 
 let
-  version = "2.4.3";
-  sha256 = "1fg4pmla5m903m76ndjd8q5dkcykf67v1p4dcajmnr3bvg2p8lza";
+  version = "2.4.4";
+  sha256 = "1hm8migjb53cymp4qvg1h20yqllmy9f7x0awv5450391i6syyqq6";
 in stdenv.mkDerivation rec {
   name = "postgis-${version}";
 
@@ -53,17 +53,6 @@ in stdenv.mkDerivation rec {
     url = "http://download.osgeo.org/postgis/source/postgis-${builtins.toString version}.tar.gz";
     inherit sha256;
   };
-
-  patches = [
-    (fetchpatch {
-      url = "https://trac.osgeo.org/postgis/changeset/16417?format=diff&new=16417";
-      name = "json-c-0.13.patch";
-      sha256 = "1hk2fh4nsvq76ksi7z4shlgj7fik6ac3sjsb0khsypsjfhz7ic8z";
-      stripLen = 3;
-      extraPrefix = "";
-      excludes = [ "NEWS" ];
-    })
-  ];
 
   # don't pass these vars to the builder
   removeAttrs = ["sql_comments" "sql_srcs"];

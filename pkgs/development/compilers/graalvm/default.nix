@@ -23,11 +23,15 @@ let
     rec { sha1 = "9cd14a61d7aa7d554f251ef285a6f2c65caf7b65"; name = "JOPTSIMPLE_4_6.sources_${sha1}.jar";                url = mirror://maven/net/sf/jopt-simple/jopt-simple/4.6/jopt-simple-4.6-sources.jar; }
     rec { sha1 = "b852fb028de645ad2852bbe998e084d253f450a5"; name = "JMH_GENERATOR_ANNPROCESS_1_18_${sha1}.jar";         url = mirror://maven/org/openjdk/jmh/jmh-generator-annprocess/1.18/jmh-generator-annprocess-1.18.jar; }
     rec { sha1 = "d455b0dc6108b5e6f1fb4f6cf1c7b4cbedbecc97"; name = "JMH_GENERATOR_ANNPROCESS_1_18.sources_${sha1}.jar"; url = mirror://maven/org/openjdk/jmh/jmh-generator-annprocess/1.18/jmh-generator-annprocess-1.18-sources.jar; }
+    rec { sha1 = "7aac374614a8a76cad16b91f1a4419d31a7dcda3"; name = "JMH_GENERATOR_ANNPROCESS_1_21_${sha1}.jar";         url = mirror://maven/org/openjdk/jmh/jmh-generator-annprocess/1.21/jmh-generator-annprocess-1.21.jar; }
+    rec { sha1 = "fb48e2a97df95f8b9dced54a1a37749d2a64d2ae"; name = "JMH_GENERATOR_ANNPROCESS_1_21.sources_${sha1}.jar"; url = mirror://maven/org/openjdk/jmh/jmh-generator-annprocess/1.21/jmh-generator-annprocess-1.21-sources.jar; }
     rec { sha1 = "702b8525fcf81454235e5e2fa2a35f15ffc0ec7e"; name = "ASM_DEBUG_ALL_${sha1}.jar";                         url = mirror://maven/org/ow2/asm/asm-debug-all/5.0.4/asm-debug-all-5.0.4.jar; }
     rec { sha1 = "ec2544ab27e110d2d431bdad7d538ed509b21e62"; name = "COMMONS_MATH3_3_2_${sha1}.jar";                     url = mirror://maven/org/apache/commons/commons-math3/3.2/commons-math3-3.2.jar; }
     rec { sha1 = "cd098e055bf192a60c81d81893893e6e31a6482f"; name = "COMMONS_MATH3_3_2.sources_${sha1}.jar";             url = mirror://maven/org/apache/commons/commons-math3/3.2/commons-math3-3.2-sources.jar; }
     rec { sha1 = "0174aa0077e9db596e53d7f9ec37556d9392d5a6"; name = "JMH_1_18_${sha1}.jar";                              url = mirror://maven/org/openjdk/jmh/jmh-core/1.18/jmh-core-1.18.jar; }
     rec { sha1 = "7ff1e1aafea436b6aa8b29a8b8f1c2d66be26f5b"; name = "JMH_1_18.sources_${sha1}.jar";                      url = mirror://maven/org/openjdk/jmh/jmh-core/1.18/jmh-core-1.18-sources.jar; }
+    rec { sha1 = "442447101f63074c61063858033fbfde8a076873"; name = "JMH_1_21_${sha1}.jar";                              url = mirror://maven/org/openjdk/jmh/jmh-core/1.21/jmh-core-1.21.jar; }
+    rec { sha1 = "a6fe84788bf8cf762b0e561bf48774c2ea74e370"; name = "JMH_1_21.sources_${sha1}.jar";                      url = mirror://maven/org/openjdk/jmh/jmh-core/1.21/jmh-core-1.21-sources.jar; }
     rec { sha1 = "2973d150c0dc1fefe998f834810d68f278ea58ec"; name = "JUNIT_${sha1}.jar";                                 url = https://lafo.ssw.uni-linz.ac.at/pub/graal-external-deps/junit-4.12.jar; }
     rec { sha1 = "a6c32b40bf3d76eca54e3c601e5d1470c86fcdfa"; name = "JUNIT.sources_${sha1}.jar";                         url = https://lafo.ssw.uni-linz.ac.at/pub/graal-external-deps/junit-4.12-sources.jar; }
     rec { sha1 = "42a25dc3219429f0e5d060061f71acb49bf010a0"; name = "HAMCREST_${sha1}.jar";                              url = https://lafo.ssw.uni-linz.ac.at/pub/graal-external-deps/hamcrest-core-1.3.jar; }
@@ -50,13 +54,14 @@ let
 
 in rec {
 
-  mx = stdenv.mkDerivation {
+  mx = stdenv.mkDerivation rec {
+    version = "5.171.0";
     name = "mx";
     src = fetchFromGitHub {
       owner  = "graalvm";
       repo   = "mx";
-      rev    = "22557cf7ec417c49aca20c13a9123045005d72d0"; # HEAD at 2018-02-16
-      sha256 = "070647ih2qzcssj7yripbg1w9bjwi1rcp1blx5z3jbp1shrr6563";
+      rev    = version;
+      sha256 = "0ag3g49fnjrnlmjb55dbn9l2cwyvanx36f5hyf21ad8px05fh6jv";
     };
     nativeBuildInputs = [ makeWrapper ];
     buildPhase = ''
@@ -77,9 +82,9 @@ in rec {
 
   # copy of pkgs.oraclejvm8 with JVMCI interface (TODO: it should work with pkgs.openjdk8 too)
   jvmci8 = stdenv.mkDerivation rec {
-    version = "0.41";
+    version = "0.43";
     name = let
-             n = "jvmci8u161-${version}";
+             n = "jvmci8u171-${version}";
            in if (lib.stringLength n) == (lib.stringLength oraclejdk8.name) then
                 n
               else
@@ -88,7 +93,7 @@ in rec {
       owner  = "graalvm";
       repo   = "graal-jvmci-8";
       rev    = "jvmci-${version}";
-      sha256 = "0pajf114l8lzczfdzz968c3s1ardiy4q5ya8p2kmwxl06giy95qr";
+      sha256 = "0jkp67m7s252kngxnj0yp397pgx5z95v1lbi68v9g4dw050l28rk";
     };
     buildInputs = [ mx mercurial ];
     postUnpack = ''
@@ -101,8 +106,10 @@ in rec {
         hg checkout ${lib.escapeShellArg src.rev}
       )
     '';
+    hardeningDisable = [ "fortify" ];
     NIX_CFLAGS_COMPILE = [
       "-Wno-error=format-overflow" # newly detected by gcc7
+      "-Wno-error=nonnull"
     ];
     buildPhase = ''
       cp -dpR ${oraclejdk8} writable-copy-of-jdk
@@ -122,9 +129,9 @@ in rec {
   };
 
   graalvm8 = stdenv.mkDerivation rec {
-    version = "0.31";
+    version = "1.0.0-rc1";
     name = let
-             n = "graal-vm-8-${version}";
+             n = "graal-${version}";
            in if (lib.stringLength n) == (lib.stringLength jvmci8.name) then
                 n
               else
@@ -132,8 +139,8 @@ in rec {
     src = fetchFromGitHub {
       owner  = "oracle";
       repo   = "graal";
-      rev    = "vm-enterprise-${version}";
-      sha256 = "0rhd6dk2jpbxgdprqvdk991b2k177jrjgyjabdnmv5lzlhczy676";
+      rev    = "vm-${version}";
+      sha256 = "1j1m53d8x0mkvqr9lwlkjddfha5jrsq9hxlblbjv1bqcivfmmfn7";
     };
     buildInputs = [ mx zlib mercurial jvmci8 ];
     postUnpack = ''
@@ -167,7 +174,6 @@ in rec {
       cp -pR  $MX_ALT_OUTPUT_ROOT/tools/dists/chromeinspector*          $out/jre/tools/chromeinspector/
       echo "name=GraalVM ${version}"                                  > $out/jre/lib/amd64/server/vm.properties
       ln -s --relative $out/jre/bin/native-image                        $out/bin/native-image
-      cp      $out/jre/tools/nfi/bin/libtrufflenfi.so                   $out/jre/lib/amd64/
       cp -dpR $out/jre/lib/svm/clibraries                               $out/jre/lib/svm/builder/
 
       # BUG workaround http://mail.openjdk.java.net/pipermail/graal-dev/2017-December/005141.html
@@ -193,7 +199,7 @@ in rec {
       $out/bin/java -XX:+UnlockExperimentalVMOptions -XX:+EnableJVMCI -XX:+UseJVMCICompiler HelloWorld | fgrep 'Hello World'
 
       # Ahead-Of-Time compilation
-      $out/bin/native-image -no-server HelloWorld
+      $out/bin/native-image --no-server HelloWorld
       ./helloworld
       ./helloworld | fgrep 'Hello World'
     '';

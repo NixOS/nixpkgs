@@ -120,7 +120,7 @@ self: super: {
     prePatch        = "cd lambdacube-ir.haskell; ";
   });
 
-  singletons = super.singletons_2_4_1;
+  singletons = dontCheck super.singletons_2_4_1;
   th-desugar = super.th-desugar_1_8;
 
   ## Upstreamed, awaiting a Hackage release
@@ -136,6 +136,8 @@ self: super: {
     };
   });
 
+  ## Bounds related: it wants base-compat 0.9.
+  criterion = super.criterion_1_4_1_0;
 
   ## Unmerged
 
