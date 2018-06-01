@@ -2,7 +2,7 @@
 
 buildGoPackage rec {
   name = "gllvm-${version}";
-  version = "1.2.1";
+  version = "1.2.2";
 
   goPackagePath = "github.com/SRI-CSL/gllvm";
 
@@ -10,7 +10,7 @@ buildGoPackage rec {
     owner = "SRI-CSL";
     repo = "gllvm";
     rev = "v${version}";
-    sha256 = "1rbvn7qhzb7xxqv0wrkwxq4sm657vsl6q7nwrfq2zwb21573811z";
+    sha256 = "1k6081frnc6i6h3fa8d796cirhbf5kkshw7qyarz5wi3fcgijn4s";
   };
 
   meta = with stdenv.lib; {
@@ -18,5 +18,6 @@ buildGoPackage rec {
     description = "Whole Program LLVM: wllvm ported to go";
     license = licenses.bsd3;
     maintainers = with maintainers; [ dtzWill ];
+    platforms = platforms.all;
   };
 }
