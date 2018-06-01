@@ -24,13 +24,13 @@ nodePackages // {
   phantomjs = nodePackages.phantomjs.override (oldAttrs: {
     buildInputs = oldAttrs.buildInputs ++ [ pkgs.phantomjs2 ];
   });
-  
+
   webdrvr = nodePackages.webdrvr.override (oldAttrs: {
     buildInputs = oldAttrs.buildInputs ++ [ pkgs.phantomjs ];
-    
+
     preRebuild = ''
       mkdir $TMPDIR/webdrvr
-      
+
       ln -s ${pkgs.fetchurl {
         url = "https://selenium-release.storage.googleapis.com/2.43/selenium-server-standalone-2.43.1.jar";
         sha1 = "ef1b5f8ae9c99332f99ba8794988a1d5b974d27b";
@@ -63,6 +63,15 @@ nodePackages // {
       tmp=$(mktemp -d)
       ln -s /usr/bin/xcodebuild $tmp
       export PATH="$PATH:$tmp"
+    '';
+  });
+
+  pnpm = nodePackages.pnpm.override (oldAttrs: {
+    nativeBuildInputs = oldAttrs.buildInputs ++ [ pkgs.makeWrapper ];
+    postInstall = ''
+      for prog in $out/bin/*; do
+        wrapProgram "$prog" --prefix PATH : ${stdenv.lib.makeBinPath [ nodejs.passthru.python ]}
+      done
     '';
   });
 
