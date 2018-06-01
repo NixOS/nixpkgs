@@ -1863,7 +1863,7 @@ set debug-file-directory ~/.nix-profile/lib/debug
   <variablelist>
    <varlistentry xml:id='fun-makeWrapper'>
     <term>
-     <function>makeWrapper</function><replaceable>executable</replaceable><replaceable>wrapperfile</replaceable><replaceable>args</replaceable>
+     <function>makeWrapper</function> <replaceable>executable</replaceable> <replaceable>wrapperfile</replaceable> <replaceable>args</replaceable>
     </term>
     <listitem>
      <para>
@@ -1889,7 +1889,7 @@ makeWrapper $out/bin/foo $wrapperfile --prefix PATH : ${lib.makeBinPath [ hello 
    </varlistentry>
    <varlistentry xml:id='fun-substitute'>
     <term>
-     <function>substitute</function><replaceable>infile</replaceable><replaceable>outfile</replaceable><replaceable>subs</replaceable>
+     <function>substitute</function> <replaceable>infile</replaceable> <replaceable>outfile</replaceable> <replaceable>subs</replaceable>
     </term>
     <listitem>
      <para>
@@ -1900,7 +1900,7 @@ makeWrapper $out/bin/foo $wrapperfile --prefix PATH : ${lib.makeBinPath [ hello 
       <variablelist>
        <varlistentry>
         <term>
-         <option>--replace</option><replaceable>s1</replaceable><replaceable>s2</replaceable>
+         <option>--replace</option> <replaceable>s1</replaceable> <replaceable>s2</replaceable>
         </term>
         <listitem>
          <para>
@@ -1911,7 +1911,7 @@ makeWrapper $out/bin/foo $wrapperfile --prefix PATH : ${lib.makeBinPath [ hello 
        </varlistentry>
        <varlistentry>
         <term>
-         <option>--subst-var</option><replaceable>varName</replaceable>
+         <option>--subst-var</option> <replaceable>varName</replaceable>
         </term>
         <listitem>
          <para>
@@ -1927,7 +1927,7 @@ makeWrapper $out/bin/foo $wrapperfile --prefix PATH : ${lib.makeBinPath [ hello 
        </varlistentry>
        <varlistentry>
         <term>
-         <option>--subst-var-by</option><replaceable>varName</replaceable><replaceable>s</replaceable>
+         <option>--subst-var-by</option> <replaceable>varName</replaceable> <replaceable>s</replaceable>
         </term>
         <listitem>
          <para>
@@ -1962,7 +1962,7 @@ substitute ./foo.in ./foo.out \
    </varlistentry>
    <varlistentry xml:id='fun-substituteInPlace'>
     <term>
-     <function>substituteInPlace</function><replaceable>file</replaceable><replaceable>subs</replaceable>
+     <function>substituteInPlace</function> <replaceable>file</replaceable> <replaceable>subs</replaceable>
     </term>
     <listitem>
      <para>
@@ -1973,7 +1973,7 @@ substitute ./foo.in ./foo.out \
    </varlistentry>
    <varlistentry xml:id='fun-substituteAll'>
     <term>
-     <function>substituteAll</function><replaceable>infile</replaceable><replaceable>outfile</replaceable>
+     <function>substituteAll</function> <replaceable>infile</replaceable> <replaceable>outfile</replaceable>
     </term>
     <listitem>
      <para>
@@ -2013,7 +2013,7 @@ echo @foo@
    </varlistentry>
    <varlistentry xml:id='fun-substituteAllInPlace'>
     <term>
-     <function>substituteAllInPlace</function><replaceable>file</replaceable>
+     <function>substituteAllInPlace</function> <replaceable>file</replaceable>
     </term>
     <listitem>
      <para>
@@ -2024,7 +2024,7 @@ echo @foo@
    </varlistentry>
    <varlistentry xml:id='fun-stripHash'>
     <term>
-     <function>stripHash</function><replaceable>path</replaceable>
+     <function>stripHash</function> <replaceable>path</replaceable>
     </term>
     <listitem>
      <para>
@@ -2045,7 +2045,7 @@ someVar=$(stripHash $name)
    </varlistentry>
    <varlistentry xml:id='fun-wrapProgram'>
     <term>
-     <function>wrapProgram</function><replaceable>executable</replaceable><replaceable>makeWrapperArgs</replaceable>
+     <function>wrapProgram</function> <replaceable>executable</replaceable> <replaceable>makeWrapperArgs</replaceable>
     </term>
     <listitem>
      <para>
