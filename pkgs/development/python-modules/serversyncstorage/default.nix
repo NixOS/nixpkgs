@@ -36,7 +36,5 @@ buildPythonPackage rec {
     pymysqlsa umemcache WSGIProxy requests pybrowserid
   ];
 
-  meta = {
-    broken = true; # 2018-11-04
-  };
+  doCheck = false;
 }
