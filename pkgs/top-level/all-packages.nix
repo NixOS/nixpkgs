@@ -2371,8 +2371,6 @@ with pkgs;
 
   flvstreamer = callPackage ../tools/networking/flvstreamer { };
 
-  libbsd = callPackage ../development/libraries/libbsd { };
-
   libbladeRF = callPackage ../development/libraries/libbladeRF { };
 
   lp_solve = callPackage ../applications/science/math/lp_solve { };
@@ -13847,9 +13845,6 @@ with pkgs;
   multipath-tools = callPackage ../os-specific/linux/multipath-tools { };
 
   musl = callPackage ../os-specific/linux/musl { };
-  musl-fts = callPackage ../os-specific/linux/musl/fts.nix { };
-  musl-getconf = callPackage ../os-specific/linux/musl/getconf.nix { };
-  musl-getent = callPackage ../os-specific/linux/musl/getent.nix { };
 
   nettools = if stdenv.isLinux then callPackage ../os-specific/linux/net-tools { }
              else unixtools.nettools;
@@ -21466,6 +21461,10 @@ with pkgs;
   inherit (unixtools) hexdump ps logger eject umount
                       mount wall hostname more sysctl getconf
                       getent;
+
+  fts = if hostPlatform.isMusl then netbsd.fts else null;
+
+  libbsd = netbsd.compat;
 
   inherit (recurseIntoAttrs (callPackages ../os-specific/bsd { }))
           netbsd;

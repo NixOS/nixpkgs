@@ -50,14 +50,14 @@ let
       linux = pkgs.utillinux;
     };
     getconf = {
-      linux = if hostPlatform.isMusl then pkgs.musl-getconf
-              else lib.getBin stdenv.cc.libc;
+      linux = if hostPlatform.libc == "glibc" then lib.getBin pkgs.glibc
+              else pkgs.netbsd.getconf;
       darwin = pkgs.darwin.system_cmds;
     };
     getent = {
-      linux = if hostPlatform.isMusl then pkgs.musl-getent
-              # This may not be right on other platforms, but preserves existing behavior
-              else /* if hostPlatform.libc == "glibc" then */ pkgs.glibc.bin;
+      linux = if hostPlatform.libc == "glibc" then lib.getBin pkgs.glibc
+              else pkgs.netbsd.getent;
+      darwin = pkgs.netbsd.getent;
     };
     getopt = {
       linux = pkgs.utillinux;
