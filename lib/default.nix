@@ -56,10 +56,10 @@ let
       hasAttr head isAttrs isBool isInt isList isString length
       lessThan listToAttrs pathExists readFile replaceStrings seq
       stringLength sub substring tail;
-    inherit (trivial) id const concat or and boolToString mergeAttrs
-      flip mapNullable inNixShell min max importJSON warn info
-      nixpkgsVersion version mod compare splitByAndCompare
-      functionArgs setFunctionArgs isFunction;
+    inherit (trivial) id const concat or and bitAnd bitOr bitXor
+      boolToString mergeAttrs flip mapNullable inNixShell min max
+      importJSON warn info nixpkgsVersion version mod compare
+      splitByAndCompare functionArgs setFunctionArgs isFunction;
 
     inherit (fixedPoints) fix fix' extends composeExtensions
       makeExtensible makeExtensibleWithCustomName;

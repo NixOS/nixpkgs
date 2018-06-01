@@ -1,4 +1,38 @@
 { lib }:
+let
+  zipIntBits = f: x: y:
+    let
+      # (intToBits 6) -> [ 0 1 1 ]
+      intToBits = x:
+        if x==0 then
+          []
+        else
+          let
+            headbit  = if (x / 2) * 2 != x then 1 else 0;                          # x & 1
+            tailbits = if x < 0 then 9223372036854775807 + ((x+1) / 2) else x / 2; # x >>> 1
+          in
+            [headbit] ++ (intToBits tailbits);
+
+      # (bitsToInt [ 0 1 1 ]) -> 6
+      bitsToInt = l:
+        if l==[] then
+          0
+        else
+          (builtins.head l) + (2 * (bitsToInt (builtins.tail l)));
+
+      zipListsWith' = fst: snd:
+        if fst==[] && snd==[] then
+          []
+        else if fst==[] then
+          [(f 0                   (builtins.head snd))] ++ (zipListsWith' []                  (builtins.tail snd))
+        else if snd==[] then
+          [(f (builtins.head fst) 0                  )] ++ (zipListsWith' (builtins.tail fst) []                 )
+        else
+          [(f (builtins.head fst) (builtins.head snd))] ++ (zipListsWith' (builtins.tail fst) (builtins.tail snd));
+    in
+      assert (builtins.isInt x) && (builtins.isInt y);
+      bitsToInt (zipListsWith' (intToBits x) (intToBits y));
+in
 rec {
 
   /* The identity function
@@ -30,6 +64,15 @@ rec {
 
   /* boolean “and” */
   and = x: y: x && y;
+
+  /* bitwise “and” */
+  bitAnd = builtins.bitAnd or zipIntBits (a: b: if a==1 && b==1 then 1 else 0);
+
+  /* bitwise “or” */
+  bitOr = builtins.bitOr or zipIntBits (a: b: if a==1 || b==1 then 1 else 0);
+
+  /* bitwise “xor” */
+  bitXor = builtins.bitXor or zipIntBits (a: b: if a!=b then 1 else 0);
 
   /* Convert a boolean to a string.
      Note that toString on a bool returns "1" and "".
