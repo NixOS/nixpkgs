@@ -13890,8 +13890,6 @@ with pkgs;
 
   golint = callPackage ../development/tools/golint { };
 
-  godep = callPackage ../development/tools/godep { };
-
   godef = callPackage ../development/tools/godef { };
 
   goimports = callPackage ../development/tools/goimports { };
