@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, cmake, ninja, pkgconfig, libiconv, libintlOrEmpty
+{ stdenv, lib, fetchurl, cmake, ninja, pkgconfig, libiconv, libintl
 , zlib, curl, cairo, freetype, fontconfig, lcms, libjpeg, openjpeg
 , withData ? true, poppler_data
 , qt5Support ? false, qtbase ? null
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "dev" ];
 
-  buildInputs = [ libiconv ] ++ libintlOrEmpty ++ lib.optional withData poppler_data;
+  buildInputs = [ libiconv libintl ] ++ lib.optional withData poppler_data;
 
   # TODO: reduce propagation to necessary libs
   propagatedBuildInputs = with lib;
@@ -31,6 +31,9 @@ stdenv.mkDerivation rec {
     ++ optional introspectionSupport gobjectIntrospection;
 
   nativeBuildInputs = [ cmake ninja pkgconfig ];
+
+  # Not sure when and how to pass it.  It seems an upstream bug anyway.
+  CXXFLAGS = stdenv.lib.optionalString stdenv.cc.isClang "-std=c++11";
 
   cmakeFlags = [
     (mkFlag true "XPDF_HEADERS")

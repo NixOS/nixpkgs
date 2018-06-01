@@ -22,6 +22,8 @@ stdenv.mkDerivation rec {
 
   patchFlags = "-p0";
 
+  hardeningDisable = [ "format" ];
+
   buildInputs =
     [ pkgconfig glib cairo fontconfig libtiff giflib
       libjpeg libpng libXrender libexif

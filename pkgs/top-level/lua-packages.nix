@@ -438,6 +438,8 @@ let
       );
     '';
 
+    doCheck = false; # fails to find itself
+
     installTargets = [ "install" "install-unix" ];
 
     meta = with stdenv.lib; {
@@ -756,6 +758,8 @@ let
       "MPACK_LUA_VERSION=${lua.version}"
       "LUA_CMOD_INSTALLDIR=$(out)/lib/lua/${lua.luaversion}"
     ];
+
+    hardeningDisable = [ "fortify" ];
 
     meta = with stdenv.lib; {
       description = "Lua bindings for libmpack";

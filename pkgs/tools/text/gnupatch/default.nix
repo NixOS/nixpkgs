@@ -11,6 +11,11 @@ stdenv.mkDerivation rec {
     sha256 = "1zfqy4rdcy279vwn2z1kbv19dcfw25d2aqy9nzvdkq5bjzd0nqdc";
   };
 
+  patches = [
+    # https://git.savannah.gnu.org/cgit/patch.git/patch/?id=f290f48a621867084884bfff87f8093c15195e6a
+    ./CVE-2018-6951.patch
+  ];
+
   buildInputs = stdenv.lib.optional doCheck ed;
 
   configureFlags = stdenv.lib.optionals (hostPlatform != buildPlatform) [

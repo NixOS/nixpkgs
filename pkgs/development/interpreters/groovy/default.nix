@@ -4,11 +4,11 @@
 
 stdenv.mkDerivation rec {
   name = "groovy-${version}";
-  version = "2.4.15";
+  version = "2.5.0";
 
   src = fetchurl {
     url = "http://dl.bintray.com/groovy/maven/apache-groovy-binary-${version}.zip";
-    sha256 = "1vaa1wjnaza04hvp1n4kh10hvxx8370liz2ndm908dqv9mxa6k5x";
+    sha256 = "1qzciri8qjx5p7x015rk5ws7gj53qidamp85r2r7aj6ssyp3r40k";
   };
 
   buildInputs = [ unzip makeWrapper ];
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     mkdir -p $out
     mkdir -p $out/share/doc/groovy
     rm bin/*.bat
-    mv {bin,conf,embeddable,grooid,indy,lib} $out
+    mv {bin,conf,grooid,indy,lib} $out
     mv {licenses,LICENSE,NOTICE} $out/share/doc/groovy
 
     sed -i 's#which#${which}/bin/which#g' $out/bin/startGroovy

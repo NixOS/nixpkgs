@@ -33,6 +33,8 @@ buildGoPackage rec {
 
   allowGoReference = true;
 
+  doCheck = false; # tries to access the net
+
   meta = with stdenv.lib; {
     description = "Go apps packaging for Nix";
     homepage = https://github.com/kamilchm/go2nix;

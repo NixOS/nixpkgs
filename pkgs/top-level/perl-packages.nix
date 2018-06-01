@@ -6461,8 +6461,10 @@ let self = _self // overrides; _self = with self; {
     # Patch has been sent upstream.
     patches = [ ../development/perl-modules/gd-options-passthrough-and-fontconfig.patch ];
 
-    # tests fail
-    doCheck = false;
+    # otherwise "cc1: error: -Wformat-security ignored without -Wformat [-Werror=format-security]"
+    hardeningDisable = [ "format" ];
+
+    doCheck = false; # fails 1 out of 13 tests
 
     makeMakerFlags = "--lib_png_path=${pkgs.libpng.out} --lib_jpeg_path=${pkgs.libjpeg.out} --lib_zlib_path=${pkgs.zlib.out} --lib_ft_path=${pkgs.freetype.out} --lib_fontconfig_path=${pkgs.fontconfig.lib} --lib_xpm_path=${pkgs.xorg.libXpm.out}";
   };
@@ -6544,6 +6546,20 @@ let self = _self // overrides; _self = with self; {
     src = fetchurl {
       url = "mirror://cpan/authors/id/G/GW/GWARD/${name}.tar.gz";
       sha256 = "0xskl9lcj07sdfx5dkma5wvhhgf5xlsq0khgh8kk34dm6dv0dpwv";
+    };
+  };
+
+  Git = buildPerlPackage rec {
+    name = "Git-0.42";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/M/MS/MSOUTH/${name}.tar.gz";
+      sha256 = "9469a9f398f3a2bf2b0500566ee41d3ff6fae460412a137185767a1cc4783a6d";
+    };
+    propagatedBuildInputs = [ Error ];
+    meta = {
+      maintainers = [ maintainers.limeytexan ];
+      description = "This is the Git.pm, plus the other files in the perl/Git directory, from github's git/git";
+      license = stdenv.lib.licenses.free;
     };
   };
 
@@ -17246,10 +17262,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   URI = buildPerlPackage rec {
-    name = "URI-1.73";
+    name = "URI-1.74";
     src = fetchurl {
       url = "mirror://cpan/authors/id/E/ET/ETHER/${name}.tar.gz";
-      sha256 = "cca7ab4a6f63f3ccaacae0f2e1337e8edf84137e73f18548ec7d659f23efe413";
+      sha256 = "a9c254f45f89cb1dd946b689dfe433095404532a4543bdaab0b71ce0fdcdd53d";
     };
     buildInputs = [ TestNeeds ];
     meta = {

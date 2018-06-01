@@ -3,13 +3,13 @@
 }:
 
 buildPythonPackage rec {
-  version = "v4.10.0";
+  version = "4.10.0";
   pname = "mt940";
 
   src = fetchFromGitHub {
     owner = "WoLpH";
     repo = pname;
-    rev = version;
+    rev = "v${version}";
     sha256 = "1dsf2di8rr0iw2vaz6dppalby3y7i8x2bl0qjqvaiqacjxxvwj65";
   };
 

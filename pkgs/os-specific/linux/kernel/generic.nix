@@ -12,6 +12,9 @@
 , # The kernel version.
   version
 
+, # Allows overriding the default defconfig
+  defconfig ? null
+
 , # Overrides to the kernel config.
   extraConfig ? ""
 
@@ -85,7 +88,7 @@ let
 
     platformName = hostPlatform.platform.name;
     # e.g. "defconfig"
-    kernelBaseConfig = hostPlatform.platform.kernelBaseConfig;
+    kernelBaseConfig = if defconfig != null then defconfig else hostPlatform.platform.kernelBaseConfig;
     # e.g. "bzImage"
     kernelTarget = hostPlatform.platform.kernelTarget;
 

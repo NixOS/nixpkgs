@@ -162,7 +162,7 @@ in package-set { inherit pkgs stdenv callPackage; } self // {
       filter = path: type:
                  pkgs.lib.hasSuffix "${name}.cabal" path ||
                  baseNameOf path == "package.yaml";
-      expr = haskellSrc2nix {
+      expr = self.haskellSrc2nix {
         inherit name;
         src = if pkgs.lib.canCleanSource src
                 then pkgs.lib.cleanSourceWith { inherit src filter; }

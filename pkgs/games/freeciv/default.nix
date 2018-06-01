@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, zlib, bzip2, pkgconfig, curl, lzma, gettext
+{ stdenv, fetchurl, zlib, bzip2, pkgconfig, curl, lzma, gettext, libiconv
 , sdlClient ? true, SDL, SDL_mixer, SDL_image, SDL_ttf, SDL_gfx, freetype, fluidsynth
 , gtkClient ? false, gtk2
 , server ? true, readline
@@ -22,7 +22,7 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [ pkgconfig ];
 
-  buildInputs = [ zlib bzip2 curl lzma gettext ]
+  buildInputs = [ zlib bzip2 curl lzma gettext libiconv ]
     ++ optionals sdlClient [ SDL SDL_mixer SDL_image SDL_ttf SDL_gfx freetype fluidsynth ]
     ++ optionals gtkClient [ gtk2 ]
     ++ optional server readline
@@ -50,6 +50,6 @@ stdenv.mkDerivation {
     license = licenses.gpl2;
 
     maintainers = with maintainers; [ pierron ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

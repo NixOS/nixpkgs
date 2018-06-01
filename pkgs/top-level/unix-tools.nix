@@ -1,4 +1,5 @@
-{ pkgs, buildEnv, runCommand, hostPlatform, lib }:
+{ pkgs, buildEnv, runCommand, hostPlatform, lib
+, stdenv }:
 
 # These are some unix tools that are commonly included in the /usr/bin
 # and /usr/sbin directory under more normal distributions. Along with
@@ -11,9 +12,11 @@
 # input, not "procps" which requires Linux.
 
 let
+  version = "1003.1-2008";
+
   singleBinary = cmd: providers: let
       provider = "${lib.getBin providers.${hostPlatform.parsed.kernel.name}}/bin/${cmd}";
-    in runCommand cmd {
+    in runCommand "${cmd}-${version}" {
       meta.platforms = map (n: { kernel.name = n; }) (pkgs.lib.attrNames providers);
     } ''
       mkdir -p $out/bin
@@ -28,7 +31,7 @@ let
 
   # more is unavailable in darwin
   # just use less
-  more_compat = runCommand "more" {} ''
+  more_compat = runCommand "more-${version}" {} ''
     mkdir -p $out/bin
     ln -s ${pkgs.less}/bin/less $out/bin/more
   '';
@@ -45,6 +48,16 @@ let
     };
     eject = {
       linux = pkgs.utillinux;
+    };
+    getconf = {
+      linux = if hostPlatform.libc == "glibc" then lib.getBin pkgs.glibc
+              else pkgs.netbsd.getconf;
+      darwin = pkgs.darwin.system_cmds;
+    };
+    getent = {
+      linux = if hostPlatform.libc == "glibc" then lib.getBin pkgs.glibc
+              else pkgs.netbsd.getent;
+      darwin = pkgs.netbsd.getent;
     };
     getopt = {
       linux = pkgs.utillinux;
@@ -131,7 +144,7 @@ let
   };
 
   makeCompat = name': value: buildEnv {
-    name = name' + "-compat";
+    name = name' + "-compat-${version}";
     paths = value;
   };
 

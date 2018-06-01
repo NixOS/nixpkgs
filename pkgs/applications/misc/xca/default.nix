@@ -1,20 +1,27 @@
-{ mkDerivation, lib, fetchurl, pkgconfig, which
+{ mkDerivation, lib, fetchFromGitHub, autoreconfHook, perl, pkgconfig, which
 , libtool, openssl, qtbase, qttools }:
 
 mkDerivation rec {
   name = "xca-${version}";
-  version = "1.4.1";
+  version = "2.0.1";
 
-  src = fetchurl {
-    url = "mirror://sourceforge/xca/${name}.tar.gz";
-    sha256 = "11niik2m4yswkp71hrdh54z5kgkvdg8y0b6wdqbrn6vy1n8gz63q";
+  src = fetchFromGitHub {
+    owner  = "chris2511";
+    repo   = "xca";
+    rev    = "RELEASE.${version}";
+    sha256 = "0906xnmqzd9q5irxzm19361vhzig9yqsmf6wsc3rggniix5bk3a8";
   };
 
-  enableParallelBuilding = true;
+  postPatch = ''
+    substituteInPlace doc/code2html \
+      --replace /usr/bin/perl ${perl}/bin/perl
+  '';
 
   buildInputs = [ libtool openssl qtbase qttools ];
 
-  nativeBuildInputs = [ pkgconfig which ];
+  nativeBuildInputs = [ autoreconfHook pkgconfig which ];
+
+  enableParallelBuilding = true;
 
   configureFlags = [ "CXXFLAGS=-std=c++11" ];
 

@@ -1,5 +1,5 @@
 { lib, stdenv, fetchgit, fetchFromGitHub, makeWrapper, git
-, python3, sshfs-fuse, torsocks, sshuttle, conntrack_tools }:
+, python3, sshfs-fuse, torsocks, sshuttle, conntrack-tools }:
 
 let
   sshuttle-telepresence = lib.overrideDerivation sshuttle (p: {
@@ -35,7 +35,7 @@ in stdenv.mkDerivation rec {
     cp cli/telepresence $out/libexec/telepresence
 
     makeWrapper $out/libexec/telepresence $out/bin/telepresence \
-      --prefix PATH : ${lib.makeBinPath [python3 sshfs-fuse torsocks conntrack_tools sshuttle-telepresence]}
+      --prefix PATH : ${lib.makeBinPath [python3 sshfs-fuse torsocks conntrack-tools sshuttle-telepresence]}
   '';
 
   meta = {

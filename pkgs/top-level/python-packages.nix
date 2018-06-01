@@ -201,6 +201,8 @@ in {
 
   # packages defined elsewhere
 
+  amazon_kclpy = callPackage ../development/python-modules/amazon_kclpy { };
+
   backports_csv = callPackage ../development/python-modules/backports_csv {};
 
   bap = callPackage ../development/python-modules/bap {
@@ -310,6 +312,8 @@ in {
   oauthenticator = callPackage ../development/python-modules/oauthenticator { };
 
   outcome = callPackage ../development/python-modules/outcome {};
+
+  pdfminer = callPackage ../development/python-modules/pdfminer_six { };
 
   plantuml = callPackage ../tools/misc/plantuml { };
 
@@ -1323,7 +1327,7 @@ in {
     #setupPyBuildFlags = [ "--berkeley-db=${pkgs.db}" ];
     # We can also use a variable
     preConfigure = ''
-      export BERKELEYDB_DIR=${pkgs.db};
+      export BERKELEYDB_DIR=${pkgs.db.dev};
     '';
 
     meta = {
@@ -2101,6 +2105,8 @@ in {
 
   demjson = callPackage ../development/python-modules/demjson { };
 
+  deprecation = callPackage ../development/python-modules/deprecation { };
+
   derpconf = callPackage ../development/python-modules/derpconf { };
 
   deskcon = self.buildPythonPackage rec {
@@ -2817,9 +2823,10 @@ in {
   };
 
   gnutls = buildPythonPackage rec {
-    name = "python-gnutls";
+    pname = "python-gnutls";
+    version = "3.0.0";
     src = pkgs.fetchurl {
-      url = "mirror://pypi/p/python-gnutls/python-gnutls-3.0.0.tar.gz";
+      url = "mirror://pypi/p/python-gnutls/${pname}-${version}.tar.gz";
       sha256 = "1yrdxcj5rzvz8iglircz6icvyggz5fmdcd010n6w3j60yp4p84kc";
     };
 
@@ -3785,28 +3792,6 @@ in {
       homepage = https://github.com/joeyespo/path-and-address;
       license = licenses.mit;
       maintainers = with maintainers; [ koral];
-    };
-  };
-
-
-  pdfminer = buildPythonPackage rec {
-    version = "20140328";
-    name = "pdfminer-${version}";
-
-    disabled = ! isPy27;
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/p/pdfminer/pdfminer-${version}.tar.gz";
-      sha256 = "0qpjv4b776dwvpf5a7v19g41qsz97bv0qqsyvm7a31k50n9pn65s";
-    };
-
-    propagatedBuildInputs = with self; [  ];
-
-    meta = {
-      description = "Tool for extracting information from PDF documents";
-      homepage = http://euske.github.io/pdfminer/index.html;
-      license = licenses.mit;
-      maintainers = with maintainers; [ ];
     };
   };
 
@@ -6962,6 +6947,9 @@ in {
 
   pylru = callPackage ../development/python-modules/pylru { };
 
+  libnl-python = disabledIf isPy3k
+    (toPythonModule (pkgs.libnl.override{pythonSupport=true; inherit python; })).py;
+
   lark-parser = callPackage ../development/python-modules/lark-parser { };
 
   lazy-object-proxy = buildPythonPackage rec {
@@ -9111,7 +9099,7 @@ in {
       sha256 = "0hh9j5zd2kc0804d2jmf1q3w5xm9l9s69hhgysbncrv5fw0414lh";
     };
     buildInputs = with pkgs; [ bashInteractive ]; # needed for bash-completion helper
-    propagatedBuildInputs = with self; [ urlgrabber m2crypto pyyaml ];
+    propagatedBuildInputs = with self; [ urlgrabber m2crypto pyyaml lxml ];
     postInstall = ''
       ln -s $out/bin/osc-wrapper.py $out/bin/osc
       install -D -m444 osc.fish $out/etc/fish/completions/osc.fish
@@ -10370,7 +10358,7 @@ in {
   };
 
   pybcrypt = buildPythonPackage rec {
-    name = "pybcrypt";
+    pname = "pybcrypt";
     version = "0.4";
 
     src = pkgs.fetchurl {
@@ -13418,27 +13406,7 @@ in {
     };
   };
 
-  supervisor = buildPythonPackage rec {
-    name = "supervisor-3.1.4";
-
-    disabled = isPy3k;
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/s/supervisor/${name}.tar.gz";
-      sha256 = "0kk0sv7780m4dzmrcb2m284krz907jh8jp7khz5a79qryy4m1xw2";
-    };
-
-    buildInputs = with self; [ mock ];
-    propagatedBuildInputs = with self; [ meld3 ];
-
-    # failing tests when building under chroot as root user doesn't exist
-    doCheck = false;
-
-    meta = {
-      description = "A system for controlling process state under UNIX";
-      homepage = http://supervisord.org/;
-    };
-  };
+  supervisor = callPackage ../development/python-modules/supervisor {};
 
   subprocess32 = callPackage ../development/python-modules/subprocess32 { };
 
@@ -14279,25 +14247,7 @@ in {
 
   TurboCheetah = callPackage ../development/python-modules/TurboCheetah { };
 
-  tweepy = buildPythonPackage (rec {
-    name = "tweepy-3.5.0";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/t/tweepy/${name}.tar.gz";
-      sha256 = "0n2shilamgwhzmvf534xg7f6hrnznbixyl5pw2f5a3f391gwy37h";
-    };
-
-    doCheck = false;
-    propagatedBuildInputs = with self; [ requests six requests_oauthlib ];
-
-    meta = {
-      homepage = "https://github.com/tweepy/tweepy";
-      description = "Twitter library for python";
-      license = licenses.mit;
-      maintainers = with maintainers; [ garbas ];
-      platforms = platforms.linux;
-    };
-  });
+  tweepy = callPackage ../development/python-modules/tweepy { };
 
   twiggy = buildPythonPackage rec {
     name = "Twiggy-${version}";
@@ -16254,6 +16204,10 @@ EOF
     };
   };
 
+  libversion = callPackage ../development/python-modules/libversion {
+    inherit (pkgs) libversion;
+  };
+
   libvirt = callPackage ../development/python-modules/libvirt {
     inherit (pkgs) libvirt;
   };
@@ -16988,6 +16942,11 @@ EOF
       url = "mirror://pypi/p/pyPEG2/pyPEG2-${version}.tar.gz";
       sha256 = "0v8ziaam2r637v94ra4dbjw6jzxz99gs5x4i585kgag1v204yb9b";
     };
+
+    checkPhase = ''
+      # The tests assume that test_xmlast does not run before test_pyPEG2.
+      python -m unittest pypeg2.test.test_pyPEG2 pypeg2.test.test_xmlast
+    '';
 
     #https://bitbucket.org/fdik/pypeg/issues/36/test-failures-on-py35
     doCheck = !isPy3k;
@@ -18195,6 +18154,13 @@ EOF
   pysdl2 = callPackage ../development/python-modules/pysdl2 { };
 
   pyogg = callPackage ../development/python-modules/pyogg { };
+
+  rubymarshal = callPackage ../development/python-modules/rubymarshal { };
+
+  radio_beam = callPackage ../development/python-modules/radio_beam { };
+
+  spectral-cube = callPackage ../development/python-modules/spectral-cube { };
+
 });
 
 in fix' (extends overrides packages)

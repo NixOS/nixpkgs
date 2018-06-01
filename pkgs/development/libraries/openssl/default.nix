@@ -73,8 +73,7 @@ let
 
     makeFlags = [ "MANDIR=$(man)/share/man" ];
 
-    # Parallel building is broken in OpenSSL.
-    enableParallelBuilding = false;
+    enableParallelBuilding = true;
 
     postInstall = ''
       # If we're building dynamic libraries, then don't install static

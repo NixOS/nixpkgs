@@ -69,13 +69,19 @@ in rec {
     };
     ghc842 = callPackage ../development/compilers/ghc/8.4.2.nix rec {
       bootPkgs = packages.ghc821Binary;
-      inherit (bootPkgs) alex happy;
+      inherit (bootPkgs) alex happy hscolour;
+      buildLlvmPackages = buildPackages.llvmPackages_5;
+      llvmPackages = pkgs.llvmPackages_5;
+    };
+    ghc843 = callPackage ../development/compilers/ghc/8.4.3.nix rec {
+      bootPkgs = packages.ghc821Binary;
+      inherit (bootPkgs) alex happy hscolour;
       buildLlvmPackages = buildPackages.llvmPackages_5;
       llvmPackages = pkgs.llvmPackages_5;
     };
     ghcHEAD = callPackage ../development/compilers/ghc/head.nix rec {
       bootPkgs = packages.ghc821Binary;
-      inherit (bootPkgs) alex happy;
+      inherit (bootPkgs) alex happy hscolour;
       buildLlvmPackages = buildPackages.llvmPackages_5;
       llvmPackages = pkgs.llvmPackages_5;
     };
@@ -151,6 +157,11 @@ in rec {
       ghc = bh.compiler.ghc842;
       compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-8.4.x.nix { };
     };
+    ghc843 = callPackage ../development/haskell-modules {
+      buildHaskellPackages = bh.packages.ghc843;
+      ghc = bh.compiler.ghc843;
+      compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-8.4.x.nix { };
+    };
     ghcHEAD = callPackage ../development/haskell-modules {
       buildHaskellPackages = bh.packages.ghcHEAD;
       ghc = bh.compiler.ghcHEAD;
@@ -159,13 +170,13 @@ in rec {
     ghcjs = packages.ghcjs82;
     ghcjs710 = callPackage ../development/haskell-modules rec {
       buildHaskellPackages = ghc.bootPkgs;
-      ghc = bh.compiler.ghcjs;
+      ghc = bh.compiler.ghcjs710;
       compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-7.10.x.nix { };
       packageSetConfig = callPackage ../development/haskell-modules/configuration-ghcjs.nix { };
     };
     ghcjs80 = callPackage ../development/haskell-modules rec {
       buildHaskellPackages = ghc.bootPkgs;
-      ghc = bh.compiler.ghcjsHEAD;
+      ghc = bh.compiler.ghcjs80;
       compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-8.0.x.nix { };
       packageSetConfig = callPackage ../development/haskell-modules/configuration-ghcjs.nix { };
     };

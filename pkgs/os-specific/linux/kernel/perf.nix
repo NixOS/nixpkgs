@@ -31,6 +31,8 @@ stdenv.mkDerivation {
 
   makeFlags = ["prefix=$(out)" "WERROR=0"] ++ kernel.makeFlags;
 
+  hardeningDisable = [ "format" ];
+
   # perf refers both to newt and slang
   nativeBuildInputs = [
     asciidoc xmlto docbook_xsl docbook_xml_dtd_45 libxslt
@@ -52,6 +54,9 @@ stdenv.mkDerivation {
     ++ stdenv.lib.optionals (hasPrefix "gcc-6" stdenv.cc.cc.name) [
       "-Wno-error=unused-const-variable" "-Wno-error=misleading-indentation"
     ];
+
+  doCheck = false; # requires "sparse"
+  doInstallCheck = false; # same
 
   separateDebugInfo = true;
   installFlags = "install install-man ASCIIDOC8=1 prefix=$(out)";

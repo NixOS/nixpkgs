@@ -16,6 +16,8 @@ stdenv.mkDerivation rec {
   buildInputs = [ python popt atk libX11 libICE xorg.libXtst libXi
                   dbus-glib at-spi2-core libSM ];
 
+  doCheck = false; # needs dbus daemon
+
   meta = with stdenv.lib; {
     platforms = platforms.unix;
   };

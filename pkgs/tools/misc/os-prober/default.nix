@@ -1,32 +1,27 @@
 { stdenv, fetchurl, makeWrapper,
-systemd, # udevadm
-busybox,
-coreutils, # os-prober desn't seem to work with pure busybox
-devicemapper, # lvs
-# optional dependencies
-cryptsetup ? null,
-libuuid ? null, # blkid and blockdev
-dmraid ? null,
-ntfs3g ? null
+# optional dependencies, the command(s) they provide
+coreutils,  # mktemp
+grub2,      # grub-mount and grub-probe
+cryptsetup, # cryptsetup
+libuuid,    # blkid and blockdev
+libudev,    # udevadm udevinfo
+ntfs3g      # ntfs3g
 }:
 
 stdenv.mkDerivation rec {
   version = "1.76";
   name = "os-prober-${version}";
   src = fetchurl {
-    url = "mirror://debian/pool/main/o/os-prober/os-prober_${version}.tar.xz";
-    sha256 = "1vb45i76bqivlghrq7m3n07qfmmq4wxrkplqx8gywj011rhq19fk";
+    url = "https://salsa.debian.org/philh/os-prober/-/archive/${version}/os-prober-${version}.tar.bz2";
+    sha256 = "07rw3092pckh21vx6y4hzqcn3wn4cqmwxaaiq100lncnhmszg11g";
   };
 
   buildInputs = [ makeWrapper ];
   installPhase = ''
     # executables
-    mkdir -p $out/bin
-    mkdir -p $out/lib
-    mkdir -p $out/share
-    cp os-prober linux-boot-prober $out/bin
-    cp newns $out/lib
-    cp common.sh $out/share
+    install -Dt $out/bin os-prober linux-boot-prober
+    install -Dt $out/lib newns
+    install -Dt $out/share common.sh
 
     # probes
     case "${stdenv.system}" in
@@ -36,8 +31,7 @@ stdenv.mkDerivation rec {
         *) ARCH=other;;
     esac;
     for probes in os-probes os-probes/mounted os-probes/init linux-boot-probes linux-boot-probes/mounted; do
-      mkdir -p $out/lib/$probes;
-      cp $probes/common/* $out/lib/$probes;
+      install -Dt $out/lib/$probes $probes/common/*;
       if [ -e "$probes/$ARCH" ]; then
         mkdir -p $out/lib/$probes
         cp -r $probes/$ARCH/* $out/lib/$probes;
@@ -57,21 +51,15 @@ stdenv.mkDerivation rec {
     done;
     for file in $out/bin/*; do
       wrapProgram $file \
-        --set LVM_SYSTEM_DIR ${devicemapper} \
-        --suffix PATH : "$out/bin${builtins.foldl' (x: y: x + ":" + y) "" (
-          map (x: (toString x) + "/bin") (
-            builtins.filter (x: x!=null)
-              [ devicemapper systemd coreutils cryptsetup libuuid dmraid ntfs3g busybox ]
-            )
-          )
-        }" \
+        --suffix PATH : ${stdenv.lib.makeBinPath [ grub2 libudev coreutils cryptsetup libuuid ntfs3g ]} \
         --run "[ -d /var/lib/os-prober ] || mkdir /var/lib/os-prober"
     done;
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "Utility to detect other OSs on a set of drives";
     homepage = http://packages.debian.org/source/sid/os-prober;
-    license = stdenv.lib.licenses.gpl2Plus;
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ symphorien ];
   };
 }

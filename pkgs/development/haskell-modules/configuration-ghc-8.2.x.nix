@@ -41,8 +41,8 @@ self: super: {
     prePatch = "sed -i -e 's/process.*< 1.5,/process,/g' Cabal.cabal";
   });
 
-  # jailbreak-cabal doesn't seem to work right with the native Cabal version.
-  jailbreak-cabal = pkgs.haskell.packages.ghc802.jailbreak-cabal;
+  # Build with the latest Cabal version, which works best albeit not perfectly.
+  jailbreak-cabal = super.jailbreak-cabal.override { Cabal = self.Cabal_2_2_0_1; };
 
   # https://github.com/bmillwood/applicative-quoters/issues/6
   applicative-quoters = appendPatch super.applicative-quoters (pkgs.fetchpatch {

@@ -3,7 +3,7 @@
 stdenv.mkDerivation rec {
   pname = "liberationsansnarrow";
   version = "1.07.3";
-  name = "${pname}";
+  name = "${pname}-${version}";
 
   src = fetchurl {
     url = "https://fedorahosted.org/releases/l/i/liberation-fonts/liberation-fonts-ttf-${version}.tar.gz";

@@ -1,23 +1,25 @@
 { stdenv, fetchurl, cmake, pkgconfig, SDL2, SDL2_image, SDL2_mixer, SDL2_net, SDL2_ttf
 , pango, gettext, boost, freetype, libvorbis, fribidi, dbus, libpng, pcre, openssl, icu
+, Cocoa, Foundation
 , enableTools ? false
 }:
 
 stdenv.mkDerivation rec {
   pname = "wesnoth";
-  version = "1.14.1";
+  version = "1.14.2";
 
   name = "${pname}-${version}";
 
   src = fetchurl {
     url = "mirror://sourceforge/sourceforge/${pname}/${name}.tar.bz2";
-    sha256 = "1mzrnbv71b4s41c5x8clhb53l8lidiwzny1hl828228pvys5bxkb";
+    sha256 = "1xhnhxjc8zjv89xmrbffa54fa4ybw6x0p34k14n9lrz1y18vaar8";
   };
 
   nativeBuildInputs = [ cmake pkgconfig ];
 
   buildInputs = [ SDL2 SDL2_image SDL2_mixer SDL2_net SDL2_ttf pango gettext boost
-                  libvorbis fribidi dbus libpng pcre openssl icu ];
+                  libvorbis fribidi dbus libpng pcre openssl icu ]
+                ++ stdenv.lib.optionals stdenv.isDarwin [ Cocoa Foundation];
 
   cmakeFlags = [ "-DENABLE_TOOLS=${if enableTools then "ON" else "OFF"}" ];
 
@@ -36,6 +38,6 @@ stdenv.mkDerivation rec {
     homepage = http://www.wesnoth.org/;
     license = licenses.gpl2;
     maintainers = with maintainers; [ abbradar ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

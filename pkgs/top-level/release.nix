@@ -43,8 +43,7 @@ let
               jobs.ghc.x86_64-darwin
               jobs.git.x86_64-darwin
               jobs.go.x86_64-darwin
-              jobs.mysql.x86_64-darwin
-              jobs.nix-repl.x86_64-darwin
+              jobs.mariadb.x86_64-darwin
               jobs.nix.x86_64-darwin
               jobs.nox.x86_64-darwin
               jobs.nix-info.x86_64-darwin
@@ -84,9 +83,6 @@ let
               jobs.python.x86_64-darwin
               jobs.python3.x86_64-linux
               jobs.python3.x86_64-darwin
-              # Many developers use nix-repl
-              jobs.nix-repl.x86_64-linux
-              jobs.nix-repl.x86_64-darwin
               # Needed by travis-ci to test PRs
               jobs.nox.x86_64-linux
               jobs.nox.x86_64-darwin
@@ -99,7 +95,7 @@ let
               jobs.thunderbird.x86_64-linux
               # Ensure that basic stuff works on darwin
               jobs.git.x86_64-darwin
-              jobs.mysql.x86_64-darwin
+              jobs.mariadb.x86_64-darwin
               jobs.vim.x86_64-darwin
               # Ensure that UI stuff works on darwin
               jobs.inkscape.x86_64-darwin

@@ -103,15 +103,13 @@ let
       #  include_next "unistd.h"
       #endif
       EOF
-    '' + stdenv.lib.optionalString useOld ''
+
       cd cctools
     '';
 
     # TODO: this builds an ld without support for LLVM's LTO. We need to teach it, but that's rather
     # hairy to handle during bootstrap. Perhaps it could be optional?
-    preConfigure = stdenv.lib.optionalString (!useOld) ''
-      cd cctools
-    '' + ''
+    preConfigure = ''
       sh autogen.sh
     '';
 

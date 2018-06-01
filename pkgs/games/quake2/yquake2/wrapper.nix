@@ -12,7 +12,7 @@ let
   };
 
 in stdenv.mkDerivation {
-  inherit name;
+  name = "${name}-${stdenv.lib.getVersion yquake2}";
 
   nativeBuildInputs = [ makeWrapper ];
 

@@ -14,6 +14,8 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "PREFIX=$(out)" ];
 
+  doCheck = false; # requires "bashate"
+
   postInstall = ''
     sed -i \
       -e '2i PATH="${pathAdd}:$PATH"' \

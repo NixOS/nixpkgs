@@ -120,7 +120,7 @@ self: super: {
     prePatch        = "cd lambdacube-ir.haskell; ";
   });
 
-  singletons = super.singletons_2_4_1;
+  singletons = dontCheck super.singletons_2_4_1;
   th-desugar = super.th-desugar_1_8;
 
   ## Upstreamed, awaiting a Hackage release
@@ -136,6 +136,8 @@ self: super: {
     };
   });
 
+  ## Bounds related: it wants base-compat 0.9.
+  criterion = super.criterion_1_4_1_0;
 
   ## Unmerged
 
@@ -290,14 +292,6 @@ self: super: {
     jailbreak       = true;
   });
 
-  jailbreak-cabal = super.jailbreak-cabal.override {
-    ##     • No instance for (Semigroup CDialect)
-    ##         arising from the superclasses of an instance declaration
-    ##     • In the instance declaration for ‘Monoid CDialect’
-    ## Undo the override in `configuration-common.nix`: GHC 8.4 bumps Cabal to 2.1:
-    Cabal = self.Cabal;
-  };
-
   kan-extensions = overrideCabal super.kan-extensions (drv: {
     ## Setup: Encountered missing dependencies:
     ## free ==4.*
@@ -413,7 +407,7 @@ self: super: {
 
   # Older versions don't compile.
   base-compat = self.base-compat_0_10_1;
-  brick = self.brick_0_37;
+  brick = self.brick_0_37_1;
   dhall = self.dhall_1_13_0;
   dhall_1_13_0 = doJailbreak super.dhall_1_13_0;  # support ansi-terminal 0.8.x
   HaTeX = self.HaTeX_3_19_0_0;

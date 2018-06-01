@@ -18,5 +18,8 @@ stdenv.mkDerivation rec {
   doCheck = true;
   checkTarget = "test";
 
+  # requires optimisation but memory operations are compiled with -O0
+  hardeningDisable = ["fortify"];
+
   installFlags = "PREFIX=$(out)";
 }

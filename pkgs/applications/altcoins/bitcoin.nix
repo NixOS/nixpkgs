@@ -25,6 +25,10 @@ stdenv.mkDerivation rec{
                                             "--with-qt-bindir=${qtbase.dev}/bin:${qttools.dev}/bin"
                                           ];
 
+  # Fails with "This application failed to start because it could not
+  # find or load the Qt platform plugin "minimal""
+  doCheck = false;
+
   meta = {
     description = "Peer-to-peer electronic cash system";
     longDescription= ''

@@ -1,11 +1,11 @@
-{ stdenv, appleDerivation }:
+{ stdenv, appleDerivation, autoreconfHook }:
 
 appleDerivation {
-  preConfigure = "cd libiconv"
-    + stdenv.lib.optionalString stdenv.hostPlatform.isiOS ''
+  postUnpack = "sourceRoot=$sourceRoot/libiconv";
 
-      sed -i 's/darwin\*/ios\*/g' configure libcharset/configure
-    '';
+  preConfigure = stdenv.lib.optionalString stdenv.hostPlatform.isiOS ''
+    sed -i 's/darwin\*/ios\*/g' configure libcharset/configure
+  '';
 
   postInstall = ''
     mv $out/lib/libiconv.dylib $out/lib/libiconv-nocharset.dylib
@@ -18,7 +18,10 @@ appleDerivation {
       -Wl,-reexport_library -Wl,$out/lib/libcharset.dylib
   '';
 
-  setup-hook = ../../../../development/libraries/libiconv/setup-hook.sh;
+  setupHooks = [
+    ../../../../build-support/setup-hooks/role.bash
+    ../../../../development/libraries/libiconv/setup-hook.sh
+  ];
 
   meta = {
     platforms = stdenv.lib.platforms.darwin;

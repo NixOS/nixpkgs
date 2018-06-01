@@ -7,8 +7,8 @@ let
   # Various changes for 64-bit sunxi boards, (hopefully) destined for 2018.05
   sunxiPatch = fetchpatch {
     name = "sunxi.patch";
-    url = "https://github.com/u-boot/u-boot/compare/v2018.03...dezgeg:2018-03-sunxi.patch";
-    sha256 = "1pqn7c6c06hfygwpcgaraqvqxcjhz99j0rx5psfhj8igy0qvk2dq";
+    url = "https://github.com/u-boot/u-boot/compare/v2018.05...dezgeg:2018-05-sunxi.patch";
+    sha256 = "1dfv4s1f71iv80vjxgyghv4pcwjv4mjphk75a8hfl3jdbpd66d36";
   };
 
   buildUBoot = { filesToInstall
@@ -21,21 +21,21 @@ let
            stdenv.mkDerivation (rec {
 
     name = "uboot-${defconfig}-${version}";
-    version = "2018.03";
+    version = "2018.05";
 
     src = fetchurl {
       url = "ftp://ftp.denx.de/pub/u-boot/u-boot-${version}.tar.bz2";
-      sha256 = "1z9x635l5164c5hnf7qs19w7j3qghbkgs7rpn673dm898i9pfx3y";
+      sha256 = "0j60p4iskzb4hamxgykc6gd7xchxfka1zwh8hv08r9rrc4m3r8ad";
     };
 
     patches = [
       (fetchpatch {
-        url = https://github.com/dezgeg/u-boot/commit/rpi-2017-11-patch1.patch;
-        sha256 = "067yq55vv1slv4xy346px7h329pi14abdn04chg6s1s6hmf6c1x9";
+        url = https://github.com/dezgeg/u-boot/commit/rpi-2018-05-patch1.patch;
+        sha256 = "0xvw16mp6mm36987rd5yb8bw0n5b3p1gq35wch2gbj15wx55450p";
       })
       (fetchpatch {
-        url = https://github.com/dezgeg/u-boot/commit/rpi-2017-11-patch2.patch;
-        sha256 = "0bbw0q027xvzvdxxvpzjajg4rm30a8mb7z74b6ma9q0l7y7bi0c4";
+        url = https://github.com/dezgeg/u-boot/commit/rpi-2018-05-patch2.patch;
+        sha256 = "0q1a5l5rfgddncxrjk59qr1f5587dwbvcf6z15bsfl2invs19m2b";
       })
       (fetchpatch {
         url = https://github.com/dezgeg/u-boot/commit/pythonpath-2018-03.patch;
@@ -100,8 +100,7 @@ in rec {
     hardeningDisable = [];
     dontStrip = false;
     extraMeta.platforms = stdenv.lib.platforms.linux;
-    # build tools/kwboot
-    extraMakeFlags = [ "CONFIG_KIRKWOOD=y" "CROSS_BUILD_TOOLS=1" "NO_SDL=1" "tools" ];
+    extraMakeFlags = [ "HOST_TOOLS_ALL=y" "CROSS_BUILD_TOOLS=1" "NO_SDL=1" "tools" ];
     postConfigure = ''
       sed -i '/CONFIG_SYS_TEXT_BASE/c\CONFIG_SYS_TEXT_BASE=0x00000000' .config
     '';
@@ -215,6 +214,12 @@ in rec {
   ubootRaspberryPi3_64bit = buildUBoot rec {
     defconfig = "rpi_3_defconfig";
     extraMeta.platforms = ["aarch64-linux"];
+    filesToInstall = ["u-boot.bin"];
+  };
+
+  ubootRaspberryPiZero = buildUBoot rec {
+    defconfig = "rpi_0_w_defconfig";
+    extraMeta.platforms = ["armv6l-linux"];
     filesToInstall = ["u-boot.bin"];
   };
 

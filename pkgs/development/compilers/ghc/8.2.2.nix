@@ -152,10 +152,8 @@ stdenv.mkDerivation rec {
     "--disable-large-address-space"
   ];
 
-  # Hack to make sure we never to the relaxation `$PATH` and hooks support for
-  # compatability. This will be replaced with something clearer in a future
-  # masss-rebuild.
-  crossConfig = true;
+  # Make sure we never relax`$PATH` and hooks support for compatability.
+  strictDeps = true;
 
   nativeBuildInputs = [
     autoconf autoreconfHook automake perl python3 sphinx
@@ -178,6 +176,9 @@ stdenv.mkDerivation rec {
   stripDebugFlags = [ "-S" ] ++ stdenv.lib.optional (!targetPlatform.isDarwin) "--keep-file-symbols";
 
   checkTarget = "test";
+  doCheck = false; # fails with "testsuite/tests: No such file or directory.  Stop."
+
+  hardeningDisable = [ "format" ];
 
   postInstall = ''
     for bin in "$out"/lib/${name}/bin/*; do

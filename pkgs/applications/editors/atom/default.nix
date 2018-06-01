@@ -58,12 +58,12 @@ let
   };
 in stdenv.lib.mapAttrs common {
   atom = {
-    version = "1.27.1";
-    sha256 = "08slv8s90wz2jcdrcqh2d815wfbrkwcdx9c3qbx8cml04hz8p2gx";
+    version = "1.27.2";
+    sha256 = "0xriv142asc82mjxzkqsafaqalxa3icz4781z2fsgyfkkw6zbz2v";
   };
 
   atom-beta = {
-    version = "1.28.0-beta1";
-    sha256 = "1mkxq2a7sylj9jx1bs2v1pmgrwc10cgh810qic1lncq9jzpaik0n";
+    version = "1.28.0-beta2";
+    sha256 = "0fc9j1l776hv057dirw2bv9wmvhcaba5c4nq1cgs5rb5whxir2n6";
   };
 }

@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   version = "1.2.8";
-  name = "zerotierone";
+  name = "zerotierone-${version}";
 
   src = fetchurl {
     url = "https://github.com/zerotier/ZeroTierOne/archive/${version}.tar.gz";

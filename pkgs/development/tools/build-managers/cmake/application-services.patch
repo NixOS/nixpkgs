@@ -1,0 +1,16 @@
+diff --git a/Source/cmGlobalXCodeGenerator.cxx b/Source/cmGlobalXCodeGenerator.cxx
+index 2008a0b..5a3e8ee 100644
+--- a/Source/cmGlobalXCodeGenerator.cxx
++++ b/Source/cmGlobalXCodeGenerator.cxx
+@@ -35,11 +35,6 @@
+ 
+ struct cmLinkImplementation;
+ 
+-#if defined(CMAKE_BUILD_WITH_CMAKE) && defined(__APPLE__)
+-#define HAVE_APPLICATION_SERVICES
+-#include <ApplicationServices/ApplicationServices.h>
+-#endif
+-
+ #if defined(CMAKE_BUILD_WITH_CMAKE)
+ #include "cmXMLParser.h"
+ 

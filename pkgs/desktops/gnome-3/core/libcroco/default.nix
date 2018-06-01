@@ -13,12 +13,12 @@ in stdenv.mkDerivation rec {
   patches = [
     (fetchpatch {
       name = "CVE-2017-7960.patch";
-      url = "https://git.gnome.org/browse/libcroco/patch/?id=898e3a8c8c0314d2e6b106809a8e3e93cf9d4394";
+      url = https://gitlab.gnome.org/GNOME/libcroco/commit/898e3a8c8c0314d2e6b106809a8e3e93cf9d4394.patch;
       sha256 = "1xjwdqijxf4b7mhdp3kkgnb6c14y0bn3b3gg79kyrm82x696d94l";
     })
     (fetchpatch {
       name = "CVE-2017-7961.patch";
-      url = "https://git.gnome.org/browse/libcroco/patch/?id=9ad72875e9f08e4c519ef63d44cdbd94aa9504f7";
+      url = https://gitlab.gnome.org/GNOME/libcroco/commit/9ad72875e9f08e4c519ef63d44cdbd94aa9504f7.patch;
       sha256 = "0zakd72ynzjgzskwyvqglqiznsb93j1bkvc1lgyrzgv9rwrbwv9s";
     })
   ];
@@ -39,7 +39,7 @@ in stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "GNOME CSS2 parsing and manipulation toolkit";
-    homepage = https://git.gnome.org/browse/libcroco;
+    homepage = https://gitlab.gnome.org/GNOME/libcroco;
     license = licenses.lgpl2;
     platforms = platforms.unix;
   };

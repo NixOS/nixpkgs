@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
   # Hack to make sure we never to the relaxation `$PATH` and hooks support for
   # compatability. This will be replaced with something clearer in a future
   # masss-rebuild.
-  crossConfig = true;
+  strictDeps = true;
 
   meta = {
     description = "GNU software calculator";
