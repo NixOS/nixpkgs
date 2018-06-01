@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, dpkg, gnome3, gtk2, atk, cairo, pango, gdk_pixbuf, glib, freetype,
+{ stdenv, lib, fetchurl, dpkg, gnome3, gtk3, atk, cairo, pango, gdk_pixbuf, glib, freetype,
 fontconfig, dbus, libX11, xorg, libXi, libXcursor, libXdamage, libXrandr,
 libXcomposite, libXext, libXfixes, libXrender, libXtst, libXScrnSaver, nss,
 nspr, alsaLib, cups, expat, udev
@@ -16,7 +16,7 @@ let
     gdk_pixbuf
     glib
     gnome3.gconf
-    gtk2
+    gtk3
     pango
     libX11
     libXScrnSaver
@@ -40,13 +40,13 @@ in
   stdenv.mkDerivation rec {
     name = "signal-desktop-${version}";
 
-    version = "1.11.0";
+    version = "1.12.0";
 
     src =
       if stdenv.system == "x86_64-linux" then
         fetchurl {
           url = "https://updates.signal.org/desktop/apt/pool/main/s/signal-desktop/signal-desktop_${version}_amd64.deb";
-          sha256 = "0s3qlzm7iy9qxca2hlh1hq0dnjr7y5wxad1ssqgmyhxsif0nqm96";
+          sha256 = "19c9pilx2qkpyqw3p167bfcizrpd4np5jxdcwqmpbcfibmrpmcsk";
         }
       else
         throw "Signal for Desktop is not currently supported on ${stdenv.system}";
