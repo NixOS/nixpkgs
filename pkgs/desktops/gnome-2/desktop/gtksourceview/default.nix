@@ -1,6 +1,6 @@
 {stdenv, fetchpatch, fetchurl, autoreconfHook, pkgconfig, atk, cairo, glib
 , gnome-common, gtk, pango
-, libxml2Python, perl, intltool, gettext, gtk-mac-integration }:
+, libxml2Python, perl, intltool, gettext, gtk-mac-integration-gtk2 }:
 
 with stdenv.lib;
 
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
     pango libxml2Python perl intltool
     gettext
   ] ++ optionals stdenv.isDarwin [
-    autoreconfHook gnome-common gtk-mac-integration
+    autoreconfHook gnome-common gtk-mac-integration-gtk2
   ];
 
   preConfigure = optionalString stdenv.isDarwin ''
