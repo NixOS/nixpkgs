@@ -428,7 +428,9 @@ packageOverrides = pkgs: {
    <para>
     <variablelist>
      <varlistentry>
-      <term>Steam fails to start. What do I do?</term>
+      <term>
+       Steam fails to start. What do I do?
+      </term>
       <listitem>
        <para>
         Try to run
@@ -438,7 +440,9 @@ packageOverrides = pkgs: {
       </listitem>
      </varlistentry>
      <varlistentry>
-      <term>Using the FOSS Radeon or nouveau (nvidia) drivers</term>
+      <term>
+       Using the FOSS Radeon or nouveau (nvidia) drivers
+      </term>
       <listitem>
        <itemizedlist>
         <listitem>
@@ -462,7 +466,9 @@ packageOverrides = pkgs: {
       </listitem>
      </varlistentry>
      <varlistentry>
-      <term>Java</term>
+      <term>
+       Java
+      </term>
       <listitem>
        <orderedlist>
         <listitem>
