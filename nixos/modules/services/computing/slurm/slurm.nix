@@ -204,6 +204,9 @@ in
           EOT
             chmod +x "$wrappername"
           done
+
+          mkdir -p $out/share
+          ln -s ${getBin cfg.package}/share/man $out/share/man
         '';
       };
 
