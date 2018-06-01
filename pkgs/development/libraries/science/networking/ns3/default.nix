@@ -59,6 +59,7 @@ stdenv.mkDerivation rec {
   propagatedBuildInputs = [
     # stdenv.cc ?
     pythonEnv
+    # llvmPackages.libcxx
   ];
 
 

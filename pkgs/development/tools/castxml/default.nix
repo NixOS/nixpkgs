@@ -30,7 +30,6 @@ stdenv.mkDerivation rec {
 
   propagatedbuildInputs = [
     llvmPackages.libclang
-    llvmPackages.libcxx
   ];
 
   # 97% tests passed, 96 tests failed out of 2866
