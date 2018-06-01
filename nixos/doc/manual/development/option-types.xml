@@ -196,7 +196,7 @@
   <variablelist>
    <varlistentry>
     <term>
-     <varname>types.enum</varname><replaceable>l</replaceable>
+     <varname>types.enum</varname> <replaceable>l</replaceable>
     </term>
     <listitem>
      <para>
@@ -208,7 +208,7 @@
    </varlistentry>
    <varlistentry>
     <term>
-     <varname>types.separatedString</varname><replaceable>sep</replaceable>
+     <varname>types.separatedString</varname> <replaceable>sep</replaceable>
     </term>
     <listitem>
      <para>
@@ -219,7 +219,7 @@
    </varlistentry>
    <varlistentry>
     <term>
-     <varname>types.ints.between</varname><replaceable>lowest</replaceable><replaceable>highest</replaceable>
+     <varname>types.ints.between</varname> <replaceable>lowest</replaceable> <replaceable>highest</replaceable>
     </term>
     <listitem>
      <para>
@@ -231,7 +231,7 @@
    </varlistentry>
    <varlistentry>
     <term>
-     <varname>types.submodule</varname><replaceable>o</replaceable>
+     <varname>types.submodule</varname> <replaceable>o</replaceable>
     </term>
     <listitem>
      <para>
@@ -259,7 +259,7 @@
   <variablelist>
    <varlistentry>
     <term>
-     <varname>types.listOf</varname><replaceable>t</replaceable>
+     <varname>types.listOf</varname> <replaceable>t</replaceable>
     </term>
     <listitem>
      <para>
@@ -270,7 +270,7 @@
    </varlistentry>
    <varlistentry>
     <term>
-     <varname>types.attrsOf</varname><replaceable>t</replaceable>
+     <varname>types.attrsOf</varname> <replaceable>t</replaceable>
     </term>
     <listitem>
      <para>
@@ -282,7 +282,7 @@
    </varlistentry>
    <varlistentry>
     <term>
-     <varname>types.loaOf</varname><replaceable>t</replaceable>
+     <varname>types.loaOf</varname> <replaceable>t</replaceable>
     </term>
     <listitem>
      <para>
@@ -293,7 +293,7 @@
    </varlistentry>
    <varlistentry>
     <term>
-     <varname>types.nullOr</varname><replaceable>t</replaceable>
+     <varname>types.nullOr</varname> <replaceable>t</replaceable>
     </term>
     <listitem>
      <para>
@@ -304,7 +304,7 @@
    </varlistentry>
    <varlistentry>
     <term>
-     <varname>types.uniq</varname><replaceable>t</replaceable>
+     <varname>types.uniq</varname> <replaceable>t</replaceable>
     </term>
     <listitem>
      <para>
@@ -315,7 +315,7 @@
    </varlistentry>
    <varlistentry>
     <term>
-     <varname>types.either</varname><replaceable>t1</replaceable><replaceable>t2</replaceable>
+     <varname>types.either</varname> <replaceable>t1</replaceable> <replaceable>t2</replaceable>
     </term>
     <listitem>
      <para>
@@ -327,7 +327,7 @@
    </varlistentry>
    <varlistentry>
     <term>
-     <varname>types.coercedTo</varname><replaceable>from</replaceable><replaceable>f</replaceable><replaceable>to</replaceable>
+     <varname>types.coercedTo</varname> <replaceable>from</replaceable> <replaceable>f</replaceable> <replaceable>to</replaceable>
     </term>
     <listitem>
      <para>

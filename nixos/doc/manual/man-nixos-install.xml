@@ -62,15 +62,15 @@
     <arg choice='plain'>
      <option>-j</option>
     </arg>
-     </group><replaceable>number</replaceable>
+     </group> <replaceable>number</replaceable>
    </arg>
     
    <arg>
-    <option>--cores</option><replaceable>number</replaceable>
+    <option>--cores</option> <replaceable>number</replaceable>
    </arg>
     
    <arg>
-    <option>--option</option><replaceable>name</replaceable><replaceable>value</replaceable>
+    <option>--option</option> <replaceable>name</replaceable> <replaceable>value</replaceable>
    </arg>
     
    <arg>
@@ -213,7 +213,7 @@
    </varlistentry>
    <varlistentry>
     <term>
-     <option>--option</option><replaceable>name</replaceable><replaceable>value</replaceable>
+     <option>--option</option> <replaceable>name</replaceable> <replaceable>value</replaceable>
     </term>
     <listitem>
      <para>
