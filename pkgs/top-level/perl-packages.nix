@@ -6549,6 +6549,20 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
+  Git = buildPerlPackage rec {
+    name = "Git-0.42";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/M/MS/MSOUTH/${name}.tar.gz";
+      sha256 = "9469a9f398f3a2bf2b0500566ee41d3ff6fae460412a137185767a1cc4783a6d";
+    };
+    propagatedBuildInputs = [ Error ];
+    meta = {
+      maintainers = [ maintainers.limeytexan ];
+      description = "This is the Git.pm, plus the other files in the perl/Git directory, from github's git/git";
+      license = stdenv.lib.licenses.free;
+    };
+  };
+
   GitPurePerl = buildPerlPackage rec {
     name = "Git-PurePerl-0.53";
     src = fetchurl {
