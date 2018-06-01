@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, dpkg, gnome3, gtk3, atk, cairo, pango, gdk_pixbuf, glib, freetype,
+{ stdenv, lib, fetchurl, dpkg, wrapGAppsHook, gnome3, gtk3, atk, cairo, pango, gdk_pixbuf, glib, freetype,
 fontconfig, dbus, libX11, xorg, libXi, libXcursor, libXdamage, libXrandr,
 libXcomposite, libXext, libXfixes, libXrender, libXtst, libXScrnSaver, nss,
 nspr, alsaLib, cups, expat, udev
@@ -52,7 +52,7 @@ in
         throw "Signal for Desktop is not currently supported on ${stdenv.system}";
 
     phases = [ "unpackPhase" "installPhase" ];
-    nativeBuildInputs = [ dpkg ];
+    nativeBuildInputs = [ dpkg wrapGAppsHook ];
     unpackPhase = "dpkg-deb -x $src .";
     installPhase = ''
       mkdir -p $out
@@ -67,6 +67,9 @@ in
       # Patch signal
       patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
                --set-rpath ${rpath}:$out/libexec $out/libexec/signal-desktop
+      wrapProgram $out/libexec/signal-desktop \
+        --prefix XDG_DATA_DIRS : "${gtk3}/share/gsettings-schemas/${gtk3.name}/" \
+        "''${gappsWrapperArgs[@]}"
 
       # Symlink to bin
       mkdir -p $out/bin
