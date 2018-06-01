@@ -1,19 +1,19 @@
-{ stdenv, pkgs, rustPlatform, fetchFromGitHub }:
+{ stdenv, rustPlatform, fetchFromGitHub, cmake, pkgconfig, zlib }:
 
 rustPlatform.buildRustPackage rec {
   name    = "bat-${version}";
-  version = "0.3.0";
+  version = "0.4.1";
 
   src = fetchFromGitHub {
     owner  = "sharkdp";
     repo   = "bat";
     rev    = "v${version}";
-    sha256 = "15d7i0iy5lks3jg9js6n6fy4xanjk76fpryl2kq88kdkq67hpzfp";
+    sha256 = "0fiif6b8g2hdb05s028dbcpav6ax0qap2hbsr9p2bld4z7j7321m";
   };
 
-  cargoSha256 = "179a7abhzpxjp3cc820jzxg0qk1fiv9rkpazwnzhkjl8yd7b7qi3";
+  cargoSha256 = "0w0y3sfrpk8sn9rls90kjqrqr62pd690ripdfbvb5ipkzizp429l";
 
-  buildInputs = with pkgs; [ pkgconfig cmake zlib file perl curl ];
+  nativeBuildInputs = [ cmake pkgconfig zlib ];
 
   meta = with stdenv.lib; {
     description = "A cat(1) clone with syntax highlighting and Git integration";
