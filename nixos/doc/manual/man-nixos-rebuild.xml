@@ -76,7 +76,7 @@
     <arg choice='plain'>
      <option>-p</option>
     </arg>
-     </group><replaceable>name</replaceable>
+     </group> <replaceable>name</replaceable>
    </arg>
    <sbr />
    <arg>

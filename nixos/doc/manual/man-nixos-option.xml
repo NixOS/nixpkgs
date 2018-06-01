@@ -15,7 +15,7 @@
   <cmdsynopsis>
    <command>nixos-option</command> 
    <arg>
-    <option>-I</option><replaceable>path</replaceable>
+    <option>-I</option> <replaceable>path</replaceable>
    </arg>
     
    <arg>
@@ -51,7 +51,7 @@
   <variablelist>
    <varlistentry>
     <term>
-     <option>-I</option><replaceable>path</replaceable>
+     <option>-I</option> <replaceable>path</replaceable>
     </term>
     <listitem>
      <para>
