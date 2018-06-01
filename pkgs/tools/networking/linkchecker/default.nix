@@ -1,19 +1,5 @@
 { stdenv, lib, fetchFromGitHub, fetchpatch, python2, gettext }:
-let
-  # pin requests version until next release.
-  # see: https://github.com/linkcheck/linkchecker/issues/76
-  python2Packages = (python2.override {
-    packageOverrides = self: super: {   
-      requests = super.requests.overridePythonAttrs(oldAttrs: rec {
-        version = "2.14.2";
-        src = oldAttrs.src.override {
-          inherit version;
-          sha256 = "0lyi82a0ijs1m7k9w1mqwbmq1qjsac35fazx7xqyh8ws76xanx52";
-        };
-      });
-    };
-  }).pkgs;
-in
+
 python2Packages.buildPythonApplication rec {
   pname = "LinkChecker";
   version = "9.3.1";
