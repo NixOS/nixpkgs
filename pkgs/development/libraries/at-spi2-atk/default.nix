@@ -1,4 +1,5 @@
-{ stdenv, fetchurl, python, pkgconfig, popt, atk, libX11, libICE, xorg, libXi
+{ stdenv, fetchurl, pkgconfig, meson, ninja, libxml2
+, python, popt, atk, libX11, libICE, xorg, libXi
 , intltool, dbus-glib, at-spi2-core, libSM }:
 
 stdenv.mkDerivation rec {
@@ -12,9 +13,9 @@ stdenv.mkDerivation rec {
     sha256 = "0x9vc99ni46fg5dzlx67vbw0zqffr24gz8jvbdxbmzyvc5xw5w5l";
   };
 
-  nativeBuildInputs = [ pkgconfig intltool ];
+  nativeBuildInputs = [ meson ninja pkgconfig intltool ];
   buildInputs = [ python popt atk libX11 libICE xorg.libXtst libXi
-                  dbus-glib at-spi2-core libSM ];
+                  dbus-glib at-spi2-core libSM libxml2 ];
 
   doCheck = false; # needs dbus daemon
 
