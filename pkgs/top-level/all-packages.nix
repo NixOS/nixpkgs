@@ -8638,6 +8638,8 @@ with pkgs;
 
   buddy = callPackage ../development/libraries/buddy { };
 
+  bulletml = callPackage ../development/libraries/bulletml { };
+
   bwidget = callPackage ../development/libraries/bwidget { };
 
   bzrtp = callPackage ../development/libraries/bzrtp { };
@@ -19419,6 +19421,8 @@ with pkgs;
   robotfindskitten = callPackage ../games/robotfindskitten { };
 
   rocksndiamonds = callPackage ../games/rocksndiamonds { };
+
+  rrootage = callPackage ../games/rrootage { };
 
   saga = callPackage ../applications/gis/saga { };
 
