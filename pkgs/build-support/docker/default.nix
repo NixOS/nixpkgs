@@ -47,6 +47,8 @@ rec {
     }:
 
     runCommand name {
+      inherit imageName imageDigest;
+      imageTag = finalImageTag;
       impureEnvVars = pkgs.stdenv.lib.fetchers.proxyImpureEnvVars;
       outputHashMode = "flat";
       outputHashAlgo = "sha256";
