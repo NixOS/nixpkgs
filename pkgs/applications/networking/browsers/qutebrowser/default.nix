@@ -29,13 +29,13 @@ let
 in python3Packages.buildPythonApplication rec {
   name = "qutebrowser-${version}${versionPostfix}";
   namePrefix = "";
-  version = "1.3.0";
+  version = "1.3.1";
   versionPostfix = "";
 
   # the release tarballs are different from the git checkout!
   src = fetchurl {
     url = "https://github.com/qutebrowser/qutebrowser/releases/download/v${version}/${name}.tar.gz";
-    sha256 = "159h669x60pfla71zx28wnrik8rvsrw5i8kbd3xccynk6klm3kw3";
+    sha256 = "121fz549vlxdasw0lcx6v394x8g34nadvrfs4svw3b65n0shv1ky";
   };
 
   # Needs tox

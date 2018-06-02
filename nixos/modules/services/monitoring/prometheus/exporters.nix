@@ -20,6 +20,7 @@ let
   exporterOpts = {
     blackbox  = import ./exporters/blackbox.nix  { inherit config lib pkgs; };
     collectd  = import ./exporters/collectd.nix  { inherit config lib pkgs; };
+    dnsmasq   = import ./exporters/dnsmasq.nix   { inherit config lib pkgs; };
     dovecot   = import ./exporters/dovecot.nix   { inherit config lib pkgs; };
     fritzbox  = import ./exporters/fritzbox.nix  { inherit config lib pkgs; };
     json      = import ./exporters/json.nix      { inherit config lib pkgs; };
