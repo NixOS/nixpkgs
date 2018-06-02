@@ -2403,7 +2403,6 @@ let self = _self // overrides; _self = with self; {
       description = "Interface to Bzip2 compression library";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
-    doCheck = false;
   };
 
   CompressRawBzip2 = buildPerlPackage rec {
