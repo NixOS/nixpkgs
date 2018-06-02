@@ -18014,7 +18014,7 @@ with pkgs;
       saslSupport = false;
       sasl = cyrus_sasl;
     })
-    subversion18 subversion19;
+    subversion18 subversion19 subversion_1_10;
 
   subversion = pkgs.subversion19;
 
