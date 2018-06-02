@@ -1,19 +1,18 @@
-{ stdenv, fetchsvn, autoreconfHook }:
+{ stdenv, fetchurl, autoreconfHook }:
 
 stdenv.mkDerivation rec {
-  name = "ctags-${revision}";
-  revision = "816";
+  name = "ctags-${version}";
+  version = "5.8";
 
-  src = fetchsvn {
-    url = "https://ctags.svn.sourceforge.net/svnroot/ctags/trunk";
-    rev = revision;
-    sha256 = "0jmbkrmscbl64j71qffcc39x005jrmphx8kirs1g2ws44wil39hf";
+  src = fetchurl {
+    url = "mirror://sourceforge/ctags/ctags-${version}.tar.gz";
+    sha256 = "1iwrkrpdcmzbjmrv6b8169fvw6pq8v1307mipc5rx5myr9fv8i0f";
   };
 
   nativeBuildInputs = [ autoreconfHook ];
 
-  # don't use $T(E)MP which is set to the build directory
-  configureFlags= [ "--enable-tmpdir=/tmp" ];
+  # lregex.c:411:4: error: format not a string literal and no format arguments [-Werror=format-security]
+  hardeningDisable = [ "format" ];
 
   meta = with stdenv.lib; {
     description = "A tool for fast source code browsing (exuberant ctags)";
