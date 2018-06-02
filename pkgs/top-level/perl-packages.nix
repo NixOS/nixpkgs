@@ -523,10 +523,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   AudioScan = buildPerlPackage rec {
-    name = "Audio-Scan-0.99";
+    name = "Audio-Scan-1.00";
     src = fetchurl {
       url = "mirror://cpan/authors/id/A/AG/AGRUNDMA/${name}.tar.gz";
-      sha256 = "00092cjj89sp019b35fm3qiz4iczqznwa3yhx5jdkazlwjhlmmma";
+      sha256 = "00aj95mv5dsyi0cnmd8b6i6hvvw1xiczgkmc5mv775p385q3pcfm";
     };
     buildInputs = [ pkgs.zlib TestWarn ];
     NIX_CFLAGS_COMPILE = "-I${pkgs.zlib.dev}/include";
