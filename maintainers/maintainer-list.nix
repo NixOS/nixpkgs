@@ -2973,6 +2973,11 @@
     github = "phreedom";
     name = "Evgeny Egorochkin";
   };
+  phryneas = {
+    email = "mail@lenzw.de";
+    github = "phryneas";
+    name = "Lenz Weber";
+  };
   phunehehe = {
     email = "phunehehe@gmail.com";
     github = "phunehehe";
