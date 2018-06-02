@@ -13410,7 +13410,7 @@ let self = _self // overrides; _self = with self; {
       maintainers = with maintainers; [ ];
       platforms   = stdenv.lib.platforms.unix;
     };
-    doCheck = false;
+    doCheck = false; /* creates files in HOME */
   };
 
   RTClientREST = buildPerlPackage {
