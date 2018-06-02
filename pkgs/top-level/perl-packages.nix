@@ -14757,12 +14757,12 @@ let self = _self // overrides; _self = with self; {
   };
 
   TermProgressBar = buildPerlPackage rec {
-    name = "Term-ProgressBar-2.21";
+    name = "Term-ProgressBar-2.22";
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/MA/MANWAR/${name}.tar.gz";
-      sha256 = "66994f1a6ca94d8d92e3efac406142fb0d05033360c0acce2599862db9c30e44";
+      sha256 = "2642ecca5b0b038c14812bcad3a9611ff7911dc59c9104d220797f837a880c49";
     };
-    buildInputs = [ CaptureTiny TestException ];
+    buildInputs = [ CaptureTiny TestException TestWarnings ];
     propagatedBuildInputs = [ ClassMethodMaker TermReadKey ];
     meta = {
       description = "Provide a progress meter on a standard terminal";
