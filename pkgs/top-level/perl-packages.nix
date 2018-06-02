@@ -5873,6 +5873,20 @@ let self = _self // overrides; _self = with self; {
     buildInputs = [ PathTiny TestDeep TestFatal TestFile TestWarnings ];
   };
 
+  FileCopyRecursiveReduced = buildPerlPackage rec {
+     name = "File-Copy-Recursive-Reduced-0.006";
+     src = fetchurl {
+       url = mirror://cpan/authors/id/J/JK/JKEENAN/File-Copy-Recursive-Reduced-0.006.tar.gz;
+       sha256 = "0b3yf33bahaf4ipfqipn8y5z4296k3vgzzsqbhh5ahwzls9zj676";
+     };
+     buildInputs = [ CaptureTiny PathTiny ];
+     meta = {
+       description = "Recursive copying of files and directories within Perl 5 toolchain";
+       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+       homepage = "http://thenceforward.net/perl/modules/File-Copy-Recursive-Reduced/";
+     };
+  };
+
   FileDesktopEntry = buildPerlPackage rec {
     version = "0.04";
     name = "File-DesktopEntry-${version}";
@@ -9813,12 +9827,12 @@ let self = _self // overrides; _self = with self; {
   };
 
   ModuleBuildXSUtil = buildPerlModule rec {
-    name = "Module-Build-XSUtil-0.18";
+    name = "Module-Build-XSUtil-0.19";
     src = fetchurl {
       url = "mirror://cpan/authors/id/H/HI/HIDEAKIO/${name}.tar.gz";
-      sha256 = "1vjl77iwbwr2xhdlyqva3hhma9r1fgr2rappwsimwqjmybdrfd6b";
+      sha256 = "004ly9xxjlsbrr2vhxsa1n84z3034gxrzr7z0wl45szd8v1v6qwh";
     };
-    buildInputs = [ CaptureTiny CwdGuard FileCopyRecursive ];
+    buildInputs = [ CaptureTiny CwdGuard FileCopyRecursiveReduced ];
     meta = {
       description = "A Module::Build class for building XS modules";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
