@@ -16,9 +16,6 @@ let
       optional (!debug) "-DQT_NO_DEBUG"
       ++ lib.toList (args.NIX_CFLAGS_COMPILE or []);
 
-    configureFlags = [ "-no-framework" ]
-                  ++ (args.configureFlags or []);
-
     cmakeFlags =
       (args.cmakeFlags or [])
       ++ [

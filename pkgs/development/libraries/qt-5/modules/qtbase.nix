@@ -298,6 +298,7 @@ stdenv.mkDerivation {
           "-no-fontconfig"
           "-qt-freetype"
           "-qt-libpng"
+          "-no-framework"
         ]
       else
         [
