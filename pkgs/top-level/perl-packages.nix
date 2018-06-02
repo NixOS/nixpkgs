@@ -743,10 +743,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   BHooksEndOfScope = buildPerlPackage rec {
-    name = "B-Hooks-EndOfScope-0.21";
+    name = "B-Hooks-EndOfScope-0.24";
     src = fetchurl {
       url = "mirror://cpan/authors/id/E/ET/ETHER/${name}.tar.gz";
-      sha256 = "0b70vbpabsy9ia366k330cz1zbdyb1pwhb0l7j28pmpih045iwwh";
+      sha256 = "1imcqxp23yc80a7p0h56sja9glbrh4qyhgzljqd4g9habpz3vah3";
     };
     propagatedBuildInputs = [ ModuleImplementation SubExporterProgressive ];
     meta = {
