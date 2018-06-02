@@ -5,7 +5,7 @@
   imports = [
     ../.
   ];
-  # fix font sizes in X
+  # Fix font sizes in X
   services.xserver.dpi = 210;
   fonts.fontconfig.dpi = 210;
 }
