@@ -16170,10 +16170,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   TestXPath = buildPerlModule {
-    name = "Test-XPath-0.16";
+    name = "Test-XPath-0.19";
     src = fetchurl {
-      url = mirror://cpan/authors/id/D/DW/DWHEELER/Test-XPath-0.16.tar.gz;
-      sha256 = "09s47d5jcrx35dz623gjiqn0qmjrv0wb54czr7h01wffw1w8akxi";
+      url = mirror://cpan/authors/id/M/MA/MANWAR/Test-XPath-0.19.tar.gz;
+      sha256 = "1wy0488yg15kahfafnlmlhppxik7d0z00wxwj9fszrsq2h6crz6y";
     };
     propagatedBuildInputs = [ XMLLibXML ];
     meta = {
