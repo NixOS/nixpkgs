@@ -1,0 +1,9 @@
+- Maybe detach old config style from new one? Would clean up stuff
+- Certainly move all old config style definitions into their own file, the current file is too big
+- znc modules: make them declare which type they are (combination of global/user/network) then use that info to check whether the settings are valid. Automatically add them to the znc modules when they are used somewhere. No more stringly types module adding (the current modules already declare their name already which is nice).
+- Maybe change the type of the semantic config file to something that checks for more properties and adds some convenience functions. E.g. with the current semantic config you have to specify the server as a string of servername, optional "+" if ssl, the server port and the password. Could be made into an option set with these properties instead.
+
+
+More advanced stuff:
+- Generate module configs, which can currently only be set at runtime through an irc client. These module configs are pretty much just key value pairs, but each module would have to specify its options. And options can be globally, per network or per user.
+- Add proper testing with qemu.
