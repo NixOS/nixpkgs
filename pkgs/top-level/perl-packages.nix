@@ -2338,12 +2338,12 @@ let self = _self // overrides; _self = with self; {
   };
 
   CloneChoose = buildPerlPackage rec {
-     name = "Clone-Choose-0.008";
+     name = "Clone-Choose-0.010";
      src = fetchurl {
-       url = mirror://cpan/authors/id/H/HE/HERMES/Clone-Choose-0.008.tar.gz;
-       sha256 = "0grf0bg1ldzqakaq7aaigjngwd07zybrlmwjcnb0q986q0jcfank";
+       url = mirror://cpan/authors/id/H/HE/HERMES/Clone-Choose-0.010.tar.gz;
+       sha256 = "0cin2bjn5z8xhm9v4j7pwlkx88jnvz8al0njdjwyvs6fb0glh8sn";
      };
-     buildInputs = [ Clone ClonePP ];
+     buildInputs = [ Clone ClonePP TestWithoutModule ];
      meta = {
        description = "Choose appropriate clone utility";
        license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
