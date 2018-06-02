@@ -2900,10 +2900,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   CPANPLUS = buildPerlPackage rec {
-    name = "CPANPLUS-0.9172";
+    name = "CPANPLUS-0.9174";
     src = fetchurl {
       url = "mirror://cpan/authors/id/B/BI/BINGOS/${name}.tar.gz";
-      sha256 = "1q4b0fkdn4sh8ym9dig21w96p7kzrhq66lqhn0dy1l3pgx413zlc";
+      sha256 = "1ahddfs9jc2z3h7z6lkf9ppmrgw2kjnzcpbrhvwq3rlpxa9xshhq";
     };
     doCheck = false;
     meta = {
