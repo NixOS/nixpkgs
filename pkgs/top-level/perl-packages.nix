@@ -15639,10 +15639,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   TestPod = buildPerlPackage rec {
-    name = "Test-Pod-1.51";
+    name = "Test-Pod-1.52";
     src = fetchurl {
       url = "mirror://cpan/authors/id/E/ET/ETHER/${name}.tar.gz";
-      sha256 = "1yvy5mc4j3s2h4aizryvark2nm58g2c6zhw9mlx9wmsavz7d78f1";
+      sha256 = "1z75x1pxwp8ajwq9iazlg2c3wd7rdlim08yclpdg32qnc36dpa30";
     };
     meta = {
       homepage = http://search.cpan.org/dist/Test-Pod/;
