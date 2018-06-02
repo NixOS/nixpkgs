@@ -7980,10 +7980,10 @@ let self = _self // overrides; _self = with self; {
 
 
   IPCRun = buildPerlPackage {
-    name = "IPC-Run-0.98";
+    name = "IPC-Run-20180523.0";
     src = fetchurl {
-      url = mirror://cpan/authors/id/T/TO/TODDR/IPC-Run-0.98.tar.gz;
-      sha256 = "018r6jb8h0danyd3g8k03ziaf4w2d31qi9x876gn21js8l232spl";
+      url = mirror://cpan/authors/id/T/TO/TODDR/IPC-Run-20180523.0.tar.gz;
+      sha256 = "0bvckcs1629ifqfb68xkapd4a74fd5qbg6z9qs8i6rx4z3nxfl1q";
     };
     doCheck = false; /* attempts a network connection to localhost */
     meta = {
