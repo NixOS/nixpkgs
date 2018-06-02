@@ -66,6 +66,10 @@ in
 
 {
 
+  imports = [
+    ./opts.nix
+  ];
+
   options = {
     services.znc = {
       enable = mkOption {
@@ -125,27 +129,6 @@ in
         '';
       };
 
-      zncConf = mkOption {
-        default = "";
-        example = "See: http://wiki.znc.in/Configuration";
-        type = types.lines;
-        description = ''
-          Config file as generated with `znc --makeconf` to use for the whole ZNC configuration.
-          If specified, `confOptions` will be ignored, and this value, as-is, will be used.
-          If left empty, a conf file with default values will be used.
-        '';
-      };
-
-      confOptions = mkOption {
-        type = types.submodule (import ./opts.nix);
-        example = literalExample ''
-
-        '';
-        description = ''
-          The full legacy config style which isn't as flexible as the new one
-        '';
-      };
-
       modulePackages = mkOption {
         type = types.listOf types.package;
         default = [ ];
@@ -190,35 +173,10 @@ in
     };
 
     services.znc = {
-      config = let c = cfg.confOptions; in {
+      config = {
         Version = (builtins.parseDrvName pkgs.znc.name).version;
-        LoadModule = c.modules;
-        Listener.l = {
-          Port = c.port;
-          IPv4 = true;
-          IPv6 = true;
-          SSL = c.useSSL;
-        };
-        User.${c.userName} = {
-          Admin = mkDefault true;
-          Nick = mkDefault c.nick;
-          AltNick = mkDefault "${c.nick}_";
-          Ident = mkDefault c.nick;
-          RealName = mkDefault c.nick;
-          LoadModule = mkDefault c.userModules;
-          Network = mapAttrs (name: net: {
-            LoadModule = mkDefault net.modules;
-            Server = mkDefault "${net.server} ${optionalString net.useSSL "+"}${toString net.port} ${net.password}";
-            Chan = mkDefault (optionalAttrs net.hasBitlbeeControlChannel { "&bitlbee" = {}; } //
-              listToAttrs (map (n: nameValuePair n {}) net.channels));
-            extraConfig = (if net.extraConf == "" then null else net.extraConf);
-          }) c.networks;
-          extraConfig = mkDefault ([
-            c.passBlock
-          ] ++ optional (c.extraZncConf != "") c.extraZncConf);
-        };
       };
-      configFile = pkgs.writeText "znc.conf" (semanticToString cfg.config);
+      configFile = mkDefault (pkgs.writeText "znc.conf" (semanticToString cfg.config));
     };
 
     systemd.services.znc = {
