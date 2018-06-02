@@ -8191,10 +8191,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   JSONMaybeXS = buildPerlPackage rec {
-    name = "JSON-MaybeXS-1.003010";
+    name = "JSON-MaybeXS-1.004000";
     src = fetchurl {
-      url = mirror://cpan/authors/id/H/HA/HAARG/JSON-MaybeXS-1.003010.tar.gz;
-      sha256 = "0hs504x5zsa2vl6r7b3rvbygsak1ly24m1lg636bqp3x7jirmb30";
+      url = mirror://cpan/authors/id/H/HA/HAARG/JSON-MaybeXS-1.004000.tar.gz;
+      sha256 = "09m1w03as6n0a00pzvaldkhm494yaf5n0g3j2cwwfx24iwpa1gar";
     };
     meta = {
       description = "Use L<Cpanel::JSON::XS> with a fallback to L<JSON::XS> and L<JSON::PP>";
