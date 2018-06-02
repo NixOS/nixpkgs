@@ -1143,6 +1143,7 @@ let self = _self // overrides; _self = with self; {
       description = "Sensible default end action";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
+    buildInputs = [ HTTPRequestAsCGI ];
   };
 
   CatalystActionREST = buildPerlPackage rec {
