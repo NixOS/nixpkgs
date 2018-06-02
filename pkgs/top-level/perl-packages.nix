@@ -3895,12 +3895,12 @@ let self = _self // overrides; _self = with self; {
   };
 
   DateTimeLocale = buildPerlPackage rec {
-    name = "DateTime-Locale-1.17";
+    name = "DateTime-Locale-1.20";
     src = fetchurl {
       url = "mirror://cpan/authors/id/D/DR/DROLSKY/${name}.tar.gz";
-      sha256 = "0ca6598b3f89e92e3d1140e5685c69f6f795f6eed158fa482f33ce2122b35cc9";
+      sha256 = "998f034234441932c82a4598fa49a14f346d6e981d1d2d91a179913a9f81b898";
     };
-    buildInputs = [ CPANMetaCheck FileShareDirInstall TestFatal TestFileShareDir TestRequires TestWarnings ];
+    buildInputs = [ CPANMetaCheck FileShareDirInstall IPCSystemSimple TestFatal TestFileShareDir TestRequires TestWarnings ];
     propagatedBuildInputs = [ FileShareDir ParamsValidationCompiler ScalarListUtils Specio namespaceautoclean ];
     meta = {
       homepage = https://metacpan.org/release/DateTime-Locale;
