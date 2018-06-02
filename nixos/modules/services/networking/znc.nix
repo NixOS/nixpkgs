@@ -11,9 +11,12 @@ let
 
     getAttrs = set: sort (a: b:
       # Attributes should be last
-      if builtins.isAttrs set.${a}
-      then if builtins.isAttrs set.${b} then a < b else false
-      else if builtins.isAttrs set.${b} then true else a < b
+      if a == "extraConfig"
+        then false # Always put extraConfig last
+        else if builtins.isAttrs set.${a}
+          # Attributes should be last
+          then if builtins.isAttrs set.${b} then a < b else false
+          else if builtins.isAttrs set.${b} then true else a < b
     ) (builtins.attrNames set);
 
     toLines = set: flatten (map (name: let
@@ -22,6 +25,7 @@ let
         bool = "${name} = ${if val then "true" else "false"}";
         string = if name == "extraConfig" then val else "${name} = ${val}";
         int = "${name} = ${toString val}";
+        null = [];
       };
       forType = atom value // {
 
@@ -41,178 +45,124 @@ let
 
   in concatStringsSep "\n" (toLines cfg);
 
-  semanticTypes = rec {
+  semanticTypes = with types; rec {
     zncAtom = either (either int bool) str;
     zncList = listOf zncAtom;
-    zncAttr = attrsOf (nullOr semanticConfigType);
-    zncAll = either (either zncAtom zncList) zncAttr;
+    zncAttr = attrsOf (nullOr zncConf);
+    zncAll = nullOr (either (either zncAtom zncList) zncAttr);
     zncConf = attrsOf (zncAll // {
-      description = "znc value (atoms (str, int, bool), list of atoms, or attrsets of znc values)";
+      description = "znc values (null, atoms (str, int, bool), list of atoms, or attrsets of znc values)";
     });
   };
 
   defaultUser = "znc"; # Default user to own process.
-
-  # Default user and pass:
-  # un=znc
-  # pw=nixospass
-
   defaultUserName = "znc";
-  defaultPassBlock = {
-    Pass.password = {
-      Method = "sha256";
-      Hash = "e2ce303c7ea75c571d80d8540a8699b46535be6a085be3414947d638e48d9e93";
-      Salt = "l5Xryew4g*!oa(ECfX2o";
-    };
-  };
 
   modules = pkgs.buildEnv {
     name = "znc-modules";
     paths = cfg.modulePackages;
   };
 
-  # Keep znc.conf in nix store, then symlink or copy into `dataDir`, depending on `mutable`.
   notNull = a: ! isNull a;
-  toSemantic = confOpts: {
-    Version = "1.6.3";
-    LoadModule = confOpts.modules;
-    Listener.l = {
-      Port = confOpts.port;
-      IPv4 = true;
-      IPv6 = true;
-      SSL = confOpts.useSSL;
-    };
-    User.${confOpts.userName} = {
-      Admin = true;
-      Nick = confOpts.nick;
-      AltNick = confOpts.nick + "_";
-      Ident = confOpts.nick;
-      RealName = confOpts.nick;
-      LoadModule = confOpts.userModules;
-      Network = mapAttrs (name: net: {
-        LoadModule = net.modules;
-        Server = "${net.server} ${optionalString net.useSSL "+"}${toString net.port} ${net.password}";
-        Chan = optionalAttrs net.hasBitlbeeControlChannel { "&bitlbee" = {}; } //
-          listToAttrs (map (n: { name = n; value = {}; }) net.channels);
-        extraConfig = net.extraConf;
-      }) confOpts.networks;
-      extraConfig = ''
-        ${confOpts.passBlock}
-        ${confOpts.extraZncConf}
+
+  networkOpts.options = {
+    server = mkOption {
+      type = types.str;
+      example = "chat.freenode.net";
+      description = ''
+        IRC server address.
       '';
     };
-  };
 
-  zncConfFile = pkgs.writeTextFile {
-    name = "znc.conf";
-    text = if cfg.zncConf != ""
-      then cfg.zncConf
-      else semanticToString (toSemantic cfg.confOptions);
-  };
+    port = mkOption {
+      type = types.int;
+      default = 6697;
+      example = 6697;
+      description = ''
+        IRC server port.
+      '';
+    };
 
-  networkOpts = { ... }: {
-    options = {
-      server = mkOption {
-        type = types.str;
-        example = "chat.freenode.net";
-        description = ''
-          IRC server address.
-        '';
-      };
+    userName = mkOption {
+      default = "";
+      example = "johntron";
+      type = types.string;
+      description = ''
+        A nick identity specific to the IRC server.
+      '';
+    };
 
-      port = mkOption {
-        type = types.int;
-        default = 6697;
-        example = 6697;
-        description = ''
-          IRC server port.
-        '';
-      };
+    password = mkOption {
+      type = types.str;
+      default = "";
+      description = ''
+        IRC server password, such as for a Slack gateway.
+      '';
+    };
 
-      userName = mkOption {
-        default = "";
-        example = "johntron";
-        type = types.string;
-        description = ''
-          A nick identity specific to the IRC server.
-        '';
-      };
+    useSSL = mkOption {
+      type = types.bool;
+      default = true;
+      description = ''
+        Whether to use SSL to connect to the IRC server.
+      '';
+    };
 
-      password = mkOption {
-        type = types.str;
-        default = "";
-        description = ''
-          IRC server password, such as for a Slack gateway.
-        '';
-      };
+    modulePackages = mkOption {
+      type = types.listOf types.package;
+      example = [ "pkgs.zncModules.push" "pkgs.zncModules.fish" ];
+      description = ''
+        External ZNC modules to build.
+      '';
+    };
 
-      useSSL = mkOption {
-        type = types.bool;
-        default = true;
-        description = ''
-          Whether to use SSL to connect to the IRC server.
-        '';
-      };
+    modules = mkOption {
+      type = types.listOf types.str;
+      default = [ "simple_away" ];
+      example = literalExample "[ simple_away sasl ]";
+      description = ''
+        ZNC modules to load.
+      '';
+    };
 
-      modulePackages = mkOption {
-        type = types.listOf types.package;
-        #default = [];
-        example = [ "pkgs.zncModules.push" "pkgs.zncModules.fish" ];
-        description = ''
-          External ZNC modules to build.
-        '';
-      };
+    channels = mkOption {
+      type = types.listOf types.str;
+      default = [];
+      example = [ "nixos" ];
+      description = ''
+        IRC channels to join.
+      '';
+    };
 
-      modules = mkOption {
-        type = types.listOf types.str;
-        default = [ "simple_away" ];
-        example = literalExample "[ simple_away sasl ]";
-        description = ''
-          ZNC modules to load.
-        '';
-      };
+    hasBitlbeeControlChannel = mkOption {
+      type = types.bool;
+      default = false;
+      description = ''
+        Whether to add the special Bitlbee operations channel.
+      '';
+    };
 
-      channels = mkOption {
-        type = types.listOf types.str;
-        default = [];
-        example = [ "nixos" ];
-        description = ''
-          IRC channels to join.
-        '';
-      };
-
-      hasBitlbeeControlChannel = mkOption {
-        type = types.bool;
-        default = false;
-        description = ''
-          Whether to add the special Bitlbee operations channel.
-        '';
-      };
-
-      extraConf = mkOption {
-        default = "";
-        type = types.lines;
-        example = ''
-          Encoding = ^UTF-8
-          FloodBurst = 4
-          FloodRate = 1.00
-          IRCConnectEnabled = true
-          Ident = johntron
-          JoinDelay = 0
-          Nick = johntron
-        '';
-        description = ''
-          Extra config for the network.
-        '';
-      };
+    extraConf = mkOption {
+      default = "";
+      type = types.lines;
+      example = ''
+        Encoding = ^UTF-8
+        FloodBurst = 4
+        FloodRate = 1.00
+        IRCConnectEnabled = true
+        Ident = johntron
+        JoinDelay = 0
+        Nick = johntron
+      '';
+      description = ''
+        Extra config for the network.
+      '';
     };
   };
 
 in
 
 {
-
-  ###### Interface
 
   options = {
     services.znc = {
@@ -222,6 +172,19 @@ in
         description = ''
           Enable a ZNC service for a user.
         '';
+      };
+
+      config = mkOption {
+        default = {};
+        type = semanticTypes.zncConf;
+        description = ''
+          semantic ZNC config, represented as
+        '';
+      };
+
+      configFile = mkOption {
+        type = types.path;
+        description = "config file";
       };
 
       user = mkOption {
@@ -325,8 +288,22 @@ in
         };
 
         passBlock = mkOption {
-          example = defaultPassBlock;
-          type = types.string;
+          example = literalExample ''
+            # password "nixospass"
+            Pass.password = {
+              Method = "sha256";
+              Hash = "e2ce303c7ea75c571d80d8540a8699b46535be6a085be3414947d638e48d9e93";
+              Salt = "l5Xryew4g*!oa(ECfX2o";
+            };
+
+            # Or as returned by `znc --makepass` also works:
+            <Pass password>
+              Method = sha256
+              Hash = e2ce303c7ea75c571d80d8540a8699b46535be6a085be3414947d638e48d9e93
+              Salt = l5Xryew4g*!oa(ECfX2o
+            </Pass>
+          '';
+          type = types.either semanticTypes.zncConf types.string;
           description = ''
             Generate with `nix-shell -p znc --command "znc --makepass"`.
             This is the password used to log in to the ZNC web admin interface.
@@ -402,10 +379,42 @@ in
       allowedTCPPorts = [ cfg.confOptions.port ];
     };
 
+    services.znc = {
+      config = let c = cfg.confOptions; in {
+        Version = (builtins.parseDrvName pkgs.znc.name).version;
+        LoadModule = c.modules;
+        Listener.l = {
+          Port = c.port;
+          IPv4 = true;
+          IPv6 = true;
+          SSL = c.useSSL;
+        };
+        User.${c.userName} = {
+          Admin = mkDefault true;
+          Nick = mkDefault c.nick;
+          AltNick = mkDefault "${c.nick}_";
+          Ident = mkDefault c.nick;
+          RealName = mkDefault c.nick;
+          LoadModule = mkDefault c.userModules;
+          Network = mapAttrs (name: net: {
+            LoadModule = mkDefault net.modules;
+            Server = mkDefault "${net.server} ${optionalString net.useSSL "+"}${toString net.port} ${net.password}";
+            Chan = mkDefault (optionalAttrs net.hasBitlbeeControlChannel { "&bitlbee" = {}; } //
+              listToAttrs (map (n: nameValuePair n {}) net.channels));
+            extraConfig = (if net.extraConf == "" then null else net.extraConf);
+          }) c.networks;
+          extraConfig = mkDefault ([
+            c.passBlock
+          ] ++ optional (c.extraZncConf != "") c.extraZncConf);
+        };
+      };
+      configFile = pkgs.writeText "znc.conf" (semanticToString cfg.config);
+    };
+
     systemd.services.znc = {
       description = "ZNC Server";
       wantedBy = [ "multi-user.target" ];
-      after = [ "network.service" ];
+      after = [ "network.target" ];
       serviceConfig = {
         User = cfg.user;
         Group = cfg.group;
@@ -415,20 +424,21 @@ in
         ExecStop   = "${pkgs.coreutils}/bin/kill -INT $MAINPID";
       };
       preStart = ''
-        mkdir -p ${cfg.dataDir}/configs
+        filepath="${cfg.dataDir}/configs/znc.conf"
+        mkdir -p "$(dirname "$filepath")
 
         # If mutable, regenerate conf file every time.
         ${optionalString (!cfg.mutable) ''
           echo "znc is set to be system-managed. Now deleting old znc.conf file to be regenerated."
-          rm -f ${cfg.dataDir}/configs/znc.conf
+          rm -f "$filepath"
         ''}
 
         # Ensure essential files exist.
-        if [[ ! -f ${cfg.dataDir}/configs/znc.conf ]]; then
+        if [[ ! -f "$filepath" ]]; then
             echo "No znc.conf file found in ${cfg.dataDir}. Creating one now."
-            cp --no-clobber ${zncConfFile} ${cfg.dataDir}/configs/znc.conf
-            chmod u+rw ${cfg.dataDir}/configs/znc.conf
-            chown ${cfg.user} ${cfg.dataDir}/configs/znc.conf
+            cp --no-clobber ${cfg.configFile} "$filepath"
+            chmod u+rw "$filepath"
+            chown ${cfg.user} "$filepath"
         fi
 
         if [[ ! -f ${cfg.dataDir}/znc.pem ]]; then
