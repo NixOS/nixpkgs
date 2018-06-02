@@ -55,4 +55,14 @@ STOP_CHARGE_THRESH_BAT0=80
     ];
   };
 
+  # Enable S3 suspend state: you have to manually follow the
+  # instructions shown here: https://delta-xi.net/#056 in order to
+  # produce the ACPI patched table. Put the CPIO archive in /boot and
+  # then enable the following lines
+  # boot.kernelParams = [
+  #   "mem_sleep_default=deep"
+  # ];
+  # boot.initrd.prepend = [
+  #   "/boot/acpi_override"
+  # ];
 }
