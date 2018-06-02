@@ -11080,10 +11080,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   Mouse = buildPerlModule rec {
-    name = "Mouse-2.5.2";
+    name = "Mouse-2.5.4";
     src = fetchurl {
-      url = mirror://cpan/authors/id/S/SK/SKAJI/Mouse-v2.5.2.tar.gz;
-      sha256 = "17nr2432cfw7q2qxiz8pv7lw91dszgvn4ln77gpv2m77kjh5ilbs";
+      url = mirror://cpan/authors/id/S/SK/SKAJI/Mouse-v2.5.4.tar.gz;
+      sha256 = "041nm46bxxyi1fd8w69r45k434b6m43va2s06pr3bys6igxic79d";
     };
     buildInputs = [ DevelPPPort ModuleBuildXSUtil TestException TestFatal TestLeakTrace TestOutput TestRequires TryTiny self.version ];
     NIX_CFLAGS_COMPILE = stdenv.lib.optionalString stdenv.isi686 "-fno-stack-protector";
