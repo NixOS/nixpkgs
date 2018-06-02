@@ -18,4 +18,9 @@ stdenv.mkDerivation rec{
     libav libpulseaudio
   ];
   nativeBuildInputs = [ qmake ];
+  meta = {
+    mantainers = [];
+    description = "a full featured webcam capture application";
+    platforms = stdenv.lib.platforms.linux;
+  };
 }
