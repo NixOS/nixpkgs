@@ -14346,10 +14346,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   SubQuote = buildPerlPackage rec {
-    name = "Sub-Quote-2.005000";
+    name = "Sub-Quote-2.005001";
     src = fetchurl {
       url = "mirror://cpan/authors/id/H/HA/HAARG/${name}.tar.gz";
-      sha256 = "44b145111bee7b0001818e77f7ce587153232dbc97351f4c5ed34522372b64ff";
+      sha256 = "d6ab4f0775def015367a05e02024b403f991b2be11d774f3d235fe7e9bdbba07";
     };
     buildInputs = [ TestFatal ];
     meta = {
