@@ -13,8 +13,9 @@ assertExecutable() {
 # ARGS:
 # --argv0 NAME      : set name of executed process to NAME
 #                     (otherwise it’s called …-wrapped)
-# --set   VAR VAL   : add VAR with value VAL to the executable’s environment
-# --unset VAR       : remove VAR from the environment
+# --set    VAR VAL  : add VAR with value VAL to the executable’s environment
+# --unset  VAR      : remove VAR from the environment
+# --export VAR      : export VAR
 # --run   COMMAND   : run command before the executable
 #                     The command can push extra flags to a magic list variable
 #                     extraFlagsArray, which are then added to the invocation
@@ -57,6 +58,10 @@ makeWrapper() {
             varName="${params[$((n + 1))]}"
             n=$((n + 1))
             echo "unset $varName" >> "$wrapper"
+        elif [[ "$p" == "--export" ]]; then
+            varName="${params[$((n+1))]}"
+            n=$((n + 1))
+            echo "export $varName" >> "$wrapper"
         elif [[ "$p" == "--run" ]]; then
             command="${params[$((n + 1))]}"
             n=$((n + 1))
