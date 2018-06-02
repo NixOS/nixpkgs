@@ -1235,7 +1235,7 @@ let self = _self // overrides; _self = with self; {
       sha256 = "ee2a4bb3ed78baa1464335408f284345b6ba0ef6576ad7bfbd7b656c788a39f9";
     };
     buildInputs = [ ModuleInstall TestLongString TestWWWMechanize TestWWWMechanizeCatalyst ];
-    propagatedBuildInputs = [ CatalystPluginStaticSimple FileSlurp JSONXS ListMoreUtils PodPOMViewTOC XMLSimple ];
+    propagatedBuildInputs = [ CatalystPluginStaticSimple ClassAccessor FileSlurp JSONXS ListMoreUtils PodPOMViewTOC XMLSimple ];
     meta = {
       homepage = http://search.cpan.org/dist/Catalyst-Controller-POD/;
       description = "Serves PODs right from your Catalyst application";
