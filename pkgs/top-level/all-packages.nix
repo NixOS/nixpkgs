@@ -6782,6 +6782,8 @@ with pkgs;
 
   microscheme = callPackage ../development/compilers/microscheme { };
 
+  mint = callPackage ../development/compilers/mint { };
+
   mitscheme = callPackage ../development/compilers/mit-scheme {
    texLive = texlive.combine { inherit (texlive) scheme-small; };
    texinfo = texinfo5;
