@@ -9652,10 +9652,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   MIMETypes = buildPerlPackage rec {
-    name = "MIME-Types-2.13";
+    name = "MIME-Types-2.17";
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/MA/MARKOV/${name}.tar.gz";
-      sha256 = "1y3vnxk4wv4a00lxcp39hw9650cdl455d3y7nv42rqmvaxikghwr";
+      sha256 = "1xlg7q6h8zyb8534sy0iqn90py18kilg419q6051bwqz5zadfkp0";
     };
     meta = {
       description = "Definition of MIME types";
