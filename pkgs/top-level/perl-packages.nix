@@ -14627,7 +14627,7 @@ let self = _self // overrides; _self = with self; {
       description = "Everything you need to follow the Catalyst Tutorial";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
-    doCheck = false;
+    doCheck = false; /* fails with 'open3: exec of .. perl .. failed: Argument list too long at .../TAP/Parser/Iterator/Process.pm line 165.' */
   };
 
   TaskFreecellSolverTesting = buildPerlModule rec {
