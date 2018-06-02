@@ -723,7 +723,7 @@ let self = _self // overrides; _self = with self; {
       description = "Perl compiler";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
-    doCheck = false;
+    doCheck = false; /* test fails */
   };
 
   BFlags = buildPerlPackage rec {
