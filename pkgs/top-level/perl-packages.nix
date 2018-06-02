@@ -6307,7 +6307,7 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  FileUtil = buildPerlPackage rec {
+  FileUtil = buildPerlModule rec {
     name = "File-Util-4.161950";
     src = fetchurl {
       url = "mirror://cpan/authors/id/T/TO/TOMMY/${name}.tar.gz";
