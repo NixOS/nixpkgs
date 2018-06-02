@@ -3106,14 +3106,28 @@ let self = _self // overrides; _self = with self; {
     NIX_CFLAGS_LINK = "-L${pkgs.openssl.out}/lib -lcrypto";
   };
 
+  CryptOpenSSLGuess = buildPerlPackage rec {
+     name = "Crypt-OpenSSL-Guess-0.11";
+     src = fetchurl {
+       url = mirror://cpan/authors/id/A/AK/AKIYM/Crypt-OpenSSL-Guess-0.11.tar.gz;
+       sha256 = "0rvi9l4ljcbhwwvspq019nfq2h2v746dk355h2nwnlmqikiihsxa";
+     };
+     meta = {
+       description = "Guess OpenSSL include path";
+       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+       homepage = "https://github.com/akiym/Crypt-OpenSSL-Guess";
+     };
+  };
+
   CryptOpenSSLRandom = buildPerlPackage rec {
-    name = "Crypt-OpenSSL-Random-0.11";
+    name = "Crypt-OpenSSL-Random-0.15";
     src = fetchurl {
       url = "mirror://cpan/authors/id/R/RU/RURBAN/${name}.tar.gz";
-      sha256 = "0yjcabkibrkafywvdkmd1xpi6br48skyk3l15ni176wvlg38335v";
+      sha256 = "1x6ffps8q7mnawmcfq740llzy7i10g3319vap0wiw4d33fm6z1zh";
     };
     NIX_CFLAGS_COMPILE = "-I${pkgs.openssl.dev}/include";
     NIX_CFLAGS_LINK = "-L${pkgs.openssl.out}/lib -lcrypto";
+    buildInputs = [ CryptOpenSSLGuess ];
   };
 
   CryptOpenSSLRSA = buildPerlPackage rec {
