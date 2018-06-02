@@ -11274,7 +11274,7 @@ let self = _self // overrides; _self = with self; {
     patches =
       [ ../development/perl-modules/net-amazon-mechanicalturk.patch ];
     propagatedBuildInputs = [ DigestHMAC LWPProtocolHttps XMLParser ];
-    doCheck = false;
+    doCheck = false; /* wants network */
   };
 
   NetAmazonS3 = buildPerlPackage rec {
