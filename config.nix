@@ -1,4 +1,4 @@
-{ pkgs, options, ... }: {
+{ pkgs, options, lib, ... }: with lib; {
   imports = [
     ./nixos/modules/profiles/minimal.nix
   ];
@@ -10,6 +10,7 @@
   users.users.root.password = "root";
   services.znc = {
     enable = true;
+
     mutable = false;
     confOptions.passBlock = ''
       <Pass password>
@@ -18,5 +19,13 @@
         Salt = l5Xryew4g*!oa(ECfX2o
       </Pass>
     '';
+    confOptions.networks = {
+      freenode = {
+        server = "chat.freenode.net";
+        port = 6697;
+        useSSL = true;
+        modules = [ "simple_away" ];
+      };
+    };
   };
 }
