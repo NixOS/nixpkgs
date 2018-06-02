@@ -3015,12 +3015,12 @@ let self = _self // overrides; _self = with self; {
   };
 
   CryptRandomSource = buildPerlModule {
-    name = "Crypt-Random-Source-0.12";
+    name = "Crypt-Random-Source-0.14";
     src = fetchurl {
-      url = mirror://cpan/authors/id/E/ET/ETHER/Crypt-Random-Source-0.12.tar.gz;
-      sha256 = "00mw5m52sbz9nqp3f6axyrgcrihqxn7k8gv0vi1kvm1j1nc9g29h";
+      url = mirror://cpan/authors/id/E/ET/ETHER/Crypt-Random-Source-0.14.tar.gz;
+      sha256 = "1rpdds3sy5l1fhngnkrsgwsmwd54wpicx3i9ds69blcskwkcwkpc";
     };
-    buildInputs = [ ModuleBuildTiny TestException TestSimple13 ];
+    buildInputs = [ ModuleBuildTiny TestFatal TestSimple13 ];
     propagatedBuildInputs = [ CaptureTiny ModuleFind Moo SubExporter TypeTiny namespaceclean ];
     meta = {
       homepage = http://search.cpan.org/dist/Crypt-Random-Source;
