@@ -16331,13 +16331,12 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  TextFormat = buildPerlPackage rec {
-    name = "Text-Format-0.60";
+  TextFormat = buildPerlModule rec {
+    name = "Text-Format-0.61";
     src = fetchurl {
       url = "mirror://cpan/authors/id/S/SH/SHLOMIF/${name}.tar.gz";
-      sha256 = "664f313570604624ff9e1fc9b26b6d04e06897b3e4eac83089fc0905a692a2b8";
+      sha256 = "bb8a3b8ff515c85101baf553a769337f944a05cde81f111ae78aff416bf4ae2b";
     };
-    buildInputs = [ ModuleBuild ];
     meta = {
       homepage = http://www.shlomifish.org/open-source/projects/Text-Format/;
       description = "Format text";
