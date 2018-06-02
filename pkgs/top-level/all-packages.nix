@@ -18578,6 +18578,8 @@ with pkgs;
 
   webtorrent_desktop = callPackage ../applications/video/webtorrent_desktop {};
 
+  webcamoid =  libsForQt5.callPackage ../applications/graphics/webcamoid {};
+  
   weechat = callPackage ../applications/networking/irc/weechat {
     inherit (darwin) libobjc;
     inherit (darwin) libresolv;
