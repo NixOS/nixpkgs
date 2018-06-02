@@ -186,8 +186,6 @@ in
       wrappedSlurm = pkgs.stdenv.mkDerivation {
         name = "wrappedSlurm";
 
-        propagatedBuildInputs = [ cfg.package etcSlurm ];
-
         builder = pkgs.writeText "builder.sh" ''
           source $stdenv/setup
           mkdir -p $out/bin
