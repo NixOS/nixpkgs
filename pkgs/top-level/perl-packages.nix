@@ -18036,13 +18036,13 @@ let self = _self // overrides; _self = with self; {
   };
 
   YAML = buildPerlPackage rec {
-    name = "YAML-1.24";
+    name = "YAML-1.26";
     src = fetchurl {
-      url = mirror://cpan/authors/id/T/TI/TINITA/YAML-1.24.tar.gz;
-      sha256 = "1dpzgnjbd8yvf94vf45cmyj5bc6vrm6bchhx9xqwxqd5f9d093dm";
+      url = mirror://cpan/authors/id/T/TI/TINITA/YAML-1.26.tar.gz;
+      sha256 = "1g3zjm145zsackgnzkkb1chd15xns84jccm6knpwbysa9karjbzs";
     };
 
-    buildInputs = [ TestBase TestYAML ];
+    buildInputs = [ TestBase TestDeep TestYAML ];
 
     meta = {
       homepage = https://github.com/ingydotnet/yaml-pm/tree;
