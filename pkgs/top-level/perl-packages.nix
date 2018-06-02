@@ -15470,16 +15470,17 @@ let self = _self // overrides; _self = with self; {
   };
 
   TestMockModule = buildPerlModule {
-    name = "Test-MockModule-0.13";
+    name = "Test-MockModule-0.15";
     src = fetchurl {
-      url = mirror://cpan/authors/id/G/GF/GFRANKS/Test-MockModule-0.13.tar.gz;
-      sha256 = "0lwh6fvnc16r6d74vvh5h4b5a1spcslpjb3mcqbv23k01lm78wvl";
+      url = mirror://cpan/authors/id/G/GF/GFRANKS/Test-MockModule-0.15.tar.gz;
+      sha256 = "0nx3nz7yvgcw9vw646520hh1jb3kz6sspsfqa69v3vczdkfgx5qn";
     };
     propagatedBuildInputs = [ SUPER ];
     meta = {
       maintainers = with maintainers; [ ];
       platforms   = stdenv.lib.platforms.unix;
     };
+    buildInputs = [ TestWarnings ];
   };
 
   SUPER = buildPerlModule rec {
