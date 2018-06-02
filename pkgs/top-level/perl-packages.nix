@@ -8177,7 +8177,6 @@ let self = _self // overrides; _self = with self; {
       description = "JSON (JavaScript Object Notation) encoder/decoder";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
-    doCheck = false;
   };
 
   JSONAny = buildPerlPackage {
