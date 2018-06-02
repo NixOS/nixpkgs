@@ -8108,11 +8108,11 @@ let self = _self // overrides; _self = with self; {
   };
 
   InlineJava = buildPerlPackage rec {
-    name = "Inline-Java-0.53";
+    name = "Inline-Java-0.66";
 
     src = fetchurl {
-      url = "mirror://cpan/authors/id/P/PA/PATL/${name}.tar.gz";
-      sha256 = "1d9hq09nv3l6m015ws08b3gbfp8daxryqr7p0yi0xhqr44j9qcj8";
+      url = mirror://cpan/authors/id/E/ET/ETJ/Inline-Java-0.66.tar.gz;
+      sha256 = "0j6r6gxdn3wzx36cgcx4znj4ihp5fjl4gzk1623vvwgnwrlf0hy7";
     };
 
     propagatedBuildInputs = [ Inline ];
@@ -8137,6 +8137,7 @@ let self = _self // overrides; _self = with self; {
 
       maintainers = [ ];
     };
+    buildInputs = [ ExtUtilsMakeMaker ];
   };
 
   IPCSignal = buildPerlPackage rec {
