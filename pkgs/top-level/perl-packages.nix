@@ -13923,10 +13923,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   StatisticsDescriptive = buildPerlModule {
-    name = "Statistics-Descriptive-3.0612";
+    name = "Statistics-Descriptive-3.0613";
     src = fetchurl {
-      url = mirror://cpan/authors/id/S/SH/SHLOMIF/Statistics-Descriptive-3.0612.tar.gz;
-      sha256 = "772413148e5e00efb32f277c4254aa78b9112490a896208dcd0025813afdbf7a";
+      url = mirror://cpan/authors/id/S/SH/SHLOMIF/Statistics-Descriptive-3.0613.tar.gz;
+      sha256 = "ee053899c06bb042c7ff3a0d32feabe457ed0a2c893355633288436a49707ead";
     };
     meta = {
       #homepage = http://web-cpan.berlios.de/modules/Statistics-Descriptive/; # berlios shut down; I found no replacement
