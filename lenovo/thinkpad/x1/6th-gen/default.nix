@@ -1,3 +1,8 @@
+# A good source of information about how to fix the issues still
+# standing with kernel 4.6.11 is the following wiki page:
+# https://wiki.archlinux.org/index.php/Lenovo_ThinkPad_X1_Carbon_(Gen_6). The
+# TrackPoint and TouchPad issues there seem to have been fixed already.
+
 { config, pkgs, ... }:
 {
   imports = [
