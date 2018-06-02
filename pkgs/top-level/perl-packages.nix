@@ -6592,10 +6592,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   Glib = buildPerlPackage rec {
-    name = "Glib-1.326";
+    name = "Glib-1.327";
     src = fetchurl {
       url = "mirror://cpan/authors/id/X/XA/XAOC/${name}.tar.gz";
-      sha256 = "0prn9kkdpwjq9qmzqashbhk3pq4gvlrmvm3b10xf1dhc48406382";
+      sha256 = "0n7hjhbh5xhagvb0qjwzg21j22ks0csah0chgk98g4wnfllxjl0k";
     };
     buildInputs = [ pkgs.glib ];
     meta = {
