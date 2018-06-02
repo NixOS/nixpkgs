@@ -17472,12 +17472,12 @@ let self = _self // overrides; _self = with self; {
   };
 
   VMEC2 = buildPerlModule rec {
-    name = "VM-EC2-1.25";
+    name = "VM-EC2-1.28";
     src = fetchurl {
       url = "mirror://cpan/authors/id/L/LD/LDS/${name}.tar.gz";
-      sha256 = "cc8002965e3a4919527a85a84100cfc3703165a449ade29e95f4e31889fbd9ad";
+      sha256 = "b2b6b31745c57431fca0efb9b9d0b8f168d6081755e048fd9d6c4469bd108acd";
     };
-    propagatedBuildInputs = [ AnyEventHTTP JSON StringApprox XMLSimple ];
+    propagatedBuildInputs = [ AnyEventCacheDNS AnyEventHTTP JSON StringApprox XMLSimple ];
     meta = {
       description = "Perl interface to Amazon EC2, Virtual Private Cloud, Elastic Load Balancing, Autoscaling, and Relational Database services";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
