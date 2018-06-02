@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     sha256 = "0rnml9spd6p0i5qy9g4r82drwdr09r1z9cf4p89agbrkxqmrsffd";
   };
 
-  patches = stdenv.lib.optional hostPlatform.isDarwin stdenv.secure-format-patch;
+  patches = []; # remove on another rebuild
 
   nativeBuildInputs = [ m4 perl ] ++ stdenv.lib.optional stdenv.isSunOS help2man;
   propagatedBuildInputs = [ m4 ];
