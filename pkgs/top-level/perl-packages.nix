@@ -15035,10 +15035,10 @@ let self = _self // overrides; _self = with self; {
 
 
   TestBase = buildPerlPackage rec {
-    name = "Test-Base-0.88";
+    name = "Test-Base-0.89";
     src = fetchurl {
       url = "mirror://cpan/authors/id/I/IN/INGY/${name}.tar.gz";
-      sha256 = "0fch1cvivnszbnwhpfmwv1rin04j5xkj1n1ylfmlxg6bm72qqdjj";
+      sha256 = "056hibgg3i2b89mwr76vyxi6ayb3hqjqcwicvn3s5lximsma3517";
     };
     propagatedBuildInputs = [ Spiffy ];
     buildInputs = [ AlgorithmDiff TextDiff ];
