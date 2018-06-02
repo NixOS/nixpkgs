@@ -2,6 +2,7 @@
   "alloy"
 , "asar"
 , "azure-cli"
+, "bash-language-server"
 , "bower"
 , "bower2nix"
 , "browserify"
