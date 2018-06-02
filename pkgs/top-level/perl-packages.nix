@@ -9250,10 +9250,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   MailDKIM = buildPerlPackage rec {
-    name = "Mail-DKIM-0.52";
+    name = "Mail-DKIM-0.53";
     src = fetchurl {
-      url = mirror://cpan/authors/id/M/MB/MBRADSHAW/Mail-DKIM-0.52.tar.gz;
-      sha256 = "1dbczg7vyvvm12d9gbiqd9a24qg4254cz7bh7yf3p27i58hhpbwy";
+      url = mirror://cpan/authors/id/M/MB/MBRADSHAW/Mail-DKIM-0.53.tar.gz;
+      sha256 = "1aqmffkbsqcckllf6hxbdm1xcybw6674h18np2aaas8z42g0ji3w";
     };
     propagatedBuildInputs = [ CryptOpenSSLRSA MailTools NetDNSResolverMock YAMLLibYAML ];
     doCheck = false; # tries to access the domain name system
