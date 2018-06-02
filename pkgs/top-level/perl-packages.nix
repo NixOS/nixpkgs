@@ -12540,10 +12540,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   PlackMiddlewareMethodOverride = buildPerlPackage rec {
-    name = "Plack-Middleware-MethodOverride-0.15";
+    name = "Plack-Middleware-MethodOverride-0.20";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/D/DW/DWHEELER/${name}.tar.gz";
-      sha256 = "2b4a6e67006f97a2b4cf7980900f6a8ababb1cf97d6597319f9897ada3c555bc";
+      url = mirror://cpan/authors/id/M/MI/MIYAGAWA/Plack-Middleware-MethodOverride-0.20.tar.gz;
+      sha256 = "dbfb5a2efb48bfeb01cb3ae1e1c677e155dc7bfe210c7e7f221bae3cb6aab5f1";
     };
     propagatedBuildInputs = [ Plack ];
     meta = {
