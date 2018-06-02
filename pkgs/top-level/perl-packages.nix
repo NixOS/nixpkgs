@@ -630,16 +630,17 @@ let self = _self // overrides; _self = with self; {
   };
 
   autobox = buildPerlPackage rec {
-    name = "autobox-2.85";
+    name = "autobox-3.0.1";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/C/CH/CHOCOLATE/${name}.tar.gz";
-      sha256 = "d0b8d0f27f3d1c1e8ef47f806fa06b9c229c3ca84057004fedc35dbbc0341140";
+      url = mirror://cpan/authors/id/C/CH/CHOCOLATE/autobox-v3.0.1.tar.gz;
+      sha256 = "c303b7fccfaa1ff4d4c429ab3f15e5ca2a77554ef8c9fc3b8c62ba859e874c98";
     };
     propagatedBuildInputs = [ ScopeGuard ];
     meta = {
       description = "Call methods on native types";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
+    buildInputs = [ IPCSystemSimple TestFatal ];
   };
 
   Autobox = self.autobox;
