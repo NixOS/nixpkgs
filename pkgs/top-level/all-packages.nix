@@ -18936,6 +18936,8 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
+  zeronet = callPackage ../applications/networking/p2p/zeronet { };
+
   zexy = callPackage ../applications/audio/pd-plugins/zexy  { };
 
   zgrviewer = callPackage ../applications/graphics/zgrviewer {};
