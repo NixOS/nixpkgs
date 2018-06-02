@@ -9402,10 +9402,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   MathBigIntLite = buildPerlPackage rec {
-     name = "Math-BigInt-Lite-0.17";
+     name = "Math-BigInt-Lite-0.18";
      src = fetchurl {
-       url = mirror://cpan/authors/id/P/PJ/PJACKLAM/Math-BigInt-Lite-0.17.tar.gz;
-       sha256 = "1pii36cykpja9al6bdnsxn2w0la674qagqcff6lhk9yx6xakycpk";
+       url = mirror://cpan/authors/id/P/PJ/PJACKLAM/Math-BigInt-Lite-0.18.tar.gz;
+       sha256 = "1m97jkh26nrji6mjdwhwlq9bcdn8qlw3vimik8bs2hw80syi70j4";
      };
      propagatedBuildInputs = [ MathBigInt ];
      meta = {
