@@ -5341,10 +5341,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   Error = buildPerlModule rec {
-    name = "Error-0.17025";
+    name = "Error-0.17026";
     src = fetchurl {
       url = "mirror://cpan/authors/id/S/SH/SHLOMIF/${name}.tar.gz";
-      sha256 = "1bzgzmf1v4md02vadm46b4j4ilqxrcrfasvbzymhrznlsd54g7vc";
+      sha256 = "1nam651w5ffsh64nnqjpzirm5g3ck92idzz1f0sf0fnp5jb0ln9p";
     };
   };
 
