@@ -13962,10 +13962,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   strictures = buildPerlPackage rec {
-    name = "strictures-2.000003";
+    name = "strictures-2.000005";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/H/HA/HAARG/${name}.tar.gz";
-      sha256 = "08mgvf1d2651gsg3jgjfs13878ndqa4ji8vfsda9f7jjd84ymy17";
+      url = mirror://cpan/authors/id/E/ET/ETHER/strictures-2.000005.tar.gz;
+      sha256 = "16fxhsmn2v8a1fxd02243zl7vckmvwzwwys1pjp9rw68hagxn2wn";
     };
     meta = {
       homepage = http://git.shadowcat.co.uk/gitweb/gitweb.cgi?p=p5sagit/strictures.git;
