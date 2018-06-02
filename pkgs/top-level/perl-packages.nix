@@ -16385,10 +16385,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   TestManifest = buildPerlPackage {
-    name = "Test-Manifest-2.02";
+    name = "Test-Manifest-2.021";
     src = fetchurl {
-      url = mirror://cpan/authors/id/B/BD/BDFOY/Test-Manifest-2.02.tar.gz;
-      sha256 = "064783ceaf7dd569a5724d40900a3f9d92168ee4c613f7a3cb99a99aa8283396";
+      url = mirror://cpan/authors/id/B/BD/BDFOY/Test-Manifest-2.021.tar.gz;
+      sha256 = "a47aaad71c580e16e6e63d8c037cdddcd919876754beb2c95d9a88682dd332d9";
     };
     meta = {
       description = "Interact with a t/test_manifest file";
