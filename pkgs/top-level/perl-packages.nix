@@ -5912,10 +5912,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   FileFindObjectRule = buildPerlModule rec {
-    name = "File-Find-Object-Rule-0.0306";
+    name = "File-Find-Object-Rule-0.0307";
     src = fetchurl {
       url = "mirror://cpan/authors/id/S/SH/SHLOMIF/${name}.tar.gz";
-      sha256 = "2ce55766b25fb8799d37b95bca61e8a71d8a437e28541e1cd06b7eb89f7739d1";
+      sha256 = "571d92c1bbd749b03a5e063b65cdef081b8063fe190fca7ed2e37af7ccb5a99a";
     };
     propagatedBuildInputs = [ FileFindObject NumberCompare TextGlob ];
     meta = {
