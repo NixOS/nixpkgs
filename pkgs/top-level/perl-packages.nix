@@ -7679,10 +7679,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   IO = buildPerlPackage {
-    name = "IO-1.25";
+    name = "IO-1.39";
     src = fetchurl {
-      url = mirror://cpan/authors/id/G/GB/GBARR/IO-1.25.tar.gz;
-      sha256 = "89790db8b9281235dc995c1a85d532042ff68a90e1504abd39d463f05623e7b5";
+      url = mirror://cpan/authors/id/T/TO/TODDR/IO-1.39.tar.gz;
+      sha256 = "4f0502e7f123ac824188eb8873038aaf2ddcc29f8babc1a0b2e1cd34b55a1fca";
     };
     doCheck = false;
     meta = {
