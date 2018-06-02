@@ -5886,6 +5886,8 @@ with pkgs;
 
   zdelta = callPackage ../tools/compression/zdelta { };
 
+  zeronet = callPackage ../applications/networking/zeronet { };
+
   zerotierone = callPackage ../tools/networking/zerotierone { };
 
   zerofree = callPackage ../tools/filesystems/zerofree { };
