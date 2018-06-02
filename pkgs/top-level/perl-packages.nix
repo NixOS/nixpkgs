@@ -299,10 +299,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   Appcpanminus = buildPerlPackage rec {
-    name = "App-cpanminus-1.7043";
+    name = "App-cpanminus-1.7044";
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/MI/MIYAGAWA/${name}.tar.gz";
-      sha256 = "68a06f7da80882a95bc02c92c7ee305846fb6ab648cf83678ea945e44ad65c65";
+      sha256 = "9b60767fe40752ef7a9d3f13f19060a63389a5c23acc3e9827e19b75500f81f3";
     };
     meta = {
       homepage = https://github.com/miyagawa/cpanminus;
