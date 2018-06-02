@@ -2563,10 +2563,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   ConfigMVP = buildPerlPackage {
-    name = "Config-MVP-2.200010";
+    name = "Config-MVP-2.200011";
     src = fetchurl {
-      url = mirror://cpan/authors/id/R/RJ/RJBS/Config-MVP-2.200010.tar.gz;
-      sha256 = "bfb5870452a12ead4d3fd485045d1fa92b2a11741c3b93b61eb43f3dcbd6099b";
+      url = mirror://cpan/authors/id/R/RJ/RJBS/Config-MVP-2.200011.tar.gz;
+      sha256 = "23c95666fc43c4adaebcc093b1b56091efc2a6aa2d75366a216d18eda96ad716";
     };
     buildInputs = [ TestFatal ];
     propagatedBuildInputs = [ ModulePluggable MooseXOneArgNew RoleHasMessage RoleIdentifiable Throwable TieIxHash ];
