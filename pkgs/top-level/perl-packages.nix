@@ -9389,10 +9389,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   MathBigIntGMP = buildPerlPackage rec {
-    name = "Math-BigInt-GMP-1.6004";
+    name = "Math-BigInt-GMP-1.6005";
     src = fetchurl {
       url    = "mirror://cpan/authors/id/P/PJ/PJACKLAM/${name}.tar.gz";
-      sha256 = "1wiklyxxpf02c01flymyjqh46lhi0qhkvf14icni8grjgpfjjqi3";
+      sha256 = "0a5qwsjrp46lkmaxpw408lv14ygivk9i3cbbcrjim1qwsk1jlmjc";
     };
     buildInputs = [ pkgs.gmp ];
     doCheck = false;
