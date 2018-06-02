@@ -1215,17 +1215,18 @@ let self = _self // overrides; _self = with self; {
   };
 
   CatalystControllerHTMLFormFu = buildPerlPackage rec {
-    name = "Catalyst-Controller-HTML-FormFu-2.02";
+    name = "Catalyst-Controller-HTML-FormFu-2.04";
     src = fetchurl {
-      url = mirror://cpan/authors/id/N/NI/NIGELM/Catalyst-Controller-HTML-FormFu-2.02.tar.gz;
-      sha256 = "5ddfd4983bfb0c722995c964b4d9264b3a26a89c820c921648631a7717be0551";
+      url = mirror://cpan/authors/id/N/NI/NIGELM/Catalyst-Controller-HTML-FormFu-2.04.tar.gz;
+      sha256 = "f13fb9b3b3b00b35f06abc31614461c8d7346fbe07fb569c71e8d586e5eb5ddc";
     };
-    buildInputs = [ CatalystActionRenderView CatalystPluginSession CatalystPluginSessionStateCookie CatalystPluginSessionStoreFile CatalystViewTT TemplateToolkit TestLongString TestWWWMechanize TestWWWMechanizeCatalyst ];
-    propagatedBuildInputs = [ CatalystComponentInstancePerContext HTMLFormFu RegexpAssemble ];
+    buildInputs = [ CatalystActionRenderView CatalystPluginSession CatalystPluginSessionStateCookie CatalystPluginSessionStoreFile CatalystViewTT CodeTidyAllPluginPerlAlignMooseAttributes PodCoverageTrustPod PodTidy TemplateToolkit TestCPANMeta TestDifferences TestEOL TestKwalitee TestLongString TestMemoryCycle TestNoTabs TestPAUSEPermissions TestPod TestPodCoverage TestWWWMechanize TestWWWMechanizeCatalyst ];
+    propagatedBuildInputs = [ CatalystComponentInstancePerContext HTMLFormFuMultiForm RegexpAssemble ];
     meta = {
       description = "Catalyst integration for HTML::FormFu";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
+    doCheck = false; /* fails with 'open3: exec of .. perl .. failed: Argument list too long at .../TAP/Parser/Iterator/Process.pm line 165.' */
   };
 
   CatalystControllerPOD = buildPerlModule rec {
@@ -2376,6 +2377,19 @@ let self = _self // overrides; _self = with self; {
        description = "Engine for tidyall, your all-in-one code tidier and validator";
        license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
        homepage = "http://metacpan.org/release/Code-TidyAll";
+     };
+  };
+
+  CodeTidyAllPluginPerlAlignMooseAttributes = buildPerlPackage rec {
+     name = "Code-TidyAll-Plugin-Perl-AlignMooseAttributes-0.01";
+     src = fetchurl {
+       url = mirror://cpan/authors/id/J/JS/JSWARTZ/Code-TidyAll-Plugin-Perl-AlignMooseAttributes-0.01.tar.gz;
+       sha256 = "1r8w5kfm17j1dyrrsjhwww423zzdzhx1i3d3brl32wzhasgf47cd";
+     };
+     propagatedBuildInputs = [ CodeTidyAll TextAligner ];
+     meta = {
+       description = "TidyAll plugin to sort and align Moose-style attributes";
+       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
      };
   };
 
@@ -5321,6 +5335,19 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
+  EncodeNewlines = buildPerlPackage rec {
+     name = "Encode-Newlines-0.05";
+     src = fetchurl {
+       url = mirror://cpan/authors/id/N/NE/NEILB/Encode-Newlines-0.05.tar.gz;
+       sha256 = "1gipd3wnma28w5gjbzycfkpi6chksy14lhxkp4hwizf8r351zcrl";
+     };
+     meta = {
+       description = "Normalize line ending sequences";
+       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+       homepage = "https://github.com/neilb/Encode-Newlines";
+     };
+  };
+
   enum = buildPerlPackage rec {
     name = "enum-1.11";
     src = fetchurl {
@@ -7126,6 +7153,20 @@ let self = _self // overrides; _self = with self; {
       description = "HTML Form Creation, Rendering and Validation Framework";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
+  };
+
+  HTMLFormFuMultiForm = buildPerlPackage rec {
+     name = "HTML-FormFu-MultiForm-1.03";
+     src = fetchurl {
+       url = mirror://cpan/authors/id/N/NI/NIGELM/HTML-FormFu-MultiForm-1.03.tar.gz;
+       sha256 = "17qm94hwhn6jyhd2am4gqxq7yrlhv3jv0ayx17df95mqdgbhrw1n";
+     };
+     propagatedBuildInputs = [ CryptCBC CryptDES HTMLFormFu ];
+     meta = {
+       description = "Handle multi-page/stage forms with FormFu";
+       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+       homepage = "https://github.com/FormFu/HTML-FormFu-MultiForm";
+     };
   };
 
   HTMLFormHandler = buildPerlPackage {
@@ -13145,6 +13186,20 @@ let self = _self // overrides; _self = with self; {
      };
   };
 
+  PodTidy = buildPerlModule rec {
+     name = "Pod-Tidy-0.10";
+     src = fetchurl {
+       url = mirror://cpan/authors/id/J/JH/JHOBLITT/Pod-Tidy-0.10.tar.gz;
+       sha256 = "1gcxjplgksnc5iggi8dzbkbkcryii5wjhypd7fs3kmbwx91y2vl8";
+     };
+     propagatedBuildInputs = [ EncodeNewlines IOString PodWrap TextGlob ];
+     buildInputs = [ TestCmd ];
+     meta = {
+       description = "a reformatting Pod Processor";
+       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+     };
+  };
+
   PodUsage = buildPerlPackage {
     name = "Pod-Usage-1.69";
     src = fetchurl {
@@ -13171,6 +13226,17 @@ let self = _self // overrides; _self = with self; {
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
       maintainers = [ maintainers.rycee ];
     };
+  };
+
+  PodWrap = buildPerlModule rec {
+     name = "Pod-Wrap-0.01";
+     src = fetchurl {
+       url = mirror://cpan/authors/id/N/NU/NUFFIN/Pod-Wrap-0.01.tar.gz;
+       sha256 = "0qwb5hp26f85xnb3zivf8ccfdplabiyl5sd53c6wgdgvzzicpjjh";
+     };
+     meta = {
+       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+     };
   };
 
   ProbePerl = buildPerlPackage rec {
@@ -15115,6 +15181,20 @@ let self = _self // overrides; _self = with self; {
       description = "Check for uncleaned imports";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
+  };
+
+  TestCmd = buildPerlPackage rec {
+     name = "Test-Cmd-1.09";
+     src = fetchurl {
+       url = mirror://cpan/authors/id/N/NE/NEILB/Test-Cmd-1.09.tar.gz;
+       sha256 = "114nfafwfxxn7kig265b7lg0znb5ybvc282sjjwf14g7vpn20cyg";
+     };
+       doCheck = false; /* test fails */
+     meta = {
+       description = "Perl module for portable testing of commands and scripts";
+       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+       homepage = "https://github.com/neilb/Test-Cmd";
+     };
   };
 
   TestCommand = buildPerlModule {
