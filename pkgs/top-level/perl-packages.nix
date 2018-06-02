@@ -14572,10 +14572,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   TaskWeaken = buildPerlPackage {
-    name = "Task-Weaken-1.05";
+    name = "Task-Weaken-1.06";
     src = fetchurl {
-      url = mirror://cpan/authors/id/E/ET/ETHER/Task-Weaken-1.05.tar.gz;
-      sha256 = "0p5ryr3421p5rqj6dk5dcvxsml5gl9skbn7gv4szk50fimrvzww5";
+      url = mirror://cpan/authors/id/E/ET/ETHER/Task-Weaken-1.06.tar.gz;
+      sha256 = "1gk6rmnp4x50lzr0vfng41khf0f8yzxlm0pad1j69vxskpdzx0r3";
     };
     meta = {
       description = "Ensure that a platform has weaken support";
