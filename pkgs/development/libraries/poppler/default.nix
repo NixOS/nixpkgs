@@ -3,7 +3,7 @@
 , withData ? true, poppler_data
 , qt5Support ? false, qtbase ? null
 , introspectionSupport ? false, gobjectIntrospection ? null
-, utils ? false
+, utils ? false, nss ? null
 , minimal ? false, suffix ? "glib"
 }:
 
@@ -28,6 +28,7 @@ stdenv.mkDerivation rec {
     [ zlib freetype fontconfig libjpeg openjpeg ]
     ++ optionals (!minimal) [ cairo lcms curl ]
     ++ optional qt5Support qtbase
+    ++ optional utils nss
     ++ optional introspectionSupport gobjectIntrospection;
 
   nativeBuildInputs = [ cmake ninja pkgconfig ];
@@ -49,7 +50,9 @@ stdenv.mkDerivation rec {
     description = "A PDF rendering library";
 
     longDescription = ''
-      Poppler is a PDF rendering library based on the xpdf-3.0 code base.
+      Poppler is a PDF rendering library based on the xpdf-3.0 code
+      base. In addition it provides a number of tools that can be
+      installed separately.
     '';
 
     license = licenses.gpl2;
