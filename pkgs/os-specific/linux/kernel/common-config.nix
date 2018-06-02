@@ -214,6 +214,11 @@ with stdenv.lib;
   ${optionalString (versionOlder version "4.3") ''
     DRM_I915_KMS y
   ''}
+  # iGVT-g support
+  ${optionalString (versionAtLeast version "4.16") ''
+    DRM_I915_GVT y
+    DRM_I915_GVT_KVMGT m
+  ''}
   # Allow specifying custom EDID on the kernel command line
   DRM_LOAD_EDID_FIRMWARE y
   VGA_SWITCHEROO y # Hybrid graphics support
