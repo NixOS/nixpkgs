@@ -15320,7 +15320,7 @@ let self = _self // overrides; _self = with self; {
       sha256 = "b33647cbb4b2f2fcfbde4f8bb4383d0ac95c2f89c4c5770eb691f1643a337aad";
     };
     buildInputs = [ TestFatal ];
-    propagatedBuildInputs = [ ClassTiny FileCopyRecursive FileShareDir ScopeGuard ];
+    propagatedBuildInputs = [ ClassTiny FileCopyRecursive FileShareDir PathTiny ScopeGuard ];
     meta = {
       homepage = https://github.com/kentfredric/Test-File-ShareDir;
       description = "Create a Fake ShareDir for your modules for testing";
