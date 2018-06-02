@@ -9840,16 +9840,17 @@ let self = _self // overrides; _self = with self; {
   };
 
   ModuleCPANfile = buildPerlPackage rec {
-     name = "Module-CPANfile-1.1002";
+     name = "Module-CPANfile-1.1004";
      src = fetchurl {
-       url = mirror://cpan/authors/id/M/MI/MIYAGAWA/Module-CPANfile-1.1002.tar.gz;
-       sha256 = "1z9wsps70h7ypaxmwq8l8wp0dg4kqrxmaqgzbh2fq8jw9idw55dz";
+       url = mirror://cpan/authors/id/M/MI/MIYAGAWA/Module-CPANfile-1.1004.tar.gz;
+       sha256 = "08a9a5mybf0llwlfvk7n0q7az6lrrzgzwc3432mcwbb4k8pbxvw8";
      };
      meta = {
        description = "Parse cpanfile";
        license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
        homepage = "https://github.com/miyagawa/cpanfile";
      };
+    buildInputs = [ Filepushd ];
   };
 
   ModuleCoreList = buildPerlPackage {
