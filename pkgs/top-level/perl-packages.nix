@@ -16569,10 +16569,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   TextSprintfNamed = buildPerlModule rec {
-    name = "Text-Sprintf-Named-0.0402";
+    name = "Text-Sprintf-Named-0.0403";
     src = fetchurl {
       url = "mirror://cpan/authors/id/S/SH/SHLOMIF/${name}.tar.gz";
-      sha256 = "951317fce8fa5dd08190ba760182bc71f2b4346fa21df55c76155e6353e2864f";
+      sha256 = "8a2f6e52998d1d8adb6ce0f5be85265be2e51ce06cf8ae23b3a0f059ba21b888";
     };
     buildInputs = [ TestWarn ];
     meta = {
