@@ -16068,10 +16068,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   TestWarn = buildPerlPackage {
-    name = "Test-Warn-0.32";
+    name = "Test-Warn-0.33";
     src = fetchurl {
-      url = mirror://cpan/authors/id/B/BI/BIGJ/Test-Warn-0.32.tar.gz;
-      sha256 = "1lkkpx8gyfsxfkys1psp990xyy1zxf8rsqd44az57x4y3zkidi9g";
+      url = mirror://cpan/authors/id/B/BI/BIGJ/Test-Warn-0.33.tar.gz;
+      sha256 = "1i744wq55rckcyhj7l7p039jyaqpf6jgq1dgrznin3kvl8b8s042";
     };
     propagatedBuildInputs = [ SubUplevel ];
     meta = {
