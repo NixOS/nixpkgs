@@ -14789,6 +14789,8 @@ with pkgs;
 
   adobe-reader = callPackage_i686 ../applications/misc/adobe-reader { };
 
+  adr-tools = callPackage ../applications/misc/adr-tools { };
+
   masterpdfeditor = libsForQt5.callPackage ../applications/misc/masterpdfeditor { };
 
   aeolus = callPackage ../applications/audio/aeolus { };
