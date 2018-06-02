@@ -15547,6 +15547,18 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
+  TestMoreUTF8 = buildPerlPackage rec {
+     name = "Test-More-UTF8-0.05";
+     src = fetchurl {
+       url = mirror://cpan/authors/id/M/MO/MONS/Test-More-UTF8-0.05.tar.gz;
+       sha256 = "016fs77lmw8xxrcnapvp6wq4hjwgsdfi3l9ylpxgxkcpdarw9wdr";
+     };
+     meta = {
+       description = "Enhancing Test::More for UTF8-based projects";
+       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+     };
+  };
+
   TestMore = TestSimple;
 
   TestMost = buildPerlPackage {
@@ -16616,16 +16628,16 @@ let self = _self // overrides; _self = with self; {
   };
 
   TextTemplate = buildPerlPackage {
-    name = "Text-Template-1.52";
+    name = "Text-Template-1.53";
     src = fetchurl {
-      url = mirror://cpan/authors/id/M/MS/MSCHOUT/Text-Template-1.52.tar.gz;
-      sha256 = "85da7a5e7eecf1871cda8bf3ce7b8ad0b5f75c6c5791f43a7d94373406859b6c";
+      url = mirror://cpan/authors/id/M/MS/MSCHOUT/Text-Template-1.53.tar.gz;
+      sha256 = "ae221cbba2b27967a12bda3f531547e897eb38ae0a92c084607fd5a6a8085bc4";
     };
     meta = {
       description = "Unknown";
       license = "unknown";
     };
-    buildInputs = [ TestWarnings ];
+    buildInputs = [ TestMoreUTF8 TestWarnings ];
   };
 
   TestTrap = buildPerlModule rec {
