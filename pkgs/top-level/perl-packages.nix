@@ -4022,10 +4022,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   DevelPPPort = buildPerlPackage rec {
-    name = "Devel-PPPort-3.36";
+    name = "Devel-PPPort-3.42";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/W/WO/WOLFSAGE/${name}.tar.gz";
-      sha256 = "b70fb1b4e2d48983ad20052fd7ae6df4c10ceffdedbacb2d691ddc9c957afa52";
+      url = mirror://cpan/authors/id/X/XS/XSAWYERX/Devel-PPPort-3.42.tar.gz;
+      sha256 = "bac5d98b92fe2673a84ea45f1c9b615e3a46c3cc6db59c61a2fc95dd3cf9e14a";
     };
     meta = {
       description = "Perl/Pollution/Portability";
