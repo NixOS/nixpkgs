@@ -2453,10 +2453,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   ConfigAutoConf = buildPerlPackage rec {
-    name = "Config-AutoConf-0.315";
+    name = "Config-AutoConf-0.316";
     src = fetchurl {
-      url = mirror://cpan/authors/id/R/RE/REHSACK/Config-AutoConf-0.315.tar.gz;
-      sha256 = "0h39x9rzrhhilpg8yxlzpka269qrzsjg0iy0c1b9xflqlvhx2g2b";
+      url = mirror://cpan/authors/id/R/RE/REHSACK/Config-AutoConf-0.316.tar.gz;
+      sha256 = "0xxrdg12ig9fcsk0dws50hzfar4a8dsw1pimq6xf14lllrclnvwf";
     };
     propagatedBuildInputs = [ CaptureTiny ];
     meta = {
