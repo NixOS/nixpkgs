@@ -5987,10 +5987,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   FileHomeDir = buildPerlPackage {
-    name = "File-HomeDir-1.002";
+    name = "File-HomeDir-1.004";
     src = fetchurl {
-      url = mirror://cpan/authors/id/R/RE/REHSACK/File-HomeDir-1.002.tar.gz;
-      sha256 = "eb4c0c85775138460cd4013d8117232f08e88381c95c6a93b3d11e969185c274";
+      url = mirror://cpan/authors/id/R/RE/REHSACK/File-HomeDir-1.004.tar.gz;
+      sha256 = "45f67e2bb5e60a7970d080e8f02079732e5a8dfc0c7c3cbdb29abfb3f9f791ad";
     };
     propagatedBuildInputs = [ FileWhich ];
     meta = {
