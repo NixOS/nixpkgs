@@ -15560,10 +15560,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   TestNoTabs = buildPerlPackage {
-    name = "Test-NoTabs-2.00";
+    name = "Test-NoTabs-2.02";
     src = fetchurl {
-      url = mirror://cpan/authors/id/E/ET/ETHER/Test-NoTabs-2.00.tar.gz;
-      sha256 = "127kpl1va267qar2ia4c22xb96jby2jqnda3sj5pjgmxg8si26cg";
+      url = mirror://cpan/authors/id/E/ET/ETHER/Test-NoTabs-2.02.tar.gz;
+      sha256 = "0c306p9qdpa2ycii3c50hml23mwy6bjxpry126g1dw11hyiwcxgv";
     };
     meta = {
       description = "Check the presence of tabs in your project";
