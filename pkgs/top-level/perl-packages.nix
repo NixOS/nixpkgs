@@ -914,10 +914,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   BusinessISSN = buildPerlPackage {
-    name = "Business-ISSN-0.91";
+    name = "Business-ISSN-1.003";
     src = fetchurl {
-      url = mirror://cpan/authors/id/B/BD/BDFOY/Business-ISSN-0.91.tar.gz;
-      sha256 = "f15b192c0f547bb2967811072b3d343b94bc5ea58d02704c19122f7ae0a9d6b5";
+      url = mirror://cpan/authors/id/B/BD/BDFOY/Business-ISSN-1.003.tar.gz;
+      sha256 = "1272456c19937a24bc5f9a0db9dc447043591137719ee4dc955a63be544b99d1";
     };
     meta = {
       description = "Work with International Standard Serial Numbers";
