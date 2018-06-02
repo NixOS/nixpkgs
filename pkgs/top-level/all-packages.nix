@@ -16787,6 +16787,8 @@ with pkgs;
 
   makeself = callPackage ../applications/misc/makeself { };
 
+  mapmap = libsForQt5.callPackage ../applications/video/mapmap { };
+
   marathon = callPackage ../applications/networking/cluster/marathon { };
   marathonctl = callPackage ../tools/virtualization/marathonctl { } ;
 
