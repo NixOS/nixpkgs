@@ -13938,10 +13938,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   Storable = buildPerlPackage {
-    name = "Storable-2.51";
+    name = "Storable-3.11";
     src = fetchurl {
-      url = mirror://cpan/authors/id/A/AM/AMS/Storable-2.51.tar.gz;
-      sha256 = "a566b792112bbba21131ec1d7a2bf78170c648484895283ae53c7f0c3dc2f0be";
+      url = mirror://cpan/authors/id/X/XS/XSAWYERX/Storable-3.11.tar.gz;
+      sha256 = "b2dac116d2f5adaf289e9a8a9bbac35cc2c24a9d2221fea9b6578a33b8ec7d28";
     };
     meta = {
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
