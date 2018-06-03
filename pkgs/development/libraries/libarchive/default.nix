@@ -1,5 +1,5 @@
 {
-  fetchurl, stdenv, pkgconfig,
+  fetchurl, fetchpatch, stdenv, pkgconfig,
   acl, attr, bzip2, e2fsprogs, libxml2, lzo, openssl, sharutils, xz, zlib,
 
   # Optional but increases closure only negligibly.
@@ -20,6 +20,12 @@ stdenv.mkDerivation rec {
   patches = [
     ./CVE-2017-14166.patch
     ./CVE-2017-14502.patch
+
+    # LibreSSL patch; this is from upstream, and can be removed when the next release is made.
+    (fetchpatch {
+      url = "https://github.com/libarchive/libarchive/commit/5da00ad75b09e262774ec3675bbe4d5a4502a852.patch";
+      sha256 = "1r5n09dqhs5f8jx4iyqy06f0ryrxnbz60ww9aiww0j4gp5fs77qk";
+    })
   ];
 
   outputs = [ "out" "lib" "dev" ];
