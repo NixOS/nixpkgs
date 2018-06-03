@@ -3906,6 +3906,11 @@
     github = "tokudan";
     name = "Daniel Frank";
   };
+  tomahna = {
+    email = "kevin.rauscher@tomahna.fr";
+    github = "Tomahna";
+    name = "Kevin Rauscher";
+  };
   tomberek = {
     email = "tomberek@gmail.com";
     github = "tomberek";
