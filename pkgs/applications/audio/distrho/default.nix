@@ -22,7 +22,10 @@ stdenv.mkDerivation rec {
     xorg.libXinerama xorg.libXrender ladspa-sdk
   ];
 
-  buildPhase = ''
+  buildPhase = with stdenv; ''
+    # Remove x86_64 specific optimisations
+    ${if system != "x86_64-linux" then "export LINUX_EMBED=1" else ""}
+
     sh ./scripts/premake-update.sh linux
     make lv2
   '';
