@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig ];
 
-  propagatedBuildInputs = [ ]
+  propagatedBuildInputs = [ libiconv ]
     ++ optionals x11Support [ libXext libICE libXrandr ]
     ++ optional stdenv.isLinux libcap
     ++ optionals openglSupport [ libGL libGLU ]
@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
     ++ optional pulseaudioSupport libpulseaudio
     ++ optional stdenv.isDarwin Cocoa;
 
-  buildInputs = [ libiconv ]
+  buildInputs = [ ]
     ++ optional (!hostPlatform.isMinGW) audiofile
     ++ optionals stdenv.isDarwin [ AudioUnit CoreAudio CoreServices Kernel OpenGL ];
 
@@ -118,6 +118,8 @@ stdenv.mkDerivation rec {
   setupHook = ./setup-hook.sh;
 
   passthru = { inherit openglSupport; };
+
+  enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
     description = "A cross-platform multimedia library";
