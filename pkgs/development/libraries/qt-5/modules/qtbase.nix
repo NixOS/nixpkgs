@@ -298,6 +298,7 @@ stdenv.mkDerivation {
           "-no-fontconfig"
           "-qt-freetype"
           "-qt-libpng"
+          "-no-framework"
         ]
       else
         [
@@ -373,24 +374,6 @@ stdenv.mkDerivation {
     ''
 
     + (
-      if stdenv.isDarwin
-      then
-        ''
-          fixDarwinDylibNames_rpath() {
-            local flags=()
-
-            for fn in "$@"; do
-              flags+=(-change "@rpath/$fn.framework/Versions/5/$fn" "$out/lib/$fn.framework/Versions/5/$fn")
-            done
-
-            for fn in "$@"; do
-              echo "$fn: fixing dylib"
-              install_name_tool -id "$out/lib/$fn.framework/Versions/5/$fn" "''${flags[@]}" "$out/lib/$fn.framework/Versions/5/$fn"
-            done
-          }
-          fixDarwinDylibNames_rpath "QtConcurrent" "QtPrintSupport" "QtCore" "QtSql" "QtDBus" "QtTest" "QtGui" "QtWidgets" "QtNetwork" "QtXml" "QtOpenGL"
-        ''
-      else
         # fixup .pc file (where to find 'moc' etc.)
         ''
           sed -i "$dev/lib/pkgconfig/Qt5Core.pc" \

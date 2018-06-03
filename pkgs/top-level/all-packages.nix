@@ -12940,6 +12940,7 @@ with pkgs;
 
   samba4 = callPackage ../servers/samba/4.x.nix {
     python = python2;
+    libbsd = libbsd-freedesktop;
   };
 
   sambaMaster = callPackage ../servers/samba/master.nix { };
@@ -13907,8 +13908,6 @@ with pkgs;
   gotags = callPackage ../development/tools/gotags { };
 
   golint = callPackage ../development/tools/golint { };
-
-  godep = callPackage ../development/tools/godep { };
 
   godef = callPackage ../development/tools/godef { };
 
@@ -17498,6 +17497,8 @@ with pkgs;
   pstree = callPackage ../applications/misc/pstree { };
 
   ptask = callPackage ../applications/misc/ptask { };
+
+  pulseaudio-ctl = callPackage ../applications/audio/pulseaudio-ctl { };
 
   pulseaudio-dlna = callPackage ../applications/audio/pulseaudio-dlna { };
 
@@ -21492,6 +21493,8 @@ with pkgs;
   fts = if hostPlatform.isMusl then netbsd.fts else null;
 
   libbsd = netbsd.compat;
+
+  libbsd-freedesktop = callPackage ../development/libraries/libbsd {};
 
   inherit (recurseIntoAttrs (callPackages ../os-specific/bsd { }))
           netbsd;

@@ -55,6 +55,8 @@ in buildPythonPackage rec {
     xlwt
   ];
 
+  patches = [ ./pandas-0.22.0-pytest-3.5.1.patch ];
+
   # For OSX, we need to add a dependency on libcxx, which provides
   # `complex.h` and other libraries that pandas depends on to build.
   postPatch = optionalString isDarwin ''
