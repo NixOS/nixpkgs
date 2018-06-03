@@ -3370,6 +3370,10 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) CoreServices;
   };
 
+  medfile = callPackage ../development/libraries/medfile {
+    hdf5 = hdf5_1_8;
+  };
+
   memtester = callPackage ../tools/system/memtester { };
 
   minergate = callPackage ../applications/misc/minergate { };
@@ -15971,7 +15975,7 @@ with pkgs;
 
   fomp = callPackage ../applications/audio/fomp { };
 
-  freecad = callPackage ../applications/graphics/freecad { };
+  freecad = callPackage ../applications/graphics/freecad { mpi = openmpi; };
 
   freemind = callPackage ../applications/misc/freemind { };
 
