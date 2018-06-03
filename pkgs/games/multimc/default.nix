@@ -4,12 +4,12 @@ let
   libpath = with xorg; stdenv.lib.makeLibraryPath [ libX11 libXext libXcursor libXrandr libXxf86vm libpulseaudio ];
 in stdenv.mkDerivation rec {
   name = "multimc-${version}";
-  version = "0.6.1";
+  version = "0.6.2";
   src = fetchFromGitHub {
     owner = "MultiMC";
     repo = "MultiMC5";
     rev = version;
-    sha256 = "0glsf4vfir8w24bpinf3cx2ninrcp7hpq9cl463wl78dvqfg47kx";
+    sha256 = "07jrr6si8nzfqwf073zhgw47y6snib23ad3imh1ik1nn5r7wqy3c";
     fetchSubmodules = true;
   };
   nativeBuildInputs = [ cmake file makeWrapper ];
@@ -18,6 +18,9 @@ in stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   postInstall = ''
+    mkdir -p $out/share/{applications,pixmaps}
+    cp ../application/resources/multimc/scalable/multimc.svg $out/share/pixmaps
+    cp ../application/package/linux/multimc.desktop $out/share/applications
     wrapProgram $out/bin/MultiMC --add-flags "-d \$HOME/.multimc/" --set GAME_LIBRARY_PATH /run/opengl-driver/lib:${libpath} --prefix PATH : ${jdk}/bin/
   '';
 
