@@ -4911,6 +4911,8 @@ with pkgs;
 
   sharutils = callPackage ../tools/archivers/sharutils { };
 
+  schema2ldif = callPackage ../tools/text/schema2ldif { };
+
   shocco = callPackage ../tools/text/shocco { };
 
   shotwell = callPackage ../applications/graphics/shotwell { };
