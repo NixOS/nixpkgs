@@ -24,6 +24,19 @@ stdenv.mkDerivation rec {
     cp lib/* $out/lib
     chmod +x $out/bin/*
     mv $out/pkgconfig $out/lib
+
+    ${stdenv.lib.optionalString stdenv.isDarwin ''
+      install_name_tool -change libcork.dylib $out/lib/libcork.dylib $out/lib/libipset.dylib
+      install_name_tool -change libbloom.dylib $out/lib/libbloom.dylib $out/lib/libipset.dylib
+
+      for exe in $out/bin/*; do
+        install_name_tool -change libmbedtls.dylib ${mbedtls}/lib/libmbedtls.dylib $exe
+        install_name_tool -change libmbedcrypto.dylib ${mbedtls}/lib/libmbedcrypto.dylib $exe
+        install_name_tool -change libcork.dylib $out/lib/libcork.dylib $exe
+        install_name_tool -change libipset.dylib $out/lib/libipset.dylib $exe
+        install_name_tool -change libbloom.dylib $out/lib/libbloom.dylib $exe
+      done
+    ''}
   '';
 
   meta = with stdenv.lib; {
@@ -35,6 +48,6 @@ stdenv.mkDerivation rec {
     homepage = https://github.com/shadowsocks/shadowsocks-libev;
     license = licenses.gpl3Plus;
     maintainers = [ maintainers.nfjinjing ];
-    platforms = platforms.linux;
+    platforms = platforms.all;
   };
 }
