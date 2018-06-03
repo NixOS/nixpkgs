@@ -1,40 +1,57 @@
-{ stdenv, fetchFromGitHub, ostree, rpm, which, autoconf, automake, libtool, pkgconfig,
-  libcap, glib, libgsystem, json-glib, libarchive, libsolv, librepo, gtk-doc, elfutils,
-  gperf, cmake, pcre, check, python, libxslt, docbook_xsl, docbook_xml_dtd_42, acl }:
+{ stdenv, fetchpatch, fetchFromGitHub, ostree, rpm, which, autoconf, automake, libtool, pkgconfig,
+  gobjectIntrospection, gtk-doc, libxml2, libxslt, docbook_xsl, docbook_xml_dtd_42, gperf, cmake,
+  libcap, glib, systemd, json-glib, libarchive, libsolv, librepo, polkit,
+  bubblewrap, pcre, check, python }:
 
 let
   libglnx-src = fetchFromGitHub {
-    owner  = "GNOME";
-    repo   = "libglnx";
-    rev    = "4ae5e3beaaa674abfabf7404ab6fafcc4ec547db";
-    sha256 = "1npb9zbyb4bl0nxqf0pcqankcwzs3k1x8i2wkdwhgak4qcvxvfqn";
+    owner = "GNOME";
+    repo = "libglnx";
+    rev = "97b5c08d2f93dc93ba296a84bbd2a5ab9bd8fc97";
+    sha256 = "0cz4x63f6ys7dln54g6mrr7hksvqwz78wdc8qb7zr1h2cp1azcvs";
   };
 
   libdnf-src = fetchFromGitHub {
-    owner  = "rpm-software-management";
-    repo   = "libhif";
-    rev    = "b69552b3b3a42fd41698a925d5f5f623667bac63";
-    sha256 = "0h6k09rb4imzbmsn7mspwl0js2awqdpb4ysdqq550vw2nr0dzszr";
+    owner = "rpm-software-management";
+    repo = "libdnf";
+    rev = "b3fcc53f6f3baf4f51f836f5e1eb54eb82d5df49";
+    sha256 = "15nl9x4blyc9922rvz7iq56yy8hxhpsf31cs3ag7aypqpfx3czci";
   };
 
-  version = "2016.10";
+  version = "2018.5";
 in stdenv.mkDerivation {
   name = "rpm-ostree-${version}";
 
+  outputs = [ "out" "dev" "man" "devdoc" ];
+
   src = fetchFromGitHub {
-    rev    = "v${version}";
-    owner  = "projectatomic";
-    repo   = "rpm-ostree";
-    sha256 = "0a0wwklzk1kvk3bbxxfvxgk4ck5dn7a7v32shqidb674fr2d5pvb";
+    rev = "v${version}";
+    owner = "projectatomic";
+    repo = "rpm-ostree";
+    sha256 = "0y37hr8mmrsww4ka2hlqmz7wp57ibzhah4j87yg8q8dks5hxcbsx";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [
+    pkgconfig which autoconf automake libtool cmake gperf
+    gobjectIntrospection gtk-doc libxml2 libxslt docbook_xsl docbook_xml_dtd_42
+  ];
   buildInputs = [
-    which autoconf automake libtool libcap ostree rpm glib libgsystem gperf
-    json-glib libarchive libsolv librepo gtk-doc libxslt docbook_xsl docbook_xml_dtd_42
-    cmake pcre check python
-    # FIXME: get rid of this once libarchive properly propagates this
-    acl
+    libcap ostree rpm glib systemd polkit bubblewrap
+    json-glib libarchive libsolv librepo
+    pcre check python
+  ];
+
+  patches = [
+    # Use gdbus-codegen from PATH
+    (fetchpatch {
+      url = https://github.com/projectatomic/rpm-ostree/commit/315406d8cd0937e786723986e88d376c88806c60.patch;
+      sha256 = "073yfa62515kyf58s0sz56w0a40062lh761y2y4assqipybwxbvp";
+    })
+  ];
+
+  configureFlags = [
+    "--enable-gtk-doc"
+    "--with-bubblewrap=${bubblewrap}/bin/bwrap"
   ];
 
   dontUseCmakeConfigure = true;
@@ -47,14 +64,11 @@ in stdenv.mkDerivation {
     # According to #cmake on freenode, libdnf should bundle the FindLibSolv.cmake module
     cp ${libsolv}/share/cmake/Modules/FindLibSolv.cmake libdnf/cmake/modules/
 
-    # See https://github.com/projectatomic/rpm-ostree/issues/480
-    substituteInPlace src/libpriv/rpmostree-unpacker.c --replace 'include <selinux/selinux.h>' ""
-
     # libdnf normally wants sphinx to build its hawkey manpages, but we don't care about those manpages since we don't use hawkey
     substituteInPlace configure.ac --replace 'cmake \' 'cmake -DWITH_MAN=off \'
 
     # Let's not hardcode the rpm-gpg path...
-    substituteInPlace libdnf/libdnf/dnf-keyring.c \
+    substituteInPlace libdnf/libdnf/dnf-keyring.cpp \
       --replace '"/etc/pki/rpm-gpg"' 'getenv("LIBDNF_RPM_GPG_PATH_OVERRIDE") ? getenv("LIBDNF_RPM_GPG_PATH_OVERRIDE") : "/etc/pki/rpm-gpg"'
   '';
 
@@ -64,10 +78,10 @@ in stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "A hybrid image/package system. It uses OSTree as an image format, and uses RPM as a component model";
-    homepage    = "https://rpm-ostree.readthedocs.io/en/latest/";
-    license     = licenses.lgpl2Plus;
-    platforms   = platforms.linux;
+    homepage = https://rpm-ostree.readthedocs.io/en/latest/;
+    license = licenses.lgpl2Plus;
     maintainers = with maintainers; [ copumpkin ];
+    platforms = platforms.linux;
   };
 }
 
