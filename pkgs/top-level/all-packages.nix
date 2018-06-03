@@ -10141,8 +10141,6 @@ with pkgs;
 
   libgssglue = callPackage ../development/libraries/libgssglue { };
 
-  libgsystem = callPackage ../development/libraries/libgsystem { };
-
   libgudev = callPackage ../development/libraries/libgudev { };
 
   libguestfs-appliance = callPackage ../development/libraries/libguestfs/appliance.nix {};
