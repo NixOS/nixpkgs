@@ -5,7 +5,7 @@ with lib;
 let
   luks = config.boot.initrd.luks;
 
-  openCommand = name': { name, device, header, keyFile, keyFileSize, allowDiscards, yubikey, fallbackToPassword, ... }: assert name' == name; ''
+  openCommand = name': { name, device, header, keyFile, keyFileSize, keyFileOffset, allowDiscards, yubikey, fallbackToPassword, ... }: assert name' == name; ''
 
     # Wait for a target (e.g. device, keyFile, header, ...) to appear.
     wait_target() {
@@ -47,6 +47,7 @@ let
         ${optionalString (keyFile != null) ''
         ${optionalString fallbackToPassword "if [ -e ${keyFile} ]; then"}
             echo " --key-file=${keyFile} ${optionalString (keyFileSize != null) "--keyfile-size=${toString keyFileSize}"}" \
+                   ${optionalString (keyFileOffset != null) "--keyfile-offset=${toString keyFileOffset}"}" \
               >> /.luksopen_args
         ${optionalString fallbackToPassword ''
         else
@@ -313,6 +314,19 @@ in
               or partition is used as key file). If not specified, the whole
               <literal>keyFile</literal> will be used decryption, instead of just
               the first <literal>keyFileSize</literal> bytes.
+            '';
+          };
+
+          keyFileOffset = mkOption {
+            default = null;
+            example = 4096;
+            type = types.nullOr types.int;
+            description = ''
+              The offset of the key file. Use this in combination with
+              <literal>keyFileSize</literal> to use part of a file as key file
+              (often the case if a raw device or partition is used as a key file).
+              If not specified, the key begins at the first byte of
+              <literal>keyFile</literal>.
             '';
           };
 
