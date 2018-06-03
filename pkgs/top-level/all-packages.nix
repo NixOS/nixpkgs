@@ -17138,6 +17138,8 @@ with pkgs;
     inherit (gnome3) libgee;
   };
 
+  synapse-bt = callPackage ../applications/networking/p2p/synapse-bt { };
+
   synfigstudio = callPackage ../applications/graphics/synfigstudio {
     fontsConf = makeFontsConf { fontDirectories = [ freefont_ttf ]; };
     inherit (gnome3) defaultIconTheme;
