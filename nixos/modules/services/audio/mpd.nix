@@ -133,7 +133,7 @@ in {
         defaultText = ''''${dataDir}/tag_cache'';
         description = ''
           The path to MPD's database. If set to <literal>null</literal> the
-          paramter is omitted from the configuration.
+          parameter is omitted from the configuration.
         '';
       };
     };
