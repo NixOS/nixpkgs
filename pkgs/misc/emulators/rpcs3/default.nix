@@ -1,5 +1,5 @@
-{ stdenv, lib, fetchgit, cmake, pkgconfig
-, qtbase, openal, glew, llvm_4, vulkan-loader, libpng, ffmpeg, libevdev
+{ stdenv, lib, fetchgit, cmake, pkgconfig, git
+, qt5, openal, glew, vulkan-loader, libpng, ffmpeg, libevdev, python27
 , pulseaudioSupport ? true, libpulseaudio
 , waylandSupport ? true, wayland
 , alsaSupport ? true, alsaLib
@@ -7,12 +7,15 @@
 
 stdenv.mkDerivation rec {
   name = "rpcs3-${version}";
-  version = "2018-02-23";
+  version = "0.0.5-6884";
 
   src = fetchgit {
     url = "https://github.com/RPCS3/rpcs3";
-    rev = "41bd07274f15b8f1be2475d73c3c75ada913dabb";
-    sha256 = "1v28m64ahakzj4jzjkmdd7y8q75pn9wjs03vprbnl0z6wqavqn0x";
+    rev = "dcd7f442fac3b9b45ecaddf5460ecb8f7238df2e";
+    sha256 = "0fqdwd6lr5yb4lffmvw4abhdfr70bl4jfdc95cmpc0zzdld0lb0a";
+    branchName = "master";  # Prevent default 'fetchgit' branch from appearing in version info
+    deepClone = true;       # Required for git describe to return commit count in version info
+    leaveDotGit = true;     # Required for version header file generation
   };
 
   cmakeFlags = [
@@ -21,10 +24,10 @@ stdenv.mkDerivation rec {
     "-DUSE_NATIVE_INSTRUCTIONS=OFF"
   ];
 
-  nativeBuildInputs = [ cmake pkgconfig ];
+  nativeBuildInputs = [ cmake pkgconfig git ];
 
   buildInputs = [
-    qtbase openal glew llvm_4 vulkan-loader libpng ffmpeg libevdev
+    qt5.qtbase qt5.qtquickcontrols openal glew vulkan-loader libpng ffmpeg libevdev python27
   ] ++ lib.optional pulseaudioSupport libpulseaudio
     ++ lib.optional alsaSupport alsaLib
     ++ lib.optional waylandSupport wayland;
@@ -34,7 +37,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     description = "PS3 emulator/debugger";
     homepage = "https://rpcs3.net/";
-    maintainers = with maintainers; [ abbradar ];
+    maintainers = with maintainers; [ abbradar nocent ];
     license = licenses.gpl2;
     platforms = [ "x86_64-linux" ];
   };
