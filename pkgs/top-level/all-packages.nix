@@ -15325,8 +15325,7 @@ with pkgs;
   dmtx-utils = callPackage (callPackage ../tools/graphics/dmtx-utils) {
   };
 
-  # go 1.9 pin until https://github.com/moby/moby/pull/35739
-  inherit (callPackage ../applications/virtualization/docker { go = go_1_9; })
+  inherit (callPackage ../applications/virtualization/docker { })
     docker_18_03
     docker_18_05;
 
