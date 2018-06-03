@@ -1,7 +1,7 @@
 { stdenv, fetchurl, pkgconfig, intltool, glib, libxml2, gtk3, gtkvnc, gmp
 , libgcrypt, gnupg, cyrus_sasl, shared-mime-info, libvirt, yajl, xen
 , gsettings-desktop-schemas, makeWrapper, libvirt-glib, libcap_ng, numactl
-, libapparmor
+, libapparmor, gst_all_1
 , spiceSupport ? true
 , spice-gtk ? null, spice-protocol ? null, libcap ? null, gdbm ? null
 }:
@@ -30,11 +30,14 @@ stdenv.mkDerivation rec {
     xen
   ] ++ optionals spiceSupport [
     spice-gtk spice-protocol libcap gdbm
+    gst_all_1.gst-plugins-base gst_all_1.gst-plugins-good
   ];
 
   postInstall = ''
     for f in "$out"/bin/*; do
-        wrapProgram "$f" --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH"
+        wrapProgram "$f" \
+          --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH" \
+          --prefix GST_PLUGIN_SYSTEM_PATH_1_0 : "$GST_PLUGIN_SYSTEM_PATH_1_0"
     done
   '';
 

@@ -2,12 +2,12 @@
 
 stdenv.mkDerivation rec {
   name = "procps-${version}";
-  version = "3.3.14";
+  version = "3.3.15";
 
   # The project's releases are on SF, but git repo on gitlab.
   src = fetchurl {
     url = "mirror://sourceforge/procps-ng/procps-ng-${version}.tar.xz";
-    sha256 = "0v3j6rkzzscqds37i105cxx3q4dk04rsgpqfd5p7hzcvk59h5njy";
+    sha256 = "0r84kwa5fl0sjdashcn4vh7hgfm7ahdcysig3mcjvpmkzi7p9g8h";
   };
 
   buildInputs = [ ncurses ];

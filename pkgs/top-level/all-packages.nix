@@ -4400,6 +4400,8 @@ with pkgs;
 
   philter = callPackage ../tools/networking/philter { };
 
+  phodav = callPackage ../tools/networking/phodav { };
+
   pinentry = callPackage ../tools/security/pinentry {
     libcap = if stdenv.isDarwin then null else libcap;
   };

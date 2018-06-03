@@ -2,7 +2,7 @@
 , openssl, libpulseaudio, pixman, gobjectIntrospection, libjpeg_turbo, zlib
 , cyrus_sasl, python2Packages, autoreconfHook, usbredir, libsoup
 , withPolkit ? true, polkit, acl, usbutils
-, vala, gtk3, epoxy, libdrm }:
+, vala, gtk3, epoxy, libdrm, gst_all_1, phodav }:
 
 # If this package is built with polkit support (withPolkit=true),
 # usb redirection reqires spice-client-glib-usb-acl-helper to run setuid root.
@@ -46,8 +46,8 @@ in stdenv.mkDerivation rec {
   '';
 
   buildInputs = [
-    spice-protocol celt_0_5_1 openssl libpulseaudio pixman
-    libjpeg_turbo zlib cyrus_sasl python pygtk usbredir gtk3 epoxy libdrm
+    spice-protocol celt_0_5_1 openssl libpulseaudio gst_all_1.gst-plugins-base pixman
+    libjpeg_turbo zlib cyrus_sasl python pygtk usbredir gtk3 epoxy libdrm phodav
   ] ++ optionals withPolkit [ polkit acl usbutils ] ;
 
   nativeBuildInputs = [ pkgconfig gettext libsoup autoreconfHook vala gobjectIntrospection ];
