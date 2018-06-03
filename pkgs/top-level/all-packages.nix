@@ -17498,6 +17498,8 @@ with pkgs;
 
   ptask = callPackage ../applications/misc/ptask { };
 
+  pulseaudio-ctl = callPackage ../applications/audio/pulseaudio-ctl { };
+
   pulseaudio-dlna = callPackage ../applications/audio/pulseaudio-dlna { };
 
   pulseview = libsForQt5.callPackage ../applications/science/electronics/pulseview { };
