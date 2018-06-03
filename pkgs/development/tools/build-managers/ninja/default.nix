@@ -15,7 +15,9 @@ stdenv.mkDerivation rec {
 
   buildPhase = ''
     python configure.py --bootstrap
-    ./ninja manual
+    # "./ninja -vn manual" output copied here to support cross compilation.
+    asciidoc -b docbook -d book -o build/manual.xml doc/manual.asciidoc
+    xsltproc --nonet doc/docbook.xsl build/manual.xml > doc/manual.html
   '';
 
   installPhase = ''
