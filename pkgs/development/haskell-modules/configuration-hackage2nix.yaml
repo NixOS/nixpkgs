@@ -483,8 +483,8 @@ default-package-overrides:
   - deque ==0.2.1
   - deriving-compat ==0.4.2
   - descriptive ==0.9.4
-  - dhall ==1.11.1
-  - dhall-json ==1.0.13
+  - dhall ==1.14.0
+  - dhall-json ==1.2.0
   - dice ==0.1
   - dictionaries ==0.2.0.4
   - Diff ==0.3.4
