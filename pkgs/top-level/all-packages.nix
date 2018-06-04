@@ -1891,6 +1891,15 @@ with pkgs;
     brotliSupport = true;
   };
 
+  curl_7_59 = callPackage ../tools/networking/curl/7_59.nix rec {
+    fetchurl = fetchurlBoot;
+    http2Support = true;
+    zlibSupport = true;
+    sslSupport = zlibSupport;
+    scpSupport = zlibSupport && !stdenv.isSunOS && !stdenv.isCygwin;
+    gssSupport = true;
+  };
+
   curl = callPackage ../tools/networking/curl rec {
     fetchurl = fetchurlBoot;
     http2Support = true;
@@ -20880,6 +20889,7 @@ with pkgs;
   inherit (callPackages ../tools/package-management/nix {
       storeDir = config.nix.storeDir or "/nix/store";
       stateDir = config.nix.stateDir or "/nix/var";
+      curl = curl_7_59;
       })
     nix
     nix1
