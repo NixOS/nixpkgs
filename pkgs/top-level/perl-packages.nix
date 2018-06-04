@@ -16189,18 +16189,7 @@ let self = _self // overrides; _self = with self; {
     buildInputs = [ TestBase ];
   };
 
-  TextAbbrev = buildPerlPackage {
-    name = "Text-Abbrev-1.02";
-    src = fetchurl {
-      url = mirror://cpan/authors/id/F/FL/FLORA/Text-Abbrev-1.02.tar.gz;
-      sha256 = "9cfb8bea2d5806b72fa1a0e1a3367ce662262eaa2701c6a3143a2a8076917433";
-    };
-    meta = {
-      homepage = http://search.cpan.org/dist/Text-Abbrev;
-      description = "Abbrev - create an abbreviation table from a list";
-      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
-    };
-  };
+  TextAbbrev = null; # part of Perl 5.22
 
   TextAligner = buildPerlModule rec {
     name = "Text-Aligner-0.13";
