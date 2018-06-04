@@ -4494,17 +4494,7 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  Digest = buildPerlPackage {
-    name = "Digest-1.17";
-    src = fetchurl {
-      url = mirror://cpan/authors/id/G/GA/GAAS/Digest-1.17.tar.gz;
-      sha256 = "2f6a54459fc7f37c0669d548bb224b695eb8d2ddc089aa5547645ce1f5fd86f7";
-    };
-    meta = {
-      description = "Modules that calculate message digests";
-      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
-    };
-  };
+  Digest = null; # part of Perl 5.22
 
   DigestCRC = buildPerlPackage rec {
     name = "Digest-CRC-0.22.2";
