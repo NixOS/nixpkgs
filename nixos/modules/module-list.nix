@@ -240,6 +240,8 @@
   ./services/desktops/profile-sync-daemon.nix
   ./services/desktops/telepathy.nix
   ./services/development/hoogle.nix
+  ./services/development/jupyter/default.nix
+  ./services/development/jupyterlab/default.nix
   ./services/editors/emacs.nix
   ./services/editors/infinoted.nix
   ./services/games/factorio.nix
