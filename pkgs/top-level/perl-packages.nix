@@ -678,17 +678,7 @@ let self = _self // overrides; _self = with self; {
 
   autodie = null; # part of Perl
 
-  AutoLoader = buildPerlPackage {
-    name = "AutoLoader-5.74";
-    src = fetchurl {
-      url = mirror://cpan/authors/id/S/SM/SMUELLER/AutoLoader-5.74.tar.gz;
-      sha256 = "2fac75b05309f71a6871804cd25e1a3ba0a28f43f294fb54528077558da3aff4";
-    };
-    meta = {
-      description = "Load subroutines only on demand";
-      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
-    };
-  };
+  AutoLoader = null; # part of Perl 5.22
 
   autovivification = buildPerlPackage rec {
     name = "autovivification-0.18";
