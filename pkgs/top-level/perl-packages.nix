@@ -13491,17 +13491,7 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  SearchDict = buildPerlPackage {
-    name = "Search-Dict-1.07";
-    src = fetchurl {
-      url = mirror://cpan/authors/id/D/DA/DAGOLDEN/Search-Dict-1.07.tar.gz;
-      sha256 = "b128cdae4712fe53e83a219ca65478a84c1b128a2c6c86933e47923cf19c6554";
-    };
-    meta = {
-      description = "Look - search for key in dictionary file";
-      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
-    };
-  };
+  SearchDict = null; # part of Perl 5.22
 
   SelfLoader = buildPerlPackage {
     name = "SelfLoader-1.24";
