@@ -17,11 +17,11 @@ stdenv.mkDerivation rec {
   patches = [
     (fetchpatch {
       url = "https://github.com/libevent/libevent/commit/22dd14945c25600de3cf8b91000c66703b551e4f.patch";
-      sha256 = "0lbr3723chycslk1vbb7rkppwckqkcbvvl0xgh31nki612dl9xsk";
+      sha256 = "0fzcb241cp9mm7j6baw22blcglbc083ryigzyjaij8r530av10kd";
     })
     (fetchpatch {
       url = "https://github.com/libevent/libevent/commit/28b8075400c70b2d2da2ce07e590c2ec6d11783d.patch";
-      sha256 = "0as1vkqwpxs4rjimgv8ap7gvljkizdh0ayl0wrq80zpfzvnrb6db";
+      sha256 = "0dkzlk44033xksg2iq5w90r3lnziwl1mgz291nzqq906zrya0sdb";
     })
   ];
 
@@ -49,6 +49,8 @@ stdenv.mkDerivation rec {
       --replace "$out" "$openssl"
     sed "/^libdir=/s|$out|$openssl|" -i "$openssl"/lib/libevent_openssl.la
   '';
+
+  enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
     description = "Event notification library";
