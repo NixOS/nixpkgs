@@ -30,8 +30,10 @@ stdenv.mkDerivation rec {
     "-DBUILD_DOCUMENTATION=ON"
   ];
 
+  hardeningDisable = [ "fortify" ];
+
   meta = with stdenv.lib; {
-    homepage = https://www.nuand.com/;
+    homepage = https://nuand.com/libbladeRF-doc;
     description = "Supporting library of the BladeRF SDR opensource hardware";
     license = licenses.lgpl21;
     maintainers = with maintainers; [ funfunctor ];
