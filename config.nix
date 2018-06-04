@@ -4,14 +4,17 @@
   ];
   environment.systemPackages = with pkgs; [
     vim
+    weechat
   ];
+  services.nixosManual.enable = true;
+  documentation.enable = true;
   i18n.consoleUseXkbConfig = true;
   services.xserver.xkbVariant = "dvp";
   users.users.root.password = "root";
   services.znc = {
     enable = true;
-
     mutable = false;
+
     confOptions.passBlock = ''
       <Pass password>
         Method = sha256
