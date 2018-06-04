@@ -7602,18 +7602,7 @@ let self = _self // overrides; _self = with self; {
      };
   };
 
-  I18NCollate = buildPerlPackage {
-    name = "I18N-Collate-1.02";
-    src = fetchurl {
-      url = mirror://cpan/authors/id/F/FL/FLORA/I18N-Collate-1.02.tar.gz;
-      sha256 = "9174506bc903eda89690394e3f45558ab7e013114227896d8569d6164648fe37";
-    };
-    meta = {
-      homepage = http://search.cpan.org/dist/I18N-Collate;
-      description = "Compare 8-bit scalar data according to the current locale";
-      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
-    };
-  };
+  I18NCollate = null; # part of Perl 5.22
 
   iCalParser = buildPerlPackage rec {
     name = "iCal-Parser-1.21";
