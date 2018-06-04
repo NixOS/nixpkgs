@@ -62,13 +62,6 @@ let
 
     passBlock = mkOption {
       example = literalExample ''
-        # password "nixospass"
-        Pass.password = {
-          Method = "sha256";
-          Hash = "e2ce303c7ea75c571d80d8540a8699b46535be6a085be3414947d638e48d9e93";
-          Salt = "l5Xryew4g*!oa(ECfX2o";
-        };
-
         # Or as returned by `znc --makepass` also works:
         <Pass password>
           Method = sha256
@@ -79,7 +72,7 @@ let
       type = types.string;
       description = ''
         Generate with `nix-shell -p znc --command "znc --makepass"`.
-        This is the password used to log in to the ZNC web admin interface.
+        This is the password used to log into ZNC.
       '';
     };
 
