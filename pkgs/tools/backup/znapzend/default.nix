@@ -1,6 +1,7 @@
 { stdenv, fetchFromGitHub, fetchurl, zfs, mbuffer, perl, perlPackages, wget, autoconf, automake }:
 
 let
+  # when upgrade znapzend, check versions of Perl libs here: https://github.com/oetiker/znapzend/blob/master/PERL_MODULES
   Mojolicious-6-46 = perlPackages.buildPerlPackage rec {
     name = "Mojolicious-6.46";
     src = fetchurl {
