@@ -259,19 +259,19 @@ in
         # Ensure essential files exist.
         if [[ ! -f "$filepath" ]]; then
             echo "No znc.conf file found in ${cfg.dataDir}. Creating one now."
-            cp --no-clobber ${cfg.configFile} "$filepath"
+            cp --no-clobber "${cfg.configFile}" "$filepath"
             chmod u+rw "$filepath"
             chown ${cfg.user} "$filepath"
         fi
 
-        if [[ ! -f ${cfg.dataDir}/znc.pem ]]; then
+        if [[ ! -f "${cfg.dataDir}/znc.pem" ]]; then
           echo "No znc.pem file found in ${cfg.dataDir}. Creating one now."
-          ${pkgs.znc}/bin/znc --makepem --datadir ${cfg.dataDir}
+          ${pkgs.znc}/bin/znc --makepem --datadir "${cfg.dataDir}"
         fi
 
         # Symlink modules
-        rm ${cfg.dataDir}/modules || true
-        ln -fs ${modules}/lib/znc ${cfg.dataDir}/modules
+        rm "${cfg.dataDir}/modules" || true
+        ln -fs "${modules}/lib/znc" "${cfg.dataDir}/modules"
       '';
     };
 
