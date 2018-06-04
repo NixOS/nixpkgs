@@ -10,11 +10,7 @@
 , targets
 , targetPatches
 , targetToolchains
-
-# Tests frequently break on Darwin
-# See the rust issue: https://github.com/rust-lang/rust/issues/51006
-, doCheck ? (!stdenv.isDarwin)
-
+, doCheck ? true
 , broken ? false
 , buildPlatform, hostPlatform
 } @ args:

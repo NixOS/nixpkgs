@@ -16,7 +16,7 @@ in rec {
   rustc = callPackage ./rustc.nix {
     inherit stdenv llvm targets targetPatches targetToolchains rustPlatform version src;
 
-    patches = [];
+    patches = [ ./patches/net-tcp-disable-tests.patch ./patches/stdsimd-disable-doctest.patch ];
 
     forceBundledLLVM = true;
 
