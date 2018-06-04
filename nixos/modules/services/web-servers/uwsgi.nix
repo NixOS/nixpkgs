@@ -31,9 +31,7 @@ let
         inherit python;
       };
 
-      penv = python.buildEnv.override {
-        extraLibs = (c.pythonPackages or (self: [])) pythonPackages;
-      };
+      pythonEnv = python.withPackages (c.pythonPackages or (self: []));
 
       uwsgiCfg = {
         uwsgi =
@@ -42,7 +40,7 @@ let
               inherit plugins;
             } // removeAttrs c [ "type" "pythonPackages" ]
               // optionalAttrs (python != null) {
-                pythonpath = "${penv}/${python.sitePackages}";
+                pythonpath = "${pythonEnv}/${python.sitePackages}";
                 env =
                   # Argh, uwsgi expects list of key-values there instead of a dictionary.
                   let env' = c.env or [];
@@ -51,7 +49,7 @@ let
                            then substring (stringLength "PATH=") (stringLength x) x
                            else null;
                       oldPaths = filter (x: x != null) (map getPath env');
-                  in env' ++ [ "PATH=${optionalString (oldPaths != []) "${last oldPaths}:"}${penv}/bin" ];
+                  in env' ++ [ "PATH=${optionalString (oldPaths != []) "${last oldPaths}:"}${pythonEnv}/bin" ];
               }
           else if c.type == "emperor"
             then {
