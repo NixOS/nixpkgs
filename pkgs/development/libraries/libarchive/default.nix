@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     # LibreSSL patch; this is from upstream, and can be removed when the next release is made.
     (fetchpatch {
       url = "https://github.com/libarchive/libarchive/commit/5da00ad75b09e262774ec3675bbe4d5a4502a852.patch";
-      sha256 = "1r5n09dqhs5f8jx4iyqy06f0ryrxnbz60ww9aiww0j4gp5fs77qk";
+      sha256 = "0np1i9r6mfxmbksj7mmf5abpnmlmg63704p9z3ihjh2rnq596c1v";
     })
   ];
 
@@ -51,6 +51,8 @@ stdenv.mkDerivation rec {
       -e 's|-lcrypto|-L${openssl.out}/lib -lcrypto|' \
       -e 's|-llzo2|-L${lzo}/lib -llzo2|'
   '';
+
+  enableParallelBuilding = true;
 
   meta = {
     description = "Multi-format archive and compression library";
