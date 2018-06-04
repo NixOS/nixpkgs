@@ -6929,6 +6929,8 @@ in {
 
   kiwisolver = callPackage ../development/python-modules/kiwisolver { };
 
+  klaus = callPackage ../development/python-modules/klaus {};
+
   klein = callPackage ../development/python-modules/klein { };
 
   koji = callPackage ../development/python-modules/koji { };

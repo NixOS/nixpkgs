@@ -1,6 +1,6 @@
 { lib, python, fetchFromGitHub }:
 
-python.pkgs.buildPythonApplication rec {
+python.pkgs.buildPythonPackage rec {
   pname = "klaus";
   version = "1.2.2";
 
