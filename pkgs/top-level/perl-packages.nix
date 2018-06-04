@@ -4054,18 +4054,7 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  DevelSelfStubber = buildPerlPackage {
-    name = "Devel-SelfStubber-1.05";
-    src = fetchurl {
-      url = mirror://cpan/authors/id/F/FL/FLORA/Devel-SelfStubber-1.05.tar.gz;
-      sha256 = "b7bd750e41ec2dbca3f2f1d48e5e8ba594dcc8bc7a923a2565611ab8d0846bf8";
-    };
-    meta = {
-      homepage = http://search.cpan.org/dist/Devel-SelfStubber;
-      description = "Generate stubs for a SelfLoading module";
-      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
-    };
-  };
+  DevelSelfStubber = null; # part of Perl 5.22
 
   DevelSizeMe = buildPerlPackage {
     name = "Devel-SizeMe-0.19";
