@@ -31,7 +31,7 @@ let
 
   tfFeature = x: if x then "1" else "0";
 
-  version = "1.5.0";
+  version = "1.8.0";
 
   pkg = buildBazelPackage rec {
     name = "tensorflow-build-${version}";
@@ -40,20 +40,8 @@ let
       owner = "tensorflow";
       repo = "tensorflow";
       rev = "v${version}";
-      sha256 = "1c4djsaip901nasm7a6dsimr02bsv70a7b1g0kysb4n39qpdh22q";
+      sha256 = "18hydad4d61qg5ji7frcbmhb1l09s122n9hl7ic0nqq6j786acvv";
     };
-
-    patches = [
-      # Fix build with Bazel >= 0.10
-      (fetchpatch {
-        url = "https://github.com/tensorflow/tensorflow/commit/6fcfab770c2672e2250e0f5686b9545d99eb7b2b.patch";
-        sha256 = "0p61za1mx3a7gj1s5lsps16fcw18iwnvq2b46v1kyqfgq77a12vb";
-      })
-      (fetchpatch {
-        url = "https://github.com/tensorflow/tensorflow/commit/3f57956725b553d196974c9ad31badeb3eabf8bb.patch";
-        sha256 = "11dja5gqy0qw27sc9b6yw9r0lfk8dznb32vrqqfcnypk2qmv26va";
-      })
-    ];
 
     nativeBuildInputs = [ swig which ];
 
@@ -84,6 +72,8 @@ let
       mkdir -p "$PYTHON_LIB_PATH"
     '';
 
+    dontAddPrefix = true;
+
     NIX_LDFLAGS = lib.optionals cudaSupport [ "-lcublas" "-lcudnn" "-lcuda" "-lcudart" ];
 
     hardeningDisable = [ "all" ];
@@ -101,7 +91,7 @@ let
         rm -rf $bazelOut/external/{bazel_tools,\@bazel_tools.marker,local_*,\@local_*}
       '';
 
-      sha256 = "1nc98aqrp14q7llypcwaa0kdn9xi7r0p1mnd3vmmn1m299py33ca";
+      sha256 = "1fczzfhcg1va18rdmj9zgc11ah619pl8bny6hw51c51kbxr9fskc";
     };
 
     buildAttrs = {
