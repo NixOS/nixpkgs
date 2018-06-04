@@ -127,7 +127,7 @@ with pkgs;
 
   digitalbitbox = libsForQt5.callPackage ../applications/misc/digitalbitbox { };
 
-  # go 1.9 pin until https://github.com/moby/moby/pull/35739
+  # go 1.9 pin, with 1.10 test nixos/tools/docker-tools.nix fails
   dockerTools = callPackage ../build-support/docker { go = go_1_9; };
 
   docker_compose = pythonPackages.docker_compose;
