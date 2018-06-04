@@ -231,7 +231,7 @@ in
 
   config = {
     services.znc = {
-      config = let c = cfg.confOptions; in {
+      config = let c = cfg.confOptions; in mkDefault {
         LoadModule = c.modules;
         Listener.l = {
           Port = c.port;
@@ -240,20 +240,20 @@ in
           SSL = c.useSSL;
         };
         User.${c.userName} = {
-          Admin = mkDefault true;
-          Nick = mkDefault c.nick;
-          AltNick = mkDefault "${c.nick}_";
-          Ident = mkDefault c.nick;
-          RealName = mkDefault c.nick;
-          LoadModule = mkDefault c.userModules;
+          Admin = true;
+          Nick = c.nick;
+          AltNick = "${c.nick}_";
+          Ident = c.nick;
+          RealName = c.nick;
+          LoadModule = c.userModules;
           Network = mapAttrs (name: net: {
-            LoadModule = mkDefault net.modules;
-            Server = mkDefault "${net.server} ${optionalString net.useSSL "+"}${toString net.port} ${net.password}";
-            Chan = mkDefault (optionalAttrs net.hasBitlbeeControlChannel { "&bitlbee" = {}; } //
+            LoadModule = net.modules;
+            Server = "${net.server} ${optionalString net.useSSL "+"}${toString net.port} ${net.password}";
+            Chan = (optionalAttrs net.hasBitlbeeControlChannel { "&bitlbee" = {}; } //
               listToAttrs (map (n: nameValuePair n {}) net.channels));
-            extraConfig = (if net.extraConf == "" then null else net.extraConf);
+            extraConfig = if net.extraConf == "" then null else net.extraConf;
           }) c.networks;
-          extraConfig = mkDefault ([
+          extraConfig = ([
             c.passBlock
           ] ++ optional (c.extraZncConf != "") c.extraZncConf);
         };
