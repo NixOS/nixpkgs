@@ -4714,19 +4714,7 @@ let self = _self // overrides; _self = with self; {
     buildInputs = [ TestMojibake ];
   };
 
-  DistZillaPluginNoTabsTests = buildPerlPackage {
-    name = "Dist-Zilla-Plugin-NoTabsTests-0.01";
-    src = fetchurl {
-      url = mirror://cpan/authors/id/F/FL/FLORA/Dist-Zilla-Plugin-NoTabsTests-0.01.tar.gz;
-      sha256 = "fd4ed380de4fc2bad61db377cc50ab26b567e53b3a1efd0b8d8baab80256ef9e";
-    };
-    propagatedBuildInputs = [ DistZilla Moose TestNoTabs namespaceautoclean ];
-    meta = {
-      homepage = http://search.cpan.org/dist/Dist-Zilla-Plugin-NoTabsTests;
-      description = "Release tests making sure hard tabs aren't used";
-      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
-    };
-  };
+  DistZillaPluginNoTabsTests = DistZillaPluginTestNoTabs;
 
   DistZillaPluginPodWeaver = buildPerlPackage {
     name = "Dist-Zilla-Plugin-PodWeaver-4.008";
@@ -5154,20 +5142,7 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  EmailMIMEModifier = buildPerlPackage rec {
-    doCheck = false; # tests are broken, it seems
-    name = "Email-MIME-Modifier-1.444";
-    src = fetchurl {
-      url = "http://search.cpan.org/CPAN/authors/id/R/RJ/RJBS/${name}.tar.gz";
-      sha256 = "4521cf361527cd9b5e8b0db3d2e6c9588c52de6a8997e1daf5c21ed1eb7a4ba2";
-    };
-    propagatedBuildInputs = [ EmailMIME EmailMIMEContentType ];
-    meta = {
-      homepage = "http://search.cpan.org/~rjbs/${name}";
-      description = "Modify Email::MIME Objects Easily";
-      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
-    };
-  };
+  EmailMIMEModifier = EmailMIME;
 
   EmailSend = buildPerlPackage rec {
     name = "Email-Send-2.201";
@@ -5511,18 +5486,7 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  ExtUtilsCommand = buildPerlPackage {
-    name = "ExtUtils-Command-1.20";
-    src = fetchurl {
-      url = mirror://cpan/authors/id/B/BI/BINGOS/ExtUtils-Command-1.20.tar.gz;
-      sha256 = "740cccc93ba851aae803695b7a5b65ccbaa78bf4e96aa2e54f3f632c87a98c98";
-    };
-    meta = {
-      homepage = http://search.cpan.org/dist/ExtUtils-Command;
-      description = "Utilities to replace common UNIX commands in Makefiles etc";
-      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
-    };
-  };
+  ExtUtilsCommand = ExtUtilsMakeMaker;
 
   Expect = buildPerlPackage {
     name = "Expect-1.35";
@@ -12105,19 +12069,7 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  ParseCPANMeta = buildPerlPackage {
-    name = "Parse-CPAN-Meta-1.4414";
-    src = fetchurl {
-      url = mirror://cpan/authors/id/D/DA/DAGOLDEN/Parse-CPAN-Meta-1.4414.tar.gz;
-      sha256 = "cd7608154dfb72c9e110f012befe6b75d78448cb3e761716b60aa7545e16ca1b";
-    };
-    propagatedBuildInputs = [ CPANMetaYAML JSONPP ];
-    meta = {
-      homepage = https://github.com/Perl-Toolchain-Gang/Parse-CPAN-Meta;
-      description = "Parse META.yml and META.json CPAN metadata files";
-      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
-    };
-  };
+  ParseCPANMeta = CPANMeta;
 
   ParseDebControl = buildPerlPackage rec {
     name = "Parse-DebControl-2.005";
@@ -16105,13 +16057,7 @@ let self = _self // overrides; _self = with self; {
     buildInputs = [ TestSharedFork ];
   };
 
-  TestTester = buildPerlPackage {
-    name = "Test-Tester-0.109";
-    src = fetchurl {
-      url = mirror://cpan/authors/id/F/FD/FDALY/Test-Tester-0.109.tar.gz;
-      sha256 = "0m9n28z09kq455r5nydj1bnr85lvmbfpcbjdkjfbpmfb5xgciiyk";
-    };
-  };
+  TestTester = TestSimple;
 
   TestTime = buildPerlPackage rec {
     name = "Test-Time-0.05";
@@ -16164,18 +16110,7 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  Testuseok = buildPerlPackage {
-    name = "Test-use-ok-0.11";
-    src = fetchurl {
-      url = mirror://cpan/authors/id/A/AU/AUDREYT/Test-use-ok-0.11.tar.gz;
-      sha256 = "8410438a2acf127bffcf1ab92205b747a615b487e80a48e8c3d0bb9fa0dbb2a8";
-    };
-    meta = {
-      homepage = https://github.com/audreyt/Test-use-ok/tree;
-      description = "Alternative to Test::More::use_ok";
-      license = "unrestricted";
-    };
-  };
+  Testuseok = TestSimple;
 
   TestWarn = buildPerlPackage {
     name = "Test-Warn-0.33";
