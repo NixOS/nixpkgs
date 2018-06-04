@@ -5506,17 +5506,7 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  Exporter = buildPerlPackage {
-    name = "Exporter-5.72";
-    src = fetchurl {
-      url = mirror://cpan/authors/id/T/TO/TODDR/Exporter-5.72.tar.gz;
-      sha256 = "cd13b7a0e91e8505a0ce4b25f40fab2c92bb28a99ef0d03da1001d95a32f0291";
-    };
-    meta = {
-      description = "Implements default import method for modules";
-      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
-    };
-  };
+  Exporter = null; # part of Perl 5.22
 
   ExtUtilsCBuilder = buildPerlPackage rec {
     name = "ExtUtils-CBuilder-0.280230";
