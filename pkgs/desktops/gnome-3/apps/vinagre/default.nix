@@ -25,8 +25,6 @@ stdenv.mkDerivation rec {
       --prefix XDG_DATA_DIRS : "$XDG_ICON_DIRS:$GSETTINGS_SCHEMAS_PATH:$out/share"
   '';
 
-  hardeningDisable = [ "format" ];
-
   meta = with stdenv.lib; {
     homepage = https://wiki.gnome.org/Apps/Vinagre;
     description = "Remote desktop viewer for GNOME";
