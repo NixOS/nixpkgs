@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi, six }:
+{ stdenv, buildPythonPackage, fetchPypi, six, setuptools_scm }:
 buildPythonPackage rec {
   name = "${pname}-${version}";
   pname = "python-dateutil";
