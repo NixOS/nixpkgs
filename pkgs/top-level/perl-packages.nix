@@ -8290,17 +8290,7 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  lib_ = buildPerlPackage {
-    name = "lib-0.63";
-    src = fetchurl {
-      url = mirror://cpan/authors/id/S/SM/SMUELLER/lib-0.63.tar.gz;
-      sha256 = "72f63db9220098e834d7a38231626bd0c9b802c1ec54a628e2df35f3818e5a00";
-    };
-    meta = {
-      description = "Manipulate @INC at compile time";
-      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
-    };
-  };
+  lib_ = null; # part of Perl 5.22
 
   libapreq2 = buildPerlPackage {
     name = "libapreq2-2.13";
