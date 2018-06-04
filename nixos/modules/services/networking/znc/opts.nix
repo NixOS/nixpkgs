@@ -243,7 +243,7 @@ in
             LoadModule = net.modules;
             Server = "${net.server} ${optionalString net.useSSL "+"}${toString net.port} ${net.password}";
             Chan = (optionalAttrs net.hasBitlbeeControlChannel { "&bitlbee" = {}; } //
-              listToAttrs (map (n: nameValuePair n {}) net.channels));
+              listToAttrs (map (n: nameValuePair "#${n}" {}) net.channels));
             extraConfig = if net.extraConf == "" then null else net.extraConf;
           }) c.networks;
           extraConfig = ([
