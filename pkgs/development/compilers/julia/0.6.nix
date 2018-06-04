@@ -50,11 +50,16 @@ let
     url = "mirror://pypi/v/virtualenv/virtualenv-${virtualenvVersion}.tar.gz";
     sha256 = "06fw4liazpx5vf3am45q2pdiwrv0id7ckv7n6zmpml29x6vkzmkh";
   };
+
+  majorVersion = "0";
+  minorVersion = "6";
+  maintenanceVersion = "2";
+  version = "${majorVersion}.${minorVersion}.${maintenanceVersion}";
 in
 
 stdenv.mkDerivation rec {
   pname = "julia";
-  version = "0.6.2";
+  inherit version;
   name = "${pname}-${version}";
 
   src = fetchzip {
@@ -182,6 +187,11 @@ stdenv.mkDerivation rec {
       fi
     done
   '';
+
+  passthru = {
+    inherit majorVersion minorVersion maintenanceVersion;
+    site = "share/julia/site/v${majorVersion}.${minorVersion}";
+  };
 
   meta = {
     description = "High-level performance-oriented dynamical language for technical computing";
