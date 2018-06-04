@@ -12279,16 +12279,7 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  PerlIOviaQuotedPrint = buildPerlPackage {
-    name = "PerlIO-via-QuotedPrint-0.08";
-    src = fetchurl {
-      url = mirror://cpan/authors/id/S/SH/SHAY/PerlIO-via-QuotedPrint-0.08.tar.gz;
-      sha256 = "9b999a54134816de5217f7a8cac69fa5d89ab32dc589fcd5c9e84902f608cb9c";
-    };
-    meta = {
-      description = "PerlIO Layer for quoted-printable encoding";
-    };
-  };
+  PerlIOviaQuotedPrint = null; # part of Perl 5.22
 
   PerlIOviasymlink = buildPerlPackage {
     name = "PerlIO-via-symlink-0.05";
