@@ -356,7 +356,7 @@ in
         text = cfg.database.password;
       })));
 
-    systemd.services.gitea-dump = {
+    systemd.services.gitea-dump = mkIf cfg.dump.enable {
        description = "gitea dump";
        after = [ "gitea.service" ];
        wantedBy = [ "default.target" ];
@@ -376,7 +376,7 @@ in
        };
     };
 
-    systemd.timers.gitea-dump = {
+    systemd.timers.gitea-dump = mkIf cfg.dump.enable {
       description = "Update timer for gitea-dump";
       partOf = [ "gitea-dump.service" ];
       wantedBy = [ "timers.target" ];
