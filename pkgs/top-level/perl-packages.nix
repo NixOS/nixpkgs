@@ -16583,16 +16583,7 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  TextTabsWrap = buildPerlPackage {
-    name = "Text-Tabs+Wrap-2013.0523";
-    src = fetchurl {
-      url = mirror://cpan/authors/id/M/MU/MUIR/modules/Text-Tabs+Wrap-2013.0523.tar.gz;
-      sha256 = "b9cb056fffb737b9c12862099b952bf4ab4b1f599fd34935356ae57dab6f655f";
-    };
-    meta = {
-      description = "Expand tabs and do simple line wrapping";
-    };
-  };
+  TextTabsWrap = null; # part of Perl 5.22
 
   TextTabularDisplay = buildPerlPackage rec {
     name = "Text-TabularDisplay-1.38";
