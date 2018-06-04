@@ -77,10 +77,16 @@ rec {
     optional (badFields != [ ])
       "Systemd ${group} has extra fields [${concatStringsSep " " badFields}].";
 
-  checkUnitConfig = group: checks: v:
-    let errors = concatMap (c: c group v) checks; in
-    if errors == [] then true
-      else builtins.trace (concatStringsSep "\n" errors) false;
+  checkUnitConfig = group: checks: attrs: let
+    # We're applied at the top-level type (attrsOf unitOption), so the actual
+    # unit options might contain attributes from mkOverride that we need to
+    # convert into single values before checking them.
+    defs = mapAttrs (const (v:
+      if v._type or "" == "override" then v.content else v
+    )) attrs;
+    errors = concatMap (c: c group defs) checks;
+  in if errors == [] then true
+     else builtins.trace (concatStringsSep "\n" errors) false;
 
   toOption = x:
     if x == true then "true"
