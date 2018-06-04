@@ -1,6 +1,6 @@
 { useLua ? !stdenv.isDarwin
 , usePcre ? true
-, stdenv, fetchurl
+, stdenv, fetchurl, fetchpatch
 , openssl, zlib, lua5_3 ? null, pcre ? null
 }:
 
@@ -16,6 +16,14 @@ stdenv.mkDerivation rec {
     url = "https://www.haproxy.org/download/${stdenv.lib.versions.majorMinor version}/src/${name}.tar.gz";
     sha256 = "00miblgwll3mycsgmp3gd3cn4lwsagxzgjxk5i6csnyqgj97fss3";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "CVE-2018-11469.patch";
+      url = "https://git.haproxy.org/?p=haproxy-1.8.git;a=patch;h=17514045e5d934dede62116216c1b016fe23dd06";
+      sha256 = "0hzcvghg8qz45n3mrcgsjgvrvicvbvm52cc4hs5jbk1yb50qvls7";
+    })
+  ];
 
   buildInputs = [ openssl zlib ]
     ++ stdenv.lib.optional useLua lua5_3
