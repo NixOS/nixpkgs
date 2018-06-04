@@ -2685,13 +2685,7 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  constant = buildPerlPackage rec {
-    name = "constant-1.33";
-    src = fetchurl {
-      url = mirror://cpan/authors/id/R/RJ/RJBS/constant-1.33.tar.gz;
-      sha256 = "015my616h5l2fswh52x4dp3n007gk5lax83ww9q6cmzb610mv5kr";
-    };
-  };
+  constant = null; # part of Perl 5.22
 
   constantboolean = buildPerlModule {
     name = "constant-boolean-0.02";
