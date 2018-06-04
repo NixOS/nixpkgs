@@ -18,6 +18,8 @@ stdenv.mkDerivation rec {
   buildInputs = [ gtk3 vte libxml2 gtkvnc intltool libsecret
                   itstool makeWrapper gnome3.defaultIconTheme librsvg ];
 
+  NIX_CFLAGS_COMPILE = "-Wno-format-nonliteral";
+
   preFixup = ''
     wrapProgram "$out/bin/vinagre" \
       --prefix XDG_DATA_DIRS : "$XDG_ICON_DIRS:$GSETTINGS_SCHEMAS_PATH:$out/share"

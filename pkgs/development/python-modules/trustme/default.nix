@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi, cryptography, pytest, pyopenssl, service-identity }:
+{ lib, buildPythonPackage, fetchPypi, isPy3k, cryptography, futures, pytest, pyopenssl, service-identity }:
 
 buildPythonPackage rec {
   pname = "trustme";
@@ -15,6 +15,8 @@ buildPythonPackage rec {
   '';
   propagatedBuildInputs = [
     cryptography
+  ] ++ lib.optionals (!isPy3k) [
+    futures
   ];
 
   meta = {

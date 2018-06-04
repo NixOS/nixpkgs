@@ -257,7 +257,7 @@ in
               echo "Setup of ssh host keys from http://metadata.google.internal/computeMetadata/v1/instance/attributes/ failed."
               false
           fi
-          rm -f $SSH_HOST_KEYS_DIR
+          rm -rf $SSH_HOST_KEYS_DIR
         '';
       serviceConfig.Type = "oneshot";
       serviceConfig.RemainAfterExit = true;

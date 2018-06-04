@@ -78,7 +78,7 @@ let
     };
 
     caFile = mkOption {
-      description = "${prefix} certificate authrority file used to connect to kube-apiserver.";
+      description = "${prefix} certificate authority file used to connect to kube-apiserver.";
       type = types.nullOr types.path;
       default = cfg.caFile;
     };
