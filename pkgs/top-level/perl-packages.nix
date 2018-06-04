@@ -14923,16 +14923,7 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  Test = buildPerlPackage {
-    name = "Test-1.26";
-    src = fetchurl {
-      url = mirror://cpan/authors/id/J/JE/JESSE/Test-1.26.tar.gz;
-      sha256 = "f7701bd28e05e7f82fe9a181bbab38f53fa6aeae48d2a810da74d1b981d4f392";
-    };
-    meta = {
-      description = "Provides a simple framework for writing test scripts";
-    };
-  };
+  Test = null; # part of Perl 5.22
 
   Test2PluginNoWarnings = buildPerlPackage rec {
      name = "Test2-Plugin-NoWarnings-0.06";
