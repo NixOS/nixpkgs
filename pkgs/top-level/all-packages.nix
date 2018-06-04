@@ -6788,8 +6788,8 @@ with pkgs;
     inherit (stdenvAdapters) overrideCC;
     buildLlvmTools = buildPackages.llvmPackages_5.tools;
     targetLlvmLibraries = targetPackages.llvmPackages_5.libraries;
-  } // stdenv.lib.optionalAttrs stdenv.isDarwin {
-    cmake = cmake.override {
+  } // stdenv.lib.optionalAttrs (stdenv.isDarwin && hostPlatform == buildPlatform) {
+    cmake = buildPackages.cmake.override {
       isBootstrap = true;
       majorVersion = "3.9"; # 3.10.2: 'ApplicationServices/ApplicationServices.h' file not found
     };
