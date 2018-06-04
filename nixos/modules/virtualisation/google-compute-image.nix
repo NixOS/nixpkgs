@@ -253,12 +253,11 @@ in
               mv -f $SSH_HOST_KEYS_DIR/ssh_host_ed25519_key* /etc/ssh/
               chmod 600 /etc/ssh/ssh_host_ed25519_key
               chmod 644 /etc/ssh/ssh_host_ed25519_key.pub
-              rm $SSH_HOST_KEYS_DIR/*
           else
               echo "Setup of ssh host keys from http://metadata.google.internal/computeMetadata/v1/instance/attributes/ failed."
               false
           fi
-          rm -r $SSH_HOST_KEYS_DIR
+          rm -rf $SSH_HOST_KEYS_DIR
         '';
       serviceConfig.Type = "oneshot";
       serviceConfig.RemainAfterExit = true;
