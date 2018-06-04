@@ -4363,6 +4363,8 @@ with pkgs;
 
   pdf2odt = callPackage ../tools/typesetting/pdf2odt { };
 
+  pdf-redact-tools = callPackage ../tools/graphics/pdfredacttools { };
+
   pdf2svg = callPackage ../tools/graphics/pdf2svg { };
 
   fmodex = callPackage ../games/zandronum/fmod.nix { };
