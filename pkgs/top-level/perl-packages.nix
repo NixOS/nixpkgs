@@ -12922,13 +12922,7 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  PodEscapes = let version = "1.07"; in buildPerlPackage {
-    name = "Pod-Escapes-${version}";
-    src = fetchurl {
-      url = "mirror://cpan/authors/id/N/NE/NEILB/Pod-Escapes-${version}.tar.gz";
-      sha256 = "0213lmbbw3vy50ahlp2lqmmnkwhrizyl1y87i4jgnla9k0kwixyv";
-    };
-  };
+  PodEscapes = null; # part of Perl 5.22
 
   PodEventual = buildPerlPackage {
     name = "Pod-Eventual-0.094001";
