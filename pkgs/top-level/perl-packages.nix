@@ -13422,13 +13422,7 @@ let self = _self // overrides; _self = with self; {
     propagatedBuildInputs = [ DateTimeFormatDateParse Error LWP ParamsValidate ];
   };
 
-  Safe = buildPerlPackage {
-    name = "Safe-2.35";
-    src = fetchurl {
-      url = mirror://cpan/authors/id/R/RG/RGARCIA/Safe-2.35.tar.gz;
-      sha256 = "e5d09756580287d7dc183ddaf26e4b2467e6f75b52ad73decdbe62d0750979b1";
-    };
-  };
+  Safe = null; # part of Perl 5.22
 
   SafeIsa = buildPerlPackage {
     name = "Safe-Isa-1.000010";
