@@ -9436,13 +9436,7 @@ let self = _self // overrides; _self = with self; {
     buildInputs = [ ExtUtilsCppGuess ExtUtilsTypemapsDefault ExtUtilsXSpp ModuleBuildWithXSpp TestDeep ];
   };
 
-  MathComplex = buildPerlPackage {
-    name = "Math-Complex-1.59";
-    src = fetchurl {
-      url = mirror://cpan/authors/id/Z/ZE/ZEFRAM/Math-Complex-1.59.tar.gz;
-      sha256 = "f35eb4987512c51d2c47294a008ede210d8dd759b90b887d04847c69b42dd6d1";
-    };
-  };
+  MathComplex = null; # part of Perl 5.22
 
   MathConvexHullMonotoneChain = buildPerlPackage rec {
     name = "Math-ConvexHull-MonotoneChain-0.01";
