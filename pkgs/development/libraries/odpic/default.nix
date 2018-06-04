@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     description = "Oracle ODPI-C library";
     homepage = "https://oracle.github.io/odpi/";
     maintainers = with maintainers; [ mkazulak ];
-    licence = licenses.asl20;
+    license = licenses.asl20;
     platforms = [ "x86_64-linux" ];
     hydraPlatforms = [];
   };
