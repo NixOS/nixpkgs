@@ -9605,13 +9605,7 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  MIMEBase64 = buildPerlPackage rec {
-    name = "MIME-Base64-3.15";
-    src = fetchurl {
-      url = "mirror://cpan/authors/id/G/GA/GAAS/${name}.tar.gz";
-      sha256 = "1f8y78dskf91p4xym73n9lqbj15av5vxpsivm7nr7jx9lrk3b1kz";
-    };
-  };
+  MIMEBase64 = null; # part of Perl 5.22
 
   MIMECharset = buildPerlPackage {
     name = "MIME-Charset-1.012.2";
