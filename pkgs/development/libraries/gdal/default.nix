@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, unzip, libjpeg, libtiff, zlib
+{ stdenv, fetchurl, fetchpatch, unzip, libjpeg, libtiff, zlib
 , postgresql, mysql, libgeotiff, pythonPackages, proj, geos, openssl
 , libpng, sqlite, libspatialite, poppler, hdf4
 , libiconv
@@ -15,6 +15,16 @@ stdenv.mkDerivation rec {
     url = "http://download.osgeo.org/gdal/${version}/${name}.tar.xz";
     sha256 = "18iaamzkn0lipizynvspf3bs5qzgcy36hn6bbi941q8dlfdf8xbg";
   };
+
+  patches = [
+    # fix build with recent Poppler
+    (fetchpatch {
+      url    = "https://github.com/OSGeo/gdal/commit/124f0343436d1267319ac627fc220530091b41ea.diff";
+      stripLen = 2;
+      extraPrefix = "";
+      sha256 = "1v6iiy4cgrdcfas3iva5swh9446pqfjh5p6bcab6y49hyjhpsgfy";
+    })
+  ];
 
   buildInputs = [ unzip libjpeg libtiff libpng proj openssl sqlite
     libspatialite poppler hdf4 ]
