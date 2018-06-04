@@ -8760,13 +8760,7 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  LocaleMaketextSimple = buildPerlPackage {
-    name = "Locale-Maketext-Simple-0.21";
-    src = fetchurl {
-      url = mirror://cpan/authors/id/J/JE/JESSE/Locale-Maketext-Simple-0.21.tar.gz;
-      sha256 = "1ad9vh45j8c32nzkbjipinawyg1pnjckwlhsjqcqs47vyi8zy2dh";
-    };
-  };
+  LocaleMaketextSimple = null; # part of Perl 5.22
 
   LocaleMsgfmt = buildPerlPackage {
     name = "Locale-Msgfmt-0.15";
