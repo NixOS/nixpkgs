@@ -97,7 +97,7 @@ in
     system.build.sdImage = pkgs.stdenv.mkDerivation {
       name = config.sdImage.imageName;
 
-      buildInputs = with pkgs; [ dosfstools e2fsprogs mtools libfaketime utillinux ];
+      nativeBuildInputs = with pkgs.buildPackages; [ dosfstools e2fsprogs mtools libfaketime utillinux ];
 
       buildCommand = ''
         mkdir -p $out/nix-support $out/sd-image
