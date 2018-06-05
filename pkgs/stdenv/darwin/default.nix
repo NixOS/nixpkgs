@@ -360,6 +360,7 @@ in rec {
       cc       = pkgs.llvmPackages.clang-unwrapped;
       bintools = pkgs.darwin.binutils;
       libc     = pkgs.darwin.Libsystem;
+      libcxx   = pkgs.libcxx;
       extraPackages = [ pkgs.libcxx ];
     };
 

@@ -10,7 +10,7 @@
 , cc ? null, libc ? null, bintools, coreutils ? null, shell ? stdenvNoCC.shell
 , extraPackages ? [], extraBuildCommands ? ""
 , isGNU ? false, isClang ? cc.isClang or false, gnugrep ? null
-, buildPackages ? {}
+, buildPackages ? {}, libcxx ? null
 }:
 
 with stdenvNoCC.lib;
@@ -42,8 +42,14 @@ let
   # The wrapper scripts use 'cat' and 'grep', so we may need coreutils.
   coreutils_bin = if nativeTools then "" else getBin coreutils;
 
-  default_cxx_stdlib_compile = optionalString (targetPlatform.isLinux && !(cc.isGNU or false) && !nativeTools)
-    "-isystem $(echo -n ${cc.gcc}/include/c++/*) -isystem $(echo -n ${cc.gcc}/include/c++/*)/$(${cc.gcc}/bin/gcc -dumpmachine)";
+  default_cxx_stdlib_compile = if (targetPlatform.isLinux && !(cc.isGNU or false) && !nativeTools) then
+      "-isystem $(echo -n ${cc.gcc}/include/c++/*) -isystem $(echo -n ${cc.gcc}/include/c++/*)/$(${cc.gcc}/bin/gcc -dumpmachine)"
+    else if (targetPlatform.isDarwin && (cc.isClang or true) && !nativeTools && libcxx != null) then
+      "-isystem ${libcxx}/include/c++/v1"
+    else
+      "";
+  default_cxx_stdlib_link = optionalString (targetPlatform.isDarwin && (cc.isClang or true) && !nativeTools && libcxx != null)
+    "-L${libcxx}/lib -stdlib=libc++";
 
   dashlessTarget = stdenv.lib.replaceStrings ["-"] ["_"] targetPlatform.config;
 
@@ -90,7 +96,7 @@ stdenv.mkDerivation {
     # Binutils, and Apple's "cctools"; "bintools" as an attempt to find an
     # unused middle-ground name that evokes both.
     inherit bintools;
-    inherit libc nativeTools nativeLibc nativePrefix isGNU isClang default_cxx_stdlib_compile;
+    inherit libc nativeTools nativeLibc nativePrefix isGNU isClang default_cxx_stdlib_compile default_cxx_stdlib_link;
 
     emacsBufferSetup = pkgs: ''
       ; We should handle propagation here too
@@ -148,6 +154,7 @@ stdenv.mkDerivation {
       export named_cxx=${targetPrefix}c++
 
       export default_cxx_stdlib_compile="${default_cxx_stdlib_compile}"
+      export default_cxx_stdlib_link="${default_cxx_stdlib_link}"
 
       if [ -e $ccPath/${targetPrefix}gcc ]; then
         wrap ${targetPrefix}gcc ${./cc-wrapper.sh} $ccPath/${targetPrefix}gcc
