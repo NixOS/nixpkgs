@@ -9,6 +9,8 @@ buildPythonPackage rec {
     sha256 = "79351b79087f473f83fb27a5cd552bd1056f2dfa7acec5d4a68f35a7cbea6776";
   };
 
+  preInstall = ''export USE_OMP=0'';
+
   propagatedBuildInputs = [ numpy ];
 
   checkInputs = [ nose ];
