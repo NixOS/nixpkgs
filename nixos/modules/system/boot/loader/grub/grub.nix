@@ -64,9 +64,10 @@ let
       )) + ":" + (makeSearchPathOutput "bin" "sbin" [
         pkgs.mdadm pkgs.utillinux
       ]);
-      font = if lib.last (lib.splitString "." cfg.font) == "pf2"
+      font = if cfg.font == null then ""
+        else (if lib.last (lib.splitString "." cfg.font) == "pf2"
              then cfg.font
-             else "${convertedFont}";
+             else "${convertedFont}");
     });
 
   bootDeviceCounters = fold (device: attr: attr // { "${device}" = (attr."${device}" or 0) + 1; }) {}
