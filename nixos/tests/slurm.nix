@@ -61,6 +61,7 @@ in {
     $node->succeed("mkdir /etc/munge");
     $node->succeed("echo '${mungekey}' > /etc/munge/munge.key");
     $node->succeed("chmod 0400 /etc/munge/munge.key");
+    $node->succeed("chown munge:munge /etc/munge/munge.key");
     $node->succeed("systemctl restart munged");
   }
 

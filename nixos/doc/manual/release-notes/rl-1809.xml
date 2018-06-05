@@ -115,6 +115,12 @@ $ nix-instantiate -E '(import &lt;nixpkgsunstable&gt; {}).gitFull'
      Gnucash 2.4 is still available under the attribute <literal>gnucash24</literal>.
     </para>
    </listitem>
+   <listitem>
+    <para>
+     <varname>services.munge</varname> now runs as user (and group) <literal>munge</literal> instead of root.
+     Make sure the key file is accessible to the daemon.
+    </para>
+   </listitem>
   </itemizedlist>
  </section>
 
