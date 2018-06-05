@@ -12435,6 +12435,8 @@ in {
 
   typing = callPackage ../development/python-modules/typing { };
 
+  typing-extensions = callPackage ../development/python-modules/typing-extensions { };
+
   typeguard = callPackage ../development/python-modules/typeguard { };
 
   ruamel_yaml = buildPythonPackage rec {
