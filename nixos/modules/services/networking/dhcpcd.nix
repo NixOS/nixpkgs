@@ -40,8 +40,7 @@ let
       hostname
 
       # A list of options to request from the DHCP server.
-      option domain_name_servers, domain_name, domain_search, host_name
-      option classless_static_routes, ntp_servers, interface_mtu
+      ${concatMapStringsSep "\n" (x: "option ${x}") cfg.options}
 
       # A ServerID is required by RFC2131.
       # Commented out because of many non-compliant DHCP servers in the wild :(
@@ -125,6 +124,15 @@ in
          any of the shell glob patterns in this list. Any interface not
          explicitly matched by this pattern will be denied. This pattern only
          applies when non-null.
+      '';
+    };
+
+    networking.dhcpcd.options = mkOption {
+      type = types.listOf types.str;
+      default = [ "domain_name" "domain_search" "host_name" "classless_static_routes" "ntp_servers" "interface_mtu" ]
+              ++ optional (config.networking.nameservers == []) "domain_name_servers";
+      description = ''
+         A list of options to request from the DHCP server.
       '';
     };
 
