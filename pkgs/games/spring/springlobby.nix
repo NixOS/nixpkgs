@@ -1,38 +1,67 @@
 { stdenv, fetchurl, cmake, wxGTK30, openal, pkgconfig, curl, libtorrentRasterbar
-, libpng, libX11, gettext, bash, gawk, boost, libnotify, gtk2, doxygen, spring
-, makeWrapper, glib, minizip, alure, pcre, jsoncpp }:
+, libpng, libX11, gettext, bash, gawk, boost, libnotify, gtk2, doxygen
+, makeWrapper, glib, minizip, alure, pcre, jsoncpp, buildFHSUserEnv, SDL2
+, libGLU, curlFull }:
 
-stdenv.mkDerivation rec {
-  name = "springlobby-${version}";
-  version = "0.255";
+let
+  springlobby = stdenv.mkDerivation rec {
+    name = "springlobby-${version}";
+    version = "0.264";
 
-  src = fetchurl {
-    url = "http://www.springlobby.info/tarballs/springlobby-${version}.tar.bz2";
-    sha256 = "12iv6h1mz998lzxc2jwkza0m1yvaaq8h05k36i85xyp7g90197jw";
+    src = fetchurl {
+      url = "http://www.springlobby.info/tarballs/springlobby-${version}.tar.bz2";
+      sha256 = "5d3c98169a4c9106dd6f112823cfa0e44846cedca3920050151472bfb75561c4";
+    };
+
+    nativeBuildInputs = [
+      cmake
+      doxygen
+      makeWrapper
+      pkgconfig
+    ];
+    
+    buildInputs = [
+      alure
+      boost
+      curl
+      doxygen
+      gettext
+      glib
+      gtk2
+      jsoncpp
+      libX11
+      libnotify
+      libpng
+      libtorrentRasterbar
+      minizip
+      openal
+      pcre
+      wxGTK30
+    ];
+
+    patches = [
+      # Allows springLobby to continue using system installed spring until
+      # https://github.com/springlobby/springlobby/issues/707 is fixed:
+      ./revert_58b423e.patch
+    ];
+
+    enableParallelBuilding = true;
+
+    postInstall = "wrapProgram $out/bin/springlobby";
+    
+    meta = with stdenv.lib; {
+      description = "Cross-platform lobby client for the Spring RTS project";
+      homepage = http://springlobby.info/;
+      license = licenses.gpl2Plus;
+      maintainers = with maintainers; [ phreedom qknight domenkozar ];
+      platforms = platforms.linux;
+    };
   };
+in
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [
-    cmake wxGTK30 openal curl gettext libtorrentRasterbar pcre jsoncpp
-    boost libpng libX11 libnotify gtk2 doxygen makeWrapper glib minizip alure
-  ];
-
-  patches = [ ./revert_58b423e.patch ]; # Allows springLobby to continue using system installed spring until #707 is fixed
-
-  enableParallelBuilding = true;
-
-  postInstall = ''
-    wrapProgram $out/bin/springlobby \
-      --prefix PATH : "${spring}/bin" \
-      --set SPRING_BUNDLE_DIR "${spring}/lib"
-  '';
-
-  meta = with stdenv.lib; {
-    homepage = http://springlobby.info/;
-    repositories.git = git://github.com/springlobby/springlobby.git;
-    description = "Cross-platform lobby client for the Spring RTS project";
-    license = licenses.gpl2;
-    maintainers = with maintainers; [ phreedom qknight domenkozar ];
-    platforms = platforms.linux;
-  };
+buildFHSUserEnv {
+  name = "springlobby";
+  targetPkgs = _: [ curlFull libGLU openal SDL2 springlobby ];
+  runScript = "springlobby";
+  inherit (springlobby) meta;
 }
