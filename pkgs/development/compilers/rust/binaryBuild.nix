@@ -14,7 +14,7 @@ let
 
   installComponents
     = "rustc,rust-std-${platform}"
-    + (optionalString bootstrapping ",rust-docs,cargo")
+    + (optionalString bootstrapping ",cargo")
     ;
 in
 
