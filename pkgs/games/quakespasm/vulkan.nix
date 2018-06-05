@@ -33,7 +33,6 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Vulkan Quake port based on QuakeSpasm";
-    homepage = src.meta.homepage;
     longDescription = ''
       vkQuake is a Quake 1 port using Vulkan instead of OpenGL for rendering.
       It is based on the popular QuakeSpasm port and runs all mods compatible with it

@@ -28,7 +28,6 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "A library for making a simple Wayland compositor";
-    homepage    = src.meta.homepage;
     license     = lib.licenses.mit;
     platforms   = lib.platforms.linux;
     maintainers = with lib.maintainers; [ ];

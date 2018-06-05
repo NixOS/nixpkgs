@@ -53,7 +53,6 @@ in stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Graphical disk usage analyzer";
-    homepage = src.meta.homepage;
     license = licenses.gpl2;
     maintainers = with maintainers; [ gnidorah ];
     platforms = platforms.linux;

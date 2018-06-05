@@ -26,7 +26,6 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     version = "0.9.2";
     description = "Telegram API tools for QtQml and Qml";
-    homepage = src.meta.homepage;
     license = licenses.gpl3;
     maintainers = [ maintainers.Profpatsch ];
     platforms = platforms.linux;

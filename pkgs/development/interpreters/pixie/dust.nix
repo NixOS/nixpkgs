@@ -28,7 +28,6 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Provides tooling around pixie, e.g. a nicer repl, running tests and fetching dependencies";
-    homepage = src.meta.homepage;
     license = stdenv.lib.licenses.lgpl3;
     platforms = stdenv.lib.platforms.linux ++ stdenv.lib.platforms.darwin;
   };
