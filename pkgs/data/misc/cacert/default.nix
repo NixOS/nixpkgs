@@ -9,7 +9,7 @@ let
 
   certdata2pem = fetchurl {
     name = "certdata2pem.py";
-    url = "https://anonscm.debian.org/cgit/collab-maint/ca-certificates.git/plain/mozilla/certdata2pem.py?h=debian/20170717";
+    url = "https://salsa.debian.org/debian/ca-certificates/raw/debian/20170717/mozilla/certdata2pem.py";
     sha256 = "1d4q27j1gss0186a5m8bs5dk786w07ccyq0qi6xmd2zr1a8q16wy";
   };
 
