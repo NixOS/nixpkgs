@@ -10,20 +10,28 @@
 , dbus
 , glib
 , libxml2
+
+, gnome3 # To pass updateScript
 }:
 
 stdenv.mkDerivation rec {
-  name = "${moduleName}-${version}";
-  moduleName = "at-spi2-atk";
+  name = "${pname}-${version}";
+  pname = "at-spi2-atk";
   version = "2.26.2";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${moduleName}/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
+    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
     sha256 = "0vkan52ab9vrkknnv8y4f1cspk8x7xd10qx92xk9ys71p851z2b1";
   };
 
   nativeBuildInputs = [ meson ninja pkgconfig ];
   buildInputs = [ at-spi2-core atk dbus glib libxml2 ];
+
+  passthru = {
+    updateScript = gnome3.updateScript {
+      packageName = pname;
+    };
+  };
 
   meta = with stdenv.lib; {
     description = "D-Bus bridge for Assistive Technology Service Provider Interface (AT-SPI) and Accessibility Toolkit (ATK)";
