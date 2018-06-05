@@ -560,6 +560,7 @@ in {
         mkdir -p ${cfg.statePath}/tmp/sockets
         mkdir -p ${cfg.statePath}/shell
         mkdir -p ${cfg.statePath}/db
+        mkdir -p ${cfg.statePath}/uploads
 
         rm -rf ${cfg.statePath}/config ${cfg.statePath}/shell/hooks
         mkdir -p ${cfg.statePath}/config
@@ -570,6 +571,7 @@ in {
         mkdir -p ${cfg.statePath}/log
         ln -sf ${cfg.statePath}/log /run/gitlab/log
         ln -sf ${cfg.statePath}/tmp /run/gitlab/tmp
+        ln -sf ${cfg.statePath}/uploads /run/gitlab/uploads
         ln -sf $GITLAB_SHELL_CONFIG_PATH /run/gitlab/shell-config.yml
         chown -R ${cfg.user}:${cfg.group} /run/gitlab
 
