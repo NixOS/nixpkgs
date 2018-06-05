@@ -9,17 +9,19 @@
 , dbus
 , glib
 , libX11
-, libXtst # at-spi2-core can be build with custom option not to support X, but due to it is a aplication client-side library, GUI-less usage is a very rare case
+, libXtst # at-spi2-core can be build without X support, but due it is a client-side library, GUI-less usage is a very rare case
 , libXi
+
+, gnome3 # To pass updateScript
 }:
 
 stdenv.mkDerivation rec {
-  name = "${moduleName}-${version}";
-  moduleName   = "at-spi2-core";
+  name = "${pname}-${version}";
+  pname = "at-spi2-core";
   version = "2.28.0";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${moduleName}/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
+    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
     sha256 = "11qwdxxx4jm0zj04xydlwah41axiz276dckkiql3rr0wn5x4i8j2";
   };
 
@@ -27,6 +29,12 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ meson ninja pkgconfig gobjectIntrospection ];
   buildInputs = [ dbus glib libX11 libXtst libXi ];
+
+  passthru = {
+    updateScript = gnome3.updateScript {
+      packageName = pname;
+    };
+  };
 
   meta = with stdenv.lib; {
     description = "Assistive Technology Service Provider Interface protocol definitions and daemon for D-Bus";
