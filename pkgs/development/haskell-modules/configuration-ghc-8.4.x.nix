@@ -397,10 +397,6 @@ self: super: {
   dhall_1_13_0 = doJailbreak super.dhall_1_14_0;  # support ansi-terminal 0.8.x
   HaTeX = self.HaTeX_3_19_0_0;
   hpack = self.hpack_0_28_2;
-  hspec = dontCheck super.hspec_2_5_3;
-  hspec-core = dontCheck super.hspec-core_2_5_3;
-  hspec-discover = self.hspec-discover_2_5_3;
-  hspec-smallcheck = self.hspec-smallcheck_0_5_2;
   matrix = self.matrix_0_3_6_1;
   pandoc = self.pandoc_2_2_1;
   pandoc-types = self.pandoc-types_1_17_5_1;
