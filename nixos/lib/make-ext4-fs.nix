@@ -9,13 +9,13 @@
 }:
 
 let
-  sdClosureInfo = pkgs.closureInfo { rootPaths = storePaths; };
+  sdClosureInfo = pkgs.buildPackages.closureInfo { rootPaths = storePaths; };
 in
 
 pkgs.stdenv.mkDerivation {
   name = "ext4-fs.img";
 
-  nativeBuildInputs = with pkgs; [e2fsprogs.bin libfaketime perl];
+  nativeBuildInputs = with pkgs.buildPackages; [e2fsprogs.bin libfaketime perl];
 
   buildCommand =
     ''
