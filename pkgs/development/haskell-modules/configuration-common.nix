@@ -51,8 +51,6 @@ self: super: {
   clock = dontCheck super.clock;
   Dust-crypto = dontCheck super.Dust-crypto;
   hasql-postgres = dontCheck super.hasql-postgres;
-  hspec = super.hspec.override { stringbuilder = dontCheck self.stringbuilder; };
-  hspec-core = super.hspec-core.override { silently = dontCheck self.silently; temporary = dontCheck self.temporary; };
   hspec-expectations = dontCheck super.hspec-expectations;
   HTTP = dontCheck super.HTTP;
   http-streams = dontCheck super.http-streams;
@@ -1070,6 +1068,39 @@ self: super: {
     base-compat = super.base-compat_0_10_1;
   };
 
+  # A few things for hspec*:
+  #
+  #   1. Break cycles for test
+  #
+  #   2. https://github.com/hspec/hspec/pull/355 The buildTool will be properly
+  #      cabal2nixed when run on the patched cabal file.
+  #
+  #   3. Force 2.5.1 as only it has patch for proper build-tool-depends deps.
+  hspec_2_5_1 = let
+    breakCycles = super.hspec_2_5_1.override { stringbuilder = dontCheck self.stringbuilder; };
+  in appendPatch (addTestToolDepend breakCycles self.hspec-meta) (pkgs.fetchpatch {
+    url = "https://github.com/hspec/hspec/commit/8007227da5c8f2e294c1455a9f2c9855917dc461.diff";
+    includes = [ "hspec.cabal" ];
+    sha256 = "0qk7lsg7s1j42mf9zbh4ga1ca5qbh1qsnsidvlp4rjjifw6jq3vz";
+  });
+  hspec-core_2_5_1 = let
+    breakCycles = super.hspec-core_2_5_1.override { silently = dontCheck self.silently; temporary = dontCheck self.temporary; };
+  in appendPatch (addTestToolDepend breakCycles self.hspec-meta) (pkgs.fetchpatch {
+    url = "https://github.com/hspec/hspec/commit/8007227da5c8f2e294c1455a9f2c9855917dc461.diff";
+    includes = [ "hspec-core.cabal" ];
+    sha256 = "0rwlz24mqh67gpkcrnhm8js594783v4gikzmdwi148w0h6hw2435";
+    stripLen = 1;
+  });
+  hspec-discover_2_5_1 = appendPatch (addTestToolDepend super.hspec-discover_2_5_1 self.hspec-meta) (pkgs.fetchpatch {
+    url = "https://github.com/hspec/hspec/commit/8007227da5c8f2e294c1455a9f2c9855917dc461.diff";
+    includes = [ "hspec-discover.cabal" ];
+    sha256 = "1c343flwxaq7cpnwyjf4y1c5smqs5q90i48sda9kyhl88mslq63b";
+    stripLen = 1;
+  });
+  hspec = self.hspec_2_5_1;
+  hspec-core = self.hspec-core_2_5_1;
+  hspec-discover = self.hspec-discover_2_5_1;
+  hspec-smallcheck = self.hspec-smallcheck_0_5_2;
 }
 
 //
