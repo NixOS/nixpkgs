@@ -382,7 +382,9 @@ in {
     callPackage = pkgs.callPackage;
   };
 
-  pykdtree = callPackage ../development/python-modules/pykdtree { };
+  pykdtree = callPackage ../development/python-modules/pykdtree {
+    inherit (pkgs.llvmPackages) openmp;
+  };
 
   pyparser = callPackage ../development/python-modules/pyparser { };
 

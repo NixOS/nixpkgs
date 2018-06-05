@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi, numpy, nose }:
+{ stdenv, buildPythonPackage, fetchPypi, numpy, nose, openmp }:
 
 buildPythonPackage rec {
   pname = "pykdtree";
@@ -9,7 +9,7 @@ buildPythonPackage rec {
     sha256 = "79351b79087f473f83fb27a5cd552bd1056f2dfa7acec5d4a68f35a7cbea6776";
   };
 
-  preInstall = ''export USE_OMP=0'';
+  buildInputs = [ openmp ];
 
   propagatedBuildInputs = [ numpy ];
 
@@ -22,4 +22,3 @@ buildPythonPackage rec {
     maintainers = with maintainers; [ psyanticy ];
   };
 }
-
