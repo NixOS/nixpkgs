@@ -228,7 +228,7 @@
     "comfoconnect" = ps: with ps; [  ];
     "config" = ps: with ps; [ aiohttp-cors ];
     "config.automation" = ps: with ps; [  ];
-    "config.config_entries" = ps: with ps; [  ];
+    "config.config_entries" = ps: with ps; [ voluptuous-serialize ];
     "config.core" = ps: with ps; [  ];
     "config.customize" = ps: with ps; [  ];
     "config.entity_registry" = ps: with ps; [  ];
@@ -402,7 +402,7 @@
     "http.real_ip" = ps: with ps; [  ];
     "http.static" = ps: with ps; [  ];
     "http.view" = ps: with ps; [  ];
-    "hue" = ps: with ps; [ aiohue voluptuous-serialize ];
+    "hue" = ps: with ps; [ aiohue ];
     "hue.bridge" = ps: with ps; [  ];
     "hue.config_flow" = ps: with ps; [  ];
     "hue.const" = ps: with ps; [  ];
@@ -459,7 +459,7 @@
     "light.hive" = ps: with ps; [  ];
     "light.homekit_controller" = ps: with ps; [  ];
     "light.homematic" = ps: with ps; [ pyhomematic ];
-    "light.hue" = ps: with ps; [ aiohue voluptuous-serialize ];
+    "light.hue" = ps: with ps; [ aiohue ];
     "light.hyperion" = ps: with ps; [  ];
     "light.iglo" = ps: with ps; [  ];
     "light.ihc" = ps: with ps; [  ];
