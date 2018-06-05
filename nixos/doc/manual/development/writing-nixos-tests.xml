@@ -54,7 +54,8 @@ xlink:href="https://github.com/NixOS/nixpkgs/blob/master/nixos/tests/nfs.nix">nf
 <!-- FIXME: would be nice to generate this automatically. -->
   <variablelist>
    <varlistentry>
-    <term><option>virtualisation.memorySize</option>
+    <term>
+     <option>virtualisation.memorySize</option>
     </term>
     <listitem>
      <para>
@@ -63,7 +64,8 @@ xlink:href="https://github.com/NixOS/nixpkgs/blob/master/nixos/tests/nfs.nix">nf
     </listitem>
    </varlistentry>
    <varlistentry>
-    <term><option>virtualisation.vlans</option>
+    <term>
+     <option>virtualisation.vlans</option>
     </term>
     <listitem>
      <para>
@@ -75,7 +77,8 @@ xlink:href="https://github.com/NixOS/nixpkgs/blob/master/nixos/tests/nfs.nix">nf
     </listitem>
    </varlistentry>
    <varlistentry>
-    <term><option>virtualisation.writableStore</option>
+    <term>
+     <option>virtualisation.writableStore</option>
     </term>
     <listitem>
      <para>
@@ -120,7 +123,8 @@ startAll;
   The following methods are available on machine objects:
   <variablelist>
    <varlistentry>
-    <term><methodname>start</methodname>
+    <term>
+     <methodname>start</methodname>
     </term>
     <listitem>
      <para>
@@ -130,7 +134,8 @@ startAll;
     </listitem>
    </varlistentry>
    <varlistentry>
-    <term><methodname>shutdown</methodname>
+    <term>
+     <methodname>shutdown</methodname>
     </term>
     <listitem>
      <para>
@@ -139,7 +144,8 @@ startAll;
     </listitem>
    </varlistentry>
    <varlistentry>
-    <term><methodname>crash</methodname>
+    <term>
+     <methodname>crash</methodname>
     </term>
     <listitem>
      <para>
@@ -148,7 +154,8 @@ startAll;
     </listitem>
    </varlistentry>
    <varlistentry>
-    <term><methodname>block</methodname>
+    <term>
+     <methodname>block</methodname>
     </term>
     <listitem>
      <para>
@@ -158,7 +165,8 @@ startAll;
     </listitem>
    </varlistentry>
    <varlistentry>
-    <term><methodname>unblock</methodname>
+    <term>
+     <methodname>unblock</methodname>
     </term>
     <listitem>
      <para>
@@ -167,7 +175,8 @@ startAll;
     </listitem>
    </varlistentry>
    <varlistentry>
-    <term><methodname>screenshot</methodname>
+    <term>
+     <methodname>screenshot</methodname>
     </term>
     <listitem>
      <para>
@@ -177,7 +186,8 @@ startAll;
     </listitem>
    </varlistentry>
    <varlistentry>
-    <term><methodname>getScreenText</methodname>
+    <term>
+     <methodname>getScreenText</methodname>
     </term>
     <listitem>
      <para>
@@ -193,7 +203,8 @@ startAll;
     </listitem>
    </varlistentry>
    <varlistentry>
-    <term><methodname>sendMonitorCommand</methodname>
+    <term>
+     <methodname>sendMonitorCommand</methodname>
     </term>
     <listitem>
      <para>
@@ -203,7 +214,8 @@ startAll;
     </listitem>
    </varlistentry>
    <varlistentry>
-    <term><methodname>sendKeys</methodname>
+    <term>
+     <methodname>sendKeys</methodname>
     </term>
     <listitem>
      <para>
@@ -213,7 +225,8 @@ startAll;
     </listitem>
    </varlistentry>
    <varlistentry>
-    <term><methodname>sendChars</methodname>
+    <term>
+     <methodname>sendChars</methodname>
     </term>
     <listitem>
      <para>
@@ -224,7 +237,8 @@ startAll;
     </listitem>
    </varlistentry>
    <varlistentry>
-    <term><methodname>execute</methodname>
+    <term>
+     <methodname>execute</methodname>
     </term>
     <listitem>
      <para>
@@ -235,7 +249,8 @@ startAll;
     </listitem>
    </varlistentry>
    <varlistentry>
-    <term><methodname>succeed</methodname>
+    <term>
+     <methodname>succeed</methodname>
     </term>
     <listitem>
      <para>
@@ -245,7 +260,8 @@ startAll;
     </listitem>
    </varlistentry>
    <varlistentry>
-    <term><methodname>fail</methodname>
+    <term>
+     <methodname>fail</methodname>
     </term>
     <listitem>
      <para>
@@ -255,7 +271,8 @@ startAll;
     </listitem>
    </varlistentry>
    <varlistentry>
-    <term><methodname>waitUntilSucceeds</methodname>
+    <term>
+     <methodname>waitUntilSucceeds</methodname>
     </term>
     <listitem>
      <para>
@@ -264,7 +281,8 @@ startAll;
     </listitem>
    </varlistentry>
    <varlistentry>
-    <term><methodname>waitUntilFails</methodname>
+    <term>
+     <methodname>waitUntilFails</methodname>
     </term>
     <listitem>
      <para>
@@ -273,7 +291,8 @@ startAll;
     </listitem>
    </varlistentry>
    <varlistentry>
-    <term><methodname>waitForUnit</methodname>
+    <term>
+     <methodname>waitForUnit</methodname>
     </term>
     <listitem>
      <para>
@@ -282,7 +301,8 @@ startAll;
     </listitem>
    </varlistentry>
    <varlistentry>
-    <term><methodname>waitForFile</methodname>
+    <term>
+     <methodname>waitForFile</methodname>
     </term>
     <listitem>
      <para>
@@ -291,7 +311,8 @@ startAll;
     </listitem>
    </varlistentry>
    <varlistentry>
-    <term><methodname>waitForOpenPort</methodname>
+    <term>
+     <methodname>waitForOpenPort</methodname>
     </term>
     <listitem>
      <para>
@@ -301,7 +322,8 @@ startAll;
     </listitem>
    </varlistentry>
    <varlistentry>
-    <term><methodname>waitForClosedPort</methodname>
+    <term>
+     <methodname>waitForClosedPort</methodname>
     </term>
     <listitem>
      <para>
@@ -310,7 +332,8 @@ startAll;
     </listitem>
    </varlistentry>
    <varlistentry>
-    <term><methodname>waitForX</methodname>
+    <term>
+     <methodname>waitForX</methodname>
     </term>
     <listitem>
      <para>
@@ -319,7 +342,8 @@ startAll;
     </listitem>
    </varlistentry>
    <varlistentry>
-    <term><methodname>waitForText</methodname>
+    <term>
+     <methodname>waitForText</methodname>
     </term>
     <listitem>
      <para>
@@ -336,7 +360,8 @@ startAll;
     </listitem>
    </varlistentry>
    <varlistentry>
-    <term><methodname>waitForWindow</methodname>
+    <term>
+     <methodname>waitForWindow</methodname>
     </term>
     <listitem>
      <para>
@@ -346,7 +371,8 @@ startAll;
     </listitem>
    </varlistentry>
    <varlistentry>
-    <term><methodname>copyFileFromHost</methodname>
+    <term>
+     <methodname>copyFileFromHost</methodname>
     </term>
     <listitem>
      <para>
@@ -361,7 +387,8 @@ startAll;
     </listitem>
    </varlistentry>
    <varlistentry>
-    <term><methodname>systemctl</methodname>
+    <term>
+     <methodname>systemctl</methodname>
     </term>
     <listitem>
      <para>

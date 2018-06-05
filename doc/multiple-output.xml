@@ -188,8 +188,8 @@
 
    <variablelist>
     <varlistentry>
-     <term><varname>
-         $outputDev</varname>
+     <term>
+      <varname> $outputDev</varname>
      </term>
      <listitem>
       <para>
@@ -200,8 +200,8 @@
      </listitem>
     </varlistentry>
     <varlistentry>
-     <term><varname>
-        $outputBin</varname>
+     <term>
+      <varname> $outputBin</varname>
      </term>
      <listitem>
       <para>
@@ -211,8 +211,8 @@
      </listitem>
     </varlistentry>
     <varlistentry>
-     <term><varname>
-        $outputLib</varname>
+     <term>
+      <varname> $outputLib</varname>
      </term>
      <listitem>
       <para>
@@ -223,8 +223,8 @@
      </listitem>
     </varlistentry>
     <varlistentry>
-     <term><varname>
-        $outputDoc</varname>
+     <term>
+      <varname> $outputDoc</varname>
      </term>
      <listitem>
       <para>
@@ -235,8 +235,8 @@
      </listitem>
     </varlistentry>
     <varlistentry>
-     <term><varname>
-        $outputDevdoc</varname>
+     <term>
+      <varname> $outputDevdoc</varname>
      </term>
      <listitem>
       <para>
@@ -248,8 +248,8 @@
      </listitem>
     </varlistentry>
     <varlistentry>
-     <term><varname>
-        $outputMan</varname>
+     <term>
+      <varname> $outputMan</varname>
      </term>
      <listitem>
       <para>
@@ -259,8 +259,8 @@
      </listitem>
     </varlistentry>
     <varlistentry>
-     <term><varname>
-        $outputDevman</varname>
+     <term>
+      <varname> $outputDevman</varname>
      </term>
      <listitem>
       <para>
@@ -270,8 +270,8 @@
      </listitem>
     </varlistentry>
     <varlistentry>
-     <term><varname>
-        $outputInfo</varname>
+     <term>
+      <varname> $outputInfo</varname>
      </term>
      <listitem>
       <para>

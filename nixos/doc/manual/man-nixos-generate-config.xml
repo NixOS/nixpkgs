@@ -12,16 +12,24 @@
   </refname><refpurpose>generate NixOS configuration modules</refpurpose>
  </refnamediv>
  <refsynopsisdiv>
-  <cmdsynopsis><command>nixos-generate-config</command>
-   <arg><option>--force</option>
-   </arg>
+  <cmdsynopsis>
+   <command>nixos-generate-config</command> 
    <arg>
-    <arg choice='plain'><option>--root</option>
-    </arg><replaceable>root</replaceable>
+    <option>--force</option>
    </arg>
+    
    <arg>
-    <arg choice='plain'><option>--dir</option>
-    </arg><replaceable>dir</replaceable>
+    <arg choice='plain'>
+     <option>--root</option>
+    </arg>
+     <replaceable>root</replaceable>
+   </arg>
+    
+   <arg>
+    <arg choice='plain'>
+     <option>--dir</option>
+    </arg>
+     <replaceable>dir</replaceable>
    </arg>
   </cmdsynopsis>
  </refsynopsisdiv>
@@ -31,7 +39,8 @@
    This command writes two NixOS configuration modules:
    <variablelist>
     <varlistentry>
-     <term><option>/etc/nixos/hardware-configuration.nix</option>
+     <term>
+      <option>/etc/nixos/hardware-configuration.nix</option>
      </term>
      <listitem>
       <para>
@@ -53,7 +62,8 @@
      </listitem>
     </varlistentry>
     <varlistentry>
-     <term><option>/etc/nixos/configuration.nix</option>
+     <term>
+      <option>/etc/nixos/configuration.nix</option>
      </term>
      <listitem>
       <para>
@@ -74,7 +84,8 @@
   </para>
   <variablelist>
    <varlistentry>
-    <term><option>--root</option>
+    <term>
+     <option>--root</option>
     </term>
     <listitem>
      <para>
@@ -88,7 +99,8 @@
     </listitem>
    </varlistentry>
    <varlistentry>
-    <term><option>--dir</option>
+    <term>
+     <option>--dir</option>
     </term>
     <listitem>
      <para>
@@ -99,7 +111,8 @@
     </listitem>
    </varlistentry>
    <varlistentry>
-    <term><option>--force</option>
+    <term>
+     <option>--force</option>
     </term>
     <listitem>
      <para>
@@ -109,7 +122,8 @@
     </listitem>
    </varlistentry>
    <varlistentry>
-    <term><option>--no-filesystems</option>
+    <term>
+     <option>--no-filesystems</option>
     </term>
     <listitem>
      <para>
@@ -119,7 +133,8 @@
     </listitem>
    </varlistentry>
    <varlistentry>
-    <term><option>--show-hardware-config</option>
+    <term>
+     <option>--show-hardware-config</option>
     </term>
     <listitem>
      <para>

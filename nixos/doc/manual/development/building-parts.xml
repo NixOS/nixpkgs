@@ -15,7 +15,8 @@ $ nix-build -A config.<replaceable>option</replaceable></screen>
   include:
   <variablelist>
    <varlistentry>
-    <term><varname>system.build.toplevel</varname>
+    <term>
+     <varname>system.build.toplevel</varname>
     </term>
     <listitem>
      <para>
@@ -32,7 +33,8 @@ $ nix-build -A system</screen>
     </listitem>
    </varlistentry>
    <varlistentry>
-    <term><varname>system.build.manual.manual</varname>
+    <term>
+     <varname>system.build.manual.manual</varname>
     </term>
     <listitem>
      <para>
@@ -41,7 +43,8 @@ $ nix-build -A system</screen>
     </listitem>
    </varlistentry>
    <varlistentry>
-    <term><varname>system.build.etc</varname>
+    <term>
+     <varname>system.build.etc</varname>
     </term>
     <listitem>
      <para>
@@ -51,9 +54,11 @@ $ nix-build -A system</screen>
     </listitem>
    </varlistentry>
    <varlistentry>
-    <term><varname>system.build.initialRamdisk</varname>
+    <term>
+     <varname>system.build.initialRamdisk</varname>
     </term>
-    <term><varname>system.build.kernel</varname>
+    <term>
+     <varname>system.build.kernel</varname>
     </term>
     <listitem>
      <para>
@@ -69,11 +74,14 @@ $ qemu-system-x86_64 -kernel ./kernel/bzImage -initrd ./initrd/initrd -hda /dev/
     </listitem>
    </varlistentry>
    <varlistentry>
-    <term><varname>system.build.nixos-rebuild</varname>
+    <term>
+     <varname>system.build.nixos-rebuild</varname>
     </term>
-    <term><varname>system.build.nixos-install</varname>
+    <term>
+     <varname>system.build.nixos-install</varname>
     </term>
-    <term><varname>system.build.nixos-generate-config</varname>
+    <term>
+     <varname>system.build.nixos-generate-config</varname>
     </term>
     <listitem>
      <para>
@@ -82,7 +90,8 @@ $ qemu-system-x86_64 -kernel ./kernel/bzImage -initrd ./initrd/initrd -hda /dev/
     </listitem>
    </varlistentry>
    <varlistentry>
-    <term><varname>systemd.units.<replaceable>unit-name</replaceable>.unit</varname>
+    <term>
+     <varname>systemd.units.<replaceable>unit-name</replaceable>.unit</varname>
     </term>
     <listitem>
      <para>

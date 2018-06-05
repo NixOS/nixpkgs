@@ -16,7 +16,9 @@
    </para>
    <variablelist>
     <varlistentry>
-     <term>UEFI systems</term>
+     <term>
+      UEFI systems
+     </term>
      <listitem>
       <para>
        You should boot the live CD in UEFI mode (consult your specific
@@ -138,7 +140,9 @@
      <listitem>
       <variablelist>
        <varlistentry>
-        <term>UEFI systems</term>
+        <term>
+         UEFI systems
+        </term>
         <listitem>
          <para>
           For creating boot partitions: <command>mkfs.fat</command>. Again
@@ -178,7 +182,9 @@
   <listitem>
    <variablelist>
     <varlistentry>
-     <term>UEFI systems</term>
+     <term>
+      UEFI systems
+     </term>
      <listitem>
       <para>
        Mount the boot file system on <filename>/mnt/boot</filename>, e.g.
@@ -234,7 +240,9 @@
    </para>
    <variablelist>
     <varlistentry>
-     <term>BIOS systems</term>
+     <term>
+      BIOS systems
+     </term>
      <listitem>
       <para>
        You <emphasis>must</emphasis> set the option
@@ -244,7 +252,9 @@
      </listitem>
     </varlistentry>
     <varlistentry>
-     <term>UEFI systems</term>
+     <term>
+      UEFI systems
+     </term>
      <listitem>
       <para>
        You <emphasis>must</emphasis> set the option

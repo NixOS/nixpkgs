@@ -12,14 +12,22 @@
   </refname><refpurpose>inspect a NixOS configuration</refpurpose>
  </refnamediv>
  <refsynopsisdiv>
-  <cmdsynopsis><command>nixos-option</command>
-   <arg><option>-I</option><replaceable>path</replaceable>
+  <cmdsynopsis>
+   <command>nixos-option</command> 
+   <arg>
+    <option>-I</option> <replaceable>path</replaceable>
    </arg>
-   <arg><option>--verbose</option>
+    
+   <arg>
+    <option>--verbose</option>
    </arg>
-   <arg><option>--xml</option>
+    
+   <arg>
+    <option>--xml</option>
    </arg>
-   <arg choice="plain"><replaceable>option.name</replaceable>
+    
+   <arg choice="plain">
+    <replaceable>option.name</replaceable>
    </arg>
   </cmdsynopsis>
  </refsynopsisdiv>
@@ -42,7 +50,8 @@
   </para>
   <variablelist>
    <varlistentry>
-    <term><option>-I</option><replaceable>path</replaceable>
+    <term>
+     <option>-I</option> <replaceable>path</replaceable>
     </term>
     <listitem>
      <para>
@@ -52,7 +61,8 @@
     </listitem>
    </varlistentry>
    <varlistentry>
-    <term><option>--verbose</option>
+    <term>
+     <option>--verbose</option>
     </term>
     <listitem>
      <para>
@@ -62,7 +72,8 @@
     </listitem>
    </varlistentry>
    <varlistentry>
-    <term><option>--xml</option>
+    <term>
+     <option>--xml</option>
     </term>
     <listitem>
      <para>
@@ -76,7 +87,8 @@
   <title>Environment</title>
   <variablelist>
    <varlistentry>
-    <term><envar>NIXOS_CONFIG</envar>
+    <term>
+     <envar>NIXOS_CONFIG</envar>
     </term>
     <listitem>
      <para>
