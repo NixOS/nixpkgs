@@ -68,7 +68,7 @@ set -u
 ccWrapper_addCVars () {
     # See ../setup-hooks/role.bash
     local role_post role_pre
-    getTargetRoleEnvHook
+    getHostRoleEnvHook
 
     if [[ -d "$1/include" ]]; then
         export NIX_${role_pre}CFLAGS_COMPILE+=" ${ccIncludeFlag:--isystem} $1/include"
