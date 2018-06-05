@@ -1358,6 +1358,8 @@ with pkgs;
 
   meritous = callPackage ../games/meritous { };
 
+  opendune = callPackage ../games/opendune { };
+
   meson = callPackage ../development/tools/build-managers/meson { };
 
   metabase = callPackage ../servers/metabase { };
