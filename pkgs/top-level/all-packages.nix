@@ -2157,7 +2157,7 @@ with pkgs;
 
   mcrcon = callPackage ../tools/networking/mcrcon {};
 
-  s-tar = callPackages ../tools/archivers/s-tar {};
+  s-tar = callPackage ../tools/archivers/s-tar {};
 
   tealdeer = callPackage ../tools/misc/tealdeer { };
 
