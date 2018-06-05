@@ -118,13 +118,6 @@ stdenv.mkDerivation {
     ] ++ stdenv.lib.optional (stdenv.hostPlatform.libc == "musl") "NO_AFFINITY=1"
     ++ mapAttrsToList (var: val: var + "=" + val) config;
 
-  patches = stdenv.lib.optional (stdenv.hostPlatform.libc != "glibc")
-    # https://github.com/xianyi/OpenBLAS/pull/1247
-    (fetchpatch {
-      url = "https://github.com/xianyi/OpenBLAS/commit/88a35ff457f55e527e0e8a503a0dc61976c1846d.patch";
-      sha256 = "1a3qrhvl5hp06c53fjqghq4zgf6ls7narm06l0shcvs57hznh09n";
-    });
-
   doCheck = true;
   checkTarget = "tests";
 
