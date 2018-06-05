@@ -42,7 +42,7 @@ let
     };
   };
 
-  configFile = pkgs.writeText "docker-registry-config.yml" (builtins.toJSON (registryConfig // cfg.extraConfig));
+  configFile = pkgs.writeText "docker-registry-config.yml" (builtins.toJSON (recursiveUpdate registryConfig cfg.extraConfig));
 
 in {
   options.services.dockerRegistry = {
@@ -91,7 +91,7 @@ in {
         Docker extra registry configuration via environment variables.
       '';
       default = {};
-      type = types.attrsOf types.str;
+      type = types.attrs;
     };
 
     enableGarbageCollect = mkEnableOption "garbage collect";
