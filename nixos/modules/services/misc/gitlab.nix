@@ -584,7 +584,9 @@ in {
           ln -sf ${smtpSettings} ${cfg.statePath}/config/initializers/smtp_settings.rb
         ''}
         ln -sf ${cfg.statePath}/config /run/gitlab/config
-        rm ${cfg.statePath}/lib
+        if [ -e ${cfg.statePath}/lib ]; then
+          rm ${cfg.statePath}/lib
+        fi
         ln -sf ${pkgs.gitlab}/share/gitlab/lib ${cfg.statePath}/lib
         cp ${cfg.packages.gitlab}/share/gitlab/VERSION ${cfg.statePath}/VERSION
 
