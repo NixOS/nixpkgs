@@ -80,7 +80,9 @@ The option value `services.httpd.enable' in `/etc/nixos/configuration.nix' is no
   Options have various types of values. The most important are:
   <variablelist>
    <varlistentry>
-    <term>Strings</term>
+    <term>
+     Strings
+    </term>
     <listitem>
      <para>
       Strings are enclosed in double quotes, e.g.
@@ -112,7 +114,9 @@ networking.extraHosts =
     </listitem>
    </varlistentry>
    <varlistentry>
-    <term>Booleans</term>
+    <term>
+     Booleans
+    </term>
     <listitem>
      <para>
       These can be <literal>true</literal> or <literal>false</literal>, e.g.
@@ -124,7 +128,9 @@ networking.firewall.allowPing = false;
     </listitem>
    </varlistentry>
    <varlistentry>
-    <term>Integers</term>
+    <term>
+     Integers
+    </term>
     <listitem>
      <para>
       For example,
@@ -141,7 +147,9 @@ boot.kernel.sysctl."net.ipv4.tcp_keepalive_time" = 60;
     </listitem>
    </varlistentry>
    <varlistentry>
-    <term>Sets</term>
+    <term>
+     Sets
+    </term>
     <listitem>
      <para>
       Sets were introduced above. They are name/value pairs enclosed in braces,
@@ -157,7 +165,9 @@ fileSystems."/boot" =
     </listitem>
    </varlistentry>
    <varlistentry>
-    <term>Lists</term>
+    <term>
+     Lists
+    </term>
     <listitem>
      <para>
       The important thing to note about lists is that list elements are
@@ -173,7 +183,9 @@ swapDevices = [ { device = "/dev/disk/by-label/swap"; } ];
     </listitem>
    </varlistentry>
    <varlistentry>
-    <term>Packages</term>
+    <term>
+     Packages
+    </term>
     <listitem>
      <para>
       Usually, the packages you need are already part of the Nix Packages

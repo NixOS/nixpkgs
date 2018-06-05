@@ -14,6 +14,11 @@ format:
 	find . -iname '*.xml' -type f -print0 | xargs -0 -I{} -n1 \
 		xmlformat --config-file "../xmlformat.conf" -i {}
 
+.PHONY: fix-misc-xml
+fix-misc-xml:
+	find . -iname '*.xml' -type f \
+		-exec ../varlistentry-fixer.rb {} ';'
+
 .PHONY: clean
 clean:
 	rm -f manual-combined.xml generated
