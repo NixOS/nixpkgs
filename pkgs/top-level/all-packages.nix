@@ -7818,6 +7818,8 @@ with pkgs;
 
   ctodo = callPackage ../applications/misc/ctodo { };
 
+  ctmg = callPackage ../tools/security/ctmg { };
+
   cmake_2_8 = callPackage ../development/tools/build-managers/cmake/2.8.nix { };
 
   cmake = libsForQt5.callPackage ../development/tools/build-managers/cmake { };
