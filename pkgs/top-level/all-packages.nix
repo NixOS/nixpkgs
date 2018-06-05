@@ -9700,10 +9700,6 @@ with pkgs;
 
   hamlib = callPackage ../development/libraries/hamlib { };
 
-  # TODO : Let admin choose.
-  # We are using mit-krb5 because it is better maintained
-  kerberos = libkrb5;
-
   heimdal = callPackage ../development/libraries/kerberos/heimdal.nix {
     inherit (darwin.apple_sdk.frameworks) CoreFoundation Security SystemConfiguration;
   };
