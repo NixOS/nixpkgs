@@ -6,16 +6,19 @@
 , storePaths
 , volumeLabel
 , uuid ? "44444444-4444-4444-8888-888888888888"
+, e2fsprogs
+, libfaketime
+, perl
 }:
 
 let
-  sdClosureInfo = pkgs.closureInfo { rootPaths = storePaths; };
+  sdClosureInfo = pkgs.buildPackages.closureInfo { rootPaths = storePaths; };
 in
 
 pkgs.stdenv.mkDerivation {
   name = "ext4-fs.img";
 
-  nativeBuildInputs = with pkgs; [e2fsprogs.bin libfaketime perl];
+  nativeBuildInputs = [e2fsprogs.bin libfaketime perl];
 
   buildCommand =
     ''
