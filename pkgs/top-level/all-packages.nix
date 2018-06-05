@@ -20925,9 +20925,15 @@ with pkgs;
     nixStable
     nixUnstable;
 
-  nixops = callPackage ../tools/package-management/nixops { };
+  nixops = pythonPackages.callPackage ../tools/package-management/nixops { };
 
-  nixopsUnstable = lowPrio (callPackage ../tools/package-management/nixops/unstable.nix { });
+  nixopsUnstable = lowPrio (nixops.overrideAttrs( oa: rec {
+    version = "1.6.1pre2622_f10999a";
+    src = fetchurl {
+      url = "https://hydra.nixos.org/build/73716350/download/2/nixops-${version}.tar.bz2";
+      sha256 = "08886b6vxhjc3cp0ikxp920zap7wp6r92763fp785rvxrmb00rbd";
+    };
+  }));
 
   nixops-dns = callPackage ../tools/package-management/nixops/nixops-dns.nix { };
 
