@@ -77,6 +77,9 @@ rec {
   /* bitwise “xor” */
   bitXor = builtins.bitXor or zipIntBits (a: b: if a!=b then 1 else 0);
 
+  /* bitwise “not” */
+  bitNot = builtins.sub (-1);
+
   /* Convert a boolean to a string.
      Note that toString on a bool returns "1" and "".
   */
