@@ -96,10 +96,10 @@
     dependencies = ["multipart-post"];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "0q3z6mm6ym11jrzi1hqcwi0mkydb5m980g8is6ggkcxrinmx2nxx";
+      sha256 = "14lg0c4bphk16rccc5jmaan6nfcvmy0caiahpc61f9zfwpsj7ymg";
       type = "gem";
     };
-    version = "0.15.1";
+    version = "0.15.2";
   };
   fast-stemmer = {
     source = {
@@ -112,10 +112,10 @@
   ffi = {
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "0zw6pbyvmj8wafdc7l5h7w20zkp1vbr2805ql5d941g2b20pk4zr";
+      sha256 = "0jpm2dis1j7zvvy3lg7axz9jml316zrn7s0j59vyq3qr127z0m7q";
       type = "gem";
     };
-    version = "1.9.23";
+    version = "1.9.25";
   };
   forwardable-extended = {
     source = {
@@ -163,10 +163,10 @@
     dependencies = ["addressable" "colorator" "em-websocket" "i18n" "jekyll-sass-converter" "jekyll-watch" "kramdown" "liquid" "mercenary" "pathutil" "rouge" "safe_yaml"];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "1cp1iijcf4w2i7lzfbszpv2in9fcxm23fv0znghkm934rxrw55g8";
+      sha256 = "1iw90wihk9dscgmppf5v6lysg3kjmnx50mjyl4gghkdb4spw97xk";
       type = "gem";
     };
-    version = "3.8.2";
+    version = "3.8.3";
   };
   jekyll-avatar = {
     dependencies = ["jekyll"];
@@ -190,10 +190,10 @@
     dependencies = ["jekyll"];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "0kr3kyaq4z3jixn6ay8h16bxxlv6slvvp7nqnl05jdymhkl0bmm9";
+      sha256 = "0l5w2bd6dsjnc623qjw5h06n0wslh32rqkkjlkymga24cplbln8j";
       type = "gem";
     };
-    version = "0.9.3";
+    version = "0.10.0";
   };
   jekyll-gist = {
     dependencies = ["octokit"];
@@ -243,10 +243,10 @@
     dependencies = ["jekyll"];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "0f9b2mvmx57zj49afb3x8cmzdmb1kh4rbpbv3v7w5bh47g2c9big";
+      sha256 = "19yfr5i04gm50swbc6xxf4090z5z1v0kjfnvh695ydq1dkyx1csl";
       type = "gem";
     };
-    version = "2.4.0";
+    version = "2.5.0";
   };
   jekyll-sitemap = {
     dependencies = ["jekyll"];
@@ -278,10 +278,10 @@
   kramdown = {
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "0mkrqpp01rrfn3rx6wwsjizyqmafp0vgg8ja1dvbjs185r5zw3za";
+      sha256 = "1n1c4jmrh5ig8iv1rw81s4mw4xsp4v97hvf8zkigv4hn5h542qjq";
       type = "gem";
     };
-    version = "1.16.2";
+    version = "1.17.0";
   };
   liquid = {
     source = {
