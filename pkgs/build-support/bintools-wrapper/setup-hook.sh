@@ -13,7 +13,7 @@ set -u
 bintoolsWrapper_addLDVars () {
     # See ../setup-hooks/role.bash
     local role_post role_pre
-    getTargetRoleEnvHook
+    getHostRoleEnvHook
 
     if [[ -d "$1/lib64" && ! -L "$1/lib64" ]]; then
         export NIX_${role_pre}LDFLAGS+=" -L$1/lib64"
