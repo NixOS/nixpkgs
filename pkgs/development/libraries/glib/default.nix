@@ -71,7 +71,9 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig perl python gettext ];
 
-  propagatedBuildInputs = [ zlib libffi gettext libiconv ];
+  propagatedNativeBuildInputs = [ gettext ];
+
+  propagatedBuildInputs = [ zlib libffi libiconv ];
 
   # internal pcre would only add <200kB, but it's relatively common
   configureFlags = [ "--with-pcre=system" ]
