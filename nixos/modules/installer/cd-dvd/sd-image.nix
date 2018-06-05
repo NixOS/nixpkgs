@@ -12,13 +12,12 @@
 with lib;
 
 let
-  rootfsImage = import ../../../lib/make-ext4-fs.nix {
-    inherit pkgs;
+  rootfsImage = pkgs.callPackage ../../../lib/make-ext4-fs.nix ({
     inherit (config.sdImage) storePaths;
     volumeLabel = "NIXOS_SD";
   } // optionalAttrs (config.sdImage.rootPartitionUUID != null) {
     uuid = config.sdImage.rootPartitionUUID;
-  };
+  });
 in
 {
   options.sdImage = {
@@ -94,10 +93,10 @@ in
 
     sdImage.storePaths = [ config.system.build.toplevel ];
 
-    system.build.sdImage = pkgs.stdenv.mkDerivation {
+    system.build.sdImage = pkgs.callPackage ({ stdenv, dosfstools, e2fsprogs, mtools, libfaketime, utillinux }: stdenv.mkDerivation {
       name = config.sdImage.imageName;
 
-      buildInputs = with pkgs; [ dosfstools e2fsprogs mtools libfaketime utillinux ];
+      nativeBuildInputs = [ dosfstools e2fsprogs mtools libfaketime utillinux ];
 
       buildCommand = ''
         mkdir -p $out/nix-support $out/sd-image
@@ -138,7 +137,7 @@ in
         (cd boot; mcopy -bpsvm -i ../bootpart.img ./* ::)
         dd conv=notrunc if=bootpart.img of=$img seek=$START count=$SECTORS
       '';
-    };
+    }) {};
 
     boot.postBootCommands = ''
       # On the first boot do some maintenance tasks
