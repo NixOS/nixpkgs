@@ -120,6 +120,7 @@ in {
       serviceConfig = {
         User = "docker-registry";
         WorkingDirectory = cfg.storagePath;
+        AmbientCapabilities = mkIf (cfg.port < 1024) "cap_net_bind_service";
       };
     };
 
