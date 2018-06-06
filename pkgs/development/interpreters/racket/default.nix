@@ -1,10 +1,11 @@
 { stdenv, fetchurl, makeFontsConf, makeWrapper
 , cairo, coreutils, fontconfig, freefont_ttf
-, glib, gmp, gtk2, libedit, libffi, libjpeg
+, glib, gmp, gtk3, libedit, libffi, libjpeg
 , libpng, libtool, mpfr, openssl, pango, poppler
 , readline, sqlite
 , disableDocs ? false
 , CoreFoundation
+, gsettings_desktop_schemas
 }:
 
 let
@@ -18,7 +19,8 @@ let
     fontconfig
     glib
     gmp
-    gtk2
+    gtk3
+    gsettings_desktop_schemas
     libedit
     libjpeg
     libpng
@@ -53,7 +55,7 @@ stdenv.mkDerivation rec {
     (stdenv.lib.optionalString stdenv.isDarwin "-framework CoreFoundation")
   ];
 
-  buildInputs = [ fontconfig libffi libtool makeWrapper sqlite ]
+  buildInputs = [ fontconfig libffi libtool makeWrapper sqlite gsettings_desktop_schemas gtk3 ]
     ++ stdenv.lib.optionals stdenv.isDarwin [ CoreFoundation ];
 
   preConfigure = ''
@@ -76,7 +78,9 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     for p in $(ls $out/bin/) ; do
-      wrapProgram $out/bin/$p --prefix LD_LIBRARY_PATH ":" "${LD_LIBRARY_PATH}";
+      wrapProgram $out/bin/$p \
+        --prefix LD_LIBRARY_PATH ":" "${LD_LIBRARY_PATH}" \
+        --prefix XDG_DATA_DIRS ":" "$GSETTINGS_SCHEMAS_PATH";
     done
   '';
 
