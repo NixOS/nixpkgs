@@ -12963,7 +12963,6 @@ with pkgs;
 
   samba4 = callPackage ../servers/samba/4.x.nix {
     python = python2;
-    libbsd = libbsd-freedesktop;
   };
 
   sambaMaster = callPackage ../servers/samba/master.nix { };
@@ -21531,8 +21530,6 @@ with pkgs;
   fts = if hostPlatform.isMusl then netbsd.fts else null;
 
   libbsd = netbsd.compat;
-
-  libbsd-freedesktop = callPackage ../development/libraries/libbsd {};
 
   inherit (recurseIntoAttrs (callPackages ../os-specific/bsd { }))
           netbsd;
