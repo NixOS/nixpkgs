@@ -1,7 +1,7 @@
-{ fetchurl, stdenv, wrapGAppsHook
+{ fetchurl, stdenv, wrapGAppsHook, autoreconfHook
 , curl, dbus, dbus-glib, enchant, gtk2, gnutls, gnupg, gpgme, hicolor-icon-theme
 , libarchive, libcanberra-gtk2, libetpan, libnotify, libsoup, libxml2, networkmanager
-, openldap , perl, pkgconfig, poppler, python, shared-mime-info, webkitgtk24x-gtk2
+, openldap, perl, pkgconfig, poppler, python, shared-mime-info, webkitgtk24x-gtk2
 , glib-networking, gsettings-desktop-schemas, libSM, libytnef
 
 # Build options
@@ -10,7 +10,6 @@
 #       provided:
 #         gdata requires libgdata
 #         geolocation requires libchamplain
-#         python requires python
 , enableLdap ? false
 , enableNetworkManager ? false
 , enablePgp ? true
@@ -19,6 +18,7 @@
 , enablePluginNotificationDialogs ? true
 , enablePluginNotificationSounds ? true
 , enablePluginPdf ? false
+, enablePluginPython ? false
 , enablePluginRavatar ? false
 , enablePluginRssyl ? false
 , enablePluginSmime ? false
@@ -43,16 +43,22 @@ stdenv.mkDerivation rec {
 
   patches = [ ./mime.patch ];
 
+  preConfigure = ''
+    # autotools check tries to dlopen libpython as a requirement for the python plugin
+    export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:${python}/lib
+  '';
+
   postPatch = ''
     substituteInPlace src/procmime.c \
         --subst-var-by MIMEROOTDIR ${shared-mime-info}/share
   '';
 
-  nativeBuildInputs = [ pkgconfig wrapGAppsHook ];
+  nativeBuildInputs = [ autoreconfHook pkgconfig wrapGAppsHook python.pkgs.wrapPython ];
+  propagatedBuildInputs = with python.pkgs; [ python ] ++ optionals enablePluginPython [ pygtk pygobject2 ];
 
   buildInputs =
     [ curl dbus dbus-glib gtk2 gnutls gsettings-desktop-schemas hicolor-icon-theme
-      libetpan perl python glib-networking libSM libytnef
+      libetpan perl glib-networking libSM libytnef
     ]
     ++ optional enableSpellcheck enchant
     ++ optionals (enablePgp || enablePluginSmime) [ gnupg gpgme ]
@@ -77,6 +83,7 @@ stdenv.mkDerivation rec {
     ++ optional (!enablePluginArchive) "--disable-archive-plugin"
     ++ optional (!enablePluginFancy) "--disable-fancy-plugin"
     ++ optional (!enablePluginPdf) "--disable-pdf_viewer-plugin"
+    ++ optional (!enablePluginPython) "--disable-python-plugin"
     ++ optional (!enablePluginRavatar) "--disable-libravatar-plugin"
     ++ optional (!enablePluginRssyl) "--disable-rssyl-plugin"
     ++ optional (!enablePluginSmime) "--disable-smime-plugin"
@@ -87,8 +94,11 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+  pythonPath = with python.pkgs; [ pygobject2 pygtk ];
+
   preFixup = ''
-    gappsWrapperArgs+=(--prefix XDG_DATA_DIRS : "${shared-mime-info}/share")
+    buildPythonPath "$out $pythonPath"
+    gappsWrapperArgs+=(--prefix XDG_DATA_DIRS : "${shared-mime-info}/share" --prefix PYTHONPATH : "$program_PYTHONPATH")
   '';
 
   postInstall = ''
