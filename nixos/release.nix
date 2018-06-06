@@ -305,6 +305,7 @@ in rec {
   tests.home-assistant = callTest tests/home-assistant.nix { };
   tests.hound = callTest tests/hound.nix {};
   tests.hocker-fetchdocker = callTest tests/hocker-fetchdocker {};
+  tests.hydra = callTest tests/hydra {};
   tests.i3wm = callTest tests/i3wm.nix {};
   tests.iftop = callTest tests/iftop.nix {};
   tests.initrd-network-ssh = callTest tests/initrd-network-ssh {};
