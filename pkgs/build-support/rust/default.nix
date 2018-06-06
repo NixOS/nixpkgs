@@ -58,13 +58,21 @@ in stdenv.mkDerivation (args // {
     ${setupVendorDir}
 
     mkdir .cargo
-    cat >.cargo/config <<-EOF
-      [source.crates-io]
-      registry = 'https://github.com/rust-lang/crates.io-index'
-      replace-with = 'vendored-sources'
 
-      [source.vendored-sources]
-      directory = '$(pwd)/$cargoDepsCopy'
+    if [ -f $(pwd)/$cargoDepsCopy/cargo-config ]; then 
+      # removal needed or the checksum fails
+      mv $(pwd)/$cargoDepsCopy/cargo-config .cargo/config
+      sed -i -e '/\[source\.vendored-sources\]/ { N; d; }' .cargo/config
+      sed -i -e '/\[source\.crates-io\]/ { N; d; }' .cargo/config
+    fi
+
+    cat >>.cargo/config <<-EOF
+    [source.crates-io]
+    registry = 'https://github.com/rust-lang/crates.io-index'
+    replace-with = 'vendored-sources'
+
+    [source.vendored-sources]
+    directory = '$(pwd)/$cargoDepsCopy'
     EOF
 
     unset cargoDepsCopy
@@ -97,3 +105,4 @@ in stdenv.mkDerivation (args // {
 
   passthru = { inherit cargoDeps; } // (args.passthru or {});
 })
+
