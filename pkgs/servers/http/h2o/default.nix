@@ -7,13 +7,13 @@ with builtins;
 
 stdenv.mkDerivation rec {
   name = "h2o-${version}";
-  version = "2.2.4";
+  version = "2.2.5";
 
   src = fetchFromGitHub {
     owner  = "h2o";
     repo   = "h2o";
     rev    = "refs/tags/v${version}";
-    sha256 = "0176x0bzjry19zs074a9i5vhncc842xikmx43wj61jky318nq4w4";
+    sha256 = "0jyvbp6cjiirj44nxqa2fi5y473gnc8awfn8zv82hb1y9rlxqfyv";
   };
 
   nativeBuildInputs = [ pkgconfig cmake ];
