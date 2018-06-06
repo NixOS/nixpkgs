@@ -17,10 +17,13 @@ let
   # Used for finding packages on GNOME mirrors
   versionBranch = lib.versions.majorMinor;
 
-  fetchGnomeSource = {pname, version, sha256, name ? "${pname}-${version}"}:
+  fetchGnomeSource = {pname, version, sha256, name ? "${pname}-${version}", shortenVersion ? true}:
+    let
+      shortVersion = if shortenVersion then versionBranch version else version;
+    in
     pkgs.fetchurl {
       inherit sha256;
-      url = "mirror://gnome/sources/${pname}/${versionBranch version}/${name}.tar.xz";
+      url = "mirror://gnome/sources/${pname}/${shortVersion}/${name}.tar.xz";
     };
 
   updateScript = callPackage ./update.nix { };
