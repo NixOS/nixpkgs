@@ -16134,6 +16134,8 @@ with pkgs;
 
   linssid = libsForQt5.callPackage ../applications/networking/linssid { };
 
+  m32edit = callPackage ../applications/audio/midas/m32edit.nix {};
+
   manuskript = callPackage ../applications/editors/manuskript { };
 
   manul = callPackage ../development/tools/manul { };
@@ -18711,6 +18713,8 @@ with pkgs;
   x2goclient = libsForQt5.callPackage ../applications/networking/remote/x2goclient { };
 
   x2vnc = callPackage ../tools/X11/x2vnc { };
+
+  x32edit = callPackage ../applications/audio/midas/x32edit.nix {};
 
   x42-plugins = callPackage ../applications/audio/x42-plugins { };
 
