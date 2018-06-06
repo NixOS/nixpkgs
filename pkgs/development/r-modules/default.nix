@@ -435,6 +435,7 @@ let
     mzR = [ pkgs.netcdf ];
     cluster = [ pkgs.libiconv ];
     KernSmooth = [ pkgs.libiconv ];
+    nlme = [ pkgs.libiconv ];
   };
 
   packagesRequireingX = [
