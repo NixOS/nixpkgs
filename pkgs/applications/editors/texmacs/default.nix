@@ -9,17 +9,16 @@
   koreanFonts ? false }:
 
 let
-  pname = "TeXmacs";
-  version = "1.99.2";
   common = callPackage ./common.nix {
     inherit tex extraFonts chineseFonts japaneseFonts koreanFonts;
   };
 in
-stdenv.mkDerivation {
-  name = "${pname}-${version}";
+stdenv.mkDerivation rec {
+  pname = "TeXmacs";
+  version = "1.99.2";
 
   src = fetchurl {
-    url = "http://www.texmacs.org/Download/ftp/tmftp/source/TeXmacs-${version}-src.tar.gz";
+    url = "http://www.texmacs.org/Download/ftp/tmftp/source/${pname}-${version}-src.tar.gz";
     sha256 = "0l48g9746igiaxw657shm8g3xxk565vzsviajlrxqyljbh6py0fs";
   };
 
@@ -34,7 +33,7 @@ stdenv.mkDerivation {
   inherit (common) postPatch;
 
   postFixup = ''
-    bin="$out/libexec/TeXmacs/bin/texmacs.bin"
+    bin="$out/libexec/${pname}/bin/texmacs.bin"
     rpath=$(patchelf --print-rpath "$bin")
     patchelf --set-rpath "$rpath:${zlib.out}/lib" "$bin"
   '';

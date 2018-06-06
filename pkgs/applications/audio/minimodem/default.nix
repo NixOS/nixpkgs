@@ -5,7 +5,6 @@
 stdenv.mkDerivation rec {
   version = "0.24-1";
   pname = "minimodem";
-  name = "${pname}-${version}";
 
   src = fetchFromGitHub {
     owner = "kamalmostafa";
@@ -39,4 +38,3 @@ stdenv.mkDerivation rec {
     maintainers = with stdenv.lib.maintainers; [ relrod ];
   };
 }
-

@@ -3,7 +3,6 @@
 stdenv.mkDerivation rec {
   pname = "texstudio";
   version = "2.12.8";
-  name = "${pname}-${version}";
 
   src = fetchFromGitHub {
     owner = "${pname}-org";

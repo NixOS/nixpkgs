@@ -36,8 +36,7 @@
 
 let
   androidStudio = stdenv.mkDerivation {
-    name = "${pname}-${version}";
-
+    inherit pname version;
     src = fetchurl {
       url = "https://dl.google.com/dl/android/studio/ide-zips/${version}/android-studio-ide-${build}-linux.zip";
       sha256 = sha256Hash;

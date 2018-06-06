@@ -3,11 +3,9 @@
 , curl, glib, gnome3, gst_all_1, json-glib, libnotify, libsecret, sqlite
 }:
 
-let
+stdenv.mkDerivation rec {
   pname = "FeedReader";
   version = "2.2";
-in stdenv.mkDerivation {
-  name = "${pname}-${version}";
 
   src = fetchFromGitHub {
     owner = "jangernert";

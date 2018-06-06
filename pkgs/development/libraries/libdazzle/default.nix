@@ -1,12 +1,9 @@
 { stdenv, pkgs, fetchurl, ninja, meson, pkgconfig, vala, gobjectIntrospection, libxml2
 , gtk-doc, docbook_xsl, dbus, xvfb_run, glib, gtk3, gnome3 }:
 
-let
+stdenv.mkDerivation rec {
   version = "3.28.1";
   pname = "libdazzle";
-in
-stdenv.mkDerivation {
-  name = "${pname}-${version}";
 
   outputs = [ "out" "dev" "devdoc" ];
   outputBin = "dev";
