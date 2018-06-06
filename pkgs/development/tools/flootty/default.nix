@@ -7,7 +7,6 @@ in
 buildPythonApplication rec {
   pname = "Flootty";
   version = "3.2.1";
-  name = "${pname}-${version}";
 
   src = fetchPypi {
     inherit pname version;

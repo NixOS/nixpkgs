@@ -4,7 +4,6 @@ nose, shouldbe, gss, krb5Full, which, darwin }:
 buildPythonPackage rec {
   pname = "gssapi";
   version = "1.4.1";
-  name = "${pname}-${version}";
 
   src = fetchPypi {
     inherit pname version;

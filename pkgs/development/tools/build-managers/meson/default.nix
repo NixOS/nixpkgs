@@ -4,7 +4,6 @@
 in python3Packages.buildPythonApplication rec {
   version = "0.46.1";
   pname = "meson";
-  name = "${pname}-${version}";
 
   src = python3Packages.fetchPypi {
     inherit pname version;

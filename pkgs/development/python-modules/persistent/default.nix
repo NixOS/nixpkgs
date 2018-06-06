@@ -7,7 +7,6 @@
 buildPythonPackage rec {
   pname = "persistent";
   version = "4.2.4.2";
-  name = "${pname}-${version}";
 
   propagatedBuildInputs = [ zope_interface ];
 

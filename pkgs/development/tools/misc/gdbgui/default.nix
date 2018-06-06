@@ -3,7 +3,6 @@ let
   deps = import ./requirements.nix { inherit pkgs; };
 in
 python27Packages.buildPythonApplication rec {
-  name = "${pname}-${version}";
   pname = "gdbgui";
   version = "0.11.1.2";
 

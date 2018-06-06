@@ -25,7 +25,6 @@
 }:
 
 buildPythonPackage rec {
-  name = "${pname}-${version}";
   pname = "Sphinx";
   version = "1.7.4";
   src = fetchPypi {
