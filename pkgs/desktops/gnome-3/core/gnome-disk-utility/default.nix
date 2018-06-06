@@ -5,11 +5,11 @@
 
 stdenv.mkDerivation rec {
   name = "gnome-disk-utility-${version}";
-  version = "3.28.2";
+  version = "3.28.3";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-disk-utility/${gnome3.versionBranch version}/${name}.tar.xz";
-    sha256 = "1j3l4b1prbnixzy6srvcsjfg1dx5nqys2lmygm31ygfdq7svp3m6";
+    sha256 = "11ajz4cbsdns81kihd6242b6pwxbw8bkr9qqkf4qnb4kp363a38m";
   };
 
   passthru = {
