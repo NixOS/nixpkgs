@@ -45,6 +45,9 @@ buildFHSUserEnv {
   '';
 
   runScript = writeScript "install-and-start-dropbox" ''
+    # Fix for "libgcc_s.so.1 must be installed for pthread_cancel to work"
+    export NIX_LDFLAGS="-lgcc_s"
+
     export BROWSER=firefox
 
     set -e
