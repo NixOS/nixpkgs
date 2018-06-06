@@ -1,4 +1,4 @@
-{ stdenv, rustPlatform, fetchFromGitHub, cmake, pkgconfig, zlib }:
+{ stdenv, rustPlatform, fetchFromGitHub, cmake, pkgconfig, zlib, libiconv, darwin }:
 
 rustPlatform.buildRustPackage rec {
   name    = "bat-${version}";
@@ -15,11 +15,15 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [ cmake pkgconfig zlib ];
 
+  buildInputs = [ libiconv ] ++ stdenv.lib.optionals stdenv.isDarwin [
+    darwin.apple_sdk.frameworks.Security
+  ];
+
   meta = with stdenv.lib; {
     description = "A cat(1) clone with syntax highlighting and Git integration";
     homepage    = https://github.com/sharkdp/bat;
     license     = with licenses; [ asl20 /* or */ mit ];
     maintainers = with maintainers; [ dywedir ];
-    platforms   = platforms.linux;
+    platforms   = platforms.linux ++ platforms.darwin;
   };
 }
