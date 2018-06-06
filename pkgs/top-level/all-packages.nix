@@ -4162,9 +4162,7 @@ with pkgs;
 
   opendht = callPackage ../development/libraries/opendht {};
 
-  opendkim = callPackage ../development/libraries/opendkim {
-    libbsd = libbsd-freedesktop;
-  };
+  opendkim = callPackage ../development/libraries/opendkim { };
 
   opendylan = callPackage ../development/compilers/opendylan {
     opendylan-bootstrap = opendylan_bin;
