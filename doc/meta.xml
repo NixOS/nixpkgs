@@ -83,7 +83,8 @@ hello-2.3  A program that produces a familiar, friendly greeting
 
   <variablelist>
    <varlistentry>
-    <term><varname>description</varname>
+    <term>
+     <varname>description</varname>
     </term>
     <listitem>
      <para>
@@ -106,7 +107,8 @@ hello-2.3  A program that produces a familiar, friendly greeting
     </listitem>
    </varlistentry>
    <varlistentry>
-    <term><varname>longDescription</varname>
+    <term>
+     <varname>longDescription</varname>
     </term>
     <listitem>
      <para>
@@ -115,7 +117,8 @@ hello-2.3  A program that produces a familiar, friendly greeting
     </listitem>
    </varlistentry>
    <varlistentry>
-    <term><varname>branch</varname>
+    <term>
+     <varname>branch</varname>
     </term>
     <listitem>
      <para>
@@ -126,7 +129,8 @@ hello-2.3  A program that produces a familiar, friendly greeting
     </listitem>
    </varlistentry>
    <varlistentry>
-    <term><varname>homepage</varname>
+    <term>
+     <varname>homepage</varname>
     </term>
     <listitem>
      <para>
@@ -136,7 +140,8 @@ hello-2.3  A program that produces a familiar, friendly greeting
     </listitem>
    </varlistentry>
    <varlistentry>
-    <term><varname>downloadPage</varname>
+    <term>
+     <varname>downloadPage</varname>
     </term>
     <listitem>
      <para>
@@ -146,7 +151,8 @@ hello-2.3  A program that produces a familiar, friendly greeting
     </listitem>
    </varlistentry>
    <varlistentry>
-    <term><varname>license</varname>
+    <term>
+     <varname>license</varname>
     </term>
     <listitem>
      <para>
@@ -198,7 +204,8 @@ hello-2.3  A program that produces a familiar, friendly greeting
     </listitem>
    </varlistentry>
    <varlistentry>
-    <term><varname>maintainers</varname>
+    <term>
+     <varname>maintainers</varname>
     </term>
     <listitem>
      <para>
@@ -213,7 +220,8 @@ hello-2.3  A program that produces a familiar, friendly greeting
     </listitem>
    </varlistentry>
    <varlistentry>
-    <term><varname>priority</varname>
+    <term>
+     <varname>priority</varname>
     </term>
     <listitem>
      <para>
@@ -225,7 +233,8 @@ hello-2.3  A program that produces a familiar, friendly greeting
     </listitem>
    </varlistentry>
    <varlistentry>
-    <term><varname>platforms</varname>
+    <term>
+     <varname>platforms</varname>
     </term>
     <listitem>
      <para>
@@ -242,7 +251,8 @@ meta.platforms = stdenv.lib.platforms.linux;
     </listitem>
    </varlistentry>
    <varlistentry>
-    <term><varname>hydraPlatforms</varname>
+    <term>
+     <varname>hydraPlatforms</varname>
     </term>
     <listitem>
      <para>
@@ -261,7 +271,8 @@ meta.hydraPlatforms = [];
     </listitem>
    </varlistentry>
    <varlistentry>
-    <term><varname>broken</varname>
+    <term>
+     <varname>broken</varname>
     </term>
     <listitem>
      <para>
@@ -273,7 +284,8 @@ meta.hydraPlatforms = [];
     </listitem>
    </varlistentry>
    <varlistentry>
-    <term><varname>updateWalker</varname>
+    <term>
+     <varname>updateWalker</varname>
     </term>
     <listitem>
      <para>
@@ -305,8 +317,8 @@ meta.hydraPlatforms = [];
    generic options are available:
    <variablelist>
     <varlistentry>
-     <term><varname>stdenv.lib.licenses.free</varname>,
-    <varname>"free"</varname>
+     <term>
+      <varname>stdenv.lib.licenses.free</varname>, <varname>"free"</varname>
      </term>
      <listitem>
       <para>
@@ -315,8 +327,8 @@ meta.hydraPlatforms = [];
      </listitem>
     </varlistentry>
     <varlistentry>
-     <term><varname>stdenv.lib.licenses.unfreeRedistributable</varname>,
-    <varname>"unfree-redistributable"</varname>
+     <term>
+      <varname>stdenv.lib.licenses.unfreeRedistributable</varname>, <varname>"unfree-redistributable"</varname>
      </term>
      <listitem>
       <para>
@@ -336,8 +348,8 @@ meta.hydraPlatforms = [];
      </listitem>
     </varlistentry>
     <varlistentry>
-     <term><varname>stdenv.lib.licenses.unfree</varname>,
-    <varname>"unfree"</varname>
+     <term>
+      <varname>stdenv.lib.licenses.unfree</varname>, <varname>"unfree"</varname>
      </term>
      <listitem>
       <para>
@@ -348,8 +360,8 @@ meta.hydraPlatforms = [];
      </listitem>
     </varlistentry>
     <varlistentry>
-     <term><varname>stdenv.lib.licenses.unfreeRedistributableFirmware</varname>,
-    <varname>"unfree-redistributable-firmware"</varname>
+     <term>
+      <varname>stdenv.lib.licenses.unfreeRedistributableFirmware</varname>, <varname>"unfree-redistributable-firmware"</varname>
      </term>
      <listitem>
       <para>

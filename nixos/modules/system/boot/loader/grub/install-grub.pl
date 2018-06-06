@@ -281,22 +281,24 @@ else {
         else
           insmod vbe
         fi
-        insmod font
-        if loadfont " . $grubBoot->path . "/converted-font.pf2; then
-          insmod gfxterm
-          if [ \"\${grub_platform}\" = \"efi\" ]; then
-            set gfxmode=$gfxmodeEfi
-            set gfxpayload=keep
-          else
-            set gfxmode=$gfxmodeBios
-            set gfxpayload=text
-          fi
-          terminal_output gfxterm
-        fi
     ";
 
     if ($font) {
         copy $font, "$bootPath/converted-font.pf2" or die "cannot copy $font to $bootPath\n";
+        $conf .= "
+            insmod font
+            if loadfont " . $grubBoot->path . "/converted-font.pf2; then
+              insmod gfxterm
+              if [ \"\${grub_platform}\" = \"efi\" ]; then
+                set gfxmode=$gfxmodeEfi
+                set gfxpayload=keep
+              else
+                set gfxmode=$gfxmodeBios
+                set gfxpayload=text
+              fi
+              terminal_output gfxterm
+            fi
+        ";
     }
     if ($splashImage) {
         # FIXME: GRUB 1.97 doesn't resize the background image if it

@@ -13,7 +13,9 @@ let
   mpdConf = pkgs.writeText "mpd.conf" ''
     music_directory     "${cfg.musicDirectory}"
     playlist_directory  "${cfg.playlistDirectory}"
-    db_file             "${cfg.dbFile}"
+    ${lib.optionalString (cfg.dbFile != null) ''
+      db_file             "${cfg.dbFile}"
+    ''}
     state_file          "${cfg.dataDir}/state"
     sticker_file        "${cfg.dataDir}/sticker.sql"
     log_file            "syslog"
@@ -126,11 +128,12 @@ in {
       };
 
       dbFile = mkOption {
-        type = types.str;
+        type = types.nullOr types.str;
         default = "${cfg.dataDir}/tag_cache";
         defaultText = ''''${dataDir}/tag_cache'';
         description = ''
-          The path to MPD's database.
+          The path to MPD's database. If set to <literal>null</literal> the
+          parameter is omitted from the configuration.
         '';
       };
     };

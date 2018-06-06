@@ -12,47 +12,76 @@
   </refname><refpurpose>install bootloader and NixOS</refpurpose>
  </refnamediv>
  <refsynopsisdiv>
-  <cmdsynopsis><command>nixos-install</command>
+  <cmdsynopsis>
+   <command>nixos-install</command> 
    <arg>
-    <arg choice='plain'><option>-I</option>
-    </arg><replaceable>path</replaceable>
+    <arg choice='plain'>
+     <option>-I</option>
+    </arg>
+     <replaceable>path</replaceable>
    </arg>
+    
    <arg>
-    <arg choice='plain'><option>--root</option>
-    </arg><replaceable>root</replaceable>
+    <arg choice='plain'>
+     <option>--root</option>
+    </arg>
+     <replaceable>root</replaceable>
    </arg>
+    
    <arg>
-    <arg choice='plain'><option>--system</option>
-    </arg><replaceable>path</replaceable>
+    <arg choice='plain'>
+     <option>--system</option>
+    </arg>
+     <replaceable>path</replaceable>
    </arg>
+    
    <arg>
-    <arg choice='plain'><option>--no-channel-copy</option>
+    <arg choice='plain'>
+     <option>--no-channel-copy</option>
     </arg>
    </arg>
+    
    <arg>
-    <arg choice='plain'><option>--no-root-passwd</option>
+    <arg choice='plain'>
+     <option>--no-root-passwd</option>
     </arg>
    </arg>
+    
    <arg>
-    <arg choice='plain'><option>--no-bootloader</option>
+    <arg choice='plain'>
+     <option>--no-bootloader</option>
     </arg>
    </arg>
-   <arg><group choice='req'>
-    <arg choice='plain'><option>--max-jobs</option>
-    </arg>
-    <arg choice='plain'><option>-j</option>
-    </arg></group><replaceable>number</replaceable>
-   </arg>
-   <arg><option>--cores</option><replaceable>number</replaceable>
-   </arg>
-   <arg><option>--option</option><replaceable>name</replaceable><replaceable>value</replaceable>
-   </arg>
+    
    <arg>
-    <arg choice='plain'><option>--show-trace</option>
+    <group choice='req'> 
+    <arg choice='plain'>
+     <option>--max-jobs</option>
+    </arg>
+     
+    <arg choice='plain'>
+     <option>-j</option>
+    </arg>
+     </group> <replaceable>number</replaceable>
+   </arg>
+    
+   <arg>
+    <option>--cores</option> <replaceable>number</replaceable>
+   </arg>
+    
+   <arg>
+    <option>--option</option> <replaceable>name</replaceable> <replaceable>value</replaceable>
+   </arg>
+    
+   <arg>
+    <arg choice='plain'>
+     <option>--show-trace</option>
     </arg>
    </arg>
+    
    <arg>
-    <arg choice='plain'><option>--help</option>
+    <arg choice='plain'>
+     <option>--help</option>
     </arg>
    </arg>
   </cmdsynopsis>
@@ -106,7 +135,8 @@
   </para>
   <variablelist>
    <varlistentry>
-    <term><option>--root</option>
+    <term>
+     <option>--root</option>
     </term>
     <listitem>
      <para>
@@ -117,7 +147,8 @@
     </listitem>
    </varlistentry>
    <varlistentry>
-    <term><option>--system</option>
+    <term>
+     <option>--system</option>
     </term>
     <listitem>
      <para>
@@ -135,7 +166,8 @@
     </listitem>
    </varlistentry>
    <varlistentry>
-    <term><option>-I</option>
+    <term>
+     <option>-I</option>
     </term>
     <listitem>
      <para>
@@ -147,9 +179,11 @@
     </listitem>
    </varlistentry>
    <varlistentry>
-    <term><option>--max-jobs</option>
+    <term>
+     <option>--max-jobs</option>
     </term>
-    <term><option>-j</option>
+    <term>
+     <option>-j</option>
     </term>
     <listitem>
      <para>
@@ -160,7 +194,8 @@
     </listitem>
    </varlistentry>
    <varlistentry>
-    <term><option>--cores</option>
+    <term>
+     <option>--cores</option>
     </term>
     <listitem>
      <para>
@@ -177,7 +212,8 @@
     </listitem>
    </varlistentry>
    <varlistentry>
-    <term><option>--option</option><replaceable>name</replaceable><replaceable>value</replaceable>
+    <term>
+     <option>--option</option> <replaceable>name</replaceable> <replaceable>value</replaceable>
     </term>
     <listitem>
      <para>
@@ -187,7 +223,8 @@
     </listitem>
    </varlistentry>
    <varlistentry>
-    <term><option>--show-trace</option>
+    <term>
+     <option>--show-trace</option>
     </term>
     <listitem>
      <para>
@@ -197,7 +234,8 @@
     </listitem>
    </varlistentry>
    <varlistentry>
-    <term><option>--help</option>
+    <term>
+     <option>--help</option>
     </term>
     <listitem>
      <para>

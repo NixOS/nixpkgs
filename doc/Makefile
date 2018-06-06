@@ -12,6 +12,11 @@ format:
 	find . -iname '*.xml' -type f -print0 | xargs -0 -I{} -n1 \
 		xmlformat --config-file "$$XMLFORMAT_CONFIG" -i {}
 
+.PHONY: fix-misc-xml
+fix-misc-xml:
+	find . -iname '*.xml' -type f \
+		-exec ../nixos/doc/varlistentry-fixer.rb {} ';'
+
 .PHONY: clean
 clean:
 	rm -f ${MD_TARGETS} .version manual-full.xml

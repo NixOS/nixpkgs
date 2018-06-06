@@ -249,7 +249,8 @@
 
   <variablelist>
    <varlistentry>
-    <term><literal>name</literal>
+    <term>
+     <literal>name</literal>
     </term>
     <listitem>
      <para>
@@ -258,7 +259,8 @@
     </listitem>
    </varlistentry>
    <varlistentry>
-    <term><literal>targetPkgs</literal>
+    <term>
+     <literal>targetPkgs</literal>
     </term>
     <listitem>
      <para>
@@ -268,7 +270,8 @@
     </listitem>
    </varlistentry>
    <varlistentry>
-    <term><literal>multiPkgs</literal>
+    <term>
+     <literal>multiPkgs</literal>
     </term>
     <listitem>
      <para>
@@ -279,7 +282,8 @@
     </listitem>
    </varlistentry>
    <varlistentry>
-    <term><literal>extraBuildCommands</literal>
+    <term>
+     <literal>extraBuildCommands</literal>
     </term>
     <listitem>
      <para>
@@ -289,7 +293,8 @@
     </listitem>
    </varlistentry>
    <varlistentry>
-    <term><literal>extraBuildCommandsMulti</literal>
+    <term>
+     <literal>extraBuildCommandsMulti</literal>
     </term>
     <listitem>
      <para>
@@ -299,7 +304,8 @@
     </listitem>
    </varlistentry>
    <varlistentry>
-    <term><literal>extraOutputsToInstall</literal>
+    <term>
+     <literal>extraOutputsToInstall</literal>
     </term>
     <listitem>
      <para>
@@ -309,7 +315,8 @@
     </listitem>
    </varlistentry>
    <varlistentry>
-    <term><literal>extraInstallCommands</literal>
+    <term>
+     <literal>extraInstallCommands</literal>
     </term>
     <listitem>
      <para>
@@ -319,7 +326,8 @@
     </listitem>
    </varlistentry>
    <varlistentry>
-    <term><literal>runScript</literal>
+    <term>
+     <literal>runScript</literal>
     </term>
     <listitem>
      <para>

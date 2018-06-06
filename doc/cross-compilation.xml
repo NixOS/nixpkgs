@@ -60,7 +60,8 @@
 
    <variablelist>
     <varlistentry>
-     <term><varname>buildPlatform</varname>
+     <term>
+      <varname>buildPlatform</varname>
      </term>
      <listitem>
       <para>
@@ -71,7 +72,8 @@
      </listitem>
     </varlistentry>
     <varlistentry>
-     <term><varname>hostPlatform</varname>
+     <term>
+      <varname>hostPlatform</varname>
      </term>
      <listitem>
       <para>
@@ -82,7 +84,8 @@
      </listitem>
     </varlistentry>
     <varlistentry>
-     <term><varname>targetPlatform</varname>
+     <term>
+      <varname>targetPlatform</varname>
      </term>
      <listitem>
       <para>
@@ -128,7 +131,8 @@
 
    <variablelist>
     <varlistentry>
-     <term><varname>system</varname>
+     <term>
+      <varname>system</varname>
      </term>
      <listitem>
       <para>
@@ -141,7 +145,8 @@
      </listitem>
     </varlistentry>
     <varlistentry>
-     <term><varname>config</varname>
+     <term>
+      <varname>config</varname>
      </term>
      <listitem>
       <para>
@@ -157,7 +162,8 @@
      </listitem>
     </varlistentry>
     <varlistentry>
-     <term><varname>parsed</varname>
+     <term>
+      <varname>parsed</varname>
      </term>
      <listitem>
       <para>
@@ -171,7 +177,8 @@
      </listitem>
     </varlistentry>
     <varlistentry>
-     <term><varname>libc</varname>
+     <term>
+      <varname>libc</varname>
      </term>
      <listitem>
       <para>
@@ -183,7 +190,8 @@
      </listitem>
     </varlistentry>
     <varlistentry>
-     <term><varname>is*</varname>
+     <term>
+      <varname>is*</varname>
      </term>
      <listitem>
       <para>
@@ -195,7 +203,8 @@
      </listitem>
     </varlistentry>
     <varlistentry>
-     <term><varname>platform</varname>
+     <term>
+      <varname>platform</varname>
      </term>
      <listitem>
       <para>

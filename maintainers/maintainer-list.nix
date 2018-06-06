@@ -558,6 +558,11 @@
     github = "bergey";
     name = "Daniel Bergey";
   };
+  bfortz = {
+    email = "bernard.fortz@gmail.com";
+    github = "bfortz";
+    name = "Bernard Fortz";
+  };
   bhipple = {
     email = "bhipple@protonmail.com";
     github = "bhipple";
@@ -3446,6 +3451,11 @@
     email = "octavian.cerna@gmail.com";
     github = "tavyc";
     name = "Octavian Cerna";
+  };
+  tazjin = {
+    email = "mail@tazj.in";
+    github = "tazjin";
+    name = "Vincent Ambo";
   };
   teh = {
     email = "tehunger@gmail.com";

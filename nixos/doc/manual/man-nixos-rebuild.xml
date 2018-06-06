@@ -12,43 +12,75 @@
   </refname><refpurpose>reconfigure a NixOS machine</refpurpose>
  </refnamediv>
  <refsynopsisdiv>
-  <cmdsynopsis><command>nixos-rebuild</command><group choice='req'>
-   <arg choice='plain'><option>switch</option>
+  <cmdsynopsis>
+   <command>nixos-rebuild</command><group choice='req'> 
+   <arg choice='plain'>
+    <option>switch</option>
    </arg>
-   <arg choice='plain'><option>boot</option>
+    
+   <arg choice='plain'>
+    <option>boot</option>
    </arg>
-   <arg choice='plain'><option>test</option>
+    
+   <arg choice='plain'>
+    <option>test</option>
    </arg>
-   <arg choice='plain'><option>build</option>
+    
+   <arg choice='plain'>
+    <option>build</option>
    </arg>
-   <arg choice='plain'><option>dry-build</option>
+    
+   <arg choice='plain'>
+    <option>dry-build</option>
    </arg>
-   <arg choice='plain'><option>dry-activate</option>
+    
+   <arg choice='plain'>
+    <option>dry-activate</option>
    </arg>
-   <arg choice='plain'><option>build-vm</option>
+    
+   <arg choice='plain'>
+    <option>build-vm</option>
    </arg>
-   <arg choice='plain'><option>build-vm-with-bootloader</option>
-   </arg></group>
+    
+   <arg choice='plain'>
+    <option>build-vm-with-bootloader</option>
+   </arg>
+    </group>
    <sbr />
-   <arg><option>--upgrade</option>
+   <arg>
+    <option>--upgrade</option>
    </arg>
-   <arg><option>--install-bootloader</option>
+    
+   <arg>
+    <option>--install-bootloader</option>
    </arg>
-   <arg><option>--no-build-nix</option>
+    
+   <arg>
+    <option>--no-build-nix</option>
    </arg>
-   <arg><option>--fast</option>
+    
+   <arg>
+    <option>--fast</option>
    </arg>
-   <arg><option>--rollback</option>
+    
+   <arg>
+    <option>--rollback</option>
    </arg>
    <sbr />
-   <arg><group choice='req'>
-    <arg choice='plain'><option>--profile-name</option>
+   <arg>
+    <group choice='req'> 
+    <arg choice='plain'>
+     <option>--profile-name</option>
     </arg>
-    <arg choice='plain'><option>-p</option>
-    </arg></group><replaceable>name</replaceable>
+     
+    <arg choice='plain'>
+     <option>-p</option>
+    </arg>
+     </group> <replaceable>name</replaceable>
    </arg>
    <sbr />
-   <arg><option>--show-trace</option>
+   <arg>
+    <option>--show-trace</option>
    </arg>
   </cmdsynopsis>
  </refsynopsisdiv>
@@ -68,7 +100,8 @@
    operation. It must be one of the following:
    <variablelist>
     <varlistentry>
-     <term><option>switch</option>
+     <term>
+      <option>switch</option>
      </term>
      <listitem>
       <para>
@@ -82,7 +115,8 @@
      </listitem>
     </varlistentry>
     <varlistentry>
-     <term><option>boot</option>
+     <term>
+      <option>boot</option>
      </term>
      <listitem>
       <para>
@@ -94,7 +128,8 @@
      </listitem>
     </varlistentry>
     <varlistentry>
-     <term><option>test</option>
+     <term>
+      <option>test</option>
      </term>
      <listitem>
       <para>
@@ -107,7 +142,8 @@
      </listitem>
     </varlistentry>
     <varlistentry>
-     <term><option>build</option>
+     <term>
+      <option>build</option>
      </term>
      <listitem>
       <para>
@@ -124,7 +160,8 @@ $ nix-build /path/to/nixpkgs/nixos -A system
      </listitem>
     </varlistentry>
     <varlistentry>
-     <term><option>dry-build</option>
+     <term>
+      <option>dry-build</option>
      </term>
      <listitem>
       <para>
@@ -134,7 +171,8 @@ $ nix-build /path/to/nixpkgs/nixos -A system
      </listitem>
     </varlistentry>
     <varlistentry>
-     <term><option>dry-activate</option>
+     <term>
+      <option>dry-activate</option>
      </term>
      <listitem>
       <para>
@@ -147,7 +185,8 @@ $ nix-build /path/to/nixpkgs/nixos -A system
      </listitem>
     </varlistentry>
     <varlistentry>
-     <term><option>build-vm</option>
+     <term>
+      <option>build-vm</option>
      </term>
      <listitem>
       <para>
@@ -186,7 +225,8 @@ $ ./result/bin/run-*-vm
      </listitem>
     </varlistentry>
     <varlistentry>
-     <term><option>build-vm-with-bootloader</option>
+     <term>
+      <option>build-vm-with-bootloader</option>
      </term>
      <listitem>
       <para>
@@ -213,7 +253,8 @@ $ ./result/bin/run-*-vm
   </para>
   <variablelist>
    <varlistentry>
-    <term><option>--upgrade</option>
+    <term>
+     <option>--upgrade</option>
     </term>
     <listitem>
      <para>
@@ -222,7 +263,8 @@ $ ./result/bin/run-*-vm
     </listitem>
    </varlistentry>
    <varlistentry>
-    <term><option>--install-bootloader</option>
+    <term>
+     <option>--install-bootloader</option>
     </term>
     <listitem>
      <para>
@@ -232,7 +274,8 @@ $ ./result/bin/run-*-vm
     </listitem>
    </varlistentry>
    <varlistentry>
-    <term><option>--no-build-nix</option>
+    <term>
+     <option>--no-build-nix</option>
     </term>
     <listitem>
      <para>
@@ -246,7 +289,8 @@ $ ./result/bin/run-*-vm
     </listitem>
    </varlistentry>
    <varlistentry>
-    <term><option>--fast</option>
+    <term>
+     <option>--fast</option>
     </term>
     <listitem>
      <para>
@@ -258,7 +302,8 @@ $ ./result/bin/run-*-vm
     </listitem>
    </varlistentry>
    <varlistentry>
-    <term><option>--rollback</option>
+    <term>
+     <option>--rollback</option>
     </term>
     <listitem>
      <para>
@@ -271,9 +316,11 @@ $ ./result/bin/run-*-vm
     </listitem>
    </varlistentry>
    <varlistentry>
-    <term><option>--profile-name</option>
+    <term>
+     <option>--profile-name</option>
     </term>
-    <term><option>-p</option>
+    <term>
+     <option>-p</option>
     </term>
     <listitem>
      <para>
@@ -299,7 +346,8 @@ $ nixos-rebuild switch -p test -I nixos-config=./test.nix
     </listitem>
    </varlistentry>
    <varlistentry>
-    <term><option>--build-host</option>
+    <term>
+     <option>--build-host</option>
     </term>
     <listitem>
      <para>
@@ -323,7 +371,8 @@ $ nixos-rebuild switch -p test -I nixos-config=./test.nix
     </listitem>
    </varlistentry>
    <varlistentry>
-    <term><option>--target-host</option>
+    <term>
+     <option>--target-host</option>
     </term>
     <listitem>
      <para>
@@ -361,7 +410,8 @@ $ nixos-rebuild switch -p test -I nixos-config=./test.nix
   <title>Environment</title>
   <variablelist>
    <varlistentry>
-    <term><envar>NIXOS_CONFIG</envar>
+    <term>
+     <envar>NIXOS_CONFIG</envar>
     </term>
     <listitem>
      <para>
@@ -371,7 +421,8 @@ $ nixos-rebuild switch -p test -I nixos-config=./test.nix
     </listitem>
    </varlistentry>
    <varlistentry>
-    <term><envar>NIX_SSHOPTS</envar>
+    <term>
+     <envar>NIX_SSHOPTS</envar>
     </term>
     <listitem>
      <para>
@@ -386,7 +437,8 @@ $ nixos-rebuild switch -p test -I nixos-config=./test.nix
   <title>Files</title>
   <variablelist>
    <varlistentry>
-    <term><filename>/run/current-system</filename>
+    <term>
+     <filename>/run/current-system</filename>
     </term>
     <listitem>
      <para>
@@ -395,7 +447,8 @@ $ nixos-rebuild switch -p test -I nixos-config=./test.nix
     </listitem>
    </varlistentry>
    <varlistentry>
-    <term><filename>/nix/var/nix/profiles/system</filename>
+    <term>
+     <filename>/nix/var/nix/profiles/system</filename>
     </term>
     <listitem>
      <para>
