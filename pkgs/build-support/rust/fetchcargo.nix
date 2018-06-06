@@ -23,9 +23,10 @@ stdenv.mkDerivation {
 
     ${cargoUpdateHook}
 
-    cargo vendor
+    cargo vendor | tee cargo-config
 
     cp -ar vendor $out
+    cp cargo-config $out
   '';
 
   outputHashAlgo = "sha256";
@@ -35,3 +36,4 @@ stdenv.mkDerivation {
   impureEnvVars = stdenv.lib.fetchers.proxyImpureEnvVars;
   preferLocalBuild = true;
 }
+
