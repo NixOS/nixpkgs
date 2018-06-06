@@ -1,14 +1,14 @@
-{ pkgs, pkgsi686Linux, stdenv }:
+{ pkgs, stdenv, stdenvNoCC, gccStdenv }:
 
 let
   callPackage = pkgs.newScope self;
-  callPackage_i686 = pkgsi686Linux.newScope self;
 
   self = rec {
     dwarf-fortress-original = callPackage ./game.nix { };
 
     dfhack = callPackage ./dfhack {
       inherit (pkgs.perlPackages) XMLLibXML XMLLibXSLT;
+      stdenv = gccStdenv;
     };
 
     soundSense = callPackage ./soundsense.nix { };
@@ -32,9 +32,13 @@ let
 
     dwarf-therapist = callPackage ./dwarf-therapist/wrapper.nix { };
 
-    phoebus-theme = callPackage ./themes/phoebus.nix { };
+    themes = callPackage ./themes {
+      stdenv = stdenvNoCC;
+    };
 
-    cla-theme = callPackage ./themes/cla.nix { };
+    phoebus-theme = themes.phoebus;
+
+    cla-theme = themes.cla;
   };
 
 in self
