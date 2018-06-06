@@ -3,7 +3,6 @@
 python2.pkgs.buildPythonApplication rec {
   pname = "lit";
   version = "0.5.1";
-  name = "${pname}-${version}";
 
   src = python2.pkgs.fetchPypi {
     inherit pname version;

@@ -6,7 +6,6 @@
 
 buildPythonPackage rec {
   pname = "pelican";
-  name = "${pname}-${version}";
   version = "3.7.1";
   disabled = isPy26;
 

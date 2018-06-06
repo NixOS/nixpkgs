@@ -13,7 +13,6 @@
 
 buildPythonPackage rec {
   pname = "smart_open";
-  name = "${pname}-${version}";
   version = "1.5.7";
 
   src = fetchPypi {

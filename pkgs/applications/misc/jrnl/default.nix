@@ -7,7 +7,6 @@ with python.pkgs;
 buildPythonApplication rec {
   pname = "jrnl";
   version = "1.9.8";
-  name = "${pname}-${version}";
   disabled = isPy3k;
 
   src = fetchPypi {
