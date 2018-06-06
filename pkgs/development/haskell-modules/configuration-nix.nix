@@ -146,6 +146,9 @@ self: super: builtins.intersectAttrs super {
   gtk-traymanager = addPkgconfigDepend super.gtk-traymanager pkgs.gtk3;
   taffybar = (addPkgconfigDepend super.taffybar pkgs.gtk3).override { dbus = self.dbus_1_0_1; };
 
+  # Add necessary reference to gtk3 package
+  gi-dbusmenugtk3 = addPkgconfigDepend super.gi-dbusmenugtk3 pkgs.gtk3;
+
   # Need WebkitGTK, not just webkit.
   webkit = super.webkit.override { webkit = pkgs.webkitgtk24x-gtk2; };
   websnap = super.websnap.override { webkit = pkgs.webkitgtk24x-gtk3; };
