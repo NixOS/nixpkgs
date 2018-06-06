@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "gtkwave-${version}";
-  version = "3.3.90";
+  version = "3.3.91";
 
   src = fetchurl {
     url    = "mirror://sourceforge/gtkwave/${name}.tar.gz";
-    sha256 = "1q1fi0nqja9d8xj24h7ykvnpms6zqgn24jmyj1mxn48qig301c6m";
+    sha256 = "1vp9qj3wyfwm36jk3pajvi09xvc1m1crf3d4gphfbs6nkyx2z942";
   };
 
   nativeBuildInputs = [ pkgconfig ];
