@@ -20,11 +20,11 @@ assert (withQt5 -> qtbase != null && qtsvg != null && qtx11extras != null);
 
 stdenv.mkDerivation rec {
   name = "vlc-${version}";
-  version = "3.0.1";
+  version = "3.0.3";
 
   src = fetchurl {
     url = "http://get.videolan.org/vlc/${version}/${name}.tar.xz";
-    sha256 = "008krfhykm9447wc1kkw82bsw3f6ikljgrqyb1sinwlxnkghqw6f";
+    sha256 = "0lavzly8l0ll1d9iris9cnirgcs77g48lxj14058dxqkvd5v1a4v";
   };
 
   # VLC uses a *ton* of libraries for various pieces of functionality, many of
@@ -51,6 +51,14 @@ stdenv.mkDerivation rec {
   # vlc depends on a c11-gcc wrapper script which we don't have so we need to
   # set the path to the compiler
   BUILDCC = "${stdenv.cc}/bin/gcc";
+
+  patches = [
+    (fetchpatch {
+      name = "vlc-qt5.11.patch";
+      url = "https://git.archlinux.org/svntogit/packages.git/plain/trunk/vlc-qt5.11.patch?h=packages/vlc";
+      sha256 = "0yh65bhhaz876cazhagnafs1dr61184lpj3y0m3y7k37bswykj8p";
+    })
+  ];
 
   postPatch = ''
     substituteInPlace configure \

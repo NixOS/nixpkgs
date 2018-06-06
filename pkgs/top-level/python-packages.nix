@@ -384,6 +384,10 @@ in {
     callPackage = pkgs.callPackage;
   };
 
+  pykdtree = callPackage ../development/python-modules/pykdtree {
+    inherit (pkgs.llvmPackages) openmp;
+  };
+
   pyparser = callPackage ../development/python-modules/pyparser { };
 
   pyqt4 = callPackage ../development/python-modules/pyqt/4.x.nix {
@@ -12435,6 +12439,8 @@ in {
 
   typing = callPackage ../development/python-modules/typing { };
 
+  typing-extensions = callPackage ../development/python-modules/typing-extensions { };
+
   typeguard = callPackage ../development/python-modules/typeguard { };
 
   ruamel_yaml = buildPythonPackage rec {
@@ -18130,6 +18136,8 @@ EOF
   ephem = callPackage ../development/python-modules/ephem { };
 
   voluptuous = callPackage ../development/python-modules/voluptuous { };
+
+  voluptuous-serialize = callPackage ../development/python-modules/voluptuous-serialize { };
 
   pysigset = callPackage ../development/python-modules/pysigset { };
 

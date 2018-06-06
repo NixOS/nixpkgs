@@ -363,6 +363,8 @@ let
       then callPackage ../development/ocaml-modules/lambda-term { }
       else lambdaTerm-1_6;
 
+    linenoise = callPackage ../development/ocaml-modules/linenoise { };
+
     llvm = callPackage ../development/ocaml-modules/llvm {
       llvm = pkgs.llvm_39;
     };

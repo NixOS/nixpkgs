@@ -228,7 +228,7 @@
     "comfoconnect" = ps: with ps; [  ];
     "config" = ps: with ps; [ aiohttp-cors ];
     "config.automation" = ps: with ps; [  ];
-    "config.config_entries" = ps: with ps; [  ];
+    "config.config_entries" = ps: with ps; [ voluptuous-serialize ];
     "config.core" = ps: with ps; [  ];
     "config.customize" = ps: with ps; [  ];
     "config.entity_registry" = ps: with ps; [  ];

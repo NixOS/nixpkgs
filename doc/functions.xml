@@ -321,7 +321,8 @@ merge:"diff3"
 
   <variablelist>
    <varlistentry>
-    <term><literal>name</literal>
+    <term>
+     <literal>name</literal>
     </term>
     <listitem>
      <para>
@@ -330,7 +331,8 @@ merge:"diff3"
     </listitem>
    </varlistentry>
    <varlistentry>
-    <term><literal>targetPkgs</literal>
+    <term>
+     <literal>targetPkgs</literal>
     </term>
     <listitem>
      <para>
@@ -340,7 +342,8 @@ merge:"diff3"
     </listitem>
    </varlistentry>
    <varlistentry>
-    <term><literal>multiPkgs</literal>
+    <term>
+     <literal>multiPkgs</literal>
     </term>
     <listitem>
      <para>
@@ -351,7 +354,8 @@ merge:"diff3"
     </listitem>
    </varlistentry>
    <varlistentry>
-    <term><literal>extraBuildCommands</literal>
+    <term>
+     <literal>extraBuildCommands</literal>
     </term>
     <listitem>
      <para>
@@ -361,7 +365,8 @@ merge:"diff3"
     </listitem>
    </varlistentry>
    <varlistentry>
-    <term><literal>extraBuildCommandsMulti</literal>
+    <term>
+     <literal>extraBuildCommandsMulti</literal>
     </term>
     <listitem>
      <para>
@@ -371,7 +376,8 @@ merge:"diff3"
     </listitem>
    </varlistentry>
    <varlistentry>
-    <term><literal>extraOutputsToInstall</literal>
+    <term>
+     <literal>extraOutputsToInstall</literal>
     </term>
     <listitem>
      <para>
@@ -381,7 +387,8 @@ merge:"diff3"
     </listitem>
    </varlistentry>
    <varlistentry>
-    <term><literal>extraInstallCommands</literal>
+    <term>
+     <literal>extraInstallCommands</literal>
     </term>
     <listitem>
      <para>
@@ -391,7 +398,8 @@ merge:"diff3"
     </listitem>
    </varlistentry>
    <varlistentry>
-    <term><literal>runScript</literal>
+    <term>
+     <literal>runScript</literal>
     </term>
     <listitem>
      <para>
@@ -624,9 +632,9 @@ merge:"diff3"
 
    <para>
     This function is analogous to the <command>docker pull</command> command,
-    in that can be used to pull a Docker image from a Docker registry.
-    By default <link xlink:href="https://hub.docker.com/">Docker Hub</link>
-    is used to pull images.
+    in that can be used to pull a Docker image from a Docker registry. By
+    default <link xlink:href="https://hub.docker.com/">Docker Hub</link> is
+    used to pull images.
    </para>
 
    <para>
@@ -648,15 +656,15 @@ merge:"diff3"
    <calloutlist>
     <callout arearefs='ex-dockerTools-pullImage-1'>
      <para>
-      <varname>imageName</varname> specifies the name of the image to be downloaded,
-      which can also include the registry namespace (e.g. <literal>nixos</literal>).
-      This argument is required.
+      <varname>imageName</varname> specifies the name of the image to be
+      downloaded, which can also include the registry namespace (e.g.
+      <literal>nixos</literal>). This argument is required.
      </para>
     </callout>
     <callout arearefs='ex-dockerTools-pullImage-2'>
      <para>
-      <varname>imageDigest</varname> specifies the digest of the image
-      to be downloaded. Skopeo can be used to get the digest of an image
+      <varname>imageDigest</varname> specifies the digest of the image to be
+      downloaded. Skopeo can be used to get the digest of an image
 <programlisting>
   $ skopeo inspect docker://docker.io/nixos/nix:1.11 | jq -r '.Digest'
   sha256:20d9485b25ecfd89204e843a962c1bd70e9cc6858d65d7f5fadc340246e2116b
@@ -666,10 +674,10 @@ merge:"diff3"
     </callout>
     <callout arearefs='ex-dockerTools-pullImage-3'>
      <para>
-      <varname>finalImageTag</varname>, if specified, this is the tag of
-      the image to be created. Note it is never used to fetch the image
-      since we prefer to rely on the immutable digest ID. By default
-      it's <literal>latest</literal>.
+      <varname>finalImageTag</varname>, if specified, this is the tag of the
+      image to be created. Note it is never used to fetch the image since we
+      prefer to rely on the immutable digest ID. By default it's
+      <literal>latest</literal>.
      </para>
     </callout>
     <callout arearefs='ex-dockerTools-pullImage-4'>

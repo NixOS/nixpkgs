@@ -1,5 +1,6 @@
 # FIXME: make gdk_pixbuf dependency optional
-{ buildPythonPackage
+{ stdenv
+, buildPythonPackage
 , fetchPypi
 , lib
 , substituteAll
@@ -42,6 +43,7 @@ buildPythonPackage rec {
     # OSError: dlopen() failed to load a library: gdk_pixbuf-2.0 / gdk_pixbuf-2.0-0
     (substituteAll {
       src = ./dlopen-paths.patch;
+      ext = stdenv.hostPlatform.extensions.sharedLibrary;
       cairo = cairo.out;
       glib = glib.out;
       gdk_pixbuf = gdk_pixbuf.out;

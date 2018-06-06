@@ -95,8 +95,8 @@ in with py.pkgs; buildPythonApplication rec {
   propagatedBuildInputs = [
     # From setup.py
     requests pyyaml pytz pip jinja2 voluptuous typing aiohttp async-timeout astral certifi attrs
-    # From http, frontend and recorder components
-    sqlalchemy aiohttp-cors hass-frontend
+    # From http, frontend, recorder and config.config_entries components
+    sqlalchemy aiohttp-cors hass-frontend voluptuous-serialize
   ] ++ componentBuildInputs ++ extraBuildInputs;
 
   checkInputs = [

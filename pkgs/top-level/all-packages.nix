@@ -1358,6 +1358,8 @@ with pkgs;
 
   meritous = callPackage ../games/meritous { };
 
+  opendune = callPackage ../games/opendune { };
+
   meson = callPackage ../development/tools/build-managers/meson { };
 
   metabase = callPackage ../servers/metabase { };
@@ -2157,7 +2159,7 @@ with pkgs;
 
   mcrcon = callPackage ../tools/networking/mcrcon {};
 
-  s-tar = callPackages ../tools/archivers/s-tar {};
+  s-tar = callPackage ../tools/archivers/s-tar {};
 
   tealdeer = callPackage ../tools/misc/tealdeer { };
 
@@ -2381,6 +2383,8 @@ with pkgs;
   fluentd = callPackage ../tools/misc/fluentd { };
 
   flvstreamer = callPackage ../tools/networking/flvstreamer { };
+
+  libbsd = callPackage ../development/libraries/libbsd { };
 
   libbladeRF = callPackage ../development/libraries/libbladeRF { };
 
@@ -4160,9 +4164,7 @@ with pkgs;
 
   opendht = callPackage ../development/libraries/opendht {};
 
-  opendkim = callPackage ../development/libraries/opendkim {
-    libbsd = libbsd-freedesktop;
-  };
+  opendkim = callPackage ../development/libraries/opendkim { };
 
   opendylan = callPackage ../development/compilers/opendylan {
     opendylan-bootstrap = opendylan_bin;
@@ -4373,6 +4375,8 @@ with pkgs;
   pdf2htmlEX = callPackage ../tools/typesetting/pdf2htmlEX { };
 
   pdf2odt = callPackage ../tools/typesetting/pdf2odt { };
+
+  pdf-redact-tools = callPackage ../tools/graphics/pdfredacttools { };
 
   pdf2svg = callPackage ../tools/graphics/pdf2svg { };
 
@@ -7815,6 +7819,8 @@ with pkgs;
   ctagsWrapped = callPackage ../development/tools/misc/ctags/wrapped.nix {};
 
   ctodo = callPackage ../applications/misc/ctodo { };
+
+  ctmg = callPackage ../tools/security/ctmg { };
 
   cmake_2_8 = callPackage ../development/tools/build-managers/cmake/2.8.nix { };
 
@@ -12958,7 +12964,6 @@ with pkgs;
 
   samba4 = callPackage ../servers/samba/4.x.nix {
     python = python2;
-    libbsd = libbsd-freedesktop;
   };
 
   sambaMaster = callPackage ../servers/samba/master.nix { };
@@ -21525,13 +21530,11 @@ with pkgs;
 
   fts = if hostPlatform.isMusl then netbsd.fts else null;
 
-  libbsd = netbsd.compat;
-
-  libbsd-freedesktop = callPackage ../development/libraries/libbsd {};
-
   inherit (recurseIntoAttrs (callPackages ../os-specific/bsd { }))
           netbsd;
 
   yrd = callPackage ../tools/networking/yrd { };
+
+  powershell = callPackage ../shells/powershell { };
 
 }

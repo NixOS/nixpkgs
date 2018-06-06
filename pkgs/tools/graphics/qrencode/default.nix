@@ -1,11 +1,11 @@
 { stdenv, fetchurl, libpng, pkgconfig }:
 
 stdenv.mkDerivation rec {
-  name = "qrencode-4.0.0";
+  name = "qrencode-4.0.1";
 
   src = fetchurl {
     url = "${meta.homepage}/${name}.tar.bz2";
-    sha256 = "02vx69fl52jbcrmnydsaxcmy6nxqm9jyxzd7hr07s491d7hka069";
+    sha256 = "0j7cqhjc0l6i99lzph51gakmcmfs74x483plna93r4ngz328knph";
   };
 
   buildInputs = [ libpng ];
