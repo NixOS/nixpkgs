@@ -15,7 +15,13 @@ let
 
   # Convert a version to branch (3.26.18 → 3.26)
   # Used for finding packages on GNOME mirrors
-  versionBranch = version: builtins.concatStringsSep "." (lib.take 2 (lib.splitString "." version));
+  versionBranch = lib.versions.majorMinor;
+
+  fetchGnomeSource = {pname, version, sha256, name ? "${pname}-${version}"}:
+    pkgs.fetchurl {
+      inherit sha256;
+      url = "mirror://gnome/sources/${pname}/${versionBranch version}/${name}.tar.xz";
+    };
 
   updateScript = callPackage ./update.nix { };
 
