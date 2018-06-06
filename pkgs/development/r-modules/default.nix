@@ -434,6 +434,7 @@ let
     dti = [ pkgs.which pkgs.xorg.xdpyinfo pkgs.imagemagick ];
     mzR = [ pkgs.netcdf ];
     cluster = [ pkgs.libiconv ];
+    KernSmooth = [ pkgs.libiconv ];
   };
 
   packagesRequireingX = [
