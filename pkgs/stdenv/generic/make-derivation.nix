@@ -12,7 +12,9 @@ rec {
   # * https://nixos.org/nix/manual/#ssec-derivation
   #   Explanation about derivations in general
   mkDerivation =
-    { name ? ""
+    { name ? if builtins.hasAttr "pname" attrs && builtins.hasAttr "version" attrs
+        then "${attrs.pname}-${attrs.version}"
+        else ""
 
     # These types of dependencies are all exhaustively documented in
     # the "Specifying Dependencies" section of the "Standard
