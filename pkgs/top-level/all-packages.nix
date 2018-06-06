@@ -2384,6 +2384,8 @@ with pkgs;
 
   flvstreamer = callPackage ../tools/networking/flvstreamer { };
 
+  libbsd = callPackage ../development/libraries/libbsd { };
+
   libbladeRF = callPackage ../development/libraries/libbladeRF { };
 
   lp_solve = callPackage ../applications/science/math/lp_solve { };
@@ -21526,8 +21528,6 @@ with pkgs;
                       getent;
 
   fts = if hostPlatform.isMusl then netbsd.fts else null;
-
-  libbsd = netbsd.compat;
 
   inherit (recurseIntoAttrs (callPackages ../os-specific/bsd { }))
           netbsd;
