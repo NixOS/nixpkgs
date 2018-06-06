@@ -15,11 +15,11 @@ mariadb = everything // {
 };
 
 common = rec { # attributes common to both builds
-  version = "10.2.14";
+  version = "10.2.15";
 
   src = fetchurl {
     url    = "https://downloads.mariadb.org/f/mariadb-${version}/source/mariadb-${version}.tar.gz";
-    sha256 = "0zizf3q0hdkmsn6rpwdbfm5xkj21cwpnnzq9knjfpwcadqnyqhrl";
+    sha256 = "04ds6vkb7k2lqpcdz663z4ll1jx1zz2hqxz5nj7gs8pwb18j1pik";
     name   = "mariadb-${version}.tar.gz";
   };
 
