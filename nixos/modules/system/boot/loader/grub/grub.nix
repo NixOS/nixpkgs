@@ -35,6 +35,7 @@ let
     let
       efiSysMountPoint = if args.efiSysMountPoint == null then args.path else args.efiSysMountPoint;
       efiSysMountPoint' = replaceChars [ "/" ] [ "-" ] efiSysMountPoint;
+      initrdSecrets = config.boot.initrd.secrets != {};
     in
     pkgs.writeText "grub-config.xml" (builtins.toXML
     { splashImage = f cfg.splashImage;
@@ -49,12 +50,12 @@ let
       storePath = config.boot.loader.grub.storePath;
       bootloaderId = if args.efiBootloaderId == null then "NixOS${efiSysMountPoint'}" else args.efiBootloaderId;
       timeout = if config.boot.loader.timeout == null then -1 else config.boot.loader.timeout;
-      inherit efiSysMountPoint;
+      inherit efiSysMountPoint initrdSecrets;
       inherit (args) devices;
       inherit (efi) canTouchEfiVariables;
       inherit (cfg)
         version extraConfig extraPerEntryConfig extraEntries forceInstall useOSProber
-        extraEntriesBeforeNixOS extraPrepareConfig extraInitrd configurationLimit copyKernels
+        extraEntriesBeforeNixOS extraPrepareConfig configurationLimit copyKernels
         default fsIdentifier efiSupport efiInstallAsRemovable gfxmodeEfi gfxmodeBios;
       path = (makeBinPath ([
         pkgs.coreutils pkgs.gnused pkgs.gnugrep pkgs.findutils pkgs.diffutils pkgs.btrfs-progs
@@ -281,19 +282,6 @@ in
           Each attribute name denotes the destination file name in
           <filename>/boot</filename>, while the corresponding
           attribute value specifies the source file.
-        '';
-      };
-
-      extraInitrd = mkOption {
-        type = types.nullOr types.path;
-        default = null;
-        example = "/boot/extra_initramfs.gz";
-        description = ''
-          The path to a second initramfs to be supplied to the kernel.
-          This ramfs will not be copied to the store, so that it can
-          contain secrets such as LUKS keyfiles or ssh keys.
-          This implies that rolling back to a previous configuration
-          won't rollback the state of this file.
         '';
       };
 
@@ -540,6 +528,8 @@ in
       boot.loader.grub.mirroredBoots = optionals (cfg.devices != [ ]) [
         { path = "/boot"; inherit (cfg) devices; inherit (efi) efiSysMountPoint; }
       ];
+
+      boot.loader.supportsInitrdSecrets = true;
 
       system.build.installBootLoader =
         let
