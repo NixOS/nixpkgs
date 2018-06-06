@@ -2,7 +2,7 @@
 stdenv.mkDerivation rec {
   inherit type;
   baseName = "${type}-Edit";
-  name = "${baseName}-${version}";
+  name = "${lib.toLower baseName}-${version}";
 
   src = fetchurl {
     url = "http://downloads.music-group.com/software/behringer/${type}/${type}-Edit_LINUX_64bit_${version}.tar.gz";
