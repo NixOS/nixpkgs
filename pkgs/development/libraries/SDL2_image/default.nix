@@ -12,6 +12,9 @@ stdenv.mkDerivation rec {
   buildInputs = [ SDL2 libpng libjpeg libtiff libungif libXpm zlib ]
     ++ stdenv.lib.optional stdenv.isDarwin Foundation;
 
+
+  configureFlags = stdenv.lib.optional stdenv.isDarwin "--disable-sdltest";
+
   enableParallelBuilding = true;
 
   meta = with stdenv.lib; {

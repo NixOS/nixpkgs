@@ -55,7 +55,8 @@ stdenv.mkDerivation rec {
   configureFlags = [
     "--disable-oss"
   ] ++ optional (!x11Support) "--without-x"
-    ++ optional alsaSupport "--with-alsa-prefix=${alsaLib.out}/lib";
+    ++ optional alsaSupport "--with-alsa-prefix=${alsaLib.out}/lib"
+    ++ optional stdenv.isDarwin "--disable-sdltest";
 
   postInstall = ''
     moveToOutput lib/libSDL2main.a "$dev"
