@@ -44,5 +44,6 @@ pkgs.stdenv.mkDerivation {
 
     mkdir -p $out/nix-support/
     echo "doc manual $dest manual.html" >> $out/nix-support/hydra-build-products
+    echo "doc manual $dest nixpkgs-manual.epub" >> $out/nix-support/hydra-build-products
   '';
 }
