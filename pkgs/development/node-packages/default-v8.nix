@@ -68,9 +68,14 @@ nodePackages // {
 
   pnpm = nodePackages.pnpm.override (oldAttrs: {
     nativeBuildInputs = oldAttrs.buildInputs ++ [ pkgs.makeWrapper ];
-    postInstall = ''
+    postInstall = let
+      pnpmLibPath = stdenv.lib.makeBinPath [
+        nodejs.passthru.python
+        nodejs
+      ];
+    in ''
       for prog in $out/bin/*; do
-        wrapProgram "$prog" --prefix PATH : ${stdenv.lib.makeBinPath [ nodejs.passthru.python ]}
+        wrapProgram "$prog" --prefix PATH : ${pnpmLibPath}
       done
     '';
   });
