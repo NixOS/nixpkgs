@@ -9888,6 +9888,8 @@ in {
     name = "${python.libPrefix}-${pkgs.kmsxx.name}";
   });
 
+  pvlib = callPackage ../development/python-modules/pvlib { };
+
   pybase64 = callPackage ../development/python-modules/pybase64 { };
 
   pylibconfig2 = callPackage ../development/python-modules/pylibconfig2 { };
