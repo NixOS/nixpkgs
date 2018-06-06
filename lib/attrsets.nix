@@ -384,11 +384,12 @@ rec {
   recursiveUpdateUntil = pred: lhs: rhs:
     let f = attrPath:
       zipAttrsWith (n: values:
+        let here = attrPath ++ [n]; in
         if tail values == []
-        || pred attrPath (head (tail values)) (head values) then
+        || pred here (head (tail values)) (head values) then
           head values
         else
-          f (attrPath ++ [n]) values
+          f here values
       );
     in f [] [rhs lhs];
 
