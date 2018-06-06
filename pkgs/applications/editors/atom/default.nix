@@ -63,7 +63,7 @@ in stdenv.lib.mapAttrs common {
   };
 
   atom-beta = {
-    version = "1.28.0-beta2";
-    sha256 = "0fc9j1l776hv057dirw2bv9wmvhcaba5c4nq1cgs5rb5whxir2n6";
+    version = "1.28.0-beta3";
+    sha256 = "07mmzkbc7xzcwh6ylrs2w1g3l5gmyfk0gdmr2kzr6jdr00cq73y0";
   };
 }
