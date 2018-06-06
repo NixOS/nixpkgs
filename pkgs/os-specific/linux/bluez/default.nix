@@ -3,11 +3,11 @@
   systemd, enableWiimote ? false, enableMidi ? false }:
 
 stdenv.mkDerivation rec {
-  name = "bluez-5.49";
+  name = "bluez-5.50";
 
   src = fetchurl {
     url = "mirror://kernel/linux/bluetooth/${name}.tar.xz";
-    sha256 = "15ffsaz7l3fgdg03l7g1xx9jw7xgs6pc548zxqsxawsca5x1sc1k";
+    sha256 = "048r91vx9gs5nwwbah2s0xig04nwk14c5s0vb7qmaqdvighsmz2z";
   };
 
   pythonPath = with pythonPackages; [
