@@ -437,6 +437,7 @@ let
     KernSmooth = [ pkgs.libiconv ];
     nlme = [ pkgs.libiconv ];
     Matrix = [ pkgs.libiconv ];
+    mgcv = [ pkgs.libiconv ];
   };
 
   packagesRequireingX = [
