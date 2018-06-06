@@ -2384,6 +2384,8 @@ with pkgs;
 
   flvstreamer = callPackage ../tools/networking/flvstreamer { };
 
+  libbsd = callPackage ../development/libraries/libbsd { };
+
   libbladeRF = callPackage ../development/libraries/libbladeRF { };
 
   lp_solve = callPackage ../applications/science/math/lp_solve { };
@@ -4162,9 +4164,7 @@ with pkgs;
 
   opendht = callPackage ../development/libraries/opendht {};
 
-  opendkim = callPackage ../development/libraries/opendkim {
-    libbsd = libbsd-freedesktop;
-  };
+  opendkim = callPackage ../development/libraries/opendkim { };
 
   opendylan = callPackage ../development/compilers/opendylan {
     opendylan-bootstrap = opendylan_bin;
@@ -12963,7 +12963,6 @@ with pkgs;
 
   samba4 = callPackage ../servers/samba/4.x.nix {
     python = python2;
-    libbsd = libbsd-freedesktop;
   };
 
   sambaMaster = callPackage ../servers/samba/master.nix { };
@@ -21529,10 +21528,6 @@ with pkgs;
                       getent;
 
   fts = if hostPlatform.isMusl then netbsd.fts else null;
-
-  libbsd = netbsd.compat;
-
-  libbsd-freedesktop = callPackage ../development/libraries/libbsd {};
 
   inherit (recurseIntoAttrs (callPackages ../os-specific/bsd { }))
           netbsd;
