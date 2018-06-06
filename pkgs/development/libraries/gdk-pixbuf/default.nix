@@ -73,8 +73,16 @@ stdenv.mkDerivation rec {
   '';
 
   postInstall =
-    # All except one utility seem to be only useful during building.
+    # meson erroneously installs loaders with .dylib extension on Darwin.
+    # Their @rpath has to be replaced before gdk-pixbuf-query-loaders looks at them.
+    stdenv.lib.optionalString stdenv.isDarwin ''
+      for f in $out/${passthru.moduleDir}/*.dylib; do
+          install_name_tool -change @rpath/libgdk_pixbuf-2.0.0.dylib $out/lib/libgdk_pixbuf-2.0.0.dylib $f
+          mv $f ''${f%.dylib}.so
+      done
     ''
+    # All except one utility seem to be only useful during building.
+    + ''
       moveToOutput "bin" "$dev"
       moveToOutput "bin/gdk-pixbuf-thumbnailer" "$out"
 
