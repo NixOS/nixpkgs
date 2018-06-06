@@ -7377,7 +7377,7 @@ with pkgs;
 
   python27 = callPackage ../development/interpreters/python/cpython/2.7 {
     self = python27;
-    inherit (darwin) CF configd;
+    inherit (buildPackages.darwin) CF configd;
   };
   python34 = callPackage ../development/interpreters/python/cpython/3.4 {
     inherit (darwin) CF configd;
@@ -10553,7 +10553,7 @@ with pkgs;
     else callPackage ../development/libraries/libunwind { };
 
   libuv = callPackage ../development/libraries/libuv {
-    inherit (darwin.apple_sdk.frameworks) ApplicationServices CoreServices;
+    inherit (buildPackages.darwin.apple_sdk.frameworks) ApplicationServices CoreServices;
   };
 
   libv4l = lowPrio (v4l_utils.override {

@@ -154,7 +154,7 @@ let
     ++ optional hostPlatform.isCygwin expat
     ++ [ db gdbm ncurses sqlite readline ]
     ++ optionals x11Support [ tcl tk xlibsWrapper libX11 ]
-    ++ optionals stdenv.isDarwin ([ CF ] ++ optional (configd != null) configd);
+    ++ optionals hostPlatform.isDarwin ([ CF ] ++ optional (configd != null) configd);
   nativeBuildInputs =
     optionals (hostPlatform != buildPlatform)
     [ buildPackages.stdenv.cc buildPackages.python ];
