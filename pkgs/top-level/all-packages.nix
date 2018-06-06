@@ -19789,6 +19789,7 @@ with pkgs;
   });
 
   gnome3 = recurseIntoAttrs (callPackage ../desktops/gnome-3 { });
+  inherit (gnome3) fetchGnomeSource;
 
   gnomeExtensions = recurseIntoAttrs {
     appindicator = callPackage ../desktops/gnome-3/extensions/appindicator { };
