@@ -100,6 +100,7 @@ in
       # Don't restart dbus-daemon. Bad things tend to happen if we do.
       reloadIfChanged = true;
       restartTriggers = [ configDir ];
+      environment = { LD_LIBRARY_PATH = config.system.nssModules.path; };
     };
 
     systemd.user = {
