@@ -1254,6 +1254,8 @@ in {
 
   pyechonest = callPackage ../development/python-modules/pyechonest { };
 
+  pyezminc = callPackage ../development/python-modules/pyezminc { };
+
   billiard = callPackage ../development/python-modules/billiard { };
 
   binaryornot = callPackage ../development/python-modules/binaryornot { };
