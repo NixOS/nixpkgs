@@ -12811,7 +12811,8 @@ with pkgs;
   monitoring-plugins = callPackage ../servers/monitoring/plugins { };
   nagiosPluginsOfficial = monitoring-plugins;
 
-  inherit (callPackage ../servers/monitoring/plugins/labs_consol_de.nix { inherit (perlPackages) NetSNMP; })
+  inherit (callPackage ../servers/monitoring/plugins/labs_consol_de.nix { inherit (perlPackages) DBDsybase NetSNMP; })
+    check-mssql-health
     check-nwc-health
     check-ups-health;
 
