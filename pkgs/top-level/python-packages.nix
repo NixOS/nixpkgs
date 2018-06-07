@@ -195,6 +195,8 @@ in {
     inherit (pkgs) augeas;
   };
 
+  autograd = callPackage ../development/python-modules/autograd { };
+
   automat = callPackage ../development/python-modules/automat { };
 
   aws-xray-sdk = callPackage ../development/python-modules/aws-xray-sdk { };
