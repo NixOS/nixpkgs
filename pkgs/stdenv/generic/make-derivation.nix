@@ -66,6 +66,8 @@ rec {
     , pos ? # position used in error messages and for meta.position
         (if attrs.meta.description or null != null
           then builtins.unsafeGetAttrPos "description" attrs.meta
+          else if attrs.version or null != null
+          then builtins.unsafeGetAttrPos "version" attrs
           else builtins.unsafeGetAttrPos "name" attrs)
     , separateDebugInfo ? false
     , outputs ? [ "out" ]
