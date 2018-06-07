@@ -1,4 +1,5 @@
 { stdenv, lib, fetchurl, pkgconfig, perl
+, threadedResolverSupport ? true
 , http2Support ? true, nghttp2
 , idnSupport ? false, libidn ? null
 , ldapSupport ? false, openldap ? null
@@ -73,6 +74,7 @@ stdenv.mkDerivation rec {
       ( if idnSupport then "--with-libidn=${libidn.dev}" else "--without-libidn" )
       ( if brotliSupport then "--with-brotli" else "--without-brotli" )
     ]
+    ++ stdenv.lib.optional (!threadedResolverSupport) "--disable-threaded-resolver"
     ++ stdenv.lib.optional c-aresSupport "--enable-ares=${c-ares}"
     ++ stdenv.lib.optional gssSupport "--with-gssapi=${kerberos.dev}";
 
