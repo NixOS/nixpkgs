@@ -103,7 +103,7 @@ let
     src = fetchzip {
       url = "https://fpdownload.adobe.com/pub/flashplayer/pdc/"
           + "${version}/flash_player_ppapi_linux.x86_64.tar.gz";
-      sha256 = "092fjp5znnc8mz6jh4nm9kswkhfr31v2l7kasr97f32rw9fksi9g";
+      sha256 = "0bcsrsz2dd12xs9vn2977k4s6hag1cknkrsgxz3c9pxk4jz99f3k";
       stripRoot = false;
     };
 
