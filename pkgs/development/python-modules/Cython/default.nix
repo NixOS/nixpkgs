@@ -20,6 +20,7 @@ let
     # now until upstream finds a workaround.
     # Upstream issue here: https://github.com/cython/cython/issues/2308
     ++ stdenv.lib.optionals stdenv.isAarch64 [ "numpy_memoryview" ]
+    ++ stdenv.lib.optionals stdenv.isi686 [ "future_division" "overflow_check_longlong" ]
   ;
 
 in buildPythonPackage rec {
