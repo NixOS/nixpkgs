@@ -1,4 +1,5 @@
-{ stdenv, fetchFcitxSource, cmake, pkgconfig, fcitx, gettext, libpinyin, glib, pcre, dbus, qtwebengine, qtbase, fcitx-qt5 }:
+{ stdenv, fetchFcitxSource, fetchurl, cmake, pkgconfig, fcitx, gettext
+, libpinyin, glib, pcre, dbus, qtwebengine, qtbase, fcitx-qt5 }:
 
 stdenv.mkDerivation rec {
   pname = "fcitx-libpinyin";
@@ -35,7 +36,7 @@ stdenv.mkDerivation rec {
 
   preBuild = let
     ZHUYIN_DATA_FILE_NAME = "model.text.20161206.tar.gz";
-    store_path = fetchFcitxSource {
+    store_path = fetchurl {
       url = "https://download.fcitx-im.org/data/${ZHUYIN_DATA_FILE_NAME}";
       sha256 = "017p11si1b7bkwx36xaybq5a9icq1pd7x1jbymqw92akfgjj8w2w";
     };
