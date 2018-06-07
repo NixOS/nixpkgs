@@ -1,7 +1,7 @@
 { stdenv, lib, fetchFcitxSource, cmake, fcitx, pkgconfig, qtbase, extra-cmake-modules }:
 
 stdenv.mkDerivation rec {
-  name = "fcitx-qt5-${version}";
+  pname = "fcitx-qt5";
   version = "1.2.1";
 
   src = fetchFcitxSource {
