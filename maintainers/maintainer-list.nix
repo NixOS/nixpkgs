@@ -2176,6 +2176,11 @@
     github = "limeytexan";
     name = "Michael Brantley";
   };
+  linc01n = {
+    email = "git@lincoln.hk";
+    github = "linc01n";
+    name = "Lincoln Lee";
+  };
   linquize = {
     email = "linquize@yahoo.com.hk";
     github = "linquize";
