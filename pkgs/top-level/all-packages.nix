@@ -20888,6 +20888,7 @@ with pkgs;
   inherit (callPackages ../tools/package-management/nix {
       storeDir = config.nix.storeDir or "/nix/store";
       stateDir = config.nix.stateDir or "/nix/var";
+      curl = curl.override { c-aresSupport = true; };
       })
     nix
     nix1
