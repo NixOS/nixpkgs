@@ -1,7 +1,8 @@
 { stdenv, fetchFcitxSource, makeWrapper, pkgconfig, cmake, fcitx, gtk3, isocodes, gnome3 }:
 
 stdenv.mkDerivation rec {
-  name = "fcitx-configtool-0.4.9";
+  pname = "fcitx-configtool";
+  version = "0.4.9";
 
   meta = with stdenv.lib; {
     description = "GTK-based config tool for Fcitx";

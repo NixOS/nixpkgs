@@ -2295,6 +2295,12 @@ with pkgs;
     plugins = [];
   };
 
+  fetchFcitxSource = {pname, version, sha256}:
+    fetchurl {
+      inherit sha256;
+      url = "http://download.fcitx-im.org/${pname}/${pname}-${version}.tar.xz";
+    };
+
   fcitx-engines = recurseIntoAttrs {
 
     anthy = callPackage ../tools/inputmethods/fcitx-engines/fcitx-anthy { };
