@@ -81,6 +81,10 @@ rec {
 
     , ... } @ attrs:
 
+    # Check that the name is consistent with pname and version:
+    assert lib.lists.all (name: builtins.hasAttr name attrs) ["name" "pname" "version"]
+      -> attrs.name == "${attrs.pname}-${attrs.version}";
+
     # TODO(@Ericson2314): Make this more modular, and not O(n^2).
     let
       supportedHardeningFlags = [ "fortify" "stackprotector" "pie" "pic" "strictoverflow" "format" "relro" "bindnow" ];
