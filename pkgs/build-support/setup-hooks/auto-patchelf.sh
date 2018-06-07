@@ -15,6 +15,7 @@ findElfs() {
         while [ -n "$1" ]; do
             mimeType="$(file -b -N --mime-type "$1")"
             if [ "$mimeType" = application/x-executable \
+              -o "$mimeType" = application/x-pie-executable \
               -o "$mimeType" = application/x-sharedlib ]; then
                 echo "$1"
             fi
