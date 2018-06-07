@@ -9798,6 +9798,8 @@ with pkgs;
   libcec = callPackage ../development/libraries/libcec { };
   libcec_platform = callPackage ../development/libraries/libcec/platform.nix { };
 
+  libcef = callPackage ../development/libraries/libcef { inherit (gnome2) GConf; };
+
   libcello = callPackage ../development/libraries/libcello {};
 
   libcerf = callPackage ../development/libraries/libcerf {};
@@ -17269,6 +17271,8 @@ with pkgs;
   };
 
   oblogout = callPackage ../tools/X11/oblogout { };
+
+  obs-linuxbrowser = callPackage ../applications/video/obs-studio/linuxbrowser.nix { };
 
   obs-studio = libsForQt5.callPackage ../applications/video/obs-studio {
     alsaSupport = stdenv.isLinux;
