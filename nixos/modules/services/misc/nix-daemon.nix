@@ -130,12 +130,13 @@ in
         default = false;
         description = "
           If set, Nix will perform builds in a sandboxed environment that it
-          will set up automatically for each build.  This prevents
-          impurities in builds by disallowing access to dependencies
-          outside of the Nix store. This isn't enabled by default for
-          performance (in addition to using chroot, it is also isolated
-          in a Network and Mount namespace). It doesn't affect derivation
-          hashes, so changing this option will not trigger a rebuild of packages.
+          will set up automatically for each build. This prevents impurities
+          in builds by disallowing access to dependencies outside of the Nix 
+          store by using network and mount namespaces in a chroot environment. 
+          This isn't enabled by default for possible performance penalties
+          resulting form running in an isolated network and mount namespace. 
+          It doesn't affect derivation hashes, so changing this option will 
+          not trigger a rebuild of packages.
         ";
       };
 
