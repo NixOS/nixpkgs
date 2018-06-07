@@ -1868,23 +1868,25 @@ with pkgs;
   cron = callPackage ../tools/system/cron { };
 
   inherit (callPackages ../development/compilers/cudatoolkit { })
-    cudatoolkit6
-    cudatoolkit65
-    cudatoolkit7
-    cudatoolkit75
-    cudatoolkit8
-    cudatoolkit9;
+    cudatoolkit_6
+    cudatoolkit_6_5
+    cudatoolkit_7
+    cudatoolkit_7_5
+    cudatoolkit_8
+    cudatoolkit_9_0
+    cudatoolkit_9;
 
-  cudatoolkit = cudatoolkit9;
+  cudatoolkit = cudatoolkit_9;
 
   inherit (callPackages ../development/libraries/science/math/cudnn { })
-    cudnn_cudatoolkit7
-    cudnn_cudatoolkit75
-    cudnn6_cudatoolkit8
-    cudnn_cudatoolkit8
-    cudnn_cudatoolkit9;
+    cudnn_cudatoolkit_7
+    cudnn_cudatoolkit_7_5
+    cudnn6_cudatoolkit_8
+    cudnn_cudatoolkit_8
+    cudnn_cudatoolkit_9
+    cudnn_cudatoolkit_9_0;
 
-  cudnn = cudnn_cudatoolkit9;
+  cudnn = cudnn_cudatoolkit_9;
 
   curlFull = curl.override {
     idnSupport = true;
@@ -3933,10 +3935,10 @@ with pkgs;
   xnbd = callPackage ../tools/networking/xnbd { };
 
   inherit (callPackages ../development/libraries/science/math/nccl { })
-    nccl_cudatoolkit8
-    nccl_cudatoolkit9;
+    nccl_cudatoolkit_8
+    nccl_cudatoolkit_9;
 
-  nccl = nccl_cudatoolkit9;
+  nccl = nccl_cudatoolkit_9;
 
   ndjbdns = callPackage ../tools/networking/ndjbdns { };
 

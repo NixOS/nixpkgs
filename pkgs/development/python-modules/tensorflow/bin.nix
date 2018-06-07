@@ -2,7 +2,7 @@
 , lib
 , fetchurl
 , buildPythonPackage
-, isPy3k, isPy36, pythonOlder
+, isPy3k, isPy35, isPy36, pythonOlder
 , numpy
 , six
 , protobuf
@@ -12,20 +12,40 @@
 , enum34
 , tensorflow-tensorboard
 , cudaSupport ? false
+, cudatoolkit ? null
+, cudnn ? null
+, nvidia_x11 ? null
+, zlib
+, python
+, symlinkJoin
 }:
 
-# tensorflow is built from a downloaded wheel because the source
-# build doesn't yet work on Darwin.
+# We keep this binary build for two reasons:
+# - the source build doesn't work on Darwin.
+# - the source build is currently brittle and not easy to maintain
 
-buildPythonPackage rec {
+assert cudaSupport -> cudatoolkit != null
+                   && cudnn != null
+                   && nvidia_x11 != null;
+let
+  cudatoolkit_joined = symlinkJoin {
+    name = "unsplit_cudatoolkit";
+    paths = [ cudatoolkit.out
+              cudatoolkit.lib ];};
+
+in buildPythonPackage rec {
   pname = "tensorflow";
-  version = "1.5.0";
+  version = "1.7.1";
   format = "wheel";
 
-  src = fetchurl {
-    url = "https://storage.googleapis.com/tensorflow/mac/cpu/tensorflow-${version}-py3-none-any.whl";
-    sha256 = "1mapv45n9wmgcq3i3im0pv0gmhwkxw5z69nsnxb1gfxbj1mz5h9m";
-  };
+  src = let
+    pyVerNoDot = lib.strings.stringAsChars (x: if x == "." then "" else x) "${python.majorVersion}";
+    version = if stdenv.isDarwin then builtins.substring 0 1 pyVerNoDot else pyVerNoDot;
+    platform = if stdenv.isDarwin then "mac" else "linux";
+    unit = if cudaSupport then "gpu" else "cpu";
+    key = "${platform}_py_${version}_${unit}";
+    dls = import ./tf1.7.1-hashes.nix;
+  in fetchurl dls.${key};
 
   propagatedBuildInputs = [ numpy six protobuf absl-py ]
                  ++ lib.optional (!isPy3k) mock
@@ -38,14 +58,28 @@ buildPythonPackage rec {
   # bleach) Hence we disable dependency checking for now.
   installFlags = lib.optional isPy36 "--no-dependencies";
 
+  # Note that we need to run *after* the fixup phase because the
+  # libraries are loaded at runtime. If we run in preFixup then
+  # patchelf --shrink-rpath will remove the cuda libraries.
+  postFixup = let
+    rpath = stdenv.lib.makeLibraryPath
+      ([ stdenv.cc.cc.lib zlib ] ++ lib.optionals cudaSupport [ cudatoolkit_joined cudnn nvidia_x11 ]);
+  in
+  lib.optionalString (stdenv.isLinux) ''
+    rrPath="$out/${python.sitePackages}/tensorflow/:${rpath}"
+    internalLibPath="$out/${python.sitePackages}/tensorflow/python/_pywrap_tensorflow_internal.so"
+    find $out -name '*.${stdenv.hostPlatform.extensions.sharedLibrary}' -exec patchelf --set-rpath "$rrPath" {} \;
+  '';
+
+
   meta = with stdenv.lib; {
     description = "Computation using data flow graphs for scalable machine learning";
     homepage = http://tensorflow.org;
     license = licenses.asl20;
     maintainers = with maintainers; [ jyp abbradar ];
-    platforms = platforms.darwin;
+    platforms = with platforms; linux ++ lib.optionals (!cudaSupport) darwin;
     # Python 2.7 build uses different string encoding.
     # See https://github.com/NixOS/nixpkgs/pull/37044#issuecomment-373452253
-    broken = cudaSupport || !isPy3k;
+    broken = stdenv.isDarwin && !isPy3k;
   };
 }
