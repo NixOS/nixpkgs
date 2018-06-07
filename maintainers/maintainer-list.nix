@@ -2289,6 +2289,11 @@
     github = "madjar";
     name = "Georges Dubus";
   };
+  mafo = {
+    email = "Marc.Fontaine@gmx.de";
+    github = "MarcFontaine";
+    name = "Marc Fontaine";
+  };
   magnetophon = {
     email = "bart@magnetophon.nl";
     github = "magnetophon";
