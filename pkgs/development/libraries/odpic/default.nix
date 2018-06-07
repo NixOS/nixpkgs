@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "odpic-${version}";
-  version = "2.3.2";
+  version = "2.4.0";
 
   src = fetchurl {
     url = "https://github.com/oracle/odpi/archive/v${version}.tar.gz";
-    sha256 = "0a52vqy3c27hmcia4x4vhs6z0ha27xkw7fvfa17f7kxs5w84ll07";
+    sha256 = "1z793mg8hmy067xhllip7ca84xy07ca1cqilnr35mbvhmydp03zz";
   };
 
   buildInputs = [ libaio oracle-instantclient ];
@@ -15,14 +15,10 @@ stdenv.mkDerivation rec {
     [ oracle-instantclient ];
 
   dontPatchELF = true;
-  installPhase = ''
-    mkdir -p $out/lib
-    mkdir $out/include
+  makeFlags = [ "PREFIX=$(out)" ];
 
-    cp lib/* $out/lib/
-    cp include/* $out/include/
-
-    patchelf --set-rpath "${libPath}" $out/lib/libodpic.so
+  postFixup = ''
+    patchelf --set-rpath "${libPath}" $out/lib/libodpic${stdenv.hostPlatform.extensions.sharedLibrary}
   '';
 
   meta = with stdenv.lib; {
