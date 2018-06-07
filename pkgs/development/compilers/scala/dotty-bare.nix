@@ -1,12 +1,12 @@
 { stdenv, fetchurl, makeWrapper, jre }:
 
 stdenv.mkDerivation rec {
-  version = "0.6.0-RC1";
+  version = "0.8.0-RC1";
   name = "dotty-bare-${version}";
 
   src = fetchurl {
     url = "https://github.com/lampepfl/dotty/releases/download/${version}/dotty-${version}.tar.gz";
-    sha256 = "de1f5e72fb0e0b4c377d6cec93f565eff49769698cd8be01b420705fe8475ca4";
+    sha256 = "e5b7a9bb6f1007146a440ddfff871cc312075e5d69b9ab7e279ad7c3514f7065";
   };
 
   propagatedBuildInputs = [ jre ] ;
