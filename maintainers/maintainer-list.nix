@@ -393,6 +393,11 @@
     github = "andir";
     name = "Andreas Rammhold";
   };
+  andreabedini = {
+    email = "andrea@kzn.io";
+    github = "andreabedini";
+    name = "Andrea Bedini";
+  };
   andres = {
     email = "ksnixos@andres-loeh.de";
     github = "kosmikus";
