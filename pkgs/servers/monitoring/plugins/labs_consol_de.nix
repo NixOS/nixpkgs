@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, fetchurl, buildPerlPackage, autoreconfHook, makeWrapper
-, perl, NetSNMP, coreutils, gnused, gnugrep }:
+, perl, DBDsybase, NetSNMP, coreutils, gnused, gnugrep }:
 
 let
   glplugin = fetchFromGitHub {
@@ -9,11 +9,10 @@ let
     sha256 = "0wb55a9pmgbilfffx0wkiikg9830qd66j635ypczqp4basslpq5b";
   };
 
-  generic = { pname, version, sha256, description, ... } @ attrs:
+  generic = { pname, version, sha256, description, buildInputs, ... }:
   let
-    attrs' = builtins.removeAttrs attrs [ "pname" "version" "rev" "sha256"];
     name' = "${stdenv.lib.replaceStrings [ "-" ] [ "_" ] "${pname}"}-${version}";
-  in perl.stdenv.mkDerivation rec {
+  in perl.stdenv.mkDerivation {
     name = "${pname}-${version}";
 
     src = fetchurl {
@@ -21,7 +20,7 @@ let
       inherit sha256;
     };
 
-    buildInputs = [ perl NetSNMP ];
+    buildInputs = [ perl ] ++ buildInputs;
 
     nativeBuildInputs = [ autoreconfHook makeWrapper ];
 
@@ -54,11 +53,20 @@ let
   };
 
 in {
+  check-mssql-health = generic {
+    pname       = "check_mssql_health";
+    version     = "2.6.4.14";
+    sha256      = "0w6gybrs7imx169l8740s0ax3adya867fw0abrampx59mnsj5pm1";
+    description = "Check plugin for Microsoft SQL Server.";
+    buildInputs = [ DBDsybase ];
+  };
+
   check-nwc-health = generic {
     pname       = "check_nwc_health";
     version     = "7.0.1.3";
     sha256      = "0rgd6zgd7kplx3z72n8zbzwkh8vnd83361sk9ibh6ng78sds1sl5";
     description = "Check plugin for network equipment.";
+    buildInputs = [ NetSNMP ];
   };
 
   check-ups-health = generic {
@@ -66,5 +74,6 @@ in {
     version     = "2.8.2.2";
     sha256      = "1gc2wjsymay2vk5ywc1jj9cvrbhs0fs851x8l4nc75df2g75v521";
     description = "Check plugin for UPSs.";
+    buildInputs = [ NetSNMP ];
   };
 }

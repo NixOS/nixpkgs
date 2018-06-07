@@ -4100,6 +4100,11 @@ let self = _self // overrides; _self = with self; {
     inherit (pkgs) postgresql;
   };
 
+  DBDsybase = import ../development/perl-modules/DBD-sybase {
+    inherit fetchurl buildPerlPackage DBI;
+    inherit (pkgs) freetds;
+  };
+
   DBFile = import ../development/perl-modules/DB_File {
     inherit fetchurl buildPerlPackage;
     inherit (pkgs) db;
