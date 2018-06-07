@@ -83,7 +83,7 @@ rec {
 
     # Check that the name is consistent with pname and version:
     assert lib.lists.all (name: builtins.hasAttr name attrs) ["name" "pname" "version"]
-      -> attrs.name == "${attrs.pname}-${attrs.version}";
+      -> lib.strings.hasSuffix "${attrs.pname}-${attrs.version}" attrs.name;
 
     # TODO(@Ericson2314): Make this more modular, and not O(n^2).
     let
