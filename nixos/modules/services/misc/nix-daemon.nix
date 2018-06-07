@@ -133,8 +133,9 @@ in
           will set up automatically for each build.  This prevents
           impurities in builds by disallowing access to dependencies
           outside of the Nix store. This isn't enabled by default for
-          performance. It doesn't affect derivation hashes, so changing
-          this option will not trigger a rebuild of packages.
+          performance (in addition to using chroot, it is also isolated
+          in a Network and Mount namespace). It doesn't affect derivation
+          hashes, so changing this option will not trigger a rebuild of packages.
         ";
       };
 
