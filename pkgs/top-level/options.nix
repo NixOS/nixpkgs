@@ -126,4 +126,29 @@ with lib;
     '';
   };
 
+  enableDynamic = mkOption {
+    default = true;
+    type = types.bool;
+    description = ''
+
+      Whether to build packages with dynamic linking. This has
+      historically been the default everywhere in Nixpkgs.
+
+    '';
+  };
+
+  enableStatic = mkOption {
+    default = targetPlatform.isiOS;
+    type = types.bool;
+    description = ''
+
+      Whether to build packages with static linking if available. Note
+      that not all packages support this.
+
+      Packages using this option may or may not also build dynamic
+      libraries. Set enableDynamic to disable those.
+
+    '';
+  };
+
 }
