@@ -1,11 +1,12 @@
 diff --git a/CMakeLists.txt b/CMakeLists.txt
-index 4ac56b43..dacf3853 100644
+index 0c05208f..8893648e 100644
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
-@@ -48,6 +48,19 @@ add_subdirectory(libevmasm)
+@@ -48,6 +48,20 @@ add_subdirectory(libevmasm)
  add_subdirectory(libsolidity)
  add_subdirectory(libsolc)
  
++
 +install(DIRECTORY libdevcore/
 +        DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/libdevcore
 +        FILES_MATCHING PATTERN "*.h")
@@ -38,7 +39,7 @@ index 86192c1b..e7f15e93 100644
 @@ -3,3 +3,4 @@ file(GLOB headers "*.h")
  
  add_library(evmasm ${sources} ${headers})
- target_link_libraries(evmasm PUBLIC jsoncpp devcore)
+ target_link_libraries(evmasm PUBLIC devcore)
 +install(TARGETS evmasm LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR})
 diff --git a/liblll/CMakeLists.txt b/liblll/CMakeLists.txt
 index 4cdc073a..b61f03c7 100644
@@ -50,11 +51,10 @@ index 4cdc073a..b61f03c7 100644
  target_link_libraries(lll PUBLIC evmasm devcore)
 +install(TARGETS lll LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR})
 diff --git a/libsolidity/CMakeLists.txt b/libsolidity/CMakeLists.txt
-index 97b01c83..e876177e 100644
+index 0bdec4b4..e876177e 100644
 --- a/libsolidity/CMakeLists.txt
 +++ b/libsolidity/CMakeLists.txt
-@@ -28,7 +28,8 @@ else()
- endif()
+@@ -29,6 +29,7 @@ endif()
  
  add_library(solidity ${sources} ${headers})
  target_link_libraries(solidity PUBLIC evmasm devcore ${Boost_FILESYSTEM_LIBRARY} ${Boost_SYSTEM_LIBRARY})
