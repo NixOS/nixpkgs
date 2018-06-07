@@ -1,4 +1,4 @@
-{ lib, fetchurl, pythonPackages, pkgconfig, makeWrapper, qmake
+{ lib, fetchurl, pythonPackages, pkgconfig, makeWrapper, qmake, fetchpatch
 , lndir, qtbase, qtsvg, qtwebkit, qtwebengine, dbus_libs
 , withWebSockets ? false, qtwebsockets
 , withConnectivity ? false, qtconnectivity
@@ -63,6 +63,17 @@ in buildPythonPackage {
 
     runHook postConfigure
   '';
+
+  patches = [
+    # This patch from Arch Linux fixes Cura segfaulting on startup
+    # https://github.com/Ultimaker/Cura/issues/3438
+    # It can probably removed on 5.10.3
+    (fetchpatch {
+      name = "pyqt5-cura-crash.patch";
+      url = https://git.archlinux.org/svntogit/packages.git/plain/repos/extra-x86_64/pyqt5-cura-crash.patch?id=6cfe64a3d1827e0ed9cc62f1683a53b582315f4f;
+      sha256 = "02a0mw1z8p9hhqhl4bgjrmf1xq82xjmpivn5bg6r4yv6pidsh7ck";
+    })
+  ];
 
   postInstall = ''
     for i in $out/bin/*; do
