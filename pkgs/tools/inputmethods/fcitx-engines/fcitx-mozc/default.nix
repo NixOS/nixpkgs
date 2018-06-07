@@ -1,4 +1,4 @@
-{ clangStdenv, fetchFromGitHub, fetchurl, fetchpatch, gyp, which, ninja,
+{ clangStdenv, fetchFromGitHub, fetchFcitxSource, fetchpatch, gyp, which, ninja,
   python, pkgconfig, protobuf, gtk2, zinnia, qt5, libxcb, tegaki-zinnia-japanese,
   fcitx, gettext }:
 let
@@ -8,7 +8,7 @@ let
     rev    = "e5b3425575734c323e1d947009dd74709437b684";
     sha256 = "0pyrpz9c8nxccwpgyr36w314mi8h132cis8ijvlqmmhqxwsi30hm";
   };
-  icons = fetchurl {
+  icons = fetchFcitxSource {
     url    = "http://download.fcitx-im.org/fcitx-mozc/fcitx-mozc-icon.tar.gz";
     sha256 = "10bdjn481jsh32vll7r756l392anz44h6207vjqwby3rplk31np1";
   };

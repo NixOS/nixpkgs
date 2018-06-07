@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, makeWrapper, pkgconfig, cmake, fcitx, gtk3, isocodes, gnome3 }:
+{ stdenv, fetchFcitxSource, makeWrapper, pkgconfig, cmake, fcitx, gtk3, isocodes, gnome3 }:
 
 stdenv.mkDerivation rec {
   name = "fcitx-configtool-0.4.9";
@@ -10,8 +10,8 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ cdepillabout ];
   };
 
-  src = fetchurl {
-    url = "http://download.fcitx-im.org/fcitx-configtool/${name}.tar.xz";
+  src = fetchFcitxSource {
+    inherit pname version;
     sha256 = "1ypr2jr3vzs2shqfrvhqy69xvagrn9x507180i9wxy14hb97a82r";
   };
 
@@ -24,4 +24,3 @@ stdenv.mkDerivation rec {
       --prefix XDG_DATA_DIRS : "$XDG_ICON_DIRS";
   '';
 }
-
