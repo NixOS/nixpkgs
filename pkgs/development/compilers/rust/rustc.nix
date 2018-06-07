@@ -10,11 +10,7 @@
 , targets
 , targetPatches
 , targetToolchains
-
-# Tests frequently break on Darwin
-# See the rust issue: https://github.com/rust-lang/rust/issues/51006
-, doCheck ? (!stdenv.isDarwin)
-
+, doCheck ? true
 , broken ? false
 , buildPlatform, hostPlatform
 } @ args:
@@ -149,10 +145,11 @@ stdenv.mkDerivation {
   outputs = [ "out" "man" "doc" ];
   setOutputFlags = false;
 
-  # Disable codegen units for the tests.
+  # Disable codegen units and hardening for the tests.
   preCheck = ''
     export RUSTFLAGS=
     export TZDIR=${tzdata}/share/zoneinfo
+    export hardeningDisable=all
   '' +
   # Ensure TMPDIR is set, and disable a test that removing the HOME
   # variable from the environment falls back to another home
