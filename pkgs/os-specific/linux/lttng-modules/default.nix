@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, kernel }:
+{ stdenv, fetchurl, kernel, libelf }:
 
 stdenv.mkDerivation rec {
   pname = "lttng-modules-${version}";
@@ -9,6 +9,8 @@ stdenv.mkDerivation rec {
     url = "http://lttng.org/files/lttng-modules/lttng-modules-${version}.tar.bz2";
     sha256 = "07rs01zwr4bmjamplix5qz1c6mb6wdawb68vyn0w6wx68ppbpnxq";
   };
+
+  buildInputs = [ libelf ];
 
   hardeningDisable = [ "pic" ];
 
@@ -30,7 +32,7 @@ stdenv.mkDerivation rec {
     platforms = platforms.linux;
     maintainers = [ maintainers.bjornfor ];
     broken = builtins.compareVersions kernel.version "3.18" == -1
-      || builtins.compareVersions kernel.version "4.11" == 1;
+      || builtins.compareVersions kernel.version "4.16" == 1;
   };
 
 }
