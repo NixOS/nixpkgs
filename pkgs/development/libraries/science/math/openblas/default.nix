@@ -118,6 +118,8 @@ stdenv.mkDerivation {
     ] ++ stdenv.lib.optional (stdenv.hostPlatform.libc == "musl") "NO_AFFINITY=1"
     ++ mapAttrsToList (var: val: var + "=" + val) config;
 
+  patches = []; # TODO: Remove on next mass-rebuild
+
   doCheck = true;
   checkTarget = "tests";
 
