@@ -65,7 +65,7 @@ then throw "${name} not supported for interpreter ${python.executable}"
 else
 
 toPythonModule (python.stdenv.mkDerivation (builtins.removeAttrs attrs [
-    "disabled" "checkInputs" "doCheck" "doInstallCheck" "dontWrapPythonPrograms" "catchConflicts" "pname" "version"
+    "disabled" "checkInputs" "doCheck" "doInstallCheck" "dontWrapPythonPrograms" "catchConflicts" "pname"
   ] // {
 
   name = namePrefix + name;
