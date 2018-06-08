@@ -8153,25 +8153,16 @@ let self = _self // overrides; _self = with self; {
      };
   };
 
-
   JSON = buildPerlPackage {
-    name = "JSON-2.90";
+    name = "JSON-2.97001";
     src = fetchurl {
-      url = mirror://cpan/authors/id/M/MA/MAKAMAKA/JSON-2.90.tar.gz;
-      sha256 = "127yppvr17qik9pkd1vy901hs4l13kg6rhp76jdgcyask35v7nsd";
+      url = mirror://cpan/authors/id/I/IS/ISHIGAKI/JSON-2.97001.tar.gz;
+      sha256 = "0nlgdzy40q26z8qhwngsd461glyai8dpwaccyhiljmrkaqwdjxz2";
     };
-    preConfigure = ''
-      cp lib/JSON/backportPP.pm{,orig}
-      echo "1;" > lib/JSON/backportPP.pm
-    '';
-    postConfigure = ''
-      cp lib/JSON/backportPP.pm{orig,}
-    '';
     meta = {
       description = "JSON (JavaScript Object Notation) encoder/decoder";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
-    doCheck = false;
   };
 
   JSONAny = buildPerlPackage {
