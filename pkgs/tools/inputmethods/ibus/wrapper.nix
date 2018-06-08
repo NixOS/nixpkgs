@@ -3,7 +3,7 @@
 }:
 
 let
-  name = "ibus-with-plugins-" + (builtins.parseDrvName ibus.name).version;
+  name = "ibus-with-plugins-" + ibus.version;
   env = {
     buildInputs = [ ibus ] ++ plugins;
     nativeBuildInputs = [ lndir makeWrapper ];

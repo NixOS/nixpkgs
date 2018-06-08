@@ -9,7 +9,7 @@ let
     sha256 = "0pyrpz9c8nxccwpgyr36w314mi8h132cis8ijvlqmmhqxwsi30hm";
   };
 in clangStdenv.mkDerivation rec {
-  name = "ibus-mozc-${version}";
+  pname = "ibus-mozc";
   version = "2.20.2673.102";
 
   meta = with clangStdenv.lib; {

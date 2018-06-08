@@ -1,4 +1,4 @@
-{ stdenv, fetchurl
+{ stdenv, fetchFromGitHub
 , vala, intltool, pkgconfig
 , libkkc, ibus, skk-dicts
 , gtk3
@@ -7,11 +7,12 @@
 stdenv.mkDerivation rec {
   pname = "ibus-kkc";
   version = "1.5.22";
-  name = "${pname}-${version}";
 
-  src = fetchurl {
-    url = "${meta.homepage}/releases/download/v${version}/${name}.tar.gz";
-    sha256 = "1kj74c9zy9yxkjx7pz96mzqc13cf10yfmlgprr8sfd4ay192bzi2";
+  src = fetchFromGitHub {
+    owner = "ueno";
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "1w5dpska0ps3jwqnhvxic7lmhlba2vyj85nkfngj84b9agpf7f3r";
   };
 
   nativeBuildInputs = [

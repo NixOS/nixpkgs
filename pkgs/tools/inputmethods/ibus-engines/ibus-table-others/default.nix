@@ -1,12 +1,14 @@
-{ stdenv, fetchurl, ibus, ibus-table, pkgconfig, python3 }:
+{ stdenv, fetchFromGitHub, ibus, ibus-table, pkgconfig, python3 }:
 
 stdenv.mkDerivation rec {
-  name = "ibus-table-others-${version}";
+  pname = "ibus-table-others";
   version = "1.3.9";
 
-  src = fetchurl {
-    url = "https://github.com/moebiuscurve/ibus-table-others/releases/download/${version}/${name}.tar.gz";
-    sha256 = "0270a9njyzb1f8nw5w9ghwxcl3m6f13d8p8a01fjm8rnjs04mcb3";
+  src = fetchFromGitHub {
+    owner = "moebiuscurve";
+    repo = pname;
+    rev = version;
+    sha256 = "0iyhfb9261q4g1ldvddiqsf03fhpagailbxw3a7pig1858v15izf";
   };
 
   nativeBuildInputs = [ pkgconfig ];

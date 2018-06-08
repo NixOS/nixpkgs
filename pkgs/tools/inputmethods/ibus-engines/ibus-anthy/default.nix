@@ -1,10 +1,17 @@
-{ stdenv, fetchurl, intltool, pkgconfig
+{ stdenv, fetchFromGitHub, intltool, pkgconfig
 , anthy, ibus, glib, gobjectIntrospection, gtk3, python3
 }:
 
 stdenv.mkDerivation rec {
-  name = "ibus-anthy-${version}";
+  pname = "ibus-anthy";
   version = "1.5.10";
+
+  src = fetchFromGitHub {
+    owner = "ibus";
+    repo = pname;
+    rev = version;
+    sha256 = "07qyfdra2lc91jn35inraxbjqzni6yzx59a17k968pspx8lzdx02";
+  };
 
   meta = with stdenv.lib; {
     isIbusEngine = true;
@@ -27,9 +34,4 @@ stdenv.mkDerivation rec {
     wrapPythonPrograms
     substituteInPlace $out/share/ibus/component/anthy.xml --replace \$\{exec_prefix\} $out
   '';
-
-  src = fetchurl {
-    url = "https://github.com/ibus/ibus-anthy/releases/download/${version}/${name}.tar.gz";
-    sha256 = "0jpqz7pb9brlqiwrbr3i6wvj3b39a9bs9lljl3qa3r77mz8y0cyc";
-  };
 }

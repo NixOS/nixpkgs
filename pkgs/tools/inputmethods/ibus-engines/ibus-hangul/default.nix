@@ -1,14 +1,16 @@
-{ stdenv, fetchurl, intltool, pkgconfig
+{ stdenv, fetchFromGitHub, intltool, pkgconfig
 , gtk3, ibus, libhangul, librsvg, python3
 }:
 
 stdenv.mkDerivation rec {
-  name = "ibus-hangul-${version}";
+  pname = "ibus-hangul";
   version = "1.5.0";
 
-  src = fetchurl {
-    url = "https://github.com/choehwanjin/ibus-hangul/releases/download/${version}/${name}.tar.gz";
-    sha256 = "120p9w7za6hi521hz8q235fkl4i3p1qqr8nqm4a3kxr0pcq40bd2";
+  src = fetchFromGitHub {
+    owner = "choehwanjin";
+    repo = pname;
+    rev = version;
+    sha256 = "12l2spr32biqdbz01bzkamgq5gskbi6cd7ai343wqyy1ibjlkmp8";
   };
 
   buildInputs = [ gtk3 ibus libhangul python3 ];
