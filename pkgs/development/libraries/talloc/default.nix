@@ -3,11 +3,11 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "talloc-2.1.12";
+  name = "talloc-2.1.13";
 
   src = fetchurl {
     url = "mirror://samba/talloc/${name}.tar.gz";
-    sha256 = "0jv0ri9vj93fczzgl7rn7xvnfgl2kfx4x85cr8h8v52yh7v0qz4q";
+    sha256 = "0iv09iv385x69gfzvassq6m3y0rd8ncylls95dm015xdy3drkww4";
   };
 
   nativeBuildInputs = [ pkgconfig ];
