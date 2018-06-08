@@ -7692,6 +7692,11 @@ with pkgs;
   bazel_0_4 = callPackage ../development/tools/build-managers/bazel/0.4.nix { };
   bazel = callPackage ../development/tools/build-managers/bazel { };
 
+  bazel-buildtools = callPackage ../development/tools/build-managers/bazel/buildtools { };
+  buildifier = bazel-buildtools;
+  buildozer = bazel-buildtools;
+  unused_deps = bazel-buildtools;
+
   buildBazelPackage = callPackage ../build-support/build-bazel-package { };
 
   bear = callPackage ../development/tools/build-managers/bear { };
