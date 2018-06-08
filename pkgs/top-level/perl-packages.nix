@@ -1464,21 +1464,7 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  CatalystPluginUnicodeEncoding = buildPerlPackage {
-    name = "Catalyst-Plugin-Unicode-Encoding-1.9";
-    src = fetchurl {
-      url = mirror://cpan/authors/id/B/BO/BOBTFISH/Catalyst-Plugin-Unicode-Encoding-1.9.tar.gz;
-      sha256 = "1glxkh79zz71bmgk44hnhsi37z2mgxcwf7bkmwlnwv3jh1iaz0ah";
-    };
-    buildInputs = [ HTTPMessage IOStringy ];
-    propagatedBuildInputs = [ CatalystRuntime ClassDataInheritable LWP TryTiny URI ];
-    meta = {
-      description = "Unicode aware Catalyst";
-      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
-      maintainers = with maintainers; [ ];
-      platforms   = stdenv.lib.platforms.unix;
-    };
-  };
+  CatalystPluginUnicodeEncoding = CatalystRuntime;
 
   CatalystPluginHTMLWidget = buildPerlPackage rec {
     name = "Catalyst-Plugin-HTML-Widget-1.1";
