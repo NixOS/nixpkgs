@@ -8598,11 +8598,11 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  ListBinarySearch = pkgs.buildPerlPackage {
-    name = "List-BinarySearch-0.20";
+  ListBinarySearch = buildPerlPackage {
+    name = "List-BinarySearch-0.25";
     src = pkgs.fetchurl {
-      url = mirror://cpan/authors/id/D/DA/DAVIDO/List-BinarySearch-0.20.tar.gz;
-      sha256 = "1piyl65m38bwqaap13wkgs033wiwb6m5zmr5va86ya4696cir7wd";
+      url = mirror://cpan/authors/id/D/DA/DAVIDO/List-BinarySearch-0.25.tar.gz;
+      sha256 = "0ap8y9rsjxg75887klgij90mf459f8dwy0dbx1g06h30pmqk04f8";
     };
   };
 
