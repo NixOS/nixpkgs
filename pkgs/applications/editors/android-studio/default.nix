@@ -8,14 +8,14 @@ let
     inherit (gnome2) GConf gnome_vfs;
   };
   stableVersion = {
-    version = "3.1.2.0"; # "Android Studio 3.1.2"
-    build = "173.4720617";
-    sha256Hash = "1h9f4pkyqxkqxampi8v035czg5d4g6lp4bsrnq5mgpwhjwkr1whk";
+    version = "3.1.3.0"; # "Android Studio 3.1.3"
+    build = "173.4819257";
+    sha256Hash = "196yaswbxh2nd83gimjxr8ggr5xkdxq7n3xlh6ax73v59pj4hryq";
   };
   latestVersion = {
-    version = "3.2.0.15"; # "Android Studio 3.2 Canary 16"
-    build = "181.4802120";
-    sha256Hash = "0ch9jjq58k83dpnq65xyxchyik24w3fmh2v9q3kx1s028iavmpym";
+    version = "3.2.0.16"; # "Android Studio 3.2 Canary 17"
+    build = "181.4823740";
+    sha256Hash = "04282zd28kn2a4rjsi0ikx4bc9ab668xm7cc87ga60pzyg5gmmgk";
   };
 in rec {
   # Old alias

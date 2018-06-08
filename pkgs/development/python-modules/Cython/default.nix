@@ -11,7 +11,19 @@
 , ncurses
 }:
 
-buildPythonPackage rec {
+let
+  excludedTests = []
+    # cython's testsuite is not working very well with libc++
+    # We are however optimistic about things outside of testsuite still working
+    ++ stdenv.lib.optionals (stdenv.cc.isClang or false) [ "cpdef_extern_func" "libcpp_algo" ]
+    # Some tests in the test suite isn't working on aarch64. Disable them for
+    # now until upstream finds a workaround.
+    # Upstream issue here: https://github.com/cython/cython/issues/2308
+    ++ stdenv.lib.optionals stdenv.isAarch64 [ "numpy_memoryview" ]
+    ++ stdenv.lib.optionals stdenv.isi686 [ "future_division" "overflow_check_longlong" ]
+  ;
+
+in buildPythonPackage rec {
   pname = "Cython";
   version = "0.28.3";
 
@@ -29,12 +41,11 @@ buildPythonPackage rec {
   buildInputs = [ glibcLocales gdb ];
   LC_ALL = "en_US.UTF-8";
 
-  # cython's testsuite is not working very well with libc++
-  # We are however optimistic about things outside of testsuite still working
   checkPhase = ''
     export HOME="$NIX_BUILD_TOP"
     ${python.interpreter} runtests.py \
-      ${if stdenv.cc.isClang or false then ''--exclude="(cpdef_extern_func|libcpp_algo)"'' else ""}
+      ${stdenv.lib.optionalString (builtins.length excludedTests != 0)
+        ''--exclude="(${builtins.concatStringsSep "|" excludedTests})"''}
   '';
 
   meta = {

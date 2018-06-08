@@ -63,7 +63,7 @@ stdenv.mkDerivation rec {
     "-Djasper=true"
     "-Dx11=true"
     "-Dgir=${if gobjectIntrospection != null then "true" else "false"}"
-  ] ++ stdenv.lib.optional stdenv.isDarwin "-Dbuiltin_loaders=all";
+  ];
 
   postPatch = ''
     chmod +x build-aux/* # patchShebangs only applies to executables
@@ -73,8 +73,16 @@ stdenv.mkDerivation rec {
   '';
 
   postInstall =
-    # All except one utility seem to be only useful during building.
+    # meson erroneously installs loaders with .dylib extension on Darwin.
+    # Their @rpath has to be replaced before gdk-pixbuf-query-loaders looks at them.
+    stdenv.lib.optionalString stdenv.isDarwin ''
+      for f in $out/${passthru.moduleDir}/*.dylib; do
+          install_name_tool -change @rpath/libgdk_pixbuf-2.0.0.dylib $out/lib/libgdk_pixbuf-2.0.0.dylib $f
+          mv $f ''${f%.dylib}.so
+      done
     ''
+    # All except one utility seem to be only useful during building.
+    + ''
       moveToOutput "bin" "$dev"
       moveToOutput "bin/gdk-pixbuf-thumbnailer" "$out"
 
@@ -82,12 +90,8 @@ stdenv.mkDerivation rec {
       $dev/bin/gdk-pixbuf-query-loaders --update-cache
     '';
 
-  # The fixDarwinDylibNames hook doesn't patch library references or binaries.
+  # The fixDarwinDylibNames hook doesn't patch binaries.
   preFixup = stdenv.lib.optionalString stdenv.isDarwin ''
-    for f in $(find $out/lib -name '*.dylib'); do
-        install_name_tool -change @rpath/libgdk_pixbuf-2.0.0.dylib $out/lib/libgdk_pixbuf-2.0.0.dylib $f
-    done
-
     for f in $out/bin/* $dev/bin/*; do
         install_name_tool -change @rpath/libgdk_pixbuf-2.0.0.dylib $out/lib/libgdk_pixbuf-2.0.0.dylib $f
     done

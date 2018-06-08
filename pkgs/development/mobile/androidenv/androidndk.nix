@@ -31,7 +31,6 @@ stdenv.mkDerivation rec {
       jdk python3 which
     ]) + ":${platformTools}/platform-tools";
   in ''
-    set -x
     mkdir -pv $out/libexec
     mkdir -pv $out/lib64
     ln -s ${ncurses5.out}/lib/libncursesw.so.5 $out/lib64/libtinfo.so.5

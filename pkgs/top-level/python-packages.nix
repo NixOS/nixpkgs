@@ -195,6 +195,8 @@ in {
     inherit (pkgs) augeas;
   };
 
+  autograd = callPackage ../development/python-modules/autograd { };
+
   automat = callPackage ../development/python-modules/automat { };
 
   aws-xray-sdk = callPackage ../development/python-modules/aws-xray-sdk { };
@@ -1205,8 +1207,8 @@ in {
   cufflinks = callPackage ../development/python-modules/cufflinks { };
 
   cupy = callPackage ../development/python-modules/cupy {
-    cudatoolkit = pkgs.cudatoolkit8;
-    cudnn = pkgs.cudnn6_cudatoolkit8;
+    cudatoolkit = pkgs.cudatoolkit_8;
+    cudnn = pkgs.cudnn6_cudatoolkit_8;
     nccl = pkgs.nccl;
   };
 
@@ -1251,6 +1253,8 @@ in {
   py4j = callPackage ../development/python-modules/py4j { };
 
   pyechonest = callPackage ../development/python-modules/pyechonest { };
+
+  pyezminc = callPackage ../development/python-modules/pyezminc { };
 
   billiard = callPackage ../development/python-modules/billiard { };
 
@@ -3974,7 +3978,7 @@ in {
   };
 
   pycuda = callPackage ../development/python-modules/pycuda rec {
-    cudatoolkit = pkgs.cudatoolkit75;
+    cudatoolkit = pkgs.cudatoolkit_7_5;
     inherit (pkgs.stdenv) mkDerivation;
   };
 
@@ -5606,14 +5610,14 @@ in {
     # https://github.com/pytorch/pytorch/issues/5831
     # https://devtalk.nvidia.com/default/topic/1028112
     # We should be able to remove this when CUDA 9.2 is released.
-    cudatoolkit9 = pkgs.cudatoolkit9.override {
+    cudatoolkit_9 = pkgs.cudatoolkit_9.override {
       gcc6 = pkgs.gcc5;
     };
   in callPackage ../development/python-modules/pytorch {
     cudaSupport = pkgs.config.cudaSupport or false;
-    cudatoolkit = cudatoolkit9;
-    cudnn = pkgs.cudnn_cudatoolkit9.override {
-      inherit cudatoolkit9;
+    cudatoolkit = cudatoolkit_9;
+    cudnn = pkgs.cudnn_cudatoolkit_9.override {
+      inherit cudatoolkit_9;
     };
   };
 
@@ -9887,6 +9891,8 @@ in {
   }).overrideAttrs (oldAttrs: {
     name = "${python.libPrefix}-${pkgs.kmsxx.name}";
   });
+
+  pvlib = callPackage ../development/python-modules/pvlib { };
 
   pybase64 = callPackage ../development/python-modules/pybase64 { };
 
@@ -17593,11 +17599,11 @@ EOF
   tensorflow =
     if stdenv.isDarwin
     then callPackage ../development/python-modules/tensorflow/bin.nix { }
-    else callPackage ../development/python-modules/tensorflow rec {
+    else callPackage ../development/python-modules/tensorflow/bin.nix rec {
       cudaSupport = pkgs.config.cudaSupport or false;
       inherit (pkgs.linuxPackages) nvidia_x11;
-      cudatoolkit = pkgs.cudatoolkit9;
-      cudnn = pkgs.cudnn_cudatoolkit9;
+      cudatoolkit = pkgs.cudatoolkit_9_0;
+      cudnn = pkgs.cudnn_cudatoolkit_9_0;
     };
 
   tensorflowWithoutCuda = self.tensorflow.override {

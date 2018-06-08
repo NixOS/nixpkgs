@@ -2,13 +2,13 @@
 
 python3Packages.buildPythonApplication rec {
   name = "xonsh-${version}";
-  version = "0.6.4";
+  version = "0.6.6";
 
   src = fetchFromGitHub {
     owner = "scopatz";
     repo = "xonsh";
     rev = version;
-    sha256= "16nfvfa9cklm5qb2lrr12z7k4wjb6pbb0y0ma15riqcda56ygmj7";
+    sha256= "09w7656qhqv3al52cl5lgzawvkbkpwjfnxyg0vyx0gbjs1hwiqjj";
   };
 
   LC_ALL = "en_US.UTF-8";

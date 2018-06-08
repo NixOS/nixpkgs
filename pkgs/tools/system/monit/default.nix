@@ -3,11 +3,11 @@
 let useSSL = (openssl != null);
     isCross = ( buildPlatform != hostPlatform ) ; in
 stdenv.mkDerivation rec {
-  name = "monit-5.25.1";
+  name = "monit-5.25.2";
 
   src = fetchurl {
     url = "${meta.homepage}dist/${name}.tar.gz";
-    sha256 = "1g417cf6j0v6z233a3625fw1cxsh45xql7ag83jz2988n772ap2b";
+    sha256 = "0jn6mdsh50zd3jc61hr1y8sd80r01gqcyvd860zf8m8i3lvfc35a";
   };
 
   nativeBuildInputs = [ bison flex ];

@@ -1176,6 +1176,8 @@ with pkgs;
 
   duperemove = callPackage ../tools/filesystems/duperemove { };
 
+  dylibbundler = callPackage ../tools/misc/dylibbundler { };
+
   dynamic-colors = callPackage ../tools/misc/dynamic-colors { };
 
   dyncall = callPackage ../development/libraries/dyncall { };
@@ -1868,23 +1870,25 @@ with pkgs;
   cron = callPackage ../tools/system/cron { };
 
   inherit (callPackages ../development/compilers/cudatoolkit { })
-    cudatoolkit6
-    cudatoolkit65
-    cudatoolkit7
-    cudatoolkit75
-    cudatoolkit8
-    cudatoolkit9;
+    cudatoolkit_6
+    cudatoolkit_6_5
+    cudatoolkit_7
+    cudatoolkit_7_5
+    cudatoolkit_8
+    cudatoolkit_9_0
+    cudatoolkit_9;
 
-  cudatoolkit = cudatoolkit9;
+  cudatoolkit = cudatoolkit_9;
 
   inherit (callPackages ../development/libraries/science/math/cudnn { })
-    cudnn_cudatoolkit7
-    cudnn_cudatoolkit75
-    cudnn6_cudatoolkit8
-    cudnn_cudatoolkit8
-    cudnn_cudatoolkit9;
+    cudnn_cudatoolkit_7
+    cudnn_cudatoolkit_7_5
+    cudnn6_cudatoolkit_8
+    cudnn_cudatoolkit_8
+    cudnn_cudatoolkit_9
+    cudnn_cudatoolkit_9_0;
 
-  cudnn = cudnn_cudatoolkit9;
+  cudnn = cudnn_cudatoolkit_9;
 
   curlFull = curl.override {
     idnSupport = true;
@@ -2314,6 +2318,8 @@ with pkgs;
       inherit (python2Packages) gyp;
       protobuf = pkgs.protobuf.overrideDerivation (oldAttrs: { stdenv = clangStdenv; });
     };
+
+    table-extra = callPackage ../tools/inputmethods/fcitx-engines/fcitx-table-extra { };
 
     table-other = callPackage ../tools/inputmethods/fcitx-engines/fcitx-table-other { };
 
@@ -3931,10 +3937,10 @@ with pkgs;
   xnbd = callPackage ../tools/networking/xnbd { };
 
   inherit (callPackages ../development/libraries/science/math/nccl { })
-    nccl_cudatoolkit8
-    nccl_cudatoolkit9;
+    nccl_cudatoolkit_8
+    nccl_cudatoolkit_9;
 
-  nccl = nccl_cudatoolkit9;
+  nccl = nccl_cudatoolkit_9;
 
   ndjbdns = callPackage ../tools/networking/ndjbdns { };
 
@@ -7688,6 +7694,11 @@ with pkgs;
   bazel_0_4 = callPackage ../development/tools/build-managers/bazel/0.4.nix { };
   bazel = callPackage ../development/tools/build-managers/bazel { };
 
+  bazel-buildtools = callPackage ../development/tools/build-managers/bazel/buildtools { };
+  buildifier = bazel-buildtools;
+  buildozer = bazel-buildtools;
+  unused_deps = bazel-buildtools;
+
   buildBazelPackage = callPackage ../build-support/build-bazel-package { };
 
   bear = callPackage ../development/tools/build-managers/bear { };
@@ -9798,6 +9809,8 @@ with pkgs;
 
   libcec = callPackage ../development/libraries/libcec { };
   libcec_platform = callPackage ../development/libraries/libcec/platform.nix { };
+
+  libcef = callPackage ../development/libraries/libcef { inherit (gnome2) GConf; };
 
   libcello = callPackage ../development/libraries/libcello {};
 
@@ -12803,7 +12816,8 @@ with pkgs;
 
   monitoring-plugins = callPackage ../servers/monitoring/plugins { };
 
-  inherit (callPackage ../servers/monitoring/plugins/labs_consol_de.nix { inherit (perlPackages) NetSNMP; })
+  inherit (callPackage ../servers/monitoring/plugins/labs_consol_de.nix { inherit (perlPackages) DBDsybase NetSNMP; })
+    check-mssql-health
     check-nwc-health
     check-ups-health;
 
@@ -14949,7 +14963,6 @@ with pkgs;
   hevm = self.altcoins.hevm;
 
   parity = self.altcoins.parity;
-  parity-beta = self.altcoins.parity-beta;
   parity-ui = self.altcoins.parity-ui;
 
   stellar-core = self.altcoins.stellar-core;
@@ -15368,6 +15381,7 @@ with pkgs;
 
   docker-machine = callPackage ../applications/networking/cluster/docker-machine { };
   docker-machine-kvm = callPackage ../applications/networking/cluster/docker-machine/kvm.nix { };
+  docker-machine-kvm2 = callPackage ../applications/networking/cluster/docker-machine/kvm2.nix { };
   docker-machine-xhyve = callPackage ../applications/networking/cluster/docker-machine/xhyve.nix {
     inherit (darwin.apple_sdk.frameworks) Hypervisor vmnet;
   };
@@ -16134,6 +16148,8 @@ with pkgs;
   libquvi = callPackage ../applications/video/quvi/library.nix { };
 
   linssid = libsForQt5.callPackage ../applications/networking/linssid { };
+
+  m32edit = callPackage ../applications/audio/midas/m32edit.nix {};
 
   manuskript = callPackage ../applications/editors/manuskript { };
 
@@ -17269,6 +17285,8 @@ with pkgs;
   };
 
   oblogout = callPackage ../tools/X11/oblogout { };
+
+  obs-linuxbrowser = callPackage ../applications/video/obs-studio/linuxbrowser.nix { };
 
   obs-studio = libsForQt5.callPackage ../applications/video/obs-studio {
     alsaSupport = stdenv.isLinux;
@@ -18712,6 +18730,8 @@ with pkgs;
   x2goclient = libsForQt5.callPackage ../applications/networking/remote/x2goclient { };
 
   x2vnc = callPackage ../tools/X11/x2vnc { };
+
+  x32edit = callPackage ../applications/audio/midas/x32edit.nix {};
 
   x42-plugins = callPackage ../applications/audio/x42-plugins { };
 
@@ -20570,6 +20590,7 @@ with pkgs;
 
   vite = callPackage ../applications/science/misc/vite { };
 
+  xearth = callPackage ../applications/science/astronomy/xearth { };
   xplanet = callPackage ../applications/science/astronomy/xplanet { };
 
   ### SCIENCE / PHYSICS

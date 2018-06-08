@@ -562,6 +562,11 @@
     github = "basvandijk";
     name = "Bas van Dijk";
   };
+  bbarker = {
+    email = "brandon.barker@gmail.com";
+    github = "bbarker";
+    name = "Brandon Elam Barker";
+  };  
   bcarrell = {
     email = "brandoncarrell@gmail.com";
     github = "bcarrell";
@@ -2176,6 +2181,11 @@
     github = "limeytexan";
     name = "Michael Brantley";
   };
+  linc01n = {
+    email = "git@lincoln.hk";
+    github = "linc01n";
+    name = "Lincoln Lee";
+  };
   linquize = {
     email = "linquize@yahoo.com.hk";
     github = "linquize";
@@ -2288,6 +2298,11 @@
     email = "georges.dubus@compiletoi.net";
     github = "madjar";
     name = "Georges Dubus";
+  };
+  mafo = {
+    email = "Marc.Fontaine@gmx.de";
+    github = "MarcFontaine";
+    name = "Marc Fontaine";
   };
   magnetophon = {
     email = "bart@magnetophon.nl";
@@ -3949,6 +3964,11 @@
     email = "root@uralbash.ru";
     github = "uralbash";
     name = "Svintsov Dmitry";
+  };
+  uri-canva = {
+    email = "uri@canva.com";
+    github = "uri-canva";
+    name = "Uri Baghin";
   };
   utdemir = {
     email = "me@utdemir.com";

@@ -4089,6 +4089,11 @@ let self = _self // overrides; _self = with self; {
     inherit (pkgs) postgresql;
   };
 
+  DBDsybase = import ../development/perl-modules/DBD-sybase {
+    inherit fetchurl buildPerlPackage DBI;
+    inherit (pkgs) freetds;
+  };
+
   DBFile = import ../development/perl-modules/DB_File {
     inherit fetchurl buildPerlPackage;
     inherit (pkgs) db;
@@ -5819,17 +5824,13 @@ let self = _self // overrides; _self = with self; {
   };
 
   FileDesktopEntry = buildPerlPackage rec {
-    version = "0.04";
+    version = "0.22";
     name = "File-DesktopEntry-${version}";
-    configurePhase = ''
-      preConfigure || true
-      perl Build.PL PREFIX="$out" prefix="$out"
-    '';
     src = fetchurl {
-      url = "mirror://cpan/modules/by-module/File/${name}.tar.gz";
-      sha256 = "d7f80d8bd303651a43dc1810c73740d38a0d2b158fb33cd3b6ca4d3a566da7cb";
+      url = mirror://cpan/authors/id/M/MI/MICHIELB/File-DesktopEntry-0.22.tar.gz;
+      sha256 = "169c01e3dae2f629767bec1a9f1cdbd6ec6d713d1501e0b2786e4dd1235635b8";
     };
-    propagatedBuildInputs = [ FileBaseDir ];
+    propagatedBuildInputs = [ FileBaseDir URI ];
   };
 
   FileFindIterator = buildPerlPackage {
@@ -6406,23 +6407,16 @@ let self = _self // overrides; _self = with self; {
   };
 
   GD = buildPerlPackage rec {
-    name = "GD-2.53";
+    name = "GD-2.68";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/L/LD/LDS/${name}.tar.gz";
-      sha256 = "1ampz82kf0ixybncfgpvq2bp9nq5sjsmmw4c8srsv0g5jpz02pfh";
+      url = mirror://cpan/authors/id/R/RU/RURBAN/GD-2.68.tar.gz;
+      sha256 = "0p2ya641nl5cvcqgw829xgabh835qijfd6vq2ba12862946xx8va";
     };
 
-    buildInputs = [ pkgs.gd pkgs.libjpeg pkgs.zlib pkgs.freetype pkgs.libpng pkgs.fontconfig pkgs.xorg.libXpm ];
-
-    # Patch needed to get arguments past the first GetOptions call
-    # and to specify libfontconfig search path.
-    # Patch has been sent upstream.
-    patches = [ ../development/perl-modules/gd-options-passthrough-and-fontconfig.patch ];
+    buildInputs = [ pkgs.gd pkgs.libjpeg pkgs.zlib pkgs.freetype pkgs.libpng pkgs.fontconfig pkgs.xorg.libXpm ExtUtilsPkgConfig TestFork ];
 
     # otherwise "cc1: error: -Wformat-security ignored without -Wformat [-Werror=format-security]"
     hardeningDisable = [ "format" ];
-
-    doCheck = false; # fails 1 out of 13 tests
 
     makeMakerFlags = "--lib_png_path=${pkgs.libpng.out} --lib_jpeg_path=${pkgs.libjpeg.out} --lib_zlib_path=${pkgs.zlib.out} --lib_ft_path=${pkgs.freetype.out} --lib_fontconfig_path=${pkgs.fontconfig.lib} --lib_xpm_path=${pkgs.xorg.libXpm.out}";
   };
@@ -8544,11 +8538,11 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  ListBinarySearch = pkgs.buildPerlPackage {
-    name = "List-BinarySearch-0.20";
+  ListBinarySearch = buildPerlPackage {
+    name = "List-BinarySearch-0.25";
     src = pkgs.fetchurl {
-      url = mirror://cpan/authors/id/D/DA/DAVIDO/List-BinarySearch-0.20.tar.gz;
-      sha256 = "1piyl65m38bwqaap13wkgs033wiwb6m5zmr5va86ya4696cir7wd";
+      url = mirror://cpan/authors/id/D/DA/DAVIDO/List-BinarySearch-0.25.tar.gz;
+      sha256 = "0ap8y9rsjxg75887klgij90mf459f8dwy0dbx1g06h30pmqk04f8";
     };
   };
 
@@ -15230,6 +15224,18 @@ let self = _self // overrides; _self = with self; {
     meta = {
       homepage = https://github.com/kentfredric/Test-File-ShareDir;
       description = "Create a Fake ShareDir for your modules for testing";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
+  TestFork = buildPerlModule rec {
+    name = "Test-Fork-0.02";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/M/MS/MSCHWERN/Test-Fork-0.02.tar.gz;
+      sha256 = "0gnh8m81fdrwmzy1fix12grfq7sf7nn0gbf24zlap1gq4kxzpzpw";
+    };
+    meta = {
+      description = "test code which forks";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
   };

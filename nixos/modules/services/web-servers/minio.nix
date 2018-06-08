@@ -85,7 +85,7 @@ in
       '';
       serviceConfig = {
         PermissionsStartOnly = true;
-        ExecStart = "${cfg.package}/bin/minio server --address ${cfg.listenAddress} --config-dir=${cfg.configDir} ${cfg.dataDir}";
+        ExecStart = "${cfg.package}/bin/minio server --json --address ${cfg.listenAddress} --config-dir=${cfg.configDir} ${cfg.dataDir}";
         Type = "simple";
         User = "minio";
         Group = "minio";
