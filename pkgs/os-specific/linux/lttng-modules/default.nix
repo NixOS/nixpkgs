@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, kernel, libelf }:
+{ stdenv, fetchurl, kernel }:
 
 stdenv.mkDerivation rec {
   pname = "lttng-modules-${version}";
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     sha256 = "07rs01zwr4bmjamplix5qz1c6mb6wdawb68vyn0w6wx68ppbpnxq";
   };
 
-  buildInputs = [ libelf ];
+  buildInputs = kernel.moduleBuildDependencies;
 
   hardeningDisable = [ "pic" ];
 
