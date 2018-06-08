@@ -8,11 +8,11 @@
 
 
 stdenv.mkDerivation {
-  name = "gromacs-2018";
+  name = "gromacs-2018.1";
 
   src = fetchurl {
-    url = "ftp://ftp.gromacs.org/pub/gromacs/gromacs-2018.tar.gz";
-    sha256 = "1sfh3wdrw07797xm86fq10r0024ym585yyrnhdh0qam596vx1dfy";
+    url = "ftp://ftp.gromacs.org/pub/gromacs/gromacs-2018.1.tar.gz";
+    sha256 = "1k85sz0b9rmq00g58v22y9v671gsa512sjivx3n3yclr0hs36dad";
   };
 
   buildInputs = [cmake fftw]
