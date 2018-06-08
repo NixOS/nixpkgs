@@ -203,6 +203,8 @@ in {
 
   amazon_kclpy = callPackage ../development/python-modules/amazon_kclpy { };
 
+  ansiconv = callPackage ../development/python-modules/ansiconv { };
+
   backports_csv = callPackage ../development/python-modules/backports_csv {};
 
   bap = callPackage ../development/python-modules/bap {
