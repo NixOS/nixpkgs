@@ -23,7 +23,7 @@
 , alsaLib
 , libidn
 , zlib
-, version ? "13.9.0"
+, version ? "13.9.1"
 }:
 
 let
