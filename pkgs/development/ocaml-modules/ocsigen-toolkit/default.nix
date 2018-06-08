@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, buildOcaml, ocaml, opam
+{ stdenv, fetchurl, buildOcaml, ocaml, opaline
 , calendar, eliom, js_of_ocaml-ppx_deriving_json
 }:
 
@@ -8,13 +8,13 @@ buildOcaml rec
  version = "1.1.0";
 
  propagatedBuildInputs = [ calendar eliom js_of_ocaml-ppx_deriving_json ];
- buildInputs = [ opam ];
+ buildInputs = [ opaline ];
 
  installPhase =
   ''
     export OCAMLPATH=$out/lib/ocaml/${ocaml.version}/site-lib/:$OCAMLPATH
     make install
-    opam-installer --prefix=$out
+    opaline -prefix $out
   '';
 
   src = fetchurl {
