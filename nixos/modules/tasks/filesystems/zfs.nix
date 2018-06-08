@@ -401,6 +401,9 @@ in
           nameValuePair "zfs-sync-${pool}" {
             description = "Sync ZFS pool \"${pool}\"";
             wantedBy = [ "shutdown.target" ];
+            unitConfig = {
+              DefaultDependencies = false;
+            };
             serviceConfig = {
               Type = "oneshot";
               RemainAfterExit = true;
