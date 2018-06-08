@@ -1,4 +1,4 @@
-{ stdenv, fetchzip, libmnl ? null, makeWrapper ? null, wireguard-go ? null }:
+{ stdenv, fetchzip, libmnl ? null }:
 
 with stdenv.lib;
 
@@ -13,7 +13,6 @@ stdenv.mkDerivation rec {
 
   sourceRoot = "source/src/tools";
 
-  nativeBuildInputs = [ (optional stdenv.isDarwin makeWrapper) ];
   buildInputs = [ (optional stdenv.isLinux libmnl) ];
 
   makeFlags = [
@@ -27,10 +26,6 @@ stdenv.mkDerivation rec {
   postFixup = ''
     substituteInPlace $out/lib/systemd/system/wg-quick@.service \
       --replace /usr/bin $out/bin
-  '' + optionalString stdenv.isDarwin ''
-    for f in $out/bin/*; do
-      wrapProgram $f --prefix PATH : ${wireguard-go}/bin
-    done
   '';
 
   meta = with stdenv.lib; {
