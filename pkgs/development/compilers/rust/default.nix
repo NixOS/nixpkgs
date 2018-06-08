@@ -16,7 +16,14 @@ in rec {
   rustc = callPackage ./rustc.nix {
     inherit stdenv llvm targets targetPatches targetToolchains rustPlatform version src;
 
-    patches = [ ./patches/net-tcp-disable-tests.patch ./patches/stdsimd-disable-doctest.patch ];
+    patches = [
+      ./patches/net-tcp-disable-tests.patch
+      ./patches/stdsimd-disable-doctest.patch
+      # Fails on hydra - not locally; the exact reason is unknown.
+      # Comments in the test suggest that some non-reproducible environment
+      # variables such $RANDOM can make it fail.
+      ./patches/disable-test-inherit-env.patch
+    ];
 
     forceBundledLLVM = true;
 
