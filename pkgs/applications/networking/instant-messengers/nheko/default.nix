@@ -50,13 +50,13 @@ let
 in
 stdenv.mkDerivation rec {
   name = "nheko-${version}";
-  version = "0.4.2";
+  version = "0.4.3";
 
   src = fetchFromGitHub {
     owner = "mujx";
     repo = "nheko";
     rev = "v${version}";
-    sha256 = "1z9dbvcgwafxr131a8447qkx97x8l93k32xa8xvajgvjlimqphqk";
+    sha256 = "0qjia42nam3hj835k2jb5b6j6n56rdkb8rn67yqf45xdz8ypmbmv";
   };
 
   # This patch is likely not strictly speaking needed, but will help detect when
