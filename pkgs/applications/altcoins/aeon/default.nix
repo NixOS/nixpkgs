@@ -3,11 +3,9 @@
 , zeromq, pcsclite, readline
 }:
 
-let
+stdenv.mkDerivation rec {
+  pname = "aeon";
   version = "0.12.0.0";
-in
-stdenv.mkDerivation {
-  name = "aeon-${version}";
 
   src = fetchFromGitHub {
     owner = "aeonix";
