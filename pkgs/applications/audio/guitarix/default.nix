@@ -11,7 +11,7 @@ let
 in
 
 stdenv.mkDerivation rec {
-  name = "guitarix-${version}";
+  pname = "guitarix";
   version = "0.37.0";
 
   src = fetchurl {

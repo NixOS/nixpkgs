@@ -4,7 +4,7 @@
 , qtbase, qttools, SDL ? null }:
 
 stdenv.mkDerivation rec {
-  name = "lmms-${version}";
+  pname = "lmms";
   version = "1.2.0-rc4";
 
   src = fetchFromGitHub {

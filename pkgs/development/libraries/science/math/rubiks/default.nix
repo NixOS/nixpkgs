@@ -7,10 +7,9 @@
 stdenv.mkDerivation rec {
   pname = "rubiks";
   version = "20070912";
-  name = "${pname}-${version}";
 
   src = fetchurl {
-    url = "http://mirrors.mit.edu/sage/spkg/upstream/rubiks/rubiks-${version}.tar.bz2";
+    url = "http://mirrors.mit.edu/sage/spkg/upstream/${pname}/${pname}-${version}.tar.bz2";
     sha256 = "0zdmkb0j1kyspdpsszzb2k3279xij79jkx0dxd9f3ix1yyyg3yfq";
   };
 
@@ -29,19 +28,19 @@ stdenv.mkDerivation rec {
     # Fix makefiles which use all the variables in all the wrong ways and
     # hardcode values for some variables.
     (fetchpatch {
-      url = "https://git.sagemath.org/sage.git/plain/build/pkgs/rubiks/patches/dietz-cu2-Makefile.patch?id=07d6c37d18811e2b377a9689790a7c5e24da16ba";
+      url = "https://git.sagemath.org/sage.git/plain/build/pkgs/${pname}/patches/dietz-cu2-Makefile.patch?id=07d6c37d18811e2b377a9689790a7c5e24da16ba";
       sha256 = "1ry3w1mk9q4jqd91zlaa1bdiiplld4hpfjaldbhlmzlgrrc99qmq";
     })
     (fetchpatch {
-      url = "https://git.sagemath.org/sage.git/plain/build/pkgs/rubiks/patches/dietz-mcube-Makefile.patch?id=07d6c37d18811e2b377a9689790a7c5e24da16ba";
+      url = "https://git.sagemath.org/sage.git/plain/build/pkgs/${pname}/patches/dietz-mcube-Makefile.patch?id=07d6c37d18811e2b377a9689790a7c5e24da16ba";
       sha256 = "0zsbh6k3kqdg82fv0kzghr1x7pafisv943gmssqscp107bhg77bz";
     })
     (fetchpatch {
-      url = "https://git.sagemath.org/sage.git/plain/build/pkgs/rubiks/patches/dietz-solver-Makefile.patch?id=07d6c37d18811e2b377a9689790a7c5e24da16ba";
+      url = "https://git.sagemath.org/sage.git/plain/build/pkgs/${pname}/patches/dietz-solver-Makefile.patch?id=07d6c37d18811e2b377a9689790a7c5e24da16ba";
       sha256 = "0vhw70ylnmydgjhwx8jjlb2slccj4pfqn6vzirkyz1wp8apsmfhp";
     })
     (fetchpatch {
-      url = "https://git.sagemath.org/sage.git/plain/build/pkgs/rubiks/patches/reid-Makefile.patch?id=07d6c37d18811e2b377a9689790a7c5e24da16ba";
+      url = "https://git.sagemath.org/sage.git/plain/build/pkgs/${pname}/patches/reid-Makefile.patch?id=07d6c37d18811e2b377a9689790a7c5e24da16ba";
       sha256 = "1r311sn012xs135s0d21qwsig2kld7rdcq19nm0zbnklviid57df";
     })
   ];

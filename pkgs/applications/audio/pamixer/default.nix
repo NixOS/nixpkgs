@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, fetchpatch, boost, libpulseaudio }:
 
 stdenv.mkDerivation rec {
-  name = "pamixer-${version}";
+  pname = "pamixer";
   version = "1.3.1";
 
   src = fetchFromGitHub {

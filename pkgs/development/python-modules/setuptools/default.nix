@@ -6,9 +6,10 @@
 }:
 
 # Should use buildPythonPackage here somehow
-stdenv.mkDerivation rec {
+let
   pname = "setuptools";
   version = "39.0.1";
+in stdenv.mkDerivation rec {
   name = "${python.libPrefix}-${pname}-${version}";
 
   src = fetchPypi {

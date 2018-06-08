@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
 
-  name = "ncpamixer-${version}";
+  pname = "ncpamixer";
   version = "1.2";
 
   src = fetchFromGitHub {

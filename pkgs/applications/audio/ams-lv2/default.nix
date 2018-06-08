@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, cairo, fftw, gtkmm2, lv2, lvtk, pkgconfig, python }:
 
 stdenv.mkDerivation  rec {
-  name = "ams-lv2-${version}";
+  pname = "ams-lv2";
   version = "1.2.1";
 
   src = fetchFromGitHub {

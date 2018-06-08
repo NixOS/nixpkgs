@@ -1,10 +1,8 @@
 { stdenv, fetchurl, cmake, qt5, zlib, taglib, pkgconfig, pcre, gst_all_1 }:
 
-let
+stdenv.mkDerivation rec {
+  pname = "sayonara-player";
   version = "1.0.0-git5-20180115";
-in
-stdenv.mkDerivation {
-  name = "sayonara-player-${version}";
 
   src = fetchurl {
     url = "https://sayonara-player.com/sw/sayonara-player-${version}.tar.gz";

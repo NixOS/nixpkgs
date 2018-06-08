@@ -39,7 +39,7 @@ let
     '';
   };
   cldrEmojiAnnotation = stdenv.mkDerivation rec {
-    name = "cldr-emoji-annotation-${version}";
+    pname = "cldr-emoji-annotation";
     version = "31.90.0_1";
     src = fetchFromGitHub {
       owner = "fujiwarat";
@@ -61,7 +61,7 @@ let
 in
 
 stdenv.mkDerivation rec {
-  name = "ibus-${version}";
+  pname = "ibus";
   version = "1.5.17";
 
   src = fetchFromGitHub {

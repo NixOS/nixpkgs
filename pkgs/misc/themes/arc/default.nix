@@ -3,11 +3,10 @@
 let
   # treat versions newer than 3.22 as 3.22
   gnomeVersion = if stdenv.lib.versionOlder "3.22" gnome3.version then "3.22" else gnome3.version;
-  pname = "arc-theme";
 in
 
 stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
+  pname = "arc-theme";
   version = "2017-05-12";
 
   src = fetchFromGitHub {

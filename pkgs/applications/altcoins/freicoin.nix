@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   version = "0.8.6-2";
-  name = "freicoin-${version}";
+  pname = "freicoin";
 
   src = fetchFromGitHub {
     owner = "freicoin";

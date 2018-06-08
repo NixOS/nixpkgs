@@ -2,12 +2,10 @@
 
 let
   common = pname: {version, sha256}: stdenv.mkDerivation rec {
-    name = "${pname}-${version}";
-    inherit version;
+    inherit pname version;
 
     src = fetchurl {
       url = "https://github.com/atom/atom/releases/download/v${version}/atom-amd64.deb";
-      name = "${name}.deb";
       inherit sha256;
     };
 

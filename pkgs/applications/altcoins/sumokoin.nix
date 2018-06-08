@@ -2,7 +2,7 @@
 , libunwind, lmdb, miniupnpc }:
 
 stdenv.mkDerivation rec {
-  name = "sumokoin-${version}";
+  pname = "sumokoin";
   version = "0.2.0.0";
 
   src = fetchFromGitHub {

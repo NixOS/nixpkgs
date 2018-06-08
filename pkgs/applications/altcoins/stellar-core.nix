@@ -1,12 +1,9 @@
 { stdenv, lib, fetchgit, autoconf, libtool, automake, pkgconfig, git
 , bison, flex, postgresql }:
 
-let
+stdenv.mkDerivation rec {
   pname = "stellar-core";
   version = "0.5.1";
-
-in stdenv.mkDerivation {
-  name = "${pname}-${version}";
 
   src = fetchgit {
     url = "https://github.com/stellar/stellar-core.git";

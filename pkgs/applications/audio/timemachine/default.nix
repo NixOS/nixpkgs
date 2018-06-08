@@ -3,7 +3,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "timemachine-${version}";
+  pname = "timemachine";
   version = "0.3.1";
   src = fetchFromGitHub {
     owner = "swh";

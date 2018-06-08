@@ -1,11 +1,11 @@
-{ stdenv, lib, fetchurl, cmake, fcitx, pkgconfig, qtbase, extra-cmake-modules }:
+{ stdenv, lib, fetchFcitxSource, cmake, fcitx, pkgconfig, qtbase, extra-cmake-modules }:
 
 stdenv.mkDerivation rec {
-  name = "fcitx-qt5-${version}";
+  pname = "fcitx-qt5";
   version = "1.2.1";
 
-  src = fetchurl {
-    url = "http://download.fcitx-im.org/fcitx-qt5/${name}.tar.xz";
+  src = fetchFcitxSource {
+    inherit pname version;
     sha256 = "0z8ax0dxk88byic41mfaiahjdv1k8ciwn97xfjkkgr4ijgscdr8c";
   };
 

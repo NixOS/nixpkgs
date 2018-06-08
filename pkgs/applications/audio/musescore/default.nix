@@ -5,7 +5,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "musescore-${version}";
+  pname = "musescore";
   version = "2.2.1";
 
   src = fetchFromGitHub {

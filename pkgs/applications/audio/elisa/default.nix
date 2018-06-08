@@ -6,7 +6,7 @@
 }:
 
 mkDerivation rec {
-  name = "elisa-${version}";
+  pname = "elisa";
   version = "0.1";
 
   src = fetchFromGitHub {

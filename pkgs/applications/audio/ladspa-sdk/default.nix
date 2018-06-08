@@ -1,6 +1,6 @@
 { stdenv, fetchurl }:
 stdenv.mkDerivation rec {
-  name = "ladspa-sdk-${version}";
+  pname = "ladspa-sdk";
   version = "1.13";
   src = fetchurl {
     url = "http://www.ladspa.org/download/ladspa_sdk_${version}.tgz";

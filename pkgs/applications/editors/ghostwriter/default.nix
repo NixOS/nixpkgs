@@ -3,7 +3,6 @@
 stdenv.mkDerivation rec {
   pname = "ghostwriter";
   version = "1.6.2";
-  name = "${pname}-${version}";
 
   src = fetchFromGitHub {
     owner = "wereturtle";

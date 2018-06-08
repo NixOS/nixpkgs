@@ -14,7 +14,6 @@ stdenv.mkDerivation rec {
   # newer versions (4.9.0) are available, but still considered beta (https://github.com/gap-system/gap/wiki/GAP-4.9-release-notes)
   version = "4r8p10";
   pkgVer = "2018_01_15-13_02";
-  name = "${pname}-${version}";
 
   src = let
     # 4r8p10 -> 48

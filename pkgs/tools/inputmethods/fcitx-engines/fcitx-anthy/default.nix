@@ -1,11 +1,11 @@
-{ stdenv, fetchurl, cmake, fcitx, anthy, gettext, pkgconfig }:
+{ stdenv, fetchFcitxSource, cmake, fcitx, anthy, gettext, pkgconfig }:
 
 stdenv.mkDerivation rec {
-  name = "fcitx-anthy-${version}";
+  pname = "fcitx-anthy";
   version = "0.2.2";
 
-  src = fetchurl {
-    url = "http://download.fcitx-im.org/fcitx-anthy/${name}.tar.xz";
+  src = fetchFcitxSource {
+    inherit pname version;
     sha256 = "0ayrzfx95670k86y19bzl6i6w98haaln3x8dxpb39a5dwgz59pf8";
   };
 

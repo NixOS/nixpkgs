@@ -4,7 +4,7 @@
 , ibus, python3 }:
 
 stdenv.mkDerivation rec {
-  name = "ibus-table-${version}";
+  pname = "ibus-table";
   version = "1.9.20";
 
   src = fetchFromGitHub {

@@ -5,7 +5,7 @@
 let
   inherit (pythonPackages) python;
 in stdenv.mkDerivation rec {
-  name = "morituri-${version}";
+  pname = "morituri";
   version = "0.2.3.20151109";
   namePrefix = "";
 

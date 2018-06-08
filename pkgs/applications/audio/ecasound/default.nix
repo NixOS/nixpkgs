@@ -14,7 +14,7 @@
 # TODO: fix readline, ncurses, lilv, liblo, liboil and python. See configure log.
 
 stdenv.mkDerivation rec {
-  name = "ecasound-${version}";
+  pname = "ecasound";
   version = "2.9.1";
 
   src = fetchurl {

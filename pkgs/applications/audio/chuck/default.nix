@@ -4,7 +4,7 @@
 
 stdenv.mkDerivation rec {
   version = "1.3.5.2";
-  name = "chuck-${version}";
+  pname = "chuck";
 
   src = fetchurl {
     url = "http://chuck.cs.princeton.edu/release/files/chuck-${version}.tgz";

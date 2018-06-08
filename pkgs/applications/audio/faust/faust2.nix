@@ -36,9 +36,9 @@ let
 
   faust = stdenv.mkDerivation {
 
-    name = "faust-${version}";
+    pname = "faust";
 
-    inherit src;
+    inherit version src;
 
     nativeBuildInputs = [ makeWrapper pkgconfig vim ];
     buildInputs = [ llvm emscripten openssl libsndfile libmicrohttpd ];

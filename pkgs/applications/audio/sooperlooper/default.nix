@@ -4,7 +4,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "sooperlooper-git-${version}";
+  pname = "sooperlooper-git";
   version = "2016-07-19";
 
   src = fetchFromGitHub {

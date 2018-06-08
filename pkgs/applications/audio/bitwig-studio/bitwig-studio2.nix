@@ -2,7 +2,7 @@
   xdg_utils, zenity, ffmpeg }:
 
 bitwig-studio1.overrideAttrs (oldAttrs: rec {
-  name = "bitwig-studio-${version}";
+  pname = "bitwig-studio";
   version = "2.3.2";
 
   src = fetchurl {

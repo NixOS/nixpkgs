@@ -12,7 +12,9 @@ rec {
   # * https://nixos.org/nix/manual/#ssec-derivation
   #   Explanation about derivations in general
   mkDerivation =
-    { name ? ""
+    { name ? if builtins.hasAttr "pname" attrs && builtins.hasAttr "version" attrs
+        then "${attrs.pname}-${attrs.version}"
+        else ""
 
     # These types of dependencies are all exhaustively documented in
     # the "Specifying Dependencies" section of the "Standard
@@ -64,6 +66,8 @@ rec {
     , pos ? # position used in error messages and for meta.position
         (if attrs.meta.description or null != null
           then builtins.unsafeGetAttrPos "description" attrs.meta
+          else if attrs.version or null != null
+          then builtins.unsafeGetAttrPos "version" attrs
           else builtins.unsafeGetAttrPos "name" attrs)
     , separateDebugInfo ? false
     , outputs ? [ "out" ]
@@ -76,6 +80,10 @@ rec {
     , hardeningDisable ? []
 
     , ... } @ attrs:
+
+    # Check that the name is consistent with pname and version:
+    assert lib.lists.all (name: builtins.hasAttr name attrs) ["name" "pname" "version"]
+      -> lib.strings.hasSuffix "${attrs.pname}-${attrs.version}" attrs.name;
 
     # TODO(@Ericson2314): Make this more modular, and not O(n^2).
     let

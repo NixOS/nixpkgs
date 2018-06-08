@@ -2,7 +2,7 @@
 , lmdb, miniupnpc, readline }:
 
 stdenv.mkDerivation rec {
-  name = "masari-${version}";
+  pname = "masari";
   version = "0.1.4.0";
 
   src = fetchFromGitHub {

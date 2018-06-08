@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, pythonPackages, mopidy }:
 
 pythonPackages.buildPythonApplication rec {
-  name = "mopidy-youtube-${version}";
+  pname = "mopidy-youtube";
 
   version = "2.0.2";
 

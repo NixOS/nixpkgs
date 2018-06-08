@@ -14,9 +14,9 @@ let
     sha256 = "8fca9275c89964f13da985c3656cb00ba029d7f3916b37990927ffdf264e7926";
   };
 
-in stdenv.mkDerivation rec {
   pname = "pip";
   version = "10.0.1";
+in stdenv.mkDerivation rec {
   name = "${python.libPrefix}-bootstrapped-${pname}-${version}";
 
   src = fetchPypi {

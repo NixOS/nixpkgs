@@ -1,10 +1,9 @@
 { stdenv, lib, pkgconfig, fetchFromGitHub, scons, python, glibmm, libpulseaudio, libao
 }:
 
-let
+stdenv.mkDerivation rec {
+  pname = "rhvoice";
   version = "unstable-2018-02-10";
-in stdenv.mkDerivation rec {
-  name = "rhvoice-${version}";
 
   src = fetchFromGitHub {
     owner = "Olga-Yakovleva";

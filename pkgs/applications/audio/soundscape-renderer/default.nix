@@ -15,7 +15,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "soundscape-renderer-unstable-${version}";
+  pname = "soundscape-renderer-unstable";
 
   version = "2016-11-03";
 

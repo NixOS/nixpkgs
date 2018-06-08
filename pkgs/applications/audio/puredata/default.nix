@@ -3,7 +3,7 @@
 }:
 
 stdenv.mkDerivation  rec {
-  name = "puredata-${version}";
+  pname = "puredata";
   version = "0.48-0";
 
   src = fetchurl {
