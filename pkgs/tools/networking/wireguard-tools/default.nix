@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
 
   src = fetchzip {
     url = "https://git.zx2c4.com/WireGuard/snapshot/WireGuard-${version}.tar.xz";
-    sha256 = "ff653095cc0e4c491ab6cd095ddf5d1db207f48f947fb92873a73220363f423c";
+    sha256 = "0944zxmpx2cs71nxl7rcyhpqlwplkzd7jsf1n66vflngw2sjxm03";
   };
 
   sourceRoot = "source/src/tools";
