@@ -1,7 +1,7 @@
 { stdenv, fetchFromBitbucket, opusfile, libopus, libogg, openssl, deadbeef }:
 
 stdenv.mkDerivation rec {
-  name = "deadbeef-opus-plugin-${version}";
+  pname = "deadbeef-opus-plugin";
   version = "0.8";
 
   src = fetchFromBitbucket {

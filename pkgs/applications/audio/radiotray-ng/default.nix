@@ -39,7 +39,7 @@ let
   pythonInputs = with python2.pkgs; [ python2 lxml ];
 in
 stdenv.mkDerivation rec {
-  name = "radiotray-ng-${version}";
+  pname = "radiotray-ng";
   version = "0.2.2";
 
   src = fetchFromGitHub {

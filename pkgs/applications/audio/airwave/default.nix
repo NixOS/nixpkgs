@@ -37,7 +37,8 @@ let
 in
 
 multiStdenv.mkDerivation {
-  name = "airwave-${version}";
+  pname = "airwave";
+  inherit version;
 
   src = airwave-src;
 

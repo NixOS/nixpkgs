@@ -13,7 +13,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "csound-${version}";
+  pname = "csound";
   version = "6.11.0";
 
   enableParallelBuilding = true;

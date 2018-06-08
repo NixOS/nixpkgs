@@ -12,7 +12,7 @@ let
     else "x86";
 in
 stdenv.mkDerivation rec {
-  name = "SunVox-${version}";
+  pname = "SunVox";
   version = "1.9.3b";
 
   src = fetchurl {

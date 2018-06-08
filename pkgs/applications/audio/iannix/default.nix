@@ -2,7 +2,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "iannix-${version}";
+  pname = "iannix";
   version = "2016-01-31";
   src = fetchFromGitHub {
     owner = "iannix";

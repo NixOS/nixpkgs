@@ -4,7 +4,7 @@
 }:
 
 stdenv.mkDerivation  rec {
-  name = "fluidsynth-${version}";
+  pname = "fluidsynth";
   version = "1.1.10";
 
   src = fetchFromGitHub {

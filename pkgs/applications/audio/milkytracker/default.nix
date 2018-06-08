@@ -4,7 +4,7 @@
 
 stdenv.mkDerivation rec {
   version = "1.01";
-  name = "milkytracker-${version}";
+  pname = "milkytracker";
 
   src = fetchurl {
     url = "https://github.com/milkytracker/MilkyTracker/archive/v${version}.00.tar.gz";

@@ -16,11 +16,10 @@
 , gst_all_1
 , gst_plugins ? with gst_all_1; [ gst-plugins-good gst-plugins-ugly ]
 }:
-let
-  version = "7.1";
 
-in stdenv.mkDerivation rec {
-  name = "gradio-${version}";
+stdenv.mkDerivation rec {
+  pname = "gradio";
+  version = "7.1";
 
   src = fetchFromGitHub {
     owner = "haecker-felix";

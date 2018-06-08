@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, faust2jaqt, faust2lv2 }:
 stdenv.mkDerivation rec {
-  name = "shelfMultiBand-${version}";
+  pname = "shelfMultiBand";
   version = "0.6.1";
 
   src = fetchFromGitHub {

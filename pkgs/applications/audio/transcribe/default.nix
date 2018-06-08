@@ -4,7 +4,7 @@
 , libpng12, pango, zlib }:
 
 stdenv.mkDerivation rec {
-  name = "transcribe-${version}";
+  pname = "transcribe";
   version = "8.40";
 
   src = if stdenv.system == "i686-linux" then

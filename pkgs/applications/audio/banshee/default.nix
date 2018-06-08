@@ -5,7 +5,7 @@
 , libmtp, libgpod, mono-zeroconf }:
 
 stdenv.mkDerivation rec {
-  name = "banshee-${version}";
+  pname = "banshee";
   version = "2.6.2";
 
   src = fetchurl {

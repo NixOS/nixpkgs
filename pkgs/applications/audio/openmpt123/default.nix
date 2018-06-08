@@ -1,9 +1,8 @@
 { stdenv, fetchurl, SDL2, pkgconfig, flac, libsndfile }:
 
-let
+stdenv.mkDerivation rec {
+  pname = "openmpt123";
   version = "0.2.7025-beta20.1";
-in stdenv.mkDerivation rec {
-  name = "openmpt123-${version}";
   src = fetchurl {
     url = "https://lib.openmpt.org/files/libopenmpt/src/libopenmpt-${version}.tar.gz";
     sha256 = "0qp2nnz6pnl1d7yv9hcjyim7q6yax5881k1jxm8jfgjqagmz5k6p";

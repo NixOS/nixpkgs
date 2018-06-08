@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, lv2 }:
 
 stdenv.mkDerivation rec {
-  name = "mod-distortion-git-${version}";
+  pname = "mod-distortion-git";
   version = "2016-08-19";
 
   src = fetchFromGitHub {

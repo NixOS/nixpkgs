@@ -4,7 +4,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "flacon-${version}";
+  pname = "flacon";
   version = "4.1.0";
 
   src = fetchFromGitHub {

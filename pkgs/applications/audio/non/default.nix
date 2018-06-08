@@ -3,7 +3,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "non-${version}";
+  pname = "non";
   version = "2018-02-15";
   src = fetchFromGitHub {
     owner = "original-male";

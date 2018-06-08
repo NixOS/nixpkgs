@@ -21,7 +21,7 @@ let
 
   patches = [
     ./clementine-spotify-blob.patch
-    # Required so as to avoid adding libspotify as a build dependency (as it is 
+    # Required so as to avoid adding libspotify as a build dependency (as it is
     # unfree and thus would prevent us from having a free package).
     ./clementine-spotify-blob-remove-from-build.patch
     (fetchpatch {
@@ -69,8 +69,8 @@ let
   '';
 
   free = stdenv.mkDerivation {
-    name = "clementine-free-${version}";
-    inherit src patches nativeBuildInputs postPatch;
+    pname = "clementine-free";
+    inherit version src patches nativeBuildInputs postPatch;
 
     buildInputs = buildInputs ++ [ makeWrapper ];
 
@@ -96,9 +96,9 @@ let
 
   # Unfree Spotify blob for Clementine
   unfree = stdenv.mkDerivation {
-    name = "clementine-blob-${version}";
+    pname = "clementine-blob";
     # Use the same patches and sources as Clementine
-    inherit src nativeBuildInputs postPatch;
+    inherit version src nativeBuildInputs postPatch;
 
     patches = [
       ./clementine-spotify-blob.patch

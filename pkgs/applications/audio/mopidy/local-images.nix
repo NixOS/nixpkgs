@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, pythonPackages, mopidy, gobjectIntrospection }:
 
 pythonPackages.buildPythonApplication rec {
-  name = "mopidy-local-images-${version}";
+  pname = "mopidy-local-images";
 
   version = "1.0.0";
 

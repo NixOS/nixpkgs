@@ -31,7 +31,7 @@ in
 
 mkDerivation {
   inherit version;
-  name = "audacious-qt5-${version}";
+  pname = "audacious-qt5";
 
   sourceFiles = lib.attrValues sources;
   sourceRoots = lib.attrNames sources;

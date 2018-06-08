@@ -47,7 +47,8 @@ let
 in
 
 stdenv.mkDerivation {
-  name = "spotify-${version}";
+  pname = "spotify";
+  inherit version;
 
   src = fetchurl {
     url = "https://repository-origin.spotify.com/pool/non-free/s/spotify-client/spotify-client_${version}_amd64.deb";

@@ -1,11 +1,8 @@
 { stdenv, fetchurl, makeWrapper, bash, bc, findutils, flac, lame, opusTools, procps, sox }:
 
-let
-  version = "1.7.5";
-in
-
 stdenv.mkDerivation rec {
-  name = "caudec-${version}";
+  pname = "caudec";
+  version = "1.7.5";
 
   src = fetchurl {
     url = "http://caudec.net/downloads/caudec-${version}.tar.gz";

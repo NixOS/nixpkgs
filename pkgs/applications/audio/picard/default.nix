@@ -1,10 +1,10 @@
 { stdenv, python2Packages, fetchurl, gettext, chromaprint }:
 
 let
-  version = "1.4.2";
   pythonPackages = python2Packages;
-in pythonPackages.buildPythonApplication {
-  name = "picard-${version}";
+in pythonPackages.buildPythonApplication rec {
+  pname = "picard";
+  version = "1.4.2";
   namePrefix = "";
 
   src = fetchurl {

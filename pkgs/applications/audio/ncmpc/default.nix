@@ -2,7 +2,7 @@
 , mpd_clientlib, gettext }:
 
 stdenv.mkDerivation rec {
-  name = "ncmpc-${version}";
+  pname = "ncmpc";
   version = "0.30";
 
   src = fetchFromGitHub {
