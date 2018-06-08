@@ -1,11 +1,11 @@
 { stdenv, fetchurl, buildPerlPackage, DBI, sqlite }:
 
 buildPerlPackage rec {
-  name = "DBD-SQLite-1.56";
+  name = "DBD-SQLite-1.57_01";
 
   src = fetchurl {
-    url = mirror://cpan/authors/id/I/IS/ISHIGAKI/DBD-SQLite-1.56.tar.gz;
-    sha256 = "14g9cpc4qpdd3309c62xfar98ygw17rm2h64ncpvpyclgak33y65";
+    url = mirror://cpan/authors/id/I/IS/ISHIGAKI/DBD-SQLite-1.57_01.tar.gz;
+    sha256 = "1111cwlqkf4837y8mf8sag2cma82r059iy0869y2bz4bz88v2zzs";
   };
 
   propagatedBuildInputs = [ DBI ];
