@@ -20,6 +20,7 @@ stdenv.mkDerivation rec {
     "mod_welcome"
     "mod_logging"
     "mod_auth_simple"
+    "mod_auth_sqlite"
     "mod_chat_history"
     "mod_chat_only"
     "mod_topic"
