@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   name = "rocksdb-${version}";
   version = "5.11.3";
 
-  outputs = [ "dev" "out" "static" "bin" ];
+#  outputs = [ "dev" "out" "static" "bin" ];
 
   src = fetchFromGitHub {
     owner = "facebook";
@@ -40,17 +40,44 @@ stdenv.mkDerivation rec {
   };
 
 #  cmakeFlags = "-DCMAKE_C_COMPILER=x86_64-w64-mingw32-gcc -DCMAKE_CXX_COMPILER=x86_64-w64-mingw32-g++ ";
-  cmakeFlags = "-DCMAKE_SYSTEM_NAME=Windows -DCMAKE_CXX_FLAGS=-std=c++11 -DCMAKE_CXX_FLAGS=-pthread";
-  buildFlags = "rocksdb VERBOSE=1 -j1";
+  cmakeFlags = "-DJNI=0 -DWITH_GFLAGS=0 -DCMAKE_SYSTEM_NAME=Windows";
+  buildFlags = "rocksdb-shared rocksdb";
+
+#  preInstall = ''
+#    mv librocksdb.a ..
+#    cd ..
+#  '';
+
+  installPhase = ''
+    install -d $out/lib
+    cd ..
+    for header_dir in `find "include/rocksdb" -type d`; do \
+      install -d $out/$header_dir; \
+    done
+    for header in `find "include/rocksdb" -type f -name "*.h"`; do \
+      install -C -m 644 $header $out/$header; \
+    done
+    cd build
+    for lib in `find . -type f -name "*rocksdb*.a"`; do \
+      install -C -m 755 $lib $out/lib
+    done
+    for lib in `find . -type f -name "*rocksdb*.dll"`; do \
+      install -C -m 755 $lib $out/lib
+    done
+  '';
+
+  NIX_CFLAGS_COMPILE = [ "-Wno-unused-but-set-variable" "-D_POSIX_C_SOURCE" "-static-libstdc++" ];
 
   # postPatch = ''
   #   # Hack to fix typos
   #   sed -i 's,#inlcude,#include,g' build_tools/build_detect_platform
   # '';
-
+  hardeningDisable = [ "format" "stackprotector" ];
   # # Environment vars used for building certain configurations
   PORTABLE = "1";
   USE_SSE = "1";
+#  CMAKE_CXX_FLAGS = "-static-libstdc++";
+#  CXXFLAGS = "-static-libstdc++";
   #CMAKE_CXX_FLAGS = "-std=c++11 -pthread -pthreads";
   # JEMALLOC_LIB = stdenv.lib.optionalString (malloc == jemalloc) "-ljemalloc";
 
@@ -68,11 +95,11 @@ stdenv.mkDerivation rec {
   #   "static_lib"
   # ] ++ tools ;
 
-  # installFlags = buildAndInstallFlags ++ [
-  #   "INSTALL_PATH=\${out}"
-  #   "install-shared"
-  #   "install-static"
-  # ];
+#  installFlags = [
+#    "INSTALL_PATH=\${out}"
+#    "install-shared"
+#    "install-headers"
+#  ];
 
   # postInstall = ''
   #   # Might eventually remove this when we are confident in the build process

@@ -1,10 +1,11 @@
 { stdenv, fetchurl, m4, cxx ? true
+, targetPlatform
 , buildPackages
 , withStatic ? false }:
 
 let inherit (stdenv.lib) optional optionalString; in
 
-let self = stdenv.mkDerivation rec {
+let self = stdenv.mkDerivation (rec {
   name = "gmp-6.1.2";
 
   src = fetchurl { # we need to use bz2, others aren't in bootstrapping stdenv
@@ -78,5 +79,15 @@ let self = stdenv.mkDerivation rec {
     platforms = platforms.all;
     maintainers = [ maintainers.peti maintainers.vrthra ];
   };
-};
+} // stdenv.lib.optionalAttrs targetPlatform.isWindows {
+  # NOTE: can not use stdenv.cc.isGNU / isClang, as that results in
+  #       an infinite recursion at the gmp = gmp6 line in all-packages.
+  #
+  # do *not* pass CXXSTDLIB when cc is not clang, gcc doesn't understand
+  # -stdlib=libc++. If the buildPackages compiler is clang, we will
+  # inject this, and certainly do not want it for the cc compiler.
+  preConfigure = ''
+    export NIX_CXXSTDLIB_LINK=""
+ '';
+});
   in self

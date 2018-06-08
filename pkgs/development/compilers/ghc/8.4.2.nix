@@ -48,8 +48,7 @@ let
     include mk/flavours/\$(BuildFlavour).mk
     endif
     DYNAMIC_GHC_PROGRAMS = ${if enableShared then "YES" else "NO"}
-  '' + stdenv.lib.optionalString enableIntegerSimple ''
-    INTEGER_LIBRARY = integer-simple
+    INTEGER_LIBRARY = ${if enableIntegerSimple then "integer-simple" else "integer-gmp"}
   '' + stdenv.lib.optionalString (targetPlatform != hostPlatform) ''
     Stage1Only = YES
     HADDOCK_DOCS = NO

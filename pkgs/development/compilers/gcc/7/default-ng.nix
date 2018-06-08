@@ -67,4 +67,32 @@ in stdenv.mkDerivation ({
     # it should be a no-op mostly anyway, and would
     # simplify the expression.
     buildPhase = "";
+} // optionalAttrs (component != "gcc") {
+    # alright, so if we do build the components
+    # separately, they still end up in
+    #   $out/lib/gcc/<target>/<version>
+    # that's also where the include folder ends
+    # up in.  As we'll only push $out/lib and
+    # $out/include into the NIX_CFLAGS and NIX_LDFLAGS
+    # we need to move them into place.
+    postInstall = ''
+      set -v
+      mv $out/lib $out/lib.old
+      mv $(ls -d $out/lib.old/gcc/*/*) $out/lib
+      mv $out/lib/include $out/include
+      mkdir -p $out/include
+      mv $out/*/lib/* $out/lib
+      mkdir -p $out/lib
+      ls $out 
+      targetDir=$(find $out -name "*-*-*" -mindepth 1 -maxdepth 1 -type d)
+      if [[ -d "$targetDir/include" ]]; then
+         mv $targetDir/include/*/*/* $out/include
+      fi
+      targetDir2=$(find $out/include -name "*-*-*" -mindepth 1 -maxdepth 1 -type d)
+      if [[ -d "$targetDir2" ]]; then
+         cp -r $targetDir2/* $out/include
+      fi
+      rm -fR $out/lib.old
+      set +v
+    '';
 })

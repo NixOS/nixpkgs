@@ -6092,7 +6092,7 @@ with pkgs;
   gerbil-unstable = callPackage ../development/compilers/gerbil/unstable.nix { };
 
   gccFun = callPackage ../development/compilers/gcc/7;
-  gcc = gcc7-ng-msvcrt;
+  gcc = gcc7-ng;
   gcc-unwrapped = gcc.cc;
 
   gccStdenv = if stdenv.cc.isGNU then stdenv else stdenv.override {
@@ -6160,7 +6160,12 @@ with pkgs;
   crossLibcStdenv = buildPackages.makeStdenvCross {
     inherit (buildPackages.buildPackages) stdenv;
     inherit buildPlatform hostPlatform targetPlatform;
-    cc = buildPackages.gcc7-ng-msvcrt; #gccCrossStageStatic;
+    cc = buildPackages.gcc7-ng;#-msvcrt; #gccCrossStageStatic;
+  };
+  crossLibcStdenvNoLibgcc = buildPackages.makeStdenvCross {
+    inherit (buildPackages.buildPackages) stdenv;
+    inherit buildPlatform hostPlatform targetPlatform;
+    cc = buildPackages.gcc7-ng-msvcrt;#-msvcrt; #gccCrossStageStatic;
   };
   crossLibcStdenvNolibc = buildPackages.makeStdenvCross {
     inherit (buildPackages.buildPackages) stdenv;
@@ -6280,6 +6285,18 @@ with pkgs;
   #   and build winpthreads
   # - finish building the rest of gcc. (libgcc, ...)
 
+  # Dependencies:
+  #
+  #
+  # gcc7
+  # - gcc7-ng-msvcrt
+  #   - mingw_w64
+  #   - mingw_w64_headers
+  # - gcc7-ng-libgcc
+  #   - bintools
+  #   - mingw_w64
+  #   - mingw_w64_pthreads
+
   gcc7-ng-prebuilt =
     let libc = targetPackages.windows.mingw_w64_headers;
         bintools = wrapBintoolsWith { bintools = binutils-unwrapped; libc = libc; };
@@ -6298,6 +6315,19 @@ with pkgs;
     let libc = targetPackages.windows.mingw_w64;
         bintools = wrapBintoolsWith { bintools = binutils-unwrapped; libc = libc; };
     in wrapCCWith {
+     extraPackages = [ libc targetPackages.windows.mingw_w64_headers ];
+     cc = callPackage ../development/compilers/gcc/7/default-ng.nix { gcc-prebuilt = gcc7-ng-prebuilt; component = "gcc"; };
+     libc = libc;
+     bintools = bintools;
+  };
+
+  gcc7-ng =
+    let libc = targetPackages.windows.mingw_w64;
+        bintools = wrapBintoolsWith { bintools = binutils-unwrapped; libc = libc; };
+    in wrapCCWith {
+     extraPackages = [ targetPackages.gcc7-ng-libgcc targetPackages.gcc7-ng-libssp targetPackages.gcc7-ng-libstdcpp-v3
+                       libc targetPackages.windows.mingw_w64_headers targetPackages.windows.mingw_w64_pthreads
+                        ];
      cc = callPackage ../development/compilers/gcc/7/default-ng.nix { gcc-prebuilt = gcc7-ng-prebuilt; component = "gcc"; };
      libc = libc;
      bintools = bintools;
@@ -6306,7 +6336,21 @@ with pkgs;
   # this is a rather convoluted setup to achive the following:
   # still use the build machiens CC, yet build a target library.
   gcc7-ng-libgcc = callPackage ../development/compilers/gcc/7/default-ng.nix { gcc-prebuilt = buildPackages.gcc7-ng-prebuilt; component = "target-libgcc";
-    stdenv = buildPackages.stdenv; #crossLibcStdenv;
+    stdenv = buildPackages.stdenv;
+    extraBuildInputs = [ windows.mingw_w64 buildPackages.binutils-unwrapped windows.mingw_w64_pthreads ];
+    inherit (buildPackages) gmp mpfr libmpc;
+  };
+
+  # this is a rather convoluted setup to achive the following:
+  # still use the build machiens CC, yet build a target library.
+  gcc7-ng-libssp = callPackage ../development/compilers/gcc/7/default-ng.nix { gcc-prebuilt = buildPackages.gcc7-ng-prebuilt; component = "target-libssp";
+    stdenv = buildPackages.stdenv;
+    extraBuildInputs = [ windows.mingw_w64 buildPackages.binutils-unwrapped windows.mingw_w64_pthreads ];
+    inherit (buildPackages) gmp mpfr libmpc;
+  };
+
+  gcc7-ng-libstdcpp-v3 = callPackage ../development/compilers/gcc/7/default-ng.nix { gcc-prebuilt = buildPackages.gcc7-ng-prebuilt; component = "target-libstdc++-v3";
+    stdenv = buildPackages.stdenv;
     extraBuildInputs = [ windows.mingw_w64 buildPackages.binutils-unwrapped windows.mingw_w64_pthreads ];
     inherit (buildPackages) gmp mpfr libmpc;
   };
@@ -6324,7 +6368,7 @@ with pkgs;
 
   gcc-snapshot = lowPrio (wrapCC (callPackage ../development/compilers/gcc/snapshot {
     inherit noSysDirs;
-
+ 
     # PGO seems to speed up compilation by gcc by ~10%, see #445 discussion
     profiledCompiler = with stdenv; (!isDarwin && (isi686 || isx86_64));
 
@@ -7025,7 +7069,7 @@ with pkgs;
 
   wla-dx = callPackage ../development/compilers/wla-dx { };
 
-  wrapCCWith = { name ? "", cc, bintools, libc, extraBuildCommands ? "" }:
+  wrapCCWith = { name ? "", cc, bintools, libc, extraBuildCommands ? "", extraPackages ? [] }:
       ccWrapperFun rec {
     nativeTools = targetPlatform == hostPlatform && stdenv.cc.nativeTools or false;
     nativeLibc = targetPlatform == hostPlatform && stdenv.cc.nativeLibc or false;
@@ -7035,7 +7079,7 @@ with pkgs;
     isGNU = cc.isGNU or false;
     isClang = cc.isClang or false;
 
-    inherit name cc bintools libc extraBuildCommands;
+    inherit name cc bintools libc extraBuildCommands extraPackages;
   };
 
   ccWrapperFun = callPackage ../build-support/cc-wrapper;
@@ -11482,7 +11526,7 @@ with pkgs;
 
   rlog = callPackage ../development/libraries/rlog { };
 
-  rocksdb = callPackage ../development/libraries/rocksdb { stdenv = overrideCC stdenv gcc7-ng-msvcrt; jemalloc = jemalloc450; };
+  rocksdb = callPackage ../development/libraries/rocksdb { jemalloc = jemalloc450; };
 
   rocksdb_lite = rocksdb.override { enableLite = true; };
 
@@ -14282,7 +14326,7 @@ with pkgs;
     mingw_w64_headers = callPackage ../os-specific/windows/mingw-w64/headers.nix { };
 
     mingw_w64_pthreads = callPackage ../os-specific/windows/mingw-w64/pthreads.nix {
-      stdenv = crossLibcStdenv;
+      stdenv = crossLibcStdenvNoLibgcc;
     };
 
     pthreads = callPackage ../os-specific/windows/pthread-w32 {

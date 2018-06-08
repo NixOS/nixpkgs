@@ -76,7 +76,11 @@ let
     # Parallel building is broken in OpenSSL.
     enableParallelBuilding = false;
 
-    postInstall = ''
+    postInstall = (stdenv.lib.optionalString hostPlatform.isWindows ''
+      echo $out/*
+      echo $out/lib/*
+      echo $out/bin/*
+    '') + ''
       # If we're building dynamic libraries, then don't install static
       # libraries.
       if [ -n "$(echo $out/lib/*.so $out/lib/*.dylib $out/lib/*.dll)" ]; then
@@ -93,6 +97,8 @@ let
       rm -r $out/etc/ssl/misc
 
       rmdir $out/etc/ssl/{certs,private}
+    '' + stdenv.lib.optionalString hostPlatform.isWindows ''
+      cp $bin/bin/*.dll $out/lib/
     '';
 
     postFixup = ''
