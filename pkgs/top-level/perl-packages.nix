@@ -5876,6 +5876,7 @@ let self = _self // overrides; _self = with self; {
       sha256 = "d7f80d8bd303651a43dc1810c73740d38a0d2b158fb33cd3b6ca4d3a566da7cb";
     };
     propagatedBuildInputs = [ FileBaseDir ];
+    buildInputs = [ ModuleBuild ];
   };
 
   FileFindIterator = buildPerlPackage {
