@@ -5865,18 +5865,13 @@ let self = _self // overrides; _self = with self; {
   };
 
   FileDesktopEntry = buildPerlPackage rec {
-    version = "0.04";
+    version = "0.22";
     name = "File-DesktopEntry-${version}";
-    configurePhase = ''
-      preConfigure || true
-      perl Build.PL PREFIX="$out" prefix="$out"
-    '';
     src = fetchurl {
-      url = "mirror://cpan/modules/by-module/File/${name}.tar.gz";
-      sha256 = "d7f80d8bd303651a43dc1810c73740d38a0d2b158fb33cd3b6ca4d3a566da7cb";
+      url = mirror://cpan/authors/id/M/MI/MICHIELB/File-DesktopEntry-0.22.tar.gz;
+      sha256 = "169c01e3dae2f629767bec1a9f1cdbd6ec6d713d1501e0b2786e4dd1235635b8";
     };
-    propagatedBuildInputs = [ FileBaseDir ];
-    buildInputs = [ ModuleBuild ];
+    propagatedBuildInputs = [ FileBaseDir URI ];
   };
 
   FileFindIterator = buildPerlPackage {
