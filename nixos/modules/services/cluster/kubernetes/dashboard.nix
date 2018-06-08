@@ -4,16 +4,6 @@ with lib;
 
 let
   cfg = config.services.kubernetes.addons.dashboard;
-
-  name = "k8s.gcr.io/kubernetes-dashboard-amd64";
-  version = "v1.8.3";
-
-  image = pkgs.dockerTools.pullImage {
-    imageName = name;
-    imageDigest = "sha256:dc4026c1b595435ef5527ca598e1e9c4343076926d7d62b365c44831395adbd0";
-    finalImageTag = version;
-    sha256 = "18ajcg0q1vignfjk2sm4xj4wzphfz8wah69ps8dklqfvv0164mc8";
-  };
 in {
   options.services.kubernetes.addons.dashboard = {
     enable = mkEnableOption "kubernetes dashboard addon";
@@ -23,10 +13,27 @@ in {
       type = types.bool;
       default = elem "RBAC" config.services.kubernetes.apiserver.authorizationMode;
     };
+
+    version = mkOption {
+      description = "Which version of the kubernetes dashboard to deploy";
+      type = types.str;
+      default = "v1.8.3";
+    };
+
+    image = mkOption {
+      description = "Docker image to seed for the kubernetes dashboard container.";
+      type = types.attrs;
+      default = {
+        imageName = "k8s.gcr.io/kubernetes-dashboard-amd64";
+        imageDigest = "sha256:dc4026c1b595435ef5527ca598e1e9c4343076926d7d62b365c44831395adbd0";
+        finalImageTag = cfg.version;
+        sha256 = "18ajcg0q1vignfjk2sm4xj4wzphfz8wah69ps8dklqfvv0164mc8";
+      };
+    };
   };
 
   config = mkIf cfg.enable {
-    services.kubernetes.kubelet.seedDockerImages = [image];
+    services.kubernetes.kubelet.seedDockerImages = [(pkgs.dockerTools.pullImage cfg.image)];
 
     services.kubernetes.addonManager.addons = {
       kubernetes-dashboard-deployment = {
@@ -36,7 +43,7 @@ in {
           labels = {
             k8s-addon = "kubernetes-dashboard.addons.k8s.io";
             k8s-app = "kubernetes-dashboard";
-            version = version;
+            version = cfg.version;
             "kubernetes.io/cluster-service" = "true";
             "addonmanager.kubernetes.io/mode" = "Reconcile";
           };
@@ -52,7 +59,7 @@ in {
               labels = {
                 k8s-addon = "kubernetes-dashboard.addons.k8s.io";
                 k8s-app = "kubernetes-dashboard";
-                version = version;
+                version = cfg.version;
                 "kubernetes.io/cluster-service" = "true";
               };
               annotations = {
@@ -63,7 +70,7 @@ in {
               priorityClassName = "system-cluster-critical";
               containers = [{
                 name = "kubernetes-dashboard";
-                image = "${name}:${version}";
+                image = with cfg.image; "${imageName}:${finalImageTag}";
                 ports = [{
                   containerPort = 8443;
                   protocol = "TCP";
