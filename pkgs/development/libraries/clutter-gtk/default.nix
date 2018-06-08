@@ -1,8 +1,11 @@
-{ fetchurl, stdenv, pkgconfig, gobjectIntrospection, clutter, gtk3, gnome3 }:
+{ fetchurl, stdenv, pkgconfig, meson, ninja
+, gobjectIntrospection, clutter, gtk3, gnome3 }:
+
 let
   pname = "clutter-gtk";
   version = "1.8.4";
 in
+
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";
 
@@ -12,7 +15,7 @@ stdenv.mkDerivation rec {
   };
 
   propagatedBuildInputs = [ clutter gtk3 ];
-  nativeBuildInputs = [ pkgconfig gobjectIntrospection ];
+  nativeBuildInputs = [ meson ninja pkgconfig gobjectIntrospection ];
 
   postBuild = "rm -rf $out/share/gtk-doc";
 
