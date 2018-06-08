@@ -1,11 +1,11 @@
 {stdenv, fetchurl, libjpeg, lcms2, gettext, jasper }:
 
 stdenv.mkDerivation rec {
-  name = "dcraw-9.27.0";
+  name = "dcraw-9.28.0";
 
   src = fetchurl {
     url = "http://www.cybercom.net/~dcoffin/dcraw/archive/${name}.tar.gz";
-    sha256 = "16bhk3pl5kb9ikv367szl8m92nx85rqypz5im8x3sakm357wrn61";
+    sha256 = "1fdl3xa1fbm71xzc3760rsjkvf0x5jdjrvdzyg2l9ka24vdc7418";
   };
 
   buildInputs = [ libjpeg lcms2 gettext jasper ];
