@@ -17251,7 +17251,7 @@ let self = _self // overrides; _self = with self; {
   UnicodeString = buildPerlPackage rec {
     name = "Unicode-String-2.10";
     src = fetchurl {
-      url = mirror://cpan/authors/id/G/GA/GAAS/Unicode-String-2.10.tar.gz;
+      url = mirror://cpan/authors/id/G/GA/GAAS/GAAS/Unicode-String-2.10.tar.gz;
       sha256 = "0s4vp8k7ag7z9lsnnkpa9mnch83kxhp9gh7yiapld5a7rq712jl9";
     };
   };
