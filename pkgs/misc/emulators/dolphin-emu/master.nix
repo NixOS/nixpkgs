@@ -1,10 +1,8 @@
-{ stdenv, fetchFromGitHub, pkgconfig, cmake, bluez, ffmpeg, libao, libGLU_combined, gtk2, glib
+{ stdenv, fetchFromGitHub, pkgconfig, cmake, makeWrapper, bluez, ffmpeg, libao, libGLU_combined, gtk2, glib
 , pcre, gettext, libpthreadstubs, libXrandr, libXext, libXxf86vm, libXinerama, libSM, readline
-, openal, libXdmcp, portaudio, libusb, libevdev
+, openal, libXdmcp, portaudio, libusb, libevdev, curl, qt5
+, vulkan-loader ? null
 , libpulseaudio ? null
-, curl
-
-, qt5
 # - Inputs used for Darwin
 , CoreBluetooth, cf-private, ForceFeedback, IOKit, OpenGL
 , wxGTK
@@ -38,13 +36,14 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  nativeBuildInputs = [ cmake pkgconfig ];
+  nativeBuildInputs = [ cmake pkgconfig ]
+                      ++ stdenv.lib.optionals stdenv.isLinux [ makeWrapper ];
 
   buildInputs = [ curl ffmpeg libao libGLU_combined gtk2 glib pcre
                   gettext libpthreadstubs libXrandr libXext libXxf86vm libXinerama libSM readline openal
                   libXdmcp portaudio libusb libpulseaudio libpng hidapi
                 ] ++ stdenv.lib.optionals stdenv.isDarwin [ wxGTK CoreBluetooth cf-private ForceFeedback IOKit OpenGL ]
-                  ++ stdenv.lib.optionals stdenv.isLinux  [ bluez libevdev  ]
+                  ++ stdenv.lib.optionals stdenv.isLinux [ bluez libevdev vulkan-loader ]
                   ++ stdenv.lib.optionals dolphin-qtgui [ qt5.qtbase ];
 
   # - Change install path to Applications relative to $out
@@ -57,6 +56,11 @@ stdenv.mkDerivation rec {
 
   preInstall = stdenv.lib.optionalString stdenv.isDarwin ''
     mkdir -p "$out/Applications"
+  '';
+
+  postInstall = stdenv.lib.optionalString stdenv.isLinux ''
+    wrapProgram $out/bin/dolphin-emu-nogui --prefix LD_LIBRARY_PATH : ${vulkan-loader}/lib
+    wrapProgram $out/bin/dolphin-emu-wx --prefix LD_LIBRARY_PATH : ${vulkan-loader}/lib
   '';
 
   meta = {
