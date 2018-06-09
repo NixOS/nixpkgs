@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, cmake, pkgconfig, ncurses, zlib, xz, lzo, lz4, bzip2, snappy
+{ stdenv, fetchurl, fetchgit, cmake, pkgconfig, ncurses, zlib, xz, lzo, lz4, bzip2, snappy
 , libiconv, openssl, pcre, boost, judy, bison, libxml2
 , libaio, libevent, groff, jemalloc, cracklib, systemd, numactl, perl
 , fixDarwinDylibNames, cctools, CoreServices
@@ -18,7 +18,7 @@ common = rec { # attributes common to both builds
   version = "10.2.15";
 
   src = fetchurl {
-    url    = "https://downloads.mariadb.org/f/mariadb-${version}/source/mariadb-${version}.tar.gz";
+    url    = "https://downloads.mariadb.com/MariaDB/mariadb-${version}/source/mariadb-${version}.tar.gz";
     sha256 = "04ds6vkb7k2lqpcdz663z4ll1jx1zz2hqxz5nj7gs8pwb18j1pik";
     name   = "mariadb-${version}.tar.gz";
   };
@@ -78,7 +78,7 @@ common = rec { # attributes common to both builds
 
   meta = with stdenv.lib; {
     description = "An enhanced, drop-in replacement for MySQL";
-    homepage    = https://mariadb.org/;
+    homepage    = https://mariadb.com/;
     license     = licenses.gpl2;
     maintainers = with maintainers; [ thoughtpolice wkennington ];
     platforms   = platforms.all;
@@ -169,10 +169,10 @@ connector-c = stdenv.mkDerivation rec {
   name = "mariadb-connector-c-${version}";
   version = "2.3.5";
 
-  src = fetchurl {
-    url = "https://downloads.mariadb.org/interstitial/connector-c-${version}/mariadb-connector-c-${version}-src.tar.gz/from/http%3A//ftp.hosteurope.de/mirror/archive.mariadb.org/?serve";
-    sha256 = "0vvlfs56hxin130vh8pcs5w7jpv1yc6g76bhpzg88hnp4v1z8frg";
-    name   = "mariadb-connector-c-${version}-src.tar.gz";
+  src = fetchgit {
+    url = https://github.com/MariaDB/mariadb-connector-c;
+    rev = "v_${version}";
+    sha256 = "12ppc1rkykm1x61pavmprmbis3zccr8kwcygpdkzw8dmryzz4n4q";
   };
 
   # outputs = [ "dev" "out" ]; FIXME: cmake variables don't allow that < 3.0
