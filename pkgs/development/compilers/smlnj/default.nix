@@ -38,7 +38,7 @@ in stdenv.mkDerivation {
   '' + stdenv.lib.optionalString stdenv.isDarwin (with darwin; ''
     sed -i '/^[[:space:]]*\*x86-darwin\*)$/,/^[[:space:]]*\*) ;;/ c\
 \  \*x86-darwin\*)\
-\    INCLFILE=${apple_sdk.sdk}/include/unistd.h\
+\    INCLFILE=${stdenv.lib.getDev apple_sdk.sdk}/include/unistd.h\
 \    ;;\
 \  \*) ;;
 ' base/runtime/config/gen-posix-names.sh
