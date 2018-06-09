@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, makeWrapper, which, cmake, perl, perlPackages,
   boost, tbb, wxGTK30, pkgconfig, gtk3, fetchurl, gtk2, bash, libGLU,
-  glew, eigen }:
+  glew, eigen, curl }:
 let
   AlienWxWidgets = perlPackages.buildPerlPackage rec {
     name = "Alien-wxWidgets-0.69";
@@ -33,12 +33,13 @@ let
 in
 stdenv.mkDerivation rec {
   name = "slic3r-prusa-edition-${version}";
-  version = "1.39.2";
+  version = "1.40.0-beta";
 
   enableParallelBuilding = true;
 
   buildInputs = [
     cmake
+    curl
     perl
     makeWrapper
     eigen
@@ -73,6 +74,10 @@ stdenv.mkDerivation rec {
 
   prePatch = ''
     sed -i 's|"/usr/include/asm-generic/ioctls.h"|<asm-generic/ioctls.h>|g' xs/src/libslic3r/GCodeSender.cpp
+    # We need to fix the library installation path, as PERL_VENDORLIB and
+    # PERL_VENDORARCH are set incorrectly. This can be seen when running cmake.
+    sed -i 's|''${PERL_VENDORARCH}|lib/slic3r-prusa3d|g' xs/CMakeLists.txt
+    sed -i 's|''${PERL_VENDORLIB}|lib/slic3r-prusa3d|g' xs/CMakeLists.txt
   '';
 
   postInstall = ''
@@ -82,14 +87,14 @@ stdenv.mkDerivation rec {
 
     # it seems we need to copy the icons...
     mkdir -p $out/bin/var
-    cp ../resources/icons/* $out/bin/var/
+    cp -r ../resources/icons/* $out/bin/var/
     cp -r ../resources $out/bin/
   '';
 
   src = fetchFromGitHub {
     owner = "prusa3d";
     repo = "Slic3r";
-    sha256 = "0vbqkmd2yqi469ijqm4wyzjmq9w1kwiy8av1kchm4429z5hpmxcd";
+    sha256 = "0yzj56kahcdxbmhx2kg0izcnjbwmlrwch0ir2c5f3ks30ph20rck";
     rev = "version_${version}";
   };
 
