@@ -32,9 +32,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig autoconf automake ];
 
-  buildInputs = [ ncurses libxml2 gnutls texinfo gettext ];
-
-  propagatedBuildInputs = [
+  buildInputs = [ ncurses libxml2 gnutls texinfo gettext
     AppKit Carbon Cocoa IOKit OSAKit Quartz QuartzCore WebKit
     ImageCaptureCore GSS ImageIO   # may be optional
   ];
