@@ -7,10 +7,7 @@ stdenv.mkDerivation rec {
   version = "1.1.6";
 
   src = fetchurl {
-    urls = [
-      "ftp://ftp.alsa-project.org/pub/tools/${name}.tar.bz2"
-      "http://alsa.cybermirror.org/tools/${name}.tar.bz2"
-    ];
+    url = "mirror://alsa/tools/${name}.tar.bz2";
     sha256 = "09rjb6hw1mn9y1jfdfj5djncgc2cr5wfps83k56rf6k4zg14v76n";
   };
 
