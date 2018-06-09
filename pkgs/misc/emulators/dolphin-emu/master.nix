@@ -20,12 +20,12 @@ assert dolphin-wxgui || dolphin-qtgui;
 assert !(dolphin-wxgui && dolphin-qtgui);
 
 stdenv.mkDerivation rec {
-  name = "dolphin-emu-20180430";
+  name = "dolphin-emu-20180609";
   src = fetchFromGitHub {
     owner = "dolphin-emu";
     repo = "dolphin";
-    rev = "ad098283c023b0f5f0d314c646bc5d5756c35e3d";
-    sha256 = "17fv3vz0nc5jax1bbl4wny1kzsshbbhms82dxd8rzcwwvd2ad1g7";
+    rev = "1d87584d69e3fdd730502127274fcbd85cebd591";
+    sha256 = "0sxzmmv8gvfsy96p1x1aya1cpq0237gip3zkl4bks4grgxf8958b";
   };
 
   cmakeFlags = [
