@@ -1,7 +1,8 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "hello-2.10";
+  name = "hello-${version}";
+  version = "2.10";
 
   src = fetchurl {
     url = "mirror://gnu/hello/${name}.tar.gz";
