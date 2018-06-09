@@ -13,12 +13,12 @@ stdenv.mkDerivation rec {
 
   prePatch = let
       debian = fetchurl {
-        url = http://snapshot.debian.org/archive/debian-debug/20180128T155203Z//pool/main/t/tiff/tiff_4.0.9-3.debian.tar.xz;
-        sha256 = "0wya42y7kcq093g3h7ca10cm5sns1mgnkjmdd2qdi59v8arga4y4";
+        url = http://http.debian.net/debian/pool/main/t/tiff/tiff_4.0.9-5.debian.tar.xz;
+        sha256 = "15lwcsd46gini27akms2ngyxnwi1hs2yskrv5x2wazs5fw5ii62w";
       };
     in ''
-      tar xf '${debian}'
-      patches="$patches $(cat debian/patches/series | sed 's|^|debian/patches/|')"
+      tar xf ${debian}
+      patches="$patches $(sed 's|^|debian/patches/|' < debian/patches/series)"
     '';
 
   outputs = [ "bin" "dev" "out" "man" "doc" ];
