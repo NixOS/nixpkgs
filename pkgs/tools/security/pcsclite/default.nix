@@ -1,13 +1,16 @@
-{ stdenv, fetchurl, pkgconfig, udev, dbus_libs, perl, python2
+{ stdenv, fetchFromGitLab, pkgconfig, udev, dbus_libs, perl, python2
 , IOKit ? null }:
 
 stdenv.mkDerivation rec {
   name = "pcsclite-${version}";
   version = "1.8.23";
 
-  src = fetchurl {
-    url = "https://pcsclite.apdu.fr/files/pcsc-lite-${version}.tar.bz2";
-    sha256 = "1jc9ws5ra6v3plwraqixin0w0wfxj64drahrbkyrrwzghqjjc9ss";
+  src = fetchFromGitLab {
+    domain = "salsa.debian.org";
+    owner = "debian";
+    repo = "pcsc-lite";
+    rev = "upstream%2F${version}";
+    sha256 = "09b7a79hjkgiyvhyvwf8gpxaf8b7wd0342hx6zrpd269hhfbjvwy";
   };
 
   patches = [ ./no-dropdir-literals.patch ];
@@ -34,7 +37,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Middleware to access a smart card using SCard API (PC/SC)";
-    homepage = https://pcsclite.apdu.fr/;
+    homepage = https://salsa.debian.org/debian/pcsc-lite;
     license = licenses.bsd3;
     maintainers = with maintainers; [ viric wkennington ];
     platforms = with platforms; unix;
