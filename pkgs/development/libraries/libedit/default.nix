@@ -1,11 +1,11 @@
 { stdenv, fetchurl, ncurses, groff }:
 
 stdenv.mkDerivation rec {
-  name = "libedit-20170329-3.1";
+  name = "libedit-20180525-3.1";
 
   src = fetchurl {
     url = "http://thrysoee.dk/editline/${name}.tar.gz";
-    sha256 = "1gnlgl0x8g9ky59s70nriy5gv47676d1s4ypvbv8y11apl7xkwli";
+    sha256 = "05iicng4kag5hxdc7adbyj1gm3qbmvcc33m9cyx5gys0s67yl6y4";
   };
 
   outputs = [ "out" "dev" ];
