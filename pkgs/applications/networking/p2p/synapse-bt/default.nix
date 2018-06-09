@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, rustPlatform, pkgconfig, openssl }:
+{ stdenv, fetchFromGitHub, rustPlatform, pkgconfig, openssl, Security }:
 
 rustPlatform.buildRustPackage rec {
   name = "synapse-bt-unstable-${version}";
@@ -13,7 +13,7 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "1psrmgf6ddzqwx7gf301rx84asfnvxpsvkx2fan453v65819k960";
 
-  buildInputs = [ pkgconfig openssl ];
+  buildInputs = [ pkgconfig openssl ] ++ stdenv.lib.optional stdenv.isDarwin Security;
 
   cargoBuildFlags = [ "--all" ];
 
