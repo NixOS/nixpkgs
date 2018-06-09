@@ -17187,7 +17187,9 @@ with pkgs;
     inherit (gnome3) libgee;
   };
 
-  synapse-bt = callPackage ../applications/networking/p2p/synapse-bt { };
+  synapse-bt = callPackage ../applications/networking/p2p/synapse-bt {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
 
   synfigstudio = callPackage ../applications/graphics/synfigstudio {
     fontsConf = makeFontsConf { fontDirectories = [ freefont_ttf ]; };
