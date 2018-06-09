@@ -22,7 +22,7 @@ buildGoPackage rec {
     description = "Userspace Go implementation of WireGuard";
     homepage = https://git.zx2c4.com/wireguard-go/about/;
     license = licenses.gpl2;
-    maintainers = with maintainers; [ kirelagin zx2c4 ];
+    maintainers = with maintainers; [ kirelagin yegortimoshenko zx2c4 ];
     platforms = platforms.darwin;
   };
 }
