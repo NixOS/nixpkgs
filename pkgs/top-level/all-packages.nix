@@ -21243,6 +21243,8 @@ with pkgs;
 
   unicode-paracode = callPackage ../tools/misc/unicode { };
 
+  unixcw = callPackage ../applications/misc/unixcw { };
+
   valauncher = callPackage ../applications/misc/valauncher { };
 
   vault = callPackage ../tools/security/vault { };
