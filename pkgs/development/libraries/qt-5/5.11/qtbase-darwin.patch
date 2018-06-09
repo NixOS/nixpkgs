@@ -20,6 +20,20 @@ index 341d3bccf2..3368234c26 100644
      for (NSString *ifName in wifiInterfaces) {
              scanThread->interfaceName = QString::fromNSString(ifName);
              scanThread->start();
+diff --git a/src/plugins/platforms/cocoa/qcocoascreen.mm b/src/plugins/platforms/cocoa/qcoco
+ascreen.mm
+index a17a02b6..d76c42fa 100644
+--- a/src/plugins/platforms/cocoa/qcocoascreen.mm
++++ b/src/plugins/platforms/cocoa/qcocoascreen.mm
+@@ -114,7 +114,7 @@ void QCocoaScreen::updateGeometry()
+         return;
+
+     // The reference screen for the geometry is always the primary screen
+-    QRectF primaryScreenGeometry = QRectF::fromCGRect([[NSScreen screens] firstObject].frame);
++    QRectF primaryScreenGeometry = QRectF::fromCGRect([[[NSScreen screens] firstObject] frame]);
+     m_geometry = qt_mac_flip(QRectF::fromCGRect(nsScreen.frame), primaryScreenGeometry).toRect();
+     m_availableGeometry = qt_mac_flip(QRectF::fromCGRect(nsScreen.visibleFrame), primaryScreenGeometry).toRect();
+
 diff --git a/src/plugins/platforms/cocoa/qcocoawindow.mm b/src/plugins/platforms/cocoa/qcocoawindow.mm
 index 54254455e4..e10f62909a 100644
 --- a/src/plugins/platforms/cocoa/qcocoawindow.mm
