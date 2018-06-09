@@ -51,8 +51,10 @@ in
     inherit (pkgs.llvmPackages) clang-unwrapped;
   };
 
+  iproute2mac = callPackage ../os-specific/darwin/iproute2mac { };
+
   libobjc = apple-source-releases.objc4;
-  
+
   lsusb = callPackage ../os-specific/darwin/lsusb { };
 
   opencflite = callPackage ../os-specific/darwin/opencflite { };
