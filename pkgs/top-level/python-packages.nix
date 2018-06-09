@@ -315,6 +315,8 @@ in {
 
   outcome = callPackage ../development/python-modules/outcome {};
 
+  pdf2image = callPackage ../development/python-modules/pdf2image { };
+
   pdfminer = callPackage ../development/python-modules/pdfminer_six { };
 
   plantuml = callPackage ../tools/misc/plantuml { };
