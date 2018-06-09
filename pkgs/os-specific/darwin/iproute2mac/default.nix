@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, python }:
+{ stdenv, fetchFromGitHub, darwin, python }:
 
 stdenv.mkDerivation rec {
   version = "1.2.1";
@@ -14,7 +14,14 @@ stdenv.mkDerivation rec {
   buildInputs = [ python ];
 
   postPatch = ''
-    substituteInPlace src/ip.py --replace /usr/bin/python ${python}/bin/python
+    substituteInPlace src/ip.py \
+      --replace /usr/bin/python ${python}/bin/python \
+      --replace /sbin/ifconfig ${darwin.network_cmds}/bin/ifconfig \
+      --replace /sbin/route ${darwin.network_cmds}/bin/route \
+      --replace /usr/sbin/netstat ${darwin.network_cmds}/bin/netstat \
+      --replace /usr/sbin/ndp ${darwin.network_cmds}/bin/ndp \
+      --replace /usr/sbin/arp ${darwin.network_cmds}/bin/arp \
+      --replace /usr/sbin/networksetup ${darwin.network_cmds}/bin/networksetup
   '';
   installPhase = ''
     mkdir -p $out/bin
