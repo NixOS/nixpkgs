@@ -23,7 +23,7 @@
 , alsaLib
 , libidn
 , zlib
-, version ? "13.9.0"
+, version ? "13.9.1"
 }:
 
 let
@@ -209,6 +209,7 @@ let
         find $ICAInstDir -type f -exec file {} \; |
           grep 'ELF.*executable' |
           cut -f 1 -d : |
+          grep -vi '\(.dll\|.so\)$' | # added as a workaround to https://github.com/NixOS/nixpkgs/issues/41729
           while read f
           do
             echo "Patching ELF intrepreter and rpath for $f"
