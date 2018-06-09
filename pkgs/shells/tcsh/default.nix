@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
     homepage = http://www.tcsh.org/;
     license = licenses.bsd2;
     maintainers = with maintainers; [ AndersonTorres ];
-    platforms = platforms.linux;
+    platforms = platforms.linux ++ platforms.darwin;
   };
 
   passthru = {
