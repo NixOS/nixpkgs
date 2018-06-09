@@ -221,6 +221,8 @@ stdenv.mkDerivation (rec {
     done
   '';
 
+  enableParallelBuilding = true;
+
   # TODO(@oxij): Stop referencing args here
   meta = {
     homepage = http://www.xen.org/;

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, ocaml, findlib, ocamlbuild, opam }:
+{ stdenv, fetchurl, ocaml, findlib, ocamlbuild, opaline }:
 
 let
   pname = "cmdliner";
@@ -17,17 +17,12 @@ stdenv.mkDerivation rec {
   };
 
   unpackCmd = "tar xjf $src";
-  nativeBuildInputs = [ ocamlbuild opam ];
+  nativeBuildInputs = [ ocamlbuild opaline ];
   buildInputs = [ ocaml findlib ];
-
-  createFindlibDestdir = true;
 
   configurePhase = "ocaml pkg/git.ml";
   buildPhase     = "ocaml pkg/build.ml native=true native-dynlink=true";
-  installPhase   = ''
-    opam-installer --script --prefix=$out | sh
-    ln -s $out/lib/${pname} $out/lib/ocaml/${ocaml.version}/site-lib/
-  '';
+  installPhase   = "opaline -libdir $OCAMLFIND_DESTDIR";
 
   meta = with stdenv.lib; {
     homepage = http://erratique.ch/software/cmdliner;

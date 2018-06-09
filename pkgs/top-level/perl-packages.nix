@@ -8115,20 +8115,12 @@ let self = _self // overrides; _self = with self; {
      };
   };
 
-
   JSON = buildPerlPackage {
-    name = "JSON-2.90";
+    name = "JSON-2.97001";
     src = fetchurl {
-      url = mirror://cpan/authors/id/M/MA/MAKAMAKA/JSON-2.90.tar.gz;
-      sha256 = "127yppvr17qik9pkd1vy901hs4l13kg6rhp76jdgcyask35v7nsd";
+      url = mirror://cpan/authors/id/I/IS/ISHIGAKI/JSON-2.97001.tar.gz;
+      sha256 = "0nlgdzy40q26z8qhwngsd461glyai8dpwaccyhiljmrkaqwdjxz2";
     };
-    preConfigure = ''
-      cp lib/JSON/backportPP.pm{,orig}
-      echo "1;" > lib/JSON/backportPP.pm
-    '';
-    postConfigure = ''
-      cp lib/JSON/backportPP.pm{orig,}
-    '';
     meta = {
       description = "JSON (JavaScript Object Notation) encoder/decoder";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
@@ -14412,17 +14404,16 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  SysVirt = buildPerlPackage rec {
-    version = "4.1.0";
+  SysVirt = buildPerlModule rec {
+    version = "4.4.0";
     name = "Sys-Virt-${version}";
     src = assert version == pkgs.libvirt.version; pkgs.fetchgit {
       url = git://libvirt.org/libvirt-perl.git;
       rev = "v${version}";
-      sha256 = "0m0snv6gqh97nh1c31qvbm4sdzp49vixn7w3r69h6a5r71sn78x4";
+      sha256 = "1swlbis7mk1dk36badyibi3s467vhrjii0hhvhbsn2n0l6wa49x6";
     };
-    propagatedBuildInputs = [XMLXPath];
     nativeBuildInputs = [ pkgs.pkgconfig ];
-    buildInputs = [TestPodCoverage TimeHiRes TestPod pkgs.libvirt];
+    buildInputs = [ pkgs.libvirt CPANChanges TestPod TestPodCoverage XMLXPath ];
     meta = {
       platforms = stdenv.lib.platforms.linux;
     };
@@ -17169,13 +17160,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   UnicodeString = buildPerlPackage rec {
-    name = "Unicode-String-2.09";
-    patches = [
-      ../development/perl-modules/Unicode-String-perl-5-22.patch
-    ];
+    name = "Unicode-String-2.10";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/G/GA/GAAS/${name}.tar.gz";
-      sha256 = "1bgsaf3dgmlgyvi84r42ysc037mr5280amnypa4d98jfjpdvw5y8";
+      url = mirror://cpan/authors/id/G/GA/GAAS/GAAS/Unicode-String-2.10.tar.gz;
+      sha256 = "0s4vp8k7ag7z9lsnnkpa9mnch83kxhp9gh7yiapld5a7rq712jl9";
     };
   };
 

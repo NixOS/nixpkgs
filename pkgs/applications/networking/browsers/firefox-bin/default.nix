@@ -45,6 +45,7 @@
 , gnused
 , gnugrep
 , gnupg
+, ffmpeg
 }:
 
 let
@@ -122,6 +123,7 @@ stdenv.mkDerivation {
       libpulseaudio
       (lib.getDev libpulseaudio)
       systemd
+      ffmpeg
     ] + ":" + stdenv.lib.makeSearchPathOutput "lib" "lib64" [
       stdenv.cc.cc
     ];

@@ -1,4 +1,4 @@
-{ stdenv, buildOcaml, fetchurl, ocaml_oasis, opam }:
+{ stdenv, buildOcaml, fetchurl, ocaml_oasis, opaline }:
 
 buildOcaml rec {
   name = "js-build-tools";
@@ -13,11 +13,11 @@ buildOcaml rec {
 
   hasSharedObjects = true;
 
-  buildInputs = [ ocaml_oasis opam ];
+  buildInputs = [ ocaml_oasis opaline ];
 
   dontAddPrefix = true;
   configurePhase = "./configure --prefix $prefix";
-  installPhase = "opam-installer -i --prefix $prefix --libdir `ocamlfind printconf destdir` ${name}.install";
+  installPhase = "opaline -prefix $prefix -libdir $OCAMLFIND_DESTDIR ${name}.install";
 
   patches = [ ./js-build-tools-darwin.patch ];
 
