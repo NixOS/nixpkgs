@@ -4148,6 +4148,8 @@ with pkgs;
 
   odpdown = callPackage ../tools/typesetting/odpdown { };
 
+  odpic = callPackage ../development/libraries/odpic { };
+
   odt2txt = callPackage ../tools/text/odt2txt { };
 
   offlineimap = callPackage ../tools/networking/offlineimap { };
