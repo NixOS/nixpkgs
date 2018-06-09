@@ -78,7 +78,7 @@ stdenv.mkDerivation rec {
     description = "GNU Emacs 25, the extensible, customizable text editor";
     homepage    = http://www.gnu.org/software/emacs/;
     license     = licenses.gpl3Plus;
-    maintainers = with maintainers; [ jwiegley ];
+    maintainers = with maintainers; [ jwiegley matthewbauer ];
     platforms   = platforms.darwin;
 
     longDescription = ''
