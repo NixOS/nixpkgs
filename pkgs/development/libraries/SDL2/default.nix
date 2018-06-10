@@ -80,7 +80,7 @@ stdenv.mkDerivation rec {
   # from above in this way. This is pretty weird.
   postFixup = optionalString (stdenv.hostPlatform.extensions.sharedLibrary == ".so") ''
     for lib in $out/lib/*.so* ; do
-      if [[ -L "$lib" ]]; then
+      if ! [[ -L "$lib" ]]; then
         patchelf --set-rpath "$(patchelf --print-rpath $lib):${lib.makeLibraryPath propagatedBuildInputs}" "$lib"
       fi
     done
