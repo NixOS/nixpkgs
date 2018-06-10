@@ -386,14 +386,16 @@ $ nix-env -i w3m</screen>
 # fdisk /dev/sda # <lineannotation>(or whatever device you want to install on)</lineannotation>
 -- for UEFI systems only
 > n      # <lineannotation>(create a new partition for /boot)</lineannotation>
+>        # <lineannotation>(accept default partition type primary)</lineannotation>
 > 3      # <lineannotation>(make it a partition number 3)</lineannotation>
 >        # <lineannotation>(press enter to accept the default)</lineannotation>
 > +512M  # <lineannotation>(the size of the UEFI boot partition)</lineannotation>
-> t      # <lineannotation>(change the partition type ...)</lineannotation>
-> 3      # <lineannotation>(... of the boot partition ...)</lineannotation>
-> 1      # <lineannotation>(... to 'UEFI System')</lineannotation>
+> n      # <lineannotation>(ignore optional warning 'Partition #3 contains a vfat signature', if you get it.)</lineannotation>
+> t      # <lineannotation>(change the partition type of the boot partition ...)</lineannotation>
+> 1      # <lineannotation>(... to 'UEFI System'. sometimes instead uses hex code ef instead.)</lineannotation>
 -- for BIOS or UEFI systems
 > n      # <lineannotation>(create a new partition for /swap)</lineannotation>
+>        # <lineannotation>(accept default partition type primary)</lineannotation>
 > 2      # <lineannotation>(make it a partition number 2)</lineannotation>
 >        # <lineannotation>(press enter to accept the default)</lineannotation>
 > +8G    # <lineannotation>(the size of the swap partition)</lineannotation>
@@ -402,6 +404,7 @@ $ nix-env -i w3m</screen>
 >        # <lineannotation>(press enter to accept the default)</lineannotation>
 >        # <lineannotation>(press enter to accept the default and use the rest of the remaining space)</lineannotation>
 > a      # <lineannotation>(make the partition bootable)</lineannotation>
+> 1      # <lineannotation>(for the root partition)</lineannotation>
 > x      # <lineannotation>(enter expert mode)</lineannotation>
 > f      # <lineannotation>(fix up the partition ordering)</lineannotation>
 > r      # <lineannotation>(exit expert mode)</lineannotation>
