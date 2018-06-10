@@ -1,4 +1,9 @@
-{ stdenv, rustPlatform, fetchFromGitHub, dbus, gdk_pixbuf, libnotify, pkgconfig }:
+{ stdenv, lib, rustPlatform, fetchFromGitHub, dbus, gdk_pixbuf, libnotify, makeWrapper, pkgconfig, xorg, alsaUtils }:
+
+let
+  runtimeDeps = [ xorg.xsetroot ]
+    ++ lib.optional (alsaUtils != null) alsaUtils;
+in
 
 rustPlatform.buildRustPackage rec {
   name = "dwm-status-${version}";
@@ -11,14 +16,15 @@ rustPlatform.buildRustPackage rec {
     sha256 = "0nw0iz78mnrmgpc471yjv7yzsaf7346mwjp6hm5kbsdclvrdq9d7";
   };
 
-  buildInputs = [
-    dbus
-    gdk_pixbuf
-    libnotify
-    pkgconfig
-  ];
+  nativeBuildInputs = [ makeWrapper pkgconfig ];
+  buildInputs = [ dbus gdk_pixbuf libnotify ];
 
   cargoSha256 = "0169k91pb7ipvi0m71cmkppp1klgp5ghampa7x0fxkyrvrf0dvqg";
+
+  postInstall = ''
+    wrapProgram $out/bin/dwm-status \
+      --prefix "PATH" : "${stdenv.lib.makeBinPath runtimeDeps}"
+  '';
 
   meta = with stdenv.lib; {
     description = "DWM status service which dynamically updates when needed";
