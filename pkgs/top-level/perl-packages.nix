@@ -6512,6 +6512,18 @@ let self = _self // overrides; _self = with self; {
     doCheck = false; # seems to access the network
   };
 
+  GetoptArgvFile = buildPerlPackage rec {
+    name = "Getopt-ArgvFile-1.11";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/J/JS/JSTENZEL/${name}.tar.gz";
+      sha256 = "3709aa513ce6fd71d1a55a02e34d2f090017d5350a9bd447005653c9b0835b22";
+    };
+    meta = {
+      license = stdenv.lib.licenses.artistic1;
+      maintainers = [ maintainers.pSub ];
+    };
+  };
+
   GetoptLong = buildPerlPackage rec {
     name = "Getopt-Long-2.50";
     src = fetchurl {
