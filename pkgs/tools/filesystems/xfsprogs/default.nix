@@ -12,8 +12,8 @@ stdenv.mkDerivation rec {
   version = "4.14.0";
 
   src = fetchgit {
-    url = "git://git.kernel.org/pub/scm/fs/xfs/xfsprogs-dev.git";
-    rev = "refs/tags/v${version}";
+    url = "https://git.kernel.org/pub/scm/fs/xfs/xfsprogs-dev.git";
+    rev = "v${version}";
     sha256 = "19mg3avm188xz215hqbbh7251q27qwm7g1xr8ffrjwvzmdq55rxj";
   };
 
