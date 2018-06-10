@@ -93,7 +93,7 @@
        For partitioning: <command>fdisk</command>.
 <screen>
 # fdisk /dev/sda # <lineannotation>(or whatever device you want to install on)</lineannotation>
-> m      # <lineannotation>(ensure the first category listed is DOS (MBR), if not first use gparted to create an MSDOS partition table.)</lineannotation>
+> m      # <lineannotation>(ensure the first category listed is GPT, if not first use gparted to create a GPT partition table.)</lineannotation>
 -- for UEFI systems only
 > n      # <lineannotation>(create a new partition for /boot)</lineannotation>
 >        # <lineannotation>(accept default partition type primary)</lineannotation>
@@ -389,7 +389,7 @@ $ nix-env -i w3m</screen>
   <title>Commands for Installing NixOS on <filename>/dev/sda</filename></title>
 <screen>
 # fdisk /dev/sda # <lineannotation>(or whatever device you want to install on)</lineannotation>
-> m      # <lineannotation>(ensure the first category listed is DOS (MBR), if not first use gparted to create an MSDOS partition table.)</lineannotation>
+> m      # <lineannotation>(ensure the first category listed is GPT, if not first use gparted to create a GPT partition table.)</lineannotation>
 -- for UEFI systems only
 > n      # <lineannotation>(create a new partition for /boot)</lineannotation>
 >        # <lineannotation>(accept default partition type primary)</lineannotation>
