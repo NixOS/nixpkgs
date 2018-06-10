@@ -39,8 +39,9 @@ in stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "DFHack";
     repo = "dfhack";
-    sha256 = "0srgymyd57hk9iffhi2i0ra5vzw2vzlpzn4042yb90vqpmvz2zrj";
+    sha256 = "15hz90lfg7asgm4bqa2yi2lkwzrljphb42q6616sriwzs66xia6h";
     rev = version;
+    fetchSubmodules = true;
   };
 
   nativeBuildInputs = [ cmake perl XMLLibXML XMLLibXSLT fakegit ];
