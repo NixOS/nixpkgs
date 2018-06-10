@@ -14430,6 +14430,19 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
+  SysMemInfo = buildPerlPackage rec {
+    name = "Sys-MemInfo-0.99";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/S/SC/SCRESTO/${name}.tar.gz";
+      sha256 = "0786319d3a3a8bae5d727939244bf17e140b714f52734d5e9f627203e4cf3e3b";
+    };
+    meta = {
+      description = "Memory informations";
+      maintainers = [ maintainers.pSub ];
+      license = with stdenv.lib.licenses; [ gpl2Plus ];
+    };
+  };
+
   SysCPU = buildPerlPackage rec {
     name = "Sys-CPU-0.61";
     src = fetchurl {
