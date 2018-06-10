@@ -101,7 +101,7 @@
 > +512M  # <lineannotation>(the size of the UEFI boot partition)</lineannotation>
 > y      # <lineannotation>(optionally confirm removing vfat signature, if you get a warning about it.)</lineannotation>
 > t      # <lineannotation>(change the partition type of the boot partition ...)</lineannotation>
-> 1      # <lineannotation>(... to 'UEFI System'. sometimes instead uses hex code ef instead.)</lineannotation>
+> ef      # <lineannotation>(... to 'UEFI System'. sometimes instead uses hex code 1 instead.)</lineannotation>
 -- for BIOS or UEFI systems
 > n      # <lineannotation>(create a new partition for /swap)</lineannotation>
 >        # <lineannotation>(accept default partition type primary)</lineannotation>
@@ -396,7 +396,7 @@ $ nix-env -i w3m</screen>
 > +512M  # <lineannotation>(the size of the UEFI boot partition)</lineannotation>
 > y      # <lineannotation>(optionally confirm removing vfat signature, if you get a warning about it.)</lineannotation>
 > t      # <lineannotation>(change the partition type of the boot partition ...)</lineannotation>
-> 1      # <lineannotation>(... to 'UEFI System'. sometimes instead uses hex code ef instead.)</lineannotation>
+> ef      # <lineannotation>(... to 'UEFI System'. sometimes instead uses hex code 1 instead.)</lineannotation>
 -- for BIOS or UEFI systems
 > n      # <lineannotation>(create a new partition for /swap)</lineannotation>
 >        # <lineannotation>(accept default partition type primary)</lineannotation>
