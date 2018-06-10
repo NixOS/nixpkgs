@@ -78,9 +78,15 @@ let
 
     # For Yubikey salt storage
     mkdir -p /crypt-storage
+
+    # Disable all input echo for the whole stage. We could use read -s
+    # instead but that would ocasionally leak characters between read
+    # invocations.
+    stty -echo
   '';
 
   postCommands = ''
+    stty echo
     umount /crypt-storage 2>/dev/null
     umount /crypt-ramfs 2>/dev/null
   '';
@@ -113,8 +119,8 @@ let
                     # ask cryptsetup-askpass
                     echo -n "${device}" > /crypt-ramfs/device
 
-                    # and try reading it from /dev/console
-                    IFS= read -t 1 -rs passphrase
+                    # and try reading it from /dev/console with a timeout
+                    IFS= read -t 1 -r passphrase
                     if [ -n "$passphrase" ]; then
                        ${if luks.reusePassphrases then ''
                          # remember it for the next device
@@ -199,7 +205,7 @@ let
         for try in $(seq 3); do
             ${optionalString yubikey.twoFactor ''
             echo -n "Enter two-factor passphrase: "
-            read -rs k_user
+            read -r k_user
             echo
             ''}
 
