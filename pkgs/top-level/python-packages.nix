@@ -18177,6 +18177,10 @@ EOF
 
   spectral-cube = callPackage ../development/python-modules/spectral-cube { };
 
+  astunparse = callPackage ../development/python-modules/astunparse { };
+
+  gast = callPackage ../development/python-modules/gast { };
+
 });
 
 in fix' (extends overrides packages)

@@ -3,8 +3,11 @@
 , fetchurl
 , buildPythonPackage
 , isPy3k, isPy35, isPy36, pythonOlder
+, astor
+, gast
 , numpy
 , six
+, termcolor
 , protobuf
 , absl-py
 , mock
@@ -47,7 +50,7 @@ in buildPythonPackage rec {
     dls = import ./tf1.7.1-hashes.nix;
   in fetchurl dls.${key};
 
-  propagatedBuildInputs = [ numpy six protobuf absl-py ]
+  propagatedBuildInputs = [ numpy six protobuf absl-py astor gast termcolor ]
                  ++ lib.optional (!isPy3k) mock
                  ++ lib.optionals (pythonOlder "3.4") [ backports_weakref enum34 ]
                  ++ lib.optional (pythonOlder "3.6") tensorflow-tensorboard;
