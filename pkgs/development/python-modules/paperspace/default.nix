@@ -12,9 +12,10 @@ buildPythonPackage rec {
     sha256 = "0z19arikcjpfvp3bgssnlhplm1qzgw95s3r5fnsyf7nwmc4pvvpa";
   };
 
-  buildInputs = [ boto3 requests ];
+  propagatedBuildInputs = [ boto3 requests ];
 
-  doCheck = false; # bizarre test failure
+  # tries to use /homeless-shelter to mimic container usage, etc
+  doCheck = false;
 
   meta = with stdenv.lib; {
     description = "Python API for Paperspace Cloud";
