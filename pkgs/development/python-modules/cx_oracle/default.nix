@@ -1,22 +1,19 @@
-{ stdenv, buildPythonPackage, fetchPypi, oracle-instantclient }:
+{ stdenv, buildPythonPackage, fetchPypi, odpic }:
 
 buildPythonPackage rec {
   pname = "cx_Oracle";
   version = "6.3.1";
 
-  buildInputs = [
-    oracle-instantclient
-  ];
+  buildInputs = [ odpic ];
 
   src = fetchPypi {
     inherit pname version;
     sha256 = "0200j6jh80rpgzxmvgcxmkshaj4zadq32g2i97nlwiq3f7q374l7";
   };
 
-  patches = [ ./0001-odpi-src-dpiOci.c-nixify-libclntsh.so-dlopen.patch ];
-
-  postPatch = ''
-    substituteInPlace odpi/src/dpiOci.c --replace @libclntsh@ "${oracle-instantclient}/lib/libclntsh.so";
+  preConfigure = ''
+    export ODPIC_INC_DIR="${odpic}/include"
+    export ODPIC_LIB_DIR="${odpic}/lib"
   '';
 
   # Check need an Oracle database to run

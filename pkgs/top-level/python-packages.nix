@@ -3731,6 +3731,8 @@ in {
   # These used to be here but were moved to all-packages, but I'll leave them around for a while.
   pants = pkgs.pants;
 
+  paperspace = callPackage ../development/python-modules/paperspace { };
+
   paperwork-backend = callPackage ../applications/office/paperwork/backend.nix { };
 
   papis-python-rofi = callPackage ../development/python-modules/papis-python-rofi { };

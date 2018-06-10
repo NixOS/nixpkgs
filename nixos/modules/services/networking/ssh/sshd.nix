@@ -334,7 +334,9 @@ in
     services.openssh.moduliFile = mkDefault "${cfgc.package}/etc/ssh/moduli";
 
     environment.etc = authKeysFiles //
-      { "ssh/moduli".source = cfg.moduliFile; };
+      { "ssh/moduli".source = cfg.moduliFile;
+        "ssh/sshd_config".text = cfg.extraConfig;
+      };
 
     systemd =
       let
@@ -365,7 +367,7 @@ in
               { ExecStart =
                   (optionalString cfg.startWhenNeeded "-") +
                   "${cfgc.package}/bin/sshd " + (optionalString cfg.startWhenNeeded "-i ") +
-                  "-f ${pkgs.writeText "sshd_config" cfg.extraConfig}";
+                  "-f /etc/ssh/sshd_config";
                 KillMode = "process";
               } // (if cfg.startWhenNeeded then {
                 StandardInput = "socket";

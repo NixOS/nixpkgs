@@ -1,49 +1,57 @@
-{ stdenv, requireFile, autoPatchelfHook, rpmextract, libaio, makeWrapper, odbcSupport ? false, unixODBC }:
+{ stdenv, requireFile, autoPatchelfHook, unzip, libaio, makeWrapper, odbcSupport ? false, unixODBC }:
 
 assert odbcSupport -> unixODBC != null;
 
 let
-    baseVersion = "12.2";
-    requireSource = version: rel: part: hash: (requireFile rec {
-      name = "oracle-instantclient${baseVersion}-${part}-${version}-${rel}.x86_64.rpm";
-      message = ''
-        This Nix expression requires that ${name} already
-        be part of the store. Download the file
-        manually at
-
-        http://www.oracle.com/technetwork/topics/linuxx86-64soft-092277.html
-
-        and add it to the Nix store using either:
-          nix-store --add-fixed sha256 ${name}
-        or
-          nix-prefetch-url --type sha256 file:///path/to/${name}
-      '';
-      url = "http://www.oracle.com/technetwork/topics/linuxx86-64soft-092277.html";
-      sha256 = hash;
-    });
-in stdenv.mkDerivation rec {
+  baseVersion = "12.2";
   version = "${baseVersion}.0.1.0";
+
+  requireSource = component: arch: version: rel: hash: (requireFile rec {
+    name = "instantclient-${component}-${arch}-${version}" + (stdenv.lib.optionalString (rel != "") "-${rel}") + ".zip";
+    url = "http://www.oracle.com/technetwork/database/database-technologies/instant-client/downloads/index.html";
+    sha256 = hash;
+  });
+
+  throwSystem = throw "Unsupported system: ${stdenv.system}";
+
+  arch = {
+    "x86_64-linux" = "linux.x64";
+    "x86_64-darwin" = "macos.x64";
+  }."${stdenv.system}" or throwSystem;
+
+  srcs = {
+    "x86_64-linux" = [
+      (requireSource "basic" arch version "" "5015e3c9fba84e009f7519893f798a1622c37d1ae2c55104ff502c52a0fe5194")
+      (requireSource "sdk" arch version "" "7f404c3573c062ce487a51ac4cfe650c878d7edf8e73b364ec852645ed1098cb")
+      (requireSource "sqlplus" arch version "" "d49b2bd97376591ca07e7a836278933c3f251875c215044feac73ba9f451dfc2") ]
+      ++ stdenv.lib.optional odbcSupport (requireSource "odbc" arch version "2" "365a4ae32c7062d9fbc3fb41add748e7881f774484a175a4b41a2c294ce9095d");
+    "x86_64-darwin" = [
+      (requireSource "basic" arch version "2" "3ed3102e5a24f0da638694191edb34933309fb472eb1df21ad5c86eedac3ebb9")
+      (requireSource "sdk" arch version "2" "e0befca9c4e71ebc9f444957ffa70f01aeeec5976ea27c40406471b04c34848b")
+      (requireSource "sqlplus" arch version "2" "d147cbb5b2a954fdcb4b642df4f0bd1153fd56e0f56e7fa301601b4f7e2abe0e") ]
+      ++ stdenv.lib.optional odbcSupport (requireSource "odbc" arch version "2" "1805c1ab6c8c5e8df7bdcc35d7f2b94c329ecf4dff9bde55d5f9b159ecd8b64e");
+  }."${stdenv.system}" or throwSystem;
+
+in stdenv.mkDerivation rec {
+  inherit version srcs;
   name = "oracle-instantclient-${version}";
 
-  buildInputs = [ libaio stdenv.cc.cc.lib ] ++ stdenv.lib.optional odbcSupport unixODBC;
-  nativeBuildInputs = [ autoPatchelfHook makeWrapper rpmextract ];
+  buildInputs = [ stdenv.cc.cc.lib ]
+    ++ stdenv.lib.optionals (stdenv.isLinux) [ libaio ]
+    ++ stdenv.lib.optional odbcSupport unixODBC;
+  nativeBuildInputs = [ autoPatchelfHook makeWrapper unzip ];
 
-  srcs = [
-    (requireSource version "1" "basic" "43c4bfa938af741ae0f9964a656f36a0700849f5780a2887c8e9f1be14fe8b66")
-    (requireSource version "1" "devel" "4c7ad8d977f9f908e47c5e71ce56c2a40c7dc83cec8a5c106b9ff06d45bb3442")
-    (requireSource version "1" "sqlplus" "303e82820a10f78e401e2b07d4eebf98b25029454d79f06c46e5f9a302ce5552")
-  ] ++ stdenv.lib.optional odbcSupport (requireSource version "2" "odbc" "e870c84d2d4be6f77c0760083b82b7ffbb15a4bf5c93c4e6c84f36d6ed4dfdf1");
-
-  unpackCmd = "rpmextract $curSrc";
+  unpackCmd = "unzip $curSrc";
 
   installPhase = ''
-    mkdir -p "$out/"{bin,include,lib,"share/${name}/demo/"}
+    mkdir -p "$out/"{bin,include,lib,"share/java","share/${name}/demo/"}
 
-    install -Dm755 lib/oracle/${baseVersion}/client64/bin/* $out/bin
+    install -Dm755 {sqlplus,adrci,genezi} $out/bin
     ln -s $out/bin/sqlplus $out/bin/sqlplus64
-    install -Dm644 lib/oracle/${baseVersion}/client64/lib/* $out/lib
-    install -Dm644 include/oracle/${baseVersion}/client64/* $out/include
-    install -Dm644 share/oracle/${baseVersion}/client64/demo/* $out/share/${name}/demo
+    install -Dm644 *${stdenv.hostPlatform.extensions.sharedLibrary}* $out/lib
+    install -Dm644 *.jar $out/share/java
+    install -Dm644 sdk/include/* $out/include
+    install -Dm644 sdk/demo/* $out/share/${name}/demo
   '';
 
   meta = with stdenv.lib; {
@@ -54,7 +62,7 @@ in stdenv.mkDerivation rec {
       command line SQL client.
     '';
     license = licenses.unfree;
-    platforms = [ "x86_64-linux" ];
+    platforms = [ "x86_64-linux" "x86_64-darwin" ];
     maintainers = with maintainers; [ pesterhazy flokli ];
     hydraPlatforms = [];
   };

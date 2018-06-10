@@ -26,13 +26,13 @@ stdenv.mkDerivation rec {
     sha256 = "0f2wzdw2a3ac581322b2y79rlj3c9f33ddrq9allj97r1si6v5xk";
   };
 
+  patches = [ ./clean-env.patch ];
+
   enableParallelBuilding = true;
 
   nativeBuildInputs = [ pkgconfig autoconf automake ];
 
-  buildInputs = [ ncurses libxml2 gnutls texinfo gettext ];
-
-  propagatedBuildInputs = [
+  buildInputs = [ ncurses libxml2 gnutls texinfo gettext
     AppKit Carbon Cocoa IOKit OSAKit Quartz QuartzCore WebKit
     ImageCaptureCore GSS ImageIO   # may be optional
   ];
