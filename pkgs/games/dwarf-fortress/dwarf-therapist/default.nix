@@ -14,11 +14,16 @@ stdenv.mkDerivation rec {
   buildInputs = [ qtbase qtdeclarative ];
   nativeBuildInputs = [ texlive cmake ninja ];
 
+  installPhase = if stdenv.isDarwin then ''
+    mkdir -p $out/Applications
+    cp -r DwarfTherapist.app $out/Applications
+  '' else null;
+
   meta = with stdenv.lib; {
     description = "Tool to manage dwarves in in a running game of Dwarf Fortress";
     maintainers = with maintainers; [ the-kenny abbradar bendlas ];
     license = licenses.mit;
-    platforms = [ "x86_64-linux" "i686-linux" ];
+    platforms = platforms.unix;
     homepage = https://github.com/Dwarf-Therapist/Dwarf-Therapist;
   };
 }
