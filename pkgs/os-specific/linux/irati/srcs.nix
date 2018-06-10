@@ -1,12 +1,12 @@
 { stdenv, fetchFromGitHub }:
 rec {
-  version = "git-2018-04-23";
+  version = "git-2018-06-07";
 
   src = fetchFromGitHub {
     owner = "IRATI";
     repo = "stack";
-    rev = "4a5ba0df45d877cea4a82d8b3ed6c526c0f25d98";
-    sha256 = "1jgf6fybdbk0xhy9kbgiv5mjpjpd8bdmc316i6mybmrl34x736bn";
+    rev = "9a280d8a1e49892331161f264720afc36619a9ab";
+    sha256 = "1yb0g2msrrw5cad0nc5wh9fxaclskwfqcxl34cbi4iv6v52v2dr9";
   };
 
   prePatch = ''
