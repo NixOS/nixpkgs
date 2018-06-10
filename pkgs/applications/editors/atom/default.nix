@@ -35,6 +35,8 @@ let
       patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
         --set-rpath "${atomEnv.libPath}" \
         $share/resources/app/apm/bin/node
+      patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
+        $out/share/atom/resources/app.asar.unpacked/node_modules/symbols-view/vendor/ctags-linux
 
       dugite=$share/resources/app.asar.unpacked/node_modules/dugite
       rm -f $dugite/git/bin/git
@@ -53,7 +55,7 @@ let
       homepage = https://atom.io/;
       license = licenses.mit;
       maintainers = with maintainers; [ offline nequissimus synthetica ysndr ];
-      platforms = [ "x86_64-linux" ];
+      platforms = platforms.x86_64;
     };
   };
 in stdenv.lib.mapAttrs common {
