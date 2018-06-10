@@ -11824,6 +11824,8 @@ with pkgs;
 
   tinyxml-2 = callPackage ../development/libraries/tinyxml-2 { };
 
+  tiscamera = callPackage ../os-specific/linux/tiscamera { };
+
   tivodecode = callPackage ../applications/video/tivodecode { };
 
   tix = callPackage ../development/libraries/tix { };
