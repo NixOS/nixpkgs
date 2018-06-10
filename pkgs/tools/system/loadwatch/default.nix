@@ -1,10 +1,11 @@
-{ stdenv, fetchurl, ... }:
+{ stdenv, fetchgit, ... }:
 
 stdenv.mkDerivation {
-  name = "loadwatch-1.1";
-  src = fetchurl {
-    url = "mirror://debian/pool/main/l/loadwatch/loadwatch_1.0+1.1alpha1.orig.tar.gz";
-    sha256 = "1abjl3cy4sa4ivdm7wghv9rq93h8kix4wjbiv7pb906rdqs4881a";
+  name = "loadwatch-1.1-1-g6d2544c";
+  src = fetchgit {
+    url = "git://woffs.de/git/fd/loadwatch.git";
+    sha256 = "1bhw5ywvhyb6snidsnllfpdi1migy73wg2gchhsfbcpm8aaz9c9b";
+    rev = "6d2544c0caaa8a64bbafc3f851e06b8056c30e6e";
   };
   installPhase = ''
     mkdir -p $out/bin
