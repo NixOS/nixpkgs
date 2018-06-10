@@ -410,6 +410,8 @@ in {
 
   pytest-tornado = callPackage ../development/python-modules/pytest-tornado { };
 
+  python-hosts = callPackage ../development/python-modules/python-hosts { };
+
   python-openid = callPackage (if isPy3k
     then ../development/python-modules/python3-openid
     else ../development/python-modules/python-openid) { };
