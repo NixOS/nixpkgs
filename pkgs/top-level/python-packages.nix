@@ -10841,12 +10841,19 @@ in {
   };
 
   PyICU = buildPythonPackage rec {
-    name = "PyICU-1.9.7";
+    name = "PyICU-2.0.3";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/P/PyICU/${name}.tar.gz";
-      sha256 = "0qavhngmn7c90fz25a8a2k50wd5gzp3vwwjq8v2pkf2hq4fcs9yv";
+      sha256 = "0pzss3l0b0vcsyr7wlqdd6pkcqldspajfgd9k2iijf6r152d2ln4";
     };
+
+    patches = [
+      (pkgs.fetchpatch {
+        url = https://sources.debian.org/data/main/p/pyicu/2.0.3-1/debian/patches/icu_test.patch;
+        sha256 = "1iavdkyqixm9i753svl17barla93b7jzgkw09dn3hnggamx7zwx9";
+      })
+    ];
 
     buildInputs = [ pkgs.icu self.pytest ];
 
