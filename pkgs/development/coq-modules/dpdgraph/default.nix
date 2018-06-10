@@ -1,6 +1,11 @@
 { stdenv, fetchFromGitHub, autoreconfHook, coq, ocamlPackages }:
 
 let params = {
+  "8.8" = {
+    version = "0.6.3";
+    rev = "0acbd0a594c7e927574d5f212cc73a486b5305d2";
+    sha256 = "0c95b0bz2kjm6swr5na4gs06lxxywradszxbr5ldh2zx02r3f3rx";
+  };
   "8.7" = {
     version = "0.6.2";
     rev = "d76ddde37d918569945774733b7997e8b24daf51";

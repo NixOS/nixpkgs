@@ -2,25 +2,25 @@
 
 stdenv.mkDerivation rec {
   name = "crystal-${version}";
-  version = "0.24.1";
+  version = "0.24.2";
 
   src = fetchurl {
     url = "https://github.com/crystal-lang/crystal/archive/${version}.tar.gz";
-    sha256 = "1n375cwzb9rfqbjiimfbj4h5q4rsgh2rf6rmm2zbzizzm79a96a9";
+    sha256 = "1l7nrrfgz1yxxjphypwzlxj6dbari20p71zb4l0gix09lmas8l6y";
   };
 
-  prebuiltName = "crystal-0.24.1-2";
+  prebuiltName = "crystal-0.24.2-1";
   prebuiltSrc = let arch = {
     "x86_64-linux" = "linux-x86_64";
     "i686-linux" = "linux-i686";
     "x86_64-darwin" = "darwin-x86_64";
   }."${stdenv.system}" or (throw "system ${stdenv.system} not supported");
   in fetchurl {
-    url = "https://github.com/crystal-lang/crystal/releases/download/v0.24.1/${prebuiltName}-${arch}.tar.gz";
+    url = "https://github.com/crystal-lang/crystal/releases/download/0.24.2/${prebuiltName}-${arch}.tar.gz";
     sha256 = {
-      "x86_64-linux" = "19xchfzsyxh0gqi89y6d73iqc06bl097idz6905jf0i35x9ghpdp";
-      "i686-linux" = "15zaxgc1yc9ixbsgy2d8g8d7x2w4vbnndi1ms3wf0ss8azmghiag";
-      "x86_64-darwin" = "1818ahalahcbh974ai09hyfsns6njkpph4sbn4xwv2235x35dqib";
+      "x86_64-linux" = "1xf6riwd5k5f95988m1hsppsfii5v96svgmy12ncy7mgmm7k4dh3";
+      "i686-linux" = "0ar05kj89pm3zxfnxwhf0mz9vrd9q5p47y4969sh0r6knccri0kp";
+      "x86_64-darwin" = "1vz8bi5rfgggiic4ayxbcf6pfmdjvqcg4lsivnk2fyshr1m8l0h5";
     }."${stdenv.system}";
   };
 

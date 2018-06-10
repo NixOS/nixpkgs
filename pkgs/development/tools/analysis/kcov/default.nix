@@ -2,19 +2,21 @@
 
 stdenv.mkDerivation rec {
   name = "kcov-${version}";
-  version = "34";
+  version = "35";
 
   src = fetchFromGitHub {
     owner = "SimonKagstrom";
     repo = "kcov";
     rev = "v${version}";
-    sha256 = "1i4pn5na8m308pssk8585nmqi8kwd63a9h2rkjrn4w78ibmxvj01";
+    sha256 = "1da9vm87pi5m9ika0q1f1ai85w3vwlap8yln147yr9sc37jp5jcw";
   };
 
   preConfigure = "patchShebangs src/bin-to-c-source.py";
   nativeBuildInputs = [ cmake pkgconfig ];
 
   buildInputs = [ zlib curl elfutils python libiberty libopcodes ];
+
+  patches = [ ./aarch64_nt_prstatus.patch ];
 
   enableParallelBuilding = true;
 
@@ -32,7 +34,7 @@ stdenv.mkDerivation rec {
     homepage = http://simonkagstrom.github.io/kcov/index.html;
     license = licenses.gpl2;
 
-    maintainers = [ maintainers.gal_bolle ];
+    maintainers = with maintainers; [ gal_bolle ekleog ];
     platforms = platforms.linux;
   };
 }

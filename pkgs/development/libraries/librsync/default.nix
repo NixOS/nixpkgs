@@ -14,9 +14,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake ];
   buildInputs = [ perl zlib bzip2 popt ];
 
-  crossAttrs = {
-    dontStrip = true;
-  };
+  dontStrip = stdenv.hostPlatform != stdenv.buildPlatform;
 
   meta = with stdenv.lib; {
     homepage = http://librsync.sourceforge.net/;

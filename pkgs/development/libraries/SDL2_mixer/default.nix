@@ -23,7 +23,8 @@ stdenv.mkDerivation rec {
   propagatedBuildInputs = [ SDL2 libogg libvorbis fluidsynth smpeg2 flac libmodplug ];
 
   configureFlags = [ "--disable-music-ogg-shared" ]
-    ++ lib.optional enableNativeMidi "--enable-music-native-midi-gpl";
+    ++ lib.optional enableNativeMidi "--enable-music-native-midi-gpl"
+    ++ lib.optionals stdenv.isDarwin [ "--disable-sdltest" "--disable-smpegtest" ];
 
   meta = with stdenv.lib; {
     description = "SDL multi-channel audio mixer library";

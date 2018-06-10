@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgconfig, glib, cairo, Carbon, fontconfig
-, libtiff, giflib, libungif, libjpeg, libpng, monoDLLFixer
+, libtiff, giflib, libjpeg, libpng, monoDLLFixer
 , libXrender, libexif }:
 
 stdenv.mkDerivation rec {
@@ -22,8 +22,10 @@ stdenv.mkDerivation rec {
 
   patchFlags = "-p0";
 
+  hardeningDisable = [ "format" ];
+
   buildInputs =
-    [ pkgconfig glib cairo fontconfig libtiff giflib libungif
+    [ pkgconfig glib cairo fontconfig libtiff giflib
       libjpeg libpng libXrender libexif
     ]
     ++ stdenv.lib.optional stdenv.isDarwin Carbon;

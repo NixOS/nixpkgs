@@ -1,11 +1,11 @@
 { python27Packages, fetchurl, lib } :
 python27Packages.buildPythonApplication rec {
-  name = "motu-client-${version}";
-  version = "1.4.00";
+  pname = "motu-client";
+  version = "1.5.00";
 
   src = fetchurl {
     url = "https://github.com/quiet-oceans/motuclient-setuptools/archive/${version}.tar.gz";
-    sha256 = "0v0h90mylhaamd1vm4nc64q63vmlafhijm47hs0xfam33y1q2yvb";
+    sha256 = "1iqsws3wa2gpb36ms21xmaxfi83i8p8cdya4cxpn4r47c8mz74x8";
   };
 
   meta = with lib; {

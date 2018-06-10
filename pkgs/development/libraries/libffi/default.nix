@@ -49,6 +49,11 @@ stdenv.mkDerivation rec {
     "--enable-pax_emutramp"
   ];
 
+  preCheck = ''
+    # The tests use -O0 which is not compatible with -D_FORTIFY_SOURCE.
+    NIX_HARDENING_ENABLE=''${NIX_HARDENING_ENABLE/fortify/}
+  '';
+
   inherit doCheck;
 
   dontStrip = hostPlatform != buildPlatform; # Don't run the native `strip' when cross-compiling.

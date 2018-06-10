@@ -294,7 +294,7 @@ in rec {
     extraPreHook = ''
       export PATH_LOCALE=${pkgs.darwin.locale}/share/locale
     '';
-    overrides = self: super: (persistent self super) // {
+    overrides = lib.composeExtensions persistent (self: super: {
       # Hack to make sure we don't link ncurses in bootstrap tools. The proper
       # solution is to avoid passing -L/nix-store/...-bootstrap-tools/lib,
       # quite a sledgehammer just to get the C runtime.
@@ -303,7 +303,7 @@ in rec {
            "--disable-curses"
          ];
       });
-    };
+    });
   };
 
   stdenvDarwin = prevStage: let
@@ -321,7 +321,7 @@ in rec {
       darwin = super.darwin // {
         inherit (darwin) dyld ICU Libsystem libiconv;
       } // lib.optionalAttrs (super.targetPlatform == localSystem) {
-        inherit (darwin) binutils cctools;
+        inherit (darwin) binutils binutils-unwrapped cctools;
       };
     } // lib.optionalAttrs (super.targetPlatform == localSystem) {
       # Need to get rid of these when cross-compiling.
@@ -386,16 +386,15 @@ in rec {
       dyld Libsystem CF cctools ICU libiconv locale
     ]);
 
-    overrides = self: super:
-      let persistent' = persistent self super; in persistent' // {
-        clang = cc;
-        llvmPackages = persistent'.llvmPackages // { clang = cc; };
-        inherit cc;
+    overrides = lib.composeExtensions persistent (self: super: {
+      clang = cc;
+      llvmPackages = super.llvmPackages // { clang = cc; };
+      inherit cc;
 
-        darwin = super.darwin // {
-          xnu = super.darwin.xnu.override { python = super.python.override { configd = null; }; };
-        };
+      darwin = super.darwin // {
+        xnu = super.darwin.xnu.override { python = super.python.override { configd = null; }; };
       };
+    });
   };
 
   stagesDarwin = [

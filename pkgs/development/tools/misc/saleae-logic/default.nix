@@ -21,8 +21,6 @@ let
 
 in
 
-assert stdenv.system == "i686-linux" || stdenv.system == "x86_64-linux";
-
 stdenv.mkDerivation rec {
   pname = "saleae-logic";
   version = "1.2.10";
@@ -93,7 +91,7 @@ stdenv.mkDerivation rec {
     description = "Software for Saleae logic analyzers";
     homepage = http://www.saleae.com/;
     license = licenses.unfree;
-    platforms = platforms.linux;
+    platforms = [ "x86_64-linux" "i686-linux" ];
     maintainers = [ maintainers.bjornfor ];
   };
 }

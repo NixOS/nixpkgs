@@ -4,8 +4,6 @@ qtModule {
   name = "qtlocation";
   qtInputs = [ qtbase qtmultimedia ];
   outputs = [ "bin" "out" "dev" ];
-  # Linking with -lclipper fails with parallel build enabled
-  enableParallelBuilding = false;
   qmakeFlags = stdenv.lib.optional stdenv.isDarwin [
      # boost uses std::auto_ptr which has been disabled in clang with libcxx
      # This flag re-enables this feature

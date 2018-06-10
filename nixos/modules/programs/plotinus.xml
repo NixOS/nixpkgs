@@ -17,7 +17,7 @@
 <para>To enable Plotinus, add the following to your <filename>configuration.nix</filename>:
 
 <programlisting>
-programs.plotinus.enable = true;
+<xref linkend="opt-programs.plotinus.enable"/> = true;
 </programlisting>
 
 </para>

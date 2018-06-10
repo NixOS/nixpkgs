@@ -18,7 +18,7 @@ in symlinkJoin {
   postBuild = ''
     # DwarfTherapist assumes it's run in $out/share/dwarftherapist and
     # therefore uses many relative paths.
-    wrapProgram $out/bin/DwarfTherapist \
+    wrapProgram $out/bin/dwarftherapist \
       --run "cd $out/share/dwarftherapist"
 
     rm -rf $out/share/dwarftherapist/memory_layouts/linux
@@ -26,7 +26,7 @@ in symlinkJoin {
     origmd5=$(cat "${dfHashFile}.orig" | cut -c1-8)
     patchedmd5=$(cat "${dfHashFile}" | cut -c1-8)
     substitute \
-      ${dt.layouts}/${inifile} \
+      ${dt}/share/dwarftherapist/memory_layouts/${inifile} \
       $out/share/dwarftherapist/memory_layouts/${inifile} \
       --replace "$origmd5" "$patchedmd5"
   '';

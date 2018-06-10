@@ -51,5 +51,6 @@ mkChromiumDerivation (base: rec {
     license = licenses.bsd3;
     platforms = platforms.linux;
     hydraPlatforms = if channel == "stable" then ["aarch64-linux" "x86_64-linux"] else [];
+    timeout = 86400; # 24 hours
   };
 })

@@ -13,11 +13,13 @@
 , gnused
 , curl
 , utillinux
+, libarchive
+, file
  }:
 
 stdenv.mkDerivation rec {
   name = "singularity-${version}";
-  version = "2.4.6";
+  version = "2.5.1";
 
   enableParallelBuilding = true;
 
@@ -45,11 +47,11 @@ stdenv.mkDerivation rec {
     owner = "singularityware";
     repo = "singularity";
     rev = version;
-    sha256 = "0bs1jqm7v7wv1kdxq8kyqn3gl5m76j0wwwgjyjnndrhczlsh5m1d";
+    sha256 = "1i029qs6dfpyirhbdz0nrx2sh5fddysk4wqkjqj5m60kxs4x8a3d";
   };
 
   nativeBuildInputs = [ autoreconfHook makeWrapper ];
-  buildInputs = [ coreutils gnugrep python e2fsprogs which gnutar squashfsTools gzip gnused curl utillinux ];
+  buildInputs = [ coreutils gnugrep python e2fsprogs which gnutar squashfsTools gzip gnused curl utillinux libarchive file ];
 
   meta = with stdenv.lib; {
     homepage = http://singularity.lbl.gov/;

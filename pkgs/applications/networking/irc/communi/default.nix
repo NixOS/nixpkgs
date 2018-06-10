@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     "
   '';
 
-  postInstall = ''
+  postInstall = stdenv.lib.optionalString stdenv.isLinux ''
     substituteInPlace "$out/share/applications/communi.desktop" \
       --replace "/usr/bin" "$out/bin"
   '';

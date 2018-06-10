@@ -20,5 +20,6 @@ appleDerivation {
 
   postInstall = ''
     mv $out/usr/local/include $out/include
+    rm -rf $out/usr
   '';
 }

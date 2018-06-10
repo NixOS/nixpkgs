@@ -1,32 +1,42 @@
-{ stdenv, fetchFromGitHub, buildGoPackage, git, libtool }:
+{ stdenv, fetchFromGitHub, buildGoPackage, libtool }:
 
 buildGoPackage rec {
   name = "notary-${version}";
-  version = "0.6.0";
-  gitcommit = "34f53ad";
+  version = "0.6.1";
+  gitcommit = "d6e1431f";
 
   src = fetchFromGitHub {
     owner = "theupdateframework";
     repo = "notary";
     rev = "v${version}";
-    sha256 = "0lg7ab2agkk3rnladcvpdzk8cnf3m49qfm4sanh7yjvlvlv1wm4a";
+    sha256 = "1ak9dk6vjny5069hp3w36dbjawcnaq82l3i2qvf7mn7zfglbsnf9";
   };
 
+  patches = [ ./no-git-usage.patch ];
+
   buildInputs = [ libtool ];
+  buildPhase = ''
+    runHook preBuild
+    cd go/src/github.com/theupdateframework/notary
+    make client GITCOMMIT=${gitcommit}
+    runHook postBuild
+  '';
 
   goPackagePath = "github.com/theupdateframework/notary";
 
-  buildPhase = ''
-    cd go/src/github.com/theupdateframework/notary
-    make GITCOMMIT=${gitcommit} GITUNTRACKEDCHANGES= client
+  installPhase = ''
+    runHook preInstall
+    install -D bin/notary $bin/bin/notary
+    runHook postInstall
   '';
 
-  installPhase = ''
-    install -D bin/notary $bin/bin/notary
+  doCheck = true;
+  checkPhase = ''
+    make test PKGS=github.com/theupdateframework/notary/cmd/notary
   '';
 
   meta = with stdenv.lib; {
-    description = " Notary is a project that allows anyone to have trust over arbitrary collections of data";
+    description = "Notary is a project that allows anyone to have trust over arbitrary collections of data";
     longDescription = ''
       The Notary project comprises a server and a client for running and
       interacting with trusted collections. See the service architecture
@@ -49,7 +59,7 @@ buildGoPackage rec {
     '';
     license = licenses.asl20;
     homepage = https://github.com/theupdateframework/notary;
-    maintainers = with maintainers; [ vdemeester ];
-    platforms = with platforms; unix;
+    maintainers = with maintainers; [ vdemeester ma27 ];
+    platforms = platforms.unix;
   };
 }

@@ -1,6 +1,14 @@
 # This module defines the global list of uids and gids.  We keep a
 # central list to prevent id collisions.
 
+# IMPORTANT!
+# We only add static uids and gids for services where it is not feasible
+# to change uids/gids on service start, in example a service with a lot of
+# files. Please also check if the service is applicable for systemd's
+# DynamicUser option and does not need a uid/gid allocation at all.
+# Systemd can also change ownership of service directories using the
+# RuntimeDirectory/StateDirectory options.
+
 { config, pkgs, lib, ... }:
 
 {
@@ -138,7 +146,6 @@
       ngircd = 112;
       btsync = 113;
       minecraft = 114;
-      #monetdb = 115; # unused (not packaged), removed 2016-09-19
       vault = 115;
       rippled = 116;
       murmur = 117;
@@ -191,7 +198,7 @@
       cadvisor = 167;
       nylon = 168;
       apache-kafka = 169;
-      panamax = 170;
+      #panamax = 170; # unused
       exim = 172;
       #fleet = 173; # unused
       #input = 174; # unused
@@ -306,6 +313,10 @@
       monero = 287;
       ceph = 288;
       duplicati = 289;
+      monetdb = 290;
+      restic = 291;
+      openvpn = 292;
+      meguca = 293;
 
       # When adding a uid, make sure it doesn't match an existing gid. And don't use uids above 399!
 
@@ -424,7 +435,6 @@
       #ngircd = 112; # unused
       btsync = 113;
       #minecraft = 114; # unused
-      #monetdb = 115; # unused (not packaged), removed 2016-09-19
       vault = 115;
       #ripped = 116; # unused
       #murmur = 117; # unused
@@ -474,9 +484,9 @@
       #chronos = 164; # unused
       gitlab = 165;
       nylon = 168;
-      panamax = 170;
+      #panamax = 170; # unused
       exim = 172;
-      fleet = 173;
+      #fleet = 173; # unused
       input = 174;
       sddm = 175;
       tss = 176;
@@ -580,6 +590,10 @@
       monero = 287;
       ceph = 288;
       duplicati = 289;
+      monetdb = 290;
+      restic = 291;
+      openvpn = 292;
+      meguca = 293;
 
       # When adding a gid, make sure it doesn't match an existing
       # uid. Users and groups with the same name should have equal

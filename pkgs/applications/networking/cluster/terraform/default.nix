@@ -60,8 +60,8 @@ let
           # of plugins, which might be counterintuitive if someone just wants a vanilla Terraform.
           if actualPlugins == []
             then terraform.overrideAttrs (orig: { passthru = orig.passthru // passthru; })
-            else stdenv.mkDerivation {
-              name = "${terraform.name}-with-plugins";
+            else lib.appendToName "with-plugins "(stdenv.mkDerivation {
+              inherit (terraform) name;
               buildInputs = [ makeWrapper ];
 
               buildCommand = ''
@@ -72,7 +72,7 @@ let
               '';
 
               inherit passthru;
-            };
+            });
     in withPlugins (_: []);
 
   plugins = import ./providers { inherit stdenv lib buildGoPackage fetchFromGitHub; };
@@ -104,8 +104,8 @@ in rec {
   terraform_0_10-full = terraform_0_10.withPlugins lib.attrValues;
 
   terraform_0_11 = pluggable (generic {
-    version = "0.11.6";
-    sha256 = "17kd3ln1i40qb8fll5918rvgackzf1ibmr7li1p9vky4ki3iwr0l";
+    version = "0.11.7";
+    sha256 = "0q5gl8yn1f8fas1v68lz081k88gbmlk7f2xqlwqmh01qpqjxd42q";
     patches = [ ./provider-path.patch ];
     passthru = { inherit plugins; };
   });

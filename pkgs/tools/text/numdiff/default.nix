@@ -18,6 +18,6 @@ stdenv.mkDerivation rec {
     homepage = http://www.nongnu.org/numdiff/;
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ ndowens ];
-    platforms = platforms.gnu;
+    platforms = platforms.gnu ++ platforms.linux;
   };
 }

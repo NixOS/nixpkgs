@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   
   meta = {
     description = "Network intrusion prevention and detection system (IDS/IPS)";
-    homepage = http://www.snort.org;
+    homepage = https://www.snort.org;
     maintainers = with stdenv.lib.maintainers; [ aycanirican ];
     license = stdenv.lib.licenses.gpl2;
     platforms = with stdenv.lib.platforms; linux;

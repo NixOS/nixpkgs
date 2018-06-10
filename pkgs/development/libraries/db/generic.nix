@@ -20,6 +20,8 @@ stdenv.mkDerivation (rec {
 
   patches = extraPatches;
 
+  outputs = [ "bin" "out" "dev" ];
+
   configureFlags =
     [
       (if cxxSupport then "--enable-cxx" else "--disable-cxx")

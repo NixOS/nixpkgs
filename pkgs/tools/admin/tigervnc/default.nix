@@ -5,7 +5,8 @@
 , cmake, gettext, libtool
 , glproto, libGLU
 , gnutls, pam, nettle
-, xterm, openssh }:
+, xterm, openssh
+, makeWrapper}:
 
 with stdenv.lib;
 
@@ -87,7 +88,7 @@ stdenv.mkDerivation rec {
     glproto libGLU
   ] ++ xorgserver.buildInputs;
 
-  nativeBuildInputs = with xorg; [ cmake zlib gettext libtool utilmacros fontutil ]
+  nativeBuildInputs = with xorg; [ cmake zlib gettext libtool utilmacros fontutil makeWrapper ]
     ++ xorg.xorgserver.nativeBuildInputs;
 
   propagatedBuildInputs = xorg.xorgserver.propagatedBuildInputs;

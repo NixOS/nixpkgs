@@ -1,13 +1,19 @@
 source 'https://rubygems.org'
 
-gem 'github-linguist', '~> 4.7.0', require: 'linguist'
+gem 'rugged', '~> 0.27.0'
+gem 'github-linguist', '~> 5.3.3', require: 'linguist'
 gem 'gitlab-markup', '~> 1.6.2'
-gem 'gitaly-proto', '~> 0.83.0', require: 'gitaly'
+gem 'gitaly-proto', '~> 0.99.0', require: 'gitaly'
 gem 'activesupport', '~> 5.0.2'
 gem 'rdoc', '~> 4.2'
-gem 'gollum-lib', '~> 4.2', require: false
-gem 'gollum-rugged_adapter', '~> 0.4.4', require: false
-gem 'grpc', '~> 1.8.0'
+gem 'gitlab-gollum-lib', '~> 4.2', require: false
+gem 'gitlab-gollum-rugged_adapter', '~> 0.4.4', require: false
+gem 'grpc', '~> 1.10.0'
+gem 'sentry-raven', '~> 2.7.2', require: false
+
+# Detects the open source license the repository includes
+# This version needs to be in sync with GitLab CE/EE
+gem 'licensee', '~> 8.9.0'
 
 # Locked until https://github.com/google/protobuf/issues/4210 is closed
 gem 'google-protobuf', '= 3.5.1'

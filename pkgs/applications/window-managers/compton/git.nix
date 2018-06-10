@@ -3,14 +3,15 @@
   pkgconfig, libXcomposite, libXdamage, libXext, libXfixes, libXinerama,
   libXrandr, libXrender, xwininfo }:
 
-stdenv.mkDerivation {
-  name = "compton-git-2016-08-10";
+stdenv.mkDerivation rec {
+  name = "compton-git-${version}";
+  version = "2018-05-21";
 
   src = fetchFromGitHub {
-    owner  = "chjj";
+    owner  = "yshui";
     repo   = "compton";
-    rev    = "f1cd308cde0f1e1f21ec2ac8f16a3c873fa22d3a";
-    sha256 = "1ky438d1rsg4ylkcp60m82r0jck8rks3gfa869rc63k37p2nfn8p";
+    rev    = "9b24550814b7c69065f90039b0a5d0a2281b9f81";
+    sha256 = "09nn0q9lgv59chfxljips0n8vnwwxi1yz6hmcsiggsl3zvpabpxl";
   };
 
   nativeBuildInputs = [
@@ -44,7 +45,7 @@ stdenv.mkDerivation {
   meta = with stdenv.lib; {
     description =
       "A fork of XCompMgr, a sample compositing manager for X servers (git version)";
-    homepage = https://github.com/chjj/compton/;
+    homepage = https://github.com/yshui/compton/;
     license = licenses.mit;
     longDescription = ''
       A fork of XCompMgr, which is a sample compositing manager for X
@@ -53,7 +54,7 @@ stdenv.mkDerivation {
       additional features, such as additional effects, and a fork at a
       well-defined and proper place.
     '';
-    maintainers = [ maintainers.ertes ];
+    maintainers = [ maintainers.ertes maintainers.twey ];
     platforms = platforms.linux;
   };
 }

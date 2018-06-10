@@ -67,7 +67,9 @@ rec {
 
   git-crypt = callPackage ./git-crypt { };
 
-  git-dit = callPackage ./git-dit { };
+  git-dit = callPackage ./git-dit {
+    inherit (darwin.apple_sdk.frameworks) CoreFoundation Security;
+  };
 
   git-extras = callPackage ./git-extras { };
 
@@ -82,12 +84,14 @@ rec {
   git-radar = callPackage ./git-radar { };
 
   git-recent = callPackage ./git-recent {
-    utillinux = if stdenv.isLinux then utillinuxMinimal else null;
+    utillinux = if stdenv.isLinux then utillinuxMinimal else utillinux;
   };
 
   git-remote-hg = callPackage ./git-remote-hg { };
 
   git-secret = callPackage ./git-secret { };
+
+  git-secrets = callPackage ./git-secrets { };
 
   git-stree = callPackage ./git-stree { };
 
@@ -105,9 +109,7 @@ rec {
     inherit (darwin) Security;
   };
 
-  hubUnstable = callPackage ./hub/unstable.nix {
-    inherit (darwin) Security;
-  };
+  hubUnstable = throw "use gitAndTools.hub instead";
 
   qgit = qt5.callPackage ./qgit { };
 

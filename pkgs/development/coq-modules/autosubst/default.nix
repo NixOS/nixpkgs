@@ -24,6 +24,9 @@ stdenv.mkDerivation rec {
     platforms = coq.meta.platforms;
   };
 
-  passthru = { inherit (mathcomp) compatibleCoqVersions; };
+  passthru = {
+    compatibleCoqVersions = v: builtins.elem v [ "8.5" "8.6" "8.7" ];
+  };
+
 
 }

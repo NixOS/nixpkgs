@@ -48,7 +48,7 @@ in stdenv.mkDerivation rec {
 
     substituteInPlace pkg/oc/bootstrap/docker/host/host.go  \
       --replace 'nsenter --mount=/rootfs/proc/1/ns/mnt mkdir' \
-      'nsenter --mount=/rootfs/proc/1/ns/mnt ${utillinux}/bin/mount'
+      'nsenter --mount=/rootfs/proc/1/ns/mnt ${coreutils}/bin/mkdir'
   '';
 
   buildPhase = ''
@@ -69,6 +69,8 @@ in stdenv.mkDerivation rec {
   installPhase = ''
     mkdir -p "$out/bin"
     cp -a "_output/local/bin/$(go env GOOS)/$(go env GOARCH)/"* "$out/bin/"
+    install -D -t "$out/etc/bash_completion.d" contrib/completions/bash/*
+    install -D -t "$out/share/zsh/site-functions" contrib/completions/zsh/*
   '';
 
   preFixup = ''

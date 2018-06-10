@@ -254,6 +254,21 @@ stdenv.mkDerivation rec {
     make doxygen
   '';
 
+  # By default $out/lib/pkgconfig/opencv.pc looks something like this:
+  #
+  #   prefix=/nix/store/10pzq1a8fkh8q4sysj8n6mv0w0nl0miq-opencv-3.4.1
+  #   exec_prefix=${prefix}
+  #   libdir=${exec_prefix}//nix/store/10pzq1a8fkh8q4sysj8n6mv0w0nl0miq-opencv-3.4.1/lib
+  #   ...
+  #   Libs: -L${exec_prefix}//nix/store/10pzq1a8fkh8q4sysj8n6mv0w0nl0miq-opencv-3.4.1/lib ...
+  #
+  # Note that ${exec_prefix} is set to $out but that $out is also appended to
+  # ${exec_prefix}. This causes linker errors in downstream packages so we strip
+  # of $out after the ${exec_prefix} prefix:
+  postInstall = ''
+    sed -i "s|\''${exec_prefix}/$out|\''${exec_prefix}|" "$out/lib/pkgconfig/opencv.pc"
+  '';
+
   hardeningDisable = [ "bindnow" "relro" ];
 
   passthru = lib.optionalAttrs enablePython { pythonPath = []; };

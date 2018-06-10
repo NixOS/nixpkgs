@@ -9,7 +9,6 @@
 
 with stdenv.lib;
 
-assert stdenv.isFreeBSD || stdenv.isDarwin || stdenv.cc.isGNU || hostPlatform.isCygwin;
 assert stdenv.isLinux -> utillinuxMinimal != null;
 
 # TODO:
@@ -66,7 +65,7 @@ stdenv.mkDerivation rec {
     ++ optionals stdenv.isLinux [ utillinuxMinimal ] # for libmount
     ++ optionals doCheck [ tzdata libxml2 desktop-file-utils shared-mime-info ];
 
-  nativeBuildInputs = [ pkgconfig perl python ];
+  nativeBuildInputs = [ pkgconfig perl python gettext ];
 
   propagatedBuildInputs = [ zlib libffi gettext libiconv ];
 

@@ -128,6 +128,7 @@ in
         owner = "fcron";
         group = "fcron";
         setgid = true;
+        setuid = true;
       };
       fcrondyn = {
         source = "${pkgs.fcron}/bin/fcrondyn";

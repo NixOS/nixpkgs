@@ -1,23 +1,34 @@
-{ fetchFromGitHub, ag, tree, stdenv, ... }:
+{ fetchFromGitHub, ag, tree, man, stdenv, 
+  pandocSupport ? true, pandoc ? null
+  , ... }:
+
+assert pandocSupport -> pandoc != null;
 
 stdenv.mkDerivation rec {
 
   name = "memo-${version}";
 
-  version = "0.2";
+  version = "0.4";
 
   src = fetchFromGitHub {
     owner  = "mrVanDalo";
     repo   = "memo";
     rev    = "${version}";
-    sha256 = "0mww4w5m6jv4s0krm74cccrz0vlr8rrwiv122jk67l1v9r80pchs";
+    sha256 = "06999nps46dxrjakvpin1d2zvfpjil69hb3bxagq29icalag3y2z";
   };
 
-  installPhase = ''
+  installPhase = let
+    pandocReplacement = if pandocSupport then
+      "pandoc_cmd=${pandoc}/bin/pandoc"
+    else
+      "#pandoc_cmd=pandoc";
+  in ''
     mkdir -p $out/{bin,share/man/man1,share/bash-completion/completions}
     substituteInPlace memo \
-      --replace "ack "  "${ag}/bin/ag " \
-      --replace "tree " "${tree}/bin/tree "
+      --replace "ack_cmd=ack"       "ack_cmd=${ag}/bin/ag" \
+      --replace "tree_cmd=tree"     "tree_cmd=${tree}/bin/tree" \
+      --replace "man_cmd=man"       "man_cmd=${man}/bin/man" \
+      --replace "pandoc_cmd=pandoc" "${pandocReplacement}"
     mv memo $out/bin/
     mv doc/memo.1 $out/share/man/man1/memo.1
     mv completion/memo.bash $out/share/bash-completion/completions/memo.sh

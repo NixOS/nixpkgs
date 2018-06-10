@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
     homepage = http://www.gnu.org/software/dejagnu/;
     license = licenses.gpl2Plus;
 
-    platforms = platforms.linux;
+    platforms = platforms.unix;
     maintainers = with maintainers; [ wkennington vrthra ];
   };
 }

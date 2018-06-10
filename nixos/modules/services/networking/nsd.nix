@@ -20,6 +20,7 @@ let
     zoneStats = length (collect (x: (x.zoneStats or null) != null) cfg.zones) > 0;
   };
 
+  mkZoneFileName = name: if name == "." then "root" else name;
 
   nsdEnv = pkgs.buildEnv {
     name = "nsd-env";
@@ -50,8 +51,9 @@ let
   };
 
   writeZoneData = name: text: pkgs.writeTextFile {
-    inherit name text;
-    destination = "/zones/${name}";
+    name = "nsd-zone-${mkZoneFileName name}";
+    inherit text;
+    destination = "/zones/${mkZoneFileName name}";
   };
 
 
@@ -146,7 +148,7 @@ let
   zoneConfigFile = name: zone: ''
     zone:
       name:         "${name}"
-      zonefile:     "${stateDir}/zones/${name}"
+      zonefile:     "${stateDir}/zones/${mkZoneFileName name}"
       ${maybeString "outgoing-interface: " zone.outgoingInterface}
     ${forEach     "  rrl-whitelist: "      zone.rrlWhitelist}
       ${maybeString "zonestats: "          zone.zoneStats}
@@ -886,6 +888,12 @@ in
   };
 
   config = mkIf cfg.enable {
+
+    assertions = singleton {
+      assertion = zoneConfigs ? "." -> cfg.rootServer;
+      message = "You have a root zone configured. If this is really what you "
+              + "want, please enable 'services.nsd.rootServer'.";
+    };
 
     environment.systemPackages = [ nsdPkg ];
 

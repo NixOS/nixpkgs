@@ -20,24 +20,16 @@ let
       mkdir -p $out/etc
       cp -r config $out/etc/way-cooler
     '';
-    postFixup = ''
-      cd $out/bin
-      mv way_cooler way-cooler
-    '';
   });
   wc-bg = ((callPackage ./wc-bg.nix {}).wc_bg {}).overrideAttrs (oldAttrs: rec {
     nativeBuildInputs = [ makeWrapper ];
 
     postFixup = ''
-      makeWrapper $out/bin/wc_bg $out/bin/wc-bg \
+      makeWrapper $out/bin/wc-bg $out/bin/wc-bg \
         --prefix LD_LIBRARY_PATH : "${stdenv.lib.makeLibraryPath [ wayland ]}"
     '';
   });
   wc-grab = ((callPackage ./wc-grab.nix {}).wc_grab {}).overrideAttrs (oldAttrs: rec {
-    postFixup = ''
-      cd $out/bin
-      mv wc_grab wc-grab
-    '';
   });
   wc-lock = (((callPackage ./wc-lock.nix {}).wc_lock {}).override {
     crateOverrides = defaultCrateOverrides // {
@@ -47,7 +39,7 @@ let
     nativeBuildInputs = [ makeWrapper ];
 
     postFixup = ''
-      makeWrapper $out/bin/wc_lock $out/bin/wc-lock \
+      makeWrapper $out/bin/wc-lock $out/bin/wc-lock \
         --prefix LD_LIBRARY_PATH : "${stdenv.lib.makeLibraryPath [ libxkbcommon wayland ]}"
     '';
   });

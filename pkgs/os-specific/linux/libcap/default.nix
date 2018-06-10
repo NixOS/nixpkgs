@@ -1,5 +1,4 @@
-{ stdenv, buildPackages, fetchurl, attr, perl, pam ? null }:
-assert pam != null -> stdenv.isLinux;
+{ stdenv, buildPackages, fetchurl, attr, perl, pam }:
 
 stdenv.mkDerivation rec {
   name = "libcap-${version}";
@@ -10,8 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "0qjiqc5pknaal57453nxcbz3mn1r4hkyywam41wfcglq3v2qlg39";
   };
 
-  outputs = [ "out" "dev" "lib" "man" "doc" ]
-    ++ stdenv.lib.optional (pam != null) "pam";
+  outputs = [ "out" "dev" "lib" "man" "doc" "pam" ];
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
   nativeBuildInputs = [ perl ];
@@ -22,7 +20,7 @@ stdenv.mkDerivation rec {
 
   makeFlags = [
     "lib=lib"
-    (stdenv.lib.optional (pam != null) "PAM_CAP=yes")
+    "PAM_CAP=yes"
     "BUILD_CC=$(CC_FOR_BUILD)"
     "CC:=$(CC)"
   ];

@@ -241,6 +241,7 @@ let
                 nixos-artwork.wallpapers.gnome-dark
                 perlPackages.XMLLibXML
                 perlPackages.ListCompare
+                xorg.lndir
 
                 # add curl so that rather than seeing the test attempt to download
                 # curl's tarball, we see what it's trying to download

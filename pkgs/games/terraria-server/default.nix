@@ -1,5 +1,4 @@
 { stdenv, lib, file, fetchurl, unzip }:
-assert stdenv.system == "x86_64-linux";
 
 stdenv.mkDerivation rec {
   name    = "terraria-server-${version}";
@@ -31,7 +30,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = http://terraria.org;
     description = "Dedicated server for Terraria, a 2D action-adventure sandbox";
-    platforms = platforms.linux;
+    platforms = ["x86_64-linux"];
     license = licenses.unfree;
   };
 }

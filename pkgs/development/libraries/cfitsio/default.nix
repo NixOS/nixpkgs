@@ -8,9 +8,11 @@
     sha256 = "07fghxh5fl8nqk3q0dh8rvc83npnm0hisxzcj16a6r7gj5pmp40l";
   };
 
+  patches = [ ./darwin-curl-config.patch ./darwin-rpath-universal.patch ];
+
   # Shared-only build
   buildFlags = "shared";
-  patchPhase = '' sed -e '/^install:/s/libcfitsio.a //' -e 's@/bin/@@g' -i Makefile.in
+  postPatch = '' sed -e '/^install:/s/libcfitsio.a //' -e 's@/bin/@@g' -i Makefile.in
    '';
 
   meta = with stdenv.lib; {
@@ -27,6 +29,6 @@
       '';
     # Permissive BSD-style license.
     license = "permissive";
-    platforms = platforms.linux;
+    platforms = with platforms; linux ++ darwin;
   };
 }

@@ -174,6 +174,11 @@ in pythonPackages.buildPythonApplication rec {
       test/test_replaygain.py
   '';
 
+  postInstall = ''
+    mkdir -p $out/share/zsh/site-functions
+    cp extra/_beet $out/share/zsh/site-functions/
+  '';
+
   doCheck = true;
 
   preCheck = ''
@@ -222,7 +227,7 @@ in pythonPackages.buildPythonApplication rec {
 
   meta = {
     description = "Music tagger and library organizer";
-    homepage = http://beets.radbox.org;
+    homepage = http://beets.io;
     license = licenses.mit;
     maintainers = with maintainers; [ aszlig domenkozar pjones ];
     platforms = platforms.linux;

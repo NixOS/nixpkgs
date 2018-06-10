@@ -50,6 +50,7 @@ in stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     description = "Open-source braille translator and back-translator";
     homepage = http://liblouis.org/;
+    broken = true;
     license = licenses.lgpl21;
     maintainers = with maintainers; [ jtojnar ];
     platforms = platforms.unix;

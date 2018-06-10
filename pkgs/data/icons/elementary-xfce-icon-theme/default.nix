@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "elementary-xfce-icon-theme-${version}";
-  version = "2017-11-28";
+  version = "0.11";
 
   src = fetchFromGitHub {
     owner = "shimmerproject";
     repo = "elementary-xfce";
-    rev = "b5cc6f044ed24e388ed2fffed1d02f43ce76f5e6";
-    sha256 = "15n28f2pw8b0y5pi8ydahg31v6hhh7zvpvymi8jaafdc9bn18z3y";
+    rev = "elementary-xfce-${version}";
+    sha256 = "1hgbw9wwsgrbrs8lgdhba2m8m1cvqbcy27b87kjws6jsa00f5hx6";
   };
 
   nativeBuildInputs = [ gtk3 hicolor-icon-theme ];

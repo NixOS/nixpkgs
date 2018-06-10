@@ -17,10 +17,9 @@ stdenv.mkDerivation rec {
   buildInputs = [ unzip ];
 
   unpackPhase = ''
-    echo ${stdenv.system}
     unzip $src
     tar xf "Linux Driver Ver${version}/sclgeneric_${version}_linux_${arch}bit.tar.gz"
-    cd sclgeneric_${version}_linux_${arch}bit; export sourceRoot=`pwd`
+    export sourceRoot=$(readlink -e sclgeneric_${version}_linux_${arch}bit)
   '';
 
   # Add support for SCL011 nPA (subsidized model for German eID)

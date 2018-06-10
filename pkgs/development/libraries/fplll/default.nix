@@ -4,12 +4,12 @@
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";
   pname = "fplll";
-  version = "5.2.0";
+  version = "5.2.1";
   src = fetchFromGitHub {
     owner = "${pname}";
     repo = "${pname}";
     rev = "${version}";
-    sha256 = "0931i4q49lzlifsg9zd8a2yzj626i1s2bqhkfxvcxv94c38s0nh1";
+    sha256 = "015qmrd7nfaysbv1hbwiprz9g6hnww1y1z1xw8f43ysb7k1b5nbg";
   };
   nativeBuildInputs = [autoconf automake libtool gettext autoreconfHook];
   buildInputs = [gmp mpfr];

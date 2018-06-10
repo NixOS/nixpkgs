@@ -89,6 +89,8 @@ stdenv.mkDerivation rec {
     ${pythonEnv.interpreter} ./test.py
   '';
 
+  hardeningDisable = [ "fortify" ];
+
   meta = {
     homepage = http://www.nsnam.org;
     license = stdenv.lib.licenses.gpl3;

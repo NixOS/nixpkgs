@@ -1,4 +1,5 @@
-{ stdenv, fetchurl, makeWrapper, libredirect, gcc-unwrapped, bash, gtk-engine-murrine, gtk_engines, librsvg
+{ stdenv, fetchurl, makeWrapper, autoPatchelfHook
+, libredirect, gcc-unwrapped, bash, gtk-engine-murrine, gtk_engines, librsvg
 
 , libX11, libXext, libXi, libXau, libXrender, libXft, libXmu, libSM, libXcomposite, libXfixes, libXpm
 , libXinerama, libXdamage, libICE, libXtst, libXaw, fontconfig, pango, cairo, glib, libxml2, atk, gtk2
@@ -9,11 +10,6 @@
 let
   version = "Indy-1.1.0";
 
-  deps = [
-    stdenv.cc.cc libX11 libXext libXi libXau libXrender libXft libXmu libSM libXcomposite libXfixes libXpm
-    libXinerama libXdamage libICE libXtst libXaw fontconfig pango cairo glib libxml2 atk gtk2
-    gdk_pixbuf libGL ncurses
-  ];
   runtime_deps = [
     xclock xsettingsd
   ];
@@ -31,7 +27,12 @@ in stdenv.mkDerivation {
     })
   ];
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper autoPatchelfHook ];
+  buildInputs = [
+    stdenv.cc.cc libX11 libXext libXi libXau libXrender libXft libXmu libSM libXcomposite libXfixes libXpm
+    libXinerama libXdamage libICE libXtst libXaw fontconfig pango cairo glib libxml2 atk gtk2
+    gdk_pixbuf libGL ncurses
+  ];
 
   buildPhase = ''
     while IFS= read -r -d ''$'\0' i; do
@@ -58,15 +59,11 @@ in stdenv.mkDerivation {
       --prefix PATH : ${stdenv.lib.makeBinPath runtime_deps}
 
     while IFS= read -r -d ''$'\0' i; do
-      if isELF "$i"; then
-        bin=`patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" "$i"; echo $?`
-        patchelf --set-rpath "$maxx/lib64:$maxx/OpenMotif-2.1.32/lib64:$maxx/OpenMotif-2.3.1/lib64:${stdenv.lib.makeLibraryPath deps}" "$i"
-        if [ "$bin" -eq 0 ]; then
-          wrapProgram "$i" \
-            --set LD_PRELOAD "${libredirect}/lib/libredirect.so" \
-            --set NIX_REDIRECTS /opt/MaXX=$maxx \
-            --prefix PATH : $maxx/sbin
-        fi
+      if isExecutable "$i"; then
+        wrapProgram "$i" \
+          --set LD_PRELOAD "${libredirect}/lib/libredirect.so" \
+          --set NIX_REDIRECTS /opt/MaXX=$maxx \
+          --prefix PATH : $maxx/sbin
       fi
     done < <(find "$maxx" -type f -print0)
 

@@ -34,6 +34,8 @@ stdenv.mkDerivation rec {
       ++ stdenv.lib.optional (cyrus_sasl == null) "--without-cyrus-sasl"
       ++ stdenv.lib.optional stdenv.isFreeBSD "--with-pic";
 
+  doCheck = false; # needs a running LDAP server
+
   installFlags = [ "sysconfdir=$(out)/etc" "localstatedir=$(out)/var" ];
 
   # 1. Fixup broken libtool

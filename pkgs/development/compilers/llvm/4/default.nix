@@ -1,11 +1,11 @@
 { lowPrio, newScope, stdenv, targetPlatform, cmake, libstdcxxHook
-, libxml2, python2, isl, fetchurl, overrideCC, wrapCC, ccWrapperFun
+, libxml2, python2, isl, fetchurl, overrideCC, wrapCCWith
 , darwin
+, buildLlvmTools # tools, but from the previous stage, for cross
+, targetLlvmLibraries # libraries, but from the next stage, for cross
 }:
 
 let
-  callPackage = newScope (self // { inherit stdenv cmake libxml2 python2 isl release_version version fetch; });
-
   release_version = "4.0.1";
   version = release_version; # differentiating these is important for rc's
 
@@ -22,51 +22,46 @@ let
     let drv-manpages = drv.override { enableManpages = true; }; in
     drv // { man = drv-manpages.out; /*outputs = drv.outputs ++ ["man"];*/ };
 
-  llvm = callPackage ./llvm.nix {
-    inherit compiler-rt_src stdenv;
-  };
+  tools = let
+    callPackage = newScope (tools // { inherit stdenv cmake libxml2 python2 isl release_version version fetch; });
+  in {
 
-  clang-unwrapped = callPackage ./clang {
-    inherit clang-tools-extra_src stdenv;
-  };
+    llvm = overrideManOutput (callPackage ./llvm.nix {
+      inherit compiler-rt_src;
+      inherit (targetLlvmLibraries) libcxxabi;
+    });
+    clang-unwrapped = overrideManOutput (callPackage ./clang {
+      inherit clang-tools-extra_src;
+    });
 
-  self = {
-    llvm = overrideManOutput llvm;
-    clang-unwrapped = overrideManOutput clang-unwrapped;
+    libclang = tools.clang-unwrapped.lib;
+    llvm-manpages = lowPrio tools.llvm.man;
+    clang-manpages = lowPrio tools.clang-unwrapped.man;
 
-    libclang = self.clang-unwrapped.lib;
-    llvm-manpages = lowPrio self.llvm.man;
-    clang-manpages = lowPrio self.clang-unwrapped.man;
+    clang = if stdenv.cc.isGNU then tools.libstdcxxClang else tools.libcxxClang;
 
-    clang = if stdenv.cc.isGNU then self.libstdcxxClang else self.libcxxClang;
-
-    libstdcxxClang = ccWrapperFun {
-      cc = self.clang-unwrapped;
-      /* FIXME is this right? */
-      inherit (stdenv.cc) bintools libc nativeTools nativeLibc;
+    libstdcxxClang = wrapCCWith {
+      cc = tools.clang-unwrapped;
       extraPackages = [ libstdcxxHook ];
     };
 
-    libcxxClang = ccWrapperFun {
-      cc = self.clang-unwrapped;
-      /* FIXME is this right? */
-      inherit (stdenv.cc) bintools libc nativeTools nativeLibc;
-      extraPackages = [ self.libcxx self.libcxxabi ];
+    libcxxClang = wrapCCWith {
+      cc = tools.clang-unwrapped;
+      extraPackages = [ targetLlvmLibraries.libcxx targetLlvmLibraries.libcxxabi ];
     };
-
-    stdenv = stdenv.override (drv: {
-      allowedRequisites = null;
-      cc = self.clang;
-    });
-
-    libcxxStdenv = stdenv.override (drv: {
-      allowedRequisites = null;
-      cc = self.libcxxClang;
-    });
 
     lld = callPackage ./lld.nix {};
 
     lldb = callPackage ./lldb.nix {};
+  };
+
+  libraries = let
+    callPackage = newScope (libraries // buildLlvmTools // { inherit stdenv cmake libxml2 python2 isl release_version version fetch; });
+  in {
+
+    stdenv = overrideCC stdenv buildLlvmTools.clang;
+
+    libcxxStdenv = overrideCC stdenv buildLlvmTools.libcxxClang;
 
     libcxx = callPackage ./libc++ {};
 
@@ -75,4 +70,4 @@ let
     openmp = callPackage ./openmp.nix {};
   };
 
-in self
+in { inherit tools libraries; } // libraries // tools

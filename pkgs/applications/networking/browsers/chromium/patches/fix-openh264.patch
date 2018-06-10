@@ -1,0 +1,10 @@
+--- a/third_party/openh264/BUILD.gn
++++ b/third_party/openh264/BUILD.gn
+@@ -24,6 +24,7 @@ config("config") {
+   if (!is_win || is_clang) {
+     cflags += [
+       "-Wno-format",
++      "-Wno-format-security",
+       "-Wno-header-hygiene",
+       "-Wno-unused-function",
+       "-Wno-unused-value",

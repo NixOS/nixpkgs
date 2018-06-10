@@ -38,6 +38,6 @@ stdenv.mkDerivation rec {
     '';
 
      maintainers = gnome3.maintainers;
-     platforms = platforms.gnu;  # arbitrary choice
+     platforms = platforms.gnu ++ platforms.linux;  # arbitrary choice
   };
 }

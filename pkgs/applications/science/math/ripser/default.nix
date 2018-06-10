@@ -15,7 +15,7 @@ let
   inherit (stdenv.lib) optional;
 in
 stdenv.mkDerivation {
-  name = "ripser";
+  name = "ripser-${version}";
   version = "1.0";
 
   src = fetchFromGitHub {

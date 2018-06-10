@@ -5,11 +5,11 @@ with stdenv.lib;
 
 stdenv.mkDerivation rec {
   name = "openresty-${version}";
-  version = "1.13.6.1";
+  version = "1.13.6.2";
 
   src = fetchurl {
     url = "http://openresty.org/download/openresty-${version}.tar.gz";
-    sha256 = "0sv93nw1j597mdpnibmgaa3nnghdk0z6k27vavm8w2c1z9n6w96i";
+    sha256 = "0hi9zw4344a4i636g3nbnnlm8qbnq37f50irhd1xncih4xc1jvll";
   };
 
   buildInputs = [ openssl zlib pcre libxml2 libxslt gd geoip postgresql ];

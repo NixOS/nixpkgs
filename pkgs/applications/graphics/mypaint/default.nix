@@ -1,5 +1,5 @@
-{ stdenv, fetchFromGitHub, gtk3, intltool, json_c, lcms2, libpng, librsvg,
-  pkgconfig, python2Packages, scons, swig, wrapGAppsHook }:
+{ stdenv, fetchFromGitHub, gtk3, intltool, json_c, lcms2, libpng, librsvg, gobjectIntrospection, hicolor-icon-theme
+, gdk_pixbuf, pkgconfig, python2Packages, scons, swig, wrapGAppsHook }:
 
 let
   inherit (python2Packages) python pycairo pygobject3 numpy;
@@ -15,9 +15,14 @@ in stdenv.mkDerivation rec {
     fetchSubmodules = true;
   };
 
-  nativeBuildInputs = [ intltool pkgconfig scons swig wrapGAppsHook ];
+  nativeBuildInputs = [
+    intltool pkgconfig scons swig wrapGAppsHook
+    gobjectIntrospection # for setup hook
+  ];
 
-  buildInputs = [ gtk3 json_c lcms2 libpng librsvg pycairo pygobject3 python ];
+  buildInputs = [
+    gtk3 gdk_pixbuf json_c lcms2 libpng librsvg pycairo pygobject3 python hicolor-icon-theme
+  ];
 
   propagatedBuildInputs = [ numpy ];
 

@@ -1,4 +1,5 @@
-{ stdenv, fetchurl, pkgconfig, glib, gtk3, libgee, intltool, gnome3, libintlOrEmpty }:
+{ stdenv, fetchurl, pkgconfig, glib, gtk3, libgee, intltool, gnome3
+, libintl }:
 
 let
   pname = "libgnome-games-support";
@@ -11,10 +12,8 @@ in stdenv.mkDerivation rec {
     sha256 = "1j7lfcnc29lgn8ppn13wkn9w2y1n3lsapagwp91zh3bf0h2h4hv1";
   };
 
-  nativeBuildInputs = [ pkgconfig intltool ] ++ libintlOrEmpty;
-  buildInputs = [ glib gtk3 libgee ];
-
-  NIX_LDFLAGS = if stdenv.isDarwin then "-lintl" else null;
+  nativeBuildInputs = [ pkgconfig intltool ];
+  buildInputs = [ glib gtk3 libgee libintl ];
 
   passthru = {
     updateScript = gnome3.updateScript {

@@ -145,6 +145,7 @@ in
   grpc = attrs: {
     nativeBuildInputs = [ pkgconfig ];
     buildInputs = [ openssl ];
+    hardeningDisable = [ "format" ];
     NIX_CFLAGS_COMPILE = [ "-Wno-error=stringop-overflow" "-Wno-error=implicit-fallthrough" ];
   };
 
@@ -205,6 +206,13 @@ in
       "--with-exslt-lib=${libxslt.out}/lib"
       "--with-exslt-include=${libxslt.dev}/include"
     ] ++ lib.optional stdenv.isDarwin "--with-iconv-dir=${libiconv}";
+  };
+
+  oxidized = attrs: {
+    postInstall = ''
+      cd "$(cat "$out/nix-support/gem-meta/install-path")"
+      patch -p1 < ${../../../tools/admin/oxidized/temporary-x-series.patch}
+    '';
   };
 
   pango = attrs: {

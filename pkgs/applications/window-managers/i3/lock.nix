@@ -23,6 +23,11 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A simple screen locker like slock";
+    longDescription = ''
+      Simple screen locker. After locking, a colored background (default: white) or
+      a configurable image is shown, and a ring-shaped unlock-indicator gives feedback
+      for every keystroke. After entering your password, the screen is unlocked again.
+    '';
     homepage = https://i3wm.org/i3lock/;
     maintainers = with maintainers; [ garbas malyn domenkozar ];
     license = licenses.bsd3;

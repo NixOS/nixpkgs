@@ -6,70 +6,81 @@ with lib;
 let
   cfg = config.services.oauth2_proxy;
 
-  # Use like:
-  #   repeatedArgs (arg: "--arg=${arg}") args
-  repeatedArgs = concatMapStringsSep " ";
-
   # oauth2_proxy provides many options that are only relevant if you are using
   # a certain provider. This set maps from provider name to a function that
   # takes the configuration and returns a string that can be inserted into the
   # command-line to launch oauth2_proxy.
   providerSpecificOptions = {
-    azure = cfg: ''
-      --azure-tenant=${cfg.azure.tenant} \
-      --resource=${cfg.azure.resource} \
-    '';
+    azure = cfg: {
+      azure.tenant = cfg.azure.tenant;
+      resource = cfg.azure.resource;
+    };
 
-    github = cfg: ''
-      ${optionalString (!isNull cfg.github.org) "--github-org=${cfg.github.org}"} \
-      ${optionalString (!isNull cfg.github.team) "--github-org=${cfg.github.team}"} \
-    '';
+    github = cfg: { github = {
+      inherit (cfg.github) org team;
+    }; };
 
-    google = cfg: ''
-      --google-admin-email=${cfg.google.adminEmail} \
-      --google-service-account=${cfg.google.serviceAccountJSON} \
-      ${repeatedArgs (group: "--google-group=${group}") cfg.google.groups} \
-    '';
+    google = cfg: { google = with cfg.google; optionalAttrs (groups != []) {
+      admin-email = adminEmail;
+      service-account = serviceAccountJSON;
+      group = groups;
+    }; };
   };
 
   authenticatedEmailsFile = pkgs.writeText "authenticated-emails" cfg.email.addresses;
 
-  getProviderOptions = cfg: provider: providerSpecificOptions.${provider} or (_: "") cfg;
+  getProviderOptions = cfg: provider: providerSpecificOptions.${provider} or (_: {}) cfg;
 
-  mkCommandLine = cfg: ''
-    --provider='${cfg.provider}' \
-    ${optionalString (!isNull cfg.email.addresses) "--authenticated-emails-file='${authenticatedEmailsFile}'"} \
-    --approval-prompt='${cfg.approvalPrompt}' \
-    ${optionalString (cfg.passBasicAuth && !isNull cfg.basicAuthPassword) "--basic-auth-password='${cfg.basicAuthPassword}'"} \
-    --client-id='${cfg.clientID}' \
-    --client-secret='${cfg.clientSecret}' \
-    ${optionalString (!isNull cfg.cookie.domain) "--cookie-domain='${cfg.cookie.domain}'"} \
-    --cookie-expire='${cfg.cookie.expire}' \
-    --cookie-httponly=${boolToString cfg.cookie.httpOnly} \
-    --cookie-name='${cfg.cookie.name}' \
-    --cookie-secret='${cfg.cookie.secret}' \
-    --cookie-secure=${boolToString cfg.cookie.secure} \
-    ${optionalString (!isNull cfg.cookie.refresh) "--cookie-refresh='${cfg.cookie.refresh}'"} \
-    ${optionalString (!isNull cfg.customTemplatesDir) "--custom-templates-dir='${cfg.customTemplatesDir}'"} \
-    ${repeatedArgs (x: "--email-domain='${x}'") cfg.email.domains} \
-    --http-address='${cfg.httpAddress}' \
-    ${optionalString (!isNull cfg.htpasswd.file) "--htpasswd-file='${cfg.htpasswd.file}' --display-htpasswd-form=${boolToString cfg.htpasswd.displayForm}"} \
-    ${optionalString (!isNull cfg.loginURL) "--login-url='${cfg.loginURL}'"} \
-    --pass-access-token=${boolToString cfg.passAccessToken} \
-    --pass-basic-auth=${boolToString cfg.passBasicAuth} \
-    --pass-host-header=${boolToString cfg.passHostHeader} \
-    --proxy-prefix='${cfg.proxyPrefix}' \
-    ${optionalString (!isNull cfg.profileURL) "--profile-url='${cfg.profileURL}'"} \
-    ${optionalString (!isNull cfg.redeemURL) "--redeem-url='${cfg.redeemURL}'"} \
-    ${optionalString (!isNull cfg.redirectURL) "--redirect-url='${cfg.redirectURL}'"} \
-    --request-logging=${boolToString cfg.requestLogging} \
-    ${optionalString (!isNull cfg.scope) "--scope='${cfg.scope}'"} \
-    ${repeatedArgs (x: "--skip-auth-regex='${x}'") cfg.skipAuthRegexes} \
-    ${optionalString (!isNull cfg.signatureKey) "--signature-key='${cfg.signatureKey}'"} \
-    --upstream='${cfg.upstream}' \
-    ${optionalString (!isNull cfg.validateURL) "--validate-url='${cfg.validateURL}'"} \
-    ${optionalString cfg.tls.enable "--tls-cert='${cfg.tls.certificate}' --tls-key='${cfg.tls.key}' --https-address='${cfg.tls.httpsAddress}'"} \
-  '' + getProviderOptions cfg cfg.provider;
+  allConfig = with cfg; {
+    inherit (cfg) provider scope upstream;
+    approval-prompt = approvalPrompt;
+    basic-auth-password = basicAuthPassword;
+    client-id = clientID;
+    client-secret = clientSecret;
+    custom-templates-dir = customTemplatesDir;
+    email-domain = email.domains;
+    http-address = httpAddress;
+    login-url = loginURL;
+    pass-access-token = passAccessToken;
+    pass-basic-auth = passBasicAuth;
+    pass-host-header = passHostHeader;
+    proxy-prefix = proxyPrefix;
+    profile-url = profileURL;
+    redeem-url = redeemURL;
+    redirect-url = redirectURL;
+    request-logging = requestLogging;
+    skip-auth-regex = skipAuthRegexes;
+    signature-key = signatureKey;
+    validate-url = validateURL;
+    htpasswd-file = htpasswd.file;
+    cookie = {
+      inherit (cookie) domain secure expire name secret refresh;
+      httponly = cookie.httpOnly;
+    };
+    set-xauthrequest = setXauthrequest;
+  } // lib.optionalAttrs (!isNull cfg.email.addresses) {
+    authenticated-emails-file = authenticatedEmailsFile;
+  } // lib.optionalAttrs (cfg.passBasicAuth) {
+    basic-auth-password = cfg.basicAuthPassword;
+  } // lib.optionalAttrs (!isNull cfg.htpasswd.file) {
+    display-htpasswd-file = cfg.htpasswd.displayForm;
+  } // lib.optionalAttrs tls.enable {
+    tls-cert = tls.certificate;
+    tls-key = tls.key;
+    https-address = tls.httpsAddress;
+  } // (getProviderOptions cfg cfg.provider) // cfg.extraConfig;
+
+  mapConfig = key: attr:
+  if (!isNull attr && attr != []) then (
+    if (builtins.typeOf attr) == "set" then concatStringsSep " "
+      (mapAttrsToList (name: value: mapConfig (key + "-" + name) value) attr) else
+    if (builtins.typeOf attr) == "list" then concatMapStringsSep " " (mapConfig key) attr else
+    if (builtins.typeOf attr) == "bool" then "--${key}=${boolToString attr}" else
+    if (builtins.typeOf attr) == "string" then "--${key}='${attr}'" else
+    "--${key}=${toString attr}")
+    else "";
+
+  configString = concatStringsSep " " (mapAttrsToList mapConfig allConfig);
 in
 {
   options.services.oauth2_proxy = {
@@ -110,7 +121,7 @@ in
     };
 
     clientID = mkOption {
-      type = types.str;
+      type = types.nullOr types.str;
       description = ''
         The OAuth Client ID.
       '';
@@ -118,7 +129,7 @@ in
     };
 
     clientSecret = mkOption {
-      type = types.str;
+      type = types.nullOr types.str;
       description = ''
         The OAuth Client Secret.
       '';
@@ -272,7 +283,8 @@ in
     ####################################################
     # UPSTREAM Configuration
     upstream = mkOption {
-      type = types.commas;
+      type = with types; coercedTo string (x: [x]) (listOf string);
+      default = [];
       description = ''
         The http url(s) of the upstream endpoint or <literal>file://</literal>
         paths for static files. Routing is based on the path.
@@ -365,7 +377,7 @@ in
       };
 
       secret = mkOption {
-        type = types.str;
+        type = types.nullOr types.str;
         description = ''
           The seed string for secure cookies.
         '';
@@ -494,9 +506,42 @@ in
       '';
     };
 
+    setXauthrequest = mkOption {
+      type = types.nullOr types.bool;
+      default = false;
+      description = ''
+        Set X-Auth-Request-User and X-Auth-Request-Email response headers (useful in Nginx auth_request mode). Setting this to 'null' means using the upstream default (false).
+      '';
+    };
+
+    extraConfig = mkOption {
+      default = {};
+      description = ''
+        Extra config to pass to oauth2_proxy.
+      '';
+    };
+
+    keyFile = mkOption {
+      type = types.nullOr types.string;
+      default = null;
+      description = ''
+        oauth2_proxy allows passing sensitive configuration via environment variables.
+        Make a file that contains lines like
+        OAUTH2_PROXY_CLIENT_SECRET=asdfasdfasdf.apps.googleuserscontent.com
+        and specify the path here.
+      '';
+      example = "/run/keys/oauth2_proxy";
+    };
+
   };
 
   config = mkIf cfg.enable {
+
+    services.oauth2_proxy = mkIf (!isNull cfg.keyFile) {
+      clientID = mkDefault null;
+      clientSecret = mkDefault null;
+      cookie.secret = mkDefault null;
+    };
 
     users.extraUsers.oauth2_proxy = {
       description = "OAuth2 Proxy";
@@ -511,7 +556,8 @@ in
       serviceConfig = {
         User = "oauth2_proxy";
         Restart = "always";
-        ExecStart = "${cfg.package.bin}/bin/oauth2_proxy ${mkCommandLine cfg}";
+        ExecStart = "${cfg.package.bin}/bin/oauth2_proxy ${configString}";
+        EnvironmentFile = mkIf (cfg.keyFile != null) cfg.keyFile;
       };
     };
 

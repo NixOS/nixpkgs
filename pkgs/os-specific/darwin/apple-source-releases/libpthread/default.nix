@@ -1,8 +1,6 @@
 { stdenv, appleDerivation, libdispatch, xnu }:
 
 appleDerivation {
-  phases = [ "unpackPhase" "installPhase" "fixupPhase" ];
-
   propagatedBuildInputs = [ libdispatch xnu ];
 
   installPhase = ''

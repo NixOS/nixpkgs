@@ -2,17 +2,18 @@
 , pkgconfig, gettext, gobjectIntrospection
 , bison, flex, python3, glib, makeWrapper
 , libcap,libunwind, darwin
+, lib
 }:
 
 stdenv.mkDerivation rec {
   name = "gstreamer-1.14.0";
 
-  meta = {
+  meta = with lib ;{
     description = "Open source multimedia framework";
     homepage = https://gstreamer.freedesktop.org;
-    license = stdenv.lib.licenses.lgpl2Plus;
-    platforms = stdenv.lib.platforms.unix;
-    maintainers = [ stdenv.lib.maintainers.ttuegel ];
+    license = licenses.lgpl2Plus;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ ttuegel matthewbauer ];
   };
 
   src = fetchurl {
@@ -20,7 +21,7 @@ stdenv.mkDerivation rec {
     sha256 = "0vj6k01lp2yva6rfd95fkyng9jdr62gkz0x8d2l81dyly1ki6dpw";
   };
 
-  patches = [ 
+  patches = [
     (fetchpatch {
         url = "https://bug794856.bugzilla-attachments.gnome.org/attachment.cgi?id=370411";
         sha256 = "16plzzmkk906k4892zq68j3c9z8vdma5nxzlviq20jfv04ykhmk2";
@@ -34,7 +35,9 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     meson ninja pkgconfig gettext bison flex python3 makeWrapper gobjectIntrospection
   ];
-  buildInputs = [ libcap libunwind ] ++ stdenv.lib.optional stdenv.isDarwin darwin.apple_sdk.frameworks.CoreServices;
+  buildInputs =
+       lib.optionals stdenv.isLinux [ libcap libunwind ]
+    ++ lib.optional stdenv.isDarwin darwin.apple_sdk.frameworks.CoreServices;
 
   propagatedBuildInputs = [ glib ];
 

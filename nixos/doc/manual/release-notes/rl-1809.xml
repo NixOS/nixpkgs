@@ -3,84 +3,185 @@
          xmlns:xi="http://www.w3.org/2001/XInclude"
          version="5.0"
          xml:id="sec-release-18.09">
+ <title>Release 18.09 (“Jellyfish”, 2018/09/??)</title>
 
-<title>Release 18.09 (“Jellyfish”, 2018/09/??)</title>
-
-<section xmlns="http://docbook.org/ns/docbook"
+ <section xmlns="http://docbook.org/ns/docbook"
          xmlns:xlink="http://www.w3.org/1999/xlink"
          xmlns:xi="http://www.w3.org/2001/XInclude"
          version="5.0"
          xml:id="sec-release-18.09-highlights">
+  <title>Highlights</title>
 
-<title>Highlights</title>
+  <para>
+   In addition to numerous new and upgraded packages, this release has the
+   following highlights:
+  </para>
 
-<para>In addition to numerous new and upgraded packages, this release
-has the following highlights: </para>
-
-<itemizedlist>
-  <listitem>
+  <itemizedlist>
+   <listitem>
     <para>
-      TODO
+     User channels are now in the default <literal>NIX_PATH</literal>, allowing
+     users to use their personal <command>nix-channel</command> defined
+     channels in <command>nix-build</command> and <command>nix-shell</command>
+     commands, as well as in imports like <code>import
+     &lt;mychannel&gt;</code>.
     </para>
-  </listitem>
+    <para>
+     For example
+    </para>
+<programlisting>
+$ nix-channel --add https://nixos.org/channels/nixpkgs-unstable nixpkgsunstable
+$ nix-channel --update
+$ nix-build '&lt;nixpkgsunstable&gt;' -A gitFull
+$ nix run -f '&lt;nixpkgsunstable&gt;' gitFull
+$ nix-instantiate -E '(import &lt;nixpkgsunstable&gt; {}).gitFull'
+</programlisting>
+   </listitem>
+  </itemizedlist>
+ </section>
 
-</itemizedlist>
-
-</section>
-<section xmlns="http://docbook.org/ns/docbook"
+ <section xmlns="http://docbook.org/ns/docbook"
          xmlns:xlink="http://www.w3.org/1999/xlink"
          xmlns:xi="http://www.w3.org/2001/XInclude"
          version="5.0"
          xml:id="sec-release-18.09-new-services">
+  <title>New Services</title>
 
-<title>New Services</title>
+  <para>
+   The following new services were added since the last release:
+  </para>
 
-<para>The following new services were added since the last release:</para>
+  <itemizedlist>
+   <listitem>
+    <para>
+     When enabled the <literal>iproute2</literal> will copy the files expected
+     by ip route (e.g., <filename>rt_tables</filename>) in
+     <filename>/run/iproute2</filename>. This allows to write aliases for
+     routing tables for instance.
+    </para>
+   </listitem>
+  </itemizedlist>
+ </section>
 
-<itemizedlist>
-  <listitem>
-    <para></para>
-  </listitem>
-</itemizedlist>
-
-</section>
-<section xmlns="http://docbook.org/ns/docbook"
+ <section xmlns="http://docbook.org/ns/docbook"
          xmlns:xlink="http://www.w3.org/1999/xlink"
          xmlns:xi="http://www.w3.org/2001/XInclude"
          version="5.0"
          xml:id="sec-release-18.09-incompatibilities">
+  <title>Backward Incompatibilities</title>
 
-<title>Backward Incompatibilities</title>
+  <para>
+   When upgrading from a previous release, please be aware of the following
+   incompatible changes:
+  </para>
 
-<para>When upgrading from a previous release, please be aware of the
-following incompatible changes:</para>
-
-<itemizedlist>
-  <listitem>
+  <itemizedlist>
+   <listitem>
     <para>
-      The <literal>clementine</literal> package points now to the free derivation.
-      <literal>clementineFree</literal> is removed now and <literal>clementineUnfree</literal>
-      points to the package which is bundled with the unfree <literal>libspotify</literal> package.
+     <literal>lib.strict</literal> is removed. Use
+     <literal>builtins.seq</literal> instead.
     </para>
-  </listitem>
-</itemizedlist>
+   </listitem>
+   <listitem>
+    <para>
+     The <literal>clementine</literal> package points now to the free
+     derivation. <literal>clementineFree</literal> is removed now and
+     <literal>clementineUnfree</literal> points to the package which is bundled
+     with the unfree <literal>libspotify</literal> package.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     The <literal>netcat</literal> package is now taken directly from OpenBSD's
+     <literal>libressl</literal>, instead of relying on Debian's fork. The new
+     version should be very close to the old version, but there are some minor
+     differences. Importantly, flags like -b, -q, -C, and -Z are no longer
+     accepted by the nc command.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     The <varname>services.docker-registry.extraConfig</varname> object doesn't
+     contain environment variables anymore. Instead it needs to provide an
+     object structure that can be mapped onto the YAML configuration defined in
+     <link xlink:href="https://github.com/docker/distribution/blob/v2.6.2/docs/configuration.md">the
+     <varname>docker/distribution</varname> docs</link>.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     <literal>gnucash</literal> has changed from version 2.4 to 3.x. If you've
+     been using <literal>gnucash</literal> (version 2.4) instead of
+     <literal>gnucash26</literal> (version 2.6) you must open your Gnucash data
+     file(s) with <literal>gnucash26</literal> and then save them to upgrade
+     the file format. Then you may use your data file(s) with Gnucash 3.x. See
+     the upgrade
+     <link xlink:href="https://wiki.gnucash.org/wiki/FAQ#Using_Different_Versions.2C_Up_And_Downgrade">documentation</link>.
+     Gnucash 2.4 is still available under the attribute
+     <literal>gnucash24</literal>.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     <varname>services.munge</varname> now runs as user (and group) <literal>munge</literal> instead of root.
+     Make sure the key file is accessible to the daemon.
+    </para>
+   </listitem>
+  </itemizedlist>
+ </section>
 
-</section>
-<section xmlns="http://docbook.org/ns/docbook"
+ <section xmlns="http://docbook.org/ns/docbook"
          xmlns:xlink="http://www.w3.org/1999/xlink"
          xmlns:xi="http://www.w3.org/2001/XInclude"
          version="5.0"
          xml:id="sec-release-18.09-notable-changes">
+  <title>Other Notable Changes</title>
 
-<title>Other Notable Changes</title>
-
-<itemizedlist>
-  <listitem>
+  <itemizedlist>
+   <listitem>
+    <para>
+     <literal>dockerTools.pullImage</literal> relies on image digest instead of
+     image tag to download the image. The <literal>sha256</literal> of a pulled
+     image has to be updated.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     <literal>lib.attrNamesToStr</literal> has been deprecated. Use more
+     specific concatenation (<literal>lib.concat(Map)StringsSep</literal>)
+     instead.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     <literal>lib.addErrorContextToAttrs</literal> has been deprecated. Use
+     <literal>builtins.addErrorContext</literal> directly.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     <literal>lib.showVal</literal> has been deprecated. Use
+     <literal>lib.traceSeqN</literal> instead.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     <literal>lib.traceXMLVal</literal> has been deprecated. Use
+     <literal>lib.traceValFn builtins.toXml</literal> instead.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     <literal>lib.traceXMLValMarked</literal> has been deprecated. Use
+     <literal>lib.traceValFn (x: str + builtins.toXML x)</literal> instead.
+    </para>
+   </listitem>
+   <listitem>
     <para>
       The <literal>pkgs</literal> argument to NixOS modules can now be set directly using <literal>nixpkgs.pkgs</literal>. Previously, only the <literal>system</literal>, <literal>config</literal> and <literal>overlays</literal> arguments could be used to influence <literal>pkgs</literal>.
     </para>
-  </listitem>
-  <listitem>
+   </listitem>
+   <listitem>
     <para>
       A NixOS system can now be constructed more easily based on a preexisting invocation of Nixpkgs. For example:
       <programlisting>
@@ -92,8 +193,106 @@ inherit (pkgs.nixos {
 
       This benefits evaluation performance, lets you write Nixpkgs packages that depend on NixOS images and is consistent with a deployment architecture that would be centered around Nixpkgs overlays.
     </para>
-  </listitem>
-</itemizedlist>
+   </listitem>
+   <listitem>
+    <para>
+      <literal>lib.traceValIfNot</literal> has been deprecated. Use
+      <literal>if/then/else</literal> and <literal>lib.traceValSeq</literal> instead.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     <literal>lib.traceCallXml</literal> has been deprecated. Please complain
+     if you use the function regularly.
+    </para>
+    <para>
+     The attribute <literal>lib.nixpkgsVersion</literal> has been deprecated in
+     favor of <literal>lib.version</literal>. Please refer to the discussion in
+     <link xlink:href="https://github.com/NixOS/nixpkgs/pull/39416#discussion_r183845745">NixOS/nixpkgs#39416</link>
+     for further reference.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     The module for <option>security.dhparams</option> has two new options now:
+    </para>
+    <variablelist>
+     <varlistentry>
+      <term>
+       <option>security.dhparams.stateless</option>
+      </term>
+      <listitem>
+       <para>
+        Puts the generated Diffie-Hellman parameters into the Nix store instead
+        of managing them in a stateful manner in
+        <filename class="directory">/var/lib/dhparams</filename>.
+       </para>
+      </listitem>
+     </varlistentry>
+     <varlistentry>
+      <term>
+       <option>security.dhparams.defaultBitSize</option>
+      </term>
+      <listitem>
+       <para>
+        The default bit size to use for the generated Diffie-Hellman
+        parameters.
+       </para>
+      </listitem>
+     </varlistentry>
+    </variablelist>
+    <note>
+     <para>
+      The path to the actual generated parameter files should now be queried
+      using
+      <literal>config.security.dhparams.params.<replaceable>name</replaceable>.path</literal>
+      because it might be either in the Nix store or in a directory configured
+      by <option>security.dhparams.path</option>.
+     </para>
+    </note>
+    <note>
+     <title>For developers:</title>
+     <para>
+      Module implementers should not set a specific bit size in order to let
+      users configure it by themselves if they want to have a different bit
+      size than the default (2048).
+     </para>
+     <para>
+      An example usage of this would be:
+<programlisting>
+{ config, ... }:
 
-</section>
+{
+  security.dhparams.params.myservice = {};
+  environment.etc."myservice.conf".text = ''
+    dhparams = ${config.security.dhparams.params.myservice.path}
+  '';
+}
+</programlisting>
+     </para>
+    </note>
+   </listitem>
+   <listitem>
+    <para>
+     <literal>networking.networkmanager.useDnsmasq</literal> has been
+     deprecated. Use <literal>networking.networkmanager.dns</literal> instead.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     The option
+     <varname>services.kubernetes.apiserver.admissionControl</varname> was
+     renamed to
+     <varname>services.kubernetes.apiserver.enableAdmissionPlugins</varname>.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     Recommented way to access the Kubernetes Dashboard is with HTTPS (TLS)
+     Therefore; public service port for the dashboard has changed to 443
+     (container port 8443) and scheme to https.
+    </para>
+   </listitem>
+  </itemizedlist>
+ </section>
 </section>

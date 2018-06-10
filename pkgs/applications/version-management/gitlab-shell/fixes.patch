@@ -5,8 +5,8 @@ index 30a6b71..46b4dfa 100644
 @@ -26,8 +26,8 @@ module GoBuild
      raise "env must be a hash" unless env.is_a?(Hash)
      raise "cmd must be an array" unless cmd.is_a?(Array)
-   
--    if !system(env, *cmd)
+ 
+-    unless system(env, *cmd)
 -      abort "command failed: #{env.inspect} #{cmd.join(' ')}"
 -    end
 +    puts "Starting #{env.inspect} #{cmd.join(' ')}"

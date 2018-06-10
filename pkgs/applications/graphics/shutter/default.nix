@@ -1,4 +1,6 @@
-{ stdenv, fetchurl, fetchpatch, perl, perlPackages, makeWrapper, imagemagick, gdk_pixbuf, librsvg }:
+{ stdenv, fetchurl, fetchpatch, perl, perlPackages, makeWrapper, imagemagick, gdk_pixbuf, librsvg
+, hicolor-icon-theme
+}:
 
 let
   perlModules = with perlPackages;
@@ -29,6 +31,7 @@ stdenv.mkDerivation rec {
     wrapProgram $out/bin/shutter \
       --set PERL5LIB "${stdenv.lib.makePerlPath perlModules}" \
       --prefix PATH : "${imagemagick.out}/bin" \
+      --suffix XDG_DATA_DIRS : "${hicolor-icon-theme}/share" \
       --set GDK_PIXBUF_MODULE_FILE "$GDK_PIXBUF_MODULE_FILE"
   '';
 

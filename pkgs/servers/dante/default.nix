@@ -1,6 +1,6 @@
-{ stdenv, fetchurl }:
+{ stdenv, fetchurl, pam, libkrb5, cyrus_sasl, miniupnpc }:
 
-stdenv.mkDerivation (rec {
+stdenv.mkDerivation rec {
   name = "dante-${version}";
   version = "1.4.2";
 
@@ -9,15 +9,17 @@ stdenv.mkDerivation (rec {
     sha256 = "1bfafnm445afrmyxvvcl8ckq0p59yzykmr3y8qvryzrscd85g8ms";
   };
 
+  buildInputs = [ pam libkrb5 cyrus_sasl miniupnpc ];
+
   configureFlags = [
     "--with-libc=libc.so.6"
   ];
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "A circuit-level SOCKS client/server that can be used to provide convenient and secure network connectivity.";
     homepage    = "https://www.inet.no/dante/";
-    maintainers = [ stdenv.lib.maintainers.arobyn ];
-    license     = stdenv.lib.licenses.bsdOriginal;
-    platforms   = stdenv.lib.platforms.linux;
+    maintainers = [ maintainers.arobyn ];
+    license     = licenses.bsdOriginal;
+    platforms   = platforms.linux;
   };
-})
+}

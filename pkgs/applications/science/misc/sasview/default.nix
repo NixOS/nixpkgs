@@ -1,7 +1,8 @@
-{lib, fetchgit, gcc, python}:
+{ lib, fetchFromGitHub, gcc, python }:
 
 let
-  xhtml2pdf = import ./xhtml2pdf.nix { inherit lib;
+  xhtml2pdf = import ./xhtml2pdf.nix {
+    inherit lib;
     fetchPypi = python.pkgs.fetchPypi;
     buildPythonPackage = python.pkgs.buildPythonPackage;
     html5lib = python.pkgs.html5lib;
@@ -10,17 +11,29 @@ let
     pillow = python.pkgs.pillow;
     pypdf2 = python.pkgs.pypdf2;
     reportlab = python.pkgs.reportlab;
-};
+  };
 
 in
 
 python.pkgs.buildPythonApplication rec {
   pname = "sasview";
-  version = "4.1.2";
+  version = "unstable-2018-05-05";
 
-  buildInputs = with python.pkgs; [
+  checkInputs = with python.pkgs; [
     pytest
-    unittest-xml-reporting];
+    unittest-xml-reporting
+  ];
+
+  checkPhase = ''
+    # fix the following error:
+    # imported module 'sas.sascalc.data_util.uncertainty' has this __file__ attribute:
+    #   /build/source/build/lib.linux-x86_64-2.7/sas/sascalc/data_util/uncertainty.py
+    # which is not the same as the test file we want to collect:
+    #   /build/source/dist/tmpbuild/sasview/sas/sascalc/data_util/uncertainty.py
+    rm -r dist/tmpbuild
+
+    HOME=$(mktemp -d) py.test
+  '';
 
   propagatedBuildInputs = with python.pkgs; [
     bumps
@@ -41,20 +54,22 @@ python.pkgs.buildPythonApplication rec {
     six
     sphinx
     wxPython
-    xhtml2pdf];
+    xhtml2pdf
+  ];
 
-  src = fetchgit {
-    url = "https://github.com/SasView/sasview.git";
-    rev = "v${version}";
-    sha256 ="05la54wwzzlkhmj8vkr0bvzagyib6z6mgwqbddzjs5y1wd48vpcx";
+  src = fetchFromGitHub {
+    owner = "SasView";
+    repo = "sasview";
+    rev = "de431924d0ddf73cfb952df88bd6661181947019";
+    sha256 = "01bk0i0g65yzyq16n1a61rgjna8rrc2i51x2ndf1z7khb1fl16vg";
   };
 
-  patches = [./pyparsing-fix.patch ./local_config.patch];
+  patches = [ ./pyparsing-fix.patch ./local_config.patch ];
 
-  meta = {
+  meta = with lib; {
     homepage = https://www.sasview.org;
     description = "Fitting and data analysis for small angle scattering data";
-    maintainers = with lib.maintainers; [ rprospero ];
-    license = lib.licenses.bsd3;
+    maintainers = with maintainers; [ rprospero ];
+    license = licenses.bsd3;
   };
 }

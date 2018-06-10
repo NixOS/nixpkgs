@@ -76,7 +76,7 @@ in
       ];
 
     system.build = {
-      inherit nixos-install nixos-prepare-root nixos-generate-config nixos-option nixos-rebuild nixos-enter;
+      inherit nixos-install nixos-generate-config nixos-option nixos-rebuild nixos-enter;
     };
 
   };

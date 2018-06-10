@@ -1,10 +1,10 @@
 { stdenv, fetchurl, ncurses, pcre, libpng, zlib, readline, libiconv }:
 
 stdenv.mkDerivation rec {
-  name = "slang-2.3.1a";
+  name = "slang-2.3.2";
   src = fetchurl {
     url = "http://www.jedsoft.org/releases/slang/${name}.tar.bz2";
-    sha256 = "0dlcy0hn0j6cj9qj5x6hpb0axifnvzzmv5jqq0wq14fygw0c7w2l";
+    sha256 = "06p379fqn6w38rdpqi98irxi2bf4llb0rja3dlgkqz7nqh7kp7pw";
   };
 
   outputs = [ "out" "dev" "man" "doc" ];
@@ -16,9 +16,22 @@ stdenv.mkDerivation rec {
     sed -i -e "s|/bin/ln|ln|" src/Makefile.in
     sed -i -e "s|-ltermcap|-lncurses|" ./configure
   '';
-  configureFlags = "--with-png=${libpng.dev} --with-z=${zlib.dev} --with-pcre=${pcre.dev} --with-readline=${readline.dev}";
-  buildInputs = [ pcre libpng zlib readline ] ++ stdenv.lib.optionals (stdenv.isDarwin) [ libiconv ];
+
+  configureFlags = [
+    "--with-png=${libpng.dev}"
+    "--with-z=${zlib.dev}"
+    "--with-pcre=${pcre.dev}"
+    "--with-readline=${readline.dev}"
+  ];
+
+  buildInputs = [
+    pcre libpng zlib readline
+  ] ++ stdenv.lib.optionals (stdenv.isDarwin) [ libiconv ];
+
   propagatedBuildInputs = [ ncurses ];
+
+  # slang 2.3.2 does not support parallel building
+  enableParallelBuilding = false;
 
   postInstall = ''
     find "$out"/lib/ -name '*.so' -exec chmod +x "{}" \;
@@ -29,7 +42,7 @@ stdenv.mkDerivation rec {
     description = "A multi-platform programmer's library designed to allow a developer to create robust software";
     homepage = http://www.jedsoft.org/slang/;
     license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ fuuzetsu ];
     platforms = platforms.unix;
-    maintainers = [ maintainers.fuuzetsu ];
   };
 }

@@ -41,7 +41,9 @@ in lib.init bootStages ++ [
       targetPlatform = crossSystem;
       cc = if crossSystem.useiOSPrebuilt or false
              then buildPackages.darwin.iosSdkPkgs.clang
-           else if crossSystem.useAndroidPrebuilt
+           else if (crossSystem.useAndroidPrebuilt && crossSystem.is32bit)
+             then buildPackages.androidenv.androidndkPkgs_10e.gcc
+           else if (crossSystem.useAndroidPrebuilt && crossSystem.is64bit)
              then buildPackages.androidenv.androidndkPkgs.gcc
            else buildPackages.gcc;
     };

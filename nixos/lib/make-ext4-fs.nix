@@ -14,7 +14,7 @@ in
 pkgs.stdenv.mkDerivation {
   name = "ext4-fs.img";
 
-  nativeBuildInputs = with pkgs; [e2fsprogs libfaketime perl];
+  nativeBuildInputs = with pkgs; [e2fsprogs.bin libfaketime perl];
 
   buildCommand =
     ''
@@ -81,6 +81,13 @@ pkgs.stdenv.mkDerivation {
       if egrep -q 'Could not allocate|File not found' errorlog; then
         cat errorlog
         echo "--- Failed to create EXT4 image of $bytes bytes (numInodes=$numInodes, numDataBlocks=$numDataBlocks) ---"
+        return 1
+      fi
+
+      # I have ended up with corrupted images sometimes, I suspect that happens when the build machine's disk gets full during the build.
+      if ! fsck.ext4 -n -f $out; then
+        echo "--- Fsck failed for EXT4 image of $bytes bytes (numInodes=$numInodes, numDataBlocks=$numDataBlocks) ---"
+        cat errorlog
         return 1
       fi
     '';

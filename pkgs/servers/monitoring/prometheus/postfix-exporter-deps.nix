@@ -10,30 +10,12 @@
     };
   }
   {
-    goPackagePath = "github.com/coreos/go-systemd";
-    fetch = {
-      type = "git";
-      url = "https://github.com/coreos/go-systemd";
-      rev = "d1b7d058aa2adfc795ad17ff4aaa2bc64ec11c78";
-      sha256 = "1nz3v1b90hnmj2vjjwq96pr6psxlndqjyd30v9sgiwygzb7db9mv";
-    };
-  }
-  {
-    goPackagePath = "github.com/coreos/pkg";
-    fetch = {
-      type = "git";
-      url = "https://github.com/coreos/pkg";
-      rev = "97fdf19511ea361ae1c100dd393cc47f8dcfa1e1";
-      sha256 = "1srn87wih25l09f75483hnxsr8fc6rq3bk7w1x8125ym39p6mg21";
-    };
-  }
-  {
     goPackagePath = "github.com/golang/protobuf";
     fetch = {
       type = "git";
       url = "https://github.com/golang/protobuf";
-      rev = "e09c5db296004fbe3f74490e84dcd62c3c5ddb1b";
-      sha256 = "1acnmalkqwrq6k3l71c4pyws0zn18r2609kqaq55lhbdcjgzid31";
+      rev = "b4deda0973fb4c70b50d226b1af49f3da59f5265";
+      sha256 = "0ya4ha7m20bw048m1159ppqzlvda4x0vdprlbk5sdgmy74h3xcdq";
     };
   }
   {
@@ -68,8 +50,8 @@
     fetch = {
       type = "git";
       url = "https://github.com/prometheus/common";
-      rev = "d0f7cd64bda49e08b22ae8a730aa57aa0db125d6";
-      sha256 = "1d4hfbb66xsf0wq317fwhgrwakqzhvryw4d7ip851lwrpql5fqcx";
+      rev = "d811d2e9bf898806ecfb6ef6296774b13ffc314c";
+      sha256 = "0r4067r4ysmljksqw3awcxx5qplqhykahc5igdzgkky7i4bvaik1";
     };
   }
   {

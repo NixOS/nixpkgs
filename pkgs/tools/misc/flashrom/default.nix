@@ -9,6 +9,12 @@ stdenv.mkDerivation rec {
     sha256 = "0i9wg1lyfg99bld7d00zqjm9f0lk6m0q3h3n9c195c9yysq5ccfb";
   };
 
+  # Newer versions of libusb deprecate some API flashrom uses.
+  postPatch = ''
+    substituteInPlace Makefile \
+      --replace "-Werror" "-Werror -Wno-error=deprecated-declarations -Wno-error=unused-const-variable="
+  '';
+
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ libftdi pciutils ];
 

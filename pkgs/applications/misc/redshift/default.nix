@@ -1,16 +1,22 @@
 { stdenv, fetchFromGitHub, fetchurl, autoconf, automake, gettext, intltool
-, libtool, pkgconfig, wrapGAppsHook, wrapPython, geoclue2, gobjectIntrospection
-, gtk3, python, pygobject3, pyxdg, libdrm, libxcb, hicolor-icon-theme }:
+, libtool, pkgconfig, wrapGAppsHook, wrapPython, gobjectIntrospection
+, gtk3, python, pygobject3, hicolor-icon-theme, pyxdg
+
+, withCoreLocation ? stdenv.isDarwin, CoreLocation, Foundation, Cocoa
+, withQuartz ? stdenv.isDarwin, ApplicationServices
+, withRandr ? stdenv.isLinux, libxcb
+, withDrm ? stdenv.isLinux, libdrm
+, withGeoclue ? stdenv.isLinux, geoclue }:
 
 stdenv.mkDerivation rec {
   name = "redshift-${version}";
-  version = "1.11";
+  version = "1.12";
 
   src = fetchFromGitHub {
     owner = "jonls";
     repo = "redshift";
     rev = "v${version}";
-    sha256 = "0jfi4wqklqw2rm0r2xwalyzir88zkdvqj0z5id0l5v20vsrfiiyj";
+    sha256 = "12cb4gaqkybp4bkkns8pam378izr2mwhr2iy04wkprs2v92j7bz6";
   };
 
   patches = [
@@ -29,15 +35,25 @@ stdenv.mkDerivation rec {
     wrapPython
   ];
 
+  configureFlags = [
+    "--enable-randr=${if withRandr then "yes" else "no"}"
+    "--enable-geoclue2=${if withGeoclue then "yes" else "no"}"
+    "--enable-drm=${if withDrm then "yes" else "no"}"
+    "--enable-quartz=${if withQuartz then "yes" else "no"}"
+    "--enable-corelocation=${if withCoreLocation then "yes" else "no"}"
+  ];
+
   buildInputs = [
-    geoclue2
     gobjectIntrospection
     gtk3
-    libdrm
-    libxcb
     python
     hicolor-icon-theme
-  ];
+  ] ++ stdenv.lib.optional  withRandr        libxcb
+    ++ stdenv.lib.optional  withGeoclue      geoclue
+    ++ stdenv.lib.optional  withDrm          libdrm
+    ++ stdenv.lib.optional  withQuartz       ApplicationServices
+    ++ stdenv.lib.optionals withCoreLocation [ CoreLocation Foundation Cocoa ]
+    ;
 
   pythonPath = [ pygobject3 pyxdg ];
 
@@ -59,7 +75,7 @@ stdenv.mkDerivation rec {
     '';
     license = licenses.gpl3Plus;
     homepage = http://jonls.dk/redshift;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
     maintainers = with maintainers; [ yegortimoshenko ];
   };
 }

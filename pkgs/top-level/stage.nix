@@ -97,7 +97,8 @@ let
       res self;
     in res;
 
-  aliases = self: super: import ./aliases.nix super;
+  aliases = self: super: if config.skipAliases or false then {}
+                         else import ./aliases.nix super;
 
   # stdenvOverrides is used to avoid having multiple of versions
   # of certain dependencies that were used in bootstrapping the

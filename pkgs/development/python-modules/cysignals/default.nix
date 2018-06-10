@@ -7,11 +7,11 @@
 
 buildPythonPackage rec {
   pname = "cysignals";
-  version = "1.6.9";
+  version = "1.7.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "003invnixqy1h4lb358vwrxykxzp15csaddkgq3pqqmswnva5908";
+    sha256 = "15nky8siwlc7s8v23vv4m0mnxa1z6jcs2qfr26m2mkw9j9g2na2j";
   };
 
   hardeningDisable = [

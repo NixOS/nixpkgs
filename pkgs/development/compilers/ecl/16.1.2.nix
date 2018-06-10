@@ -1,10 +1,14 @@
-{stdenv, fetchurl
+{ stdenv, fetchurl, fetchpatch
 , libtool, autoconf, automake
 , gmp, mpfr, libffi, makeWrapper
 , noUnicode ? false
 , gcc
-, threadSupport ? true
+, threadSupport ? false
+, useBoehmgc ? true, boehmgc
 }:
+
+assert useBoehmgc -> boehmgc != null;
+
 let
   s = # Generated upstream information
   rec {
@@ -19,6 +23,9 @@ let
   ];
   propagatedBuildInputs = [
     libffi gmp mpfr gcc
+  ] ++ stdenv.lib.optionals useBoehmgc [
+    # replaces ecl's own gc which other packages can depend on, thus propagated
+    boehmgc
   ];
 in
 stdenv.mkDerivation {
@@ -38,6 +45,15 @@ stdenv.mkDerivation {
     (stdenv.lib.optional (! noUnicode)
       "--enable-unicode")
     ;
+
+  patches = [
+    (fetchpatch {
+      # Avoid infinite loop, see https://gitlab.com/embeddable-common-lisp/ecl/issues/43 (fixed upstream)
+      name = "avoid-infinite-loop.patch";
+      url = "https://gitlab.com/embeddable-common-lisp/ecl/commit/caba1989f40ef917e7486f41b9cd5c7e3c5c2d79.patch";
+      sha256 = "07vw91psbc9gdn8grql46ra8lq3bgkzg5v480chnbryna4sv6lbb";
+    })
+  ];
 
   hardeningDisable = [ "format" ];
 

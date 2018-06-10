@@ -23,8 +23,13 @@ buildGoPackage rec {
   goDeps = ./deps.nix;
 
   patchPhase = ''
-    sed -i -e "s|expand('<sfile>:h:h').'/bin/fzf'|'$bin/bin/fzf'|" plugin/fzf.vim
-    sed -i -e "s|expand('<sfile>:h:h').'/bin/fzf-tmux'|'$bin/bin/fzf-tmux'|" plugin/fzf.vim
+    sed -i -e "s|expand('<sfile>:h:h')|'$bin'|" plugin/fzf.vim
+
+    # Original and output files can't be the same
+    if cmp -s $src/plugin/fzf.vim plugin/fzf.vim; then
+      echo "Vim plugin patch not applied properly. Aborting" && \
+      exit 1
+    fi
   '';
 
   preInstall = ''

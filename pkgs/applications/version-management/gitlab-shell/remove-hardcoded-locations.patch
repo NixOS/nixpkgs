@@ -19,9 +19,9 @@ index 1452f95..2b40327 100644
      end
  
      # We use 'chdir: ROOT_PATH' to let the next executable know where config.yml is.
--    Kernel::exec(env, *args, unsetenv_others: true, chdir: ROOT_PATH)
+-    Kernel.exec(env, *args, unsetenv_others: true, chdir: ROOT_PATH)
 +    # Except we don't, because we're already in the right directory on nixos!
-+    Kernel::exec(env, *args, unsetenv_others: true)
++    Kernel.exec(env, *args, unsetenv_others: true)
    end
  
    def api

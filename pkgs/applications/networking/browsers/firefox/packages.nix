@@ -12,21 +12,27 @@ let
     ./fix-pa-context-connect-retval.patch
   ];
 
+  firefox60_aarch64_skia_patch = fetchpatch {
+      name = "aarch64-skia.patch";
+      url = https://src.fedoraproject.org/rpms/firefox/raw/8cff86d95da3190272d1beddd45b41de3148f8ef/f/build-aarch64-skia.patch;
+      sha256 = "11acb0ms4jrswp7268nm2p8g8l4lv8zc666a5bqjbb09x9k6b78k";
+  };
+
 in
 
 rec {
 
   firefox = common rec {
     pname = "firefox";
-    version = "59.0.2";
+    version = "60.0.1";
     src = fetchurl {
-      url = "https://hg.mozilla.org/releases/mozilla-release/archive/239e434d6d2b8e1e2b697c3416d1e96d48fe98e5.tar.bz2";
-      sha512 = "3kfh224sfc9ig4733frnskcs49xzjkrs00lxllsvx1imm6f4sf117mqlvc7bhgrn8ldiqn6vaa5g6gd9b7awkk1g975bbzk9namb3yv";
+      url = "mirror://mozilla/firefox/releases/${version}/source/firefox-${version}.source.tar.xz";
+      sha512 = "083bhfh32dy1cz4c4wn92i2lnl9mqikkd9dlkwd5i6clyjb9pc6d5g87kvb8si0n6jll4alyhw792j56a7gmzny3d93068hr4zyh3qn";
     };
 
     patches = nixpkgsPatches ++ [
       ./no-buildconfig.patch
-    ];
+    ] ++ lib.optional stdenv.isAarch64 firefox60_aarch64_skia_patch;
 
     meta = {
       description = "A web browser built from Firefox source tree";
@@ -39,12 +45,12 @@ rec {
     };
   } {};
 
-  firefox-esr = common rec {
+  firefox-esr-52 = common rec {
     pname = "firefox-esr";
-    version = "52.7.3esr";
+    version = "52.8.0esr";
     src = fetchurl {
       url = "mirror://mozilla/firefox/releases/${version}/source/firefox-${version}.source.tar.xz";
-      sha512 = "31y3qrslg61724vmly6gr1lqcrqgpkh3zsl8riax45gizfcp3qbgkvmd5wwfn9fiwjqi6ww3i08j51wxrfxcxznv7c6qzsvzzc30mgw";
+      sha512 = "4136fa582e4ffd754d46a79bdb562bd12da4d013d87dfe40fa92addf377e95f5f642993c8b783edd5290089619beeb5a907a0810b68b8808884f087986977df1";
     };
 
     patches = nixpkgsPatches;
@@ -53,7 +59,28 @@ rec {
       description = "A web browser built from Firefox Extended Support Release source tree";
     };
     updateScript = callPackage ./update.nix {
-      attrPath = "firefox-esr-unwrapped";
+      attrPath = "firefox-esr-52-unwrapped";
+      versionSuffix = "esr";
+    };
+  } {};
+
+  firefox-esr-60 = common rec {
+    pname = "firefox-esr";
+    version = "60.0.1esr";
+    src = fetchurl {
+      url = "mirror://mozilla/firefox/releases/${version}/source/firefox-${version}.source.tar.xz";
+      sha512 = "2kswaf2d8qbhx1ry4ai7y2hr8cprpm00wwdr9qwpdr31m7w0jzndh0fn7jn1f57s42j6jk0jg78d34x10p2rvdii8hrbbr9q9sw8v4b";
+    };
+
+    patches = nixpkgsPatches ++ [
+      ./no-buildconfig.patch
+    ] ++ lib.optional stdenv.isAarch64 firefox60_aarch64_skia_patch;
+
+    meta = firefox.meta // {
+      description = "A web browser built from Firefox Extended Support Release source tree";
+    };
+    updateScript = callPackage ./update.nix {
+      attrPath = "firefox-esr-60-unwrapped";
       versionSuffix = "esr";
     };
   } {};
@@ -129,16 +156,16 @@ in rec {
 
   tor-browser-7-5 = common (rec {
     pname = "tor-browser";
-    version = "7.5.2";
+    version = "7.5.4";
     isTorBrowserLike = true;
 
     # FIXME: fetchFromGitHub is not ideal, unpacked source is >900Mb
     src = fetchFromGitHub {
       owner = "SLNOS";
       repo  = "tor-browser";
-      # branch "tor-browser-52.7.3esr-7.5-1-slnos";
-      rev   = "62e77aa47d90c10cfc9c6f3b7358a6bdc3167182";
-      sha256 = "09pyqicv6z0h4lmjdybx56gj3l28gkl0bbpk0pnmlzcyr9vng7zj";
+      # branch "tor-browser-52.8.0esr-7.5-1-slnos"
+      rev   = "dbaabe129d2982bee00a753146fbe610fec0ca50";
+      sha256 = "0j60vz18bwabqbzv0r1id3vcyh3832mzx6cg5r7x5c03s5hn40a4";
     };
 
     patches = nixpkgsPatches;
@@ -153,9 +180,9 @@ in rec {
     src = fetchFromGitHub {
       owner = "SLNOS";
       repo  = "tor-browser";
-      # branch "tor-browser-52.7.0esr-8.0-1-slnos";
-      rev   = "58314ccb043882e830ee9a21c37a92d6e0d34e94";
-      sha256 = "09gb7chw2kly53b599xwpi75azj00957rnxly9fqv8zi3n5k2pdb";
+      # branch "tor-browser-52.8.0esr-8.0-1-slnos";
+      rev   = "5d7e9e1cacbf70840f8f1a9aafe99f354f9ad0ca";
+      sha256 = "0cwxwwc4m7331bbp3id694ffwxar0j5kfpgpn9l1z36rmgv92n21";
     };
 
     patches = nixpkgsPatches;

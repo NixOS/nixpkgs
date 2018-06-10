@@ -1,6 +1,6 @@
 {stdenv, fetchpatch, fetchurl, autoreconfHook, pkgconfig, atk, cairo, glib
 , gnome-common, gtk, pango
-, libxml2Python, perl, intltool, gettext, gtk-mac-integration }:
+, libxml2Python, perl, intltool, gettext, gtk-mac-integration-gtk2 }:
 
 with stdenv.lib;
 
@@ -16,12 +16,12 @@ stdenv.mkDerivation rec {
   patches = optionals stdenv.isDarwin [
     (fetchpatch {
       name = "change-igemacintegration-to-gtkosxapplication.patch";
-      url = "https://git.gnome.org/browse/gtksourceview/patch/?id=e88357c5f210a8796104505c090fb6a04c213902";
+      url = "https://gitlab.gnome.org/GNOME/gtksourceview/commit/e88357c5f210a8796104505c090fb6a04c213902.patch";
       sha256 = "0h5q79q9dqbg46zcyay71xn1pm4aji925gjd5j93v4wqn41wj5m7";
     })
     (fetchpatch {
       name = "update-to-gtk-mac-integration-2.0-api.patch";
-      url = "https://git.gnome.org/browse/gtksourceview/patch/?id=ab46e552e1d0dae73f72adac8d578e40bdadaf95";
+      url = "https://gitlab.gnome.org/GNOME/gtksourceview/commit/ab46e552e1d0dae73f72adac8d578e40bdadaf95.patch";
       sha256 = "0qzrbv4hpa0v8qbmpi2vp575n13lkrvp3cgllwrd2pslw1v9q3aj";
     })
   ];
@@ -32,12 +32,12 @@ stdenv.mkDerivation rec {
     pango libxml2Python perl intltool
     gettext
   ] ++ optionals stdenv.isDarwin [
-    autoreconfHook gnome-common gtk-mac-integration
+    autoreconfHook gnome-common gtk-mac-integration-gtk2
   ];
 
   preConfigure = optionalString stdenv.isDarwin ''
     intltoolize --force
   '';
 
-  NIX_LDFLAGS = stdenv.lib.optionalString stdenv.isDarwin "-lintl";
+  doCheck = false; # requires X11 daemon
 }

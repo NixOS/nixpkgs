@@ -26,7 +26,7 @@ in rec {
 
   none = [];
 
-  arm     = filterDoubles predicates.isArm;
+  arm     = filterDoubles predicates.isAarch32;
   aarch64 = filterDoubles predicates.isAarch64;
   x86     = filterDoubles predicates.isx86;
   i686    = filterDoubles predicates.isi686;

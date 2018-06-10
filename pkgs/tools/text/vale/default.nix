@@ -2,16 +2,16 @@
 
 buildGoPackage rec {
   name = "vale-${version}";
-  version = "0.10.1";
-  rev    = "${version}";
+  version = "0.11.2";
+  rev    = "v${version}";
 
-  goPackagePath = "github.com/ValeLint/vale";
+  goPackagePath = "github.com/errata-ai/vale";
 
   src = fetchFromGitHub {
     inherit rev;
-    owner  = "ValeLint";
+    owner  = "errata-ai";
     repo   = "vale";
-    sha256 = "1iyc9mny3nb6j3allj3szkiygc2v3gi7l7syq9ifjrm1wknk8wrf";
+    sha256 = "0zs6bdwnc5fpa0skw1xhdwg6jzsc7wcb8lsfj235jc8jd2w13mvm";
   };
 
   goDeps = ./deps.nix;

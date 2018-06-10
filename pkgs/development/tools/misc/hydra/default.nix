@@ -27,6 +27,7 @@ let
         CatalystViewDownload
         CatalystViewJSON
         CatalystViewTT
+        CatalystXRoleApplicator
         CatalystXScriptServerStarman
         CryptRandPasswd
         DBDPg
@@ -39,6 +40,7 @@ let
         FileSlurp
         IOCompress
         IPCRun
+        JSONAny
         JSONXS
         LWP
         LWPProtocolHttps

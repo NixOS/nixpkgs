@@ -5,14 +5,14 @@
 
 let
   pname = "meld";
-  version = "3.18.0";
+  version = "3.18.1";
   inherit (python3Packages) python buildPythonApplication pycairo pygobject3;
 in buildPythonApplication rec {
   name = "${pname}-${version}";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${gnome3.versionBranch version}/${name}.tar.xz";
-    sha256 = "0gi2jzgsrd5q2icyp6wphbn532ddg82nxhfxlffkniy7wnqmi0c4";
+    sha256 = "0yg8i1ff3rsavsaxbnd6dxmfsiyv49kk8rv5wqnyhf2zmfp8rxis";
   };
 
   buildInputs = [

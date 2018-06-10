@@ -19,6 +19,11 @@ buildPythonPackage rec {
 
   checkInputs = [ nose mock ];
 
+  # v0.20.0 tests are nondeterministic:
+  # test_send_batch_metrics: https://hydra.nixos.org/build/74920933
+  # test_timed_decorator_threaded: https://hydra.nixos.org/build/74328993
+  doCheck = false;
+
   meta = with lib; {
     description = "The Datadog Python library";
     license = licenses.bsd3;

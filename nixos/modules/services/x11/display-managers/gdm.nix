@@ -135,6 +135,9 @@ in
 
     systemd.services.display-manager.path = [ pkgs.gnome3.gnome-session ];
 
+    # Allow choosing an user account
+    services.accounts-daemon.enable = true;
+
     services.dbus.packages = [ gdm ];
 
     systemd.user.services.dbus.wantedBy = [ "default.target" ];

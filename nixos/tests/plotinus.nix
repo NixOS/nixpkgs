@@ -15,11 +15,11 @@ import ./make-test.nix ({ pkgs, ... }: {
   testScript =
     ''
       $machine->waitForX;
-      $machine->execute("xterm -e 'gnome-calculator' &");
-      $machine->waitForWindow(qr/Calculator/);
-      $machine->execute("xdotool key ctrl+shift+p");
-      $machine->sleep(1); # wait for the popup
-      $machine->execute("xdotool key p r e f e r e n c e s Return");
+      $machine->succeed("gnome-calculator &");
+      $machine->waitForWindow(qr/gnome-calculator/);
+      $machine->succeed("xdotool search --sync --onlyvisible --class gnome-calculator windowfocus --sync key ctrl+shift+p");
+      $machine->sleep(5); # wait for the popup
+      $machine->succeed("xdotool key --delay 100 p r e f e r e n c e s Return");
       $machine->waitForWindow(qr/Preferences/);
       $machine->screenshot("screen");
     '';

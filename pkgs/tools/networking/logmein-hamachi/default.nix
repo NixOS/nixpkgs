@@ -2,8 +2,6 @@
 
 with stdenv.lib;
 
-assert stdenv.isLinux;
-
 let
   arch =
     if stdenv.system == "x86_64-linux" then "x64"

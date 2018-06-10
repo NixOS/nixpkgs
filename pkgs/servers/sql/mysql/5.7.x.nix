@@ -6,11 +6,11 @@
 let
 self = stdenv.mkDerivation rec {
   name = "mysql-${version}";
-  version = "5.7.20";
+  version = "5.7.22";
 
   src = fetchurl {
     url = "mirror://mysql/MySQL-5.7/${name}.tar.gz";
-    sha256 = "11v4g3igigv3zvknv67qml8in6fjrbs2vnr3q6bg6f62nydm95sk";
+    sha256 = "1wng15j5caz6fsv28avlcxjgq3c5n90ifk79xa0h7jws19dl1f2f";
   };
 
   preConfigure = stdenv.lib.optional stdenv.isDarwin ''
@@ -26,14 +26,14 @@ self = stdenv.mkDerivation rec {
   outputs = [ "out" "static" ];
 
   cmakeFlags = [
+    "-DCMAKE_SKIP_BUILD_RPATH=OFF" # To run libmysql/libmysql_api_test during build.
     "-DWITH_SSL=yes"
     "-DWITH_EMBEDDED_SERVER=yes"
-    "-DWITH_UNITTEST=no"
+    "-DWITH_UNIT_TESTS=no"
     "-DWITH_ZLIB=yes"
     "-DWITH_ARCHIVE_STORAGE_ENGINE=yes"
     "-DWITH_BLACKHOLE_STORAGE_ENGINE=yes"
     "-DWITH_FEDERATED_STORAGE_ENGINE=yes"
-    "-DCMAKE_VERBOSE_MAKEFILE=yes"
     "-DHAVE_IPV6=yes"
     "-DMYSQL_UNIX_ADDR=/run/mysqld/mysqld.sock"
     "-DMYSQL_DATADIR=/var/lib/mysql"
@@ -45,6 +45,7 @@ self = stdenv.mkDerivation rec {
     "-DINSTALL_DOCREADMEDIR=share/mysql"
     "-DINSTALL_SUPPORTFILESDIR=share/mysql"
     "-DINSTALL_MYSQLSHAREDIR=share/mysql"
+    "-DINSTALL_MYSQLTESTDIR="
     "-DINSTALL_DOCDIR=share/mysql/docs"
     "-DINSTALL_SHAREDIR=share/mysql"
   ];
@@ -53,13 +54,10 @@ self = stdenv.mkDerivation rec {
   NIX_LDFLAGS = stdenv.lib.optionalString stdenv.isLinux "-lgcc_s";
 
   prePatch = ''
-    sed -i -e "s|/usr/bin/libtool|libtool|" cmake/libutils.cmake
+    sed -i -e "s|/usr/bin/libtool|libtool|" cmake/merge_archives.cmake.in
   '';
   postInstall = ''
-    sed -i -e "s|basedir=\"\"|basedir=\"$out\"|" $out/bin/mysql_install_db
-    install -vD $out/lib/*.a -t $static/lib
-    rm -r $out/mysql-test
-    rm $out/share/man/man1/mysql-test-run.pl.1 $out/lib/*.a
+    moveToOutput "lib/*.a" $static
     ln -s libmysqlclient${stdenv.hostPlatform.extensions.sharedLibrary} $out/lib/libmysqlclient_r${stdenv.hostPlatform.extensions.sharedLibrary}
   '';
 

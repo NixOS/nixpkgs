@@ -54,7 +54,7 @@ index cef00f6..e69de29 100644
 -  MatrixStructs
 -
 -  GIT_REPOSITORY https://github.com/mujx/matrix-structs
--  GIT_TAG 91bb2b85a75d664007ef81aeb500d35268425922
+-  GIT_TAG 5e57c2385a79b6629d1998fec4a7c0baee23555e
 -
 -  BUILD_IN_SOURCE 1
 -  SOURCE_DIR ${MATRIX_STRUCTS_ROOT}

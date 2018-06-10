@@ -48,6 +48,8 @@ let
           then "./Configure mingw${toString hostPlatform.parsed.cpu.bits}"
         else if hostPlatform.isLinux
           then "./Configure linux-generic${toString hostPlatform.parsed.cpu.bits}"
+        else if hostPlatform.isiOS
+          then "./Configure ios${toString hostPlatform.parsed.cpu.bits}-cross"
         else
           throw "Not sure what configuration to use for ${hostPlatform.config}"
       );
@@ -71,8 +73,7 @@ let
 
     makeFlags = [ "MANDIR=$(man)/share/man" ];
 
-    # Parallel building is broken in OpenSSL.
-    enableParallelBuilding = false;
+    enableParallelBuilding = true;
 
     postInstall = ''
       # If we're building dynamic libraries, then don't install static

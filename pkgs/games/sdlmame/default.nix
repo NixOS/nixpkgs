@@ -1,7 +1,5 @@
 { stdenv, fetchurl, alsaLib, qt48, SDL, fontconfig, freetype, SDL_ttf, xorg }:
 
-assert stdenv.system == "x86_64-linux" || stdenv.system == "i686-linux";
-
 stdenv.mkDerivation rec {
   version = "0.151.u0-1";
   name    = "sdlmame-${version}";
@@ -39,6 +37,6 @@ stdenv.mkDerivation rec {
     description = "A port of the popular Multiple Arcade Machine Emulator using SDL with OpenGL support";
     license     = "MAME";
     maintainers = with maintainers; [ lovek323 ];
-    platforms   = platforms.linux;
+    platforms   = [ "x86_64-linux" "i686-linux" ];
   };
 }

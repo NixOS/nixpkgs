@@ -129,6 +129,7 @@ let
       syntax-highlighting = callPackage ./syntax-highlighting.nix {};
       threadweaver = callPackage ./threadweaver.nix {};
       kirigami2 = callPackage ./kirigami2.nix {};
+      kholidays = callPackage ./kholidays.nix {};
 
     # TIER 2
       kactivities = callPackage ./kactivities.nix {};
@@ -154,6 +155,7 @@ let
       kded = callPackage ./kded.nix {};
       kdesignerplugin = callPackage ./kdesignerplugin.nix {};
       kdesu = callPackage ./kdesu.nix {};
+      kdewebkit = callPackage ./kdewebkit.nix {};
       kemoticons = callPackage ./kemoticons.nix {};
       kglobalaccel = callPackage ./kglobalaccel.nix {};
       kiconthemes = callPackage ./kiconthemes {};

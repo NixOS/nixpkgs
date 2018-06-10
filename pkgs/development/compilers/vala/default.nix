@@ -1,10 +1,12 @@
-{ stdenv, fetchurl, pkgconfig, flex, bison, libxslt, autoconf, graphviz
+{ stdenv, lib, fetchurl, pkgconfig, flex, bison, libxslt, autoconf, graphviz
 , glib, libiconv, libintl, libtool, expat
 }:
 
 let
   generic = { major, minor, sha256, extraNativeBuildInputs ? [], extraBuildInputs ? [] }:
-  stdenv.mkDerivation rec {
+  let
+    atLeast = lib.versionAtLeast "${major}.${minor}";
+  in stdenv.mkDerivation rec {
     name = "vala-${major}.${minor}";
 
     src = fetchurl {
@@ -14,9 +16,15 @@ let
 
     outputs = [ "out" "devdoc" ];
 
-    nativeBuildInputs = [ pkgconfig flex bison libxslt ] ++ extraNativeBuildInputs;
+    nativeBuildInputs = [
+      pkgconfig flex bison libxslt
+    ] ++ lib.optional (stdenv.isDarwin && (atLeast "0.38")) expat
+      ++ extraNativeBuildInputs;
 
-    buildInputs = [ glib libiconv libintl ] ++ extraBuildInputs;
+    buildInputs = [
+      glib libiconv libintl
+    ] ++ lib.optional (atLeast "0.38") graphviz
+      ++ extraBuildInputs;
 
     meta = with stdenv.lib; {
       description = "Compiler for GObject type system";
@@ -28,12 +36,6 @@ let
   };
 
 in rec {
-
-  vala_0_23 = generic {
-    major   = "0.23";
-    minor   = "3";
-    sha256  = "101xjbc818g4849n9a80c2aai13zakj7mpnd7470xnkvz5jwqq96";
-  };
 
   vala_0_26 = generic {
     major   = "0.26";
@@ -61,24 +63,21 @@ in rec {
 
   vala_0_36 = generic {
     major   = "0.36";
-    minor   = "12";
-    sha256  = "1nvw721piwdh15bipg0sdll9kvgpz0y9i5fpszlc7y9w64yis25l";
+    minor   = "13";
+    sha256  = "0gxz7yisd9vh5d2889p60knaifz5zndgj98zkdfkkaykdfdq4m9k";
   };
 
   vala_0_38 = generic {
     major   = "0.38";
-    minor   = "4";
-    sha256  = "1sg5gaq3jhgr9vzh2ypiw475167k150wmyglymr7wwqppmikmcrc";
-    extraNativeBuildInputs = [ autoconf ] ++ stdenv.lib.optionals stdenv.isDarwin [ libtool expat ];
-    extraBuildInputs = [ graphviz ];
+    minor   = "9";
+    sha256  = "1dh1qacfsc1nr6hxwhn9lqmhnq39rv8gxbapdmj1v65zs96j3fn3";
+    extraNativeBuildInputs = [ autoconf ] ++ lib.optional stdenv.isDarwin libtool;
   };
 
   vala_0_40 = generic {
     major   = "0.40";
-    minor   = "0";
-    sha256  = "0wcfljl55a9qvslfcc4sf76wdpwgn83n96b7fgb7r49ib35qz20m";
-    extraNativeBuildInputs = stdenv.lib.optionals stdenv.isDarwin [ expat ];
-    extraBuildInputs = [ graphviz ];
+    minor   = "6";
+    sha256  = "1qjbwhifwwqbdg5zilvnwm4n76g8p7jwqs3fa0biw3rylzqm193d";
   };
 
   vala = vala_0_38;

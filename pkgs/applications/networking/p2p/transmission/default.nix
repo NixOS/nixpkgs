@@ -10,11 +10,11 @@ let inherit (stdenv.lib) optional optionals optionalString; in
 
 stdenv.mkDerivation rec {
   name = "transmission-" + optionalString enableGTK3 "gtk-" + version;
-  version = "2.93";
+  version = "2.94";
 
   src = fetchurl {
-    url = "https://github.com/transmission/transmission-releases/raw/master/transmission-2.93.tar.xz";
-    sha256 = "8815920e0a4499bcdadbbe89a4115092dab42ce5199f71ff9a926cfd12b9b90b";
+    url = "https://github.com/transmission/transmission-releases/raw/master/transmission-2.94.tar.xz";
+    sha256 = "0zbbj7rlm6m7vb64x68a64cwmijhsrwx9l63hbwqs7zr9742qi1m";
   };
 
   nativeBuildInputs = [ pkgconfig ]

@@ -4,7 +4,6 @@
   pkexecPath ? "/run/wrappers/bin/pkexec", libredirect,
   gksuSupport ? false, gksu, unzip, zip, bash}:
 
-assert stdenv.system == "i686-linux" || stdenv.system == "x86_64-linux";
 assert gksuSupport -> gksu != null;
 
 let
@@ -114,6 +113,6 @@ in stdenv.mkDerivation (rec {
     homepage = https://www.sublimetext.com/;
     maintainers = with maintainers; [ wmertens demin-dmitriy zimbatm ];
     license = licenses.unfree;
-    platforms = platforms.linux;
+    platforms = [ "x86_64-linux" "i686-linux" ];
   };
 })

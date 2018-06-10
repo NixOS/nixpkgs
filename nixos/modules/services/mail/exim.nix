@@ -94,6 +94,7 @@ in
     systemd.services.exim = {
       description = "Exim Mail Daemon";
       wantedBy = [ "multi-user.target" ];
+      restartTriggers = [ config.environment.etc."exim.conf".source ];
       serviceConfig = {
         ExecStart   = "${exim}/bin/exim -bdf -q30m";
         ExecReload  = "${coreutils}/bin/kill -HUP $MAINPID";

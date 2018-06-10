@@ -1,59 +1,37 @@
-{ stdenv, fetchzip, cmake, pkgconfig
+{ stdenv, lib, fetchFromGitHub, cmake, pkgconfig
 , alsaLib, freetype, libjack2, lame, libogg, libpulseaudio, libsndfile, libvorbis
-, portaudio, qtbase, qtdeclarative, qtscript, qtsvg, qttools
+, portaudio, portmidi, qtbase, qtdeclarative, qtscript, qtsvg, qttools
 , qtwebkit, qtxmlpatterns
 }:
 
 stdenv.mkDerivation rec {
   name = "musescore-${version}";
-  version = "2.1.0";
+  version = "2.2.1";
 
-  src = fetchzip {
-    url = "https://github.com/musescore/MuseScore/archive/v${version}.tar.gz";
-    sha256 = "1rlxz2nzilz7n6c0affnjk2wcxl4b8949qxs0xi555gxg01kybls";
+  src = fetchFromGitHub {
+    owner  = "musescore";
+    repo   = "MuseScore";
+    rev    = "v${version}";
+    sha256 = "00lwcsnpyiq9l9x11nm24mzf67xmhzjhwi4c3iqry6ayi9c4p4qs";
   };
 
-  hardeningDisable = [ "relro" "bindnow" ];
-
-  makeFlags = [
-    "PREFIX=$(out)"
-  ];
-
   cmakeFlags = [
-    "-DAEOLUS=OFF"
-    "-DZERBERUS=ON"
-    "-DOSC=ON=ON"
-    "-DOMR=OFF" # TODO: add OMR support, CLEF_G not declared error
-    "-DOCR=OFF" # Not necessary without OMR
-    "-DSOUNDFONT3=ON"
-    "-DHAS_AUDIOFILE=ON"
-    "-DBUILD_JACK=ON"
-  ];
-
-  preBuild = ''
-    make lrelease
-  '';
-
-  postBuild = ''
-    make manpages
-  '';
+  ] ++ lib.optional (lib.versionAtLeast freetype.version "2.5.2") "-DUSE_SYSTEM_FREETYPE=ON";
 
   nativeBuildInputs = [ cmake pkgconfig ];
 
-  enableParallelBuilding = true;
-
   buildInputs = [
     alsaLib libjack2 freetype lame libogg libpulseaudio libsndfile libvorbis
-    portaudio qtbase qtdeclarative qtscript qtsvg qttools
-    qtwebkit qtxmlpatterns #tesseract
+    portaudio portmidi # tesseract
+    qtbase qtdeclarative qtscript qtsvg qttools qtwebkit qtxmlpatterns
   ];
 
   meta = with stdenv.lib; {
     description = "Music notation and composition software";
     homepage = https://musescore.org/;
     license = licenses.gpl2;
+    maintainers = with maintainers; [ vandenoever ];
     platforms = platforms.linux;
-    maintainers = [ maintainers.vandenoever ];
     repositories.git = https://github.com/musescore/MuseScore;
   };
 }

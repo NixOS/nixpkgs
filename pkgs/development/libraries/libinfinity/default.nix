@@ -12,7 +12,8 @@ let
 
 in stdenv.mkDerivation rec {
 
-  name = "libinfinity-0.7.1";
+  name = "libinfinity-${version}";
+  version = "0.7.1";
   src = fetchurl {
     url = "http://releases.0x539.de/libinfinity/${name}.tar.gz";
     sha256 = "1jw2fhrcbpyz99bij07iyhy9ffyqdn87vl8cb1qz897y3f2f0vk2";
@@ -35,6 +36,10 @@ in stdenv.mkDerivation rec {
     ${edf daemon "libdaemon"}
     ${edf avahiSupport "avahi"}
   '';
+
+  passthru = {
+    inherit version;
+  };
 
   meta = {
     homepage = http://gobby.0x539.de/;

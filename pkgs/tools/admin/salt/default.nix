@@ -6,13 +6,24 @@
   extraInputs ? []
 }:
 
+let
+  # Use tornado-4.x until https://github.com/saltstack/salt/issues/45790 is resolved
+  tornado = python2Packages.tornado.overridePythonAttrs (oldAttrs: rec {
+    version = "4.5.3";
+    name = "${oldAttrs.pname}-${version}";
+    src = oldAttrs.src.override {
+      inherit version;
+      sha256 = "02jzd23l4r6fswmwxaica9ldlyc2p6q8dk6dyff7j58fmdzf853d";
+    };
+  });
+in
 python2Packages.buildPythonApplication rec {
   pname = "salt";
-  version = "2017.7.4";
+  version = "2018.3.0";
 
   src = python2Packages.fetchPypi {
     inherit pname version;
-    sha256 = "15xfvclk3ns8vk17j7bfy4alq7ab5x3y3jnpqzp5583bfyak0mqx";
+    sha256 = "0cbbnmaynnpfknmppzlz04mqw4d3d2ay1dqrli11b5pnzli5v950";
   };
 
   propagatedBuildInputs = with python2Packages; [

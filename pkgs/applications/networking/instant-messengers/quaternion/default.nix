@@ -2,24 +2,21 @@
 
 stdenv.mkDerivation rec {
   name = "quaternion-${version}";
-  version = "0.0.5";
-
-  # libqmatrixclient doesn't support dynamic linking as of 0.2 so we simply pull in the source
+  version = "0.0.9";
 
   src = fetchFromGitHub {
     owner  = "QMatrixClient";
     repo   = "Quaternion";
     rev    = "v${version}";
-    sha256 = "14xmaq446aggqhpcilahrw2mr5gf2mlr1xzyp7r6amrnmnqsyxrd";
+    sha256 = "0zdpll953a7biwnklhgmgg3k2vz7j58lc1nmfkmvsfcj1fmdf408";
   };
 
   buildInputs = [ qtbase qtquickcontrols libqmatrixclient ];
 
   nativeBuildInputs = [ cmake ];
 
-  enableParallelBuilding = true;
-
-  # take the source from libqmatrixclient
+  # libqmatrixclient is now compiled as a dynamic library but quarternion cannot use it yet
+  # https://github.com/QMatrixClient/Quaternion/issues/239
   postPatch = ''
     rm -rf lib
     ln -s ${libqmatrixclient.src} lib

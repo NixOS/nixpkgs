@@ -3,15 +3,14 @@
          xmlns:xi="http://www.w3.org/2001/XInclude"
          version="5.0"
          xml:id="sec-module-abstractions">
+ <title>Abstractions</title>
 
-<title>Abstractions</title>
-
-<para>If you find yourself repeating yourself over and over, it’s time
-to abstract.  Take, for instance, this Apache HTTP Server configuration:
-
+ <para>
+  If you find yourself repeating yourself over and over, it’s time to
+  abstract. Take, for instance, this Apache HTTP Server configuration:
 <programlisting>
 {
-  services.httpd.virtualHosts =
+  <xref linkend="opt-services.httpd.virtualHosts"/> =
     [ { hostName = "example.org";
         documentRoot = "/webroot";
         adminAddr = "alice@example.org";
@@ -28,11 +27,9 @@ to abstract.  Take, for instance, this Apache HTTP Server configuration:
     ];
 }
 </programlisting>
-
-It defines two virtual hosts with nearly identical configuration; the
-only difference is that the second one has SSL enabled.  To prevent
-this duplication, we can use a <literal>let</literal>:
-
+  It defines two virtual hosts with nearly identical configuration; the only
+  difference is that the second one has SSL enabled. To prevent this
+  duplication, we can use a <literal>let</literal>:
 <programlisting>
 let
   exampleOrgCommon =
@@ -43,7 +40,7 @@ let
     };
 in
 {
-  services.httpd.virtualHosts =
+  <xref linkend="opt-services.httpd.virtualHosts"/> =
     [ exampleOrgCommon
       (exampleOrgCommon // {
         enableSSL = true;
@@ -53,40 +50,38 @@ in
     ];
 }
 </programlisting>
+  The <literal>let exampleOrgCommon = <replaceable>...</replaceable></literal>
+  defines a variable named <literal>exampleOrgCommon</literal>. The
+  <literal>//</literal> operator merges two attribute sets, so the
+  configuration of the second virtual host is the set
+  <literal>exampleOrgCommon</literal> extended with the SSL options.
+ </para>
 
-The <literal>let exampleOrgCommon =
-<replaceable>...</replaceable></literal> defines a variable named
-<literal>exampleOrgCommon</literal>.  The <literal>//</literal>
-operator merges two attribute sets, so the configuration of the second
-virtual host is the set <literal>exampleOrgCommon</literal> extended
-with the SSL options.</para>
-
-<para>You can write a <literal>let</literal> wherever an expression is
-allowed.  Thus, you also could have written:
-
+ <para>
+  You can write a <literal>let</literal> wherever an expression is allowed.
+  Thus, you also could have written:
 <programlisting>
 {
-  services.httpd.virtualHosts =
+  <xref linkend="opt-services.httpd.virtualHosts"/> =
     let exampleOrgCommon = <replaceable>...</replaceable>; in
     [ exampleOrgCommon
       (exampleOrgCommon // { <replaceable>...</replaceable> })
     ];
 }
 </programlisting>
+  but not <literal>{ let exampleOrgCommon = <replaceable>...</replaceable>; in
+  <replaceable>...</replaceable>; }</literal> since attributes (as opposed to
+  attribute values) are not expressions.
+ </para>
 
-but not <literal>{ let exampleOrgCommon =
-<replaceable>...</replaceable>; in <replaceable>...</replaceable>;
-}</literal> since attributes (as opposed to attribute values) are not
-expressions.</para>
-
-<para><emphasis>Functions</emphasis> provide another method of
-abstraction.  For instance, suppose that we want to generate lots of
-different virtual hosts, all with identical configuration except for
-the host name.  This can be done as follows:
-
+ <para>
+  <emphasis>Functions</emphasis> provide another method of abstraction. For
+  instance, suppose that we want to generate lots of different virtual hosts,
+  all with identical configuration except for the host name. This can be done
+  as follows:
 <programlisting>
 {
-  services.httpd.virtualHosts =
+  <xref linkend="opt-services.httpd.virtualHosts"/> =
     let
       makeVirtualHost = name:
         { hostName = name;
@@ -101,38 +96,36 @@ the host name.  This can be done as follows:
       ];
 }
 </programlisting>
+  Here, <varname>makeVirtualHost</varname> is a function that takes a single
+  argument <literal>name</literal> and returns the configuration for a virtual
+  host. That function is then called for several names to produce the list of
+  virtual host configurations.
+ </para>
 
-Here, <varname>makeVirtualHost</varname> is a function that takes a
-single argument <literal>name</literal> and returns the configuration
-for a virtual host.  That function is then called for several names to
-produce the list of virtual host configurations.</para>
-
-<para>We can further improve on this by using the function
-<varname>map</varname>, which applies another function to every
-element in a list:
-
+ <para>
+  We can further improve on this by using the function <varname>map</varname>,
+  which applies another function to every element in a list:
 <programlisting>
 {
-  services.httpd.virtualHosts =
+  <xref linkend="opt-services.httpd.virtualHosts"/> =
     let
       makeVirtualHost = <replaceable>...</replaceable>;
     in map makeVirtualHost
       [ "example.org" "example.com" "example.gov" "example.nl" ];
 }
 </programlisting>
+  (The function <literal>map</literal> is called a <emphasis>higher-order
+  function</emphasis> because it takes another function as an argument.)
+ </para>
 
-(The function <literal>map</literal> is called a
-<emphasis>higher-order function</emphasis> because it takes another
-function as an argument.)</para>
-
-<para>What if you need more than one argument, for instance, if we
-want to use a different <literal>documentRoot</literal> for each
-virtual host?  Then we can make <varname>makeVirtualHost</varname> a
-function that takes a <emphasis>set</emphasis> as its argument, like this:
-
+ <para>
+  What if you need more than one argument, for instance, if we want to use a
+  different <literal>documentRoot</literal> for each virtual host? Then we can
+  make <varname>makeVirtualHost</varname> a function that takes a
+  <emphasis>set</emphasis> as its argument, like this:
 <programlisting>
 {
-  services.httpd.virtualHosts =
+  <xref linkend="opt-services.httpd.virtualHosts"/> =
     let
       makeVirtualHost = { name, root }:
         { hostName = name;
@@ -147,10 +140,9 @@ function that takes a <emphasis>set</emphasis> as its argument, like this:
       ];
 }
 </programlisting>
-
-But in this case (where every root is a subdirectory of
-<filename>/sites</filename> named after the virtual host), it would
-have been shorter to define <varname>makeVirtualHost</varname> as
+  But in this case (where every root is a subdirectory of
+  <filename>/sites</filename> named after the virtual host), it would have been
+  shorter to define <varname>makeVirtualHost</varname> as
 <programlisting>
 makeVirtualHost = name:
   { hostName = name;
@@ -158,9 +150,7 @@ makeVirtualHost = name:
     adminAddr = "alice@example.org";
   };
 </programlisting>
-
-Here, the construct
-<literal>${<replaceable>...</replaceable>}</literal> allows the result
-of an expression to be spliced into a string.</para>
-
+  Here, the construct <literal>${<replaceable>...</replaceable>}</literal>
+  allows the result of an expression to be spliced into a string.
+ </para>
 </section>

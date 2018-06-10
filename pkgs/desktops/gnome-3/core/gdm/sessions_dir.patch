@@ -1,8 +1,17 @@
-diff --git a/daemon/gdm-session.c b/daemon/gdm-session.c
-index ff3a1acb..b8705d8f 100644
+--- a/daemon/gdm-launch-environment.c
++++ b/daemon/gdm-launch-environment.c
+@@ -126,7 +126,7 @@
+                 "LC_COLLATE", "LC_MONETARY", "LC_MESSAGES", "LC_PAPER",
+                 "LC_NAME", "LC_ADDRESS", "LC_TELEPHONE", "LC_MEASUREMENT",
+                 "LC_IDENTIFICATION", "LC_ALL", "WINDOWPATH", "XCURSOR_PATH",
+-                "XDG_CONFIG_DIRS", NULL
++                "XDG_CONFIG_DIRS", "GDM_SESSIONS_DIR", NULL
+         };
+         char *system_data_dirs;
+         int i;
 --- a/daemon/gdm-session.c
 +++ b/daemon/gdm-session.c
-@@ -344,6 +344,7 @@ get_system_session_dirs (GdmSession *self)
+@@ -345,12 +345,17 @@
          char **search_dirs;
  
          static const char *x_search_dirs[] = {
@@ -10,8 +19,7 @@ index ff3a1acb..b8705d8f 100644
                  "/etc/X11/sessions/",
                  DMCONFDIR "/Sessions/",
                  DATADIR "/gdm/BuiltInSessions/",
-@@ -351,6 +352,10 @@ get_system_session_dirs (GdmSession *self)
-                 NULL
+                 DATADIR "/xsessions/",
          };
  
 +        if (getenv("GDM_SESSIONS_DIR") != NULL) {
@@ -21,3 +29,24 @@ index ff3a1acb..b8705d8f 100644
          static const char *wayland_search_dir = DATADIR "/wayland-sessions/";
  
          search_array = g_array_new (TRUE, TRUE, sizeof (char *));
+--- a/libgdm/gdm-sessions.c
++++ b/libgdm/gdm-sessions.c
+@@ -217,6 +217,7 @@
+ {
+         int         i;
+         const char *xorg_search_dirs[] = {
++                "/var/empty/",
+                 "/etc/X11/sessions/",
+                 DMCONFDIR "/Sessions/",
+                 DATADIR "/gdm/BuiltInSessions/",
+@@ -224,6 +225,10 @@
+                 NULL
+         };
+ 
++        if (g_getenv("GDM_SESSIONS_DIR") != NULL) {
++                xorg_search_dirs[0] = g_getenv("GDM_SESSIONS_DIR");
++        };
++
+ #ifdef ENABLE_WAYLAND_SUPPORT
+         const char *wayland_search_dirs[] = {
+                 DATADIR "/wayland-sessions/",

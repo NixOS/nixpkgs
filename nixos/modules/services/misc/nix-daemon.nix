@@ -33,7 +33,7 @@ let
       sh = pkgs.runtimeShell;
       binshDeps = pkgs.writeReferencesToFile sh;
     in
-      pkgs.runCommand "nix.conf" { extraOptions = cfg.extraOptions; } ''
+      pkgs.runCommand "nix.conf" { extraOptions = cfg.extraOptions; } (''
         ${optionalString (!isNix20) ''
           extraPaths=$(for i in $(cat ${binshDeps}); do if test -d $i; then echo $i; fi; done)
         ''}
@@ -62,7 +62,11 @@ let
         ''}
         $extraOptions
         END
-      '';
+      '' + optionalString cfg.checkConfig ''
+        echo "Checking that Nix can read nix.conf..."
+        ln -s $out ./nix.conf
+        NIX_CONF_DIR=$PWD ${cfg.package}/bin/nix show-config >/dev/null
+      '');
 
 in
 
@@ -126,11 +130,13 @@ in
         default = false;
         description = "
           If set, Nix will perform builds in a sandboxed environment that it
-          will set up automatically for each build.  This prevents
-          impurities in builds by disallowing access to dependencies
-          outside of the Nix store. This isn't enabled by default for
-          performance. It doesn't affect derivation hashes, so changing
-          this option will not trigger a rebuild of packages.
+          will set up automatically for each build. This prevents impurities
+          in builds by disallowing access to dependencies outside of the Nix 
+          store by using network and mount namespaces in a chroot environment. 
+          This isn't enabled by default for possible performance impacts due to 
+          the initial setup time of a sandbox for each build. It doesn't affect 
+          derivation hashes, so changing this option will not trigger a rebuild
+          of packages.
         ";
       };
 
@@ -338,7 +344,9 @@ in
       nixPath = mkOption {
         type = types.listOf types.str;
         default =
-          [ "nixpkgs=/nix/var/nix/profiles/per-user/root/channels/nixos/nixpkgs"
+          [
+            "$HOME/.nix-defexpr/channels"
+            "nixpkgs=/nix/var/nix/profiles/per-user/root/channels/nixos"
             "nixos-config=/etc/nixos/configuration.nix"
             "/nix/var/nix/profiles/per-user/root/channels"
           ];
@@ -349,6 +357,13 @@ in
         '';
       };
 
+      checkConfig = mkOption {
+        type = types.bool;
+        default = true;
+        description = ''
+          If enabled (the default), checks that Nix can parse the generated nix.conf.
+        '';
+      };
     };
 
   };

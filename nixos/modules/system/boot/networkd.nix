@@ -146,12 +146,13 @@ let
   # .network files have a [Link] section with different options than in .netlink files
   checkNetworkLink = checkUnitConfig "Link" [
     (assertOnlyFields [
-      "MACAddress" "MTUBytes" "ARP" "Unmanaged"
+      "MACAddress" "MTUBytes" "ARP" "Unmanaged" "RequiredForOnline"
     ])
     (assertMacAddress "MACAddress")
     (assertByteFormat "MTUBytes")
     (assertValueOneOf "ARP" boolValues)
     (assertValueOneOf "Unmanaged" boolValues)
+    (assertValueOneOf "RquiredForOnline" boolValues)
   ];
 
 
@@ -712,6 +713,9 @@ in
     systemd.services.systemd-networkd = {
       wantedBy = [ "multi-user.target" ];
       restartTriggers = map (f: f.source) (unitFiles);
+      # prevent race condition with interface renaming (#39069)
+      requires = [ "systemd-udev-settle.service" ];
+      after = [ "systemd-udev-settle.service" ];
     };
 
     systemd.services.systemd-networkd-wait-online = {

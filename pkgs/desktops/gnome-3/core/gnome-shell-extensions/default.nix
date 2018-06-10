@@ -3,11 +3,11 @@
 
 stdenv.mkDerivation rec {
   name = "gnome-shell-extensions-${version}";
-  version = "3.28.0";
+  version = "3.28.1";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-shell-extensions/${gnome3.versionBranch version}/${name}.tar.xz";
-    sha256 = "00xm5r4q40c0ji80vrsqg2fkrvzb1nm75p3ikv6bsmd3gfvwwp91";
+    sha256 = "0n4h8rdnq3knrvlg6inrl62a73h20dbhfgniwy18572jicrh5ip9";
   };
 
   passthru = {
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
     # Fixup adapted from export-zips.sh in the source.
 
     extensiondir=$out/share/gnome-shell/extensions
-    schemadir=$out/share/gsettings-schemas/gnome-shell-extensions-3.28.0/glib-2.0/schemas/
+    schemadir=$out/share/gsettings-schemas/${name}/glib-2.0/schemas/
 
     glib-compile-schemas $schemadir
 

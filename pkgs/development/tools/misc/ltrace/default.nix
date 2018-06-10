@@ -10,10 +10,14 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ elfutils libunwind ];
 
-  preConfigure =
-    ''
-      configureFlags="--disable-werror"
-      makeFlagsArray=(INSTALL="install -c")
+  prePatch = let
+      debian = fetchurl {
+        url = mirror://debian/pool/main/l/ltrace/ltrace_0.7.3-6.debian.tar.xz;
+        sha256 = "0xc4pfd8qw53crvdxr29iwl8na53zmknca082kziwpvlzsick4kp";
+      };
+    in ''
+      tar xf '${debian}'
+      patches="$patches $(cat debian/patches/series | sed 's|^|debian/patches/|')"
     '';
 
   meta = with stdenv.lib; {

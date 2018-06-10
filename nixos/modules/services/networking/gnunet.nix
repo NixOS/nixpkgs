@@ -102,6 +102,14 @@ in
         };
       };
 
+      package = mkOption {
+        type = types.package;
+        default = pkgs.gnunet;
+        defaultText = "pkgs.gnunet";
+        description = "Overridable attribute of the gnunet package to use.";
+        example = literalExample "pkgs.gnunet_git";
+      };
+
       extraOptions = mkOption {
         default = "";
         description = ''
@@ -130,16 +138,16 @@ in
 
     # The user tools that talk to `gnunetd' should come from the same source,
     # so install them globally.
-    environment.systemPackages = [ pkgs.gnunet ];
+    environment.systemPackages = [ cfg.package ];
 
     systemd.services.gnunet = {
       description = "GNUnet";
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
-      path = [ pkgs.gnunet pkgs.miniupnpc ];
+      path = [ cfg.package pkgs.miniupnpc ];
       environment.TMPDIR = "/tmp";
       serviceConfig.PrivateTemp = true;
-      serviceConfig.ExecStart = "${pkgs.gnunet}/lib/gnunet/libexec/gnunet-service-arm -c ${configFile}";
+      serviceConfig.ExecStart = "${cfg.package}/lib/gnunet/libexec/gnunet-service-arm -c ${configFile}";
       serviceConfig.User = "gnunet";
       serviceConfig.UMask = "0007";
       serviceConfig.WorkingDirectory = homeDir;

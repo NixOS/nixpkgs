@@ -7,7 +7,7 @@ let
   real_url = if url == null then
     "http://caml.inria.fr/pub/distrib/ocaml-${versionNoPatch}/ocaml-${version}.tar.xz"
   else url;
-  safeX11 = stdenv: !(stdenv.isArm || stdenv.isMips);
+  safeX11 = stdenv: !(stdenv.isAarch32 || stdenv.isMips);
 in
 
 { stdenv, fetchurl, ncurses, buildEnv
@@ -15,7 +15,7 @@ in
 , flambdaSupport ? false
 }:
 
-assert useX11 -> !stdenv.isArm && !stdenv.isMips;
+assert useX11 -> !stdenv.isAarch32 && !stdenv.isMips;
 assert flambdaSupport -> stdenv.lib.versionAtLeast version "4.03";
 
 let
@@ -45,7 +45,8 @@ stdenv.mkDerivation (args // rec {
   ;
 
   buildFlags = "world" + optionalString useNativeCompilers " bootstrap world.opt";
-  buildInputs = [ncurses] ++ optionals useX11 [ libX11 xproto ];
+  buildInputs = optional (!stdenv.lib.versionAtLeast version "4.07") ncurses
+    ++ optionals useX11 [ libX11 xproto ];
   installTargets = "install" + optionalString useNativeCompilers " installopt";
   preConfigure = optionalString (!stdenv.lib.versionAtLeast version "4.04") ''
     CAT=$(type -tp cat)

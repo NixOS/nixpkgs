@@ -5,11 +5,9 @@ let
   inherit (stdenv) lib isDarwin;
   inherit (lib) overrideDerivation;
 
-  setMalloc0ReturnsNullCrossCompiling = ''
-    if test -n "$crossConfig"; then
-      configureFlags="$configureFlags --enable-malloc0returnsnull";
-    fi
-  '';
+  malloc0ReturnsNullCrossFlag = stdenv.lib.optional
+    (stdenv.hostPlatform != stdenv.buildPlatform)
+    "--enable-malloc0returnsnull";
 
   gitRelease = { libName, version, rev, sha256 } : attrs : attrs // {
     name = libName + "-" + version;
@@ -101,7 +99,9 @@ in
 
   libX11 = attrs: attrs // {
     outputs = [ "out" "dev" "man" ];
-    preConfigure = setMalloc0ReturnsNullCrossCompiling + ''
+    configureFlags = attrs.configureFlags or []
+      ++ malloc0ReturnsNullCrossFlag;
+    preConfigure = ''
       sed 's,^as_dummy.*,as_dummy="\$PATH",' -i configure
     '';
     postInstall =
@@ -138,16 +138,19 @@ in
 
   libXxf86vm = attrs: attrs // {
     outputs = [ "out" "dev" ];
-    preConfigure = setMalloc0ReturnsNullCrossCompiling;
+    configureFlags = attrs.configureFlags or []
+      ++ malloc0ReturnsNullCrossFlag;
   };
 
   # Propagate some build inputs because of header file dependencies.
   # Note: most of these are in Requires.private, so maybe builder.sh
   # should propagate them automatically.
   libXt = attrs: attrs // {
-    preConfigure = setMalloc0ReturnsNullCrossCompiling + ''
+    preConfigure = ''
       sed 's,^as_dummy.*,as_dummy="\$PATH",' -i configure
     '';
+    configureFlags = attrs.configureFlags or []
+      ++ malloc0ReturnsNullCrossFlag;
     propagatedBuildInputs = [ xorg.libSM ];
     CPP = stdenv.lib.optionalString stdenv.isDarwin "clang -E -";
     outputs = [ "out" "dev" "devdoc" ];
@@ -188,7 +191,8 @@ in
   libXft = attrs: attrs // {
     outputs = [ "out" "dev" ];
     propagatedBuildInputs = [ xorg.libXrender args.freetype args.fontconfig ];
-    preConfigure = setMalloc0ReturnsNullCrossCompiling;
+    configureFlags = attrs.configureFlags or []
+      ++ malloc0ReturnsNullCrossFlag;
     # the include files need ft2build.h, and Requires.private isn't enough for us
     postInstall = ''
       sed "/^Requires:/s/$/, freetype2/" -i "$dev/lib/pkgconfig/xft.pc"
@@ -198,7 +202,8 @@ in
   libXext = attrs: attrs // {
     outputs = [ "out" "dev" "man" "doc" ];
     propagatedBuildInputs = [ xorg.xproto xorg.libXau ];
-    preConfigure = setMalloc0ReturnsNullCrossCompiling;
+    configureFlags = attrs.configureFlags or []
+      ++ malloc0ReturnsNullCrossFlag;
   };
 
   libXfixes = attrs: attrs // {
@@ -221,7 +226,8 @@ in
 
   libXrandr = attrs: attrs // {
     outputs = [ "out" "dev" ];
-    preConfigure = setMalloc0ReturnsNullCrossCompiling;
+    configureFlags = attrs.configureFlags or []
+      ++ malloc0ReturnsNullCrossFlag;
     propagatedBuildInputs = [xorg.libXrender];
   };
 
@@ -232,8 +238,9 @@ in
 
   libXrender = attrs: attrs // {
     outputs = [ "out" "dev" "doc" ];
+    configureFlags = attrs.configureFlags or []
+      ++ malloc0ReturnsNullCrossFlag;
     propagatedBuildInputs = [ xorg.renderproto ];
-    preConfigure = setMalloc0ReturnsNullCrossCompiling;
   };
 
   libXres = attrs: attrs // {
@@ -456,7 +463,7 @@ in
             };
             nativeBuildInputs = [ pkgconfig ];
             buildInputs = [ dri2proto dri3proto renderproto libdrm openssl libX11 libXau libXaw libxcb xcbutil xcbutilwm xcbutilimage xcbutilkeysyms xcbutilrenderutil libXdmcp libXfixes libxkbfile libXmu libXpm libXrender libXres libXt ];
-            postPatch = "sed '1i#include <malloc.h>' -i include/os.h";
+            postPatch = stdenv.lib.optionalString stdenv.isLinux "sed '1i#include <malloc.h>' -i include/os.h";
             meta.platforms = stdenv.lib.platforms.unix;
         } else throw "unsupported xorg abiCompat ${args.abiCompat} for ${attrs_passed.name}";
 
@@ -465,7 +472,7 @@ in
       version = (builtins.parseDrvName attrs.name).version;
       commonBuildInputs = attrs.buildInputs ++ [ xtrans ];
       commonPropagatedBuildInputs = [
-        args.zlib args.libGL args.mesa_noglu args.dbus
+        args.zlib args.libGL args.libGLU args.dbus
         xf86bigfontproto glproto xf86driproto
         compositeproto scrnsaverproto resourceproto
         xf86dgaproto
@@ -476,8 +483,6 @@ in
         dri2proto dri3proto kbproto xineramaproto resourceproto scrnsaverproto videoproto
         libXfont2
       ];
-      # fix_segfault: https://bugs.freedesktop.org/show_bug.cgi?id=91316
-      commonPatches = [ ];
       # XQuartz requires two compilations: the first to get X / XQuartz,
       # and the second to get Xvfb, Xnest, etc.
       darwinOtherX = overrideDerivation xorgserver (oldAttrs: {
@@ -494,11 +499,10 @@ in
       if (!isDarwin)
       then {
         outputs = [ "out" "dev" ];
-        buildInputs = [ makeWrapper args.libdrm ] ++ commonBuildInputs;
+        buildInputs = commonBuildInputs ++ [ args.libdrm args.mesa_noglu ];
         propagatedBuildInputs = [ libpciaccess args.epoxy ] ++ commonPropagatedBuildInputs ++ lib.optionals stdenv.isLinux [
           args.udev
         ];
-        patches = commonPatches;
         prePatch = stdenv.lib.optionalString stdenv.hostPlatform.isMusl ''
           export CFLAGS+=" -D__uid_t=uid_t -D__gid_t=gid_t"
         '';
@@ -512,7 +516,10 @@ in
           "--with-xkb-path=${xorg.xkeyboardconfig}/share/X11/xkb"
           "--with-xkb-output=$out/share/X11/xkb/compiled"
           "--enable-glamor"
+        ] ++ lib.optionals stdenv.hostPlatform.isMusl [
+          "--disable-tls"
         ];
+
         postInstall = ''
           rm -fr $out/share/X11/xkb/compiled # otherwise X will try to write in it
           ( # assert() keeps runtime reference xorgserver-dev in xf86-video-intel and others
@@ -524,6 +531,7 @@ in
         '';
         passthru.version = version; # needed by virtualbox guest additions
       } else {
+        nativeBuildInputs = attrs.nativeBuildInputs ++ [ args.autoreconfHook xorg.utilmacros xorg.fontutil ];
         buildInputs = commonBuildInputs ++ [
           args.bootstrap_cmds args.automake args.autoconf
           args.apple_sdk.libs.Xplugin
@@ -533,16 +541,31 @@ in
         propagatedBuildInputs = commonPropagatedBuildInputs ++ [
           libAppleWM applewmproto
         ];
-        # Patches can be pulled from the server-*-apple branches of:
-        # http://cgit.freedesktop.org/~jeremyhu/xserver/
-        patches = commonPatches ++ [
-          ./darwin/0002-sdksyms.sh-Use-CPPFLAGS-not-CFLAGS.patch
-          ./darwin/0004-Use-old-miTrapezoids-and-miTriangles-routines.patch
-          ./darwin/0006-fb-Revert-fb-changes-that-broke-XQuartz.patch
-          ./darwin/private-extern.patch
-          ./darwin/bundle_main.patch
-          ./darwin/stub.patch
+
+        # XQuartz patchset
+        patches = [
+          (args.fetchpatch {
+            url = "https://github.com/XQuartz/xorg-server/commit/e88fd6d785d5be477d5598e70d105ffb804771aa.patch";
+            sha256 = "1q0a30m1qj6ai924afz490xhack7rg4q3iig2gxsjjh98snikr1k";
+            name = "use-cppflags-not-cflags.patch";
+          })
+          (args.fetchpatch {
+            url = "https://github.com/XQuartz/xorg-server/commit/75ee9649bcfe937ac08e03e82fd45d9e18110ef4.patch";
+            sha256 = "1vlfylm011y00j8mig9zy6gk9bw2b4ilw2qlsc6la49zi3k0i9fg";
+            name = "use-old-mitrapezoids-and-mitriangles-routines.patch";
+          })
+          (args.fetchpatch {
+            url = "https://github.com/XQuartz/xorg-server/commit/c58f47415be79a6564a9b1b2a62c2bf866141e73.patch";
+            sha256 = "19sisqzw8x2ml4lfrwfvavc2jfyq2bj5xcf83z89jdxg8g1gdd1i";
+            name = "revert-fb-changes-1.patch";
+          })
+          (args.fetchpatch {
+            url = "https://github.com/XQuartz/xorg-server/commit/56e6f1f099d2821e5002b9b05b715e7b251c0c97.patch";
+            sha256 = "0zm9g0g1jvy79sgkvy0rjm6ywrdba2xjd1nsnjbxjccckbr6i396";
+            name = "revert-fb-changes-2.patch";
+          })
         ];
+
         configureFlags = [
           # note: --enable-xquartz is auto
           "CPPFLAGS=-I${./darwin/dri}"
@@ -578,6 +601,10 @@ in
 
   twm = attrs: attrs // {
     nativeBuildInputs = attrs.nativeBuildInputs ++ [args.bison args.flex];
+  };
+
+  xauth = attrs: attrs // {
+    doCheck = false; # fails
   };
 
   xcursorthemes = attrs: attrs // {
@@ -632,6 +659,12 @@ in
         sha256 = "0z3643afgrync280zrp531ija0hqxc5mrwjif9nh9lcnzgnz2d6d";
       })
     ];
+  };
+
+  xorgcffiles = attrs: attrs // {
+    postInstall = stdenv.lib.optionalString stdenv.isDarwin ''
+      substituteInPlace $out/lib/X11/config/darwin.cf --replace "/usr/bin/" ""
+    '';
   };
 
   xwd = attrs: attrs // {

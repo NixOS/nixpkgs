@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = https://www.gnu.org/software/gcal/;
     license = stdenv.lib.licenses.gpl3Plus;
-    platforms = stdenv.lib.platforms.linux;
+    platforms = stdenv.lib.platforms.unix;
     maintainers = [ stdenv.lib.maintainers.romildo ];
   };
 }

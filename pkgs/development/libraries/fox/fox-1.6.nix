@@ -3,7 +3,7 @@
 , CoreServices }:
 
 let
-  version = "1.6.56";
+  version = "1.6.57";
 in
 
 stdenv.mkDerivation rec {
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "ftp://ftp.fox-toolkit.org/pub/${name}.tar.gz";
-    sha256 = "1ckcb12gblz1ad1371ah1qirxn3r9zdngh9w0357hsqfmkyfa5y5";
+    sha256 = "08w98m6wjadraw1pi13igzagly4b2nfa57kdqdnkjfhgkvg1bvv5";
   };
 
   buildInputs = [

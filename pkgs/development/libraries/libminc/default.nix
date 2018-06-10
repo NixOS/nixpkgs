@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   pname = "libminc";
-  name  = "${pname}-2017-09-14";
+  name  = "${pname}-2018-01-17";
 
   owner = "BIC-MNI";
 
@@ -10,8 +10,8 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     inherit owner;
     repo   = pname;
-    rev    = "e11c6df9321b4061bf87a7d43171ec55e9e3908f";
-    sha256 = "0lmd0js3jgni2mw1zfvd4qg6byxiv3ndgv2z3nm7975i83zw48xk";
+    rev    = "a9cbe1353eae9791b7d5b03af16e0f86922ce40b";
+    sha256 = "0mn4n3ihzcr1jw2g1vy6c8p4lkc88jwljk04argmj7k4djrgpxpa";
   };
 
   nativeBuildInputs = [ cmake ];

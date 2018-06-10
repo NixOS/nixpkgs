@@ -19,7 +19,7 @@ buildGoPackage rec {
   buildInputs = [ makeWrapper ];
 
   preFixup = ''
-    wrapProgram "$bin/bin/diskrsync" --prefix PATH : ${openssh}/bin
+    wrapProgram "$bin/bin/diskrsync" --argv0 diskrsync --prefix PATH : ${openssh}/bin
   '';
 
   meta = with stdenv.lib; {

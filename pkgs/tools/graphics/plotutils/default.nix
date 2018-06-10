@@ -17,6 +17,11 @@ stdenv.mkDerivation rec {
   buildInputs = [ libpng ];
   patches = map fetchurl (import ./debian-patches.nix);
 
+  preBuild = ''
+    # Fix parallel building.
+    make -C libplot xmi.h
+  '';
+
   configureFlags = "--enable-libplotter"; # required for pstoedit
 
   hardeningDisable = [ "format" ];

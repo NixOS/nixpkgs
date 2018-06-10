@@ -18,7 +18,7 @@
 
 assert faacSupport -> enableUnfree;
 
-let inherit (stdenv.lib) optional optionals hasPrefix; in
+let inherit (stdenv.lib) optional optionals hasPrefix enableFeature; in
 
 /* ToDo:
     - more deps, inspiration: http://packages.ubuntu.com/raring/libav-tools
@@ -51,29 +51,35 @@ let
       substituteInPlace ./configure --replace "#! /bin/sh" "#!${bash}/bin/sh"
     '';
 
-    configureFlags =
-      assert stdenv.lib.all (x: x!=null) buildInputs;
-    [
+    configurePlatforms = [];
+    configureFlags = assert stdenv.lib.all (x: x!=null) buildInputs; [
+      "--arch=${hostPlatform.parsed.cpu.name}"
+      "--target_os=${hostPlatform.parsed.kernel.name}"
       #"--enable-postproc" # it's now a separate package in upstream
       "--disable-avserver" # upstream says it's in a bad state
       "--enable-avplay"
       "--enable-shared"
       "--enable-runtime-cpudetect"
       "--cc=cc"
-    ]
-      ++ optionals enableGPL [ "--enable-gpl" "--enable-swscale" ]
-      ++ optional mp3Support "--enable-libmp3lame"
-      ++ optional speexSupport "--enable-libspeex"
-      ++ optional theoraSupport "--enable-libtheora"
-      ++ optional vorbisSupport "--enable-libvorbis"
-      ++ optional vpxSupport "--enable-libvpx"
-      ++ optional x264Support "--enable-libx264"
-      ++ optional xvidSupport "--enable-libxvid"
-      ++ optional faacSupport "--enable-libfaac --enable-nonfree"
-      ++ optional vaapiSupport "--enable-vaapi"
-      ++ optional vdpauSupport "--enable-vdpau"
-      ++ optional freetypeSupport "--enable-libfreetype"
-      ;
+      (enableFeature enableGPL "gpl")
+      (enableFeature enableGPL "swscale")
+      (enableFeature mp3Support "libmp3lame")
+      (enableFeature mp3Support "libmp3lame")
+      (enableFeature speexSupport "libspeex")
+      (enableFeature theoraSupport "libtheora")
+      (enableFeature vorbisSupport "libvorbis")
+      (enableFeature vpxSupport "libvpx")
+      (enableFeature x264Support "libx264")
+      (enableFeature xvidSupport "libxvid")
+      (enableFeature faacSupport "libfaac")
+      (enableFeature faacSupport "nonfree")
+      (enableFeature vaapiSupport "vaapi")
+      (enableFeature vdpauSupport "vdpau")
+      (enableFeature freetypeSupport "libfreetype")
+    ] ++ optional (stdenv.hostPlatform != stdenv.buildPlatform) [
+      "--cross-prefix=${stdenv.cc.targetPrefix}"
+      "--enable-cross-compile"
+    ];
 
   nativeBuildInputs = [ pkgconfig perl ];
     buildInputs = [ lame yasm zlib bzip2 SDL bash ]
@@ -111,16 +117,6 @@ let
 
     doInstallCheck = false; # fails randomly
     installCheckTarget = "check"; # tests need to be run *after* installation
-
-    crossAttrs = {
-      configurePlatforms = [];
-      configureFlags = configureFlags ++ [
-        "--cross-prefix=${stdenv.cc.targetPrefix}"
-        "--enable-cross-compile"
-        "--target_os=linux"
-        "--arch=${hostPlatform.arch}"
-        ];
-    };
 
     passthru = { inherit vdpauSupport; };
 

@@ -2,7 +2,7 @@
 
 buildGoPackage rec {
   name          = "kontemplate-${version}";
-  version       = "1.4.0";
+  version       = "1.6.0";
   goPackagePath = "github.com/tazjin/kontemplate";
   goDeps        = ./deps.nix;
 
@@ -10,7 +10,7 @@ buildGoPackage rec {
     owner  = "tazjin";
     repo   = "kontemplate";
     rev    = "v${version}";
-    sha256 = "11aqc9sgyqz3pscx7njnb3xghl7d61vzdgl3bqndady0dxsccrpj";
+    sha256 = "06qcf2cxs686kd7iqccmqd5chdzxgbkav95byjim7sgvq9qjajfi";
   };
 
   meta = with lib; {

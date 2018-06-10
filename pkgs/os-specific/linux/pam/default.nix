@@ -1,4 +1,4 @@
-{ stdenv, buildPackages, hostPlatform, fetchurl, fetchpatch, flex, cracklib }:
+{ stdenv, buildPackages, hostPlatform, fetchurl, fetchpatch, flex, cracklib, db4 }:
 
 stdenv.mkDerivation rec {
   name = "linux-pam-${version}";
@@ -29,24 +29,9 @@ stdenv.mkDerivation rec {
   depsBuildBuild = [ buildPackages.stdenv.cc ];
   nativeBuildInputs = [ flex ];
 
-  buildInputs = [ cracklib ];
+  buildInputs = [ cracklib db4 ];
 
   enableParallelBuilding = true;
-
-  crossAttrs = {
-    propagatedBuildInputs = [ flex.crossDrv cracklib.crossDrv ];
-    preConfigure = preConfigure + ''
-      $crossConfig-ar x ${flex.crossDrv}/lib/libfl.a
-      mv libyywrap.o libyywrap-target.o
-      ar x ${flex}/lib/libfl.a
-      mv libyywrap.o libyywrap-host.o
-      export LDFLAGS="$LDFLAGS $PWD/libyywrap-target.o"
-      sed -e 's/@CC@/gcc/' -i doc/specs/Makefile.in
-    '';
-    postConfigure = ''
-      sed -e "s@ $PWD/libyywrap-target.o@ $PWD/libyywrap-host.o@" -i doc/specs/Makefile
-    '';
-  };
 
   postInstall = ''
     mv -v $out/sbin/unix_chkpwd{,.orig}
@@ -70,9 +55,12 @@ stdenv.mkDerivation rec {
       sed -e 's/pam_rhosts//g' -i modules/Makefile.in
   '';
 
-  meta = {
-    homepage = http://ftp.kernel.org/pub/linux/libs/pam/;
+  doCheck = false; # fails
+
+  meta = with stdenv.lib; {
+    homepage = http://www.linux-pam.org/;
     description = "Pluggable Authentication Modules, a flexible mechanism for authenticating user";
-    platforms = stdenv.lib.platforms.linux;
+    platforms = platforms.linux;
+    license = licenses.bsd3;
   };
 }

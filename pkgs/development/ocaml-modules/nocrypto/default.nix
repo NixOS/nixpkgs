@@ -22,10 +22,7 @@ stdenv.mkDerivation rec {
     ppx_sexp_conv ];
   propagatedBuildInputs = [ cstruct zarith sexplib ] ++ optional withLwt cstruct-lwt;
 
-  buildPhase = ''
-    LD_LIBRARY_PATH=${cpuid}/lib/ocaml/${ocaml.version}/site-lib/stubslibs/ \
-    ${topkg.buildPhase} --with-lwt ${boolToString withLwt}
-  '';
+  buildPhase = "${topkg.buildPhase} --with-lwt ${boolToString withLwt}";
   inherit (topkg) installPhase;
 
   meta = {

@@ -13,6 +13,8 @@ let
 
     installPhase = ''
       mkdir -p $out/share/fonts/opentype/
+      # Pagella & Adventor are not flat archives
+      test -d "${abbreviation}${version}otf" && cd "${abbreviation}${version}otf"
       cp -v *.otf $out/share/fonts/opentype/
     '';
 
@@ -33,9 +35,9 @@ let
 in stdenv.lib.mapAttrs mkVariant {
   adventor = {
     displayName = "Adventor";
-    version = "2.003";
-    sha256 = "13wnb04z9f766ij30x8bpkn4xzv7n466g07dlbimx7qvglxl605g";
-    outputHash = "1cz0lkk2a5fg8r8175h454va499hzln3s99dadxhh147nx1914pm";
+    version = "2_501";
+    sha256 = "0qjg3x0adfppyx3x33cm07ww9i9sl88xaq07m7wfip8rmyp567fn";
+    outputHash = "117h6f02m1r54b4f1a98q5kkjchl5pv9ibm1jla6xrzhk2pchb27";
     abbreviation = "qag";
   };
   bonum = {
@@ -68,9 +70,9 @@ in stdenv.lib.mapAttrs mkVariant {
   };
   pagella = {
     displayName = "Pagella";
-    version ="2.004";
-    sha256 = "0b2pjhw1ihnl951slln6d6vafjd3i6p4i947lwybvg8081qfvd9z";
-    outputHash = "0c6s0r14qax3b4amvm9nffwzby8mm4p7r2hfb8yv9jzhjwa5z8rd";
+    version ="2_501";
+    sha256 = "1kccaxs3vk93la2pz4nv05hx1x3diyla49cz4l33zifdcp2zgg9d";
+    outputHash = "1nnjsgplimh29502pkd19rvfg93x31svxxmx4x7h51njrx1j8qa8";
     abbreviation = "qpl";
   };
   schola = {

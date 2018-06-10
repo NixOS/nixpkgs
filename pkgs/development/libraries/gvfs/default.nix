@@ -18,14 +18,14 @@
 
 let
   pname = "gvfs";
-  version = "1.36.1";
+  version = "1.36.2";
 in
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${gnome3.versionBranch version}/${name}.tar.xz";
-    sha256 = "09phj9kqk8lzcmkjfq7qmzpkj4xp1vg4mskv6d2s9j62hvrxyh1q";
+    sha256 = "1xq105596sk9yram5a143b369wpaiiwc9gz86n0j1kfr7nipkqn4";
   };
 
   # Uncomment when switching back to meson

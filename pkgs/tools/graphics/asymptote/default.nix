@@ -51,7 +51,9 @@ stdenv.mkDerivation {
     rmdir $out/share/info/asymptote
     rm $out/share/info/dir
 
-    rm -rf "$out"/share/texmf
+    rm -rfv "$out"/share/texmf
+    mkdir -pv "$out"/share/emacs/site-lisp/${s.name}
+    mv -v "$out"/share/asymptote/*.el "$out"/share/emacs/site-lisp/${s.name}
   '';
 
   enableParallelBuilding = true;

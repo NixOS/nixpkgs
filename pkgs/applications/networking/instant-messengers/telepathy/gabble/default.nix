@@ -22,6 +22,6 @@ stdenv.mkDerivation rec {
     homepage = https://telepathy.freedesktop.org/components/telepathy-gabble/;
     description = "Jabber/XMPP connection manager for the Telepathy framework";
     license = licenses.lgpl21Plus;
-    platforms = stdenv.lib.platforms.gnu;
+    platforms = stdenv.lib.platforms.gnu ++ stdenv.lib.platforms.linux;
   };
 }

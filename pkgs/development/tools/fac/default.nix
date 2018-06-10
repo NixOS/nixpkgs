@@ -1,14 +1,8 @@
 { stdenv, buildGoPackage, fetchFromGitHub, fetchurl, makeWrapper, git }:
 
-let
-  # TODO: Remove this on next update, should be included
-  fac_1 = fetchurl {
-    url = https://raw.githubusercontent.com/mkchoi212/fac/0a500c2a2dba9017fe7c2a45f15c328755f561a6/doc/fac.1;
-    sha256 = "1fsyx9i20ryhpihdpvs2z7vccl13b9bnh5hcdxn7bvqjz78mbqhw";
-  };
-in buildGoPackage rec {
+buildGoPackage rec {
   name = "fac-${version}";
-  version = "1.0.4";
+  version = "1.1.0";
 
   goPackagePath = "github.com/mkchoi212/fac";
 
@@ -16,8 +10,10 @@ in buildGoPackage rec {
     owner = "mkchoi212";
     repo = "fac";
     rev = "v${version}";
-    sha256 = "0jhx80jbkxfxj95hmdpb9wwwya064xpfkaa218l1lwm3qwfbpk95";
+    sha256 = "054j8yrblf1frcfn3dwrjbgf000i3ngbaz2c172nwbx75g309ihx";
   };
+
+  goDeps = ./deps.nix;
 
   nativeBuildInputs = [ makeWrapper ];
 
@@ -25,7 +21,8 @@ in buildGoPackage rec {
     wrapProgram $bin/bin/fac \
       --prefix PATH : ${git}/bin
 
-    install -D ${fac_1} $out/share/man/man1/fac.1
+    # Install man page, not installed by default
+    install -D go/src/${goPackagePath}/assets/doc/fac.1 $out/share/man/man1/fac.1
   '';
 
   meta = with stdenv.lib; {

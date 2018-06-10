@@ -10,14 +10,26 @@ rec {
   bitcoin-abc  = libsForQt5.callPackage ./bitcoin-abc.nix { boost = boost165; withGui = true; };
   bitcoind-abc = callPackage ./bitcoin-abc.nix { boost = boost165; withGui = false; };
 
-  bitcoin-unlimited  = callPackage ./bitcoin-unlimited.nix { withGui = true; };
-  bitcoind-unlimited = callPackage ./bitcoin-unlimited.nix { withGui = false; };
+  bitcoin-unlimited  = callPackage ./bitcoin-unlimited.nix {
+    inherit (darwin.apple_sdk.frameworks) Foundation ApplicationServices AppKit;
+    withGui = true;
+  };
+  bitcoind-unlimited = callPackage ./bitcoin-unlimited.nix {
+    inherit (darwin.apple_sdk.frameworks) Foundation ApplicationServices AppKit;
+    withGui = false;
+  };
 
   bitcoin-classic  = libsForQt5.callPackage ./bitcoin-classic.nix { boost = boost165; withGui = true; };
   bitcoind-classic = callPackage ./bitcoin-classic.nix { boost = boost165; withGui = false; };
 
-  bitcoin-xt  = callPackage ./bitcoin-xt.nix { boost = boost165; withGui = true; };
-  bitcoind-xt = callPackage ./bitcoin-xt.nix { boost = boost165; withGui = false; };
+  bitcoin-xt  = callPackage ./bitcoin-xt.nix {
+    inherit (darwin.apple_sdk.frameworks) Foundation ApplicationServices AppKit;
+    boost = boost165; withGui = true;
+  };
+  bitcoind-xt = callPackage ./bitcoin-xt.nix {
+    inherit (darwin.apple_sdk.frameworks) Foundation ApplicationServices AppKit;
+    boost = boost165; withGui = false;
+  };
 
   btc1 = callPackage ./btc1.nix { boost = boost165; withGui = true; };
   btc1d = callPackage ./btc1.nix { boost = boost165; withGui = false; };
@@ -73,5 +85,7 @@ rec {
   };
 
   parity = callPackage ./parity { };
-  parity-beta = callPackage ./parity/beta.nix { };
+  parity-ui = callPackage ./parity-ui { };
+
+  particl-core = callPackage ./particl/particl-core.nix { boost = boost165; miniupnpc = miniupnpc_2; withGui = false; };
 }

@@ -1,11 +1,11 @@
 { lowPrio, newScope, stdenv, targetPlatform, cmake, libstdcxxHook
-, libxml2, python2, isl, fetchurl, overrideCC, wrapCC, ccWrapperFun
+, libxml2, python2, isl, fetchurl, overrideCC, wrapCCWith
 , darwin
+, buildLlvmTools # tools, but from the previous stage, for cross
+, targetLlvmLibraries # libraries, but from the next stage, for cross
 }:
 
 let
-  callPackage = newScope (self // { inherit stdenv cmake libxml2 python2 isl release_version version fetch; });
-
   release_version = "6.0.0";
   version = release_version; # differentiating these is important for rc's
 
@@ -14,7 +14,6 @@ let
     inherit sha256;
   };
 
-  compiler-rt_src = fetch "compiler-rt" "16m7rvh3w6vq10iwkjrr1nn293djld3xm62l5zasisaprx117k6h";
   clang-tools-extra_src = fetch "clang-tools-extra" "1ll9v6r29xfdiywbn9iss49ad39ah3fk91wiv0sr6k6k9i544fq5";
 
   # Add man output without introducing extra dependencies.
@@ -22,51 +21,69 @@ let
     let drv-manpages = drv.override { enableManpages = true; }; in
     drv // { man = drv-manpages.out; /*outputs = drv.outputs ++ ["man"];*/ };
 
-  llvm = callPackage ./llvm.nix {
-    inherit compiler-rt_src stdenv;
-  };
+  tools = let
+    callPackage = newScope (tools // { inherit stdenv cmake libxml2 python2 isl release_version version fetch; });
+  in {
 
-  clang-unwrapped = callPackage ./clang {
-    inherit clang-tools-extra_src stdenv;
-  };
-
-  self = {
-    llvm = overrideManOutput llvm;
-    clang-unwrapped = overrideManOutput clang-unwrapped;
-
-    libclang = self.clang-unwrapped.lib;
-    llvm-manpages = lowPrio self.llvm.man;
-    clang-manpages = lowPrio self.clang-unwrapped.man;
-
-    clang = if stdenv.cc.isGNU then self.libstdcxxClang else self.libcxxClang;
-
-    libstdcxxClang = ccWrapperFun {
-      cc = self.clang-unwrapped;
-      /* FIXME is this right? */
-      inherit (stdenv.cc) bintools libc nativeTools nativeLibc;
-      extraPackages = [ libstdcxxHook ];
-    };
-
-    libcxxClang = ccWrapperFun {
-      cc = self.clang-unwrapped;
-      /* FIXME is this right? */
-      inherit (stdenv.cc) bintools libc nativeTools nativeLibc;
-      extraPackages = [ self.libcxx self.libcxxabi ];
-    };
-
-    stdenv = stdenv.override (drv: {
-      allowedRequisites = null;
-      cc = self.clang;
+    llvm = overrideManOutput (callPackage ./llvm.nix {
+      inherit (targetLlvmLibraries) libcxxabi;
+    });
+    clang-unwrapped = overrideManOutput (callPackage ./clang {
+      inherit clang-tools-extra_src;
     });
 
-    libcxxStdenv = stdenv.override (drv: {
-      allowedRequisites = null;
-      cc = self.libcxxClang;
-    });
+    libclang = tools.clang-unwrapped.lib;
+    llvm-manpages = lowPrio tools.llvm.man;
+    clang-manpages = lowPrio tools.clang-unwrapped.man;
+
+    clang = if stdenv.cc.isGNU then tools.libstdcxxClang else tools.libcxxClang;
+
+    libstdcxxClang = wrapCCWith rec {
+      cc = tools.clang-unwrapped;
+      extraPackages = [ libstdcxxHook targetLlvmLibraries.compiler-rt ];
+      extraBuildCommands = ''
+        rsrc="$out/resource-root"
+        mkdir "$rsrc"
+        ln -s "${cc}/lib/clang/${release_version}/include" "$rsrc"
+        ln -s "${targetLlvmLibraries.compiler-rt.out}/lib" "$rsrc/lib"
+        echo "-resource-dir=$rsrc" >> $out/nix-support/cc-cflags
+      '' + stdenv.lib.optionalString stdenv.targetPlatform.isLinux ''
+        echo "--gcc-toolchain=${tools.clang-unwrapped.gcc}" >> $out/nix-support/cc-cflags
+      '';
+    };
+
+    libcxxClang = wrapCCWith rec {
+      cc = tools.clang-unwrapped;
+      extraPackages = [
+        targetLlvmLibraries.libcxx
+        targetLlvmLibraries.libcxxabi
+        targetLlvmLibraries.compiler-rt
+      ];
+      extraBuildCommands = ''
+        rsrc="$out/resource-root"
+        mkdir "$rsrc"
+        ln -s "${cc}/lib/clang/${release_version}/include" "$rsrc"
+        ln -s "${targetLlvmLibraries.compiler-rt.out}/lib" "$rsrc/lib"
+        echo "-resource-dir=$rsrc" >> $out/nix-support/cc-cflags
+      '' + stdenv.lib.optionalString stdenv.targetPlatform.isLinux ''
+        echo "--gcc-toolchain=${tools.clang-unwrapped.gcc}" >> $out/nix-support/cc-cflags
+      '';
+    };
 
     lld = callPackage ./lld.nix {};
 
     lldb = callPackage ./lldb.nix {};
+  };
+
+  libraries = let
+    callPackage = newScope (libraries // buildLlvmTools // { inherit stdenv cmake libxml2 python2 isl release_version version fetch; });
+  in {
+
+    compiler-rt = callPackage ./compiler-rt.nix {};
+
+    stdenv = overrideCC stdenv buildLlvmTools.clang;
+
+    libcxxStdenv = overrideCC stdenv buildLlvmTools.libcxxClang;
 
     libcxx = callPackage ./libc++ {};
 
@@ -75,4 +92,4 @@ let
     openmp = callPackage ./openmp.nix {};
   };
 
-in self
+in { inherit tools libraries; } // libraries // tools

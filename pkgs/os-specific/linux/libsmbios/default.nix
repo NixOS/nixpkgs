@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, pkgconfig, autoreconfHook, help2man, gettext
-, libxml2, perl, doxygen }:
+, libxml2, perl, python3, doxygen }:
 
 
 stdenv.mkDerivation rec {
@@ -15,7 +15,9 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoreconfHook doxygen gettext libxml2 help2man perl pkgconfig ];
 
-  configureFlags = [ "--disable-python" "--disable-graphviz" ];
+  buildInputs = [ python3 ];
+
+  configureFlags = [ "--disable-graphviz" ];
 
   enableParallelBuilding = true;
 

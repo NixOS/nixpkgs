@@ -9,6 +9,8 @@ stdenv.mkDerivation rec {
     sha256 = "1r3qpg3bhz37mgvp9chsaa3k0csby3vayfvz8ggsqz194af5i2w5";
   };
 
+  outputs = [ "out" "dev" "man" "info" ];
+
   patches = stdenv.lib.optional doCheck ./gpt-unicode-test-fix.patch
     ++ stdenv.lib.optional stdenv.hostPlatform.isMusl
     (fetchpatch {

@@ -3,11 +3,11 @@
 
 stdenv.mkDerivation rec {
   name = "gnome-logs-${version}";
-  version = "3.28.0";
+  version = "3.28.2";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-logs/${gnome3.versionBranch version}/${name}.tar.xz";
-    sha256 = "0j3wkbz7c2snmx4kjmh767175nf2lqxx2p8b8xa2qslknxc3gq6b";
+    sha256 = "0qqmw55rrxdz2n9xwn85nm7j9y9i85fxlxjfgv683mbpdyv0gbg0";
   };
 
   configureFlags = [ "--disable-tests" ];

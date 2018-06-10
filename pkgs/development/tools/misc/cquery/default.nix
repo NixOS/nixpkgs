@@ -5,8 +5,8 @@ let
   src = fetchFromGitHub {
     owner = "cquery-project";
     repo = "cquery";
-    rev = "e45a9ebbb6d8bfaf8bf1a3135b6faa910afea37e";
-    sha256 = "049gkqbamq4r2nz9yjcwq369zrmwrikzbhfza2x2vndqzaavq5yg";
+    rev = "34b357bc5e873d52d2aa41287c6e138244cea109";
+    sha256 = "0i34v30cl73485bzpbis539x0iq9whpv0403ca5a9h6vqwnvdn7c";
     fetchSubmodules = true;
   };
 
@@ -15,7 +15,7 @@ let
 in
 stdenv.mkDerivation rec {
   name    = "cquery-${version}";
-  version = "2018-03-25";
+  version = "2018-05-01";
 
   inherit src;
 
@@ -46,7 +46,6 @@ stdenv.mkDerivation rec {
   doInstallCheck = true;
   installCheckPhase = ''
     pushd ${src}
-    $out/bin/cquery --ci --clang-sanity-check && \
     $out/bin/cquery --ci --test-unit
   '';
 
@@ -56,6 +55,5 @@ stdenv.mkDerivation rec {
     license     = licenses.mit;
     platforms   = platforms.linux ++ platforms.darwin;
     maintainers = [ maintainers.tobim ];
-    priority    = 3;
   };
 }

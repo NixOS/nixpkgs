@@ -19,7 +19,7 @@ buildPythonApplication rec {
 
   # Somehow setuptools can't find pyqt5. Maybe because the dist-info folder is missing?
   postPatch = ''
-    substituteInPlace setup.py --replace 'pyqt5;python_version>="3"' ' '
+    sed -i -e '/pyqt5/d' setup.py
   '';
 
   propagatedBuildInputs = [
