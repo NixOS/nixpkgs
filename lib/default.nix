@@ -56,7 +56,7 @@ let
       hasAttr head isAttrs isBool isInt isList isString length
       lessThan listToAttrs pathExists readFile replaceStrings seq
       stringLength sub substring tail;
-    inherit (trivial) id const concat or and bitAnd bitOr bitXor
+    inherit (trivial) id const concat or and bitAnd bitOr bitXor bitNot
       boolToString mergeAttrs flip mapNullable inNixShell min max
       importJSON warn info nixpkgsVersion version mod compare
       splitByAndCompare functionArgs setFunctionArgs isFunction;
