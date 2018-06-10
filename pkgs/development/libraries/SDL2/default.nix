@@ -78,7 +78,7 @@ stdenv.mkDerivation rec {
   # You can grep SDL sources with `grep -rE 'SDL_(NAME|.*_SYM)'` to
   # confirm that they actually use most of the `propagatedBuildInputs`
   # from above in this way. This is pretty weird.
-  postFixup = ''
+  postFixup = optionalString (stdenv.hostPlatform.extensions.sharedLibrary == ".so") ''
     for lib in $out/lib/*.so* ; do
       if [[ -L "$lib" ]]; then
         patchelf --set-rpath "$(patchelf --print-rpath $lib):${lib.makeLibraryPath propagatedBuildInputs}" "$lib"
