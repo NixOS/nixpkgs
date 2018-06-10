@@ -390,7 +390,7 @@ $ nix-env -i w3m</screen>
 > 3      # <lineannotation>(make it a partition number 3)</lineannotation>
 >        # <lineannotation>(press enter to accept the default)</lineannotation>
 > +512M  # <lineannotation>(the size of the UEFI boot partition)</lineannotation>
-> n      # <lineannotation>(ignore optional warning 'Partition #3 contains a vfat signature', if you get it.)</lineannotation>
+> y      # <lineannotation>(optionally confirm removing vfat signature, if you get a warning about it.)</lineannotation>
 > t      # <lineannotation>(change the partition type of the boot partition ...)</lineannotation>
 > 1      # <lineannotation>(... to 'UEFI System'. sometimes instead uses hex code ef instead.)</lineannotation>
 -- for BIOS or UEFI systems
