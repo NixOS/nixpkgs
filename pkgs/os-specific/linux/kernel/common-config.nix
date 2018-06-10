@@ -463,6 +463,7 @@ with stdenv.lib;
   PPP_FILTER y
   REGULATOR y # Voltage and Current Regulator Support
   RC_DEVICES? y # Enable IR devices
+  RT2800USB_RT53XX y
   RT2800USB_RT55XX y
   SCHED_AUTOGROUP y
   CFS_BANDWIDTH y
