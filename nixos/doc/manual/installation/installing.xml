@@ -95,26 +95,29 @@
 # fdisk /dev/sda # <lineannotation>(or whatever device you want to install on)</lineannotation>
 -- for UEFI systems only
 > n      # <lineannotation>(create a new partition for /boot)</lineannotation>
+>        # <lineannotation>(accept default partition type primary)</lineannotation>
 > 3      # <lineannotation>(make it a partition number 3)</lineannotation>
 >        # <lineannotation>(press enter to accept the default)</lineannotation>
 > +512M  # <lineannotation>(the size of the UEFI boot partition)</lineannotation>
-> t      # <lineannotation>(change the partition type ...)</lineannotation>
-> 3      # <lineannotation>(... of the boot partition ...)</lineannotation>
-> 1      # <lineannotation>(... to 'UEFI System')</lineannotation>
+> y      # <lineannotation>(optionally confirm removing vfat signature, if you get a warning about it.)</lineannotation>
+> t      # <lineannotation>(change the partition type of the boot partition ...)</lineannotation>
+> 1      # <lineannotation>(... to 'UEFI System'. sometimes instead uses hex code ef instead.)</lineannotation>
 -- for BIOS or UEFI systems
 > n      # <lineannotation>(create a new partition for /swap)</lineannotation>
+>        # <lineannotation>(accept default partition type primary)</lineannotation>
 > 2      # <lineannotation>(make it a partition number 2)</lineannotation>
 >        # <lineannotation>(press enter to accept the default)</lineannotation>
-> +8G    # <lineannotation>(the size of the swap partition, set to whatever you like)</lineannotation>
+> +8G    # <lineannotation>(the size of the swap partition)</lineannotation>
 > n      # <lineannotation>(create a new partition for /)</lineannotation>
 > 1      # <lineannotation>(make it a partition number 1)</lineannotation>
 >        # <lineannotation>(press enter to accept the default)</lineannotation>
 >        # <lineannotation>(press enter to accept the default and use the rest of the remaining space)</lineannotation>
 > a      # <lineannotation>(make the partition bootable)</lineannotation>
+> 1      # <lineannotation>(for the root partition)</lineannotation>
 > x      # <lineannotation>(enter expert mode)</lineannotation>
 > f      # <lineannotation>(fix up the partition ordering)</lineannotation>
 > r      # <lineannotation>(exit expert mode)</lineannotation>
-> w      # <lineannotation>(write the partition table to disk and exit)</lineannotation></screen>
+> w      # <lineannotation>(write the partition table to disk and exit)</lineannotation>
       </para>
      </listitem>
      <listitem>
