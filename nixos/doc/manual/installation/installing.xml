@@ -98,10 +98,10 @@
 >        # <lineannotation>(accept default partition type primary)</lineannotation>
 > 3      # <lineannotation>(make it a partition number 3)</lineannotation>
 >        # <lineannotation>(press enter to accept the default)</lineannotation>
-> +512M  # <lineannotation>(the size of the UEFI boot partition)</lineannotation>
-> y      # <lineannotation>(optionally confirm removing vfat signature, if you get a warning about it.)</lineannotation>
+> +2G    # <lineannotation>(the size of the UEFI boot partition)</lineannotation>
+> y      # <lineannotation>(optionally confirm removing signature, if you get a warning about it.)</lineannotation>
 > t      # <lineannotation>(change the partition type of the boot partition ...)</lineannotation>
-> ef      # <lineannotation>(... to 'UEFI System'. sometimes instead uses hex code 1 instead.)</lineannotation>
+> ef     # <lineannotation>(... to 'UEFI System'. sometimes instead uses hex code 1 instead.)</lineannotation>
 -- for BIOS or UEFI systems
 > n      # <lineannotation>(create a new partition for /swap)</lineannotation>
 >        # <lineannotation>(accept default partition type primary)</lineannotation>
@@ -110,7 +110,7 @@
 > +8G    # <lineannotation>(the size of the swap partition)</lineannotation>
 > n      # <lineannotation>(create a new partition for /)</lineannotation>
 >        # <lineannotation>(accept default partition type primary)</lineannotation>
-> 1      # <lineannotation>(make it a partition number 1)</lineannotation>
+>        # <lineannotation>(confirm default partition number 1)</lineannotation>
 >        # <lineannotation>(press enter to accept the default)</lineannotation>
 >        # <lineannotation>(press enter to accept the default and use the rest of the remaining space)</lineannotation>
 > a      # <lineannotation>(make the partition bootable)</lineannotation>
@@ -393,10 +393,10 @@ $ nix-env -i w3m</screen>
 >        # <lineannotation>(accept default partition type primary)</lineannotation>
 > 3      # <lineannotation>(make it a partition number 3)</lineannotation>
 >        # <lineannotation>(press enter to accept the default)</lineannotation>
-> +512M  # <lineannotation>(the size of the UEFI boot partition)</lineannotation>
-> y      # <lineannotation>(optionally confirm removing vfat signature, if you get a warning about it.)</lineannotation>
+> +2G    # <lineannotation>(the size of the UEFI boot partition)</lineannotation>
+> y      # <lineannotation>(optionally confirm removing signature, if you get a warning about it.)</lineannotation>
 > t      # <lineannotation>(change the partition type of the boot partition ...)</lineannotation>
-> ef      # <lineannotation>(... to 'UEFI System'. sometimes instead uses hex code 1 instead.)</lineannotation>
+> ef     # <lineannotation>(... to 'UEFI System'. sometimes instead uses hex code 1 instead.)</lineannotation>
 -- for BIOS or UEFI systems
 > n      # <lineannotation>(create a new partition for /swap)</lineannotation>
 >        # <lineannotation>(accept default partition type primary)</lineannotation>
@@ -405,7 +405,7 @@ $ nix-env -i w3m</screen>
 > +8G    # <lineannotation>(the size of the swap partition)</lineannotation>
 > n      # <lineannotation>(create a new partition for /)</lineannotation>
 >        # <lineannotation>(accept default partition type primary)</lineannotation>
-> 1      # <lineannotation>(make it a partition number 1)</lineannotation>
+>        # <lineannotation>(confirm default partition number 1)</lineannotation>
 >        # <lineannotation>(press enter to accept the default)</lineannotation>
 >        # <lineannotation>(press enter to accept the default and use the rest of the remaining space)</lineannotation>
 > a      # <lineannotation>(make the partition bootable)</lineannotation>
