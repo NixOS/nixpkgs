@@ -3,8 +3,8 @@
 
 buildGoPackage rec {
   name = "meguca-unstable-${version}";
-  version = "2018-05-26";
-  rev = "9f3d902fb899dbc874c1a91298d86fda7da59b1e";
+  version = "2018-06-10";
+  rev = "e2f97faf10fd3dd672f9b80d220079bfad1c045c";
   goPackagePath = "github.com/bakape/meguca";
   goDeps = ./server_deps.nix;
   enableParallelBuilding = true;
@@ -14,20 +14,18 @@ buildGoPackage rec {
   src = fetchgit {
     inherit rev;
     url = "https://github.com/bakape/meguca";
-    sha256 = "0qblllf23pxcwi5fhaq8xc77iawll7v7xpk2mf9ngks3h8p7gddq";
+    sha256 = "1blj970kdvasgxxwca6idvzl6ha29g9fvqwxgy00j7hk37hzkkzf";
     fetchSubmodules = true;
   };
 
-  configurePhase = ''
+  buildPhase = ''
     export HOME=$PWD
-    export GOPATH=$GOPATH:$HOME/go
+    export GOPATH=$GOPATH:$HOME/go/src/github.com/bakape/meguca/go
+    cd $HOME/go/src/github.com/bakape/meguca
     ln -sf ${nodePackages.meguca}/lib/node_modules/meguca/node_modules
     sed -i "/npm install --progress false --depth 0/d" Makefile
     make generate_clean
     go generate meguca/...
-  '';
-
-  buildPhase = ''
     go build -p $NIX_BUILD_CORES meguca
     make -j $NIX_BUILD_CORES client wasm
   '';
