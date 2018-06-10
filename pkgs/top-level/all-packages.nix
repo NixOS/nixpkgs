@@ -17226,6 +17226,10 @@ with pkgs;
 
   maxlib = callPackage ../applications/audio/pd-plugins/maxlib { };
 
+  maxscale = callPackage ../tools/networking/maxscale {
+    stdenv = overrideCC stdenv gcc6;
+  };
+
   pdfdiff = callPackage ../applications/misc/pdfdiff { };
 
   mupdf = callPackage ../applications/misc/mupdf { };
