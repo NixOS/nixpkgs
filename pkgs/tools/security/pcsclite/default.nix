@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     # This URL changes in unpredictable ways, so it is not sensible
     # to put a version variable in there.
     url = "https://pcsclite.apdu.fr/files/pcsc-lite-1.8.23.tar.bz2";
-    sha256 = "09b7a79hjkgiyvhyvwf8gpxaf8b7wd0342hx6zrpd269hhfbjvwy";
+    sha256 = "1jc9ws5ra6v3plwraqixin0w0wfxj64drahrbkyrrwzghqjjc9ss";
   };
 
   patches = [ ./no-dropdir-literals.patch ];
