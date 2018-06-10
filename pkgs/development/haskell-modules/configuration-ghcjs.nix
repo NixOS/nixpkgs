@@ -201,4 +201,7 @@ self: super:
   # triggers an internal pattern match failure in haddock
   # https://github.com/haskell/haddock/issues/553
   wai = dontHaddock super.wai;
+
+  base-orphans = dontCheck super.base-orphans;
+  distributive = dontCheck super.distributive;
 }
