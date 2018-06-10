@@ -40,7 +40,7 @@ assert langGo -> langCC;
 with stdenv.lib;
 with builtins;
 
-let version = "7-20170409";
+let version = "8-20180608";
 
     # Whether building a cross-compiler for GNU/Hurd.
     crossGNU = targetPlatform != hostPlatform && targetPlatform.config == "i586-pc-gnu";
@@ -48,8 +48,7 @@ let version = "7-20170409";
     enableParallelBuilding = true;
 
     patches =
-      [ ]
-      ++ optional (targetPlatform != hostPlatform) ../libstdc++-target.patch
+         optional (targetPlatform != hostPlatform) ../libstdc++-target.patch
       ++ optional noSysDirs ../no-sys-dirs.patch
       ++ optional langFortran ../gfortran-driving.patch;
 
@@ -82,6 +81,9 @@ let version = "7-20170409";
         "--disable-shared"
         "--disable-libatomic"  # libatomic requires libc
         "--disable-decimal-float" # libdecnumber requires libc
+        # maybe only needed on musl, PATH_MAX
+        # https://github.com/richfelker/musl-cross-make/blob/0867cdf300618d1e3e87a0a939fa4427207ad9d7/litecross/Makefile#L62
+        "--disable-libmpx"
       ] else [
         (if crossDarwin then "--with-sysroot=${getLib libcCross}/share/sysroot"
          else                "--with-headers=${getDev libcCross}/include")
@@ -98,13 +100,15 @@ let version = "7-20170409";
           # To keep ABI compatibility with upstream mingw-w64
           "--enable-fully-dynamic-string"
         ] else
-          optionals (targetPlatform.libc == "uclibc") [
+          optionals (targetPlatform.libc == "uclibc" || targetPlatform.libc == "musl") [
             # libsanitizer requires netrom/netrom.h which is not
             # available in uclibc.
             "--disable-libsanitizer"
             # In uclibc cases, libgomp needs an additional '-ldl'
             # and as I don't know how to pass it, I disable libgomp.
             "--disable-libgomp"
+            # musl at least, disable: https://git.buildroot.net/buildroot/commit/?id=873d4019f7fb00f6a80592224236b3ba7d657865
+            "--disable-libmpx"
           ] ++ [
           "--enable-threads=posix"
           "--enable-nls"
@@ -123,8 +127,8 @@ stdenv.mkDerivation ({
   builder = ../builder.sh;
 
   src = fetchurl {
-    url = "mirror://gcc/snapshots/${version}/gcc-${version}.tar.bz2";
-    sha256 = "19197rw1xrpkb8h10lfgn6zj7yj52x95hdmr0x5lg8i4v3i23b67";
+    url = "mirror://gcc/snapshots/${version}/gcc-${version}.tar.xz";
+    sha256 = "08kwhm1gj5m9x81hv8spi9sablbbdlppfh31d41v00apmzpfb5rh";
   };
 
   inherit patches;
@@ -137,7 +141,25 @@ stdenv.mkDerivation ({
 
   hardeningDisable = [ "format" ];
 
-  postPatch =
+  # This should kill all the stdinc frameworks that gcc and friends like to
+  # insert into default search paths.
+  prePatch = stdenv.lib.optionalString hostPlatform.isDarwin ''
+    substituteInPlace gcc/config/darwin-c.c \
+      --replace 'if (stdinc)' 'if (0)'
+
+    substituteInPlace libgcc/config/t-slibgcc-darwin \
+      --replace "-install_name @shlib_slibdir@/\$(SHLIB_INSTALL_NAME)" "-install_name $lib/lib/\$(SHLIB_INSTALL_NAME)"
+
+    substituteInPlace libgfortran/configure \
+      --replace "-install_name \\\$rpath/\\\$soname" "-install_name $lib/lib/\\\$soname"
+  '';
+
+  postPatch = ''
+    configureScripts=$(find . -name configure)
+    for configureScript in $configureScripts; do
+      patchShebangs $configureScript
+    done
+  '' + (
     if targetPlatform.isHurd
     then
       # On GNU/Hurd glibc refers to Hurd & Mach headers and libpthread is not
@@ -176,16 +198,23 @@ stdenv.mkDerivation ({
       let
         libc = if libcCross != null then libcCross else stdenv.cc.libc;
       in
-        '' echo "fixing the \`GLIBC_DYNAMIC_LINKER' and \`UCLIBC_DYNAMIC_LINKER' macros..."
+        (
+        '' echo "fixing the \`GLIBC_DYNAMIC_LINKER', \`UCLIBC_DYNAMIC_LINKER', and \`MUSL_DYNAMIC_LINKER' macros..."
            for header in "gcc/config/"*-gnu.h "gcc/config/"*"/"*.h
            do
-             grep -q LIBC_DYNAMIC_LINKER "$header" || continue
+             grep -q _DYNAMIC_LINKER "$header" || continue
              echo "  fixing \`$header'..."
              sed -i "$header" \
-                 -e 's|define[[:blank:]]*\([UCG]\+\)LIBC_DYNAMIC_LINKER\([0-9]*\)[[:blank:]]"\([^\"]\+\)"$|define \1LIBC_DYNAMIC_LINKER\2 "${libc.out}\3"|g'
+                 -e 's|define[[:blank:]]*\([UCG]\+\)LIBC_DYNAMIC_LINKER\([0-9]*\)[[:blank:]]"\([^\"]\+\)"$|define \1LIBC_DYNAMIC_LINKER\2 "${libc.out}\3"|g' \
+                 -e 's|define[[:blank:]]*MUSL_DYNAMIC_LINKER\([0-9]*\)[[:blank:]]"\([^\"]\+\)"$|define MUSL_DYNAMIC_LINKER\1 "${libc.out}\2"|g'
            done
         ''
-    else null;
+        + stdenv.lib.optionalString (targetPlatform.libc == "musl")
+        ''
+            sed -i gcc/config/linux.h -e '1i#undef LOCAL_INCLUDE_DIR'
+        ''
+        )
+    else "");
 
   # TODO(@Ericson2314): Make passthru instead. Weird to avoid mass rebuild,
   crossStageStatic = targetPlatform == hostPlatform || crossStageStatic;
@@ -276,7 +305,6 @@ stdenv.mkDerivation ({
     # Optional features
     optional (isl != null) "--with-isl=${isl}" ++
 
-
     (import ../common/platform-flags.nix { inherit (stdenv) lib targetPlatform; }) ++
     optional (targetPlatform != hostPlatform) crossConfigureFlags ++
     optional (!bootstrap) "--disable-bootstrap" ++
@@ -288,16 +316,16 @@ stdenv.mkDerivation ({
       # On Illumos/Solaris GNU as is preferred
       "--with-gnu-as" "--without-gnu-ld"
     ]
+    ++ optional (targetPlatform == hostPlatform && targetPlatform.libc == "musl") "--disable-libsanitizer"
   ;
 
   targetConfig = if targetPlatform != hostPlatform then targetPlatform.config else null;
 
-  buildFlags = if bootstrap then
-    (if profiledCompiler then "profiledbootstrap" else "bootstrap")
-    else "";
+  buildFlags = optional
+    (bootstrap && hostPlatform == buildPlatform)
+    (if profiledCompiler then "profiledbootstrap" else "bootstrap");
 
   dontStrip = !stripped;
-  NIX_STRIP_DEBUG = !stripped;
 
   installTargets =
     if stripped
@@ -382,8 +410,6 @@ stdenv.mkDerivation ({
       stdenv.lib.platforms.linux ++
       stdenv.lib.platforms.freebsd ++
       stdenv.lib.platforms.darwin;
-
-    broken = true;
   };
 }
 
