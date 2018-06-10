@@ -28,7 +28,7 @@ with lib;
     services.nixosManual.showManual = true;
 
     # Let the user play Rogue on TTY 8 during the installation.
-    services.rogue.enable = true;
+    #services.rogue.enable = true;
 
     # Disable some other stuff we don't need.
     security.sudo.enable = false;
@@ -45,8 +45,13 @@ with lib;
             "Type `systemctl start display-manager' to\nstart the graphical user interface."}
       '';
 
-    # Allow sshd to be started manually through "start sshd".
-    services.openssh.enable = true;
+    # Allow sshd to be started manually through "systemctl start sshd".
+    services.openssh = {
+      enable = true;
+      # Allow password login to the installation, if the user sets a password via "passwd"
+      # It is safe as root doesn't have a password by default and SSH is disabled by default
+      permitRootLogin = "yes";
+    };
     systemd.services.sshd.wantedBy = mkOverride 50 [];
 
     # Enable wpa_supplicant, but don't start it by default.
@@ -66,9 +71,20 @@ with lib;
     boot.kernel.sysctl."vm.overcommit_memory" = "1";
 
     # To speed up installation a little bit, include the complete
-    # stdenv in the Nix store on the CD.  Archive::Cpio is needed for
-    # the initrd builder.
-    system.extraDependencies = [ pkgs.stdenv pkgs.busybox pkgs.perlPackages.ArchiveCpio ];
+    # stdenv in the Nix store on the CD.
+    system.extraDependencies = with pkgs;
+      [
+        stdenv
+        stdenvNoCC # for runCommand
+        busybox
+        jq # for closureInfo
+      ];
 
+    # Show all debug messages from the kernel but don't log refused packets
+    # because we have the firewall enabled. This makes installs from the
+    # console less cumbersome if the machine has a public IP.
+    networking.firewall.logRefusedConnections = mkDefault false;
+
+    environment.systemPackages = [ pkgs.vim ];
   };
 }

@@ -11,7 +11,8 @@ stdenv.mkDerivation rec {
     sha256 = "1zzf688dbbcb5z2r9v1p28rddns6znzx35nc05ygza6lp7aknkna";
   };
 
-  buildInputs = [ libpcap pkgconfig bison cyrus_sasl tcp_wrappers flex ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ libpcap bison cyrus_sasl tcp_wrappers flex ];
   propagatedBuildInputs = [ procps which wget lsof net_snmp ];
 
   patchPhase = ''

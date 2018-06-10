@@ -1,10 +1,13 @@
-{ stdenv, fetchurl }:
+{ stdenv, fetchurl, libtool }:
 stdenv.mkDerivation rec {
-  name = "getdata-0.8.9";
+  name = "getdata-${version}";
+  version = "0.10.0";
   src = fetchurl {
-    url = "mirror://sourceforge/getdata/${name}.tar.bz2";
-    sha256 = "1cgwrflpp9ia2cwnhmwp45nmsg15ymjh03pysrfigyfmag94ac51";
+    url = "mirror://sourceforge/getdata/${name}.tar.xz";
+    sha256 = "18xbb32vygav9x6yz0gdklif4chjskmkgp06rwnjdf9myhia0iym";
   };
+
+  buildInputs = [ libtool ];
 
   meta = with stdenv.lib; {
     description = "Reference implementation of the Dirfile Standards";

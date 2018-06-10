@@ -1,20 +1,33 @@
 { stdenv, fetchurl, jre, makeWrapper, bash,
-  majorVersion ? "0.9" }:
+  majorVersion ? "1.0" }:
 
 let
   versionMap = {
-    "0.8" = { kafkaVersion = "0.8.2.1";
-              scalaVersion = "2.10";
-              sha256 = "1klri23fjxbzv7rmi05vcqqfpy7dzi1spn2084y1dxsi1ypfkvc9";
-            };
-    "0.9" = { kafkaVersion = "0.9.0.1";
-              scalaVersion = "2.11";
-              sha256 = "0ykcjv5dz9i5bws9my2d60pww1g9v2p2nqr67h0i2xrjm7az8a6v";
-            };
-    "0.10" = { kafkaVersion = "0.10.0.1";
-               scalaVersion = "2.11";
-               sha256 = "0bdhzbhmm87a47162hyazcjmfibqg9r3ryzfjag7r0nxxmd64wrd";
-             };
+    "0.9" = {
+      kafkaVersion = "0.9.0.1";
+      scalaVersion = "2.11";
+      sha256 = "0ykcjv5dz9i5bws9my2d60pww1g9v2p2nqr67h0i2xrjm7az8a6v";
+    };
+    "0.10" = {
+      kafkaVersion = "0.10.2.1";
+      scalaVersion = "2.12";
+      sha256 = "0iszr6r0n9yjgq7kcp1hf00fg754m86gs4jzqc18542an94b88z5";
+    };
+    "0.11" = {
+      kafkaVersion = "0.11.0.1";
+      scalaVersion = "2.12";
+      sha256 = "1wj639h95aq5n132fq1rbyzqh5rsa4mlhbg3c5mszqglnzdz4xn7";
+    };
+    "1.0" = {
+      kafkaVersion = "1.0.1";
+      scalaVersion = "2.12";
+      sha256 = "1fxn6i0kanwksj1dhcnlni0cn542k50wdg8jkwhfmf4qq8yfl90m";
+    };
+    "1.1" = {
+      kafkaVersion = "1.1.0";
+      scalaVersion = "2.12";
+      sha256 = "04idhsr6pbkb0xkx38faxv2pn5nkjcflz6wl4s3ka82h1fbq74j9";
+    };
   };
 in
 
@@ -37,6 +50,7 @@ stdenv.mkDerivation rec {
 
     mkdir -p $out/bin
     cp bin/kafka* $out/bin
+    cp bin/connect* $out/bin
 
     # allow us the specify logging directory using env
     substituteInPlace $out/bin/kafka-run-class.sh \
@@ -52,7 +66,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = "http://kafka.apache.org";
+    homepage = http://kafka.apache.org;
     description = "A high-throughput distributed messaging system";
     license = licenses.asl20;
     maintainers = [ maintainers.ragge ];

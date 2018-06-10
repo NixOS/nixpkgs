@@ -17,8 +17,8 @@ stdenv.mkDerivation rec {
       This library aims to provide simple helpers that allows you to re-use code and to avoid
       re-inventing the wheel.
     '';
-    homepage = http://netfilter.org/projects/libmnl/index.html;
-    license = stdenv.lib.licenses.gpl2Plus;
+    homepage = https://netfilter.org/projects/libmnl/index.html;
+    license = stdenv.lib.licenses.lgpl21Plus;
 
     platforms = stdenv.lib.platforms.linux;
   };

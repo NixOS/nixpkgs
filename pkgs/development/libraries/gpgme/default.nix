@@ -1,38 +1,60 @@
-{ stdenv, fetchurl, libgpgerror, gnupg, pkgconfig, glib, pth, libassuan
-, useGnupg1 ? false, gnupg1 ? null }:
+{ stdenv, fetchurl, fetchpatch, libgpgerror, gnupg, pkgconfig, glib, pth, libassuan
+, file, which
+, autoreconfHook
+, git
+, texinfo5
+, qtbase ? null
+, withPython ? false, swig2 ? null, python ? null
+}:
 
-assert useGnupg1 -> gnupg1 != null;
-assert !useGnupg1 -> gnupg != null;
+let inherit (stdenv) lib system; in
 
-let
-  gpgStorePath = if useGnupg1 then gnupg1 else gnupg;
-  gpgProgram = if useGnupg1 then "gpg" else "gpg2";
-in
 stdenv.mkDerivation rec {
-  name = "gpgme-1.6.0";
+  name = "gpgme-${version}";
+  version = "1.11.1";
 
   src = fetchurl {
     url = "mirror://gnupg/gpgme/${name}.tar.bz2";
-    sha256 = "17892sclz3yg45wbyqqrzzpq3l0icbnfl28f101b3062g8cy97dh";
+    sha256 = "0vxx5xaag3rhp4g2arp5qm77gvz4kj0m3hnpvhkdvqyjfhbi26rd";
   };
 
   outputs = [ "out" "dev" "info" ];
   outputBin = "dev"; # gpgme-config; not so sure about gpgme-tool
 
-  propagatedBuildInputs = [ libgpgerror glib libassuan pth ];
+  propagatedBuildInputs =
+    [ libgpgerror glib libassuan pth ]
+    ++ lib.optional (qtbase != null) qtbase;
 
-  nativeBuildInputs = [ pkgconfig gnupg ];
+  nativeBuildInputs = [ file pkgconfig gnupg autoreconfHook git texinfo5 ]
+  ++ lib.optionals withPython [ python swig2 which ];
+
+  postPatch =''
+    substituteInPlace ./configure --replace /usr/bin/file ${file}/bin/file
+  '';
 
   configureFlags = [
-    "--with-gpg=${gpgStorePath}/bin/${gpgProgram}"
-    "--enable-fixed-path=${gpgStorePath}/bin"
-  ];
+    "--enable-fixed-path=${gnupg}/bin"
+    "--with-libgpg-error-prefix=${libgpgerror.dev}"
+  ] ++ lib.optional withPython "--enable-languages=python";
+
+  NIX_CFLAGS_COMPILE =
+    # qgpgme uses Q_ASSERT which retains build inputs at runtime unless
+    # debugging is disabled
+    lib.optional (qtbase != null) "-DQT_NO_DEBUG"
+    # https://www.gnupg.org/documentation/manuals/gpgme/Largefile-Support-_0028LFS_0029.html
+    ++ lib.optional (system == "i686-linux") "-D_FILE_OFFSET_BITS=64";
 
   meta = with stdenv.lib; {
-    homepage = "http://www.gnupg.org/related_software/gpgme";
+    homepage = https://gnupg.org/software/gpgme/index.html;
     description = "Library for making GnuPG easier to use";
-    license = licenses.gpl2;
+    longDescription = ''
+      GnuPG Made Easy (GPGME) is a library designed to make access to GnuPG
+      easier for applications. It provides a High-Level Crypto API for
+      encryption, decryption, signing, signature verification and key
+      management.
+    '';
+    license = with licenses; [ lgpl21Plus gpl3Plus ];
     platforms = platforms.unix;
-    maintainers = [ maintainers.fuuzetsu ];
+    maintainers = with maintainers; [ fuuzetsu primeos ];
   };
 }

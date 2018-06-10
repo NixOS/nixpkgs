@@ -9,7 +9,8 @@ stdenv.mkDerivation rec {
     sha256 = "0l548xdx2fvjya1ixp37pn382yak0m4kwfh9lgh7l3y2sblqw9zs";
   };
 
-  buildInputs = [ cmake fcitx gettext libchewing pkgconfig ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ cmake fcitx gettext libchewing ];
 
   preInstall = ''
    substituteInPlace src/cmake_install.cmake \

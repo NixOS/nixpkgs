@@ -8,7 +8,8 @@ stdenv.mkDerivation rec {
     sha256 = "0sr9i9b3qfwbfvzvk00yrrg3x2xqk1njadbldkvn7hwwa4z5bm9l";
   };
 
-  buildInputs = [ pkgconfig fuse glib attr ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ fuse glib attr ];
 
   makeFlags = "DESTDIR=$(out) PREFIX=";
 

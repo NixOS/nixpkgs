@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "hakuneko-${version}";
-  version = "1.4.1";
+  version = "1.4.2";
 
   src = fetchurl {
     url = "mirror://sourceforge/hakuneko/hakuneko_${version}_src.tar.gz";
-    sha256 = "d7e066e3157445f273ccf14172c05077759da036ffe700a28a409fde862b69a7";
+    sha256 = "76a63fa05e91b082cb5a70a8abacef005354e99978ff8b1369f7aa0af7615d52";
   };
 
   preConfigure = ''
@@ -18,8 +18,11 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Manga downloader";
-    homepage = http://sourceforge.net/projects/hakuneko/;
+    homepage = https://sourceforge.net/projects/hakuneko/;
     license = stdenv.lib.licenses.mit;
     platforms = stdenv.lib.platforms.linux;
+
+    # This project was abandoned upstream.
+    broken = true;
   };
 }

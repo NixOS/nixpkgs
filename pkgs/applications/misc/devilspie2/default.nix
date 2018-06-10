@@ -2,18 +2,15 @@
 
 stdenv.mkDerivation rec {
   name = "devilspie2-${version}";
-  version = "0.39";
+  version = "0.43";
 
   src = fetchurl {
-    url = "http://download.savannah.gnu.org/releases/devilspie2/devilspie2_0.39-src.tar.gz";
-    sha256 = "07b74ffc078e5f01525d9da7a1978b4c1a9725b814b344f83a1a203cf4caae09";
+    url = "http://download.savannah.gnu.org/releases/devilspie2/devilspie2_${version}-src.tar.gz";
+    sha256 = "0a7qjl2qd4099kkkbwa1y2fk48s21jlr409lf9mij7mlc9yc3zzc";
   };
 
-  buildInputs = [ intltool pkgconfig glib gtk lua libwnck3 ];
-
-  patchPhase = ''
-    sed -i -e s@/usr/local@$out@ Makefile
-  '';
+  nativeBuildInputs = [ intltool pkgconfig ];
+  buildInputs = [ glib gtk lua libwnck3 ];
 
   installPhase = ''
     mkdir -p $out/bin $out/share/man/man1
@@ -22,7 +19,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    description = "Devilspie2 is a window matching utility";
+    description = "A window matching utility";
     longDescription = ''
       Devilspie2 is a window matching utility, allowing the user to
       perform scripted actions on windows as they are created. For

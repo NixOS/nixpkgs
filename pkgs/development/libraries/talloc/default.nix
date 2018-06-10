@@ -3,15 +3,16 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "talloc-2.1.8";
+  name = "talloc-2.1.12";
 
   src = fetchurl {
     url = "mirror://samba/talloc/${name}.tar.gz";
-    sha256 = "0c3ihyb0jd8mhvi7gg2mr5w1zl2habx6jlkbyxzyckad2q8lkl92";
+    sha256 = "0jv0ri9vj93fczzgl7rn7xvnfgl2kfx4x85cr8h8v52yh7v0qz4q";
   };
 
+  nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
-    python pkgconfig readline libxslt docbook_xsl docbook_xml_dtd_42
+    python readline libxslt docbook_xsl docbook_xml_dtd_42
   ];
 
   preConfigure = ''
@@ -24,8 +25,8 @@ stdenv.mkDerivation rec {
     "--builtin-libraries=replace"
   ];
 
-  postInstall = ''		
-    ar qf $out/lib/libtalloc.a bin/default/talloc_[0-9]*.o		
+  postInstall = ''
+    ar q $out/lib/libtalloc.a bin/default/talloc_[0-9]*.o
   '';
 
   meta = with stdenv.lib; {

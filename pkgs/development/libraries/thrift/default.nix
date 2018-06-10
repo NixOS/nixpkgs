@@ -4,11 +4,11 @@
 
 stdenv.mkDerivation rec {
   name = "thrift-${version}";
-  version = "0.9.3";
+  version = "0.11.0";
 
   src = fetchurl {
     url = "http://archive.apache.org/dist/thrift/${version}/${name}.tar.gz";
-    sha256 = "17lnchan9q3qdg222rgjjai6819j9k755s239phdv6n0183hlx5h";
+    sha256 = "1hk0zb9289gf920rdl0clmwqx6kvygz92nj01lqrhd2arfv3ibf4";
   };
 
   #enableParallelBuilding = true; problems on hydra
@@ -17,8 +17,9 @@ stdenv.mkDerivation rec {
   # pythonFull.buildEnv.override { extraLibs = [ thrift ]; }
   pythonPath = [];
 
+  nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
-    boost zlib libevent openssl python pkgconfig bison flex twisted
+    boost zlib libevent openssl python bison flex twisted
   ];
 
   preConfigure = "export PY_PREFIX=$out";

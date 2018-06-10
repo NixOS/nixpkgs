@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   meta = {
-    homepage = "http://www.gnu.org/software/gprolog/";
+    homepage = http://www.gnu.org/software/gprolog/;
     description = "GNU Prolog, a free Prolog compiler with constraint solving over finite domains";
     license = stdenv.lib.licenses.lgpl3Plus;
 
@@ -63,6 +63,6 @@ stdenv.mkDerivation rec {
     '';
 
     maintainers = [ stdenv.lib.maintainers.peti ];
-    platforms = stdenv.lib.platforms.gnu;
+    platforms = stdenv.lib.platforms.gnu ++ stdenv.lib.platforms.linux;
   };
 }

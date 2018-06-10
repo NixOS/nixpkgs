@@ -1,15 +1,13 @@
-{ fetchsvn, stdenv, mesa, unzip, libXrandr, libX11, libXxf86vm }:
+{ stdenv, fetchzip, libGLU_combined, unzip, libXrandr, libX11, libXxf86vm }:
 
 
 stdenv.mkDerivation rec {
-  name = "irrlicht-${version}-svn-${revision}";
-  version = "1.8";
-  revision = "5104"; # newest revision as of 05-16-15
+  name = "irrlicht-${version}";
+  version = "1.8.4";
 
-  src = fetchsvn {
-    url = "https://svn.code.sf.net/p/irrlicht/code/branches/releases/${version}"; # get 1.8 release (same regardless of rev)
-    rev = "${revision}";
-    sha256 = "18xvlrjf113mphf29iy24hmrkh7xff6j9cz0chrxjqbr9xk9h1yq";
+  src = fetchzip {
+    url = "mirror://sourceforge/irrlicht/${name}.zip";
+    sha256 = "02sq067fn4xpf0lcyb4vqxmm43qg2nxx770bgrl799yymqbvih5f";
   };
 
   preConfigure = ''
@@ -17,7 +15,7 @@ stdenv.mkDerivation rec {
   '';
 
   buildPhase = ''
-    make sharedlib NDEBUG=1
+    make sharedlib NDEBUG=1 "LDFLAGS=-lX11 -lGL -lXxf86vm"
   '';
 
   preInstall = ''
@@ -25,7 +23,7 @@ stdenv.mkDerivation rec {
     mkdir -p $out/lib
   '';
 
-  buildInputs = [ unzip mesa libXrandr libX11 libXxf86vm ];
+  buildInputs = [ unzip libGLU_combined libXrandr libX11 libXxf86vm ];
 
   meta = {
     homepage = http://irrlicht.sourceforge.net/;

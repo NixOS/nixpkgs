@@ -1,19 +1,33 @@
-{ stdenv, fetchurl, glib, db, pkgconfig }:
+{ stdenv, fetchurl, fetchFromGitHub, autoreconfHook, glib, db, pkgconfig }:
 
-stdenv.mkDerivation {
-  name = "libpinyin-1.3.0";
+let
+  modelData = fetchurl {
+    url    = "mirror://sourceforge/libpinyin/models/model14.text.tar.gz";
+    sha256 = "0qqk30nflj07zjhs231c95ln4yj4ipzwxxiwrxazrg4hb8bhypqq";
+  };
+in
+stdenv.mkDerivation rec {
+  name = "libpinyin-${version}";
+  version = "2.1.91";
+
+  nativeBuildInputs = [ autoreconfHook glib db pkgconfig ];
+
+  postUnpack = ''
+    tar -xzf ${modelData} -C $sourceRoot/data
+  '';
+
+  src = fetchFromGitHub {
+    owner  = "libpinyin";
+    repo   = "libpinyin";
+    rev    = version;
+    sha256 = "0jbvn65p3zh0573hh27aasd3qly5anyfi8jnps2dxi0my09wbrq3";
+  };
 
   meta = with stdenv.lib; {
     description = "Library for intelligent sentence-based Chinese pinyin input method";
     homepage    = https://sourceforge.net/projects/libpinyin;
     license     = licenses.gpl2;
+    maintainers = with maintainers; [ ericsagnes ];
     platforms   = platforms.linux;
-  };
-
-  buildInputs = [ glib db pkgconfig ];
-
-  src = fetchurl {
-    url = "mirror://sourceforge/project/libpinyin/libpinyin/libpinyin-1.3.0.tar.gz";
-    sha256 = "e105c443b01cd67b9db2a5236435d5441cf514b997b891215fa65f16030cf1f2";
   };
 }

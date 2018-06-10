@@ -1,13 +1,18 @@
-{stdenv, darcs, nix}: {url, rev ? null, context ? null, md5 ? "", sha256 ? ""}:
+{stdenvNoCC, darcs, nix, cacert}:
 
-stdenv.mkDerivation {
+{url, rev ? null, context ? null, md5 ? "", sha256 ? ""}:
+
+if md5 != "" then
+  throw "fetchdarcs does not support md5 anymore, please use sha256"
+else
+stdenvNoCC.mkDerivation {
   name = "fetchdarcs";
   builder = ./builder.sh;
-  buildInputs = [darcs];
+  nativeBuildInputs = [cacert darcs];
 
-  outputHashAlgo = if sha256 == "" then "md5" else "sha256";
+  outputHashAlgo = "sha256";
   outputHashMode = "recursive";
-  outputHash = if sha256 == "" then md5 else sha256;
-  
+  outputHash = sha256;
+
   inherit url rev context;
 }

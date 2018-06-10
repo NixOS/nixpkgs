@@ -1,40 +1,45 @@
-{ fetchurl, stdenv }:
+{ fetchurl, stdenv, libnsl }:
 
-stdenv.mkDerivation {
-  name = "tcp-wrappers-7.6";
+let
+  vanillaVersion = "7.6.q";
+  patchLevel = "26";
+in stdenv.mkDerivation rec {
+  name = "tcp-wrappers-${version}";
+  version = "${vanillaVersion}-${patchLevel}";
 
   src = fetchurl {
-    url = mirror://debian/pool/main/t/tcp-wrappers/tcp-wrappers_7.6.dbs.orig.tar.gz;
-    sha256 = "0k68ziinx6biwar5lcb9jvv0rp6b3vmj6861n75bvrz4w1piwkdp";
+    url = "mirror://debian/pool/main/t/tcp-wrappers/tcp-wrappers_${vanillaVersion}.orig.tar.gz";
+    sha256 = "0p9ilj4v96q32klavx0phw9va21fjp8vpk11nbh6v2ppxnnxfhwm";
   };
 
-  patches = [
-    (fetchurl {
-       url = mirror://debian/pool/main/t/tcp-wrappers/tcp-wrappers_7.6.dbs-13.diff.gz;
-       sha256 = "071ir20rh8ckhgrc0y99wgnlbqjgkprf0qwbv84lqw5i6qajbcnh";
-     })
-  ];
+  debian = fetchurl {
+    url = "mirror://debian/pool/main/t/tcp-wrappers/tcp-wrappers_${version}.debian.tar.xz";
+    sha256 = "1dcdhi9lwzv7g19ggwxms2msq9fy14rl09rjqb10hwv0jix7z8j8";
+  };
 
   prePatch = ''
-    cd upstream/tarballs
-    tar xzvf *
-    cd tcp_wrappers_7.6
+    tar -xaf $debian
+    patches="$(cat debian/patches/series | sed 's,^,debian/patches/,') $patches"
+
+    substituteInPlace Makefile --replace STRINGS STRINGDEFS
+    substituteInPlace debian/patches/13_shlib_weaksym --replace STRINGS STRINGDEFS
   '';
 
-  postPatch = ''
-    for patch in debian/patches/*; do
-      echo "applying Debian patch \`$(basename $patch)'..."
-      patch --batch -p1 < $patch
-    done
+  # Fix __BEGIN_DECLS usage (even if it wasn't non-standard, this doesn't include sys/cdefs.h)
+  patches = [ ./cdecls.patch ];
+
+  postPatch = stdenv.lib.optionalString stdenv.hostPlatform.isMusl ''
+    substituteInPlace Makefile \
+      --replace '-DNETGROUP' '-DUSE_GETDOMAIN'
   '';
 
-  buildPhase = ''
-    make REAL_DAEMON_DIR="$out/sbin" linux
-  '';
+  buildInputs = [ libnsl ];
+
+  makeFlags = [ "REAL_DAEMON_DIR=$(out)/bin" "linux" "AR:=$(AR)" ];
 
   installPhase = ''
-    mkdir -p "$out/sbin"
-    cp -v safe_finger tcpd tcpdchk tcpdmatch try-from "$out/sbin"
+    mkdir -p "$out/bin"
+    cp -v safe_finger tcpd tcpdchk tcpdmatch try-from "$out/bin"
 
     mkdir -p "$out/lib"
     cp -v shared/lib*.so* "$out/lib"
@@ -42,7 +47,6 @@ stdenv.mkDerivation {
     mkdir -p "$out/include"
     cp -v *.h "$out/include"
 
-    mkdir -p "$out/man"
     for i in 3 5 8;
     do
       mkdir -p "$out/man/man$i"
@@ -66,6 +70,6 @@ stdenv.mkDerivation {
 
     homepage = ftp://ftp.porcupine.org/pub/security/index.html;
     license = "BSD-style";
-    platforms = stdenv.lib.platforms.unix;
+    platforms = stdenv.lib.platforms.linux;
   };
 }

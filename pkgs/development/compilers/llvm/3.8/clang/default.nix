@@ -1,4 +1,4 @@
-{ stdenv, fetch, cmake, libxml2, libedit, llvm, version, clang-tools-extra_src, python }:
+{ stdenv, fetch, cmake, libxml2, llvm, version, clang-tools-extra_src, python }:
 
 let
   gcc = if stdenv.cc.isGNU then stdenv.cc.cc else stdenv.cc.cc.gcc;
@@ -6,17 +6,16 @@ let
     name = "clang-${version}";
 
     unpackPhase = ''
-      unpackFile ${fetch "cfe" "1ybcac8hlr9vl3wg8s4v6cp0c0qgqnwprsv85lihbkq3vqv94504"}
+      unpackFile ${fetch "cfe" "1prc72xmkgx8wrzmrr337776676nhsp1qd3mw2bvb22bzdnq7lsc"}
       mv cfe-${version}.src clang
       sourceRoot=$PWD/clang
       unpackFile ${clang-tools-extra_src}
       mv clang-tools-extra-* $sourceRoot/tools/extra
     '';
 
-    buildInputs = [ cmake libedit libxml2 llvm python ];
+    buildInputs = [ cmake libxml2 llvm python ];
 
     cmakeFlags = [
-      "-DCMAKE_BUILD_TYPE=Release"
       "-DCMAKE_CXX_FLAGS=-std=c++11"
     ] ++
     # Maybe with compiler-rt this won't be needed?
@@ -30,19 +29,38 @@ let
       sed -i -e 's/DriverArgs.hasArg(options::OPT_nostdlibinc)/true/' lib/Driver/ToolChains.cpp
     '';
 
+    outputs = [ "out" "lib" "python" ];
+
     # Clang expects to find LLVMgold in its own prefix
     # Clang expects to find sanitizer libraries in its own prefix
     postInstall = ''
-      ln -sv ${llvm}/lib/LLVMgold.so $out/lib
+      if [ -e ${llvm}/lib/LLVMgold.so ]; then
+        ln -sv ${llvm}/lib/LLVMgold.so $out/lib
+      fi
+
       ln -sv ${llvm}/lib/clang/${version}/lib $out/lib/clang/${version}/
       ln -sv $out/bin/clang $out/bin/cpp
+
+      # Move libclang to 'lib' output
+      moveToOutput "lib/libclang.*" "$lib"
+      substituteInPlace $out/share/clang/cmake/ClangTargets-release.cmake \
+          --replace "\''${_IMPORT_PREFIX}/lib/libclang." "$lib/lib/libclang."
+
+      mkdir -p $python/bin $python/share/clang/
+      mv $out/bin/{git-clang-format,scan-view} $python/bin
+      if [ -e $out/bin/set-xcode-analyzer ]; then
+        mv $out/bin/set-xcode-analyzer $python/bin
+      fi
+      mv $out/share/clang/*.py $python/share/clang
+
+      rm $out/bin/c-index-test
     '';
 
     enableParallelBuilding = true;
 
     passthru = {
-      lib = self; # compatibility with gcc, so that `stdenv.cc.cc.lib` works on both
       isClang = true;
+      inherit llvm;
     } // stdenv.lib.optionalAttrs stdenv.isLinux {
       inherit gcc;
     };
@@ -50,7 +68,7 @@ let
     meta = {
       description = "A c, c++, objective-c, and objective-c++ frontend for the llvm compiler";
       homepage    = http://llvm.org/;
-      license     = stdenv.lib.licenses.bsd3;
+      license     = stdenv.lib.licenses.ncsa;
       platforms   = stdenv.lib.platforms.all;
     };
   };

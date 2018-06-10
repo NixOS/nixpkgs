@@ -1,15 +1,15 @@
 { stdenv, fetchurl, pcsclite, pkgconfig, libusb1, perl }:
 
 stdenv.mkDerivation rec {
-  version = "1.4.23";
+  version = "1.4.27";
   name = "ccid-${version}";
 
   src = fetchurl {
-    url = "https://alioth.debian.org/frs/download.php/file/4169/ccid-1.4.23.tar.bz2";
-    sha256 = "0s7c2g8idnnh19958aswaa2s51ncr2j7gqrkk5g95qpfnv7asdh8";
+    url = "https://alioth.debian.org/frs/download.php/file/4218/ccid-1.4.27.tar.bz2";
+    sha256 = "0dyikpmhsph36ndgd61bs4yx437v5y0bmm8ahjacp1k9c1ly4q56";
   };
 
-  patchPhase = ''
+  postPatch = ''
     patchShebangs .
     substituteInPlace src/Makefile.in --replace /bin/echo echo
   '';

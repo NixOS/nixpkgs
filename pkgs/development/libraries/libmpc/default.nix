@@ -1,23 +1,21 @@
-{ fetchurl, stdenv, gmp, mpfr }:
+{ stdenv, fetchurl
+, gmp, mpfr
+}:
+
 let
-  version = "1.0.3";
+  version = "1.1.0";
 in
 stdenv.mkDerivation rec {
   name = "libmpc-${version}"; # to avoid clash with the MPD client
 
   src = fetchurl {
-    url = "http://www.multiprecision.org/mpc/download/mpc-${version}.tar.gz";
-    sha256 = "1hzci2zrrd7v3g1jk35qindq05hbl0bhjcyyisq9z209xb3fqzb1";
+    url = "mirror://gnu/mpc/mpc-${version}.tar.gz";
+    sha256 = "0biwnhjm3rx3hc0rfpvyniky4lpzsvdcwhmcn7f0h4iw2hwcb1b9";
   };
 
   buildInputs = [ gmp mpfr ];
 
-  CFLAGS = "-I${gmp.dev}/include";
-
-  doCheck = true;
-
-  # FIXME needs gcc 4.9 in bootstrap tools
-  hardeningDisable = [ "stackprotector" ];
+  doCheck = true; # not cross;
 
   meta = {
     description = "Library for multiprecision complex arithmetic with exact rounding";

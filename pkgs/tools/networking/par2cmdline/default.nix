@@ -1,26 +1,28 @@
-{ stdenv, fetchzip, autoreconfHook }:
+{ stdenv, fetchFromGitHub, autoreconfHook }:
 
 stdenv.mkDerivation rec {
   name    = "par2cmdline-${version}";
-  version = "0.6.11";
+  version = "0.8.0";
 
-  src = fetchzip {
-    url = "https://github.com/BlackIkeEagle/par2cmdline/archive/v${version}.tar.gz";
-    sha256 = "0maywssv468ia7rf8jyq4axwahgli3nfykl7x3zip503psywjj8a";
+  src = fetchFromGitHub {
+    owner = "Parchive";
+    repo = "par2cmdline";
+    rev = "v${version}";
+    sha256 = "0f1jsd5sw2wynjzi7yjqjaf13yhyjfdid91p8yh0jn32y03kjyrz";
   };
 
-  buildInputs = [ autoreconfHook ];
+  nativeBuildInputs = [ autoreconfHook ];
 
-  meta = {
-    homepage = https://github.com/BlackIkeEagle/par2cmdline;
+  meta = with stdenv.lib; {
+    homepage = https://github.com/Parchive/par2cmdline;
     description = "PAR 2.0 compatible file verification and repair tool";
     longDescription = ''
       par2cmdline is a program for creating and using PAR2 files to detect
       damage in data files and repair them if necessary. It can be used with
       any kind of file.
     '';
-    license = stdenv.lib.licenses.gpl2Plus;
-    maintainers = [ stdenv.lib.maintainers.muflax ];
-    platforms = stdenv.lib.platforms.all;
+    license = licenses.gpl2Plus;
+    maintainers = [ maintainers.muflax ];
+    platforms = platforms.all;
   };
 }

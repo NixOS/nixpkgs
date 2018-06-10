@@ -1,40 +1,55 @@
-{ stdenv, lib, writeText, writeScript, fetchurl, php }:
+{ stdenv, lib, fetchurl, writeScript, writeText, php }:
 
 let
-  version = "0.24.1";
   name = "wp-cli-${version}";
+  version = "1.5.1";
 
-  phpIni = writeText "wp-cli-php.ini" ''
+  src = fetchurl {
+    url    = "https://github.com/wp-cli/wp-cli/releases/download/v${version}/${name}.phar";
+    sha256 = "1lnjbl6rcv32g6akj4552ncyqmbsawmx1dnbmxr0rjj7wr8484f1";
+  };
+
+  completion = fetchurl {
+    url    = "https://raw.githubusercontent.com/wp-cli/wp-cli/v${version}/utils/wp-completion.bash";
+    sha256 = "15d330x6d3fizrm6ckzmdknqg6wjlx5fr87bmkbd5s6a1ihs0g24";
+  };
+
+  bin = writeScript "wp" ''
+    #! ${stdenv.shell}
+
+    set -euo pipefail
+
+    exec ${lib.getBin php}/bin/php \
+      -c ${ini} \
+      -f ${src} -- "$@"
+  '';
+
+  ini = writeText "wp-cli.ini" ''
+    [PHP]
+    memory_limit = -1 ; no limit as composer uses a lot of memory
+
     [Phar]
     phar.readonly = Off
   '';
 
-  wpBin = writeScript "wp" ''
-    #! ${stdenv.shell} -e
-    exec ${php}/bin/php \
-      -c ${phpIni} \
-      -f ${src} "$@"
-  '';
-
-  src = fetchurl {
-    url = "https://github.com/wp-cli/wp-cli/releases/download/v${version}/${name}.phar";
-    sha256 = "027nclp8qbfr624ja6aixzcwnvb55d7dskk9l1i042bc86hmphfd";
-  };
-
 in stdenv.mkDerivation rec {
-
-  inherit name;
+  inherit name version;
 
   buildCommand = ''
-    mkdir -p $out/bin
-    ln -s ${wpBin} $out/bin/wp
+    mkdir -p $out/{bin,share/bash-completion/completions}
+
+    ln      -s     ${bin}        $out/bin/wp
+    install -Dm644 ${completion} $out/share/bash-completion/completions/wp
+
+    # this is a very basic run test
+    $out/bin/wp --info
   '';
 
   meta = with stdenv.lib; {
     description = "A command line interface for WordPress";
+    homepage    = https://wp-cli.org;
+    license     = licenses.mit;
     maintainers = with maintainers; [ peterhoeg ];
-    platforms = platforms.all;
-    homepage = https://wp-cli.org;
-    license = licenses.mit;
+    platforms   = platforms.all;
   };
 }

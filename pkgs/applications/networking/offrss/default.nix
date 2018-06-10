@@ -8,19 +8,14 @@ stdenv.mkDerivation {
     cp offrss $out/bin
   '';
 
-  crossAttrs = {
-    propagatedBuildInputs = [ curl.crossDrv libmrss.crossDrv ];
-    preConfigure = ''
-      sed 's/^PDF/#PDF/' -i Makefile
-    '';
-    makeFlags = "CC=${stdenv.cross.config}-gcc";
-  };
-
-  buildInputs = [ curl libmrss podofo ]
+  buildInputs = [ curl libmrss ]
+    ++ stdenv.lib.optional (stdenv.hostPlatform == stdenv.buildPlatform) podofo
     ++ stdenv.lib.optional (!stdenv.isLinux) libiconv;
 
   configurePhase = stdenv.lib.optionalString (!stdenv.isLinux) ''
     sed 's/#EXTRA/EXTRA/' -i Makefile
+  '' + stdenv.lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
+    sed 's/^PDF/#PDF/' -i Makefile
   '';
 
   src = fetchurl {
@@ -29,10 +24,10 @@ stdenv.mkDerivation {
   };
 
   meta = {
-    homepage = "http://vicerveza.homeunix.net/~viric/cgi-bin/offrss";
+    homepage = http://vicerveza.homeunix.net/~viric/cgi-bin/offrss;
     description = "Offline RSS/Atom reader";
     license="AGPLv3+";
     maintainers = with stdenv.lib.maintainers; [viric];
-    platforms = with stdenv.lib.platforms; all;
+    platforms = stdenv.lib.platforms.linux;
   };
 }

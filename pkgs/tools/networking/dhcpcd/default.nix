@@ -1,14 +1,19 @@
-{ stdenv, fetchurl, pkgconfig, udev }:
+{ stdenv, fetchurl, pkgconfig, udev, runtimeShellPackage }:
 
 stdenv.mkDerivation rec {
-  name = "dhcpcd-6.11.3";
+  # when updating this to >=7, check, see previous reverts:
+  # nix-build -A nixos.tests.networking.scripted.macvlan.x86_64-linux nixos/release-combined.nix
+  name = "dhcpcd-6.11.5";
 
   src = fetchurl {
     url = "mirror://roy/dhcpcd/${name}.tar.xz";
-    sha256 = "01lv4a7ls55iv9f9gkh6vswqmbpqkdzj4d8ayq4dcir9vz215gas";
+    sha256 = "17nnhxmbdcc7k2mh6sgvxisqcqbic5540xbig363ds97gvf795kg";
   };
 
-  buildInputs = [ pkgconfig udev ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ udev ];
+
+  preConfigure = "patchShebangs ./configure";
 
   configureFlags = [
     "--sysconfdir=/etc"
@@ -24,9 +29,14 @@ stdenv.mkDerivation rec {
   # Check that the udev plugin got built.
   postInstall = stdenv.lib.optional (udev != null) "[ -e $out/lib/dhcpcd/dev/udev.so ]";
 
+  # TODO shlevy remove once patchShebangs is fixed
+  postFixup = ''
+    find $out -type f -print0 | xargs --null sed -i 's|${stdenv.shellPackage}|${runtimeShellPackage}|'
+  '';
+
   meta = {
     description = "A client for the Dynamic Host Configuration Protocol (DHCP)";
-    homepage = http://roy.marples.name/projects/dhcpcd;
+    homepage = https://roy.marples.name/projects/dhcpcd;
     platforms = stdenv.lib.platforms.linux;
     maintainers = with stdenv.lib.maintainers; [ eelco fpletz ];
   };

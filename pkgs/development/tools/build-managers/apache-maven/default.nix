@@ -2,7 +2,7 @@
 
 assert jdk != null;
 
-let version = "3.3.9"; in
+let version = "3.5.3"; in
 stdenv.mkDerivation rec {
   name = "apache-maven-${version}";
 
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://apache/maven/maven-3/${version}/binaries/${name}-bin.tar.gz";
-    sha256 = "6e3e9c949ab4695a204f74038717aa7b2689b1be94875899ac1b3fe42800ff82";
+    sha256 = "0244mpziz4rw35x2cahsqlxpnygvi6qpll16g4kx87db7wvmcadm";
   };
 
   buildInputs = [ makeWrapper ];
@@ -22,5 +22,6 @@ stdenv.mkDerivation rec {
     homepage = http://maven.apache.org/;
     license = licenses.asl20;
     platforms = platforms.unix;
+    maintainers = with maintainers; [ cko ];
   };
 }

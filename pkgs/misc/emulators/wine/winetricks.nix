@@ -14,6 +14,8 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "PREFIX=$(out)" ];
 
+  doCheck = false; # requires "bashate"
+
   postInstall = ''
     sed -i \
       -e '2i PATH="${pathAdd}:$PATH"' \
@@ -23,7 +25,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "A script to install DLLs needed to work around problems in Wine";
     license = stdenv.lib.licenses.lgpl21;
-    homepage = http://code.google.com/p/winetricks/;
+    homepage = https://github.com/Winetricks/winetricks;
     maintainers = with stdenv.lib.maintainers; [ the-kenny ];
     platforms = with stdenv.lib.platforms; linux;
   };

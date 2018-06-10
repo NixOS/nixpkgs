@@ -2,7 +2,7 @@
 
 buildGoPackage rec {
   name = "sift-${version}";
-  version = "0.8.0";
+  version = "0.9.0";
   rev = "v${version}";
 
   goPackagePath = "github.com/svent/sift";
@@ -11,16 +11,16 @@ buildGoPackage rec {
     inherit rev;
     owner = "svent";
     repo = "sift";
-    sha256 = "1nb042k420xr6000ipwhqn41vg8jfp6ghq4z7y1sjnndkrhclzm1";
+    sha256 = "0bgy0jf84z1c3msvb60ffj4axayfchdkf0xjnsbx9kad1v10g7i1";
   };
 
   goDeps = ./deps.nix;
 
   meta = with lib; {
     description = "sift is a fast and powerful alternative to grep";
-    homepage = "https://sift-tool.org";
+    homepage = https://sift-tool.org;
     maintainers = [ maintainers.carlsverre ];
     license = licenses.gpl3;
-    platforms = platforms.linux;
+    platforms = platforms.all;
   };
 }

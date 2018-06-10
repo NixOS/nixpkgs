@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
   doCheck = true;
   checkPhase = "python runtests.py";
 
-  buildInputs = [ python python.modules.bsddb libxslt
+  buildInputs = [ python libxslt
     libxml2 pythonPackages.genshi pythonPackages.lxml makeWrapper ];
 
   installPhase = ''
@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
       feeds published by web sites and aggregates their content together into a
       single combined feed, latest news first.
     '';
-    homepage = "http://intertwingly.net/code/venus/docs/index.html";
+    homepage = http://intertwingly.net/code/venus/docs/index.html;
     license = stdenv.lib.licenses.psfl;
     platforms = stdenv.lib.platforms.all;
     maintainers = [ stdenv.lib.maintainers.garbas ];

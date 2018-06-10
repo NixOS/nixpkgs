@@ -1,35 +1,35 @@
-{ stdenv, fetchurl, pythonPackages }:
+{ stdenv, fetchurl, python }:
 
-pythonPackages.buildPythonApplication rec {
-  name = "tmuxp-${version}";
-  version = "1.2.0";
+with python.pkgs;
 
-  namePrefix = "";
+buildPythonApplication rec {
+  pname = "tmuxp";
+  version = "1.4.0";
 
-  src = fetchurl {
-    url = "mirror://pypi/t/tmuxp/${name}.tar.gz";
-    sha256 = "05z5ssv9glsqmcy9fdq06bawy1274dnzqsqd3a4z4jd0w6j09smn";
+  src = fetchPypi {
+    inherit pname version;
+    sha256 = "1ghi6w0cfgs94zlz304q37h3lga2jalfm0hqi3g2060zfdnb96n7";
   };
 
-  patchPhase = ''
-    # Dependencies required for testing shouldn't pinned to
-    # a specific version.
-    substituteInPlace requirements/test.txt \
-      --replace "==" ">="
+  postPatch = ''
+    sed -i 's/==.*$//' requirements/base.txt requirements/test.txt
   '';
 
-  buildInputs = with pythonPackages; [
+  checkInputs = [
     pytest
     pytest-rerunfailures
   ];
 
-  propagatedBuildInputs = with pythonPackages; [
+  # No tests in archive
+  doCheck = false;
+
+  propagatedBuildInputs = [
     click colorama kaptan libtmux
   ];
 
   meta = with stdenv.lib; {
     description = "Manage tmux workspaces from JSON and YAML";
-    homepage = "http://tmuxp.readthedocs.io";
+    homepage = http://tmuxp.readthedocs.io;
     license = licenses.bsd3;
     platforms = platforms.linux;
     maintainers = with maintainers; [ jgeerds ];

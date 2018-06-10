@@ -1,32 +1,46 @@
-{ stdenv, fetchzip, ocaml, findlib, cstruct, zarith, ounit }:
+{ stdenv, buildOcaml, fetchFromGitHub, ocaml, findlib
+, cstruct, zarith, ounit, result, topkg, ptime
+}:
 
-assert stdenv.lib.versionAtLeast (stdenv.lib.getVersion ocaml) "4.01";
+let param =
+  if stdenv.lib.versionAtLeast ocaml.version "4.02" then {
+    version = "0.2.0";
+    sha256 = "0yfq4hnyzx6hy05m60007cfpq88wxwa8wqzib19lnk2qrgy772mx";
+    propagatedBuildInputs = [ ptime ];
+  } else {
+    version = "0.1.3";
+    sha256 = "0hpn049i46sdnv2i6m7r6m6ch0jz8argybh71wykbvcqdby08zxj";
+  propagatedBuildInputs = [ ];
+  };
+in
 
-let version = "0.1.2"; in
+buildOcaml rec {
+  name = "asn1-combinators";
+  inherit (param) version;
 
-stdenv.mkDerivation {
-  name = "ocaml-asn1-combinators-${version}";
+  minimumSupportedOcamlVersion = "4.01";
 
-  src = fetchzip {
-    url = "https://github.com/mirleft/ocaml-asn1-combinators/archive/${version}.tar.gz";
-    sha256 = "13vpdgcyph4vq3gcp8b16756s4nz3crpxhxfhcqgc1ffz61gc0h5";
+  src = fetchFromGitHub {
+    owner  = "mirleft";
+    repo   = "ocaml-asn1-combinators";
+    rev    = "v${version}";
+    inherit (param) sha256;
   };
 
-  buildInputs = [ ocaml findlib ounit ];
-  propagatedBuildInputs = [ cstruct zarith ];
+  buildInputs = [ ocaml findlib ounit topkg ];
+  propagatedBuildInputs = [ result cstruct zarith ] ++ param.propagatedBuildInputs;
 
-  createFindlibDestdir = true;
+  buildPhase = "${topkg.run} build --tests true";
 
-  configureFlags = "--enable-tests";
+  inherit (topkg) installPhase;
+
   doCheck = true;
-  checkTarget = "test";
+  checkPhase = "${topkg.run} test";
 
   meta = {
     homepage = https://github.com/mirleft/ocaml-asn1-combinators;
     description = "Combinators for expressing ASN.1 grammars in OCaml";
-    platforms = ocaml.meta.platforms or [];
-    license = stdenv.lib.licenses.bsd2;
+    license = stdenv.lib.licenses.isc;
     maintainers = with stdenv.lib.maintainers; [ vbgl ];
-    broken = stdenv.isi686; # https://github.com/mirleft/ocaml-asn1-combinators/issues/13
   };
 }

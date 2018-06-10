@@ -5,7 +5,7 @@
   , pythonPackages, utillinux
 
   # these deps are hidden; cmake doesn't catch them
-  , gazeboSimulator, sdformat ? gazeboSimulator.sdformat, curl, tinyxml, kde4, x11
+  , gazeboSimulator, sdformat ? gazeboSimulator.sdformat, curl, tinyxml, qt4, x11
   , withIgnitionTransport ? true
   , libav, withLibAvSupport ? true
   , openal, withAudioSupport ? false
@@ -31,13 +31,19 @@ stdenv.mkDerivation rec {
   };
 
   enableParallelBuilding = true; # gazebo needs this so bad
-  cmakeFlags = []
+  cmakeFlags = [
+  "-DCMAKE_INSTALL_LIBDIR:PATH=lib"
+  "-DCMAKE_INSTALL_INCLUDEDIR=include" ]
     ++ optional withQuickBuild [ "-DENABLE_TESTS_COMPILATION=False" ]
     ++ optional withLowMemorySupport [ "-DUSE_LOW_MEMORY_TESTS=True" ]
     ++ optional withHeadless [ "-DENABLE_SCREEN_TESTS=False" ];
 
+  nativeBuildInputs = [ cmake pkgconfig ];
+
+  propagatedNativeBuildInputs = [ boost boost-build boost_process protobuf ];
+
   buildInputs = [
-    #cmake pkgconfig boost protobuf
+    #cmake boost protobuf
     freeimage
     xorg_sys_opengl
     tbb
@@ -55,7 +61,7 @@ stdenv.mkDerivation rec {
     curl
     tinyxml
     x11
-    kde4.qt4
+    qt4
   ] ++ optional stdenv.isLinux utillinux # on Linux needs uuid/uuid.h
     ++ optional withDocs doxygen
     ++ optional withLibAvSupport libav  #TODO: package rubygem-ronn and put it here
@@ -66,10 +72,6 @@ stdenv.mkDerivation rec {
     ++ optional withDigitalElevationTerrainsSupport gdal
     ++ optional withConstructiveSolidGeometrySupport gts
     ++ optional withHdf5Support hdf5;
-
-  nativeBuildInputs = [ cmake pkgconfig ];
-
-  propagatedNativeBuildInputs = [ boost boost-build boost_process protobuf ];
 
   meta = with stdenv.lib; {
     homepage = http://gazebosim.org/;

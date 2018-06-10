@@ -6,9 +6,7 @@ stdenv.mkDerivation rec {
 
   env = bundlerEnv rec {
     name = "ronn-gems";
-    gemfile = ./Gemfile;
-    lockfile = ./Gemfile.lock;
-    gemset = ./gemset.nix;
+    gemdir = ./.;
   };
 
   phases = ["installPhase"];

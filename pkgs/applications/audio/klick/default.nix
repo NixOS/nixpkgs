@@ -10,7 +10,9 @@ stdenv.mkDerivation rec {
     sha256 = "1289533c0849b1b66463bf27f7ce5f71736b655cfb7672ef884c7e6eb957ac42";
   };
 
-  buildInputs = [ scons pkgconfig libsamplerate libsndfile liblo libjack2 boost ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ scons libsamplerate libsndfile liblo libjack2 boost ];
+  NIX_CFLAGS_COMPILE = "-fpermissive";
 
   buildPhase = ''
     mkdir -p $out
@@ -20,7 +22,7 @@ stdenv.mkDerivation rec {
   installPhase = "scons install";
 
   meta = {
-    homepage = "http://das.nasophon.de/klick/";
+    homepage = http://das.nasophon.de/klick/;
     description = "Advanced command-line metronome for JACK";
     license = stdenv.lib.licenses.gpl2Plus;
     platforms = stdenv.lib.platforms.linux;

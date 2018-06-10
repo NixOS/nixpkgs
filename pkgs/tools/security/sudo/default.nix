@@ -1,18 +1,24 @@
-{ stdenv, fetchurl, coreutils, pam, groff
-, sendmailPath ? "/var/setuid-wrappers/sendmail"
+{ stdenv, fetchurl, coreutils, pam, groff, sssd
+, sendmailPath ? "/run/wrappers/bin/sendmail"
 , withInsults ? false
+, withSssd ? false
 }:
 
 stdenv.mkDerivation rec {
-  name = "sudo-1.8.17p1";
+  name = "sudo-1.8.23";
 
   src = fetchurl {
     urls =
       [ "ftp://ftp.sudo.ws/pub/sudo/${name}.tar.gz"
         "ftp://ftp.sudo.ws/pub/sudo/OLD/${name}.tar.gz"
       ];
-    sha256 = "c690d707fb561b3ecdf6a6de5563bc0b769388eff201c851edbace408bb155cc";
+    sha256 = "0yg62wq8rcrbr7qvh3wgfg2g4bwanbi50cr2lf2cfyy8dydx4qyq";
   };
+
+  prePatch = ''
+    # do not set sticky bit in nix store
+    substituteInPlace src/Makefile.in --replace 04755 0755
+  '';
 
   configureFlags = [
     "--with-env-editor"
@@ -22,9 +28,13 @@ stdenv.mkDerivation rec {
     "--with-logpath=/var/log/sudo.log"
     "--with-iologdir=/var/log/sudo-io"
     "--with-sendmail=${sendmailPath}"
+    "--enable-tmpfiles.d=no"
   ] ++ stdenv.lib.optional withInsults [
     "--with-insults"
     "--with-all-insults"
+  ] ++ stdenv.lib.optional withSssd [
+    "--with-sssd"
+    "--with-sssd-lib=${sssd}/lib"
   ];
 
   configureFlagsArray = [
@@ -41,9 +51,12 @@ stdenv.mkDerivation rec {
     installFlags="sudoers_uid=$(id -u) sudoers_gid=$(id -g) sysconfdir=$out/etc rundir=$TMPDIR/dummy vardir=$TMPDIR/dummy"
     '';
 
-  buildInputs = [ coreutils pam groff ];
+  nativeBuildInputs = [ groff ];
+  buildInputs = [ pam ];
 
   enableParallelBuilding = true;
+
+  doCheck = false; # needs root
 
   postInstall =
     ''
@@ -61,9 +74,9 @@ stdenv.mkDerivation rec {
       providing an audit trail of the commands and their arguments.
       '';
 
-    homepage = http://www.sudo.ws/;
+    homepage = https://www.sudo.ws/;
 
-    license = http://www.sudo.ws/sudo/license.html;
+    license = https://www.sudo.ws/sudo/license.html;
 
     maintainers = [ stdenv.lib.maintainers.eelco ];
 

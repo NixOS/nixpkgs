@@ -11,9 +11,10 @@ import ./make-test.nix ({ pkgs, ...} : {
         services.smokeping = {
           enable = true;
           port = 8081;
+          mailHost = "127.0.0.2";
           probeConfig = ''
             + FPing
-            binary = ${pkgs.fping}/bin/fping
+            binary = /run/wrappers/bin/fping
             offset = 0%
           '';
         };
@@ -27,5 +28,6 @@ import ./make-test.nix ({ pkgs, ...} : {
     $sm->waitForFile("/var/lib/smokeping/data/Local/LocalMachine.rrd");
     $sm->succeed("curl -s -f localhost:8081/smokeping.fcgi?target=Local");
     $sm->succeed("ls /var/lib/smokeping/cache/Local/LocalMachine_mini.png");
+    $sm->succeed("ls /var/lib/smokeping/cache/index.html");
   '';
 })

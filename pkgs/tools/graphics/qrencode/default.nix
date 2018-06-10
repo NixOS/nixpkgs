@@ -1,20 +1,20 @@
 { stdenv, fetchurl, libpng, pkgconfig }:
 
 stdenv.mkDerivation rec {
-  name = "qrencode-3.4.4";
+  name = "qrencode-4.0.1";
 
   src = fetchurl {
     url = "${meta.homepage}/${name}.tar.bz2";
-    sha256 = "198zvsfa2y5bb3ccikrhmhd4i43apr3b26dqcf3zkjyv3n5iirgg";
+    sha256 = "0j7cqhjc0l6i99lzph51gakmcmfs74x483plna93r4ngz328knph";
   };
 
   buildInputs = [ libpng ];
   nativeBuildInputs = [ pkgconfig ];
 
-  meta = {
-    homepage = http://fukuchi.org/works/qrencode/;
+  meta = with stdenv.lib; {
+    homepage = https://fukuchi.org/works/qrencode/;
     description = "QR code encoder";
-    platforms = stdenv.lib.platforms.all;
-    maintainers = [ stdenv.lib.maintainers.urkud ];
+    platforms = platforms.all;
+    maintainers = with maintainers; [ yegortimoshenko ];
   };
 }

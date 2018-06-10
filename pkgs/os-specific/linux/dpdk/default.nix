@@ -1,71 +1,64 @@
-{ stdenv, lib, kernel, fetchurl, pkgconfig, libvirt }:
+{ stdenv, lib, kernel, fetchurl, pkgconfig, numactl, shared ? false }:
 
-assert lib.versionAtLeast kernel.version "3.18";
+let
 
-stdenv.mkDerivation rec {
-  name = "dpdk-${version}-${kernel.version}";
-  version = "16.07";
+  kver = kernel.modDirVersion or null;
+
+  mod = kernel != null;
+
+in stdenv.mkDerivation rec {
+  name = "dpdk-${version}" + lib.optionalString mod "-${kernel.version}";
+  version = "17.11.2";
 
   src = fetchurl {
-    url = "http://dpdk.org/browse/dpdk/snapshot/dpdk-${version}.tar.gz";
-    sha256 = "1sgh55w3xpc0lb70s74cbyryxdjijk1fbv9b25jy8ms3lxaj966c";
+    url = "http://fast.dpdk.org/rel/dpdk-${version}.tar.xz";
+    sha256 = "19m5l3jkrns8r1zbjb6ry18w50ff36kbl5b5g6pfcp9p57sfisd2";
   };
 
-  buildInputs = [ pkgconfig libvirt ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ numactl ] ++ lib.optional mod kernel.moduleBuildDependencies;
 
-  RTE_KERNELDIR = "${kernel.dev}/lib/modules/${kernel.modDirVersion}/build";
+  RTE_KERNELDIR = if mod then "${kernel.dev}/lib/modules/${kver}/build" else "/var/empty";
   RTE_TARGET = "x86_64-native-linuxapp-gcc";
 
   # we need sse3 instructions to build
-  NIX_CFLAGS_COMPILE = [ "-march=core2" ];
-
-  enableParallelBuilding = true;
-  outputs = [ "out" "kmod" "examples" ];
-
+  NIX_CFLAGS_COMPILE = [ "-msse3" ];
   hardeningDisable = [ "pic" ];
 
+  postPatch = ''
+    cat >>config/defconfig_$RTE_TARGET <<EOF
+# Build static or shared libraries.
+CONFIG_RTE_BUILD_SHARED_LIB=${if shared then "y" else "n"}
+EOF
+  '' + lib.optionalString (!mod) ''
+    cat >>config/defconfig_$RTE_TARGET <<EOF
+# Do not build kernel modules.
+CONFIG_RTE_EAL_IGB_UIO=n
+CONFIG_RTE_KNI_KMOD=n
+EOF
+  '';
+
   configurePhase = ''
-    make T=x86_64-native-linuxapp-gcc config
+    make T=${RTE_TARGET} config
   '';
 
-  buildPhase = ''
-    make T=x86_64-native-linuxapp-gcc install
-    make T=x86_64-native-linuxapp-gcc examples
-  '';
+  installTargets = [ "install-runtime" "install-sdk" "install-kmod" ]; # skip install-doc
 
-  installPhase = ''
-    install -m 0755 -d $out/lib
-    install -m 0644 ${RTE_TARGET}/lib/*.a $out/lib
+  installFlags = [
+    "prefix=$(out)"
+  ] ++ lib.optionals mod [
+    "kerneldir=$(kmod)/lib/modules/${kver}"
+  ];
 
-    install -m 0755 -d $out/include
-    install -m 0644 ${RTE_TARGET}/include/*.h $out/include
+  outputs = [ "out" ] ++ lib.optional mod "kmod";
 
-    install -m 0755 -d $out/include/generic
-    install -m 0644 ${RTE_TARGET}/include/generic/*.h $out/include/generic
+  enableParallelBuilding = true;
 
-    install -m 0755 -d $out/include/exec-env
-    install -m 0644 ${RTE_TARGET}/include/exec-env/*.h $out/include/exec-env
-
-    install -m 0755 -d $out/${RTE_TARGET}
-    install -m 0644 ${RTE_TARGET}/.config $out/${RTE_TARGET}
-
-    install -m 0755 -d $out/${RTE_TARGET}/include
-    install -m 0644 ${RTE_TARGET}/include/rte_config.h $out/${RTE_TARGET}/include
-
-    cp -pr mk scripts $out/
-
-    mkdir -p $kmod/lib/modules/${kernel.modDirVersion}/kernel/drivers/net
-    cp ${RTE_TARGET}/kmod/*.ko $kmod/lib/modules/${kernel.modDirVersion}/kernel/drivers/net
-
-    mkdir -p $examples/bin
-    find examples ${RTE_TARGET}/app -type f -executable -exec cp {} $examples/bin \;
-  '';
-
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Set of libraries and drivers for fast packet processing";
     homepage = http://dpdk.org/;
     license = with licenses; [ lgpl21 gpl2 bsd2 ];
     platforms =  [ "x86_64-linux" ];
-    maintainers = [ maintainers.domenkozar ];
+    maintainers = with maintainers; [ domenkozar orivej ];
   };
 }

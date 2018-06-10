@@ -11,14 +11,16 @@ stdenv.mkDerivation rec {
     sha256 = "0jwxh71am83fbnq9mn06jl06rq8qybm506js79xmmc3xbk5pqvy4";
   };
 
-  buildInputs = [ libconfig pkgconfig libevent openssl ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ libconfig libevent openssl ];
 
-  installFlags = "INSTALL_DIR=\${out}/bin/";
+  installFlags = [ "INSTALL_DIR=$(out)/bin/" ];
 
-  preInstall = ''
+  prePatch = ''
     mkdir -p $out/bin
     substituteInPlace Makefile \
-      --replace /usr/bin/install $(type -P install)
+      --replace /usr/bin/install $(type -P install) \
+      --replace gcc cc
   '';
 
   meta = {

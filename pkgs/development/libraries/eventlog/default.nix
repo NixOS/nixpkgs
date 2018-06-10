@@ -18,7 +18,7 @@ stdenv.mkDerivation {
       Where you had a simple non-structrured string in syslog() you have a
       combination of description and tag/value pairs.
     '';
-    homepage = "http://www.balabit.com/support/community/products/";
+    homepage = http://www.balabit.com/support/community/products/;
     license = stdenv.lib.licenses.bsd3;
     platforms = stdenv.lib.platforms.unix;
   };

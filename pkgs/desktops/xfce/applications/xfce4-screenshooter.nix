@@ -1,5 +1,5 @@
-{ stdenv, fetchurl, pkgconfig, intltool, xfce4panel, libxfce4util, gtk, libsoup
-, exo, hicolor_icon_theme }:
+{ stdenv, fetchurl, pkgconfig, intltool, xfce4-panel, libxfce4util, gtk, libsoup
+, makeWrapper, glib-networking, exo, hicolor-icon-theme, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
   p_name  = "xfce4-screenshooter";
@@ -13,11 +13,11 @@ stdenv.mkDerivation rec {
   name = "${p_name}-${ver_maj}.${ver_min}";
 
   nativeBuildInputs = [
-    pkgconfig intltool
+    pkgconfig intltool wrapGAppsHook
   ];
 
   buildInputs = [
-    xfce4panel libxfce4util gtk libsoup exo hicolor_icon_theme
+    xfce4-panel libxfce4util gtk libsoup exo hicolor-icon-theme glib-networking
   ];
 
   meta = {

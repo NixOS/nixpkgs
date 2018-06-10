@@ -1,16 +1,24 @@
-{stdenv, fetchurl, cmake, pkgconfig, zlib, curl, elfutils, python, libiberty, binutils}:
+{stdenv, fetchFromGitHub, cmake, pkgconfig, zlib, curl, elfutils, python, libiberty, libopcodes}:
 
 stdenv.mkDerivation rec {
   name = "kcov-${version}";
-  version = "29";
+  version = "35";
 
-  src = fetchurl {
-    url = "https://github.com/SimonKagstrom/kcov/archive/v${version}.tar.gz";
-    sha256 = "0nspf1bfq8zv7zmcmvkbgg3c90k10qcd56gyg8ln5z64nadvha9d";
+  src = fetchFromGitHub {
+    owner = "SimonKagstrom";
+    repo = "kcov";
+    rev = "v${version}";
+    sha256 = "1da9vm87pi5m9ika0q1f1ai85w3vwlap8yln147yr9sc37jp5jcw";
   };
 
   preConfigure = "patchShebangs src/bin-to-c-source.py";
-  buildInputs = [ cmake pkgconfig zlib curl elfutils python libiberty binutils ];
+  nativeBuildInputs = [ cmake pkgconfig ];
+
+  buildInputs = [ zlib curl elfutils python libiberty libopcodes ];
+
+  patches = [ ./aarch64_nt_prstatus.patch ];
+
+  enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
     description = "Code coverage tester for compiled programs, Python scripts and shell scripts";
@@ -26,7 +34,7 @@ stdenv.mkDerivation rec {
     homepage = http://simonkagstrom.github.io/kcov/index.html;
     license = licenses.gpl2;
 
-    maintainers = [ maintainers.gal_bolle ];
+    maintainers = with maintainers; [ gal_bolle ekleog ];
     platforms = platforms.linux;
   };
 }

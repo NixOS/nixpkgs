@@ -3,25 +3,35 @@
 with lib;
 
 let
-  cfg = config.services.namecoind;
+  cfg     = config.services.namecoind;
+  dataDir = "/var/lib/namecoind";
+  useSSL  = (cfg.rpc.certificate != null) && (cfg.rpc.key != null);
+  useRPC  = (cfg.rpc.user != null) && (cfg.rpc.password != null);
 
-  namecoinConf =
-  let
-    useSSL = (cfg.rpcCertificate != null) && (cfg.rpcKey != null);
-  in
-  pkgs.writeText "namecoin.conf" ''
+  listToConf = option: list:
+    concatMapStrings (value :"${option}=${value}\n") list;
+
+  configFile = pkgs.writeText "namecoin.conf" (''
     server=1
     daemon=0
-    rpcallowip=127.0.0.1
-    walletpath=${cfg.wallet}
-    gen=${if cfg.generate then "1" else "0"}
-    rpcssl=${if useSSL then "1" else "0"}
-    ${optionalString useSSL "rpcsslcertificatechainfile=${cfg.rpcCertificate}"}
-    ${optionalString useSSL "rpcsslprivatekeyfile=${cfg.rpcKey}"}
-    ${optionalString useSSL "rpcsslciphers=TLSv1.2+HIGH:TLSv1+HIGH:!SSLv2:!aNULL:!eNULL:!3DES:@STRENGTH"}
     txindex=1
     txprevcache=1
-  '';
+    walletpath=${cfg.wallet}
+    gen=${if cfg.generate then "1" else "0"}
+    ${listToConf "addnode" cfg.extraNodes}
+    ${listToConf "connect" cfg.trustedNodes}
+  '' + optionalString useRPC ''
+    rpcbind=${cfg.rpc.address}
+    rpcport=${toString cfg.rpc.port}
+    rpcuser=${cfg.rpc.user}
+    rpcpassword=${cfg.rpc.password}
+    ${listToConf "rpcallowip" cfg.rpc.allowFrom}
+  '' + optionalString useSSL ''
+    rpcssl=1
+    rpcsslcertificatechainfile=${cfg.rpc.certificate}
+    rpcsslprivatekeyfile=${cfg.rpc.key}
+    rpcsslciphers=TLSv1.2+HIGH:TLSv1+HIGH:!SSLv2:!aNULL:!eNULL:!3DES:@STRENGTH
+  '');
 
 in
 
@@ -33,37 +43,14 @@ in
 
     services.namecoind = {
 
-      enable = mkOption {
-        type = types.bool;
-        default = false;
-        description = ''
-          Whether to run namecoind.
-        '';
-      };
+      enable = mkEnableOption "namecoind, Namecoin client.";
 
       wallet = mkOption {
         type = types.path;
-        example = "/etc/namecoin/wallet.dat";
+        default = "${dataDir}/wallet.dat";
         description = ''
           Wallet file. The ownership of the file has to be
           namecoin:namecoin, and the permissions must be 0640.
-        '';
-      };
-
-      userFile = mkOption {
-        type = types.nullOr types.path;
-        default = null;
-        example = "/etc/namecoin/user";
-        description = ''
-          File containing the user name and user password to
-          authenticate RPC connections to namecoind.
-          The content of the file is of the form:
-          <literal>
-          USER=namecoin
-          PASSWORD=secret
-          </literal>
-          The ownership of the file has to be namecoin:namecoin,
-          and the permissions must be 0640.
         '';
       };
 
@@ -75,21 +62,80 @@ in
         '';
       };
 
-      rpcCertificate = mkOption {
+      extraNodes = mkOption {
+        type = types.listOf types.str;
+        default = [ ];
+        description = ''
+          List of additional peer IP addresses to connect to.
+        '';
+      };
+
+      trustedNodes = mkOption {
+        type = types.listOf types.str;
+        default = [ ];
+        description = ''
+          List of the only peer IP addresses to connect to. If specified
+          no other connection will be made.
+        '';
+      };
+
+      rpc.user = mkOption {
+        type = types.nullOr types.str;
+        default = null;
+        description = ''
+          User name for RPC connections.
+        '';
+      };
+
+      rpc.password = mkOption {
+        type = types.str;
+        default = null;
+        description = ''
+          Password for RPC connections.
+        '';
+      };
+
+      rpc.address = mkOption {
+        type = types.str;
+        default = "0.0.0.0";
+        description = ''
+          IP address the RPC server will bind to.
+        '';
+      };
+
+      rpc.port = mkOption {
+        type = types.int;
+        default = 8332;
+        description = ''
+          Port the RPC server will bind to.
+        '';
+      };
+
+      rpc.certificate = mkOption {
         type = types.nullOr types.path;
         default = null;
-        example = "/etc/namecoin/server.cert";
+        example = "/var/lib/namecoind/server.cert";
         description = ''
           Certificate file for securing RPC connections.
         '';
       };
 
-      rpcKey = mkOption {
+      rpc.key = mkOption {
         type = types.nullOr types.path;
         default = null;
-        example = "/etc/namecoin/server.pem";
+        example = "/var/lib/namecoind/server.pem";
         description = ''
           Key file for securing RPC connections.
+        '';
+      };
+
+
+      rpc.allowFrom = mkOption {
+        type = types.listOf types.str;
+        default = [ "127.0.0.1" ];
+        description = ''
+          List of IP address ranges allowed to use the RPC API.
+          Wiledcards (*) can be user to specify a range.
         '';
       };
 
@@ -102,47 +148,54 @@ in
 
   config = mkIf cfg.enable {
 
-    users.extraUsers = singleton
-      { name = "namecoin";
-        uid = config.ids.uids.namecoin;
-        description = "Namecoin daemon user";
-        home = "/var/lib/namecoin";
-        createHome = true;
-      };
+    services.dnschain.extraConfig = ''
+      [namecoin]
+      config = ${configFile}
+    '';
 
-    users.extraGroups = singleton
-      { name = "namecoin";
-        gid = config.ids.gids.namecoin;
-      };
+    users.extraUsers = singleton {
+      name = "namecoin";
+      uid  = config.ids.uids.namecoin;
+      description = "Namecoin daemon user";
+      home = dataDir;
+      createHome = true;
+    };
+
+    users.extraGroups = singleton {
+      name = "namecoin";
+      gid  = config.ids.gids.namecoin;
+    };
 
     systemd.services.namecoind = {
-        description = "Namecoind Daemon";
-        after = [ "network.target" ];
-        wantedBy = [ "multi-user.target" ];
-        preStart = ''
-          if [  "$(stat --printf '%u' ${cfg.userFile})" != "${toString config.ids.uids.namecoin}" \
-             -o "$(stat --printf '%g' ${cfg.userFile})" != "${toString config.ids.gids.namecoin}" \
-             -o "$(stat --printf '%a' ${cfg.userFile})" != "640" ]; then
-             echo "ERROR: bad ownership or rights on ${cfg.userFile}" >&2
-             exit 1
-          fi
-          if [  "$(stat --printf '%u' ${cfg.wallet})" != "${toString config.ids.uids.namecoin}" \
-             -o "$(stat --printf '%g' ${cfg.wallet})" != "${toString config.ids.gids.namecoin}" \
-             -o "$(stat --printf '%a' ${cfg.wallet})" != "640" ]; then
-             echo "ERROR: bad ownership or rights on ${cfg.wallet}" >&2
-             exit 1
-          fi
-        '';
-        serviceConfig = {
-          Type = "simple";
-          User = "namecoin";
-          EnvironmentFile = cfg.userFile;
-          ExecStart = "${pkgs.altcoins.namecoind}/bin/namecoind -conf=${namecoinConf} -rpcuser=\${USER} -rpcpassword=\${PASSWORD} -printtoconsole";
-          ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
-          ExecStop = "${pkgs.coreutils}/bin/kill -KILL $MAINPID";
-          StandardOutput = "null";
-          Nice = "10";
-        };
+      description = "Namecoind daemon";
+      after    = [ "network.target" ];
+      wantedBy = [ "multi-user.target" ];
+
+      serviceConfig = {
+        User  = "namecoin";
+        Group = "namecoin";
+        ExecStart  = "${pkgs.altcoins.namecoind}/bin/namecoind -conf=${configFile} -datadir=${dataDir} -printtoconsole";
+        ExecStop   = "${pkgs.coreutils}/bin/kill -KILL $MAINPID";
+        ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
+        Nice = "10";
+        PrivateTmp = true;
+        TimeoutStopSec     = "60s";
+        TimeoutStartSec    = "2s";
+        Restart            = "always";
+        StartLimitInterval = "120s";
+        StartLimitBurst    = "5";
+      };
+
+      preStart = optionalString (cfg.wallet != "${dataDir}/wallet.dat")  ''
+        # check wallet file permissions
+        if [ "$(stat --printf '%u' ${cfg.wallet})" != "${toString config.ids.uids.namecoin}" \
+           -o "$(stat --printf '%g' ${cfg.wallet})" != "${toString config.ids.gids.namecoin}" \
+           -o "$(stat --printf '%a' ${cfg.wallet})" != "640" ]; then
+           echo "ERROR: bad ownership or rights on ${cfg.wallet}" >&2
+           exit 1
+        fi
+      '';
+
     };
 
   };

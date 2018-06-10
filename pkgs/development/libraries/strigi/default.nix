@@ -16,11 +16,11 @@ stdenv.mkDerivation rec {
   CLUCENE_HOME = clucene_core;
 
   buildInputs =
-    [ zlib bzip2 stdenv.cc.libc libxml2 qt4 exiv2 clucene_core fam dbus_tools ];
+    [ zlib bzip2 libxml2 qt4 exiv2 clucene_core fam dbus_tools ];
 
   nativeBuildInputs = [ cmake pkgconfig perl ];
 
-  patches = [ ./export_bufferedstream.patch ];
+  patches = [ ./export_bufferedstream.patch ./gcc6.patch ];
 
   enableParallelBuilding = true;
 
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
     homepage = http://strigi.sourceforge.net;
     description = "A very fast and efficient crawler to index data on your harddrive";
     license = "LGPL";
-    maintainers = with stdenv.lib.maintainers; [ sander urkud ];
+    maintainers = with stdenv.lib.maintainers; [ sander ];
     inherit (qt4.meta) platforms;
   };
 }

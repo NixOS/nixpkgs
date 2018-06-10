@@ -1,45 +1,41 @@
-{ mkDerivation, aeson, ansi-terminal, ansi-wl-pprint, base, binary
-, bytestring, containers, directory, edit-distance, fetchgit
-, filemanip, filepath, HUnit, indents, mtl, optparse-applicative
-, parsec, pretty, process, QuickCheck, quickcheck-io
-, regex-applicative, split, stdenv, tasty, tasty-golden
-, tasty-hunit, tasty-quickcheck, text, union-find, wl-pprint
+{ mkDerivation, ansi-terminal, ansi-wl-pprint, base, binary
+, bytestring, Cabal, cmark, containers, directory, fetchgit
+, filepath, free, HUnit, indents, json, mtl, optparse-applicative
+, parsec, process, QuickCheck, quickcheck-io, split, stdenv, tasty
+, tasty-golden, tasty-hunit, tasty-quickcheck, text
 }:
 mkDerivation {
   pname = "elm-format";
-  version = "0.4.0";
+  version = "0.7.0";
   src = fetchgit {
     url = "http://github.com/avh4/elm-format";
-    sha256 = "199xh2w5cwcf79a8fv6j8dpk9h8a4cygrf8cfr9p7bvp2wvczibm";
-    rev = "d9cbe65c5f01d21b5a02c2f963aa4c9d3f0539d0";
+    sha256 = "1snl2lrrzdwgzi68agi3sdw84aslj04pzzxpm1mam9ic6dzhn3jf";
+    rev = "da4b415c6a2b7e77b7d9f00beca3e45230e603fb";
   };
-  isLibrary = false;
+
+  doHaddock = false;
+  isLibrary = true;
   isExecutable = true;
-  executableHaskellDepends = [
-    aeson ansi-terminal ansi-wl-pprint base binary bytestring
-    containers directory edit-distance filemanip filepath indents mtl
-    optparse-applicative parsec pretty process regex-applicative split
-    text
+  setupHaskellDepends = [ base Cabal directory filepath process ];
+  libraryHaskellDepends = [
+    ansi-terminal ansi-wl-pprint base binary bytestring containers
+    directory filepath free indents json mtl optparse-applicative
+    parsec process split text
   ];
+  executableHaskellDepends = [ base ];
   testHaskellDepends = [
-    aeson ansi-terminal ansi-wl-pprint base binary bytestring
-    containers directory edit-distance filemanip filepath HUnit indents
-    mtl optparse-applicative parsec pretty process QuickCheck
-    quickcheck-io regex-applicative split tasty tasty-golden
-    tasty-hunit tasty-quickcheck text union-find wl-pprint
+    base cmark containers HUnit mtl parsec QuickCheck quickcheck-io
+    split tasty tasty-golden tasty-hunit tasty-quickcheck text
   ];
   jailbreak = true;
-  homepage = "http://elm-lang.org";
+  postInstall = ''
+    ln -s $out/bin/elm-format-0.18 $out/bin/elm-format
+  '';
+  postPatch = ''
+    sed -i "s|desc <-.*||" ./Setup.hs
+    sed -i "s|gitDescribe = .*|gitDescribe = \\\\\"da4b415c\\\\\"\"|" ./Setup.hs
+  '';
+  homepage = http://elm-lang.org;
   description = "A source code formatter for Elm";
   license = stdenv.lib.licenses.bsd3;
-
-  # XXX: I've manually disabled tests, only the following test is failing
-  # ...
-  # ElmFormat.Cli
-  #   format a single file in place:                    OK
-  #   usage instructions:                               FAIL
-  # ...
-  # 1 out of 266 tests failed (0.50s)
-  # Test suite elm-format-tests: FAIL
-  doCheck = false;
 }

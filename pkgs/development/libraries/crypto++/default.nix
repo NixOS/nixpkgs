@@ -1,20 +1,21 @@
-{ fetchurl, stdenv, unzip }:
+{ fetchurl, fetchFromGitHub, stdenv }:
 
 stdenv.mkDerivation rec {
-  name = "crypto++-5.6.2";
+  name = "crypto++-${version}";
+  majorVersion = "5.6";
+  version = "${majorVersion}.5";
 
-  src = fetchurl {
-    url = "mirror://sourceforge/cryptopp/cryptopp562.zip";
-    sha256 = "0x1mqpz1v071cfrw4grbw7z734cxnpry1qh2b6rsmcx6nkyd5gsw";
+  src = fetchFromGitHub {
+    owner = "weidai11";
+    repo = "cryptopp";
+    rev = "CRYPTOPP_5_6_5";
+    sha256 = "1yk7jyf4va9425cg05llskpls2jm7n3jwy2hj5jm74zkr4mwpvl7";
   };
 
   patches = with stdenv;
     lib.optional (system != "i686-cygwin") ./dll.patch
-    ++ lib.optional isDarwin ./GNUmakefile.patch;
+    ++ lib.optional isDarwin ./GNUmakefile-darwin.patch;
 
-  buildInputs = [ unzip ];
-
-  sourceRoot = ".";
 
   configurePhase = let
     marchflags =
@@ -30,14 +31,18 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  makeFlags = "PREFIX=$(out)";
-  buildFlags = "libcryptopp.so";
+  makeFlags = [ "PREFIX=$(out)" ];
+  buildFlags = [ "libcryptopp.so" ];
+  installFlags = [ "LDCONF=true" ];
 
   doCheck = true;
   checkPhase = "LD_LIBRARY_PATH=`pwd` make test";
 
   # prefer -fPIC and .so to .a; cryptotest.exe seems superfluous
-  postInstall = ''rm "$out"/lib/*.a -r "$out/bin" '';
+  postInstall = ''
+    rm "$out"/lib/*.a -r "$out/bin"
+    ln -sf "$out"/lib/libcryptopp.so.${version} "$out"/lib/libcryptopp.so.${majorVersion}
+  '';
 
   meta = with stdenv.lib; {
     description = "Crypto++, a free C++ class library of cryptographic schemes";
@@ -47,4 +52,3 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
   };
 }
-

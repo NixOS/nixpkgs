@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Utility to split mp3, ogg vorbis and FLAC files without decoding";
-    homepage = http://sourceforge.net/projects/mp3splt/;
+    homepage = https://sourceforge.net/projects/mp3splt/;
     license = licenses.gpl2;
     maintainers = [ maintainers.bosu ];
     platforms = platforms.unix;

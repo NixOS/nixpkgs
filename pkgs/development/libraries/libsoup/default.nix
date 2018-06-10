@@ -1,18 +1,18 @@
-{ stdenv, fetchurl, glib, libxml2, pkgconfig
-, gnomeSupport ? true, libgnome_keyring, sqlite, glib_networking, gobjectIntrospection
-, valaSupport ? true, vala_0_32
-, libintlOrEmpty
-, intltool, python }:
+{ stdenv, fetchurl, glib, libxml2, pkgconfig, gnome3
+, gnomeSupport ? true, sqlite, glib-networking, gobjectIntrospection
+, valaSupport ? true, vala_0_40
+, intltool, python3 }:
+
 let
-  majorVersion = "2.54";
-  version = "${majorVersion}.1";
+  pname = "libsoup";
+  version = "2.62.0";
 in
-stdenv.mkDerivation {
-  name = "libsoup-${version}";
+stdenv.mkDerivation rec {
+  name = "${pname}-${version}";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/libsoup/${majorVersion}/libsoup-${version}.tar.xz";
-    sha256 = "0cyn5pq4xl1gb8413h2p4d5wrn558dc054zhwmk4swrl40ijrd27";
+    url = "mirror://gnome/sources/${pname}/${gnome3.versionBranch version}/${name}.tar.xz";
+    sha256 = "1b5aff1igbsx1h4v3wmkffvzgiy8rscibqka7fmjf2lxs7l7lz5b";
   };
 
   prePatch = ''
@@ -24,23 +24,31 @@ stdenv.mkDerivation {
 
   outputs = [ "out" "dev" ];
 
-  buildInputs = libintlOrEmpty ++ [ intltool python sqlite ]
-    ++ stdenv.lib.optionals valaSupport [ vala_0_32 ];
-  nativeBuildInputs = [ pkgconfig ];
-  propagatedBuildInputs = [ glib libxml2 gobjectIntrospection ]
-    ++ stdenv.lib.optionals gnomeSupport [ libgnome_keyring ];
-  passthru.propagatedUserEnvPackages = [ glib_networking.out ];
+  buildInputs = [ python3 sqlite ];
+  nativeBuildInputs = [ pkgconfig intltool gobjectIntrospection ]
+    ++ stdenv.lib.optionals valaSupport [ vala_0_40 ];
+  propagatedBuildInputs = [ glib libxml2 ];
 
-  # glib_networking is a runtime dependency, not a compile-time dependency
-  configureFlags = "--disable-tls-check"
-    + " --enable-vala=${if valaSupport then "yes" else "no"}"
-    + stdenv.lib.optionalString (!gnomeSupport) " --without-gnome";
+  # glib-networking is a runtime dependency, not a compile-time dependency
+  configureFlags = [
+    "--disable-tls-check"
+    "--enable-vala=${if valaSupport then "yes" else "no"}"
+    "--with-gnome=${if gnomeSupport then "yes" else "no"}"
+  ];
 
-  NIX_CFLAGS_COMPILE = stdenv.lib.optionalString stdenv.isDarwin "-lintl";
+  doCheck = false; # fails with "no: command not found"
 
-  postInstall = "rm -rf $out/share/gtk-doc";
+  passthru = {
+    propagatedUserEnvPackages = [ glib-networking.out ];
+    updateScript = gnome3.updateScript {
+      packageName = pname;
+    };
+  };
 
   meta = {
+    description = "HTTP client/server library for GNOME";
+    homepage = https://wiki.gnome.org/Projects/libsoup;
+    license = stdenv.lib.licenses.gpl2;
     inherit (glib.meta) maintainers platforms;
   };
 }

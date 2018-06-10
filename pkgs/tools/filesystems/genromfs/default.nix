@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = "http://romfs.sourceforge.net/";
+    homepage = http://romfs.sourceforge.net/;
     description = "Tool for creating romfs file system images";
     license = licenses.gpl2;
     maintainers = with maintainers; [ pxc ];

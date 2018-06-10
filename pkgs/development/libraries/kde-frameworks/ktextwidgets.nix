@@ -1,14 +1,16 @@
-{ kdeFramework, lib, ecm, kcompletion, kconfig
-, kconfigwidgets, ki18n, kiconthemes, kservice, kwindowsystem
-, sonnet
+{
+  mkDerivation, lib,
+  extra-cmake-modules,
+  kcompletion, kconfig, kconfigwidgets, ki18n, kiconthemes, kservice,
+  kwindowsystem, qtbase, sonnet,
 }:
 
-kdeFramework {
+mkDerivation {
   name = "ktextwidgets";
   meta = { maintainers = [ lib.maintainers.ttuegel ]; };
-  nativeBuildInputs = [ ecm ];
-  propagatedBuildInputs = [
-    kcompletion kconfig kconfigwidgets ki18n kiconthemes kservice kwindowsystem
-    sonnet
+  nativeBuildInputs = [ extra-cmake-modules ];
+  buildInputs = [
+    kcompletion kconfig kconfigwidgets kiconthemes kservice kwindowsystem
   ];
+  propagatedBuildInputs = [ ki18n qtbase sonnet ];
 }

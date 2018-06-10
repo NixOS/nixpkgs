@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
   '';
 
   # keep man3
-  outputDocdev = "out";
+  outputDevdoc = "out";
 
   meta = with stdenv.lib; {
     homepage = http://www.corpit.ru/mjt/udns.html;

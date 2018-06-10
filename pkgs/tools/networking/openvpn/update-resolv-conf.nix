@@ -1,16 +1,16 @@
-{ stdenv, lib, fetchFromGitHub, makeWrapper, openresolv, coreutils, which, systemd }:
+{ stdenv, lib, fetchFromGitHub, makeWrapper, openresolv, coreutils, systemd }:
 
 let
-  binPath = lib.makeBinPath [ coreutils openresolv which systemd ];
+  binPath = lib.makeBinPath [ coreutils openresolv systemd ];
 
 in stdenv.mkDerivation rec {
-  name = "update-resolv-conf-2016-04-24";
+  name = "update-resolv-conf-2017-06-21";
 
   src = fetchFromGitHub {
     owner = "masterkorp";
     repo = "openvpn-update-resolv-conf";
-    rev = "994574f36b9147cc78674a5f13874d503a625c98";
-    sha256 = "1rvzlaj53k8s09phg4clsyzlmf44dmwwyvg0nbg966sxp3xsqlxc";
+    rev = "43093c2f970bf84cd374e18ec05ac6d9cae444b8";
+    sha256 = "1lf66bsgv2w6nzg1iqf25zpjf4ckcr45adkpgdq9gvhkfnvlp8av";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -26,7 +26,7 @@ in stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Script to update your /etc/resolv.conf with DNS settings that come from the received push dhcp-options";
-    homepage = "https://github.com/masterkorp/openvpn-update-resolv-conf/";
+    homepage = https://github.com/masterkorp/openvpn-update-resolv-conf/;
     maintainers = with maintainers; [ abbradar ];
     license = licenses.gpl2;
     platforms = platforms.unix;

@@ -26,8 +26,9 @@ let
       # Ensure privacy for newly created home directories.
       UMASK        077
 
-      # Uncomment this to allow non-root users to change their account
-      #information.  This should be made configurable.
+      # Uncomment this and install chfn SUID to allow non-root
+      # users to change their account GECOS information.
+      # This should be made configurable.
       #CHFN_RESTRICT frwh
 
     '';
@@ -101,11 +102,14 @@ in
         chpasswd = { rootOK = true; };
       };
 
-    security.setuidPrograms = [ "su" "chfn" ]
-      ++ [ "newuidmap" "newgidmap" ] # new in shadow 4.2.x
-      ++ lib.optionals config.users.mutableUsers
-      [ "passwd" "sg" "newgrp" ];
-
+    security.wrappers = {
+      su.source        = "${pkgs.shadow.su}/bin/su";
+      sg.source        = "${pkgs.shadow.out}/bin/sg";
+      newgrp.source    = "${pkgs.shadow.out}/bin/newgrp";
+      newuidmap.source = "${pkgs.shadow.out}/bin/newuidmap";
+      newgidmap.source = "${pkgs.shadow.out}/bin/newgidmap";
+    } // (if config.users.mutableUsers then {
+      passwd.source    = "${pkgs.shadow.out}/bin/passwd";
+    } else {});
   };
-
 }

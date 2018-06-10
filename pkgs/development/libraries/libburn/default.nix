@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "libburn-${version}";
-  version = "1.4.4";
+  version = "1.4.8";
 
   src = fetchurl {
     url = "http://files.libburnia-project.org/releases/${name}.tar.gz";
-    sha256 = "053x1sj6r5pj5396g007v6l0s7942cy2mh5fd3caqx0jdw6h9xqv";
+    sha256 = "19lxnzn8bz70glrrrn2hs43gf5g7gfbcka9rcbckhv1pb7is509y";
   };
 
   meta = with stdenv.lib; {

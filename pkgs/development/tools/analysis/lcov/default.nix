@@ -1,11 +1,11 @@
 {stdenv, fetchurl, perl}:
 
 stdenv.mkDerivation rec {
-  name = "lcov-1.12";
+  name = "lcov-1.13";
 
   src = fetchurl {
     url = "mirror://sourceforge/ltp/${name}.tar.gz";
-    sha256 = "19wfifdpxxivhq9adbphanjfga9bg9spms9v7c3589wndjff8x5l";
+    sha256 = "08wabnb0gcjqk0qc65a6cgbbmz6b8lvam3p7byh0dk42hj3jr5s4";
   };
 
   buildInputs = [ perl ];
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
     homepage = http://ltp.sourceforge.net/coverage/lcov.php;
     license = stdenv.lib.licenses.gpl2Plus;
 
-    maintainers = with maintainers; [ dezgeg mornfall ];
+    maintainers = with maintainers; [ dezgeg ];
     platforms = platforms.all;
   };
 }

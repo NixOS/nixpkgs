@@ -6,14 +6,15 @@
 stdenv.mkDerivation rec {
 
   name = "tilda-${version}";
-  version = "1.2.4";
+  version = "1.4.1";
 
   src = fetchurl {
     url = "https://github.com/lanoxx/tilda/archive/${name}.tar.gz";
-    sha256 = "1f7b52c5d8cfd9038ad2e41fc633fce935f420fa657ed15e3942722c8570751e";
+    sha256 = "0w2hry2bqcqrkik4l100b1a9jlsih6sq8zwhfpl8zzfq20i00lfs";
   };
 
-  buildInputs = [ pkgconfig autoreconfHook gettext confuse vte gtk makeWrapper ];
+  nativeBuildInputs = [ autoreconfHook pkgconfig ];
+  buildInputs = [ gettext confuse vte gtk makeWrapper ];
 
   LD_LIBRARY_PATH = "${expat.out}/lib"; # ugly hack for xgettext to work during build
 

@@ -29,6 +29,7 @@ in
 
       extraPackages = mkOption {
         default = self: [];
+        defaultText = "self: []";
         example = literalExample ''
           haskellPackages: [
             haskellPackages.xmonad-contrib
@@ -44,7 +45,6 @@ in
 
       enableContribAndExtras = mkOption {
         default = false;
-        example = true;
         type = lib.types.bool;
         description = "Enable xmonad-{contrib,extras} in Xmonad.";
       };

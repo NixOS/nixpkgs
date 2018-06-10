@@ -1,47 +1,81 @@
-{ stdenv, fetchurl, cmake, pkgconfig
-, giflib, libjpeg, zlib, libpng, tinyxml, allegro
-, libX11, libXext, libXcursor, libXpm, libXxf86vm, libXxf86dga
+{ stdenv, lib, fetchFromGitHub, cmake, pkgconfig
+, curl, freetype, giflib, libjpeg, libpng, libwebp, pixman, tinyxml, zlib
+, libX11, libXext, libXcursor, libXxf86vm
+, unfree ? false
+, cmark
 }:
 
-stdenv.mkDerivation rec {
-  name = "aseprite-0.9.5";
+# Unfree version is not redistributable:
+# https://dev.aseprite.org/2016/09/01/new-source-code-license/
+# Consider supporting the developer: https://aseprite.org/#buy
 
-  src = fetchurl {
-    url = "http://aseprite.googlecode.com/files/${name}.tar.xz";
-    sha256 = "0m7i6ybj2bym4w9rybacnnaaq2jjn76vlpbp932xcclakl6kdq41";
+stdenv.mkDerivation rec {
+  name = "aseprite-${version}";
+  version = if unfree then "1.2.4" else "1.1.7";
+
+  src = fetchFromGitHub {
+    owner = "aseprite";
+    repo = "aseprite";
+    rev = "v${version}";
+    fetchSubmodules = true;
+    sha256 = if unfree
+      then "1rnf4a8vgddz8x55rpqaihlxmqip1kgpdhqb4d3l71h1zmidg5k3"
+      else "0gd49lns2bpzbkwax5jf9x1xmg1j8ij997kcxr2596cwiswnw4di";
   };
 
+  nativeBuildInputs = [ cmake pkgconfig ];
+
   buildInputs = [
-    cmake pkgconfig
-    giflib libjpeg zlib libpng tinyxml allegro
-    libX11 libXext libXcursor libXpm libXxf86vm libXxf86dga
+    curl freetype giflib libjpeg libpng libwebp pixman tinyxml zlib
+    libX11 libXext libXcursor libXxf86vm
+  ] ++ lib.optionals unfree [ cmark ];
+
+  postPatch = ''
+    sed -i src/config.h -e "s-\\(#define VERSION\\) .*-\\1 \"$version\"-"
+  '';
+
+  cmakeFlags = [
+    "-DENABLE_UPDATER=OFF"
+    "-DUSE_SHARED_CURL=ON"
+    "-DUSE_SHARED_FREETYPE=ON"
+    "-DUSE_SHARED_GIFLIB=ON"
+    "-DUSE_SHARED_JPEGLIB=ON"
+    "-DUSE_SHARED_LIBPNG=ON"
+    "-DUSE_SHARED_LIBWEBP=ON"
+    "-DUSE_SHARED_PIXMAN=ON"
+    "-DUSE_SHARED_TINYXML=ON"
+    "-DUSE_SHARED_ZLIB=ON"
+    "-DWITH_DESKTOP_INTEGRATION=ON"
+    "-DWITH_WEBP_SUPPORT=ON"
+  ] ++ lib.optionals unfree [
+    "-DUSE_SHARED_CMARK=ON"
+    # Aseprite needs internal freetype headers.
+    "-DUSE_SHARED_FREETYPE=OFF"
+    # Disable libarchive programs.
+    "-DENABLE_CAT=OFF"
+    "-DENABLE_CPIO=OFF"
+    "-DENABLE_TAR=OFF"
   ];
 
-  patchPhase = ''
-    sed -i '/^find_unittests/d' src/CMakeLists.txt
-    sed -i '/include_directories(.*third_party\/gtest.*)/d' src/CMakeLists.txt
-    sed -i '/add_subdirectory(gtest)/d' third_party/CMakeLists.txt
-    sed -i 's/png_\(sizeof\)/\1/g' src/file/png_format.cpp
+  postInstall = ''
+    # Install desktop icons.
+    src="$out/share/aseprite/data/icons"
+    for size in 16 32 48 64; do
+      dst="$out"/share/icons/hicolor/"$size"x"$size"
+      install -Dm644 "$src"/ase"$size".png "$dst"/apps/aseprite.png
+      install -Dm644 "$src"/doc"$size".png "$dst"/mimetypes/aseprite.png
+    done
+    # Delete unneeded artifacts of bundled libraries.
+    rm -rf "$out"/include "$out"/lib
   '';
 
-  cmakeFlags = ''
-    -DUSE_SHARED_GIFLIB=ON
-    -DUSE_SHARED_JPEGLIB=ON
-    -DUSE_SHARED_ZLIB=ON
-    -DUSE_SHARED_LIBPNG=ON
-    -DUSE_SHARED_LIBLOADPNG=ON
-    -DUSE_SHARED_TINYXML=ON
-    -DUSE_SHARED_GTEST=ON
-    -DUSE_SHARED_ALLEGRO4=ON
-    -DENABLE_UPDATER=OFF
-  '';
+  enableParallelBuilding = true;
 
-  NIX_LDFLAGS = "-lX11";
-
-  meta = {
+  meta = with lib; {
+    homepage = https://www.aseprite.org/;
     description = "Animated sprite editor & pixel art tool";
-    homepage = "http://www.aseprite.org/";
-    license = stdenv.lib.licenses.gpl2Plus;
-    platforms = stdenv.lib.platforms.linux;
+    license = if unfree then licenses.unfree else licenses.gpl2;
+    maintainers = with maintainers; [ orivej ];
+    platforms = platforms.linux;
   };
 }

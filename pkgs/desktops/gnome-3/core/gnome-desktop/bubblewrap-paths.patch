@@ -1,0 +1,19 @@
+--- a/libgnome-desktop/gnome-desktop-thumbnail-script.c
++++ b/libgnome-desktop/gnome-desktop-thumbnail-script.c
+@@ -504,14 +504,10 @@
+   g_return_val_if_fail (script->s_infile != NULL, FALSE);
+ 
+   add_args (array,
+-	    "bwrap",
+-	    "--ro-bind", "/usr", "/usr",
+-	    "--ro-bind", "/lib", "/lib",
+-	    "--ro-bind", "/lib64", "/lib64",
++	    "@BUBBLEWRAP_BIN@",
++      "--ro-bind", "/nix/store", "/nix/store",
+ 	    "--proc", "/proc",
+ 	    "--dev", "/dev",
+-	    "--symlink", "usr/bin", "/bin",
+-	    "--symlink", "usr/sbin", "/sbin",
+ 	    "--chdir", "/",
+ 	    "--setenv", "GIO_USE_VFS", "local",
+ 	    "--unshare-all",

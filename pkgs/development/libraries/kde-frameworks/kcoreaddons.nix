@@ -1,8 +1,16 @@
-{ kdeFramework, lib, ecm, shared_mime_info }:
+{
+  mkDerivation, lib, fetchurl, writeScript,
+  extra-cmake-modules,
+  qtbase, qttools, shared-mime-info
+}:
 
-kdeFramework {
+mkDerivation {
   name = "kcoreaddons";
-  meta = { maintainers = [ lib.maintainers.ttuegel ]; };
-  nativeBuildInputs = [ ecm ];
-  propagatedBuildInputs = [ shared_mime_info ];
+  meta = {
+    maintainers = [ lib.maintainers.ttuegel ];
+    broken = builtins.compareVersions qtbase.version "5.7.0" < 0;
+  };
+  nativeBuildInputs = [ extra-cmake-modules ];
+  buildInputs = [ qttools shared-mime-info ];
+  propagatedBuildInputs = [ qtbase ];
 }

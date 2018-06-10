@@ -19,13 +19,17 @@ stdenv.mkDerivation {
     # and /usr/lib. It's a stupid feature anyway. Likewise, when searching for
     # included Makefiles, don't look in /usr/include and friends.
     ./impure-dirs.patch
+    ./pselect.patch
+    # Fix support for glibc 2.27's glob, inspired by http://www.linuxfromscratch.org/lfs/view/8.2/chapter05/make.html
+    ./glibc-2.27-glob.patch
   ];
 
-  buildInputs = stdenv.lib.optionals guileSupport [ guile pkgconfig ];
+  nativeBuildInputs = stdenv.lib.optionals guileSupport [ pkgconfig ];
+  buildInputs = stdenv.lib.optionals guileSupport [ guile ];
 
   configureFlags = stdenv.lib.optional guileSupport "--with-guile";
 
-  outputs = [ "out" "doc" ];
+  outputs = [ "out" "man" "info" ];
 
   meta = with stdenv.lib; {
     homepage = http://www.gnu.org/software/make/;

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, dbus_glib, glib, ORBit2, libxml2
+{ stdenv, fetchurl, pkgconfig, dbus-glib, glib, ORBit2, libxml2
 , polkit, intltool, dbus_libs, gtk2 ? null, withGtk ? false }:
 
 assert withGtk -> (gtk2 != null);
@@ -11,9 +11,9 @@ stdenv.mkDerivation {
     sha256 = "09ch709cb9fniwc4221xgkq0jf0x0lxs814sqig8p2dcll0llvzk";
   };
 
-  outputs = [ "out" "dev" "doc" ];
+  outputs = [ "out" "dev" "man" ];
 
-  buildInputs = [ ORBit2 dbus_libs dbus_glib libxml2 ]
+  buildInputs = [ ORBit2 dbus_libs dbus-glib libxml2 ]
     # polkit requires pam, which requires shadow.h, which is not available on
     # darwin
     ++ stdenv.lib.optional (!stdenv.isDarwin) polkit

@@ -2,10 +2,10 @@
 
 stdenv.mkDerivation rec {
   name = "xvkbd-${version}";
-  version = "3.7";
+  version = "3.9";
   src = fetchurl {
-    url = "http://homepage3.nifty.com/tsato/xvkbd/xvkbd-${version}.tar.gz";
-    sha256 = "02y9ks9sa4sn3vkbgswjs5qcd85xhwvarnmhg41pq3l2d617cpw9";
+    url = "http://t-sato.in.coocan.jp/xvkbd/xvkbd-3.9.tar.gz";
+    sha256 = "17csj6x5zm3g67izfwhagkal1rbqzpw09lqmmlyrjy3vzgfkf75q";
   };
 
   buildInputs = [ imake libXt libXaw libXtst xextproto libXi Xaw3d libXpm gccmakedep ];

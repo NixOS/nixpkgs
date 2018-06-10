@@ -1,15 +1,19 @@
-{ fetchurl, stdenv }:
+{ stdenv, fetchurl
+, buildPlatform, hostPlatform
+, enableSigbusFix ? false # required by kernels < 3.18.6
+}:
 
 stdenv.mkDerivation rec {
-  name = "libsigsegv-2.10";
+  name = "libsigsegv-2.12";
 
   src = fetchurl {
     url = "mirror://gnu/libsigsegv/${name}.tar.gz";
-    sha256 = "16hrs8k3nmc7a8jam5j1fpspd6sdpkamskvsdpcw6m29vnis8q44";
+    sha256 = "1dlhqf4igzpqayms25lkhycjq1ccavisx8cnb3y4zapbkqsszq9s";
   };
 
-  # https://github.com/NixOS/nixpkgs/issues/6028
-  doCheck = false;
+  patches = if enableSigbusFix then [ ./sigbus_fix.patch ] else null;
+
+  doCheck = true; # not cross;
 
   meta = {
     homepage = http://www.gnu.org/software/libsigsegv/;

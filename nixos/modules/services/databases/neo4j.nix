@@ -5,34 +5,39 @@ with lib;
 let
   cfg = config.services.neo4j;
 
-  serverConfig = pkgs.writeText "neo4j-server.properties" ''
-    org.neo4j.server.database.location=${cfg.dataDir}/data/graph.db
-    org.neo4j.server.webserver.address=${cfg.listenAddress}
-    org.neo4j.server.webserver.port=${toString cfg.port}
-    ${optionalString cfg.enableHttps ''
-      org.neo4j.server.webserver.https.enabled=true
-      org.neo4j.server.webserver.https.port=${toString cfg.httpsPort}
-      org.neo4j.server.webserver.https.cert.location=${cfg.cert}
-      org.neo4j.server.webserver.https.key.location=${cfg.key}
-      org.neo4j.server.webserver.https.keystore.location=${cfg.dataDir}/data/keystore
+  serverConfig = pkgs.writeText "neo4j.conf" ''
+    dbms.directories.data=${cfg.dataDir}/data
+    dbms.directories.certificates=${cfg.certDir}
+    dbms.directories.logs=${cfg.dataDir}/logs
+    dbms.directories.plugins=${cfg.dataDir}/plugins
+    dbms.connector.http.type=HTTP
+    dbms.connector.http.enabled=true
+    dbms.connector.http.address=${cfg.listenAddress}:${toString cfg.port}
+    ${optionalString cfg.enableBolt ''
+      dbms.connector.bolt.type=BOLT
+      dbms.connector.bolt.enabled=true
+      dbms.connector.bolt.tls_level=OPTIONAL
+      dbms.connector.bolt.address=${cfg.listenAddress}:${toString cfg.boltPort}
     ''}
-    org.neo4j.server.webadmin.rrdb.location=${cfg.dataDir}/data/rrd
-    org.neo4j.server.webadmin.data.uri=/db/data/
-    org.neo4j.server.webadmin.management.uri=/db/manage/
-    org.neo4j.server.db.tuning.properties=${cfg.package}/share/neo4j/conf/neo4j.properties
-    org.neo4j.server.manage.console_engines=shell
+    ${optionalString cfg.enableHttps ''
+      dbms.connector.https.type=HTTP
+      dbms.connector.https.enabled=true
+      dbms.connector.https.encryption=TLS
+      dbms.connector.https.address=${cfg.listenAddress}:${toString cfg.httpsPort}
+    ''}
+    dbms.shell.enabled=true
     ${cfg.extraServerConfig}
-  '';
 
-  loggingConfig = pkgs.writeText "logging.properties" cfg.loggingConfig;
+    # Default JVM parameters from neo4j.conf
+    dbms.jvm.additional=-XX:+UseG1GC
+    dbms.jvm.additional=-XX:-OmitStackTraceInFastThrow
+    dbms.jvm.additional=-XX:+AlwaysPreTouch
+    dbms.jvm.additional=-XX:+UnlockExperimentalVMOptions
+    dbms.jvm.additional=-XX:+TrustFinalNonStaticFields
+    dbms.jvm.additional=-XX:+DisableExplicitGC
+    dbms.jvm.additional=-Djdk.tls.ephemeralDHKeySize=2048
 
-  wrapperConfig = pkgs.writeText "neo4j-wrapper.conf" ''
-    wrapper.java.additional=-Dorg.neo4j.server.properties=${serverConfig}
-    wrapper.java.additional=-Djava.util.logging.config.file=${loggingConfig}
-    wrapper.java.additional=-XX:+UseConcMarkSweepGC
-    wrapper.java.additional=-XX:+CMSClassUnloadingEnabled
-    wrapper.pidfile=${cfg.dataDir}/neo4j-server.pid
-    wrapper.name=neo4j
+    dbms.jvm.additional=-Dunsupported.dbms.udc.source=tarball
   '';
 
 in {
@@ -65,6 +70,18 @@ in {
       type = types.int;
     };
 
+    enableBolt = mkOption {
+      description = "Enable bolt for Neo4j.";
+      default = true;
+      type = types.bool;
+    };
+
+    boltPort = mkOption {
+      description = "Neo4j port to listen for BOLT traffic.";
+      default = 7687;
+      type = types.int;
+    };
+
     enableHttps = mkOption {
       description = "Enable https for Neo4j.";
       default = false;
@@ -77,15 +94,9 @@ in {
       type = types.int;
     };
 
-    cert = mkOption {
-      description = "Neo4j https certificate.";
-      default = "${cfg.dataDir}/conf/ssl/neo4j.cert";
-      type = types.path;
-    };
-
-    key = mkOption {
-      description = "Neo4j https certificate key.";
-      default = "${cfg.dataDir}/conf/ssl/neo4j.key";
+    certDir = mkOption {
+      description = "Neo4j TLS certificates directory.";
+      default = "${cfg.dataDir}/certificates";
       type = types.path;
     };
 
@@ -95,26 +106,11 @@ in {
       type = types.path;
     };
 
-    loggingConfig = mkOption {
-      description = "Neo4j logging configuration.";
-      default = ''
-        handlers=java.util.logging.ConsoleHandler
-        .level=INFO
-        org.neo4j.server.level=INFO
-
-        java.util.logging.ConsoleHandler.level=INFO
-        java.util.logging.ConsoleHandler.formatter=org.neo4j.server.logging.SimpleConsoleFormatter
-        java.util.logging.ConsoleHandler.filter=org.neo4j.server.logging.NeoLogFilter
-      '';
-      type = types.lines;
-    };
-
     extraServerConfig = mkOption {
       description = "Extra configuration for neo4j server.";
       default = "";
       type = types.lines;
     };
-
   };
 
   ###### implementation
@@ -123,21 +119,25 @@ in {
     systemd.services.neo4j = {
       description = "Neo4j Daemon";
       wantedBy = [ "multi-user.target" ];
-      after = [ "network-interfaces.target" ];
-      environment = { NEO4J_INSTANCE = cfg.dataDir; };
+      after = [ "network.target" ];
+      environment = {
+        NEO4J_HOME = "${cfg.package}/share/neo4j";
+        NEO4J_CONF = "${cfg.dataDir}/conf";
+      };
       serviceConfig = {
         ExecStart = "${cfg.package}/bin/neo4j console";
         User = "neo4j";
         PermissionsStartOnly = true;
+        LimitNOFILE = 40000;
       };
       preStart = ''
-        mkdir -m 0700 -p ${cfg.dataDir}/{data/graph.db,conf}
-        ln -fs ${wrapperConfig} ${cfg.dataDir}/conf/neo4j-wrapper.conf
+        mkdir -m 0700 -p ${cfg.dataDir}/{data/graph.db,conf,logs}
+        ln -fs ${serverConfig} ${cfg.dataDir}/conf/neo4j.conf
         if [ "$(id -u)" = 0 ]; then chown -R neo4j ${cfg.dataDir}; fi
       '';
     };
 
-    environment.systemPackages = [ pkgs.neo4j ];
+    environment.systemPackages = [ cfg.package ];
 
     users.extraUsers = singleton {
       name = "neo4j";
@@ -146,5 +146,4 @@ in {
       home = cfg.dataDir;
     };
   };
-
 }

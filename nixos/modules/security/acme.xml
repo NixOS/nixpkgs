@@ -48,9 +48,9 @@ http {
 <filename>configuration.nix</filename>:
 
 <programlisting>
-security.acme.certs."foo.example.com" = {
-  webroot = "/var/www/challenges";
-  email = "foo@example.com";
+<xref linkend="opt-security.acme.certs"/>."foo.example.com" = {
+  <link linkend="opt-security.acme.certs._name_.webroot">webroot</link> = "/var/www/challenges";
+  <link linkend="opt-security.acme.certs._name_.email">email</link> = "foo@example.com";
 };
 </programlisting>
 </para>
@@ -58,40 +58,36 @@ security.acme.certs."foo.example.com" = {
 <para>The private key <filename>key.pem</filename> and certificate
 <filename>fullchain.pem</filename> will be put into
 <filename>/var/lib/acme/foo.example.com</filename>. The target directory can
-be configured with the option <literal>security.acme.directory</literal>.
+be configured with the option <xref linkend="opt-security.acme.directory"/>.
 </para>
 
 <para>Refer to <xref linkend="ch-options" /> for all available configuration
-options for the <literal>security.acme</literal> module.</para>
+options for the <link linkend="opt-security.acme.certs">security.acme</link> module.</para>
 
 </section>
 
 <section><title>Using ACME certificates in Nginx</title>
-<para>In practice ACME is mostly used for retrieval and renewal of
-  certificates that will be used in a webserver like Nginx. A configuration for
-  Nginx that uses the certificates from ACME for
-  <literal>foo.example.com</literal> will look similar to:
+<para>NixOS supports fetching ACME certificates for you by setting
+  <literal><link linkend="opt-services.nginx.virtualHosts._name_.enableACME">enableACME</link> = true;</literal> in a virtualHost config. We
+first create self-signed placeholder certificates in place of the
+real ACME certs. The placeholder certs are overwritten when the ACME
+certs arrive. For <literal>foo.example.com</literal> the config would
+look like.
 </para>
 
 <programlisting>
-services.nginx.httpConfig = ''
-  server {
-    server_name foo.example.com;
-    listen 443 ssl;
-    ssl_certificate     ${config.security.acme.directory}/foo.example.com/fullchain.pem;
-    ssl_certificate_key ${config.security.acme.directory}/foo.example.com/key.pem;
-    root /var/www/foo.example.com/;
-  }
-'';
+services.nginx = {
+  <link linkend="opt-services.nginx.enable">enable = true;</link>
+  <link linkend="opt-services.nginx.virtualHosts">virtualHosts</link> = {
+    "foo.example.com" = {
+      <link linkend="opt-services.nginx.virtualHosts._name_.forceSSL">forceSSL</link> = true;
+      <link linkend="opt-services.nginx.virtualHosts._name_.enableACME">enableACME</link> = true;
+      locations."/" = {
+        <link linkend="opt-services.nginx.virtualHosts._name_.locations._name_.root">root</link> = "/var/www";
+      };
+    };
+  };
+}
 </programlisting>
-
-<para>Now Nginx will try to use the certificates that will be retrieved by ACME.
-  ACME needs Nginx (or any other webserver) to function and Nginx needs
-  the certificates to actually start. For this reason the ACME module
-  automatically generates self-signed certificates that will be used by Nginx to
-  start. After that Nginx is used by ACME to retrieve the actual ACME
-  certificates. <literal>security.acme.preliminarySelfsigned</literal> can be
-  used to control whether to generate the self-signed certificates.
-</para>
 </section>
 </chapter>

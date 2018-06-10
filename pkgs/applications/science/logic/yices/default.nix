@@ -1,25 +1,41 @@
-{ stdenv, fetchurl, gmp-static, gperf, autoreconfHook }:
+{ stdenv, fetchurl, gmp-static, gperf, autoreconfHook, libpoly }:
 
 stdenv.mkDerivation rec {
   name    = "yices-${version}";
-  version = "2.3.1";
+  version = "2.5.4";
 
   src = fetchurl {
-    url = "http://yices.csl.sri.com/cgi-bin/yices2-newnewdownload.cgi?file=yices-2.3.1-src.tar.gz&accept=I+Agree";
-    name = "yices-${version}-src.tar.gz";
-    sha256 = "1da70n0cah0dh3pk7fcrvjkszx9qmhc0csgl15jqa7bdh707k2zs";
+    url = "https://github.com/SRI-CSL/yices2/archive/Yices-${version}.tar.gz";
+    name = "${name}-src.tar.gz";
+    sha256 = "1k8wmlddi3zv5kgg6xbch3a0s0xqsmsfc7y6z8zrgcyhswl36h7p";
   };
 
-  configureFlags = [ "--with-static-gmp=${gmp-static.out}/lib/libgmp.a"
-                     "--with-static-gmp-include-dir=${gmp-static.dev}/include"
-                   ];
-  buildInputs = [ gmp-static gperf autoreconfHook ];
+  nativeBuildInputs = [ autoreconfHook ];
+  buildInputs       = [ gmp-static gperf libpoly ];
+  configureFlags =
+    [ "--with-static-gmp=${gmp-static.out}/lib/libgmp.a"
+      "--with-static-gmp-include-dir=${gmp-static.dev}/include"
+      "--enable-mcsat"
+    ];
 
-  meta = {
+  enableParallelBuilding = true;
+  doCheck = true;
+
+  # Usual shenanigans
+  patchPhase = ''patchShebangs tests/regress/check.sh'';
+
+  # Includes a fix for the embedded soname being libyices.so.2.5, but
+  # only installing the libyices.so.2.5.x file.
+  installPhase = ''
+      make install LDCONFIG=true
+      (cd $out/lib && ln -s -f libyices.so.${version} libyices.so.2.5)
+  '';
+
+  meta = with stdenv.lib; {
     description = "A high-performance theorem prover and SMT solver";
     homepage    = "http://yices.csl.sri.com";
-    license     = stdenv.lib.licenses.unfreeRedistributable;
-    platforms   = stdenv.lib.platforms.linux;
-    maintainers = [ stdenv.lib.maintainers.thoughtpolice ];
+    license     = licenses.gpl3;
+    platforms   = with platforms; linux ++ darwin;
+    maintainers = [ maintainers.thoughtpolice ];
   };
 }

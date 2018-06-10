@@ -6,7 +6,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = http://www.jdom.org/dist/binary/jdom-1.0.tar.gz;
-    md5 = "ce29ecc05d63fdb419737fd00c04c281";
+    sha256 = "1igmxzcy0s25zcy9vmcw0kd13lh60r0b4qg8lnp1jic33f427pxf";
   };
 
   meta = {

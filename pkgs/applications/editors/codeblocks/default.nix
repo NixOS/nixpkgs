@@ -1,33 +1,30 @@
-{ stdenv, fetchurl, autoconf, automake, libtool, pkgconfig, file, zip, wxGTK, gtk2
+{ stdenv, fetchurl, autoreconfHook, libtool, pkgconfig, file, zip, wxGTK, gtk2
 , contribPlugins ? false, hunspell, gamin, boost
 }:
 
-with { inherit (stdenv.lib) optionalString optional optionals; };
+with stdenv.lib;
 
 stdenv.mkDerivation rec {
   name = "${pname}-${stdenv.lib.optionalString contribPlugins "full-"}${version}";
-  version = "13.12";
+  version = "17.12";
   pname = "codeblocks";
 
   src = fetchurl {
-    url = "mirror://sourceforge/codeblocks/Sources/${version}/codeblocks_${version}-1.tar.gz";
-    sha256 = "044njhps4cm1ijfdyr5f9wjyd0vblhrz9b4603ma52wcdq25093p";
+    url = "mirror://sourceforge/codeblocks/Sources/${version}/codeblocks_${version}.tar.xz";
+    sha256 = "1q2pph7md1p10i83rir2l4gvy7ym2iw8w6sk5vl995knf851m20k";
   };
 
-  buildInputs = [ automake autoconf libtool pkgconfig file zip wxGTK gtk2 ]
+  nativeBuildInputs = [ autoreconfHook pkgconfig libtool file zip ];
+  buildInputs = [ wxGTK gtk2 ]
     ++ optionals contribPlugins [ hunspell gamin boost ];
   enableParallelBuilding = true;
   patches = [ ./writable-projects.patch ];
   preConfigure = "substituteInPlace ./configure --replace /usr/bin/file ${file}/bin/file";
   postConfigure = optionalString stdenv.isLinux "substituteInPlace libtool --replace ldconfig ${stdenv.cc.libc.bin}/bin/ldconfig";
   configureFlags = [ "--enable-pch=no" ]
-    ++ optional contribPlugins "--with-contrib-plugins";
+    ++ optional contribPlugins [ "--with-contrib-plugins" "--with-boost-libdir=${boost}/lib" ];
 
-  # Fix boost 1.59 compat
-  # Try removing in the next version
-  CPPFLAGS = "-DBOOST_ERROR_CODE_HEADER_ONLY -DBOOST_SYSTEM_NO_DEPRECATED";
-
-  meta = with stdenv.lib; {
+  meta = {
     maintainers = [ maintainers.linquize ];
     platforms = platforms.all;
     description = "The open source, cross platform, free C, C++ and Fortran IDE";

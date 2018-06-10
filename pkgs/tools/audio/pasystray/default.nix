@@ -2,16 +2,18 @@
 , gnome3, avahi, gtk3, libnotify, libpulseaudio, xlibsWrapper}:
 
 stdenv.mkDerivation rec {
-  name = "pasystray-0.5.2";
+  name = "pasystray-${version}";
+  version = "0.6.0";
 
   src = fetchFromGitHub {
     owner = "christophgysin";
     repo = "pasystray";
-    rev = "6709fc1e9f792baf4f7b4507a887d5876b2cfa70";
-    sha256 = "1z21wassdiwfnlcrkpdqh8ylblpd1xxjxcmib5mwix9va2lykdfv";
+    rev = name;
+    sha256 = "0k13s7pmz5ks3kli8pwhzd47hcjwv46gd2fgk7i4fbkfwf3z279h";
   };
 
-  buildInputs = [ autoconf automake makeWrapper pkgconfig 
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ autoconf automake makeWrapper 
                   gnome3.defaultIconTheme
                   avahi gtk3 libnotify libpulseaudio xlibsWrapper ];
 
@@ -29,9 +31,9 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "PulseAudio system tray";
-    homepage = "https://github.com/christophgysin/pasystray";
+    homepage = https://github.com/christophgysin/pasystray;
     license = licenses.lgpl21Plus;
-    maintainers = [ maintainers.exlevan ];
+    maintainers = with maintainers; [ exlevan kamilchm ];
     platforms = platforms.linux;
   };
 }

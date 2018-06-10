@@ -1,8 +1,9 @@
 { stdenv, fetchurl, makeWrapper, pkgconfig, gtk2, gtkspell2, aspell
-, gstreamer, gst_plugins_base, gst_plugins_good, startupnotification, gettext
-, perl, perlXMLParser, libxml2, nss, nspr, farsight2
-, libXScrnSaver, ncurses, avahi, dbus, dbus_glib, intltool, libidn
+, gst_all_1, startupnotification, gettext
+, perl, perlXMLParser, libxml2, nss, nspr, farstream
+, libXScrnSaver, ncurses, avahi, dbus, dbus-glib, intltool, libidn
 , lib, python, libICE, libXext, libSM
+, cyrus_sasl ? null
 , openssl ? null
 , gnutls ? null
 , libgcrypt ? null
@@ -14,24 +15,26 @@
 let unwrapped = stdenv.mkDerivation rec {
   name = "pidgin-${version}";
   majorVersion = "2";
-  version = "${majorVersion}.10.11";
+  version = "${majorVersion}.13.0";
 
   src = fetchurl {
     url = "mirror://sourceforge/pidgin/${name}.tar.bz2";
-    sha256 = "01s0q30qrjlzj7kkz6f8lvrwsdd55a9yjh2xjjwyyxzw849j3bpj";
+    sha256 = "13vdqj70315p9rzgnbxjp9c51mdzf1l4jg1kvnylc4bidw61air7";
   };
 
   inherit nss ncurses;
 
   nativeBuildInputs = [ makeWrapper ];
 
+  NIX_CFLAGS_COMPILE = "-I${gst_all_1.gst-plugins-base.dev}/include/gstreamer-1.0";
+
   buildInputs = [
-    gtkspell2 aspell
-    gstreamer gst_plugins_base gst_plugins_good startupnotification
-    libxml2 nss nspr farsight2
+    gtkspell2 aspell startupnotification
+    gst_all_1.gstreamer gst_all_1.gst-plugins-base gst_all_1.gst-plugins-good
+    libxml2 nss nspr farstream
     libXScrnSaver ncurses python
-    avahi dbus dbus_glib intltool libidn
-    libICE libXext libSM
+    avahi dbus dbus-glib intltool libidn
+    libICE libXext libSM cyrus_sasl
   ]
   ++ (lib.optional (openssl != null) openssl)
   ++ (lib.optional (gnutls != null) gnutls)
@@ -41,7 +44,7 @@ let unwrapped = stdenv.mkDerivation rec {
     pkgconfig gtk2 perl perlXMLParser gettext
   ];
 
-  patches = [./pidgin-makefile.patch ./add-search-path.patch ];
+  patches = [ ./pidgin-makefile.patch ./add-search-path.patch ];
 
   configureFlags = [
     "--with-nspr-includes=${nspr.dev}/include/nspr"
@@ -53,6 +56,7 @@ let unwrapped = stdenv.mkDerivation rec {
     "--disable-nm"
     "--disable-tcl"
   ]
+  ++ (lib.optionals (cyrus_sasl != null) [ "--enable-cyrus-sasl=yes" ])
   ++ (lib.optionals (gnutls != null) ["--enable-gnutls=yes" "--enable-nss=no"]);
 
   enableParallelBuilding = true;
@@ -76,4 +80,3 @@ in if plugins == [] then unwrapped
       inherit stdenv makeWrapper symlinkJoin plugins;
       pidgin = unwrapped;
     }
-

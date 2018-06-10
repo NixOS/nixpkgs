@@ -46,6 +46,20 @@ in stdenv.mkDerivation rec {
       make -j$NIX_BUILD_CORES
       make install
     done
+
+    mkdir -p $out/lib/pkgconfig
+    cat >$out/lib/pkgconfig/ibverbs.pc <<EOF
+    prefix=$out
+    exec_prefix=\''${prefix}
+    libdir=\''${exec_prefix}/lib
+    includedir=\''${prefix}/include
+
+    Name: IB verbs
+    Version: ${version}
+    Description: Library for direct userspace use of RDMA (InfiniBand/iWARP)
+    Libs: -L\''${libdir} -libverbs
+    Cflags: -I\''${includedir}
+    EOF
   '';
 
   # Re-add the libibverbs path into runpath of the library

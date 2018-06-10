@@ -1,27 +1,26 @@
-{ stdenv, fetchFromGitHub, which, sqlite, lua5_1, perl, zlib, pkgconfig, ncurses
-, dejavu_fonts, libpng, SDL2, SDL2_image, mesa, freetype, pngcrush
+{ stdenv, lib, fetchFromGitHub, which, sqlite, lua5_1, perl, zlib, pkgconfig, ncurses
+, dejavu_fonts, libpng, SDL2, SDL2_image, libGLU_combined, freetype, pngcrush, advancecomp
 , tileMode ? false
 }:
 
 stdenv.mkDerivation rec {
-  name = "crawl-${version}" + (if tileMode then "-tiles" else "");
-  version = "0.18.1";
+  name = "crawl-${version}${lib.optionalString tileMode "-tiles"}";
+  version = "0.21.1";
 
   src = fetchFromGitHub {
     owner = "crawl-ref";
     repo = "crawl-ref";
     rev = version;
-    sha256 = "1cg5mxhx0lfhadls6n8avcpkjx08nqf1y085li97zqxl3gjaj64j";
+    sha256 = "191pmd7vpp9qni5l13fb5s8g1axniah8a6hhi31gp0848c8n7hlh";
   };
 
   patches = [ ./crawl_purify.patch ];
 
-  nativeBuildInputs = [ pkgconfig which perl pngcrush ];
+  nativeBuildInputs = [ pkgconfig which perl pngcrush advancecomp ];
 
   # Still unstable with luajit
   buildInputs = [ lua5_1 zlib sqlite ncurses ]
-             ++ stdenv.lib.optionals tileMode
-                [ libpng SDL2 SDL2_image freetype mesa ];
+                ++ lib.optionals tileMode [ libpng SDL2 SDL2_image freetype libGLU_combined ];
 
   preBuild = ''
     cd crawl-ref/source
@@ -33,11 +32,13 @@ stdenv.mkDerivation rec {
     rm -rf contrib
   '';
 
-  makeFlags = [ "prefix=$(out)" "FORCE_CC=gcc" "FORCE_CXX=g++" "HOSTCXX=g++"
-                "SAVEDIR=~/.crawl" "sqlite=${sqlite.dev}" ]
-           ++ stdenv.lib.optionals tileMode [ "TILES=y" "dejavu_fonts=${dejavu_fonts}" ];
+  fontsPath = lib.optionalString tileMode dejavu_fonts;
 
-  postInstall = if tileMode then "mv $out/bin/crawl $out/bin/crawl-tiles" else "";
+  makeFlags = [ "prefix=$(out)" "FORCE_CC=cc" "FORCE_CXX=c++" "HOSTCXX=c++"
+                "SAVEDIR=~/.crawl" "sqlite=${sqlite.dev}"
+              ] ++ lib.optional tileMode "TILES=y";
+
+  postInstall = lib.optionalString tileMode "mv $out/bin/crawl $out/bin/crawl-tiles";
 
   enableParallelBuilding = true;
 

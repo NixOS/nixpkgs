@@ -1,10 +1,9 @@
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
-@@ -84,7 +84,7 @@ message(STATUS "DETECT_HDF5                = ${DETECT_HDF5}"               )
- ##
- ## Find LAPACK and BLAS libraries, or their optimised versions
- ##
--
+@@ -152,6 +152,7 @@ message(STATUS "DETECT_HDF5                = ${DETECT_HDF5}"               )
+
+ set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_CURRENT_SOURCE_DIR}/cmake_aux/Modules/")
+
 +set(APPLE false)
  if(APPLE)
    

@@ -16,10 +16,10 @@ stdenv.mkDerivation {
   '';
 
   meta = {
-    homepage = "https://github.com/seenaburns/stag";
+    homepage = https://github.com/seenaburns/stag;
     description = "Terminal streaming bar graph passed through stdin";
     license = stdenv.lib.licenses.bsdOriginal;
-    maintainers = [ stdenv.lib.maintainers.matthiasbeyer ];
+    maintainers = with stdenv.lib.maintainers; [ ];
     platforms = stdenv.lib.platforms.unix;
   };
 }

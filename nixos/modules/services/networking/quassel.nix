@@ -3,8 +3,8 @@
 with lib;
 
 let
-  quassel = pkgs.kde4.quasselDaemon;
   cfg = config.services.quassel;
+  quassel = cfg.package;
   user = if cfg.user != null then cfg.user else "quassel";
 in
 
@@ -21,6 +21,16 @@ in
         description = ''
           Whether to run the Quassel IRC client daemon.
         '';
+      };
+
+      package = mkOption {
+        type = types.package;
+        default = pkgs.quasselDaemon;
+        defaultText = "pkgs.quasselDaemon";
+        description = ''
+          The package of the quassel daemon.
+        '';
+        example = literalExample "pkgs.quasselDaemon";
       };
 
       interfaces = mkOption {

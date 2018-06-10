@@ -1,33 +1,45 @@
 {
-  enableXft ? true, libXft ? null,
-  patches ? [],
-  stdenv, fetchurl,
-  lua, gettext, groff,
-  pkgconfig, busybox,
-  xlibsWrapper, libXinerama, libXrandr, libX11
+  enableXft ? true, libXft ? null, patches ? [], stdenv, lua, gettext, pkgconfig, xlibsWrapper, libXinerama, libXrandr, libX11,
+  xterm, xmessage, makeWrapper, lib, fetchFromGitHub, mandoc, which
 }:
 
 assert enableXft -> libXft != null;
 
+let
+  pname = "notion";
+  version = "3-2017050501";
+  inherit patches;
+in
 stdenv.mkDerivation {
-  name     = "notion";
-  version  = "3-2015061300";
+  name = "${pname}-${version}";
   meta = with stdenv.lib; {
     description = "Tiling tabbed window manager, follow-on to the ion window manager";
     homepage = http://notion.sourceforge.net;
     platforms = platforms.linux;
     license   = licenses.notion_lgpl;
-    maintainers = [maintainers.jfb];
+    maintainers = with maintainers; [jfb];
   };
-  src = fetchurl {
-    url = https://github.com/raboof/notion/archive/3-2015061300.tar.gz;
-    sha256 = "3c9d9f35a9fb0d17c263b76fe28f7a1a4a05b7d6140545524cc1effd98c5c305";
+  src = fetchFromGitHub {
+    owner = "raboof";
+    repo = pname;
+    rev = version;
+    sha256 = "1wq5ylpsw5lkbm3c2bzmx2ajlngwib30adxlqbvq4bgkaf9zjh65";
   };
 
-  patches = patches ++ stdenv.lib.optional enableXft ./notion-xft_nixos.diff;
-  postPatch = "substituteInPlace system-autodetect.mk --replace '#PRELOAD_MODULES=1' 'PRELOAD_MODULES=1'";
-  buildInputs = [xlibsWrapper lua gettext groff pkgconfig busybox libXinerama libXrandr libX11] ++ stdenv.lib.optional enableXft libXft;
+  patches = patches;
+  postPatch = ''
+    substituteInPlace system-autodetect.mk --replace '#PRELOAD_MODULES=1' 'PRELOAD_MODULES=1'
+    substituteInPlace man/Makefile --replace "nroff -man -Tlatin1" "${mandoc}/bin/mandoc -T man"
+  '';
+
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [makeWrapper xlibsWrapper lua gettext mandoc which libXinerama libXrandr libX11 ] ++ stdenv.lib.optional enableXft libXft;
 
   buildFlags = "LUA_DIR=${lua} X11_PREFIX=/no-such-path PREFIX=\${out}";
   installFlags = "PREFIX=\${out}";
+
+  postInstall = ''
+    wrapProgram $out/bin/notion \
+      --prefix PATH ":" "${xmessage}/bin:${xterm}/bin" \
+  '';
 }

@@ -1,12 +1,10 @@
-{ stdenv, consul, ruby, bundlerEnv, zip }:
+{ stdenv, consul, ruby, bundlerEnv, zip, nodejs }:
 
 let
   # `sass` et al
   gems = bundlerEnv {
     name = "consul-ui-deps";
-    gemfile = ./Gemfile;
-    lockfile = ./Gemfile.lock;
-    gemset = ./gemset.nix;
+    gemdir = ./.;
   };
 in
 
@@ -15,9 +13,11 @@ stdenv.mkDerivation {
 
   src = consul.src;
 
-  buildInputs = [ ruby gems zip ];
+  buildInputs = [ ruby gems zip nodejs ];
 
-  patchPhase = "patchShebangs ./ui/scripts/dist.sh";
+  patches = [ ./ui-no-bundle-exec.patch ];
+
+  postPatch = "patchShebangs ./ui/scripts/dist.sh";
 
   buildPhase = ''
     # Build ui static files
@@ -32,7 +32,7 @@ stdenv.mkDerivation {
   '';
 
   meta = with stdenv.lib; {
-    homepage    = http://www.consul.io/;
+    homepage    = https://www.consul.io/;
     description = "A tool for service discovery, monitoring and configuration";
     maintainers = with maintainers; [ cstrahan wkennington ];
     license     = licenses.mpl20 ;

@@ -6,6 +6,7 @@ with lib;
 let
 
   cfg = config.hardware.pulseaudio;
+  alsaCfg = config.sound;
 
   systemWide = cfg.enable && cfg.systemWide;
   nonSystemWide = cfg.enable && !cfg.systemWide;
@@ -44,7 +45,7 @@ let
   uid = ids.uids.pulseaudio;
   gid = ids.gids.pulseaudio;
 
-  stateDir = "/var/run/pulse";
+  stateDir = "/run/pulse";
 
   # Create pulse/client.conf even if PulseAudio is disabled so
   # that we can disable the autospawn feature in programs that
@@ -76,6 +77,7 @@ let
     ctl.!default {
       type pulse
     }
+    ${alsaCfg.extraConfig}
   '');
 
 in {
@@ -99,7 +101,8 @@ in {
           each user that tries to use the sound system. The server runs
           with user privileges. This is the recommended and most secure
           way to use PulseAudio. If true, one system-wide PulseAudio
-          server is launched on boot, running as the user "pulse".
+          server is launched on boot, running as the user "pulse", and
+          only users in the "audio" group will have access to the server.
           Please read the PulseAudio documentation for more details.
         '';
       };
@@ -108,7 +111,7 @@ in {
         type = types.bool;
         default = false;
         description = ''
-          Whether to include the 32-bit pulseaudio libraries in the systemn or not.
+          Whether to include the 32-bit pulseaudio libraries in the system or not.
           This is only useful on 64-bit systems and currently limited to x86_64-linux.
         '';
       };
@@ -160,6 +163,13 @@ in {
             if activated.
           '';
         };
+
+        config = mkOption {
+          type = types.attrsOf types.unspecified;
+          default = {};
+          description = ''Config of the pulse daemon. See <literal>man pulse-daemon.conf</literal>.'';
+          example = literalExample ''{ flat-volumes = "no"; }'';
+        };
       };
 
       zeroconf = {
@@ -204,14 +214,26 @@ in {
     (mkIf cfg.enable {
       environment.systemPackages = [ overriddenPackage ];
 
-      environment.etc = singleton {
-        target = "asound.conf";
-        source = alsaConf;
-      };
+      sound.enable = true;
+
+      environment.etc = [
+        { target = "asound.conf";
+          source = alsaConf; }
+
+        { target = "pulse/daemon.conf";
+          source = writeText "daemon.conf" (lib.generators.toKeyValue {} cfg.daemon.config); }
+
+        { target = "openal/alsoft.conf";
+          source = writeText "alsoft.conf" "drivers=pulse"; }
+
+        { target = "libao.conf";
+          source = writeText "libao.conf" "default_driver=pulse"; }
+      ];
 
       # Allow PulseAudio to get realtime priority using rtkit.
       security.rtkit.enable = true;
 
+      systemd.packages = [ overriddenPackage ];
     })
 
     (mkIf hasZeroconf {
@@ -227,30 +249,16 @@ in {
         target = "pulse/default.pa";
         source = myConfigFile;
       };
-
       systemd.user = {
         services.pulseaudio = {
-          description = "PulseAudio Server";
-          # NixOS doesn't support "Also" so we bring it in manually
-          wantedBy = [ "default.target" ];
-          serviceConfig = {
-            Type = "notify";
-            ExecStart = binaryNoDaemon;
-            Restart = "on-failure";
-            RestartSec = "500ms";
-          };
-          environment = { DISPLAY = ":${toString config.services.xserver.display}"; };
           restartIfChanged = true;
-        };
-
-        sockets.pulseaudio = {
-          description = "PulseAudio Socket";
-          wantedBy = [ "sockets.target" ];
-          socketConfig = {
-            Priority = 6;
-            Backlog = 5;
-            ListenStream = "%t/pulse/native";
+          serviceConfig = {
+            RestartSec = "500ms";
+            PassEnvironment = "DISPLAY";
           };
+        };
+        sockets.pulseaudio = {
+          wantedBy = [ "sockets.target" ];
         };
       };
     })
@@ -280,6 +288,8 @@ in {
           RestartSec = "500ms";
         };
       };
+
+      environment.variables.PULSE_COOKIE = "${stateDir}/.config/pulse/cookie";
     })
   ];
 

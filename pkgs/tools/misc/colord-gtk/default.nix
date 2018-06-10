@@ -8,7 +8,8 @@ stdenv.mkDerivation rec {
     sha256 = "0i9y3bb5apj6a0f8cx36l6mjzs7xc0k7nf0magmf58vy2mzhpl18";
   };
 
-  buildInputs = [ intltool colord glib gtk3 pkgconfig lcms2 ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ intltool colord glib gtk3 lcms2 ];
 
   meta = {
     homepage = http://www.freedesktop.org/software/colord/intro.html;

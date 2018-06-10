@@ -1,8 +1,8 @@
 { stdenv, fetchurl, unzip, jdk, makeWrapper }:
 
 rec {
-  gradleGen = {name, src} : stdenv.mkDerivation rec {
-    inherit name src;
+  gradleGen = {name, src, nativeVersion} : stdenv.mkDerivation rec {
+    inherit name src nativeVersion;
 
     dontBuild = true;
 
@@ -21,10 +21,10 @@ rec {
       let arch = if stdenv.is64bit then "amd64" else "i386"; in ''
         mkdir patching
         pushd patching
-        jar xf $out/lib/gradle/lib/native-platform-linux-${arch}-0.10.jar
+        jar xf $out/lib/gradle/lib/native-platform-linux-${arch}-${nativeVersion}.jar
         patchelf --set-rpath "${stdenv.cc.cc.lib}/lib:${stdenv.cc.cc.lib}/lib64" net/rubygrapefruit/platform/linux-${arch}/libnative-platform.so
-        jar cf native-platform-linux-${arch}-0.10.jar .
-        mv native-platform-linux-${arch}-0.10.jar $out/lib/gradle/lib/
+        jar cf native-platform-linux-${arch}-${nativeVersion}.jar .
+        mv native-platform-linux-${arch}-${nativeVersion}.jar $out/lib/gradle/lib/
         popd
 
         # The scanner doesn't pick up the runtime dependency in the jar.
@@ -52,16 +52,28 @@ rec {
   };
 
   gradle_latest = gradleGen rec {
-    name = "gradle-3.0";
+    name = "gradle-4.8";
+    nativeVersion = "0.14";
 
     src = fetchurl {
       url = "http://services.gradle.org/distributions/${name}-bin.zip";
-      sha256 = "103z2nzlpc6x3mav0mqardd84rj1si718f6wpnpl8i273aa0dj9r";
+      sha256 = "1fpihf35nd2wqh3ghkk9x0x2nr1s4vx3dgrfn2q4xagsm299dqpk";
+    };
+  };
+
+  gradle_3_5 = gradleGen rec {
+    name = "gradle-3.5";
+    nativeVersion = "0.14";
+
+    src = fetchurl {
+      url = "http://services.gradle.org/distributions/${name}-bin.zip";
+      sha256 = "046i268zkg89ps7c1sq8yx9lbn9kighh4gcskxmzf3qriiwm0x0b";
     };
   };
 
   gradle_2_14 = gradleGen rec {
     name = "gradle-2.14.1";
+    nativeVersion = "0.10";
 
     src = fetchurl {
       url = "http://services.gradle.org/distributions/${name}-bin.zip";
@@ -71,6 +83,7 @@ rec {
 
   gradle_2_5 = gradleGen rec {
     name = "gradle-2.5";
+    nativeVersion = "0.10";
 
     src = fetchurl {
       url = "http://services.gradle.org/distributions/${name}-bin.zip";

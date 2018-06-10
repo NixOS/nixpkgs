@@ -19,7 +19,6 @@ import ./make-test.nix ({ pkgs, ...} : {
     startAll;
 
     $master->waitForUnit("mysql");
-    $master->sleep(10); # Hopefully this is long enough!!
     $master->succeed("echo 'use testdb; select * from tests' | mysql -u root -N | grep 4");
   '';
 })

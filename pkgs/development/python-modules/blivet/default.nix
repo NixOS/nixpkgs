@@ -7,7 +7,8 @@ let
   selinuxWithPython = libselinux.override pyenable;
   cryptsetupWithPython = cryptsetup.override pyenable;
 in buildPythonPackage rec {
-  name = "blivet-${version}";
+  pname = "blivet";
+  name = "${pname}-${version}";
   version = "0.67";
 
   src = fetchFromGitHub {
@@ -28,7 +29,6 @@ in buildPythonPackage rec {
     }' blivet/formats/__init__.py
     sed -i -e 's|"lsof"|"${lsof}/bin/lsof"|' blivet/formats/fs.py
     sed -i -r -e 's|"(u?mount)"|"${utillinux}/bin/\1"|' blivet/util.py
-    sed -i -e '/pvscan/s/, *"--cache"//' blivet/devicelibs/lvm.py
   '';
 
   propagatedBuildInputs = [
@@ -40,7 +40,7 @@ in buildPythonPackage rec {
   doCheck = false;
 
   meta = with stdenv.lib; {
-    homepage = "https://fedoraproject.org/wiki/Blivet";
+    homepage = https://fedoraproject.org/wiki/Blivet;
     description = "Module for management of a system's storage configuration";
     license = with licenses; [ gpl2Plus lgpl21Plus ];
     platforms = platforms.linux;

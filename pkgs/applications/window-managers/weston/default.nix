@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, wayland, mesa, libxkbcommon, cairo, libxcb
+{ stdenv, fetchurl, pkgconfig, wayland, libGL, mesa_noglu, libxkbcommon, cairo, libxcb
 , libXcursor, xlibsWrapper, udev, libdrm, mtdev, libjpeg, pam, dbus, libinput
 , pango ? null, libunwind ? null, freerdp ? null, vaapi ? null, libva ? null
 , libwebp ? null, xwayland ? null, wayland-protocols
@@ -7,16 +7,16 @@
 
 stdenv.mkDerivation rec {
   name = "weston-${version}";
-  version = "1.11.0";
+  version = "4.0.0";
 
   src = fetchurl {
     url = "http://wayland.freedesktop.org/releases/${name}.tar.xz";
-    sha256 = "09biddxw3ar797kxf9mywjkb2iwky6my39gpp51ni846y7lqdq05";
+    sha256 = "0n2big8xw6g6n46zm1jyf00dv9r4d84visdz5b8vxpw3xzkhmz50";
   };
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
-    wayland mesa libxkbcommon cairo libxcb libXcursor xlibsWrapper udev libdrm
+    wayland libGL mesa_noglu libxkbcommon cairo libxcb libXcursor xlibsWrapper udev libdrm
     mtdev libjpeg pam dbus libinput pango libunwind freerdp vaapi libva
     libwebp wayland-protocols
   ];
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
     "--enable-weston-launch"
     "--disable-setuid-install" # prevent install target to chown root weston-launch, which fails
   ] ++ stdenv.lib.optional (freerdp != null) "--enable-rdp-compositor"
-    ++ stdenv.lib.optional (vaapi != null) "--enabe-vaapi-recorder"
+    ++ stdenv.lib.optional (vaapi != null) "--enable-vaapi-recorder"
     ++ stdenv.lib.optionals (xwayland != null) [
         "--enable-xwayland"
         "--with-xserver-path=${xwayland.out}/bin/Xwayland"

@@ -1,8 +1,8 @@
 diff --git a/configure b/configure
-index 6779cc3..4275520 100755
+index b9ad66b..a2a7382 100755
 --- a/configure
 +++ b/configure
-@@ -15707,21 +15707,6 @@ $as_echo "not found" >&6; }
+@@ -16033,21 +16033,6 @@ $as_echo "not found" >&6; }
  			*-hp-hpux*)
  				DST_OPENSSL_LIBS="-L$use_openssl/lib -Wl,+b: -lcrypto"
  				;;

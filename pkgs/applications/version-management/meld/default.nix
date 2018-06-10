@@ -1,23 +1,23 @@
-{ stdenv, fetchurl, itstool, pythonPackages, intltool, wrapGAppsHook
+{ stdenv, fetchurl, itstool, python3Packages, intltool, wrapGAppsHook
 , libxml2, gobjectIntrospection, gtk3, gnome3, cairo, file
 }:
 
 
 let
-  minor = "3.16";
-  version = "${minor}.2";
-  inherit (pythonPackages) python buildPythonApplication pycairo pygobject3;
+  pname = "meld";
+  version = "3.18.1";
+  inherit (python3Packages) python buildPythonApplication pycairo pygobject3;
 in buildPythonApplication rec {
-  name = "meld-${version}";
+  name = "${pname}-${version}";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/meld/${minor}/meld-${version}.tar.xz";
-    sha256 = "2dd3f58b95444bf721e0c912668c29cf8f47a402440b772ea12c4b9a0c94966f";
+    url = "mirror://gnome/sources/${pname}/${gnome3.versionBranch version}/${name}.tar.xz";
+    sha256 = "0yg8i1ff3rsavsaxbnd6dxmfsiyv49kk8rv5wqnyhf2zmfp8rxis";
   };
 
   buildInputs = [
     intltool wrapGAppsHook itstool libxml2
-    gnome3.gtksourceview gnome3.gsettings_desktop_schemas pycairo cairo
+    gnome3.gtksourceview gnome3.gsettings-desktop-schemas pycairo cairo
     gnome3.defaultIconTheme gnome3.dconf file
   ];
   propagatedBuildInputs = [ gobjectIntrospection pygobject3 gtk3 ];
@@ -40,6 +40,14 @@ in buildPythonApplication rec {
   '';
 
   pythonPath = [ gtk3 ];
+
+  doCheck = false;
+
+  passthru = {
+    updateScript = gnome3.updateScript {
+      packageName = pname;
+    };
+  };
 
   meta = with stdenv.lib; {
     description = "Visual diff and merge tool";

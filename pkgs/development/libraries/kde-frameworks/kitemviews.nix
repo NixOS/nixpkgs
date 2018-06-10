@@ -1,9 +1,17 @@
-{ kdeFramework, lib
-, ecm
+{
+  mkDerivation, lib,
+  extra-cmake-modules,
+  qtbase, qttools
 }:
 
-kdeFramework {
+mkDerivation {
   name = "kitemviews";
-  meta = { maintainers = [ lib.maintainers.ttuegel ]; };
-  nativeBuildInputs = [ ecm ];
+  meta = {
+    maintainers = [ lib.maintainers.ttuegel ];
+    broken = builtins.compareVersions qtbase.version "5.7.0" < 0;
+  };
+  nativeBuildInputs = [ extra-cmake-modules ];
+  buildInputs = [ qttools ];
+  propagatedBuildInputs = [ qtbase ];
+  outputs = [ "out" "dev" ];
 }

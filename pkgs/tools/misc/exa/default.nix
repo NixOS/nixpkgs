@@ -1,24 +1,41 @@
-{ stdenv, fetchFromGitHub, rustPlatform, openssl, cmake, zlib }:
+{ stdenv, fetchFromGitHub, rustPlatform, cmake, perl, pkgconfig, zlib
+, darwin, libiconv
+}:
 
 with rustPlatform;
 
 buildRustPackage rec {
   name = "exa-${version}";
-  version = "2016-04-20";
+  version = "0.8.0";
 
-  # NOTE: There is an impurity caused by `exa` depending on
-  # https://github.com/rust-datetime/zoneinfo-compiled.git
-  depsSha256 = "0qsqkgc1wxigvskhaamgfp5pyc2kprsikhcfccysgs07w44nxkd0";
+  cargoSha256 = "08zzn3a32xfjkmpawcjppn1mr26ws3iv40cckiz8ldz4qc8y9gdh";
 
   src = fetchFromGitHub {
     owner = "ogham";
     repo = "exa";
-    rev = "110a1c716bfc4a7f74f74b3c4f0a881c773fcd06";
-    sha256 = "136yxi85m50vwmqinr1wnd0h29n5yjykqqqk9ibbcmmhx8sqhjzf";
+    rev = "v${version}";
+    sha256 = "0jy11a3xfnfnmyw1kjmv4ffavhijs8c940kw24vafklnacx5n88m";
   };
 
-  nativeBuildInputs = [ cmake ];
-  buildInputs = [ openssl zlib ];
+  nativeBuildInputs = [ cmake pkgconfig perl ];
+  buildInputs = [ zlib ]
+  ++ stdenv.lib.optionals stdenv.isDarwin [
+    libiconv darwin.apple_sdk.frameworks.Security ]
+  ;
+
+  postInstall = ''
+    mkdir -p $out/share/man/man1
+    cp contrib/man/exa.1 $out/share/man/man1/
+
+    mkdir -p $out/share/bash-completion/completions
+    cp contrib/completions.bash $out/share/bash-completion/completions/exa
+
+    mkdir -p $out/share/fish/vendor_completions.d
+    cp contrib/completions.fish $out/share/fish/vendor_completions.d/exa.fish
+
+    mkdir -p $out/share/zsh/site-functions
+    cp contrib/completions.zsh $out/share/zsh/site-functions/_exa
+  '';
 
   # Some tests fail, but Travis ensures a proper build
   doCheck = false;
@@ -33,8 +50,8 @@ buildRustPackage rec {
       for a directory, or recursing into directories with a tree view. exa is
       written in Rust, so it’s small, fast, and portable.
     '';
-    homepage = http://bsago.me/exa;
+    homepage = https://the.exa.website;
     license = licenses.mit;
-    maintainer = [ maintainers.ehegnes ];
+    maintainers = [ maintainers.ehegnes ];
   };
 }

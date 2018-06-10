@@ -1,20 +1,13 @@
-{ stdenv, fetchurl, perl, zlib, bzip2, xz, makeWrapper }:
+{ stdenv, fetchurl, perl, zlib, bzip2, xz, makeWrapper, coreutils }:
 
 stdenv.mkDerivation rec {
   name = "dpkg-${version}";
-  version = "1.18.10";
+  version = "1.19.0.5";
 
   src = fetchurl {
     url = "mirror://debian/pool/main/d/dpkg/dpkg_${version}.tar.xz";
-    sha256 = "1ibdidmc8nfiigadfpl3xrccrxw6hvmqiqqizy1v265s87d28m82";
+    sha256 = "1dc5kp3fqy1k66fly6jfxkkg7w6d0jy8szddpfyc2xvzga94d041";
   };
-
-  postPatch = ''
-    # dpkg tries to force some dependents like debian-devscripts to use
-    # -fstack-protector-strong - not (yet?) a good idea. Disable for now:
-    substituteInPlace scripts/Dpkg/Vendor/Debian.pm \
-      --replace "stackprotectorstrong => 1" "stackprotectorstrong => 0"
-  '';
 
   configureFlags = [
     "--disable-dselect"
@@ -38,6 +31,24 @@ stdenv.mkDerivation rec {
     done
   '';
 
+  patchPhase = ''
+    patchShebangs .
+
+    # Dpkg commands sometimes calls out to shell commands
+    substituteInPlace lib/dpkg/dpkg.h \
+       --replace '"dpkg-deb"' \"$out/bin/dpkg-deb\" \
+       --replace '"dpkg-split"' \"$out/bin/dpkg-split\" \
+       --replace '"dpkg-query"' \"$out/bin/dpkg-query\" \
+       --replace '"dpkg-divert"' \"$out/bin/dpkg-divert\" \
+       --replace '"dpkg-statoverride"' \"$out/bin/dpkg-statoverride\" \
+       --replace '"dpkg-trigger"' \"$out/bin/dpkg-trigger\" \
+       --replace '"dpkg"' \"$out/bin/dpkg\" \
+       --replace '"debsig-verify"' \"$out/bin/debsig-verify\" \
+       --replace '"rm"' \"${coreutils}/bin/rm\" \
+       --replace '"cat"' \"${coreutils}/bin/cat\" \
+       --replace '"diff"' \"${coreutils}/bin/diff\"
+  '';
+
   buildInputs = [ perl zlib bzip2 xz ];
   nativeBuildInputs = [ makeWrapper ];
 
@@ -55,9 +66,9 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "The Debian package manager";
-    homepage = http://wiki.debian.org/Teams/Dpkg;
+    homepage = https://wiki.debian.org/Teams/Dpkg;
     license = licenses.gpl2Plus;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ mornfall nckx ];
+    maintainers = with maintainers; [ ];
   };
 }

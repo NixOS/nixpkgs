@@ -9,13 +9,13 @@ stdenv.mkDerivation rec {
     sha256 = "0jgmzs0ycl930hmzcvx0ykryik56704yw62w394q1q3xw5kkjn9v";
   };
 
-  configureFlags = [ "--with-uuid=${libuuid}" ];
+  configureFlags = [ "--with-uuid=${libuuid.dev}" ];
   buildInputs = [ icu tzdata.dev ];
   enableParallelBuilding = true;
 
   meta = {
-    description = "Cross platform port of the OS X CoreFoundation";
-    homepage = "http://sourceforge.net/projects/opencflite/";
+    description = "Cross platform port of the macOS CoreFoundation";
+    homepage = https://sourceforge.net/projects/opencflite/;
     license = stdenv.lib.licenses.apsl20;
   };
 }

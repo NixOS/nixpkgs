@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     sha256 = "af20982fe43e8dce62d50bf7a78e461ab36c308325b123cddbababf0d3beaf9f";
   };
 
-  buildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkgconfig ];
   propagatedBuildInputs = [ pure lilv lv2 serd sord sratom ];
   makeFlags = "CFLAGS=-I${lilv}/include/lilv-0 libdir=$(out)/lib prefix=$(out)/";
   setupHook = ../generic-setup-hook.sh;

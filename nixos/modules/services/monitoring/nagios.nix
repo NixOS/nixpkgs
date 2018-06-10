@@ -163,7 +163,7 @@ in
       description = "Nagios monitoring daemon";
       path     = [ pkgs.nagios ];
       wantedBy = [ "multi-user.target" ];
-      after    = [ "network-interfaces.target" ];
+      after    = [ "network.target" ];
 
       serviceConfig = {
         User = "nagios";

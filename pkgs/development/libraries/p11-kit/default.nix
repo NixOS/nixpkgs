@@ -1,17 +1,26 @@
-{ stdenv, fetchurl, libiconv, pkgconfig, libffi, libtasn1 }:
+{ stdenv, fetchFromGitHub, autoreconfHook, which, pkgconfig, libiconv
+, libffi, libtasn1 }:
 
 stdenv.mkDerivation rec {
-  name = "p11-kit-0.23.2";
+  name = "p11-kit-${version}";
+  version = "0.23.12";
 
-  src = fetchurl {
-    url = "${meta.homepage}releases/${name}.tar.gz";
-    sha256 = "1w7szm190phlkg7qx05ychlj2dbvkgkhx9gw6dx4d5rw62l6wwms";
+  src = fetchFromGitHub {
+    owner = "p11-glue";
+    repo = "p11-kit";
+    rev = version;
+    sha256 = "0pb3qlddzbw7dglwnrl7fs9g71vhqk7qzxnb1i4nw633qgy21ga1";
   };
 
-  outputs = [ "out" "dev" "devdoc" ];
+  outputs = [ "out" "dev"];
   outputBin = "dev";
 
-  buildInputs = [ pkgconfig libffi libtasn1 libiconv ];
+  nativeBuildInputs = [ autoreconfHook which pkgconfig ];
+  buildInputs = [ libffi libtasn1 libiconv ];
+
+  autoreconfPhase = ''
+    NOCONFIGURE=1 ./autogen.sh
+  '';
 
   configureFlags = [
     "--sysconfdir=/etc"
@@ -21,10 +30,13 @@ stdenv.mkDerivation rec {
 
   installFlags = [ "exampledir=\${out}/etc/pkcs11" ];
 
+  doInstallCheck = false; # probably a bug in this derivation
+  enableParallelBuilding = true;
+
   meta = with stdenv.lib; {
     homepage = https://p11-glue.freedesktop.org/;
     platforms = platforms.all;
-    maintainers = with maintainers; [ urkud wkennington ];
+    maintainers = with maintainers; [ wkennington ];
     license = licenses.mit;
   };
 }

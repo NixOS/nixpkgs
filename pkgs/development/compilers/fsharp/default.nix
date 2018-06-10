@@ -1,4 +1,4 @@
-# Temporaririly avoid dependency on dotnetbuildhelpers to avoid rebuilding many times while working on it
+# Temporarily avoid dependency on dotnetbuildhelpers to avoid rebuilding many times while working on it
 
 { stdenv, fetchurl, mono, pkgconfig, dotnetbuildhelpers, autoconf, automake, which }:
 
@@ -11,7 +11,8 @@ stdenv.mkDerivation rec {
     sha256 = "0mvmvwwpl4zq0yvgzdizww8l9azvlrc82xm32nz1fi1nw8x5qfqk";
   };
 
-  buildInputs = [ mono pkgconfig dotnetbuildhelpers autoconf automake which ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ mono dotnetbuildhelpers autoconf automake which ];
 
   configurePhase = ''
     sed -i '988d' src/FSharpSource.targets
@@ -39,9 +40,9 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "A functional CLI language";
-    homepage = "http://fsharp.org/";
+    homepage = http://fsharp.org/;
     license = stdenv.lib.licenses.asl20;
     maintainers = with stdenv.lib.maintainers; [ thoughtpolice raskin ];
-    platforms = with stdenv.lib.platforms; linux;
+    platforms = with stdenv.lib.platforms; unix;
   };
 }

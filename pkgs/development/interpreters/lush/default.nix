@@ -1,5 +1,5 @@
-{stdenv, fetchurl, libX11, xproto, indent, readline, gsl, freeglut, mesa, SDL
-, blas, binutils, intltool, gettext, zlib, libSM}:
+{stdenv, fetchurl, libX11, xproto, indent, readline, gsl, freeglut, libGLU_combined, SDL
+, blas, libbfd, intltool, gettext, zlib, libSM}:
 
 stdenv.mkDerivation rec {
   baseName = "lush";
@@ -8,11 +8,11 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url="mirror://sourceforge/project/lush/lush2/lush-2.0.1.tar.gz";
-    sha256="02pkfn3nqdkm9fm44911dbcz0v3r0l53vygj8xigl6id5g3iwi4k";
+    sha256 = "02pkfn3nqdkm9fm44911dbcz0v3r0l53vygj8xigl6id5g3iwi4k";
   };
 
   buildInputs = [
-    libX11 libSM xproto indent readline gsl freeglut mesa SDL blas binutils
+    libX11 libSM xproto indent readline gsl freeglut libGLU_combined SDL blas libbfd
     intltool gettext zlib
   ];
 

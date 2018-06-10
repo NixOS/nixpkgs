@@ -5,12 +5,9 @@ import ./make-test.nix {
     one = { config, pkgs, ... }: {
       services.prometheus = {
         enable = true;
-        globalConfig = {
-          labels = { foo = "bar"; };
-        };
         scrapeConfigs = [{
           job_name = "prometheus";
-          target_groups = [{
+          static_configs = [{
             targets = [ "127.0.0.1:9090" ];
             labels = { instance = "localhost"; };
           }];

@@ -1,31 +1,47 @@
-{stdenv, fetchurl, pkgconfig, lua, fpc, pcre, portaudio, freetype, libpng
-, SDL, SDL_image, ffmpeg, sqlite, zlib, libX11 }:
+{ stdenv, autoreconfHook, fetchFromGitHub, pkgconfig
+, lua, fpc, pcre, portaudio, freetype, libpng
+, SDL2, SDL2_image, SDL2_gfx, SDL2_mixer, SDL2_net, SDL2_ttf
+, ffmpeg, sqlite, zlib, libX11, libGLU_combined }:
 
-stdenv.mkDerivation rec {
-  name = "ultrastardx-1.1";
-  src = fetchurl {
-    url = "mirror://sourceforge/ultrastardx/${name}-src.tar.gz";
-    sha256 = "0sfj5rfgj302avcp6gj5hiypcxms1wc6h3qzjaf5i2a9kcvnibcd";
+let
+  sharedLibs = [
+    pcre portaudio freetype
+    SDL2 SDL2_image SDL2_gfx SDL2_mixer SDL2_net SDL2_ttf
+    sqlite lua zlib libX11 libGLU_combined ffmpeg
+  ];
+
+in stdenv.mkDerivation rec {
+  name = "ultrastardx-${version}";
+  version = "2017.8.0";
+  src = fetchFromGitHub {
+    owner = "UltraStar-Deluxe";
+    repo = "USDX";
+    rev = "v${version}";
+    sha256 = "1zp0xfwzci3cjmwx3cprcxvm60cik5cvhvrz9n4d6yb8dv38nqzm";
   };
 
-  buildInputs = [ pkgconfig fpc pcre portaudio freetype libpng SDL SDL_image ffmpeg
-    sqlite lua ];
+  nativeBuildInputs = [ pkgconfig autoreconfHook ];
+  buildInputs = [ fpc libpng ] ++ sharedLibs;
 
-
-  # The fpc is not properly wrapped to add -rpath. I add this manually.
-  # I even do a trick on lib/lib64 for libgcc, that I expect it will work.
-  preBuild = ''
-    export NIX_LDFLAGS="$NIX_LDFLAGS -rpath ${SDL.out}/lib -rpath ${SDL_image}/lib -rpath ${libpng.out}/lib -rpath ${freetype.out}/lib -rpath ${portaudio}/lib -rpath ${ffmpeg.out}/lib -rpath ${zlib.out}/lib -rpath ${sqlite.out}/lib -rpath ${libX11.out}/lib -rpath ${pcre.out}/lib -rpath ${lua}/lib -rpath ${stdenv.cc.cc.out}/lib64 -rpath ${stdenv.cc.cc.out}/lib"
-
-    sed -i 414,424d Makefile
+  postPatch = ''
+    # autoconf substitutes strange things otherwise
+    substituteInPlace src/config.inc.in \
+      --subst-var-by libpcre_LIBNAME libpcre.so.1
   '';
+
+  preBuild = with stdenv.lib;
+    let items = concatMapStringsSep " " (x: "-rpath ${getLib x}/lib") sharedLibs;
+    in ''
+      export NIX_LDFLAGS="$NIX_LDFLAGS ${items}"
+    '';
 
   # dlopened libgcc requires the rpath not to be shrinked
   dontPatchELF = true;
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = http://ultrastardx.sourceforge.net/;
     description = "Free and open source karaoke game";
-    license = stdenv.lib.licenses.gpl2Plus;
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ Profpatsch ];
   };
 }

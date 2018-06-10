@@ -1,37 +1,12 @@
-Author: Dmitry Shachnev <mitya57@gmail.com>
-Description: do not build unrar extension as we strip unrar from the tarball
-Forwarded: not-needed
-Last-Update: 2013-04-04
-
-Index: calibre/setup/extensions.json
-===================================================================
---- calibre.orig/setup/extensions.json
-+++ calibre/setup/extensions.json
-@@ -211,14 +211,5 @@
-         "sources": "calibre/devices/mtp/unix/devices.c calibre/devices/mtp/unix/libmtp.c",
-         "headers": "calibre/devices/mtp/unix/devices.h calibre/devices/mtp/unix/upstream/music-players.h calibre/devices/mtp/unix/upstream/device-flags.h",
-         "libraries": "mtp"
--    },
--    {
--        "name": "unrar",
--        "sources": "unrar/rar.cpp unrar/strlist.cpp unrar/strfn.cpp unrar/pathfn.cpp unrar/savepos.cpp unrar/smallfn.cpp unrar/global.cpp unrar/file.cpp unrar/filefn.cpp unrar/filcreat.cpp unrar/archive.cpp unrar/arcread.cpp unrar/unicode.cpp unrar/system.cpp unrar/isnt.cpp unrar/crypt.cpp unrar/crc.cpp unrar/rawread.cpp unrar/encname.cpp unrar/resource.cpp unrar/match.cpp unrar/timefn.cpp unrar/rdwrfn.cpp unrar/consio.cpp unrar/options.cpp unrar/ulinks.cpp unrar/errhnd.cpp unrar/rarvm.cpp unrar/secpassword.cpp unrar/rijndael.cpp unrar/getbits.cpp unrar/sha1.cpp unrar/extinfo.cpp unrar/extract.cpp unrar/volume.cpp unrar/list.cpp unrar/find.cpp unrar/unpack.cpp unrar/cmddata.cpp unrar/filestr.cpp unrar/scantree.cpp calibre/utils/unrar.cpp",
--        "inc_dirs": "unrar",
--        "defines": "SILENT RARDLL UNRAR _FILE_OFFSET_BITS=64 _LARGEFILE_SOURCE",
--        "windows_defines": "SILENT RARDLL UNRAR",
--        "optimize_level": 2,
--        "windows_libraries": "User32 Advapi32 kernel32 Shell32"
-     }
- ]
-Index: calibre/src/calibre/ebooks/metadata/archive.py
-===================================================================
---- calibre.orig/src/calibre/ebooks/metadata/archive.py	2014-02-02 10:42:14.510954007 +0100
-+++ calibre/src/calibre/ebooks/metadata/archive.py	2014-02-02 10:42:14.502954007 +0100
-@@ -42,7 +42,7 @@
-     description = _('Extract common e-book formats from archives '
-         '(zip/rar) files. Also try to autodetect if they are actually '
-         'cbz/cbr files.')
+diff --git a/src/calibre/ebooks/metadata/archive.py b/src/calibre/ebooks/metadata/archive.py
+index 938ab24..1e095f8 100644
+--- a/src/calibre/ebooks/metadata/archive.py
++++ b/src/calibre/ebooks/metadata/archive.py
+@@ -44,7 +44,7 @@
+     description = _('Extract common e-book formats from archive files '
+         '(ZIP/RAR). Also try to autodetect if they are actually '
+         'CBZ/CBR files.')
 -    file_types = set(['zip', 'rar'])
 +    file_types = set(['zip'])
      supported_platforms = ['windows', 'osx', 'linux']
      on_import = True
- 

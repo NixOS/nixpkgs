@@ -1,15 +1,15 @@
-{ stdenv, fetchurl, pkgs, python3Packages }:
+{ stdenv, pkgs, python3Packages }:
 
 with python3Packages;
 
 buildPythonApplication rec {
-  # Reenable tests for 0.9.0, they are broken at the moment: #15981
-  version = "0.8.2";
-  name = "khal-${version}";
+  name = "${pname}-${version}";
+  pname = "khal";
+  version = "0.9.9";
 
-  src = fetchurl {
-    url = "mirror://pypi/k/khal/khal-${version}.tar.gz";
-    sha256 = "0ihclh3jsxhvq7azgdxbdzwbl7my30cdcg3g5ss5bpm4ivskrzzj";
+  src = fetchPypi {
+    inherit pname version;
+    sha256 = "0dq9aqb9pqjfqrnfg43mhpb7m0szmychxy1ydb3lwzf3500c9rsh";
   };
 
   LC_ALL = "en_US.UTF-8";
@@ -40,6 +40,6 @@ buildPythonApplication rec {
     homepage = http://lostpackets.de/khal/;
     description = "CLI calendar application";
     license = licenses.mit;
-    maintainers = with maintainers; [ matthiasbeyer jgeerds ];
+    maintainers = with maintainers; [ jgeerds ];
   };
 }

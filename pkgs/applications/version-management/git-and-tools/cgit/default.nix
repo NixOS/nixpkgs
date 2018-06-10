@@ -1,30 +1,31 @@
 { stdenv, fetchurl, openssl, zlib, asciidoc, libxml2, libxslt
 , docbook_xml_xslt, pkgconfig, luajit
 , gzip, bzip2, xz
+, python, wrapPython, pygments, markdown
 }:
 
 stdenv.mkDerivation rec {
   name = "cgit-${version}";
-  version = "0.12";
+  version = "1.1";
 
   src = fetchurl {
     url = "http://git.zx2c4.com/cgit/snapshot/${name}.tar.xz";
-    sha256 = "1dx54hgfyabmg9nm5qp6d01f54nlbqbbdwhwl0llb9imjf237qif";
+    sha256 = "142qcgs8dwnzhymn0a7xx47p9fc2z5wrb86ah4a9iz0mpqlsz288";
   };
 
   # cgit is tightly coupled with git and needs a git source tree to build.
   # IMPORTANT: Remember to check which git version cgit needs on every version
-  # bump (look in the Makefile).
-  # NOTE: as of 0.10.1, the git version is compatible from 1.9.0 to
-  # 1.9.2 (see the repository history)
+  # bump (look for "GIT_VER" in the top-level Makefile).
   gitSrc = fetchurl {
-    url    = "mirror://kernel/software/scm/git/git-2.7.0.tar.xz";
-    sha256 = "03bvb8s5j8i54qbi3yayl42bv0wf2fpgnh1a2lkhbj79zi7b77zs";
+    url    = "mirror://kernel/software/scm/git/git-2.10.2.tar.xz";
+    sha256 = "0wc64dzcxrzgi6kwcljz6y3cwm3ajdgf6aws7g58azbhvl1jk04l";
   };
 
+  nativeBuildInputs = [ pkgconfig ] ++ [ python wrapPython ];
   buildInputs = [
-    openssl zlib asciidoc libxml2 libxslt docbook_xml_xslt pkgconfig luajit
+    openssl zlib asciidoc libxml2 libxslt docbook_xml_xslt luajit
   ];
+  pythonPath = [ pygments markdown ];
 
   postPatch = ''
     sed -e 's|"gzip"|"${gzip}/bin/gzip"|' \
@@ -51,10 +52,12 @@ stdenv.mkDerivation rec {
     a2x --no-xmllint -f manpage cgitrc.5.txt
     mkdir -p "$out/share/man/man5"
     cp cgitrc.5 "$out/share/man/man5"
+
+    wrapPythonProgramsIn "$out/lib/cgit/filters" "$out $pythonPath"
   '';
 
   meta = {
-    homepage = http://git.zx2c4.com/cgit/about/;
+    homepage = https://git.zx2c4.com/cgit/about/;
     repositories.git = git://git.zx2c4.com/cgit;
     description = "Web frontend for git repositories";
     license = stdenv.lib.licenses.gpl2;

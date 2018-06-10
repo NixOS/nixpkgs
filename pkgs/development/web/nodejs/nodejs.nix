@@ -1,66 +1,107 @@
-{ stdenv, fetchurl, openssl, python, zlib, libuv, v8, utillinux, http-parser
-, pkgconfig, runCommand, which, libtool
-, version
-, sha256 ? null
-, src ? fetchurl { url = "https://nodejs.org/download/release/v${version}/node-v${version}.tar.xz"; inherit sha256; }
-, preBuild ? ""
-, extraConfigFlags ? []
-, extraBuildInputs ? []
-, ...
+{ stdenv, fetchurl, openssl, python2, zlib, libuv, utillinux, http-parser
+, pkgconfig, which
+# Updater dependencies
+, writeScript, coreutils, gnugrep, jq, curl, common-updater-scripts, nix
+, gnupg
+, darwin ? null
 }:
 
-assert stdenv.system != "armv5tel-linux";
+with stdenv.lib;
+
+{ enableNpm ? true, version, sha256, patches } @args:
 
 let
 
-  deps = {
-    inherit openssl zlib libuv;
-  } // (stdenv.lib.optionalAttrs (!stdenv.isDarwin) {
-    inherit http-parser;
-  });
+  inherit (darwin.apple_sdk.frameworks) CoreServices ApplicationServices;
 
-  sharedConfigureFlags = name: [
+
+
+  baseName = if enableNpm then "nodejs" else "nodejs-slim";
+
+  sharedLibDeps = { inherit openssl zlib libuv; } // (optionalAttrs (!stdenv.isDarwin) { inherit http-parser; });
+
+  sharedConfigureFlags = concatMap (name: [
     "--shared-${name}"
-    "--shared-${name}-includes=${builtins.getAttr name deps}/include"
-    "--shared-${name}-libpath=${builtins.getAttr name deps}/lib"
-  ];
+    "--shared-${name}-libpath=${getLib sharedLibDeps.${name}}/lib"
+    /** Closure notes: we explicitly avoid specifying --shared-*-includes,
+     *  as that would put the paths into bin/nodejs.
+     *  Including pkgconfig in build inputs would also have the same effect!
+     */
+  ]) (builtins.attrNames sharedLibDeps);
 
-  inherit (stdenv.lib) concatMap optional optionals maintainers licenses platforms;
+  copyLibHeaders =
+    map
+      (name: "${getDev sharedLibDeps.${name}}/include/*")
+      (builtins.attrNames sharedLibDeps);
 
-in stdenv.mkDerivation {
+  extraConfigFlags = optionals (!enableNpm) [ "--without-npm" ];
+in
 
-  inherit version src preBuild;
+  stdenv.mkDerivation {
+    inherit version;
 
-  name = "nodejs-${version}";
+    name = "${baseName}-${version}";
 
-  configureFlags = concatMap sharedConfigureFlags (builtins.attrNames deps) ++ [ "--without-dtrace" ] ++ extraConfigFlags;
-  dontDisableStatic = true;
-  prePatch = ''
-    patchShebangs .
-    sed -i 's/raise.*No Xcode or CLT version detected.*/version = "7.0.0"/' tools/gyp/pylib/gyp/xcode_emulation.py
-  '';
+    src = fetchurl {
+      url = "http://nodejs.org/dist/v${version}/node-v${version}.tar.xz";
+      inherit sha256;
+    };
 
-  postInstall = ''
-    PATH=$out/bin:$PATH patchShebangs $out
-  '';
-
-  patches = stdenv.lib.optionals stdenv.isDarwin [ ./no-xcode.patch ];
-
-  buildInputs = extraBuildInputs
-    ++ [ python which zlib libuv openssl ]
+    buildInputs = optionals stdenv.isDarwin [ CoreServices ApplicationServices ]
+    ++ [ python2 which zlib libuv openssl ]
     ++ optionals stdenv.isLinux [ utillinux http-parser ]
-    ++ optionals stdenv.isDarwin [ pkgconfig libtool ];
-  setupHook = ./setup-hook.sh;
+    ++ optionals stdenv.isDarwin [ pkgconfig darwin.cctools ];
 
-  enableParallelBuilding = true;
+    configureFlags = sharedConfigureFlags ++ [ "--without-dtrace" ] ++ extraConfigFlags;
 
-  passthru.interpreterName = "nodejs";
+    dontDisableStatic = true;
 
-  meta = {
-    description = "Event-driven I/O framework for the V8 JavaScript engine";
-    homepage = http://nodejs.org;
-    license = licenses.mit;
-    maintainers = [ maintainers.goibhniu maintainers.havvy maintainers.gilligan maintainers.cko ];
-    platforms = platforms.linux ++ platforms.darwin;
-  };
+    enableParallelBuilding = true;
+
+    passthru.interpreterName = "nodejs";
+
+    setupHook = ./setup-hook.sh;
+
+    pos = builtins.unsafeGetAttrPos "version" args;
+
+    inherit patches;
+
+    preBuild = optionalString stdenv.isDarwin ''
+      sed -i -e "s|tr1/type_traits|type_traits|g" \
+      -e "s|std::tr1|std|" src/util.h
+    '';
+
+    prePatch = ''
+      patchShebangs .
+      sed -i 's/raise.*No Xcode or CLT version detected.*/version = "7.0.0"/' tools/gyp/pylib/gyp/xcode_emulation.py
+    '';
+
+    postInstall = ''
+      paxmark m $out/bin/node
+      PATH=$out/bin:$PATH patchShebangs $out
+
+      ${optionalString enableNpm ''
+        mkdir -p $out/share/bash-completion/completions/
+        $out/bin/npm completion > $out/share/bash-completion/completions/npm
+      ''}
+
+      # install the missing headers for node-gyp
+      cp -r ${concatStringsSep " " copyLibHeaders} $out/include/node
+    '';
+
+    passthru.updateScript = import ./update.nix {
+      inherit writeScript coreutils gnugrep jq curl common-updater-scripts gnupg nix;
+      inherit (stdenv) lib;
+      majorVersion = with stdenv.lib; elemAt (splitString "." version) 0;
+    };
+
+    meta = {
+      description = "Event-driven I/O framework for the V8 JavaScript engine";
+      homepage = https://nodejs.org;
+      license = licenses.mit;
+      maintainers = with maintainers; [ goibhniu gilligan cko ];
+      platforms = platforms.linux ++ platforms.darwin;
+    };
+
+    passthru.python = python2; # to ensure nodeEnv uses the same version
 }

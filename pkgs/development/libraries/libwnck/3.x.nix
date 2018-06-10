@@ -1,22 +1,38 @@
-{stdenv, fetchurl, pkgconfig, libX11, gtk3, intltool}:
+{stdenv, fetchurl, pkgconfig, libX11, gtk3, intltool, gobjectIntrospection, gnome3}:
 
-stdenv.mkDerivation {
-  name = "libwnck-3.4.7";
+let
+  pname = "libwnck";
+  version = "3.24.1";
+in stdenv.mkDerivation rec{
+  name = "${pname}-${version}";
 
   src = fetchurl {
-    url = mirror://gnome/sources/libwnck/3.4/libwnck-3.4.7.tar.xz;
-    sha256 = "d48ac9c7f50c0d563097f63d07bcc83744c7d92a1b4ef65e5faeab32b5ccb723";
+    url = "mirror://gnome/sources/${pname}/${gnome3.versionBranch version}/${name}.tar.xz";
+    sha256 = "010zk9zvydggxqnxfml3scml5yxmpjy90irpqcayrzw26lldr9mg";
   };
 
   outputs = [ "out" "dev" "devdoc" ];
   outputBin = "dev";
 
-  patches = [ ./install_introspection_to_prefix.patch ];
+  configureFlags = [ "--enable-introspection" ];
 
-  buildInputs = [ pkgconfig intltool ];
+  nativeBuildInputs = [ pkgconfig intltool gobjectIntrospection ];
   propagatedBuildInputs = [ libX11 gtk3 ];
 
-  meta = {
-    platforms = stdenv.lib.platforms.linux;
+  PKG_CONFIG_GOBJECT_INTROSPECTION_1_0_GIRDIR = "$(dev)/share/gir-1.0";
+  PKG_CONFIG_GOBJECT_INTROSPECTION_1_0_TYPELIBDIR = "$(out)/lib/girepository-1.0";
+
+  passthru = {
+    updateScript = gnome3.updateScript {
+      packageName = pname;
+      attrPath = "gnome3.${pname}";
+    };
+  };
+
+  meta = with stdenv.lib; {
+    description = "Library to manage X windows and workspaces (via pagers, tasklists, etc.)";
+    license = licenses.lgpl21Plus;
+    platforms = platforms.linux;
+    maintainers = [];
   };
 }

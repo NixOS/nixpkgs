@@ -1,34 +1,37 @@
-{ stdenv, fetchsvn, boost, ganv, glibmm, gtkmm2, libjack2, lilv-svn
-, lv2, makeWrapper, pkgconfig, python, raul, rdflib, serd, sord-svn, sratom
+{ stdenv, fetchgit, boost, ganv, glibmm, gtkmm2, libjack2, lilv
+, lv2Unstable, makeWrapper, pkgconfig, python, raul, rdflib, serd, sord, sratom
+
 , suil
 }:
 
 stdenv.mkDerivation  rec {
-  name = "ingen-svn-${rev}";
-  rev = "5675";
+  name = "ingen-unstable-${rev}";
+  rev = "2017-07-22";
 
-  src = fetchsvn {
-    url = "http://svn.drobilla.net/lad/trunk/ingen";
-    rev = rev;
-    sha256 = "1dk56rzbc0rwlbzr90rv8bh5163xwld32nmkvcz7ajfchi4fnv86";
+  src = fetchgit {
+    url = "https://git.drobilla.net/cgit.cgi/ingen.git";
+    rev = "cc4a4db33f4d126a07a4a498e053c5fb9a883be3";
+    sha256 = "1gmwmml486r9zq4w65v91mfaz36af9zzyjkmi74m8qmh67ffqn3w";
+    deepClone = true;
   };
 
+  nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
-    boost ganv glibmm gtkmm2 libjack2 lilv-svn lv2 makeWrapper pkgconfig
-    python raul serd sord-svn sratom suil
+    boost ganv glibmm gtkmm2 libjack2 lilv lv2Unstable makeWrapper
+    python raul serd sord sratom suil
   ];
 
   configurePhase = ''
     sed -e "s@{PYTHONDIR}/'@out/'@" -i wscript
-    python waf configure --prefix=$out
+    ${python.interpreter} waf configure --prefix=$out
   '';
 
   propagatedBuildInputs = [ rdflib ];
 
-  buildPhase = "python waf";
+  buildPhase = "${python.interpreter} waf";
 
   installPhase = ''
-    python waf install
+    ${python.interpreter} waf install
     for program in ingenams ingenish
     do
       wrapProgram $out/bin/$program \

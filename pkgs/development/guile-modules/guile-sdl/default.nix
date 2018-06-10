@@ -1,27 +1,20 @@
-{ stdenv, fetchurl, guile, buildEnv
+{ stdenv, fetchurl, pkgconfig, guile, buildEnv
 , SDL, SDL_image, SDL_ttf, SDL_mixer
 }:
 
 stdenv.mkDerivation rec {
-  name = "guile-sdl-0.5.1";
-
-  meta = with stdenv.lib; {
-    description = "Guile bindings for SDL";
-    homepage    = "http://gnu.org/s/guile-sdl";
-    license     = licenses.gpl3Plus;
-    platforms   = platforms.linux;
-  };
+  name = "${pname}-${version}";
+  pname = "guile-sdl";
+  version = "0.5.2";
 
   src = fetchurl {
-    url = "mirror://gnu/guile-sdl/${name}.tar.xz";
-    sha256 = "126n4rd0ydh6i2s11ari5k85iivradlf12zq13b34shf9k1wn5am";
+    url = "mirror://gnu/${pname}/${name}.tar.xz";
+    sha256 = "0cjgs012a9922hn6xqwj66w6qmfs3nycnm56hyykx5n3g5p7ag01";
   };
 
-  nativeBuildInputs = [ guile ];
+  nativeBuildInputs = [ pkgconfig guile ];
 
-  buildInputs = [
-    SDL.dev SDL_image SDL_ttf SDL_mixer
-  ];
+  buildInputs = [ SDL.dev SDL_image SDL_ttf SDL_mixer ];
 
   GUILE_AUTO_COMPILE = 0;
 
@@ -31,4 +24,12 @@ stdenv.mkDerivation rec {
       paths = buildInputs;
     };
   in "SDLMINUSI=-I${sdl}/include/SDL";
+
+  meta = with stdenv.lib; {
+    description = "Guile bindings for SDL";
+    homepage = "http://gnu.org/s/guile-sdl";
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ vyp ];
+    platforms = platforms.linux;
+  };
 }

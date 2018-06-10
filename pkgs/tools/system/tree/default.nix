@@ -42,7 +42,7 @@ stdenv.mkDerivation {
   '';
 
   meta = {
-    homepage = "http://mama.indstate.edu/users/ice/tree/";
+    homepage = http://mama.indstate.edu/users/ice/tree/;
     description = "Command to produce a depth indented directory listing";
     license = stdenv.lib.licenses.gpl2;
 

@@ -1,67 +1,63 @@
 { stdenv, fetchurl, substituteAll
 , pkgconfig
+, makeWrapper
 , cups, zlib, libjpeg, libusb1, pythonPackages, sane-backends, dbus, usbutils
-, net_snmp, openssl, polkit
+, net_snmp, openssl, polkit, nettools
 , bash, coreutils, utillinux
-, qtSupport ? true, qt4
+, withQt5 ? true
 , withPlugin ? false
 }:
 
 let
 
   name = "hplip-${version}";
-  version = "3.16.5";
+  version = "3.18.3";
 
   src = fetchurl {
     url = "mirror://sourceforge/hplip/${name}.tar.gz";
-    sha256 = "1nay65q1zmx2jxiwn66n7mlr73azacz5097gw98kqqf90dh522f6";
+    sha256 = "0x5xs86v18w46rxz5whc15bl4fb7p4km6xqjpwzclp83nl7rl01y";
   };
 
   plugin = fetchurl {
-    url = "http://www.openprinting.org/download/printdriver/auxfiles/HP/plugins/${name}-plugin.run";
-    sha256 = "15qrcd3ndnxri6pfdfmsjyv2f3zfkig80yghs76jbsm106rp8g3q";
+    url = "https://www.openprinting.org/download/printdriver/auxfiles/HP/plugins/${name}-plugin.run";
+    sha256 = "11nc3cifhd2h2c7p0dr2jjzrg3fd5j43ih1wy0m186l6wcgdjssw";
   };
 
-  hplipState =
-    substituteAll
-      {
-        inherit version;
-        src = ./hplip.state;
-      };
+  hplipState = substituteAll {
+    inherit version;
+    src = ./hplip.state;
+  };
 
-  hplipPlatforms =
-    {
-      "i686-linux"   = "x86_32";
-      "x86_64-linux" = "x86_64";
-      "armv6l-linux" = "arm32";
-      "armv7l-linux" = "arm32";
-    };
+  hplipPlatforms = {
+    "i686-linux"   = "x86_32";
+    "x86_64-linux" = "x86_64";
+    "armv6l-linux" = "arm32";
+    "armv7l-linux" = "arm32";
+  };
 
   hplipArch = hplipPlatforms."${stdenv.system}"
     or (throw "HPLIP not supported on ${stdenv.system}");
 
-  pluginArches = [ "x86_32" "x86_64" ];
+  pluginArches = [ "x86_32" "x86_64" "arm32" ];
 
 in
 
 assert withPlugin -> builtins.elem hplipArch pluginArches
   || throw "HPLIP plugin not supported on ${stdenv.system}";
 
-stdenv.mkDerivation {
+pythonPackages.buildPythonApplication {
   inherit name src;
+  format = "other";
 
   buildInputs = [
     libjpeg
     cups
     libusb1
-    pythonPackages.python
-    pythonPackages.wrapPython
     sane-backends
     dbus
     net_snmp
     openssl
-  ] ++ stdenv.lib.optionals qtSupport [
-    qt4
+    zlib
   ];
 
   nativeBuildInputs = [
@@ -72,33 +68,38 @@ stdenv.mkDerivation {
     dbus
     pillow
     pygobject2
-    recursivePthLoader
     reportlab
     usbutils
-  ] ++ stdenv.lib.optionals qtSupport [
-    pyqt4
+    sip
+  ] ++ stdenv.lib.optionals withQt5 [
+    pyqt5
   ];
+
+  makeWrapperArgs = [ "--prefix" "PATH" ":" "${nettools}/bin" ];
 
   prePatch = ''
     # HPLIP hardcodes absolute paths everywhere. Nuke from orbit.
     find . -type f -exec sed -i \
-      -e s,/etc/hp,$out/etc/hp, \
-      -e s,/etc/sane.d,$out/etc/sane.d, \
-      -e s,/usr/include/libusb-1.0,${libusb1.dev}/include/libusb-1.0, \
-      -e s,/usr/share/hal/fdi/preprobe/10osvendor,$out/share/hal/fdi/preprobe/10osvendor, \
-      -e s,/usr/lib/systemd/system,$out/lib/systemd/system, \
-      -e s,/var/lib/hp,$out/var/lib/hp, \
+      -e s,/etc/hp,$out/etc/hp,g \
+      -e s,/etc/sane.d,$out/etc/sane.d,g \
+      -e s,/usr/include/libusb-1.0,${libusb1.dev}/include/libusb-1.0,g \
+      -e s,/usr/share/hal/fdi/preprobe/10osvendor,$out/share/hal/fdi/preprobe/10osvendor,g \
+      -e s,/usr/lib/systemd/system,$out/lib/systemd/system,g \
+      -e s,/var/lib/hp,$out/var/lib/hp,g \
       {} +
   '';
 
   preConfigure = ''
     export configureFlags="$configureFlags
+      --with-hpppddir=$out/share/cups/model/HP
       --with-cupsfilterdir=$out/lib/cups/filter
       --with-cupsbackenddir=$out/lib/cups/backend
       --with-icondir=$out/share/applications
       --with-systraydir=$out/xdg/autostart
       --with-mimedir=$out/etc/cups
       --enable-policykit
+      --disable-qt4
+      ${stdenv.lib.optionalString withQt5 "--enable-qt5"}
     "
 
     export makeFlags="
@@ -143,38 +144,33 @@ stdenv.mkDerivation {
     mkdir -p $out/var/lib/hp
     cp ${hplipState} $out/var/lib/hp/hplip.state
 
-    mkdir -p $out/etc/sane.d/dll.d
-    mv $out/etc/sane.d/dll.conf $out/etc/sane.d/dll.d/hpaio.conf
-
     rm $out/etc/udev/rules.d/56-hpmud.rules
   '';
 
-  fixupPhase = ''
-    # Wrap the user-facing Python scripts in $out/bin without turning the
-    # ones in $out /share into shell scripts (they need to be importable).
-    # Note that $out/bin contains only symlinks to $out/share.
+  # The installed executables are just symlinks into $out/share/hplip,
+  # but wrapPythonPrograms ignores symlinks. We cannot replace the Python
+  # modules in $out/share/hplip with wrapper scripts because they import
+  # each other as libraries. Instead, we emulate wrapPythonPrograms by
+  # 1. Calling patchPythonProgram on the original script in $out/share/hplip
+  # 2. Making our own wrapper pointing directly to the original script.
+  dontWrapPythonPrograms = true;
+  preFixup = ''
+    buildPythonPath "$out $pythonPath"
+
     for bin in $out/bin/*; do
-      py=`readlink -m $bin`
+      py=$(readlink -m $bin)
       rm $bin
-      cp $py $bin
-      wrapPythonProgramsIn $bin "$out $pythonPath"
-      sed -i "s@$(dirname $bin)/[^ ]*@$py@g" $bin
+      echo "patching \`$py'..."
+      patchPythonScript "$py"
+      echo "wrapping \`$bin'..."
+      makeWrapper "$py" "$bin" \
+          --prefix PATH ':' "$program_PATH" \
+          --set PYTHONNOUSERSITE "true" \
+          $makeWrapperArgs
     done
+  '';
 
-    # Remove originals. Knows a little too much about wrapPythonProgramsIn.
-    rm -f $out/bin/.*-wrapped
-
-    # Merely patching shebangs in $out/share does not cause trouble.
-    for i in $out/share/hplip{,/*}/*.py; do
-      substituteInPlace $i \
-        --replace /usr/bin/python \
-        ${pythonPackages.python}/bin/${pythonPackages.python.executable} \
-        --replace "/usr/bin/env python" \
-        ${pythonPackages.python}/bin/${pythonPackages.python.executable}
-    done
-
-    wrapPythonProgramsIn $out/lib "$out $pythonPath"
-
+  postFixup = ''
     substituteInPlace $out/etc/hp/hplip.conf --replace /usr $out
   '' + stdenv.lib.optionalString (!withPlugin) ''
     # A udev rule to notify users that they need the binary plugin.
@@ -188,11 +184,11 @@ stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "Print, scan and fax HP drivers for Linux";
-    homepage = http://hplipopensource.com/;
+    homepage = https://developers.hp.com/hp-linux-imaging-and-printing;
     license = if withPlugin
       then licenses.unfree
       else with licenses; [ mit bsd2 gpl2Plus ];
     platforms = [ "i686-linux" "x86_64-linux" "armv6l-linux" "armv7l-linux" ];
-    maintainers = with maintainers; [ jgeerds nckx ];
+    maintainers = with maintainers; [ jgeerds ttuegel ];
   };
 }

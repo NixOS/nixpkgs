@@ -9,7 +9,8 @@ stdenv.mkDerivation rec {
   name = "ign-transport-${version}";
   inherit src;
 
-  buildInputs = [ cmake protobuf zeromq pkgconfig
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ cmake protobuf zeromq
     utillinux # we need utillinux/e2fsprogs uuid/uuid.h
   ];
 
@@ -20,10 +21,11 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = http://ignitionrobotics.org/libraries/math;
+    homepage = https://ignitionrobotics.org/libraries/math;
     description = "Math library by Ingition Robotics, created for the Gazebo project";
     license = licenses.asl20;
     maintainers = with maintainers; [ pxc ];
     platforms = platforms.all;
+    broken = true; # 2018-04-10
   };
 }

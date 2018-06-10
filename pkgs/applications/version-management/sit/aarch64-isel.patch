@@ -1,0 +1,9 @@
+diff --git a/.cargo/config b/.cargo/config
+new file mode 100644
+index 0000000..15e7649
+--- /dev/null
++++ b/.cargo/config
+@@ -0,0 +1,3 @@
++# https://github.com/rust-lang/rust/issues/50516
++[target.'cfg(all(debug_assertions, target_arch = "aarch64"))']
++rustflags = ["-C", "llvm-args=-fast-isel"]

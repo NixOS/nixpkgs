@@ -1,7 +1,7 @@
 { stdenv, appleDerivation, yacc, flex }:
 
 appleDerivation {
-  buildInputs = [ yacc flex ];
+  nativeBuildInputs = [ yacc flex ];
 
   buildPhase = ''
     cd migcom.tproj
@@ -41,4 +41,8 @@ appleDerivation {
       --replace '/bin/rmdir' "rmdir" \
       --replace 'C=''${MIGCC}' "C=cc"
   '';
+
+  meta = {
+    platforms = stdenv.lib.platforms.darwin;
+  };
 }

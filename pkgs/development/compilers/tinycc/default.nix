@@ -1,26 +1,15 @@
 { stdenv, fetchFromRepoOrCz, perl, texinfo }:
-
-assert (stdenv.isGlibc);
-
 with stdenv.lib;
-
-let
-  date = "20160525";
-  version = "0.9.27pre-${date}";
-  rev = "1ca685f887310b5cbdc415cdfc3a578dbc8d82d8";
-  sha256 = "149s847jkg2zdmk09h0cp0q69m8kxxci441zyw8b08fy9b87ayd8";
-in
 
 stdenv.mkDerivation rec {
   name = "tcc-${version}";
+  version = "0.9.27";
 
   src = fetchFromRepoOrCz {
     repo = "tinycc";
-    inherit rev;
-    inherit sha256;
+    rev = "release_0_9_27";
+    sha256 = "12mm1lqywz0akr2yb2axjfbw8lwv57nh395vzsk534riz03ml977";
   };
-
-  outputs = [ "bin" "dev" "out" ];
 
   nativeBuildInputs = [ perl texinfo ];
 
@@ -32,17 +21,20 @@ stdenv.mkDerivation rec {
   '';
 
   preConfigure = ''
-    configureFlagsArray+=("--elfinterp=$(cat $NIX_CC/nix-support/dynamic-linker)")
-    configureFlagsArray+=("--crtprefix=${stdenv.glibc.out}/lib")
-    configureFlagsArray+=("--sysincludepaths=${stdenv.glibc.dev}/include:{B}/include")
-    configureFlagsArray+=("--libpaths=${stdenv.glibc.out}/lib")
+    echo ${version} > VERSION
+
+    configureFlagsArray+=("--cc=cc")
+    configureFlagsArray+=("--elfinterp=$(< $NIX_CC/nix-support/dynamic-linker)")
+    configureFlagsArray+=("--crtprefix=${getLib stdenv.cc.libc}/lib")
+    configureFlagsArray+=("--sysincludepaths=${getDev stdenv.cc.libc}/include:{B}/include")
+    configureFlagsArray+=("--libpaths=${getLib stdenv.cc.libc}/lib")
   '';
 
   doCheck = true;
   checkTarget = "test";
 
   postFixup = ''
-    paxmark m $bin/bin/tcc
+    paxmark m $out/bin/tcc
   '';
 
   meta = {
@@ -73,9 +65,9 @@ stdenv.mkDerivation rec {
     '';
 
     homepage = http://www.tinycc.org/;
-    license = licenses.lgpl2Plus;
+    license = licenses.mit;
 
-    platforms = platforms.unix;
+    platforms = [ "x86_64-linux" ];
     maintainers = [ maintainers.joachifm ];
   };
 }

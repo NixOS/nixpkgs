@@ -1,14 +1,19 @@
-{ stdenv, fetchurl, xlibsWrapper, libjpeg, libtiff, giflib, libpng, bzip2, pkgconfig }:
+{ stdenv, fetchurl, libjpeg, libtiff, giflib, libpng, bzip2, pkgconfig
+, freetype, libid3tag
+, x11Support ? true, xlibsWrapper ? null }:
+
+with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  name = "imlib2-1.4.9";
+  name = "imlib2-1.5.0";
 
   src = fetchurl {
     url = "mirror://sourceforge/enlightenment/${name}.tar.bz2";
-    sha256 = "08809xxk2555yj6glixzw9a0x3x8cx55imd89kj3r0h152bn8a3x";
+    sha256 = "0kg28b5wp886hiy12v7abdybrvlymb7g3nvg0ysn2y8h883s5w8m";
   };
 
-  buildInputs = [ xlibsWrapper libjpeg libtiff giflib libpng bzip2 ];
+  buildInputs = [ libjpeg libtiff giflib libpng bzip2 freetype libid3tag ]
+    ++ optional x11Support xlibsWrapper;
 
   nativeBuildInputs = [ pkgconfig ];
 
@@ -21,7 +26,14 @@ stdenv.mkDerivation rec {
 
   # Do not build amd64 assembly code on Darwin, because it fails to compile
   # with unknow directive errors
-  configureFlags = if stdenv.isDarwin then [ "--enable-amd64=no" ] else null;
+  configureFlags = optional stdenv.isDarwin "--enable-amd64=no"
+    ++ optional (!x11Support) "--without-x";
+
+  outputs = [ "bin" "out" "dev" ];
+
+  postInstall = ''
+    moveToOutput bin/imlib2-config "$dev"
+  '';
 
   meta = {
     description = "Image manipulation library";
@@ -34,8 +46,9 @@ stdenv.mkDerivation rec {
       easily, without sacrificing speed.
     '';
 
-    license = stdenv.lib.licenses.free;
-    platforms = stdenv.lib.platforms.unix;
-    maintainers = with stdenv.lib.maintainers; [ spwhitt ];
+    homepage = http://docs.enlightenment.org/api/imlib2/html;
+    license = licenses.free;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ spwhitt ];
   };
 }

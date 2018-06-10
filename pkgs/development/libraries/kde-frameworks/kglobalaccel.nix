@@ -1,18 +1,16 @@
-{ kdeFramework, lib
-, ecm
-, kconfig
-, kcoreaddons
-, kcrash
-, kdbusaddons
-, kwindowsystem
-, qtx11extras
+{
+  mkDerivation, lib,
+  extra-cmake-modules,
+  kconfig, kcoreaddons, kcrash, kdbusaddons, kservice, kwindowsystem,
+  qtbase, qttools, qtx11extras,
 }:
 
-kdeFramework {
+mkDerivation {
   name = "kglobalaccel";
-  meta = { maintainers = [ lib.maintainers.ttuegel ]; };
-  nativeBuildInputs = [ ecm ];
-  propagatedBuildInputs = [
-    kconfig kcoreaddons kcrash kdbusaddons kwindowsystem qtx11extras
+  nativeBuildInputs = [ extra-cmake-modules ];
+  buildInputs = [
+    kconfig kcoreaddons kcrash kdbusaddons kservice kwindowsystem qttools
+    qtx11extras
   ];
+  propagatedBuildInputs = [ qtbase ];
 }

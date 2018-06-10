@@ -50,14 +50,14 @@ in {
       };
 
     systemd.services.foldingathome = {
-      after = [ "network-interfaces.target" ];
+      after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
       preStart = ''
         mkdir -m 0755 -p ${stateDir}
         chown ${fahUser} ${stateDir}
         cp -f ${pkgs.writeText "client.cfg" cfg.config} ${stateDir}/client.cfg
       '';
-      script = "${pkgs.su}/bin/su -s ${pkgs.stdenv.shell} ${fahUser} -c 'cd ${stateDir}; ${pkgs.foldingathome}/bin/fah6'";
+      script = "${pkgs.su}/bin/su -s ${pkgs.runtimeShell} ${fahUser} -c 'cd ${stateDir}; ${pkgs.foldingathome}/bin/fah6'";
     };
 
     services.foldingAtHome.config = ''

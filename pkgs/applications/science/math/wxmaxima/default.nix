@@ -1,35 +1,33 @@
-{ stdenv, fetchurl, maxima, wxGTK, makeWrapper }:
+{ stdenv, fetchFromGitHub
+, wrapGAppsHook, cmake, gettext
+, maxima, wxGTK, gnome3 }:
 
-let
-  name    = "wxmaxima";
-  version = "15.04.0";
-in
-stdenv.mkDerivation {
-  name = "${name}-${version}";
+stdenv.mkDerivation rec {
+  name = "wxmaxima-${version}";
+  version = "18.02.0";
 
-  src = fetchurl {
-    url = "mirror://sourceforge/${name}/wxMaxima/${version}/wxmaxima-${version}.tar.gz";
-    sha256 = "1fm47ah4aw5qdjqhkz67w5fwhy8yfffa5z896crp0d3hk2bh4180";
+  src = fetchFromGitHub {
+    owner = "andrejv";
+    repo = "wxmaxima";
+    rev = "Version-${version}";
+    sha256 = "0s7bdykc77slqix28cyaa6x8wvxrn8461mkdgxflvi2apwsl56aa";
   };
 
-  buildInputs = [wxGTK maxima makeWrapper];
+  buildInputs = [ wxGTK maxima gnome3.defaultIconTheme ];
 
-  postInstall = ''
-    # Make sure that wxmaxima can find its runtime dependencies.
-    for prog in "$out/bin/"*; do
-      wrapProgram "$prog" --prefix PATH ":" "${maxima}/bin"
-    done
+  nativeBuildInputs = [ wrapGAppsHook cmake gettext ];
+
+  preConfigure = ''
+    gappsWrapperArgs+=(--prefix PATH ":" ${maxima}/bin)
   '';
-
-  doCheck = true;
 
   enableParallelBuilding = true;
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "Cross platform GUI for the computer algebra system Maxima";
-    license = stdenv.lib.licenses.gpl2;
+    license = licenses.gpl2;
     homepage = http://wxmaxima.sourceforge.net;
-    platforms = stdenv.lib.platforms.linux;
-    maintainers = [ stdenv.lib.maintainers.peti ];
+    platforms = platforms.linux;
+    maintainers = [ maintainers.peti ];
   };
 }

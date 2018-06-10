@@ -1,18 +1,19 @@
-{ stdenv, fetchurl, pkgconfig, intltool, libxfce4util, xfce4panel, libxfce4ui, libxfcegui4, xfconf, gtk}:
+{ stdenv, fetchurl, pkgconfig, intltool, libxfce4util, xfce4-panel, libxfce4ui, libxfcegui4, xfconf, gtk}:
 
 with stdenv.lib;
 stdenv.mkDerivation rec {
   p_name  = "xfce4-eyes-plugin";
   ver_maj = "4.4";
-  ver_min = "3";
+  ver_min = "4";
 
   src = fetchurl {
     url = "mirror://xfce/src/panel-plugins/${p_name}/${ver_maj}/${name}.tar.bz2";
-    sha256 = "0z4161i14m73i515ymhj34c1ycz5fmjmbczdd8plx3nvrxdk76jb";
+    sha256 = "1jh02hylvsvfpxrx0bq6fzgy6vnxf9qakgpbfvr63lfkd1dyh314";
   };
   name = "${p_name}-${ver_maj}.${ver_min}";
 
-  buildInputs = [ pkgconfig intltool libxfce4util libxfce4ui xfce4panel libxfcegui4 xfconf gtk ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ intltool libxfce4util libxfce4ui xfce4-panel libxfcegui4 xfconf gtk ];
 
   meta = {
     homepage = "http://goodies.xfce.org/projects/panel-plugins/${p_name}";

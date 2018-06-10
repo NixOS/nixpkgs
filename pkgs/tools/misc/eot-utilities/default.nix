@@ -10,10 +10,10 @@ stdenv.mkDerivation rec {
     sha256 = "0cb41riabss23hgfg7vxhky09d6zqwjy1nxdvr3l2bh5qzd4kvaf";
   };
 
-  buildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkgconfig ];
 
   meta = {
-    homepage = "http://www.w3.org/Tools/eot-utils/";
+    homepage = http://www.w3.org/Tools/eot-utils/;
     description = "Create Embedded Open Type from OpenType or TrueType font";
     license = stdenv.lib.licenses.w3c;
     maintainers = with stdenv.lib.maintainers; [ leenaars ];

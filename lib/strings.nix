@@ -1,6 +1,6 @@
 /* String manipulation functions. */
-
-let lib = import ./default.nix;
+{ lib }:
+let
 
 inherit (builtins) length;
 
@@ -33,7 +33,7 @@ rec {
        concatImapStrings (pos: x: "${toString pos}-${x}") ["foo" "bar"]
        => "1-foo2-bar"
   */
-  concatImapStrings = f: list: concatStrings (lib.imap f list);
+  concatImapStrings = f: list: concatStrings (lib.imap1 f list);
 
   /* Place an element between each element of a list
 
@@ -70,7 +70,7 @@ rec {
        concatImapStringsSep "-" (pos: x: toString (x / pos)) [ 6 6 6 ]
        => "6-3-2"
   */
-  concatImapStringsSep = sep: f: list: concatStringsSep sep (lib.imap f list);
+  concatImapStringsSep = sep: f: list: concatStringsSep sep (lib.imap1 f list);
 
   /* Construct a Unix-style search path consisting of each `subDir"
      directory of the given list of packages.
@@ -82,7 +82,7 @@ rec {
        => "//bin"
   */
   makeSearchPath = subDir: packages:
-    concatStringsSep ":" (map (path: path + "/" + subDir) packages);
+    concatStringsSep ":" (map (path: path + "/" + subDir) (builtins.filter (x: x != null) packages));
 
   /* Construct a Unix-style search path, using given package output.
      If no output is found, fallback to `.out` and then to the default.
@@ -126,8 +126,8 @@ rec {
   */
   makePerlPath = makeSearchPathOutput "lib" "lib/perl5/site_perl";
 
-  /* Dependening on the boolean `cond', return either the given string
-     or the empty string. Useful to contatenate against a bigger string.
+  /* Depending on the boolean `cond', return either the given string
+     or the empty string. Useful to concatenate against a bigger string.
 
      Example:
        optionalString true "some-string"
@@ -219,6 +219,14 @@ rec {
   */
   escapeShellArgs = concatMapStringsSep " " escapeShellArg;
 
+  /* Turn a string into a Nix expression representing that string
+
+     Example:
+       escapeNixString "hello\${}\n"
+       => "\"hello\\\${}\\n\""
+  */
+  escapeNixString = s: escape ["$"] (builtins.toJSON s);
+
   /* Obsolete - use replaceStrings instead. */
   replaceChars = builtins.replaceStrings or (
     del: new: s:
@@ -291,7 +299,7 @@ rec {
 
       recurse = index: startAt:
         let cutUntil = i: [(substring startAt (i - startAt) s)]; in
-        if index < lastSearch then
+        if index <= lastSearch then
           if startWithSep index then
             let restartAt = index + sepLen; in
             cutUntil index ++ recurse restartAt restartAt
@@ -406,6 +414,39 @@ rec {
   */
   enableFeature = enable: feat: "--${if enable then "enable" else "disable"}-${feat}";
 
+  /* Create an --{enable-<feat>=<value>,disable-<feat>} string that can be passed to
+     standard GNU Autoconf scripts.
+
+     Example:
+       enableFeature true "shared" "foo"
+       => "--enable-shared=foo"
+       enableFeature false "shared" (throw "ignored")
+       => "--disable-shared"
+  */
+  enableFeatureAs = enable: feat: value: enableFeature enable feat + optionalString enable "=${value}";
+
+  /* Create an --{with,without}-<feat> string that can be passed to
+     standard GNU Autoconf scripts.
+
+     Example:
+       withFeature true "shared"
+       => "--with-shared"
+       withFeature false "shared"
+       => "--without-shared"
+  */
+  withFeature = with_: feat: "--${if with_ then "with" else "without"}-${feat}";
+
+  /* Create an --{with-<feat>=<value>,without-<feat>} string that can be passed to
+     standard GNU Autoconf scripts.
+
+     Example:
+       with_Feature true "shared" "foo"
+       => "--with-shared=foo"
+       with_Feature false "shared" (throw "ignored")
+       => "--without-shared"
+  */
+  withFeatureAs = with_: feat: value: withFeature with_ feat + optionalString with_ "=${value}";
+
   /* Create a fixed width string with additional prefix to match
      required width.
 
@@ -429,6 +470,13 @@ rec {
   */
   fixedWidthNumber = width: n: fixedWidthString width "0" (toString n);
 
+  /* Check whether a value can be coerced to a string */
+  isCoercibleToString = x:
+    builtins.elem (builtins.typeOf x) [ "path" "string" "null" "int" "float" "bool" ] ||
+    (builtins.isList x && lib.all isCoercibleToString x) ||
+    x ? outPath ||
+    x ? __toString;
+
   /* Check whether a value is a store path.
 
      Example:
@@ -438,8 +486,13 @@ rec {
        => true
        isStorePath pkgs.python
        => true
+       isStorePath [] || isStorePath 42 || isStorePath {} || …
+       => false
   */
-  isStorePath = x: builtins.substring 0 1 (toString x) == "/" && dirOf (builtins.toPath x) == builtins.storeDir;
+  isStorePath = x:
+       isCoercibleToString x
+    && builtins.substring 0 1 (toString x) == "/"
+    && dirOf (builtins.toPath x) == builtins.storeDir;
 
   /* Convert string to int
      Obviously, it is a bit hacky to use fromJSON that way.
@@ -476,10 +529,8 @@ rec {
   readPathsFromFile = rootPath: file:
     let
       root = toString rootPath;
-      lines =
-        builtins.map (lib.removeSuffix "\n")
-        (lib.splitString "\n" (builtins.readFile file));
-      removeComments = lib.filter (line: !(lib.hasPrefix "#" line));
+      lines = lib.splitString "\n" (builtins.readFile file);
+      removeComments = lib.filter (line: line != "" && !(lib.hasPrefix "#" line));
       relativePaths = removeComments lines;
       absolutePaths = builtins.map (path: builtins.toPath (root + "/" + path)) relativePaths;
     in

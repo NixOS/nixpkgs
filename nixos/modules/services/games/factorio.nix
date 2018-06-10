@@ -6,7 +6,7 @@ let
   cfg = config.services.factorio;
   factorio = pkgs.factorio-headless;
   name = "Factorio";
-  stateDir = "/var/lib/factorio";
+  stateDir = cfg.stateDir;
   mkSavePath = name: "${stateDir}/saves/${name}.zip";
   configFile = pkgs.writeText "factorio.conf" ''
     use-system-read-write-data-directories=true
@@ -14,7 +14,32 @@ let
     read-data=${factorio}/share/factorio/data
     write-data=${stateDir}
   '';
-  modDir = pkgs.factorio-mkModDirDrv cfg.mods;
+  serverSettings = {
+    name = cfg.game-name;
+    description = cfg.description;
+    visibility = {
+      public = cfg.public;
+      lan = cfg.lan;
+    };
+    username = cfg.username;
+    password = cfg.password;
+    token = cfg.token;
+    game_password = cfg.game-password;
+    require_user_verification = cfg.requireUserVerification;
+    max_upload_in_kilobytes_per_second = 0;
+    minimum_latency_in_ticks = 0;
+    ignore_player_limit_for_returning_players = false;
+    allow_commands = "admins-only";
+    autosave_interval = cfg.autosave-interval;
+    autosave_slots = 5;
+    afk_autokick_interval = 0;
+    auto_pause = true;
+    only_admins_can_pause_the_game = true;
+    autosave_only_on_server = true;
+    admins = [];
+  };
+  serverSettingsFile = pkgs.writeText "server-settings.json" (builtins.toJSON (filterAttrsRecursive (n: v: v != null) serverSettings));
+  modDir = pkgs.factorio-utils.mkModDirDrv cfg.mods;
 in
 {
   options = {
@@ -55,6 +80,15 @@ in
           customizations.
         '';
       };
+      stateDir = mkOption {
+        type = types.path;
+        default = "/var/lib/factorio";
+        description = ''
+          The server's data directory.
+
+          The configuration and map will be stored here.
+        '';
+      };
       mods = mkOption {
         type = types.listOf types.package;
         default = [];
@@ -67,12 +101,75 @@ in
           derivations via nixos-channel. Until then, this is for experts only.
         '';
       };
+      game-name = mkOption {
+        type = types.nullOr types.string;
+        default = "Factorio Game";
+        description = ''
+          Name of the game as it will appear in the game listing.
+        '';
+      };
+      description = mkOption {
+        type = types.nullOr types.string;
+        default = "";
+        description = ''
+          Description of the game that will appear in the listing.
+        '';
+      };
+      public = mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          Game will be published on the official Factorio matching server.
+        '';
+      };
+      lan = mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          Game will be broadcast on LAN.
+        '';
+      };
+      username = mkOption {
+        type = types.nullOr types.string;
+        default = null;
+        description = ''
+          Your factorio.com login credentials. Required for games with visibility public.
+        '';
+      };
+      password = mkOption {
+        type = types.nullOr types.string;
+        default = null;
+        description = ''
+          Your factorio.com login credentials. Required for games with visibility public.
+        '';
+      };
+      token = mkOption {
+        type = types.nullOr types.string;
+        default = null;
+        description = ''
+          Authentication token. May be used instead of 'password' above.
+        '';
+      };
+      game-password = mkOption {
+        type = types.nullOr types.string;
+        default = null;
+        description = ''
+          Game password.
+        '';
+      };
+      requireUserVerification = mkOption {
+        type = types.bool;
+        default = true;
+        description = ''
+          When set to true, the server will only allow clients that have a valid factorio.com account.
+        '';
+      };
       autosave-interval = mkOption {
         type = types.nullOr types.int;
         default = null;
-        example = 2;
+        example = 10;
         description = ''
-          The time, in minutes, between autosaves.
+          Autosave interval in minutes.
         '';
       };
     };
@@ -120,8 +217,8 @@ in
           "--config=${cfg.configFile}"
           "--port=${toString cfg.port}"
           "--start-server=${mkSavePath cfg.saveName}"
+          "--server-settings=${serverSettingsFile}"
           (optionalString (cfg.mods != []) "--mod-directory=${modDir}")
-          (optionalString (cfg.autosave-interval != null) "--autosave-interval ${toString cfg.autosave-interval}")
         ];
       };
     };

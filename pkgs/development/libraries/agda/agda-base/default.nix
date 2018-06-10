@@ -13,7 +13,7 @@ agda.mkDerivation (self: rec {
   everythingFile = "README.agda";
 
   meta = {
-    homepage = "https://github.com/pcapriotti/agda-base";
+    homepage = https://github.com/pcapriotti/agda-base;
     description = "Base library for HoTT in Agda";
     license = stdenv.lib.licenses.bsd3;
     platforms = stdenv.lib.platforms.unix;

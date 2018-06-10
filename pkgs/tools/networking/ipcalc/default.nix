@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   '';
   meta = {
     description = "Simple IP network calculator";
-    homepage = "http://jodies.de/ipcalc";
+    homepage = http://jodies.de/ipcalc;
     license = stdenv.lib.licenses.gpl2Plus;
     platforms = stdenv.lib.platforms.all;
   };

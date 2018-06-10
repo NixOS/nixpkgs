@@ -10,15 +10,21 @@
 , rootServer       ? false
 , rrtypes          ? false
 , zoneStats        ? false
+
+, configFile ? "etc/nsd/nsd.conf"
 }:
 
 stdenv.mkDerivation rec {
-  name = "nsd-4.1.9";
+  name = "nsd-4.1.21";
 
   src = fetchurl {
     url = "http://www.nlnetlabs.nl/downloads/nsd/${name}.tar.gz";
-    sha256 = "1wn8jm5kpp81m88c77j97850mnmd87yaw8qp3xsdwcakcd6j44dq";
+    sha256 = "1gfjdgb5nc0nrbpdm36ngxml302khl2lnwkykl3q45byl0sbjn3q";
   };
+
+  prePatch = ''
+    substituteInPlace nsd-control-setup.sh.in --replace openssl ${openssl}/bin/openssl
+  '';
 
   buildInputs = [ libevent openssl ];
 
@@ -35,7 +41,15 @@ stdenv.mkDerivation rec {
      ++ edf rootServer       "root-server"
      ++ edf rrtypes          "draft-rrtypes"
      ++ edf zoneStats        "zone-stats"
-     ++ [ "--with-ssl=${openssl.dev}" "--with-libevent=${libevent.dev}" ];
+     ++ [ "--with-ssl=${openssl.dev}"
+          "--with-libevent=${libevent.dev}"
+          "--with-nsd_conf_file=${configFile}"
+          "--with-configdir=etc/nsd"
+        ];
+
+  patchPhase = ''
+    sed 's@$(INSTALL_DATA) nsd.conf.sample $(DESTDIR)$(nsdconfigfile).sample@@g' -i Makefile.in
+  '';
 
   meta = with stdenv.lib; {
     homepage = http://www.nlnetlabs.nl;

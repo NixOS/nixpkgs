@@ -1,29 +1,25 @@
-{ stdenv, fetchFromGitLab, pythonPackages, gnome2 }:
+{ stdenv, fetchFromGitLab, python2Packages, gnome3 }:
 
 stdenv.mkDerivation rec {
   name = "pmenu-${version}";
-  version = "2016-05-13";
+  version = "2018-01-01";
 
   src = fetchFromGitLab {
     owner = "o9000";
     repo = "pmenu";
-    rev = "90b722de345cff56f8ec0908a0e8a7d733c0c671";
-    sha256 = "15bkvadr7ab44mc8gkdqs3w14cm498mwf72w5rjm2rdh55357jjh";
+    rev = "f98a5bdf20deb0b7f0543e5ce6a8f5574f695e07";
+    sha256 = "131nqafbmbfpgsgss27pz4cyb9fb29m5h1ai1fyvcn286rr9dnp2";
   };
 
-  nativeBuildInputs = [ pythonPackages.wrapPython ];
+  nativeBuildInputs = [ python2Packages.wrapPython ];
 
-  buildInputs = [ pythonPackages.pygtk gnome2.gnome_menus ];
+  buildInputs = [ python2Packages.pygtk gnome3.gnome-menus ];
 
-  pythonPath = [ pythonPackages.pygtk ];
-  
-  patchPhase = ''
-    substituteInPlace install.sh --replace "/usr/local" "$out"
-  '';
+  pythonPath = [ python2Packages.pygtk ];
     
   installPhase = ''
     mkdir -p $out/bin $out/share/applications
-    ./install.sh
+    ./install.sh $out
   '';
 
   postFixup = ''

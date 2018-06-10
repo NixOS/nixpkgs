@@ -1,21 +1,28 @@
-{ stdenv, fetchzip, ocaml, findlib, cstruct }:
+{ stdenv, fetchurl, ocaml, findlib, jbuilder, cstruct }:
 
-let version = "1.0.0"; in
+if !stdenv.lib.versionAtLeast ocaml.version "4.02"
+then throw "hex is not available for OCaml ${ocaml.version}"
+else
+
+let version = "1.2.0"; in
 
 stdenv.mkDerivation {
-  name = "ocaml-hex-${version}";
+  name = "ocaml${ocaml.version}-hex-${version}";
 
-  src = fetchzip {
-    url = "https://github.com/mirage/ocaml-hex/archive/${version}.tar.gz";
-    sha256 = "0g4cq4bsksga15fa5ln083gkglawknbnhi2s4k8yk0yi5xngvwm4";
+  src = fetchurl {
+    url = "https://github.com/mirage/ocaml-hex/releases/download/v1.2.0/hex-1.2.0.tbz";
+    sha256 = "17hqf7z5afp2z2c55fk5myxkm7cm74259rqm94hcxkqlpdaqhm8h";
   };
 
-  buildInputs = [ ocaml findlib ];
+  unpackCmd = "tar -xjf $curSrc";
+
+  buildInputs = [ ocaml findlib jbuilder ];
   propagatedBuildInputs = [ cstruct ];
-  configureFlags = "--enable-tests";
+
+  buildPhase = "jbuilder build -p hex";
   doCheck = true;
-  checkTarget = "test";
-  createFindlibDestdir = true;
+  checkPhase = "jbuilder runtest";
+  inherit (jbuilder) installPhase;
 
   meta = {
     description = "Mininal OCaml library providing hexadecimal converters";

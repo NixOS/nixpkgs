@@ -1,67 +1,101 @@
 { stdenv
 , fetchFromGitHub
+, fetchpatch
 , which
 , cmake
-, clang_35
-, llvmPackages_36
+, clang
+, llvmPackages
 , libunwind
 , gettext
 , openssl
+, python2
+, icu
+, lttng-ust
+, liburcu
+, libuuid
+, libkrb5
+, debug ? false
 }:
 
 stdenv.mkDerivation rec {
   name = "coreclr-${version}";
-  version = "git-" + (builtins.substring 0 10 rev);
-  rev = "8c70800b5e8dc5535c379dec4a6fb32f7ab5e878";
+  version = "2.0.7";
 
   src = fetchFromGitHub {
-    owner = "dotnet";
-    repo = "coreclr";
-    inherit rev;
-    sha256 = "1galskbnr9kdjjxpx5qywh49400swchhq5f54i16kxyr9k4mvq1f";
+    owner  = "dotnet";
+    repo   = "coreclr";
+    rev    = "v${version}";
+    sha256 = "0pzkrfgqywhpijbx7j1v4lxa6270h6whymb64jdkp7yj56ipqh2n";
   };
 
-  buildInputs = [
+  patches = [
+    (fetchpatch {
+      # glibc 2.26
+      url = https://github.com/dotnet/coreclr/commit/a8f83b615708c529b112898e7d2fbc3f618b26ee.patch;
+      sha256 = "047ph5gip4z2h7liwdxsmpnlaq0sd3hliaw4nyqjp647m80g3ffq";
+    })
+    (fetchpatch {
+      # clang 5
+      url = https://github.com/dotnet/coreclr/commit/9b22e1a767dee38f351001c5601f56d78766a43e.patch;
+      sha256 = "1w1lxw5ryvhq8m5m0kv880c4bh6y9xdgypkr76sqbh3v568yghzg";
+    })
+  ];
+
+  nativeBuildInputs = [
     which
     cmake
-    clang_35
-    llvmPackages_36.llvm
-    llvmPackages_36.lldb
+    clang
+  ];
+
+  buildInputs = [
+    llvmPackages.llvm
+    llvmPackages.lldb
     libunwind
     gettext
     openssl
+    python2
+    icu
+    lttng-ust
+    liburcu
+    libuuid
+    libkrb5
   ];
 
   configurePhase = ''
-    # Prevent clang-3.5 (rather than just clang) from being selected as the compiler as that's
-    # not wrapped
-    substituteInPlace src/pal/tools/gen-buildsys-clang.sh --replace "which \"clang-" "which \"clang-DoNotFindThisOne"
-
-    # Prevent the -nostdinc++ flag to be passed to clang, which causes a compilation error
-    substituteInPlace src/CMakeLists.txt --replace "if(NOT CLR_CMAKE_PLATFORM_DARWIN)" "if(FALSE)"
-
-    patchShebangs build.sh
-    patchShebangs src/pal/tools/gen-buildsys-clang.sh
+    # override to avoid cmake running
+    patchShebangs .
   '';
 
-  buildPhase = "./build.sh";
+  BuildArch = if stdenv.is64bit then "x64" else "x86";
+  BuildType = if debug then "Debug" else "Release";
+
+  hardeningDisable = [
+    "strictoverflow"
+    "format"
+  ];
+
+  buildPhase = ''
+    runHook preBuild
+    # disable -Werror which can potentially breaks with every compiler upgrade
+    ./build.sh $BuildArch $BuildType cmakeargs "-DCLR_CMAKE_WARNINGS_ARE_ERRORS=OFF"
+    runHook postBuild
+  '';
 
   installPhase = ''
-    pushd bin/Product/Linux.x64.Debug/
-    mkdir -v -p $out/bin
-    cp -v coreconsole corerun crossgen $out/bin
-    cp -rv lib $out
-    cp -v *.so $out/lib
-    cp -rv inc $out/include
-    cp -rv gcinfo $out/include
-    popd
+    runHook preInstall
+    mkdir -p $out/share/dotnet $out/bin
+    cp -r bin/Product/Linux.$BuildArch.$BuildType/* $out/share/dotnet
+    for cmd in coreconsole corerun createdump crossgen ilasm ildasm mcs superpmi; do
+      ln -s $out/share/dotnet/$cmd $out/bin/$cmd
+    done
+    runHook postInstall
   '';
 
-  meta = {
-    homepage = http://dotnet.github.io/core/;
+  meta = with stdenv.lib; {
+    homepage = https://dotnet.github.io/core/;
     description = ".NET is a general purpose development platform";
     platforms = [ "x86_64-linux" ];
-    maintainers = with stdenv.lib.maintainers; [ obadz ];
-    license = stdenv.lib.licenses.mit;
+    maintainers = with maintainers; [ kuznero ];
+    license = licenses.mit;
   };
 }

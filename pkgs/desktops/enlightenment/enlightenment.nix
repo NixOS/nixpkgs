@@ -1,59 +1,88 @@
-{ stdenv, fetchurl, pkgconfig, efl, xcbutilkeysyms, libXrandr, libXdmcp,
-libxcb, libffi, pam, alsaLib, luajit, bzip2, libpthreadstubs, gdbm, libcap,
-mesa_glu , xkeyboard_config }:
+{ stdenv, fetchurl, meson, ninja, pkgconfig, gettext, efl,
+  xcbutilkeysyms, libXrandr, libXdmcp, libxcb, libffi, pam, alsaLib,
+  luajit, bzip2, libpthreadstubs, gdbm, libcap, libGLU, mesa_noglu,
+  xkeyboard_config, pcre
+}:
 
 stdenv.mkDerivation rec {
   name = "enlightenment-${version}";
-  version = "0.21.2";
+  version = "0.22.3";
 
   src = fetchurl {
     url = "http://download.enlightenment.org/rel/apps/enlightenment/${name}.tar.xz";
-    sha256 = "0fi5dxrprnvhnn2y51gnfpsjj44snriqi20k20a73vhaqxfn8xx8";
+    sha256 = "16zydv7z94aw3rywmb9gr8ya85k7b75h22wng95lfx1x0y1yb0ad";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
-
-  buildInputs = [ efl libXdmcp libxcb
-    xcbutilkeysyms libXrandr libffi pam alsaLib luajit bzip2
-    libpthreadstubs gdbm ] ++ stdenv.lib.optionals stdenv.isLinux [ libcap ];
-
-  NIX_CFLAGS_COMPILE = [
-    "-I${efl}/include/ecore-imf-1"
-    "-I${efl}/include/emile-1"
-    "-I${efl}/include/eo-1"
-    "-I${efl}/include/ethumb-1"
-    "-I${efl}/include/ethumb-client-1"
+  nativeBuildInputs = [
+    meson
+    ninja
+    (pkgconfig.override { vanilla = true; })
+    gettext
   ];
 
-  preConfigure = ''
-    export USER_SESSION_DIR=$prefix/lib/systemd/user
+  buildInputs = [
+    efl
+    libXdmcp
+    libxcb
+    xcbutilkeysyms
+    libXrandr
+    libffi
+    pam
+    alsaLib
+    luajit
+    bzip2
+    libpthreadstubs
+    gdbm
+    pcre
+    mesa_noglu
+    xkeyboard_config
+  ] ++
+    stdenv.lib.optionals stdenv.isLinux [ libcap ];
 
-    substituteInPlace src/modules/xkbswitch/e_mod_parse.c \
-      --replace "/usr/share/X11/xkb/rules/xorg.lst" "${xkeyboard_config}/share/X11/xkb/rules/base.lst"
+  patches = [
+    # Some programs installed by enlightenment (to set the cpu frequency,
+    # for instance) need root ownership and setuid/setgid permissions, which
+    # are not allowed for files in /nix/store. Instead of allowing the
+    # installer to try to do this, the file $out/e-wrappers.nix is created,
+    # containing the needed configuration for wrapping those programs. It
+    # can be used in the enlightenment module. The idea is:
+    # 
+    #  1) rename the original binary adding the extension .orig
+    #  2) wrap the renamed binary at /run/wrappers/bin/
+    #  3) create a new symbolic link using the original binary name (in the
+    #     original directory where enlightenment wants it) pointing to the
+    #     wrapper
 
-    substituteInPlace "src/bin/e_import_config_dialog.c" \
+    ./enlightenment.suid-exes.patch
+  ];
+
+  postPatch = ''
+    # In order to get the available keyboard layouts Enlightenment looks for
+    # the file xorg.lst, that should be provided by xkeyboard-config (when
+    # configured with option --with-xkb-rules-symlink=xorg). Currently
+    # xkeyboard-config is not configured with this option in
+    # NixOS. Therefore it is needed to add base.lst (which xorg.lst would be
+    # a symbolic link to) explicitly as an alternative.
+
+    sed "/#ifdef XKB_BASE/a XKB_BASE \"\/rules\/base.lst\"," \
+      -i src/modules/wizard/page_011.c src/modules/xkbswitch/e_mod_parse.c
+
+    # edge_cc is a binary provided by efl and cannot be found at the directory
+    # given by e_prefix_bin_get(), which is $out/bin
+
+    substituteInPlace src/bin/e_import_config_dialog.c \
       --replace "e_prefix_bin_get()" "\"${efl}/bin\""
   '';
 
+  mesonFlags = [ "-Dsystemdunitdir=lib/systemd/user" ];
+
   enableParallelBuilding = true;
 
-  # this is a hack and without this cpufreq module is not working. does the following:
-  #   1. moves the "freqset" binary to "e_freqset",
-  #   2. linkes "e_freqset" to enlightenment/bin so that,
-  #   3. setuidPrograms detects it and makes appropriate stuff to /var/setuid-wrappers/e_freqset,
-  #   4. and finaly, linkes /var/setuid-wrappers/e_freqset to original destination where enlightenment wants it
-  postInstall = ''
-    export CPUFREQ_DIRPATH=`readlink -f $out/lib/enlightenment/modules/cpufreq/linux-gnu-*`;
-    mv $CPUFREQ_DIRPATH/freqset $CPUFREQ_DIRPATH/e_freqset
-    ln -sv $CPUFREQ_DIRPATH/e_freqset $out/bin/e_freqset
-    ln -sv /var/setuid-wrappers/e_freqset $CPUFREQ_DIRPATH/freqset
-  '';
-
-  meta = {
+  meta = with stdenv.lib; {
     description = "The Compositing Window Manager and Desktop Shell";
-    homepage = http://enlightenment.org/;
-    maintainers = with stdenv.lib.maintainers; [ matejc tstrobel ftrvxmtrx ];
-    platforms = stdenv.lib.platforms.linux;
-    license = stdenv.lib.licenses.bsd2;
+    homepage = https://www.enlightenment.org;
+    license = licenses.bsd2;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ matejc tstrobel ftrvxmtrx romildo ];
   };
 }

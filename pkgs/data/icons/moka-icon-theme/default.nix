@@ -1,24 +1,24 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, faba-icon-theme }:
+{ stdenv, fetchFromGitHub, autoreconfHook, faba-icon-theme, gtk3 }:
 
 stdenv.mkDerivation rec {
-  name = "${package-name}-${version}";
-  package-name = "moka-icon-theme";
-  version = "2016-06-07";
+  name = "${pname}-${version}";
+  pname = "moka-icon-theme";
+  version = "5.3.6";
 
   src = fetchFromGitHub {
-    owner = "moka-project";
-    repo = package-name;
-    rev = "a03d14e30dbdf05e8ea904994b8081ad0824e155";
-    sha256 = "1j1cnrrg0gfr4vfzxlabrv8090fg4yni99g61s82vnyszkiy1rcm";
+    owner = "snwh";
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "17f8k8z8xvib4hkxq0cw9j7bhdpqpv5frrkyc4sbyildcbavzzbr";
   };
 
-  nativeBuildInputs = [ autoreconfHook ];
-
-  buildInputs = [ faba-icon-theme ];
+  nativeBuildInputs = [ autoreconfHook faba-icon-theme gtk3 ];
 
   postPatch = ''
     substituteInPlace Makefile.am --replace '$(DESTDIR)'/usr $out
   '';
+
+  postFixup = "gtk-update-icon-cache $out/share/icons/Moka";
 
   meta = with stdenv.lib; {
     description = "An icon theme designed with a minimal flat style using simple geometry and bright colours";

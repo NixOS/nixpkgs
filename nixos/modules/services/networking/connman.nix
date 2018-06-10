@@ -27,6 +27,14 @@ in {
         '';
       };
 
+      enableVPN = mkOption {
+        type = types.bool;
+        default = true;
+        description = ''
+          Whether to enable ConnMan VPN service.
+        '';
+      };
+
       extraConfig = mkOption {
         type = types.lines;
         default = ''
@@ -41,6 +49,15 @@ in {
         default = [ "vmnet" "vboxnet" "virbr" "ifb" "ve" ];
         description = ''
           Default blacklisted interfaces, this includes NixOS containers interfaces (ve).
+        '';
+      };
+
+      extraFlags = mkOption {
+        type = with types; listOf string;
+        default = [ ];
+        example = [ "--nodnsproxy" ];
+        description = ''
+          Extra flags to pass to connmand
         '';
       };
 
@@ -73,12 +90,12 @@ in {
         Type = "dbus";
         BusName = "net.connman";
         Restart = "on-failure";
-        ExecStart = "${pkgs.connman}/sbin/connmand --config=${configFile} --nodaemon";
+        ExecStart = "${pkgs.connman}/sbin/connmand --config=${configFile} --nodaemon ${toString cfg.extraFlags}";
         StandardOutput = "null";
       };
     };
 
-    systemd.services."connman-vpn" = {
+    systemd.services."connman-vpn" = mkIf cfg.enableVPN {
       description = "ConnMan VPN service";
       wantedBy = [ "multi-user.target" ];
       after = [ "syslog.target" ];
@@ -91,7 +108,7 @@ in {
       };
     };
 
-    systemd.services."net-connman-vpn" = {
+    systemd.services."net-connman-vpn" = mkIf cfg.enableVPN {
       description = "D-BUS Service";
       serviceConfig = {
         Name = "net.connman.vpn";
@@ -107,10 +124,5 @@ in {
       wireless.enable = true;
       networkmanager.enable = false;
     };
-
-    powerManagement.resumeCommands = ''
-      systemctl restart connman
-    '';
-
   };
 }

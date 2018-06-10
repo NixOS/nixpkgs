@@ -1,27 +1,35 @@
-{ stdenv, fetchurl, pkgconfig, which, openssl, qt4, libtool, gcc, makeWrapper }:
+{ mkDerivation, lib, fetchFromGitHub, autoreconfHook, perl, pkgconfig, which
+, libtool, openssl, qtbase, qttools }:
 
-stdenv.mkDerivation rec {
+mkDerivation rec {
   name = "xca-${version}";
-  version = "1.3.2";
+  version = "2.0.1";
 
-  src = fetchurl {
-    url = "mirror://sourceforge/xca/${name}.tar.gz";
-    sha256 = "1r2w9gpahjv221j963bd4vn0gj4cxmb9j42f3cd9qdn890hizw84";
+  src = fetchFromGitHub {
+    owner  = "chris2511";
+    repo   = "xca";
+    rev    = "RELEASE.${version}";
+    sha256 = "0906xnmqzd9q5irxzm19361vhzig9yqsmf6wsc3rggniix5bk3a8";
   };
 
-  postInstall = ''
-    wrapProgram "$out/bin/xca" \
-      --prefix LD_LIBRARY_PATH : \
-        "${gcc.cc.lib}/lib64:${stdenv.lib.makeLibraryPath [ qt4 gcc.cc openssl libtool ]}"
+  postPatch = ''
+    substituteInPlace doc/code2html \
+      --replace /usr/bin/perl ${perl}/bin/perl
   '';
 
-  buildInputs = [ openssl qt4 libtool gcc makeWrapper ];
-  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ libtool openssl qtbase qttools ];
 
-  meta = with stdenv.lib; {
+  nativeBuildInputs = [ autoreconfHook pkgconfig which ];
+
+  enableParallelBuilding = true;
+
+  configureFlags = [ "CXXFLAGS=-std=c++11" ];
+
+  meta = with lib; {
     description = "Interface for managing asymetric keys like RSA or DSA";
-    homepage = http://xca.sourceforge.net/;
-    platforms = platforms.all;
-    license = licenses.bsd3;
+    homepage    = http://xca.sourceforge.net/;
+    license     = licenses.bsd3;
+    maintainers = with maintainers; [ offline peterhoeg ];
+    platforms   = platforms.all;
   };
 }

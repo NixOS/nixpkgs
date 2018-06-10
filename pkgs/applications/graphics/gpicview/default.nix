@@ -24,5 +24,6 @@ stdenv.mkDerivation {
     platforms   = platforms.unix;
   };
 
-  buildInputs = [ intltool pkgconfig gtk2 ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ intltool gtk2 ];
 }

@@ -1,5 +1,7 @@
 { stdenv, fetchurl
-, windows ? null, variant ? null, pcre
+, pcre, windows ? null
+, buildPlatform, hostPlatform
+, variant ? null
 }:
 
 with stdenv.lib;
@@ -7,7 +9,7 @@ with stdenv.lib;
 assert elem variant [ null "cpp" "pcre16" "pcre32" ];
 
 let
-  version = "8.38";
+  version = "8.41";
   pname = if (variant == null) then "pcre"
     else  if (variant == "cpp") then "pcre-cpp"
     else  variant;
@@ -17,23 +19,27 @@ in stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "ftp://ftp.csx.cam.ac.uk/pub/software/programming/pcre/pcre-${version}.tar.bz2";
-    sha256 = "1pvra19ljkr5ky35y2iywjnsckrs9ch2anrf5b0dc91hw8v2vq5r";
+    sha256 = "0c5m469p5pd7jip621ipq6hbgh7128lzh7xndllfgh77ban7wb76";
   };
-
-  patches = [
-    ./CVE-2016-1283.patch
-  ];
 
   outputs = [ "bin" "dev" "out" "doc" "man" ];
 
-  configureFlags = [
-    "--enable-jit"
+  configureFlags = optional (!hostPlatform.isRiscV) "--enable-jit" ++ [
     "--enable-unicode-properties"
     "--disable-cpp"
   ]
     ++ optional (variant != null) "--enable-${variant}";
 
-  doCheck = with stdenv; !(isCygwin || isFreeBSD);
+  buildInputs = optional (hostPlatform.libc == "msvcrt") windows.mingw_w64_pthreads;
+
+  # https://bugs.exim.org/show_bug.cgi?id=2173
+  patches = [ ./stacksize-detection.patch ];
+
+  preCheck = ''
+    patchShebangs RunGrepTest
+  '';
+
+  doCheck = !(with hostPlatform; isCygwin || isFreeBSD) && hostPlatform == buildPlatform;
     # XXX: test failure on Cygwin
     # we are running out of stack on both freeBSDs on Hydra
 
@@ -44,12 +50,8 @@ in stdenv.mkDerivation rec {
     ln -sf -t "$out/lib/" '${pcre.out}'/lib/libpcre{,posix}.{so.*.*.*,*dylib}
   '';
 
-  crossAttrs = optionalAttrs (stdenv.cross.libc == "msvcrt") {
-    buildInputs = [ windows.mingw_w64_pthreads.crossDrv ];
-  };
-
   meta = {
-    homepage = "http://www.pcre.org/";
+    homepage = http://www.pcre.org/;
     description = "A library for Perl Compatible Regular Expressions";
     license = stdenv.lib.licenses.bsd3;
 

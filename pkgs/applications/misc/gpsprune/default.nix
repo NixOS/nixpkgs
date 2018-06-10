@@ -1,16 +1,15 @@
-{ fetchurl, stdenv, makeDesktopItem, unzip, bash, jre8 }:
+{ fetchurl, stdenv, makeDesktopItem, makeWrapper, unzip, bash, jre8 }:
 
 stdenv.mkDerivation rec {
   name = "gpsprune-${version}";
-  version = "18.5";
+  version = "19";
 
   src = fetchurl {
     url = "http://activityworkshop.net/software/gpsprune/gpsprune_${version}.jar";
-    sha256 = "0xd97b7rs5i41hyih6zdbvls090903yfr1r9lflq93dyqhmzpdhn";
+    sha256 = "0n08fg55zgpfg1f6lq0n3ngi0n8af1r0rhmbnpik5mjng4m9g3x5";
   };
 
-  phases = [ "installPhase" ];
-
+  nativeBuildInputs = [ makeWrapper ];
   buildInputs = [ jre8 ];
 
   desktopItem = makeDesktopItem {
@@ -23,15 +22,11 @@ stdenv.mkDerivation rec {
     categories = "Education;Geoscience;";
   };
 
-  installPhase = ''
+  buildCommand = ''
     mkdir -p $out/bin $out/share/java
     cp -v $src $out/share/java/gpsprune.jar
-    cat > $out/bin/gpsprune <<EOF
-    #!${bash}/bin/bash
-    exec ${jre8}/bin/java -jar $out/share/java/gpsprune.jar "\$@"
-    EOF
-    chmod 755 $out/bin/gpsprune
-
+    makeWrapper ${jre8}/bin/java $out/bin/gpsprune \
+      --add-flags "-jar $out/share/java/gpsprune.jar"
     mkdir -p $out/share/applications
     cp $desktopItem/share/applications"/"* $out/share/applications
     mkdir -p $out/share/pixmaps
@@ -40,7 +35,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Application for viewing, editing and converting GPS coordinate data";
-    homepage = http://activityworkshop.net/software/gpsprune/;
+    homepage = https://activityworkshop.net/software/gpsprune/;
     license = licenses.gpl2Plus;
     maintainers = [ maintainers.rycee ];
     platforms = platforms.all;

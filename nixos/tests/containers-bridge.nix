@@ -26,8 +26,8 @@ import ./make-test.nix ({ pkgs, ...} : {
       };
       networking.interfaces = {
         br0 = {
-          ip4 = [{ address = hostIp; prefixLength = 24; }];
-          ip6 = [{ address = hostIp6; prefixLength = 7; }];
+          ipv4.addresses = [{ address = hostIp; prefixLength = 24; }];
+          ipv6.addresses = [{ address = hostIp6; prefixLength = 7; }];
         };
       };
 
@@ -66,8 +66,14 @@ import ./make-test.nix ({ pkgs, ...} : {
       "${containerIp6}" =~ /([^\/]+)\/([0-9+])/;
       my $ip6 = $1;
       chomp $ip6;
-      $machine->succeed("ping6 -n -c 1 $ip6");
+      $machine->succeed("ping -n -c 1 $ip6");
       $machine->succeed("curl --fail http://[$ip6]/ > /dev/null");
+
+      # Check that nixos-container show-ip works in case of an ipv4 address with
+      # subnetmask in CIDR notation.
+      my $result = $machine->succeed("nixos-container show-ip webserver");
+      chomp $result;
+      $result eq $ip or die;
 
       # Stop the container.
       $machine->succeed("nixos-container stop webserver");

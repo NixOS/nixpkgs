@@ -1,13 +1,19 @@
 {
-  kdeFramework, lib, copyPathsToStore, ecm,
-  kconfig, kcoreaddons, kcrash, kdbusaddons, kdoctools, ki18n, kwindowsystem
+  mkDerivation, lib, copyPathsToStore,
+  bison, extra-cmake-modules, flex,
+  kconfig, kcoreaddons, kcrash, kdbusaddons, kdoctools, ki18n, kwindowsystem,
+  qtbase, shared-mime-info,
 }:
 
-kdeFramework {
+mkDerivation {
   name = "kservice";
   meta = { maintainers = [ lib.maintainers.ttuegel ]; };
-  propagatedNativeBuildInputs = [ ecm ];
-  nativeBuildInputs = [ kdoctools ];
-  propagatedBuildInputs = [ kconfig kcoreaddons kcrash kdbusaddons ki18n kwindowsystem ];
+  nativeBuildInputs = [ extra-cmake-modules kdoctools ];
+  propagatedNativeBuildInputs = [ bison flex ];
+  buildInputs = [
+    kcrash kdbusaddons ki18n kwindowsystem qtbase
+  ];
+  propagatedBuildInputs = [ kconfig kcoreaddons ];
+  propagatedUserEnvPkgs = [ shared-mime-info ]; # for kbuildsycoca5
   patches = copyPathsToStore (lib.readPathsFromFile ./. ./series);
 }

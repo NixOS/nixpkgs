@@ -14,7 +14,8 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "dev" "devdoc" ];
 
-  buildInputs = [ pkgconfig glib intltool ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ glib intltool ];
 
   meta = {
     homepage = http://www.xfce.org/;

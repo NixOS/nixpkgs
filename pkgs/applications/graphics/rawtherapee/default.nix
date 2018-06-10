@@ -1,26 +1,36 @@
-{ stdenv, fetchFromGitHub, pkgconfig, cmake, pixman, libpthreadstubs, gtkmm2, libXau
-, libXdmcp, lcms2, libiptcdata, libcanberra_gtk2, fftw, expat, pcre, libsigcxx
-, mercurial  # Not really needed for anything, but it fails if it does not find 'hg'
+{ stdenv, fetchFromGitHub, pkgconfig, cmake, pixman, libpthreadstubs, gtkmm3, libXau
+, libXdmcp, lcms2, libiptcdata, libcanberra-gtk3, fftw, expat, pcre, libsigcxx, wrapGAppsHook
+, lensfun
 }:
 
 stdenv.mkDerivation rec {
-  name = "rawtherapee-4.2";
+  version = "5.4";
+  name = "rawtherapee-" + version;
 
   src = fetchFromGitHub {
     owner = "Beep6581";
     repo = "RawTherapee";
-    rev = "4.2";
-    sha256 = "1v4px239vlmk9l8wbzlvlyni4ns12icxmgfz21m86jkd10pj5dgr";
+    rev = version;
+    sha256 = "1h2x5biqsb4kfwsffqkyk8ky22qv2a0cjs1s445x9farcr3kwk99";
   };
 
-  buildInputs = [ pkgconfig cmake pixman libpthreadstubs gtkmm2 libXau libXdmcp
-    lcms2 libiptcdata mercurial libcanberra_gtk2 fftw expat pcre libsigcxx ];
+  nativeBuildInputs = [ cmake pkgconfig wrapGAppsHook ];
 
-  patchPhase = ''
-    patch -p1 < ${./sigc++_fix.patch}
+  buildInputs = [
+    pixman libpthreadstubs gtkmm3 libXau libXdmcp
+    lcms2 libiptcdata libcanberra-gtk3 fftw expat pcre libsigcxx lensfun
+  ];
+
+  cmakeFlags = [
+    "-DPROC_TARGET_NUMBER=2"
+    "-DCACHE_NAME_SUFFIX=\"\""
+  ];
+
+  CMAKE_CXX_FLAGS = "-std=c++11 -Wno-deprecated-declarations -Wno-unused-result";
+
+  postUnpack = ''
+    echo "set(HG_VERSION $version)" > $sourceRoot/ReleaseInfo.cmake
   '';
-
-  NIX_CFLAGS_COMPILE = "-std=gnu++11 -Wno-deprecated-declarations -Wno-unused-result";
 
   enableParallelBuilding = true;
 

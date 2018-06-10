@@ -1,47 +1,55 @@
-{ stdenv, fetchurl, libsysfs, gnutls, openssl, libcap, sp, docbook_sgml_dtd_31
+{ stdenv, fetchurl
+, libsysfs, gnutls, openssl
+, libcap, opensp, docbook_sgml_dtd_31
+, libidn, nettle
 , SGMLSpm, libgcrypt }:
 
-assert stdenv ? glibc;
-
 let
-  time = "20151218";
+  time = "20161105";
 in
 stdenv.mkDerivation rec {
   name = "iputils-${time}";
 
   src = fetchurl {
-    url = "http://www.skbuff.net/iputils/iputils-s${time}.tar.bz2";
-    sha256 = "189592jlkhxdgy8jc07m4bsl41ik9r6i6aaqb532prai37bmi7sl";
+    url = "https://github.com/iputils/iputils/archive/s${time}.tar.gz";
+    sha256 = "12mdmh4qbf5610csaw3rkzhpzf6djndi4jsl4gyr8wni0cphj4zq";
   };
 
   prePatch = ''
-    sed -i s/sgmlspl/sgmlspl.pl/ doc/Makefile
+    sed -e s/sgmlspl/sgmlspl.pl/ \
+        -e s/nsgmls/onsgmls/ \
+      -i doc/Makefile
   '';
 
-  makeFlags = "USE_GNUTLS=no";
+  # Disable idn usage w/musl: https://github.com/iputils/iputils/pull/111
+  makeFlags = [ "USE_GNUTLS=no" ] ++ stdenv.lib.optional stdenv.hostPlatform.isMusl "USE_IDN=no";
 
+  depsBuildBuild = [ opensp SGMLSpm docbook_sgml_dtd_31 ];
   buildInputs = [
-    libsysfs openssl libcap sp docbook_sgml_dtd_31 SGMLSpm libgcrypt
-  ];
+    libsysfs openssl libcap libgcrypt nettle
+  ] ++ stdenv.lib.optional (!stdenv.hostPlatform.isMusl) libidn;
 
-  buildFlags = "man all ninfod";
+  # ninfod probably could build on cross, but the Makefile doesn't pass --host etc to the sub configure...
+  buildFlags = "man all" + stdenv.lib.optionalString (!stdenv.isCross) " ninfod";
 
   installPhase =
     ''
-      mkdir -p $out/sbin $out/bin
-      cp -p ping ping6 tracepath tracepath6 traceroute6 $out/bin/
-      cp -p clockdiff arping rdisc ninfod/ninfod $out/sbin/
+      mkdir -p $out/bin
+      cp -p ping tracepath clockdiff arping rdisc rarpd $out/bin/
+      if [ -x ninfod/ninfod ]; then
+        cp -p ninfod/ninfod $out/bin
+      fi
 
       mkdir -p $out/share/man/man8
-      cp -p doc/clockdiff.8 doc/arping.8 doc/ping.8 doc/rdisc.8 \
-        doc/tracepath.8 doc/ninfod.8 $out/share/man/man8
-      ln -s $out/share/man/man8/{ping,ping6}.8
-      ln -s $out/share/man/man8/{tracepath,tracepath6}.8
+      cp -p \
+        doc/clockdiff.8 doc/arping.8 doc/ping.8 doc/rdisc.8 doc/rarpd.8 doc/tracepath.8 doc/ninfod.8 \
+        $out/share/man/man8
     '';
 
-  meta = {
-    homepage = http://www.skbuff.net/iputils/;
+  meta = with stdenv.lib; {
+    homepage = https://github.com/iputils/iputils;
     description = "A set of small useful utilities for Linux networking";
-    platforms = stdenv.lib.platforms.linux;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ lheckemann ];
   };
 }

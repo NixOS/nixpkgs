@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, nasm, perl, python, libuuid, mtools, makeWrapper }:
+{ stdenv, fetchFromGitHub, fetchurl, nasm, perl, python, libuuid, mtools, makeWrapper }:
 
 stdenv.mkDerivation rec {
   name = "syslinux-2015-11-09";
@@ -10,7 +10,16 @@ stdenv.mkDerivation rec {
     sha256 = "0wk3r5ki4lc334f9jpml07wpl8d0bnxi9h1l4h4fyf9a0d7n4kmw";
   };
 
-  patches = [ ./perl-deps.patch ];
+  patches = [
+    ./perl-deps.patch
+    (fetchurl {
+      # ldlinux.elf: Not enough room for program headers, try linking with -N
+      name = "not-enough-room.patch";
+      url = "https://anonscm.debian.org/cgit/collab-maint/syslinux.git/plain/"
+          + "debian/patches/0014_fix_ftbfs_no_dynamic_linker.patch?id=a556ad7";
+      sha256 = "0ijqjsjmnphmvsx0z6ppnajsfv6xh6crshy44i2a5klxw4nlvrsw";
+    })
+  ];
 
   nativeBuildInputs = [ nasm perl python ];
   buildInputs = [ libuuid makeWrapper ];
@@ -21,7 +30,8 @@ stdenv.mkDerivation rec {
   preBuild = ''
     substituteInPlace Makefile --replace /bin/pwd $(type -P pwd)
     substituteInPlace gpxe/src/Makefile.housekeeping --replace /bin/echo $(type -P echo)
-    substituteInPlace utils/ppmtolss16 gpxe/src/Makefile --replace /usr/bin/perl $(type -P perl)
+    substituteInPlace utils/ppmtolss16 --replace /usr/bin/perl $(type -P perl)
+    substituteInPlace gpxe/src/Makefile --replace /usr/bin/perl $(type -P perl)
   '';
 
   stripDebugList = "bin sbin share/syslinux/com32";
@@ -40,12 +50,15 @@ stdenv.mkDerivation rec {
   postInstall = ''
     wrapProgram $out/bin/syslinux \
       --prefix PATH : "${mtools}/bin"
+
+    # Delete com32 headers to save space, nobody seems to be using them
+    rm -rf $out/share/syslinux/com32
   '';
 
   meta = with stdenv.lib; {
     homepage = http://www.syslinux.org/;
     description = "A lightweight bootloader";
     license = licenses.gpl2;
-    platforms = platforms.linux;
+    platforms = [ "i686-linux" "x86_64-linux" ];
   };
 }

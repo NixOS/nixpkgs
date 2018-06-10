@@ -1,14 +1,14 @@
-postFixupHooks+=(_cygwinFixAutoImageBase)
+fixupOutputHooks+=(_cygwinFixAutoImageBase)
 
 _cygwinFixAutoImageBase() {
-    if [ "$dontRebase" == 1 ]; then
+    if [ "$dontRebase" == 1 ] || [ ! -d "$prefix" ]; then
         return
     fi
-    find $out -name "*.dll" | while read DLL; do
+    find "$prefix" -name "*.dll" -type f | while read DLL; do
         if [ -f /etc/rebasenix.nextbase ]; then
             NEXTBASE="$(</etc/rebasenix.nextbase)"
         fi
-        NEXTBASE=${NEXTBASE:-0x200000000}
+        NEXTBASE=${NEXTBASE:-0x200000001}
 
         REBASE=(`/bin/rebase -i $DLL`)
         BASE=${REBASE[2]}

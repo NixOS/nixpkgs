@@ -14,4 +14,4 @@ findGdkPixbufLoaders() {
 
 }
 
-envHooks+=(findGdkPixbufLoaders)
+addEnvHooks "$hostOffset" findGdkPixbufLoaders

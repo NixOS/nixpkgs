@@ -1,24 +1,33 @@
 { enableGUI ? true, enablePDFtoPPM ? true, useT1Lib ? false
-, stdenv, fetchurl, zlib, libpng, xlibsWrapper ? null, motif ? null, freetype ? null, t1lib ? null
-, base14Fonts ? null
+, stdenv, fetchurl, zlib, libpng, freetype ? null, t1lib ? null
+, cmake, qtbase ? null, qtsvg ? null, makeWrapper
 }:
 
-assert enableGUI -> xlibsWrapper != null && motif != null && freetype != null;
+assert enableGUI -> qtbase != null && qtsvg != null && freetype != null;
 assert enablePDFtoPPM -> freetype != null;
 assert useT1Lib -> t1lib != null;
 
 assert !useT1Lib; # t1lib has multiple unpatched security vulnerabilities
 
 stdenv.mkDerivation {
-  name = "xpdf-3.04";
+  name = "xpdf-4.00";
 
-  src = fetchurl {
-    url = ftp://ftp.foolabs.com/pub/xpdf/xpdf-3.04.tar.gz;
-    sha256 = "1rbp54mr3z2x3a3a1qmz8byzygzi223vckfam9ib5g1sfds0qf8i";
+   src = fetchurl {
+    url = http://www.xpdfreader.com/dl/xpdf-4.00.tar.gz;
+    sha256 = "1mhn89738vjva14xr5gblc2zrdgzmpqbbjdflqdmpqv647294ggz";
   };
 
+  # Fix "No known features for CXX compiler", see
+  # https://cmake.org/pipermail/cmake/2016-December/064733.html and the note at
+  # https://cmake.org/cmake/help/v3.10/command/cmake_minimum_required.html
+  patches = stdenv.lib.optional stdenv.isDarwin  ./cmake_version.patch;
+
+  nativeBuildInputs = [ cmake makeWrapper ];
+
+  cmakeFlags = ["-DSYSTEM_XPDFRC=/etc/xpdfrc" "-DA4_PAPER=ON"];
+
   buildInputs = [ zlib libpng ] ++
-    stdenv.lib.optionals enableGUI [xlibsWrapper motif] ++
+    stdenv.lib.optional enableGUI qtbase ++
     stdenv.lib.optional useT1Lib t1lib ++
     stdenv.lib.optional enablePDFtoPPM freetype;
 
@@ -27,16 +36,13 @@ stdenv.mkDerivation {
 
   hardeningDisable = [ "format" ];
 
-  configureFlags = "--enable-a4-paper";
-
-  postInstall = stdenv.lib.optionalString (base14Fonts != null) ''
-    substituteInPlace $out/etc/xpdfrc \
-      --replace /usr/local/share/ghostscript/fonts ${base14Fonts} \
-      --replace '#fontFile' fontFile
+  postInstall = stdenv.lib.optionalString (stdenv.isDarwin && enableGUI) ''
+    wrapProgram $out/bin/xpdf \
+      --set QT_PLUGIN_PATH ${qtbase.bin}/${qtbase.qtPluginPrefix}:${qtsvg.bin}/${qtbase.qtPluginPrefix}
   '';
 
   meta = {
-    homepage = "http://www.foolabs.com/xpdf/";
+    homepage = http://www.foolabs.com/xpdf/;
     description = "Viewer for Portable Document Format (PDF) files";
 
     platforms = stdenv.lib.platforms.unix;

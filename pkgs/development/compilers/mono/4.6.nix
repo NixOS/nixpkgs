@@ -2,6 +2,7 @@
 
 callPackage ./generic.nix (rec {
   inherit Foundation libobjc;
-  version = "4.6.0.182";
-  sha256 = "1sajwl7fqhkcmh697qqjj4z6amzkay7xf7npsvpm10gm071s5qi6";
+  version = "4.6.2.16";
+  sha256 = "190f7kcrm1y5x61s1xwdmjnwc3czsg50s3mml4xmix7byh3x2rc9";
+  enableParallelBuilding = false; # #32386, https://hydra.nixos.org/build/65617511
 })

@@ -40,7 +40,7 @@ let
     { splashImage = f cfg.splashImage;
       grub = f grub;
       grubTarget = f (grub.grubTarget or "");
-      shell = "${pkgs.stdenv.shell}";
+      shell = "${pkgs.runtimeShell}";
       fullName = (builtins.parseDrvName realGrub.name).name;
       fullVersion = (builtins.parseDrvName realGrub.name).version;
       grubEfi = f grubEfi;
@@ -53,20 +53,33 @@ let
       inherit (args) devices;
       inherit (efi) canTouchEfiVariables;
       inherit (cfg)
-        version extraConfig extraPerEntryConfig extraEntries
-        extraEntriesBeforeNixOS extraPrepareConfig configurationLimit copyKernels
+        version extraConfig extraPerEntryConfig extraEntries forceInstall useOSProber
+        extraEntriesBeforeNixOS extraPrepareConfig extraInitrd configurationLimit copyKernels
         default fsIdentifier efiSupport efiInstallAsRemovable gfxmodeEfi gfxmodeBios;
       path = (makeBinPath ([
         pkgs.coreutils pkgs.gnused pkgs.gnugrep pkgs.findutils pkgs.diffutils pkgs.btrfs-progs
-        pkgs.utillinux ] ++ (if cfg.efiSupport && (cfg.version == 2) then [pkgs.efibootmgr ] else [])
+        pkgs.utillinux ]
+        ++ (optional (cfg.efiSupport && (cfg.version == 2)) pkgs.efibootmgr)
+        ++ (optionals cfg.useOSProber [pkgs.busybox pkgs.os-prober])
       )) + ":" + (makeSearchPathOutput "bin" "sbin" [
         pkgs.mdadm pkgs.utillinux
       ]);
+      font = if cfg.font == null then ""
+        else (if lib.last (lib.splitString "." cfg.font) == "pf2"
+             then cfg.font
+             else "${convertedFont}");
     });
 
   bootDeviceCounters = fold (device: attr: attr // { "${device}" = (attr."${device}" or 0) + 1; }) {}
     (concatMap (args: args.devices) cfg.mirroredBoots);
 
+  convertedFont = (pkgs.runCommand "grub-font-converted.pf2" {}
+           (builtins.concatStringsSep " "
+             ([ "${realGrub}/bin/grub-mkfont"
+               cfg.font
+               "--output" "$out"
+             ] ++ (optional (cfg.fontSize!=null) "--size ${toString cfg.fontSize}")))
+         );
 in
 
 {
@@ -98,7 +111,7 @@ in
 
       device = mkOption {
         default = "";
-        example = "/dev/hda";
+        example = "/dev/disk/by-id/wwn-0x500001234567890a";
         type = types.str;
         description = ''
           The device on which the GRUB boot loader will be installed.
@@ -111,7 +124,7 @@ in
 
       devices = mkOption {
         default = [];
-        example = [ "/dev/hda" ];
+        example = [ "/dev/disk/by-id/wwn-0x500001234567890a" ];
         type = types.listOf types.str;
         description = ''
           The devices on which the boot loader, GRUB, will be
@@ -123,59 +136,59 @@ in
       mirroredBoots = mkOption {
         default = [ ];
         example = [
-          { path = "/boot1"; devices = [ "/dev/sda" ]; }
-          { path = "/boot2"; devices = [ "/dev/sdb" ]; }
+          { path = "/boot1"; devices = [ "/dev/disk/by-id/wwn-0x500001234567890a" ]; }
+          { path = "/boot2"; devices = [ "/dev/disk/by-id/wwn-0x500009876543210a" ]; }
         ];
         description = ''
           Mirror the boot configuration to multiple partitions and install grub
           to the respective devices corresponding to those partitions.
         '';
 
-        type = types.listOf types.optionSet;
+        type = with types; listOf (submodule {
+          options = {
 
-        options = {
+            path = mkOption {
+              example = "/boot1";
+              type = types.str;
+              description = ''
+                The path to the boot directory where GRUB will be written. Generally
+                this boot path should double as an EFI path.
+              '';
+            };
 
-          path = mkOption {
-            example = "/boot1";
-            type = types.str;
-            description = ''
-              The path to the boot directory where GRUB will be written. Generally
-              this boot path should double as an EFI path.
-            '';
+            efiSysMountPoint = mkOption {
+              default = null;
+              example = "/boot1/efi";
+              type = types.nullOr types.str;
+              description = ''
+                The path to the efi system mount point. Usually this is the same
+                partition as the above path and can be left as null.
+              '';
+            };
+
+            efiBootloaderId = mkOption {
+              default = null;
+              example = "NixOS-fsid";
+              type = types.nullOr types.str;
+              description = ''
+                The id of the bootloader to store in efi nvram.
+                The default is to name it NixOS and append the path or efiSysMountPoint.
+                This is only used if <literal>boot.loader.efi.canTouchEfiVariables</literal> is true.
+              '';
+            };
+
+            devices = mkOption {
+              default = [ ];
+              example = [ "/dev/disk/by-id/wwn-0x500001234567890a" "/dev/disk/by-id/wwn-0x500009876543210a" ];
+              type = types.listOf types.str;
+              description = ''
+                The path to the devices which will have the GRUB MBR written.
+                Note these are typically device paths and not paths to partitions.
+              '';
+            };
+
           };
-
-          efiSysMountPoint = mkOption {
-            default = null;
-            example = "/boot1/efi";
-            type = types.nullOr types.str;
-            description = ''
-              The path to the efi system mount point. Usually this is the same
-              partition as the above path and can be left as null.
-            '';
-          };
-
-          efiBootloaderId = mkOption {
-            default = null;
-            example = "NixOS-fsid";
-            type = types.nullOr types.str;
-            description = ''
-              The id of the bootloader to store in efi nvram.
-              The default is to name it NixOS and append the path or efiSysMountPoint.
-              This is only used if <literal>boot.loader.efi.canTouchEfiVariables</literal> is true.
-            '';
-          };
-
-          devices = mkOption {
-            default = [ ];
-            example = [ "/dev/sda" "/dev/sdb" ];
-            type = types.listOf types.str;
-            description = ''
-              The path to the devices which will have the GRUB MBR written.
-              Note these are typically device paths and not paths to partitions.
-            '';
-          };
-
-        };
+        });
       };
 
       configurationName = mkOption {
@@ -237,6 +250,12 @@ in
           menuentry "Windows 7" {
             chainloader (hd0,4)+1
           }
+
+          # GRUB 2 with UEFI example, chainloading another distro
+          menuentry "Fedora" {
+            set root=(hd1,1)
+            chainloader /efi/fedora/grubx64.efi
+          }
         '';
         description = ''
           Any additional entries you want added to the GRUB boot menu.
@@ -265,14 +284,65 @@ in
         '';
       };
 
+      extraInitrd = mkOption {
+        type = types.nullOr types.path;
+        default = null;
+        example = "/boot/extra_initramfs.gz";
+        description = ''
+          The path to a second initramfs to be supplied to the kernel.
+          This ramfs will not be copied to the store, so that it can
+          contain secrets such as LUKS keyfiles or ssh keys.
+          This implies that rolling back to a previous configuration
+          won't rollback the state of this file.
+        '';
+      };
+
+      useOSProber = mkOption {
+        default = false;
+        type = types.bool;
+        description = ''
+          If set to true, append entries for other OSs detected by os-prober.
+        '';
+      };
+
       splashImage = mkOption {
         type = types.nullOr types.path;
         example = literalExample "./my-background.png";
         description = ''
-          Background image used for GRUB.  It must be a 640x480,
+          Background image used for GRUB.
+          Set to <literal>null</literal> to run GRUB in text mode.
+
+          <note><para>
+          For grub 1:
+          It must be a 640x480,
           14-colour image in XPM format, optionally compressed with
-          <command>gzip</command> or <command>bzip2</command>.  Set to
-          <literal>null</literal> to run GRUB in text mode.
+          <command>gzip</command> or <command>bzip2</command>.
+          </para></note>
+
+          <note><para>
+          For grub 2:
+          File must be one of .png, .tga, .jpg, or .jpeg. JPEG images must
+          not be progressive.
+          The image will be scaled if necessary to fit the screen.
+          </para></note>
+        '';
+      };
+
+      font = mkOption {
+        type = types.nullOr types.path;
+        default = "${realGrub}/share/grub/unicode.pf2";
+        description = ''
+          Path to a TrueType, OpenType, or pf2 font to be used by Grub.
+        '';
+      };
+
+      fontSize = mkOption {
+        type = types.nullOr types.int;
+        example = literalExample 16;
+        default = null;
+        description = ''
+          Font size for the grub menu. Ignored unless <literal>font</literal>
+          is set to a ttf or otf font.
         '';
       };
 
@@ -324,8 +394,7 @@ in
 
       fsIdentifier = mkOption {
         default = "uuid";
-        type = types.addCheck types.str
-          (type: type == "uuid" || type == "label" || type == "provided");
+        type = types.enum [ "uuid" "label" "provided" ];
         description = ''
           Determines how GRUB will identify devices when generating the
           configuration file. A value of uuid / label signifies that grub
@@ -359,7 +428,6 @@ in
 
       efiInstallAsRemovable = mkOption {
         default = false;
-        example = true;
         type = types.bool;
         description = ''
           Whether to invoke <literal>grub-install</literal> with
@@ -401,6 +469,16 @@ in
         description = ''
           Enable support for encrypted partitions. GRUB should automatically
           unlock the correct encrypted partition and look for filesystems.
+        '';
+      };
+
+      forceInstall = mkOption {
+        default = false;
+        type = types.bool;
+        description = ''
+          Whether to try and forcibly install GRUB even if problems are
+          detected. It is not recommended to enable this unless you know what
+          you are doing.
         '';
       };
 
@@ -452,7 +530,7 @@ in
           sha256 = "14kqdx2lfqvh40h6fjjzqgff1mwk74dmbjvmqphi6azzra7z8d59";
         }
         # GRUB 1.97 doesn't support gzipped XPMs.
-        else "${pkgs.nixos-artwork}/share/artwork/gnome/Gnome_Dark.png");
+        else "${pkgs.nixos-artwork.wallpapers.gnome-dark}/share/artwork/gnome/Gnome_Dark.png");
     }
 
     (mkIf cfg.enable {
@@ -471,9 +549,9 @@ in
             btrfsprogs = pkgs.btrfs-progs;
           };
         in pkgs.writeScript "install-grub.sh" (''
-        #!${pkgs.stdenv.shell}
+        #!${pkgs.runtimeShell}
         set -e
-        export PERL5LIB=${makePerlPath (with pkgs.perlPackages; [ FileSlurp XMLLibXML XMLSAX ListCompare ])}
+        export PERL5LIB=${makePerlPath (with pkgs.perlPackages; [ FileSlurp XMLLibXML XMLSAX XMLSAXBase ListCompare ])}
         ${optionalString cfg.enableCryptodisk "export GRUB_ENABLE_CRYPTODISK=y"}
       '' + flip concatMapStrings cfg.mirroredBoots (args: ''
         ${pkgs.perl}/bin/perl ${install-grub-pl} ${grubConfig args} $@
@@ -503,7 +581,7 @@ in
             + "'boot.loader.grub.mirroredBoots' to make the system bootable.";
         }
         {
-          assertion = all (c: c < 2) (mapAttrsToList (_: c: c) bootDeviceCounters);
+          assertion = cfg.efiSupport || all (c: c < 2) (mapAttrsToList (_: c: c) bootDeviceCounters);
           message = "You cannot have duplicated devices in mirroredBoots";
         }
         {

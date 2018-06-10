@@ -1,7 +1,8 @@
-{stdenv, fetchurl, python, antlr}:
+{stdenv, fetchurl, buildPythonPackage, antlr, isPy3k}:
 
-stdenv.mkDerivation rec {
-  name = "PyStringTemplate-${version}";
+buildPythonPackage rec {
+  pname = "PyStringTemplate";
+  name = "${pname}-${version}";
   version = "3.2b1";
 
   src = fetchurl {
@@ -9,16 +10,15 @@ stdenv.mkDerivation rec {
     sha256 = "0lbib0l8c1q7i1j610rwcdagymr1idahrql4dkgnm5rzyg2vk3ml";
   };
 
-  propagatedBuildInputs = [python antlr];
+  propagatedBuildInputs = [ antlr ];
 
-  dontBuild = true;
+  disabled = isPy3k;
 
-  installPhase = ''
-    python setup.py install --prefix=$out --install-lib=$(toPythonPath $out) -O1
-  '';
+  # No tests included in archive
+  doCheck = false;
 
   meta = {
-    homepage = "http://www.stringtemplate.org/";
+    homepage = http://www.stringtemplate.org/;
     description = "Text Templating Library";
     platforms = stdenv.lib.platforms.linux;
   };

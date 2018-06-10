@@ -79,7 +79,7 @@ let
   checkBond = checkUnitConfig "Bond" [
     (assertOnlyFields [
       "Mode" "TransmitHashPolicy" "LACPTransmitRate" "MIIMonitorSec"
-      "UpDelaySec" "DownDelaySec"
+      "UpDelaySec" "DownDelaySec" "GratuitousARP"
     ])
     (assertValueOneOf "Mode" [
       "balance-rr" "active-backup" "balance-xor"
@@ -94,7 +94,7 @@ let
   checkNetwork = checkUnitConfig "Network" [
     (assertOnlyFields [
       "Description" "DHCP" "DHCPServer" "IPForward" "IPMasquerade" "IPv4LL" "IPv4LLRoute"
-      "LLMNR" "Domains" "Bridge" "Bond"
+      "LLMNR" "MulticastDNS" "Domains" "Bridge" "Bond" "IPv6PrivacyExtensions"
     ])
     (assertValueOneOf "DHCP" ["both" "none" "v4" "v6"])
     (assertValueOneOf "DHCPServer" boolValues)
@@ -103,6 +103,8 @@ let
     (assertValueOneOf "IPv4LL" boolValues)
     (assertValueOneOf "IPv4LLRoute" boolValues)
     (assertValueOneOf "LLMNR" boolValues)
+    (assertValueOneOf "MulticastDNS" boolValues)
+    (assertValueOneOf "IPv6PrivacyExtensions" ["yes" "no" "prefer-public" "kernel"])
   ];
 
   checkAddress = checkUnitConfig "Address" [
@@ -141,6 +143,19 @@ let
     (assertValueOneOf "EmitTimezone" boolValues)
   ];
 
+  # .network files have a [Link] section with different options than in .netlink files
+  checkNetworkLink = checkUnitConfig "Link" [
+    (assertOnlyFields [
+      "MACAddress" "MTUBytes" "ARP" "Unmanaged" "RequiredForOnline"
+    ])
+    (assertMacAddress "MACAddress")
+    (assertByteFormat "MTUBytes")
+    (assertValueOneOf "ARP" boolValues)
+    (assertValueOneOf "Unmanaged" boolValues)
+    (assertValueOneOf "RquiredForOnline" boolValues)
+  ];
+
+
   commonNetworkOptions = {
 
     enable = mkOption {
@@ -165,6 +180,11 @@ let
       '';
     };
 
+    extraConfig = mkOption {
+      default = "";
+      type = types.lines;
+      description = "Extra configuration append to unit";
+    };
   };
 
   linkOptions = commonNetworkOptions // {
@@ -296,35 +316,35 @@ let
   };
 
   addressOptions = {
-
-    addressConfig = mkOption {
-      default = {};
-      example = { Address = "192.168.0.100/24"; };
-      type = types.addCheck (types.attrsOf unitOption) checkAddress;
-      description = ''
-        Each attribute in this set specifies an option in the
-        <literal>[Address]</literal> section of the unit.  See
-        <citerefentry><refentrytitle>systemd.network</refentrytitle>
-        <manvolnum>5</manvolnum></citerefentry> for details.
-      '';
+    options = {
+      addressConfig = mkOption {
+        default = {};
+        example = { Address = "192.168.0.100/24"; };
+        type = types.addCheck (types.attrsOf unitOption) checkAddress;
+        description = ''
+          Each attribute in this set specifies an option in the
+          <literal>[Address]</literal> section of the unit.  See
+          <citerefentry><refentrytitle>systemd.network</refentrytitle>
+          <manvolnum>5</manvolnum></citerefentry> for details.
+        '';
+      };
     };
-
   };
 
   routeOptions = {
-
-    routeConfig = mkOption {
-      default = {};
-      example = { Gateway = "192.168.0.1"; };
-      type = types.addCheck (types.attrsOf unitOption) checkRoute;
-      description = ''
-        Each attribute in this set specifies an option in the
-        <literal>[Route]</literal> section of the unit.  See
-        <citerefentry><refentrytitle>systemd.network</refentrytitle>
-        <manvolnum>5</manvolnum></citerefentry> for details.
-      '';
+    options = {
+      routeConfig = mkOption {
+        default = {};
+        example = { Gateway = "192.168.0.1"; };
+        type = types.addCheck (types.attrsOf unitOption) checkRoute;
+        description = ''
+          Each attribute in this set specifies an option in the
+          <literal>[Route]</literal> section of the unit.  See
+          <citerefentry><refentrytitle>systemd.network</refentrytitle>
+          <manvolnum>5</manvolnum></citerefentry> for details.
+        '';
+      };
     };
-
   };
 
   networkOptions = commonNetworkOptions // {
@@ -360,6 +380,18 @@ let
       description = ''
         Each attribute in this set specifies an option in the
         <literal>[DHCPServer]</literal> section of the unit.  See
+        <citerefentry><refentrytitle>systemd.network</refentrytitle>
+        <manvolnum>5</manvolnum></citerefentry> for details.
+      '';
+    };
+
+    linkConfig = mkOption {
+      default = {};
+      example = { Unmanaged = true; };
+      type = types.addCheck (types.attrsOf unitOption) checkNetworkLink;
+      description = ''
+        Each attribute in this set specifies an option in the
+        <literal>[Link]</literal> section of the unit.  See
         <citerefentry><refentrytitle>systemd.network</refentrytitle>
         <manvolnum>5</manvolnum></citerefentry> for details.
       '';
@@ -471,8 +503,7 @@ let
 
     addresses = mkOption {
       default = [ ];
-      type = types.listOf types.optionSet;
-      options = [ addressOptions ];
+      type = with types; listOf (submodule addressOptions);
       description = ''
         A list of address sections to be added to the unit.  See
         <citerefentry><refentrytitle>systemd.network</refentrytitle>
@@ -482,8 +513,7 @@ let
 
     routes = mkOption {
       default = [ ];
-      type = types.listOf types.optionSet;
-      options = [ routeOptions ];
+      type = with types; listOf (submodule routeOptions);
       description = ''
         A list of route sections to be added to the unit.  See
         <citerefentry><refentrytitle>systemd.network</refentrytitle>
@@ -517,6 +547,8 @@ let
         ''
           [Link]
           ${attrsToSection def.linkConfig}
+
+          ${def.extraConfig}
         '';
     };
 
@@ -567,6 +599,7 @@ let
             ${attrsToSection def.bondConfig}
 
           ''}
+          ${def.extraConfig}
         '';
     };
 
@@ -574,6 +607,12 @@ let
     { inherit (def) enable;
       text = commonMatchText def +
         ''
+          ${optionalString (def.linkConfig != { }) ''
+            [Link]
+            ${attrsToSection def.linkConfig}
+
+          ''}
+
           [Network]
           ${attrsToSection def.networkConfig}
           ${concatStringsSep "\n" (map (s: "Address=${s}") def.address)}
@@ -605,9 +644,14 @@ let
             ${attrsToSection x.routeConfig}
 
           '')}
+          ${def.extraConfig}
         '';
     };
 
+  unitFiles = map (name: {
+    target = "systemd/network/${name}";
+    source = "${cfg.units.${name}.unit}/${name}";
+  }) (attrNames cfg.units);
 in
 
 {
@@ -624,56 +668,54 @@ in
 
     systemd.network.links = mkOption {
       default = {};
-      type = types.attrsOf types.optionSet;
-      options = [ linkOptions ];
+      type = with types; attrsOf (submodule [ { options = linkOptions; } ]);
       description = "Definition of systemd network links.";
     };
 
     systemd.network.netdevs = mkOption {
       default = {};
-      type = types.attrsOf types.optionSet;
-      options = [ netdevOptions ];
+      type = with types; attrsOf (submodule [ { options = netdevOptions; } ]);
       description = "Definition of systemd network devices.";
     };
 
     systemd.network.networks = mkOption {
       default = {};
-      type = types.attrsOf types.optionSet;
-      options = [ networkOptions networkConfig ];
+      type = with types; attrsOf (submodule [ { options = networkOptions; } networkConfig ]);
       description = "Definition of systemd networks.";
     };
 
     systemd.network.units = mkOption {
       description = "Definition of networkd units.";
       default = {};
-      type = types.attrsOf types.optionSet;
-      options = { name, config, ... }:
+      type = with types; attrsOf (submodule (
+        { name, config, ... }:
         { options = concreteUnitOptions;
           config = {
             unit = mkDefault (makeUnit name config);
           };
-        };
+        }));
     };
 
   };
 
   config = mkIf config.systemd.network.enable {
 
-    systemd.additionalUpstreamSystemUnits =
-      [ "systemd-networkd.service" "systemd-networkd-wait-online.service" ];
+    systemd.additionalUpstreamSystemUnits = [
+      "systemd-networkd.service" "systemd-networkd-wait-online.service"
+    ];
 
-    systemd.network.units =
-      mapAttrs' (n: v: nameValuePair "${n}.link" (linkToUnit n v)) cfg.links
+    systemd.network.units = mapAttrs' (n: v: nameValuePair "${n}.link" (linkToUnit n v)) cfg.links
       // mapAttrs' (n: v: nameValuePair "${n}.netdev" (netdevToUnit n v)) cfg.netdevs
       // mapAttrs' (n: v: nameValuePair "${n}.network" (networkToUnit n v)) cfg.networks;
 
-    environment.etc."systemd/network".source =
-      generateUnits "network" cfg.units [] [];
+    environment.etc = unitFiles;
 
     systemd.services.systemd-networkd = {
       wantedBy = [ "multi-user.target" ];
-      before = [ "network-interfaces.target" ];
-      restartTriggers = [ config.environment.etc."systemd/network".source ];
+      restartTriggers = map (f: f.source) (unitFiles);
+      # prevent race condition with interface renaming (#39069)
+      requires = [ "systemd-udev-settle.service" ];
+      after = [ "systemd-udev-settle.service" ];
     };
 
     systemd.services.systemd-networkd-wait-online = {
@@ -693,8 +735,5 @@ in
     };
 
     services.resolved.enable = mkDefault true;
-    services.timesyncd.enable = mkDefault config.services.ntp.enable;
-
   };
-
 }

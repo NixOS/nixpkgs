@@ -1,11 +1,11 @@
-{ stdenv, fetchurl }:
+{ stdenv, hostPlatform, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "gnum4-1.4.17";
+  name = "gnum4-1.4.18";
 
   src = fetchurl {
-    url = "mirror://gnu/m4/m4-1.4.17.tar.bz2";
-    sha256 = "0w0da1chh12mczxa5lnwzjk9czi3dq6gnnndbpa6w4rj76b1yklf";
+    url = "mirror://gnu/m4/m4-1.4.18.tar.bz2";
+    sha256 = "1xkwwq0sgv05cla0g0a01yzhk0wpsn9y40w9kh9miiiv0imxfh36";
   };
 
   doCheck = false;
@@ -13,10 +13,7 @@ stdenv.mkDerivation rec {
   configureFlags = "--with-syscmd-shell=${stdenv.shell}";
 
   # Upstream is aware of it; it may be in the next release.
-  patches = [ ./s_isdir.patch ];
-
-  # FIXME needs gcc 4.9 in bootstrap tools
-  hardeningDisable = [ "stackprotector" ];
+  patches = [ ./s_isdir.patch ] ++ stdenv.lib.optional hostPlatform.isDarwin stdenv.secure-format-patch;
 
   meta = {
     homepage = http://www.gnu.org/software/m4/;

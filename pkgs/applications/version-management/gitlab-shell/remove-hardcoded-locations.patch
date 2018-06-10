@@ -1,13 +1,27 @@
-diff --git a/lib/gitlab_projects.rb b/lib/gitlab_projects.rb
-index c1d175a..7f7fd2f 100644
---- a/lib/gitlab_projects.rb
-+++ b/lib/gitlab_projects.rb
-@@ -5,7 +5,7 @@ require_relative 'gitlab_config'
- require_relative 'gitlab_logger'
+diff --git a/go/internal/config/config.go b/go/internal/config/config.go
+index c57b4de..88cfc95 100644
+--- a/go/internal/config/config.go
++++ b/go/internal/config/config.go
+@@ -27,7 +27,7 @@ func New() (*Config, error) {
+ 	}
+ 	cfg.RootDir = dir
  
- class GitlabProjects
--  GLOBAL_HOOKS_DIRECTORY = File.join(ROOT_PATH, 'hooks')
-+  GLOBAL_HOOKS_DIRECTORY = ENV['GITLAB_SHELL_HOOKS_PATH'] || File.join(ROOT_PATH, 'hooks')
+-	configBytes, err := ioutil.ReadFile(path.Join(cfg.RootDir, configFile))
++	configBytes, err := ioutil.ReadFile("/run/gitlab/shell-config.yml")
+ 	if err != nil {
+ 		return nil, err
+ 	}
+diff --git a/lib/gitlab_shell.rb b/lib/gitlab_shell.rb
+index 1452f95..2b40327 100644
+--- a/lib/gitlab_shell.rb
++++ b/lib/gitlab_shell.rb
+@@ -180,7 +180,8 @@ class GitlabShell
+     end
  
-   # Project name is a directory name for repository with .git at the end
-   # It may be namespaced or not. Like repo.git or gitlab/repo.git
+     # We use 'chdir: ROOT_PATH' to let the next executable know where config.yml is.
+-    Kernel.exec(env, *args, unsetenv_others: true, chdir: ROOT_PATH)
++    # Except we don't, because we're already in the right directory on nixos!
++    Kernel.exec(env, *args, unsetenv_others: true)
+   end
+ 
+   def api

@@ -20,8 +20,8 @@ stdenv.mkDerivation rec {
 
   preBuild = ''
     tar Jxvf ${srcManpages} debian/manpages
-    gzip -9 debian/manpages/stun.1
-    gzip -9 debian/manpages/stund.8
+    gzip -9n debian/manpages/stun.1
+    gzip -9n debian/manpages/stund.8
   '';
 
   installPhase = ''
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Stun server and test client";
-    homepage    = http://sourceforge.net/projects/stun/;
+    homepage    = https://sourceforge.net/projects/stun/;
     license     = licenses.vsl10;
     maintainers = with maintainers; [ marcweber obadz ];
     platforms   = platforms.linux;

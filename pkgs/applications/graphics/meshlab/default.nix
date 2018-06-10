@@ -1,51 +1,66 @@
-{ stdenv, fetchurl, qt4, bzip2, lib3ds, levmar, muparser, unzip, vcg }:
+{ stdenv, fetchFromGitHub, libGLU, qtbase, qtscript, qtxmlpatterns }:
 
-stdenv.mkDerivation rec {
-  name = "meshlab-1.3.3";
+let
+  meshlabRev = "5700f5474c8f90696a8925e2a209a0a8ab506662";
+  vcglibRev = "a8e87662b63ee9f4ded5d4699b28d74183040803";
+in stdenv.mkDerivation {
+  name = "meshlab-2016.12";
 
-  src = fetchurl {
-    url = "mirror://sourceforge/meshlab/meshlab/MeshLab%20v1.3.3/MeshLabSrc_AllInc_v133.tgz";
-    sha256 = "03wqaibfbfag2w1zi1a5z6h546r9d7pg2sjl5pwg24w7yp8rr0n9";
-  };
+  srcs =
+    [
+      (fetchFromGitHub {
+        owner = "cnr-isti-vclab";
+        repo = "meshlab";
+        rev = meshlabRev;
+        sha256 = "0srrp7zhi86dsg4zsx1615gr26barz38zdl8s03zq6vm1dgzl3cc";
+        name = "meshlab-${meshlabRev}";
+      })
+      (fetchFromGitHub {
+        owner = "cnr-isti-vclab";
+        repo = "vcglib";
+        rev = vcglibRev;
+        sha256 = "0jh8jc8rn7rci8qr3q03q574fk2hsc3rllysck41j8xkr3rmxz2f";
+        name = "vcglib-${vcglibRev}";
+      })
+    ];
 
-  # I don't know why I need this; without this, the rpath set at the beginning of the
-  # buildPhase gets removed from the 'meshlab' binary
-  dontPatchELF = true;
+  sourceRoot = "meshlab-${meshlabRev}";
 
-  patches = [ ./include-unistd.diff ];
+  patches = [ ./fix-2016.02.patch ];
 
   hardeningDisable = [ "format" ];
+  enableParallelBuilding = true;
 
   buildPhase = ''
-    mkdir -p "$out/include"
+    # MeshLab has ../vcglib hardcoded everywhere, so move the source dir
+    mv ../vcglib-${vcglibRev} ../vcglib
+
+    cd src
     export NIX_LDFLAGS="-rpath $out/opt/meshlab $NIX_LDFLAGS"
-    cd meshlab/src
+
     pushd external
     qmake -recursive external.pro
-    make
+    buildPhase
     popd
     qmake -recursive meshlab_full.pro
-    make
+    buildPhase
   '';
 
   installPhase = ''
-    mkdir -p $out/opt/meshlab $out/bin $out/lib
-    pushd distrib
-    cp -R * $out/opt/meshlab
-    popd
+    mkdir -p $out/opt/meshlab $out/bin
+    cp -Rv distrib/* $out/opt/meshlab
     ln -s $out/opt/meshlab/meshlab $out/bin/meshlab
+    ln -s $out/opt/meshlab/meshlabserver $out/bin/meshlabserver
   '';
 
-  sourceRoot = ".";
-
-  buildInputs = [ qt4 unzip vcg ];
+  buildInputs = [ libGLU qtbase qtscript qtxmlpatterns ];
 
   meta = {
-    description = "System for the processing and editing of unstructured 3D triangular meshes";
-    homepage = http://meshlab.sourceforge.net/;
-    license = stdenv.lib.licenses.gpl2Plus;
+    description = "A system for processing and editing 3D triangular meshes.";
+    homepage = http://www.meshlab.net/;
+    license = stdenv.lib.licenses.gpl3;
     maintainers = with stdenv.lib.maintainers; [viric];
     platforms = with stdenv.lib.platforms; linux;
-    broken = stdenv.isLinux && stdenv.isi686;
+    broken = true; # 2018-04-11
   };
 }

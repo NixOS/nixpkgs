@@ -5,11 +5,12 @@
 , enableJPEG ? true, libjpeg
 , enablePNG ? true, libpng
 , enableTIFF ? true, libtiff
-, enableEXR ? true, openexr, ilmbase
+, enableEXR ? (!stdenv.isDarwin), openexr, ilmbase
 , enableJPEG2K ? true, jasper
 , enableFfmpeg ? false, ffmpeg
-, enableGStreamer ? false, gst_all
-, enableEigen ? false, eigen
+, enableGStreamer ? false, gst_all_1
+, enableEigen ? true, eigen
+, darwin
 }:
 
 let
@@ -28,6 +29,19 @@ stdenv.mkDerivation rec {
     sha256 = "1k29rxlvrhgc5hadg2nc50wa3d2ls9ndp373257p756a0aividxh";
   };
 
+  patches =
+    [ # Don't include a copy of the CMake status output in the
+      # build. This causes a runtime dependency on GCC.
+      ./no-build-info.patch
+    ];
+
+  # This prevents cmake from using libraries in impure paths (which causes build failure on non NixOS)
+  postPatch = ''
+    sed -i '/Add these standard paths to the search paths for FIND_LIBRARY/,/^\s*$/{d}' CMakeLists.txt
+  '';
+
+  outputs = [ "out" "dev" ];
+
   buildInputs =
        [ zlib ]
     ++ lib.optional enablePython pythonPackages.python
@@ -38,8 +52,9 @@ stdenv.mkDerivation rec {
     ++ lib.optionals enableEXR [ openexr ilmbase ]
     ++ lib.optional enableJPEG2K jasper
     ++ lib.optional enableFfmpeg ffmpeg
-    ++ lib.optionals enableGStreamer (with gst_all; [ gstreamer gst-plugins-base ])
+    ++ lib.optionals enableGStreamer (with gst_all_1; [ gstreamer gst-plugins-base ])
     ++ lib.optional enableEigen eigen
+    ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [ Cocoa QTKit ])
     ;
 
   propagatedBuildInputs = lib.optional enablePython pythonPackages.numpy;
@@ -54,19 +69,26 @@ stdenv.mkDerivation rec {
     (opencvFlag "JPEG" enableJPEG)
     (opencvFlag "PNG" enablePNG)
     (opencvFlag "OPENEXR" enableEXR)
+    (opencvFlag "GSTREAMER" enableGStreamer)
   ];
 
   enableParallelBuilding = true;
 
   hardeningDisable = [ "bindnow" "relro" ];
 
+  # Fix pkgconfig file that gets broken with multiple outputs
+  postFixup = ''
+    sed -i $dev/lib/pkgconfig/opencv.pc -e "s|includedir_old=.*|includedir_old=$dev/include/opencv|"
+    sed -i $dev/lib/pkgconfig/opencv.pc -e "s|includedir_new=.*|includedir_new=$dev/include|"
+  '';
+
   passthru = lib.optionalAttrs enablePython { pythonPath = []; };
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "Open Computer Vision Library with more than 500 algorithms";
-    homepage = http://opencv.org/;
-    license = stdenv.lib.licenses.bsd3;
-    maintainers = with stdenv.lib.maintainers; [viric flosse];
-    platforms = with stdenv.lib.platforms; linux;
+    homepage = https://opencv.org/;
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ viric ];
+    platforms = platforms.linux ++ platforms.darwin;
   };
 }

@@ -1,21 +1,21 @@
-{ stdenv, fetchurl }:
+{ stdenv, fetchFromGitHub, autoreconfHook }:
 
 stdenv.mkDerivation rec {
-  name = "redir-2.2.1";
+  name = "redir-${version}";
+  version = "3.2";
 
-  src = fetchurl {
-    url = "http://sammy.net/~sammy/hacks/${name}.tar.gz";
-    sha256 = "0v0f14br00rrmd1ss644adsby4gm29sn7a2ccy7l93ik6pw099by";
+  src = fetchFromGitHub {
+    owner = "troglobit";
+    repo = "redir";
+    rev = "v${version}";
+    sha256 = "015vxpy6n7xflkq0lgls4f4vw7ynvv2635bwykzglin3v5ssrm2k";
   };
 
-  installPhase = ''
-    mkdir -p $out/bin
-    cp redir $out/bin
-  '';
+  nativeBuildInputs = [ autoreconfHook ];
 
   meta = {
-    description = "A port redirector";
-    homepage = http://sammy.net/~sammy/hacks/;
+    description = "A TCP port redirector for UNIX";
+    homepage = https://github.com/troglobit/redir;
     license = stdenv.lib.licenses.gpl2;
     maintainers = with stdenv.lib.maintainers; [ globin ];
     platforms = stdenv.lib.platforms.linux;

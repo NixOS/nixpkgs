@@ -1,11 +1,12 @@
 { stdenv, fetchurl, fetchpatch, ncurses, utmp, pam ? null }:
 
 stdenv.mkDerivation rec {
-  name = "screen-4.4.0";
+  name = "screen-${version}";
+  version = "4.6.2";
 
   src = fetchurl {
     url = "mirror://gnu/screen/${name}.tar.gz";
-    sha256 = "12r12xwhsg59mlprikbbmn60gh8lqhrvyar7mlxg4fwsfma2lwpg";
+    sha256 = "0fps0fsipfbh7c2cnp7rjw9n79j0ysq21mk8hzifa33a1r924s8v";
   };
 
   configureFlags= [
@@ -14,6 +15,13 @@ stdenv.mkDerivation rec {
     "--with-sys-screenrc=/etc/screenrc"
     "--enable-colors256"
   ];
+
+  patches = stdenv.lib.optional stdenv.hostPlatform.isMusl
+    (fetchpatch {
+      url = https://gist.githubusercontent.com/yujinakayama/4608863/raw/76b9f89af5e5a2e97d9a0f36aac989fb56cf1447/gistfile1.diff;
+      sha256 = "0f9bf83p8zdxaa1pr75jyf5g8xr3r8kv7cyzzbpraa1q4j15ss1p";
+      stripLen = 1;
+    });
 
   buildInputs = [ ncurses ] ++ stdenv.lib.optional stdenv.isLinux pam
                             ++ stdenv.lib.optional stdenv.isDarwin utmp;

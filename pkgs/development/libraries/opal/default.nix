@@ -9,7 +9,8 @@ stdenv.mkDerivation rec {
     sha256 = "f208985003461b2743575eccac13ad890b3e5baac35b68ddef17162460aff864";
   };
 
-  buildInputs = [ pkgconfig ptlib srtp libtheora speex
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ ptlib srtp libtheora speex
                   ffmpeg x264 cyrus_sasl openldap openssl expat unixODBC ];
   propagatedBuildInputs = [ speex ]; 
 
@@ -17,7 +18,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  NIX_CFLAGS = "-D__STDC_CONSTANT_MACROS=1";
+  NIX_CFLAGS_COMPILE = "-D__STDC_CONSTANT_MACROS=1 -std=gnu++98";
 
   patches = [ ./disable-samples-ftbfs.diff ./libav9.patch ./libav10.patch ];
       

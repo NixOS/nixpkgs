@@ -1,72 +1,82 @@
 /*
 
+# New packages
+
+READ THIS FIRST
+
+This module is for official packages in Qt 5. All available packages are listed
+in `./srcs.nix`, although a few are not yet packaged in Nixpkgs (see below).
+
+IF YOUR PACKAGE IS NOT LISTED IN `./srcs.nix`, IT DOES NOT GO HERE.
+
+Many of the packages released upstream are not yet built in Nixpkgs due to lack
+of demand. To add a Nixpkgs build for an upstream package, copy one of the
+existing packages here and modify it as necessary.
+
 # Updates
 
-Before a major version update, make a copy of this directory. (We like to
-keep the old version around for a short time after major updates.) Add a
-top-level attribute to `top-level/all-packages.nix`.
-
-1. Update the URL in `maintainers/scripts/generate-qt.sh`.
-2. From the top of the Nixpkgs tree, run
-   `./maintainers/scripts/generate-qt.sh > pkgs/development/libraries/qt-5/$VERSION/srcs.nix`.
-3. Check that the new packages build correctly.
-4. Commit the changes and open a pull request.
+1. Update the URL in `./fetch.sh`.
+2. Run `./maintainers/scripts/fetch-kde-qt.sh pkgs/development/libraries/qt-5/$VERSION/`
+   from the top of the Nixpkgs tree.
+3. Update `qtCompatVersion` below if the minor version number changes.
+4. Check that the new packages build correctly.
+5. Commit the changes and open a pull request.
 
 */
 
-{ pkgs
+{
+  newScope,
+  stdenv, fetchurl, makeSetupHook, makeWrapper,
+  bison, cups ? null, harfbuzz, libGL, perl,
+  gstreamer, gst-plugins-base,
 
-# options
-, developerBuild ? false
-, decryptSslTraffic ? false
+  # options
+  developerBuild ? false,
+  decryptSslTraffic ? false,
+  debug ? false,
 }:
-
-let inherit (pkgs) makeSetupHook makeWrapper stdenv; in
 
 with stdenv.lib;
 
 let
 
+  qtCompatVersion = "5.6";
+
   mirror = "http://download.qt.io";
-  srcs = import ./srcs.nix { inherit (pkgs) fetchurl; inherit mirror; };
+  srcs = import ./srcs.nix { inherit fetchurl; inherit mirror; };
 
-  qtSubmodule = args:
-    let
-      inherit (args) name;
-      version = args.version or srcs."${name}".version;
-      src = args.src or srcs."${name}".src;
-      inherit (pkgs.stdenv) mkDerivation;
-    in mkDerivation (args // {
-      name = "${name}-${version}";
-      inherit src;
+  patches = {
+    qtbase = [ ./qtbase.patch ];
+    qtdeclarative = [ ./qtdeclarative.patch ];
+    qtscript = [ ./qtscript.patch ];
+    qtserialport = [ ./qtserialport.patch ];
+    qttools = [ ./qttools.patch ];
+    qtwebengine = [ ./qtwebengine-seccomp.patch ]
+      ++ optional stdenv.needsPax ./qtwebengine-paxmark-mksnapshot.patch;
+    qtwebkit = [ ./qtwebkit.patch ];
+  };
 
-      propagatedBuildInputs = args.qtInputs ++ (args.propagatedBuildInputs or []);
-      nativeBuildInputs =
-        (args.nativeBuildInputs or [])
-        ++ [ pkgs.perl self.qmakeHook ];
+  mkDerivation =
+    import ../mkDerivation.nix
+    { inherit stdenv; inherit (stdenv) lib; }
+    { inherit debug; };
 
-      NIX_QT_SUBMODULE = args.NIX_QT_SUBMODULE or true;
-
-      outputs = args.outputs or [ "out" "dev" ];
-      setOutputFlags = args.setOutputFlags or false;
-
-      setupHook = ./setup-hook.sh;
-
-      enableParallelBuilding = args.enableParallelBuilding or true;
-
-      meta = self.qtbase.meta // (args.meta or {});
-    });
+  qtModule =
+    import ../qtModule.nix
+    { inherit mkDerivation perl; inherit (stdenv) lib; }
+    { inherit self srcs patches; };
 
   addPackages = self: with self;
     let
-      callPackage = self.newScope { inherit qtSubmodule srcs; };
+      callPackage = self.newScope { inherit qtCompatVersion qtModule srcs; };
     in {
 
-      qtbase = callPackage ./qtbase {
-        mesa = pkgs.mesa_noglu;
-        harfbuzz = pkgs.harfbuzz-icu;
-        cups = if stdenv.isLinux then pkgs.cups else null;
-        bison = pkgs.bison2; # error: too few arguments to function 'int yylex(...
+      inherit mkDerivation;
+
+      qtbase = callPackage ../modules/qtbase.nix {
+        inherit bison cups harfbuzz libGL;
+        inherit (srcs.qtbase) src version;
+        patches = patches.qtbase;
         inherit developerBuild decryptSslTraffic;
       };
 
@@ -74,46 +84,48 @@ let
       /* qtactiveqt = not packaged */
       /* qtandroidextras = not packaged */
       /* qtcanvas3d = not packaged */
-      qtconnectivity = callPackage ./qtconnectivity.nix {};
-      qtdeclarative = callPackage ./qtdeclarative {};
-      qtdoc = callPackage ./qtdoc.nix {};
-      qtenginio = callPackage ./qtenginio.nix {};
-      qtgraphicaleffects = callPackage ./qtgraphicaleffects.nix {};
-      qtimageformats = callPackage ./qtimageformats.nix {};
-      qtlocation = callPackage ./qtlocation.nix {};
+      qtconnectivity = callPackage ../modules/qtconnectivity.nix {};
+      qtdeclarative = callPackage ../modules/qtdeclarative.nix {};
+      qtdoc = callPackage ../modules/qtdoc.nix {};
+      qtgraphicaleffects = callPackage ../modules/qtgraphicaleffects.nix {};
+      qtimageformats = callPackage ../modules/qtimageformats.nix {};
+      qtlocation = callPackage ../modules/qtlocation.nix {};
       /* qtmacextras = not packaged */
-      qtmultimedia = callPackage ./qtmultimedia.nix {
-        inherit (pkgs.gst_all_1) gstreamer gst-plugins-base;
+      qtmultimedia = callPackage ../modules/qtmultimedia.nix {
+        inherit gstreamer gst-plugins-base;
       };
-      qtquickcontrols = callPackage ./qtquickcontrols.nix {};
-      qtscript = callPackage ./qtscript {};
-      qtsensors = callPackage ./qtsensors.nix {};
-      qtserialport = callPackage ./qtserialport {};
-      qtsvg = callPackage ./qtsvg.nix {};
-      qttools = callPackage ./qttools {};
-      qttranslations = callPackage ./qttranslations.nix {};
-      qtwayland = callPackage ./qtwayland.nix {};
-      qtwebchannel = callPackage ./qtwebchannel.nix {};
-      qtwebengine = callPackage ./qtwebengine.nix {};
-      qtwebkit = callPackage ./qtwebkit {};
-      qtwebsockets = callPackage ./qtwebsockets.nix {};
+      qtquick1 = null;
+      qtquickcontrols = callPackage ../modules/qtquickcontrols.nix {};
+      qtquickcontrols2 = callPackage ../modules/qtquickcontrols2.nix {};
+      qtscript = callPackage ../modules/qtscript.nix {};
+      qtsensors = callPackage ../modules/qtsensors.nix {};
+      qtserialport = callPackage ../modules/qtserialport.nix {};
+      qtsvg = callPackage ../modules/qtsvg.nix {};
+      qttools = callPackage ../modules/qttools.nix {};
+      qttranslations = callPackage ../modules/qttranslations.nix {};
+      qtwayland = callPackage ../modules/qtwayland.nix {};
+      qtwebchannel = callPackage ../modules/qtwebchannel.nix {};
+      qtwebengine = callPackage ../modules/qtwebengine.nix {};
+      qtwebkit = callPackage ../modules/qtwebkit.nix {};
+      qtwebsockets = callPackage ../modules/qtwebsockets.nix {};
       /* qtwinextras = not packaged */
-      qtx11extras = callPackage ./qtx11extras.nix {};
-      qtxmlpatterns = callPackage ./qtxmlpatterns.nix {};
+      qtx11extras = callPackage ../modules/qtx11extras.nix {};
+      qtxmlpatterns = callPackage ../modules/qtxmlpatterns.nix {};
 
       env = callPackage ../qt-env.nix {};
-      full = env "qt-${qtbase.version}" [
-        qtconnectivity qtdeclarative qtdoc qtenginio qtgraphicaleffects
-        qtimageformats qtlocation qtmultimedia qtquickcontrols qtscript
+      full = env "qt-full-${qtbase.version}" [
+        qtconnectivity qtdeclarative qtdoc qtgraphicaleffects qtimageformats
+        qtlocation qtmultimedia qtquickcontrols qtquickcontrols2 qtscript
         qtsensors qtserialport qtsvg qttools qttranslations qtwayland
-        qtwebsockets qtx11extras qtxmlpatterns
+        qtwebchannel qtwebengine qtwebkit qtwebsockets qtx11extras qtxmlpatterns
       ];
 
-      makeQtWrapper = makeSetupHook { deps = [ makeWrapper ]; } ./make-qt-wrapper.sh;
-      qmakeHook = makeSetupHook { deps = [ self.qtbase.dev ]; } ./qmake-hook.sh;
-
+      qmake = makeSetupHook {
+        deps = [ self.qtbase.dev ];
+        substitutions = { inherit (stdenv) isDarwin; };
+      } ../hooks/qmake-hook.sh;
     };
 
-   self = makeScope pkgs.newScope addPackages;
+   self = makeScope newScope addPackages;
 
 in self

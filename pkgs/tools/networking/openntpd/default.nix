@@ -1,25 +1,31 @@
-{ stdenv, fetchurl, openssl
+{ stdenv, fetchurl, libressl
 , privsepPath ? "/var/empty"
 , privsepUser ? "ntp"
 }:
 
 stdenv.mkDerivation rec {
   name = "openntpd-${version}";
-  version = "5.7p4";
+  version = "6.2p3";
 
   src = fetchurl {
     url = "mirror://openbsd/OpenNTPD/${name}.tar.gz";
-    sha256 = "08ybpi351284wj53qqrmg13j8l7md397yrqsmg0aqxg3frcxk4x9";
+    sha256 = "0fn12i4kzsi0zkr4qp3dp9bycmirnfapajqvdfx02zhr4hanj0kv";
   };
+
+  prePatch = ''
+    sed -i '20i#include <sys/cdefs.h>' src/ntpd.h
+    sed -i '19i#include <sys/cdefs.h>' src/log.c
+  '';
 
   configureFlags = [
     "--with-privsep-path=${privsepPath}"
     "--with-privsep-user=${privsepUser}"
     "--sysconfdir=/etc"
     "--localstatedir=/var"
+    "--with-cacert=/etc/ssl/certs/ca-certificates.crt"
   ];
 
-  buildInputs = [ openssl ];
+  buildInputs = [ libressl ];
 
   installFlags = [
     "sysconfdir=\${out}/etc"
@@ -27,7 +33,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with stdenv.lib; {
-    homepage = "http://www.openntpd.org/";
+    homepage = http://www.openntpd.org/;
     license = licenses.bsd3;
     description = "OpenBSD NTP daemon (Debian port)";
     platforms = platforms.all;

@@ -18,5 +18,5 @@ if [ -z "$libxmlHookDone" ]; then
     # xmllint and xsltproc from looking in /etc/xml/catalog.
     export XML_CATALOG_FILES
     if [ -z "$XML_CATALOG_FILES" ]; then XML_CATALOG_FILES=" "; fi
-    envHooks+=(addXMLCatalogs)
+    addEnvHooks "$hostOffset" addXMLCatalogs
 fi

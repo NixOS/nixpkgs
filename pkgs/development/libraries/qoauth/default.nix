@@ -1,25 +1,29 @@
-{ stdenv, fetchurl, qt4, qca2, qmake4Hook }:
+{ stdenv, fetchurl, qt5, qca2-qt5 }:
 
 stdenv.mkDerivation {
-  name = "qoauth-1.0.1";
+  name = "qoauth-2.0.0";
 
   src = fetchurl {
-    url = https://github.com/ayoy/qoauth/tarball/v1.0.1;
-    name = "qoauth-1.0.1.tar.gz";
-    sha256 = "1ax0g4dd49a3a1699ams13bkhz690xfwqg8rxp1capbdpf2aa8cp";
+    url = https://github.com/ayoy/qoauth/archive/v2.0.0.tar.gz;
+    name = "qoauth-2.0.0.tar.gz";
+    sha256 = "a28005986410d333e03d077679cdf6c504ec5a33342867dc0f9fb0b74285e333";
   };
 
-  patchPhase = "sed -e 's/lib64/lib/g' -i src/src.pro";
+  postPatch = ''
+    sed -i src/src.pro \
+        -e 's/lib64/lib/g' \
+        -e '/features.path =/ s|$$\[QMAKE_MKSPECS\]|$$NIX_OUTPUT_DEV/mkspecs|'
+  '';
 
-  buildInputs = [ qt4 qca2 ];
-  nativeBuildInputs = [ qmake4Hook ];
+  buildInputs = [ qt5.qtbase qca2-qt5 ];
+  nativeBuildInputs = [ qt5.qmake ];
 
-  NIX_CFLAGS_COMPILE = [ "-I${qca2}/include/QtCrypto" ];
-  NIX_LDFLAGS = [ "-lqca" ];
+  NIX_CFLAGS_COMPILE = [ "-I${qca2-qt5}/include/Qca-qt5/QtCrypto" ];
+  NIX_LDFLAGS = [ "-lqca-qt5" ];
 
   meta = {
     description = "Qt library for OAuth authentication";
-    inherit (qt4.meta) platforms;
-    maintainers = [ stdenv.lib.maintainers.urkud ];
+    inherit (qt5.qtbase.meta) platforms;
+    maintainers = [ ];
   };
 }

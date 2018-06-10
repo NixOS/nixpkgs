@@ -3,22 +3,23 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "2016-06-12";
+  version = "2.6.7";
   name = "numix-gtk-theme-${version}";
 
   src = fetchFromGitHub {
     repo = "numix-gtk-theme";
     owner = "numixproject";
-    rev = "1d941a15971f43fb2f5675c7059bf313b78797fc";
-    sha256 = "14b1gl761acdza4bkqr6dvsblvi2wsph79j5jircxfd3wgvm756i";
+    rev = version;
+    sha256 = "12mw0kr0kkvg395qlbsvkvaqccr90cmxw5rrsl236zh43kj8grb7";
   };
 
   nativeBuildInputs = [ sass glib libxml2 gdk_pixbuf ];
 
-  buildInputs = [ gtk-engine-murrine ];
+  propagatedUserEnvPkgs = [ gtk-engine-murrine ];
 
   postPatch = ''
     substituteInPlace Makefile --replace '$(DESTDIR)'/usr $out
+    patchShebangs .
   '';
 
   meta = {

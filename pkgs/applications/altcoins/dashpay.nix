@@ -1,32 +1,42 @@
-{ fetchzip, stdenv, pkgconfig, autoreconfHook
+{ fetchFromGitHub, stdenv, pkgconfig, autoreconfHook
 , openssl, db48, boost, zlib, miniupnpc
-, qt4, qrencode, glib, protobuf, yasm
-, utillinux }:
+, qrencode, glib, protobuf, yasm, libevent
+, utillinux
+, enable_Upnp ? false
+, disable_Wallet ? false
+, disable_Daemon ? false }:
 
 with stdenv.lib;
 stdenv.mkDerivation rec {
+  name = "dashpay-${version}";
+  version = "0.12.2.3";
 
-  name = "dashpay-${meta.version}";
-
-  src = fetchzip {
-    url = "https://github.com/dashpay/dash/archive/v${meta.version}.tar.gz";
-    sha256 = "19bk7cviy3n2dpj4kr3i6i0i3ac2l5ri8ln1a51nd3n90k016wnx";
+  src = fetchFromGitHub {
+    owner = "dashpay";
+    repo= "dash";
+    rev = "v${version}";
+    sha256 = "0l1gcj2xf2bal9ph9y11x8yd28fd25f55f48xbm45bfw3ij7nbaa";
   };
 
-  buildInputs = [ pkgconfig autoreconfHook glib openssl db48 yasm
-                  boost zlib miniupnpc protobuf qt4 qrencode utillinux ];
+  nativeBuildInputs = [ pkgconfig autoreconfHook ];
+  buildInputs = [ glib openssl db48 yasm boost zlib libevent
+                  miniupnpc protobuf qrencode utillinux ];
 
-  configureFlags = [ "--with-boost-libdir=${boost.out}/lib" ];
 
-  meta = with stdenv.lib; {
-    version = "0.12.0.55";
+  configureFlags = [ "--with-boost-libdir=${boost.out}/lib --with-gui=no" ]
+                    ++ optional enable_Upnp "--enable-upnp-default"
+                    ++ optional disable_Wallet "--disable-wallet"
+                    ++ optional disable_Daemon "--disable-daemon"
+                    ;
+
+  meta = {
     description = "A decentralized key/value registration and transfer system";
     longDescription = ''
       Dash (DASH) is an open sourced, privacy-centric digital currency
       with instant transactions.  It allows you to keep your finances
       private as you make transactions without waits, similar to cash.
     '';
-    homepage = http://dashpay.io;
+    homepage = https://www.dash.org;
     maintainers = with maintainers; [ AndersonTorres ];
     platforms = platforms.unix;
   };

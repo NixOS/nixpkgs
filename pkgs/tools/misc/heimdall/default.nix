@@ -1,27 +1,25 @@
-{ stdenv, fetchFromGitHub, zlib, libusb1, cmake, qt5, enableGUI ? false }:
+{ stdenv, fetchFromGitHub, cmake
+, zlib, libusb1
+, enableGUI ? false, qtbase ? null }:
 
-let version = "1.4.1-34-g7ebee1e"; in
-
-stdenv.mkDerivation {
-  name = "heimdall-${version}";
+stdenv.mkDerivation rec {
+  name = "heimdall-${if enableGUI then "gui-" else ""}${version}";
+  version = "1.4.2";
 
   src = fetchFromGitHub {
     owner  = "Benjamin-Dobell";
     repo   = "Heimdall";
     rev    = "v${version}";
-    sha256 = "10c71k251wxd05j6c76qlar5sd73zam1c1g2cq3cscqayd7rzafg";
+    sha256 = "1ygn4snvcmi98rgldgxf5hwm7zzi1zcsihfvm6awf9s6mpcjzbqz";
   };
 
-  buildInputs = [ zlib libusb1 cmake ];
-  patchPhase = stdenv.lib.optional (!enableGUI) ''
-    sed -i '/heimdall-frontend/d' CMakeLists.txt
-  '';
-  enableParallelBuilding = true;
+  buildInputs = [
+    zlib libusb1
+  ] ++ stdenv.lib.optional enableGUI qtbase;
+  nativeBuildInputs = [ cmake ];
+
   cmakeFlags = [
-    "-DQt5Widgets_DIR=${qt5.qtbase.dev}/lib/cmake/Qt5Widgets"
-    "-DQt5Gui_DIR=${qt5.qtbase.dev}/lib/cmake/Qt5Gui"
-    "-DQt5Core_DIR=${qt5.qtbase.dev}/lib/cmake/Qt5Core"
-    "-DBUILD_TYPE=Release"
+    "-DDISABLE_FRONTEND=${if enableGUI then "OFF" else "ON"}"
   ];
 
   preConfigure = ''
@@ -30,16 +28,20 @@ stdenv.mkDerivation {
   '';
 
   installPhase = ''
-    mkdir -p $out/bin $out/share/doc/heimdall $out/lib/udev/rules.d
-    cp "bin/"* $out/bin/
-    cp ../Linux/README $out/share/doc/heimdall
-    cp ../heimdall/60-heimdall.rules $out/lib/udev/rules.d
+    mkdir -p $out/{bin,share/doc/heimdall,lib/udev/rules.d}
+    install -m755 -t $out/bin                bin/*
+    install -m644 -t $out/lib/udev/rules.d   ../heimdall/60-heimdall.rules
+    install -m644 ../Linux/README   $out/share/doc/heimdall/README.linux
+    install -m644 ../OSX/README.txt $out/share/doc/heimdall/README.osx
   '';
 
-  meta = {
-    homepage = "http://www.glassechidna.com.au/products/heimdall/";
+  enableParallelBuilding = true;
+
+  meta = with stdenv.lib; {
+    homepage    = http://www.glassechidna.com.au/products/heimdall/;
     description = "A cross-platform tool suite to flash firmware onto Samsung Galaxy S devices";
-    license = stdenv.lib.licenses.mit;
-    platforms = stdenv.lib.platforms.linux;
+    license     = licenses.mit;
+    maintainers = with maintainers; [ peterhoeg ];
+    platforms   = platforms.unix;
   };
 }

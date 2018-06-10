@@ -19,11 +19,11 @@ let
 in
 pythonPackages.buildPythonApplication rec {
   name = "ocropus-${version}";
-  version = "20150316";
+  version = "20170811";
 
   src = fetchFromGitHub {
-    sha256 = "0m5bm2ah3p29c13vp7hz7rm058qnlm840zd8xv20byijhlz0447g";
-    rev = "5ba07bb959d605ec15424dd2b8f3d7245820084e";
+    sha256 = "0qx0d8yj0w66qglkrmfavp5dh1sky72njfaqii7bnrpv5n4j3q39";
+    rev = "ae84a8edaf0b76135f749ba66fc30c272d0726d0";
     repo = "ocropy";
     owner = "tmbdev";
   };
@@ -37,7 +37,8 @@ pythonPackages.buildPythonApplication rec {
     ${concatStrings (map (x: "cp -R ${x.src} models/`basename ${x.name}`;")
       models)}
 
-    substituteInPlace ocrolib/{common,default}.py --replace /usr/local $out
+    substituteInPlace ocrolib/common.py --replace /usr/local $out
+    substituteInPlace ocrolib/default.py --replace /usr/local $out
   '';
 
   doCheck = false;  # fails
@@ -52,7 +53,7 @@ pythonPackages.buildPythonApplication rec {
     description = "Open source document analysis and OCR system";
     license = licenses.asl20;
     homepage = https://github.com/tmbdev/ocropy/;
-    maintainers = with maintainers; [ domenkozar nckx viric ];
+    maintainers = with maintainers; [ domenkozar viric ];
     platforms = platforms.linux;
   };
 }

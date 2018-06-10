@@ -1,29 +1,37 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, perl }:
+{ stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, perl, pythonPackages, libiconv }:
 
 stdenv.mkDerivation rec {
   name = "universal-ctags-${version}";
-  version = "2016-07-06";
+  version = "2018-01-05";
 
   src = fetchFromGitHub {
     owner = "universal-ctags";
     repo = "ctags";
-    rev = "44a325a9db23063b231f6f041af9aaf19320d9b9";
-    sha256 = "11vq901h121ckqgw52k9x7way3q38b7jd08vr1n2sjz7kxh0zdd0";
+    rev = "c66bdfb4db99977c1bd0568e33e60853a48dca65";
+    sha256 = "0fdzhr0704cj84ym00plkl5l9w83haal6i6w70lx6f4968pcliyi";
   };
 
-  buildInputs = [ autoreconfHook pkgconfig ];
+  nativeBuildInputs = [ autoreconfHook pkgconfig pythonPackages.docutils ];
+  buildInputs = stdenv.lib.optional stdenv.isDarwin libiconv;
 
+  # to generate makefile.in
   autoreconfPhase = ''
-    ./autogen.sh --tmpdir
+    ./autogen.sh
   '';
+
+  configureFlags = [ "--enable-tmpdir=/tmp" ];
 
   postConfigure = ''
     sed -i 's|/usr/bin/env perl|${perl}/bin/perl|' misc/optlib2c
   '';
 
+  doCheck = true;
+
+  checkFlags = "units";
+
   meta = with stdenv.lib; {
     description = "A maintained ctags implementation";
-    homepage = "https://ctags.io/";
+    homepage = https://ctags.io/;
     license = licenses.gpl2Plus;
     platforms = platforms.unix;
     # universal-ctags is preferred over emacs's ctags

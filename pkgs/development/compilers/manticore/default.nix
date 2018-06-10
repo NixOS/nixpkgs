@@ -1,14 +1,41 @@
-{ stdenv, fetchurl, coreutils, autoconf, automake, smlnj }:
+{ stdenv, fetchFromGitHub, coreutils, autoreconfHook, smlnj }:
 
-stdenv.mkDerivation rec {
+let
+  rev= "f8e08c89dd98b7b8dba318d245dcd4abd3328ae2";
+in stdenv.mkDerivation rec {
   name = "manticore-${version}";
-  version = "2014.08.18";
-  builder = ./builder.sh;
-  src = fetchurl {
-    url = https://github.com/rrnewton/manticore_temp_mirror/archive/snapshot-20140818.tar.gz; 
-    sha256 = "1x52xpj5gbcpqjqm6aw6ssn901f353zypj3d5scm8i3ad777y29d";
+  version = "2017.08.22";
+ 
+  src = fetchFromGitHub {
+    owner = "ManticoreProject";
+    repo = "manticore";
+    sha256 = "06icq0qdzwyzbsyms53blxpb9i26n2vn7ci8p9xvvnq687hxhr73";
+    inherit rev;
   };
-  inherit stdenv coreutils autoconf automake smlnj;
+
+  enableParallelBuilding = false;
+ 
+  nativeBuildInputs = [ autoreconfHook ];
+  
+  buildInputs = [ coreutils smlnj ];
+
+  autoreconfFlags = "-Iconfig -vfi";
+
+  unpackPhase = ''
+    mkdir -p $out
+    cd $out
+    unpackFile $src
+    mv source repo_checkout
+    cd repo_checkout
+    chmod u+w . -R
+  ''; 
+  
+  postPatch = ''
+    patchShebangs .
+    substituteInPlace configure.ac --replace 'MANTICORE_ROOT=`pwd`' 'MANTICORE_ROOT=$out/repo_checkout'
+  '';
+
+  preInstall = "mkdir -p $out/bin";
 
   meta = {
     description = "A parallel, pure variant of Standard ML";

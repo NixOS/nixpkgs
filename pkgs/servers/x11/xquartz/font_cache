@@ -1,4 +1,4 @@
-#!/bin/bash
+#!@shell@
 
 export PATH=@PATH@:$PATH
 
@@ -83,7 +83,7 @@ get_fontdirs() {
         if [[ $osxfonts == 1 ]] ; then
             find {/System/,/}Library/Fonts -type d
         fi
-    else 
+    else
         if [[ $osxfonts == 1 && -d "${HOME}/Library/Fonts" ]] ; then
             find "${HOME}/Library/Fonts" -type d
         fi

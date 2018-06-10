@@ -1,14 +1,17 @@
-{ kdeFramework, lib, ecm, kbookmarks, kcompletion
-, kconfig, kconfigwidgets, ki18n, kiconthemes, kio, knotifications
-, kwidgetsaddons, libXcursor, qtx11extras
+{
+  mkDerivation, lib,
+  extra-cmake-modules,
+  kbookmarks, kcompletion, kconfig, kconfigwidgets, ki18n, kiconthemes, kio,
+  knewstuff, knotifications, kpackage, kwidgetsaddons, libXcursor, qtx11extras
 }:
 
-kdeFramework {
+mkDerivation {
   name = "frameworkintegration";
   meta = { maintainers = [ lib.maintainers.ttuegel ]; };
-  nativeBuildInputs = [ ecm ];
-  propagatedBuildInputs = [
-    kbookmarks kcompletion kconfig kconfigwidgets knotifications ki18n kio
-    kiconthemes kwidgetsaddons libXcursor qtx11extras
+  nativeBuildInputs = [ extra-cmake-modules ];
+  buildInputs = [
+    kbookmarks kcompletion kconfig ki18n kio knewstuff knotifications kpackage
+    kwidgetsaddons libXcursor qtx11extras
   ];
+  propagatedBuildInputs = [ kconfigwidgets kiconthemes ];
 }

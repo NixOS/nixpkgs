@@ -1,7 +1,10 @@
-{ kdeFramework, lib, ecm, python }:
+{ mkDerivation, lib, extra-cmake-modules, python }:
 
-kdeFramework {
+mkDerivation {
   name = "kapidox";
   meta = { maintainers = [ lib.maintainers.ttuegel ]; };
-  nativeBuildInputs = [ ecm python ];
+  nativeBuildInputs = [ extra-cmake-modules python ];
+  postFixup = ''
+    moveToOutput bin $bin
+  '';
 }

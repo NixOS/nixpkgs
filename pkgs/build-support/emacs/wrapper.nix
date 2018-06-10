@@ -21,7 +21,7 @@ set which contains `emacsWithPackages`. For example, to override
 `emacsPackagesNg.emacsWithPackages`,
 ```
 let customEmacsPackages =
-      emacsPackagesNg.override (super: self: {
+      emacsPackagesNg.overrideScope (super: self: {
         # use a custom version of emacs
         emacs = ...;
         # use the unstable MELPA version of magit
@@ -40,7 +40,7 @@ packagesFun: # packages explicitly requested by the user
 
 let
   explicitRequires =
-    if builtins.isFunction packagesFun
+    if lib.isFunction packagesFun
       then packagesFun self
     else packagesFun;
 in
@@ -55,12 +55,46 @@ stdenv.mkDerivation {
   deps = runCommand "emacs-packages-deps"
    { inherit explicitRequires lndir emacs; }
    ''
+     findInputsOld() {
+         local pkg="$1"; shift
+         local var="$1"; shift
+         local propagatedBuildInputsFiles=("$@")
+
+         # TODO(@Ericson2314): Restore using associative array once Darwin
+         # nix-shell doesn't use impure bash. This should replace the O(n)
+         # case with an O(1) hash map lookup, assuming bash is implemented
+         # well :D.
+         local varSlice="$var[*]"
+         # ''${..-} to hack around old bash empty array problem
+         case "''${!varSlice-}" in
+             *" $pkg "*) return 0 ;;
+         esac
+         unset -v varSlice
+
+         eval "$var"'+=("$pkg")'
+
+         if ! [ -e "$pkg" ]; then
+             echo "build input $pkg does not exist" >&2
+             exit 1
+         fi
+
+         local file
+         for file in "''${propagatedBuildInputsFiles[@]}"; do
+             file="$pkg/nix-support/$file"
+             [[ -f "$file" ]] || continue
+
+             local pkgNext
+             for pkgNext in $(< "$file"); do
+                 findInputsOld "$pkgNext" "$var" "''${propagatedBuildInputsFiles[@]}"
+             done
+         done
+     }
      mkdir -p $out/bin
      mkdir -p $out/share/emacs/site-lisp
 
      local requires
      for pkg in $explicitRequires; do
-       findInputs $pkg requires propagated-user-env-packages
+       findInputsOld $pkg requires propagated-user-env-packages
      done
      # requires now holds all requested packages and their transitive dependencies
 
@@ -80,18 +114,20 @@ stdenv.mkDerivation {
        linkPath "$1" "share/emacs/site-lisp" "share/emacs/site-lisp"
      }
 
-     for pkg in $requires; do
+     # Iterate over the array of inputs (avoiding nix's own interpolation)
+     for pkg in "''${requires[@]}"; do
        linkEmacsPackage $pkg
      done
 
      siteStart="$out/share/emacs/site-lisp/site-start.el"
+     siteStartByteCompiled="$siteStart"c
 
      # A dependency may have brought the original siteStart, delete it and
      # create our own
      # Begin the new site-start.el by loading the original, which sets some
      # NixOS-specific paths. Paths are searched in the reverse of the order
      # they are specified in, so user and system profile paths are searched last.
-     rm -f $siteStart
+     rm -f $siteStart $siteStartByteCompiled
      cat >"$siteStart" <<EOF
 (load-file "$emacs/share/emacs/site-lisp/site-start.el")
 (add-to-list 'load-path "$out/share/emacs/site-lisp")
@@ -113,6 +149,19 @@ EOF
       makeWrapper "$prog" "$out/bin/$progname" \
         --suffix EMACSLOADPATH ":" "$deps/share/emacs/site-lisp:"
     done
+
+    # Wrap MacOS app
+    # this has to pick up resources and metadata
+    # to recognize it as an "app"
+    if [ -d "$emacs/Applications/Emacs.app" ]; then
+      mkdir -p $out/Applications/Emacs.app/Contents/MacOS
+      cp -r $emacs/Applications/Emacs.app/Contents/Info.plist \
+            $emacs/Applications/Emacs.app/Contents/PkgInfo \
+            $emacs/Applications/Emacs.app/Contents/Resources \
+            $out/Applications/Emacs.app/Contents
+      makeWrapper $emacs/Applications/Emacs.app/Contents/MacOS/Emacs $out/Applications/Emacs.app/Contents/MacOS/Emacs \
+        --suffix EMACSLOADPATH ":" "$deps/share/emacs/site-lisp:"
+    fi
 
     mkdir -p $out/share
     # Link icons and desktop files into place

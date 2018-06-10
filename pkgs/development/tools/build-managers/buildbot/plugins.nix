@@ -1,90 +1,105 @@
-{ stdenv
-, fetchurl
-, pythonPackages
-}:
+{ stdenv, pythonPackages, buildbot-pkg }:
 
-let
-  buildbot-pkg = pythonPackages.buildPythonPackage rec {
-    name = "${pname}-${version}";
-    pname = "buildbot-pkg";
-    version = "0.9.0rc3";
-
-    src = fetchurl {
-      url = "mirror://pypi/b/${pname}/${name}.tar.gz";
-      sha256 = "0a05dgc5nn6sx3nicfvqwar9iy8yxhq92688dhs5p6mzjxaprlxm";
-    };
-
-    propagatedBuildInputs = with pythonPackages; [ setuptools ];
-
-    meta = with stdenv.lib; {
-      homepage = http://buildbot.net/;
-      description = "Buildbot Packaging Helper";
-      maintainers = with maintainers; [ nand0p ryansydnor ];
-      platforms = platforms.all;
-    };
-  };
-
-in {
-
+{
   www = pythonPackages.buildPythonPackage rec {
     name = "${pname}-${version}";
     pname = "buildbot_www";
-    version = "0.9.0rc3";
+    version = buildbot-pkg.version;
 
     # NOTE: wheel is used due to buildbot circular dependency
     format = "wheel";
-    src = fetchurl {
-      url = "https://pypi.python.org/packages/93/1e/09e329fc831ae4f5be05eb3363c9028ab7e26e9c7e5d89e3aa66c3f25d9d/${name}-py2-none-any.whl";
-      sha256 = "0fy2v7y1kc53zm67ddx85yz5qh4b7hmcbfzmsziiv9n83a0qh1i6";
-    };
 
-    propagatedBuildInputs = [ buildbot-pkg ];
+    src = pythonPackages.fetchPypi {
+      inherit pname version format;
+      sha256 = "01v9w8iy9q6fwrmz6db7fanjixax7whn74k67bj0czrbjjkpfzvb";
+    };
 
     meta = with stdenv.lib; {
       homepage = http://buildbot.net/;
       description = "Buildbot UI";
       maintainers = with maintainers; [ nand0p ryansydnor ];
-      platforms = platforms.all;
+      license = licenses.gpl2;
     };
   };
 
   console-view = pythonPackages.buildPythonPackage rec {
     name = "${pname}-${version}";
     pname = "buildbot-console-view";
-    version = "0.9.0rc3";
+    version = buildbot-pkg.version;
 
-    src = fetchurl {
-      url = "mirror://pypi/b/${pname}/${name}.tar.gz";
-      sha256 = "09yfqrnwfambg1j4x7ywnjg4xfhvv6f242zzh35fwj64cnqmqx07";
+    src = pythonPackages.fetchPypi {
+      inherit pname version;
+      sha256 = "1cwxkzpgwzk9b361rj980bbnmhzzsr46pgf94zqpg3na8xm6hpwj";
     };
 
-    propagatedBuildInputs = [ buildbot-pkg ];
+    propagatedBuildInputs = with pythonPackages; [ buildbot-pkg ];
 
     meta = with stdenv.lib; {
       homepage = http://buildbot.net/;
       description = "Buildbot Console View Plugin";
       maintainers = with maintainers; [ nand0p ryansydnor ];
-      platforms = platforms.all;
+      license = licenses.gpl2;
     };
   };
 
   waterfall-view = pythonPackages.buildPythonPackage rec {
     name = "${pname}-${version}";
     pname = "buildbot-waterfall-view";
-    version = "0.9.0rc3";
+    version = buildbot-pkg.version;
 
-    src = fetchurl {
-      url = "mirror://pypi/b/${pname}/${name}.tar.gz";
-      sha256 = "0xpqxj3mmwl5xdhm3p52shl24d85qapdk4v66f9hrb9pnk5k4a81";
+    src = pythonPackages.fetchPypi {
+      inherit pname version;
+      sha256 = "0ival58f50128315d0nck63pzya2zm7q6hvgmxfbjl0my8il9p2l";
     };
 
-    propagatedBuildInputs = [ buildbot-pkg ];
+    propagatedBuildInputs = with pythonPackages; [ buildbot-pkg ];
 
     meta = with stdenv.lib; {
       homepage = http://buildbot.net/;
       description = "Buildbot Waterfall View Plugin";
       maintainers = with maintainers; [ nand0p ryansydnor ];
-      platforms = platforms.all;
+      license = licenses.gpl2;
     };
   };
+
+  grid-view = pythonPackages.buildPythonPackage rec {
+    name = "${pname}-${version}";
+    pname = "buildbot-grid-view";
+    version = buildbot-pkg.version;
+
+    src = pythonPackages.fetchPypi {
+      inherit pname version;
+      sha256 = "0jiwfb699nqbmpcm88y187ig4ha6p7d4v98mjwa9blhm54dk8kh1";
+    };
+
+    propagatedBuildInputs = with pythonPackages; [ buildbot-pkg ];
+
+    meta = with stdenv.lib; {
+      homepage = http://buildbot.net/;
+      description = "Buildbot Grid View Plugin";
+      maintainers = with maintainers; [ nand0p ];
+      license = licenses.gpl2;
+    };
+  };
+
+  wsgi-dashboards = pythonPackages.buildPythonPackage rec {
+    name = "${pname}-${version}";
+    pname = "buildbot-wsgi-dashboards";
+    version = buildbot-pkg.version;
+
+    src = pythonPackages.fetchPypi {
+      inherit pname version;
+      sha256 = "00mfn24gbwr2p3n7nsijzv949l7hiksiafhma18nnh40r8f4l5f2";
+    };
+
+    propagatedBuildInputs = with pythonPackages; [ buildbot-pkg ];
+
+    meta = with stdenv.lib; {
+      homepage = http://buildbot.net/;
+      description = "Buildbot WSGI dashboards Plugin";
+      maintainers = with maintainers; [ ];
+      license = licenses.gpl2;
+    };
+  };
+
 }

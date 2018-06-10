@@ -1,26 +1,29 @@
 {stdenv, fetchurl
   , freeglut, ghostscriptX, imagemagick, fftw 
-  , boehmgc, mesa_glu, mesa_noglu, ncurses, readline, gsl, libsigsegv
+  , boehmgc, libGLU, libGL, mesa_noglu, ncurses, readline, gsl, libsigsegv
   , python, zlib, perl, texLive, texinfo, xz
+, darwin
 }:
-
-assert stdenv.isLinux;
 
 let
   s = # Generated upstream information
   rec {
     baseName="asymptote";
-    version="2.38";
+    version="2.44";
     name="${baseName}-${version}";
-    hash="1dxwvq0xighqckkjkjva8s0igxfgy1j25z81pbwvlz6jzsrxpip9";
-    url="mirror://sourceforge/project/asymptote/2.38/asymptote-2.38.src.tgz";
-    sha256="1dxwvq0xighqckkjkjva8s0igxfgy1j25z81pbwvlz6jzsrxpip9";
+    hash="1rs9v95g19ri6ra2m921jf2yr9avqnzfybrqxilsld98xpqx56vg";
+    url="https://freefr.dl.sourceforge.net/project/asymptote/2.44/asymptote-2.44.src.tgz";
+    sha256="1rs9v95g19ri6ra2m921jf2yr9avqnzfybrqxilsld98xpqx56vg";
   };
   buildInputs = [
-   freeglut ghostscriptX imagemagick fftw 
-   boehmgc mesa_glu mesa_noglu mesa_noglu.osmesa ncurses readline gsl libsigsegv
-   python zlib perl texLive texinfo xz
-  ];
+   ghostscriptX imagemagick fftw
+   boehmgc ncurses readline gsl libsigsegv
+   python zlib perl texLive texinfo xz ]
+   ++ stdenv.lib.optionals stdenv.isLinux
+     [ freeglut libGLU libGL mesa_noglu.osmesa ]
+   ++ stdenv.lib.optionals stdenv.isDarwin
+     (with darwin.apple_sdk.frameworks; [ OpenGL GLUT Cocoa ])
+   ;
 in
 stdenv.mkDerivation {
   inherit (s) name version;
@@ -47,15 +50,19 @@ stdenv.mkDerivation {
     sed -i -e 's|(asymptote/asymptote)|(asymptote)|' $out/share/info/asymptote.info
     rmdir $out/share/info/asymptote
     rm $out/share/info/dir
+
+    rm -rfv "$out"/share/texmf
+    mkdir -pv "$out"/share/emacs/site-lisp/${s.name}
+    mv -v "$out"/share/asymptote/*.el "$out"/share/emacs/site-lisp/${s.name}
   '';
 
   enableParallelBuilding = true;
 
-  meta = {
+  meta = with stdenv.lib; {
     inherit (s) version;
     description =  "A tool for programming graphics intended to replace Metapost";
-    license = stdenv.lib.licenses.gpl3Plus;
-    maintainers = [stdenv.lib.maintainers.raskin stdenv.lib.maintainers.peti];
-    platforms = stdenv.lib.platforms.linux;
+    license = licenses.gpl3Plus;
+    maintainers = [ maintainers.raskin maintainers.peti ];
+    platforms = platforms.linux ++ platforms.darwin;
   };
 }

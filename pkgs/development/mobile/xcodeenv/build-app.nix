@@ -1,18 +1,18 @@
 {stdenv, xcodewrapper}:
 { name
 , src
-, sdkVersion ? "6.1"
+, sdkVersion ? "11.2"
 , target ? null
 , configuration ? null
 , scheme ? null
 , sdk ? null
-, arch ? null
 , xcodeFlags ? ""
 , release ? false
 , codeSignIdentity ? null
 , certificateFile ? null
 , certificatePassword ? null
 , provisioningProfile ? null
+, signMethod ? null
 , generateIPA ? false
 , generateXCArchive ? false
 , enableWirelessDistribution ? false
@@ -22,7 +22,7 @@
 , title ? null
 }:
 
-assert release -> codeSignIdentity != null && certificateFile != null && certificatePassword != null && provisioningProfile != null;
+assert release -> codeSignIdentity != null && certificateFile != null && certificatePassword != null && provisioningProfile != null && signMethod != null;
 assert enableWirelessDistribution -> installURL != null && bundleId != null && version != null && title != null;
 
 let
@@ -35,11 +35,6 @@ let
       if release then "Release" else "Debug"
     else configuration;
     
-  _arch = if arch == null
-    then
-      if release then "armv7" else "x86_64"
-    else arch;
-
   _sdk = if sdk == null
     then
       if release then "iphoneos" + sdkVersion else "iphonesimulator" + sdkVersion
@@ -68,6 +63,9 @@ stdenv.mkDerivation {
         # Import the certificate into the keychain
         security import ${certificateFile} -k $keychainName -P "${certificatePassword}" -A 
 
+        # Grant the codesign utility permissions to read from the keychain
+        security set-key-partition-list -S apple-tool:,apple: -s -k "" $keychainName
+        
         # Determine provisioning ID
         PROVISIONING_PROFILE=$(grep UUID -A1 -a ${provisioningProfile} | grep -o "[-A-Za-z0-9]\{36\}")
 
@@ -83,13 +81,36 @@ stdenv.mkDerivation {
       ''}
 
     # Do the building
-    xcodebuild -target ${_target} -configuration ${_configuration} ${stdenv.lib.optionalString (scheme != null) "-scheme ${scheme}"} -sdk ${_sdk} -arch ${_arch} ONLY_ACTIVE_ARCH=NO VALID_ARCHS="${_arch}" CONFIGURATION_TEMP_DIR=$TMPDIR CONFIGURATION_BUILD_DIR=$out ${if generateXCArchive then "archive" else ""} ${xcodeFlags} ${if release then ''"CODE_SIGN_IDENTITY=${codeSignIdentity}" PROVISIONING_PROFILE=$PROVISIONING_PROFILE OTHER_CODE_SIGN_FLAGS="--keychain $HOME/Library/Keychains/$keychainName"'' else ""}
-    
+    export LD=clang # To avoid problem with -isysroot parameter that is unrecognized by the stock ld. Comparison with an impure build shows that it uses clang instead. Ugly, but it works
+
+    xcodebuild -target ${_target} -configuration ${_configuration} ${stdenv.lib.optionalString (scheme != null) "-scheme ${scheme}"} -sdk ${_sdk} TARGETED_DEVICE_FAMILY="1, 2" ONLY_ACTIVE_ARCH=NO CONFIGURATION_TEMP_DIR=$TMPDIR CONFIGURATION_BUILD_DIR=$out ${if generateIPA || generateXCArchive then "-archivePath \"${name}.xcarchive\" archive" else ""} ${if release then ''PROVISIONING_PROFILE=$PROVISIONING_PROFILE OTHER_CODE_SIGN_FLAGS="--keychain $HOME/Library/Keychains/$keychainName-db"'' else ""} ${xcodeFlags}
+
     ${stdenv.lib.optionalString release ''
       ${stdenv.lib.optionalString generateIPA ''
+        # Create export plist file
+        cat > "${name}.plist" <<EOF
+        <?xml version="1.0" encoding="UTF-8"?>
+        <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+        <plist version="1.0">
+        <dict>
+            <key>provisioningProfiles</key>
+            <dict>
+                <key>${bundleId}</key>
+                <string>$PROVISIONING_PROFILE</string>
+            </dict>
+            <key>method</key>
+            <string>${signMethod}</string>
+            ${stdenv.lib.optionalString (signMethod == "enterprise" || signMethod == "ad-hoc") ''
+              <key>compileBitcode</key>
+              <false/>
+            ''}
+        </dict>
+        </plist>
+        EOF
+
         # Produce an IPA file
-        xcrun -sdk iphoneos PackageApplication -v $out/*.app -o "$out/${name}.ipa"
-        
+        xcodebuild -exportArchive -archivePath "${name}.xcarchive" -exportOptionsPlist "${name}.plist" -exportPath $out
+
         # Add IPA to Hydra build products
         mkdir -p $out/nix-support
         echo "file binary-dist \"$(echo $out/*.ipa)\"" > $out/nix-support/hydra-build-products
@@ -99,6 +120,10 @@ stdenv.mkDerivation {
           sed -e "s|@INSTALL_URL@|${installURL}?bundleId=${bundleId}\&amp;version=${version}\&amp;title=$appname|" ${./install.html.template} > $out/$appname.html
           echo "doc install \"$out/$appname.html\"" >> $out/nix-support/hydra-build-products
         ''}
+      ''}
+      ${stdenv.lib.optionalString generateXCArchive ''
+        mkdir -p $out
+        mv "${name}.xcarchive" $out
       ''}
       
       # Delete our temp keychain

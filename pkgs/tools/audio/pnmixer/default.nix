@@ -1,27 +1,23 @@
-{ stdenv, fetchFromGitHub, pkgconfig, intltool, autoconf, automake, alsaLib, gtk3, glibc, libnotify, libX11 }:
+{ stdenv, fetchFromGitHub, cmake, pkgconfig, gettext, alsaLib, gtk3, glib, libnotify, libX11, pcre }:
 
 stdenv.mkDerivation rec {
   name = "pnmixer-${version}";
-  version = "0.7";
+  version = "0.7.2";
 
   src = fetchFromGitHub {
     owner = "nicklan";
     repo = "pnmixer";
     rev = "v${version}";
-    sha256 = "077l28qhr82ifqfwc2nqi5q1hmi6dyqqbhmjcsn27p4y433f3rpb";
+    sha256 = "0416pa933ddf4b7ph9zxhk5jppkk7ppcq1aqph6xsrfnka4yb148";
   };
 
-  nativeBuildInputs = [ pkgconfig autoconf automake intltool ];
+  nativeBuildInputs = [ cmake pkgconfig gettext ];
 
-  buildInputs = [ alsaLib gtk3 glibc libnotify libX11 ];
-
-  preConfigure = ''
-    ./autogen.sh
-  '';
+  buildInputs = [ alsaLib gtk3 glib libnotify libX11 pcre ];
 
   meta = with stdenv.lib; {
     homepage = https://github.com/nicklan/pnmixer;
-    description = "ALSA mixer for the system tray";
+    description = "ALSA volume mixer for the system tray";
     license = licenses.gpl3;
     platforms = platforms.linux;
     maintainers = with maintainers; [ campadrenalin romildo ];

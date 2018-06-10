@@ -1,18 +1,19 @@
-{stdenv, buildOcaml, fetchurl, libffi, pkgconfig, ncurses}:
+{ stdenv, buildOcaml, fetchzip, libffi, pkgconfig, ncurses, integers }:
 
 buildOcaml rec {
   name = "ctypes";
-  version = "0.4.1";
+  version = "0.13.1";
 
   minimumSupportedOcamlVersion = "4";
 
-  src = fetchurl {
-    url = "https://github.com/ocamllabs/ocaml-ctypes/archive/${version}.tar.gz";
-    sha256 = "74564e049de5d3c0e76ea284c225cb658ac1a2b483345be1efb9be4b3c1702f5";
+  src = fetchzip {
+    url = "https://github.com/ocamllabs/ocaml-ctypes/archive/67e711ec891e087fbe1e0b4665aa525af4eaa409.tar.gz";
+    sha256 = "1z84s5znr3lj84rzv6m37xxj9h7fwx4qiiykx3djf52qgk1rb2xb";
   };
 
-  buildInputs = [ ncurses pkgconfig ];
-  propagatedBuildInputs = [ libffi ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ ncurses ];
+  propagatedBuildInputs = [ integers libffi ];
 
   hasSharedObjects = true;
 

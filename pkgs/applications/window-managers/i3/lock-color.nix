@@ -1,17 +1,23 @@
-{ stdenv, fetchFromGitHub, which, pkgconfig, libxcb, xcbutilkeysyms
-, xcbutilimage, pam, libX11, libev, cairo, libxkbcommon, libxkbfile }:
+{ stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, libxcb,
+  xcbutilkeysyms , xcbutilimage, pam, libX11, libev, cairo, libxkbcommon,
+  libxkbfile, libjpeg_turbo
+}:
 
 stdenv.mkDerivation rec {
-  rev = "63a4c23ec6f0b3f62144122a4277d51caf023e4f";
-  name = "i3lock-color-2.7_rev${builtins.substring 0 7 rev}";
+  version = "2.11-c";
+  name = "i3lock-color-${version}";
+
   src = fetchFromGitHub {
-    owner = "Arcaena";
+    owner = "PandorasFox";
     repo = "i3lock-color";
-    inherit rev;
-    sha256 = "1wfp0p85h45l50l6zfk5cr9ynka60vhjlgnyk8mqd5fp0w4ibxip";
+    rev = version;
+    sha256 = "1myq9fazkwd776agrnj27bm5nwskvss9v9a5qb77n037dv8d0rdw";
   };
-  buildInputs = [ which pkgconfig libxcb xcbutilkeysyms xcbutilimage pam libX11
-    libev cairo libxkbcommon libxkbfile ];
+
+  nativeBuildInputs = [ autoreconfHook pkgconfig ];
+  buildInputs = [ libxcb xcbutilkeysyms xcbutilimage pam libX11
+    libev cairo libxkbcommon libxkbfile libjpeg_turbo ];
+
   makeFlags = "all";
   preInstall = ''
     mkdir -p $out/share/man/man1
@@ -19,12 +25,38 @@ stdenv.mkDerivation rec {
   installFlags = "PREFIX=\${out} SYSCONFDIR=\${out}/etc MANDIR=\${out}/share/man";
   postInstall = ''
     mv $out/bin/i3lock $out/bin/i3lock-color
+    mv $out/share/man/man1/i3lock.1 $out/share/man/man1/i3lock-color.1
+    sed -i 's/\(^\|\s\|"\)i3lock\(\s\|$\)/\1i3lock-color\2/g' $out/share/man/man1/i3lock-color.1
   '';
   meta = with stdenv.lib; {
-    description = "A simple screen locker like slock";
-    homepage = http://i3wm.org/i3lock/;
+    description = "A simple screen locker like slock, enhanced version with extra configuration options";
+    longDescription = ''
+      Simple screen locker. After locking, a colored background (default: white) or
+      a configurable image is shown, and a ring-shaped unlock-indicator gives feedback
+      for every keystroke. After entering your password, the screen is unlocked again.
+
+      i3lock-color is forked from i3lock (https://i3wm.org/i3lock/) with the following
+      enhancements / additional configuration options:
+
+      - indicator:
+        - shape: ring or bar
+        - size: configurable
+        - all colors: configurable
+        - all texts: configurable
+        - visibility: can be always visible, can be restricted to some screens
+
+      - background: optionally show a blurred screen instead of a single color
+
+      - more information: show text at configurable positions:
+        - clock: time/date with configurable format
+        - keyboard-layout
+    '';
+    homepage = http://github.com/PandorasFox/i3lock-color;
     maintainers = with maintainers; [ garbas malyn ];
     license = licenses.bsd3;
-    platforms = platforms.all;
+
+    # Needs the SSE2 instruction set. See upstream issue
+    # https://github.com/chrjguill/i3lock-color/issues/44
+    platforms = platforms.x86;
   };
 }

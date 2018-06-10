@@ -8,8 +8,9 @@ stdenv.mkDerivation rec {
   version = "1.0.6";
   name = "${baseName}-${version}";
 
+  nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
-    autoconf automake libtool pkgconfig asciidoc libxslt libxml2
+    autoconf automake libtool asciidoc libxslt libxml2
     docbook_xml_dtd_45 docbook_xml_xslt
     libarchive lzma
   ];
@@ -31,6 +32,6 @@ stdenv.mkDerivation rec {
     description = ''A parallel compressor/decompressor for xz format'';
     license = stdenv.lib.licenses.bsd2;
     maintainers = [stdenv.lib.maintainers.raskin];
-    platforms = stdenv.lib.platforms.linux;
+    platforms = stdenv.lib.platforms.unix;
   };
 }

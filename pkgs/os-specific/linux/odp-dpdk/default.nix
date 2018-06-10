@@ -1,33 +1,27 @@
-{ stdenv, fetchgit, autoreconfHook, openssl, libpcap, dpdk }:
+{ stdenv, fetchurl, autoreconfHook, pkgconfig
+, dpdk, libconfig, libpcap, numactl, openssl
+}:
 
 stdenv.mkDerivation rec {
   name = "odp-dpdk-${version}";
-  version = "2016-08-16";
+  version = "1.19.0.0_DPDK_17.11";
 
-  src = fetchgit {
-    url = "https://git.linaro.org/lng/odp-dpdk.git";
-    rev = "7068593f600e2b5a23ee1780d5c722c54e966df1";
-    sha256 = "0pz0zkxqaac193x21wmj3x88gfza6bvhmv5yf8fzkpm9zxnl2sy4";
+  src = fetchurl {
+    url = "https://git.linaro.org/lng/odp-dpdk.git/snapshot/${name}.tar.gz";
+    sha256 = "05bwjaxl9hqc6fbkp95nniq11g3kvzmlxw0bq55i7p2v35nv38px";
   };
 
-  nativeBuildInputs = [ autoreconfHook ];
-  buildInputs = [ openssl dpdk libpcap ];
+  nativeBuildInputs = [ autoreconfHook pkgconfig ];
+  buildInputs = [ dpdk libconfig libpcap numactl openssl ];
 
-  RTE_SDK = "${dpdk}";
+  RTE_SDK = "${dpdk}/share/dpdk";
   RTE_TARGET = "x86_64-native-linuxapp-gcc";
-
-  patchPhase = ''
-    substituteInPlace scripts/git_hash.sh --replace /bin/bash /bin/sh
-    substituteInPlace scripts/get_impl_str.sh --replace /bin/bash /bin/sh
-    echo -n ${version} > .scmversion
-  '';
 
   dontDisableStatic = true;
 
   configureFlags = [
-    "--with-platform=linux-dpdk"
     "--disable-shared"
-    "--with-sdk-install-path=${dpdk}/${RTE_TARGET}"
+    "--with-dpdk-path=${dpdk}"
   ];
 
   meta = with stdenv.lib; {

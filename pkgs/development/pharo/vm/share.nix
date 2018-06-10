@@ -28,7 +28,12 @@ stdenv.mkDerivation rec {
 
   sources50Zip = fetchurl {
     url = http://files.pharo.org/sources/PharoV50.sources.zip;
-    sha256 = "0ykl1y0a4yy5qn8fwz0wkl8fcn4pqv9q0w0r2llhzdz3jdg1k69g";
+    sha256 = "1vmcah03zacvj1r2x27vdp63g6rcbz3prjd5sjy1z0a9xsjmqp25";
+  };
+
+  sources60Zip = fetchurl {
+    url = http://files.pharo.org/sources/PharoV60.sources.zip;
+    sha256 = "0xbdi679ryb2zg412xy6zkh22l20pmbl92m3qhfgzjvgybna8z2a";
   };
 
   buildInputs = [ unzip ];
@@ -43,12 +48,13 @@ stdenv.mkDerivation rec {
     unzip ${sources30Zip} -d $prefix/lib/
     unzip ${sources40Zip} -d $prefix/lib/
     unzip ${sources50Zip} -d $prefix/lib/
+    unzip ${sources60Zip} -d $prefix/lib/
   '';
 
   meta = {
     description = "Shared files for Pharo";
     homepage = http://pharo.org;
     license = stdenv.lib.licenses.mit;
-    maintainers = [ stdenv.lib.maintainers.DamienCassou ];
+    maintainers = [ ];
   };
 }

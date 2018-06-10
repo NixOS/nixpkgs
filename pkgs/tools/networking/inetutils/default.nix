@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, ncurses }:
+{ stdenv, lib, fetchurl, ncurses, perl, help2man }:
 
 stdenv.mkDerivation rec {
   name = "inetutils-1.9.4";
@@ -8,21 +8,28 @@ stdenv.mkDerivation rec {
     sha256 = "05n65k4ixl85dc6rxc51b1b732gnmm8xnqi424dy9f1nz7ppb3xy";
   };
 
-  buildInputs = [ ncurses /* for `talk' */ ];
+  patches = [
+    ./whois-Update-Canadian-TLD-server.patch
+    ./service-name.patch
+  ];
 
-  configureFlags = "--with-ncurses-include-dir=${ncurses.dev}/include";
+  buildInputs = [ ncurses /* for `talk' */ perl /* for `whois' */ help2man ];
+
+  configureFlags = [ "--with-ncurses-include-dir=${ncurses.dev}/include" ]
+  ++ lib.optionals stdenv.hostPlatform.isMusl [ # Musl doesn't define rcmd
+    "--disable-rcp"
+    "--disable-rsh"
+    "--disable-rlogin"
+    "--disable-rexec"
+  ] ++ lib.optional stdenv.isDarwin  "--disable-servers";
 
   # Test fails with "UNIX socket name too long", probably because our
   # $TMPDIR is too long.
-  #doCheck = true;
+  doCheck = false;
 
-  postInstall = ''
-    # XXX: These programs are normally installed setuid but since it
-    # fails, they end up being non-executable, hence this hack.
-    chmod +x $out/bin/{ping,ping6,rcp,rlogin,rsh,traceroute}
-  '';
+  installFlags = [ "SUIDMODE=" ];
 
-  meta = {
+  meta = with lib; {
     description = "Collection of common network programs";
 
     longDescription =
@@ -33,9 +40,9 @@ stdenv.mkDerivation rec {
       '';
 
     homepage = http://www.gnu.org/software/inetutils/;
-    license = stdenv.lib.licenses.gpl3Plus;
+    license = licenses.gpl3Plus;
 
-    maintainers = [ ];
-    platforms = stdenv.lib.platforms.gnu;
+    maintainers = with maintainers; [ matthewbauer ];
+    platforms = platforms.unix;
   };
 }

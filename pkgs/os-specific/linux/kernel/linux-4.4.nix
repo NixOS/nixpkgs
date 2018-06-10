@@ -1,19 +1,11 @@
-{ stdenv, fetchurl, perl, buildLinux, ... } @ args:
+{ stdenv, buildPackages, hostPlatform, fetchurl, perl, buildLinux, ... } @ args:
 
-import ./generic.nix (args // rec {
-  version = "4.4.20";
+buildLinux (args // rec {
+  version = "4.4.136";
   extraMeta.branch = "4.4";
 
   src = fetchurl {
     url = "mirror://kernel/linux/kernel/v4.x/linux-${version}.tar.xz";
-    sha256 = "1ammaspil0xxw32c5j4mznkhfbpz1i14rm4n148d0fa1m5qbqcfj";
+    sha256 = "0svb6qbhc376jk26r67qssh7lradx63s60qlm1q2kd4xjhxyj5a3";
   };
-
-  kernelPatches = args.kernelPatches;
-
-  features.iwlwifi = true;
-  features.efiBootStub = true;
-  features.needsCifsUtils = true;
-  features.canDisableNetfilterConntrackHelpers = true;
-  features.netfilterRPFilter = true;
 } // (args.argsOverride or {}))

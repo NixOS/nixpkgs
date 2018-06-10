@@ -26,9 +26,12 @@ stdenv.mkDerivation rec {
       ./arch.patch
     ];
 
-  buildInputs = [ pkgconfig SDL libogg libvorbis zlib unzip ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ SDL libogg libvorbis zlib unzip ];
 
   enableParallelBuilding = true;
+
+  makeFlags = [ "DESTDIR=$(out)" ];
 
   postInstall =
     ''

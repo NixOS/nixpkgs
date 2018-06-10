@@ -11,16 +11,22 @@ let
   });
   versionSpec = {
     "latest" = {
+      name = "1.0.0";
+      rev = "refs/tags/1.0.0";
+      sha256 = "16r0lwhxl8g71masmfbjr7s7m7fah4ii4smi1g8zpbpiqjz48ryb";
+      patches = [];
+    };
+    "0.9.9" = {
       name = "0.9.9";
       rev = "refs/tags/0.9.9";
       sha256 = "0hmvbdk2yr5wrkiwn9dfzf65s4xc2qifj0sn6w2mghzp96cph79k";
       patches = [ ./fix-module-path.patch ];
     };
     "git" = {
-        name = "git-20160617";
-        rev = "7d5b5eb76aa656baf5a8713f514937765f66b10a";
-	sha256 = "1jpj978r54086hypjxqxi0r3zacqpkr61dp6dbi0lykgx7m5bjfb";
-	patches = [];
+        name = "git-20170203";
+        rev = "d20f24e58ab62afceae2afb6262ffef3cc318b97";
+        sha256 = "1gi29ds1x6dq7lz8lamnhcvcrr3cvvrg5yappfkggyhyvib1ii70";
+        patches = [];
     };
   }.${version};
 in
@@ -42,6 +48,7 @@ stdenv.mkDerivation rec {
     sbcl
     lispPackages.clx
     lispPackages.cl-ppcre
+    lispPackages.alexandria
     xdpyinfo
   ];
 
@@ -83,14 +90,15 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
-    inherit sbcl lispPackages;
+    inherit sbcl lispPackages contrib;
   };
 
   meta = with stdenv.lib; {
     description = "A tiling window manager for X11";
     homepage    = https://github.com/stumpwm/;
     license     = licenses.gpl2Plus;
-    maintainers = with maintainers; [ hiberno the-kenny ];
+    maintainers = with maintainers; [ the-kenny ];
     platforms   = platforms.linux;
+    broken = true; # 2018-04-11
   };
 }

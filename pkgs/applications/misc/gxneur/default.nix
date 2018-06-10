@@ -8,8 +8,9 @@ stdenv.mkDerivation {
     sha256 = "f093428a479158247a7ff8424f0aec9af9f7b1d05b191cf30b7c534965a6839f";
   };
 
+  nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
-    xorg.libX11 pkgconfig  glib gtk2 xorg.libXpm xorg.libXt xorg.libXext xneur_0_13
+    xorg.libX11 glib gtk2 xorg.libXpm xorg.libXt xorg.libXext xneur_0_13
     libglade GConf pcre
   ];
 

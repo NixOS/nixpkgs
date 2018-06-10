@@ -104,7 +104,6 @@ in
         enable = mkOption {
           type = types.bool;
           default = any isEnabled services;
-          example = true;
           description = ''
             Whether to enable the Zebra routing manager.
 
@@ -134,7 +133,7 @@ in
     users.groups = {
       quagga = {};
       # Members of the quaggavty group can use vtysh to inspect the Quagga daemons
-      quaggavty = {};
+      quaggavty = { members = [ "quagga" ]; };
     };
 
     systemd.services =

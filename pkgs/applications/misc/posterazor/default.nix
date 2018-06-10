@@ -10,7 +10,8 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = [ "format" ];
 
-  buildInputs = [ cmake unzip pkgconfig libXpm fltk13 freeimage ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ cmake unzip libXpm fltk13 freeimage ];
 
   unpackPhase = ''
     unzip $src -d posterazor
@@ -28,9 +29,9 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    homepage = "http://posterazor.sourceforge.net/";
+    homepage = http://posterazor.sourceforge.net/;
     description = "Cuts a raster image into pieces which can afterwards be printed out and assembled to a poster";
     maintainers = [ stdenv.lib.maintainers.madjar ];
-    platforms = stdenv.lib.platforms.all;
+    platforms = stdenv.lib.platforms.linux;
   };
 }

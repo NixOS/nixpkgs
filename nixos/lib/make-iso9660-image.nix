@@ -1,4 +1,4 @@
-{ stdenv, perl, pathsFromGraph, xorriso, syslinux
+{ stdenv, perl, closureInfo, xorriso, syslinux
 
 , # The file name of the resulting ISO image.
   isoName ? "cd.iso"
@@ -48,9 +48,9 @@ assert usbBootable -> isohybridMbrImage != "";
 stdenv.mkDerivation {
   name = isoName;
   builder = ./make-iso9660-image.sh;
-  buildInputs = [perl xorriso syslinux];
+  buildInputs = [ xorriso syslinux ];
 
-  inherit isoName bootable bootImage compressImage volumeID pathsFromGraph efiBootImage efiBootable isohybridMbrImage usbBootable;
+  inherit isoName bootable bootImage compressImage volumeID efiBootImage efiBootable isohybridMbrImage usbBootable;
 
   # !!! should use XML.
   sources = map (x: x.source) contents;
@@ -61,6 +61,5 @@ stdenv.mkDerivation {
   symlinks = map (x: x.symlink) storeContents;
 
   # For obtaining the closure of `storeContents'.
-  exportReferencesGraph =
-    map (x: [("closure-" + baseNameOf x.object) x.object]) storeContents;
+  closureInfo = closureInfo { rootPaths = map (x: x.object) storeContents; };
 }

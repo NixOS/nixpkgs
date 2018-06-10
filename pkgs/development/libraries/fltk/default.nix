@@ -1,25 +1,21 @@
 { stdenv, composableDerivation, fetchurl, pkgconfig, xlibsWrapper, inputproto, libXi
-, freeglut, mesa, libjpeg, zlib, libXinerama, libXft, libpng
+, freeglut, libGLU_combined, libjpeg, zlib, libXinerama, libXft, libpng
 , cfg ? {}
 , darwin, libtiff, freetype
 }:
 
 let inherit (composableDerivation) edf; in
 
-let version = "1.3.3"; in
+let version = "1.3.4"; in
 composableDerivation.composableDerivation {} {
   name = "fltk-${version}";
 
   src = fetchurl {
     url = "http://fltk.org/pub/fltk/${version}/fltk-${version}-source.tar.gz";
-    sha256 = "15qd7lkz5d5ynz70xhxhigpz3wns39v9xcf7ggkl0792syc8sfgq";
+    sha256 = "13y57pnayrkfzm8azdfvysm8b77ysac8zhhdsh8kxmb0x3203ay8";
   };
 
-  # http://www.fltk.org/str.php?L3156
-  postPatch = ''
-    substituteInPlace FL/x.H \
-      --replace 'class Fl_XFont_On_Demand' 'class FL_EXPORT Fl_XFont_On_Demand'
-  '';
+  patches = stdenv.lib.optionals stdenv.isDarwin [ ./nsosv.patch ];
 
   nativeBuildInputs = [ pkgconfig ];
   propagatedBuildInputs = [ inputproto ]
@@ -33,7 +29,7 @@ composableDerivation.composableDerivation {} {
     # this could be tidied up (?).. eg why does it require freeglut without glSupport?
     edf { name = "cygwin"; }  #         use the CygWin libraries default=no
     // edf { name = "debug"; }  #          turn on debugging default=no
-    // edf { name = "gl"; enable = { buildInputs = [ mesa ]; }; }  #             turn on OpenGL support default=yes
+    // edf { name = "gl"; enable = { buildInputs = [ libGLU_combined ]; }; }  #             turn on OpenGL support default=yes
     // edf { name = "shared"; }  #         turn on shared libraries default=no
     // edf { name = "threads"; }  #        enable multi-threading support
     // edf { name = "quartz"; enable = { buildInputs = "quartz"; }; }  # don't konw yet what quartz is #         use Quartz instead of Quickdraw (default=no)

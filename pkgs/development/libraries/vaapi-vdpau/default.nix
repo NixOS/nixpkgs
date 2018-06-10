@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, libvdpau, mesa, libva, pkgconfig }:
+{ stdenv, fetchurl, libvdpau, libGLU_combined, libva, pkgconfig }:
 let
   libvdpau08patch = (fetchurl { url = "http://sources.gentoo.org/cgi-bin/viewvc.cgi/gentoo-x86/x11-libs/libva-vdpau-driver/files/libva-vdpau-driver-0.7.4-libvdpau-0.8.patch?revision=1.1";
                                 name = "libva-vdpau-driver-0.7.4-libvdpau-0.8.patch";
@@ -19,7 +19,8 @@ stdenv.mkDerivation rec {
                           sha256 = "166svcav6axkrlb3i4rbf6dkwjnqdf69xw339az1f5yabj72pqqs";
                         }) ];
 
-  buildInputs = [ libvdpau mesa libva pkgconfig ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ libvdpau libGLU_combined libva ];
 
   preConfigure = ''
     patch -p0 < ${libvdpau08patch}  # use -p0 instead of -p1
@@ -28,7 +29,7 @@ stdenv.mkDerivation rec {
 
 
   meta = {
-    homepage = http://cgit.freedesktop.org/vaapi/vdpau-driver/;
+    homepage = https://cgit.freedesktop.org/vaapi/vdpau-driver/;
     license = stdenv.lib.licenses.gpl2Plus;
     description = "VDPAU driver for the VAAPI library";
     platforms = stdenv.lib.platforms.linux;

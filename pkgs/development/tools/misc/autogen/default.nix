@@ -1,18 +1,31 @@
-{ stdenv, fetchurl, which, pkgconfig, perl, guile, libxml2 }:
+{ stdenv, buildPackages, fetchurl, which, pkgconfig, texinfo, perl, guile, libxml2 }:
 
 stdenv.mkDerivation rec {
   name = "autogen-${version}";
-  version = "5.18.7";
+  version = "5.18.12";
 
   src = fetchurl {
-    url = "mirror://gnu/autogen/autogen-${version}.tar.xz";
-    sha256 = "01d4m8ckww12sy50vgyxlnz83z9dxqpyqp153cscncc9w6jq19d7";
+    url = "mirror://gnu/autogen/rel${version}/autogen-${version}.tar.xz";
+    sha256 = "1n5zq4872sakvz9c7ncsdcfp0z8rsybsxvbmhkpbd19ii0pacfxy";
   };
 
   outputs = [ "bin" "dev" "lib" "out" "man" "info" ];
 
-  nativeBuildInputs = [ which pkgconfig perl ];
-  buildInputs = [ guile libxml2 ];
+  nativeBuildInputs = [ which pkgconfig perl ]
+    # autogen needs a build autogen when cross-compiling
+    ++ stdenv.lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+      buildPackages.buildPackages.autogen buildPackages.texinfo ];
+  buildInputs = [
+    guile libxml2
+  ];
+
+  configureFlags = stdenv.lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+    "--with-libxml2=${libxml2.dev}"
+    "--with-libxml2-cflags=-I${libxml2.dev}/include/libxml2"
+    # the configure check for regcomp wants to run a host program
+    "libopts_cv_with_libregex=yes"
+    #"MAKEINFO=${buildPackages.texinfo}/bin/makeinfo"
+  ];
 
   postPatch = ''
     # Fix a broken sed expression used for detecting the minor

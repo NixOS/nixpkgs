@@ -1,5 +1,5 @@
 { stdenv, fetchurl, fetchpatch, scons, boost, gperftools, pcre-cpp, snappy
-, zlib, libyamlcpp, sasl, openssl, libpcap, wiredtiger
+, zlib, libyamlcpp, sasl, openssl, libpcap, wiredtiger, Security
 }:
 
 # Note:
@@ -7,7 +7,7 @@
 
 with stdenv.lib;
 
-let version = "3.2.9";
+let version = "3.4.10";
     system-libraries = [
       "pcre"
       #"asio" -- XXX use package?
@@ -22,8 +22,8 @@ let version = "3.2.9";
 
     buildInputs = [
       sasl boost gperftools pcre-cpp snappy
-      zlib libyamlcpp sasl openssl libpcap
-    ]; # ++ optional stdenv.is64bit wiredtiger;
+      zlib libyamlcpp sasl openssl.dev openssl.out libpcap
+    ] ++ stdenv.lib.optionals stdenv.isDarwin [ Security ];
 
     other-args = concatStringsSep " " ([
       "--ssl"
@@ -43,8 +43,8 @@ in stdenv.mkDerivation rec {
   name = "mongodb-${version}";
 
   src = fetchurl {
-    url = "http://downloads.mongodb.org/src/mongodb-src-r${version}.tar.gz";
-    sha256 = "06q6j2bjy31pjwqws53wdpmn2x8w2hafzsnv1s3wx15pc9vq3y15";
+    url = "https://fastdl.mongodb.org/src/mongodb-src-r${version}.tar.gz";
+    sha256 = "1wz2mhl9z0b1bdkg6m8v8mvw9k60mdv5ybq554xn3yjj9z500f24";
   };
 
   nativeBuildInputs = [ scons ];
@@ -52,12 +52,6 @@ in stdenv.mkDerivation rec {
 
   patches =
     [
-      # When not building with the system valgrind, the build should use the
-      # vendored header file - regardless of whether or not we're using the system
-      # tcmalloc - so we need to lift the include path manipulation out of the
-      # conditional.
-      ./valgrind-include.patch
-
       # MongoDB keeps track of its build parameters, which tricks nix into
       # keeping dependencies to build inputs in the final output.
       # We remove the build flags from buildInfo data.
@@ -86,6 +80,8 @@ in stdenv.mkDerivation rec {
     substituteInPlace src/mongo/db/storage/storage_options.h \
       --replace 'engine("wiredTiger")' 'engine("mmapv1")'
   '';
+
+  NIX_CFLAGS_COMPILE = stdenv.lib.optional stdenv.cc.isClang "-Wno-unused-command-line-argument";
 
   buildPhase = ''
     scons -j $NIX_BUILD_CORES core --release ${other-args}

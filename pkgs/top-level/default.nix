@@ -1,121 +1,99 @@
-/* This file composes the Nix Packages collection.  That is, it
-   imports the functions that build the various packages, and calls
-   them with appropriate arguments.  The result is a set of all the
-   packages in the Nix Packages collection for some particular
-   platform. */
+/* This function composes the Nix Packages collection. It:
 
+     1. Applies the final stage to the given `config` if it is a function
 
-{ # The system (e.g., `i686-linux') for which to build the packages.
-  system
+     2. Infers an appropriate `platform` based on the `system` if none is
+        provided
 
-, # The standard environment to use.  Only used for bootstrapping.  If
-  # null, the default standard environment is used.
-  bootStdenv ? null
+     3. Defaults to no non-standard config and no cross-compilation target
 
-, # Non-GNU/Linux OSes are currently "impure" platforms, with their libc
-  # outside of the store.  Thus, GCC, GFortran, & co. must always look for
-  # files in standard system directories (/usr/include, etc.)
-  noSysDirs ? (system != "x86_64-freebsd" && system != "i686-freebsd"
-               && system != "x86_64-solaris"
-               && system != "x86_64-kfreebsd-gnu")
+     4. Uses the above to infer the default standard environment's (stdenv's)
+        stages if no stdenv's are provided
+
+     5. Folds the stages to yield the final fully booted package set for the
+        chosen stdenv
+
+   Use `impure.nix` to also infer the `system` based on the one on which
+   evaluation is taking place, and the configuration from environment variables
+   or dot-files. */
+
+{ # The system packages will be built on. See the manual for the
+  # subtle division of labor between these two `*System`s and the three
+  # `*Platform`s.
+  localSystem
+
+, # The system packages will ultimately be run on. Null if the two should be the
+  # same.
+  crossSystem ? null
 
 , # Allow a configuration attribute set to be passed in as an argument.
   config ? {}
 
-, crossSystem ? null
-, platform ? null
-}:
+, # List of overlays layers used to extend Nixpkgs.
+  overlays ? []
 
+, # A function booting the final package set for a specific standard
+  # environment. See below for the arguments given to that function, the type of
+  # list it returns.
+  stdenvStages ? import ../stdenv
+} @ args:
 
-let configExpr = config; platform_ = platform; in # rename the function arguments
+let # Rename the function arguments
+  configExpr = config;
+  crossSystem0 = crossSystem;
 
-let
-
+in let
   lib = import ../../lib;
 
   # Allow both:
   # { /* the config */ } and
   # { pkgs, ... } : { /* the config */ }
   config =
-    if builtins.isFunction configExpr
+    if lib.isFunction configExpr
     then configExpr { inherit pkgs; }
     else configExpr;
 
-  # Allow setting the platform in the config file. Otherwise, let's use a reasonable default (pc)
+  # From a minimum of `system` or `config` (actually a target triple, *not*
+  # nixpkgs configuration), infer the other one and platform as needed.
+  localSystem = lib.systems.elaborate (
+    # Allow setting the platform in the config file. This take precedence over
+    # the inferred platform, but not over an explicitly passed-in one.
+    builtins.intersectAttrs { platform = null; } config
+    // args.localSystem);
 
-  platformAuto = let
-      platforms = (import ./platforms.nix);
-    in
-      if system == "armv6l-linux" then platforms.raspberrypi
-      else if system == "armv7l-linux" then platforms.armv7l-hf-multiplatform
-      else if system == "armv5tel-linux" then platforms.sheevaplug
-      else if system == "mips64el-linux" then platforms.fuloong2f_n32
-      else if system == "x86_64-linux" then platforms.pc64
-      else if system == "i686-linux" then platforms.pc32
-      else platforms.pcBase;
+  crossSystem = lib.mapNullable lib.systems.elaborate crossSystem0;
 
-  platform = if platform_ != null then platform_
-    else config.platform or platformAuto;
+  # A few packages make a new package set to draw their dependencies from.
+  # (Currently to get a cross tool chain, or forced-i686 package.) Rather than
+  # give `all-packages.nix` all the arguments to this function, even ones that
+  # don't concern it, we give it this function to "re-call" nixpkgs, inheriting
+  # whatever arguments it doesn't explicitly provide. This way,
+  # `all-packages.nix` doesn't know more than it needs too.
+  #
+  # It's OK that `args` doesn't include default arguemtns from this file:
+  # they'll be deterministically inferred. In fact we must *not* include them,
+  # because it's important that if some parameter which affects the default is
+  # substituted with a different argument, the default is re-inferred.
+  #
+  # To put this in concrete terms, this function is basically just used today to
+  # use package for a different platform for the current platform (namely cross
+  # compiling toolchains and 32-bit packages on x86_64). In both those cases we
+  # want the provided non-native `localSystem` argument to affect the stdenv
+  # chosen.
+  nixpkgsFun = newArgs: import ./. (args // newArgs);
 
-  topLevelArguments = {
-    inherit system bootStdenv noSysDirs config crossSystem platform lib;
+  # Partially apply some arguments for building bootstraping stage pkgs
+  # sets. Only apply arguments which no stdenv would want to override.
+  allPackages = newArgs: import ./stage.nix ({
+    inherit lib nixpkgsFun;
+  } // newArgs);
+
+  boot = import ../stdenv/booter.nix { inherit lib allPackages; };
+
+  stages = stdenvStages {
+    inherit lib localSystem crossSystem config overlays;
   };
 
-  # Allow packages to be overridden globally via the `packageOverrides'
-  # configuration option, which must be a function that takes `pkgs'
-  # as an argument and returns a set of new or overridden packages.
-  # The `packageOverrides' function is called with the *original*
-  # (un-overridden) set of packages, allowing packageOverrides
-  # attributes to refer to the original attributes (e.g. "foo =
-  # ... pkgs.foo ...").
-  pkgs = pkgsWithOverrides (self: config.packageOverrides or (super: {}));
+  pkgs = boot stages;
 
-  # Return the complete set of packages, after applying the overrides
-  # returned by the `overrider' function (see above).  Warning: this
-  # function is very expensive!
-  pkgsWithOverrides = overrider:
-    let
-      stdenvAdapters = self: super:
-        let res = import ../stdenv/adapters.nix self; in res // {
-          stdenvAdapters = res;
-        };
-
-      trivialBuilders = self: super:
-        (import ../build-support/trivial-builders.nix {
-          inherit lib; inherit (self) stdenv; inherit (self.xorg) lndir;
-        });
-
-      stdenvDefault = self: super: (import ./stdenv.nix topLevelArguments) {} pkgs;
-
-      allPackagesArgs = topLevelArguments // { inherit pkgsWithOverrides; };
-      allPackages = self: super:
-        let res = import ./all-packages.nix allPackagesArgs res self;
-        in res;
-
-      aliases = self: super: import ./aliases.nix super;
-
-      # stdenvOverrides is used to avoid circular dependencies for building
-      # the standard build environment. This mechanism uses the override
-      # mechanism to implement some staged compilation of the stdenv.
-      #
-      # We don't want stdenv overrides in the case of cross-building, or
-      # otherwise the basic overridden packages will not be built with the
-      # crossStdenv adapter.
-      stdenvOverrides = self: super:
-        lib.optionalAttrs (crossSystem == null && super.stdenv ? overrides)
-          (super.stdenv.overrides super);
-
-      customOverrides = self: super:
-        lib.optionalAttrs (bootStdenv == null) (overrider self super);
-    in
-      lib.fix' (
-        lib.extends customOverrides (
-          lib.extends stdenvOverrides (
-            lib.extends aliases (
-              lib.extends allPackages (
-                lib.extends stdenvDefault (
-                  lib.extends trivialBuilders (
-                    lib.extends stdenvAdapters (
-                      self: {}))))))));
-in
-  pkgs
+in pkgs

@@ -1,32 +1,31 @@
-{ stdenv, fetchzip, git, gnupg, makeQtWrapper, pass, qtbase, qtsvg, qttools, qmakeHook }:
+{ stdenv, fetchFromGitHub, git, gnupg, pass, qtbase, qtsvg, qttools, qmake, makeWrapper }:
 
 stdenv.mkDerivation rec {
   name = "qtpass-${version}";
-  version = "1.1.3";
+  version = "1.2.1";
 
-  src = fetchzip {
-    url = "https://github.com/IJHack/qtpass/archive/v${version}.tar.gz";
-    sha256 = "114rqvd2jl98c75zmhdwfmp44kxa4v459naiivb4w020d60ziq7l";
+  src = fetchFromGitHub {
+    owner  = "IJHack";
+    repo   = "QtPass";
+    rev    = "v${version}";
+    sha256 = "0pp38b3fifkfwqcb6vi194ccgb8j3zc8j8jq8ww5ib0wvhldzsg8";
   };
+
+  patches = [ ./hidpi.patch ];
 
   buildInputs = [ git gnupg pass qtbase qtsvg qttools ];
 
-  nativeBuildInputs = [ makeQtWrapper qmakeHook ];
+  nativeBuildInputs = [ makeWrapper qmake ];
 
-  preConfigure = ''
-    qmakeFlags="$qmakeFlags CONFIG+=release DESTDIR=$out"
-  '';
-
-  installPhase = ''
-    mkdir $out/bin
-    mv $out/qtpass $out/bin
-    install -D {,$out/share/applications/}qtpass.desktop
-    install -D artwork/icon.svg $out/share/icons/hicolor/scalable/apps/qtpass-icon.svg
-    runHook postInstall
+  postPatch = ''
+    substituteInPlace qtpass.pro --replace "SUBDIRS += src tests main" "SUBDIRS += src main"
+    substituteInPlace qtpass.pro --replace "main.depends = tests" "main.depends = src"
   '';
 
   postInstall = ''
-    wrapQtProgram $out/bin/qtpass \
+    install -D qtpass.desktop $out/share/applications/qtpass.desktop
+    install -D artwork/icon.svg $out/share/icons/hicolor/scalable/apps/qtpass-icon.svg
+    wrapProgram $out/bin/qtpass \
       --suffix PATH : ${git}/bin \
       --suffix PATH : ${gnupg}/bin \
       --suffix PATH : ${pass}/bin

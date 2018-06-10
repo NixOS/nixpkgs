@@ -1,4 +1,4 @@
-{ version, sha256, stdenv, fetchurl, ocaml, findlib }:
+{ version, sha256, stdenv, fetchurl, ocaml, findlib, ocamlbuild }:
 
 stdenv.mkDerivation {
   name = "menhir-${version}";
@@ -8,7 +8,7 @@ stdenv.mkDerivation {
     inherit sha256;
   };
 
-  buildInputs = [ ocaml findlib ];
+  buildInputs = [ ocaml findlib ocamlbuild ];
 
   createFindlibDestdir = true;
 
@@ -36,7 +36,7 @@ stdenv.mkDerivation {
       and Yann Régis-Gianas.
     '';
     license = with licenses; [
-      qpl /* generator */
+      (if versionAtLeast version "20170418" then gpl2 else qpl) /* generator */
       lgpl2 /* library */
     ];
     platforms = ocaml.meta.platforms or [];

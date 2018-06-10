@@ -1,16 +1,22 @@
-{ stdenv, fetchFromGitHub, python, llvm, clang }:
+{ stdenv, fetchFromGitHub, python, llvmPackages }:
+
+let
+  llvm = llvmPackages.llvm;
+  clang = llvmPackages.clang;
+in
 
 stdenv.mkDerivation {
-  name = "libclc-2015-08-07";
+  name = "libclc-2017-11-29";
 
   src = fetchFromGitHub {
     owner = "llvm-mirror";
     repo = "libclc";
-    rev = "f97d9db40718f2e68b3f0b44200760d8e0d50532";
-    sha256 = "10n9qk1dild9yjkjjkzpmp9zid3ysdgvqrad554azcf755frch7g";
+    rev = "d6384415ab854c68777dd77451aa2bc0d959da99";
+    sha256 = "10fqrlnqlknh58x7pfsbg9r07fblfg2mgq2m4fr1jbb836ncn3wh";
   };
 
-  buildInputs = [ python llvm clang ];
+  nativeBuildInputs = [ python ];
+  buildInputs = [ llvm clang ];
 
   postPatch = ''
     sed -i 's,llvm_clang =.*,llvm_clang = "${clang}/bin/clang",' configure.py
@@ -18,7 +24,7 @@ stdenv.mkDerivation {
   '';
 
   configurePhase = ''
-    python2 ./configure.py --prefix=$out
+    ${python.interpreter} ./configure.py --prefix=$out
   '';
 
   meta = with stdenv.lib; {

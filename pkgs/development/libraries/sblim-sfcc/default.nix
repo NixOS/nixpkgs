@@ -1,30 +1,28 @@
-{ fetchgit, stdenv, autoconf, automake, libtool, curl }:
+{ stdenv, fetchFromGitHub, autoreconfHook, curl }:
 
 stdenv.mkDerivation rec {
-  version = "2.2.9";
   name = "sblim-sfcc-${version}";
+  version = "2.2.9"; # this is technically 2.2.9-preview
 
-  src = fetchgit {
-    url = "https://github.com/kkaempf/sblim-sfcc.git";
-    rev = "f70fecb410a53531e4fe99d39cf81b581819cac9";
-    sha256 = "1hsxim284qzldh599gf6khxj80g8q5263xl3lj3hdndxbhbs843v";
+  src = fetchFromGitHub {
+    owner  = "kkaempf";
+    repo   = "sblim-sfcc";
+    rev    = "514a76af2020fd6dc6fc380df76cbe27786a76a2";
+    sha256 = "06c1mskl9ixbf26v88w0lvn6v2xd6n5f0jd5mckqrn9j4vmh70hs";
   };
 
-  preConfigure = "./autoconfiscate.sh";
+  buildInputs = [ curl ];
 
-  buildInputs = [ autoconf automake libtool curl ];
+  nativeBuildInputs = [ autoreconfHook ];
 
-  meta = {
+  enableParallelBuilding = true;
+
+  meta = with stdenv.lib; {
     description = "Small Footprint CIM Client Library";
-
-    homepage = http://sourceforge.net/projects/sblim/;
-
-    maintainers = [ stdenv.lib.maintainers.deepfire ];
-
-    license = stdenv.lib.licenses.cpl10;
-
-    platforms = stdenv.lib.platforms.gnu;  # arbitrary choice
-
+    homepage    = https://sourceforge.net/projects/sblim/;
+    license     = licenses.cpl10;
+    maintainers = with maintainers; [ deepfire ];
+    platforms   = platforms.unix;
     inherit version;
   };
 }

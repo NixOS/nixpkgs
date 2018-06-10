@@ -1,11 +1,11 @@
 {stdenv, fetchurl, boost, openssl}:
 
 stdenv.mkDerivation rec {
-  name = "asio-1.10.6";
+  name = "asio-1.12.1";
 
   src = fetchurl {
     url = "mirror://sourceforge/asio/${name}.tar.bz2";
-    sha256 = "0phr6zq8z78dwhhzs3h27q32mcv1ffg2gyq880rw3xmilx01rmz0";
+    sha256 = "0nln45662kg799ykvqx5m9z9qcsmadmgg6r5najryls7x16in2d9";
   };
 
   propagatedBuildInputs = [ boost ];

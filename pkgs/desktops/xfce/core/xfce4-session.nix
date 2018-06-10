@@ -1,6 +1,6 @@
 { stdenv, fetchurl, fetchpatch, pkgconfig, intltool, gtk, polkit
-, libxfce4util, libxfce4ui, xfce4panel, libwnck, dbus_glib, xfconf, libglade, xorg
-, hicolor_icon_theme
+, libxfce4util, libxfce4ui, xfce4-panel, libwnck, dbus-glib, xfconf, libglade, xorg
+, hicolor-icon-theme
 }:
 
 let
@@ -16,10 +16,15 @@ stdenv.mkDerivation rec {
     sha256 = "97d7f2a2d0af7f3623b68d1f04091e02913b28f9555dab8b0d26c8a1299d08fd";
   };
 
+  patches = [
+    # Fix "lock screen" not working for light-locker
+    ./xfce4-light-locker.patch
+  ];
+
   buildInputs =
-    [ pkgconfig intltool gtk libxfce4util libxfce4ui libwnck dbus_glib
-      xfconf xfce4panel libglade xorg.iceauth xorg.libSM
-      polkit hicolor_icon_theme
+    [ pkgconfig intltool gtk libxfce4util libxfce4ui libwnck dbus-glib
+      xfconf xfce4-panel libglade xorg.iceauth xorg.libSM
+      polkit hicolor-icon-theme
     ]; #TODO: upower-glib, gconf (assistive?), gnome keyring
 
   preBuild = ''

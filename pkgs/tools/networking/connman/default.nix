@@ -1,13 +1,13 @@
-{ stdenv, fetchurl, pkgconfig, openconnect, file, gawk,
+{ stdenv, fetchurl, fetchpatch, pkgconfig, openconnect, file, gawk,
   openvpn, vpnc, glib, dbus, iptables, gnutls, polkit,
   wpa_supplicant, readline6, pptp, ppp }:
 
 stdenv.mkDerivation rec {
   name = "connman-${version}";
-  version = "1.33";
+  version = "1.36";
   src = fetchurl {
     url = "mirror://kernel/linux/network/connman/${name}.tar.xz";
-    sha256 = "187mknq2i907gf8dz0i79359gn1qc9mryvqkcgb280d7dw1ld2dw";
+    sha256 = "0x00dq5c2frz06md3g5y0jh5kbcj2hrfl5qjcqga8gs4ri0xp2f7";
   };
 
   buildInputs = [ openconnect polkit
@@ -44,6 +44,7 @@ stdenv.mkDerivation rec {
     "--enable-datafiles"
     "--enable-pptp"
     "--with-pptp=${pptp}/sbin/pptp"
+    "--enable-iwd"
   ];
 
   postInstall = ''
@@ -51,10 +52,9 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    description = "Provides a daemon for managing internet connections";
-    homepage = "https://connman.net/";
+    description = "A daemon for managing internet connections";
+    homepage = https://01.org/connman;
     maintainers = [ maintainers.matejc ];
-    # tested only on linux, might work on others also
     platforms = platforms.linux;
     license = licenses.gpl2;
   };

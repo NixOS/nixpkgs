@@ -10,12 +10,12 @@ assert enableJabber -> minmay != null;
 
 let
 
-  version = "2.2.2";
+  version = "2.2.20";
   branch = "2.2";
 
   src = fetchurl {
     url = "mirror://sourceforge/zabbix/zabbix-${version}.tar.gz";
-    sha256 = "1gmjbjmajdllzd7akihb5kg4l2gf0ii9c16fq8mlla37sshzj3p0";
+    sha256 = "00pfpyj3vydwx9dn0bklh1p5j0bp2awi4hvv4kgliyav8l0416hk";
   };
 
   preConfigure =
@@ -57,7 +57,8 @@ in
         -e 's/iks/mmay/g' -e 's/IKS/MMAY/g' src/libs/zbxmedia/jabber.c
     '';
 
-    buildInputs = [ pkgconfig postgresql curl openssl zlib ]
+  nativeBuildInputs = [ pkgconfig ];
+    buildInputs = [ postgresql curl openssl zlib ]
       ++ stdenv.lib.optional enableSnmp net_snmp
       ++ stdenv.lib.optional enableSsh libssh2
       ++ stdenv.lib.optional enableLdap openldap;

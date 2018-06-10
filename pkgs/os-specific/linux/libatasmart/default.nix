@@ -8,7 +8,8 @@ stdenv.mkDerivation rec {
     sha256 = "138gvgdwk6h4ljrjsr09pxk1nrki4b155hqdzyr8mlk3bwsfmw31";
   };
 
-  buildInputs = [ pkgconfig udev ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ udev ];
 
   meta = {
     homepage = http://0pointer.de/public/;

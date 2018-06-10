@@ -2,16 +2,18 @@
 
 { stdenv, fetchurl, lib, file
 , pkgconfig, autoconf
-, glib, dbus_glib, gtkVersion
+, glib, dbus-glib, gtkVersion ? "3"
 , gtk2 ? null, libindicator-gtk2 ? null, libdbusmenu-gtk2 ? null
 , gtk3 ? null, libindicator-gtk3 ? null, libdbusmenu-gtk3 ? null
-, python, pygobject2, pygtk, gobjectIntrospection, vala_0_23
+, python2Packages, gobjectIntrospection, vala
 , monoSupport ? false, mono ? null, gtk-sharp-2_0 ? null
  }:
 
 with lib;
 
-stdenv.mkDerivation rec {
+let
+  inherit (python2Packages) python pygobject2 pygtk;
+in stdenv.mkDerivation rec {
   name = let postfix = if gtkVersion == "2" && monoSupport then "sharp" else "gtk${gtkVersion}";
           in "libappindicator-${postfix}-${version}";
   version = "${versionMajor}.${versionMinor}";
@@ -25,19 +27,26 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig autoconf ];
 
+  propagatedBuildInputs =
+    if gtkVersion == "2"
+    then [ gtk2 libdbusmenu-gtk2 ]
+    else [ gtk3 libdbusmenu-gtk3 ];
+
   buildInputs = [
-    glib dbus_glib
-    python pygobject2 pygtk gobjectIntrospection vala_0_23
+    glib dbus-glib
+    python pygobject2 pygtk gobjectIntrospection vala
   ] ++ (if gtkVersion == "2"
-    then [ gtk2 libindicator-gtk2 libdbusmenu-gtk2 ] ++ optionals monoSupport [ mono gtk-sharp-2_0 ]
-    else [ gtk3 libindicator-gtk3 libdbusmenu-gtk3 ]);
+    then [ libindicator-gtk2 ] ++ optionals monoSupport [ mono gtk-sharp-2_0 ]
+    else [ libindicator-gtk3 ]);
 
   postPatch = ''
     substituteInPlace configure.ac \
       --replace '=codegendir pygtk-2.0' '=codegendir pygobject-2.0'
     autoconf
-    substituteInPlace {configure,ltmain.sh,m4/libtool.m4} \
-      --replace /usr/bin/file ${file}/bin/file
+    for f in {configure,ltmain.sh,m4/libtool.m4}; do
+      substituteInPlace $f \
+        --replace /usr/bin/file ${file}/bin/file
+    done
   '';
 
   configureFlags = [
@@ -59,7 +68,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "A library to allow applications to export a menu into the Unity Menu bar";
-    homepage = "https://launchpad.net/libappindicator";
+    homepage = https://launchpad.net/libappindicator;
     license = with licenses; [ lgpl21 lgpl3 ];
     platforms = platforms.linux;
     maintainers = [ maintainers.msteen ];

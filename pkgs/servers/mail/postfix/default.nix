@@ -1,8 +1,9 @@
-{ stdenv, lib, fetchurl, makeWrapper, gnused, db, openssl, cyrus_sasl
+{ stdenv, lib, fetchurl, makeWrapper, gnused, db, openssl, cyrus_sasl, libnsl
 , coreutils, findutils, gnugrep, gawk, icu, pcre
 , withPgSQL ? false, postgresql
-, withMySQL ? false, libmysql
+, withMySQL ? false, mysql
 , withSQLite ? false, sqlite
+, withLDAP ? false, openldap
 }:
 
 let
@@ -10,29 +11,33 @@ let
     "-DUSE_TLS" "-DUSE_SASL_AUTH" "-DUSE_CYRUS_SASL" "-I${cyrus_sasl.dev}/include/sasl"
     "-DHAS_DB_BYPASS_MAKEDEFS_CHECK"
    ] ++ lib.optional withPgSQL "-DHAS_PGSQL"
-     ++ lib.optionals withMySQL [ "-DHAS_MYSQL" "-I${lib.getDev libmysql}/include/mysql" ]
-     ++ lib.optional withSQLite "-DHAS_SQLITE");
+     ++ lib.optionals withMySQL [ "-DHAS_MYSQL" "-I${mysql.connector-c}/include/mysql" "-L${mysql.connector-c}/lib/mysql" ]
+     ++ lib.optional withSQLite "-DHAS_SQLITE"
+     ++ lib.optional withLDAP "-DHAS_LDAP");
    auxlibs = lib.concatStringsSep " " ([
      "-ldb" "-lnsl" "-lresolv" "-lsasl2" "-lcrypto" "-lssl"
    ] ++ lib.optional withPgSQL "-lpq"
      ++ lib.optional withMySQL "-lmysqlclient"
-     ++ lib.optional withSQLite "-lsqlite3");
+     ++ lib.optional withSQLite "-lsqlite3"
+     ++ lib.optional withLDAP "-lldap");
 
 in stdenv.mkDerivation rec {
 
   name = "postfix-${version}";
 
-  version = "3.1.2";
+  version = "3.3.1";
 
   src = fetchurl {
     url = "ftp://ftp.cs.uu.nl/mirror/postfix/postfix-release/official/${name}.tar.gz";
-    sha256 = "0sqgsfq3dqilfcr2z9wi7g12mcma690j8qvs8v93gszrdgpb9f8s";
+    sha256 = "0fvymsklp32njsv0ngc1f45j01kcy61r5in99g5palibwkd19xal";
   };
 
-  buildInputs = [ makeWrapper gnused db openssl cyrus_sasl icu pcre ]
+  nativeBuildInputs = [ makeWrapper ];
+  buildInputs = [ db openssl cyrus_sasl icu libnsl pcre ]
                 ++ lib.optional withPgSQL postgresql
-                ++ lib.optional withMySQL libmysql
-                ++ lib.optional withSQLite sqlite;
+                ++ lib.optional withMySQL mysql.connector-c
+                ++ lib.optional withSQLite sqlite
+                ++ lib.optional withLDAP openldap;
 
   hardeningDisable = [ "format" ];
   hardeningEnable = [ "pie" ];
@@ -83,9 +88,9 @@ in stdenv.mkDerivation rec {
   '';
 
   meta = {
-    homepage = "http://www.postfix.org/";
+    homepage = http://www.postfix.org/;
     description = "A fast, easy to administer, and secure mail server";
-    license = lib.licenses.bsdOriginal;
+    license = with lib.licenses; [ ipl10 epl20 ];
     platforms = lib.platforms.linux;
     maintainers = [ lib.maintainers.rickynils ];
   };

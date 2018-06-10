@@ -1,23 +1,31 @@
-{ stdenv, fetchurl, xorg, ncurses, freetype, fontconfig, pkgconfig
+{ stdenv, fetchurl, fetchpatch, xorg, ncurses, freetype, fontconfig, pkgconfig, makeWrapper
 , enableDecLocator ? true
 }:
 
 stdenv.mkDerivation rec {
-  name = "xterm-325";
+  name = "xterm-333";
 
   src = fetchurl {
-    url = "ftp://invisible-island.net/xterm/${name}.tgz";
-    sha256 = "06sz66z4hvjjkvm3r5a5z442iis8lz8yjfzc629pwhj01ixb0c9v";
+    urls = [
+     "ftp://ftp.invisible-island.net/xterm/${name}.tgz"
+     "https://invisible-mirror.net/archives/xterm/${name}.tgz"
+   ];
+    sha256 = "0y7gl26mxw6kwqx9j9mi6lx1lp1v3nrlga19ddn07j2m9q0l479g";
   };
 
   buildInputs =
     [ xorg.libXaw xorg.xproto xorg.libXt xorg.libXext xorg.libX11 xorg.libSM xorg.libICE
-      ncurses freetype fontconfig pkgconfig xorg.libXft xorg.luit
+      ncurses freetype fontconfig pkgconfig xorg.libXft xorg.luit makeWrapper
     ];
 
   patches = [
     ./sixel-256.support.patch
-  ];
+  ] ++ stdenv.lib.optional stdenv.hostPlatform.isMusl
+    (fetchpatch {
+      name = "posix-ptys.patch";
+      url = "https://git.alpinelinux.org/cgit/aports/plain/community/xterm/posix-ptys.patch?id=3aa532e77875fa1db18c7fcb938b16647031bcc1";
+      sha256 = "0czgnsxkkmkrk1idw69qxbprh0jb4sw3c24zpnqq2v76jkl7zvlr";
+    });
 
   configureFlags = [
     "--enable-wide-chars"
@@ -30,6 +38,7 @@ stdenv.mkDerivation rec {
     "--enable-luit"
     "--enable-mini-luit"
     "--with-tty-group=tty"
+    "--with-app-defaults=$(out)/lib/X11/app-defaults"
   ] ++ stdenv.lib.optional enableDecLocator "--enable-dec-locator";
 
   # Work around broken "plink.sh".
@@ -44,9 +53,18 @@ stdenv.mkDerivation rec {
     echo '#define USE_UTMP_SETGID 1'
   '';
 
+  postInstall = ''
+    for bin in $out/bin/*; do
+      wrapProgram $bin --set XAPPLRESDIR $out/lib/X11/app-defaults/
+    done
+
+    install -D -t $out/share/applications xterm.desktop
+    install -D -t $out/share/icons/hicolor/48x48/apps icons/xterm-color_48x48.xpm
+  '';
+
   meta = {
     homepage = http://invisible-island.net/xterm;
-    license = "BSD";
+    license = with stdenv.lib.licenses; [ mit ];
     maintainers = with stdenv.lib.maintainers; [viric vrthra];
     platforms = with stdenv.lib.platforms; linux ++ darwin;
   };

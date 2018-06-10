@@ -38,8 +38,11 @@
   gphoto2Support ? false,
   ldapSupport ? false,
   pulseaudioSupport ? false,
+  udevSupport ? false,
   xineramaSupport ? false,
-  xmlSupport ? false }:
+  xmlSupport ? false,
+  vulkanSupport ? false,
+}:
 
 let wine-build = build: release:
       lib.getAttr build (callPackage ./packages.nix {
@@ -50,7 +53,7 @@ let wine-build = build: release:
                   netapiSupport cursesSupport vaSupport pcapSupport v4lSupport saneSupport
                   gsmSupport gphoto2Support ldapSupport fontconfigSupport alsaSupport
                   pulseaudioSupport xineramaSupport gtkSupport openclSupport xmlSupport tlsSupport
-                  openglSupport gstreamerSupport;
+                  openglSupport gstreamerSupport udevSupport vulkanSupport;
         };
       });
 

@@ -1,17 +1,19 @@
-{ stdenv, pythonPackages, fetchFromGitHub, rtmpdump }:
+{ stdenv, pythonPackages, fetchFromGitHub, rtmpdump, ffmpeg }:
 
 pythonPackages.buildPythonApplication rec {
-  version = "1.14.0-rc1";
+  version = "0.12.1";
   name = "streamlink-${version}";
 
   src = fetchFromGitHub {
     owner = "streamlink";
     repo = "streamlink";
-    rev = "ffc099b16b9a9d2c0c44081d687c50ee2e935f29";
-    sha256 = "0ix2k2yd2jzcazkjjb0iczr4bv7pgx873k7bhxgb9zwplklxpw1k";
+    rev = "${version}";
+    sha256 = "0r63fjp5qhnbp5kr4w2nn3gnj0wr0ik1pw1gyry8jl9rp2jq9db5";
   };
 
-  propagatedBuildInputs = (with pythonPackages; [ pycrypto requests2 ]) ++ [ rtmpdump ];
+  checkInputs = with pythonPackages; [ pytest mock requests-mock ];
+
+  propagatedBuildInputs = (with pythonPackages; [ pycryptodome requests iso-639 iso3166 websocket_client ]) ++ [ rtmpdump ffmpeg ];
 
   meta = with stdenv.lib; {
     homepage = https://github.com/streamlink/streamlink;
@@ -25,6 +27,6 @@ pythonPackages.buildPythonApplication rec {
     '';
     license = licenses.bsd2;
     platforms = platforms.linux;
-    maintainers = [ maintainers.dezgeg ];
+    maintainers = with maintainers; [ dezgeg zraexy ];
   };
 }

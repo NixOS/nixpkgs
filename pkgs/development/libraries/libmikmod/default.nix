@@ -4,10 +4,10 @@ let
   inherit (stdenv.lib) optional optionals optionalString;
 
 in stdenv.mkDerivation rec {
-  name = "libmikmod-3.3.7";
+  name = "libmikmod-3.3.11.1";
   src = fetchurl {
     url = "mirror://sourceforge/mikmod/${name}.tar.gz";
-    sha256 = "18nrkf5l50hfg0y50yxr7bvik9f002lhn8c00nbcp6dgm5011x2c";
+    sha256 = "06bdnhb0l81srdzg6gn2v2ydhhaazza7rshrcj3q8dpqr3gn97dd";
   };
 
   buildInputs = [ texinfo ]

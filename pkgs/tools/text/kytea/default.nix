@@ -6,22 +6,24 @@ stdenv.mkDerivation rec {
   version = "0.4.7";
 
   src = fetchurl {
-    url    = "http://www.phontron.com/kytea/download/kytea-0.4.6.tar.gz";
-    sha256 = "0n6d88j0qda4dmy6mcj0cyin46n05m5phvjiah9i4ip54h8vs9s3";
+    url    = "http://www.phontron.com/kytea/download/${name}.tar.gz";
+    sha256 = "0ilzzwn5vpvm65bnbyb9f5rxyxy3jmbafw9w0lgl5iad1ka36jjk";
   };
+
+  patches = [ ./gcc-O3.patch ];
 
   meta = with stdenv.lib; {
     homepage = http://www.phontron.com/kytea/;
     description = "General toolkit developed for analyzing text";
 
     longDescription = ''
-      A general toolkit developed for analyzing text, with a focus on Japanese, 
+      A general toolkit developed for analyzing text, with a focus on Japanese,
       Chinese and other languages requiring word or morpheme segmentation.
     '';
 
     license = licenses.asl20;
 
-    maintainers = [ maintainers.ericsagnes ];
+    maintainers = with maintainers; [ ericsagnes ndowens ];
     platforms = platforms.linux;
   };
 

@@ -4,7 +4,7 @@ with lib;
 
 let
   cfg = config.services.zookeeper;
-  
+
   zookeeperConfig = ''
     dataDir=${cfg.dataDir}
     clientPort=${toString cfg.port}
@@ -49,7 +49,7 @@ in {
       default = 1;
       type = types.int;
     };
- 
+
     extraConf = mkOption {
       description = "Extra configuration for Zookeeper.";
       type = types.lines;
@@ -106,20 +106,29 @@ in {
       '';
     };
 
+    package = mkOption {
+      description = "The zookeeper package to use";
+      default = pkgs.zookeeper;
+      defaultText = "pkgs.zookeeper";
+      type = types.package;
+    };
+
   };
 
 
   config = mkIf cfg.enable {
+    environment.systemPackages = [cfg.package];
+
     systemd.services.zookeeper = {
       description = "Zookeeper Daemon";
       wantedBy = [ "multi-user.target" ];
-      after = [ "network-interfaces.target" ];
+      after = [ "network.target" ];
       environment = { ZOOCFGDIR = configDir; };
       serviceConfig = {
         ExecStart = ''
           ${pkgs.jre}/bin/java \
-            -cp "${pkgs.zookeeper}/lib/*:${pkgs.zookeeper}/${pkgs.zookeeper.name}.jar:${configDir}" \
-            ${toString cfg.extraCmdLineOptions} \
+            -cp "${cfg.package}/lib/*:${cfg.package}/${cfg.package.name}.jar:${configDir}" \
+            ${escapeShellArgs cfg.extraCmdLineOptions} \
             -Dzookeeper.datadir.autocreate=false \
             ${optionalString cfg.preferIPv4 "-Djava.net.preferIPv4Stack=true"} \
             org.apache.zookeeper.server.quorum.QuorumPeerMain \

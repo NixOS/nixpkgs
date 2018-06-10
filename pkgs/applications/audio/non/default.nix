@@ -4,15 +4,16 @@
 
 stdenv.mkDerivation rec {
   name = "non-${version}";
-  version = "2016-04-05";
+  version = "2018-02-15";
   src = fetchFromGitHub {
     owner = "original-male";
     repo = "non";
-    rev = "16885e69fe865495dc32d869d1454ab148b0dca6";
-    sha256 = "1nwzzgcdpbqh5kjvz40yy5nmzvpp8gcr9biyhhwi68s5bsg972ss";
+    rev = "5ae43bb27c42387052a73e5ffc5d33efb9d946a9";
+    sha256 = "1cljkkyi9dxqpqhx8y6l2ja4zjmlya26m26kqxml8gx08vyvddhx";
   };
 
-  buildInputs = [ pkgconfig python2 cairo libjpeg ntk libjack2 libsndfile
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ python2 cairo libjpeg ntk libjack2 libsndfile
     ladspaH liblrdf liblo libsigcxx
   ];
   configurePhase = "python waf configure --prefix=$out";

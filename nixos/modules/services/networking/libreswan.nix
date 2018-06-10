@@ -11,13 +11,13 @@ let
 
   trim = chars: str: let
       nonchars = filter (x : !(elem x.value chars))
-                  (imap (i: v: {ind = (sub i 1); value = v;}) (stringToCharacters str));
+                  (imap0 (i: v: {ind = i; value = v;}) (stringToCharacters str));
     in
       if length nonchars == 0 then ""
       else substring (head nonchars).ind (add 1 (sub (last nonchars).ind (head nonchars).ind)) str;
   indent = str: concatStrings (concatMap (s: ["  " (trim [" " "\t"] s) "\n"]) (splitString "\n" str));
   configText = indent (toString cfg.configSetup);
-  connectionText = concatStrings (mapAttrsToList (n: v: 
+  connectionText = concatStrings (mapAttrsToList (n: v:
     ''
       conn ${n}
       ${indent v}
@@ -27,7 +27,7 @@ let
     ''
       config setup
       ${configText}
-      
+
       ${connectionText}
     '';
 
@@ -93,6 +93,9 @@ in
         "${pkgs.libreswan}"
         "${pkgs.iproute}"
         "${pkgs.procps}"
+        "${pkgs.nssTools}"
+        "${pkgs.iptables}"
+        "${pkgs.nettools}"
       ];
 
       wants = [ "network-online.target" ];
@@ -102,7 +105,7 @@ in
       serviceConfig = {
         Type = "simple";
         Restart = "always";
-        EnvironmentFile = "${pkgs.libreswan}/etc/sysconfig/pluto";
+        EnvironmentFile = "-${pkgs.libreswan}/etc/sysconfig/pluto";
         ExecStartPre = [
           "${libexec}/addconn --config ${configFile} --checkconfig"
           "${libexec}/_stackmanager start"

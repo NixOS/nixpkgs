@@ -2,7 +2,7 @@
 let
   cfg = config.services.fourStoreEndpoint;
   endpointUser = "fourstorehttp";
-  run = "${pkgs.su}/bin/su -s ${pkgs.stdenv.shell} ${endpointUser} -c";
+  run = "${pkgs.su}/bin/su -s ${pkgs.runtimeShell} ${endpointUser} -c";
 in
 with lib;
 {

@@ -1,8 +1,9 @@
-{ kdeFramework, lib, ecm, kcoreaddons, ki18n }:
+{ mkDerivation, lib, extra-cmake-modules, kcoreaddons, ki18n, qtbase, }:
 
-kdeFramework {
+mkDerivation {
   name = "kpty";
   meta = { maintainers = [ lib.maintainers.ttuegel ]; };
-  nativeBuildInputs = [ ecm ];
-  propagatedBuildInputs = [ kcoreaddons ki18n ];
+  nativeBuildInputs = [ extra-cmake-modules ];
+  buildInputs = [ kcoreaddons ki18n qtbase ];
+  outputs = [ "out" "dev" ];
 }

@@ -9,7 +9,8 @@ stdenv.mkDerivation {
     sha256 = "1g26hr6rl7bbb9cwqk606nbbapslq3wnsy8j28azrgi8hgfqhjfi";
   };
 
-  buildInputs = [ libX11 makeWrapper autoreconfHook ];
+  nativeBuildInputs = [ autoreconfHook ];
+  buildInputs = [ libX11 makeWrapper ];
 
   preConfigure = ''
     ./autogen.sh

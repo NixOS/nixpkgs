@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     description = "A bundle of NPAPI headers by Mozilla";
 
-    homepage = https://code.google.com/p/npapi-sdk/;
+    homepage = https://bitbucket.org/mgorny/npapi-sdk; # see also https://github.com/mozilla/npapi-sdk
     license = licenses.bsd3;
     platforms = platforms.linux;
   };

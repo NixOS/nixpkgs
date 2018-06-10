@@ -4,19 +4,16 @@
 with lib;
 
 let
-
-  version = "4.3.1";
-  fullversion = "${version}";
-
   # Our bare-bones wp-config.php file using the above settings
   wordpressConfig = pkgs.writeText "wp-config.php" ''
     <?php
     define('DB_NAME',     '${config.dbName}');
     define('DB_USER',     '${config.dbUser}');
-    define('DB_PASSWORD', '${config.dbPassword}');
+    define('DB_PASSWORD', file_get_contents('${config.dbPasswordFile}'));
     define('DB_HOST',     '${config.dbHost}');
     define('DB_CHARSET',  'utf8');
     $table_prefix  = '${config.tablePrefix}';
+    define('AUTOMATIC_UPDATER_DISABLED', true);
     ${config.extraConfig}
     if ( !defined('ABSPATH') )
     	define('ABSPATH', dirname(__FILE__) . '/');
@@ -70,12 +67,7 @@ let
   # The wordpress package itself
   wordpressRoot = pkgs.stdenv.mkDerivation rec {
     name = "wordpress";
-    src = pkgs.fetchFromGitHub {
-      owner = "WordPress";
-      repo = "WordPress";
-      rev = "${fullversion}";
-      sha256 = "1rk10vcv4z9p04hfzc0wkbilrgx7m9ssyr6c3w6vw3vl1bcgqxza";
-    };
+    src = config.package;
     installPhase = ''
       mkdir -p $out
       # copy all the wordpress files we downloaded
@@ -98,7 +90,7 @@ let
       # symlink additional plugin(s)
       ${concatMapStrings (plugin: "ln -s ${plugin} $out/wp-content/plugins/${plugin.name}\n") (config.plugins) }
 
-      # symlink additional translation(s) 
+      # symlink additional translation(s)
       mkdir -p $out/wp-content/languages
       ${concatMapStrings (language: "ln -s ${language}/*.mo ${language}/*.po $out/wp-content/languages/\n") (selectedLanguages) }
     '';
@@ -121,9 +113,17 @@ in
   enablePHP = true;
 
   options = {
+    package = mkOption {
+      type = types.path;
+      default = pkgs.wordpress;
+      description = ''
+        Path to the wordpress sources.
+        Upgrading? We have a test! nix-build ./nixos/tests/wordpress.nix
+      '';
+    };
     dbHost = mkOption {
       default = "localhost";
-      description = "The location of the database server.";  
+      description = "The location of the database server.";
       example = "localhost";
     };
     dbName = mkOption {
@@ -138,8 +138,33 @@ in
     };
     dbPassword = mkOption {
       default = "wordpress";
-      description = "The mysql password to the respective dbUser.";
+      description = ''
+        The mysql password to the respective dbUser.
+
+        Warning: this password is stored in the world-readable Nix store. It's
+        recommended to use the $dbPasswordFile option since that gives you control over
+        the security of the password. $dbPasswordFile also takes precedence over $dbPassword.
+      '';
       example = "wordpress";
+    };
+    dbPasswordFile = mkOption {
+      type = types.str;
+      default = toString (pkgs.writeTextFile {
+        name = "wordpress-dbpassword";
+        text = config.dbPassword;
+      });
+      example = "/run/keys/wordpress-dbpassword";
+      description = ''
+        Path to a file that contains the mysql password to the respective dbUser.
+        The file should be readable by the user: config.services.httpd.user.
+
+        $dbPasswordFile takes precedence over the $dbPassword option.
+
+        This defaults to a file in the world-readable Nix store that contains the value
+        of the $dbPassword option. It's recommended to override this with a path not in
+        the Nix store. Tip: use nixops key management:
+        <link xlink:href='https://nixos.org/nixops/manual/#idm140737318306400'/>
+      '';
     };
     tablePrefix = mkOption {
       default = "wp_";
@@ -211,6 +236,7 @@ in
           example = "[ \"en_GB\" \"de_DE\" ];";
     };
     extraConfig = mkOption {
+      type = types.lines;
       default = "";
       example =
         ''
@@ -244,7 +270,6 @@ in
     chown ${serverInfo.serverConfig.user} ${config.wordpressUploads}
 
     # we should use systemd dependencies here
-    #waitForUnit("network-interfaces.target");
     if [ ! -d ${serverInfo.fullConfig.services.mysql.dataDir}/${config.dbName} ]; then
       echo "Need to create the database '${config.dbName}' and grant permissions to user named '${config.dbUser}'."
       # Wait until MySQL is up
@@ -252,8 +277,8 @@ in
         sleep 1
       done
       ${pkgs.mysql}/bin/mysql -e 'CREATE DATABASE ${config.dbName};'
-      ${pkgs.mysql}/bin/mysql -e 'GRANT ALL ON ${config.dbName}.* TO ${config.dbUser}@localhost IDENTIFIED BY "${config.dbPassword}";'
-    else 
+      ${pkgs.mysql}/bin/mysql -e "GRANT ALL ON ${config.dbName}.* TO ${config.dbUser}@localhost IDENTIFIED BY \"$(cat ${config.dbPasswordFile})\";"
+    else
       echo "Good, no need to do anything database related."
     fi
   '';

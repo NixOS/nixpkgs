@@ -1,35 +1,47 @@
 { stdenv, fetchurl, pkgconfig
 
 # Optional Dependencies
-, openssl ? null, libev ? null, zlib ? null, jansson ? null, boost ? null
-, libxml2 ? null, jemalloc ? null
+, openssl ? null, libev ? null, zlib ? null, c-ares ? null
+, enableHpack ? false, jansson ? null
+, enableAsioLib ? false, boost ? null
+, enableGetAssets ? false, libxml2 ? null
+, enableJemalloc ? false, jemalloc ? null
 }:
+
+assert enableHpack -> jansson != null;
+assert enableAsioLib -> boost != null;
+assert enableGetAssets -> libxml2 != null;
+assert enableJemalloc -> jemalloc != null;
+
+let inherit (stdenv.lib) optional; in
 
 stdenv.mkDerivation rec {
   name = "nghttp2-${version}";
-  version = "1.10.0";
+  version = "1.32.0";
 
-  # Don't use fetchFromGitHub since this needs a bootstrap curl
   src = fetchurl {
     url = "https://github.com/nghttp2/nghttp2/releases/download/v${version}/nghttp2-${version}.tar.bz2";
-    sha256 = "1m95j3lhxp6k16aa2m03rsky13nmj8ky1kk96cwl88vbsrliz4mh";
+    sha256 = "0jlndbp4bnyvdg8b59pznrzz0bvwb9nmag7zgcflg51lm1pq2q06";
   };
 
-  # Configure script searches for a symbol which does not exist in jemalloc on Darwin
-  # Reported upstream in https://github.com/tatsuhiro-t/nghttp2/issues/233
-  postPatch = if stdenv.isDarwin && jemalloc != null then ''
-    substituteInPlace configure --replace "malloc_stats_print" "je_malloc_stats_print"
-  '' else null;
-
-  outputs = [ "out" "dev" "lib" ];
+  outputs = [ "bin" "out" "dev" "lib" ];
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ openssl libev zlib ];
+  buildInputs = [ openssl libev zlib c-ares ]
+    ++ optional enableHpack jansson
+    ++ optional enableAsioLib boost
+    ++ optional enableGetAssets libxml2
+    ++ optional enableJemalloc jemalloc;
 
   enableParallelBuilding = true;
 
+  configureFlags = [ "--with-spdylay=no" "--disable-examples" "--disable-python-bindings" "--enable-app" ]
+    ++ optional enableAsioLib "--enable-asio-lib --with-boost-libdir=${boost}/lib";
+
+  #doCheck = true;  # requires CUnit ; currently failing at test_util_localtime_date in util_test.cc
+
   meta = with stdenv.lib; {
-    homepage = http://nghttp2.org/;
+    homepage = https://nghttp2.org/;
     description = "A C implementation of HTTP/2";
     license = licenses.mit;
     platforms = platforms.all;

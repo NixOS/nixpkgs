@@ -1,10 +1,12 @@
-{ kdeFramework, lib
-, ecm
-, kdoctools
+{
+  mkDerivation, lib,
+  extra-cmake-modules, kdoctools,
+  pcre, qtbase,
 }:
 
-kdeFramework {
+mkDerivation {
   name = "kjs";
   meta = { maintainers = [ lib.maintainers.ttuegel ]; };
-  nativeBuildInputs = [ ecm kdoctools ];
+  nativeBuildInputs = [ extra-cmake-modules kdoctools ];
+  buildInputs = [ pcre qtbase ];
 }

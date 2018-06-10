@@ -1,22 +1,23 @@
-{ stdenv, fetchsvn, boost, gtk2, pkgconfig, python }:
+{ stdenv, fetchgit, boost, gtk2, pkgconfig, python }:
 
 stdenv.mkDerivation rec {
-  name = "raul-svn-${rev}";
-  rev = "5675";
+  name = "raul-unstable-${rev}";
+  rev = "2017-07-23";
 
-  src = fetchsvn {
-    url = "http://svn.drobilla.net/lad/trunk/raul";
-    rev = rev;
-    sha256 = "0yvm3j57lch89dixx7zsip7pxsws0xxy1y6ck7a3l0534qc5kny4";
+  src = fetchgit {
+    url = "http://git.drobilla.net/cgit.cgi/raul.git";
+    rev = "4db870b2b20b0a608ec0283139056b836c5b1624";
+    sha256 = "04fajrass3ymr72flx5js5vxc601ccrmx8ny8scp0rw7j0igyjdr";
   };
 
-  buildInputs = [ boost gtk2 pkgconfig python ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ boost gtk2 python ];
 
-  configurePhase = "python waf configure --prefix=$out";
+  configurePhase = "${python.interpreter} waf configure --prefix=$out";
 
-  buildPhase = "python waf";
+  buildPhase = "${python.interpreter} waf";
 
-  installPhase = "python waf install";
+  installPhase = "${python.interpreter} waf install";
 
   meta = with stdenv.lib; {
     description = "A C++ utility library primarily aimed at audio/musical applications";

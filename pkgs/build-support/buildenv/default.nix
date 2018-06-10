@@ -2,9 +2,10 @@
 # a fork of the buildEnv in the Nix distribution.  Most changes should
 # eventually be merged back into the Nix distribution.
 
-{ perl, runCommand, lib }:
+{ buildPackages, runCommand, lib }:
 
-{ name
+lib.makeOverridable
+({ name
 
 , # The manifest file (if any).  A symlink $out/manifest will be
   # created to it.
@@ -66,6 +67,6 @@ runCommand name
     passAsFile = if builtins.stringLength pkgs >= 128*1024 then [ "pkgs" ] else null;
   }
   ''
-    ${perl}/bin/perl -w ${./builder.pl}
+    ${buildPackages.perl}/bin/perl -w ${./builder.pl}
     eval "$postBuild"
-  ''
+  '')

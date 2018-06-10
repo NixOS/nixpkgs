@@ -8,12 +8,15 @@ stdenv.mkDerivation {
     sha256 = "1sr9wyy7w898vq63yd003yp3k66hd4vm8b0qsm9zvmwmpiz4wvln";
   };
 
+  nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
-    pkgconfig makeWrapper alsaLib gnome3.gtk gdk_pixbuf gnome3.defaultIconTheme
+    makeWrapper alsaLib gnome3.gtk gdk_pixbuf gnome3.defaultIconTheme
     librsvg wrapGAppsHook
   ];
 
-  makeFlags="PREFIX=$(out)";
+  makeFlags = [ "PREFIX=$(out)" ];
+
+  NIX_CFLAGS_COMPILE = [ "-D_POSIX_C_SOURCE" ];
 
   meta = {
     description = "A simple and lightweight volume icon that sits in your system tray";

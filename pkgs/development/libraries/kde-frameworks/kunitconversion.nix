@@ -1,8 +1,9 @@
-{ kdeFramework, lib, ecm, ki18n }:
+{ mkDerivation, lib, extra-cmake-modules, ki18n, qtbase, }:
 
-kdeFramework {
+mkDerivation {
   name = "kunitconversion";
   meta = { maintainers = [ lib.maintainers.ttuegel ]; };
-  nativeBuildInputs = [ ecm ];
-  propagatedBuildInputs = [ ki18n ];
+  nativeBuildInputs = [ extra-cmake-modules ];
+  buildInputs = [ ki18n qtbase ];
+  outputs = [ "out" "dev" ];
 }

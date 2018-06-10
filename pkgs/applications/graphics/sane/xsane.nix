@@ -1,9 +1,9 @@
 { stdenv, fetchurl, sane-backends, sane-frontends, libX11, gtk2, pkgconfig, libpng
 , libusb ? null
-, gimpSupport ? false, gimp_2_8 ? null
+, gimpSupport ? false, gimp ? null
 }:
 
-assert gimpSupport -> gimp_2_8 != null;
+assert gimpSupport -> gimp != null;
 
 stdenv.mkDerivation rec {
   name = "xsane-0.999";
@@ -18,9 +18,10 @@ stdenv.mkDerivation rec {
     chmod a+rX -R .
   '';
 
-  buildInputs = [libpng sane-backends sane-frontends libX11 gtk2 pkgconfig ]
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [libpng sane-backends sane-frontends libX11 gtk2 ]
     ++ (if libusb != null then [libusb] else [])
-    ++ stdenv.lib.optional gimpSupport gimp_2_8;
+    ++ stdenv.lib.optional gimpSupport gimp;
 
   meta = {
     homepage = http://www.sane-project.org/;

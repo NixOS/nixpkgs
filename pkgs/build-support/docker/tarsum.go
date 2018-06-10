@@ -5,7 +5,7 @@ import (
 	"io"
 	"io/ioutil"
 	"os"
-	"tarsum"
+	"github.com/docker/docker/pkg/tarsum"
 )
 
 func main() {

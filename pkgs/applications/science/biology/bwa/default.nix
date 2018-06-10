@@ -1,21 +1,18 @@
-{ stdenv, fetchFromGitHub, zlib }:
+{ stdenv, fetchurl, zlib }:
 
 stdenv.mkDerivation rec {
   name    = "bwa-${version}";
-  version = "0.7.15";
+  version = "0.7.17";
 
-  src = fetchFromGitHub {
-    owner  = "lh3";
-    repo   = "bwa";
-    rev    = "v${version}";
-    sha256 = "1aasdr3lik42gafi9lds7xw0wgv8ijjll1g32d7jm04pp235c7nl";
+  src = fetchurl {
+    url = "mirror://sourceforge/bio-bwa/${name}.tar.bz2";
+    sha256 = "1zfhv2zg9v1icdlq4p9ssc8k01mca5d1bd87w71py2swfi74s6yy";
   };
 
   buildInputs = [ zlib ];
 
   installPhase = ''
-    mkdir -p $out/bin
-    cp bwa $out/bin
+    install -vD bwa $out/bin/bwa
   '';
 
   meta = with stdenv.lib; {

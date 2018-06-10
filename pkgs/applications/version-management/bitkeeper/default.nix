@@ -4,19 +4,20 @@
 
 stdenv.mkDerivation rec {
   name = "bitkeeper-${version}";
-  version = "7.3ce";
+  version = "7.3.1ce";
 
   src = fetchurl {
-    url = "https://www.bitkeeper.org/downloads/${version}/bk-${version}.tar.gz";
-    sha256 = "0lk4vydpq5bi52m81h327gvzdzybf8kkak7yjwmpj6kg1jn9blaz";
+    url = "https://www.bitkeeper.org/downloads/${version}/bk-${version}.src.tar.gz";
+    sha256 = "0l6jwvcg4s1q00vb01hdv58jgv03l8x5mhjl73cwgfiff80zx147";
   };
 
   hardeningDisable = [ "fortify" ];
 
   enableParallelBuilding = true;
 
+  nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
-    perl gperf bison groff libXft pkgconfig
+    perl gperf bison groff libXft
     pcre libtomcrypt libtommath lz4
   ];
 
@@ -50,5 +51,6 @@ stdenv.mkDerivation rec {
     license     = stdenv.lib.licenses.asl20;
     platforms   = stdenv.lib.platforms.linux;
     maintainers = with stdenv.lib.maintainers; [ wscott thoughtpolice ];
+    broken      = true; # seems to fail on recent glibc versions
   };
 }

@@ -3,31 +3,21 @@
 , alsaLib, dbus_libs, cups, libexif, ffmpeg, systemd
 , freetype, fontconfig, libXft, libXrender, libxcb, expat, libXau, libXdmcp
 , libuuid, xz
-, gstreamer, gst_plugins_base, libxml2
-, glib, gtk2, pango, gdk_pixbuf, cairo, atk, gnome3
+, gstreamer, gst-plugins-base, libxml2
+, glib, gtk3, pango, gdk_pixbuf, cairo, atk, at-spi2-atk, gnome3
 , nss, nspr
-, patchelf
+, patchelf, makeWrapper
+, proprietaryCodecs ? false, vivaldi-ffmpeg-codecs ? null
 }:
 
-let
-  version = "1.3";
-  build = "551.30-1";
-  fullVersion = "stable_${version}.${build}";
-
-  info = if stdenv.is64bit then {
-      arch = "amd64";
-      sha256 = "89d0630c9df56cfb12a87f23430179f6d14a8c57fb029d1c8d28ab06c98b7640";
-    } else {
-      arch = "i386";
-      sha256 = "0a7e07833f5359e38516222767da63edeca92177cbb6d4ef4946a6ef7c7b2946";
-    };
-in stdenv.mkDerivation rec {
-  product    = "vivaldi";
-  name       = "${product}-${version}";
+stdenv.mkDerivation rec {
+  name = "${product}-${version}";
+  product = "vivaldi";
+  version = "1.15.1147.42-1";
 
   src = fetchurl {
-    inherit (info) sha256;
-    url = "https://downloads.vivaldi.com/stable/${product}-${fullVersion}_${info.arch}.deb";
+    url = "https://downloads.vivaldi.com/stable/${product}-stable_${version}_amd64.deb";
+    sha256 = "15cajvn2sv05qdp3y538n2xvyy3il49q8zi5928z1mfirjz3dlwh";
   };
 
   unpackPhase = ''
@@ -35,18 +25,20 @@ in stdenv.mkDerivation rec {
     tar -xvf data.tar.xz
   '';
 
-  buildInputs =
-    [ stdenv.cc.cc stdenv.cc.libc zlib libX11 libXt libXext libSM libICE
-      libXi libXft libXcursor libXfixes libXScrnSaver libXcomposite libXdamage libXtst libXrandr
-      atk alsaLib dbus_libs cups gtk2 gdk_pixbuf libexif ffmpeg systemd
-      freetype fontconfig libXrender libuuid expat glib nss nspr
-      gstreamer libxml2 gst_plugins_base pango cairo gnome3.gconf
-      patchelf
-    ];
+  nativeBuildInputs = [ patchelf makeWrapper ];
+
+  buildInputs = [
+    stdenv.cc.cc stdenv.cc.libc zlib libX11 libXt libXext libSM libICE libxcb
+    libXi libXft libXcursor libXfixes libXScrnSaver libXcomposite libXdamage libXtst libXrandr
+    atk at-spi2-atk alsaLib dbus_libs cups gtk3 gdk_pixbuf libexif ffmpeg systemd
+    freetype fontconfig libXrender libuuid expat glib nss nspr
+    gstreamer libxml2 gst-plugins-base pango cairo gnome3.gconf
+  ] ++ stdenv.lib.optional proprietaryCodecs vivaldi-ffmpeg-codecs;
 
   libPath = stdenv.lib.makeLibraryPath buildInputs
     + stdenv.lib.optionalString (stdenv.is64bit)
-      (":" + stdenv.lib.makeSearchPathOutput "lib" "lib64" buildInputs);
+      (":" + stdenv.lib.makeSearchPathOutput "lib" "lib64" buildInputs)
+    + ":$out/opt/vivaldi/lib";
 
   buildPhase = ''
     echo "Patching Vivaldi binaries"
@@ -54,6 +46,10 @@ in stdenv.mkDerivation rec {
       --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
       --set-rpath "${libPath}" \
       opt/vivaldi/vivaldi-bin
+  '' + stdenv.lib.optionalString proprietaryCodecs ''
+    sed -i '/^VIVALDI_FFMPEG_FOUND/ a \
+    checkffmpeg "${vivaldi-ffmpeg-codecs}/lib/libffmpeg.so"' opt/vivaldi/vivaldi
+  '' + ''
     echo "Finished patching Vivaldi binaries"
   '';
 
@@ -65,6 +61,19 @@ in stdenv.mkDerivation rec {
     cp -r opt "$out"
     mkdir "$out/bin"
     ln -s "$out/opt/vivaldi/vivaldi" "$out/bin/vivaldi"
+    mkdir -p "$out/share"
+    cp -r usr/share/{applications,xfce4} "$out"/share
+    substituteInPlace "$out"/share/applications/*.desktop \
+      --replace /usr/bin/vivaldi-stable "$out"/bin/vivaldi
+    local d
+    for d in 16 22 24 32 48 64 128 256; do
+      mkdir -p "$out"/share/icons/hicolor/''${d}x''${d}/apps
+      ln -s \
+        "$out"/opt/vivaldi/product_logo_''${d}.png \
+        "$out"/share/icons/hicolor/''${d}x''${d}/apps/vivaldi.png
+    done
+    wrapProgram "$out/bin/vivaldi" \
+      --suffix XDG_DATA_DIRS : ${gtk3}/share/gsettings-schemas/${gtk3.name}/
   '';
 
   meta = with stdenv.lib; {
@@ -72,6 +81,6 @@ in stdenv.mkDerivation rec {
     homepage    = "https://vivaldi.com";
     license     = licenses.unfree;
     maintainers = with maintainers; [ otwieracz nequissimus ];
-    platforms   = platforms.linux;
+    platforms   = [ "x86_64-linux" ];
   };
 }

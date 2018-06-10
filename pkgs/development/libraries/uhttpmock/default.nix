@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitLab, autoconf, gtk_doc, automake, libtool, pkgconfig, glib, libsoup, gobjectIntrospection }:
+{ stdenv, lib, fetchFromGitLab, autoconf, gtk-doc, automake, libtool, pkgconfig, glib, libsoup, gobjectIntrospection }:
 
 stdenv.mkDerivation rec {
   version="0.5.0";
@@ -11,7 +11,8 @@ stdenv.mkDerivation rec {
     sha256 = "0kkf670abkq5ikm3mqls475lydfsd9by1kv5im4k757xrl1br1d4";
   };
 
-  buildInputs = [ autoconf gtk_doc automake libtool pkgconfig glib libsoup gobjectIntrospection ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ autoconf gtk-doc automake libtool glib libsoup gobjectIntrospection ];
 
   preConfigure = "./autogen.sh";
 
@@ -19,7 +20,7 @@ stdenv.mkDerivation rec {
     description = "Project for mocking web service APIs which use HTTP or HTTPS";
     homepage = https://gitlab.com/groups/uhttpmock/;
     license = licenses.lgpl21;
-    maintainers = with maintainers; [ DamienCassou ];
+    maintainers = with maintainers; [ ];
     platforms = with platforms; linux;
   };
 }

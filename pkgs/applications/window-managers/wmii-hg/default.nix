@@ -29,14 +29,15 @@ stdenv.mkDerivation rec {
     EOF
   '';
 
-  buildInputs = [ unzip pkgconfig libixp_hg txt2tags dash python which
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ unzip libixp_hg txt2tags dash python which
                   libX11 libXrender libXext libXinerama libXrandr libXft ];
 
   # For some reason including mercurial in buildInputs did not help
   makeFlags = "WMII_HGVERSION=hg${rev}";
 
   meta = {
-    homepage = "https://code.google.com/archive/p/wmii/";
+    homepage = https://suckless.org/; # https://wmii.suckless.org/ does not exist anymore
     description = "A small window manager controlled by a 9P filesystem";
     maintainers = with stdenv.lib.maintainers; [ kovirobi ];
     license = stdenv.lib.licenses.mit;

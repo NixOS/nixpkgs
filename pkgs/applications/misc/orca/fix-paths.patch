@@ -1,0 +1,29 @@
+--- a/src/orca/orca.py
++++ b/src/orca/orca.py
+@@ -239,7 +239,7 @@
+ 
+ def _setXmodmap(xkbmap):
+     """Set the keyboard map using xkbcomp."""
+-    p = subprocess.Popen(['xkbcomp', '-w0', '-', os.environ['DISPLAY']],
++    p = subprocess.Popen(['@xkbcomp@', '-w0', '-', os.environ['DISPLAY']],
+         stdin=subprocess.PIPE, stdout=None, stderr=None)
+     p.communicate(xkbmap)
+ 
+@@ -297,7 +297,7 @@
+     """
+ 
+     global _originalXmodmap
+-    _originalXmodmap = subprocess.check_output(['xkbcomp', os.environ['DISPLAY'], '-'])
++    _originalXmodmap = subprocess.check_output(['@xkbcomp@', os.environ['DISPLAY'], '-'])
+ 
+ def _restoreXmodmap(keyList=[]):
+     """Restore the original xmodmap values for the keys in keyList.
+@@ -309,7 +309,7 @@
+ 
+     global _capsLockCleared
+     _capsLockCleared = False
+-    p = subprocess.Popen(['xkbcomp', '-w0', '-', os.environ['DISPLAY']],
++    p = subprocess.Popen(['@xkbcomp@', '-w0', '-', os.environ['DISPLAY']],
+         stdin=subprocess.PIPE, stdout=None, stderr=None)
+     p.communicate(_originalXmodmap)
+ 

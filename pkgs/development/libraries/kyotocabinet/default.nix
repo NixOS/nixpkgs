@@ -17,8 +17,18 @@ stdenv.mkDerivation rec {
       --replace tr1::unordered_set std::unordered_set
 
     substituteInPlace lab/kcdict/Makefile --replace stdc++ c++
-    substituteInPlace configure --replace stdc++ c++
+    substituteInPlace configure \
+        --replace /usr/local/bin:/usr/local/sbin: "" \
+        --replace /usr/bin:/usr/sbin: "" \
+        --replace /bin:/sbin: "" \
+        --replace stdc++ c++
   '';
+
+  patches = [(fetchurl {
+    name = "gcc6.patch";
+    url = "http://src.fedoraproject.org/rpms/kyotocabinet/raw/master/f/kyotocabinet-1.2.76-gcc6.patch";
+    sha256 = "1h5k38mkiq7lz8nd2gbn7yvimcz49g3z7phn1cr560bzjih8rz23";
+  })];
 
   buildInputs = [ zlib ];
 

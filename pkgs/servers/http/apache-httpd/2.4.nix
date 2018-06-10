@@ -4,11 +4,11 @@
 , http2Support ? true, nghttp2
 , ldapSupport ? true, openldap
 , libxml2Support ? true, libxml2
+, brotliSupport ? true, brotli
 , luaSupport ? false, lua5
 }:
 
-let optional       = stdenv.lib.optional;
-    optionalString = stdenv.lib.optionalString;
+let inherit (stdenv.lib) optional optionalString;
 in
 
 assert sslSupport -> aprutil.sslSupport && openssl != null;
@@ -16,26 +16,27 @@ assert ldapSupport -> aprutil.ldapSupport && openldap != null;
 assert http2Support -> nghttp2 != null;
 
 stdenv.mkDerivation rec {
-  version = "2.4.23";
+  version = "2.4.33";
   name = "apache-httpd-${version}";
 
   src = fetchurl {
     url = "mirror://apache/httpd/httpd-${version}.tar.bz2";
-    sha256 = "0n2yx3gjlpr4kgqx845fj6amnmg25r2l6a7rzab5hxnpmar985hc";
+    sha256 = "de02511859b00d17845b9abdd1f975d5ccb5d0b280c567da5bf2ad4b70846f05";
   };
 
   # FIXME: -dev depends on -doc
-  outputs = [ "out" "dev" "doc" ];
+  outputs = [ "out" "dev" "man" "doc" ];
   setOutputFlags = false; # it would move $out/modules, etc.
 
   buildInputs = [perl] ++
+    optional brotliSupport brotli ++
     optional sslSupport openssl ++
     optional ldapSupport openldap ++    # there is no --with-ldap flag
     optional libxml2Support libxml2 ++
     optional http2Support nghttp2 ++
     optional stdenv.isDarwin libiconv;
 
-  patchPhase = ''
+  prePatch = ''
     sed -i config.layout -e "s|installbuilddir:.*|installbuilddir: $dev/share/build|"
   '';
 
@@ -45,6 +46,7 @@ stdenv.mkDerivation rec {
   preConfigure = ''
     configureFlags="$configureFlags --includedir=$dev/include"
   '';
+
   configureFlags = ''
     --with-apr=${apr.dev}
     --with-apr-util=${aprutil.dev}
@@ -57,6 +59,7 @@ stdenv.mkDerivation rec {
     --enable-cern-meta
     --enable-imagemap
     --enable-cgi
+    ${optionalString brotliSupport "--enable-brotli --with-brotli=${brotli}"}
     ${optionalString proxySupport "--enable-proxy"}
     ${optionalString sslSupport "--enable-ssl"}
     ${optionalString http2Support "--enable-http2 --with-nghttp2"}
@@ -66,6 +69,8 @@ stdenv.mkDerivation rec {
   '';
 
   enableParallelBuilding = true;
+
+  stripDebugList = "lib modules bin";
 
   postInstall = ''
     mkdir -p $doc/share/doc/httpd

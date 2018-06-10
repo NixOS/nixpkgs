@@ -1,12 +1,12 @@
 { stdenv, fetchurl, perl, unzip }:
 stdenv.mkDerivation rec {
   name = "zpaq-${version}";
-  version = "7.14";
+  version = "715";
 
   src = let
     mungedVersion = with stdenv.lib; concatStrings (splitString "." version);
   in fetchurl {
-    sha256 = "1xmmn5sy19yip8cbr3plhd7nh7x7k1b09lq2kqfcp6bndg7jxgby";
+    sha256 = "066l94yyladlfzri877nh2dhkvspagjn3m5bmv725fmhkr9c4pp8";
     url = "http://mattmahoney.net/dc/zpaq${mungedVersion}.zip";
   };
 
@@ -35,7 +35,8 @@ stdenv.mkDerivation rec {
     description = "Incremental journaling backup utility and archiver";
     homepage = http://mattmahoney.net/dc/zpaq.html;
     license = licenses.gpl3Plus ;
-    maintainers = with maintainers; [ raskin nckx ];
+    maintainers = with maintainers; [ raskin ];
     platforms = platforms.linux;
+    inherit version;
   };
 }

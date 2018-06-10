@@ -1,4 +1,5 @@
-{ go, govers, parallel, lib, fetchgit, fetchhg }:
+{ go, govers, parallel, lib, fetchgit, fetchhg, fetchbzr, rsync
+, removeReferencesTo, fetchFromGitHub }:
 
 { name, buildInputs ? [], nativeBuildInputs ? [], passthru ? {}, preFixup ? ""
 
@@ -16,6 +17,10 @@
 
 # Extra sources to include in the gopath
 , extraSrcs ? [ ]
+
+# Extra gopaths containing src subfolder
+# with sources to include in the gopath
+, extraSrcPaths ? [ ]
 
 # go2nix dependency file
 , goDeps ? null
@@ -37,9 +42,7 @@ let
 
   removeReferences = [ ] ++ lib.optional (!allowGoReference) go;
 
-  removeExpr = refs: lib.flip lib.concatMapStrings refs (ref: ''
-    | sed "s,${ref},$(echo "${ref}" | sed "s,$NIX_STORE/[^-]*,$NIX_STORE/eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee,"),g" \
-  '');
+  removeExpr = refs: ''remove-references-to ${lib.concatMapStrings (ref: " -t ${ref}") refs}'';
 
   dep2src = goDep:
     {
@@ -52,7 +55,15 @@ let
         fetchhg {
           inherit (goDep.fetch) url rev sha256;
         }
-      else abort "Unrecognized package fetch type";
+      else if goDep.fetch.type == "bzr" then
+        fetchbzr {
+          inherit (goDep.fetch) url rev sha256;
+        }
+      else if goDep.fetch.type == "FromGitHub" then
+        fetchFromGitHub {
+          inherit (goDep.fetch) owner repo rev sha256;
+        }
+      else abort "Unrecognized package fetch type: ${goDep.fetch.type}";
     };
 
   importGodeps = { depsFile }:
@@ -65,8 +76,8 @@ in
 go.stdenv.mkDerivation (
   (builtins.removeAttrs args [ "goPackageAliases" "disabled" ]) // {
 
-  name = "go${go.meta.branch}-${name}";
-  nativeBuildInputs = [ go parallel ]
+  inherit name;
+  nativeBuildInputs = [ removeReferencesTo go parallel ]
     ++ (lib.optional (!dontRenameImports) govers) ++ nativeBuildInputs;
   buildInputs = [ go ] ++ buildInputs;
 
@@ -85,6 +96,9 @@ go.stdenv.mkDerivation (
     chmod -R u+w goPath/*
     mv goPath/* "go/src/${goPackagePath}"
     rmdir goPath
+
+  '') + (lib.optionalString (extraSrcPaths != []) ''
+    ${rsync}/bin/rsync -a ${lib.concatMapStringsSep " " (p: "${p}/src") extraSrcPaths} go
 
   '') + ''
     export GOPATH=$NIX_BUILD_TOP/go:$GOPATH
@@ -109,11 +123,12 @@ go.stdenv.mkDerivation (
       local d; local cmd;
       cmd="$1"
       d="$2"
+      . $TMPDIR/buildFlagsArray
       echo "$d" | grep -q "\(/_\|examples\|Godeps\)" && return 0
       [ -n "$excludedPackages" ] && echo "$d" | grep -q "$excludedPackages" && return 0
       local OUT
       if ! OUT="$(go $cmd $buildFlags "''${buildFlagsArray[@]}" -v $d 2>&1)"; then
-        if ! echo "$OUT" | grep -q 'no buildable Go source files'; then
+        if ! echo "$OUT" | grep -qE '(no( buildable| non-test)?|build constraints exclude all) Go (source )?files'; then
           echo "$OUT" >&2
           return 1
         fi
@@ -130,12 +145,17 @@ go.stdenv.mkDerivation (
       if [ -n "$subPackages" ]; then
         echo "$subPackages" | sed "s,\(^\| \),\1$goPackagePath/,g"
       else
-        pushd go/src >/dev/null
+        pushd "$NIX_BUILD_TOP/go/src" >/dev/null
         find "$goPackagePath" -type f -name \*$type.go -exec dirname {} \; | grep -v "/vendor/" | sort | uniq
         popd >/dev/null
       fi
     }
 
+    if [ ''${#buildFlagsArray[@]} -ne 0 ]; then
+      declare -p buildFlagsArray > $TMPDIR/buildFlagsArray
+    else
+      touch $TMPDIR/buildFlagsArray
+    fi
     export -f buildGoDir # parallel needs to see the function
     if [ -z "$enableParallelBuilding" ]; then
         export NIX_BUILD_CORES=1
@@ -173,12 +193,11 @@ go.stdenv.mkDerivation (
   '';
 
   preFixup = preFixup + ''
-    while read file; do
-      cat $file ${removeExpr removeReferences} > $file.tmp
-      mv $file.tmp $file
-      chmod +x $file
-    done < <(find $bin/bin -type f 2>/dev/null)
+    find $bin/bin -type f -exec ${removeExpr removeReferences} '{}' + || true
   '';
+
+  # Disable go cache, which is not reused in nix anyway
+  GOCACHE = "off";
 
   shellHook = ''
     d=$(mktemp -d "--suffix=-$name")
@@ -187,7 +206,7 @@ go.stdenv.mkDerivation (
      ln -s "${dep.src}" "$d/src/${dep.goPackagePath}"
   ''
   ) goPath) + ''
-    export GOPATH="$d:$GOPATH"
+    export GOPATH=${lib.concatStringsSep ":" ( ["$d"] ++ ["$GOPATH"] ++ ["$PWD"] ++ extraSrcPaths)}
   '';
 
   disallowedReferences = lib.optional (!allowGoReference) go
@@ -204,7 +223,8 @@ go.stdenv.mkDerivation (
 
   meta = {
     # Add default meta information
-    platforms = lib.platforms.all;
+    homepage = "https://${goPackagePath}";
+    platforms = go.meta.platforms or lib.platforms.all;
   } // meta // {
     # add an extra maintainer to every package
     maintainers = (meta.maintainers or []) ++

@@ -1,18 +1,19 @@
-{ stdenv, fetchurl, pkgconfig, intltool, libxfce4util, xfce4panel, libxfce4ui, libxfcegui4, xfconf, gtk}:
+{ stdenv, fetchurl, pkgconfig, intltool, libxfce4util, xfce4-panel, libxfce4ui, libxfcegui4, xfconf, gtk}:
 
 with stdenv.lib;
 stdenv.mkDerivation rec {
   p_name  = "xfce4-embed-plugin";
-  ver_maj = "1.4";
-  ver_min = "1";
+  ver_maj = "1.6";
+  ver_min = "0";
 
   src = fetchurl {
     url = "mirror://xfce/src/panel-plugins/${p_name}/${ver_maj}/${name}.tar.bz2";
-    sha256 = "0s0zlg7nvjaqvma4l8bhxk171yjrpncsz6v0ff1cxl3z6ya6hbxq";
+    sha256 = "0a72kqsjjh45swimqlpyrahdnplp0383v0i4phr4n6g8c1ixyry7";
   };
   name = "${p_name}-${ver_maj}.${ver_min}";
 
-  buildInputs = [ pkgconfig intltool libxfce4util libxfce4ui xfce4panel libxfcegui4 xfconf gtk ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ intltool libxfce4util libxfce4ui xfce4-panel libxfcegui4 xfconf gtk ];
 
   meta = {
     homepage = "http://goodies.xfce.org/projects/panel-plugins/${p_name}";

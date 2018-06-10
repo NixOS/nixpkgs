@@ -2,16 +2,16 @@
 
 stdenv.mkDerivation rec {
   name = "darkhttpd-${version}";
-  version = "1.11";
+  version = "1.12";
 
   src = fetchurl {
     url = "https://unix4lyfe.org/darkhttpd/${name}.tar.bz2";
-    sha256 = "0lbcv6pa82md0gqyyskxndf8hm58y76nrnkanc831ia3vm529bdg";
+    sha256 = "0185wlyx4iqiwfigp1zvql14zw7gxfacncii3d15yaxk4av1f155";
   };
 
-  installPhase = ''
-    install -d "$out/bin"
+  enableParallelBuilding = true;
 
+  installPhase = ''
     # install darkhttpd
     install -Dm755 "darkhttpd" "$out/bin/darkhttpd"
 
@@ -22,9 +22,9 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Small and secure static webserver";
-    homepage = http://dmr.ath.cx/net/darkhttpd/;
-    license = stdenv.lib.licenses.bsd3;
-    platforms = platforms.linux;
-    maintainers = [ maintainers.bobvanderlinden ];
+    homepage    = https://unix4lyfe.org/darkhttpd/;
+    license     = licenses.bsd3;
+    maintainers = with maintainers; [ bobvanderlinden ];
+    platforms   = platforms.all;
   };
 }

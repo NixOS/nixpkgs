@@ -53,6 +53,7 @@ in
 
       extraConfig = mkOption {
         default = "";
+        type = types.lines;
         description = ''
           Configuration that is injected verbatim into the configuration file.
         '';

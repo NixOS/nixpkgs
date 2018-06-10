@@ -6,7 +6,7 @@ assert ((config.planetary_annihilation or null).url or null) != null;
 assert ((config.planetary_annihilation or null).sha256 or null) != null;
 
 /* to setup:
- $ cat ~/.nixpkgs/config.nix
+ $ cat ~/.config/nixpkgs/config.nix
  {
   planetary_annihilation = {
     url = "file:///home/user/PA_Linux_62857.tar.bz2";

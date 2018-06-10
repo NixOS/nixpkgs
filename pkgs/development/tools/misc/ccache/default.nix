@@ -1,15 +1,25 @@
-{ stdenv, fetchurl, fetchpatch, runCommand, zlib }:
+{ stdenv, fetchurl, fetchpatch, runCommand, perl, zlib, makeWrapper }:
 
 let ccache = stdenv.mkDerivation rec {
   name = "ccache-${version}";
-  version = "3.2.5";
+  version = "3.4.1";
 
   src = fetchurl {
-    sha256 = "11db1g109g0g5si0s50yd99ja5f8j4asxb081clvx78r9d9i2w0i";
+    sha256 = "1pppi4jbkkj641cdynmc35jaj40jjicw7gj75ran5qs5886jcblc";
     url = "mirror://samba/ccache/${name}.tar.xz";
   };
 
+  nativeBuildInputs = [ perl ];
+
   buildInputs = [ zlib ];
+
+  outputs = [ "out" "man" ];
+
+  # non to be fail on filesystems with unconventional blocksizes (zfs on Hydra?)
+  patches = [
+    ./fix-debug-prefix-map-suite.patch
+    ./skip-fs-dependent-test.patch
+  ];
 
   postPatch = ''
     substituteInPlace Makefile.in --replace 'objs) $(extra_libs)' 'objs)'
@@ -29,18 +39,16 @@ let ccache = stdenv.mkDerivation rec {
         isGNU = unwrappedCC.isGNU or false;
       };
       inherit (unwrappedCC) lib;
+      nativeBuildInputs = [ makeWrapper ];
       buildCommand = ''
         mkdir -p $out/bin
 
         wrap() {
           local cname="$1"
           if [ -x "${unwrappedCC}/bin/$cname" ]; then
-            cat > $out/bin/$cname << EOF
-        #!/bin/sh
-        ${extraConfig}
-        exec ${ccache}/bin/ccache ${unwrappedCC}/bin/$cname "\$@"
-        EOF
-            chmod +x $out/bin/$cname
+            makeWrapper ${ccache}/bin/ccache $out/bin/$cname \
+              --run ${stdenv.lib.escapeShellArg extraConfig} \
+              --add-flags ${unwrappedCC}/bin/$cname
           fi
         }
 
@@ -68,7 +76,6 @@ let ccache = stdenv.mkDerivation rec {
     homepage = http://ccache.samba.org/;
     downloadPage = https://ccache.samba.org/download.html;
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ nckx ];
     platforms = platforms.unix;
   };
 };

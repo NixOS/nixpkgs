@@ -1,49 +1,48 @@
-{ stdenv, lib, fetchFromGitHub, pythonPackages, makeWrapper, chromaprint }:
+{ stdenv, fetchFromGitHub, python2Packages, makeWrapper, chromaprint }:
 
-with lib;
-with pythonPackages;
-
-buildPythonApplication rec {
-  version = "1.1.1";
+python2Packages.buildPythonApplication rec {
   name = "puddletag-${version}";
-  namePrefix = "";
+  version = "1.2.0";
 
   src = fetchFromGitHub {
-    owner = "keithgg";
-    repo = "puddletag";
-    rev = "1.1.1";
-    sha256 = "0zmhc01qg64fb825b3kj0mb0r0d9hms30nqvhdks0qnv7ahahqrx";
+    owner  = "keithgg";
+    repo   = "puddletag";
+    rev    = "v${version}";
+    sha256 = "1g6wa91awy17z5b704yi9kfynnvfm9lkrvpfvwccscr1h8s3qmiz";
   };
 
-  sourceRoot = "${name}-src/source";
+  setSourceRoot = ''
+    sourceRoot=$(echo */source)
+  '';
 
-  disabled = isPy3k;
+  disabled = python2Packages.isPy3k; # work to support python 3 has not begun
 
-  outputs = [ "out" ];
-
-  propagatedBuildInputs = [
-    chromaprint
+  propagatedBuildInputs = [ chromaprint ] ++ (with python2Packages; [
     configobj
     mutagen
     pyparsing
     pyqt4
-  ];
+  ]);
 
   doCheck = false;   # there are no tests
   dontStrip = true;  # we are not generating any binaries
 
   installPhase = ''
+    runHook preInstall
+
     siteDir=$(toPythonPath $out)
     mkdir -p $siteDir
     PYTHONPATH=$PYTHONPATH:$siteDir
-    ${python.interpreter} setup.py install --prefix $out
+    ${python2Packages.python.interpreter} setup.py install --prefix $out
+
+    runHook postInstall
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://puddletag.net;
+    homepage    = https://puddletag.net;
     description = "An audio tag editor similar to the Windows program, Mp3tag";
-    license = licenses.gpl3;
-    platforms = platforms.linux;
+    license     = licenses.gpl3;
     maintainers = with maintainers; [ peterhoeg ];
+    platforms   = platforms.linux;
   };
 }

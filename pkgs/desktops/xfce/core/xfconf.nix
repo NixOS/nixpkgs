@@ -1,22 +1,25 @@
-{ stdenv, fetchurl, pkgconfig, intltool, glib, libxfce4util, dbus_glib }:
+{ stdenv, fetchurl, pkgconfig, intltool, glib, libxfce4util, dbus-glib }:
 let
   p_name  = "xfconf";
   ver_maj = "4.12";
-  ver_min = "0";
+  ver_min = "1";
 in
 stdenv.mkDerivation rec {
   name = "${p_name}-${ver_maj}.${ver_min}";
 
   src = fetchurl {
     url = "mirror://xfce/src/xfce/${p_name}/${ver_maj}/${name}.tar.bz2";
-    sha256 = "0mmi0g30aln3x98y5p507g17pipq0dj0bwypshan8cq5hkmfl44r";
+    sha256 = "0dns190bwb615wy9ma2654sw4vz1d0rcv061zmaalkv9wmj8bx1m";
   };
 
   outputs = [ "out" "dev" "devdoc" ];
 
   #TODO: no perl bingings yet (ExtUtils::Depends, ExtUtils::PkgConfig, Glib)
-  buildInputs = [ pkgconfig intltool glib libxfce4util ];
-  propagatedBuildInputs = [ dbus_glib ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ intltool glib libxfce4util ];
+  propagatedBuildInputs = [ dbus-glib ];
+
+  doCheck = false; # requires dbus daemon
 
   meta = with stdenv.lib; {
     homepage = http://docs.xfce.org/xfce/xfconf/start;
@@ -25,4 +28,3 @@ stdenv.mkDerivation rec {
     platforms = platforms.linux;
   };
 }
-

@@ -9,7 +9,8 @@ stdenv.mkDerivation {
     rev = "4c32e748863d5165cc0e3d6b54a8383f4836cdf1";
     sha256 = "18szs3j3ig8wlcqngran0daxaj7j2qsmch0212ids6fymj1hgax4";
   };
-  buildInputs = [ openssl doxygen boost sqlite cryptopp pkgconfig python pythonPackages.sphinx];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ openssl doxygen boost sqlite cryptopp python pythonPackages.sphinx];
   preConfigure = ''
     patchShebangs waf
     ./waf configure \
@@ -26,7 +27,7 @@ stdenv.mkDerivation {
     ./waf install
   '';
   meta = with stdenv.lib; {
-    homepage = "http://named-data.net/";
+    homepage = http://named-data.net/;
     description = "A Named Data Neworking (NDN) or Content Centric Networking (CCN) abstraction";
     longDescription = ''
       ndn-cxx is a C++ library, implementing Named Data Networking (NDN)
@@ -44,5 +45,6 @@ stdenv.mkDerivation {
     license = licenses.lgpl3;
     platforms = stdenv.lib.platforms.unix;
     maintainers = [ maintainers.sjmackenzie ];
+    broken = true; # 2018-04-11
   };
 }

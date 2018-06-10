@@ -1,24 +1,26 @@
 {stdenv, fetchurl, perl, gettext }:
 
 stdenv.mkDerivation rec {
-  name = "dos2unix-7.3.2";
-  
+  name = "dos2unix-${version}";
+  version = "7.4.0";
+
   src = fetchurl {
-    url = "http://waterlan.home.xs4all.nl/dos2unix/${name}.tar.gz";
-    sha256 = "12c68c6wjnwrkyjj99fn6d0i4bf53aldj259lhjwq0g0nc5yxs67";
+    url = "https://waterlan.home.xs4all.nl/dos2unix/${name}.tar.gz";
+    sha256 = "12h4c61g376bhq03y5g2xszkrkrj5hwd928rly3xsp6rvfmnbixs";
   };
 
   configurePhase = ''
-    sed -i -e s,/usr,$out, Makefile
-  '';
+    substituteInPlace Makefile \
+    --replace /usr $out
+    '';
 
   buildInputs = [ perl gettext ];
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = http://waterlan.home.xs4all.nl/dos2unix.html;
     description = "Tools to transform text files from dos to unix formats and vicervesa";
-    license = stdenv.lib.licenses.bsd2;
-    maintainers = with stdenv.lib.maintainers; [viric];
-    platforms = with stdenv.lib.platforms; all;
+    license = licenses.bsd2;
+    maintainers = with maintainers; [viric ndowens ];
+
   };
 }

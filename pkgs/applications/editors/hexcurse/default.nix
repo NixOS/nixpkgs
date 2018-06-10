@@ -1,20 +1,32 @@
-{ stdenv, lib, fetchFromGitHub, ncurses }:
+{ stdenv, lib, fetchFromGitHub, fetchpatch, ncurses }:
 
 stdenv.mkDerivation rec {
   name = "hexcurse-${version}";
-  version = "1.58";
+  version = "1.60.0";
+
   src = fetchFromGitHub {
     owner = "LonnyGomes";
     repo = "hexcurse";
-    rev = "hexcurse-${version}";
-    sha256 = "0hm9mms2ija3wqba0mkk9i8fhb8q1pam6d6pjlingkzz6ygxnnp7";
+    rev = "v${version}";
+    sha256 = "17ckkxfzbqvvfdnh10if4aqdcq98q3vl6dn1v6f4lhr4ifnyjdlk";
   };
-  buildInputs = [
-    ncurses
+  buildInputs = [ ncurses ];
+  patches = [
+    # gcc7 compat
+    (fetchpatch {
+      url = https://github.com/LonnyGomes/hexcurse/commit/d808cb7067d1df067f8b707fabbfaf9f8931484c.patch;
+      sha256 = "0h8345blmc401c6bivf0imn4cwii67264yrzxg821r46wrnfvyi2";
+    })
+    # gcc7 compat
+    (fetchpatch {
+      url = https://github.com/LonnyGomes/hexcurse/commit/716b5d58ac859cc240b8ccb9cbd79ace3e0593c1.patch;
+      sha256 = "0v6gbp6pjpmnzswlf6d97aywiy015g3kcmfrrkspsbb7lh1y3nix";
+    })
   ];
+  
   meta = with lib; {
     description = "ncurses-based console hexeditor written in C";
-    homepage = "https://github.com/LonnyGomes/hexcurse";
+    homepage = https://github.com/LonnyGomes/hexcurse;
     license = licenses.gpl2;
     platforms = platforms.linux;
     maintainers = with maintainers; [ cstrahan ];

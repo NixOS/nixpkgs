@@ -9,14 +9,16 @@ stdenv.mkDerivation rec {
     sha256 = "0jhh1h1k5b41v2ycq8kn43nkrkh0b9l7xjmw38rak871g3z3hix1";
   };
 
-  buildInputs = [ pkgconfig gcc perl libusb ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ gcc perl libusb ];
 
   meta = {
     license = stdenv.lib.licenses.gpl2;
     description = "Translator between GDB's remote debug protocol and the AVR JTAG ICE protocol";
-    homepage = http://sourceforge.net/projects/avarice/files/avarice/;
+    homepage = https://sourceforge.net/projects/avarice/files/avarice/;
     maintainers = [ stdenv.lib.maintainers.smironov ];
     platforms = stdenv.lib.platforms.linux;
+    broken = true; # 2018-04-10
   };
 }
 

@@ -3,17 +3,18 @@
 
 stdenv.mkDerivation rec {
   name = "playerctl-${version}";
-  version = "0.5.0";
+  version = "0.6.0";
 
   src = fetchFromGitHub {
     owner = "acrisci";
     repo = "playerctl";
     rev = "v${version}";
-    sha256 = "0b4pg5pwblgbf6kvvynzh9dshfikxy5c2ks7733n7wza5wkpgmng";
+    sha256 = "1sxy87syrfk485f2x556rl567j6rph4ss0xahf04bv26bzj3mqrp";
   };
 
+  nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
-    which autoconf automake libtool gnome2.gtkdoc glib pkgconfig
+    which autoconf automake libtool gnome2.gtkdoc glib
     gobjectIntrospection
   ];
 

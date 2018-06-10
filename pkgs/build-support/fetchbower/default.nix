@@ -1,14 +1,16 @@
-{ stdenv, lib, bower2nix }:
+{ stdenvNoCC, lib, bower2nix, cacert }:
 let
   bowerVersion = version:
     let
       components = lib.splitString "#" version;
       hash = lib.last components;
-      ver = if builtins.length components == 1 then version else hash;
+      ver = if builtins.length components == 1 then (cleanName version) else hash;
     in ver;
 
-  fetchbower = name: version: target: outputHash: stdenv.mkDerivation {
-    name = "${name}-${bowerVersion version}";
+  cleanName = name: lib.replaceStrings ["/" ":"] ["-" "-"] name;
+
+  fetchbower = name: version: target: outputHash: stdenvNoCC.mkDerivation {
+    name = "${cleanName name}-${bowerVersion version}";
     buildCommand = ''
       fetch-bower --quiet --out=$PWD/out "${name}" "${target}" "${version}"
       # In some cases, the result of fetchBower is different depending
@@ -20,7 +22,7 @@ let
     outputHashMode = "recursive";
     outputHashAlgo = "sha256";
     inherit outputHash;
-    buildInputs = [ bower2nix ];
+    nativeBuildInputs = [ bower2nix cacert ];
   };
 
 in fetchbower

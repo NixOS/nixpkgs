@@ -1,36 +1,43 @@
-{ stdenv, fetchurl, unzip, jre }:
+{ stdenv, jdk, jre, coursier, makeWrapper }:
 
-stdenv.mkDerivation rec {
-  version = "0.3.1";
+let
   baseName = "scalafmt";
+  version = "1.4.0";
+  deps = stdenv.mkDerivation {
+    name = "${baseName}-deps-${version}";
+    buildCommand = ''
+      export COURSIER_CACHE=$(pwd)
+      ${coursier}/bin/coursier fetch com.geirsson:scalafmt-cli_2.12:${version} > deps
+      mkdir -p $out/share/java
+      cp $(< deps) $out/share/java/
+    '';
+    outputHashMode = "recursive";
+    outputHashAlgo = "sha256";
+    outputHash     = "12hsix3b7qnyr9x2v7i6jgqljdqxpfj4bfvhjdl99ijr793g3lnp";
+  };
+in
+stdenv.mkDerivation rec {
   name = "${baseName}-${version}";
 
-  src = fetchurl {
-    url = "https://github.com/olafurpg/scalafmt/releases/download/v${version}/${baseName}.tar.gz";
-    sha256 = "08jbhwnmcqjq95a4c0wsw7vp2v9apys6czrpjjaw7x1q4vgcnjzv";
-  };
+  buildInputs = [ jdk makeWrapper deps ];
 
-  unpackPhase = "tar xvzf $src";
+  doCheck = true;
+
+  phases = [ "installPhase" "checkPhase" ];
 
   installPhase = ''
-    mkdir -p "$out/bin"
-    mkdir -p "$out/lib"
+    makeWrapper ${jre}/bin/java $out/bin/${baseName} \
+      --add-flags "-cp $CLASSPATH org.scalafmt.cli.Cli"
+  '';
 
-    cp cli/target/scala-2.11/scalafmt.jar "$out/lib/${name}.jar"
-
-    cat > "$out/bin/${baseName}" << EOF
-    #!${stdenv.shell}
-    exec ${jre}/bin/java -jar "$out/lib/${name}.jar" "\$@"
-    EOF
-
-    chmod a+x "$out/bin/${baseName}"
+  checkPhase = ''
+    $out/bin/${baseName} --version | grep -q "${version}"
   '';
 
   meta = with stdenv.lib; {
     description = "Opinionated code formatter for Scala";
     homepage = http://scalafmt.org;
     license = licenses.asl20;
-    platforms = platforms.linux;
     maintainers = [ maintainers.markus1189 ];
   };
 }

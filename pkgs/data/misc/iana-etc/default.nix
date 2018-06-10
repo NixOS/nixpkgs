@@ -1,18 +1,22 @@
 {stdenv, fetchurl}:
 
 stdenv.mkDerivation rec {
-  name = "iana-etc-2.30";
+  name = "iana-etc-${version}";
+  version = "20180405";
 
   src = fetchurl {
-    url = "http://sethwklein.net/projects/iana-etc/downloads/${name}.tar.bz2";
-    sha256 = "03gjlg5zlwsdk6qyw3v85l129rna5bpm4m7pzrp864h0n97qg9mr";
+    url = "https://github.com/Mic92/iana-etc/releases/download/${version}/iana-etc-${version}.tar.gz";
+    sha256 = "0x6i95arrc4lcq2il3r05hbnd9vsi87z4yc8s3agkvbj74d6hfhj";
   };
 
-  preInstall = "installFlags=\"PREFIX=$out\"";
+  installPhase = ''
+    install -D -t $out/etc services protocols
+  '';
 
-  meta = {
-    homepage = http://sethwklein.net/projects/iana-etc/;
+  meta = with stdenv.lib; {
+    homepage = https://github.com/Mic92/iana-etc;
     description = "IANA protocol and port number assignments (/etc/protocols and /etc/services)";
-    platforms = stdenv.lib.platforms.unix;
+    platforms = platforms.unix;
+    license = licenses.mit;
   };
 }

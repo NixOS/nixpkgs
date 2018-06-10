@@ -1,14 +1,20 @@
-{ stdenv, fetchurl }:
+{ stdenv, fetchFromGitHub, cmake }:
 
 stdenv.mkDerivation rec {
   name = "${product}-${version}";
   product = "uncrustify";
-  version = "0.63";
+  version = "0.67";
 
-  src = fetchurl {
-    url = "mirror://sourceforge/uncrustify/${product}-${version}.tar.gz";
-    sha256 = "1qravjzmips3m7asbsd0qllmprrl1rshjlmnfq68w84d38sb3yyz";
+  src = fetchFromGitHub {
+    owner = product;
+    repo = product;
+    rev = name;
+    sha256 = "0hf8c93aj1hjg6cc77x6p7nf7ddp8mn4b6a9gpcrvmx8w81afpd3";
   };
+
+  nativeBuildInputs = [ cmake ];
+
+  enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
     description = "Source code beautifier for C, C++, C#, ObjectiveC, D, Java, Pawn and VALA";

@@ -22,6 +22,12 @@ in
         default = "emby";
         description = "Group under which emby runs.";
       };
+
+      dataDir = mkOption {
+        type = types.path;
+        default = "/var/lib/emby/ProgramData-Server";
+        description = "Location where Emby stores its data.";
+      };
     };
   };
 
@@ -31,10 +37,10 @@ in
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
       preStart = ''
-        test -d /var/lib/emby/ProgramData-Server || {
-          echo "Creating initial Emby data directory in /var/lib/emby/ProgramData-Server"
-          mkdir -p /var/lib/emby/ProgramData-Server
-          chown -R ${cfg.user}:${cfg.group} /var/lib/emby/ProgramData-Server
+        test -d ${cfg.dataDir} || {
+          echo "Creating initial Emby data directory in ${cfg.dataDir}"
+          mkdir -p ${cfg.dataDir}
+          chown -R ${cfg.user}:${cfg.group} ${cfg.dataDir}
           }
       '';
 
@@ -43,7 +49,7 @@ in
         User = cfg.user;
         Group = cfg.group;
         PermissionsStartOnly = "true";
-        ExecStart = "${pkgs.mono}/bin/mono ${pkgs.emby}/bin/MediaBrowser.Server.Mono.exe";
+        ExecStart = "${pkgs.emby}/bin/MediaBrowser.Server.Mono";
         Restart = "on-failure";
       };
     };

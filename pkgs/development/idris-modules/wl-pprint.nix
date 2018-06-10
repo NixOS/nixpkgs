@@ -4,25 +4,24 @@
 , base
 , lib
 , idris
-}: build-idris-package {
+}:
+build-idris-package {
   name = "wl-pprint";
+  version = "2017-03-13";
 
   src = fetchFromGitHub {
     owner = "shayan-najd";
     repo = "wl-pprint";
-    rev = "120f654b0b9838b57e10b163d3562d959439fb07";
-    sha256 = "1yymdl251zla6hv9rcg06x73gbp6xb0n6f6a02bsy5fqfmrfngcl";
+    rev = "97590d1679b3db07bb430783988b4cba539e9947";
+    sha256 = "0ifp76cqg340jkkzanx69vg76qivv53vh1lzv9zkp5f49prkwl5d";
   };
 
-  propagatedBuildInputs = [ prelude base ];
+  idrisDeps = [ prelude base ];
 
   meta = {
     description = "Wadler-Leijen pretty-printing library";
-
     homepage = https://github.com/shayan-najd/wl-pprint;
-
     license = lib.licenses.bsd2;
-
     inherit (idris.meta) platforms;
   };
 }

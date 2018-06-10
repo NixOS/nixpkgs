@@ -1,4 +1,4 @@
-{stdenv, fetchurl, freetype, mesa}:
+{stdenv, fetchurl, freetype, libGLU_combined}:
 
 let
   name = "ftgl-2.1.3-rc5";
@@ -11,10 +11,12 @@ stdenv.mkDerivation {
     sha256 = "0nsn4s6vnv5xcgxcw6q031amvh2zfj2smy1r5mbnjj2548hxcn2l";
   };
 
-  buildInputs = [freetype mesa];
+  buildInputs = [ freetype libGLU_combined ];
+
+  enableParallelBuilding = true;
 
   meta = {
-    homepage = "http://sourceforge.net/apps/mediawiki/ftgl/";
+    homepage = https://sourceforge.net/apps/mediawiki/ftgl/;
     description = "Font rendering library for OpenGL applications";
     license = stdenv.lib.licenses.gpl3Plus;
 
@@ -25,7 +27,7 @@ stdenv.mkDerivation {
       and extruded polygon rendering modes.
     '';
 
-    platforms = stdenv.lib.platforms.gnu;
+    platforms = stdenv.lib.platforms.unix;
     maintainers = [];
   };
 }

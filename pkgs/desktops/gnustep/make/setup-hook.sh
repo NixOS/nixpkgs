@@ -74,4 +74,4 @@ addEnvVars() {
 	addToSearchPath NIX_GNUSTEP_SYSTEM_DOC_INFO "$tmp"
     fi
 }
-envHooks=(${envHooks[@]} addEnvVars)
+addEnvHooks "$targetOffset" addEnvVars

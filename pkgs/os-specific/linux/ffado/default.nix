@@ -1,5 +1,5 @@
 { stdenv, fetchurl, scons, pkgconfig, which, makeWrapper, python
-, expat, libraw1394, libconfig, libavc1394, libiec61883
+, expat, libraw1394, libconfig, libavc1394, libiec61883, libxmlxx, glibmm
 
 # Optional dependencies
 , libjack2 ? null, dbus ? null, dbus_cplusplus ? null, alsaLib ? null
@@ -11,7 +11,7 @@
 
 let
 
-  shouldUsePkg = pkg: if pkg != null && stdenv.lib.any (x: x == stdenv.system) pkg.meta.platforms then pkg else null;
+  shouldUsePkg = pkg: if pkg != null && pkg.meta.available then pkg else null;
 
   libOnly = prefix == "lib";
 
@@ -25,11 +25,11 @@ let
 in
 stdenv.mkDerivation rec {
   name = "${prefix}ffado-${version}";
-  version = "2.2.1";
+  version = "2.4.0";
 
   src = fetchurl {
     url = "http://www.ffado.org/files/libffado-${version}.tgz";
-    sha256 = "1ximic90l0av91njb123ra2zp6mg23yg5iz8xa5371cqrn79nacz";
+    sha256 = "14rprlcd0gpvg9kljh0zzjzd2rc9hbqqpjidshxxjvvfh4r00f4f";
   };
 
   nativeBuildInputs = [ scons pkgconfig which makeWrapper python ];
@@ -38,12 +38,11 @@ stdenv.mkDerivation rec {
     expat libraw1394 libconfig libavc1394 libiec61883
   ] ++ stdenv.lib.optionals (!libOnly) [
     optLibjack2 optDbus optDbus_cplusplus optAlsaLib optPyqt4
-    optXdg_utils
+    optXdg_utils libxmlxx glibmm
   ];
 
-  patches = [ ./build-fix.patch ];
-
   postPatch = ''
+    sed '1iimport sys' -i SConstruct
     # SConstruct checks cpuinfo and an objdump of /bin/mount to determine the appropriate arch
     # Let's just skip this and tell it which to build
     sed '/def is_userspace_32bit(cpuinfo):/a\
@@ -55,6 +54,10 @@ stdenv.mkDerivation rec {
     sed -i -e '1i #include <stdlib.h>' \
       -e '1i #include "version.h"' \
       src/libutil/serialize_expat.cpp
+  '';
+
+  preConfigure = ''
+    export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE $(pkg-config --cflags libxml++-2.6)"
   '';
 
   # TODO fix ffado-diag, it doesn't seem to use PYPKGDIR

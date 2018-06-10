@@ -1,13 +1,13 @@
 { stdenv, fetchFromGitHub, bash, which, withFont ? "" }:
 
 stdenv.mkDerivation rec {
-  version = "0.8.0";
+  version = "2.0.0";
   name = "nerdfonts-${version}";
   src = fetchFromGitHub {
     owner = "ryanoasis";
     repo = "nerd-fonts";
     rev = version;
-    sha256 = "0n7idfk4460j8g0rw73hzz195pdh4c916hpc5r6dxpvgcmvryzc5";
+    sha256 = "09i467hyskvzj2wn5sj6shvc9pb0a0rx5iknjkkkbg1ng3bla7nm";
   };
   dontPatchShebangs = true;
   buildInputs = [ which ];
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
       number of additional glyphs from popular 'iconic fonts' such as Font
       Awesome, Devicons, Octicons, and others.
     '';
-    homepage = "https://github.com/ryanoasis/nerd-fonts";
+    homepage = https://github.com/ryanoasis/nerd-fonts;
     license = licenses.mit;
     maintainers = with maintainers; [ garbas ];
     platforms = with platforms; unix;

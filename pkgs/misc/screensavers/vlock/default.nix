@@ -9,8 +9,12 @@ stdenv.mkDerivation {
   };
 
   prePatch = ''
-    sed -i -e '/INSTALL/s/-[og] [^ ]*//g' Makefile modules/Makefile
+    sed -i -e '/INSTALL/ {
+      s/-[og] [^ ]*//g; s/4711/755/
+    }' Makefile modules/Makefile
   '';
+
+  patches = [ ./eintr.patch ];
 
   configureFlags = "VLOCK_GROUP=root ROOT_GROUP=root";
 

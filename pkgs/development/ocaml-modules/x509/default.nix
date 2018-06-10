@@ -1,28 +1,33 @@
-{ stdenv, fetchzip, ocaml, findlib, asn1-combinators, nocrypto, ounit }:
+{ stdenv, fetchurl, ocaml, findlib, ocamlbuild, topkg
+, asn1-combinators, astring, nocrypto, ppx_sexp_conv
+, ounit, cstruct-unix
+}:
 
-let version = "0.5.0"; in
+stdenv.mkDerivation rec {
+  name = "ocaml${ocaml.version}-x509-${version}";
+  version = "0.6.1";
 
-stdenv.mkDerivation {
-  name = "ocaml-x509-${version}";
-
-  src = fetchzip {
-    url = "https://github.com/mirleft/ocaml-x509/archive/${version}.tar.gz";
-    sha256 = "0i9618ph4i2yk5dvvhiqhm7wf3qmd6b795mxwff8jf856gb2gdyn";
+  src = fetchurl {
+    url = "https://github.com/mirleft/ocaml-x509/releases/download/${version}/x509-${version}.tbz";
+    sha256 = "1c62mw9rnzq0rs3ihbhfs18nv4mdzwag7893hlqgji3wmaai70pk";
   };
 
-  buildInputs = [ ocaml findlib ounit ];
-  propagatedBuildInputs = [ asn1-combinators nocrypto ];
+  unpackCmd = "tar -xjf $curSrc";
 
-  configureFlags = "--enable-tests";
+  buildInputs = [ ocaml findlib ocamlbuild topkg ppx_sexp_conv ounit cstruct-unix ];
+  propagatedBuildInputs = [ asn1-combinators astring nocrypto ];
+
+  buildPhase = "${topkg.run} build --tests true";
+
   doCheck = true;
-  checkTarget = "test";
-  createFindlibDestdir = true;
+  checkPhase = "${topkg.run} test";
 
-  meta = {
+  inherit (topkg) installPhase;
+
+  meta = with stdenv.lib; {
     homepage = https://github.com/mirleft/ocaml-x509;
     description = "X509 (RFC5280) handling in OCaml";
-    platforms = ocaml.meta.platforms or [];
-    license = stdenv.lib.licenses.bsd2;
-    maintainers = with stdenv.lib.maintainers; [ vbgl ];
+    license = licenses.bsd2;
+    maintainers = with maintainers; [ vbgl ];
   };
 }

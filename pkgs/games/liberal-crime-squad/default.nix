@@ -11,7 +11,8 @@ stdenv.mkDerivation rec {
     sha256 = "0mcldn8ivlfyjfx22ygzcbbw3bzl0j6vi3g6jyj8jmcrni61mgmb";
   };
 
-  buildInputs = [ ncurses autoreconfHook SDL2 SDL2_mixer ];
+  nativeBuildInputs = [ autoreconfHook ];
+  buildInputs = [ ncurses SDL2 SDL2_mixer ];
 
   meta = with stdenv.lib; {
     description = "A humorous politically themed ncurses game";

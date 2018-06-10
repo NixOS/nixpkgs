@@ -1,23 +1,25 @@
-{ stdenv, fetchFromGitHub, freetype, libX11, libXt, libXft
-}:
+{ stdenv, fetchFromGitHub, freetype, libX11, libXi, libXt, libXft }:
 
 stdenv.mkDerivation rec {
-  name = "deadpixi-sam-unstable";
-  version = "2016-09-15";
-    src = fetchFromGitHub {
-      owner = "deadpixi";
-      repo = "sam";
-      rev = "a6a8872246e8634d884b0ce52bc3be9770ab1b0f";
-      sha256 = "1zr8dl0vp1xic3dq69h4bp2fcxsjhrzasfl6ayvkibjd6z5dn07p";
-    };
+  version = "2017-10-27";
+  name = "deadpixi-sam-unstable-${version}";
+
+  src = fetchFromGitHub {
+    owner = "deadpixi";
+    repo = "sam";
+    rev = "51693780fb1457913389db6634163998f9b775b8";
+    sha256 = "0nfkj93j4bgli4ixbk041nwi14rabk04kqg8krq4mj0044m1qywr";
+  };
 
   postPatch = ''
     substituteInPlace config.mk.def \
-      --replace "/usr/include/freetype2" "${freetype.dev}/include/freetype2"
+      --replace "/usr/include/freetype2" "${freetype.dev}/include/freetype2" \
+      --replace "CC=gcc" ""
   '';
 
+  CFLAGS = "-D_DARWIN_C_SOURCE";
   makeFlags = [ "DESTDIR=$(out)" ];
-  buildInputs = [ libX11 libXt libXft ];
+  buildInputs = [ libX11 libXi libXt libXft ];
 
   postInstall = ''
     mkdir -p $out/share/applications
@@ -29,6 +31,6 @@ stdenv.mkDerivation rec {
     description = "Updated version of the sam text editor";
     license = with licenses; lpl-102;
     maintainers = with maintainers; [ ramkromberg ];
-    platforms = with platforms; linux;
+    platforms = with platforms; unix;
   };
 }

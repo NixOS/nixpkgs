@@ -1,21 +1,21 @@
-{stdenv, mercurial, nix}: {name ? null, url, rev ? null, md5 ? null, sha256 ? null, fetchSubrepos ? false}:
+{stdenvNoCC, mercurial, nix}: {name ? null, url, rev ? null, md5 ? null, sha256 ? null, fetchSubrepos ? false}:
 
+if md5 != null then
+  throw "fetchhg does not support md5 anymore, please use sha256"
+else
 # TODO: statically check if mercurial as the https support if the url starts woth https.
-stdenv.mkDerivation {
+stdenvNoCC.mkDerivation {
   name = "hg-archive" + (if name != null then "-${name}" else "");
   builder = ./builder.sh;
-  buildInputs = [mercurial];
+  nativeBuildInputs = [mercurial];
 
-  impureEnvVars = stdenv.lib.fetchers.proxyImpureEnvVars;
-
-  # Nix <= 0.7 compatibility.
-  id = md5;
+  impureEnvVars = stdenvNoCC.lib.fetchers.proxyImpureEnvVars;
 
   subrepoClause = if fetchSubrepos then "S" else "";
 
-  outputHashAlgo = if md5 != null then "md5" else "sha256";
+  outputHashAlgo = "sha256";
   outputHashMode = "recursive";
-  outputHash = if md5 != null then md5 else sha256;
+  outputHash = sha256;
 
   inherit url rev;
   preferLocalBuild = true;

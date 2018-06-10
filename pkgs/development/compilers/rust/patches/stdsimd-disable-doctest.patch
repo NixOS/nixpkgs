@@ -1,0 +1,20 @@
+diff --git a/src/stdsimd/coresimd/x86/mod.rs b/src/stdsimd/coresimd/x86/mod.rs
+index 32915c332..7cb54f31e 100644
+--- a/src/stdsimd/coresimd/x86/mod.rs
++++ b/src/stdsimd/coresimd/x86/mod.rs
+@@ -279,7 +279,6 @@ types! {
+     ///
+     /// # Examples
+     ///
+-    /// ```
+     /// # #![feature(cfg_target_feature, target_feature, stdsimd)]
+     /// # #![cfg_attr(not(dox), no_std)]
+     /// # #[cfg(not(dox))]
+@@ -301,7 +300,6 @@ types! {
+     /// # }
+     /// # if is_x86_feature_detected!("sse") { unsafe { foo() } }
+     /// # }
+-    /// ```
+     pub struct __m256(f32, f32, f32, f32, f32, f32, f32, f32);
+ 
+     /// 256-bit wide set of four `f64` types, x86-specific

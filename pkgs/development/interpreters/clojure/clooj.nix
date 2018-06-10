@@ -6,7 +6,8 @@ stdenv.mkDerivation {
   name = "clooj-${version}";
 
   jar = fetchurl {
-    url = "http://www.mediafire.com/download/prkf64humftrmz3/clooj-${version}-standalone.jar";
+    # mirrored as original mediafire.com source does not work without user interaction
+    url = "https://archive.org/download/clooj-0.4.4-standalone/clooj-0.4.4-standalone.jar";
     sha256 = "0hbc29bg2a86rm3sx9kvj7h7db9j0kbnrb706wsfiyk3zi3bavnd";
   };
 

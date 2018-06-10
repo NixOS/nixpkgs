@@ -50,17 +50,22 @@ let
               "up ${pkgs.writeScript "openvpn-${name}-up" upScript}"}
           ${optionalString (cfg.down != "" || cfg.updateResolvConf)
               "down ${pkgs.writeScript "openvpn-${name}-down" downScript}"}
+          ${optionalString (cfg.authUserPass != null)
+              "auth-user-pass ${pkgs.writeText "openvpn-credentials-${name}" ''
+                ${cfg.authUserPass.username}
+                ${cfg.authUserPass.password}
+              ''}"}
         '';
 
     in {
       description = "OpenVPN instance ‘${name}’";
 
       wantedBy = optional cfg.autoStart "multi-user.target";
-      after = [ "network-interfaces.target" ];
+      after = [ "network.target" ];
 
       path = [ pkgs.iptables pkgs.iproute pkgs.nettools ];
 
-      serviceConfig.ExecStart = "@${openvpn}/sbin/openvpn openvpn --config ${configFile}";
+      serviceConfig.ExecStart = "@${openvpn}/sbin/openvpn openvpn --suppress-timestamps --config ${configFile}";
       serviceConfig.Restart = "always";
       serviceConfig.Type = "notify";
     };
@@ -116,52 +121,77 @@ in
         attribute name.
       '';
 
-      type = types.attrsOf types.optionSet;
+      type = with types; attrsOf (submodule {
 
-      options = {
+        options = {
 
-        config = mkOption {
-          type = types.lines;
-          description = ''
-            Configuration of this OpenVPN instance.  See
-            <citerefentry><refentrytitle>openvpn</refentrytitle><manvolnum>8</manvolnum></citerefentry>
-            for details.
-          '';
+          config = mkOption {
+            type = types.lines;
+            description = ''
+              Configuration of this OpenVPN instance.  See
+              <citerefentry><refentrytitle>openvpn</refentrytitle><manvolnum>8</manvolnum></citerefentry>
+              for details.
+            '';
+          };
+
+          up = mkOption {
+            default = "";
+            type = types.lines;
+            description = ''
+              Shell commands executed when the instance is starting.
+            '';
+          };
+
+          down = mkOption {
+            default = "";
+            type = types.lines;
+            description = ''
+              Shell commands executed when the instance is shutting down.
+            '';
+          };
+
+          autoStart = mkOption {
+            default = true;
+            type = types.bool;
+            description = "Whether this OpenVPN instance should be started automatically.";
+          };
+
+          updateResolvConf = mkOption {
+            default = false;
+            type = types.bool;
+            description = ''
+              Use the script from the update-resolv-conf package to automatically
+              update resolv.conf with the DNS information provided by openvpn. The
+              script will be run after the "up" commands and before the "down" commands.
+            '';
+          };
+
+          authUserPass = mkOption {
+            default = null;
+            description = ''
+              This option can be used to store the username / password credentials
+              with the "auth-user-pass" authentication method.
+
+              WARNING: Using this option will put the credentials WORLD-READABLE in the Nix store!
+            '';
+            type = types.nullOr (types.submodule {
+
+              options = {
+                username = mkOption {
+                  description = "The username to store inside the credentials file.";
+                  type = types.string;
+                };
+
+                password = mkOption {
+                  description = "The password to store inside the credentials file.";
+                  type = types.string;
+                };
+              };
+            });
+          };
         };
 
-        up = mkOption {
-          default = "";
-          type = types.lines;
-          description = ''
-            Shell commands executed when the instance is starting.
-          '';
-        };
-
-        down = mkOption {
-          default = "";
-          type = types.lines;
-          description = ''
-            Shell commands executed when the instance is shutting down.
-          '';
-        };
-
-        autoStart = mkOption {
-          default = true;
-          type = types.bool;
-          description = "Whether this OpenVPN instance should be started automatically.";
-        };
-
-        updateResolvConf = mkOption {
-          default = false;
-          type = types.bool;
-          description = ''
-            Use the script from the update-resolv-conf package to automatically
-            update resolv.conf with the DNS information provided by openvpn. The
-            script will be run after the "up" commands and before the "down" commands.
-          '';
-        };
-
-      };
+      });
 
     };
 

@@ -1,50 +1,43 @@
-{ stdenv, fetchgit, cmake, expat }:
+{ stdenv, fetchFromGitHub, cmake, qtbase }:
 
 stdenv.mkDerivation rec {
   name = "boomerang-${version}";
-  version = "0.3.2alpha";
+  version = "0.4.0-alpha-2018-01-18";
 
-  src = fetchgit {
-    url = "https://github.com/nemerle/boomerang.git";
-    rev = "78c6b9dd33790be43dcb07edc549161398904006";
-    sha256 = "1n49wx2v9r40mh5kdkspqvc8rccpb4s004qxqvn4fwc59dm0pqbs";
+  src = fetchFromGitHub {
+    owner = "ceeac";
+    repo = "boomerang";
+    rev = "b4ff8d573407a8ed6365d4bfe53d2d47d983e393";
+    sha256 = "0x17vlm6y1paa49fi3pmzz7vzdqms19qkr274hkq32ql342b6i6x";
   };
 
-  buildInputs = [ cmake expat ];
+  nativeBuildInputs = [ cmake ];
+  buildInputs = [ qtbase ];
 
-  postPatch = ''
-    sed -i -e 's/-std=c++0x/-std=c++11 -fpermissive/' CMakeLists.txt
-
-    # Hardcode library base path ("lib/" is appended elsewhere)
-    sed -i -e 's|::m_base_path = "|&'"$out"'/|' loader/BinaryFileFactory.cpp
-    # Deactivate setting base path at runtime
-    sed -i -e 's/m_base_path *=[^}]*//' include/BinaryFile.h
-
-    # Fix up shared directory locations
-    shared="$out/share/boomerang/"
-    find frontend -name '*.cpp' -print | xargs sed -i -e \
-      's|Boomerang::get()->getProgPath()|std::string("'"$shared"'")|'
-
-    cat >> loader/CMakeLists.txt <<CMAKE
-    INSTALL(TARGETS bffDump BinaryFile
-            ElfBinaryFile Win32BinaryFile ExeBinaryFile HpSomBinaryFile
-            PalmBinaryFile DOS4GWBinaryFile MachOBinaryFile
-            RUNTIME DESTINATION bin
-            LIBRARY DESTINATION lib)
-    CMAKE
-
-    cat >> CMakeLists.txt <<CMAKE
-    INSTALL(TARGETS boomerang DESTINATION bin)
-    INSTALL(DIRECTORY signatures DESTINATION share/boomerang)
-    INSTALL(DIRECTORY frontend/machine DESTINATION share/boomerang/frontend)
-    CMAKE
+  postPatch =
+  # Look in installation directory for required files, not relative to working directory
+  ''
+    substituteInPlace src/boomerang/core/Settings.cpp \
+      --replace "setDataDirectory(\"../share/boomerang\");" \
+                "setDataDirectory(\"$out/share/boomerang\");" \
+      --replace "setPluginDirectory(\"../lib/boomerang/plugins\");" \
+                "setPluginDirectory(\"$out/lib/boomerang/plugins\");"
+  ''
+  # Fixup version:
+  # * don't try to inspect with git
+  #   (even if we kept .git and such it would be "dirty" because of patching)
+  # * use date so version is monotonically increasing moving forward
+  + ''
+    sed -i cmake-scripts/boomerang-version.cmake \
+      -e 's/set(\(PROJECT\|BOOMERANG\)_VERSION ".*")/set(\1_VERSION "${version}")/'
   '';
 
   enableParallelBuilding = true;
 
-  meta = {
-    homepage = "http://boomerang.sourceforge.net/";
-    license = stdenv.lib.licenses.bsd3;
+  meta = with stdenv.lib; {
+    homepage = http://boomerang.sourceforge.net/;
+    license = licenses.bsd3;
     description = "A general, open source, retargetable decompiler";
+    maintainers = with maintainers; [ dtzWill ];
   };
 }

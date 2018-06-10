@@ -1,17 +1,17 @@
-{ kdeFramework, lib, copyPathsToStore
-, ecm, perl
-, karchive, kconfig, kguiaddons, kiconthemes, kparts
-, libgit2
-, qtscript, qtxmlpatterns
-, ki18n, kio, sonnet
+{
+  mkDerivation, lib, copyPathsToStore, fetchpatch,
+  extra-cmake-modules, perl,
+  karchive, kconfig, kguiaddons, ki18n, kiconthemes, kio, kparts, libgit2,
+  qtscript, qtxmlpatterns, sonnet, syntax-highlighting, qtquickcontrols
 }:
 
-kdeFramework {
+mkDerivation {
   name = "ktexteditor";
   meta = { maintainers = [ lib.maintainers.ttuegel ]; };
-  nativeBuildInputs = [ ecm perl ];
-  propagatedBuildInputs = [
-    karchive kconfig kguiaddons ki18n kiconthemes kio kparts libgit2 qtscript
-    qtxmlpatterns sonnet
+  nativeBuildInputs = [ extra-cmake-modules perl ];
+  buildInputs = [
+    karchive kconfig kguiaddons ki18n kiconthemes kio libgit2 qtscript
+    qtxmlpatterns sonnet syntax-highlighting qtquickcontrols
   ];
+  propagatedBuildInputs = [ kparts ];
 }

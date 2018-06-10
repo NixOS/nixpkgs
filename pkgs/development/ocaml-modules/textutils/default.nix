@@ -1,4 +1,4 @@
-{stdenv, buildOcaml, fetchurl, core, pa_ounit, pa_test, sexplib}:
+{stdenv, buildOcaml, fetchurl, core_p4, pa_ounit, pa_test, sexplib_p4}:
 
 buildOcaml rec {
   name = "textutils";
@@ -12,7 +12,7 @@ buildOcaml rec {
   };
 
   buildInputs = [ pa_test ];
-  propagatedBuildInputs = [ core pa_ounit sexplib ];
+  propagatedBuildInputs = [ core_p4 pa_ounit sexplib_p4 ];
 
   meta = with stdenv.lib; {
     homepage = https://github.com/janestreet/textutils;

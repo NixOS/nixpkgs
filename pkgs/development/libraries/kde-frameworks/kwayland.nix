@@ -1,14 +1,17 @@
-{ kdeFramework
-, ecm
-, wayland
+{
+  mkDerivation, lib, propagateBin,
+  extra-cmake-modules,
+  qtbase, wayland
 }:
 
-kdeFramework {
+mkDerivation {
   name = "kwayland";
-  nativeBuildInputs = [
-    ecm
-  ];
-  propagatedBuildInputs = [
-    wayland
-  ];
+  meta = {
+    maintainers = [ lib.maintainers.ttuegel ];
+    broken = builtins.compareVersions qtbase.version "5.7.0" < 0;
+  };
+  nativeBuildInputs = [ extra-cmake-modules ];
+  buildInputs = [ wayland ];
+  propagatedBuildInputs = [ qtbase ];
+  setupHook = propagateBin; # XDG_CONFIG_DIRS
 }

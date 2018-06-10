@@ -12,13 +12,18 @@ let
     keyfile ${cfg.ssl.keyfile}
   '';
 
+  passwordConf = optionalString cfg.checkPasswords ''
+    password_file ${cfg.dataDir}/passwd
+  '';
+
   mosquittoConf = pkgs.writeText "mosquitto.conf" ''
     pid_file /run/mosquitto/pid
     acl_file ${aclFile}
     persistence true
-    allow_anonymous ${if cfg.allowAnonymous then "true" else "false"}
+    allow_anonymous ${boolToString cfg.allowAnonymous}
     bind_address ${cfg.host}
     port ${toString cfg.port}
+    ${passwordConf}
     ${listenerConf}
     ${cfg.extraConf}
   '';
@@ -125,8 +130,8 @@ in
               description = ''
                 Specifies the hashed password for the MQTT User.
                 <option>hashedPassword</option> overrides <option>password</option>.
-                To generate hashed password install <literal>mkpasswd</literal>
-                package and run <literal>mkpasswd -m sha-512</literal>.
+                To generate hashed password install <literal>mosquitto</literal>
+                package and use <literal>mosquitto_passwd</literal>.
               '';
             };
 
@@ -147,10 +152,18 @@ in
 
       allowAnonymous = mkOption {
         default = false;
-        example = true;
         type = types.bool;
         description = ''
           Allow clients to connect without authentication.
+        '';
+      };
+
+      checkPasswords = mkOption {
+        default = false;
+        example = true;
+        type = types.bool;
+        description = ''
+          Refuse connection when clients provide incorrect passwords.
         '';
       };
 
@@ -199,7 +212,7 @@ in
       '' + concatStringsSep "\n" (
         mapAttrsToList (n: c:
           if c.hashedPassword != null then
-            "echo '${n}:${c.hashedPassword}' > ${cfg.dataDir}/passwd"
+            "echo '${n}:${c.hashedPassword}' >> ${cfg.dataDir}/passwd"
           else optionalString (c.password != null)
             "${pkgs.mosquitto}/bin/mosquitto_passwd -b ${cfg.dataDir}/passwd ${n} ${c.password}"
         ) cfg.users);

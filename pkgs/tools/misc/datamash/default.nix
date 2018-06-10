@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "datamash-${version}";
-  version = "1.1.0";
+  version = "1.3";
 
   src = fetchurl {
     url = "mirror://gnu/datamash/${name}.tar.gz";
-    sha256 = "1c2bj0jrm4fxkf0ykxkzgyk1l9s0idqm8rbzmk3n9pgldb4arrd9";
+    sha256 = "19jpcv4ryvbz0476d6dgpxpbjkpmih4q84wj06nslls338bm5fzf";
   };
 
   meta = with stdenv.lib; {

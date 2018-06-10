@@ -1,12 +1,12 @@
 {stdenv, fetchurl, ocaml, findlib, camlp4}:
 
-let
-  ocaml_version = (builtins.parseDrvName ocaml.name).version;
-  version = "0.8.2";
-in
+if stdenv.lib.versionAtLeast ocaml.version "4.05"
+then throw "camomile-0.8.2 is not available for OCaml ${ocaml.version}"
+else
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   name = "camomile-${version}";
+  version = "0.8.2";
 
   src = fetchurl {
     url = "mirror://sourceforge/camomile/camomile-${version}.tar.bz2";

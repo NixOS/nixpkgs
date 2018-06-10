@@ -2,20 +2,21 @@
 
 stdenv.mkDerivation rec {
   name = "sratom-${version}";
-  version = "0.4.6";
+  version = "0.6.0";
 
   src = fetchurl {
     url = "http://download.drobilla.net/${name}.tar.bz2";
-    sha256 = "080jjiyxjnj7hf25844hd9rb01grvzz1rk8mxcdnakywmspbxfd4";
+    sha256 = "0hrxd9i66s06bpn6i3s9ka95134g3sm8yscmif7qgdzhyjqw42j4";
   };
 
-  buildInputs = [ lv2 pkgconfig python serd sord ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ lv2 python serd sord ];
 
-  configurePhase = "python waf configure --prefix=$out";
+  configurePhase = "${python.interpreter} waf configure --prefix=$out";
 
-  buildPhase = "python waf";
+  buildPhase = "${python.interpreter} waf";
 
-  installPhase = "python waf install";
+  installPhase = "${python.interpreter} waf install";
 
   meta = with stdenv.lib; {
     homepage = http://drobilla.net/software/sratom;

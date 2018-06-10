@@ -12,7 +12,8 @@ stdenv.mkDerivation rec {
     sha256 = "180z6hbax1qypy5cyy2z6nn7fzxla4ib47ck8mqwr714ag77na8p";
   };
 
-  buildInputs = [ glib gtk2 pkgconfig popt ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ glib gtk2 popt ];
 
   doCheck = true;
 
@@ -31,9 +32,9 @@ stdenv.mkDerivation rec {
       Also, supports CTRL-R / CTRL-S / "!" for searching through history.
       Running commands in a terminal with CTRL-Enter. URL handlers.
     '';
-    homepage = "http://sourceforge.net/projects/gmrun/";
+    homepage = https://sourceforge.net/projects/gmrun/;
     license = "GPL";
-    maintainers = [ stdenv.lib.maintainers.bbenoist ];
+    maintainers = [];
     platforms = stdenv.lib.platforms.all;
   };
 }

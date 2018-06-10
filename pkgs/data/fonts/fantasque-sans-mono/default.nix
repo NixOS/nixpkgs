@@ -1,34 +1,29 @@
-{stdenv, fetchurl, unzip}:
+{ stdenv, fetchzip }:
 
-stdenv.mkDerivation rec {
+let
+
+  version = "1.7.2";
+
+in
+
+fetchzip rec {
   name = "fantasque-sans-mono-${version}";
-  version = "1.7.1";
 
-  src = fetchurl {
-    url = "https://github.com/belluzj/fantasque-sans/releases/download/v${version}/FantasqueSansMono.zip";
-    sha256 = "0lkky7mmpq6igpjh7lsv30xjx62mwlx27gd9zwcyv3mp2d2b5cvb";
-  };
+  url = "https://github.com/belluzj/fantasque-sans/releases/download/v${version}/FantasqueSansMono-Normal.zip";
 
-  buildInputs = [unzip];
-  phases = ["unpackPhase" "installPhase"];
-
-  unpackCmd = ''
-    mkdir -p ${name}
-    unzip -qq -d ${name} $src
+  postFetch = ''
+    mkdir -p $out/share/{doc,fonts}
+    unzip -j $downloadedFile \*.otf    -d $out/share/fonts/opentype
+    unzip -j $downloadedFile README.md -d $out/share/doc/${name}
   '';
 
-  installPhase = ''
-    mkdir -p $out/share/fonts/opentype
-    mkdir -p $out/share/doc/${name}
-    cp -v "OTF/"*.otf $out/share/fonts/opentype
-    cp -v README.md $out/share/doc/${name}
-  '';
+  sha256 = "1fwvbqfrgb539xybwdawvwa8cg4f215kw905rgl9a6p0iwa1nxqk";
 
   meta = with stdenv.lib; {
     homepage = https://github.com/belluzj/fantasque-sans;
     description = "A font family with a great monospaced variant for programmers";
     license = licenses.ofl;
     platforms = platforms.all;
-    maintainers = [maintainers.rycee];
+    maintainers = [ maintainers.rycee ];
   };
 }

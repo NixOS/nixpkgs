@@ -1,26 +1,31 @@
-{ stdenv, fetchurl, getopt }:
-
-let version = "2.3.1"; in
+{ stdenv, fetchurl, getopt, makeWrapper }:
 
 stdenv.mkDerivation rec {
   name = "libseccomp-${version}";
+  version = "2.3.3";
 
   src = fetchurl {
     url = "https://github.com/seccomp/libseccomp/releases/download/v${version}/libseccomp-${version}.tar.gz";
-    sha256 = "0asnlkzqms520r0dra08dzcz5hh6hs7lkajfw9wij3vrd0hxsnzz";
+    sha256 = "0mdiyfljrkfl50q1m3ws8yfcyfjwf1zgkvcva8ffcwncji18zhkz";
   };
 
-  buildInputs = [ getopt ];
+  outputs = [ "out" "lib" "dev" "man" ];
+
+  buildInputs = [ getopt makeWrapper ];
 
   patchPhase = ''
     patchShebangs .
   '';
 
+  # Hack to ensure that patchelf --shrink-rpath get rids of a $TMPDIR reference.
+  preFixup = "rm -rfv src";
+
   meta = with stdenv.lib; {
     description = "High level library for the Linux Kernel seccomp filter";
-    homepage    = "http://sourceforge.net/projects/libseccomp";
-    license     = licenses.lgpl2;
+    homepage    = "https://github.com/seccomp/libseccomp";
+    license     = licenses.lgpl21;
     platforms   = platforms.linux;
+    badPlatforms = platforms.riscv;
     maintainers = with maintainers; [ thoughtpolice wkennington ];
   };
 }

@@ -1,12 +1,10 @@
 { stdenv, lib, pkgArches,
   name, version, src, monos, geckos, platforms,
-  pkgconfig, fontforge, makeWrapper, flex, bison,
+  # flex 2.6.3 causes: undefined reference to `yywrap'
+  pkgconfig, fontforge, makeWrapper, flex_2_6_1, bison,
   supportFlags,
   buildScript ? null, configureFlags ? ""
 }:
-
-assert stdenv.isLinux;
-assert stdenv.cc.cc.isGNU or false;
 
 with import ./util.nix { inherit lib; };
 
@@ -16,11 +14,12 @@ stdenv.mkDerivation ((lib.optionalAttrs (! isNull buildScript) {
   inherit name src configureFlags;
 
   nativeBuildInputs = [
-    pkgconfig fontforge makeWrapper flex bison
+    pkgconfig fontforge makeWrapper flex_2_6_1 bison
   ];
 
   buildInputs = toBuildInputs pkgArches (with supportFlags; (pkgs:
   [ pkgs.freetype ]
+  ++ lib.optional stdenv.isLinux         pkgs.libcap
   ++ lib.optional pngSupport             pkgs.libpng
   ++ lib.optional jpegSupport            pkgs.libjpeg
   ++ lib.optional cupsSupport            pkgs.cups
@@ -32,12 +31,12 @@ stdenv.mkDerivation ((lib.optionalAttrs (! isNull buildScript) {
   ++ lib.optional cairoSupport           pkgs.cairo
   ++ lib.optional tiffSupport            pkgs.libtiff
   ++ lib.optional odbcSupport            pkgs.unixODBC
-  ++ lib.optional netapiSupport          pkgs.samba3_light
+  ++ lib.optional netapiSupport          pkgs.samba4
   ++ lib.optional cursesSupport          pkgs.ncurses
   ++ lib.optional vaSupport              pkgs.libva
   ++ lib.optional pcapSupport            pkgs.libpcap
   ++ lib.optional v4lSupport             pkgs.libv4l
-  ++ lib.optional saneSupport            pkgs.saneBackends
+  ++ lib.optional saneSupport            pkgs.sane-backends
   ++ lib.optional gsmSupport             pkgs.gsm
   ++ lib.optional gphoto2Support         pkgs.libgphoto2
   ++ lib.optional ldapSupport            pkgs.openldap
@@ -45,15 +44,22 @@ stdenv.mkDerivation ((lib.optionalAttrs (! isNull buildScript) {
   ++ lib.optional alsaSupport            pkgs.alsaLib
   ++ lib.optional pulseaudioSupport      pkgs.libpulseaudio
   ++ lib.optional xineramaSupport        pkgs.xorg.libXinerama
-  ++ lib.optionals gstreamerSupport      (with pkgs.gst_all; [ gstreamer gst-plugins-base gst-plugins-good gst-plugins-bad gst-plugins-ugly gst-ffmpeg ])
+  ++ lib.optional udevSupport            pkgs.udev
+  ++ lib.optional vulkanSupport          pkgs.vulkan-loader
+  ++ lib.optionals gstreamerSupport      (with pkgs.gst_all_1; [ gstreamer gst-plugins-base gst-plugins-good gst-plugins-bad gst-plugins-ugly gst-libav ])
   ++ lib.optionals gtkSupport    [ pkgs.gtk3 pkgs.glib ]
-  ++ lib.optionals openclSupport [ pkgs.opencl-headers pkgs.opencl-icd ]
+  ++ lib.optionals openclSupport [ pkgs.opencl-headers pkgs.ocl-icd ]
   ++ lib.optionals xmlSupport    [ pkgs.libxml2 pkgs.libxslt ]
   ++ lib.optionals tlsSupport    [ pkgs.openssl pkgs.gnutls ]
-  ++ lib.optionals openglSupport [ pkgs.mesa pkgs.mesa_noglu.osmesa pkgs.libdrm ]
-  ++ (with pkgs.xorg; [
-    libX11  libXi libXcursor libXrandr libXrender libXxf86vm libXcomposite libXext
-  ])));
+  ++ lib.optionals openglSupport [ pkgs.libGLU_combined pkgs.mesa_noglu.osmesa pkgs.libdrm ]
+  ++ lib.optionals stdenv.isDarwin (with pkgs.buildPackages.darwin.apple_sdk.frameworks; [
+     CoreServices Foundation ForceFeedback AppKit OpenGL IOKit DiskArbitration Security
+     ApplicationServices AudioToolbox CoreAudio AudioUnit CoreMIDI OpenAL OpenCL Cocoa Carbon
+  ])
+  ++ lib.optionals stdenv.isLinux  (with pkgs.xorg; [
+     libXi libXcursor libXrandr libXrender libXxf86vm libXcomposite libXext
+  ])
+  ++ [ pkgs.xorg.libX11 ]));
 
   # Wine locates a lot of libraries dynamically through dlopen().  Add
   # them to the RPATH so that the user doesn't have to set them in
@@ -80,7 +86,7 @@ stdenv.mkDerivation ((lib.optionalAttrs (! isNull buildScript) {
   # Add capability to ignore known failing tests
   # and enable doCheck
   doCheck = false;
-  
+
   postInstall = let
     links = prefix: pkg: "ln -s ${pkg} $out/${prefix}/${pkg.name}";
   in ''
@@ -89,19 +95,28 @@ stdenv.mkDerivation ((lib.optionalAttrs (! isNull buildScript) {
           ((map (links "share/wine/gecko") geckos)
         ++ (map (links "share/wine/mono")  monos))}
   '' + lib.optionalString supportFlags.gstreamerSupport ''
-    wrapProgram "$out/bin/wine" \
-      --argv0 "" \
-      --prefix GST_PLUGIN_SYSTEM_PATH ":" "$GST_PLUGIN_SYSTEM_PATH"
+    for i in wine ; do
+      if [ -e "$out/bin/$i" ]; then
+        wrapProgram "$out/bin/$i" \
+          --argv0 "" \
+          --prefix GST_PLUGIN_SYSTEM_PATH_1_0 ":" "$GST_PLUGIN_SYSTEM_PATH_1_0"
+      fi
+    done
   '';
-  
+
   enableParallelBuilding = true;
+
+  # https://bugs.winehq.org/show_bug.cgi?id=43530
+  # https://github.com/NixOS/nixpkgs/issues/31989
+  hardeningDisable = [ "bindnow" ]
+    ++ lib.optional (stdenv.hostPlatform.isDarwin) "fortify";
 
   passthru = { inherit pkgArches; };
   meta = {
     inherit version platforms;
-    homepage = "http://www.winehq.org/";
+    homepage = http://www.winehq.org/;
     license = "LGPL";
     description = "An Open Source implementation of the Windows API on top of X, OpenGL, and Unix";
-    maintainers = with stdenv.lib.maintainers; [ avnik raskin ];
+    maintainers = with stdenv.lib.maintainers; [ avnik raskin bendlas ];
   };
 })

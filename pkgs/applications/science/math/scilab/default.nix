@@ -67,5 +67,6 @@ stdenv.mkDerivation rec {
     description = "Scientific software package for numerical computations (Matlab lookalike)";
     # see http://www.scilab.org/legal
     license = "SciLab";
+    broken = true;
   };
 }

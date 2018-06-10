@@ -1,26 +1,47 @@
-{ stdenv, fetchurl, cmake, pkgconfig,
-  gtk2 , poppler, freetype, libpthreadstubs, libXdmcp, libxshmfence
+{ stdenv, fetchFromGitHub, fetchpatch, cmake, pkgconfig, pcre, libxkbcommon, epoxy
+, gtk3, poppler, freetype, libpthreadstubs, libXdmcp, libxshmfence, wrapGAppsHook
 }:
 
 stdenv.mkDerivation rec {
-  version = "0.1.f7f7b9c";
+  version = "0.1.5";
   name = "apvlv-${version}";
 
-  src = fetchurl {
-    url = "https://github.com/downloads/naihe2010/apvlv/${name}-Source.tar.gz";
-    sha256 = "125nlcfjdhgzi9jjxh9l2yc9g39l6jahf8qh2555q20xkxf4rl0w";
+  src = fetchFromGitHub {
+    owner = "naihe2010";
+    repo = "apvlv";
+    rev = "v${version}";
+    sha256 = "1n4xiic8lqnv3mqi7wpdv866gyyakax71gffv3n9427rmcld465i";
   };
 
-  preConfigure = ''
-    export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -I${poppler.dev}/include/poppler"
-  '';
+  NIX_CFLAGS_COMPILE = "-I${poppler.dev}/include/poppler";
+
+  nativeBuildInputs = [
+    pkgconfig
+    wrapGAppsHook
+  ];
 
   buildInputs = [
-    pkgconfig cmake
-     poppler
-     freetype gtk2
-     libpthreadstubs libXdmcp libxshmfence # otherwise warnings in compilation
-   ];
+    cmake
+    poppler pcre libxkbcommon epoxy
+    freetype gtk3
+    libpthreadstubs libXdmcp libxshmfence # otherwise warnings in compilation
+  ];
+
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/naihe2010/apvlv/commit/d432635b9c5ea6c052a2ae1fb71aedec5c4ad57a.patch";
+      sha256 = "1am8dgv2kkpqmm2vaysa61czx8ppdx94zb3c59sx88np50jpy70w";
+    })
+    (fetchpatch {
+      url = "https://github.com/naihe2010/apvlv/commit/4c7a583e8431964def482e5471f02e6de8e62a7b.patch";
+      sha256 = "1dszm120lwm90hcg5zmd4vr6pjyaxc84qmb7k0fr59mmb3qif62j";
+    })
+    # fix build with gcc7
+    (fetchpatch {
+      url = "https://github.com/naihe2010/apvlv/commit/a3a895772a27d76dab0c37643f0f4c73f9970e62.patch";
+      sha256 = "1fpc7wr1ajilvwi5gjsy5g9jcx4bl03gp5dmajg90ljqbhwz2bfi";
+    })
+  ];
 
   installPhase = ''
     # binary
@@ -30,10 +51,11 @@ stdenv.mkDerivation rec {
     # displays pdfStartup.pdf as default pdf entry
     mkdir -p $out/share/doc/apvlv/
     cp ../Startup.pdf $out/share/doc/apvlv/Startup.pdf
+    cp ../main_menubar.glade $out/share/doc/apvlv/main_menubar.glade
   '';
 
   meta = with stdenv.lib; {
-    homepage = "http://naihe2010.github.io/apvlv/";
+    homepage = http://naihe2010.github.io/apvlv/;
     description = "PDF viewer with Vim-like behaviour";
     longDescription = ''
       apvlv is a PDF/DJVU/UMD/TXT Viewer Under Linux/WIN32
@@ -41,7 +63,7 @@ stdenv.mkDerivation rec {
     '';
 
     license = licenses.lgpl2;
-    platforms = platforms.unix;
+    platforms = platforms.linux;
     maintainers = [ maintainers.ardumont ];
   };
 

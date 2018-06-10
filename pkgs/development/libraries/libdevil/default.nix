@@ -1,12 +1,10 @@
-{ stdenv, fetchurl, libjpeg, libpng, libmng, lcms1, libtiff, openexr, mesa
-, libX11, pkgconfig
-
-, OpenGL
+{ stdenv, fetchurl, libjpeg, libpng, libmng, lcms1, libtiff, openexr, libGL
+, libX11, pkgconfig, OpenGL
 }:
 
 stdenv.mkDerivation rec {
 
-  name ="libdevil-${version}";
+  name = "libdevil-${version}";
   version = "1.7.8";
 
   src = fetchurl {
@@ -14,7 +12,9 @@ stdenv.mkDerivation rec {
     sha256 = "1zd850nn7nvkkhasrv7kn17kzgslr5ry933v6db62s4lr0zzlbv8";
   };
 
-  buildInputs = [ libjpeg libpng libmng lcms1 libtiff openexr mesa libX11 ]
+  outputs = [ "out" "dev" ];
+
+  buildInputs = [ libjpeg libpng libmng lcms1 libtiff openexr libGL libX11 ]
     ++ stdenv.lib.optionals stdenv.isDarwin [ OpenGL ];
   nativeBuildInputs = [ pkgconfig ];
 
@@ -40,11 +40,13 @@ stdenv.mkDerivation rec {
       ./il_endian.h.patch
     ];
 
+  enableParallelBuilding = true;
+
   meta = with stdenv.lib; {
     homepage = http://openil.sourceforge.net/;
     description = "An image library which can can load, save, convert, manipulate, filter and display a wide variety of image formats";
     license = licenses.lgpl2;
     platforms = platforms.mesaPlatforms;
-    maintainers = [ maintainers.phreedom maintainers.urkud ];
+    maintainers = [ maintainers.phreedom ];
   };
 }

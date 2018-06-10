@@ -1,16 +1,18 @@
 { stdenv, fetchFromGitHub, cmake
-, mesa_noglu, libSM, SDL, SDL_image, SDL_ttf, glew, openalSoft
+, libGL, libSM, SDL, SDL_image, SDL_ttf, glew, openalSoft
 , ncurses, glib, gtk2, libsndfile, zlib
 }:
 
+let dfVersion = "0.44.10"; in
+
 stdenv.mkDerivation {
-  name = "dwarf_fortress_unfuck-2016-07-13";
+  name = "dwarf_fortress_unfuck-${dfVersion}";
 
   src = fetchFromGitHub {
     owner = "svenstaro";
     repo = "dwarf_fortress_unfuck";
-    rev = "d6a4ee67e7b41bec1caa87548640643db35a6080";
-    sha256 = "17p7jzmwd5z54wn6bxmic0i8y8mma3q359zcy3r9x2mp2wv1yd7p";
+    rev = dfVersion;
+    sha256 = "0vb19qx2ibc79j4bgbk9lskb883qfb0815zw1dfz9k7rqwal8mzj";
   };
 
   cmakeFlags = [
@@ -21,7 +23,7 @@ stdenv.mkDerivation {
   nativeBuildInputs = [ cmake ];
   buildInputs = [
     libSM SDL SDL_image SDL_ttf glew openalSoft
-    ncurses gtk2 libsndfile zlib mesa_noglu
+    ncurses gtk2 libsndfile zlib libGL
   ];
 
   installPhase = ''
@@ -30,7 +32,10 @@ stdenv.mkDerivation {
 
   enableParallelBuilding = true;
 
-  passthru.dfVersion = "0.43.05";
+  # Breaks dfhack because of inlining.
+  hardeningDisable = [ "fortify" ];
+
+  passthru = { inherit dfVersion; };
 
   meta = with stdenv.lib; {
     description = "Unfucked multimedia layer for Dwarf Fortress";

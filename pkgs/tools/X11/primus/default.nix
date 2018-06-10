@@ -5,6 +5,8 @@
 # Other distributions do the same.
 { stdenv
 , stdenv_i686
+, lib
+, bumblebee
 , primusLib
 , writeScriptBin
 , primusLib_i686 ? null
@@ -18,7 +20,10 @@ let
 
   primus = if useNvidia then primusLib_ else primusLib_.override { nvidia_x11 = null; };
   primus_i686 = if useNvidia then primusLib_i686_ else primusLib_i686_.override { nvidia_x11 = null; };
-  ldPath = stdenv.lib.makeLibraryPath ([primus] ++ stdenv.lib.optional (primusLib_i686 != null) primus_i686);
+  ldPath = lib.makeLibraryPath (lib.filter (x: x != null) (
+    [ primus primus.glvnd ]
+    ++ lib.optionals (primusLib_i686 != null) [ primus_i686 primus_i686.glvnd ]
+  ));
 
 in writeScriptBin "primusrun" ''
   #!${stdenv.shell}

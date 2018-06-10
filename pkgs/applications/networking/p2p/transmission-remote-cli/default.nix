@@ -10,7 +10,6 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = with pythonPackages; [ python wrapPython ];
-  pythonPath = [ pythonPackages.curses ];
 
   installPhase = ''
     install -D transmission-remote-cli $out/bin/transmission-remote-cli

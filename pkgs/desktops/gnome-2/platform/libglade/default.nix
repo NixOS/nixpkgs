@@ -10,9 +10,8 @@ stdenv.mkDerivation {
 
   outputs = [ "out" "dev" ];
 
-  buildInputs = [ pkgconfig gtk python gettext ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ gtk python gettext ];
 
   propagatedBuildInputs = [ libxml2 ];
-
-  NIX_LDFLAGS = stdenv.lib.optionalString stdenv.isDarwin "-lintl";
 }

@@ -3,15 +3,16 @@
 
 stdenv.mkDerivation rec {
   name = "accountsservice-${version}";
-  version = "0.6.42";
+  version = "0.6.49";
 
   src = fetchurl {
-    url = "http://www.freedesktop.org/software/accountsservice/accountsservice-${version}.tar.xz";
-    sha256 = "0zh0kjpdc631qh36plcgpwvnmh9wj8l5cki3aw5r09w6y7198r75";
+    url = "https://www.freedesktop.org/software/accountsservice/accountsservice-${version}.tar.xz";
+    sha256 = "032ndvs18gla49dvc9vg35cwczg0wpv2wscp1m3yjfdqdpams7i5";
   };
 
-  buildInputs = [ pkgconfig glib intltool libtool makeWrapper
-                  gobjectIntrospection polkit systemd ];
+  nativeBuildInputs = [ pkgconfig makeWrapper ];
+
+  buildInputs = [ glib intltool libtool gobjectIntrospection polkit systemd ];
 
   configureFlags = [ "--with-systemdsystemunitdir=$(out)/etc/systemd/system"
                      "--localstatedir=/var" ];
@@ -26,7 +27,6 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./no-create-dirs.patch
-    ./Add-nixbld-to-user-blacklist.patch
     ./Disable-methods-that-change-files-in-etc.patch
   ];
 
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "D-Bus interface for user account query and manipulation";
-    homepage = http://www.freedesktop.org/wiki/Software/AccountsService;
+    homepage = https://www.freedesktop.org/wiki/Software/AccountsService;
     license = licenses.gpl3;
     maintainers = with maintainers; [ pSub ];
     platforms = with platforms; linux;

@@ -1,15 +1,20 @@
 { fetchurl,  stdenv, flex }:
 
 stdenv.mkDerivation rec {
-  version = "5.15";
+  version = "5.18";
   name = "wcslib-${version}";
 
   buildInputs = [ flex ];
 
   src = fetchurl {
     url = "ftp://ftp.atnf.csiro.au/pub/software/wcslib/${name}.tar.bz2";
-    sha256 ="1s2nig327g4bimd9xshlk11ww09a7mrjmsbpdcd8smsmn2kl1glb";
+    sha256 ="16jh568k99c9p0y3qzcgps2rii933x9wlay7q1xm0lr59zqzp4xn";
   };
+
+  prePatch = ''
+    substituteInPlace GNUmakefile --replace 2775 0775
+    substituteInPlace C/GNUmakefile --replace 2775 0775
+  '';
 
   enableParallelBuilding = true;
 

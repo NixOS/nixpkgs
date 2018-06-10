@@ -1,36 +1,57 @@
-{ stdenv, fetchurl, autoreconfHook, openssl, python, findutils }:
+{ stdenv, fetchurl, findutils, fixDarwinDylibNames
+, sslSupport? true, openssl
+}:
 
-let version = "2.0.22"; in
-stdenv.mkDerivation {
+assert sslSupport -> openssl != null;
+
+stdenv.mkDerivation rec {
   name = "libevent-${version}";
+  version = "2.1.8";
 
   src = fetchurl {
-    url = "mirror://sourceforge/levent/libevent-${version}-stable.tar.gz";
-    sha256 = "18qz9qfwrkakmazdlwxvjmw8p76g70n3faikwvdwznns1agw9hki";
+    url = "https://github.com/libevent/libevent/releases/download/release-${version}-stable/libevent-${version}-stable.tar.gz";
+    sha256 = "1hhxnxlr0fsdv7bdmzsnhdz16fxf3jg2r6vyljcl3kj6pflcap4n";
   };
-  postPatch = "patchShebangs event_rpcgen.py";
 
-  outputs = [ "out" "dev" ];
+  # libevent_openssl is moved into its own output, so that openssl isn't present
+  # in the default closure.
+  outputs = [ "out" "dev" ]
+    ++ stdenv.lib.optional sslSupport "openssl"
+    ;
   outputBin = "dev";
+  propagatedBuildOutputs = [ "out" ]
+    ++ stdenv.lib.optional sslSupport "openssl"
+    ;
 
-  nativeBuildInputs = [ autoreconfHook ];
-  buildInputs = [ openssl python ] ++ stdenv.lib.optional stdenv.isCygwin findutils;
+  buildInputs = []
+    ++ stdenv.lib.optional sslSupport openssl
+    ++ stdenv.lib.optional stdenv.isCygwin findutils
+    ++ stdenv.lib.optional stdenv.isDarwin fixDarwinDylibNames
+    ;
+
+  doCheck = false; # needs the net
+
+  postInstall = stdenv.lib.optionalString sslSupport ''
+    moveToOutput "lib/libevent_openssl*" "$openssl"
+    substituteInPlace "$dev/lib/pkgconfig/libevent_openssl.pc" \
+      --replace "$out" "$openssl"
+    sed "/^libdir=/s|$out|$openssl|" -i "$openssl"/lib/libevent_openssl.la
+  '';
 
   meta = with stdenv.lib; {
     description = "Event notification library";
+    longDescription = ''
+      The libevent API provides a mechanism to execute a callback function
+      when a specific event occurs on a file descriptor or after a timeout
+      has been reached.  Furthermore, libevent also support callbacks due
+      to signals or regular timeouts.
 
-    longDescription =
-      '' The libevent API provides a mechanism to execute a callback function
-         when a specific event occurs on a file descriptor or after a timeout
-         has been reached.  Furthermore, libevent also support callbacks due
-         to signals or regular timeouts.
-
-         libevent is meant to replace the event loop found in event driven
-         network servers.  An application just needs to call event_dispatch()
-         and then add or remove events dynamically without having to change
-         the event loop.
-      '';
-
+      libevent is meant to replace the event loop found in event driven
+      network servers.  An application just needs to call event_dispatch()
+      and then add or remove events dynamically without having to change
+      the event loop.
+    '';
+    homepage = http://libevent.org/;
     license = licenses.bsd3;
     platforms = platforms.all;
     maintainers = with maintainers; [ wkennington ];

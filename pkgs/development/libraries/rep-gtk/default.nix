@@ -4,14 +4,16 @@ with stdenv.lib;
 stdenv.mkDerivation rec {
 
   name = "rep-gtk-${version}";
-  version = "0.90.8.2";
+  version = "0.90.8.3";
+  sourceName = "rep-gtk_${version}";
 
   src = fetchurl {
-    url = "https://github.com/SawfishWM/rep-gtk/archive/${name}.tar.gz";
-    sha256 = "0pkpp7pj22c8hkyyivr9qw6q08ad42alynsf54ixdy6p9wn4qs1r";
+    url = "http://download.tuxfamily.org/librep/rep-gtk/${sourceName}.tar.xz";
+    sha256 = "0hgkkywm8zczir3lqr727bn7ybgg71x9cwj1av8fykkr8pdpard9";
   };
 
-  buildInputs = [ pkgconfig autoreconfHook ];
+  nativeBuildInputs = [ autoreconfHook pkgconfig ];
+  buildInputs = [ ];
   propagatedBuildInputs = [ librep gtk2 ];
 
   patchPhase = ''
@@ -25,3 +27,4 @@ stdenv.mkDerivation rec {
     maintainers = [ maintainers.AndersonTorres ];
   };
 }
+# TODO: investigate fetchFromGithub

@@ -2,28 +2,28 @@
 
 systemConfig=@systemConfig@
 
-export HOME=/root
+export HOME=/root PATH="@path@"
+
+
+# Process the kernel command line.
+for o in $(</proc/cmdline); do
+    case $o in
+        boot.debugtrace)
+            # Show each command.
+            set -x
+            ;;
+        resume=*)
+            set -- $(IFS==; echo $o)
+            resumeDevice=$2
+            ;;
+    esac
+done
 
 
 # Print a greeting.
 echo
 echo -e "\e[1;32m<<< NixOS Stage 2 >>>\e[0m"
 echo
-
-
-# Set the PATH.
-setPath() {
-    local dirs="$1"
-    export PATH=/empty
-    for i in $dirs; do
-        PATH=$PATH:$i/bin
-        if test -e $i/sbin; then
-            PATH=$PATH:$i/sbin
-        fi
-    done
-}
-
-setPath "@path@"
 
 
 # Normally, stage 1 mounts the root filesystem read/writable.
@@ -43,7 +43,7 @@ if [ ! -e /proc/1 ]; then
         local options="$3"
         local fsType="$4"
 
-        mkdir -m 0755 -p "$mountPoint"
+        install -m 0755 -d "$mountPoint"
         mount -n -t "$fsType" -o "$options" "$device" "$mountPoint"
     }
     source @earlyMountScript@
@@ -61,7 +61,9 @@ echo "booting system configuration $systemConfig" > /dev/kmsg
 chown -f 0:30000 /nix/store
 chmod -f 1775 /nix/store
 if [ -n "@readOnlyStore@" ]; then
-    if ! readonly-mountpoint /nix/store; then
+    if ! [[ "$(findmnt --noheadings --output OPTIONS /nix/store)" =~ ro(,|$) ]]; then
+        # FIXME when linux < 4.5 is EOL, switch to atomic bind mounts
+        #mount /nix/store /nix/store -o bind,remount,ro
         mount --bind /nix/store /nix/store
         mount -o remount,ro,bind /nix/store
     fi
@@ -69,37 +71,17 @@ fi
 
 
 # Provide a /etc/mtab.
-mkdir -m 0755 -p /etc
+install -m 0755 -d /etc
 test -e /etc/fstab || touch /etc/fstab # to shut up mount
 rm -f /etc/mtab* # not that we care about stale locks
 ln -s /proc/mounts /etc/mtab
 
 
-# Process the kernel command line.
-for o in $(cat /proc/cmdline); do
-    case $o in
-        boot.debugtrace)
-            # Show each command.
-            set -x
-            ;;
-        resume=*)
-            set -- $(IFS==; echo $o)
-            resumeDevice=$2
-            ;;
-    esac
-done
-
-
 # More special file systems, initialise required directories.
 [ -e /proc/bus/usb ] && mount -t usbfs usbfs /proc/bus/usb # UML doesn't have USB by default
-mkdir -m 01777 -p /tmp
-mkdir -m 0755 -p /var /var/log /var/lib /var/db
-mkdir -m 0755 -p /nix/var
-mkdir -m 0700 -p /root
-chmod 0700 /root
-mkdir -m 0755 -p /bin # for the /bin/sh symlink
-mkdir -m 0755 -p /home
-mkdir -m 0755 -p /etc/nixos
+install -m 01777 -d /tmp
+install -m 0755 -d /var/{log,lib,db} /nix/var /etc/nixos/ \
+    /run/lock /home /bin # for the /bin/sh symlink
 
 
 # Miscellaneous boot time cleanup.
@@ -109,19 +91,6 @@ rm -f /etc/{group,passwd,shadow}.lock
 
 # Also get rid of temporary GC roots.
 rm -rf /nix/var/nix/gcroots/tmp /nix/var/nix/temproots
-
-
-# Create a ramfs on /run/keys to hold secrets that shouldn't be
-# written to disk (generally used for NixOps, harmless elsewhere).
-if ! mountpoint -q /run/keys; then
-    rm -rf /run/keys
-    mkdir /run/keys
-    mount -t ramfs ramfs /run/keys
-    chown 0:96 /run/keys
-    chmod 0750 /run/keys
-fi
-
-mkdir -m 0755 -p /run/lock
 
 
 # For backwards compatibility, symlink /var/run to /run, and /var/lock
@@ -137,8 +106,8 @@ fi
 
 
 # Use /etc/resolv.conf supplied by systemd-nspawn, if applicable.
-if [ -n "@useHostResolvConf@" -a -e /etc/resolv.conf ]; then
-    cat /etc/resolv.conf | resolvconf -m 1000 -a host
+if [ -n "@useHostResolvConf@" ] && [ -e /etc/resolv.conf ]; then
+    resolvconf -m 1000 -a host </etc/resolv.conf
 fi
 
 # Log the script output to /dev/kmsg or /run/log/stage-2-init.log.

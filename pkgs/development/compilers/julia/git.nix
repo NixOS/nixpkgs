@@ -1,12 +1,15 @@
 { stdenv, fetchgit, fetchurl
 # build tools
-, gfortran, m4, makeWrapper, patchelf, perl, which, python2
+, gfortran, m4, makeWrapper, patchelf, perl, which, python2, paxctl
 # libjulia dependencies
 , libunwind, readline, utf8proc, zlib
+, llvm
 # standard library dependencies
 , curl, fftwSinglePrec, fftw, gmp, libgit2, mpfr, openlibm, openspecfun, pcre2
 # linear algebra
 , openblas, arpack, suitesparse
+# Darwin frameworks
+, CoreServices, ApplicationServices
 }:
 
 with stdenv.lib;
@@ -22,28 +25,22 @@ let
 in
 
 let
-  llvmVersion = "3.7.1";
-  llvm = fetchurl {
-    url = "http://llvm.org/releases/${llvmVersion}/llvm-${llvmVersion}.src.tar.xz";
-    sha256 = "1masakdp9g2dan1yrazg7md5am2vacbkb3nahb3dchpc1knr8xxy";
-  };
-
   dsfmtVersion = "2.2.3";
   dsfmt = fetchurl {
     url = "http://www.math.sci.hiroshima-u.ac.jp/~m-mat/MT/SFMT/dSFMT-src-${dsfmtVersion}.tar.gz";
     sha256 = "03kaqbjbi6viz0n33dk5jlf6ayxqlsq4804n7kwkndiga9s4hd42";
   };
 
-  libuvVersion = "a1d9166a440e4a0664c0e6de6ebe25350de56a42";
+  libuvVersion = "8d5131b6c1595920dd30644cd1435b4f344b46c8";
   libuv = fetchurl {
     url = "https://api.github.com/repos/JuliaLang/libuv/tarball/${libuvVersion}";
-    sha256 = "1sjvly4ylfyj8kxnx0gsjj2f70cg17h302h1i08gfndrqam68za5";
+    sha256 = "1886r04igcs0k24sbb61wn10f8ki35c39jsnc5djv3rg4hvn9l49";
   };
 
   rmathVersion = "0.1";
   rmath-julia = fetchurl {
     url = "https://api.github.com/repos/JuliaLang/Rmath-julia/tarball/v${rmathVersion}";
-    sha256 = "0ai5dhjc43zcvangz123ryxmlbm51s21rg13bllwyn98w67arhb4";
+    sha256 = "1qyps217175qhid46l8f5i1v8i82slgp23ia63x2hzxwfmx8617p";
   };
   
   virtualenvVersion = "15.0.0";
@@ -55,18 +52,17 @@ in
 
 stdenv.mkDerivation rec {
   pname = "julia";
-  version = "0.5.0-dev-2016-06-10";
+  version = "0.6.0-dev-2016-11-25";
   name = "${pname}-${version}";
 
   src = fetchgit {
     url = "https://github.com/JuliaLang/${pname}";
-    rev = "56d7d6672c7db717dacb5e34f485180c2eba83b2";
-    sha256 = "1wbrzdrxp94i7yxdgf3qgrjshmqxi0c4bqz7wy0c0c0kjlg6flmx";
+    rev = "03c24644815ba5320d038bb60c08565375fea1d9";
+    sha256 = "103mg9dz8yda2zxbd85jv8zhdzs29jj0dxrm2ppxpfhbbf6fxqav";
   };
 
   prePatch = ''
     mkdir deps/srccache
-    cp "${llvm}" "./deps/srccache/llvm-${llvmVersion}.src.tar.xz"
     cp "${dsfmt}" "./deps/srccache/dsfmt-${dsfmtVersion}.tar.gz"
     cp "${rmath-julia}" "./deps/srccache/Rmath-julia-${rmathVersion}.tar.gz"
     cp "${libuv}" "./deps/srccache/libuv-${libuvVersion}.tar.gz"
@@ -76,7 +72,7 @@ stdenv.mkDerivation rec {
   patches = [
     ./0001.1-use-system-utf8proc.patch
     ./0002-use-system-suitesparse.patch
-  ];
+  ] ++ stdenv.lib.optional stdenv.needsPax ./0004-hardened.patch;
 
   postPatch = ''
     patchShebangs . contrib
@@ -85,10 +81,13 @@ stdenv.mkDerivation rec {
   buildInputs = [
     arpack fftw fftwSinglePrec gmp libgit2 libunwind mpfr
     pcre2.dev openblas openlibm openspecfun readline suitesparse utf8proc
-    zlib
-  ];
+    zlib llvm
+  ]
+  ++ stdenv.lib.optionals stdenv.isDarwin [CoreServices ApplicationServices]
+  ;
 
-  nativeBuildInputs = [ curl gfortran m4 makeWrapper patchelf perl python2 which ];
+  nativeBuildInputs = [ curl gfortran m4 makeWrapper patchelf perl python2 which ]
+    ++ stdenv.lib.optional stdenv.needsPax paxctl;
 
   makeFlags =
     let
@@ -125,7 +124,7 @@ stdenv.mkDerivation rec {
       "USE_SYSTEM_LIBGIT2=1"
       "USE_SYSTEM_LIBUNWIND=1"
       # 'replutil' test failure with LLVM 3.8.0, invalid libraries with 3.7.1
-      "USE_SYSTEM_LLVM=0"
+      "USE_SYSTEM_LLVM=1"
       "USE_SYSTEM_MPFR=1"
       "USE_SYSTEM_OPENLIBM=1"
       "USE_SYSTEM_OPENSPECFUN=1"
@@ -142,7 +141,7 @@ stdenv.mkDerivation rec {
 
   LD_LIBRARY_PATH = makeLibraryPath [
     arpack fftw fftwSinglePrec gmp libgit2 mpfr openblas openlibm
-    openspecfun pcre2 suitesparse
+    openspecfun pcre2 suitesparse llvm
   ];
 
   dontStrip = true;
@@ -165,17 +164,17 @@ stdenv.mkDerivation rec {
   postInstall = ''
     for prog in "$out/bin/julia" "$out/bin/julia-debug"; do
         wrapProgram "$prog" \
-            --prefix LD_LIBRARY_PATH : "$LD_LIBRARY_PATH" \
+            --prefix LD_LIBRARY_PATH : "$LD_LIBRARY_PATH:$out/lib/julia" \
             --prefix PATH : "${stdenv.lib.makeBinPath [ curl ]}"
     done
   '';
 
   meta = {
     description = "High-level performance-oriented dynamical language for technical computing";
-    homepage = "http://julialang.org/";
+    homepage = https://julialang.org/;
     license = stdenv.lib.licenses.mit;
     maintainers = with stdenv.lib.maintainers; [ raskin ];
     platforms = [ "i686-linux" "x86_64-linux" "x86_64-darwin" ];
-    broken = stdenv.isi686;
+    broken = true; # since 2017-04-08.
   };
 }

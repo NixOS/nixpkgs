@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, dbus_glib, gtk2, pkgconfig, wordnet }:
+{ stdenv, fetchurl, dbus-glib, gtk2, pkgconfig, wordnet }:
 
 stdenv.mkDerivation rec {
   name = "artha-${version}";
@@ -9,7 +9,8 @@ stdenv.mkDerivation rec {
     sha256 = "0qr4ihl7ma3cq82xi1fpzvf74mm9vsg0j035xvmcp3r6rmw2fycx";
   };
 
-  buildInputs = [ dbus_glib gtk2 pkgconfig wordnet ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ dbus-glib gtk2 wordnet ];
 
   meta = with stdenv.lib; {
     description = "An offline thesaurus based on WordNet";

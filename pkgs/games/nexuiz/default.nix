@@ -3,7 +3,7 @@
   unzip, zlib, curl, libjpeg, libpng, libvorbis, libtheora
 , libogg, libmodplug
 , # glx
-  libX11, mesa, libXpm, libXext, libXxf86vm, libXxf86dga, alsaLib
+  libX11, libGLU_combined, libXpm, libXext, libXxf86vm, libXxf86dga, alsaLib
 , # sdl
   SDL
 }:
@@ -24,7 +24,7 @@ in stdenv.mkDerivation {
     # required for both
     unzip
     # glx
-    libX11 mesa libXpm libXext libXxf86vm libXxf86dga alsaLib
+    libX11 libGLU_combined libXpm libXext libXxf86vm libXxf86dga alsaLib
     # sdl
     SDL
   ];
@@ -69,7 +69,7 @@ in stdenv.mkDerivation {
 
   meta = {
     description = "A free fast-paced first-person shooter";
-    homepage = "http://www.alientrap.org/games/nexuiz";
+    homepage = http://www.alientrap.org/games/nexuiz;
     license = stdenv.lib.licenses.gpl2;
     platforms = stdenv.lib.platforms.linux;
   };

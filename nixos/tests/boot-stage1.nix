@@ -3,12 +3,13 @@ import ./make-test.nix ({ pkgs, ... }: {
 
   machine = { config, pkgs, lib, ... }: {
     boot.extraModulePackages = let
-      compileKernelModule = name: source: pkgs.runCommand name rec {
+      compileKernelModule = name: source: pkgs.runCommandCC name rec {
         inherit source;
         kdev = config.boot.kernelPackages.kernel.dev;
         kver = config.boot.kernelPackages.kernel.modDirVersion;
         ksrc = "${kdev}/lib/modules/${kver}/build";
         hardeningDisable = [ "pic" ];
+        nativeBuildInputs = kdev.moduleBuildDependencies;
       } ''
         echo "obj-m += $name.o" > Makefile
         echo "$source" > "$name.c"
@@ -21,11 +22,16 @@ import ./make-test.nix ({ pkgs, ... }: {
       # the boot process kills any kthread by accident, like what happened in
       # issue #15226.
       kcanary = compileKernelModule "kcanary" ''
+        #include <linux/version.h>
         #include <linux/init.h>
         #include <linux/module.h>
         #include <linux/kernel.h>
         #include <linux/kthread.h>
         #include <linux/sched.h>
+        #include <linux/signal.h>
+        #if LINUX_VERSION_CODE >= KERNEL_VERSION(4, 10, 0)
+        #include <linux/sched/signal.h>
+        #endif
 
         struct task_struct *canaryTask;
 
@@ -62,7 +68,7 @@ import ./make-test.nix ({ pkgs, ... }: {
     boot.initrd.kernelModules = [ "kcanary" ];
 
     boot.initrd.extraUtilsCommands = let
-      compile = name: source: pkgs.runCommand name { inherit source; } ''
+      compile = name: source: pkgs.runCommandCC name { inherit source; } ''
         mkdir -p "$out/bin"
         echo "$source" | gcc -Wall -o "$out/bin/$name" -xc -
       '';

@@ -1,19 +1,25 @@
-{ stdenv, fetchurl, cpio, zlib, bzip2, file, elfutils, libarchive, nspr, nss, popt, db, xz, python, lua, pkgconfig, autoreconfHook }:
+{ stdenv
+, pkgconfig, autoreconfHook
+, fetchurl, cpio, zlib, bzip2, file, elfutils, libbfd, libarchive, nspr, nss, popt, db, xz, python, lua
+}:
 
 stdenv.mkDerivation rec {
-  name = "rpm-4.12.0";
+  name = "rpm-${version}";
+  version = "4.14.1";
 
   src = fetchurl {
-    url = "http://rpm.org/releases/rpm-4.12.x/${name}.tar.bz2";
-    sha256 = "18hk47hc755nslvb7xkq4jb095z7va0nlcyxdpxayc4lmb8mq3bp";
+    url = "http://ftp.rpm.org/releases/rpm-4.14.x/rpm-${version}.tar.bz2";
+    sha256 = "0fvrjq6jsvbllb5q6blchzh7p5flk61rz34g4g9mp9iwrhn0xx23";
   };
 
   outputs = [ "out" "dev" "man" ];
 
-  buildInputs = [ cpio zlib bzip2 file libarchive nspr nss db xz python lua pkgconfig autoreconfHook ];
+  nativeBuildInputs = [ autoreconfHook pkgconfig ];
+  buildInputs = [ cpio zlib bzip2 file libarchive nspr nss db xz python lua ];
 
   # rpm/rpmlib.h includes popt.h, and then the pkg-config file mentions these as linkage requirements
-  propagatedBuildInputs = [ popt elfutils nss db bzip2 libarchive ];
+  propagatedBuildInputs = [ popt nss db bzip2 libarchive libbfd ]
+    ++ stdenv.lib.optional stdenv.isLinux elfutils;
 
   NIX_CFLAGS_COMPILE = "-I${nspr.dev}/include/nspr -I${nss.dev}/include/nss";
 
@@ -43,13 +49,17 @@ stdenv.mkDerivation rec {
     for tool in ld nm objcopy objdump strip; do
       sed -i $out/lib/rpm/macros -e "s/^%__$tool.*/%__$tool $tool/"
     done
+
+    # symlinks produced by build are incorrect
+    ln -sf $out/bin/{rpm,rpmquery}
+    ln -sf $out/bin/{rpm,rpmverify}
   '';
 
   meta = with stdenv.lib; {
     homepage = http://www.rpm.org/;
     license = licenses.gpl2;
     description = "The RPM Package Manager";
-    maintainers = with maintainers; [ mornfall copumpkin ];
-    platforms = platforms.linux;
+    maintainers = with maintainers; [ copumpkin ];
+    platforms = platforms.linux ++ platforms.darwin;
   };
 }

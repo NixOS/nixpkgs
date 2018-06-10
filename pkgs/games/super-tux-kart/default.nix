@@ -1,45 +1,58 @@
-{ fetchgit, fetchsvn, cmake, stdenv, plib, SDL, openal, freealut, mesa
-, libvorbis, libogg, gettext, libXxf86vm, curl, pkgconfig
-, fribidi, autoconf, automake, libtool, bluez, libjpeg, libpng }:
+{ stdenv, fetchFromGitHub, fetchsvn, cmake, pkgconfig
+, openal, freealut, libGLU_combined, libvorbis, libogg, gettext, curl, freetype
+, fribidi, libtool, bluez, libjpeg, libpng, zlib, libX11, libXrandr }:
 
-stdenv.mkDerivation rec {
+let
+  dir = "stk-code";
+
+in stdenv.mkDerivation rec {
   name = "supertuxkart-${version}";
 
-  version = "0.9";
+  version = "0.9.3";
+
   srcs = [
-    (fetchgit {
-      url = "https://github.com/supertuxkart/stk-code";
-      rev = "28a525f6d4aba2667c41a549b027149fcceda97e";
-      sha256 = "0b5izr7j3clm6pcxanwwaas06f17wi454s6hwmgv1mg48aay2v97";
-      name = "stk-code";
+    (fetchFromGitHub {
+      owner  = "supertuxkart";
+      repo   = "stk-code";
+      rev    = version;
+      sha256 = "1smnanjjaj4yq2ywikv0l6xysh6n2h1cm549plbg5xdk9mx2sfia";
+      name   = dir;
     })
     (fetchsvn {
-      url = "https://svn.code.sf.net/p/supertuxkart/code/stk-assets";
-      rev = "16293";
-      sha256 = "07jdkli28xr3rcxvixyy5bwi26n5i7dkhd9q0j4wifgs4pymm8r5";
-      name = "stk-assets";
+      url    = "https://svn.code.sf.net/p/supertuxkart/code/stk-assets";
+      rev    = "17448";
+      sha256 = "0lxbb4k57gv4gj12l5hnvhwdycpzcxjwg7qdfwglj2bdvaxf9f21";
+      name   = "stk-assets";
     })
   ];
-  
+
+  nativeBuildInputs = [ cmake gettext libtool pkgconfig ];
+
   buildInputs = [
-    plib SDL openal freealut mesa libvorbis libogg gettext
-    libXxf86vm curl pkgconfig fribidi autoconf automake libtool cmake bluez libjpeg libpng
+    libX11 libXrandr
+    openal freealut libGLU_combined libvorbis libogg zlib freetype
+    curl fribidi bluez libjpeg libpng
   ];
 
   enableParallelBuilding = true;
 
-  sourceRoot = "stk-code";
+  cmakeFlags = [
+    "-DBUILD_RECORDER=OFF"         # libopenglrecorder is not in nixpkgs
+    "-DUSE_SYSTEM_ANGELSCRIPT=OFF" # doesn't work with 2.31.2 or 2.32.0
+  ];
 
-  meta = {
+  sourceRoot = dir;
+
+  meta = with stdenv.lib; {
     description = "A Free 3D kart racing game";
     longDescription = ''
       SuperTuxKart is a Free 3D kart racing game, with many tracks,
       characters and items for you to try, similar in spirit to Mario
       Kart.
     '';
-    homepage = http://supertuxkart.sourceforge.net/;
-    license = stdenv.lib.licenses.gpl2Plus;
-    maintainers = with stdenv.lib.maintainers; [ c0dehero fuuzetsu ];
-    platforms = with stdenv.lib.platforms; linux;
+    homepage = https://supertuxkart.net/;
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ c0dehero fuuzetsu peterhoeg ];
+    platforms = with platforms; linux;
   };
 }

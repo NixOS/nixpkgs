@@ -1,11 +1,11 @@
 { stdenv, fetchurl, perl }:
 
 stdenv.mkDerivation rec {
-  name = "mbedtls-1.3.17";
+  name = "mbedtls-1.3.20";
 
   src = fetchurl {
     url = "https://tls.mbed.org/download/${name}-gpl.tgz";
-    sha256 = "10nviv3d8w6sp3kn3yzdpssvzqxdbr4kg38g7rg930q2hlzb9gpm";
+    sha256 = "0vv69c1c5rr7jcwwivx06fbfixgig90pjznh2c6cn841hgwm9z00";
   };
 
   nativeBuildInputs = [ perl ];

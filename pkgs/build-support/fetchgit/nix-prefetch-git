@@ -39,7 +39,7 @@ usage(){
 
 Options:
       --out path      Path where the output would be stored.
-      --url url       Any url understand by 'git clone'.
+      --url url       Any url understood by 'git clone'.
       --rev ref       Any sha1 or references (such as refs/heads/master)
       --hash h        Expected hash.
       --deepClone     Clone the entire repository.
@@ -47,6 +47,7 @@ Options:
       --leave-dotGit  Keep the .git directories.
       --fetch-submodules Fetch submodules.
       --builder       Clone as fetchgit does, but url, rev, and out option are mandatory.
+      --quiet         Only print the final json summary.
 "
     exit 1
 }
@@ -120,9 +121,8 @@ hash_from_ref(){
 url_to_name(){
     local url=$1
     local ref=$2
-    # basename removes the / and .git suffixes
     local base
-    base=$(basename "$url" .git)
+    base=$(basename "$url" .git | cut -d: -f2)
 
     if [[ $ref =~ ^[a-z0-9]+$ ]]; then
         echo "$base-${ref:0:7}"
@@ -184,8 +184,8 @@ init_submodules(){
         local url
 
         # checkout each submodule
-        hash=$(echo "$l" | awk '{print substr($1,2)}')
-        dir=$(echo "$l" | awk '{print $2}')
+        hash=$(echo "$l" | awk '{print $1}' | tr -d '-')
+        dir=$(echo "$l" | sed -n 's/^ \{0,1\}[^ ]* \(.*\) ([^ ]*)$/\1/p')
         name=$(
             git config -f .gitmodules --get-regexp submodule\..*\.path |
             sed -n "s,^\(.*\)\.path $dir\$,\\1,p")
@@ -283,16 +283,16 @@ _clone_user_rev() {
             if test -z "$(echo "$rev" | tr -d 0123456789abcdef)"; then
                 clone "$dir" "$url" "$rev" "" 1>&2
             else
-                echo 1>&2 "Bad commit hash or bad reference."
-                exit 1
+                # if revision is not hexadecimal it might be a tag
+                clone "$dir" "$url" "" "refs/tags/$rev" 1>&2
             fi;;
     esac
 
     pushd "$dir" >/dev/null
     fullRev=$( (git rev-parse "$rev" 2>/dev/null || git rev-parse "refs/heads/$branchName") | tail -n1)
     humanReadableRev=$(git describe "$fullRev" 2> /dev/null || git describe --tags "$fullRev" 2> /dev/null || echo -- none --)
-    commitDate=$(git show --no-patch --pretty=%ci "$fullRev")
-    commitDateStrict8601=$(git show --no-patch --pretty=%cI "$fullRev")
+    commitDate=$(git show -1 --no-patch --pretty=%ci "$fullRev")
+    commitDateStrict8601=$(git show -1 --no-patch --pretty=%cI "$fullRev")
     popd >/dev/null
 
     # Allow doing additional processing before .git removal
@@ -322,6 +322,18 @@ clone_user_rev() {
     fi
 }
 
+json_escape() {
+    local s="$1"
+    s="${s//\\/\\\\}" # \
+    s="${s//\"/\\\"}" # "
+    s="${s//^H/\\\b}" # \b (backspace)
+    s="${s//^L/\\\f}" # \f (form feed)
+    s="${s//
+/\\\n}" # \n (newline)
+    s="${s//^M/\\\r}" # \r (carriage return)
+    s="${s//   /\\t}" # \t (tab)
+    echo "$s"
+}
 
 print_results() {
     hash="$1"
@@ -338,17 +350,15 @@ print_results() {
         fi
     fi
     if test -n "$hash"; then
-        echo "{"
-        echo "  \"url\": \"$url\","
-        echo "  \"rev\": \"$fullRev\","
-        echo "  \"date\": \"$commitDateStrict8601\","
-        echo -n "  \"$hashType\": \"$hash\""
-        if test -n "$fetchSubmodules"; then
-            echo ","
-            echo -n "  \"fetchSubmodules\": true"
-        fi
-        echo ""
-        echo "}"
+        cat <<EOF
+{
+  "url": "$(json_escape "$url")",
+  "rev": "$(json_escape "$fullRev")",
+  "date": "$(json_escape "$commitDateStrict8601")",
+  "$(json_escape "$hashType")": "$(json_escape "$hash")",
+  "fetchSubmodules": $([[ -n "fetchSubmodules" ]] && echo true || echo false)
+}
+EOF
     fi
 }
 
@@ -396,8 +406,7 @@ else
         finalPath=$(nix-store --add-fixed --recursive "$hashType" "$tmpFile")
 
         if test -n "$expHash" -a "$expHash" != "$hash"; then
-            print_metadata
-            echo "hash mismatch for URL \`$url'" >&2
+            echo "hash mismatch for URL \`$url'. Got \`$hash'; expected \`$expHash'." >&2
             exit 1
         fi
     fi

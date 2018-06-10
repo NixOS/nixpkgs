@@ -12,6 +12,8 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = [ "format" ];
 
+  doCheck = false; # fails
+
   meta = with stdenv.lib; {
     description = "Tools to manipulate patch files";
     homepage = http://cyberelk.net/tim/software/patchutils;

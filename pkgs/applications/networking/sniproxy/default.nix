@@ -1,17 +1,18 @@
-{ stdenv, fetchFromGitHub, autoconf, automake, autoreconfHook, gettext, libev, pcre, pkgconfig, udns }:
+{ stdenv, fetchFromGitHub, autoreconfHook, gettext, libev, pcre, pkgconfig, udns }:
 
 stdenv.mkDerivation rec {
   name = "sniproxy-${version}";
-  version = "0.4.0";
+  version = "0.5.0";
 
   src = fetchFromGitHub {
     owner = "dlundquist";
     repo = "sniproxy";
     rev = version;
-    sha256 = "1r6hv55k2z8l5q57l2q2x3nsspc2yjvi56l760yrz2c1hgh6r0a2";
+    sha256 = "0nspisqdl0si5zpiiwkh9hhdy6h7lxw8l09rasflyawlmm680z1i";
   };
 
-  buildInputs = [ autoconf automake autoreconfHook gettext libev pcre pkgconfig udns ];
+  nativeBuildInputs = [ autoreconfHook pkgconfig ];
+  buildInputs = [ gettext libev pcre udns ];
 
   meta = with stdenv.lib; {
     inherit (src.meta) homepage;

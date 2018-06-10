@@ -1,49 +1,62 @@
-{ stdenv, fetchurl
+{ stdenv, fetchurl, makeDesktopItem, makeWrapper
 , alsaLib, atk, cairo, cups, dbus, expat, fontconfig, freetype, gdk_pixbuf
-, glib, gnome2, gtk2, libnotify, libX11, libXcomposite, libXcursor, libXdamage
-, libXext, libXfixes, libXi, libXrandr, libXrender, libXtst, nspr, nss, pango
-, systemd, libXScrnSaver }:
+, glib, gnome3, gtk2, libnotify, libX11, libXcomposite, libXcursor, libXdamage
+, libXext, libXfixes, libXi, libXrandr, libXrender, libXtst, nspr, nss, libxcb
+, pango, systemd, libXScrnSaver, libcxx, libpulseaudio }:
 
-let version = "0.0.8"; in
+stdenv.mkDerivation rec {
 
-stdenv.mkDerivation {
-
-    name = "discord-${version}";
+    pname = "discord";
+    version = "0.0.5";
+    name = "${pname}-${version}";
 
     src = fetchurl {
-        url = "https://cdn-canary.discordapp.com/apps/linux/${version}/discord-canary-${version}.tar.gz";
-        sha256 = "1g48jxiswpfvbgjs4dyywmzj9kncvrgpajhixk3acizdmfmsyqkk";
+        url = "https://cdn.discordapp.com/apps/linux/${version}/${pname}-${version}.tar.gz";
+        sha256 = "067gb72qsxrzfma04njkbqbmsvwnnyhw4k9igg5769jkxay68i1g";
     };
 
+    nativeBuildInputs = [ makeWrapper ];
+
     libPath = stdenv.lib.makeLibraryPath [
+        libcxx systemd libpulseaudio
         stdenv.cc.cc alsaLib atk cairo cups dbus expat fontconfig freetype
-        gdk_pixbuf glib gnome2.GConf gtk2 libnotify libX11 libXcomposite
+        gdk_pixbuf glib gnome3.gconf gtk2 libnotify libX11 libXcomposite
         libXcursor libXdamage libXext libXfixes libXi libXrandr libXrender
-        libXtst nspr nss pango systemd libXScrnSaver
+        libXtst nspr nss libxcb pango systemd libXScrnSaver
      ];
 
     installPhase = ''
-        mkdir -p $out/bin
-        mv * $out
+        mkdir -p $out/{bin,opt/discord,share/pixmaps}
+        mv * $out/opt/discord
 
-        # Copying how adobe-reader does it,
-        # see pkgs/applications/misc/adobe-reader/builder.sh
-        patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
-                 --set-rpath "$out:$libPath"                                   \
-                 $out/DiscordCanary
+        patchelf --set-interpreter ${stdenv.cc.bintools.dynamicLinker} \
+                 $out/opt/discord/Discord
 
-        ln -s $out/DiscordCanary $out/bin/
+        paxmark m $out/opt/discord/Discord
 
-        # Putting udev in the path won't work :(
-        ln -s ${systemd.lib}/lib/libudev.so.1 $out
+        wrapProgram $out/opt/discord/Discord --prefix LD_LIBRARY_PATH : ${libPath}
+
+        ln -s $out/opt/discord/Discord $out/bin/
+        ln -s $out/opt/discord/discord.png $out/share/pixmaps
+
+        ln -s "${desktopItem}/share/applications" $out/share/
         '';
 
+    desktopItem = makeDesktopItem {
+      name = pname;
+      exec = "Discord";
+      icon = pname;
+      desktopName = "Discord";
+      genericName = meta.description;
+      categories = "Network;InstantMessaging;";
+    };
+
     meta = with stdenv.lib; {
-        description = "All-in-one voice and text chat for gamers that’s free, secure, and works on both your desktop and phone";
-        homepage = "https://discordapp.com/";
+        description = "All-in-one cross-platform voice and text chat for gamers";
+        homepage = https://discordapp.com/;
         downloadPage = "https://github.com/crmarsh/discord-linux-bugs";
         license = licenses.unfree;
-        maintainers = [ maintainers.ldesgoui ];
+        maintainers = [ maintainers.ldesgoui maintainers.MP2E ];
         platforms = [ "x86_64-linux" ];
     };
 }

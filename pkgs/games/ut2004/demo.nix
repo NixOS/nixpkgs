@@ -32,7 +32,7 @@ in stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A first-person shooter video game developed by Epic Games and Digital Extreme -- demo version";
-    homepage = "http://www.unrealtournament2004.com";
+    homepage = http://www.unrealtournament2004.com;
     license = licenses.unfree;
     maintainers = with maintainers; [ abbradar ];
     platforms = [ "x86_64-linux" "i686-linux" ];

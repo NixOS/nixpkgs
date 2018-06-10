@@ -13,31 +13,17 @@ in
 
 stdenv.mkDerivation rec {
   name = "refind-${version}";
-  version = "0.10.3";
+  version = "0.11.2";
   srcName = "refind-src-${version}";
 
   src = fetchurl {
     url = "mirror://sourceforge/project/refind/${version}/${srcName}.tar.gz";
-    sha256 = "1r2qp29mz08lx36i7x52i2598773bxvfhwryd954ssq2baifjav5";
+    sha256 = "1k0xpm4y0gk1rxqdyprqyqpg5j16xw3l2gm3d9zpi5n9id43jkzn";
   };
-
-  patches = [
-    (fetchpatch {
-      url = "https://bugs.debian.org/cgi-bin/bugreport.cgi?att=1;bug=831258;filename=002-efiprot.patch;msg=10";
-      sha256 = "17h03h5mgkpamcj9jcq8h6x2admpknysrbdwccg7yxirlc52fc2s";
-      name = "002-efiprot.patch";
-    })
-  ];
 
   buildInputs = [ gnu-efi ];
 
   hardeningDisable = [ "stackprotector" ];
-
-  postPatch = ''
-    sed -e 's|-DEFI_FUNCTION_WRAPPER|-DEFI_FUNCTION_WRAPPER -maccumulate-outgoing-args|g' -i Make.common
-    sed -e 's|-DEFIX64|-DEFIX64 -maccumulate-outgoing-args|g' -i Make.common
-    sed -e 's|-m64|-maccumulate-outgoing-args -m64|g' -i filesystems/Make.gnuefi
-  '';
 
   makeFlags =
     [ "prefix="
@@ -71,7 +57,7 @@ stdenv.mkDerivation rec {
     install -D -m0644 gptsync/gptsync_${efiPlatform}.efi $out/share/refind/tools_${efiPlatform}/gptsync_${efiPlatform}.efi
 
     # helper scripts
-    install -D -m0755 refind-install $out/share/refind/refind-install
+    install -D -m0755 refind-install $out/bin/refind-install
     install -D -m0755 mkrlconf $out/bin/refind-mkrlconf
     install -D -m0755 mvrefind $out/bin/refind-mvrefind
     install -D -m0755 fonts/mkfont.sh $out/bin/refind-mkfont
@@ -100,21 +86,13 @@ stdenv.mkDerivation rec {
     # keys
     install -D -m0644 keys/* $out/share/refind/keys/
 
-    # The refind-install script assumes that all resource files are
-    # installed under the same directory as the script itself. To avoid
-    # having to patch around this assumption, generate a wrapper that
-    # cds into $out/share/refind and executes the real script from
-    # there.
-    cat >$out/bin/refind-install <<EOF
-#! ${stdenv.shell}
-cd $out/share/refind && exec -a $out/bin/refind-install ./refind-install \$*
-EOF
-    chmod +x $out/bin/refind-install
+    # Fix variable definition of 'RefindDir' which is used to locate ressource files.
+    sed -i "s,\bRefindDir=.*,RefindDir=$out/share/refind,g" $out/bin/refind-install
 
     # Patch uses of `which`.  We could patch in calls to efibootmgr,
     # openssl, convert, and openssl, but that would greatly enlarge
     # refind's closure (from ca 28MB to over 400MB).
-    sed -i 's,`which \(.*\)`,`type -p \1`,g' $out/share/refind/refind-install
+    sed -i 's,`which \(.*\)`,`type -p \1`,g' $out/bin/refind-install
     sed -i 's,`which \(.*\)`,`type -p \1`,g' $out/bin/refind-mvrefind
     sed -i 's,`which \(.*\)`,`type -p \1`,g' $out/bin/refind-mkfont
   '';

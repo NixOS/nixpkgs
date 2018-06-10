@@ -1,12 +1,15 @@
-{ stdenv, fetchurl, autoreconfHook, gzip, bzip2, pkgconfig, flex, check, pam }:
+{ stdenv, fetchurl, autoreconfHook,
+  gzip, bzip2, pkgconfig, flex, check,
+  pam, coreutils
+}:
 
 stdenv.mkDerivation rec {
   name = "kbd-${version}";
-  version = "2.0.3";
+  version = "2.0.4";
 
   src = fetchurl {
     url = "mirror://kernel/linux/utils/kbd/${name}.tar.xz";
-    sha256 = "0ppv953gn2zylcagr4z6zg5y2x93dxrml29plypg6xgbq3hrv2bs";
+    sha256 = "124swm93dm4ca0pifgkrand3r9gvj3019d4zkfxsj9djpvv0mnaz";
   };
 
   configureFlags = [
@@ -15,7 +18,7 @@ stdenv.mkDerivation rec {
     "--disable-nls"
   ];
 
-  patches = [ ./console-fix.patch ./search-paths.patch ];
+  patches = [ ./search-paths.patch ];
 
   postPatch =
     ''
@@ -29,10 +32,18 @@ stdenv.mkDerivation rec {
 
       # We get a warning in armv5tel-linux and the fuloong2f, so we
       # disable -Werror in it.
-      ${stdenv.lib.optionalString (stdenv.isArm || stdenv.system == "mips64el-linux") ''
+      ${stdenv.lib.optionalString (stdenv.isAarch32 || stdenv.hostPlatform.isMips) ''
         sed -i s/-Werror// src/Makefile.am
       ''}
     '';
+
+  postInstall = ''
+    for i in $out/bin/unicode_{start,stop}; do
+      substituteInPlace "$i" \
+        --replace /usr/bin/tty ${coreutils}/bin/tty
+    done
+  '';
+
 
   buildInputs = [ check pam ];
   nativeBuildInputs = [ autoreconfHook pkgconfig flex ];
@@ -43,6 +54,6 @@ stdenv.mkDerivation rec {
     homepage = ftp://ftp.altlinux.org/pub/people/legion/kbd/;
     description = "Linux keyboard utilities and keyboard maps";
     platforms = platforms.linux;
-    licenses = licenses.gpl2Plus;
+    license = licenses.gpl2Plus;
   };
 }

@@ -2,7 +2,8 @@
 
 stdenv.mkDerivation rec {
   name = "davix-0.6.4";
-  buildInputs = [ stdenv pkgconfig cmake openssl libxml2 boost ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ stdenv cmake openssl libxml2 boost ];
 
   src = fetchFromGitHub {
     owner = "cern-it-sdc-id";

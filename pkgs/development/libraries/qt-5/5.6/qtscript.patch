@@ -1,0 +1,13 @@
+diff --git a/src/3rdparty/javascriptcore/JavaScriptCore/wtf/Threading.h b/src/3rdparty/javascriptcore/JavaScriptCore/wtf/Threading.h
+index 1f6d25e..087c3fb 100644
+--- a/src/3rdparty/javascriptcore/JavaScriptCore/wtf/Threading.h
++++ b/src/3rdparty/javascriptcore/JavaScriptCore/wtf/Threading.h
+@@ -81,7 +81,7 @@
+ #include <pthread.h>
+ #elif PLATFORM(GTK)
+ #include <wtf/gtk/GOwnPtr.h>
+-typedef struct _GMutex GMutex;
++typedef union _GMutex GMutex;
+ typedef struct _GCond GCond;
+ #endif
+ 

@@ -36,6 +36,5 @@ stdenv.mkDerivation rec {
     homepage = http://duff.dreda.org/;
     license = licenses.zlib;
     platforms = platforms.all;
-    maintainers = with maintainers; [ nckx ];
   };
 }

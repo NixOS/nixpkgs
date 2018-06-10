@@ -2,13 +2,14 @@
 , pkgconfig, gettext, xmlsec, zlib
 }:
 
-stdenv.mkDerivation rec {
+let
+  inherit ((import ./sources.nix).aqbanking) sha256 releaseId version;
+in stdenv.mkDerivation rec {
   name = "aqbanking-${version}";
-  version = "5.6.10";
+  inherit version;
 
   src = let
-    inherit ((import ./sources.nix).aqbanking) sha256 releaseId;
-    qstring = "package=03&release=${releaseId}&file=01";
+    qstring = "package=03&release=${releaseId}&file=02";
     mkURLs = map (base: "${base}/sites/download/download.php?${qstring}");
   in fetchurl {
     name = "${name}.tar.gz";
@@ -30,10 +31,10 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "An interface to banking tasks, file formats and country information";
-    homepage = "http://www2.aquamaniac.de/sites/download/packages.php?package=03&showall=1";
+    homepage = http://www2.aquamaniac.de/sites/download/packages.php?package=03&showall=1;
     hydraPlatforms = [];
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ goibhniu urkud ];
+    maintainers = with maintainers; [ goibhniu ];
     platforms = platforms.linux;
   };
 }

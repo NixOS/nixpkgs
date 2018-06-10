@@ -1,24 +1,20 @@
 { stdenv, fetchurl, makeWrapper, jre, cpio, gawk, gnugrep, gnused, procps, swt, gtk2, glib, libXtst }:
 
-let
-  version = "4.7.0";
-  rev = "2"; #tracks unversioned changes that occur on download.code42.com from time to time
-
-in stdenv.mkDerivation rec {
+stdenv.mkDerivation rec {
+  version = "4.8.3";
+  rev = "1"; #tracks unversioned changes that occur on download.code42.com from time to time
   name = "crashplan-${version}-r${rev}";
 
-  crashPlanArchive = fetchurl {
+  src = fetchurl {
     url = "https://download.code42.com/installs/linux/install/CrashPlan/CrashPlan_${version}_Linux.tgz";
-    sha256 = "1vi6dqf8kc90axrgdcf6rwnhynxgxkc0qn6pbdp2gvkxdqxrprn8";
+    sha256 = "c25d87ec1d442a396b668547e39b70d66dcfe02250cc57a25916ebb42a407113";
   };
-
-  srcs = [ crashPlanArchive ];
 
   meta = with stdenv.lib; {
     description = "An online/offline backup solution";
-    homepage = "http://www.crashplan.org";
+    homepage = http://www.crashplan.org;
     license = licenses.unfree;
-    maintainers = with maintainers; [ sztupi domenkozar ];
+    maintainers = with maintainers; [ sztupi domenkozar jerith666 ];
   };
 
   buildInputs = [ makeWrapper cpio ];
@@ -43,7 +39,6 @@ in stdenv.mkDerivation rec {
 
     install -d -m 755 unpacked $out
 
-    install -D -m 644 EULA.txt $out/EULA.txt
     install -D -m 644 run.conf $out/bin/run.conf
     install -D -m 755 scripts/CrashPlanDesktop $out/bin/CrashPlanDesktop
     install -D -m 755 scripts/CrashPlanEngine $out/bin/CrashPlanEngine

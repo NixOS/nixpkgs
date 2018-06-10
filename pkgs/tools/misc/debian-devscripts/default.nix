@@ -2,18 +2,18 @@
 , FileDesktopEntry, libxslt, docbook_xsl, makeWrapper
 , python3Packages
 , perlPackages, curl, gnupg, diffutils
-, sendmailPath ? "/var/setuid-wrappers/sendmail"
+, sendmailPath ? "/run/wrappers/bin/sendmail"
 }:
 
 let
   inherit (python3Packages) python setuptools;
 in stdenv.mkDerivation rec {
-  version = "2.16.6";
+  version = "2.16.8";
   name = "debian-devscripts-${version}";
 
   src = fetchurl {
     url = "mirror://debian/pool/main/d/devscripts/devscripts_${version}.tar.xz";
-    sha256 = "0lkhilwb1gsnk8q14wkrl78s0w3l8aghsaz00vprmkmcc3j1x14h";
+    sha256 = "0xy1nvqrnifx46g8ch69pk31by0va6hn10wpi1fkrsrgncanjjh1";
   };
 
   buildInputs = [ perl CryptSSLeay LWP unzip xz dpkg TimeDate DBFile 
@@ -27,10 +27,10 @@ in stdenv.mkDerivation rec {
     mkdir -p "$tgtpy"
     export PYTHONPATH="$PYTHONPATH''${PYTHONPATH:+:}$tgtpy"
     find po4a scripts -type f -exec sed -r \
-      -e "s@/usr/bin/gpg(2|)@${gnupg}/bin/gpg2@g" \
+      -e "s@/usr/bin/gpg(2|)@${gnupg}/bin/gpg@g" \
       -e "s@/usr/(s|)bin/sendmail@${sendmailPath}@g" \
       -e "s@/usr/bin/diff@${diffutils}/bin/diff@g" \
-      -e "s@/usr/bin/gpgv(2|)@${gnupg}/bin/gpgv2@g" \
+      -e "s@/usr/bin/gpgv(2|)@${gnupg}/bin/gpgv@g" \
       -e "s@(command -v|/usr/bin/)curl@${curl.bin}/bin/curl@g" \
       -i {} +
     sed -e "s@/usr/share/sgml/[^ ]*/manpages/docbook.xsl@${docbook_xsl}/xml/xsl/docbook/manpages/docbook.xsl@" -i scripts/Makefile
@@ -54,7 +54,8 @@ in stdenv.mkDerivation rec {
       wrapProgram "$i" \
         --prefix PERL5LIB : "$PERL5LIB" \
         --prefix PERL5LIB : "$out/share/devscripts" \
-        --prefix PYTHONPATH : "$out/lib/python3.4/site-packages"
+        --prefix PYTHONPATH : "$out/lib/python3.4/site-packages" \
+        --prefix PATH : "${dpkg}/bin"
     done
   '';
 

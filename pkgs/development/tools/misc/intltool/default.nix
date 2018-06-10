@@ -11,17 +11,17 @@ stdenv.mkDerivation rec {
 
   # fix "unescaped left brace" errors when using intltool in some cases
   patches = [(fetchpatch {
-    name = "perl-5.22.patch";
-    url = "https://anonscm.debian.org/viewvc/pkg-gnome/desktop/unstable/intltool"
-      + "/debian/patches/perl5.22-regex-fixes?revision=47255&view=co";
-    sha256 = "17clqczb9fky7hp8czxa0fy82b5478irvz4f3fnans3sqxl95hx3";
+    name = "perl5.26-regex-fixes.patch";
+    url = "https://sources.debian.org/data/main/i/intltool/0.51.0-5"
+      + "/debian/patches/perl5.26-regex-fixes.patch";
+    sha256 = "12q2140867r5d0dysly72khi7b0mm2gd7nlm1k81iyg7fxgnyz45";
   })];
 
   propagatedBuildInputs = [ gettext perl perlXMLParser ];
 
   meta = with stdenv.lib; {
     description = "Translation helper tool";
-    homepage = http://launchpad.net/intltool/;
+    homepage = https://launchpad.net/intltool/;
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ raskin ];
     platforms = platforms.unix;

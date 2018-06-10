@@ -1,49 +1,48 @@
-{ stdenv, fetchurl, ocaml, findlib, opam, gg, uutf, otfm, js_of_ocaml,
+{ stdenv, lib, fetchurl, ocaml, findlib, ocamlbuild, topkg
+, uchar, result, gg, uutf, otfm
+, js_of_ocaml, js_of_ocaml-ocamlbuild, js_of_ocaml-ppx,
   pdfBackend ? true, # depends on uutf and otfm
   htmlcBackend ? true # depends on js_of_ocaml
 }:
 
+with lib;
+
 let
-  inherit (stdenv.lib) getVersion optionals versionAtLeast;
+  inherit (stdenv.lib) optionals versionAtLeast;
 
   pname = "vg";
-  version = "0.8.1";
+  version = "0.9.0";
   webpage = "http://erratique.ch/software/${pname}";
 in
 
-assert versionAtLeast (getVersion ocaml) "4.01.0";
+assert versionAtLeast ocaml.version "4.02.0";
 
 stdenv.mkDerivation rec {
 
-  name = "ocaml-${pname}-${version}";
+  name = "ocaml${ocaml.version}-${pname}-${version}";
 
   src = fetchurl {
     url = "${webpage}/releases/${pname}-${version}.tbz";
-    sha256 = "1cdcvsr5z8845ndilnrz7p4n6yn4gv2p91z2mgi4vrailcmn5vzd";
+    sha256 = "1czd2fq85hy24w5pllarsq4pvbx9rda5zdikxfxdng8s9kff2h3f";
   };
 
-  buildInputs = [ ocaml findlib opam ];
+  buildInputs = [ ocaml findlib ocamlbuild topkg ];
 
-  propagatedBuildInputs = [ gg ]
+  propagatedBuildInputs = [ uchar result gg ]
                           ++ optionals pdfBackend [ uutf otfm ]
-                          ++ optionals htmlcBackend [ js_of_ocaml ];
-
-  createFindlibDestdir = true;
+                          ++ optionals htmlcBackend [ js_of_ocaml js_of_ocaml-ocamlbuild js_of_ocaml-ppx ];
 
   unpackCmd = "tar xjf $src";
 
-  buildPhase = "ocaml pkg/build.ml native=true native-dynlink=true"
-               + (if pdfBackend then " uutf=true otfm=true"
-                                else " uutf=false otfm=false")
-               + (if htmlcBackend then " jsoo=true"
-                                  else " jsoo=false");
+  buildPhase = topkg.buildPhase
+    + " --with-uutf ${boolToString pdfBackend}"
+    + " --with-otfm ${boolToString pdfBackend}"
+    + " --with-js_of_ocaml ${boolToString htmlcBackend}"
+    + " --with-cairo2 false";
 
-  installPhase = ''
-    opam-installer --script --prefix=$out ${pname}.install | sh
-    ln -s $out/lib/${pname} $out/lib/ocaml/${getVersion ocaml}/site-lib/${pname}
-  '';
+  inherit (topkg) installPhase;
 
-  meta = with stdenv.lib; {
+  meta = {
     description = "Declarative 2D vector graphics for OCaml";
     longDescription = ''
     Vg is an OCaml module for declarative 2D vector graphics. In Vg, images

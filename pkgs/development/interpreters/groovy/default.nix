@@ -4,19 +4,21 @@
 
 stdenv.mkDerivation rec {
   name = "groovy-${version}";
-  version = "2.4.6";
+  version = "2.5.0";
 
   src = fetchurl {
     url = "http://dl.bintray.com/groovy/maven/apache-groovy-binary-${version}.zip";
-    sha256 = "0s474wy7db7j1pans5ks986b52bdmn40l29zl6xl44y23fsvagwv";
+    sha256 = "1qzciri8qjx5p7x015rk5ws7gj53qidamp85r2r7aj6ssyp3r40k";
   };
 
   buildInputs = [ unzip makeWrapper ];
 
   installPhase = ''
     mkdir -p $out
+    mkdir -p $out/share/doc/groovy
     rm bin/*.bat
-    mv * $out
+    mv {bin,conf,grooid,indy,lib} $out
+    mv {licenses,LICENSE,NOTICE} $out/share/doc/groovy
 
     sed -i 's#which#${which}/bin/which#g' $out/bin/startGroovy
 
@@ -26,8 +28,6 @@ stdenv.mkDerivation rec {
             --prefix PATH ":" "${jdk}/bin"
     done
   '';
-
-  phases = "unpackPhase installPhase";
 
   meta = with stdenv.lib; {
     description = "An agile dynamic language for the Java Platform";

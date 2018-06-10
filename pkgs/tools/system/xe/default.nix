@@ -2,19 +2,22 @@
 
 stdenv.mkDerivation rec {
   name = "xe-${version}";
-  version = "0.5";
+  version = "0.11";
+  
   src = fetchFromGitHub {
     owner = "chneukirchen";
     repo = "xe";
     rev = "v${version}";
-    sha256 = "0rv9npgjb695slql39asyp6znv9r3a6jbcsrsa1cmhk82iy4bljc";
+    sha256 = "04jr8f6jcijr0bsmn8ajm0aj35qh9my3xjsaq64h8lwg5bpyn29x";
   };
+
   makeFlags = "PREFIX=$(out)";
+  
   meta = with lib; {
     description = "Simple xargs and apply replacement";
-    homepage = "https://github.com/chneukirchen/xe";
+    homepage = https://github.com/chneukirchen/xe;
     license = licenses.publicDomain;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ cstrahan ];
+    maintainers = with maintainers; [ cstrahan ndowens ];
   };
 }

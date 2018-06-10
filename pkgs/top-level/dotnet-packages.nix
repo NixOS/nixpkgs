@@ -46,6 +46,20 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
     outputFiles = [ "lib/net40/*" ];
   };
 
+  FSharpCore = fetchNuGet {
+    baseName = "FSharp.Core";
+    version = "4.0.0.1";
+    sha256 = "01nhjcxdz8l1r5vvdzhmgy5x7z5fqppab3ki34qg14axgf8jjygn";
+    outputFiles = [ "*" ];
+  };
+
+  FSharpData225 = fetchNuGet {
+    baseName = "FSharp.Data";
+    version = "2.2.5";
+    sha256 = "1c9l6bk0d2srccash2980y9phq3kmfm0m76k4wghnysnq94vm724";
+    outputFiles = [ "*" ];
+  };
+
   FSharpDataSQLProvider = fetchNuGet {
     baseName = "SQLProvider";
     version = "0.0.9-alpha";
@@ -60,6 +74,13 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
     outputFiles = [ "lib/net45/*" ];
   };
 
+  FsCheck262 = fetchNuGet {
+    baseName = "FsCheck";
+    version = "2.6.2";
+    sha256 = "0fh9yvsc4i61z31qf00d6gjv6xxd54pv1ykf5bpv95a5crc3qfvl";
+    outputFiles = [ "*" ];
+  };
+
   FsCheckNunit = fetchNuGet {
     baseName = "FsCheck.Nunit";
     version = "1.0.4";
@@ -67,11 +88,25 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
     outputFiles = [ "lib/net45/*" ];
   };
 
+  FSharpCompilerTools = fetchNuGet {
+    baseName = "FSharp.Compiler.Tools";
+    version = "4.1.4";
+    sha256 = "0vsp0khlnwh15ibg8s161rw6a6i8rlriclpq53paga447jllf0m8";
+    outputFiles = [ "*" ];
+  };
+
   FsLexYacc = fetchNuGet {
     baseName = "FsLexYacc";
     version = "6.1.0";
     sha256 = "1v5myn62zqs431i046gscqw2v0c969fc7pdplx7z9cnpy0p2s4rv";
     outputFiles = [ "build/*" ];
+  };
+
+  FsLexYacc704 = fetchNuGet {
+    baseName = "FsLexYacc";
+    version = "7.0.4";
+    sha256 = "01zpdb0pybdf0by02rwd7pb1g0cmnn8jxm2pibzxjxw6f4l43ywi";
+    outputFiles = [ "*" ];
   };
 
   FsPickler = fetchNuGet {
@@ -100,6 +135,13 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
     version = "3.0.1";
     sha256 = "1g3j3kvg9vrapb1vjgq65nvn1vg7bzm66w7yjnaip1iww1yn1b0p";
     outputFiles = [ "lib/*" ];
+  };
+
+  NUnit350 = fetchNuGet {
+    baseName = "NUnit";
+    version = "3.5.0";
+    sha256 = "19fxq9cf754ygda5c8rn1zqs71pfxi7mb96jwqhlichnqih6i16z";
+    outputFiles = [ "*" ];
   };
 
   NUnit2 = fetchNuGet {
@@ -153,6 +195,13 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
     outputFiles = [ "tools/*" ];
   };
 
+  SystemValueTuple = fetchNuGet {
+    baseName = "System.ValueTuple";
+    version = "4.3.0";
+    sha256 = "00p5s753xh5417arw3k6npf1pc1k3m1s9mrlkw5vmc7pg8lm6n88";
+    outputFiles = [ "*" ];
+  };
+
   RestSharp = fetchNuGet {
     baseName = "RestSharp";
     version = "105.2.3";
@@ -170,7 +219,7 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
   SmartIrc4net = fetchNuGet {
     baseName = "SmartIrc4net";
     version = "0.4.5.1";
-    sha256 = "1k6zc6xsqfzj7nc9479d32akj6d37jq6i1qirmz1i66p52zb5hm1";
+    sha256 = "1d531sj39fvwmj2wgplqfify301y3cwp7kwr9ai5hgrq81jmjn2b";
     outputFiles = [ "lib/*" ];
   };
 
@@ -181,11 +230,32 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
     outputFiles = [ "bin/*" ];
   };
 
+  OpenNAT = fetchNuGet {
+    baseName = "Open.NAT";
+    version = "2.1.0";
+    sha256 = "1jyd30fwycdwx5ck96zhp2xf20yz0sp7g3pjbqhmay4kd322mfwk";
+    outputFiles = [ "lib/*" ];
+  };
+
   MonoNat = fetchNuGet {
     baseName = "Mono.Nat";
     version = "1.2.24";
     sha256 = "0vfkach11kkcd9rcqz3s38m70d5spyb21gl99iqnkljxj5555wjs";
     outputFiles = [ "lib/*" ];
+  };
+
+  MicrosoftDiaSymReader = fetchNuGet {
+    baseName = "Microsoft.DiaSymReader";
+    version = "1.1.0";
+    sha256 = "04dgwy6nyxksd1nb24k5c5vz8naggg7hryadvwqnm2v3alkh6g88";
+    outputFiles = [ "*" ];
+  };
+
+  MicrosoftDiaSymReaderPortablePdb = fetchNuGet {
+    baseName = "Microsoft.DiaSymReader.PortablePdb";
+    version = "1.2.0";
+    sha256 = "0qa8sqg0lzz9galkkfyi8rkbkali0nxm3qd5y4dlxp96ngrq5ldz";
+    outputFiles = [ "*" ];
   };
 
   NUnitRunners = fetchNuGet {
@@ -203,6 +273,20 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
     outputFiles = [ "lib/portable-net45+win8+wp8+wpa81/*" ];
   };
 
+  SystemCollectionsImmutable131 = fetchNuGet {
+    baseName = "System.Collections.Immutable";
+    version = "1.3.1";
+    sha256 = "149fcp7k7r9iw24dv5hbaij0c38kcv28dyhzbkggilfh4x2hy8c2";
+    outputFiles = [ "*" ];
+  };
+
+  SystemReflectionMetadata = fetchNuGet {
+    baseName = "System.Reflection.Metadata";
+    version = "1.4.2";
+    sha256 = "19fhdgd35yg52gyckhgwrphq07nv7v7r73hcg69ns94xfg1i6r7i";
+    outputFiles = [ "*" ];
+  };
+
   Suave = fetchNuGet {
     baseName = "Suave";
     version = "0.29.0";
@@ -212,6 +296,112 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
   };
 
   # SOURCE PACKAGES
+
+  Boogie = buildDotnetPackage rec {
+    baseName = "Boogie";
+    version = "2018-05-28";
+    name = "${baseName}-unstable-${version}";
+
+    src = fetchFromGitHub {
+      owner = "boogie-org";
+      repo = "boogie";
+      rev = "fc97aac639505f46cda7904dae95c9557716d037";
+      sha256 = "1hjksc5sapw1shxjwg0swja5afman8i15wnv5b6rzkqd4mg8y6nz";
+    };
+
+    # emulate `nuget restore Source/Boogie.sln`
+    # which installs in $srcdir/Source/packages
+    preBuild = ''
+      mkdir -p Source/packages/NUnit.2.6.3
+      ln -sn ${dotnetPackages.NUnit}/lib/dotnet/NUnit Source/packages/NUnit.2.6.3/lib
+    '';
+
+    buildInputs = [
+      dotnetPackages.NUnit
+      dotnetPackages.NUnitRunners
+    ];
+
+    xBuildFiles = [ "Source/Boogie.sln" ];
+
+    outputFiles = [ "Binaries/*" ];
+
+    postInstall = ''
+        mkdir -pv "$out/lib/dotnet/${baseName}"
+        ln -sv "${pkgs.z3}/bin/z3" "$out/lib/dotnet/${baseName}/z3.exe"
+
+        # so that this derivation can be used as a vim plugin to install syntax highlighting
+        vimdir=$out/share/vim-plugins/boogie
+        install -Dt $vimdir/syntax/ Util/vim/syntax/boogie.vim
+        mkdir $vimdir/ftdetect
+        echo 'au BufRead,BufNewFile *.bpl set filetype=boogie' > $vimdir/ftdetect/bpl.vim
+    '';
+
+    meta = with stdenv.lib; {
+      description = "An intermediate verification language";
+      homepage = "https://github.com/boogie-org/boogie";
+      longDescription = ''
+        Boogie is an intermediate verification language (IVL), intended as a
+        layer on which to build program verifiers for other languages.
+
+        This derivation may be used as a vim plugin to provide syntax highlighting.
+      '';
+      license = licenses.mspl;
+      maintainers = [ maintainers.taktoa ];
+      platforms = with platforms; (linux ++ darwin);
+    };
+  };
+
+  Dafny = buildDotnetPackage rec {
+    baseName = "Dafny";
+    version = "2.1.0";
+
+    src = fetchurl {
+      url = "https://github.com/Microsoft/dafny/archive/v${version}.tar.gz";
+      sha256 = "1iyhy0zpi6wvqif7826anzgdipgsy5bk775ds9qqwfw27j7x6fy5";
+    };
+
+    postPatch = ''
+      sed -i \
+        -e 's/ Visible="False"//' \
+        -e "s/Exists(\$(CodeContractsInstallDir))/Exists('\$(CodeContractsInstallDir)')/" \
+        Source/*/*.csproj
+    '';
+
+    preBuild = ''
+      ln -s ${pkgs.z3} Binaries/z3
+    '';
+
+    buildInputs = [ Boogie ];
+
+    xBuildFiles = [ "Source/Dafny.sln" ];
+    xBuildFlags = [ "/p:Configuration=Checked" "/p:Platform=Any CPU" "/t:Rebuild" ];
+
+    outputFiles = [ "Binaries/*" ];
+
+    # Do not wrap the z3 executable, only dafny-related ones.
+    exeFiles = [ "Dafny*.exe" ];
+
+    # Dafny needs mono in its path.
+    makeWrapperArgs = "--set PATH ${mono}/bin";
+
+    # Boogie as an input is not enough. Boogie libraries need to be at the same
+    # place as Dafny ones. Same for "*.dll.mdb". No idea why or how to fix.
+    postFixup = ''
+      for lib in ${Boogie}/lib/dotnet/${Boogie.baseName}/*.dll{,.mdb}; do
+        ln -s $lib $out/lib/dotnet/${baseName}/
+      done
+      # We generate our own executable scripts
+      rm -f $out/lib/dotnet/${baseName}/dafny{,-server}
+    '';
+
+    meta = with stdenv.lib; {
+      description = "A programming language with built-in specification constructs";
+      homepage = "http://research.microsoft.com/dafny";
+      maintainers = with maintainers; [ layus ];
+      license = licenses.mit;
+      platforms = with platforms; (linux ++ darwin);
+    };
+  };
 
   Deedle = buildDotnetPackage rec {
     baseName = "Deedle";
@@ -282,7 +472,7 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
 
     meta = {
       description = "Excel-DNA is an independent project to integrate .NET into Excel";
-      homepage = "http://excel-dna.net/";
+      homepage = "https://excel-dna.net/";
       license = stdenv.lib.licenses.mit;
       maintainers = with stdenv.lib.maintainers; [ obadz ];
       platforms = with stdenv.lib.platforms; linux;
@@ -554,7 +744,7 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
 
     meta = {
       description = "Math.NET Numerics is an opensource numerical library for .Net, Silverlight and Mono";
-      homepage = http://numerics.mathdotnet.com/;
+      homepage = https://numerics.mathdotnet.com/;
       license = stdenv.lib.licenses.mit;
       maintainers = with stdenv.lib.maintainers; [ obadz ];
       platforms = with stdenv.lib.platforms; linux;
@@ -711,7 +901,7 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
 
     meta = {
       description = "Popular high-performance JSON framework for .NET";
-      homepage = "http://www.newtonsoft.com/json";
+      homepage = "https://www.newtonsoft.com/json";
       license = stdenv.lib.licenses.mit;
       maintainers = with stdenv.lib.maintainers; [ obadz ];
       platforms = with stdenv.lib.platforms; linux;
@@ -720,13 +910,13 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
 
   Nuget = buildDotnetPackage {
     baseName = "Nuget";
-    version = "2.8.5";
+    version = "3.4.3";
 
     src = fetchFromGitHub {
       owner = "mono";
       repo = "nuget-binary";
-      rev = "da1f2102f8172df6f7a1370a4998e3f88b91c047";
-      sha256 = "1hbnckc4gvqkknf8gh1k7iwqb4vdzifdjd19i60fnczly5v8m1c3";
+      rev = "1f3025c2eb13bfcb56b47ddd77329ac3d9911d1c";
+      sha256 = "01snk05hcrp5i2ys3p1y34r05q1b460q6wb8p3vwpba2q2czdax5";
     };
 
     buildInputs = [ unzip ];
@@ -735,7 +925,7 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
 
     outputFiles = [ "*" ];
     dllFiles = [ "NuGet*.dll" ];
-    exeFiles = [ "NuGet.exe" ];
+    exeFiles = [ "nuget.exe" ];
   };
 
   Paket = buildDotnetPackage rec {

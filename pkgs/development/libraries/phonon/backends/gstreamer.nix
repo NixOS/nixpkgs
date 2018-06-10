@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   name = "${pname}-${if withQt5 then "qt5" else "qt4"}-${v}";
 
   meta = with stdenv.lib; {
-    homepage = http://phonon.kde.org/;
+    homepage = https://phonon.kde.org/;
     description = "GStreamer backend for Phonon";
     platforms = platforms.linux;
     maintainers = with maintainers; [ ttuegel ];
@@ -29,14 +29,35 @@ stdenv.mkDerivation rec {
     sha256 = "1wc5p1rqglf0n1avp55s50k7fjdzdrhg0gind15k8796w7nfbhyf";
   };
 
+  # Hardcode paths to useful plugins so the backend doesn't depend
+  # on system paths being set.
+  patches = [ ./gst-plugin-paths.patch ];
+
+  NIX_CFLAGS_COMPILE =
+    let gstPluginPaths =
+          lib.makeSearchPathOutput "lib" "/lib/gstreamer-1.0"
+          (with gst_all_1; [
+            gstreamer
+            gst-plugins-base
+            gst-plugins-good
+            gst-plugins-ugly
+            gst-plugins-bad
+            gst-libav
+          ]);
+    in [
+      # This flag should be picked up through pkgconfig, but it isn't.
+      "-I${gst_all_1.gstreamer.dev}/lib/gstreamer-1.0/include"
+
+      ''-DGST_PLUGIN_PATH_1_0="${gstPluginPaths}"''
+    ];
+
   buildInputs = with gst_all_1;
     [ gstreamer gst-plugins-base phonon ]
     ++ (if withQt5 then [ qtbase qtx11extras ] else [ qt4 ]);
 
-  NIX_CFLAGS_COMPILE = [
-    # This flag should be picked up through pkgconfig, but it isn't.
-    "-I${gst_all_1.gstreamer.dev}/lib/gstreamer-1.0/include"
-  ];
+  # cleanup: the build system creates (empty) $out/$out/share/icons (double prefix)
+  # if DESTDIR is unset
+  DESTDIR="/";
 
   nativeBuildInputs = [ cmake pkgconfig ] ++ optional withQt5 extra-cmake-modules;
 

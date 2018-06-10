@@ -1,7 +1,5 @@
-{ stdenv, fetchurl, bison, flex, gettext, pkgconfig, libpng
-, libtheora, openal, physfs, mesa, fribidi, fontconfig
-, freetype, qt4, glew, libogg, libvorbis, zlib, libX11
-, libXrandr, zip, unzip, which, perl
+{ stdenv, lib, fetchurl, perl, unzip, zip, which, pkgconfig
+, qtbase, qtscript, SDL2, libtheora, openal, glew, physfs, fribidi
 , withVideos ? false
 }:
 
@@ -14,28 +12,31 @@ let
 in
 
 stdenv.mkDerivation rec {
-  version = "3.1.5";
+  version = "3.2.3";
   name = "${pname}-${version}";
+
   src = fetchurl {
     url = "mirror://sourceforge/${pname}/releases/${version}/${name}.tar.xz";
-    sha256 = "0hm49i2knvvg3wlnryv7h4m84s3qa7jfyym5yy6365sx8wzcrai1";
+    sha256 = "10kmpr4cby95zwqsl1zwx95d9achli6khq7flv6xmrq30a39xazw";
   };
-  buildInputs = [ bison flex gettext pkgconfig libpng libtheora openal
-                  physfs mesa fribidi fontconfig freetype qt4
-                  glew libogg libvorbis zlib libX11 libXrandr zip
-                  unzip perl
-                ];
-  patchPhase = ''
+
+  buildInputs = [ qtbase qtscript SDL2 libtheora openal glew physfs fribidi ];
+  nativeBuildInputs = [ perl zip unzip pkgconfig ];
+
+  postPatch = ''
     substituteInPlace lib/exceptionhandler/dumpinfo.cpp \
                       --replace "which %s" "${which}/bin/which %s"
     substituteInPlace lib/exceptionhandler/exceptionhandler.cpp \
                       --replace "which %s" "${which}/bin/which %s"
   '';
-  configureFlags = "--with-backend=qt --with-distributor=NixOS";
 
-  NIX_CFLAGS_COMPILE = "-fpermissive"; # GL header minor incompatibility
+  configureFlags = [ "--with-distributor=NixOS" ];
 
-  postInstall = stdenv.lib.optionalString withVideos "cp ${sequences_src} $out/share/warzone2100/sequences.wz";
+  hardeningDisable = [ "format" ];
+
+  enableParallelBuilding = true;
+
+  postInstall = lib.optionalString withVideos "cp ${sequences_src} $out/share/warzone2100/sequences.wz";
 
   meta = with stdenv.lib; {
     description = "A free RTS game, originally developed by Pumpkin Studios";

@@ -20,6 +20,8 @@ stdenv.mkDerivation rec {
                      "--with-gamesdir=/tmp/unnethack"
                    ];
 
+  makeFlags = [ "GAMEPERM=744" ];
+
   postInstall = ''
     cp -r /tmp/unnethack $out/share/unnethack/profile
     mv $out/bin/unnethack $out/bin/.wrapped_unnethack
@@ -45,7 +47,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Fork of NetHack";
-    homepage = "http://unnethack.wordpress.com/";
+    homepage = https://unnethack.wordpress.com/;
     license = "nethack";
     platforms = platforms.all;
     maintainers = with maintainers; [ abbradar ];

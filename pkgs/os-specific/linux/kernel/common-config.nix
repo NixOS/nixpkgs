@@ -16,7 +16,7 @@
 
 */
 
-{ stdenv, version, kernelPlatform, extraConfig, features }:
+{ stdenv, version, extraConfig, features }:
 
 with stdenv.lib;
 
@@ -27,22 +27,35 @@ with stdenv.lib;
     MODULE_COMPRESS_XZ y
   ''}
 
+  KERNEL_XZ y
+
   # Debugging.
   DEBUG_KERNEL y
-  TIMER_STATS y
-  BACKTRACE_SELF_TEST n
-  CPU_NOTIFIER_ERROR_INJECT? n
+  DYNAMIC_DEBUG y
   DEBUG_DEVRES n
-  DEBUG_NX_TEST n
   DEBUG_STACK_USAGE n
   DEBUG_STACKOVERFLOW n
-  RCU_TORTURE_TEST n
   SCHEDSTATS n
   DETECT_HUNG_TASK y
 
+  ${if (features.debug or false) then ''
+    DEBUG_INFO y
+  '' else ''
+    DEBUG_INFO n
+  ''}
+
+  ${optionalString (versionOlder version "4.4") ''
+    CPU_NOTIFIER_ERROR_INJECT? n
+  ''}
+
+  ${optionalString (versionOlder version "4.11") ''
+    TIMER_STATS y
+    DEBUG_NX_TEST n
+  ''}
+
   # Bump the maximum number of CPUs to support systems like EC2 x1.*
   # instances and Xeon Phi.
-  ${optionalString (stdenv.system == "x86_64-linux") ''
+  ${optionalString (stdenv.hostPlatform.system == "x86_64-linux" || stdenv.hostPlatform.system == "aarch64-linux") ''
     NR_CPUS 384
   ''}
 
@@ -84,6 +97,15 @@ with stdenv.lib;
   # module, so that the initrd gets a good I/O scheduler.
   IOSCHED_CFQ y
   BLK_CGROUP y # required by CFQ
+  IOSCHED_DEADLINE y
+  ${optionalString (versionAtLeast version "4.11") ''
+    MQ_IOSCHED_DEADLINE y
+  ''}
+  ${optionalString (versionAtLeast version "4.12") ''
+    BFQ_GROUP_IOSCHED y
+    MQ_IOSCHED_KYBER y
+    IOSCHED_BFQ m
+  ''}
 
   # Enable NUMA.
   NUMA? y
@@ -91,10 +113,13 @@ with stdenv.lib;
   # Disable some expensive (?) features.
   PM_TRACE_RTC n
 
+  # Enable initrd support.
+  BLK_DEV_RAM y
+  BLK_DEV_INITRD y
+
   # Enable various subsystems.
   ACCESSIBILITY y # Accessibility support
   AUXDISPLAY y # Auxiliary Display support
-  DONGLE y # Serial dongle support
   HIPPI y
   MTD_COMPLEX_MAPPINGS y # needed for many devices
   SCSI_LOWLEVEL y # enable lots of SCSI devices
@@ -103,6 +128,9 @@ with stdenv.lib;
   SPI y # needed for many devices
   SPI_MASTER y
   WAN y
+  ${optionalString (versionOlder version "4.17") ''
+    DONGLE y # Serial dongle support
+  ''}
 
   # Networking options.
   NET y
@@ -110,7 +138,10 @@ with stdenv.lib;
   ${optionalString (versionOlder version "3.13") ''
     IPV6_PRIVACY y
   ''}
+  NETFILTER y
   NETFILTER_ADVANCED y
+  CGROUP_BPF? y # Required by systemd per-cgroup firewalling
+  CGROUP_NET_PRIO y # Required by systemd
   IP_ROUTE_VERBOSE y
   IP_MROUTE_MULTIPLE_TABLES y
   IP_VS_PROTO_TCP y
@@ -118,6 +149,7 @@ with stdenv.lib;
   IP_VS_PROTO_ESP y
   IP_VS_PROTO_AH y
   IP_DCCP_CCID3 n # experimental
+  IP_MULTICAST y
   IPV6_ROUTER_PREF y
   IPV6_ROUTE_INFO y
   IPV6_OPTIMISTIC_DAD y
@@ -126,6 +158,9 @@ with stdenv.lib;
   IPV6_MROUTE y
   IPV6_MROUTE_MULTIPLE_TABLES y
   IPV6_PIMSM_V2 y
+  ${optionalString (versionAtLeast version "4.7") ''
+    IPV6_FOU_TUNNEL m
+  ''}
   CLS_U32_PERF y
   CLS_U32_MARK y
   ${optionalString (stdenv.system == "x86_64-linux") ''
@@ -139,6 +174,10 @@ with stdenv.lib;
   L2TP_IP m
   L2TP_ETH m
   BRIDGE_VLAN_FILTERING y
+  BONDING m
+  NET_L3_MASTER_DEV? y
+  NET_FOU_IP_TUNNELS? y
+  IP_NF_TARGET_REDIRECT m
 
   # Wireless networking.
   CFG80211_WEXT? y # Without it, ipw2200 drivers don't build
@@ -172,44 +211,69 @@ with stdenv.lib;
 
   # Video configuration.
   # Enable KMS for devices whose X.org driver supports it.
-  ${optionalString (versionOlder version "4.3" && !(features.chromiumos or false)) ''
+  ${optionalString (versionOlder version "4.3") ''
     DRM_I915_KMS y
+  ''}
+  # iGVT-g support
+  ${optionalString (versionAtLeast version "4.16") ''
+    DRM_I915_GVT y
+    DRM_I915_GVT_KVMGT m
   ''}
   # Allow specifying custom EDID on the kernel command line
   DRM_LOAD_EDID_FIRMWARE y
   VGA_SWITCHEROO y # Hybrid graphics support
   DRM_GMA600 y
   DRM_GMA3600 y
-  ${optionalString (versionAtLeast version "4.5") ''
+  ${optionalString (versionAtLeast version "4.5" && (versionOlder version "4.9")) ''
     DRM_AMD_POWERPLAY y # necessary for amdgpu polaris support
+  ''}
+  ${optionalString (versionAtLeast version "4.9") ''
+    DRM_AMDGPU_SI y # (experimental) amdgpu support for verde and newer chipsets
+    DRM_AMDGPU_CIK y # (stable) amdgpu support for bonaire and newer chipsets
   ''}
 
   # Sound.
   SND_DYNAMIC_MINORS y
   SND_AC97_POWER_SAVE y # AC97 Power-Saving Mode
   SND_HDA_INPUT_BEEP y # Support digital beep via input layer
+  SND_HDA_RECONFIG y # Support reconfiguration of jack functions
+  SND_HDA_PATCH_LOADER y # Support configuring jack functions via fw mechanism at boot
   SND_USB_CAIAQ_INPUT y
-  PSS_MIXER y # Enable PSS mixer (Beethoven ADSP-16 and other compatible)
+  ${optionalString (versionOlder version "4.12") ''
+    PSS_MIXER y # Enable PSS mixer (Beethoven ADSP-16 and other compatible)
+  ''}
 
   # USB serial devices.
   USB_SERIAL_GENERIC y # USB Generic Serial Driver
-  USB_SERIAL_KEYSPAN_MPR y # include firmware for various USB serial devices
-  USB_SERIAL_KEYSPAN_USA28 y
-  USB_SERIAL_KEYSPAN_USA28X y
-  USB_SERIAL_KEYSPAN_USA28XA y
-  USB_SERIAL_KEYSPAN_USA28XB y
-  USB_SERIAL_KEYSPAN_USA19 y
-  USB_SERIAL_KEYSPAN_USA18X y
-  USB_SERIAL_KEYSPAN_USA19W y
-  USB_SERIAL_KEYSPAN_USA19QW y
-  USB_SERIAL_KEYSPAN_USA19QI y
-  USB_SERIAL_KEYSPAN_USA49W y
-  USB_SERIAL_KEYSPAN_USA49WLC y
+
+  # Include firmware for various USB serial devices.
+  # Only applicable for kernels below 4.16, after that no firmware is shipped in the kernel tree.
+  ${optionalString (versionOlder version "4.16") ''
+    USB_SERIAL_KEYSPAN_MPR y
+    USB_SERIAL_KEYSPAN_USA28 y
+    USB_SERIAL_KEYSPAN_USA28X y
+    USB_SERIAL_KEYSPAN_USA28XA y
+    USB_SERIAL_KEYSPAN_USA28XB y
+    USB_SERIAL_KEYSPAN_USA19 y
+    USB_SERIAL_KEYSPAN_USA18X y
+    USB_SERIAL_KEYSPAN_USA19W y
+    USB_SERIAL_KEYSPAN_USA19QW y
+    USB_SERIAL_KEYSPAN_USA19QI y
+    USB_SERIAL_KEYSPAN_USA49W y
+    USB_SERIAL_KEYSPAN_USA49WLC y
+  ''}
+
+  # Device mapper (RAID, LVM, etc.)
+  MD y
 
   # Filesystem options - in particular, enable extended attributes and
   # ACLs for all filesystems that support them.
   FANOTIFY y
   TMPFS y
+  TMPFS_POSIX_ACL y
+  ${optionalString (versionAtLeast version "4.9") ''
+    FS_ENCRYPTION? m
+  ''}
   EXT2_FS_XATTR y
   EXT2_FS_POSIX_ACL y
   EXT2_FS_SECURITY y
@@ -219,6 +283,7 @@ with stdenv.lib;
   EXT3_FS_POSIX_ACL y
   EXT3_FS_SECURITY y
   EXT4_FS_POSIX_ACL y
+  EXT4_ENCRYPTION? ${if versionOlder version "4.8" then "m" else "y"}
   EXT4_FS_SECURITY y
   REISERFS_FS_XATTR? y
   REISERFS_FS_POSIX_ACL? y
@@ -231,6 +296,10 @@ with stdenv.lib;
   OCFS2_DEBUG_MASKLOG? n
   BTRFS_FS_POSIX_ACL y
   UBIFS_FS_ADVANCED_COMPR? y
+  F2FS_FS m
+  F2FS_FS_SECURITY? y
+  F2FS_FS_ENCRYPTION? y
+  UDF_FS m
   ${optionalString (versionAtLeast version "4.0" && versionOlder version "4.6") ''
     NFSD_PNFS y
   ''}
@@ -252,6 +321,14 @@ with stdenv.lib;
   CIFS_XATTR y
   CIFS_POSIX y
   CIFS_FSCACHE y
+  CIFS_STATS y
+  CIFS_WEAK_PW_HASH y
+  CIFS_UPCALL y
+  CIFS_ACL y
+  CIFS_DFS_UPCALL y
+  ${optionalString (versionOlder version "4.13") ''
+    CIFS_SMB2 y
+  ''}
   ${optionalString (versionAtLeast version "3.12") ''
     CEPH_FSCACHE y
   ''}
@@ -278,18 +355,22 @@ with stdenv.lib;
   NLS_ISO8859_1 m    # VFAT default for the iocharset= mount option
 
   # Runtime security tests
-  DEBUG_SET_MODULE_RONX? y # Detect writes to read-only module pages
+  ${optionalString (versionOlder version "4.11") ''
+    DEBUG_SET_MODULE_RONX? y # Detect writes to read-only module pages
+  ''}
 
   # Security related features.
   RANDOMIZE_BASE? y
-  STRICT_DEVMEM y # Filter access to /dev/mem
+  STRICT_DEVMEM? y # Filter access to /dev/mem
   SECURITY_SELINUX_BOOTPARAM_VALUE 0 # Disable SELinux by default
+  SECURITY_YAMA? y # Prevent processes from ptracing non-children processes
   DEVKMEM n # Disable /dev/kmem
-  ${if versionOlder version "3.14" then ''
-    CC_STACKPROTECTOR? y # Detect buffer overflows on the stack
-  '' else ''
-    CC_STACKPROTECTOR_REGULAR? y
-  ''}
+  ${optionalString (! stdenv.hostPlatform.isAarch32)
+    (if versionOlder version "3.14" then ''
+        CC_STACKPROTECTOR? y # Detect buffer overflows on the stack
+      '' else ''
+        CC_STACKPROTECTOR_REGULAR? y
+      '')}
   ${optionalString (versionAtLeast version "3.12") ''
     USER_NS y # Support for user namespaces
   ''}
@@ -306,6 +387,15 @@ with stdenv.lib;
     MICROCODE_EARLY y
     MICROCODE_INTEL_EARLY y
     MICROCODE_AMD_EARLY y
+  ''}
+
+  ${optionalString (versionAtLeast version "4.10") ''
+    # Write Back Throttling
+    # https://lwn.net/Articles/682582/
+    # https://bugzilla.kernel.org/show_bug.cgi?id=12309#c655
+    BLK_WBT y
+    BLK_WBT_SQ y
+    BLK_WBT_MQ y
   ''}
 
   # Misc. options.
@@ -334,6 +424,7 @@ with stdenv.lib;
   CGROUPS y # used by systemd
   FHANDLE y # used by systemd
   SECCOMP y # used by systemd >= 231
+  SECCOMP_FILTER y # ditto
   POSIX_MQUEUE y
   FRONTSWAP y
   FUSION y # Fusion MPT device support
@@ -341,7 +432,9 @@ with stdenv.lib;
   ${optionalString (versionAtLeast version "4.3") ''
     IDLE_PAGE_TRACKING y
   ''}
-  IRDA_ULTRA y # Ultra (connectionless) protocol
+  ${optionalString (versionOlder version "4.17") ''
+    IRDA_ULTRA y # Ultra (connectionless) protocol
+  ''}
   JOYSTICK_IFORCE_232? y # I-Force Serial joysticks and wheels
   JOYSTICK_IFORCE_USB? y # I-Force USB joysticks and wheels
   JOYSTICK_XPAD_FF? y # X-Box gamepad rumble support
@@ -356,7 +449,9 @@ with stdenv.lib;
   ${optionalString (versionAtLeast version "3.15" && versionOlder version "4.8") ''
     MLX4_EN_VXLAN y
   ''}
-  MODVERSIONS y
+  ${optionalString (versionOlder version "4.9") ''
+    MODVERSIONS y
+  ''}
   MOUSE_PS2_ELANTECH y # Elantech PS/2 protocol extension
   MTRR_SANITIZER y
   NET_FC y # Fibre Channel driver support
@@ -368,8 +463,10 @@ with stdenv.lib;
   PPP_FILTER y
   REGULATOR y # Voltage and Current Regulator Support
   RC_DEVICES? y # Enable IR devices
+  RT2800USB_RT53XX y
   RT2800USB_RT55XX y
   SCHED_AUTOGROUP y
+  CFS_BANDWIDTH y
   SCSI_LOGGING y # SCSI logging facility
   SERIAL_8250 y # 8250/16550 and compatible serial support
   SLIP_COMPRESSED y # CSLIP compressed headers
@@ -390,12 +487,15 @@ with stdenv.lib;
   X86_CHECK_BIOS_CORRUPTION y
   X86_MCE y
 
-  # PCI-Expresscard hotplug support
-  ${optionalString (versionAtLeast version "3.12") "HOTPLUG_PCI_PCIE y"}
+  ${optionalString (versionAtLeast version "3.12") ''
+    HOTPLUG_PCI_ACPI y # PCI hotplug using ACPI
+    HOTPLUG_PCI_PCIE y # PCI-Expresscard hotplug support
+  ''}
+
 
   # Linux containers.
   NAMESPACES? y #  Required by 'unshare' used by 'nixos-install'
-  RT_GROUP_SCHED? y
+  RT_GROUP_SCHED n
   CGROUP_DEVICE? y
   MEMCG y
   MEMCG_SWAP y
@@ -422,7 +522,13 @@ with stdenv.lib;
   FTRACE_SYSCALLS y
   SCHED_TRACER y
   STACK_TRACER y
-  UPROBE_EVENT y
+
+  ${if versionOlder version "4.11" then ''
+    UPROBE_EVENT? y
+  '' else ''
+    UPROBE_EVENTS? y
+  ''}
+
   ${optionalString (versionAtLeast version "4.4") ''
     BPF_SYSCALL y
     BPF_EVENTS y
@@ -444,10 +550,12 @@ with stdenv.lib;
     KVM_APIC_ARCHITECTURE y
   ''}
   KVM_ASYNC_PF y
-  ${optionalString (versionAtLeast version "4.0") ''
+  ${optionalString ((versionAtLeast version "4.0") && (versionOlder version "4.12")) ''
     KVM_COMPAT? y
   ''}
-  KVM_DEVICE_ASSIGNMENT? y
+  ${optionalString (versionOlder version "4.12") ''
+    KVM_DEVICE_ASSIGNMENT? y
+  ''}
   ${optionalString (versionAtLeast version "4.0") ''
     KVM_GENERIC_DIRTYLOG_READ_PROTECT y
   ''}
@@ -456,27 +564,29 @@ with stdenv.lib;
   ${optionalString (versionAtLeast version "3.13") ''
     KVM_VFIO y
   ''}
-  XEN? y
-  XEN_DOM0? y
-  ${optionalString ((versionAtLeast version "3.18") && (features.xen_dom0 or false))  ''
-    PCI_XEN? y
-    HVC_XEN? y
-    HVC_XEN_FRONTEND? y
-    XEN_SYS_HYPERVISOR? y
-    SWIOTLB_XEN? y
-    XEN_BACKEND? y
-    XEN_BALLOON? y
-    XEN_BALLOON_MEMORY_HOTPLUG? y
-    XEN_EFI? y
-    XEN_HAVE_PVMMU? y
-    XEN_MCE_LOG? y
-    XEN_PVH? y
-    XEN_PVHVM? y
-    XEN_SAVE_RESTORE? y
-    XEN_SCRUB_PAGES? y
-    XEN_SELFBALLOONING? y
-    XEN_STUB? y
-    XEN_TMEM? y
+  ${optionalString (stdenv.isx86_64 || stdenv.isi686) ''
+    XEN? y
+    XEN_DOM0? y
+    ${optionalString ((versionAtLeast version "3.18") && (features.xen_dom0 or false))  ''
+      PCI_XEN? y
+      HVC_XEN? y
+      HVC_XEN_FRONTEND? y
+      XEN_SYS_HYPERVISOR? y
+      SWIOTLB_XEN? y
+      XEN_BACKEND? y
+      XEN_BALLOON? y
+      XEN_BALLOON_MEMORY_HOTPLUG? y
+      XEN_EFI? y
+      XEN_HAVE_PVMMU? y
+      XEN_MCE_LOG? y
+      XEN_PVH? y
+      XEN_PVHVM? y
+      XEN_SAVE_RESTORE? y
+      XEN_SCRUB_PAGES? y
+      XEN_SELFBALLOONING? y
+      XEN_STUB? y
+      XEN_TMEM? y
+    ''}
   ''}
   KSM y
   ${optionalString (!stdenv.is64bit) ''
@@ -490,10 +600,16 @@ with stdenv.lib;
   # Media support.
   MEDIA_DIGITAL_TV_SUPPORT y
   MEDIA_CAMERA_SUPPORT y
-  MEDIA_RC_SUPPORT y
+  ${optionalString (versionOlder version "4.14") ''
+    MEDIA_RC_SUPPORT y
+  ''}
+  MEDIA_CONTROLLER y
   MEDIA_USB_SUPPORT y
-  ${optionalString (!(features.chromiumos or false)) ''
-    MEDIA_PCI_SUPPORT y
+  MEDIA_PCI_SUPPORT y
+  MEDIA_ANALOG_TV_SUPPORT y
+  VIDEO_STK1160_COMMON m
+  ${optionalString (versionOlder version "4.11") ''
+    VIDEO_STK1160_AC97 y
   ''}
 
   # Our initrd init uses shebang scripts, so can't be modular.
@@ -512,9 +628,15 @@ with stdenv.lib;
   TRANSPARENT_HUGEPAGE_MADVISE? y
 
   # zram support (e.g for in-memory compressed swap).
-  ZSMALLOC y
   ZRAM m
   ZSWAP? y
+  ZBUD? y
+  ${optionalString (versionOlder version "3.18") ''
+    ZSMALLOC y
+  ''}
+  ${optionalString (versionAtLeast version "3.18") ''
+    ZSMALLOC m
+  ''}
 
   # Enable PCIe and USB for the brcmfmac driver
   BRCMFMAC_USB? y
@@ -525,71 +647,78 @@ with stdenv.lib;
     X86_X2APIC y
     IRQ_REMAP y
   ''}
+  
+  # needed for iwd WPS support (wpa_supplicant replacement)
+  ${optionalString (versionAtLeast version "4.7") ''
+    KEY_DH_OPERATIONS y
+  ''}
 
   # Disable the firmware helper fallback, udev doesn't implement it any more
   FW_LOADER_USER_HELPER_FALLBACK? n
 
-  # ChromiumOS support
-  ${optionalString (features.chromiumos or false) ''
-    CHROME_PLATFORMS y
-    VGA_SWITCHEROO n
-    MMC_SDHCI_PXAV2 n
-    NET_IPVTI n
-    IPV6_VTI n
-    REGULATOR_FIXED_VOLTAGE n
-    TPS6105X n
-    CPU_FREQ_STAT y
-    IPV6 y
-    MFD_CROS_EC y
-    MFD_CROS_EC_LPC y
-    MFD_CROS_EC_DEV y
-    CHARGER_CROS_USB_PD y
-    I2C y
-    MEDIA_SUBDRV_AUTOSELECT n
-    VIDEO_IR_I2C n
-    BLK_DEV_DM y
-    ANDROID_PARANOID_NETWORK n
-    DM_VERITY n
-    DRM_VGEM n
-    CPU_FREQ_GOV_INTERACTIVE n
-    INPUT_KEYRESET n
-    DM_BOOTCACHE n
-    UID_CPUTIME n
-
-    ${optionalString (versionAtLeast version "3.18") ''
-      CPUFREQ_DT n
-      EXTCON_CROS_EC n
-      DRM_POWERVR_ROGUE n
-      CHROMEOS_OF_FIRMWARE y
-      TEST_RHASHTABLE n
-      BCMDHD n
-      TRUSTY n
-    ''}
-
-    ${optionalString (versionOlder version "3.18") ''
-      MALI_MIDGARD n
-      DVB_USB_DIB0700 n
-      DVB_USB_DW2102 n
-      DVB_USB_PCTV452E n
-      DVB_USB_TTUSB2 n
-      DVB_USB_AF9015 n
-      DVB_USB_AF9035 n
-      DVB_USB_ANYSEE n
-      DVB_USB_AZ6007 n
-      DVB_USB_IT913X n
-      DVB_USB_LME2510 n
-      DVB_USB_RTL28XXU n
-      USB_S2255 n
-      VIDEO_EM28XX n
-      VIDEO_TM6000 n
-      USB_DWC2 n
-      USB_GSPCA n
-      SPEAKUP n
-      XO15_EBOOK n
-      USB_GADGET n
-    ''}
+  # Disable various self-test modules that have no use in a production system
+  # This menu disables all/most of them on >= 4.16
+  RUNTIME_TESTING_MENU? n
+  # For older kernels, painstakingly disable each symbol.
+  ${optionalString (versionOlder version "4.16") ''
+    ARM_KPROBES_TEST? n
+    ASYNC_RAID6_TEST? n
+    ATOMIC64_SELFTEST? n
+    BACKTRACE_SELF_TEST? n
+    INTERVAL_TREE_TEST? n
+    PERCPU_TEST? n
+    RBTREE_TEST? n
+    TEST_BITMAP? n
+    TEST_BPF? n
+    TEST_FIRMWARE? n
+    TEST_HASH? n
+    TEST_HEXDUMP? n
+    TEST_KMOD? n
+    TEST_KSTRTOX? n
+    TEST_LIST_SORT? n
+    TEST_LKM? n
+    TEST_PARMAN? n
+    TEST_PRINTF? n
+    TEST_RHASHTABLE? n
+    TEST_SORT? n
+    TEST_STATIC_KEYS? n
+    TEST_STRING_HELPERS? n
+    TEST_UDELAY? n
+    TEST_USER_COPY? n
+    TEST_UUID? n
   ''}
 
-  ${kernelPlatform.kernelExtraConfig or ""}
+  CRC32_SELFTEST? n
+  CRYPTO_TEST? n
+  DRM_DEBUG_MM_SELFTEST? n
+  EFI_TEST? n
+  GLOB_SELFTEST? n
+  LNET_SELFTEST? n
+  LOCK_TORTURE_TEST? n
+  MTD_TESTS? n
+  NOTIFIER_ERROR_INJECTION? n
+  RCU_PERF_TEST? n
+  RCU_TORTURE_TEST? n
+  TEST_ASYNC_DRIVER_PROBE? n
+  WW_MUTEX_SELFTEST? n
+  XZ_DEC_TEST? n
+
+  ${optionalString (features.criu or false)  ''
+    EXPERT y
+    CHECKPOINT_RESTORE y
+  ''}
+
+  ${optionalString ((features.criu or false) && (features.criu_revert_expert or true))
+    # Revert some changes, introduced by EXPERT, when necessary for criu
+  ''
+    RFKILL_INPUT? y
+    HID_PICOLCD_FB? y
+    HID_PICOLCD_BACKLIGHT? y
+    HID_PICOLCD_LCD? y
+    HID_PICOLCD_LEDS? y
+    HID_PICOLCD_CIR? y
+    DEBUG_MEMORY_INIT? y
+  ''}
+
   ${extraConfig}
 ''

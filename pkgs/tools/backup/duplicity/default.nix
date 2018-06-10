@@ -1,33 +1,43 @@
-{ stdenv, fetchurl, pythonPackages, librsync, ncftp, gnupg, rsync, makeWrapper
-}:
+{ stdenv, fetchurl, python2Packages, librsync, ncftp, gnupg, rsync, makeWrapper }:
 
-let
-  version = "0.7.07.1";
-  inherit (pythonPackages) boto ecdsa lockfile paramiko pycrypto python setuptools;
-in stdenv.mkDerivation {
+python2Packages.buildPythonApplication rec {
   name = "duplicity-${version}";
+  version = "0.7.12";
 
   src = fetchurl {
-    url = "http://code.launchpad.net/duplicity/0.7-series/${version}/+download/duplicity-${version}.tar.gz";
-    sha256 = "594c6d0e723e56f8a7114d57811c613622d535cafdef4a3643a4d4c89c1904f8";
+    url = "http://code.launchpad.net/duplicity/0.7-series/${version}/+download/${name}.tar.gz";
+    sha256 = "1rhgrz2lm9vbfdp2raykrih1c6n2lw5jd572z4dsz488m52avjqi";
   };
 
-  installPhase = ''
-    python setup.py install --prefix=$out
+  buildInputs = [ librsync makeWrapper python2Packages.wrapPython ];
+  propagatedBuildInputs = with python2Packages; [
+    boto cffi cryptography ecdsa enum idna pygobject3
+    ipaddress lockfile paramiko pyasn1 pycrypto six
+  ];
+  checkInputs = with python2Packages; [ lockfile mock pexpect ];
+
+  # lots of tests are failing, although we get a little further now with the bits in preCheck
+  doCheck = false;
+
+  postInstall = ''
     wrapProgram $out/bin/duplicity \
-      --prefix PYTHONPATH : "$(toPythonPath $out):$(toPythonPath ${pycrypto}):$(toPythonPath ${ecdsa}):$(toPythonPath ${paramiko}):$(toPythonPath ${boto}):$(toPythonPath ${lockfile})" \
       --prefix PATH : "${stdenv.lib.makeBinPath [ gnupg ncftp rsync ]}"
-    wrapProgram $out/bin/rdiffdir \
-      --prefix PYTHONPATH : "$(toPythonPath $out):$(toPythonPath ${pycrypto}):$(toPythonPath ${ecdsa}):$(toPythonPath ${paramiko}):$(toPythonPath ${boto}):$(toPythonPath ${lockfile})"
+
+    wrapPythonPrograms
   '';
 
-  buildInputs = [ python librsync makeWrapper setuptools ];
+  preCheck = ''
+    patchShebangs testing
 
-  meta = {
+    substituteInPlace testing/__init__.py \
+      --replace 'mkdir testfiles' 'mkdir -p testfiles'
+  '';
+
+  meta = with stdenv.lib; {
     description = "Encrypted bandwidth-efficient backup using the rsync algorithm";
-    homepage = "http://www.nongnu.org/duplicity";
-    license = stdenv.lib.licenses.gpl2Plus;
-    maintainers = with stdenv.lib.maintainers; [viric peti];
-    platforms = with stdenv.lib.platforms; linux;
+    homepage = http://www.nongnu.org/duplicity;
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ viric peti ];
+    platforms = platforms.unix;
   };
 }

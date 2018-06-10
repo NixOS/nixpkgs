@@ -12,7 +12,8 @@ stdenv.mkDerivation rec {
     sha256 = "1xcqjz20lxikzn96f4f69mqyl9y985h9g0gyc9f7ckj18q22b5j5";
   };
 
-  buildInputs = [ cmake sqlite pkgconfig systemd ] ++ stdenv.lib.optional tlsSupport openssl;
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ cmake sqlite systemd ] ++ stdenv.lib.optional tlsSupport openssl;
 
   outputs = [ "out"
     "mod_example"

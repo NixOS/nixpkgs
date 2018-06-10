@@ -1,29 +1,30 @@
-{ stdenv, fetchurl, fetchzip, ocaml, findlib, ocpBuild, ocpIndent, opam, cmdliner, ncurses, re, lambdaTerm, libev }:
+{ stdenv, fetchFromGitHub, fetchpatch, ocaml, findlib, ocpBuild, ocpIndent, opam, cmdliner, ncurses, re, lambdaTerm, libev }:
 
 let inherit (stdenv.lib) getVersion versionAtLeast optional; in
 
 assert versionAtLeast (getVersion ocaml) "4";
-assert versionAtLeast (getVersion ocpBuild) "1.99.6-beta";
+assert versionAtLeast (getVersion ocpBuild) "1.99.13-beta";
 assert versionAtLeast (getVersion ocpIndent) "1.4.2";
 
 let
-  version = "1.1.2";
-  patch402 = fetchurl {
-    url = https://raw.githubusercontent.com/ocaml/opam-repository/master/packages/ocp-index/ocp-index.1.1.2/files/ocaml.4.02.patch;
-    sha256 = "1wcpn2pv7h8ia3ybmzdlm8v5hfvq1rgmlj02wwj0yh3vqjvxqvsm";
-  };
+  version = "1.1.5";
 in
 
 stdenv.mkDerivation {
 
   name = "ocp-index-${version}";
 
-  src = fetchzip {
-    url = "http://github.com/OCamlPro/ocp-index/archive/${version}.tar.gz";
-    sha256 = "0cz0bz5nisc5r23b1w07q2bl489gd09mg8rp9kyq9m6rj669b18l";
+  src = fetchFromGitHub {
+    owner = "OCamlPro";
+    repo = "ocp-index";
+    rev = version;
+    sha256 = "0gir0fm8mq609371kmwpsqfvpfx2b26ax3f9rg5fjf5r0bjk9pqd";
   };
 
-  patches = optional (versionAtLeast (getVersion ocaml) "4.02") patch402;
+  patches = [ (fetchpatch {
+    url = https://github.com/OCamlPro/ocp-index/commit/618872a0980d077857a63d502eadbbf0d1b05c0f.diff;
+    sha256 = "07snnydczkzapradh1c22ggv9vaff67nc36pi3218azb87mb1p7z";
+  }) ];
 
   buildInputs = [ ocaml findlib ocpBuild opam cmdliner ncurses re libev ]
   ++ optional (versionAtLeast (getVersion lambdaTerm) "1.7") lambdaTerm;

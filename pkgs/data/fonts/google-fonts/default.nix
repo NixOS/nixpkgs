@@ -1,15 +1,39 @@
-{ stdenv, fetchurl }:
+{ stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
-  name = "google-fonts";
-  version = "2015-11-18";
+  name = "google-fonts-${version}";
+  version = "2017-06-28";
 
-  src = fetchurl {
-    url = "https://github.com/google/fonts/archive/a26bc2b9f4ad27266c2587dc0355b3066519844a.tar.gz";
-    sha256 = "1aizwzsxg30mjds1628280bs7ishgsfairnx131654gm51aihw8p";
+  src = fetchFromGitHub {
+    owner = "google";
+    repo = "fonts";
+    rev = "b1cb16c0ce2402242e0106d15b0429d1b8075ecc";
+    sha256 = "18kyclwipkdv4zxfws87x2l91jwn34vrizw8rmv8lqznnfsjh2lg";
   };
 
-  phases = [ "unpackPhase" "installPhase" ];
+  outputHashAlgo = "sha256";
+  outputHashMode = "recursive";
+  outputHash = "0n0j2hi1qb2sc6p3v6lpaqb2aq0m9xjmi7apz3hf2nx97rrsam22";
+
+  phases = [ "unpackPhase" "patchPhase" "installPhase" ];
+
+  patchPhase = ''
+    # These directories need to be removed because they contain
+    # older or duplicate versions of fonts also present in other
+    # directories. This causes non-determinism in the install since
+    # the installation order of font files with the same name is not
+    # fixed.
+    rm -rv ofl/alefhebrew \
+      ofl/misssaintdelafield \
+      ofl/mrbedford \
+      ofl/siamreap \
+      ofl/terminaldosislight
+
+    if find . -name "*.ttf" | sed 's|.*/||' | sort | uniq -c | sort -n | grep -v '^.*1 '; then
+      echo "error: duplicate font names"
+      exit 1
+    fi
+  '';
 
   installPhase = ''
     dest=$out/share/fonts/truetype
@@ -18,13 +42,9 @@ stdenv.mkDerivation rec {
     chmod -x $dest/*.ttf
   '';
 
-  outputHashAlgo = "sha256";
-  outputHashMode = "recursive";
-  outputHash = "0q03gg0sh2mljlbmhamnxz28d13znh9dzca84p554s7pwg6z4wca";
-
   meta = with stdenv.lib; {
-    homepage = https://www.google.com/fontsl;
-    description = "Font files available from Google Font";
+    homepage = https://fonts.google.com;
+    description = "Font files available from Google Fonts";
     license = with licenses; [ asl20 ofl ufl ];
     platforms = platforms.all;
     hydraPlatforms = [];

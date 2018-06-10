@@ -1,5 +1,7 @@
-{ stdenv, fetchurl, bzip2
-, enableNLS ? false, libnatspec }:
+{ stdenv, fetchurl
+, bzip2
+, enableNLS ? false, libnatspec
+}:
 
 stdenv.mkDerivation {
   name = "unzip-6.0";
@@ -11,6 +13,8 @@ stdenv.mkDerivation {
 
   hardeningDisable = [ "format" ];
 
+  patchFlags = "-p1 -F3";
+
   patches = [
     ./CVE-2014-8139.diff
     ./CVE-2014-8140.diff
@@ -18,6 +22,9 @@ stdenv.mkDerivation {
     ./CVE-2014-9636.diff
     ./CVE-2015-7696.diff
     ./CVE-2015-7697.diff
+    ./CVE-2014-9913.patch
+    ./CVE-2016-9844.patch
+    ./dont-hardcode-cc.patch
   ] ++ stdenv.lib.optional enableNLS
     (fetchurl {
       url = "http://sources.gentoo.org/cgi-bin/viewvc.cgi/gentoo-x86/app-arch/unzip/files/unzip-6.0-natspec.patch?revision=1.1";

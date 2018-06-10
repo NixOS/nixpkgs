@@ -1,59 +1,63 @@
-{ stdenv, fetchurl, autoconf, automake, libtool, leptonica, libpng, libtiff
+{ stdenv, fetchFromGitHub, autoreconfHook, pkgconfig
+, leptonica, libpng, libtiff, icu, pango, opencl-headers
+
+# Supported list of languages or `null' for all available languages
 , enableLanguages ? null
 }:
 
-with stdenv.lib;
-
-let
-  majVersion = "3.02";
-  version = "${majVersion}.02";
-
-  mkLang = lang: sha256: let
-    src = fetchurl {
-      url = "http://tesseract-ocr.googlecode.com/files/tesseract-ocr-${majVersion}.${lang}.tar.gz";
-      inherit sha256;
-    };
-  in "tar xfvz ${src} -C $out/share/ --strip=1";
-
-  wantLang = name: const (enableLanguages == null || elem name enableLanguages);
-
-  extraLanguages = mapAttrsToList mkLang (filterAttrs wantLang {
-    cat = "0d1smiv1b3k9ay2s05sl7q08mb3ln4w5iiiymv2cs8g8333z8jl9";
-    rus = "059336mkhsj9m3hwfb818xjlxkcdpy7wfgr62qwz65cx914xl709";
-    spa = "1c9iza5mbahd9pa7znnq8yv09v5kz3gbd2sarcgcgc1ps1jc437l";
-    nld = "162acxp1yb6gyki2is3ay2msalmfcsnrlsd9wml2ja05k94m6bjy";
-    eng = "1y5xf794n832s3lymzlsdm2s9nlrd2v27jjjp0fd9xp7c2ah4461";
-    slv = "0rqng43435cly32idxm1lvxkcippvc3xpxbfizwq5j0155ym00dr";
-    jpn = "07v8pymd0iwyzh946lxylybda20gsw7p4fsb09jw147955x49gq9";
-  });
-in
-
 stdenv.mkDerivation rec {
   name = "tesseract-${version}";
+  version = "3.05.00";
 
-  src = fetchurl {
-    url = "http://tesseract-ocr.googlecode.com/files/tesseract-ocr-${version}.tar.gz";
-    sha256 = "0g81m9y4iydp7kgr56mlkvjdwpp3mb01q385yhdnyvra7z5kkk96";
+  src = fetchFromGitHub {
+    owner = "tesseract-ocr";
+    repo = "tesseract";
+    rev = version;
+    sha256 = "11wrpcfl118wxsv2c3w2scznwb48c4547qml42s2bpdz079g8y30";
   };
 
-  buildInputs = [ autoconf automake libtool leptonica libpng libtiff ];
+  tessdata = fetchFromGitHub {
+    owner = "tesseract-ocr";
+    repo = "tessdata";
+    rev = "3cf1e2df1fe1d1da29295c9ef0983796c7958b7d";
+    sha256 = "1v4b63v5nzcxr2y3635r19l7lj5smjmc9vfk0wmxlryxncb4vpg7";
+  };
 
-  hardeningDisable = [ "format" ];
+  nativeBuildInputs = [ pkgconfig autoreconfHook ];
+  buildInputs = [ leptonica libpng libtiff icu pango opencl-headers ];
 
-  preConfigure = ''
-      ./autogen.sh
-      substituteInPlace "configure" \
-        --replace 'LIBLEPT_HEADERSDIR="/usr/local/include /usr/include"' \
-                  'LIBLEPT_HEADERSDIR=${leptonica}/include'
+  LIBLEPT_HEADERSDIR = "${leptonica}/include";
+
+  # Copy the .traineddata files of the languages specified in enableLanguages
+  # into `$out/share/tessdata' and check afterwards if copying was successful.
+  postInstall = let
+    mkArg = lang: "-iname ${stdenv.lib.escapeShellArg "${lang}.traineddata"}";
+    mkFindArgs = stdenv.lib.concatMapStringsSep " -o " mkArg;
+    findLangArgs = if enableLanguages != null
+                   then "\\( ${mkFindArgs enableLanguages} \\)"
+                   else "-iname '*.traineddata'";
+  in ''
+    numLangs="$(find "$tessdata" -mindepth 1 -maxdepth 1 -type f \
+      ${findLangArgs} -exec cp -t "$out/share/tessdata" {} + -print | wc -l)"
+
+    ${if enableLanguages != null then ''
+      expected=${toString (builtins.length enableLanguages)}
+    '' else ''
+      expected="$(ls -1 "$tessdata/"*.traineddata | wc -l)"
+    ''}
+
+    if [ "$numLangs" -ne "$expected" ]; then
+      echo "Expected $expected languages, but $numLangs" \
+           "were copied to \`$out/share/tessdata'" >&2
+      exit 1
+    fi
   '';
-
-  postInstall = concatStringsSep "; " extraLanguages;
 
   meta = {
     description = "OCR engine";
-    homepage = http://code.google.com/p/tesseract-ocr/;
+    homepage = https://github.com/tesseract-ocr/tesseract;
     license = stdenv.lib.licenses.asl20;
     maintainers = with stdenv.lib.maintainers; [viric];
-    platforms = with stdenv.lib.platforms; linux;
+    platforms = with stdenv.lib.platforms; linux ++ darwin;
   };
 }

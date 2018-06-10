@@ -1,10 +1,13 @@
-{ kdeFramework, lib, ecm, kdoctools, ki18n, kjs
-, qtsvg
+{
+  mkDerivation, lib,
+  extra-cmake-modules, kdoctools, qttools,
+  ki18n, kjs, qtsvg,
 }:
 
-kdeFramework {
+mkDerivation {
   name = "kjsembed";
   meta = { maintainers = [ lib.maintainers.ttuegel ]; };
-  nativeBuildInputs = [ ecm kdoctools ];
-  propagatedBuildInputs = [ ki18n kjs qtsvg ];
+  nativeBuildInputs = [ extra-cmake-modules kdoctools qttools ];
+  buildInputs = [ ki18n qtsvg ];
+  propagatedBuildInputs = [ kjs ];
 }

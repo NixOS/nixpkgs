@@ -17,7 +17,7 @@ let
   # you should use files).
   moduleFiles =
     # FIXME: use typeOf (Nix 1.6.1).
-    filter (x: !isAttrs x && !builtins.isFunction x) modules;
+    filter (x: !isAttrs x && !lib.isFunction x) modules;
 
   # Partition module files because between NixOS and non-NixOS files.  NixOS
   # files may change if the repository is updated.

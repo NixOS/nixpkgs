@@ -1,22 +1,41 @@
-{ stdenv, fetchurl, automoc4, cmake, gettext, perl, pkgconfig, shared_mime_info
-, libxslt, kdelibs, kdepimlibs, grantlee, qjson, qca2, libofx, sqlite, boost }:
+{ mkDerivation, lib, fetchurl,
+  cmake, extra-cmake-modules, qtwebengine, qtscript, grantlee,
+  kxmlgui, kwallet, kparts, kdoctools, kjobwidgets, kdesignerplugin,
+  kiconthemes, knewstuff, sqlcipher, qca-qt5, kactivities, karchive,
+  kguiaddons, knotifyconfig, krunner, kwindowsystem, libofx, shared-mime-info
+}:
 
-stdenv.mkDerivation rec {
-  name = "skrooge-1.12.5";
+mkDerivation rec {
+  name = "skrooge-${version}";
+  version = "2.13.0";
 
   src = fetchurl {
     url = "http://download.kde.org/stable/skrooge/${name}.tar.xz";
-    sha256 = "1mnkm0367knh0a65gifr20p42ql9zndw7d6kmbvfshvpfsmghl40";
+    sha256 = "1f1k0fkfhism1jyx3yxi8rdf1jrmp2vaphmz7fgh9hk18ndvss7d";
   };
 
-  buildInputs = [ libxslt kdelibs kdepimlibs grantlee qjson qca2 libofx sqlite boost ];
+  nativeBuildInputs = [
+    cmake extra-cmake-modules kdoctools shared-mime-info
+  ];
 
-  nativeBuildInputs = [ automoc4 cmake gettext perl pkgconfig shared_mime_info ];
+  buildInputs = [
+    qtwebengine qtscript grantlee kxmlgui kwallet kparts
+    kjobwidgets kdesignerplugin kiconthemes knewstuff sqlcipher qca-qt5
+    kactivities karchive kguiaddons knotifyconfig krunner kwindowsystem libofx
+  ];
 
-  meta = {
-    inherit (kdelibs.meta) platforms;
-    description = "A personal finance manager for KDE";
-    maintainers = [ stdenv.lib.maintainers.urkud ];
-    license = stdenv.lib.licenses.gpl3;
+  # SKG_DESIGNER must be used to generate the needed library for QtDesigner.
+  # This is needed ONLY for developers. So NOT NEEDED for end user.
+  # Source: https://forum.kde.org/viewtopic.php?f=210&t=143375#p393675
+  cmakeFlags = [
+    "-DSKG_DESIGNER=OFF"
+    "-DSKG_WEBENGINE=ON"
+  ];
+
+  meta = with lib; {
+    description = "A personal finances manager, powered by KDE";
+    license = with licenses; [ gpl3 ];
+    maintainers = with maintainers; [ joko ];
+    homepage = https://skrooge.org/;
   };
 }

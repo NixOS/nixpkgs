@@ -1,7 +1,7 @@
 { lib, stdenv, fetchurl, python, pkgconfig, perl, libxslt, docbook_xsl
-, docbook_xml_dtd_42, docbook_xml_dtd_45, readline, talloc, ntdb, tdb, tevent
-, ldb, popt, iniparser, libbsd, libarchive, libiconv, gettext
-, kerberos, zlib, openldap, cups, pam, avahi, acl, libaio, fam, libceph, glusterfs
+, docbook_xml_dtd_42, docbook_xml_dtd_45, readline, talloc
+, popt, iniparser, libbsd, libarchive, libiconv, gettext
+, krb5Full, zlib, openldap, cups, pam, avahi, acl, libaio, fam, libceph, glusterfs
 , gnutls, libgcrypt, libgpgerror
 , ncurses, libunwind, libibverbs, librdmacm, systemd
 
@@ -18,24 +18,26 @@
 with lib;
 
 stdenv.mkDerivation rec {
-  name = "samba-4.3.11";
+  name = "samba-${version}";
+  version = "4.7.6";
 
   src = fetchurl {
     url = "mirror://samba/pub/samba/stable/${name}.tar.gz";
-    sha256 = "1v2grwivm6rasz1ganbybs0ikz1lydaniy65kxf1v8rl1qqngach";
+    sha256 = "0vkxqp3wh7bpn1fd45lznmrpn2ma1fq75yq28vi08rggr07y7v8y";
   };
 
   outputs = [ "out" "dev" "man" ];
 
   patches =
     [ ./4.x-no-persistent-install.patch
-      ./4.x-fix-ctdb-deps.patch
+      ./patch-source3__libads__kerberos_keytab.c.patch
+      ./4.x-no-persistent-install-dynconfig.patch
     ];
 
   buildInputs =
     [ python pkgconfig perl libxslt docbook_xsl docbook_xml_dtd_42 /*
-      docbook_xml_dtd_45 */ readline talloc ntdb tdb tevent ldb popt iniparser
-      libbsd libarchive zlib acl fam libiconv gettext libunwind kerberos
+      docbook_xml_dtd_45 */ readline talloc popt iniparser
+      libbsd libarchive zlib acl fam libiconv gettext libunwind krb5Full
     ]
     ++ optionals stdenv.isLinux [ libaio pam systemd ]
     ++ optionals (enableInfiniband && stdenv.isLinux) [ libibverbs librdmacm ]
@@ -59,17 +61,16 @@ stdenv.mkDerivation rec {
     [ "--with-static-modules=NONE"
       "--with-shared-modules=ALL"
       "--with-system-mitkrb5"
+      "--with-system-mitkdc" "${krb5Full}"
       "--enable-fhs"
       "--sysconfdir=/etc"
       "--localstatedir=/var"
-      "--bundled-libraries=NONE"
-      "--private-libraries=NONE"
-      "--builtin-libraries=NONE"
     ]
     ++ optional (!enableDomainController) "--without-ad-dc"
     ++ optionals (!enableLDAP) [ "--without-ldap" "--without-ads" ];
 
-  enableParallelBuilding = true;
+  # To build in parallel.
+  buildPhase = "python buildtools/bin/waf build -j $NIX_BUILD_CORES";
 
   # Some libraries don't have /lib/samba in RPATH but need it.
   # Use find -type f -executable -exec echo {} \; -exec sh -c 'ldd {} | grep "not found"' \;

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgs, jack ? pkgs.libjack2 }:
+{ stdenv, fetchurl, pkgconfig, scons, qt4, lash, libjack2, jack ? libjack2 }:
 
 stdenv.mkDerivation rec {
   name = "jackmix-0.5.2";
@@ -7,11 +7,13 @@ stdenv.mkDerivation rec {
     sha256 = "18f5v7g66mgarhs476frvayhch7fy4nyjf2xivixc061ipn0m82j";
   };
 
+  patches = [ ./no_error.patch ];
+
+  nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
-    pkgs.pkgconfig
-    pkgs.scons
-    pkgs.kde4.qt4
-    pkgs.lash
+    scons
+    qt4
+    lash
     jack
   ];
 
@@ -31,5 +33,3 @@ stdenv.mkDerivation rec {
     platforms = stdenv.lib.platforms.linux;
   };
 }
-
-

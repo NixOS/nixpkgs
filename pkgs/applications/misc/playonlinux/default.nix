@@ -7,7 +7,7 @@
 , gnupg1compat
 , icoutils
 , imagemagick
-, netcat
+, netcat-gnu
 , p7zip
 , python2Packages
 , unzip
@@ -21,10 +21,8 @@
 , curl
 }:
 
-assert stdenv.isLinux;
-
 let
-  version = "4.2.10";
+  version = "4.2.12";
 
   binpath = stdenv.lib.makeBinPath
     [ cabextract
@@ -34,7 +32,7 @@ let
       gnupg1compat
       icoutils
       imagemagick
-      netcat
+      netcat-gnu
       p7zip
       unzip
       wget
@@ -48,16 +46,16 @@ let
   ld32 =
     if stdenv.system == "x86_64-linux" then "${stdenv.cc}/nix-support/dynamic-linker-m32"
     else if stdenv.system == "i686-linux" then "${stdenv.cc}/nix-support/dynamic-linker"
-    else abort "Unsupported platform for PlayOnLinux: ${stdenv.system}";
+    else throw "Unsupported platform for PlayOnLinux: ${stdenv.system}";
   ld64 = "${stdenv.cc}/nix-support/dynamic-linker";
-  libs = pkgs: stdenv.lib.makeLibraryPath [ pkgs.xlibs.libX11 ];
+  libs = pkgs: stdenv.lib.makeLibraryPath [ pkgs.xorg.libX11 ];
 
 in stdenv.mkDerivation {
   name = "playonlinux-${version}";
 
   src = fetchurl {
     url = "https://www.playonlinux.com/script_files/PlayOnLinux/${version}/PlayOnLinux_${version}.tar.gz";
-    sha256 = "0ws94hgxajaww450q8ivrp28ypv39mashs29ak41faxf29cr097m";
+    sha256 = "03k8v9dknc5hfrfzqw1nkpifz7wkixv3mvjl1vnp4fx8rj2xrjrq";
   };
 
   nativeBuildInputs = [ makeWrapper ];

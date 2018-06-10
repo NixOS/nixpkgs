@@ -9,9 +9,11 @@ stdenv.mkDerivation rec {
     sha256 = "07y6s4mm86cv7p1ljz94sxnqa89y9amn3vzwsnbq5hrl4vdy0zac";
   };
 
+  NIX_CFLAGS_COMPILE = "-Wno-error=implicit-fallthrough";
   configureFlags = [ "--with-systemd" "--with-systemdsystemunitdir=$(out)/etc/systemd/system" ];
 
-  buildInputs = [ autoreconfHook systemd fcgi pkgconfig ];
+  nativeBuildInputs = [ autoreconfHook pkgconfig ];
+  buildInputs = [ systemd fcgi ];
 
   # systemd 230 no longer has libsystemd-daemon as a separate entity from libsystemd
   postPatch = ''

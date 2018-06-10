@@ -78,6 +78,13 @@ in {
         '';
       };
 
+      package = mkOption {
+        default = pkgs.jenkins;
+        defaultText = "pkgs.jenkins";
+        type = types.package;
+        description = "Jenkins package to use.";
+      };
+
       packages = mkOption {
         default = [ pkgs.stdenv pkgs.git pkgs.jdk config.programs.ssh.package pkgs.nix ];
         defaultText = "[ pkgs.stdenv pkgs.git pkgs.jdk config.programs.ssh.package pkgs.nix ]";
@@ -101,6 +108,22 @@ in {
         '';
       };
 
+      plugins = mkOption {
+        default = null;
+        type = types.nullOr (types.attrsOf types.package);
+        description = ''
+          A set of plugins to activate. Note that this will completely
+          remove and replace any previously installed plugins. If you
+          have manually-installed plugins that you want to keep while
+          using this module, set this option to
+          <literal>null</literal>. You can generate this set with a
+          tool such as <literal>jenkinsPlugins2nix</literal>.
+        '';
+        example = literalExample ''
+          import path/to/jenkinsPlugins2nix-generated-plugins.nix { inherit (pkgs) fetchurl stdenv; }
+        '';
+      };
+
       extraOptions = mkOption {
         type = types.listOf types.str;
         default = [ ];
@@ -109,10 +132,24 @@ in {
           Additional command line arguments to pass to Jenkins.
         '';
       };
+
+      extraJavaOptions = mkOption {
+        type = types.listOf types.str;
+        default = [ ];
+        example = [ "-Xmx80m" ];
+        description = ''
+          Additional command line arguments to pass to the Java run time (as opposed to Jenkins).
+        '';
+      };
     };
   };
 
   config = mkIf cfg.enable {
+    # server references the dejavu fonts
+    environment.systemPackages = [
+      pkgs.dejavu_fonts
+    ];
+
     users.extraGroups = optional (cfg.group == "jenkins") {
       name = "jenkins";
       gid = config.ids.gids.jenkins;
@@ -149,19 +186,36 @@ in {
       path = cfg.packages;
 
       # Force .war (re)extraction, or else we might run stale Jenkins.
-      preStart = ''
-        rm -rf ${cfg.home}/war
-      '';
 
+      preStart =
+        let replacePlugins =
+              if isNull cfg.plugins
+              then ""
+              else
+                let pluginCmds = lib.attrsets.mapAttrsToList
+                      (n: v: "cp ${v} ${cfg.home}/plugins/${n}.hpi")
+                      cfg.plugins;
+                in ''
+                  rm -r ${cfg.home}/plugins || true
+                  mkdir -p ${cfg.home}/plugins
+                  ${lib.strings.concatStringsSep "\n" pluginCmds}
+                '';
+        in ''
+          rm -rf ${cfg.home}/war
+          ${replacePlugins}
+        '';
+
+      # For reference: https://wiki.jenkins.io/display/JENKINS/JenkinsLinuxStartupScript
       script = ''
-        ${pkgs.jdk}/bin/java -jar ${pkgs.jenkins}/webapps/jenkins.war --httpListenAddress=${cfg.listenAddress} \
+        ${pkgs.jdk}/bin/java ${concatStringsSep " " cfg.extraJavaOptions} -jar ${cfg.package}/webapps/jenkins.war --httpListenAddress=${cfg.listenAddress} \
                                                   --httpPort=${toString cfg.port} \
                                                   --prefix=${cfg.prefix} \
+                                                  -Djava.awt.headless=true \
                                                   ${concatStringsSep " " cfg.extraOptions}
       '';
 
       postStart = ''
-        until [[ $(${pkgs.curl.bin}/bin/curl -s --head -w '\n%{http_code}' http://${cfg.listenAddress}:${toString cfg.port}${cfg.prefix} | tail -n1) =~ ^(200|403)$ ]]; do
+        until [[ $(${pkgs.curl.bin}/bin/curl -L -s --head -w '\n%{http_code}' http://${cfg.listenAddress}:${toString cfg.port}${cfg.prefix} | tail -n1) =~ ^(200|403)$ ]]; do
           sleep 1
         done
       '';

@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, fftw, libsndfile, qtbase, qtmultimedia, qmakeHook, makeQtWrapper }:
+{ stdenv, fetchFromGitHub, fftw, libsndfile, qtbase, qtmultimedia, qmake }:
 
 let
 
@@ -6,7 +6,7 @@ let
     src = fetchFromGitHub {
       sha256 = "07m2wf2gqyya95b65gawrnr4pvc9jyzmg6h8sinzgxlpskz93wwc";
       rev = "39053e8896eedd7b3e8a9e9a9ffd80f1fc6ceb16";
-      repo = "reaper";
+      repo = "REAPER";
       owner = "gillesdegottex";
     };
     meta = with stdenv.lib; {
@@ -16,8 +16,8 @@ let
 
   libqaudioextra = {
     src = fetchFromGitHub {
-      sha256 = "17pvlij8cc4lwzf6f1cnygj3m3ci6xfa3lv5bgcr5i1gzyjxqpq1";
-      rev = "b7d187cd9a1fd76ea94151e2e02453508d0151d3";
+      sha256 = "0m6x1qm7lbjplqasr2jhnd2ndi0y6z9ybbiiixnlwfm23sp15wci";
+      rev = "9ae051989a8fed0b2f8194b1501151909a821a89";
       repo = "libqaudioextra";
       owner = "gillesdegottex";
     };
@@ -28,34 +28,26 @@ let
 
 in stdenv.mkDerivation rec {
   name = "dfasma-${version}";
-  version = "1.2.5";
+  version = "1.4.5";
 
   src = fetchFromGitHub {
-    sha256 = "0mgy2bkmyp7lvaqsr7hkndwdgjf26mlpsj6smrmn1vp0cqyrw72d";
+    sha256 = "09fcyjm0hg3y51fnjax88m93im39nbynxj79ffdknsazmqw9ac0h";
     rev = "v${version}";
     repo = "dfasma";
     owner = "gillesdegottex";
   };
 
-  buildInputs = [ fftw libsndfile qtbase qtmultimedia qmakeHook ];
+  buildInputs = [ fftw libsndfile qtbase qtmultimedia ];
 
-  nativeBuildInputs = [ makeQtWrapper ];
+  nativeBuildInputs = [ qmake ];
 
   postPatch = ''
-    substituteInPlace dfasma.pro --replace '$$DFASMAVERSIONGITPRO' '${version}'
     cp -Rv "${reaperFork.src}"/* external/REAPER
     cp -Rv "${libqaudioextra.src}"/* external/libqaudioextra
-  '';
-
-  preConfigure = ''
-    qmakeFlags="$qmakeFlags PREFIXSHORTCUT=$out"
+    substituteInPlace dfasma.pro --replace "CONFIG += file_sdif" "";
   '';
 
   enableParallelBuilding = true;
-
-  postInstall = ''
-    wrapQtProgram "$out/bin/dfasma"
-  '';
 
   meta = with stdenv.lib; {
     description = "Analyse and compare audio files in time and frequency";
@@ -70,6 +62,5 @@ in stdenv.mkDerivation rec {
     homepage = http://gillesdegottex.github.io/dfasma/;
     license = [ licenses.gpl3Plus reaperFork.meta.license ];
     platforms = platforms.linux;
-    maintainers = with maintainers; [ nckx ];
   };
 }

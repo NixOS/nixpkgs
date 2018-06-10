@@ -19,6 +19,7 @@ let
       glibc # needed for getent
       shadow
       nettools # needed for hostname
+      utillinux # needed for mount and mountpoint
     ];
 
 in
@@ -60,7 +61,7 @@ in
       apply = set: {
         script =
           ''
-            #! ${pkgs.stdenv.shell}
+            #! ${pkgs.runtimeShell}
 
             systemConfig=@out@
 
@@ -116,14 +117,7 @@ in
 
   config = {
 
-    system.activationScripts.stdio =
-      ''
-        # Needed by some programs.
-        ln -sfn /proc/self/fd /dev/fd
-        ln -sfn /proc/self/fd/0 /dev/stdin
-        ln -sfn /proc/self/fd/1 /dev/stdout
-        ln -sfn /proc/self/fd/2 /dev/stderr
-      '';
+    system.activationScripts.stdio = ""; # obsolete
 
     system.activationScripts.var =
       ''
@@ -145,6 +139,7 @@ in
         ${pkgs.e2fsprogs}/bin/chattr -f -i /var/empty || true
         find /var/empty -mindepth 1 -delete
         chmod 0555 /var/empty
+        chown root:root /var/empty
         ${pkgs.e2fsprogs}/bin/chattr -f +i /var/empty || true
       '';
 
@@ -159,7 +154,7 @@ in
         rmdir --ignore-fail-on-non-empty /usr/bin /usr
       '';
 
-    system.activationScripts.tmpfs =
+    system.activationScripts.specialfs =
       ''
         specialMount() {
           local device="$1"
@@ -167,7 +162,12 @@ in
           local options="$3"
           local fsType="$4"
 
-          ${pkgs.utillinux}/bin/mount -t "$fsType" -o "remount,$options" "$device" "$mountPoint"
+          if mountpoint -q "$mountPoint"; then
+            local options="remount,$options"
+          else
+            mkdir -m 0755 -p "$mountPoint"
+          fi
+          mount -t "$fsType" -o "$options" "$device" "$mountPoint"
         }
         source ${config.system.build.earlyMountScript}
       '';

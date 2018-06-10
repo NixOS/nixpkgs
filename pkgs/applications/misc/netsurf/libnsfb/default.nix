@@ -13,7 +13,8 @@ stdenv.mkDerivation rec {
     sha256 = "176f8why9gzbaca9nnxjqasl02qzc6g507z5w3dzkcjifnkz4mzl";
   };
 
-  buildInputs = [ pkgconfig buildsystem SDL ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ buildsystem SDL ];
 
   makeFlags = [
     "PREFIX=$(out)"
@@ -22,7 +23,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with stdenv.lib; {
-    homepage = "http://www.netsurf-browser.org/";
+    homepage = http://www.netsurf-browser.org/;
     description = "CSS parser and selection library for netsurf browser";
     license = licenses.gpl2;
     maintainers = [ maintainers.vrthra ];

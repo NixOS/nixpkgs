@@ -1,13 +1,14 @@
-{ stdenv, fetchFromGitHub, python, buildPythonApplication, pythonPackages }:
+{ stdenv, fetchFromGitHub, python2Packages }:
 
-buildPythonApplication rec {
-  name = "gitfs-0.2.5";
+python2Packages.buildPythonApplication rec {
+  name = "gitfs-${version}";
+  version = "0.4.5.1";
 
   src = fetchFromGitHub {
     owner = "PressLabs";
     repo = "gitfs";
-    rev = "495c6c52ec3573294ba7b8426ed794eb466cbb82";
-    sha256 = "04yh6b5ivbviqy5k2768ag75cd5kr8k70ar0d801yvc8hnijvphk";
+    rev = version;
+    sha256 = "1s9ml2ryqxvzzq9mxa9y3xmzr742qxcpw9kzzbr7vm3bxgkyi074";
   };
 
   patchPhase = ''
@@ -15,7 +16,11 @@ buildPythonApplication rec {
     echo > requirements.txt
   '';
 
-  propagatedBuildInputs = with pythonPackages; [ atomiclong fusepy pygit2 ];
+  buildInputs = with python2Packages; [ pytest pytestcov mock ];
+  propagatedBuildInputs = with python2Packages; [ atomiclong fusepy pygit2 ];
+
+  checkPhase = "py.test";
+  doCheck = false;
 
   meta = {
     description = "A FUSE filesystem that fully integrates with git";

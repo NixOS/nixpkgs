@@ -5,12 +5,12 @@ let
   common = { versionMajor, versionMinor, sha256 } @ args: stdenv.mkDerivation (rec {
     name = "apache-tomcat-${version}";
     version = "${versionMajor}.${versionMinor}";
-    
+
     src = fetchurl {
       url = "mirror://apache/tomcat/tomcat-${versionMajor}/v${version}/bin/${name}.tar.gz";
       inherit sha256;
     };
-    
+
     outputs = [ "out" "webapps" ];
     installPhase =
       ''
@@ -19,7 +19,7 @@ let
         mkdir -p $webapps/webapps
         mv $out/webapps $webapps/
       '';
-    
+
     meta = {
       homepage = https://tomcat.apache.org/;
       description = "An implementation of the Java Servlet and JavaServer Pages technologies";
@@ -30,35 +30,27 @@ let
   });
 
 in {
-
-  tomcat6 = common {
-    versionMajor = "6";
-    versionMinor = "0.45";
-    sha256 = "0ba8h86padpk23xmscp7sg70g0v8ji2jbwwriz59hxqy5zhd76wg";
-  };
-
   tomcat7 = common {
     versionMajor = "7";
-    versionMinor = "0.70";
-    sha256 = "0x4chqb7kkmadmhf2hlank856hw2vpgjl14fak74ybimlcb3dwqk";
+    versionMinor = "0.82";
+    sha256 = "0vb7c5i50ral4rr39ss95k7cxnzd7fs21zd7f97d1f3qslzwl69g";
   };
 
   tomcat8 = common {
     versionMajor = "8";
-    versionMinor = "0.37";
-    sha256 = "0f9d4yxjzwdrayj5l3jyiclnmpb5lffvmsnp54qpf6m3gm7cj5i6";
+    versionMinor = "0.47";
+    sha256 = "0xv4v3i08rwzfmz7rkhglq5cbjgnfava8dw0i33vsp7dk162a4g4";
   };
 
   tomcat85 = common {
     versionMajor = "8";
-    versionMinor = "5.5";
-    sha256 = "0idfxjrw5q45f531gyjnv6xjkbj9nhy2v1w4z7558z96230a0fqj";
+    versionMinor = "5.23";
+    sha256 = "1qnww70x75c0qf2wn8mkpz5lszggjnh78dpb4chyw2fnbm3wxain";
   };
-  
-  tomcatUnstable = common {
+
+  tomcat9 = common {
     versionMajor = "9";
-    versionMinor = "0.0.M10";
-    sha256 = "0p3pqwz9zjvr9w73divsyaa53mbazf0icxfs06wvgxsvkbgj5gq9";
+    versionMinor = "0.2";
+    sha256 = "0aaykzi0b2xsdmjp60ihcjzh1m95p0a79kn5l2v7vgbkyg449638";
   };
-  
 }

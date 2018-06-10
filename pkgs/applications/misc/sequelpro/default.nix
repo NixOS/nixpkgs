@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    description = "MySQL database management for Mac OS X";
+    description = "MySQL database management for macOS";
     homepage = http://www.sequelpro.com/;
     license = stdenv.lib.licenses.mit;
     platforms = stdenv.lib.platforms.darwin;

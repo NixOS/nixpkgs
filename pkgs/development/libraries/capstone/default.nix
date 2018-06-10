@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, bash, cmake }:
+{ stdenv, fetchurl, bash, pkgconfig }:
 
 stdenv.mkDerivation rec {
   name    = "capstone-${version}";
@@ -9,7 +9,14 @@ stdenv.mkDerivation rec {
     sha256 = "1whl5c8j6vqvz2j6ay2pyszx0jg8d3x8hq66cvgghmjchvsssvax";
   };
 
-  buildInputs = [ cmake ];
+  configurePhase = '' patchShebangs make.sh '';
+  buildPhase = '' ./make.sh '';
+  installPhase = '' env PREFIX=$out ./make.sh install '';
+  
+  nativeBuildInputs = [
+    pkgconfig
+  ];
+
   enableParallelBuilding = true;
 
   meta = {

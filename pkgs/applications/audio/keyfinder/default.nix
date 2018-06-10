@@ -1,22 +1,24 @@
-{ stdenv, fetchFromGitHub, libav_0_8, libkeyfinder, qtbase, qtxmlpatterns, qmakeHook, taglib }:
+{ stdenv, fetchFromGitHub, libav_0_8, libkeyfinder, qtbase, qtxmlpatterns, qmake, taglib }:
 
 stdenv.mkDerivation rec {
   name = "keyfinder-${version}";
-  version = "2.1";
+  version = "2.2";
 
   src = fetchFromGitHub {
-    sha256 = "0j9k90ll4cr8j8dywb6zf1bs9vijlx7m4zsh6w9hxwrr7ymz89hn";
+    sha256 = "0vjszk1h8vj2qycgbffzy6k7amg75jlvlnzwaqhz9nll2pcvw0zl";
     rev = version;
     repo = "is_KeyFinder";
     owner = "ibsh";
   };
 
-  buildInputs = [ libav_0_8 libkeyfinder qtbase qtxmlpatterns qmakeHook taglib ];
+  nativeBuildInputs = [ qmake ];
+  buildInputs = [ libav_0_8 libkeyfinder qtbase qtxmlpatterns taglib ];
 
   postPatch = ''
     substituteInPlace is_KeyFinder.pro \
        --replace "keyfinder.0" "keyfinder" \
-       --replace "-stdlib=libc++" ""
+       --replace "-stdlib=libc++" "" \
+       --replace "\$\$[QT_INSTALL_PREFIX]" "$out"
   '';
 
   enableParallelBuilding = true;
@@ -35,6 +37,5 @@ stdenv.mkDerivation rec {
     homepage = http://www.ibrahimshaath.co.uk/keyfinder/;
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ nckx ];
   };
 }

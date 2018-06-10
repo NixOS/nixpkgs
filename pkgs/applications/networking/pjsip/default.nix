@@ -2,14 +2,18 @@
 
 stdenv.mkDerivation rec {
   name = "pjsip-${version}";
-  version = "2.5.5";
+  version = "2.7.2";
 
   src = fetchurl {
     url = "http://www.pjsip.org/release/${version}/pjproject-${version}.tar.bz2";
-    sha256 = "ab39207b761d3485199cd881410afeb2d171dff7c2bf75e8caae91c6dca508f3";
+    sha256 = "0wiph6g51wanzwjjrpwsz63amgvly8g08jz033gnwqmppa584b4w";
   };
 
   buildInputs = [ openssl libsamplerate alsaLib ];
+
+  preConfigure = ''
+    export LD=$CC
+  '';
 
   postInstall = ''
     mkdir -p $out/bin
@@ -25,7 +29,7 @@ stdenv.mkDerivation rec {
     description = "A multimedia communication library written in C, implementing standard based protocols such as SIP, SDP, RTP, STUN, TURN, and ICE";
     homepage = http://pjsip.org/;
     license = stdenv.lib.licenses.gpl2Plus;
-    maintainers = with stdenv.lib.maintainers; [viric];
+    maintainers = with stdenv.lib.maintainers; [viric olynch];
     platforms = with stdenv.lib.platforms; linux;
   };
 }

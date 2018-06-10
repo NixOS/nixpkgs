@@ -1,29 +1,20 @@
-{ stdenv, fetchgit, zlib, curl, expat, fuse, openssl
-, autoconf, automake, libtool, python
+{ stdenv, fetchFromGitHub, zlib, curl, expat, fuse, openssl
+, autoreconfHook, python
 }:
 
 stdenv.mkDerivation rec {
-  version = "3.7.6";
+  version = "3.7.16";
   name = "afflib-${version}";
 
-  src = fetchgit {
-    url = "https://github.com/sshock/AFFLIBv3/";
-    rev = "refs/tags/v${version}";
-    sha256 = "08www22njllqz1j3jkmgn1p36sifxrjd6qlsa7ch4kqy4jaaka1k";
-    name = "afflib-${version}-checkout";
+  src = fetchFromGitHub {
+    owner = "sshock";
+    repo = "AFFLIBv3";
+    rev = "v${version}";
+    sha256 = "0piwkmg7jn64h57cjf5cybyvyqxj2k752g9vrf4ycds7nhvvbnb6";
   };
 
-  buildInputs = [ zlib curl expat fuse openssl 
-    libtool autoconf automake python
-    ];
-
-  preConfigure = ''
-    libtoolize -f
-    autoheader -f
-    aclocal
-    automake --add-missing -c 
-    autoconf -f
-  '';
+  nativeBuildInputs = [ autoreconfHook ];
+  buildInputs = [ zlib curl expat fuse openssl python ];
 
   meta = {
     homepage = http://afflib.sourceforge.net/;

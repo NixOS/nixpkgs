@@ -1,14 +1,20 @@
 { stdenv, fetchurl
 , pkgconfig
-, python3
+, python3Packages
+, wrapGAppsHook
+, atk
 , dbus_libs
 , evemu
 , frame
+, gdk_pixbuf
+, gobjectIntrospection
 , grail
+, gtk3
 , libX11
 , libXext
 , libXi
 , libXtst
+, pango
 , xorgserver
 }:
 
@@ -16,17 +22,32 @@ with stdenv.lib;
 
 stdenv.mkDerivation rec {
   name = "geis-${version}";
-  version = "2.2.16";
+  version = "2.2.17";
 
   src = fetchurl {
     url = "https://launchpad.net/geis/trunk/${version}/+download/${name}.tar.xz";
-    sha256 = "40a694092c79f325a2fbf8a9f301177bc91c364f4e637c2aa8963ad2a5aabbcf";
+    sha256 = "1svhbjibm448ybq6gnjjzj0ak42srhihssafj0w402aj71lgaq4a";
   };
 
-  NIX_CFLAGS_COMPILE = "-Wno-error=pedantic";
+  NIX_CFLAGS_COMPILE = "-Wno-format -Wno-misleading-indentation -Wno-error";
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ python3 dbus_libs evemu frame grail libX11 libXext libXi libXtst xorgserver ];
+  pythonPath = with python3Packages;
+    [ pygobject3  ];
+
+  nativeBuildInputs = [ pkgconfig wrapGAppsHook python3Packages.wrapPython];
+  buildInputs = [ atk dbus_libs evemu frame gdk_pixbuf gobjectIntrospection grail
+    gtk3 libX11 libXext libXi libXtst pango python3Packages.python xorgserver
+  ];
+
+  patchPhase = ''
+    substituteInPlace python/geis/geis_v2.py --replace \
+      "ctypes.util.find_library(\"geis\")" "'$out/lib/libgeis.so'"
+  '';
+
+  preFixup = ''
+    buildPythonPath "$out $pythonPath"
+    gappsWrapperArgs+=(--set PYTHONPATH "$program_PYTHONPATH")
+  '';
 
   meta = {
     description = "A library for input gesture recognition";

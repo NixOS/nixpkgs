@@ -2,7 +2,7 @@
 
 runCommand "fc-cache"
   rec {
-    buildInputs = [ fontconfig ];
+    buildInputs = [ fontconfig.bin ];
     passAsFile = [ "fontDirs" ];
     fontDirs = ''
       <!-- Font directories -->
@@ -24,4 +24,8 @@ runCommand "fc-cache"
 
     mkdir -p $out
     fc-cache -sv
+
+    # This is not a cache dir in the normal sense -- it won't be automatically
+    # recreated.
+    rm "$out/CACHEDIR.TAG"
   ''

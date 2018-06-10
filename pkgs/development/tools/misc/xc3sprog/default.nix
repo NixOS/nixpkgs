@@ -4,12 +4,12 @@
 # prebuilt binary subversion snapshots on sourceforge.
 
 stdenv.mkDerivation rec {
-  version = "748"; # latest @ 2013-10-26
+  version = "787";
   name = "xc3sprog-${version}";
 
   src = fetchsvn rec {
     url = "https://svn.code.sf.net/p/xc3sprog/code/trunk";
-    sha256 = "0wkz6094kkqz91qpa24pzlbhndc47sjmqhwk3p7ccabv0041rzk0";
+    sha256 = "1rfhms3i7375kdlg0sdg5k52ix3xv5llj2dr30vamyg7pk74y8rx";
     rev = "${version}";
   };
 

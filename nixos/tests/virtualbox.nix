@@ -11,10 +11,10 @@ let
       #!${pkgs.stdenv.shell} -xe
       export PATH="${lib.makeBinPath [ pkgs.coreutils pkgs.utillinux ]}"
 
-      mkdir -p /var/run/dbus
+      mkdir -p /run/dbus
       cat > /etc/passwd <<EOF
       root:x:0:0::/root:/bin/false
-      messagebus:x:1:1::/var/run/dbus:/bin/false
+      messagebus:x:1:1::/run/dbus:/bin/false
       EOF
       cat > /etc/group <<EOF
       root:x:0:
@@ -43,6 +43,9 @@ let
       "init=${pkgs.writeScript "mini-init.sh" miniInit}"
     ];
 
+    # XXX: Remove this once TSS location detection has been fixed in VirtualBox
+    boot.kernelPackages = pkgs.linuxPackages_4_9;
+
     fileSystems."/" = {
       device = "vboxshare";
       fsType = "vboxsf";
@@ -65,7 +68,7 @@ let
       touch /mnt-root/boot-done
       hostname "${vmName}"
       mkdir -p /nix/store
-      unshare -m "@shell@" -c '
+      unshare -m ${escapeShellArg pkgs.stdenv.shell} -c '
         mount -t vboxsf nixstore /nix/store
         exec "$stage2Init"
       '
@@ -107,11 +110,8 @@ let
 
     buildInputs = [ pkgs.utillinux pkgs.perl ];
   } ''
-    ${pkgs.parted}/sbin/parted /dev/vda mklabel msdos
-    ${pkgs.parted}/sbin/parted /dev/vda -- mkpart primary ext2 1M -1s
-    . /sys/class/block/vda1/uevent
-    mknod /dev/vda1 b $MAJOR $MINOR
-
+    ${pkgs.parted}/sbin/parted --script /dev/vda mklabel msdos
+    ${pkgs.parted}/sbin/parted --script /dev/vda -- mkpart primary ext2 1M -1s
     ${pkgs.e2fsprogs}/sbin/mkfs.ext4 /dev/vda1
     ${pkgs.e2fsprogs}/sbin/tune2fs -c 0 -i 0 /dev/vda1
     mkdir /mnt
@@ -299,9 +299,9 @@ let
       -pf /run/dhclient.pid \
       -v eth0 eth1
 
-    otherIP="$(${pkgs.netcat}/bin/netcat -clp 1234 || :)"
+    otherIP="$(${pkgs.netcat}/bin/nc -l 1234 || :)"
     ${pkgs.iputils}/bin/ping -I eth1 -c1 "$otherIP"
-    echo "$otherIP reachable" | ${pkgs.netcat}/bin/netcat -clp 5678 || :
+    echo "$otherIP reachable" | ${pkgs.netcat}/bin/nc -l 5678 || :
   '';
 
   sysdDetectVirt = pkgs: ''
@@ -461,11 +461,11 @@ in mapAttrs mkVBoxTest {
     my $test1IP = waitForIP_test1 1;
     my $test2IP = waitForIP_test2 1;
 
-    $machine->succeed("echo '$test2IP' | netcat -c '$test1IP' 1234");
-    $machine->succeed("echo '$test1IP' | netcat -c '$test2IP' 1234");
+    $machine->succeed("echo '$test2IP' | nc -N '$test1IP' 1234");
+    $machine->succeed("echo '$test1IP' | nc -N '$test2IP' 1234");
 
-    $machine->waitUntilSucceeds("netcat -c '$test1IP' 5678 >&2");
-    $machine->waitUntilSucceeds("netcat -c '$test2IP' 5678 >&2");
+    $machine->waitUntilSucceeds("nc -N '$test1IP' 5678 < /dev/null >&2");
+    $machine->waitUntilSucceeds("nc -N '$test2IP' 5678 < /dev/null >&2");
 
     shutdownVM_test1;
     shutdownVM_test2;

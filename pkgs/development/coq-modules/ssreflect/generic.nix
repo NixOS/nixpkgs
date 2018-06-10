@@ -1,16 +1,15 @@
 { stdenv, fetchurl, coq, ncurses, which
 , graphviz, withDoc ? false
-, src, patches ? []
+, src, name, patches ? []
 }:
 
 stdenv.mkDerivation {
 
-  name = "coq-ssreflect-1.6-${coq.coq-version}";
-
+  inherit name;
   inherit src;
 
   nativeBuildInputs = stdenv.lib.optionals withDoc [ graphviz ];
-  buildInputs = [ coq.ocaml coq.camlp5 ncurses which ];
+  buildInputs = [ coq.ocaml coq.findlib coq.camlp5 ncurses which ];
   propagatedBuildInputs = [ coq ];
 
   enableParallelBuilding = true;
@@ -18,7 +17,7 @@ stdenv.mkDerivation {
   inherit patches;
 
   preBuild = ''
-    patchShebangs etc/utils/ssrcoqdep
+    patchShebangs etc/utils/ssrcoqdep || true
     cd mathcomp/ssreflect
     export COQBIN=${coq}/bin/
   '';
@@ -41,6 +40,10 @@ stdenv.mkDerivation {
     license = licenses.cecill-b;
     maintainers = with maintainers; [ vbgl jwiegley ];
     platforms = coq.meta.platforms;
+  };
+
+  passthru = {
+    compatibleCoqVersions = v: builtins.elem v [ "8.5" "8.6" "8.7" "8.8" ];
   };
 
 }

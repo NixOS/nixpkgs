@@ -1,51 +1,22 @@
-{ stdenv, lib, gox, gotools, buildGoPackage, fetchFromGitHub
-, fetchgit, fetchhg, fetchbzr, fetchsvn }:
-
-stdenv.mkDerivation rec {
+{ stdenv, buildGoPackage, fetchFromGitHub }:
+buildGoPackage rec {
   name = "packer-${version}";
-  version = "0.10.1";
+  version = "1.2.0";
 
-  src = (import ./deps.nix {
-    inherit stdenv lib gox gotools buildGoPackage fetchgit fetchhg fetchbzr fetchsvn;
-  }).out;
+  goPackagePath = "github.com/hashicorp/packer";
 
-  buildInputs = [ src.go gox gotools ];
+  subPackages = [ "." ];
 
-  configurePhase = ''
-    export GOPATH=$PWD/share/go
-    export XC_ARCH=$(go env GOARCH)
-    export XC_OS=$(go env GOOS)
-
-    mkdir $GOPATH/bin
-
-    cd $GOPATH/src/github.com/mitchellh/packer
-
-    # Don't fetch the deps
-    substituteInPlace "Makefile" --replace ': deps' ':'
-
-    # Avoid using git
-    sed \
-      -e "s|GITBRANCH:=.*||" \
-      -e "s|GITSHA:=.*|GITSHA=${src.rev}|" \
-      -i Makefile
-    sed \
-      -e "s|GIT_COMMIT=.*|GIT_COMMIT=${src.rev}|" \
-      -e "s|GIT_DIRTY=.*|GIT_DIRTY=|" \
-      -i "scripts/build.sh"
-  '';
-
-  buildPhase = ''
-    make generate releasebin
-  '';
-
-  installPhase = ''
-    mkdir -p $out/bin
-    mv bin/* $out/bin
-  '';
+  src = fetchFromGitHub {
+    owner = "hashicorp";
+    repo = "packer";
+    rev = "v${version}";
+    sha256 = "05qsyh6d4qsvabr543ggd4b09fipxzr270cawsx0glmkgw82nkzi";
+  };
 
   meta = with stdenv.lib; {
     description = "A tool for creating identical machine images for multiple platforms from a single source configuration";
-    homepage    = http://www.packer.io;
+    homepage    = https://www.packer.io;
     license     = licenses.mpl20;
     maintainers = with maintainers; [ cstrahan zimbatm ];
     platforms   = platforms.unix;

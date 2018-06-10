@@ -7,16 +7,13 @@
 # http://vlc-bluray.whoknowsmy.name/
 # https://wiki.archlinux.org/index.php/BluRay
 
-let baseName = "libaacs";
-    version  = "0.8.1";
-in
-
-stdenv.mkDerivation {
-  name = "${baseName}-${version}";
+stdenv.mkDerivation rec {
+  name = "libaacs-${version}";
+  version  = "0.9.0";
 
   src = fetchurl {
-    url = "http://get.videolan.org/${baseName}/${version}/${baseName}-${version}.tar.bz2";
-    sha256 = "1s5v075hnbs57995r6lljm79wgrip3gnyf55a0y7bja75jh49hwm";
+    url = "http://get.videolan.org/libaacs/${version}/${name}.tar.bz2";
+    sha256 = "1kms92i0c7i1yl659kqjf19lm8172pnpik5lsxp19xphr74vvq27";
   };
 
   buildInputs = [ libgcrypt libgpgerror ];

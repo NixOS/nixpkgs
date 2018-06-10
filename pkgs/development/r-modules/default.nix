@@ -3,7 +3,7 @@
 { R, pkgs, overrides }:
 
 let
-  inherit (pkgs) fetchurl stdenv lib;
+  inherit (pkgs) cacert fetchurl stdenv lib;
 
   buildRPackage = pkgs.callPackage ./generic-builder.nix {
     inherit R;
@@ -16,8 +16,6 @@ let
   # some packages, e.g. cncaGUI, require X running while installation,
   # so that we use xvfb-run if requireX is true.
   mkDerive = {mkHomepage, mkUrls}: args:
-      # XXX: not ideal ("2.2" would match "2.22") but sufficient
-      assert (!(args ? rVersion) || lib.hasPrefix args.rVersion (lib.getVersion R));
       lib.makeOverridable ({
         name, version, sha256,
         depends ? [],
@@ -40,28 +38,25 @@ let
     meta.broken = broken;
   });
 
-  # Templates for generating Bioconductor, CRAN and IRkernel packages
+  # Templates for generating Bioconductor and CRAN packages
   # from the name, version, sha256, and optional per-package arguments above
   #
   deriveBioc = mkDerive {
-    mkHomepage = {name, rVersion}: "https://bioconductor.org/packages/${rVersion}/bioc/html/${name}.html";
-    mkUrls = {name, version, rVersion}: [ "mirror://bioc/${rVersion}/bioc/src/contrib/${name}_${version}.tar.gz" ];
+    mkHomepage = {name, biocVersion}: "https://bioconductor.org/packages/${biocVersion}/bioc/html/${name}.html";
+    mkUrls = {name, version, biocVersion}: [ "mirror://bioc/${biocVersion}/bioc/src/contrib/${name}_${version}.tar.gz"
+                                             "mirror://bioc/${biocVersion}/bioc/src/contrib/Archive/${name}_${version}.tar.gz" ];
   };
   deriveBiocAnn = mkDerive {
-    mkHomepage = {name, rVersion}: "http://www.bioconductor.org/packages/${name}.html";
-    mkUrls = {name, version, rVersion}: [ "mirror://bioc/${rVersion}/data/annotation/src/contrib/${name}_${version}.tar.gz" ];
+    mkHomepage = {name, biocVersion}: "http://www.bioconductor.org/packages/${name}.html";
+    mkUrls = {name, version, biocVersion}: [ "mirror://bioc/${biocVersion}/data/annotation/src/contrib/${name}_${version}.tar.gz" ];
   };
   deriveBiocExp = mkDerive {
-    mkHomepage = {name, rVersion}: "http://www.bioconductor.org/packages/${name}.html";
-    mkUrls = {name, version, rVersion}: [ "mirror://bioc/${rVersion}/data/experiment/src/contrib/${name}_${version}.tar.gz" ];
+    mkHomepage = {name, biocVersion}: "http://www.bioconductor.org/packages/${name}.html";
+    mkUrls = {name, version, biocVersion}: [ "mirror://bioc/${biocVersion}/data/experiment/src/contrib/${name}_${version}.tar.gz" ];
   };
   deriveCran = mkDerive {
     mkHomepage = {name, snapshot}: "http://mran.revolutionanalytics.com/snapshot/${snapshot}/web/packages/${name}/";
     mkUrls = {name, version, snapshot}: [ "http://mran.revolutionanalytics.com/snapshot/${snapshot}/src/contrib/${name}_${version}.tar.gz" ];
-  };
-  deriveIRkernel = mkDerive {
-    mkHomepage = {name}: "https://irkernel.github.io/";
-    mkUrls = {name, version}: [ "http://irkernel.github.io/src/contrib/${name}_${version}.tar.gz" ];
   };
 
   # Overrides package definitions with nativeBuildInputs.
@@ -224,8 +219,7 @@ let
   _self = import ./bioc-packages.nix { inherit self; derive = deriveBioc; } //
           import ./bioc-annotation-packages.nix { inherit self; derive = deriveBiocAnn; } //
           import ./bioc-experiment-packages.nix { inherit self; derive = deriveBiocExp; } //
-          import ./cran-packages.nix { inherit self; derive = deriveCran; } //
-          import ./irkernel-packages.nix { inherit self; derive = deriveIRkernel; };
+          import ./cran-packages.nix { inherit self; derive = deriveCran; };
 
   # tweaks for the individual packages and "in self" follow
 
@@ -237,146 +231,159 @@ let
   packagesWithNativeBuildInputs = {
     abn = [ pkgs.gsl_1 ];
     adimpro = [ pkgs.imagemagick ];
+    animation = [ pkgs.which ];
     audio = [ pkgs.portaudio ];
     BayesSAE = [ pkgs.gsl_1 ];
     BayesVarSel = [ pkgs.gsl_1 ];
-    BayesXsrc = [ pkgs.readline pkgs.ncurses ];
+    BayesXsrc = [ pkgs.readline.dev pkgs.ncurses ];
     bigGP = [ pkgs.openmpi ];
+    bio3d = [ pkgs.zlib ];
     BiocCheck = [ pkgs.which ];
     Biostrings = [ pkgs.zlib ];
     bnpmr = [ pkgs.gsl_1 ];
-    BNSP = [ pkgs.gsl_1 ];
-    cairoDevice = [ pkgs.gtk2 ];
-    Cairo = [ pkgs.libtiff pkgs.libjpeg pkgs.cairo ];
+    cairoDevice = [ pkgs.gtk2.dev ];
+    Cairo = [ pkgs.libtiff pkgs.libjpeg pkgs.cairo.dev pkgs.x11 pkgs.fontconfig.lib ];
     Cardinal = [ pkgs.which ];
     chebpol = [ pkgs.fftw ];
     ChemmineOB = [ pkgs.openbabel pkgs.pkgconfig ];
     cit = [ pkgs.gsl_1 ];
     curl = [ pkgs.curl.dev ];
-    devEMF = [ pkgs.xorg.libXft ];
+    data_table = lib.optional stdenv.isDarwin pkgs.llvmPackages.openmp;
+    devEMF = [ pkgs.xorg.libXft.dev pkgs.x11 ];
     diversitree = [ pkgs.gsl_1 pkgs.fftw ];
     EMCluster = [ pkgs.liblapack ];
-    fftw = [ pkgs.fftw ];
-    fftwtools = [ pkgs.fftw ];
+    fftw = [ pkgs.fftw.dev ];
+    fftwtools = [ pkgs.fftw.dev ];
     Formula = [ pkgs.gmp ];
     geoCount = [ pkgs.gsl_1 ];
-    git2r = [ pkgs.zlib pkgs.openssl ];
+    gdtools = [ pkgs.cairo.dev pkgs.fontconfig.lib pkgs.freetype.dev ];
+    git2r = [ pkgs.zlib.dev pkgs.openssl.dev ];
     GLAD = [ pkgs.gsl_1 ];
     glpkAPI = [ pkgs.gmp pkgs.glpk ];
-    gmp = [ pkgs.gmp ];
+    gmp = [ pkgs.gmp.dev ];
     graphscan = [ pkgs.gsl_1 ];
     gsl = [ pkgs.gsl_1 ];
+    h5 = [ pkgs.hdf5-cpp pkgs.which ];
+    haven = [ pkgs.libiconv ];
+    h5vc = [ pkgs.zlib.dev ];
     HiCseg = [ pkgs.gsl_1 ];
+    imager = [ pkgs.x11 ];
     iBMQ = [ pkgs.gsl_1 ];
-    igraph = [ pkgs.gmp ];
+    igraph = [ pkgs.gmp pkgs.libxml2.dev ];
     JavaGD = [ pkgs.jdk ];
-    jpeg = [ pkgs.libjpeg ];
+    jpeg = [ pkgs.libjpeg.dev ];
     KFKSDS = [ pkgs.gsl_1 ];
-    kza = [ pkgs.fftw ];
+    kza = [ pkgs.fftw.dev ];
     libamtrack = [ pkgs.gsl_1 ];
+    magick = [ pkgs.imagemagick.dev ];
     mixcat = [ pkgs.gsl_1 ];
     mvabund = [ pkgs.gsl_1 ];
-    mwaved = [ pkgs.fftw ];
+    mwaved = [ pkgs.fftw.dev ];
     ncdf4 = [ pkgs.netcdf ];
     nloptr = [ pkgs.nlopt ];
-    openssl = [ pkgs.openssl.dev ];
+    odbc = [ pkgs.unixODBC ];
     outbreaker = [ pkgs.gsl_1 ];
     pander = [ pkgs.pandoc pkgs.which ];
     pbdMPI = [ pkgs.openmpi ];
     pbdNCDF4 = [ pkgs.netcdf ];
     pbdPROF = [ pkgs.openmpi ];
-    PKI = [ pkgs.openssl ];
-    png = [ pkgs.libpng ];
-    PopGenome = [ pkgs.zlib ];
+    pbdZMQ = lib.optionals stdenv.isDarwin [ pkgs.which ];
+    pdftools = [ pkgs.poppler.dev ];
+    PKI = [ pkgs.openssl.dev ];
+    png = [ pkgs.libpng.dev ];
+    PopGenome = [ pkgs.zlib.dev ];
     proj4 = [ pkgs.proj ];
+    protolite = [ pkgs.protobuf ];
     qtbase = [ pkgs.qt4 ];
     qtpaint = [ pkgs.qt4 ];
     R2GUESS = [ pkgs.gsl_1 ];
-    R2SWF = [ pkgs.zlib pkgs.libpng pkgs.freetype ];
+    R2SWF = [ pkgs.zlib pkgs.libpng pkgs.freetype.dev ];
     RAppArmor = [ pkgs.libapparmor ];
     rapportools = [ pkgs.which ];
     rapport = [ pkgs.which ];
-    rbamtools = [ pkgs.zlib ];
-    rcdd = [ pkgs.gmp ];
-    RcppCNPy = [ pkgs.zlib ];
+    readxl = [ pkgs.libiconv ];
+    rbamtools = [ pkgs.zlib.dev ];
+    rcdd = [ pkgs.gmp.dev ];
+    RcppCNPy = [ pkgs.zlib.dev ];
     RcppGSL = [ pkgs.gsl_1 ];
-    RcppOctave = [ pkgs.zlib pkgs.bzip2 pkgs.icu pkgs.lzma pkgs.pcre pkgs.octave ];
     RcppZiggurat = [ pkgs.gsl_1 ];
     rgdal = [ pkgs.proj pkgs.gdal ];
     rgeos = [ pkgs.geos ];
-    rggobi = [ pkgs.ggobi pkgs.gtk2 pkgs.libxml2 ];
-    rgl = [ pkgs.mesa pkgs.xlibsWrapper ];
+    rggobi = [ pkgs.ggobi pkgs.gtk2.dev pkgs.libxml2.dev ];
+    rgl = [ pkgs.libGLU_combined pkgs.xlibsWrapper ];
     Rglpk = [ pkgs.glpk ];
-    RGtk2 = [ pkgs.gtk2 ];
-    Rhpc = [ pkgs.zlib pkgs.bzip2 pkgs.icu pkgs.lzma pkgs.openmpi pkgs.pcre ];
-    Rhtslib = [ pkgs.zlib ];
-    RJaCGH = [ pkgs.zlib ];
+    RGtk2 = [ pkgs.gtk2.dev ];
+    rhdf5 = [ pkgs.zlib ];
+    Rhpc = [ pkgs.zlib pkgs.bzip2.dev pkgs.icu pkgs.lzma.dev pkgs.openmpi pkgs.pcre.dev ];
+    Rhtslib = [ pkgs.zlib.dev pkgs.automake pkgs.autoconf ];
+    RJaCGH = [ pkgs.zlib.dev ];
     rjags = [ pkgs.jags ];
-    rJava = [ pkgs.zlib pkgs.bzip2 pkgs.icu pkgs.lzma pkgs.pcre pkgs.jdk pkgs.libzip ];
+    rJava = [ pkgs.zlib pkgs.bzip2.dev pkgs.icu pkgs.lzma.dev pkgs.pcre.dev pkgs.jdk pkgs.libzip ];
     Rlibeemd = [ pkgs.gsl_1 ];
-    rmatio = [ pkgs.zlib ];
-    Rmpfr = [ pkgs.gmp pkgs.mpfr ];
+    rmatio = [ pkgs.zlib.dev ];
+    Rmpfr = [ pkgs.gmp pkgs.mpfr.dev ];
     Rmpi = [ pkgs.openmpi ];
-    RMySQL = [ pkgs.zlib pkgs.mysql.lib ];
+    RMySQL = [ pkgs.zlib pkgs.mysql.connector-c pkgs.openssl.dev ];
     RNetCDF = [ pkgs.netcdf pkgs.udunits ];
     RODBCext = [ pkgs.libiodbc ];
     RODBC = [ pkgs.libiodbc ];
+    rpanel = [ pkgs.bwidget ];
     rpg = [ pkgs.postgresql ];
-    rphast = [ pkgs.pcre pkgs.zlib pkgs.bzip2 pkgs.gzip pkgs.readline ];
+    rphast = [ pkgs.pcre.dev pkgs.zlib pkgs.bzip2 pkgs.gzip pkgs.readline ];
     Rpoppler = [ pkgs.poppler ];
-    RPostgreSQL = [ pkgs.postgresql ];
+    RPostgreSQL = [ pkgs.postgresql pkgs.postgresql ];
     RProtoBuf = [ pkgs.protobuf ];
     rPython = [ pkgs.python ];
-    RSclient = [ pkgs.openssl ];
+    RSclient = [ pkgs.openssl.dev ];
     Rserve = [ pkgs.openssl ];
-    Rssa = [ pkgs.fftw ];
-    rtfbs = [ pkgs.zlib pkgs.pcre pkgs.bzip2 pkgs.gzip pkgs.readline ];
-    rtiff = [ pkgs.libtiff ];
+    Rssa = [ pkgs.fftw.dev ];
+    rtfbs = [ pkgs.zlib pkgs.pcre.dev pkgs.bzip2 pkgs.gzip pkgs.readline ];
+    rtiff = [ pkgs.libtiff.dev ];
     runjags = [ pkgs.jags ];
-    RVowpalWabbit = [ pkgs.zlib pkgs.boost ];
+    RVowpalWabbit = [ pkgs.zlib.dev pkgs.boost ];
     rzmq = [ pkgs.zeromq3 ];
     SAVE = [ pkgs.zlib pkgs.bzip2 pkgs.icu pkgs.lzma pkgs.pcre ];
     sdcTable = [ pkgs.gmp pkgs.glpk ];
-    seewave = [ pkgs.fftw pkgs.libsndfile ];
-    seqinr = [ pkgs.zlib ];
-    seqminer = [ pkgs.zlib pkgs.bzip2 ];
-    showtext = [ pkgs.zlib pkgs.libpng pkgs.icu pkgs.freetype ];
+    seewave = [ pkgs.fftw.dev pkgs.libsndfile.dev ];
+    seqinr = [ pkgs.zlib.dev ];
+    seqminer = [ pkgs.zlib.dev pkgs.bzip2 ];
+    sf = [ pkgs.gdal pkgs.proj pkgs.geos ];
+    showtext = [ pkgs.zlib pkgs.libpng pkgs.icu pkgs.freetype.dev ];
     simplexreg = [ pkgs.gsl_1 ];
-    SOD = [ pkgs.cudatoolkit ]; # requres CL/cl.h
-    spate = [ pkgs.fftw ];
-    sprint = [ pkgs.openmpi ];
+    SOD = [ pkgs.opencl-headers ];
+    spate = [ pkgs.fftw.dev ];
     ssanv = [ pkgs.proj ];
     stsm = [ pkgs.gsl_1 ];
     stringi = [ pkgs.icu.dev ];
     survSNP = [ pkgs.gsl_1 ];
-    sysfonts = [ pkgs.zlib pkgs.libpng pkgs.freetype ];
-    TAQMNGR = [ pkgs.zlib ];
-    tiff = [ pkgs.libtiff ];
+    sysfonts = [ pkgs.zlib pkgs.libpng pkgs.freetype.dev ];
+    TAQMNGR = [ pkgs.zlib.dev ];
+    tesseract = [ pkgs.tesseract pkgs.leptonica ];
+    tiff = [ pkgs.libtiff.dev ];
     TKF = [ pkgs.gsl_1 ];
-    tkrplot = [ pkgs.xorg.libX11 ];
+    tkrplot = [ pkgs.xorg.libX11 pkgs.tk.dev ];
     topicmodels = [ pkgs.gsl_1 ];
     udunits2 = [ pkgs.udunits pkgs.expat ];
-    V8 = [ pkgs.v8 ];
+    V8 = [ pkgs.v8_3_14 ];
     VBLPCM = [ pkgs.gsl_1 ];
-    VBmix = [ pkgs.gsl_1 pkgs.fftw pkgs.qt4 ];
-    WhopGenome = [ pkgs.zlib ];
-    XBRL = [ pkgs.zlib pkgs.libxml2 ];
-    xml2 = [ pkgs.libxml2 ];
+    WhopGenome = [ pkgs.zlib.dev ];
+    XBRL = [ pkgs.zlib pkgs.libxml2.dev ];
+    xml2 = [ pkgs.libxml2.dev ] ++ lib.optionals stdenv.isDarwin [ pkgs.perl ];
     XML = [ pkgs.libtool pkgs.libxml2.dev pkgs.xmlsec pkgs.libxslt ];
-    affyPLM = [ pkgs.zlib ];
-    bamsignals = [ pkgs.zlib ];
-    BitSeq = [ pkgs.zlib ];
+    affyPLM = [ pkgs.zlib.dev ];
+    bamsignals = [ pkgs.zlib.dev ];
+    BitSeq = [ pkgs.zlib.dev ];
     DiffBind = [ pkgs.zlib ];
-    ShortRead = [ pkgs.zlib ];
-    oligo = [ pkgs.zlib ];
-    gmapR = [ pkgs.zlib ];
-    Rsubread = [ pkgs.zlib ];
-    XVector = [ pkgs.zlib ];
-    Rsamtools = [ pkgs.zlib ];
-    rtracklayer = [ pkgs.zlib ];
-    affyio = [ pkgs.zlib ];
-    VariantAnnotation = [ pkgs.zlib ];
-    snpStats = [ pkgs.zlib ];
+    ShortRead = [ pkgs.zlib.dev ];
+    oligo = [ pkgs.zlib.dev ];
+    gmapR = [ pkgs.zlib.dev ];
+    Rsubread = [ pkgs.zlib.dev ];
+    XVector = [ pkgs.zlib.dev ];
+    Rsamtools = [ pkgs.zlib.dev ];
+    rtracklayer = [ pkgs.zlib.dev ];
+    affyio = [ pkgs.zlib.dev ];
+    VariantAnnotation = [ pkgs.zlib.dev ];
+    snpStats = [ pkgs.zlib.dev ];
   };
 
   packagesWithBuildInputs = {
@@ -385,48 +392,57 @@ let
     nat = [ pkgs.which ];
     nat_nblast = [ pkgs.which ];
     nat_templatebrains = [ pkgs.which ];
+    pbdZMQ = lib.optionals stdenv.isDarwin [ pkgs.darwin.binutils ];
     RMark = [ pkgs.which ];
     RPushbullet = [ pkgs.which ];
     qtpaint = [ pkgs.cmake ];
     qtbase = [ pkgs.cmake pkgs.perl ];
-    gmatrix = [ pkgs.cudatoolkit ];
-    RCurl = [ pkgs.curl ];
+    RCurl = [ pkgs.curl.dev ];
     R2SWF = [ pkgs.pkgconfig ];
     rggobi = [ pkgs.pkgconfig ];
     RGtk2 = [ pkgs.pkgconfig ];
     RProtoBuf = [ pkgs.pkgconfig ];
     Rpoppler = [ pkgs.pkgconfig ];
-    VBmix = [ pkgs.pkgconfig ];
     XML = [ pkgs.pkgconfig ];
     cairoDevice = [ pkgs.pkgconfig ];
     chebpol = [ pkgs.pkgconfig ];
     fftw = [ pkgs.pkgconfig ];
     geoCount = [ pkgs.pkgconfig ];
+    gdtools = [ pkgs.pkgconfig ];
+    JuniperKernel = lib.optionals stdenv.isDarwin [ pkgs.darwin.binutils ];
     kza = [ pkgs.pkgconfig ];
+    magick = [ pkgs.pkgconfig ];
     mwaved = [ pkgs.pkgconfig ];
+    odbc = [ pkgs.pkgconfig ];
+    openssl = [ pkgs.pkgconfig ];
+    pdftools = [ pkgs.pkgconfig ];
+    sf = [ pkgs.pkgconfig ];
     showtext = [ pkgs.pkgconfig ];
     spate = [ pkgs.pkgconfig ];
     stringi = [ pkgs.pkgconfig ];
+    sys = [ pkgs.libapparmor ];
     sysfonts = [ pkgs.pkgconfig ];
+    tesseract = [ pkgs.pkgconfig ];
     Cairo = [ pkgs.pkgconfig ];
     Rsymphony = [ pkgs.pkgconfig pkgs.doxygen pkgs.graphviz pkgs.subversion ];
-    qtutils = [ pkgs.qt4 ];
-    ecoretriever = [ pkgs.which ];
     tcltk2 = [ pkgs.tcl pkgs.tk ];
     tikzDevice = [ pkgs.which pkgs.texlive.combined.scheme-medium ];
     rPython = [ pkgs.which ];
     gridGraphics = [ pkgs.which ];
-    gputools = [ pkgs.which pkgs.cudatoolkit ];
     adimpro = [ pkgs.which pkgs.xorg.xdpyinfo ];
     PET = [ pkgs.which pkgs.xorg.xdpyinfo pkgs.imagemagick ];
     dti = [ pkgs.which pkgs.xorg.xdpyinfo pkgs.imagemagick ];
     mzR = [ pkgs.netcdf ];
+    cluster = [ pkgs.libiconv ];
+    KernSmooth = [ pkgs.libiconv ];
+    nlme = [ pkgs.libiconv ];
+    Matrix = [ pkgs.libiconv ];
+    mgcv = [ pkgs.libiconv ];
   };
 
   packagesRequireingX = [
     "accrual"
     "ade4TkGUI"
-    "adehabitat"
     "analogue"
     "analogueExtra"
     "AnalyzeFMRI"
@@ -469,7 +485,6 @@ let
     "DeducerSurvival"
     "DeducerText"
     "Demerelate"
-    "DescTools"
     "detrendeR"
     "dgmb"
     "DivMelt"
@@ -480,10 +495,8 @@ let
     "EasyqpcR"
     "EcoVirtual"
     "ENiRG"
-    "EnQuireR"
     "eVenn"
     "exactLoglinTest"
-    "FAiR"
     "fat2Lpoly"
     "fbati"
     "FD"
@@ -499,13 +512,11 @@ let
     "fscaret"
     "fSRM"
     "gcmr"
-    "Geneland"
     "GeoGenetix"
     "geomorph"
     "geoR"
     "geoRglm"
     "georob"
-    "GeoXp"
     "GGEBiplotGUI"
     "gnm"
     "GPCSIV"
@@ -521,7 +532,6 @@ let
     "HH"
     "HiveR"
     "HomoPolymer"
-    "iBUGS"
     "ic50"
     "iDynoR"
     "in2extRemes"
@@ -570,7 +580,6 @@ let
     "plotSEMM"
     "plsRbeta"
     "plsRglm"
-    "pmg"
     "PopGenReport"
     "poppr"
     "powerpkg"
@@ -578,11 +587,8 @@ let
     "prefmod"
     "PrevMap"
     "ProbForecastGOP"
-    "QCAGUI"
     "qtbase"
     "qtpaint"
-    "qtutils"
-    "R2STATS"
     "r4ss"
     "RandomFields"
     "rareNMtests"
@@ -633,14 +639,12 @@ let
     "rioja"
     "ripa"
     "rite"
-    "rnbn"
     "RNCEP"
     "RQDA"
     "RSDA"
     "rsgcc"
     "RSurvey"
     "RunuranGUI"
-    "sdcMicroGUI"
     "sharpshootR"
     "simba"
     "Simile"
@@ -666,7 +670,6 @@ let
     "SYNCSA"
     "SyNet"
     "tcltk2"
-    "TDMR"
     "TED"
     "TestScorer"
     "TIMP"
@@ -689,1087 +692,12 @@ let
   ];
 
   packagesToSkipCheck = [
-    "Rmpi" # tries to run MPI processes
-    "gmatrix" # requires CUDA runtime
-    "sprint" # tries to run MPI processes
-    "pbdMPI" # tries to run MPI processes
+    "Rmpi"     # tries to run MPI processes
+    "pbdMPI"   # tries to run MPI processes
   ];
 
   # Packages which cannot be installed due to lack of dependencies or other reasons.
   brokenPackages = [
-    "TED" # depends on broken package animation
-    "streamMOA" # depends on broken package animation
-    "stream" # depends on broken package animation
-    "spdynmod" # depends on broken package animation
-    "treeplyr" # depends on broken package animation
-    "recluster" # depends on broken package animation
-    "geomorph" # depends on broken package animation
-    "phytools" # depends on broken package animation
-    "animation" # broken build
-    "srd" # broken build
-    "paleotree" # broken build
-    "ndtv" # broken build
-    "mvMORPH" # broken build
-    "mptools" # broken build
-    "monogeneaGM" # broken build
-    "molaR" # broken build
-    "idm" # broken build
-    "hisse" # broken build
-    "gfcanalysis" # broken build
-    "evolqg" # broken build
-    "evobiR" # broken build
-    "convevol" # broken build
-    "bayou" # broken build
-    "anim_plots" # broken build
-    "TKF" # broken build
-    "Rphylopars" # broken build
-    "RAM" # broken build
-    "PhySortR" # broken build
-    "MonoPhy" # broken build
-    "Momocs" # broken build
-    "Evomorph" # broken build
-    "PBD" # depends on broken package DDD
-    "DDD" # broken build
-    "BMhyd" # broken build
-    "rscala" # broken build
-    "rgpui" # depends on broken package rgp
-    "rgp" # broken build
-    "qcmetrics" # broken build
-    "lfe" # broken build
-    "interactiveDisplay" # depends on broken package interactiveDisplayBase
-    "RefNet" # depends on broken package interactiveDisplayBase
-    "pwOmics" # depends on broken package interactiveDisplayBase
-    "grasp2db" # depends on broken package interactiveDisplayBase
-    "EnsDb_Rnorvegicus_v79" # depends on broken package interactiveDisplayBase
-    "EnsDb_Rnorvegicus_v75" # depends on broken package interactiveDisplayBase
-    "EnsDb_Mmusculus_v79" # depends on broken package interactiveDisplayBase
-    "EnsDb_Mmusculus_v75" # depends on broken package interactiveDisplayBase
-    "EnsDb_Hsapiens_v79" # depends on broken package interactiveDisplayBase
-    "EnsDb_Hsapiens_v75" # depends on broken package interactiveDisplayBase
-    "ensembldb" # depends on broken package interactiveDisplayBase
-    "AnnotationHubData" # depends on broken package interactiveDisplayBase
-    "AnnotationHub" # depends on broken package interactiveDisplayBase
-    "interactiveDisplayBase" # broken build
-    "h2o" # broken build
-    "funModeling" # broken build
-    "brr" # broken build
-    "bedr" # broken build
-    "Sabermetrics" # broken build
-    "RKEEL" # depends on broken package RKEELjars
-    "RKEELjars" # broken build
-    "RapidPolygonLookup" # depends on broken package PBSmapping
-    "PBSmapping" # broken build
-    "stagePop" # depends on broken package PBSddesolve
-    "PBSddesolve" # broken build
-    "Metab" # broken build
-    "Crossover" # broken build
-    "CardinalWorkflows" # broken build
-    "spoccutils" # depends on broken package spocc
-    "mapr" # depends on broken package spocc
-    "vmsbase" # broken build
-    "vcfR" # broken build
-    "strataG" # broken build
-    "SSDM" # broken build
-    "SimInf" # broken build
-    "shazam" # broken build
-    "rsvg" # broken build
-    "Rothermel" # broken build
-    "rfPermute" # broken build
-    "redland" # broken build
-    "RAppArmor" # broken build
-    "permGPU" # broken build
-    "pdftools" # broken build
-    "OceanView" # broken build
-    "MSeasyTkGUI" # broken build
-    "mrMLM" # broken build
-    "MonetDBLite" # broken build
-    "MixGHD" # broken build
-    "LCMCR" # broken build
-    "hunspell" # broken build
-    "googleformr" # broken build
-    "ggseas" # depends on broken package x13binary
-    "seasonal" # depends on broken package x13binary
-    "gunsales" # depends on broken package x13binary
-    "x13binary" # broken build
-    "fds" # broken build
-    "exifr" # broken build
-    "rite" # depends on broken package euroMix
-    "MBCB" # depends on broken package euroMix
-    "forensim" # depends on broken package euroMix
-    "dynBiplotGUI" # depends on broken package euroMix
-    "cncaGUI" # depends on broken package euroMix
-    "biplotbootGUI" # depends on broken package euroMix
-    "AnthropMMD" # depends on broken package euroMix
-    "ilc" # depends on broken package demography
-    "demography" # broken build
-    "webbioc" # depends on broken package limma
-    "davidTiling" # depends on broken package limma
-    "tilingArray" # depends on broken package limma
-    "NAPPA" # depends on broken package limma
-    "NanoStringNorm" # depends on broken package limma
-    "synapterdata" # depends on broken package limma
-    "synapter" # depends on broken package limma
-    "RforProteomics" # depends on broken package limma
-    "pRolocdata" # depends on broken package limma
-    "ProCoNA" # depends on broken package limma
-    "Pbase" # depends on broken package limma
-    "MSnID" # depends on broken package limma
-    "msmsEDA" # depends on broken package limma
-    "MSnbase" # depends on broken package limma
-    "staRank" # depends on broken package limma
-    "phenoDist" # depends on broken package limma
-    "imageHTS" # depends on broken package limma
-    "Mulder2012" # depends on broken package limma
-    "HTSanalyzeR" # depends on broken package limma
-    "gespeR" # depends on broken package limma
-    "cellHTS2" # depends on broken package limma
-    "affyPara" # depends on broken package limma
-    "vsn" # depends on broken package limma
-    "ttScreening" # depends on broken package limma
-    "metaX" # depends on broken package limma
-    "SSPA" # depends on broken package limma
-    "SQDA" # depends on broken package limma
-    "ADaCGH2" # depends on broken package limma
-    "snapCGH" # depends on broken package limma
-    "Shrinkage" # depends on broken package limma
-    "SafeQuant" # depends on broken package limma
-    "RTopper" # depends on broken package limma
-    "RTCGAToolbox" # depends on broken package limma
-    "RPPanalyzer" # depends on broken package limma
-    "Rnits" # depends on broken package limma
-    "RNAinteractMAPK" # depends on broken package limma
-    "RNAinteract" # depends on broken package limma
-    "SimBindProfiles" # depends on broken package limma
-    "ccTutorial" # depends on broken package limma
-    "Ringo" # depends on broken package limma
-    "rCGH" # depends on broken package limma
-    "qusage" # depends on broken package limma
-    "qpcrNorm" # depends on broken package limma
-    "prot2D" # depends on broken package limma
-    "polyester" # depends on broken package limma
-    "plmDE" # depends on broken package limma
-    "phenoTest" # depends on broken package limma
-    "RANKS" # depends on broken package limma
-    "PerfMeas" # depends on broken package limma
-    "pepStat" # depends on broken package limma
-    "PECA" # depends on broken package limma
-    "PADOG" # depends on broken package limma
-    "OGSA" # depends on broken package limma
-    "nethet" # depends on broken package limma
-    "lpNet" # depends on broken package limma
-    "nem" # depends on broken package limma
-    "monocle" # depends on broken package limma
-    "MmPalateMiRNA" # depends on broken package limma
-    "miRtest" # depends on broken package limma
-    "miRLAB" # depends on broken package limma
-    "mGSZ" # depends on broken package limma
-    "MAMA" # depends on broken package limma
-    "metaMA" # depends on broken package limma
-    "msd16s" # depends on broken package limma
-    "metagenomeSeq" # depends on broken package limma
-    "metabolomics" # depends on broken package limma
-    "maSigPro" # depends on broken package limma
-    "timecourse" # depends on broken package limma
-    "stepNorm" # depends on broken package limma
-    "RBM" # depends on broken package limma
-    "saps" # depends on broken package limma
-    "PharmacoGx" # depends on broken package limma
-    "piano" # depends on broken package limma
-    "OLINgui" # depends on broken package limma
-    "OLIN" # depends on broken package limma
-    "nnNorm" # depends on broken package limma
-    "ListerEtAlBSseq" # depends on broken package limma
-    "compEpiTools" # depends on broken package limma
-    "methylPipe" # depends on broken package limma
-    "dyebiasexamples" # depends on broken package limma
-    "dyebias" # depends on broken package limma
-    "CluMix" # depends on broken package limma
-    "HCsnip" # depends on broken package limma
-    "sigaR" # depends on broken package limma
-    "plrs" # depends on broken package limma
-    "CGHregions" # depends on broken package limma
-    "QDNAseq_mm10" # depends on broken package limma
-    "QDNAseq_hg19" # depends on broken package limma
-    "QDNAseq" # depends on broken package limma
-    "GeneBreak" # depends on broken package limma
-    "focalCall" # depends on broken package limma
-    "CGHnormaliter" # depends on broken package limma
-    "CGHcall" # depends on broken package limma
-    "CGHbase" # depends on broken package limma
-    "beta7" # depends on broken package limma
-    "marray" # depends on broken package limma
-    "LVSmiRNA" # depends on broken package limma
-    "lmdme" # depends on broken package limma
-    "limmaGUI" # depends on broken package limma
-    "InPAS" # depends on broken package limma
-    "iChip" # depends on broken package limma
-    "unifiedWMWqPCR" # depends on broken package limma
-    "nondetects" # depends on broken package limma
-    "HTqPCR" # depends on broken package limma
-    "HD2013SGI" # depends on broken package limma
-    "vtpnet" # depends on broken package limma
-    "gwascat" # depends on broken package limma
-    "gQTLstats" # depends on broken package limma
-    "GOsummaries" # depends on broken package limma
-    "yri1kgv" # depends on broken package limma
-    "hmyriB36" # depends on broken package limma
-    "cheung2010" # depends on broken package limma
-    "GGtools" # depends on broken package limma
-    "GGdata" # depends on broken package limma
-    "encoDnaseI" # depends on broken package limma
-    "dsQTL" # depends on broken package limma
-    "ceuhm3" # depends on broken package limma
-    "ceu1kgv" # depends on broken package limma
-    "ceu1kg" # depends on broken package limma
-    "GGBase" # depends on broken package limma
-    "GeneSelector" # depends on broken package limma
-    "GeneSelectMMD" # depends on broken package limma
-    "gCMAPWeb" # depends on broken package limma
-    "gCMAP" # depends on broken package limma
-    "flowBin" # depends on broken package limma
-    "Fletcher2013a" # depends on broken package limma
-    "FEM" # depends on broken package limma
-    "explorase" # depends on broken package limma
-    "ExiMiR" # depends on broken package limma
-    "tweeDEseq" # depends on broken package limma
-    "tRanslatome" # depends on broken package limma
-    "ToPASeq" # depends on broken package limma
-    "timeSeq" # depends on broken package limma
-    "TCGAbiolinks" # depends on broken package limma
-    "TCC" # depends on broken package limma
-    "systemPipeR" # depends on broken package limma
-    "STATegRa" # depends on broken package limma
-    "ssizeRNA" # depends on broken package limma
-    "RUVSeq" # depends on broken package limma
-    "RnaSeqSampleSizeData" # depends on broken package limma
-    "RnaSeqSampleSize" # depends on broken package limma
-    "rnaSeqMap" # depends on broken package limma
-    "ReportingTools" # depends on broken package limma
-    "QuasiSeq" # depends on broken package limma
-    "PROPER" # depends on broken package limma
-    "myTAI" # depends on broken package limma
-    "msmsTests" # depends on broken package limma
-    "methylMnM" # depends on broken package limma
-    "metaseqR" # depends on broken package limma
-    "MEDIPS" # depends on broken package limma
-    "manta" # depends on broken package limma
-    "HTSFilter" # depends on broken package limma
-    "HTSCluster" # depends on broken package limma
-    "GSAgm" # depends on broken package limma
-    "fdrDiscreteNull" # depends on broken package limma
-    "erccdashboard" # depends on broken package limma
-    "EnrichmentBrowser" # depends on broken package limma
-    "edgeRun" # depends on broken package limma
-    "EDDA" # depends on broken package limma
-    "RnaSeqTutorial" # depends on broken package limma
-    "easyRNASeq" # depends on broken package limma
-    "DEGreport" # depends on broken package limma
-    "Imetagene" # depends on broken package limma
-    "metagene" # depends on broken package limma
-    "DBChIP" # depends on broken package limma
-    "babel" # depends on broken package limma
-    "apmsWAPP" # depends on broken package limma
-    "ampliQueso" # depends on broken package limma
-    "edgeR" # depends on broken package limma
-    "MMDiff" # depends on broken package limma
-    "ChIPQC" # depends on broken package limma
-    "DiffBind" # depends on broken package limma
-    "DCGL" # depends on broken package limma
-    "Prostar" # depends on broken package limma
-    "DAPAR" # depends on broken package limma
-    "DAAGbio" # depends on broken package limma
-    "csaw" # depends on broken package limma
-    "cp4p" # depends on broken package limma
-    "coRNAi" # depends on broken package limma
-    "Cormotif" # depends on broken package limma
-    "CORM" # depends on broken package limma
-    "TurboNorm" # depends on broken package limma
-    "maigesPack" # depends on broken package limma
-    "convert" # depends on broken package limma
-    "compcodeR" # depends on broken package limma
-    "codelink" # depends on broken package limma
-    "clippda" # depends on broken package limma
-    "REDseq" # depends on broken package limma
-    "GUIDEseq" # depends on broken package limma
-    "ggtut" # depends on broken package limma
-    "FunciSNP" # depends on broken package limma
-    "ChIPpeakAnno" # depends on broken package limma
-    "ChIPComp" # depends on broken package limma
-    "ChimpHumanBrainData" # depends on broken package limma
-    "charmData" # depends on broken package limma
-    "charm" # depends on broken package limma
-    "cghMCR" # depends on broken package limma
-    "CCl4" # depends on broken package limma
-    "casper" # depends on broken package limma
-    "CancerMutationAnalysis" # depends on broken package limma
-    "CALIB" # depends on broken package limma
-    "quantro" # depends on broken package limma
-    "RnBeads" # depends on broken package limma
-    "mvoutData" # depends on broken package limma
-    "MineICA" # depends on broken package limma
-    "methyAnalysis" # depends on broken package limma
-    "MAQCsubsetILM" # depends on broken package limma
-    "MAQCsubset" # depends on broken package limma
-    "lumiRatIDMapping" # depends on broken package limma
-    "lumiMouseIDMapping" # depends on broken package limma
-    "lumiHumanIDMapping" # depends on broken package limma
-    "lumiBarnes" # depends on broken package limma
-    "iCheck" # depends on broken package limma
-    "ffpeExampleData" # depends on broken package limma
-    "arrayMvout" # depends on broken package limma
-    "lumi" # depends on broken package limma
-    "ffpe" # depends on broken package limma
-    "methylumi" # depends on broken package limma
-    "shinyMethyl" # depends on broken package limma
-    "MethylAidData" # depends on broken package limma
-    "MethylAid" # depends on broken package limma
-    "IlluminaHumanMethylation450kmanifest" # depends on broken package limma
-    "skewr" # depends on broken package limma
-    "wateRmelon" # depends on broken package limma
-    "missMethyl" # depends on broken package limma
-    "minfiData" # depends on broken package limma
-    "IlluminaHumanMethylation450kanno_ilmn12_hg19" # depends on broken package limma
-    "IlluminaHumanMethylation27kmanifest" # depends on broken package limma
-    "FlowSorted_DLPFC_450k" # depends on broken package limma
-    "FlowSorted_Blood_450k" # depends on broken package limma
-    "ENmix" # depends on broken package limma
-    "ELMER" # depends on broken package limma
-    "MEAL" # depends on broken package limma
-    "DMRcate" # depends on broken package limma
-    "CopyNumber450kData" # depends on broken package limma
-    "CopyNumber450k" # depends on broken package limma
-    "conumee" # depends on broken package limma
-    "ChAMP" # depends on broken package limma
-    "minfi" # depends on broken package limma
-    "regionReport" # depends on broken package limma
-    "derfinderPlot" # depends on broken package limma
-    "derfinder" # depends on broken package limma
-    "bumphunter" # depends on broken package limma
-    "birta" # depends on broken package limma
-    "betr" # depends on broken package limma
-    "beadarrayMSV" # depends on broken package limma
-    "RobLoxBioC" # depends on broken package limma
-    "maGUI" # depends on broken package limma
-    "epigenomix" # depends on broken package limma
-    "blima" # depends on broken package limma
-    "BeadArrayUseCases" # depends on broken package limma
-    "beadarrayFilter" # depends on broken package limma
-    "beadarrayExampleData" # depends on broken package limma
-    "beadarray" # depends on broken package limma
-    "ballgown" # depends on broken package limma
-    "attract" # depends on broken package limma
-    "ArrayTools" # depends on broken package limma
-    "arrayQuality" # depends on broken package limma
-    "DrugVsDisease" # depends on broken package limma
-    "ArrayExpress" # depends on broken package limma
-    "oneChannelGUI" # depends on broken package limma
-    "affylmGUI" # depends on broken package limma
-    "AffyExpress" # depends on broken package limma
-    "AgiMicroRna" # depends on broken package limma
-    "affycoretools" # depends on broken package limma
-    "ABSSeq" # depends on broken package limma
-    "a4" # depends on broken package limma
-    "a4Base" # depends on broken package limma
-    "limma" # broken build
-    "TransView" # broken build
-    "Starr" # broken build
-    "SICtools" # broken build
-    "ReQON" # depends on broken package seqbias
-    "seqbias" # broken build
-    "Repitools" # broken build
-    "QuasR" # broken build
-    "qrqc" # broken build
-    "ProteomicsAnnotationHubData" # broken build
-    "podkat" # broken build
-    "PING" # depends on broken package PICS
-    "PICS" # broken build
-    "mcaGUI" # broken build
-    "deepSNV" # broken build
-    "motifbreakR" # depends on broken package MotIV
-    "LowMACA" # depends on broken package MotIV
-    "dagLogo" # depends on broken package MotIV
-    "motifStack" # depends on broken package MotIV
-    "MotIV" # broken build
-    "CNEr" # broken build
-    "canceR" # broken build
-    "BubbleTree" # broken build
-    "arrayQualityMetrics" # broken build
-    "ArrayExpressHTS" # broken build
-    "TargetSearchData" # depends on broken package TargetSearch
-    "TargetSearch" # broken build
-    "ptw" # depends on broken package nloptr
-    "gpuR" # broken build
-    "erma" # broken build
-    "MBmca" # depends on broken package chipPCR
-    "dpcR" # depends on broken package chipPCR
-    "chipPCR" # broken build
-    "alsace" # broken build
-    "rrlda" # depends on broken package VIM
-    "qrfactor" # depends on broken package VIM
-    "MVN" # depends on broken package VIM
-    "mvoutlier" # depends on broken package VIM
-    "robCompositions" # depends on broken package VIM
-    "DiagrammeRsvg" # depends on broken package V8
-    "dagitty" # depends on broken package V8
-    "remoter" # depends on broken package sodium
-    "Fletcher2013b" # depends on broken package RTN
-    "apaStyle" # depends on broken package ReporteRs
-    "categoryCompare" # depends on broken package RCytoscape
-    "preseqR" # depends on broken package polynom
-    "permutations" # depends on broken package partitions
-    "GLMMRR" # depends on broken package lme4
-    "replicationInterval" # depends on broken package lme4
-    "GWASdata" # depends on broken package GWASTools
-    "EnsemblePCReg" # depends on broken package EnsembleBase
-    "EnsembleCV" # depends on broken package EnsembleBase
-    "cpgen" # depends on broken package pedigreemm
-    "mitml" # depends on broken package jomo
-    "IlluminaHumanMethylation450k_db" # broken build
-    "gahgu95ecdf" # broken build
-    "gahgu95dcdf" # broken build
-    "gahgu95ccdf" # broken build
-    "gahgu95bcdf" # broken build
-    "gahgu95av2cdf" # broken build
-    "PREDAsampledata" # depends on broken package gahgu133plus2cdf
-    "gahgu133plus2cdf" # broken build
-    "gahgu133bcdf" # broken build
-    "gahgu133acdf" # broken build
-    "annmap" # depends on broken package RMySQL
-    "choroplethr" # depends on broken package acs
-    "acs" # broken build
-    "spray" # depends on broken package partitions
-    "CNVrd2" # broken build
-    "proteoQC" # depends on broken package rTANDEM
-    "PGA" # depends on broken package rTANDEM
-    "MBESS" # depends on broken package OpenMx
-    "IONiseR" # depends on broken package rhdf5
-    "DOQTL" # depends on broken package rhdf5
-    "DmelSGI" # depends on broken package rhdf5
-    "flowDiv" # depends on broken package ncdfFlow
-    "ChemmineDrugs" # depends on broken package ChemmineR
-    "stpm" # depends on broken package nloptr
-    "sjmisc" # depends on broken package nloptr
-    "rstanarm" # depends on broken package nloptr
-    "glmmsr" # depends on broken package nloptr
-    "FDboost" # depends on broken package nloptr
-    "faraway" # depends on broken package nloptr
-    "interplot" # depends on broken package nloptr
-    "VSE" # depends on broken package car
-    "VARSEDIG" # depends on broken package car
-    "translateSPSS2R" # depends on broken package car
-    "tadaatoolbox" # depends on broken package car
-    "lavaan_shiny" # depends on broken package car
-    "RcmdrPlugin_GWRM" # depends on broken package car
-    "TextoMineR" # depends on broken package car
-    "pcaBootPlot" # depends on broken package car
-    "ClustGeo" # depends on broken package car
-    "preproviz" # depends on broken package car
-    "hsdar" # depends on broken package car
-    "DecisionCurve" # depends on broken package car
-    "CONDOP" # depends on broken package car
-    "EnsemblePenReg" # depends on broken package car
-    "EnsembleBase" # depends on broken package car
-    "fullfact" # depends on broken package car
-    "clusterSEs" # depends on broken package car
-    "ggiraph" # depends on broken package gdtools
-    "rvg" # depends on broken package gdtools
-    "ggpmisc" # depends on broken package polynom
-    "mlt_docreg" # depends on broken package polynom
-    "mlt" # depends on broken package polynom
-    "basefun" # depends on broken package polynom
-    "rtable" # depends on broken package ReporteRs
-    "Mediana" # depends on broken package ReporteRs
-    "ReporteRs" # broken build
-    "abd" # depends on broken package nlopt
-    "adabag" # depends on broken package nlopt
-    "adhoc" # broken build
-    "AER" # depends on broken package nlopt
-    "afex" # depends on broken package nlopt
-    "agRee" # depends on broken package nlopt
-    "aLFQ" # depends on broken package nlopt
-    "algstat" # broken build
-    "alr3" # depends on broken package nlopt
-    "alr4" # depends on broken package nlopt
-    "alsace" # depends on broken nloptr
-    "anacor" # depends on broken package nlopt
-    "aods3" # depends on broken package nlopt
-    "apaTables" # depends on broken package car
-    "apt" # depends on broken package nlopt
-    "ArfimaMLM" # depends on broken package nlopt
-    "arm" # depends on broken package nlopt
-    "ART" # depends on broken package car
-    "ARTool" # depends on broken package nlopt
-    "AssetPricing" # broken build
-    "AtelieR" # broken build
-    "auRoc" # depends on broken package MBESS
-    "AutoModel" # depends on broken package car
-    "bamdit" # broken build
-    "bapred" # depends on broken package lme4
-    "bartMachine" # depends on broken package nlopt
-    "bayesDem" # depends on broken package nlopt
-    "bayesLife" # depends on broken package nlopt
-    "BayesMed" # broken build
-    "bayesmix" # broken build
-    "bayesPop" # depends on broken package nlopt
-    "Bayesthresh" # depends on broken package nlopt
-    "BaySIC" # broken build
-    "BBRecapture" # depends on broken package nlopt
-    "BCA" # depends on broken package nlopt
-    "bdynsys" # depends on broken package car
-    "BEST" # broken build
-    "bgmm" # depends on broken package nlopt
-    "BIFIEsurvey" # depends on broken package nlopt
-    "BiGGR" # depends on broken package rsbml
-    "bioassayR" # broken build
-    "BiodiversityR" # depends on broken package nlopt
-    "biotools" # depends on broken package rpanel
-    "birte" # build is broken
-    "BLCOP" # depends on broken package Rsymphony
-    "blmeco" # depends on broken package nlopt
-    "blme" # depends on broken package nlopt
-    "bmd" # depends on broken package nlopt
-    "bmem" # depends on broken package nlopt
-    "bmeta" # depends on broken package R2jags
-    "bootnet" # depends on broken package nlopt
-    "boral" # broken build
-    "BradleyTerry2" # depends on broken package nlopt
-    "BrailleR" # broken build
-    "brainGraph" # build is broken
-    "brms" # build is broken
-    "BRugs" # build is broken
-    "BTSPAS" # broken build
-    "CADFtest" # depends on broken package nlopt
-    "cAIC4" # depends on broken package nlopt
-    "candisc" # depends on broken package nlopt
-    "carcass" # depends on broken package nlopt
-    "car" # depends on broken package nlopt
-    "caret" # depends on broken package nlopt
-    "caretEnsemble" # depends on broken package nlopt
-    "CARrampsOcl" # depends on broken package OpenCL
-    "Causata" # broken build
-    "CCpop" # depends on broken package nlopt
-    "CCTpack" # broken build
-    "ChainLadder" # depends on broken package nlopt
-    "ChemmineR" # Build Is Broken
-    "chipenrich" # build is broken
-    "chipPCR" # depends on broken nloptr
-    "classify" # broken build
-    "climwin" # depends on broken package nlopt
-    "CLME" # depends on broken package nlopt
-    "clpAPI" # build is broken
-    "clusterPower" # depends on broken package nlopt
-    "clusterSEs" # depends on broken AER
-    "ClustGeo" # depends on broken FactoMineR
-    "CNORfuzzy" # depends on broken package nlopt
-    "CNVPanelizer" # depends on broken cn.mops
-    "COHCAP" # build is broken
-    "colorscience" # broken build
-    "compendiumdb" # broken build
-    "conformal" # depends on broken package nlopt
-    "corHMM" # depends on broken package nlopt
-    "CosmoPhotoz" # depends on broken package nlopt
-    "covmat" # depends on broken package VIM
-    "cplexAPI" # build is broken
-    "cquad" # depends on broken package car
-    "CrypticIBDcheck" # depends on broken package nlopt
-    "ctsem" # depends on broken package OpenMx
-    "cudaBayesreg" # build is broken
-    "daff" # depends on broken package V8
-    "dagbag" # build is broken
-    "DAMisc" # depends on broken package nlopt
-    "datafsm" # depends on broken package caret
-    "dbConnect" # broken build
-    "DBKGrad" # depends on broken package rpanel
-    #"dcmle" # broken build
-    "ddst" # broken build
-    "Deducer" # depends on broken package nlopt
-    "DeducerExtras" # depends on broken package nlopt
-    "DeducerPlugInExample" # depends on broken package nlopt
-    "DeducerPlugInScaling" # depends on broken package nlopt
-    "DeducerSpatial" # depends on broken package nlopt
-    "DeducerSurvival" # depends on broken package nlopt
-    "DeducerText" # depends on broken package nlopt
-    "DEGraph" # depends on broken package RCytoscape
-    "destiny" # depends on broken package VIM
-    "DiagTest3Grp" # depends on broken package nlopt
-    "diffHic" # depends on broken package rhdf5
-    "difR" # depends on broken package nlopt
-    "DirichletMultinomial" # Build Is Broken
-    "DistatisR" # depends on broken package nlopt
-    "diveRsity" # depends on broken package nlopt
-    "DJL" # depends on broken package car
-    "dpa" # depends on broken package nlopt
-    "dpcR" # depends on broken nloptr
-    "drc" # depends on broken package nlopt
-    "drfit" # depends on broken package nlopt
-    "drsmooth" # depends on broken package nlopt
-    "dynlm" # depends on broken package nlopt
-    "easyanova" # depends on broken package nlopt
-    "ecd" # depends on broken package polynom
-    "edge" # depends on broken package nlopt
-    "eeptools" # depends on broken package nlopt
-    "EffectLiteR" # depends on broken package nlopt
-    "effects" # depends on broken package nlopt
-    "eiR" # depends on broken package ChemmineR
-    "EMA" # depends on broken package nlopt
-    "embryogrowth" # broken build
-    "emg" # broken build
-    "EnQuireR" # depends on broken package nlopt
-    "episplineDensity" # depends on broken package nlopt
-    "epr" # depends on broken package nlopt
-    "erer" # depends on broken package nlopt
-    "erma" # depends on broken GenomicFiles
-    "erpR" # depends on broken package rpanel
-    "ESKNN" # depends on broken package caret
-    "euroMix" # build is broken
-    "extRemes" # depends on broken package nlopt
-    "ez" # depends on broken package nlopt
-    "ezec" # depends on broken package drc
-    "facopy" # depends on broken package nlopt
-    "FactoMineR" # depends on broken package nlopt
-    "Factoshiny" # depends on broken package nlopt
-    "faoutlier" # depends on broken package nlopt
-    "fastR" # depends on broken package nlopt
-    "FDRreg" # depends on broken package nlopt
-    "fishmethods" # depends on broken package lme4
-    "flipflop" # broken build
-    "flowDensity" # depends on broken package nlopt
-    "flowPeaks" # build is broken
-    "flowQ" # build is broken
-    "flowStats" # depends on broken package ncdfFlow
-    "flowVS" # depends on broken package ncdfFlow
-    "flowWorkspace" # depends on broken package ncdfFlow
-    "fmcsR" # depends on broken package ChemmineR
-    "fPortfolio" # depends on broken package Rsymphony
-    "fracprolif" # broken build
-    "FreeSortR" # broken build
-    "freqweights" # depends on broken package nlopt
-    "frmqa" # broken build
-    "FSA" # depends on broken package car
-    "fscaret" # depends on broken package nlopt
-    "funcy" # depends on broken package car
-    "fxregime" # depends on broken package nlopt
-    "gamclass" # depends on broken package nlopt
-    "gamlss_demo" # depends on broken package rpanel
-    "gamm4" # depends on broken package nlopt
-    "gaussquad" # broken build
-    "gcmr" # depends on broken package nlopt
-    "GDAtools" # depends on broken package nlopt
-    "gdtools" # broken build
-    "GENE_E" # depends on broken package rhdf5
-    "GENESIS" # broken build
-    "genridge" # depends on broken package nlopt
-    "geojsonio" # depends on broken package V8
-    "GEWIST" # depends on broken package nlopt
-    "ggtree" # broken build
-    "gimme" # depends on broken package nlopt
-    "gmatrix" # depends on broken package cudatoolkit
-    "gMCP" # build is broken
-    "gmum_r" # broken build
-    "Goslate" # depends on broken package PythonInR
-    "GPC" # broken build
-    "gplm" # depends on broken package nlopt
-    "gpuR" # depends on GPU-specific header files
-    "gputools" # depends on broken package cudatoolkit
-    "granova" # depends on broken package nlopt
-    "graphicalVAR" # depends on broken package nlopt
-    "GraphPAC" # broken build
-    "gridGraphics" # build is broken
-    "GSCA" # depends on broken package rhdf5
-    "GUIDE" # depends on broken package rpanel
-    "GWAF" # depends on broken package nlopt
-    "GWASTools" # broken build
-    "h5" # build is broken
-    "h5vc" # depends on broken package rhdf5
-    "hbsae" # depends on broken package nlopt
-    "heplots" # depends on broken package nlopt
-    "HiDimMaxStable" # broken build
-    "HierO" # Build Is Broken
-    "HilbertVisGUI" # Build Is Broken
-    "HiPLARM" # Build Is Broken
-    "HistDAWass" # depends on broken package nlopt
-    "HLMdiag" # depends on broken package nlopt
-    "homomorpheR" # broken build
-    "hpcwld" # broken build
-    "hwwntest" # broken build
-    "HydeNet" # broken build
-    "hysteresis" # depends on broken package nlopt
-    "IATscores" # depends on broken package nlopt
-    "ibd" # depends on broken package nlopt
-    "iccbeta" # depends on broken package nlopt
-    "iClick" # depends on broken package rugarch
-    "ifaTools" # depends on broken package OpenMx
-    "imager" # broken build
-    "immunoClust" # build is broken
-    "in2extRemes" # depends on broken package nlopt
-    "inferference" # depends on broken package nlopt
-    "influence_ME" # depends on broken package nlopt
-    "inSilicoMerging" # build is broken
-    "INSPEcT" # depends on broken GenomicFeatures
-    "interplot" # depends on broken arm
-    "IONiseR" # depends on broken rhdf5
-    "IsingFit" # depends on broken package nlopt
-    "ITEMAN" # depends on broken package car
-    "iteRates" # broken build
-    "iterpc" # broken build
-    "IUPS" # broken build
-    "IVAS" # depends on broken package nlopt
-    "ivpack" # depends on broken package nlopt
-    "jagsUI" # broken build
-    "JAGUAR" # depends on broken package nlopt
-    "joda" # depends on broken package nlopt
-    "jomo" # build is broken
-    "js" # depends on broken package V8
-    "KoNLP" # broken build
-    "kzft" # broken build
-    "LaplaceDeconv" # depends on broken package orthopolynom
-    "lawn" # depends on broken package V8
-    "ldamatch" # broken build
-    "learnstats" # depends on broken package nlopt
-    "lefse" # build is broken
-    "lessR" # depends on broken package nlopt
-    "lgcp" # depends on broken package rpanel
-    "Libra" # broken build
-    "LinRegInteractive" # depends on broken package rpanel
-    "lira" # broken build
-    "littler" # broken build
-    "lme4" # depends on broken package nlopt
-    "LMERConvenienceFunctions" # depends on broken package nlopt
-    "lmerTest" # depends on broken package nlopt
-    "lmSupport" # depends on broken package nlopt
-    "LOGIT" # depends on broken package caret
-    "longpower" # depends on broken package nlopt
-    "LPTime" # broken build
-    "MAIT" # depends on broken package nlopt
-    "mAPKL" # build is broken
-    "maPredictDSC" # depends on broken package nlopt
-    "mar1s" # broken build
-    "marked" # depends on broken package nlopt
-    "matchingMarkets" # broken build
-    "MatrixRider" # depends on broken package DirichletMultinomial
-    "MaxPro" # depends on broken package nlopt
-    "mbest" # depends on broken package nlopt
-    "MBmca" # depends on broken nloptr
-    "mBvs" # build is broken
-    "meboot" # depends on broken package nlopt
-    "medflex" # depends on broken package car
-    "mediation" # depends on broken package lme4
-    "MEDME" # depends on broken package nlopt
-    "MEMSS" # depends on broken package nlopt
-    "merTools" # depends on broken package arm
-    "meta4diag" # broken build
-    "metagear" # build is broken
-    "metaheur" # depends on broken package preprocomb
-    "metamisc" # broken build
-    "metaplus" # depends on broken package nlopt
-    "metaSEM" # depends on broken package OpenMx
-    "Metatron" # depends on broken package nlopt
-    "miceadds" # depends on broken package nlopt
-    "micEconAids" # depends on broken package nlopt
-    "micEconCES" # depends on broken package nlopt
-    "micEconSNQP" # depends on broken package nlopt
-    "mi" # depends on broken package nlopt
-    "MigClim" # Build Is Broken
-    "migui" # depends on broken package nlopt
-    "minimist" # depends on broken package V8
-    "missMDA" # depends on broken package nlopt
-    "mitoODE" # build is broken
-    "mixAK" # depends on broken package nlopt
-    "MixedPoisson" # broken build
-    "mixlm" # depends on broken package nlopt
-    "MixMAP" # depends on broken package nlopt
-    "mlma" # depends on broken package lme4
-    "mlmRev" # depends on broken package nlopt
-    "MLSeq" # depends on broken package nlopt
-    "mlVAR" # depends on broken package nlopt
-    "MM" # broken build
-    "mongolite" # build is broken
-    "mosaic" # depends on broken package nlopt
-    "mpoly" # broken build
-    "mRMRe" # broken build
-    "msa" # broken build
-    "MSGFgui" # depends on broken package MSGFplus
-    "MSGFplus" # Build Is Broken
-    "MSstats" # depends on broken package nlopt
-    "MultiRR" # depends on broken package nlopt
-    "muma" # depends on broken package nlopt
-    "munsellinterpol" # broken build
-    "mutossGUI" # build is broken
-    "mvinfluence" # depends on broken package nlopt
-    "MXM" # broken build
-    "NanoStringDiff" # broken build
-    "NanoStringQCPro" # build is broken
-    "nCal" # depends on broken package nlopt
-    "ncdfFlow" # build is broken
-    "NCIgraph" # depends on broken package RCytoscape
-    "NHPoisson" # depends on broken package nlopt
-    "nloptr" # depends on broken package nlopt
-    "nlsem" # broken build
-    "nlts" # broken build
-    "nonrandom" # depends on broken package nlopt
-    "NORRRM" # build is broken
-    "npIntFactRep" # depends on broken package nlopt
-    "NSM3" # broken build
-    "omics" # depends on broken package lme4
-    "OmicsMarkeR" # depends on broken package nlopt
-    "OPDOE" # broken build
-    "OpenCL" # build is broken
-    "openCyto" # depends on broken package ncdfFlow
-    "OpenMx" # build is broken
-    "optBiomarker" # depends on broken package rpanel
-    "ora" # depends on broken package ROracle
-    "ordBTL" # depends on broken package nlopt
-    "ordPens" # depends on broken package lme4
-    "orthopolynom" # broken build
-    "OUwie" # depends on broken package nlopt
-    "oz" # broken build
-    "PAA" # broken build
-    "pamm" # depends on broken package nlopt
-    "panelAR" # depends on broken package nlopt
-    "papeR" # depends on broken package nlopt
-    "parboost" # depends on broken package nlopt
-    "parma" # depends on broken package nlopt
-    "partitions" # broken build
-    "PatternClass" # build is broken
-    "PBImisc" # depends on broken package nlopt
-    "pcaBootPlot" # depends on broken FactoMineR
-    "pcaL1" # build is broken
-    "pcnetmeta" # broken build
-    "PDQutils" # broken build
-    "pedigreemm" # depends on broken package nlopt
-    "pequod" # depends on broken package nlopt
-    "pglm" # depends on broken package car
-    "PhenStat" # depends on broken package nlopt
-    "phia" # depends on broken package nlopt
-    "phylocurve" # depends on broken package nlopt
-    "piecewiseSEM" # depends on broken package lme4
-    "plateCore" # depends on broken package ncdfFlow
-    "plfMA" # broken build
-    "plm" # depends on broken package car
-    "plsRbeta" # depends on broken package nlopt
-    "plsRcox" # depends on broken package nlopt
-    "plsRglm" # depends on broken package nlopt
-    "pmm" # depends on broken package nlopt
-    "polynom" # broken build
-    "pomp" # depends on broken package nlopt
-    "predictmeans" # depends on broken package nlopt
-    "preprocomb" # depends on broken package caret
-    "prevalence" # broken build
-    "prLogistic" # depends on broken package nlopt
-    "pRoloc" # depends on broken package nlopt
-    "pRolocGUI" # depends on broken package nlopt
-    "PSAboot" # depends on broken package nlopt
-    "ptw" # depends on broken nloptr
-    "PurBayes" # broken build
-    "pvca" # depends on broken package nlopt
-    "PythonInR" # broken build
-    "QFRM" # broken build
-    "qgraph" # depends on broken package nlopt
-    "qtbase" # build is broken
-    "qtlnet" # depends on broken package nlopt
-    "qtpaint" # depends on broken package qtbase
-    "qtutils" # depends on broken package qtbase
-    "QUALIFIER" # depends on broken package ncdfFlow
-    "quantification" # depends on broken package nlopt
-    "QuartPAC" # broken build
-    "R2jags" # broken build
-    "R2STATS" # depends on broken package nlopt
-    "rain" # broken build
-    "raincpc" # build is broken
-    "rainfreq" # build is broken
-    "RamiGO" # depends on broken package RCytoscape
-    "RareVariantVis" # depends on broken VariantAnnotation
-    "rasclass" # depends on broken package nlopt
-    "rationalfun" # broken build
-    "RBerkeley" # broken build
-    "RbioRXN" # depends on broken package ChemmineR
-    "Rblpapi" # broken build
-    "Rchemcpp" # depends on broken package ChemmineR
-    "rchess" # depends on broken package V8
-    "Rchoice" # depends on broken package car
-    "Rcmdr" # depends on broken package nlopt
-    "RcmdrMisc" # depends on broken package nlopt
-    "RcmdrPlugin_BCA" # depends on broken package nlopt
-    "RcmdrPlugin_coin" # depends on broken package nlopt
-    "RcmdrPlugin_depthTools" # depends on broken package nlopt
-    "RcmdrPlugin_DoE" # depends on broken package nlopt
-    "RcmdrPlugin_doex" # depends on broken package nlopt
-    "RcmdrPlugin_EACSPIR" # depends on broken package nlopt
-    "RcmdrPlugin_EBM" # depends on broken package nlopt
-    "RcmdrPlugin_EcoVirtual" # depends on broken package nlopt
-    "RcmdrPlugin_epack" # depends on broken package nlopt
-    "RcmdrPlugin_Export" # depends on broken package Rcmdr
-    "RcmdrPlugin_EZR" # depends on broken package nlopt
-    "RcmdrPlugin_FactoMineR" # depends on broken package nlopt
-    "RcmdrPlugin_HH" # depends on broken package nlopt
-    "RcmdrPlugin_IPSUR" # depends on broken package nlopt
-    "RcmdrPlugin_KMggplot2" # depends on broken package nlopt
-    "RcmdrPlugin_lfstat" # depends on broken package nlopt
-    "RcmdrPlugin_MA" # depends on broken package nlopt
-    "RcmdrPlugin_mosaic" # depends on broken package nlopt
-    "RcmdrPlugin_MPAStats" # depends on broken package nlopt
-    "RcmdrPlugin_NMBU" # depends on broken package nlopt
-    "RcmdrPlugin_orloca" # depends on broken package nlopt
-    "RcmdrPlugin_plotByGroup" # depends on broken package nlopt
-    "RcmdrPlugin_pointG" # depends on broken package nlopt
-    "RcmdrPlugin_qual" # depends on broken package nlopt
-    "RcmdrPlugin_RMTCJags" # depends on broken package nlopt
-    "RcmdrPlugin_ROC" # depends on broken package nlopt
-    "RcmdrPlugin_sampling" # depends on broken package nlopt
-    "RcmdrPlugin_SCDA" # depends on broken package nlopt
-    "RcmdrPlugin_seeg" # depends on broken package nlopt
-    "RcmdrPlugin_SLC" # depends on broken package nlopt
-    "RcmdrPlugin_SM" # depends on broken package nlopt
-    "RcmdrPlugin_sos" # depends on broken package nlopt
-    "RcmdrPlugin_steepness" # depends on broken package nlopt
-    "RcmdrPlugin_survival" # depends on broken package nlopt
-    "RcmdrPlugin_TeachingDemos" # depends on broken package nlopt
-    "RcmdrPlugin_temis" # depends on broken package nlopt
-    "RcmdrPlugin_UCA" # depends on broken package nlopt
-    "Rcpi" # depends on broken package ChemmineR
-    "Rcplex" # Build Is Broken
-    "RcppAPT" # Build Is Broken
-    "RcppRedis" # build is broken
-    "rcrypt" # broken build
-    "RCytoscape" # Build Is Broken
-    "rdd" # depends on broken package nlopt
-    "rddtools" # depends on broken package AER
-    "rDEA" # build is broken
-    "RDieHarder" # build is broken
-    "REBayes" # depends on broken package Rmosek
-    "referenceIntervals" # depends on broken package nlopt
-    "refund" # depends on broken package nlopt
-    "refund_shiny" # depends on broken package refund
-    "REndo" # depends on broken package AER
-    "repijson" # depends on broken package V8
-    "REST" # depends on broken package nlopt
-    "rgbif" # depends on broken package V8
-    "Rgnuplot" # broken build
-    "rhdf5" # build is broken
-    "rjade" # depends on broken package V8
-    "rJPSGCS" # build is broken
-    "rLindo" # build is broken
-    "RLRsim" # depends on broken package lme4
-    "RMallow" # broken build
-    "rMAT" # build is broken
-    "rmgarch" # depends on broken package nlopt
-    "rminer" # depends on broken package nlopt
-    "Rmosek" # build is broken
-    "RMySQL" # broken build
-    "RNAither" # depends on broken package nlopt
-    "RnavGraph" # build is broken
-    "rnetcarto" # broken build
-    "robustlmm" # depends on broken package nlopt
-    "rockchalk" # depends on broken package nlopt
-    "ROI_plugin_symphony" # depends on broken package Rsymphony
-    "rols" # build is broken
-    "ROracle" # Build Is Broken
-    "rpanel" # build is broken
-    "Rpoppler" # broken build
-    "rpubchem" # depends on broken package nlopt
-    "RQuantLib" # build is broken
-    "rr" # depends on broken package nlopt
-    "RRreg" # depends on broken package lme4
-    "RSAP" # build is broken
-    "rsbml" # build is broken
-    "RSDA" # depends on broken package nlopt
-    "Rsomoclu" # broken build
-    "RStoolbox" # depends on broken package caret
-    "Rsymphony" # build is broken
-    "rTableICC" # broken build
-    "rTANDEM" # build is broken
-    "RTN" # depends on broken package nlopt
-    "rugarch" # depends on broken package nlopt
-    "rUnemploymentData" # broken build
-    "RVAideMemoire" # depends on broken package nlopt
-    "RVFam" # depends on broken package nlopt
-    "RVideoPoker" # depends on broken package rpanel
-    "RWebServices" # broken build
-    "ryouready" # depends on broken package nlopt
-    "sadists" # broken build
-    "sampleSelection" # depends on broken package nlopt
-    "sapFinder" # depends on broken package rTANDEM
-    "sdcMicro" # depends on broken package nlopt
-    "sdcMicroGUI" # depends on broken package nlopt
-    "SDD" # depends on broken package rpanel
-    "seeg" # depends on broken package nlopt
-    "Sejong" # broken build
-    "sem" # depends on broken package nlopt
-    "semdiag" # depends on broken package nlopt
-    "semGOF" # depends on broken package nlopt
-    "semPlot" # depends on broken package nlopt
-    "SensMixed" # depends on broken package lme4
-    "SensoMineR" # depends on broken package nlopt
-    "seqCNA" # build is broken
-    "SeqFeatR" # broken build
-    "SeqGrapheR" # Build Is Broken
-    "seqHMM" # depends on broken package nloptr
-    "seqTools" # build is broken
-    "SharpeR" # broken build
-    "shinyTANDEM" # depends on broken package rTANDEM
-    "SIBER" # broken build
-    "simPop" # depends on broken package VIM
-    "simr" # depends on broken package lme4
-    "SJava" # broken build
-    "sjPlot" # depends on broken package nlopt
-    "smacof" # broken build
-    "SNAGEE" # build is broken
-    "snm" # depends on broken package nlopt
-    "SOD" # depends on broken package cudatoolkit
-    "sodium" # broken build
-    "soilphysics" # depends on broken package rpanel
-    "sortinghat" # broken build
-    "SoyNAM" # depends on broken package lme4
-    "spacom" # depends on broken package nlopt
-    "SparseLearner" # depends on broken package qgraph
-    "specificity" # depends on broken package nlopt
-    "specmine" # depends on broken package caret
-    "splm" # depends on broken package car
-    "spocc" # depends on broken package V8
-    "spoccutils" # depends on broken spocc
-    "ssmrob" # depends on broken package nlopt
-    "StatMethRank" # broken build
-    "stepp" # depends on broken package nlopt
-    "stringgaussnet" # build is broken
-    "Surrogate" # depends on broken package nlopt
-    "svglite" # depends on broken package gdtools
-    "sybilSBML" # build is broken
-    "systemfit" # depends on broken package nlopt
-    "TcGSA" # depends on broken package nlopt
-    "TDMR" # depends on broken package nlopt
-    "TextoMineR"  # depends on broken package FactoMineR
-    "TFBSTools" # depends on broken package DirichletMultinomial
-    "tigerstats" # depends on broken package nlopt
-    "TLBC" # depends on broken package caret
-    "tmle" # broken build
-    "tnam" # depends on broken package lme4
-    "tolBasis" # depends on broken package polynom
-    "translateSPSS2R" # depends on broken car
-    "TriMatch" # depends on broken package nlopt
-    "TSMySQL" # broken build
-    "tsoutliers" # broken build
-    "UBCRM" # broken build
-    "umx" # depends on broken package OpenMx
-    "uniftest" # broken build
-    "untb" # broken build
-    "userfriendlyscience" # depends on broken package nlopt
-    "V8" # build is broken
-    "varComp" # depends on broken package lme4
-    "varian" # build is broken
-    "variancePartition" # depends on broken package lme4
-    "VBmix" # broken build
-    "VIM" # depends on broken package nlopt
-    "VIMGUI" # depends on broken package nlopt
-    "vows" # depends on broken package nlopt
-    "webp" # build is broken
-    "wfe" # depends on broken package nlopt
-    "wordbankr" # depends on broken package RMySQL
-    "xergm" # depends on broken package nlopt
-    "xps" # build is broken
-    "ZeligChoice" # depends on broken package AER
-    "Zelig" # depends on broken package AER
-    "zetadiv" # depends on broken package nlopt
-    "zoib" # broken build
   ];
 
   otherOverrides = old: new: {
@@ -1794,12 +722,21 @@ let
         '';
     });
 
+    Cairo = old.Cairo.overrideDerivation (attrs: {
+      NIX_LDFLAGS = "-lfontconfig";
+    });
+
     curl = old.curl.overrideDerivation (attrs: {
       preConfigure = "patchShebangs configure";
     });
 
     RcppArmadillo = old.RcppArmadillo.overrideDerivation (attrs: {
       patchPhase = "patchShebangs configure";
+    });
+
+    data_table = old.data_table.overrideDerivation (attrs: {
+      NIX_CFLAGS_COMPILE = attrs.NIX_CFLAGS_COMPILE
+        + lib.optionalString stdenv.isDarwin " -fopenmp";
     });
 
     rpf = old.rpf.overrideDerivation (attrs: {
@@ -1824,8 +761,27 @@ let
       '';
     });
 
+    JuniperKernel = old.JuniperKernel.overrideDerivation (attrs: {
+      postPatch = lib.optionalString stdenv.isDarwin ''
+        for file in {R,src}/*.R; do
+            sed -i 's#system("which \(otool\|install_name_tool\)"[^)]*)#"${pkgs.darwin.cctools}/bin/\1"#g' $file
+        done
+      '';
+      preConfigure = ''
+        patchShebangs configure
+      '';
+    });
+
     Mposterior = old.Mposterior.overrideDerivation (attrs: {
       PKG_LIBS = "-L${pkgs.openblasCompat}/lib -lopenblas";
+    });
+
+    pbdZMQ = old.pbdZMQ.overrideDerivation (attrs: {
+      postPatch = lib.optionalString stdenv.isDarwin ''
+        for file in R/*.{r,r.in}; do
+            sed -i 's#system("which \(\w\+\)"[^)]*)#"${pkgs.darwin.cctools}/bin/\1"#g' $file
+        done
+      '';
     });
 
     qtbase = old.qtbase.overrideDerivation (attrs: {
@@ -1856,12 +812,15 @@ let
     });
 
     RMySQL = old.RMySQL.overrideDerivation (attrs: {
-      patches = [ ./patches/RMySQL.patch ];
-      MYSQL_DIR="${pkgs.mysql.lib}";
+      MYSQL_DIR="${pkgs.mysql.connector-c}";
+      preConfigure = ''
+        patchShebangs configure
+      '';
     });
 
     devEMF = old.devEMF.overrideDerivation (attrs: {
       NIX_CFLAGS_LINK = "-L${pkgs.xorg.libXft.out}/lib -lXft";
+      NIX_LDFLAGS = "-lX11";
     });
 
     slfm = old.slfm.overrideDerivation (attrs: {
@@ -1872,18 +831,6 @@ let
       PKG_LIBS = "-L${pkgs.openblasCompat}/lib -lopenblas";
     });
 
-    gputools = old.gputools.overrideDerivation (attrs: {
-      patches = [ ./patches/gputools.patch ];
-      CUDA_HOME = "${pkgs.cudatoolkit}";
-    });
-
-    gmatrix = old.gmatrix.overrideDerivation (attrs: {
-      patches = [ ./patches/gmatrix.patch ];
-      CUDA_LIB_PATH = "${pkgs.cudatoolkit}/lib64";
-      R_INC_PATH = "${pkgs.R}/lib/R/include";
-      CUDA_INC_PATH = "${pkgs.cudatoolkit}/include";
-    });
-
     EMCluster = old.EMCluster.overrideDerivation (attrs: {
       patches = [ ./patches/EMCluster.patch ];
     });
@@ -1892,17 +839,9 @@ let
       patches = [ ./patches/spMC.patch ];
     });
 
-    BayesLogit = old.BayesLogit.overrideDerivation (attrs: {
-      patches = [ ./patches/BayesLogit.patch ];
-      buildInputs = (attrs.buildInputs or []) ++ [ pkgs.openblasCompat ];
-    });
-
-    BayesBridge = old.BayesBridge.overrideDerivation (attrs: {
-      patches = [ ./patches/BayesBridge.patch ];
-    });
-
     openssl = old.openssl.overrideDerivation (attrs: {
-      OPENSSL_INCLUDES = "${pkgs.openssl.dev}/include";
+      PKGCONFIG_CFLAGS = "-I${pkgs.openssl.dev}/include";
+      PKGCONFIG_LIBS = "-Wl,-rpath,${pkgs.openssl.out}/lib -L${pkgs.openssl.out}/lib -lssl -lcrypto";
     });
 
     Rserve = old.Rserve.overrideDerivation (attrs: {
@@ -1920,9 +859,78 @@ let
     });
 
     V8 = old.V8.overrideDerivation (attrs: {
-      preConfigure = "export V8_INCLUDES=${pkgs.v8}/include";
+      preConfigure = ''
+        export INCLUDE_DIR=${pkgs.v8_3_14}/include
+        export LIB_DIR=${pkgs.v8_3_14}/lib
+        patchShebangs configure
+        '';
     });
 
+    acs = old.acs.overrideDerivation (attrs: {
+      preConfigure = ''
+        patchShebangs configure
+        '';
+    });
+
+    gdtools = old.gdtools.overrideDerivation (attrs: {
+      preConfigure = ''
+        patchShebangs configure
+        '';
+      NIX_LDFLAGS = "-lfontconfig -lfreetype";
+    });
+
+    magick = old.magick.overrideDerivation (attrs: {
+      preConfigure = ''
+        patchShebangs configure
+        '';
+    });
+
+    protolite = old.protolite.overrideDerivation (attrs: {
+      preConfigure = ''
+        patchShebangs configure
+        '';
+    });
+
+    rpanel = old.rpanel.overrideDerivation (attrs: {
+      preConfigure = ''
+        export TCLLIBPATH="${pkgs.bwidget}/lib/bwidget${pkgs.bwidget.version}"
+      '';
+      TCLLIBPATH = "${pkgs.bwidget}/lib/bwidget${pkgs.bwidget.version}";
+    });
+
+    OpenMx = old.OpenMx.overrideDerivation (attrs: {
+      preConfigure = ''
+        patchShebangs configure
+        '';
+    });
+
+    odbc = old.odbc.overrideDerivation (attrs: {
+      preConfigure = ''
+        patchShebangs configure
+        '';
+    });
+
+    x13binary = old.x13binary.overrideDerivation (attrs: {
+      preConfigure = ''
+        patchShebangs configure
+        '';
+    });
+
+    geojsonio = old.geojsonio.overrideDerivation (attrs: {
+      buildInputs = [ cacert ] ++ attrs.buildInputs;
+    });
+
+    rstan = old.rstan.overrideDerivation (attrs: {
+      NIX_CFLAGS_COMPILE = "${attrs.NIX_CFLAGS_COMPILE} -DBOOST_PHOENIX_NO_VARIADIC_EXPRESSION";
+    });
+
+    mongolite = old.mongolite.overrideDerivation (attrs: {
+      preConfigure = ''
+        patchShebangs configure
+        '';
+      PKGCONFIG_CFLAGS = "-I${pkgs.openssl.dev}/include -I${pkgs.cyrus_sasl.dev}/include -I${pkgs.zlib.dev}/include";
+      PKGCONFIG_LIBS = "-Wl,-rpath,${pkgs.openssl.out}/lib -L${pkgs.openssl.out}/lib -L${pkgs.cyrus_sasl.out}/lib -L${pkgs.zlib.out}/lib -lssl -lcrypto -lsasl2 -lz";
+    });
   };
 in
   self

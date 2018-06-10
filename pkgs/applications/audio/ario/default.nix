@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgconfig, gettext, gtk2, expat, intltool, libgcrypt,
-  libunique, gnutls, libxml2, curl, mpd_clientlib, dbus_glib, libnotify,
+  libunique, gnutls, libxml2, curl, mpd_clientlib, dbus-glib, libnotify,
   libsoup, avahi, taglib
   }:
 
@@ -14,14 +14,15 @@ stdenv.mkDerivation rec {
 
   patches = [ ./glib-single-include.patch ];
 
+  nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
-    pkgconfig gettext gtk2 expat intltool libgcrypt libunique gnutls
-    libxml2 curl mpd_clientlib dbus_glib libnotify libsoup avahi taglib
+    gettext gtk2 expat intltool libgcrypt libunique gnutls
+    libxml2 curl mpd_clientlib dbus-glib libnotify libsoup avahi taglib
   ];
 
   meta = {
     description = "GTK2 client for MPD (Music player daemon)";
-    homepage = "http://ario-player.sourceforge.net/";
+    homepage = http://ario-player.sourceforge.net/;
     license = stdenv.lib.licenses.gpl2Plus;
     maintainers = [ stdenv.lib.maintainers.garrison ];
     platforms = stdenv.lib.platforms.all;

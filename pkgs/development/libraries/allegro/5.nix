@@ -1,23 +1,36 @@
-{ stdenv, fetchurl, texinfo, libXext, xextproto, libX11, xproto
+{ stdenv, fetchFromGitHub, texinfo, libXext, xextproto, libX11, xproto
 , libXpm, libXt, libXcursor, alsaLib, cmake, zlib, libpng, libvorbis
 , libXxf86dga, libXxf86misc, xf86dgaproto, xf86miscproto
-, xf86vidmodeproto, libXxf86vm, openal, mesa, kbproto, libjpeg, flac }:
+, xf86vidmodeproto, libXxf86vm, openal, libGLU_combined, kbproto, libjpeg, flac
+, inputproto, libXi, fixesproto, libXfixes, freetype, libopus, libtheora
+, physfs, enet, pkgconfig, gtk2, pcre, libpulseaudio, libpthreadstubs
+, libXdmcp
+}:
 
 stdenv.mkDerivation rec {
   name = "allegro-${version}";
-  version = "5.0.11";
+  version = "5.2.4.0";
 
-  src = fetchurl {
-    url = "http://download.gna.org/allegro/allegro/${version}/${name}.tar.gz";
-    sha256 = "0cd51qrh97jrr0xdmnivqgwljpmizg8pixsgvc4blqqlaz4i9zj9";
+  src = fetchFromGitHub {
+    owner = "liballeg";
+    repo = "allegro5";
+    rev = version;
+    sha256 = "01y3hirn5b08f188nnhb2cbqj4vzysr7l2qpz2208srv8arzmj2d";
   };
 
   buildInputs = [
     texinfo libXext xextproto libX11 xproto libXpm libXt libXcursor
     alsaLib cmake zlib libpng libvorbis libXxf86dga libXxf86misc
-    xf86dgaproto xf86miscproto xf86vidmodeproto libXxf86vm openal mesa
+    xf86dgaproto xf86miscproto xf86vidmodeproto libXxf86vm openal libGLU_combined
     kbproto libjpeg flac
+    inputproto libXi fixesproto libXfixes
+    enet libtheora freetype physfs libopus pkgconfig gtk2 pcre libXdmcp
+    libpulseaudio libpthreadstubs
   ];
+
+  patchPhase = ''
+    sed -e 's@/XInput2.h@/XI2.h@g' -i CMakeLists.txt "src/"*.c
+  '';
 
   cmakeFlags = [ "-DCMAKE_SKIP_RPATH=ON" ];
 

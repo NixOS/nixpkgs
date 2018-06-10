@@ -24,7 +24,7 @@
   <para>
     Emacs runs within a graphical desktop environment using the X
     Window System, but works equally well on a text terminal. Under
-    <productname>OS X</productname>, a "Mac port" edition is
+    <productname>macOS</productname>, a "Mac port" edition is
     available, which uses Apple's native GUI frameworks.
   </para>
 
@@ -43,9 +43,10 @@
     <title>Installing <application>Emacs</application></title>
 
     <para>
-      Emacs can installed in the normal way for Nix (see <xref
-      linkend="sec-package-management" />). In addition, a NixOS
-      <emphasis>service</emphasis> can be enabled.
+      Emacs can be installed in the normal way for Nix (see
+      <xref linkend="sec-package-management" />).
+      In addition, a NixOS <emphasis>service</emphasis>
+      can be enabled.
     </para>
 
     <section>
@@ -72,17 +73,18 @@
             <term><varname>emacs25-nox</varname></term>
             <listitem>
               <para>
-                Emacs 24 built without any dependency on X11
+                Emacs 25 built without any dependency on X11
                 libraries.
               </para>
             </listitem>
           </varlistentry>
           <varlistentry>
-            <term><varname>emacs24Macport</varname></term>
+            <term><varname>emacsMacport</varname></term>
+            <term><varname>emacs25Macport</varname></term>
             <listitem>
               <para>
-                Emacs 24 with the "Mac port" patches, providing a more
-                native look and feel under OS X.
+                Emacs 25 with the "Mac port" patches, providing a more
+                native look and feel under macOS.
               </para>
             </listitem>
           </varlistentry>
@@ -315,10 +317,10 @@ https://nixos.org/nixpkgs/manual/#sec-modify-via-packageOverrides
       <para>
         If you are not on NixOS or want to install this particular
         Emacs only for yourself, you can do so by adding it to your
-        <filename>~/.nixpkgs/config.nix</filename>
+        <filename>~/.config/nixpkgs/config.nix</filename>
         (see <link xlink:href="http://nixos.org/nixpkgs/manual/#sec-modify-via-packageOverrides">Nixpkgs manual</link>):
         <example>
-          <title>Custom Emacs in <filename>~/.nixpkgs/system.nix</filename></title>
+          <title>Custom Emacs in <filename>~/.config/nixpkgs/config.nix</filename></title>
           <programlisting><![CDATA[
 {
   packageOverrides = super: let self = super.pkgs; in {
@@ -355,14 +357,14 @@ https://nixos.org/nixpkgs/manual/#sec-modify-via-packageOverrides
         <programlisting><![CDATA[
 { pkgs ? import <nixpkgs> {} }:
 let
-  myEmacs = pkgs.lib.overrideDerivation (pkgs.emacs.override {
+  myEmacs = (pkgs.emacs.override {
     # Use gtk3 instead of the default gtk2
     withGTK3 = true;
     withGTK2 = false;
-  }) (attrs: {
+  }).overrideAttrs (attrs: {
     # I don't want emacs.desktop file because I only use
     # emacsclient.
-    postInstall = attrs.postInstall + ''
+    postInstall = (attrs.postInstall or "") + ''
       rm $out/share/applications/emacs.desktop
     '';
   });
@@ -402,10 +404,10 @@ in [...]
       user service for Emacs daemon, add the following to your
       <filename>configuration.nix</filename>:
 
-      <programlisting><![CDATA[
-services.emacs.enable = true;
-services.emacs.package = import /home/cassou/.emacs.d { pkgs = pkgs; };
-]]></programlisting>
+<programlisting>
+<xref linkend="opt-services.emacs.enable"/> = true;
+<xref linkend="opt-services.emacs.package"/> = import /home/cassou/.emacs.d { pkgs = pkgs; };
+</programlisting>
     </para>
 
     <para>
@@ -460,7 +462,7 @@ emacsclient --create-frame --tty  # opens a new frame on the current terminal
     <!--<title><command>emacsclient</command> as the Default Editor</title>-->
 
     <para>
-      If <varname>services.emacs.defaultEditor</varname> is
+      If <xref linkend="opt-services.emacs.defaultEditor"/> is
       <literal>true</literal>, the <varname>EDITOR</varname> variable
       will be set to a wrapper script which launches
       <command>emacsclient</command>.
@@ -495,10 +497,10 @@ emacsclient --create-frame --tty  # opens a new frame on the current terminal
       Emacs daemon is not wanted for all users, it is possible to
       install the service but not globally enable it:
 
-      <programlisting><![CDATA[
-services.emacs.enable = false;
-services.emacs.install = true;
-]]></programlisting>
+<programlisting>
+<xref linkend="opt-services.emacs.enable"/> = false;
+<xref linkend="opt-services.emacs.install"/> = true;
+</programlisting>
     </para>
 
     <para>
@@ -563,6 +565,55 @@ services.emacs.install = true;
       available man pages. For example, type <literal>M-x woman
       &lt;RET&gt; nixos-rebuild &lt;RET&gt;.</literal>
     </para>
+  </section>
+
+  <section xml:id="sec-emacs-docbook-xml">
+    <title>Editing DocBook 5 XML Documents</title>
+    <para>
+      Emacs includes <link
+      xlink:href="https://www.gnu.org/software/emacs/manual/html_node/nxml-mode/Introduction.html">nXML</link>,
+      a major-mode for validating and editing XML documents.
+      When editing DocBook 5.0 documents, such as
+      <link linkend="book-nixos-manual">this one</link>,
+      nXML needs to be configured with the relevant schema, which is
+      not included.
+    </para>
+
+    <para>
+      To install the DocBook 5.0 schemas, either add
+      <varname>pkgs.docbook5</varname> to
+      <xref linkend="opt-environment.systemPackages"/> (<link
+      linkend="sec-declarative-package-mgmt">NixOS</link>), or run
+      <literal>nix-env -i pkgs.docbook5</literal>
+      (<link linkend="sec-ad-hoc-packages">Nix</link>).
+    </para>
+
+    <para>
+      Then customize the variable <varname>rng-schema-locating-files</varname> to include <filename>~/.emacs.d/schemas.xml</filename> and put the following text into that file:
+      <example xml:id="ex-emacs-docbook-xml">
+        <title>nXML Schema Configuration (<filename>~/.emacs.d/schemas.xml</filename>)</title>
+        <programlisting language="xml"><![CDATA[
+<?xml version="1.0"?>
+<!--
+  To let emacs find this file, evaluate:
+  (add-to-list 'rng-schema-locating-files "~/.emacs.d/schemas.xml")
+-->
+<locatingRules xmlns="http://thaiopensource.com/ns/locating-rules/1.0">
+  <!--
+    Use this variation if pkgs.docbook5 is added to environment.systemPackages
+  -->
+  <namespace ns="http://docbook.org/ns/docbook"
+             uri="/run/current-system/sw/share/xml/docbook-5.0/rng/docbookxi.rnc"/>
+  <!--
+    Use this variation if installing schema with "nix-env -iA pkgs.docbook5".
+  <namespace ns="http://docbook.org/ns/docbook"
+             uri="../.nix-profile/share/xml/docbook-5.0/rng/docbookxi.rnc"/>
+  -->
+</locatingRules>
+]]></programlisting>
+    </example>
+  </para>
+
   </section>
 </section>
 

@@ -1,21 +1,20 @@
-{ stdenv, fetchurl, patchelf, makeWrapper, xorg, gcc }:
-
-assert stdenv.isLinux;
+{ stdenv, fetchurl, patchelf, makeWrapper, xorg, gcc, gcc-unwrapped }:
 
 stdenv.mkDerivation rec {
    name = "IPMIView-${version}";
-   version = "20151223";
+   version = "2.13.0";
+   buildVersion = "170504";
 
    src = fetchurl {
-     url = "ftp://ftp.supermicro.com/utility/IPMIView/Linux/IPMIView_V2.11.0_bundleJRE_Linux_x64_${version}.tar.gz";
-     sha256 = "1rv9j0id7i2ipm25n60bpfdm1gj44xg2aj8rnx4s6id3ln90q121";
-   };
+    url = "ftp://ftp.supermicro.com/utility/IPMIView/Linux/IPMIView_${version}_build.${buildVersion}_bundleJRE_Linux_x64.tar.gz";
+    sha256 = "1hfw5g6lxg3vqg0nc3g2sv2h6bn8za35bxxms0ri0sgb9v3xg1y6";
+  };
 
    buildInputs = [ patchelf makeWrapper ];
 
    buildPhase = with xorg; ''
      patchelf --set-rpath "${stdenv.lib.makeLibraryPath [ libX11 libXext libXrender libXtst libXi ]}" ./jre/lib/amd64/xawt/libmawt.so
-     patchelf --set-rpath "${gcc.cc}/lib" ./libiKVM64.so
+     patchelf --set-rpath "${gcc-unwrapped.lib}/lib" ./libiKVM64.so
      patchelf --set-rpath "${stdenv.lib.makeLibraryPath [ libXcursor libX11 libXext libXrender libXtst libXi ]}" --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" ./jre/bin/javaws
      patchelf --set-rpath "${gcc.cc}/lib:$out/jre/lib/amd64/jli" --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" ./jre/bin/java
    '';
@@ -23,12 +22,12 @@ stdenv.mkDerivation rec {
    installPhase = ''
      mkdir -p $out/bin
      cp -R . $out/
-     echo "$out/jre/bin/java -jar $out/IPMIView20.jar" > $out/bin/IPMIView
-     chmod +x $out/bin/IPMIView
+     makeWrapper $out/jre/bin/java $out/bin/IPMIView \
+       --prefix PATH : "$out/jre/bin" \
+       --add-flags "-jar $out/IPMIView20.jar"
    '';
 
    meta = with stdenv.lib; {
     license = licenses.unfree;
    };
   }
-

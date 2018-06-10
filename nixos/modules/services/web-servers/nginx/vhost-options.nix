@@ -3,11 +3,20 @@
 # has additional options that affect the web server as a whole, like
 # the user/group to run under.)
 
-{ lib }:
+{ config, lib }:
 
 with lib;
 {
   options = {
+    serverName = mkOption {
+      type = types.nullOr types.str;
+      default = null;
+      description = ''
+        Name of this virtual host. Defaults to attribute name in virtualHosts.
+      '';
+      example = "example.org";
+    };
+
     serverAliases = mkOption {
       type = types.listOf types.str;
       default = [];
@@ -17,19 +26,44 @@ with lib;
       '';
     };
 
-    port = mkOption {
-      type = types.nullOr types.int;
-      default = null;
+    listen = mkOption {
+      type = with types; listOf (submodule { options = {
+        addr = mkOption { type = str;  description = "IP address.";  };
+        port = mkOption { type = int;  description = "Port number."; default = 80; };
+        ssl  = mkOption { type = bool; description = "Enable SSL.";  default = false; };
+      }; });
+      default = [];
+      example = [
+        { addr = "195.154.1.1"; port = 443; ssl = true;}
+        { addr = "192.154.1.1"; port = 80; }
+      ];
       description = ''
-        Port for the server. Defaults to 80 for http
-        and 443 for https (i.e. when enableSSL is set).
+        Listen addresses and ports for this virtual host.
+        IPv6 addresses must be enclosed in square brackets.
+        Note: this option overrides <literal>addSSL</literal>
+        and <literal>onlySSL</literal>.
       '';
     };
 
     enableACME = mkOption {
       type = types.bool;
       default = false;
-      description = "Whether to ask Let's Encrypt to sign a certificate for this vhost.";
+      description = ''
+        Whether to ask Let's Encrypt to sign a certificate for this vhost.
+        Alternately, you can use an existing certificate through <option>useACMEHost</option>.
+      '';
+    };
+
+    useACMEHost = mkOption {
+      type = types.nullOr types.str;
+      default = null;
+      description = ''
+        A host of an existing Let's Encrypt certificate to use.
+        This is useful if you have many subdomains and want to avoid hitting the
+        <link xlink:href="https://letsencrypt.org/docs/rate-limits/">rate limit</link>.
+        Alternately, you can generate a certificate through <option>enableACME</option>.
+        <emphasis>Note that this option does not create any certificates, nor it does add subdomains to existing ones – you will need to create them manually using  <xref linkend="opt-security.acme.certs"/>.</emphasis>
+      '';
     };
 
     acmeRoot = mkOption {
@@ -47,16 +81,40 @@ with lib;
       '';
     };
 
-    enableSSL = mkOption {
+    addSSL = mkOption {
       type = types.bool;
       default = false;
-      description = "Whether to enable SSL (https) support.";
+      description = ''
+        Whether to enable HTTPS in addition to plain HTTP. This will set defaults for
+        <literal>listen</literal> to listen on all interfaces on the respective default
+        ports (80, 443).
+      '';
+    };
+
+    onlySSL = mkOption {
+      type = types.bool;
+      default = false;
+      description = ''
+        Whether to enable HTTPS and reject plain HTTP connections. This will set
+        defaults for <literal>listen</literal> to listen on all interfaces on port 443.
+      '';
+    };
+
+    enableSSL = mkOption {
+      type = types.bool;
+      visible = false;
+      default = false;
     };
 
     forceSSL = mkOption {
       type = types.bool;
       default = false;
-      description = "Whether to always redirect to https.";
+      description = ''
+        Whether to add a separate nginx server block that permanently redirects (301)
+        all plain HTTP traffic to HTTPS. This will set defaults for
+        <literal>listen</literal> to listen on all interfaces on the respective default
+        ports (80, 443), where the non-SSL listens are used for the redirect vhosts.
+      '';
     };
 
     sslCertificate = mkOption {
@@ -69,6 +127,20 @@ with lib;
       type = types.path;
       example = "/var/host.key";
       description = "Path to server SSL certificate key.";
+    };
+
+    http2 = mkOption {
+      type = types.bool;
+      default = true;
+      description = ''
+        Whether to enable HTTP 2.
+        Note that (as of writing) due to nginx's implementation, to disable
+        HTTP 2 you have to disable it on all vhosts that use a given
+        IP address / port.
+        If there is one server block configured to enable http2,then it is
+        enabled for all server blocks on this IP.
+        See https://stackoverflow.com/a/39466948/263061.
+      '';
     };
 
     root = mkOption {
@@ -99,10 +171,10 @@ with lib;
     globalRedirect = mkOption {
       type = types.nullOr types.str;
       default = null;
-      example = http://newserver.example.org/;
+      example = "newserver.example.org";
       description = ''
         If set, all requests for this host are redirected permanently to
-        the given URL.
+        the given hostname.
       '';
     };
 
@@ -119,6 +191,14 @@ with lib;
 
         WARNING: This is implemented to store the password in plain text in the
         nix store.
+      '';
+    };
+
+    basicAuthFile = mkOption {
+      type = types.nullOr types.path;
+      default = null;
+      description = ''
+        Basic Auth password file for a vhost.
       '';
     };
 

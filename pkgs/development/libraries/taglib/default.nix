@@ -1,24 +1,40 @@
-{stdenv, fetchurl, zlib, cmake}:
+{stdenv, fetchurl, zlib, cmake, fetchpatch}:
 
 stdenv.mkDerivation rec {
-  name = "taglib-1.10";
+  name = "taglib-1.11.1";
 
   src = fetchurl {
-    url = "http://taglib.github.io/releases/${name}.tar.gz";
-    sha256 = "1alv6vp72p0x9i9yscmz2a71anjwqy53y9pbcbqxvc1c0i82vhr4";
+    url = "http://taglib.org/releases/${name}.tar.gz";
+    sha256 = "0ssjcdjv4qf9liph5ry1kngam1y7zp8fzr9xv4wzzrma22kabldn";
   };
 
-  cmakeFlags = "-DWITH_ASF=ON -DWITH_MP4=ON";
+  patches = [
+    (fetchpatch {
+      # https://github.com/taglib/taglib/issues/829
+      name = "CVE-2017-12678.patch";
+      url = "https://github.com/taglib/taglib/commit/eb9ded1206f18.patch";
+      sha256 = "1bvpxsvmlpi3by7myzss9kkpdkv405612n8ff68mw1ambj8h1m90";
+    })
+  ];
 
-  buildInputs = [ zlib ];
   nativeBuildInputs = [ cmake ];
 
-  meta = {
-    homepage = http://developer.kde.org/~wheeler/taglib.html;
-    repositories.git = git://github.com/taglib/taglib.git;
+  buildInputs = [ zlib ];
 
-    description = "A library for reading and editing the meta-data of several popular audio formats";
+  cmakeFlags = [ "-DBUILD_SHARED_LIBS=ON" ];
+
+  meta = with stdenv.lib; {
+    homepage = http://taglib.org/;
+    repositories.git = git://github.com/taglib/taglib.git;
+    description = "A library for reading and editing audio file metadata.";
+    longDescription = ''
+      TagLib is a library for reading and editing the meta-data of several
+      popular audio formats. Currently it supports both ID3v1 and ID3v2 for MP3
+      files, Ogg Vorbis comments and ID3 tags and Vorbis comments in FLAC, MPC,
+      Speex, WavPack, TrueAudio, WAV, AIFF, MP4 and ASF files.
+    '';
+    license = with licenses; [ lgpl3 mpl11 ];
     inherit (cmake.meta) platforms;
-    maintainers = [ stdenv.lib.maintainers.urkud ];
+    maintainers = with maintainers; [ ttuegel ];
   };
 }

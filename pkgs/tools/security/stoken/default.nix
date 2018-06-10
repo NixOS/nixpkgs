@@ -4,12 +4,12 @@
 
 stdenv.mkDerivation rec {
   pname = "stoken";
-  version = "v0.90";
+  version = "0.90";
   name = "${pname}-${version}";
   src = fetchFromGitHub {
     owner = "cernekee";
     repo = pname;
-    rev = version;
+    rev = "v${version}";
     sha256 = "1k7wn8pmp7dv646g938dsr99090lsphl7zy4m9x7qbh2zlnnf9af";
   };
 
@@ -20,8 +20,10 @@ stdenv.mkDerivation rec {
     automake --add-missing --copy
     autoconf
   '';
+
+  nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
-    autoconf automake libtool pkgconfig
+    autoconf automake libtool
     libxml2 nettle
   ] ++ stdenv.lib.optional withGTK3 gtk3;
 

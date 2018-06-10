@@ -11,7 +11,7 @@ stdenv.mkDerivation {
   patches =
     [ (fetchurl {
         url = http://rmdir.de/~michael/micropolis_git.patch;
-        sha256 = "0sjl61av7lab3a5vif1jpyicmdb2igvqq6nwaw0s3agg6dh69v1d";
+        sha256 = "10j0svcs576ip7v5mn99gvqx9ki8jfd5w5yvsxj57xh56dd0by2p";
       })
     ];
 
@@ -33,8 +33,8 @@ stdenv.mkDerivation {
         cp -R $d $out/usr/share/games/micropolis
       done
       cp Micropolis $out/usr/share/games/micropolis
-      cat > $out/bin/micropolis << EOF 
-      #!/bin/bash
+      cat > $out/bin/micropolis << EOF
+      #!${stdenv.shell}
       cd $out/usr/share/games/micropolis
       ./Micropolis
       EOF

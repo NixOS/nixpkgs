@@ -1,6 +1,6 @@
-{ stdenv, fetchurl, pkgconfig, makeWrapper, intltool, libgpod, curl, flac,
-  gnome, gtk3, glib, gettext, perl, perlXMLParser, flex, libglade, libid3tag,
-  libvorbis, hicolor_icon_theme, gdk_pixbuf }:
+{ stdenv, fetchurl, pkgconfig, wrapGAppsHook, intltool, libgpod, curl, flac,
+  gnome3, gtk3, glib, gettext, perl, perlXMLParser, flex, libid3tag,
+  libvorbis, hicolor-icon-theme, gdk_pixbuf }:
 
 stdenv.mkDerivation rec {
   version = "2.1.5";
@@ -11,21 +11,15 @@ stdenv.mkDerivation rec {
     sha256 = "0xisrpx069f7bjkyc8vqxb4k0480jmx1wscqxr6cpq1qj6pchzd5";
   };
 
-  propagatedUserEnvPkgs = [ gnome.gnome_themes_standard ];
-
-  buildInputs = [ pkgconfig makeWrapper intltool curl gettext perl perlXMLParser
-    flex libgpod libid3tag flac libvorbis gtk3 gdk_pixbuf libglade gnome.anjuta
-    gnome.gdl gnome.defaultIconTheme
-    hicolor_icon_theme ];
+  nativeBuildInputs = [ pkgconfig wrapGAppsHook intltool ];
+  buildInputs = [
+    curl gettext perl perlXMLParser
+    flex libgpod libid3tag flac libvorbis gtk3 gdk_pixbuf
+    gnome3.gdl gnome3.defaultIconTheme gnome3.anjuta
+  ];
 
   patchPhase = ''
     sed -i 's/which/type -P/' scripts/*.sh
-  '';
-
-  preFixup = ''
-    wrapProgram "$out/bin/gtkpod" \
-      --set GDK_PIXBUF_MODULE_FILE "$GDK_PIXBUF_MODULE_FILE" \
-      --prefix XDG_DATA_DIRS : "$XDG_ICON_DIRS:${gnome.gnome_themes_standard}/share:$out/share:$GSETTINGS_SCHEMAS_PATH"
   '';
 
   enableParallelBuilding = true;

@@ -3,7 +3,7 @@
 let
   inherit (python3Packages) python dbus-python keyring;
 in stdenv.mkDerivation rec {
-  version = "1.1.12";
+  version = "1.1.24";
 
   name = "backintime-common-${version}";
 
@@ -11,7 +11,7 @@ in stdenv.mkDerivation rec {
     owner = "bit-team";
     repo = "backintime";
     rev = "v${version}";
-    sha256 = "0n3x48wa8aa7i8fff85h3b5h3xpabk51ld0ymy3pkqh0krfgs59a";
+    sha256 = "0g6gabnr60ns8854hijdddbanks7319q4n3fj5l6rc4xsq0qck18";
   };
 
   buildInputs = [ makeWrapper gettext python dbus-python keyring openssh cron rsync sshfs-fuse encfs ];
@@ -35,7 +35,7 @@ in stdenv.mkDerivation rec {
     homepage = https://github.com/bit-team/backintime;
     description = "Simple backup tool for Linux";
     license = stdenv.lib.licenses.gpl2;
-    maintainers = [ stdenv.lib.maintainers.DamienCassou ];
+    maintainers = [ ];
     platforms = stdenv.lib.platforms.all;
     longDescription = ''
       Back In Time is a simple backup tool (on top of rsync) for Linux

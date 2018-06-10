@@ -1,20 +1,32 @@
-{ stdenv, fetchgit
+{ stdenv, fetchFromGitHub, fetchpatch
 , pkgconfig, cmake, libzip, epoxy, ffmpeg, imagemagick, SDL2
 , qtbase, qtmultimedia }:
 
 stdenv.mkDerivation rec {
-  name = "mgba-git-${version}";
-  version = "20160325";
+  name = "mgba-${version}";
+  version = "0.6.1";
 
-  src = fetchgit {
-    url = "https://github.com/mgba-emu/mgba.git";
-    rev = "be2641c77b4a438e0db487bc82b43bc27a26e0c2";
-    sha256 = "1wxywfbkgqvb0j9cyz4nwsfzhxrdjcmvz1k7rljmy4bz1pjcglj1";
+  src = fetchFromGitHub {
+    owner = "mgba-emu";
+    repo = "mgba";
+    rev = version;
+    sha256 = "1fgxn3j6wc5mcgb81sc6fzy5m4saz02jz4zlms51dgycvy0flbz7";
   };
 
-  buildInputs = [
-    pkgconfig cmake libzip epoxy ffmpeg imagemagick SDL2
-    qtbase qtmultimedia
+  nativeBuildInputs = [ pkgconfig cmake ];
+
+  buildInputs = [ libzip epoxy ffmpeg imagemagick SDL2 qtbase qtmultimedia ];
+
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/mgba-emu/mgba/commit/e31373560535203d826687044290a4994706c2dd.patch";
+      sha256 = "07582vj0fqgsgryx28pnshiwri9dn88l1rr4vkraib7bzx7cs4f9";
+    })
+
+    (fetchpatch {
+      url = "https://github.com/mgba-emu/mgba/commit/baabe0090bb1fd5997e531fd9568c2de09b5fc21.patch";
+      sha256 = "1kv9dxxna35s050q9af9nzskplz2x1aq8avg0ihbznhxjl8vmxz9";
+    })
   ];
 
   meta = with stdenv.lib; {

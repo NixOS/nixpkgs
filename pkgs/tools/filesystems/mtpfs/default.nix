@@ -3,7 +3,8 @@
 stdenv.mkDerivation rec {
   name = "mtpfs-1.1";
 
-  buildInputs = [ pkgconfig fuse libmtp glib libid3tag libmad ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ fuse libmtp glib libid3tag libmad ];
 
   # adding LIBS is a hack, duno why it does not find libid3tag.so by adding buildInputs
   preConfigure = ''
@@ -18,7 +19,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = {
-    homepage = https://code.google.com/p/mtpfs/;
+    homepage = https://github.com/cjd/mtpfs;
     description = "FUSE Filesystem providing access to MTP devices";
     platforms = stdenv.lib.platforms.all;
     maintainers = [ stdenv.lib.maintainers.qknight ];

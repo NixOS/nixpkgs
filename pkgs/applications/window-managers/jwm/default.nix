@@ -1,15 +1,17 @@
-{ stdenv, fetchurl, pkgconfig, automake, autoconf, libtool, gettext, which,
-  xorg, libX11, libXext, libXinerama, libXpm, libXft, libXau, libXdmcp,
-  libXmu, libpng, libjpeg, expat, xproto, xextproto, xineramaproto, librsvg,
-  freetype, fontconfig }:
+{ stdenv, fetchFromGitHub, pkgconfig, automake, autoconf, libtool,
+  gettext, which, xorg, libX11, libXext, libXinerama, libXpm, libXft,
+  libXau, libXdmcp, libXmu, libpng, libjpeg, expat, xproto, xextproto,
+  xineramaproto, librsvg, freetype, fontconfig }:
 
 stdenv.mkDerivation rec {
   name = "jwm-${version}";
-  version = "1548";
+  version = "1685";
   
-  src = fetchurl {
-     url = "https://github.com/joewing/jwm/archive/s${version}.tar.gz";
-     sha256 = "1ih5y7567vwcbnkjwm3cc9iq4n9rzz818mkh6ryli9ld230hla5r";
+  src = fetchFromGitHub {
+    owner = "joewing";
+    repo = "jwm";
+    rev = "s${version}";
+    sha256 = "1kyvy022sij898g2hm5spy5vq0kw6aqd7fsnawl2xyh06gwh29wg";
   };
 
   nativeBuildInputs = [ pkgconfig automake autoconf libtool gettext which ];
@@ -23,7 +25,7 @@ stdenv.mkDerivation rec {
   preConfigure = "./autogen.sh";
 
   meta = {
-    homepage = "http://joewing.net/projects/jwm/";
+    homepage = http://joewing.net/projects/jwm/;
     description = "Joe's Window Manager is a light-weight X11 window manager";
     license = stdenv.lib.licenses.gpl2;
     platforms   = stdenv.lib.platforms.unix;

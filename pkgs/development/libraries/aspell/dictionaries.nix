@@ -1,16 +1,45 @@
-{stdenv, fetchurl, aspell, which}:
+{lib, stdenv, fetchurl, aspell, which}:
+
+with lib;
+
+/* HOWTO:
+
+   * Add some of these to your profile or systemPackages.
+
+     ~~~~
+     environment.systemPackages = [
+       aspell
+       aspellDicts.en
+       aspellDicts.en-computers
+       aspellDicts.en-science
+     ];
+     ~~~~
+
+   * Rebuild and switch to the new profile.
+   * Add something like
+
+     ~~~~
+     master en_US
+     extra-dicts en-computers.rws
+     add-extra-dicts en_US-science.rws
+     ~~~~
+
+     to `/etc/aspell.conf` or `~/.aspell.conf`.
+   * Check that `aspell -a` starts without errors.
+   * (optional) Check your config with `aspell dump config | grep -vE '^(#|$)'`.
+   * Enjoy.
+
+*/
 
 let
 
   /* Function to compile an Aspell dictionary.  Fortunately, they all
      build in the exact same way. */
   buildDict =
-    {shortName, fullName, src, postInstall ? ""}:
+    {shortName, fullName, ...}@args:
 
-    stdenv.mkDerivation {
+    stdenv.mkDerivation ({
       name = "aspell-dict-${shortName}";
-
-      inherit src;
 
       buildInputs = [aspell which];
 
@@ -18,15 +47,76 @@ let
 
       preBuild = "makeFlagsArray=(dictdir=$out/lib/aspell datadir=$out/lib/aspell)";
 
-      inherit postInstall;
-
       meta = {
         description = "Aspell dictionary for ${fullName}";
         platforms = stdenv.lib.platforms.all;
-      };
-    };
+      } // (args.meta or {});
+    } // removeAttrs args [ "meta" ]);
 
-in {
+  /* Function to compile txt dict files into Aspell dictionaries. */
+  buildTxtDict =
+    {langInputs ? [], ...}@args:
+    buildDict ({
+      propagatedUserEnvPackages = langInputs;
+
+      preBuild = ''
+        # Aspell can't handle multiple data-dirs
+        # Copy everything we might possibly need
+        ${concatMapStringsSep "\n" (p: ''
+          cp -a ${p}/lib/aspell/* .
+        '') ([ aspell ] ++ langInputs)}
+        export ASPELL_CONF="data-dir $(pwd)"
+
+        aspell-create() {
+          target=$1
+          shift
+          echo building $target
+          aspell create "$@" master ./$target.rws
+        }
+
+        words-only() {
+          awk -F'\t' '{print $1}' | sort | uniq
+        }
+
+        # drop comments
+        aspell-affix() {
+          words-only \
+            | grep -v '#' \
+            | aspell-create "$@"
+        }
+
+        # Hack: drop comments and words with affixes
+        aspell-plain() {
+          words-only \
+            | grep -v '#' \
+            | grep -v '/' \
+            | aspell-create "$@"
+        }
+
+        aspell-install() {
+          install -d $out/lib/aspell
+          for a in "$@"; do
+            echo installing $a
+            install -t $out/lib/aspell $a.rws
+          done
+        }
+      '';
+
+      phases = [ "preBuild" "buildPhase" "installPhase" ];
+    } // args);
+
+in rec {
+
+  ### Languages
+
+  ca = buildDict {
+    shortName = "ca-2.1.5-1";
+    fullName = "Catalan";
+    src = fetchurl {
+      url = mirror://gnu/aspell/dict/ca/aspell6-ca-2.1.5-1.tar.bz2;
+      sha256 = "1fb5y5kgvk25nlsfvc8cai978hg66x3pbp9py56pldc7vxzf9npb";
+    };
+  };
 
   cs = buildDict {
     shortName = "cs-20040614-1";
@@ -203,6 +293,15 @@ in {
     };
   };
 
+  tr = buildDict {
+    shortName = "tr-0.50-0";
+    fullName = "Turkish";
+    src = fetchurl {
+      url = mirror://gnu/aspell/dict/tr/aspell-tr-0.50-0.tar.bz2;
+      sha256 = "0jpvpm96ga7s7rmsm6rbyrrr22b2dicxv2hy7ysv5y7bbq757ihb";
+    };
+  };
+
   uk = buildDict {
     shortName = "uk-1.4.0-0";
     fullName = "Ukrainian";
@@ -210,6 +309,55 @@ in {
       url = mirror://gnu/aspell/dict/uk/aspell6-uk-1.4.0-0.tar.bz2;
       sha256 = "137i4njvnslab6l4s291s11xijr5jsy75lbdph32f9y183lagy9m";
     };
+  };
+
+  ### Jargons
+
+  en-computers = buildTxtDict rec {
+    shortName = "en-computers";
+    fullName = "English Computer Jargon";
+
+    src = fetchurl {
+      url = https://mrsatterly.com/computer.dic;
+      sha256 = "1vzk7cdvcm9r1c6mgxpabrdcpvghdv9mjmnf6iq5wllcif5nsw2b";
+    };
+
+    langInputs = [ en ];
+
+    buildPhase = "cat $src | aspell-affix en-computers --dont-validate-words --lang=en";
+    installPhase = "aspell-install en-computers";
+
+    meta = {
+      homepage = https://mrsatterly.com/spelling.html;
+    };
+  };
+
+  en-science = buildTxtDict rec {
+    shortName = "en-science";
+    fullName = "English Scientific Jargon";
+
+    src1 = fetchurl {
+      url = http://jpetrie.net/wp-content/uploads/custom_scientific_US.txt;
+      sha256 = "1psqm094zl4prk2f8h18jv0d471hxykzd1zdnrlx7gzrzy6pz5r3";
+    };
+
+    src2 = fetchurl {
+      url = http://jpetrie.net/wp-content/uploads/custom_scientific_UK.txt;
+      sha256 = "17ss1sdr3k70zbyx2z9xf74345slrp41gbkpih8axrmg4x92fgm1";
+    };
+
+    langInputs = [ en ];
+
+    buildPhase = ''
+      cat $src1 | aspell-plain en_US-science --dont-validate-words --lang=en
+      cat $src2 | aspell-plain en_GB-science --dont-validate-words --lang=en
+    '';
+    installPhase = "aspell-install en_US-science en_GB-science";
+
+    meta = {
+      homepage = http://www.jpetrie.net/scientific-word-list-for-spell-checkersspelling-dictionaries/;
+    };
+
   };
 
 }

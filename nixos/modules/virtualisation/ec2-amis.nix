@@ -1,4 +1,4 @@
-{
+let self = {
   "14.04".ap-northeast-1.hvm-ebs = "ami-71c6f470";
   "14.04".ap-northeast-1.pv-ebs = "ami-4dcbf84c";
   "14.04".ap-northeast-1.pv-s3 = "ami-8fc4f68e";
@@ -134,4 +134,128 @@
   "16.03".us-west-2.hvm-s3 = "ami-925c9ff2";
   "16.03".us-west-2.pv-ebs = "ami-5e61a23e";
   "16.03".us-west-2.pv-s3 = "ami-734c8f13";
-}
+
+  # 16.09.1508.3909827
+  "16.09".ap-northeast-1.hvm-ebs = "ami-68453b0f";
+  "16.09".ap-northeast-1.hvm-s3 = "ami-f9bec09e";
+  "16.09".ap-northeast-1.pv-ebs = "ami-254a3442";
+  "16.09".ap-northeast-1.pv-s3 = "ami-ef473988";
+  "16.09".ap-northeast-2.hvm-ebs = "ami-18ae7f76";
+  "16.09".ap-northeast-2.hvm-s3 = "ami-9eac7df0";
+  "16.09".ap-northeast-2.pv-ebs = "ami-57aa7b39";
+  "16.09".ap-northeast-2.pv-s3 = "ami-5cae7f32";
+  "16.09".ap-south-1.hvm-ebs = "ami-b3f98fdc";
+  "16.09".ap-south-1.hvm-s3 = "ami-98e690f7";
+  "16.09".ap-south-1.pv-ebs = "ami-aef98fc1";
+  "16.09".ap-south-1.pv-s3 = "ami-caf88ea5";
+  "16.09".ap-southeast-1.hvm-ebs = "ami-80fb51e3";
+  "16.09".ap-southeast-1.hvm-s3 = "ami-2df3594e";
+  "16.09".ap-southeast-1.pv-ebs = "ami-37f05a54";
+  "16.09".ap-southeast-1.pv-s3 = "ami-27f35944";
+  "16.09".ap-southeast-2.hvm-ebs = "ami-57ece834";
+  "16.09".ap-southeast-2.hvm-s3 = "ami-87f4f0e4";
+  "16.09".ap-southeast-2.pv-ebs = "ami-d8ede9bb";
+  "16.09".ap-southeast-2.pv-s3 = "ami-a6ebefc5";
+  "16.09".ca-central-1.hvm-ebs = "ami-9f863bfb";
+  "16.09".ca-central-1.hvm-s3 = "ami-ea85388e";
+  "16.09".ca-central-1.pv-ebs = "ami-ce8a37aa";
+  "16.09".ca-central-1.pv-s3 = "ami-448a3720";
+  "16.09".eu-central-1.hvm-ebs = "ami-1b884774";
+  "16.09".eu-central-1.hvm-s3 = "ami-b08c43df";
+  "16.09".eu-central-1.pv-ebs = "ami-888946e7";
+  "16.09".eu-central-1.pv-s3 = "ami-06874869";
+  "16.09".eu-west-1.hvm-ebs = "ami-1ed3e76d";
+  "16.09".eu-west-1.hvm-s3 = "ami-73d1e500";
+  "16.09".eu-west-1.pv-ebs = "ami-44c0f437";
+  "16.09".eu-west-1.pv-s3 = "ami-f3d8ec80";
+  "16.09".eu-west-2.hvm-ebs = "ami-2c9c9648";
+  "16.09".eu-west-2.hvm-s3 = "ami-6b9e940f";
+  "16.09".eu-west-2.pv-ebs = "ami-f1999395";
+  "16.09".eu-west-2.pv-s3 = "ami-bb9f95df";
+  "16.09".sa-east-1.hvm-ebs = "ami-a11882cd";
+  "16.09".sa-east-1.hvm-s3 = "ami-7726bc1b";
+  "16.09".sa-east-1.pv-ebs = "ami-9725bffb";
+  "16.09".sa-east-1.pv-s3 = "ami-b027bddc";
+  "16.09".us-east-1.hvm-ebs = "ami-854ca593";
+  "16.09".us-east-1.hvm-s3 = "ami-2241a834";
+  "16.09".us-east-1.pv-ebs = "ami-a441a8b2";
+  "16.09".us-east-1.pv-s3 = "ami-e841a8fe";
+  "16.09".us-east-2.hvm-ebs = "ami-3f41645a";
+  "16.09".us-east-2.hvm-s3 = "ami-804065e5";
+  "16.09".us-east-2.pv-ebs = "ami-f1466394";
+  "16.09".us-east-2.pv-s3 = "ami-05426760";
+  "16.09".us-west-1.hvm-ebs = "ami-c2efbca2";
+  "16.09".us-west-1.hvm-s3 = "ami-d71042b7";
+  "16.09".us-west-1.pv-ebs = "ami-04e8bb64";
+  "16.09".us-west-1.pv-s3 = "ami-31e9ba51";
+  "16.09".us-west-2.hvm-ebs = "ami-6449f504";
+  "16.09".us-west-2.hvm-s3 = "ami-344af654";
+  "16.09".us-west-2.pv-ebs = "ami-6d4af60d";
+  "16.09".us-west-2.pv-s3 = "ami-de48f4be";
+
+  # 17.03.885.6024dd4067
+  "17.03".ap-northeast-1.hvm-ebs = "ami-dbd0f7bc";
+  "17.03".ap-northeast-1.hvm-s3 = "ami-7cdff81b";
+  "17.03".ap-northeast-2.hvm-ebs = "ami-c59a48ab";
+  "17.03".ap-northeast-2.hvm-s3 = "ami-0b944665";
+  "17.03".ap-south-1.hvm-ebs = "ami-4f413220";
+  "17.03".ap-south-1.hvm-s3 = "ami-864033e9";
+  "17.03".ap-southeast-1.hvm-ebs = "ami-e08c3383";
+  "17.03".ap-southeast-1.hvm-s3 = "ami-c28f30a1";
+  "17.03".ap-southeast-2.hvm-ebs = "ami-fca9a69f";
+  "17.03".ap-southeast-2.hvm-s3 = "ami-3daaa55e";
+  "17.03".ca-central-1.hvm-ebs = "ami-9b00bdff";
+  "17.03".ca-central-1.hvm-s3 = "ami-e800bd8c";
+  "17.03".eu-central-1.hvm-ebs = "ami-5450803b";
+  "17.03".eu-central-1.hvm-s3 = "ami-6e2efe01";
+  "17.03".eu-west-1.hvm-ebs = "ami-10754c76";
+  "17.03".eu-west-1.hvm-s3 = "ami-11734a77";
+  "17.03".eu-west-2.hvm-ebs = "ami-ff1d099b";
+  "17.03".eu-west-2.hvm-s3 = "ami-fe1d099a";
+  "17.03".sa-east-1.hvm-ebs = "ami-d95d3eb5";
+  "17.03".sa-east-1.hvm-s3 = "ami-fca2c190";
+  "17.03".us-east-1.hvm-ebs = "ami-0940c61f";
+  "17.03".us-east-1.hvm-s3 = "ami-674fc971";
+  "17.03".us-east-2.hvm-ebs = "ami-afc2e6ca";
+  "17.03".us-east-2.hvm-s3 = "ami-a1cde9c4";
+  "17.03".us-west-1.hvm-ebs = "ami-587b2138";
+  "17.03".us-west-1.hvm-s3 = "ami-70411b10";
+  "17.03".us-west-2.hvm-ebs = "ami-a93daac9";
+  "17.03".us-west-2.hvm-s3 = "ami-5139ae31";
+
+  # 17.09.2681.59661f21be6
+  "17.09".eu-west-1.hvm-ebs = "ami-a30192da";
+  "17.09".eu-west-2.hvm-ebs = "ami-295a414d";
+  "17.09".eu-west-3.hvm-ebs = "ami-8c0eb9f1";
+  "17.09".eu-central-1.hvm-ebs = "ami-266cfe49";
+  "17.09".us-east-1.hvm-ebs = "ami-40bee63a";
+  "17.09".us-east-2.hvm-ebs = "ami-9d84aff8";
+  "17.09".us-west-1.hvm-ebs = "ami-d14142b1";
+  "17.09".us-west-2.hvm-ebs = "ami-3eb40346";
+  "17.09".ca-central-1.hvm-ebs = "ami-ca8207ae";
+  "17.09".ap-southeast-1.hvm-ebs = "ami-84bccff8";
+  "17.09".ap-southeast-2.hvm-ebs = "ami-0dc5386f";
+  "17.09".ap-northeast-1.hvm-ebs = "ami-89b921ef";
+  "17.09".ap-northeast-2.hvm-ebs = "ami-179b3b79";
+  "17.09".sa-east-1.hvm-ebs = "ami-4762202b";
+  "17.09".ap-south-1.hvm-ebs = "ami-4e376021";
+
+  # 18.03.131792.becbe4dbe16
+  "18.03".eu-west-1.hvm-ebs = "ami-cda4fab4";
+  "18.03".eu-west-2.hvm-ebs = "ami-d96786be";
+  "18.03".eu-west-3.hvm-ebs = "ami-6b0cba16";
+  "18.03".eu-central-1.hvm-ebs = "ami-5e2b75b5";
+  "18.03".us-east-1.hvm-ebs = "ami-d464cba9";
+  "18.03".us-east-2.hvm-ebs = "ami-fd221298";
+  "18.03".us-west-1.hvm-ebs = "ami-ff0d1d9f";
+  "18.03".us-west-2.hvm-ebs = "ami-c05c3bb8";
+  "18.03".ca-central-1.hvm-ebs = "ami-cc72f4a8";
+  "18.03".ap-southeast-1.hvm-ebs = "ami-b61633ca";
+  "18.03".ap-southeast-2.hvm-ebs = "ami-530fc131";
+  "18.03".ap-northeast-1.hvm-ebs = "ami-90d6c0ec";
+  "18.03".ap-northeast-2.hvm-ebs = "ami-a1248bcf";
+  "18.03".sa-east-1.hvm-ebs = "ami-b090c6dc";
+  "18.03".ap-south-1.hvm-ebs = "ami-32c9ec5d";
+
+  latest = self."18.03";
+}; in self

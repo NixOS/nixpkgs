@@ -15,12 +15,17 @@ import ./make-test.nix ({ pkgs, ...} : {
       # container available within the VM, because we don't have network access.
       virtualisation.pathsInNixDB = let
         emptyContainer = import ../lib/eval-config.nix {
-          inherit (config.nixpkgs) system;
+          inherit (config.nixpkgs.localSystem) system;
           modules = lib.singleton {
-            containers.foo.config = {};
+            containers.foo.config = {
+              system.nixos.stateVersion = "18.03";
+            };
           };
         };
-      in [ pkgs.stdenv emptyContainer.config.containers.foo.path ];
+      in [
+        pkgs.stdenv pkgs.stdenvNoCC emptyContainer.config.containers.foo.path
+        pkgs.libxslt
+      ];
     };
 
   testScript =

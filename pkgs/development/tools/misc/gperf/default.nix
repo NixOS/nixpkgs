@@ -1,11 +1,11 @@
 {stdenv, fetchurl}:
 
 stdenv.mkDerivation rec {
-  name = "gperf-3.0.4";
+  name = "gperf-3.1";
 
   src = fetchurl {
     url = "mirror://gnu/gperf/${name}.tar.gz";
-    sha256 = "0gnnm8iqcl52m8iha3sxrzrl9mcyhg7lfrhhqgdn4zj00ji14wbn";
+    sha256 = "1qispg6i508rq8pkajh26cznwimbnj06wq9sd85vg95v8nwld1aq";
   };
 
   meta = {

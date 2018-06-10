@@ -1,21 +1,22 @@
-{ stdenv, fetchurl, perl, buildLinux, ... } @ args:
+{ stdenv, buildPackages, hostPlatform, fetchFromGitHub, perl, buildLinux, ... } @ args:
 
-import ./generic.nix (args // rec {
-  mptcpVersion = "0.91";
-  modDirVersion = "4.1.26";
+buildLinux (rec {
+  mptcpVersion = "0.93";
+  modDirVersion = "4.9.60";
   version = "${modDirVersion}-mptcp_v${mptcpVersion}";
+  # autoModules= true;
 
   extraMeta = {
-    branch = "4.1";
-    maintainers = stdenv.lib.maintainers.layus;
+    branch = "4.4";
+    maintainers = with stdenv.lib.maintainers; [ teto layus ];
   };
 
-  src = fetchurl {
-    url = "https://github.com/multipath-tcp/mptcp/archive/v${mptcpVersion}.tar.gz";
-    sha256 = "0rbvgz89j5wk781y201qdxy2kz4gmlamb72wdbxj8mxv92x56lh3";
+  src = fetchFromGitHub {
+    owner = "multipath-tcp";
+    repo = "mptcp";
+    rev = "v${mptcpVersion}";
+    sha256 = "1irlppzvcmckrazs2c4vg6y8ji31552izc3wqabf401v57jvxcys";
   };
-
-  kernelPatches = args.kernelPatches;
 
   extraConfig = ''
     IPV6 y
@@ -32,8 +33,7 @@ import ./generic.nix (args // rec {
     DEFAULT_MPTCP_PM default
 
     # MPTCP scheduler selection.
-    # Disabled as the only non-default is the useless round-robin.
-    MPTCP_SCHED_ADVANCED n
+    MPTCP_SCHED_ADVANCED y
     DEFAULT_MPTCP_SCHED default
 
     # Smarter TCP congestion controllers
@@ -41,11 +41,6 @@ import ./generic.nix (args // rec {
     TCP_CONG_OLIA m
     TCP_CONG_WVEGAS m
     TCP_CONG_BALIA m
-  '';
 
-  features.iwlwifi = true;
-  features.efiBootStub = true;
-  features.needsCifsUtils = true;
-  features.canDisableNetfilterConntrackHelpers = true;
-  features.netfilterRPFilter = true;
-} // (args.argsOverride or {}))
+  '' + (args.extraConfig or "");
+} // args)

@@ -1,5 +1,5 @@
 { stdenv, lib, fetchgit, fetchFromGitHub, gyp, readline, python, which, icu
-, patchelf, coreutils
+, patchelf, coreutils, cctools
 , doCheck ? false
 , static ? false
 }:
@@ -7,13 +7,11 @@
 assert readline != null;
 
 let
-  arch = if stdenv.isArm
-         then if stdenv.is64bit
-              then"arm64"
-              else "arm"
-         else if stdenv.is64bit
-              then"x64"
-              else "ia32";
+  arch = if stdenv.isx86_64 then "x64"
+            else if stdenv.isi686 then "ia32"
+            else if stdenv.isAarch64 then "arm64"
+            else if stdenv.isAarch32 then "arm"
+            else throw "Unknown architecture for v8";
   git_url = "https://chromium.googlesource.com";
   clangFlag = if stdenv.isDarwin then "1" else "0";
   sharedFlag = if static then "static_library" else "shared_library";
@@ -126,7 +124,13 @@ stdenv.mkDerivation rec {
 
   # Patch based off of:
   # https://github.com/cowboyd/libv8/tree/v5.1.281.67.0/patches
-  patches = lib.optional (!doCheck) ./libv8-5.4.232.patch;
+  patches = lib.optional (!doCheck) ./libv8-5.4.232.patch
+  ++ stdenv.lib.optionals stdenv.isDarwin [ ./no-xcode.patch ];
+
+  prePatch = ''
+    chmod +w tools/gyp/pylib/gyp
+    chmod +w tools/gyp/pylib/gyp/xcode_emulation.py
+  '';
 
   postPatch = ''
     sed -i 's,#!/usr/bin/env python,#!${python}/bin/python,' gypfiles/gyp_v8
@@ -152,18 +156,23 @@ stdenv.mkDerivation rec {
   '';
 
   nativeBuildInputs = [ which ];
-  buildInputs = [ readline python icu patchelf ];
+  buildInputs = [ readline python icu ]
+    ++ stdenv.lib.optional stdenv.isDarwin cctools
+    ++ stdenv.lib.optional stdenv.isLinux patchelf;
 
-  NIX_CFLAGS_COMPILE = "-Wno-error=strict-overflow";
+  NIX_CFLAGS_COMPILE = "-Wno-error=strict-overflow -Wno-error=unused-function -Wno-error=attributes"
+    + stdenv.lib.optionalString stdenv.cc.isClang " -Wno-error=unused-lambda-capture";
 
   buildFlags = [
-    "LINK=g++"
+    "LINK=c++"
     "-C out"
     "builddir=$(CURDIR)/Release"
     "BUILDTYPE=Release"
   ];
 
   enableParallelBuilding = true;
+
+  dontUpdateAutotoolsGnuConfigScripts = if stdenv.isAarch64 then true else null;
 
   # the `libv8_libplatform` target is _only_ built as a static library,
   # and is expected to be statically linked in when needed.
@@ -174,7 +183,7 @@ stdenv.mkDerivation rec {
     install -vD out/Release/mksnapshot "$out/bin/mksnapshot"
     ${if static then ""
     else if stdenv.isDarwin then ''
-    install -vD out/Release/lib.target/libv8.dylib "$out/lib/libv8.dylib"
+    install -vD out/Release/libv8.dylib "$out/lib/libv8.dylib"
     install_name_tool -change /usr/local/lib/libv8.dylib $out/lib/libv8.dylib -change /usr/lib/libgcc_s.1.dylib ${stdenv.cc.cc.lib}/lib/libgcc_s.1.dylib $out/bin/d8
     install_name_tool -id $out/lib/libv8.dylib -change /usr/lib/libgcc_s.1.dylib ${stdenv.cc.cc.lib}/lib/libgcc_s.1.dylib $out/lib/libv8.dylib
     '' else ''
@@ -190,7 +199,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Google's open source JavaScript engine";
     maintainers = with maintainers; [ cstrahan proglodyte ];
-    platforms = platforms.linux;
+    platforms = platforms.linux ++ platforms.darwin;
     license = licenses.bsd3;
   };
 }

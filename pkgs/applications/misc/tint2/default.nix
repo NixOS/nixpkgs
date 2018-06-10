@@ -1,18 +1,18 @@
 { stdenv, fetchFromGitLab, pkgconfig, cmake, gettext, cairo, pango, pcre
-, glib , imlib2, gtk2, libXinerama , libXrender, libXcomposite, libXdamage
-, libX11 , libXrandr, librsvg, libpthreadstubs , libXdmcp
-, libstartup_notification , hicolor_icon_theme, wrapGAppsHook
+, glib, imlib2, gtk2, libXinerama, libXrender, libXcomposite, libXdamage
+, libX11, libXrandr, librsvg, libpthreadstubs, libXdmcp
+, libstartup_notification, hicolor-icon-theme, wrapGAppsHook
 }:
 
 stdenv.mkDerivation rec {
   name = "tint2-${version}";
-  version = "0.12.12";
+  version = "16.4";
 
   src = fetchFromGitLab {
     owner = "o9000";
     repo = "tint2";
     rev = version;
-    sha256 = "0zgcdancsna95sjxslack9lh8f6qnj8d5wm02891mshn2jhgins3";
+    sha256 = "1h9l45zimai2hqfcf2y98g4i03imhmvm3mlsld9x99i650kxr5jm";
   };
 
   enableParallelBuilding = true;
@@ -21,15 +21,11 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ cairo pango pcre glib imlib2 gtk2 libXinerama libXrender
     libXcomposite libXdamage libX11 libXrandr librsvg libpthreadstubs
-    libXdmcp libstartup_notification hicolor_icon_theme ];
+    libXdmcp libstartup_notification hicolor-icon-theme ];
 
-  preConfigure = ''
+  postPatch = ''
     substituteInPlace CMakeLists.txt --replace /etc $out/etc
-  '';
-
-  prePatch = ''
-    for f in ./src/tint2conf/properties.c \
-             ./src/launcher/apps-common.c \
+    for f in ./src/launcher/apps-common.c \
              ./src/launcher/icon-theme-common.c \
              ./themes/*tint2rc
     do
@@ -41,7 +37,7 @@ stdenv.mkDerivation rec {
     homepage = https://gitlab.com/o9000/tint2;
     description = "Simple panel/taskbar unintrusive and light (memory, cpu, aestetic)";
     license = stdenv.lib.licenses.gpl2;
-    platforms = stdenv.lib.platforms.unix;
+    platforms = stdenv.lib.platforms.linux;
     maintainers = [ stdenv.lib.maintainers.romildo ];
   };
 }

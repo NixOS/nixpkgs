@@ -1,7 +1,5 @@
-    buildInputs = [ perl ruby ];
+    buildInputs = [ ruby rake ];
     buildPhase = ''
-      pushd ruby/command-t
-      ruby extconf.rb
-      make
-      popd
+      rake make
+      rm ruby/command-t/ext/command-t/*.o
     '';

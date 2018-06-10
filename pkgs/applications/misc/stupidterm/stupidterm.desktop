@@ -1,0 +1,9 @@
+[Desktop Entry]
+Version=20170315
+Name=stupidterm
+Comment=VTE based terminal emulator
+Exec=stupidterm
+Icon=utilities-terminal
+Terminal=false
+Type=Application
+Categories=System;TerminalEmulator;

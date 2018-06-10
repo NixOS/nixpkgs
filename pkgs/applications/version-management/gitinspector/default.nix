@@ -1,6 +1,6 @@
-{ stdenv, fetchzip, buildPythonApplication }:
+{ stdenv, fetchzip, python2Packages}:
 
-buildPythonApplication rec {
+python2Packages.buildPythonApplication rec {
   name = "gitinspector-${version}";
   version = "0.4.4";
   namePrefix = "";
@@ -10,6 +10,10 @@ buildPythonApplication rec {
     sha256 = "1pfsw6xldm6jigs3nhysvqaxk8a0zf8zczgfkrp920as9sya3c7m";
     name = name + "-src";
   };
+
+  checkInputs = with python2Packages; [
+    unittest2
+  ];
 
   meta = with stdenv.lib; {
     homepage = https://github.com/ejwa/gitinspector;

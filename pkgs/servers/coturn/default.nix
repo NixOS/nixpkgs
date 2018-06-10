@@ -1,16 +1,16 @@
 { stdenv, fetchFromGitHub, openssl, libevent }:
 
-with { inherit (stdenv.lib) optional; };
+let inherit (stdenv.lib) optional; in
 
 stdenv.mkDerivation rec {
   name = "coturn-${version}";
-  version = "4.5.0.3";
+  version = "4.5.0.7";
 
   src = fetchFromGitHub {
     owner = "coturn";
     repo = "coturn";
     rev = "${version}";
-    sha256 = "1xr4dp3p16m4rq9mdsprs6s50rnif6hk38xx9siyykgfjnwr6i9g";
+    sha256 = "1781fx8lqgc54j973xzgq9d7k3g2j03va82jb4217gd3a93pa65l";
   };
 
   buildInputs = [ openssl libevent ];

@@ -4,16 +4,17 @@ automake, pkgconfig, lv2, fftw, cmake, xorg, libjack2, libsamplerate, libsndfile
 
 stdenv.mkDerivation rec {
   repo = "rkrlv2";
-  name = "${repo}-b1.0";
+  name = "${repo}-b2.0";
 
   src = fetchFromGitHub {
     owner = "ssj71";
     inherit repo;
-    rev = "a315f5aefe63be7e34663596b8b050410a9b7e72";
-    sha256 = "0kr3rvq7n1bh47qryyarcpiibms601qd8l1vypmm61969l4d4bn8";
+    rev = "beta_2";
+    sha256 = "128jcilbrd1l65c01w2bazsb21x78mng0jjkhi3x9crf1n9qbh2m";
   };
 
-  buildInputs = with xorg; [ automake pkgconfig lv2 fftw cmake libXpm libjack2 libsamplerate libsndfile libXft ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = with xorg; [ automake lv2 fftw cmake libXpm libjack2 libsamplerate libsndfile libXft ];
 
   meta = {
     description = "Rakarrak effects ported to LV2";

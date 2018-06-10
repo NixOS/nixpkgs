@@ -79,9 +79,10 @@ stdenv.mkDerivation {
       implementing combinations of deduction, execution and property
       checking.
     '';
-    homepage = "http://hol.sourceforge.net/";
+    homepage = http://hol.sourceforge.net/;
     license = licenses.bsd3;
     maintainers = with maintainers; [ mudri ];
     platforms = with platforms; linux;
+    broken = true;
   };
 }

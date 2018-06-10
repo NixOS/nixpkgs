@@ -1,10 +1,10 @@
 { callPackage, fetchurl, ... } @ args:
 
 callPackage ./generic.nix (args // rec {
-  version = "3.1.1";
+  version = "3.4";
 
   src = fetchurl {
     url = "mirror://gnu/nettle/nettle-${version}.tar.gz";
-    sha256 = "0k1x57zviysvi91lkk66cg8v819vywm5g5yqs22wppfqcifx5m2z";
+    sha256 = "150y8655h629wn946dvzasq16qxsc1m9nf58mifvhl350bgl4ymf";
   };
 })

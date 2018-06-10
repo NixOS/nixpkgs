@@ -10,7 +10,8 @@ stdenv.mkDerivation rec {
     url = "http://ymorin.is-a-geek.org/download/${basename}/${name}.tar.xz";
   };
 
-  buildInputs = [ bison flex gperf ncurses pkgconfig ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ bison flex gperf ncurses ];
 
   hardeningDisable = [ "format" ];
 

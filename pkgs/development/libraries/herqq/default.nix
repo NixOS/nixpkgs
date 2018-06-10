@@ -1,19 +1,24 @@
-{ stdenv, fetchurl, qt4, qmake4Hook, unzip }:
+{ stdenv, qt5, unzip, fetchFromGitHub, qtmultimedia }:
 
 stdenv.mkDerivation rec {
-  name = "herqq-1.0.0";
+  version = "2.1.0";
+  name = "herqq-${version}";
 
-  buildInputs = [ qt4 unzip qmake4Hook ];
+  nativeBuildInputs = [ qt5.qmake ];
+  buildInputs = [ qt5.qtbase unzip qtmultimedia ];
+  preConfigure = "cd herqq";
 
-  src = fetchurl {
-    url = "mirror://sourceforge/hupnp/${name}.zip";
-    sha256 = "13klwszi7h7mvdz2ap0ac4dp7lc0gswp8lzzlwidhqfmf9pwgkyb";
+  src = fetchFromGitHub {
+    owner = "ThomArmax";
+    repo = "HUPnP";
+    rev = version;
+    sha256 = "1w674rbwbhpirq70gp9rk6p068j36rwn112fx3nz613wgw63x84m";
   };
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = http://herqq.org;
     description = "A software library for building UPnP devices and control points";
-    inherit (qt4.meta) platforms;
-    maintainers = [ stdenv.lib.maintainers.urkud ];
+    platforms = platforms.linux;
+    maintainers = [ ];
   };
 }

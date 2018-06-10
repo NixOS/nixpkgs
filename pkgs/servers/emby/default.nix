@@ -1,33 +1,42 @@
-{ stdenv, fetchurl, pkgs, ... }:
+{ stdenv, fetchurl, pkgs, unzip, sqlite, makeWrapper, mono46, ffmpeg, ... }:
 
 stdenv.mkDerivation rec {
   name = "emby-${version}";
-  version = "3.0.7200";
+  version = "3.4.1.0";
 
   src = fetchurl {
-    url = "https://github.com/MediaBrowser/Emby/archive/${version}.tar.gz";
-    sha256 = "1j1fa54as8s75qky5gw9bw3b19mgn72nv89ip2hgln6bjv1b40jq";
+    url = "https://github.com/MediaBrowser/Emby/releases/download/${version}/Emby.Mono.zip";
+    sha256 = "08jr6v8xhmiwbby0lfvpjrlma280inwh5qp6v4p93lzd07fjynh5";
   };
 
+  buildInputs = with pkgs; [
+    unzip
+    makeWrapper
+  ];
   propagatedBuildInputs = with pkgs; [
-    mono
+    mono46
     sqlite
   ];
 
+  # Need to set sourceRoot as unpacker will complain about multiple directory output
+  sourceRoot = ".";
+
   buildPhase = ''
-    xbuild /p:Configuration="Release Mono" /p:Platform="Any CPU" /t:build MediaBrowser.Mono.sln
-    substituteInPlace MediaBrowser.Server.Mono/bin/Release\ Mono/System.Data.SQLite.dll.config --replace libsqlite3.so ${pkgs.sqlite.out}/lib/libsqlite3.so
-    substituteInPlace MediaBrowser.Server.Mono/bin/Release\ Mono/MediaBrowser.Server.Mono.exe.config --replace ProgramData-Server "/var/lib/emby/ProgramData-Server"
+    substituteInPlace SQLitePCLRaw.provider.sqlite3.dll.config --replace libsqlite3.so ${sqlite.out}/lib/libsqlite3.so
+    substituteInPlace MediaBrowser.Server.Mono.exe.config --replace ProgramData-Server "/var/lib/emby/ProgramData-Server"
   '';
 
   installPhase = ''
     mkdir -p $out/bin
-    cp -r MediaBrowser.Server.Mono/bin/Release\ Mono/* $out/bin/
+    cp -r * $out/bin
+
+    makeWrapper "${mono46}/bin/mono" $out/bin/MediaBrowser.Server.Mono \
+      --add-flags "$out/bin/MediaBrowser.Server.Mono.exe -ffmpeg ${ffmpeg}/bin/ffmpeg -ffprobe ${ffmpeg}/bin/ffprobe"
   '';
 
   meta = {
     description = "MediaBrowser - Bring together your videos, music, photos, and live television";
-    homepage = http://emby.media/;
+    homepage = https://emby.media/;
     license = stdenv.lib.licenses.gpl2;
     maintainers = [ stdenv.lib.maintainers.fadenb ];
     platforms = stdenv.lib.platforms.all;

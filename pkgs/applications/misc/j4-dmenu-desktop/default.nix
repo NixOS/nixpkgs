@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name    = "j4-dmenu-desktop-${version}";
-  version = "2.14";
+  version = "2.16";
 
   src = fetchFromGitHub {
     owner  = "enkore";
     repo   = "j4-dmenu-desktop";
     rev    = "r${version}";
-    sha256 = "14srrkz4qx8qplgrrjv38ri4pnkxaxaq6jy89j13xhna492bq128";
+    sha256 = "0714cri8bwpimmiirhzrkbri4xi24k0za6i1aw94d3fnblk2dg9f";
   };
 
   postPatch = ''
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     description = "A wrapper for dmenu that recognize .desktop files";
     homepage    = "https://github.com/enkore/j4-dmenu-desktop";
     license     = licenses.gpl3;
-    maintainer  = with maintainers; [ ericsagnes ];
-    platforms = with platforms; unix;
+    maintainers = with maintainers; [ ericsagnes ];
+    platforms   = with platforms; unix;
   };
 }

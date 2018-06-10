@@ -3,7 +3,7 @@ let
   cfg = config.services.fourStore;
   stateDir = "/var/lib/4store";
   fourStoreUser = "fourstore";
-  run = "${pkgs.su}/bin/su -s ${pkgs.stdenv.shell} ${fourStoreUser}";
+  run = "${pkgs.su}/bin/su -s ${pkgs.runtimeShell} ${fourStoreUser}";
 in
 with lib;
 {

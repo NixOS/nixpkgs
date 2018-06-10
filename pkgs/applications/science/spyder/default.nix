@@ -1,25 +1,31 @@
-{ stdenv, fetchurl, unzip, buildPythonApplication, makeDesktopItem
+{ stdenv, fetchPypi, unzip, buildPythonApplication, makeDesktopItem
 # mandatory
-, pyside
-# recommended
-, pyflakes ? null, rope ? null, sphinx ? null, numpy ? null, scipy ? null, matplotlib ? null
+, numpydoc, qtconsole, qtawesome, jedi, pycodestyle, psutil
+, pyflakes, rope, sphinx, nbconvert, mccabe, pyopengl, cloudpickle
 # optional
-, ipython ? null, pylint ? null, pep8 ? null
+, numpy ? null, scipy ? null, matplotlib ? null
+# optional
+, pylint ? null
 }:
 
 buildPythonApplication rec {
-  name = "spyder-${version}";
-  version = "2.3.8";
-  namePrefix = "";
+  pname = "spyder";
+  version = "3.2.8";
 
-  src = fetchurl {
-    url = "mirror://pypi/s/spyder/${name}.zip";
-    sha256 = "99fdae2cea325c0f2842c77bd67dd22db19fef3d9c0dde1545b1a2650eae517e";
+  src = fetchPypi {
+    inherit pname version;
+    sha256 = "0iwcby2bxvayz0kp282yh864br55w6gpd8rqcdj1cp3jbn3q6vg5";
   };
 
-  # NOTE: sphinx makes the build fail with: ValueError: ZIP does not support timestamps before 1980
-  propagatedBuildInputs =
-    [ pyside pyflakes rope  numpy scipy matplotlib ipython pylint pep8 ];
+  # Somehow setuptools can't find pyqt5. Maybe because the dist-info folder is missing?
+  postPatch = ''
+    sed -i -e '/pyqt5/d' setup.py
+  '';
+
+  propagatedBuildInputs = [
+    jedi pycodestyle psutil pyflakes rope numpy scipy matplotlib pylint
+    numpydoc qtconsole qtawesome nbconvert mccabe pyopengl cloudpickle
+  ];
 
   # There is no test for spyder
   doCheck = false;
@@ -36,9 +42,9 @@ buildPythonApplication rec {
 
   # Create desktop item
   postInstall = ''
-    mkdir -p $out/share/{applications,icons}
-    cp  $desktopItem/share/applications/* $out/share/applications/
-    cp  spyderlib/images/spyder.svg $out/share/icons/
+    mkdir -p $out/share/icons
+    cp spyder/images/spyder.svg $out/share/icons
+    cp -r $desktopItem/share/applications/ $out/share
   '';
 
   meta = with stdenv.lib; {
@@ -51,6 +57,5 @@ buildPythonApplication rec {
     homepage = https://github.com/spyder-ide/spyder/;
     license = licenses.mit;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ bjornfor fridh ];
   };
 }

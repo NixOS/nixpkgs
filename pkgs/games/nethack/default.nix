@@ -1,15 +1,16 @@
-{ stdenv, lib, fetchurl, writeScript, ncurses, gzip, flex, bison }:
+{ stdenv, lib, fetchurl, writeScript, coreutils, ncurses, gzip, flex, bison, less }:
 
 let
   platform =
-    if lib.elem stdenv.system lib.platforms.unix then "unix"
-    else abort "Unknown platform for NetHack";
+    if stdenv.hostPlatform.isUnix then "unix"
+    else throw "Unknown platform for NetHack: ${stdenv.system}";
   unixHint =
-    if stdenv.isLinux then "linux"
-    else if stdenv.isDarwin then "macosx10.10"
+    /**/ if stdenv.hostPlatform.isLinux  then "linux"
+    else if stdenv.hostPlatform.isDarwin then "macosx10.10"
     # We probably want something different for Darwin
     else "unix";
   userDir = "~/.config/nethack";
+  binPath = lib.makeBinPath [ coreutils less ];
 
 in stdenv.mkDerivation {
   name = "nethack-3.6.0";
@@ -60,6 +61,7 @@ in stdenv.mkDerivation {
     mkdir -p $out/bin
     cat <<EOF >$out/bin/nethack
     #! ${stdenv.shell} -e
+    PATH=${binPath}:\$PATH
 
     if [ ! -d ${userDir} ]; then
       mkdir -p ${userDir}
@@ -88,7 +90,7 @@ in stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "Rogue-like game";
-    homepage = "http://nethack.org/";
+    homepage = http://nethack.org/;
     license = "nethack";
     platforms = platforms.unix;
     maintainers = with maintainers; [ abbradar ];

@@ -15,7 +15,8 @@ stdenv.mkDerivation rec {
     cd src
   '';
 
-  buildInputs = [ gtk2 openssl pcsclite pkgconfig opensc ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ gtk2 openssl pcsclite opensc ];
 
   buildPhase = ''
     sed -i "s|opensc-pkcs11.so|${opensc}/lib/pkcs11/opensc-pkcs11.so|" Makefile 
@@ -37,7 +38,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Firefox ID card signing plugin";
-    homepage = "http://www.id.ee/";
+    homepage = http://www.id.ee/;
     license = licenses.lgpl2;
     platforms = platforms.linux;
     maintainers = [ maintainers.jagajaga ];

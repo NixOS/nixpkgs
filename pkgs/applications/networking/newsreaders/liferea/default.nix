@@ -1,40 +1,36 @@
-{ stdenv, fetchurl, pkgconfig, intltool, python, pygobject3
-, glib, gnome3, pango, libxml2, libxslt, sqlite, libsoup, glib_networking
-, webkitgtk, json_glib, gobjectIntrospection, gst_all_1
-, libnotify
-, makeWrapper
+{ stdenv, fetchurl, pkgconfig, intltool, python3Packages, wrapGAppsHook
+, glib, libxml2, libxslt, sqlite, libsoup , webkitgtk, json-glib, gst_all_1
+, libnotify, gtk3, gsettings-desktop-schemas, libpeas, dconf, librsvg
+, gobjectIntrospection, glib-networking
 }:
 
-let pname = "liferea";
-    version = "1.10.19";
-in
-stdenv.mkDerivation rec {
+let
+  pname = "liferea";
+  version = "1.12.3";
+in stdenv.mkDerivation rec {
   name = "${pname}-${version}";
 
   src = fetchurl {
     url = "https://github.com/lwindolf/${pname}/releases/download/v${version}/${name}.tar.bz2";
-    sha256 = "1h6x8xd4ldrgw9mbf2gwf7wxi6z34h0d0rnwy9kyskdcgkymvi80";
+    sha256 = "0wm2c8qrgnadq63fivai53xm7vl05wgxc0nk39jcriscdikzqpcg";
   };
 
-  buildInputs = with gst_all_1; [
-    pkgconfig intltool python
-    glib gnome3.gtk pango libxml2 libxslt sqlite libsoup
-    webkitgtk json_glib gobjectIntrospection gnome3.gsettings_desktop_schemas
-    gnome3.libpeas gnome3.dconf
-    gst-plugins-base gst-plugins-good gst-plugins-bad
-    gnome3.libgnome_keyring gnome3.defaultIconTheme
-    libnotify
-    makeWrapper
-  ];
+  nativeBuildInputs = [ wrapGAppsHook python3Packages.wrapPython intltool pkgconfig ];
+
+  buildInputs = [
+    glib gtk3 webkitgtk libxml2 libxslt sqlite libsoup gsettings-desktop-schemas
+    libpeas gsettings-desktop-schemas json-glib dconf gobjectIntrospection
+    librsvg glib-networking libnotify
+  ] ++ (with gst_all_1; [
+    gstreamer gst-plugins-base gst-plugins-good gst-plugins-bad
+  ]);
+
+  pythonPath = with python3Packages; [ pygobject3 pycairo ];
 
   preFixup = ''
-    for f in "$out"/bin/*; do
-      wrapProgram "$f" \
-        --prefix PYTHONPATH : "$(toPythonPath $out):$(toPythonPath ${pygobject3})" \
-        --prefix GI_TYPELIB_PATH : "$GI_TYPELIB_PATH" \
-        --prefix GIO_EXTRA_MODULES : "${gnome3.dconf}/lib/gio/modules:${glib_networking.out}/lib/gio/modules" \
-        --prefix XDG_DATA_DIRS : "$XDG_ICON_DIRS:${gnome3.gtk.out}/share:$out/share:$GSETTINGS_SCHEMAS_PATH"
-    done
+    rm "$out/share/icons/hicolor/icon-theme.cache"
+    buildPythonPath "$out $pythonPath"
+    gappsWrapperArgs+=(--prefix PYTHONPATH : "$program_PYTHONPATH")
   '';
 
   meta = with stdenv.lib; {

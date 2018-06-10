@@ -14,7 +14,8 @@ stdenv.mkDerivation rec {
 
   makeFlags = "prefix=$(out)";
 
-  buildInputs = [ glib gettext readline pkgconfig ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ glib gettext readline ];
 
   hardeningDisable = [ "format" ];
 

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, SDL, ncurses, libtcod, binutils }:
+{ stdenv, fetchurl, SDL, ncurses, libtcod }:
 
 stdenv.mkDerivation rec {
   name = "brogue-${version}";
@@ -24,6 +24,9 @@ stdenv.mkDerivation rec {
     mkdir -p $out/share/brogue
     cp -r bin/fonts $out/share/brogue/
   '';
+
+  # fix crash; shouldn’t be a security risk because it’s an offline game
+  hardeningDisable = [ "stackprotector" "fortify" ];
 
   meta = with stdenv.lib; {
     description = "A roguelike game";

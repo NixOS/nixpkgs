@@ -26,17 +26,21 @@ in
           This will switch to a new virtual terminal, turn off console
           switching and disable SysRq mechanism (when
           <option>services.physlock.disableSysRq</option> is set)
-          until the root or <option>services.physlock.user</option>
-          password is given.
+          until the root or user password is given.
         '';
       };
 
-      user = mkOption {
-        type = types.nullOr types.str;
-        default = null;
+      allowAnyUser = mkOption {
+        type = types.bool;
+        default = false;
         description = ''
-          User whose password will be used to unlock the screen on par
-          with the root password.
+          Whether to allow any user to lock the screen. This will install a
+          setuid wrapper to allow any user to start physlock as root, which
+          is a minor security risk. Call the physlock binary to use this instead
+          of using the systemd service.
+
+          Note that you might need to relog to have the correct binary in your
+          PATH upon changing this option.
         '';
       };
 
@@ -89,26 +93,36 @@ in
 
   ###### implementation
 
-  config = mkIf cfg.enable {
+  config = mkIf cfg.enable (mkMerge [
+    {
 
-    # for physlock -l and physlock -L
-    environment.systemPackages = [ pkgs.physlock ];
+      # for physlock -l and physlock -L
+      environment.systemPackages = [ pkgs.physlock ];
 
-    systemd.services."physlock" = {
-      enable = true;
-      description = "Physlock";
-      wantedBy = optional cfg.lockOn.suspend   "suspend.target"
-              ++ optional cfg.lockOn.hibernate "hibernate.target"
-              ++ cfg.lockOn.extraTargets;
-      before   = optional cfg.lockOn.suspend   "systemd-suspend.service"
-              ++ optional cfg.lockOn.hibernate "systemd-hibernate.service"
-              ++ cfg.lockOn.extraTargets;
-      serviceConfig.Type = "forking";
-      script = ''
-        ${pkgs.physlock}/bin/physlock -d${optionalString cfg.disableSysRq "s"}${optionalString (cfg.user != null) " -u ${cfg.user}"}
-      '';
-    };
+      systemd.services."physlock" = {
+        enable = true;
+        description = "Physlock";
+        wantedBy = optional cfg.lockOn.suspend   "suspend.target"
+                ++ optional cfg.lockOn.hibernate "hibernate.target"
+                ++ cfg.lockOn.extraTargets;
+        before   = optional cfg.lockOn.suspend   "systemd-suspend.service"
+                ++ optional cfg.lockOn.hibernate "systemd-hibernate.service"
+                ++ cfg.lockOn.extraTargets;
+        serviceConfig = {
+          Type = "forking";
+          ExecStart = "${pkgs.physlock}/bin/physlock -d${optionalString cfg.disableSysRq "s"}";
+        };
+      };
 
-  };
+      security.pam.services.physlock = {};
+
+    }
+
+    (mkIf cfg.allowAnyUser {
+
+      security.wrappers.physlock = { source = "${pkgs.physlock}/bin/physlock"; user = "root"; };
+
+    })
+  ]);
 
 }

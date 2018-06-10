@@ -1,8 +1,14 @@
-{ kdeFramework, lib, ecm, kcoreaddons, kwindowsystem, qtx11extras }:
+{
+  mkDerivation, lib,
+  extra-cmake-modules,
+  kcoreaddons, kwindowsystem, qtbase, qtx11extras,
+}:
 
-kdeFramework {
+mkDerivation {
   name = "kcrash";
   meta = { maintainers = [ lib.maintainers.ttuegel ]; };
-  nativeBuildInputs = [ ecm ];
-  propagatedBuildInputs = [ kcoreaddons kwindowsystem qtx11extras ];
+  nativeBuildInputs = [ extra-cmake-modules ];
+  buildInputs = [ kcoreaddons kwindowsystem qtx11extras ];
+  propagatedBuildInputs = [ qtbase ];
+  outputs = [ "out" "dev" ];
 }

@@ -1,4 +1,6 @@
-{ stdenv, fetchurl, perl, perlPackages, makeWrapper, imagemagick, gdk_pixbuf, librsvg }:
+{ stdenv, fetchurl, fetchpatch, perl, perlPackages, makeWrapper, imagemagick, gdk_pixbuf, librsvg
+, hicolor-icon-theme
+}:
 
 let
   perlModules = with perlPackages;
@@ -8,14 +10,15 @@ let
       ProcProcessTable URI ImageExifTool Gtk2AppIndicator LWPUserAgent JSON
       PerlMagick WWWMechanize HTTPDate HTMLForm HTMLParser HTMLTagset JSONXS
       CommonSense HTTPCookies NetOAuth PathClass GooCanvas X11Protocol Cairo
+      EncodeLocale TryTiny TypesSerialiser LWPMediaTypes
     ];
 in
 stdenv.mkDerivation rec {
-  name = "shutter-0.93.1";
+  name = "shutter-0.94";
 
   src = fetchurl {
-    url = "http://shutter-project.org/wp-content/uploads/releases/tars/${name}.tar.gz";
-    sha256 = "09cn3scwy98wqxkrjhnmxhpfnnynlbb41856yn5m3zwzqrxiyvak";
+    url = "https://launchpad.net/shutter/0.9x/0.94/+download/shutter-0.94.tar.gz";
+    sha256 = "943152cdf9e1b2096d38e3da9622d8bf97956a08eda747c3e7fcc564a3f0f40d";
   };
 
   buildInputs = [ perl makeWrapper gdk_pixbuf librsvg ] ++ perlModules;
@@ -28,6 +31,7 @@ stdenv.mkDerivation rec {
     wrapProgram $out/bin/shutter \
       --set PERL5LIB "${stdenv.lib.makePerlPath perlModules}" \
       --prefix PATH : "${imagemagick.out}/bin" \
+      --suffix XDG_DATA_DIRS : "${hicolor-icon-theme}/share" \
       --set GDK_PIXBUF_MODULE_FILE "$GDK_PIXBUF_MODULE_FILE"
   '';
 

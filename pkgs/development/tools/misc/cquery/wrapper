@@ -1,0 +1,12 @@
+#! @shell@ -e
+
+initString="--init={\"extraClangArguments\": [@standard_library_includes@"
+
+if [ "${NIX_CFLAGS_COMPILE}" != "" ]; then
+  read -a cflags_array <<< ${NIX_CFLAGS_COMPILE}
+  initString+=$(printf ', \"%s\"' "${cflags_array[@]}")
+fi
+
+initString+="]}"
+
+exec -a "$0" "@out@/bin/@wrapped@" "${initString}" "${extraFlagsArray[@]}" "$@"

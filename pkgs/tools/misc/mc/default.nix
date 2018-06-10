@@ -3,24 +3,36 @@
 
 stdenv.mkDerivation rec {
   name = "mc-${version}";
-  version = "4.8.17";
-  
+  version = "4.8.21";
+
   src = fetchurl {
-    url = "http://www.midnight-commander.org/downloads/${name}.tar.bz2";
-    sha256 = "0fvqzffppj0aja9hi0k1xdjg5m6s99immlla1y9yzn5fp8vwpl36";    
+    url = "http://www.midnight-commander.org/downloads/${name}.tar.xz";
+    sha256 = "130lzrcmazinznnnpf00lcizdlmjdhfiqfx00g1cjcbwmi3fadwg";
   };
-  
-  buildInputs = [ pkgconfig perl glib gpm slang zip unzip file gettext libX11 libICE e2fsprogs
-    libssh2 openssl ];
+
+  nativeBuildInputs = [ pkgconfig ];
+
+  buildInputs = [
+    perl glib slang zip unzip file gettext libX11 libICE libssh2 openssl
+  ] ++ stdenv.lib.optionals (!stdenv.isDarwin) [ e2fsprogs gpm ];
+
+  enableParallelBuilding = true;
 
   configureFlags = [ "--enable-vfs-smb" ];
+
+  postFixup = ''
+    # remove unwanted build-dependency references
+    sed -i -e "s!PKG_CONFIG_PATH=''${PKG_CONFIG_PATH}!PKG_CONFIG_PATH=$(echo "$PKG_CONFIG_PATH" | sed -e 's/./0/g')!" $out/bin/mc
+  '';
 
   meta = {
     description = "File Manager and User Shell for the GNU Project";
     homepage = http://www.midnight-commander.org;
+    downloadPage = "http://www.midnight-commander.org/downloads/";
     repositories.git = git://github.com/MidnightCommander/mc.git;
     license = stdenv.lib.licenses.gpl2Plus;
     maintainers = [ stdenv.lib.maintainers.sander ];
-    platforms = stdenv.lib.platforms.linux;
+    platforms = with stdenv.lib.platforms; linux ++ darwin;
+    updateWalker = true;
   };
 }

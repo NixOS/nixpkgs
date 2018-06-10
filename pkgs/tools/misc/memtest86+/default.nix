@@ -1,15 +1,13 @@
-{ stdenv, fetchurl }:
+{ stdenv, fetchgit }:
 
 stdenv.mkDerivation rec {
-  name = "memtest86+-5.01";
+  name = "memtest86+-5.01+coreboot-20180113";
 
-  src = fetchurl {
-    url = "http://www.memtest.org/download/5.01/${name}.tar.gz";
-    sha256 = "0fch1l55753y6jkk0hj8f6vw4h1kinkn9ysp22dq5g9zjnvjf88l";
+  src = fetchgit {
+    url = "https://review.coreboot.org/memtest86plus";
+    rev = "5ca4eb9544e51254254d09ae6e70f93403469ec3";
+    sha256 = "08m4rjr0chhhb1whgggknz926zv9hm8bisnxqp8lffqiwhb55rgk";
   };
-
-  # Patch incompatiblity with GCC. Source: http://koji.fedoraproject.org/koji/buildinfo?buildID=586907
-  patches = [ ./compile-fix.patch ./crash-fix.patch ./no-optimization.patch ];
 
   preBuild = ''
     # Really dirty hack to get Memtest to build without needing a Glibc
@@ -22,7 +20,7 @@ stdenv.mkDerivation rec {
 
   NIX_CFLAGS_COMPILE = "-I. -std=gnu90";
 
-  hardeningDisable = [ "stackprotector" "pic" ];
+  hardeningDisable = [ "all" ];
 
   buildFlags = "memtest.bin";
 
@@ -36,6 +34,6 @@ stdenv.mkDerivation rec {
     homepage = http://www.memtest.org/;
     description = "A tool to detect memory errors";
     license = stdenv.lib.licenses.gpl2;
-    platforms = stdenv.lib.platforms.linux;
+    platforms = [ "x86_64-linux" "i686-linux" ];
   };
 }

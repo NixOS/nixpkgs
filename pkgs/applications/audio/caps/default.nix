@@ -6,6 +6,18 @@ stdenv.mkDerivation rec {
     url = "http://www.quitte.de/dsp/caps_${version}.tar.bz2";
     sha256 = "081zx0i2ysw5nmy03j60q9j11zdlg1fxws81kwanncdgayxgwipp";
   };
+
+  patches = [
+    (fetchurl {
+      url = "https://salsa.debian.org/multimedia-team/caps/raw/9a99c225/debian/patches/0001-Avoid-ambiguity-in-div-invocation.patch";
+      sha256 = "1b1pb5yfskiw8zi1lkj572l2ajpirh4amq538vggwvlpv1fqfway";
+    })
+    (fetchurl {
+      url = "https://salsa.debian.org/multimedia-team/caps/raw/a411203d/debian/patches/0002-Use-standard-exp10f-instead-of-pow10f.patch";
+      sha256 = "18ciklnscabr77l8b89xmbagkk79w4iqfpzr2yhn2ywv2jp8akx9";
+    })
+  ];
+
   configurePhase = ''
     echo "PREFIX = $out" > defines.make
   '';

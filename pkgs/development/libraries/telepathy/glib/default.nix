@@ -1,5 +1,5 @@
-{ stdenv, fetchurl, dbus_glib, glib, python, pkgconfig, libxslt
-, gobjectIntrospection, valaSupport ? true, vala_0_23 }:
+{ stdenv, fetchurl, dbus-glib, glib, python2, pkgconfig, libxslt
+, gobjectIntrospection, valaSupport ? true, vala_0_38, glibcLocales }:
 
 stdenv.mkDerivation rec {
   name = "telepathy-glib-0.24.1";
@@ -10,14 +10,17 @@ stdenv.mkDerivation rec {
   };
 
   configureFlags = stdenv.lib.optional valaSupport "--enable-vala-bindings";
+  LC_ALL = "en_US.UTF-8";
+  propagatedBuildInputs = [dbus-glib glib gobjectIntrospection];
 
-  propagatedBuildInputs = [dbus_glib glib python gobjectIntrospection];
-
-  buildInputs = [pkgconfig libxslt] ++ stdenv.lib.optional valaSupport vala_0_23;
+  nativeBuildInputs = [ pkgconfig libxslt ] ++ stdenv.lib.optional valaSupport vala_0_38;
+  buildInputs = [ glibcLocales python2 ];
 
   preConfigure = ''
     substituteInPlace telepathy-glib/telepathy-glib.pc.in --replace Requires.private Requires
   '';
+
+  passthru.python = python2;
 
   meta = {
     homepage = http://telepathy.freedesktop.org;

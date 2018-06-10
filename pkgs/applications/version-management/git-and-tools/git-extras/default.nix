@@ -2,16 +2,16 @@
 
 stdenv.mkDerivation rec {
   name = "git-extras-${version}";
-  version = "4.1.0";
+  version = "4.5.0";
 
   src = fetchurl {
     url = "https://github.com/tj/git-extras/archive/${version}.tar.gz";
-    sha256 = "d4c028e2fe78abde8f3e640b70f431318fb28d82894dde22772efe8ba3563f85";
+    sha256 = "059680bvblbhrlkybg1yisr5zq62pir1rnaxz5izhfsw2ng9s2fb";
   };
 
-  phases = [ "unpackPhase" "installPhase" ];
+  dontBuild = true;
 
-  makeFlags = "DESTDIR=$(out) PREFIX=";
+  installFlags = [ "DESTDIR=$(out) PREFIX=" ];
 
   meta = with stdenv.lib; {
     homepage = https://github.com/tj/git-extras;

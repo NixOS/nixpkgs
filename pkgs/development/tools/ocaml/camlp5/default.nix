@@ -1,29 +1,37 @@
-{stdenv, fetchurl, ocaml, transitional ? false}:
+{ stdenv, fetchzip, ocaml, transitional ? false }:
 
 let
-  ocaml_version = (builtins.parseDrvName ocaml.name).version;
   metafile = ./META;
 in
 
 stdenv.mkDerivation {
 
-  name = "camlp5${if transitional then "_transitional" else ""}-6.16";
+  name = "camlp5${if transitional then "_transitional" else ""}-7.05";
 
-  src = fetchurl {
-    url = http://camlp5.gforge.inria.fr/distrib/src/camlp5-6.16.tgz;
-    sha256 = "1caqa2rl7rav7pfwv1l1j0j18yr1qzyyqz0wa9519x91ckznqi7x";
+  src = fetchzip {
+    url = https://github.com/camlp5/camlp5/archive/rel705.tar.gz;
+    sha256 = "16igfyjl2jja4f1mibjfzk0c2jr09nxsz6lb63x1jkccmy6430q2";
   };
 
   buildInputs = [ ocaml ];
 
+  postPatch = ''
+    for p in compile/compile.sh config/Makefile.tpl test/Makefile test/check_ocaml_versions.sh
+    do
+      substituteInPlace $p --replace '/bin/rm' rm
+    done
+  '';
+
   prefixKey = "-prefix ";
 
   preConfigure = "configureFlagsArray=(" +  (if transitional then "--transitional" else "--strict") +
-                  " --libdir $out/lib/ocaml/${ocaml_version}/site-lib)";
+                  " --libdir $out/lib/ocaml/${ocaml.version}/site-lib)";
 
   buildFlags = "world.opt";
 
-  postInstall = "cp ${metafile} $out/lib/ocaml/${ocaml_version}/site-lib/camlp5/META";
+  postInstall = "cp ${metafile} $out/lib/ocaml/${ocaml.version}/site-lib/camlp5/META";
+
+  dontStrip = true;
 
   meta = with stdenv.lib; {
     description = "Preprocessor-pretty-printer for OCaml";
@@ -31,7 +39,7 @@ stdenv.mkDerivation {
       Camlp5 is a preprocessor and pretty-printer for OCaml programs.
       It also provides parsing and printing tools.
     '';
-    homepage = http://pauillac.inria.fr/~ddr/camlp5/;
+    homepage = https://camlp5.github.io/;
     license = licenses.bsd3;
     platforms = ocaml.meta.platforms or [];
     maintainers = with maintainers; [

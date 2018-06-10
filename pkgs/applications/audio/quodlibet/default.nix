@@ -1,64 +1,59 @@
-{ stdenv, fetchurl, pythonPackages, intltool
-, gst_python, withGstPlugins ? false, gst_plugins_base ? null
-, gst_plugins_good ? null, gst_plugins_ugly ? null, gst_plugins_bad ? null }:
+{ stdenv, fetchurl, python3, wrapGAppsHook, gettext, intltool, libsoup, gnome3, gtk3, gdk_pixbuf,
+  tag ? "", xvfb_run, dbus, glibcLocales, glib, gobjectIntrospection,
+  gst_all_1, withGstPlugins ? true,
+  xineBackend ? false, xineLib,
+  withDbusPython ? false, withPyInotify ? false, withMusicBrainzNgs ? false, withPahoMqtt ? false,
+  webkitgtk ? null,
+  keybinder3 ? null, gtksourceview ? null, libmodplug ? null, kakasi ? null, libappindicator-gtk3 ? null }:
 
-assert withGstPlugins -> gst_plugins_base != null
-                         || gst_plugins_good != null
-                         || gst_plugins_ugly != null
-                         || gst_plugins_bad != null;
-
-let
-  version = "2.6.3";
-  inherit (pythonPackages) buildPythonApplication python mutagen pygtk pygobject2 dbus-python;
-in buildPythonApplication {
-  # call the package quodlibet and just quodlibet
-  name = "quodlibet${stdenv.lib.optionalString withGstPlugins "-with-gst-plugins"}-${version}";
+let optionals = stdenv.lib.optionals; in
+python3.pkgs.buildPythonApplication rec {
+  name = "quodlibet${tag}-${version}";
+  version = "4.1.0";
 
   # XXX, tests fail
+  # https://github.com/quodlibet/quodlibet/issues/2820
   doCheck = false;
 
-  srcs = [
-    (fetchurl {
-      url = "https://bitbucket.org/lazka/quodlibet-files/raw/default/releases/quodlibet-${version}.tar.gz";
-      sha256 = "0ilasi4b0ay8r6v6ba209wsm80fq2nmzigzc5kvphrk71jwypx6z";
-     })
-    (fetchurl {
-      url = "https://bitbucket.org/lazka/quodlibet-files/raw/default/releases/quodlibet-plugins-${version}.tar.gz";
-      sha256 = "1rv08rhdjad8sjhplqsspcf4vkazgkxyshsqmbfbrrk5kvv57ybc";
-     })
-  ];
+  src = fetchurl {
+    url = "https://github.com/quodlibet/quodlibet/releases/download/release-${version}/quodlibet-${version}.tar.gz";
+    sha256 = "1vcxx4sz5i4ag74pjpdfw7jkwxfb8jhvn8igcjwd5cccw4gscm2z";
+  };
 
-  preConfigure = ''
-    # TODO: for now don't a apply gdist overrides, will be needed for shipping icons, gtk, etc
-    sed -i /distclass/d setup.py
+  nativeBuildInputs = [ wrapGAppsHook gettext intltool ];
+
+  checkInputs = with python3.pkgs; [ pytest pytest_xdist pyflakes pycodestyle polib xvfb_run dbus.daemon glibcLocales ];
+
+  buildInputs = [ gnome3.defaultIconTheme libsoup glib gtk3 webkitgtk gdk_pixbuf keybinder3 gtksourceview libmodplug libappindicator-gtk3 kakasi gobjectIntrospection ]
+    ++ (if xineBackend then [ xineLib ] else with gst_all_1;
+    [ gstreamer gst-plugins-base ] ++ optionals withGstPlugins [ gst-plugins-good gst-plugins-ugly gst-plugins-bad ]);
+
+  propagatedBuildInputs = with python3.pkgs; [ pygobject3 pycairo mutagen gst-python feedparser ]
+      ++ optionals withDbusPython [ dbus-python ]
+      ++ optionals withPyInotify [ pyinotify ]
+      ++ optionals withMusicBrainzNgs [ musicbrainzngs ]
+      ++ optionals stdenv.isDarwin [ pyobjc ]
+      ++ optionals withPahoMqtt [ paho-mqtt ];
+
+  LC_ALL = "en_US.UTF-8";
+
+  checkPhase = ''
+    runHook preCheck
+    checkHomeDir=$(mktemp -d)
+    mkdir -p $checkHomeDir/.cache/thumbnails/normal # Required by TThumb.test_recreate_broken_cache_file
+    env XDG_DATA_DIRS="$out/share:${gtk3}/share/gsettings-schemas/${gtk3.name}:$XDG_DATA_DIRS" \
+      HOME=$checkHomeDir \
+      xvfb-run -s '-screen 0 800x600x24' dbus-run-session \
+        --config-file=${dbus.daemon}/share/dbus-1/session.conf \
+        py.test
+    runHook postCheck
   '';
 
-  sourceRoot = "quodlibet-${version}";
+  preFixup = stdenv.lib.optionalString (kakasi != null) "gappsWrapperArgs+=(--prefix PATH : ${kakasi}/bin)";
 
-  postUnpack = ''
-    # the patch searches for plugins in directory ../plugins
-    # so link the appropriate directory there
-    ln -sf quodlibet-plugins-${version} plugins
-  '';
-
-  patches = [ ./quodlibet-package-plugins.patch ];
-
-  buildInputs = stdenv.lib.optionals withGstPlugins [
-    gst_plugins_base gst_plugins_good gst_plugins_ugly gst_plugins_bad
-  ];
-
-  propagatedBuildInputs = [
-    mutagen pygtk pygobject2 dbus-python gst_python intltool
-  ];
-
-  postInstall = stdenv.lib.optionalString withGstPlugins ''
-    # Wrap quodlibet so it finds the GStreamer plug-ins
-    wrapProgram "$out/bin/quodlibet" --prefix \
-      GST_PLUGIN_SYSTEM_PATH ":" "$GST_PLUGIN_SYSTEM_PATH"                                                     \
-  '';
-
-  meta = {
+  meta = with stdenv.lib; {
     description = "GTK+-based audio player written in Python, using the Mutagen tagging library";
+    license = licenses.gpl2Plus;
 
     longDescription = ''
       Quod Libet is a GTK+-based audio player written in Python, using
@@ -74,7 +69,7 @@ in buildPythonApplication {
       & internet radio, and all major audio formats.
     '';
 
-    maintainers = [ stdenv.lib.maintainers.coroa ];
-    homepage = http://code.google.com/p/quodlibet/;
+    maintainers = with maintainers; [ coroa sauyon ];
+    homepage = https://quodlibet.readthedocs.io/en/latest/;
   };
 }

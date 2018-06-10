@@ -1,19 +1,23 @@
-/* Generic builder for Python packages that come without a setup.py. */
+# Generic builder.
 
 { lib
+, config
 , python
 , wrapPython
 , setuptools
 , unzip
-, ensureNewerSourcesHook
+, ensureNewerSourcesForZipFilesHook
+# Whether the derivation provides a Python module or not.
+, toPythonModule
+, namePrefix
 }:
 
-{ name
+{ name ? "${attrs.pname}-${attrs.version}"
 
-# by default prefix `name` e.g. "python3.3-${name}"
-, namePrefix ? python.libPrefix + "-"
+# Build-time dependencies for the package
+, nativeBuildInputs ? []
 
-# Dependencies for building the package
+# Run-time dependencies for the package
 , buildInputs ? []
 
 # Dependencies needed for running the checkPhase.
@@ -37,11 +41,20 @@
 # generated binaries.
 , makeWrapperArgs ? []
 
+# Skip wrapping of python programs altogether
+, dontWrapPythonPrograms ? false
+
+# Remove bytecode from bin folder.
+# When a Python script has the extension `.py`, bytecode is generated
+# Typically, executables in bin have no extension, so no bytecode is generated.
+# However, some packages do provide executables with extensions, and thus bytecode is generated.
+, removeBinBytecode ? true
+
 , meta ? {}
 
 , passthru ? {}
 
-, doCheck ? false
+, doCheck ? config.doCheckByDefault or false
 
 , ... } @ attrs:
 
@@ -51,45 +64,46 @@ if disabled
 then throw "${name} not supported for interpreter ${python.executable}"
 else
 
-python.stdenv.mkDerivation (builtins.removeAttrs attrs ["disabled"] // {
+toPythonModule (python.stdenv.mkDerivation (builtins.removeAttrs attrs [
+    "disabled" "checkInputs" "doCheck" "doInstallCheck" "dontWrapPythonPrograms" "catchConflicts"
+  ] // {
 
   name = namePrefix + name;
 
-  inherit pythonPath;
+  nativeBuildInputs = [ ensureNewerSourcesForZipFilesHook ]
+    ++ nativeBuildInputs;
 
-  buildInputs = [ wrapPython ] ++ buildInputs ++ pythonPath
-    ++ [ (ensureNewerSourcesHook { year = "1980"; }) ]
-    ++ (lib.optional (lib.hasSuffix "zip" attrs.src.name or "") unzip)
-    ++ lib.optionals doCheck checkInputs;
+  buildInputs = [ wrapPython ]
+    ++ lib.optional (lib.hasSuffix "zip" (attrs.src.name or "")) unzip
+    ++ lib.optional catchConflicts setuptools # If we no longer propagate setuptools
+    ++ buildInputs
+    ++ pythonPath;
 
-  # propagate python/setuptools to active setup-hook in nix-shell
+  # Propagate python and setuptools. We should stop propagating setuptools.
   propagatedBuildInputs = propagatedBuildInputs ++ [ python setuptools ];
 
   # Python packages don't have a checkPhase, only an installCheckPhase
   doCheck = false;
   doInstallCheck = doCheck;
+  installCheckInputs = checkInputs;
 
-  postFixup = attrs.postFixup or ''
+  postFixup = lib.optionalString (!dontWrapPythonPrograms) ''
     wrapPythonPrograms
+  '' + lib.optionalString removeBinBytecode ''
+    if [ -d "$out/bin" ]; then
+      rm -rf "$out/bin/__pycache__"                 # Python 3
+      find "$out/bin" -type f -name "*.pyc" -delete # Python 2
+    fi
   '' + lib.optionalString catchConflicts ''
-    # check if we have two packages with the same name in closure and fail
-    # this shouldn't happen, something went wrong with dependencies specs
-    ${python.interpreter} ${./catch_conflicts.py}
-  '';
+    # Check if we have two packages with the same name in the closure and fail.
+    # If this happens, something went wrong with the dependencies specs.
+    # Intentionally kept in a subdirectory, see catch_conflicts/README.md.
+    ${python.interpreter} ${./catch_conflicts}/catch_conflicts.py
+  '' + attrs.postFixup or '''';
 
-  passthru = {
-    inherit python; # The python interpreter
-  } // passthru;
-
-  meta = with lib.maintainers; {
+  meta = {
     # default to python's platforms
     platforms = python.meta.platforms;
-  } // meta // {
-    # add extra maintainer(s) to every package
-    maintainers = (meta.maintainers or []) ++ [ chaoflow domenkozar ];
-    # a marker for release utilities to discover python packages
     isBuildPythonPackage = python.meta.platforms;
-  };
-})
-
-
+  } // meta;
+}))

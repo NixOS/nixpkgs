@@ -1,18 +1,27 @@
-{ stdenv, fetchurl, self, callPackage, python27Packages
-, bzip2, openssl, gettext
-
-, includeModules ? false
-
-, db, gdbm, ncurses, sqlite, readline
-
-, tcl ? null, tk ? null, xlibsWrapper ? null, libX11 ? null, x11Support ? !stdenv.isCygwin
-, zlib ? null, zlibSupport ? true
-, expat, libffi
-
-, CF, configd
+{ stdenv, hostPlatform, buildPlatform, buildPackages, fetchurl
+, bzip2
+, gdbm
+, fetchpatch
+, ncurses
+, openssl
+, readline
+, sqlite
+, tcl ? null, tk ? null, tix ? null, xlibsWrapper ? null, libX11 ? null, x11Support ? false
+, zlib
+, callPackage
+, self
+, gettext
+, db
+, expat
+, libffi
+, CF, configd, coreutils
+, python-setup-hook
+# Some proprietary libs assume UCS2 unicode, especially on darwin :(
+, ucsEncoding ? 4
+# For the Python package set
+, pkgs, packageOverrides ? (self: super: {})
 }:
 
-assert zlibSupport -> zlib != null;
 assert x11Support -> tcl != null
                   && tk != null
                   && xlibsWrapper != null
@@ -22,13 +31,19 @@ with stdenv.lib;
 
 let
   majorVersion = "2.7";
-  version = "${majorVersion}.12";
+  minorVersion = "15";
+  minorVersionSuffix = "";
+  pythonVersion = majorVersion;
+  version = "${majorVersion}.${minorVersion}${minorVersionSuffix}";
+  libPrefix = "python${majorVersion}";
+  sitePackages = "lib/${libPrefix}/site-packages";
 
   src = fetchurl {
-    url = "http://www.python.org/ftp/python/${version}/Python-${version}.tar.xz";
-    sha256 = "0y7rl603vmwlxm6ilkhc51rx2mfj14ckcz40xxgs0ljnvlhp30yp";
+    url = "https://www.python.org/ftp/python/${majorVersion}.${minorVersion}/Python-${version}.tar.xz";
+    sha256 = "0x2mvz9dp11wj7p5ccvmk9s0hzjk2fa1m462p395l4r6bfnb3n92";
   };
 
+  hasDistutilsCxxPatch = !(stdenv.cc.isGNU or false);
   patches =
     [ # Look in C_INCLUDE_PATH and LIBRARY_PATH for stuff.
       ./search-path.patch
@@ -43,7 +58,8 @@ let
       # if DETERMINISTIC_BUILD env var is set
       ./deterministic-build.patch
 
-      ./properly-detect-curses.patch
+    ] ++ optionals (x11Support && stdenv.isDarwin) [
+      ./use-correct-tcl-tk-on-darwin.patch
     ] ++ optionals stdenv.isLinux [
 
       # Disable the use of ldconfig in ctypes.util.find_library (since
@@ -53,7 +69,7 @@ let
       # libuuid, slowing down program startup a lot).
       ./no-ldconfig.patch
 
-    ] ++ optionals stdenv.isCygwin [
+    ] ++ optionals hostPlatform.isCygwin [
       ./2.5.2-ctypes-util-find_library.patch
       ./2.5.2-tkinter-x11.patch
       ./2.6.2-ssl-threads.patch
@@ -64,6 +80,14 @@ let
       ./2.7.3-dylib.patch
       ./2.7.3-getpath-exe-extension.patch
       ./2.7.3-no-libm.patch
+    ] ++ optionals hasDistutilsCxxPatch [
+
+      # Patch from http://bugs.python.org/issue1222585 adapted to work with
+      # `patch -p1' and with a last hunk removed
+      # Upstream distutils is calling C compiler to compile C++ code, which
+      # only works for GCC and Apple Clang. This makes distutils to call C++
+      # compiler when needed.
+      ./python-2.7-distutils-C++.patch
     ];
 
   preConfigure = ''
@@ -78,37 +102,62 @@ let
     '' + optionalString stdenv.isDarwin ''
       substituteInPlace configure --replace '`/usr/bin/arch`' '"i386"'
       substituteInPlace Lib/multiprocessing/__init__.py \
-        --replace 'os.popen(comm)' 'os.popen("nproc")'
+        --replace 'os.popen(comm)' 'os.popen("${coreutils}/bin/nproc")'
     '';
 
   configureFlags = [
     "--enable-shared"
     "--with-threads"
-    "--enable-unicode=ucs4"
-  ] ++ optionals stdenv.isCygwin [
+    "--enable-unicode=ucs${toString ucsEncoding}"
+  ] ++ optionals (hostPlatform.isCygwin || hostPlatform.isAarch64) [
     "--with-system-ffi"
+  ] ++ optionals hostPlatform.isCygwin [
     "--with-system-expat"
     "ac_cv_func_bind_textdomain_codeset=yes"
   ] ++ optionals stdenv.isDarwin [
     "--disable-toolbox-glue"
-  ];
+  ] ++ optionals (hostPlatform != buildPlatform) [
+    "PYTHON_FOR_BUILD=${getBin buildPackages.python}/bin/python"
+    "ac_cv_buggy_getaddrinfo=no"
+    # Assume little-endian IEEE 754 floating point when cross compiling
+    "ac_cv_little_endian_double=yes"
+    "ac_cv_big_endian_double=no"
+    "ac_cv_mixed_endian_double=no"
+    "ac_cv_x87_double_rounding=yes"
+    "ac_cv_tanh_preserves_zero_sign=yes"
+    # Generally assume that things are present and work
+    "ac_cv_posix_semaphores_enabled=yes"
+    "ac_cv_broken_sem_getvalue=no"
+    "ac_cv_wchar_t_signed=yes"
+    "ac_cv_rshift_extends_sign=yes"
+    "ac_cv_broken_nice=no"
+    "ac_cv_broken_poll=no"
+    "ac_cv_working_tzset=yes"
+    "ac_cv_have_long_long_format=yes"
+    "ac_cv_have_size_t_format=yes"
+    "ac_cv_computed_gotos=yes"
+    "ac_cv_file__dev_ptmx=yes"
+    "ac_cv_file__dev_ptc=yes"
+  ]
+    # Never even try to use lchmod on linux,
+    # don't rely on detecting glibc-isms.
+  ++ optional hostPlatform.isLinux "ac_cv_func_lchmod=no";
 
-  postConfigure = if stdenv.isCygwin then ''
+  postConfigure = if hostPlatform.isCygwin then ''
     sed -i Makefile -e 's,PYTHONPATH="$(srcdir),PYTHONPATH="$(abs_srcdir),'
   '' else null;
 
   buildInputs =
     optional (stdenv ? cc && stdenv.cc.libc != null) stdenv.cc.libc ++
-    [ bzip2 openssl ]
-    ++ optionals stdenv.isCygwin [ expat libffi ]
-    ++ optionals includeModules (
-        [ db gdbm ncurses sqlite readline
-        ] ++ optionals x11Support [ tcl tk xlibsWrapper libX11 ]
-    )
-    ++ optional zlibSupport zlib
-    ++ optional stdenv.isDarwin CF;
-
-  propagatedBuildInputs = optional stdenv.isDarwin configd;
+    [ bzip2 openssl zlib ]
+    ++ optional (hostPlatform.isCygwin || hostPlatform.isAarch64) libffi
+    ++ optional hostPlatform.isCygwin expat
+    ++ [ db gdbm ncurses sqlite readline ]
+    ++ optionals x11Support [ tcl tk xlibsWrapper libX11 ]
+    ++ optionals stdenv.isDarwin ([ CF ] ++ optional (configd != null) configd);
+  nativeBuildInputs =
+    optionals (hostPlatform != buildPlatform)
+    [ buildPackages.stdenv.cc buildPackages.python ];
 
   mkPaths = paths: {
     C_INCLUDE_PATH = makeSearchPathOutput "dev" "include" paths;
@@ -117,27 +166,35 @@ let
 
   # Build the basic Python interpreter without modules that have
   # external dependencies.
-  python = stdenv.mkDerivation {
+
+in stdenv.mkDerivation {
     name = "python-${version}";
     pythonVersion = majorVersion;
 
-    inherit majorVersion version src patches buildInputs propagatedBuildInputs
+    inherit majorVersion version src patches buildInputs nativeBuildInputs
             preConfigure configureFlags;
 
     LDFLAGS = stdenv.lib.optionalString (!stdenv.isDarwin) "-lgcc_s";
     inherit (mkPaths buildInputs) C_INCLUDE_PATH LIBRARY_PATH;
 
-    NIX_CFLAGS_COMPILE = optionalString stdenv.isDarwin "-msse2";
+    NIX_CFLAGS_COMPILE = optionalString stdenv.isDarwin "-msse2"
+      + optionalString hostPlatform.isMusl " -DTHREAD_STACK_SIZE=0x100000";
     DETERMINISTIC_BUILD = 1;
 
-    setupHook = ./setup-hook.sh;
+    setupHook = python-setup-hook sitePackages;
+
+    postPatch = optionalString (x11Support && (tix != null)) ''
+          substituteInPlace "Lib/lib-tk/Tix.py" --replace "os.environ.get('TIX_LIBRARY')" "os.environ.get('TIX_LIBRARY') or '${tix}/lib'"
+    '';
 
     postInstall =
       ''
         # needed for some packages, especially packages that backport
         # functionality to 2.x from 3.x
         for item in $out/lib/python${majorVersion}/test/*; do
-          if [[ "$item" != */test_support.py* ]]; then
+          if [[ "$item" != */test_support.py*
+             && "$item" != */test/support
+             && "$item" != */test/regrtest.py* ]]; then
             rm -rf "$item"
           else
             echo $item
@@ -150,27 +207,45 @@ let
 
         paxmark E $out/bin/python${majorVersion}
 
-        ${optionalString includeModules "$out/bin/python ./setup.py build_ext"}
+        # Python on Nix is not manylinux1 compatible. https://github.com/NixOS/nixpkgs/issues/18484
+        echo "manylinux1_compatible=False" >> $out/lib/${libPrefix}/_manylinux.py
 
         rm "$out"/lib/python*/plat-*/regen # refers to glibc.dev
+
+        # Determinism: Windows installers were not deterministic.
+        # We're also not interested in building Windows installers.
+        find "$out" -name 'wininst*.exe' | xargs -r rm -f
+      '' + optionalString (stdenv.hostPlatform == stdenv.buildPlatform)
+      ''
+        # Determinism: rebuild all bytecode
+        # We exclude lib2to3 because that's Python 2 code which fails
+        # We rebuild three times, once for each optimization level
+        find $out -name "*.py" | $out/bin/python -m compileall -q -f -x "lib2to3" -i -
+        find $out -name "*.py" | $out/bin/python -O -m compileall -q -f -x "lib2to3" -i -
+        find $out -name "*.py" | $out/bin/python -OO -m compileall -q -f -x "lib2to3" -i -
+      '' + optionalString hostPlatform.isCygwin ''
+        cp libpython2.7.dll.a $out/lib
       '';
 
-    passthru = rec {
-      inherit zlibSupport;
+    passthru = let
+      pythonPackages = callPackage ../../../../../top-level/python-packages.nix {python=self; overrides=packageOverrides;};
+    in rec {
+      inherit libPrefix sitePackages x11Support hasDistutilsCxxPatch ucsEncoding;
+      executable = libPrefix;
+      buildEnv = callPackage ../../wrapper.nix { python = self; inherit (pythonPackages) requiredPythonModules; };
+      withPackages = import ../../with-packages.nix { inherit buildEnv pythonPackages;};
+      pkgs = pythonPackages;
       isPy2 = true;
       isPy27 = true;
-      buildEnv = callPackage ../../wrapper.nix { python = self; };
-      withPackages = import ../../with-packages.nix { inherit buildEnv; pythonPackages = python27Packages; };
-      libPrefix = "python${majorVersion}";
-      executable = libPrefix;
-      sitePackages = "lib/${libPrefix}/site-packages";
       interpreter = "${self}/bin/${executable}";
     };
 
     enableParallelBuilding = true;
 
+    doCheck = false; # expensive, and fails
+
     meta = {
-      homepage = "http://python.org";
+      homepage = http://python.org;
       description = "A high-level dynamically-typed programming language";
       longDescription = ''
         Python is a remarkably powerful dynamic programming language that
@@ -183,101 +258,9 @@ let
       '';
       license = stdenv.lib.licenses.psfl;
       platforms = stdenv.lib.platforms.all;
-      maintainers = with stdenv.lib.maintainers; [ chaoflow domenkozar ];
+      maintainers = with stdenv.lib.maintainers; [ fridh ];
+      # Higher priority than Python 3.x so that `/bin/python` points to `/bin/python2`
+      # in case both 2 and 3 are installed.
+      priority = -100;
     };
-  };
-
-
-  # This function builds a Python module included in the main Python
-  # distribution in a separate derivation.
-  buildInternalPythonModule =
-    { moduleName
-    , internalName ? "_" + moduleName
-    , deps
-    }:
-    if includeModules then null else stdenv.mkDerivation rec {
-      name = "python-${moduleName}-${python.version}";
-
-      inherit src patches preConfigure postConfigure configureFlags;
-
-      buildInputs = [ python ] ++ deps;
-
-      # We need to set this for python.buildEnv
-      pythonPath = [];
-
-      inherit (mkPaths buildInputs) C_INCLUDE_PATH LIBRARY_PATH;
-
-      # non-python gdbm has a libintl dependency on i686-cygwin, not on x86_64-cygwin
-      buildPhase = (if (stdenv.system == "i686-cygwin" && moduleName == "gdbm") then ''
-          sed -i setup.py -e "s:libraries = \['gdbm'\]:libraries = ['gdbm', 'intl']:"
-      '' else '''') + ''
-          substituteInPlace setup.py --replace 'self.extensions = extensions' \
-            'self.extensions = [ext for ext in self.extensions if ext.name in ["${internalName}"]]'
-
-          python ./setup.py build_ext
-          [ -z "$(find build -name '*_failed.so' -print)" ]
-        '';
-
-      installPhase =
-        ''
-          dest=$out/lib/${python.libPrefix}/site-packages
-          mkdir -p $dest
-          cp -p $(find . -name "*.${if stdenv.isCygwin then "dll" else "so"}") $dest/
-        '';
-    };
-
-
-  # The Python modules included in the main Python distribution, built
-  # as separate derivations.
-  modules = {
-
-    bsddb = buildInternalPythonModule {
-      moduleName = "bsddb";
-      deps = [ db ];
-    };
-
-    curses = buildInternalPythonModule {
-      moduleName = "curses";
-      deps = [ ncurses ];
-    };
-
-    curses_panel = buildInternalPythonModule {
-      moduleName = "curses_panel";
-      deps = [ ncurses modules.curses ];
-    };
-
-    crypt = buildInternalPythonModule {
-      moduleName = "crypt";
-      internalName = "crypt";
-      deps = optional (stdenv ? glibc) stdenv.glibc;
-    };
-
-    gdbm = buildInternalPythonModule {
-      moduleName = "gdbm";
-      internalName = "gdbm";
-      deps = [ gdbm ] ++ stdenv.lib.optional stdenv.isCygwin gettext;
-    };
-
-    sqlite3 = buildInternalPythonModule {
-      moduleName = "sqlite3";
-      deps = [ sqlite ];
-    };
-
-  } // optionalAttrs x11Support {
-
-    tkinter = if stdenv.isCygwin then null else (buildInternalPythonModule {
-      moduleName = "tkinter";
-      deps = [ tcl tk xlibsWrapper libX11 ];
-    });
-
-  } // {
-
-    readline = buildInternalPythonModule {
-      moduleName = "readline";
-      internalName = "readline";
-      deps = [ readline ];
-    };
-
-  };
-
-in python // { inherit modules; }
+  }

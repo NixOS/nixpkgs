@@ -1,33 +1,44 @@
-{ stdenv, fetchurl, pythonPackages, pkgconfig, SDL
-, libpng, ffmpeg, freetype, glew, mesa, fribidi, zlib
+{ stdenv, fetchurl, pythonPackages, pkgconfig, SDL2
+, libpng, ffmpeg, freetype, glew, libGLU_combined, fribidi, zlib
+, glib
 }:
 
 with pythonPackages;
 
-stdenv.mkDerivation {
-  name = "renpy-6.17.6";
+stdenv.mkDerivation rec {
+  name = "renpy-${version}";
+  version = "7.0.0";
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "Ren'Py Visual Novel Engine";
-    homepage = "http://renpy.org/";
-    license = stdenv.lib.licenses.mit;
-    platforms = stdenv.lib.platforms.linux;
+    homepage = http://renpy.org/;
+    license = licenses.mit;
+    platforms = platforms.linux;
   };
 
   src = fetchurl {
-    url = "http://www.renpy.org/dl/6.17.6/renpy-6.17.6-source.tar.bz2";
-    sha256 = "0rkynw9cnr1zqdinz037d9zig6grhp2ca2pyxk80vhdpjb0xrkic";
+    url = "https://www.renpy.org/dl/${version}/renpy-${version}-source.tar.bz2";
+    sha256 = "0yrwp5iw4fjg7kbd041qv8gh2p0dnbrnkrgmn0ndk5k10pjij82g";
   };
 
-  buildInputs = [
-    python cython pkgconfig wrapPython
-    SDL libpng ffmpeg freetype glew mesa fribidi zlib pygame
+  patches = [
+    ./launcherenv.patch
   ];
 
-  pythonPath = [ pygame ];
+  postPatch = ''
+    substituteInPlace launcher/game/choose_directory.rpy --replace /usr/bin/python ${python.interpreter}
+  '';
+
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [
+    python cython wrapPython tkinter
+    SDL2 libpng ffmpeg freetype glew libGLU_combined fribidi zlib pygame_sdl2 glib
+  ];
+
+  pythonPath = [ pygame_sdl2 tkinter ];
 
   RENPY_DEPS_INSTALL = stdenv.lib.concatStringsSep "::" (map (path: "${path}") [
-    SDL SDL.dev libpng ffmpeg ffmpeg.out freetype glew.dev glew.out mesa fribidi zlib
+    SDL2 SDL2.dev libpng ffmpeg ffmpeg.out freetype glew.dev glew.out libGLU_combined fribidi zlib
   ]);
 
   buildPhase = ''
@@ -36,15 +47,16 @@ stdenv.mkDerivation {
 
   installPhase = ''
     mkdir -p $out/share/renpy
-    cp -r renpy renpy.py $out/share/renpy
+    cp -vr * $out/share/renpy
+    rm -rf $out/share/renpy/module
+
     python module/setup.py install --prefix=$out --install-lib=$out/share/renpy/module
 
-    wrapPythonPrograms
     makeWrapper ${python}/bin/python $out/bin/renpy \
-      --set PYTHONPATH $program_PYTHONPATH \
+      --set PYTHONPATH $PYTHONPATH \
       --set RENPY_BASE $out/share/renpy \
       --add-flags "-O $out/share/renpy/renpy.py"
   '';
 
-  NIX_CFLAGS_COMPILE = "-I${pygame}/include/${python.libPrefix}";
+  NIX_CFLAGS_COMPILE = "-I${pygame_sdl2}/include/${python.libPrefix}";
 }

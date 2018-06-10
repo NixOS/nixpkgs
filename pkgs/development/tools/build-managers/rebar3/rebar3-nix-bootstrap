@@ -41,7 +41,7 @@ main(Args) ->
     {ok, RequiredData} = gather_required_data_from_the_environment(ArgData),
     do_the_bootstrap(RequiredData).
 
-%% @doc There are two modes 'registery_only' where the register is
+%% @doc There are two modes 'registry_only' where the register is
 %% created from hex and everything else.
 -spec do_the_bootstrap(#data{}) -> ok.
 do_the_bootstrap(RequiredData = #data{registry_only = true}) ->
@@ -55,7 +55,7 @@ do_the_bootstrap(RequiredData) ->
 %% @doc
 %% Argument parsing is super simple only because we want to keep the
 %% dependencies minimal. For now there can be two entries on the
-%% command line, "registery-only" and "debug-info"
+%% command line, "registry-only" and "debug-info"
 -spec parse_args([string()]) -> #data{}.
 parse_args(Args0) ->
     PossibleArgs = sets:from_list(["registry-only", "debug-info"]),
@@ -94,7 +94,7 @@ bootstrap_plugins(#data{plugins = Plugins}) ->
 
 -spec bootstrap_libs(#data{}) -> ok.
 bootstrap_libs(#data{erl_libs = ErlLibs}) ->
-    io:format("Bootstrapping dependent librariesXXXX~n"),
+    io:format("Bootstrapping dependent libraries~n"),
     Target = "_build/default/lib/",
     Paths = string:tokens(ErlLibs, ":"),
     CopiableFiles =
@@ -146,13 +146,14 @@ make_symlink(Path, TargetFile) ->
 
 %% @doc
 %% This takes an app name in the standard OTP <name>-<version> format
-%% and returns just the app name. Why? because rebar is doesn't
+%% and returns just the app name. Why? Because rebar doesn't
 %% respect OTP conventions in some cases.
 -spec fixup_app_name(string()) -> string().
 fixup_app_name(FileName) ->
     case string:tokens(FileName, "-") of
         [Name] -> Name;
-        [Name, _Version] -> Name
+        [Name, _Version] -> Name;
+        [Name, _Version, _Tag] -> Name
     end.
 
 -spec bootstrap_registry(#data{}) -> ok.
@@ -179,14 +180,14 @@ make_sure_registry_snapshot_exists(RegistrySnapshot) ->
             erlang:halt(1)
     end.
 
--spec gather_required_data_from_the_environment(#data{}) -> {ok, map()}.
+-spec gather_required_data_from_the_environment(#data{}) -> {ok, #data{}}.
 gather_required_data_from_the_environment(ArgData) ->
     {ok, ArgData#data{ version = guard_env("version")
-                     , erl_libs = os:getenv("ERL_LIBS", [])
-                     , plugins = os:getenv("buildPlugins", [])
+                     , erl_libs = get_env("ERL_LIBS", [])
+                     , plugins = get_env("buildPlugins", [])
                      , root = code:root_dir()
                      , name = guard_env("name")
-                     , compile_ports = nix2bool(os:getenv("compilePorts", ""))
+                     , compile_ports = nix2bool(get_env("compilePorts", ""))
                      , registry_snapshot = guard_env("HEX_REGISTRY_SNAPSHOT")}}.
 
 -spec nix2bool(any()) -> boolean().
@@ -195,9 +196,17 @@ nix2bool("1") ->
 nix2bool("") ->
     false.
 
+get_env(Name) ->
+    os:getenv(Name).
+get_env(Name, Def) ->
+    case get_env(Name) of
+        false -> Def;
+        Val ->   Val
+    end.
+
 -spec guard_env(string()) -> string().
 guard_env(Name) ->
-    case os:getenv(Name) of
+    case get_env(Name) of
         false ->
             stderr("Expected Environment variable ~s! Are you sure you are "
                    "running in a Nix environment? Either a nix-build, "

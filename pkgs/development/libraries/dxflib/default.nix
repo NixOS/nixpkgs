@@ -1,7 +1,7 @@
-{stdenv, fetchurl}: 
+{stdenv, fetchurl}:
 
 stdenv.mkDerivation rec {
-  version = "2.5.0.0-1";
+  version = "3.12.2";
   name = "dxflib-${version}";
   src = fetchurl {
     url = "http://www.qcad.org/archives/dxflib/${name}.src.tar.gz";

@@ -49,6 +49,8 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = [ "stackprotector" "pic" ];
 
+  NIX_CFLAGS_COMPILE = "-Wno-error"; # generated code redefines yyfree
+
   preConfigure =
     '' for i in "tests/util/"*.in
        do
@@ -96,6 +98,6 @@ stdenv.mkDerivation rec {
     description = "GRUB 2.0 extended with TCG (TPM) support for integrity measured boot process (trusted boot)";
     homepage = https://github.com/Sirrix-AG/TrustedGRUB2;
     license = licenses.gpl3Plus;
-    platforms = platforms.gnu;
+    platforms = platforms.gnu ++ platforms.linux;
   };
 }

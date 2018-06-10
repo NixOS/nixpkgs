@@ -2,10 +2,10 @@
 
 stdenv.mkDerivation rec {
   name = "aha-${version}";
-  version = "0.4.9";
+  version = "0.4.10.6";
 
   src = fetchFromGitHub {
-    sha256 = "0g7awnh7z4cj3kkmldg6kl8dsvdvs46vbf273crmpswk0r4hzj80";
+    sha256 = "18mz3f5aqw4vbdrxf8wblqm6nca73ppq9hb2z2ppw6k0557i71kz";
     rev = version;
     repo = "aha";
     owner = "theZiz";
@@ -23,6 +23,5 @@ stdenv.mkDerivation rec {
     homepage = https://github.com/theZiz/aha;
     license = with licenses; [ lgpl2Plus mpl11 ];
     platforms = platforms.linux;
-    maintainers = with maintainers; [ nckx ];
   };
 }

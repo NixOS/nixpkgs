@@ -3,17 +3,18 @@
 
 stdenv.mkDerivation rec {
   name = "hivex-${version}";
-  version = "1.3.11";
+  version = "1.3.15";
 
   src = fetchurl {
     url = "http://libguestfs.org/download/hivex/${name}.tar.gz";
-    sha256 = "0y3nqykwy58divxkv7gmsb067dasyfz3apbp437hl57rgrndyfn6";
+    sha256 = "02vzipzrp1gr87rn7mkhyzr4zdjkp2dzcvvb223x7i0ch8ci7r4c";
   };
 
   patches = [ ./hivex-syms.patch ];
 
+  nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
-    pkgconfig autoreconfHook makeWrapper
+    autoreconfHook makeWrapper
     perl libxml2 IOStringy
   ];
 

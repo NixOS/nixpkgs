@@ -32,15 +32,22 @@ in
         description = "Whether to enable Disnix";
       };
 
+      enableMultiUser = mkOption {
+        type = types.bool;
+        default = true;
+        description = "Whether to support multi-user mode by enabling the Disnix D-Bus service";
+      };
+
       useWebServiceInterface = mkOption {
         default = false;
         description = "Whether to enable the DisnixWebService interface running on Apache Tomcat";
       };
-      
+
       package = mkOption {
         type = types.path;
         description = "The Disnix package";
         default = pkgs.disnix;
+        defaultText = "pkgs.disnix";
       };
 
     };
@@ -50,8 +57,8 @@ in
   ###### implementation
 
   config = mkIf cfg.enable {
-    dysnomia.enable = true;
-    
+    services.dysnomia.enable = true;
+
     environment.systemPackages = [ pkgs.disnix ] ++ optional cfg.useWebServiceInterface pkgs.DisnixWebService;
 
     services.dbus.enable = true;
@@ -70,7 +77,7 @@ in
       };
 
     systemd.services = {
-      disnix = {
+      disnix = mkIf cfg.enableMultiUser {
         description = "Disnix server";
         wants = [ "dysnomia.target" ];
         wantedBy = [ "multi-user.target" ];
@@ -91,7 +98,7 @@ in
         }
         // (if config.environment.variables ? DYSNOMIA_CONTAINERS_PATH then { inherit (config.environment.variables) DYSNOMIA_CONTAINERS_PATH; } else {})
         // (if config.environment.variables ? DYSNOMIA_MODULES_PATH then { inherit (config.environment.variables) DYSNOMIA_MODULES_PATH; } else {});
-        
+
         serviceConfig.ExecStart = "${cfg.package}/bin/disnix-service";
       };
 

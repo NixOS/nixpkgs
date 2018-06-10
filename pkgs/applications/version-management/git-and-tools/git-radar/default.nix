@@ -2,18 +2,16 @@
 
 stdenv.mkDerivation rec {
   name = "git-radar-${version}";
-  version = "0.3.2";
-
-  phases = [ "unpackPhase" "installPhase" ];
-
-  dontInstallSrc = true;
+  version = "0.6";
 
   src = fetchFromGitHub {
     owner = "michaeldfallen";
     repo = "git-radar";
     rev = "v${version}";
-    sha256 = "1028462b4kqxx66vjv7r8nnr6bi3kw11fixpqyg2srqriha6447p";
+    sha256 = "0c3zp8s4w7m4s71qgwk1jyfc8yzw34f2hi43x1w437ypgabwg81j";
   };
+
+  dontBuild = true;
 
   installPhase = ''
     mkdir -p $out/bin
@@ -24,7 +22,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     homepage = https://github.com/michaeldfallen/git-radar;
     license = licenses.mit;
-    description = "Git-radar is a tool you can add to your prompt to provide at-a-glance information on your git repo";
+    description = "A tool you can add to your prompt to provide at-a-glance information on your git repo";
     platforms = with platforms; linux ++ darwin;
     maintainers = with maintainers; [ kamilchm ];
   };

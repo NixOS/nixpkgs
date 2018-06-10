@@ -1,20 +1,24 @@
 { stdenv, fetchFromGitHub, sqlite, readline, asciidoc, SDL, SDL_gfx }:
 
-stdenv.mkDerivation {
-  name = "jimtcl-0.76";
+let
+  makeSDLFlags = map (p: "-I${stdenv.lib.getDev p}/include/SDL");
+
+in stdenv.mkDerivation rec {
+  name = "jimtcl-${version}";
+  version = "0.77";
 
   src = fetchFromGitHub {
     owner = "msteveb";
     repo = "jimtcl";
-    rev = "51f65c6d38fbf86e1f0b036ad336761fd2ab7fa0";
-    sha256 = "00ldal1w9ysyfmx28xdcaz81vaazr1fqixxb2abk438yfpp1i9hq";
+    rev = version;
+    sha256 = "06d9gdgvi6cwd6pjg3xig0kkjqm6kgq3am8yq1xnksyz2n09f0kp";
   };
 
   buildInputs = [
     sqlite readline asciidoc SDL SDL_gfx
   ];
 
-  NIX_CFLAGS_COMPILE = [ "-I${SDL.dev}/include/SDL" ];
+  NIX_CFLAGS_COMPILE = makeSDLFlags [ SDL SDL_gfx ];
 
   configureFlags = [
     "--with-ext=oo"

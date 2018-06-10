@@ -1,14 +1,17 @@
-{ stdenv, lib, buildGoPackage, fetchFromGitHub }:
+{ stdenv, buildGoPackage, fetchFromGitHub, openssl_1_0_2, pkgconfig, libpcap }:
 
 let
   tools = [
     "bsondump" "mongodump" "mongoexport" "mongofiles" "mongoimport"
-    "mongooplog" "mongorestore" "mongostat" "mongotop"
+    "mongoreplay" "mongorestore" "mongostat" "mongotop"
   ];
 in
+
+with stdenv.lib;
+
 buildGoPackage rec {
   name = "mongo-tools-${version}";
-  version = "3.0.12";
+  version = "3.7.2";
   rev = "r${version}";
 
   goPackagePath = "github.com/mongodb/mongo-tools";
@@ -18,20 +21,28 @@ buildGoPackage rec {
     inherit rev;
     owner = "mongodb";
     repo = "mongo-tools";
-    sha256 = "142vxgniri1mfy2xmfgxhbdp6k6h8c5milv454krv1b51v43hsbm";
+    sha256 = "1y5hd4qw7422sqkj8vmy4agscvin3ck54r515bjrzn69iw73nhfl";
   };
 
-  goDeps = ./deps.nix;
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ openssl_1_0_2 libpcap ];
 
   # Mongodb incorrectly names all of their binaries main
   # Let's work around this with our own installer
-  preInstall = ''
-    mkdir -p $bin/bin
-  '' + toString (map (t: ''
-      go install $goPackagePath/${t}/main
-      mv go/bin/main $bin/bin/${t}
-  ''
-  ) tools) + ''  
-    rm -r go/bin
+  buildPhase = ''
+    # move vendored codes so nixpkgs go builder could find it
+    mv go/src/github.com/mongodb/mongo-tools/vendor/src/* go/src/github.com/mongodb/mongo-tools/vendor/
+
+    runHook preBuild
+    ${stdenv.lib.concatMapStrings (t: ''
+      go build -o "$bin/bin/${t}" -tags ssl -ldflags "-s -w" $goPackagePath/${t}/main
+    '') tools}
+    runHook postBuild
   '';
+
+  meta = {
+    homepage = https://github.com/mongodb/mongo-tools;
+    description = "Tools for the MongoDB";
+    license = licenses.asl20;
+  };
 }

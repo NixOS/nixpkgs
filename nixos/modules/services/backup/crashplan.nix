@@ -49,7 +49,7 @@ with lib;
         ensureDir ${crashplan.vardir}/backupArchives 700
         ensureDir ${crashplan.vardir}/log 777
         cp -avn ${crashplan}/conf.template/* ${crashplan.vardir}/conf
-        for x in app.asar bin EULA.txt install.vars lang lib libjniwrap64.so libjniwrap.so libjtux64.so libjtux.so libmd564.so libmd5.so share skin upgrade; do
+        for x in app.asar bin install.vars lang lib libc42archive64.so libc52archive.so libjniwrap64.so libjniwrap.so libjtux64.so libjtux.so libleveldb64.so libleveldb.so libmd564.so libmd5.so share skin upgrade; do
           rm -f ${crashplan.vardir}/$x;
           ln -sf ${crashplan}/$x ${crashplan.vardir}/$x;
         done

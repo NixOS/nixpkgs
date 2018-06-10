@@ -18,18 +18,22 @@ let
       sha256 = "0iwa8wyydcpjss6d1jy4jibqxpvzph4vmaxwwmndpsqy1fz64y9i";
     })
   ];
-  buildInputs = [
+  nativeBuildInputs = [
   ];
 in
 stdenv.mkDerivation {
   name = "tempora-lgc";
-  inherit buildInputs;
+  inherit nativeBuildInputs;
   inherit srcs;
   phases = "installPhase";
   installPhase = ''
     mkdir -p "$out/share/fonts/opentype/public"
     cp ${toString srcs} "$out/share/fonts/opentype/public"
   '';
+  outputHashAlgo = "sha256";
+  outputHashMode = "recursive";
+  outputHash = "1kwj31cjgdirqvh6bxs4fnvvr1ppaz6z8w40kvhkivgs69jglmzw";
+
   meta = {
     description = ''Tempora font'';
     license = stdenv.lib.licenses.gpl2 ;

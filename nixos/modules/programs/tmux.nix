@@ -61,11 +61,15 @@ in {
   options = {
     programs.tmux = {
 
-      enable = mkEnableOption "<command>tmux</command> - a <command>screen</command> replacement.";
+      enable = mkOption {
+        type = types.bool;
+        default = false;
+        description = "Whenever to configure <command>tmux</command> system-wide.";
+        relatedPackages = [ "tmux" ];
+      };
 
       aggressiveResize = mkOption {
         default = false;
-        example = true;
         type = types.bool;
         description = ''
           Resize the window to the size of the smallest session for which it is the current window.
@@ -81,14 +85,12 @@ in {
 
       clock24 = mkOption {
         default = false;
-        example = true;
         type = types.bool;
         description = "Use 24 hour clock.";
       };
 
       customPaneNavigationAndResize = mkOption {
         default = false;
-        example = true;
         type = types.bool;
         description = "Override the hjkl and HJKL bindings for pane navigation and resizing in VI mode.";
       };
@@ -124,14 +126,12 @@ in {
 
       newSession = mkOption {
         default = false;
-        example = true;
         type = types.bool;
         description = "Automatically spawn a session if trying to attach and none are running.";
       };
 
       reverseSplit = mkOption {
         default = false;
-        example = true;
         type = types.bool;
         description = "Reverse the window split shortcuts.";
       };
@@ -156,6 +156,15 @@ in {
         type = types.str;
         description = "Set the $TERM variable.";
       };
+
+      secureSocket = mkOption {
+        default = true;
+        type = types.bool;
+        description = ''
+          Store tmux socket under /run, which is more secure than /tmp, but as a
+          downside it doesn't survive user logout.
+        '';
+      };
     };
   };
 
@@ -168,7 +177,7 @@ in {
       systemPackages = [ pkgs.tmux ];
 
       variables = {
-        TMUX_TMPDIR = ''''${XDG_RUNTIME_DIR:-"/run/user/\$(id -u)"}'';
+        TMUX_TMPDIR = lib.optional cfg.secureSocket ''''${XDG_RUNTIME_DIR:-"/run/user/\$(id -u)"}'';
       };
     };
   };

@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   #  http://www.mail-archive.com/suspend-devel@lists.sourceforge.net/msg02355.html
   makeFlags = [
     "DESTDIR=$(out)"
-  ] ++ stdenv.lib.optional (stdenv.isx86_64 || stdenv.isArm) "BACKEND=x86emu";
+  ] ++ stdenv.lib.optional (!stdenv.isi686) "BACKEND=x86emu";
 
   preBuild = ''
     sed -i lrmi.c -e 's@defined(__i386__)@(defined(__i386__) || defined(__x86_64__))@'
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     description = "Real-mode x86 code emulator";
     maintainers = with maintainers; [ raskin ];
-    platforms = with platforms; linux ++ freebsd ++ netbsd;
+    platforms = [ "x86_64-linux" "i686-linux" ];
     license = licenses.mit;
   };
 }

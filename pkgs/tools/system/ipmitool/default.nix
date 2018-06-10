@@ -1,15 +1,15 @@
-{ fetchurl, stdenv, openssl, static ? false }:
+{ stdenv, lib, fetchurl, openssl, static ? false }:
 
 let
   pkgname = "ipmitool";
-  version = "1.8.15";
+  version = "1.8.18";
 in
 stdenv.mkDerivation {
   name = "${pkgname}-${version}";
 
   src = fetchurl {
     url = "mirror://sourceforge/${pkgname}/${pkgname}-${version}.tar.gz";
-    sha256 = "0y6g8xg9p854n7xm3kds8m3d53jrsllnknp8lcr3jscf99j4x5ph";
+    sha256 = "0kfh8ny35rvwxwah4yv91a05qwpx74b5slq2lhrh71wz572va93m";
   };
 
   patchPhase = stdenv.lib.optionalString stdenv.isDarwin ''
@@ -28,10 +28,11 @@ stdenv.mkDerivation {
   makeFlags = if static then "AM_LDFLAGS=-all-static" else "";
   dontDisableStatic = static;
 
-  meta = {
+  meta = with lib; {
     description = ''Command-line interface to IPMI-enabled devices'';
-    license = stdenv.lib.licenses.bsd3;
-    homepage = http://ipmitool.sourceforge.net;
-    platforms = stdenv.lib.platforms.unix;
+    license = licenses.bsd3;
+    homepage = https://sourceforge.net/projects/ipmitool/;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ fpletz ];
   };
 }

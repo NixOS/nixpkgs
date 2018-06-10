@@ -8,9 +8,14 @@ let
 
   cfg = config.boot.plymouth;
 
+  breezePlymouth = pkgs.breeze-plymouth.override {
+    nixosBranding = true;
+    nixosVersion = config.system.nixos.release;
+  };
+
   themesEnv = pkgs.buildEnv {
     name = "plymouth-themes";
-    paths = [ plymouth ] ++ cfg.themePackages;
+    paths = [ plymouth breezePlymouth ] ++ cfg.themePackages;
   };
 
   configFile = pkgs.writeText "plymouthd.conf" ''
@@ -38,7 +43,7 @@ in
       };
 
       theme = mkOption {
-        default = "fade-in";
+        default = "breeze";
         type = types.str;
         description = ''
           Splash screen theme.
@@ -51,6 +56,10 @@ in
           url = "https://nixos.org/logo/nixos-hires.png";
           sha256 = "1ivzgd7iz0i06y36p8m5w48fd8pjqwxhdaavc0pxs7w1g7mcy5si";
         };
+        defaultText = ''pkgs.fetchurl {
+          url = "https://nixos.org/logo/nixos-hires.png";
+          sha256 = "1ivzgd7iz0i06y36p8m5w48fd8pjqwxhdaavc0pxs7w1g7mcy5si";
+        }'';
         description = ''
           Logo which is displayed on the splash screen.
         '';
@@ -68,7 +77,7 @@ in
     environment.systemPackages = [ plymouth ];
 
     environment.etc."plymouth/plymouthd.conf".source = configFile;
-    environment.etc."plymouth/plymouthd.defaults".source = "${plymouth}/share/plymouth/plymouth.defaults";
+    environment.etc."plymouth/plymouthd.defaults".source = "${plymouth}/share/plymouth/plymouthd.defaults";
     environment.etc."plymouth/logo.png".source = cfg.logo;
     environment.etc."plymouth/themes".source = "${themesEnv}/share/plymouth/themes";
     # XXX: Needed because we supply a different set of plugins in initrd.
@@ -78,9 +87,10 @@ in
 
     systemd.services.plymouth-kexec.wantedBy = [ "kexec.target" ];
     systemd.services.plymouth-halt.wantedBy = [ "halt.target" ];
+    systemd.services.plymouth-quit-wait.wantedBy = [ "multi-user.target" ];
     systemd.services.plymouth-quit = {
       wantedBy = [ "multi-user.target" ];
-      after = [ "display-manager.service" "multi-user.target" ];
+      after = [ "display-manager.service" ];
     };
     systemd.services.plymouth-poweroff.wantedBy = [ "poweroff.target" ];
     systemd.services.plymouth-reboot.wantedBy = [ "reboot.target" ];
@@ -93,12 +103,26 @@ in
       moduleName="$(sed -n 's,ModuleName *= *,,p' ${themesEnv}/share/plymouth/themes/${cfg.theme}/${cfg.theme}.plymouth)"
 
       mkdir -p $out/lib/plymouth/renderers
-      cp ${plymouth}/lib/plymouth/{text,details,$moduleName}.so $out/lib/plymouth
+      # module might come from a theme
+      cp ${themesEnv}/lib/plymouth/{text,details,$moduleName}.so $out/lib/plymouth
       cp ${plymouth}/lib/plymouth/renderers/{drm,frame-buffer}.so $out/lib/plymouth/renderers
 
       mkdir -p $out/share/plymouth/themes
       cp ${plymouth}/share/plymouth/plymouthd.defaults $out/share/plymouth
-      cp -r ${themesEnv}/share/plymouth/themes/{text,details,${cfg.theme}} $out/share/plymouth/themes
+
+      # copy themes into working directory for patching
+      mkdir themes
+      # use -L to copy the directories proper, not the symlinks to them
+      cp -r -L ${themesEnv}/share/plymouth/themes/{text,details,${cfg.theme}} themes
+
+      # patch out any attempted references to the theme or plymouth's themes directory
+      chmod -R +w themes
+      find themes -type f | while read file
+      do
+        sed -i "s,/nix/.*/share/plymouth/themes,$out/share/plymouth/themes,g" $file
+      done
+
+      cp -r themes/* $out/share/plymouth/themes
       cp ${cfg.logo} $out/share/plymouth/logo.png
     '';
 

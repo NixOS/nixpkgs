@@ -1,20 +1,18 @@
-{stdenv, fetchurl}:
+{stdenv, fetchzip}:
 
-stdenv.mkDerivation {
+fetchzip {
   name = "ttf-bitstream-vera-1.10";
 
-  src = fetchurl {
-    url = mirror://gnome/sources/ttf-bitstream-vera/1.10/ttf-bitstream-vera-1.10.tar.bz2;
-    sha256 = "1p3qs51x5327gnk71yq8cvmxc6wgx79sqxfvxcv80cdvgggjfnyv";
-  };
+  url = mirror://gnome/sources/ttf-bitstream-vera/1.10/ttf-bitstream-vera-1.10.tar.bz2;
 
-  dontBuild = true;
-
-  installPhase = ''
+  postFetch = ''
+    tar -xjf $downloadedFile --strip-components=1
     fontDir=$out/share/fonts/truetype
     mkdir -p $fontDir
     cp *.ttf $fontDir
   '';
+
+  sha256 = "179hal4yi3367jg8rsvqx6h2w4s0kn9zzrv8c47sslyg28g39s4m";
 
   meta = {
     platforms = stdenv.lib.platforms.unix;

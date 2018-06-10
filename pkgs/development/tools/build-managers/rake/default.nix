@@ -1,13 +1,11 @@
 { lib, bundlerEnv, ruby }:
 
 bundlerEnv {
-  name = "rake-11.1.1";
+  name = "rake-${(import ./gemset.nix).rake.version}";
 
   inherit ruby;
-  gemfile = ./Gemfile;
-  lockfile = ./Gemfile.lock;
-  gemset = ./gemset.nix;
-  
+  gemdir = ./.;
+
   meta = with lib; {
     description = "A software task management and build automation tool";
     homepage = https://github.com/ruby/rake;

@@ -1,17 +1,17 @@
-{ fetchurl, fetchFromGitHub, stdenv, wxGTK30, freeimage, cmake, zziplib, mesa, boost,
+{ fetchurl, fetchFromGitHub, stdenv, wxGTK30, freeimage, cmake, zziplib, libGLU_combined, boost,
   pkgconfig, libuuid, openal, ogre, ois, curl, gtk2, pixman, mygui, unzip,
   angelscript, ogrepaged, mysocketw, libxcb
   }:
 
 stdenv.mkDerivation rec {
-  version = "git-20160412";
+  version = "0.4.7.0";
   name = "rigsofrods-${version}";
 
   src = fetchFromGitHub {
     owner = "RigsOfRods";
     repo = "rigs-of-rods";
-    rev = "1ebd359dbd467b4c3171dd6d054e7d8ec39f78ba";
-    sha256 = "0h71nrgq5r5cnh20c7wl8jzyaf50dj1b5jdrwihnklpsfyfvjlw4";
+    rev = version;
+    sha256 = "0cb1il7qm45kfhh6h6jwfpxvjlh2dmg8z1yz9kj4d6098myf2lg4";
   };
 
   enableParallelBuilding = true;
@@ -25,7 +25,8 @@ stdenv.mkDerivation rec {
     ln -s $out/share/rigsofrods/{RoR,RoRConfig} $out/bin
   '';
 
-  buildInputs = [ wxGTK30 freeimage cmake zziplib mesa boost pkgconfig
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ wxGTK30 freeimage cmake zziplib libGLU_combined boost
     libuuid openal ogre ois curl gtk2 mygui unzip angelscript
     ogrepaged mysocketw libxcb ];
 

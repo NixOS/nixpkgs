@@ -2,11 +2,11 @@
 
 perlPackages.buildPerlPackage rec {
   name = "awstats-${version}";
-  version = "7.4";
+  version = "7.7";
 
   src = fetchurl {
     url = "mirror://sourceforge/awstats/${name}.tar.gz";
-    sha256 = "0mdbilsl8g9a84qgyws4pakhqr3mfhs5g5dqbgsn9gn285rzxas3";
+    sha256 = "0z3p77jnpjilajs9yv87r8xla2x1gjqlvrhpbgbh5ih73386v3j2";
   };
 
   postPatch = ''
@@ -41,12 +41,15 @@ perlPackages.buildPerlPackage rec {
     mv wwwroot "$out/wwwroot"
     rm -r "$out/wwwroot/classes/src/"
 
+    mkdir -p "$out/share/awstats"
+    mv tools "$out/share/awstats/tools"
+
     mkdir -p "$bin/bin"
     ln -s "$out/wwwroot/cgi-bin/awstats.pl" "$bin/bin/awstats"
 
-    mkdir -p "$doc/share/"
+    mkdir -p "$doc/share/doc"
     mv README.md docs/
-    mv docs "$doc/share/awstats"
+    mv docs "$doc/share/doc/awstats"
   '';
 
   meta = with stdenv.lib; {

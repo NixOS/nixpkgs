@@ -1,17 +1,26 @@
-{ stdenv, fetchFromGitHub, gtk2, pkgconfig, intltool }:
+{ stdenv, fetchFromGitHub, fetchpatch, gtk3, pkgconfig, intltool, libxslt, hicolor-icon-theme }:
 
 stdenv.mkDerivation rec {
-  version = "0.5.4.7";
+  version = "0.5.4.12";
   name = "xarchiver-${version}";
 
   src = fetchFromGitHub {
     owner = "ib";
     repo = "xarchiver";
-    rev = "${name}";
-    sha256 = "0w9lx8d8r50j48qfhn2r0dlcnwy3pjyy6xjvgpr0qagy5l1q1qj4";
+    rev = "${version}";
+    sha256 = "13d8slcx3frz0dhl1w4llj7001n57cjjb8r7dlaw5qacaas3xfwi";
   };
 
-  buildInputs = [ gtk2 pkgconfig intltool ];
+  patches = [
+    # Fixes darwin build, remove with next update.
+    (fetchpatch {
+      url = https://github.com/ib/xarchiver/commit/8c69d066a827419feafd0bd047d19207ceadc7df.patch;
+      sha256 = "1ch1409hx1ynkm0mz93zy8h7wvcrsn56sz7lczsf6hznc8yzl0qg";
+    })
+  ];
+
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ gtk3 intltool libxslt hicolor-icon-theme ];
 
   meta = {
     description = "GTK+ frontend to 7z,zip,rar,tar,bzip2, gzip,arj, lha, rpm and deb (open and extract only)";

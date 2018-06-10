@@ -1,26 +1,24 @@
-{ stdenv, fetchFromGitHub, ncurses, boost, asciidoc, docbook_xsl, libxslt }:
+{ stdenv, fetchFromGitHub, ncurses, boost, asciidoc, docbook_xsl, libxslt, pkgconfig }:
 
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  name = "kakoune-nightly-${version}";
-  version = "2016-07-26";
+  name = "kakoune-unstable-${version}";
+  version = "2018-05-21";
   src = fetchFromGitHub {
     repo = "kakoune";
     owner = "mawww";
-    rev = "0d2c5072b083a893843e4fa87f9f702979069e14";
-    sha256 = "01qqs5yr9xvvklg3gg45lgnyh6gji28m854mi1snzvjd7fksf50n";
+    rev = "878d2a4bdb674a5e7703a66e530520f48efba641";
+    sha256 = "0pwy6ilsb62s1792gjyvhvq8shj60l8lx26b58zvpfb54an4s6rk";
   };
-  buildInputs = [ ncurses boost asciidoc docbook_xsl libxslt ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ ncurses asciidoc docbook_xsl libxslt ];
+  makeFlags = [ "debug=no" ];
 
-  buildPhase = ''
-    sed -ie 's#--no-xmllint#--no-xmllint --xsltproc-opts="--nonet"#g' src/Makefile
+  postPatch = ''
     export PREFIX=$out
-    (cd src && make )
-  '';
-
-  installPhase = ''
-    (cd src && make install)
+    cd src
+    sed -ie 's#--no-xmllint#--no-xmllint --xsltproc-opts="--nonet"#g' Makefile
   '';
 
   meta = {
@@ -28,6 +26,6 @@ stdenv.mkDerivation rec {
     description = "A vim inspired text editor";
     license = licenses.publicDomain;
     maintainers = with maintainers; [ vrthra ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

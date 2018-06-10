@@ -1,22 +1,22 @@
-{ stdenv, fetchgit, perl, cdrkit, syslinux }:
+{ stdenv, lib, fetchgit, perl, cdrkit, syslinux, xz, openssl
+, embedScript ? null
+}:
 
 let
-  date = "20141124";
-  rev = "5cbdc41778622c07429e00f5aee383b575532bf0";
+  date = "20180220";
+  rev = "47849be3a900c546cf92066849be0806f4e611d9";
 in
 
 stdenv.mkDerivation {
   name = "ipxe-${date}-${builtins.substring 0 7 rev}";
 
-  buildInputs = [ perl cdrkit syslinux ];
+  buildInputs = [ perl cdrkit syslinux xz openssl ];
 
   src = fetchgit {
     url = git://git.ipxe.org/ipxe.git;
-    sha256 = "0wiy3kag6x8a2a71pc9za9izmac8gdz90vaqp2mwgih6p2lz01zq";
+    sha256 = "1f4pi1dp2zqnrbfnggnzycfvrxv0bqgw73dxbyy3hfy4mhdj6z45";
     inherit rev;
   };
-
-  preConfigure = "cd src";
 
   # not possible due to assembler code
   hardeningDisable = [ "pic" "stackprotector" ];
@@ -26,13 +26,31 @@ stdenv.mkDerivation {
   makeFlags =
     [ "ECHO_E_BIN_ECHO=echo" "ECHO_E_BIN_ECHO_E=echo" # No /bin/echo here.
       "ISOLINUX_BIN_LIST=${syslinux}/share/syslinux/isolinux.bin"
-    ];
+      "LDLINUX_C32=${syslinux}/share/syslinux/ldlinux.c32"
+    ] ++ lib.optional (embedScript != null) "EMBED=${embedScript}";
 
-  installPhase =
-    ''
-      mkdir $out
-      cp bin/ipxe.dsk bin/ipxe.usb bin/ipxe.iso bin/ipxe.lkrn bin/undionly.kpxe $out
-    '';
+
+  enabledOptions = [ "DOWNLOAD_PROTO_HTTPS" ];
+
+  configurePhase = ''
+    runHook preConfigure
+    for opt in $enabledOptions; do echo "#define $opt" >> src/config/general.h; done
+    sed -i '/cp \''${ISOLINUX_BIN}/s/$/ --no-preserve=mode/' src/util/geniso
+    runHook postConfigure
+  '';
+
+  preBuild = "cd src";
+
+  installPhase = ''
+    mkdir -p $out
+    cp bin/ipxe.dsk bin/ipxe.usb bin/ipxe.iso bin/ipxe.lkrn bin/undionly.kpxe $out
+
+    # Some PXE constellations especially with dnsmasq are looking for the file with .0 ending
+    # let's provide it as a symlink to be compatible in this case.
+    ln -s undionly.kpxe $out/undionly.kpxe.0
+  '';
+
+  enableParallelBuilding = true;
 
   meta = with stdenv.lib;
     { description = "Network boot firmware";

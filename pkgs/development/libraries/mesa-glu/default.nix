@@ -1,7 +1,8 @@
-{ stdenv, fetchurl, pkgconfig, mesa_noglu }:
+{ stdenv, fetchurl, pkgconfig, libGL }:
 
 stdenv.mkDerivation rec {
-  name = "glu-9.0.0";
+  name = "glu-${version}";
+  version = "9.0.0";
 
   src = fetchurl {
     url = "ftp://ftp.freedesktop.org/pub/mesa/glu/${name}.tar.bz2";
@@ -11,14 +12,14 @@ stdenv.mkDerivation rec {
     echo 'Cflags: -I''${includedir}' >> glu.pc.in
   '';
 
-  buildInputs = [ pkgconfig ];
-  propagatedBuildInputs = [ mesa_noglu ];
+  nativeBuildInputs = [ pkgconfig ];
+  propagatedBuildInputs = [ libGL ];
 
   outputs = [ "out" "dev" ];
 
   meta = {
     description = "OpenGL utility library";
-    homepage = http://cgit.freedesktop.org/mesa/glu/;
+    homepage = https://cgit.freedesktop.org/mesa/glu/;
     license = stdenv.lib.licenses.sgi-b-20;
     platforms = stdenv.lib.platforms.unix;
   };

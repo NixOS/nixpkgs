@@ -1,37 +1,72 @@
-{stdenv, fetchurl, ocaml, findlib, lambdaTerm, ocaml_lwt, makeWrapper,
- ocaml_react, camomile, zed, cppo, camlp4, ppx_tools
+{ stdenv, fetchurl, bash, ocaml, findlib, ocamlbuild, camlp4
+, lambdaTerm, ocaml_lwt, camomile, zed, cppo, ppx_tools, makeWrapper
 }:
 
+if !stdenv.lib.versionAtLeast ocaml.version "4.02"
+then throw "utop is not available for OCaml ${ocaml.version}"
+else
+
 stdenv.mkDerivation rec {
-  version = "1.19.2";
+  version = "1.19.3";
   name = "utop-${version}";
 
   src = fetchurl {
     url = "https://github.com/diml/utop/archive/${version}.tar.gz";
-    sha256 = "0hxybkqmrh0sz1yyyrgzdmxp46gda4vk22pv07s0qpfg2dpv56jh";
+    sha256 = "16z02vp9n97iax4fqpbi7v86r75vbabxvnd1rirh8w2miixs1g4x";
   };
 
-  buildInputs = [ ocaml findlib makeWrapper cppo camlp4 ppx_tools ];
+  nativeBuildInputs = [ makeWrapper ];
+  buildInputs = [ ocaml findlib ocamlbuild cppo camlp4 ppx_tools ];
 
   propagatedBuildInputs = [ lambdaTerm ocaml_lwt ];
 
   createFindlibDestdir = true;
 
   configureFlags = [ "--enable-camlp4" ]
-  ++ stdenv.lib.optional (ppx_tools != null) "--enable-interact";
+  ++ stdenv.lib.optional (ppx_tools != null && !stdenv.lib.versionAtLeast ocaml.version "4.04") "--enable-interact";
 
   buildPhase = ''
     make
     make doc
     '';
 
+  dontStrip = true;
+
   postFixup =
-  let ocamlVersion = (builtins.parseDrvName (ocaml.name)).version;
-  in
-   ''
+   let
+     path = "etc/utop/env";
+
+     # derivation of just runtime deps so env vars created by
+     # setup-hooks can be saved for use at runtime
+     runtime = stdenv.mkDerivation rec {
+       name = "utop-runtime-env-${version}";
+
+       buildInputs = [ findlib ] ++ propagatedBuildInputs;
+
+       phases = [ "installPhase" ];
+
+       installPhase = ''
+         mkdir -p "$out"/${path}
+         for e in OCAMLPATH CAML_LD_LIBRARY_PATH; do
+           printf %s "''${!e}" > "$out"/${path}/$e
+         done
+       '';
+     };
+
+     get = key: ''$(cat "${runtime}/${path}/${key}")'';
+   in ''
    for prog in "$out"/bin/*
    do
-    wrapProgram $prog --set CAML_LD_LIBRARY_PATH "${ocaml_lwt}"/lib/ocaml/${ocamlVersion}/site-lib/lwt/:"${lambdaTerm}"/lib/ocaml/${ocamlVersion}/site-lib/lambda-term/:'$CAML_LD_LIBRARY_PATH' --set OCAMLPATH "${ocaml_lwt}"/lib/ocaml/${ocamlVersion}/site-lib:${ocaml_react}/lib/ocaml/${ocamlVersion}/site-lib:${camomile}/lib/ocaml/${ocamlVersion}/site-lib:${zed}/lib/ocaml/${ocamlVersion}/site-lib:${lambdaTerm}/lib/ocaml/${ocamlVersion}/site-lib:"$out"/lib/ocaml/${ocamlVersion}/site-lib:'$OCAMLPATH'
+
+    # Note: wrapProgram by default calls 'exec -a $0 ...', but this
+    # breaks utop on Linux with OCaml 4.04, and is disabled with
+    # '--argv0 ""' flag. See https://github.com/NixOS/nixpkgs/issues/24496
+    wrapProgram "$prog" \
+      --argv0 "" \
+      --prefix CAML_LD_LIBRARY_PATH ":" "${get "CAML_LD_LIBRARY_PATH"}" \
+      --prefix OCAMLPATH ":" "${get "OCAMLPATH"}" \
+      --prefix OCAMLPATH ":" $(unset OCAMLPATH; addOCamlPath "$out"; printf %s "$OCAMLPATH") \
+      --add-flags "-I ${findlib}/lib/ocaml/${stdenv.lib.getVersion ocaml}/site-lib"
    done
    '';
 

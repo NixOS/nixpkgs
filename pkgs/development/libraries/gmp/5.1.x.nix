@@ -1,6 +1,6 @@
 { stdenv, fetchurl, m4, cxx ? true, withStatic ? true }:
 
-with { inherit (stdenv.lib) optional optionalString; };
+let inherit (stdenv.lib) optional optionalString; in
 
 let self = stdenv.mkDerivation rec {
   name = "gmp-5.1.3";
@@ -17,9 +17,6 @@ let self = stdenv.mkDerivation rec {
   passthru.static = self.out;
 
   nativeBuildInputs = [ m4 ];
-
-  # FIXME needs gcc 4.9 in bootstrap tools
-  hardeningDisable = [ "format" "stackprotector" ];
 
   patches = if stdenv.isDarwin then [ ./need-size-t.patch ] else null;
 
@@ -40,7 +37,7 @@ let self = stdenv.mkDerivation rec {
   # The config.guess in GMP tries to runtime-detect various
   # ARM optimization flags via /proc/cpuinfo (and is also
   # broken on multicore CPUs). Avoid this impurity.
-  preConfigure = optionalString stdenv.isArm ''
+  preConfigure = optionalString stdenv.isAarch32 ''
       configureFlagsArray+=("--build=$(./configfsf.guess)")
     '';
 
@@ -51,7 +48,7 @@ let self = stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
-    homepage = "http://gmplib.org/";
+    homepage = https://gmplib.org/;
     description = "GNU multiple precision arithmetic library";
     license = licenses.gpl3Plus;
 

@@ -1,23 +1,38 @@
-{ stdenv, lib, fetchFromGitHub
-, go, libapparmor, apparmor-parser, libseccomp }:
+{ stdenv, lib, fetchFromGitHub, removeReferencesTo
+, go, libapparmor, apparmor-parser, libseccomp, btrfs-progs }:
 
 with lib;
 
 stdenv.mkDerivation rec {
   name = "containerd-${version}";
-  version = "0.2.3";
+  version = "1.1.0";
 
   src = fetchFromGitHub {
-    owner = "docker";
+    owner = "containerd";
     repo = "containerd";
     rev = "v${version}";
-    sha256 = "0hlvbd5n4v337ywkc8mnbhp9m8lg8612krv45262n87c2ijyx09s";
+    sha256 = "0nknqprmi04jfiivrk158jyddc95q4jggfsm7cg7rpvjamkzn6c8";
   };
 
-  buildInputs = [ go ];
+  hardeningDisable = [ "fortify" ];
+
+  buildInputs = [ removeReferencesTo go btrfs-progs ];
+  buildFlags = "VERSION=v${version}";
+
+  BUILDTAGS = []
+    ++ optional (btrfs-progs == null) "no_btrfs";
+
+  preConfigure = ''
+    # Extract the source
+    cd "$NIX_BUILD_TOP"
+    mkdir -p "go/src/github.com/containerd"
+    mv "$sourceRoot" "go/src/github.com/containerd/containerd"
+    export GOPATH=$NIX_BUILD_TOP/go:$GOPATH
+'';
 
   preBuild = ''
-    ln -s $(pwd) vendor/src/github.com/docker/containerd
+    cd go/src/github.com/containerd/containerd
+    patchShebangs .
   '';
 
   installPhase = ''
@@ -26,10 +41,7 @@ stdenv.mkDerivation rec {
   '';
 
   preFixup = ''
-    # remove references to go compiler
-    while read file; do
-      sed -ri "s,${go},$(echo "${go}" | sed "s,$NIX_STORE/[^-]*,$NIX_STORE/eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee,"),g" $file
-    done < <(find $out/bin -type f 2>/dev/null)
+    find $out -type f -exec remove-references-to -t ${go} '{}' +
   '';
 
   meta = {

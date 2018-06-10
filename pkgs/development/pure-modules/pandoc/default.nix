@@ -10,7 +10,8 @@ stdenv.mkDerivation rec {
     sha256 = "0f23a17549048ca3a8f4936ea9e931feb05997390b486850936b746996350cda";
   };
 
-  buildInputs = [ pkgconfig pure ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ pure ];
   propagatedBuildInputs = [ pandoc gawk getopt ];
   makeFlags = "libdir=$(out)/lib prefix=$(out)/";
   preInstall = ''

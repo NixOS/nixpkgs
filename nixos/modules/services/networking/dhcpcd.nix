@@ -16,7 +16,7 @@ let
   # Don't start dhcpcd on explicitly configured interfaces or on
   # interfaces that are part of a bridge, bond or sit device.
   ignoredInterfaces =
-    map (i: i.name) (filter (i: if i.useDHCP != null then !i.useDHCP else i.ip4 != [ ] || i.ipAddress != null) interfaces)
+    map (i: i.name) (filter (i: if i.useDHCP != null then !i.useDHCP else i.ipv4.addresses != [ ]) interfaces)
     ++ mapAttrsToList (i: _: i) config.networking.sits
     ++ concatLists (attrValues (mapAttrs (n: v: v.interfaces) config.networking.bridges))
     ++ concatLists (attrValues (mapAttrs (n: v: v.interfaces) config.networking.vswitches))
@@ -71,8 +71,7 @@ let
           # anything ever again ("couldn't resolve ..., giving up on
           # it"), so we silently lose time synchronisation. This also
           # applies to openntpd.
-          ${config.systemd.package}/bin/systemctl try-restart ntpd.service
-          ${config.systemd.package}/bin/systemctl try-restart openntpd.service
+          ${config.systemd.package}/bin/systemctl try-reload-or-restart ntpd.service openntpd.service || true
       fi
 
       ${cfg.runHook}
@@ -154,12 +153,16 @@ in
 
   config = mkIf enableDHCP {
 
-    systemd.services.dhcpcd =
+    systemd.services.dhcpcd = let
+      cfgN = config.networking;
+      hasDefaultGatewaySet = (cfgN.defaultGateway != null && cfgN.defaultGateway.address != "")
+                          && (!cfgN.enableIPv6 || (cfgN.defaultGateway6 != null && cfgN.defaultGateway6.address != ""));
+    in
       { description = "DHCP Client";
 
-        wantedBy = [ "multi-user.target" ];
+        wantedBy = [ "multi-user.target" ] ++ optional (!hasDefaultGatewaySet) "network-online.target";
+        after = [ "network.target" ];
         wants = [ "network.target" ];
-        before = [ "network.target" ];
 
         # Stopping dhcpcd during a reconfiguration is undesirable
         # because it brings down the network interfaces configured by
@@ -173,7 +176,7 @@ in
         serviceConfig =
           { Type = "forking";
             PIDFile = "/run/dhcpcd.pid";
-            ExecStart = "@${dhcpcd}/sbin/dhcpcd dhcpcd --quiet ${optionalString cfg.persistent "--persistent"} --config ${dhcpcdConf}";
+            ExecStart = "@${dhcpcd}/sbin/dhcpcd dhcpcd -w --quiet ${optionalString cfg.persistent "--persistent"} --config ${dhcpcdConf}";
             ExecReload = "${dhcpcd}/sbin/dhcpcd --rebind";
             Restart = "always";
           };

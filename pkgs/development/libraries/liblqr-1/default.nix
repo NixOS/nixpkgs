@@ -8,13 +8,13 @@ stdenv.mkDerivation rec {
     sha256 = "0dzikxzjz5zmy3vnydh90aqk23q0qm8ykx6plz6p4z90zlp84fhp";
   };
 
-  buildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkgconfig ];
   propagatedBuildInputs = [ glib ];
 
   meta = with stdenv.lib; {
     homepage = http://liblqr.wikidot.com;
     description = "Seam-carving C/C++ library called Liquid Rescaling";
     platforms = platforms.all;
-    maintainers = [ maintainers.urkud ];
+    maintainers = [ ];
   };
 }

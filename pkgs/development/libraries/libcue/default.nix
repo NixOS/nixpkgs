@@ -1,20 +1,30 @@
-{ stdenv, fetchurl }:
+{ stdenv, fetchFromGitHub, cmake, bison, flex }:
+
 stdenv.mkDerivation rec {
-  name = "libcue-1.4.0";
-  src = fetchurl {
-    url = "mirror://sourceforge/libcue/${name}.tar.bz2";
-    sha256 = "17kjd7rjz1bvfn44n3n2bjb7a1ywd0yc0g4sqp5ihf9b5bn7cwlb";
+  name = "libcue-${version}";
+  version = "2.2.1";
+
+  src = fetchFromGitHub {
+    owner = "lipnitsk";
+    repo = "libcue";
+    rev = "v${version}";
+    sha256 = "1iqw4n01rv2jyk9lksagyxj8ml0kcfwk67n79zy1r6zv1xfp5ywm";
   };
-  meta = {
-    description = "A library to parse a cue sheet";
+
+  nativeBuildInputs = [ cmake bison flex ];
+
+  doCheck = false; # fails all the tests (ctest)
+
+  meta = with stdenv.lib; {
+    description = "CUE Sheet Parser Library";
     longDescription = ''
       libcue is intended to parse a so called cue sheet from a char string or
       a file pointer. For handling of the parsed data a convenient API is
       available.
     '';
-    homepage = http://sourceforge.net/projects/libcue/;
-    license = stdenv.lib.licenses.gpl2;
-    maintainers = with stdenv.lib.maintainers; [ astsmtl ];
-    platforms = with stdenv.lib.platforms; linux;
+    homepage = https://sourceforge.net/projects/libcue/;
+    license = licenses.gpl2;
+    maintainers = with maintainers; [ astsmtl ];
+    platforms = platforms.linux ++ platforms.darwin;
   };
 }

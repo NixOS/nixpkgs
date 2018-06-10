@@ -3,7 +3,7 @@
 
 buildGoPackage rec {
   name = "machine-${version}";
-  version = "0.8.1";
+  version = "0.14.0";
 
   goPackagePath = "github.com/docker/machine";
 
@@ -11,8 +11,13 @@ buildGoPackage rec {
     rev = "v${version}";
     owner = "docker";
     repo = "machine";
-    sha256 = "0l4a5bqfw8i8wrl5yzkqy848r7vdx6hw8p5m3z3vzabvsmsjjwy7";
+    sha256 = "0hd5sklmvkhhpfn318hq9w0f7x14165h1l2mdn9iv4447z1iibff";
   };
+
+  postInstall = ''
+    mkdir -p $bin/share/bash-completion/completions/
+    cp go/src/github.com/docker/machine/contrib/completion/bash/* $bin/share/bash-completion/completions/
+  '';
 
   postFixup =  ''
     mv $bin/bin/cmd $bin/bin/docker-machine
@@ -23,6 +28,6 @@ buildGoPackage rec {
     description = "Docker Machine is a tool that lets you install Docker Engine on virtual hosts, and manage Docker Engine on the hosts.";
     license = licenses.asl20;
     maintainers = with maintainers; [ offline tailhook ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

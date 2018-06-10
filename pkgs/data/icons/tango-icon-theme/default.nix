@@ -12,11 +12,12 @@ stdenv.mkDerivation rec {
 
   patches = [ ./rsvg-convert.patch ];
 
-  buildInputs = [ intltool pkgconfig iconnamingutils imagemagick librsvg ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ intltool iconnamingutils imagemagick librsvg ];
 
   configureFlags = "--enable-png-creation";
 
-  postInstall = '''${gtk.dev}/bin/gtk-update-icon-cache' "$out/share/icons/Tango" '';
+  postInstall = '''${gtk.out}/bin/gtk-update-icon-cache' "$out/share/icons/Tango" '';
 
   meta = {
     description = "A basic set of icons";

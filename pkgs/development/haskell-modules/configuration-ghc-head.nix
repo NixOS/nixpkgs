@@ -1,6 +1,6 @@
-{ pkgs }:
+{ pkgs, haskellLib }:
 
-with import ./lib.nix { inherit pkgs; };
+with haskellLib;
 
 self: super: {
 
@@ -18,7 +18,11 @@ self: super: {
   deepseq = null;
   directory = null;
   filepath = null;
+  ghc-boot = null;
+  ghc-boot-th = null;
+  ghc-compact = null;
   ghc-prim = null;
+  ghci = null;
   haskeline = null;
   hoopl = null;
   hpc = null;
@@ -34,7 +38,7 @@ self: super: {
   xhtml = null;
 
   # jailbreak-cabal can use the native Cabal library.
-  jailbreak-cabal = super.jailbreak-cabal.override { Cabal = null; };
+  jailbreak-cabal = pkgs.haskell.packages.ghc802.jailbreak-cabal;
 
   # haddock: No input file(s).
   nats = dontHaddock super.nats;
@@ -43,16 +47,12 @@ self: super: {
   # We have time 1.5
   aeson = disableCabalFlag super.aeson "old-locale";
 
-  # Show works differently for record syntax now, breaking haskell-src-exts' parser tests
-  # https://github.com/haskell-suite/haskell-src-exts/issues/224
-  haskell-src-exts = dontCheck super.haskell-src-exts;
-
   # Setup: At least the following dependencies are missing: base <4.8
   hspec-expectations = overrideCabal super.hspec-expectations (drv: {
     postPatch = "sed -i -e 's|base < 4.8|base|' hspec-expectations.cabal";
   });
   utf8-string = overrideCabal super.utf8-string (drv: {
-    postPatch = "sed -i -e 's|base >= 3 && < 4.8|base|' utf8-string.cabal";
+    postPatch = "sed -i -e 's|base >= 4.3 && < 4.10|base|' utf8-string.cabal";
   });
 
   # bos/attoparsec#92
@@ -85,4 +85,12 @@ self: super: {
   # Won't work with LLVM 3.5.
   llvm-general = markBrokenVersion "3.4.5.3" super.llvm-general;
 
+  # A bunch of jailbreaks due to 'base' bump
+  old-time = doJailbreak super.old-time;
+  old-locale = doJailbreak super.old-locale;
+  primitive = doJailbreak super.primitive;
+  test-framework = doJailbreak super.test-framework;
+  atomic-primops = doJailbreak (appendPatch super.atomic-primops ./patches/atomic-primops-Cabal-1.25.patch);
+  hashable = doJailbreak super.hashable;
+  stm = doJailbreak super.stm;
 }

@@ -2,8 +2,9 @@
 , pkgconfig, faad2, faac, a52dec, alsaLib, fftw, lame, libavc1394
 , libiec61883, libraw1394, libsndfile, libvorbis, libogg, libjpeg
 , libtiff, freetype, mjpegtools, x264, gettext, openexr
-, libXext, libXxf86vm, libXv, libXi, libX11, xextproto, libtheora, libpng
-, libdv, libuuid, file, nasm, perl }:
+, libXext, libXxf86vm, libXv, libXi, libX11, libXft, xextproto, libtheora, libpng
+, libdv, libuuid, file, nasm, perl
+, fontconfig, intltool }:
 
 stdenv.mkDerivation {
   name = "cinelerra-git";
@@ -15,8 +16,16 @@ stdenv.mkDerivation {
 
   src = fetchgit {
     url = "git://git.cinelerra-cv.org/j6t/cinelerra.git";
-    rev = "01dc4375a0fb65d10dd95151473d0e195239175f";
-    sha256 = "0grz644vrnajhxn96x05a3rlwrbd20yq40sw3y5yg7bvi96900gf";
+    # 2.3
+    #rev = "58ef118e63bf2fac8c99add372c584e93b008bae";
+    #sha256 = "1wx8c9rvh4y7fgg39lb02cy3sanms8a4fayr70jbhcb4rp691lph";
+    # master 22 nov 2016
+    #rev = "dbc22e0f35a9e8c274b06d4075b51dc9bace34aa";
+    #sha256 = "0c76j98ws1x2s5hzcdlykxm2bi7987d9nanka428xj62id0grla5";
+
+    # j6t/cinelerra.git
+    rev = "454be60e201c18c1fc3f1f253a6d2184fcfc94c4";
+    sha256 = "1n4kshqhgnr7aivsi8dgx48phyd2nzvv4szbc82mndklvs9jfb7r";
   };
 
   # touch config.rpath: work around bug in automake 1.10 ?
@@ -34,11 +43,16 @@ stdenv.mkDerivation {
       a52dec alsaLib   fftw lame libavc1394 libiec61883
       libraw1394 libsndfile libvorbis libogg libjpeg libtiff freetype
       mjpegtools x264 gettext openexr
-      libXext libXxf86vm libXv libXi libX11 xextproto
+      libXext libXxf86vm libXv libXi libX11 libXft xextproto
       libtheora libpng libdv libuuid
       nasm
       perl
+      fontconfig intltool
     ];
+
+  # $ make -C cinelerra edl.o
+  # edl.C:50:25: fatal error: versioninfo.h: No such file or directory
+  enableParallelBuilding = false;
 
   meta = {
     description = "Video Editor";

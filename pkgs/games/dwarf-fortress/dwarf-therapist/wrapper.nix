@@ -1,9 +1,11 @@
-{ symlinkJoin, lib, dwarf-therapist-original, dwarf-fortress-original, makeWrapper }:
+{ stdenv, symlinkJoin, lib, dwarf-therapist-original, dwarf-fortress-original, makeWrapper }:
 
 let
   df = dwarf-fortress-original;
   dt = dwarf-therapist-original;
-  inifile = "linux/v0${df.baseVersion}.${df.patchVersion}.ini";
+  platformSlug = if stdenv.targetPlatform.is32bit then
+    "linux32" else "linux64";
+  inifile = "linux/v0.${df.baseVersion}.${df.patchVersion}_${platformSlug}.ini";
   dfHashFile = "${df}/hash.md5";
 
 in symlinkJoin {
@@ -16,7 +18,7 @@ in symlinkJoin {
   postBuild = ''
     # DwarfTherapist assumes it's run in $out/share/dwarftherapist and
     # therefore uses many relative paths.
-    wrapProgram $out/bin/DwarfTherapist \
+    wrapProgram $out/bin/dwarftherapist \
       --run "cd $out/share/dwarftherapist"
 
     rm -rf $out/share/dwarftherapist/memory_layouts/linux
@@ -24,7 +26,7 @@ in symlinkJoin {
     origmd5=$(cat "${dfHashFile}.orig" | cut -c1-8)
     patchedmd5=$(cat "${dfHashFile}" | cut -c1-8)
     substitute \
-      ${dt.layouts}/${inifile} \
+      ${dt}/share/dwarftherapist/memory_layouts/${inifile} \
       $out/share/dwarftherapist/memory_layouts/${inifile} \
       --replace "$origmd5" "$patchedmd5"
   '';

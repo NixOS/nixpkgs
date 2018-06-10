@@ -1,6 +1,10 @@
-{ stdenv, fetchurl, xercesc }:
+{ stdenv, fetchurl, xercesc, getopt }:
 
-stdenv.mkDerivation rec {
+let
+  platform = if stdenv.isLinux then "linux" else
+             if stdenv.isDarwin then "macosx" else
+             throw "Unsupported platform";
+in stdenv.mkDerivation rec {
   name = "xalan-c-${version}";
   version = "1.11";
 
@@ -12,17 +16,17 @@ stdenv.mkDerivation rec {
   configurePhase = ''
     export XALANCROOT=`pwd`/c
     cd `pwd`/c
-    mkdir -p $out/usr
-    ./runConfigure -p linux -c gcc -x g++ -P$out/usr
+    mkdir -p $out
+    ./runConfigure -p ${platform} -c cc -x c++ -P$out
   '';
 
-  buildInputs = [ xercesc ];
+  buildInputs = [ xercesc getopt ];
 
   meta = {
     homepage = http://xalan.apache.org/;
     description = "A XSLT processor for transforming XML documents";
     license = stdenv.lib.licenses.asl20;
-    platforms = stdenv.lib.platforms.linux;
+    platforms = stdenv.lib.platforms.linux ++ stdenv.lib.platforms.darwin;
     maintainers = [ stdenv.lib.maintainers.jagajaga ];
   };
 }

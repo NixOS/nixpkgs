@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgconfig, autoreconfHook, libestr, json_c, zlib, pythonPackages, fastJson
-, libkrb5 ? null, systemd ? null, jemalloc ? null, libmysql ? null, postgresql ? null
+, libkrb5 ? null, systemd ? null, jemalloc ? null, mysql ? null, postgresql ? null
 , libdbi ? null, net_snmp ? null, libuuid ? null, curl ? null, gnutls ? null
 , libgcrypt ? null, liblognorm ? null, openssl ? null, librelp ? null, libksi ? null
 , libgt ? null, liblogging ? null, libnet ? null, hadoop ? null, rdkafka ? null
@@ -22,11 +22,12 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig autoreconfHook ];
   buildInputs = [
-    fastJson libestr json_c zlib pythonPackages.docutils libkrb5 jemalloc libmysql
+    fastJson libestr json_c zlib pythonPackages.docutils libkrb5 jemalloc 
     postgresql libdbi net_snmp libuuid curl gnutls libgcrypt liblognorm openssl
     librelp libgt libksi liblogging libnet hadoop rdkafka libmongo-client czmq
     rabbitmq-c hiredis
-  ] ++ stdenv.lib.optional stdenv.isLinux systemd;
+  ] ++ stdenv.lib.optional (mysql != null) mysql.connector-c
+    ++ stdenv.lib.optional stdenv.isLinux systemd;
 
   hardeningDisable = [ "format" ];
 
@@ -49,7 +50,7 @@ stdenv.mkDerivation rec {
     (mkFlag false                     "valgrind")
     (mkFlag false                     "diagtools")
     (mkFlag true                      "usertools")
-    (mkFlag (libmysql != null)        "mysql")
+    (mkFlag (mysql != null)           "mysql")
     (mkFlag (postgresql != null)      "pgsql")
     (mkFlag (libdbi != null)          "libdbi")
     (mkFlag (net_snmp != null)        "snmp")
@@ -105,7 +106,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = {
-    homepage = "http://www.rsyslog.com/";
+    homepage = http://www.rsyslog.com/;
     description = "Enhanced syslog implementation";
     license = licenses.gpl3;
     platforms = platforms.linux;

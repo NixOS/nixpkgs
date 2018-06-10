@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, qtbase, qtsvg, qmakeHook, pkgconfig, boost, wirelesstools, iw, qwt6 }:
+{ stdenv, fetchurl, qtbase, qtsvg, qmake, pkgconfig, boost, wirelesstools, iw, qwt6 }:
 
 stdenv.mkDerivation rec {
   name = "linssid-${version}";
@@ -9,7 +9,8 @@ stdenv.mkDerivation rec {
     sha256 = "13d35rlcjncd8lx3khkgn9x8is2xjd5fp6ns5xsn3w6l4xj9b4gl";
   };
 
-  buildInputs = [ qtbase qtsvg pkgconfig boost qwt6 qmakeHook ];
+  nativeBuildInputs = [ pkgconfig qmake ];
+  buildInputs = [ qtbase qtsvg boost qwt6 ];
 
   patches = [ ./0001-unbundled-qwt.patch ];
 
@@ -29,7 +30,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Graphical wireless scanning for Linux";
-    homepage = http://sourceforge.net/projects/linssid/;
+    homepage = https://sourceforge.net/projects/linssid/;
     license = licenses.gpl3;
     platforms = platforms.linux;
     maintainers = [ maintainers.bjornfor ];

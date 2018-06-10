@@ -12,14 +12,15 @@
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  version = "2.8";
+  version = "2.9.3";
   name = "asunder-${version}";
   src = fetchurl {
     url = "http://littlesvr.ca/asunder/releases/${name}.tar.bz2";
-    sha256 = "1nq9kd4rd4k2kibf57gdbm0zw2gxa234vvvdhxkm8g5bhx5h3iyq";
+    sha256 = "1630i1df06y840v3fgdf75jxw1s8kwbfn5bhi0686viah0scccw5";
   };
 
-  buildInputs = [ gtk2 libcddb intltool pkgconfig makeWrapper ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ gtk2 libcddb intltool makeWrapper ];
 
   runtimeDeps =
     optional mp3Support lame ++

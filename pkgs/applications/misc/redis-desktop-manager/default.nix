@@ -1,7 +1,7 @@
-{ stdenv, lib, fetchgit, pkgconfig , libssh2
+{ stdenv, lib, fetchgit, fetchpatch, pkgconfig, libssh2
 , qtbase, qtdeclarative, qtgraphicaleffects, qtimageformats, qtquickcontrols
-, qtsvg, qttools, qtquick1
-, makeQtWrapper, qmakeHook
+, qtsvg, qttools, qtquick1, qtcharts
+, qmake
 }:
 
 let
@@ -15,30 +15,30 @@ in
 
 stdenv.mkDerivation rec {
   name = "redis-desktop-manager-${version}";
-  version = "0.8.3";
+  version = "0.9.1";
 
   src = fetchgit {
     url = "https://github.com/uglide/RedisDesktopManager.git";
     fetchSubmodules = true;
     rev = "refs/tags/${version}";
-    sha256 = "0a7xa39qp1q32zkypw32mm3wi8wbhxhvrm6l3xsa3k1jzih7hzxr";
+    sha256 = "0yd4i944d4blw8jky0nxl7sfkkj975q4d328rdcbhizwvf6dx81f";
   };
 
-  nativeBuildInputs = [ makeQtWrapper qmakeHook ];
-
+  nativeBuildInputs = [ pkgconfig qmake ];
   buildInputs = [
-    pkgconfig libssh2 qtbase qtdeclarative qtgraphicaleffects qtimageformats
-    qtquick1 qtquickcontrols qtsvg qttools
+    libssh2 qtbase qtdeclarative qtgraphicaleffects qtimageformats
+    qtquick1 qtquickcontrols qtsvg qttools qtcharts
   ];
 
   dontUseQmakeConfigure = true;
 
+  # Disable annoying update reminder
+  postPatch = ''
+    sed -i s/'^\s*initUpdater();'/'\/\/initUpdater():'/ src/app/app.cpp
+  '';
+
   buildPhase = ''
     srcdir=$PWD
-
-    substituteInPlace src/resources/qml/ValueTabs.qml \
-      --replace "import QtQuick.Controls 1.4" \
-                "import QtQuick.Controls 1.2"
 
     cat <<EOF > src/version.h
 #ifndef RDM_VERSION
@@ -68,12 +68,11 @@ EOF
     mkdir -p $out/bin
     instdir="$srcdir/bin/linux/release"
     cp $instdir/rdm $out/bin
-    wrapQtProgram $out/bin/rdm
   '';
 
   meta = with lib; {
     description = "Cross-platform open source Redis DB management tool";
-    homepage = "http://redisdesktop.com/";
+    homepage = https://redisdesktop.com/;
     license = licenses.lgpl21;
     platforms = platforms.linux;
     maintainers = with maintainers; [ cstrahan ];

@@ -1,4 +1,4 @@
-#!/bin/bash
+#!@shell@
 
 set "$(dirname "$0")"/X11.bin "${@}"
 

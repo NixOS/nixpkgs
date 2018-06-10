@@ -11,10 +11,10 @@ stdenv.mkDerivation rec {
   buildInputs = [ cmake qt4 ];
   
   meta = with stdenv.lib; {
-    homepage = http://techbase.kde.org/Development/Tools/Automoc4;
+    homepage = https://techbase.kde.org/Development/Tools/Automoc4;
     description = "KDE Meta Object Compiler";
     license = licenses.bsd2;
-    maintainers = [ maintainers.sander maintainers.urkud ];
+    maintainers = [ maintainers.sander ];
     platforms = platforms.unix;
   };
 }

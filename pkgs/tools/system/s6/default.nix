@@ -2,7 +2,7 @@
 
 let
 
-  version = "2.2.4.3";
+  version = "2.6.1.1";
 
 in stdenv.mkDerivation rec {
 
@@ -11,7 +11,7 @@ in stdenv.mkDerivation rec {
   src = fetchgit {
     url = "git://git.skarnet.org/s6";
     rev = "refs/tags/v${version}";
-    sha256 = "1jlavi3q6wmcxdcwsy42qcgfkl0ag6hwcgmi4g67dvqs9nqjq2a3";
+    sha256 = "162hng8xcwjp8pr4d78zq3f82lm9c6ldbcfll0mjsmnxdds5hrsg";
   };
 
   dontDisableStatic = true;
@@ -19,6 +19,7 @@ in stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   configureFlags = [
+    "--enable-absolute-paths"
     "--with-sysdeps=${skalibs}/lib/skalibs/sysdeps"
     "--with-include=${skalibs}/include"
     "--with-include=${execline}/include"
@@ -28,12 +29,7 @@ in stdenv.mkDerivation rec {
     "--with-dynlib=${execline}/lib"
   ]
   ++ (if stdenv.isDarwin then [ "--disable-shared" ] else [ "--enable-shared" ])
-  ++ (stdenv.lib.optional stdenv.isDarwin "--target=${stdenv.system}");
-
-  preBuild = ''
-    substituteInPlace "src/daemontools-extras/s6-log.c" \
-      --replace '"execlineb"' '"${execline}/bin/execlineb"'
-  '';
+  ++ (stdenv.lib.optional stdenv.isDarwin "--build=${stdenv.system}");
 
   meta = {
     homepage = http://www.skarnet.org/software/s6/;

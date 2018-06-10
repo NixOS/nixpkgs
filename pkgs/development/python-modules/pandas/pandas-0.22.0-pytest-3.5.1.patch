@@ -1,0 +1,13 @@
+--- a/pandas/tests/io/test_pytables.py
++++ b/pandas/tests/io/test_pytables.py
+@@ -5028,8 +5028,8 @@ class TestHDFStore(Base):
+             with ensure_clean_path(self.path) as path:
+                 with catch_warnings(record=True):
+                     with pytest.raises(
+-                        ValueError, msg=("cannot have non-object label "
+-                                         "DataIndexableCol")):
++                        ValueError, message=("cannot have non-object label "
++                                             "DataIndexableCol")):
+                         df.to_hdf(path, 'df', format='table',
+                                   data_columns=True)
+ 

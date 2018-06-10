@@ -10,10 +10,10 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = [ libogg ];
 
-  buildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkgconfig ];
 
   meta = {
-    homepage = http://xiph.org/oggz/;
+    homepage = https://xiph.org/oggz/;
     description = "A C library and tools for manipulating with Ogg files and streams";
     longDescription = ''
       Oggz comprises liboggz and the tool oggz, which provides commands to
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
       interleaving data container developed by Monty at Xiph.Org, originally to
       support the Ogg Vorbis audio format but now used for many free codecs
       including Dirac, FLAC, Speex and Theora.'';
-    maintainers = [ stdenv.lib.maintainers.urkud ];
+    maintainers = [ ];
     platforms = stdenv.lib.platforms.unix;
   };
 }

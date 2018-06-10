@@ -1,24 +1,25 @@
 { stdenv, fetchurl, lib
-, pkgconfig, intltool, autoconf, makeWrapper
+, pkgconfig, intltool, autoconf, gnome3
 , glib, dbus, gtk3, libdbusmenu-gtk3, libappindicator-gtk3, gst_all_1
+, librsvg, wrapGAppsHook
 , pulseaudioSupport ? true, libpulseaudio ? null }:
 
 with lib;
 
 stdenv.mkDerivation rec {
   name = "audio-recorder-${version}";
-  version = "1.7-5";
+  version = "1.9.7";
 
   src = fetchurl {
-    name = "${name}-wily.tar.gz";
-    url = "${meta.homepage}/+archive/ubuntu/ppa/+files/audio-recorder_${version}%7Ewily.tar.gz";
-    sha256 = "1cdlqhfqw2mg51f068j2lhn8mzxggzsbl560l4pl4fxgmpjywpkj";
+    name = "${name}-zesty.tar.gz";
+    url = "${meta.homepage}/+archive/ubuntu/ppa/+files/audio-recorder_${version}%7Ezesty.tar.gz";
+    sha256 = "163c0vs5qj72y62731yp6sl6s0indh2szhjg02mxigv9b68dx89c";
   };
 
-  nativeBuildInputs = [ pkgconfig intltool autoconf makeWrapper ];
+  nativeBuildInputs = [ pkgconfig intltool autoconf wrapGAppsHook ];
 
   buildInputs = with gst_all_1; [
-    glib dbus gtk3 libdbusmenu-gtk3 libappindicator-gtk3
+    glib dbus gtk3 librsvg libdbusmenu-gtk3 libappindicator-gtk3 (stdenv.lib.getLib gnome3.dconf)
     gstreamer gst-plugins-base gst-plugins-good gst-plugins-bad gst-plugins-ugly gst-libav
   ] ++ optional pulseaudioSupport libpulseaudio;
 
@@ -30,10 +31,10 @@ stdenv.mkDerivation rec {
     intltoolize
   '';
 
-  postFixup = ''
-    wrapProgram $out/bin/audio-recorder \
-      --prefix XDG_DATA_DIRS : "$out/share:$XDG_ICON_DIRS:$GSETTINGS_SCHEMAS_PATH" \
-      --prefix GST_PLUGIN_SYSTEM_PATH_1_0 ":" "$GST_PLUGIN_SYSTEM_PATH_1_0"
+  preFixup = ''
+    gappsWrapperArgs+=(--prefix XDG_DATA_DIRS : $out/share:$XDG_ICON_DIRS:$GSETTINGS_SCHEMAS_PATH
+      --prefix GST_PLUGIN_SYSTEM_PATH_1_0 : $GST_PLUGIN_SYSTEM_PATH_1_0
+      --prefix GIO_EXTRA_MODULES : ${stdenv.lib.getLib gnome3.dconf}/lib/gio/modules)
   '';
 
   meta = with stdenv.lib; {

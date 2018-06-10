@@ -1,21 +1,25 @@
 { stdenv, fetchgit, cmake, pcre, doxygen }:
 
 stdenv.mkDerivation rec {
-
   name = "editorconfig-core-c-${meta.version}";
 
   src = fetchgit {
     url = "https://github.com/editorconfig/editorconfig-core-c.git";
-    rev = "d1c2c881158dfb9faa4498a0b19593dcd105d6b8";
-    fetchSubmodules = true;
+    rev = "v${meta.version}";
     sha256 = "0awpb63ci85kal3pnlj2b54bay8igj1rbc13d8gqkvidlb51nnx4";
+    fetchSubmodules = true;
     inherit name;
   };
 
-  buildInputs = [ cmake pcre doxygen ];
+  buildInputs = [ pcre ];
+  nativeBuildInputs = [ cmake doxygen ];
+
+  # Multiple doxygen can not generate man pages in the same base directory in
+  # parallel: https://bugzilla.gnome.org/show_bug.cgi?id=791153
+  enableParallelBuilding = false;
 
   meta = with stdenv.lib; {
-    homepage = "http://editorconfig.org/";
+    homepage = http://editorconfig.org/;
     description = "EditorConfig core library written in C";
     longDescription = ''
       EditorConfig makes it easy to maintain the correct coding style when
@@ -25,11 +29,10 @@ stdenv.mkDerivation rec {
       by those editors. For information on the file format and supported text
       editors, see the EditorConfig website.
     '';
-    downloadPage = "https://github.com/editorconfig/editorconfig-core-c";
+    downloadPage = https://github.com/editorconfig/editorconfig-core-c;
     license = with licenses; [ bsd2 bsd3 ];
     version = "0.12.1";
-    maintainers = [ maintainers.dochang ];
+    maintainers = with maintainers; [ dochang ];
     platforms = platforms.unix;
   };
-
 }

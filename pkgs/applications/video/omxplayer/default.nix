@@ -1,4 +1,7 @@
-{ stdenv, fetchurl, raspberrypifw, pcre, boost, freetype, zlib }:
+{ stdenv, fetchurl
+, raspberrypifw, pcre, boost, freetype, zlib
+, hostPlatform
+}:
 
 let
   ffmpeg = stdenv.mkDerivation rec {
@@ -9,9 +12,13 @@ let
       sha256 = "03s1zsprz5p6gjgwwqcf7b6cvzwwid6l8k7bamx9i0f1iwkgdm0j";
     };
     
+    configurePlatforms = [];
     configureFlags = [
-      "--arch=arm"
+      "--arch=${hostPlatform.parsed.cpu.name}"
+    ] ++ stdenv.lib.optionals stdenv.hostPlatform.isAarch32 [
+      # TODO be better with condition
       "--cpu=arm1176jzf-s"
+    ] ++ [
       "--disable-muxers"
       "--enable-muxer=spdif"
       "--enable-muxer=adts"
@@ -39,19 +46,14 @@ let
       "--enable-hardcoded-tables"
       "--disable-runtime-cpudetect"
       "--disable-debug"
+      "--arch=${hostPlatform.parsed.cpu.name}"
+      "--target_os=${hostPlatform.parsed.kernel.name}"
+    ] ++ stdenv.lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+      "--cross-prefix=${stdenv.cc.targetPrefix}"
+      "--enable-cross-compile"
     ];
 
     enableParallelBuilding = true;
-      
-    crossAttrs = {
-      dontSetConfigureCross = true;
-      configureFlags = configureFlags ++ [
-        "--cross-prefix=${stdenv.cross.config}-"
-        "--enable-cross-compile"
-        "--target_os=linux"
-        "--arch=${stdenv.cross.arch}"
-        ];
-    };
 
     meta = {
       homepage = http://www.ffmpeg.org/;
@@ -80,5 +82,6 @@ stdenv.mkDerivation rec {
     homepage = https://github.com/huceke/omxplayer;
     description = "Commandline OMX player for the Raspberry Pi";
     license = stdenv.lib.licenses.gpl2Plus;
+    platforms = stdenv.lib.platforms.arm;
   };
 }

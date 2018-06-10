@@ -1,35 +1,45 @@
-{ stdenv, lib, fetchurl, libX11, pkgconfig, libXext, libdrm, libXfixes, wayland, libffi
-, mesa_noglu
-, minimal ? true, libva
+{ stdenv, lib, fetchFromGitHub, autoreconfHook, pkgconfig
+, libXext, libdrm, libXfixes, wayland, libffi, libX11
+, libGL, libGL_driver
+, minimal ? false, libva-minimal
 }:
 
 stdenv.mkDerivation rec {
-  name = "libva-1.7.0";
+  name = "libva-${lib.optionalString minimal "minimal-"}${version}";
+  version = "2.1.0";
 
-  src = fetchurl {
-    url = "http://www.freedesktop.org/software/vaapi/releases/libva/${name}.tar.bz2";
-    sha256 = "0py9igf4kicj7ji22bjawkpd6my013qpg0s4ir2np9l1rk5vr2d6";
+  # update libva-utils and vaapiIntel as well
+  src = fetchFromGitHub {
+    owner  = "01org";
+    repo   = "libva";
+    rev    = version;
+    sha256 = "1a60lrgr65hx9b2qp0gjky1298c4d4zp3ap6vnmmz850sxx5rm8w";
   };
 
-  outputs = [ "bin" "dev" "out" ];
+  outputs = [ "dev" "out" ];
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ autoreconfHook pkgconfig ];
 
   buildInputs = [ libdrm ]
-    ++ lib.optionals (!minimal) [ libva libX11 libXext libXfixes wayland libffi mesa_noglu ];
+    ++ lib.optionals (!minimal) [ libva-minimal libX11 libXext libXfixes wayland libffi libGL ];
   # TODO: share libs between minimal and !minimal - perhaps just symlink them
 
-  configureFlags =
-    [ "--with-drivers-path=${mesa_noglu.driverLink}/lib/dri" ] ++
-    lib.optionals (!minimal) [ "--enable-glx" ];
+  enableParallelBuilding = true;
 
-  installFlags = [ "dummy_drv_video_ladir=$(out)/lib/dri" ];
+  configureFlags = [
+    # Add FHS paths for non-NixOS applications.
+    "--with-drivers-path=${libGL_driver.driverLink}/lib/dri:/usr/lib/dri:/usr/lib32/dri"
+  ] ++ lib.optionals (!minimal) [ "--enable-glx" ];
+
+  installFlags = [
+    "dummy_drv_video_ladir=$(out)/lib/dri"
+  ];
 
   meta = with stdenv.lib; {
+    description = "VAAPI library: Video Acceleration API";
     homepage = http://www.freedesktop.org/wiki/Software/vaapi;
     license = licenses.mit;
-    description = "VAAPI library: Video Acceleration API";
-    platforms = platforms.unix;
     maintainers = with maintainers; [ garbas ];
+    platforms = platforms.unix;
   };
 }

@@ -1,30 +1,51 @@
-{ stdenv, lib, fetchurl, substituteAll, lame, mplayer
-, libpulseaudio, python, pyqt4, qt4, wrapPython
-, pysqlite, sqlalchemy, pyaudio, beautifulsoup, httplib2, matplotlib
+{ stdenv
+, buildPythonApplication
+, callPackage
+, lib
+, python
+, fetchurl
+, substituteAll
+, lame
+, mplayer
+, libpulseaudio
+, pyqt4
+, sqlalchemy
+, pyaudio
+, httplib2
+, matplotlib
+, pytest
+, glibcLocales
+, nose
 # This little flag adds a huge number of dependencies, but we assume that
 # everyone wants Anki to draw plots with statistics by default.
 , plotsSupport ? true
 }:
 
 let
-    version = "2.0.35";
-in
-stdenv.mkDerivation rec {
+    # Development version of anki has bumped to beautifulsoup4
+    beautifulsoup = callPackage ./beautifulsoup.nix { };
+
+    qt4 = pyqt4.qt;
+
+in buildPythonApplication rec {
+    version = "2.0.52";
     name = "anki-${version}";
+
     src = fetchurl {
       urls = [
-        "http://ankisrs.net/download/mirror/${name}.tgz"
-        "http://ankisrs.net/download/mirror/archive/${name}.tgz"
+        "https://apps.ankiweb.net/downloads/current/${name}-source.tgz"
+        # "http://ankisrs.net/download/mirror/${name}.tgz"
+        # "http://ankisrs.net/download/mirror/archive/${name}.tgz"
       ];
-      sha256 = "1d7k38xzw1nbg83d1aqxf2f76fv3hn2fry99k3vf4lgmhndj52mv";
+      sha256 = "0yjyxgpk79rplz9z2r93kmlk09ari6xxfrz1cfm2yl9v8zfw1n6l";
     };
 
-    pythonPath = [ pyqt4 pysqlite sqlalchemy pyaudio beautifulsoup httplib2 ]
-              ++ lib.optional plotsSupport matplotlib;
+    propagatedBuildInputs = [ pyqt4 sqlalchemy pyaudio beautifulsoup httplib2 ]
+                            ++ lib.optional plotsSupport matplotlib;
 
-    buildInputs = [ python wrapPython lame mplayer libpulseaudio ];
+    checkInputs = [ pytest glibcLocales nose ];
 
-    phases = [ "unpackPhase" "patchPhase" "installPhase" ];
+    buildInputs = [ lame mplayer libpulseaudio  ];
 
     patches = [
       # Disable updated version check.
@@ -37,6 +58,11 @@ stdenv.mkDerivation rec {
       })
     ];
 
+    buildPhase = ''
+      # Dummy build phase
+      # Anki does not use setup.py
+    '';
+
     postPatch = ''
       substituteInPlace oldanki/lang.py --subst-var-by anki $out
       substituteInPlace anki/lang.py --subst-var-by anki $out
@@ -47,6 +73,15 @@ stdenv.mkDerivation rec {
 
       # Remove QT translation files. We'll use the standard QT ones.
       rm "locale/"*.qm
+    '';
+
+    # UTF-8 locale needed for testing
+    LC_ALL = "en_US.UTF-8";
+
+    checkPhase = ''
+      # - Anki writes some files to $HOME during tests
+      # - Skip tests using network
+      env HOME=$TMP pytest --ignore tests/test_sync.py
     '';
 
     installPhase = ''
@@ -78,10 +113,10 @@ stdenv.mkDerivation rec {
       wrapPythonPrograms
     '';
 
-    meta = {
+    meta = with stdenv.lib; {
       homepage = http://ankisrs.net/;
       description = "Spaced repetition flashcard program";
-      license = stdenv.lib.licenses.gpl3;
+      license = licenses.gpl3;
 
       longDescription = ''
         Anki is a program which makes remembering things easy. Because it is a lot
@@ -96,7 +131,7 @@ stdenv.mkDerivation rec {
         or even practicing guitar chords!
       '';
 
-      maintainers = with stdenv.lib.maintainers; [ the-kenny ];
-      platforms = stdenv.lib.platforms.mesaPlatforms;
+      maintainers = with maintainers; [ the-kenny ];
+      platforms = platforms.mesaPlatforms;
     };
 }

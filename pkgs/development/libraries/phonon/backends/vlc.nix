@@ -7,7 +7,7 @@
 with lib;
 
 let
-  v = "0.9.0";
+  v = "0.10.1";
   pname = "phonon-backend-vlc";
 in
 
@@ -18,14 +18,14 @@ stdenv.mkDerivation rec {
   name = "${pname}-${if withQt5 then "qt5" else "qt4"}-${v}";
 
   meta = with stdenv.lib; {
-    homepage = http://phonon.kde.org/;
+    homepage = https://phonon.kde.org/;
     description = "GStreamer backend for Phonon";
     platforms = platforms.linux;
   };
 
   src = fetchurl {
     url = "mirror://kde/stable/phonon/${pname}/${v}/${pname}-${v}.tar.xz";
-    sha256 = "1gnd1j305mqajw5gxm42vg6ajkvi8611bxgc3qhj5k0saz5dgkn0";
+    sha256 = "0b87mzkw9fdkrwgnh1kw5i5wnrd05rl42hynlykb7cfymsk6v5h9";
   };
 
   buildInputs =

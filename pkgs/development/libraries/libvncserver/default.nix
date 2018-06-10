@@ -1,41 +1,36 @@
 {stdenv, fetchurl,
-  libtool, libjpeg, openssl, libX11, libXdamage, xproto, damageproto, 
-  xextproto, libXext, fixesproto, libXfixes, xineramaproto, libXinerama, 
-  libXrandr, randrproto, libXtst, zlib
+ libtool, libjpeg, openssl, zlib, libgcrypt, autoreconfHook, pkgconfig, libpng,
+ systemd
 }:
-
-assert stdenv.isLinux;
 
 let
   s = # Generated upstream information
   rec {
     baseName="libvncserver";
-    version="0.9.9";
+    version="0.9.11";
     name="${baseName}-${version}";
-    hash="1y83z31wbjivbxs60kj8a8mmjmdkgxlvr2x15yz95yy24lshs1ng";
-    url="mirror://sourceforge/project/libvncserver/libvncserver/0.9.9/LibVNCServer-0.9.9.tar.gz";
-    sha256="1y83z31wbjivbxs60kj8a8mmjmdkgxlvr2x15yz95yy24lshs1ng";
+    url="https://github.com/LibVNC/libvncserver/archive/LibVNCServer-${version}.tar.gz";
+    sha256="15189n09r1pg2nqrpgxqrcvad89cdcrca9gx6qhm6akjf81n6g8r";
   };
-  buildInputs = [
-    libtool libjpeg openssl libX11 libXdamage xproto damageproto
-    xextproto libXext fixesproto libXfixes xineramaproto libXinerama
-    libXrandr randrproto libXtst zlib
-  ];
 in
 stdenv.mkDerivation {
   inherit (s) name version;
-  inherit buildInputs;
   src = fetchurl {
     inherit (s) url sha256;
   };
   preConfigure = ''
     sed -e 's@/usr/include/linux@${stdenv.cc.libc}/include/linux@g' -i configure
   '';
+  nativeBuildInputs = [ pkgconfig autoreconfHook ];
+  buildInputs = [
+    libtool libjpeg openssl libgcrypt libpng
+  ] ++ stdenv.lib.optional stdenv.isLinux systemd;
+  propagatedBuildInputs = [ zlib ];
   meta = {
     inherit (s) version;
     description =  "VNC server library";
     license = stdenv.lib.licenses.gpl2Plus ;
     maintainers = [stdenv.lib.maintainers.raskin];
-    platforms = stdenv.lib.platforms.linux;
+    platforms = stdenv.lib.platforms.unix;
   };
 }

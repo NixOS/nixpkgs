@@ -1,26 +1,29 @@
-{ stdenv, fetchurl, pkgconfig, libusb1, libtool, libexif, libjpeg, gettext }:
+{ stdenv, fetchpatch, fetchFromGitHub, pkgconfig, libusb1, libtool, libexif, libjpeg, gettext, autoreconfHook }:
 
 stdenv.mkDerivation rec {
   name = "libgphoto2-${meta.version}";
 
-  src = fetchurl {
-    url = "mirror://sourceforge/gphoto/${name}.tar.bz2";
-    sha256 = "1wjf79ipqwb5phfjjwf15rwgigakylnfqaj4crs5qnds6ba6i1ld";
+  src = fetchFromGitHub {
+    owner = "gphoto";
+    repo = "libgphoto2";
+    rev = "${meta.tag}";
+    sha256 = "0pbfg89817qkb35mmajsw2iz6j9nhkkj67m419f8x8yxpqkaa0wb";
   };
 
-  patches = [(fetchurl {
-    url = "https://anonscm.debian.org/cgit/pkg-phototools/libgphoto2.git/plain"
-      + "/debian/patches/libjpeg_turbo_1.5.0_fix.patch?id=8ce79a2a02d";
-    sha256 = "114iyhk6idxz2jhnzpf1glqm6d0x0y8cqfpqxz9i96q9j7x3wwin";
-  })];
+  patches = [];
 
-  nativeBuildInputs = [ pkgconfig gettext ];
-  buildInputs = [ libtool libjpeg libusb1 ];
+  nativeBuildInputs = [ pkgconfig gettext autoreconfHook ];
+  buildInputs = [ libtool libjpeg libusb1  ];
 
   # These are mentioned in the Requires line of libgphoto's pkg-config file.
   propagatedBuildInputs = [ libexif ];
 
   hardeningDisable = [ "format" ];
+
+  postInstall = ''
+    mkdir -p $out/lib/udev/rules.d
+    $out/lib/libgphoto2/print-camera-list udev-rules version 175 group camera >$out/lib/udev/rules.d/40-gphoto2.rules
+  '';
 
   meta = {
     homepage = http://www.gphoto.org/proj/libgphoto2/;
@@ -30,11 +33,11 @@ stdenv.mkDerivation rec {
       MTP, and other vendor specific protocols for controlling and transferring data
       from digital cameras.
     '';
-    version = "2.5.10";
+    version = "2.5.17";
+    tag = "libgphoto2-2_5_17-release";
     # XXX: the homepage claims LGPL, but several src files are lgpl21Plus
     license = stdenv.lib.licenses.lgpl21Plus;
     platforms = with stdenv.lib.platforms; unix;
     maintainers = with stdenv.lib.maintainers; [ jcumming ];
   };
 }
-

@@ -1,5 +1,5 @@
 { stdenv, fetchgit, glib, readline, bison, flex, pkgconfig,
-  libiconv, autoreconfHook, which, txt2man, gnome_doc_utils, scrollkeeper }:
+  libiconv, autoreconfHook, which, txt2man, gnome-doc-utils, scrollkeeper }:
 
 stdenv.mkDerivation {
   name = "mdbtools-git-2014-07-25";
@@ -10,9 +10,10 @@ stdenv.mkDerivation {
     sha256 = "0hlf5lk86xm0bpdlpk4a1zyfvbim76dhvmybxga2p7mbb1jc825l";
   };
 
+  nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
-    glib readline bison flex autoreconfHook pkgconfig which txt2man
-    gnome_doc_utils scrollkeeper libiconv
+    glib readline bison flex autoreconfHook which txt2man
+    gnome-doc-utils scrollkeeper libiconv
   ];
 
   preAutoreconf = ''

@@ -1,29 +1,66 @@
-{ stdenv, fetchurl, eventlog, pkgconfig, glib, python, systemd, perl
-, riemann_c_client, protobufc, pcre, yacc }:
+{ stdenv, fetchurl, openssl, libcap, curl, which
+, eventlog, pkgconfig, glib, python, systemd, perl
+, riemann_c_client, protobufc, pcre, libnet
+, json_c, libuuid, libivykis, mongoc, rabbitmq-c
+, libesmtp
+}:
+
+let
+  pname = "syslog-ng";
+in
 
 stdenv.mkDerivation rec {
-  name = "syslog-ng-${version}";
-
-  version = "3.6.2";
+  name = "${pname}-${version}";
+  version = "3.15.1";
 
   src = fetchurl {
-    url = "http://www.balabit.com/downloads/files?path=/syslog-ng/sources/${version}/source/syslog-ng_${version}.tar.gz";
-    sha256 = "0qc21mwajk6xrra3gqy2nvaza5gq62psamq4ayphj7lqabdglizg";
+    url = "https://github.com/balabit/${pname}/releases/download/${name}/${name}.tar.gz";
+    sha256 = "1vzrg6s30wc2as2s42h7a1qvyxqx26nq895r9y75aasfcwlbvnm2";
   };
 
-  buildInputs = [ eventlog pkgconfig glib python systemd perl riemann_c_client protobufc yacc pcre ];
+  nativeBuildInputs = [ pkgconfig which ];
+
+  buildInputs = [
+    libcap
+    curl
+    openssl
+    eventlog
+    glib
+    perl
+    python
+    systemd
+    riemann_c_client
+    protobufc
+    pcre
+    libnet
+    json_c
+    libuuid
+    libivykis
+    mongoc
+    rabbitmq-c
+    libesmtp
+  ];
 
   configureFlags = [
+    "--enable-manpages"
     "--enable-dynamic-linking"
     "--enable-systemd"
+    "--enable-smtp"
+    "--with-ivykis=system"
+    "--with-librabbitmq-client=system"
+    "--with-mongoc=system"
+    "--with-jsonc=system"
+    "--with-systemd-journal=system"
     "--with-systemdsystemunitdir=$(out)/etc/systemd/system"
   ];
 
+  outputs = [ "out" "man" ];
+
   meta = with stdenv.lib; {
-    homepage = "http://www.balabit.com/network-security/syslog-ng/";
+    homepage = http://www.balabit.com/network-security/syslog-ng/;
     description = "Next-generation syslogd with advanced networking and filtering capabilities";
     license = licenses.gpl2;
-    maintainers = [ maintainers.rickynils ];
+    maintainers = with maintainers; [ rickynils  fpletz ];
     platforms = platforms.linux;
   };
 }

@@ -7,17 +7,18 @@ with stdenv.lib;
 let
   _kernel = kernel;
 in stdenv.mkDerivation rec {
-  version = "2.5.0";
+  version = "2.5.4";
   name = "openvswitch-${version}";
 
   src = fetchurl {
     url = "http://openvswitch.org/releases/${name}.tar.gz";
-    sha256 = "08bgsqjjn2q5hvxsjqs7n3jir7k7291wlj3blsqhacjhmpxm9nil";
+    sha256 = "1lji87wg953lqcdf02f1zv2m54vhd2x9jd03bb91lnlb4qlhifiv";
   };
 
   kernel = optional (_kernel != null) _kernel.dev;
 
-  buildInputs = [ makeWrapper pkgconfig utillinux openssl libcap_ng python27
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ makeWrapper utillinux openssl libcap_ng python27
                   perl procps which ];
 
   configureFlags = [
@@ -70,7 +71,7 @@ in stdenv.mkDerivation rec {
       support distribution across multiple physical servers similar
       to VMware's vNetwork distributed vswitch or Cisco's Nexus 1000V.
       '';
-    homepage = "http://openvswitch.org/";
+    homepage = http://openvswitch.org/;
     license = licenses.asl20;
   };
 }

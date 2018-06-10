@@ -1,31 +1,29 @@
-{ stdenv, fetchgit, go, Security }:
+{ stdenv, fetchgit, go, ronn, groff, utillinux, Security }:
 
 stdenv.mkDerivation rec {
   name = "hub-${version}";
-  version = "2.2.8";
+  version = "2.4.0";
 
   src = fetchgit {
     url = https://github.com/github/hub.git;
     rev = "refs/tags/v${version}";
-    sha256 = "1fv4jb9vsbkscnb79gss2mwnd1yf9jhgzw1mhimhx25xizbx1fck";
+    sha256 = "1lr6vg0zhg2air9bnzcl811g97jraxq05l3cs46wqqflwy57xpz2";
   };
 
 
-  buildInputs = [ go ] ++ stdenv.lib.optional stdenv.isDarwin Security;
-
-  phases = [ "unpackPhase" "buildPhase" "installPhase" ];
+  buildInputs = [ go ronn groff utillinux ]
+    ++ stdenv.lib.optional stdenv.isDarwin Security;
 
   buildPhase = ''
+    mkdir bin
+    ln -s ${ronn}/bin/ronn bin/ronn
+
     patchShebangs .
-    sh script/build
+    make all man-pages
   '';
 
   installPhase = ''
-    mkdir -p "$out/bin"
-    cp bin/hub "$out/bin/"
-
-    mkdir -p "$out/share/man/man1"
-    cp "man/hub.1" "$out/share/man/man1/"
+    prefix=$out sh -x < script/install.sh
 
     mkdir -p "$out/share/zsh/site-functions"
     cp "etc/hub.zsh_completion" "$out/share/zsh/site-functions/_hub"
@@ -33,8 +31,8 @@ stdenv.mkDerivation rec {
     mkdir -p "$out/etc/bash_completion.d"
     cp "etc/hub.bash_completion.sh" "$out/etc/bash_completion.d/"
 
-# Should we also install provided git-hooks?
-# ?
+    # Should we also install provided git-hooks?
+    # And fish completion?
   '';
 
   meta = with stdenv.lib; {

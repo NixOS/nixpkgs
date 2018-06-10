@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, python, libxslt, texlive
+{ stdenv, fetchurl, python2, libxslt, texlive
 , enableAllFeatures ? false, imagemagick ? null, transfig ? null, inkscape ? null, fontconfig ? null, ghostscript ? null
 
 , tex ? texlive.combine { # satisfy all packages that ./configure mentions
@@ -21,14 +21,14 @@ assert enableAllFeatures ->
   ghostscript != null;
 
 stdenv.mkDerivation rec {
-  name = "dblatex-0.3.7";
+  name = "dblatex-0.3.10";
 
   src = fetchurl {
     url = "mirror://sourceforge/dblatex/${name}.tar.bz2";
-    sha256 = "0bkjgrn03dy5c7438s429wnv6z5ynxkr4pbhp2z49kynskgkzkjr";
+    sha256 = "1yicd861rqz78i2khl35j7nvc0ccv4jx4hzqrbhll17082vrdmkg";
   };
 
-  buildInputs = [ python libxslt tex ]
+  buildInputs = [ python2 libxslt tex ]
     ++ stdenv.lib.optionals enableAllFeatures [ imagemagick transfig ];
 
   # TODO: dblatex tries to execute texindy command, but nixpkgs doesn't have
@@ -58,7 +58,7 @@ stdenv.mkDerivation rec {
   dontBuild = true;
 
   installPhase = ''
-    python ./setup.py install --prefix="$out" --use-python-path --verbose
+    ${python2.interpreter} ./setup.py install --prefix="$out" --use-python-path --verbose
   '';
 
   passthru = { inherit tex; };

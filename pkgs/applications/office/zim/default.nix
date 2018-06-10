@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, buildPythonApplication, pythonPackages, pygtk, pygobject2, python }:
+{ stdenv, lib, fetchurl, python2Packages }:
 
 #
 # TODO: Declare configuration options for the following optional dependencies:
@@ -7,17 +7,16 @@
 #  -  pyxdg: Need to make it work first (see setupPyInstallFlags).
 #
 
-buildPythonApplication rec {
+python2Packages.buildPythonApplication rec {
   name = "zim-${version}";
-  version = "0.65";
-  namePrefix = "";
+  version = "0.68";
 
   src = fetchurl {
     url = "http://zim-wiki.org/downloads/${name}.tar.gz";
-    sha256 = "15pdq4fxag85qjsrdmmssiq85qsk5vnbp8mrqnpvx8lm8crz6hjl";
+    sha256 = "05fzb24a2s3pm89zb6gwa48wb925an5i652klx8yk9pn23h1h5fr";
   };
 
-  propagatedBuildInputs = [ pythonPackages.sqlite3 pygtk pythonPackages.pyxdg pygobject2 ];
+  propagatedBuildInputs = with python2Packages; [ pyGtkGlade pyxdg pygobject2 ];
 
   preBuild = ''
     export HOME=$TMP
@@ -30,17 +29,18 @@ buildPythonApplication rec {
     export makeWrapperArgs="--prefix XDG_DATA_DIRS : $out/share --argv0 $out/bin/.zim-wrapped"
   '';
 
-  postFixup = ''
-    wrapPythonPrograms
-    substituteInPlace $out/bin/.zim-wrapped \
-    --replace "sys.argv[0] = 'zim'" "sys.argv[0] = '$out/bin/zim'"
+  # RuntimeError: could not create GtkClipboard object
+  doCheck = false;
+
+  checkPhase = ''
+    python test.py
   '';
 
-  doCheck = true;
 
-  meta = {
-      description = "A desktop wiki";
-      homepage = http://zim-wiki.org;
-      license = stdenv.lib.licenses.gpl2Plus;
+  meta = with stdenv.lib; {
+    description = "A desktop wiki";
+    homepage = http://zim-wiki.org;
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ pSub ];
   };
 }

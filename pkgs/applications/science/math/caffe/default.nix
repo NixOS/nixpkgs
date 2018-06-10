@@ -1,58 +1,81 @@
-{ stdenv
-, openblas
-, boost
-, cudaSupport ? true
-, cudnnSupport ? false
-, cudnn ? null
-, cudatoolkit7
+{ stdenv, lib
 , fetchFromGitHub
+, cmake
+, boost
 , google-gflags
 , glog
-, hdf5
+, hdf5-cpp
 , leveldb
 , lmdb
-, opencv
+, opencv3
 , protobuf
 , snappy
+, doxygen
+, openblas
+, cudaSupport ? true, cudatoolkit
+, cudnnSupport ? false, cudnn ? null
+, ncclSupport ? false, nccl ? null
+, pythonSupport ? false, python ? null, numpy ? null
 }:
 
+assert cudnnSupport -> cudaSupport;
+assert ncclSupport -> cudaSupport;
+assert pythonSupport -> (python != null && numpy != null);
 
-let optional = stdenv.lib.optional;
-in stdenv.mkDerivation rec {
-  # Use git revision because latest "release" is really old
-  name = "caffe-git-2015-07-02";
+stdenv.mkDerivation rec {
+  name = "caffe-${version}";
+  version = "1.0";
 
   src = fetchFromGitHub {
     owner = "BVLC";
     repo = "caffe";
-    rev = "77d66dfc907dd875d69bb9fc12dd950b531e464f";
-    sha256 = "0vd4qrc49dhsawj298xpkd5mvi35sh56kdswx3yp8ya4fjajwakx";
+    rev = version;
+    sha256 = "104jp3cm823i3cdph7hgsnj6l77ygbwsy35mdmzhmsi4jxprd9j3";
   };
 
-  preConfigure = "mv Makefile.config.example Makefile.config";
+  enableParallelBuilding = true;
 
-  makeFlags = "BLAS=open " +
-              (if !cudaSupport then "CPU_ONLY=1 " else "CUDA_DIR=${cudatoolkit7} ") +
-              (if cudnnSupport then "USE_CUDNN=1 " else "");
+  nativeBuildInputs = [ cmake doxygen ];
 
-  # too many issues with tests to run them for now
-  doCheck = false;
-  checkPhase = "make runtest ${makeFlags}";
+  cmakeFlags =
+    [ (if pythonSupport then "-Dpython_version=${python.version}" else "-DBUILD_python=OFF")
+      "-DBLAS=open"
+    ] ++ (if cudaSupport then [
+           "-DCUDA_ARCH_NAME=All"
+           "-DCUDA_HOST_COMPILER=${cudatoolkit.cc}/bin/cc"
+         ] else [ "-DCPU_ONLY=ON" ])
+      ++ lib.optional ncclSupport "-DUSE_NCCL=ON";
 
-  buildInputs = [ openblas boost google-gflags glog hdf5 leveldb lmdb opencv
-                  protobuf snappy ]
-                ++ optional cudaSupport cudatoolkit7
-                ++ optional cudnnSupport cudnn;
+  buildInputs = [ boost google-gflags glog protobuf hdf5-cpp lmdb leveldb snappy opencv3 openblas ]
+                ++ lib.optional cudaSupport cudatoolkit
+                ++ lib.optional cudnnSupport cudnn
+                ++ lib.optional ncclSupport nccl
+                ++ lib.optionals pythonSupport [ python numpy ];
 
-  installPhase = ''
-    mkdir -p $out/{bin,share,lib}
-    for bin in $(find build/tools -executable -type f -name '*.bin');
-    do
-      cp $bin $out/bin/$(basename $bin .bin)
-    done
+  propagatedBuildInputs = lib.optional pythonSupport python.pkgs.protobuf;
 
-    cp -r build/examples $out/share
-    cp -r build/lib $out
+  outputs = [ "bin" "out"];
+  propagatedBuildOutputs = []; # otherwise propagates out -> bin cycle
+
+  preConfigure = lib.optionalString (cudaSupport && lib.versionAtLeast cudatoolkit.version "9.0") ''
+    # CUDA 9.0 doesn't support sm_20
+    sed -i 's,20 21(20) ,,' cmake/Cuda.cmake
+  '' + lib.optionalString (python.isPy3 or false) ''
+    sed -i \
+      -e 's,"python-py''${boost_py_version}",python3,g' \
+      -e 's,''${Boost_PYTHON-PY''${boost_py_version}_FOUND},''${Boost_PYTHON3_FOUND},g' \
+      cmake/Dependencies.cmake
+  '';
+
+  postInstall = ''
+    # Internal static library.
+    rm $out/lib/libproto.a
+
+    moveToOutput "bin" "$bin"
+  '' + lib.optionalString pythonSupport ''
+    mkdir -p $out/${python.sitePackages}
+    mv $out/python/caffe $out/${python.sitePackages}
+    rm -rf $out/python
   '';
 
   meta = with stdenv.lib; {

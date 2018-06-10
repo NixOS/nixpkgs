@@ -27,6 +27,7 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     wrapProgram $out/bin/git-bz \
+      --prefix PYTHONPATH : "$(toPythonPath "${pythonPackages.pycrypto}")" \
       --prefix PYTHONPATH : "$(toPythonPath "${pythonPackages.pysqlite}")"
   '';
 
@@ -48,7 +49,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Plus;
     homepage = http://git.fishsoup.net/cgit/git-bz/;
 
-    maintainers = with maintainers; [ nckx ];
     platforms = platforms.linux;
   };
 }

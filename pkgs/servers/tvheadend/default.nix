@@ -1,44 +1,66 @@
-{avahi, dbus, fetchurl, git, gnutar, gzip, libav, libiconv, openssl, pkgconfig, python
-, stdenv, which, zlib}:
+{ stdenv, fetchFromGitHub, cmake, makeWrapper, pkgconfig
+, avahi, dbus, gettext, git, gnutar, gzip, bzip2, ffmpeg, libiconv, openssl, python
+, which, zlib }:
 
-with stdenv.lib;
+let
+  version = "4.2.6";
 
-let version = "4.0.8";
-    pkgName = "tvheadend";
+in stdenv.mkDerivation rec {
+  name = "tvheadend-${version}";
 
-in
-
-stdenv.mkDerivation rec {
-  name = "${pkgName}-${version}";
-
-  src = fetchurl {
-    url = "https://github.com/tvheadend/tvheadend/archive/v${version}.tar.gz";
-    sha256 = "0k4g7pvfyk4bxpsjdwv7bmbygbp7gfg9wrr2aqb099ncbz18bx04";
+  src = fetchFromGitHub {
+    owner  = "tvheadend";
+    repo   = "tvheadend";
+    rev    = "v${version}";
+    sha256 = "0rnhk0r34mfmz3cnf735nzkkyal7pnv16hfyrs0g4v5rk99rlab3";
   };
+
+  buildInputs = [
+    avahi dbus gettext git gnutar gzip bzip2 ffmpeg libiconv openssl python
+    which zlib
+  ];
+
+  nativeBuildInputs = [ cmake makeWrapper pkgconfig ];
 
   enableParallelBuilding = true;
 
   # disable dvbscan, as having it enabled causes a network download which
   # cannot happen during build.
-  configureFlags = [ "--disable-dvbscan" ];
+  configureFlags = [
+    "--disable-dvbscan"
+    "--disable-bintray_cache"
+    "--disable-ffmpeg_static"
+    "--disable-hdhomerun_client"
+    "--disable-hdhomerun_static"
+  ];
 
-  buildInputs = [ avahi dbus git gnutar gzip libav libiconv openssl pkgconfig python
-    which zlib ];
+  dontUseCmakeConfigure = true;
 
   preConfigure = ''
     patchShebangs ./configure
-    substituteInPlace src/config.c --replace /usr/bin/tar ${gnutar}/bin/tar
+
+    substituteInPlace src/config.c \
+      --replace /usr/bin/tar ${gnutar}/bin/tar
+
+    # the version detection script `support/version` reads this file if it
+    # exists, so let's just use that
+    echo ${version} > rpm/version
   '';
 
-  meta = {
-    description = "TV steaming server";
+  postInstall = ''
+    wrapProgram $out/bin/tvheadend \
+      --prefix PATH : ${stdenv.lib.makeBinPath [ bzip2 ]}
+  '';
+
+  meta = with stdenv.lib; {
+    description = "TV streaming server";
     longDescription = ''
-	Tvheadend is a TV streaming server and recorder for Linux, FreeBSD and Android 
+	Tvheadend is a TV streaming server and recorder for Linux, FreeBSD and Android
         supporting DVB-S, DVB-S2, DVB-C, DVB-T, ATSC, IPTV, SAT>IP and HDHomeRun as input sources.
 	Tvheadend offers the HTTP (VLC, MPlayer), HTSP (Kodi, Movian) and SAT>IP streaming.'';
-    homepage = "https://tvheadend.org";
+    homepage = https://tvheadend.org;
     license = licenses.gpl3;
     platforms = platforms.unix;
-    maintainers = [ maintainers.simonvandel ];
+    maintainers = with maintainers; [ simonvandel ];
   };
 }

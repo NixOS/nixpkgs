@@ -15,7 +15,7 @@ stdenv.mkDerivation {
     sha256 = "91ce6c993a3a0f77ed85db76f62ce18632b4c0cbd8f864676359a17ae5e6fa3c";
   };
 
-  buildInputs = [ dpkg ];
+  nativeBuildInputs = [ dpkg ];
 
   unpackCmd = ''
     dpkg-deb --fsys-tarfile $src | tar xf - ./usr/share/fonts/truetype/kochi/kochi-gothic-subst.ttf
@@ -27,6 +27,10 @@ stdenv.mkDerivation {
     cp ./share/fonts/truetype/kochi/kochi-gothic-subst.ttf $out/share/fonts/truetype/
     cp ./share/fonts/truetype/kochi/kochi-mincho-subst.ttf $out/share/fonts/truetype/
   '';
+
+  outputHashAlgo = "sha256";
+  outputHashMode = "recursive";
+  outputHash = "10hcrf51npc1w2jsz5aiw07dgw96vs4wmsz4ai9zyaswipvf8ddy";
 
   meta = {
     description = "Japanese font, a free replacement for MS Gothic and MS Mincho";

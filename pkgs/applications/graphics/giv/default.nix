@@ -1,21 +1,22 @@
 { stdenv, fetchFromGitHub, gdk_pixbuf, scons, pkgconfig, gtk2, glib,
-  pcre, cfitsio, perl, gob2, vala_0_23, libtiff, json_glib }:
+  pcre, cfitsio, perl, gob2, vala, libtiff, json-glib }:
 
 stdenv.mkDerivation rec {
-  name = "giv-20150811-git";
+  name = "giv-${version}";
+  version = "0.9.26";
 
   src = fetchFromGitHub {
     owner = "dov";
     repo = "giv";
-    rev = "64648bfbbf10ec4a9adfbc939c96c7d1dbdce57a";
-    sha256 = "1sz2n7jbmg3g97bs613xxjpzqbsl5rvpg6v7g3x3ycyd35r8vsfp";
+    rev = "v${version}";
+    sha256 = "1sfm8j3hvqij6z3h8xz724d7hjqqbzljl2a6pp4yjpnnrxksnic2";
   };
 
   hardeningDisable = [ "format" ];
 
   prePatch = ''
     sed -i s,/usr/bin/perl,${perl}/bin/perl, doc/eperl
-    sed -i s,/usr/local,$out, SConstruct 
+    sed -i s,/usr/local,$out, SConstruct
   '';
 
   patches = [ ./build.patch ];
@@ -24,14 +25,14 @@ stdenv.mkDerivation rec {
 
   installPhase = "scons install";
 
-  buildInputs = [ gdk_pixbuf pkgconfig gtk2 glib scons pcre cfitsio perl gob2 vala_0_23 libtiff
-    json_glib ];
+  nativeBuildInputs = [ scons pkgconfig vala perl gob2 ];
+  buildInputs = [ gdk_pixbuf gtk2 glib pcre cfitsio libtiff json-glib ];
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "Cross platform image and hierarchical vector viewer based";
     homepage = http://giv.sourceforge.net/giv/;
-    license = stdenv.lib.licenses.gpl2Plus;
-    maintainers = with stdenv.lib.maintainers; [viric];
-    platforms = with stdenv.lib.platforms; linux;
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ viric ];
+    platforms = with platforms; linux;
   };
 }

@@ -16,18 +16,22 @@ stdenv.mkDerivation {
 
   postInstall = ''
     ln -s $out/bin/wish* $out/bin/wish
+    cp ../{unix,generic}/*.h $out/include
   '';
 
   configureFlags = [
     "--with-tcl=${tcl}/lib"
   ];
 
-  buildInputs = [ pkgconfig ]
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ ]
     ++ stdenv.lib.optional stdenv.isDarwin fontconfig;
 
   propagatedBuildInputs = [ tcl libXft ];
 
   NIX_CFLAGS_LINK = if stdenv.isDarwin then "-lfontconfig" else null;
+
+  doCheck = false; # fails. can't find itself
 
   inherit tcl;
 

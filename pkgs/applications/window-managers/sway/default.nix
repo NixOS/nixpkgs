@@ -1,43 +1,40 @@
-{ stdenv, fetchFromGitHub, pango, libinput
-, makeWrapper, cmake, pkgconfig, asciidoc, libxslt, docbook_xsl, cairo
-, wayland, wlc, libxkbcommon, pixman, fontconfig, pcre, json_c, dbus_libs
+{ stdenv, fetchFromGitHub
+, cmake, pkgconfig, asciidoc, libxslt, docbook_xsl
+, wayland, wlc, libxkbcommon, pcre, json_c, dbus_libs
+, pango, cairo, libinput, libcap, pam, gdk_pixbuf, libpthreadstubs
+, libXdmcp
+, buildDocs ? true
 }:
 
-let
-  version = "0.9";
-in
-  stdenv.mkDerivation rec {
-    name = "sway-${version}";
+stdenv.mkDerivation rec {
+  name = "sway-${version}";
+  version = "0.15.2";
 
-    src = fetchFromGitHub {
-      owner = "Sircmpwn";
-      repo = "sway";
-      rev = "${version}";
-      sha256 = "0qqqg23rknxnjcgvkfrx3pijqc3dvi74qmmavq07vy2qfs1xlwg0";
-    };
+  src = fetchFromGitHub {
+    owner = "swaywm";
+    repo = "sway";
+    rev = version;
+    sha256 = "1p9j5gv85lsgj4z28qja07dqyvqk41w6mlaflvvm9yxafx477g5n";
+  };
 
-    nativeBuildInputs = [ makeWrapper cmake pkgconfig asciidoc libxslt docbook_xsl ];
+  nativeBuildInputs = [
+    cmake pkgconfig
+  ] ++ stdenv.lib.optional buildDocs [ asciidoc libxslt docbook_xsl ];
+  buildInputs = [
+    wayland wlc libxkbcommon pcre json_c dbus_libs
+    pango cairo libinput libcap pam gdk_pixbuf libpthreadstubs
+    libXdmcp
+  ];
 
-    buildInputs = [ wayland wlc libxkbcommon pixman fontconfig pcre json_c dbus_libs pango cairo libinput ];
+  enableParallelBuilding = true;
 
-    patchPhase = ''
-      sed -i s@/etc/sway@$out/etc/sway@g CMakeLists.txt;
-    '';
+  cmakeFlags = "-DVERSION=${version} -DLD_LIBRARY_PATH=/run/opengl-driver/lib:/run/opengl-driver-32/lib";
 
-    makeFlags = "PREFIX=$(out)";
-    installPhase = "PREFIX=$out make install";
-
-    LD_LIBRARY_PATH = stdenv.lib.makeLibraryPath [ wlc dbus_libs ];
-    preFixup = ''
-      wrapProgram $out/bin/sway \
-        --prefix LD_LIBRARY_PATH : "${LD_LIBRARY_PATH}";
-    '';
-
-    meta = with stdenv.lib; {
-      description = "i3-compatible window manager for Wayland";
-      homepage    = "http://swaywm.org";
-      license     = licenses.mit;
-      platforms   = platforms.linux;
-      maintainers = with maintainers; [ ];
-    };
-  }
+  meta = with stdenv.lib; {
+    description = "i3-compatible window manager for Wayland";
+    homepage    = http://swaywm.org;
+    license     = licenses.mit;
+    platforms   = platforms.linux;
+    maintainers = with maintainers; [ primeos ]; # Trying to keep it up-to-date.
+  };
+}

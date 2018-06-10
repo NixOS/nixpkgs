@@ -4,22 +4,26 @@ with lib;
 
 let
   cfg = config.services.graylog;
-  configBool = b: if b then "true" else "false";
 
   confFile = pkgs.writeText "graylog.conf" ''
-    is_master = ${configBool cfg.isMaster}
+    is_master = ${boolToString cfg.isMaster}
     node_id_file = ${cfg.nodeIdFile}
     password_secret = ${cfg.passwordSecret}
     root_username = ${cfg.rootUsername}
     root_password_sha2 = ${cfg.rootPasswordSha2}
-    elasticsearch_cluster_name = ${cfg.elasticsearchClusterName}
-    elasticsearch_discovery_zen_ping_multicast_enabled = ${configBool cfg.elasticsearchDiscoveryZenPingMulticastEnabled}
-    elasticsearch_discovery_zen_ping_unicast_hosts = ${cfg.elasticsearchDiscoveryZenPingUnicastHosts}
+    elasticsearch_hosts = ${concatStringsSep "," cfg.elasticsearchHosts}
     message_journal_dir = ${cfg.messageJournalDir}
     mongodb_uri = ${cfg.mongodbUri}
+    plugin_dir = /var/lib/graylog/plugins
 
     ${cfg.extraConfig}
   '';
+
+  glPlugins = pkgs.buildEnv {
+    name = "graylog-plugins";
+    paths = cfg.plugins;
+  };
+
 in
 
 {
@@ -85,22 +89,10 @@ in
         '';
       };
 
-      elasticsearchClusterName = mkOption {
-        type = types.str;
-        example = "graylog";
-        description = "This must be the same as for your Elasticsearch cluster";
-      };
-
-      elasticsearchDiscoveryZenPingMulticastEnabled = mkOption {
-        type = types.bool;
-        default = false;
-        description = "Whether to use elasticsearch multicast discovery";
-      };
-
-      elasticsearchDiscoveryZenPingUnicastHosts = mkOption {
-        type = types.str;
-        default = "127.0.0.1:9300";
-        description = "Tells Graylogs Elasticsearch client how to find other cluster members. See Elasticsearch documentation for details";
+      elasticsearchHosts = mkOption {
+        type = types.listOf types.str;
+        example = literalExample ''[ "http://node1:9200" "http://user:password@node2:19200" ]'';
+        description = "List of valid URIs of the http ports of your elastic nodes. If one or more of your elasticsearch hosts require authentication, include the credentials in each node URI that requires authentication";
       };
 
       messageJournalDir = mkOption {
@@ -119,6 +111,12 @@ in
         type = types.str;
         default = "";
         description = "Any other configuration options you might want to add";
+      };
+
+      plugins = mkOption {
+        description = "Extra graylog plugins";
+        default = [ ];
+        type = types.listOf types.package;
       };
 
     };
@@ -143,9 +141,19 @@ in
         JAVA_HOME = jre;
         GRAYLOG_CONF = "${confFile}";
       };
-      path = [ pkgs.openjdk8 pkgs.which pkgs.procps ];
+      path = [ pkgs.jre_headless pkgs.which pkgs.procps ];
       preStart = ''
         mkdir -p /var/lib/graylog -m 755
+
+        rm -rf /var/lib/graylog/plugins || true
+        mkdir -p /var/lib/graylog/plugins -m 755
+
+        for declarativeplugin in `ls ${glPlugins}/bin/`; do
+          ln -sf ${glPlugins}/bin/$declarativeplugin /var/lib/graylog/plugins/$declarativeplugin
+        done
+        for includedplugin in `ls ${cfg.package}/plugin/`; do
+          ln -s ${cfg.package}/plugin/$includedplugin /var/lib/graylog/plugins/$includedplugin || true
+        done
         chown -R ${cfg.user} /var/lib/graylog
 
         mkdir -p ${cfg.messageJournalDir} -m 755

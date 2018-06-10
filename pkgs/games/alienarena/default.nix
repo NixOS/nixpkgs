@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgconfig, libjpeg, libX11, libXxf86vm, curl, libogg
-, libvorbis, freetype, openal, mesa }:
+, libvorbis, freetype, openal, libGLU_combined }:
 
 stdenv.mkDerivation rec {
   name = "alienarena-7.65";
@@ -9,13 +9,14 @@ stdenv.mkDerivation rec {
     sha256 = "03nnv4m2xmswr0020hssajncdb8sy95jp5yccsm53sgxga4r8igg";
   };
 
-  buildInputs = [ pkgconfig libjpeg libX11 curl libogg libvorbis
-                  freetype openal mesa libXxf86vm ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ libjpeg libX11 curl libogg libvorbis
+                  freetype openal libGLU_combined libXxf86vm ];
 
   patchPhase = ''
     substituteInPlace ./configure \
       --replace libopenal.so.1 ${openal}/lib/libopenal.so.1 \
-      --replace libGL.so.1 ${mesa}/lib/libGL.so.1
+      --replace libGL.so.1 ${libGLU_combined}/lib/libGL.so.1
   '';
 
   meta = with stdenv.lib; {

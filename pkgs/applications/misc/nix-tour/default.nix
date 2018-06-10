@@ -1,15 +1,14 @@
 { stdenv, fetchgit, electron } :
 
 stdenv.mkDerivation rec {
-  name = "nix-tour";
+  name = "nix-tour-${version}";
+  version = "0.0.1";
 
   buildInputs = [ electron ];
 
-  version = "v0.0.1";
-
   src = fetchgit {
     url = "https://github.com/nixcloud/tour_of_nix";
-    rev = "refs/tags/${version}";
+    rev = "v${version}";
     sha256 = "09b1vxli4zv1nhqnj6c0vrrl51gaira94i8l7ww96fixqxjgdwvb";
   };
 
@@ -28,7 +27,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "'the tour of nix' from nixcloud.io/tour as offline version";
-    homepage = "https://nixcloud.io/tour";
+    homepage = https://nixcloud.io/tour;
     license = licenses.gpl2;
     platforms = platforms.linux;
     maintainers = with maintainers; [ qknight ];

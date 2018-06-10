@@ -11,7 +11,8 @@ stdenv.mkDerivation rec {
     sha256 = "126jph21b70jlxapzmll8pq36i53lb304hbsiap25160vdqid4n1";
   };
 
-  buildInputs = [ pkgconfig SDL2 ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ SDL2 ];
 
   meta = {
     description = "An open-source Atari 2600 VCS emulator";

@@ -11,12 +11,12 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace Makefile --replace /usr $out
+    sed -i -e '/chmod u+s/d' Makefile
   '';
 
   meta = with stdenv.lib; {
     description = "Setuid-safe wrapper for chroot";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ nckx ];
     platforms = with platforms; unix;
   };
 }

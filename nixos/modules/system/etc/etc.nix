@@ -8,7 +8,7 @@ let
 
   etc' = filter (f: f.enable) (attrValues config.environment.etc);
 
-  etc = pkgs.stdenv.mkDerivation {
+  etc = pkgs.stdenvNoCC.mkDerivation {
     name = "etc";
 
     builder = ./make-etc.sh;
@@ -20,8 +20,8 @@ let
     sources = map (x: x.source) etc';
     targets = map (x: x.target) etc';
     modes = map (x: x.mode) etc';
-    uids  = map (x: x.uid) etc';
-    gids  = map (x: x.gid) etc';
+    users  = map (x: x.user) etc';
+    groups  = map (x: x.group) etc';
   };
 
 in
@@ -33,7 +33,6 @@ in
   options = {
 
     environment.etc = mkOption {
-      type = types.loaOf types.optionSet;
       default = {};
       example = literalExample ''
         { example-configuration-file =
@@ -47,7 +46,8 @@ in
         Set of files that have to be linked in <filename>/etc</filename>.
       '';
 
-      options = singleton ({ name, config, ... }:
+      type = with types; loaOf (submodule (
+        { name, config, ... }:
         { options = {
 
             enable = mkOption {
@@ -108,6 +108,26 @@ in
               '';
             };
 
+            user = mkOption {
+              default = "+${toString config.uid}";
+              type = types.str;
+              description = ''
+                User name of created file.
+                Only takes affect when the file is copied (that is, the mode is not 'symlink').
+                Changing this option takes precedence over <literal>uid</literal>.
+              '';
+            };
+
+            group = mkOption {
+              default = "+${toString config.gid}";
+              type = types.str;
+              description = ''
+                Group name of created file.
+                Only takes affect when the file is copied (that is, the mode is not 'symlink').
+                Changing this option takes precedence over <literal>gid</literal>.
+              '';
+            };
+
           };
 
           config = {
@@ -117,7 +137,7 @@ in
               in mkDefault (pkgs.writeText name' config.text));
           };
 
-        });
+        }));
 
     };
 
@@ -130,7 +150,7 @@ in
 
     system.build.etc = etc;
 
-    system.activationScripts.etc = stringAfter [ "stdio" ]
+    system.activationScripts.etc = stringAfter [ "users" "groups" ]
       ''
         # Set up the statically computed bits of /etc.
         echo "setting up /etc..."

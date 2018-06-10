@@ -2,20 +2,21 @@
   }:
 
 stdenv.mkDerivation rec {
-  name = "i3status-2.10";
+  name = "i3status-2.12";
 
   src = fetchurl {
-    url = "http://i3wm.org/i3status/${name}.tar.bz2";
-    sha256 = "1497dsvb32z9xljmxz95dnyvsbayn188ilm3l4ys8m5h25vd1xfs";
+    url = "https://i3wm.org/i3status/${name}.tar.bz2";
+    sha256 = "06krpbijv4yi33nypg6qcn4hilcrdyarsdpd9fmr2cq46qaqiikg";
   };
 
-  buildInputs = [ confuse yajl alsaLib libpulseaudio libnl pkgconfig ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ confuse yajl alsaLib libpulseaudio libnl ];
 
   makeFlags = [ "all" "PREFIX=$(out)" ];
 
   meta = {
     description = "A tiling window manager";
-    homepage = http://i3wm.org;
+    homepage = https://i3wm.org;
     maintainers = [ stdenv.lib.maintainers.garbas ];
     license = stdenv.lib.licenses.bsd3;
     platforms = stdenv.lib.platforms.all;

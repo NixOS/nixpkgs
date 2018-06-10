@@ -20,10 +20,6 @@ stdenv.mkDerivation rec {
     touch NEWS ChangeLog AUTHORS
   '';
 
-  crossAttrs = {
-    configureFlags = "--with-ppl=${ppl.crossDrv}";
-  };
-
   doCheck = true;
 
   meta = {
@@ -69,6 +65,6 @@ stdenv.mkDerivation rec {
        make[3]: *** [Box.lo] Error 1
 
     */
-    platforms = with stdenv.lib.platforms; allBut cygwin;
+    platforms = stdenv.lib.platforms.unix; # Once had cygwin problems
   };
 }

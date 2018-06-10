@@ -3,16 +3,16 @@
 let arch =
   if stdenv.isi686 then "i386"
   else if stdenv.isx86_64 then "x86_64"
-  else abort "Unknown architecture";
+  else throw "Unknown architecture";
 in stdenv.mkDerivation rec {
   name = "grub4dos-${version}";
-  version = "0.4.6a-2016-08-06";
+  version = "0.4.6a-2018-02-20";
 
   src = fetchFromGitHub {
     owner = "chenall";
     repo = "grub4dos";
-    rev = "99d6ddbe7611f942d2708d77a620d6aa94a284d1";
-    sha256 = "0gnllk0qkx6d0azf7v9cr0b23gp577avksz0f4dl3v3ldgi0dksq";
+    rev = "74f6c862c73a4d21e61832174f4ab2f1d7f8b12a";
+    sha256 = "0p85y5adnlcs4cdi9dg6f5fzzc1y12bmfhx13qs0576izx2rma3q";
   };
 
   nativeBuildInputs = [ nasm ];
@@ -31,7 +31,7 @@ in stdenv.mkDerivation rec {
   dontPatchELF = true;
 
   meta = with stdenv.lib; {
-    homepage = "http://grub4dos.chenall.net/";
+    homepage = http://grub4dos.chenall.net/;
     description = "GRUB for DOS is the dos extension of GRUB";
     maintainers = with maintainers; [ abbradar ];
     platforms = platforms.linux;

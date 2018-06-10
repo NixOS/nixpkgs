@@ -1,14 +1,14 @@
 { stdenv, fetchurl, asciidoc, libxml2, docbook_xml_dtd_45, libxslt
-, docbook_xsl, diffutils, coreutils, gnugrep
+, docbook_xsl, diffutils, coreutils, gnugrep, gnused
 }:
 
 stdenv.mkDerivation rec {
   name = "autorevision-${version}";
-  version = "1.14";
+  version = "1.21";
 
   src = fetchurl {
     url = "https://github.com/Autorevision/autorevision/releases/download/v%2F${version}/autorevision-${version}.tgz";
-    sha256 = "0h0ig922am9qd0nbri3i6p4k789mv5iavxzxwylclg0mfgx43qd2";
+    sha256 = "07ssirjy2mgbqxr792n3rqa408hm7qnhwfjzd73rqfwvjcahy1q8";
   };
 
   buildInputs = [
@@ -18,9 +18,11 @@ stdenv.mkDerivation rec {
   installFlags = [ "prefix=$(out)" ];
 
   postInstall = ''
-    sed -e "s|cmp|${diffutils}/bin/cmp|" \
-        -e "s|cat|${coreutils}/bin/cat|" \
-        -e "s|grep|${gnugrep}/bin/grep|" \
+    sed -e "s|\<cmp\>|${diffutils}/bin/cmp|g" \
+        -e "s|\<cat\>|${coreutils}/bin/cat|g" \
+        -e "s|\<grep\>|${gnugrep}/bin/grep|g" \
+        -e "s|\<sed\>|${gnused}/bin/sed|g" \
+        -e "s|\<tee\>|${coreutils}/bin/tee|g" \
         -i "$out/bin/autorevision"
   '';
 

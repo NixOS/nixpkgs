@@ -4,7 +4,7 @@
 , systemd
 , libxkbcommon
 , libdrm
-, mesa
+, libGLU_combined
 , pango
 , pixman
 , pkgconfig
@@ -25,13 +25,15 @@ stdenv.mkDerivation rec {
     systemd
     libxkbcommon
     libdrm
-    mesa
+    libGLU_combined
     pango
     pixman
     pkgconfig
     docbook_xsl
     libxslt
   ];
+
+  patches = [ ./kmscon-8-glibc-2.26.patch ];
 
   # FIXME: Remove as soon as kmscon > 8 comes along.
   postPatch = ''
@@ -45,9 +47,11 @@ stdenv.mkDerivation rec {
     "--with-renderers=bbulk,gltex,pixman"
   ];
 
+  enableParallelBuilding = true;
+
   meta = {
     description = "KMS/DRM based System Console";
-    homepage = "http://www.freedesktop.org/wiki/Software/kmscon/";
+    homepage = http://www.freedesktop.org/wiki/Software/kmscon/;
     license = stdenv.lib.licenses.mit;
     platforms = stdenv.lib.platforms.linux;
   };

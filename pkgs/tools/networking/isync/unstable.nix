@@ -1,17 +1,20 @@
-{ fetchgit, stdenv, openssl, pkgconfig, db, cyrus_sasl
-, autoconf, automake }:
+{
+  stdenv, fetchgit,
+  autoconf, automake, cyrus_sasl, db, openssl, perl, pkgconfig, zlib,
+}:
 
 stdenv.mkDerivation rec {
-  name = "isync-git-2015-11-08";
-  rev = "46e792";
+  name = "isync-git-20170514";
+  rev = "4b3768806278a70db696ba52645dc1b6eb8de58a";
 
   src = fetchgit {
-    url = "git://git.code.sf.net/p/isync/isync";
+    url = "https://git.code.sf.net/p/isync/isync";
     inherit rev;
-    sha256 = "02bm5m3bwpfns7qdwfybyl4fwa146n55v67pdchkhxaqpa4ddws1";
+    sha256 = "1cv1isw01cfp7724z6f4pf6k4rx3k1lg0pc1xcq17zpikx9d10fb";
   };
 
-  buildInputs = [ openssl pkgconfig db cyrus_sasl autoconf automake ];
+  nativeBuildInputs = [ autoconf automake perl pkgconfig ];
+  buildInputs = [ cyrus_sasl db openssl zlib ];
 
   preConfigure = ''
     touch ChangeLog
@@ -22,8 +25,7 @@ stdenv.mkDerivation rec {
     homepage = http://isync.sourceforge.net/;
     description = "Free IMAP and MailDir mailbox synchronizer";
     license = licenses.gpl2Plus;
-
-    maintainers = with maintainers; [ the-kenny ];
+    maintainers = with maintainers; [ the-kenny ttuegel ];
     platforms = platforms.unix;
   };
 }

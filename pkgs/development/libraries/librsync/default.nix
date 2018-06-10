@@ -1,25 +1,20 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, perl, zlib, bzip2, popt }:
+{ stdenv, fetchFromGitHub, cmake, perl, zlib, bzip2, popt }:
 
 stdenv.mkDerivation rec {
   name = "librsync-${version}";
-  version = "1.0.0";
+  version = "2.0.2";
 
   src = fetchFromGitHub {
     owner = "librsync";
     repo = "librsync";
     rev = "v${version}";
-    sha256 = "0rc2pksdd0mhdvk8y1yix71rf19wdx1lb2ryrkhi7vcy240rvgvc";
+    sha256 = "1qnr4rk93mhggqjh2025clmlhhgnjhq983p1vbh8i1g8aiqdnapi";
   };
 
-  buildInputs = [ autoreconfHook perl zlib bzip2 popt ];
+  nativeBuildInputs = [ cmake ];
+  buildInputs = [ perl zlib bzip2 popt ];
 
-  configureFlags = if stdenv.isCygwin then "--enable-static" else "--enable-shared";
-
-  CFLAGS = "-std=gnu89";
-
-  crossAttrs = {
-    dontStrip = true;
-  };
+  dontStrip = stdenv.hostPlatform != stdenv.buildPlatform;
 
   meta = with stdenv.lib; {
     homepage = http://librsync.sourceforge.net/;

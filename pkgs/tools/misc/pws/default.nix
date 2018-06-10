@@ -8,9 +8,7 @@ stdenv.mkDerivation rec {
 
     inherit ruby;
 
-    gemfile  = ./Gemfile;
-    lockfile = ./Gemfile.lock;
-    gemset   = ./gemset.nix;
+    gemdir = ./.;
   };
 
   buildInputs = [ makeWrapper ];
@@ -27,7 +25,7 @@ stdenv.mkDerivation rec {
     description = "Command-line password safe";
     homepage    = https://github.com/janlelis/pws;
     license     = licenses.mit;
-    maintainers = maintainers.swistak35;
+    maintainers = [ maintainers.swistak35 ];
     platforms   = platforms.unix;
   };
 }

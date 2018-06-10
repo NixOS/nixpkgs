@@ -1,8 +1,10 @@
-{ system ? builtins.currentSystem }:
+{ pkgspath ? ../../.., test-pkgspath ? pkgspath, system ? builtins.currentSystem }:
 
-with import ../../.. { inherit system; };
+with import pkgspath { inherit system; };
 
-rec {
+let
+  llvmPackages = llvmPackages_4;
+in rec {
   coreutils_ = coreutils.override (args: {
     # We want coreutils without ACL support.
     aclSupport = false;
@@ -13,28 +15,29 @@ rec {
   # Avoid debugging larger changes for now.
   bzip2_ = bzip2.override (args: { linkStatic = true; });
 
+  # Avoid messing with libkrb5 and libnghttp2.
+  curl_ = curl.override (args: { gssSupport = false; http2Support = false; });
+
   build = stdenv.mkDerivation {
     name = "stdenv-bootstrap-tools";
 
     buildInputs = [nukeReferences cpio];
 
     buildCommand = ''
-      mkdir -p $out/bin $out/lib
+      mkdir -p $out/bin $out/lib $out/lib/system
 
-      # Our (fake) loader
-      cp -d ${darwin.dyld}/lib/dyld $out/lib/
-
-      # C standard library stuff
-      cp -d ${darwin.Libsystem}/lib/*.o $out/lib/
-      cp -d ${darwin.Libsystem}/lib/*.dylib $out/lib/
+      # We're not going to bundle the actual libSystem.dylib; instead we reconstruct it on
+      # the other side. See the notes in stdenv/darwin/default.nix for more information.
+      # We also need the .o files for various low-level boot stuff.
+      cp -d ${darwin.Libsystem}/lib/*.o $out/lib
+      cp -d ${darwin.Libsystem}/lib/system/*.dylib $out/lib/system
 
       # Resolv is actually a link to another package, so let's copy it properly
-      rm $out/lib/libresolv.9.dylib
       cp -L ${darwin.Libsystem}/lib/libresolv.9.dylib $out/lib
 
       cp -rL ${darwin.Libsystem}/include $out
       chmod -R u+w $out/include
-      cp -rL ${icu.dev}/include*             $out/include
+      cp -rL ${darwin.ICU}/include*             $out/include
       cp -rL ${libiconv}/include/*       $out/include
       cp -rL ${gnugrep.pcre.dev}/include/*   $out/include
       mv $out/include $out/include-Libsystem
@@ -60,8 +63,8 @@ rec {
 
       # This used to be in-nixpkgs, but now is in the bundle
       # because I can't be bothered to make it partially static
-      cp ${curl.bin}/bin/curl $out/bin
-      cp -d ${curl.out}/lib/libcurl*.dylib $out/lib
+      cp ${curl_.bin}/bin/curl $out/bin
+      cp -d ${curl_.out}/lib/libcurl*.dylib $out/lib
       cp -d ${libssh2.out}/lib/libssh*.dylib $out/lib
       cp -d ${openssl.out}/lib/*.dylib $out/lib
 
@@ -78,13 +81,13 @@ rec {
 
       cp -rL ${llvmPackages.clang-unwrapped}/lib/clang $out/lib
 
-      cp -d ${libcxx}/lib/libc++*.dylib $out/lib
-      cp -d ${libcxxabi}/lib/libc++abi*.dylib $out/lib
+      cp -d ${llvmPackages.libcxx}/lib/libc++*.dylib $out/lib
+      cp -d ${llvmPackages.libcxxabi}/lib/libc++abi*.dylib $out/lib
 
       mkdir $out/include
-      cp -rd ${libcxx}/include/c++     $out/include
+      cp -rd ${llvmPackages.libcxx}/include/c++     $out/include
 
-      cp -d ${icu.out}/lib/libicu*.dylib $out/lib
+      cp -d ${darwin.ICU}/lib/libicu*.dylib $out/lib
       cp -d ${zlib.out}/lib/libz.*       $out/lib
       cp -d ${gmpxx.out}/lib/libgmp*.*   $out/lib
       cp -d ${xz.out}/lib/liblzma*.*     $out/lib
@@ -107,33 +110,26 @@ rec {
         done
       }
 
-      fix_dyld() {
-        # This is clearly a hack. Once we have an install_name_tool-alike that can patch dyld, this will be nicer.
-        ${perl}/bin/perl -i -0777 -pe 's/\/nix\/store\/eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee-dyld-239\.4\/lib\/dyld/\/usr\/lib\/dyld\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00/sg' "$1"
-      }
-
       # Strip executables even further
       for i in $out/bin/*; do
         if test -x $i -a ! -L $i; then
           chmod +w $i
-
-          fix_dyld $i
           strip $i || true
         fi
       done
 
       for i in $out/bin/* $out/lib/*.dylib $out/lib/clang/*/lib/darwin/*.dylib $out/Library/Frameworks/CoreFoundation.framework/Versions/A/CoreFoundation; do
-        if test -x $i -a ! -L $i; then
+        if test -x "$i" -a ! -L "$i"; then
           echo "Adding rpath to $i"
           rpathify $i
         fi
       done
 
       nuke-refs $out/lib/*
+      nuke-refs $out/lib/system/*
       nuke-refs $out/lib/clang/*/lib/darwin/*
       nuke-refs $out/Library/Frameworks/CoreFoundation.framework/Versions/A/CoreFoundation
 
-      set -x
       mkdir $out/.pack
       mv $out/* $out/.pack
       mv $out/.pack $out/pack
@@ -147,10 +143,6 @@ rec {
       chmod u+w $out/on-server/*
       strip $out/on-server/*
       nuke-refs $out/on-server/*
-
-      for i in $out/on-server/*; do
-        fix_dyld $i
-      done
 
       (cd $out/pack && (find | cpio -o -H newc)) | bzip2 > $out/on-server/bootstrap-tools.cpio.bz2
     '';
@@ -208,14 +200,49 @@ rec {
         fi
       done
 
+      install_name_tool \
+        -id $out/lib/system/libsystem_c.dylib \
+        $out/lib/system/libsystem_c.dylib
+
+      install_name_tool \
+        -id $out/lib/system/libsystem_kernel.dylib \
+        $out/lib/system/libsystem_kernel.dylib
+
+      # TODO: this logic basically duplicates similar logic in the Libsystem expression. Deduplicate them!
+      libs=$(otool -arch x86_64 -L /usr/lib/libSystem.dylib | tail -n +3 | awk '{ print $1 }')
+
+      for i in $libs; do
+        if [ "$i" != "/usr/lib/system/libsystem_kernel.dylib" ] && [ "$i" != "/usr/lib/system/libsystem_c.dylib" ]; then
+          args="$args -reexport_library $i"
+        fi
+      done
+
+      ld -macosx_version_min 10.7 \
+         -arch x86_64 \
+         -dylib \
+         -o $out/lib/libSystem.B.dylib \
+         -compatibility_version 1.0 \
+         -current_version 1226.10.1 \
+         -reexport_library $out/lib/system/libsystem_c.dylib \
+         -reexport_library $out/lib/system/libsystem_kernel.dylib \
+         $args
+
+      ln -s libSystem.B.dylib $out/lib/libSystem.dylib
+
+      for name in c dbm dl info m mx poll proc pthread rpcsvc util gcc_s.10.4 gcc_s.10.5; do
+        ln -s libSystem.dylib $out/lib/lib$name.dylib
+      done
+
+      ln -s libresolv.9.dylib $out/lib/libresolv.dylib
+
       for i in $out/lib/*.dylib $out/Library/Frameworks/CoreFoundation.framework/Versions/A/CoreFoundation; do
-        if ! test -L $i; then
-          echo patching $i
+        if test ! -L "$i" -a "$i" != "$out/lib/libSystem*.dylib"; then
+          echo "Patching $i"
 
           id=$(otool -D "$i" | tail -n 1)
           install_name_tool -id "$(dirname $i)/$(basename $id)" $i
 
-          libs=$(otool -L "$i" | tail -n +2 | grep -v Libsystem | cat)
+          libs=$(otool -L "$i" | tail -n +2 | grep -v libSystem | cat)
           if [ -n "$libs" ]; then
             install_name_tool -add_rpath $out/lib $i
           fi
@@ -225,9 +252,24 @@ rec {
       ln -s bash $out/bin/sh
       ln -s bzip2 $out/bin/bunzip2
 
+      # Provide a gunzip script.
+      cat > $out/bin/gunzip <<EOF
+      #!$out/bin/sh
+      exec $out/bin/gzip -d "\$@"
+      EOF
+      chmod +x $out/bin/gunzip
+
+      # Provide fgrep/egrep.
+      echo "#! $out/bin/sh" > $out/bin/egrep
+      echo "exec $out/bin/grep -E \"\$@\"" >> $out/bin/egrep
+      echo "#! $out/bin/sh" > $out/bin/fgrep
+      echo "exec $out/bin/grep -F \"\$@\"" >> $out/bin/fgrep
+
       cat >$out/bin/dsymutil << EOF
       #!$out/bin/sh
       EOF
+
+      chmod +x $out/bin/egrep $out/bin/fgrep $out/bin/dsymutil
     '';
 
     allowedReferences = [ "out" ];
@@ -262,8 +304,8 @@ rec {
       export flags="-idirafter ${unpack}/include-Libsystem --sysroot=${unpack} -L${unpack}/lib"
 
       export CPP="clang -E $flags"
-      export CC="clang $flags -Wl,-rpath,${unpack}/lib -Wl,-v"
-      export CXX="clang++ $flags --stdlib=libc++ -lc++abi -isystem${unpack}/include/c++/v1 -Wl,-rpath,${unpack}/lib -Wl,-v"
+      export CC="clang $flags -Wl,-rpath,${unpack}/lib -Wl,-v -Wl,-sdk_version,10.10"
+      export CXX="clang++ $flags --stdlib=libc++ -lc++abi -isystem${unpack}/include/c++/v1 -Wl,-rpath,${unpack}/lib -Wl,-v -Wl,-sdk_version,10.10"
 
       echo '#include <stdio.h>' >> foo.c
       echo '#include <float.h>' >> foo.c
@@ -293,10 +335,10 @@ rec {
   };
 
   # The ultimate test: bootstrap a whole stdenv from the tools specified above and get a package set out of it
-  test-pkgs = let
-    stdenv = import ./. { inherit system bootstrapFiles; };
-  in import ../../.. {
+  test-pkgs = import test-pkgspath {
     inherit system;
-    bootStdenv = stdenv.stdenvDarwin;
+    stdenvStages = args: let
+        args' = args // { inherit bootstrapFiles; };
+      in (import (test-pkgspath + "/pkgs/stdenv/darwin") args').stagesDarwin;
   };
 }

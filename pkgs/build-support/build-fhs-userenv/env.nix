@@ -51,12 +51,17 @@ let
     export PS1='${name}-chrootenv:\u@\h:\w\$ '
     export LOCALE_ARCHIVE='/usr/lib/locale/locale-archive'
     export LD_LIBRARY_PATH='/run/opengl-driver/lib:/run/opengl-driver-32/lib:/usr/lib:/usr/lib32'
-    export PATH='/var/setuid-wrappers:/usr/bin:/usr/sbin'
-    export PKG_CONFIG_PATH=/usr/lib/pkgconfig
+    export PATH='/run/wrappers/bin:/usr/bin:/usr/sbin'
+    export TZDIR='/etc/zoneinfo'
 
-    # Force compilers to look in default search paths
+    # Force compilers and other tools to look in default search paths
+    unset NIX_ENFORCE_PURITY
+    export NIX_CC_WRAPPER_${stdenv.cc.infixSalt}_TARGET_HOST=1
     export NIX_CFLAGS_COMPILE='-idirafter /usr/include'
-    export NIX_LDFLAGS_BEFORE='-L/usr/lib -L/usr/lib32'
+    export NIX_CFLAGS_LINK='-L/usr/lib -L/usr/lib32'
+    export NIX_LDFLAGS='-L/usr/lib -L/usr/lib32'
+    export PKG_CONFIG_PATH=/usr/lib/pkgconfig
+    export ACLOCAL_PATH=/usr/share/aclocal
 
     ${profile}
   '';
@@ -89,6 +94,7 @@ let
 
       # symlink other core stuff
       ln -s /host/etc/localtime localtime
+      ln -s /host/etc/zoneinfo zoneinfo
       ln -s /host/etc/machine-id machine-id
       ln -s /host/etc/os-release os-release
 

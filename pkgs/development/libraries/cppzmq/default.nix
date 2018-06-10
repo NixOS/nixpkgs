@@ -1,19 +1,18 @@
-{ stdenv, fetchFromGitHub }:
+{ stdenv, fetchFromGitHub, cmake, zeromq }:
 
 stdenv.mkDerivation rec {
   name = "cppzmq-${version}";
-  version = "2016-07-18";
+  version = "4.2.3";
 
   src = fetchFromGitHub {
     owner = "zeromq";
     repo = "cppzmq";
-    rev = "92d2af6def80a01b76d5e73f073c439ad00ab757";
-    sha256 = "0lnwh314hh5ifad2sa2nz1g1ld1jc4vplm7clyvx304sjjvbvl27";
+    rev = "v${version}";
+    sha256 = "1yjs25ra5s8zs0rhk50w3f1rrrl80hhq784lwdhh1m3risk740sa";
   };
 
-  installPhase = ''
-    install -Dm644 zmq.hpp $out/include/zmq.hpp
-  '';
+  nativeBuildInputs = [ cmake ];
+  buildInputs = [ zeromq ];
 
   meta = with stdenv.lib; {
     homepage = https://github.com/zeromq/cppzmq;

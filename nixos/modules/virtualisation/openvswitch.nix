@@ -169,7 +169,7 @@ in {
         mkdir -p ${runDir}/ipsec/{etc/racoon,etc/init.d/,usr/sbin/}
         ln -fs ${pkgs.ipsecTools}/bin/setkey ${runDir}/ipsec/usr/sbin/setkey
         ln -fs ${pkgs.writeScript "racoon-restart" ''
-        #!${pkgs.stdenv.shell}
+        #!${pkgs.runtimeShell}
         /var/run/current-system/sw/bin/systemctl $1 racoon
         ''} ${runDir}/ipsec/etc/init.d/racoon
       '';

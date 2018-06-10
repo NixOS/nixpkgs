@@ -1,18 +1,23 @@
 {
+  alsaLib,
   boost,
   cln,
   cmake,
-  fetchgit,
+  fetchFromGitHub,
   gcc,
   ginac,
   jamomacore,
-  kde5,
+  kdnssd,
   libsndfile,
   ninja,
   portaudio,
+  portmidi,
   qtbase,
   qtdeclarative,
   qtimageformats,
+  qtmultimedia,
+  qtquickcontrols2,
+  qtserialport,
   qtsvg,
   qttools,
   qtwebsockets,
@@ -21,31 +26,36 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "1.0.0-a67";
+  version = "1.0.0-b31";
   name = "i-score-${version}";
 
-  src = fetchgit {
-    url = "https://github.com/OSSIA/i-score.git";
-    rev = "ede2453b139346ae46702b5e2643c5488f8c89fb";
-    sha256 = "0cl9vdmxkshdacgpp7s2rg40b7xbsjrzw916jds9i3rpq1pcy5pj";
-    leaveDotGit = true;
-    deepClone = true;
+  src = fetchFromGitHub {
+    owner = "OSSIA";
+    repo = "i-score";
+    rev = "v${version}";
+    sha256 = "0g7s6n11w3wflrv5i2047dxx56lryms7xj0mznnlk5bii7g8dxzb";
+    fetchSubmodules = true;
   };
 
   buildInputs = [
+    alsaLib
     boost
     cln
     cmake
     ginac
     gcc
     jamomacore
-    kde5.kdnssd
+    kdnssd
     libsndfile
     ninja
     portaudio
+    portmidi
     qtbase
     qtdeclarative
     qtimageformats
+    qtmultimedia
+    qtquickcontrols2
+    qtserialport
     qtsvg
     qttools
     qtwebsockets
@@ -59,21 +69,11 @@ stdenv.mkDerivation rec {
     "-DISCORE_BUILD_FOR_PACKAGE_MANAGER=True"
   ];
 
-  patchPhase = ''
-    sed -e '77d' -i CMake/modules/GetGitRevisionDescription.cmake
-  '';
-
   preConfigure = ''
     export CMAKE_PREFIX_PATH="$CMAKE_PREFIX_PATH:$(echo "${jamomacore}/jamoma/share/cmake/Jamoma")"
   '';
 
-  preBuild = ''
-    ninja
-  '';
-
-  installPhase = ''
-    cmake --build . --target install
-  '';
+  postInstall = ''rm $out/bin/i-score.sh'';
 
   meta = {
     description = "An interactive sequencer for the intermedia arts";

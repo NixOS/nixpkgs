@@ -1,11 +1,11 @@
 { stdenv, fetchurl, autoreconfHook, pkgconfig, libzen, zlib }:
 
 stdenv.mkDerivation rec {
-  version = "0.7.87";
+  version = "18.05";
   name = "libmediainfo-${version}";
   src = fetchurl {
-    url = "http://mediaarea.net/download/source/libmediainfo/${version}/libmediainfo_${version}.tar.xz";
-    sha256 = "1gvjvc809mrhpcqr62cihhc6jnwml197xjbgydnzvsghih8dq8s9";
+    url = "https://mediaarea.net/download/source/libmediainfo/${version}/libmediainfo_${version}.tar.xz";
+    sha256 = "08ajrmbvqn2cvfq3jjdh64lma77kx4di5vg632c6bmbir89rcxbn";
   };
 
   nativeBuildInputs = [ autoreconfHook pkgconfig ];
@@ -15,13 +15,15 @@ stdenv.mkDerivation rec {
 
   configureFlags = [ "--enable-shared" ];
 
+  enableParallelBuilding = true;
+
   postInstall = ''
     install -vD -m 644 libmediainfo.pc "$out/lib/pkgconfig/libmediainfo.pc"
   '';
 
   meta = with stdenv.lib; {
     description = "Shared library for mediainfo";
-    homepage = http://mediaarea.net/;
+    homepage = https://mediaarea.net/;
     license = licenses.bsd2;
     platforms = platforms.unix;
     maintainers = [ maintainers.devhell ];

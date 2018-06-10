@@ -1,46 +1,39 @@
-{ stdenv, fetchurl, autoconf, automake, openssl, libxml2 }:
+{ stdenv, cmake, fetchFromGitHub, ncurses, libsodium, json_c }:
 
-let
-  scrypt_src = fetchurl {
-    url = "http://masterpasswordapp.com/libscrypt-b12b554.tar.gz";
-    sha256 = "02vz4i66v1acd15xjgki4ilmmp28m6a5603gi4hf8id3d3ndl9n7";
+stdenv.mkDerivation rec {
+  name = "mpw-2.6-f8043ae";
+
+  src = fetchFromGitHub {
+    owner = "Lyndir";
+    repo = "MasterPassword";
+    rev = "f8043ae16d73ddfb205aadd25c35cd9c5e95b228";
+    sha256 = "0hy02ri7y3sca85z3ff5i68crwav5cjd7rrdqj7jrnpp1bw4yapi";
   };
 
-in stdenv.mkDerivation {
-  name = "mpw-2.1-cli4";
-
-  srcs = [
-    (fetchurl {
-      url = "https://ssl.masterpasswordapp.com/mpw-2.1-cli4-0-gf6b2287.tar.gz";
-      sha256 = "141bzb3nj18rbnbpdvsri8cdwwwxz4d6akyhfa834542xf96b9vf";
-    })
-    scrypt_src
-  ];
-
-  sourceRoot = ".";
-
   postUnpack = ''
-    cp -R libscrypt-b12b554/* lib/scrypt
+    sourceRoot+=/platform-independent/cli-c
   '';
 
-  prePatch = ''
-    patchShebangs .
+  preConfigure = ''
+    substituteInPlace CMakeLists.txt --replace curses ncurses
+    echo ${name} > VERSION
   '';
 
-  NIX_CFLAGS_COMPILE = "-I${libxml2.dev}/include/libxml2";
+  dontUseCmakeBuildDir = true;
 
-  buildInputs = [ autoconf automake openssl libxml2 ];
+  nativeBuildInputs = [ cmake ];
 
-  buildPhase = ''
-    targets="mpw mpw-tests" ./build
-  '';
+  buildInputs = [ ncurses libsodium json_c ];
 
   installPhase = ''
     mkdir -p $out/bin
     mv mpw $out/bin/mpw
   '';
 
-  meta = {
-    platforms = stdenv.lib.platforms.unix;
+  meta = with stdenv.lib; {
+    homepage = https://masterpasswordapp.com/;
+    description = "A stateless password management solution";
+    license = licenses.gpl3;
+    platforms = platforms.unix;
   };
 }

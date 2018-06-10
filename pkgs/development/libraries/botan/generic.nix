@@ -3,6 +3,7 @@
 , baseVersion, revision, sha256
 , extraConfigureFlags ? ""
 , postPatch ? null
+, darwin
 , ...
 }:
 
@@ -20,7 +21,8 @@ stdenv.mkDerivation rec {
   };
   inherit postPatch;
 
-  buildInputs = [ python bzip2 zlib gmp openssl boost ];
+  buildInputs = [ python bzip2 zlib gmp openssl boost ]
+             ++ stdenv.lib.optional stdenv.isDarwin darwin.apple_sdk.frameworks.Security;
 
   configurePhase = ''
     python configure.py --prefix=$out --with-bzip2 --with-zlib ${if openssl != null then "--with-openssl" else ""} ${extraConfigureFlags}${if stdenv.cc.isClang then " --cc=clang" else "" }
@@ -43,7 +45,7 @@ stdenv.mkDerivation rec {
     inherit version;
     description = "Cryptographic algorithms library";
     maintainers = with maintainers; [ raskin ];
-    platforms = platforms.unix;
+    platforms = ["x86_64-linux" "i686-linux" "x86_64-darwin"];
     license = licenses.bsd2;
   };
   passthru.updateInfo.downloadPage = "http://files.randombit.net/botan/";

@@ -1,18 +1,21 @@
-{ stdenv, fetchurl, ocaml, findlib, ocaml_oasis, camlp4, uutf, markup, ppx_tools, re }:
+{ stdenv, fetchzip, ocaml, findlib, ocamlbuild, camlp4, uutf, markup, ppx_tools_versioned, re
+}:
+
+assert stdenv.lib.versionAtLeast ocaml.version "4.02";
 
 stdenv.mkDerivation rec {
   pname = "tyxml";
-  version = "3.6.0";
-  name = "${pname}-${version}";
+  version = "4.2.0";
+  name = "ocaml${ocaml.version}-${pname}-${version}";
 
-  src = fetchurl {
+  src = fetchzip {
     url = "http://github.com/ocsigen/tyxml/archive/${version}.tar.gz";
-    sha256 = "1rz0f48x8p1m30723rn5v85pp7rd0spr04sd7gzryy99vn3ianga";
-    };
+    sha256 = "1zrkrmxyj5a2cdh4b9zr9anwfk320wv3x0ynxnyxl5za2ix8sld8";
+  };
 
-  buildInputs = [ocaml findlib camlp4];
+  buildInputs = [ ocaml findlib ocamlbuild camlp4 ppx_tools_versioned markup ];
 
-  propagatedBuildInputs = [uutf re ppx_tools markup];
+  propagatedBuildInputs = [ uutf re ];
 
   createFindlibDestdir = true;
 

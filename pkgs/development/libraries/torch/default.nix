@@ -10,7 +10,14 @@ stdenv.mkDerivation rec{
     libjpeg zeromq3 ncurses openssl libpng readline pkgconfig
     zlib libX11 which
   ];
-  src = fetchgit (stdenv.lib.importJSON ./src.json);
+
+  src = fetchgit {
+    url = "https://github.com/torch/distro";
+    rev = "8b6a834f8c8755f6f5f84ef9d8da9cfc79c5ce1f";
+    sha256 = "120hnz82d7izinsmv5smyqww71dhpix23pm43s522dfcglpql8xy";
+    fetchSubmodules = true;
+  };
+
   buildPhase = ''
     cd ..
     export PREFIX=$out

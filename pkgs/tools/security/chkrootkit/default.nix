@@ -1,15 +1,30 @@
-{stdenv, fetchurl}:
+{ stdenv, fetchurl }:
 
-stdenv.mkDerivation {
-  name = "chkrootkit-0.50";
+stdenv.mkDerivation rec {
+  name = "chkrootkit-0.52";
 
   src = fetchurl {
-    url = ftp://ftp.pangeia.com.br/pub/seg/pac/chkrootkit-0.50.tar.gz;
-    sha256 = "1ivclp7ixndacjmf7xgj8lfa6h7ihx44mzzsapqdvf0c5f9gqj4m";
+    url = "ftp://ftp.pangeia.com.br/pub/seg/pac/${name}.tar.gz";
+    sha256 = "04d2yxpy99y90rvrlc9fqmlffs6iyfbghxbhvv12j1xfr2ww0y65";
   };
 
-  installPhase = "
+  # TODO: a lazy work-around for linux build failure ...
+  makeFlags = [ "STATIC=" ];
+
+   postPatch = ''
+    substituteInPlace chkrootkit \
+      --replace " ./" " $out/bin/"
+   '';
+
+  installPhase = ''
     mkdir -p $out/sbin
     cp check_wtmpx chkdirs chklastlog chkproc chkrootkit chkutmp chkwtmp ifpromisc strings-static $out/sbin
-  ";
+  '';
+
+  meta = with stdenv.lib; {
+    description = "Locally checks for signs of a rootkit";
+    homepage = http://www.chkrootkit.org/;
+    license = licenses.bsd2;
+    platforms = with platforms; linux;
+  };
 }

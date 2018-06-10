@@ -1,7 +1,6 @@
 { system ? builtins.currentSystem }:
 
 with import ../lib/testing.nix { inherit system; };
-with import ../lib/qemu-flags.nix;
 with pkgs.lib;
 
 let
@@ -25,6 +24,12 @@ let
           my $machine = createMachine({ ${machineConfig}, qemuFlags => '-m 768' });
           $machine->start;
           $machine->waitForUnit("multi-user.target");
+          $machine->succeed("nix verify -r --no-trust /run/current-system");
+
+          # Test whether the channel got installed correctly.
+          $machine->succeed("nix-instantiate --dry-run '<nixpkgs>' -A hello");
+          $machine->succeed("nix-env --dry-run -iA nixos.procps");
+
           $machine->shutdown;
         '';
     };
@@ -40,12 +45,12 @@ in {
 
     uefiCdrom = makeBootTest "uefi-cdrom" ''
         cdrom => glob("${iso}/iso/*.iso"),
-        bios => '${pkgs.OVMF}/FV/OVMF.fd'
+        bios => '${pkgs.OVMF.fd}/FV/OVMF.fd'
       '';
 
     uefiUsb = makeBootTest "uefi-usb" ''
         usb => glob("${iso}/iso/*.iso"),
-        bios => '${pkgs.OVMF}/FV/OVMF.fd'
+        bios => '${pkgs.OVMF.fd}/FV/OVMF.fd'
       '';
 
     netboot = let

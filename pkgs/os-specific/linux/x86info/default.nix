@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
       registers (MSRs) via the msr kernel module.  it will approximate processor
       frequency, and identify the cache sizes and layout. 
     '';
-    platforms = stdenv.lib.platforms.linux;
+    platforms = [ "i686-linux" "x86_64-linux" ];
     license = stdenv.lib.licenses.gpl2;
     homepage = http://codemonkey.org.uk/projects/x86info/;
     maintainers = with stdenv.lib.maintainers; [jcumming];

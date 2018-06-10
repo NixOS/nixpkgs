@@ -1,20 +1,20 @@
 { fetchurl, stdenv, makeWrapper, python, alsaLib
-, libX11, mesa_glu, SDL, lua5, zlib, bam, freetype
+, libX11, libGLU, SDL, lua5, zlib, bam, freetype
 }:
 
 stdenv.mkDerivation rec {
-  name = "teeworlds-0.6.3";
+  name = "teeworlds-0.6.4";
 
   src = fetchurl {
-    url = "https://downloads.teeworlds.com/teeworlds-0.6.3-src.tar.gz";
-    sha256 = "0yq7f3yan07sxrhz7mzwqv344nfmdc67p3dg173631w9fb1yf3j9";
+    url = "https://downloads.teeworlds.com/teeworlds-0.6.4-src.tar.gz";
+    sha256 = "1qlqzp4wqh1vnip081lbsjnx5jj5m5y4msrcm8glbd80pfgd2qf2";
   };
 
   # we always want to use system libs instead of these
   postPatch = "rm -r other/{freetype,sdl}/{include,lib32,lib64}";
 
   buildInputs = [
-    python makeWrapper alsaLib libX11 mesa_glu SDL lua5 zlib bam freetype
+    python makeWrapper alsaLib libX11 libGLU SDL lua5 zlib bam freetype
   ];
 
   buildPhase = ''
@@ -61,7 +61,7 @@ stdenv.mkDerivation rec {
       Flag.  You can even design your own maps!
     '';
 
-    homepage = http://teeworlds.com/;
+    homepage = https://teeworlds.com/;
     license = "BSD-style, see `license.txt'";
     maintainers = with stdenv.lib.maintainers; [ astsmtl ];
     platforms = with stdenv.lib.platforms; linux;

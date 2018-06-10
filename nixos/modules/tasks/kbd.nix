@@ -13,7 +13,7 @@ let
   isUnicode = hasSuffix "UTF-8" (toUpper config.i18n.defaultLocale);
 
   optimizedKeymap = pkgs.runCommand "keymap" {
-    nativeBuildInputs = [ pkgs.kbd ];
+    nativeBuildInputs = [ pkgs.buildPackages.kbd ];
     LOADKEYS_KEYMAP_PATH = "${kbdEnv}/share/keymaps/**";
   } ''
     loadkeys -b ${optionalString isUnicode "-u"} "${config.i18n.consoleKeyMap}" > $out
@@ -71,7 +71,7 @@ in
   ###### implementation
 
   config = mkMerge [
-    (mkIf (!setVconsole || (setVconsole && config.boot.earlyVconsoleSetup)) {
+    (mkIf (!setVconsole) {
       systemd.services."systemd-vconsole-setup".enable = false;
     })
 
@@ -97,20 +97,13 @@ in
             printf "${makeColorCS n color}" >> /dev/console
           '') config.i18n.consoleColors}
         '';
-      }
 
-      (mkIf (!config.boot.earlyVconsoleSetup) {
-        # This is identical to the systemd-vconsole-setup.service unit
-        # shipped with systemd, except that it uses /dev/tty1 instead of
-        # /dev/tty0 to prevent putting the X server in non-raw mode, and
-        # it has a restart trigger.
         systemd.services."systemd-vconsole-setup" =
-          { wantedBy = [ "sysinit.target" ];
-            before = [ "display-manager.service" ];
+          { before = [ "display-manager.service" ];
             after = [ "systemd-udev-settle.service" ];
             restartTriggers = [ vconsoleConf kbdEnv ];
           };
-      })
+      }
 
       (mkIf config.boot.earlyVconsoleSetup {
         boot.initrd.extraUtilsCommands = ''

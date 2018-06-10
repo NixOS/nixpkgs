@@ -1,8 +1,8 @@
-{ fetchurl, stdenv, wrapGAppsHook
-, curl, dbus, dbus_glib, enchant, gtk2, gnutls, gnupg, gpgme, hicolor_icon_theme
-, libarchive, libcanberra_gtk2, libetpan, libnotify, libsoup, libxml2, networkmanager
-, openldap , perl, pkgconfig, poppler, python, shared_mime_info, webkitgtk2
-, glib_networking, gsettings_desktop_schemas
+{ fetchurl, stdenv, wrapGAppsHook, autoreconfHook
+, curl, dbus, dbus-glib, enchant, gtk2, gnutls, gnupg, gpgme, hicolor-icon-theme
+, libarchive, libcanberra-gtk2, libetpan, libnotify, libsoup, libxml2, networkmanager
+, openldap, perl, pkgconfig, poppler, python, shared-mime-info, webkitgtk24x-gtk2
+, glib-networking, gsettings-desktop-schemas, libSM, libytnef
 
 # Build options
 # TODO: A flag to build the manual.
@@ -10,7 +10,6 @@
 #       provided:
 #         gdata requires libgdata
 #         geolocation requires libchamplain
-#         python requires python
 , enableLdap ? false
 , enableNetworkManager ? false
 , enablePgp ? true
@@ -19,6 +18,7 @@
 , enablePluginNotificationDialogs ? true
 , enablePluginNotificationSounds ? true
 , enablePluginPdf ? false
+, enablePluginPython ? false
 , enablePluginRavatar ? false
 , enablePluginRssyl ? false
 , enablePluginSmime ? false
@@ -32,43 +32,45 @@ with stdenv.lib;
 
 stdenv.mkDerivation rec {
   name = "claws-mail-${version}";
-  version = "3.14.0";
-
-  meta = {
-    description = "The user-friendly, lightweight, and fast email client";
-    homepage = http://www.claws-mail.org/;
-    license = licenses.gpl3;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ khumba fpletz ];
-  };
+  version = "3.16.0";
 
   src = fetchurl {
     url = "http://www.claws-mail.org/download.php?file=releases/claws-mail-${version}.tar.xz";
-    sha256 = "0nfchgga3ir91s8rky0a0vnz8cgj2f6h716wh3cmb466a01xfss6";
+    sha256 = "1awpr3s7n8bq8p3w10a4j6lg5bizjxyiqp4rqzc2j8cn7lyi64n2";
   };
+
+  outputs = [ "out" "dev" ];
 
   patches = [ ./mime.patch ];
 
-  postPatch = ''
-    substituteInPlace src/procmime.c \
-        --subst-var-by MIMEROOTDIR ${shared_mime_info}/share
+  preConfigure = ''
+    # autotools check tries to dlopen libpython as a requirement for the python plugin
+    export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:${python}/lib
   '';
 
+  postPatch = ''
+    substituteInPlace src/procmime.c \
+        --subst-var-by MIMEROOTDIR ${shared-mime-info}/share
+  '';
+
+  nativeBuildInputs = [ autoreconfHook pkgconfig wrapGAppsHook python.pkgs.wrapPython ];
+  propagatedBuildInputs = with python.pkgs; [ python ] ++ optionals enablePluginPython [ pygtk pygobject2 ];
+
   buildInputs =
-    [ curl dbus dbus_glib gtk2 gnutls gsettings_desktop_schemas hicolor_icon_theme
-      libetpan perl pkgconfig python wrapGAppsHook glib_networking
+    [ curl dbus dbus-glib gtk2 gnutls gsettings-desktop-schemas hicolor-icon-theme
+      libetpan perl glib-networking libSM libytnef
     ]
     ++ optional enableSpellcheck enchant
     ++ optionals (enablePgp || enablePluginSmime) [ gnupg gpgme ]
     ++ optional enablePluginArchive libarchive
-    ++ optional enablePluginNotificationSounds libcanberra_gtk2
+    ++ optional enablePluginNotificationSounds libcanberra-gtk2
     ++ optional enablePluginNotificationDialogs libnotify
     ++ optional enablePluginFancy libsoup
     ++ optional enablePluginRssyl libxml2
     ++ optional enableNetworkManager networkmanager
     ++ optional enableLdap openldap
     ++ optional enablePluginPdf poppler
-    ++ optional enablePluginFancy webkitgtk2;
+    ++ optional enablePluginFancy webkitgtk24x-gtk2;
 
   configureFlags =
     optional (!enableLdap) "--disable-ldap"
@@ -81,6 +83,7 @@ stdenv.mkDerivation rec {
     ++ optional (!enablePluginArchive) "--disable-archive-plugin"
     ++ optional (!enablePluginFancy) "--disable-fancy-plugin"
     ++ optional (!enablePluginPdf) "--disable-pdf_viewer-plugin"
+    ++ optional (!enablePluginPython) "--disable-python-plugin"
     ++ optional (!enablePluginRavatar) "--disable-libravatar-plugin"
     ++ optional (!enablePluginRssyl) "--disable-rssyl-plugin"
     ++ optional (!enablePluginSmime) "--disable-smime-plugin"
@@ -91,12 +94,23 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+  pythonPath = with python.pkgs; [ pygobject2 pygtk ];
+
   preFixup = ''
-    gappsWrapperArgs+=(--prefix XDG_DATA_DIRS : "${shared_mime_info}/share")
+    buildPythonPath "$out $pythonPath"
+    gappsWrapperArgs+=(--prefix XDG_DATA_DIRS : "${shared-mime-info}/share" --prefix PYTHONPATH : "$program_PYTHONPATH")
   '';
 
   postInstall = ''
     mkdir -p $out/share/applications
     cp claws-mail.desktop $out/share/applications
   '';
+
+  meta = {
+    description = "The user-friendly, lightweight, and fast email client";
+    homepage = http://www.claws-mail.org/;
+    license = licenses.gpl3;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ fpletz globin ];
+  };
 }

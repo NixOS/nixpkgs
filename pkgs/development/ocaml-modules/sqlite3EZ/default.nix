@@ -1,4 +1,4 @@
-{stdenv, fetchurl, ocaml, findlib, twt, ocaml_sqlite3 }:
+{ stdenv, fetchurl, ocaml, findlib, ocamlbuild, twt, ocaml_sqlite3 }:
 
 assert stdenv.lib.versionAtLeast (stdenv.lib.getVersion ocaml) "3.12";
 
@@ -10,14 +10,14 @@ stdenv.mkDerivation {
     sha256 = "8ed2c5d5914a65cbd95589ef11bfb8b38a020eb850cdd49b8adce7ee3a563748";
   };
 
-  buildInputs = [ ocaml findlib twt ];
+  buildInputs = [ ocaml findlib ocamlbuild twt ];
 
   propagatedBuildInputs = [ ocaml_sqlite3 ];
 
   createFindlibDestdir = true;
 
   meta = with stdenv.lib; {
-    homepage = http://github.com/mlin/ocaml-sqlite3EZ;
+    homepage = https://github.com/mlin/ocaml-sqlite3EZ;
     description = "A thin wrapper for sqlite3-ocaml with a simplified interface";
     license = licenses.mit;
     maintainers = [ maintainers.vbgl ];

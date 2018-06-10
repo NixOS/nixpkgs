@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, libtool, autoconf, automake }:
 
 stdenv.mkDerivation rec {
-  version = "v0.99.4";
+  version = "0.99.4";
   name = "fastjson-${version}";
   src = fetchFromGitHub {
     repo = "libfastjson";
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A fast json library for C";
-    homepage = "https://github.com/rsyslog/libfastjson";
+    homepage = https://github.com/rsyslog/libfastjson;
     license = licenses.mit;
     maintainers = with maintainers; [ nequissimus ];
     platforms = with platforms; unix;

@@ -2,15 +2,16 @@
 
 with lib;
 
-let cfg = config.systemd; in
-
-rec {
+let
+  cfg = config.systemd;
+  lndir = "${pkgs.xorg.lndir}/bin/lndir";
+in rec {
 
   shellEscape = s: (replaceChars [ "\\" ] [ "\\\\" ] s);
 
   makeUnit = name: unit:
     let
-      pathSafeName = lib.replaceChars ["@" ":" "\\"] ["-" "-" "-"] name;
+      pathSafeName = lib.replaceChars ["@" ":" "\\" "[" "]"] ["-" "-" "-" "" ""] name;
     in
     if unit.enable then
       pkgs.runCommand "unit-${pathSafeName}"
@@ -77,10 +78,16 @@ rec {
     optional (badFields != [ ])
       "Systemd ${group} has extra fields [${concatStringsSep " " badFields}].";
 
-  checkUnitConfig = group: checks: v:
-    let errors = concatMap (c: c group v) checks; in
-    if errors == [] then true
-      else builtins.trace (concatStringsSep "\n" errors) false;
+  checkUnitConfig = group: checks: attrs: let
+    # We're applied at the top-level type (attrsOf unitOption), so the actual
+    # unit options might contain attributes from mkOverride that we need to
+    # convert into single values before checking them.
+    defs = mapAttrs (const (v:
+      if v._type or "" == "override" then v.content else v
+    )) attrs;
+    errors = concatMap (c: c group defs) checks;
+  in if errors == [] then true
+     else builtins.trace (concatStringsSep "\n" errors) false;
 
   toOption = x:
     if x == true then "true"
@@ -136,7 +143,13 @@ rec {
       for i in ${toString cfg.packages}; do
         for fn in $i/etc/systemd/${type}/* $i/lib/systemd/${type}/*; do
           if ! [[ "$fn" =~ .wants$ ]]; then
-            ln -s $fn $out/
+            if [[ -d "$fn" ]]; then
+              targetDir="$out/$(basename "$fn")"
+              mkdir -p "$targetDir"
+              ${lndir} "$fn" "$targetDir"
+            else
+              ln -s $fn $out/
+            fi
           fi
         done
       done
@@ -151,7 +164,7 @@ rec {
           if [ "$(readlink -f $i/$fn)" = /dev/null ]; then
             ln -sfn /dev/null $out/$fn
           else
-            mkdir $out/$fn.d
+            mkdir -p $out/$fn.d
             ln -s $i/$fn $out/$fn.d/overrides.conf
           fi
        else
@@ -159,7 +172,13 @@ rec {
         fi
       done
 
-      # Created .wants and .requires symlinks from the wantedBy and
+      # Create service aliases from aliases option.
+      ${concatStrings (mapAttrsToList (name: unit:
+          concatMapStrings (name2: ''
+            ln -sfn '${name}' $out/'${name2}'
+          '') unit.aliases) units)}
+
+      # Create .wants and .requires symlinks from the wantedBy and
       # requiredBy options.
       ${concatStrings (mapAttrsToList (name: unit:
           concatMapStrings (name2: ''
@@ -182,7 +201,7 @@ rec {
         mkdir -p $out/getty.target.wants/
         ln -s ../autovt@tty1.service $out/getty.target.wants/
 
-        ln -s ../local-fs.target ../remote-fs.target ../network.target \
+        ln -s ../local-fs.target ../remote-fs.target \
         ../nss-lookup.target ../nss-user-lookup.target ../swap.target \
         $out/multi-user.target.wants/
       ''}

@@ -4,13 +4,13 @@ stdenv.mkDerivation {
   name = "tetex-3.0";
 
   src = fetchurl {
-    url = ftp://cam.ctan.org/tex-archive/systems/unix/teTeX/current/distrib/tetex-src-3.0.tar.gz;
-    md5 = "944a4641e79e61043fdaf8f38ecbb4b3";
+    url = http://mirrors.ctan.org/obsolete/systems/unix/teTeX/3.0/distrib/tetex-src-3.0.tar.gz;
+    sha256 = "16v44465ipd9yyqri9rgxp6rbgs194k4sh1kckvccvdsnnp7w3ww";
   };
 
   texmf = fetchurl {
-    url = ftp://cam.ctan.org/tex-archive/systems/unix/teTeX/current/distrib/tetex-texmf-3.0.tar.gz;
-    md5 = "11aa15c8d3e28ee7815e0d5fcdf43fd4";
+    url = http://mirrors.ctan.org/obsolete/systems/unix/teTeX/3.0/distrib/tetex-texmf-3.0.tar.gz;
+    sha256 = "1hj06qvm02a2hx1a67igp45kxlbkczjlg20gr8lbp73l36k8yfvc";
   };
 
   buildInputs = [ flex bison zlib libpng ncurses ed ];
@@ -26,7 +26,7 @@ stdenv.mkDerivation {
     find ./ -name "config.guess" -exec rm {} \; -exec ln -s ${automake}/share/automake-*/config.guess {} \;
   '' else null;
 
-  patches = [ ./environment.patch ./getline.patch ./clang.patch ];
+  patches = [ ./environment.patch ./getline.patch ./clang.patch ./extramembot.patch ];
 
   setupHook = ./setup-hook.sh;
 
@@ -48,7 +48,7 @@ stdenv.mkDerivation {
   meta = with stdenv.lib; {
     description  = "A full-featured (La)TeX distribution";
     homepage     = http://www.tug.org/tetex/;
-    matintainers = with maintainers; [ lovek323 ];
+    maintainers  = with maintainers; [ lovek323 ];
     platforms    = platforms.unix;
     hydraPlatforms = [];
   };

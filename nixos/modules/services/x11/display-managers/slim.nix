@@ -12,29 +12,29 @@ let
     ''
       xauth_path ${dmcfg.xauthBin}
       default_xserver ${dmcfg.xserverBin}
-      xserver_arguments ${dmcfg.xserverArgs}
+      xserver_arguments ${toString dmcfg.xserverArgs}
       sessiondir ${dmcfg.session.desktops}
-      login_cmd exec ${pkgs.stdenv.shell} ${dmcfg.session.script} "%session"
+      login_cmd exec ${pkgs.runtimeShell} ${dmcfg.session.script} "%session"
       halt_cmd ${config.systemd.package}/sbin/shutdown -h now
       reboot_cmd ${config.systemd.package}/sbin/shutdown -r now
+      logfile /dev/stderr
       ${optionalString (cfg.defaultUser != null) ("default_user " + cfg.defaultUser)}
       ${optionalString (cfg.defaultUser != null) ("focus_password yes")}
       ${optionalString cfg.autoLogin "auto_login yes"}
+      ${optionalString (cfg.consoleCmd != null) "console_cmd ${cfg.consoleCmd}"}
       ${cfg.extraConfig}
     '';
 
   # Unpack the SLiM theme, or use the default.
   slimThemesDir =
     let
-      unpackedTheme = pkgs.stdenv.mkDerivation {
-        name = "slim-theme";
-        buildCommand = ''
+      unpackedTheme = pkgs.runCommand "slim-theme" {}
+        ''
           mkdir -p $out
           cd $out
           unpackFile ${cfg.theme}
           ln -s * default
         '';
-      };
     in if cfg.theme == null then "${pkgs.slim}/share/slim/themes" else unpackedTheme;
 
 in
@@ -107,6 +107,18 @@ in
         '';
       };
 
+      consoleCmd = mkOption {
+        type = types.nullOr types.str;
+        default = ''
+          ${pkgs.xterm}/bin/xterm -C -fg white -bg black +sb -T "Console login" -e ${pkgs.shadow}/bin/login
+        '';
+        defaultText = ''
+          ''${pkgs.xterm}/bin/xterm -C -fg white -bg black +sb -T "Console login" -e ''${pkgs.shadow}/bin/login
+        '';
+        description = ''
+          The command to run when "console" is given as the username.
+        '';
+      };
     };
 
   };
@@ -117,11 +129,7 @@ in
   config = mkIf cfg.enable {
 
     services.xserver.displayManager.job =
-      { preStart =
-          ''
-            rm -f /var/log/slim.log
-          '';
-        environment =
+      { environment =
           { SLIM_CFGFILE = slimConfig;
             SLIM_THEMESDIR = slimThemesDir;
           };

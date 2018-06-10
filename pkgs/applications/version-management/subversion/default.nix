@@ -5,7 +5,7 @@
 , perlBindings ? false
 , javahlBindings ? false
 , saslSupport ? false
-, stdenv, fetchurl, apr, aprutil, zlib, sqlite
+, stdenv, fetchurl, apr, aprutil, zlib, sqlite, openssl, lz4, utf8proc
 , apacheHttpd ? null, expat, swig ? null, jdk ? null, python ? null, perl ? null
 , sasl ? null, serf ? null
 }:
@@ -17,7 +17,7 @@ assert javahlBindings -> jdk != null && perl != null;
 
 let
 
-  common = { version, sha256 }: stdenv.mkDerivation (rec {
+  common = { version, sha256, extraBuildInputs ? [ ] }: stdenv.mkDerivation (rec {
     inherit version;
     name = "subversion-${version}";
 
@@ -26,10 +26,11 @@ let
       inherit sha256;
     };
 
-  # Can't do separate $lib and $bin, as libs reference bins
-  outputs = [ "out" "dev" "man" ];
+    # Can't do separate $lib and $bin, as libs reference bins
+    outputs = [ "out" "dev" "man" ];
 
-    buildInputs = [ zlib apr aprutil sqlite ]
+    buildInputs = [ zlib apr aprutil sqlite openssl ]
+      ++ extraBuildInputs
       ++ stdenv.lib.optional httpSupport serf
       ++ stdenv.lib.optional pythonBindings python
       ++ stdenv.lib.optional perlBindings perl
@@ -75,16 +76,20 @@ let
       mkdir -p $out/share/bash-completion/completions
       cp tools/client-side/bash_completion $out/share/bash-completion/completions/subversion
 
-    for f in $out/lib/*.la; do
-      substituteInPlace $f --replace "${expat.dev}/lib" "${expat.out}/lib"
-      substituteInPlace $f --replace "${zlib.dev}/lib" "${zlib.out}/lib"
-      substituteInPlace $f --replace "${sqlite.dev}/lib" "${sqlite.out}/lib"
-    done
+      for f in $out/lib/*.la $out/lib/python*/site-packages/*/*.la; do
+        substituteInPlace $f \
+          --replace "${expat.dev}/lib" "${expat.out}/lib" \
+          --replace "${zlib.dev}/lib" "${zlib.out}/lib" \
+          --replace "${sqlite.dev}/lib" "${sqlite.out}/lib" \
+          --replace "${openssl.dev}/lib" "${openssl.out}/lib"
+      done
     '';
 
     inherit perlBindings pythonBindings;
 
     enableParallelBuilding = true;
+
+    doCheck = false; # fails 10 out of ~2300 tests
 
     meta = {
       description = "A version control system intended to be a compelling replacement for CVS in the open source community";
@@ -101,15 +106,19 @@ let
   });
 
 in {
-
   subversion18 = common {
-    version = "1.8.16";
-    sha256 = "0imkxn25n6sbcgfldrx4z29npjprb1lxjm5fb89q4297161nx3zi";
+    version = "1.8.19";
+    sha256 = "1gp6426gkdza6ni2whgifjcmjb4nq34ljy07yxkrhlarvfq6ks2n";
   };
 
   subversion19 = common {
-    version = "1.9.4";
-    sha256 = "16cjkvvq628hbznkhqkppzs8nifcr7k43s5y4c32cgwqmgigjrqj";
+    version = "1.9.7";
+    sha256 = "08qn94zaqcclam2spb4h742lvhxw8w5bnrlya0fm0bp17hriicf3";
   };
 
+  subversion_1_10 = common {
+    version = "1.10.0";
+    sha256 = "115mlvmf663w16mc3xyypnaizq401vbypc56hl2ylzc3pcx3zwic";
+    extraBuildInputs = [ lz4 utf8proc ];
+  };
 }

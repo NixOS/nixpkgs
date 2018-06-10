@@ -1,13 +1,14 @@
 {stdenv, fetchFromGitHub, cmake}:
 
 stdenv.mkDerivation rec {
-  name = "wla-dx-git-2016-02-27";
+  version = "2017-06-05";
+  name = "wla-dx-git-${version}";
 
   src = fetchFromGitHub {
     owner = "vhelin";
     repo = "wla-dx";
-    rev = "8189fe8d5620584ea16563875ff3c5430527c86a";
-    sha256 = "02zgkcyfx7y8j6jvyi12lm29fydnd7m3rxv6g2psv23fyzmpkkir";
+    rev = "ae6843f9711cbc2fa6dd8c200877b40bd2bcad7f";
+    sha256 = "09c2kz12ld97ad41j6r8r65jknllrak1x8r43fgr26x7hdlxz5c6";
   };
 
   hardeningDisable = [ "format" ];
@@ -20,7 +21,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake ];
 
   meta = with stdenv.lib; {
-    homepage = "http://www.villehelin.com/wla.html";
+    homepage = http://www.villehelin.com/wla.html;
     description = "Yet Another GB-Z80/Z80/6502/65C02/6510/65816/HUC6280/SPC-700 Multi Platform Cross Assembler Package";
     license = licenses.gpl2;
     maintainers = with maintainers; [ matthewbauer ];

@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, fftw, freeglut, mesa_glu, qtbase, qtmultimedia, qmakeHook
+{ stdenv, fetchFromGitHub, fftw, freeglut, libGLU, qtbase, qtmultimedia, qmake
 , alsaSupport ? true, alsaLib ? null
 , jackSupport ? false, libjack2 ? null
 , portaudioSupport ? false, portaudio ? null }:
@@ -11,16 +11,17 @@ with stdenv.lib;
 
 stdenv.mkDerivation rec {
   name = "fmit-${version}";
-  version = "1.1.8";
+  version = "1.1.14";
 
   src = fetchFromGitHub {
-    sha256 = "14vx4p1h3c6frvv8dam4ymz588zpycmg17pxfkmx4m7pszhlin6b";
+    sha256 = "18gvl8smcnigzldy1acs5h8rscf287b39xi4y2cl5armqbj0y38x";
     rev = "v${version}";
     repo = "fmit";
     owner = "gillesdegottex";
   };
 
-  buildInputs = [ fftw qtbase qtmultimedia qmakeHook ]
+  nativeBuildInputs = [ qmake ];
+  buildInputs = [ fftw qtbase qtmultimedia ]
     ++ optionals alsaSupport [ alsaLib ]
     ++ optionals jackSupport [ libjack2 ]
     ++ optionals portaudioSupport [ portaudio ];
@@ -48,6 +49,5 @@ stdenv.mkDerivation rec {
     homepage = http://gillesdegottex.github.io/fmit/;
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ nckx ];
   };
 }

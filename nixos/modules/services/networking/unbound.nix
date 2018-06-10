@@ -8,9 +8,9 @@ let
 
   stateDir = "/var/lib/unbound";
 
-  access = concatMapStrings (x: "  access-control: ${x} allow\n") cfg.allowedAccess;
+  access = concatMapStringsSep "\n  " (x: "access-control: ${x} allow") cfg.allowedAccess;
 
-  interfaces = concatMapStrings (x: "  interface: ${x}\n") cfg.interfaces;
+  interfaces = concatMapStringsSep "\n  " (x: "interface: ${x}") cfg.interfaces;
 
   isLocalAddress = x: substring 0 3 x == "::1" || substring 0 9 x == "127.0.0.1";
 
@@ -79,7 +79,7 @@ in
 
       extraConfig = mkOption {
         default = "";
-        type = types.str;
+        type = types.lines;
         description = ''
           Extra unbound config. See
           <citerefentry><refentrytitle>unbound.conf</refentrytitle><manvolnum>8
@@ -105,14 +105,14 @@ in
       description = "Unbound recursive Domain Name Server";
       after = [ "network.target" ];
       before = [ "nss-lookup.target" ];
-      wants = [" nss-lookup.target" ];
+      wants = [ "nss-lookup.target" ];
       wantedBy = [ "multi-user.target" ];
 
       preStart = ''
         mkdir -m 0755 -p ${stateDir}/dev/
         cp ${confFile} ${stateDir}/unbound.conf
         ${optionalString cfg.enableRootTrustAnchor ''
-        ${pkgs.unbound}/bin/unbound-anchor -a ${rootTrustAnchorFile}
+        ${pkgs.unbound}/bin/unbound-anchor -a ${rootTrustAnchorFile} || echo "Root anchor updated!"
         chown unbound ${stateDir} ${rootTrustAnchorFile}
         ''}
         touch ${stateDir}/dev/random

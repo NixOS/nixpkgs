@@ -1,14 +1,15 @@
 { stdenv, fetchurl, fox, pkgconfig, gettext, xlibsWrapper, gcc, intltool, file, libpng }:
 
 stdenv.mkDerivation rec {
-  name = "xfe-1.37";
+  name = "xfe-1.42";
 
   src = fetchurl {
     url = "mirror://sourceforge/xfe/${name}.tar.gz";
-    sha256 = "1g9a0bpny2m7ixgxpqjh0wvh2x6d0lpj6682zn5dfqwan4j2xfsd";
+    sha256 = "1v1v0vcbnm30kpyd3rj8f56yh7lfnwy7nbs9785wi229b29fiqx1";
   };
 
-  buildInputs = [ fox pkgconfig gettext xlibsWrapper gcc intltool file libpng ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ fox gettext xlibsWrapper gcc intltool file libpng ];
 
   preConfigure = ''
     sed -i s,/usr/share/xfe,$out/share/xfe, src/xfedefs.h
@@ -23,9 +24,9 @@ stdenv.mkDerivation rec {
       It is based on the popular, but discontinued, X Win Commander, which was developed by Maxim Baranov.
       Xfe aims to be the filemanager of choice for all the Unix addicts!
     '';
-    homepage = "http://sourceforge.net/projects/xfe/";
+    homepage = https://sourceforge.net/projects/xfe/;
     license = stdenv.lib.licenses.gpl2;
-    maintainers = [ stdenv.lib.maintainers.bbenoist ];
+    maintainers = [];
     platforms = stdenv.lib.platforms.linux;
   };
 }

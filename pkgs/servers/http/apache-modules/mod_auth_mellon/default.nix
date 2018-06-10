@@ -3,20 +3,21 @@
 stdenv.mkDerivation rec {
 
   name = "mod_auth_mellon-${version}";
-  version = "0.12.0";
+  version = "0.13.1";
 
   src = fetchFromGitHub {
     owner = "UNINETT";
     repo = "mod_auth_mellon";
     rev = "v${version}";
-    sha256 = "1p6v6vgrfvgvc5y2ygqyyxi0klpm3nxaw3fg35zmpmw663w8skqn";
+    sha256 = "16b43y5a5p8g1287x04rv923230cy8dfs2j18cx6208n4bv4dvnk";
   };
 
   patches = [
     ./fixdeps.patch
   ];
 
-  buildInputs = [ apacheHttpd autoconf autoreconfHook automake curl glib lasso libtool libxml2 libxslt openssl pkgconfig xmlsec ];
+  nativeBuildInputs = [ autoreconfHook pkgconfig ];
+  buildInputs = [ apacheHttpd autoconf automake curl glib lasso libtool libxml2 libxslt openssl xmlsec ];
 
   configureFlags = ["--with-apxs2=${apacheHttpd.dev}/bin/apxs" "--exec-prefix=$out"];
 

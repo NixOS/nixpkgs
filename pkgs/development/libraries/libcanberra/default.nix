@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgconfig, libtool, gtk ? null, libcap
-, alsaLib, libpulseaudio, gstreamer, gst_plugins_base, libvorbis }:
+, alsaLib, libpulseaudio, gst_all_1, libvorbis }:
 
 stdenv.mkDerivation rec {
   name = "libcanberra-0.30";
@@ -9,10 +9,10 @@ stdenv.mkDerivation rec {
     sha256 = "0wps39h8rx2b00vyvkia5j40fkak3dpipp1kzilqla0cgvk73dn2";
   };
 
+  nativeBuildInputs = [ pkgconfig libtool ];
   buildInputs = [
-    pkgconfig libtool alsaLib libpulseaudio libvorbis gtk libcap
-    /*gstreamer gst_plugins_base*/      # ToDo: gstreamer not found (why?), add (g)udev?
-  ];
+    alsaLib libpulseaudio libvorbis gtk libcap
+  ] ++ (with gst_all_1; [ gstreamer gst-plugins-base ]);
 
   configureFlags = "--disable-oss";
 
@@ -42,6 +42,6 @@ stdenv.mkDerivation rec {
     license = stdenv.lib.licenses.lgpl2Plus;
 
     maintainers = [ ];
-    platforms = stdenv.lib.platforms.gnu;  # arbitrary choice
+    platforms = stdenv.lib.platforms.gnu ++ stdenv.lib.platforms.linux;  # arbitrary choice
   };
 }

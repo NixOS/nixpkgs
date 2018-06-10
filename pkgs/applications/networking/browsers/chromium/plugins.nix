@@ -1,5 +1,10 @@
 { stdenv
 , jshon
+, glib
+, nspr
+, nss
+, fetchzip
+, patchelfUnstable
 , enablePepperFlash ? false
 , enableWideVine ? false
 
@@ -9,6 +14,8 @@
 with stdenv.lib;
 
 let
+  mkrpath = p: "${makeSearchPathOutput "lib" "lib64" p}:${makeLibraryPath p}";
+
   # Generate a shell fragment that emits flags appended to the
   # final makeWrapper call for wrapping the browser's main binary.
   #
@@ -37,14 +44,14 @@ let
     echo ${toString quoted} > "''$${output}/nix-support/wrapper-flags"
   '';
 
-  plugins = stdenv.mkDerivation {
-    name = "chromium-binary-plugins";
+  widevine = stdenv.mkDerivation {
+    name = "chromium-binary-plugin-widevine";
 
     src = upstream-info.binary;
 
+    nativeBuildInputs = [ patchelfUnstable ];
+
     phases = [ "unpackPhase" "patchPhase" "installPhase" "checkPhase" ];
-    outputs = [ "flash" "widevine" ];
-    out = "flash"; # outputs TODO: is this a hack?
 
     unpackCmd = let
       chan = if upstream-info.channel == "dev"    then "chrome-unstable"
@@ -53,7 +60,6 @@ let
     in ''
       mkdir -p plugins
       ar p "$src" data.tar.xz | tar xJ -C plugins --strip-components=4 \
-        ./opt/google/${chan}/PepperFlash \
         ./opt/google/${chan}/libwidevinecdm.so \
         ./opt/google/${chan}/libwidevinecdmadapter.so
     '';
@@ -63,56 +69,74 @@ let
       ! find -iname '*.so' -exec ldd {} + | grep 'not found'
     '';
 
-    patchPhase = let
-      rpaths = [ stdenv.cc.cc ];
-      mkrpath = p: "${makeSearchPathOutput "lib" "lib64" p}:${makeLibraryPath p}";
-    in ''
-      for sofile in PepperFlash/libpepflashplayer.so \
-                    libwidevinecdm.so libwidevinecdmadapter.so; do
-        chmod +x "$sofile"
-        patchelf --set-rpath "${mkrpath rpaths}" "$sofile"
-      done
+    PATCH_RPATH = mkrpath [ stdenv.cc.cc glib nspr nss ];
 
-      patchelf --set-rpath "$widevine/lib:${mkrpath rpaths}" \
-        libwidevinecdmadapter.so
+    patchPhase = ''
+      chmod +x libwidevinecdm.so libwidevinecdmadapter.so
+      patchelf --set-rpath "$PATCH_RPATH" libwidevinecdm.so
+      patchelf --set-rpath "$out/lib:$PATCH_RPATH" libwidevinecdmadapter.so
     '';
 
     installPhase = let
       wvName = "Widevine Content Decryption Module";
       wvDescription = "Playback of encrypted HTML audio/video content";
       wvMimeTypes = "application/x-ppapi-widevine-cdm";
-      wvModule = "@widevine@/lib/libwidevinecdmadapter.so";
+      wvModule = "@out@/lib/libwidevinecdmadapter.so";
       wvInfo = "#${wvName}#${wvDescription};${wvMimeTypes}";
     in ''
-      flashVersion="$(
-        "${jshon}/bin/jshon" -F PepperFlash/manifest.json -e version -u
-      )"
-
-      install -vD PepperFlash/libpepflashplayer.so \
-        "$flash/lib/libpepflashplayer.so"
+      install -vD libwidevinecdm.so \
+        "$out/lib/libwidevinecdm.so"
+      install -vD libwidevinecdmadapter.so \
+        "$out/lib/libwidevinecdmadapter.so"
 
       ${mkPluginInfo {
-        output = "flash";
-        allowedVars = [ "flash" "flashVersion" ];
+        flags = [ "--register-pepper-plugins=${wvModule}${wvInfo}" ];
+        envVars.NIX_CHROMIUM_PLUGIN_PATH_WIDEVINE = "@out@/lib";
+      }}
+    '';
+  };
+
+  flash = stdenv.mkDerivation rec {
+    name = "flashplayer-ppapi-${version}";
+    version = "30.0.0.113";
+
+    src = fetchzip {
+      url = "https://fpdownload.adobe.com/pub/flashplayer/pdc/"
+          + "${version}/flash_player_ppapi_linux.x86_64.tar.gz";
+      sha256 = "0bcsrsz2dd12xs9vn2977k4s6hag1cknkrsgxz3c9pxk4jz99f3k";
+      stripRoot = false;
+    };
+
+    patchPhase = ''
+      chmod +x libpepflashplayer.so
+      patchelf --set-rpath "${mkrpath [ stdenv.cc.cc ]}" libpepflashplayer.so
+    '';
+
+    doCheck = true;
+    checkPhase = ''
+      ! find -iname '*.so' -exec ldd {} + | grep 'not found'
+    '';
+
+    installPhase = ''
+      flashVersion="$(
+        "${jshon}/bin/jshon" -F manifest.json -e version -u
+      )"
+
+      install -vD libpepflashplayer.so "$out/lib/libpepflashplayer.so"
+
+      ${mkPluginInfo {
+        allowedVars = [ "out" "flashVersion" ];
         flags = [
-          "--ppapi-flash-path=@flash@/lib/libpepflashplayer.so"
+          "--ppapi-flash-path=@out@/lib/libpepflashplayer.so"
           "--ppapi-flash-version=@flashVersion@"
         ];
       }}
-
-      install -vD libwidevinecdm.so \
-        "$widevine/lib/libwidevinecdm.so"
-      install -vD libwidevinecdmadapter.so \
-        "$widevine/lib/libwidevinecdmadapter.so"
-
-      ${mkPluginInfo {
-        output = "widevine";
-        flags = [ "--register-pepper-plugins=${wvModule}${wvInfo}" ];
-        envVars.NIX_CHROMIUM_PLUGIN_PATH_WIDEVINE = "@widevine@/lib";
-      }}
     '';
 
-    passthru.enabled = optional enablePepperFlash plugins.flash
-                    ++ optional enableWideVine    plugins.widevine;
+    dontStrip = true;
   };
-in plugins
+
+in {
+  enabled = optional enableWideVine widevine
+         ++ optional enablePepperFlash flash;
+}

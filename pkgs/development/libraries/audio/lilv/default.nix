@@ -2,20 +2,21 @@
 
 stdenv.mkDerivation rec {
   name = "lilv-${version}";
-  version = "0.20.0";
+  version = "0.24.2";
 
   src = fetchurl {
     url = "http://download.drobilla.net/${name}.tar.bz2";
-    sha256 = "0aj2plkx56iar8vzjbq2l7hi7sp0ml99m0h44rgwai2x4vqkk2j2";
+    sha256 = "08m5a372pr1l7aii9s3pic5nm68gynx1n1bc7bnlswziq6qnbv7p";
   };
 
-  buildInputs = [ lv2 pkgconfig python serd sord sratom ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ lv2 python serd sord sratom ];
 
-  configurePhase = "python waf configure --prefix=$out";
+  configurePhase = "${python.interpreter} waf configure --prefix=$out";
 
-  buildPhase = "python waf";
+  buildPhase = "${python.interpreter} waf";
 
-  installPhase = "python waf install";
+  installPhase = "${python.interpreter} waf install";
 
   meta = with stdenv.lib; {
     homepage = http://drobilla.net/software/lilv;

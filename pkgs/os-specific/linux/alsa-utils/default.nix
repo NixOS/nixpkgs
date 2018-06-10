@@ -2,14 +2,14 @@
 
 stdenv.mkDerivation rec {
   name = "alsa-utils-${version}";
-  version = "1.1.0";
+  version = "1.1.6";
 
   src = fetchurl {
     urls = [
       "ftp://ftp.alsa-project.org/pub/utils/${name}.tar.bz2"
       "http://alsa.cybermirror.org/utils/${name}.tar.bz2"
     ];
-    sha256 = "3b1c3135b76e14532d3dd23fb15759ddd7daf9ffbc183f7a9a0a3a86374748f1";
+    sha256 = "0vnkyymgwj9rfdb11nvab30dnfrylmakdfildxl0y8mj836awp0m";
   };
 
   patchPhase = ''
@@ -17,7 +17,8 @@ stdenv.mkDerivation rec {
       --replace "which" "type -p" \
       --replace "lspci" "${pciutils}/bin/lspci"
   '';
-  buildInputs = [ gettext alsaLib ncurses libsamplerate fftw ];
+  nativeBuildInputs = [ gettext ];
+  buildInputs = [ alsaLib ncurses libsamplerate fftw ];
 
   configureFlags = "--disable-xmlto --with-udev-rules-dir=$(out)/lib/udev/rules.d";
 

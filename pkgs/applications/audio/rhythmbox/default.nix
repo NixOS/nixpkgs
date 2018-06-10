@@ -7,37 +7,44 @@
 , libsoup
 , gnome3
 , tdb
-, json_glib
+, json-glib
 , itstool
 , wrapGAppsHook
 , gst_all_1
 , gst_plugins ? with gst_all_1; [ gst-plugins-good gst-plugins-ugly ]
 }:
 let
-  version = "${major}.${minor}";
-  major = "3.2";
-  minor = "1";
-
+  pname = "rhythmbox";
+  version = "3.4.2";
 in stdenv.mkDerivation rec {
-  name = "rhythmbox-${version}";
+  name = "${pname}-${version}";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/rhythmbox/${major}/${name}.tar.xz";
-    sha256 = "0f3radhlji7rxl760yl2vm49fvfslympxrpm8497acbmbd7wlhxz";
+    url = "mirror://gnome/sources/${pname}/${gnome3.versionBranch version}/${name}.tar.xz";
+    sha256 = "0hzcns8gf5yb0rm4ss8jd8qzarcaplp5cylk6plwilsqfvxj4xn2";
   };
 
-  buildInputs = [
+  patches = [
+    # build with GStreamer 1.14 https://bugzilla.gnome.org/show_bug.cgi?id=788706
+    (fetchurl {
+      name = "fmradio-Fix-build-with-GStreamer-master.patch";
+      url = https://bugzilla.gnome.org/attachment.cgi?id=361178;
+      sha256 = "1h09mimlglj9hcmc3pfp0d6c277mqh2khwv9fryk43pkv3904d2w";
+    })
+  ];
+
+  nativeBuildInputs = [
     pkgconfig
+    intltool perl perlPackages.XMLParser
+    itstool
+    wrapGAppsHook
+  ];
 
+  buildInputs = [
     python3
-    perl
-    perlPackages.XMLParser
-
-    intltool
     libsoup
     tdb
-    json_glib
-    itstool
+    json-glib
 
     gtk3
     gnome3.libpeas
@@ -46,11 +53,16 @@ in stdenv.mkDerivation rec {
 
     gst_all_1.gstreamer
     gst_all_1.gst-plugins-base
-
-    wrapGAppsHook
   ] ++ gst_plugins;
 
   enableParallelBuilding = true;
+
+  passthru = {
+    updateScript = gnome3.updateScript {
+      packageName = pname;
+      versionPolicy = "none";
+    };
+  };
 
   meta = with stdenv.lib; {
     homepage = https://wiki.gnome.org/Apps/Rhythmbox;

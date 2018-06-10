@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, octoprint, pythonPackages }:
+{ stdenv, fetchFromGitHub, fetchpatch, octoprint, pythonPackages }:
 
 let
   buildPlugin = args: pythonPackages.buildPythonApplication (args // {
@@ -12,13 +12,13 @@ let
 
     m33-fio = buildPlugin rec {
       name = "M33-Fio-${version}";
-      version = "1.7";
+      version = "1.21";
 
       src = fetchFromGitHub {
         owner = "donovan6000";
         repo = "M33-Fio";
         rev = "V${version}";
-        sha256 = "14sqvgrpf3zvgycjj7f3m7m2flx06zq4h0yhq4g18av0zbsrv7yp";
+        sha256 = "1la3611kkqn8yiwjn6cizc45ri8pnk6ckld1na4nk6mqk88jvjq7";
       };
 
       patches = [
@@ -34,7 +34,7 @@ let
       '';
 
       meta = with stdenv.lib; {
-        homepage = "https://github.com/donovan6000/M3D-Fio";
+        homepage = https://github.com/donovan6000/M33-Fio;
         description = "OctoPrint plugin for the Micro 3D printer";
         platforms = platforms.all;
         license = licenses.gpl3;
@@ -54,7 +54,7 @@ let
       };
 
       meta = with stdenv.lib; {
-        homepage = "https://github.com/MoonshineSG/OctoPrint-TitleStatus";
+        homepage = https://github.com/MoonshineSG/OctoPrint-TitleStatus;
         description = "Show printers status in window title";
         platforms = platforms.all;
         license = licenses.agpl3;
@@ -64,17 +64,17 @@ let
 
     stlviewer = buildPlugin rec {
       name = "OctoPrint-STLViewer-${version}";
-      version = "0.3.0";
+      version = "0.4.1";
 
       src = fetchFromGitHub {
         owner = "jneilliii";
         repo = "OctoPrint-STLViewer";
         rev = "v${version}";
-        sha256 = "1a6sa8pw9ay7x27pfwr3nzb22x3jaw0c9vwyz4mrj76zkiw6svfi";
+        sha256 = "1f64s37g2d79g76v0vjnjrc2jp2gwrsnfgx7w3n0hkf1lz1pjkm0";
       };
 
       meta = with stdenv.lib; {
-        homepage = "https://github.com/jneilliii/Octoprint-STLViewer";
+        homepage = https://github.com/jneilliii/Octoprint-STLViewer;
         description = "A simple stl viewer tab for OctoPrint";
         platforms = platforms.all;
         license = licenses.agpl3;

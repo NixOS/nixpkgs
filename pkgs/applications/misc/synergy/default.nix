@@ -1,22 +1,30 @@
-{ stdenv, fetchFromGitHub, cmake, xlibsWrapper, libX11, libXi, libXtst, libXrandr
+{ stdenv, fetchFromGitHub, fetchpatch, cmake, xlibsWrapper, libX11, libXi, libXtst, libXrandr
 , xinput, curl, openssl, unzip }:
 
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
   name = "synergy-${version}";
-  version = "1.7.6";
+  version = "1.8.8";
 
   src = fetchFromGitHub {
     owner = "symless";
-    repo = "synergy";
+    repo = "synergy-core";
     rev = "v${version}-stable";
-    sha256 = "1bjksvdr74mc3xh11z4fd6qlhgklny51q5r6gqg1bhnvn9dzyrxw";
+    sha256 = "0ksgr9hkf09h54572p7k7b9zkfhcdb2g2d5x7ixxn028y8i3jyp3";
+  };
+
+  patches = [ ./openssl-1.1.patch ];
+
+  patch_gcc6 = fetchpatch {
+    url = https://raw.githubusercontent.com/gentoo/gentoo/20e2bff3697ebf5f291e9907b34aae3074a36b53/dev-cpp/gmock/files/gmock-1.7.0-gcc6.patch;
+    sha256 = "0j3f381x1lf8qci9pfv6mliggl8qs2w05v5lw3rs3gn7aibg174d";
   };
 
   postPatch = ''
     ${unzip}/bin/unzip -d ext/gmock-1.6.0 ext/gmock-1.6.0.zip
     ${unzip}/bin/unzip -d ext/gtest-1.6.0 ext/gtest-1.6.0.zip
+    patch -d ext/gmock-1.6.0 -p1 -i ${patch_gcc6}
   ''
     # We have XRRNotifyEvent (libXrandr), but with the upstream CMakeLists.txt
     # it's not able to find it (it's trying to search the store path of libX11
@@ -52,9 +60,10 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Share one mouse and keyboard between multiple computers";
-    homepage = "http://synergy-project.org/";
+    homepage = http://synergy-project.org/;
     license = licenses.gpl2;
     maintainers = [ maintainers.aszlig ];
     platforms = platforms.all;
+    broken = stdenv.isDarwin;
   };
 }

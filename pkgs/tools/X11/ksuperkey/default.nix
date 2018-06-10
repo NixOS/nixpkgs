@@ -3,8 +3,9 @@
 stdenv.mkDerivation rec {
   name = "ksuperkey-git-2015-07-21";
 
+  nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
-    libX11 libXtst pkgconfig inputproto libXi xproto xextproto
+    libX11 libXtst inputproto libXi xproto xextproto
   ];
 
   src = fetchgit {

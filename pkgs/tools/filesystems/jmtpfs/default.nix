@@ -11,7 +11,8 @@ stdenv.mkDerivation {
     owner = "JasonFerrara";
   };
 
-  buildInputs = [ file fuse libmtp pkgconfig ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ file fuse libmtp ];
 
   meta = with stdenv.lib; {
     description = "A FUSE filesystem for MTP devices like Android phones";

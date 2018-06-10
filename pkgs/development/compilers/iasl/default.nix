@@ -1,11 +1,12 @@
 {stdenv, fetchurl, bison, flex}:
 
-stdenv.mkDerivation {
-  name = "iasl-20130117";
+stdenv.mkDerivation rec {
+  name = "iasl-${version}";
+  version = "20180313";
 
   src = fetchurl {
-    url = http://www.acpica.org/download/acpica-unix-20130117.tar.gz;
-    sha256 = "1zils7l7gnkbbl8916dlhvij1g625ryb7769zhzffn3flshfdivh";
+    url = "https://acpica.org/sites/acpica/files/acpica-unix-${version}.tar.gz";
+    sha256 = "05ab2xfv9wqwbzjaa9xqgrvvan87rxv29hw48h1gcckpc5smp2wm";
   };
 
   NIX_CFLAGS_COMPILE = "-O3";

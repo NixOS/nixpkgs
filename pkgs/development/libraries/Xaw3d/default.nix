@@ -1,18 +1,17 @@
-{stdenv, fetchurl, xlibsWrapper, imake, gccmakedep, libXmu, libXpm, libXp, bison, flex}:
+{stdenv, fetchurl, xlibsWrapper, imake, gccmakedep, libXmu, libXpm, libXp, bison, flex, pkgconfig}:
 
 stdenv.mkDerivation {
-  name = "Xaw3d-1.5E";
-  builder = ./builder.sh;
+  name = "Xaw3d-1.6.2";
   src = fetchurl {
-    url = http://freshmeat.net/redir/xaw3d/11835/url_tgz/Xaw3d-1.5E.tar.gz;
-    md5 = "29ecfdcd6bcf47f62ecfd672d31269a1";
+    url = https://www.x.org/releases/individual/lib/libXaw3d-1.6.2.tar.bz2;
+    sha256 = "0awplv1nf53ywv01yxphga3v6dcniwqnxgnb0cn4khb121l12kxp";
   };
-  patches = [./config.patch ./laylex.patch];
+  nativeBuildInputs = [ pkgconfig ];
   buildInputs = [imake gccmakedep libXpm libXp bison flex];
   propagatedBuildInputs = [xlibsWrapper libXmu];
 
   meta = {
     description = "3D widget set based on the Athena Widget set";
-    platforms = stdenv.lib.platforms.linux;
+    platforms = stdenv.lib.platforms.unix;
   };
 }

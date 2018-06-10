@@ -1,7 +1,5 @@
 { stdenv, fetchurl, flex, systemd, perl }:
 
-assert stdenv.isLinux;
-
 stdenv.mkDerivation rec {
   name = "drbd-8.4.4";
 
@@ -18,18 +16,18 @@ stdenv.mkDerivation rec {
 
   preConfigure =
     ''
-      export PATH=${systemd.udev.bin}/sbin:$PATH
-      substituteInPlace user/Makefile.in --replace /sbin/ $out/sbin/
+      export PATH=${systemd}/sbin:$PATH
+      substituteInPlace user/Makefile.in \
+        --replace /sbin '$(sbindir)'
       substituteInPlace user/legacy/Makefile.in \
-        --replace /sbin/ $out/sbin/ \
-        --replace '$(DESTDIR)/lib/drbd' $out/lib/drbd
+        --replace '$(DESTDIR)/lib/drbd' '$(DESTDIR)$(LIBDIR)'
       substituteInPlace user/drbdadm_usage_cnt.c --replace /lib/drbd $out/lib/drbd
-      substituteInPlace scripts/drbd.rules --replace /sbin/drbdadm $out/sbin/drbdadm
+      substituteInPlace scripts/drbd.rules --replace /usr/sbin/drbdadm $out/sbin/drbdadm
     '';
 
   makeFlags = "SHELL=${stdenv.shell}";
 
-  installFlags = "localstatedir=$(TMPDIR)/var sysconfdir=$(out)/etc INITDIR=$(out)/etc/init.d DESTDIR=$(out)";
+  installFlags = "localstatedir=$(TMPDIR)/var sysconfdir=$(out)/etc INITDIR=$(out)/etc/init.d";
 
   meta = {
     homepage = http://www.drbd.org/;

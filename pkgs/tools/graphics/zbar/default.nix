@@ -1,8 +1,11 @@
-{ stdenv, fetchurl, imagemagickBig, pkgconfig, python, pygtk, perl
+{ stdenv, fetchurl, imagemagickBig, pkgconfig, python2Packages, perl
 , libX11, libv4l, qt4, lzma, gtk2, fetchpatch, autoreconfHook
+, enableVideo ? stdenv.isLinux
 }:
 
-stdenv.mkDerivation rec {
+let
+  inherit (python2Packages) pygtk python;
+in stdenv.mkDerivation rec {
   name = "${pname}-${version}";
   pname = "zbar";
   version = "0.10";
@@ -36,7 +39,12 @@ stdenv.mkDerivation rec {
 
   buildInputs =
     [ imagemagickBig pkgconfig python pygtk perl libX11
-      libv4l qt4 lzma gtk2 autoreconfHook ];
+      lzma autoreconfHook ] ++
+    stdenv.lib.optionals enableVideo [ libv4l gtk2 qt4 ];
+
+  configureFlags = stdenv.lib.optionals (!enableVideo) [
+    "--disable-video" "--without-gtk" "--without-qt"
+  ];
 
   hardeningDisable = [ "fortify" ];
 
@@ -50,7 +58,7 @@ stdenv.mkDerivation rec {
       Code.
     '';
     maintainers = with maintainers; [ raskin ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
     license = licenses.lgpl21;
     homepage = http://zbar.sourceforge.net/;
   };

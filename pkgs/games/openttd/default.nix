@@ -29,16 +29,16 @@ let
 in
 stdenv.mkDerivation rec {
   name = "openttd-${version}";
-  version = "1.6.1";
+  version = "1.8.0";
 
   src = fetchurl {
     url = "http://binaries.openttd.org/releases/${version}/${name}-source.tar.xz";
-    sha256 = "1ak32fj5xkk2fvmm3g8i7wzmk4bh2ijsp8fzvvw5wj6365p9j24v";
+    sha256 = "0zq8xdg0k92p3s4j9x76591zaqz7k9ra69q008m209vdfffjvly2";
   };
 
   nativeBuildInputs = [ pkgconfig makeWrapper ];
   buildInputs = [ SDL libpng xz zlib freetype fontconfig ]
-    ++ stdenv.lib.optional withFluidSynth [ fluidsynth soundfont-fluid ];
+    ++ stdenv.lib.optionals withFluidSynth [ fluidsynth soundfont-fluid ];
 
   prefixKey = "--prefix-dir=";
 

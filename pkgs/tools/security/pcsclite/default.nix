@@ -3,11 +3,13 @@
 
 stdenv.mkDerivation rec {
   name = "pcsclite-${version}";
-  version = "1.8.17";
+  version = "1.8.23";
 
   src = fetchurl {
-    url = "https://alioth.debian.org/frs/download.php/file/4173/pcsc-lite-${version}.tar.bz2";
-    sha256 = "0vq2291kvnbg8czlakqahxrdhsvp74fqy3z75lfjlkq2aj36yayp";
+    # This URL changes in unpredictable ways, so it is not sensible
+    # to put a version variable in there.
+    url = "https://alioth.debian.org/frs/download.php/file/4235/pcsc-lite-1.8.23.tar.bz2";
+    sha256 = "1jc9ws5ra6v3plwraqixin0w0wfxj64drahrbkyrrwzghqjjc9ss";
   };
 
   patches = [ ./no-dropdir-literals.patch ];
@@ -18,7 +20,9 @@ stdenv.mkDerivation rec {
     "--enable-confdir=/etc"
     "--enable-ipcdir=/run/pcscd"
   ] ++ stdenv.lib.optional stdenv.isLinux
-         "--with-systemdsystemunitdir=\${out}/etc/systemd/system";
+         "--with-systemdsystemunitdir=\${out}/etc/systemd/system"
+    ++ stdenv.lib.optional (!stdenv.isLinux)
+         "--disable-libsystemd";
 
   postConfigure = ''
     sed -i -re '/^#define *PCSCLITE_HP_DROPDIR */ {

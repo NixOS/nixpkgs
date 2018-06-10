@@ -1,8 +1,10 @@
-{ kdeFramework, lib, ecm, ki18n, kio }:
+{ mkDerivation, lib, extra-cmake-modules, ki18n, kio }:
 
-kdeFramework {
+mkDerivation {
   name = "kxmlrpcclient";
   meta = { maintainers = [ lib.maintainers.ttuegel ]; };
-  nativeBuildInputs = [ ecm ];
-  propagatedBuildInputs = [ ki18n kio ];
+  nativeBuildInputs = [ extra-cmake-modules ];
+  buildInputs = [ ki18n ];
+  propagatedBuildInputs = [ kio ];
+  outputs = [ "out" "dev" ];
 }

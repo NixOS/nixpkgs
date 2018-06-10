@@ -3,11 +3,11 @@
 
 stdenv.mkDerivation rec {
   name = "radeontop-${version}";
-  version = "2016-07-04";
+  version = "2018-03-25";
 
   src = fetchFromGitHub {
-    sha256 = "07pj5c3shnxljwq0hkksw7qnp8kb3n5ngihdmi4fqbmyz8in2vm5";
-    rev = "bb3ed18aa8877f2816348ca9f016bb61d67e636f";
+    sha256 = "0s41xy9nrzxmimkdg23fr86rqcfiw6iqh99zpph0j990l8yzmv9b";
+    rev = "v1.1";
     repo = "radeontop";
     owner = "clbr";
   };
@@ -40,6 +40,6 @@ stdenv.mkDerivation rec {
     homepage = https://github.com/clbr/radeontop;
     platforms = platforms.linux;
     license = licenses.gpl3;
-    maintainers = with maintainers; [ rycee nckx ];
+    maintainers = with maintainers; [ rycee ];
   };
 }

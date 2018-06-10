@@ -2,10 +2,10 @@
 
 stdenv.mkDerivation rec {
   name = "hans-${version}";
-  version = "0.4.4";
+  version = "1.0";
 
   src = fetchFromGitHub {
-    sha256 = "1xskffmmdmg1whlrl5wpkv9z29vh0igrbmsz0b45s9v0761a7kis";
+    sha256 = "1qnfl7wr5x937b6jx3vhhvnwnrclrqvq7d7zxbfhk74pdwnjy8n4";
     rev = "v${version}";
     repo = "hans";
     owner = "friedrich";
@@ -34,6 +34,5 @@ stdenv.mkDerivation rec {
     homepage = http://code.gerade.org/hans/;
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ nckx ];
   };
 }

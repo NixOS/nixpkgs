@@ -1,27 +1,23 @@
 { stdenv, fetchFromGitHub, perl, libxcb, libXft }:
 
-let
-  version = "2015-07-23";
-in
-  stdenv.mkDerivation rec {
-    name = "bar-xft-git-${version}";
+stdenv.mkDerivation rec {
+  name = "lemonbar-xft-unstable-2016-02-17";
 
-    src = fetchFromGitHub {
-      owner = "krypt-n";
-      repo = "bar";
-      rev = "3020df19232153f9e98ae0c8111db3de938a2719";
-      sha256 = "0a54yr534jd4l5gjzpypc0y5lh2qb2wsrd662s84jjgq8bpss8av";
-    };
+  src = fetchFromGitHub {
+    owner  = "krypt-n";
+    repo   = "bar";
+    rev    = "a43b801ddc0f015ce8b1211f4c062fad12cd63a9";
+    sha256 = "0iqas07qjvabxyvna2m9aj5bcwnkdii1izl9jxha63vz0zlsc4gd";
+  };
 
-    buildInputs = [ libxcb libXft perl ];
+  buildInputs = [ libxcb libXft perl ];
 
-    prePatch = ''sed -i "s@/usr@$out@" Makefile'';
+  prePatch = ''sed -i "s@/usr@$out@" Makefile'';
 
-    meta = {
-      description = "A lightweight xcb based bar with XFT-support";
-      homepage = https://github.com/krypt-n/bar;
-      maintainers = [ stdenv.lib.maintainers.hiberno ];
-      license = "Custom";
-      platforms = stdenv.lib.platforms.linux;
-    };
+  meta = {
+    description = "A lightweight xcb based bar with XFT-support";
+    homepage = https://github.com/krypt-n/bar;
+    license = "Custom";
+    platforms = stdenv.lib.platforms.linux;
+  };
 }

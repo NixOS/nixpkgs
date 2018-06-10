@@ -10,7 +10,8 @@ stdenv.mkDerivation rec {
     rev = "47f34b81e4de834fd3537dd71928c4f3cdb7f533";
   };
 
-  buildInputs = [ glib pkgconfig python scons ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ glib python scons ];
   buildPhase = "scons prefix=$out";
   installPhase = "scons prefix=$out install";
 

@@ -6,16 +6,43 @@ with lib;
 
 let
 
-  inherit (config.services.avahi) nssmdns;
-  inherit (config.services.samba) nsswins;
-  ldap = (config.users.ldap.enable && config.users.ldap.nsswitch);
+  # only with nscd up and running we can load NSS modules that are not integrated in NSS
+  canLoadExternalModules = config.services.nscd.enable;
+  myhostname = canLoadExternalModules;
+  mymachines = canLoadExternalModules;
+  nssmdns = canLoadExternalModules && config.services.avahi.nssmdns;
+  nsswins = canLoadExternalModules && config.services.samba.nsswins;
+  ldap = canLoadExternalModules && (config.users.ldap.enable && config.users.ldap.nsswitch);
+  sssd = canLoadExternalModules && config.services.sssd.enable;
+  resolved = canLoadExternalModules && config.services.resolved.enable;
 
-in
+  hostArray = [ "files" ]
+    ++ optional mymachines "mymachines"
+    ++ optional nssmdns "mdns_minimal [NOTFOUND=return]"
+    ++ optional nsswins "wins"
+    ++ optional resolved "resolve [!UNAVAIL=return]"
+    ++ [ "dns" ]
+    ++ optional nssmdns "mdns"
+    ++ optional myhostname "myhostname";
 
-{
+  passwdArray = [ "files" ]
+    ++ optional sssd "sss"
+    ++ optional ldap "ldap"
+    ++ optional mymachines "mymachines"
+    ++ [ "systemd" ];
+
+  shadowArray = [ "files" ]
+    ++ optional sssd "sss"
+    ++ optional ldap "ldap";
+
+  servicesArray = [ "files" ]
+    ++ optional sssd "sss";
+
+in {
   options = {
 
     # NSS modules.  Hacky!
+    # Only works with nscd!
     system.nssModules = mkOption {
       type = types.listOf types.path;
       internal = true;
@@ -35,28 +62,42 @@ in
   };
 
   config = {
+    assertions = [
+      {
+        # generic catch if the NixOS module adding to nssModules does not prevent it with specific message.
+        assertion = config.system.nssModules.path != "" -> canLoadExternalModules;
+        message = "Loading NSS modules from path ${config.system.nssModules.path} requires nscd being enabled.";
+      }
+      {
+        # resolved does not need to add to nssModules, therefore needs an extra assertion
+        assertion = resolved -> canLoadExternalModules;
+        message = "Loading systemd-resolved's nss-resolve NSS module requires nscd being enabled.";
+      }
+    ];
 
     # Name Service Switch configuration file.  Required by the C
     # library.  !!! Factor out the mdns stuff.  The avahi module
     # should define an option used by this module.
-    environment.etc."nsswitch.conf".text =
-      ''
-        passwd:    files ${optionalString ldap "ldap"}
-        group:     files ${optionalString ldap "ldap"}
-        shadow:    files ${optionalString ldap "ldap"}
-        hosts:     files ${optionalString nssmdns "mdns_minimal [NOTFOUND=return]"} dns ${optionalString nssmdns "mdns"} ${optionalString nsswins "wins"} myhostname mymachines
-        networks:  files dns
-        ethers:    files
-        services:  files
-        protocols: files
-      '';
+    environment.etc."nsswitch.conf".text = ''
+      passwd:    ${concatStringsSep " " passwdArray}
+      group:     ${concatStringsSep " " passwdArray}
+      shadow:    ${concatStringsSep " " shadowArray}
+
+      hosts:     ${concatStringsSep " " hostArray}
+      networks:  files
+
+      ethers:    files
+      services:  ${concatStringsSep " " servicesArray}
+      protocols: files
+      rpc:       files
+    '';
 
     # Systemd provides nss-myhostname to ensure that our hostname
     # always resolves to a valid IP address.  It returns all locally
     # configured IP addresses, or ::1 and 127.0.0.2 as
     # fallbacks. Systemd also provides nss-mymachines to return IP
     # addresses of local containers.
-    system.nssModules = [ config.systemd.package ];
+    system.nssModules = optionals canLoadExternalModules [ config.systemd.package.out ];
 
   };
 }

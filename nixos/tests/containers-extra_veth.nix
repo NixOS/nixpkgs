@@ -21,11 +21,11 @@ import ./make-test.nix ({ pkgs, ...} : {
       };
       networking.interfaces = {
         br0 = {
-          ip4 = [{ address = "192.168.0.1"; prefixLength = 24; }];
-          ip6 = [{ address = "fc00::1"; prefixLength = 7; }];
+          ipv4.addresses = [{ address = "192.168.0.1"; prefixLength = 24; }];
+          ipv6.addresses = [{ address = "fc00::1"; prefixLength = 7; }];
         };
         br1 = {
-          ip4 = [{ address = "192.168.1.1"; prefixLength = 24; }];
+          ipv4.addresses = [{ address = "192.168.1.1"; prefixLength = 24; }];
         };
       };
 
@@ -84,7 +84,7 @@ import ./make-test.nix ({ pkgs, ...} : {
 
       # Ping on main veth
       $machine->succeed("ping -n -c 1 192.168.0.100");
-      $machine->succeed("ping6 -n -c 1 fc00::2");
+      $machine->succeed("ping -n -c 1 fc00::2");
 
       # Ping on the first extra veth
       $machine->succeed("ping -n -c 1 192.168.1.100 >&2");

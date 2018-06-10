@@ -17,30 +17,33 @@ in
       };
       config = mkOption {
         default = "";
-        description = "monit.conf content";
+        description = "monitrc content";
       };
     };
   };
 
   config = mkIf config.services.monit.enable {
 
-    environment.etc = [
-      {
-        source = pkgs.writeTextFile {
-          name = "monit.conf";
-          text = config.services.monit.config;
-        };
-        target = "monit.conf";
-        mode = "0400";
-      }
-    ];
+    environment.systemPackages = [ pkgs.monit ];
+
+    environment.etc."monitrc" = {
+      text = config.services.monit.config;
+      mode = "0400";
+    };
 
     systemd.services.monit = {
-      description = "Monit system watcher";
-      after = [ "network-interfaces.target" ];
+      description = "Pro-active monitoring utility for unix systems";
+      after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
-      script = "${pkgs.monit}/bin/monit -I -c /etc/monit.conf";
-      serviceConfig.Restart = "always";
+      serviceConfig = {
+        ExecStart = "${pkgs.monit}/bin/monit -I -c /etc/monitrc";
+        ExecStop = "${pkgs.monit}/bin/monit -c /etc/monitrc quit";
+        ExecReload = "${pkgs.monit}/bin/monit -c /etc/monitrc reload";
+        KillMode = "process";
+        Restart = "always";
+      };
+      restartTriggers = [ config.environment.etc."monitrc".source ];
     };
+
   };
 }

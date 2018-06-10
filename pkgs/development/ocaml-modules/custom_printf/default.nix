@@ -1,4 +1,4 @@
-{stdenv, buildOcaml, fetchurl, type_conv, sexplib, pa_ounit}:
+{stdenv, buildOcaml, fetchurl, type_conv, sexplib_p4, pa_ounit}:
 
 buildOcaml rec {
   name = "custom_printf";
@@ -12,7 +12,7 @@ buildOcaml rec {
   };
 
   buildInputs = [ pa_ounit ];
-  propagatedBuildInputs = [ type_conv sexplib ];
+  propagatedBuildInputs = [ type_conv sexplib_p4 ];
 
   meta = with stdenv.lib; {
     homepage = https://github.com/janestreet/custom_printf;

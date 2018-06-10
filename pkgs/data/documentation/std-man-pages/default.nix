@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     sha256 = "0153py77ll759jacq41dp2z2ksr08pdcfic0rwjd6pr84dk89y9v";
   };
 
-  outputDocdev = "out";
+  outputDevdoc = "out";
 
   installPhase = ''
     mkdir -p $out/share/man

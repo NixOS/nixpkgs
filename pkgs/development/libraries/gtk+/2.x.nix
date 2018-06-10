@@ -1,18 +1,23 @@
 { stdenv, fetchurl, pkgconfig, gettext, glib, atk, pango, cairo, perl, xorg
-, gdk_pixbuf, libintlOrEmpty, xlibsWrapper
+, gdk_pixbuf, xlibsWrapper, gobjectIntrospection
 , xineramaSupport ? stdenv.isLinux
 , cupsSupport ? true, cups ? null
+, gdktarget ? "x11"
+, AppKit, Cocoa
+, fetchpatch
 }:
 
 assert xineramaSupport -> xorg.libXinerama != null;
 assert cupsSupport -> cups != null;
 
+with stdenv.lib;
+
 stdenv.mkDerivation rec {
-  name = "gtk+-2.24.31";
+  name = "gtk+-2.24.32";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gtk+/2.24/${name}.tar.xz";
-    sha256 = "68c1922732c7efc08df4656a5366dcc3afdc8791513400dac276009b40954658";
+    sha256 = "b6c8a93ddda5eabe3bfee1eb39636c9a03d2a56c7b62828b359bf197943c582e";
   };
 
   outputs = [ "out" "dev" "devdoc" ];
@@ -20,30 +25,43 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  NIX_CFLAGS_COMPILE = stdenv.lib.optionalString (libintlOrEmpty != []) "-lintl";
-
   setupHook = ./setup-hook.sh;
 
-  nativeBuildInputs = [ setupHook perl pkgconfig gettext ];
+  nativeBuildInputs = [ setupHook perl pkgconfig gettext gobjectIntrospection ];
 
-  patches = [ ./2.0-immodules.cache.patch ];
+  patches = [
+    ./2.0-immodules.cache.patch
+    ./gtk2-theme-paths.patch
+  ] ++ optional stdenv.isDarwin (fetchpatch {
+    url = https://bug557780.bugzilla-attachments.gnome.org/attachment.cgi?id=306776;
+    sha256 = "0sp8f1r5c4j2nlnbqgv7s7nxa4cfwigvm033hvhb1ld652pjag4r";
+  });
 
-  propagatedBuildInputs = with xorg; with stdenv.lib;
+  propagatedBuildInputs = with xorg;
     [ glib cairo pango gdk_pixbuf atk ]
     ++ optionals (stdenv.isLinux || stdenv.isDarwin) [
          libXrandr libXrender libXcomposite libXi libXcursor
        ]
     ++ optionals stdenv.isDarwin [ xlibsWrapper libXdamage ]
-    ++ libintlOrEmpty
     ++ optional xineramaSupport libXinerama
-    ++ optionals cupsSupport [ cups ];
+    ++ optionals cupsSupport [ cups ]
+    ++ optionals stdenv.isDarwin [ AppKit Cocoa ];
 
-  configureFlags = if stdenv.isDarwin
-    then "--disable-glibtest --disable-introspection --disable-visibility"
-    else "--with-xinput=yes";
+  configureFlags = [
+    "--with-gdktarget=${gdktarget}"
+    "--with-xinput=yes"
+  ] ++ optionals stdenv.isDarwin [
+    "--disable-glibtest"
+    "--disable-introspection"
+    "--disable-visibility"
+  ];
+
+  doCheck = false; # needs X11
 
   postInstall = ''
     moveToOutput share/gtk-2.0/demo "$devdoc"
+    # The updater is needed for nixos env and it's tiny.
+    moveToOutput bin/gtk-update-icon-cache "$out"
   '';
 
   passthru = {
@@ -51,11 +69,12 @@ stdenv.mkDerivation rec {
       rm $out/lib/gtk-2.0/2.10.0/immodules.cache
       $out/bin/gtk-query-immodules-2.0 $out/lib/gtk-2.0/2.10.0/immodules/*.so > $out/lib/gtk-2.0/2.10.0/immodules.cache
     ''; # workaround for bug of nix-mode for Emacs */ '';
+    inherit gdktarget;
   };
 
-  meta = with stdenv.lib; {
+  meta = {
     description = "A multi-platform toolkit for creating graphical user interfaces";
-    homepage    = http://www.gtk.org/;
+    homepage    = https://www.gtk.org/;
     license     = licenses.lgpl2Plus;
     maintainers = with maintainers; [ lovek323 raskin ];
     platforms   = platforms.all;

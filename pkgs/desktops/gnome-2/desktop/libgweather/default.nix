@@ -1,6 +1,6 @@
 { stdenv, fetchurl, pkgconfig, libxml2, gtk, intltool, GConf, libsoup, libtasn1, nettle, gmp }:
 
-assert stdenv.isLinux;
+assert stdenv ? glibc;
 
 stdenv.mkDerivation rec {
   name = "libgweather-2.30.3";
@@ -9,5 +9,6 @@ stdenv.mkDerivation rec {
     sha256 = "0k16lpdyy8as8wgc5dqpy5b8i9i4mrl77qx8db23fgs2c533fddq";
   };
   configureFlags = "--with-zoneinfo-dir=${stdenv.glibc}/share/zoneinfo";
-  buildInputs = [ pkgconfig libxml2 gtk intltool GConf libsoup libtasn1 nettle gmp ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ libxml2 gtk intltool GConf libsoup libtasn1 nettle gmp ];
 }

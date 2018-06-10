@@ -18,14 +18,15 @@ assert withFonts -> freetype != null;
 # https://wiki.archlinux.org/index.php/BluRay
 
 stdenv.mkDerivation rec {
-  baseName = "libbluray";
-  version  = "0.9.2";
-  name = "${baseName}-${version}";
+  name = "libbluray-${version}";
+  version  = "1.0.2";
 
   src = fetchurl {
-    url = "http://get.videolan.org/${baseName}/${version}/${name}.tar.bz2";
-    sha256 = "1sp71j4agcsg17g6b85cqz78pn5vknl5pl39rvr6mkib5ps99jgg";
+    url = "http://get.videolan.org/libbluray/${version}/${name}.tar.bz2";
+    sha256 = "1zxfnw1xbghcj7b3zz5djndv6gwssxda19cz1lrlqrkg8577r7kd";
   };
+
+  patches = optional withJava ./BDJ-JARFILE-path.patch;
 
   nativeBuildInputs = [ pkgconfig autoreconfHook ]
                       ++ optionals withJava [ ant ]
@@ -37,28 +38,28 @@ stdenv.mkDerivation rec {
                 ++ optional withFonts freetype
                 ;
 
-  propagatedBuildInputs = stdenv.lib.optional withAACS libaacs;
+  propagatedBuildInputs = optional withAACS libaacs;
+
+  NIX_LDFLAGS = [
+    (optionalString withAACS   "-L${libaacs}/lib -laacs")
+    (optionalString withBDplus "-L${libbdplus}/lib -lbdplus")
+  ];
 
   preConfigure = ''
     ${optionalString withJava ''export JDK_HOME="${jdk.home}"''}
-    ${optionalString withAACS ''export NIX_LDFLAGS="$NIX_LDFLAGS -L${libaacs}/lib -laacs"''}
-    ${optionalString withBDplus ''export NIX_LDFLAGS="$NIX_LDFLAGS -L${libbdplus}/lib -lbdplus"''}
   '';
 
   configureFlags =  with stdenv.lib;
-                    optional (! withJava) "--disable-bdjava"
+                    optional (! withJava) "--disable-bdjava-jar"
                  ++ optional (! withMetadata) "--without-libxml2"
                  ++ optional (! withFonts) "--without-freetype"
                  ;
-
-  # Fix search path for BDJ jarfile
-  patches = stdenv.lib.optional withJava ./BDJ-JARFILE-path.patch;
 
   meta = with stdenv.lib; {
     homepage = http://www.videolan.org/developers/libbluray.html;
     description = "Library to access Blu-Ray disks for video playback";
     license = licenses.lgpl21;
-    maintainers = [ maintainers.abbradar ];
+    maintainers = with maintainers; [ abbradar ];
     platforms = platforms.unix;
   };
 }

@@ -16,18 +16,17 @@ in buildPythonApplication rec {
 
   disabled = !isPy3k;
 
+  nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
-    pkgconfig intltool wrapGAppsHook
-    gnome3.gnome_themes_standard gnome3.defaultIconTheme
-    gnome3.gsettings_desktop_schemas
+    intltool wrapGAppsHook
+    gnome3.defaultIconTheme
+    gnome3.gsettings-desktop-schemas
   ];
 
   postPatch = ''
     # Remove "Local MPD" tab which is not suitable for NixOS.
     sed -i '/localmpd/d' sonata/consts.py
   '';
-
-  propagatedUserEnvPkgs = [ gnome3.gnome_themes_standard ];
 
   propagatedBuildInputs = [
     gobjectIntrospection gtk3 pygobject3
@@ -62,7 +61,7 @@ in buildPythonApplication rec {
        - Commandline control
        - Available in 24 languages
     '';
-    homepage = "http://www.nongnu.org/sonata/";
+    homepage = http://www.nongnu.org/sonata/;
     license = stdenv.lib.licenses.gpl3;
     platforms = stdenv.lib.platforms.linux;
     maintainers = [ stdenv.lib.maintainers.rvl ];

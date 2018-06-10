@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub
-, freetype, harfbuzz, jbig2dec, libjpeg, libX11, mujs, mupdf, ncurses, openjpeg
+, freetype, harfbuzz, jbig2dec, libjpeg, libX11, mupdf, ncurses, openjpeg
 , openssl
 
 , imageSupport ? true, imlib2 ? null }:
@@ -9,30 +9,28 @@ let
     then "jfbview"
     else "jfbpdf";
   binaries = if imageSupport
-    then [ "jfbview" "jpdfcat" "jpdfgrep" ]	# all require imlib2
-    else [ "jfbpdf" ];	       		  	# does not
+    then [ "jfbview" "jpdfcat" "jpdfgrep" ] # all require imlib2
+    else [ "jfbpdf" ]; # does not
 in
 
 stdenv.mkDerivation rec {
   name = "${package}-${version}";
-  version = "0.5.2";
+  version = "0.5.5";
 
   src = fetchFromGitHub {
-    sha256 = "1vd2ndl4ar2bzqf0k11qid6gvma59qg62imsa81mgczsqw7kvbx6";
-    rev = version;
     repo = "JFBView";
     owner = "jichu4n";
+    rev = version;
+    sha256 = "1w844ha9lp49ik79yfislib34455nl9gcksbx22hiz30gmqwzakz";
   };
 
+  hardeningDisable = [ "format" ];
+
   buildInputs = [
-    freetype harfbuzz jbig2dec libjpeg libX11 mujs mupdf ncurses openjpeg
+    freetype harfbuzz jbig2dec libjpeg libX11 mupdf ncurses openjpeg
     openssl
   ] ++ stdenv.lib.optionals imageSupport [
     imlib2
-  ];
-
-  patches = [
-    ./mupdf-1.9.patch
   ];
 
   configurePhase = ''
@@ -63,9 +61,8 @@ stdenv.mkDerivation rec {
       - Asynchronous background rendering of the next page
       - Customizable multi-threaded caching
     '';
-    homepage = http://seasonofcode.com/pages/jfbview.html;
+    homepage = https://seasonofcode.com/pages/jfbview.html;
     license = licenses.asl20;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ nckx ];
   };
 }

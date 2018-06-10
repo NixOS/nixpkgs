@@ -25,10 +25,10 @@ pythonPackages.buildPythonApplication rec {
 
     meta = with stdenv.lib; {
         description = "Bugtracker supporting distributed revision control";
-        homepage = "http://www.bugseverywhere.org/";
+        homepage = http://www.bugseverywhere.org/;
         license = licenses.gpl2Plus;
         platforms = platforms.all;
-        maintainers = [ maintainers.matthiasbeyer ];
+        maintainers = [ ];
     };
 }
 

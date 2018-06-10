@@ -1,11 +1,11 @@
-{ stdenv, fetchFromGitHub, fetchurl, makeWrapper
-, perl, pandoc, pythonPackages, git
-, par2cmdline ? null, par2Support ? false
+{ stdenv, fetchFromGitHub, makeWrapper
+, perl, pandoc, python2Packages, git
+, par2cmdline ? null, par2Support ? true
 }:
 
 assert par2Support -> par2cmdline != null;
 
-let version = "0.28.1"; in
+let version = "0.29.1"; in
 
 with stdenv.lib;
 
@@ -16,17 +16,16 @@ stdenv.mkDerivation rec {
     repo = "bup";
     owner = "bup";
     rev = version;
-    sha256 = "1hsxzrjvqa3pd74vmz8agiiwynrzynp1i726h0fzdsakc4adya4l";
+    sha256 = "0wdr399jf64zzzsdvldhrwvnh5xpbghjvslr1j2cwr5y4i36znxf";
   };
 
-  buildInputs = [ git pythonPackages.python ];
+  buildInputs = [
+    git
+    (python2Packages.python.withPackages
+      (p: with p; [ setuptools tornado ]
+        ++ stdenv.lib.optionals (!stdenv.isDarwin) [ pyxattr pylibacl fuse ]))
+  ];
   nativeBuildInputs = [ pandoc perl makeWrapper ];
-
-  patches = optional stdenv.isDarwin (fetchurl {
-    url = "https://github.com/bup/bup/commit/75d089e7cdb7a7eb4d69c352f56dad5ad3aa1f97.diff";
-    sha256 = "05kp47p30a45ip0fg090vijvzc7ijr0alc3y8kjl6bvv3gliails";
-    name = "darwin_10_10.patch";
-  });
 
   postPatch = ''
     patchShebangs .
@@ -47,13 +46,11 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     wrapProgram $out/bin/bup \
-      --prefix PATH : ${git}/bin \
-      --prefix PYTHONPATH : ${concatStringsSep ":" (map (x: "$(toPythonPath ${x})")
-        (with pythonPackages; [ pyxattr pylibacl setuptools fuse tornado ]))}
+      --prefix PATH : ${git}/bin
   '';
 
   meta = {
-    homepage = "https://github.com/bup/bup";
+    homepage = https://github.com/bup/bup;
     description = "Efficient file backup system based on the git packfile format";
     license = licenses.gpl2Plus;
 
@@ -62,7 +59,7 @@ stdenv.mkDerivation rec {
       Capable of doing *fast* incremental backups of virtual machine images.
     '';
 
-    platforms = platforms.linux;
+    platforms = platforms.linux ++ platforms.darwin;
     maintainers = with maintainers; [ muflax ];
   };
 }

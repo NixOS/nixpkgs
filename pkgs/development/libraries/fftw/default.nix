@@ -4,17 +4,24 @@ with lib;
 
 assert elem precision [ "single" "double" "long-double" "quad-precision" ];
 
-let version = "3.3.5"; in
+let
+  version = "3.3.8";
+  withDoc = stdenv.cc.isGNU;
+in
 
 stdenv.mkDerivation rec {
   name = "fftw-${precision}-${version}";
 
   src = fetchurl {
-    url = "ftp://ftp.fftw.org/pub/fftw/fftw-${version}.tar.gz";
-    sha256 = "1kwbx92ps0r7s2mqy7lxbxanslxdzj7dp7r7gmdkzv1j8yqf3kwf";
+    urls = [
+      "http://fftw.org/fftw-${version}.tar.gz"
+      "ftp://ftp.fftw.org/pub/fftw/fftw-${version}.tar.gz"
+    ];
+    sha256 = "00z3k8fq561wq2khssqg0kallk0504dzlx989x3vvicjdqpjc4v1";
   };
 
-  outputs = [ "out" "dev" "doc" ]; # it's dev-doc only
+  outputs = [ "out" "dev" "man" ]
+    ++ optional withDoc "info"; # it's dev-doc only
   outputBin = "dev"; # fftw-wisdom
 
   configureFlags =
@@ -25,9 +32,9 @@ stdenv.mkDerivation rec {
     # all x86_64 have sse2
     # however, not all float sizes fit
     ++ optional (stdenv.isx86_64 && (precision == "single" || precision == "double") )  "--enable-sse2"
-    ++ optional stdenv.cc.isGNU "--enable-openmp"
+    ++ optional (stdenv.cc.isGNU && !stdenv.hostPlatform.isMusl) "--enable-openmp"
     # doc generation causes Fortran wrapper generation which hard-codes gcc
-    ++ optional (!stdenv.cc.isGNU) "--disable-doc";
+    ++ optional (!withDoc) "--disable-doc";
 
   enableParallelBuilding = true;
 

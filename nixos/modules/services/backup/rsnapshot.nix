@@ -7,11 +7,14 @@ let
   cfgfile = pkgs.writeText "rsnapshot.conf" ''
     config_version	1.2
     cmd_cp	${pkgs.coreutils}/bin/cp
+    cmd_rm	${pkgs.coreutils}/bin/rm
     cmd_rsync	${pkgs.rsync}/bin/rsync
     cmd_ssh	${pkgs.openssh}/bin/ssh
     cmd_logger	${pkgs.inetutils}/bin/logger
     cmd_du	${pkgs.coreutils}/bin/du
+    cmd_rsnapshot_diff	${pkgs.rsnapshot}/bin/rsnapshot-diff
     lockfile	/run/rsnapshot.pid
+    link_dest	1
 
     ${cfg.extraConfig}
   '';
@@ -23,7 +26,6 @@ in
       enableManualRsnapshot = mkOption {
         description = "Whether to enable manual usage of the rsnapshot command with this module.";
         default = true;
-        example = false;
         type = types.bool;
       };
 

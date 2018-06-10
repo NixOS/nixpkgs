@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    homepage = "http://www.fastcgi.com/";
+    homepage = http://www.fastcgi.com/;
     description = "Provide support for the FastCGI protocol";
 
     longDescription = ''

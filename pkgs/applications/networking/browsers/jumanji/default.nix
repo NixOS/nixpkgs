@@ -1,5 +1,5 @@
-{ stdenv, fetchgit, pkgconfig, girara, gtk, webkitgtk, glib_networking, makeWrapper
-, gsettings_desktop_schemas }:
+{ stdenv, fetchgit, pkgconfig, girara, gtk, webkitgtk, glib-networking, makeWrapper
+, gsettings-desktop-schemas }:
 
 stdenv.mkDerivation rec {
   name = "jumanji-${version}";
@@ -11,19 +11,20 @@ stdenv.mkDerivation rec {
     sha256 = "1dsbyz489fx7dp07i29q1rjkl7nhrfscc8ks8an2rdyhx3457asg";
   };
 
-  buildInputs = [ girara pkgconfig gtk webkitgtk makeWrapper gsettings_desktop_schemas ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ girara gtk webkitgtk makeWrapper gsettings-desktop-schemas ];
 
   makeFlags = [ "PREFIX=$(out)" ];
 
   preFixup=''
     wrapProgram "$out/bin/jumanji" \
-     --prefix GIO_EXTRA_MODULES : "${glib_networking.out}/lib/gio/modules" \
+     --prefix GIO_EXTRA_MODULES : "${glib-networking.out}/lib/gio/modules" \
      --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH"
   '';
 
   meta = with stdenv.lib; {
     description = "Minimal web browser";
-    homepage = http://pwmt.org/projects/jumanji/;
+    homepage = https://pwmt.org/projects/jumanji/;
     platforms = platforms.all;
     maintainers = [ maintainers.koral ];
   };

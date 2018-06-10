@@ -1,25 +1,22 @@
 { stdenv, fetchurl, kernel, which }:
 
-assert stdenv.isLinux;
 # Don't bother with older versions, though some might even work:
-assert stdenv.lib.versionAtLeast kernel.version "4.3";
-# Disable on grsecurity kernels, which break module building:
-assert !kernel.features ? grsecurity;
+assert stdenv.lib.versionAtLeast kernel.version "4.10";
 
 let
   release = "0.4.0";
-  revbump = "rev22"; # don't forget to change forum download id...
+  revbump = "rev25"; # don't forget to change forum download id...
 in stdenv.mkDerivation rec {
   name = "linux-phc-intel-${version}-${kernel.version}";
   version = "${release}-${revbump}";
 
   src = fetchurl {
-    sha256 = "f80285a8cd2ebb1753841e493af0c091d55c33823777b26a93d25ed7264a385d";
-    url = "http://www.linux-phc.org/forum/download/file.php?id=172";
+    sha256 = "1w91hpphd8i0br7g5qra26jdydqar45zqwq6jq8yyz6l0vb10zlz";
+    url = "http://www.linux-phc.org/forum/download/file.php?id=194";
     name = "phc-intel-pack-${revbump}.tar.bz2";
   };
 
-  buildInputs = [ which ];
+  nativeBuildInputs = [ which ] ++ kernel.moduleBuildDependencies;
 
   hardeningDisable = [ "pic" ];
 
@@ -50,7 +47,6 @@ in stdenv.mkDerivation rec {
     homepage = http://www.linux-phc.org/;
     downloadPage = "http://www.linux-phc.org/forum/viewtopic.php?f=7&t=267";
     license = licenses.gpl2;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ nckx ];
+    platforms = [ "x86_64-linux" "i686-linux" ];
   };
 }

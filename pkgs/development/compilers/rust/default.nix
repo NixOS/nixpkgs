@@ -1,35 +1,45 @@
-{ stdenv, callPackage, recurseIntoAttrs, makeRustPlatform,
-  targets ? [], targetToolchains ? [], targetPatches ? [] }:
+{ stdenv, callPackage, recurseIntoAttrs, makeRustPlatform, llvm, fetchurl
+, targets ? []
+, targetToolchains ? []
+, targetPatches ? []
+}:
 
 let
   rustPlatform = recurseIntoAttrs (makeRustPlatform (callPackage ./bootstrap.nix {}));
-in
-
-rec {
+  version = "1.26.2";
+  cargoVersion = "1.26.2";
+  src = fetchurl {
+    url = "https://static.rust-lang.org/dist/rustc-${version}-src.tar.gz";
+    sha256 = "0047ais0fvmqvngqkdsxgrzhb0kljg8wy85b01kbbjc88hqcz7pv";
+  };
+in rec {
   rustc = callPackage ./rustc.nix {
-    shortVersion = "1.11.0";
-    isRelease = true;
-    forceBundledLLVM = false;
-    configureFlags = [ "--release-channel=stable" ];
-    srcRev = "9b21dcd6a89f38e8ceccb2ede8c9027cb409f6e3";
-    srcSha = "12djpxhwqvq3262ai9vd096bvriynci2mrwn0dfjrd0w6s0i8viy";
+    inherit stdenv llvm targets targetPatches targetToolchains rustPlatform version src;
 
     patches = [
-      ./patches/disable-lockfile-check.patch
-    ] ++ stdenv.lib.optional stdenv.needsPax ./patches/grsec.patch;
+      ./patches/net-tcp-disable-tests.patch
+      ./patches/stdsimd-disable-doctest.patch
+      # Fails on hydra - not locally; the exact reason is unknown.
+      # Comments in the test suggest that some non-reproducible environment
+      # variables such $RANDOM can make it fail.
+      ./patches/disable-test-inherit-env.patch
+    ];
 
-    inherit targets;
-    inherit targetPatches;
-    inherit targetToolchains;
-    inherit rustPlatform;
+    forceBundledLLVM = true;
+
+    configureFlags = [ "--release-channel=stable" ];
+
+    # 1. Upstream is not running tests on aarch64:
+    # see https://github.com/rust-lang/rust/issues/49807#issuecomment-380860567
+    # So we do the same.
+    # 2. Tests run out of memory for i686
+    doCheck = !stdenv.isAarch64 && !stdenv.isi686;
   };
 
   cargo = callPackage ./cargo.nix rec {
-    version = "0.12.0";
-    srcRev = "6b98d1f8abf5b33c1ca2771d3f5f3bafc3407b93";
-    srcSha = "0pq6l3yzmh2il6320f6501hvp9iikdxzl34i5b52v93ncpim36bk";
-    depsSha256 = "1jrwzm9fd15kf2d5zb17q901hx32h711ivcwdpxpmzwq08sjlcvl";
-
+    version = cargoVersion;
+    inherit src;
+    inherit stdenv;
     inherit rustc; # the rustc that will be wrapped by cargo
     inherit rustPlatform; # used to build cargo
   };

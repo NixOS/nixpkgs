@@ -1,34 +1,39 @@
 { stdenv, fetchurl, ncurses, coreutils }:
 
-let version = "3.2.5"; in
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   name = "ncftp-${version}";
+  version = "3.2.6";
 
   src = fetchurl {
-    url = "ftp://ftp.ncftp.com/ncftp/ncftp-${version}-src.tar.bz2";
-    sha256 = "0hlx12i0lwi99qsrx7nccf4nvwjj2gych4yks5y179b1ax0y5sxl";
+    url = "ftp://ftp.ncftp.com/ncftp/ncftp-${version}-src.tar.xz";
+    sha256 = "1389657cwgw5a3kljnqmhvfh4vr2gcr71dwz1mlhf22xq23hc82z";
   };
 
   buildInputs = [ ncurses ];
 
-  preConfigure = ''
-    find . -name "*.sh" -type f | xargs sed 's@/bin/ls@${coreutils}/bin/ls@g' -i
-    find . -name "*.in" -type f | xargs sed 's@/bin/ls@${coreutils}/bin/ls@g' -i
-    find . -name "*.c" -type f | xargs sed 's@/bin/ls@${coreutils}/bin/ls@g' -i
-    sed 's@/bin/ls@${coreutils}/bin/ls@g' -i configure
+  enableParallelBuilding = true;
 
-    find . -name "*.sh" -type f | xargs sed 's@/bin/rm@${coreutils}/bin/rm@g' -i
-    find . -name "*.in" -type f | xargs sed 's@/bin/rm@${coreutils}/bin/rm@g' -i
-    find . -name "*.c" -type f | xargs sed 's@/bin/rm@${coreutils}/bin/rm@g' -i
-    sed 's@/bin/rm@${coreutils}/bin/rm@g' -i configure
+  preConfigure = ''
+    find . -name '*.sh' -or -name '*.in' -or -name '*.c' -or -name configure | xargs sed -i \
+      -e 's@/bin/ls@${coreutils}/bin/ls@g' \
+      -e 's@/bin/rm@${coreutils}/bin/rm@g'
   '';
 
-  configureFlags = [ "--mandir=$out/share/man/" ];
+  postInstall = ''
+    rmdir $out/etc
+    mkdir -p $out/share/doc
+    cp -r doc $out/share/doc/ncftp
+  '';
+
+  configureFlags = [
+    "--enable-ssp"
+    "--mandir=$(out)/share/man/"
+  ];
 
   meta = with stdenv.lib; {
     description = "Command line FTP (File Transfer Protocol) client";
-    homepage = http://www.ncftp.com/ncftp/;
+    homepage = https://www.ncftp.com/ncftp/;
+    maintainers = with maintainers; [ bjornfor ];
     platforms = platforms.unix;
-    maintainers = [ maintainers.bjornfor ];
   };
 }

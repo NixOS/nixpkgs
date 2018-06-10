@@ -1,5 +1,4 @@
 source $stdenv/setup
-set -x
 
 sources_=($sources)
 targets_=($targets)
@@ -52,9 +51,10 @@ $extraCommands
 
 mkdir -p $out/tarball
 
-tar cvJf $out/tarball/$fileName.tar.xz * $extraArgs
+rm env-vars
+
+time tar --sort=name --mtime='@1' --owner=0 --group=0 --numeric-owner -c * $extraArgs | $compressCommand > $out/tarball/$fileName.tar${extension}
 
 mkdir -p $out/nix-support
 echo $system > $out/nix-support/system
-echo "file system-tarball $out/tarball/$fileName.tar.xz" > $out/nix-support/hydra-build-products
-
+echo "file system-tarball $out/tarball/$fileName.tar${extension}" > $out/nix-support/hydra-build-products

@@ -31,6 +31,7 @@ let
       pkgs.nano
       pkgs.ncurses
       pkgs.netcat
+      pkgs.nix-info
       config.programs.ssh.package
       pkgs.perl
       pkgs.procps
@@ -108,16 +109,18 @@ in
         "/sbin"
         "/share/applications"
         "/share/desktop-directories"
-        "/share/doc"
         "/share/emacs"
         "/share/icons"
         "/share/menus"
         "/share/mime"
         "/share/nano"
         "/share/org"
-        "/share/terminfo"
         "/share/themes"
         "/share/vim-plugins"
+        "/share/vulkan"
+        "/share/kservices5"
+        "/share/kservicetypes5"
+        "/share/kxmlgui5"
       ];
 
     system.path = pkgs.buildEnv {

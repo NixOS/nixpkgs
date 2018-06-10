@@ -1,10 +1,11 @@
 # This module generates nixos-install, nixos-rebuild,
 # nixos-generate-config, etc.
 
-{ config, pkgs, modulesPath, ... }:
+{ config, lib, pkgs, modulesPath, ... }:
+
+with lib;
 
 let
-
   cfg = config.installer;
 
   makeProg = args: pkgs.substituteAll (args // {
@@ -20,16 +21,8 @@ let
   nixos-install = makeProg {
     name = "nixos-install";
     src = ./nixos-install.sh;
-
-    inherit (pkgs) perl pathsFromGraph rsync;
     nix = config.nix.package.out;
-    cacert = "${pkgs.cacert}/etc/ssl/certs/ca-bundle.crt";
-    root_uid = config.ids.uids.root;
-    nixbld_gid = config.ids.gids.nixbld;
-
-    nixClosure = pkgs.runCommand "closure"
-      { exportReferencesGraph = ["refs" config.nix.package.out]; }
-      "cp refs $out";
+    path = makeBinPath [ nixos-enter ];
   };
 
   nixos-rebuild =
@@ -47,7 +40,7 @@ let
     src = ./nixos-generate-config.pl;
     path = [ pkgs.btrfs-progs ];
     perl = "${pkgs.perl}/bin/perl -I${pkgs.perlPackages.FileSlurp}/lib/perl5/site_perl";
-    inherit (config.system) nixosRelease;
+    inherit (config.system.nixos) release;
   };
 
   nixos-option = makeProg {
@@ -58,7 +51,12 @@ let
   nixos-version = makeProg {
     name = "nixos-version";
     src = ./nixos-version.sh;
-    inherit (config.system) nixosVersion nixosCodeName nixosRevision;
+    inherit (config.system.nixos) version codeName revision;
+  };
+
+  nixos-enter = makeProg {
+    name = "nixos-enter";
+    src = ./nixos-enter.sh;
   };
 
 in
@@ -74,10 +72,11 @@ in
         nixos-generate-config
         nixos-option
         nixos-version
+        nixos-enter
       ];
 
     system.build = {
-      inherit nixos-install nixos-generate-config nixos-option nixos-rebuild;
+      inherit nixos-install nixos-generate-config nixos-option nixos-rebuild nixos-enter;
     };
 
   };

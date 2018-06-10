@@ -1,35 +1,39 @@
-{ stdenv, fetchurl, qtbase, qtsvg, qtserialport, qtwebkit, qtmultimedia
-, qttools, yacc, flex, zlib, config, qmakeHook, makeQtWrapper }:
+{ stdenv, fetchurl
+, qtbase, qtsvg, qtserialport, qtwebkit, qtmultimedia, qttools, qtconnectivity
+, yacc, flex, zlib, config, qmake, makeWrapper
+}:
 stdenv.mkDerivation rec {
   name = "golden-cheetah-${version}";
-  version = "4.0-DEV1603";
+  version = "3.4";
   src = fetchurl {
     name = "${name}.tar.gz";
     url = "https://github.com/GoldenCheetah/GoldenCheetah/archive/V${version}.tar.gz";
-    sha256 = "12knlzqmq8b3nyl3kvcsnzrbjksgd83mzwzj97wccyfiffjl4wah";
+    sha256 = "0fiz2pj155cd357kph50lc6rjyzwp045glfv4y68qls9j7m9ayaf";
   };
   buildInputs = [
-    qtbase qtsvg qtserialport qtwebkit qtmultimedia qttools yacc flex zlib
+    qtbase qtsvg qtserialport qtwebkit qtmultimedia qttools zlib
+    qtconnectivity
   ];
-  nativeBuildInputs = [ makeQtWrapper qmakeHook ];
+  nativeBuildInputs = [ flex makeWrapper qmake yacc ];
   preConfigure = ''
     cp src/gcconfig.pri.in src/gcconfig.pri
     cp qwt/qwtconfig.pri.in qwt/qwtconfig.pri
     echo 'QMAKE_LRELEASE = ${qttools.dev}/bin/lrelease' >> src/gcconfig.pri
     sed -i -e '21,23d' qwt/qwtconfig.pri # Removed forced installation to /usr/local
   '';
-  #postConfigure =
-    #  + (
-    # with (config.golden-cheetah);
-    # stdenv.lib.optionalString (dropbox-client-id != null && dropbox-client-secret != null) ''
-    #   echo 'DEFINES += GC_DROPBOX_CLIENT_ID=\\\"${config.golden-cheetah.dropbox-client-id}\\\"' >>  src/gcconfig.pri
-    #   echo 'DEFINES += GC_DROPBOX_CLIENT_SECRET=\\\"${config.golden-cheetah.dropbox-client-secret}\\\"' >>  src/gcconfig.pri
-    # '');
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     cp src/GoldenCheetah $out/bin
-    wrapQtProgram $out/bin/GoldenCheetah --set LD_LIBRARY_PATH "${zlib.out}/lib" # patchelf doesn't seem to work
+    wrapProgram $out/bin/GoldenCheetah --set LD_LIBRARY_PATH "${zlib.out}/lib"
+
+    runHook postInstall
   '';
+
+  # RCC: Error in 'Resources/application.qrc': Cannot find file 'translations/gc_fr.qm'
+  enableParallelBuilding = false;
+
   meta = {
     description = "Performance software for cyclists, runners and triathletes";
     platforms = stdenv.lib.platforms.linux;

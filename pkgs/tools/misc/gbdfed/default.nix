@@ -9,7 +9,8 @@ stdenv.mkDerivation rec {
     sha256 = "0g09k6wim58hngxncq2brr7mwjm92j3famp0vs4b3p48wr65vcjx";
   };
 
-  buildInputs = [ pkgconfig freetype gtk ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ freetype gtk ];
 
   patches = [ ./Makefile.patch ];
 

@@ -1,32 +1,32 @@
-{ stdenv, fetchurl, pkgconfig, efl }:
+{ stdenv, fetchurl, meson, ninja, pkgconfig, efl, pcre, mesa_noglu, makeWrapper }:
 
 stdenv.mkDerivation rec {
   name = "terminology-${version}";
-  version = "0.9.1";
+  version = "1.2.1";
 
   src = fetchurl {
     url = "http://download.enlightenment.org/rel/apps/terminology/${name}.tar.xz";
-    sha256 = "1kwv9vkhngdm5v38q93xpcykghnyawhjjcb5bgy0p89gpbk7mvpc";
+    sha256 = "1ii8332bl88l8md3gvz5dhi9bjpm6shyf14ck9kfyy7d56hp71mc";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [
+    meson
+    ninja
+    (pkgconfig.override { vanilla = true; })
+    makeWrapper
+  ];
 
-  buildInputs = [ efl ];
-
-  NIX_CFLAGS_COMPILE = [
-    "-I${efl}/include/ecore-con-1"
-    "-I${efl}/include/eldbus-1"
-    "-I${efl}/include/elocation-1"
-    "-I${efl}/include/emile-1"
-    "-I${efl}/include/eo-1"
-    "-I${efl}/include/ethumb-1"
+  buildInputs = [
+    efl
+    pcre
+    mesa_noglu
   ];
 
   meta = {
-    description = "The best terminal emulator written with the EFL";
-    homepage = http://enlightenment.org/;
-    maintainers = with stdenv.lib.maintainers; [ matejc tstrobel ftrvxmtrx ];
+    description = "Powerful terminal emulator based on EFL";
+    homepage = https://www.enlightenment.org/about-terminology;
     platforms = stdenv.lib.platforms.linux;
     license = stdenv.lib.licenses.bsd2;
+    maintainers = with stdenv.lib.maintainers; [ matejc tstrobel ftrvxmtrx ];
   };
 }

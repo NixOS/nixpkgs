@@ -1,8 +1,9 @@
-{ fetchurl, stdenv, pkgconfig, python, gstreamer
-, gst_plugins_base, pygobject2
+{ fetchurl, stdenv, pkgconfig, python2Packages, gstreamer, gst-plugins-base
 }:
 
-stdenv.mkDerivation rec {
+let
+  inherit (python2Packages) python pygobject2;
+in stdenv.mkDerivation rec {
   name = "gst-python-0.10.22";
 
   src = fetchurl {
@@ -20,13 +21,13 @@ stdenv.mkDerivation rec {
   patches = [ ./disable-testFake.patch ];
 
   buildInputs =
-    [ pkgconfig gst_plugins_base pygobject2 ]
+    [ pkgconfig gst-plugins-base pygobject2 ]
     ;
 
   propagatedBuildInputs = [ gstreamer python ];
 
   meta = {
-    homepage = http://gstreamer.freedesktop.org;
+    homepage = https://gstreamer.freedesktop.org;
 
     description = "Python bindings for GStreamer";
 

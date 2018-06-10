@@ -1,25 +1,27 @@
-{ stdenv, cmake, pkgconfig, SDL2, qtbase, qttools, xorg, fetchFromGitHub }:
+{ mkDerivation, lib, cmake, pkgconfig, SDL2, qtbase, qttools, xorg, fetchFromGitHub }:
 
-stdenv.mkDerivation rec {
+mkDerivation rec {
   name = "antimicro-${version}";
-  version = "2.22";
+  version = "2.23";
 
   src = fetchFromGitHub {
     owner = "AntiMicro";
     repo = "antimicro";
     rev = "${version}";
-    sha256 = "102fh9ysd2dmfc6b73bj88m064jhlglqrz2gd7k9jccadxpbp3mq";
+    sha256 = "1q40ayxwwyq85lc89cnj1cm2nar625h4vhh8dvmb2qcxczaggf4v";
   };
 
+  nativeBuildInputs = [ cmake pkgconfig ];
   buildInputs = [
-    cmake pkgconfig SDL2 qtbase qttools xorg.libXtst
+    SDL2 qtbase qttools xorg.libXtst
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "GUI for mapping keyboard and mouse controls to a gamepad";
     inherit (src.meta) homepage;
     maintainers = with maintainers; [ jb55 ];
     license = licenses.gpl3;
     platforms = with platforms; linux;
+    broken = true; # 2018-04-10
   };
 }

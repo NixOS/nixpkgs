@@ -7,11 +7,11 @@ in
 
 stdenv.mkDerivation rec {
 
-  name = "stockfish-7";
+  name = "stockfish-8";
 
   src = fetchurl {
     url = "https://stockfish.s3.amazonaws.com/${name}-src.zip";
-    sha256 = "0djzg3h5d9qs27snf0rr6zl6iaki1jb84v8m8k3c2lcjbj2vpwc9";
+    sha256 = "1sachz41kbni88yjxwv5y4vl0gjbnyqvp1kpdm7v56k43zr3dbbv";
   };
 
   buildInputs = [ unzip ];
@@ -22,14 +22,14 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
-    homepage = "https://stockfishchess.org/";
+    homepage = https://stockfishchess.org/;
     description = "Strong open source chess engine";
     longDescription = ''
       Stockfish is one of the strongest chess engines in the world. It is also
       much stronger than the best human chess grandmasters.
       '';
     maintainers = with maintainers; [ luispedro peti ];
-    platforms = with platforms; i686 ++ x86_64;
+    platforms = ["x86_64-linux" "i686-linux"];
     license = licenses.gpl2;
   };
 

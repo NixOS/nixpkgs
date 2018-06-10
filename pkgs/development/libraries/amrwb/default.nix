@@ -1,33 +1,25 @@
-{stdenv, fetchurl, unzip}:
+{ stdenv, fetchurl, unzip }:
 
-stdenv.mkDerivation {
-  # The 'src' 7.0.0.3 expects amrwb 700, but there is only 710 available now,
-  # so I guess in 3gpp they updated to 7.1.0, but amrwb did not update the libraries.
-  # I guess amrwb uses the first version numbers to match those of 3gpp,
-  # so I set the name to 7.1.0.3 in this case
-  name = "amrwb-7.1.0.3";
+stdenv.mkDerivation rec {
+  name = "amrwb-${version}";
+  version = "11.0.0.0";
 
   srcAmr = fetchurl {
-    url = http://www.3gpp.org/ftp/Specs/latest/Rel-7/26_series/26204-710.zip;
-    sha256 = "1wnx72m20y8bdlyndyy8rskr0hi4llk1h1hcr34awxfmi9l4922i";
+    url = http://www.3gpp.org/ftp/Specs/archive/26_series/26.204/26204-b00.zip;
+    sha256 = "1v4zhs6f1mf1xkrzhljh05890in0rpr5d5pcak9h4igxhd2c91f8";
   };
 
   src = fetchurl {
-    url = http://www.penguin.cz/~utx/ftp/amr/amrwb-7.0.0.3.tar.bz2;
-    sha256 = "0nn94i3gw3d5fgks43wdhshdlhpd4rcrzj46f2vsby0viwkxxp8z";
+    url = "http://www.penguin.cz/~utx/ftp/amr/amrwb-${version}.tar.bz2";
+    sha256 = "1p6m9nd08mv525w14py9qzs9zwsa5i3vxf5bgcmcvc408jqmkbsw";
   };
 
   buildInputs = [ unzip ];
 
-  patchPhase = ''
-    sed -i s/26204-700/26204-710/g Makefile.am Makefile.in configure configure.ac \
-      prepare_sources.sh.in
-  '';
-
   configureFlags = [ "--cache-file=config.cache" "--with-downloader=true" ];
 
   postConfigure = ''
-    cp $srcAmr 26204-710.zip 
+    cp $srcAmr 26204-b00.zip
   '';
 
   meta = {

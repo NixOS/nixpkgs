@@ -1,23 +1,36 @@
 { stdenv, fetchurl, gettext, coreutils }:
 
 stdenv.mkDerivation rec {
-  name = "sharutils-4.11.1";
+  name = "sharutils-4.15.2";
 
   src = fetchurl {
-    url = "mirror://gnu/sharutils/${name}.tar.bz2";
-    sha256 = "1mallg1gprimlggdisfzdmh1xi676jsfdlfyvanlcw72ny8fsj3g";
+    url = "mirror://gnu/sharutils/${name}.tar.xz";
+    sha256 = "16isapn8f39lnffc3dp4dan05b7x6mnc76v6q5nn8ysxvvvwy19b";
   };
 
   hardeningDisable = [ "format" ];
 
-  preConfigure = ''
-     # Fix for building on Glibc 2.16.  Won't be needed once the
-     # gnulib in sharutils is updated.
-     sed -i ${stdenv.lib.optionalString (stdenv.isOpenBSD && stdenv.cc.nativeTools) "''"} '/gets is a security hole/d' lib/stdio.in.h
-  '';
-
   # GNU Gettext is needed on non-GNU platforms.
-  buildInputs = [ gettext coreutils ];
+  buildInputs = [ coreutils gettext ];
+
+  # These tests try to hit /etc/passwd to find out your username if pass in a submitter
+  # name on the command line. Since we block access to /etc/passwd on the Darwin sandbox
+  # that cause shar to just segfault. It isn't a problem on Linux because their sandbox
+  # remaps /etc/passwd to a trivial file, but we can't do that on Darwin so I do this
+  # instead. In this case, I pass in the very imaginative "submitter" as the submitter name
+
+  patchPhase = let
+      # This evaluates to a string containing:
+      #
+      #     substituteInPlace tests/shar-2 --replace '${SHAR}' '${SHAR} -s submitter'
+      #     substituteInPlace tests/shar-2 --replace '${SHAR}' '${SHAR} -s submitter'
+      shar_sub = "\${SHAR}";
+    in ''
+      substituteInPlace tests/shar-1 --replace '${shar_sub}' '${shar_sub} -s submitter'
+      substituteInPlace tests/shar-2 --replace '${shar_sub}' '${shar_sub} -s submitter'
+
+      substituteInPlace intl/Makefile.in --replace "AR = ar" ""
+    '';
 
   doCheck = true;
 
@@ -25,7 +38,7 @@ stdenv.mkDerivation rec {
     patches = [ ./sharutils-4.11.1-cross-binary-mode-popen.patch ];
   };
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "Tools for remote synchronization and `shell archives'";
     longDescription =
       '' GNU shar makes so-called shell archives out of many files, preparing
@@ -44,8 +57,8 @@ stdenv.mkDerivation rec {
          concatenated shell archives.
       '';
     homepage = http://www.gnu.org/software/sharutils/;
-    license = stdenv.lib.licenses.gpl3Plus;
-    maintainers = [ ];
-    platforms = stdenv.lib.platforms.all;
+    license = licenses.gpl3Plus;
+    maintainers = [ maintainers.ndowens ];
+    platforms = platforms.all;
   };
 }

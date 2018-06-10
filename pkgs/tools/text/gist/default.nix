@@ -4,8 +4,8 @@ buildRubyGem rec {
   inherit ruby;
   name = "${gemName}-${version}";
   gemName = "gist";
-  version = "4.5.0";
-  sha256 = "0k9bgjdmnr14whmjx6c8d5ak1dpazirj96hk5ds69rl5d9issw0l";
+  version = "4.6.2";
+  source.sha256 = "0zrw84k2982aiansmv2aj3101d3giwa58221n6aisvg5jq5kmiib";
 
   buildInputs = [ makeWrapper ];
 
@@ -19,7 +19,7 @@ buildRubyGem rec {
 
   meta = with lib; {
     description = "Upload code to https://gist.github.com (or github enterprise)";
-    homepage = "http://defunkt.io/gist/";
+    homepage = http://defunkt.io/gist/;
     license = licenses.mit;
     maintainers = with maintainers; [ zimbatm ];
     platforms = ruby.meta.platforms;

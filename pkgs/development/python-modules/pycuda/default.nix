@@ -1,5 +1,7 @@
-{ buildPythonPackage 
+{ buildPythonPackage
+, fetchPypi
 , fetchFromGitHub
+, Mako
 , boost
 , numpy
 , pytools
@@ -11,7 +13,7 @@
 , python
 , mkDerivation
 , stdenv
-, pythonOlder
+, isPy3k
 }:
 let
   compyte = import ./compyte.nix {
@@ -19,33 +21,32 @@ let
   };
 in
 buildPythonPackage rec {
-  name = "pycuda-${version}"; 
-  version = "2016.1"; 
+  pname = "pycuda";
+  version = "2017.1.1";
+  name = "${pname}-${version}";
 
-  src = fetchFromGitHub {
-    owner = "inducer"; 
-    repo = "pycuda";
-    rev = "609817e22c038249f5e9ddd720b3ca5a9d58ca11"; 
-    sha256 = "0kg6ayxsw2gja9rqspy6z8ihacf9jnxr8hzywjwmj1izkv24cff7"; 
-  }; 
+  src = fetchPypi {
+    inherit pname version;
+    sha256 = "0qxmcjax32p1ywicw9sha2rvfbak4kjbx9pq57j3wq4cwf296nkb";
+  };
 
   preConfigure = ''
-    findInputs ${boost.dev} boost_dirs propagated-native-build-inputs
-
-    export BOOST_INCLUDEDIR=$(echo $boost_dirs | sed -e s/\ /\\n/g - | grep '\-dev')/include
-    export BOOST_LIBRARYDIR=$(echo $boost_dirs | sed -e s/\ /\\n/g - | grep -v '\-dev')/lib
-    
-    ${python.interpreter} configure.py --boost-inc-dir=$BOOST_INCLUDEDIR \
-                            --boost-lib-dir=$BOOST_LIBRARYDIR \
-                            --no-use-shipped-boost \
-                            --boost-python-libname=boost_python
+    ${python.interpreter} configure.py --boost-inc-dir=${boost.dev}/include \
+                          --boost-lib-dir=${boost}/lib \
+                          --no-use-shipped-boost \
+                          --boost-python-libname=boost_python${stdenv.lib.optionalString isPy3k "3"}
   '';
 
   postInstall = ''
-    ln -s ${compyte} $out/${python.sitePackages}/pycuda/compyte 
+    ln -s ${compyte} $out/${python.sitePackages}/pycuda/compyte
   '';
 
-  doCheck = pythonOlder "3.5";
+  # Requires access to libcuda.so.1 which is provided by the driver
+  doCheck = false;
+
+  checkPhase = ''
+    py.test
+  '';
 
   propagatedBuildInputs = [
     numpy
@@ -57,7 +58,8 @@ buildPythonPackage rec {
     cudatoolkit
     compyte
     python
-  ]; 
+    Mako
+  ];
 
   meta = with stdenv.lib; {
     homepage = https://github.com/inducer/pycuda/;

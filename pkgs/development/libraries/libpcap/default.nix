@@ -1,37 +1,54 @@
-{ stdenv, fetchurl, flex, bison }:
+{ stdenv, fetchurl, fetchpatch, flex, bison }:
 
 stdenv.mkDerivation rec {
-  name = "libpcap-1.7.4";
-  
+  name = "libpcap-1.8.1";
+
   src = fetchurl {
     url = "http://www.tcpdump.org/release/${name}.tar.gz";
-    sha256 = "1c28ykkizd7jqgzrfkg7ivqjlqs9p6lygp26bsw2i0z8hwhi3lvs";
+    sha256 = "07jlhc66z76dipj4j5v3dig8x6h3k6cb36kmnmpsixf3zmlvqgb7";
   };
-  
+
   nativeBuildInputs = [ flex bison ];
-  
+
   # We need to force the autodetection because detection doesn't
   # work in pure build enviroments.
-  configureFlags =
-    if stdenv.isLinux then [ "--with-pcap=linux" ]
-    else if stdenv.isDarwin then [ "--with-pcap=bpf" ]
-    else [];
+  configureFlags = [
+    ("--with-pcap=" + {
+      linux = "linux";
+      darwin = "bpf";
+    }.${stdenv.hostPlatform.parsed.kernel.name})
+  ] ++ stdenv.lib.optionals (stdenv.hostPlatform == stdenv.buildPlatform) [
+    "ac_cv_linux_vers=2"
+  ];
+
+  dontStrip = stdenv.hostPlatform != stdenv.buildPlatform;
 
   prePatch = stdenv.lib.optionalString stdenv.isDarwin ''
     substituteInPlace configure --replace " -arch i386" ""
   '';
 
-  preInstall = ''mkdir -p $out/bin'';
-  
-  crossAttrs = {
-    # Stripping hurts in static libraries
-    dontStrip = true;
-    configureFlags = configureFlags ++ [ "ac_cv_linux_vers=2" ];
-  };
+  patches = [
+    (fetchpatch {
+      url    = "https://sources.debian.net/data/main/libp/libpcap/1.8.1-3/debian/patches/disable-remote.diff";
+      sha256 = "0dvjax9c0spvq8cdjnkbnm65wlzaml259yragf95kzg611vszfmj";
+    })
+    # See https://github.com/wjt/bustle/commit/f62cf6bfa662af4ae39effbbd4891bc619e3b4e9
+    (fetchpatch {
+      url    = "https://github.com/the-tcpdump-group/libpcap/commit/2be9c29d45fb1fab8e9549342a30c160b7dea3e1.patch";
+      sha256 = "1g8mh942vr0abn48g0bdvi4gmhq1bz0l80276603y7064qhy3wq5";
+    })
+    (fetchpatch {
+      url    = "https://github.com/the-tcpdump-group/libpcap/commit/1a6b088a88886eac782008f37a7219a32b86da45.patch";
+      sha256 = "1n5ylm7ch3i1lh4y2q16b0vabgym8g8mqiqxpqcdkjdn05c1wflr";
+    })
+  ];
 
-  meta = {
+  preInstall = ''mkdir -p $out/bin'';
+
+  meta = with stdenv.lib; {
     homepage = http://www.tcpdump.org;
     description = "Packet Capture Library";
-    platforms = stdenv.lib.platforms.unix;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ fpletz ];
   };
 }

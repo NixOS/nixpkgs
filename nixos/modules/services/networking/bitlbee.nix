@@ -7,10 +7,9 @@ let
   cfg = config.services.bitlbee;
   bitlbeeUid = config.ids.uids.bitlbee;
 
-  authModeCheck = v:
-    v == "Open" ||
-    v == "Closed" ||
-    v == "Registered";
+  bitlbeePkg = if cfg.libpurple_plugins == []
+  then pkgs.bitlbee
+  else pkgs.bitlbee.override { enableLibPurple = true; };
 
   bitlbeeConfig = pkgs.writeText "bitlbee.conf"
     ''
@@ -29,6 +28,12 @@ let
     [defaults]
     ${cfg.extraDefaults}
     '';
+
+  purple_plugin_path =
+    lib.concatMapStringsSep ":"
+      (plugin: "${plugin}/lib/pidgin/")
+      cfg.libpurple_plugins
+    ;
 
 in
 
@@ -67,7 +72,7 @@ in
 
       authMode = mkOption {
         default = "Open";
-        type = types.addCheck types.str authModeCheck;
+        type = types.enum [ "Open" "Closed" "Registered" ];
         description = ''
           The following authentication modes are available:
             Open -- Accept connections from anyone, use NickServ for user authentication.
@@ -92,6 +97,15 @@ in
         example = literalExample "[ pkgs.bitlbee-facebook ]";
         description = ''
           The list of bitlbee plugins to install.
+        '';
+      };
+
+      libpurple_plugins = mkOption {
+        type = types.listOf types.package;
+        default = [];
+        example = literalExample "[ pkgs.purple-matrix ]";
+        description = ''
+          The list of libpurple plugins to install.
         '';
       };
 
@@ -149,14 +163,16 @@ in
       };
 
     systemd.services.bitlbee =
-      { description = "BitlBee IRC to other chat networks gateway";
+      {
+        environment.PURPLE_PLUGIN_PATH = purple_plugin_path;
+        description = "BitlBee IRC to other chat networks gateway";
         after = [ "network.target" ];
         wantedBy = [ "multi-user.target" ];
         serviceConfig.User = "bitlbee";
-        serviceConfig.ExecStart = "${pkgs.bitlbee}/sbin/bitlbee -F -n -c ${bitlbeeConfig}";
+        serviceConfig.ExecStart = "${bitlbeePkg}/sbin/bitlbee -F -n -c ${bitlbeeConfig}";
       };
 
-    environment.systemPackages = [ pkgs.bitlbee ];
+    environment.systemPackages = [ bitlbeePkg ];
 
   };
 

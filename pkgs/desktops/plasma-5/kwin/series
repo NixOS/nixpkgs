@@ -1,0 +1,3 @@
+follow-symlinks.patch
+xwayland.patch
+no-setcap-install.patch

@@ -1,26 +1,28 @@
-{ stdenv, fetchFromGitHub, autoreconfHook }:
+{ stdenv, fetchFromGitHub, autoreconfHook, gtk3 }:
 
 stdenv.mkDerivation rec {
-  name = "${package-name}-${version}";
-  package-name = "paper-icon-theme";
-  version = "2016-06-08";
+  name = "${pname}-${version}";
+  pname = "paper-icon-theme";
+  version = "2017-11-20";
 
   src = fetchFromGitHub {
     owner = "snwh";
-    repo = package-name;
-    rev = "6aa0a2c8d802199d0a9f71579f136bd6476d5d8e";
-    sha256 = "07ak1lnvd0gwaclkcvccjbxikh701vfi07gmjp4zcqi6b5crl7f5";
+    repo = pname;
+    rev = "af0296ecc872ad723fad7dca6e7e89eb85cbb3a8";
+    sha256 = "18a9zl9lbw9gc3zas49w329xrps4slvkp4nv815nlnmimz8dj85m";
   };
 
-  nativeBuildInputs = [ autoreconfHook ];
+  nativeBuildInputs = [ autoreconfHook gtk3 ];
 
-  postPatch = ''
-    substituteInPlace Makefile.am --replace '$(DESTDIR)'/usr $out
+  postFixup = ''
+    for theme in $out/share/icons/*; do
+      gtk-update-icon-cache $theme
+    done
   '';
 
   meta = with stdenv.lib; {
     description = "Modern icon theme designed around bold colours and simple geometric shapes";
-    homepage = http://snwh.org/paper;
+    homepage = https://snwh.org/paper;
     license = with licenses; [ cc-by-sa-40 lgpl3 ];
     platforms = platforms.all;
     maintainers = with maintainers; [ romildo ];

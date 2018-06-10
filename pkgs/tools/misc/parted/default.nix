@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, devicemapper, libuuid, gettext, readline, perl, python
+{ stdenv, fetchurl, fetchpatch, devicemapper, libuuid, gettext, readline, perl, python2
 , utillinux, check, enableStatic ? false, hurd ? null }:
 
 stdenv.mkDerivation rec {
@@ -9,7 +9,14 @@ stdenv.mkDerivation rec {
     sha256 = "1r3qpg3bhz37mgvp9chsaa3k0csby3vayfvz8ggsqz194af5i2w5";
   };
 
-  patches = stdenv.lib.optional doCheck ./gpt-unicode-test-fix.patch;
+  outputs = [ "out" "dev" "man" "info" ];
+
+  patches = stdenv.lib.optional doCheck ./gpt-unicode-test-fix.patch
+    ++ stdenv.lib.optional stdenv.hostPlatform.isMusl
+    (fetchpatch {
+      url = "https://git.alpinelinux.org/cgit/aports/plain/main/parted/fix-includes.patch?id=9c5cd3c329a40ba4559cc1d8c7d17a9bf95c237b";
+      sha256 = "117ypyiwvzym6pi8xmy16wa5z3sbpx7gh6haabs6kfb1x2894z7q";
+    });
 
   postPatch = stdenv.lib.optionalString doCheck ''
     patchShebangs tests
@@ -20,7 +27,7 @@ stdenv.mkDerivation rec {
     ++ stdenv.lib.optional (gettext != null) gettext
     ++ stdenv.lib.optional (devicemapper != null) devicemapper
     ++ stdenv.lib.optional (hurd != null) hurd
-    ++ stdenv.lib.optionals doCheck [ check perl python ];
+    ++ stdenv.lib.optionals doCheck [ check perl python2 ];
 
   configureFlags =
        (if (readline != null)
@@ -29,7 +36,9 @@ stdenv.mkDerivation rec {
     ++ stdenv.lib.optional (devicemapper == null) "--disable-device-mapper"
     ++ stdenv.lib.optional enableStatic "--enable-static";
 
-  doCheck = true;
+  # Tests were previously failing due to Hydra running builds as uid 0.
+  # That should hopefully be fixed now.
+  doCheck = !stdenv.hostPlatform.isMusl; /* translation test */
 
   preCheck =
     stdenv.lib.optionalString doCheck

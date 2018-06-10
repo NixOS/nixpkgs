@@ -9,7 +9,8 @@ stdenv.mkDerivation rec {
     sha256 = "1a2hzyck95g740qg4p4wd4fjwsmlknh75i9sbx5r5v9pyr4i3m4f";
   };
 
-  buildInputs = [ perl libX11 libjpeg libpng libtiff pkgconfig
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ perl libX11 libjpeg libpng libtiff
     librsvg glib gtk2 libXxf86vm libXext poppler xineLib ];
 
   # The program tries to dlopen both Xxf86vm and Xext, so we use the
@@ -32,11 +33,11 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = "http://eaglemode.sourceforge.net";
+    homepage = http://eaglemode.sourceforge.net;
     description = "Zoomable User Interface";
     license = licenses.gpl3;
     maintainers = with maintainers; [ viric ];
     platforms = platforms.linux;
-    hydraPlatforms = [];
+    broken = true;
   };
 }

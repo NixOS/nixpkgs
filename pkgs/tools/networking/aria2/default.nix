@@ -5,13 +5,13 @@
 
 stdenv.mkDerivation rec {
   name = "aria2-${version}";
-  version = "1.27.1";
+  version = "1.34.0";
 
   src = fetchFromGitHub {
     owner = "aria2";
     repo = "aria2";
     rev = "release-${version}";
-    sha256 = "003m80gdcqfxi5jjzwiszql5y8lrj7a59gjygy0ya72fa9j4l9mi";
+    sha256 = "0hwqnjyszasr6049vr5mn48slb48v5kw39cbpbxa68ggmhj9bw6m";
   };
 
   nativeBuildInputs = [ pkgconfig autoreconfHook ];
@@ -26,8 +26,8 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     homepage = https://aria2.github.io;
     description = "A lightweight, multi-protocol, multi-source, command-line download utility";
-    maintainers = with maintainers; [ koral jgeerds ];
     license = licenses.gpl2Plus;
     platforms = platforms.unix;
+    maintainers = with maintainers; [ koral jgeerds ];
   };
 }

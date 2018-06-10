@@ -70,7 +70,7 @@ in
       etc."exim.conf".text = ''
         exim_user = ${cfg.user}
         exim_group = ${cfg.group}
-        exim_path = /var/setuid-wrappers/exim
+        exim_path = /run/wrappers/bin/exim
         spool_directory = ${cfg.spoolDir}
         ${cfg.config}
       '';
@@ -89,11 +89,12 @@ in
       gid = config.ids.gids.exim;
     };
 
-    security.setuidPrograms = [ "exim" ];
+    security.wrappers.exim.source = "${exim}/bin/exim";
 
     systemd.services.exim = {
       description = "Exim Mail Daemon";
       wantedBy = [ "multi-user.target" ];
+      restartTriggers = [ config.environment.etc."exim.conf".source ];
       serviceConfig = {
         ExecStart   = "${exim}/bin/exim -bdf -q30m";
         ExecReload  = "${coreutils}/bin/kill -HUP $MAINPID";

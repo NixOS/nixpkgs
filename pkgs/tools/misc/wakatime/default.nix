@@ -1,18 +1,26 @@
-{ stdenv, pythonPackages, fetchFromGitHub }:
+{ stdenv, python3Packages, fetchFromGitHub, glibcLocales }:
 
-with pythonPackages;
-
-buildPythonPackage rec {
-  namePrefix = "";
+with python3Packages;
+buildPythonApplication rec {
   name = "wakatime-${version}";
-  version = "6.0.1";
+  version = "10.1.0";
 
   src = fetchFromGitHub {
-    sha256 = "0bkzchivkz39jiz78jy7zkpsg6fd94wd7nsmrnijvxb3dn35l7l2";
-    rev = version;
-    repo = "wakatime";
     owner = "wakatime";
+    repo = "wakatime";
+    rev = version;
+    sha256 = "0mq1b5hwm03jz1mhlfiwi8k5r6556r1nfv9h7qs3y32zrj9mvifv";
   };
+
+  # needs more dependencies from https://github.com/wakatime/wakatime/blob/191b302bfb5f272ae928c6d3867d06f3dfcba4a8/dev-requirements.txt
+  # especially nose-capturestderr, which we do not package yet.
+  doCheck = false;
+  checkInputs = [ mock testfixtures pytest glibcLocales ];
+
+  checkPhase = ''
+    export HOME=$(mktemp -d) LC_ALL=en_US.utf-8
+    pytest tests
+  '';
 
   meta = with stdenv.lib; {
     inherit (src.meta) homepage;
@@ -24,6 +32,5 @@ buildPythonPackage rec {
       to install the wakatime CLI interface manually.
     '';
     license = licenses.bsd3;
-    maintainers = with maintainers; [ nckx ];
   };
 }

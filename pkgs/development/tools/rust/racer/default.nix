@@ -1,37 +1,37 @@
-{ stdenv, fetchFromGitHub, rustPlatform, makeWrapper }:
+{ stdenv, fetchFromGitHub, rustPlatform, makeWrapper, rustup, substituteAll }:
 
-with rustPlatform;
-
-buildRustPackage rec {
+rustPlatform.buildRustPackage rec {
   name = "racer-${version}";
-  version = "1.2.10";
+  version = "2.0.12";
+
   src = fetchFromGitHub {
-    owner = "phildawes";
+    owner = "racer-rust";
     repo = "racer";
-    rev = "e5ffe9efc1d10d4a7d66944b4c0939b7c575530e";
-    sha256 = "1cvgd6gcwb82p387h4wl8wz07z64is8jrihmf2z84vxmlrasmprm";
+    rev = version;
+    sha256 = "0y1xlpjr8y8gsmmrjlykx4vwzf8akk42g35kg3kc419ry4fli945";
   };
 
-  depsSha256 = "1d44q7hfxijn40q7y6xawgd3c91i90fmd1dyx7i2v9as29js5694";
+  cargoSha256 = "1h3jv4hajdv6k309kjr6b6298kxmd0faw081i3788sl794k9mp0j";
 
-  buildInputs = [ makeWrapper ];
+  # rustup is required for test
+  buildInputs = [ makeWrapper rustup ];
 
   preCheck = ''
-    export RUST_SRC_PATH="${rustPlatform.rust.rustc.src}/src"
+    export RUST_SRC_PATH="${rustPlatform.rustcSrc}"
   '';
-
+  patches = [
+    (substituteAll {
+      src = ./rust-src.patch;
+      inherit (rustPlatform) rustcSrc;
+    })
+    ./ignore-tests.patch
+  ];
   doCheck = true;
-
-  installPhase = ''
-    mkdir -p $out/bin
-    cp -p target/release/racer $out/bin/
-    wrapProgram $out/bin/racer --set RUST_SRC_PATH "${rustPlatform.rust.rustc.src}/src"
-  '';
 
   meta = with stdenv.lib; {
     description = "A utility intended to provide Rust code completion for editors and IDEs";
-    homepage = https://github.com/phildawes/racer;
-    license = stdenv.lib.licenses.mit;
+    homepage = https://github.com/racer-rust/racer;
+    license = licenses.mit;
     maintainers = with maintainers; [ jagajaga globin ];
     platforms = platforms.all;
   };

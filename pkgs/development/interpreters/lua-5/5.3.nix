@@ -1,26 +1,28 @@
-{ stdenv, fetchurl, readline, compat ? false }:
+{ stdenv, fetchurl, readline, compat ? false
+, hostPlatform
+}:
 
 stdenv.mkDerivation rec {
   name = "lua-${version}";
   luaversion = "5.3";
-  version = "${luaversion}.0";
+  version = "${luaversion}.4";
 
   src = fetchurl {
-    url = "http://www.lua.org/ftp/${name}.tar.gz";
-    sha1 = "1c46d1c78c44039939e820126b86a6ae12dadfba";
+    url = "https://www.lua.org/ftp/${name}.tar.gz";
+    sha256 = "0320a8dg3aci4hxla380dx1ifkw8gj4gbw5c4dz41g1kh98sm0gn";
   };
 
-  nativeBuildInputs = [ readline ];
+  buildInputs = [ readline ];
 
   patches = if stdenv.isDarwin then [ ./5.2.darwin.patch ] else [];
 
   configurePhase =
     if stdenv.isDarwin
     then ''
-    makeFlagsArray=( INSTALL_TOP=$out INSTALL_MAN=$out/share/man/man1 PLAT=macosx CFLAGS="-DLUA_USE_LINUX -fno-common -O2 -fPIC${if compat then " -DLUA_COMPAT_ALL" else ""}" LDFLAGS="-fPIC" V=${luaversion} R=${version} )
+    makeFlagsArray=( INSTALL_TOP=$out INSTALL_MAN=$out/share/man/man1 PLAT=macosx CFLAGS="-DLUA_USE_LINUX -fno-common -O2 -fPIC${if compat then " -DLUA_COMPAT_ALL" else ""}" LDFLAGS="-fPIC" V=${luaversion} R=${version}  CC="$CC" )
     installFlagsArray=( TO_BIN="lua luac" TO_LIB="liblua.${version}.dylib" INSTALL_DATA='cp -d' )
   '' else ''
-    makeFlagsArray=( INSTALL_TOP=$out INSTALL_MAN=$out/share/man/man1 PLAT=linux CFLAGS="-DLUA_USE_LINUX -O2 -fPIC${if compat then " -DLUA_COMPAT_ALL" else ""}" LDFLAGS="-fPIC" V=${luaversion} R=${version})
+    makeFlagsArray=( INSTALL_TOP=$out INSTALL_MAN=$out/share/man/man1 PLAT=linux CFLAGS="-DLUA_USE_LINUX -O2 -fPIC${if compat then " -DLUA_COMPAT_ALL" else ""}" LDFLAGS="-fPIC" V=${luaversion} R=${version} CC="$CC" AR="$AR q" RANLIB="$RANLIB" )
     installFlagsArray=( TO_BIN="lua luac" TO_LIB="liblua.a liblua.so liblua.so.${luaversion} liblua.so.${version}" INSTALL_DATA='cp -d' )
     cat ${./lua-5.3-dso.make} >> src/Makefile
     sed -e 's/ALL_T *= */& $(LUA_SO)/' -i src/Makefile
@@ -53,39 +55,8 @@ stdenv.mkDerivation rec {
     EOF
   '';
 
-  crossAttrs = let
-    isMingw = stdenv.cross.libc == "msvcrt";
-    isDarwin = stdenv.cross.libc == "libSystem";
-  in {
-    configurePhase = ''
-      makeFlagsArray=(
-        INSTALL_TOP=$out
-        INSTALL_MAN=$out/share/man/man1
-        CC=${stdenv.cross.config}-gcc
-        STRIP=:
-        RANLIB=${stdenv.cross.config}-ranlib
-        V=${luaversion}
-        R=${version}
-        ${if isMingw then "mingw" else stdenv.lib.optionalString isDarwin ''
-        AR="${stdenv.cross.config}-ar rcu"
-        macosx
-        ''}
-      )
-    '' + stdenv.lib.optionalString isMingw ''
-      installFlagsArray=(
-        TO_BIN="lua.exe luac.exe"
-        TO_LIB="liblua.a lua52.dll"
-        INSTALL_DATA="cp -d"
-      )
-    '';
-  } // stdenv.lib.optionalAttrs isDarwin {
-    postPatch = ''
-      sed -i -e 's/-Wl,-soname[^ ]* *//' src/Makefile
-    '';
-  };
-
   meta = {
-    homepage = "http://www.lua.org";
+    homepage = http://www.lua.org;
     description = "Powerful, fast, lightweight, embeddable scripting language";
     longDescription = ''
       Lua combines simple procedural syntax with powerful data

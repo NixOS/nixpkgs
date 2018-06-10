@@ -20,6 +20,8 @@ stdenv.mkDerivation {
     sha256 = "1lbr6pyyby4k9rn2ry5qc38kc738d0442jhhq57vmdjb6hxjya7m";
   }) ];
 
+  nativeBuildInputs = kernel.moduleBuildDependencies;
+
   hardeningDisable = [ "pic" ];
 
   preBuild = ''
@@ -48,7 +50,7 @@ stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "A module for powering off hybrid GPUs";
-    platforms = platforms.linux;
+    platforms = [ "x86_64-linux" "i686-linux" ];
     homepage = https://github.com/Bumblebee-Project/bbswitch;
     maintainers = with maintainers; [ abbradar ];
   };

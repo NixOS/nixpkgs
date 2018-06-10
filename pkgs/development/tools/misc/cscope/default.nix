@@ -31,11 +31,6 @@ stdenv.mkDerivation rec {
     cp xcscope.el{,c} "$out/share/emacs/site-lisp"
   '';
 
-  crossAttrs = {
-    postInstall = "";
-    propagatedBuildInputs = [ ncurses.crossDrv ];
-  };
-
   meta = {
     description = "A developer's tool for browsing source code";
 
@@ -53,6 +48,6 @@ stdenv.mkDerivation rec {
 
     maintainers = with stdenv.lib.maintainers; [viric];
 
-    platforms = with stdenv.lib.platforms; linux;
+    platforms = stdenv.lib.platforms.unix;
   };
 }

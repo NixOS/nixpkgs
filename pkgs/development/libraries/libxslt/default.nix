@@ -1,52 +1,64 @@
-{ stdenv, fetchurl, fetchpatch, libxml2, findXMLCatalogs }:
+{ stdenv, fetchurl, fetchpatch, libxml2, findXMLCatalogs, python2
+, buildPlatform, hostPlatform
+, cryptoSupport ? false
+, pythonSupport ? buildPlatform == hostPlatform
+}:
+
+assert pythonSupport -> python2 != null;
+assert pythonSupport -> libxml2.pythonSupport;
+
+with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  name = "libxslt-1.1.28";
+  pname = "libxslt";
+  version = "1.1.32";
+  name = pname + "-" + version;
 
   src = fetchurl {
     url = "http://xmlsoft.org/sources/${name}.tar.gz";
-    sha256 = "13029baw9kkyjgr7q3jccw2mz38amq7mmpr5p3bh775qawd1bisz";
+    sha256 = "0q2l6m56iv3ysxgm2walhg4c9wp7q183jb328687i9zlp85csvjj";
   };
 
-  patches = stdenv.lib.optional stdenv.isSunOS ./patch-ah.patch
-    ++ stdenv.lib.optional (stdenv.cross.libc or null == "msvcrt")
-        (fetchpatch {
-          name = "mingw.patch";
-          url = "http://git.gnome.org/browse/libxslt/patch/?id=ab5810bf27cd63";
-          sha256 = "0kkqq3fv2k3q86al38vp6zwxazpvp5kslcjnmrq4ax5cm2zvsjk3";
-        })
-    ++ [
-      (fetchpatch {
-        name = "CVE-2015-7995.patch";
-        url = "http://git.gnome.org/browse/libxslt/patch/?id=7ca19df892ca22";
-        sha256 = "1xzg0q94dzbih9nvqp7g9ihz0a3qb0w23l1158m360z9smbi8zbd";
-      })
-    ];
+  patches = stdenv.lib.optional stdenv.isSunOS ./patch-ah.patch;
 
-  outputs = [ "bin" "dev" "out" "doc" ];
+  # fixes: can't build x86_64-unknown-cygwin shared library unless -no-undefined is specified
+  postPatch = optionalString hostPlatform.isCygwin ''
+    substituteInPlace tests/plugins/Makefile.in \
+      --replace 'la_LDFLAGS =' 'la_LDFLAGS = $(WIN32_EXTRA_LDFLAGS)'
+  '';
 
-  buildInputs = [ libxml2 ];
+  outputs = [ "bin" "dev" "out" "man" "doc" ] ++ stdenv.lib.optional pythonSupport "py";
+
+  buildInputs = [ libxml2.dev ] ++ stdenv.lib.optionals pythonSupport [ libxml2.py python2 ];
 
   propagatedBuildInputs = [ findXMLCatalogs ];
 
   configureFlags = [
-    "--without-python"
-    "--without-crypto"
+    "--with-libxml-prefix=${libxml2.dev}"
     "--without-debug"
     "--without-mem-debug"
     "--without-debugger"
-  ];
+  ] ++ optional pythonSupport "--with-python=${python2}"
+    ++ optional (!cryptoSupport) "--without-crypto";
 
   postFixup = ''
     moveToOutput bin/xslt-config "$dev"
     moveToOutput lib/xsltConf.sh "$dev"
     moveToOutput share/man/man1 "$bin"
+  '' + optionalString pythonSupport ''
+    mkdir -p $py/nix-support
+    echo ${libxml2.py} >> $py/nix-support/propagated-build-inputs
+    moveToOutput lib/python2.7 "$py"
   '';
+
+  passthru = {
+    inherit pythonSupport;
+  };
 
   meta = with stdenv.lib; {
     homepage = http://xmlsoft.org/XSLT/;
     description = "A C library and tools to do XSL transformations";
-    license = "bsd";
+    license = licenses.mit;
     platforms = platforms.unix;
     maintainers = [ maintainers.eelco ];
   };

@@ -1,15 +1,29 @@
-{ stdenv, fetchurl, harfbuzz, pkgconfig, qt4 }:
+{
+  stdenv, lib, fetchurl, pkgconfig, autoreconfHook
+, freetype, harfbuzz, libiconv, qtbase
+, enableGUI ? true
+}:
 
 stdenv.mkDerivation rec {
-  version = "1.3";
+  version = "1.8.1";
   name = "ttfautohint-${version}";
-  
+
   src = fetchurl {
     url = "mirror://savannah/freetype/${name}.tar.gz";
-    sha256 = "01719jgdzgf0m4fzkkij563iksr40c7wydv1yq8ygpxjj0vs17y3";
+    sha256 = "1yflnydzdfkr8bi29yf42hb6h6525a4rdid3w8qjfk8rpqh53pqj";
   };
 
-  buildInputs = [ harfbuzz pkgconfig qt4 ];
+  postAutoreconf = ''
+    substituteInPlace configure --replace "macx-g++" "macx-clang"
+  '';
+
+  nativeBuildInputs = [ pkgconfig autoreconfHook ];
+
+  buildInputs = [ freetype harfbuzz libiconv ] ++ lib.optional enableGUI qtbase;
+
+  configureFlags = [ ''--with-qt=${if enableGUI then "${qtbase}/lib" else "no"}'' ];
+
+  enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
     description = "An automatic hinter for TrueType fonts";
@@ -19,10 +33,10 @@ stdenv.mkDerivation rec {
       new font where all glyphs are bytecode hinted using the
       information given by FreeType’s auto-hinting module.
     '';
-    homepage = http://www.freetype.org/ttfautohint/;
+    homepage = https://www.freetype.org/ttfautohint;
     license = licenses.gpl2Plus; # or the FreeType License (BSD + advertising clause)
-    maintainers = [ maintainers.goibhniu ];
-    platforms = platforms.linux;
+    maintainers = with maintainers; [ goibhniu ndowens ];
+    platforms = platforms.unix;
   };
 
 }

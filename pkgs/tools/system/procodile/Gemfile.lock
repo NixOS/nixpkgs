@@ -1,0 +1,15 @@
+GEM
+  remote: https://rubygems.org/
+  specs:
+    json (2.1.0)
+    procodile (1.0.17)
+      json
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  procodile
+
+BUNDLED WITH
+   1.14.6

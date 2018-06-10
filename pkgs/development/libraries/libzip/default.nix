@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "libzip-${version}";
-  version = "1.1.2";
+  version = "1.3.0";
 
   src = fetchurl {
-    url = "http://www.nih.at/libzip/${name}.tar.gz";
-    sha256 = "08b26qbfxq6z5xf36y1d8insm5valv83dhj933iag6man04prb2r";
+    url = "https://www.nih.at/libzip/${name}.tar.gz";
+    sha256 = "1633dvjc08zwwhzqhnv62rjf1abx8y5njmm8y16ik9iwd07ka6d9";
   };
 
   outputs = [ "out" "dev" ];
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    homepage = http://www.nih.at/libzip;
+    homepage = https://www.nih.at/libzip;
     description = "A C library for reading, creating and modifying zip archives";
     platforms = stdenv.lib.platforms.unix;
   };

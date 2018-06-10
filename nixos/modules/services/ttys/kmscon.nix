@@ -60,6 +60,7 @@ in {
       ConditionPathExists=/dev/tty0
 
       [Service]
+      ExecStart=
       ExecStart=${pkgs.kmscon}/bin/kmscon "--vt=%I" ${cfg.extraOptions} --seats=seat0 --no-switchvt --configdir ${configDir} --login -- ${pkgs.shadow}/bin/login -p
       UtmpIdentifier=%I
       TTYPath=/dev/%I
@@ -76,7 +77,7 @@ in {
           ln -s ${config.systemd.units."kmsconvt@.service".unit}/kmsconvt@.service $out/autovt@.service
         '';
 
-    systemd.services.systemd-vconsole-setup.restartIfChanged = false;
+    systemd.services.systemd-vconsole-setup.enable = false;
 
     services.kmscon.extraConfig = mkIf cfg.hwRender ''
       drm

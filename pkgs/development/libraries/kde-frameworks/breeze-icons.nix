@@ -1,10 +1,13 @@
-{ kdeFramework, lib, ecm, qtsvg }:
+{ mkDerivation, lib, extra-cmake-modules, gtk3, qtsvg }:
 
-kdeFramework {
+mkDerivation {
   name = "breeze-icons";
   meta = { maintainers = [ lib.maintainers.ttuegel ]; };
-  outputs = [ "out" ];
-  nativeBuildInputs = [ ecm ];
+  nativeBuildInputs = [ extra-cmake-modules gtk3 ];
   buildInputs = [ qtsvg ];
-  propagatedUserEnvPkgs = [ qtsvg.out ];
+  outputs = [ "out" ]; # only runtime outputs
+  postInstall = ''
+    gtk-update-icon-cache "''${out:?}/share/icons/breeze"
+    gtk-update-icon-cache "''${out:?}/share/icons/breeze-dark"
+  '';
 }

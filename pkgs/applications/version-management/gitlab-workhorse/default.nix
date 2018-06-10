@@ -1,14 +1,14 @@
 { stdenv, fetchFromGitLab, git, go }:
 
 stdenv.mkDerivation rec {
-  version = "0.7.11";
+  version = "4.2.0";
   name = "gitlab-workhorse-${version}";
 
   srcs = fetchFromGitLab {
     owner = "gitlab-org";
     repo = "gitlab-workhorse";
     rev = "v${version}";
-    sha256 = "1z32nf9qbw050wzl1dsydrs68c9fp5kkvdn58z2g88bbyk6gyivm";
+    sha256 = "11n43mfp7a59iq8k7sh9bnww3bq56ml2p6752csclg77xii6dzyy";
   };
 
   buildInputs = [ git go ];
@@ -24,7 +24,10 @@ stdenv.mkDerivation rec {
     make install PREFIX=$out
   '';
 
-  meta = {
-    platforms = stdenv.lib.platforms.unix;
+  meta = with stdenv.lib; {
+    homepage = http://www.gitlab.com/;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ fpletz globin ];
+    license = licenses.mit;
   };
 }

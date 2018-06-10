@@ -1,37 +1,33 @@
-{ stdenv, fetchFromGitHub, libtoxcore, cmake, jsoncpp, lib, stdenvAdapters, libsodium, systemd, enableDebugging, libcap }:
+{ stdenv, fetchFromGitHub, cmake, nlohmann_json,
+  libtoxcore, libsodium, libcap, zeromq,
+  systemd ? null }:
 
-with lib;
+with stdenv.lib;
 
-let
-  libtoxcoreLocked = stdenv.lib.overrideDerivation libtoxcore (oldAttrs: {
-    name = "libtoxcore-2016-09-07";
-    src = fetchFromGitHub {
-      owner  = "TokTok";
-      repo   = "toxcore";
-      rev    = "3521898b0cbf398d882496f6382f6c4ea1c23bc1";
-      sha256 = "1jvf0v9cqwd4ssj1iarhgsr05qg48v7yvmbnn3k01jy0lqci8iaq";
-    };
-  });
-
-in stdenv.mkDerivation {
-  name = "toxvpn-2016-09-09";
+stdenv.mkDerivation rec {
+  name = "toxvpn-2018-04-17";
 
   src = fetchFromGitHub {
     owner  = "cleverca22";
     repo   = "toxvpn";
-    rev    = "6e188f26fff8bddc1014ee3cc7a7423f9f344a09";
-    sha256 = "1bshc6pzk7z7q7g17cwx9gmlcyzn4szqvdiy0ihbk2xmx9k31c6p";
+    rev    = "dc766f98888f500ea51f002f59007eac3f3a0a06";
+    sha256 = "19br3fmrdm45fvymj9kvwikkn8m657yd5fkhx6grv35ckrj83mxz";
   };
 
-  buildInputs = [ cmake libtoxcoreLocked jsoncpp libsodium libcap ] ++ optional (systemd != null) systemd;
+  buildInputs = [ libtoxcore nlohmann_json libsodium zeromq ]
+    ++ optionals stdenv.isLinux [ libcap systemd ];
 
-  cmakeFlags = optional (systemd != null) [ "-DSYSTEMD=1" ];
+  nativeBuildInputs = [ cmake ];
+
+  cmakeFlags = optional stdenv.isLinux [ "-DSYSTEMD=1" ];
+
+  postInstall = "$out/bin/toxvpn -h";
 
   meta = with stdenv.lib; {
     description = "A powerful tool that allows one to make tunneled point to point connections over Tox";
     homepage    = https://github.com/cleverca22/toxvpn;
     license     = licenses.gpl3;
     maintainers = with maintainers; [ cleverca22 obadz ];
-    platforms   = platforms.linux;
+    platforms   = platforms.linux ++ platforms.darwin;
   };
 }

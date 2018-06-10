@@ -1,6 +1,6 @@
 { stdenv, fetchurl, lib, file
 , pkgconfig, autoconf
-, glib, dbus_glib, json_glib
+, glib, dbus-glib, json-glib
 , gtk3, libindicator-gtk3, libdbusmenu-gtk3, libappindicator-gtk3 }:
 
 with lib;
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkgconfig autoconf ];
 
   buildInputs = [
-    glib dbus_glib json_glib
+    glib dbus-glib json-glib
     gtk3 libindicator-gtk3 libdbusmenu-gtk3 libappindicator-gtk3
   ];
 
@@ -28,8 +28,10 @@ stdenv.mkDerivation rec {
       --replace 'DBUSSERVICEDIR=`$PKG_CONFIG --variable=session_bus_services_dir dbus-1`' \
                 "DBUSSERVICEDIR=$out/share/dbus-1/services"
     autoconf
-    substituteInPlace {configure,ltmain.sh,m4/libtool.m4} \
-      --replace /usr/bin/file ${file}/bin/file
+    for f in {configure,ltmain.sh,m4/libtool.m4}; do
+      substituteInPlace $f \
+        --replace /usr/bin/file ${file}/bin/file
+    done
     substituteInPlace src/Makefile.in \
       --replace 'applicationlibdir = $(INDICATORDIR)' "applicationlibdir = $out/lib"
   '';
@@ -47,7 +49,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Indicator to take menus from applications and place them in the panel";
-    homepage = "https://launchpad.net/indicator-application";
+    homepage = https://launchpad.net/indicator-application;
     license = licenses.gpl3;
     platforms = platforms.linux;
     maintainers = [ maintainers.msteen ];

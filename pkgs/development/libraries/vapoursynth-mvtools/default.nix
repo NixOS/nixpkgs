@@ -4,17 +4,18 @@
 
 stdenv.mkDerivation rec {
   name = "vapoursynth-mvtools-${version}";
-  version = "16";
+  version = "19";
 
   src = fetchFromGitHub {
     owner = "dubhater";
     repo  = "vapoursynth-mvtools";
-    rev    = "48959b868c18fa8066502f957734cbd5fb9762a0";
-    sha256 = "15xpqvfzhv0kcf3gyghni4flazi1mmj2iy6zw5834phqr52yg07z";
+    rev    = "v${version}";
+    sha256 = "1wjwf1lgfkqz87s0j251g625mw9xmx79zzgrjyhq3wlii73m6qwp";
   };
 
+  nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
-    pkgconfig autoreconfHook
+    autoreconfHook
     yasm vapoursynth fftwFloat
   ];
 

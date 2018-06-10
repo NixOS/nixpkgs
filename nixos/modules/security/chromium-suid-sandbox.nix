@@ -19,14 +19,11 @@ in
 
       Also, if the URL chrome://sandbox tells you that "You are not adequately
       sandboxed!", turning this on might resolve the issue.
-
-      Finally, if you have <option>security.grsecurity</option> enabled and you
-      use Chromium, you probably need this.
     '';
   };
 
   config = mkIf cfg.enable {
     environment.systemPackages = [ sandbox ];
-    security.setuidPrograms    = [ sandbox.passthru.sandboxExecutableName ];
+    security.wrappers."${sandbox.passthru.sandboxExecutableName}".source = "${sandbox}/bin/${sandbox.passthru.sandboxExecutableName}";
   };
 }

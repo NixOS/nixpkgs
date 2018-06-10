@@ -2,13 +2,14 @@
 
 stdenv.mkDerivation rec {
   name = "gecode-${version}";
-  version = "4.4.0";
+  version = "6.0.0";
 
   src = fetchurl {
     url = "http://www.gecode.org/download/${name}.tar.gz";
-    sha256 = "0akqjzy6pd229mn0lhpdbyc4wbazhprkd5ijqs99z68bj3b9h0s3";
+    sha256 = "0dp7bm6k790jx669y4jr0ffi5cdfpwsqm1ykj2c0zh56jsgs6hfs";
   };
 
+  enableParallelBuilding = true;
   buildInputs = [ perl ];
 
   meta = with stdenv.lib; {

@@ -1,12 +1,14 @@
 {stdenv, fetchurl} :
 
-stdenv.mkDerivation {
-  name = "lucene-1.4.1";
+stdenv.mkDerivation rec {
+  name = "lucene-${version}";
+  version = "1.4.3";
+
   builder = ./builder.sh;
 
   src = fetchurl {
-    url = http://cvs.apache.org/dist/jakarta/lucene/v1.4.1/lucene-1.4.1.tar.gz;
-    md5 = "656a6f40f5b8f7d2e19453436848bfe8";
+    url = "https://archive.apache.org/dist/jakarta/lucene/${name}.tar.gz";
+    sha256 = "1mxaxg65f7v8n60irjwm24v7hcisbl0srmpvcy1l4scs6rjj1awh";
   };
 
   meta = {

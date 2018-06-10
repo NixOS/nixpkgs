@@ -1,27 +1,29 @@
---- a/src/libical/icaltz-util.c	2015-06-11 15:40:58.843138630 +0200
-+++ b/src/libical/icaltz-util.c	2015-06-11 15:43:12.722046252 +0200
-@@ -107,7 +107,7 @@
- 	char	charcnt[4];			
- } tzinfo; 
- 
--static char *search_paths [] = {"/usr/share/zoneinfo","/usr/lib/zoneinfo","/etc/zoneinfo","/usr/share/lib/zoneinfo"};
-+static char *search_paths [] = {"/etc/zoneinfo","/usr/share/zoneinfo","/usr/lib/zoneinfo","/usr/share/lib/zoneinfo"};
+--- a/src/libical/icaltz-util.c
++++ b/src/libical/icaltz-util.c
+@@ -96,9 +96,9 @@ typedef struct
  static char *zdir = NULL;
  
- #define NUM_SEARCH_PATHS (sizeof (search_paths)/ sizeof (search_paths [0]))
-@@ -194,6 +194,15 @@
- 	const char *fname = ZONES_TAB_SYSTEM_FILENAME;
- 	unsigned int i;
+ static char *search_paths[] = {
++    "/etc/zoneinfo",
+     "/usr/share/zoneinfo",
+     "/usr/lib/zoneinfo",
+-    "/etc/zoneinfo",
+     "/usr/share/lib/zoneinfo"
+ };
  
-+	const char *env_tzdir = getenv ("TZDIR");
-+	if (env_tzdir) {
-+		sprintf (file_path, "%s/%s", env_tzdir, fname);
-+		if (!access (file_path, F_OK|R_OK)) {
-+			zdir = env_tzdir;
-+			return;
-+		}
-+	}
+@@ -179,6 +179,15 @@ static void set_zonedir(void)
+     const char *fname = ZONES_TAB_SYSTEM_FILENAME;
+     size_t i, num_search_paths;
+ 
++   const char *env_tzdir = getenv ("TZDIR");
++   if (env_tzdir) {
++       snprintf(file_path, MAXPATHLEN, "%s/%s", env_tzdir, fname);
++       if (!access (file_path, F_OK|R_OK)) {
++           zdir = env_tzdir;
++           return;
++       }
++   }
 +
- 	for (i = 0; i < NUM_SEARCH_PATHS; i++) {
- 		sprintf (file_path, "%s/%s", search_paths [i], fname);
- 		if (!access (file_path, F_OK|R_OK)) {
+     num_search_paths = sizeof(search_paths) / sizeof(search_paths[0]);
+     for (i = 0; i < num_search_paths; i++) {
+         snprintf(file_path, MAXPATHLEN, "%s/%s", search_paths[i], fname);

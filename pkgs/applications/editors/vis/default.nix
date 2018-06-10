@@ -1,18 +1,15 @@
 { stdenv, fetchFromGitHub, pkgconfig, makeWrapper, makeDesktopItem
 , ncurses, libtermkey, lpeg, lua
 , acl ? null, libselinux ? null
-, version ? "2016-08-24"
-, rev ? "010dcd60ffda37027908f2a0b20c751b83ca975e"
-, sha256 ? "0bpbyi5yq50zw0hkh326pmdcnm91paf1yz4853dcq63y0ddv89jp"
 }:
 
 stdenv.mkDerivation rec {
-  name = "vis-unstable-${version}";
-  inherit version;
+  name = "vis-${version}";
+  version  = "0.5";
 
   src = fetchFromGitHub {
-    inherit sha256;
-    inherit rev;
+    rev = "v${version}";
+    sha256 = "1vhq6hprkgj90iwl5vl3pxs3xwc01mx8yhi6c1phzry5agqqp8jb";
     repo = "vis";
     owner = "martanne";
   };
@@ -24,10 +21,14 @@ stdenv.mkDerivation rec {
     libtermkey
     lua
     lpeg
-  ] ++ stdenv.lib.optional stdenv.isLinux [
+  ] ++ stdenv.lib.optionals stdenv.isLinux [
     acl
     libselinux
   ];
+
+  postPatch = ''
+    patchShebangs ./configure
+  '';
 
   LUA_CPATH="${lpeg}/lib/lua/${lua.luaversion}/?.so;";
   LUA_PATH="${lpeg}/share/lua/${lua.luaversion}/?.lua";
@@ -37,8 +38,8 @@ stdenv.mkDerivation rec {
     cp $desktopItem/share/applications/* $out/share/applications
     echo wrapping $out/bin/vis with runtime environment
     wrapProgram $out/bin/vis \
-      --prefix LUA_CPATH : "${lpeg}/lib/lua/${lua.luaversion}/?.so" \
-      --prefix LUA_PATH : "${lpeg}/share/lua/${lua.luaversion}/?.lua" \
+      --prefix LUA_CPATH ';' "${lpeg}/lib/lua/${lua.luaversion}/?.so" \
+      --prefix LUA_PATH ';' "${lpeg}/share/lua/${lua.luaversion}/?.lua" \
       --prefix VIS_PATH : "\$HOME/.config:$out/share/vis"
   '';
 
@@ -62,7 +63,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A vim like editor";
-    homepage = http://github.com/martanne/vis;
+    homepage = https://github.com/martanne/vis;
     license = licenses.isc;
     maintainers = with maintainers; [ vrthra ramkromberg ];
     platforms = platforms.unix;

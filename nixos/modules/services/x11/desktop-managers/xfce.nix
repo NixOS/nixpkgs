@@ -3,15 +3,11 @@
 with lib;
 
 let
-
-  xcfg = config.services.xserver;
-  cfg = xcfg.desktopManager.xfce;
-
+  cfg = config.services.xserver.desktopManager.xfce;
 in
 
 {
   options = {
-
     services.xserver.desktopManager.xfce = {
       enable = mkOption {
         type = types.bool;
@@ -41,81 +37,106 @@ in
           Shell commands executed just before XFCE is started.
         '';
       };
-    };
 
-  };
-
-
-  config = mkIf (xcfg.enable && cfg.enable) {
-
-    services.xserver.desktopManager.session = singleton
-      { name = "xfce";
-        bgSupport = true;
-        start =
-          ''
-            ${cfg.extraSessionCommands}
-
-            # Set GTK_PATH so that GTK+ can find the theme engines.
-            export GTK_PATH="${config.system.path}/lib/gtk-2.0:${config.system.path}/lib/gtk-3.0"
-
-            # Set GTK_DATA_PREFIX so that GTK+ can find the Xfce themes.
-            export GTK_DATA_PREFIX=${config.system.path}
-
-            ${pkgs.stdenv.shell} ${pkgs.xfce.xinitrc} &
-            waitPID=$!
-          '';
+      enableXfwm = mkOption {
+        type = types.bool;
+        default = true;
+        description = "Enable the XFWM (default) window manager.";
       };
 
+      screenLock = mkOption {
+        type = types.enum [ "xscreensaver" "xlockmore" "slock" ];
+        default = "xlockmore";
+        description = "Application used by XFCE to lock the screen.";
+      };
+    };
+  };
+
+  config = mkIf cfg.enable {
+    environment.systemPackages = with pkgs.xfce // pkgs; [
+      # Get GTK+ themes and gtk-update-icon-cache
+      gtk2.out
+
+      # Supplies some abstract icons such as:
+      # utilities-terminal, accessories-text-editor
+      gnome3.defaultIconTheme
+
+      hicolor-icon-theme
+      tango-icon-theme
+      xfce4-icon-theme
+
+      desktop-file-utils
+      shared-mime-info
+
+      # Needed by Xfce's xinitrc script
+      # TODO: replace with command -v
+      which
+
+      exo
+      garcon
+      gtk-xfce-engine
+      gvfs
+      libxfce4ui
+      tumbler
+      xfconf
+
+      mousepad
+      ristretto
+      xfce4-appfinder
+      xfce4-screenshooter
+      xfce4-session
+      xfce4-settings
+      xfce4-terminal
+
+      (thunar.override { thunarPlugins = cfg.thunarPlugins; })
+      thunar-volman # TODO: drop
+    ] ++ (if config.hardware.pulseaudio.enable
+          then [ xfce4-mixer-pulse xfce4-volumed-pulse ]
+	  else [ xfce4-mixer xfce4-volumed ])
+      # TODO: NetworkManager doesn't belong here
+      ++ optionals config.networking.networkmanager.enable [ networkmanagerapplet ]
+      ++ optionals config.powerManagement.enable [ xfce4-power-manager ]
+      ++ optionals cfg.enableXfwm [ xfwm4 ]
+      ++ optionals (!cfg.noDesktop) [
+        xfce4-panel
+        xfce4-notifyd
+        xfdesktop
+      ];
+
+    environment.pathsToLink = [
+      "/share/xfce4"
+      "/share/themes"
+      "/share/mime"
+      "/share/desktop-directories"
+      "/share/gtksourceview-2.0"
+    ];
+
+    environment.variables = {
+      GDK_PIXBUF_MODULE_FILE = "${pkgs.librsvg.out}/lib/gdk-pixbuf-2.0/2.10.0/loaders.cache";
+      GIO_EXTRA_MODULES = [ "${pkgs.xfce.gvfs}/lib/gio/modules" ];
+    };
+
+    services.xserver.desktopManager.session = [{
+      name = "xfce";
+      bgSupport = true;
+      start = ''
+        ${cfg.extraSessionCommands}
+
+        # Set GTK_PATH so that GTK+ can find the theme engines.
+        export GTK_PATH="${config.system.path}/lib/gtk-2.0:${config.system.path}/lib/gtk-3.0"
+
+        # Set GTK_DATA_PREFIX so that GTK+ can find the Xfce themes.
+        export GTK_DATA_PREFIX=${config.system.path}
+
+        ${pkgs.runtimeShell} ${pkgs.xfce.xinitrc} &
+        waitPID=$!
+      '';
+    }];
+
     services.xserver.updateDbusEnvironment = true;
-
-    environment.systemPackages =
-      [ pkgs.gtk2 # To get GTK+'s themes.
-        pkgs.hicolor_icon_theme
-        pkgs.tango-icon-theme
-        pkgs.shared_mime_info
-        pkgs.which # Needed by the xfce's xinitrc script.
-        pkgs.xfce.exo
-        pkgs.xfce.gtk_xfce_engine
-        pkgs.xfce.mousepad
-        pkgs.xfce.ristretto
-        pkgs.xfce.terminal
-       (pkgs.xfce.thunar.override { thunarPlugins = cfg.thunarPlugins; })
-        pkgs.xfce.xfce4icontheme
-        pkgs.xfce.xfce4session
-        pkgs.xfce.xfce4settings
-        pkgs.xfce.xfce4mixer
-        pkgs.xfce.xfce4volumed
-        pkgs.xfce.xfce4-screenshooter
-        pkgs.xfce.xfconf
-        pkgs.xfce.xfwm4
-        # This supplies some "abstract" icons such as
-        # "utilities-terminal" and "accessories-text-editor".
-        pkgs.gnome3.defaultIconTheme
-        pkgs.desktop_file_utils
-        pkgs.xfce.libxfce4ui
-        pkgs.xfce.garcon
-        pkgs.xfce.thunar_volman
-        pkgs.xfce.gvfs
-        pkgs.xfce.xfce4_appfinder
-        pkgs.xfce.tumbler       # found via dbus
-      ]
-      ++ optional config.powerManagement.enable pkgs.xfce.xfce4_power_manager
-      ++ optional config.networking.networkmanager.enable pkgs.networkmanagerapplet
-      ++ optionals (!cfg.noDesktop)
-         [ pkgs.xfce.xfce4panel
-           pkgs.xfce.xfdesktop
-	   pkgs.xfce.xfce4notifyd  # found via dbus
-         ];
-
-    environment.pathsToLink =
-      [ "/share/xfce4" "/share/themes" "/share/mime" "/share/desktop-directories" "/share/gtksourceview-2.0" ];
-
-    environment.variables.GIO_EXTRA_MODULES = [ "${pkgs.xfce.gvfs}/lib/gio/modules" ];
 
     # Enable helpful DBus services.
     services.udisks2.enable = true;
     services.upower.enable = config.powerManagement.enable;
-
   };
-
 }

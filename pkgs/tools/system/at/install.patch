@@ -20,7 +20,7 @@
 +	$(INSTALL) -m 755 -d $(IROOT)$(sbindir)
 +	$(INSTALL) -m 755 -d $(IROOT)$(docdir)
 +	$(INSTALL) -m 755 -d $(IROOT)$(atdocdir)
-+	$(INSTALL) -m 6755 -s at $(IROOT)$(bindir)
++	$(INSTALL) -m 0755 at $(IROOT)$(bindir)
  	$(LN_S) -f at $(IROOT)$(bindir)/atq
  	$(LN_S) -f at $(IROOT)$(bindir)/atrm
 -	$(INSTALL) -g root -o root -m 755 batch $(IROOT)$(bindir)
@@ -34,7 +34,7 @@
 +	$(INSTALL) -d -m 755 $(IROOT)$(man1dir)
 +	$(INSTALL) -d -m 755 $(IROOT)$(man5dir)
 +	$(INSTALL) -d -m 755 $(IROOT)$(man8dir)
-+	$(INSTALL) -m 755 -s atd $(IROOT)$(sbindir)
++	$(INSTALL) -m 755 atd $(IROOT)$(sbindir)
 +	$(INSTALL) -m 755 atrun $(IROOT)$(sbindir)
 +	$(INSTALL) -m 644 at.1 $(IROOT)$(man1dir)/
  	cd $(IROOT)$(man1dir) && $(LN_S) -f at.1 atq.1 && $(LN_S) -f at.1 batch.1 && $(LN_S) -f at.1 atrm.1

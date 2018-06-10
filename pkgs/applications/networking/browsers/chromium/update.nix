@@ -64,7 +64,7 @@ in rec {
     csv2nix = name: src: import (runCommand "${name}.nix" {
       src = builtins.fetchurl src;
     } ''
-      esc() { echo "\"$(echo "$1" | sed -e 's/"\\$/\\&/')\""; }
+      esc() { echo "\"$(echo "$1" | sed -e 's/"\\$/\\&/')\""; } # ohai emacs "
       IFS=, read -r -a headings <<< "$(head -n1 "$src")"
       echo "[" > "$out"
       tail -n +2 "$src" | while IFS=, read -r -a line; do
@@ -145,7 +145,7 @@ in rec {
         outputHashMode = "flat";
         outputHashAlgo = "md5";
 
-        buildInputs = [ curl ];
+        nativeBuildInputs = [ curl ];
         preferLocalBuild = true;
 
         buildCommand = ''
@@ -178,7 +178,7 @@ in rec {
 
     getHash = path: import (runCommand "gethash.nix" {
       inherit path;
-      buildInputs = [ nix ];
+      nativeBuildInputs = [ nix ];
     } ''
       sha256="$(nix-hash --flat --base32 --type sha256 "$path")"
       echo "\"$sha256\"" > "$out"

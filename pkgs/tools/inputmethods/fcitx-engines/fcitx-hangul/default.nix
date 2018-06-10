@@ -9,7 +9,8 @@ stdenv.mkDerivation rec {
     sha256 = "1jq78nczliw6pnhfac8hspffybrry6syk17y0wwcq05j3r3nd2lp";
   };
 
-  buildInputs = [ cmake fcitx libhangul gettext pkgconfig ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ cmake fcitx libhangul gettext ];
 
   preInstall = ''
     substituteInPlace src/cmake_install.cmake \

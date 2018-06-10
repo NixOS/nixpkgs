@@ -1,24 +1,31 @@
-{stdenv, buildOcaml, fetchurl, sexplib, stringext, uri, cstruct, ipaddr,
- async ? null, async_ssl ? null, lwt ? null}:
+{ stdenv, fetchFromGitHub, ocaml, findlib, jbuilder
+, ppx_sexp_conv
+, astring, ipaddr, uri
+}:
 
-buildOcaml rec {
-  name = "conduit";
-  version = "0.8.3";
+stdenv.mkDerivation rec {
+	version = "1.0.0";
+	name = "ocaml${ocaml.version}-conduit-${version}";
 
-  src = fetchurl {
-    url = "https://github.com/mirage/ocaml-conduit/archive/v${version}.tar.gz";
-    sha256 = "5cf1a46aa0254345e5143feebe6b54bdef96314e9987f44e69f24618d620faa1";
-  };
+	src = fetchFromGitHub {
+		owner = "mirage";
+		repo = "ocaml-conduit";
+		rev = "v${version}";
+		sha256 = "1ryigzh7sfif1mly624fpm87aw5h60n5wzdlrvqsf71qcpxc6iiz";
+	};
 
-  propagatedBuildInputs = ([ sexplib stringext uri cstruct ipaddr ]
-                            ++ stdenv.lib.optional (lwt != null) lwt
-                            ++ stdenv.lib.optional (async != null) async
-                            ++ stdenv.lib.optional (async_ssl != null) async_ssl);
+	buildInputs = [ ocaml findlib jbuilder ppx_sexp_conv ];
+	propagatedBuildInputs = [ astring ipaddr uri ];
 
-  meta = with stdenv.lib; {
-    homepage = https://github.com/mirage/ocaml-conduit;
-    description = "Resolve URIs into communication channels for Async or Lwt ";
-    license = licenses.mit;
-    maintainers = [ maintainers.ericbmerritt ];
-  };
+	buildPhase = "jbuilder build -p conduit";
+
+	inherit (jbuilder) installPhase;
+
+	meta = {
+		description = "Network connection library for TCP and SSL";
+		license = stdenv.lib.licenses.isc;
+		maintainers = [ stdenv.lib.maintainers.vbgl ];
+		inherit (src.meta) homepage;
+		inherit (ocaml.meta) platforms;
+	};
 }

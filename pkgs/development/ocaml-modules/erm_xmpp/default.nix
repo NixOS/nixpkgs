@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchzip, ocaml, findlib, erm_xml, cryptokit, camlp4 }:
+{ stdenv, fetchurl, fetchzip, ocaml, findlib, ocamlbuild, erm_xml, cryptokit, camlp4 }:
 
 let
   version = "0.2";
@@ -18,7 +18,7 @@ stdenv.mkDerivation {
 
   patches = [ disable-tests ];
 
-  buildInputs = [ ocaml findlib camlp4 ];
+  buildInputs = [ ocaml findlib ocamlbuild camlp4 ];
   propagatedBuildInputs = [ erm_xml cryptokit ];
 
   createFindlibDestdir = true;

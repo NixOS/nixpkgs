@@ -64,28 +64,39 @@ in
 
   config = {
     # Note: this is set here rather than up there so that changing
-    # nixosLabel would not rebuild manual pages
-    services.mingetty.greetingLine = mkDefault ''<<< Welcome to NixOS ${config.system.nixosLabel} (\m) - \l >>>'';
+    # nixos.label would not rebuild manual pages
+    services.mingetty.greetingLine = mkDefault ''<<< Welcome to NixOS ${config.system.nixos.label} (\m) - \l >>>'';
 
     systemd.services."getty@" =
-      { serviceConfig.ExecStart = gettyCmd "--noclear --keep-baud %I 115200,38400,9600 $TERM";
+      { serviceConfig.ExecStart = [
+          "" # override upstream default with an empty ExecStart
+          (gettyCmd "--noclear --keep-baud %I 115200,38400,9600 $TERM")
+        ];
         restartIfChanged = false;
       };
 
     systemd.services."serial-getty@" =
-      { serviceConfig.ExecStart =
-          let speeds = concatStringsSep "," (map toString config.services.mingetty.serialSpeed);
-          in gettyCmd "%I ${speeds} $TERM";
+      let speeds = concatStringsSep "," (map toString config.services.mingetty.serialSpeed); in
+      { serviceConfig.ExecStart = [
+          "" # override upstream default with an empty ExecStart
+          (gettyCmd "%I ${speeds} $TERM")
+        ];
         restartIfChanged = false;
       };
 
     systemd.services."container-getty@" =
-      { serviceConfig.ExecStart = gettyCmd "--noclear --keep-baud pts/%I 115200,38400,9600 $TERM";
+      { serviceConfig.ExecStart = [
+          "" # override upstream default with an empty ExecStart
+          (gettyCmd "--noclear --keep-baud pts/%I 115200,38400,9600 $TERM")
+        ];
         restartIfChanged = false;
       };
 
     systemd.services."console-getty" =
-      { serviceConfig.ExecStart = gettyCmd "--noclear --keep-baud console 115200,38400,9600 $TERM";
+      { serviceConfig.ExecStart = [
+          "" # override upstream default with an empty ExecStart
+          (gettyCmd "--noclear --keep-baud console 115200,38400,9600 $TERM")
+        ];
         serviceConfig.Restart = "always";
         restartIfChanged = false;
         enable = mkDefault config.boot.isContainer;

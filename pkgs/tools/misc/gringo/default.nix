@@ -1,5 +1,6 @@
 { stdenv, fetchurl,
-  bison, re2c, scons
+  bison, re2c, scons,
+  libcxx
 }:
 
 let
@@ -18,10 +19,28 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./gringo-4.5.4-cmath.patch
+    ./gringo-4.5.4-to_string.patch
   ];
 
+  patchPhase = stdenv.lib.optionalString stdenv.isDarwin ''
+    substituteInPlace ./SConstruct \
+      --replace \
+        "env['CXX']            = 'g++'" \
+        "env['CXX']            = '$CXX'"
+
+    substituteInPlace ./SConstruct \
+      --replace \
+        "env['CPPPATH']        = []" \
+        "env['CPPPATH']        = ['${libcxx}/include/c++/v1']"
+
+    substituteInPlace ./SConstruct \
+      --replace \
+        "env['LIBPATH']        = []" \
+        "env['LIBPATH']        = ['${libcxx}/lib']"
+  '';
+
   buildPhase = ''
-    scons --build-dir=release
+    scons WITH_PYTHON= --build-dir=release
   '';
 
   installPhase = ''
@@ -32,7 +51,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     description = "Converts input programs with first-order variables to equivalent ground programs";
     homepage = http://potassco.sourceforge.net/;
-    platforms = platforms.linux;
+    platforms = platforms.all;
     maintainers = [ maintainers.hakuch ];
     license = licenses.gpl3Plus;
   };

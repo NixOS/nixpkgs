@@ -1,18 +1,25 @@
-{ stdenv, lib, buildGoPackage, fetchgit, fetchhg, fetchbzr, fetchsvn }:
+{ stdenv, lib, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
   name = "drive-${version}";
-  version = "20151025-${stdenv.lib.strings.substring 0 7 rev}";
-  rev = "6dc2f1e83032ea3911fa6147b846ee93f18dc544";
+  version = "0.3.8.1";
 
   goPackagePath = "github.com/odeke-em/drive";
   subPackages = [ "cmd/drive" ];
 
-  src = fetchgit {
-    inherit rev;
-    url = "https://github.com/odeke-em/drive";
-    sha256 = "07s4nhfcr6vznf1amvl3a4wq2hn9zq871rcppfi4i6zs7iw2ay1v";
+  src = fetchFromGitHub {
+    owner = "odeke-em";
+    repo = "drive";
+    rev = "v${version}";
+    sha256 = "1b9cgc148rg5irg4jas10zv9i2km75x1zin25hld340dmpjcpi82";
   };
 
   goDeps = ./deps.nix;
+
+  meta = with lib; {
+    homepage = https://github.com/odeke-em/drive;
+    description = "Google Drive client for the commandline";
+    license = licenses.asl20;
+    platforms = platforms.linux;
+  };
 }

@@ -1,19 +1,25 @@
-{ stdenv, fetchFromGitHub, python3, libftdi }:
+{ stdenv, fetchFromGitHub, python3, libftdi, pkgconfig }:
 
 stdenv.mkDerivation rec {
   name = "icestorm-${version}";
-  version = "2016.08.18";
+  version = "2018.05.03";
 
   src = fetchFromGitHub {
-    owner = "cliffordwolf";
-    repo = "icestorm";
-    rev = "12b2295c9087d94b75e374bb205ae4d76cf17e2f";
-    sha256 = "1mmzlqvap6w8n4qzv3idvy51arkgn03692ssplwncy3akjrbsd2b";
+    owner  = "cliffordwolf";
+    repo   = "icestorm";
+    rev    = "237280ce44f72c7b2e1ca671d5113dba34cc4fca";
+    sha256 = "0r9xh024snaf1g2r5k524yl6lvf5rkfhqwjzcixh1m12012i5hrh";
   };
 
+  nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ python3 libftdi ];
-  preBuild = ''
-    makeFlags="PREFIX=$out $makeFlags"
+  makeFlags = [ "PREFIX=$(out)" ];
+
+  # fix icebox_vlog chipdb path. icestorm issue:
+  #   https://github.com/cliffordwolf/icestorm/issues/125
+  patchPhase = ''
+    substituteInPlace ./icebox/icebox_vlog.py \
+      --replace /usr/local/share "$out/share"
   '';
 
   meta = {
@@ -26,7 +32,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = http://www.clifford.at/icestorm/;
     license = stdenv.lib.licenses.isc;
-    maintainers = [ stdenv.lib.maintainers.shell ];
+    maintainers = with stdenv.lib.maintainers; [ shell thoughtpolice ];
     platforms = stdenv.lib.platforms.linux;
   };
 }

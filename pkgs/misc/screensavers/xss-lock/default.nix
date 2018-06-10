@@ -10,12 +10,9 @@ stdenv.mkDerivation {
     sha256 = "10hx7k7ga8g08akwz8qrsvj8iqr5nd4siiva6sjx789jvf0sak7r";
   };
 
-  buildInputs = [ cmake pkgconfig docutils glib libpthreadstubs libXau
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ cmake docutils glib libpthreadstubs libXau
                   libXdmcp xcbutil ];
-
-  cmakeFlags = [
-    "-DCMAKE_BUILD_TYPE=Release"
-  ];
 
   meta = with stdenv.lib; {
     description = "Use external locker (such as i3lock) as X screen saver";

@@ -2,14 +2,15 @@
 
 stdenv.mkDerivation rec {
     name = "hex-registry";
-    rev = "d58a937";
+    rev = "9f736e7";
     version = "0.0.0+build.${rev}";
 
+    # src = /home/gleber/code/erl/hex-pm-registry-snapshots;
     src = fetchFromGitHub {
         owner = "erlang-nix";
         repo = "hex-pm-registry-snapshots";
         inherit rev;
-        sha256 = "11ymmn75qjlhzf7aaza708gq0hqg55dzd3q13npgq43wg90rgpxy";
+        sha256 = "1xiw5yifyk3bbmr0cr82y1nc4c6zk11f6azdv07glb7yrgccrv79";
     };
 
     installPhase = ''

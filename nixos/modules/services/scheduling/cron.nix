@@ -20,7 +20,7 @@ let
   cronNixosPkg = pkgs.cron.override {
     # The mail.nix nixos module, if there is any local mail system enabled,
     # should have sendmail in this path.
-    sendmailPath = "/var/setuid-wrappers/sendmail";
+    sendmailPath = "/run/wrappers/bin/sendmail";
   };
 
   allFiles =
@@ -39,7 +39,7 @@ in
 
       enable = mkOption {
         type = types.bool;
-        example = true;
+        default = false;
         description = "Whether to enable the Vixie cron daemon.";
       };
 
@@ -61,7 +61,7 @@ in
           A list of Cron jobs to be appended to the system-wide
           crontab.  See the manual page for crontab for the expected
           format. If you want to get the results mailed you must setuid
-          sendmail. See <option>security.setuidOwners</option>
+          sendmail. See <option>security.wrappers</option>
 
           If neither /var/cron/cron.deny nor /var/cron/cron.allow exist only root
           will is allowed to have its own crontab file. The /var/cron/cron.deny file
@@ -92,13 +92,9 @@ in
   config = mkMerge [
 
     { services.cron.enable = mkDefault (allFiles != []); }
-
     (mkIf (config.services.cron.enable) {
-
-      security.setuidPrograms = [ "crontab" ];
-
+      security.wrappers.crontab.source = "${cronNixosPkg}/bin/crontab";
       environment.systemPackages = [ cronNixosPkg ];
-
       environment.etc.crontab =
         { source = pkgs.runCommand "crontabs" { inherit allFiles; preferLocalBuild = true; }
             ''
@@ -126,7 +122,7 @@ in
               fi
             '';
 
-          restartTriggers = [ config.environment.etc.localtime.source ];
+          restartTriggers = [ config.time.timeZone ];
           serviceConfig.ExecStart = "${cronNixosPkg}/bin/cron -n";
         };
 

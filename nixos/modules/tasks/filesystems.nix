@@ -5,6 +5,11 @@ with utils;
 
 let
 
+  addCheckDesc = desc: elemType: check: types.addCheck elemType check
+    // { description = "${elemType.description} (with check: ${desc})"; };
+  nonEmptyStr = addCheckDesc "non-empty" types.str
+    (x: x != "" && ! (all (c: c == " " || c == "\t") (stringToCharacters x)));
+
   fileSystems' = toposort fsBefore (attrValues config.fileSystems);
 
   fileSystems = if fileSystems' ? "result"
@@ -18,7 +23,7 @@ let
 
   prioOption = prio: optionalString (prio != null) " pri=${toString prio}";
 
-  specialFSTypes = [ "proc" "sysfs" "tmpfs" "devtmpfs" "devpts" ];
+  specialFSTypes = [ "proc" "sysfs" "tmpfs" "ramfs" "devtmpfs" "devpts" ];
 
   coreFileSystemOpts = { name, config, ... }: {
 
@@ -26,21 +31,21 @@ let
 
       mountPoint = mkOption {
         example = "/mnt/usb";
-        type = types.str;
+        type = nonEmptyStr;
         description = "Location of the mounted the file system.";
       };
 
       device = mkOption {
         default = null;
         example = "/dev/sda";
-        type = types.nullOr types.str;
+        type = types.nullOr nonEmptyStr;
         description = "Location of the device.";
       };
 
       fsType = mkOption {
         default = "auto";
         example = "ext3";
-        type = types.str;
+        type = nonEmptyStr;
         description = "Type of the file system.";
       };
 
@@ -48,7 +53,7 @@ let
         default = [ "defaults" ];
         example = [ "data=journal" ];
         description = "Options used to mount the file system.";
-        type = types.listOf types.str;
+        type = types.listOf nonEmptyStr;
       };
 
     };
@@ -67,7 +72,7 @@ let
       label = mkOption {
         default = null;
         example = "root-partition";
-        type = types.nullOr types.str;
+        type = types.nullOr nonEmptyStr;
         description = "Label of the device (if any).";
       };
 
@@ -110,11 +115,18 @@ let
 
     };
 
-    config = {
+    config = let
+      defaultFormatOptions =
+        # -F needed to allow bare block device without partitions
+        if (builtins.substring 0 3 config.fsType) == "ext" then "-F"
+        # -q needed for non-interactive operations
+        else if config.fsType == "jfs" then "-q"
+        # (same here)
+        else if config.fsType == "reiserfs" then "-q"
+        else null;
+    in {
       options = mkIf config.autoResize [ "x-nixos.autoresize" ];
-
-      # -F needed to allow bare block device without partitions
-      formatOptions = mkIf ((builtins.substring 0 3 config.fsType) == "ext") (mkDefault "-F");
+      formatOptions = mkIf (defaultFormatOptions != null) (mkDefault defaultFormatOptions);
     };
 
   };
@@ -212,11 +224,11 @@ in
     # Add the mount helpers to the system path so that `mount' can find them.
     system.fsPackages = [ pkgs.dosfstools ];
 
-    environment.systemPackages = [ pkgs.fuse ] ++ config.system.fsPackages;
+    environment.systemPackages = with pkgs; [ fuse3 fuse ] ++ config.system.fsPackages;
 
     environment.etc.fstab.text =
       let
-        fsToSkipCheck = [ "none" "btrfs" "zfs" "tmpfs" "nfs" "vboxsf" ];
+        fsToSkipCheck = [ "none" "bindfs" "btrfs" "zfs" "tmpfs" "nfs" "vboxsf" "glusterfs" ];
         skipCheck = fs: fs.noCheck || fs.device == "none" || builtins.elem fs.fsType fsToSkipCheck;
       in ''
         # This is a generated file.  Do not edit!
@@ -258,7 +270,7 @@ in
           let
             mountPoint' = "${escapeSystemdPath fs.mountPoint}.mount";
             device'  = escapeSystemdPath fs.device;
-            device'' = "${device}.device";
+            device'' = "${device'}.device";
           in nameValuePair "mkfs-${device'}"
           { description = "Initialisation of Filesystem ${fs.device}";
             wantedBy = [ mountPoint' ];
@@ -286,10 +298,13 @@ in
     # Sync mount options with systemd's src/core/mount-setup.c: mount_table.
     boot.specialFileSystems = {
       "/proc" = { fsType = "proc"; options = [ "nosuid" "noexec" "nodev" ]; };
-      "/run" = { fsType = "tmpfs"; options = [ "nodev" "strictatime" "mode=755" "size=${config.boot.runSize}" ]; };
+      "/run" = { fsType = "tmpfs"; options = [ "nosuid" "nodev" "strictatime" "mode=755" "size=${config.boot.runSize}" ]; };
       "/dev" = { fsType = "devtmpfs"; options = [ "nosuid" "strictatime" "mode=755" "size=${config.boot.devSize}" ]; };
       "/dev/shm" = { fsType = "tmpfs"; options = [ "nosuid" "nodev" "strictatime" "mode=1777" "size=${config.boot.devShmSize}" ]; };
-      "/dev/pts" = { fsType = "devpts"; options = [ "nosuid" "noexec" "mode=620" "gid=${toString config.ids.gids.tty}" ]; };
+      "/dev/pts" = { fsType = "devpts"; options = [ "nosuid" "noexec" "mode=620" "ptmxmode=0666" "gid=${toString config.ids.gids.tty}" ]; };
+
+      # To hold secrets that shouldn't be written to disk (generally used for NixOps, harmless elsewhere)
+      "/run/keys" = { fsType = "ramfs"; options = [ "nosuid" "nodev" "mode=750" "gid=${toString config.ids.gids.keys}" ]; };
     } // optionalAttrs (!config.boot.isContainer) {
       # systemd-nspawn populates /sys by itself, and remounting it causes all
       # kinds of weird issues (most noticeably, waiting for host disk device

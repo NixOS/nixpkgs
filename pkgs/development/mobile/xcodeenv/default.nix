@@ -1,4 +1,4 @@
-{stdenv, version ? "7.2", xcodeBaseDir ? "/Applications/Xcode.app"}:
+{stdenv, version ? "9.2", xcodeBaseDir ? "/Applications/Xcode.app"}:
 
 rec {
   xcodewrapper = import ./xcodewrapper.nix {

@@ -1,24 +1,24 @@
-{ stdenv, fetchFromGitHub, makeWrapper, autoconf, automake, libtool }:
+{ stdenv, fetchFromGitHub, autoreconfHook, libtool }:
 
 stdenv.mkDerivation rec{
-  version="1.26";
+  version="1.27";
   name = "mxt-app-${version}";
 
   src = fetchFromGitHub {
     owner = "atmel-maxtouch";
     repo = "mxt-app";
     rev = "v${version}";
-    sha256 = "07afdgh8pnhgh2372cf5pqy6p7l6w3ing2hwnvz6db8wxw59n48h";
+    sha256 = "0m1qxsdkwgajyd0sdw909l4w31csa26nw0xzr9ldddnvzb1va05h";
   };
 
-  buildInputs = [ autoconf automake libtool ];
-  preConfigure = "./autogen.sh";
-
+  nativeBuildInputs = [ autoreconfHook ];
+  buildInputs = [ libtool ];
+ 
   hardeningDisable = [ "fortify" ];
 
   meta = with stdenv.lib; {
     description = "Command line utility for Atmel maXTouch devices";
-    homepage = http://github.com/atmel-maxtouch/mxt-app;
+    homepage = https://github.com/atmel-maxtouch/mxt-app;
     license = licenses.bsd2;
     maintainers = [ maintainers.colemickens ];
     platforms = platforms.unix;

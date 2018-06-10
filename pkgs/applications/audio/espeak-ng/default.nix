@@ -5,13 +5,13 @@
 
 stdenv.mkDerivation rec {
   name = "espeak-ng-${version}";
-  version = "2016-08-28";
+  version = "1.49.2";
 
   src = fetchFromGitHub {
     owner = "espeak-ng";
     repo = "espeak-ng";
-    rev = "b784e77c5708b61feed780d8f1113c4c8eb92200";
-    sha256 = "1whix4mv0qvsvifgpwwbdzhv621as3rxpn9ijqc2683h6k8pvcfk";
+    rev = version;
+    sha256 = "17bbl3zi8214iaaj8kjnancjvmvizwybg3sg17qjq4mf5c6xfg2c";
   };
 
   nativeBuildInputs = [ autoconf automake which libtool pkgconfig ronn ];
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Open source speech synthesizer that supports over 70 languages, based on eSpeak";
-    homepage = "https://github.com/espeak-ng/espeak-ng";
+    homepage = https://github.com/espeak-ng/espeak-ng;
     license = licenses.gpl3;
     maintainers = with maintainers; [ aske ];
     platforms = platforms.linux;

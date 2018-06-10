@@ -1,13 +1,13 @@
-{ stdenv, fetchurl, gyp, utillinux, python, fixDarwinDylibNames }:
+{ stdenv, fetchurl, python2Packages, utillinux, fixDarwinDylibNames }:
 
 let
-  version = "2.7.0";
+  version = "2.8.1";
 in stdenv.mkDerivation {
   name = "http-parser-${version}";
 
   src = fetchurl {
     url = "https://github.com/joyent/http-parser/archive/v${version}.tar.gz";
-    sha256 = "0rqij6v6wv1giwx4prfa082kw1nka5d9vlb06zkc8mwszq1vzidh";
+    sha256 = "15ids8k2f0xhnnxh4m85w2f78pg5ndiwrpl24kyssznnp1l5yqai";
   };
 
   patches = [ ./build-shared.patch ];
@@ -17,9 +17,9 @@ in stdenv.mkDerivation {
   buildFlags = [ "BUILDTYPE=Release" ];
 
   buildInputs =
-    [ gyp ]
+    [ python2Packages.gyp ]
     ++ stdenv.lib.optional stdenv.isLinux utillinux
-    ++ stdenv.lib.optionals stdenv.isDarwin [ python fixDarwinDylibNames ];
+    ++ stdenv.lib.optionals stdenv.isDarwin [ python2Packages.python fixDarwinDylibNames ];
 
   doCheck = !stdenv.isDarwin;
 
@@ -42,6 +42,6 @@ in stdenv.mkDerivation {
     homepage = https://github.com/joyent/http-parser;
 
     license = stdenv.lib.licenses.mit;
-    platforms = stdenv.lib.platforms.linux; # Broken on pure-darwin, wants xcode
+    platforms = stdenv.lib.platforms.unix;
   };
 }

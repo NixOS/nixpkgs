@@ -1,4 +1,4 @@
-{stdenv, fetchurl}:
+{ stdenv, fetchurl }:
 
 stdenv.mkDerivation {
   name = "replace-2.24";
@@ -8,11 +8,9 @@ stdenv.mkDerivation {
     sha256 = "1c2nkxx83vmlh1v3ib6r2xqh121gdb1rharwsimcb2h0xwc558dm";
   };
 
-  makeFlags = "TREE=\$(out) MANTREE=\$(TREE)/share/man";
+  outputs = [ "out" "man" ];
 
-  crossAttrs = {
-    makeFlags = "TREE=\$(out) MANTREE=\$(TREE)/share/man CC=${stdenv.cross.config}-gcc";
-  };
+  makeFlags = "TREE=\$(out) MANTREE=\$(TREE)/share/man";
 
   preBuild = ''
     sed -e "s@/bin/mv@$(type -P mv)@" -i replace.h
@@ -24,7 +22,7 @@ stdenv.mkDerivation {
   patches = [./malloc.patch];
 
   meta = {
-    homepage = http://replace.richardlloyd.org.uk/;
+    homepage = https://replace.richardlloyd.org.uk/;
     description = "A tool to replace verbatim strings";
     platforms = stdenv.lib.platforms.unix;
   };

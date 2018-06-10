@@ -28,7 +28,6 @@ buildPythonApplication rec {
     }' blivet/formats/__init__.py
     sed -i -e 's|"lsof"|"${lsof}/bin/lsof"|' blivet/formats/fs.py
     sed -i -r -e 's|"(u?mount)"|"${utillinux.bin}/bin/\1"|' blivet/util.py
-    sed -i '/pvscan/s/, *"--cache"//' blivet/devicelibs/lvm.py
   '' + stdenv.lib.optionalString useNixUdev ''
     sed -i -e '/find_library/,/find_library/ {
       c libudev = "${systemd.lib}/lib/libudev.so.1"
@@ -43,7 +42,7 @@ buildPythonApplication rec {
   doCheck = false;
 
   meta = with stdenv.lib; {
-    homepage = "https://fedoraproject.org/wiki/Blivet";
+    homepage = https://fedoraproject.org/wiki/Blivet;
     description = "Module for management of a system's storage configuration";
     license = with licenses; [ gpl2Plus lgpl21Plus ];
     platforms = platforms.linux;

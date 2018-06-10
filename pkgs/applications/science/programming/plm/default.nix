@@ -28,9 +28,9 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Free cross-platform programming exerciser";
-    Homepage = http://webloria.loria.fr/~quinson/Teaching/PLM/;
+    homepage = http://webloria.loria.fr/~quinson/Teaching/PLM/;
     license = licenses.gpl3;
-    maintainers = [ maintainers.DamienCassou ];
+    maintainers = [ ];
     platforms = stdenv.lib.platforms.all;
   };
 }

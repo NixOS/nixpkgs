@@ -48,7 +48,7 @@ let cfg = config.system.autoUpgrade; in
         description = ''
           Specification (in the format described by
           <citerefentry><refentrytitle>systemd.time</refentrytitle>
-          <manvolnum>5</manvolnum></citerefentry>) of the time at
+          <manvolnum>7</manvolnum></citerefentry>) of the time at
           which the update will occur.
         '';
       };
@@ -76,7 +76,7 @@ let cfg = config.system.autoUpgrade; in
       environment = config.nix.envVars //
         { inherit (config.environment.sessionVariables) NIX_PATH;
           HOME = "/root";
-        };
+        } // config.networking.proxy.envVars;
 
       path = [ pkgs.gnutar pkgs.xz.bin config.nix.package.out ];
 
@@ -84,7 +84,7 @@ let cfg = config.system.autoUpgrade; in
         ${config.system.build.nixos-rebuild}/bin/nixos-rebuild switch ${toString cfg.flags}
       '';
 
-      startAt = optionalString cfg.enable cfg.dates;
+      startAt = optional cfg.enable cfg.dates;
     };
 
   };

@@ -1,33 +1,37 @@
-{ stdenv, fetchurl, pythonPackages, intltool, libxml2Python, curl
-, wrapGAppsHook, virtinst, gnome_python, gtkvnc, vte
-, gtk3, gobjectIntrospection, libvirt-glib, gsettings_desktop_schemas, glib
-, avahi, dconf, spiceSupport ? true, spice_gtk, libosinfo, gnome3, system-libvirt
+{ stdenv, fetchurl, python2Packages, intltool, file
+, wrapGAppsHook, gtkvnc, vte, avahi, dconf
+, gobjectIntrospection, libvirt-glib, system-libvirt
+, gsettings-desktop-schemas, glib, libosinfo, gnome3, gtk3
+, spiceSupport ? true, spice-gtk ? null
+, cpio, e2fsprogs, findutils, gzip
 }:
 
 with stdenv.lib;
-with pythonPackages;
 
-buildPythonApplication rec {
+python2Packages.buildPythonApplication rec {
   name = "virt-manager-${version}";
-  version = "1.4.0";
+  version = "1.5.1";
   namePrefix = "";
 
   src = fetchurl {
     url = "http://virt-manager.org/download/sources/virt-manager/${name}.tar.gz";
-    sha256 = "1jnawqjmcqd2db78ngx05x7cxxn3iy1sb4qfgbwcn045qh6a8cdz";
+    sha256 = "1ardmd4sxdmd57y7qpka44gf09c1yq2g0xs074d3k1h925crv27f";
   };
 
-  propagatedBuildInputs =
-    [ eventlet greenlet gflags netaddr carrot routes
-      PasteDeploy m2crypto ipy twisted
-      distutils_extra simplejson readline glanceclient cheetah lockfile httplib2
-      urlgrabber virtinst pyGtkGlade dbus-python gnome_python pygobject3
-      libvirt libxml2Python ipaddr vte libosinfo gobjectIntrospection gtk3 mox
-      gtkvnc libvirt-glib glib gsettings_desktop_schemas gnome3.defaultIconTheme
-      wrapGAppsHook
-    ] ++ optional spiceSupport spice_gtk;
+  nativeBuildInputs = [
+    wrapGAppsHook intltool file
+    gobjectIntrospection # for setup hook populating GI_TYPELIB_PATH
+  ];
 
-  buildInputs = [ dconf avahi intltool ];
+  buildInputs =
+    [ libvirt-glib vte dconf gtkvnc gnome3.defaultIconTheme avahi
+      gsettings-desktop-schemas libosinfo gtk3
+    ] ++ optional spiceSupport spice-gtk;
+
+  propagatedBuildInputs = with python2Packages;
+    [
+      pygobject3 ipaddr libvirt libxml2 requests
+    ];
 
   patchPhase = ''
     sed -i 's|/usr/share/libvirt/cpu_map.xml|${system-libvirt}/share/libvirt/cpu_map.xml|g' virtinst/capabilities.py
@@ -35,11 +39,17 @@ buildPythonApplication rec {
   '';
 
   postConfigure = ''
-    ${python.interpreter} setup.py configure --prefix=$out
+    ${python2Packages.python.interpreter} setup.py configure --prefix=$out
   '';
 
   postInstall = ''
     ${glib.dev}/bin/glib-compile-schemas "$out"/share/glib-2.0/schemas
+  '';
+
+  preFixup = ''
+    gappsWrapperArgs+=(--set PYTHONPATH "$PYTHONPATH")
+    # these are called from virt-install in initrdinject.py
+    gappsWrapperArgs+=(--prefix PATH : "${makeBinPath [ cpio e2fsprogs file findutils gzip ]}")
   '';
 
   # Failed tests
@@ -54,6 +64,8 @@ buildPythonApplication rec {
       manages Xen and LXC (linux containers).
     '';
     license = licenses.gpl2;
-    maintainers = with maintainers; [qknight offline];
+    # exclude Darwin since libvirt-glib currently doesn't build there
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ qknight offline fpletz ];
   };
 }

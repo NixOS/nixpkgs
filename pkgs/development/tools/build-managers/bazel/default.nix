@@ -1,35 +1,100 @@
-{ stdenv, fetchFromGitHub, jdk, zip, zlib, protobuf3_0, pkgconfig, libarchive, unzip, which, makeWrapper }:
+{ stdenv, lib, fetchurl, jdk, zip, unzip, bash, writeScriptBin, coreutils, makeWrapper, which, python
+# Always assume all markers valid (don't redownload dependencies).
+# Also, don't clean up environment variables.
+, enableNixHacks ? false
+}:
+
 stdenv.mkDerivation rec {
-  version = "0.3.1";
+
+  version = "0.12.0";
+
+  meta = with stdenv.lib; {
+    homepage = "https://github.com/bazelbuild/bazel/";
+    description = "Build tool that builds code quickly and reliably";
+    license = licenses.asl20;
+    maintainers = [ maintainers.philandstuff ];
+    platforms = platforms.linux;
+  };
+
   name = "bazel-${version}";
 
-  src = fetchFromGitHub {
-    owner = "google";
-    repo = "bazel";
-    rev = version;
-    sha256 = "1cm8zjxf8y3ai6h9wndxvflfsijjqhg87fll9ar7ff0hbbbdf6l5";
+  src = fetchurl {
+    url = "https://github.com/bazelbuild/bazel/releases/download/${version}/bazel-${version}-dist.zip";
+    sha256 = "3b3e7dc76d145046fdc78db7cac9a82bc8939d3b291e53a7ce85315feb827754";
   };
 
-  buildInputs = [ pkgconfig protobuf3_0 zlib zip libarchive unzip which makeWrapper jdk ];
+  sourceRoot = ".";
+
+  patches = lib.optional enableNixHacks ./nix-hacks.patch;
+
+  # Bazel expects several utils to be available in Bash even without PATH. Hence this hack.
+
+  customBash = writeScriptBin "bash" ''
+    #!${stdenv.shell}
+    PATH="$PATH:${lib.makeBinPath [ coreutils ]}" exec ${bash}/bin/bash "$@"
+  '';
+
+  postPatch = ''
+    find src/main/java/com/google/devtools -type f -print0 | while IFS="" read -r -d "" path; do
+      substituteInPlace "$path" \
+        --replace /bin/bash ${customBash}/bin/bash \
+        --replace /usr/bin/env ${coreutils}/bin/env
+    done
+    patchShebangs .
+  '';
+
+  buildInputs = [
+    jdk
+  ];
+
+  nativeBuildInputs = [
+    zip
+    python
+    unzip
+    makeWrapper
+    which
+    customBash
+  ];
+
+  # If TMPDIR is in the unpack dir we run afoul of blaze's infinite symlink
+  # detector (see com.google.devtools.build.lib.skyframe.FileFunction).
+  # Change this to $(mktemp -d) as soon as we figure out why.
 
   buildPhase = ''
-    export LD_LIBRARY_PATH="${stdenv.lib.makeLibraryPath [ stdenv.cc.cc.lib ]}"
-
-    bash compile.sh
+    export TMPDIR=/tmp
+    ./compile.sh
+    ./output/bazel --output_user_root=/tmp/.bazel build //scripts:bash_completion \
+      --spawn_strategy=standalone \
+      --genrule_strategy=standalone
+    cp bazel-bin/scripts/bazel-complete.bash output/
   '';
 
+  # Build the CPP and Java examples to verify that Bazel works.
+
+  doCheck = true;
+  checkPhase = ''
+    export TEST_TMPDIR=$(pwd)
+    ./output/bazel test --test_output=errors \
+        examples/cpp:hello-success_test \
+        examples/java-native/src/test/java/com/example/myproject:hello
+  '';
+
+  # Bazel expects gcc and java to be in the path.
   installPhase = ''
-    mkdir -p $out/bin $out/share
-    cp -R output $out/share/bazel
-    ln -s $out/share/bazel/bazel $out/bin/bazel
-    wrapProgram $out/bin/bazel --set JAVA_HOME "${jdk.home}"
+    mkdir -p $out/bin
+    mv output/bazel $out/bin
+    wrapProgram "$out/bin/bazel" --prefix PATH : "${lib.makeBinPath [ stdenv.cc jdk ]}"
+    mkdir -p $out/share/bash-completion/completions $out/share/zsh/site-functions
+    mv output/bazel-complete.bash $out/share/bash-completion/completions/
+    cp scripts/zsh_completion/_bazel $out/share/zsh/site-functions/
   '';
 
-  meta = {
-    homepage = http://github.com/google/bazel/;
-    description = "Build tool that builds code quickly and reliably";
-    license = stdenv.lib.licenses.asl20;
-    maintainers = [ stdenv.lib.maintainers.philandstuff ];
-    platforms = [ "x86_64-linux" ];
-  };
+  # Save paths to hardcoded dependencies so Nix can detect them.
+  postFixup = ''
+    mkdir -p $out/nix-support
+    echo "${customBash} ${coreutils}" > $out/nix-support/depends
+  '';
+
+  dontStrip = true;
+  dontPatchELF = true;
 }

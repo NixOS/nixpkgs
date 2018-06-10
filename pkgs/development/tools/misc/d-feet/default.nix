@@ -1,31 +1,30 @@
 { stdenv, pkgconfig, fetchurl, itstool, intltool, libxml2, glib, gtk3
-, pep8, python, makeWrapper, gnome3, pygobject3, libwnck3 }:
+, python3Packages, wrapGAppsHook, gnome3, libwnck3, gobjectIntrospection }:
 
 let
-  version = "${major}.11";
-  major = "0.3";
-in
-
-stdenv.mkDerivation rec {
-  name = "d-feet-${version}";
+  pname = "d-feet";
+  version = "0.3.13";
+in python3Packages.buildPythonApplication rec {
+  name = "${pname}-${version}";
+  format = "other";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/d-feet/${major}/d-feet-${version}.tar.xz";
-    sha256 = "a3dc940c66f84b996c328531e3034d475ec690d7ff639445ff7ca746aa8cb9c2";
+    url = "mirror://gnome/sources/d-feet/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
+    sha256 = "1md3lzs55sg04ds69dbginpxqvgg3qnf1lfx3vmsxph6bbd2y6ll";
   };
 
-  buildInputs = [
-    pkgconfig libxml2 itstool intltool glib gtk3 pep8 python
-    gnome3.defaultIconTheme makeWrapper pygobject3 libwnck3
-  ];
+  nativeBuildInputs = [ pkgconfig itstool intltool wrapGAppsHook libxml2 ];
+  buildInputs = [ glib gtk3 gnome3.defaultIconTheme libwnck3 gobjectIntrospection ];
 
-  preFixup =
-    ''
-      wrapProgram $out/bin/d-feet \
-        --prefix PYTHONPATH : "$(toPythonPath $out):$(toPythonPath ${pygobject3})" \
-        --prefix GI_TYPELIB_PATH : "$GI_TYPELIB_PATH" \
-        --prefix XDG_DATA_DIRS : "$XDG_ICON_DIRS:$out/share"
-    '';
+  propagatedBuildInputs = with python3Packages; [ pygobject3 pep8 ];
+
+  passthru = {
+    updateScript = gnome3.updateScript {
+      packageName = pname;
+      attrPath = "dfeet";
+      versionPolicy = "none";
+    };
+  };
 
   meta = {
     description = "D-Feet is an easy to use D-Bus debugger";
@@ -35,7 +34,7 @@ stdenv.mkDerivation rec {
       and invoke methods on those interfaces.
     '';
 
-    homepage = https://wiki.gnome.org/action/show/Apps/DFeet;
+    homepage = https://wiki.gnome.org/Apps/DFeet;
     platforms = stdenv.lib.platforms.all;
     license = stdenv.lib.licenses.gpl2;
     maintainers = with stdenv.lib.maintainers; [ ktosiek ];

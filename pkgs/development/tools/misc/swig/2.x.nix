@@ -14,6 +14,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ autoconf automake libtool bison ];
   buildInputs = [ pcre ];
 
+  configureFlags = "--without-tcl";
+
   postPatch = ''
     # Disable ccache documentation as it need yodl
     sed -i '/man1/d' CCache/Makefile.in
@@ -43,6 +45,6 @@ stdenv.mkDerivation rec {
 
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
 
-    maintainers = [ lib.maintainers.urkud ];
+    maintainers = [ ];
   };
 }

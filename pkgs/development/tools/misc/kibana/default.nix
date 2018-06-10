@@ -1,14 +1,27 @@
 { stdenv, makeWrapper, fetchurl, nodejs, coreutils, which }:
 
 with stdenv.lib;
-
-stdenv.mkDerivation rec {
+let
+  inherit (builtins) elemAt;
+  archOverrides = {
+    "i686" = "x86";
+  };
+  info = splitString "-" stdenv.system;
+  arch = (elemAt info 0);
+  elasticArch = archOverrides."${arch}" or arch;
+  plat = elemAt info 1;
+  shas = {
+    "x86_64-linux"  = "1wnnrhhpgc58s09p99cmi8r2jmwsd5lmh2inb0k8nmizz5v1sjz0";
+    "i686-linux"    = "0sdx59jlfrf7r9793xpn2vxaxjdczgn3qfw8yny03dcs6fjaxi2y";
+    "x86_64-darwin" = "0rmp536kn001g52lxngpj6x6d0j3qj0r11d4djbz7h6s5ml03kza";
+  };
+in stdenv.mkDerivation rec {
   name = "kibana-${version}";
-  version = "4.5.2";
+  version = "4.6.5";
 
   src = fetchurl {
-    url = "http://download.elastic.co/kibana/kibana-snapshot/${name}-snapshot-linux-x86.tar.gz";
-    sha256 = "1na8xh525znxaqjhxfvpx0q3rj85cjb6l9zlzd44dl31a9l117y4";
+    url = "https://download.elastic.co/kibana/kibana/${name}-${plat}-${elasticArch}.tar.gz";
+    sha256 = shas."${stdenv.system}" or (throw "Unknown architecture");
   };
 
   buildInputs = [ makeWrapper ];

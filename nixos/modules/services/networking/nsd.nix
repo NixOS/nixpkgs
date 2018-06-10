@@ -11,6 +11,8 @@ let
 
   # build nsd with the options needed for the given config
   nsdPkg = pkgs.nsd.override {
+    configFile = "${configFile}/nsd.conf";
+
     bind8Stats = cfg.bind8Stats;
     ipv6 = cfg.ipv6;
     ratelimit = cfg.ratelimit.enable;
@@ -18,6 +20,7 @@ let
     zoneStats = length (collect (x: (x.zoneStats or null) != null) cfg.zones) > 0;
   };
 
+  mkZoneFileName = name: if name == "." then "root" else name;
 
   nsdEnv = pkgs.buildEnv {
     name = "nsd-env";
@@ -30,6 +33,7 @@ let
       cd $out/zones
 
       for zoneFile in *; do
+        echo "|- checking zone '$out/zones/$zoneFile'"
         ${nsdPkg}/sbin/nsd-checkzone "$zoneFile" "$zoneFile" || {
           if grep -q \\\\\\$ "$zoneFile"; then
             echo zone "$zoneFile" contains escaped dollar signes \\\$
@@ -47,8 +51,9 @@ let
   };
 
   writeZoneData = name: text: pkgs.writeTextFile {
-    inherit name text;
-    destination = "/zones/${name}";
+    name = "nsd-zone-${mkZoneFileName name}";
+    inherit text;
+    destination = "/zones/${mkZoneFileName name}";
   };
 
 
@@ -71,6 +76,7 @@ let
       # interfaces
     ${forEach "  ip-address: " cfg.interfaces}
 
+      ip-freebind:         ${yesOrNo  cfg.ipFreebind}
       hide-version:        ${yesOrNo  cfg.hideVersion}
       identity:            "${cfg.identity}"
       ip-transparent:      ${yesOrNo  cfg.ipTransparent}
@@ -84,7 +90,7 @@ let
       reuseport:           ${yesOrNo  cfg.reuseport}
       round-robin:         ${yesOrNo  cfg.roundRobin}
       server-count:        ${toString cfg.serverCount}
-      ${if cfg.statistics == null then "" else "statistics:          ${toString cfg.statistics}"}
+      ${maybeToString "statistics: " cfg.statistics}
       tcp-count:           ${toString cfg.tcpCount}
       tcp-query-count:     ${toString cfg.tcpQueryCount}
       tcp-timeout:         ${toString cfg.tcpTimeout}
@@ -117,7 +123,8 @@ let
   '';
 
   yesOrNo = b: if b then "yes" else "no";
-  maybeString = pre: s: if s == null then "" else ''${pre} "${s}"'';
+  maybeString = prefix: x: if x == null then "" else ''${prefix} "${x}"'';
+  maybeToString = prefix: x: if x == null then "" else ''${prefix} ${toString x}'';
   forEach = pre: l: concatMapStrings (x: pre + x + "\n") l;
 
 
@@ -141,10 +148,15 @@ let
   zoneConfigFile = name: zone: ''
     zone:
       name:         "${name}"
-      zonefile:     "${stateDir}/zones/${name}"
+      zonefile:     "${stateDir}/zones/${mkZoneFileName name}"
       ${maybeString "outgoing-interface: " zone.outgoingInterface}
     ${forEach     "  rrl-whitelist: "      zone.rrlWhitelist}
       ${maybeString "zonestats: "          zone.zoneStats}
+
+      ${maybeToString "max-refresh-time: " zone.maxRefreshSecs}
+      ${maybeToString "min-refresh-time: " zone.minRefreshSecs}
+      ${maybeToString "max-retry-time:   " zone.maxRetrySecs}
+      ${maybeToString "min-retry-time:   " zone.minRetrySecs}
 
       allow-axfr-fallback: ${yesOrNo       zone.allowAXFRFallback}
     ${forEach     "  allow-notify: "       zone.allowNotify}
@@ -240,6 +252,84 @@ let
           Use imports or pkgs.lib.readFile if you don't want this data in your config file.
         '';
       };
+      
+      dnssec = mkEnableOption "DNSSEC";
+
+      dnssecPolicy = {
+        algorithm = mkOption {
+          type = types.str;
+          default = "RSASHA256";
+          description = "Which algorithm to use for DNSSEC";
+        };
+        keyttl = mkOption {
+          type = types.str;
+          default = "1h";
+          description = "TTL for dnssec records";
+        };
+        coverage = mkOption {
+          type = types.str;
+          default = "1y";
+          description = ''
+            The length of time to ensure that keys will be correct; no action will be taken to create new keys to be activated after this time.
+          '';
+        };
+        zsk = mkOption {
+          type = keyPolicy;
+          default = { keySize = 2048;
+                      prePublish = "1w";
+                      postPublish = "1w";
+                      rollPeriod = "1mo";
+                    };
+          description = "Key policy for zone signing keys";
+        };
+        ksk = mkOption {
+          type = keyPolicy;
+          default = { keySize = 4096;
+                      prePublish = "1mo";
+                      postPublish = "1mo";
+                      rollPeriod = "0";
+                    };
+          description = "Key policy for key signing keys";
+        };
+      };
+
+      maxRefreshSecs = mkOption {
+        type = types.nullOr types.int;
+        default = null;
+        description = ''
+          Limit refresh time for secondary zones. This is the timer which
+          checks to see if the zone has to be refetched when it expires.
+          Normally the value from the SOA record is used, but this  option
+          restricts that value.
+        '';
+      };
+
+      minRefreshSecs = mkOption {
+        type = types.nullOr types.int;
+        default = null;
+        description = ''
+          Limit refresh time for secondary zones.
+        '';
+      };
+
+      maxRetrySecs = mkOption {
+        type = types.nullOr types.int;
+        default = null;
+        description = ''
+          Limit retry time for secondary zones. This is the timeout after
+          a failed fetch attempt for the zone. Normally the value from
+          the SOA record is used, but this option restricts that value.
+        '';
+      };
+
+      minRetrySecs = mkOption {
+        type = types.nullOr types.int;
+        default = null;
+        description = ''
+          Limit retry time for secondary zones.
+        '';
+      };
+
 
       notify = mkOption {
         type = types.listOf types.str;
@@ -300,12 +390,10 @@ let
       };
 
       rrlWhitelist = mkOption {
-        type = types.listOf types.str;
+        type = with types; listOf (enum [ "nxdomain" "error" "referral" "any" "rrsig" "wildcard" "nodata" "dnskey" "positive" "all" ]);
         default = [];
         description = ''
           Whitelists the given rrl-types.
-          The RRL classification types are:  nxdomain,  error, referral, any,
-          rrsig, wildcard, nodata, dnskey, positive, all
         '';
       };
 
@@ -321,10 +409,61 @@ let
           and stats_noreset.
         '';
       };
-
     };
   };
 
+  keyPolicy = types.submodule {
+    options = {
+      keySize = mkOption {
+        type = types.int;
+        description = "Key size in bits";
+      };
+      prePublish = mkOption {
+        type = types.str;
+        description = "How long in advance to publish new keys";
+      };
+      postPublish = mkOption {
+        type = types.str;
+        description = "How long after deactivation to keep a key in the zone";
+      };
+      rollPeriod = mkOption {
+        type = types.str;
+        description = "How frequently to change keys";
+      };
+    };
+  };
+
+  dnssecZones = (filterAttrs (n: v: if v ? dnssec then v.dnssec else false) zoneConfigs);
+
+  dnssec = length (attrNames dnssecZones) != 0; 
+
+  signZones = optionalString dnssec ''
+    mkdir -p ${stateDir}/dnssec
+    chown ${username}:${username} ${stateDir}/dnssec
+    chmod 0600 ${stateDir}/dnssec
+
+    ${concatStrings (mapAttrsToList signZone dnssecZones)}
+  '';
+  signZone = name: zone: ''
+    ${pkgs.bind}/bin/dnssec-keymgr -g ${pkgs.bind}/bin/dnssec-keygen -s ${pkgs.bind}/bin/dnssec-settime -K ${stateDir}/dnssec -c ${policyFile name zone.dnssecPolicy} ${name}
+    ${pkgs.bind}/bin/dnssec-signzone -S -K ${stateDir}/dnssec -o ${name} -O full -N date ${stateDir}/zones/${name}
+    ${nsdPkg}/sbin/nsd-checkzone ${name} ${stateDir}/zones/${name}.signed && mv -v ${stateDir}/zones/${name}.signed ${stateDir}/zones/${name}
+  '';
+  policyFile = name: policy: pkgs.writeText "${name}.policy" ''
+    zone ${name} {
+      algorithm ${policy.algorithm};
+      key-size zsk ${toString policy.zsk.keySize};
+      key-size ksk ${toString policy.ksk.keySize};
+      keyttl ${policy.keyttl};
+      pre-publish zsk ${policy.zsk.prePublish};
+      pre-publish ksk ${policy.ksk.prePublish};
+      post-publish zsk ${policy.zsk.postPublish};
+      post-publish ksk ${policy.ksk.postPublish};
+      roll-period zsk ${policy.zsk.rollPeriod};
+      roll-period ksk ${policy.ksk.rollPeriod};
+      coverage ${policy.coverage};
+    };
+  '';
 in
 {
   # options are ordered alphanumerically
@@ -333,6 +472,14 @@ in
     enable = mkEnableOption "NSD authoritative DNS server";
 
     bind8Stats = mkEnableOption "BIND8 like statistics";
+
+    dnssecInterval = mkOption {
+      type = types.str;
+      default = "1h";
+      description = ''
+        How often to check whether dnssec key rollover is required
+      '';
+    };
 
     extraConfig = mkOption {
       type = types.str;
@@ -363,6 +510,15 @@ in
       default = [ "127.0.0.0" "::1" ];
       description = ''
         What addresses the server should listen to.
+      '';
+    };
+
+    ipFreebind = mkOption {
+      type = types.bool;
+      default = false;
+      description = ''
+        Whether to bind to nonlocal addresses and interfaces that are down.
+        Similar to ip-transparent.
       '';
     };
 
@@ -686,7 +842,6 @@ in
 
     };
 
-
     zones = mkOption {
       type = types.attrsOf zoneOptions;
       default = {};
@@ -730,10 +885,17 @@ in
         serverGroup1.
       '';
     };
-
   };
 
   config = mkIf cfg.enable {
+
+    assertions = singleton {
+      assertion = zoneConfigs ? "." -> cfg.rootServer;
+      message = "You have a root zone configured. If this is really what you "
+              + "want, please enable 'services.nsd.rootServer'.";
+    };
+
+    environment.systemPackages = [ nsdPkg ];
 
     users.extraGroups = singleton {
       name = username;
@@ -758,6 +920,7 @@ in
 
       serviceConfig = {
         ExecStart = "${nsdPkg}/sbin/nsd -d -c ${nsdEnv}/nsd.conf";
+        StandardError = "null";
         PIDFile = pidFile;
         Restart = "always";
         RestartSec = "4s";
@@ -774,9 +937,9 @@ in
         mkdir -m 0700 -p "${stateDir}/var"
 
         cat > "${stateDir}/don't touch anything in here" << EOF
-        Everything in this directory except NSD's state in var is
-        automatically generated and will be purged and redeployed
-        by the nsd.service pre-start script.
+        Everything in this directory except NSD's state in var and dnssec
+        is automatically generated and will be purged and redeployed by
+        the nsd.service pre-start script.
         EOF
 
         chown ${username}:${username} -R "${stateDir}/private"
@@ -790,5 +953,35 @@ in
       '';
     };
 
+    nixpkgs.config = mkIf dnssec {
+      bind.enablePython = true;
+    };
+
+    systemd.timers."nsd-dnssec" = mkIf dnssec {
+      description = "Automatic DNSSEC key rollover";
+
+      wantedBy = [ "nsd.service" ];
+
+      timerConfig = {
+        OnActiveSec = cfg.dnssecInterval;
+        OnUnitActiveSec = cfg.dnssecInterval;
+      };
+    };
+
+    systemd.services."nsd-dnssec" = mkIf dnssec {
+      description = "DNSSEC key rollover";
+
+      wantedBy = [ "nsd.service" ];
+      before = [ "nsd.service" ];
+
+      script = signZones;
+
+      postStop = ''
+        ${pkgs.systemd}/bin/systemctl kill -s SIGHUP nsd.service
+      '';
+    };
+
   };
+
+  meta.maintainers = with lib.maintainers; [ hrdinka ];
 }

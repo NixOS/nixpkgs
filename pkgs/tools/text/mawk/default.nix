@@ -1,11 +1,14 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "mawk-1.3.4-20141206";
+  name = "mawk-1.3.4-20171017";
 
   src = fetchurl {
-    url = "ftp://invisible-island.net/mawk/${name}.tgz";
-    sha256 = "1j49ffl8gpfaq99hkylf3fjiygq74w1kpfp8f52xbpx57vn9587g";
+    urls = [
+      "ftp://ftp.invisible-island.net/mawk/${name}.tgz"
+      "https://invisible-mirror.net/archives/mawk/${name}.tgz"
+    ];
+    sha256 = "0nwyxhipn4jx7j695lih1xggxm6cp4fjk4wbgihd33ni3rfi25yv";
   };
 
   meta = with stdenv.lib; {

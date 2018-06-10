@@ -45,7 +45,9 @@
 
 let
   inherit (stdenv.lib) optional optionalString;
-  version = "3.10.2";
+  # Don't upgrade until https://github.com/math-atlas/math-atlas/issues/44
+  # is resolved.
+  version = "3.10.3";
 in
 
 stdenv.mkDerivation {
@@ -53,7 +55,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "mirror://sourceforge/math-atlas/atlas${version}.tar.bz2";
-    sha256 = "0bqh4bdnjdyww4mcpg6kn0x7338mfqbdgysn97dzrwwb26di7ars";
+    sha256 = "1dyjlq3fiparvm8ypwk6rsmjzmnwk81l88gkishphpvc79ryp216";
   };
 
   buildInputs = [ gfortran ];
@@ -100,11 +102,15 @@ stdenv.mkDerivation {
     fi
   '';
 
+  # 1. /buildATLAS/build/bin/ATLrun.sh: multiple segfaults.
+  # 2. "atlas does its own parallel builds"
+  enableParallelBuilding = false;
+
   meta = {
-    homepage = "http://math-atlas.sourceforge.net/";
+    homepage = http://math-atlas.sourceforge.net/;
     description = "Automatically Tuned Linear Algebra Software (ATLAS)";
     license = stdenv.lib.licenses.bsd3;
-    platforms = stdenv.lib.platforms.linux;
+    platforms = stdenv.lib.platforms.unix;
 
     longDescription = ''
       The ATLAS (Automatically Tuned Linear Algebra Software) project is an

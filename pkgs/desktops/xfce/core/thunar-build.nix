@@ -1,6 +1,6 @@
 { stdenv, fetchurl, pkgconfig, intltool
-, gtk, dbus_glib, libstartup_notification, libnotify, libexif, pcre, udev
-, exo, libxfce4util, xfconf, xfce4panel
+, gtk, dbus-glib, libstartup_notification, libnotify, libexif, pcre, udev
+, exo, libxfce4util, xfconf, xfce4-panel, wrapGAppsHook
 }:
 
 stdenv.mkDerivation rec {
@@ -21,10 +21,11 @@ stdenv.mkDerivation rec {
     sed -i -e 's|thunar_dialogs_show_insecure_program (parent, _(".*"), file, exec)|1|' thunar/thunar-file.c
   '';
 
+  nativeBuildInputs = [ pkgconfig wrapGAppsHook ];
   buildInputs = [
-    pkgconfig intltool
-    gtk dbus_glib libstartup_notification libnotify libexif pcre udev
-    exo libxfce4util xfconf xfce4panel
+    intltool
+    gtk dbus-glib libstartup_notification libnotify libexif pcre udev
+    exo libxfce4util xfconf xfce4-panel
   ];
   # TODO: optionality?
 

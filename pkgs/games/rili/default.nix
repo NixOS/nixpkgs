@@ -12,7 +12,8 @@ stdenv.mkDerivation {
 
   CPPFLAGS = "-I${SDL.dev}/include -I${SDL.dev}/include/SDL -I${SDL_mixer}/include";
 
-  buildInputs = [ SDL SDL_mixer autoreconfHook ];
+  nativeBuildInputs = [ autoreconfHook ];
+  buildInputs = [ SDL SDL_mixer ];
 
   meta = {
     homepage = http://ri-li.sourceforge.net;

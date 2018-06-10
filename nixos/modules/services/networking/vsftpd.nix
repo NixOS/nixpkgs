@@ -37,6 +37,9 @@ let
     (yesNoOption "anonymousUser" "anonymous_enable" false ''
       Whether to enable the anonymous FTP user.
     '')
+    (yesNoOption "anonymousUserNoPassword" "no_anon_password" false ''
+      Whether to disable the password for the anonymous FTP user.
+    '')
     (yesNoOption "localUsers" "local_enable" false ''
       Whether to enable FTP for local users.
     '')
@@ -100,6 +103,10 @@ let
         seccomp_sandbox=NO
       ''}
       anon_umask=${cfg.anonymousUmask}
+      ${optionalString cfg.anonymousUser ''
+        anon_root=${cfg.anonymousUserHome}
+      ''}
+      ${cfg.extraConfig}
     '';
 
 in
@@ -161,6 +168,13 @@ in
         default = "077";
         example = "002";
         description = "Anonymous write umask.";
+      };
+
+      extraConfig = mkOption {
+        type = types.lines;
+        default = "";
+        example = "ftpd_banner=Hello";
+        description = "Extra configuration to add at the bottom of the generated configuration file.";
       };
 
     } // (listToAttrs (catAttrs "nixosOption" optionDescription));

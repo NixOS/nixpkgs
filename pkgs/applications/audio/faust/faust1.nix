@@ -9,11 +9,11 @@ with stdenv.lib.strings;
 
 let
 
-  version = "0.9.73";
+  version = "0.9.90";
 
   src = fetchurl {
     url = "mirror://sourceforge/project/faudiostream/faust-${version}.tgz";
-    sha256 = "0x2scxkwvvjx7b7smj5xb8kr269qakf49z3fxpasd9g7025q44k5";
+    sha256 = "0d1fqwymyfb73zkmpwv4zk4gsg4ji7qs20mfsr20skmnqx30xvna";
   };
 
   meta = with stdenv.lib; {
@@ -49,7 +49,7 @@ let
     # faust.wrapWithBuildEnv.
     postInstall = ''
       # syntax error when eval'd directly
-      pattern="faust2!(svg)"
+      pattern="faust2!(*@(atomsnippets|graph|graphviewer|md|plot|sig|sigviewer|svg))"
       (shopt -s extglob; rm "$out"/bin/$pattern)
     '';
 
@@ -158,7 +158,8 @@ let
 
     stdenv.mkDerivation ((faust2ApplBase args) // {
 
-      buildInputs = [ makeWrapper pkgconfig ];
+      nativeBuildInputs = [ pkgconfig ];
+      buildInputs = [ makeWrapper ];
 
       propagatedBuildInputs = [ faust ] ++ propagatedBuildInputs;
 
@@ -167,7 +168,8 @@ let
         # export parts of the build environment
         for script in "$out"/bin/*; do
           wrapProgram "$script" \
-            --set FAUST_LIB_PATH "${faust}/lib/faust" \
+            --set FAUSTLIB "${faust}/lib/faust" \
+            --set FAUSTINC "${faust}/include/faust" \
             --prefix PATH : "$PATH" \
             --prefix PKG_CONFIG_PATH : "$PKG_CONFIG_PATH" \
             --set NIX_CFLAGS_COMPILE "$NIX_CFLAGS_COMPILE" \

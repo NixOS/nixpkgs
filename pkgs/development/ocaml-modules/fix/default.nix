@@ -1,4 +1,4 @@
-{stdenv, fetchurl, ocaml, findlib}:
+{ stdenv, fetchurl, ocaml, findlib, ocamlbuild }:
 
 assert stdenv.lib.versionAtLeast (stdenv.lib.getVersion ocaml) "3.12";
 
@@ -11,7 +11,7 @@ stdenv.mkDerivation {
     sha256 = "1phlqcs1nb93x9cf0w0hnq2ck4dmn71zm4mxf60w96vb9yb9qzp0";
   };
 
-  buildInputs = [ ocaml findlib ];
+  buildInputs = [ ocaml findlib ocamlbuild ];
 
   createFindlibDestdir = true;
 

@@ -24,6 +24,8 @@ let
     Method = nsswitch
   '';
 
+  nfsConfFile = pkgs.writeText "nfs.conf" cfg.extraConfig;
+
   cfg = config.services.nfs;
 
 in
@@ -32,23 +34,12 @@ in
   ###### interface
 
   options = {
-
     services.nfs = {
-      statdPort = mkOption {
-        default = null;
-        example = 4000;
+      extraConfig = mkOption {
+        type = types.lines;
+        default = "";
         description = ''
-          Use a fixed port for <command>rpc.statd</command>. This is
-          useful if the NFS server is behind a firewall.
-        '';
-      };
-      lockdPort = mkOption {
-        default = null;
-        example = 4001;
-        description = ''
-          Use a fixed port for the NFS lock manager kernel module
-          (<literal>lockd/nlockmgr</literal>).  This is useful if the
-          NFS server is behind a firewall.
+          Extra nfs-utils configuration.
         '';
       };
     };
@@ -62,69 +53,55 @@ in
 
     system.fsPackages = [ pkgs.nfs-utils ];
 
-    boot.extraModprobeConfig = mkIf (cfg.lockdPort != null) ''
-      options lockd nlm_udpport=${toString cfg.lockdPort} nlm_tcpport=${toString cfg.lockdPort}
-    '';
-
-    boot.kernelModules = [ "sunrpc" ];
-
     boot.initrd.kernelModules = mkIf inInitrd [ "nfs" ];
 
-    # FIXME: should use upstream units from nfs-utils.
+    systemd.packages = [ pkgs.nfs-utils ];
+    systemd.generator-packages = [ pkgs.nfs-utils ];
 
-    systemd.services.statd =
-      { description = "NFSv3 Network Status Monitor";
+    environment.etc = {
+      "idmapd.conf".source = idmapdConfFile;
+      "nfs.conf".source = nfsConfFile;
+    };
 
-        path = [ pkgs.nfs-utils pkgs.sysvtools pkgs.utillinux ];
-
-        wants = [ "remote-fs-pre.target" ];
-        before = [ "remote-fs-pre.target" ];
-        wantedBy = [ "remote-fs.target" ];
-        requires = [ "basic.target" "rpcbind.service" ];
-        after = [ "basic.target" "rpcbind.service" ];
-
-        unitConfig.DefaultDependencies = false; # don't stop during shutdown
-
-        preStart =
-          ''
-            mkdir -p ${nfsStateDir}/sm
-            mkdir -p ${nfsStateDir}/sm.bak
-            sm-notify -d
-          '';
-
-        serviceConfig.Type = "forking";
-        serviceConfig.ExecStart = ''
-          @${pkgs.nfs-utils}/sbin/rpc.statd rpc.statd --no-notify \
-              ${if cfg.statdPort != null then "-p ${toString cfg.statdPort}" else ""}
-        '';
-        serviceConfig.Restart = "always";
+    systemd.services.nfs-blkmap =
+      { restartTriggers = [ nfsConfFile ];
       };
 
-    systemd.services.idmapd =
-      { description = "NFSv4 ID Mapping Daemon";
+    systemd.targets.nfs-client =
+      { wantedBy = [ "multi-user.target" "remote-fs.target" ];
+      };
 
-        path = [ pkgs.sysvtools pkgs.utillinux ];
+    systemd.services.nfs-idmapd =
+      { restartTriggers = [ idmapdConfFile ];
+      };
 
-        wants = [ "remote-fs-pre.target" ];
-        before = [ "remote-fs-pre.target" ];
-        wantedBy = [ "remote-fs.target" ];
-        requires = [ "rpcbind.service" ];
-        after = [ "rpcbind.service" ];
+    systemd.services.nfs-mountd =
+      { restartTriggers = [ nfsConfFile ];
+        enable = mkDefault false;
+      };
+
+    systemd.services.nfs-server =
+      { restartTriggers = [ nfsConfFile ];
+        enable = mkDefault false;
+      };
+
+    systemd.services.auth-rpcgss-module =
+      {
+        unitConfig.ConditionPathExists = [ "" "/etc/krb5.keytab" ];
+      };
+
+    systemd.services.rpc-gssd =
+      { restartTriggers = [ nfsConfFile ];
+        unitConfig.ConditionPathExists = [ "" "/etc/krb5.keytab" ];
+      };
+
+    systemd.services.rpc-statd =
+      { restartTriggers = [ nfsConfFile ];
 
         preStart =
           ''
-            mkdir -p ${rpcMountpoint}
-            mount -t rpc_pipefs rpc_pipefs ${rpcMountpoint}
+            mkdir -p /var/lib/nfs/{sm,sm.bak}
           '';
-
-        postStop =
-          ''
-            umount ${rpcMountpoint}
-          '';
-
-        serviceConfig.Type = "forking";
-        serviceConfig.ExecStart = "@${pkgs.nfs-utils}/sbin/rpc.idmapd rpc.idmapd -c ${idmapdConfFile}";
-        serviceConfig.Restart = "always";
       };
 
   };

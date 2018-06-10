@@ -11,8 +11,9 @@ stdenv.mkDerivation rec {
   postPatch = ''
     sed -i 's/^\(CFLAGS.*\)$/\1 -fPIC/' Makefile
   '' + stdenv.lib.optionalString stdenv.cc.isClang ''
-    substituteInPlace Makefile libjbig/Makefile pbmtools/Makefile \
-      --replace "CC = gcc" "CC = clang"
+    for f in Makefile libjbig/Makefile pbmtools/Makefile; do
+        substituteInPlace $f --replace "CC = gcc" "CC = clang"
+    done
   '';
 
   installPhase = ''
@@ -32,7 +33,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = "http://www.cl.cam.ac.uk/~mgk25/jbigkit/";
+    homepage = http://www.cl.cam.ac.uk/~mgk25/jbigkit/;
     description = "A software implementation of the JBIG1 data compression standard";
     license = licenses.gpl2;
     platforms = platforms.all;

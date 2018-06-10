@@ -1,6 +1,6 @@
 { stdenv, fetchurl, writeText, sbclBootstrap
 , sbclBootstrapHost ? "${sbclBootstrap}/bin/sbcl --disable-debugger --no-userinit --no-sysinit"
-, threadSupport ? (stdenv.isi686 || stdenv.isx86_64)
+, threadSupport ? (stdenv.isi686 || stdenv.isx86_64 || "aarch64-linux" == stdenv.system)
   # Meant for sbcl used for creating binaries portable to non-NixOS via save-lisp-and-die.
   # Note that the created binaries still need `patchelf --set-interpreter ...`
   # to get rid of ${glibc} dependency.
@@ -9,11 +9,11 @@
 
 stdenv.mkDerivation rec {
   name    = "sbcl-${version}";
-  version = "1.3.8";
+  version = "1.4.7";
 
   src = fetchurl {
     url    = "mirror://sourceforge/project/sbcl/sbcl/${version}/${name}-source.tar.bz2";
-    sha256 = "0jfhrzsydgxzx0g90bl3fjys0i5biah76lkxjgh16l7h7577y8rh";
+    sha256 = "1wmxly94pn8527092hyzg5mq58mg7qlc46nm31f268wb2dm67rvm";
   };
 
   patchPhase = ''
@@ -25,8 +25,8 @@ stdenv.mkDerivation rec {
              (disable (x)
                (setf features (remove x features))))
     ''
-    + stdenv.lib.optionalString threadSupport "(enable :sb-thread)"
-    + stdenv.lib.optionalString stdenv.isArm "(enable :arm)"
+    + (if threadSupport then "(enable :sb-thread)" else "(disable :sb-thread)")
+    + stdenv.lib.optionalString stdenv.isAarch32 "(enable :arm)"
     + ''
       )) " > customize-target-features.lisp
 
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
     # SBCL checks whether files are up-to-date in many places..
     # Unfortunately, same timestamp is not good enough
     sed -e 's@> x y@>= x y@' -i contrib/sb-aclrepl/repl.lisp
-    sed -e '/(date)/i((= date 2208988801) 2208988800)' -i contrib/asdf/asdf.lisp
+    #sed -e '/(date)/i((= date 2208988801) 2208988800)' -i contrib/asdf/asdf.lisp
     sed -i src/cold/slam.lisp -e \
       '/file-write-date input/a)'
     sed -i src/cold/slam.lisp -e \
@@ -91,7 +91,7 @@ stdenv.mkDerivation rec {
 
   # Specifying $SBCL_HOME is only truly needed with `purgeNixReferences = true`.
   setupHook = writeText "setupHook.sh" ''
-    envHooks+=(_setSbclHome)
+    addEnvHooks "$targetOffset" _setSbclHome
     _setSbclHome() {
       export SBCL_HOME='@out@/lib/sbcl/'
     }

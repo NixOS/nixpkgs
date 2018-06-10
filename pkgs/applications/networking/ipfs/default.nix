@@ -1,22 +1,31 @@
-{ stdenv, buildGoPackage, fetchFromGitHub }:
+{ stdenv, buildGoPackage, fetchFromGitHub, fetchgx }:
 
 buildGoPackage rec {
   name = "ipfs-${version}";
-  version = "i20160112--${stdenv.lib.strings.substring 0 7 rev}";
-  rev = "7070b4d878baad57dcc8da80080dd293aa46cabd";
+  version = "0.4.15";
+  rev = "v${version}";
 
   goPackagePath = "github.com/ipfs/go-ipfs";
+
+  extraSrcPaths = [
+    (fetchgx {
+      inherit name src;
+      sha256 = "0bysfh2hd040i8lnyzhy96frflls4kdnlw748cl51ngqg3rwbhgz";
+    })
+  ];
 
   src = fetchFromGitHub {
     owner = "ipfs";
     repo = "go-ipfs";
     inherit rev;
-    sha256 = "1b7aimnbz287fy7p27v3qdxnz514r5142v3jihqxanbk9g384gcd";
+    sha256 = "1ry4a4pq26dbwy2b9cwi3xjaiyq6sng9lxnb1n30zxhp4w7rla2h";
   };
 
   meta = with stdenv.lib; {
     description = "A global, versioned, peer-to-peer filesystem";
+    homepage = https://ipfs.io/;
     license = licenses.mit;
-    broken = true;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ fpletz ];
   };
 }

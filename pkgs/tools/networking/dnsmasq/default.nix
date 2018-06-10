@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, dbus_libs, nettle, libidn, libnetfilter_conntrack }:
+{ stdenv, fetchurl, pkgconfig, dbus_libs, nettle, libidn, libnetfilter_conntrack, fetchpatch }:
 
 with stdenv.lib;
 let
@@ -11,12 +11,22 @@ let
   ]);
 in
 stdenv.mkDerivation rec {
-  name = "dnsmasq-2.76";
+  name = "dnsmasq-2.78";
 
   src = fetchurl {
     url = "http://www.thekelleys.org.uk/dnsmasq/${name}.tar.xz";
-    sha256 = "15lzih6671gh9knzpl8mxchiml7z5lfqzr7jm2r0rjhrxs6nk4jb";
+    sha256 = "0ar5h5v3kas2qx2wgy5iqin15gc4jhqrqs067xacgc3lii1rz549";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "CVE-2017-15107.patch";
+      url = "http://thekelleys.org.uk/gitweb/?p=dnsmasq.git;a=patch;h=4fe6744a220eddd3f1749b40cac3dfc510787de6";
+      sha256 = "0r8grhh1q46z8v6manx1vvfpf2vmchfzsg7l1djh63b1fy1mbjkk";
+      # changelog does not apply cleanly but its safe to skip
+      excludes = [ "CHANGELOG" ];
+    })
+  ];
 
   preBuild = ''
     makeFlagsArray=("COPTS=${copts}")
@@ -39,6 +49,11 @@ stdenv.mkDerivation rec {
   # module can create it in Nix-land?
   postInstall = ''
     install -Dm644 trust-anchors.conf $out/share/dnsmasq/trust-anchors.conf
+  '' + optionalString stdenv.isDarwin ''
+    install -Dm644 contrib/MacOSX-launchd/uk.org.thekelleys.dnsmasq.plist \
+      $out/Library/LaunchDaemons/uk.org.thekelleys.dnsmasq.plist
+    substituteInPlace $out/Library/LaunchDaemons/uk.org.thekelleys.dnsmasq.plist \
+      --replace "/usr/local/sbin" "$out/bin"
   '' + optionalString stdenv.isLinux ''
     install -Dm644 dbus/dnsmasq.conf $out/etc/dbus-1/system.d/dnsmasq.conf
     install -Dm755 contrib/lease-tools/dhcp_lease_time $out/bin/dhcp_lease_time

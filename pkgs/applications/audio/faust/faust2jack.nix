@@ -2,6 +2,7 @@
 , gtk2
 , jack2Full
 , opencv
+, libsndfile
 }:
 
 faust.wrapWithBuildEnv {
@@ -18,6 +19,7 @@ faust.wrapWithBuildEnv {
     gtk2
     jack2Full
     opencv
+    libsndfile
   ];
 
 }

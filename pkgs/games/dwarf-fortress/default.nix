@@ -1,20 +1,21 @@
-{ pkgs, pkgsi686Linux }:
+{ pkgs, stdenv, stdenvNoCC, gccStdenv }:
 
 let
   callPackage = pkgs.newScope self;
-  callPackage_i686 = pkgsi686Linux.newScope self;
 
   self = rec {
     dwarf-fortress-original = callPackage ./game.nix { };
 
-    dfhack = callPackage_i686 ./dfhack {
-      inherit (pkgsi686Linux.perlPackages) XMLLibXML XMLLibXSLT;
-      protobuf = with pkgsi686Linux; protobuf.override {
-        stdenv = overrideInStdenv stdenv [ useOldCXXAbi ];
-      };
+    dfhack = callPackage ./dfhack {
+      inherit (pkgs.perlPackages) XMLLibXML XMLLibXSLT;
+      stdenv = gccStdenv;
     };
 
-    dwarf-fortress-unfuck = callPackage ./unfuck.nix { };
+    soundSense = callPackage ./soundsense.nix { };
+
+    # unfuck is linux-only right now, we will just use it there
+    dwarf-fortress-unfuck = if stdenv.isLinux then callPackage ./unfuck.nix { }
+                                              else null;
 
     dwarf-fortress = callPackage ./wrapper {
       themes = {
@@ -31,9 +32,13 @@ let
 
     dwarf-therapist = callPackage ./dwarf-therapist/wrapper.nix { };
 
-    phoebus-theme = callPackage ./themes/phoebus.nix { };
+    themes = callPackage ./themes {
+      stdenv = stdenvNoCC;
+    };
 
-    cla-theme = callPackage ./themes/cla.nix { };
+    phoebus-theme = themes.phoebus;
+
+    cla-theme = themes.cla;
   };
 
 in self

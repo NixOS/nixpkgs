@@ -14,7 +14,10 @@ stdenv.mkDerivation {
 
   postUnpack = ''sourceRoot="$sourceRoot/unix"'';
 
-  buildInputs = [ python tcl tk vorbis-tools pkgconfig xlibsWrapper ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ python tcl tk vorbis-tools xlibsWrapper ];
+
+  hardeningDisable = [ "format" ];
 
   postInstall = "aoeu";
 
@@ -27,5 +30,6 @@ stdenv.mkDerivation {
     description = "The Snack Sound Toolkit (Tcl)";
     homepage = http://www.speech.kth.se/snack/;
     license = stdenv.lib.licenses.gpl2;
+    broken = true;
   };
 }

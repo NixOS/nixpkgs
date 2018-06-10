@@ -3,13 +3,10 @@
 appleDerivation {
   meta.broken = stdenv.cc.nativeLibc;
 
-  buildInputs = [ launchd bootstrap_cmds ppp IOKit eap8021x ];
+  nativeBuildInputs = [ bootstrap_cmds ];
+  buildInputs = [ launchd ppp IOKit eap8021x ];
 
   propagatedBuildInputs = [ Security ];
-
-  propagatedSandboxProfile = ''
-    (allow mach-lookup (global-name "com.apple.SystemConfiguration.configd"))
-  '';
 
   patchPhase = ''
     HACK=$PWD/hack

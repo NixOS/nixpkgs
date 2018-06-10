@@ -1,20 +1,22 @@
-{ stdenv, fetchzip, ocaml, findlib, yojson, menhir
+{ stdenv, fetchzip, ocaml, findlib, yojson
 , withEmacsMode ? false, emacs }:
 
-assert stdenv.lib.versionAtLeast (stdenv.lib.getVersion ocaml) "4.00";
+assert stdenv.lib.versionAtLeast ocaml.version "4.02";
 
-let version = "2.3.1"; in
+let
+  version = "3.0.5";
+in
 
 stdenv.mkDerivation {
 
   name = "merlin-${version}";
 
   src = fetchzip {
-    url = "https://github.com/the-lambda-church/merlin/archive/v${version}.tar.gz";
-    sha256 = "192jamcc7rmvadlqqsjkzsl6hlgwhg9my1qc89fxh1lmd4qdsrpn";
+    url = "https://github.com/ocaml/merlin/archive/v${version}.tar.gz";
+    sha256 = "06h0klzzvb62rzb6m0pq8aa207fz7z54mjr05vky4wv8195bbjiy";
   };
 
-  buildInputs = [ ocaml findlib yojson menhir ]
+  buildInputs = [ ocaml findlib yojson ]
     ++ stdenv.lib.optional withEmacsMode emacs;
 
   preConfigure = "mkdir -p $out/bin";
@@ -23,7 +25,7 @@ stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "An editor-independent tool to ease the development of programs in OCaml";
-    homepage = "http://the-lambda-church.github.io/merlin/";
+    homepage = "https://github.com/ocaml/merlin";
     license = licenses.mit;
     maintainers = [ maintainers.vbgl ];
   };

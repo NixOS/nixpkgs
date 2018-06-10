@@ -1,20 +1,19 @@
-{ stdenv, fetchurl, makeWrapper, jre, utillinux, getopt }:
+{ stdenv, fetchurl, makeWrapper, jre, utillinux }:
 
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  version = "2.3.4";
+  version = "2.4.4";
   name = "elasticsearch-${version}";
 
   src = fetchurl {
     url = "https://download.elasticsearch.org/elasticsearch/release/org/elasticsearch/distribution/tar/elasticsearch/${version}/${name}.tar.gz";
-    sha256 = "0vphyqhna510y8bcihlmz3awzszgyfpmzrfcy548a2pd9mghq7ip";
+    sha256 = "1qjq04sfqb35pf2xpvr8j5p27chfxpjp8ymrp1h5bfk5rbk9444q";
   };
 
-  patches = [ ./es-home-2.x.patch ];
+  patches = [ ./es-home-2.x.patch ./es-classpath-2.x.patch ];
 
-  buildInputs = [ makeWrapper jre ] ++
-    (if (!stdenv.isDarwin) then [utillinux] else [getopt]);
+  buildInputs = [ makeWrapper jre utillinux ];
 
   installPhase = ''
     mkdir -p $out
@@ -22,9 +21,9 @@ stdenv.mkDerivation rec {
 
     # don't want to have binary with name plugin
     mv $out/bin/plugin $out/bin/elasticsearch-plugin
-       wrapProgram $out/bin/elasticsearch ${if (!stdenv.isDarwin)
-        then ''--prefix PATH : "${utillinux}/bin/"''
-        else ''--prefix PATH : "${getopt}/bin"''} \
+    wrapProgram $out/bin/elasticsearch \
+      --prefix ES_CLASSPATH : "$out/lib/${name}.jar":"$out/lib/*" \
+      --prefix PATH : "${utillinux}/bin" \
       --set JAVA_HOME "${jre}"
     wrapProgram $out/bin/elasticsearch-plugin --set JAVA_HOME "${jre}"
   '';

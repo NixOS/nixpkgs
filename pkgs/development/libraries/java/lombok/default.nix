@@ -1,13 +1,18 @@
-{stdenv, fetchurl}:
+{ stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "lombok-1.16.8";
+  name = "lombok-1.16.22";
+
   src = fetchurl {
     url = "https://projectlombok.org/downloads/${name}.jar";
-    sha256 = "0s7ak6gx1h04da2rdhvc0fk896cwqm2m7g3chqcjpsrkgfdv4cpy";
+    sha256 = "1hr2jjlqdnxrw7ablqkf7ljc6n2q6a04ww14di06zs6i3l82zzpa";
   };
-  phases = [ "installPhase" ];
-  installPhase = "mkdir -p $out/share/java; cp $src $out/share/java/lombok.jar";
+
+  buildCommand = ''
+    mkdir -p $out/share/java
+    cp $src $out/share/java/lombok.jar
+  '';
+
   meta = {
     description = "A library that can write a lot of boilerplate for your Java project";
     platforms = stdenv.lib.platforms.all;

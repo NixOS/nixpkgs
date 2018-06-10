@@ -1,39 +1,28 @@
-{ lib, stdenv, fetchurl, go }:
+{ stdenv, buildGoPackage, fetchFromGitHub }:
 
-stdenv.mkDerivation rec {
-  name = "minio-${shortVersion}";
+buildGoPackage rec {
+  name = "minio-${version}";
 
-  shortVersion = "20160821";
-  longVersion = "2016-08-21T02:44:47Z";
+  version = "2018-05-11T00-29-24Z";
 
-  src = fetchurl {
-    url = "https://github.com/minio/minio/archive/RELEASE.${lib.replaceStrings [":"] ["-"] longVersion}.tar.gz";
-    sha256 = "159196bnb4b7f00jh9gll9kqqxq1ifxv1kg5bd6yjpqf5qca4pkn";
+  src = fetchFromGitHub {
+    owner = "minio";
+    repo = "minio";
+    rev = "RELEASE.${version}";
+    sha256 = "01jw1djfs0jbhsx9pmx3kj31mfhrw45lr1i4lwkmh8k7fxn8w13x";
   };
 
-  buildInputs = [ go ];
+  goPackagePath = "github.com/minio/minio";
 
-  unpackPhase = ''
-    d=$TMPDIR/src/github.com/minio/minio
-    mkdir -p $d
-    tar xf $src -C $d --strip-component 1
-    export GOPATH=$TMPDIR
-    cd $d
-  '';
+  buildFlagsArray = [''-ldflags=
+    -X github.com/minio/minio/cmd.Version=${version}
+  ''];
 
-  buildPhase = ''
-    mkdir -p $out/bin
-    go build -o $out/bin/minio \
-      --ldflags "-X github.com/minio/minio/cmd.Version=${longVersion}"
-  '';
-
-  installPhase = "true";
-
-  meta = {
+  meta = with stdenv.lib; {
     homepage = https://www.minio.io/;
     description = "An S3-compatible object storage server";
-    maintainers = [ lib.maintainers.eelco ];
-    platforms = lib.platforms.linux;
-    license = lib.licenses.asl20;
+    maintainers = with maintainers; [ eelco bachp ];
+    platforms = platforms.unix;
+    license = licenses.asl20;
   };
 }

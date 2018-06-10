@@ -1,35 +1,49 @@
-{ stdenv, fetchurl, pkgconfig, dbus, libconfig, libdrm, libxml2, mesa, pcre,
-  libXcomposite, libXfixes, libXdamage, libXinerama, libXrandr, libXrender,
-  libXext, xwininfo }:
+{ stdenv, lib, fetchFromGitHub, pkgconfig, asciidoc, docbook_xml_dtd_45
+, docbook_xsl, libxslt, libxml2, makeWrapper
+, dbus, libconfig, libdrm, libGL, pcre, libX11, libXcomposite, libXdamage
+, libXinerama, libXrandr, libXrender, libXext, xwininfo }:
 
 stdenv.mkDerivation rec {
-  name = "compton-0.1_beta2";
+  name = "compton-0.1_beta2.5";
 
-  src = fetchurl {
-    url = https://github.com/chjj/compton/releases/download/v0.1_beta2/compton-git-v0.1_beta2-2013-10-21.tar.xz;
-    sha256 = "1mpgn1d98dv66xs2j8gaxjiw26nzwl9a641lrday7h40g3k45g9v";
+  src = fetchFromGitHub {
+    owner = "chjj";
+    repo = "compton";
+    rev = "b7f43ee67a1d2d08239a2eb67b7f50fe51a592a8";
+    sha256 = "1p7ayzvm3c63q42na5frznq3rlr1lby2pdgbvzm1zl07wagqss18";
   };
 
   buildInputs = [
-    pkgconfig
-    dbus
-    libconfig
-    libdrm
-    libxml2
-    mesa
-    pcre
+    libX11
     libXcomposite
-    libXfixes
     libXdamage
-    libXinerama
-    libXrandr
     libXrender
+    libXrandr
     libXext
+    libXinerama
+    libdrm
+    pcre
+    libconfig
+    dbus
+    libGL
+  ];
+
+  nativeBuildInputs = [
+    pkgconfig
+    asciidoc
+    libxml2
+    docbook_xml_dtd_45
+    docbook_xsl
+    libxslt
+    makeWrapper
   ];
   
-  propagatedBuildInputs = [ xwininfo ];
-  
-  installFlags = "PREFIX=$(out)";
+  installFlags = [ "PREFIX=$(out)" ];
+
+  postInstall = ''
+    wrapProgram $out/bin/compton-trans \
+      --prefix PATH : ${lib.makeBinPath [ xwininfo ]}
+  '';
 
   meta = with stdenv.lib; {
     homepage = https://github.com/chjj/compton/;

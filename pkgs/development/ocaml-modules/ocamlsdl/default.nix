@@ -1,20 +1,20 @@
 {stdenv, fetchurl, ocaml, pkgconfig, findlib, SDL, SDL_image, SDL_mixer, SDL_ttf, SDL_gfx, lablgl }: 
 
 let
-  ocaml_version = (builtins.parseDrvName ocaml.name).version;
   pname = "ocamlsdl";
-  version = "0.9.1";
 in
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   name = "${pname}-${version}";
+  version = "0.9.1";
 
   src = fetchurl { 
     url = "mirror://sourceforge/project/ocamlsdl/OCamlSDL/ocamlsdl-0.9.1/ocamlsdl-0.9.1.tar.gz";
     sha256 = "abfb295b263dc11e97fffdd88ea1a28b46df8cc2b196777093e4fe7f509e4f8f";
   };
 
-  buildInputs = [ocaml pkgconfig findlib SDL SDL_image SDL_mixer SDL_ttf SDL_gfx lablgl];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ocaml findlib SDL SDL_image SDL_mixer SDL_ttf SDL_gfx lablgl];
 
   propagatedBuildInputs = [ SDL SDL_image SDL_mixer SDL_ttf SDL_gfx pkgconfig ];
   createFindlibDestdir = true;

@@ -1,7 +1,6 @@
 { system ? builtins.currentSystem }:
 
 with import ../lib/testing.nix { inherit system; };
-with import ../lib/qemu-flags.nix;
 with pkgs.lib;
 
 let
@@ -25,8 +24,13 @@ let
           # access. Mostly copied from
           # modules/profiles/installation-device.nix.
           system.extraDependencies =
-            [ pkgs.stdenv pkgs.busybox pkgs.perlPackages.ArchiveCpio
-              pkgs.unionfs-fuse pkgs.mkinitcpio-nfs-utils
+            with pkgs; [
+              stdenv busybox perlPackages.ArchiveCpio unionfs-fuse mkinitcpio-nfs-utils
+
+              # These are used in the configure-from-userdata tests for EC2. Httpd and valgrind are requested
+              # directly by the configuration we set, and libxslt.bin is used indirectly as a build dependency
+              # of the derivation for dbus configuration files.
+              apacheHttpd valgrind.doc libxslt.bin
             ];
         }
       ];
@@ -137,6 +141,8 @@ in {
 
     # ### http://nixos.org/channels/nixos-unstable nixos
     userData = ''
+      { pkgs, ... }:
+
       {
         imports = [
           <nixpkgs/nixos/modules/virtualisation/amazon-image.nix>
@@ -146,12 +152,22 @@ in {
         environment.etc.testFile = {
           text = "whoa";
         };
+
+        services.httpd = {
+          enable = true;
+          adminAddr = "test@example.org";
+          documentRoot = "${pkgs.valgrind.doc}/share/doc/valgrind/html";
+        };
+        networking.firewall.allowedTCPPorts = [ 80 ];
       }
     '';
     script = ''
       $machine->start;
       $machine->waitForFile("/etc/testFile");
       $machine->succeed("cat /etc/testFile | grep -q 'whoa'");
+
+      $machine->waitForUnit("httpd.service");
+      $machine->succeed("curl http://localhost | grep Valgrind");
     '';
   };
 }

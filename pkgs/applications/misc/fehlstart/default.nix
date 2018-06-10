@@ -11,7 +11,8 @@ stdenv.mkDerivation {
   };
 
   patches = [ ./use-nix-profiles.patch ];
-  buildInputs = [ pkgconfig gtk2 keybinder ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ gtk2 keybinder ];
 
   preConfigure = ''
     export PREFIX=$out
@@ -20,7 +21,7 @@ stdenv.mkDerivation {
   meta = with stdenv.lib; {
     description = "Small desktop application launcher with reasonable memory footprint";
     homepage = https://gitlab.com/fehlstart/fehlstart;
-    licence = licenses.gpl3;
+    license = licenses.gpl3;
     maintainers = [ maintainers.mounium ];
     platforms = platforms.all;
   };

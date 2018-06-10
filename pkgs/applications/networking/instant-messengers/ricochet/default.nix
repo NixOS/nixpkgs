@@ -1,15 +1,15 @@
 { stdenv, fetchurl, pkgconfig, makeDesktopItem, unzip
-, qtbase, qttools, makeQtWrapper, qtmultimedia, qtquick1, qtquickcontrols
-, openssl, protobuf, qmakeHook
+, qtbase, qttools, qtmultimedia, qtquick1, qtquickcontrols
+, openssl, protobuf, qmake
 }:
 
 stdenv.mkDerivation rec {
   name = "ricochet-${version}";
-  version = "1.1.2";
+  version = "1.1.4";
 
   src = fetchurl {
     url = "https://github.com/ricochet-im/ricochet/archive/v${version}.tar.gz";
-    sha256 = "1szb5vmlqal0vhan87kgbks184f7xbfay1hr3d3vm8r1lvcjjfkr";
+    sha256 = "1kfj42ksvj7axc809lb8siqzj5hck2pib427b63a3ipnqc5h1faf";
   };
 
   desktopItem = makeDesktopItem {
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     openssl protobuf
   ];
 
-  nativeBuildInputs = [ pkgconfig makeQtWrapper qmakeHook ];
+  nativeBuildInputs = [ pkgconfig qmake ];
 
   preConfigure = ''
     export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE $(pkg-config --cflags openssl)"
@@ -38,7 +38,6 @@ stdenv.mkDerivation rec {
   installPhase = ''
     mkdir -p $out/bin
     cp ricochet $out/bin
-    wrapQtProgram $out/bin/ricochet
 
     mkdir -p $out/share/applications
     cp $desktopItem/share/applications"/"* $out/share/applications
@@ -47,11 +46,14 @@ stdenv.mkDerivation rec {
     cp icons/ricochet.png $out/share/pixmaps/ricochet.png
   '';
 
+  # RCC: Error in 'translation/embedded.qrc': Cannot find file 'ricochet_en.qm'
+  enableParallelBuilding = false;
+
   meta = with stdenv.lib; {
     description = "Anonymous peer-to-peer instant messaging";
-    homepage = "https://ricochet.im";
+    homepage = https://ricochet.im;
     license = licenses.bsd3;
-    maintainers = [ maintainers.codsl maintainers.jgillich ];
+    maintainers = [ maintainers.codsl maintainers.jgillich maintainers.np ];
     platforms = platforms.linux;
   };
 }

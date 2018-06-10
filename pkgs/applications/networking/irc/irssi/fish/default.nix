@@ -21,7 +21,8 @@ stdenv.mkDerivation rec {
     cp src/.libs/libfish.so $out/lib/irssi/modules
   '';
   
-  buildInputs = [ gmp automake autoconf libtool openssl glib pkgconfig ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ gmp automake autoconf libtool openssl glib ];
   
   meta = {
     homepage = https://github.com/falsovsky/FiSH-irssi;

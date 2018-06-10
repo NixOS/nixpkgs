@@ -1,25 +1,30 @@
-{ stdenv, fetchurl, cmake, pkgconfig, qt }:
+{ stdenv, fetchurl, cmake, pkgconfig, qt, darwin }:
 
 stdenv.mkDerivation rec {
-  name = "qca-2.1.1";
+  name = "qca-${version}";
+  version = "2.1.3";
 
   src = fetchurl {
-    url = "http://download.kde.org/stable/qca/2.1.1/src/qca-2.1.1.tar.xz";
-    sha256 = "10z9icq28fww4qbzwra8d9z55ywbv74qk68nhiqfrydm21wkxplm";
+    url = "http://download.kde.org/stable/qca/${version}/src/qca-${version}.tar.xz";
+    sha256 = "0lz3n652z208daxypdcxiybl0a9fnn6ida0q7fh5f42269mdhgq0";
   };
 
   nativeBuildInputs = [ cmake pkgconfig ];
-  buildInputs = [ qt ];
+  buildInputs = [ (stdenv.lib.optional stdenv.isDarwin darwin.apple_sdk.frameworks.Security) qt ];
 
   enableParallelBuilding = true;
 
-  patches = [ ./libressl.patch ];
+  # tells CMake to use this CA bundle file if it is accessible
+  preConfigure = ''export QC_CERTSTORE_PATH=/etc/ssl/certs/ca-certificates.crt'';
+
+  # tricks CMake into using this CA bundle file if it is not accessible (in a sandbox)
+  cmakeFlags = [ "-Dqca_CERTSTORE=/etc/ssl/certs/ca-certificates.crt" ];
 
   meta = with stdenv.lib; {
     description = "Qt Cryptographic Architecture";
     license = "LGPL";
     homepage = http://delta.affinix.com/qca;
-    maintainers = [ maintainers.sander maintainers.urkud ];
-    platforms = platforms.linux;
+    maintainers = [ maintainers.sander ];
+    platforms = platforms.unix;
   };
 }

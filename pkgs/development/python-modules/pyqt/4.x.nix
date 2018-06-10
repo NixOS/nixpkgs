@@ -1,14 +1,19 @@
 { stdenv, fetchurl, pythonPackages, qt4, pkgconfig, lndir, dbus_libs, makeWrapper }:
 
 let
-  version = "4.11.3";
-  inherit (pythonPackages) mkPythonDerivation python dbus-python sip;
-in mkPythonDerivation {
-  name = "PyQt-x11-gpl-${version}";
+  pname = "PyQt-x11-gpl";
+  version = "4.12";
+
+  inherit (pythonPackages) buildPythonPackage python dbus-python sip;
+in buildPythonPackage {
+  pname = pname;
+  name = pname + "-" + version;
+  version = version;
+  format = "other";
 
   src = fetchurl {
-    url = "mirror://sourceforge/pyqt/PyQt4/PyQt-${version}/PyQt-x11-gpl-${version}.tar.gz";
-    sha256 = "11jnfjw79s0b0qdd9s6kd69w87vf16dhagbhbmwbmrp2vgf80dw5";
+    url = "mirror://sourceforge/pyqt/PyQt4_gpl_x11-${version}.tar.gz";
+    sha256 = "1nw8r88a5g2d550yvklawlvns8gd5slw53yy688kxnsa65aln79w";
   };
 
   configurePhase = ''
@@ -18,7 +23,7 @@ in mkPythonDerivation {
 
     export PYTHONPATH=$PYTHONPATH:$out/lib/${python.libPrefix}/site-packages
     ${stdenv.lib.optionalString stdenv.isDarwin ''
-      export QMAKESPEC="unsupported/macx-clang-libc++" # OS X target after bootstrapping phase \
+      export QMAKESPEC="unsupported/macx-clang-libc++" # macOS target after bootstrapping phase \
     ''}
 
     substituteInPlace configure.py \
@@ -36,7 +41,8 @@ in mkPythonDerivation {
     ${python.executable} configure.py $configureFlags "''${configureFlagsArray[@]}"
   '';
 
-  buildInputs = [ pkgconfig makeWrapper qt4 lndir dbus_libs ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ makeWrapper qt4 lndir dbus_libs ];
 
   propagatedBuildInputs = [ sip ];
 

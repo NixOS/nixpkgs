@@ -2,16 +2,17 @@
 
 stdenv.mkDerivation rec {
   name = "umurmur-${version}";
-  version = "0.2.16";
-  
+  version = "0.2.17";
+
   src = fetchFromGitHub {
-    owner = "fatbob313";
+    owner = "umurmur";
     repo = "umurmur";
     rev = version;
-    sha256 = "0njvdqvjda13v1a2yyjn47mb0l0cdfb2bfvb5s13wpgwy2xxk0px";
+    sha256 = "074px4ygmv4ydy2pqwxwnz17f0hfswqkz5kc9qfz0iby3h5i3fyl";
   };
-  
-  buildInputs = [ autoreconfHook openssl protobufc libconfig ];
+
+  nativeBuildInputs = [ autoreconfHook ];
+  buildInputs = [ openssl protobufc libconfig ];
 
   configureFlags = [
     "--with-ssl=openssl"
@@ -21,7 +22,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     description = "Minimalistic Murmur (Mumble server)";
     license = licenses.bsd3;
-    homepage = http://code.google.com/p/umurmur/;
+    homepage = https://github.com/umurmur/umurmur;
     platforms = platforms.all;
   };
 }

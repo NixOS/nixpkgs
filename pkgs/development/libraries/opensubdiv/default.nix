@@ -1,40 +1,43 @@
-{ lib, stdenv, fetchurl, fetchFromGitHub, cmake, pkgconfig, xorg, mesa_glu, mesa_noglu, glew
+{ lib, stdenv, fetchurl, fetchFromGitHub, cmake, pkgconfig, xorg, libGLU
+, libGL, glew, ocl-icd, python3
 , cudaSupport ? false, cudatoolkit
+, darwin
 }:
 
-stdenv.mkDerivation {
-  name = "opensubdiv-3.0.5";
+stdenv.mkDerivation rec {
+  name = "opensubdiv-${version}";
+  version = "3.3.1";
 
   src = fetchFromGitHub {
     owner = "PixarAnimationStudios";
     repo = "OpenSubdiv";
-    rev = "v3_0_5";
-    sha256 = "16xv4cw1k75wgd4ddr0sa87wd46ygbn2k2avh9c1mfd405p80d92";
+    rev = "v${lib.replaceChars ["."] ["_"] version}";
+    sha256 = "1s96038yvf8wch5gv537iigqflxx7rh9wwn3wlrk8f9yfdwv1mk1";
   };
 
   outputs = [ "out" "dev" ];
 
-  patches =
-    [ # Fix for building with cudatoolkit 7.
-      (fetchurl {
-        url = "https://github.com/opeca64/OpenSubdiv/commit/c3c258d00feaeffe1123f6077179c155e71febfb.patch";
-        sha256 = "0vazhp35v8vsgnvprkzwvfkbalr0kzcwlin9ygyfb77cz7mwicnf";
-      })
-    ];
-
   buildInputs =
-    [ cmake pkgconfig mesa_glu mesa_noglu
+    [ cmake pkgconfig libGLU libGL python3
       # FIXME: these are not actually needed, but the configure script wants them.
-      glew xorg.libX11 xorg.libXrandr xorg.libXxf86vm xorg.libXcursor xorg.libXinerama
+      glew xorg.libX11 xorg.libXrandr xorg.libXxf86vm xorg.libXcursor
+      xorg.libXinerama xorg.libXi
     ]
+    ++ lib.optional (!stdenv.isDarwin) ocl-icd
+    ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [OpenCL Cocoa CoreVideo IOKit AppKit AGL ])
     ++ lib.optional cudaSupport cudatoolkit;
 
   cmakeFlags =
     [ "-DNO_TUTORIALS=1"
       "-DNO_REGRESSION=1"
       "-DNO_EXAMPLES=1"
-      "-DGLEW_INCLUDE_DIR=${glew}/include"
-      "-DGLEW_LIBRARY=${glew}/lib"
+      "-DNO_METAL=1" # don’t have metal in apple sdk
+    ] ++ lib.optionals (!stdenv.isDarwin) [
+      "-DGLEW_INCLUDE_DIR=${glew.dev}/include"
+      "-DGLEW_LIBRARY=${glew.dev}/lib"
+    ] ++ lib.optionals cudaSupport [
+      "-DOSD_CUDA_NVCC_FLAGS=--gpu-architecture=compute_30"
+      "-DCUDA_HOST_COMPILER=${cudatoolkit.cc}/bin/cc"
     ];
 
   enableParallelBuilding = true;
@@ -44,7 +47,7 @@ stdenv.mkDerivation {
   meta = {
     description = "An Open-Source subdivision surface library";
     homepage = http://graphics.pixar.com/opensubdiv;
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.unix;
     maintainers = [ lib.maintainers.eelco ];
     license = lib.licenses.asl20;
   };

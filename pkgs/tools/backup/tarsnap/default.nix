@@ -8,11 +8,11 @@ let
 in
 stdenv.mkDerivation rec {
   name = "tarsnap-${version}";
-  version = "1.0.37";
+  version = "1.0.39";
 
   src = fetchurl {
     url = "https://www.tarsnap.com/download/tarsnap-autoconf-${version}.tgz";
-    sha256 = "1ynv323qi6775lzjb6hvifl8ajkv2bizy43sajadjfqvcl9r96gs";
+    sha256 = "10i0whbmb345l2ggnf4vs66qjcyf6hmlr8f4nqqcfq0h5a5j24sn";
   };
 
   preConfigure = ''
@@ -29,13 +29,13 @@ stdenv.mkDerivation rec {
     install -m 444 -D ${zshCompletion} $out/share/zsh/site-functions/_tarsnap
   '';
 
-  buildInputs = [ openssl zlib e2fsprogs ];
+  buildInputs = [ openssl zlib ] ++ stdenv.lib.optional stdenv.isLinux e2fsprogs ;
 
   meta = {
     description = "Online backups for the truly paranoid";
     homepage    = "http://www.tarsnap.com/";
     license     = "tarsnap";
-    platforms   = stdenv.lib.platforms.linux;
+    platforms   = stdenv.lib.platforms.unix;
     maintainers = with stdenv.lib.maintainers; [ thoughtpolice roconnor ];
   };
 }

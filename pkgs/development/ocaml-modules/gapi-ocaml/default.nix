@@ -1,18 +1,22 @@
-{ stdenv, fetchurl, ocaml, findlib, ocurl, cryptokit, ocaml_extlib, yojson, ocamlnet, xmlm }:
+{ stdenv, fetchFromGitHub, ocaml, findlib, jbuilder, ocurl, cryptokit, ocaml_extlib, yojson, ocamlnet, xmlm }:
+
+if !stdenv.lib.versionAtLeast ocaml.version "4.02"
+then throw "gapi-ocaml is not available for OCaml ${ocaml.version}"
+else
 
 stdenv.mkDerivation rec {
-  name = "gapi-ocaml-0.2.10";
-  src = fetchurl {
-    url = "https://forge.ocamlcore.org/frs/download.php/1601/${name}.tar.gz";
-    sha256 = "0kg4j7dhr7jynpy8x53bflqjf78jyl14j414l6px34xz7c9qx5fl";
+  name = "gapi-ocaml-${version}";
+  version = "0.3.6";
+  src = fetchFromGitHub {
+    owner = "astrada";
+    repo = "gapi-ocaml";
+    rev = "v${version}";
+    sha256 = "0qgsy51bhkpfgl5rdnjw4bqs5fbh2w4vwrfbl8y3lh1wrqmnwci4";
   };
-  buildInputs = [ ocaml findlib ];
+  buildInputs = [ ocaml jbuilder findlib ];
   propagatedBuildInputs = [ ocurl cryptokit ocaml_extlib yojson ocamlnet xmlm ];
 
-  configurePhase = "ocaml setup.ml -configure --prefix $out";
-  buildPhase = "ocaml setup.ml -build";
-  installPhase = "ocaml setup.ml -install";
-  createFindlibDestdir = true;
+  inherit (jbuilder) installPhase;
 
   meta = {
     description = "OCaml client for google services";

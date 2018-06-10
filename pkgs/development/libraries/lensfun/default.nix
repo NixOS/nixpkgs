@@ -1,22 +1,22 @@
-{ stdenv, fetchurl, pkgconfig, python, glib, zlib, libpng, gnumake3 }:
+{ stdenv, fetchurl, pkgconfig, python, glib, zlib, libpng, gnumake3, cmake }:
 
 stdenv.mkDerivation rec {
-  name = "lensfun-0.2.8";
+  version = "0.3.2";
+  name = "lensfun-${version}";
 
   src = fetchurl {
-    url = "mirror://sourceforge/lensfun/${name}.tar.bz2";
-    sha256 = "0j0smagnksdm9gjnk13w200hjxshmxf2kvyxxnra4nc2qzxrg3zq";
+    url = "mirror://sourceforge/lensfun/${version}/${name}.tar.gz";
+    sha256 = "0cfk8jjhs9nbfjfdy98plrj9ayi59aph0nx6ppslgjhlcvacm2xf";
   };
 
-  patchPhase = "sed -e 's@/usr/bin/python@${python}/bin/python@' -i configure";
-
-  buildInputs = [ pkgconfig glib zlib libpng gnumake3 ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ glib zlib libpng cmake gnumake3 ];
 
   configureFlags = "-v";
 
   meta = with stdenv.lib; {
     platforms = platforms.linux;
-    maintainers = [ maintainers.urkud ];
+    maintainers = [ ];
     license = stdenv.lib.licenses.lgpl3;
     description = "An opensource database of photographic lenses and their characteristics";
     homepage = http://lensfun.sourceforge.net/;

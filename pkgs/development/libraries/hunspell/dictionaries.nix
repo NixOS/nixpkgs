@@ -1,30 +1,13 @@
 /* hunspell dictionaries */
 
-{ stdenv, fetchurl, unzip }:
+{ stdenv, fetchurl, fetchFromGitHub, unzip, coreutils, bash, which, zip, ispell, perl, hunspell }:
 
-with stdenv.lib;
 
 let
-
   mkDict =
-  { name, src, meta, readmeFile, dictFileName, ... }:
-  let
-    isFrench = hasSuffix "fr_" dictFileName;
-    isItaly = hasSuffix "it_" dictFileName;
-    isSpanish = hasSuffix "es_" dictFileName;
-    isEnglish = hasSuffix "en_" dictFileName;
-  in
-  stdenv.mkDerivation rec {
-    inherit name src meta;
-    buildInputs = [ unzip ];
-    sourceRoot = ".";
-    phases = "unpackPhase installPhase" + (if isItaly then "patchPhase" else "");
-    unpackCmd = "unzip $src ${readmeFile} ${dictFileName}.dic ${dictFileName}.aff";
-    prePatch = if isItaly then ''
-    # Fix dic file empty lines (FS#22275)
-    sed '/^\/$/d' -i it_IT.dic
-    '' else "";
-
+  { name, readmeFile, dictFileName, ... }@args:
+  stdenv.mkDerivation (rec {
+    inherit name;
     installPhase = ''
       # hunspell dicts
       install -dm755 "$out/share/hunspell"
@@ -38,22 +21,89 @@ let
       install -dm755 "$out/share/doc"
       install -m644 ${readmeFile} $out/share/doc/${name}.txt
     '';
-  };
+  } // args);
 
-  mkDictFromRedIRIS =
-    { shortName, shortDescription, dictFileName, src }:
+  mkDictFromRla =
+    { shortName, shortDescription, dictFileName }:
     mkDict rec {
-      inherit src dictFileName;
-      version = "0.7";
-      name = "hunspell-dict-${shortName}-rediris-${version}";
+      inherit dictFileName;
+      version = "2.2";
+      name = "hunspell-dict-${shortName}-rla-${version}";
       readmeFile = "README.txt";
+      src = fetchFromGitHub {
+        owner = "sbosio";
+        repo = "rla-es";
+        rev = "v${version}";
+        sha256 = "0n9ms092k7vg7xpd3ksadxydbrizkb7js7dfxr08nbnnb9fgy0i8";
+      };
       meta = with stdenv.lib; {
-        description = "Hunspell dictionary for ${shortDescription} from RedIRIS";
-        homepage = https://forja.rediris.es/projects/rla-es/;
+        description = "Hunspell dictionary for ${shortDescription} from rla";
+        homepage = https://github.com/sbosio/rla-es;
         license = with licenses; [ gpl3 lgpl3 mpl11 ];
         maintainers = with maintainers; [ renzo ];
         platforms = platforms.all;
       };
+      phases = "unpackPhase patchPhase buildPhase installPhase";
+      buildInputs = [ bash coreutils unzip which zip ];
+      patchPhase = ''
+        substituteInPlace ortograf/herramientas/make_dict.sh \
+           --replace /bin/bash bash \
+           --replace /dev/stderr stderr.log
+
+        substituteInPlace ortograf/herramientas/remover_comentarios.sh \
+           --replace /bin/bash bash \
+      '';
+      buildPhase = ''
+        cd ortograf/herramientas
+        bash -x ./make_dict.sh -l ${dictFileName} -2
+        unzip ${dictFileName}.zip \
+          ${dictFileName}.dic ${dictFileName}.aff ${readmeFile}
+      '';
+    };
+
+  mkDictFromDSSO =
+    { shortName, shortDescription, dictFileName }:
+    mkDict rec {
+      inherit dictFileName;
+      version = "2.40";
+      # Should really use a string function or something
+      _version = "2-40";
+      name = "hunspell-dict-${shortName}-dsso-${version}";
+      _name = "ooo_swedish_dict_${_version}";
+      readmeFile = "LICENSE_en_US.txt";
+      src = fetchurl {
+        url = "https://extensions.libreoffice.org/extensions/swedish-spelling-dictionary-den-stora-svenska-ordlistan/${version}/@@download/file/${_name}.oxt";
+        sha256 = "b982881cc75f5c4af1199535bd4735ee476bdc48edf63e3f05fb4f715654a7bc";
+      };
+      meta = with stdenv.lib; {
+        longDescription = ''
+        Svensk ordlista baserad på DSSO (den stora svenska ordlistan) och Göran
+        Anderssons (goran@init.se) arbete med denna. Ordlistan hämtas från
+        LibreOffice då dsso.se inte längre verkar vara med oss.
+        '';
+        description = "Hunspell dictionary for ${shortDescription} from LibreOffice";
+        license = licenses.lgpl3;
+        platforms = platforms.all;
+      };
+      buildInputs = [ unzip ];
+      phases = "unpackPhase installPhase";
+      sourceRoot = ".";
+      unpackCmd = ''
+      unzip $src dictionaries/${dictFileName}.dic dictionaries/${dictFileName}.aff $readmeFile
+      '';
+      installPhase = ''
+        # hunspell dicts
+        install -dm755 "$out/share/hunspell"
+        install -m644 dictionaries/${dictFileName}.dic "$out/share/hunspell/"
+        install -m644 dictionaries/${dictFileName}.aff "$out/share/hunspell/"
+        # myspell dicts symlinks
+        install -dm755 "$out/share/myspell/dicts"
+        ln -sv "$out/share/hunspell/${dictFileName}.dic" "$out/share/myspell/dicts/"
+        ln -sv "$out/share/hunspell/${dictFileName}.aff" "$out/share/myspell/dicts/"
+        # docs
+        install -dm755 "$out/share/doc"
+        install -m644 ${readmeFile} $out/share/doc/${name}.txt
+      '';
     };
 
   mkDictFromDicollecte =
@@ -70,11 +120,17 @@ let
       meta = with stdenv.lib; {
         inherit longDescription;
         description = "Hunspell dictionary for ${shortDescription} from Dicollecte";
-        homepage = "http://www.dicollecte.org/home.php?prj=fr";
+        homepage = https://www.dicollecte.org/home.php?prj=fr;
         license = licenses.mpl20;
         maintainers = with maintainers; [ renzo ];
         platforms = platforms.all;
       };
+      buildInputs = [ unzip ];
+      phases = "unpackPhase installPhase";
+      sourceRoot = ".";
+      unpackCmd = ''
+        unzip $src ${dictFileName}.dic ${dictFileName}.aff ${readmeFile}
+      '';
     };
 
   mkDictFromWordlist =
@@ -91,9 +147,15 @@ let
         maintainers = with maintainers; [ renzo ];
         platforms = platforms.all;
       };
+      buildInputs = [ unzip ];
+      phases = "unpackPhase installPhase";
+      sourceRoot = ".";
+      unpackCmd = ''
+        unzip $src ${dictFileName}.dic ${dictFileName}.aff ${readmeFile}
+      '';
     };
 
-  mkLinguistico =
+  mkDictFromLinguistico =
     { shortName, shortDescription, dictFileName, src }:
     mkDict rec {
       inherit src dictFileName;
@@ -101,9 +163,88 @@ let
       name = "hunspell-dict-${shortName}-linguistico-${version}";
       readmeFile = dictFileName + "_README.txt";
       meta = with stdenv.lib; {
-        homepage = http://sourceforge.net/projects/linguistico/;
+        homepage = https://sourceforge.net/projects/linguistico/;
         license = licenses.gpl3;
         maintainers = with maintainers; [ renzo ];
+        platforms = platforms.all;
+      };
+      buildInputs = [ unzip ];
+      phases = "unpackPhase patchPhase installPhase";
+      sourceRoot = ".";
+      prePatch = ''
+        # Fix dic file empty lines (FS#22275)
+        sed '/^\/$/d' -i ${dictFileName}.dic
+      '';
+      unpackCmd = ''
+        unzip $src ${dictFileName}.dic ${dictFileName}.aff ${readmeFile}
+      '';
+    };
+
+  mkDictFromXuxen =
+    { shortName, srcs, shortDescription, longDescription, dictFileName }:
+    stdenv.mkDerivation rec {
+      name = "hunspell-dict-${shortName}-xuxen-${version}";
+      version = "5-2015.11.10";
+
+      inherit srcs;
+
+      phases = ["unpackPhase" "installPhase"];
+      sourceRoot = ".";
+      # Copy files stripping until first dash (path and hash)
+      unpackCmd = "cp $curSrc \${curSrc##*-}";
+      installPhase = ''
+        # hunspell dicts
+        install -dm755 "$out/share/hunspell"
+        install -m644 ${dictFileName}.dic "$out/share/hunspell/"
+        install -m644 ${dictFileName}.aff "$out/share/hunspell/"
+        # myspell dicts symlinks
+        install -dm755 "$out/share/myspell/dicts"
+        ln -sv "$out/share/hunspell/${dictFileName}.dic" "$out/share/myspell/dicts/"
+        ln -sv "$out/share/hunspell/${dictFileName}.aff" "$out/share/myspell/dicts/"
+      '';
+
+      meta = with stdenv.lib; {
+        homepage = http://xuxen.eus/;
+        description = shortDescription;
+        longDescription = longDescription;
+        license = licenses.gpl2;
+        maintainers = with maintainers; [ zalakain ];
+        platforms = platforms.all;
+      };
+    };
+
+  mkDictFromJ3e =
+    { shortName, shortDescription, dictFileName }:
+    stdenv.mkDerivation rec {
+      name = "hunspell-dict-${shortName}-j3e-${version}";
+      version = "20161207";
+
+      src = fetchurl {
+        url = "https://j3e.de/ispell/igerman98/dict/igerman98-${version}.tar.bz2";
+        sha256 = "1a3055hp2bc4q4nlg3gmg0147p3a1zlfnc65xiv2v9pyql1nya8p";
+      };
+
+      buildInputs = [ ispell perl hunspell ];
+
+      phases = ["unpackPhase" "installPhase"];
+      installPhase = ''
+        patchShebangs bin
+        make hunspell/${dictFileName}.aff hunspell/${dictFileName}.dic
+        # hunspell dicts
+        install -dm755 "$out/share/hunspell"
+        install -m644 hunspell/${dictFileName}.dic "$out/share/hunspell/"
+        install -m644 hunspell/${dictFileName}.aff "$out/share/hunspell/"
+        # myspell dicts symlinks
+        install -dm755 "$out/share/myspell/dicts"
+        ln -sv "$out/share/hunspell/${dictFileName}.dic" "$out/share/myspell/dicts/"
+        ln -sv "$out/share/hunspell/${dictFileName}.aff" "$out/share/myspell/dicts/"
+      '';
+
+      meta = with stdenv.lib; {
+        homepage = https://www.j3e.de/ispell/igerman98/index_en.html;
+        description = shortDescription;
+        license = with licenses; [ gpl2 gpl3 ];
+        maintainers = with maintainers; [ timor ];
         platforms = platforms.all;
       };
     };
@@ -154,214 +295,130 @@ in {
 
   /* SPANISH */
 
-  es-any = mkDictFromRedIRIS {
+  es-any = mkDictFromRla {
     shortName = "es-any";
     shortDescription = "Spanish (any variant)";
     dictFileName = "es_ANY";
-    src = fetchurl {
-      url = http://forja.rediris.es/frs/download.php/2933/es_ANY.oxt;
-      md5 = "e3d4b38f280e7376178529db2ece982b";
-    };
   };
 
-  es-ar = mkDictFromRedIRIS {
+  es-ar = mkDictFromRla {
     shortName = "es-ar";
     shortDescription = "Spanish (Argentina)";
     dictFileName = "es_AR";
-    src = fetchurl {
-      url = http://forja.rediris.es/frs/download.php/2953/es_AR.oxt;
-      md5 = "68ee8f4ebc89a1fa461045d4dbb9b7be";
-    };
   };
 
-  es-bo = mkDictFromRedIRIS {
+  es-bo = mkDictFromRla {
     shortName = "es-bo";
     shortDescription = "Spanish (Bolivia)";
     dictFileName = "es_BO";
-    src = fetchurl {
-      url = http://forja.rediris.es/frs/download.php/2952/es_BO.oxt;
-      md5 = "1ebf11b6094e0bfece8e95cc34e7a409";
-    };
   };
 
-  es-cl = mkDictFromRedIRIS {
+  es-cl = mkDictFromRla {
     shortName = "es-cl";
     shortDescription = "Spanish (Chile)";
     dictFileName = "es_CL";
-    src = fetchurl {
-      url = http://forja.rediris.es/frs/download.php/2951/es_CL.oxt;
-      md5 = "092a388101350b77af4fd789668582bd";
-    };
   };
 
-  es-co = mkDictFromRedIRIS {
+  es-co = mkDictFromRla {
     shortName = "es-co";
     shortDescription = "Spanish (Colombia)";
     dictFileName = "es_CO";
-    src = fetchurl {
-      url = http://forja.rediris.es/frs/download.php/2950/es_CO.oxt;
-      md5 = "fc440fd9fc55ca2dfb9bfa34a1e63864";
-    };
   };
 
-  es-cr = mkDictFromRedIRIS {
+  es-cr = mkDictFromRla {
     shortName = "es-cr";
     shortDescription = "Spanish (Costra Rica)";
     dictFileName = "es_CR";
-    src = fetchurl {
-      url = http://forja.rediris.es/frs/download.php/2949/es_CR.oxt;
-      md5 = "7510fd0f4eb3c6e65523a8d0960f77dd";
-    };
   };
 
-  es-cu = mkDictFromRedIRIS {
+  es-cu = mkDictFromRla {
     shortName = "es-cu";
     shortDescription = "Spanish (Cuba)";
     dictFileName = "es_CU";
-    src = fetchurl {
-      url = http://forja.rediris.es/frs/download.php/2948/es_CU.oxt;
-      md5 = "0ab4b9638f58ddd3d95d1265918ff39e";
-    };
   };
 
-  es-do = mkDictFromRedIRIS {
+  es-do = mkDictFromRla {
     shortName = "es-do";
     shortDescription = "Spanish (Dominican Republic)";
     dictFileName = "es_DO";
-    src = fetchurl {
-      url = http://forja.rediris.es/frs/download.php/2947/es_DO.oxt;
-      md5 = "24a20fd4d887693afef539e6f1a3b58e";
-    };
   };
 
-  es-ec = mkDictFromRedIRIS {
+  es-ec = mkDictFromRla {
     shortName = "es-ec";
     shortDescription = "Spanish (Ecuador)";
     dictFileName = "es_EC";
-    src = fetchurl {
-      url = http://forja.rediris.es/frs/download.php/2946/es_EC.oxt;
-      md5 = "5d7343a246323ceda58cfbbf1428e279";
-    };
   };
 
-  es-es = mkDictFromRedIRIS {
+  es-es = mkDictFromRla {
     shortName = "es-es";
     shortDescription = "Spanish (Spain)";
     dictFileName = "es_ES";
-    src = fetchurl {
-      url = http://forja.rediris.es/frs/download.php/2945/es_ES.oxt;
-      md5 = "59dd45e6785ed644adbbd73f4f126182";
-    };
   };
 
-  es-gt = mkDictFromRedIRIS {
+  es-gt = mkDictFromRla {
     shortName = "es-gt";
     shortDescription = "Spanish (Guatemala)";
     dictFileName = "es_GT";
-    src = fetchurl {
-      url = http://forja.rediris.es/frs/download.php/2944/es_GT.oxt;
-      md5 = "b1a9be80687e3117c67ac46aad6b8d66";
-    };
   };
 
-  es-hn = mkDictFromRedIRIS {
+  es-hn = mkDictFromRla {
     shortName = "es-hn";
     shortDescription = "Spanish (Honduras)";
     dictFileName = "es_HN";
-    src = fetchurl {
-      url = http://forja.rediris.es/frs/download.php/2943/es_HN.oxt;
-      md5 = "d0db5bebd6925738b524de9709950f22";
-    };
   };
 
-  es-mx = mkDictFromRedIRIS {
+  es-mx = mkDictFromRla {
     shortName = "es-mx";
     shortDescription = "Spanish (Mexico)";
     dictFileName = "es_MX";
-    src = fetchurl {
-      url = http://forja.rediris.es/frs/download.php/2942/es_MX.oxt;
-      md5 = "0de780714f84955112f38f35fb63a894";
-    };
   };
 
-  es-ni = mkDictFromRedIRIS {
+  es-ni = mkDictFromRla {
     shortName = "es-ni";
     shortDescription = "Spanish (Nicaragua)";
     dictFileName = "es_NI";
-    src = fetchurl {
-      url = http://forja.rediris.es/frs/download.php/2941/es_NI.oxt;
-      md5 = "d259d7be17c34df76c7de40c80720a39";
-    };
   };
 
-  es-pa = mkDictFromRedIRIS {
+  es-pa = mkDictFromRla {
     shortName = "es-pa";
     shortDescription = "Spanish (Panama)";
     dictFileName = "es_PA";
-    src = fetchurl {
-      url = http://forja.rediris.es/frs/download.php/2940/es_PA.oxt;
-      md5 = "085fbdbed6a2e248630c801881563b7a";
-    };
   };
 
-  es-pe = mkDictFromRedIRIS {
+  es-pe = mkDictFromRla {
     shortName = "es-pe";
     shortDescription = "Spanish (Peru)";
     dictFileName = "es_PE";
-    src = fetchurl {
-      url = http://forja.rediris.es/frs/download.php/2939/es_PE.oxt;
-      md5 = "f4673063246888995d4eaa2d4a24ee3d";
-    };
   };
 
-  es-pr = mkDictFromRedIRIS {
+  es-pr = mkDictFromRla {
     shortName = "es-pr";
     shortDescription = "Spanish (Puerto Rico)";
     dictFileName = "es_PR";
-    src = fetchurl {
-      url = http://forja.rediris.es/frs/download.php/2938/es_PR.oxt;
-      md5 = "e67bcf891ba9eeaeb57a60ec8e57f1ac";
-    };
   };
 
-  es-py = mkDictFromRedIRIS {
+  es-py = mkDictFromRla {
     shortName = "es-py";
     shortDescription = "Spanish (Paraguay)";
     dictFileName = "es_PY";
-    src = fetchurl {
-      url = http://forja.rediris.es/frs/download.php/2937/es_PY.oxt;
-      md5 = "ba98e3197c81db4c572def2c5cca942d";
-    };
   };
 
-  es-sv = mkDictFromRedIRIS {
+  es-sv = mkDictFromRla {
     shortName = "es-sv";
     shortDescription = "Spanish (El Salvador)";
     dictFileName = "es_SV";
-    src = fetchurl {
-      url = http://forja.rediris.es/frs/download.php/2936/es_SV.oxt;
-      md5 = "c68ca9d188cb23c88cdd34a069c5a013";
-    };
   };
 
-  es-uy = mkDictFromRedIRIS {
+  es-uy = mkDictFromRla {
     shortName = "es-uy";
     shortDescription = "Spanish (Uruguay)";
     dictFileName = "es_UY";
-    src = fetchurl {
-      url = http://forja.rediris.es/frs/download.php/2935/es_UY.oxt;
-      md5 = "aeb9d39e4d17e9c904c1f3567178aad6";
-    };
   };
 
-  es-ve = mkDictFromRedIRIS {
+  es-ve = mkDictFromRla {
     shortName = "es-ve";
     shortDescription = "Spanish (Venezuela)";
     dictFileName = "es_VE";
-    src = fetchurl {
-      url = http://forja.rediris.es/frs/download.php/2934/es_VE.oxt;
-      md5 = "8afa9619aede2d9708e799e0f5d0fcab";
-    };
   };
 
   /* FRENCH */
@@ -410,13 +467,80 @@ in {
 
   /* ITALIAN */
 
-  it-it =  mkLinguistico rec {
+  it-it =  mkDictFromLinguistico rec {
     shortName = "it-it";
     dictFileName = "it_IT";
     shortDescription = "Hunspell dictionary for 'Italian (Italy)' from Linguistico";
     src = fetchurl {
       url = mirror://sourceforge/linguistico/italiano_2_4_2007_09_01.zip;
-      md5 = "e7fbd9e2dfb25ea3288cdb918e1e1260";
+      sha256 = "0m9frz75fx456bczknay5i446gdcp1smm48lc0qfwzhz0j3zcdrd";
     };
+  };
+
+  /* BASQUE */
+
+  eu-es = mkDictFromXuxen {
+    shortName = "eu-es";
+    dictFileName = "eu_ES";
+    shortDescription = "Basque (Xuxen 5)";
+    longDescription = ''
+      Itxura berritzeaz gain, testuak zuzentzen laguntzeko zenbait hobekuntza
+      egin dira Xuxen.eus-en. Lexikoari dagokionez, 18645 sarrera berri erantsi
+      ditugu, eta proposamenak egiteko sistema ere aldatu dugu. Esate baterako,
+      gaizki idatzitako hitz baten inguruko proposamenak eskuratzeko, euskaraz
+      idaztean egiten ditugun akats arruntenak hartu dira kontuan. Sistemak
+      ematen dituen proposamenak ordenatzeko, berriz, aipatutako irizpidea
+      erabiltzeaz gain, Internetetik automatikoki eskuratutako euskarazko corpus
+      bateko datuen arabera ordenatu daitezke emaitzak. Erabiltzaileak horrela
+      ordenatu nahi baditu proposamenak, hautatu egin behar du aukera hori
+      testu-kutxaren azpian dituen aukeren artean. Interesgarria da proposamenak
+      ordenatzeko irizpide hori, hala sistemak formarik erabilienak proposatuko
+      baitizkigu gutxiago erabiltzen direnen aurretik.
+    '';
+    srcs = [
+      (fetchurl {
+        url = "http://xuxen.eus/static/hunspell/eu_ES.aff";
+        sha256 = "12w2j6phzas2rdzc7f20jnk93sm59m2zzfdgxv6p8nvcvbrkmc02";
+      })
+      (fetchurl {
+        url = "http://xuxen.eus/static/hunspell/eu_ES.dic";
+        sha256 = "0lw193jr7ldvln5x5z9p21rz1by46h0say9whfcw2kxs9vprd5b3";
+      })
+    ];
+  };
+
+  /* SWEDISH */
+  
+  sv-se = mkDictFromDSSO rec {
+    shortName = "sv-se";
+    dictFileName = "sv_SE";
+    shortDescription = "Swedish (Sweden)";
+  };
+
+  # Finlandian Swedish (hello Linus Torvalds)
+  sv-fi = mkDictFromDSSO rec {
+    shortName = "sv-fi";
+    dictFileName = "sv_FI";
+    shortDescription = "Swedish (Finland)";
+  };
+  
+  /* GERMAN */
+
+  de-de = mkDictFromJ3e {
+    shortName = "de-de";
+    shortDescription = "German (Germany)";
+    dictFileName = "de_DE";
+  };
+
+  de-at = mkDictFromJ3e {
+    shortName = "de-at";
+    shortDescription = "German (Austria)";
+    dictFileName = "de_AT";
+  };
+
+  de-ch = mkDictFromJ3e {
+    shortName = "de-ch";
+    shortDescription = "German (Switzerland)";
+    dictFileName = "de_CH";
   };
 }

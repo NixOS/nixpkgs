@@ -5,25 +5,62 @@ with lib;
 let
   cfg = config.services.tor;
   torDirectory = "/var/lib/tor";
+  torRunDirectory = "/run/tor";
 
   opt    = name: value: optionalString (value != null) "${name} ${value}";
-  optint = name: value: optionalString (value != 0)    "${name} ${toString value}";
+  optint = name: value: optionalString (value != null && value != 0)    "${name} ${toString value}";
+
+  isolationOptions = {
+    type = types.listOf (types.enum [
+      "IsolateClientAddr"
+      "IsolateSOCKSAuth"
+      "IsolateClientProtocol"
+      "IsolateDestPort"
+      "IsolateDestAddr"
+    ]);
+    default = [];
+    example = [
+      "IsolateClientAddr"
+      "IsolateSOCKSAuth"
+      "IsolateClientProtocol"
+      "IsolateDestPort"
+      "IsolateDestAddr"
+    ];
+    description = "Tor isolation options";
+  };
+
 
   torRc = ''
     User tor
     DataDirectory ${torDirectory}
+    ${optionalString cfg.enableGeoIP ''
+      GeoIPFile ${pkgs.tor.geoip}/share/tor/geoip
+      GeoIPv6File ${pkgs.tor.geoip}/share/tor/geoip6
+    ''}
 
     ${optint "ControlPort" cfg.controlPort}
+    ${optionalString cfg.controlSocket.enable "ControlSocket ${torRunDirectory}/control GroupWritable RelaxDirModeCheck"}
   ''
   # Client connection config
-  + optionalString cfg.client.enable  ''
-    SOCKSPort ${cfg.client.socksListenAddress} IsolateDestAddr
+  + optionalString cfg.client.enable ''
+    SOCKSPort ${cfg.client.socksListenAddress} ${toString cfg.client.socksIsolationOptions}
     SOCKSPort ${cfg.client.socksListenAddressFaster}
     ${opt "SocksPolicy" cfg.client.socksPolicy}
+
+    ${optionalString cfg.client.transparentProxy.enable ''
+    TransPort ${cfg.client.transparentProxy.listenAddress} ${toString cfg.client.transparentProxy.isolationOptions}
+    ''}
+
+    ${optionalString cfg.client.dns.enable ''
+    DNSPort ${cfg.client.dns.listenAddress} ${toString cfg.client.dns.isolationOptions}
+    AutomapHostsOnResolve 1
+    AutomapHostsSuffixes ${concatStringsSep "," cfg.client.dns.automapHostsSuffixes}
+    ''}
   ''
   # Relay config
   + optionalString cfg.relay.enable ''
-    ORPort ${cfg.relay.portSpec}
+    ORPort ${toString cfg.relay.port}
+    ${opt "Address" cfg.relay.address}
     ${opt "Nickname" cfg.relay.nickname}
     ${opt "ContactInfo" cfg.relay.contactInfo}
 
@@ -32,19 +69,35 @@ let
     ${opt "AccountingMax" cfg.relay.accountingMax}
     ${opt "AccountingStart" cfg.relay.accountingStart}
 
-    ${if cfg.relay.isExit then
+    ${if (cfg.relay.role == "exit") then
         opt "ExitPolicy" cfg.relay.exitPolicy
       else
         "ExitPolicy reject *:*"}
 
-    ${optionalString cfg.relay.isBridge ''
+    ${optionalString (elem cfg.relay.role ["bridge" "private-bridge"]) ''
       BridgeRelay 1
       ServerTransportPlugin obfs2,obfs3 exec ${pkgs.pythonPackages.obfsproxy}/bin/obfsproxy managed
+      ExtORPort auto
+      ${optionalString (cfg.relay.role == "private-bridge") ''
+        ExtraInfoStatistics 0
+        PublishServerDescriptor 0
+      ''}
     ''}
   ''
+  # Hidden services
+  + concatStrings (flip mapAttrsToList cfg.hiddenServices (n: v: ''
+    HiddenServiceDir ${torDirectory}/onion/${v.name}
+    ${flip concatMapStrings v.map (p: ''
+      HiddenServicePort ${toString p.port} ${p.destination}
+    '')}
+    ${optionalString (v.authorizeClient != null) ''
+      HiddenServiceAuthorizeClient ${v.authorizeClient.authType} ${concatStringsSep "," v.authorizeClient.clientNames}
+    ''}
+  ''))
   + cfg.extraConfig;
 
   torRcFile = pkgs.writeText "torrc" torRc;
+
 in
 {
   options = {
@@ -58,6 +111,18 @@ in
         '';
       };
 
+      enableGeoIP = mkOption {
+        type = types.bool;
+        default = true;
+        description = ''
+          Whenever to configure Tor daemon to use GeoIP databases.
+
+          Disabling this will disable by-country statistics for
+          bridges and relays and some client and third-party software
+          functionality.
+        '';
+      };
+
       extraConfig = mkOption {
         type = types.lines;
         default = "";
@@ -68,13 +133,24 @@ in
       };
 
       controlPort = mkOption {
-        type = types.int;
-        default = 0;
+        type = types.nullOr (types.either types.int types.str);
+        default = null;
         example = 9051;
         description = ''
           If set, Tor will accept connections on the specified port
           and allow them to control the tor process.
         '';
+      };
+
+      controlSocket = {
+        enable = mkOption {
+          type = types.bool;
+          default = false;
+          description = ''
+            Wheter to enable Tor control socket. Control socket is created
+            in <literal>${torRunDirectory}/control</literal>
+          '';
+        };
       };
 
       client = {
@@ -105,9 +181,10 @@ in
           example = "192.168.0.1:9101";
           description = ''
             Bind to this address to listen for connections from
-            Socks-speaking applications. Same as socksListenAddress
-            but uses weaker circuit isolation to provide performance
-            suitable for a web browser.
+            Socks-speaking applications. Same as
+            <option>socksListenAddress</option> but uses weaker
+            circuit isolation to provide performance suitable for a
+            web browser.
            '';
          };
 
@@ -117,13 +194,63 @@ in
           example = "accept 192.168.0.0/16, reject *";
           description = ''
             Entry policies to allow/deny SOCKS requests based on IP
-            address.  First entry that matches wins. If no SocksPolicy
+            address. First entry that matches wins. If no SocksPolicy
             is set, we accept all (and only) requests from
-            SocksListenAddress.
+            <option>socksListenAddress</option>.
           '';
         };
 
+        socksIsolationOptions = mkOption (isolationOptions // {
+          default = ["IsolateDestAddr"];
+        });
+
+        transparentProxy = {
+          enable = mkOption {
+            type = types.bool;
+            default = false;
+            description = "Whether to enable tor transaprent proxy";
+          };
+
+          listenAddress = mkOption {
+            type = types.str;
+            default = "127.0.0.1:9040";
+            example = "192.168.0.1:9040";
+            description = ''
+              Bind transparent proxy to this address.
+            '';
+          };
+
+          isolationOptions = mkOption isolationOptions;
+        };
+
+        dns = {
+          enable = mkOption {
+            type = types.bool;
+            default = false;
+            description = "Whether to enable tor dns resolver";
+          };
+
+          listenAddress = mkOption {
+            type = types.str;
+            default = "127.0.0.1:9053";
+            example = "192.168.0.1:9053";
+            description = ''
+              Bind tor dns to this address.
+            '';
+          };
+
+          isolationOptions = mkOption isolationOptions;
+
+          automapHostsSuffixes = mkOption {
+            type = types.listOf types.str;
+            default = [".onion" ".exit"];
+            example = [".onion"];
+            description = "List of suffixes to use with automapHostsOnResolve";
+          };
+        };
+
         privoxy.enable = mkOption {
+          type = types.bool;
           default = true;
           description = ''
             Whether to enable and configure the system Privoxy to use Tor's
@@ -147,45 +274,147 @@ in
           description = ''
             Whether to enable relaying TOR traffic for others.
 
-            See https://www.torproject.org/docs/tor-doc-relay for details.
+            See <link xlink:href="https://www.torproject.org/docs/tor-doc-relay" />
+            for details.
+
+            Setting this to true requires setting
+            <option>services.tor.relay.role</option>
+            and
+            <option>services.tor.relay.port</option>
+            options.
           '';
         };
 
-        isBridge = mkOption {
-          type = types.bool;
-          default = false;
+        role = mkOption {
+          type = types.enum [ "exit" "relay" "bridge" "private-bridge" ];
           description = ''
-            Bridge relays (or "bridges") are Tor relays that aren't
-            listed in the main directory. Since there is no complete
-            public list of them, even if an ISP is filtering
-            connections to all the known Tor relays, they probably
-            won't be able to block all the bridges.
+            Your role in Tor network. There're several options:
 
-            A bridge relay can't be an exit relay.
+            <variablelist>
+            <varlistentry>
+              <term><literal>exit</literal></term>
+              <listitem>
+                <para>
+                  An exit relay. This allows Tor users to access regular
+                  Internet services through your public IP.
+                </para>
 
-            You need to set relay.enable to true for this option to
-            take effect.
+                <important><para>
+                  Running an exit relay may expose you to abuse
+                  complaints. See
+                  <link xlink:href="https://www.torproject.org/faq.html.en#ExitPolicies" />
+                  for more info.
+                </para></important>
 
-            The bridge is set up with an obfuscated transport proxy.
+                <para>
+                  You can specify which services Tor users may access via
+                  your exit relay using <option>exitPolicy</option> option.
+                </para>
+              </listitem>
+            </varlistentry>
 
-            See https://www.torproject.org/bridges.html.en for more info.
-          '';
-        };
+            <varlistentry>
+              <term><literal>relay</literal></term>
+              <listitem>
+                <para>
+                  Regular relay. This allows Tor users to relay onion
+                  traffic to other Tor nodes, but not to public
+                  Internet.
+                </para>
 
-        isExit = mkOption {
-          type = types.bool;
-          default = false;
-          description = ''
-            An exit relay allows Tor users to access regular Internet
-            services.
+                <important><para>
+                  Note that some misconfigured and/or disrespectful
+                  towards privacy sites will block you even if your
+                  relay is not an exit relay. That is, just being listed
+                  in a public relay directory can have unwanted
+                  consequences.
 
-            Unlike running a non-exit relay, running an exit relay may
-            expose you to abuse complaints. See
-            https://www.torproject.org/faq.html.en#ExitPolicies for
-            more info.
+                  Which means you might not want to use
+                  this role if you browse public Internet from the same
+                  network as your relay, unless you want to write
+                  e-mails to those sites (you should!).
+                </para></important>
 
-            You can specify which services Tor users may access via
-            your exit relay using exitPolicy option.
+                <para>
+                  See
+                  <link xlink:href="https://www.torproject.org/docs/tor-doc-relay.html.en" />
+                  for more info.
+                </para>
+              </listitem>
+            </varlistentry>
+
+            <varlistentry>
+              <term><literal>bridge</literal></term>
+              <listitem>
+                <para>
+                  Regular bridge. Works like a regular relay, but
+                  doesn't list you in the public relay directory and
+                  hides your Tor node behind obfsproxy.
+                </para>
+
+                <para>
+                  Using this option will make Tor advertise your bridge
+                  to users through various mechanisms like
+                  <link xlink:href="https://bridges.torproject.org/" />, though.
+                </para>
+
+                <important>
+                  <para>
+                    WARNING: THE FOLLOWING PARAGRAPH IS NOT LEGAL ADVISE.
+                    Consult with your lawer when in doubt.
+                  </para>
+
+                  <para>
+                    This role should be safe to use in most situations
+                    (unless the act of forwarding traffic for others is
+                    a punishable offence under your local laws, which
+                    would be pretty insane as it would make ISP
+                    illegal).
+                  </para>
+                </important>
+
+                <para>
+                  See <link xlink:href="https://www.torproject.org/docs/bridges.html.en" />
+                  for more info.
+                </para>
+              </listitem>
+            </varlistentry>
+
+            <varlistentry>
+              <term><literal>private-bridge</literal></term>
+              <listitem>
+                <para>
+                  Private bridge. Works like regular bridge, but does
+                  not advertise your node in any way.
+                </para>
+
+                <para>
+                  Using this role means that you won't contribute to Tor
+                  network in any way unless you advertise your node
+                  yourself in some way.
+                </para>
+
+                <para>
+                  Use this if you want to run a private bridge, for
+                  example because you'll give out your bridge address
+                  manually to your friends.
+                </para>
+
+                <para>
+                  Switching to this role after measurable time in
+                  "bridge" role is pretty useless as some Tor users
+                  would have learned about your node already. In the
+                  latter case you can still change
+                  <option>port</option> option.
+                </para>
+
+                <para>
+                  See <link xlink:href="https://www.torproject.org/docs/bridges.html.en" />
+                  for more info.
+                </para>
+              </listitem>
+            </varlistentry>
+            </variablelist>
           '';
         };
 
@@ -212,11 +441,11 @@ in
           default = null;
           example = "450 GBytes";
           description = ''
-            Specify maximum bandwidth allowed during an accounting
-            period. This allows you to limit overall tor bandwidth
-            over some time period. See the
-            <literal>AccountingMax</literal> option by looking at the
-            tor manual (<literal>man tor</literal>) for more.
+            Specify maximum bandwidth allowed during an accounting period. This
+            allows you to limit overall tor bandwidth over some time period.
+            See the <literal>AccountingMax</literal> option by looking at the
+            tor manual <citerefentry><refentrytitle>tor</refentrytitle>
+            <manvolnum>1</manvolnum></citerefentry> for more.
 
             Note this limit applies individually to upload and
             download; if you specify <literal>"500 GBytes"</literal>
@@ -230,16 +459,17 @@ in
           default = null;
           example = "month 1 1:00";
           description = ''
-            Specify length of an accounting period. This allows you to
-            limit overall tor bandwidth over some time period. See the
-            <literal>AccountingStart</literal> option by looking at
-            the tor manual (<literal>man tor</literal>) for more.
+            Specify length of an accounting period. This allows you to limit
+            overall tor bandwidth over some time period. See the
+            <literal>AccountingStart</literal> option by looking at the tor
+            manual <citerefentry><refentrytitle>tor</refentrytitle>
+            <manvolnum>1</manvolnum></citerefentry> for more.
           '';
         };
 
         bandwidthRate = mkOption {
-          type = types.int;
-          default = 0;
+          type = types.nullOr types.int;
+          default = null;
           example = 100;
           description = ''
             Specify this to limit the bandwidth usage of relayed (server)
@@ -248,7 +478,7 @@ in
         };
 
         bandwidthBurst = mkOption {
-          type = types.int;
+          type = types.nullOr types.int;
           default = cfg.relay.bandwidthRate;
           example = 200;
           description = ''
@@ -258,13 +488,24 @@ in
           '';
         };
 
-        portSpec = mkOption {
-          type    = types.str;
-          example = "143";
+        address = mkOption {
+          type    = types.nullOr types.str;
+          default = null;
+          example = "noname.example.com";
           description = ''
-            What port to advertise for Tor connections. This corresponds
-            to the <literal>ORPort</literal> section in the Tor manual; see
-            <literal>man tor</literal> for more details.
+            The IP address or full DNS name for advertised address of your relay.
+            Leave unset and Tor will guess.
+          '';
+        };
+
+        port = mkOption {
+          type    = types.either types.int types.str;
+          example = 143;
+          description = ''
+            What port to advertise for Tor connections. This corresponds to the
+            <literal>ORPort</literal> section in the Tor manual; see
+            <citerefentry><refentrytitle>tor</refentrytitle>
+            <manvolnum>1</manvolnum></citerefentry> for more details.
 
             At a minimum, you should just specify the port for the
             relay to listen on; a common one like 143, 22, 80, or 443
@@ -282,13 +523,15 @@ in
             considered first to last, and the first match wins. If you
             want to _replace_ the default exit policy, end this with
             either a reject *:* or an accept *:*. Otherwise, you're
-            _augmenting_ (prepending to) the default exit
-            policy. Leave commented to just use the default, which is
+            _augmenting_ (prepending to) the default exit policy.
+            Leave commented to just use the default, which is
             available in the man page or at
-            https://www.torproject.org/documentation.html
+            <link xlink:href="https://www.torproject.org/documentation.html" />.
 
-            Look at https://www.torproject.org/faq-abuse.html#TypicalAbuses
-            for issues you might encounter if you use the default exit policy.
+            Look at
+            <link xlink:href="https://www.torproject.org/faq-abuse.html#TypicalAbuses" />
+            for issues you might encounter if you use the default
+            exit policy.
 
             If certain IPs and ports are blocked externally, e.g. by
             your firewall, you should update your exit policy to
@@ -297,15 +540,151 @@ in
           '';
         };
       };
+
+      hiddenServices = mkOption {
+        description = ''
+          A set of static hidden services that terminate their Tor
+          circuits at this node.
+
+          Every element in this set declares a virtual onion host.
+
+          You can specify your onion address by putting corresponding
+          private key to an appropriate place in ${torDirectory}.
+
+          For services without private keys in ${torDirectory} Tor
+          daemon will generate random key pairs (which implies random
+          onion addresses) on restart. The latter could take a while,
+          please be patient.
+
+          <note><para>
+            Hidden services can be useful even if you don't intend to
+            actually <emphasis>hide</emphasis> them, since they can
+            also be seen as a kind of NAT traversal mechanism.
+
+            E.g. the example will make your sshd, whatever runs on
+            "8080" and your mail server available from anywhere where
+            the Tor network is available (which, with the help from
+            bridges, is pretty much everywhere), even if both client
+            and server machines are behind NAT you have no control
+            over.
+          </para></note>
+        '';
+        default = {};
+        example = literalExample ''
+          { "my-hidden-service-example".map = [
+              { port = 22; }                # map ssh port to this machine's ssh
+              { port = 80; toPort = 8080; } # map http port to whatever runs on 8080
+              { port = "sip"; toHost = "mail.example.com"; toPort = "imap"; } # because we can
+            ];
+          }
+        '';
+        type = types.loaOf (types.submodule ({name, config, ...}: {
+          options = {
+
+             name = mkOption {
+               type = types.str;
+               description = ''
+                 Name of this tor hidden service.
+
+                 This is purely descriptive.
+
+                 After restarting Tor daemon you should be able to
+                 find your .onion address in
+                 <literal>${torDirectory}/onion/$name/hostname</literal>.
+               '';
+             };
+
+             map = mkOption {
+               default = [];
+               description = "Port mapping for this hidden service.";
+               type = types.listOf (types.submodule ({config, ...}: {
+                 options = {
+
+                   port = mkOption {
+                     type = types.either types.int types.str;
+                     example = 80;
+                     description = ''
+                       Hidden service port to "bind to".
+                     '';
+                   };
+
+                   destination = mkOption {
+                     internal = true;
+                     type = types.str;
+                     description = "Forward these connections where?";
+                   };
+
+                   toHost = mkOption {
+                     type = types.str;
+                     default = "127.0.0.1";
+                     description = "Mapping destination host.";
+                   };
+
+                   toPort = mkOption {
+                     type = types.either types.int types.str;
+                     example = 8080;
+                     description = "Mapping destination port.";
+                   };
+
+                 };
+
+                 config = {
+                   toPort = mkDefault config.port;
+                   destination = mkDefault "${config.toHost}:${toString config.toPort}";
+                 };
+               }));
+             };
+
+             authorizeClient = mkOption {
+               default = null;
+               description = "If configured, the hidden service is accessible for authorized clients only.";
+               type = types.nullOr (types.submodule ({config, ...}: {
+
+                 options = {
+
+                   authType = mkOption {
+                     type = types.enum [ "basic" "stealth" ];
+                     description = ''
+                       Either <literal>"basic"</literal> for a general-purpose authorization protocol
+                       or <literal>"stealth"</literal> for a less scalable protocol
+                       that also hides service activity from unauthorized clients.
+                     '';
+                   };
+
+                   clientNames = mkOption {
+                     type = types.nonEmptyListOf (types.strMatching "[A-Za-z0-9+-_]+");
+                     description = ''
+                       Only clients that are listed here are authorized to access the hidden service.
+                       Generated authorization data can be found in <filename>${torDirectory}/onion/$name/hostname</filename>.
+                       Clients need to put this authorization data in their configuration file using <literal>HidServAuth</literal>.
+                     '';
+                   };
+                 };
+               }));
+             };
+          };
+
+          config = {
+            name = mkDefault name;
+          };
+        }));
+      };
     };
   };
 
   config = mkIf cfg.enable {
-    assertions = singleton
-      { message = "Can't be both an exit and a bridge relay at the same time";
-        assertion =
-          cfg.relay.enable -> !(cfg.relay.isBridge && cfg.relay.isExit);
-      };
+    # Not sure if `cfg.relay.role == "private-bridge"` helps as tor
+    # sends a lot of stats
+    warnings = optional (cfg.relay.enable && cfg.hiddenServices != {})
+      ''
+        Running Tor hidden services on a public relay makes the
+        presence of hidden services visible through simple statistical
+        analysis of publicly available data.
+
+        You can safely ignore this warning if you don't intend to
+        actually hide your hidden services. In either case, you can
+        always create a container/VM with a separate Tor daemon instance.
+      '';
 
     users.extraGroups.tor.gid = config.ids.gids.tor;
     users.extraUsers.tor =
@@ -324,9 +703,9 @@ in
         after    = [ "network.target" ];
         restartTriggers = [ torRcFile ];
 
-        # Translated from the upstream contrib/dist/tor.service.in
         serviceConfig =
           { Type         = "simple";
+            # Translated from the upstream contrib/dist/tor.service.in
             ExecStartPre = "${pkgs.tor}/bin/tor -f ${torRcFile} --verify-config";
             ExecStart    = "${pkgs.tor}/bin/tor -f ${torRcFile} --RunAsDaemon 0";
             ExecReload   = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
@@ -342,11 +721,13 @@ in
             #   DeviceAllow /dev/urandom r
             # .. but we can't specify DeviceAllow multiple times. 'closed'
             # is close enough.
+            RuntimeDirectory        = "tor";
+            StateDirectory          = [ "tor" "tor/onion" ];
             PrivateTmp              = "yes";
             DevicePolicy            = "closed";
             InaccessibleDirectories = "/home";
             ReadOnlyDirectories     = "/";
-            ReadWriteDirectories    = torDirectory;
+            ReadWriteDirectories    = [torDirectory torRunDirectory];
             NoNewPrivileges         = "yes";
           };
       };

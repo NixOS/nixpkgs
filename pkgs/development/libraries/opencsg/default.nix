@@ -1,15 +1,15 @@
-{stdenv, fetchurl, mesa, freeglut, glew, libXmu, libXext, libX11
+{stdenv, fetchurl, libGLU_combined, freeglut, glew, libXmu, libXext, libX11
   }:
 
 stdenv.mkDerivation rec {
-  version = "1.4.0";
+  version = "1.4.2";
   name = "opencsg-${version}";
   src = fetchurl {
     url = "http://www.opencsg.org/OpenCSG-${version}.tar.gz";
-    sha256 = "13c73jxadm27h7spdh3qj1v6rnn81v4xwqlv5a6k72pv9kjnpd7c";
+    sha256 = "1ysazynm759gnw1rdhn9xw9nixnzrlzrc462340a6iif79fyqlnr";
   };
 
-  buildInputs = [mesa freeglut glew libXmu libXext libX11];
+  buildInputs = [libGLU_combined freeglut glew libXmu libXext libX11];
 
   doCheck = false;
 
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Constructive Solid Geometry library";
-    homepage = "http://www.opencsg.org/";
+    homepage = http://www.opencsg.org/;
     platforms = with stdenv.lib.platforms;
       linux;
     maintainers = with stdenv.lib.maintainers; 

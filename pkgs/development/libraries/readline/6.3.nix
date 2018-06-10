@@ -1,4 +1,6 @@
-{ fetchurl, stdenv, ncurses }:
+{ fetchurl, stdenv, ncurses
+, buildPlatform, hostPlatform
+}:
 
 stdenv.mkDerivation rec {
   name = "readline-6.3p08";
@@ -8,11 +10,17 @@ stdenv.mkDerivation rec {
     sha256 = "0hzxr9jxqqx5sxsv9vmlxdnvlr9vi4ih1avjb869hbs6p5qn1fjn";
   };
 
-  outputs = [ "out" "dev" "doc" ];
+  outputs = [ "out" "dev" "man" "doc" "info" ];
 
   propagatedBuildInputs = [ncurses];
 
   patchFlags = "-p0";
+
+  configureFlags =
+    stdenv.lib.optional (stdenv.hostPlatform != stdenv.buildPlatform)
+    [ # This test requires running host code
+      "bash_cv_wcwidth_broken=no"
+    ];
 
   patches =
     [ ./link-against-ncurses.patch
@@ -29,7 +37,7 @@ stdenv.mkDerivation rec {
        import ./readline-6.3-patches.nix patch);
 
   # Don't run the native `strip' when cross-compiling.
-  dontStrip = stdenv ? cross;
+  dontStrip = hostPlatform != buildPlatform;
   bash_cv_func_sigsetjmp = if stdenv.isCygwin then "missing" else null;
 
   meta = with stdenv.lib; {

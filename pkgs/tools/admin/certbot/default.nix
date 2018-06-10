@@ -1,14 +1,16 @@
 { stdenv, pythonPackages, fetchFromGitHub, dialog }:
 
+# Latest version of certbot supports python3 and python3 version of pythondialog
+
 pythonPackages.buildPythonApplication rec {
   name = "certbot-${version}";
-  version = "0.6.0";
+  version = "0.24.0";
 
   src = fetchFromGitHub {
     owner = "certbot";
     repo = "certbot";
     rev = "v${version}";
-    sha256 = "1x0prlldkgg0hxmya4m5h3k3c872wr0jylmzpr3m04mk339yiw0c";
+    sha256 = "0gsq4si0bqwzd7ywf87y7bbprqg1m72qdj11h64qmwb5zl4vh444";
   };
 
   propagatedBuildInputs = with pythonPackages; [
@@ -29,8 +31,8 @@ pythonPackages.buildPythonApplication rec {
   buildInputs = [ dialog ] ++ (with pythonPackages; [ nose mock gnureadline ]);
 
   patchPhase = ''
-    substituteInPlace certbot/notify.py --replace "/usr/sbin/sendmail" "/var/setuid-wrappers/sendmail"
-    substituteInPlace certbot/le_util.py --replace "sw_vers" "/usr/bin/sw_vers"
+    substituteInPlace certbot/notify.py --replace "/usr/sbin/sendmail" "/run/wrappers/bin/sendmail"
+    substituteInPlace certbot/util.py --replace "sw_vers" "/usr/bin/sw_vers"
   '';
 
   postInstall = ''
@@ -39,6 +41,8 @@ pythonPackages.buildPythonApplication rec {
                        --prefix PATH : "${dialog}/bin:$PATH"
     done
   '';
+
+  doCheck = !stdenv.isDarwin; # On Hydra Darwin tests fail with "Too many open files".
 
   meta = with stdenv.lib; {
     homepage = src.meta.homepage;

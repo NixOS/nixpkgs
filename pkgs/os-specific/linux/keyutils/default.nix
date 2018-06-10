@@ -1,23 +1,26 @@
 { stdenv, fetchurl, gnumake, file }:
 
 stdenv.mkDerivation rec {
-  name = "keyutils-1.5.9";
+  name = "keyutils-${version}";
+  version = "1.5.10";
 
   src = fetchurl {
     url = "http://people.redhat.com/dhowells/keyutils/${name}.tar.bz2";
-    sha256 = "1bl3w03ygxhc0hz69klfdlwqn33jvzxl1zfl2jmnb2v85iawb8jd";
+    sha256 = "1dmgjcf7mnwc6h72xkvpaqpzxw8vmlnsmzz0s27pg0giwzm3sp0i";
   };
 
-  buildInputs = [ file ];
+  outputs = [ "out" "lib" "dev" ];
 
-  patchPhase = ''
-    sed -i -e "s, /usr/bin/make, ${gnumake}/bin/make," \
-        -e "s, /usr, ," \
-        -e "s,\$(LNS) \$(LIBDIR)/\$(SONAME),\$(LNS) \$(SONAME)," \
-        Makefile
-  '';
-
-  installPhase = "make install DESTDIR=$out";
+  installFlags = [
+    "ETCDIR=$(out)/etc"
+    "BINDIR=$(out)/bin"
+    "SBINDIR=$(out)/sbin"
+    "SHAREDIR=$(out)/share/keyutils"
+    "MANDIR=$(out)/share/man"
+    "INCLUDEDIR=$(dev)/include"
+    "LIBDIR=$(lib)/lib"
+    "USRLIBDIR=$(lib)/lib"
+  ];
 
   meta = with stdenv.lib; {
     homepage = http://people.redhat.com/dhowells/keyutils/;

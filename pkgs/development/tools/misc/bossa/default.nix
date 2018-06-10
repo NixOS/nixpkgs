@@ -14,12 +14,12 @@ let
 
 in
 stdenv.mkDerivation rec {
-  name = "bossa-2014-08-18";
+  name = "bossa-1.8";
 
   src = fetchgit {
     url = https://github.com/shumatech/BOSSA;
-    rev = "0f0a41cb1c3a65e909c5c744d8ae664e896a08ac"; /* arduino branch */
-    sha256 = "0xg79kli1ypw9zyl90mm6vfk909jinmk3lnl8sim6v2yn8shs9cn";
+    rev = "3be622ca0aa6214a2fc51c1ec682c4a58a423d62";
+    sha256 = "19ik86qbffcb04cgmi4mnascbkck4ynfj87ha65qdk6fmp5q35vm";
   };
 
   patches = [ ./bossa-no-applet-build.patch ];
@@ -29,6 +29,7 @@ stdenv.mkDerivation rec {
 
   # Explicitly specify targets so they don't get stripped.
   makeFlags = [ "bin/bossac" "bin/bossash" "bin/bossa" ];
+  NIX_CFLAGS_COMPILE = "-Wno-error=deprecated-declarations";
 
   installPhase = ''
     mkdir -p $out/bin

@@ -2,30 +2,30 @@
   cpio, fetchurl, fetchFromGitHub, iptables, systemd, makeWrapper, glibc }:
 
 let
-  # Always get the information from 
+  # Always get the information from
   # https://github.com/coreos/rkt/blob/v${VERSION}/stage1/usr_from_coreos/coreos-common.mk
-  coreosImageRelease = "1151.0.0";
-  coreosImageSystemdVersion = "231";
+  coreosImageRelease = "1478.0.0";
+  coreosImageSystemdVersion = "233";
 
   # TODO: track https://github.com/coreos/rkt/issues/1758 to allow "host" flavor.
   stage1Flavours = [ "coreos" "fly" ];
   stage1Dir = "lib/rkt/stage1-images";
 
 in stdenv.mkDerivation rec {
-  version = "1.14.0";
+  version = "1.30.0";
   name = "rkt-${version}";
   BUILDDIR="build-${name}";
 
   src = fetchFromGitHub {
-      rev = "v${version}";
-      owner = "coreos";
-      repo = "rkt";
-      sha256 = "0wniknmsv6xml3cp6ggjlqvcpwhp4bw1dqdnbm561mchvm69zhc2";
+    owner = "coreos";
+    repo = "rkt";
+    rev = "v${version}";
+    sha256 = "0dqf83b7iin1np8k8k1m8i99ybga8vx932q7n2q64yghkw7p6i00";
   };
 
   stage1BaseImage = fetchurl {
     url = "http://alpha.release.core-os.net/amd64-usr/${coreosImageRelease}/coreos_production_pxe_image.cpio.gz";
-    sha256 = "1j75ad1g217aqar84m9ycl2m71g821hq9yahl4bgjaipx9xnj23g";
+    sha256 = "0s4qdkkfp0iirfnm5ds3b3hxq0249kvpygyhflma8z90ivkzk5wq";
   };
 
   buildInputs = [
@@ -58,7 +58,7 @@ in stdenv.mkDerivation rec {
     cp -Rv $BUILDDIR/target/bin/stage1-*.aci $out/${stage1Dir}/
 
     wrapProgram $out/bin/rkt \
-      --prefix LD_LIBRARY_PATH : ${systemd}/lib \
+      --prefix LD_LIBRARY_PATH : "${systemd.lib}/lib:${acl.out}/lib" \
       --prefix PATH : ${iptables}/bin
   '';
 

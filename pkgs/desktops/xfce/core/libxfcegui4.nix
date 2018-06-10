@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgconfig, intltool, gtk
-, libxfce4util, xfconf, libglade, libstartup_notification, hicolor_icon_theme }:
+, libxfce4util, xfconf, libglade, libstartup_notification, hicolor-icon-theme }:
 let
   p_name  = "libxfcegui4";
   ver_maj = "4.10";
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
 
   buildInputs =
     [ pkgconfig intltool gtk libxfce4util xfconf libglade
-      libstartup_notification hicolor_icon_theme
+      libstartup_notification hicolor-icon-theme
     ];
 
   meta = {

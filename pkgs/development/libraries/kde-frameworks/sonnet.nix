@@ -1,11 +1,15 @@
-{ kdeFramework, lib
-, ecm
-, hunspell
+{ mkDerivation, lib
+, extra-cmake-modules
+, hunspell, qtbase, qttools
 }:
 
-kdeFramework {
+mkDerivation {
   name = "sonnet";
-  meta = { maintainers = [ lib.maintainers.ttuegel ]; };
-  nativeBuildInputs = [ ecm ];
-  buildInputs = [ hunspell ];
+  meta = {
+    maintainers = [ lib.maintainers.ttuegel ];
+    broken = builtins.compareVersions qtbase.version "5.7.0" < 0;
+  };
+  nativeBuildInputs = [ extra-cmake-modules ];
+  buildInputs = [ hunspell qttools ];
+  propagatedBuildInputs = [ qtbase ];
 }

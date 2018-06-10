@@ -1,28 +1,25 @@
 {
-  kdeDerivation, kdeWrapper, fetchurl, lib,
-  ecm, kdoctools,
-  kconfig, kinit
+  mkDerivation, fetchurl, lib,
+  extra-cmake-modules, kdoctools, wrapGAppsHook,
+  kconfig, kcrash, kinit
 }:
 
 let
   pname = "kronometer";
-  version = "2.1.0";
-  unwrapped = kdeDerivation rec {
-    name = "${pname}-${version}";
-
-    src = fetchurl {
-      url = "mirror://kde/stable/${pname}/${version}/src/${name}.tar.xz";
-      sha256 = "1nh7y4c13rscy55f5n8s2v8jij27b55rwkxh9g8r0p7mdwmw8vri";
-    };
-
-    meta = with lib; {
-      license = licenses.gpl2;
-      maintainers = with maintainers; [ peterhoeg ];
-    };
-    nativeBuildInputs = [ ecm kdoctools ];
-    propagatedBuildInputs = [ kconfig kinit ];
-  };
+  version = "2.2.1";
 in
-kdeWrapper unwrapped {
-  targets = [ "bin/kronometer" ];
+mkDerivation rec {
+  name = "${pname}-${version}";
+
+  src = fetchurl {
+    url = "mirror://kde/stable/${pname}/${version}/src/${name}.tar.xz";
+    sha256 = "18b2qi5b9hn8jy3yhav72n14z5l9w3p5fv5kslhbxc7rfvjr4h3x";
+  };
+
+  meta = with lib; {
+    license = licenses.gpl2;
+    maintainers = with maintainers; [ peterhoeg ];
+  };
+  nativeBuildInputs = [ extra-cmake-modules kdoctools wrapGAppsHook ];
+  propagatedBuildInputs = [ kconfig kcrash kinit ];
 }

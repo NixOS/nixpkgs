@@ -1,20 +1,24 @@
-{ stdenv, fetchurl, boost, cmake, ilmbase, libjpeg, libpng, libtiff
+{ stdenv, fetchFromGitHub, boost, cmake, ilmbase, libjpeg, libpng, libtiff
 , opencolorio, openexr, unzip
 }:
 
 stdenv.mkDerivation rec {
   name = "openimageio-${version}";
-  version = "1.6.11";
+  version = "1.8.9";
 
-  src = fetchurl {
-    url = "https://github.com/OpenImageIO/oiio/archive/Release-${version}.zip";
-    sha256 = "0cr0z81a41bg193dx9crcq1mns7mmzz7qys4lrbm18cmdbwkk88x";
+  src = fetchFromGitHub {
+    owner = "OpenImageIO";
+    repo = "oiio";
+    rev = "Release-${version}";
+    sha256 = "0xyfb41arvi3cc5jvgj2m8skzjrb0xma8sml74svygjgagxfj65h";
   };
 
   outputs = [ "bin" "out" "dev" "doc" ];
 
+  nativeBuildInputs = [ cmake ];
   buildInputs = [
-    boost cmake ilmbase libjpeg libpng libtiff opencolorio openexr
+    boost ilmbase libjpeg libpng
+    libtiff opencolorio openexr
     unzip
   ];
 
@@ -39,6 +43,6 @@ stdenv.mkDerivation rec {
     description = "A library and tools for reading and writing images";
     license = licenses.bsd3;
     maintainers = [ maintainers.goibhniu ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

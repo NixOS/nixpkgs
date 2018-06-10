@@ -1,27 +1,33 @@
-{ stdenv, fetchurl }:
+{ stdenv, lib, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "mp4v2-1.9.1p4";
+  name = "mp4v2-2.0.0";
 
   src = fetchurl {
-    url = "http://mp4v2.googlecode.com/files/${name}.tar.bz2";
-    sha256 = "1d73qbi0faqad3bpmjfr4kk0mfmqpl1f43ysrx4gq9i3mfp1qf2w";
+    url = "https://storage.googleapis.com/google-code-archive-downloads/v2/code.google.com/mp4v2/${name}.tar.bz2";
+    sha256 = "0f438bimimsvxjbdp4vsr8hjw2nwggmhaxgcw07g2z361fkbj683";
   };
 
-  # From Handbrake
-  # mp4v2 doesn't seem to be actively maintained any more :-/
   patches = [
-    ./A00-nero-vobsub.patch ./A01-divide-zero.patch ./A02-meaningful-4gb-warning.patch
-    ./P00-mingw-dllimport.patch
+    (fetchurl {
+      name = "gcc-7.patch";
+      url = "https://src.fedoraproject.org/cgit/rpms/libmp4v2.git/plain/"
+          + "0004-Fix-GCC7-build.patch?id=d7aeedabb";
+      sha256 = "0sbn0il7lmk77yrjyb4f0a3z3h8gsmdkscvz5n9hmrrrhrwf672w";
+    })
   ];
+
   # `faac' expects `mp4.h'.
   postInstall = "ln -s mp4v2/mp4v2.h $out/include/mp4.h";
 
   hardeningDisable = [ "format" ];
 
+  enableParallelBuilding = true;
+
   meta = {
-    homepage = http://code.google.com/p/mp4v2;
-    maintainers = [ stdenv.lib.maintainers.urkud ];
-    platforms = stdenv.lib.platforms.linux;
+    homepage = https://code.google.com/archive/p/mp4v2/;
+    maintainers = [ ];
+    platforms = lib.platforms.unix;
+    license = lib.licenses.mpl11;
   };
 }

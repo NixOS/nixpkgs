@@ -1,13 +1,15 @@
-{ stdenv, fetchurl, m4, cxx ? true, withStatic ? false }:
+{ stdenv, fetchurl, m4, cxx ? true
+, buildPackages
+, withStatic ? false }:
 
-with { inherit (stdenv.lib) optional optionalString; };
+let inherit (stdenv.lib) optional optionalString; in
 
 let self = stdenv.mkDerivation rec {
-  name = "gmp-6.1.1";
+  name = "gmp-6.1.2";
 
   src = fetchurl { # we need to use bz2, others aren't in bootstrapping stdenv
     urls = [ "mirror://gnu/gmp/${name}.tar.bz2" "ftp://ftp.gmplib.org/pub/${name}/${name}.tar.bz2" ];
-    sha256 = "1mpzprdzkgfpdc1v2lf4dxlxps4x8bvmzvd8n1ri6gw9y9jrh458";
+    sha256 = "1clg7pbpk6qwxj5b2mw0pghzawp2qlm3jf9gdd8i6fl6yh2bnxaj";
   };
 
   #outputs TODO: split $cxx due to libstdc++ dependency
@@ -16,6 +18,7 @@ let self = stdenv.mkDerivation rec {
   outputs = [ "out" "dev" "info" ];
   passthru.static = self.out;
 
+  depsBuildBuild = [ buildPackages.stdenv.cc ];
   nativeBuildInputs = [ m4 ];
 
   configureFlags =
@@ -35,18 +38,18 @@ let self = stdenv.mkDerivation rec {
   # The config.guess in GMP tries to runtime-detect various
   # ARM optimization flags via /proc/cpuinfo (and is also
   # broken on multicore CPUs). Avoid this impurity.
-  preConfigure = optionalString stdenv.isArm ''
+  preConfigure = optionalString stdenv.isAarch32 ''
       configureFlagsArray+=("--build=$(./configfsf.guess)")
     '';
 
-  doCheck = true;
+  doCheck = true; # not cross;
 
   dontDisableStatic = withStatic;
 
   enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
-    homepage = "http://gmplib.org/";
+    homepage = https://gmplib.org/;
     description = "GNU multiple precision arithmetic library";
     license = licenses.gpl3Plus;
 

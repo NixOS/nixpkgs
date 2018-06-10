@@ -1,27 +1,28 @@
 { stdenv, fetchurl
-, pkgconfig, cmake, perl, ffmpeg
-, docbook_xml_dtd_45, docbook_xsl, libxslt
-, phonon, automoc4, chromaprint, id3lib
-, taglib, mp4v2, flac, libogg, libvorbis
-, qt, zlib, readline
+, pkgconfig, cmake, python, ffmpeg, phonon, automoc4
+, chromaprint, docbook_xml_dtd_45, docbook_xsl, libxslt
+, id3lib, taglib, mp4v2, flac, libogg, libvorbis
+, zlib, readline , qtbase, qttools, qtmultimedia, qtquickcontrols
 , makeWrapper
 }:
 
 stdenv.mkDerivation rec {
 
-  name = "kid3-${meta.version}";
+  name = "kid3-${version}";
+  version = "3.6.1";
 
   src = fetchurl {
-    url = "mirror://sourceforge/project/kid3/kid3/${meta.version}/${name}.tar.gz";
-    sha256 = "12sa54mg1b3wkagmh5yi20ski8km9d199lk0a1yfxy0ffjfld7js";
+    url = "mirror://sourceforge/project/kid3/kid3/${version}/${name}.tar.gz";
+    sha256 = "1bbnd6jgahdiqmsbw6c3x4h517m50db592fnq1w0v4k5aaav4i26";
   };
 
   buildInputs = with stdenv.lib;
-  [ pkgconfig cmake perl ffmpeg docbook_xml_dtd_45 docbook_xsl libxslt
-    phonon automoc4 chromaprint id3lib taglib mp4v2 flac libogg libvorbis
-    qt zlib readline makeWrapper ];
+  [ pkgconfig cmake python ffmpeg phonon automoc4
+    chromaprint docbook_xml_dtd_45 docbook_xsl libxslt
+    id3lib taglib mp4v2 flac libogg libvorbis zlib readline
+    qtbase qttools qtmultimedia qtquickcontrols makeWrapper ];
 
-  cmakeFlags = [ "-DCMAKE_BUILD_TYPE=Release" "-DWITH_APPS=Qt;CLI" ];
+  cmakeFlags = [ "-DWITH_APPS=Qt;CLI" ];
   NIX_LDFLAGS = "-lm -lpthread";
 
   preConfigure = ''
@@ -29,11 +30,12 @@ stdenv.mkDerivation rec {
   '';
 
   postInstall = ''
-    wrapProgram $out/bin/kid3-qt --prefix QT_PLUGIN_PATH : $out/lib/qt4/plugins
+    wrapProgram $out/bin/kid3-qt --prefix QT_PLUGIN_PATH : $out/lib/qt5/plugins
   '';
 
+  enableParallelBuilding = true;
+
   meta = with stdenv.lib; {
-    version = "3.3.0";
     description = "A simple and powerful audio tag editor";
     longDescription = ''
       If you want to easily tag multiple MP3, Ogg/Vorbis, FLAC, MPC,
@@ -71,4 +73,3 @@ stdenv.mkDerivation rec {
     platforms = platforms.linux;
   };
 }
-# TODO: Qt5 support

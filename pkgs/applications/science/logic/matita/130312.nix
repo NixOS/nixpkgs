@@ -1,10 +1,8 @@
 {stdenv, fetchurl, ocaml, findlib, gdome2, ocaml_expat, gmetadom, ocaml_http, lablgtk, ocaml_mysql, ocamlnet, ulex08, camlzip, ocaml_pcre, automake, autoconf }:
 
 let
-  ocaml_version = (builtins.parseDrvName ocaml.name).version;
   version = "0.99.1pre130312";
   pname = "matita";
-
 in
 
 stdenv.mkDerivation {

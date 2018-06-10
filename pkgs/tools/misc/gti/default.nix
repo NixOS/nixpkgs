@@ -2,18 +2,14 @@
 
 stdenv.mkDerivation rec {
   name = "gti-${version}";
-  version = "2015-05-21";
+  version = "1.6.1";
 
   src = fetchFromGitHub {
     owner = "rwos";
     repo = "gti";
-    rev = "edaac795b0b0ff01f2347789f96c740c764bf376";
-    sha256 = "1wki7d61kcmv9s3xayky9cz84qa773x3y1z88y768hq8ifwadcbn";
+    rev = "v${version}";
+    sha256 = "19q3r4v22z2q1j4njap356f3mcq6kwh6v8nbbq2rw4x3cdxwdv51";
   };
-
-  prePatch = ''
-    substituteInPlace Makefile --replace gcc cc
-  '';
 
   installPhase = ''
     mkdir -p $out/bin $out/share/man/man6

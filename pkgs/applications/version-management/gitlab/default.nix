@@ -1,43 +1,46 @@
-{ stdenv, lib, bundler, fetchFromGitHub, bundlerEnv, libiconv, ruby
-, tzdata, git, nodejs, procps
+{ pkgs, stdenv, lib, bundler, fetchurl, fetchFromGitHub, bundlerEnv, libiconv
+, ruby, tzdata, git, procps, nettools
 }:
 
-/* When updating the Gemfile add `gem "activerecord-nulldb-adapter"`
-   to allow building the assets without a database */
-
 let
-  env = bundlerEnv {
-    name = "gitlab";
+  rubyEnv = bundlerEnv {
+    name = "gitlab-env-${version}";
     inherit ruby;
-    gemfile = ./Gemfile;
-    lockfile = ./Gemfile.lock;
-    gemset = ./gemset.nix;
+    gemdir = ./.;
+    groups = [ "default" "unicorn" "ed25519" "metrics" ];
     meta = with lib; {
       homepage = http://www.gitlab.com/;
       platforms = platforms.linux;
-      maintainers = [ ];
+      maintainers = with maintainers; [ fpletz globin ];
       license = licenses.mit;
     };
+  };
+
+  version = "10.8.0";
+
+  gitlabDeb = fetchurl {
+    url = "https://packages.gitlab.com/gitlab/gitlab-ce/packages/debian/jessie/gitlab-ce_${version}-ce.0_amd64.deb/download";
+    sha256 = "0j5jrlwfpgwfirjnqb9w4snl9w213kdxb1ajyrla211q603d4j34";
   };
 
 in
 
 stdenv.mkDerivation rec {
   name = "gitlab-${version}";
-  version = "8.11.2";
-
-  buildInputs = [ env ruby bundler tzdata git nodejs procps ];
 
   src = fetchFromGitHub {
     owner = "gitlabhq";
     repo = "gitlabhq";
     rev = "v${version}";
-    sha256 = "1id6jsf4mshxis07dqlkgdyqi1v415rp4lx9ix8sjfznchria58b";
+    sha256 = "1idvi27xpghvvb3sv62afhcnnswvjlrbg5lld79a761kd4187cym";
   };
+
+  buildInputs = [
+    rubyEnv rubyEnv.wrappedRuby rubyEnv.bundler tzdata git procps nettools
+  ];
 
   patches = [
     ./remove-hardcoded-locations.patch
-    ./nulladapter.patch
   ];
 
   postPatch = ''
@@ -51,6 +54,8 @@ stdenv.mkDerivation rec {
 
     substituteInPlace app/controllers/admin/background_jobs_controller.rb \
         --replace "ps -U" "${procps}/bin/ps -U"
+
+    sed -i '/ask_to_continue/d' lib/tasks/gitlab/two_factor.rake
 
     # required for some gems:
     cat > config/database.yml <<EOF
@@ -66,23 +71,37 @@ stdenv.mkDerivation rec {
 
   buildPhase = ''
     mv config/gitlab.yml.example config/gitlab.yml
-    GITLAB_DATABASE_ADAPTER=nulldb \
-      SKIP_STORAGE_VALIDATION=true \
-      rake assets:precompile RAILS_ENV=production
+
+    # work around unpacking deb containing binary with suid bit
+    ar p ${gitlabDeb} data.tar.gz | gunzip > gitlab-deb-data.tar
+    tar -f gitlab-deb-data.tar --delete ./opt/gitlab/embedded/bin/ksu
+    tar -xf gitlab-deb-data.tar
+
+    mv -v opt/gitlab/embedded/service/gitlab-rails/public/assets public
+    rm -rf opt
+
     mv config/gitlab.yml config/gitlab.yml.example
-    rm config/secrets.yml
+    rm -f config/secrets.yml
     mv config config.dist
   '';
 
   installPhase = ''
+    rm -r tmp
     mkdir -p $out/share
     cp -r . $out/share/gitlab
+    rm -rf $out/share/gitlab/log
+    ln -sf /run/gitlab/log $out/share/gitlab/log
     ln -sf /run/gitlab/uploads $out/share/gitlab/public/uploads
     ln -sf /run/gitlab/config $out/share/gitlab/config
+    ln -sf /run/gitlab/tmp $out/share/gitlab/tmp
+
+    # rake tasks to mitigate CVE-2017-0882
+    # see https://about.gitlab.com/2017/03/20/gitlab-8-dot-17-dot-4-security-release/
+    cp ${./reset_token.rake} $out/share/gitlab/lib/tasks/reset_token.rake
   '';
 
   passthru = {
-    inherit env;
-    inherit ruby;
+    inherit rubyEnv;
+    ruby = rubyEnv.wrappedRuby;
   };
 }

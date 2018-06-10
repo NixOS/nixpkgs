@@ -28,7 +28,8 @@ stdenv.mkDerivation rec {
     sha256 = "1k0x8mzgavfy7q9kywl6kzsc084g1xlymcnsxi5v6jp279nsdwwq";
   };
 
-  buildInputs = [ pkgconfig libpng openssl curl gtk2 check libxml2 libidn perl
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ libpng openssl curl gtk2 check libxml2 libidn perl
     nettools perlPackages.HTMLParser libXcursor libXrandr makeWrapper SDL
     buildsystem
     nsgenbind
@@ -66,7 +67,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = "http://www.netsurf-browser.org/";
+    homepage = http://www.netsurf-browser.org/;
     description = "Free opensource web browser";
     license = licenses.gpl2;
     maintainers = [ maintainers.vrthra ];

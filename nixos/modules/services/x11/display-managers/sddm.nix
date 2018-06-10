@@ -9,16 +9,27 @@ let
   cfg = dmcfg.sddm;
   xEnv = config.systemd.services."display-manager".environment;
 
-  sddm = pkgs.sddm.override { inherit (cfg) themes; };
+  inherit (pkgs) sddm;
 
   xserverWrapper = pkgs.writeScript "xserver-wrapper" ''
     #!/bin/sh
     ${concatMapStrings (n: "export ${n}=\"${getAttr n xEnv}\"\n") (attrNames xEnv)}
-    exec ${dmcfg.xserverBin} ${dmcfg.xserverArgs} "$@"
+    exec systemd-cat ${dmcfg.xserverBin} ${toString dmcfg.xserverArgs} "$@"
   '';
 
   Xsetup = pkgs.writeScript "Xsetup" ''
     #!/bin/sh
+
+    # Prior to Qt 5.9.2, there is a QML cache invalidation bug which sometimes
+    # strikes new Plasma 5 releases. If the QML cache is not invalidated, SDDM
+    # will segfault without explanation. We really tore our hair out for awhile
+    # before finding the bug:
+    # https://bugreports.qt.io/browse/QTBUG-62302
+    # We work around the problem by deleting the QML cache before startup. It
+    # will be regenerated, causing a small but perceptible delay when SDDM
+    # starts.
+    rm -fr /var/lib/sddm/.cache/sddm-greeter/qmlcache
+
     ${cfg.setupScript}
   '';
 
@@ -26,7 +37,6 @@ let
     #!/bin/sh
     ${cfg.stopScript}
   '';
-
 
   cfgFile = pkgs.writeText "sddm.conf" ''
     [General]
@@ -38,8 +48,8 @@ let
 
     [Theme]
     Current=${cfg.theme}
-    ThemeDir=${sddm}/share/sddm/themes
-    FacesDir=${sddm}/share/sddm/faces
+    ThemeDir=/run/current-system/sw/share/sddm/themes
+    FacesDir=/run/current-system/sw/share/sddm/faces
 
     [Users]
     MaximumUid=${toString config.ids.uids.nixbld}
@@ -47,7 +57,7 @@ let
     HideShells=/run/current-system/sw/bin/nologin
 
     [X11]
-    MinimumVT=${toString xcfg.tty}
+    MinimumVT=${toString (if xcfg.tty != null then xcfg.tty else 7)}
     ServerPath=${xserverWrapper}
     XephyrPath=${pkgs.xorg.xorgserver.out}/bin/Xephyr
     SessionCommand=${dmcfg.session.script}
@@ -55,12 +65,16 @@ let
     XauthPath=${pkgs.xorg.xauth}/bin/xauth
     DisplayCommand=${Xsetup}
     DisplayStopCommand=${Xstop}
+    EnableHidpi=${if cfg.enableHidpi then "true" else "false"}
+
+    [Wayland]
+    EnableHidpi=${if cfg.enableHidpi then "true" else "false"}
 
     ${optionalString cfg.autoLogin.enable ''
     [Autologin]
     User=${cfg.autoLogin.user}
     Session=${defaultSessionName}.desktop
-    Relogin=${if cfg.autoLogin.relogin then "true" else "false"}
+    Relogin=${boolToString cfg.autoLogin.relogin}
     ''}
 
     ${cfg.extraConfig}
@@ -70,7 +84,7 @@ let
     let
       dm = xcfg.desktopManager.default;
       wm = xcfg.windowManager.default;
-    in dm + optionalString (wm != "none") (" + " + wm);
+    in dm + optionalString (wm != "none") ("+" + wm);
 
 in
 {
@@ -85,8 +99,19 @@ in
         '';
       };
 
+      enableHidpi = mkOption {
+        type = types.bool;
+        default = true;
+        description = ''
+          Whether to enable automatic HiDPI mode.
+          </para>
+          <para>
+          Versions up to 0.17 are broken so this only works from 0.18 onwards.
+        '';
+      };
+
       extraConfig = mkOption {
-        type = types.str;
+        type = types.lines;
         default = "";
         example = ''
           [Autologin]
@@ -103,14 +128,6 @@ in
         default = "";
         description = ''
           Greeter theme to use.
-        '';
-      };
-
-      themes = mkOption {
-        type = types.listOf types.package;
-        default = [];
-        description = ''
-          Extra packages providing themes.
         '';
       };
 
@@ -203,9 +220,17 @@ in
     services.xserver.displayManager.slim.enable = false;
 
     services.xserver.displayManager.job = {
-      logsXsession = true;
+      logToFile = true;
 
-      execCmd = "exec ${sddm}/bin/sddm";
+      environment = {
+        # Load themes from system environment
+        QT_PLUGIN_PATH = "/run/current-system/sw/" + pkgs.qt5.qtbase.qtPluginPrefix;
+        QML2_IMPORT_PATH = "/run/current-system/sw/" + pkgs.qt5.qtbase.qtQmlPrefix;
+
+        XDG_DATA_DIRS = "/run/current-system/sw/share";
+      };
+
+      execCmd = "exec /run/current-system/sw/bin/sddm";
     };
 
     security.pam.services = {
@@ -254,5 +279,11 @@ in
 
     users.extraGroups.sddm.gid = config.ids.gids.sddm;
 
+    environment.systemPackages = [ sddm ];
+    services.dbus.packages = [ sddm ];
+
+    # To enable user switching, allow sddm to allocate TTYs/displays dynamically.
+    services.xserver.tty = null;
+    services.xserver.display = null;
   };
 }

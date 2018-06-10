@@ -1,25 +1,31 @@
-{ stdenv, fetchsvn, pkgconfig, autoreconfHook, gnutls33, freetype
+{ lib, stdenv, fetchFromGitHub, pkgconfig, autoreconfHook, gnutls, freetype
 , SDL, SDL_gfx, SDL_ttf, liblo, libxml2, alsaLib, libjack2, libvorbis
-, libSM, libsndfile, libogg
+, libSM, libsndfile, libogg, libtool
 }:
+let
+  makeSDLFlags = map (p: "-I${lib.getDev p}/include/SDL");
+in
 
 stdenv.mkDerivation rec {
   name = "freewheeling-${version}";
-  version = "100";
+  version = "0.6.4";
 
-  src = fetchsvn {
-    url = svn://svn.code.sf.net/p/freewheeling/code;
-    rev = version;
-    sha256 = "1m6z7p93xyha25qma9bazpzbp04pqdv5h3yrv6851775xsyvzksv";
+  src = fetchFromGitHub {
+    owner = "free-wheeling";
+    repo = "freewheeling";
+    rev = "v${version}";
+    sha256 = "1xflbbnjdibjmyxb1zq8liylaw5k03nnl1z3272jh204pqh17ri9";
   };
 
-  nativeBuildInputs = [ pkgconfig autoreconfHook ];
+  nativeBuildInputs = [ pkgconfig autoreconfHook libtool ];
   buildInputs = [
-    gnutls33 freetype SDL SDL_gfx SDL_ttf
+    freetype SDL SDL_gfx SDL_ttf
     liblo libxml2 libjack2 alsaLib libvorbis libsndfile libogg libSM
+    (gnutls.overrideAttrs (oldAttrs: {
+      configureFlags = oldAttrs.configureFlags ++ [ "--enable-openssl-compatibility" ];
+    }))
   ];
-
-  patches = [ ./am_path_sdl.patch ./xml.patch ];
+  NIX_CFLAGS_COMPILE = makeSDLFlags [ SDL SDL_ttf SDL_gfx ] ++ [ "-I${libxml2.dev}/include/libxml2" ];
 
   hardeningDisable = [ "format" ];
 
@@ -33,11 +39,11 @@ stdenv.mkDerivation rec {
         improv. We leave mice and menus, and dive into our own process
         of making sound.
 
-        Freewheeling runs under Mac OS X and Linux, and is open source
+        Freewheeling runs under macOS and Linux, and is open source
         software, released under the GNU GPL license.
     '' ;
 
-    homepage = "http://freewheeling.sourceforge.net";
+    homepage = http://freewheeling.sourceforge.net;
     license = stdenv.lib.licenses.gpl2;
     maintainers = [ stdenv.lib.maintainers.sepi ];
     platforms = stdenv.lib.platforms.linux;

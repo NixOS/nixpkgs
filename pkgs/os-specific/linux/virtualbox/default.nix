@@ -7,6 +7,16 @@ stdenv.mkDerivation {
     "fortify" "pic" "stackprotector"
   ];
 
+  nativeBuildInputs = kernel.moduleBuildDependencies;
+
+  patches = [
+    ./fix_kerndir.patch
+    ./fix_kbuild.patch
+  ];
+
+  KERN_DIR = "${kernel.dev}/lib/modules/${kernel.modDirVersion}/build";
+  INCLUDE_BASE = "${virtualbox.modsrc}";
+
   makeFlags = [
     "-C ${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
     "INSTALL_MOD_PATH=$(out)"

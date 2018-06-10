@@ -1,11 +1,11 @@
-{ stdenv, fetchurl, makeWrapper, jre }:
+{ stdenv, fetchurl, makeWrapper, jre, gnugrep, coreutils }:
 
 stdenv.mkDerivation rec {
-  name = "scala-2.11.8";
+  name = "scala-2.12.6";
 
   src = fetchurl {
     url = "http://www.scala-lang.org/files/archive/${name}.tgz";
-    sha256 = "1khs7673wca7gnxz2rxphv6v5k94jkpcarlqznsys9cpknhqdz47";
+    sha256 = "05ili2959yrshqi44wpmwy0dyfm4kvp6i8mlbnj1xvc5b9649iqs";
   };
 
   propagatedBuildInputs = [ jre ] ;
@@ -16,8 +16,16 @@ stdenv.mkDerivation rec {
     rm "bin/"*.bat
     mv * $out
 
+    # put docs in correct subdirectory
+    mkdir -p $out/share/doc
+    mv $out/doc $out/share/doc/scala
+
     for p in $(ls $out/bin/) ; do
-      wrapProgram $out/bin/$p --prefix PATH ":" ${jre}/bin ;
+      wrapProgram $out/bin/$p \
+        --prefix PATH ":" ${coreutils}/bin \
+        --prefix PATH ":" ${gnugrep}/bin \
+        --prefix PATH ":" ${jre}/bin \
+        --set JAVA_HOME ${jre}
     done
   '';
 

@@ -32,7 +32,7 @@ stdenv.mkDerivation {
       around datasets arising from point samples, images, distance
       matrices and so forth.
     '';
-    homepage = "http://www.sas.upenn.edu/~vnanda/perseus/index.html";
+    homepage = http://www.sas.upenn.edu/~vnanda/perseus/index.html;
     license = stdenv.lib.licenses.gpl3;
     maintainers = with stdenv.lib.maintainers; [erikryb];
     platforms = stdenv.lib.platforms.linux;

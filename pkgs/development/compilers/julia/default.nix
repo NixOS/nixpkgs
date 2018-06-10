@@ -1,6 +1,6 @@
 { stdenv, fetchgit, fetchurl
 # build tools
-, gfortran, m4, makeWrapper, patchelf, perl, which, python2
+, gfortran, m4, makeWrapper, patchelf, perl, which, python2, paxctl
 # libjulia dependencies
 , libunwind, llvm, readline, utf8proc, zlib
 # standard library dependencies
@@ -42,18 +42,18 @@ let
   rmathVersion = "0.1";
   rmath-julia = fetchurl {
     url = "https://api.github.com/repos/JuliaLang/Rmath-julia/tarball/v${rmathVersion}";
-    sha256 = "0ai5dhjc43zcvangz123ryxmlbm51s21rg13bllwyn98w67arhb4";
+    sha256 = "1qyps217175qhid46l8f5i1v8i82slgp23ia63x2hzxwfmx8617p";
   };
 in
 
 stdenv.mkDerivation rec {
   pname = "julia";
-  version = "0.4.6";
+  version = "0.4.7";
   name = "${pname}-${version}";
 
   src = fetchurl {
     url = "https://github.com/JuliaLang/${pname}/releases/download/v${version}/${name}.tar.gz";
-    sha256 = "17wsppmsf782icyzri34zha61wfx4brfq4h68qg17w6zimd2plg5";
+    sha256 = "09f531jhs8pyd1xng5c26x994w7q0sxxr28mr3qfw9wpkbmsc2pf";
   };
 
   prePatch = ''
@@ -66,7 +66,7 @@ stdenv.mkDerivation rec {
     ./0001-use-system-utf8proc.patch
     ./0002-use-system-suitesparse.patch
     ./0003-no-ldconfig.patch
-  ];
+  ] ++ stdenv.lib.optional stdenv.needsPax ./0004-hardened-0.4.7.patch;
 
   postPatch = ''
     patchShebangs . contrib
@@ -79,7 +79,8 @@ stdenv.mkDerivation rec {
   ] ++
     stdenv.lib.optionals stdenv.isDarwin [CoreServices ApplicationServices] ;
 
-  nativeBuildInputs = [ curl gfortran m4 makeWrapper patchelf perl python2 which ];
+  nativeBuildInputs = [ curl gfortran m4 makeWrapper patchelf perl python2 which ]
+    ++ stdenv.lib.optional stdenv.needsPax paxctl;
 
   makeFlags =
     let
@@ -159,10 +160,11 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "High-level performance-oriented dynamical language for technical computing";
-    homepage = "http://julialang.org/";
+    homepage = https://julialang.org/;
     license = stdenv.lib.licenses.mit;
     maintainers = with stdenv.lib.maintainers; [ raskin ];
     platforms = [ "i686-linux" "x86_64-linux" "x86_64-darwin" ];
-    broken = stdenv.isi686;
+    #broken = stdenv.isi686;
+    broken = true; # 2018-04-10
   };
 }

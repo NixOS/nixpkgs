@@ -1,12 +1,12 @@
-{ stdenv, fetchurl, mono, libmediainfo, sqlite, makeWrapper, ... }:
+{ stdenv, fetchurl, mono, libmediainfo, sqlite, curl, makeWrapper, ... }:
 
 stdenv.mkDerivation rec {
   name = "sonarr-${version}";
-  version = "2.0.0.4326";
+  version = "2.0.0.5163";
 
   src = fetchurl {
     url = "http://download.sonarr.tv/v2/master/mono/NzbDrone.master.${version}.mono.tar.gz";
-    sha256 = "1lrfwwy5bjsmrq6zpx0kadmlacafmj44qhifswbhljlykxwsld7r";
+    sha256 = "037rs0cb7dfiblfy02x2l4amv9dmx1wiz5pa97vpczfgk5gq99y3";
   };
 
   buildInputs = [
@@ -19,8 +19,8 @@ stdenv.mkDerivation rec {
 
     makeWrapper "${mono}/bin/mono" $out/bin/NzbDrone \
       --add-flags "$out/bin/NzbDrone.exe" \
-      --prefix LD_LIBRARY_PATH ':' "${sqlite.out}/lib" \
-      --prefix LD_LIBRARY_PATH ':' "${libmediainfo}/lib"
+      --prefix LD_LIBRARY_PATH : ${stdenv.lib.makeLibraryPath [
+          curl sqlite libmediainfo ]}
   '';
 
   meta = {

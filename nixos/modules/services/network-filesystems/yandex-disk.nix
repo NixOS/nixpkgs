@@ -55,6 +55,15 @@ in
         description = "The directory to use for Yandex.Disk storage";
       };
 
+      excludes = mkOption {
+        default = "";
+        type = types.string;
+        example = "data,backup";
+        description = ''
+          Comma-separated list of directories which are excluded from synchronization.
+        '';
+      };
+
     };
 
   };
@@ -86,15 +95,15 @@ in
         chown ${u} ${dir}
 
         if ! test -d "${cfg.directory}" ; then
-          mkdir -p -m 755 ${cfg.directory} ||
+          (mkdir -p -m 755 ${cfg.directory} && chown ${u} ${cfg.directory}) ||
             exit 1
         fi
 
-        ${pkgs.su}/bin/su -s ${pkgs.stdenv.shell} ${u} \
+        ${pkgs.su}/bin/su -s ${pkgs.runtimeShell} ${u} \
           -c '${pkgs.yandex-disk}/bin/yandex-disk token -p ${cfg.password} ${cfg.username} ${dir}/token'
 
-        ${pkgs.su}/bin/su -s ${pkgs.stdenv.shell} ${u} \
-          -c '${pkgs.yandex-disk}/bin/yandex-disk start --no-daemon -a ${dir}/token -d ${cfg.directory}'
+        ${pkgs.su}/bin/su -s ${pkgs.runtimeShell} ${u} \
+          -c '${pkgs.yandex-disk}/bin/yandex-disk start --no-daemon -a ${dir}/token -d ${cfg.directory} --exclude-dirs=${cfg.excludes}'
       '';
 
     };

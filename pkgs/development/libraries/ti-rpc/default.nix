@@ -1,12 +1,20 @@
-{ fetchurl, stdenv, autoreconfHook, libkrb5 }:
+{ fetchurl, fetchpatch, stdenv, autoreconfHook, libkrb5 }:
 
 stdenv.mkDerivation rec {
-  name = "libtirpc-1.0.1";
+  name = "libtirpc-1.0.3";
 
   src = fetchurl {
     url = "mirror://sourceforge/libtirpc/${name}.tar.bz2";
-    sha256 = "17mqrdgsgp9m92pmq7bvr119svdg753prqqxmg4cnz5y657rfmji";
+    sha256 = "0ppxl3k3nsz0qdakq844i2kj4fvh9h937lhx26bgmpmxq67sghw6";
   };
+
+  postPatch = ''
+    sed '1i#include <stdint.h>' -i src/xdr_sizeof.c
+  '' + stdenv.lib.optionalString stdenv.hostPlatform.isMusl ''
+    substituteInPlace tirpc/rpc/types.h \
+      --replace '#if defined __APPLE_CC__ || defined __FreeBSD__' \
+                '#if defined __APPLE_CC__ || defined __FreeBSD__ || !defined __GLIBC__'
+  '';
 
   nativeBuildInputs = [ autoreconfHook ];
   propagatedBuildInputs = [ libkrb5 ];
@@ -20,7 +28,7 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   meta = with stdenv.lib; {
-    homepage = "http://sourceforge.net/projects/libtirpc/";
+    homepage = https://sourceforge.net/projects/libtirpc/;
     description = "The transport-independent Sun RPC implementation (TI-RPC)";
     license = licenses.bsd3;
     platforms = platforms.linux;

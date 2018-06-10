@@ -1,20 +1,18 @@
-{ stdenv, fetchurl, unzip }:
+{ stdenv, fetchzip }:
 
-stdenv.mkDerivation rec {
+let
+  version = "2.138";
+in fetchzip rec {
   name = "roboto-${version}";
-  version = "2.134";
 
-  src = fetchurl {
-    url = "https://github.com/google/roboto/releases/download/v${version}/roboto-unhinted.zip";
-    sha256 = "1l033xc2n4754gwakxshh5235cnrnzy7q6zsp5zghn8ib0gdp5rb";
-  };
+  url = "https://github.com/google/roboto/releases/download/v${version}/roboto-unhinted.zip";
 
-  nativeBuildInputs = [ unzip ];
-
-  installPhase = ''
-    mkdir -p $out/share/fonts/truetype
-    cp -a * $out/share/fonts/truetype/
+  postFetch = ''
+    mkdir -p $out/share/fonts
+    unzip -j $downloadedFile \*.ttf -x __MACOSX/\* -d $out/share/fonts/truetype
   '';
+
+  sha256 = "1s3c48wwvvwd3p4w3hfkri5v2c54j2bdxmd3bjv54klc5mrlh6z3";
 
   meta = {
     homepage = https://github.com/google/roboto;
@@ -25,7 +23,7 @@ stdenv.mkDerivation rec {
       Material Design.
     '';
     license = stdenv.lib.licenses.asl20;
-    maintainers = [ stdenv.lib.maintainers.romildo ];
     platforms = stdenv.lib.platforms.all;
+    maintainers = [ stdenv.lib.maintainers.romildo ];
   };
 }

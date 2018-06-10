@@ -1,4 +1,4 @@
-{ fetchurl, lib, unzip, nettools, pythonPackages }:
+{ fetchurl, lib, unzip, nettools, pythonPackages, texinfo }:
 
 # FAILURES: The "running build_ext" phase fails to compile Twisted
 # plugins, because it tries to write them into Twisted's (immutable)
@@ -6,16 +6,18 @@
 # some loss of functionality because of it.
 
 pythonPackages.buildPythonApplication rec {
-  version = "1.11.0";
+  version = "1.12.1";
   name = "tahoe-lafs-${version}";
   namePrefix = "";
 
   src = fetchurl {
     url = "https://tahoe-lafs.org/downloads/tahoe-lafs-${version}.tar.bz2";
-    sha256 = "0hrp87rarbmmpnrxk91s83h6irkykds3pl263dagcddbdl5inqdi";
+    sha256 = "0x9f1kjym1188fp6l5sqy0zz8mdb4xw861bni2ccv26q482ynbks";
   };
 
-  patchPhase = ''
+  outputs = [ "out" "doc" "info" ];
+
+  postPatch = ''
     sed -i "src/allmydata/util/iputil.py" \
         -es"|_linux_path = '/sbin/ifconfig'|_linux_path = '${nettools}/bin/ifconfig'|g"
 
@@ -30,25 +32,50 @@ pythonPackages.buildPythonApplication rec {
     sed -i 's/"pycrypto.*"/"pycrypto"/' src/allmydata/_auto_deps.py
   '';
 
+  # Remove broken and expensive tests.
+  preConfigure = ''
+    (
+      cd src/allmydata/test
+
+      # Buggy?
+      rm cli/test_create.py test_backupdb.py
+
+      # These require Tor and I2P.
+      rm test_connections.py test_iputil.py test_hung_server.py test_i2p_provider.py test_tor_provider.py
+
+      # Expensive
+      rm test_system.py
+    )
+  '';
+
+  nativeBuildInputs = with pythonPackages; [ sphinx texinfo ];
+
   buildInputs = with pythonPackages; [ unzip numpy mock ];
 
   # The `backup' command requires `sqlite3'.
   propagatedBuildInputs = with pythonPackages; [
-    twisted foolscap nevow simplejson zfec pycryptopp sqlite3 darcsver
+    twisted foolscap nevow simplejson zfec pycryptopp darcsver
     setuptoolsTrial setuptoolsDarcs pycrypto pyasn1 zope_interface
-    service-identity
+    service-identity pyyaml
   ];
 
+  # Install the documentation.
   postInstall = ''
-    # Install the documentation.
-    mkdir -p "$out/share/doc/${name}"
-    cp -rv "docs/"* "$out/share/doc/${name}"
-    find "$out/share/doc/${name}" -name Makefile -exec rm -v {} \;
+    (
+      cd docs
+
+      make singlehtml
+      mkdir -p "$doc/share/doc/${name}"
+      cp -rv _build/singlehtml/* "$doc/share/doc/${name}"
+
+      make info
+      mkdir -p "$info/share/info"
+      cp -rv _build/texinfo/*.info "$info/share/info"
+    )
   '';
 
   checkPhase = ''
-    # Still broken. ~ C.
-    #   trial allmydata
+    trial --rterrors allmydata
   '';
 
   meta = {
@@ -62,6 +89,6 @@ pythonPackages.buildPythonApplication rec {
     homepage = http://tahoe-lafs.org/;
     license = [ lib.licenses.gpl2Plus /* or */ "TGPPLv1+" ];
     maintainers = with lib.maintainers; [ MostAwesomeDude ];
-    platforms = lib.platforms.gnu;  # arbitrary choice
+    platforms = lib.platforms.gnu ++ lib.platforms.linux;
   };
 }

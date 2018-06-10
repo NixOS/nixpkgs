@@ -17,7 +17,7 @@ agda.mkDerivation (self: rec {
   '';
 
   meta = {
-    homepage = "https://svn.divms.uiowa.edu/repos/clc/projects/agda/lib/";
+    homepage = https://svn.divms.uiowa.edu/repos/clc/projects/agda/lib/;
     description = "Agda standard library developed at Iowa";
     license = stdenv.lib.licenses.free;
     platforms = stdenv.lib.platforms.unix;

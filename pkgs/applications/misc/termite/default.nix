@@ -1,23 +1,28 @@
-{ stdenv, fetchgit, pkgconfig, vte, gtk3, ncurses, makeWrapper
+{ stdenv, fetchgit, pkgconfig, vte, gtk3, ncurses, makeWrapper, wrapGAppsHook, symlinkJoin
 , configFile ? null
 }:
 
-let 
-  version = "11";
+let
+  version = "13";
   termite = stdenv.mkDerivation {
     name = "termite-${version}";
 
     src = fetchgit {
       url = "https://github.com/thestinger/termite";
       rev = "refs/tags/v${version}";
-      sha256 = "1cw4yw7n9m2si8b7zcfyz9pyihncabxm5g39v1mxslfajxgwzmd8";
+      sha256 = "02cn70ygl93ghhkhs3xdxn5b1yadc255v3yp8cmhhyzsv5027hvj";
     };
+
+    # https://github.com/thestinger/termite/pull/516
+    patches = [ ./url_regexp_trailing.patch ];
 
     postPatch = "sed '1i#include <math.h>' -i termite.cc";
 
     makeFlags = [ "VERSION=v${version}" "PREFIX=" "DESTDIR=$(out)" ];
 
-    buildInputs = [ pkgconfig vte gtk3 ncurses ];
+    buildInputs = [ vte gtk3 ncurses ];
+
+    nativeBuildInputs = [ wrapGAppsHook pkgconfig ];
 
     outputs = [ "out" "terminfo" ];
 
@@ -37,13 +42,13 @@ let
       platforms = platforms.all;
     };
   };
-in if configFile == null then termite else stdenv.mkDerivation {
+in if configFile == null then termite else symlinkJoin {
   name = "termite-with-config-${version}";
+  paths = [ termite ];
   nativeBuildInputs = [ makeWrapper ];
-  buildCommand = ''
-    mkdir -p $out/etc/xdg/termite/ $out/bin
-    ln -s ${termite}/bin/termite $out/bin/termite
-    wrapProgram $out/bin/termite --add-flags "--config ${configFile}"
+  postBuild = ''
+    wrapProgram $out/bin/termite \
+      --add-flags "--config ${configFile}"
   '';
   passthru.terminfo = termite.terminfo;
 }

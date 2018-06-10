@@ -1,16 +1,21 @@
-{ stdenv, fetchurl, ncurses, readline }:
+{ stdenv, fetchurl, ncurses, readline, autoreconfHook }:
 
 stdenv.mkDerivation rec {
-  name = "hunspell-1.3.3";
+  version = "1.6.2";
+  name = "hunspell-${version}";
 
   src = fetchurl {
-    url = "mirror://sourceforge/hunspell/${name}.tar.gz";
-    sha256 = "0v14ff9s37vkh45diaddndcrj0hmn67arh8xh8k79q9c1vgc1cm7";
+    url = "https://github.com/hunspell/hunspell/archive/v${version}.tar.gz";
+    sha256 = "1i7lsv2cm0713ia3j5wjkcrhpfp3lqpjpwp4d3v18n7ycaqcxn9w";
   };
 
   outputs = [ "bin" "dev" "out" "man" ];
 
   buildInputs = [ ncurses readline ];
+  nativeBuildInputs = [ autoreconfHook ];
+
+  autoreconfFlags = "-vfi";
+
   configureFlags = [ "--with-ui" "--with-readline" ];
 
   hardeningDisable = [ "format" ];
@@ -21,7 +26,7 @@ stdenv.mkDerivation rec {
     longDescription = ''
       Hunspell is the spell checker of LibreOffice, OpenOffice.org, Mozilla
       Firefox 3 & Thunderbird, Google Chrome, and it is also used by
-      proprietary software packages, like Mac OS X, InDesign, memoQ, Opera and
+      proprietary software packages, like macOS, InDesign, memoQ, Opera and
       SDL Trados.
 
       Main features:
@@ -33,7 +38,7 @@ stdenv.mkDerivation rec {
       * C++ library under GPL/LGPL/MPL tri-license.
       * Interfaces and ports:
         * Enchant (Generic spelling library from the Abiword project),
-        * XSpell (Mac OS X port, but Hunspell is part of the OS X from version 10.6 (Snow Leopard), and
+        * XSpell (macOS port, but Hunspell is part of the macOS from version 10.6 (Snow Leopard), and
             now it is enough to place Hunspell dictionary files into
             ~/Library/Spelling or /Library/Spelling for spell checking),
         * Delphi, Java (JNA, JNI), Perl, .NET, Python, Ruby ([1], [2]), UNO.

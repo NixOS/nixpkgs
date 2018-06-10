@@ -1,14 +1,15 @@
-{ stdenv, fetchurl, fixedPoint ? false, withCustomModes ? true }:
+{ stdenv, fetchurl, fetchpatch
+, fixedPoint ? false, withCustomModes ? true }:
 
 let
-  version = "1.1.3";
+  version = "1.2.1";
 in
 stdenv.mkDerivation rec {
   name = "libopus-${version}";
 
   src = fetchurl {
-    url = "http://downloads.xiph.org/releases/opus/opus-${version}.tar.gz";
-    sha256 = "0cxnd7pjxbgh6l3cbzsw29phpr5cq28fikfhjlp1hc3y5s0gxdjq";
+    url = "https://archive.mozilla.org/pub/opus/opus-${version}.tar.gz";
+    sha256 = "0ch7yzgg4bn1g36bpjsfrgs4n19c84d7wpdida6yzifrrhwx7byg";
   };
 
   outputs = [ "out" "dev" ];

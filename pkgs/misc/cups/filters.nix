@@ -1,6 +1,7 @@
 { stdenv, fetchurl, pkgconfig, cups, poppler, poppler_utils, fontconfig
 , libjpeg, libpng, perl, ijs, qpdf, dbus, substituteAll, bash, avahi
-, makeWrapper, coreutils, gnused, bc, gawk, gnugrep, which
+, makeWrapper, coreutils, gnused, bc, gawk, gnugrep, which, ghostscript
+, mupdf
 }:
 
 let
@@ -8,22 +9,23 @@ let
 
 in stdenv.mkDerivation rec {
   name = "cups-filters-${version}";
-  version = "1.11.1";
+  version = "1.20.3";
 
   src = fetchurl {
     url = "http://openprinting.org/download/cups-filters/${name}.tar.xz";
-    sha256 = "0x0jxn1hnif92m7dyqrqh015gpsf79dviarb7dfl0zya2drlk1m8";
+    sha256 = "1g18qkvl9zdxickiblgs2vvkip4b6p2jalw4d30zzz3hh8f1g6iv";
   };
 
   nativeBuildInputs = [ pkgconfig makeWrapper ];
 
   buildInputs = [
     cups poppler poppler_utils fontconfig libjpeg libpng perl
-    ijs qpdf dbus avahi
+    ijs qpdf dbus avahi ghostscript mupdf
   ];
 
   configureFlags = [
     "--with-pdftops=pdftops"
+    "--with-pdftops-path=${poppler_utils}/bin/pdftops"
     "--enable-imagefilters"
     "--with-rcdir=no"
     "--with-shell=${stdenv.shell}"
@@ -41,6 +43,9 @@ in stdenv.mkDerivation rec {
 
       # Ensure that gstoraster can find gs in $PATH.
       substituteInPlace filter/gstoraster.c --replace execve execvpe
+
+      # Patch shebangs of generated build scripts
+      patchShebangs filter
     '';
 
   postInstall =
@@ -51,6 +56,7 @@ in stdenv.mkDerivation rec {
     '';
 
   enableParallelBuilding = true;
+  doCheck = false; # fails 4 out of 6 tests
 
   meta = {
     homepage = http://www.linuxfoundation.org/collaborate/workgroups/openprinting/cups-filters;

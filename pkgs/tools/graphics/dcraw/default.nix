@@ -1,11 +1,11 @@
 {stdenv, fetchurl, libjpeg, lcms2, gettext, jasper }:
 
 stdenv.mkDerivation rec {
-  name = "dcraw-9.26.0";
+  name = "dcraw-9.28.0";
 
   src = fetchurl {
     url = "http://www.cybercom.net/~dcoffin/dcraw/archive/${name}.tar.gz";
-    sha256 = "18zvzaxjq1yaj90xm8bwb30lqbjyjyp002bp175dayh3kr91syc5";
+    sha256 = "1fdl3xa1fbm71xzc3760rsjkvf0x5jdjrvdzyg2l9ka24vdc7418";
   };
 
   buildInputs = [ libjpeg lcms2 gettext jasper ];
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     homepage = http://www.cybercom.net/~dcoffin/dcraw/;
     description = "Decoder for many camera raw picture formats";
     license = stdenv.lib.licenses.free;
-    platforms = with stdenv.lib.platforms; allBut cygwin;
-    maintainers = [ stdenv.lib.maintainers.urkud ];
+    platforms = stdenv.lib.platforms.unix; # Once had cygwin problems
+    maintainers = [ ];
   };
 }

@@ -1,13 +1,13 @@
 { stdenv, pythonPackages, fetchurl }:
 pythonPackages.buildPythonApplication rec {
   name = "bleachbit-${version}";
-  version = "1.12";
+  version = "2.0";
 
   namePrefix = "";
 
   src = fetchurl {
     url = "mirror://sourceforge/bleachbit/${name}.tar.bz2";
-    sha256 = "1x58n429q1c77nfpf2g3vyh6yq8wha69zfzmxf1rvjvcvvmqs62m";
+    sha256 = "0ps98zx4n13q92bq7ykqi6hj3i7brdqgm87i9gk6ibvljp1vxdz9";
   };
 
   buildInputs = [  pythonPackages.wrapPython ];
@@ -22,10 +22,10 @@ pythonPackages.buildPythonApplication rec {
     substituteInPlace $out/bin/bleachbit --replace "#!/usr/bin/env python" "#!${pythonPackages.python.interpreter}"
   '';
 
-  propagatedBuildInputs = with pythonPackages; [ pygtk sqlite3 ];
+  propagatedBuildInputs = with pythonPackages; [ pygtk ];
 
   meta = {
-    homepage = "http://bleachbit.sourceforge.net";
+    homepage = http://bleachbit.sourceforge.net;
     description = "A program to clean your computer";
     longDescription = "BleachBit helps you easily clean your computer to free space and maintain privacy.";
     license = stdenv.lib.licenses.gpl3;

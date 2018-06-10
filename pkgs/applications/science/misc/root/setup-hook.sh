@@ -6,4 +6,4 @@ thisroot () {
     source @out@/bin/thisroot.sh
 }
 
-envHooks+=(thisroot)
+postHooks+=(thisroot)

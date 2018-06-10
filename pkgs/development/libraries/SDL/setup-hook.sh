@@ -4,8 +4,4 @@ addSDLPath () {
   fi
 }
 
-if test -n "$crossConfig"; then
-  crossEnvHooks+=(addSDLPath)
-else
-  envHooks+=(addSDLPath)
-fi
+addEnvHooks "$hostOffset" addSDLPath

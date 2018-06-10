@@ -1,11 +1,12 @@
-{ stdenv, fetchurl, perl }:
+{ stdenv, fetchgit, perl }:
 
 stdenv.mkDerivation {
-  name = "cowsay-3.03";
+  name = "cowsay-3.03+dfsg1-16";
 
-  src = fetchurl {
-    url = http://www.nog.net/~tony/warez/cowsay-3.03.tar.gz;
-    sha256 = "1s3c0g5vmsadicc4lrlkmkm8znm4y6wnxd8kyv9xgm676hban1il";
+  src = fetchgit {
+    url = https://anonscm.debian.org/git/collab-maint/cowsay.git;
+    rev = "acb946c166fa3b9526b9c471ef1330f9f89f9c8b";
+    sha256 = "1ji66nrdcc8sh79hwils3nbaj897s352r5wp7kzjwiym8bm2azk6";
   };
 
   buildInputs = [ perl ];

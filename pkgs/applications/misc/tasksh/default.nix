@@ -1,23 +1,24 @@
-{ stdenv, fetchurl, cmake, libuuid, gnutls }:
+{ stdenv, fetchurl, cmake, libuuid, gnutls, readline }:
 
 stdenv.mkDerivation rec {
   name = "tasksh-${version}";
-  version = "1.0.0";
+  version = "1.2.0";
 
   enableParallelBuilding = true;
 
   src = fetchurl {
-    url = "http://taskwarrior.org/download/tasksh-latest.tar.gz";
-    sha256 = "0ll6pwhw4wsdffacsmpq46fqh084p9mdaa777giqbag3b8gwik4s";
+    url = "http://taskwarrior.org/download/${name}.tar.gz";
+    sha256 = "1z8zw8lld62fjafjvy248dncjk0i4fwygw0ahzjdvyyppx4zjhkf";
   };
 
+  buildInputs = [ readline ];
   nativeBuildInputs = [ cmake ];
 
   meta = with stdenv.lib; {
     description = "REPL for taskwarrior";
     homepage = http://tasktools.org;
     license = licenses.mit;
-    maintainers = with maintainers; [ matthiasbeyer ];
+    maintainers = with maintainers; [ ];
     platforms = platforms.linux;
   };
 }

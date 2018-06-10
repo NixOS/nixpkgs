@@ -1,14 +1,17 @@
-{ kdeFramework, lib, ecm, attica, kconfig
-, kconfigwidgets, kglobalaccel, ki18n, kiconthemes, kitemviews
-, ktextwidgets, kwindowsystem, sonnet
+{
+  mkDerivation, lib,
+  extra-cmake-modules,
+  attica, kconfig, kconfigwidgets, kglobalaccel, ki18n, kiconthemes, kitemviews,
+  ktextwidgets, kwindowsystem, qtbase, sonnet,
 }:
 
-kdeFramework {
+mkDerivation {
   name = "kxmlgui";
   meta = { maintainers = [ lib.maintainers.ttuegel ]; };
-  nativeBuildInputs = [ ecm ];
-  propagatedBuildInputs = [
-    attica kconfig kconfigwidgets kglobalaccel ki18n kiconthemes kitemviews
-    ktextwidgets kwindowsystem sonnet
+  nativeBuildInputs = [ extra-cmake-modules ];
+  buildInputs = [
+    attica kglobalaccel ki18n kiconthemes kitemviews ktextwidgets kwindowsystem
+    sonnet
   ];
+  propagatedBuildInputs = [ kconfig kconfigwidgets qtbase ];
 }

@@ -1,31 +1,55 @@
-{ lib, stdenv, fetchurl, qtbase, qmakeHook, makeWrapper }:
+{ lib, stdenv, fetchgit, qtbase, qmake, makeWrapper, qtscript, gcc, flex, bison, qtdeclarative, gnutar }:
 
-stdenv.mkDerivation {
-  name = "awesomebump-4.0";
 
-  src = fetchurl {
-    url = https://github.com/kmkolasinski/AwesomeBump/archive/Linuxv4.0.tar.gz;
-    sha256 = "1rp4m4y2ld49hibzwqwy214cbiin80i882d9l0y1znknkdcclxf2";
+let
+  version = "5.1";
+
+  src = fetchgit {
+    url = "https://github.com/kmkolasinski/AwesomeBump.git";
+    rev = "Winx32v${version}";
+    sha256 = "1c8b9jki0v8kzkvsvyv7q1w3s7j40br6ph15hh2xi0a1mpwckq56";
+    fetchSubmodules = true;
   };
 
-  setSourceRoot = "sourceRoot=$(echo */Sources)";
-
-  buildInputs = [ qtbase qmakeHook makeWrapper ];
-
-  enableParallelBuilding = true;
-
-  installPhase =
-    ''
-      d=$out/libexec/AwesomeBump
-      mkdir -p $d $out/bin
-      cp AwesomeBump $d/
-      cp -prd ../Bin/Configs ../Bin/Core $d/
-
-      # AwesomeBump expects to find Core and Configs in its current
-      # directory.
-      makeWrapper $d/AwesomeBump $out/bin/AwesomeBump \
-        --run "cd $d"
+  qtnproperty = stdenv.mkDerivation {
+    name = "qtnproperty";
+    inherit src;
+    sourceRoot = "AwesomeBump/Sources/utils/QtnProperty";
+    patches = [ ./qtnproperty-parallel-building.patch ];
+    buildInputs = [ qtscript qtbase qtdeclarative ];
+    nativeBuildInputs = [ qmake flex bison ];
+    postInstall = ''
+      install -D bin-linux/QtnPEG $out/bin/QtnPEG
     '';
+  };
+in stdenv.mkDerivation rec {
+  name = "awesomebump-${version}";
+
+  inherit src;
+
+  buildInputs = [ qtbase qtscript qtdeclarative ];
+
+  nativeBuildInputs = [ qmake makeWrapper ];
+
+  preBuild = ''
+    ln -sf ${qtnproperty}/bin/QtnPEG Sources/utils/QtnProperty/bin-linux/QtnPEG
+  '';
+
+  postInstall = ''
+    d=$out/libexec/AwesomeBump
+
+    mkdir -p $d
+    cp -vr workdir/`cat workdir/current`/bin/AwesomeBump $d/
+    cp -prd Bin/Configs Bin/Core $d/
+
+    # AwesomeBump expects to find Core and Configs in its current directory.
+    makeWrapper $d/AwesomeBump $out/bin/AwesomeBump \
+        --run "cd $d"
+  '';
+
+  # $ cd Sources; qmake; make ../workdir/linux-g++-dgb-gl4/obj/glwidget.o
+  # fatal error: properties/ImageProperties.peg.h: No such file or directory
+  enableParallelBuilding = false;
 
   meta = {
     homepage = https://github.com/kmkolasinski/AwesomeBump;

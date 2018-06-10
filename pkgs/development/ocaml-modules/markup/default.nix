@@ -1,20 +1,20 @@
-{ stdenv, fetchurl, ocaml, findlib, uutf, lwt }:
+{ stdenv, fetchzip, ocaml, findlib, ocamlbuild, uutf, lwt }:
 
 stdenv.mkDerivation rec {
-  pname = "ocaml-markup";
-  version = "0.7.2";
-  name = "${pname}-${version}";
+  pname = "markup";
+  version = "0.7.5";
+  name = "ocaml${ocaml.version}-${pname}-${version}";
 
-  src = fetchurl {
+  src = fetchzip {
     url = "http://github.com/aantron/markup.ml/archive/${version}.tar.gz";
-    sha256 = "0d3wi22v7h0iqzq8dgl0g4fj2wb67gvmbzdckacifghinrx762k3";
+    sha256 = "09qm73m6c6wjh51w61vnfsnis37m28cf1r6hnkr3bbg903ahwbp5";
     };
 
-  buildInputs = [ocaml findlib];
+  buildInputs = [ ocaml findlib ocamlbuild lwt ];
 
   installPhase = "make ocamlfind-install";
-  
-  propagatedBuildInputs = [uutf lwt];
+
+  propagatedBuildInputs = [ uutf ];
 
   createFindlibDestdir = true;
 

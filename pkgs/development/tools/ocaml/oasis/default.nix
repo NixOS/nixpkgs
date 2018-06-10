@@ -1,22 +1,22 @@
-{stdenv, fetchurl, ocaml, findlib, ocaml_data_notation, type_conv, camlp4,
- ocamlmod, ocamlify, ounit, expect}:
+{ stdenv, fetchurl, ocaml, findlib, ocamlbuild, ocamlmod, ocamlify }:
 
-stdenv.mkDerivation {
-  name = "ocaml-oasis-0.4.6";
+stdenv.mkDerivation rec {
+  version = "0.4.10";
+  name = "ocaml-oasis-${version}";
 
+  # You must manually update the url, not just the version. OCamlforge keys off
+  # the number after download.php, not the filename.
   src = fetchurl {
-    url = http://forge.ocamlcore.org/frs/download.php/1604/oasis-0.4.6.tar.gz;
-    sha256 = "1yxv3ckkf87nz0cyll0yy1kd295j5pv3jqwkfrr1y65wkz5vw90k";
+    url = https://forge.ocamlcore.org/frs/download.php/1694/oasis-0.4.10.tar.gz;
+    sha256 = "13ah03pbcvrjv5lmx971hvkm9rvbvimska5wmjfvgvd20ca0gn8w";
   };
 
   createFindlibDestdir = true;
 
   buildInputs =
     [
-      ocaml findlib type_conv ocamlmod ocamlify ounit camlp4
+      ocaml findlib ocamlbuild ocamlmod ocamlify
     ];
-
-  propagatedBuildInputs = [ ocaml_data_notation ];
 
   configurePhase = "ocaml setup.ml -configure --prefix $out";
   buildPhase     = "ocaml setup.ml -build";

@@ -1,20 +1,29 @@
 { stdenv, fetchurl, pkgconfig, libvirt, glib, libxml2, intltool, libtool, yajl
-, nettle, libgcrypt, python, pygobject2, gobjectIntrospection, libcap_ng, numactl
-, xen
+, nettle, libgcrypt, pythonPackages, gobjectIntrospection, libcap_ng, numactl
+, xen, libapparmor, vala
 }:
 
-stdenv.mkDerivation rec {
-  name = "libvirt-glib-0.2.3";
+let
+  inherit (pythonPackages) python pygobject2;
+in stdenv.mkDerivation rec {
+  name = "libvirt-glib-1.0.0";
+
+  outputs = [ "out" "dev" ];
 
   src = fetchurl {
     url = "http://libvirt.org/sources/glib/${name}.tar.gz";
-    sha256 = "1pahj8qa7k2307sd57rwqwq1hijya02v0sxk91hl3cw48niimcf3";
+    sha256 = "0iwa5sdbii52pjpdm5j37f67sdmf0kpcky4liwhy1nf43k85i4fa";
   };
 
+  nativeBuildInputs = [ pkgconfig vala ];
   buildInputs = [
-    pkgconfig libvirt glib libxml2 intltool libtool yajl nettle libgcrypt
-    python pygobject2 gobjectIntrospection libcap_ng numactl xen
+    libvirt glib libxml2 intltool libtool yajl nettle libgcrypt
+    python pygobject2 gobjectIntrospection libcap_ng numactl libapparmor
+  ] ++ stdenv.lib.optionals stdenv.isx86_64 [
+    xen
   ];
+
+  enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
     description = "Library for working with virtual machines";

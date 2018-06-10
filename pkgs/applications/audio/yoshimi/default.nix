@@ -1,28 +1,33 @@
-{ stdenv, fetchurl, alsaLib, boost, cairo, cmake, fftwSinglePrec, fltk
-, libjack2, libsndfile, libXdmcp, readline, lv2, mesa, minixml, pkgconfig, zlib, xorg
+{ stdenv, fetchurl, alsaLib, boost, cairo, cmake, fftwSinglePrec, fltk, pcre
+, libjack2, libsndfile, libXdmcp, readline, lv2, libGLU_combined, minixml, pkgconfig, zlib, xorg
 }:
 
 assert stdenv ? glibc;
 
 stdenv.mkDerivation  rec {
   name = "yoshimi-${version}";
-  version = "1.3.8.2";
+  version = "1.5.8";
 
   src = fetchurl {
     url = "mirror://sourceforge/yoshimi/${name}.tar.bz2";
-    sha256 = "0wl4ln6v1nkkx56kfah23chyrhga2vi93i82g0s200c4s4184xr8";
+    sha256 = "0gwsr5srzy28hwqhfzrc8pswysmyra8kbww3bxfx8bq4mdjifdj6";
   };
 
   buildInputs = [
-    alsaLib boost cairo fftwSinglePrec fltk libjack2 libsndfile libXdmcp readline lv2 mesa
-    minixml zlib xorg.libpthreadstubs
+    alsaLib boost cairo fftwSinglePrec fltk libjack2 libsndfile libXdmcp readline lv2 libGLU_combined
+    minixml zlib xorg.libpthreadstubs pcre
   ];
 
   nativeBuildInputs = [ cmake pkgconfig ];
 
+  patchPhase = ''
+    substituteInPlace src/Misc/Config.cpp --replace /usr $out
+    substituteInPlace src/Misc/Bank.cpp --replace /usr $out
+  '';
+
   preConfigure = "cd src";
 
-  cmakeFlags = [ "-DFLTK_MATH_LIBRARY=${stdenv.glibc.out}/lib/libm.so -DCMAKE_INSTALL_DATAROOTDIR=$out" ];
+  cmakeFlags = [ "-DFLTK_MATH_LIBRARY=${stdenv.glibc.out}/lib/libm.so" ];
 
   meta = with stdenv.lib; {
     description = "High quality software synthesizer based on ZynAddSubFX";

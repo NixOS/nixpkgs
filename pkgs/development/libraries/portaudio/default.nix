@@ -1,41 +1,38 @@
-{ stdenv, fetchurl, alsaLib, pkgconfig }:
+{ stdenv, fetchurl, alsaLib, pkgconfig, libjack2
+, AudioUnit, AudioToolbox, CoreAudio, CoreServices, Carbon }:
 
 stdenv.mkDerivation rec {
-  name = "portaudio-19-20140130";
-  
+  name = "portaudio-190600-20161030";
+
   src = fetchurl {
-    url = http://www.portaudio.com/archives/pa_stable_v19_20140130.tgz;
-    sha256 = "0mwddk4qzybaf85wqfhxqlf0c5im9il8z03rd4n127k8y2jj9q4g";
+    url = http://www.portaudio.com/archives/pa_stable_v190600_20161030.tgz;
+    sha256 = "04qmin6nj144b8qb9kkd9a52xfvm0qdgm8bg8jbl7s3frmyiv8pm";
   };
 
-  buildInputs = [ pkgconfig ]
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ libjack2 ]
     ++ stdenv.lib.optional (!stdenv.isDarwin) alsaLib;
 
-  configureFlags = stdenv.lib.optionals stdenv.isDarwin
-    [ "--build=x86_64" "--without-oss" "--enable-static" "--enable-shared" ];
+  configureFlags = [ "--disable-mac-universal --enable-cxx" ];
 
-  preBuild = stdenv.lib.optionalString stdenv.isDarwin ''
+  propagatedBuildInputs = stdenv.lib.optionals stdenv.isDarwin [ AudioUnit AudioToolbox CoreAudio CoreServices Carbon ];
+
+  patchPhase = stdenv.lib.optionalString stdenv.isDarwin ''
     sed -i '50 i\
       #include <CoreAudio/AudioHardware.h>\
       #include <CoreAudio/AudioHardwareBase.h>\
       #include <CoreAudio/AudioHardwareDeprecated.h>' \
       include/pa_mac_core.h
-
-    # disable two tests that don't compile
-    sed -i -e 105d Makefile
-    sed -i -e 107d Makefile
   '';
 
   # not sure why, but all the headers seem to be installed by the make install
-  installPhase = if stdenv.isDarwin then ''
-    mkdir -p "$out"
-    cp -r include "$out"
-    cp -r lib "$out"
-  '' else ''
+  installPhase = ''
     make install
-
+  '' + stdenv.lib.optionalString (!stdenv.isDarwin) ''
     # fixup .pc file to find alsa library
     sed -i "s|-lasound|-L${alsaLib.out}/lib -lasound|" "$out/lib/pkgconfig/"*.pc
+  '' + stdenv.lib.optionalString stdenv.isDarwin ''
+    cp include/pa_mac_core.h $out/include/pa_mac_core.h
   '';
 
   meta = with stdenv.lib; {

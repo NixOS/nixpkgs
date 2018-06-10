@@ -1,16 +1,17 @@
-{ stdenv, fetchurl, fetchpatch, python, pkgconfig, usbmuxd, glib, libgcrypt,
+{ stdenv, fetchurl, fetchpatch, python2, pkgconfig, usbmuxd, glib, libgcrypt,
   libtasn1, libplist, readline, libusbmuxd, openssl }:
 
 stdenv.mkDerivation rec {
   name = "libimobiledevice-1.2.0";
 
-  nativeBuildInputs = [ python libplist.swig pkgconfig ];
+  nativeBuildInputs = [ python2 libplist.swig pkgconfig ];
   buildInputs = [ readline ];
   propagatedBuildInputs = [ libusbmuxd glib libgcrypt libtasn1 libplist openssl ];
 
   patches = [
     ./disable_sslv3.patch
-    (fetchpatch { # CVE-2016-5104
+    (fetchpatch {
+      name = "CVE-2016-5104.patch";
       url = "https://github.com/libimobiledevice/libimobiledevice/commit/df1f5c4d70d0c19ad40072f5246ca457e7f9849e.patch";
       sha256 = "06ygb9aqcvm4v08wrldsddjgyqv5bkpq6lxzq2a1nwqp9mq4a4k1";
     })

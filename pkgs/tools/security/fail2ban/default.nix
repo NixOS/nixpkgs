@@ -1,19 +1,18 @@
 { stdenv, fetchFromGitHub, python, pythonPackages, gamin }:
 
-let version = "0.9.4"; in
+let version = "0.10.3.1"; in
 
 pythonPackages.buildPythonApplication {
   name = "fail2ban-${version}";
-  namePrefix = "";
 
   src = fetchFromGitHub {
     owner  = "fail2ban";
     repo   = "fail2ban";
     rev    = version;
-    sha256 = "1m8gqj35kwrn30rqwd488sgakaisz22xa5v9llvz6gwf4f7ps0a9";
+    sha256 = "03gljmqykwwvwxcfhqqfccmnsjhsl93052i38r9mf7hj4jj8v7x5";
   };
 
-  propagatedBuildInputs = [ python.modules.sqlite3 gamin ]
+  propagatedBuildInputs = [ gamin ]
     ++ (stdenv.lib.optional stdenv.isLinux pythonPackages.systemd);
 
   preConfigure = ''
@@ -27,6 +26,8 @@ pythonPackages.buildPythonApplication {
   doCheck = false;
 
   preInstall = ''
+    substituteInPlace setup.py --replace /usr/share/doc/ share/doc/
+  
     # see https://github.com/NixOS/nixpkgs/issues/4968
     ${python}/bin/${python.executable} setup.py install_data --install-dir=$out --root=$out
   '';

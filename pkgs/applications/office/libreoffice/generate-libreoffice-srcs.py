@@ -22,12 +22,19 @@ def main():
     for x in packages:
 
         md5 = x['md5']
+        upstream_sha256 = x['sha256']
+        if upstream_sha256:
+            hash = upstream_sha256
+            hashtype = 'sha256'
+        else:
+            hash = md5
+            hashtype = 'md5'
         tarball = x['tarball']
 
         url = construct_url(x)
         print('url: {}'.format(url), file=sys.stderr)
 
-        path = download(url, tarball, md5)
+        path = download(url, tarball, hash, hashtype)
         print('path: {}'.format(path), file=sys.stderr)
 
         sha256 = get_sha256(path)
@@ -38,7 +45,7 @@ def main():
         print('    url = "{}";'.format(url))
         print('    sha256 = "{}";'.format(sha256))
         print('    md5 = "{}";'.format(md5))
-        print('    md5name = "{}-{}";'.format(md5,tarball))
+        print('    md5name = "{}-{}";'.format(md5 or upstream_sha256,tarball))
         print('  }')
 
     print(']')
@@ -53,9 +60,9 @@ def construct_url(x):
             x.get('subdir', ''), x['md5'], x['tarball'])
 
 
-def download(url, name, md5):
-    cmd = ['nix-prefetch-url', url, md5, '--print-path',
-           '--type', 'md5', '--name', name]
+def download(url, name, hash, hashtype):
+    cmd = ['nix-prefetch-url', url, hash, '--print-path',
+           '--type', hashtype, '--name', name]
     proc = subprocess.run(cmd, stdout=subprocess.PIPE, check=True,
                           universal_newlines=True)
     return proc.stdout.split('\n')[1].strip()
@@ -114,7 +121,7 @@ def get_packages_from_download_list():
         Groups lines according to their order within the file, to support
         packages that are listed in `download.lst` more than once.
         """
-        keys = ['tarball', 'md5', 'brief']
+        keys = ['tarball', 'md5', 'sha256', 'brief']
         a = {k: [x for x in xs if k in x['attrs']] for k in keys}
         return zip(*[a[k] for k in keys])
 
@@ -220,7 +227,7 @@ def sub_symbols(xs):
 
     def get_value(k):
         x = symbols.get(k)
-        return x['value'] if x is not None else None
+        return x['value'] if x is not None else ''
 
     for x in xs:
         yield dict_merge([{'value': sub_str(x['value'], get_value)},
@@ -249,7 +256,7 @@ def interpret(x):
     Output: One of 1. Dict with keys 'name' and 'attrs'
                    2. 'unrecognized' (if interpretation failed)
     """
-    for f in [interpret_md5, interpret_tarball_with_md5, interpret_tarball]:
+    for f in [interpret_md5, interpret_sha256, interpret_tarball_with_md5, interpret_tarball, interpret_jar]:
         result = f(x)
         if result is not None:
             return result
@@ -267,8 +274,14 @@ def interpret_md5(x):
 
     if match:
         return {'name': match.group(1),
-                'attrs': {'md5': x['value']}}
+                'attrs': {'md5': x['value'], 'sha256': ''}}
 
+def interpret_sha256(x):
+    match = re.match('^(.*)_SHA256SUM$', x['key'])
+
+    if match:
+        return {'name': match.group(1),
+                'attrs': {'sha256': x['value'], 'md5': ''}}
 
 def interpret_tarball(x):
     """
@@ -278,6 +291,13 @@ def interpret_tarball(x):
     """
 
     match = re.match('^(.*)_TARBALL$', x['key'])
+
+    if match:
+        return {'name': match.group(1),
+                'attrs': {'tarball': x['value'], 'brief': True}}
+
+def interpret_jar(x):
+    match = re.match('^(.*)_JAR$', x['key'])
 
     if match:
         return {'name': match.group(1),
@@ -293,7 +313,7 @@ def interpret_tarball_with_md5(x):
                'md5': '48d647fbd8ef8889e5a7f422c1bfda94', 'brief': False}}
     """
 
-    match = {'key': re.match('^(.*)_TARBALL$', x['key']),
+    match = {'key': re.match('^(.*)_(TARBALL|JAR)$', x['key']),
              'value': re.match('(?P<md5>[0-9a-fA-F]{32})-(?P<tarball>.+)$',
                                x['value'])}
 
@@ -301,6 +321,7 @@ def interpret_tarball_with_md5(x):
         return {'name': match['key'].group(1),
                 'attrs': {'tarball': match['value'].group('tarball'),
                           'md5': match['value'].group('md5'),
+                          'sha256': '',
                           'brief': False}}
 
 

@@ -1,18 +1,19 @@
-{ stdenv, lib, bundlerEnv, gpgme, ruby, ncurses, writeText, zlib, xapian
-, pkgconfig, which }:
+{ lib, bundlerEnv, ruby }:
 
-bundlerEnv {
-  name = "lolcat-42.1.0";
+bundlerEnv rec {
+  name = "${pname}-${version}";
+  pname = "lolcat";
+  version = (import ./gemset.nix).lolcat.version;
 
   inherit ruby;
-  gemfile = ./Gemfile;
-  lockfile = ./Gemfile.lock;
-  gemset = ./gemset.nix;
+
+  # expects Gemfile, Gemfile.lock and gemset.nix in the same directory
+  gemdir = ./.;
 
   meta = with lib; {
     description = "A rainbow version of cat";
     homepage    = https://github.com/busyloop/lolcat;
-    license     = licenses.wtfpl;
-    maintainers = with maintainers; [ pSub ];
+    license     = licenses.bsd3;
+    maintainers = with maintainers; [ StillerHarpo ];
   };
 }

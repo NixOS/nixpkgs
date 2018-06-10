@@ -13,7 +13,7 @@ stdenv.mkDerivation {
 
   buildInputs = [pam openssl db];
   meta = {
-    homepage = "http://www.padl.com/OSS/pam_ccreds.html";
+    homepage = http://www.padl.com/OSS/pam_ccreds.html;
     description = "PAM module to locally authenticate using an enterprise identity when the network is unavailable";
     platforms = stdenv.lib.platforms.linux;
   };

@@ -1,19 +1,17 @@
 { stdenv, fetchFromGitHub, unzip, cmake, boost, zlib }:
 
-let
-  version = "3.2";
-in
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   name = "assimp-${version}";
+  version = "4.1.0";
 
   src = fetchFromGitHub{
     owner = "assimp";
     repo = "assimp";
     rev = "v${version}";
-    sha256 = "09fsksbq9a8gykwmw6gaicwh2ladrln1jc1xc5yk7w6x180cbb1x";
+    sha256 = "00g61g3ixmfszzjncpvm8x7gp2livaj4lmhbycjmrw4x3gfqlc4r";
   };
 
-  buildInputs = [ unzip cmake boost zlib ];
+  buildInputs = [ cmake boost zlib ];
 
   meta = with stdenv.lib; {
     description = "A library to import various 3D model formats";

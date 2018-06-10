@@ -1,8 +1,6 @@
 { stdenv, appleDerivation, libdispatch, xnu }:
 
 appleDerivation {
-  phases = [ "unpackPhase" "installPhase" "fixupPhase" ];
-
   propagatedBuildInputs = [ libdispatch xnu ];
 
   installPhase = ''
@@ -16,4 +14,8 @@ appleDerivation {
     cp -r sys $out/include
     cp -r sys/_pthread/*.h $out/include/sys/_types/
   '';
+
+  meta = {
+    platforms = stdenv.lib.platforms.darwin;
+  };
 }
