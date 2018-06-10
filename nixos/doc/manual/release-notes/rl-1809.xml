@@ -178,9 +178,26 @@ $ nix-instantiate -E '(import &lt;nixpkgsunstable&gt; {}).gitFull'
    </listitem>
    <listitem>
     <para>
-     <literal>lib.traceValIfNot</literal> has been deprecated. Use
-     <literal>if/then/else</literal> and <literal>lib.traceValSeq</literal>
-     instead.
+      The <literal>pkgs</literal> argument to NixOS modules can now be set directly using <literal>nixpkgs.pkgs</literal>. Previously, only the <literal>system</literal>, <literal>config</literal> and <literal>overlays</literal> arguments could be used to influence <literal>pkgs</literal>.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+      A NixOS system can now be constructed more easily based on a preexisting invocation of Nixpkgs. For example:
+      <programlisting>
+inherit (pkgs.nixos {
+  boot.loader.grub.enable = false;
+  fileSystems."/".device = "/dev/xvda1";
+}) toplevel kernel initialRamdisk manual;
+      </programlisting>
+
+      This benefits evaluation performance, lets you write Nixpkgs packages that depend on NixOS images and is consistent with a deployment architecture that would be centered around Nixpkgs overlays.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+      <literal>lib.traceValIfNot</literal> has been deprecated. Use
+      <literal>if/then/else</literal> and <literal>lib.traceValSeq</literal> instead.
     </para>
    </listitem>
    <listitem>
