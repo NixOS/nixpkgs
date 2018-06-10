@@ -7,7 +7,7 @@ else
 stdenv.mkDerivation rec {
   pname = "libarcus";
   name = "${pname}-${version}";
-  version = "3.2.1";
+  version = "3.3.0";
   
   src = fetchFromGitHub {
     owner = "Ultimaker";
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Communication library between internal components for Ultimaker software";
-    homepage = "https://github.com/Ultimaker/libArcus";
+    homepage = https://github.com/Ultimaker/libArcus;
     license = licenses.agpl3;
     platforms = platforms.linux;
     maintainers = with maintainers; [ abbradar ];
