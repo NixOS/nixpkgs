@@ -75,9 +75,13 @@ let
     # Warning: Do NOT replace with tmpfs!
     mkdir -p /crypt-ramfs
     mount -t ramfs none /crypt-ramfs
+
+    # For Yubikey salt storage
+    mkdir -p /crypt-storage
   '';
 
   postCommands = ''
+    umount /crypt-storage 2>/dev/null
     umount /crypt-ramfs 2>/dev/null
   '';
 
@@ -184,11 +188,11 @@ let
         local new_response
         local new_k_luks
 
-        mkdir -p ${yubikey.storage.mountPoint}
-        mount -t ${yubikey.storage.fsType} ${toString yubikey.storage.device} ${yubikey.storage.mountPoint}
+        mount -t ${yubikey.storage.fsType} ${yubikey.storage.device} /crypt-storage || \
+          die "Failed to mount Yubikey salt storage device"
 
-        salt="$(cat ${yubikey.storage.mountPoint}${yubikey.storage.path} | sed -n 1p | tr -d '\n')"
-        iterations="$(cat ${yubikey.storage.mountPoint}${yubikey.storage.path} | sed -n 2p | tr -d '\n')"
+        salt="$(cat /crypt-storage${yubikey.storage.path} | sed -n 1p | tr -d '\n')"
+        iterations="$(cat /crypt-storage${yubikey.storage.path} | sed -n 2p | tr -d '\n')"
         challenge="$(echo -n $salt | openssl-wrap dgst -binary -sha512 | rbtohex)"
         response="$(ykchalresp -${toString yubikey.slot} -x $challenge 2>/dev/null)"
 
@@ -216,10 +220,7 @@ let
             fi
         done
 
-        if [ "$opened" == false ]; then
-            umount ${yubikey.storage.mountPoint}
-            die "Maximum authentication errors reached"
-        fi
+        [ "$opened" == false ] && die "Maximum authentication errors reached"
 
         echo -n "Gathering entropy for new salt (please enter random keys to generate entropy if this blocks for long)..."
         for i in $(seq ${toString yubikey.saltLength}); do
@@ -244,26 +245,17 @@ let
             new_k_luks="$(echo | pbkdf2-sha512 ${toString yubikey.keyLength} $new_iterations $new_response | rbtohex)"
         fi
 
-        mkdir -p ${yubikey.ramfsMountPoint}
-        # A ramfs is used here to ensure that the file used to update
-        # the key slot with cryptsetup will never get swapped out.
-        # Warning: Do NOT replace with tmpfs!
-        mount -t ramfs none ${yubikey.ramfsMountPoint}
-
-        echo -n "$new_k_luks" | hextorb > ${yubikey.ramfsMountPoint}/new_key
-        echo -n "$k_luks" | hextorb | ${cschange} --key-file=- ${yubikey.ramfsMountPoint}/new_key
+        echo -n "$new_k_luks" | hextorb > /crypt-ramfs/new_key
+        echo -n "$k_luks" | hextorb | ${cschange} --key-file=- /crypt-ramfs/new_key
 
         if [ $? == 0 ]; then
-            echo -ne "$new_salt\n$new_iterations" > ${yubikey.storage.mountPoint}${yubikey.storage.path}
+            echo -ne "$new_salt\n$new_iterations" > /crypt-storage${yubikey.storage.path}
         else
             echo "Warning: Could not update LUKS key, current challenge persists!"
         fi
 
-        rm -f ${yubikey.ramfsMountPoint}/new_key
-        umount ${yubikey.ramfsMountPoint}
-        rm -rf ${yubikey.ramfsMountPoint}
-
-        umount ${yubikey.storage.mountPoint}
+        rm -f /crypt-ramfs/new_key
+        umount /crypt-storage
     }
 
     open_yubikey() {
@@ -506,12 +498,6 @@ in
                   description = "Time in seconds to wait for the Yubikey.";
                 };
 
-                ramfsMountPoint = mkOption {
-                  default = "/crypt-ramfs";
-                  type = types.str;
-                  description = "Path where the ramfs used to update the LUKS key will be mounted during early boot.";
-                };
-
                 /* TODO: Add to the documentation of the current module:
 
                    Options related to the storing the salt.
@@ -532,12 +518,6 @@ in
                     description = "The filesystem of the unencrypted device.";
                   };
 
-                  mountPoint = mkOption {
-                    default = "/crypt-storage";
-                    type = types.str;
-                    description = "Path where the unencrypted device will be mounted during early boot.";
-                  };
-
                   path = mkOption {
                     default = "/crypt-storage/default";
                     type = types.str;
@@ -550,8 +530,8 @@ in
               };
             });
           };
-
-        }; }));
+        };
+      }));
     };
 
     boot.initrd.luks.yubikeySupport = mkOption {
