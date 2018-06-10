@@ -297,6 +297,64 @@ in
         '';
       };
 
+      tcpKeepAlive = mkOption {
+        type = types.bool;
+        default = true;
+        example = false;
+        description = ''
+          Specifies whether the system should send TCP keepalive messages to the other side. If they are sent, death of
+          the connection or crash of one of the machines will be properly noticed. However, this means that connections
+          will die if the route is down temporarily, and some people find it annoying. On the other hand, if
+          TCP keepalives are not sent, sessions may hang indefinitely on the server, leaving “ghost” users and consuming
+          server resources.
+          The default is yes (to send TCP keepalive messages), and the server will notice if the network goes down or
+          the client host crashes. This avoids infinitely hanging sessions.
+          To disable TCP keepalive messages, the value should be set to no.
+        '';
+      };
+
+      clientAliveCountMax = mkOption {
+        type = types.nullOr types.str;
+        default = null;
+        example = 5;
+        description = ''
+          Sets the number of client alive messages which may be sent without sshd(8) receiving any messages back from
+          the client. If this threshold is reached while client alive messages are being sent, sshd will disconnect
+          the client, terminating the session. It is important to note that the use of client alive messages is very
+          different from TCPKeepAlive. The client alive messages are sent through the encrypted channel and therefore
+          will not be spoofable. The TCP keepalive option enabled by TCPKeepAlive is spoofable. The client alive
+          mechanism is valuable when the client or server depend on knowing when a connection has become inactive.
+          The default value is 3. If ClientAliveInterval is set to 15, and ClientAliveCountMax is left at the default,
+          unresponsive SSH clients will be disconnected after approximately 45 seconds.
+        '';
+      };
+
+      clientAliveInterval = mkOption {
+        type = types.nullOr types.str;
+        default = null;
+        example = 15;
+        description = ''
+          Sets a timeout interval in seconds after which if no data has been received from the client, sshd(8) will send a
+          message through the encrypted channel to request a response from the client. The default is 0, indicating
+          that these messages will not be sent to the client.
+        '';
+      };
+
+      maxStartups = mkOption {
+        type = types.nullOr types.str;
+        default = null;
+        example = "3:30:9";
+        description = ''
+          Specifies the maximum number of concurrent unauthenticated connections to the SSH daemon. Additional
+          connections will be dropped until authentication succeeds or the LoginGraceTime expires for a connection.
+          The default is 10:30:100.
+          Alternatively, random early drop can be enabled by specifying the three colon separated values
+          start:rate:full (e.g. "10:30:60"). sshd(8) will refuse connection attempts with a probability of rate/100 (30%)
+          if there are currently start (10) unauthenticated connections. The probability increases linearly and all
+          connection attempts are refused if the number of unauthenticated connections reaches full (60).
+        '';
+      };
+
       extraConfig = mkOption {
         type = types.lines;
         default = "";
@@ -422,15 +480,11 @@ in
           ListenAddress ${addr}${if port != null then ":" + toString port else ""}
         '') cfg.listenAddresses}
 
-        ${optionalString cfgc.setXAuthLocation ''
-            XAuthLocation ${pkgs.xorg.xauth}/bin/xauth
-        ''}
-
-        ${if cfg.forwardX11 then ''
-          X11Forwarding yes
-        '' else ''
-          X11Forwarding no
-        ''}
+        ${if cfg.forwardX11
+          then ''X11Forwarding yes''
+          else ''X11Forwarding no''
+        }
+        ${optionalString cfgc.setXAuthLocation ''XAuthLocation ${pkgs.xorg.xauth}/bin/xauth''}
 
         ${optionalString cfg.allowSFTP ''
           Subsystem sftp ${cfgc.package}/libexec/sftp-server ${concatStringsSep " " cfg.sftpFlags}
@@ -455,11 +509,18 @@ in
 
         LogLevel ${cfg.logLevel}
 
-        ${if cfg.useDns then ''
-          UseDNS yes
-        '' else ''
-          UseDNS no
-        ''}
+        ${if cfg.useDns
+          then ''UseDNS yes''
+          else ''UseDNS no''
+        }
+        ${if cfg. tcpKeepAlive
+          then ''TCPKeepAlive yes''
+          else ''TCPKeepAlive no''
+        }
+        ${optionalString (cfg.clientAliveCountMax != null) ''ClientAliveCountMax ${cfg.clientAliveCountMax}''}
+        ${optionalString (cfg.clientAliveInterval != null) ''ClientAliveInterval ${cfg.clientAliveInterval}''}
+
+        ${optionalString (cfg.maxStartups != null) ''MaxStartups ${toString cfg.maxStartups}''}
 
       '';
 
