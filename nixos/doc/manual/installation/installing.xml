@@ -109,6 +109,7 @@
 >        # <lineannotation>(press enter to accept the default)</lineannotation>
 > +8G    # <lineannotation>(the size of the swap partition)</lineannotation>
 > n      # <lineannotation>(create a new partition for /)</lineannotation>
+>        # <lineannotation>(accept default partition type primary)</lineannotation>
 > 1      # <lineannotation>(make it a partition number 1)</lineannotation>
 >        # <lineannotation>(press enter to accept the default)</lineannotation>
 >        # <lineannotation>(press enter to accept the default and use the rest of the remaining space)</lineannotation>
@@ -403,6 +404,7 @@ $ nix-env -i w3m</screen>
 >        # <lineannotation>(press enter to accept the default)</lineannotation>
 > +8G    # <lineannotation>(the size of the swap partition)</lineannotation>
 > n      # <lineannotation>(create a new partition for /)</lineannotation>
+>        # <lineannotation>(accept default partition type primary)</lineannotation>
 > 1      # <lineannotation>(make it a partition number 1)</lineannotation>
 >        # <lineannotation>(press enter to accept the default)</lineannotation>
 >        # <lineannotation>(press enter to accept the default and use the rest of the remaining space)</lineannotation>
