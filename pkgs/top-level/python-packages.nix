@@ -287,7 +287,9 @@ in {
 
   logster = callPackage ../development/python-modules/logster { };
 
-  mail-parser = callPackage ../development/python-modules/mail-parser {  };
+  mail-parser = callPackage ../development/python-modules/mail-parser { };
+
+  moderngl = callPackage ../development/python-modules/ModernGL { };
 
   mpi4py = callPackage ../development/python-modules/mpi4py {
     mpi = pkgs.openmpi;
