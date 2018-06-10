@@ -13,11 +13,11 @@ let
   binPath = lib.makeBinPath [ coreutils less ];
 
 in stdenv.mkDerivation {
-  name = "nethack-3.6.0";
+  name = "nethack-3.6.1";
 
   src = fetchurl {
-    url = "mirror://sourceforge/nethack/nethack-360-src.tgz";
-    sha256 = "12mi5kgqw3q029y57pkg3gnp930p7yvlqi118xxdif2qhj6nkphs";
+    url = "http://nethack.org/download/3.6.1/nethack-361-src.tgz";
+    sha256 = "1dha0ijvxhx7c9hr0452h93x81iiqsll8bc9msdnp7xdqcfbz32b";
   };
 
   buildInputs = [ ncurses ];
