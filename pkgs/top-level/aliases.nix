@@ -1,4 +1,4 @@
-self:
+lib: self: super:
 
 with self;
 
@@ -19,7 +19,7 @@ let
 
   # Make sure that we are not shadowing something from
   # all-packages.nix.
-  checkInPkgs = n: alias: if builtins.hasAttr n self
+  checkInPkgs = n: alias: if builtins.hasAttr n super
                           then throw "Alias ${n} is still in all-packages.nix"
                           else alias;
 
@@ -32,7 +32,7 @@ in
 
   ### Deprecated aliases - for backward compatibility
 
-mapAliases (rec {
+mapAliases ({
   PPSSPP = ppsspp; # added 2017-10-01
   QmidiNet = qmidinet;  # added 2016-05-22
   accounts-qt = libsForQt5.accounts-qt; # added 2015-12-19
