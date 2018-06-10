@@ -6460,7 +6460,7 @@ with pkgs;
   haskell = callPackage ./haskell-packages.nix { };
 
   haskellPackages = haskell.packages.ghc822.override {
-    overrides = config.haskellPackageOverrides or (self: super: {});
+    overrides = config.haskellPackageOverrides or haskell.packageOverrides;
   };
 
   inherit (haskellPackages) ghc;
