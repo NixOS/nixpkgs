@@ -15437,6 +15437,8 @@ with pkgs;
     patches = config.dwm.patches or [];
   };
 
+  dwm-status = callPackage ../applications/window-managers/dwm/dwm-status.nix { };
+
   dynamips = callPackage ../applications/virtualization/dynamips { };
 
   evilwm = callPackage ../applications/window-managers/evilwm {
