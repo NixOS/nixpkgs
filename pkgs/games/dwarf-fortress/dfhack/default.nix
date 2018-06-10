@@ -1,6 +1,7 @@
 { stdenv, hostPlatform, lib, fetchFromGitHub, cmake, writeScriptBin, callPackage
 , perl, XMLLibXML, XMLLibXSLT, zlib
 , enableStoneSense ? false,  allegro5, libGLU_combined
+, SDL
 }:
 
 let
@@ -46,7 +47,7 @@ in stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake perl XMLLibXML XMLLibXSLT fakegit ];
   # We don't use system libraries because dfhack needs old C++ ABI.
-  buildInputs = [ zlib ]
+  buildInputs = [ zlib SDL ]
              ++ lib.optionals enableStoneSense [ allegro5 libGLU_combined ];
 
   preConfigure = ''
