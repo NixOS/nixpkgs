@@ -8,8 +8,8 @@ stdenv.mkDerivation rec {
   src = fetchurl {
     # This URL changes in unpredictable ways, so it is not sensible
     # to put a version variable in there.
-    url = "https://alioth.debian.org/frs/download.php/file/4235/pcsc-lite-1.8.23.tar.bz2";
-    sha256 = "1jc9ws5ra6v3plwraqixin0w0wfxj64drahrbkyrrwzghqjjc9ss";
+    url = "https://pcsclite.apdu.fr/files/pcsc-lite-1.8.23.tar.bz2";
+    sha256 = "09b7a79hjkgiyvhyvwf8gpxaf8b7wd0342hx6zrpd269hhfbjvwy";
   };
 
   patches = [ ./no-dropdir-literals.patch ];
