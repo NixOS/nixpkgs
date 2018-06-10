@@ -9,6 +9,7 @@
 , gdb
 , numpy
 , ncurses
+, fetchpatch
 }:
 
 let
@@ -47,6 +48,15 @@ in buildPythonPackage rec {
       ${stdenv.lib.optionalString (builtins.length excludedTests != 0)
         ''--exclude="(${builtins.concatStringsSep "|" excludedTests})"''}
   '';
+
+  patches = [
+    # The following is in GitHub in 0.28.3 but not in the `sdist`.
+    # https://github.com/cython/cython/issues/2319
+    (fetchpatch {
+      url = https://github.com/cython/cython/commit/c485b1b77264c3c75d090a3c526de24966830d42.patch;
+      sha256 = "1p6jj9rb097kqvhs5j5127sj5zy18l7x9v0p478cjyzh41khh9r0";
+    })
+  ];
 
   meta = {
     description = "An optimising static compiler for both the Python programming language and the extended Cython programming language";
