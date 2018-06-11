@@ -58,7 +58,7 @@ stdenv.mkDerivation rec {
   # Don't search in non-Nix locations such as /usr, but do search in our libc.
   patches = [ ./search-path-3.9.patch ]
     # Don't depend on frameworks.
-    ++ optional useSharedLibraries ./application-services.patch  # TODO: remove conditional
+    ++ optional (useSharedLibraries && majorVersion == "3.11") ./application-services.patch  # TODO: remove conditional
     ++ optional stdenv.isCygwin ./3.2.2-cygwin.patch;
 
   outputs = [ "out" ];
