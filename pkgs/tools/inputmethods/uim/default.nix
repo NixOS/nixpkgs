@@ -38,15 +38,15 @@ assert withFFI -> libffi != null;
 assert withMisc -> libeb != null;
 
 stdenv.mkDerivation rec {
-  version = "1.8.6-20180501-git";
+  version = "1.8.8";
   name = "uim-${version}";
 
   src = fetchFromGitHub {
     owner = "uim";
     repo = "uim";
-    rev = "c79432cb5aba3a67fb7e7557f4817c749865cc8a";
+    rev = "2c0958c9c505a87e70e344c2192e2e5123c71ea5";
     fetchSubmodules = true;
-    sha256 = "12rznfwq1mh750i18bl1743c51akyyvy6la5rgrxmrnp0mha9ba5";
+    sha256 = "1hkjxi5r49gcna37m3jvykny5hz9ram4y8a3q7lw4qzr52mz9pdp";
   };
 
   nativeBuildInputs = [
