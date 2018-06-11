@@ -23,13 +23,6 @@ self: super:
       };
   in stage1 // stage2 // {
 
-  old-time = overrideCabal stage2.old-time (drv: {
-    postPatch = ''
-      ${pkgs.autoconf}/bin/autoreconf --install --force --verbose
-    '';
-    buildTools = pkgs.lib.optional pkgs.stdenv.isDarwin pkgs.darwin.libiconv;
-  });
-
   network = addBuildTools super.network (pkgs.lib.optional pkgs.stdenv.isDarwin pkgs.darwin.libiconv);
   zlib = addBuildTools super.zlib (pkgs.lib.optional pkgs.stdenv.isDarwin pkgs.darwin.libiconv);
   unix-compat = addBuildTools super.unix-compat (pkgs.lib.optional pkgs.stdenv.isDarwin pkgs.darwin.libiconv);
