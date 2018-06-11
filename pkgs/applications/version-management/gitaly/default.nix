@@ -23,6 +23,8 @@ in buildGoPackage rec {
     inherit rubyEnv;
   };
 
+  buildInputs = [rubyEnv.wrappedRuby];
+
   postInstall = ''
     mkdir -p $ruby
     cp -rv $src/ruby/{bin,lib,vendor} $ruby
