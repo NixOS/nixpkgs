@@ -7355,7 +7355,11 @@ let
       version = "2.0.1";
       src = fetchurl {
         url = "https://registry.npmjs.org/unordered-set/-/unordered-set-2.0.1.tgz";
+<<<<<<< HEAD
         sha512 = "eUmNTPzdx+q/WvOHW0bgGYLWvWHNT3PTKEQLg0MAQhc0AHASHVHoP/9YytYd4RBVariqno/mEUhVZN98CmD7bg==";
+=======
+        sha512 = "1pgnq0agkgn8ma827k8z7map1m5a4713pbcln7z7zl5278jf00385s2011q62s4539p6kydc6yxd0hrw135p1zkbazymiyxzi68sjbr";
+>>>>>>> nodePackages: meguca: 1.0.5 -> 1.0.7
       };
     };
     "unpipe-1.0.0" = {
@@ -8116,6 +8120,11 @@ in
           })
           sources."pump-1.0.3"
           sources."random-access-memory-3.0.0"
+<<<<<<< HEAD
+=======
+          sources."unordered-set-2.0.1"
+          sources."varint-5.0.0"
+>>>>>>> nodePackages: meguca: 1.0.5 -> 1.0.7
         ];
       })
       sources."dat-registry-4.0.0"
@@ -8811,10 +8820,17 @@ in
   pnpm = nodeEnv.buildNodePackage {
     name = "pnpm";
     packageName = "pnpm";
+<<<<<<< HEAD
     version = "2.7.0";
     src = fetchurl {
       url = "https://registry.npmjs.org/pnpm/-/pnpm-2.7.0.tgz";
       sha1 = "cfaf3889c04125abfa20117358d7bcec72902faf";
+=======
+    version = "2.4.0";
+    src = fetchurl {
+      url = "https://registry.npmjs.org/pnpm/-/pnpm-2.4.0.tgz";
+      sha1 = "54c27537e831f91d5afe63320a5aa2df597efe84";
+>>>>>>> nodePackages: meguca: 1.0.5 -> 1.0.7
     };
     buildInputs = globalBuildInputs;
     meta = {
