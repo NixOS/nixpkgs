@@ -12783,6 +12783,7 @@ with pkgs;
   rpcbind = callPackage ../servers/rpcbind { };
 
   mariadb = callPackage ../servers/sql/mariadb {
+    asio = asio_1_10;
     inherit (darwin) cctools;
     inherit (pkgs.darwin.apple_sdk.frameworks) CoreServices;
   };
