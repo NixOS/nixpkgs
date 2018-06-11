@@ -199,6 +199,8 @@ in {
 
   automat = callPackage ../development/python-modules/automat { };
 
+  aws-sam-translator = callPackage ../development/python-modules/aws-sam-translator { };
+
   aws-xray-sdk = callPackage ../development/python-modules/aws-xray-sdk { };
 
   # packages defined elsewhere
