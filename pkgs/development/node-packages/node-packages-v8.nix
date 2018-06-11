@@ -49,6 +49,7 @@ let
         sha1 = "cbc4b9a68981bf0b501ccd06a9058acd65309bf7";
       };
     };
+<<<<<<< HEAD
     "@types/node-10.3.1" = {
       name = "_at_types_slash_node";
       packageName = "@types/node";
@@ -56,6 +57,15 @@ let
       src = fetchurl {
         url = "https://registry.npmjs.org/@types/node/-/node-10.3.1.tgz";
         sha512 = "0xqz0wlddb3vi0mmlncn1ypd7sa2zv3fcq58jk7nr0xdsrwwzn9ncdq784lvg8d2k7lzq1p2kjyak5nghq0imbdj8hrmk6365lgvi92";
+=======
+    "@types/node-10.3.2" = {
+      name = "_at_types_slash_node";
+      packageName = "@types/node";
+      version = "10.3.2";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/@types/node/-/node-10.3.2.tgz";
+        sha512 = "3w50bh9i0rl27vnrn4mmwjphccfaybj74ydfymjmq46p8dfllfwm37lgxqjrx0mp6hrdia5hllbwnpsx2a4wwwck9hh9dkp798c9mzl";
+>>>>>>> nodePackages: meguca: 1.0.4 (2018-05-17) -> 1.0.5
       };
     };
     "@types/superagent-3.5.6" = {
@@ -101,6 +111,15 @@ let
       src = fetchurl {
         url = "https://registry.npmjs.org/abstract-random-access/-/abstract-random-access-1.1.2.tgz";
         sha1 = "9a8eac8ff79866f3f9b4bb1443ca778f1598aeda";
+      };
+    };
+    "ajv-4.11.8" = {
+      name = "ajv";
+      packageName = "ajv";
+      version = "4.11.8";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/ajv/-/ajv-4.11.8.tgz";
+        sha1 = "82ffb02b29e662ae53bdc20af15947706739c536";
       };
     };
     "ajv-5.5.2" = {
@@ -400,6 +419,15 @@ let
         sha1 = "dac8787713c9966849fc8180777ebe9c1ddf3b86";
       };
     };
+    "assert-plus-0.2.0" = {
+      name = "assert-plus";
+      packageName = "assert-plus";
+      version = "0.2.0";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/assert-plus/-/assert-plus-0.2.0.tgz";
+        sha1 = "d74e1b87e7affc0db8aadb7021f3fe48101ab234";
+      };
+    };
     "assert-plus-1.0.0" = {
       name = "assert-plus";
       packageName = "assert-plus";
@@ -497,6 +525,15 @@ let
       src = fetchurl {
         url = "https://registry.npmjs.org/atomic-batcher/-/atomic-batcher-1.0.2.tgz";
         sha1 = "d16901d10ccec59516c197b9ccd8930689b813b4";
+      };
+    };
+    "aws-sign2-0.6.0" = {
+      name = "aws-sign2";
+      packageName = "aws-sign2";
+      version = "0.6.0";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/aws-sign2/-/aws-sign2-0.6.0.tgz";
+        sha1 = "14342dd38dbcc94d0e5b87d763cd63612c0e794f";
       };
     };
     "aws-sign2-0.7.0" = {
@@ -661,6 +698,18 @@ let
         sha1 = "090700c4ba28862a8520ef378395fdee5f61c229";
       };
     };
+<<<<<<< HEAD
+=======
+    "boom-2.10.1" = {
+      name = "boom";
+      packageName = "boom";
+      version = "2.10.1";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/boom/-/boom-2.10.1.tgz";
+        sha1 = "39c8918ceff5799f83f9492a848f625add0c766f";
+      };
+    };
+>>>>>>> nodePackages: meguca: 1.0.4 (2018-05-17) -> 1.0.5
     "boxen-1.3.0" = {
       name = "boxen";
       packageName = "boxen";
@@ -1453,6 +1502,18 @@ let
         sha1 = "88d7ff7ec0dfb86f713dc87bbb42d044d3e6c41b";
       };
     };
+<<<<<<< HEAD
+=======
+    "cryptiles-2.0.5" = {
+      name = "cryptiles";
+      packageName = "cryptiles";
+      version = "2.0.5";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/cryptiles/-/cryptiles-2.0.5.tgz";
+        sha1 = "3bdfecdc608147c1c67202fa291e7dca59eaa3b8";
+      };
+    };
+>>>>>>> nodePackages: meguca: 1.0.4 (2018-05-17) -> 1.0.5
     "crypto-random-string-1.0.0" = {
       name = "crypto-random-string";
       packageName = "crypto-random-string";
@@ -2515,6 +2576,15 @@ let
         sha1 = "d35bc62e7fbc2937ae78f948aaa0d38d90607577";
       };
     };
+    "form-data-2.1.4" = {
+      name = "form-data";
+      packageName = "form-data";
+      version = "2.1.4";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/form-data/-/form-data-2.1.4.tgz";
+        sha1 = "33c183acf193276ecaa98143a69e94bfee1750d1";
+      };
+    };
     "form-data-2.3.2" = {
       name = "form-data";
       packageName = "form-data";
@@ -2857,6 +2927,15 @@ let
         sha1 = "630a35dfe0294bc281edae6ffc5d329fc7982dcc";
       };
     };
+    "har-schema-1.0.5" = {
+      name = "har-schema";
+      packageName = "har-schema";
+      version = "1.0.5";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/har-schema/-/har-schema-1.0.5.tgz";
+        sha1 = "d263135f43307c02c602afc8fe95970c0151369e";
+      };
+    };
     "har-schema-2.0.0" = {
       name = "har-schema";
       packageName = "har-schema";
@@ -2864,6 +2943,15 @@ let
       src = fetchurl {
         url = "https://registry.npmjs.org/har-schema/-/har-schema-2.0.0.tgz";
         sha1 = "a94c2224ebcac04782a0d9035521f24735b7ec92";
+      };
+    };
+    "har-validator-4.2.1" = {
+      name = "har-validator";
+      packageName = "har-validator";
+      version = "4.2.1";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/har-validator/-/har-validator-4.2.1.tgz";
+        sha1 = "33481d0f1bbff600dd203d75812a6a5fba002e2a";
       };
     };
     "har-validator-5.0.3" = {
@@ -2965,6 +3053,18 @@ let
         sha1 = "95b0b63fec2146619a6fe57fe75628d5a39efe4f";
       };
     };
+<<<<<<< HEAD
+=======
+    "hawk-3.1.3" = {
+      name = "hawk";
+      packageName = "hawk";
+      version = "3.1.3";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/hawk/-/hawk-3.1.3.tgz";
+        sha1 = "078444bd7c1640b0fe540d2c9b73d59678e8e1c4";
+      };
+    };
+>>>>>>> nodePackages: meguca: 1.0.4 (2018-05-17) -> 1.0.5
     "he-1.1.1" = {
       name = "he";
       packageName = "he";
@@ -2974,6 +3074,18 @@ let
         sha1 = "93410fd21b009735151f8868c2f271f3427e23fd";
       };
     };
+<<<<<<< HEAD
+=======
+    "hoek-2.16.3" = {
+      name = "hoek";
+      packageName = "hoek";
+      version = "2.16.3";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/hoek/-/hoek-2.16.3.tgz";
+        sha1 = "20bb7403d3cea398e91dc4710a8ff1b8274a25ed";
+      };
+    };
+>>>>>>> nodePackages: meguca: 1.0.4 (2018-05-17) -> 1.0.5
     "http-errors-1.6.3" = {
       name = "http-errors";
       packageName = "http-errors";
@@ -2990,6 +3102,15 @@ let
       src = fetchurl {
         url = "https://registry.npmjs.org/http-methods/-/http-methods-0.1.0.tgz";
         sha1 = "29691b6fc58f4f7e81a3605dca82682b068e4430";
+      };
+    };
+    "http-signature-1.1.1" = {
+      name = "http-signature";
+      packageName = "http-signature";
+      version = "1.1.1";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/http-signature/-/http-signature-1.1.1.tgz";
+        sha1 = "df72e267066cd0ac67fb76adf8e134a8fbcf91bf";
       };
     };
     "http-signature-1.2.0" = {
@@ -3073,13 +3194,13 @@ let
         sha1 = "c6019a7595f2cefca702eab694a010bcd9298d20";
       };
     };
-    "ieee754-1.1.11" = {
+    "ieee754-1.1.12" = {
       name = "ieee754";
       packageName = "ieee754";
-      version = "1.1.11";
+      version = "1.1.12";
       src = fetchurl {
-        url = "https://registry.npmjs.org/ieee754/-/ieee754-1.1.11.tgz";
-        sha512 = "0g5x1ijy37vzfz46pnh03mxkmdb9d2qd9f8ncy49xj4j9xkks9p0x8s5hnyc7grwh6sryk118rd7w7wz6w0hzyw9agwnavvlc4g642n";
+        url = "https://registry.npmjs.org/ieee754/-/ieee754-1.1.12.tgz";
+        sha512 = "0nf551idk1p8slbvd2jvzdh9hkm5z2dpv0b3jh1wgkab3mbi33vimdwiivrymvaqk7ba3by6rg9bn5xsdiqi24cn9vr5yjq6kw8y2qs";
       };
     };
     "ignore-by-default-1.0.1" = {
@@ -3739,6 +3860,15 @@ let
         sha1 = "349a6d44c53a51de89b40805c5d5e59b417d3340";
       };
     };
+    "json-stable-stringify-1.0.1" = {
+      name = "json-stable-stringify";
+      packageName = "json-stable-stringify";
+      version = "1.0.1";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/json-stable-stringify/-/json-stable-stringify-1.0.1.tgz";
+        sha1 = "9a759d39c5f2ff503fd5300646ed445f88c4f9af";
+      };
+    };
     "json-stringify-safe-5.0.1" = {
       name = "json-stringify-safe";
       packageName = "json-stringify-safe";
@@ -3755,6 +3885,15 @@ let
       src = fetchurl {
         url = "https://registry.npmjs.org/jsonfile/-/jsonfile-2.4.0.tgz";
         sha1 = "3736a2b428b87bbda0cc83b53fa3d633a35c2ae8";
+      };
+    };
+    "jsonify-0.0.0" = {
+      name = "jsonify";
+      packageName = "jsonify";
+      version = "0.0.0";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/jsonify/-/jsonify-0.0.0.tgz";
+        sha1 = "2c74b6ee41d93ca51b7b5aaee8f503631d252a73";
       };
     };
     "jsprim-1.4.1" = {
@@ -5224,6 +5363,15 @@ let
         sha1 = "7a57eb550a6783f9115331fcf4663d5c8e007a50";
       };
     };
+    "performance-now-0.2.0" = {
+      name = "performance-now";
+      packageName = "performance-now";
+      version = "0.2.0";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/performance-now/-/performance-now-0.2.0.tgz";
+        sha1 = "33ef30c5c77d4ea21c5a53869d91b56d8f2555e5";
+      };
+    };
     "performance-now-2.1.0" = {
       name = "performance-now";
       packageName = "performance-now";
@@ -5494,6 +5642,15 @@ let
         sha1 = "c31d9b74ec27df75e543a86c78728ed8d4623607";
       };
     };
+    "qs-6.4.0" = {
+      name = "qs";
+      packageName = "qs";
+      version = "6.4.0";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/qs/-/qs-6.4.0.tgz";
+        sha1 = "13e26d28ad6b0ffaa91312cd3bf708ed351e7233";
+      };
+    };
     "qs-6.5.2" = {
       name = "qs";
       packageName = "qs";
@@ -5746,11 +5903,28 @@ let
         sha1 = "8dcae470e1c88abc2d600fff4a776286da75e637";
       };
     };
+<<<<<<< HEAD
     "request-2.87.0" = {
       name = "request";
       packageName = "request";
       version = "2.87.0";
       src = fetchurl {
+=======
+    "request-2.81.0" = {
+      name = "request";
+      packageName = "request";
+      version = "2.81.0";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/request/-/request-2.81.0.tgz";
+        sha1 = "c6928946a0e06c5f8d6f8a9333469ffda46298a0";
+      };
+    };
+    "request-2.87.0" = {
+      name = "request";
+      packageName = "request";
+      version = "2.87.0";
+      src = fetchurl {
+>>>>>>> nodePackages: meguca: 1.0.4 (2018-05-17) -> 1.0.5
         url = "https://registry.npmjs.org/request/-/request-2.87.0.tgz";
         sha512 = "0vnsbflzj7gxa33r47bzsiaf7jc00b9iqkqdz8l7n9x5dgdgbq1qpcqqslds1arazipz8pjr4m5rf4ikg4d59d49gn9dky0ds921jkx";
       };
@@ -6178,6 +6352,18 @@ let
         sha512 = "1jsaqma4ycl2iq0761i1w7758z1kq7gbsij4xfb7p5cnw0qa62pszv6pr3j856n3pbxww7wwxs5wvcg2cb6vy020kw3bchashqs9clr";
       };
     };
+<<<<<<< HEAD
+=======
+    "sntp-1.0.9" = {
+      name = "sntp";
+      packageName = "sntp";
+      version = "1.0.9";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/sntp/-/sntp-1.0.9.tgz";
+        sha1 = "6541184cc90aeea6c6e7b35e2659082443c66198";
+      };
+    };
+>>>>>>> nodePackages: meguca: 1.0.4 (2018-05-17) -> 1.0.5
     "sodium-javascript-0.5.5" = {
       name = "sodium-javascript";
       packageName = "sodium-javascript";
@@ -6482,6 +6668,15 @@ let
       src = fetchurl {
         url = "https://registry.npmjs.org/string_decoder/-/string_decoder-1.1.1.tgz";
         sha512 = "315yd4vzwrwk3vwj1klf46y1cj2jbvf88066y2rnwhksb98phj46jkxixbwsp3h607w7czy7cby522s7sx8mvspdpdm3s72y2ga3x4z";
+      };
+    };
+    "stringstream-0.0.6" = {
+      name = "stringstream";
+      packageName = "stringstream";
+      version = "0.0.6";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/stringstream/-/stringstream-0.0.6.tgz";
+        sha512 = "22fa8nryyacyx538az1iir54hqsfb46m6jycmqvfpylmg025xdn1wng94ay1rg69m4s3lv0cf2qnxvzffvm5s74q5fb108y14289cgk";
       };
     };
     "strip-ansi-3.0.1" = {
@@ -7583,7 +7778,11 @@ in
           sources."chalk-1.1.3"
         ];
       })
+<<<<<<< HEAD
       sources."@types/node-10.3.1"
+=======
+      sources."@types/node-10.3.2"
+>>>>>>> nodePackages: meguca: 1.0.4 (2018-05-17) -> 1.0.5
       sources."@types/superagent-3.5.6"
       sources."ansi-escapes-3.1.0"
       sources."ansi-regex-2.1.1"
@@ -8191,25 +8390,29 @@ in
   node-gyp = nodeEnv.buildNodePackage {
     name = "node-gyp";
     packageName = "node-gyp";
-    version = "3.6.2";
+    version = "3.7.0";
     src = fetchurl {
-      url = "https://registry.npmjs.org/node-gyp/-/node-gyp-3.6.2.tgz";
-      sha1 = "9bfbe54562286284838e750eac05295853fa1c60";
+      url = "https://registry.npmjs.org/node-gyp/-/node-gyp-3.7.0.tgz";
+      sha512 = "1pf02189vfiqj2qqm8ihvb9fwa2j32c3xj1hifv5njlasm24rrxjw4yj2ynqpyal2jmdj3v0n3rbpyj0f5wfw4qrvx77ibxbgy08d58";
     };
     dependencies = [
       sources."abbrev-1.1.1"
-      sources."ajv-5.5.2"
+      sources."ajv-4.11.8"
       sources."ansi-regex-2.1.1"
       sources."aproba-1.2.0"
       sources."are-we-there-yet-1.1.5"
       sources."asn1-0.2.3"
-      sources."assert-plus-1.0.0"
+      sources."assert-plus-0.2.0"
       sources."asynckit-0.4.0"
-      sources."aws-sign2-0.7.0"
+      sources."aws-sign2-0.6.0"
       sources."aws4-1.7.0"
       sources."balanced-match-1.0.0"
       sources."bcrypt-pbkdf-1.0.1"
       sources."block-stream-0.0.9"
+<<<<<<< HEAD
+=======
+      sources."boom-2.10.1"
+>>>>>>> nodePackages: meguca: 1.0.4 (2018-05-17) -> 1.0.5
       sources."brace-expansion-1.1.11"
       sources."caseless-0.12.0"
       sources."co-4.6.0"
@@ -8218,26 +8421,34 @@ in
       sources."concat-map-0.0.1"
       sources."console-control-strings-1.1.0"
       sources."core-util-is-1.0.2"
+<<<<<<< HEAD
+=======
+      sources."cryptiles-2.0.5"
+>>>>>>> nodePackages: meguca: 1.0.4 (2018-05-17) -> 1.0.5
       sources."dashdash-1.14.1"
       sources."delayed-stream-1.0.0"
       sources."delegates-1.0.0"
       sources."ecc-jsbn-0.1.1"
       sources."extend-3.0.1"
       sources."extsprintf-1.3.0"
-      sources."fast-deep-equal-1.1.0"
-      sources."fast-json-stable-stringify-2.0.0"
       sources."forever-agent-0.6.1"
-      sources."form-data-2.3.2"
+      sources."form-data-2.1.4"
       sources."fs.realpath-1.0.0"
       sources."fstream-1.0.11"
       sources."gauge-2.7.4"
       sources."getpass-0.1.7"
       sources."glob-7.1.2"
       sources."graceful-fs-4.1.11"
-      sources."har-schema-2.0.0"
-      sources."har-validator-5.0.3"
+      sources."har-schema-1.0.5"
+      sources."har-validator-4.2.1"
       sources."has-unicode-2.0.1"
+<<<<<<< HEAD
       sources."http-signature-1.2.0"
+=======
+      sources."hawk-3.1.3"
+      sources."hoek-2.16.3"
+      sources."http-signature-1.1.1"
+>>>>>>> nodePackages: meguca: 1.0.4 (2018-05-17) -> 1.0.5
       sources."inflight-1.0.6"
       sources."inherits-2.0.3"
       sources."is-fullwidth-code-point-1.0.0"
@@ -8247,9 +8458,14 @@ in
       sources."isstream-0.1.2"
       sources."jsbn-0.1.1"
       sources."json-schema-0.2.3"
-      sources."json-schema-traverse-0.3.1"
+      sources."json-stable-stringify-1.0.1"
       sources."json-stringify-safe-5.0.1"
-      sources."jsprim-1.4.1"
+      sources."jsonify-0.0.0"
+      (sources."jsprim-1.4.1" // {
+        dependencies = [
+          sources."assert-plus-1.0.0"
+        ];
+      })
       sources."mime-db-1.33.0"
       sources."mime-types-2.1.18"
       sources."minimatch-3.0.4"
@@ -8265,21 +8481,35 @@ in
       sources."os-tmpdir-1.0.2"
       sources."osenv-0.1.5"
       sources."path-is-absolute-1.0.1"
-      sources."performance-now-2.1.0"
+      sources."performance-now-0.2.0"
       sources."process-nextick-args-2.0.0"
       sources."punycode-1.4.1"
-      sources."qs-6.5.2"
+      sources."qs-6.4.0"
       sources."readable-stream-2.3.6"
+<<<<<<< HEAD
       sources."request-2.87.0"
+=======
+      sources."request-2.81.0"
+>>>>>>> nodePackages: meguca: 1.0.4 (2018-05-17) -> 1.0.5
       sources."rimraf-2.6.2"
       sources."safe-buffer-5.1.2"
       sources."safer-buffer-2.1.2"
       sources."semver-5.3.0"
       sources."set-blocking-2.0.0"
       sources."signal-exit-3.0.2"
+<<<<<<< HEAD
       sources."sshpk-1.14.2"
+=======
+      sources."sntp-1.0.9"
+      (sources."sshpk-1.14.2" // {
+        dependencies = [
+          sources."assert-plus-1.0.0"
+        ];
+      })
+>>>>>>> nodePackages: meguca: 1.0.4 (2018-05-17) -> 1.0.5
       sources."string-width-1.0.2"
       sources."string_decoder-1.1.1"
+      sources."stringstream-0.0.6"
       sources."strip-ansi-3.0.1"
       sources."tar-2.2.1"
       sources."tough-cookie-2.3.4"
@@ -8295,7 +8525,7 @@ in
     buildInputs = globalBuildInputs;
     meta = {
       description = "Node.js native addon build tool";
-      homepage = "https://github.com/nodejs/node-gyp#readme";
+      homepage = https://github.com/nodejs/node-gyp;
       license = "MIT";
     };
     production = true;
@@ -8620,7 +8850,7 @@ in
       sources."has-to-string-tag-x-1.4.1"
       sources."http-signature-1.2.0"
       sources."iconv-lite-0.4.23"
-      sources."ieee754-1.1.11"
+      sources."ieee754-1.1.12"
       sources."inflight-1.0.6"
       sources."inherits-2.0.3"
       sources."ini-1.3.5"
