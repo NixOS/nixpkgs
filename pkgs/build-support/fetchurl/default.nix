@@ -133,7 +133,7 @@ stdenvNoCC.mkDerivation {
 
   impureEnvVars = impureEnvVars ++ netrcImpureEnvVars;
 
-  nixpkgsVersion = lib.release;
+  nixpkgsVersion = lib.trivial.release;
 
   # Doing the download on a remote machine just duplicates network
   # traffic, so don't do that.
