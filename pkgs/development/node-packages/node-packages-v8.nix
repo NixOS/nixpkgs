@@ -7255,13 +7255,13 @@ let
         sha1 = "2ba7ef316edd0b9590cc547c74f76a2f164fecca";
       };
     };
-    "unordered-set-2.0.0" = {
+    "unordered-set-2.0.1" = {
       name = "unordered-set";
       packageName = "unordered-set";
-      version = "2.0.0";
+      version = "2.0.1";
       src = fetchurl {
-        url = "https://registry.npmjs.org/unordered-set/-/unordered-set-2.0.0.tgz";
-        sha1 = "985a27e975baa20b8263aea7a791e9300941a9ec";
+        url = "https://registry.npmjs.org/unordered-set/-/unordered-set-2.0.1.tgz";
+        sha512 = "1pgnq0agkgn8ma827k8z7map1m5a4713pbcln7z7zl5278jf00385s2011q62s4539p6kydc6yxd0hrw135p1zkbazymiyxzi68sjbr";
       };
     };
     "unpipe-1.0.0" = {
@@ -8014,7 +8014,7 @@ in
           sources."process-nextick-args-1.0.7"
           sources."pump-1.0.3"
           sources."random-access-memory-3.0.0"
-          sources."unordered-set-2.0.0"
+          sources."unordered-set-2.0.1"
           sources."varint-5.0.0"
         ];
       })
@@ -8638,10 +8638,10 @@ in
   pnpm = nodeEnv.buildNodePackage {
     name = "pnpm";
     packageName = "pnpm";
-    version = "2.2.2";
+    version = "2.4.0";
     src = fetchurl {
-      url = "https://registry.npmjs.org/pnpm/-/pnpm-2.2.2.tgz";
-      sha1 = "23d5ed8d7c5133ad46b4ac7b0ee63cbe7bdec688";
+      url = "https://registry.npmjs.org/pnpm/-/pnpm-2.4.0.tgz";
+      sha1 = "54c27537e831f91d5afe63320a5aa2df597efe84";
     };
     buildInputs = globalBuildInputs;
     meta = {

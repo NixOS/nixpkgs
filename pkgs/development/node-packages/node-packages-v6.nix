@@ -24569,13 +24569,13 @@ let
         sha1 = "935d240cdfe0f5805307fdfe967d88942a2cbcf0";
       };
     };
-    "serve-handler-3.1.0" = {
+    "serve-handler-3.1.1" = {
       name = "serve-handler";
       packageName = "serve-handler";
-      version = "3.1.0";
+      version = "3.1.1";
       src = fetchurl {
-        url = "https://registry.npmjs.org/serve-handler/-/serve-handler-3.1.0.tgz";
-        sha512 = "2aha60igym9agandgfm7r4wy0g4ql85bs904k1556hdw098s3akj72c8mwb3ws5ldsy3ac5iw79f0ryjk3cac0fg2n3n9jhjy11mnh9";
+        url = "https://registry.npmjs.org/serve-handler/-/serve-handler-3.1.1.tgz";
+        sha512 = "32qab4isx4xhvmqqllr6i3n69zgdzjqyff5wdll8d5wj6mv6v24vx1hbqx7hk0v35jnj4s896fi8cnrbcc85mf4z8xmhpbs2p9nrhp8";
       };
     };
     "serve-index-1.7.3" = {
@@ -28618,13 +28618,13 @@ let
         sha1 = "2ba7ef316edd0b9590cc547c74f76a2f164fecca";
       };
     };
-    "unordered-set-2.0.0" = {
+    "unordered-set-2.0.1" = {
       name = "unordered-set";
       packageName = "unordered-set";
-      version = "2.0.0";
+      version = "2.0.1";
       src = fetchurl {
-        url = "https://registry.npmjs.org/unordered-set/-/unordered-set-2.0.0.tgz";
-        sha1 = "985a27e975baa20b8263aea7a791e9300941a9ec";
+        url = "https://registry.npmjs.org/unordered-set/-/unordered-set-2.0.1.tgz";
+        sha512 = "1pgnq0agkgn8ma827k8z7map1m5a4713pbcln7z7zl5278jf00385s2011q62s4539p6kydc6yxd0hrw135p1zkbazymiyxzi68sjbr";
       };
     };
     "unorm-1.4.1" = {
@@ -29563,13 +29563,13 @@ let
         sha1 = "e48d79962f0b8e02de955e3f524908e2b19c0374";
       };
     };
-    "vscode-languageserver-types-3.8.1" = {
+    "vscode-languageserver-types-3.8.2" = {
       name = "vscode-languageserver-types";
       packageName = "vscode-languageserver-types";
-      version = "3.8.1";
+      version = "3.8.2";
       src = fetchurl {
-        url = "https://registry.npmjs.org/vscode-languageserver-types/-/vscode-languageserver-types-3.8.1.tgz";
-        sha512 = "2kmqzghy2829p65vyf6q1q0ia27sdr2vmvny3krqzxqi4m2vbww8aa3yza4zwvpq81dqcncmrgs1phryq20f6dj004n19w12jph3hiv";
+        url = "https://registry.npmjs.org/vscode-languageserver-types/-/vscode-languageserver-types-3.8.2.tgz";
+        sha512 = "1pn37gfklkizcvw7my11lagj7cq86g2x0n67c6z2b1py1r15sz87bgj9dn5pf1qwd87kp91r87kcajaask8rr197k3crmafvp5284yr";
       };
     };
     "vscode-uri-1.0.3" = {
@@ -33061,7 +33061,7 @@ in
           sources."process-nextick-args-1.0.7"
           sources."pump-1.0.3"
           sources."random-access-memory-3.0.0"
-          sources."unordered-set-2.0.0"
+          sources."unordered-set-2.0.1"
           sources."varint-5.0.0"
         ];
       })
@@ -36158,7 +36158,7 @@ in
         ];
       })
       sources."vscode-languageserver-protocol-3.5.1"
-      sources."vscode-languageserver-types-3.8.1"
+      sources."vscode-languageserver-types-3.8.2"
       sources."vscode-uri-1.0.5"
       sources."wrappy-1.0.2"
       sources."xorshift-0.2.1"
@@ -38935,10 +38935,10 @@ in
   meguca = nodeEnv.buildNodePackage {
     name = "meguca";
     packageName = "meguca";
-    version = "1.0.5";
+    version = "1.0.7";
     src = fetchurl {
-      url = "https://registry.npmjs.org/meguca/-/meguca-1.0.5.tgz";
-      sha512 = "0lilvxbsrwlmavh8g991m709w8p58h6rcq63izh7l6lsindvbq2w5lrk19ifb8ynqycfyhc7kh67yvkfw42p44i48skk316vjz9k8ry";
+      url = "https://registry.npmjs.org/meguca/-/meguca-1.0.7.tgz";
+      sha512 = "0wj7z2361ijiw98jp6x7xa5z3nn2fk2q1w8bgcw7j4fdw6fyp4hidfkqrcs5zkg7mribwfz22nyh6l08gv04b6r8srqjkrxy9b9ff6y";
     };
     dependencies = [
       (sources."@gulp-sourcemaps/identity-map-1.0.1" // {
@@ -41781,7 +41781,7 @@ in
       sources."vscode-languageclient-4.0.1"
       sources."vscode-languageserver-4.0.0"
       sources."vscode-languageserver-protocol-3.6.0"
-      sources."vscode-languageserver-types-3.8.1"
+      sources."vscode-languageserver-types-3.8.2"
       sources."vscode-uri-1.0.3"
       sources."wrappy-1.0.2"
     ];
@@ -43862,6 +43862,7 @@ in
     name = "serve";
     packageName = "serve";
 <<<<<<< HEAD
+<<<<<<< HEAD
     version = "8.1.1";
     src = fetchurl {
       url = "https://registry.npmjs.org/serve/-/serve-8.1.1.tgz";
@@ -43872,10 +43873,16 @@ in
       url = "https://registry.npmjs.org/serve/-/serve-8.1.2.tgz";
       sha512 = "1n065fkglc79qiaj96c6aiz3rcmc8fw6vv58xpq4fw8k4cawyzpryhmpxa5433j2b0ska9jw66z4rpcbf8nq633y04wsg7xf01fzvm1";
 >>>>>>> nodePackages: meguca: 1.0.4 (2018-05-17) -> 1.0.5
+=======
+    version = "8.1.3";
+    src = fetchurl {
+      url = "https://registry.npmjs.org/serve/-/serve-8.1.3.tgz";
+      sha512 = "0cxicqbyqwpvfdsskdggc87mj4y789fv0b469dz3ynl8897dhwwwcc1p5f219c9wha1gxpx9qw61qlgpzk66kffrngvil054fv3laif";
+>>>>>>> nodePackages: meguca: 1.0.5 -> 1.0.7
     };
     dependencies = [
       sources."@zeit/schemas-1.2.0"
-      sources."ajv-6.5.0"
+      sources."ajv-6.5.1"
       sources."ansi-styles-3.2.1"
       sources."arg-2.0.0"
       sources."balanced-match-1.0.0"
@@ -43895,7 +43902,7 @@ in
       sources."glob-slasher-1.0.1"
       sources."has-flag-3.0.0"
       sources."ini-1.3.5"
-      sources."json-schema-traverse-0.3.1"
+      sources."json-schema-traverse-0.4.1"
       sources."lodash-2.4.2"
       sources."lodash._objecttypes-2.4.1"
       sources."lodash.isobject-2.4.1"
@@ -43910,7 +43917,7 @@ in
       sources."registry-auth-token-3.3.2"
       sources."registry-url-3.1.0"
       sources."safe-buffer-5.1.2"
-      (sources."serve-handler-3.1.0" // {
+      (sources."serve-handler-3.1.1" // {
         dependencies = [
           sources."punycode-1.4.1"
         ];
