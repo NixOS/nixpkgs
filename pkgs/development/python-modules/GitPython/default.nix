@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi, gitdb2, mock, nose, ddt }:
+{ lib, buildPythonPackage, fetchPypi, git, gitdb2, mock, nose, ddt }:
 
 buildPythonPackage rec {
   version = "2.1.9";
@@ -11,6 +11,10 @@ buildPythonPackage rec {
 
   checkInputs = [ mock nose ddt ];
   propagatedBuildInputs = [ gitdb2 ];
+
+  postPatch = ''
+    sed -i "s|^refresh()$|refresh(path='${git}/bin/git')|" git/__init__.py
+  '';
 
   # Tests require a git repo
   doCheck = false;
