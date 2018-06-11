@@ -50,7 +50,7 @@ let
     # NAT from external ports to internal ports.
     ${concatMapStrings (fwd: ''
       iptables -w -t nat -A nixos-nat-pre \
-        -i ${cfg.externalInterface} -p ${fwd.proto} \
+        -i ${toString cfg.externalInterface} -p ${fwd.proto} \
         --dport ${builtins.toString fwd.sourcePort} \
         -j DNAT --to-destination ${fwd.destination}
 
@@ -81,7 +81,7 @@ let
 
     ${optionalString (cfg.dmzHost != null) ''
       iptables -w -t nat -A nixos-nat-pre \
-        -i ${cfg.externalInterface} -j DNAT \
+        -i ${toString cfg.externalInterface} -j DNAT \
         --to-destination ${cfg.dmzHost}
     ''}
 
