@@ -4241,6 +4241,8 @@ with pkgs;
 
   update-resolv-conf = callPackage ../tools/networking/openvpn/update-resolv-conf.nix { };
 
+  opae = callPackage ../development/libraries/opae { };
+
   openvswitch = callPackage ../os-specific/linux/openvswitch { };
 
   optipng = callPackage ../tools/graphics/optipng {
