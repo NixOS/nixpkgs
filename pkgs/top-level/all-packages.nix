@@ -9809,8 +9809,12 @@ with pkgs;
   };
 
   libcanberra = callPackage ../development/libraries/libcanberra { };
-  libcanberra-gtk3 = pkgs.libcanberra.override { gtk = pkgs.gtk3; };
-  libcanberra-gtk2 = pkgs.libcanberra-gtk3.override { gtk = pkgs.gtk2; };
+  libcanberra-gtk3 = pkgs.libcanberra.override {
+    gtk = gtk3;
+  };
+  libcanberra-gtk2 = pkgs.libcanberra-gtk3.override {
+    gtk = gtk2.override { gdktarget = "x11"; };
+  };
 
   libcanberra_kde = if (config.kde_runtime.libcanberraWithoutGTK or true)
     then pkgs.libcanberra
