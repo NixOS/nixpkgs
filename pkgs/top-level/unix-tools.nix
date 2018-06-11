@@ -83,6 +83,9 @@ let
       linux = pkgs.nettools;
       darwin = pkgs.darwin.network_cmds;
     };
+    locale = {
+      linux = pkgs.glibc;
+    };
     logger = {
       linux = pkgs.utillinux;
     };
