@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi, substituteAll, glibc, pytest }:
+{ stdenv, buildPythonPackage, fetchPypi, substituteAll, locale, pytest }:
 
 buildPythonPackage rec {
   pname = "click";
@@ -9,11 +9,12 @@ buildPythonPackage rec {
     sha256 = "02qkfpykbq35id8glfgwc38yc430427yd05z1wc5cnld8zgicmgi";
   };
 
-  patches = stdenv.lib.optionals (stdenv.isLinux && !stdenv.hostPlatform.isMusl)
+  patches = [
     (substituteAll {
       src = ./fix-paths.patch;
-      locale = "${glibc.bin}/bin/locale";
-    });
+      locale = "${locale}/bin/locale";
+    })
+  ];
 
   buildInputs = [ pytest ];
 

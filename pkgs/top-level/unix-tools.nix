@@ -85,6 +85,7 @@ let
     };
     locale = {
       linux = pkgs.glibc;
+      darwin = pkgs.netbsd.locale;
     };
     logger = {
       linux = pkgs.utillinux;

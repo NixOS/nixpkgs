@@ -21639,7 +21639,7 @@ with pkgs;
   unixtools = recurseIntoAttrs (callPackages ./unix-tools.nix { });
   inherit (unixtools) hexdump ps logger eject umount
                       mount wall hostname more sysctl getconf
-                      getent;
+                      getent locale;
 
   fts = if hostPlatform.isMusl then netbsd.fts else null;
 
