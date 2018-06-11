@@ -167,6 +167,7 @@ everything = stdenv.mkDerivation (common // {
     rm -r "$out"/data # Don't need testing data
     rm "$out"/share/man/man1/mysql-test-run.pl.1
     rm "$out"/bin/rcmysql
+  '' + optionalString (! stdenv.isDarwin) ''
     sed -i 's/-mariadb/-mysql/' "$out"/bin/galera_new_cluster
   '';
 
