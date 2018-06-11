@@ -12,6 +12,7 @@ let
       if [ "$1" = bound ]; then
         ip address add "$ip/$mask" dev "$interface"
         if [ -n "$router" ]; then
+          ip route add "$router" dev "$interface" # just in case if "$router" is not within "$ip/$mask" (e.g. Hetzner Cloud)
           ip route add default via "$router" dev "$interface"
         fi
         if [ -n "$dns" ]; then
