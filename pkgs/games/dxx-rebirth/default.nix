@@ -37,6 +37,8 @@ in stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+  hardeningDisable = [ "format" ];
+
   buildPhase = ''
     runHook preBuild
 
