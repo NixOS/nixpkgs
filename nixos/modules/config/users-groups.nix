@@ -171,6 +171,20 @@ let
         '';
       };
 
+      initialHomeContents = mkOption {
+        type = types.nullOr types.path;
+        default = null;
+        description = ''
+          Specifies the directory that represents the contents of a newly
+          created home directory. The contents of this directory is copied
+          to the home directory when the home directory is being created.
+          This represents the behavior of
+          <filename>/etc/skel</filename>.
+          This option only applies when <option>createHome</option>
+          is enabled.
+        '';
+      };
+
       useDefaultShell = mkOption {
         type = types.bool;
         default = false;
@@ -383,7 +397,8 @@ let
     inherit (cfg) mutableUsers;
     users = mapAttrsToList (_: u:
       { inherit (u)
-          name uid group description home createHome isSystemUser
+          name uid group description isSystemUser
+          home createHome initialHomeContents
           password passwordFile hashedPassword
           initialPassword initialHashedPassword;
         shell = utils.toShellPath u.shell;

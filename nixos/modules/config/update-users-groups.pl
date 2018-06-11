@@ -213,7 +213,15 @@ foreach my $u (@{$spec->{users}}) {
 
     # Create a home directory.
     if ($u->{createHome}) {
-        make_path($u->{home}, { mode => 0700 }) if ! -e $u->{home};
+        my $new_home = 0;
+        if ( !-e $u->{home} ) {
+            make_path($u->{home}, { mode => 0700 });
+            $new_home = 1;
+        }
+        if (defined $new_home && $u->{initialHomeContents}) {
+            system("cp --recursive --preserve=mode --no-preserve=owner $u->{initialHomeContents}/. $u->{home}");
+            system("chown -R $u->{uid}, $u->{gid}, $u->{home}");
+        }
         chown $u->{uid}, $u->{gid}, $u->{home};
     }
 
