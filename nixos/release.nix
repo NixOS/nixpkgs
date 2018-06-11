@@ -337,6 +337,7 @@ in rec {
   tests.mumble = callTest tests/mumble.nix {};
   tests.munin = callTest tests/munin.nix {};
   tests.mutableUsers = callTest tests/mutable-users.nix {};
+  tests.initialHomeContents = callTest tests/initial-home-contents.nix {};
   tests.mysql = callTest tests/mysql.nix {};
   tests.mysqlBackup = callTest tests/mysql-backup.nix {};
   tests.mysqlReplication = callTest tests/mysql-replication.nix {};
