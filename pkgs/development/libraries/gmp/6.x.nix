@@ -75,6 +75,7 @@ let self = stdenv.mkDerivation rec {
          asymptotically faster algorithms.
       '';
 
+    broken = with stdenv.hostPlatform; useAndroidPrebuilt || useiOSPrebuilt;
     platforms = platforms.all;
     maintainers = [ maintainers.peti maintainers.vrthra ];
   };

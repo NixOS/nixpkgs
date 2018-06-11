@@ -8,7 +8,6 @@ let
   integerSimpleExcludes = [
     "ghc7103Binary"
     "ghc821Binary"
-    "ghcCross"
     "ghcjs"
     "ghcjs710"
     "ghcjs80"
