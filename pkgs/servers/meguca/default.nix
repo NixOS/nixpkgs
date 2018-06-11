@@ -3,8 +3,8 @@
 
 buildGoPackage rec {
   name = "meguca-unstable-${version}";
-  version = "2018-06-10";
-  rev = "e2f97faf10fd3dd672f9b80d220079bfad1c045c";
+  version = "2018-06-11";
+  rev = "0c10e89fade68da414a574b5b0fa2f0dba432ea8";
   goPackagePath = "github.com/bakape/meguca";
   goDeps = ./server_deps.nix;
   enableParallelBuilding = true;
@@ -14,7 +14,7 @@ buildGoPackage rec {
   src = fetchgit {
     inherit rev;
     url = "https://github.com/bakape/meguca";
-    sha256 = "1blj970kdvasgxxwca6idvzl6ha29g9fvqwxgy00j7hk37hzkkzf";
+    sha256 = "1nw0hfa0ikbk8d5rsj3fbdwhzwnxjqkw8ypswd0hyw8nwsaxyyq8";
     fetchSubmodules = true;
   };
 
