@@ -418,7 +418,7 @@ self: super: {
   hspec-smallcheck = self.hspec-smallcheck_0_5_2;
   matrix = self.matrix_0_3_6_1;
   pandoc = self.pandoc_2_2_1;
-  pandoc-types = self.pandoc-types_1_17_4_2;
+  pandoc-types = self.pandoc-types_1_17_5_1;
   wl-pprint-text = self.wl-pprint-text_1_2_0_0;
 
   # https://github.com/xmonad/xmonad/issues/155
