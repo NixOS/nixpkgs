@@ -8171,6 +8171,10 @@ let self = _self // overrides; _self = with self; {
       url = mirror://cpan/authors/id/I/IS/ISHIGAKI/JSON-2.97001.tar.gz;
       sha256 = "0nlgdzy40q26z8qhwngsd461glyai8dpwaccyhiljmrkaqwdjxz2";
     };
+    # Do not abort cross-compilation on failure to load native JSON module into host perl
+    preConfigure = ''
+      substituteInPlace Makefile.PL --replace "exit 0;" ""
+    '';
     meta = {
       description = "JSON (JavaScript Object Notation) encoder/decoder";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
