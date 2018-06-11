@@ -1,5 +1,5 @@
 { stdenv, lib, fetchFromGitHub, makeWrapper, removeReferencesTo, pkgconfig
-, go-md2man, go, containerd, runc, docker-proxy, tini, libtool
+, go-md2man, go ? null, go_1_9 ? null, containerd, runc, docker-proxy, tini, libtool
 , sqlite, iproute, bridge-utils, devicemapper, systemd
 , btrfs-progs, iptables, e2fsprogs, xz, utillinux, xfsprogs
 , procps, libseccomp
@@ -36,6 +36,7 @@ rec {
         sha256 = containerdSha256;
       };
 
+      go = (if versionAtLeast version "18.05.5-ce" then go else go_1_9);
       hardeningDisable = [ "fortify" ];
 
       buildInputs = [ removeReferencesTo go btrfs-progs ];
