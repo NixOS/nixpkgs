@@ -49,13 +49,32 @@ let
         sha1 = "cbc4b9a68981bf0b501ccd06a9058acd65309bf7";
       };
     };
+<<<<<<< HEAD
     "@types/node-10.5.0" = {
+=======
+<<<<<<< HEAD
+    "@types/node-10.3.1" = {
+>>>>>>> nodePackages: meguca: 1.0.4 (2018-05-17) -> 1.0.5
       name = "_at_types_slash_node";
       packageName = "@types/node";
       version = "10.5.0";
       src = fetchurl {
+<<<<<<< HEAD
         url = "https://registry.npmjs.org/@types/node/-/node-10.5.0.tgz";
         sha512 = "baXPuqA7EVcBUpA5so2K26DTzk7NCWBc9xrPMu9PbUMwgusJRm9zJBPhiDmJVEcnTQ3aOxUZeuFHpd9qMYDNRg==";
+=======
+        url = "https://registry.npmjs.org/@types/node/-/node-10.3.1.tgz";
+        sha512 = "0xqz0wlddb3vi0mmlncn1ypd7sa2zv3fcq58jk7nr0xdsrwwzn9ncdq784lvg8d2k7lzq1p2kjyak5nghq0imbdj8hrmk6365lgvi92";
+=======
+    "@types/node-10.3.2" = {
+      name = "_at_types_slash_node";
+      packageName = "@types/node";
+      version = "10.3.2";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/@types/node/-/node-10.3.2.tgz";
+        sha512 = "3w50bh9i0rl27vnrn4mmwjphccfaybj74ydfymjmq46p8dfllfwm37lgxqjrx0mp6hrdia5hllbwnpsx2a4wwwck9hh9dkp798c9mzl";
+>>>>>>> nodePackages: meguca: 1.0.4 (2018-05-17) -> 1.0.5
+>>>>>>> nodePackages: meguca: 1.0.4 (2018-05-17) -> 1.0.5
       };
     };
     "@types/superagent-3.5.6" = {
@@ -688,6 +707,11 @@ let
         sha1 = "090700c4ba28862a8520ef378395fdee5f61c229";
       };
     };
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+=======
+>>>>>>> nodePackages: meguca: 1.0.4 (2018-05-17) -> 1.0.5
     "boom-2.10.1" = {
       name = "boom";
       packageName = "boom";
@@ -697,6 +721,10 @@ let
         sha1 = "39c8918ceff5799f83f9492a848f625add0c766f";
       };
     };
+<<<<<<< HEAD
+=======
+>>>>>>> nodePackages: meguca: 1.0.4 (2018-05-17) -> 1.0.5
+>>>>>>> nodePackages: meguca: 1.0.4 (2018-05-17) -> 1.0.5
     "boxen-1.3.0" = {
       name = "boxen";
       packageName = "boxen";
@@ -1489,6 +1517,11 @@ let
         sha1 = "88d7ff7ec0dfb86f713dc87bbb42d044d3e6c41b";
       };
     };
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+=======
+>>>>>>> nodePackages: meguca: 1.0.4 (2018-05-17) -> 1.0.5
     "cryptiles-2.0.5" = {
       name = "cryptiles";
       packageName = "cryptiles";
@@ -1498,6 +1531,10 @@ let
         sha1 = "3bdfecdc608147c1c67202fa291e7dca59eaa3b8";
       };
     };
+<<<<<<< HEAD
+=======
+>>>>>>> nodePackages: meguca: 1.0.4 (2018-05-17) -> 1.0.5
+>>>>>>> nodePackages: meguca: 1.0.4 (2018-05-17) -> 1.0.5
     "crypto-random-string-1.0.0" = {
       name = "crypto-random-string";
       packageName = "crypto-random-string";
@@ -3037,6 +3074,11 @@ let
         sha1 = "95b0b63fec2146619a6fe57fe75628d5a39efe4f";
       };
     };
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+=======
+>>>>>>> nodePackages: meguca: 1.0.4 (2018-05-17) -> 1.0.5
     "hawk-3.1.3" = {
       name = "hawk";
       packageName = "hawk";
@@ -3046,6 +3088,10 @@ let
         sha1 = "078444bd7c1640b0fe540d2c9b73d59678e8e1c4";
       };
     };
+<<<<<<< HEAD
+=======
+>>>>>>> nodePackages: meguca: 1.0.4 (2018-05-17) -> 1.0.5
+>>>>>>> nodePackages: meguca: 1.0.4 (2018-05-17) -> 1.0.5
     "he-1.1.1" = {
       name = "he";
       packageName = "he";
@@ -3055,6 +3101,11 @@ let
         sha1 = "93410fd21b009735151f8868c2f271f3427e23fd";
       };
     };
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+=======
+>>>>>>> nodePackages: meguca: 1.0.4 (2018-05-17) -> 1.0.5
     "hoek-2.16.3" = {
       name = "hoek";
       packageName = "hoek";
@@ -3064,6 +3115,10 @@ let
         sha1 = "20bb7403d3cea398e91dc4710a8ff1b8274a25ed";
       };
     };
+<<<<<<< HEAD
+=======
+>>>>>>> nodePackages: meguca: 1.0.4 (2018-05-17) -> 1.0.5
+>>>>>>> nodePackages: meguca: 1.0.4 (2018-05-17) -> 1.0.5
     "http-errors-1.6.3" = {
       name = "http-errors";
       packageName = "http-errors";
@@ -3187,7 +3242,11 @@ let
       version = "1.1.12";
       src = fetchurl {
         url = "https://registry.npmjs.org/ieee754/-/ieee754-1.1.12.tgz";
+<<<<<<< HEAD
         sha512 = "GguP+DRY+pJ3soyIiGPTvdiVXjZ+DbXOxGpXn3eMvNW4x4irjqXm4wHKscC+TfxSJ0yw/S1F24tqdMNsMZTiLA==";
+=======
+        sha512 = "0nf551idk1p8slbvd2jvzdh9hkm5z2dpv0b3jh1wgkab3mbi33vimdwiivrymvaqk7ba3by6rg9bn5xsdiqi24cn9vr5yjq6kw8y2qs";
+>>>>>>> nodePackages: meguca: 1.0.4 (2018-05-17) -> 1.0.5
       };
     };
     "ignore-by-default-1.0.1" = {
@@ -5899,6 +5958,25 @@ let
         sha1 = "8dcae470e1c88abc2d600fff4a776286da75e637";
       };
     };
+<<<<<<< HEAD
+    "request-2.81.0" = {
+      name = "request";
+      packageName = "request";
+      version = "2.81.0";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/request/-/request-2.81.0.tgz";
+        sha1 = "c6928946a0e06c5f8d6f8a9333469ffda46298a0";
+      };
+    };
+=======
+<<<<<<< HEAD
+>>>>>>> nodePackages: meguca: 1.0.4 (2018-05-17) -> 1.0.5
+    "request-2.87.0" = {
+      name = "request";
+      packageName = "request";
+      version = "2.87.0";
+      src = fetchurl {
+=======
     "request-2.81.0" = {
       name = "request";
       packageName = "request";
@@ -5913,6 +5991,7 @@ let
       packageName = "request";
       version = "2.87.0";
       src = fetchurl {
+>>>>>>> nodePackages: meguca: 1.0.4 (2018-05-17) -> 1.0.5
         url = "https://registry.npmjs.org/request/-/request-2.87.0.tgz";
         sha512 = "fcogkm7Az5bsS6Sl0sibkbhcKsnyon/jV1kF3ajGmF0c8HrttdKTPRT9hieOaQHA5HEq6r8OyWOo/o781C1tNw==";
       };
@@ -6349,6 +6428,18 @@ let
         sha1 = "6541184cc90aeea6c6e7b35e2659082443c66198";
       };
     };
+<<<<<<< HEAD
+=======
+    "sntp-1.0.9" = {
+      name = "sntp";
+      packageName = "sntp";
+      version = "1.0.9";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/sntp/-/sntp-1.0.9.tgz";
+        sha1 = "6541184cc90aeea6c6e7b35e2659082443c66198";
+      };
+    };
+>>>>>>> nodePackages: meguca: 1.0.4 (2018-05-17) -> 1.0.5
     "sodium-javascript-0.5.5" = {
       name = "sodium-javascript";
       packageName = "sodium-javascript";
@@ -6671,6 +6762,15 @@ let
       src = fetchurl {
         url = "https://registry.npmjs.org/stringstream/-/stringstream-0.0.6.tgz";
         sha512 = "87GEBAkegbBcweToUrdzf3eLhWNg06FJTebl4BVJz/JgWy8CvEr9dRtX5qWphiynMSQlxxi+QqN0z5T32SLlhA==";
+      };
+    };
+    "stringstream-0.0.6" = {
+      name = "stringstream";
+      packageName = "stringstream";
+      version = "0.0.6";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/stringstream/-/stringstream-0.0.6.tgz";
+        sha512 = "22fa8nryyacyx538az1iir54hqsfb46m6jycmqvfpylmg025xdn1wng94ay1rg69m4s3lv0cf2qnxvzffvm5s74q5fb108y14289cgk";
       };
     };
     "strip-ansi-3.0.1" = {
@@ -7767,8 +7867,21 @@ in
       sources."@cycle/http-14.9.0"
       sources."@cycle/isolate-3.3.0"
       sources."@cycle/run-3.4.0"
+<<<<<<< HEAD
       sources."@cycle/time-0.10.1"
       sources."@types/node-10.5.0"
+=======
+      (sources."@cycle/time-0.10.1" // {
+        dependencies = [
+          sources."chalk-1.1.3"
+        ];
+      })
+<<<<<<< HEAD
+      sources."@types/node-10.3.1"
+=======
+      sources."@types/node-10.3.2"
+>>>>>>> nodePackages: meguca: 1.0.4 (2018-05-17) -> 1.0.5
+>>>>>>> nodePackages: meguca: 1.0.4 (2018-05-17) -> 1.0.5
       sources."@types/superagent-3.5.6"
       sources."ansi-escapes-3.1.0"
       sources."ansi-regex-2.1.1"
@@ -8412,7 +8525,11 @@ in
     version = "3.7.0";
     src = fetchurl {
       url = "https://registry.npmjs.org/node-gyp/-/node-gyp-3.7.0.tgz";
+<<<<<<< HEAD
       sha512 = "qDQE/Ft9xXP6zphwx4sD0t+VhwV7yFaloMpfbL2QnnDZcyaiakWlLdtFGGQfTAwpFHdpbRhRxVhIHN1OKAjgbg==";
+=======
+      sha512 = "1pf02189vfiqj2qqm8ihvb9fwa2j32c3xj1hifv5njlasm24rrxjw4yj2ynqpyal2jmdj3v0n3rbpyj0f5wfw4qrvx77ibxbgy08d58";
+>>>>>>> nodePackages: meguca: 1.0.4 (2018-05-17) -> 1.0.5
     };
     dependencies = [
       sources."abbrev-1.1.1"
@@ -8428,7 +8545,14 @@ in
       sources."balanced-match-1.0.0"
       sources."bcrypt-pbkdf-1.0.1"
       sources."block-stream-0.0.9"
+<<<<<<< HEAD
       sources."boom-2.10.1"
+=======
+<<<<<<< HEAD
+=======
+      sources."boom-2.10.1"
+>>>>>>> nodePackages: meguca: 1.0.4 (2018-05-17) -> 1.0.5
+>>>>>>> nodePackages: meguca: 1.0.4 (2018-05-17) -> 1.0.5
       sources."brace-expansion-1.1.11"
       sources."caseless-0.12.0"
       sources."co-4.6.0"
@@ -8437,12 +8561,20 @@ in
       sources."concat-map-0.0.1"
       sources."console-control-strings-1.1.0"
       sources."core-util-is-1.0.2"
+<<<<<<< HEAD
       sources."cryptiles-2.0.5"
       (sources."dashdash-1.14.1" // {
         dependencies = [
           sources."assert-plus-1.0.0"
         ];
       })
+=======
+<<<<<<< HEAD
+=======
+      sources."cryptiles-2.0.5"
+>>>>>>> nodePackages: meguca: 1.0.4 (2018-05-17) -> 1.0.5
+      sources."dashdash-1.14.1"
+>>>>>>> nodePackages: meguca: 1.0.4 (2018-05-17) -> 1.0.5
       sources."delayed-stream-1.0.0"
       sources."delegates-1.0.0"
       sources."ecc-jsbn-0.1.1"
@@ -8463,9 +8595,19 @@ in
       sources."har-schema-1.0.5"
       sources."har-validator-4.2.1"
       sources."has-unicode-2.0.1"
+<<<<<<< HEAD
       sources."hawk-3.1.3"
       sources."hoek-2.16.3"
       sources."http-signature-1.1.1"
+=======
+<<<<<<< HEAD
+      sources."http-signature-1.2.0"
+=======
+      sources."hawk-3.1.3"
+      sources."hoek-2.16.3"
+      sources."http-signature-1.1.1"
+>>>>>>> nodePackages: meguca: 1.0.4 (2018-05-17) -> 1.0.5
+>>>>>>> nodePackages: meguca: 1.0.4 (2018-05-17) -> 1.0.5
       sources."inflight-1.0.6"
       sources."inherits-2.0.3"
       sources."is-fullwidth-code-point-1.0.0"
@@ -8503,19 +8645,37 @@ in
       sources."punycode-1.4.1"
       sources."qs-6.4.0"
       sources."readable-stream-2.3.6"
+<<<<<<< HEAD
       sources."request-2.81.0"
+=======
+<<<<<<< HEAD
+      sources."request-2.87.0"
+=======
+      sources."request-2.81.0"
+>>>>>>> nodePackages: meguca: 1.0.4 (2018-05-17) -> 1.0.5
+>>>>>>> nodePackages: meguca: 1.0.4 (2018-05-17) -> 1.0.5
       sources."rimraf-2.6.2"
       sources."safe-buffer-5.1.2"
       sources."safer-buffer-2.1.2"
       sources."semver-5.3.0"
       sources."set-blocking-2.0.0"
       sources."signal-exit-3.0.2"
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+      sources."sshpk-1.14.2"
+=======
+>>>>>>> nodePackages: meguca: 1.0.4 (2018-05-17) -> 1.0.5
       sources."sntp-1.0.9"
       (sources."sshpk-1.14.2" // {
         dependencies = [
           sources."assert-plus-1.0.0"
         ];
       })
+<<<<<<< HEAD
+=======
+>>>>>>> nodePackages: meguca: 1.0.4 (2018-05-17) -> 1.0.5
+>>>>>>> nodePackages: meguca: 1.0.4 (2018-05-17) -> 1.0.5
       sources."string-width-1.0.2"
       sources."string_decoder-1.1.1"
       sources."stringstream-0.0.6"
