@@ -34,11 +34,12 @@ diff -urN ntp-4.2.8p10.orig/ntpd/ntpd.c ntp-4.2.8p10/ntpd/ntpd.c
  	SCMP_SYS(madvise),
  	SCMP_SYS(mmap),
  	SCMP_SYS(mmap2),
-@@ -1211,6 +1216,7 @@
+@@ -1211,6 +1216,8 @@
  	SCMP_SYS(select),
  	SCMP_SYS(setitimer),
  	SCMP_SYS(setsid),
 +        SCMP_SYS(setsockopt),
++        SCMP_SYS(openat),
  	SCMP_SYS(sigprocmask),
  	SCMP_SYS(sigreturn),
  	SCMP_SYS(socketcall),
