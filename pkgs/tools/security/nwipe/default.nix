@@ -9,7 +9,8 @@ stdenv.mkDerivation rec {
     rev = "v${version}";
     sha256 = "0zminjngz98b4jl1ii6ssa7pkmf4xw6mmk8apxz3xr68cps12ls0";
   };
-  nativeBuildInputs = [ automake autoconf ncurses parted pkgconfig ];
+  nativeBuildInputs = [ automake autoconf pkgconfig ];
+  buildInputs = [ ncurses parted ];
   preConfigure = "sh init.sh || :";
   meta = with stdenv.lib; {
     description = "Securely erase disks";
