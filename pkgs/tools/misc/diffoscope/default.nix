@@ -8,12 +8,12 @@
 
 python3Packages.buildPythonApplication rec {
   name = "diffoscope-${version}";
-  version = "91";
+  version = "95";
 
   src = fetchgit {
     url    = "https://anonscm.debian.org/git/reproducible/diffoscope.git";
     rev    = "refs/tags/${version}";
-    sha256 = "16xqy71115cj4kws6bkcjm98nlaff3a32fz82rn2l1xk9w9n3dnz";
+    sha256 = "1x06krs3lp41x5w2l8ck8g47il3qzlclyphw9a2wv71sqkb5zxzi";
   };
 
   patches = [
