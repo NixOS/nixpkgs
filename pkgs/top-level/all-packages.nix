@@ -4992,7 +4992,9 @@ with pkgs;
 
   sisco.lv2 = callPackage ../applications/audio/sisco.lv2 { };
 
-  sit = callPackage ../applications/version-management/sit { };
+  sit = callPackage ../applications/version-management/sit {
+    inherit (darwin.apple_sdk.frameworks) CoreFoundation Security;
+  };
 
   skippy-xd = callPackage ../tools/X11/skippy-xd {};
 
