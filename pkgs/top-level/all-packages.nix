@@ -8724,6 +8724,8 @@ with pkgs;
 
   ccrtp_1_8 = callPackage ../development/libraries/ccrtp/1.8.nix { };
 
+  cctz = callPackage ../development/libraries/cctz { };
+
   celt = callPackage ../development/libraries/celt {};
   celt_0_7 = callPackage ../development/libraries/celt/0.7.nix {};
   celt_0_5_1 = callPackage ../development/libraries/celt/0.5.1.nix {};
