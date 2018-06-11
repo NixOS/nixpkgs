@@ -4440,23 +4440,23 @@ with pkgs;
     libcap = if stdenv.isDarwin then null else libcap;
   };
 
-  pinentry_ncurses = pinentry.override {
+  pinentry_ncurses = self.pinentry.override {
     gtk2 = null;
   };
 
-  pinentry_emacs = pinentry.override {
+  pinentry_emacs = self.pinentry.override {
     enableEmacs = true;
   };
 
-  pinentry_gnome = pinentry.override {
+  pinentry_gnome = self.pinentry.override {
     gcr = gnome3.gcr;
   };
 
-  pinentry_qt4 = pinentry.override {
+  pinentry_qt4 = self.pinentry.override {
     qt = qt4;
   };
 
-  pinentry_qt5 = pinentry.override {
+  pinentry_qt5 = self.pinentry.override {
     qt = qt5.qtbase;
   };
 
