@@ -3,11 +3,11 @@
 buildPythonPackage rec {
   name = "${pname}-${version}";
   pname = "buildbot-pkg";
-  version = "1.1.2";
+  version = "1.2.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0f14453e2f2f357f44edd79df2d3b3901b4e03f4746693c209b71e226ed238cd";
+    sha256 = "70f429311c5812ffd334f023f4f50b904be5c672c8674ee6d28a11a7c096f18a";
   };
 
   propagatedBuildInputs = [ setuptools ];
