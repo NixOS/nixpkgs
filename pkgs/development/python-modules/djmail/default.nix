@@ -5,7 +5,7 @@
 buildPythonPackage rec {
   pname = "djmail";
   name = "${pname}-${version}";
-  version = "1.0.1";
+  version = "1.1.0";
 
   meta = {
     description = "Simple, powerfull and nonobstructive django email middleware.";
@@ -15,7 +15,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1827i9qcn1ki09i5pg0lmar7cxjv18avh76x1n20947p1cimf3rp";
+    sha256 = "87d2a8b4bdf67ae9b312e127ccc873a53116cf297ec786460d782ce82eaa76b5";
   };
 
   propagatedBuildInputs = [ celery django psycopg2 ];
