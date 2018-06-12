@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, gettext, libmsgpack, libtermkey
+{ stdenv, fetchFromGitHub, cmake, gettext, libmsgpack, libtermkey, libiconv
 , libtool, libuv, luaPackages, ncurses, perl, pkgconfig
 , unibilium, vimUtils, xsel, gperf, callPackage
 , libvterm-neovim
@@ -11,13 +11,13 @@ let
 
   neovim = stdenv.mkDerivation rec {
     name = "neovim-unwrapped-${version}";
-    version = "0.2.2";
+    version = "0.3.0";
 
     src = fetchFromGitHub {
       owner = "neovim";
       repo = "neovim";
       rev = "v${version}";
-      sha256 = "1dxr29d0hyag7snbww5s40as90412qb61rgj7gd9rps1iccl9gv4";
+      sha256 = "10c8y309fdwvr3d9n6vm1f2c0k6pzicnhc64l2dvbw1lnabp04vv";
     };
 
     enableParallelBuilding = true;
@@ -32,6 +32,7 @@ let
       luaPackages.lua
       gperf
     ] ++ optional withJemalloc jemalloc
+      ++ optional stdenv.isDarwin libiconv
       ++ lualibs;
 
     nativeBuildInputs = [
