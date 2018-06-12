@@ -3,12 +3,12 @@
 
 buildPythonPackage rec {
   pname = "gunicorn";
-  version = "19.7.1";
+  version = "19.8.1";
   name = "${pname}-${version}";
 
   src = fetchurl {
     url = "mirror://pypi/g/gunicorn/${name}.tar.gz";
-    sha256 = "eee1169f0ca667be05db3351a0960765620dad53f53434262ff8901b68a1b622";
+    sha256 = "bc59005979efb6d2dd7d5ba72d99f8a8422862ad17ff3a16e900684630dd2a10";
   };
 
   buildInputs = [ pytest mock pytestcov coverage ];
