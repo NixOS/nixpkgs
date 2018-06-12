@@ -2,7 +2,7 @@
 
 buildPythonPackage rec {
   pname = "distro";
-  version = "1.2.0";
+  version = "1.3.0";
 
   buildInputs = [ pytest pytestcov tox];
 
@@ -13,7 +13,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "d94370e43b676ac44fbe1ab68ca903a6147eaba3a9e8eff85b2c05556a455b76";
+    sha256 = "224041cef9600e72d19ae41ba006e71c05c4dc802516da715d7fda55ba3d8742";
   };
 
   meta = with stdenv.lib; {
