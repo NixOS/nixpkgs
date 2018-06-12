@@ -1,13 +1,13 @@
 { stdenv, fetchurl, python, buildPythonPackage, gmp }:
 
 buildPythonPackage rec {
-  version = "3.5.1";
+  version = "3.6.1";
   pname = "pycryptodome";
   name = "${pname}-${version}";
 
   src = fetchurl {
     url = "mirror://pypi/p/pycryptodome/${name}.tar.gz";
-    sha256 = "b7957736f5e868416b06ff033f8525e64630c99a8880b531836605190b0cac96";
+    sha256 = "15013007e393d0cc0e69f4329a47c4c8597b7f3d02c12c03f805405542f70c71";
   };
 
   meta = {
