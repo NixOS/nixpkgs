@@ -2,12 +2,12 @@
 
 buildPythonPackage rec {
   pname = "python-dateutil";
-  version = "1.5";
+  version = "2.7.3";
   disabled = isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "02dhw57jf5kjcp7ng1if7vdrbnlpb9yjmz7wygwwvf3gni4766bg";
+    sha256 = "e27001de32f627c22380a688bcc43ce83504a7bc5da472209b4c70f02829f0b8";
   };
 
   propagatedBuildInputs = [ six ];
