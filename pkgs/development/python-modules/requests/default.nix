@@ -4,11 +4,11 @@
 
 buildPythonPackage rec {
   pname = "requests";
-  version = "2.18.4";
+  version = "2.19.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0zi3v9nsmv9j27d0c0m1dvqyvaxz53g8m0aa1h3qanxs4irkwi4w";
+    sha256 = "cc408268d0e21589bcc2b2c248e42932b8c4d112f499c12c92e99e2178a6134c";
   };
 
   outputs = [ "out" "dev" ];
