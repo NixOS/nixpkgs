@@ -6,9 +6,7 @@ stdenv.mkDerivation rec {
   version = "1.8.23";
 
   src = fetchurl {
-    # This URL changes in unpredictable ways, so it is not sensible
-    # to put a version variable in there.
-    url = "https://alioth.debian.org/frs/download.php/file/4235/pcsc-lite-1.8.23.tar.bz2";
+    url = "https://pcsclite.apdu.fr/files/pcsc-lite-${version}.tar.bz2";
     sha256 = "1jc9ws5ra6v3plwraqixin0w0wfxj64drahrbkyrrwzghqjjc9ss";
   };
 
@@ -36,7 +34,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Middleware to access a smart card using SCard API (PC/SC)";
-    homepage = http://pcsclite.alioth.debian.org/;
+    homepage = https://pcsclite.apdu.fr/;
     license = licenses.bsd3;
     maintainers = with maintainers; [ viric wkennington ];
     platforms = with platforms; unix;

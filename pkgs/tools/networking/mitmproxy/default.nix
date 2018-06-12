@@ -18,6 +18,8 @@ buildPythonPackage rec {
     sed 's/>=\([0-9]\.\?\)\+\( \?, \?<\([0-9]\.\?\)\+\)\?//' -i setup.py
   '';
 
+  doCheck = (!stdenv.isDarwin);
+
   checkPhase = ''
     export HOME=$(mktemp -d)
     export LC_CTYPE=en_US.UTF-8

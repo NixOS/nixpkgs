@@ -24,7 +24,8 @@ stdenv.mkDerivation rec {
     stdenv.lib.optional stdenv.isDarwin ./darwin-openssl-linking-fix.patch;
 
   nativeBuildInputs = [ perl ];
-  buildInputs = [ libcap libtool libxml2 openssl ]
+  buildInputs = [ libtool libxml2 openssl ]
+    ++ lib.optional stdenv.isLinux libcap
     ++ lib.optional enableSeccomp libseccomp
     ++ lib.optional enablePython python3;
 
@@ -34,7 +35,6 @@ stdenv.mkDerivation rec {
 
   configureFlags = [
     "--localstatedir=/var"
-    "--with-libcap=${libcap.dev}"
     "--with-libtool"
     "--with-libxml2=${libxml2.dev}"
     "--with-openssl=${openssl.dev}"
@@ -54,7 +54,8 @@ stdenv.mkDerivation rec {
     "--with-gost"
     "--without-eddsa"
     "--with-aes"
-  ] ++ lib.optional enableSeccomp "--enable-seccomp";
+  ] ++ lib.optional stdenv.isLinux "--with-libcap=${libcap.dev}"
+    ++ lib.optional enableSeccomp "--enable-seccomp";
 
   postInstall = ''
     moveToOutput bin/bind9-config $dev

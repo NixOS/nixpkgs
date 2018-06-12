@@ -973,7 +973,7 @@ stdenv.mkDerivation {
     # the following packages are related to the dependencies of your python
     # project.
     # In this particular example the python modules listed in the
-    # requirements.tx require the following packages to be installed locally
+    # requirements.txt require the following packages to be installed locally
     # in order to compile any binary extensions they may require.
     #
     taglib

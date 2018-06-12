@@ -199,11 +199,15 @@ in {
 
   automat = callPackage ../development/python-modules/automat { };
 
+  aws-sam-translator = callPackage ../development/python-modules/aws-sam-translator { };
+
   aws-xray-sdk = callPackage ../development/python-modules/aws-xray-sdk { };
 
   # packages defined elsewhere
 
   amazon_kclpy = callPackage ../development/python-modules/amazon_kclpy { };
+
+  ansiconv = callPackage ../development/python-modules/ansiconv { };
 
   backports_csv = callPackage ../development/python-modules/backports_csv {};
 
@@ -234,6 +238,8 @@ in {
   dbf = callPackage ../development/python-modules/dbf { };
 
   dbfread = callPackage ../development/python-modules/dbfread { };
+
+  deap = callPackage ../development/python-modules/deap { };
 
   dkimpy = callPackage ../development/python-modules/dkimpy { };
 
@@ -315,6 +321,8 @@ in {
 
   outcome = callPackage ../development/python-modules/outcome {};
 
+  pdf2image = callPackage ../development/python-modules/pdf2image { };
+
   pdfminer = callPackage ../development/python-modules/pdfminer_six { };
 
   plantuml = callPackage ../tools/misc/plantuml { };
@@ -390,6 +398,8 @@ in {
     inherit (pkgs.llvmPackages) openmp;
   };
 
+  pynisher = callPackage ../development/python-modules/pynisher { };
+
   pyparser = callPackage ../development/python-modules/pyparser { };
 
   pyqt4 = callPackage ../development/python-modules/pyqt/4.x.nix {
@@ -417,6 +427,8 @@ in {
   };
 
   pytest-tornado = callPackage ../development/python-modules/pytest-tornado { };
+
+  python-hosts = callPackage ../development/python-modules/python-hosts { };
 
   python-openid = callPackage (if isPy3k
     then ../development/python-modules/python3-openid
@@ -451,6 +463,8 @@ in {
   simpleeval = callPackage ../development/python-modules/simpleeval { };
 
   sip = callPackage ../development/python-modules/sip { };
+
+  spglib = callPackage ../development/python-modules/spglib { };
 
   supervise_api = callPackage ../development/python-modules/supervise_api { };
 
@@ -10839,12 +10853,19 @@ in {
   };
 
   PyICU = buildPythonPackage rec {
-    name = "PyICU-1.9.7";
+    name = "PyICU-2.0.3";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/P/PyICU/${name}.tar.gz";
-      sha256 = "0qavhngmn7c90fz25a8a2k50wd5gzp3vwwjq8v2pkf2hq4fcs9yv";
+      sha256 = "0pzss3l0b0vcsyr7wlqdd6pkcqldspajfgd9k2iijf6r152d2ln4";
     };
+
+    patches = [
+      (pkgs.fetchpatch {
+        url = https://sources.debian.org/data/main/p/pyicu/2.0.3-1/debian/patches/icu_test.patch;
+        sha256 = "1iavdkyqixm9i753svl17barla93b7jzgkw09dn3hnggamx7zwx9";
+      })
+    ];
 
     buildInputs = [ pkgs.icu self.pytest ];
 
@@ -18176,6 +18197,10 @@ EOF
   radio_beam = callPackage ../development/python-modules/radio_beam { };
 
   spectral-cube = callPackage ../development/python-modules/spectral-cube { };
+
+  astunparse = callPackage ../development/python-modules/astunparse { };
+
+  gast = callPackage ../development/python-modules/gast { };
 
 });
 

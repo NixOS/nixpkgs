@@ -4,10 +4,7 @@ stdenv.mkDerivation rec {
   name = "alsa-plugins-1.1.6";
 
   src = fetchurl {
-    urls = [
-      "ftp://ftp.alsa-project.org/pub/plugins/${name}.tar.bz2"
-      "http://alsa.cybermirror.org/plugins/${name}.tar.bz2"
-    ];
+    url = "mirror://alsa/plugins/${name}.tar.bz2";
     sha256 = "04qcwkisbh0d6lnh0rw1k6n869fbs6zbfq6yvb41rymiwgmk27bg";
   };
 

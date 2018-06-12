@@ -13,7 +13,10 @@ stdenv.mkDerivation rec {
   name = "fftw-${precision}-${version}";
 
   src = fetchurl {
-    url = "ftp://ftp.fftw.org/pub/fftw/fftw-${version}.tar.gz";
+    urls = [
+      "http://fftw.org/fftw-${version}.tar.gz"
+      "ftp://ftp.fftw.org/pub/fftw/fftw-${version}.tar.gz"
+    ];
     sha256 = "00z3k8fq561wq2khssqg0kallk0504dzlx989x3vvicjdqpjc4v1";
   };
 

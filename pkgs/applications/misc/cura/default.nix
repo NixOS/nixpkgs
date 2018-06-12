@@ -2,27 +2,30 @@
 
 mkDerivation rec {
   name = "cura-${version}";
-  version = "3.2.1";
+  version = "3.3.1";
 
   src = fetchFromGitHub {
     owner = "Ultimaker";
     repo = "Cura";
     rev = version;
-    sha256 = "0yaya0ww92qjm7g31q85m5f95nwdapldjx1kdf1ar4yzwh4r15rp";
+    sha256 = "0a2xxiw1h5cq4nd4pdkq757hap85p2i29msxs57kbfdd78izrjlx";
   };
 
   materials = fetchFromGitHub {
     owner = "Ultimaker";
     repo = "fdm_materials";
-    rev = "3.2.1";
-    sha256 = "1kr9ga727x0kazw2ypac9bi6g6lddbsx80qw8fbn0514kg2mr9n3";
+    rev = "3.3.0";
+    sha256 = "0vf7s4m14aqhdg4m2yjj87kjxi2gpa46mgx86p0a91jwvkxa8a1q";
   };
 
   buildInputs = [ qtbase qtquickcontrols2 ];
   propagatedBuildInputs = with python3.pkgs; [ uranium zeroconf pyserial numpy-stl ];
   nativeBuildInputs = [ cmake python3.pkgs.wrapPython ];
 
-  cmakeFlags = [ "-DURANIUM_DIR=${python3.pkgs.uranium.src}" ];
+  cmakeFlags = [
+    "-DURANIUM_DIR=${python3.pkgs.uranium.src}"
+    "-DCURA_VERSION=${version}"
+  ];
 
   postPatch = ''
     sed -i 's,/python''${PYTHON_VERSION_MAJOR}/dist-packages,/python''${PYTHON_VERSION_MAJOR}.''${PYTHON_VERSION_MINOR}/site-packages,g' CMakeLists.txt

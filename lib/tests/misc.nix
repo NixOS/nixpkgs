@@ -45,6 +45,21 @@ runTests {
     expected = true;
   };
 
+  testBitAnd = {
+    expr = (bitAnd 3 10);
+    expected = 2;
+  };
+
+  testBitOr = {
+    expr = (bitOr 3 10);
+    expected = 11;
+  };
+
+  testBitXor = {
+    expr = (bitXor 3 10);
+    expected = 9;
+  };
+
 # STRINGS
 
   testConcatMapStrings = {

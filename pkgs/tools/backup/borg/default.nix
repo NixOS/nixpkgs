@@ -2,17 +2,12 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "borgbackup";
-  version = "1.1.5";
+  version = "1.1.6";
 
   src = python3Packages.fetchPypi {
     inherit pname version;
-    sha256 = "4356e6c712871f389e3cb1d6382e341ea635f9e5c65de1cd8fcd103d0fb66d3d";
+    sha256 = "a1d2e474c85d3ad3d59b3f8209b5549653c88912082ea0159d27a2e80c910930";
   };
-
-  postPatch = ''
-    # loosen constraint on msgpack version, only 0.5.0 had problems
-    sed -i "s/'msgpack-python.*'/'msgpack-python'/g" setup.py
-  '';
 
   nativeBuildInputs = with python3Packages; [
     # For building documentation:

@@ -1,6 +1,7 @@
 { stdenv, hostPlatform, lib, fetchFromGitHub, cmake, writeScriptBin, callPackage
 , perl, XMLLibXML, XMLLibXSLT, zlib
 , enableStoneSense ? false,  allegro5, libGLU_combined
+, SDL
 }:
 
 let
@@ -39,13 +40,14 @@ in stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "DFHack";
     repo = "dfhack";
-    sha256 = "0srgymyd57hk9iffhi2i0ra5vzw2vzlpzn4042yb90vqpmvz2zrj";
+    sha256 = "15hz90lfg7asgm4bqa2yi2lkwzrljphb42q6616sriwzs66xia6h";
     rev = version;
+    fetchSubmodules = true;
   };
 
   nativeBuildInputs = [ cmake perl XMLLibXML XMLLibXSLT fakegit ];
   # We don't use system libraries because dfhack needs old C++ ABI.
-  buildInputs = [ zlib ]
+  buildInputs = [ zlib SDL ]
              ++ lib.optionals enableStoneSense [ allegro5 libGLU_combined ];
 
   preConfigure = ''

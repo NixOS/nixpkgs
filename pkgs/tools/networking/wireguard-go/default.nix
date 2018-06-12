@@ -13,11 +13,6 @@ buildGoPackage rec {
 
   goDeps = ./deps.nix;
 
-  postPatch = ''
-    # Replace local imports so that go tools do not trip on them
-    find . -name '*.go' -exec sed -i '/import (/,/)/s@"./@"${goPackagePath}/@' {} \;
-  '';
-
   meta = with stdenv.lib; {
     description = "Userspace Go implementation of WireGuard";
     homepage = https://git.zx2c4.com/wireguard-go/about/;

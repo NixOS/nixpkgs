@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake pkgconfig ];
   buildInputs = [ libevent openssl ];
 
-  doCheck = true;
+  doCheck = (!stdenv.isDarwin);
   checkPhase = "ctest";
 
   meta = with stdenv.lib; {

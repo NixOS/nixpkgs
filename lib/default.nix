@@ -56,10 +56,10 @@ let
       hasAttr head isAttrs isBool isInt isList isString length
       lessThan listToAttrs pathExists readFile replaceStrings seq
       stringLength sub substring tail;
-    inherit (trivial) id const concat or and boolToString mergeAttrs
-      flip mapNullable inNixShell min max importJSON warn info
-      nixpkgsVersion version mod compare splitByAndCompare
-      functionArgs setFunctionArgs isFunction;
+    inherit (trivial) id const concat or and bitAnd bitOr bitXor bitNot
+      boolToString mergeAttrs flip mapNullable inNixShell min max
+      importJSON warn info nixpkgsVersion version mod compare
+      splitByAndCompare functionArgs setFunctionArgs isFunction;
 
     inherit (fixedPoints) fix fix' extends composeExtensions
       makeExtensible makeExtensibleWithCustomName;
@@ -76,7 +76,7 @@ let
       optional optionals toList range partition zipListsWith zipLists
       reverseList listDfs toposort sort naturalSort compareLists take
       drop sublist last init crossLists unique intersectLists
-      subtractLists mutuallyExclusive;
+      subtractLists mutuallyExclusive groupBy groupBy';
     inherit (strings) concatStrings concatMapStrings concatImapStrings
       intersperse concatStringsSep concatMapStringsSep
       concatImapStringsSep makeSearchPath makeSearchPathOutput
