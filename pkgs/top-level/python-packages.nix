@@ -239,6 +239,8 @@ in {
 
   dbfread = callPackage ../development/python-modules/dbfread { };
 
+  deap = callPackage ../development/python-modules/deap { };
+
   dkimpy = callPackage ../development/python-modules/dkimpy { };
 
   diff_cover = callPackage ../development/python-modules/diff_cover { };
