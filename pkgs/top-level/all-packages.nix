@@ -680,6 +680,8 @@ with pkgs;
 
   passExtensions = recurseIntoAttrs pass.extensions;
 
+  asc-key-to-qr-code-gif = callPackage ../tools/security/asc-key-to-qr-code-gif { };
+
   gopass = callPackage ../tools/security/gopass { };
 
   browserpass = callPackage ../tools/security/browserpass { };
