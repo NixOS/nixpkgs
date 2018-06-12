@@ -6,11 +6,11 @@
 buildPythonPackage rec {
   name = "${pname}-${version}";
   pname = "autobahn";
-  version = "18.3.1";
+  version = "18.6.1";
 
   src = fetchurl {
     url = "mirror://pypi/a/${pname}/${name}.tar.gz";
-    sha256 = "fc1d38227bb44a453b54cffa48de8b2e6ce48ddc5e97fb5950b0faa27576f385";
+    sha256 = "2f41bfc512ec482044fa8cfa74182118dedd87e03b3494472d9ff1b5a1e27d24";
   };
 
   # Upstream claim python2 support, but tests require pytest-asyncio which
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     (stdenv.lib.optionals (!isPy3k) [ trollius futures ]);
 
   checkPhase = ''
-    py.test $out
+    USE_TWISTED=true py.test $out
   '';
 
   meta = with stdenv.lib; {
