@@ -6236,30 +6236,7 @@ in {
 
   grammalecte = callPackage ../development/python-modules/grammalecte { };
 
-  greenlet = buildPythonPackage rec {
-    name = "greenlet-${version}";
-    version = "0.4.10";
-    disabled = isPyPy;  # builtin for pypy
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/g/greenlet/${name}.tar.gz";
-      sha256 = "c4417624aa88380cdf0fe110a8a6e0dbcc26f80887197fe5df0427dfa348ae62";
-    };
-
-    propagatedBuildInputs = with self; [ six ];
-
-    # see https://github.com/python-greenlet/greenlet/issues/85
-    preCheck = ''
-      rm tests/test_leaks.py
-    '';
-
-    meta = {
-      homepage = https://pypi.python.org/pypi/greenlet;
-      description = "Module for lightweight in-process concurrent programming";
-      license     = licenses.lgpl2;
-      platforms   = platforms.all;
-    };
-  };
+  greenlet = callPackage ../development/python-modules/greenlet { };
 
   grib-api = disabledIf (!isPy27) (toPythonModule
     (pkgs.grib-api.override {
