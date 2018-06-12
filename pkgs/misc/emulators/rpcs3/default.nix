@@ -7,12 +7,12 @@
 
 stdenv.mkDerivation rec {
   name = "rpcs3-${version}";
-  version = "0.0.5-6925";
+  version = "0.0.5-6938";
 
   src = fetchgit {
     url = "https://github.com/RPCS3/rpcs3";
-    rev = "db9a6113d7155eb14cb2770bbd6af46b26797fd9";
-    sha256 = "0jyj9z1x44vi86gabmryigggbsmm0vfvivw4krppxxqiirgr8bli";
+    rev = "4db0cf005bbd030dc001b41e480a739db77db601";
+    sha256 = "1hcafhlz6y1hkbfklszf4hbdiciwgswkwwdpw9j3kvyvgs2bwhfl";
     branchName = "master";  # Prevent default 'fetchgit' branch from appearing in version info
     deepClone = true;       # Required for git describe to return commit count in version info
     leaveDotGit = true;     # Required for version header file generation
