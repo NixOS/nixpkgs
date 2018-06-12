@@ -14,11 +14,11 @@
 buildPythonPackage rec {
   pname = "Twisted";
   name = "${pname}-${version}";
-  version = "17.9.0";
+  version = "18.4.0";
 
   src = fetchurl {
     url = "mirror://pypi/T/Twisted/${name}.tar.bz2";
-    sha256 = "0da1a7e35d5fcae37bc9c7978970b5feb3bc82822155b8654ec63925c05af75c";
+    sha256 = "a4cc164a781859c74de47f17f0e85f4bce8a3321a9d0892c015c8f80c4158ad9";
   };
 
   propagatedBuildInputs = [ zope_interface incremental automat constantly hyperlink ];
