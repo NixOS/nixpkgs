@@ -5,13 +5,13 @@ with python3Packages;
 buildPythonApplication rec {
   name = "${pname}-${version}";
   pname = "pirate-get";
-  version = "0.2.13";
+  version = "0.3.0";
 
   doCheck = false;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "c5b159e02067136d3157d56061958a50e997a078510e4403bb7de40217833f3f";
+    sha256 = "171dd2d387fd8af726abcf4cac0d806463bedc8e5f892655179fb4b215df47b2";
   };
 
   propagatedBuildInputs = [ colorama veryprettytable beautifulsoup4 ];
