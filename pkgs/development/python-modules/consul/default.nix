@@ -3,11 +3,11 @@
 
 buildPythonPackage rec {
   pname = "python-consul";
-  version = "0.7.2";
+  version = "1.0.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "ef0b7c8a2d8efba5f9602f45aadbe5035e22a511d245624ed732af81223a6571";
+    sha256 = "0feb7a14b6869bbfa9eb4868e823f040e3642b84e80c39ffdff3a8b7fd7017c4";
   };
 
   buildInputs = [ requests six pytest ];
