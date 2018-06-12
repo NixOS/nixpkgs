@@ -2,12 +2,12 @@
 
 buildPythonPackage rec {
   pname = "gevent";
-  version = "1.2.2";
+  version = "1.3.3";
   name = pname + "-" + version;
 
   src = fetchurl {
     url = "mirror://pypi/g/gevent/${name}.tar.gz";
-    sha256 = "0bbbjvi423y9k9xagrcsimnayaqymg6f2dj76m9z3mjpkjpci4a7";
+    sha256 = "59465c7bce7671834f58b44ef62cd8626f1557a0e7e3de44a3b596056f8adc73";
   };
 
   buildInputs = [ libev ];
