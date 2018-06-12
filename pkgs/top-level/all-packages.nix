@@ -571,6 +571,8 @@ with pkgs;
 
   aws_shell = pythonPackages.callPackage ../tools/admin/aws_shell { };
 
+  aws-sam-cli = callPackage ../development/tools/aws-sam-cli { };
+
   aws-vault = callPackage ../tools/admin/aws-vault { };
 
   iamy = callPackage ../tools/admin/iamy { };
