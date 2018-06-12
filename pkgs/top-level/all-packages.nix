@@ -1489,6 +1489,8 @@ with pkgs;
     utillinux = utillinuxMinimal;
   };
 
+  sqlint = callPackage ../development/tools/sqlint { };
+
   antibody = callPackage ../shells/zsh/antibody { };
 
   antigen = callPackage ../shells/zsh/antigen { };
