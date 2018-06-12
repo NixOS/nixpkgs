@@ -2,7 +2,7 @@
 
 buildPythonPackage rec {
   pname = "BTrees";
-  version = "4.4.1";
+  version = "4.5.0";
   name = "${pname}-${version}";
 
   buildInputs = [ transaction ];
@@ -10,7 +10,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "a2738b71693971c1f7502888d649bef270c65f026db731e03d53f1ec4edfe8a3";
+    sha256 = "46b02cb69b26a5238db771ea1955b503df73ecf254bb8063af4c61999fc75b5c";
   };
 
   meta = with stdenv.lib; {
