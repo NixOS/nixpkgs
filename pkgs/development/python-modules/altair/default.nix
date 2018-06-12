@@ -3,11 +3,11 @@
 
 buildPythonPackage rec {
   pname = "altair";
-  version = "1.2.1";
+  version = "2.1.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "c1303f77f1ba4d632f2958c83c0f457b2b969860b1ac9adfb872aefa1780baa7";
+    sha256 = "e8b222588dde98ec614e6808357fde7fa321118db44cc909df2bf30158d931c0";
   };
 
   postPatch = ''
