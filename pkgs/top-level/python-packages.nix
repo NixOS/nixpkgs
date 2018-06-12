@@ -413,6 +413,8 @@ in {
     inherit (pkgs.llvmPackages) openmp;
   };
 
+  pykerberos = callPackage ../development/python-modules/pykerberos { };
+
   pynisher = callPackage ../development/python-modules/pynisher { };
 
   pyparser = callPackage ../development/python-modules/pyparser { };
