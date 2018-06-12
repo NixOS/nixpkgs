@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, gettext, libmsgpack, libtermkey
+{ stdenv, fetchFromGitHub, cmake, gettext, libmsgpack, libtermkey, libiconv
 , libtool, libuv, luaPackages, ncurses, perl, pkgconfig
 , unibilium, vimUtils, xsel, gperf, callPackage
 , libvterm-neovim
@@ -32,6 +32,7 @@ let
       luaPackages.lua
       gperf
     ] ++ optional withJemalloc jemalloc
+      ++ optional stdenv.isDarwin libiconv
       ++ lualibs;
 
     nativeBuildInputs = [
