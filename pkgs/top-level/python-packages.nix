@@ -2109,6 +2109,8 @@ in {
 
   requests-cache = callPackage ../development/python-modules/requests-cache { };
 
+  requests-kerberos = callPackage ../development/python-modules/requests-kerberos { };
+
   requests-unixsocket = callPackage ../development/python-modules/requests-unixsocket {};
 
   howdoi = callPackage ../development/python-modules/howdoi {};
