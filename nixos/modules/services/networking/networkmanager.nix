@@ -9,18 +9,11 @@ let
   # /var/lib/misc is for dnsmasq.leases.
   stateDirs = "/var/lib/NetworkManager /var/lib/dhclient /var/lib/misc";
 
-  dns =
-    if cfg.dns == "none" then "none"
-    else if cfg.dns == "dnsmasq" then "dnsmasq"
-    else if config.services.resolved.enable then "systemd-resolved"
-    else if config.services.unbound.enable then "unbound"
-    else "default";
-
   configFile = writeText "NetworkManager.conf" ''
     [main]
     plugins=keyfile
     dhcp=${cfg.dhcp}
-    dns=${dns}
+    dns=${cfg.dns}
 
     [keyfile]
     ${optionalString (cfg.unmanaged != [])
@@ -207,19 +200,73 @@ in {
       };
 
       dns = mkOption {
-        type = types.enum [ "auto" "dnsmasq" "none" ];
-        default = "auto";
+        type = types.enum [ "default" "dnsmasq" "unbound" "systemd-resolved" "none" ];
+        default = "default";
         description = ''
+          Set the DNS (<literal>resolv.conf</literal>) processing mode.
+          </para>
+          <para>
           Options:
-            - auto: Check for systemd-resolved, unbound, or use default.
-            - dnsmasq:
-              Enable NetworkManager's dnsmasq integration. NetworkManager will run
-              dnsmasq as a local caching nameserver, using a "split DNS"
-              configuration if you are connected to a VPN, and then update
-              resolv.conf to point to the local nameserver.
-            - none:
-              Disable NetworkManager's DNS integration completely.
-              It will not touch your /etc/resolv.conf.
+          <variablelist>
+          <varlistentry>
+            <term><literal>"default"</literal></term>
+            <listitem><para>
+              NetworkManager will update <literal>/etc/resolv.conf</literal> to
+              reflect the nameservers provided by currently active connections.
+            </para></listitem>
+          </varlistentry>
+          <varlistentry>
+            <term><literal>"dnsmasq"</literal></term>
+            <listitem>
+              <para>
+                Enable NetworkManager's dnsmasq integration. NetworkManager will
+                run dnsmasq as a local caching nameserver, using a "split DNS"
+                configuration if you are connected to a VPN, and then update
+                <literal>resolv.conf</literal> to point to the local nameserver.
+              </para>
+              <para>
+                It is possible to pass custom options to the dnsmasq instance by
+                adding them to files in the
+                <literal>/etc/NetworkManager/dnsmasq.d/</literal> directory.
+              </para>
+              <para>
+                When multiple upstream servers are available, dnsmasq will
+                initially contact them in parallel and then use the fastest to
+                respond, probing again other servers after some time.  This
+                behavior can be modified passing the
+                <literal>all-servers</literal> or <literal>strict-order</literal>
+                options to dnsmasq (see the manual page for more details).
+              </para>
+              <para>
+                Note that this option causes NetworkManager to launch and manage
+                its own instance of the dnsmasq daemon, which is
+                <emphasis>not</emphasis> the same as setting
+                <literal>services.dnsmasq.enable = true;</literal>.
+              </para>
+            </listitem>
+          </varlistentry>
+          <varlistentry>
+            <term><literal>"unbound"</literal></term>
+            <listitem><para>
+              NetworkManager will talk to unbound and dnssec-triggerd,
+              providing a "split DNS" configuration with DNSSEC support.
+              <literal>/etc/resolv.conf</literal> will be managed by
+              dnssec-trigger daemon.
+            </para></listitem>
+          </varlistentry>
+          <varlistentry>
+            <term><literal>"systemd-resolved"</literal></term>
+            <listitem><para>
+              NetworkManager will push the DNS configuration to systemd-resolved.
+            </para></listitem>
+          </varlistentry>
+          <varlistentry>
+            <term><literal>"none"</literal></term>
+            <listitem><para>
+              NetworkManager will not modify resolv.conf.
+            </para></listitem>
+          </varlistentry>
+          </variablelist>
         '';
       };
 
