@@ -28,16 +28,18 @@ let
   inherit (stdenv) isDarwin;
 in buildPythonPackage rec {
   pname = "pandas";
-  version = "0.22.0";
-  name = "${pname}-${version}";
+  version = "0.23.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "44a94091dd71f05922eec661638ec1a35f26d573c119aa2fad964f10a2880e6c";
+    sha256 = "84ab1d50590cb2d9554211f164dc1b1a216bc94da2ba922aed2690c83f248fd9";
   };
 
   LC_ALL = "en_US.UTF-8";
-  buildInputs = [ pytest glibcLocales ] ++ optional isDarwin libcxx;
+
+  checkInputs = [ pytest glibcLocales moto ];
+
+  buildInputs = [] ++ optional isDarwin libcxx;
   propagatedBuildInputs = [
     cython
     dateutil
@@ -55,8 +57,6 @@ in buildPythonPackage rec {
     xlwt
   ];
 
-  patches = [ ./pandas-0.22.0-pytest-3.5.1.patch ];
-
   # For OSX, we need to add a dependency on libcxx, which provides
   # `complex.h` and other libraries that pandas depends on to build.
   postPatch = optionalString isDarwin ''
@@ -67,7 +67,6 @@ in buildPythonPackage rec {
                 "['pandas/src/klib', 'pandas/src', '$cpp_sdk']"
   '';
 
-  checkInputs = [ moto ];
   checkPhase = ''
     runHook preCheck
   ''
