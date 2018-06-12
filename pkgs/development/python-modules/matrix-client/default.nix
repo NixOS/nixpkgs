@@ -7,12 +7,12 @@
 
 buildPythonPackage rec {
   pname = "matrix-client";
-  version = "0.0.6";
+  version = "0.2.0";
   name = "${pname}-${version}";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "15kx5px26hwr0sxpyjk4w61fjnabg1b57hwys1nyarc0jx4qjhiq";
+    sha256 = "b96e87adf1bc2270166b2a4cff1320d2ef283779ea8b3c4edd0d9051fc7b7924";
   };
 
   checkInputs = [ tox pytest flake8 responses ];
