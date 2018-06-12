@@ -3,10 +3,10 @@
 buildPythonPackage rec {
   name = "${pname}-${version}";
   pname = "pydub";
-  version = "0.21.0";
+  version = "0.22.0";
   src = fetchPypi {
     inherit pname version;
-    sha256 = "27acc5977b0f5220682175d44fda737bbf818143b0832c0c3863b5dde38e197a";
+    sha256 = "91192b94a28121cccd64bfaef1d12da59f3a69a5f4c35f67d428bfc395f390b5";
   };
 
   patches = [
