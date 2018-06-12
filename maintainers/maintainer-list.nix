@@ -566,7 +566,7 @@
     email = "brandon.barker@gmail.com";
     github = "bbarker";
     name = "Brandon Elam Barker";
-  };  
+  };
   bcarrell = {
     email = "brandoncarrell@gmail.com";
     github = "bcarrell";
@@ -1701,6 +1701,11 @@
     email = "ilya.kolpakov@gmail.com";
     github = "ilya-kolpakov";
     name = "Ilya Kolpakov";
+  };
+  imalison = {
+    email = "IvanMalison@gmail.com";
+    github = "IvanMalison";
+    name = "Ivan Malison";
   };
   infinisil = {
     email = "infinisil@icloud.com";
