@@ -460,6 +460,8 @@ in {
 
   sip = callPackage ../development/python-modules/sip { };
 
+  spglib = callPackage ../development/python-modules/spglib { };
+
   supervise_api = callPackage ../development/python-modules/supervise_api { };
 
   syncserver = callPackage ../development/python-modules/syncserver {};
