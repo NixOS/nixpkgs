@@ -5,11 +5,11 @@
 
 buildPythonPackage rec {
   pname = "cheroot";
-  version = "6.0.0";
+  version = "6.3.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "10s67wxymk4xg45l7ca59n4l6m6rnj8b9l52pg1angxh958lwixs";
+    sha256 = "e83ecc6bd473c340a10adac19cc69c65607638fa3e8b37cf0b26b6fdf4db4994";
   };
 
   propagatedBuildInputs = [ more-itertools six ];
