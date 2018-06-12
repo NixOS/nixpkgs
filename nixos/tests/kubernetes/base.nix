@@ -50,6 +50,7 @@ let
               };
               services.flannel.iface = "eth1";
               services.kubernetes.apiserver.advertiseAddress = master.ip;
+              services.kubernetes.apiserver.address = master.ip;
             }
             (optionalAttrs (any (role: role == "master") machine.roles) {
               networking.firewall.allowedTCPPorts = [
