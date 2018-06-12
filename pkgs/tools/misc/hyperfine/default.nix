@@ -1,16 +1,14 @@
 { stdenv, fetchFromGitHub, rustPlatform }:
 
-with rustPlatform;
-
-buildRustPackage rec {
+rustPlatform.buildRustPackage rec {
   name = "hyperfine-${version}";
-  version = "1.0.0";
+  version = "1.1.0";
 
   src = fetchFromGitHub {
     owner  = "sharkdp";
     repo   = "hyperfine";
     rev    = "refs/tags/v${version}";
-    sha256 = "0prmnhyp20w71l3mjqgdr38q94cqr1xayzgj7ibbq2hdick4w5nn";
+    sha256 = "13h43sjp059yq3bmdbb9i1082fkx5yzmhrkf5kpkxhnyn67xbdsg";
   };
 
   cargoSha256 = "0saf0hl21ba2ckqbsw64908nvs0x1rjrnm73ackzpmv5pi9j567s";
