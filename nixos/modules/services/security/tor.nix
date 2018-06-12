@@ -360,7 +360,7 @@ in
 
                 <important>
                   <para>
-                    WARNING: THE FOLLOWING PARAGRAPH IS NOT LEGAL ADVISE.
+                    WARNING: THE FOLLOWING PARAGRAPH IS NOT LEGAL ADVICE.
                     Consult with your lawer when in doubt.
                   </para>
 
