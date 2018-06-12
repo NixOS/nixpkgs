@@ -20486,6 +20486,7 @@ with pkgs;
 
   qucs = callPackage ../applications/science/electronics/qucs { };
 
+  xcircuit = callPackage ../applications/science/electronics/xcircuit { };
 
   xoscope = callPackage ../applications/science/electronics/xoscope { };
 
