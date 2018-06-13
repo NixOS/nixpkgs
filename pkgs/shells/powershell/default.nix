@@ -22,7 +22,8 @@ stdenv.mkDerivation rec {
     stripRoot = false;
   };
 
-  buildInputs = [ autoPatchelfHook makeWrapper less ] ++ libraries;
+  buildInputs = [ less ] ++ libraries;
+  nativeBuildInputs = [ autoPatchelfHook makeWrapper ];
 
   # TODO: remove PAGER after upgrading to v6.1.0-preview.1 or later as it has been addressed in
   # https://github.com/PowerShell/PowerShell/pull/6144
