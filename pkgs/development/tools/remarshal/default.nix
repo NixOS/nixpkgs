@@ -20,6 +20,5 @@ python3Packages.buildPythonApplication rec {
     license = licenses.mit;
     homepage = https://github.com/dbohdan/remarshal;
     maintainers = with maintainers; [ offline ];
-    platforms = platforms.linux;
   };
 }
