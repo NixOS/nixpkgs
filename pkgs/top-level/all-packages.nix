@@ -15860,6 +15860,8 @@ with pkgs;
 
   dragonfly-reverb = callPackage ../applications/audio/dragonfly-reverb { };
 
+  drawpile = libsForQt5.callPackage ../applications/graphics/drawpile { };
+
   droopy = callPackage ../applications/networking/droopy {
     inherit (python3Packages) wrapPython;
   };
