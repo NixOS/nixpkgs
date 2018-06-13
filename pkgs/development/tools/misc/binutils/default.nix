@@ -103,6 +103,8 @@ stdenv.mkDerivation rec {
     then "-Wno-string-plus-int -Wno-deprecated-declarations"
     else "-static-libgcc";
 
+  hardeningDisable = [ "format" ];
+
   # TODO(@Ericson2314): Always pass "--target" and always targetPrefix.
   configurePlatforms = [ "build" "host" ] ++ stdenv.lib.optional (targetPlatform != hostPlatform) "target";
 
