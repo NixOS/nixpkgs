@@ -8,11 +8,11 @@
 
 stdenv.mkDerivation rec {
   name = "gnome-documents-${version}";
-  version = "3.28.0";
+  version = "3.28.1";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-documents/${gnome3.versionBranch version}/${name}.tar.xz";
-    sha256 = "174q59gk9j0083bvv8sd2k66xrd4lydy2rcqbwsbzsy22fbhwcha";
+    sha256 = "1i0s246bg9xcjxgbajph744pn65bq5gk6r9kkl3f5iwdq3rjc0pm";
   };
 
   doCheck = true;
