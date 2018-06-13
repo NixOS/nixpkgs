@@ -220,7 +220,7 @@ foreach my $u (@{$spec->{users}}) {
         }
         if (defined $new_home && $u->{initialHomeContents}) {
             system("cp --recursive --preserve=mode --no-preserve=owner $u->{initialHomeContents}/. $u->{home}");
-            system("chown -R $u->{uid}, $u->{gid}, $u->{home}");
+            system("chown -R $u->{uid}:$u->{gid} $u->{home}");
         }
         chown $u->{uid}, $u->{gid}, $u->{home};
     }
