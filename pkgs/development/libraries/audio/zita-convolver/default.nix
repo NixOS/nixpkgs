@@ -2,10 +2,10 @@
 
 stdenv.mkDerivation rec {
   name = "zita-convolver-${version}";
-  version = "3.1.0";
+  version = "4.0.0";
   src = fetchurl {
     url = "http://kokkinizita.linuxaudio.org/linuxaudio/downloads/${name}.tar.bz2";
-    sha256 = "14qrnczhp5mbwhky64il7kxc4hl1mmh495v60va7i2qnhasr6zmz";
+    sha256 = "0fx7f48ls0rlndqrmd4k7ifpnml39yxzc2f0n6xyysypgn06y673";
   };
 
   buildInputs = [ fftwFloat ];
