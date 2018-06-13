@@ -46,22 +46,6 @@ let
     '';
   });
 
-  # Collect all interfaces that are defined for a device
-  # as device:interface key:value pairs.
-  wlanDeviceInterfaces =
-    let
-      allDevices = unique (mapAttrsToList (_: v: v.device) cfg.wlanInterfaces);
-      interfacesOfDevice = d: filterAttrs (_: v: v.device == d) cfg.wlanInterfaces;
-    in
-      genAttrs allDevices (d: interfacesOfDevice d);
-
-  # Convert device:interface key:value pairs into a list, and if it exists,
-  # place the interface which is named after the device at the beginning.
-  wlanListDeviceFirst = device: interfaces:
-    if hasAttr device interfaces
-    then mapAttrsToList (n: v: v//{_iName=n;}) (filterAttrs (n: _: n==device) interfaces) ++ mapAttrsToList (n: v: v//{_iName=n;}) (filterAttrs (n: _: n!=device) interfaces)
-    else mapAttrsToList (n: v: v // {_iName = n;}) interfaces;
-
   # We must escape interfaces due to the systemd interpretation
   subsystemDevice = interface:
     "sys-subsystem-net-devices-${escapeSystemdPath interface}.device";
