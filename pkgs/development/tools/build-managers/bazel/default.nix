@@ -40,7 +40,6 @@ stdenv.mkDerivation rec {
     extern char **environ;
 
     int main(int argc, char *argv[]) {
-      printf("environ: %s\n", environ[0]);
       char *path = getenv("PATH");
       char *pathToAppend = "${lib.makeBinPath [ coreutils ]}";
       char *newPath;
@@ -57,12 +56,22 @@ stdenv.mkDerivation rec {
     }
   '';
 
-  postPatch = ''
+  postPatch = stdenv.lib.optionalString stdenv.hostPlatform.isDarwin ''
+    export NIX_LDFLAGS="$NIX_LDFLAGS -F${CoreFoundation}/Library/Frameworks -F${CoreServices}/Library/Frameworks -F${Foundation}/Library/Frameworks"
+  '' + ''
     find src/main/java/com/google/devtools -type f -print0 | while IFS="" read -r -d "" path; do
       substituteInPlace "$path" \
         --replace /bin/bash ${customBash}/bin/bash \
         --replace /usr/bin/env ${coreutils}/bin/env
     done
+    echo "build --copt=\"$(echo $NIX_CFLAGS_COMPILE | sed -e 's/ /" --copt=\"/g')\"" >> .bazelrc
+    echo "build --host_copt=\"$(echo $NIX_CFLAGS_COMPILE | sed -e 's/ /" --host_copt=\"/g')\"" >> .bazelrc
+    echo "build --linkopt=\"-Wl,$(echo $NIX_LDFLAGS | sed -e 's/ /" --linkopt=\"-Wl,/g')\"" >> .bazelrc
+    echo "build --host_linkopt=\"-Wl,$(echo $NIX_LDFLAGS | sed -e 's/ /" --host_linkopt=\"-Wl,/g')\"" >> .bazelrc
+    sed -i -e "348 a --copt=\"$(echo $NIX_CFLAGS_COMPILE | sed -e 's/ /" --copt=\"/g')\" \\\\" scripts/bootstrap/compile.sh
+    sed -i -e "348 a --host_copt=\"$(echo $NIX_CFLAGS_COMPILE | sed -e 's/ /" --host_copt=\"/g')\" \\\\" scripts/bootstrap/compile.sh
+    sed -i -e "348 a --linkopt=\"-Wl,$(echo $NIX_LDFLAGS | sed -e 's/ /" --linkopt=\"-Wl,/g')\" \\\\" scripts/bootstrap/compile.sh
+    sed -i -e "348 a --host_linkopt=\"-Wl,$(echo $NIX_LDFLAGS | sed -e 's/ /" --host_linkopt=\"-Wl,/g')\" \\\\" scripts/bootstrap/compile.sh
     patchShebangs .
   '';
 
