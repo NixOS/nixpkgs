@@ -2872,10 +2872,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   CPANPerlReleases = buildPerlPackage rec {
-    name = "CPAN-Perl-Releases-3.58";
+    name = "CPAN-Perl-Releases-3.60";
     src = fetchurl {
       url = "mirror://cpan/authors/id/B/BI/BINGOS/${name}.tar.gz";
-      sha256 = "1v56gj1032p5hbmlvg0nakrah7rhwin17ak06fpnyjn5lacyy753";
+      sha256 = "1aday1mcxshx63aawjgy1ygjlk23fr939pq7mz2jkfla2vkrlj04";
     };
     meta = {
       homepage = https://github.com/bingos/cpan-perl-releases;
