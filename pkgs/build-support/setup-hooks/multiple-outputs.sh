@@ -2,6 +2,7 @@
 preConfigureHooks+=(_multioutConfig)
 preFixupHooks+=(_multioutDocs)
 preFixupHooks+=(_multioutDevs)
+preFixupHooks+=(_multioutStatic)
 postFixupHooks+=(_multioutPropagateDev)
 
 # Assign the first string containing nonempty variable to the variable named $1
@@ -36,6 +37,9 @@ _overrideFirst outputInclude "$outputDev"
 
 # so-libs are often among the main things to keep, and so go to $out
 _overrideFirst outputLib "lib" "out"
+
+# statically linked libraries
+_overrideFirst outputStatic "static" "lib" "out"
 
 _overrideFirst outputDoc "doc" "out"
 _overrideFirst outputDevdoc "devdoc" REMOVE # documentation for developers
@@ -73,6 +77,7 @@ _multioutConfig() {
         --docdir=${!outputDoc}/share/doc/${shareDocName} \
         --libdir=${!outputLib}/lib --libexecdir=${!outputLib}/libexec \
         --localedir=${!outputLib}/share/locale \
+        --enable-static \
         $configureFlags"
 
     installFlags="\
@@ -162,6 +167,11 @@ _multioutDevs() {
         echo "Patching '$f' includedir to output ${!outputInclude}"
         sed -i "/^includedir=/s,=\${prefix},=${!outputInclude}," "$f"
     done
+}
+
+_multioutStatic() {
+    if [ "$outputs" = "out" ] || [ -z "${moveToStatic-1}" ]; then return; fi;
+    find lib -name "*.a" -exec moveToOutput "{}" "${!outputStatic}"
 }
 
 # Make the "dev" propagate other outputs needed for development.
