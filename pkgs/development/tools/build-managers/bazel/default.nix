@@ -1,7 +1,9 @@
-{ stdenv, lib, fetchurl, jdk, zip, unzip, bash, writeScriptBin, coreutils, makeWrapper, which, python
+{ stdenv, lib, fetchurl, jdk, zip, unzip, bash, writeCBin, coreutils, makeWrapper, which, python
 # Always assume all markers valid (don't redownload dependencies).
 # Also, don't clean up environment variables.
 , enableNixHacks ? false
+# Apple dependencies
+, libcxx, CoreFoundation, CoreServices, Foundation
 }:
 
 stdenv.mkDerivation rec {
@@ -13,7 +15,7 @@ stdenv.mkDerivation rec {
     description = "Build tool that builds code quickly and reliably";
     license = licenses.asl20;
     maintainers = [ maintainers.philandstuff ];
-    platforms = platforms.linux;
+    platforms = platforms.linux ++ platforms.darwin;
   };
 
   name = "bazel-${version}";
@@ -25,21 +27,55 @@ stdenv.mkDerivation rec {
 
   sourceRoot = ".";
 
-  patches = lib.optional enableNixHacks ./nix-hacks.patch;
+  patches = lib.optionals (enableNixHacks) [ ./nix-hacks.patch ];
 
   # Bazel expects several utils to be available in Bash even without PATH. Hence this hack.
 
-  customBash = writeScriptBin "bash" ''
-    #!${stdenv.shell}
-    PATH="$PATH:${lib.makeBinPath [ coreutils ]}" exec ${bash}/bin/bash "$@"
-  '';
+  customBash = writeCBin {
+    name = "bash";
+    code = ''
+      #include <stdio.h>
+      #include <stdlib.h>
+      #include <string.h>
+      #include <unistd.h>
 
-  postPatch = ''
+      extern char **environ;
+
+      int main(int argc, char *argv[]) {
+        printf("environ: %s\n", environ[0]);
+        char *path = getenv("PATH");
+        char *pathToAppend = "${lib.makeBinPath [ coreutils ]}";
+        char *newPath;
+        if (path != NULL) {
+          int length = strlen(path) + 1 + strlen(pathToAppend) + 1;
+          newPath = malloc(length * sizeof(char));
+          snprintf(newPath, length, "%s:%s", path, pathToAppend);
+        } else {
+          newPath = pathToAppend;
+        }
+        setenv("PATH", newPath, 1);
+        execve("${bash}/bin/bash", argv, environ);
+        return 0;
+      }
+    '';
+  };
+
+  postPatch = stdenv.lib.optionalString stdenv.hostPlatform.isDarwin ''
+    export NIX_LDFLAGS="$NIX_LDFLAGS -F${CoreFoundation}/Library/Frameworks -F${CoreServices}/Library/Frameworks -F${Foundation}/Library/Frameworks"
+  '' + ''
     find src/main/java/com/google/devtools -type f -print0 | while IFS="" read -r -d "" path; do
       substituteInPlace "$path" \
         --replace /bin/bash ${customBash}/bin/bash \
         --replace /usr/bin/env ${coreutils}/bin/env
     done
+    echo "build --copt=\"$(echo $NIX_CFLAGS_COMPILE | sed -e 's/ /" --copt=\"/g')\"" >> .bazelrc
+    echo "build --host_copt=\"$(echo $NIX_CFLAGS_COMPILE | sed -e 's/ /" --host_copt=\"/g')\"" >> .bazelrc
+    echo "build --linkopt=\"-Wl,$(echo $NIX_LDFLAGS | sed -e 's/ /" --linkopt=\"-Wl,/g')\"" >> .bazelrc
+    echo "build --host_linkopt=\"-Wl,$(echo $NIX_LDFLAGS | sed -e 's/ /" --host_linkopt=\"-Wl,/g')\"" >> .bazelrc
+    sed -i -e "348 a --copt=\"$(echo $NIX_CFLAGS_COMPILE | sed -e 's/ /" --copt=\"/g')\" \\\\" scripts/bootstrap/compile.sh
+    sed -i -e "348 a --host_copt=\"$(echo $NIX_CFLAGS_COMPILE | sed -e 's/ /" --host_copt=\"/g')\" \\\\" scripts/bootstrap/compile.sh
+    sed -i -e "348 a --linkopt=\"-Wl,$(echo $NIX_LDFLAGS | sed -e 's/ /" --linkopt=\"-Wl,/g')\" \\\\" scripts/bootstrap/compile.sh
+    sed -i -e "348 a --host_linkopt=\"-Wl,$(echo $NIX_LDFLAGS | sed -e 's/ /" --host_linkopt=\"-Wl,/g')\" \\\\" scripts/bootstrap/compile.sh
     patchShebangs .
   '';
 
@@ -54,7 +90,7 @@ stdenv.mkDerivation rec {
     makeWrapper
     which
     customBash
-  ];
+  ] ++ stdenv.lib.optionals (stdenv.hostPlatform.isDarwin) [ libcxx CoreFoundation CoreServices Foundation ];
 
   # If TMPDIR is in the unpack dir we run afoul of blaze's infinite symlink
   # detector (see com.google.devtools.build.lib.skyframe.FileFunction).
