@@ -12654,6 +12654,8 @@ with pkgs;
   matterircd = callPackage ../servers/mattermost/matterircd.nix { };
   matterbridge = callPackage ../servers/matterbridge { };
 
+  mattermost-desktop = callPackage ../applications/networking/instant-messengers/mattermost-desktop { };
+
   mediatomb = callPackage ../servers/mediatomb { };
 
   meguca = callPackage ../servers/meguca { };
