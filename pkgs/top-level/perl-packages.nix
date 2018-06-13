@@ -5147,10 +5147,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   EmailSimple = buildPerlPackage rec {
-    name = "Email-Simple-2.214";
+    name = "Email-Simple-2.216";
     src = fetchurl {
       url = "mirror://cpan/authors/id/R/RJ/RJBS/${name}.tar.gz";
-      sha256 = "b2f02b37441ea60efbddebbd675017d26bb767e9a4de3e0fc30b5410a1416b92";
+      sha256 = "d85f63cd1088d11311103676a8cf498fff564a201b538de52cd753b5e5ca8bd4";
     };
     propagatedBuildInputs = [ EmailDateFormat ];
     meta = {
