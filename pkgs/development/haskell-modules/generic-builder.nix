@@ -166,9 +166,11 @@ let
     "--configure-option=--host=${hostPlatform.config}"
   ] ++ crossCabalFlags);
 
+  useSeparateSetupDb = setupHaskellDepends != [] || isCross || isGhcjs;
+
   setupCompileFlags = [
     (optionalString (!coreSetup) "-${nativePackageDbFlag}=${
-      if setupHaskellDepends != []
+      if useSeparateSetupDb
       then "$setupPackageConfDir"
       else "$packageConfDir"
     }")
@@ -268,7 +270,7 @@ stdenv.mkDerivation ({
     echo "Build with ${ghc}."
     ${optionalString (hasActiveLibrary && hyperlinkSource) "export PATH=${hscolour}/bin:$PATH"}
 
-  '' + (optionalString (setupHaskellDepends != []) ''
+  '' + (optionalString useSeparateSetupDb ''
     setupPackageConfDir="$TMPDIR/setup-package.conf.d"
     mkdir -p $setupPackageConfDir
   '') + ''
@@ -282,7 +284,7 @@ stdenv.mkDerivation ({
   # dependencies for the build machine.
   #
   # pkgs* arrays defined in stdenv/setup.hs
-  + (optionalString (setupHaskellDepends != []) ''
+  + (optionalString useSeparateSetupDb ''
     for p in "''${pkgsBuildBuild[@]}" "''${pkgsBuildHost[@]}" "''${pkgsBuildTarget[@]}"; do
       ${buildPkgDb nativeGhc.name "$setupPackageConfDir"}
     done
