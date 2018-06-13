@@ -1,5 +1,5 @@
-{ stdenv, fetchgit, autoPatchelfHook, fetchzip, libunwind, libuuid, icu, curl, cacert,
-  makeWrapper, less, openssl }:
+{ stdenv, fetchgit, autoPatchelfHook, fetchzip, libunwind, libuuid, icu, curl,
+  makeWrapper, less, openssl, pam, lttng-ust }:
 
 let platformString = if stdenv.isDarwin then "osx"
                      else if stdenv.isLinux then "linux"
@@ -10,6 +10,7 @@ let platformString = if stdenv.isDarwin then "osx"
     platformLdLibraryPath = if stdenv.isDarwin then "DYLD_FALLBACK_LIBRARY_PATH"
                      else if stdenv.isLinux then "LD_LIBRARY_PATH"
                      else throw "unsupported platform";
+    libraries = [ libunwind libuuid icu curl openssl lttng-ust ] ++ (if stdenv.isLinux then [ pam ] else []);
 in
 stdenv.mkDerivation rec {
   name = "powershell-${version}";
@@ -21,8 +22,7 @@ stdenv.mkDerivation rec {
     stripRoot = false;
   };
 
-  buildInputs = [ autoPatchelfHook makeWrapper ];
-  propagatedBuildInputs = [ libunwind libuuid icu curl cacert less openssl ];
+  buildInputs = [ autoPatchelfHook makeWrapper less ] ++ libraries;
 
   # TODO: remove PAGER after upgrading to v6.1.0-preview.1 or later as it has been addressed in
   # https://github.com/PowerShell/PowerShell/pull/6144
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
     mkdir -p $out/share/powershell
     cp -r * $out/share/powershell
     rm $out/share/powershell/DELETE_ME_TO_DISABLE_CONSOLEHOST_TELEMETRY
-    makeWrapper $out/share/powershell/pwsh $out/bin/pwsh --prefix ${platformLdLibraryPath} : "${stdenv.lib.makeLibraryPath [ libunwind libuuid icu openssl curl ]}" \
+    makeWrapper $out/share/powershell/pwsh $out/bin/pwsh --prefix ${platformLdLibraryPath} : "${stdenv.lib.makeLibraryPath libraries}" \
                                            --set PAGER ${less}/bin/less --set TERM xterm
   '';
 
