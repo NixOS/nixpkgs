@@ -61,8 +61,8 @@ let
 
         makeWrapper "$(readlink -v --canonicalize-existing "${bin}")" \
           "$out/bin/nvim" --add-flags " \
-        --cmd \"${if withPython then "let g:python_host_prog='$out/bin/nvim-python'" else "let g:loaded_python_provider = 1"}\" \
-        --cmd \"${if withPython3 then "let g:python3_host_prog='$out/bin/nvim-python3'" else "let g:loaded_python3_provider = 1"}\" \
+        --cmd \"${if withPython then "let g:python_host_prog='${pythonEnv.interpreter}'" else "let g:loaded_python_provider = 1"}\" \
+        --cmd \"${if withPython3 then "let g:python3_host_prog='${python3Env.interpreter}'" else "let g:loaded_python3_provider = 1"}\" \
         --cmd \"${if withRuby then "let g:ruby_host_prog='$out/bin/nvim-ruby'" else "let g:loaded_ruby_provider=1"}\" " \
         --unset PYTHONPATH \
          ${optionalString withRuby '' --suffix PATH : ${rubyEnv}/bin --set GEM_HOME ${rubyEnv}/${rubyEnv.ruby.gemPath}'' }
@@ -71,15 +71,12 @@ let
       + optionalString (!stdenv.isDarwin) ''
         # copy and patch the original neovim.desktop file
         mkdir -p $out/share/applications
+        cp -R ${neovim}/share/man $out/share/
         substitute ${neovim}/share/applications/nvim.desktop $out/share/applications/nvim.desktop \
           --replace 'TryExec=nvim' "TryExec=$out/bin/nvim" \
           --replace 'Name=Neovim' 'Name=WrappedNeovim'
       ''
-      + optionalString withPython ''
-      ln -s ${pythonEnv}/bin/python $out/bin/nvim-python
-    '' + optionalString withPython3 ''
-      ln -s ${python3Env}/bin/python3 $out/bin/nvim-python3
-    '' + optionalString withRuby ''
+      + optionalString withRuby ''
       ln -s ${rubyEnv}/bin/neovim-ruby-host $out/bin/nvim-ruby
     ''
       + optionalString withPyGUI ''
