@@ -22,8 +22,8 @@ stdenv.mkDerivation rec {
     ./patches/0030-Display-whole-multibyte-character.patch
   ];
   postPatch = ''
+    if [ ! stdenv.isDarwin ]; then echo "#define USG" >> local.h; fi
     cat >> local.h <<EOF
-    #define USG
     #define TERMLIB "-lncurses"
     #define LANGUAGES "{american,MASTERDICTS=american.med,HASHFILES=americanmed.hash}"
     #define MASTERHASH "americanmed.hash"
