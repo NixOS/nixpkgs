@@ -4399,10 +4399,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   DevelNYTProf = buildPerlPackage rec {
-    name = "Devel-NYTProf-6.05";
+    name = "Devel-NYTProf-6.06";
     src = fetchurl {
       url = "mirror://cpan/authors/id/T/TI/TIMB/${name}.tar.gz";
-      sha256 = "b2a9f8b49afb9be8d087ddb50ef77a53f3796481b37eb5a965e1d4055445db1c";
+      sha256 = "a14227ca79f1750b92cc7b8b0a5806c92abc4964a21a7fb100bd4907d6c4be55";
     };
     propagatedBuildInputs = [ FileWhich JSONMaybeXS ];
     meta = {
