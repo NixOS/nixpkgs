@@ -25,9 +25,7 @@ let
     callPackage = newScope (tools // { inherit stdenv cmake libxml2 python2 isl release_version version fetch; });
   in {
 
-    llvm = overrideManOutput (callPackage ./llvm.nix {
-      inherit (targetLlvmLibraries) libcxxabi;
-    });
+    llvm = overrideManOutput (callPackage ./llvm.nix { });
     clang-unwrapped = overrideManOutput (callPackage ./clang {
       inherit clang-tools-extra_src;
     });

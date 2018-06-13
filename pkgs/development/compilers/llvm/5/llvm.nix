@@ -43,7 +43,8 @@ in stdenv.mkDerivation (rec {
     ++ stdenv.lib.optional enableManpages python.pkgs.sphinx;
 
   buildInputs = [ libxml2 libffi ]
-    ++ stdenv.lib.optionals stdenv.isDarwin [ libcxxabi ];
+    # TODO(@Ericson2314): Remove next mass rebuild
+    ++ stdenv.lib.optionals (stdenv.isDarwin && stdenv.hostPlatform == stdenv.buildPlatform) [ libcxxabi ];
 
   propagatedBuildInputs = [ ncurses zlib ];
 
