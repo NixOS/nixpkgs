@@ -3,25 +3,19 @@
 , alsaLib, dbus, dbus_cplusplus
 
 # Optional dependencies
-, pyqt4 ? null, dbus-python ? null, xdg_utils ? null
+, pyqt4 ? null, dbus-python ? null
 
-# Other Flags
-, libOnly ? false
+# ffado contain two (actually) independed packages core libraries and mixer,
+# each of them have completely independed set of dependencies, and mixer even
+# not use libraries for core packages. So `mixerOnly` parameter change logic of
+# these expression, patching out all-but-mixer. Otherwise we have perfect build loop
+# (via ffado -> pyqt4 -> qt4 -> pulseaudio -> ffado)
+, mixerOnly ? false
 }:
 
 let
-
-  shouldUsePkg = pkg: if pkg != null && pkg.meta.available then pkg else null;
-
-# Mixer/tools dependencies
-# FIXME: can we build mixer separately? Then we can farewell `libOnly` mode
-# (otherwise we have perfect loop via qt -> pulseaudio -> jack -> ffado -> qt)
-# FIXME: it should work with pyqt5 as well (so we can farewell `qt4` sometimes)
-  optPyqt4 = shouldUsePkg pyqt4;
-  optPythonDBus = shouldUsePkg dbus-python;
-  optXdg_utils = shouldUsePkg xdg_utils;
-
   PYDIR="$out/lib/${python.libPrefix}/site-packages";
+  BINDIR = if mixerOnly then "$out/bin" else "$bin/bin";
   SCONS_OPTIONS = ''
       PREFIX=$out \
       PYPKGDIR=${PYDIR} \
@@ -30,13 +24,14 @@ let
       SERIALIZE_USE_EXPAT=True \
       BUILD_TESTS=False \
       UDEVDIR=$out/lib/udev/rules.d \
-      BINDIR=$bin/bin \
+      BINDIR=${BINDIR} \
       INCLUDEDIR=$dev/include \
-      BUILD_MIXER=${if libOnly then "False" else "True"} \
+      WILL_DEAL_WITH_XDG_MYSELF=True \
+      BUILD_MIXER=${if mixerOnly then "True" else "False"} \
   '';
 in
 stdenv.mkDerivation rec {
-  name = "ffado-${version}";
+  name = "ffado-${if mixerOnly then "mixer" else "core"}-${version}";
   version = "2.4.0";
 
   src = fetchurl {
@@ -44,14 +39,14 @@ stdenv.mkDerivation rec {
     sha256 = "14rprlcd0gpvg9kljh0zzjzd2rc9hbqqpjidshxxjvvfh4r00f4f";
   };
 
-  outputs = [ "out" "bin" "dev" ];
+  outputs = if mixerOnly then [ "out" ] else [ "out" "bin" "dev" ];
 
   nativeBuildInputs = [ scons pkgconfig which makeWrapper python ];
 
   buildInputs = [
     expat libraw1394 libconfig libavc1394 libiec61883 dbus dbus_cplusplus libxmlxx
-  ] ++ stdenv.lib.optionals (!libOnly) [
-    optXdg_utils
+  ] ++ stdenv.lib.optionals mixerOnly [
+    pyqt4 dbus-python
   ];
 
   postPatch = ''
@@ -67,6 +62,9 @@ stdenv.mkDerivation rec {
     sed -i -e '1i #include <stdlib.h>' \
       -e '1i #include "version.h"' \
       src/libutil/serialize_expat.cpp
+  '' + stdenv.lib.optionalString mixerOnly ''
+    sed 's!dirs=subdirs!dirs=["support/mixer-qt4"]!' -i SConstruct
+    sed "/env.Install/ d" -i SConstruct
   '';
 
   preConfigure = ''
@@ -79,13 +77,10 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
-    scons ${SCONS_OPTIONS} install
-  '' + stdenv.lib.optionalString (!libOnly && optPyqt4 != null && optPythonDBus != null) ''
+    scons ${SCONS_OPTIONS} ${if mixerOnly then "${BINDIR} ${PYDIR}" else "install"}
+  '' + stdenv.lib.optionalString mixerOnly ''
     wrapProgram $out/bin/ffado-mixer --prefix PYTHONPATH : \
-      $PYTHONPATH:${PYDIR}:${optPyqt4}/$LIBSUFFIX:${optPythonDBus}/$LIBSUFFIX:
-
-    wrapProgram $out/bin/ffado-diag --prefix PYTHONPATH : \
-      $PYTHONPATH:${PYDIR}:$out/share/libffado/python:${optPyqt4}/$LIBSUFFIX:${optPythonDBus}/$LIBSUFFIX:
+      $PYTHONPATH:${PYDIR}:${pyqt4}/$LIBSUFFIX:${dbus-python}/$LIBSUFFIX:
    '';
 
   meta = with stdenv.lib; {

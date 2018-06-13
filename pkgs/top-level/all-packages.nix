@@ -13372,8 +13372,10 @@ with pkgs;
 
   fatrace = callPackage ../os-specific/linux/fatrace { };
 
-  ffado = callPackage ../os-specific/linux/ffado {
+  ffado = callPackage ../os-specific/linux/ffado { };
+  ffado-mixer = callPackage ../os-specific/linux/ffado {
     inherit (python2Packages) python pyqt4 dbus-python;
+    mixerOnly = true;
   };
 
   fbterm = callPackage ../os-specific/linux/fbterm { };
