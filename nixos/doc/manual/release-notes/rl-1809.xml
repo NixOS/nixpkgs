@@ -288,9 +288,22 @@ inherit (pkgs.nixos {
    </listitem>
    <listitem>
     <para>
-     Recommented way to access the Kubernetes Dashboard is with HTTPS (TLS)
+     Recommended way to access the Kubernetes Dashboard is via HTTPS (TLS)
      Therefore; public service port for the dashboard has changed to 443
      (container port 8443) and scheme to https.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     The option <varname>services.kubernetes.apiserver.address</varname>
+     was renamed to <varname>services.kubernetes.apiserver.bindAddress</varname>.
+     Note that the default value has changed from 127.0.0.1 to 0.0.0.0.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     The option <varname>services.kubernetes.apiserver.publicAddress</varname>
+     was not used and thus has been removed.
     </para>
    </listitem>
   </itemizedlist>
