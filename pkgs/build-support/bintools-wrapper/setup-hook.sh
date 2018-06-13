@@ -22,6 +22,10 @@ bintoolsWrapper_addLDVars () {
     if [[ -d "$1/lib" ]]; then
         export NIX_${role_pre}LDFLAGS+=" -L$1/lib"
     fi
+
+    if [[ -d "$1/Library/Frameworks" ]]; then
+        export NIX_${role_pre}LDFLAGS+=" -F$1/Library/Frameworks"
+    fi
 }
 
 # See ../setup-hooks/role.bash
