@@ -17,10 +17,18 @@ let
 
   tools = stdenv.lib.makeExtensible (tools: let
     callPackage = newScope (tools // { inherit stdenv isl version fetch; });
- in {
-    llvm = callPackage ./llvm.nix {
-      inherit compiler-rt_src;
-    };
+    mkExtraBuildCommands = cc: ''
+      rsrc="$out/resource-root"
+      mkdir "$rsrc"
+      ln -s "${cc}/lib/clang/${version}/include" "$rsrc"
+      ln -s "${targetLlvmLibraries.compiler-rt.out}/lib" "$rsrc/lib"
+      echo "-resource-dir=$rsrc" >> $out/nix-support/cc-cflags
+    '' + stdenv.lib.optionalString stdenv.targetPlatform.isLinux ''
+      echo "--gcc-toolchain=${tools.clang-unwrapped.gcc}" >> $out/nix-support/cc-cflags
+    '';
+  in {
+
+    llvm = callPackage ./llvm.nix { };
 
     clang-unwrapped = callPackage ./clang {
       inherit clang-tools-extra_src;
@@ -30,14 +38,23 @@ let
 
     clang = if stdenv.cc.isGNU then tools.libstdcxxClang else tools.libcxxClang;
 
-    libstdcxxClang = wrapCCWith {
+    libstdcxxClang = wrapCCWith rec {
       cc = tools.clang-unwrapped;
-      extraPackages = [ libstdcxxHook ];
+      extraPackages = [
+        libstdcxxHook
+        targetLlvmLibraries.compiler-rt
+      ];
+      extraBuildCommands = mkExtraBuildCommands cc;
     };
 
-    libcxxClang = wrapCCWith {
+    libcxxClang = wrapCCWith rec {
       cc = tools.clang-unwrapped;
-      extraPackages = [ targetLlvmLibraries.libcxx targetLlvmLibraries.libcxxabi ];
+      extraPackages = [
+        targetLlvmLibraries.libcxx
+        targetLlvmLibraries.libcxxabi
+        targetLlvmLibraries.compiler-rt
+      ];
+      extraBuildCommands = mkExtraBuildCommands cc;
     };
 
     lldb = callPackage ./lldb.nix {};
@@ -46,6 +63,8 @@ let
   libraries = stdenv.lib.makeExtensible (libraries: let
     callPackage = newScope (libraries // buildLlvmTools // { inherit stdenv isl version fetch; });
   in {
+
+    compiler-rt = callPackage ./compiler-rt.nix {};
 
     stdenv = overrideCC stdenv buildLlvmTools.clang;
 

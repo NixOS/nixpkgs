@@ -11,7 +11,6 @@
 , ncurses
 , version
 , zlib
-, compiler-rt_src
 , debugVersion ? false
 , enableSharedLibraries ? (buildPlatform == hostPlatform)
 , buildPackages
@@ -34,8 +33,6 @@ in stdenv.mkDerivation rec {
     unpackFile ${src}
     mv llvm-${version}.src llvm
     sourceRoot=$PWD/llvm
-    unpackFile ${compiler-rt_src}
-    mv compiler-rt-* $sourceRoot/projects/compiler-rt
   '';
 
   outputs = [ "out" ] ++ stdenv.lib.optional enableSharedLibraries "lib";
@@ -73,16 +70,7 @@ in stdenv.mkDerivation rec {
       sha256 = "11sq86spw41v72f676igksapdlsgh7fiqp5qkkmgfj0ndqcn9skf";
     }}
   ''
-  # TSAN requires XPC on Darwin, which we have no public/free source files for. We can depend on the Apple frameworks
-  # to get it, but they're unfree. Since LLVM is rather central to the stdenv, we patch out TSAN support so that Hydra
-  # can build this. If we didn't do it, basically the entire nixpkgs on Darwin would have an unfree dependency and we'd
-  # get no binary cache for the entire platform. If you really find yourself wanting the TSAN, make this controllable by
-  # a flag and turn the flag off during the stdenv build. I realize that this LLVM isn't used in the stdenv but I want to
-  # keep it consistent with 4.0. We really shouldn't be copying and pasting all this code around...
   + stdenv.lib.optionalString stdenv.isDarwin ''
-    substituteInPlace ./projects/compiler-rt/cmake/config-ix.cmake \
-      --replace 'set(COMPILER_RT_HAS_TSAN TRUE)' 'set(COMPILER_RT_HAS_TSAN FALSE)'
-
     substituteInPlace CMakeLists.txt \
       --replace 'set(CMAKE_INSTALL_NAME_DIR "@rpath")' "set(CMAKE_INSTALL_NAME_DIR "$lib/lib")" \
       --replace 'set(CMAKE_INSTALL_RPATH "@executable_path/../lib")' ""
@@ -91,20 +79,6 @@ in stdenv.mkDerivation rec {
   + stdenv.lib.optionalString (enableSharedLibraries) ''
     substitute '${./llvm-outputs.patch}' ./llvm-outputs.patch --subst-var lib
     patch -p1 < ./llvm-outputs.patch
-  ''
-  + ''
-    (
-      cd projects/compiler-rt
-      patch -p1 < ${
-        fetchpatch {
-          name = "sigaltstack.patch"; # for glibc-2.26
-          url = https://github.com/llvm-mirror/compiler-rt/commit/8a5e425a68d.diff;
-          sha256 = "0h4y5vl74qaa7dl54b1fcyqalvlpd8zban2d1jxfkxpzyi7m8ifi";
-        }
-      }
-      substituteInPlace lib/esan/esan_sideline_linux.cpp \
-        --replace 'struct sigaltstack' 'stack_t'
-    )
   '';
 
   # hacky fix: created binaries need to be run before installation

@@ -11,7 +11,6 @@
 , ncurses
 , version
 , zlib
-, compiler-rt_src
 , debugVersion ? false
 , enableSharedLibraries ? true
 }:
@@ -25,8 +24,6 @@ in stdenv.mkDerivation rec {
     unpackFile ${src}
     mv llvm-${version}.src llvm
     sourceRoot=$PWD/llvm
-    unpackFile ${compiler-rt_src}
-    mv compiler-rt-* $sourceRoot/projects/compiler-rt
   '';
 
   buildInputs = [ perl groff cmake libxml2 python libffi ];
@@ -46,23 +43,9 @@ in stdenv.mkDerivation rec {
   # 10.9. This is a temporary measure until nixpkgs darwin support is
   # updated.
   postPatch = stdenv.lib.optionalString stdenv.isDarwin ''
-    sed -i 's/os_trace(\(.*\)");$/printf(\1\\n");/g' ./projects/compiler-rt/lib/sanitizer_common/sanitizer_mac.cc
-
     substituteInPlace CMakeLists.txt \
       --replace 'set(CMAKE_INSTALL_NAME_DIR "@rpath")' "set(CMAKE_INSTALL_NAME_DIR "$out/lib")" \
       --replace 'set(CMAKE_INSTALL_RPATH "@executable_path/../lib")' ""
-  ''
-  + ''
-    (
-      cd projects/compiler-rt
-      patch -p1 < ${
-        fetchpatch {
-          name = "sigaltstack.patch"; # for glibc-2.26
-          url = https://github.com/llvm-mirror/compiler-rt/commit/8a5e425a68d.diff;
-          sha256 = "0h4y5vl74qaa7dl54b1fcyqalvlpd8zban2d1jxfkxpzyi7m8ifi";
-        }
-      }
-    )
   '';
 
   # hacky fix: created binaries need to be run before installation
