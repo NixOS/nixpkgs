@@ -275,10 +275,9 @@ in rec {
         libcxxabi libcxx ncurses libffi zlib gmp pcre gnugrep
         coreutils findutils diffutils patchutils;
 
-       llvmPackages = let llvmOverride = llvmPackages.llvm.override { inherit libcxxabi; };
-       in super.llvmPackages // {
-         llvm = llvmOverride;
-         clang-unwrapped = llvmPackages.clang-unwrapped.override { llvm = llvmOverride; };
+       llvmPackages_5 = super.llvmPackages_5 // {
+         llvm = llvmPackages_5.llvm.override { inherit libcxxabi; };
+         clang-unwrapped = llvmPackages_5.clang-unwrapped.override { llvm = self.llvmPackages_5.llvm; };
        };
 
       darwin = super.darwin // {
@@ -314,8 +313,8 @@ in rec {
         libcxxabi libcxx ncurses libffi zlib llvm gmp pcre gnugrep
         coreutils findutils diffutils patchutils;
 
-      llvmPackages = super.llvmPackages // {
-        inherit (llvmPackages) llvm clang-unwrapped;
+      llvmPackages_5 = super.llvmPackages_5 // {
+        inherit (llvmPackages_5) llvm clang-unwrapped;
       };
 
       darwin = super.darwin // {
