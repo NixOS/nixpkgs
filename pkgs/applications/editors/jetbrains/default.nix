@@ -247,7 +247,7 @@ in
       sha256 = "0daj1ha7d9kxgb60mx2yzyj01m6ahw5d6wzs0vvwp5fh5qf4mpw5";
     };
     wmClass = "jetbrains-clion";
-    update-channel = "CLion_Release"; # channel's id as in http://www.jetbrains.com/updates/updates.xml
+    update-channel = "CLion Release"; # channel's id as in http://www.jetbrains.com/updates/updates.xml
   };
 
   datagrip = buildDataGrip rec {
@@ -260,7 +260,7 @@ in
       sha256 = "0y959p9jsfqlf6cnj2k5m4bxc85yn5lv549rbacwicx4f0g6zp6r"; /* updated by script */
     };
     wmClass = "jetbrains-datagrip";
-    update-channel = "datagrip_2018_1";
+    update-channel = "DataGrip 2018.1";
   };
 
   goland = buildGoland rec {
@@ -273,7 +273,7 @@ in
       sha256 = "02nl6dssf2r4lk0fy40cvgm1m0nnfvaz2k6yygwzr35qmbsw2xjq"; /* updated by script */
     };
     wmClass = "jetbrains-goland";
-    update-channel = "goland_release";
+    update-channel = "GoLand Release";
   };
 
   idea-community = buildIdea rec {
@@ -286,7 +286,7 @@ in
       sha256 = "1qb425wg4690474g348yizhkcqcgigz2synp4blcfv4p0pg79ri6"; /* updated by script */
     };
     wmClass = "jetbrains-idea-ce";
-    update-channel = "IDEA_Release";
+    update-channel = "IntelliJ IDEA Release";
   };
 
   idea-ultimate = buildIdea rec {
@@ -299,7 +299,7 @@ in
       sha256 = "0jn771z09bscnk283kwrki0zyzhh4v4n6mr2swbd0ccs9v12dx71"; /* updated by script */
     };
     wmClass = "jetbrains-idea";
-    update-channel = "IDEA_Release";
+    update-channel = "IntelliJ IDEA Release";
   };
 
   phpstorm = buildPhpStorm rec {
@@ -312,7 +312,7 @@ in
       sha256 = "0rrcsn44va942nrznldjkxymir45q8gq1lf3f8vg1w3k87cfk1zp"; /* updated by script */
     };
     wmClass = "jetbrains-phpstorm";
-    update-channel = "PS2018.1";
+    update-channel = "PhpStorm 2018.1";
   };
 
   pycharm-community = buildPycharm rec {
@@ -325,7 +325,7 @@ in
       sha256 = "1cwrqdcp6hwr8wd234g120bblc4bjmhwxwsgj9mmxblj31c7c6an"; /* updated by script */
     };
     wmClass = "jetbrains-pycharm-ce";
-    update-channel = "PyCharm_Release";
+    update-channel = "PyCharm Release";
   };
 
   pycharm-professional = buildPycharm rec {
@@ -338,7 +338,7 @@ in
       sha256 = "1chri4cknfvvqhxy973dyf7dl5linqdxc97zshrzdqhmwq6y7580"; /* updated by script */
     };
     wmClass = "jetbrains-pycharm";
-    update-channel = "PyCharm_Release";
+    update-channel = "PyCharm Release";
   };
 
   rider = buildRider rec {
@@ -351,7 +351,7 @@ in
       sha256 = "0jhzfi9r18hy6mig8rrrr2n55lrfn5ysa7h347w5yv2dm7kx09ib"; /* updated by script */
     };
     wmClass = "jetbrains-rider";
-    update-channel = "rider_2018_1";
+    update-channel = "Rider 2018.1.2";
   };
 
   ruby-mine = buildRubyMine rec {
@@ -364,7 +364,7 @@ in
       sha256 = "033rjsx6zjrfbl89i513ms14iw53ip56h4bkilrij32hshb7c2c5"; /* updated by script */
     };
     wmClass = "jetbrains-rubymine";
-    update-channel = "rm2018.1";
+    update-channel = "RubyMine 2018.1";
   };
 
   webstorm = buildWebStorm rec {
@@ -377,7 +377,7 @@ in
       sha256 = "03nhs4vmqbm5s4ykjz475nvcbwvp2hb0bq5ijfjxwayj3jgv0zbm"; /* updated by script */
     };
     wmClass = "jetbrains-webstorm";
-    update-channel = "WS_Release";
+    update-channel = "WebStorm Release";
   };
 
 }
