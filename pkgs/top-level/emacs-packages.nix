@@ -32,7 +32,7 @@
 #   `meta` with `platforms` and `homepage` set to something you are
 #   unlikely to want to override for most packages
 
-{ lib, newScope, stdenv, fetchurl, fetchgit, fetchFromGitHub, fetchhg, runCommand
+{ lib, newScope, stdenv, fetchurl, fetchgit, fetchFromGitHub, fetchhg, fetchpatch, runCommand
 
 , emacs, texinfo, lndir, makeWrapper
 , trivialBuild
@@ -82,6 +82,20 @@ let
       rev = "v${version}";
       sha256 = "1i4647vax5na73basc5dz4lh9kprir00fh8ps4i0l1y3ippnjs2s";
     };
+    patches = [
+      (fetchpatch {
+        url = https://github.com/politza/pdf-tools/commit/6505a0e817495b85897c9380161034ae611ddd90.patch;
+        sha256 = "122ycbja8ckaysp58xqfcv11sgpbcp78pll5mywf9hgr0qap9jsy";
+      })
+      (fetchpatch {
+        url = https://github.com/politza/pdf-tools/commit/ded6341b0e3ad97e8b14f68c1796ba66dc155fd1.patch;
+        sha256 = "0hd2v4c6xq2jzg2m6s5kzs0fldgygf1pnfqd11v6x4w05zvxn6a2";
+      })
+      (fetchpatch {
+        url = https://github.com/politza/pdf-tools/commit/50a5297b82e26cfd52f6c00645ddc1057099d6a7.patch;
+        sha256 = "107rqzldg06h8k3pmdinkl78dr4xycm570sp2an4ihjmpmph0z39";
+      })
+    ];
     nativeBuildInputs = [ external.pkgconfig ];
     buildInputs = with external; [ autoconf automake libpng zlib poppler ];
     preBuild = "make server/epdfinfo";
