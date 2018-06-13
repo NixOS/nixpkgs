@@ -17,7 +17,7 @@ in stdenv.mkDerivation rec {
     sha256 = "0ci7is75bwqqw2p32vxvrk6ds51ik7qgx73m920rakv5jlayax0b";
   };
 
-  outputs = [ "bin" "dev" "out" "man" "doc" "static" ]
+  outputs = [ "bin" "dev" "out" "man" "doc" ]
     ++ lib.optional pythonSupport "py";
   propagatedBuildOutputs = "out bin" + lib.optionalString pythonSupport " py";
 
@@ -32,7 +32,7 @@ in stdenv.mkDerivation rec {
   configureFlags =
        lib.optional pythonSupport "--with-python=${python}"
     ++ lib.optional icuSupport    "--with-icu"
-    ++ [ "--exec_prefix=$dev" "--enable-static" ];
+    ++ [ "--exec_prefix=$dev" ];
 
   enableParallelBuilding = true;
 
@@ -57,11 +57,6 @@ in stdenv.mkDerivation rec {
     moveToOutput bin/xml2-config "$dev"
     moveToOutput lib/xml2Conf.sh "$dev"
     moveToOutput share/man/man1 "$bin"
-  '';
-
-  postInstall = ''
-    mkdir -p $static/lib
-    cp .libs/libxml2.a $static/lib/
   '';
 
   passthru = { inherit version; pythonSupport = pythonSupport; };
