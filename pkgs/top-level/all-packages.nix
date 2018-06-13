@@ -7711,7 +7711,9 @@ with pkgs;
   bam = callPackage ../development/tools/build-managers/bam {};
 
   bazel_0_4 = callPackage ../development/tools/build-managers/bazel/0.4.nix { };
-  bazel = callPackage ../development/tools/build-managers/bazel { };
+  bazel = callPackage ../development/tools/build-managers/bazel {
+    inherit (darwin.apple_sdk.frameworks) CoreFoundation CoreServices Foundation;
+  };
 
   bazel-buildtools = callPackage ../development/tools/build-managers/bazel/buildtools { };
   buildifier = bazel-buildtools;
@@ -12652,6 +12654,8 @@ with pkgs;
   mattermost = callPackage ../servers/mattermost { };
   matterircd = callPackage ../servers/mattermost/matterircd.nix { };
   matterbridge = callPackage ../servers/matterbridge { };
+
+  mattermost-desktop = callPackage ../applications/networking/instant-messengers/mattermost-desktop { };
 
   mediatomb = callPackage ../servers/mediatomb { };
 
@@ -20491,6 +20495,7 @@ with pkgs;
 
   qucs = callPackage ../applications/science/electronics/qucs { };
 
+  xcircuit = callPackage ../applications/science/electronics/xcircuit { };
 
   xoscope = callPackage ../applications/science/electronics/xoscope { };
 

@@ -166,8 +166,14 @@ let
     "--configure-option=--host=${hostPlatform.config}"
   ] ++ crossCabalFlags);
 
+  useSeparateSetupDb = setupHaskellDepends != [] || isCross || isGhcjs;
+
   setupCompileFlags = [
-    (optionalString (!coreSetup) "-${nativePackageDbFlag}=$packageConfDir")
+    (optionalString (!coreSetup) "-${nativePackageDbFlag}=${
+      if useSeparateSetupDb
+      then "$setupPackageConfDir"
+      else "$packageConfDir"
+    }")
     (optionalString (isGhcjs || isHaLVM || versionOlder "7.8" ghc.version) "-j$NIX_BUILD_CORES")
     # https://github.com/haskell/cabal/issues/2398
     (optionalString (versionOlder "7.10" ghc.version && !isHaLVM) "-threaded")
@@ -205,9 +211,9 @@ let
 
   nativeGhcCommand = "${nativeGhc.targetPrefix}ghc";
 
-  buildPkgDb = ghcName: ''
+  buildPkgDb = ghcName: packageConfDir: ''
     if [ -d "$p/lib/${ghcName}/package.conf.d" ]; then
-      cp -f "$p/lib/${ghcName}/package.conf.d/"*.conf $packageConfDir/
+      cp -f "$p/lib/${ghcName}/package.conf.d/"*.conf ${packageConfDir}/
       continue
     fi
     if [ -d "$p/include" ]; then
@@ -264,7 +270,7 @@ stdenv.mkDerivation ({
     echo "Build with ${ghc}."
     ${optionalString (hasActiveLibrary && hyperlinkSource) "export PATH=${hscolour}/bin:$PATH"}
 
-  '' + (optionalString (setupHaskellDepends != []) ''
+  '' + (optionalString useSeparateSetupDb ''
     setupPackageConfDir="$TMPDIR/setup-package.conf.d"
     mkdir -p $setupPackageConfDir
   '') + ''
@@ -278,9 +284,9 @@ stdenv.mkDerivation ({
   # dependencies for the build machine.
   #
   # pkgs* arrays defined in stdenv/setup.hs
-  + (optionalString (setupHaskellDepends != []) ''
+  + (optionalString useSeparateSetupDb ''
     for p in "''${pkgsBuildBuild[@]}" "''${pkgsBuildHost[@]}" "''${pkgsBuildTarget[@]}"; do
-      ${buildPkgDb nativeGhc.name}
+      ${buildPkgDb nativeGhc.name "$setupPackageConfDir"}
     done
     ${nativeGhcCommand}-pkg --${nativePackageDbFlag}="$setupPackageConfDir" recache
   '')
@@ -288,7 +294,7 @@ stdenv.mkDerivation ({
     # For normal components
   + ''
     for p in "''${pkgsHostHost[@]}" "''${pkgsHostTarget[@]}"; do
-      ${buildPkgDb ghc.name}
+      ${buildPkgDb ghc.name "$packageConfDir"}
     done
   ''
   # only use the links hack if we're actually building dylibs. otherwise, the
@@ -323,11 +329,7 @@ stdenv.mkDerivation ({
     done
 
     echo setupCompileFlags: $setupCompileFlags
-    ${optionalString (setupHaskellDepends != [])
-       ''
-       echo GHC_PACKAGE_PATH="$setupPackageConfDir:"
-       GHC_PACKAGE_PATH="$setupPackageConfDir:" ''
-    }${nativeGhcCommand} $setupCompileFlags --make -o Setup -odir $TMPDIR -hidir $TMPDIR $i
+    ${nativeGhcCommand} $setupCompileFlags --make -o Setup -odir $TMPDIR -hidir $TMPDIR $i
 
     runHook postCompileBuildDriver
   '';

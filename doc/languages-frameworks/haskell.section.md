@@ -334,10 +334,29 @@ navigate there.
 
 Finally, you can run
 ```shell
-hoogle server -p 8080 --local
+hoogle server --local -p 8080
 ```
 and navigate to http://localhost:8080/ for your own local
-[Hoogle](https://www.haskell.org/hoogle/).
+[Hoogle](https://www.haskell.org/hoogle/). The `--local` flag makes the hoogle
+server serve files from your nix store over http, without the flag it will use
+`file://` URIs. Note, however, that Firefox and possibly other browsers
+disallow navigation from `http://` to `file://` URIs for security reasons,
+which might be quite an inconvenience. Versions before v5 did not have this
+flag. See
+[this page](http://kb.mozillazine.org/Links_to_local_pages_do_not_work) for
+workarounds.
+
+For NixOS users there's a service which runs this exact command for you.
+Specify the `packages` you want documentation for and the `haskellPackages` set
+you want them to come from. Add the following to `configuration.nix`.
+
+```nix
+services.hoogle = {
+enable = true;
+packages = (hpkgs: with hpkgs; [text cryptonite]);
+haskellPackages = pkgs.haskellPackages;
+};
+```
 
 ### How to build a Haskell project using Stack
 

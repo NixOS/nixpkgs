@@ -16,13 +16,13 @@ with lib;
 
 stdenv.mkDerivation rec {
   name = "kubernetes-${version}";
-  version = "1.10.3";
+  version = "1.10.4";
 
   src = fetchFromGitHub {
     owner = "kubernetes";
     repo = "kubernetes";
     rev = "v${version}";
-    sha256 = "1la9cdf5a67kg72xn4bn5mib1caiv5vxsjmnxqsmx0m7vhbv5i4n";
+    sha256 = "0q1llnqy83fkx3vhcfjyl3frd41h7g1cvl38lfhsz1z1v9av3bpd";
   };
 
   # Build using golang v1.9 in accordance with https://github.com/kubernetes/kubernetes/blob/master/CHANGELOG-1.10.md#external-dependencies

@@ -149,6 +149,7 @@ let
       ./patches/nix_plugin_paths_52.patch
     ]  ++ optionals (versionAtLeast version "68") [
       ./patches/nix_plugin_paths_68.patch
+      (githubPatch "56cb5f7da1025f6db869e840ed34d3b98b9ab899" "04mp5r1yvdvdx6m12g3lw3z51bzh7m3gr73mhblkn4wxdbvi3dcs")
     ] ++ optional enableWideVine ./patches/widevine.patch;
 
     postPatch = ''
