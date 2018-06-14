@@ -26,13 +26,13 @@ let
   };
 in pythonPackages.buildPythonApplication rec {
   name = "matrix-synapse-${version}";
-  version = "0.30.0";
+  version = "0.31.2";
 
   src = fetchFromGitHub {
     owner = "matrix-org";
     repo = "synapse";
     rev = "v${version}";
-    sha256 = "10ggv7669ngxs8py82k8z24874ga0ldcxvpp7xhjpbr1s0gw8zv8";
+    sha256 = "15nfdq5s0d4bv1in6vymhq70hpz48p0nlzx25wxpibbrix630h8q";
   };
 
   patches = [
@@ -42,7 +42,7 @@ in pythonPackages.buildPythonApplication rec {
   propagatedBuildInputs = with pythonPackages; [
     blist canonicaljson daemonize dateutil frozendict pillow pyasn1
     pydenticon pymacaroons-pynacl pynacl pyopenssl pysaml2 pytz requests
-    signedjson systemd twisted ujson unpaddedbase64 pyyaml
+    signedjson systemd twisted ujson unpaddedbase64 pyyaml prometheus_client
     matrix-angular-sdk bleach netaddr jinja2 psycopg2
     psutil msgpack-python lxml matrix-synapse-ldap3
     phonenumbers jsonschema affinity bcrypt
