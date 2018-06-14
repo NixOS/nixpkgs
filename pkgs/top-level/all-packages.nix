@@ -11642,6 +11642,8 @@ with pkgs;
 
   skalibs = callPackage ../development/libraries/skalibs { };
 
+  skydive = callPackage ../tools/networking/skydive { };
+
   slang = callPackage ../development/libraries/slang { };
 
   slibGuile = callPackage ../development/libraries/slib {
