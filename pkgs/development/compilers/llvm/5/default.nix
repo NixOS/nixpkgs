@@ -22,7 +22,7 @@ let
     let drv-manpages = drv.override { enableManpages = true; }; in
     drv // { man = drv-manpages.out; /*outputs = drv.outputs ++ ["man"];*/ };
 
-  tools = let
+  tools = stdenv.lib.makeExtensible (tools: let
     callPackage = newScope (tools // { inherit stdenv cmake libxml2 python2 isl release_version version fetch; });
   in {
 
@@ -53,9 +53,9 @@ let
     lld = callPackage ./lld.nix {};
 
     lldb = callPackage ./lldb.nix {};
-  };
+  });
 
-  libraries = let
+  libraries = stdenv.lib.makeExtensible (libraries: let
     callPackage = newScope (libraries // buildLlvmTools // { inherit stdenv cmake libxml2 python2 isl release_version version fetch; });
   in {
 
@@ -68,6 +68,6 @@ let
     libcxxabi = callPackage ./libc++abi.nix {};
 
     openmp = callPackage ./openmp.nix {};
-  };
+  });
 
 in { inherit tools libraries; } // libraries // tools

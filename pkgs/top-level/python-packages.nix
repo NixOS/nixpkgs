@@ -6929,6 +6929,8 @@ in {
 
   kiwisolver = callPackage ../development/python-modules/kiwisolver { };
 
+  klaus = callPackage ../development/python-modules/klaus {};
+
   klein = callPackage ../development/python-modules/klein { };
 
   koji = callPackage ../development/python-modules/koji { };
@@ -18202,6 +18204,11 @@ EOF
 
   gast = callPackage ../development/python-modules/gast { };
 
+  IBMQuantumExperience = callPackage ../development/python-modules/ibmquantumexperience { };
+
+  qiskit = callPackage ../development/python-modules/qiskit { };
+
+  qasm2image = callPackage ../development/python-modules/qasm2image { };
 });
 
 in fix' (extends overrides packages)

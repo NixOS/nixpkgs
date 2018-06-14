@@ -159,26 +159,27 @@ in rec {
         dyld = bootstrapTools;
       };
 
-      libcxx = stdenv.mkDerivation {
-        name = "bootstrap-stage0-libcxx";
-        phases = [ "installPhase" "fixupPhase" ];
-        installPhase = ''
-          mkdir -p $out/lib $out/include
-          ln -s ${bootstrapTools}/lib/libc++.dylib $out/lib/libc++.dylib
-          ln -s ${bootstrapTools}/include/c++      $out/include/c++
-        '';
-        linkCxxAbi = false;
-        setupHook = ../../development/compilers/llvm/3.9/libc++/setup-hook.sh;
-      };
+      llvmPackages_5 = {
+        libcxx = stdenv.mkDerivation {
+          name = "bootstrap-stage0-libcxx";
+          phases = [ "installPhase" "fixupPhase" ];
+          installPhase = ''
+            mkdir -p $out/lib $out/include
+            ln -s ${bootstrapTools}/lib/libc++.dylib $out/lib/libc++.dylib
+            ln -s ${bootstrapTools}/include/c++      $out/include/c++
+          '';
+          linkCxxAbi = false;
+          setupHook = ../../development/compilers/llvm/3.9/libc++/setup-hook.sh;
+        };
 
-      libcxxabi = stdenv.mkDerivation {
-        name = "bootstrap-stage0-libcxxabi";
-        buildCommand = ''
-          mkdir -p $out/lib
-          ln -s ${bootstrapTools}/lib/libc++abi.dylib $out/lib/libc++abi.dylib
-        '';
+        libcxxabi = stdenv.mkDerivation {
+          name = "bootstrap-stage0-libcxxabi";
+          buildCommand = ''
+            mkdir -p $out/lib
+            ln -s ${bootstrapTools}/lib/libc++abi.dylib $out/lib/libc++abi.dylib
+          '';
+        };
       };
-
     };
 
     extraNativeBuildInputs = [];
@@ -236,8 +237,11 @@ in rec {
         patchutils m4 scons flex perl bison unifdef unzip openssl python
         gettext sharutils libarchive pkg-config groff bash subversion
         openssh sqlite sed serf openldap db cyrus-sasl expat apr-util
-        findfreetype libssh curl cmake autoconf automake libtool cpio
-        libcxx libcxxabi;
+        findfreetype libssh curl cmake autoconf automake libtool cpio;
+
+      llvmPackages_5 = super.llvmPackages_5 // {
+        inherit (llvmPackages_5) libcxx libcxxabi;
+      };
 
       darwin = super.darwin // {
         inherit (darwin)
@@ -272,13 +276,18 @@ in rec {
     persistent = self: super: with prevStage; {
       inherit
         gnumake gzip gnused bzip2 gawk ed xz patch bash
-        libcxxabi libcxx ncurses libffi zlib gmp pcre gnugrep
+        ncurses libffi zlib gmp pcre gnugrep
         coreutils findutils diffutils patchutils;
 
-       llvmPackages_5 = super.llvmPackages_5 // {
-         llvm = llvmPackages_5.llvm.override { inherit libcxxabi; };
-         clang-unwrapped = llvmPackages_5.clang-unwrapped.override { llvm = self.llvmPackages_5.llvm; };
-       };
+      llvmPackages_5 = super.llvmPackages_5 // (let
+        tools = super.llvmPackages_5.tools.extend (_: _: {
+          llvm = llvmPackages_5.llvm.override { inherit libcxxabi; };
+          clang-unwrapped = llvmPackages_5.clang-unwrapped.override { llvm = self.llvmPackages_5.llvm; };
+        });
+        libraries = super.llvmPackages_5.libraries.extend (_: _: {
+          inherit (llvmPackages_5) libcxx libcxxabi;
+        });
+      in { inherit tools libraries; } // tools // libraries);
 
       darwin = super.darwin // {
         inherit (darwin) dyld Libsystem libiconv locale;
@@ -310,12 +319,17 @@ in rec {
     persistent = self: super: with prevStage; {
       inherit
         gnumake gzip gnused bzip2 gawk ed xz patch bash
-        libcxxabi libcxx ncurses libffi zlib llvm gmp pcre gnugrep
+        ncurses libffi zlib llvm gmp pcre gnugrep
         coreutils findutils diffutils patchutils;
 
-      llvmPackages_5 = super.llvmPackages_5 // {
-        inherit (llvmPackages_5) llvm clang-unwrapped;
-      };
+      llvmPackages_5 = super.llvmPackages_5 // (let
+        tools = super.llvmPackages_5.tools.extend (_: _: {
+          inherit (llvmPackages_5) llvm clang-unwrapped;
+        });
+        libraries = super.llvmPackages_5.libraries.extend (_: _: {
+          inherit (llvmPackages_5) libcxx libcxxabi;
+        });
+      in { inherit tools libraries; } // tools // libraries);
 
       darwin = super.darwin // {
         inherit (darwin) dyld ICU Libsystem libiconv;
