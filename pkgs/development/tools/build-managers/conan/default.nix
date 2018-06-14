@@ -20,12 +20,12 @@ let newPython = python.override {
 };
 
 in newPython.pkgs.buildPythonApplication rec {
-  version = "1.2.3";
+  version = "1.4.4";
   pname = "conan";
 
   src = newPython.pkgs.fetchPypi {
     inherit pname version;
-    sha256 = "623e92d99cd0f4ec92552b23af66a6bb066071e213659f502480bb9a96d7be23";
+    sha256 = "1g03f8rw9l198w9ph0gi0q3g84ilp1dxxc9nmj0dgnymcfgpf89n";
   };
 
   checkInputs = with newPython.pkgs; [
