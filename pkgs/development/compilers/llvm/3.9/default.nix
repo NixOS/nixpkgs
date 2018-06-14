@@ -20,7 +20,6 @@ let
   in {
     llvm = callPackage ./llvm.nix {
       inherit compiler-rt_src;
-      inherit (targetLlvmLibraries) libcxxabi;
     };
 
     clang-unwrapped = callPackage ./clang {

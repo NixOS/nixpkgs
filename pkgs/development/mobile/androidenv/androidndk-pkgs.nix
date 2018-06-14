@@ -110,7 +110,8 @@ rec {
       mkdir -p $out
       cp -r ${includePath} $out/include
       chmod +w $out/include
-      ${lib.optionalString (lib.versionOlder buildAndroidndk.version "10e") "ln -s $out/include/${targetInfo.triple}/asm $out/include/asm"}
+      ${lib.optionalString (lib.versionOlder "10e" buildAndroidndk.version)
+        "ln -s $out/include/${hostInfo.triple}/asm $out/include/asm"}
       ln -s ${libPath} $out/lib
     '';
 }

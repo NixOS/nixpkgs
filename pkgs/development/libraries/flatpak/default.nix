@@ -4,7 +4,7 @@
 , libsoup, lzma, ostree, polkit, python3, systemd, xlibs, valgrind, glib_networking, makeWrapper, gnome3 }:
 
 let
-  version = "0.11.7";
+  version = "0.11.8.2";
   desktop_schemas = gnome3.gsettings_desktop_schemas;
 in stdenv.mkDerivation rec {
   name = "flatpak-${version}";
@@ -13,7 +13,7 @@ in stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://github.com/flatpak/flatpak/releases/download/${version}/${name}.tar.xz";
-    sha256 = "1vq4j7v68lp4fsvpas1bcsx1z4snpj0mkbq2mi00kx3jb48z768h";
+    sha256 = "03c2fx0y7irvws25858x217xmbacn2vfdypf8vc32hkrbh9i6df7";
   };
 
   patches = [

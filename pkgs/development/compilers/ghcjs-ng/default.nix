@@ -47,6 +47,8 @@ let
     # Relics of the old GHCJS build system
     stage1Packages = [];
     mkStage2 = _: {};
+
+    haskellCompilerName = "ghcjs";
   };
 
   bootGhcjs = haskellLib.justStaticExecutables passthru.bootPkgs.ghcjs;

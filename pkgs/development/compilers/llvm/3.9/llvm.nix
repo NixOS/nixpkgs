@@ -13,7 +13,6 @@
 , version
 , zlib
 , compiler-rt_src
-, libcxxabi
 , debugVersion ? false
 , enableSharedLibraries ? (buildPlatform == hostPlatform)
 , darwin
@@ -53,7 +52,7 @@ in stdenv.mkDerivation rec {
     groff
     libxml2
     libffi
-  ] ++ stdenv.lib.optionals stdenv.isDarwin [ libcxxabi ];
+  ];
 
   propagatedBuildInputs = [ ncurses zlib ];
 

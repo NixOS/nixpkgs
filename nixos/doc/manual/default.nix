@@ -31,11 +31,12 @@ let
                   else p;
       describe = args:
         let
+          title = args.title or null;
           name = args.name or (lib.concatStringsSep "." args.path);
           path = args.path or [ args.name ];
           package = args.package or (lib.attrByPath path (throw "Invalid package attribute path `${toString path}'") pkgs);
         in "<listitem>"
-        + "<para><literal>pkgs.${name} (${package.meta.name})</literal>"
+        + "<para><literal>${lib.optionalString (title != null) "${title} aka "}pkgs.${name} (${package.meta.name})</literal>"
         + lib.optionalString (!package.meta.available) " <emphasis>[UNAVAILABLE]</emphasis>"
         + ": ${package.meta.description or "???"}.</para>"
         + lib.optionalString (args ? comment) "\n<para>${args.comment}</para>"
@@ -51,7 +52,7 @@ let
   // lib.optionalAttrs (opt ? example) { example = substFunction opt.example; }
   // lib.optionalAttrs (opt ? default) { default = substFunction opt.default; }
   // lib.optionalAttrs (opt ? type) { type = substFunction opt.type; }
-  // lib.optionalAttrs (opt ? relatedPackages) { relatedPackages = genRelatedPackages opt.relatedPackages; });
+  // lib.optionalAttrs (opt ? relatedPackages && opt.relatedPackages != []) { relatedPackages = genRelatedPackages opt.relatedPackages; });
 
   # We need to strip references to /nix/store/* from options,
   # including any `extraSources` if some modules came from elsewhere,

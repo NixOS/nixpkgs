@@ -5,7 +5,8 @@ stdenv.mkDerivation {
 
   src = fetch "libcxxabi" "1qfs2iis1i0ppv11jndc98cvd7s25pj46pq2sfyldmzswdxmzdg1";
 
-  buildInputs = [ cmake ] ++ stdenv.lib.optional (!stdenv.isDarwin && !stdenv.isFreeBSD) libunwind;
+  nativeBuildInputs = [ cmake ];
+  buildInputs = stdenv.lib.optional (!stdenv.isDarwin && !stdenv.isFreeBSD) libunwind;
 
   postUnpack = ''
     unpackFile ${libcxx.src}
