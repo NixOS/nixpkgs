@@ -27,12 +27,13 @@ let self = stdenv.mkDerivation rec {
     # See <http://hydra.nixos.org/build/2760931>, for instance.
     #
     # no darwin because gmp uses ASM that clang doesn't like
-    optional (!stdenv.isSunOS) "--enable-fat"
+    optional (!stdenv.isSunOS && stdenv.hostPlatform.isx86) "--enable-fat"
     ++ (if cxx then [ "--enable-cxx"  ]
                else [ "--disable-cxx" ])
     ++ optional (cxx && stdenv.isDarwin) "CPPFLAGS=-fexceptions"
-    ++ optional stdenv.isDarwin "ABI=64"
+    ++ optional (stdenv.isDarwin && stdenv.is64bit) "ABI=64"
     ++ optional stdenv.is64bit "--with-pic"
+    ++ optional (with stdenv.hostPlatform; useAndroidPrebuilt || useiOSPrebuilt) "--disable-assembly"
     ;
 
   # The config.guess in GMP tries to runtime-detect various
@@ -75,7 +76,6 @@ let self = stdenv.mkDerivation rec {
          asymptotically faster algorithms.
       '';
 
-    broken = with stdenv.hostPlatform; useAndroidPrebuilt || useiOSPrebuilt;
     platforms = platforms.all;
     maintainers = [ maintainers.peti maintainers.vrthra ];
   };
