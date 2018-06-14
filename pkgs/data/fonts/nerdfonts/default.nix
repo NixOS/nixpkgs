@@ -31,6 +31,5 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     maintainers = with maintainers; [ garbas ];
     platforms = with platforms; unix;
-    hydraPlatforms = []; # 'Output limit exceeded' on Hydra
   };
 }
