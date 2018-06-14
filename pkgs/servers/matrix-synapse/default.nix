@@ -26,7 +26,7 @@ let
   };
 in pythonPackages.buildPythonApplication rec {
   name = "matrix-synapse-${version}";
-  version = "0.31.1";
+  version = "0.31.2";
 
   src = fetchFromGitHub {
     owner = "matrix-org";
