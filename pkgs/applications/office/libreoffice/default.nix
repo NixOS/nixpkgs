@@ -12,7 +12,7 @@
 , libatomic_ops, graphite2, harfbuzz, libodfgen, libzmf
 , librevenge, libe-book, libmwaw, glm, glew, gst_all_1
 , gdb, commonsLogging, librdf_rasqal, wrapGAppsHook
-, defaultIconTheme, glib, ncurses, xmlsec, epoxy, gpgme
+, defaultIconTheme, glib, ncurses, epoxy, gpgme
 , langs ? [ "ca" "de" "en-GB" "en-US" "eo" "es" "fr" "hu" "it" "nl" "pl" "ru" "sl" ]
 , withHelp ? true
 , kdeIntegration ? false
@@ -241,6 +241,7 @@ in stdenv.mkDerivation rec {
     "--without-system-mdds"
     # https://github.com/NixOS/nixpkgs/commit/5c5362427a3fa9aefccfca9e531492a8735d4e6f
     "--without-system-orcus"
+    "--without-system-xmlsec"
   ];
 
   checkPhase = ''
@@ -261,7 +262,7 @@ in stdenv.mkDerivation rec {
       python3 sablotron sane-backends unzip vigra which zip zlib
       mdds bluez5 glibc libcmis libwps libabw libzmf libtool
       libxshmfence libatomic_ops graphite2 harfbuzz gpgme utillinux
-      librevenge libe-book libmwaw glm glew ncurses xmlsec epoxy
+      librevenge libe-book libmwaw glm glew ncurses epoxy
       libodfgen CoinMP librdf_rasqal defaultIconTheme gettext
       gdb
     ]
