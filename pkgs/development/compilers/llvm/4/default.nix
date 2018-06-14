@@ -28,7 +28,6 @@ let
 
     llvm = overrideManOutput (callPackage ./llvm.nix {
       inherit compiler-rt_src;
-      inherit (targetLlvmLibraries) libcxxabi;
     });
     clang-unwrapped = overrideManOutput (callPackage ./clang {
       inherit clang-tools-extra_src;

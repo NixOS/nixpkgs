@@ -13,7 +13,6 @@
 , version
 , zlib
 , compiler-rt_src
-, libcxxabi
 , debugVersion ? false
 , enableSharedLibraries ? true
 }:
@@ -31,8 +30,7 @@ in stdenv.mkDerivation rec {
     mv compiler-rt-* $sourceRoot/projects/compiler-rt
   '';
 
-  buildInputs = [ perl groff cmake libxml2 python libffi ]
-    ++ stdenv.lib.optional stdenv.isDarwin libcxxabi;
+  buildInputs = [ perl groff cmake libxml2 python libffi ];
 
   propagatedBuildInputs = [ ncurses zlib ];
 
