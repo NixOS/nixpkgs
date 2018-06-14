@@ -48,7 +48,7 @@ let
     stage1Packages = [];
     mkStage2 = _: {};
 
-    haskellCompilerName = "ghcjs";
+    haskellCompilerName = "ghcjs-${bootGhcjs.version}";
   };
 
   bootGhcjs = haskellLib.justStaticExecutables passthru.bootPkgs.ghcjs;
