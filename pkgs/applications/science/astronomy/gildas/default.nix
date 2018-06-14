@@ -33,10 +33,10 @@ stdenv.mkDerivation rec {
 
   buildPhase=''
     make depend
-    make install
+    make
   '';
 
-  installPhase=''
+  postInstall=''
     mkdir -p $out/bin
     cp -a ../gildas-exe-${srcVersion}/* $out
     mv $out/$GAG_EXEC_SYSTEM $out/libexec
