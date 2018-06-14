@@ -444,4 +444,10 @@ self: super: {
 
   lambdabot-core = appendPatch super.lambdabot-core ./patches/lambdabot-core-ghc-8.4.x-fix.patch;
 
+  # Version 1.9.1 excludes base-compat 0.10.x for the benefit of older
+  # compilers, but ghc 8.4.x works fine with the new version.
+  hledger-lib = doJailbreak super.hledger-lib;
+  hledger = doJailbreak super.hledger;
+  hledger-ui = doJailbreak super.hledger-ui;
+
 }
