@@ -3,7 +3,7 @@ with stdenv.lib;
 let
   # Sanitizers are not supported on Darwin.
   # Sanitizer headers aren't available in older libc++ stdenvs due to a bug
-  sanitizersBroken = stdenv.cc.isClang && versionOlder (getVersion stdenv.cc.name) "6.0.0";
+  sanitizersBroken = stdenv.cc.isClang && versionOlder (getVersion stdenv.cc.name) "5.0.0";
 in stdenv.mkDerivation {
   name = "cc-wrapper-test";
 

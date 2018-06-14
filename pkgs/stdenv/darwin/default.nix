@@ -239,9 +239,11 @@ in rec {
         openssh sqlite sed serf openldap db cyrus-sasl expat apr-util
         findfreetype libssh curl cmake autoconf automake libtool cpio;
 
-      llvmPackages_5 = super.llvmPackages_5 // {
-        inherit (llvmPackages_5) libcxx libcxxabi;
-      };
+      llvmPackages_5 = super.llvmPackages_5 // (let
+        libraries = super.llvmPackages_5.libraries.extend (_: _: {
+          inherit (llvmPackages_5) libcxx libcxxabi;
+        });
+      in { inherit libraries; } // libraries);
 
       darwin = super.darwin // {
         inherit (darwin)
@@ -280,12 +282,14 @@ in rec {
         coreutils findutils diffutils patchutils;
 
       llvmPackages_5 = super.llvmPackages_5 // (let
-        tools = super.llvmPackages_5.tools.extend (_: _: {
-          llvm = llvmPackages_5.llvm.override { inherit libcxxabi; };
-          clang-unwrapped = llvmPackages_5.clang-unwrapped.override { llvm = self.llvmPackages_5.llvm; };
+        tools = super.llvmPackages_5.tools.extend (llvmSelf: _: {
+          inherit (llvmPackages_5) llvm;
+          # The .override that was here before had the side affect of removing
+          # the hacked-in "man" output.
+          clang-unwrapped = builtins.removeAttrs llvmPackages_5.clang-unwrapped [ "man" ];
         });
-        libraries = super.llvmPackages_5.libraries.extend (_: _: {
-          inherit (llvmPackages_5) libcxx libcxxabi;
+        libraries = super.llvmPackages_5.libraries.extend (llvmSelf: _: {
+          inherit (llvmPackages_5) libcxx libcxxabi compiler-rt;
         });
       in { inherit tools libraries; } // tools // libraries);
 
@@ -327,7 +331,7 @@ in rec {
           inherit (llvmPackages_5) llvm clang-unwrapped;
         });
         libraries = super.llvmPackages_5.libraries.extend (_: _: {
-          inherit (llvmPackages_5) libcxx libcxxabi;
+          inherit (llvmPackages_5) compiler-rt libcxx libcxxabi;
         });
       in { inherit tools libraries; } // tools // libraries);
 
@@ -361,20 +365,7 @@ in rec {
     initialPath = import ../common-path.nix { inherit pkgs; };
     shell       = "${pkgs.bash}/bin/bash";
 
-    cc = lib.callPackageWith {} ../../build-support/cc-wrapper {
-      inherit (pkgs) stdenvNoCC;
-      inherit shell;
-      nativeTools = false;
-      nativeLibc  = false;
-      buildPackages = {
-        inherit (prevStage) stdenv;
-      };
-      inherit (pkgs) coreutils gnugrep;
-      cc       = pkgs.llvmPackages.clang-unwrapped;
-      bintools = pkgs.darwin.binutils;
-      libc     = pkgs.darwin.Libsystem;
-      extraPackages = [ pkgs.libcxx ];
-    };
+    cc = pkgs.llvmPackages.libcxxClang;
 
     extraNativeBuildInputs = [];
     extraBuildInputs = [ pkgs.darwin.CF ];
@@ -390,7 +381,8 @@ in rec {
 
     allowedRequisites = (with pkgs; [
       xz.out xz.bin libcxx libcxxabi gmp.out gnumake findutils bzip2.out
-      bzip2.bin llvmPackages.llvm llvmPackages.llvm.lib zlib.out zlib.dev libffi.out coreutils ed diffutils gnutar
+      bzip2.bin llvmPackages.llvm llvmPackages.llvm.lib llvmPackages.compiler-rt llvmPackages.compiler-rt.dev
+      zlib.out zlib.dev libffi.out coreutils ed diffutils gnutar
       gzip ncurses.out ncurses.dev ncurses.man gnused bash gawk
       gnugrep llvmPackages.clang-unwrapped llvmPackages.clang-unwrapped.lib patch pcre.out gettext
       binutils.bintools darwin.binutils darwin.binutils.bintools
