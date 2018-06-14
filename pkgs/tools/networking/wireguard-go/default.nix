@@ -2,13 +2,13 @@
 
 buildGoPackage rec {
   name = "wireguard-go-${version}";
-  version = "0.0.20180531";
+  version = "0.0.20180613";
 
   goPackagePath = "git.zx2c4.com/wireguard-go";
 
   src = fetchzip {
     url = "https://git.zx2c4.com/wireguard-go/snapshot/wireguard-go-${version}.tar.xz";
-    sha256 = "1vs11kr5a2s99v0g7079nfrfvmjfh1p2lnkj2icjyn2cb0s1vqiy";
+    sha256 = "0pvg7s1kyn48az54lsnyn1ryhjk0flmpz5dx520rc94g6xn88fic";
   };
 
   goDeps = ./deps.nix;
