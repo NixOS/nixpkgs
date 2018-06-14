@@ -15,14 +15,14 @@
 
 , # If enabled, GHC will be built with the GPL-free but slower integer-simple
   # library instead of the faster but GPLed integer-gmp library.
-  enableIntegerSimple ? false, gmp ? null
+  enableIntegerSimple ? !(gmp.meta.available or false), gmp
 
 , # If enabled, use -fPIC when compiling static libs.
   enableRelocatedStaticLibs ? targetPlatform != hostPlatform
 
 , # Whether to build dynamic libs for the standard library (on the target
   # platform). Static libs are always built.
-  enableShared ? !targetPlatform.isWindows && !targetPlatform.useAndroidPrebuilt
+  enableShared ? !targetPlatform.isWindows && !targetPlatform.useAndroidPrebuilt && !targetPlatform.useiOSPrebuilt
 
 , # Whetherto build terminfo.
   enableTerminfo ? !targetPlatform.isWindows
@@ -31,8 +31,6 @@
   # specific flavour and falls back to ghc default values.
   ghcFlavour ? stdenv.lib.optionalString (targetPlatform != hostPlatform) "perf-cross"
 }:
-
-assert !enableIntegerSimple -> gmp != null;
 
 let
   inherit (bootPkgs) ghc;
