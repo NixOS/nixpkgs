@@ -1216,6 +1216,8 @@ with pkgs;
     pythonPackages = python3Packages;
   };
 
+  dozenal = callPackage ../applications/misc/dozenal { };
+
   dpic = callPackage ../tools/graphics/dpic { };
 
   dragon-drop = callPackage ../tools/X11/dragon-drop {
