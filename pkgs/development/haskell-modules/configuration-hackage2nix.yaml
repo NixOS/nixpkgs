@@ -1197,7 +1197,6 @@ default-package-overrides:
   - js-flot ==0.8.3
   - js-jquery ==3.3.1
   - json ==0.9.2
-  - json-autotype ==1.0.18
   - json-builder ==0.3
   - json-rpc-generic ==0.2.1.4
   - json-schema ==0.7.4.1
