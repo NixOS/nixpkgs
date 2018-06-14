@@ -1,34 +1,26 @@
-{ stdenv, fetchurl, chromaprint, fetchpatch, fftw, flac, faad2, mp4v2
+{ stdenv, fetchFromGitHub, chromaprint, fetchpatch, fftw, flac, faad2, mp4v2
 , libid3tag, libmad, libopus, libshout, libsndfile, libusb1, libvorbis
 , pkgconfig, portaudio, portmidi, protobuf, qt4, rubberband, scons, sqlite
-, taglib, vampSDK
+, taglib, vampSDK, libebur128, hidapi, opusfile, upower, libjack2, soundtouch, libogg
 }:
 
 stdenv.mkDerivation rec {
   name = "mixxx-${version}";
-  version = "2.0.0";
+  version = "2.1.0";
 
-  src = fetchurl {
-    url = "http://downloads.mixxx.org/${name}/${name}-src.tar.gz";
-    sha256 = "0vb71w1yq0xwwsclrn2jj9bk8w4n14rfv5c0aw46c11mp8xz7f71";
+# The source is not in the usual location, see:
+# https://bugs.launchpad.net/mixxx/+bug/1764840
+  src = fetchFromGitHub {
+      owner = "mixxxdj";
+      repo = "mixxx";
+      rev = "release-${version}";
+      sha256 = "0mh2slj6c28kkzrir752harsmakn0v9h6hi6rj0yy6hygb5lq1wz";
   };
-
-  patches = [
-    (fetchpatch {
-      url = "https://sources.debian.net/data/main/m/mixxx/2.0.0~dfsg-7.1/debian/patches/0007-fix_gcc6_issue.patch";
-      sha256 = "0kpyv10wcjcvbijk6vpq54gx9sqzrq4kq2qilc1czmisp9qdy5sd";
-    })
-    (fetchpatch {
-      url = "https://622776.bugs.gentoo.org/attachment.cgi?id=487284";
-      name = "sqlite.patch";
-      sha256 = "1qqbd8nrxrjcc1dwvyqfq1k2yz3l071sfcgd2dmpk6j8d4j5kx31";
-    })
- ];
 
   buildInputs = [
     chromaprint fftw flac faad2 mp4v2 libid3tag libmad libopus libshout libsndfile
     libusb1 libvorbis pkgconfig portaudio portmidi protobuf qt4
-    rubberband scons sqlite taglib vampSDK
+    rubberband scons sqlite taglib vampSDK libebur128 hidapi opusfile upower libjack2 soundtouch libogg
   ];
 
   sconsFlags = [
