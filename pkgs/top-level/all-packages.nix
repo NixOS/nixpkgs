@@ -5044,6 +5044,8 @@ with pkgs;
 
   snort = callPackage ../applications/networking/ids/snort { };
 
+  soapui = callPackage ../applications/networking/soapui { };
+
   sshguard = callPackage ../tools/security/sshguard {};
 
   softhsm = callPackage ../tools/security/softhsm {
