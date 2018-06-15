@@ -1,14 +1,28 @@
-{ stdenv, buildFHSUserEnv, makeDesktopItem, fetchFromGitHub, python3, gtk3
-, gobjectIntrospection, wrapGAppsHook, xterm }:
+{ stdenv, pkgs, buildFHSUserEnv, makeDesktopItem, fetchFromGitHub
+, wrapGAppsHook, python3 }:
 
 let
-  inherit (python3.pkgs) buildPythonApplication pyyaml pygobject3 pyxdg evdev;
+  inherit (python3.pkgs) buildPythonApplication evdev pyyaml pyxdg pygobject3
+    dbus-python;
+
+  deps = with pkgs; with xorg; [
+    stdenv.cc.cc gtk2 gtk3 gobjectIntrospection gdk_pixbuf cairo glib pango zlib
+    openssl python3 polkit wine desktop-file-utils hicolor-icon-theme cabextract
+    evdev pyxdg pyyaml pygobject3 dbus-python sqlite xrandr xterm libX11 libGL
+    libXrandr libxml2 SDL alsaLib dbus pulseaudio harfbuzz freetype psmisc atk
+    bluez ffmpeg libao libGLU_combined pcre gettext libpthreadstubs libXext
+    libXxf86vm libXinerama libSM readline openal libXdmcp portaudio libusb
+    libevdev curl qt5.qtbase vulkan-loader libpulseaudio graphite2 libsndfile
+  ];
 
   lutris = buildPythonApplication rec {
     name = "lutris-${version}";
     version = "v0.4.18";
     enableParallelBuilding = true;
     nativeBuildInputs = [ wrapGAppsHook ];
+    propagatedBuildInputs = deps;
+    fullPath = stdenv.lib.makeLibraryPath deps;
+    preConfigure = "export HOME=$PWD";
 
     src = fetchFromGitHub {
       owner = "lutris";
@@ -17,17 +31,8 @@ let
       sha256 = "1pgvk3qaaph1dlkrc5cq2jifr3yqlhnqsfa0wkaqzssh9acd5q9b";
     };
 
-    propagatedBuildInputs = [
-      pyyaml pygobject3 pyxdg evdev gtk3 gobjectIntrospection xterm
-    ];
-
-    postConfigure = ''
-      export HOME=$PWD
-      sed -i "/import traceback/a import gi\ngi.require_version('Gtk', '3.0')" \
-        lutris/util/system.py
-    '';
-
     makeWrapperArgs = [
+      "--prefix LD_LIBRARY_PATH : ${fullPath}:$out/lib"
       "--set GI_TYPELIB_PATH $GI_TYPELIB_PATH"
       "--prefix XDG_DATA_DIRS : $out/share"
       "--suffix XDG_DATA_DIRS : $XDG_ICON_DIRS:$GSETTINGS_SCHEMAS_PATH"
@@ -55,11 +60,7 @@ let
 in buildFHSUserEnv rec {
   name = "lutris";
   runScript = "lutris";
-
-  targetPkgs = pkgs: with pkgs; with xorg; [
-    lutris wine xrandr xterm libX11 libXrandr libGL gtk2 gdk_pixbuf cairo pango
-    glib libxml2 SDL alsaLib dbus pulseaudio zlib harfbuzz freetype psmisc
-  ];
+  targetPkgs = pkgs: [ lutris ];
 
   extraInstallCommands = ''
     mkdir -p $out/share/applications
