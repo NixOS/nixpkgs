@@ -316,6 +316,12 @@ mapAliases ({
   arm-frc-linux-gnueabi-binutils = pkgsCross.arm-frc-linux-gnueabi.buildPackages.binutils;
   arm-frc-linux-gnueabi-gcc = pkgsCross.arm-frc-linux-gnueabi.buildPackages.gcc;
 
+  gcc-arm-embedded-4_8 = pkgsCross.armv7l-hf-multiplatform.buildPackages.gcc48;
+  gcc-arm-embedded-4_9 = pkgsCross.armv7l-hf-multiplatform.buildPackages.gcc49;
+  gcc-arm-embedded-5 = pkgsCross.armv7l-hf-multiplatform.buildPackages.gcc5;
+  gcc-arm-embedded-6 = pkgsCross.armv7l-hf-multiplatform.buildPackages.gcc6;
+  gcc-arm-embedded = pkgsCross.armv7l-hf-multiplatform.buildPackages.gcc;
+
   inherit (ocaml-ng) # added 2016-09-14
     ocamlPackages_3_10_0 ocamlPackages_3_11_2 ocamlPackages_3_12_1
     ocamlPackages_4_00_1 ocamlPackages_4_01_0 ocamlPackages_4_02
