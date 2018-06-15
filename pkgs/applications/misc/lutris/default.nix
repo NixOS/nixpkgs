@@ -7,13 +7,14 @@ let
   lutris = buildPythonApplication rec {
     name = "lutris-${version}";
     version = "v0.4.18";
+
     enableParallelBuilding = true;
     nativeBuildInputs = [ wrapGAppsHook ];
 
     src = fetchFromGitHub {
       owner = "lutris";
       repo = "lutris";
-      rev = "${version}";
+      rev = version;
       sha256 = "1pgvk3qaaph1dlkrc5cq2jifr3yqlhnqsfa0wkaqzssh9acd5q9b";
     };
 
@@ -53,6 +54,7 @@ let
     startupNotify = "false";
   };
 in
+
 buildFHSUserEnv rec {
   name = "lutris";
   targetPkgs = pkgs: with pkgs; [ lutris xrandr xterm wine ];
