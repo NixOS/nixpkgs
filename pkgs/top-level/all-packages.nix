@@ -31,6 +31,11 @@ with pkgs;
     then pkgsi686Linux.callPackage
     else throw "callPackage_i686 not supported on system '${stdenv.system}'";
 
+  # Useful attribute of systems to cross compile to.
+  pkgsCross = lib.mapAttrs (n: crossSystem:
+              nixpkgsFun { inherit crossSystem; })
+              lib.systems.examples;
+
   # A stdenv capable of building 32-bit binaries.  On x86_64-linux,
   # it uses GCC compiled with multilib support; on i686-linux, it's
   # just the plain stdenv.
