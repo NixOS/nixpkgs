@@ -15750,9 +15750,7 @@ with pkgs;
 
   eterm = callPackage ../applications/misc/eterm { };
 
-  etherape = callPackage ../applications/networking/sniffers/etherape {
-    inherit (gnome2) libgnomecanvas libglade;
-  };
+  etherape = callPackage ../applications/networking/sniffers/etherape { };
 
   evilvte = callPackage ../applications/misc/evilvte {
     configH = config.evilvte.config or "";
