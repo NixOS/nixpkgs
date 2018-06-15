@@ -187,25 +187,25 @@ rec {
   LanguageClient-neovim = let
     LanguageClient-neovim-src = fetchgit {
       url = "https://github.com/autozimu/LanguageClient-neovim";
-      rev = "fbc46862af7fa254f74f1108149fd0669c46f1ad";
-      sha256 = "1wrrmikriyw8an8hn7240igcaca9a0ykh1j0dfy45kslxkmqkk3r";
+      rev = "5015aa164dc9ad96a0f5fbadaf92a888d16bc0d9";
+      sha256 = "1b3916al2y4hxmmlhqxw4cdliyd42xahc7wmgm8yq1gbvzbhdafg";
     };
     LanguageClient-neovim-bin = rustPlatform.buildRustPackage {
       name = "LanguageClient-neovim-bin";
       src = LanguageClient-neovim-src;
 
-      cargoSha256 = "0c2sklpvab63a1f1mhcq9abq5m2srkj52ypq7dq44g8ngn2a05ka";
+      cargoSha256 = "1vafyi650qdaq1f7fc8d4nzrv1i6iz28fs5z66hsnz4xkwb3qq9w";
     };
   in buildVimPluginFrom2Nix {
-    name = "LanguageClient-neovim-2018-03-06";
+    name = "LanguageClient-neovim-2018-06-12";
     src = LanguageClient-neovim-src;
 
     dependencies = [];
     propogatedBuildInputs = [ LanguageClient-neovim-bin ];
 
     preFixup = ''
-      substituteInPlace "$out"/share/vim-plugins/LanguageClient-neovim/plugin/LanguageClient.vim \
-        --replace "let l:command = [s:root . '/bin/languageclient']" "let l:command = ['${LanguageClient-neovim-bin}/bin/languageclient']"
+      substituteInPlace "$out"/share/vim-plugins/LanguageClient-neovim/autoload/LanguageClient.vim \
+        --replace "let l:path = s:root . '/bin/'" "let l:path = '${LanguageClient-neovim-bin}' . '/bin/'"
     '';
   };
 
