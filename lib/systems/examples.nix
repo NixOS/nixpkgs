@@ -91,6 +91,13 @@ rec {
   riscv64 = riscv "64";
   riscv32 = riscv "32";
 
+  arm-frc-linux-gnueabi = {
+    config = "arm-frc-linux-gnueabi";
+    platform = {
+      kernelArch = "arm";
+    };
+  };
+
 
   #
   # Darwin

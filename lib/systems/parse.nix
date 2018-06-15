@@ -110,6 +110,7 @@ rec {
   vendors = setTypes types.openVendor {
     apple = {};
     pc = {};
+    frc = {};
 
     unknown = {};
   };
