@@ -1,6 +1,6 @@
-{ stdenv, fetchurl, lib, iasl, dev86, pam, libxslt, libxml2, libX11, xproto, libXext
-, libXcursor, libXmu, qt5, libIDL, SDL, libcap, zlib, libpng, glib, lvm2
-, libXrandr, libXinerama
+{ stdenv, fetchurl, lib, fetchpatch, iasl, dev86, pam, libxslt, libxml2
+, libX11, xproto, libXext, libXcursor, libXmu, qt5, libIDL, SDL, libcap
+, zlib, libpng, glib, lvm2, libXrandr, libXinerama
 , pkgconfig, which, docbook_xsl, docbook_xml_dtd_43
 , alsaLib, curl, libvpx, gawk, nettools, dbus
 , xorriso, makeself, perl
@@ -94,9 +94,14 @@ in stdenv.mkDerivation {
 
   patches =
      optional enableHardening ./hardened.patch
-  ++ [ ./qtx11extras.patch ];
-
-
+  ++ [
+    ./qtx11extras.patch
+    (fetchpatch {
+      name = "010-qt-5.11.patch";
+      url = "https://git.archlinux.org/svntogit/community.git/plain/trunk/010-qt-5.11.patch?h=packages/virtualbox";
+      sha256 = "0hjx99pg40wqyggnrpylrp5zngva4xrnk7r90i0ynrqc7n84g9pn";
+    })
+  ];
 
   postPatch = ''
     sed -i -e 's|/sbin/ifconfig|${nettools}/bin/ifconfig|' \

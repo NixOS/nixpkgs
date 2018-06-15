@@ -16,15 +16,14 @@ in mkDerivation rec {
     sha256 = "1m35ly6miwy8ivsln3j1bfv0nxbc4gyqnj7f847zzp53jsqrm3mq";
   };
 
-  patches = [ ./sddm-ignore-config-mtime.patch ];
+  patches = [
+    ./sddm-ignore-config-mtime.patch
+    ./qt511.patch
+  ];
 
   postPatch =
-    # Module Qt5::Test must be included in `find_package` before it is used.
-    ''
-      sed -i CMakeLists.txt -e '/find_package(Qt5/ s|)| Test)|'
-    ''
     # Fix missing include for gettimeofday()
-    + ''
+    ''
       sed -e '1i#include <sys/time.h>' -i src/helper/HelperApp.cpp
     '';
 
