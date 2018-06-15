@@ -3,8 +3,8 @@ let
   pname = "yojson";
   param =
   if stdenv.lib.versionAtLeast ocaml.version "4.02" then {
-    version = "1.4.0";
-    sha256 = "0rzn4yihfi0psd2qmgrx5fvwpby87sqx4zws3ijf49f7wbpycccv";
+    version = "1.4.1";
+    sha256 = "0nwsfkmqpyfab4rxq76q8ff7giyanghw08094jyrp275v99zdjr9";
     buildInputs = [ jbuilder ];
     extra = { inherit (jbuilder) installPhase; };
   } else {

@@ -1,29 +1,27 @@
-{ stdenv, fetchurl, pkgconfig, gtk, zathura_core, girara, djvulibre, gettext }:
+{ stdenv, fetchurl, meson, ninja, pkgconfig, gtk, zathura_core, girara, djvulibre, gettext }:
 
 stdenv.mkDerivation rec {
-  name = "zathura-djvu-0.2.5";
+  name = "zathura-djvu-0.2.8";
 
   src = fetchurl {
-    url = "http://pwmt.org/projects/zathura/plugins/download/${name}.tar.gz";
-    sha256 = "03cw54d2fipvbrnbqy0xccqkx6s77dyhyymx479aj5ryy4513dq8";
+    url = "https://pwmt.org/projects/zathura/plugins/download/${name}.tar.xz";
+    sha256 = "0axkv1crdxn0z44whaqp2ibkdqcykhjnxk7qzms0dp1b67an9rnh";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ meson ninja pkgconfig ];
   buildInputs = [ djvulibre gettext zathura_core gtk girara ];
 
-  patches = [ ./gtkflags.patch ];
-
-  makeFlags = [ "PREFIX=$(out)" "PLUGINDIR=$(out)/lib" ];
+  PKG_CONFIG_ZATHURA_PLUGINDIR = "lib/zathura";
 
   meta = with stdenv.lib; {
-    homepage = http://pwmt.org/projects/zathura/;
+    homepage = https://pwmt.org/projects/zathura-djvu/;
     description = "A zathura DJVU plugin";
     longDescription = ''
       The zathura-djvu plugin adds DjVu support to zathura by using the
       djvulibre library.
     '';
     license = licenses.zlib;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
     maintainers = with maintainers; [ garbas ];
   };
 }

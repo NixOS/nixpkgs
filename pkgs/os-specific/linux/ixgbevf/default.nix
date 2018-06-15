@@ -2,12 +2,14 @@
 
 stdenv.mkDerivation rec {
   name = "ixgbevf-${version}-${kernel.version}";
-  version = "4.2.1";
+  version = "4.3.4";
 
   src = fetchurl {
     url = "mirror://sourceforge/e1000/ixgbevf-${version}.tar.gz";
-    sha256 = "1666hsavaspjmf45ij396mkndzk6g0n3ibr2glfdhjfqhfy35zb8";
+    sha256 = "122zn9nd8f95bpidiiinc8xaizypkirqs8vlmsdy2iv3w65md9k3";
   };
+
+  nativeBuildInputs = kernel.moduleBuildDependencies;
 
   hardeningDisable = [ "pic" ];
 

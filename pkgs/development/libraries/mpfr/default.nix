@@ -1,16 +1,15 @@
 { stdenv, fetchurl, gmp
-, buildPlatform, hostPlatform
+, hostPlatform
 }:
 
 stdenv.mkDerivation rec {
-  name = "mpfr-3.1.3";
+  version = "4.0.1";
+  name = "mpfr-${version}";
 
   src = fetchurl {
-    url = "mirror://gnu/mpfr/${name}.tar.bz2";
-    sha256 = "1z8akfw9wbmq91vrx04bw86mmnxw2sw5qm5cr8ix5b3w2mcv8fzn";
+    url = "mirror://gnu/mpfr/${name}.tar.xz";
+    sha256 = "0vp1lrc08gcmwdaqck6bpzllkrykvp06vz5gnqpyw0v3h9h4m1v7";
   };
-
-  patches = [ ./upstream.patch ];
 
   outputs = [ "out" "dev" "doc" "info" ];
 
@@ -21,7 +20,7 @@ stdenv.mkDerivation rec {
     stdenv.lib.optional hostPlatform.isSunOS "--disable-thread-safe" ++
     stdenv.lib.optional hostPlatform.is64bit "--with-pic";
 
-  doCheck = hostPlatform == buildPlatform;
+  doCheck = true; # not cross;
 
   enableParallelBuilding = true;
 

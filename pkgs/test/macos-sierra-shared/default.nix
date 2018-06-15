@@ -3,7 +3,7 @@
 let
   makeBigExe = stdenv: prefix: rec {
 
-    count = 500;
+    count = 320;
 
     sillyLibs = lib.genList (i: stdenv.mkDerivation rec {
       name = "${prefix}-fluff-${toString i}";
@@ -75,13 +75,14 @@ in stdenvNoCC.mkDerivation {
   buildInputs = [ good.finalExe bad.finalExe ];
   # TODO(@Ericson2314): Be impure or require exact MacOS version of builder?
   buildCommand = ''
-    if bad-asdf
-    then echo "bad-asdf can succeed on non-sierra, OK" >&2
+    if bad-asdf &> /dev/null
+    then echo "WARNING: bad-asdf did not fail, not running on sierra?" >&2
     else echo "bad-asdf should fail on sierra, OK" >&2
     fi
 
     # Must succeed on all supported MacOS versions
     good-asdf
+    echo "good-asdf should succeed on sierra, OK"
 
     touch $out
   '';

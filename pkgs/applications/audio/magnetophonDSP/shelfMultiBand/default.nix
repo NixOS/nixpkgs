@@ -15,7 +15,6 @@ stdenv.mkDerivation rec {
   buildPhase = ''
     faust2jaqt -vec -double -time -t 99999 shelfMultiBand.dsp
     faust2jaqt -vec -double -time -t 99999 shelfMultiBandMono.dsp
-    sed -i "s|\[ *scale *: *log *\]||g ; s|\btgroup\b|hgroup|g" "shelfMultiBand.lib"
     faust2lv2 -vec -double -time -gui -t 99999 shelfMultiBandMono.dsp
     faust2lv2 -vec -double -time -gui -t 99999 shelfMultiBand.dsp
   '';

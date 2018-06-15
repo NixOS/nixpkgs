@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "picocom-${version}";
-  version = "2.2";
+  version = "3.1";
 
   src = fetchFromGitHub {
     owner = "npat-efault";
     repo = "picocom";
     rev = version;
-    sha256 = "06b2ic34dnxc73cprc5imi3iamlhsv623sbg9vj5h5rvs586dwjx";
+    sha256 = "1vvjydqf0ax47nvdyyl67jafw5b3sfsav00xid6qpgia1gs2r72n";
   };
 
   buildInputs = [ makeWrapper ];
@@ -26,6 +26,6 @@ stdenv.mkDerivation rec {
     description = "Minimal dumb-terminal emulation program";
     homepage = https://github.com/npat-efault/picocom/;
     license = stdenv.lib.licenses.gpl2Plus;
-    platforms = stdenv.lib.platforms.gnu;  # arbitrary choice
+    platforms = stdenv.lib.platforms.gnu ++ stdenv.lib.platforms.linux;  # arbitrary choice
   };
 }

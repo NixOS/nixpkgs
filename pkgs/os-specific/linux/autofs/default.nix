@@ -1,15 +1,15 @@
-{ stdenv, lib, fetchurl, flex, bison, linuxHeaders, libtirpc, utillinux, nfs-utils, e2fsprogs
+{ stdenv, lib, fetchurl, flex, bison, linuxHeaders, libtirpc, mount, umount, nfs-utils, e2fsprogs
 , libxml2, kerberos, kmod, openldap, sssd, cyrus_sasl, openssl }:
 
 let
-  version = "5.1.3";
+  version = "5.1.4";
   name = "autofs-${version}";
 in stdenv.mkDerivation {
   inherit name;
 
   src = fetchurl {
     url = "mirror://kernel/linux/daemons/autofs/v5/${name}.tar.xz";
-    sha256 = "1gxifa93104pxlmxrikhwciy5zdgk20m63siyhq1myym7vzfnvp9";
+    sha256 = "08hpphawzcdibwbhw0r3y7hnfczlazpp90sf3bz2imgza7p31klg";
   };
 
   preConfigure = ''
@@ -17,10 +17,10 @@ in stdenv.mkDerivation {
     export sssldir="${sssd}/lib/sssd/modules"
     export HAVE_SSS_AUTOFS=1
 
-    export MOUNT=${utillinux}/bin/mount
+    export MOUNT=${mount}/bin/mount
     export MOUNT_NFS=${nfs-utils}/bin/mount.nfs
-    export UMOUNT=${utillinux}/bin/umount
-    export MODPROBE=${utillinux}/bin/modprobe
+    export UMOUNT=${umount}/bin/umount
+    export MODPROBE=${kmod}/bin/modprobe
     export E2FSCK=${e2fsprogs}/bin/fsck.ext2
     export E3FSCK=${e2fsprogs}/bin/fsck.ext3
     export E4FSCK=${e2fsprogs}/bin/fsck.ext4

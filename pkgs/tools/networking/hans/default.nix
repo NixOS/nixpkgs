@@ -34,6 +34,5 @@ stdenv.mkDerivation rec {
     homepage = http://code.gerade.org/hans/;
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ nckx ];
   };
 }

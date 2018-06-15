@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "libwacom-${version}";
-  version = "0.26";
+  version = "0.29";
 
   src = fetchurl {
     url = "mirror://sourceforge/linuxwacom/libwacom/${name}.tar.bz2";
-    sha256 = "0xpvkjvzaj9blcmw8ha46616bzfivj99kwzvr91clxd6iaf11r63";
+    sha256 = "1diklgcjhmvcxi9p1ifp6wcnyr6k7z9jhrlzfhzjqd6zipk01slw";
   };
 
   nativeBuildInputs = [ pkgconfig ];

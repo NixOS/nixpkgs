@@ -3,13 +3,14 @@
 
 # Note: zlib is not required; MySQL can use an internal zlib.
 
-stdenv.mkDerivation rec {
+let
+self = stdenv.mkDerivation rec {
   name = "mysql-${version}";
-  version = "5.5.58";
+  version = "5.5.60";
 
   src = fetchurl {
     url = "mirror://mysql/MySQL-5.5/${name}.tar.gz";
-    sha256 = "1f890376ld1qapl038sjh2ialdizys3sj96vfn4mqmb1ybx14scv";
+    sha256 = "071xaamqkbscybqzm79gf2w3bkr9lqlzwafis3gzc8w8fkhi4hd3";
   };
 
   patches = if stdenv.isCygwin then [
@@ -46,8 +47,11 @@ stdenv.mkDerivation rec {
     "-DINSTALL_MYSQLSHAREDIR=share/mysql"
     "-DINSTALL_DOCDIR=share/mysql/docs"
     "-DINSTALL_SHAREDIR=share/mysql"
+    "-DINSTALL_MYSQLTESTDIR="
+    "-DINSTALL_SQLBENCHDIR="
   ];
 
+  NIX_CFLAGS_COMPILE = [ "-fpermissive" ]; # since gcc-7
   NIX_LDFLAGS = stdenv.lib.optionalString stdenv.isLinux "-lgcc_s";
 
   prePatch = ''
@@ -55,15 +59,19 @@ stdenv.mkDerivation rec {
   '';
   postInstall = ''
     sed -i -e "s|basedir=\"\"|basedir=\"$out\"|" $out/bin/mysql_install_db
-    rm -r $out/mysql-test $out/sql-bench $out/data "$out"/lib/*.a
-    rm $out/share/man/man1/mysql-test-run.pl.1
+    rm -r $out/data "$out"/lib/*.a
   '';
 
-  passthru.mysqlVersion = "5.5";
+  passthru = {
+    client = self;
+    connector-c = self;
+    server = self;
+    mysqlVersion = "5.5";
+  };
 
   meta = {
-    homepage = http://www.mysql.com/;
+    homepage = https://www.mysql.com/;
     description = "The world's most popular open source database";
     platforms = stdenv.lib.platforms.unix;
   };
-}
+}; in self

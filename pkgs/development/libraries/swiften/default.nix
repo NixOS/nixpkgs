@@ -1,14 +1,14 @@
 { stdenv, python, fetchurl, openssl, boost }:
 stdenv.mkDerivation rec {
   name    = "swiften-${version}";
-  version = "3.0beta2";
+  version = "4.0";
 
   buildInputs           = [ python ];
   propagatedBuildInputs = [ openssl boost ];
 
   src = fetchurl {
     url    = "http://swift.im/downloads/releases/swift-${version}/swift-${version}.tar.gz";
-    sha256 = "0i6ks122rry9wvg6qahk3yiggi7nlkpgws1z0r41vi4i1siq0ls0";
+    sha256 = "06bk45hxqmny8z7x78ycrfrazq6xdzv5c28i8x0lgc85j03b5dsh";
   };
   
   buildPhase = ''

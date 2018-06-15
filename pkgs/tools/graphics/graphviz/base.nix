@@ -23,21 +23,32 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     libpng libjpeg expat yacc libtool fontconfig gd gts libdevil flex pango
+    gettext
   ] ++ optionals (xorg != null) (with xorg; [ libXrender libXaw libXpm ])
-    ++ optionals (stdenv.isDarwin) [ ApplicationServices gettext ];
+    ++ optionals (stdenv.isDarwin) [ ApplicationServices ];
 
   hardeningDisable = [ "fortify" ];
 
   CPPFLAGS = stdenv.lib.optionalString (xorg != null && stdenv.isDarwin)
     "-I${cairo.dev}/include/cairo";
 
-  configureFlags = optional (xorg == null) "--without-x";
+  configureFlags = [
+    "--with-ltdl-lib=${libtool.lib}/lib"
+    "--with-ltdl-include=${libtool}/include"
+  ] ++ stdenv.lib.optional (xorg == null) [ "--without-x" ];
 
   postPatch = ''
     for f in $(find . -name Makefile.in); do
       substituteInPlace $f --replace "-lstdc++" "-lc++"
     done
   '';
+
+  # ''
+  #   substituteInPlace rtest/rtest.sh \
+  #     --replace "/bin/ksh" "${mksh}/bin/mksh"
+  # '';
+
+  doCheck = false; # fails with "Graphviz test suite requires ksh93" which is not in nixpkgs
 
   preAutoreconf = "./autogen.sh";
 

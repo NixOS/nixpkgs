@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "pick-${version}";
-  version = "1.9.0";
+  version = "2.0.2";
 
   src = fetchFromGitHub {
     owner = "calleerlandsson";
     repo = "pick";
     rev = "v${version}";
-    sha256 = "0s0mn9iz17ldhvahggh9rsmgfrjh0kvk5bh4p9xhxcn7rcp0h5ka";
+    sha256 = "0wm3220gqrwldiq0rjdraq5mw3i7d58zwzls8234sx9maf59h0k0";
   };
 
   buildInputs = [ ncurses ];

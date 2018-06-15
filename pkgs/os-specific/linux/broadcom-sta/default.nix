@@ -21,6 +21,8 @@ stdenv.mkDerivation {
 
   hardeningDisable = [ "pic" ];
 
+  nativeBuildInputs = kernel.moduleBuildDependencies;
+
   patches = [
     ./i686-build-failure.patch
     ./license.patch
@@ -31,6 +33,7 @@ stdenv.mkDerivation {
     ./linux-4.11.patch
     # source: https://aur.archlinux.org/cgit/aur.git/tree/linux412.patch?h=broadcom-wl
     ./linux-4.12.patch
+    ./linux-4.15.patch
     ./null-pointer-fix.patch
     ./gcc.patch
   ];

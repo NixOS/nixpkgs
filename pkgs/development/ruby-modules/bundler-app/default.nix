@@ -26,12 +26,13 @@
 , allowSubstitutes ? false
 , meta ? {}
 , postBuild ? ""
+, gemConfig ? null
 }@args:
 
 let
   basicEnv = (callPackage ../bundled-common {}) args;
 
-  cmdArgs = removeAttrs args [ "pname" "postBuild" ]
+  cmdArgs = removeAttrs args [ "pname" "postBuild" "gemConfig" ]
   // { inherit preferLocalBuild allowSubstitutes; }; # pass the defaults
 in
    runCommand basicEnv.name cmdArgs ''

@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, mesa }:
+{ fetchurl, stdenv, libGLU_combined }:
 
 stdenv.mkDerivation rec {
   name = "coin3d-${version}";
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     ./sbhashentry.patch
   ];
 
-  buildInputs = [ mesa ];
+  buildInputs = [ libGLU_combined ];
 
   meta = {
     homepage = http://www.coin3d.org/;

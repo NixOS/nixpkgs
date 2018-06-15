@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "colm-${version}";
-  version = "0.13.0.5";
+  version = "0.13.0.6";
 
   src = fetchurl {
     url = "http://www.colm.net/files/colm/${name}.tar.gz";
-    sha256 = "1320bx96ycd1xwww137cixrb983838wnrgkfsym8x5bnf5kj9rik";
+    sha256 = "0jd3qmqdm8yszy0yysbp3syk7pcbxvwzv9mibdwz7v9bv1nrai26";
   };
 
   nativeBuildInputs = [ makeWrapper asciidoc ];
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     description = "A programming language for the analysis and transformation of computer languages";
     homepage = http://www.colm.net/open-source/colm;
     license = licenses.gpl2;
-    platforms = [ "x86_64-linux" "x86_64-darwin" ];
+    platforms = platforms.unix;
     maintainers = with maintainers; [ pSub ];
   };
 }

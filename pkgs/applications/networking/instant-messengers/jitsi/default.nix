@@ -3,8 +3,6 @@
 , alsaLib, dbus_libs, gtk2, libpulseaudio, openssl, xorg
 }:
 
-assert stdenv.isLinux;
-
 stdenv.mkDerivation rec {
   name = "jitsi-${version}";
   version = "2.10.5550";
@@ -70,6 +68,6 @@ stdenv.mkDerivation rec {
     description = "Open Source Video Calls and Chat";
     license = licenses.lgpl21Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ khumba ndowens ];
+    maintainers = with maintainers; [ ndowens ];
   };
 }

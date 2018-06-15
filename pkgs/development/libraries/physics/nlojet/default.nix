@@ -1,7 +1,7 @@
 { stdenv, fetchurl, fetchpatch }:
 
 stdenv.mkDerivation rec {
-  name = "nlojet++";
+  name = "nlojet++-${version}";
   version = "4.1.3";
 
   src = fetchurl {

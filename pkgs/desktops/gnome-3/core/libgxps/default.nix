@@ -1,12 +1,15 @@
 { stdenv, fetchurl, meson, ninja, pkgconfig, glib, gobjectIntrospection, cairo
-, libarchive, freetype, libjpeg, libtiff
+, libarchive, freetype, libjpeg, libtiff, gnome3
 }:
 
-stdenv.mkDerivation rec {
-  name = "libgxps-0.3.0";
+let
+  pname = "libgxps";
+  version = "0.3.0";
+in stdenv.mkDerivation rec {
+  name = "${pname}-${version}";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/libgxps/0.3/${name}.tar.xz";
+    url = "mirror://gnome/sources/${pname}/${gnome3.versionBranch version}/${name}.tar.xz";
     sha256 = "412b1343bd31fee41f7204c47514d34c563ae34dafa4cc710897366bd6cd0fae";
   };
 
@@ -19,7 +22,19 @@ stdenv.mkDerivation rec {
     "-Dwith-liblcms2=false"
   ];
 
+  passthru = {
+    updateScript = gnome3.updateScript {
+      packageName = pname;
+      attrPath = "gnome3.${pname}";
+      versionPolicy = "none";
+    };
+  };
+
   meta = with stdenv.lib; {
-    platforms = platforms.linux;
+    description = "A GObject based library for handling and rendering XPS documents";
+    homepage = https://wiki.gnome.org/Projects/libgxps;
+    license = licenses.lgpl21Plus;
+    maintainers = gnome3.maintainers;
+    platforms = platforms.unix;
   };
 }

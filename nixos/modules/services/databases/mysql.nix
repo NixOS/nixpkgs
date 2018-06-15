@@ -7,13 +7,11 @@ let
   cfg = config.services.mysql;
 
   mysql = cfg.package;
-  
-  isMariaDB = 
+
+  isMariaDB =
     let
       pName = _p: (builtins.parseDrvName (_p.name)).name;
     in pName mysql == pName pkgs.mariadb;
-
-  atLeast55 = versionAtLeast mysql.mysqlVersion "5.5";
 
   pidFile = "${cfg.pidDir}/mysqld.pid";
 
@@ -28,13 +26,6 @@ let
     ${optionalString (cfg.bind != null) "bind-address = ${cfg.bind}" }
     ${optionalString (cfg.replication.role == "master" || cfg.replication.role == "slave") "log-bin=mysql-bin"}
     ${optionalString (cfg.replication.role == "master" || cfg.replication.role == "slave") "server-id = ${toString cfg.replication.serverId}"}
-    ${optionalString (cfg.replication.role == "slave" && !atLeast55)
-    ''
-      master-host = ${cfg.replication.masterHost}
-      master-user = ${cfg.replication.masterUser}
-      master-password = ${cfg.replication.masterPassword}
-      master-port = ${toString cfg.replication.masterPort}
-    ''}
     ${optionalString (cfg.ensureUsers != [])
     ''
       plugin-load-add = auth_socket.so
@@ -142,7 +133,7 @@ in
         '';
         example = [
           "nextcloud"
-          "piwik"
+          "matomo"
         ];
       };
 
@@ -227,7 +218,7 @@ in
   config = mkIf config.services.mysql.enable {
 
     services.mysql.dataDir =
-      mkDefault (if versionAtLeast config.system.stateVersion "17.09" then "/var/lib/mysql"
+      mkDefault (if versionAtLeast config.system.nixos.stateVersion "17.09" then "/var/lib/mysql"
                  else "/var/mysql");
 
     users.extraUsers.mysql = {
@@ -240,8 +231,10 @@ in
 
     environment.systemPackages = [mysql];
 
-    systemd.services.mysql =
-      { description = "MySQL Server";
+    systemd.services.mysql = let
+      hasNotify = (cfg.package == pkgs.mariadb);
+    in {
+        description = "MySQL Server";
 
         after = [ "network.target" ];
         wantedBy = [ "multi-user.target" ];
@@ -265,17 +258,16 @@ in
 
             mkdir -m 0755 -p ${cfg.pidDir}
             chown -R ${cfg.user} ${cfg.pidDir}
-
-            # Make the socket directory
-            mkdir -p /run/mysqld
-            chmod 0755 /run/mysqld
-            chown -R ${cfg.user} /run/mysqld
           '';
 
-        serviceConfig.ExecStart = "${mysql}/bin/mysqld --defaults-extra-file=${myCnf} ${mysqldOptions}";
+        serviceConfig = {
+          Type = if hasNotify then "notify" else "simple";
+          RuntimeDirectory = "mysqld";
+          ExecStart = "${mysql}/bin/mysqld --defaults-extra-file=${myCnf} ${mysqldOptions}";
+        };
 
-        postStart =
-          ''
+        postStart = ''
+          ${lib.optionalString (!hasNotify) ''
             # Wait until the MySQL server is available for use
             count=0
             while [ ! -e /run/mysqld/mysqld.sock ]
@@ -290,6 +282,7 @@ in
                 count=$((count++))
                 sleep 1
             done
+          ''}
 
             if [ -f /tmp/mysql_init ]
             then
@@ -298,10 +291,10 @@ in
                     # Create initial databases
                     if ! test -e "${cfg.dataDir}/${database.name}"; then
                         echo "Creating initial database: ${database.name}"
-                        ( echo "create database ${database.name};"
+                        ( echo 'create database `${database.name}`;'
 
                           ${optionalString (database ? "schema") ''
-                          echo "use ${database.name};"
+                          echo 'use `${database.name}`;'
 
                           if [ -f "${database.schema}" ]
                           then
@@ -315,7 +308,7 @@ in
                     fi
                   '') cfg.initialDatabases}
 
-                ${optionalString (cfg.replication.role == "master" && atLeast55)
+                ${optionalString (cfg.replication.role == "master")
                   ''
                     # Set up the replication master
 
@@ -326,7 +319,7 @@ in
                     ) | ${mysql}/bin/mysql -u root -N
                   ''}
 
-                ${optionalString (cfg.replication.role == "slave" && atLeast55)
+                ${optionalString (cfg.replication.role == "slave")
                   ''
                     # Set up the replication slave
 

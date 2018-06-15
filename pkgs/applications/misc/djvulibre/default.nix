@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, libjpeg, libtiff, librsvg, libintlOrEmpty }:
+{ stdenv, fetchurl, libjpeg, libtiff, librsvg, libiconv }:
 
 stdenv.mkDerivation rec {
   name = "djvulibre-3.5.27";
@@ -10,9 +10,7 @@ stdenv.mkDerivation rec {
 
   outputs = [ "bin" "dev" "out" ];
 
-  buildInputs = [ libjpeg libtiff librsvg ] ++ libintlOrEmpty;
-
-  NIX_LDFLAGS = stdenv.lib.optionalString stdenv.isDarwin "-lintl";
+  buildInputs = [ libjpeg libtiff librsvg libiconv ];
 
   meta = with stdenv.lib; {
     description = "A library and viewer for the DJVU file format for scanned images";

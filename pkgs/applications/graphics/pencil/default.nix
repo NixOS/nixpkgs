@@ -1,7 +1,7 @@
 { stdenv, fetchurl, lib, makeWrapper,
   # build dependencies
   alsaLib, atk, cairo, cups, dbus, expat, fontconfig,
-  freetype, gdk_pixbuf, glib, gnome2, nspr, nss, xlibs,
+  freetype, gdk_pixbuf, glib, gnome2, nspr, nss, xorg,
   glibc, udev
 }:
 
@@ -55,17 +55,17 @@ stdenv.mkDerivation rec {
       gnome2.pango
       nspr
       nss
-      xlibs.libX11
-      xlibs.libXScrnSaver
-      xlibs.libXcomposite
-      xlibs.libXcursor
-      xlibs.libXdamage
-      xlibs.libXext
-      xlibs.libXfixes
-      xlibs.libXi
-      xlibs.libXrandr
-      xlibs.libXrender
-      xlibs.libXtst
+      xorg.libX11
+      xorg.libXScrnSaver
+      xorg.libXcomposite
+      xorg.libXcursor
+      xorg.libXdamage
+      xorg.libXext
+      xorg.libXfixes
+      xorg.libXi
+      xorg.libXrandr
+      xorg.libXrender
+      xorg.libXtst
       stdenv.cc.cc.lib
       stdenv.cc.cc
       glibc

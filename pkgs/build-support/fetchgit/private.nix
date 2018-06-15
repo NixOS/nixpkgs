@@ -17,7 +17,7 @@
       in builtins.toString sshConfigFile}'';
 
     ssh-wrapped = runCommand "fetchgit-ssh" {
-      buildInputs = [ makeWrapper ];
+      nativeBuildInputs = [ makeWrapper ];
     } ''
       mkdir -p $out/bin
       makeWrapper ${openssh}/bin/ssh $out/bin/ssh --prefix PATH : "$out/bin" --add-flags "-F ${config}" "$@"

@@ -21,7 +21,7 @@ let
           daemon reads in addition to the the user's authorized_keys file.
           You can combine the <literal>keys</literal> and
           <literal>keyFiles</literal> options.
-          Warning: If you are using <literal>NixOps</literal> then don't use this 
+          Warning: If you are using <literal>NixOps</literal> then don't use this
           option since it will replace the key required for deployment via ssh.
         '';
       };
@@ -137,6 +137,14 @@ in
         '';
       };
 
+      openFirewall = mkOption {
+        type = types.bool;
+        default = true;
+        description = ''
+          Whether to automatically open the specified ports in the firewall.
+        '';
+      };
+
       listenAddresses = mkOption {
         type = with types; listOf (submodule {
           options = {
@@ -205,6 +213,90 @@ in
         description = "Files from which authorized keys are read.";
       };
 
+      kexAlgorithms = mkOption {
+        type = types.listOf types.str;
+        default = [
+          "curve25519-sha256@libssh.org"
+          "diffie-hellman-group-exchange-sha256"
+        ];
+        description = ''
+          Allowed key exchange algorithms
+          </para>
+          <para>
+          Defaults to recommended settings from both
+          <link xlink:href="https://stribika.github.io/2015/01/04/secure-secure-shell.html" />
+          and
+          <link xlink:href="https://wiki.mozilla.org/Security/Guidelines/OpenSSH#Modern_.28OpenSSH_6.7.2B.29" />
+        '';
+      };
+
+      ciphers = mkOption {
+        type = types.listOf types.str;
+        default = [
+          "chacha20-poly1305@openssh.com"
+          "aes256-gcm@openssh.com"
+          "aes128-gcm@openssh.com"
+          "aes256-ctr"
+          "aes192-ctr"
+          "aes128-ctr"
+        ];
+        description = ''
+          Allowed ciphers
+          </para>
+          <para>
+          Defaults to recommended settings from both
+          <link xlink:href="https://stribika.github.io/2015/01/04/secure-secure-shell.html" />
+          and
+          <link xlink:href="https://wiki.mozilla.org/Security/Guidelines/OpenSSH#Modern_.28OpenSSH_6.7.2B.29" />
+        '';
+      };
+
+      macs = mkOption {
+        type = types.listOf types.str;
+        default = [
+          "hmac-sha2-512-etm@openssh.com"
+          "hmac-sha2-256-etm@openssh.com"
+          "umac-128-etm@openssh.com"
+          "hmac-sha2-512"
+          "hmac-sha2-256"
+          "umac-128@openssh.com"
+        ];
+        description = ''
+          Allowed MACs
+          </para>
+          <para>
+          Defaults to recommended settings from both
+          <link xlink:href="https://stribika.github.io/2015/01/04/secure-secure-shell.html" />
+          and
+          <link xlink:href="https://wiki.mozilla.org/Security/Guidelines/OpenSSH#Modern_.28OpenSSH_6.7.2B.29" />
+        '';
+      };
+
+      logLevel = mkOption {
+        type = types.enum [ "QUIET" "FATAL" "ERROR" "INFO" "VERBOSE" "DEBUG" "DEBUG1" "DEBUG2" "DEBUG3" ];
+        default = "VERBOSE";
+        description = ''
+          Gives the verbosity level that is used when logging messages from sshd(8). The possible values are:
+          QUIET, FATAL, ERROR, INFO, VERBOSE, DEBUG, DEBUG1, DEBUG2, and DEBUG3. The default is VERBOSE. DEBUG and DEBUG1
+          are equivalent. DEBUG2 and DEBUG3 each specify higher levels of debugging output. Logging with a DEBUG level
+          violates the privacy of users and is not recommended.
+
+          LogLevel VERBOSE logs user's key fingerprint on login.
+          Needed to have a clear audit track of which key was used to log in.
+        '';
+      };
+
+      useDns = mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          Specifies whether sshd(8) should look up the remote host name, and to check that the resolved host name for
+          the remote IP address maps back to the very same IP address.
+          If this option is set to no (the default) then only addresses and not host names may be used in
+          ~/.ssh/authorized_keys from and sshd_config Match Host directives.
+        '';
+      };
+
       extraConfig = mkOption {
         type = types.lines;
         default = "";
@@ -242,19 +334,18 @@ in
     services.openssh.moduliFile = mkDefault "${cfgc.package}/etc/ssh/moduli";
 
     environment.etc = authKeysFiles //
-      { "ssh/moduli".source = cfg.moduliFile; };
+      { "ssh/moduli".source = cfg.moduliFile;
+        "ssh/sshd_config".text = cfg.extraConfig;
+      };
 
     systemd =
       let
         service =
           { description = "SSH Daemon";
-
             wantedBy = optional (!cfg.startWhenNeeded) "multi-user.target";
-
+            after = [ "network.target" ];
             stopIfChanged = false;
-
             path = [ cfgc.package pkgs.gawk ];
-
             environment.LD_LIBRARY_PATH = nssModulesPath;
 
             preStart =
@@ -276,7 +367,7 @@ in
               { ExecStart =
                   (optionalString cfg.startWhenNeeded "-") +
                   "${cfgc.package}/bin/sshd " + (optionalString cfg.startWhenNeeded "-i ") +
-                  "-f ${pkgs.writeText "sshd_config" cfg.extraConfig}";
+                  "-f /etc/ssh/sshd_config";
                 KillMode = "process";
               } // (if cfg.startWhenNeeded then {
                 StandardInput = "socket";
@@ -305,7 +396,7 @@ in
 
       };
 
-    networking.firewall.allowedTCPPorts = cfg.ports;
+    networking.firewall.allowedTCPPorts = if cfg.openFirewall then cfg.ports else [];
 
     security.pam.services.sshd =
       { startSession = true;
@@ -358,21 +449,18 @@ in
           HostKey ${k.path}
         '')}
 
-        ### Recommended settings from both:
-        # https://stribika.github.io/2015/01/04/secure-secure-shell.html
-        # and
-        # https://wiki.mozilla.org/Security/Guidelines/OpenSSH#Modern_.28OpenSSH_6.7.2B.29
+        KexAlgorithms ${concatStringsSep "," cfg.kexAlgorithms}
+        Ciphers ${concatStringsSep "," cfg.ciphers}
+        MACs ${concatStringsSep "," cfg.macs}
 
-        KexAlgorithms curve25519-sha256@libssh.org,diffie-hellman-group-exchange-sha256
-        Ciphers chacha20-poly1305@openssh.com,aes256-gcm@openssh.com,aes128-gcm@openssh.com,aes256-ctr,aes192-ctr,aes128-ctr
-        MACs hmac-sha2-512-etm@openssh.com,hmac-sha2-256-etm@openssh.com,umac-128-etm@openssh.com,hmac-sha2-512,hmac-sha2-256,umac-128@openssh.com
+        LogLevel ${cfg.logLevel}
 
-        # LogLevel VERBOSE logs user's key fingerprint on login.
-        # Needed to have a clear audit track of which key was used to log in.
-        LogLevel VERBOSE
+        ${if cfg.useDns then ''
+          UseDNS yes
+        '' else ''
+          UseDNS no
+        ''}
 
-        # Use kernel sandbox mechanisms where possible in unprivileged processes.
-        UsePrivilegeSeparation sandbox
       '';
 
     assertions = [{ assertion = if cfg.forwardX11 then cfgc.setXAuthLocation else true;

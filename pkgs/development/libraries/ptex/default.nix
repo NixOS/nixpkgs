@@ -3,13 +3,13 @@
 stdenv.mkDerivation rec
 {
   name = "ptex-${version}";
-  version = "2.1.28";
+  version = "2.1.33";
 
   src = fetchFromGitHub {
     owner = "wdas";
     repo = "ptex";
     rev = "v${version}";
-    sha256 = "1h6gb3mpis4m6ph7h9q764w50f9jrar3jz2ja76rn5czy6wn318x";
+    sha256 = "15ijjq3w7hwgm4mqah0x4jzjy3v2nnmmv28lbqzmxzcxjgh4sjkn";
   };
 
   outputs = [ "bin" "dev" "out" "lib" ];

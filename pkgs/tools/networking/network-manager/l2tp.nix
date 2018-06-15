@@ -15,12 +15,15 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ networkmanager ppp libsecret ]
-    ++ stdenv.lib.optionals withGnome [ gnome3.gtk gnome3.libgnome_keyring networkmanagerapplet ];
+    ++ stdenv.lib.optionals withGnome [ gnome3.gtk gnome3.libgnome-keyring networkmanagerapplet ];
 
   nativeBuildInputs = [ autoreconfHook libtool intltool pkgconfig ];
 
   postPatch = ''
     sed -i -e 's%"\(/usr/sbin\|/usr/pkg/sbin\|/usr/local/sbin\)/[^"]*",%%g' ./src/nm-l2tp-service.c
+
+    substituteInPlace ./Makefile.am \
+      --replace '$(sysconfdir)/dbus-1/system.d' "$out/etc/dbus-1/system.d"
 
     substituteInPlace ./src/nm-l2tp-service.c \
       --replace /sbin/ipsec  ${strongswan}/bin/ipsec \

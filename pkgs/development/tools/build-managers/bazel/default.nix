@@ -1,26 +1,28 @@
-{ stdenv, lib, fetchurl, jdk, zip, unzip, bash, writeScriptBin, coreutils, makeWrapper, which, python
+{ stdenv, lib, fetchurl, jdk, zip, unzip, bash, writeCBin, coreutils, makeWrapper, which, python
 # Always assume all markers valid (don't redownload dependencies).
 # Also, don't clean up environment variables.
 , enableNixHacks ? false
+# Apple dependencies
+, libcxx, CoreFoundation, CoreServices, Foundation
 }:
 
 stdenv.mkDerivation rec {
 
-  version = "0.8.0";
+  version = "0.12.0";
 
   meta = with stdenv.lib; {
     homepage = "https://github.com/bazelbuild/bazel/";
     description = "Build tool that builds code quickly and reliably";
     license = licenses.asl20;
     maintainers = [ maintainers.philandstuff ];
-    platforms = platforms.linux;
+    platforms = platforms.linux ++ platforms.darwin;
   };
 
   name = "bazel-${version}";
 
   src = fetchurl {
     url = "https://github.com/bazelbuild/bazel/releases/download/${version}/bazel-${version}-dist.zip";
-    sha256 = "0y50fhwh135fim39ra4szwzzgyb4ibls3i0hpv3d7asns0hh715a";
+    sha256 = "3b3e7dc76d145046fdc78db7cac9a82bc8939d3b291e53a7ce85315feb827754";
   };
 
   sourceRoot = ".";
@@ -29,9 +31,30 @@ stdenv.mkDerivation rec {
 
   # Bazel expects several utils to be available in Bash even without PATH. Hence this hack.
 
-  customBash = writeScriptBin "bash" ''
-    #!${stdenv.shell}
-    PATH="$PATH:${lib.makeBinPath [ coreutils ]}" exec ${bash}/bin/bash "$@"
+  customBash = writeCBin "bash" ''
+    #include <stdio.h>
+    #include <stdlib.h>
+    #include <string.h>
+    #include <unistd.h>
+
+    extern char **environ;
+
+    int main(int argc, char *argv[]) {
+      printf("environ: %s\n", environ[0]);
+      char *path = getenv("PATH");
+      char *pathToAppend = "${lib.makeBinPath [ coreutils ]}";
+      char *newPath;
+      if (path != NULL) {
+        int length = strlen(path) + 1 + strlen(pathToAppend) + 1;
+        newPath = malloc(length * sizeof(char));
+        snprintf(newPath, length, "%s:%s", path, pathToAppend);
+      } else {
+        newPath = pathToAppend;
+      }
+      setenv("PATH", newPath, 1);
+      execve("${bash}/bin/bash", argv, environ);
+      return 0;
+    }
   '';
 
   postPatch = ''
@@ -54,7 +77,7 @@ stdenv.mkDerivation rec {
     makeWrapper
     which
     customBash
-  ];
+  ] ++ lib.optionals (stdenv.isDarwin) [ libcxx CoreFoundation CoreServices Foundation ];
 
   # If TMPDIR is in the unpack dir we run afoul of blaze's infinite symlink
   # detector (see com.google.devtools.build.lib.skyframe.FileFunction).

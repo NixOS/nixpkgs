@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, ocaml, findlib, jbuilder, opam
+{ stdenv, fetchFromGitHub, ocaml, findlib, jbuilder
 , cstruct
 }:
 
@@ -7,17 +7,17 @@ then throw "mstruct is not available for OCaml ${ocaml.version}"
 else
 
 stdenv.mkDerivation rec {
-	version = "1.3.3";
+	version = "1.4.0";
 	name = "ocaml${ocaml.version}-mstruct-${version}";
 
 	src = fetchFromGitHub {
 		owner = "mirage";
 		repo = "ocaml-mstruct";
 		rev = "v${version}";
-		sha256 = "1rxjzkg6156vl6yazbk1h0ndqj80wym5aliaapijf60apqqmsp4s";
+		sha256 = "1p4ygwzs3n1fj4apfib0z0sabpph21bkq1dgjk4bsa59pq4prncm";
 	};
 
-	buildInputs = [ ocaml findlib jbuilder opam ];
+	buildInputs = [ ocaml findlib jbuilder ];
 
 	propagatedBuildInputs = [ cstruct ];
 

@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, perl, bison, flex, pkgconfig, glib, libxml2, libintlOrEmpty }:
+{ fetchurl, stdenv, perl, bison, flex, pkgconfig, glib, libxml2, libintl }:
 
 stdenv.mkDerivation rec {
   name = "gstreamer-0.10.36";
@@ -13,9 +13,9 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "dev" ];
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkgconfig libintl ];
   buildInputs = [ perl bison flex ];
-  propagatedBuildInputs = [ glib libxml2 ] ++ libintlOrEmpty;
+  propagatedBuildInputs = [ glib libxml2 ];
 
   patchPhase = ''
     sed -i -e 's/^   /\t/' docs/gst/Makefile.in docs/libs/Makefile.in docs/plugins/Makefile.in

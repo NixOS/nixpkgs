@@ -22,4 +22,9 @@ stdenv.mkDerivation {
     maintainers = [ stdenv.lib.maintainers.vbgl ];
     inherit (coq.meta) platforms;
   };
+
+  passthru = {
+    compatibleCoqVersions = v: builtins.elem v [ "8.5" "8.6" "8.7" ];
+  };
+
 }

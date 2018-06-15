@@ -1,11 +1,11 @@
 { stdenv, fetchurl, libpng }:
 
 stdenv.mkDerivation rec {
-  name = "pngcrush-1.8.1";
+  name = "pngcrush-1.8.13";
 
   src = fetchurl {
     url = "mirror://sourceforge/pmt/${name}-nolib.tar.xz";
-    sha256 = "1h3sibmmiq4ynvf8hrpksfrbcmszxh4bqpkqy5c0m8828c7drpr9";
+    sha256 = "0l43c59d6v9l0g07z3q3ywhb8xb3vz74llv3mna0izk9bj6aqkiv";
   };
 
   makeFlags = [ "CC=cc" "LD=cc" ];      # gcc and/or clang compat

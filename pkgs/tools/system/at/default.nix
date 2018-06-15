@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, bison, flex, pam
+{ stdenv, fetchurl, fetchpatch, bison, flex, pam
 , sendmailPath ? "/run/wrappers/bin/sendmail"
 , atWrapperPath ? "/run/wrappers/bin/at"
 }:
@@ -13,10 +13,17 @@ stdenv.mkDerivation rec {
     sha256 = "1fgsrqpx0r6qcjxmlsqnwilydhfxn976c870mjc0n1bkmcy94w88";
   };
 
-  patches = [ ./install.patch ];
+  patches = [
+    ./install.patch
+    (fetchpatch {
+      url = "https://raw.githubusercontent.com/riscv/riscv-poky/master/meta/recipes-extended/at/at/0001-remove-glibc-assumption.patch";
+      sha256 = "1rk4hskp0c1jqkanzdxf873i6jgki3xhrm609fsam8an8sl1njnm";
+    })
+  ];
 
-  buildInputs =
-    [ bison flex pam ];
+  nativeBuildInputs = [ bison flex ];
+
+  buildInputs = [ pam ];
 
   preConfigure =
     ''
@@ -26,12 +33,15 @@ stdenv.mkDerivation rec {
       substituteInPlace ./configure --replace "test -d /var/run" "true"
     '';
 
-  configureFlags =
-    ''
-       --with-etcdir=/etc/at
-       --with-jobdir=/var/spool/atjobs --with-atspool=/var/spool/atspool
-       --with-daemon_username=atd --with-daemon_groupname=atd
-    '';
+  configureFlags = [
+    "--with-etcdir=/etc/at"
+    "--with-jobdir=/var/spool/atjobs"
+    "--with-atspool=/var/spool/atspool"
+    "--with-daemon_username=atd"
+    "--with-daemon_groupname=atd"
+  ];
+
+  doCheck = false; # need "prove" tool
 
   # Ensure that "batch" can invoke the setuid "at" wrapper, if it exists, or
   # else we get permission errors (on NixOS). "batch" is a shell script, so

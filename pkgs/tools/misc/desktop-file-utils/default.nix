@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, glib, libintlOrEmpty }:
+{ stdenv, fetchurl, pkgconfig, glib, libintl }:
 
 with stdenv.lib;
 
@@ -11,9 +11,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ glib libintlOrEmpty ];
-
-  NIX_LDFLAGS = optionalString stdenv.isDarwin "-lintl";
+  buildInputs = [ glib libintl ];
 
   meta = {
     homepage = http://www.freedesktop.org/wiki/Software/desktop-file-utils;

@@ -8,13 +8,13 @@ in
 
 stdenv.mkDerivation rec {
   name = "freewheeling-${version}";
-  version = "0.6.2";
+  version = "0.6.4";
 
   src = fetchFromGitHub {
     owner = "free-wheeling";
     repo = "freewheeling";
     rev = "v${version}";
-    sha256 = "01hmp0jxzxpb5sl0x91hdlwmbw9n4yffrpra4f89s4n8cixrz3d9";
+    sha256 = "1xflbbnjdibjmyxb1zq8liylaw5k03nnl1z3272jh204pqh17ri9";
   };
 
   nativeBuildInputs = [ pkgconfig autoreconfHook libtool ];

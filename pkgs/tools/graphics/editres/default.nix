@@ -1,11 +1,11 @@
 { stdenv, fetchurl, pkgconfig, libXt, libXaw, libXres, utilmacros }:
 
 stdenv.mkDerivation rec {
-  name = "editres-1.0.6";
+  name = "editres-1.0.7";
 
   src = fetchurl {
     url = "mirror://xorg/individual/app/${name}.tar.gz";
-    sha256 = "06kv7dmw6pzlqc46dbh8k9xpb6sn4ihh0bcpxq0zpvw2lm66dx45";
+    sha256 = "10mbgijb6ac6wqb2grpy9mrazzw68jxjkxr9cbdf1111pa64yj19";
   };
 
   nativeBuildInputs = [ pkgconfig ];

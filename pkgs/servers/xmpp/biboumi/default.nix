@@ -1,13 +1,13 @@
 { stdenv, fetchurl, fetchgit, cmake, libuuid, expat, sqlite, libidn,
-  libiconv, botan2, systemd, pkgconfig, udns, pandoc, procps } :
+  libiconv, botan2, systemd, pkgconfig, udns, pandoc, coreutils } :
 
 stdenv.mkDerivation rec {
   name = "biboumi-${version}";
-  version = "6.1";
+  version = "7.2";
 
   src = fetchurl {
     url = "https://git.louiz.org/biboumi/snapshot/biboumi-${version}.tar.xz";
-    sha256 = "1la1n502v2wyfm0vl8v4m0hbigkkjchi21446n9mb203fz1cvr77";
+    sha256 = "0gyr2lp2imrjm5hvijcq0s7k9fzkirfl70cprjy9r4yvq6mg1jvd";
   };
 
   louiz_catch = fetchgit {
@@ -20,12 +20,11 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake pkgconfig pandoc ];
   buildInputs = [ libuuid expat sqlite libiconv libidn botan2 systemd
-    udns procps ];
+    udns ];
 
-  inherit procps;
   preConfigure = ''
     substituteInPlace CMakeLists.txt --replace /etc/biboumi $out/etc/biboumi
-    substituteInPlace unit/biboumi.service.cmake --replace /bin/kill $procps/bin/kill
+    substituteInPlace unit/biboumi.service.cmake --replace /bin/kill ${coreutils}/bin/kill
     cp $louiz_catch/single_include/catch.hpp tests/
     # echo "policy_directory=$out/etc/biboumi" >> conf/biboumi.cfg
     # TODO include conf/biboumi.cfg as example somewhere

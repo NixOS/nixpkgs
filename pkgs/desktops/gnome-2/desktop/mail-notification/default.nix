@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchFromGitHub, pkgconfig, glib, gnome2, dbus_glib, gmime, libnotify, libgnome_keyring, openssl, cyrus_sasl, gnonlin, sylpheed, gob2, gettext, intltool, libxml2, hicolor_icon_theme, tango-icon-theme }:
+{ stdenv, fetchurl, fetchFromGitHub, pkgconfig, glib, gnome2, dbus-glib, gmime, libnotify, libgnome-keyring, openssl, cyrus_sasl, gnonlin, sylpheed, gob2, gettext, intltool, libxml2, hicolor-icon-theme, tango-icon-theme }:
 
 stdenv.mkDerivation rec {
   rev = "9ae8768";
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkgconfig ];
-   buildInputs = [ glib dbus_glib gmime libnotify libgnome_keyring openssl cyrus_sasl gnonlin sylpheed gob2 gettext intltool gnome2.GConf gnome2.libgnomeui dbus_glib gmime libnotify gnome2.gnome_keyring gnome2.scrollkeeper libxml2 gnome2.gnome_icon_theme hicolor_icon_theme tango-icon-theme ];
+   buildInputs = [ glib dbus-glib gmime libnotify libgnome-keyring openssl cyrus_sasl gnonlin sylpheed gob2 gettext intltool gnome2.GConf gnome2.libgnomeui dbus-glib gmime libnotify gnome2.gnome-keyring gnome2.scrollkeeper libxml2 gnome2.gnome_icon_theme hicolor-icon-theme tango-icon-theme ];
 
   prePatch = ''
     sed -i  -e '/jb_rule_set_install_message/d' -e '/jb_rule_add_install_command/d' jbsrc/jb.c

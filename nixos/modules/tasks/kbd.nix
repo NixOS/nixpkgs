@@ -13,7 +13,7 @@ let
   isUnicode = hasSuffix "UTF-8" (toUpper config.i18n.defaultLocale);
 
   optimizedKeymap = pkgs.runCommand "keymap" {
-    nativeBuildInputs = [ pkgs.kbd ];
+    nativeBuildInputs = [ pkgs.buildPackages.kbd ];
     LOADKEYS_KEYMAP_PATH = "${kbdEnv}/share/keymaps/**";
   } ''
     loadkeys -b ${optionalString isUnicode "-u"} "${config.i18n.consoleKeyMap}" > $out

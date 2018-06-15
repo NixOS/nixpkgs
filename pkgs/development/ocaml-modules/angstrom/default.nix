@@ -1,31 +1,29 @@
-{ stdenv, fetchFromGitHub, ocaml, ocamlbuild, cstruct, result, findlib }:
+{ stdenv, fetchFromGitHub, ocaml, findlib, jbuilder, alcotest, result }:
 
-let param =
-  if stdenv.lib.versionAtLeast ocaml.version "4.03"
-  then {
-    version = "0.5.1";
-    sha256 = "0rm79xyszy9aqvflcc13y9xiya82z31fzmr3b3hx91pmqviymhgc";
-  } else {
-    version = "0.4.0";
-    sha256 = "019s3jwhnswa914bgj1fa6q67k0bl2ahqdaqfnavcbyii8763kh2";
-  };
-in
+if !stdenv.lib.versionAtLeast ocaml.version "4.03"
+then throw "angstrom is not available for OCaml ${ocaml.version}"
+else
 
 stdenv.mkDerivation rec {
-  inherit (param) version;
-  name = "ocaml-angstrom-${version}";
+  version = "0.8.1";
+  name = "ocaml${ocaml.version}-angstrom-${version}";
 
   src = fetchFromGitHub {
     owner  = "inhabitedtype";
     repo   = "angstrom";
     rev    = "${version}";
-    inherit (param) sha256;
+    sha256 = "067r3vy5lac1bfx947gy722amna3dbcak54nlh24vx87pmcq31qc";
   };
 
-  createFindlibDestdir = true;
+  buildInputs = [ ocaml findlib jbuilder alcotest ];
+  propagatedBuildInputs = [ result ];
 
-  buildInputs = [ ocaml findlib ocamlbuild ];
-  propagatedBuildInputs = [ result cstruct ];
+  buildPhase = "jbuilder build -p angstrom";
+
+  doCheck = true;
+  checkPhase = "jbuilder runtest -p angstrom";
+
+  inherit (jbuilder) installPhase;
 
   meta = {
     homepage = https://github.com/inhabitedtype/angstrom;

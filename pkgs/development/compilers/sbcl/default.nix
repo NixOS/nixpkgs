@@ -9,11 +9,11 @@
 
 stdenv.mkDerivation rec {
   name    = "sbcl-${version}";
-  version = "1.4.2";
+  version = "1.4.7";
 
   src = fetchurl {
     url    = "mirror://sourceforge/project/sbcl/sbcl/${version}/${name}-source.tar.bz2";
-    sha256 = "05s7wsx6bsnx4h6w3d8yim9apbvi8ih0glmvkmgjz7nrad4abjwd";
+    sha256 = "1wmxly94pn8527092hyzg5mq58mg7qlc46nm31f268wb2dm67rvm";
   };
 
   patchPhase = ''
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
                (setf features (remove x features))))
     ''
     + (if threadSupport then "(enable :sb-thread)" else "(disable :sb-thread)")
-    + stdenv.lib.optionalString stdenv.isArm "(enable :arm)"
+    + stdenv.lib.optionalString stdenv.isAarch32 "(enable :arm)"
     + ''
       )) " > customize-target-features.lisp
 
@@ -91,7 +91,7 @@ stdenv.mkDerivation rec {
 
   # Specifying $SBCL_HOME is only truly needed with `purgeNixReferences = true`.
   setupHook = writeText "setupHook.sh" ''
-    envHooks+=(_setSbclHome)
+    addEnvHooks "$targetOffset" _setSbclHome
     _setSbclHome() {
       export SBCL_HOME='@out@/lib/sbcl/'
     }

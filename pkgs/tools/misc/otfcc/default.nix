@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "otfcc-${version}";
-  version = "0.8.6";
+  version = "0.9.6";
 
   src = fetchFromGitHub {
     owner = "caryll";
     repo = "otfcc";
     rev = "v${version}";
-    sha256 = "0yy9awffxxs0cdlf0akld73ndnwmylxvplac4k6j7641m3vk1g8p";
+    sha256 = "1rnjfqqyc6d9nhlh8if9k37wk94mcwz4wf3k239v6idg48nrk10b";
   };
 
   nativeBuildInputs = [ premake5 ninja ];

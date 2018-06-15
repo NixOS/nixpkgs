@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
       Download the TWS from
       https://download2.interactivebrokers.com/download/unixmacosx_latest.jar,
       rename the file to ${name}, and add it to the nix store with
-      "nix-prefetch-url file://${name}".
+      "nix-prefetch-url file://\$PWD/${name}".
     '';
     sha256 = "1a2jiwwnr5g3xfba1a89c257bdbnq4zglri8hz021vk7f6s4rlrf";
   };

@@ -1,16 +1,15 @@
-{ stdenv, lib, fetchgit, cmake, writeScriptBin, callPackage
+{ stdenv, hostPlatform, lib, fetchFromGitHub, cmake, writeScriptBin, callPackage
 , perl, XMLLibXML, XMLLibXSLT, zlib
-, enableStoneSense ? false,  allegro5, mesa
+, enableStoneSense ? false,  allegro5, libGLU_combined
+, SDL
 }:
 
 let
-  dfVersion = "0.44.02";
-  version = "${dfVersion}-alpha1";
-  rev = "refs/tags/${version}";
-  sha256 = "1cdp2jwhxl54ym92jm58xyrz942ajp6idl31qrmzcqzawp2fl620";
+  dfVersion = "0.44.10";
+  version = "${dfVersion}-r1";
 
   # revision of library/xml submodule
-  xmlRev = "e2e256066cc4a5c427172d9d27db25b7823e4e86";
+  xmlRev = "3c0bf63674d5430deadaf7befaec42f0ec1e8bc5";
 
   arch =
     if stdenv.system == "x86_64-linux" then "64"
@@ -25,7 +24,7 @@ let
       if [ "$(dirname "$(pwd)")" = "xml" ]; then
         echo "${xmlRev}"
       else
-        echo "${rev}"
+        echo "refs/tags/${version}"
       fi
     elif [ "$*" = "rev-parse HEAD:library/xml" ]; then
       echo "${xmlRev}"
@@ -38,17 +37,18 @@ in stdenv.mkDerivation rec {
   name = "dfhack-${version}";
 
   # Beware of submodules
-  src = fetchgit {
-    url = "https://github.com/DFHack/dfhack";
-    inherit rev sha256;
+  src = fetchFromGitHub {
+    owner = "DFHack";
+    repo = "dfhack";
+    sha256 = "15hz90lfg7asgm4bqa2yi2lkwzrljphb42q6616sriwzs66xia6h";
+    rev = version;
+    fetchSubmodules = true;
   };
-
-  patches = [ ./fix-stonesense.patch ];
 
   nativeBuildInputs = [ cmake perl XMLLibXML XMLLibXSLT fakegit ];
   # We don't use system libraries because dfhack needs old C++ ABI.
-  buildInputs = [ zlib ]
-             ++ lib.optionals enableStoneSense [ allegro5 mesa ];
+  buildInputs = [ zlib SDL ]
+             ++ lib.optionals enableStoneSense [ allegro5 libGLU_combined ];
 
   preConfigure = ''
     # Trick build system into believing we have .git

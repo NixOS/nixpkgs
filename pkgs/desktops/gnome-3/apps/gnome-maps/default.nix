@@ -1,21 +1,31 @@
 { stdenv, fetchurl, intltool, pkgconfig, gnome3, gtk3
 , gobjectIntrospection, gdk_pixbuf, librsvg, libgweather, autoreconfHook
 , geoclue2, wrapGAppsHook, folks, libchamplain, gfbgraph, file, libsoup
-, webkitgtk }:
+, webkitgtk, gjs, libgee, geocode-glib, evolution-data-server, gnome-online-accounts }:
 
-stdenv.mkDerivation rec {
-  inherit (import ./src.nix fetchurl) name src;
+let
+  pname = "gnome-maps";
+  version = "3.28.2";
+in stdenv.mkDerivation rec {
+  name = "${pname}-${version}";
+
+  src = fetchurl {
+    url = "mirror://gnome/sources/${pname}/${gnome3.versionBranch version}/${name}.tar.xz";
+    sha256 = "1yzi08a9316jplgsl2z0qzlqxhghyqcjhv0m6i94wcain4mxk1z7";
+  };
 
   doCheck = true;
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ intltool gobjectIntrospection wrapGAppsHook
-                  gtk3 geoclue2 gnome3.gjs gnome3.libgee folks gfbgraph
-                  gnome3.geocode_glib libchamplain file libsoup
-                  gdk_pixbuf librsvg libgweather autoreconfHook
-                  gnome3.gsettings_desktop_schemas gnome3.evolution_data_server
-                  gnome3.gnome_online_accounts gnome3.defaultIconTheme
-                  webkitgtk ];
+  nativeBuildInputs = [ intltool wrapGAppsHook file autoreconfHook pkgconfig ];
+  buildInputs = [
+    gobjectIntrospection
+    gtk3 geoclue2 gjs libgee folks gfbgraph
+    geocode-glib libchamplain libsoup
+    gdk_pixbuf librsvg libgweather
+    gnome3.gsettings-desktop-schemas evolution-data-server
+    gnome-online-accounts gnome3.defaultIconTheme
+    webkitgtk
+  ];
 
   # The .service file isn't wrapped with the correct environment
   # so misses GIR files when started. By re-pointing from the gjs
@@ -26,6 +36,13 @@ stdenv.mkDerivation rec {
         --replace "Exec=@pkgdatadir@/org.gnome.Maps" \
                   "Exec=$out/bin/gnome-maps"
   '';
+
+  passthru = {
+    updateScript = gnome3.updateScript {
+      packageName = pname;
+      attrPath = "gnome3.${pname}";
+    };
+  };
 
   meta = with stdenv.lib; {
     homepage = https://wiki.gnome.org/Apps/Maps;

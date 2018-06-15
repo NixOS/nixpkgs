@@ -2,13 +2,12 @@
 
 ## various stuff that can be plugged in
 , flashplayer, hal-flash
-, MPlayerPlugin, ffmpeg, gst_all, xorg, libpulseaudio, libcanberra_gtk2
+, MPlayerPlugin, ffmpeg, xorg, libpulseaudio, libcanberra-gtk2
 , jrePlugin, icedtea_web
 , trezor-bridge, bluejeans, djview4, adobe-reader
-, google_talk_plugin, fribid, gnome3/*.gnome_shell*/
+, google_talk_plugin, fribid, gnome3/*.gnome-shell*/
 , esteidfirefoxplugin
-, vlc_npapi
-, browserpass
+, browserpass, chrome-gnome-shell, uget-integrator, plasma-browser-integration
 , libudev
 , kerberos
 }:
@@ -30,7 +29,7 @@ let
     }:
 
     let
-      cfg = stdenv.lib.attrByPath [ browserName ] {} config;
+      cfg = config.${browserName} or {};
       enableAdobeFlash = cfg.enableAdobeFlash or false;
       ffmpegSupport = browser.ffmpegSupport or false;
       gssSupport = browser.gssSupport or false;
@@ -52,27 +51,28 @@ let
           ++ lib.optional icedtea icedtea_web
           ++ lib.optional (cfg.enableGoogleTalkPlugin or false) google_talk_plugin
           ++ lib.optional (cfg.enableFriBIDPlugin or false) fribid
-          ++ lib.optional (cfg.enableGnomeExtensions or false) gnome3.gnome_shell
+          ++ lib.optional (cfg.enableGnomeExtensions or false) gnome3.gnome-shell
           ++ lib.optional (cfg.enableTrezor or false) trezor-bridge
           ++ lib.optional (cfg.enableBluejeans or false) bluejeans
           ++ lib.optional (cfg.enableAdobeReader or false) adobe-reader
           ++ lib.optional (cfg.enableEsteid or false) esteidfirefoxplugin
-          ++ lib.optional (cfg.enableVLC or false) vlc_npapi
           ++ extraPlugins
         );
       nativeMessagingHosts =
         ([ ]
           ++ lib.optional (cfg.enableBrowserpass or false) browserpass
+          ++ lib.optional (cfg.enableGnomeExtensions or false) chrome-gnome-shell
+          ++ lib.optional (cfg.enableUgetIntegrator or false) uget-integrator
+          ++ lib.optional (cfg.enablePlasmaBrowserIntegration or false) plasma-browser-integration
           ++ extraNativeMessagingHosts
         );
-      libs = (if ffmpegSupport then [ ffmpeg ] else with gst_all; [ gstreamer gst-plugins-base ])
+      libs = lib.optional ffmpegSupport ffmpeg
             ++ lib.optional gssSupport kerberos
             ++ lib.optionals (cfg.enableQuakeLive or false)
             (with xorg; [ stdenv.cc libX11 libXxf86dga libXxf86vm libXext libXt alsaLib zlib libudev ])
             ++ lib.optional (enableAdobeFlash && (cfg.enableAdobeFlashDRM or false)) hal-flash
-            ++ lib.optional (config.pulseaudio or false) libpulseaudio;
-      gst-plugins = with gst_all; [ gst-plugins-base gst-plugins-good gst-plugins-bad gst-plugins-ugly gst-ffmpeg ];
-      gtk_modules = [ libcanberra_gtk2 ];
+            ++ lib.optional (config.pulseaudio or true) libpulseaudio;
+      gtk_modules = [ libcanberra-gtk2 ];
 
     in stdenv.mkDerivation {
       inherit name;
@@ -97,7 +97,6 @@ let
       };
 
       buildInputs = [makeWrapper]
-        ++ lib.optional (!ffmpegSupport) gst-plugins
         ++ lib.optional (browser ? gtk3) browser.gtk3;
 
       buildCommand = ''
@@ -117,9 +116,7 @@ let
             --suffix PATH ':' "$out/bin" \
             --set MOZ_APP_LAUNCHER "${browserName}${nameSuffix}" \
             --set MOZ_SYSTEM_DIR "$out/lib/mozilla" \
-            ${lib.optionalString (!ffmpegSupport)
-                ''--prefix GST_PLUGIN_SYSTEM_PATH : "$GST_PLUGIN_SYSTEM_PATH"''
-            + lib.optionalString (browser ? gtk3)
+            ${lib.optionalString (browser ? gtk3)
                 ''--prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH" \
                   --suffix XDG_DATA_DIRS : '${gnome3.defaultIconTheme}/share'
                 ''
@@ -129,9 +126,13 @@ let
             mkdir -p "$out/share"
             ln -s "${browser}/share/icons" "$out/share/icons"
         else
-            mkdir -p "$out/share/icons/hicolor/128x128/apps"
-            ln -s "${browser}/lib/${browserName}-"*"/browser/icons/mozicon128.png" \
-                "$out/share/icons/hicolor/128x128/apps/${browserName}.png"
+            for res in 16 32 48 64 128; do
+            mkdir -p "$out/share/icons/hicolor/''${res}x''${res}/apps"
+            icon=( "${browser}/lib/"*"/browser/chrome/icons/default/default''${res}.png" )
+              if [ -e "$icon" ]; then ln -s "$icon" \
+                "$out/share/icons/hicolor/''${res}x''${res}/apps/${browserName}.png"
+              fi
+            done
         fi
 
         install -D -t $out/share/applications $desktopItem/share/applications/*

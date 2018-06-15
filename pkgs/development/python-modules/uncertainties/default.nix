@@ -3,11 +3,11 @@
 buildPythonPackage rec {
   name = "${pname}-${version}";
   pname = "uncertainties";
-  version = "3.0.1";
+  version = "3.0.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "de0765cac6911e5afa93ee941063a07b4a98dbd9c314c5eea4ab14bfff0054a4";
+    sha256 = "91db922d54dff6094b4ea0d6e058f713a992cdf42e3ebaf73278e1893bfa2942";
   };
 
   buildInputs = [ nose numpy ];

@@ -2,24 +2,24 @@
 
 rustPlatform.buildRustPackage rec {
   name = "fd-${version}";
-  version = "6.1.0";
+  version = "7.0.0";
 
   src = fetchFromGitHub {
     owner = "sharkdp";
     repo = "fd";
     rev = "v${version}";
-    sha256 = "1md6k531ymsg99zc6y8lni4cpfz4rcklwgibq1i5xdam3hs1n2jg";
+    sha256 = "0qykzkwrj4w3i5h1a328kadd7fgd91w0z2n4xr6i3csyaiwwgd1x";
   };
 
-  cargoSha256 = "00n2j0mjmd4lrfygnv90mixv3hfv1z56zyqcm957cwq08qavqzf1";
+  cargoSha256 = "1qicgfaqzjm7sjzgxkci6bg495n227pyicj4ycds5z6mfy15hi4q";
 
   preFixup = ''
     mkdir -p "$out/man/man1"
     cp "$src/doc/fd.1" "$out/man/man1"
 
-    mkdir -p "$out/share/"{bash-completion/completions,fish/completions,zsh/site-functions}
+    mkdir -p "$out/share/"{bash-completion/completions,fish/vendor_completions.d,zsh/site-functions}
     cp target/release/build/fd-find-*/out/fd.bash "$out/share/bash-completion/completions/"
-    cp target/release/build/fd-find-*/out/fd.fish "$out/share/fish/completions/"
+    cp target/release/build/fd-find-*/out/fd.fish "$out/share/fish/vendor_completions.d/"
     cp target/release/build/fd-find-*/out/_fd "$out/share/zsh/site-functions/"
   '';
 
@@ -33,6 +33,7 @@ rustPlatform.buildRustPackage rec {
     '';
     homepage = "https://github.com/sharkdp/fd";
     license = with licenses; [ asl20 /* or */ mit ];
+    maintainers = with maintainers; [ dywedir ];
     platforms = platforms.all;
   };
 }

@@ -54,53 +54,38 @@
 # For more details, read the individual files where the mechanisms used to
 # accomplish this will be individually documented.
 
+set -u
+
+# Skip setup hook if we're neither a build-time dep, nor, temporarily, doing a
+# native compile.
+#
+# TODO(@Ericson2314): No native exception
+[[ -z ${strictDeps-} ]] || (( "$hostOffset" < 0 )) || return 0
 
 # It's fine that any other cc-wrapper will redefine this. Bash functions close
 # over no state, and there's no @-substitutions within, so any redefined
 # function is guaranteed to be exactly the same.
 ccWrapper_addCVars () {
-    # The `depOffset` describes how the platforms of the dependencies are slid
-    # relative to the depending package. It is brought into scope of the
-    # environment hook defined as the role of the dependency being applied.
-    case $depOffset in
-        -1) local role='BUILD_' ;;
-        0)  local role='' ;;
-        1)  local role='TARGET_' ;;
-        *)  echo "cc-wrapper: Error: Cannot be used with $depOffset-offset deps, " >2;
-            return 1 ;;
-    esac
+    # See ../setup-hooks/role.bash
+    local role_post role_pre
+    getHostRoleEnvHook
 
     if [[ -d "$1/include" ]]; then
-        export NIX_${role}CFLAGS_COMPILE+=" ${ccIncludeFlag:--isystem} $1/include"
+        export NIX_${role_pre}CFLAGS_COMPILE+=" ${ccIncludeFlag:--isystem} $1/include"
     fi
 
     if [[ -d "$1/Library/Frameworks" ]]; then
-        export NIX_${role}CFLAGS_COMPILE+=" -F$1/Library/Frameworks"
+        export NIX_${role_pre}CFLAGS_COMPILE+=" -F$1/Library/Frameworks"
     fi
 }
 
-# Since the same cc-wrapper derivation can be depend on in multiple ways, we
-# need to accumulate *each* role (i.e. target platform relative the depending
-# derivation) in which the cc-wrapper derivation is used.
-# `NIX_CC_WRAPPER_@infixSalt@_TARGET_*` tracks this (needs to be an exported env
-# var so can't use fancier data structures).
-#
-# We also need to worry about what role is being added on *this* invocation of
-# setup-hook, which `role` tracks.
-if [ -n "${crossConfig:-}" ]; then
-    export NIX_CC_WRAPPER_@infixSalt@_TARGET_BUILD=1
-    role_pre='BUILD_'
-    role_post='_FOR_BUILD'
-else
-    export NIX_CC_WRAPPER_@infixSalt@_TARGET_HOST=1
-    role_pre=''
-    role_post=''
-fi
+# See ../setup-hooks/role.bash
+getTargetRole
+getTargetRoleWrapper
 
-# Eventually the exact sort of env-hook we create will depend on the role. This
-# is because based on what relative platform we are targeting, we use different
-# dependencies.
-envHooks+=(ccWrapper_addCVars)
+# We use the `targetOffset` to choose the right env hook to accumulate the right
+# sort of deps (those with that offset).
+addEnvHooks "$targetOffset" ccWrapper_addCVars
 
 # Note 1: these come *after* $out in the PATH (see setup.sh).
 # Note 2: phase separation makes this look useless to shellcheck.
@@ -129,5 +114,10 @@ export ${role_pre}CXX=@named_cxx@
 export CC${role_post}=@named_cc@
 export CXX${role_post}=@named_cxx@
 
+# If unset, assume the default hardening flags.
+: ${NIX_HARDENING_ENABLE="fortify stackprotector pic strictoverflow format relro bindnow"}
+export NIX_HARDENING_ENABLE
+
 # No local scope in sourced file
 unset -v role_pre role_post
+set +u

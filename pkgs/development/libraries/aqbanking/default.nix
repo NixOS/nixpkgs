@@ -2,13 +2,14 @@
 , pkgconfig, gettext, xmlsec, zlib
 }:
 
-stdenv.mkDerivation rec {
+let
+  inherit ((import ./sources.nix).aqbanking) sha256 releaseId version;
+in stdenv.mkDerivation rec {
   name = "aqbanking-${version}";
-  version = "5.6.10";
+  inherit version;
 
   src = let
-    inherit ((import ./sources.nix).aqbanking) sha256 releaseId;
-    qstring = "package=03&release=${releaseId}&file=01";
+    qstring = "package=03&release=${releaseId}&file=02";
     mkURLs = map (base: "${base}/sites/download/download.php?${qstring}");
   in fetchurl {
     name = "${name}.tar.gz";

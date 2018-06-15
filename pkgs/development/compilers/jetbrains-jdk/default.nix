@@ -1,5 +1,5 @@
 { stdenv, lib, fetchurl, file, glib, libxml2, libav_0_8, ffmpeg, libxslt
-, mesa_noglu , xorg, alsaLib, fontconfig, freetype, pango, gtk2, cairo
+, libGL , xorg, alsaLib, fontconfig, freetype, pango, gtk2, cairo
 , gdk_pixbuf, atk }:
 
 # TODO: Investigate building from source instead of patching binaries.
@@ -7,13 +7,13 @@
 
 let drv = stdenv.mkDerivation rec {
   pname = "jetbrainsjdk";
-  version = "152b1036.1";
+  version = "152b1248.6";
   name = pname + "-" + version;
 
   src = if stdenv.system == "x86_64-linux" then
     fetchurl {
       url = "https://bintray.com/jetbrains/intellij-jdk/download_file?file_path=jbsdk8u${version}_linux_x64.tar.gz";
-      sha256 = "1768f02i3dxdbxn8n29d522h8v0mkgnhpb8ixzq5p54vwjmfl6md";
+      sha256 = "12l81g8zhaymh4rzyfl9nyzmpkgzc7wrphm3j4plxx129yn9i7d7";
     }
   else
     throw "unsupported system: ${stdenv.system}";
@@ -51,7 +51,7 @@ let drv = stdenv.mkDerivation rec {
   '';
 
   rpath = lib.makeLibraryPath ([
-    stdenv.cc.cc stdenv.cc.libc glib libxml2 libav_0_8 ffmpeg libxslt mesa_noglu
+    stdenv.cc.cc stdenv.cc.libc glib libxml2 libav_0_8 ffmpeg libxslt libGL
     alsaLib fontconfig freetype pango gtk2 cairo gdk_pixbuf atk
   ] ++ (with xorg; [
     libX11 libXext libXtst libXi libXp libXt libXrender libXxf86vm

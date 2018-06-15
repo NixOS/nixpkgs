@@ -68,7 +68,7 @@ in
       '';
 
       script = ''
-        ${pkgs.su}/bin/su -s ${pkgs.stdenv.shell} ${user} \
+        ${pkgs.su}/bin/su -s ${pkgs.runtimeShell} ${user} \
             -c 'HOME="${cfg.dataDir}" ${pkgs.amuleDaemon}/bin/amuled'
       '';
     };

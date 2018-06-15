@@ -1,10 +1,10 @@
-{ stdenv, fetchFromGitHub, curl, dmd, libevent, rsync }:
+{ stdenv, fetchFromGitHub, fetchpatch, curl, dmd, libevent, rsync }:
 
 let
 
   dubBuild = stdenv.mkDerivation rec {
     name = "dubBuild-${version}";
-    version = "1.6.0";
+    version = "1.8.1";
 
     enableParallelBuilding = true;
 
@@ -12,15 +12,18 @@ let
       owner = "dlang";
       repo = "dub";
       rev = "v${version}";
-      sha256 = "1xjr5pp263lbcd4harxy1ybh7q0kzj9iyy63ji6pn66fizrgm7zk";
+      sha256 = "16r7x4jsfv5fjssvs6mwj8ymr6fjpvbkjhpr4f4368sjr5iyfad6";
     };
 
-    postPatch = ''
-      # Avoid that the version file is overwritten
-      substituteInPlace build.sh \
-        --replace source/dub/version_.d /dev/null
+    postUnpack = ''
+        patchShebangs .
+    '';
 
-      patchShebangs .
+    # Can be removed with https://github.com/dlang/dub/pull/1368
+    dubvar = "\\$DUB";
+    postPatch = ''
+        substituteInPlace test/fetchzip.sh \
+            --replace "dub remove" "\"${dubvar}\" remove"
     '';
 
     nativeBuildInputs = [ dmd libevent rsync ];
@@ -59,7 +62,8 @@ let
     outputHash = builtins.hashString "sha256" inputString;
 
     src = dubBuild.src;
-
+    
+    postUnpack = dubBuild.postUnpack;
     postPatch = dubBuild.postPatch;
 
     nativeBuildInputs = dubBuild.nativeBuildInputs;
@@ -71,6 +75,7 @@ let
       # file under ../etc relative to the dub location.
       cp ${dubBuild}/bin/dub bin/
       export DUB=$NIX_BUILD_TOP/source/bin/dub
+      export PATH=$PATH:$NIX_BUILD_TOP/source/bin/
       export DC=${dmd.out}/bin/dmd
       export HOME=$TMP
       ./test/run-unittest.sh

@@ -1,12 +1,12 @@
 { stdenv, fetchurl, tcl, makeWrapper }:
 
 stdenv.mkDerivation rec {
-  version = "5.45";
+  version = "5.45.4";
   name = "expect-${version}";
 
   src = fetchurl {
     url = "mirror://sourceforge/expect/Expect/${version}/expect${version}.tar.gz";
-    sha256 = "0h60bifxj876afz4im35rmnbnxjx4lbdqp2ja3k30fwa8a8cm3dj";
+    sha256 = "0d1cp5hggjl93xwc8h1y6adbnrvpkk0ywkd00inz9ndxn21xm9s9";
   };
 
   buildInputs = [ tcl ];

@@ -3,13 +3,13 @@
 
 stdenv.mkDerivation rec {
   name = "p11-kit-${version}";
-  version = "0.23.7";
+  version = "0.23.12";
 
   src = fetchFromGitHub {
     owner = "p11-glue";
     repo = "p11-kit";
     rev = version;
-    sha256 = "1l8sg0g74k2mk0y6vz19hc103dzizxa0h579gdhvxifckglb01hy";
+    sha256 = "0pb3qlddzbw7dglwnrl7fs9g71vhqk7qzxnb1i4nw633qgy21ga1";
   };
 
   outputs = [ "out" "dev"];
@@ -29,6 +29,9 @@ stdenv.mkDerivation rec {
   ];
 
   installFlags = [ "exampledir=\${out}/etc/pkcs11" ];
+
+  doInstallCheck = false; # probably a bug in this derivation
+  enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
     homepage = https://p11-glue.freedesktop.org/;

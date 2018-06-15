@@ -1,5 +1,5 @@
 { stdenv, fetchurl, fetchgit, fetchNuGet
-, autoconf, automake, pkgconfig, shared_mime_info, intltool
+, autoconf, automake, pkgconfig, shared-mime-info, intltool
 , glib, mono, gtk-sharp-2_0, gnome2, gnome-sharp, unzip
 , dotnetPackages
 }:
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
-    autoconf automake shared_mime_info intltool
+    autoconf automake shared-mime-info intltool
     mono gtk-sharp-2_0 gnome-sharp unzip
     dotnetPackages.NUnit
     dotnetPackages.NUnitRunners

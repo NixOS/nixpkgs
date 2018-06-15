@@ -5,19 +5,20 @@
 , pythonOlder
 , scandir
 , glibcLocales
+, mock
 }:
 
 if !(pythonOlder "3.4") then null else buildPythonPackage rec {
   pname = "pathlib2";
-  version = "2.2.1";
+  version = "2.3.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "ce9007df617ef6b7bd8a31cd2089ed0c1fed1f7c23cf2bf1ba140b3dd563175d";
+    sha256 = "8eb170f8d0d61825e09a95b38be068299ddeda82f35e96c3301a8a5e7604cb83";
   };
 
   propagatedBuildInputs = [ six ] ++ lib.optional (pythonOlder "3.5") scandir;
-  checkInputs = [ glibcLocales ];
+  checkInputs = [ glibcLocales ] ++ lib.optional (pythonOlder "3.3") mock;
 
   preCheck = ''
     export LC_ALL="en_US.UTF-8"

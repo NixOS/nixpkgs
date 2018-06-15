@@ -1,12 +1,13 @@
-{ stdenv, buildPythonPackage, fetchurl, python, pkgconfig, lxml, libvirt, nose }:
+{ stdenv, buildPythonPackage, fetchgit, python, pkgconfig, lxml, libvirt, nose }:
 
 buildPythonPackage rec {
   pname = "libvirt";
-  version = "3.10.0";
+  version = "4.4.0";
 
-  src = assert version == libvirt.version; fetchurl {
-    url = "http://libvirt.org/sources/python/${pname}-python-${version}.tar.gz";
-    sha256 = "1l0fgqjnx76pzkhq540x9sf5fgzlrn0dpay90j2m4iq8nkclcbpw";
+  src = assert version == libvirt.version; fetchgit {
+    url = git://libvirt.org/libvirt-python.git;
+    rev = "v${version}";
+    sha256 = "01kwwwacbq7kbsslb2ac3wwfs4r8nsv7jhn0df2mmff30izbhq34";
   };
 
   nativeBuildInputs = [ pkgconfig ];

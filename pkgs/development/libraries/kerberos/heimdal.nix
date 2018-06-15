@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, python2, perl, yacc, flex
 , texinfo, perlPackages
 , openldap, libcap_ng, sqlite, openssl, db, libedit, pam
-
+, CoreFoundation, Security, SystemConfiguration
 # Extra Args
 , type ? ""
 }:
@@ -12,20 +12,23 @@ in
 with stdenv.lib;
 stdenv.mkDerivation rec {
   name = "${type}heimdal-${version}";
-  version = "7.4.0";
+  version = "7.5.0";
 
   src = fetchFromGitHub {
     owner = "heimdal";
     repo = "heimdal";
     rev = "heimdal-${version}";
-    sha256 = "01ch6kqjrxi9fki54yjj2fhxhdkxijz161w2inh5k8mcixlf67vp";
+    sha256 = "1j38wjj4k0q8vx168k3d3k0fwa8j1q5q8f2688nnx1b9qgjd6w1d";
   };
+
+  patches = [ ./heimdal-make-missing-headers.patch ];
 
   nativeBuildInputs = [ autoreconfHook pkgconfig python2 perl yacc flex ]
     ++ (with perlPackages; [ JSON ])
     ++ optional (!libOnly) texinfo;
-  buildInputs = optionals (!stdenv.isFreeBSD) [ libcap_ng db ]
-    ++ [ sqlite openssl libedit ]
+  buildInputs = optionals (stdenv.isLinux) [ libcap_ng ]
+    ++ [ db sqlite openssl libedit ]
+    ++ optionals (stdenv.isDarwin) [ CoreFoundation Security SystemConfiguration ]
     ++ optionals (!libOnly) [ openldap pam ];
 
   ## ugly, X should be made an option
@@ -37,12 +40,17 @@ stdenv.mkDerivation rec {
     "--with-libedit=${libedit}"
     "--with-openssl=${openssl.dev}"
     "--without-x"
-    "--with-berkeley-db=${db}"
+    "--with-berkeley-db"
+    "--with-berkeley-db-include=${db.dev}/include"
   ] ++ optionals (!libOnly) [
     "--with-openldap=${openldap.dev}"
-  ] ++ optionals (!stdenv.isFreeBSD) [
+  ] ++ optionals (stdenv.isLinux) [
     "--with-capng"
   ];
+
+  postUnpack = ''
+    sed -i '/^DEFAULT_INCLUDES/ s,$, -I..,' source/cf/Makefile.am.common
+  '';
 
   buildPhase = optionalString libOnly ''
     (cd include; make -j $NIX_BUILD_CORES)
@@ -86,7 +94,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "An implementation of Kerberos 5 (and some more stuff)";
     license = licenses.bsd3;
-    platforms = platforms.linux ++ platforms.freebsd;
+    platforms = platforms.unix;
     maintainers = with maintainers; [ wkennington ];
   };
 

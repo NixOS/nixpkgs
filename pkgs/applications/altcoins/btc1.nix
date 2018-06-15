@@ -5,11 +5,11 @@
 with stdenv.lib;
 stdenv.mkDerivation rec{
   name = "bit1" + (toString (optional (!withGui) "d")) + "-" + version;
-  version = "1.14.5";
+  version = "1.15.1";
 
   src = fetchurl {
     url = "https://github.com/btc1/bitcoin/archive/v${version}.tar.gz";
-    sha256 = "1az6bbblh3adgcs16r9cjz8jacg6sbwfpg8zzfzkbp9h9j85ass5";
+    sha256 = "0v0g2wb4nsnhddxzb63vj2bc1mgyj05vqm5imicjfz8prvgc0si8";
   };
 
   nativeBuildInputs = [ pkgconfig autoreconfHook ];

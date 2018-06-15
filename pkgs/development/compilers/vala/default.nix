@@ -1,10 +1,12 @@
-{ stdenv, fetchurl, pkgconfig, flex, bison, libxslt, autoconf, graphviz
-, glib, libiconv, libintlOrEmpty, libtool, expat
+{ stdenv, lib, fetchurl, pkgconfig, flex, bison, libxslt, autoconf, graphviz
+, glib, libiconv, libintl, libtool, expat
 }:
 
 let
   generic = { major, minor, sha256, extraNativeBuildInputs ? [], extraBuildInputs ? [] }:
-  stdenv.mkDerivation rec {
+  let
+    atLeast = lib.versionAtLeast "${major}.${minor}";
+  in stdenv.mkDerivation rec {
     name = "vala-${major}.${minor}";
 
     src = fetchurl {
@@ -14,16 +16,22 @@ let
 
     outputs = [ "out" "devdoc" ];
 
-    nativeBuildInputs = [ pkgconfig flex bison libxslt ] ++ extraNativeBuildInputs;
+    nativeBuildInputs = [
+      pkgconfig flex bison libxslt
+    ] ++ lib.optional (stdenv.isDarwin && (atLeast "0.38")) expat
+      ++ extraNativeBuildInputs;
 
-    buildInputs = [ glib libiconv ] ++ libintlOrEmpty ++ extraBuildInputs;
+    buildInputs = [
+      glib libiconv libintl
+    ] ++ lib.optional (atLeast "0.38") graphviz
+      ++ extraBuildInputs;
 
     meta = with stdenv.lib; {
       description = "Compiler for GObject type system";
-      homepage = http://live.gnome.org/Vala;
+      homepage = https://wiki.gnome.org/Projects/Vala;
       license = licenses.lgpl21Plus;
       platforms = platforms.unix;
-      maintainers = with maintainers; [ antono lethalman peterhoeg ];
+      maintainers = with maintainers; [ antono jtojnar lethalman peterhoeg ];
     };
   };
 
@@ -37,8 +45,8 @@ in rec {
 
   vala_0_28 = generic {
     major   = "0.28";
-    minor   = "0";
-    sha256  = "0zwpzhkhfk3piya14m7p2hl2vaabahprphppfm46ci91z39kp7hd";
+    minor   = "1";
+    sha256  = "0isg327w6rfqqdjja6a8pc3xcdkj7pqrkdhw48bsyxab2fkaw3hw";
   };
 
   vala_0_32 = generic {
@@ -49,16 +57,27 @@ in rec {
 
   vala_0_34 = generic {
     major   = "0.34";
-    minor   = "1";
-    sha256  = "16cjybjw100qps6jg0jdyjh8hndz8a876zmxpybnf30a8vygrk7m";
+    minor   = "17";
+    sha256  = "0wd2zxww4z1ys4iqz218lvzjqjjqwsaad4x2by8pcyy43sbr7qp2";
+  };
+
+  vala_0_36 = generic {
+    major   = "0.36";
+    minor   = "13";
+    sha256  = "0gxz7yisd9vh5d2889p60knaifz5zndgj98zkdfkkaykdfdq4m9k";
   };
 
   vala_0_38 = generic {
     major   = "0.38";
-    minor   = "1";
-    sha256  = "112hl3lkcyakrk8c3qgw12gzn3nxjkvx7bn0jhl5f2m57d7k8d8h";
-    extraNativeBuildInputs = [ autoconf ] ++ stdenv.lib.optionals stdenv.isDarwin [ libtool expat ];
-    extraBuildInputs = [ graphviz ];
+    minor   = "9";
+    sha256  = "1dh1qacfsc1nr6hxwhn9lqmhnq39rv8gxbapdmj1v65zs96j3fn3";
+    extraNativeBuildInputs = [ autoconf ] ++ lib.optional stdenv.isDarwin libtool;
+  };
+
+  vala_0_40 = generic {
+    major   = "0.40";
+    minor   = "6";
+    sha256  = "1qjbwhifwwqbdg5zilvnwm4n76g8p7jwqs3fa0biw3rylzqm193d";
   };
 
   vala = vala_0_38;

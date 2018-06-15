@@ -3,7 +3,7 @@
 , qca-qt5, qjson, qtscript, qtwebkit
 , kcmutils, kconfig, kdelibs4support, kdnssd, kinit, knewstuff, knotifyconfig, ktexteditor
 , phonon, plasma-framework, threadweaver
-, curl, ffmpeg, gdk_pixbuf, libaio, libmtp, loudmouth, lzo, lz4, mariadb, pcre, snappy, taglib, taglib_extras
+, curl, ffmpeg, gdk_pixbuf, libaio, libmtp, loudmouth, lzo, lz4, mysql57, pcre, snappy, taglib, taglib_extras
 }:
 
 let
@@ -26,7 +26,8 @@ in mkDerivation {
     qca-qt5 qjson qtscript qtwebkit
     kcmutils kconfig kdelibs4support kdnssd kinit knewstuff knotifyconfig ktexteditor
     phonon plasma-framework threadweaver
-    curl ffmpeg gdk_pixbuf libaio libmtp loudmouth lz4 lzo mariadb pcre snappy taglib taglib_extras
+    curl ffmpeg gdk_pixbuf libaio libmtp loudmouth lz4 lzo mysql57.server mysql57.server.static
+    pcre snappy taglib taglib_extras
   ];
   enableParallelBuilding = true;
 

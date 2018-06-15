@@ -4,7 +4,7 @@
 }:
 
 let
-  arch = if stdenv.isArm
+  arch = if stdenv.isAarch32
          then if stdenv.is64bit
               then"arm64"
               else "arm"

@@ -54,7 +54,7 @@ let
     '';
 
   writeShScript = name: text: let dir = pkgs.writeScriptBin name ''
-    #! ${pkgs.stdenv.shell} -e
+    #! ${pkgs.runtimeShell} -e
     ${text}
   ''; in "${dir}/bin/${name}";
 
@@ -242,6 +242,9 @@ let
 
     # Don't allow traffic to leak out until the script has completed
     ip46tables -A INPUT -j nixos-drop
+
+    ${cfg.extraStopCommands}
+
     if ${startScript}; then
       ip46tables -D INPUT -j nixos-drop 2>/dev/null || true
     else

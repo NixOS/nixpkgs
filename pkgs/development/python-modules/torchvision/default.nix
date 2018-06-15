@@ -4,10 +4,11 @@
 , numpy
 , pillow
 , pytorch
-, lib }:
+, lib
+}:
 
 buildPythonPackage rec {
-  version = "0.1.9";
+  version = "0.2.1";
   pname   = "torchvision";
   name    = "${pname}-${version}";
 
@@ -16,7 +17,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     inherit pname version;
     format = "wheel";
-    sha256 = "016rjfh9w1x4xpw15ryxsvq3j2li17nd3a7qslnf3241hc6vdcwf";
+    sha256 = "18gvdabkmzfjg47ns0lw38mf85ry28nq1mas5rzlwvb4l5zmw2ms";
   };
 
   propagatedBuildInputs = [ six numpy pillow pytorch ];

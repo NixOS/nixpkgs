@@ -1,30 +1,31 @@
-{ stdenv, fetchurl, dpkg, lib, glib, dbus, makeWrapper, gnome2, atk, cairo
-, freetype, fontconfig, nspr, nss, xorg, alsaLib, cups, expat, udev }:
+{ stdenv, fetchurl, dpkg, lib, glib, dbus, makeWrapper, gnome3, gtk3, atk, cairo, pango
+, gdk_pixbuf, freetype, fontconfig, nspr, nss, xorg, alsaLib, cups, expat, udev, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
   name = "typora-${version}";
-  version = "0.9.38";
+  version = "0.9.48";
 
   src =
     if stdenv.system == "x86_64-linux" then
       fetchurl {
         url = "https://www.typora.io/linux/typora_${version}_amd64.deb";
-        sha256 = "bf6a069c5da4a7dc289bdb3c8d27e7a81daeaee99488d4d3b512c6b673780557";
+        sha256 = "36a7c5f855306bcbe3364d12aca94c2f6d013a013e59b46f89df81496ec11800";
       }
     else
       fetchurl {
         url = "https://www.typora.io/linux/typora_${version}_i386.deb";
-        sha256 = "edd092e96ebf69503cf6b39b77a61ec5e3185f8a1447da0bed063fa11861c1b9";
+        sha256 = "7197c526918a791b15b701846f9f2f1747a5b8ceac77c4cba691ee6d74d07d1d";
       }
     ;
 
     rpath = stdenv.lib.makeLibraryPath [
       alsaLib
-      gnome2.GConf
-      gnome2.gtk
-      gnome2.gdk_pixbuf
-      gnome2.pango
+      gnome3.gconf
+      gdk_pixbuf
+      pango
+      gnome3.defaultIconTheme
       expat
+      gtk3
       atk
       nspr
       nss
@@ -50,6 +51,9 @@ stdenv.mkDerivation rec {
       xorg.libXScrnSaver
   ];
 
+  nativeBuildInputs = [ wrapGAppsHook ];
+
+  dontWrapGApps = true;
 
   buildInputs = [ dpkg makeWrapper ];
 
@@ -71,7 +75,13 @@ stdenv.mkDerivation rec {
       --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
       --set-rpath "$out/share/typora:${rpath}" "$out/share/typora/Typora"
 
-    ln -s "$out/share/typora/Typora" "$out/bin/typora"
+    makeWrapper $out/share/typora/Typora $out/bin/typora
+
+    wrapProgram $out/bin/typora \
+      "''${gappsWrapperArgs[@]}" \
+      --suffix XDG_DATA_DIRS : "${gtk3}/share/gsettings-schemas/${gtk3.name}/" \
+      --set XDG_RUNTIME_DIR "XDG-RUNTIME-DIR" \
+      --prefix XDG_DATA_DIRS : "${gnome3.defaultIconTheme}/share"
 
     # Fix the desktop link
     substituteInPlace $out/share/applications/typora.desktop \

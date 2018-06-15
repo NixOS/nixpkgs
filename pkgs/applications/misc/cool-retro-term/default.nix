@@ -1,15 +1,15 @@
-{ stdenv, fetchgit, qtbase, qtquick1, qmltermwidget,
+{ stdenv, fetchFromGitHub, qtbase, qtquick1, qmltermwidget,
 qtquickcontrols, qtgraphicaleffects, qmake }:
 
 stdenv.mkDerivation rec {
-  version = "1.0.0";
+  version = "1.0.1";
   name = "cool-retro-term-${version}";
 
-  src = fetchgit {
-    url = "https://github.com/Swordfish90/cool-retro-term.git";
-    rev = "refs/tags/v${version}";
-    sha256 = "19sf9ppp2xzwfjwmdqgq9pils4yafsz662n1h65sv5aq04c7gmxs";
-    fetchSubmodules = false;
+  src = fetchFromGitHub {
+    owner = "Swordfish90";
+    repo = "cool-retro-term";
+    rev = version;
+    sha256 = "1ah54crqv13xsg9cvlwmgyhz90xjjy3vy8pbn9i0vc0ljmpgkqd5";
   };
 
   patchPhase = ''

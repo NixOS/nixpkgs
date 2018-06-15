@@ -1,51 +1,33 @@
-{ stdenv, fetchzip, ocaml, findlib, ocamlbuild, re, stringext, ounit
-, sexplib, ppx_sexp_conv
-, legacyVersion ? false
-, sexplib_p4
+{ stdenv, fetchurl, ocaml, findlib, jbuilder, ppx_sexp_conv, ounit
+, ppx_deriving, re, sexplib, stringext
 }:
 
-if !stdenv.lib.versionAtLeast ocaml.version "4"
-|| legacyVersion && stdenv.lib.versionAtLeast ocaml.version "4.03"
-then throw "uri${stdenv.lib.optionalString legacyVersion "_p4"} is not available for OCaml ${ocaml.version}" else
-
-with
-  if legacyVersion
-  then {
-    version = "1.9.1";
-    sha256 = "0v3jxqgyi4kj92r3x83rszfpnvvzy9lyb913basch4q64yka3w85";
-  } else {
-    version = "1.9.2";
-    sha256 = "137pg8j654x7r0d1664iy2zp3l82nki1kkh921lwdrwc5qqdl6jx";
-  };
-
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
+  version = "1.9.6";
   name = "ocaml${ocaml.version}-uri-${version}";
 
-  src = fetchzip {
-    url = "https://github.com/mirage/ocaml-uri/archive/v${version}.tar.gz";
-    inherit sha256;
+  src = fetchurl {
+    url = "https://github.com/mirage/ocaml-uri/releases/download/v${version}/uri-${version}.tbz";
+    sha256 = "1m845rwd70wi4iijkrigyz939m1x84ba70hvv0d9sgk6971w4kz0";
   };
 
-  buildInputs = [ ocaml findlib ocamlbuild ounit ]
-  ++ stdenv.lib.optional (!legacyVersion) ppx_sexp_conv;
-  propagatedBuildInputs = [ re (if legacyVersion then sexplib_p4 else sexplib) stringext ];
+  unpackCmd = "tar -xjf $curSrc";
 
-  configurePhase = "ocaml setup.ml -configure --prefix $out --enable-tests";
-  buildPhase = ''
-    ocaml setup.ml -build
-    ocaml setup.ml -doc
-  '';
+  buildInputs = [ ocaml findlib jbuilder ppx_sexp_conv ounit ];
+  propagatedBuildInputs = [ ppx_deriving re sexplib stringext ];
+
+  buildPhase = "jbuilder build";
+
   doCheck = true;
-  checkPhase = "ocaml setup.ml -test";
-  installPhase = "ocaml setup.ml -install";
+  checkPhase = "jbuilder runtest";
 
-  createFindlibDestdir = true;
+  inherit (jbuilder) installPhase;
 
   meta = {
-    homepage = https://github.com/mirage/ocaml-uri;
-    platforms = ocaml.meta.platforms or [];
+    homepage = "https://github.com/mirage/ocaml-uri";
     description = "RFC3986 URI parsing library for OCaml";
     license = stdenv.lib.licenses.isc;
-    maintainers = with stdenv.lib.maintainers; [ vbgl ];
+    maintainers = [ stdenv.lib.maintainers.vbgl ];
+    inherit (ocaml.meta) platforms;
   };
 }

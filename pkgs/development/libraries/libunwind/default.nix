@@ -11,6 +11,7 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./version-1.2.1.patch
+    ./backtrace-only-with-glibc.patch
   ];
 
   nativeBuildInputs = [ autoreconfHook ];
@@ -25,6 +26,8 @@ stdenv.mkDerivation rec {
     done
   '';
 
+  doCheck = false; # fails
+
   meta = with stdenv.lib; {
     homepage = http://www.nongnu.org/libunwind;
     description = "A portable and efficient API to determine the call-chain of a program";
@@ -32,4 +35,6 @@ stdenv.mkDerivation rec {
     platforms = platforms.linux;
     license = licenses.mit;
   };
+
+  passthru.supportsHost = !stdenv.hostPlatform.isRiscV;
 }

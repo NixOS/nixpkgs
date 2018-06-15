@@ -82,10 +82,6 @@ self:
         inherit (self.melpaPackages) ess ctable popup;
       };
 
-      ess-R-object-popup = super.ess-R-object-popup.override {
-        inherit (self.melpaPackages) ess popup;
-      };
-
       # upstream issue: missing dependency highlight
       evil-search-highlight-persist = markBroken super.evil-search-highlight-persist;
 
@@ -98,8 +94,8 @@ self:
       # Expects bash to be at /bin/bash
       flycheck-rtags = markBroken super.flycheck-rtags;
 
-      # upstream issue: missing file header
-      fold-dwim = markBroken super.fold-dwim;
+      # upstream issue: missing dependency
+      fold-dwim-org = markBroken super.fold-dwim-org;
 
       # build timeout
       graphene = markBroken super.graphene;
@@ -111,13 +107,10 @@ self:
       helm-rtags = markBroken super.helm-rtags;
 
       # upstream issue: missing file header
-      helm-words = markBroken super.helm-words;
-
-      # upstream issue: missing file header
       ido-complete-space-or-hyphen = markBroken super.ido-complete-space-or-hyphen;
 
       # upstream issue: missing file header
-      initsplit = markBroken super.initsplit;
+      initsplit = super.initsplit;
 
       # Expects bash to be at /bin/bash
       ivy-rtags = markBroken super.ivy-rtags;
@@ -128,14 +121,14 @@ self:
       # upstream issue: missing file header
       link = markBroken super.link;
 
-      # upstream issue: mismatched filename
-      link-hint = markBroken super.link-hint;
-
-      # part of a larger package
-      llvm-mode = dontConfigure super.llvm-mode;
-
       # upstream issue: missing file header
       maxframe = markBroken super.maxframe;
+
+      # version of magit-popup needs to match magit
+      # https://github.com/magit/magit/issues/3286
+      magit = super.magit.override {
+        inherit (self.melpaPackages) magit-popup;
+      };
 
       # missing OCaml
       merlin = markBroken super.merlin;
@@ -156,9 +149,6 @@ self:
       # upstream issue: missing dependency
       org-readme = markBroken super.org-readme;
 
-      # upstream issue: missing file header
-      perl-completion = markBroken super.perl-completion;
-
       # upstream issue: truncated file
       powershell = markBroken super.powershell;
 
@@ -167,12 +157,6 @@ self:
 
       # upstream issue: missing file header
       qiita = markBroken super.qiita;
-
-      # upstream issue: missing package version
-      quack = markBroken super.quack;
-
-      # upstream issue: missing file header
-      railgun = markBroken super.railgun;
 
       # upstream issue: missing file footer
       seoul256-theme = markBroken super.seoul256-theme;
@@ -207,9 +191,6 @@ self:
 
       # upstream issue: missing file header
       window-numbering = markBroken super.window-numbering;
-
-      # upstream issue: missing file header
-      zeitgeist = markBroken super.zeitgeist;
 
       w3m = super.w3m.override (args: {
         melpaBuild = drv: args.melpaBuild (drv // {

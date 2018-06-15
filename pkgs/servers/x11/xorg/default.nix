@@ -1,6 +1,6 @@
 # THIS IS A GENERATED FILE.  DO NOT EDIT!
 args @ { clangStdenv, fetchurl, fetchgit, fetchpatch, stdenv, pkgconfig, intltool, freetype, fontconfig
-, libxslt, expat, libpng, zlib, perl, mesa_drivers, spice_protocol
+, libxslt, expat, libpng, zlib, perl, mesa_noglu, mesa_drivers, spice-protocol
 , dbus, libuuid, openssl, gperf, m4, libevdev, tradcpp, libinput, mcpp, makeWrapper, autoreconfHook
 , autoconf, automake, libtool, xmlto, asciidoc, flex, bison, python, mtdev, pixman, ... }: with args;
 
@@ -848,11 +848,11 @@ let
   }) // {inherit libX11 xextproto xproto ;};
 
   libXfixes = (mkDerivation "libXfixes" {
-    name = "libXfixes-5.0.2";
+    name = "libXfixes-5.0.3";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/lib/libXfixes-5.0.2.tar.bz2;
-      sha256 = "1slsk898386xii0r3l7szwwq3s6y2m4dsj0x93ninjh8xkghxllv";
+      url = mirror://xorg/individual/lib/libXfixes-5.0.3.tar.bz2;
+      sha256 = "1miana3y4hwdqdparsccmygqr3ic3hs5jrqfzp70hvi2zwxd676y";
     };
     nativeBuildInputs = [ pkgconfig ];
     buildInputs = [ fixesproto libX11 xextproto xproto ];
@@ -1364,11 +1364,11 @@ let
   }) // {inherit libICE libSM libX11 libXext libXmu xproto libXt ;};
 
   utilmacros = (mkDerivation "utilmacros" {
-    name = "util-macros-1.19.1";
+    name = "util-macros-1.19.2";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/util/util-macros-1.19.1.tar.bz2;
-      sha256 = "19h6wflpmh7xxqr6lk5z8pds6r9r0dn7ijbvaacymx2q0m05km0q";
+      url = mirror://xorg/individual/util/util-macros-1.19.2.tar.bz2;
+      sha256 = "04p7ydqxgq37jklnfj18b70zsifiz4h50wvrk94i2112mmv37r6p";
     };
     nativeBuildInputs = [ pkgconfig ];
     buildInputs = [ ];
@@ -1839,9 +1839,9 @@ let
       sha256 = "0z56ifw3xiq9dychv8chg1cny0hq4v3c1r9pqcybk5fp7nzw9jpq";
     };
     nativeBuildInputs = [ pkgconfig ];
-    buildInputs = [ fontsproto mesa libdrm udev randrproto renderproto videoproto xextproto xf86driproto xorgserver xproto ];
+    buildInputs = [ fontsproto mesa_noglu libGL libdrm udev randrproto renderproto videoproto xextproto xf86driproto xorgserver xproto ];
     meta.platforms = stdenv.lib.platforms.unix;
-  }) // {inherit fontsproto mesa libdrm udev randrproto renderproto videoproto xextproto xf86driproto xorgserver xproto ;};
+  }) // {inherit fontsproto mesa_noglu libGL libdrm udev randrproto renderproto videoproto xextproto xf86driproto xorgserver xproto ;};
 
   xf86videoark = (mkDerivation "xf86videoark" {
     name = "xf86-video-ark-0.7.5";
@@ -1868,11 +1868,11 @@ let
   }) // {inherit fontsproto libpciaccess randrproto renderproto videoproto xextproto xorgserver xproto ;};
 
   xf86videoati = (mkDerivation "xf86videoati" {
-    name = "xf86-video-ati-7.9.0";
+    name = "xf86-video-ati-18.0.1";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/driver/xf86-video-ati-7.9.0.tar.bz2;
-      sha256 = "0xcq0lncb5p4sas5866qpkjyp1v8ksalw7m1gmqb3brhccp8gb9w";
+      url = mirror://xorg/individual/driver/xf86-video-ati-18.0.1.tar.bz2;
+      sha256 = "180l2yw8c63cbcs3zk729vx439aig1d7yicpyxj0nmfl4y0kpskj";
     };
     nativeBuildInputs = [ pkgconfig ];
     buildInputs = [ fontsproto libdrm udev libpciaccess randrproto renderproto videoproto xextproto xf86driproto xorgserver xproto ];
@@ -2264,11 +2264,11 @@ let
   }) // {inherit randrproto videoproto xorgserver xproto ;};
 
   xf86videovesa = (mkDerivation "xf86videovesa" {
-    name = "xf86-video-vesa-2.3.4";
+    name = "xf86-video-vesa-2.4.0";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/driver/xf86-video-vesa-2.3.4.tar.bz2;
-      sha256 = "1haiw8r1z8ihk68d0jqph2wsld13w4qkl86biq46fvyxg7cg9pbv";
+      url = mirror://xorg/individual/driver/xf86-video-vesa-2.4.0.tar.bz2;
+      sha256 = "1373vsxn6qh00na0s9c09kf09gj78rzi98zq93id8v5zsya3qi5z";
     };
     nativeBuildInputs = [ pkgconfig ];
     buildInputs = [ fontsproto libpciaccess randrproto renderproto xextproto xorgserver xproto ];
@@ -2396,11 +2396,11 @@ let
   }) // {inherit ;};
 
   xinit = (mkDerivation "xinit" {
-    name = "xinit-1.3.4";
+    name = "xinit-1.4.0";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/app/xinit-1.3.4.tar.bz2;
-      sha256 = "1cq2g469mb2cfgr8k57960yrn90bl33vfqri4pdh2zm0jxrqvn3m";
+      url = mirror://xorg/individual/app/xinit-1.4.0.tar.bz2;
+      sha256 = "1vw2wlg74ig52naw0cha3pgzcwwk25l834j42cg8m5zmybp3a213";
     };
     nativeBuildInputs = [ pkgconfig ];
     buildInputs = [ libX11 xproto ];
@@ -2468,11 +2468,11 @@ let
   }) // {inherit inputproto libX11 libXaw xproto libXt ;};
 
   xkeyboardconfig = (mkDerivation "xkeyboardconfig" {
-    name = "xkeyboard-config-2.22";
+    name = "xkeyboard-config-2.23.1";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/data/xkeyboard-config/xkeyboard-config-2.22.tar.bz2;
-      sha256 = "1garmbyfjp0han04l2l90zzwlfbdgdxl6r1qnic36i5wkycckbny";
+      url = mirror://xorg/individual/data/xkeyboard-config/xkeyboard-config-2.23.1.tar.bz2;
+      sha256 = "1wq27cs1c9y7d1d7zp5yhq29paj9smajdb68lyvm28d2zq2vqjra";
     };
     nativeBuildInputs = [ pkgconfig ];
     buildInputs = [ libX11 xproto ];
@@ -2588,11 +2588,11 @@ let
   }) // {inherit ;};
 
   xorgserver = (mkDerivation "xorgserver" {
-    name = "xorg-server-1.19.5";
+    name = "xorg-server-1.19.6";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/xserver/xorg-server-1.19.5.tar.bz2;
-      sha256 = "0iql4pgsgpyqcrd3256pv227cdadvz01ych61n0d41ixp67gmzqq";
+      url = mirror://xorg/individual/xserver/xorg-server-1.19.6.tar.bz2;
+      sha256 = "15y13ihgkggmly5s07vzvpn35gzx1w0hrkbnlcvcy05h3lpm0cm7";
     };
     nativeBuildInputs = [ pkgconfig ];
     buildInputs = [ dri2proto dri3proto renderproto openssl libX11 libXau libXaw libxcb xcbutil xcbutilwm xcbutilimage xcbutilkeysyms xcbutilrenderutil libXdmcp libXfixes libxkbfile libXmu libXpm libXrender libXres libXt ];

@@ -1,13 +1,27 @@
 { stdenv, fetchurl, meson, ninja, pkgconfig, gettext, itstool, wrapGAppsHook
 , cairo, gdk_pixbuf, colord, glib, gtk, gusb, packagekit, libwebp
-, libxml2, sane-backends, vala, gnome3 }:
+, libxml2, sane-backends, vala, gnome3, gobjectIntrospection }:
 
 stdenv.mkDerivation rec {
-  inherit (import ./src.nix fetchurl) name src;
+  name = "simple-scan-${version}";
+  version = "3.28.1";
+
+  src = fetchurl {
+    url = "mirror://gnome/sources/simple-scan/${gnome3.versionBranch version}/${name}.tar.xz";
+    sha256 = "140vz94vml0vf6kiw3sg436qfvajk21x6q86smvycgf24qfyvk6a";
+  };
+
+  passthru = {
+    updateScript = gnome3.updateScript { packageName = "simple-scan"; };
+  };
 
   buildInputs = [ cairo gdk_pixbuf colord glib gnome3.defaultIconTheme gusb
                 gtk libwebp packagekit sane-backends vala ];
-  nativeBuildInputs = [ meson ninja gettext itstool pkgconfig wrapGAppsHook libxml2 ];
+  nativeBuildInputs = [
+    meson ninja gettext itstool pkgconfig wrapGAppsHook libxml2
+    # For setup hook
+    gobjectIntrospection
+  ];
 
   postPatch = ''
     patchShebangs data/meson_compile_gschema.py
@@ -35,8 +49,6 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  checkPhase = "meson test";
-
   meta = with stdenv.lib; {
     description = "Simple scanning utility";
     longDescription = ''
@@ -49,7 +61,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = https://launchpad.net/simple-scan;
     license = licenses.gpl3Plus;
+    maintainers = gnome3.maintainers;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ nckx ];
   };
 }

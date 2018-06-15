@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, unzip, re2, openfx, zlib, ilmbase, mesa, openexr }:
+{ stdenv, fetchFromGitHub, unzip, re2, openfx, zlib, ilmbase, libGLU_combined, openexr }:
 
 stdenv.mkDerivation rec
 {
@@ -16,12 +16,17 @@ stdenv.mkDerivation rec
 
   patches = [ ./openexrid.patch ];
 
+  postPatch = ''
+    substituteInPlace openexrid/makefile \
+        --replace g++ c++
+  '';
+
   NIX_CFLAGS_COMPILE=''-I${ilmbase.dev}/include/OpenEXR
                        -I${openexr.dev}/include/OpenEXR
                        -I${openfx.dev}/include/OpenFX
                       '';
 
-  buildInputs = [ unzip re2 openfx zlib ilmbase mesa openexr ];
+  buildInputs = [ unzip re2 openfx zlib ilmbase libGLU_combined openexr ];
 
   enableParallelBuilding = true;
 
@@ -38,7 +43,7 @@ stdenv.mkDerivation rec
       find $out
       mv $out/include $dev/
       mv $out/lib $lib/
-      '';
+  '';
 
   meta = with stdenv.lib; {
     description = "OpenEXR files able to isolate any object of a CG image with a perfect antialiazing";

@@ -2,18 +2,16 @@
 
 stdenv.mkDerivation rec {
   name = "cni-${version}";
-  version = "0.5.2";
+  version = "0.6.0";
 
   src = fetchFromGitHub {
     owner = "containernetworking";
     repo = "cni";
     rev = "v${version}";
-    sha256 = "0n2sc5xf1h0i54am80kj7imrvawddn0kxvgi65w0194dpmyrg5al";
+    sha256 = "00ajs2r5r2z3l0vqwxrcwhjfc9px12qbcv5vnvs2mdipvvls1y2y";
   };
 
   buildInputs = [ go ];
-
-  outputs = ["out" "plugins"];
 
   buildPhase = ''
     patchShebangs build.sh
@@ -21,9 +19,8 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
-    mkdir -p $out/bin $plugins
+    mkdir -p $out/bin
     mv bin/cnitool $out/bin
-    mv bin/* $plugins/
   '';
 
   meta = with stdenv.lib; {

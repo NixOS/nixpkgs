@@ -1,5 +1,5 @@
 { fetchurl, stdenv, pkgconfig, glib, gstreamer, gst-plugins-base
-, libmad, libdvdread, libmpeg2, libcdio, a52dec, x264, orc, lame, libintlOrEmpty }:
+, libmad, libdvdread, libmpeg2, libcdio, a52dec, x264, orc, lame, libintl }:
 
 stdenv.mkDerivation rec {
   name = "gst-plugins-ugly-0.10.19";
@@ -13,9 +13,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs =
-    [ pkgconfig glib gstreamer gst-plugins-base libmad libdvdread a52dec x264 orc lame ] ++ libintlOrEmpty;
-
-  NIX_LDFLAGS = if stdenv.isDarwin then "-lintl" else null;
+    [ pkgconfig glib gstreamer gst-plugins-base libmad libdvdread a52dec x264 orc lame libintl ];
 
   enableParallelBuilding = true;
 

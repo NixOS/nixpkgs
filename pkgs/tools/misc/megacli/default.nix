@@ -1,7 +1,5 @@
 { stdenv, rpmextract, ncurses5, patchelf, makeWrapper, requireFile, unzip }:
 
-assert stdenv.system == "x86_64-linux";
-
 stdenv.mkDerivation rec {
   name = "megacli-8.07.07";
 
@@ -31,5 +29,6 @@ stdenv.mkDerivation rec {
   meta = {
     description = "CLI program for LSI MegaRAID cards, which also works with some Dell PERC RAID cards";
     license = stdenv.lib.licenses.unfree;
+    platforms = [ "x86_64-linux" ];
   };
 }

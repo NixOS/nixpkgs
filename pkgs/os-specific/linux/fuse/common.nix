@@ -1,9 +1,10 @@
-{ version, sha256Hash, maintainers }:
+{ version, sha256Hash }:
 
 { stdenv, fetchFromGitHub, fetchpatch
 , fusePackages, utillinux, gettext
 , autoconf, automake, libtool
 , meson, ninja, pkgconfig
+, autoreconfHook
 }:
 
 let
@@ -18,6 +19,8 @@ in stdenv.mkDerivation rec {
     sha256 = sha256Hash;
   };
 
+  preAutoreconf = "touch config.rpath";
+
   patches =
     stdenv.lib.optional
       (!isFuse3 && stdenv.isAarch64)
@@ -27,11 +30,9 @@ in stdenv.mkDerivation rec {
       })
     ++ stdenv.lib.optional isFuse3 ./fuse3-install.patch;
 
-
   nativeBuildInputs = if isFuse3
     then [ meson ninja pkgconfig ]
-    else [ autoconf automake libtool ];
-  buildInputs = stdenv.lib.optional (!isFuse3) gettext;
+    else [ autoreconfHook gettext ];
 
   outputs = [ "out" ] ++ stdenv.lib.optional isFuse3 "common";
 
@@ -61,21 +62,21 @@ in stdenv.mkDerivation rec {
   postFixup = "cd $out\n" + (if isFuse3 then ''
     mv bin/mount.fuse3 bin/mount.fuse
 
-    install -D -m555 bin/mount.fuse $common/bin/mount.fuse
-    install -D -m444 etc/udev/rules.d/99-fuse.rules $common/etc/udev/rules.d/99-fuse.rules
+    install -D -m444 etc/fuse.conf $common/etc/fuse.conf
+    install -D -m444 etc/udev/rules.d/99-fuse3.rules $common/etc/udev/rules.d/99-fuse.rules
     install -D -m444 share/man/man8/mount.fuse.8.gz $common/share/man/man8/mount.fuse.8.gz
   '' else ''
-    cp ${fusePackages.fuse_3.common}/bin/mount.fuse bin/mount.fuse
+    cp ${fusePackages.fuse_3.common}/etc/fuse.conf etc/fuse.conf
     cp ${fusePackages.fuse_3.common}/etc/udev/rules.d/99-fuse.rules etc/udev/rules.d/99-fuse.rules
     cp ${fusePackages.fuse_3.common}/share/man/man8/mount.fuse.8.gz share/man/man8/mount.fuse.8.gz
   '');
 
   enableParallelBuilding = true;
 
-  meta = {
+  meta = with stdenv.lib; {
     inherit (src.meta) homepage;
     description = "Kernel module and library that allows filesystems to be implemented in user space";
-    platforms = stdenv.lib.platforms.linux;
-    inherit maintainers;
+    platforms = platforms.linux;
+    maintainers = [ maintainers.primeos ];
   };
 }

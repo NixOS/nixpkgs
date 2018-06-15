@@ -1,18 +1,32 @@
 { stdenv, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
-  name = "lf-unstable-${version}";
-  version = "2017-10-30";
+  name = "lf-${version}";
+  version = "4";
 
   src = fetchFromGitHub {
     owner = "gokcehan";
     repo = "lf";
-    rev = "3f7bd0a62d1a243562e182d9051ebb54f3414aaa"; # nightly
-    sha256 = "0g6wf4j3dfy3yfkby3wlqajryv4kffqvhljq2q0x482fsrl4vipz";
+    rev = "r${version}";
+    sha256 = "0wvx5hhkj3l68xjcr0i5lk623zi3si79hhvwi6mw9s52i43irr31";
   };
 
   goPackagePath = "github.com/gokcehan/lf";
   goDeps = ./deps.nix;
+
+  # TODO: Setting buildFlags probably isn't working properly. I've tried a few
+  # variants, e.g.:
+  # - buildFlags = "-ldflags \"-s -w -X 'main.gVersion=${version}'\"";
+  # - buildFlags = "-ldflags \\\"-X ${goPackagePath}/main.gVersion=${version}\\\"";
+
+  # Override the build phase (to set buildFlags):
+  buildPhase = ''
+    runHook preBuild
+    runHook renameImports
+    cd go/src/${goPackagePath}
+    go install -ldflags="-s -w -X main.gVersion=r${version}"
+    runHook postBuild
+  '';
 
   meta = with stdenv.lib; {
     description = "A terminal file manager written in Go and heavily inspired by ranger";

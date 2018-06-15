@@ -1,18 +1,18 @@
 { stdenv, fetchurl, jre, makeWrapper }:
 
 let
-  version = "1.12.15";
+  version = "1.13.0";
   jarName = "bfg-${version}.jar";
   mavenUrl = "http://central.maven.org/maven2/com/madgag/bfg/${version}/${jarName}";
 in
   stdenv.mkDerivation {
     inherit version jarName;
 
-    name = "bfg-repo-cleaner";
+    name = "bfg-repo-cleaner-${version}";
 
     src = fetchurl {
       url = mavenUrl;
-      sha256 = "17dh25jambkk55khknlhy8wa9s1i1xmh9hdgj72j1lzyl0ag42ik";
+      sha256 = "1kn84rsvms1v5l1j2xgrk7dc7mnsmxkc6sqd94mnim22vnwvl8mz";
     };
 
     buildInputs = [ jre makeWrapper ];

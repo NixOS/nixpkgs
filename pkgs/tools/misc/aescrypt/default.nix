@@ -9,7 +9,10 @@ stdenv.mkDerivation rec {
     sha256 = "1a1rs7xmbxh355qg3v02rln3gshvy3j6wkx4g9ir72l22mp6zkc7";
   };
 
+  NIX_LDFLAGS = stdenv.lib.optionalString stdenv.isDarwin "-liconv";
+
   preBuild = ''
+    substituteInPlace src/Makefile --replace "CC=gcc" "CC?=gcc"
     cd src
   '';
 
@@ -21,14 +24,12 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ libiconv ];
 
-  NIX_LDFLAGS = stdenv.lib.optionalString stdenv.isDarwin "-liconv";
-
   meta = with stdenv.lib; {
     description = "Encrypt files with Advanced Encryption Standard (AES)";
     homepage    = https://www.aescrypt.com/;
     license     = licenses.gpl2;
     maintainers = with maintainers; [ lovek323 qknight ];
     platforms   = stdenv.lib.platforms.all;
-    hydraPlatforms = stdenv.lib.platforms.linux;
+    hydraPlatforms = with platforms; unix;
   };
 }

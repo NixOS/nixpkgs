@@ -16,7 +16,7 @@ with lib;
     ];
 
   # ISO naming.
-  isoImage.isoName = "${config.isoImage.isoBaseName}-${config.system.nixosLabel}-${pkgs.stdenv.system}.iso";
+  isoImage.isoName = "${config.isoImage.isoBaseName}-${config.system.nixos.label}-${pkgs.stdenv.system}.iso";
 
   isoImage.volumeID = substring 0 11 "NIXOS_ISO";
 
@@ -31,4 +31,6 @@ with lib;
 
   # Allow the user to log in as root without a password.
   users.extraUsers.root.initialHashedPassword = "";
+
+  system.nixos.stateVersion = mkDefault "18.03";
 }

@@ -3,13 +3,13 @@
 
 stdenv.mkDerivation ( rec {
   name = "ponyc-${version}";
-  version = "0.21.0";
+  version = "0.23.0";
 
   src = fetchFromGitHub {
     owner = "ponylang";
     repo = "ponyc";
     rev = version;
-    sha256 = "0kpnmgxhha22nhl2bmch47cpr0d9h5718h3w9h7qqwd994xcfk9z";
+    sha256 = "1m0zvl30926652akyzpvy5m7jn35697d5mkg3xbn3yqwbsfk4yhk";
   };
 
   buildInputs = [ llvm makeWrapper which ];
@@ -69,8 +69,10 @@ stdenv.mkDerivation ( rec {
     + stdenv.lib.optionalString stdenv.isDarwin '' bits=64 ''
     + stdenv.lib.optionalString (stdenv.isDarwin && (!lto)) '' lto=no ''
     + '' install
-    mv $out/bin/ponyc $out/bin/ponyc.wrapped
-    makeWrapper $out/bin/ponyc.wrapped $out/bin/ponyc \
+
+    wrapProgram $out/bin/ponyc \
+      --prefix PATH ":" "${stdenv.cc}/bin" \
+      --set-default CC "$CC" \
       --prefix PONYPATH : "$out/lib" \
       --prefix PONYPATH : "${stdenv.lib.getLib pcre2}/lib" \
       --prefix PONYPATH : "${stdenv.lib.getLib libressl}/lib"
@@ -84,6 +86,6 @@ stdenv.mkDerivation ( rec {
     homepage = http://www.ponylang.org;
     license = licenses.bsd2;
     maintainers = with maintainers; [ doublec kamilchm patternspandemic ];
-    platforms = subtractLists platforms.i686 platforms.unix;
+    platforms = [ "x86_64-linux" "x86_64-darwin" ];
   };
 })

@@ -1,0 +1,81 @@
+diff --git a/extra/create.sh b/extra/create.sh
+index a69e369..35d5ea1 100755
+--- a/extra/create.sh
++++ b/extra/create.sh
+@@ -1 +1 @@
+-bash -c "task add $1"
++bash -c "@task@ add $1"
+diff --git a/extra/modify.sh b/extra/modify.sh
+index 7964a26..8edd21b 100755
+--- a/extra/modify.sh
++++ b/extra/modify.sh
+@@ -1 +1 @@
+-bash -c "task $1 modify $2"
++bash -c "@task@ $1 modify $2"
+diff --git a/taskService.js b/taskService.js
+index dea40d8..ff35a80 100644
+--- a/taskService.js
++++ b/taskService.js
+@@ -186,7 +186,7 @@ const TaskService = new Lang.Class({
+ 
+         let project = projectName ? "project:" + projectName : "";
+ 
+-        let command = ['task', 'rc.json.array=on', status, project, 'export'];
++        let command = ['@task@', 'rc.json.array=on', status, project, 'export'];
+         let reader = new SpawnReader.SpawnReader();
+ 
+         let buffer = "";
+@@ -227,7 +227,7 @@ const TaskService = new Lang.Class({
+                 break;
+         }
+ 
+-        let shellProc = Gio.Subprocess.new(['task', status, 'projects'], Gio.SubprocessFlags.STDOUT_PIPE);
++        let shellProc = Gio.Subprocess.new(['@task@', status, 'projects'], Gio.SubprocessFlags.STDOUT_PIPE);
+ 
+         shellProc.wait_async(null, function(obj, result){
+             let shellProcExited = true;
+@@ -274,7 +274,7 @@ const TaskService = new Lang.Class({
+             return;
+         }
+ 
+-        let shellProc = Gio.Subprocess.new(['task', taskID.toString(), 'done'], Gio.SubprocessFlags.STDOUT_PIPE);
++        let shellProc = Gio.Subprocess.new(['@task@', taskID.toString(), 'done'], Gio.SubprocessFlags.STDOUT_PIPE);
+ 
+         shellProc.wait_async(null, function(obj, result){
+             let shellProcExited = true;
+@@ -307,7 +307,7 @@ const TaskService = new Lang.Class({
+             return;
+         }
+ 
+-        let shellProc = Gio.Subprocess.new(['task', 'modify', taskID.toString(), 'status:pending'], Gio.SubprocessFlags.STDOUT_PIPE);
++        let shellProc = Gio.Subprocess.new(['@task@', 'modify', taskID.toString(), 'status:pending'], Gio.SubprocessFlags.STDOUT_PIPE);
+ 
+         shellProc.wait_async(null, function(obj, result){
+             let shellProcExited = true;
+@@ -339,7 +339,7 @@ const TaskService = new Lang.Class({
+         {
+             return;
+         }
+-        let shellProc = Gio.Subprocess.new(['task', taskID.toString(), 'start'], Gio.SubprocessFlags.STDOUT_PIPE);
++        let shellProc = Gio.Subprocess.new(['@task@', taskID.toString(), 'start'], Gio.SubprocessFlags.STDOUT_PIPE);
+         shellProc.wait_async(null, function(obj, result){
+             let shellProcExited = true;
+             shellProc.wait_finish(result);
+@@ -369,7 +369,7 @@ const TaskService = new Lang.Class({
+         {
+             return;
+         }
+-        let shellProc = Gio.Subprocess.new(['task', taskID.toString(), 'stop'], Gio.SubprocessFlags.STDOUT_PIPE);
++        let shellProc = Gio.Subprocess.new(['@task@', taskID.toString(), 'stop'], Gio.SubprocessFlags.STDOUT_PIPE);
+         shellProc.wait_async(null, function(obj, result){
+             let shellProcExited = true;
+             shellProc.wait_finish(result);
+@@ -468,7 +468,7 @@ const TaskService = new Lang.Class({
+ 
+         try
+         {
+-            shellProc = Gio.Subprocess.new(['task', 'sync'], Gio.SubprocessFlags.STDOUT_PIPE);
++            shellProc = Gio.Subprocess.new(['@task@', 'sync'], Gio.SubprocessFlags.STDOUT_PIPE);
+         }
+         catch(err)
+         {

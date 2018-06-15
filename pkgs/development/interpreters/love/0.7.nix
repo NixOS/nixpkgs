@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgconfig
-, SDL, mesa, openal, lua
+, SDL, libGLU_combined, openal, lua
 , libdevil, freetype, physfs
 , libmodplug, mpg123, libvorbis, libogg
 }:
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
-    SDL mesa openal lua
+    SDL libGLU_combined openal lua
     libdevil freetype physfs libmodplug mpg123 libvorbis libogg
   ];
 

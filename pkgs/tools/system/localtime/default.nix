@@ -1,4 +1,4 @@
-{ stdenv, go, systemd, polkit, fetchFromGitHub, m4 }:
+{ stdenv, go, systemd, polkit, fetchFromGitHub, m4, removeReferencesTo }:
 
 stdenv.mkDerivation {
   name = "localtime-2017-11-07";
@@ -10,9 +10,14 @@ stdenv.mkDerivation {
     sha256 = "04fyna8p7q7skzx9fzmncd6gx7x5pwa9jh8a84hpljlvj0kldfs8";
   };
   
-  buildInputs = [ go systemd polkit m4 ];
+  buildInputs = [ go systemd polkit m4 removeReferencesTo ];
+  disallowedRequisites = [ go ];
 
   makeFlags = [ "PREFIX=$(out)" ];
+
+  preFixup = ''
+    find $out/bin -type f -exec remove-references-to -t ${go} '{}' +
+  '';
 
   meta = {
     description = "A daemon for keeping the system timezone up-to-date based on the current location";

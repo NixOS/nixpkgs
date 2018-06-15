@@ -1,34 +1,31 @@
-{ stdenv, fetchFromGitHub, gtk3, hicolor_icon_theme }:
+{ stdenv, fetchFromGitHub, gtk3, hicolor-icon-theme }:
 
 stdenv.mkDerivation rec {
   name = "elementary-xfce-icon-theme-${version}";
-  version = "2017-11-28";
+  version = "0.11";
 
   src = fetchFromGitHub {
     owner = "shimmerproject";
     repo = "elementary-xfce";
-    rev = "b5cc6f044ed24e388ed2fffed1d02f43ce76f5e6";
-    sha256 = "15n28f2pw8b0y5pi8ydahg31v6hhh7zvpvymi8jaafdc9bn18z3y";
+    rev = "elementary-xfce-${version}";
+    sha256 = "1hgbw9wwsgrbrs8lgdhba2m8m1cvqbcy27b87kjws6jsa00f5hx6";
   };
 
-  # fallback icon theme
-  propagatedBuildInputs = [ hicolor_icon_theme ];
-
-  dontBuild = true;
+  nativeBuildInputs = [ gtk3 hicolor-icon-theme ];
 
   installPhase = ''
-    install -dm 755 $out/share/icons
-    cp -dr --no-preserve='ownership' elementary-xfce{,-dark,-darker,-darkest} $out/share/icons/
+    mkdir -p $out/share/icons
+    mv elementary-xfce* $out/share/icons
   '';
 
-  postInstall = ''
-    for icons in "$out"/share/icons/*; do
-      "${gtk3.out}/bin/gtk-update-icon-cache" "$icons"
+  postFixup = ''
+    for theme in $out/share/icons/*; do
+      gtk-update-icon-cache $theme
     done
   '';
 
   meta = with stdenv.lib; {
-    description = "Elementary icons for Xfce and other Gtk+ desktops like Gnome3";
+    description = "Elementary icons for Xfce and other GTK+ desktops like GNOME";
     homepage = https://github.com/shimmerproject/elementary-xfce;
     license = licenses.gpl2;
     platforms = platforms.unix;

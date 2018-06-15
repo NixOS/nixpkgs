@@ -1,20 +1,19 @@
-{ stdenv, buildPythonPackage, fetchurl,
+{ stdenv, buildPythonPackage, fetchPypi,
   six, pytest, pytestrunner, pytestcov, coverage
 }:
 buildPythonPackage rec {
   pname = "libais";
-  name = "${pname}-${version}";
-  version = "0.16";
+  version = "0.17";
 
-  src = fetchurl {
-    url = "mirror://pypi/l/libais/${name}.tar.bz2";
-    sha256 = "14dsh5k32ryszwdn6p45wrqp4ska6cc9qpm6lk5c5d1p4rc7wnhq";
+  src = fetchPypi {
+    inherit pname version;
+    sha256 = "0pyka09h8nb0vlzh14npq4nxmzg1046lr3klgn97dsf5k0iflapb";
   };
 
   # data files missing
   doCheck = false;
 
-  buildInputs = [ pytest pytestrunner pytestcov coverage ];
+  checkInputs = [ pytest pytestrunner pytestcov coverage ];
   propagatedBuildInputs = [ six ];
 
   meta = with stdenv.lib; {

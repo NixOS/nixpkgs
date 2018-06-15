@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   name = "xidel-${version}";
-  version = "0.8.4";
+  version = "0.9.6";
 
   ## Source archive lacks file (manageUtils.sh), using pre-built package for now.
   #src = fetchurl {
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     if stdenv.system == "x86_64-linux" then
       fetchurl {
         url = "mirror://sourceforge/videlibri/Xidel/Xidel%20${version}/xidel_${version}-1_amd64.deb";
-        sha256 = "0gq95ag2661hsw8b7ii6z07ian832cz8g21lvq2cvps4a80ql1gi";
+        sha256 = "0hskc74y7p4j1x33yx0w4fvr610p2yimas8pxhr6bs7mb9b300h7";
       }
     else if stdenv.system == "i686-linux" then
       fetchurl {

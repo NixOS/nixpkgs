@@ -1,20 +1,18 @@
-{ stdenv, pythonPackages, fetchFromGitHub }:
+{ stdenv, python3Packages, fetchFromGitHub }:
 
-pythonPackages.buildPythonApplication rec {
-  name = "remarshal-${version}";
-  version = "0.6.0";
+python3Packages.buildPythonApplication rec {
+  pname = "remarshal";
+  version = "0.8.0";
 
   src = fetchFromGitHub {
     owner  = "dbohdan";
     repo   = "remarshal";
     rev    = "v${version}";
-    sha256 = "0jslawpzghv3chamrfddnyn5p5068kjxy8d38fxvi5h06qgfb4wp";
+    sha256 = "192r1mfd5yj6kg6fqmkjngdlgn25g5rkvm0p6xaflpvavnhvhnsj";
   };
 
-  propagatedBuildInputs = with pythonPackages; [
-    dateutil
-    pytoml
-    pyyaml
+  propagatedBuildInputs = with python3Packages; [
+    dateutil pytoml pyyaml
   ];
 
   meta = with stdenv.lib; {
@@ -22,6 +20,5 @@ pythonPackages.buildPythonApplication rec {
     license = licenses.mit;
     homepage = https://github.com/dbohdan/remarshal;
     maintainers = with maintainers; [ offline ];
-    platforms = platforms.linux;
   };
 }

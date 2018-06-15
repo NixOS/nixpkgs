@@ -4,8 +4,8 @@ buildRubyGem rec {
   inherit ruby;
   name = "${gemName}-${version}";
   gemName = "gist";
-  version = "4.6.1";
-  sha256 = "16qvmn7syvcf4lnblngzvq8xynvb62h1xhfc7xfb0c1sjh166hff";
+  version = "4.6.2";
+  source.sha256 = "0zrw84k2982aiansmv2aj3101d3giwa58221n6aisvg5jq5kmiib";
 
   buildInputs = [ makeWrapper ];
 

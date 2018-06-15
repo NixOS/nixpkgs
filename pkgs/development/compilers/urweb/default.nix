@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "17qh9mcmlhbv6r52yij8l9ik7j7x6x7c09lf6pznnbdh4sf8p5wb";
   };
 
-  buildInputs = [ openssl mlton mysql.client postgresql sqlite ];
+  buildInputs = [ openssl mlton mysql.connector-c postgresql sqlite ];
 
   prePatch = ''
     sed -e 's@/usr/bin/file@${file}/bin/file@g' -i configure
@@ -21,13 +21,13 @@ stdenv.mkDerivation rec {
 
   preConfigure = ''
     export PGHEADER="${postgresql}/include/libpq-fe.h";
-    export MSHEADER="${lib.getDev mysql.client}/include/mysql/mysql.h";
+    export MSHEADER="${mysql.connector-c}/include/mysql/mysql.h";
     export SQHEADER="${sqlite.dev}/include/sqlite3.h";
 
     export CC="${gcc}/bin/gcc";
     export CCARGS="-I$out/include \
                    -L${openssl.out}/lib \
-                   -L${lib.getLib mysql.client}/lib \
+                   -L${mysql.connector-c}/lib \
                    -L${postgresql.lib}/lib \
                    -L${sqlite.out}/lib";
   '';

@@ -4,7 +4,7 @@
 , systemd
 , libxkbcommon
 , libdrm
-, mesa
+, libGLU_combined
 , pango
 , pixman
 , pkgconfig
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
     systemd
     libxkbcommon
     libdrm
-    mesa
+    libGLU_combined
     pango
     pixman
     pkgconfig

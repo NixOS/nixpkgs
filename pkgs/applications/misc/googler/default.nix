@@ -1,14 +1,14 @@
 {stdenv, fetchFromGitHub, python}:
 
 stdenv.mkDerivation rec {
-  version = "3.3";
+  version = "3.6";
   name = "googler-${version}";
 
   src = fetchFromGitHub {
     owner = "jarun";
     repo = "googler";
     rev = "v${version}";
-    sha256 = "0gkzgcf0qss7fskgswryk835vivlv1f99ym1pbxy3vv9wcwx6a43";
+    sha256 = "1j1755b9mfmkqkgjrlsi4wr82352pqc9rfyalammqn6qrm3v3lb6";
   };
 
   propagatedBuildInputs = [ python ];

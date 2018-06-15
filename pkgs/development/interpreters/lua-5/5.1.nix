@@ -20,12 +20,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ readline ];
 
   patches = (if stdenv.isDarwin then [ ./5.1.darwin.patch ] else [ dsoPatch ])
-    ++ [(fetchpatch {
-      name = "CVE-2014-5461.patch";
-      url = "http://anonscm.debian.org/cgit/pkg-lua/lua5.1.git/plain/debian/patches/"
-        + "0004-Fix-stack-overflow-in-vararg-functions.patch?id=b75a2014db2ad65683521f7bb295bfa37b48b389";
-      sha256 = "05i5vh53d9i6dy11ibg9i9qpwz5hdm0s8bkx1d9cfcvy80cm4c7f";
-    })];
+    ++ [ ./5.1.0004-Fix-stack-overflow-in-vararg-functions.patch ];
 
   configurePhase =
     if stdenv.isDarwin
@@ -33,7 +28,7 @@ stdenv.mkDerivation rec {
     makeFlagsArray=( INSTALL_TOP=$out INSTALL_MAN=$out/share/man/man1 PLAT=macosx CFLAGS="-DLUA_USE_LINUX -fno-common -O2" LDFLAGS="" CC="$CC" )
     installFlagsArray=( TO_BIN="lua luac" TO_LIB="liblua.5.1.5.dylib" INSTALL_DATA='cp -d' )
   '' else ''
-    makeFlagsArray=( INSTALL_TOP=$out INSTALL_MAN=$out/share/man/man1 PLAT=linux CFLAGS="-DLUA_USE_LINUX -O2 -fPIC" LDFLAGS="-fPIC" )
+    makeFlagsArray=( INSTALL_TOP=$out INSTALL_MAN=$out/share/man/man1 PLAT=linux CFLAGS="-DLUA_USE_LINUX -O2 -fPIC" LDFLAGS="-fPIC" CC="$CC" AR="$AR q" RANLIB="$RANLIB" )
     installFlagsArray=( TO_BIN="lua luac" TO_LIB="liblua.a liblua.so liblua.so.5.1 liblua.so.5.1.5" INSTALL_DATA='cp -d' )
   '';
 

@@ -37,7 +37,7 @@ in stdenv.mkDerivation rec {
   meta = {
     homepage = http://skarnet.org/software/s6-rc/;
     description = "A service manager for s6-based systems";
-    platforms = stdenv.lib.platforms.all;
+    platforms = stdenv.lib.platforms.linux;
     license = stdenv.lib.licenses.isc;
     maintainers = with stdenv.lib.maintainers; [ pmahoney ];
   };

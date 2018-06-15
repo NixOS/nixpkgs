@@ -37,7 +37,7 @@
 let
 
   mirror = https://get.geo.opera.com/pub/opera/desktop;
-  version = "48.0.2685.52";
+  version = "50.0.2762.45";
 
   rpath = stdenv.lib.makeLibraryPath [
 
@@ -89,7 +89,7 @@ in stdenv.mkDerivation {
 
   src = fetchurl {
     url = "${mirror}/${version}/linux/opera-stable_${version}_amd64.deb";
-    sha256 = "027njqh2as4d0xsnvzamqiplghb8cxqnc19y0vqkvjnsw57v828p";
+    sha256 = "1ajdr6yzqc9xkvdcgkps6j5996n60ibjhj518gmminx90da6x5dy";
   };
 
   unpackCmd = "${dpkg}/bin/dpkg-deb -x $curSrc .";

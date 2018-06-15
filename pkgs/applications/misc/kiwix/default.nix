@@ -1,6 +1,6 @@
 { stdenv, fetchurl, makeWrapper, pkgconfig
 , zip, python, zlib, which, icu, libmicrohttpd, lzma, aria2, wget, bc
-, libuuid, glibc, libX11, libXext, libXt, libXrender, glib, dbus, dbus_glib
+, libuuid, glibc, libX11, libXext, libXt, libXrender, glib, dbus, dbus-glib
 , gtk2, gdk_pixbuf, pango, cairo, freetype, fontconfig, alsaLib, atk, cmake
 , xapian, ctpp2, zimlib
 }:
@@ -93,7 +93,7 @@ stdenv.mkDerivation rec {
 
     rm $out/bin/kiwix
     makeWrapper $out/lib/kiwix/kiwix-launcher $out/bin/kiwix \
-      --suffix LD_LIBRARY_PATH : ${makeLibraryPath [stdenv.cc.cc libX11 libXext libXt libXrender glib dbus dbus_glib gtk2 gdk_pixbuf pango cairo freetype fontconfig alsaLib atk]} \
+      --suffix LD_LIBRARY_PATH : ${makeLibraryPath [stdenv.cc.cc libX11 libXext libXt libXrender glib dbus dbus-glib gtk2 gdk_pixbuf pango cairo freetype fontconfig alsaLib atk]} \
       --suffix PATH : ${aria2}/bin
   '';
 

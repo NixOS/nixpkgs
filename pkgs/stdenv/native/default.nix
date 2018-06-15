@@ -119,19 +119,28 @@ in
     };
     stdenvNoCC = stdenv;
 
-    cc = import ../../build-support/cc-wrapper {
-      name = "cc-native";
-      nativeTools = true;
-      nativeLibc = true;
+    cc = let
       nativePrefix = { # switch
         "i686-solaris" = "/usr/gnu";
         "x86_64-solaris" = "/opt/local/gcc47";
       }.${system} or "/usr";
+    in
+    import ../../build-support/cc-wrapper {
+      name = "cc-native";
+      nativeTools = true;
+      nativeLibc = true;
+      inherit nativePrefix;
+      bintools = import ../../build-support/bintools-wrapper {
+        name = "bintools";
+        inherit stdenvNoCC nativePrefix;
+        nativeTools = true;
+        nativeLibc = true;
+      };
       inherit stdenvNoCC;
     };
 
     fetchurl = import ../../build-support/fetchurl {
-      inherit stdenv;
+      inherit lib stdenvNoCC;
       # Curl should be in /usr/bin or so.
       curl = null;
     };

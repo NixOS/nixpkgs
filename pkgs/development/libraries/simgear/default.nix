@@ -1,5 +1,5 @@
 { stdenv, fetchurl, plib, freeglut, xproto, libX11, libXext, xextproto, libXi
-, inputproto, libICE, libSM, libXt, libXmu, mesa, boost, zlib, libjpeg, freealut
+, inputproto, libICE, libSM, libXt, libXmu, libGLU_combined, boost, zlib, libjpeg, freealut
 , openscenegraph, openal, expat, cmake, apr
 , curl
 }:
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ plib freeglut xproto libX11 libXext xextproto libXi inputproto
-                  libICE libSM libXt libXmu mesa boost zlib libjpeg freealut
+                  libICE libSM libXt libXmu libGLU_combined boost zlib libjpeg freealut
                   openscenegraph openal expat cmake apr curl ];
 
   enableParallelBuilding = true;

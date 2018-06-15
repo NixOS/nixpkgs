@@ -16,7 +16,7 @@ in stdenv.mkDerivation {
   name = "planner-${version}";
 
   src = fetchgit {
-    url = "https://git.gnome.org/browse/planner";
+    url = https://gitlab.gnome.org/GNOME/planner.git;
     rev = "6a79647e5711b2b8d7435cacc3452e643d2f05e6";
     sha256 = "18k40s0f665qclrzvkgyfqmvjk0nqdc8aj3m8n4ky85di4qbqlwd";
   };
@@ -28,8 +28,8 @@ in stdenv.mkDerivation {
     autoconf
     libtool
 
-    gnome_common
-    gtk_doc
+    gnome-common
+    gtk-doc
 
     GConf
     gtk

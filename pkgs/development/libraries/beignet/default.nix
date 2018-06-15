@@ -12,7 +12,7 @@
 , libXext
 , python3
 , ocl-icd
-, mesa_noglu
+, libGL
 , makeWrapper
 , beignet
 }:
@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
     libXdmcp
     libXdamage
     ocl-icd
-    mesa_noglu
+    libGL
   ];
 
   nativeBuildInputs = [

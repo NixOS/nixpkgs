@@ -1,9 +1,9 @@
 { stdenv, fetchFromGitHub, cmake
-, mesa_noglu, libSM, SDL, SDL_image, SDL_ttf, glew, openalSoft
+, libGL, libSM, SDL, SDL_image, SDL_ttf, glew, openalSoft
 , ncurses, glib, gtk2, libsndfile, zlib
 }:
 
-let dfVersion = "0.44.02"; in
+let dfVersion = "0.44.10"; in
 
 stdenv.mkDerivation {
   name = "dwarf_fortress_unfuck-${dfVersion}";
@@ -12,7 +12,7 @@ stdenv.mkDerivation {
     owner = "svenstaro";
     repo = "dwarf_fortress_unfuck";
     rev = dfVersion;
-    sha256 = "0gfchfqrzx0h59mdv01hik8q2a2yx170q578agfck0nv39yhi6i5";
+    sha256 = "0vb19qx2ibc79j4bgbk9lskb883qfb0815zw1dfz9k7rqwal8mzj";
   };
 
   cmakeFlags = [
@@ -23,7 +23,7 @@ stdenv.mkDerivation {
   nativeBuildInputs = [ cmake ];
   buildInputs = [
     libSM SDL SDL_image SDL_ttf glew openalSoft
-    ncurses gtk2 libsndfile zlib mesa_noglu
+    ncurses gtk2 libsndfile zlib libGL
   ];
 
   installPhase = ''

@@ -1,9 +1,11 @@
 { stdenv, fetchurl, makeFontsConf, makeWrapper
 , cairo, coreutils, fontconfig, freefont_ttf
-, glib, gmp, gtk2, libedit, libffi, libjpeg
+, glib, gmp, gtk3, libedit, libffi, libjpeg
 , libpng, libtool, mpfr, openssl, pango, poppler
 , readline, sqlite
 , disableDocs ? false
+, CoreFoundation
+, gsettings_desktop_schemas
 }:
 
 let
@@ -17,7 +19,8 @@ let
     fontconfig
     glib
     gmp
-    gtk2
+    gtk3
+    gsettings_desktop_schemas
     libedit
     libjpeg
     libpng
@@ -33,22 +36,33 @@ in
 
 stdenv.mkDerivation rec {
   name = "racket-${version}";
-  version = "6.11";
+  version = "6.12";
 
-  src = fetchurl {
-    url = "https://mirror.racket-lang.org/installers/${version}/${name}-src.tgz";
-    sha256 = "1nk7705x24jjlbqqhj8yvbgqkfscxx3m81bry1g56kjxysjmf3sw";
+  src = (stdenv.lib.makeOverridable ({ name, sha256 }:
+    fetchurl rec {
+      url = "https://mirror.racket-lang.org/installers/${version}/${name}-src.tgz";
+      inherit sha256;
+    }
+  )) {
+    inherit name;
+    sha256 = "0cwcypzjfl9py1s695mhqkiapff7c1w29llsmdj7qgn58wl0apk5";
   };
 
   FONTCONFIG_FILE = fontsConf;
   LD_LIBRARY_PATH = libPath;
-  NIX_LDFLAGS = stdenv.lib.optionalString stdenv.cc.isGNU "-lgcc_s";
+  NIX_LDFLAGS = stdenv.lib.concatStringsSep " " [
+    (stdenv.lib.optionalString (stdenv.cc.isGNU && ! stdenv.isDarwin) "-lgcc_s")
+    (stdenv.lib.optionalString stdenv.isDarwin "-framework CoreFoundation")
+  ];
 
-  buildInputs = [ fontconfig libffi libtool makeWrapper sqlite ];
+  buildInputs = [ fontconfig libffi libtool makeWrapper sqlite gsettings_desktop_schemas gtk3 ]
+    ++ stdenv.lib.optionals stdenv.isDarwin [ CoreFoundation ];
 
   preConfigure = ''
     unset AR
-    substituteInPlace src/configure --replace /usr/bin/uname ${coreutils}/bin/uname
+    for f in src/configure src/racket/src/string.c; do
+      substituteInPlace "$f" --replace /usr/bin/uname ${coreutils}/bin/uname
+    done
     mkdir src/build
     cd src/build
   '';
@@ -64,7 +78,9 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     for p in $(ls $out/bin/) ; do
-      wrapProgram $out/bin/$p --set LD_LIBRARY_PATH "${LD_LIBRARY_PATH}";
+      wrapProgram $out/bin/$p \
+        --prefix LD_LIBRARY_PATH ":" "${LD_LIBRARY_PATH}" \
+        --prefix XDG_DATA_DIRS ":" "$GSETTINGS_SCHEMAS_PATH";
     done
   '';
 

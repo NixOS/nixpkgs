@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, fetchpatch
+{ stdenv, fetchFromGitHub
 , cmake, pkgconfig
 # Transport
 , curl
@@ -11,10 +11,11 @@
 , dbus
 , glibmm
 , gnome3
-, hicolor_icon_theme
+, hicolor-icon-theme
 , libappindicator-gtk3
 , libnotify
 , libxdg_basedir
+, wxGTK
 # GStreamer
 , gst_all_1
 # User-agent info
@@ -39,13 +40,13 @@ let
 in
 stdenv.mkDerivation rec {
   name = "radiotray-ng-${version}";
-  version = "0.1.7";
+  version = "0.2.2";
 
   src = fetchFromGitHub {
     owner = "ebruck";
     repo = "radiotray-ng";
     rev = "v${version}";
-    sha256 = "1m853gzh9r249crn0xyrq22x154r005j58b0kq3nsrgi5cps2zdv";
+    sha256 = "0q8k7nsjm6m0r0zs1br60niaqlwvd3myqalb5sqijzanx41aq2l6";
   };
 
   nativeBuildInputs = [ cmake pkgconfig wrapGAppsHook makeWrapper ];
@@ -53,31 +54,32 @@ stdenv.mkDerivation rec {
   buildInputs = [
     curl
     boost jsoncpp libbsd pcre
-    glibmm hicolor_icon_theme gnome3.gsettings_desktop_schemas libappindicator-gtk3 libnotify
+    glibmm hicolor-icon-theme gnome3.gsettings-desktop-schemas libappindicator-gtk3 libnotify
     libxdg_basedir
     lsb-release
+    wxGTK
   ] ++ stdenv.lib.optional doCheck gmock
     ++ gstInputs
     ++ pythonInputs;
 
   prePatch = ''
-    substituteInPlace debian/CMakeLists.txt \
-      --replace /usr $out
-    substituteInPlace include/radiotray-ng/common.hpp \
-      --replace /usr $out
+    for x in debian/CMakeLists.txt include/radiotray-ng/common.hpp data/*.desktop; do
+      substituteInPlace $x --replace /usr $out
+    done
+
+    # We don't find the radiotray-ng-notification icon otherwise
+    substituteInPlace data/radiotray-ng.desktop \
+      --replace radiotray-ng-notification radiotray-ng-on
+    substituteInPlace data/rtng-bookmark-editor.desktop \
+      --replace radiotray-ng-notification radiotray-ng-on
   '';
 
-  patches = [
-    (fetchpatch {
-      # Fix menu separators and minor touchup to 'version'
-      url = "https://github.com/ebruck/radiotray-ng/commit/827e9f1baaa03ab4d8a5fb3aab043e72950eb965.patch";
-      sha256 = "1aykl6lq4pga34xg5r9mc616gxnd63q6gr8qzg57w6874cj3csrr";
-    })
-  ];
+  cmakeFlags = stdenv.lib.optional doCheck "-DBUILD_TESTS=ON";
 
   enableParallelBuilding = true;
 
-  doCheck = true;
+ # XXX: as of 0.2.2, tries to download gmock instead of checking for provided
+  doCheck = false;
 
   checkPhase = "ctest";
 

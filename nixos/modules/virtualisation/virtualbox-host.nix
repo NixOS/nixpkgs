@@ -6,7 +6,7 @@ let
   cfg = config.virtualisation.virtualbox.host;
 
   virtualbox = pkgs.virtualbox.override {
-    inherit (cfg) enableHardening headless;
+    inherit (cfg) enableExtensionPack enableHardening headless;
   };
 
   kernelModules = config.boot.kernelPackages.virtualbox.override {
@@ -17,9 +17,7 @@ in
 
 {
   options.virtualisation.virtualbox.host = {
-    enable = mkOption {
-      type = types.bool;
-      default = false;
+    enable = mkEnableOption "VirtualBox" // {
       description = ''
         Whether to enable VirtualBox.
 
@@ -29,6 +27,8 @@ in
         </para></note>
       '';
     };
+
+    enableExtensionPack = mkEnableOption "VirtualBox extension pack";
 
     addNetworkInterface = mkOption {
       type = types.bool;
@@ -124,7 +124,7 @@ in
           '';
       };
 
-    networking.interfaces.vboxnet0.ip4 = [ { address = "192.168.56.1"; prefixLength = 24; } ];
+    networking.interfaces.vboxnet0.ipv4.addresses = [{ address = "192.168.56.1"; prefixLength = 24; }];
     # Make sure NetworkManager won't assume this interface being up
     # means we have internet access.
     networking.networkmanager.unmanaged = ["vboxnet0"];

@@ -1,12 +1,13 @@
 { stdenv, autoreconfHook, pkgconfig, fetchFromGitHub, gupnp }:
 
 stdenv.mkDerivation rec {
-  name = "dleyna-core";
+  pname = "dleyna-core";
+  name = "${pname}-${version}";
   version = "0.6.0";
 
   src = fetchFromGitHub {
     owner = "01org";
-    repo = name;
+    repo = pname;
     rev = "v${version}";
     sha256 = "1x5vj5zfk95avyg6g3nf6gar250cfrgla2ixj2ifn8pcick2d9vq";
   };

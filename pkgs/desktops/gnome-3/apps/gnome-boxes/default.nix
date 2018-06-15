@@ -1,40 +1,59 @@
-{ stdenv, fetchurl, makeWrapper, pkgconfig, gettext, itstool, libvirt-glib
-, glib, gobjectIntrospection, libxml2, gtk3, gtkvnc, libvirt, spice_gtk
-, spice_protocol, libsoup, libosinfo, systemd, tracker, tracker-miners, vala
-, libcap, yajl, gmp, gdbm, cyrus_sasl, gnome3, librsvg, desktop_file_utils
+{ stdenv, fetchurl, meson, ninja, wrapGAppsHook, pkgconfig, gettext, itstool, libvirt-glib
+, glib, gobjectIntrospection, libxml2, gtk3, gtkvnc, libvirt, spice-gtk
+, spice-protocol, libsoup, libosinfo, systemd, tracker, tracker-miners, vala
+, libcap, yajl, gmp, gdbm, cyrus_sasl, gnome3, librsvg, desktop-file-utils
 , mtools, cdrkit, libcdio, libusb, libarchive, acl, libgudev, qemu, libsecret
-, libcap_ng, numactl, xen, libapparmor
+, libcap_ng, numactl, xen, libapparmor, json-glib, webkitgtk
 }:
 
 # TODO: ovirt (optional)
 
-stdenv.mkDerivation rec {
-  inherit (import ./src.nix fetchurl) name src;
+let
+  version = "3.28.4";
+in stdenv.mkDerivation rec {
+  name = "gnome-boxes-${version}";
 
-  enableParallelBuilding = true;
+  src = fetchurl {
+    url = "mirror://gnome/sources/gnome-boxes/${gnome3.versionBranch version}/${name}.tar.xz";
+    sha256 = "1378zzqdwv0hnirg8k91s5vgkcl1brfild3hgach5jhg78nxdb4j";
+  };
 
   doCheck = true;
 
   nativeBuildInputs = [
-    makeWrapper pkgconfig gettext
+    meson ninja vala pkgconfig gettext itstool wrapGAppsHook gobjectIntrospection desktop-file-utils
   ];
 
+  # Required for USB redirection PolicyKit rules file
+  propagatedUserEnvPkgs = [ spice-gtk ];
+
   buildInputs = [
-    itstool libvirt-glib glib gobjectIntrospection libxml2 gtk3 gtkvnc
-    libvirt spice_gtk spice_protocol libsoup libosinfo systemd
-    tracker tracker-miners vala libcap yajl gmp gdbm cyrus_sasl libusb libarchive
-    gnome3.defaultIconTheme librsvg desktop_file_utils acl libgudev libsecret
+    libvirt-glib glib gtk3 gtkvnc libxml2
+    libvirt spice-gtk spice-protocol libsoup json-glib webkitgtk libosinfo systemd
+    tracker tracker-miners libcap yajl gmp gdbm cyrus_sasl libusb libarchive
+    gnome3.defaultIconTheme librsvg acl libgudev libsecret
     libcap_ng numactl xen libapparmor
   ];
 
   preFixup = ''
-    for prog in "$out/bin/"*; do
-        wrapProgram "$prog" \
-            --set GDK_PIXBUF_MODULE_FILE "$GDK_PIXBUF_MODULE_FILE" \
-            --prefix XDG_DATA_DIRS : "${gnome3.gnome_themes_standard}/share:$XDG_ICON_DIRS:$GSETTINGS_SCHEMAS_PATH" \
-            --prefix PATH : "${stdenv.lib.makeBinPath [ mtools cdrkit libcdio qemu ]}"
-    done
+    gappsWrapperArgs+=(--prefix PATH : "${stdenv.lib.makeBinPath [ mtools cdrkit libcdio qemu ]}")
   '';
+
+  mesonFlags = [
+    "-Dovirt=false"
+  ];
+
+  postPatch = ''
+    chmod +x build-aux/post_install.py # patchShebangs requires executable file
+    patchShebangs build-aux/post_install.py
+  '';
+
+  passthru = {
+    updateScript = gnome3.updateScript {
+      packageName = "gnome-boxes";
+      attrPath = "gnome3.gnome-boxes";
+    };
+  };
 
   meta = with stdenv.lib; {
     description = "Simple GNOME 3 application to access remote or virtual systems";

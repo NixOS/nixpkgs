@@ -1,6 +1,14 @@
 # This module defines the global list of uids and gids.  We keep a
 # central list to prevent id collisions.
 
+# IMPORTANT!
+# We only add static uids and gids for services where it is not feasible
+# to change uids/gids on service start, in example a service with a lot of
+# files. Please also check if the service is applicable for systemd's
+# DynamicUser option and does not need a uid/gid allocation at all.
+# Systemd can also change ownership of service directories using the
+# RuntimeDirectory/StateDirectory options.
+
 { config, pkgs, lib, ... }:
 
 {
@@ -56,7 +64,7 @@
       #dialout = 27; # unused
       polkituser = 28;
       #utmp = 29; # unused
-      ddclient = 30;
+      # ddclient = 30; # converted to DynamicUser = true
       davfs2 = 31;
       #disnix = 33; # unused
       osgi = 34;
@@ -65,7 +73,7 @@
       foldingathome = 37;
       sabnzbd = 38;
       #kdm = 39; # dropped in 17.03
-      ghostone = 40;
+      #ghostone = 40; # dropped in 18.03
       git = 41;
       fourstore = 42;
       fourstorehttp = 43;
@@ -106,7 +114,7 @@
       freenet = 79;
       ircd = 80;
       bacula = 81;
-      almir = 82;
+      #almir = 82; # removed 2018-03-25, the almir package was removed in 30291227f2411abaca097773eedb49b8f259e297 during 2017-08
       deluge = 83;
       mysql = 84;
       rabbitmq = 85;
@@ -138,7 +146,6 @@
       ngircd = 112;
       btsync = 113;
       minecraft = 114;
-      #monetdb = 115; # unused (not packaged), removed 2016-09-19
       vault = 115;
       rippled = 116;
       murmur = 117;
@@ -191,16 +198,16 @@
       cadvisor = 167;
       nylon = 168;
       apache-kafka = 169;
-      panamax = 170;
+      #panamax = 170; # unused
       exim = 172;
       #fleet = 173; # unused
       #input = 174; # unused
       sddm = 175;
       tss = 176;
-      memcached = 177;
+      #memcached = 177; removed 2018-01-03
       ntp = 179;
       zabbix = 180;
-      redis = 181;
+      #redis = 181; removed 2018-01-03
       unifi = 183;
       uptimed = 184;
       zope2 = 185;
@@ -233,7 +240,7 @@
       calibre-server = 213;
       heapster = 214;
       bepasty = 215;
-      pumpio = 216;
+      # pumpio = 216; # unused, removed 2018-02-24
       nm-openvpn = 217;
       mathics = 218;
       ejabberd = 219;
@@ -301,6 +308,15 @@
       pykms = 282;
       kodi = 283;
       restya-board = 284;
+      mighttpd2 = 285;
+      hass = 286;
+      monero = 287;
+      ceph = 288;
+      duplicati = 289;
+      monetdb = 290;
+      restic = 291;
+      openvpn = 292;
+      meguca = 293;
 
       # When adding a uid, make sure it doesn't match an existing gid. And don't use uids above 399!
 
@@ -339,7 +355,7 @@
       dialout = 27;
       #polkituser = 28; # currently unused, polkitd doesn't need a group
       utmp = 29;
-      ddclient = 30;
+      # ddclient = 30; # converted to DynamicUser = true
       davfs2 = 31;
       disnix = 33;
       osgi = 34;
@@ -348,7 +364,7 @@
       #foldingathome = 37; # unused
       #sabnzd = 38; # unused
       #kdm = 39; # unused, even before 17.03
-      ghostone = 40;
+      #ghostone = 40; # dropped in 18.03
       git = 41;
       fourstore = 42;
       fourstorehttp = 43;
@@ -389,7 +405,7 @@
       freenet = 79;
       ircd = 80;
       bacula = 81;
-      almir = 82;
+      #almir = 82; # removed 2018-03-25, the almir package was removed in 30291227f2411abaca097773eedb49b8f259e297 during 2017-08
       deluge = 83;
       mysql = 84;
       rabbitmq = 85;
@@ -419,7 +435,6 @@
       #ngircd = 112; # unused
       btsync = 113;
       #minecraft = 114; # unused
-      #monetdb = 115; # unused (not packaged), removed 2016-09-19
       vault = 115;
       #ripped = 116; # unused
       #murmur = 117; # unused
@@ -469,16 +484,16 @@
       #chronos = 164; # unused
       gitlab = 165;
       nylon = 168;
-      panamax = 170;
+      #panamax = 170; # unused
       exim = 172;
-      fleet = 173;
+      #fleet = 173; # unused
       input = 174;
       sddm = 175;
       tss = 176;
-      #memcached = 177; # unused
+      #memcached = 177; # unused, removed 2018-01-03
       #ntp = 179; # unused
       #zabbix = 180; # unused
-      #redis = 181; # unused
+      #redis = 181; # unused, removed 2018-01-03
       #unifi = 183; # unused
       #uptimed = 184; # unused
       #zope2 = 185; # unused
@@ -510,7 +525,7 @@
       xtreemfs = 212;
       calibre-server = 213;
       bepasty = 215;
-      pumpio = 216;
+      # pumpio = 216; # unused, removed 2018-02-24
       nm-openvpn = 217;
       mathics = 218;
       ejabberd = 219;
@@ -570,6 +585,15 @@
       pykms = 282;
       kodi = 283;
       restya-board = 284;
+      mighttpd2 = 285;
+      hass = 286;
+      monero = 287;
+      ceph = 288;
+      duplicati = 289;
+      monetdb = 290;
+      restic = 291;
+      openvpn = 292;
+      meguca = 293;
 
       # When adding a gid, make sure it doesn't match an existing
       # uid. Users and groups with the same name should have equal

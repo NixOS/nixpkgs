@@ -1,6 +1,5 @@
 { stdenv, fetchurl, m4, cxx ? true
 , buildPackages
-, buildPlatform, hostPlatform
 , withStatic ? false }:
 
 let inherit (stdenv.lib) optional optionalString; in
@@ -19,8 +18,8 @@ let self = stdenv.mkDerivation rec {
   outputs = [ "out" "dev" "info" ];
   passthru.static = self.out;
 
-  nativeBuildInputs = [ m4 ]
-    ++ stdenv.lib.optional (buildPlatform != hostPlatform) buildPackages.stdenv.cc;
+  depsBuildBuild = [ buildPackages.stdenv.cc ];
+  nativeBuildInputs = [ m4 ];
 
   configureFlags =
     # Build a "fat binary", with routines for several sub-architectures
@@ -28,22 +27,23 @@ let self = stdenv.mkDerivation rec {
     # See <http://hydra.nixos.org/build/2760931>, for instance.
     #
     # no darwin because gmp uses ASM that clang doesn't like
-    optional (!stdenv.isSunOS) "--enable-fat"
+    optional (!stdenv.isSunOS && stdenv.hostPlatform.isx86) "--enable-fat"
     ++ (if cxx then [ "--enable-cxx"  ]
                else [ "--disable-cxx" ])
     ++ optional (cxx && stdenv.isDarwin) "CPPFLAGS=-fexceptions"
-    ++ optional stdenv.isDarwin "ABI=64"
+    ++ optional (stdenv.isDarwin && stdenv.is64bit) "ABI=64"
     ++ optional stdenv.is64bit "--with-pic"
+    ++ optional (with stdenv.hostPlatform; useAndroidPrebuilt || useiOSPrebuilt) "--disable-assembly"
     ;
 
   # The config.guess in GMP tries to runtime-detect various
   # ARM optimization flags via /proc/cpuinfo (and is also
   # broken on multicore CPUs). Avoid this impurity.
-  preConfigure = optionalString stdenv.isArm ''
+  preConfigure = optionalString stdenv.isAarch32 ''
       configureFlagsArray+=("--build=$(./configfsf.guess)")
     '';
 
-  doCheck = buildPlatform == hostPlatform;
+  doCheck = true; # not cross;
 
   dontDisableStatic = withStatic;
 

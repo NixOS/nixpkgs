@@ -1,5 +1,5 @@
-{ stdenv, fetchurl, buildPythonApplication
-, zip, ffmpeg, rtmpdump, atomicparsley, pycryptodome, pandoc
+{ stdenv, targetPlatform, fetchurl, buildPythonPackage
+, zip, ffmpeg, rtmpdump, phantomjs2, atomicparsley, pycryptodome, pandoc
 # Pandoc is required to build the package's man page. Release tarballs contain a
 # formatted man page already, though, it will still be installed. We keep the
 # manpage argument in place in case someone wants to use this derivation to
@@ -8,18 +8,19 @@
 , generateManPage ? false
 , ffmpegSupport ? true
 , rtmpSupport ? true
+, phantomjsSupport ? false
 , hlsEncryptedSupport ? true
 , makeWrapper }:
 
 with stdenv.lib;
-buildPythonApplication rec {
+buildPythonPackage rec {
 
-  name = "youtube-dl-${version}";
-  version = "2017.12.02";
+  pname = "youtube-dl";
+  version = "2018.05.18";
 
   src = fetchurl {
-    url = "https://yt-dl.org/downloads/${version}/${name}.tar.gz";
-    sha256 = "1qf5gz00cnxzab3cwh9kxzhs08mddm0nwvb7j5z5xxzhi6wkslha";
+    url = "https://yt-dl.org/downloads/${version}/${pname}-${version}.tar.gz";
+    sha256 = "11r0hv6885w8k4m307kvf9545vr5a3ym9bf7szghvbcgmgc8lm5w";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -29,20 +30,24 @@ buildPythonApplication rec {
   # Ensure ffmpeg is available in $PATH for post-processing & transcoding support.
   # rtmpdump is required to download files over RTMP
   # atomicparsley for embedding thumbnails
-  postInstall = let
-    packagesToBinPath =
-    [ atomicparsley ]
-    ++ optional ffmpegSupport ffmpeg
-    ++ optional rtmpSupport rtmpdump;
-  in ''
-    wrapProgram $out/bin/youtube-dl --prefix PATH : "${makeBinPath packagesToBinPath}"
+  makeWrapperArgs = let
+      packagesToBinPath =
+        [ atomicparsley ]
+        ++ optional ffmpegSupport ffmpeg
+        ++ optional rtmpSupport rtmpdump
+        ++ optional phantomjsSupport phantomjs2;
+    in [ ''--prefix PATH : "${makeBinPath packagesToBinPath}"'' ];
+
+  postInstall = ''
+    mkdir -p $out/share/zsh/site-functions
+    cp youtube-dl.zsh $out/share/zsh/site-functions/_youtube-dl
   '';
 
   # Requires network
   doCheck = false;
 
   meta = {
-    homepage = http://rg3.github.io/youtube-dl/;
+    homepage = https://rg3.github.io/youtube-dl/;
     repositories.git = https://github.com/rg3/youtube-dl.git;
     description = "Command-line tool to download videos from YouTube.com and other sites";
     longDescription = ''

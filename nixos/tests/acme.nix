@@ -54,9 +54,11 @@ in import ./make-test.nix {
   };
 
   testScript = ''
+    $letsencrypt->waitForUnit("default.target");
     $letsencrypt->waitForUnit("boulder.service");
-    startAll;
+    $webserver->waitForUnit("default.target");
     $webserver->waitForUnit("acme-certificates.target");
+    $client->waitForUnit("default.target");
     $client->succeed('curl https://example.com/ | grep -qF "hello world"');
   '';
 }

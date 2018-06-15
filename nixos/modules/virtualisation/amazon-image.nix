@@ -11,7 +11,7 @@ with lib;
 let cfg = config.ec2; in
 
 {
-  imports = [ ../profiles/headless.nix ./ec2-data.nix ./grow-partition.nix ./amazon-init.nix ];
+  imports = [ ../profiles/headless.nix ./ec2-data.nix ./amazon-init.nix ];
 
   config = {
 
@@ -21,7 +21,7 @@ let cfg = config.ec2; in
       }
     ];
 
-    virtualisation.growPartition = cfg.hvm;
+    boot.growPartition = cfg.hvm;
 
     fileSystems."/" = {
       device = "/dev/disk/by-label/nixos";
@@ -47,13 +47,6 @@ let cfg = config.ec2; in
     boot.loader.grub.device = if cfg.hvm then "/dev/xvda" else "nodev";
     boot.loader.grub.extraPerEntryConfig = mkIf (!cfg.hvm) "root (hd0)";
     boot.loader.timeout = 0;
-
-    boot.initrd.postDeviceCommands =
-      ''
-        # Force udev to exit to prevent random "Device or resource busy
-        # while trying to open /dev/xvda" errors from fsck.
-        udevadm control --exit || true
-      '';
 
     boot.initrd.network.enable = true;
 

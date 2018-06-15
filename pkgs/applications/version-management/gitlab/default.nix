@@ -1,15 +1,13 @@
 { pkgs, stdenv, lib, bundler, fetchurl, fetchFromGitHub, bundlerEnv, libiconv
-, ruby, tzdata, git, procps, dpkg, nettools
+, ruby, tzdata, git, procps, nettools
 }:
-
-/* When updating the Gemfile add `gem "activerecord-nulldb-adapter"`
-   to allow building the assets without a database */
 
 let
   rubyEnv = bundlerEnv {
     name = "gitlab-env-${version}";
     inherit ruby;
     gemdir = ./.;
+    groups = [ "default" "unicorn" "ed25519" "metrics" ];
     meta = with lib; {
       homepage = http://www.gitlab.com/;
       platforms = platforms.linux;
@@ -18,11 +16,11 @@ let
     };
   };
 
-  version = "10.1.1";
+  version = "10.8.0";
 
   gitlabDeb = fetchurl {
     url = "https://packages.gitlab.com/gitlab/gitlab-ce/packages/debian/jessie/gitlab-ce_${version}-ce.0_amd64.deb/download";
-    sha256 = "0xvzxcygy6ffqm24rk6v9gs6g9r744vpwwvk9d00wjla7hwmq3w2";
+    sha256 = "0j5jrlwfpgwfirjnqb9w4snl9w213kdxb1ajyrla211q603d4j34";
   };
 
 in
@@ -30,21 +28,19 @@ in
 stdenv.mkDerivation rec {
   name = "gitlab-${version}";
 
-  buildInputs = [
-    rubyEnv ruby bundler tzdata git procps dpkg nettools
-  ];
-
   src = fetchFromGitHub {
     owner = "gitlabhq";
     repo = "gitlabhq";
     rev = "v${version}";
-    sha256 = "0p118msad6l12pd4q3vkvjggiiasbkh6pnl94riqyb5zkb7yrb1a";
+    sha256 = "1idvi27xpghvvb3sv62afhcnnswvjlrbg5lld79a761kd4187cym";
   };
+
+  buildInputs = [
+    rubyEnv rubyEnv.wrappedRuby rubyEnv.bundler tzdata git procps nettools
+  ];
 
   patches = [
     ./remove-hardcoded-locations.patch
-    ./nulladapter.patch
-    ./fix-36783.patch
   ];
 
   postPatch = ''
@@ -58,6 +54,8 @@ stdenv.mkDerivation rec {
 
     substituteInPlace app/controllers/admin/background_jobs_controller.rb \
         --replace "ps -U" "${procps}/bin/ps -U"
+
+    sed -i '/ask_to_continue/d' lib/tasks/gitlab/two_factor.rake
 
     # required for some gems:
     cat > config/database.yml <<EOF
@@ -74,7 +72,11 @@ stdenv.mkDerivation rec {
   buildPhase = ''
     mv config/gitlab.yml.example config/gitlab.yml
 
-    dpkg -x ${gitlabDeb} .
+    # work around unpacking deb containing binary with suid bit
+    ar p ${gitlabDeb} data.tar.gz | gunzip > gitlab-deb-data.tar
+    tar -f gitlab-deb-data.tar --delete ./opt/gitlab/embedded/bin/ksu
+    tar -xf gitlab-deb-data.tar
+
     mv -v opt/gitlab/embedded/service/gitlab-rails/public/assets public
     rm -rf opt
 
@@ -100,6 +102,6 @@ stdenv.mkDerivation rec {
 
   passthru = {
     inherit rubyEnv;
-    inherit ruby;
+    ruby = rubyEnv.wrappedRuby;
   };
 }

@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name    = "j4-dmenu-desktop-${version}";
-  version = "2.15";
+  version = "2.16";
 
   src = fetchFromGitHub {
     owner  = "enkore";
     repo   = "j4-dmenu-desktop";
     rev    = "r${version}";
-    sha256 = "1yn45i3hpim2hriaqkq7wmawwsmkynvy2xgz7dg6p5r0ikw5bn1r";
+    sha256 = "0714cri8bwpimmiirhzrkbri4xi24k0za6i1aw94d3fnblk2dg9f";
   };
 
   postPatch = ''

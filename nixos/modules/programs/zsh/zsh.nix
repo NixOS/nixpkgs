@@ -36,8 +36,9 @@ in
       shellAliases = mkOption {
         default = config.environment.shellAliases;
         description = ''
-          Set of aliases for zsh shell. See <option>environment.shellAliases</option>
-          for an option format description.
+          Set of aliases for zsh shell. Overrides the default value taken from
+           <option>environment.shellAliases</option>.
+          See <option>environment.shellAliases</option> for an option format description.
         '';
         type = types.attrs; # types.attrsOf types.stringOrPath;
       };
@@ -68,7 +69,9 @@ in
 
       promptInit = mkOption {
         default = ''
-          autoload -U promptinit && promptinit && prompt walters
+          if [ "$TERM" != dumb ]; then
+            autoload -U promptinit && promptinit && prompt walters
+          fi
         '';
         description = ''
           Shell script code used to initialise the zsh prompt.
@@ -84,13 +87,6 @@ in
         type = types.bool;
       };
 
-      enableAutosuggestions = mkOption {
-        default = false;
-        description = ''
-          Enable zsh-autosuggestions
-        '';
-        type = types.bool;
-      };
     };
 
   };
@@ -107,7 +103,7 @@ in
         if [ -n "$__ETC_ZSHENV_SOURCED" ]; then return; fi
         export __ETC_ZSHENV_SOURCED=1
 
-        . ${config.system.build.setEnvironment}
+        ${config.system.build.setEnvironment.text}
 
         ${cfge.shellInit}
 
@@ -164,10 +160,6 @@ in
         done
 
         ${optionalString cfg.enableCompletion "autoload -U compinit && compinit"}
-
-        ${optionalString (cfg.enableAutosuggestions)
-          "source ${pkgs.zsh-autosuggestions}/share/zsh-autosuggestions/zsh-autosuggestions.zsh"
-        }
 
         ${cfge.interactiveShellInit}
 

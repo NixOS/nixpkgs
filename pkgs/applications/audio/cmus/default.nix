@@ -17,7 +17,7 @@
 #, waveoutSupport
 
 , cddbSupport ? true, libcddb ? null
-, cdioSupport ? true, libcdio ? null
+, cdioSupport ? true, libcdio ? null, libcdio-paranoia ? null
 , cueSupport ? true, libcue ? null
 , discidSupport ? (!stdenv.isDarwin), libdiscid ? null
 , ffmpegSupport ? true, ffmpeg ? null
@@ -69,7 +69,7 @@ let
 
     # Input file formats
     (mkFlag cddbSupport    "CONFIG_CDDB=y"    libcddb)
-    (mkFlag cdioSupport    "CONFIG_CDIO=y"    libcdio)
+    (mkFlag cdioSupport    "CONFIG_CDIO=y"    [ libcdio libcdio-paranoia ])
     (mkFlag cueSupport     "CONFIG_CUE=y"     libcue)
     (mkFlag discidSupport  "CONFIG_DISCID=y"  libdiscid)
     (mkFlag ffmpegSupport  "CONFIG_FFMPEG=y"  ffmpeg)

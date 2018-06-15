@@ -1,6 +1,6 @@
 { stdenv, lib, fetchurl, kernel ? null, which
 , xorg, makeWrapper, glibc, patchelf, unzip
-, fontconfig, freetype, mesa # for fgl_glxgears
+, fontconfig, freetype, libGLU_combined # for fgl_glxgears
 , # Whether to build the libraries only (i.e. not the kernel module or
   # driver utils). Used to support 32-bit binaries on 64-bit
   # Linux.
@@ -90,7 +90,7 @@ stdenv.mkDerivation rec {
       xorg.libXrandr xorg.libXxf86vm xorg.xf86vidmodeproto xorg.imake xorg.libICE
       patchelf
       unzip
-      mesa
+      libGLU_combined
       fontconfig
       freetype
       makeWrapper
@@ -108,7 +108,7 @@ stdenv.mkDerivation rec {
   LD_LIBRARY_PATH = makeLibraryPath
     [ xorg.libXrender xorg.libXext xorg.libX11 xorg.libXinerama xorg.libSM
       xorg.libXrandr xorg.libXxf86vm xorg.xf86vidmodeproto xorg.imake xorg.libICE
-      mesa
+      libGLU_combined
       fontconfig
       freetype
       stdenv.cc.cc
@@ -122,7 +122,7 @@ stdenv.mkDerivation rec {
                    xorg.libX11.out xorg.libXinerama.out xorg.libSM.out
                    xorg.libICE.out ];
 
-  inherit mesa; # only required to build the examples
+  inherit libGLU_combined; # only required to build the examples
 
   enableParallelBuilding = true;
 

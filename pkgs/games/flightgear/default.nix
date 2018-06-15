@@ -1,5 +1,5 @@
 { stdenv, fetchurl, makeWrapper
-, freeglut, freealut, mesa, libICE, libjpeg, openal, openscenegraph, plib
+, freeglut, freealut, libGLU_combined, libICE, libjpeg, openal, openscenegraph, plib
 , libSM, libunwind, libX11, xproto, libXext, xextproto, libXi, inputproto
 , libXmu, libXt, simgear, zlib, boost, cmake, libpng, udev, fltk13, apr
 , makeDesktopItem, qtbase, qtdeclarative, glew
@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     makeWrapper
-    freeglut freealut mesa libICE libjpeg openal openscenegraph plib
+    freeglut freealut libGLU_combined libICE libjpeg openal openscenegraph plib
     libSM libunwind libX11 xproto libXext xextproto libXi inputproto
     libXmu libXt simgear zlib boost cmake libpng udev fltk13 apr qtbase
     glew qtdeclarative

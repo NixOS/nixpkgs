@@ -1,24 +1,26 @@
 { stdenv, fetchurl, cmake, blas, liblapack, gfortran, gmm, fltk, libjpeg
-, zlib, mesa, mesa_glu, xorg }:
+, zlib, libGLU_combined, libGLU, xorg }:
 
-let version = "3.0.5"; in
+let version = "3.0.6"; in
 
 stdenv.mkDerivation {
   name = "gmsh-${version}";
 
   src = fetchurl {
     url = "http://gmsh.info/src/gmsh-${version}-source.tgz";
-    sha256 = "ae39ed81178d94b76990b8c89b69a5ded8910fd8f7426b800044d00373d12a93";
+    sha256 = "0ywqhr0zmdhn8dvi6l8z1vkfycyv67fdrz6b95mb39np832bq04p";
   };
 
   # The original CMakeLists tries to use some version of the Lapack lib
   # that is supposed to work without Fortran but didn't for me.
   patches = [ ./CMakeLists.txt.patch ];
 
-  buildInputs = [ cmake blas liblapack gfortran gmm fltk libjpeg zlib mesa
-    mesa_glu xorg.libXrender xorg.libXcursor xorg.libXfixes xorg.libXext
+  buildInputs = [ cmake blas liblapack gmm fltk libjpeg zlib libGLU_combined
+    libGLU xorg.libXrender xorg.libXcursor xorg.libXfixes xorg.libXext
     xorg.libXft xorg.libXinerama xorg.libX11 xorg.libSM xorg.libICE
   ];
+
+  nativeBuildInputs = [ gfortran ];
 
   enableParallelBuilding = true;
 

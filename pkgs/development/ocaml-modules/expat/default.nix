@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
 	name = "ocaml${ocaml.version}-expat-${version}";
-	version = "1.0.0";
+	version = "1.1.0";
 
 	src = fetchFromGitHub {
 		owner = "whitequark";
 		repo = "ocaml-expat";
 		rev = "v${version}";
-		sha256 = "0rb47v08ra2hhh73p3d8sl4sizqwiwc37gnkl22b23sbwbjrpbz0";
+		sha256 = "07wm9663z744ya6z2lhiz5hbmc76kkipg04j9vw9dqpd1y1f2x3q";
 	};
 
 	prePatch = ''

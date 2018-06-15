@@ -1,26 +1,47 @@
-{ stdenv, fetchurl, python27Packages, wmctrl }:
+{ stdenv, fetchurl, python27Packages, python36Packages, wmctrl }:
 
-python27Packages.buildPythonPackage rec {
-  name = "plover-${version}";
-  version = "3.1.0";
+{
+  stable = with python27Packages; buildPythonPackage rec {
+    name    = "plover-${version}";
+    version = "3.1.1";
 
-  meta = with stdenv.lib; {
-    description = "OpenSteno Plover stenography software";
-    maintainers = with maintainers; [ twey kovirobi ];
-    license = licenses.gpl2;
+    meta = with stdenv.lib; {
+      description = "OpenSteno Plover stenography software";
+      maintainers = with maintainers; [ twey kovirobi ];
+      license     = licenses.gpl2;
+    };
+
+    src = fetchurl {
+      url    = "https://github.com/openstenoproject/plover/archive/v${version}.tar.gz";
+      sha256 = "1hdg5491phx6svrxxsxp8v6n4b25y7y4wxw7x3bxlbyhaskgj53r";
+    };
+
+    buildInputs           = [ pytest mock ];
+    propagatedBuildInputs = [
+      six setuptools pyserial appdirs hidapi wxPython xlib wmctrl
+    ];
   };
 
-  src = fetchurl {
-    url = "https://github.com/openstenoproject/plover/archive/v${version}.tar.gz";
-    sha256 = "1zdlgyjp93sfvk6by7rsh9hj4ijzplglrxpcpkcir6c3nq2bixl4";
+  dev = with python36Packages; buildPythonPackage rec {
+    name    = "plover-${version}";
+    version = "4.0.0.dev8";
+
+    meta = with stdenv.lib; {
+      description = "OpenSteno Plover stenography software";
+      maintainers = with maintainers; [ twey kovirobi ];
+      license     = licenses.gpl2;
+    };
+
+    src = fetchurl {
+      url    = "https://github.com/openstenoproject/plover/archive/v${version}.tar.gz";
+      sha256 = "1wxkmik1zyw5gqig5r0cas5v6f5408fbnximzw610rdisqy09rxp";
+    };
+
+    # I'm not sure why we don't find PyQt5 here but there's a similar
+    # sed on many of the platforms Plover builds for
+    postPatch = "sed -i /PyQt5/d setup.cfg";
+
+    checkInputs           = [ pytest mock ];
+    propagatedBuildInputs = [ Babel pyqt5 xlib pyserial appdirs wcwidth ];
   };
-
-  # This is a fix for https://github.com/pypa/pip/issues/3624 causing regression https://github.com/pypa/pip/issues/3781
-  postPatch = ''
-    substituteInPlace setup.py --replace " in sys_platform" " == sys_platform"
-    '';
-
-  buildInputs = with python27Packages; [ pytest mock ];
-  propagatedBuildInputs = with python27Packages; [ six setuptools pyserial appdirs hidapi
-    wxPython xlib wmctrl ];
 }

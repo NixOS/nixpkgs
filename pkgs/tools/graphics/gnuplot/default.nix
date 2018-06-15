@@ -20,11 +20,11 @@ let
   withX = libX11 != null && !aquaterm && !stdenv.isDarwin;
 in
 stdenv.mkDerivation rec {
-  name = "gnuplot-5.2.2";
+  name = "gnuplot-5.2.4";
 
   src = fetchurl {
     url = "mirror://sourceforge/gnuplot/${name}.tar.gz";
-    sha256 = "18diyy7aib9mn098x07g25c7jij1x7wbfpicz0z8gwxx08px45m4";
+    sha256 = "1jvh8xmd2cvrhlsg88kxwh55wkwx31sg50v1n59slfippl0g058m";
   };
 
   nativeBuildInputs = [ makeWrapper pkgconfig texinfo ] ++ lib.optional withQt qttools;
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     # lrelease is in qttools, not in qtbase.
-    substituteInPlace configure --replace '$'{QT5LOC}/lrelease lrelease
+    sed -i configure -e 's|''${QT5LOC}/lrelease|lrelease|'
   '';
 
   configureFlags = [

@@ -1,11 +1,12 @@
 # Generic builder.
 
 { lib
+, config
 , python
 , wrapPython
 , setuptools
 , unzip
-, ensureNewerSourcesHook
+, ensureNewerSourcesForZipFilesHook
 # Whether the derivation provides a Python module or not.
 , toPythonModule
 , namePrefix
@@ -13,7 +14,10 @@
 
 { name ? "${attrs.pname}-${attrs.version}"
 
-# Dependencies for building the package
+# Build-time dependencies for the package
+, nativeBuildInputs ? []
+
+# Run-time dependencies for the package
 , buildInputs ? []
 
 # Dependencies needed for running the checkPhase.
@@ -50,7 +54,7 @@
 
 , passthru ? {}
 
-, doCheck ? false
+, doCheck ? config.doCheckByDefault or false
 
 , ... } @ attrs:
 
@@ -66,13 +70,14 @@ toPythonModule (python.stdenv.mkDerivation (builtins.removeAttrs attrs [
 
   name = namePrefix + name;
 
-  buildInputs = ([ wrapPython (ensureNewerSourcesHook { year = "1980"; }) ]
-    ++ (lib.optional (lib.hasSuffix "zip" attrs.src.name or "") unzip)
-    ++ lib.optionals doCheck checkInputs
-    ++ lib.optional catchConflicts setuptools # If we nog longer propagate setuptools
+  nativeBuildInputs = [ ensureNewerSourcesForZipFilesHook ]
+    ++ nativeBuildInputs;
+
+  buildInputs = [ wrapPython ]
+    ++ lib.optional (lib.hasSuffix "zip" (attrs.src.name or "")) unzip
+    ++ lib.optional catchConflicts setuptools # If we no longer propagate setuptools
     ++ buildInputs
-    ++ pythonPath
-  );
+    ++ pythonPath;
 
   # Propagate python and setuptools. We should stop propagating setuptools.
   propagatedBuildInputs = propagatedBuildInputs ++ [ python setuptools ];
@@ -80,6 +85,7 @@ toPythonModule (python.stdenv.mkDerivation (builtins.removeAttrs attrs [
   # Python packages don't have a checkPhase, only an installCheckPhase
   doCheck = false;
   doInstallCheck = doCheck;
+  installCheckInputs = checkInputs;
 
   postFixup = lib.optionalString (!dontWrapPythonPrograms) ''
     wrapPythonPrograms

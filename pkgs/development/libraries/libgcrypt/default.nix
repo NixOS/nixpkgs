@@ -1,14 +1,16 @@
-{ stdenv, fetchurl, libgpgerror, enableCapabilities ? false, libcap }:
+{ stdenv, fetchurl, gettext, libgpgerror, enableCapabilities ? false, libcap
+, buildPackages
+}:
 
 assert enableCapabilities -> stdenv.isLinux;
 
 stdenv.mkDerivation rec {
   name = "libgcrypt-${version}";
-  version = "1.8.1";
+  version = "1.8.3";
 
   src = fetchurl {
     url = "mirror://gnupg/libgcrypt/${name}.tar.bz2";
-    sha256 = "1cvqd9jk5qshbh48yh3ixw4zyr4n5k50r3475rrh20xfn7w7aa3s";
+    sha256 = "0z5gs1khzyknyfjr19k8gk4q148s6q987ya85cpn0iv70fz91v36";
   };
 
   outputs = [ "out" "dev" "info" ];
@@ -19,8 +21,18 @@ stdenv.mkDerivation rec {
   # The build enables -O2 by default for everything else.
   hardeningDisable = stdenv.lib.optional stdenv.cc.isClang "fortify";
 
+  depsBuildBuild = [ buildPackages.stdenv.cc ];
+
   buildInputs = [ libgpgerror ]
+    ++ stdenv.lib.optional stdenv.isDarwin gettext
     ++ stdenv.lib.optional enableCapabilities libcap;
+
+  preConfigure = stdenv.lib.optionalString stdenv.isCross ''
+    # This is intentional: gpg-error-config is a shell script that will work during the build
+    mkdir -p "$NIX_BUILD_TOP"/bin
+    ln -s ${libgpgerror.dev}/bin/gpg-error-config "$NIX_BUILD_TOP/bin"
+    export PATH="$NIX_BUILD_TOP/bin:$PATH"
+  '';
 
   # Make sure libraries are correct for .pc and .la files
   # Also make sure includes are fixed for callers who don't use libgpgcrypt-config

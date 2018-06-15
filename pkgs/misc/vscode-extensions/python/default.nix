@@ -36,6 +36,6 @@ vscode-utils.buildVscodeMarketplaceExtension {
 
     meta = with lib; {
       license = licenses.mit;
-      maintainer = [ maintainers.jraygauthier ];
+      maintainers = [ maintainers.jraygauthier ];
     };
 }

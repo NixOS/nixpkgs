@@ -21,6 +21,6 @@ buildPythonPackage rec {
     description = "Subclass of the rpkg project for dealing with rpm packaging";
     homepage = https://pagure.io/fedpkg;
     license = licenses.gpl2;
-    maintainers = with maintainers; [ mornfall ];
+    maintainers = with maintainers; [ ];
   };
 }

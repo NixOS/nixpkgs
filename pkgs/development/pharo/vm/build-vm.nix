@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, bash, unzip, glibc, openssl, gcc, mesa, freetype, xorg, alsaLib, cairo, libuuid, autoreconfHook, gcc48, ... }:
+{ stdenv, fetchurl, bash, unzip, glibc, openssl, gcc, libGLU_combined, freetype, xorg, alsaLib, cairo, libuuid, autoreconfHook, gcc48, ... }:
 
 { name, src, version, source-date, source-url, ... }:
 
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     else if stdenv.isLinux && stdenv.isx86_64  then "linux64x64"
     else if stdenv.isDarwin && stdenv.isi686   then "macos32x86"
     else if stdenv.isDarwin && stdenv.isx86_64 then "macos64x64"
-    else abort "Unsupported platform: only Linux/Darwin x86/x64 are supported.";
+    else throw "Unsupported platform: only Linux/Darwin x86/x64 are supported.";
 
   # Shared data (for the sources file)
   pharo-share = import ./share.nix { inherit stdenv fetchurl unzip; };
@@ -83,7 +83,7 @@ stdenv.mkDerivation rec {
     mkdir -p "$out/bin"
 
     # Note: include ELF rpath in LD_LIBRARY_PATH for finding libc.
-    libs=$out:$(patchelf --print-rpath "$out/pharo"):${cairo}/lib:${mesa}/lib:${freetype}/lib:${openssl}/lib:${libuuid}/lib:${alsaLib}/lib:${xorg.libICE}/lib:${xorg.libSM}/lib
+    libs=$out:$(patchelf --print-rpath "$out/pharo"):${cairo}/lib:${libGLU_combined}/lib:${freetype}/lib:${openssl}/lib:${libuuid}/lib:${alsaLib}/lib:${xorg.libICE}/lib:${xorg.libSM}/lib
 
     # Create the script
     cat > "$out/bin/${cmd}" <<EOF
@@ -104,9 +104,9 @@ stdenv.mkDerivation rec {
   #
   # (stack protection is disabled above for gcc 4.8 compatibility.)
   nativeBuildInputs = [ autoreconfHook ];
-  buildInputs = [ bash unzip glibc openssl gcc48 mesa freetype xorg.libX11 xorg.libICE xorg.libSM alsaLib cairo pharo-share libuuid ];
+  buildInputs = [ bash unzip glibc openssl gcc48 libGLU_combined freetype xorg.libX11 xorg.libICE xorg.libSM alsaLib cairo pharo-share libuuid ];
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "Clean and innovative Smalltalk-inspired environment";
     longDescription = ''
       Pharo's goal is to deliver a clean, innovative, free open-source
@@ -122,8 +122,8 @@ stdenv.mkDerivation rec {
       packaging (ppa:pharo/stable)' project.
     '';
     homepage = http://pharo.org;
-    license = stdenv.lib.licenses.mit;
-    maintainers = [ stdenv.lib.maintainers.lukego ];
-    platforms = [ "i686-linux" "x86_64-linux" "i686-darwin" "x86_64-darwin" ];
+    license = licenses.mit;
+    maintainers = [ maintainers.lukego ];
+    platforms = [ "i686-linux" "x86_64-linux" ];
   };
 }

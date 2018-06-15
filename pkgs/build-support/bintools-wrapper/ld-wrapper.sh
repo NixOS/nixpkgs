@@ -14,7 +14,7 @@ if [ -n "@coreutils_bin@" ]; then
     PATH="@coreutils_bin@/bin"
 fi
 
-source @out@/nix-support/utils.sh
+source @out@/nix-support/utils.bash
 
 if [ -z "${NIX_BINTOOLS_WRAPPER_@infixSalt@_FLAGS_SET:-}" ]; then
     source @out@/nix-support/add-flags.sh
@@ -57,8 +57,8 @@ fi
 
 source @out@/nix-support/add-hardening.sh
 
-extraAfter=("${hardeningLDFlags[@]}")
-extraBefore=()
+extraAfter=()
+extraBefore=(${hardeningLDFlags[@]+"${hardeningLDFlags[@]}"})
 
 if [ -z "${NIX_@infixSalt@_LDFLAGS_SET:-}" ]; then
     extraAfter+=($NIX_@infixSalt@_LDFLAGS)
@@ -66,6 +66,11 @@ if [ -z "${NIX_@infixSalt@_LDFLAGS_SET:-}" ]; then
 fi
 
 extraAfter+=($NIX_@infixSalt@_LDFLAGS_AFTER)
+
+# Specify the target emulation if nothing is passed in ("-m" overrides this
+# environment variable). Ensures we never blindly fallback on targeting the host
+# platform.
+: ${LDEMULATION:=@emulation@}
 
 # Three tasks:
 #

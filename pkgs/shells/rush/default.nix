@@ -8,7 +8,9 @@ stdenv.mkDerivation rec {
     sha256 = "1vxdb81ify4xcyygh86250pi50krb16dkj42i5ii4ns3araiwckz";
   };
 
-  patches = [ ./fix-format-security-error.patch ];
+  patches = [ ./fix-format-security-error.patch
+    ./intprops.patch
+  ];
 
   doCheck = true;
 

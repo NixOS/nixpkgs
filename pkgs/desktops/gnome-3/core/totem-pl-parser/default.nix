@@ -1,10 +1,20 @@
-{ stdenv, fetchurl, meson, ninja, pkgconfig, gettext, gmime, libxml2, libsoup, gnome3 }:
+{ stdenv, fetchurl, meson, ninja, pkgconfig, gettext, gmime, libxml2, gobjectIntrospection, gnome3 }:
 
 stdenv.mkDerivation rec {
-  inherit (import ./src.nix fetchurl) name src;
+  name = "totem-pl-parser-${version}";
+  version = "3.26.1";
 
-  nativeBuildInputs = [ meson ninja pkgconfig gettext ];
-  buildInputs = [ gmime libxml2 libsoup ];
+  src = fetchurl {
+    url = "mirror://gnome/sources/totem-pl-parser/${gnome3.versionBranch version}/${name}.tar.xz";
+    sha256 = "0k5pnka907invgds48d73c1xx1a366v5dcld3gr2l1dgmjwc9qka";
+  };
+
+  passthru = {
+    updateScript = gnome3.updateScript { packageName = "totem-pl-parser"; attrPath = "gnome3.totem-pl-parser"; };
+  };
+
+  nativeBuildInputs = [ meson ninja pkgconfig gettext gobjectIntrospection ];
+  buildInputs = [ gmime libxml2 ];
 
   meta = with stdenv.lib; {
     homepage = https://wiki.gnome.org/Apps/Videos;

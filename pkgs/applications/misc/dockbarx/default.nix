@@ -1,14 +1,14 @@
 { stdenv, fetchFromGitHub, pythonPackages, gnome2, keybinder }:
 
 pythonPackages.buildPythonApplication rec {
-  ver = "0.92";
+  ver = "0.93";
   name = "dockbarx-${ver}";
 
   src = fetchFromGitHub {
     owner = "M7S";
     repo = "dockbarx";
     rev = ver;
-    sha256 = "17n7jc3bk3f2i0i1ddpp05bakifc8y5xppads7ihpkj3qw9g35vl";
+    sha256 = "1h1g2vag5vnx87sa1f0qi8rq7wlr2ymvkrdr08kk7cma4wk0x6hg";
   };
 
   postPatch = ''

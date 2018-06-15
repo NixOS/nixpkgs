@@ -1,13 +1,14 @@
-{ stdenv, pythonPackages }:
+{ stdenv, pythonPackages, fetchpatch }:
 
-pythonPackages.buildPythonApplication rec {
+with pythonPackages;
+
+buildPythonApplication rec {
   pname = "td-watson";
-  name = "${pname}-${version}";
-  version = "1.4.0";
+  version = "1.5.2";
 
-  src = pythonPackages.fetchPypi {
+  src = fetchPypi {
     inherit version pname;
-    sha256 = "1py0g4990jmvq0dn7jasda7f10kzr41bix46hnbyc1rshjzc17hq";
+    sha256 = "6e03d44a9278807fe5245e9ed0943f13ffb88e11249a02655c84cb86260b27c8";
   };
 
   # uses tox, test invocation fails
@@ -15,8 +16,16 @@ pythonPackages.buildPythonApplication rec {
   checkPhase = ''
     py.test -vs tests
  '';
-  checkInputs = with pythonPackages; [ py pytest pytest-datafiles mock pytest-mock pytestrunner ];
-  propagatedBuildInputs = with pythonPackages; [ requests click arrow ];
+
+  patches = [
+    (fetchpatch {
+      url = https://github.com/TailorDev/Watson/commit/f5760c71cbc22de4e12ede8f6f7257515a9064d3.patch;
+      sha256 = "0s9h26915ilpbd0qhmvk77r3gmrsdrl5l7dqxj0l5q66fp0z6b0g";
+    })
+  ];
+
+  checkInputs = [ py pytest pytest-datafiles mock pytest-mock pytestrunner ];
+  propagatedBuildInputs = [ requests click arrow ];
 
   meta = with stdenv.lib; {
     homepage = https://tailordev.github.io/Watson/;

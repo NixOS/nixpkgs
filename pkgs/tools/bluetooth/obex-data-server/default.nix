@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, libusb, glib, dbus_glib, bluez, openobex, dbus_libs }:
+{ stdenv, fetchurl, pkgconfig, libusb, glib, dbus-glib, bluez, openobex, dbus_libs }:
    
 stdenv.mkDerivation rec {
   name = "obex-data-server-0.4.6";
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ libusb glib dbus_glib bluez openobex dbus_libs ];
+  buildInputs = [ libusb glib dbus-glib bluez openobex dbus_libs ];
 
   patches = [ ./obex-data-server-0.4.6-build-fixes-1.patch ];
 

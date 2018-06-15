@@ -1,4 +1,4 @@
-{ stdenv, fetchurl
+{ stdenv, fetchurl, fetchpatch
 , bzip2
 , expat
 , libffi
@@ -27,7 +27,7 @@ with stdenv.lib;
 
 let
   majorVersion = "3.4";
-  minorVersion = "7";
+  minorVersion = "8";
   minorVersionSuffix = "";
   pythonVersion = majorVersion;
   version = "${majorVersion}.${minorVersion}${minorVersionSuffix}";
@@ -39,6 +39,8 @@ let
     ++ optionals x11Support [ tcl tk libX11 xproto ]
     ++ optionals stdenv.isDarwin [ CF configd ];
 
+  hasDistutilsCxxPatch = !(stdenv.cc.isGNU or false);
+
 in stdenv.mkDerivation {
   name = "python3-${version}";
   pythonVersion = majorVersion;
@@ -48,7 +50,7 @@ in stdenv.mkDerivation {
 
   src = fetchurl {
     url = "http://www.python.org/ftp/python/${version}/Python-${version}.tar.xz";
-    sha256 = "06wx2ag0dnixny67jfdl5z10243fjga898cgxhnr4dnxaqmwy547";
+    sha256 = "1sn3i9z9m56inlfrqs250qv8snl8w211wpig2pfjlyrcj3x75919";
   };
 
   NIX_LDFLAGS = optionalString stdenv.isLinux "-lgcc_s";
@@ -67,6 +69,18 @@ in stdenv.mkDerivation {
   patches = [
     ./no-ldconfig.patch
     ./ld_library_path.patch
+  ] ++ optionals (x11Support && stdenv.isDarwin) [
+    ./use-correct-tcl-tk-on-darwin.patch
+  ] ++ optionals hasDistutilsCxxPatch [
+    # Fix for http://bugs.python.org/issue1222585
+    # Upstream distutils is calling C compiler to compile C++ code, which
+    # only works for GCC and Apple Clang. This makes distutils to call C++
+    # compiler when needed.
+    (fetchpatch {
+      url = "https://bugs.python.org/file47046/python-3.x-distutils-C++.patch";
+      sha256 = "0dgdn9k2kmw4wh90vdnjcrnn97ylxgx7mbn9l87fwz6j501jqvk8";
+      extraPrefix = "";
+    })
   ];
 
   postPatch = ''
@@ -94,7 +108,10 @@ in stdenv.mkDerivation {
     "--without-ensurepip"
     "--with-system-expat"
     "--with-system-ffi"
-  ];
+  ]
+    # Never even try to use lchmod on linux,
+    # don't rely on detecting glibc-isms.
+  ++ optional stdenv.hostPlatform.isLinux "ac_cv_func_lchmod=no";
 
   preConfigure = ''
     for i in /usr /sw /opt /pkg; do	# improve purity
@@ -103,6 +120,9 @@ in stdenv.mkDerivation {
     ${optionalString stdenv.isDarwin ''
        export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -msse2"
        export MACOSX_DEPLOYMENT_TARGET=10.6
+     ''
+     + optionalString stdenv.hostPlatform.isMusl ''
+      export NIX_CFLAGS_COMPILE+=" -DTHREAD_STACK_SIZE=0x100000"
      ''}
   '';
 
@@ -158,7 +178,7 @@ in stdenv.mkDerivation {
   passthru = let
     pythonPackages = callPackage ../../../../../top-level/python-packages.nix {python=self; overrides=packageOverrides;};
   in rec {
-    inherit libPrefix sitePackages x11Support;
+    inherit libPrefix sitePackages x11Support hasDistutilsCxxPatch;
     executable = "${libPrefix}m";
     buildEnv = callPackage ../../wrapper.nix { python = self; inherit (pythonPackages) requiredPythonModules; };
     withPackages = import ../../with-packages.nix { inherit buildEnv pythonPackages;};
@@ -170,6 +190,8 @@ in stdenv.mkDerivation {
   };
 
   enableParallelBuilding = true;
+
+  doCheck = false; # expensive, and fails
 
   meta = {
     homepage = http://python.org;
@@ -185,6 +207,6 @@ in stdenv.mkDerivation {
     '';
     license = licenses.psfl;
     platforms = with platforms; linux ++ darwin;
-    maintainers = with maintainers; [ chaoflow domenkozar cstrahan ];
+    maintainers = with maintainers; [ fridh ];
   };
 }

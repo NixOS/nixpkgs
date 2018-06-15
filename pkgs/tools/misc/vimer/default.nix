@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
       in an existing instance of GVim or MacVim.
     '';
     license = licenses.mit;
-    maintainers = [ maintainers.matthiasbeyer ];
+    maintainers = [ ];
     platforms = platforms.linux;
   };
 

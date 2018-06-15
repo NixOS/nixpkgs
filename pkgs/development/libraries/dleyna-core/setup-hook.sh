@@ -5,5 +5,4 @@ addDleynaConnectorPath () {
     fi
 }
 
-envHooks+=(addDleynaConnectorPath)
-
+addEnvHooks "$targetOffset" addDleynaConnectorPath

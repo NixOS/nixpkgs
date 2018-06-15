@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, makeWrapper, cacert, zlib, buildRustPackage, curl, darwin
+{ stdenv, fetchurl, makeWrapper, bash, cacert, zlib, buildRustPackage, curl, darwin
 , version
 , src
 , platform
@@ -12,29 +12,9 @@ let
 
   bootstrapping = versionType == "bootstrap";
 
-  patchBootstrapCargo = ''
-    ${optionalString (stdenv.isLinux && bootstrapping) ''
-      patchelf \
-        --set-rpath "${stdenv.lib.makeLibraryPath [ curl zlib ]}" \
-        --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker) \
-        "$out/bin/cargo"
-    ''}
-    ${optionalString (stdenv.isDarwin && bootstrapping) ''
-      install_name_tool \
-        -change /usr/lib/libiconv.2.dylib '${getLib libiconv}/lib/libiconv.2.dylib' \
-        "$out/bin/cargo"
-      install_name_tool \
-        -change /usr/lib/libcurl.4.dylib '${getLib curl}/lib/libcurl.4.dylib' \
-        "$out/bin/cargo"
-      install_name_tool \
-        -change /usr/lib/libz.1.dylib '${getLib zlib}/lib/libz.1.dylib' \
-        "$out/bin/cargo"
-    ''}
-  '';
-
   installComponents
     = "rustc,rust-std-${platform}"
-    + (optionalString bootstrapping ",rust-docs,cargo")
+    + (optionalString bootstrapping ",cargo")
     ;
 in
 
@@ -54,9 +34,11 @@ rec {
       license = [ licenses.mit licenses.asl20 ];
     };
 
-    phases = ["unpackPhase" "installPhase" "fixupPhase"];
+    buildInputs = [ bash ] ++ stdenv.lib.optional stdenv.isDarwin Security;
 
-    propagatedBuildInputs = stdenv.lib.optional stdenv.isDarwin Security;
+    postPatch = ''
+      patchShebangs .
+    '';
 
     installPhase = ''
       ./install.sh --prefix=$out \
@@ -69,19 +51,26 @@ rec {
         patchelf \
           --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker) \
           "$out/bin/rustdoc"
-      ''}
-      ${optionalString (stdenv.isDarwin && bootstrapping) ''
-        install_name_tool -change /usr/lib/libiconv.2.dylib '${darwin.libiconv}/lib/libiconv.2.dylib' "$out/bin/cargo"
-        install_name_tool -change /usr/lib/libcurl.4.dylib '${stdenv.lib.getLib curl}/lib/libcurl.4.dylib' "$out/bin/cargo"
-        install_name_tool -change /usr/lib/libz.1.dylib '${stdenv.lib.getLib zlib}/lib/libz.1.dylib' "$out/bin/cargo"
+        patchelf \
+          --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker) \
+          "$out/bin/cargo"
       ''}
 
-      ${patchBootstrapCargo}
+      ${optionalString (stdenv.isDarwin && bootstrapping) ''
+        install_name_tool -change /usr/lib/libresolv.9.dylib '${darwin.libresolv}/lib/libresolv.9.dylib' "$out/bin/rustc"
+        install_name_tool -change /usr/lib/libresolv.9.dylib '${darwin.libresolv}/lib/libresolv.9.dylib' "$out/bin/rustdoc"
+        install_name_tool -change /usr/lib/libiconv.2.dylib '${darwin.libiconv}/lib/libiconv.2.dylib' "$out/bin/cargo"
+        install_name_tool -change /usr/lib/libresolv.9.dylib '${darwin.libresolv}/lib/libresolv.9.dylib' "$out/bin/cargo"
+        install_name_tool -change /usr/lib/libcurl.4.dylib '${stdenv.lib.getLib curl}/lib/libcurl.4.dylib' "$out/bin/cargo"
+        for f in $out/lib/lib*.dylib; do
+          install_name_tool -change /usr/lib/libresolv.9.dylib '${darwin.libresolv}/lib/libresolv.9.dylib' "$f"
+        done
+      ''}
 
       # Do NOT, I repeat, DO NOT use `wrapProgram` on $out/bin/rustc
       # (or similar) here. It causes strange effects where rustc loads
       # the wrong libraries in a bootstrap-build causing failures that
-      # are very hard to track dow. For details, see
+      # are very hard to track down. For details, see
       # https://github.com/rust-lang/rust/issues/34722#issuecomment-232164943
     '';
   };
@@ -99,16 +88,28 @@ rec {
       license = [ licenses.mit licenses.asl20 ];
     };
 
-    phases = ["unpackPhase" "installPhase" "fixupPhase"];
+    buildInputs = [ makeWrapper bash ] ++ stdenv.lib.optional stdenv.isDarwin Security;
 
-    buildInputs = [ makeWrapper ];
-    propagatedBuildInputs = stdenv.lib.optional stdenv.isDarwin Security;
+    postPatch = ''
+      patchShebangs .
+    '';
 
     installPhase = ''
+      patchShebangs ./install.sh
       ./install.sh --prefix=$out \
         --components=cargo
 
-      ${patchBootstrapCargo}
+      ${optionalString (stdenv.isLinux && bootstrapping) ''
+        patchelf \
+          --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker) \
+          "$out/bin/cargo"
+      ''}
+
+      ${optionalString (stdenv.isDarwin && bootstrapping) ''
+        install_name_tool -change /usr/lib/libiconv.2.dylib '${darwin.libiconv}/lib/libiconv.2.dylib' "$out/bin/cargo"
+        install_name_tool -change /usr/lib/libresolv.9.dylib '${darwin.libresolv}/lib/libresolv.9.dylib' "$out/bin/cargo"
+        install_name_tool -change /usr/lib/libcurl.4.dylib '${stdenv.lib.getLib curl}/lib/libcurl.4.dylib' "$out/bin/cargo"
+      ''}
 
       wrapProgram "$out/bin/cargo" \
         --suffix PATH : "${rustc}/bin"

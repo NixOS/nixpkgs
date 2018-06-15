@@ -1,0 +1,14 @@
+# The launcher game starts projects in a separate python process
+# with the -E flag, which prevents the nix set PYTHONPATH envvar
+# from taking effect, preventing the loading of pygame_sdl2
+--- a/launcher/game/project.rpy
++++ b/launcher/game/project.rpy
+@@ -239,7 +239,7 @@
+                 raise Exception("Python interpreter not found: %r", executables)
+ 
+             # Put together the basic command line.
+-            cmd = [ executable, "-EO", sys.argv[0] ]
++            cmd = [ executable, "-O", sys.argv[0] ]
+ 
+             cmd.append(self.path)
+             cmd.extend(args)

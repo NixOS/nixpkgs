@@ -1,19 +1,19 @@
 { stdenv, fetchFromGitHub, python27Packages, glib, cairo, pango, pkgconfig, libxcb, xcbutilcursor }:
 
 let cairocffi-xcffib = python27Packages.cairocffi.override {
-    pythonPath = [ python27Packages.xcffib ];
+    withXcffib = true;
   };
 in
 
 python27Packages.buildPythonApplication rec {
   name = "qtile-${version}";
-  version = "0.10.4";
+  version = "0.11.1";
 
   src = fetchFromGitHub {
     owner = "qtile";
     repo = "qtile";
     rev = "v${version}";
-    sha256 = "0rwklzgkp3x242xql6qmfpfnhr788hd3jc1l80pc5ybxlwyfx59i";
+    sha256 = "1jw6mh9m5yrijhm218lc51sc89lc2ihvyx30jhrkxy2mzllhjgrs";
   };
 
   patches = [

@@ -10,7 +10,8 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./disable_sslv3.patch
-    (fetchpatch { # CVE-2016-5104
+    (fetchpatch {
+      name = "CVE-2016-5104.patch";
       url = "https://github.com/libimobiledevice/libimobiledevice/commit/df1f5c4d70d0c19ad40072f5246ca457e7f9849e.patch";
       sha256 = "06ygb9aqcvm4v08wrldsddjgyqv5bkpq6lxzq2a1nwqp9mq4a4k1";
     })

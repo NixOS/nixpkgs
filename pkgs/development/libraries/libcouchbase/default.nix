@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "libcouchbase-${version}";
-  version = "2.7.6";
+  version = "2.9.0";
 
   src = fetchFromGitHub {
     owner = "couchbase";
     repo = "libcouchbase";
     rev = version;
-    sha256 = "13g7r0mcmrj37mihj6g1x1ckpaps659c4qwnw3ixrg7p5mb3p41f";
+    sha256 = "12s2iw4akil3hlvsccns7qw2c90yw5h67zj3wq03q938w8xcw0d0";
   };
 
   cmakeFlags = "-DLCB_NO_MOCK=ON";
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake pkgconfig ];
   buildInputs = [ libevent openssl ];
 
-  doCheck = true;
+  doCheck = (!stdenv.isDarwin);
   checkPhase = "ctest";
 
   meta = with stdenv.lib; {

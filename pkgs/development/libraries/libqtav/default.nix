@@ -1,6 +1,6 @@
 { mkDerivation, lib, fetchFromGitHub, extra-cmake-modules
 , qtbase, qtmultimedia, qtquick1, qttools
-, mesa, libX11
+, libGLU_combined, libX11
 , libass, openal, ffmpeg, libuchardet
 , alsaLib, libpulseaudio, libva
 }:
@@ -14,7 +14,7 @@ mkDerivation rec {
   nativeBuildInputs = [ extra-cmake-modules qttools ];
   buildInputs = [
     qtbase qtmultimedia qtquick1
-    mesa libX11
+    libGLU_combined libX11
     libass openal ffmpeg libuchardet
     alsaLib libpulseaudio libva
   ];
@@ -28,9 +28,9 @@ mkDerivation rec {
   };
 
   # Make sure libqtav finds its libGL dependancy at both link and run time
-  # by adding mesa to rpath. Not sure why it wasn't done automatically like
-  # the other libraries as `mesa` is part of our `buildInputs`.
-  NIX_CFLAGS_LINK = [ "-Wl,-rpath,${mesa}/lib"];
+  # by adding libGLU_combined to rpath. Not sure why it wasn't done automatically like
+  # the other libraries as `libGLU_combined` is part of our `buildInputs`.
+  NIX_CFLAGS_LINK = [ "-Wl,-rpath,${libGLU_combined}/lib"];
 
   preFixup = ''
     mkdir -p "$out/bin"

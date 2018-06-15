@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Stun server and test client";
-    homepage    = http://sourceforge.net/projects/stun/;
+    homepage    = https://sourceforge.net/projects/stun/;
     license     = licenses.vsl10;
     maintainers = with maintainers; [ marcweber obadz ];
     platforms   = platforms.linux;

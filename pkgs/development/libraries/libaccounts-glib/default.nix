@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitLab, autoconf, automake, glib
-, gtk_doc, libtool, libxml2, libxslt, pkgconfig, sqlite }:
+, gtk-doc, libtool, libxml2, libxslt, pkgconfig, sqlite }:
 
 let version = "1.23"; in
 stdenv.mkDerivation rec {
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ glib libxml2 libxslt sqlite ];
-  nativeBuildInputs = [ autoconf automake gtk_doc libtool pkgconfig ];
+  nativeBuildInputs = [ autoconf automake gtk-doc libtool pkgconfig ];
 
   postPatch = ''
     NOCONFIGURE=1 ./autogen.sh

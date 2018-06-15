@@ -65,7 +65,7 @@ stdenv.mkDerivation (rec {
     inherit description;
     homepage = http://software.schmorp.de/pkg/rxvt-unicode.html;
     downloadPage = "http://dist.schmorp.de/rxvt-unicode/Attic/";
-    maintainers = [ maintainers.mornfall ];
+    maintainers = [ ];
     platforms = platforms.unix;
   };
 })

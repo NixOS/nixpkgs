@@ -15,7 +15,7 @@
 , cairo
 , pango
 , gnome3
-, xlibs
+, xorg
 , libpng12
 , freetype
 , fontconfig
@@ -23,7 +23,7 @@
 , alsaLib
 , libidn
 , zlib
-, version ? null
+, version ? "13.9.1"
 }:
 
 let
@@ -67,9 +67,42 @@ let
       patch     = "0";
       x64hash   = "18fb374b9fb8e249b79178500dddca7a1f275411c6537e7695da5dcf19c5ba91";
       x86hash   = "4c68723b0327cf6f12da824056fce2b7853c38e6163a48c9d222b93dd8da75b6";
-      homepage  = https://www.citrix.com/downloads/citrix-receiver/linux/receiver-for-linux-latest.html; # Fix when updating version
       x64suffix = "10276927";
       x86suffix = "10276925";
+      homepage  = https://www.citrix.com/downloads/citrix-receiver/legacy-receiver-for-linux/receiver-for-linux-137.html;
+    };
+
+    "13.8.0" = {
+      major     = "13";
+      minor     = "8";
+      patch     = "0";
+      x64hash   = "FDF5991CCD52B2B98289D7B2FB46D492D3E4032846D4AFA52CAA0F8AC0578931";
+      x86hash   = "E0CFB43312BF79F753514B11F7B8DE4529823AE4C92D1B01E8A2C34F26AC57E7";
+      x64suffix = "10299729";
+      x86suffix = "10299729";
+      homepage  = https://www.citrix.com/downloads/citrix-receiver/legacy-receiver-for-linux/receiver-for-linux-138.html;
+    };
+
+    "13.9.0" = {
+      major     = "13";
+      minor     = "9";
+      patch     = "0";
+      x64hash   = "00l18s7i9yky3ddabwljwsf7fx4cjgjn9hfd74j0x1v4gl078nl9";
+      x86hash   = "117fwynpxfnrw98933y8z8v2q4g6ycs1sngvpbki2qj09bjkwmag";
+      x64suffix = "102";
+      x86suffix = "102";
+      homepage  = https://www.citrix.com/downloads/citrix-receiver/linux/receiver-for-linux-latest.html; # This version has disappeared from Citrix's website... *sigh*
+    };
+
+    "13.9.1" = {
+      major     = "13";
+      minor     = "9";
+      patch     = "1";
+      x64hash   = "A9A9157CE8C287E8AA11447A0E3C3AB7C227330E9D8882C6F7B938A4DD5925BC";
+      x86hash   = "A93E9770FD10FDD3586A2D47448559EA037265717A7000B9BD2B1DCCE7B0A483";
+      x64suffix = "6";
+      x86suffix = "6";
+      homepage  = https://www.citrix.com/downloads/citrix-receiver/linux/receiver-for-linux-latest.html;
     };
   };
 
@@ -121,11 +154,11 @@ let
         cairo
         pango
         gnome3.dconf
-        xlibs.libX11
-        xlibs.libXext
-        xlibs.libXrender
-        xlibs.libXinerama
-        xlibs.libXfixes
+        xorg.libX11
+        xorg.libXext
+        xorg.libXrender
+        xorg.libXinerama
+        xorg.libXfixes
         libpng12
         libidn
         zlib
@@ -158,7 +191,7 @@ let
           ./${prefixWithBitness}/hinst
 
         # Run the installer...
-        ./${prefixWithBitness}/hinst CDROM "`pwd`"
+        bash ./${prefixWithBitness}/hinst CDROM "`pwd`"
 
         echo "Deleting broken links..."
         for link in `find $ICAInstDir -type l `
@@ -176,6 +209,7 @@ let
         find $ICAInstDir -type f -exec file {} \; |
           grep 'ELF.*executable' |
           cut -f 1 -d : |
+          grep -vi '\(.dll\|.so\)$' | # added as a workaround to https://github.com/NixOS/nixpkgs/issues/41729
           while read f
           do
             echo "Patching ELF intrepreter and rpath for $f"
@@ -191,7 +225,7 @@ let
         makeWrapper "$ICAInstDir/wfica" "$out/bin/wfica" \
           --add-flags "-icaroot $ICAInstDir" \
           --set ICAROOT "$ICAInstDir" \
-          --set GTK_PATH "${gtk2.out}/lib/gtk-2.0:${gnome3.gnome_themes_standard}/lib/gtk-2.0" \
+          --set GTK_PATH "${gtk2.out}/lib/gtk-2.0:${gnome3.gnome-themes-standard}/lib/gtk-2.0" \
           --set GDK_PIXBUF_MODULE_FILE "$GDK_PIXBUF_MODULE_FILE" \
           --set LD_PRELOAD "${libredirect}/lib/libredirect.so" \
           --set LD_LIBRARY_PATH "$libPath" \

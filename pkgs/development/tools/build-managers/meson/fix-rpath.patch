@@ -1,0 +1,32 @@
+--- a/mesonbuild/compilers/compilers.py
++++ b/mesonbuild/compilers/compilers.py
+@@ -846,8 +848,10 @@
+             if paths != '':
+                 paths += ':'
+             paths += build_rpath
+-        if len(paths) < len(install_rpath):
+-            padding = 'X' * (len(install_rpath) - len(paths))
++        store_paths = ':'.join(filter(lambda path: path.startswith('@storeDir@'), paths.split(':')))
++        extra_space_needed = len(install_rpath + (':' if install_rpath and store_paths else '') + store_paths) - len(paths)
++        if extra_space_needed > 0:
++            padding = 'X' * extra_space_needed
+             if not paths:
+                 paths = padding
+             else:
+--- a/mesonbuild/scripts/depfixer.py
++++ b/mesonbuild/scripts/depfixer.py
+@@ -300,6 +300,14 @@
+             return
+         self.bf.seek(rp_off)
+         old_rpath = self.read_str()
++
++        if new_rpath:
++            new_rpath += b':'
++        else:
++            new_rpath = b''
++
++        new_rpath += b':'.join(filter(lambda path: path.startswith(b'@storeDir@'), old_rpath.split(b':')))
++
+         if len(old_rpath) < len(new_rpath):
+             sys.exit("New rpath must not be longer than the old one.")
+         # The linker does read-only string deduplication. If there is a

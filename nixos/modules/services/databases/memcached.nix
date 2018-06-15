@@ -40,11 +40,7 @@ in
         description = "The port to bind to";
       };
 
-      socket = mkOption {
-        default = "";
-        description = "Unix socket path to listen on. Setting this will disable network support";
-        example = "/var/run/memcached";
-      };
+      enableUnixSocket = mkEnableOption "unix socket at /run/memcached/memcached.sock";
 
       maxMemory = mkOption {
         default = 64;
@@ -68,31 +64,40 @@ in
 
   config = mkIf config.services.memcached.enable {
 
-    users.extraUsers.memcached =
-      { name = cfg.user;
-        uid = config.ids.uids.memcached;
-        description = "Memcached server user";
-      };
+    users.extraUsers = optional (cfg.user == "memcached") {
+      name = "memcached";
+      description = "Memcached server user";
+    };
 
     environment.systemPackages = [ memcached ];
 
-    systemd.services.memcached =
-      { description = "Memcached server";
+    systemd.services.memcached = {
+      description = "Memcached server";
 
-        wantedBy = [ "multi-user.target" ];
-        after = [ "network.target" ];
+      wantedBy = [ "multi-user.target" ];
+      after = [ "network.target" ];
 
-        serviceConfig = {
-          ExecStart =
-            let
-              networking = if cfg.socket != ""
-                then "-s ${cfg.socket}"
-                else "-l ${cfg.listen} -p ${toString cfg.port}";
-            in "${memcached}/bin/memcached ${networking} -m ${toString cfg.maxMemory} -c ${toString cfg.maxConnections} ${concatStringsSep " " cfg.extraOptions}";
+      serviceConfig = {
+        PermissionsStartOnly = true;
+        ExecStartPre = optionals cfg.enableUnixSocket [
+          "${pkgs.coreutils}/bin/install -d -o ${cfg.user} /run/memcached/"
+          "${pkgs.coreutils}/bin/chown -R ${cfg.user} /run/memcached/"
+        ];
+        ExecStart =
+        let
+          networking = if cfg.enableUnixSocket
+          then "-s /run/memcached/memcached.sock"
+          else "-l ${cfg.listen} -p ${toString cfg.port}";
+        in "${memcached}/bin/memcached ${networking} -m ${toString cfg.maxMemory} -c ${toString cfg.maxConnections} ${concatStringsSep " " cfg.extraOptions}";
 
-          User = cfg.user;
-        };
+        User = cfg.user;
       };
+    };
   };
+  imports = [
+    (mkRemovedOptionModule ["services" "memcached" "socket"] ''
+      This option was replaced by a fixed unix socket path at /run/memcached/memcached.sock enabled using services.memached.enableUnixSocket.
+    '')
+  ];
 
 }

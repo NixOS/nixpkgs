@@ -1,7 +1,7 @@
 { stdenv, fetchPypi, unzip, buildPythonApplication, makeDesktopItem
 # mandatory
-, qtpy, numpydoc, qtconsole, qtawesome, jedi, pycodestyle, psutil
-, pyflakes, rope, sphinx, nbconvert, mccabe
+, numpydoc, qtconsole, qtawesome, jedi, pycodestyle, psutil
+, pyflakes, rope, sphinx, nbconvert, mccabe, pyopengl, cloudpickle
 # optional
 , numpy ? null, scipy ? null, matplotlib ? null
 # optional
@@ -10,17 +10,21 @@
 
 buildPythonApplication rec {
   pname = "spyder";
-  version = "3.2.4";
-  namePrefix = "";
+  version = "3.2.8";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "028hg71gfq2yrplwhhl7hl4rbwji1l0zxzghblwmb0i443ki10v3";
+    sha256 = "0iwcby2bxvayz0kp282yh864br55w6gpd8rqcdj1cp3jbn3q6vg5";
   };
 
+  # Somehow setuptools can't find pyqt5. Maybe because the dist-info folder is missing?
+  postPatch = ''
+    sed -i -e '/pyqt5/d' setup.py
+  '';
+
   propagatedBuildInputs = [
-    jedi pycodestyle psutil qtpy pyflakes rope numpy scipy matplotlib pylint
-    numpydoc qtconsole qtawesome nbconvert mccabe
+    jedi pycodestyle psutil pyflakes rope numpy scipy matplotlib pylint
+    numpydoc qtconsole qtawesome nbconvert mccabe pyopengl cloudpickle
   ];
 
   # There is no test for spyder

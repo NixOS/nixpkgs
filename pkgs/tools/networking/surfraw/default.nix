@@ -1,11 +1,11 @@
 {stdenv, fetchurl, perl}:
 
 stdenv.mkDerivation rec {
-  name = "surfraw-2.2.9";
+  name = "surfraw-2.3.0";
 
   src = fetchurl {
-    url = "http://surfraw.alioth.debian.org/dist/surfraw-2.2.9.tar.gz";
-    sha256 = "1fy4ph5h9kp0jzj1m6pfylxnnmgdk0mmdppw76z9jhna4jndk5xa";
+    url = "http://surfraw.alioth.debian.org/dist/surfraw-2.3.0.tar.gz";
+    sha256 = "099nbif0x5cbcf18snc58nx1a3q7z0v9br9p2jiq9pcc7ic2015d";
   };
 
   configureFlags = [

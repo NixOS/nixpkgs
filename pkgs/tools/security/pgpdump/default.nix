@@ -4,13 +4,13 @@
 
 stdenv.mkDerivation rec {
   name = "pgpdump-${version}";
-  version = "0.32";
+  version = "0.33";
 
   src = fetchFromGitHub {
     owner = "kazu-yamamoto";
     repo = "pgpdump";
     rev = "v${version}";
-    sha256 = "1ip7q5sgh3nwdqbrzpp6sllkls5kma98kns53yspw1830xi1n8xc";
+    sha256 = "0pi9qdbmcmi58gmljin51ylbi3zkknl8fm26jm67cpl55hvfsn23";
   };
 
   buildInputs = stdenv.lib.optionals supportCompressedPackets [ zlib bzip2 ];
@@ -27,4 +27,3 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ primeos ];
   };
 }
-

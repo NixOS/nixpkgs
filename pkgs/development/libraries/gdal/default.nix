@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, unzip, libjpeg, libtiff, zlib
+{ stdenv, fetchurl, fetchpatch, unzip, libjpeg, libtiff, zlib
 , postgresql, mysql, libgeotiff, pythonPackages, proj, geos, openssl
 , libpng, sqlite, libspatialite, poppler, hdf4
 , libiconv
@@ -8,13 +8,23 @@
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  version = "2.2.1";
+  version = "2.3.0";
   name = "gdal-${version}";
 
   src = fetchurl {
     url = "http://download.osgeo.org/gdal/${version}/${name}.tar.xz";
-    sha256 = "0rk0p0k787whzzdl8m1f9wcrm7h9bf1pny3z96d93b4383arhw4j";
+    sha256 = "18iaamzkn0lipizynvspf3bs5qzgcy36hn6bbi941q8dlfdf8xbg";
   };
+
+  patches = [
+    # fix build with recent Poppler
+    (fetchpatch {
+      url    = "https://github.com/OSGeo/gdal/commit/124f0343436d1267319ac627fc220530091b41ea.diff";
+      stripLen = 2;
+      extraPrefix = "";
+      sha256 = "1v6iiy4cgrdcfas3iva5swh9446pqfjh5p6bcab6y49hyjhpsgfy";
+    })
+  ];
 
   buildInputs = [ unzip libjpeg libtiff libpng proj openssl sqlite
     libspatialite poppler hdf4 ]
@@ -29,7 +39,7 @@ stdenv.mkDerivation rec {
     "--with-poppler=${poppler.dev}" # optional
     "--with-libz=${zlib.dev}"       # optional
     "--with-pg=${postgresql}/bin/pg_config"
-    "--with-mysql=${mysql.lib.dev}/bin/mysql_config"
+    "--with-mysql=${mysql.connector-c or mysql}/bin/mysql_config"
     "--with-geotiff=${libgeotiff}"
     "--with-sqlite3=${sqlite.dev}"
     "--with-spatialite=${libspatialite}"

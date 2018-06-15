@@ -11,7 +11,7 @@ let
 
     # prevent make-test.nix to change IP
     networking.interfaces = {
-      eth1.ip4 = lib.mkOverride 0 [ ];
+      eth1.ipv4.addresses = lib.mkOverride 0 [ ];
     };
   };
 in {

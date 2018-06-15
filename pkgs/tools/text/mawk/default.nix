@@ -5,8 +5,8 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     urls = [
+      "ftp://ftp.invisible-island.net/mawk/${name}.tgz"
       "https://invisible-mirror.net/archives/mawk/${name}.tgz"
-      "ftp://invisible-island.net/mawk/${name}.tgz"
     ];
     sha256 = "0nwyxhipn4jx7j695lih1xggxm6cp4fjk4wbgihd33ni3rfi25yv";
   };

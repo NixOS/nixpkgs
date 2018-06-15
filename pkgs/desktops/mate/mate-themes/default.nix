@@ -3,20 +3,11 @@
 
 stdenv.mkDerivation rec {
   name = "mate-themes-${version}";
-  version = "${major-ver}.${minor-ver}";
-  # There is no 3.24 release.
-  major-ver = if stdenv.lib.versionOlder gnome3.version "3.23" then gnome3.version else "3.22";
-  minor-ver = {
-    "3.20" = "22";
-    "3.22" = "13";
-  }."${major-ver}";
+  version = "3.22.17";
 
   src = fetchurl {
-    url = "http://pub.mate-desktop.org/releases/themes/${major-ver}/${name}.tar.xz";
-    sha256 = {
-      "3.20" = "1yjj5w7zvyjyg0k21nwk438jjsnj0qklsf0z5pmmp1jff1vxyck4";
-      "3.22" = "1p7w63an8qs15hkj79nppy7471glv0rm1b0himn3c4w69q8qdc9i";
-    }."${major-ver}";
+    url = "http://pub.mate-desktop.org/releases/themes/${mate.getRelease version}/${name}.tar.xz";
+    sha256 = "1bf1swyrr5dkfsp1ihc0svr5nnwv22zxjwgmf6zhxl638ng9f41h";
   };
 
   nativeBuildInputs = [ pkgconfig intltool ];

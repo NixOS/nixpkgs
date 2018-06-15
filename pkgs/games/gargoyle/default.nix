@@ -36,6 +36,11 @@ stdenv.mkDerivation {
 
   patches = [ ./darwin.patch ];
 
+  postPatch = ''
+    substituteInPlace Jamrules \
+        --replace -mmacosx-version-min=10.7 -mmacosx-version-min=$MACOSX_DEPLOYMENT_TARGET
+  '';
+
   buildPhase = jamenv + "jam -j$NIX_BUILD_CORES";
 
   installPhase = if stdenv.isDarwin then (builtins.readFile ./darwin.sh) else jamenv + ''

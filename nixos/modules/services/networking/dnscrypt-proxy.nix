@@ -10,7 +10,7 @@ let
   # This is somewhat more flexible than preloading the key as an
   # embedded string.
   upstreamResolverListPubKey = pkgs.fetchurl {
-    url = https://raw.githubusercontent.com/jedisct1/dnscrypt-proxy/master/minisign.pub;
+    url = https://raw.githubusercontent.com/dyne/dnscrypt-proxy/master/minisign.pub;
     sha256 = "18lnp8qr6ghfc2sd46nn1rhcpr324fqlvgsp4zaigw396cd7vnnh";
   };
 
@@ -145,6 +145,9 @@ in
       }
     ];
 
+    # make man 8 dnscrypt-proxy work
+    environment.systemPackages = [ pkgs.dnscrypt-proxy ];
+
     users.users.dnscrypt-proxy = {
       description = "dnscrypt-proxy daemon user";
       isSystemUser = true;
@@ -192,6 +195,7 @@ in
     security.apparmor.profiles = singleton (pkgs.writeText "apparmor-dnscrypt-proxy" ''
       ${pkgs.dnscrypt-proxy}/bin/dnscrypt-proxy {
         /dev/null rw,
+        /dev/random r,
         /dev/urandom r,
 
         /etc/passwd r,
@@ -211,6 +215,9 @@ in
         ${getLib pkgs.gcc.cc}/lib/libssp.so.* mr,
         ${getLib pkgs.libsodium}/lib/libsodium.so.* mr,
         ${getLib pkgs.systemd}/lib/libsystemd.so.* mr,
+        ${getLib pkgs.utillinuxMinimal.out}/lib/libmount.so.* mr,
+        ${getLib pkgs.utillinuxMinimal.out}/lib/libblkid.so.* mr,
+        ${getLib pkgs.utillinuxMinimal.out}/lib/libuuid.so.* mr,
         ${getLib pkgs.xz}/lib/liblzma.so.* mr,
         ${getLib pkgs.libgcrypt}/lib/libgcrypt.so.* mr,
         ${getLib pkgs.libgpgerror}/lib/libgpg-error.so.* mr,
@@ -258,9 +265,9 @@ in
         domain=raw.githubusercontent.com
         get="curl -fSs --resolve $domain:443:$(hostip -r 8.8.8.8 $domain | head -1)"
         $get -o dnscrypt-resolvers.csv.tmp \
-          https://$domain/jedisct1/dnscrypt-proxy/master/dnscrypt-resolvers.csv
+          https://$domain/dyne/dnscrypt-proxy/master/dnscrypt-resolvers.csv
         $get -o dnscrypt-resolvers.csv.minisig.tmp \
-          https://$domain/jedisct1/dnscrypt-proxy/master/dnscrypt-resolvers.csv.minisig
+          https://$domain/dyne/dnscrypt-proxy/master/dnscrypt-resolvers.csv.minisig
         mv dnscrypt-resolvers.csv.minisig{.tmp,}
         if ! minisign -q -V -p ${upstreamResolverListPubKey} \
           -m dnscrypt-resolvers.csv.tmp -x dnscrypt-resolvers.csv.minisig ; then

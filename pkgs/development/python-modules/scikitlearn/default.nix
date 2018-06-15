@@ -7,7 +7,6 @@
 buildPythonPackage rec {
   pname = "scikit-learn";
   version = "0.19.1";
-  name = "${pname}-${version}";
   disabled = stdenv.isi686;  # https://github.com/scikit-learn/scikit-learn/issues/5534
 
   src = fetchPypi {
@@ -20,8 +19,10 @@ buildPythonPackage rec {
 
   LC_ALL="en_US.UTF-8";
 
+  # Disable doctests on OSX: https://github.com/scikit-learn/scikit-learn/issues/10213
+  # Disable doctests everywhere: https://github.com/NixOS/nixpkgs/issues/35436
   checkPhase = ''
-    HOME=$TMPDIR OMP_NUM_THREADS=1 nosetests $out/${python.sitePackages}/sklearn/
+    HOME=$TMPDIR OMP_NUM_THREADS=1 nosetests --doctest-options=+SKIP $out/${python.sitePackages}/sklearn/
   '';
 
   meta = with stdenv.lib; {

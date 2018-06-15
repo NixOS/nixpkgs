@@ -1,7 +1,7 @@
 args @ { fetchurl, ... }:
 rec {
   baseName = ''cl-who'';
-  version = ''1.1.4'';
+  version = ''20171130-git'';
 
   parasites = [ "cl-who-test" ];
 
@@ -10,8 +10,8 @@ rec {
   deps = [ args."flexi-streams" ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/cl-who/2014-12-17/cl-who-1.1.4.tgz'';
-    sha256 = ''0r9wc92njz1cc7nghgbhdmd7jy216ylhlabfj0vc45bmfa4w44rq'';
+    url = ''http://beta.quicklisp.org/archive/cl-who/2017-11-30/cl-who-20171130-git.tgz'';
+    sha256 = ''1941kwnvqnqr81vjkv8fcpc16abz7hrrmz18xwxxprsi6wifzjzw'';
   };
 
   packageName = "cl-who";
@@ -20,8 +20,8 @@ rec {
   overrides = x: x;
 }
 /* (SYSTEM cl-who DESCRIPTION (X)HTML generation macros SHA256
-    0r9wc92njz1cc7nghgbhdmd7jy216ylhlabfj0vc45bmfa4w44rq URL
-    http://beta.quicklisp.org/archive/cl-who/2014-12-17/cl-who-1.1.4.tgz MD5
-    a9e6f0b6a8aaa247dbf751de2cb550bf NAME cl-who FILENAME cl-who DEPS
+    1941kwnvqnqr81vjkv8fcpc16abz7hrrmz18xwxxprsi6wifzjzw URL
+    http://beta.quicklisp.org/archive/cl-who/2017-11-30/cl-who-20171130-git.tgz
+    MD5 257a670166ff9d24d1570f44be0c7171 NAME cl-who FILENAME cl-who DEPS
     ((NAME flexi-streams FILENAME flexi-streams)) DEPENDENCIES (flexi-streams)
-    VERSION 1.1.4 SIBLINGS NIL PARASITES (cl-who-test)) */
+    VERSION 20171130-git SIBLINGS NIL PARASITES (cl-who-test)) */

@@ -6,7 +6,7 @@ find_gio_modules() {
     fi
 }
 
-envHooks+=(find_gio_modules)
+addEnvHooks "$targetOffset" find_gio_modules
 
 # Note: $gappsWrapperArgs still gets defined even if $dontWrapGApps is set.
 wrapGAppsHook() {

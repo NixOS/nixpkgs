@@ -26,6 +26,6 @@ buildGoPackage rec {
     homepage = https://github.com/McKael/madonctl;
     license = licenses.mit;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ matthiasbeyer ];
+    maintainers = with maintainers; [ ];
   };
 }

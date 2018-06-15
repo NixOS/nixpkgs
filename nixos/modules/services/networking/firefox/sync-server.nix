@@ -33,6 +33,8 @@ let
 in
 
 {
+  meta.maintainers = with lib.maintainers; [ nadrieril ];
+
   options = {
     services.firefox.syncserver = {
       enable = mkOption {
@@ -68,18 +70,6 @@ in
         description = ''
           Port on which the sync server listen to.
         '';
-      };
-
-      user = mkOption {
-        type = types.str;
-        default = "syncserver";
-        description = "User account under which syncserver runs.";
-      };
-
-      group = mkOption {
-        type = types.str;
-        default = "syncserver";
-        description = "Group account under which syncserver runs.";
       };
 
       publicUrl = mkOption {
@@ -137,7 +127,9 @@ in
   config = mkIf cfg.enable {
 
     systemd.services.syncserver = let
-      syncServerEnv = pkgs.python.withPackages(ps: with ps; [ syncserver pasteScript ]);
+      syncServerEnv = pkgs.python.withPackages(ps: with ps; [ syncserver pasteScript requests ]);
+      user = "syncserver";
+      group = "syncserver";
     in {
       after = [ "network.target" ];
       description = "Firefox Sync Server";
@@ -145,43 +137,43 @@ in
       path = [ pkgs.coreutils syncServerEnv ];
 
       serviceConfig = {
-        User = cfg.user;
-        Group = cfg.group;
+        User = user;
+        Group = group;
         PermissionsStartOnly = true;
       };
 
       preStart = ''
         if ! test -e ${cfg.privateConfig}; then
-          mkdir -m 700 -p $(dirname ${cfg.privateConfig})
+          mkdir -p $(dirname ${cfg.privateConfig})
           echo  > ${cfg.privateConfig} '[syncserver]'
+          chmod 600 ${cfg.privateConfig}
           echo >> ${cfg.privateConfig} "secret = $(head -c 20 /dev/urandom | sha1sum | tr -d ' -')"
         fi
-        chown ${cfg.user}:${cfg.group} ${cfg.privateConfig}
+        chmod 600 ${cfg.privateConfig}
+        chmod 755 $(dirname ${cfg.privateConfig})
+        chown ${user}:${group} ${cfg.privateConfig}
+
       '' + optionalString (cfg.sqlUri == defaultSqlUri) ''
         if ! test -e $(dirname ${defaultDbLocation}); then
           mkdir -m 700 -p $(dirname ${defaultDbLocation})
-          chown ${cfg.user}:${cfg.group} $(dirname ${defaultDbLocation})
+          chown ${user}:${group} $(dirname ${defaultDbLocation})
         fi
+
         # Move previous database file if it exists
         oldDb="/var/db/firefox-sync-server.db"
         if test -f $oldDb; then
           mv $oldDb ${defaultDbLocation}
-          chown ${cfg.user}:${cfg.group} ${defaultDbLocation}
+          chown ${user}:${group} ${defaultDbLocation}
         fi
       '';
       serviceConfig.ExecStart = "${syncServerEnv}/bin/paster serve ${syncServerIni}";
     };
 
-    users.extraUsers = optionalAttrs (cfg.user == "syncserver")
-      (singleton {
-        name = "syncserver";
-        group = cfg.group;
-        isSystemUser = true;
-      });
+    users.users.syncserver = {
+      group = "syncserver";
+      isSystemUser = true;
+    };
 
-    users.extraGroups = optionalAttrs (cfg.group == "syncserver")
-      (singleton {
-        name = "syncserver";
-      });
+    users.groups.syncserver = {};
   };
 }

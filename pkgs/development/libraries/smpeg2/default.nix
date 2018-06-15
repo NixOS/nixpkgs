@@ -1,4 +1,4 @@
-{ stdenv, fetchsvn, autoconf, automake, libtool, m4, pkgconfig, makeWrapper, SDL2 }:
+{ stdenv, darwin, fetchsvn, autoconf, automake, libtool, m4, pkgconfig, makeWrapper, SDL2 }:
 
 stdenv.mkDerivation rec {
   name = "smpeg2-svn${version}";
@@ -17,7 +17,8 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoconf automake pkgconfig makeWrapper ];
 
-  buildInputs = [ SDL2 ];
+  buildInputs = [ SDL2 ]
+    ++ stdenv.lib.optional stdenv.isDarwin darwin.libobjc;
 
   preConfigure = ''
     sh autogen.sh
@@ -37,7 +38,7 @@ stdenv.mkDerivation rec {
     homepage = http://icculus.org/smpeg/;
     description = "SDL2 MPEG Player Library";
     license = licenses.lgpl2;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
     maintainers = with maintainers; [ orivej ];
   };
 }

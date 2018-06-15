@@ -161,15 +161,6 @@ in
         '';
       };
 
-      plainX = mkOption {
-        type = types.bool;
-        default = false;
-        description = ''
-          Whether the X11 session can be plain (without DM/WM) and
-          the Xsession script will be used as fallback or not.
-        '';
-      };
-
       autorun = mkOption {
         type = types.bool;
         default = true;
@@ -249,7 +240,17 @@ in
         type = types.listOf types.str;
         # !!! We'd like "nv" here, but it segfaults the X server.
         default = [ "ati" "cirrus" "intel" "vesa" "vmware" "modesetting" ];
-        example = [ "vesa" ];
+        example = [
+          "ati_unfree" "amdgpu" "amdgpu-pro"
+          "nv" "nvidia" "nvidiaLegacy340" "nvidiaLegacy304"
+        ];
+        # TODO(@oxij): think how to easily add the rest, like those nvidia things
+        relatedPackages = concatLists
+          (mapAttrsToList (n: v:
+            optional (hasPrefix "xf86video" n) {
+              path  = [ "xorg" n ];
+              title = removePrefix "xf86video" n;
+            }) pkgs.xorg);
         description = ''
           The names of the video drivers the configuration
           supports. They will be tried in order until one that
@@ -548,7 +549,7 @@ in
           knownVideoDrivers;
       in optional (driver != null) ({ inherit name; modules = []; driverName = name; } // driver));
 
-    nixpkgs.config.xorg = optionalAttrs (elem "vboxvideo" cfg.videoDrivers) { abiCompat = "1.18"; };
+    nixpkgs.config = optionalAttrs (elem "vboxvideo" cfg.videoDrivers) { xorg.abiCompat = "1.18"; };
 
     assertions = [
       { assertion = config.security.polkit.enable;
@@ -561,11 +562,6 @@ in
                 + "${toString (length primaryHeads)} heads set to primary: "
                 + concatMapStringsSep ", " (x: x.output) primaryHeads;
       })
-      { assertion = cfg.desktopManager.default == "none" && cfg.windowManager.default == "none" -> cfg.plainX;
-        message = "Either the desktop manager or the window manager shouldn't be `none`! "
-                + "To explicitly allow this, you can also set `services.xserver.plainX` to `true`. "
-                + "The `default` value looks for enabled WMs/DMs and select the first one.";
-      }
     ];
 
     environment.etc =
@@ -640,9 +636,7 @@ in
 
         environment =
           {
-            XORG_DRI_DRIVER_PATH = "/run/opengl-driver/lib/dri"; # !!! Depends on the driver selected at runtime.
-            LD_LIBRARY_PATH = concatStringsSep ":" (
-              [ "${xorg.libX11.out}/lib" "${xorg.libXext.out}/lib" "/run/opengl-driver/lib" ]
+            LD_LIBRARY_PATH = concatStringsSep ":" ([ "/run/opengl-driver/lib" ]
               ++ concatLists (catAttrs "libPath" cfg.drivers));
           } // cfg.displayManager.job.environment;
 

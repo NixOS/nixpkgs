@@ -26,9 +26,9 @@ in
         };
 
         locker = mkOption {
-          default = "xlock"; # default according to `man xautolock`
-          example = "i3lock -i /path/to/img";
-          type = types.string;
+          default = "${pkgs.xlockmore}/bin/xlock"; # default according to `man xautolock`
+          example = "${pkgs.i3lock}/bin/i3lock -i /path/to/img";
+          type = types.str;
 
           description = ''
             The script to use when automatically locking the computer.
@@ -37,8 +37,8 @@ in
 
         nowlocker = mkOption {
           default = null;
-          example = "i3lock -i /path/to/img";
-          type = types.nullOr types.string;
+          example = "${pkgs.i3lock}/bin/i3lock -i /path/to/img";
+          type = types.nullOr types.str;
 
           description = ''
             The script to use when manually locking the computer with <command>xautolock -locknow</command>.
@@ -56,10 +56,8 @@ in
 
         notifier = mkOption {
           default = null;
-          example = literalExample ''
-            "${pkgs.libnotify}/bin/notify-send \"Locking in 10 seconds\""
-          '';
-          type = types.nullOr types.string;
+          example = "${pkgs.libnotify}/bin/notify-send \"Locking in 10 seconds\"";
+          type = types.nullOr types.str;
 
           description = ''
             Notification script to be used to warn about the pending autolock.
@@ -68,8 +66,8 @@ in
 
         killer = mkOption {
           default = null; # default according to `man xautolock` is none
-          example = "systemctl suspend";
-          type = types.nullOr types.string;
+          example = "${pkgs.systemd}/bin/systemctl suspend";
+          type = types.nullOr types.str;
 
           description = ''
             The script to use when nothing has happend for as long as <option>killtime</option>
@@ -131,6 +129,12 @@ in
           assertion = cfg.killer != null -> cfg.killtime >= 10;
           message = "killtime has to be at least 10 minutes according to `man xautolock`";
         }
-      ];
+      ] ++ (lib.flip map [ "locker" "notifier" "nowlocker" "killer" ]
+        (option:
+        {
+          assertion = cfg."${option}" != null -> builtins.substring 0 1 cfg."${option}" == "/";
+          message = "Please specify a canonical path for `services.xserver.xautolock.${option}`";
+        })
+      );
     };
   }

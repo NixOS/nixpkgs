@@ -3,10 +3,10 @@
 stdenv.mkDerivation rec {
   name = pname + "-" + version;
   pname = "cb2bib";
-  version = "1.9.2";
+  version = "1.9.7";
   src = fetchurl {
     url = "http://www.molspaces.com/dl/progs/${name}.tar.gz";
-    sha256 = "0yz79v023w1229wzck3gij0iqah1xg8rg4a352q8idvg7bdmyfin";
+    sha256 = "0gr8vmlz1ikw0jiwwac2ays20z26cdv3bjdx9m1nc450hl6m5s7s";
   };
   buildInputs = [ qtbase qtwebkit qtx11extras lzo libX11 ];
   nativeBuildInputs = [ qmake ];

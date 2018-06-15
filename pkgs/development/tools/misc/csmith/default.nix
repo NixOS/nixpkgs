@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ m4 makeWrapper ];
-  buildInputs = [ libbsd perl SysCPU ];
+  buildInputs = [ perl SysCPU libbsd ];
 
   postInstall = ''
     substituteInPlace $out/bin/compiler_test.pl \

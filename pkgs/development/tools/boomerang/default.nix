@@ -1,38 +1,43 @@
-{ stdenv, fetchgit, cmake, expat, qt5, boost }:
+{ stdenv, fetchFromGitHub, cmake, qtbase }:
 
 stdenv.mkDerivation rec {
   name = "boomerang-${version}";
-  version = "0.3.99-alpha-2016-11-02";
+  version = "0.4.0-alpha-2018-01-18";
 
-  src = fetchgit {
-    url = "https://github.com/nemerle/boomerang.git";
-    rev = "f95d6436845e9036c8cfbd936731449475f79b7a";
-    sha256 = "1q3q92lfj24ij5sxdbdhcqyan28r6db1w80yrks4csf9zjij1ixh";
+  src = fetchFromGitHub {
+    owner = "ceeac";
+    repo = "boomerang";
+    rev = "b4ff8d573407a8ed6365d4bfe53d2d47d983e393";
+    sha256 = "0x17vlm6y1paa49fi3pmzz7vzdqms19qkr274hkq32ql342b6i6x";
   };
 
-  buildInputs = [ cmake expat qt5.qtbase boost ];
+  nativeBuildInputs = [ cmake ];
+  buildInputs = [ qtbase ];
 
-  patches = [ ./fix-install.patch ./fix-output.patch ];
-
-  postPatch = ''
-    substituteInPlace loader/BinaryFileFactory.cpp \
-      --replace '"lib"' '"../lib"'
-
-    substituteInPlace ui/DecompilerThread.cpp \
-      --replace '"output"' '"./output"'
-
-    substituteInPlace boomerang.cpp \
-      --replace 'progPath("./")' "progPath(\"$out/share/boomerang/\")"
-
-    substituteInPlace ui/commandlinedriver.cpp \
-      --replace "QFileInfo(args[0]).absolutePath()" "\"$out/share/boomerang/\""
+  postPatch =
+  # Look in installation directory for required files, not relative to working directory
+  ''
+    substituteInPlace src/boomerang/core/Settings.cpp \
+      --replace "setDataDirectory(\"../share/boomerang\");" \
+                "setDataDirectory(\"$out/share/boomerang\");" \
+      --replace "setPluginDirectory(\"../lib/boomerang/plugins\");" \
+                "setPluginDirectory(\"$out/lib/boomerang/plugins\");"
+  ''
+  # Fixup version:
+  # * don't try to inspect with git
+  #   (even if we kept .git and such it would be "dirty" because of patching)
+  # * use date so version is monotonically increasing moving forward
+  + ''
+    sed -i cmake-scripts/boomerang-version.cmake \
+      -e 's/set(\(PROJECT\|BOOMERANG\)_VERSION ".*")/set(\1_VERSION "${version}")/'
   '';
 
   enableParallelBuilding = true;
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = http://boomerang.sourceforge.net/;
-    license = stdenv.lib.licenses.bsd3;
+    license = licenses.bsd3;
     description = "A general, open source, retargetable decompiler";
+    maintainers = with maintainers; [ dtzWill ];
   };
 }

@@ -2,14 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "alsa-utils-${version}";
-  version = "1.1.5";
+  version = "1.1.6";
 
   src = fetchurl {
-    urls = [
-      "ftp://ftp.alsa-project.org/pub/utils/${name}.tar.bz2"
-      "http://alsa.cybermirror.org/utils/${name}.tar.bz2"
-    ];
-    sha256 = "1s727md6mb408y2cfwzjkx23abxhampyrjdkgpyygdhxx62x42rj";
+    url = "mirror://alsa/utils/${name}.tar.bz2";
+    sha256 = "0vnkyymgwj9rfdb11nvab30dnfrylmakdfildxl0y8mj836awp0m";
   };
 
   patchPhase = ''
@@ -17,7 +14,8 @@ stdenv.mkDerivation rec {
       --replace "which" "type -p" \
       --replace "lspci" "${pciutils}/bin/lspci"
   '';
-  buildInputs = [ gettext alsaLib ncurses libsamplerate fftw ];
+  nativeBuildInputs = [ gettext ];
+  buildInputs = [ alsaLib ncurses libsamplerate fftw ];
 
   configureFlags = "--disable-xmlto --with-udev-rules-dir=$(out)/lib/udev/rules.d";
 
@@ -26,7 +24,6 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = http://www.alsa-project.org/;
     description = "ALSA, the Advanced Linux Sound Architecture utils";
-
     longDescription = ''
       The Advanced Linux Sound Architecture (ALSA) provides audio and
       MIDI functionality to the Linux-based operating system.

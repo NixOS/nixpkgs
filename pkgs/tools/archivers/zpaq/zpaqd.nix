@@ -46,7 +46,7 @@ stdenv.mkDerivation {
   meta = with stdenv.lib; {
     description = "ZPAQ archive (de)compressor and algorithm development tool";
     license = licenses.gpl3Plus ;
-    maintainers = with maintainers; [ raskin nckx ];
+    maintainers = with maintainers; [ raskin ];
     platforms = platforms.linux;
   };
 }

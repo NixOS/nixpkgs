@@ -12,7 +12,7 @@
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  version = "0.25.3";
+  version = "0.27";
   name = "notmuch-${version}";
 
   passthru = {
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "http://notmuchmail.org/releases/${name}.tar.gz";
-    sha256 = "1fyx20rjpwbf2j1v5fpa5s0rjnwhcgvijzh2qyinp8rlbh1qxmab";
+    sha256 = "0xh8vq2sa7r07xb3n13drc6gdiqhcgl0pj0za5xj43qkiwpikls0";
   };
 
   nativeBuildInputs = [ pkgconfig ];
@@ -40,21 +40,26 @@ stdenv.mkDerivation rec {
   ++ optionals (!stdenv.isDarwin) [ gdb man ]; # test dependencies
 
   postPatch = ''
+    patchShebangs configure
+
     find test/ -type f -exec \
       sed -i \
         -e "1s|#!/usr/bin/env bash|#!${bash}/bin/bash|" \
         "{}" ";"
 
     for src in \
-      crypto.c \
-      notmuch-config.c \
-      emacs/notmuch-crypto.el
+      util/crypto.c \
+      notmuch-config.c
     do
       substituteInPlace "$src" \
         --replace \"gpg\" \"${gnupg}/bin/gpg\"
     done
   '';
 
+  # Notmuch doesn't use autoconf and consequently doesn't tag --bindir and
+  # friends
+  setOutputFlags = false;
+  enableParallelBuilding = true;
   makeFlags = "V=1";
 
   preFixup = optionalString stdenv.isDarwin ''
@@ -72,7 +77,7 @@ stdenv.mkDerivation rec {
     [[ -s "$lib" ]] || die "couldn't find libnotmuch"
 
     badname="$(otool -L "$prg" | awk '$1 ~ /libtalloc/ { print $1 }')"
-    goodname="$(find "${talloc}/lib" -name 'libtalloc.?.?.?.dylib')"
+    goodname="$(find "${talloc}/lib" -name 'libtalloc.*.*.*.dylib')"
 
     [[ -n "$badname" ]]  || die "couldn't find libtalloc reference in binary"
     [[ -n "$goodname" ]] || die "couldn't find libtalloc in nix store"
@@ -97,7 +102,7 @@ stdenv.mkDerivation rec {
     description = "Mail indexer";
     homepage    = https://notmuchmail.org/;
     license     = licenses.gpl3;
-    maintainers = with maintainers; [ chaoflow garbas the-kenny ];
+    maintainers = with maintainers; [ chaoflow flokli garbas the-kenny ];
     platforms   = platforms.unix;
   };
 }

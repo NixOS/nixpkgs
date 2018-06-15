@@ -1,36 +1,38 @@
 <section xmlns="http://docbook.org/ns/docbook"
          xmlns:xlink="http://www.w3.org/1999/xlink"
          xml:id="sec-language-coq">
+ <title>Coq</title>
 
-<title>Coq</title>
-  <para>
-    Coq libraries should be installed in
-    <literal>$(out)/lib/coq/${coq.coq-version}/user-contrib/</literal>.
-    Such directories are automatically added to the
-    <literal>$COQPATH</literal> environment variable by the hook defined
-    in the Coq derivation.
-  </para>
-  <para>
-    Some libraries require OCaml and sometimes also Camlp5 or findlib.
-    The exact versions that were used to build Coq are saved in the
-    <literal>coq.ocaml</literal> and <literal>coq.camlp5</literal>
-    and <literal>coq.findlib</literal> attributes.
-  </para>
-  <para>
-    Coq libraries may be compatible with some specific versions of Coq only.
-    The <literal>compatibleCoqVersions</literal> attribute is used to
-    precisely select those versions of Coq that are compatible with this
-    derivation.
-  </para>
-  <para>
-    Here is a simple package example. It is a pure Coq library, thus it
-    depends on Coq. It builds on the Mathematical Components library, thus it
-    also takes <literal>mathcomp</literal> as <literal>buildInputs</literal>.
-    Its <literal>Makefile</literal> has been generated using
-    <literal>coq_makefile</literal> so we only have to
-    set the <literal>$COQLIB</literal> variable at install time.
-  </para>
-  <programlisting>
+ <para>
+  Coq libraries should be installed in
+  <literal>$(out)/lib/coq/${coq.coq-version}/user-contrib/</literal>. Such
+  directories are automatically added to the <literal>$COQPATH</literal>
+  environment variable by the hook defined in the Coq derivation.
+ </para>
+
+ <para>
+  Some libraries require OCaml and sometimes also Camlp5 or findlib. The exact
+  versions that were used to build Coq are saved in the
+  <literal>coq.ocaml</literal> and <literal>coq.camlp5</literal> and
+  <literal>coq.findlib</literal> attributes.
+ </para>
+
+ <para>
+  Coq libraries may be compatible with some specific versions of Coq only. The
+  <literal>compatibleCoqVersions</literal> attribute is used to precisely
+  select those versions of Coq that are compatible with this derivation.
+ </para>
+
+ <para>
+  Here is a simple package example. It is a pure Coq library, thus it depends
+  on Coq. It builds on the Mathematical Components library, thus it also takes
+  <literal>mathcomp</literal> as <literal>buildInputs</literal>. Its
+  <literal>Makefile</literal> has been generated using
+  <literal>coq_makefile</literal> so we only have to set the
+  <literal>$COQLIB</literal> variable at install time.
+ </para>
+
+<programlisting>
 { stdenv, fetchFromGitHub, coq, mathcomp }:
 
 stdenv.mkDerivation rec {

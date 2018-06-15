@@ -119,17 +119,10 @@ in {
       after = [ "systemd-udev-settle.service" ]
               ++ optional vswitch.enable "vswitchd.service";
 
-      environment = {
-        LIBVIRTD_ARGS = ''--config "${configFile}" ${concatStringsSep " " cfg.extraOptions}'';
-      };
+      environment.LIBVIRTD_ARGS = ''--config "${configFile}" ${concatStringsSep " " cfg.extraOptions}'';
 
-      path = with pkgs; [
-          bridge-utils
-          dmidecode
-          dnsmasq
-          ebtables
-        ]
-        ++ optional vswitch.enable vswitch.package;
+      path = [ cfg.qemuPackage ] # libvirtd requires qemu-img to manage disk images
+             ++ optional vswitch.enable vswitch.package;
 
       preStart = ''
         mkdir -p /var/log/libvirt/qemu -m 755

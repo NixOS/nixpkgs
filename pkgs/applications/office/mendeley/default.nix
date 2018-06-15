@@ -1,7 +1,7 @@
 { fetchurl, stdenv, dpkg, which
 , makeWrapper
 , alsaLib
-, desktop_file_utils
+, desktop-file-utils
 , dbus
 , libcap
 , fontconfig
@@ -15,19 +15,24 @@
 , orc
 , nss
 , nspr
-, qt5
+, qtbase
+, qtsvg
+, qtdeclarative
+, qtwebchannel
+, qtquickcontrols
+, qtwebkit
+, qtwebengine
 , sqlite
 , xorg
-, xlibs
 , zlib
 # The provided wrapper does this, but since we don't use it
 # we emulate the behavior.  The downside is that this
 # will leave entries on your system after uninstalling mendeley.
 # (they can be removed by running '$out/bin/install-mendeley-link-handler.sh -u')
 , autorunLinkHandler ? true
+# Update script
+, writeScript
 }:
-
-assert stdenv.system == "i686-linux" || stdenv.system == "x86_64-linux";
 
 let
   arch32 = "i686-linux";
@@ -37,23 +42,23 @@ let
     then "i386"
     else "amd64";
 
-  shortVersion = "1.17.12-stable";
+  shortVersion = "1.19.1-stable";
 
   version = "${shortVersion}_${arch}";
 
   url = "http://desktop-download.mendeley.com/download/apt/pool/main/m/mendeleydesktop/mendeleydesktop_${version}.deb";
   sha256 = if stdenv.system == arch32
-    then "09n910ny8k103g1v8m19f9n827l2y0kmz79cwgy95k6acf2rkc2x"
-    else "11z65mj1a2rw6cwfarl8r1vzpcz4ww5mgvd5fyv31l60mbmnqkap";
+    then "0fcyl5i8xdgb5j0x1643qc0j74d8p11jczvqmgqkqh0wgid1y1ad"
+    else "1dzwa2cnn9xakrhhq159fhh71gw5wlbf017rrikdlia694m8akq6";
 
   deps = [
-    qt5.qtbase
-    qt5.qtsvg
-    qt5.qtdeclarative
-    qt5.qtwebchannel
-    qt5.qtquickcontrols
-    qt5.qtwebkit
-    qt5.qtwebengine
+    qtbase
+    qtsvg
+    qtdeclarative
+    qtwebchannel
+    qtquickcontrols
+    qtwebkit
+    qtwebengine
     alsaLib
     dbus
     freetype
@@ -70,7 +75,7 @@ let
     orc
     sqlite
     xorg.libX11
-    xlibs.xcbutilkeysyms
+    xorg.xcbutilkeysyms
     xorg.libxcb
     xorg.libXcomposite
     xorg.libXext
@@ -96,6 +101,8 @@ stdenv.mkDerivation {
   nativeBuildInputs = [ makeWrapper ];
   buildInputs = [ dpkg which ] ++ deps;
 
+  propagatedUserEnvPkgs = [ gconf ];
+
   unpackPhase = "true";
 
   installPhase = ''
@@ -119,17 +126,20 @@ stdenv.mkDerivation {
 
     # Patch up link handler script
     wrapProgram $out/bin/install-mendeley-link-handler.sh \
-      --prefix PATH ':' ${stdenv.lib.makeBinPath [ which gconf desktop_file_utils ] }
+      --prefix PATH ':' ${stdenv.lib.makeBinPath [ which gconf desktop-file-utils ] }
   '';
 
   dontStrip = true;
   dontPatchElf = true;
 
-  meta = {
+  updateScript = import ./update.nix { inherit writeScript; };
+
+  meta = with stdenv.lib; {
     homepage = http://www.mendeley.com;
     description = "A reference manager and academic social network";
-    license = stdenv.lib.licenses.unfree;
-    platforms = stdenv.lib.platforms.linux;
+    license = licenses.unfree;
+    platforms = [ "x86_64-linux" "i686-linux" ];
+    maintainers  = with maintainers; [ dtzWill ];
   };
 
 }

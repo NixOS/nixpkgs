@@ -1,16 +1,21 @@
-{ stdenv, fetchurl }:
+{ stdenv, fetchFromGitHub, alsaLib }:
 
 stdenv.mkDerivation rec {
-  name = "flite-2.0.0";
+  name = "flite-2.1.0";
 
-  src = fetchurl {
-    url = "http://www.festvox.org/flite/packed/flite-2.0/${name}-release.tar.bz2";
-    sha256 = "04g4r83jh4cl0irc8bg7njngcah7749956v9s6sh552kzmh3i337";
+  src = fetchFromGitHub {
+    owner  = "festvox";
+    repo   = "flite";
+    rev    = "d673f65b2c4a8cd3da7447079309a6dc4bcf1a5e";
+    sha256 = "1kx43jvdln370590gfjhxxz3chxfi6kq18504wmdpljib2l0grjq";
   };
 
-  patches = [ ./fix-rpath.patch ];
+  buildInputs = [ alsaLib ];
 
-  configureFlags = [ "--enable-shared" ];
+  configureFlags = [
+    "--enable-shared"
+    "--with-audio=alsa"
+  ];
 
   enableParallelBuilding = true;
 

@@ -4,8 +4,6 @@
 buildPythonPackage rec {
   pname = "twilio";
   version = "6.8.0";
-  name = "${pname}-${version}";
-
   # tests not included in PyPi, so fetch from github instead
   src = fetchFromGitHub {
     owner = "twilio";

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl }:
+{ stdenv, fetchurl, lib }:
 
 let
 
@@ -11,15 +11,22 @@ let
       inherit sha256;
     };
 
+    configureFlags = [ "--enable-nc" ];
+
     enableParallelBuilding = true;
 
-    outputs = [ "bin" "dev" "out" "man" ];
+    outputs = [ "bin" "dev" "out" "man" "nc" ];
+
+    postFixup = ''
+      moveToOutput "bin/nc" "$nc"
+      moveToOutput "share/man/man1/nc.1${lib.optionalString (dontGzipMan==null) ".gz"}" "$nc"
+    '';
 
     dontGzipMan = if stdenv.isDarwin then true else null; # not sure what's wrong
 
-    meta = with stdenv.lib; {
+    meta = with lib; {
       description = "Free TLS/SSL implementation";
-      homepage    = "http://www.libressl.org";
+      homepage    = "https://www.libressl.org";
       platforms   = platforms.all;
       maintainers = with maintainers; [ thoughtpolice wkennington fpletz globin ];
     };
@@ -33,7 +40,12 @@ in {
   };
 
   libressl_2_6 = generic {
-    version = "2.6.2";
-    sha256 = "0y64grb2zx98rjp2lbwihyhbml4z5ih3v7ydbxdvmabj5d4x4adh";
+    version = "2.6.4";
+    sha256 = "07yi37a2ghsgj2b4w30q1s4d2inqnix7ika1m21y57p9z71212k3";
+  };
+
+  libressl_2_7 = generic {
+    version = "2.7.3";
+    sha256 = "1597kj9jy3jyw52ys19sd4blg2gkam5q0rqdxbnrnvnyw67hviqn";
   };
 }

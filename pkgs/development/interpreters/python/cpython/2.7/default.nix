@@ -1,4 +1,4 @@
-{ stdenv, hostPlatform, fetchurl
+{ stdenv, hostPlatform, buildPlatform, buildPackages, fetchurl
 , bzip2
 , gdbm
 , fetchpatch
@@ -31,7 +31,7 @@ with stdenv.lib;
 
 let
   majorVersion = "2.7";
-  minorVersion = "14";
+  minorVersion = "15";
   minorVersionSuffix = "";
   pythonVersion = majorVersion;
   version = "${majorVersion}.${minorVersion}${minorVersionSuffix}";
@@ -40,7 +40,7 @@ let
 
   src = fetchurl {
     url = "https://www.python.org/ftp/python/${majorVersion}.${minorVersion}/Python-${version}.tar.xz";
-    sha256 = "0rka541ys16jwzcnnvjp2v12m4cwgd2jp6wj4kj511p715pb5zvi";
+    sha256 = "0x2mvz9dp11wj7p5ccvmk9s0hzjk2fa1m462p395l4r6bfnb3n92";
   };
 
   hasDistutilsCxxPatch = !(stdenv.cc.isGNU or false);
@@ -58,8 +58,26 @@ let
       # if DETERMINISTIC_BUILD env var is set
       ./deterministic-build.patch
 
-      ./properly-detect-curses.patch
+      # Fix python bug #27177 (https://bugs.python.org/issue27177)
+      # The issue is that `match.group` only recognizes python integers
+      # instead of everything that has `__index__`.
+      # This bug was fixed upstream, but not backported to 2.7
+      (fetchpatch {
+        name = "re_match_index.patch";
+        url = "https://bugs.python.org/file43084/re_match_index.patch";
+        sha256 = "0l9rw6r5r90iybdkp3hhl2pf0h0s1izc68h5d3ywrm92pq32wz57";
+      })
 
+      # "`type_getattro()` calls `tp_descr_get(self, obj, type)` without actually owning a reference to "self".
+      # In very rare cases, this can cause a segmentation fault if "self" is deleted by the descriptor."
+      # https://github.com/python/cpython/pull/6118
+      (fetchpatch {
+        name = "type_getattro.patch";
+        url = "https://github.com/python/cpython/pull/6118/commits/8c6da2d7e7e719c40fb539b7f7cb7583cccc5527.patch";
+        sha256 = "11v9yx20hs3jmw0wggzvmw39qs4mxay4kb8iq2qjydwy9ya61nrd";
+      })
+    ] ++ optionals (x11Support && stdenv.isDarwin) [
+      ./use-correct-tcl-tk-on-darwin.patch
     ] ++ optionals stdenv.isLinux [
 
       # Disable the use of ldconfig in ctypes.util.find_library (since
@@ -88,7 +106,6 @@ let
       # only works for GCC and Apple Clang. This makes distutils to call C++
       # compiler when needed.
       ./python-2.7-distutils-C++.patch
-
     ];
 
   preConfigure = ''
@@ -117,7 +134,32 @@ let
     "ac_cv_func_bind_textdomain_codeset=yes"
   ] ++ optionals stdenv.isDarwin [
     "--disable-toolbox-glue"
-  ];
+  ] ++ optionals (hostPlatform != buildPlatform) [
+    "PYTHON_FOR_BUILD=${getBin buildPackages.python}/bin/python"
+    "ac_cv_buggy_getaddrinfo=no"
+    # Assume little-endian IEEE 754 floating point when cross compiling
+    "ac_cv_little_endian_double=yes"
+    "ac_cv_big_endian_double=no"
+    "ac_cv_mixed_endian_double=no"
+    "ac_cv_x87_double_rounding=yes"
+    "ac_cv_tanh_preserves_zero_sign=yes"
+    # Generally assume that things are present and work
+    "ac_cv_posix_semaphores_enabled=yes"
+    "ac_cv_broken_sem_getvalue=no"
+    "ac_cv_wchar_t_signed=yes"
+    "ac_cv_rshift_extends_sign=yes"
+    "ac_cv_broken_nice=no"
+    "ac_cv_broken_poll=no"
+    "ac_cv_working_tzset=yes"
+    "ac_cv_have_long_long_format=yes"
+    "ac_cv_have_size_t_format=yes"
+    "ac_cv_computed_gotos=yes"
+    "ac_cv_file__dev_ptmx=yes"
+    "ac_cv_file__dev_ptc=yes"
+  ]
+    # Never even try to use lchmod on linux,
+    # don't rely on detecting glibc-isms.
+  ++ optional hostPlatform.isLinux "ac_cv_func_lchmod=no";
 
   postConfigure = if hostPlatform.isCygwin then ''
     sed -i Makefile -e 's,PYTHONPATH="$(srcdir),PYTHONPATH="$(abs_srcdir),'
@@ -131,6 +173,9 @@ let
     ++ [ db gdbm ncurses sqlite readline ]
     ++ optionals x11Support [ tcl tk xlibsWrapper libX11 ]
     ++ optionals stdenv.isDarwin ([ CF ] ++ optional (configd != null) configd);
+  nativeBuildInputs =
+    optionals (hostPlatform != buildPlatform)
+    [ buildPackages.stdenv.cc buildPackages.python ];
 
   mkPaths = paths: {
     C_INCLUDE_PATH = makeSearchPathOutput "dev" "include" paths;
@@ -144,13 +189,14 @@ in stdenv.mkDerivation {
     name = "python-${version}";
     pythonVersion = majorVersion;
 
-    inherit majorVersion version src patches buildInputs
+    inherit majorVersion version src patches buildInputs nativeBuildInputs
             preConfigure configureFlags;
 
     LDFLAGS = stdenv.lib.optionalString (!stdenv.isDarwin) "-lgcc_s";
     inherit (mkPaths buildInputs) C_INCLUDE_PATH LIBRARY_PATH;
 
-    NIX_CFLAGS_COMPILE = optionalString stdenv.isDarwin "-msse2";
+    NIX_CFLAGS_COMPILE = optionalString stdenv.isDarwin "-msse2"
+      + optionalString hostPlatform.isMusl " -DTHREAD_STACK_SIZE=0x100000";
     DETERMINISTIC_BUILD = 1;
 
     setupHook = python-setup-hook sitePackages;
@@ -187,7 +233,8 @@ in stdenv.mkDerivation {
         # Determinism: Windows installers were not deterministic.
         # We're also not interested in building Windows installers.
         find "$out" -name 'wininst*.exe' | xargs -r rm -f
-
+      '' + optionalString (stdenv.hostPlatform == stdenv.buildPlatform)
+      ''
         # Determinism: rebuild all bytecode
         # We exclude lib2to3 because that's Python 2 code which fails
         # We rebuild three times, once for each optimization level
@@ -213,6 +260,8 @@ in stdenv.mkDerivation {
 
     enableParallelBuilding = true;
 
+    doCheck = false; # expensive, and fails
+
     meta = {
       homepage = http://python.org;
       description = "A high-level dynamically-typed programming language";
@@ -227,7 +276,7 @@ in stdenv.mkDerivation {
       '';
       license = stdenv.lib.licenses.psfl;
       platforms = stdenv.lib.platforms.all;
-      maintainers = with stdenv.lib.maintainers; [ chaoflow domenkozar ];
+      maintainers = with stdenv.lib.maintainers; [ fridh ];
       # Higher priority than Python 3.x so that `/bin/python` points to `/bin/python2`
       # in case both 2 and 3 are installed.
       priority = -100;

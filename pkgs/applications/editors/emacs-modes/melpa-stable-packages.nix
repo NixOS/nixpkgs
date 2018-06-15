@@ -81,12 +81,8 @@ self:
         inherit (self.melpaPackages) ess ctable popup;
       };
 
-      ess-R-object-popup = super.ess-R-object-popup.override {
-        inherit (self.melpaPackages) ess popup;
-      };
-
       # upstream issue: doesn't build
-      eterm-256color = markBroken super.emacs-256color;
+      eterm-256color = markBroken super.eterm-256color;
 
       # upstream issue: missing dependency highlight
       evil-search-highlight-persist = markBroken super.evil-search-highlight-persist;
@@ -100,8 +96,8 @@ self:
       # Expects bash to be at /bin/bash
       flycheck-rtags = markBroken super.flycheck-rtags;
 
-      # upstream issue: missing file header
-      fold-dwim = markBroken super.fold-dwim;
+      # upstream issue: missing dependency
+      fold-dwim-org = markBroken super.fold-dwim-org;
 
       # build timeout
       graphene = markBroken super.graphene;
@@ -117,6 +113,9 @@ self:
 
       # upstream issue: missing file header
       initsplit = markBroken super.initsplit;
+
+      # upstream issue: recipe fails
+      insert-shebang = markBroken super.insert-shebang;
 
       # Expects bash to be at /bin/bash
       ivy-rtags = markBroken super.ivy-rtags;

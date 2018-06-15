@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, cmake, pkgconfig, doxygen, mesa_noglu, glew
+{ stdenv, lib, fetchFromGitHub, cmake, pkgconfig, doxygen, libGL, glew
 , xorg , ffmpeg, python3 , libjpeg, libpng, libtiff, eigen
 , Carbon ? null, Cocoa ? null
 }:
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake pkgconfig doxygen ]; 
 
   buildInputs = [ 
-    mesa_noglu 
+    libGL 
     glew 
     xorg.libX11 
     ffmpeg 

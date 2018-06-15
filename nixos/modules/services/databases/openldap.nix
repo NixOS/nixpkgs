@@ -7,8 +7,10 @@ let
   cfg = config.services.openldap;
   openldap = pkgs.openldap;
 
+  dataFile = pkgs.writeText "ldap-contents.ldif" cfg.declarativeContents;
   configFile = pkgs.writeText "slapd.conf" cfg.extraConfig;
-
+  configOpts = if cfg.configDir == null then "-f ${configFile}"
+               else "-F ${cfg.configDir}";
 in
 
 {
@@ -81,6 +83,34 @@ in
             '''
           '';
       };
+
+      declarativeContents = mkOption {
+        type = with types; nullOr lines;
+        default = null;
+        description = ''
+          Declarative contents for the LDAP database, in LDIF format.
+
+          Note a few facts when using it. First, the database
+          <emphasis>must</emphasis> be stored in the directory defined by
+          <code>dataDir</code>. Second, all <code>dataDir</code> will be erased
+          when starting the LDAP server. Third, modifications to the database
+          are not prevented, they are just dropped on the next reboot of the
+          server. Finally, performance-wise the database and indexes are rebuilt
+          on each server startup, so this will slow down server startup,
+          especially with large databases.
+        '';
+        example = ''
+          dn: dc=example,dc=org
+          objectClass: domain
+          dc: example
+
+          dn: ou=users,dc=example,dc=org
+          objectClass = organizationalUnit
+          ou: users
+
+          # ...
+        '';
+      };
     };
 
   };
@@ -88,7 +118,7 @@ in
 
   ###### implementation
 
-  config = mkIf config.services.openldap.enable {
+  config = mkIf cfg.enable {
 
     environment.systemPackages = [ openldap ];
 
@@ -98,11 +128,21 @@ in
       after = [ "network.target" ];
       preStart = ''
         mkdir -p /var/run/slapd
-        chown -R ${cfg.user}:${cfg.group} /var/run/slapd
-        mkdir -p ${cfg.dataDir}
-        chown -R ${cfg.user}:${cfg.group} ${cfg.dataDir}
+        chown -R "${cfg.user}:${cfg.group}" /var/run/slapd
+        ${optionalString (cfg.declarativeContents != null) ''
+          rm -Rf "${cfg.dataDir}"
+        ''}
+        mkdir -p "${cfg.dataDir}"
+        ${optionalString (cfg.declarativeContents != null) ''
+          ${openldap.out}/bin/slapadd ${configOpts} -l ${dataFile}
+        ''}
+        chown -R "${cfg.user}:${cfg.group}" "${cfg.dataDir}"
       '';
-      serviceConfig.ExecStart = "${openldap.out}/libexec/slapd -u ${cfg.user} -g ${cfg.group} -d 0 -h \"${concatStringsSep " " cfg.urlList}\" ${if cfg.configDir == null then "-f "+configFile else "-F "+cfg.configDir}";
+      serviceConfig.ExecStart =
+        "${openldap.out}/libexec/slapd -d 0 " +
+          "-u '${cfg.user}' -g '${cfg.group}' " +
+          "-h '${concatStringsSep " " cfg.urlList}' " +
+          "${configOpts}";
     };
 
     users.extraUsers.openldap =

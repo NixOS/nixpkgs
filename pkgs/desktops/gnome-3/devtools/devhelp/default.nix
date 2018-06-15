@@ -1,20 +1,34 @@
 { stdenv, fetchurl, pkgconfig, gnome3, gtk3, wrapGAppsHook
-, webkitgtk, intltool, gsettings_desktop_schemas }:
+, glib, appstream-glib, gobjectIntrospection
+, webkitgtk, gettext, itstool, gsettings-desktop-schemas }:
 
 stdenv.mkDerivation rec {
-  inherit (import ./src.nix fetchurl) name src;
+  name = "devhelp-${version}";
+  version = "3.28.1";
 
-  nativeBuildInputs = [ pkgconfig ];
+  src = fetchurl {
+    url = "mirror://gnome/sources/devhelp/${gnome3.versionBranch version}/${name}.tar.xz";
+    sha256 = "08a8xizjqz68k30zd37r7g516azhan9bbrjsvv10hjd5dg3f476s";
+  };
+
+  nativeBuildInputs = [ pkgconfig gettext itstool wrapGAppsHook appstream-glib gobjectIntrospection ];
   buildInputs = [
-    gtk3 wrapGAppsHook webkitgtk intltool gnome3.defaultIconTheme
-    gsettings_desktop_schemas
+    glib gtk3 webkitgtk
+    gnome3.defaultIconTheme gsettings-desktop-schemas
   ];
 
+  passthru = {
+    updateScript = gnome3.updateScript {
+      packageName = "devhelp";
+      attrPath = "gnome3.devhelp";
+    };
+  };
+
   meta = with stdenv.lib; {
-    homepage = https://live.gnome.org/devhelp;
     description = "API documentation browser for GNOME";
-    maintainers = gnome3.maintainers;
+    homepage = https://wiki.gnome.org/Apps/Devhelp;
     license = licenses.gpl2;
+    maintainers = gnome3.maintainers;
     platforms = platforms.linux;
   };
 }

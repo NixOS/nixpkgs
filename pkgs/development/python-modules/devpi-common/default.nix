@@ -2,12 +2,12 @@
 
 with pythonPackages;buildPythonPackage rec {
   pname = "devpi-common";
-  version = "3.2.0";
+  version = "3.2.3";
   name = "${pname}-${version}";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0rh119iw5hk41gsvbjr0wixvl1i4f0b1vcnw9ym35rmcp517z0wb";
+    sha256 = "d2ecae3a92b2da62ecc6586d1c40d265e61bce70d7f1be2327e8b98598ba2687";
   };
 
   propagatedBuildInputs = [ requests py ];

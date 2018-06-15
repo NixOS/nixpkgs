@@ -9,11 +9,11 @@ let
   isonum = fetchurl { url = http://www.oasis-open.org/docbook/xml/4.5/ent/isonum.ent; sha256 = "04b62dw2g3cj9i4vn9xyrsrlz8fpmmijq98dm0nrkky31bwbbrs3"; };
   isogrk1 = fetchurl { url = http://www.oasis-open.org/docbook/xml/4.5/ent/isogrk1.ent; sha256 = "04b23anhs5wr62n4rgsjirzvw7rpjcsf8smz4ffzaqh3b0vw90vm"; };
 in stdenv.mkDerivation rec {
-  name = "gnumeric-1.12.36";
+  name = "gnumeric-1.12.39";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnumeric/1.12/${name}.tar.xz";
-    sha256 = "3cbfe25f26bd31b832efed2827ac35c3c1600bed9ccd233a4037a9f4d7c54848";
+    sha256 = "26cceb7fa97dc7eee7181a79a6251a85b1f1464dcaaaf7624829f7439c5f7d3f";
   };
 
   configureFlags = "--disable-component";

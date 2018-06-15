@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "lib" ];
 
-  nativeBuildInputs = [ perl help2man ];
+  nativeBuildInputs = [ perl help2man m4 ];
   propagatedBuildInputs = [ m4 ];
 
   # Don't fixup "#! /bin/sh" in Libtool, otherwise it will use the
@@ -22,6 +22,7 @@ stdenv.mkDerivation rec {
   # XXX: The GNU ld wrapper does all sorts of nasty things wrt. RPATH, which
   # leads to the failure of a number of tests.
   doCheck = false;
+  doInstallCheck = false;
 
   # Don't run the native `strip' when cross-compiling.  This breaks at least
   # with `.a' files for MinGW.

@@ -9,7 +9,7 @@
   environment.systemPackages = [
     pkgs.w3m-nox # needed for the manual anyway
     pkgs.testdisk # useful for repairing boot problems
-    pkgs.mssys # for writing Microsoft boot sectors / MBRs
+    pkgs.ms-sys # for writing Microsoft boot sectors / MBRs
     pkgs.efibootmgr
     pkgs.efivar
     pkgs.parted
@@ -17,6 +17,7 @@
     pkgs.ddrescue
     pkgs.ccrypt
     pkgs.cryptsetup # needed for dm-crypt volumes
+    pkgs.mkpasswd # for generating password files
 
     # Some networking tools.
     pkgs.fuse
@@ -28,7 +29,6 @@
     # Hardware-related tools.
     pkgs.sdparm
     pkgs.hdparm
-    pkgs.dmraid
     pkgs.smartmontools # for diagnosing hard disks
     pkgs.pciutils
     pkgs.usbutils

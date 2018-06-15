@@ -2,13 +2,26 @@
 
 {
   brotli = {
-    src = fetchFromGitHub {
-      owner = "google";
+    src = let gitsrc = pkgs.fetchFromGitHub {
+      owner = "eustas";
       repo = "ngx_brotli";
-      rev = "bfd2885b2da4d763fed18f49216bb935223cd34b";
-      sha256 = "04yx1n0wi3l2x37jd1ynl9951qxkn8xp42yv0mfp1qz9svips81n";
-      fetchSubmodules = true;
-    };
+      rev = "37ab9b2933a0b756ba3447000b7f31d432ed8228"; # v0.1.1
+      sha256 = "114ai8v9ns23qm12wp9dgdjvldqjnrmb3cmarkn0d3k6n3bm01bf";
+    }; in pkgs.runCommandNoCC "ngx_brotli-src" {} ''
+      cp -a ${gitsrc} $out
+      substituteInPlace $out/config \
+        --replace /usr/local ${lib.getDev pkgs.brotli}
+    '';
+    inputs = [ pkgs.brotli ];
+  };
+
+  ipscrub = {
+    src = fetchFromGitHub {
+      owner = "masonicboom";
+      repo = "ipscrub";
+      rev = "99230f66d5afe1f929cf4ed217901acb6206f620";
+      sha256 = "0mfrwkg4srql38w713pg6qxi0h4hgy8inkvgc9cm80bwlv2ng9s1";
+    } + "/ipscrub";
   };
 
   rtmp ={
@@ -47,12 +60,12 @@
     '';
   };
 
-  modsecurity-beta = {
+  modsecurity-nginx = {
     src = fetchFromGitHub {
       owner = "SpiderLabs";
       repo = "ModSecurity-nginx";
-      rev = "a2a5858d249222938c2f5e48087a922c63d7f9d8";
-      sha256 = "1zj0fq35hddzf7b3x40xlbss866lg7w2vd1bbm8g1hcq1ny2s84n";
+      rev = "v1.0.0";
+      sha256 = "0zzpdqhbdqqy8kjkszv0mrq6136ah9v3zwr1jbh312j8izmzdyi7";
     };
     inputs = [ pkgs.curl pkgs.geoip pkgs.libmodsecurity pkgs.libxml2 pkgs.lmdb pkgs.yajl ];
   };
@@ -152,8 +165,8 @@
       moduleSrc = fetchFromGitHub {
         owner  = "pagespeed";
         repo   = "ngx_pagespeed";
-        rev    = "v${version}-beta";
-        sha256 = "03dvzf1lgsjxcs1jjxq95n2rhgq0wy0f9ahvgascy0fak7qx4xj9";
+        rev    = "v${version}-stable";
+        sha256 = "0ry7vmkb2bx0sspl1kgjlrzzz6lbz07313ks2lr80rrdm2zb16wp";
       };
 
       ngx_pagespeed = pkgs.runCommand
@@ -172,6 +185,7 @@
         '';
     in {
       src = ngx_pagespeed;
+      inputs = [ pkgs.zlib pkgs.libuuid ]; # psol deps
     };
 
     shibboleth = {

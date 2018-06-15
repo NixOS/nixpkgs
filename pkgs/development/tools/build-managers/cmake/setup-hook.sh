@@ -22,19 +22,38 @@ cmakeConfigurePhase() {
     if [ -z "$dontUseCmakeBuildDir" ]; then
         mkdir -p build
         cd build
-        cmakeDir=..
+        cmakeDir=${cmakeDir:-..}
     fi
 
     if [ -z "$dontAddPrefix" ]; then
         cmakeFlags="-DCMAKE_INSTALL_PREFIX=$prefix $cmakeFlags"
     fi
 
-    if [ -n "$crossConfig" ]; then
-        # By now it supports linux builds only. We should set the proper
-        # CMAKE_SYSTEM_NAME otherwise.
-        # http://www.cmake.org/Wiki/CMake_Cross_Compiling
-        cmakeFlags="-DCMAKE_CXX_COMPILER=$crossConfig-g++ -DCMAKE_C_COMPILER=$crossConfig-gcc $cmakeFlags"
-    fi
+    # We should set the proper `CMAKE_SYSTEM_NAME`.
+    # http://www.cmake.org/Wiki/CMake_Cross_Compiling
+    #
+    # Unfortunately cmake seems to expect absolute paths for ar, ranlib, and
+    # strip. Otherwise they are taken to be relative to the source root of the
+    # package being built.
+    cmakeFlags="-DCMAKE_CXX_COMPILER=$CXX $cmakeFlags"
+    cmakeFlags="-DCMAKE_C_COMPILER=$CC $cmakeFlags"
+    cmakeFlags="-DCMAKE_AR=$(command -v $AR) $cmakeFlags"
+    cmakeFlags="-DCMAKE_RANLIB=$(command -v $RANLIB) $cmakeFlags"
+    cmakeFlags="-DCMAKE_STRIP=$(command -v $STRIP) $cmakeFlags"
+
+    # on macOS we want to prefer Unix-style headers to Frameworks
+    # because we usually do not package the framework
+    cmakeFlags="-DCMAKE_FIND_FRAMEWORK=last $cmakeFlags"
+
+    # we never want to use the global macOS SDK
+    cmakeFlags="-DCMAKE_OSX_SYSROOT= $cmakeFlags"
+
+    # disable OSX deployment target
+    # we don't want our binaries to have a "minimum" OSX version
+    cmakeFlags="-DCMAKE_OSX_DEPLOYMENT_TARGET= $cmakeFlags"
+
+    # correctly detect our clang compiler
+    cmakeFlags="-DCMAKE_POLICY_DEFAULT_CMP0025=NEW $cmakeFlags"
 
     # This installs shared libraries with a fully-specified install
     # name. By default, cmake installs shared libraries with just the
@@ -43,7 +62,7 @@ cmakeConfigurePhase() {
     # libraries are in a system path or in the same directory as the
     # executable. This flag makes the shared library accessible from its
     # nix/store directory.
-    cmakeFlags="-DCMAKE_INSTALL_NAME_DIR=$prefix/lib $cmakeFlags"
+    cmakeFlags="-DCMAKE_INSTALL_NAME_DIR=${!outputLib}/lib $cmakeFlags"
     cmakeFlags="-DCMAKE_INSTALL_LIBDIR=${!outputLib}/lib $cmakeFlags"
     cmakeFlags="-DCMAKE_INSTALL_INCLUDEDIR=${!outputDev}/include $cmakeFlags"
 
@@ -72,11 +91,7 @@ if [ -z "$dontUseCmakeConfigure" -a -z "$configurePhase" ]; then
     configurePhase=cmakeConfigurePhase
 fi
 
-if [ -n "$crossConfig" ]; then
-    crossEnvHooks+=(addCMakeParams)
-else
-    envHooks+=(addCMakeParams)
-fi
+addEnvHooks "$targetOffset" addCMakeParams
 
 makeCmakeFindLibs(){
   isystem_seen=

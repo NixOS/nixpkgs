@@ -1,17 +1,17 @@
 { stdenv, fetchurl, bzip2, gfortran, libX11, libXmu, libXt, libjpeg, libpng
 , libtiff, ncurses, pango, pcre, perl, readline, tcl, texLive, tk, xz, zlib
 , less, texinfo, graphviz, icu, pkgconfig, bison, imake, which, jdk, openblas
-, curl, Cocoa, Foundation, cf-private, libobjc, tzdata, fetchpatch
+, curl, Cocoa, Foundation, cf-private, libobjc, libcxx, tzdata, fetchpatch
 , withRecommendedPackages ? true
 , enableStrictBarrier ? false
 }:
 
 stdenv.mkDerivation rec {
-  name = "R-3.4.3";
+  name = "R-3.5.0";
 
   src = fetchurl {
     url = "http://cran.r-project.org/src/base/R-3/${name}.tar.gz";
-    sha256 = "09pl0w01fr09bsrwd7nz2r5psysj0z93w4chz3hm2havvqqvhg3s";
+    sha256 = "0w38865laqg28cdhikxdxhx4rfp0kgcn72gakwypsy91br9ja5zx";
   };
 
   buildInputs = [
@@ -19,9 +19,13 @@ stdenv.mkDerivation rec {
     pango pcre perl readline texLive xz zlib less texinfo graphviz icu
     pkgconfig bison imake which jdk openblas curl
   ] ++ stdenv.lib.optionals (!stdenv.isDarwin) [ tcl tk ]
-    ++ stdenv.lib.optionals stdenv.isDarwin [ Cocoa Foundation cf-private libobjc ];
+    ++ stdenv.lib.optionals stdenv.isDarwin [ Cocoa Foundation libobjc libcxx ];
 
   patches = [ ./no-usr-local-search-paths.patch ];
+
+  prePatch = stdenv.lib.optionalString stdenv.isDarwin ''
+    substituteInPlace configure --replace "-install_name libR.dylib" "-install_name $out/lib/R/lib/libR.dylib"
+  '';
 
   preConfigure = ''
     configureFlagsArray=(
@@ -40,8 +44,8 @@ stdenv.mkDerivation rec {
       --enable-R-shlib
       AR=$(type -p ar)
       AWK=$(type -p gawk)
-      CC=$(type -p gcc)
-      CXX=$(type -p g++)
+      CC=$(type -p cc)
+      CXX=$(type -p c++)
       FC="${gfortran}/bin/gfortran" F77="${gfortran}/bin/gfortran"
       JAVA_HOME="${jdk}"
       RANLIB=$(type -p ranlib)
@@ -50,9 +54,9 @@ stdenv.mkDerivation rec {
       --without-tcltk
       --without-aqua
       --disable-R-framework
-      CC="clang"
-      CXX="clang++"
       OBJC="clang"
+      CPPFLAGS="-isystem ${libcxx}/include/c++/v1"
+      LDFLAGS="-L${libcxx}/lib"
   '' + ''
     )
     echo >>etc/Renviron.in "TCLLIBPATH=${tk}/lib"
@@ -61,7 +65,8 @@ stdenv.mkDerivation rec {
 
   installTargets = [ "install" "install-info" "install-pdf" ];
 
-  doCheck = true;
+  doCheck = withRecommendedPackages;  # R 3.5.0 fails the test suite if the
+                                      # recommended packages are not built
   preCheck = "export TZ=CET; bin/Rscript -e 'sessionInfo()'";
 
   enableParallelBuilding = true;

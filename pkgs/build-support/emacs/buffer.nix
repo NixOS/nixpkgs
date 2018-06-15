@@ -4,7 +4,8 @@
 { lib, writeText, inherit-local }:
 
 rec {
-  withPackages = pkgs: let
+  withPackages = pkgs': let
+      pkgs = builtins.filter (x: x != null) pkgs';
       extras = map (x: x.emacsBufferSetup pkgs) (builtins.filter (builtins.hasAttr "emacsBufferSetup") pkgs);
     in writeText "dir-locals.el" ''
       (require 'inherit-local "${inherit-local}/share/emacs/site-lisp/elpa/inherit-local-${inherit-local.version}/inherit-local.elc")
@@ -43,6 +44,8 @@ rec {
       (setq process-environment (copy-tree process-environment))
       (setenv "PATH" (concat "${lib.makeSearchPath "bin" pkgs}:" (getenv "PATH")))
       (inherit-local-permanent exec-path (append '(${builtins.concatStringsSep " " (map (p: "\"${p}/bin\"") pkgs)}) exec-path))
+
+      (inherit-local-permanent eshell-path-env (concat "${lib.makeSearchPath "bin" pkgs}:" eshell-path-env))
 
       (setq nixpkgs--is-nixpkgs-buffer t)
       (inherit-local 'nixpkgs--is-nixpkgs-buffer)

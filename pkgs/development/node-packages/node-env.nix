@@ -1,6 +1,6 @@
 # This file originates from node2nix
 
-{stdenv, nodejs, python2, utillinux, runCommand, writeTextFile}:
+{stdenv, nodejs, python2, utillinux, libtool, runCommand, writeTextFile}:
 
 let
   python = if nodejs ? python then nodejs.python else python2;
@@ -316,7 +316,10 @@ let
     in
     stdenv.lib.makeOverridable stdenv.mkDerivation (builtins.removeAttrs args [ "dependencies" ] // {
       name = "node-${name}-${version}";
-      buildInputs = [ tarWrapper python nodejs ] ++ stdenv.lib.optional (stdenv.isLinux) utillinux ++ args.buildInputs or [];
+      buildInputs = [ tarWrapper python nodejs ]
+        ++ stdenv.lib.optional (stdenv.isLinux) utillinux
+        ++ stdenv.lib.optional (stdenv.isDarwin) libtool
+        ++ args.buildInputs or [];
       dontStrip = args.dontStrip or true; # Striping may fail a build for some package deployments
 
       inherit dontNpmInstall preRebuild;
@@ -413,7 +416,10 @@ let
       nodeDependencies = stdenv.mkDerivation {
         name = "node-dependencies-${name}-${version}";
 
-        buildInputs = [ tarWrapper python nodejs ] ++ stdenv.lib.optional (stdenv.isLinux) utillinux ++ args.buildInputs or [];
+        buildInputs = [ tarWrapper python nodejs ]
+          ++ stdenv.lib.optional (stdenv.isLinux) utillinux
+          ++ stdenv.lib.optional (stdenv.isDarwin) libtool
+          ++ args.buildInputs or [];
 
         includeScript = includeDependencies { inherit dependencies; };
         pinpointDependenciesScript = pinpointDependenciesOfPackage args;

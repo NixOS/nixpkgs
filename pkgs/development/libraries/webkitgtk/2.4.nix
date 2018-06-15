@@ -53,6 +53,8 @@ stdenv.mkDerivation rec {
     ./quartz-webcore.patch
     ./libc++.patch
     ./plugin-none.patch
+  ] ++ optionals stdenv.hostPlatform.isMusl [
+    ./fix-execinfo.patch
   ];
 
   configureFlags = with stdenv.lib; [
@@ -87,7 +89,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     gtk2 libwebp enchant
     libxml2 libxslt
-    gst-plugins-base sqlite xorg.libXt
+    gst-plugins-base sqlite xorg.libXt xorg.libXdamage
   ] ++ optionals enableCredentialStorage [
     libsecret
   ] ++ (if stdenv.isDarwin then [

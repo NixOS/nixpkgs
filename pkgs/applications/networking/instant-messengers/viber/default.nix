@@ -1,9 +1,7 @@
 {fetchurl, stdenv, dpkg, makeWrapper,
  alsaLib, cups, curl, dbus, expat, fontconfig, freetype, glib, gst_all_1, harfbuzz, libcap,
- libpulseaudio, libxml2, libxslt, mesa, nspr, nss, openssl, systemd, wayland, xorg, zlib, ...
+ libpulseaudio, libxml2, libxslt, libGLU_combined, nspr, nss, openssl, systemd, wayland, xorg, zlib, ...
 }:
-
-assert stdenv.system == "x86_64-linux";
 
 stdenv.mkDerivation rec {
   name = "viber-${version}";
@@ -34,7 +32,7 @@ stdenv.mkDerivation rec {
       libpulseaudio
       libxml2
       libxslt
-      mesa
+      libGLU_combined
       nspr
       nss
       openssl
@@ -99,7 +97,7 @@ stdenv.mkDerivation rec {
     homepage = http://www.viber.com;
     description = "An instant messaging and Voice over IP (VoIP) app";
     license = stdenv.lib.licenses.unfree;
-    platforms = stdenv.lib.platforms.linux;
+    platforms = [ "x86_64-linux" ];
     maintainers = with stdenv.lib.maintainers; [ jagajaga ];
   };
 

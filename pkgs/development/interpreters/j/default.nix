@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "j-${version}";
-  version = "806";
+  version = "808";
   jtype = "release";
   src = fetchFromGitHub {
     owner = "jsoftware";
     repo = "jsource";
     rev = "j${version}-${jtype}";
-    sha256 = "0b9sbd5hbyr5454k0p53f03lpf03sz8mqwszaqi0vcs73bsprdjs";
+    sha256 = "1sshm04p3yznlhfp6vyc7g8qxw95y67vhnh92cmz3lfy69n2q6bf";
   };
 
   buildInputs = [ readline libedit ];

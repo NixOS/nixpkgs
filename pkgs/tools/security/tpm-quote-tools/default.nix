@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec { 
   name = "tpm-quote-tools-${version}";
-  version = "1.0.3";
+  version = "1.0.4";
 
   src = fetchurl { 
     url = "mirror://sourceforge/project/tpmquotetools/${version}/${name}.tar.gz";
-    sha256 = "1d6ry2c78sgv0z4phfrwrbvgag83xnnfri2cdzrd86w4yfgnfwdf";
+    sha256 = "1qjs83xb4np4yn1bhbjfhvkiika410v8icwnjix5ad96w2nlxp0h";
   };
 
   buildInputs = [ trousers openssl ];

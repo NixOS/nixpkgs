@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, intltool, gobjectIntrospection, gtk_doc, docbook_xsl
+{ stdenv, fetchurl, pkgconfig, intltool, gobjectIntrospection, gtk-doc, docbook_xsl
 , glib, libsoup, libxml2, libxslt, check, curl, perl, hwdata, osinfo-db, vala ? null
 }:
 
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "dev" "devdoc" ];
 
   nativeBuildInputs = [
-    pkgconfig vala intltool gobjectIntrospection gtk_doc docbook_xsl
+    pkgconfig vala intltool gobjectIntrospection gtk-doc docbook_xsl
   ] ++ stdenv.lib.optionals doCheck checkInputs;
   checkInputs = [ check curl perl ];
   buildInputs = [ glib libsoup libxml2 libxslt ];

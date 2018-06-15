@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, cmake, sfml, mesa, bullet, glm, libmad, x11, openal
+{ stdenv, fetchgit, cmake, sfml, libGLU_combined, bullet, glm, libmad, x11, openal
 , SDL2, boost, ffmpeg }:
 
 stdenv.mkDerivation rec {
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [
-    cmake sfml mesa bullet glm libmad x11 openal SDL2 boost ffmpeg
+    cmake sfml libGLU_combined bullet glm libmad x11 openal SDL2 boost ffmpeg
   ];
 
   meta = with stdenv.lib; {

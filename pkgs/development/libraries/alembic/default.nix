@@ -1,20 +1,21 @@
-{ stdenv, fetchFromGitHub, unzip, cmake, openexr, hdf5 }:
+{ stdenv, fetchFromGitHub, unzip, cmake, openexr, hdf5-threadsafe }:
 
 stdenv.mkDerivation rec
 {
   name = "alembic-${version}";
-  version = "1.7.4";
+  version = "1.7.8";
 
   src = fetchFromGitHub {
     owner = "alembic";
     repo = "alembic";
     rev = "${version}";
-    sha256 = "00r6d8xk2sq5hdl5lp14nhyh1b2d68fxpzbm69fk6iq2f2gv0iqv";
+    sha256 = "1xmndhcliz25cgdzb7ybkvb05w4klmngpk76fzghamwyi79zfs2c";
   };
 
   outputs = [ "bin" "dev" "out" "lib" ];
 
-  buildInputs = [ unzip cmake openexr hdf5 ];
+  nativeBuildInputs = [ unzip cmake ];
+  buildInputs = [ openexr hdf5-threadsafe ];
 
   enableParallelBuilding = true;
 

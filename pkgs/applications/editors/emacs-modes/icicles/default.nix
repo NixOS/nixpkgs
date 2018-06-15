@@ -2,25 +2,25 @@
 
 let
   modules = [
-    { name = "icicles.el"; sha256 = "10w1lghh9jqxxm5cszi2qyk24vnvazfywmyyz1v7zf6cyiwbndrz"; }
-    { name = "icicles-chg.el"; sha256 = "020yg4hv120mcy7qvn76j85q6hl7mfcfv66w55c6izc9lbrvvnv8"; }
-    { name = "icicles-cmd1.el"; sha256 = "1715x1vkiax93890gfjbzslxsn4swsv37spvyx7chy4s1mym9kfw"; }
-    { name = "icicles-cmd2.el"; sha256 = "187k0gmn34fn6w1dw9hjf4i788y01vk47z7ac11ar4bddwh97ddx"; }
-    { name = "icicles-doc1.el"; sha256 = "1bw5dkymn2xdrfrp80am0gqi0szs0xihny4qmgzgx6hfbng351qh"; }
-    { name = "icicles-doc2.el"; sha256 = "0zd94m1a8mwwbrbcrahxxx8q34w8cg5lna4yww4m1gliyklww86s"; }
-    { name = "icicles-face.el"; sha256 = "1mlz8dq7bgzp2cf5j37i25yw90ry657d2m8r93rdj67h7l4wyxhj"; }
-    { name = "icicles-fn.el"; sha256 = "1cdghvgsr0b7pdq4lmnfm6kwwcqbk4wqf168kf2sjajbpa24ix96"; }
-    { name = "icicles-mac.el"; sha256 = "1w5sgzbp8hyjzrmqd8bwivszaayzh8dkyqa0d751adiwjfs9sq9m"; }
-    { name = "icicles-mcmd.el"; sha256 = "1lf2galn3g52hfz61avlr4ifyn5b42dfbmyq78cpzlq7hzc928v2"; }
-    { name = "icicles-mode.el"; sha256 = "0gci04j6vx0vqsh4skarznklam1xibj7pjvy67kaip8b6a4zx9ip"; }
-    { name = "icicles-opt.el"; sha256 = "17g35ancml0mvywagzhjrgmlr4rhm1wgb5wg3fsqhhldib9qlz56"; }
-    { name = "icicles-var.el"; sha256 = "0ydixg41h09yncp8g2nv8zsyv8avg1hj2f3mgrmd2kf0n27bw2nv"; }
+    { name = "icicles.el"; sha256 = "0wxak7wh0rrb3h77ay2vypbb53skcfbrv71xkajhax0w12q6zpaj"; }
+    { name = "icicles-chg.el"; sha256 = "1kqlhisg5g9ycylzqiwxrmmgfw2jw599wisz26wvi48lac2icgg7"; }
+    { name = "icicles-cmd1.el"; sha256 = "17cpw798bl6p77cmjl7lwdnxa1qpw4z1wacjq2mdc8fh81cyw3am"; }
+    { name = "icicles-cmd2.el"; sha256 = "15swxk7fr7wsqpf26xzbvyk12ikkvfcyh9w8wmnpc38dmpyq79rb"; }
+    { name = "icicles-doc1.el"; sha256 = "04j5qvj7pqnjh8h2y2sdgi7x55czdp9xn7yysr3bzcmr1rq5p4bz"; }
+    { name = "icicles-doc2.el"; sha256 = "1k8vfhi3fa4bzsxr074bw5q6srvq6z6hi61rzlxdw7pah6qf7hcz"; }
+    { name = "icicles-face.el"; sha256 = "1pvygqzmh6ag0zhfjn1vhdvlhxybwxzj22ah2pc0ls80dlywhi4l"; }
+    { name = "icicles-fn.el"; sha256 = "1sn56z5rjsvqsy3vs7af7yai0c0qdjvcxvwwc59rhswrbi6zlxz5"; }
+    { name = "icicles-mac.el"; sha256 = "1wyvqzlpq5n70mggqijb8f5r5q9y1hxxngp64sixy0xszy5d12dk"; }
+    { name = "icicles-mcmd.el"; sha256 = "05dniz6337v9r15w8r2zad0n2h6jlygzjp7vw75vvq8mds0acmia"; }
+    { name = "icicles-mode.el"; sha256 = "1xfv8nryf5y2gygg02naawzm5qhrkba3h84g43518r1xc6rgbpp6"; }
+    { name = "icicles-opt.el"; sha256 = "10n4p999ylkapirs75y5fh33lpiyx42i3ajzl2zjfwyr1zksg1iz"; }
+    { name = "icicles-var.el"; sha256 = "1r5gb01zg8nf2qryq9saxfpnzlymmppsk7w1g09lac35c87vh8yl"; }
   ];
 
   forAll = f: map f modules;
 in
 stdenv.mkDerivation rec {
-  version = "2017-10-28";
+  version = "2018-04-16";
   name = "icicles-${version}";
 
   srcs = forAll ({name, sha256}: fetchurl { url = "http://www.emacswiki.org/emacs/download/${name}"; inherit sha256; });

@@ -1,5 +1,5 @@
 { stdenv, fetchurl, cmake, pkgconfig, SDL2, SDL2_image , curl
-, libogg, libvorbis, mesa, openal, boost, glew
+, libogg, libvorbis, libGLU_combined, openal, boost, glew
 }:
 
 stdenv.mkDerivation rec {
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig cmake ];
 
-  buildInputs = [ SDL2 SDL2_image curl libogg libvorbis mesa openal boost glew ];
+  buildInputs = [ SDL2 SDL2_image curl libogg libvorbis libGLU_combined openal boost glew ];
 
   cmakeFlags = [ "-DENABLE_BOOST_STATIC_LIBS=OFF" ];
 

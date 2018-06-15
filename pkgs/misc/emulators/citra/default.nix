@@ -1,13 +1,13 @@
 { stdenv, fetchgit, cmake, SDL2, qtbase, boost, curl, gtest }:
 
 stdenv.mkDerivation rec { 
-  name = "citra-2017-07-26";
+  name = "citra-2018-02-23";
 
   # Submodules
   src = fetchgit {
     url = "https://github.com/citra-emu/citra";
-    rev = "a724fb365787718f9e44adedc14e59d0854905a6";
-    sha256 = "0lkrwhxvq85c0smix27xvj8m463bxa67qhy8m8r43g39n0h8d5sf";
+    rev = "e51a642a13b9c2eda43d875fe318f627e11d480f";
+    sha256 = "0cw9cqbljc87rjyr2alfryp04mxpvd5mdlyrmnp9yis3xr8g9sa1";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     homepage = https://citra-emu.org/;
     description = "An open-source emulator for the Nintendo 3DS capable of playing many of your favorite games.";
-    platforms = platforms.linux;
+    platforms = [ "x86_64-linux" "i686-linux" ];
     license = licenses.gpl2;
     maintainers = with maintainers; [ abbradar ];
   };

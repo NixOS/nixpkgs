@@ -17,9 +17,9 @@ stdenv.mkDerivation {
     sed -i -e "s|all: bin doc man|all: bin|" \
            -e "s|install: install-bin install-man install-doc|install: install-bin|" Makefile
   '';
-  maintainers = [ stdenv.lib.maintainers.sander ];
 
   meta = {
     platforms = stdenv.lib.platforms.linux;
+    maintainers = [ stdenv.lib.maintainers.sander ];
   };
 }

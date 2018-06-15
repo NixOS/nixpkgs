@@ -1,21 +1,21 @@
-{ stdenv, buildGoPackage, fetchFromGitHub, libargon2, pam }:
+{ stdenv, buildGoPackage, fetchFromGitHub, pam }:
 
 # Don't use this for anything important yet!
 
 buildGoPackage rec {
   name = "fscrypt-${version}";
-  version = "0.2.2";
+  version = "0.2.3";
 
   goPackagePath = "github.com/google/fscrypt";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "fscrypt";
-    rev = version;
-    sha256 = "0a85vj1zsybhzvvgdvlw6ywh2a6inmrmc95pfa1js4vkx0ixf1kh";
+    rev = "v${version}";
+    sha256 = "126bbxim4nj56kplvyv528i88mfray50r2rc6ysblkmaw6x0fd9c";
   };
 
-  buildInputs = [ libargon2 pam ];
+  buildInputs = [ pam ];
 
   meta = with stdenv.lib; {
     description =

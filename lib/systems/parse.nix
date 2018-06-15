@@ -4,6 +4,16 @@
 # http://llvm.org/docs/doxygen/html/Triple_8cpp_source.html especially
 # Triple::normalize. Parsing should essentially act as a more conservative
 # version of that last function.
+#
+# Most of the types below come in "open" and "closed" pairs. The open ones
+# specify what information we need to know about systems in general, and the
+# closed ones are sub-types representing the whitelist of systems we support in
+# practice.
+#
+# Code in the remainder of nixpkgs shouldn't rely on the closed ones in
+# e.g. exhaustive cases. Its more a sanity check to make sure nobody defines
+# systems that overlap with existing ones and won't notice something amiss.
+#
 { lib }:
 with lib.lists;
 with lib.types;
@@ -11,51 +21,110 @@ with lib.attrsets;
 with (import ./inspect.nix { inherit lib; }).predicates;
 
 let
-  setTypesAssert = type: pred:
+  inherit (lib.options) mergeOneOption;
+
+  setTypes = type:
     mapAttrs (name: value:
-      assert pred value;
-      setType type ({ inherit name; } // value));
-  setTypes = type: setTypesAssert type (_: true);
+      assert type.check value;
+      setType type.name ({ inherit name; } // value));
 
 in
 
 rec {
 
-  isSignificantByte = isType "significant-byte";
-  significantBytes = setTypes "significant-byte" {
+  ################################################################################
+
+  types.openSignificantByte = mkOptionType {
+    name = "significant-byte";
+    description = "Endianness";
+    merge = mergeOneOption;
+  };
+
+  types.significantByte = enum (attrValues significantBytes);
+
+  significantBytes = setTypes types.openSignificantByte {
     bigEndian = {};
     littleEndian = {};
   };
 
-  isCpuType = isType "cpu-type";
-  cpuTypes = with significantBytes; setTypesAssert "cpu-type"
-    (x: elem x.bits [8 16 32 64 128]
-        && (if 8 < x.bits
-            then isSignificantByte x.significantByte
-            else !(x ? significantByte)))
-  {
-    arm      = { bits = 32; significantByte = littleEndian; family = "arm"; };
-    armv5tel = { bits = 32; significantByte = littleEndian; family = "arm"; };
-    armv6l   = { bits = 32; significantByte = littleEndian; family = "arm"; };
-    armv7a   = { bits = 32; significantByte = littleEndian; family = "arm"; };
-    armv7l   = { bits = 32; significantByte = littleEndian; family = "arm"; };
-    aarch64  = { bits = 64; significantByte = littleEndian; family = "aarch64"; };
-    i686     = { bits = 32; significantByte = littleEndian; family = "x86"; };
-    x86_64   = { bits = 64; significantByte = littleEndian; family = "x86"; };
-    mips64el = { bits = 32; significantByte = littleEndian; family = "mips"; };
-    powerpc  = { bits = 32; significantByte = bigEndian;    family = "power"; };
+  ################################################################################
+
+  # Reasonable power of 2
+  types.bitWidth = enum [ 8 16 32 64 128 ];
+
+  ################################################################################
+
+  types.openCpuType = mkOptionType {
+    name = "cpu-type";
+    description = "instruction set architecture name and information";
+    merge = mergeOneOption;
+    check = x: types.bitWidth.check x.bits
+      && (if 8 < x.bits
+          then types.significantByte.check x.significantByte
+          else !(x ? significantByte));
   };
 
-  isVendor = isType "vendor";
-  vendors = setTypes "vendor" {
+  types.cpuType = enum (attrValues cpuTypes);
+
+  cpuTypes = with significantBytes; setTypes types.openCpuType {
+    arm      = { bits = 32; significantByte = littleEndian; family = "arm"; };
+    armv5tel = { bits = 32; significantByte = littleEndian; family = "arm"; version = "5"; };
+    armv6m   = { bits = 32; significantByte = littleEndian; family = "arm"; version = "6"; };
+    armv6l   = { bits = 32; significantByte = littleEndian; family = "arm"; version = "6"; };
+    armv7a   = { bits = 32; significantByte = littleEndian; family = "arm"; version = "7"; };
+    armv7r   = { bits = 32; significantByte = littleEndian; family = "arm"; version = "7"; };
+    armv7m   = { bits = 32; significantByte = littleEndian; family = "arm"; version = "7"; };
+    armv7l   = { bits = 32; significantByte = littleEndian; family = "arm"; version = "7"; };
+    armv8a   = { bits = 32; significantByte = littleEndian; family = "arm"; version = "8"; };
+    armv8r   = { bits = 32; significantByte = littleEndian; family = "arm"; version = "8"; };
+    armv8m   = { bits = 32; significantByte = littleEndian; family = "arm"; version = "8"; };
+    aarch64  = { bits = 64; significantByte = littleEndian; family = "arm"; version = "8"; };
+
+    i686     = { bits = 32; significantByte = littleEndian; family = "x86"; };
+    x86_64   = { bits = 64; significantByte = littleEndian; family = "x86"; };
+
+    mips     = { bits = 32; significantByte = bigEndian;    family = "mips"; };
+    mipsel   = { bits = 32; significantByte = littleEndian; family = "mips"; };
+    mips64   = { bits = 64; significantByte = bigEndian;    family = "mips"; };
+    mips64el = { bits = 64; significantByte = littleEndian; family = "mips"; };
+
+    powerpc  = { bits = 32; significantByte = bigEndian;    family = "power"; };
+
+    riscv32  = { bits = 32; significantByte = littleEndian; family = "riscv"; };
+    riscv64  = { bits = 64; significantByte = littleEndian; family = "riscv"; };
+
+    wasm32   = { bits = 32; significantByte = littleEndian; family = "wasm"; };
+    wasm64   = { bits = 64; significantByte = littleEndian; family = "wasm"; };
+  };
+
+  ################################################################################
+
+  types.openVendor = mkOptionType {
+    name = "vendor";
+    description = "vendor for the platform";
+    merge = mergeOneOption;
+  };
+
+  types.vendor = enum (attrValues vendors);
+
+  vendors = setTypes types.openVendor {
     apple = {};
     pc = {};
 
     unknown = {};
   };
 
-  isExecFormat = isType "exec-format";
-  execFormats = setTypes "exec-format" {
+  ################################################################################
+
+  types.openExecFormat = mkOptionType {
+    name = "exec-format";
+    description = "executable container used by the kernel";
+    merge = mergeOneOption;
+  };
+
+  types.execFormat = enum (attrValues execFormats);
+
+  execFormats = setTypes types.openExecFormat {
     aout = {}; # a.out
     elf = {};
     macho = {};
@@ -64,16 +133,38 @@ rec {
     unknown = {};
   };
 
-  isKernelFamily = isType "kernel-family";
-  kernelFamilies = setTypes "kernel-family" {
-    bsd = {};
+  ################################################################################
+
+  types.openKernelFamily = mkOptionType {
+    name = "exec-format";
+    description = "executable container used by the kernel";
+    merge = mergeOneOption;
   };
 
-  isKernel = x: isType "kernel" x;
-  kernels = with execFormats; with kernelFamilies; setTypesAssert "kernel"
-    (x: isExecFormat x.execFormat && all isKernelFamily (attrValues x.families))
-  {
-    darwin  = { execFormat = macho;   families = { }; };
+  types.kernelFamily = enum (attrValues kernelFamilies);
+
+  kernelFamilies = setTypes types.openKernelFamily {
+    bsd = {};
+    darwin = {};
+  };
+
+  ################################################################################
+
+  types.openKernel = mkOptionType {
+    name = "kernel";
+    description = "kernel name and information";
+    merge = mergeOneOption;
+    check = x: types.execFormat.check x.execFormat
+        && all types.kernelFamily.check (attrValues x.families);
+  };
+
+  types.kernel = enum (attrValues kernels);
+
+  kernels = with execFormats; with kernelFamilies; setTypes types.openKernel {
+    # TODO(@Ericson2314): Don't want to mass-rebuild yet to keeping 'darwin' as
+    # the nnormalized name for macOS.
+    macos   = { execFormat = macho;   families = { inherit darwin; }; name = "darwin"; };
+    ios     = { execFormat = macho;   families = { inherit darwin; }; };
     freebsd = { execFormat = elf;     families = { inherit bsd; }; };
     hurd    = { execFormat = elf;     families = { }; };
     linux   = { execFormat = elf;     families = { }; };
@@ -83,31 +174,83 @@ rec {
     solaris = { execFormat = elf;     families = { }; };
     windows = { execFormat = pe;      families = { }; };
   } // { # aliases
+    # 'darwin' is the kernel for all of them. We choose macOS by default.
+    darwin = kernels.macos;
     # TODO(@Ericson2314): Handle these Darwin version suffixes more generally.
-    darwin10 = kernels.darwin;
-    darwin14 = kernels.darwin;
+    darwin10 = kernels.macos;
+    darwin14 = kernels.macos;
+    watchos = kernels.ios;
+    tvos = kernels.ios;
     win32 = kernels.windows;
   };
 
-  isAbi = isType "abi";
-  abis = setTypes "abi" {
-    cygnus = {};
-    gnu = {};
-    msvc = {};
-    eabi = {};
-    androideabi = {};
-    gnueabi = {};
-    gnueabihf = {};
+  ################################################################################
+
+  types.openAbi = mkOptionType {
+    name = "abi";
+    description = "binary interface for compiled code and syscalls";
+    merge = mergeOneOption;
+  };
+
+  types.abi = enum (attrValues abis);
+
+  abis = setTypes types.openAbi {
+    cygnus       = {};
+    msvc         = {};
+    eabi         = {};
+
+    androideabi  = {};
+    android      = {
+      assertions = [
+        { assertion = platform: !platform.isAarch32;
+          message = ''
+            The "android" ABI is not for 32-bit ARM. Use "androideabi" instead.
+          '';
+        }
+      ];
+    };
+
+    gnueabi      = { float = "soft"; };
+    gnueabihf    = { float = "hard"; };
+    gnu          = {
+      assertions = [
+        { assertion = platform: !platform.isAarch32;
+          message = ''
+            The "gnu" ABI is ambiguous on 32-bit ARM. Use "gnueabi" or "gnueabihf" instead.
+          '';
+        }
+      ];
+    };
+
+    musleabi     = { float = "soft"; };
+    musleabihf   = { float = "hard"; };
+    musl         = {};
+
+    uclibceabihf = { float = "soft"; };
+    uclibceabi   = { float = "hard"; };
+    uclibc       = {};
 
     unknown = {};
   };
 
+  ################################################################################
+
+  types.parsedPlatform = mkOptionType {
+    name = "system";
+    description = "fully parsed representation of llvm- or nix-style platform tuple";
+    merge = mergeOneOption;
+    check = { cpu, vendor, kernel, abi }:
+           types.cpuType.check cpu
+        && types.vendor.check vendor
+        && types.kernel.check kernel
+        && types.abi.check abi;
+  };
+
   isSystem = isType "system";
-  mkSystem = { cpu, vendor, kernel, abi }:
-    assert isCpuType cpu && isVendor vendor && isKernel kernel && isAbi abi;
-    setType "system" {
-      inherit cpu vendor kernel abi;
-    };
+
+  mkSystem = components:
+    assert types.parsedPlatform.check components;
+    setType "system" components;
 
   mkSkeletonFromList = l: {
     "2" = # We only do 2-part hacks for things Nix already supports
@@ -152,7 +295,12 @@ rec {
       kernel = getKernel args.kernel;
       abi =
         /**/ if args ? abi       then getAbi args.abi
-        else if isLinux   parsed then abis.gnu
+        else if isLinux   parsed then
+          if isAarch32 parsed then
+            if lib.versionAtLeast (parsed.cpu.version or "0") "6"
+            then abis.gnueabihf
+            else abis.gnueabi
+          else abis.gnu
         else if isWindows parsed then abis.gnu
         else                     abis.unknown;
     };
@@ -162,12 +310,14 @@ rec {
   mkSystemFromString = s: mkSystemFromSkeleton (mkSkeletonFromList (lib.splitString "-" s));
 
   doubleFromSystem = { cpu, vendor, kernel, abi, ... }:
-    if abi == abis.cygnus
-    then "${cpu.name}-cygwin"
+    /**/ if abi == abis.cygnus       then "${cpu.name}-cygwin"
+    else if kernel.families ? darwin then "${cpu.name}-darwin"
     else "${cpu.name}-${kernel.name}";
 
   tripleFromSystem = { cpu, vendor, kernel, abi, ... } @ sys: assert isSystem sys; let
     optAbi = lib.optionalString (abi != abis.unknown) "-${abi.name}";
   in "${cpu.name}-${vendor.name}-${kernel.name}${optAbi}";
+
+  ################################################################################
 
 }

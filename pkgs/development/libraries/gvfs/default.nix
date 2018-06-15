@@ -1,37 +1,75 @@
-{ stdenv, fetchurl, pkgconfig, intltool, libtool
-, glib, dbus, udev, libgudev, udisks2, libgcrypt, libcap, polkit
-, libgphoto2, avahi, libarchive, fuse, libcdio, file, bzip2, lzma
+{ stdenv, meson, ninja, fetchurl, pkgconfig, gettext, gnome3
+, glib, libgudev, udisks2, libgcrypt, libcap, polkit
+, libgphoto2, avahi, libarchive, fuse, libcdio
 , libxml2, libxslt, docbook_xsl, docbook_xml_dtd_42, samba, libmtp
-, gnomeSupport ? false, gnome, makeWrapper }:
+, gnomeSupport ? false, gnome, makeWrapper
+, libimobiledevice, libbluray, libcdio-paranoia, libnfs, openssh
+, libsecret, libgdata
+# Remove when switching back to meson
+, autoreconfHook, lzma, bzip2
+}:
+
+# TODO: switch to meson when upstream fixes a non-deterministic build failure
+# See https://bugzilla.gnome.org/show_bug.cgi?id=794549
+
+# Meson specific things are commented out and annotated, so switching back
+# should simply require deleting autotools specific things and adding back meson
+# flags etc.
 
 let
-  ver_maj = "1.34";
-  version = "${ver_maj}.1";
+  pname = "gvfs";
+  version = "1.36.2";
 in
 stdenv.mkDerivation rec {
-  name = "gvfs-${version}";
+  name = "${pname}-${version}";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gvfs/${ver_maj}/${name}.tar.xz";
-    sha256 = "1d3j6f252mk316hrspwy63inrhxk6l78l4bmlmql401lqapb5yby";
+    url = "mirror://gnome/sources/${pname}/${gnome3.versionBranch version}/${name}.tar.xz";
+    sha256 = "1xq105596sk9yram5a143b369wpaiiwc9gz86n0j1kfr7nipkqn4";
   };
 
+  # Uncomment when switching back to meson
+  # postPatch = ''
+  #   chmod +x meson_post_install.py # patchShebangs requires executable file
+  #   patchShebangs meson_post_install.py
+  # '';
+
   nativeBuildInputs = [
-    pkgconfig intltool libtool file makeWrapper
+    autoreconfHook # Remove when switching to meson
+    # meson ninja
+    pkgconfig gettext makeWrapper
     libxml2 libxslt docbook_xsl docbook_xml_dtd_42
   ];
 
   buildInputs =
-    [ glib dbus udev libgudev udisks2 libgcrypt
-      libgphoto2 avahi libarchive fuse libcdio lzma bzip2
-      samba libmtp libcap polkit
+    [ glib libgudev udisks2 libgcrypt
+      libgphoto2 avahi libarchive fuse libcdio
+      samba libmtp libcap polkit libimobiledevice libbluray
+      libcdio-paranoia libnfs openssh
+      # Remove when switching back to meson
+      lzma bzip2
       # ToDo: a ligther version of libsoup to have FTP/HTTP support?
     ] ++ stdenv.lib.optionals gnomeSupport (with gnome; [
-      libsoup libgnome_keyring gconf gcr
-      # ToDo: not working and probably useless until gnome3 from x-updates
+      libsoup gcr
+      gnome-online-accounts libsecret libgdata
     ]);
 
+  # Remove when switching back to meson
   configureFlags = stdenv.lib.optional (!gnomeSupport) "--disable-gcr";
+
+  # Uncomment when switching back to meson
+  # mesonFlags = [
+  #   "-Dgio_module_dir=lib/gio/modules"
+  #   "-Dsystemduserunitdir=lib/systemd/user"
+  #   "-Ddbus_service_dir=share/dbus-1/services"
+  #   "-Dtmpfilesdir=no"
+  # ] ++ stdenv.lib.optionals (!gnomeSupport) [
+  #   "-Dgcr=false" "-Dgoa=false" "-Dkeyring=false" "-Dhttp=false"
+  #   "-Dgoogle=false"
+  # ] ++ stdenv.lib.optionals (samba == null) [
+  #   # Xfce don't want samba
+  #   "-Dsmb=false"
+  # ];
 
   enableParallelBuilding = true;
 
@@ -43,9 +81,16 @@ stdenv.mkDerivation rec {
     done
   '';
 
+  passthru = {
+    updateScript = gnome3.updateScript {
+      packageName = pname;
+    };
+  };
+
   meta = with stdenv.lib; {
     description = "Virtual Filesystem support library" + optionalString gnomeSupport " (full GNOME support)";
+    license = licenses.lgpl2Plus;
     platforms = platforms.linux;
-    maintainers = [ maintainers.lethalman ];
+    maintainers = [ maintainers.lethalman ] ++ gnome3.maintainers;
   };
 }

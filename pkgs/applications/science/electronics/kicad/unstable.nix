@@ -1,22 +1,24 @@
-{ wxGTK, lib, stdenv, fetchFromGitHub, cmake, mesa, zlib
+{ wxGTK, lib, stdenv, fetchFromGitHub, cmake, libGLU_combined, zlib
 , libX11, gettext, glew, glm, cairo, curl, openssl, boost, pkgconfig
 , doxygen, pcre, libpthreadstubs, libXdmcp
 
 , oceSupport ? true, opencascade_oce
-, ngspiceSupport ? true, ngspice
+, ngspiceSupport ? true, libngspice
 , scriptingSupport ? true, swig, python, wxPython
 }:
+
+assert ngspiceSupport -> libngspice != null;
 
 with lib;
 stdenv.mkDerivation rec {
   name = "kicad-unstable-${version}";
-  version = "2017-12-11";
+  version = "2018-06-12";
 
   src = fetchFromGitHub {
     owner = "KICad";
     repo = "kicad-source-mirror";
-    rev = "1955f252265c38a313f6c595d6c4c637f38fd316";
-    sha256 = "15cc81h7nh5dk6gj6mc4ylcgdznfriilhb43n1g3xwyq3s8iaibz";
+    rev = "bc7bd107d980da147ad515aeae0469ddd55c2368";
+    sha256 = "11nsx52pd3jr2wbzr11glmcs1a9r7z1mqkqx6yvlm0awbgd8qlv8";
   };
 
   postPatch = ''
@@ -36,12 +38,13 @@ stdenv.mkDerivation rec {
       "-DCMAKE_CXX_FLAGS=-I${wxPython}/include/wx-3.0"
     ];
 
-  nativeBuildInputs = [ cmake doxygen  pkgconfig ];
+  # https://www.mail-archive.com/kicad-developers@lists.launchpad.net/msg29840.html
+  nativeBuildInputs = [ (cmake.override {majorVersion = "3.10";}) doxygen  pkgconfig ];
   buildInputs = [
-    mesa zlib libX11 wxGTK pcre libXdmcp gettext glew glm libpthreadstubs
+    libGLU_combined zlib libX11 wxGTK pcre libXdmcp gettext glew glm libpthreadstubs
     cairo curl openssl boost
   ] ++ optional (oceSupport) opencascade_oce
-    ++ optional (ngspiceSupport) ngspice
+    ++ optional (ngspiceSupport) libngspice
     ++ optionals (scriptingSupport) [ swig python wxPython ];
 
   meta = {

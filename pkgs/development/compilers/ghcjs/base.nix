@@ -174,6 +174,10 @@ in mkDerivation (rec {
     isGhcjs = true;
     inherit nodejs ghcjsBoot;
     socket-io = pkgs.nodePackages."socket.io";
+    haskellCompilerName = "ghcjs-${version}";
+
+    # let us assume ghcjs is never actually cross compiled
+    targetPrefix = "";
 
     inherit stage1Packages;
     mkStage2 = stage2 {
@@ -185,6 +189,7 @@ in mkDerivation (rec {
   description = "A Haskell to JavaScript compiler that uses the GHC API";
   license = stdenv.lib.licenses.bsd3;
   platforms = ghc.meta.platforms;
-  maintainers = with stdenv.lib.maintainers; [ jwiegley cstrahan dmjio ];
+  maintainers = with stdenv.lib.maintainers; [ jwiegley cstrahan dmjio elvishjerricco ];
+  hydraPlatforms = if broken then [] else ghc.meta.platforms;
   inherit broken;
 })

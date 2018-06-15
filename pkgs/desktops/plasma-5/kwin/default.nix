@@ -1,5 +1,5 @@
 {
-  mkDerivation, lib, copyPathsToStore,
+  mkDerivation, lib, copyPathsToStore, fetchpatch,
   extra-cmake-modules, kdoctools,
 
   epoxy,libICE, libSM, libinput, libxkbcommon, udev, wayland, xcb-util-cursor,
@@ -11,7 +11,7 @@
   kcoreaddons, kcrash, kdeclarative, kdecoration, kglobalaccel, ki18n,
   kiconthemes, kidletime, kinit, kio, knewstuff, knotifications, kpackage,
   kscreenlocker, kservice, kwayland, kwidgetsaddons, kwindowsystem, kxmlgui,
-  plasma-framework,
+  plasma-framework, qtsensors, libcap
 }:
 
 mkDerivation {
@@ -21,17 +21,18 @@ mkDerivation {
     epoxy libICE libSM libinput libxkbcommon udev wayland xcb-util-cursor
     xwayland
 
-    qtdeclarative qtmultimedia qtscript qtx11extras
+    qtdeclarative qtmultimedia qtscript qtx11extras qtsensors
 
     breeze-qt5 kactivities kcmutils kcompletion kconfig kconfigwidgets
     kcoreaddons kcrash kdeclarative kdecoration kglobalaccel ki18n kiconthemes
     kidletime kinit kio knewstuff knotifications kpackage kscreenlocker kservice
     kwayland kwidgetsaddons kwindowsystem kxmlgui plasma-framework
+    libcap
   ];
   outputs = [ "bin" "dev" "out" ];
   patches = copyPathsToStore (lib.readPathsFromFile ./. ./series);
-  NIX_CFLAGS_COMPILE = [
-    ''-DNIXPKGS_XWAYLAND="${lib.getBin xwayland}/bin/Xwayland"''
+  CXXFLAGS = [
+    ''-DNIXPKGS_XWAYLAND=\"${lib.getBin xwayland}/bin/Xwayland\"''
   ];
   cmakeFlags = [ "-DCMAKE_SKIP_BUILD_RPATH=OFF" ];
   postInstall = ''

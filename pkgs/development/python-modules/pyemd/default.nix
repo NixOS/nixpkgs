@@ -3,11 +3,11 @@
 buildPythonPackage rec {
   name = "${pname}-${version}";
   pname = "pyemd";
-  version = "0.4.4";
+  version = "0.5.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "13y06y7r1697cv4r430g45fxs40i2yk9xn0dk9nqlrpddw3a0mr4";
+    sha256 = "fc81c2116f8573e559dfbb8d73e03d9f73c22d0770559f406516984302e07e70";
   };
 
   propagatedBuildInputs = [ numpy ];

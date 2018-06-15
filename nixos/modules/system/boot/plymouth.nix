@@ -10,7 +10,7 @@ let
 
   breezePlymouth = pkgs.breeze-plymouth.override {
     nixosBranding = true;
-    nixosVersion = config.system.nixosRelease;
+    nixosVersion = config.system.nixos.release;
   };
 
   themesEnv = pkgs.buildEnv {
@@ -87,9 +87,10 @@ in
 
     systemd.services.plymouth-kexec.wantedBy = [ "kexec.target" ];
     systemd.services.plymouth-halt.wantedBy = [ "halt.target" ];
+    systemd.services.plymouth-quit-wait.wantedBy = [ "multi-user.target" ];
     systemd.services.plymouth-quit = {
       wantedBy = [ "multi-user.target" ];
-      after = [ "display-manager.service" "multi-user.target" ];
+      after = [ "display-manager.service" ];
     };
     systemd.services.plymouth-poweroff.wantedBy = [ "poweroff.target" ];
     systemd.services.plymouth-reboot.wantedBy = [ "reboot.target" ];

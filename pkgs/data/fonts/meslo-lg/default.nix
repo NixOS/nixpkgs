@@ -3,7 +3,7 @@
 stdenv.mkDerivation rec {
   version = "1.2.1";
 
-  name = "meslo-lg";
+  name = "meslo-lg-${version}";
 
   meslo-lg = fetchurl {
     url="https://github.com/andreberg/Meslo-Font/blob/master/dist/v${version}/Meslo%20LG%20v${version}.zip?raw=true";
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     sha256="0lnbkrvcpgz9chnvix79j6fiz36wj6n46brb7b1746182rl1l875";
   };
 
-  buildInputs = [ unzip ];
+  nativeBuildInputs = [ unzip ];
 
   sourceRoot = ".";
 

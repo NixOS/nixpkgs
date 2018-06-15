@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     sha256 = "1hslwqa0gqsnl3l6hd5hxpn0wlachxd51infifhlwhyhd6iwgx8p";
   };
 
-  nativeBuildInputs = [ pkgconfig xmlto docbook2x ];
+  nativeBuildInputs = [ pkgconfig xmlto docbook2x docbook_xsl docbook_xml_dtd_412 ];
 
   buildInputs = [
     python
@@ -20,10 +20,6 @@ stdenv.mkDerivation rec {
     # Probably needs to be propagated and some wrapPython magic
     # python.pkgs.pysocks
   ];
-
-  preBuild = ''
-    export XML_CATALOG_FILES='${docbook_xsl}/xml/xsl/docbook/catalog.xml ${docbook_xml_dtd_412}/xml/dtd/docbook/catalog.xml'
-  '';
 
   postPatch = ''
     substituteInPlace Makefile \

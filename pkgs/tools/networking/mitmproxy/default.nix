@@ -1,38 +1,49 @@
-{ stdenv, fetchpatch, fetchFromGitHub, fetchurl, python3, glibcLocales }:
+{ stdenv, fetchFromGitHub, python3Packages, glibcLocales }:
 
-python3.pkgs.buildPythonPackage rec {
-  baseName = "mitmproxy";
-  name = "${baseName}-unstable-2017-10-31";
+with python3Packages;
+
+buildPythonPackage rec {
+  pname = "mitmproxy";
+  version = "3.0.4";
 
   src = fetchFromGitHub {
-    owner = baseName;
-    repo = baseName;
-    rev = "80a8eaa708ea31dd9c5e7e1ab6b02c69079039c0";
-    sha256 = "0rvwm11yryzlp3c1i42rk2iv1m38yn6r83k41jb51hwg6wzbwzvw";
+    owner  = pname;
+    repo   = pname;
+    rev    = "v${version}";
+    sha256 = "10l761ds46r1p2kjxlgby9vdxbjjlgq72s6adjypghi41s3qf034";
   };
+
+  postPatch = ''
+    # remove dependency constraints
+    sed 's/>=\([0-9]\.\?\)\+\( \?, \?<\([0-9]\.\?\)\+\)\?//' -i setup.py
+  '';
+
+  doCheck = (!stdenv.isDarwin);
 
   checkPhase = ''
     export HOME=$(mktemp -d)
+    export LC_CTYPE=en_US.UTF-8
     # test_echo resolves hostnames
-    LC_CTYPE=en_US.UTF-8 pytest -k 'not test_echo and not test_find_unclaimed_URLs '
+    pytest -k 'not test_echo and not test_find_unclaimed_URLs '
   '';
 
-  propagatedBuildInputs = with python3.pkgs; [
+  propagatedBuildInputs = [
     blinker click certifi cryptography
-    h2 hyperframe
-    kaitaistruct passlib pyasn1 pyopenssl
-    pyparsing pyperclip requests ruamel_yaml tornado
-    urwid brotlipy sortedcontainers ldap3
+    h2 hyperframe kaitaistruct passlib
+    pyasn1 pyopenssl pyparsing pyperclip
+    ruamel_yaml tornado urwid brotlipy
+    sortedcontainers ldap3 wsproto
   ];
 
-  buildInputs = with python3.pkgs; [
-    beautifulsoup4 flask pytest pytestrunner glibcLocales
+  checkInputs = [
+    beautifulsoup4 flask pytest
+    requests glibcLocales
   ];
 
   meta = with stdenv.lib; {
     description = "Man-in-the-middle proxy";
-    homepage = http://mitmproxy.org/;
-    license = licenses.mit;
+    homepage    = https://mitmproxy.org/;
+    license     = licenses.mit;
     maintainers = with maintainers; [ fpletz kamilchm ];
   };
 }

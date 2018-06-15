@@ -1,7 +1,6 @@
 { system ? builtins.currentSystem }:
 
 with import ../lib/testing.nix { inherit system; };
-with import ../lib/qemu-flags.nix;
 with pkgs.lib;
 
 let
@@ -70,13 +69,20 @@ let
     let
       iface = if grubVersion == 1 then "ide" else "virtio";
       isEfi = bootLoader == "systemd-boot" || (bootLoader == "grub" && grubUseEfi);
+
+      # FIXME don't duplicate the -enable-kvm etc. flags here yet again!
       qemuFlags =
         (if system == "x86_64-linux" then "-m 768 " else "-m 512 ") +
-        (optionalString (system == "x86_64-linux") "-cpu kvm64 ");
+        (optionalString (system == "x86_64-linux") "-cpu kvm64 ") +
+        (optionalString (system == "aarch64-linux") "-enable-kvm -machine virt,gic-version=host -cpu host ");
+
       hdFlags = ''hda => "vm-state-machine/machine.qcow2", hdaInterface => "${iface}", ''
-        + optionalString isEfi ''bios => "${pkgs.OVMF.fd}/FV/OVMF.fd", '';
-    in
-    ''
+        + optionalString isEfi (if pkgs.stdenv.isAarch64
+            then ''bios => "${pkgs.OVMF.fd}/FV/QEMU_EFI.fd", ''
+            else ''bios => "${pkgs.OVMF.fd}/FV/OVMF.fd", '');
+    in if !isEfi && !(pkgs.stdenv.isi686 || pkgs.stdenv.isx86_64) then
+      throw "Non-EFI boot methods are only supported on i686 / x86_64"
+    else ''
       $machine->start;
 
       # Make sure that we get a login prompt etc.
@@ -146,7 +152,7 @@ let
       # Check that the daemon works, and that non-root users can run builds (this will build a new profile generation through the daemon)
       $machine->succeed("su alice -l -c 'nix-env -iA nixos.procps' >&2");
 
-      # We need to a writable nix-store on next boot.
+      # We need a writable Nix store on next boot.
       $machine->copyFileFromHost(
           "${ makeConfig { inherit bootLoader grubVersion grubDevice grubIdentifier grubUseEfi extraConfig; forceGrubReinstallCount = 1; } }",
           "/etc/nixos/configuration.nix");
@@ -196,8 +202,7 @@ let
       };
       nodes = {
 
-        # The configuration of the machine used to run "nixos-install". It
-        # also has a web server that simulates cache.nixos.org.
+        # The configuration of the machine used to run "nixos-install".
         machine =
           { config, lib, pkgs, ... }:
 
@@ -209,7 +214,6 @@ let
 
             virtualisation.diskSize = 8 * 1024;
             virtualisation.memorySize = 1024;
-            virtualisation.writableStore = true;
 
             # Use a small /dev/vdb as the root disk for the
             # installer. This ensures the target disk (/dev/vda) is
@@ -237,6 +241,7 @@ let
                 nixos-artwork.wallpapers.gnome-dark
                 perlPackages.XMLLibXML
                 perlPackages.ListCompare
+                xorg.lndir
 
                 # add curl so that rather than seeing the test attempt to download
                 # curl's tarball, we see what it's trying to download
@@ -246,6 +251,11 @@ let
               ++ optionals (bootLoader == "grub" && grubVersion == 2) [ pkgs.grub2 pkgs.grub2_efi ];
 
             nix.binaryCaches = mkForce [ ];
+            nix.extraOptions =
+              ''
+                hashed-mirrors =
+                connect-timeout = 1
+              '';
           };
 
       };

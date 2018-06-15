@@ -16,13 +16,8 @@ postInstall() {
 
     echo "propagating requisites $requires"
 
-    if test -n "$crossConfig"; then
-        local pkgs=("${crossPkgs[@]}")
-    else
-        local pkgs=("${nativePkgs[@]}")
-    fi
     for r in $requires; do
-        for p in "${pkgs[@]}"; do
+        for p in "${pkgsHostHost[@]}" "${pkgsHostTarget[@]}"; do
             if test -e $p/lib/pkgconfig/$r.pc; then
                 echo "  found requisite $r in $p"
                 propagatedBuildInputs+=" $p"

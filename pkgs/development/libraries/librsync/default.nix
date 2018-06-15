@@ -2,21 +2,19 @@
 
 stdenv.mkDerivation rec {
   name = "librsync-${version}";
-  version = "2.0.0";
+  version = "2.0.2";
 
   src = fetchFromGitHub {
     owner = "librsync";
     repo = "librsync";
     rev = "v${version}";
-    sha256 = "0yad7nkw6d8j824qkxrj008ak2wq6yw5p894sbhr35yc1wr5mki6";
+    sha256 = "1qnr4rk93mhggqjh2025clmlhhgnjhq983p1vbh8i1g8aiqdnapi";
   };
 
   nativeBuildInputs = [ cmake ];
   buildInputs = [ perl zlib bzip2 popt ];
 
-  crossAttrs = {
-    dontStrip = true;
-  };
+  dontStrip = stdenv.hostPlatform != stdenv.buildPlatform;
 
   meta = with stdenv.lib; {
     homepage = http://librsync.sourceforge.net/;

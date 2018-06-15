@@ -1,24 +1,24 @@
 { stdenv, fetchurl, fetchFromGitHub,
   SDL2, cmake, curl, fontconfig, freetype, jansson, libiconv, libpng,
-  libpthreadstubs, libzip, mesa_glu, openssl, pkgconfig, speexdsp, zlib
+  libpthreadstubs, libzip, libGLU, openssl, pkgconfig, speexdsp, zlib
 }:
 
 let
   name = "openrct2-${version}";
-  version = "0.1.1";
+  version = "0.1.2";
 
   openrct2-src = fetchFromGitHub {
     owner = "OpenRCT2";
     repo = "OpenRCT2";
     rev = "v${version}";
-    sha256 = "1xxwqx2gzvsdrsy76rz3sys9m4pyn9q25nbnkba3cw1z4l2b73lg";
+    sha256 = "1zqrdxr79c9yx4bdxz1r5866hhwq0lcs9qpv3vhisr56ar5n5wk3";
   };
 
   title-sequences-src = fetchFromGitHub {
     owner = "OpenRCT2";
     repo = "title-sequences";
-    rev = "v0.1.0";
-    sha256 = "17c926lhby90ilvyyl6jsiy0df8dw5jws97xigp3x8hddhvv7c16";
+    rev = "v0.1.2";
+    sha256 = "1yb1ynkfmiankii3fngr9km5wbc07rp30nh0apkj6wryrhy7imgm";
   };
 in
 stdenv.mkDerivation rec {
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
     libpng
     libpthreadstubs
     libzip
-    mesa_glu
+    libGLU
     openssl
     pkgconfig
     speexdsp
@@ -57,7 +57,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "An open source re-implementation of RollerCoaster Tycoon 2 (original game required)";
-    homepage = https://openrct2.website/;
+    homepage = https://openrct2.io/;
     license = licenses.gpl3;
     platforms = platforms.linux;
     maintainers = with maintainers; [ geistesk ];

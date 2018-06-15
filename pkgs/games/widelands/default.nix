@@ -26,9 +26,8 @@ stdenv.mkDerivation rec {
   ];
 
   src = fetchurl {
-    url = "https://launchpad.net/widelands/build${version}/build${version}/+download/"
-        + "widelands-build${version}-src.tar.bz2";
-    sha256 = "19h1gina7k1ai2mn2fd75lxm8iz8wrs6dz6dchdvg8i8d39gj4g5";
+    url = "http://launchpad.net/widelands/build${version}/build${version}/+download/widelands-build${version}-src-gcc7.tar.bz2";
+    sha256 = "0n2lb1c2dix32j90nir96zfqivn63izr1pmabjnhns3wbb7vhwzg";
   };
 
   preConfigure = ''
@@ -47,12 +46,12 @@ stdenv.mkDerivation rec {
   ];
 
   prePatch = ''
-    substituteInPlace ./debian/widelands.desktop --replace "/usr/share/games/widelands/data/" "$out/share/widelands/"
+    substituteInPlace ./debian/org.widelands.widelands.desktop --replace "/usr/share/games/widelands/data/" "$out/share/widelands/"
   '';
 
   postInstall = ''
     mkdir -p "$out/share/applications/"
-    cp -v "../debian/widelands.desktop" "$out/share/applications/"
+    cp -v "../debian/org.widelands.widelands.desktop" "$out/share/applications/"
   '';
 
   enableParallelBuilding = true;

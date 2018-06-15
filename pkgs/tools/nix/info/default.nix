@@ -38,6 +38,8 @@ stdenv.mkDerivation {
     cp ./nix-info $out/bin/nix-info
   '';
 
+  preferLocalBuild = true;
+
   meta = {
     platforms = lib.platforms.all;
   };

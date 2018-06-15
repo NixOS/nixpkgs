@@ -21,7 +21,7 @@
 , kplotting
 , ktextwidgets
 , mlt
-, shared_mime_info
+, shared-mime-info
 , libv4l
 , kfilemetadata
 , ffmpeg
@@ -34,9 +34,6 @@
 
 mkDerivation {
   name = "kdenlive";
-  patches = [
-    ./kdenlive-cmake-concurrent-module.patch
-  ];
   nativeBuildInputs = [
     extra-cmake-modules
     kdoctools
@@ -62,7 +59,7 @@ mkDerivation {
     qtquickcontrols
     qtscript
     qtwebkit
-    shared_mime_info
+    shared-mime-info
     libv4l
     ffmpeg
   ];

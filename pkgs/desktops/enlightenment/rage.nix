@@ -1,15 +1,17 @@
-{ stdenv, fetchurl, pkgconfig, efl, gst_all_1, pcre, curl, wrapGAppsHook }:
+{ stdenv, fetchurl, meson, ninja, pkgconfig, efl, gst_all_1, pcre, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
   name = "rage-${version}";
-  version = "0.2.1";
+  version = "0.3.0";
   
   src = fetchurl {
-    url = "http://download.enlightenment.org/rel/apps/rage/${name}.tar.gz";
-    sha256 = "0xlxb1hmbnqcy088cqpj2i87hsd5h3da7d2f9afiavz0ssw4ll94";
+    url = "http://download.enlightenment.org/rel/apps/rage/${name}.tar.xz";
+    sha256 = "0gfzdd4jg78bkmj61yg49w7bzspl5m1nh6agqgs8k7qrq9q26xqy";
   };
 
   nativeBuildInputs = [
+    meson
+    ninja
     (pkgconfig.override { vanilla = true; })
     wrapGAppsHook
   ];
@@ -22,12 +24,7 @@ stdenv.mkDerivation rec {
     gst_all_1.gst-plugins-bad
     gst_all_1.gst-libav
     pcre
-    curl
- ];
-
-  postInstall = ''
-    wrapProgram $out/bin/rage --prefix LD_LIBRARY_PATH : ${curl.out}/lib
-  '';
+  ];
 
   meta = {
     description = "Video + Audio player along the lines of mplayer";

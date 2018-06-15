@@ -20,14 +20,12 @@ let
 
 in stdenv.mkDerivation rec {
   name = "nano-${version}";
-  version = "2.9.1";
+  version = "2.9.7";
 
   src = fetchurl {
     url = "mirror://gnu/nano/${name}.tar.xz";
-    sha256 = "0z5sxji8jh8sh0g3inbzndhsrbm4qyqlvjrxl5wkxbr61lnxa5k3";
+    sha256 = "1ga4sdk3ikx1ilggc6c77vyfpbmq3nrhg6svgglpf5sv60bv0jmn";
   };
-
-  patches = [ ./nano-2.9.1-darwin.patch ];
 
   nativeBuildInputs = [ texinfo ] ++ optional enableNls gettext;
   buildInputs = [ ncurses ];

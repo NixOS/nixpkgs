@@ -1,10 +1,10 @@
-{ stdenv, fetchurl, config, wrapGAppsHook
+{ lib, stdenv, fetchurl, config, wrapGAppsHook
 , alsaLib
 , atk
 , cairo
 , curl
 , cups
-, dbus_glib
+, dbus-glib
 , dbus_libs
 , fontconfig
 , freetype
@@ -12,8 +12,6 @@
 , gdk_pixbuf
 , glib
 , glibc
-, gst-plugins-base
-, gstreamer
 , gtk2
 , gtk3
 , kerberos
@@ -27,11 +25,12 @@
 , libXinerama
 , libXrender
 , libXt
-, libcanberra_gtk2
+, libcanberra-gtk2
 , libgnome
 , libgnomeui
+, libnotify
 , defaultIconTheme
-, mesa
+, libGLU_combined
 , nspr
 , nss
 , pango
@@ -46,9 +45,8 @@
 , gnused
 , gnugrep
 , gnupg
+, ffmpeg
 }:
-
-assert stdenv.isLinux;
 
 let
 
@@ -87,12 +85,12 @@ stdenv.mkDerivation {
   libPath = stdenv.lib.makeLibraryPath
     [ stdenv.cc.cc
       alsaLib
-      alsaLib.dev
+      (lib.getDev alsaLib)
       atk
       cairo
       curl
       cups
-      dbus_glib
+      dbus-glib
       dbus_libs
       fontconfig
       freetype
@@ -100,8 +98,6 @@ stdenv.mkDerivation {
       gdk_pixbuf
       glib
       glibc
-      gst-plugins-base
-      gstreamer
       gtk2
       gtk3
       kerberos
@@ -115,17 +111,19 @@ stdenv.mkDerivation {
       libXinerama
       libXrender
       libXt
-      libcanberra_gtk2
+      libcanberra-gtk2
       libgnome
       libgnomeui
-      mesa
+      libnotify
+      libGLU_combined
       nspr
       nss
       pango
       libheimdal
       libpulseaudio
-      libpulseaudio.dev
+      (lib.getDev libpulseaudio)
       systemd
+      ffmpeg
     ] + ":" + stdenv.lib.makeSearchPathOutput "lib" "lib64" [
       stdenv.cc.cc
     ];
@@ -174,6 +172,8 @@ stdenv.mkDerivation {
 
   passthru.ffmpegSupport = true;
   passthru.gssSupport = true;
+  # update with:
+  # $ nix-shell maintainers/scripts/update.nix --argstr package firefox-bin-unwrapped
   passthru.updateScript = import ./update.nix {
     inherit name channel writeScript xidel coreutils gnused gnugrep gnupg curl;
     baseUrl =

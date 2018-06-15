@@ -1,22 +1,45 @@
-{ stdenv, fetchurl, python2Packages, librsvg }:
+{ stdenv
+, python2Packages
+, pkgconfig
+, librsvg
+, gobjectIntrospection
+, atk
+, gtk3
+, gtkspell3
+, gnome3
+, goocanvas2
+}:
 
 with stdenv.lib;
 
 python2Packages.buildPythonApplication rec {
-  name = "tryton-${version}";
-  version = "4.2.1";
-  src = fetchurl {
-    url = "mirror://pypi/t/tryton/${name}.tar.gz";
-    sha256 = "1ry3kvbk769m8rwqa90pplfvmmgsv4jj9w1aqhv892smia8f0ybm";
+  pname = "tryton";
+  version = "4.8.2";
+  src = python2Packages.fetchPypi {
+    inherit pname version;
+    sha256 = "02jnqxwsqk7hn52hc4jd59nd94d810i4psaa3lqqig3br5blp8yx";
   };
+  nativeBuildInputs = [ pkgconfig gobjectIntrospection ];
   propagatedBuildInputs = with python2Packages; [
     chardet
     dateutil
     pygtk
     librsvg
+    pygobject3
+    goocalendar
+    cdecimal
+  ];
+  buildInputs = [
+    atk
+    gtk3
+    gnome3.defaultIconTheme
+    gtkspell3
+    goocanvas2
   ];
   makeWrapperArgs = [
     ''--set GDK_PIXBUF_MODULE_FILE "$GDK_PIXBUF_MODULE_FILE"''
+    ''--set GI_TYPELIB_PATH "$GI_TYPELIB_PATH"''
+    ''--suffix XDG_DATA_DIRS : "$XDG_ICON_DIRS:$GSETTINGS_SCHEMAS_PATH"''
   ];
   meta = {
     description = "The client of the Tryton application platform";
@@ -30,6 +53,6 @@ python2Packages.buildPythonApplication rec {
     '';
     homepage = http://www.tryton.org/;
     license = licenses.gpl3Plus;
-    maintainers = [ maintainers.johbo ];
+    maintainers = with maintainers; [ johbo udono ];
   };
 }

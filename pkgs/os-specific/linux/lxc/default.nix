@@ -1,40 +1,31 @@
 { stdenv, fetchurl, fetchpatch, autoreconfHook, pkgconfig, perl, docbook2x
-, docbook_xml_dtd_45, python3Packages
+, docbook_xml_dtd_45, python3Packages, pam
 
 # Optional Dependencies
 , libapparmor ? null, gnutls ? null, libselinux ? null, libseccomp ? null
-, cgmanager ? null, libnih ? null, dbus ? null, libcap ? null, systemd ? null
+, libcap ? null, systemd ? null
 }:
 
-let
-  enableCgmanager = cgmanager != null && libnih != null && dbus != null;
-in
 with stdenv.lib;
 stdenv.mkDerivation rec {
   name = "lxc-${version}";
-  version = "2.1.0";
+  version = "3.0.1";
 
   src = fetchurl {
     url = "https://linuxcontainers.org/downloads/lxc/lxc-${version}.tar.gz";
-    sha256 = "1qld0gi19mximxm0qyr6vzav32gymhc7fvp0bzwv37j0b8q0fi1r";
+    sha256 = "1nyml98k28sc5sda0260cmby4irkpnhpwgmx4yhqy10wpr4nr625";
   };
 
   nativeBuildInputs = [
     autoreconfHook pkgconfig perl docbook2x python3Packages.wrapPython
   ];
   buildInputs = [
-    libapparmor gnutls libselinux libseccomp cgmanager libnih dbus libcap
+    pam libapparmor gnutls libselinux libseccomp libcap
     python3Packages.python python3Packages.setuptools systemd
   ];
 
   patches = [
     ./support-db2x.patch
-    # Fix build error against glibc 2.26
-    (fetchpatch {
-      url = "https://github.com/lxc/lxc/commit/"
-          + "180c477a326ce85632249ff16990e8c29db1b6fa.patch";
-      sha256 = "05jkiiixxk9ibj1fwzmy56rkkign28bd9mrmgiz12g92r2qahm2z";
-    })
   ];
 
   postPatch = ''
@@ -43,15 +34,8 @@ stdenv.mkDerivation rec {
 
   XML_CATALOG_FILES = "${docbook_xml_dtd_45}/xml/dtd/docbook/catalog.xml";
 
-  # FIXME
-  # glibc 2.25 moved major()/minor() to <sys/sysmacros.h>.
-  # this commit should detect this: https://github.com/lxc/lxc/pull/1388/commits/af6824fce9c9536fbcabef8d5547f6c486f55fdf
-  # However autotools checks if mkdev is still defined in <sys/types.h> runs before
-  # checking if major()/minor() is defined there. The mkdev check succeeds with
-  # a warning and the check which should set MAJOR_IN_SYSMACROS is skipped.
-  NIX_CFLAGS_COMPILE = [ "-DMAJOR_IN_SYSMACROS" ];
-
   configureFlags = [
+    "--enable-pam"
     "--localstatedir=/var"
     "--sysconfdir=/etc"
     "--disable-api-docs"

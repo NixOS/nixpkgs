@@ -1,42 +1,38 @@
 { stdenv, fetchurl, fetchpatch, zlib, openssl, perl, libedit, pkgconfig, pam, autoreconfHook
 , etcDir ? null
 , hpnSupport ? false
-, withKerberos ? false
+, withKerberos ? true
 , withGssapiPatches ? false
 , kerberos
 , linkOpenssl? true
 }:
-
-assert withKerberos -> kerberos != null;
-assert withGssapiPatches -> withKerberos;
 
 let
 
   # **please** update this patch when you update to a new openssh release.
   gssapiPatch = fetchpatch {
     name = "openssh-gssapi.patch";
-    url = "https://anonscm.debian.org/cgit/pkg-ssh/openssh.git/plain/debian"
-        + "/patches/gssapi.patch?id=1e0d55f9163793742d20eaadd4784db16fd3459d";
-    sha256 = "130phj87q87p9crigd6852nnaqsqkfg09h45a32lk4524h9kkxgb";
+    url = "https://salsa.debian.org/ssh-team/openssh/raw/"
+      + "e395eed38096fcda74398424ea94de3ec44effd5"
+      + "/debian/patches/gssapi.patch";
+    sha256 = "0x7xysgdahb4jaq0f28g2d7yzp0d3mh59i4xnffszvjndhvbk27x";
   };
 
 in
 with stdenv.lib;
 stdenv.mkDerivation rec {
-  # Please ensure that openssh_with_kerberos still builds when
-  # bumping the version here!
   name = "openssh-${version}";
-  version = if hpnSupport then "7.5p1" else "7.6p1";
+  version = if hpnSupport then "7.7p1" else "7.7p1";
 
   src = if hpnSupport then
       fetchurl {
-        url = "https://github.com/rapier1/openssh-portable/archive/hpn-KitchenSink-7_5_P1.tar.gz";
-        sha256 = "1hasdcfjl6xf5nbbbvqyyq5v7ad10nywrq89j7naxz9wln58nhnn";
+        url = "https://github.com/rapier1/openssh-portable/archive/hpn-KitchenSink-7_7_P1.tar.gz";
+        sha256 = "1l4k8mg3gnzxbz53cma8s6ak56waz03ijsr08p8vgpi0c2rc5ri5";
       }
     else
       fetchurl {
         url = "mirror://openbsd/OpenSSH/portable/${name}.tar.gz";
-        sha256 = "08qpsb8mrzcx8wgvz9insiyvq7sbg26yj5nvl2m5n57yvppcl8x3";
+        sha256 = "13vbbrvj3mmfhj83qyrg5c0ipr6bzw5s65dy4k8gr7p9hkkfffyp";
       };
 
   patches =
@@ -47,7 +43,7 @@ stdenv.mkDerivation rec {
       # See discussion in https://github.com/NixOS/nixpkgs/pull/16966
       ./dont_create_privsep_path.patch
     ]
-    ++ optional withGssapiPatches gssapiPatch;
+    ++ optional withGssapiPatches (assert withKerberos; gssapiPatch);
 
   postPatch =
     # On Hydra this makes installation fail (sometimes?),
@@ -59,7 +55,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ zlib openssl libedit pam ]
     ++ optional withKerberos kerberos
-    ++ optional hpnSupport autoreconfHook;
+    ++ optional hpnSupport autoreconfHook
+    ;
 
   preConfigure = ''
     # Setting LD causes `configure' and `make' to disagree about which linker
@@ -78,7 +75,7 @@ stdenv.mkDerivation rec {
     "--disable-strip"
     (if pam != null then "--with-pam" else "--without-pam")
   ] ++ optional (etcDir != null) "--sysconfdir=${etcDir}"
-    ++ optional withKerberos "--with-kerberos5=${kerberos}"
+    ++ optional withKerberos (assert kerberos != null; "--with-kerberos5=${kerberos}")
     ++ optional stdenv.isDarwin "--disable-libutil"
     ++ optional (!linkOpenssl) "--without-openssl";
 

@@ -3,7 +3,7 @@
 
 set -euo pipefail
 
-BUCKET_NAME="${BUCKET_NAME:-nixos-images}"
+BUCKET_NAME="${BUCKET_NAME:-nixos-cloud-images}"
 TIMESTAMP="$(date +%Y%m%d%H%M)"
 export TIMESTAMP
 
@@ -19,5 +19,5 @@ img_name=$(basename "$img_path")
 img_id=$(echo "$img_name" | sed 's|.raw.tar.gz$||;s|\.|-|g;s|_|-|g')
 if ! gsutil ls "gs://${BUCKET_NAME}/$img_name"; then
   gsutil cp "$img_path" "gs://${BUCKET_NAME}/$img_name"
+  gsutil acl ch -u AllUsers:R "gs://${BUCKET_NAME}/$img_name"
 fi
-gcloud compute images create "$img_id" --source-uri "gs://${BUCKET_NAME}/$img_name"

@@ -33,11 +33,11 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ autoreconfHook pkgconfig ];
   buildInputs = [
     autoreconfHook libsodium ncurses check libconfig
-  ] ++ stdenv.lib.optionals (!stdenv.isArm) [
+  ] ++ stdenv.lib.optionals (!stdenv.isAarch32) [
     libopus
   ];
 
-  propagatedBuildInputs = stdenv.lib.optionals (!stdenv.isArm) [ libvpx ];
+  propagatedBuildInputs = stdenv.lib.optionals (!stdenv.isAarch32) [ libvpx ];
 
   # Some tests fail randomly due to timeout. This kind of problem is well known
   # by upstream: https://github.com/irungentoo/toxcore/issues/{950,1054}

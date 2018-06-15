@@ -17,7 +17,7 @@
 stdenv.mkDerivation {
   name = "lldb-${version}";
 
-  src = fetch "lldb" "0zcbav39srf6awv9znvzr7nqdrj704i8da3wdgc8362y20rcm860";
+  src = fetch "lldb" "05j2a63yzln43852nng8a7y47spzlyr1cvdmgmbxgd29c8r0bfkq";
 
   postPatch = ''
     # Fix up various paths that assume llvm and clang are installed in the same place
@@ -41,6 +41,11 @@ stdenv.mkDerivation {
   ];
 
   enableParallelBuilding = true;
+
+  postInstall = ''
+    mkdir -p $out/share/man/man1
+    cp ../docs/lldb.1 $out/share/man/man1/
+  '';
 
   meta = with stdenv.lib; {
     description = "A next-generation high-performance debugger";

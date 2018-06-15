@@ -17,7 +17,7 @@ import ./make-test.nix ({ pkgs, ... }:
       $machine->waitForUnit('multi-user.target');
       $machine->waitForUnit('vault.service');
       $machine->waitForOpenPort(8200);
-      $machine->succeed('vault init');
-      $machine->succeed('vault status | grep "Sealed: true"');
+      $machine->succeed('vault operator init');
+      $machine->succeed('vault status | grep Sealed | grep true');
     '';
 })

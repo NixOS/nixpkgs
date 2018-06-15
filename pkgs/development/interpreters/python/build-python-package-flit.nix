@@ -10,7 +10,7 @@ attrs // {
   buildInputs = [ flit ];
   buildPhase = attrs.buildPhase or ''
     runHook preBuild
-    flit wheel
+    flit build --format wheel
     runHook postBuild
   '';
 

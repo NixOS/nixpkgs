@@ -17,6 +17,6 @@ stdenv.mkDerivation rec {
     homepage = http://quvi.sf.net;
     license = stdenv.lib.licenses.lgpl21Plus;
     platforms = stdenv.lib.platforms.linux;
-    maintainers = [ stdenv.lib.maintainers.mornfall ];
+    maintainers = [ ];
   };
 }

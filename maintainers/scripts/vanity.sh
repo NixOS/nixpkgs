@@ -10,7 +10,7 @@ git_data="$(echo "$raw_git_log" | grep 'Author:' |
 
 # Name - nick - email correspondence from log and from maintainer list
 # Also there are a few manual entries
-maintainers="$(cat "$(dirname "$0")/../../lib/maintainers.nix" |
+maintainers="$(cat "$(dirname "$0")/../maintainer-list.nix" |
   grep '=' | sed -re 's/\\"/''/g;
   s/[ 	]*([^ 	=]*)[ 	]*=[ 	]*" *(.*[^ ]) *[<](.*)[>] *".*/\1\t\2\t\3/')"
 git_lines="$( ( echo "$git_data";

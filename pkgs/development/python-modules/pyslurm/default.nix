@@ -2,17 +2,14 @@
 
 buildPythonPackage rec {
   pname = "pyslurm";
-  version = "unstable-69e4f4f";
-  name = pname + "-" + version;
+  version = "20180427";
 
   src = fetchFromGitHub {
     repo = "pyslurm";
     owner = "PySlurm";
-    rev = "69e4f4fd66003b98ddb7da25613fe641d4ae160d";
-    sha256 = "051kafkndbniklxyf0drb360aiblnqcf9rqjbvmqh66zrfya1m28";
+    rev = "3900e1afac9ffd13c80c57d8c39933d42eb7bad7";
+    sha256 = "1a183ig4sdbc70rx2yyaslyq61wkbsf8cbim1jj0kzrp65nf0vls";
   };
-
-  patches = [ ./pyslurm-dlfcn.patch ];
 
   buildInputs = [ cython slurm ];
   setupPyBuildFlags = [ "--slurm-lib=${slurm}/lib" "--slurm-inc=${slurm.dev}/include" ];

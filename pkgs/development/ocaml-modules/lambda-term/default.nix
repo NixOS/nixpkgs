@@ -17,10 +17,7 @@ buildOcaml rec {
 
   buildPhase = "jbuilder build -p lambda-term";
 
-  installPhase = ''
-    ${jbuilder.installPhase}
-    mv $out/lib/ocaml/${ocaml.version}/site-lib/{stubslibs,lambda-term}/dlllambda_term_stubs.so
-  '';
+  inherit (jbuilder) installPhase;
 
   hasSharedObjects = true;
 

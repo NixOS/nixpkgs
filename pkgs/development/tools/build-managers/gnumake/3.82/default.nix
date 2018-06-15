@@ -33,6 +33,9 @@ stdenv.mkDerivation {
       ./construct-command-line.patch
       ./long-command-line.patch
       ./darwin-library_search-dylib.patch
+
+      # Fix support for glibc 2.27's glob
+      ../4.2/glibc-2.27-glob.patch
     ];
   patchFlags = "-p0";
 

@@ -1,5 +1,7 @@
-{ stdenv, fetchFromGitHub, python2Packages, writeText, writeScript
+{ stdenv, fetchFromGitHub, python3Packages, writeText, writeScript
 , coreutils, sqlite }:
+
+with python3Packages;
 
 let
   dbSql = writeText "create_pykms_db.sql" ''
@@ -27,21 +29,21 @@ let
     fi
   '');
 
-in python2Packages.buildPythonApplication rec {
+in buildPythonApplication rec {
   name = "pykms-${version}";
-  version = "20170719";
+  version = "20171224";
 
   src = fetchFromGitHub {
     owner  = "ThunderEX";
     repo   = "py-kms";
-    rev    = "27355d88affd740330174a7c2bae9f50b9efce56";
-    sha256 = "0cpywj73jmyijjc5hs3b00argjsdwpqzmhawbxkx3mc2l4sgzc88";
+    rev    = "885f67904f002042d7758e38f9c5426461c5cdc7";
+    sha256 = "155khy1285f8xkzi6bsqm9vzz043jsjmp039va1qsh675gz3q9ha";
   };
 
-  propagatedBuildInputs = with python2Packages; [ argparse pytz ];
+  propagatedBuildInputs = [ argparse pytz ];
 
   prePatch = ''
-    siteDir=$out/${python2Packages.python.sitePackages}
+    siteDir=$out/${python.sitePackages}
 
     substituteInPlace kmsBase.py \
       --replace "'KmsDataBase.xml'" "'$siteDir/KmsDataBase.xml'"
@@ -60,7 +62,7 @@ in python2Packages.buildPythonApplication rec {
     mv * $siteDir
     for b in client server ; do
       chmod 0755 $siteDir/$b.py
-      makeWrapper ${python2Packages.python.interpreter} $out/bin/$b.py \
+      makeWrapper ${python.interpreter} $out/bin/$b.py \
         --add-flags $siteDir/$b.py
     done
 
@@ -68,7 +70,7 @@ in python2Packages.buildPythonApplication rec {
 
     mv $siteDir/README.md $out/share/doc/pykms/
 
-    ${python2Packages.python.interpreter} -m compileall $siteDir
+    ${python.interpreter} -m compileall $siteDir
 
     runHook postInstall
   '';

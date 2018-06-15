@@ -1,17 +1,19 @@
-{ fetchurl, stdenv, lib, flex, bison, db, iptables, pkgconfig }:
+{ fetchurl, stdenv, config, lib, flex, bash, bison, db, iptables, pkgconfig }:
 
 stdenv.mkDerivation rec {
   name = "iproute2-${version}";
-  version = "4.14.1";
+  version = "4.16.0";
 
   src = fetchurl {
     url = "mirror://kernel/linux/utils/net/iproute2/${name}.tar.xz";
-    sha256 = "0rq0n7yxb0hmk0s6wx5awzjgf7ikjbibd0a5ix20ldfcmxlc0fnl";
+    sha256 = "02pfalg319jpbjz273ph725br8dnkzpfvi98azi9yd6p1w128p0c";
   };
 
   preConfigure = ''
     patchShebangs ./configure
     sed -e '/ARPDDIR/d' -i Makefile
+    # Don't build netem tools--they're not installed and require HOSTCC
+    substituteInPlace Makefile --replace " netem " " "
   '';
 
   makeFlags = [
@@ -24,8 +26,9 @@ stdenv.mkDerivation rec {
     "HDRDIR=$(TMPDIR)/include/iproute2" # Don't install headers
   ];
 
+  # enable iproute2 module if you want this folder to be created
   buildFlags = [
-    "CONFDIR=/etc/iproute2"
+    "CONFDIR=${config.iproute2.confDir or "/run/iproute2"}"
   ];
 
   installFlags = [
@@ -36,6 +39,10 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ bison flex pkgconfig ];
 
   enableParallelBuilding = true;
+
+  postInstall = ''
+    PATH=${bash}/bin:$PATH patchShebangs $out/sbin
+  '';
 
   meta = with stdenv.lib; {
     homepage = https://wiki.linuxfoundation.org/networking/iproute2;

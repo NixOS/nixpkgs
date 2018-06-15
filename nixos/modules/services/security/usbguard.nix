@@ -56,7 +56,7 @@ in {
       };
 
       rules = mkOption {
-        type = types.nullOr types.str;
+        type = types.nullOr types.lines;
         default = null;
         example = ''
           allow with-interface equals { 08:*:* }
@@ -192,7 +192,7 @@ in {
 
       serviceConfig = {
         Type = "simple";
-        ExecStart = ''${pkgs.usbguard}/bin/usbguard-daemon -d -k -c ${daemonConfFile}'';
+        ExecStart = ''${pkgs.usbguard}/bin/usbguard-daemon -P -d -k -c ${daemonConfFile}'';
         Restart = "on-failure";
       };
     };

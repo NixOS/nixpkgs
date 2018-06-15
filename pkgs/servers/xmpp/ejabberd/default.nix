@@ -1,5 +1,6 @@
 { stdenv, writeScriptBin, lib, fetchurl, git, cacert
-, erlang, openssl, expat, libyaml, bash, gnused, gnugrep, coreutils, utillinux, procps
+, erlang, openssl, expat, libyaml, bash, gnused, gnugrep, coreutils, utillinux, procps, gd
+, flock
 , withMysql ? false
 , withPgsql ? false
 , withSqlite ? false, sqlite
@@ -23,17 +24,17 @@ let
   ctlpath = lib.makeBinPath [ bash gnused gnugrep coreutils utillinux procps ];
 
 in stdenv.mkDerivation rec {
-  version = "17.07";
+  version = "18.01";
   name = "ejabberd-${version}";
 
   src = fetchurl {
-    url = "http://www.process-one.net/downloads/ejabberd/${version}/${name}.tgz";
-    sha256 = "1p8ppp2czjgnq8xnhyksd82npvvx99fwr0g3rrq1wvnwh2vgb8km";
+    url = "https://www.process-one.net/downloads/ejabberd/${version}/${name}.tgz";
+    sha256 = "01i2n8mlgw293jdf4172f9q8ca8m35vysjws791p7nynpfdb4cn6";
   };
 
   nativeBuildInputs = [ fakegit ];
 
-  buildInputs = [ erlang openssl expat libyaml ]
+  buildInputs = [ erlang openssl expat libyaml gd ]
     ++ lib.optional withSqlite sqlite
     ++ lib.optional withPam pam
     ++ lib.optional withZlib zlib
@@ -50,7 +51,7 @@ in stdenv.mkDerivation rec {
 
     configureFlags = [ "--enable-all" "--with-sqlite3=${sqlite.dev}" ];
 
-    buildInputs = [ git erlang openssl expat libyaml sqlite pam zlib elixir ];
+    nativeBuildInputs = [ git erlang openssl expat libyaml sqlite pam zlib elixir ];
 
     GIT_SSL_CAINFO = "${cacert}/etc/ssl/certs/ca-bundle.crt";
 
@@ -74,7 +75,7 @@ in stdenv.mkDerivation rec {
 
     outputHashMode = "recursive";
     outputHashAlgo = "sha256";
-    outputHash = "1q9yzccn4zf5i4hibq1r0i34q4986a93ph4792l1ph07aiisc8p7";
+    outputHash = "1v3h0c7kfifb6wsfxyv5j1wc7rlxbb7r0pgd4s340wiyxnllzzhk";
   };
 
   configureFlags =
@@ -101,18 +102,18 @@ in stdenv.mkDerivation rec {
   postInstall = ''
     sed -i \
       -e '2iexport PATH=${ctlpath}:$PATH' \
-      -e 's,\(^ *FLOCK=\).*,\1${utillinux}/bin/flock,' \
+      -e 's,\(^ *FLOCK=\).*,\1${flock}/bin/flock,' \
       -e 's,\(^ *JOT=\).*,\1,' \
       -e 's,\(^ *CONNLOCKDIR=\).*,\1/var/lock/ejabberdctl,' \
       $out/sbin/ejabberdctl
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "Open-source XMPP application server written in Erlang";
-    license = lib.licenses.gpl2;
-    homepage = http://www.ejabberd.im;
-    platforms = lib.platforms.linux;
-    maintainers = [ lib.maintainers.sander lib.maintainers.abbradar ];
+    license = licenses.gpl2;
+    homepage = https://www.ejabberd.im;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ sander abbradar ];
     broken = withElixir;
   };
 }

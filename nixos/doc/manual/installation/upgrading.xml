@@ -2,140 +2,130 @@
          xmlns:xlink="http://www.w3.org/1999/xlink"
          version="5.0"
          xml:id="sec-upgrading">
-
-<title>Upgrading NixOS</title>
-
-<para>The best way to keep your NixOS installation up to date is to
-use one of the NixOS <emphasis>channels</emphasis>.  A channel is a
-Nix mechanism for distributing Nix expressions and associated
-binaries.  The NixOS channels are updated automatically from NixOS’s
-Git repository after certain tests have passed and all packages have
-been built.  These channels are:
-
-<itemizedlist>
-  <listitem>
-    <para><emphasis>Stable channels</emphasis>, such as <literal
+ <title>Upgrading NixOS</title>
+ <para>
+  The best way to keep your NixOS installation up to date is to use one of the
+  NixOS <emphasis>channels</emphasis>. A channel is a Nix mechanism for
+  distributing Nix expressions and associated binaries. The NixOS channels are
+  updated automatically from NixOS’s Git repository after certain tests have
+  passed and all packages have been built. These channels are:
+  <itemizedlist>
+   <listitem>
+    <para>
+     <emphasis>Stable channels</emphasis>, such as
+     <literal
     xlink:href="https://nixos.org/channels/nixos-17.03">nixos-17.03</literal>.
-    These only get conservative bug fixes and package upgrades.  For
-    instance, a channel update may cause the Linux kernel on your
-    system to be upgraded from 4.9.16 to 4.9.17 (a minor bug fix), but
-    not from 4.9.<replaceable>x</replaceable> to
-    4.11.<replaceable>x</replaceable> (a major change that has the
-    potential to break things).  Stable channels are generally
-    maintained until the next stable branch is created.</para>
+     These only get conservative bug fixes and package upgrades. For instance,
+     a channel update may cause the Linux kernel on your system to be upgraded
+     from 4.9.16 to 4.9.17 (a minor bug fix), but not from
+     4.9.<replaceable>x</replaceable> to 4.11.<replaceable>x</replaceable> (a
+     major change that has the potential to break things). Stable channels are
+     generally maintained until the next stable branch is created.
+    </para>
     <para></para>
-  </listitem>
-  <listitem>
-    <para>The <emphasis>unstable channel</emphasis>, <literal
+   </listitem>
+   <listitem>
+    <para>
+     The <emphasis>unstable channel</emphasis>,
+     <literal
     xlink:href="https://nixos.org/channels/nixos-unstable">nixos-unstable</literal>.
-    This corresponds to NixOS’s main development branch, and may thus
-    see radical changes between channel updates.  It’s not recommended
-    for production systems.</para>
-  </listitem>
-  <listitem>
-    <para><emphasis>Small channels</emphasis>, such as <literal
+     This corresponds to NixOS’s main development branch, and may thus see
+     radical changes between channel updates. It’s not recommended for
+     production systems.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     <emphasis>Small channels</emphasis>, such as
+     <literal
     xlink:href="https://nixos.org/channels/nixos-17.03-small">nixos-17.03-small</literal>
-    or <literal
-    xlink:href="https://nixos.org/channels/nixos-unstable-small">nixos-unstable-small</literal>. These
-    are identical to the stable and unstable channels described above,
-    except that they contain fewer binary packages. This means they
-    get updated faster than the regular channels (for instance, when a
-    critical security patch is committed to NixOS’s source tree), but
-    may require more packages to be built from source than
-    usual. They’re mostly intended for server environments and as such
-    contain few GUI applications.</para>
-  </listitem>
-</itemizedlist>
-
-To see what channels are available, go to <link
-xlink:href="https://nixos.org/channels"/>.  (Note that the URIs of the
-various channels redirect to a directory that contains the channel’s
-latest version and includes ISO images and VirtualBox
-appliances.)</para>
-
-<para>When you first install NixOS, you’re automatically subscribed to
-the NixOS channel that corresponds to your installation source.   For
-instance, if you installed from a 17.03 ISO, you will be subscribed to
-the <literal>nixos-17.03</literal> channel.  To see which NixOS
-channel you’re subscribed to, run the following as root:
-
+     or
+     <literal
+    xlink:href="https://nixos.org/channels/nixos-unstable-small">nixos-unstable-small</literal>.
+     These are identical to the stable and unstable channels described above,
+     except that they contain fewer binary packages. This means they get
+     updated faster than the regular channels (for instance, when a critical
+     security patch is committed to NixOS’s source tree), but may require
+     more packages to be built from source than usual. They’re mostly
+     intended for server environments and as such contain few GUI applications.
+    </para>
+   </listitem>
+  </itemizedlist>
+  To see what channels are available, go to
+  <link
+xlink:href="https://nixos.org/channels"/>. (Note that the URIs of the
+  various channels redirect to a directory that contains the channel’s latest
+  version and includes ISO images and VirtualBox appliances.)
+ </para>
+ <para>
+  When you first install NixOS, you’re automatically subscribed to the NixOS
+  channel that corresponds to your installation source. For instance, if you
+  installed from a 17.03 ISO, you will be subscribed to the
+  <literal>nixos-17.03</literal> channel. To see which NixOS channel you’re
+  subscribed to, run the following as root:
 <screen>
 # nix-channel --list | grep nixos
 nixos https://nixos.org/channels/nixos-unstable
 </screen>
-
-To switch to a different NixOS channel, do
-
+  To switch to a different NixOS channel, do
 <screen>
 # nix-channel --add https://nixos.org/channels/<replaceable>channel-name</replaceable> nixos
 </screen>
-
-(Be sure to include the <literal>nixos</literal> parameter at the
-end.)  For instance, to use the NixOS 17.03 stable channel:
-
+  (Be sure to include the <literal>nixos</literal> parameter at the end.) For
+  instance, to use the NixOS 17.03 stable channel:
 <screen>
 # nix-channel --add https://nixos.org/channels/nixos-17.03 nixos
 </screen>
-
-If you have a server, you may want to use the “small” channel instead:
-
+  If you have a server, you may want to use the “small” channel instead:
 <screen>
 # nix-channel --add https://nixos.org/channels/nixos-17.03-small nixos
 </screen>
-
-And if you want to live on the bleeding edge:
-
+  And if you want to live on the bleeding edge:
 <screen>
 # nix-channel --add https://nixos.org/channels/nixos-unstable nixos
 </screen>
-
-</para>
-
-<para>You can then upgrade NixOS to the latest version in your chosen
-channel by running
-
+ </para>
+ <para>
+  You can then upgrade NixOS to the latest version in your chosen channel by
+  running
 <screen>
 # nixos-rebuild switch --upgrade
 </screen>
+  which is equivalent to the more verbose <literal>nix-channel --update nixos;
+  nixos-rebuild switch</literal>.
+ </para>
+ <note>
+  <para>
+   Channels are set per user. This means that running <literal> nix-channel
+   --add</literal> as a non root user (or without sudo) will not affect
+   configuration in <literal>/etc/nixos/configuration.nix</literal>
+  </para>
+ </note>
+ <warning>
+  <para>
+   It is generally safe to switch back and forth between channels. The only
+   exception is that a newer NixOS may also have a newer Nix version, which may
+   involve an upgrade of Nix’s database schema. This cannot be undone easily,
+   so in that case you will not be able to go back to your original channel.
+  </para>
+ </warning>
+ <section>
+  <title>Automatic Upgrades</title>
 
-which is equivalent to the more verbose <literal>nix-channel --update
-nixos; nixos-rebuild switch</literal>.</para>
-
-<note><para>Channels are set per user. This means that running <literal>
-nix-channel --add</literal> as a non root user (or without sudo) will not
-affect configuration in <literal>/etc/nixos/configuration.nix</literal>
-</para></note>
-
-<warning><para>It is generally safe to switch back and forth between
-channels.  The only exception is that a newer NixOS may also have a
-newer Nix version, which may involve an upgrade of Nix’s database
-schema.  This cannot be undone easily, so in that case you will not be
-able to go back to your original channel.</para></warning>
-
-
-<section><title>Automatic Upgrades</title>
-
-<para>You can keep a NixOS system up-to-date automatically by adding
-the following to <filename>configuration.nix</filename>:
-
+  <para>
+   You can keep a NixOS system up-to-date automatically by adding the following
+   to <filename>configuration.nix</filename>:
 <programlisting>
-system.autoUpgrade.enable = true;
+<xref linkend="opt-system.autoUpgrade.enable"/> = true;
 </programlisting>
-
-This enables a periodically executed systemd service named
-<literal>nixos-upgrade.service</literal>. It runs
-<command>nixos-rebuild switch --upgrade</command> to upgrade NixOS to
-the latest version in the current channel. (To see when the service
-runs, see <command>systemctl list-timers</command>.)  You can also
-specify a channel explicitly, e.g.
-
+   This enables a periodically executed systemd service named
+   <literal>nixos-upgrade.service</literal>. It runs <command>nixos-rebuild
+   switch --upgrade</command> to upgrade NixOS to the latest version in the
+   current channel. (To see when the service runs, see <command>systemctl
+   list-timers</command>.) You can also specify a channel explicitly, e.g.
 <programlisting>
-system.autoUpgrade.channel = https://nixos.org/channels/nixos-17.03;
+<xref linkend="opt-system.autoUpgrade.channel"/> = https://nixos.org/channels/nixos-17.03;
 </programlisting>
-
-</para>
-
-</section>
-
-
+  </para>
+ </section>
 </chapter>

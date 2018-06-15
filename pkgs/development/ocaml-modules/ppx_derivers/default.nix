@@ -6,13 +6,13 @@ else
 
 stdenv.mkDerivation rec {
 	name = "ocaml${ocaml.version}-ppx_derivers-${version}";
-	version = "1.0";
+	version = "1.2";
 
 	src = fetchFromGitHub {
 		owner = "diml";
 		repo = "ppx_derivers";
 		rev = version;
-		sha256 = "049yy9706lv1li6a1bibkz1qq2ixxbdyhf4f5w9pv71jc3dlpfy8";
+		sha256 = "0bnhihl1w31as5w2czly1v3d6pbir9inmgsjg2cj6aaj9v1dzd85";
 	};
 
 	buildInputs = [ ocaml findlib jbuilder ];

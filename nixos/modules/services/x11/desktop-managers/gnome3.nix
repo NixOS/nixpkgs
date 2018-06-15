@@ -27,7 +27,7 @@ let
   nixos-gsettings-desktop-schemas = pkgs.runCommand "nixos-gsettings-desktop-schemas" {}
     ''
      mkdir -p $out/share/gsettings-schemas/nixos-gsettings-overrides/glib-2.0/schemas
-     cp -rf ${pkgs.gnome3.gsettings_desktop_schemas}/share/gsettings-schemas/gsettings-desktop-schemas*/glib-2.0/schemas/*.xml $out/share/gsettings-schemas/nixos-gsettings-overrides/glib-2.0/schemas
+     cp -rf ${pkgs.gnome3.gsettings-desktop-schemas}/share/gsettings-schemas/gsettings-desktop-schemas*/glib-2.0/schemas/*.xml $out/share/gsettings-schemas/nixos-gsettings-overrides/glib-2.0/schemas
 
      ${concatMapStrings (pkg: "cp -rf ${pkg}/share/gsettings-schemas/*/glib-2.0/schemas/*.xml $out/share/gsettings-schemas/nixos-gsettings-overrides/glib-2.0/schemas\n") cfg.extraGSettingsOverridePackages}
 
@@ -60,7 +60,7 @@ in {
         example = literalExample "[ pkgs.gnome3.gpaste ]";
         description = "Additional list of packages to be added to the session search path.
                        Useful for gnome shell extensions or gsettings-conditionated autostart.";
-        apply = list: list ++ [ pkgs.gnome3.gnome_shell pkgs.gnome3.gnome-shell-extensions ];
+        apply = list: list ++ [ pkgs.gnome3.gnome-shell pkgs.gnome3.gnome-shell-extensions ];
       };
 
       extraGSettingsOverrides = mkOption {
@@ -118,13 +118,14 @@ in {
     services.packagekit.enable = mkDefault true;
     hardware.bluetooth.enable = mkDefault true;
     services.xserver.libinput.enable = mkDefault true; # for controlling touchpad settings via gnome control center
-    services.udev.packages = [ pkgs.gnome3.gnome_settings_daemon ];
+    services.udev.packages = [ pkgs.gnome3.gnome-settings-daemon ];
     systemd.packages = [ pkgs.gnome3.vino ];
+    services.flatpak.extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
 
     # If gnome3 is installed, build vim for gtk3 too.
     nixpkgs.config.vim.gui = "gtk3";
 
-    fonts.fonts = [ pkgs.dejavu_fonts pkgs.cantarell_fonts ];
+    fonts.fonts = [ pkgs.dejavu_fonts pkgs.cantarell-fonts ];
 
     services.xserver.desktopManager.session = singleton
       { name = "gnome3";
@@ -136,7 +137,7 @@ in {
           # find theme engines
           export GTK_PATH=${config.system.path}/lib/gtk-3.0:${config.system.path}/lib/gtk-2.0
 
-          export XDG_MENU_PREFIX=gnome
+          export XDG_MENU_PREFIX=gnome-
 
           ${concatMapStrings (p: ''
             if [ -d "${p}/share/gsettings-schemas/${p.name}" ]; then
@@ -164,7 +165,7 @@ in {
           # Update user dirs as described in http://freedesktop.org/wiki/Software/xdg-user-dirs/
           ${pkgs.xdg-user-dirs}/bin/xdg-user-dirs-update
 
-          ${pkgs.gnome3.gnome_session}/bin/gnome-session ${optionalString cfg.debug "--debug"} &
+          ${pkgs.gnome3.gnome-session}/bin/gnome-session ${optionalString cfg.debug "--debug"} &
           waitPID=$!
         '';
       };
@@ -172,7 +173,7 @@ in {
     services.xserver.updateDbusEnvironment = true;
 
     environment.variables.GIO_EXTRA_MODULES = [ "${lib.getLib pkgs.gnome3.dconf}/lib/gio/modules"
-                                                "${pkgs.gnome3.glib_networking.out}/lib/gio/modules"
+                                                "${pkgs.gnome3.glib-networking.out}/lib/gio/modules"
                                                 "${pkgs.gnome3.gvfs}/lib/gio/modules" ];
     environment.systemPackages = pkgs.gnome3.corePackages ++ cfg.sessionPath
       ++ (removePackagesByName pkgs.gnome3.optionalPackages config.environment.gnome3.excludePackages);
@@ -180,10 +181,9 @@ in {
     # Use the correct gnome3 packageSet
     networking.networkmanager.basePackages =
       { inherit (pkgs) networkmanager modemmanager wpa_supplicant;
-        inherit (pkgs.gnome3) networkmanager_openvpn networkmanager_vpnc
-                              networkmanager_openconnect networkmanager_fortisslvpn
-                              networkmanager_pptp networkmanager_iodine
-                              networkmanager_l2tp; };
+        inherit (pkgs.gnome3) networkmanager-openvpn networkmanager-vpnc
+                              networkmanager-openconnect networkmanager-fortisslvpn
+                              networkmanager-iodine networkmanager-l2tp; };
 
     # Needed for themes and backgrounds
     environment.pathsToLink = [ "/share" ];

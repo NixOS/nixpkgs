@@ -1,14 +1,10 @@
-{ fetchurl, stdenv, path, cacert, git, rust }:
+{ callPackage, fetchurl, stdenv, path, cacert, git, rust, cargo-vendor }:
 let
-  cargoVendor = import ./cargo-vendor.nix {
-    inherit fetchurl stdenv;
-  };
-
   fetchcargo = import ./fetchcargo.nix {
-    inherit stdenv cacert git rust cargoVendor;
+    inherit stdenv cacert git rust cargo-vendor;
   };
 in
-{ name, cargoSha256
+{ name, cargoSha256 ? "unset"
 , src ? null
 , srcs ? null
 , sourceRoot ? null
@@ -17,22 +13,38 @@ in
 , cargoUpdateHook ? ""
 , cargoDepsHook ? ""
 , cargoBuildFlags ? []
+
+, cargoVendorDir ? null
 , ... } @ args:
+
+assert cargoVendorDir == null -> cargoSha256 != "unset";
 
 let
   lib = stdenv.lib;
 
-  cargoDeps = fetchcargo {
-    inherit name src srcs sourceRoot cargoUpdateHook;
-    sha256 = cargoSha256;
-  };
+  cargoDeps = if cargoVendorDir == null
+    then fetchcargo {
+        inherit name src srcs sourceRoot cargoUpdateHook;
+        sha256 = cargoSha256;
+      }
+    else null;
+
+  setupVendorDir = if cargoVendorDir == null
+    then ''
+      unpackFile "$cargoDeps"
+      cargoDepsCopy=$(stripHash $(basename $cargoDeps))
+      chmod -R +w "$cargoDepsCopy"
+    ''
+    else ''
+      cargoDepsCopy="$sourceRoot/${cargoVendorDir}"
+    '';
 
 in stdenv.mkDerivation (args // {
   inherit cargoDeps;
 
   patchRegistryDeps = ./patch-registry-deps;
 
-  buildInputs = [ git rust.cargo rust.rustc ] ++ buildInputs;
+  buildInputs = [ cacert git rust.cargo rust.rustc ] ++ buildInputs;
 
   configurePhase = args.configurePhase or ''
     runHook preConfigure
@@ -43,9 +55,7 @@ in stdenv.mkDerivation (args // {
   postUnpack = ''
     eval "$cargoDepsHook"
 
-    unpackFile "$cargoDeps"
-    cargoDepsCopy=$(stripHash $(basename $cargoDeps))
-    chmod -R +w "$cargoDepsCopy"
+    ${setupVendorDir}
 
     mkdir .cargo
     cat >.cargo/config <<-EOF
@@ -60,7 +70,6 @@ in stdenv.mkDerivation (args // {
     unset cargoDepsCopy
 
     export RUST_LOG=${logLevel}
-    export SSL_CERT_FILE=${cacert}/etc/ssl/certs/ca-bundle.crt
   '' + (args.postUnpack or "");
 
   buildPhase = with builtins; args.buildPhase or ''
@@ -82,7 +91,7 @@ in stdenv.mkDerivation (args // {
   installPhase = args.installPhase or ''
     runHook preInstall
     mkdir -p $out/bin
-    find target/release -maxdepth 1 -executable -exec cp "{}" $out/bin \;
+    find target/release -maxdepth 1 -executable -type f -exec cp "{}" $out/bin \;
     runHook postInstall
   '';
 

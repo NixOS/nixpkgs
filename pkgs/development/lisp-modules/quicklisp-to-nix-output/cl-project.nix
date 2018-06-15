@@ -1,15 +1,15 @@
 args @ { fetchurl, ... }:
 rec {
   baseName = ''cl-project'';
-  version = ''20160531-git'';
+  version = ''20171019-git'';
 
   description = ''Generate a skeleton for modern project'';
 
   deps = [ args."alexandria" args."anaphora" args."bordeaux-threads" args."cl-ansi-text" args."cl-colors" args."cl-emb" args."cl-fad" args."cl-ppcre" args."let-plus" args."local-time" args."prove" args."uiop" ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/cl-project/2016-05-31/cl-project-20160531-git.tgz'';
-    sha256 = ''1xwjgs5pzkdnd9i5lcic9z41d1c4yf7pvarrvawfxcicg6rrfw81'';
+    url = ''http://beta.quicklisp.org/archive/cl-project/2017-10-19/cl-project-20171019-git.tgz'';
+    sha256 = ''1phgpik46dvqxnd49kccy4fh653659qd86hv7km50m07nzm8fn7q'';
   };
 
   packageName = "cl-project";
@@ -18,9 +18,9 @@ rec {
   overrides = x: x;
 }
 /* (SYSTEM cl-project DESCRIPTION Generate a skeleton for modern project SHA256
-    1xwjgs5pzkdnd9i5lcic9z41d1c4yf7pvarrvawfxcicg6rrfw81 URL
-    http://beta.quicklisp.org/archive/cl-project/2016-05-31/cl-project-20160531-git.tgz
-    MD5 63de5ce6f0f3e5f60094a86d32c2f1a9 NAME cl-project FILENAME cl-project
+    1phgpik46dvqxnd49kccy4fh653659qd86hv7km50m07nzm8fn7q URL
+    http://beta.quicklisp.org/archive/cl-project/2017-10-19/cl-project-20171019-git.tgz
+    MD5 9dbfd7f9b0a83ca608031ebf32185a0f NAME cl-project FILENAME cl-project
     DEPS
     ((NAME alexandria FILENAME alexandria) (NAME anaphora FILENAME anaphora)
      (NAME bordeaux-threads FILENAME bordeaux-threads)
@@ -32,4 +32,4 @@ rec {
     DEPENDENCIES
     (alexandria anaphora bordeaux-threads cl-ansi-text cl-colors cl-emb cl-fad
      cl-ppcre let-plus local-time prove uiop)
-    VERSION 20160531-git SIBLINGS (cl-project-test) PARASITES NIL) */
+    VERSION 20171019-git SIBLINGS (cl-project-test) PARASITES NIL) */

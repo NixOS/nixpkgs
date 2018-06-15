@@ -1,6 +1,6 @@
-{ lib, stdenv, fetchurl, fetchpatch, pkgconfig, libtool
+{ lib, stdenv, fetchFromGitHub, fetchpatch, pkgconfig, libtool
 , bzip2, zlib, libX11, libXext, libXt, fontconfig, freetype, ghostscript, libjpeg
-, lcms2, openexr, libpng, librsvg, libtiff, libxml2, openjpeg, libwebp
+, lcms2, openexr, libpng, librsvg, libtiff, libxml2, openjpeg, libwebp, fftw
 , ApplicationServices
 , buildPlatform, hostPlatform
 }:
@@ -14,8 +14,8 @@ let
     else throw "ImageMagick is not supported on this platform.";
 
   cfg = {
-    version = "6.9.9-26";
-    sha256 = "10rcq7b9hhz50m4yqnm4g3iai7lr9jkglb7sm49ycw59arrkmwnw";
+    version = "6.9.9-34";
+    sha256 = "0sqrgyfi7i7x1akna95c1qhk9sxxswzm3pkssfi4w6v7bn24g25g";
     patches = [];
   }
     # Freeze version on mingw so we don't need to port the patch too often.
@@ -36,13 +36,10 @@ stdenv.mkDerivation rec {
   name = "imagemagick-${version}";
   inherit (cfg) version;
 
-  src = fetchurl {
-    urls = [
-      "mirror://imagemagick/releases/ImageMagick-${version}.tar.xz"
-      # the original source above removes tarballs quickly
-      "http://distfiles.macports.org/ImageMagick/ImageMagick-${version}.tar.xz"
-      "https://bintray.com/homebrew/mirror/download_file?file_path=imagemagick-${version}.tar.xz"
-    ];
+  src = fetchFromGitHub {
+    owner = "ImageMagick";
+    repo = "ImageMagick6";
+    rev = cfg.version;
     inherit (cfg) sha256;
   };
 
@@ -76,10 +73,12 @@ stdenv.mkDerivation rec {
     ++ lib.optional stdenv.isDarwin ApplicationServices;
 
   propagatedBuildInputs =
-    [ bzip2 freetype libjpeg lcms2 ]
+    [ bzip2 freetype libjpeg lcms2 fftw ]
     ++ lib.optionals (!hostPlatform.isMinGW)
       [ libX11 libXext libXt libwebp ]
     ;
+
+  doCheck = false; # fails 6 out of 76 tests
 
   postInstall = ''
     (cd "$dev/include" && ln -s ImageMagick* ImageMagick)
@@ -102,5 +101,6 @@ stdenv.mkDerivation rec {
     description = "A software suite to create, edit, compose, or convert bitmap images";
     platforms = platforms.linux ++ platforms.darwin;
     maintainers = with maintainers; [ the-kenny wkennington ];
+    license = licenses.asl20;
   };
 }

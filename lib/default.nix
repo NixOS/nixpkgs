@@ -5,9 +5,11 @@
  */
 let
 
-  callLibs = file: import file { inherit lib; };
+  inherit (import ./fixed-points.nix {}) makeExtensible;
 
-  lib = rec {
+  lib = makeExtensible (self: let
+    callLibs = file: import file { lib = self; };
+  in with self; {
 
     # often used, or depending on very little
     trivial = callLibs ./trivial.nix;
@@ -21,10 +23,10 @@ let
 
     # packaging
     customisation = callLibs ./customisation.nix;
-    maintainers = callLibs ./maintainers.nix;
+    maintainers = import ../maintainers/maintainer-list.nix;
     meta = callLibs ./meta.nix;
     sources = callLibs ./sources.nix;
-
+    versions = callLibs ./versions.nix;
 
     # module system
     modules = callLibs ./modules.nix;
@@ -47,16 +49,17 @@ let
     filesystem = callLibs ./filesystem.nix;
 
     # back-compat aliases
-    platforms = systems.doubles;
+    platforms = systems.forMeta;
 
-    inherit (builtins) add addErrorContext attrNames
-      concatLists deepSeq elem elemAt filter genericClosure genList
-      getAttr hasAttr head isAttrs isBool isFunction isInt isList
-      isString length lessThan listToAttrs pathExists readFile
-      replaceStrings seq stringLength sub substring tail;
-    inherit (trivial) id const concat or and boolToString mergeAttrs
-      flip mapNullable inNixShell min max importJSON warn info
-      nixpkgsVersion mod;
+    inherit (builtins) add addErrorContext attrNames concatLists
+      deepSeq elem elemAt filter genericClosure genList getAttr
+      hasAttr head isAttrs isBool isInt isList isString length
+      lessThan listToAttrs pathExists readFile replaceStrings seq
+      stringLength sub substring tail;
+    inherit (trivial) id const concat or and bitAnd bitOr bitXor bitNot
+      boolToString mergeAttrs flip mapNullable inNixShell min max
+      importJSON warn info nixpkgsVersion version mod compare
+      splitByAndCompare functionArgs setFunctionArgs isFunction;
 
     inherit (fixedPoints) fix fix' extends composeExtensions
       makeExtensible makeExtensibleWithCustomName;
@@ -71,29 +74,32 @@ let
     inherit (lists) singleton foldr fold foldl foldl' imap0 imap1
       concatMap flatten remove findSingle findFirst any all count
       optional optionals toList range partition zipListsWith zipLists
-      reverseList listDfs toposort sort take drop sublist last init
-      crossLists unique intersectLists subtractLists
-      mutuallyExclusive;
+      reverseList listDfs toposort sort naturalSort compareLists take
+      drop sublist last init crossLists unique intersectLists
+      subtractLists mutuallyExclusive groupBy groupBy';
     inherit (strings) concatStrings concatMapStrings concatImapStrings
       intersperse concatStringsSep concatMapStringsSep
       concatImapStringsSep makeSearchPath makeSearchPathOutput
       makeLibraryPath makeBinPath makePerlPath optionalString
       hasPrefix hasSuffix stringToCharacters stringAsChars escape
-      escapeShellArg escapeShellArgs replaceChars lowerChars upperChars
-      toLower toUpper addContextFrom splitString removePrefix
-      removeSuffix versionOlder versionAtLeast getVersion nameFromURL
-      enableFeature fixedWidthString fixedWidthNumber isStorePath
+      escapeShellArg escapeShellArgs replaceChars lowerChars
+      upperChars toLower toUpper addContextFrom splitString
+      removePrefix removeSuffix versionOlder versionAtLeast getVersion
+      nameFromURL enableFeature enableFeatureAs withFeature
+      withFeatureAs fixedWidthString fixedWidthNumber isStorePath
       toInt readPathsFromFile fileContents;
     inherit (stringsWithDeps) textClosureList textClosureMap
       noDepEntry fullDepEntry packEntry stringAfter;
     inherit (customisation) overrideDerivation makeOverridable
-      callPackageWith callPackagesWith addPassthru hydraJob makeScope;
+      callPackageWith callPackagesWith extendDerivation hydraJob
+      makeScope;
     inherit (meta) addMetaAttrs dontDistribute setName updateName
       appendToName mapDerivationAttrset lowPrio lowPrioSet hiPrio
       hiPrioSet;
     inherit (sources) pathType pathIsDirectory cleanSourceFilter
       cleanSource sourceByRegex sourceFilesBySuffices
-      commitIdFromGitRepo;
+      commitIdFromGitRepo cleanSourceWith pathHasContext
+      canCleanSource;
     inherit (modules) evalModules closeModules unifyModuleSyntax
       applyIfFunction unpackSubmodule packSubmodule mergeModules
       mergeModules' mergeOptionDecls evalOptionValue mergeDefinitions
@@ -111,11 +117,11 @@ let
       unknownModule mkOption;
     inherit (types) isType setType defaultTypeMerge defaultFunctor
       isOptionType mkOptionType;
-    inherit (debug) addErrorContextToAttrs traceIf traceVal
+    inherit (debug) addErrorContextToAttrs traceIf traceVal traceValFn
       traceXMLVal traceXMLValMarked traceSeq traceSeqN traceValSeq
-      traceValSeqN traceShowVal traceShowValMarked
-      showVal traceCall traceCall2 traceCall3 traceValIfNot runTests
-      testAllTrue strict traceCallXml attrNamesToStr;
+      traceValSeqFn traceValSeqN traceValSeqNFn traceShowVal
+      traceShowValMarked showVal traceCall traceCall2 traceCall3
+      traceValIfNot runTests testAllTrue traceCallXml attrNamesToStr;
     inherit (misc) maybeEnv defaultMergeArg defaultMerge foldArgs
       defaultOverridableDelayableArgs composedArgsAndFun
       maybeAttrNullable maybeAttr ifEnable checkFlag getValue
@@ -124,7 +130,7 @@ let
       closePropagation mapAttrsFlatten nvs setAttr setAttrMerge
       mergeAttrsWithFunc mergeAttrsConcatenateValues
       mergeAttrsNoOverride mergeAttrByFunc mergeAttrsByFuncDefaults
-      mergeAttrsByFuncDefaultsClean mergeAttrBy
-      prepareDerivationArgs nixType imap overridableDelayableArgs;
-  };
+      mergeAttrsByFuncDefaultsClean mergeAttrBy prepareDerivationArgs
+      nixType imap overridableDelayableArgs;
+  });
 in lib

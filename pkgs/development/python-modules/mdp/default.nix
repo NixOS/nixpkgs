@@ -1,16 +1,15 @@
-{ stdenv, buildPythonPackage, fetchPypi, pytest_29, future, numpy }:
+{ stdenv, buildPythonPackage, fetchPypi, pytest, future, numpy }:
 
 buildPythonPackage rec {
   pname = "MDP";
   version = "3.5";
-  name  = "${pname}-${version}";
 
   src = fetchPypi {
     inherit pname version;
     sha256 = "0aw1zxmyvx6gfmmnixbqmdaah28jl7rmqkzhxv53091asc23iw9k";
   };
 
-  checkInputs = [ pytest_29 ];
+  checkInputs = [ pytest ];
   propagatedBuildInputs = [ future numpy ];
 
   # Tests disabled because of missing dependencies not in nix

@@ -14,9 +14,9 @@
  for x in "$@" ; do
 -	chown root "$DESTDIR/$x"
 -	chmod a=rx,u+xs "$DESTDIR/$x"
-+	f="$DESTDIR/$x";
++	f="$DESTDIR$x";
 +	b=$(basename "$f".orig)
-+	mv -v "$f"{,.orig}
++	mv -v "$f" "$f".orig
 +	ln -sv /run/wrappers/bin/"$b" "$f"
 +	echo "    \"$b\".source = \"$f.orig\";" >> $w
  done

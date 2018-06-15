@@ -1,7 +1,6 @@
-{ stdenv, fetchurl, nspr, perl, zlib, sqlite }:
+{ stdenv, fetchurl, nspr, perl, zlib, sqlite, fixDarwinDylibNames }:
 
 let
-
   nssPEM = fetchurl {
     url = http://dev.gentoo.org/~polynomial-c/mozilla/nss-3.15.4-pem-support-20140109.patch.xz;
     sha256 = "10ibz6y0hknac15zr6dw4gv9nb5r5z9ym6gq18j3xqx7v7n3vpdw";
@@ -9,14 +8,15 @@ let
 
 in stdenv.mkDerivation rec {
   name = "nss-${version}";
-  version = "3.33";
+  version = "3.36.4";
 
   src = fetchurl {
-    url = "mirror://mozilla/security/nss/releases/NSS_3_33_RTM/src/${name}.tar.gz";
-    sha256 = "1r44qa4j7sri50mxxbnrpm6fxprwrhv76whi7bfq73j06syxmw4q";
+    url = "mirror://mozilla/security/nss/releases/NSS_3_36_4_RTM/src/${name}.tar.gz";
+    sha256 = "0si4g5bnhzkxy2f7rnaw86jfdzni5gvc7svxcf7ms8n97nrrdpik";
   };
 
-  buildInputs = [ perl zlib sqlite ];
+  buildInputs = [ perl zlib sqlite ]
+    ++ stdenv.lib.optional stdenv.isDarwin fixDarwinDylibNames;
 
   propagatedBuildInputs = [ nspr ];
 
@@ -28,9 +28,14 @@ in stdenv.mkDerivation rec {
     [
       # Based on http://patch-tracker.debian.org/patch/series/dl/nss/2:3.15.4-1/85_security_load.patch
       ./85_security_load.patch
+      ./ckpem.patch
     ];
 
   patchFlags = "-p0";
+
+  postPatch = stdenv.lib.optionalString stdenv.isDarwin ''
+    substituteInPlace nss/coreconf/Darwin.mk --replace '@executable_path/$(notdir $@)' "$out/lib/\$(notdir \$@)"
+  '';
 
   outputs = [ "out" "dev" "tools" ];
 
@@ -45,7 +50,8 @@ in stdenv.mkDerivation rec {
     "NSS_ENABLE_ECC=1"
     "USE_SYSTEM_ZLIB=1"
     "NSS_USE_SYSTEM_SQLITE=1"
-  ] ++ stdenv.lib.optional stdenv.is64bit "USE_64=1";
+  ] ++ stdenv.lib.optional stdenv.is64bit "USE_64=1"
+    ++ stdenv.lib.optional stdenv.isDarwin "CCC=clang++";
 
   NIX_CFLAGS_COMPILE = "-Wno-error";
 
@@ -84,15 +90,22 @@ in stdenv.mkDerivation rec {
 
   postFixup = ''
     for libname in freebl3 nssdbm3 softokn3
-    do
-      libfile="$out/lib/lib$libname.so"
-      LD_LIBRARY_PATH=$out/lib $out/bin/shlibsign -v -i "$libfile"
+    do '' +
+    (if stdenv.isDarwin
+     then ''
+       libfile="$out/lib/lib$libname.dylib"
+       DYLD_LIBRARY_PATH=$out/lib:${nspr.out}/lib \
+     '' else ''
+       libfile="$out/lib/lib$libname.so"
+       LD_LIBRARY_PATH=$out/lib:${nspr.out}/lib \
+     '') + ''
+        $out/bin/shlibsign -v -i "$libfile"
     done
 
     moveToOutput bin "$tools"
     moveToOutput bin/nss-config "$dev"
     moveToOutput lib/libcrmf.a "$dev" # needed by firefox, for example
-    rm "$out"/lib/*.a
+    rm -f "$out"/lib/*.a
   '';
 
   meta = {

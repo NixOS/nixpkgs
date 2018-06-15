@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , characteristic
 , pyasn1
 , pyasn1-modules
@@ -13,26 +13,24 @@
 buildPythonPackage rec {
   pname = "service_identity";
   version = "17.0.0";
-  name = "${pname}-${version}";
 
-
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "4001fbb3da19e0df22c47a06d29681a398473af4aa9d745eca525b3b2c2302ab";
+  src = fetchFromGitHub {
+    owner = "pyca";
+    repo = pname;
+    rev = version;
+    sha256 = "1fn332fci776m5a7jx8c1jgbm27160ip5qvv8p01c242ag6by5g0";
   };
 
   propagatedBuildInputs = [
     characteristic pyasn1 pyasn1-modules pyopenssl idna attrs
   ];
 
-  checkInputs = [
-    pytest
-  ];
+  checkInputs = [ pytest ];
+  checkPhase = "py.test";
 
-  checkPhase = ''
-    py.test
-  '';
-
-  # Tests not included in archive
-  doCheck = false;
+  meta = with lib; {
+    description = "Service identity verification for pyOpenSSL";
+    license = licenses.mit;
+    homepage = https://service-identity.readthedocs.io;
+  };
 }

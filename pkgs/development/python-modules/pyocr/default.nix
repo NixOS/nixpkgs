@@ -1,11 +1,12 @@
 { lib, fetchFromGitHub, buildPythonPackage, pillow, six
-, tesseract, cuneiform
+, tesseract, cuneiform, isPy3k
 }:
 
 buildPythonPackage rec {
   pname = "pyocr";
   version = "0.4.7";
   name = pname + "-" + version;
+  disabled = !isPy3k;
 
   # Don't fetch from PYPI because it doesn't contain tests.
   src = fetchFromGitHub {

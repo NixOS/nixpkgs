@@ -1,5 +1,5 @@
 diff --git a/mkspecs/features/create_cmake.prf b/mkspecs/features/create_cmake.prf
-index 11fb52a0b1..a4cca1fdcb 100644
+index 11fb52a0b1..614fdbb046 100644
 --- a/mkspecs/features/create_cmake.prf
 +++ b/mkspecs/features/create_cmake.prf
 @@ -21,7 +21,7 @@ load(cmake_functions)
@@ -35,7 +35,7 @@ index 11fb52a0b1..a4cca1fdcb 100644
 -    # installed in $${CMAKE_LIB_DIR}/cmake/Qt5$${CMAKE_MODULE_NAME}
 -    CMAKE_RELATIVE_INSTALL_DIR = "$${CMAKE_RELATIVE_INSTALL_LIBS_DIR}../../"
 -}
-+CMAKE_LIB_DIR = $$NIX_OUTPUT_DEV/lib/
++CMAKE_LIB_DIR = $$NIX_OUTPUT_OUT/lib/
 +CMAKE_LIB_DIR_IS_ABSOLUTE = True
  
 -CMAKE_BIN_DIR = $$cmakeRelativePath($$[QT_HOST_BINS], $$[QT_INSTALL_PREFIX])
@@ -64,7 +64,7 @@ index 11fb52a0b1..a4cca1fdcb 100644
 -    CMAKE_DLL_DIR = $$CMAKE_LIB_DIR
 -    CMAKE_DLL_DIR_IS_ABSOLUTE = $$CMAKE_LIB_DIR_IS_ABSOLUTE
 -}
-+CMAKE_DLL_DIR = $$NIX_OUTPUT_DEV/lib/
++CMAKE_DLL_DIR = $$NIX_OUTPUT_OUT/lib/
 +CMAKE_DLL_DIR_IS_ABSOLUTE = True
  
  static|staticlib:CMAKE_STATIC_TYPE = true
@@ -628,7 +628,7 @@ index 1d947159e2..b36865fc48 100644
  
      set_target_properties(Qt5::qdbusxml2cpp PROPERTIES
 diff --git a/src/gui/Qt5GuiConfigExtras.cmake.in b/src/gui/Qt5GuiConfigExtras.cmake.in
-index 07869efd7d..37b95d1b6b 100644
+index 07869efd7d..fb4183bada 100644
 --- a/src/gui/Qt5GuiConfigExtras.cmake.in
 +++ b/src/gui/Qt5GuiConfigExtras.cmake.in
 @@ -2,7 +2,7 @@
@@ -652,7 +652,7 @@ index 07869efd7d..37b95d1b6b 100644
  
  !!IF isEmpty(CMAKE_LIB_DIR_IS_ABSOLUTE)
 -    set(imported_implib \"${_qt5Gui_install_prefix}/$${CMAKE_LIB_DIR}${IMPLIB_LOCATION}\")
-+    set(imported_implib \"$$NIX_OUTPUT_DEV/$${CMAKE_LIB_DIR}${IMPLIB_LOCATION}\")
++    set(imported_implib \"$$NIX_OUTPUT_OUT/$${CMAKE_LIB_DIR}${IMPLIB_LOCATION}\")
  !!ELSE
      set(imported_implib \"$${CMAKE_LIB_DIR}${IMPLIB_LOCATION}\")
  !!ENDIF
@@ -758,6 +758,28 @@ index 4646ced954..ff3111f393 100644
              xcursorFound = xcursorLib.load();
          }
          if (xcursorFound) {
+diff --git a/src/testlib/qtestassert.h b/src/testlib/qtestassert.h
+index ca3e02ca06..28dd73d772 100644
+--- a/src/testlib/qtestassert.h
++++ b/src/testlib/qtestassert.h
+@@ -38,10 +38,13 @@
+ 
+ QT_BEGIN_NAMESPACE
+ 
+-
+-#define QTEST_ASSERT(cond) do { if (!(cond)) qt_assert(#cond,__FILE__,__LINE__); } while (0)
+-
+-#define QTEST_ASSERT_X(cond, where, what) do { if (!(cond)) qt_assert_x(where, what,__FILE__,__LINE__); } while (0)
++#if defined(QT_NO_DEBUG) && !defined(QT_FORCE_ASSERTS)
++#define QTEST_ASSERT(cond) do { } while ((false) && (cond))
++#define QTEST_ASSERT_X(cond, where, what) do { } while ((false) && (cond))
++#else
++#define QTEST_ASSERT(cond) do { if (!(cond)) qt_assert(#cond,__FILE__,__LINE__); } while (false)
++#define QTEST_ASSERT_X(cond, where, what) do { if (!(cond)) qt_assert_x(where, what,__FILE__,__LINE__); } while (false)
++#endif
+ 
+ QT_END_NAMESPACE
+ 
 diff --git a/src/widgets/Qt5WidgetsConfigExtras.cmake.in b/src/widgets/Qt5WidgetsConfigExtras.cmake.in
 index 99d87e2e46..a4eab2aa72 100644
 --- a/src/widgets/Qt5WidgetsConfigExtras.cmake.in

@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     description = "Build tool that builds code quickly and reliably";
     license = licenses.asl20;
     maintainers = with maintainers; [ cstrahan philandstuff ];
-    platforms = platforms.unix;
+    platforms = platforms.linux;
   };
 
   name = "bazel-${version}";
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
   '';
   sourceRoot = ".";
 
-  patches = lib.optional enableNixHacks ./nix-hacks.patch;
+  patches = lib.optional enableNixHacks ./nix-hacks-0.4.patch;
 
   postPatch = ''
     for f in $(grep -l -r '/bin/bash'); do

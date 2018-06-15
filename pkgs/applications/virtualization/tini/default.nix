@@ -1,14 +1,14 @@
 { stdenv, fetchFromGitHub, cmake, glibc }:
 
 stdenv.mkDerivation rec {
-  version = "0.16.1";
+  version = "0.18.0";
   name = "tini-${version}";
 
   src = fetchFromGitHub {
     owner = "krallin";
     repo = "tini";
     rev = "v${version}";
-    sha256 ="1abvjwjk7xhsbx60niy4ykcj3xvrxcl6zx8z1v827jsn47wzpikp";
+    sha256 ="1h20i3wwlbd8x4jr2gz68hgklh0lb0jj7y5xk1wvr8y58fip1rdn";
   };
 
   patchPhase = "sed -i /tini-static/d CMakeLists.txt";

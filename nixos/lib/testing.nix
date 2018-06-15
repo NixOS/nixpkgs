@@ -3,7 +3,11 @@
 with import ./build-vms.nix { inherit system minimal config; };
 with pkgs;
 
-rec {
+let
+  jquery-ui = callPackage ./testing/jquery-ui.nix { };
+  jquery = callPackage ./testing/jquery.nix { };
+
+in rec {
 
   inherit pkgs;
 
@@ -29,7 +33,7 @@ rec {
         cp ${./test-driver/Logger.pm} $libDir/Logger.pm
 
         wrapProgram $out/bin/nixos-test-driver \
-          --prefix PATH : "${lib.makeBinPath [ qemu vde2 netpbm coreutils ]}" \
+          --prefix PATH : "${lib.makeBinPath [ qemu_test vde2 netpbm coreutils ]}" \
           --prefix PERL5LIB : "${with perlPackages; lib.makePerlPath [ TermReadLineGnu XMLWriter IOTty FileSlurp ]}:$out/lib/perl5/site_perl"
       '';
   };
@@ -78,14 +82,26 @@ rec {
     } @ t:
 
     let
-      testDriverName = "nixos-test-driver-${name}";
+      # A standard store path to the vm monitor is built like this:
+      #   /tmp/nix-build-vm-test-run-$name.drv-0/vm-state-machine/monitor
+      # The max filename length of a unix domain socket is 108 bytes.
+      # This means $name can at most be 50 bytes long.
+      maxTestNameLen = 50;
+      testNameLen = builtins.stringLength name;
+
+      testDriverName = with builtins;
+        if testNameLen > maxTestNameLen then
+          abort ("The name of the test '${name}' must not be longer than ${toString maxTestNameLen} " +
+            "it's currently ${toString testNameLen} characters long.")
+        else
+          "nixos-test-driver-${name}";
 
       nodes = buildVirtualNetwork (
         t.nodes or (if t ? machine then { machine = t.machine; } else { }));
 
       testScript' =
         # Call the test script with the computed nodes.
-        if builtins.isFunction testScript
+        if lib.isFunction testScript
         then testScript { inherit nodes; }
         else testScript;
 
@@ -94,6 +110,8 @@ rec {
       vms = map (m: m.config.system.build.vm) (lib.attrValues nodes);
 
       ocrProg = tesseract_4.override { enableLanguages = [ "eng" ]; };
+
+      imagemagick_tiff = imagemagick_light.override { inherit libtiff; };
 
       # Generate onvenience wrappers for running the test driver
       # interactively with the specified network, and for starting the
@@ -112,7 +130,7 @@ rec {
           wrapProgram $out/bin/nixos-test-driver \
             --add-flags "''${vms[*]}" \
             ${lib.optionalString enableOCR
-              "--prefix PATH : '${ocrProg}/bin:${imagemagick}/bin'"} \
+              "--prefix PATH : '${ocrProg}/bin:${imagemagick_tiff}/bin'"} \
             --run "export testScript=\"\$(cat $out/test-script)\"" \
             --set VLANS '${toString vlans}'
           ln -s ${testDriver}/bin/nixos-test-driver $out/bin/nixos-run-vms
@@ -131,8 +149,8 @@ rec {
       test = passMeta (runTests driver);
       report = passMeta (releaseTools.gcovReport { coverageRuns = [ test ]; });
 
-    in (if makeCoverageReport then report else test) // { 
-      inherit nodes driver test; 
+    in (if makeCoverageReport then report else test) // {
+      inherit nodes driver test;
     };
 
   runInMachine =

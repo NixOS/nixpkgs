@@ -20,9 +20,11 @@ stdenv.mkDerivation {
     # included Makefiles, don't look in /usr/include and friends.
     ./impure-dirs.patch
     ./pselect.patch
+    # Fix support for glibc 2.27's glob, inspired by http://www.linuxfromscratch.org/lfs/view/8.2/chapter05/make.html
+    ./glibc-2.27-glob.patch
   ];
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = stdenv.lib.optionals guileSupport [ pkgconfig ];
   buildInputs = stdenv.lib.optionals guileSupport [ guile ];
 
   configureFlags = stdenv.lib.optional guileSupport "--with-guile";

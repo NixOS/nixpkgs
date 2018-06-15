@@ -38,6 +38,5 @@ in stdenv.mkDerivation rec {
     homepage = http://www.samsung.com/;
     license = licenses.unfree;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ nckx ];
   };
 }

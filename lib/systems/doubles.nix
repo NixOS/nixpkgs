@@ -1,15 +1,15 @@
 { lib }:
 let
   inherit (lib) lists;
-  parse = import ./parse.nix { inherit lib; };
-  inherit (import ./inspect.nix { inherit lib; }) predicates;
+  inherit (lib.systems) parse;
+  inherit (lib.systems.inspect) predicates;
   inherit (lib.attrsets) matchAttrs;
 
   all = [
     "aarch64-linux"
     "armv5tel-linux" "armv6l-linux" "armv7l-linux"
 
-    "mips64el-linux"
+    "mipsel-linux"
 
     "i686-cygwin" "i686-freebsd" "i686-linux" "i686-netbsd" "i686-openbsd"
 
@@ -24,19 +24,20 @@ let
 in rec {
   inherit all;
 
-  allBut = platforms: lists.filter (x: !(builtins.elem x platforms)) all;
   none = [];
 
-  arm     = filterDoubles predicates.isArm;
+  arm     = filterDoubles predicates.isAarch32;
+  aarch64 = filterDoubles predicates.isAarch64;
+  x86     = filterDoubles predicates.isx86;
   i686    = filterDoubles predicates.isi686;
-  mips    = filterDoubles predicates.isMips;
   x86_64  = filterDoubles predicates.isx86_64;
+  mips    = filterDoubles predicates.isMips;
 
   cygwin  = filterDoubles predicates.isCygwin;
   darwin  = filterDoubles predicates.isDarwin;
   freebsd = filterDoubles predicates.isFreeBSD;
   # Should be better, but MinGW is unclear, and HURD is bit-rotted.
-  gnu     = filterDoubles (matchAttrs { kernel = parse.kernels.linux;  abi = parse.abis.gnu; });
+  gnu     = filterDoubles (matchAttrs { kernel = parse.kernels.linux; abi = parse.abis.gnu; });
   illumos = filterDoubles predicates.isSunOS;
   linux   = filterDoubles predicates.isLinux;
   netbsd  = filterDoubles predicates.isNetBSD;

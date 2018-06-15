@@ -133,7 +133,7 @@ in
     users.groups = {
       quagga = {};
       # Members of the quaggavty group can use vtysh to inspect the Quagga daemons
-      quaggavty = {};
+      quaggavty = { members = [ "quagga" ]; };
     };
 
     systemd.services =

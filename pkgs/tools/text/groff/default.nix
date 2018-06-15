@@ -2,6 +2,7 @@
 , ghostscript #for postscript and html output
 , psutils, netpbm #for html output
 , buildPackages
+, autoreconfHook
 }:
 
 stdenv.mkDerivation rec {
@@ -16,6 +17,8 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "man" "doc" "info" "perl" ];
 
   enableParallelBuilding = false;
+
+  patches = [ ./look-for-ar.patch ];
 
   postPatch = stdenv.lib.optionalString (psutils != null) ''
     substituteInPlace src/preproc/html/pre-html.cpp \
@@ -32,6 +35,7 @@ stdenv.mkDerivation rec {
   '';
 
   buildInputs = [ ghostscript psutils netpbm perl ];
+  nativeBuildInputs = [ autoreconfHook ];
 
   # Builds running without a chroot environment may detect the presence
   # of /usr/X11 in the host system, leading to an impure build of the
@@ -42,17 +46,18 @@ stdenv.mkDerivation rec {
     "--without-x"
   ] ++ stdenv.lib.optionals (ghostscript != null) [
     "--with-gs=${ghostscript}/bin/gs"
+  ] ++ stdenv.lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
+    "ac_cv_path_PERL=${buildPackages.perl}/bin/perl"
+  ];
+
+  makeFlags = stdenv.lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
+    # Trick to get the build system find the proper 'native' groff
+    # http://www.mail-archive.com/bug-groff@gnu.org/msg01335.html
+    "GROFF_BIN_PATH=${buildPackages.groff}/bin"
+    "GROFFBIN=${buildPackages.groff}/bin/groff"
   ];
 
   doCheck = true;
-
-  crossAttrs = {
-    # Trick to get the build system find the proper 'native' groff
-    # http://www.mail-archive.com/bug-groff@gnu.org/msg01335.html
-    preBuild = ''
-      makeFlags="GROFF_BIN_PATH=${buildPackages.groff}/bin GROFFBIN=${buildPackages.groff}/bin/groff"
-    '';
-  };
 
   # Remove example output with (random?) colors and creation date
   # to avoid non-determinism in the output.
@@ -97,6 +102,8 @@ stdenv.mkDerivation rec {
     substituteInPlace $perl/bin/grog \
       --replace $out/lib/groff/grog $perl/lib/groff/grog
 
+  '' + stdenv.lib.optionalString (stdenv.buildPlatform != stdenv.hostPlatform) ''
+    find $perl/ -type f -print0 | xargs --null sed -i 's|${buildPackages.perl}|${perl}|'
   '';
 
   meta = with stdenv.lib; {

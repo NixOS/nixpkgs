@@ -3,7 +3,7 @@
 stdenv.mkDerivation rec {
   name = "mpage-2.5.6";
   src = fetchurl {
-    url = "http://www.mesa.nl/pub/mpage/${name}.tgz";
+    url = "http://www.libGLU_combined.nl/pub/mpage/${name}.tgz";
     sha256 = "016w9sm06sn1d2lim4p8fzl6wbmad3wigxhflsybzi7p4zy6vrjg";
   };
 
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     '';
 
     license = "liberal";  # a non-copyleft license, see `Copyright' file
-    homepage = http://www.mesa.nl/pub/mpage/;
+    homepage = http://www.libGLU_combined.nl/pub/mpage/;
     platforms = stdenv.lib.platforms.linux;
   };
 }

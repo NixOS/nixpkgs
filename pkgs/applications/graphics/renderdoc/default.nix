@@ -1,8 +1,26 @@
 { stdenv, fetchFromGitHub, cmake, pkgconfig
 , qtbase, qtx11extras, qtsvg, makeWrapper, python3, bison
-, autoconf, automake, pcre, vulkan-loader, xorg
+, pcre, vulkan-loader, xorg, autoreconfHook
 }:
 
+let
+  custom_swig = stdenv.mkDerivation {
+    name = "renderdoc-custom-swig";
+    src = fetchFromGitHub {
+      owner = "baldurk";
+      repo = "swig";
+      rev = "renderdoc-modified-1";
+      sha256 = "1whymd3vamwnp4jqfc9asls3dw9wsdi21xhm1d2a4vx9nql8if1x";
+    };
+
+    nativeBuildInputs = [ autoreconfHook pcre ];
+
+    autoreconfPhase = ''
+      patchShebangs autogen.sh
+      ./autogen.sh
+    '';
+  };
+in
 stdenv.mkDerivation rec {
   name = "renderdoc-${version}";
   version = "0.91";
@@ -17,7 +35,8 @@ stdenv.mkDerivation rec {
   buildInputs = [
     qtbase qtsvg xorg.libpthreadstubs xorg.libXdmcp qtx11extras vulkan-loader
   ];
-  nativeBuildInputs = [ cmake makeWrapper pkgconfig python3 bison autoconf automake pcre ];
+
+  nativeBuildInputs = [ cmake makeWrapper pkgconfig python3 bison ];
 
   cmakeFlags = [
     "-DBUILD_VERSION_HASH=${src.rev}"
@@ -28,6 +47,7 @@ stdenv.mkDerivation rec {
     # TODO: use this instead of preConfigure once placeholders land
     #"-DVULKAN_LAYER_FOLDER=${placeholder out}/share/vulkan/implicit_layer.d/"
   ];
+
   preConfigure = ''
     cmakeFlags+=" -DVULKAN_LAYER_FOLDER=$out/share/vulkan/implicit_layer.d/"
   '';
@@ -41,7 +61,13 @@ stdenv.mkDerivation rec {
     ln -s $out/bin/.bin/renderdoccmd $out/bin/renderdoccmd
     wrapProgram $out/bin/renderdoccmd --suffix LD_LIBRARY_PATH : $out/lib --suffix LD_LIBRARY_PATH : ${vulkan-loader}/lib
   '';
+
+  # Set path to custom swig binary
+  NIXOS_CUSTOM_SWIG = "${custom_swig}/bin/swig";
+
   enableParallelBuilding = true;
+
+  patches = [ ./custom_swig.patch ];
 
   meta = with stdenv.lib; {
     description = "A single-frame graphics debugger";

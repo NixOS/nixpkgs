@@ -10,12 +10,12 @@
 
 buildPythonPackage rec {
   pname = "argon2_cffi";
-  version = "16.3.0";
+  version = "18.1.0";
   name    = "${pname}-${version}";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1ap3il3j1pjyprrhpfyhc21izpmhzhfb5s69vlzc65zvd1nj99cr";
+    sha256 = "7e4b75611b73f53012117ad21cdde7a17b32d1e99ff6799f22d827eb83a2a59b";
   };
 
   propagatedBuildInputs = [ cffi six ];

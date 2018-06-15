@@ -1,24 +1,36 @@
 { stdenv, fetchurl
-, gmp, readline, libX11, libpthreadstubs, tex, perl }:
+, gmp, readline, libX11, tex, perl
+, withThread ? true, libpthreadstubs
+}:
+
+assert withThread -> libpthreadstubs != null;
 
 stdenv.mkDerivation rec {
 
   name = "pari-${version}";
-  version = "2.9.3";
+  version = "2.9.5";
 
   src = fetchurl {
     url = "http://pari.math.u-bordeaux.fr/pub/pari/unix/${name}.tar.gz";
-    sha256 = "0qqal1lpggd6dvs19svnz0dil86xk0xkcj5s3b7104ibkmvjfsp7";
+    sha256 = "05z6y5iwdzcdggbrkic9cy9vy9wmk5qxc21cb4lqnbqxnhjihibb";
   };
 
-  buildInputs = [ gmp readline libX11 libpthreadstubs tex perl ];
+  buildInputs = [
+    gmp
+    readline
+    libX11
+    tex
+    perl
+  ] ++ stdenv.lib.optionals withThread [
+    libpthreadstubs
+  ];
 
   configureScript = "./Configure";
   configureFlags = [
-    "--mt=pthread"
     "--with-gmp=${gmp.dev}"
     "--with-readline=${readline.dev}"
-  ] ++ stdenv.lib.optional stdenv.isDarwin "--host=x86_64-darwin";
+  ] ++ stdenv.lib.optional stdenv.isDarwin "--host=x86_64-darwin"
+  ++ stdenv.lib.optional withThread "--mt=pthread";
 
   preConfigure = ''
     export LD=$CC

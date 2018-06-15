@@ -113,13 +113,12 @@ let
 
 
     "Flask-SocketIO" = python.mkDerivation {
-      name = "Flask-SocketIO-2.9.2";
-      src = pkgs.fetchurl { url = "https://pypi.python.org/packages/e7/e0/c50a1b47498897b228764667cd006ca7d45374b79a8e5e2fa3e03ba4717c/Flask-SocketIO-2.9.2.tar.gz"; sha256 = "0fb686f9d85f4f34dc6609f62fa96fe15176a6ea7e6179149d319fabc54c543b"; };
+      name = "Flask-SocketIO-2.9.3";
+      src = pkgs.fetchurl { url = "https://pypi.python.org/packages/a0/ac/4024b73e071d5a000a998d6f26ba0a090011d5abdc7aa41f2774173c3276/Flask-SocketIO-2.9.3.tar.gz"; sha256 = "df23f790db8529c543bd0b54165215c342cf6955a4a1f605650e759197a46d59"; };
       doCheck = commonDoCheck;
       buildInputs = commonBuildInputs;
       propagatedBuildInputs = [
       self."Flask"
-      self."python-engineio"
       self."python-socketio"
     ];
       meta = with pkgs.stdenv.lib; {
@@ -179,15 +178,15 @@ let
 
 
     "Werkzeug" = python.mkDerivation {
-      name = "Werkzeug-0.12.2";
-      src = pkgs.fetchurl { url = "https://pypi.python.org/packages/56/41/c095a77eb2dd69bf278dd664a97d3416af04e9ba1a00b8c138f772741d31/Werkzeug-0.12.2.tar.gz"; sha256 = "903a7b87b74635244548b30d30db4c8947fe64c5198f58899ddcd3a13c23bb26"; };
+      name = "Werkzeug-0.14.1";
+      src = pkgs.fetchurl { url = "https://pypi.python.org/packages/9f/08/a3bb1c045ec602dc680906fc0261c267bed6b3bb4609430aff92c3888ec8/Werkzeug-0.14.1.tar.gz"; sha256 = "c3fd7a7d41976d9f44db327260e263132466836cef6f91512889ed60ad26557c"; };
       doCheck = commonDoCheck;
       buildInputs = commonBuildInputs;
       propagatedBuildInputs = [ ];
       meta = with pkgs.stdenv.lib; {
-        homepage = "http://werkzeug.pocoo.org/";
+        homepage = "https://www.palletsprojects.org/p/werkzeug/";
         license = licenses.bsdOriginal;
-        description = "The Swiss Army knife of Python web development";
+        description = "The comprehensive WSGI web application library.";
       };
     };
 
@@ -203,56 +202,6 @@ let
         homepage = "http://github.com/mitsuhiko/click";
         license = licenses.bsdOriginal;
         description = "A simple wrapper around optparse for powerful command line utilities.";
-      };
-    };
-
-
-
-    "enum-compat" = python.mkDerivation {
-      name = "enum-compat-0.0.2";
-      src = pkgs.fetchurl { url = "https://pypi.python.org/packages/95/6e/26bdcba28b66126f66cf3e4cd03bcd63f7ae330d29ee68b1f6b623550bfa/enum-compat-0.0.2.tar.gz"; sha256 = "939ceff18186a5762ae4db9fa7bfe017edbd03b66526b798dd8245394c8a4192"; };
-      doCheck = commonDoCheck;
-      buildInputs = commonBuildInputs;
-      propagatedBuildInputs = [
-      self."enum34"
-    ];
-      meta = with pkgs.stdenv.lib; {
-        homepage = "https://github.com/jstasiak/enum-compat";
-        license = licenses.mit;
-        description = "enum/enum34 compatibility package";
-      };
-    };
-
-
-
-    "enum34" = python.mkDerivation {
-      name = "enum34-1.1.6";
-      src = pkgs.fetchurl { url = "https://pypi.python.org/packages/bf/3e/31d502c25302814a7c2f1d3959d2a3b3f78e509002ba91aea64993936876/enum34-1.1.6.tar.gz"; sha256 = "8ad8c4783bf61ded74527bffb48ed9b54166685e4230386a9ed9b1279e2df5b1"; };
-      doCheck = commonDoCheck;
-      buildInputs = commonBuildInputs;
-      propagatedBuildInputs = [ ];
-      meta = with pkgs.stdenv.lib; {
-        homepage = "https://bitbucket.org/stoneleaf/enum34";
-        license = licenses.bsdOriginal;
-        description = "Python 3.4 Enum backported to 3.3, 3.2, 3.1, 2.7, 2.6, 2.5, and 2.4";
-      };
-    };
-
-
-
-    "eventlet" = python.mkDerivation {
-      name = "eventlet-0.21.0";
-      src = pkgs.fetchurl { url = "https://pypi.python.org/packages/cb/ec/eae487c106a7e38f86ac4cadafb3eec77d29996f64ca0c7015067538069b/eventlet-0.21.0.tar.gz"; sha256 = "08faffab88c1b08bd53ea28bf084a572c89f7e7648bd9d71e6116ac17a51a15d"; };
-      doCheck = commonDoCheck;
-      buildInputs = commonBuildInputs;
-      propagatedBuildInputs = [
-      self."enum-compat"
-      self."greenlet"
-    ];
-      meta = with pkgs.stdenv.lib; {
-        homepage = "http://eventlet.net";
-        license = licenses.mit;
-        description = "Highly concurrent networking library";
       };
     };
 
@@ -306,8 +255,8 @@ let
 
 
     "pygdbmi" = python.mkDerivation {
-      name = "pygdbmi-0.7.4.4";
-      src = pkgs.fetchurl { url = "https://pypi.python.org/packages/bb/1c/8c8cbd0bb5cf513a905e3ca461cfad578e708a74417182f2a00943136f83/pygdbmi-0.7.4.4.tar.gz"; sha256 = "34cd00925ca98aed87decb6a0451fa094cf31386dc457b47a62bcbf8d905a3d3"; };
+      name = "pygdbmi-0.8.2.0";
+      src = pkgs.fetchurl { url = "https://pypi.python.org/packages/4e/34/a8c86d85e0d3d8df2c289657a55c19408dbdbf0b1468859e7f1a745ae8ff/pygdbmi-0.8.2.0.tar.gz"; sha256 = "47cece65808ca42edf6966ac48e2aedca7ae1c675c4d2f0d001c7f3a7fa245fe"; };
       doCheck = commonDoCheck;
       buildInputs = commonBuildInputs;
       propagatedBuildInputs = [ ];
@@ -320,26 +269,9 @@ let
 
 
 
-    "pypugjs" = python.mkDerivation {
-      name = "pypugjs-4.2.2";
-      src = pkgs.fetchurl { url = "https://pypi.python.org/packages/21/bb/d541110bd5a5c1ecd9dab2778dc9a39ca5a5e9962845e9d3e598962ee3ca/pypugjs-4.2.2.tar.gz"; sha256 = "c99a72a78766d9462d94379a6b489f9864ecdeeeeaf8d0f34b2ce04963f6ec8c"; };
-      doCheck = commonDoCheck;
-      buildInputs = commonBuildInputs;
-      propagatedBuildInputs = [
-      self."six"
-    ];
-      meta = with pkgs.stdenv.lib; {
-        homepage = "http://github.com/matannoam/pypugjs";
-        license = licenses.mit;
-        description = "PugJS syntax template adapter for Django, Jinja2, Mako and Tornado templates - copy of PyJade with the name changed";
-      };
-    };
-
-
-
     "python-engineio" = python.mkDerivation {
-      name = "python-engineio-2.0.1";
-      src = pkgs.fetchurl { url = "https://pypi.python.org/packages/ae/61/199d5693cb077d12fb82baa9505215e0654e50e3cd4d5f3331029312b55f/python-engineio-2.0.1.tar.gz"; sha256 = "266fca0c4ed4576c873458ef06fdc7ae20942210f5e9c5f9bd039debcc672c30"; };
+      name = "python-engineio-2.0.2";
+      src = pkgs.fetchurl { url = "https://pypi.python.org/packages/e5/91/f6fd80298e68b4ca22a1a9cc3091116e2fef22fd8fb017ad9e5c6ec6ddcc/python-engineio-2.0.2.tar.gz"; sha256 = "46c710a72c3b2a8511b0d7963c46e200010f8ea3eb0721ce15603d0f23e993c4"; };
       doCheck = commonDoCheck;
       buildInputs = commonBuildInputs;
       propagatedBuildInputs = [
@@ -355,8 +287,8 @@ let
 
 
     "python-socketio" = python.mkDerivation {
-      name = "python-socketio-1.8.3";
-      src = pkgs.fetchurl { url = "https://pypi.python.org/packages/39/23/b0955fe05bed6d6621754d3b5043e5478cf57646e1e4c1cf55a6fc3f2acb/python-socketio-1.8.3.tar.gz"; sha256 = "822433bcda86924367bccfc64083bae60bd64c89c8fc07f79530458ce5a6dcea"; };
+      name = "python-socketio-1.8.4";
+      src = pkgs.fetchurl { url = "https://pypi.python.org/packages/58/a9/52af6a7ad0805977afc838ed394f8d26d078ef61e8c1bdd632801c58ef3a/python-socketio-1.8.4.tar.gz"; sha256 = "13807ce17e85371d15b31295a43b1fac1c0dba1eb5fc233353a3efd53aa122cc"; };
       doCheck = commonDoCheck;
       buildInputs = commonBuildInputs;
       propagatedBuildInputs = [

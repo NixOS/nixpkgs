@@ -5,7 +5,7 @@ let
   fetchDebianPatch = { name, debname, sha256 }:
     fetchpatch {
       inherit sha256 name;
-      url = "https://anonscm.debian.org/cgit/pkg-multimedia/audiofile.git/plain/debian/patches/${debname}?h=debian/0.3.6-4";
+      url = "https://salsa.debian.org/multimedia-team/audiofile/raw/debian/0.3.6-4/debian/patches/${debname}";
     };
 
 in

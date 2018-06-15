@@ -2,11 +2,11 @@
 
 with lib;
 let
-  diskSize = 1024; # MB
+  diskSize = 1536; # MB
   gce = pkgs.google-compute-engine;
 in
 {
-  imports = [ ../profiles/headless.nix ../profiles/qemu-guest.nix ./grow-partition.nix ];
+  imports = [ ../profiles/headless.nix ../profiles/qemu-guest.nix ];
 
   system.build.googleComputeImage = import ../../lib/make-disk-image.nix {
     name = "google-compute-image";
@@ -14,7 +14,7 @@ in
       PATH=$PATH:${pkgs.stdenv.lib.makeBinPath [ pkgs.gnutar pkgs.gzip ]}
       pushd $out
       mv $diskImage disk.raw
-      tar -Szcf nixos-image-${config.system.nixosLabel}-${pkgs.stdenv.system}.raw.tar.gz disk.raw
+      tar -Szcf nixos-image-${config.system.nixos.label}-${pkgs.stdenv.system}.raw.tar.gz disk.raw
       rm $out/disk.raw
       popd
     '';
@@ -29,6 +29,7 @@ in
     autoResize = true;
   };
 
+  boot.growPartition = true;
   boot.kernelParams = [ "console=ttyS0" "panic=1" "boot.panic_on_fail" ];
   boot.initrd.kernelModules = [ "virtio_scsi" ];
   boot.kernelModules = [ "virtio_pci" "virtio_net" ];
@@ -56,6 +57,12 @@ in
   # Always include cryptsetup so that NixOps can use it.
   environment.systemPackages = [ pkgs.cryptsetup ];
 
+  # Make sure GCE image does not replace host key that NixOps sets
+  environment.etc."default/instance_configs.cfg".text = lib.mkDefault ''
+    [InstanceSetup]
+    set_host_keys = false
+  '';
+
   # Rely on GCP's firewall instead
   networking.firewall.enable = mkDefault false;
 
@@ -67,6 +74,9 @@ in
   networking.timeServers = [ "metadata.google.internal" ];
 
   networking.usePredictableInterfaceNames = false;
+
+  # GC has 1460 MTU
+  networking.interfaces.eth0.mtu = 1460;
 
   # allow the google-accounts-daemon to manage users
   users.mutableUsers = true;
@@ -211,7 +221,7 @@ in
           echo "Obtaining SSH keys..."
           mkdir -m 0700 -p /root/.ssh
           AUTH_KEYS=$(${mktemp})
-          ${wget} -O $AUTH_KEYS http://metadata.google.internal/computeMetadata/v1/project/attributes/sshKeys
+          ${wget} -O $AUTH_KEYS http://metadata.google.internal/computeMetadata/v1/instance/attributes/sshKeys
           if [ -s $AUTH_KEYS ]; then
 
             # Read in key one by one, split in case Google decided
@@ -236,6 +246,18 @@ in
             false
           fi
           rm -f $AUTH_KEYS
+          SSH_HOST_KEYS_DIR=$(${mktemp} -d)
+          ${wget} -O $SSH_HOST_KEYS_DIR/ssh_host_ed25519_key http://metadata.google.internal/computeMetadata/v1/instance/attributes/ssh_host_ed25519_key
+          ${wget} -O $SSH_HOST_KEYS_DIR/ssh_host_ed25519_key.pub http://metadata.google.internal/computeMetadata/v1/instance/attributes/ssh_host_ed25519_key_pub
+          if [ -s $SSH_HOST_KEYS_DIR/ssh_host_ed25519_key -a -s $SSH_HOST_KEYS_DIR/ssh_host_ed25519_key.pub ]; then
+              mv -f $SSH_HOST_KEYS_DIR/ssh_host_ed25519_key* /etc/ssh/
+              chmod 600 /etc/ssh/ssh_host_ed25519_key
+              chmod 644 /etc/ssh/ssh_host_ed25519_key.pub
+          else
+              echo "Setup of ssh host keys from http://metadata.google.internal/computeMetadata/v1/instance/attributes/ failed."
+              false
+          fi
+          rm -rf $SSH_HOST_KEYS_DIR
         '';
       serviceConfig.Type = "oneshot";
       serviceConfig.RemainAfterExit = true;

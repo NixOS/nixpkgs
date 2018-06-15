@@ -1,30 +1,41 @@
-{ stdenv, fetchurl, fetchpatch
-, pkgconfig, makeWrapper
+{ stdenv, fetchurl, fetchgit
+, pkgconfig, makeWrapper, libtool, autoconf, automake
 , coreutils, libxml2, gnutls, devicemapper, perl, python2, attr
 , iproute, iptables, readline, lvm2, utillinux, systemd, libpciaccess, gettext
 , libtasn1, ebtables, libgcrypt, yajl, pmutils, libcap_ng, libapparmor
 , dnsmasq, libnl, libpcap, libxslt, xhtml1, numad, numactl, perlPackages
-, curl, libiconv, gmp, xen, zfs, parted
+, curl, libiconv, gmp, xen, zfs, parted, bridge-utils, dmidecode
 }:
 
 with stdenv.lib;
 
-# if you update, also bump <nixpkgs/pkgs/development/python-modules/libvirt/default.nix> or it will break
-stdenv.mkDerivation rec {
+# if you update, also bump <nixpkgs/pkgs/development/python-modules/libvirt/default.nix> and SysVirt in <nixpkgs/pkgs/top-level/perl-packages.nix>
+let
+  buildFromTarball = stdenv.isDarwin;
+in stdenv.mkDerivation rec {
   name = "libvirt-${version}";
-  version = "3.10.0";
+  version = "4.4.0";
 
-  src = fetchurl {
-    url = "http://libvirt.org/sources/${name}.tar.xz";
-    sha256 = "03kb37iv3dvvdlslznlc0njvjpmq082lczmsslz5p4fcwb50kwfz";
-  };
-
-  patches = [ ./build-on-bsd.patch ];
+  src =
+    if buildFromTarball then
+      fetchurl {
+        url = "http://libvirt.org/sources/${name}.tar.xz";
+        sha256 = "1djaz3b5n4ksyw6z4n4qs82g5zyxdl2gm4rsb5181bv1rdiisqs6";
+      }
+    else
+      fetchgit {
+        url = git://libvirt.org/libvirt.git;
+        rev = "v${version}";
+        sha256 = "0rhas7hbisfh0aib75nsh9wspxj8pvcqagds1mp2jgfls7hfna0r";
+        fetchSubmodules = true;
+      };
 
   nativeBuildInputs = [ makeWrapper pkgconfig ];
   buildInputs = [
     libxml2 gnutls perl python2 readline gettext libtasn1 libgcrypt yajl
     libxslt xhtml1 perlPackages.XMLXPath curl libpcap
+  ] ++ optionals (!buildFromTarball) [
+    libtool autoconf automake
   ] ++ optionals stdenv.isLinux [
     libpciaccess devicemapper lvm2 utillinux systemd libnl numad zfs
     libapparmor libcap_ng numactl attr parted
@@ -34,17 +45,16 @@ stdenv.mkDerivation rec {
     libiconv gmp
   ];
 
-  preConfigure = optionalString stdenv.isLinux ''
-    PATH=${stdenv.lib.makeBinPath [ iproute iptables ebtables lvm2 systemd ]}:$PATH
-    substituteInPlace configure \
-      --replace 'as_dummy="/bin:/usr/bin:/usr/sbin"' 'as_dummy="${numad}/bin"'
+  preConfigure = ''
+    ${ optionalString (!buildFromTarball) "./bootstrap --no-git --gnulib-srcdir=$(pwd)/.gnulib" }
+
+    PATH=${stdenv.lib.makeBinPath ([ dnsmasq ] ++ optionals stdenv.isLinux [ iproute iptables ebtables lvm2 systemd numad ])}:$PATH
 
     # the path to qemu-kvm will be stored in VM's .xml and .save files
     # do not use "''${qemu_kvm}/bin/qemu-kvm" to avoid bound VMs to particular qemu derivations
     substituteInPlace src/lxc/lxc_conf.c \
       --replace 'lxc_path,' '"/run/libvirt/nix-emulators/libvirt_lxc",'
-  '' + ''
-    PATH=${dnsmasq}/bin:$PATH
+
     patchShebangs . # fixes /usr/bin/python references
   '';
 
@@ -78,18 +88,19 @@ stdenv.mkDerivation rec {
   ];
 
   postInstall = ''
-    sed -i 's/ON_SHUTDOWN=suspend/ON_SHUTDOWN=''${ON_SHUTDOWN:-suspend}/' $out/libexec/libvirt-guests.sh
     substituteInPlace $out/libexec/libvirt-guests.sh \
-      --replace "$out/bin" "${gettext}/bin" \
-      --replace "lock/subsys" "lock"
-    sed -e "/gettext\.sh/a \\\n# Added in nixpkgs:\ngettext() { \"${gettext}/bin/gettext\" \"\$@\"; }" \
-        -i "$out/libexec/libvirt-guests.sh"
-
+      --replace 'ON_SHUTDOWN=suspend' 'ON_SHUTDOWN=''${ON_SHUTDOWN:-suspend}' \
+      --replace "$out/bin"            '${gettext}/bin' \
+      --replace 'lock/subsys'         'lock' \
+      --replace 'gettext.sh'          'gettext.sh
+  # Added in nixpkgs:
+  gettext() { "${gettext}/bin/gettext" "$@"; }
+  '
   '' + optionalString stdenv.isLinux ''
     substituteInPlace $out/lib/systemd/system/libvirtd.service --replace /bin/kill ${coreutils}/bin/kill
     rm $out/lib/systemd/system/{virtlockd,virtlogd}.*
     wrapProgram $out/sbin/libvirtd \
-      --prefix PATH : /run/libvirt/nix-emulators:${makeBinPath [ iptables iproute pmutils numad numactl ]}
+      --prefix PATH : /run/libvirt/nix-emulators:${makeBinPath [ iptables iproute pmutils numad numactl bridge-utils dmidecode dnsmasq ebtables ]}
   '';
 
   enableParallelBuilding = true;

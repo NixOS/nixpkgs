@@ -1,6 +1,7 @@
-{ stdenv, lib, fetchurl, fetchpatch, fetchFromSavannah, fetchFromGitHub
+{ stdenv, buildPackages, lib
+, fetchurl, fetchpatch, fetchFromSavannah, fetchFromGitHub
 , zlib, openssl, gdbm, ncurses, readline, groff, libyaml, libffi, autoreconfHook, bison
-, autoconf, darwin ? null
+, autoconf, libiconv, libobjc, libunwind, Foundation
 , buildEnv, bundler, bundix
 } @ args:
 
@@ -22,14 +23,22 @@ let
   # Contains the ruby version heuristics
   rubyVersion = import ./ruby-version.nix { inherit lib; };
 
+  # Needed during postInstall
+  buildRuby =
+    if stdenv.hostPlatform == stdenv.buildPlatform
+    then "$out/bin/ruby"
+    else "${buildPackages.ruby}/bin/ruby";
+
   generic = { version, sha256 }: let
     ver = version;
     tag = ver.gitTag;
     isRuby20 = ver.majMin == "2.0";
     isRuby21 = ver.majMin == "2.1";
+    isRuby25 = ver.majMin == "2.5";
     baseruby = self.override { useRailsExpress = false; };
     self = lib.makeOverridable (
-      { stdenv, lib, fetchurl, fetchpatch, fetchFromSavannah, fetchFromGitHub
+      { stdenv, buildPackages, lib
+      , fetchurl, fetchpatch, fetchFromSavannah, fetchFromGitHub
       , useRailsExpress ? true
       , zlib, zlibSupport ? true
       , openssl, opensslSupport ? true
@@ -39,8 +48,8 @@ let
       , libyaml, yamlSupport ? true
       , libffi, fiddleSupport ? true
       , autoreconfHook, bison, autoconf
-      , darwin ? null
       , buildEnv, bundler, bundix
+      , libiconv, libobjc, libunwind, Foundation
       }:
       let rubySrc =
         if useRailsExpress then fetchFromGitHub {
@@ -64,9 +73,13 @@ let
             unpackdir rubySrc;
 
         # Have `configure' avoid `/usr/bin/nroff' in non-chroot builds.
-        NROFF = "${groff}/bin/nroff";
+        NROFF = if docSupport then "${groff}/bin/nroff" else null;
 
-        nativeBuildInputs = ops useRailsExpress [ autoreconfHook bison ];
+        nativeBuildInputs =
+             ops useRailsExpress [ autoreconfHook bison ]
+          ++ ops (stdenv.buildPlatform != stdenv.hostPlatform) [
+               buildPackages.ruby
+             ];
         buildInputs =
              (op fiddleSupport libffi)
           ++ (ops cursesSupport [ ncurses readline ])
@@ -75,16 +88,15 @@ let
           ++ (op opensslSupport openssl)
           ++ (op gdbmSupport gdbm)
           ++ (op yamlSupport libyaml)
+          ++ (op isRuby25 autoconf)
           # Looks like ruby fails to build on darwin without readline even if curses
           # support is not enabled, so add readline to the build inputs if curses
           # support is disabled (if it's enabled, we already have it) and we're
           # running on darwin
-          ++ (op (!cursesSupport && stdenv.isDarwin) readline)
-          ++ (ops stdenv.isDarwin (with darwin; [ libiconv libobjc libunwind ]));
+          ++ op (!cursesSupport && stdenv.isDarwin) readline
+          ++ ops stdenv.isDarwin [ libiconv libobjc libunwind Foundation ];
 
         enableParallelBuilding = true;
-
-        hardeningDisable = lib.optional isRuby20 "format";
 
         patches =
           (import ./patchsets.nix {
@@ -97,12 +109,10 @@ let
           pushd ${sourceRoot}/rubygems
           patch -p1 < ${rubygemsPatch}
           popd
-        '' + opString isRuby21 ''
-          rm "$sourceRoot/enc/unicode/name2ctype.h"
         '';
 
-        postPatch = if isRuby21 then ''
-          rm tool/config_files.rb
+        postPatch = if isRuby25 then ''
+          sed -i configure.ac -e '/config.guess/d'
           cp ${config}/config.guess tool/
           cp ${config}/config.sub tool/
         ''
@@ -121,28 +131,35 @@ let
             "--with-out-ext=tk"
             # on yosemite, "generating encdb.h" will hang for a very long time without this flag
             "--with-setjmp-type=setjmp"
-          ];
+          ]
+          ++ op (stdenv.hostPlatform != stdenv.buildPlatform)
+             "--with-baseruby=${buildRuby}";
+
+        preInstall = ''
+          # Ruby installs gems here itself now.
+          mkdir -pv "$out/${passthru.gemPath}"
+          export GEM_HOME="$out/${passthru.gemPath}"
+        '';
 
         installFlags = stdenv.lib.optionalString docSupport "install-doc";
         # Bundler tries to create this directory
         postInstall = ''
           # Update rubygems
           pushd rubygems
-          $out/bin/ruby setup.rb
+          ${buildRuby} setup.rb
           popd
 
           # Remove unnecessary groff reference from runtime closure, since it's big
           sed -i '/NROFF/d' $out/lib/ruby/*/*/rbconfig.rb
 
           # Bundler tries to create this directory
-          mkdir -pv $out/${passthru.gemPath}
           mkdir -p $out/nix-support
           cat > $out/nix-support/setup-hook <<EOF
           addGemPath() {
             addToSearchPath GEM_PATH \$1/${passthru.gemPath}
           }
 
-          envHooks+=(addGemPath)
+          addEnvHooks "$hostOffset" addGemPath
           EOF
         '' + opString useRailsExpress ''
           rbConfig=$(find $out/lib/ruby -name rbconfig.rb)
@@ -181,43 +198,27 @@ let
     ) args; in self;
 
 in {
-  ruby_2_0_0 = generic {
-    version = rubyVersion "2" "0" "0" "p648";
+  ruby_2_3 = generic {
+    version = rubyVersion "2" "3" "7" "";
     sha256 = {
-      src = "1y3n4c6xw2wki7pyjpq5zpbgxnw5i3jc8mcpj6rk7hs995mvv446";
-      git = "0ncjfq4hfqj9kcr8pbll6kypwnmcgs8w7l4466qqfyv7jj3yjd76";
+      src = "0zvx5kdp1frjs9n95n7ba7dy0alax33wi3nj8034m3ppvnf39k9m";
+      git = "11wbzw2ywwfnvlkg3qjg0as2pzk5zyk63y2iis42d91lg1l2flrk";
     };
   };
 
-  ruby_2_1_10 = generic {
-    version = rubyVersion "2" "1" "10" "";
+  ruby_2_4 = generic {
+    version = rubyVersion "2" "4" "4" "";
     sha256 = {
-      src = "086x66w51lg41abjn79xb7f6xsryymkcc3nvakmkjnjyg96labpv";
-      git = "133phd5r5y0np5lc9nqif93l7yb13yd52aspyl6c46z5jhvhyvfi";
+      src = "0nmfr2lijik6cykk0zbj11zcapcrvmdvq83k3r6q3k74g4d1qkr5";
+      git = "103cs7hz1v0h84lbrippl87s4lawi20m406rs5dgxl2gr2wyjpy5";
     };
   };
 
-  ruby_2_2_8 = generic {
-    version = rubyVersion "2" "2" "8" "";
+  ruby_2_5 = generic {
+    version = rubyVersion "2" "5" "1" "";
     sha256 = {
-      src = "12i6v5i0djl4xx3x7fq12snqb5d4drqjmnwqs05fby4bagcbjdwg";
-      git = "16nw0795nhrj13crp5x4jis8hmi3gsyjl96pwk698wlrb89lf9bw";
-    };
-  };
-
-  ruby_2_3_5 = generic {
-    version = rubyVersion "2" "3" "5" "";
-    sha256 = {
-      src = "1k6x4g68lq30i0myip5bn56rcbwjxmqq95j1fkdgbvwbnaxzfqjl";
-      git = "0spwqz4b5xxqzs13azsd4xz4jkc3is7d9q4s6s2qilb8ib4863jl";
-    };
-  };
-
-  ruby_2_4_2 = generic {
-    version = rubyVersion "2" "4" "2" "";
-    sha256 = {
-      src = "174cdiz3am1f76vsnm3iqi9c5vqphypbf9kbxx6vqqmj01gfgfck";
-      git = "1w83kzak3m6vv3k09ynfw9vpgc7vpmij3x3zmgrhwm4ds1sp5irl";
+      src = "1c99k0fjaq7k09104h1b1cqx6mrk2b14ic1jjnxc6yav68i1ij6s";
+      git = "1j0fd16aq9x98n0kq9c3kfp2sh6xcsq8q4733p0wfqjh3vz50kyj";
     };
   };
 }

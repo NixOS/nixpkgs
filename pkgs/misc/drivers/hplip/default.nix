@@ -11,16 +11,16 @@
 let
 
   name = "hplip-${version}";
-  version = "3.17.10";
+  version = "3.18.3";
 
   src = fetchurl {
     url = "mirror://sourceforge/hplip/${name}.tar.gz";
-    sha256 = "0v27hg856b5z2rilczcbfgz8ksxn0n810g1glac3mxkj8qbl8wqg";
+    sha256 = "0x5xs86v18w46rxz5whc15bl4fb7p4km6xqjpwzclp83nl7rl01y";
   };
 
   plugin = fetchurl {
-    url = "http://www.openprinting.org/download/printdriver/auxfiles/HP/plugins/${name}-plugin.run";
-    sha256 = "07am3dnl0ipgfswz5wndprryljh9rqbfhq7mm4d4yyj3bdnnzlig";
+    url = "https://www.openprinting.org/download/printdriver/auxfiles/HP/plugins/${name}-plugin.run";
+    sha256 = "11nc3cifhd2h2c7p0dr2jjzrg3fd5j43ih1wy0m186l6wcgdjssw";
   };
 
   hplipState = substituteAll {
@@ -57,6 +57,7 @@ pythonPackages.buildPythonApplication {
     dbus
     net_snmp
     openssl
+    zlib
   ];
 
   nativeBuildInputs = [
@@ -69,21 +70,22 @@ pythonPackages.buildPythonApplication {
     pygobject2
     reportlab
     usbutils
+    sip
   ] ++ stdenv.lib.optionals withQt5 [
     pyqt5
   ];
 
-  makeWrapperArgs = [ ''--prefix PATH : "${nettools}/bin"'' ];
+  makeWrapperArgs = [ "--prefix" "PATH" ":" "${nettools}/bin" ];
 
   prePatch = ''
     # HPLIP hardcodes absolute paths everywhere. Nuke from orbit.
     find . -type f -exec sed -i \
-      -e s,/etc/hp,$out/etc/hp, \
-      -e s,/etc/sane.d,$out/etc/sane.d, \
-      -e s,/usr/include/libusb-1.0,${libusb1.dev}/include/libusb-1.0, \
-      -e s,/usr/share/hal/fdi/preprobe/10osvendor,$out/share/hal/fdi/preprobe/10osvendor, \
-      -e s,/usr/lib/systemd/system,$out/lib/systemd/system, \
-      -e s,/var/lib/hp,$out/var/lib/hp, \
+      -e s,/etc/hp,$out/etc/hp,g \
+      -e s,/etc/sane.d,$out/etc/sane.d,g \
+      -e s,/usr/include/libusb-1.0,${libusb1.dev}/include/libusb-1.0,g \
+      -e s,/usr/share/hal/fdi/preprobe/10osvendor,$out/share/hal/fdi/preprobe/10osvendor,g \
+      -e s,/usr/lib/systemd/system,$out/lib/systemd/system,g \
+      -e s,/var/lib/hp,$out/var/lib/hp,g \
       {} +
   '';
 
@@ -96,6 +98,8 @@ pythonPackages.buildPythonApplication {
       --with-systraydir=$out/xdg/autostart
       --with-mimedir=$out/etc/cups
       --enable-policykit
+      --disable-qt4
+      ${stdenv.lib.optionalString withQt5 "--enable-qt5"}
     "
 
     export makeFlags="
@@ -140,9 +144,6 @@ pythonPackages.buildPythonApplication {
     mkdir -p $out/var/lib/hp
     cp ${hplipState} $out/var/lib/hp/hplip.state
 
-    mkdir -p $out/etc/sane.d/dll.d
-    mv $out/etc/sane.d/dll.conf $out/etc/sane.d/dll.d/hpaio.conf
-
     rm $out/etc/udev/rules.d/56-hpmud.rules
   '';
 
@@ -183,7 +184,7 @@ pythonPackages.buildPythonApplication {
 
   meta = with stdenv.lib; {
     description = "Print, scan and fax HP drivers for Linux";
-    homepage = http://hplipopensource.com/;
+    homepage = https://developers.hp.com/hp-linux-imaging-and-printing;
     license = if withPlugin
       then licenses.unfree
       else with licenses; [ mit bsd2 gpl2Plus ];

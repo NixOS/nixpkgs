@@ -151,11 +151,6 @@ in
 
   config = mkIf cfg.enable {
 
-    assertions = [
-      { assertion = (cfg.channel >= 1 && cfg.channel <= 13);
-        message = "channel must be between 1 and 13";
-      }];
-
     environment.systemPackages =  [ pkgs.hostapd ];
 
     systemd.services.hostapd =

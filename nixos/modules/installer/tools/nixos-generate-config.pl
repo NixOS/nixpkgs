@@ -577,15 +577,14 @@ $bootLoaderConfig
   # Set your time zone.
   # time.timeZone = "Europe/Amsterdam";
 
-  # List packages installed in system profile. To search by name, run:
-  # \$ nix-env -qaP | grep wget
+  # List packages installed in system profile. To search, run:
+  # \$ nix search wget
   # environment.systemPackages = with pkgs; [
   #   wget vim
   # ];
 
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.
-  # programs.bash.enableCompletion = true;
   # programs.mtr.enable = true;
   # programs.gnupg.agent = { enable = true; enableSSHSupport = true; };
 
@@ -602,6 +601,10 @@ $bootLoaderConfig
 
   # Enable CUPS to print documents.
   # services.printing.enable = true;
+
+  # Enable sound.
+  # sound.enable = true;
+  # hardware.pulseaudio.enable = true;
 
   # Enable the X11 windowing system.
   # services.xserver.enable = true;
@@ -625,7 +628,7 @@ $bootLoaderConfig
   # compatible, in order to avoid breaking some software such as database
   # servers. You should change this only after NixOS release notes say you
   # should.
-  system.stateVersion = "${\(qw(@nixosRelease@))}"; # Did you read the comment?
+  system.nixos.stateVersion = "${\(qw(@release@))}"; # Did you read the comment?
 
 }
 EOF

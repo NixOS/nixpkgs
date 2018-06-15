@@ -1,7 +1,7 @@
 { fetchurl, stdenv, lib, pkgconfig, gst-plugins-base, aalib, cairo
 , flac, libjpeg, zlib, speex, libpng, libdv, libcaca, libvpx
 , libiec61883, libavc1394, taglib, libpulseaudio, gdk_pixbuf, orc
-, glib, gstreamer, bzip2, libsoup, libshout, ncurses, libintlOrEmpty
+, glib, gstreamer, bzip2, libsoup, libshout, ncurses, libintl
 , # Whether to build no plugins that have external dependencies
   # (except the PulseAudio plugin).
   minimalDeps ? false
@@ -23,14 +23,11 @@ stdenv.mkDerivation rec {
   configureFlags = [ "--enable-experimental" "--disable-oss" ];
 
   buildInputs =
-    [ pkgconfig glib gstreamer gst-plugins-base ]
+    [ pkgconfig glib gstreamer gst-plugins-base libintl ]
     ++ lib.optional stdenv.isLinux libpulseaudio
-    ++ libintlOrEmpty
     ++ lib.optionals (!minimalDeps)
       [ aalib libcaca cairo libdv flac libjpeg libpng speex
         taglib bzip2 libvpx gdk_pixbuf orc libsoup libshout ];
-
-  NIX_LDFLAGS = if stdenv.isDarwin then "-lintl" else null;
 
   enableParallelBuilding = true;
 

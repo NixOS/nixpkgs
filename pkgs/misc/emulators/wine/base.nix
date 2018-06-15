@@ -6,9 +6,6 @@
   buildScript ? null, configureFlags ? ""
 }:
 
-assert stdenv.isLinux;
-assert stdenv.cc.cc.isGNU or false;
-
 with import ./util.nix { inherit lib; };
 
 stdenv.mkDerivation ((lib.optionalAttrs (! isNull buildScript) {
@@ -36,10 +33,10 @@ stdenv.mkDerivation ((lib.optionalAttrs (! isNull buildScript) {
   ++ lib.optional odbcSupport            pkgs.unixODBC
   ++ lib.optional netapiSupport          pkgs.samba4
   ++ lib.optional cursesSupport          pkgs.ncurses
-  ++ lib.optional vaSupport              pkgs.libva-full
+  ++ lib.optional vaSupport              pkgs.libva
   ++ lib.optional pcapSupport            pkgs.libpcap
   ++ lib.optional v4lSupport             pkgs.libv4l
-  ++ lib.optional saneSupport            pkgs.saneBackends
+  ++ lib.optional saneSupport            pkgs.sane-backends
   ++ lib.optional gsmSupport             pkgs.gsm
   ++ lib.optional gphoto2Support         pkgs.libgphoto2
   ++ lib.optional ldapSupport            pkgs.openldap
@@ -48,15 +45,21 @@ stdenv.mkDerivation ((lib.optionalAttrs (! isNull buildScript) {
   ++ lib.optional pulseaudioSupport      pkgs.libpulseaudio
   ++ lib.optional xineramaSupport        pkgs.xorg.libXinerama
   ++ lib.optional udevSupport            pkgs.udev
+  ++ lib.optional vulkanSupport          pkgs.vulkan-loader
   ++ lib.optionals gstreamerSupport      (with pkgs.gst_all_1; [ gstreamer gst-plugins-base gst-plugins-good gst-plugins-bad gst-plugins-ugly gst-libav ])
   ++ lib.optionals gtkSupport    [ pkgs.gtk3 pkgs.glib ]
   ++ lib.optionals openclSupport [ pkgs.opencl-headers pkgs.ocl-icd ]
   ++ lib.optionals xmlSupport    [ pkgs.libxml2 pkgs.libxslt ]
   ++ lib.optionals tlsSupport    [ pkgs.openssl pkgs.gnutls ]
-  ++ lib.optionals openglSupport [ pkgs.mesa pkgs.mesa_noglu.osmesa pkgs.libdrm ]
-  ++ (with pkgs.xorg; [
-    libX11  libXi libXcursor libXrandr libXrender libXxf86vm libXcomposite libXext
-  ])));
+  ++ lib.optionals openglSupport [ pkgs.libGLU_combined pkgs.mesa_noglu.osmesa pkgs.libdrm ]
+  ++ lib.optionals stdenv.isDarwin (with pkgs.buildPackages.darwin.apple_sdk.frameworks; [
+     CoreServices Foundation ForceFeedback AppKit OpenGL IOKit DiskArbitration Security
+     ApplicationServices AudioToolbox CoreAudio AudioUnit CoreMIDI OpenAL OpenCL Cocoa Carbon
+  ])
+  ++ lib.optionals stdenv.isLinux  (with pkgs.xorg; [
+     libXi libXcursor libXrandr libXrender libXxf86vm libXcomposite libXext
+  ])
+  ++ [ pkgs.xorg.libX11 ]));
 
   # Wine locates a lot of libraries dynamically through dlopen().  Add
   # them to the RPATH so that the user doesn't have to set them in
@@ -83,7 +86,7 @@ stdenv.mkDerivation ((lib.optionalAttrs (! isNull buildScript) {
   # Add capability to ignore known failing tests
   # and enable doCheck
   doCheck = false;
-  
+
   postInstall = let
     links = prefix: pkg: "ln -s ${pkg} $out/${prefix}/${pkg.name}";
   in ''
@@ -92,7 +95,7 @@ stdenv.mkDerivation ((lib.optionalAttrs (! isNull buildScript) {
           ((map (links "share/wine/gecko") geckos)
         ++ (map (links "share/wine/mono")  monos))}
   '' + lib.optionalString supportFlags.gstreamerSupport ''
-    for i in wine wine64; do
+    for i in wine ; do
       if [ -e "$out/bin/$i" ]; then
         wrapProgram "$out/bin/$i" \
           --argv0 "" \
@@ -100,8 +103,13 @@ stdenv.mkDerivation ((lib.optionalAttrs (! isNull buildScript) {
       fi
     done
   '';
-  
+
   enableParallelBuilding = true;
+
+  # https://bugs.winehq.org/show_bug.cgi?id=43530
+  # https://github.com/NixOS/nixpkgs/issues/31989
+  hardeningDisable = [ "bindnow" ]
+    ++ lib.optional (stdenv.hostPlatform.isDarwin) "fortify";
 
   passthru = { inherit pkgArches; };
   meta = {

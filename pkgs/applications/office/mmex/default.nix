@@ -17,7 +17,7 @@ in
 
     meta = {
       description = "Easy-to-use personal finance software";
-      homepage = http://www.moneymanagerex.org/;
+      homepage = https://www.moneymanagerex.org/;
       license = stdenv.lib.licenses.gpl2Plus;
       maintainers = with stdenv.lib.maintainers; [viric];
       platforms = with stdenv.lib.platforms; linux;

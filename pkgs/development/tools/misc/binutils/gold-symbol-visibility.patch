@@ -1,0 +1,79 @@
+commit 8564af037f5c4c6d2744a89497691359205b2bbc
+Author: Shea Levy <shea@shealevy.com>
+Date:   Mon Mar 19 10:52:40 2018 -0400
+
+    Revert "Allow multiply-defined absolute symbols when they have the same value."
+    
+    This reverts commit 5dc824ed42cd173c1525f5abc76f4091f11a4dbc.
+
+diff --git a/gold/ChangeLog-2017 b/gold/ChangeLog-2017
+index b2a47710b5..d7ca1b48c0 100644
+--- a/gold/ChangeLog-2017
++++ b/gold/ChangeLog-2017
+@@ -114,11 +114,6 @@
+ 	(localedir): Define as @localedir@.
+ 	(gnulocaledir, gettextsrcdir): Use @datarootdir@.
+ 
+-2017-11-28  Cary Coutant  <ccoutant@gmail.com>
+-
+-	* resolve.cc (Symbol_table::resolve): Allow multiply-defined absolute
+-	symbols when they have the same value.
+-
+ 2017-11-28  Cary Coutant  <ccoutant@gmail.com>
+ 
+ 	* object.h (class Sized_relobj_file): Remove discarded_eh_frame_shndx_.
+diff --git a/gold/resolve.cc b/gold/resolve.cc
+index 4a5784cf8b..803576bfed 100644
+--- a/gold/resolve.cc
++++ b/gold/resolve.cc
+@@ -247,28 +247,18 @@ Symbol_table::resolve(Sized_symbol<size>* to,
+ 		      Object* object, const char* version,
+ 		      bool is_default_version)
+ {
+-  bool to_is_ordinary;
+-  const unsigned int to_shndx = to->shndx(&to_is_ordinary);
+-
+   // It's possible for a symbol to be defined in an object file
+   // using .symver to give it a version, and for there to also be
+   // a linker script giving that symbol the same version.  We
+   // don't want to give a multiple-definition error for this
+   // harmless redefinition.
++  bool to_is_ordinary;
+   if (to->source() == Symbol::FROM_OBJECT
+       && to->object() == object
+-      && to->is_defined()
+       && is_ordinary
++      && to->is_defined()
++      && to->shndx(&to_is_ordinary) == st_shndx
+       && to_is_ordinary
+-      && to_shndx == st_shndx
+-      && to->value() == sym.get_st_value())
+-    return;
+-
+-  // Likewise for an absolute symbol defined twice with the same value.
+-  if (!is_ordinary
+-      && st_shndx == elfcpp::SHN_ABS
+-      && !to_is_ordinary
+-      && to_shndx == elfcpp::SHN_ABS
+       && to->value() == sym.get_st_value())
+     return;
+ 
+@@ -360,8 +350,8 @@ Symbol_table::resolve(Sized_symbol<size>* to,
+       && (sym.get_st_bind() == elfcpp::STB_WEAK
+ 	  || to->binding() == elfcpp::STB_WEAK)
+       && orig_st_shndx != elfcpp::SHN_UNDEF
++      && to->shndx(&to_is_ordinary) != elfcpp::SHN_UNDEF
+       && to_is_ordinary
+-      && to_shndx != elfcpp::SHN_UNDEF
+       && sym.get_st_size() != 0    // Ignore weird 0-sized symbols.
+       && to->symsize() != 0
+       && (sym.get_st_type() != to->type()
+@@ -372,7 +362,7 @@ Symbol_table::resolve(Sized_symbol<size>* to,
+     {
+       Symbol_location fromloc
+           = { object, orig_st_shndx, static_cast<off_t>(sym.get_st_value()) };
+-      Symbol_location toloc = { to->object(), to_shndx,
++      Symbol_location toloc = { to->object(), to->shndx(&to_is_ordinary),
+ 				static_cast<off_t>(to->value()) };
+       this->candidate_odr_violations_[to->name()].insert(fromloc);
+       this->candidate_odr_violations_[to->name()].insert(toloc);

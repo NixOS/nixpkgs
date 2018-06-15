@@ -10,11 +10,11 @@ let
 
 in stdenv.mkDerivation rec {
   name = "libxml2-${version}";
-  version = "2.9.7";
+  version = "2.9.8";
 
   src = fetchurl {
     url = "http://xmlsoft.org/sources/${name}.tar.gz";
-    sha256 = "034hylzspvkm0p4bczqbf8q05a7r2disr8dz725x4bin61ymwg7n";
+    sha256 = "0ci7is75bwqqw2p32vxvrk6ds51ik7qgx73m920rakv5jlayax0b";
   };
 
   outputs = [ "bin" "dev" "out" "man" "doc" ]
@@ -36,7 +36,8 @@ in stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  doCheck = (stdenv.hostPlatform == stdenv.buildPlatform) && !stdenv.isDarwin;
+  doCheck = (stdenv.hostPlatform == stdenv.buildPlatform) && !stdenv.isDarwin &&
+    hostPlatform.libc != "musl";
 
   crossAttrs = lib.optionalAttrs (hostPlatform.libc == "msvcrt") {
     # creating the DLL is broken ATM

@@ -10,7 +10,7 @@ let
   arch = if stdenv.isx86_64 then "x64"
             else if stdenv.isi686 then "ia32"
             else if stdenv.isAarch64 then "arm64"
-            else if stdenv.isArm then "arm"
+            else if stdenv.isAarch32 then "arm"
             else throw "Unknown architecture for v8";
   git_url = "https://chromium.googlesource.com";
   clangFlag = if stdenv.isDarwin then "1" else "0";
@@ -156,10 +156,12 @@ stdenv.mkDerivation rec {
   '';
 
   nativeBuildInputs = [ which ];
-  buildInputs = [ readline python icu patchelf ]
-  ++ stdenv.lib.optionals stdenv.isDarwin [ cctools ];
+  buildInputs = [ readline python icu ]
+    ++ stdenv.lib.optional stdenv.isDarwin cctools
+    ++ stdenv.lib.optional stdenv.isLinux patchelf;
 
-  NIX_CFLAGS_COMPILE = "-Wno-error=strict-overflow -Wno-error=unused-function -Wno-error=attributes";
+  NIX_CFLAGS_COMPILE = "-Wno-error=strict-overflow -Wno-error=unused-function -Wno-error=attributes"
+    + stdenv.lib.optionalString stdenv.cc.isClang " -Wno-error=unused-lambda-capture";
 
   buildFlags = [
     "LINK=c++"

@@ -25,7 +25,6 @@
 , ffmpegProgram ? true # Build ffmpeg executable
 , ffplayProgram ? true # Build ffplay executable
 , ffprobeProgram ? true # Build ffprobe executable
-, ffserverProgram ? true # Build ffserver executable
 , qtFaststartProgram ? true # Build qt-faststart executable
 /*
  *  Library options
@@ -98,13 +97,14 @@
 , libXv ? null # Xlib support
 , lzma ? null # xz-utils
 , nvenc ? false, nvidia-video-sdk ? null # NVIDIA NVENC support
+, callPackage # needed for NVENC to access external ffmpeg nvidia headers
 , openal ? null # OpenAL 1.1 capture support
 #, opencl ? null # OpenCL code
 , opencore-amr ? null # AMR-NB de/encoder & AMR-WB decoder
 #, opencv ? null # Video filtering
-, openglExtlib ? false, mesa ? null # OpenGL rendering
+, openglExtlib ? false, libGLU_combined ? null # OpenGL rendering
 #, openh264 ? null # H.264/AVC encoder
-, openjpeg_1 ? null # JPEG 2000 de/encoder
+, openjpeg ? null # JPEG 2000 de/encoder
 , opensslExtlib ? false, openssl ? null
 , libpulseaudio ? null # Pulseaudio input support
 , rtmpdump ? null # RTMP[E] support
@@ -119,7 +119,7 @@
 #, utvideo ? null # Ut Video de/encoder
 , vid-stab ? null # Video stabilization
 #, vo-aacenc ? null # AAC encoder
-#, vo-amrwbenc ? null # AMR-WB encoder
+, vo-amrwbenc ? null # AMR-WB encoder
 , wavpack ? null # Wavpack encoder
 , x264 ? null # H.264/AVC encoder
 , x265 ? null # H.265/HEVC encoder
@@ -159,7 +159,7 @@
  *   utvideo vo-aacenc vo-amrwbenc xvmc zvbi blackmagic-design-desktop-video
  *
  * Need fixes to support Darwin:
- *   frei0r, game-music-emu, gsm, libjack2, libssh, libvpx(stable 1.3.0), openal, openjpeg_1,
+ *   frei0r, game-music-emu, gsm, libjack2, libssh, libvpx(stable 1.3.0), openal, openjpeg,
  *   pulseaudio, rtmpdump, samba, vid-stab, wavpack, x265. xavs
  *
  * Not supported:
@@ -176,6 +176,8 @@
 let
   inherit (stdenv) isCygwin isFreeBSD isLinux;
   inherit (stdenv.lib) optional optionals optionalString enableFeature;
+
+  nv-codec-headers = callPackage ./nv-codec-headers.nix { };
 in
 
 /*
@@ -201,7 +203,6 @@ assert ffplayProgram -> avcodecLibrary
                      && swresampleLibrary
                      && SDL2 != null;
 assert ffprobeProgram -> avcodecLibrary && avformatLibrary;
-assert ffserverProgram -> avformatLibrary;
 /*
  *  Library dependencies
  */
@@ -225,17 +226,17 @@ assert gnutls != null -> !opensslExtlib;
 assert libxcbshmExtlib -> libxcb != null;
 assert libxcbxfixesExtlib -> libxcb != null;
 assert libxcbshapeExtlib -> libxcb != null;
-assert openglExtlib -> mesa != null;
+assert openglExtlib -> libGLU_combined != null;
 assert opensslExtlib -> gnutls == null && openssl != null && nonfreeLicensing;
 assert nvenc -> nvidia-video-sdk != null && nonfreeLicensing;
 
 stdenv.mkDerivation rec {
   name = "ffmpeg-full-${version}";
-  version = "3.4.1";
+  version = "4.0";
 
   src = fetchurl {
     url = "https://www.ffmpeg.org/releases/ffmpeg-${version}.tar.xz";
-    sha256 = "1h4iz7q10wj04awr2wvmp60n7b09pfwrgwbbw9sgl7klcf52fxss";
+    sha256 = "0gx4ngnhi5glmxh38603qy5n6vq8bl1cr4sqd1xff95i82pmv57d";
   };
 
   prePatch = ''
@@ -249,7 +250,10 @@ stdenv.mkDerivation rec {
       --replace /usr/local/lib/frei0r-1 ${frei0r}/lib/frei0r-1
   '';
 
+  configurePlatforms = [];
   configureFlags = [
+    "--target_os=${hostPlatform.parsed.kernel.name}"
+    "--arch=${hostPlatform.parsed.cpu.name}"
     /*
      *  Licensing flags
      */
@@ -286,7 +290,6 @@ stdenv.mkDerivation rec {
     (enableFeature ffmpegProgram "ffmpeg")
     (enableFeature ffplayProgram "ffplay")
     (enableFeature ffprobeProgram "ffprobe")
-    (enableFeature ffserverProgram "ffserver")
     /*
      *  Library flags
      */
@@ -365,14 +368,12 @@ stdenv.mkDerivation rec {
     #(enableFeature (opencv != null) "libopencv")
     (enableFeature openglExtlib "opengl")
     #(enableFeature (openh264 != null) "openh264")
-    (enableFeature (openjpeg_1 != null) "libopenjpeg")
+    (enableFeature (openjpeg != null) "libopenjpeg")
     (enableFeature (opensslExtlib && gplLicensing) "openssl")
     (enableFeature (libpulseaudio != null) "libpulse")
     #(enableFeature quvi "libquvi")
     (enableFeature (rtmpdump != null) "librtmp")
     #(enableFeature (schroedinger != null) "libschroedinger")
-    #(enableFeature (shine != null) "libshine")
-    (enableFeature (samba != null && gplLicensing && version3Licensing) "libsmbclient")
     (enableFeature (SDL2 != null) "sdl2")
     (enableFeature (soxr != null) "libsoxr")
     (enableFeature (speex != null) "libspeex")
@@ -380,7 +381,7 @@ stdenv.mkDerivation rec {
     #(enableFeature (utvideo != null && gplLicensing) "libutvideo")
     (enableFeature (vid-stab != null && gplLicensing) "libvidstab") # Actual min. version 2.0
     #(enableFeature (vo-aacenc != null && version3Licensing) "libvo-aacenc")
-    #(enableFeature (vo-amrwbenc != null && version3Licensing) "libvo-amrwbenc")
+    (enableFeature (vo-amrwbenc != null && version3Licensing) "libvo-amrwbenc")
     (enableFeature (wavpack != null) "libwavpack")
     (enableFeature (x264 != null && gplLicensing) "libx264")
     (enableFeature (x265 != null && gplLicensing) "libx265")
@@ -396,6 +397,9 @@ stdenv.mkDerivation rec {
     (enableFeature optimizationsDeveloper "optimizations")
     (enableFeature extraWarningsDeveloper "extra-warnings")
     (enableFeature strippingDeveloper "stripping")
+  ] ++ optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+    "--cross-prefix=${stdenv.cc.targetPrefix}"
+    "--enable-cross-compile"
   ];
 
   nativeBuildInputs = [ perl pkgconfig texinfo yasm ];
@@ -404,13 +408,14 @@ stdenv.mkDerivation rec {
     bzip2 celt fontconfig freetype frei0r fribidi game-music-emu gnutls gsm
     libjack2 ladspaH lame libass libbluray libbs2b libcaca libdc1394 libmodplug
     libogg libopus libssh libtheora libvdpau libvorbis libvpx libwebp libX11
-    libxcb libXv lzma openal openjpeg_1 libpulseaudio rtmpdump opencore-amr
-    samba SDL2 soxr speex vid-stab wavpack x264 x265 xavs xvidcore zeromq4 zlib
-  ] ++ optional openglExtlib mesa
+    libxcb libXv lzma openal openjpeg libpulseaudio rtmpdump opencore-amr
+    samba SDL2 soxr speex vid-stab vo-amrwbenc wavpack x264 x265 xavs xvidcore
+    zeromq4 zlib
+  ] ++ optional openglExtlib libGLU_combined
     ++ optionals nonfreeLicensing [ fdk_aac openssl ]
     ++ optional ((isLinux || isFreeBSD) && libva != null) libva
     ++ optionals isLinux [ alsaLib libraw1394 libv4l ]
-    ++ optionals nvenc [ nvidia-video-sdk ]
+    ++ optionals nvenc [ nvidia-video-sdk nv-codec-headers ]
     ++ optionals stdenv.isDarwin [ Cocoa CoreServices CoreAudio AVFoundation
                                    MediaToolbox VideoDecodeAcceleration
                                    libiconv ];
@@ -431,20 +436,7 @@ stdenv.mkDerivation rec {
     done
   '';
 
-
   enableParallelBuilding = true;
-
-  /* Cross-compilation is untested, consider this an outline, more work
-     needs to be done to portions of the build to get it to work correctly */
-  crossAttrs = {
-    configurePlatforms = [];
-    configureFlags = configureFlags ++ [
-      "--cross-prefix=${stdenv.cc.targetPrefix}"
-      "--enable-cross-compile"
-      "--target_os=${hostPlatform.parsed.kernel.name}"
-      "--arch=${hostPlatform.arch}"
-    ];
-  };
 
   meta = with stdenv.lib; {
     description = "A complete, cross-platform solution to record, convert and stream audio and video";

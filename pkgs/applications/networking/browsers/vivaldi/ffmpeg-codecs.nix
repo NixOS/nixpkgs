@@ -1,5 +1,5 @@
 { stdenv, fetchurl, fetchpatch
-, dbus_glib, gtk2, gtk3, libexif, libpulseaudio, libXScrnSaver, ninja, nss
+, dbus-glib, gtk2, gtk3, libexif, libpulseaudio, libXScrnSaver, ninja, nss
 , pciutils, pkgconfig, python2, xdg_utils
 }:
 
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ ];
 
   nativeBuildInputs = [
-    dbus_glib gtk2 gtk3 libexif libpulseaudio libXScrnSaver ninja nss pciutils pkgconfig
+    dbus-glib gtk2 gtk3 libexif libpulseaudio libXScrnSaver ninja nss pciutils pkgconfig
     python2 xdg_utils
   ];
 

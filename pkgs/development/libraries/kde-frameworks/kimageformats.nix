@@ -12,5 +12,5 @@ mkDerivation {
   nativeBuildInputs = [ extra-cmake-modules ];
   buildInputs = [ karchive openexr qtbase ];
   outputs = [ "out" ]; # plugins only
-  NIX_CFLAGS_COMPILE = "-I${getDev ilmbase}/include/OpenEXR";
+  CXXFLAGS = "-I${getDev ilmbase}/include/OpenEXR";
 }

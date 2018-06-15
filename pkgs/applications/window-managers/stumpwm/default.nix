@@ -90,7 +90,7 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
-    inherit sbcl lispPackages;
+    inherit sbcl lispPackages contrib;
   };
 
   meta = with stdenv.lib; {
@@ -99,5 +99,6 @@ stdenv.mkDerivation rec {
     license     = licenses.gpl2Plus;
     maintainers = with maintainers; [ the-kenny ];
     platforms   = platforms.linux;
+    broken = true; # 2018-04-11
   };
 }

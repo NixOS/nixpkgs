@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "wireless-regdb-${version}";
-  version = "2017.03.07";
+  version = "2018.05.31";
 
   src = fetchurl {
     url = "https://www.kernel.org/pub/software/network/wireless-regdb/${name}.tar.xz";
-    sha256 = "1f9mcp78sdd4sci6v32vxfcl1rfjpv205jisz1p93kkfnaisy7ip";
+    sha256 = "0yxydxkmcb6iryrbazdk8lqqibig102kq323gw3p64vpjwxvrpz1";
   };
 
   dontBuild = true;
@@ -21,6 +21,6 @@ stdenv.mkDerivation rec {
     homepage = http://wireless.kernel.org/en/developers/Regulatory/;
     license = licenses.isc;
     platforms = platforms.all;
-    maintainers = with maintainers; [ nckx fpletz ];
+    maintainers = with maintainers; [ fpletz ];
   };
 }

@@ -13,6 +13,11 @@ stdenv.mkDerivation rec {
 
   patches = ./no-usr.patch;
 
+  postPatch = stdenv.lib.optionalString stdenv.isDarwin ''
+    substituteInPlace Makefile \
+        --replace -Wl,-soname= -Wl,-install_name,
+  '';
+
   doCheck = true;
   preCheck = "patchShebangs test/make-tests.sh";
 

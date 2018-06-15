@@ -1,33 +1,46 @@
-{ stdenv, fetchurl, pkgconfig, perl, glib, libintlOrEmpty, gobjectIntrospection }:
+{ stdenv, fetchurl, meson, ninja, gettext, pkgconfig, glib
+, fixDarwinDylibNames, gobjectIntrospection, gnome3
+}:
 
 let
-  ver_maj = "2.26";
-  ver_min = "1";
+  pname = "atk";
+  version = "2.28.1";
 in
+
 stdenv.mkDerivation rec {
-  name = "atk-${ver_maj}.${ver_min}";
+  name = "${pname}-${version}";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/atk/${ver_maj}/${name}.tar.xz";
-    sha256 = "1jwpx8az0iifw176dc2hl4mmg6gvxzxdkd1qvg4ds7c5hdmzy07g";
+    url = "mirror://gnome/sources/${pname}/${gnome3.versionBranch version}/${name}.tar.xz";
+    sha256 = "1z7laf6qwv5zsqcnj222dm5f43c6f3liil0cgx4s4s62xjk1wfnd";
   };
 
-  enableParallelBuilding = true;
+  patches = [
+    # darwin linker arguments https://bugzilla.gnome.org/show_bug.cgi?id=794326
+    (fetchurl {
+      url = https://bugzilla.gnome.org/attachment.cgi?id=369680;
+      sha256 = "11v8fhpsbapa04ifb2268cga398vfk1nq8i628441632zjz1diwg";
+    })
+  ];
 
   outputs = [ "out" "dev" ];
 
-  buildInputs = libintlOrEmpty;
+  buildInputs = stdenv.lib.optional stdenv.isDarwin fixDarwinDylibNames;
 
-  nativeBuildInputs = [ pkgconfig perl ];
+  nativeBuildInputs = [ meson ninja pkgconfig gettext gobjectIntrospection ];
 
   propagatedBuildInputs = [
     # Required by atk.pc
     glib
-    # TODO: Why propagate?
-    gobjectIntrospection
   ];
 
   doCheck = true;
+
+  passthru = {
+    updateScript = gnome3.updateScript {
+      packageName = pname;
+    };
+  };
 
   meta = {
     description = "Accessibility toolkit";

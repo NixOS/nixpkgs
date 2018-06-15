@@ -2,12 +2,12 @@
 
 stdenv.mkDerivation rec {
   name = "zap-${version}";
-  version = "2.5.0";
+  version = "2.7.0";
   src = fetchFromGitHub {
     owner = "zaproxy";
     repo = "zaproxy";
     rev ="${version}";
-    sha256 = "12bd0f2zrs7cvcyy2xj31m3szxrr2ifdjyd24z047qm465z3hj33";
+    sha256 = "1bz4pgq66v6kxmgj99llacm1d85vj8z78jlgc2z9hv0ha5i57y32";
   };
 
   buildInputs = [ jdk ant ];

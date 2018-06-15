@@ -3,11 +3,11 @@
 
 stdenv.mkDerivation rec {
   name = "chirp-daily-${version}";
-  version = "20170714";
+  version = "20180606";
 
   src = fetchurl {
-    url = "http://trac.chirp.danplanet.com/chirp_daily/daily-${version}/${name}.tar.gz";
-    sha256 = "1pglsmc0pf50w7df4vv30z5hmdxy4aqjl3qrv8kfiax7rld21gcy";
+    url = "https://trac.chirp.danplanet.com/chirp_daily/daily-${version}/${name}.tar.gz";
+    sha256 = "1v1s02675gyghhxasp4pxjrifkgshc82p99haxph1yzkq7gsf03w";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A free, open-source tool for programming your amateur radio";
-    homepage = http://chirp.danplanet.com/;
+    homepage = https://chirp.danplanet.com/;
     license = licenses.gpl3;
     platforms = platforms.linux;
     maintainers = [ maintainers.the-kenny ];

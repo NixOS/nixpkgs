@@ -1,9 +1,9 @@
 { stdenv, lib, fetchFromGitHub, cmake, pkgconfig
-, alsaLib, ffmpeg_2, glib, openssl, pcre, zlib
+, alsaLib, ffmpeg, glib, openssl, pcre, zlib
 , libX11, libXcursor, libXdamage, libXext, libXi, libXinerama, libXrandr, libXrender, libXv
 , libxkbcommon, libxkbfile
 , wayland
-, gstreamer, gst-plugins-base, gst-plugins-good
+, gstreamer, gst-plugins-base, gst-plugins-good, libunwind, orc
 , libpulseaudio ? null
 , cups ? null
 , pcsclite ? null
@@ -14,13 +14,13 @@
 
 stdenv.mkDerivation rec {
   name = "freerdp-${version}";
-  version = "2.0.0-rc1";
+  version = "2.0.0-rc2";
 
   src = fetchFromGitHub {
     owner  = "FreeRDP";
     repo   = "FreeRDP";
     rev    = version;
-    sha256 = "0m28n3mq3ax0j6j3ai4pnlx3shg2ap0md0bxlqkhfv6civ9r11nn";
+    sha256 = "01cm9g4xqihnnc5d2w1zs8gabkv59p7fyjwi1cwpzv6s198xwbfs";
   };
 
   # outputs = [ "bin" "out" "dev" ];
@@ -35,8 +35,8 @@ stdenv.mkDerivation rec {
   '';
 
   buildInputs = with lib; [
-    alsaLib cups ffmpeg_2 glib openssl pcre pcsclite libpulseaudio zlib
-    gstreamer gst-plugins-base gst-plugins-good
+    alsaLib cups ffmpeg glib openssl pcre pcsclite libpulseaudio zlib
+    gstreamer gst-plugins-base gst-plugins-good libunwind orc
     libX11 libXcursor libXdamage libXext libXi libXinerama libXrandr libXrender libXv
     libxkbcommon libxkbfile
     wayland

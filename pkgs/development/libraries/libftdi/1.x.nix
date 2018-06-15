@@ -22,6 +22,10 @@ stdenv.mkDerivation rec {
     ++ optionals pythonSupport [ python swig ]
     ++ optionals docSupport [ doxygen ];
 
+  preBuild = stdenv.lib.optionalString docSupport ''
+    make doc_i
+  '';
+
   propagatedBuildInputs = [ libusb1 ];
 
   postInstall = ''
@@ -37,7 +41,7 @@ stdenv.mkDerivation rec {
     description = "A library to talk to FTDI chips using libusb";
     homepage = https://www.intra2net.com/en/developer/libftdi/;
     license = with licenses; [ lgpl2 gpl2 ];
-    platforms = platforms.linux;
+    platforms = with platforms; linux ++ darwin;
     maintainers = [ maintainers.bjornfor ];
   };
 }

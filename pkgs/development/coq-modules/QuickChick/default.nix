@@ -1,6 +1,6 @@
-{ stdenv, fetchgit, coq, ssreflect }:
+{ stdenv, fetchFromGitHub, coq, ssreflect }:
 
-let param =
+let params =
   {
     "8.5" = {
       version = "20170512";
@@ -19,16 +19,17 @@ let param =
       rev = "195e550a1cf0810497734356437a1720ebb6d744";
       sha256 = "0zm23y89z0h4iamy74qk9qi2pz2cj3ga6ygav0w79n0qyqwhxcq1";
     };
-
-  }."${coq.coq-version}"
-; in
+  };
+  param = params."${coq.coq-version}";
+in
 
 stdenv.mkDerivation rec {
 
   name = "coq${coq.coq-version}-QuickChick-${param.version}";
 
-  src = fetchgit {
-    url = git://github.com/QuickChick/QuickChick.git;
+  src = fetchFromGitHub {
+    owner = "QuickChick";
+    repo = "QuickChick";
     inherit (param) rev sha256;
   };
 
@@ -46,6 +47,10 @@ stdenv.mkDerivation rec {
     description = "Randomized property-based testing plugin for Coq; a clone of Haskell QuickCheck";
     maintainers = with maintainers; [ jwiegley ];
     platforms = coq.meta.platforms;
+  };
+
+  passthru = {
+    compatibleCoqVersions = v: builtins.hasAttr v params;
   };
 
 }

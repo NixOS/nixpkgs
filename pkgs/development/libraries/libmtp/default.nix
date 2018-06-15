@@ -1,15 +1,16 @@
-{ stdenv, fetchurl, pkgconfig, libusb1 }:
+{ stdenv, fetchurl, pkgconfig, libusb1, libiconv }:
 
 stdenv.mkDerivation rec {
-  name = "libmtp-1.1.13";
+  name = "libmtp-1.1.15";
 
   src = fetchurl {
     url = "mirror://sourceforge/libmtp/${name}.tar.gz";
-    sha256 = "0h3dv9py5mmvxhfxmkr8ky4s80hgq3d66cmrfnnnlcdwpwpy0kj9";
+    sha256 = "089h79nkz7wcr3lbqi7025l8p75hbp0aigxk3wdk2zkm8q5r0h6h";
   };
 
   outputs = [ "bin" "dev" "out" ];
 
+  buildInputs = [ libiconv ];
   propagatedBuildInputs = [ libusb1 ];
   nativeBuildInputs = [ pkgconfig ];
 
@@ -24,7 +25,7 @@ stdenv.mkDerivation rec {
       in the form of a library suitable primarily for POSIX compliant operating
       systems. We implement MTP Basic, the stuff proposed for standardization.
       '';
-    platforms = stdenv.lib.platforms.linux;
+    platforms = stdenv.lib.platforms.unix;
     maintainers = [ ];
   };
 }

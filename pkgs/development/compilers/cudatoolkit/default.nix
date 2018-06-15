@@ -11,11 +11,12 @@ let
     , name ? ""
     , developerProgram ? false
     , python ? python27
+    , runPatches ? []
     }:
 
     stdenv.mkDerivation rec {
       name = "cudatoolkit-${version}";
-      inherit (args) version;
+      inherit version runPatches;
 
       dontPatchELF = true;
       dontStrip = true;
@@ -27,7 +28,7 @@ let
               This nix expression requires that ${args.name} is already part of the store.
               Register yourself to NVIDIA Accelerated Computing Developer Program, retrieve the CUDA toolkit
               at https://developer.nvidia.com/cuda-toolkit, and run the following command in the download directory:
-              nix-prefetch-url file://${args.name}
+              nix-prefetch-url file://\$PWD/${args.name}
             '';
             inherit (args) name sha256;
           }
@@ -48,35 +49,34 @@ let
 
       rpath = "${stdenv.lib.makeLibraryPath runtimeDependencies}:${stdenv.cc.cc.lib}/lib64";
 
+      phases = [ "unpackPhase" "installPhase" "fixupPhase" ];
+
       unpackPhase = ''
         sh $src --keep --noexec
+
         cd pkg/run_files
         sh cuda-linux*.run --keep --noexec
         sh cuda-samples*.run --keep --noexec
-        cd pkg
-      '';
+        mv pkg ../../$(basename $src)
+        cd ../..
+        rm -rf pkg
 
-      buildPhase = ''
-        chmod -R u+w .
-        while IFS= read -r -d ''$'\0' i; do
-          if ! isELF "$i"; then continue; fi
-          echo "patching $i..."
-          if [[ ! $i =~ \.so ]]; then
-            patchelf \
-              --set-interpreter "''$(cat $NIX_CC/nix-support/dynamic-linker)" $i
-          fi
-          if [[ $i =~ libcudart ]]; then
-            rpath2=
-          else
-            rpath2=$rpath:$lib/lib:$out/jre/lib/amd64/jli:$out/lib:$out/lib64:$out/nvvm/lib:$out/nvvm/lib64
-          fi
-          patchelf --set-rpath $rpath2 --force-rpath $i
-        done < <(find . -type f -print0)
+        for patch in $runPatches; do
+          sh $patch --keep --noexec
+          mv pkg $(basename $patch)
+        done
       '';
 
       installPhase = ''
         mkdir $out
+        cd $(basename $src)
         perl ./install-linux.pl --prefix="$out"
+        cd ..
+        for patch in $runPatches; do
+          cd $(basename $patch)
+          perl ./install_patch.pl --silent --accept-eula --installdir="$out"
+          cd ..
+        done
 
         rm $out/tools/CUDA_Occupancy_Calculator.xls # FIXME: why?
 
@@ -117,6 +117,23 @@ let
         echo "NIX_CFLAGS_COMPILE+=' -D_FORCE_INLINES'" >> $out/nix-support/setup-hook
       '';
 
+      preFixup = ''
+        while IFS= read -r -d ''$'\0' i; do
+          if ! isELF "$i"; then continue; fi
+          echo "patching $i..."
+          if [[ ! $i =~ \.so ]]; then
+            patchelf \
+              --set-interpreter "''$(cat $NIX_CC/nix-support/dynamic-linker)" $i
+          fi
+          if [[ $i =~ libcudart ]]; then
+            rpath2=
+          else
+            rpath2=$rpath:$lib/lib:$out/jre/lib/amd64/jli:$out/lib:$out/lib64:$out/nvvm/lib:$out/nvvm/lib64
+          fi
+          patchelf --set-rpath $rpath2 --force-rpath $i
+        done < <(find $out $lib $doc -type f -print0)
+      '';
+
       passthru = {
         cc = gcc;
         majorVersion =
@@ -134,45 +151,64 @@ let
 
 in {
 
-  cudatoolkit6 = common {
+  cudatoolkit_6 = common {
     version = "6.0.37";
     url = "http://developer.download.nvidia.com/compute/cuda/6_0/rel/installers/cuda_6.0.37_linux_64.run";
     sha256 = "991e436c7a6c94ec67cf44204d136adfef87baa3ded270544fa211179779bc40";
     gcc = gcc48;
   };
 
-  cudatoolkit65 = common {
+  cudatoolkit_6_5 = common {
     version = "6.5.19";
     url = "http://developer.download.nvidia.com/compute/cuda/6_5/rel/installers/cuda_6.5.19_linux_64.run";
     sha256 = "1x9zdmk8z784d3d35vr2ak1l4h5v4jfjhpxfi9fl9dvjkcavqyaj";
     gcc = gcc48;
   };
 
-  cudatoolkit7 = common {
+  cudatoolkit_7 = common {
     version = "7.0.28";
     url = "http://developer.download.nvidia.com/compute/cuda/7_0/Prod/local_installers/cuda_7.0.28_linux.run";
     sha256 = "1km5hpiimx11jcazg0h3mjzk220klwahs2vfqhjavpds5ff2wafi";
     gcc = gcc49;
   };
 
-  cudatoolkit75 = common {
+  cudatoolkit_7_5 = common {
     version = "7.5.18";
     url = "http://developer.download.nvidia.com/compute/cuda/7.5/Prod/local_installers/cuda_7.5.18_linux.run";
     sha256 = "1v2ylzp34ijyhcxyh5p6i0cwawwbbdhni2l5l4qm21s1cx9ish88";
     gcc = gcc49;
   };
 
-  cudatoolkit8 = common {
-    version = "8.0.61";
+  cudatoolkit_8 = common {
+    version = "8.0.61.2";
     url = "https://developer.nvidia.com/compute/cuda/8.0/Prod2/local_installers/cuda_8.0.61_375.26_linux-run";
     sha256 = "1i4xrsqbad283qffvysn88w2pmxzxbbby41lw0j1113z771akv4w";
+    runPatches = [
+      (fetchurl {
+        url = "https://developer.nvidia.com/compute/cuda/8.0/Prod2/patches/2/cuda_8.0.61.2_linux-run";
+        sha256 = "1iaz5rrsnsb1p99qiqvxn6j3ksc7ry8xlr397kqcjzxqbljbqn9d";
+      })
+    ];
     gcc = gcc5;
   };
 
-  cudatoolkit9 = common {
-    version = "9.0.176";
+  cudatoolkit_9_0 = common {
+    version = "9.0.176.1";
     url = "https://developer.nvidia.com/compute/cuda/9.0/Prod/local_installers/cuda_9.0.176_384.81_linux-run";
     sha256 = "0308rmmychxfa4inb1ird9bpgfppgr9yrfg1qp0val5azqik91ln";
+    gcc = gcc6;
+  };
+
+  cudatoolkit_9 = common {
+    version = "9.1.85.1";
+    url = "https://developer.nvidia.com/compute/cuda/9.1/Prod/local_installers/cuda_9.1.85_387.26_linux";
+    sha256 = "0lz9bwhck1ax4xf1fyb5nicb7l1kssslj518z64iirpy2qmwg5l4";
+    runPatches = [
+      (fetchurl {
+        url = "https://developer.nvidia.com/compute/cuda/9.1/Prod/patches/1/cuda_9.1.85.1_linux";
+        sha256 = "1f53ij5nb7g0vb5pcpaqvkaj1x4mfq3l0mhkfnqbk8sfrvby775g";
+      })
+    ];
     gcc = gcc6;
   };
 

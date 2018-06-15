@@ -3,13 +3,13 @@
 # the modules identified by `rootModules', plus their dependencies.
 # Also generate an appropriate modules.dep.
 
-{ stdenvNoCC, kernel, nukeReferences, rootModules
+{ stdenvNoCC, kernel, firmware, nukeReferences, rootModules
 , kmod, allowMissing ? false }:
 
 stdenvNoCC.mkDerivation {
   name = kernel.name + "-shrunk";
   builder = ./modules-closure.sh;
-  buildInputs = [ nukeReferences kmod ];
-  inherit kernel rootModules allowMissing;
+  nativeBuildInputs = [ nukeReferences kmod ];
+  inherit kernel firmware rootModules allowMissing;
   allowedReferences = ["out"];
 }

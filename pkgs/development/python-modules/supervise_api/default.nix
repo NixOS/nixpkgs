@@ -2,23 +2,26 @@
 , buildPythonPackage
 , fetchPypi
 , supervise
+, isPy3k
+, whichcraft
+, utillinux
 }:
 
 buildPythonPackage rec {
   pname = "supervise_api";
-  version = "0.1.5";
-
-  name = "${pname}-${version}";
+  version = "0.5.3";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1pqqlw80cjdgrlpvdmydkyhsrr4s531mn6bfkshm68j9gk4kq6px";
+    sha256 = "0dakc1h2ih1bw67y137wp0vph8d3y2lx5d70b8dgggy1zbpqxl1m";
   };
 
-  propagatedBuildInputs = [ supervise ];
-
-  # no tests
-  doCheck = false;
+  propagatedBuildInputs = [
+    supervise
+  ] ++ lib.optionals ( !isPy3k ) [
+    whichcraft
+  ];
+  checkInputs = [ utillinux ];
 
   meta = {
     description = "An API for running processes safely and securely";

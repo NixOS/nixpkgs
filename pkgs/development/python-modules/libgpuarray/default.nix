@@ -9,20 +9,23 @@
 , nose
 , Mako
 , python
-, cudaSupport ? false, cudatoolkit
+, cudaSupport ? false, cudatoolkit , nvidia_x11
 , openclSupport ? true, ocl-icd, clblas
 }:
 
+assert cudaSupport -> nvidia_x11 != null
+                   && cudatoolkit != null;
+
 buildPythonPackage rec {
   pname = "libgpuarray";
-  version = "0.6.9";
+  version = "0.7.5";
   name = pname + "-" + version;
 
   src = fetchFromGitHub {
     owner = "Theano";
     repo = "libgpuarray";
     rev = "v${version}";
-    sha256 = "06z47ls42a37gbv0x7f3l1qvils7q0hvy02s95l530klgibp19s0";
+    sha256 = "0zkdwjq3k6ciiyf8y5w663fbsnmzhgy27yvpxfhkpxazw9vg3l5v";
   };
 
   # requires a GPU
@@ -32,15 +35,14 @@ buildPythonPackage rec {
 
   libraryPath = lib.makeLibraryPath (
     []
-    ++ lib.optionals cudaSupport [ cudatoolkit.lib cudatoolkit.out ]
-    ++ lib.optionals openclSupport [ ocl-icd clblas ]
+    ++ lib.optionals cudaSupport [ cudatoolkit.lib cudatoolkit.out nvidia_x11 ]
+    ++ lib.optionals openclSupport ([ clblas ] ++ lib.optional (!stdenv.isDarwin) ocl-icd)
   );
 
   preBuild = ''
     make -j$NIX_BUILD_CORES
     make install
 
-    ls $out/lib
     export NIX_CFLAGS_COMPILE="-L $out/lib -I $out/include $NIX_CFLAGS_COMPILE"
 
     cd ..
@@ -48,7 +50,7 @@ buildPythonPackage rec {
 
   postFixup = ''
     rm $out/lib/libgpuarray-static.a
-
+  '' + stdenv.lib.optionalString (!stdenv.isDarwin) ''
     function fixRunPath {
       p=$(patchelf --print-rpath $1)
       patchelf --set-rpath "$p:$libraryPath" $1
@@ -76,7 +78,7 @@ buildPythonPackage rec {
     description = "Library to manipulate tensors on GPU.";
     license = licenses.free;
     maintainers = with maintainers; [ artuuge ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 
 }

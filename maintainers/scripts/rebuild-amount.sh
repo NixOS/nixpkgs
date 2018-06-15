@@ -1,9 +1,16 @@
 #!/usr/bin/env bash
 set -e
 
+# --print: avoid dependency on environment
+optPrint=
+if [ "$1" == "--print" ]; then
+	optPrint=true
+	shift
+fi
+
 if [ "$#" != 1 ] && [ "$#" != 2 ]; then
 	cat <<-EOF
-	Usage: $0 commit-spec [commit-spec]
+	Usage: $0 [--print] commit-spec [commit-spec]
 	    You need to be in a git-controlled nixpkgs tree.
 	    The current state of the tree will be used if the second commit is missing.
 	EOF
@@ -112,4 +119,9 @@ newPkgs "${tree[1]}" "${tree[2]}" '--argstr system "x86_64-linux"' > "$newlist"
 # Hacky: keep only the last word of each attribute path and sort.
 sed -n 's/\([^. ]*\.\)*\([^. ]*\) .*$/\2/p' < "$newlist" \
 	| sort | uniq -c
+
+if [ -n "$optPrint" ]; then
+	echo
+	cat "$newlist"
+fi
 

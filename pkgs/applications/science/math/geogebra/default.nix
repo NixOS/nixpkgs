@@ -2,20 +2,16 @@
 
 stdenv.mkDerivation rec {
   name = "geogebra-${version}";
-  version = "5-0-382-0";
+  version = "5-0-444-0";
 
   preferLocalBuild = true;
 
   src = fetchurl {
     urls = [
-      "http://download.geogebra.org/installers/5.0/GeoGebra-Linux-Portable-${version}.tar.bz2"
-
-      # Fallback for 5-0-382-0
-      # To avoid breaks when latest geogebra version is
-      # removed from `download.geogebra.org`
-      "http://web.archive.org/web/20170818191250/http://download.geogebra.org/installers/5.0/GeoGebra-Linux-Portable-5-0-382-0.tar.bz2"
+      "https://download.geogebra.org/installers/5.0/GeoGebra-Linux-Portable-${version}.tar.bz2"
+      "http://web.archive.org/web/20180325075100/http://download.geogebra.org/installers/5.0/GeoGebra-Linux-Portable-${version}.tar.bz2"
     ];
-    sha256 = "0xqln1ssm35q8ry4a0ly8rkgw41brmrhn26l6q6r0qqrnw85cnyv";
+    sha256 = "1x2h40m62zbhmy42hln5gjj3fwk4b6803v3k9agpv5c6j468sq0p";
   };
 
   srcIcon = fetchurl {

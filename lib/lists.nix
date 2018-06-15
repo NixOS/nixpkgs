@@ -1,7 +1,9 @@
 # General list operations.
 { lib }:
 with lib.trivial;
-
+let
+  inherit (lib.strings) toInt;
+in
 rec {
 
   inherit (builtins) head tail length isList elemAt concatLists filter elem genList;
@@ -248,6 +250,42 @@ rec {
       else { right = t.right; wrong = [h] ++ t.wrong; }
     ) { right = []; wrong = []; });
 
+  /* Splits the elements of a list into many lists, using the return value of a predicate.
+     Predicate should return a string which becomes keys of attrset `groupBy' returns.
+
+     `groupBy'' allows to customise the combining function and initial value
+
+     Example:
+       groupBy (x: boolToString (x > 2)) [ 5 1 2 3 4 ]
+       => { true = [ 5 3 4 ]; false = [ 1 2 ]; }
+       groupBy (x: x.name) [ {name = "icewm"; script = "icewm &";}
+                             {name = "xfce";  script = "xfce4-session &";}
+                             {name = "icewm"; script = "icewmbg &";}
+                             {name = "mate";  script = "gnome-session &";}
+                           ]
+       => { icewm = [ { name = "icewm"; script = "icewm &"; }
+                      { name = "icewm"; script = "icewmbg &"; } ];
+            mate  = [ { name = "mate";  script = "gnome-session &"; } ];
+            xfce  = [ { name = "xfce";  script = "xfce4-session &"; } ];
+          }
+
+
+     groupBy' allows to customise the combining function and initial value
+
+     Example:
+       groupBy' builtins.add 0 (x: boolToString (x > 2)) [ 5 1 2 3 4 ]
+       => { true = 12; false = 3; }
+  */
+  groupBy' = op: nul: pred: lst:
+    foldl' (r: e:
+              let
+                key = pred e;
+              in
+                r // { ${key} = op (r.${key} or nul) e; }
+           ) {} lst;
+
+  groupBy = groupBy' (sum: e: sum ++ [e]) [];
+
   /* Merges two lists of the same size together. If the sizes aren't the same
      the merging stops at the shortest. How both lists are merged is defined
      by the first argument.
@@ -385,6 +423,49 @@ rec {
       if len < 2 then list
       else (sort strictLess pivot.left) ++  [ first ] ++  (sort strictLess pivot.right));
 
+  /* Compare two lists element-by-element.
+
+     Example:
+       compareLists compare [] []
+       => 0
+       compareLists compare [] [ "a" ]
+       => -1
+       compareLists compare [ "a" ] []
+       => 1
+       compareLists compare [ "a" "b" ] [ "a" "c" ]
+       => 1
+  */
+  compareLists = cmp: a: b:
+    if a == []
+    then if b == []
+         then 0
+         else -1
+    else if b == []
+         then 1
+         else let rel = cmp (head a) (head b); in
+              if rel == 0
+              then compareLists cmp (tail a) (tail b)
+              else rel;
+
+  /* Sort list using "Natural sorting".
+     Numeric portions of strings are sorted in numeric order.
+
+     Example:
+       naturalSort ["disk11" "disk8" "disk100" "disk9"]
+       => ["disk8" "disk9" "disk11" "disk100"]
+       naturalSort ["10.46.133.149" "10.5.16.62" "10.54.16.25"]
+       => ["10.5.16.62" "10.46.133.149" "10.54.16.25"]
+       naturalSort ["v0.2" "v0.15" "v0.0.9"]
+       => [ "v0.0.9" "v0.2" "v0.15" ]
+  */
+  naturalSort = lst:
+    let
+      vectorise = s: map (x: if isList x then toInt (head x) else x) (builtins.split "(0|[1-9][0-9]*)" s);
+      prepared = map (x: [ (vectorise x) x ]) lst; # remember vectorised version for O(n) regex splits
+      less = a: b: (compareLists compare (head a) (head b)) < 0;
+    in
+      map (x: elemAt x 1) (sort less prepared);
+
   /* Return the first (at most) N elements of a list.
 
      Example:
@@ -440,8 +521,12 @@ rec {
   init = list: assert list != []; take (length list - 1) list;
 
 
-  /* FIXME(zimbatm) Not used anywhere
-   */
+  /* return the image of the cross product of some lists by a function
+
+    Example:
+      crossLists (x:y: "${toString x}${toString y}") [[1 2] [3 4]]
+      => [ "13" "14" "23" "24" ]
+  */
   crossLists = f: foldl (fs: args: concatMap (f: map f args) fs) [f];
 
 

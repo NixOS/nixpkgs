@@ -14,6 +14,9 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ qtbase ];
 
+  # Fixes build with Qt 5.9
+  NIX_CFLAGS_COMPILE = [ "-std=c++11" ];
+
   preConfigure = ''
     cd src
     make -f Makefile.bootstrap

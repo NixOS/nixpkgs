@@ -15,26 +15,33 @@ in import ./make-test.nix ({ pkgs, ...} : {
     clientv4 = { lib, nodes, ... }: {
       imports = [ common ];
       networking.nameservers = lib.mkForce [
-        nodes.server.config.networking.interfaces.eth1.ipAddress
+        (lib.head nodes.server.config.networking.interfaces.eth1.ipv4.addresses).address
       ];
-      networking.interfaces.eth1.ipAddress = "192.168.0.2";
-      networking.interfaces.eth1.prefixLength = 24;
+      networking.interfaces.eth1.ipv4.addresses = [
+        { address = "192.168.0.2"; prefixLength = 24; }
+      ];
     };
 
     clientv6 = { lib, nodes, ... }: {
       imports = [ common ];
       networking.nameservers = lib.mkForce [
-        nodes.server.config.networking.interfaces.eth1.ipv6Address
+        (lib.head nodes.server.config.networking.interfaces.eth1.ipv6.addresses).address
       ];
-      networking.interfaces.eth1.ipv6Address = "dead:beef::2";
+      networking.interfaces.eth1.ipv4.addresses = [
+        { address = "dead:beef::2"; prefixLength = 24; }
+      ];
     };
 
     server = { lib, ... }: {
       imports = [ common ];
-      networking.interfaces.eth1.ipAddress = "192.168.0.1";
-      networking.interfaces.eth1.prefixLength = 24;
-      networking.interfaces.eth1.ipv6Address = "dead:beef::1";
+      networking.interfaces.eth1.ipv4.addresses = [
+        { address = "192.168.0.1"; prefixLength = 24; }
+      ];
+      networking.interfaces.eth1.ipv6.addresses = [
+        { address = "dead:beef::1"; prefixLength = 64; }
+      ];
       services.nsd.enable = true;
+      services.nsd.rootServer = true;
       services.nsd.interfaces = lib.mkForce [];
       services.nsd.zones."example.com.".data = ''
         @ SOA ns.example.com noc.example.com 666 7200 3600 1209600 3600
@@ -48,6 +55,11 @@ in import ./make-test.nix ({ pkgs, ...} : {
         @ SOA ns.example.com noc.example.com 666 7200 3600 1209600 3600
         @ A 9.8.7.6
         @ AAAA fedc::bbaa
+      '';
+      services.nsd.zones.".".data = ''
+        @ SOA ns.example.com noc.example.com 666 7200 3600 1209600 3600
+        root A 1.8.7.4
+        root AAAA acbd::4
       '';
     };
   };
@@ -80,6 +92,9 @@ in import ./make-test.nix ({ pkgs, ...} : {
 
         assertHost($_, "a", "deleg.example.com", qr/address 9.8.7.6$/);
         assertHost($_, "aaaa", "deleg.example.com", qr/address fedc::bbaa$/);
+
+        assertHost($_, "a", "root", qr/address 1.8.7.4$/);
+        assertHost($_, "aaaa", "root", qr/address acbd::4$/);
       };
     }
   '';

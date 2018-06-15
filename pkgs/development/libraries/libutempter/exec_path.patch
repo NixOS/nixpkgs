@@ -1,0 +1,25 @@
+diff -ur libutempter-1.1.6/iface.c libutempter-1.1.6.patched/iface.c
+--- libutempter-1.1.6/iface.c	2010-11-04 18:14:53.000000000 +0100
++++ libutempter-1.1.6.patched/iface.c	2018-06-06 15:09:11.417755549 +0200
+@@ -60,9 +60,9 @@
+ 		_exit(EXIT_FAILURE);
+ 	}
+ 
+-	execv(path, argv);
++	execvp(path, argv);
+ #ifdef	UTEMPTER_DEBUG
+-	fprintf(stderr, "libutempter: execv: %s\n", strerror(errno));
++	fprintf(stderr, "libutempter: execvp: %s\n", strerror(errno));
+ #endif
+ 
+ 	while (EACCES == errno)
+@@ -79,7 +79,7 @@
+ 		if (setgid(sgid))
+ 			break;
+ 
+-		(void) execv(path, argv);
++		(void) execvp(path, argv);
+ 		break;
+ 	}
+ 
+Only in libutempter-1.1.6.patched: result

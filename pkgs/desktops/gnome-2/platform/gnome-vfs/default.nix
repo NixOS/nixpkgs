@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, libxml2, bzip2, openssl, dbus_glib
+{ stdenv, fetchurl, pkgconfig, libxml2, bzip2, openssl, dbus-glib
 , glib, fam, cdparanoia, intltool, GConf, gnome_mime_data, avahi, acl }:
 
 stdenv.mkDerivation rec {
@@ -14,11 +14,13 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ intltool pkgconfig ];
   buildInputs =
-    [ libxml2 bzip2 openssl dbus_glib fam cdparanoia
+    [ libxml2 bzip2 openssl dbus-glib fam cdparanoia
       gnome_mime_data avahi acl
     ];
 
   propagatedBuildInputs = [ GConf glib ];
 
   postPatch = "find . -name Makefile.in | xargs sed 's/-DG_DISABLE_DEPRECATED//g' -i ";
+
+  doCheck = false; # needs dbus daemon
 }

@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub }:
+{ stdenv, fetchFromGitHub, cmake, extra-cmake-modules, gtk3, kdeFrameworks }:
 
 stdenv.mkDerivation rec {
   name = "maia-icon-theme-${version}";
@@ -11,21 +11,19 @@ stdenv.mkDerivation rec {
     sha256 = "0f9l3k9abgg8islzddrxgbxaw6vbai5bvz5qi1v2fzir7ykx7bgj";
   };
 
-  dontBuild = true;
-  
-  installPhase = ''
-    install -dm 755 $out/share/icons
-    for f in "" "-dark"; do
-      rm icons$f/CMakeLists.txt
-      cp -dr --no-preserve='ownership' icons$f $out/share/icons/maia$f
-    done
-  '';
+  nativeBuildInputs = [
+    cmake
+    extra-cmake-modules
+    gtk3
+    kdeFrameworks.plasma-framework
+    kdeFrameworks.kwindowsystem
+  ];
 
   meta = with stdenv.lib; {
     description = "Icons based on Breeze and Super Flat Remix";
     homepage = https://github.com/manjaro/artwork-maia;
-    license = licenses.free;
-    maintainers = [ maintainers.mounium ];
+    license = licenses.free; # https://github.com/manjaro/artwork-maia/issues/27
+    maintainers = with maintainers; [ mounium ];
     platforms = platforms.all;
   };
 }

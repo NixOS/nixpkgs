@@ -1,0 +1,13 @@
+diff --git a/Makefile.PL b/Makefile.PL
+index 9f2039a..12d699c 100644
+--- a/Makefile.PL
++++ b/Makefile.PL
+@@ -213,7 +213,7 @@ TEXT
+ }  # &MY::postamble
+ 
+ 
+-query_subs;
++#query_subs;
+ 
+ my $f;
+ WriteMakefile 

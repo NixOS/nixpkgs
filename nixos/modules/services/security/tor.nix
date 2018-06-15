@@ -5,6 +5,7 @@ with lib;
 let
   cfg = config.services.tor;
   torDirectory = "/var/lib/tor";
+  torRunDirectory = "/run/tor";
 
   opt    = name: value: optionalString (value != null) "${name} ${value}";
   optint = name: value: optionalString (value != null && value != 0)    "${name} ${toString value}";
@@ -38,6 +39,7 @@ let
     ''}
 
     ${optint "ControlPort" cfg.controlPort}
+    ${optionalString cfg.controlSocket.enable "ControlPort unix:${torRunDirectory}/control GroupWritable RelaxDirModeCheck"}
   ''
   # Client connection config
   + optionalString cfg.client.enable ''
@@ -88,6 +90,9 @@ let
     ${flip concatMapStrings v.map (p: ''
       HiddenServicePort ${toString p.port} ${p.destination}
     '')}
+    ${optionalString (v.authorizeClient != null) ''
+      HiddenServiceAuthorizeClient ${v.authorizeClient.authType} ${concatStringsSep "," v.authorizeClient.clientNames}
+    ''}
   ''))
   + cfg.extraConfig;
 
@@ -135,6 +140,17 @@ in
           If set, Tor will accept connections on the specified port
           and allow them to control the tor process.
         '';
+      };
+
+      controlSocket = {
+        enable = mkOption {
+          type = types.bool;
+          default = false;
+          description = ''
+            Wheter to enable Tor control socket. Control socket is created
+            in <literal>${torRunDirectory}/control</literal>
+          '';
+        };
       };
 
       client = {
@@ -619,6 +635,33 @@ in
                }));
              };
 
+             authorizeClient = mkOption {
+               default = null;
+               description = "If configured, the hidden service is accessible for authorized clients only.";
+               type = types.nullOr (types.submodule ({config, ...}: {
+
+                 options = {
+
+                   authType = mkOption {
+                     type = types.enum [ "basic" "stealth" ];
+                     description = ''
+                       Either <literal>"basic"</literal> for a general-purpose authorization protocol
+                       or <literal>"stealth"</literal> for a less scalable protocol
+                       that also hides service activity from unauthorized clients.
+                     '';
+                   };
+
+                   clientNames = mkOption {
+                     type = types.nonEmptyListOf (types.strMatching "[A-Za-z0-9+-_]+");
+                     description = ''
+                       Only clients that are listed here are authorized to access the hidden service.
+                       Generated authorization data can be found in <filename>${torDirectory}/onion/$name/hostname</filename>.
+                       Clients need to put this authorization data in their configuration file using <literal>HidServAuth</literal>.
+                     '';
+                   };
+                 };
+               }));
+             };
           };
 
           config = {
@@ -652,23 +695,38 @@ in
         uid         = config.ids.uids.tor;
       };
 
+    # We have to do this instead of using RuntimeDirectory option in
+    # the service below because systemd has no way to set owners of
+    # RuntimeDirectory and putting this into the service below
+    # requires that service to relax it's sandbox since this needs
+    # writable /run
+    systemd.services.tor-init =
+      { description = "Tor Daemon Init";
+        wantedBy = [ "tor.service" ];
+        after = [ "local-fs.target" ];
+        script = ''
+          install -m 0700 -o tor -g tor -d ${torDirectory} ${torDirectory}/onion
+          install -m 0750 -o tor -g tor -d ${torRunDirectory}
+        '';
+        serviceConfig = {
+          Type = "oneshot";
+          RemainAfterExit = true;
+        };
+      };
+
     systemd.services.tor =
       { description = "Tor Daemon";
         path = [ pkgs.tor ];
 
         wantedBy = [ "multi-user.target" ];
-        after    = [ "network.target" ];
+        after    = [ "tor-init.service" "network.target" ];
         restartTriggers = [ torRcFile ];
-
-        # Translated from the upstream contrib/dist/tor.service.in
-        preStart = ''
-          install -o tor -g tor -d ${torDirectory}/onion
-          ${pkgs.tor}/bin/tor -f ${torRcFile} --verify-config
-        '';
 
         serviceConfig =
           { Type         = "simple";
-            ExecStart    = "${pkgs.tor}/bin/tor -f ${torRcFile} --RunAsDaemon 0";
+            # Translated from the upstream contrib/dist/tor.service.in
+            ExecStartPre = "${pkgs.tor}/bin/tor -f ${torRcFile} --verify-config";
+            ExecStart    = "${pkgs.tor}/bin/tor -f ${torRcFile}";
             ExecReload   = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
             KillSignal   = "SIGINT";
             TimeoutSec   = 30;
@@ -676,18 +734,18 @@ in
             LimitNOFILE  = 32768;
 
             # Hardening
-            # Note: DevicePolicy is set to 'closed', although the
-            # minimal permissions are really:
-            #   DeviceAllow /dev/null rw
-            #   DeviceAllow /dev/urandom r
-            # .. but we can't specify DeviceAllow multiple times. 'closed'
-            # is close enough.
-            PrivateTmp              = "yes";
-            DevicePolicy            = "closed";
-            InaccessibleDirectories = "/home";
-            ReadOnlyDirectories     = "/";
-            ReadWriteDirectories    = torDirectory;
+            # this seems to unshare /run despite what systemd.exec(5) says
+            PrivateTmp              = mkIf (!cfg.controlSocket.enable) "yes";
+            PrivateDevices          = "yes";
+            ProtectHome             = "yes";
+            ProtectSystem           = "strict";
+            InaccessiblePaths       = "/home";
+            ReadOnlyPaths           = "/";
+            ReadWritePaths          = [ torDirectory torRunDirectory ];
             NoNewPrivileges         = "yes";
+
+            # tor.service.in has this in, but this line it fails to spawn a namespace when using hidden services
+            #CapabilityBoundingSet   = "CAP_SETUID CAP_SETGID CAP_NET_BIND_SERVICE";
           };
       };
 

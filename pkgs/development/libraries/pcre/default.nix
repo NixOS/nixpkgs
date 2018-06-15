@@ -24,14 +24,20 @@ in stdenv.mkDerivation rec {
 
   outputs = [ "bin" "dev" "out" "doc" "man" ];
 
-  configureFlags = [
-    "--enable-jit"
+  configureFlags = optional (!hostPlatform.isRiscV) "--enable-jit" ++ [
     "--enable-unicode-properties"
     "--disable-cpp"
   ]
     ++ optional (variant != null) "--enable-${variant}";
 
   buildInputs = optional (hostPlatform.libc == "msvcrt") windows.mingw_w64_pthreads;
+
+  # https://bugs.exim.org/show_bug.cgi?id=2173
+  patches = [ ./stacksize-detection.patch ];
+
+  preCheck = ''
+    patchShebangs RunGrepTest
+  '';
 
   doCheck = !(with hostPlatform; isCygwin || isFreeBSD) && hostPlatform == buildPlatform;
     # XXX: test failure on Cygwin

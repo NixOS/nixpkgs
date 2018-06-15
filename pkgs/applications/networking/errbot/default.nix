@@ -2,11 +2,11 @@
 
 pythonPackages.buildPythonApplication rec {
   name = "errbot-${version}";
-  version = "5.1.2";
+  version = "5.2.0";
 
   src = fetchurl {
     url = "mirror://pypi/e/errbot/${name}.tar.gz";
-    sha256 = "1r9w7pmdw77h1hwxns6d0sdg8cndsq1lwkq0y5qiiqr91jz93ajm";
+    sha256 = "0q5fg113s3gnym38d4y5mlnxw6vrm388zw5mlapf7b2zgx34r053";
   };
 
   disabled = !pythonPackages.isPy3k;
@@ -15,7 +15,9 @@ pythonPackages.buildPythonApplication rec {
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace dnspython3 dnspython
+      --replace dnspython3 dnspython \
+      --replace 'cryptography<2.1.0' cryptography \
+      --replace 'pyOpenSSL<17.3.0' pyOpenSSL
   '';
 
   # tests folder is not included in release

@@ -1,5 +1,5 @@
 { stdenv, fetchurl, dpkg, makeWrapper, patchelf, buildFHSUserEnv
-, gtk3, gnome3, gdk_pixbuf, cairo, libjpeg_original, glib, gnome2, mesa_glu
+, gtk3, gnome3, gdk_pixbuf, cairo, libjpeg_original, glib, gnome2, libGLU
 , nvidia_cg_toolkit, zlib, openssl, portaudio
 }:
 let
@@ -11,7 +11,7 @@ let
     libjpeg_original
     glib
     gnome2.pango
-    mesa_glu
+    libGLU
     nvidia_cg_toolkit
     zlib
     openssl
@@ -77,7 +77,7 @@ let
 
 # Lightworks expects some files in /usr/share/lightworks
 in buildFHSUserEnv rec {
-  name = "lightworks";
+  name = lightworks.name;
 
   targetPkgs = pkgs: [
       lightworks

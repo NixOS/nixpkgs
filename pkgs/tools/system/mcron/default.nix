@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, guile, which, ed }:
+{ fetchurl, stdenv, guile, which, ed, libtool }:
 
 stdenv.mkDerivation rec {
   name = "mcron-1.0.6";
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     substituteInPlace makefile.in --replace "rwxs" "rwx"
   '';
 
-  buildInputs = [ guile which ed ];
+  buildInputs = [ guile which ed libtool ];
 
   doCheck = true;
 

@@ -10,11 +10,11 @@
 buildPythonPackage rec {
   pname = "restview";
   name = "${pname}-${version}";
-  version = "2.7.0";
+  version = "2.8.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "e7842100f3de179c68cfe7c2cf56c61509cd6068bc6dd58ab42c0ade5d5f97ec";
+    sha256 = "45320b4e52945d23b3f1aeacc7ff97a3b798204fe625f8b81ed5322326d5bcd1";
   };
 
   propagatedBuildInputs = [ docutils readme_renderer pygments ];

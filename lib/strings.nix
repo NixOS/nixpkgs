@@ -82,7 +82,7 @@ rec {
        => "//bin"
   */
   makeSearchPath = subDir: packages:
-    concatStringsSep ":" (map (path: path + "/" + subDir) packages);
+    concatStringsSep ":" (map (path: path + "/" + subDir) (builtins.filter (x: x != null) packages));
 
   /* Construct a Unix-style search path, using given package output.
      If no output is found, fallback to `.out` and then to the default.
@@ -414,6 +414,39 @@ rec {
   */
   enableFeature = enable: feat: "--${if enable then "enable" else "disable"}-${feat}";
 
+  /* Create an --{enable-<feat>=<value>,disable-<feat>} string that can be passed to
+     standard GNU Autoconf scripts.
+
+     Example:
+       enableFeature true "shared" "foo"
+       => "--enable-shared=foo"
+       enableFeature false "shared" (throw "ignored")
+       => "--disable-shared"
+  */
+  enableFeatureAs = enable: feat: value: enableFeature enable feat + optionalString enable "=${value}";
+
+  /* Create an --{with,without}-<feat> string that can be passed to
+     standard GNU Autoconf scripts.
+
+     Example:
+       withFeature true "shared"
+       => "--with-shared"
+       withFeature false "shared"
+       => "--without-shared"
+  */
+  withFeature = with_: feat: "--${if with_ then "with" else "without"}-${feat}";
+
+  /* Create an --{with-<feat>=<value>,without-<feat>} string that can be passed to
+     standard GNU Autoconf scripts.
+
+     Example:
+       with_Feature true "shared" "foo"
+       => "--with-shared=foo"
+       with_Feature false "shared" (throw "ignored")
+       => "--without-shared"
+  */
+  withFeatureAs = with_: feat: value: withFeature with_ feat + optionalString with_ "=${value}";
+
   /* Create a fixed width string with additional prefix to match
      required width.
 
@@ -437,6 +470,13 @@ rec {
   */
   fixedWidthNumber = width: n: fixedWidthString width "0" (toString n);
 
+  /* Check whether a value can be coerced to a string */
+  isCoercibleToString = x:
+    builtins.elem (builtins.typeOf x) [ "path" "string" "null" "int" "float" "bool" ] ||
+    (builtins.isList x && lib.all isCoercibleToString x) ||
+    x ? outPath ||
+    x ? __toString;
+
   /* Check whether a value is a store path.
 
      Example:
@@ -450,7 +490,7 @@ rec {
        => false
   */
   isStorePath = x:
-       builtins.isString x
+       isCoercibleToString x
     && builtins.substring 0 1 (toString x) == "/"
     && dirOf (builtins.toPath x) == builtins.storeDir;
 

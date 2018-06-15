@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, Xaw3d, ghostscriptX, perl }:
+{ stdenv, fetchurl, Xaw3d, ghostscriptX, perl, pkgconfig, libiconv }:
 
 let
   name = "gv-3.7.4";
@@ -11,7 +11,18 @@ stdenv.mkDerivation {
     sha256 = "0q8s43z14vxm41pfa8s5h9kyyzk1fkwjhkiwbf2x70alm6rv6qi1";
   };
 
-  buildInputs = [ Xaw3d ghostscriptX perl ];
+  configureFlags = stdenv.lib.optionals stdenv.isDarwin [
+    "--enable-SIGCHLD-fallback"
+  ];
+
+  buildInputs = [
+    Xaw3d
+    ghostscriptX
+    perl
+    pkgconfig
+  ] ++ stdenv.lib.optionals stdenv.isDarwin [
+    libiconv
+  ];
 
   patchPhase = ''
     sed 's|\<gs\>|${ghostscriptX}/bin/gs|g' -i "src/"*.in
@@ -32,6 +43,6 @@ stdenv.mkDerivation {
 
     license = stdenv.lib.licenses.gpl3Plus;
     maintainers = [ ];
-    platforms = stdenv.lib.platforms.gnu;  # arbitrary choice
+    platforms = stdenv.lib.platforms.unix;
   };
 }

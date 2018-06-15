@@ -1,18 +1,23 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, help2man, fuse, pam }:
+{ stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, help2man, fuse
+, enableDebugBuild ? false }:
 
 with stdenv.lib;
 stdenv.mkDerivation rec {
-  name = "lxcfs-2.0.7";
+  name = "lxcfs-3.0.1";
 
   src = fetchFromGitHub {
     owner = "lxc";
     repo = "lxcfs";
     rev = name;
-    sha256 = "1z6d52dc12rcplgc9jdgi3lbxm6ahlsjgs1k8v8kvn261xsq1m0a";
+    sha256 = "0rwk1nbcjnp2d2zbyng8ix9dmww211aiqq8870r9p4j11xv9mgx4";
   };
 
   nativeBuildInputs = [ pkgconfig help2man autoreconfHook ];
-  buildInputs = [ fuse pam ];
+  buildInputs = [ fuse ];
+
+  preConfigure = stdenv.lib.optionalString enableDebugBuild ''
+    sed -i 's,#AM_CFLAGS += -DDEBUG,AM_CFLAGS += -DDEBUG,' Makefile.am
+  '';
 
   configureFlags = [
     "--with-init-script=systemd"

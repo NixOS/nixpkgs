@@ -4,7 +4,7 @@
   qtbase, qttools, qtx11extras, qtsvg, libdbusmenu, kwindowsystem, solid,
   kguiaddons, liblxqt, libqtxdg, lxqt-globalkeys, libsysstat,
   xorg, libstatgrab, lm_sensors, libpulseaudio, alsaLib, menu-cache,
-  lxmenu-data, pcre
+  lxmenu-data, pcre, libXdamage
 }:
 
 stdenv.mkDerivation rec {
@@ -47,6 +47,7 @@ stdenv.mkDerivation rec {
     menu-cache
     lxmenu-data
     pcre
+    libXdamage
   ];
 
   cmakeFlags = [ "-DPULL_TRANSLATIONS=NO" ];

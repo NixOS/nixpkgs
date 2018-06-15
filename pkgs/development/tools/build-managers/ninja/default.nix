@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, python, asciidoc, re2c }:
+{ stdenv, fetchFromGitHub, python, asciidoc, docbook_xml_dtd_45, docbook_xsl, libxslt, re2c }:
 
 stdenv.mkDerivation rec {
   name = "ninja-${version}";
@@ -11,11 +11,13 @@ stdenv.mkDerivation rec {
     sha256 = "16scq9hcq6c5ap6sy8j4qi75qps1zvrf3p79j1vbrvnqzp928i5f";
   };
 
-  nativeBuildInputs = [ python asciidoc re2c ];
+  nativeBuildInputs = [ python asciidoc docbook_xml_dtd_45 docbook_xsl libxslt.bin re2c ];
 
   buildPhase = ''
     python configure.py --bootstrap
-    asciidoc doc/manual.asciidoc
+    # "./ninja -vn manual" output copied here to support cross compilation.
+    asciidoc -b docbook -d book -o build/manual.xml doc/manual.asciidoc
+    xsltproc --nonet doc/docbook.xsl build/manual.xml > doc/manual.html
   '';
 
   installPhase = ''

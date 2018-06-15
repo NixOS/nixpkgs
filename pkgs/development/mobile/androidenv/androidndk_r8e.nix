@@ -3,8 +3,6 @@
 , platformTools
 }:
 
-assert stdenv.isLinux;
-
 stdenv.mkDerivation rec {
   name = "android-ndk-r8e";
 
@@ -21,7 +19,7 @@ stdenv.mkDerivation rec {
 
   phases = "buildPhase";
 
-  buildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
 
   buildCommand = let
     bin_path = "$out/bin";

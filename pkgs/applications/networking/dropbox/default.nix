@@ -7,7 +7,7 @@ assert lib.elem stdenv.system platforms;
 # Dropbox client to bootstrap installation.
 # The client is self-updating, so the actual version may be newer.
 let
-  version = "38.4.27";
+  version = "40.4.46";
 
   arch = {
     "x86_64-linux" = "x86_64";
@@ -32,7 +32,7 @@ in
 buildFHSUserEnv {
   name = "dropbox";
 
-  targetPkgs = pkgs: with pkgs; with xlibs; [
+  targetPkgs = pkgs: with pkgs; with xorg; [
     libICE libSM libX11 libXcomposite libXdamage libXext libXfixes libXrender
     libXxf86vm libxcb xkeyboardconfig
     curl dbus firefox-bin fontconfig freetype gcc glib gnutar libxml2 libxslt

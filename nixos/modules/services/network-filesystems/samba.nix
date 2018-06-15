@@ -54,10 +54,12 @@ let
       };
 
       serviceConfig = {
-        ExecStart = "${samba}/sbin/${appName} ${args}";
+        ExecStart = "${samba}/sbin/${appName} --foreground --no-process-group ${args}";
         ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
         LimitNOFILE = 16384;
+        PIDFile = "/run/${appName}.pid";
         Type = "notify";
+        NotifyAccess = "all"; #may not do anything...
       };
 
       restartTriggers = [ configFile ];
@@ -231,11 +233,12 @@ in
             after = [ "samba-setup.service" "network.target" ];
             wantedBy = [ "multi-user.target" ];
           };
-
+          # Refer to https://github.com/samba-team/samba/tree/master/packaging/systemd
+          # for correct use with systemd
           services = {
-            "samba-smbd" = daemonService "smbd" "-F";
-            "samba-nmbd" = mkIf cfg.enableNmbd (daemonService "nmbd" "-F");
-            "samba-winbindd" = mkIf cfg.enableWinbindd (daemonService "winbindd" "-F");
+            "samba-smbd" = daemonService "smbd" "";
+            "samba-nmbd" = mkIf cfg.enableNmbd (daemonService "nmbd" "");
+            "samba-winbindd" = mkIf cfg.enableWinbindd (daemonService "winbindd" "");
             "samba-setup" = {
               description = "Samba Setup Task";
               script = setupScript;

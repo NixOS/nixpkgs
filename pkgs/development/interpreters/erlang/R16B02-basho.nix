@@ -36,7 +36,7 @@ mkDerivation rec {
     tar xf "${manpages}" -C "$out/lib/erlang"
     for i in "$out"/lib/erlang/man/man[0-9]/*.[0-9]; do
       prefix="''${i%/*}"
-      ensureDir "$out/share/man/''${prefix##*/}"
+      mkdir -p "$out/share/man/''${prefix##*/}"
       ln -s "$i" "$out/share/man/''${prefix##*/}/''${i##*/}erl"
     done
   '';

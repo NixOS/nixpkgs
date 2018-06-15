@@ -1,20 +1,45 @@
-{ stdenv, fetchurl, pkgconfig, libxml2, gtk, intltool, libsoup, gconf
-, pango, gdk_pixbuf, atk, tzdata, gnome3 }:
+{ stdenv, fetchurl, meson, ninja, pkgconfig, libxml2, glib, gtk, gettext, libsoup
+, gtk-doc, docbook_xsl, gobjectIntrospection, tzdata, geocode-glib, vala, gnome3 }:
 
-stdenv.mkDerivation rec {
-  inherit (import ./src.nix fetchurl) name src;
+let
+  pname = "libgweather";
+  version = "3.28.2";
+in stdenv.mkDerivation rec {
+  name = "${pname}-${version}";
 
-  configureFlags = [ "--with-zoneinfo-dir=${tzdata}/share/zoneinfo" "--enable-vala" ];
-  propagatedBuildInputs = [ libxml2 gtk libsoup gconf pango gdk_pixbuf atk gnome3.geocode_glib ];
-  nativeBuildInputs = [ pkgconfig intltool gnome3.vala ];
+  outputs = [ "out" "dev" "devdoc" ];
 
-  # Prevent building vapi into ${vala} derivation directory
-  prePatch = ''
-    substituteInPlace libgweather/Makefile.in --replace "\$(DESTDIR)\$(vapidir)" "\$(DESTDIR)\$(girdir)/../vala/vapi"
+  src = fetchurl {
+    url = "mirror://gnome/sources/${pname}/${gnome3.versionBranch version}/${name}.tar.xz";
+    sha256 = "0xfy5ghwvnz2g9074dy6512m4z2pv66pmja14vhi9imgacbfh708";
+  };
+
+  nativeBuildInputs = [ meson ninja pkgconfig gettext vala gtk-doc docbook_xsl gobjectIntrospection ];
+  buildInputs = [ glib gtk libsoup libxml2 geocode-glib ];
+
+  postPatch = ''
+    chmod +x meson/meson_post_install.py
+    patchShebangs meson/meson_post_install.py
   '';
 
+  mesonFlags = [
+    "-Dzoneinfo_dir=${tzdata}/share/zoneinfo"
+    "-Denable_vala=true"
+    "-Dgtk_doc=true"
+  ];
+
+  passthru = {
+    updateScript = gnome3.updateScript {
+      packageName = pname;
+      attrPath = "gnome3.${pname}";
+    };
+  };
+
   meta = with stdenv.lib; {
-    platforms = platforms.linux;
+    description = "A library to access weather information from online services for numerous locations";
+    homepage = https://wiki.gnome.org/Projects/LibGWeather;
+    license = licenses.gpl2Plus;
     maintainers = gnome3.maintainers;
+    platforms = platforms.linux;
   };
 }

@@ -1,10 +1,10 @@
-{ fetchurl, stdenv, pkgconfig, python, pygobject3
+{ fetchurl, stdenv, meson, ninja, pkgconfig, python, pygobject3
 , gst-plugins-base, ncurses
 }:
 
 stdenv.mkDerivation rec {
   pname = "gst-python";
-  version = "1.12.3";
+  version = "1.14.0";
   name = "${pname}-${version}";
 
   src = fetchurl {
@@ -12,21 +12,24 @@ stdenv.mkDerivation rec {
       "${meta.homepage}/src/gst-python/${name}.tar.xz"
       "mirror://gentoo/distfiles/${name}.tar.xz"
       ];
-    sha256 = "19rb06x2m7103zwfm0plxx95gb8bp01ng04h4q9k6ii9q7g2kxf3";
+    sha256 = "1rlr6gl4lg97ng4jxh3gb2ldmywm15vwsa72nvggr8qa2l8q3fg0";
   };
-
-  patches = [ ./different-path-with-pygobject.patch ];
 
   outputs = [ "out" "dev" ];
 
-  nativeBuildInputs = [ pkgconfig python ];
+  nativeBuildInputs = [ meson ninja pkgconfig python ];
 
   # XXX: in the Libs.private field of python3.pc
   buildInputs = [ ncurses ];
 
-  configureFlags = [
-    "--with-pygi-overrides-dir=$(out)/${python.sitePackages}/gi/overrides"
+  mesonFlags = [
+    "-Dpygi-overrides-dir=${python.sitePackages}/gi/overrides"
   ];
+
+  postPatch = ''
+    chmod +x scripts/pythondetector # patchShebangs requires executable file
+    patchShebangs scripts/pythondetector
+  '';
 
   propagatedBuildInputs = [ gst-plugins-base pygobject3 ];
 

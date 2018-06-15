@@ -5,14 +5,14 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "sudo-1.8.21p2";
+  name = "sudo-1.8.23";
 
   src = fetchurl {
     urls =
       [ "ftp://ftp.sudo.ws/pub/sudo/${name}.tar.gz"
         "ftp://ftp.sudo.ws/pub/sudo/OLD/${name}.tar.gz"
       ];
-    sha256 = "0s33szq6q59v5s377l4v6ybsdy7pfq6sz7y364j4x09ssdn79ibl";
+    sha256 = "0yg62wq8rcrbr7qvh3wgfg2g4bwanbi50cr2lf2cfyy8dydx4qyq";
   };
 
   prePatch = ''
@@ -28,6 +28,7 @@ stdenv.mkDerivation rec {
     "--with-logpath=/var/log/sudo.log"
     "--with-iologdir=/var/log/sudo-io"
     "--with-sendmail=${sendmailPath}"
+    "--enable-tmpfiles.d=no"
   ] ++ stdenv.lib.optional withInsults [
     "--with-insults"
     "--with-all-insults"
@@ -50,9 +51,12 @@ stdenv.mkDerivation rec {
     installFlags="sudoers_uid=$(id -u) sudoers_gid=$(id -g) sysconfdir=$out/etc rundir=$TMPDIR/dummy vardir=$TMPDIR/dummy"
     '';
 
-  buildInputs = [ coreutils pam groff ];
+  nativeBuildInputs = [ groff ];
+  buildInputs = [ pam ];
 
   enableParallelBuilding = true;
+
+  doCheck = false; # needs root
 
   postInstall =
     ''
@@ -70,9 +74,9 @@ stdenv.mkDerivation rec {
       providing an audit trail of the commands and their arguments.
       '';
 
-    homepage = http://www.sudo.ws/;
+    homepage = https://www.sudo.ws/;
 
-    license = http://www.sudo.ws/sudo/license.html;
+    license = https://www.sudo.ws/sudo/license.html;
 
     maintainers = [ stdenv.lib.maintainers.eelco ];
 

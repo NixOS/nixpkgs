@@ -37,7 +37,7 @@ let self = stdenv.mkDerivation rec {
   # The config.guess in GMP tries to runtime-detect various
   # ARM optimization flags via /proc/cpuinfo (and is also
   # broken on multicore CPUs). Avoid this impurity.
-  preConfigure = optionalString stdenv.isArm ''
+  preConfigure = optionalString stdenv.isAarch32 ''
       configureFlagsArray+=("--build=$(./configfsf.guess)")
     '';
 

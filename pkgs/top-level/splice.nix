@@ -24,25 +24,52 @@
 lib: pkgs: actuallySplice:
 
 let
-  defaultBuildScope = pkgs.buildPackages // pkgs.buildPackages.xorg;
+  defaultBuildBuildScope = pkgs.buildPackages.buildPackages // pkgs.buildPackages.buildPackages.xorg;
+  defaultBuildHostScope = pkgs.buildPackages // pkgs.buildPackages.xorg;
+  defaultBuildTargetScope =
+    if pkgs.targetPlatform == pkgs.hostPlatform
+    then defaultBuildHostScope
+    else assert pkgs.hostPlatform == pkgs.buildPlatform; defaultHostTargetScope;
+  defaultHostHostScope = {}; # unimplemented
   # TODO(@Ericson2314): we shouldn't preclude run-time fetching by removing
   # these attributes. We should have a more general solution for selecting
   # whether `nativeDrv` or `crossDrv` is the default in `defaultScope`.
   pkgsWithoutFetchers = lib.filterAttrs (n: _: !lib.hasPrefix "fetch" n) pkgs;
-  defaultRunScope = pkgsWithoutFetchers // pkgs.xorg;
+  targetPkgsWithoutFetchers = lib.filterAttrs (n: _: !lib.hasPrefix "fetch" n) pkgs.targetPackages;
+  defaultHostTargetScope = pkgsWithoutFetchers // pkgs.xorg;
+  defaultTargetTargetScope = targetPkgsWithoutFetchers // targetPkgsWithoutFetchers.xorg or {};
 
-  splicer = buildPkgs: runPkgs: let
-    mash = buildPkgs // runPkgs;
+  splicer = pkgsBuildBuild: pkgsBuildHost: pkgsBuildTarget:
+            pkgsHostHost: pkgsHostTarget:
+            pkgsTargetTarget: let
+    mash =
+      # Other pkgs sets
+      pkgsBuildBuild // pkgsBuildTarget // pkgsHostHost // pkgsTargetTarget
+      # The same pkgs sets one probably intends
+      // pkgsBuildHost // pkgsHostTarget;
     merge = name: {
       inherit name;
       value = let
         defaultValue = mash.${name};
         # `or {}` is for the non-derivation attsert splicing case, where `{}` is the identity.
-        buildValue = buildPkgs.${name} or {};
-        runValue = runPkgs.${name} or {};
+        valueBuildBuild = pkgsBuildBuild.${name} or {};
+        valueBuildHost = pkgsBuildHost.${name} or {};
+        valueBuildTarget = pkgsBuildTarget.${name} or {};
+        valueHostHost = throw "`valueHostHost` unimplemented: pass manually rather than relying on splicer.";
+        valueHostTarget = pkgsHostTarget.${name} or {};
+        valueTargetTarget = pkgsTargetTarget.${name} or {};
         augmentedValue = defaultValue
-          // (lib.optionalAttrs (buildPkgs ? ${name}) { nativeDrv = buildValue; })
-          // (lib.optionalAttrs (runPkgs ? ${name}) { crossDrv = runValue; });
+          # TODO(@Ericson2314): Stop using old names after transition period
+          // (lib.optionalAttrs (pkgsBuildHost ? ${name}) { nativeDrv = valueBuildHost; })
+          // (lib.optionalAttrs (pkgsHostTarget ? ${name}) { crossDrv = valueHostTarget; })
+          // {
+            __spliced =
+                 (lib.optionalAttrs (pkgsBuildBuild ? ${name}) { buildBuild = valueBuildBuild; })
+              // (lib.optionalAttrs (pkgsBuildTarget ? ${name}) { buildTarget = valueBuildTarget; })
+              // { hostHost = valueHostHost; }
+              // (lib.optionalAttrs (pkgsTargetTarget ? ${name}) { targetTarget = valueTargetTarget;
+          });
+        };
         # Get the set of outputs of a derivation. If one derivation fails to
         # evaluate we don't want to diverge the entire splice, so we fall back
         # on {}
@@ -55,10 +82,15 @@ let
       in
         # The derivation along with its outputs, which we recur
         # on to splice them together.
-        if lib.isDerivation defaultValue then augmentedValue
-          // splicer (tryGetOutputs buildValue) (getOutputs runValue)
+        if lib.isDerivation defaultValue then augmentedValue // splicer
+          (tryGetOutputs valueBuildBuild) (tryGetOutputs valueBuildHost) (tryGetOutputs valueBuildTarget)
+          (tryGetOutputs valueHostHost) (getOutputs valueHostTarget)
+          (tryGetOutputs valueTargetTarget)
         # Just recur on plain attrsets
-        else if lib.isAttrs defaultValue then splicer buildValue runValue
+        else if lib.isAttrs defaultValue then splicer
+          valueBuildBuild valueBuildHost valueBuildTarget
+          {} valueHostTarget
+          valueTargetTarget
         # Don't be fancy about non-derivations. But we could have used used
         # `__functor__` for functions instead.
         else defaultValue;
@@ -67,11 +99,16 @@ let
 
   splicedPackages =
     if actuallySplice
-    then splicer defaultBuildScope defaultRunScope // {
-      # These should never be spliced under any circumstances
-      inherit (pkgs) pkgs buildPackages targetPackages
-        buildPlatform targetPlatform hostPlatform;
-    }
+    then
+      splicer
+        defaultBuildBuildScope defaultBuildHostScope defaultBuildTargetScope
+        defaultHostHostScope defaultHostTargetScope
+        defaultTargetTargetScope
+      // {
+        # These should never be spliced under any circumstances
+        inherit (pkgs) pkgs buildPackages targetPackages
+          buildPlatform targetPlatform hostPlatform;
+      }
     else pkgs // pkgs.xorg;
 
 in

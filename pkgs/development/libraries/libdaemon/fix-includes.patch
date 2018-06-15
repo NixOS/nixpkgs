@@ -1,0 +1,13 @@
+--- libdaemon-0.14.orig/examples/testd.c
++++ libdaemon-0.14/examples/testd.c
+@@ -21,9 +21,9 @@
+ #include <signal.h>
+ #include <errno.h>
+ #include <string.h>
++#include <unistd.h>
+ #include <sys/types.h>
+ #include <sys/time.h>
+-#include <sys/unistd.h>
+ #include <sys/select.h>
+ 
+ #include <libdaemon/dfork.h>

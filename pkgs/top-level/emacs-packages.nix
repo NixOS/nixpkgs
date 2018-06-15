@@ -32,9 +32,7 @@
 #   `meta` with `platforms` and `homepage` set to something you are
 #   unlikely to want to override for most packages
 
-{ overrides
-
-, lib, newScope, stdenv, fetchurl, fetchgit, fetchFromGitHub, fetchhg, runCommand
+{ lib, newScope, stdenv, fetchurl, fetchgit, fetchFromGitHub, fetchhg, runCommand
 
 , emacs, texinfo, lndir, makeWrapper
 , trivialBuild
@@ -179,6 +177,8 @@ let
       license = gpl3Plus;
     };
   };
+
+  emacs-libvterm = callPackage ../applications/editors/emacs-modes/emacs-libvterm { };
 
   evil-jumper = melpaBuild rec {
     pname   = "evil-jumper";
@@ -387,9 +387,9 @@ let
 in
   lib.makeScope newScope (self:
     {}
-    // melpaPackages self
     // elpaPackages self
     // melpaStablePackages self
+    // melpaPackages self
     // orgPackages self
     // packagesFun self
   )

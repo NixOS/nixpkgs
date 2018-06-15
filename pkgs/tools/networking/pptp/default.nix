@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "pptp-${version}";
-  version = "1.9.0";
+  version = "1.10.0";
 
   src = fetchurl {
     url = "mirror://sourceforge/pptpclient/${name}.tar.gz";
-    sha256 = "00cj3jqj1hqri856jif4kkzan684qv1cb1zf2amzblvqqnzqq7hb";
+    sha256 = "1x2szfp96w7cag2rcvkdqbsl836ja5148zzfhaqp7kl7wjw2sjc2";
   };
 
   patchPhase =

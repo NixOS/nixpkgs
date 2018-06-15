@@ -1,43 +1,57 @@
-{ stdenv, lib, buildGoPackage, fetchFromGitHub, gpgme, libgpgerror, devicemapper, btrfs-progs, pkgconfig, ostree }:
+{ stdenv, lib, buildGoPackage, fetchFromGitHub, runCommand
+, gpgme, libgpgerror, devicemapper, btrfs-progs, pkgconfig, ostree, libselinux
+, go-md2man }:
 
 with stdenv.lib;
 
-buildGoPackage rec {
-  name = "skopeo-${version}";
-  version = "0.1.23";
-  rev = "v${version}";
-
-  goPackagePath = "github.com/projectatomic/skopeo";
-  excludedPackages = "integration";
-
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ gpgme libgpgerror devicemapper btrfs-progs ostree ];
+let
+  version = "0.1.30";
 
   src = fetchFromGitHub {
-    inherit rev;
+    rev = "v${version}";
     owner = "projectatomic";
     repo = "skopeo";
-    sha256 = "1axxnm87fpsd7q28v951ilhmzd42k8wyh741gdfdcajjwglfj0nn";
+    sha256 = "10lpiiki7mlhrp4bid40wys3lch7fars1whxsa5gy0frfgp89ghn";
   };
 
-  patches = [
-    ./path.patch
-  ];
+  defaultPolicyFile = runCommand "skopeo-default-policy.json" {} "cp ${src}/default-policy.json $out";
+
+  goPackagePath = "github.com/projectatomic/skopeo";
+
+in
+buildGoPackage rec {
+  name = "skopeo-${version}";
+  inherit src goPackagePath;
+
+  outputs = [ "bin" "man" "out" ];
+
+  excludedPackages = "integration";
+
+  nativeBuildInputs = [ pkgconfig (lib.getBin go-md2man) ];
+  buildInputs = [ gpgme libgpgerror devicemapper btrfs-progs ostree libselinux ];
+
+  buildFlagsArray = ''
+    -ldflags=
+    -X github.com/projectatomic/skopeo/vendor/github.com/containers/image/signature.systemDefaultPolicyPath=${defaultPolicyFile}
+    -X github.com/projectatomic/skopeo/vendor/github.com/containers/image/internal/tmpdir.unixTempDirForBigFiles=/tmp
+  '';
 
   preBuild = ''
     export CGO_CFLAGS="-I${getDev gpgme}/include -I${getDev libgpgerror}/include -I${getDev devicemapper}/include -I${getDev btrfs-progs}/include"
     export CGO_LDFLAGS="-L${getLib gpgme}/lib -L${getLib libgpgerror}/lib -L${getLib devicemapper}/lib"
   '';
 
-  postInstall = ''
-    mkdir $bin/etc
-    cp -v ./go/src/github.com/projectatomic/skopeo/default-policy.json $bin/etc/default-policy.json
+  postBuild = ''
+    # depends on buildGoPackage not changing …
+    pushd ./go/src/${goPackagePath}
+    make install-docs MANINSTALLDIR="$man"
+    popd
   '';
 
   meta = {
     description = "A command line utility for various operations on container images and image repositories";
     homepage = https://github.com/projectatomic/skopeo;
-    maintainers = with stdenv.lib.maintainers; [ vdemeester ];
+    maintainers = with stdenv.lib.maintainers; [ vdemeester lewo ];
     license = stdenv.lib.licenses.asl20;
   };
 }

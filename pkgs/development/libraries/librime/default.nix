@@ -3,13 +3,13 @@
 
 stdenv.mkDerivation rec {
   name = "librime-${version}";
-  version = "1.2.9";
+  version = "1.3.1";
 
   src = fetchFromGitHub {
     owner = "rime";
     repo = "librime";
-    rev = "rime-${version}";
-    sha256 = "14jgnfm61ynm086x9v7wfmv2p14h0qp8lq4d2jqm21n821jsraj6";
+    rev = "${version}";
+    sha256 = "1y0h3nnz97smx9z8h5fzk4c27mvrwv8kajxffqc43bhyvxvb2jd6";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -23,6 +23,6 @@ stdenv.mkDerivation rec {
     description = "Rime Input Method Engine, the core library";
     license     = licenses.bsd3;
     maintainers = with maintainers; [ sifmelcara ];
-    platforms   = platforms.all;
+    platforms   = platforms.linux;
   };
 }

@@ -1,5 +1,5 @@
-{ stdenv, fetchFromGitHub, python, perl, intltool, flex, autoreconfHook,
-texinfo, libiconv }:
+{ stdenv, fetchFromGitHub, python, perl, intltool, flex, autoreconfHook
+, texinfo, libiconv, libintl }:
 
 stdenv.mkDerivation rec {
   name = "recode-3.7-2fd838565";
@@ -12,15 +12,13 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ python perl intltool flex texinfo autoreconfHook libiconv ];
+  buildInputs = [ libintl ];
 
   preAutoreconf = ''
     # fix build with new automake, https://bugs.gentoo.org/show_bug.cgi?id=419455
     substituteInPlace Makefile.am --replace "ACLOCAL = ./aclocal.sh @ACLOCAL@" ""
     sed -i '/^AM_C_PROTOTYPES/d' configure.ac
     substituteInPlace src/Makefile.am --replace "ansi2knr" ""
-  ''
-  + stdenv.lib.optionalString stdenv.isDarwin ''
-    export LDFLAGS=-lintl
   '';
 
   #doCheck = true; # doesn't work yet

@@ -1,5 +1,5 @@
-{ stdenv, fetchurl, cmake, qtbase, pkgconfig, python2Packages, dbus_glib, dbus_daemon
-, telepathy_farstream, telepathy_glib, fetchpatch }:
+{ stdenv, fetchurl, cmake, qtbase, pkgconfig, python2Packages, dbus-glib, dbus_daemon
+, telepathy-farstream, telepathy-glib, fetchpatch }:
 
 let
   inherit (python2Packages) python dbus-python;
@@ -12,8 +12,8 @@ in stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ cmake pkgconfig python ];
-  propagatedBuildInputs = [ qtbase telepathy_farstream telepathy_glib ];
-  buildInputs = [ dbus_glib ];
+  propagatedBuildInputs = [ qtbase telepathy-farstream telepathy-glib ];
+  buildInputs = [ dbus-glib ];
   checkInputs = [ dbus_daemon dbus-python ];
 
   patches = [

@@ -6,7 +6,7 @@
 , glibcLocales
 , pytest
 , pytestcov
-, pytest-mock
+, mock
 , pygments
 , pillow
 , dateutil
@@ -28,16 +28,15 @@
 }:
 
 buildPythonPackage rec {
-  name = "${pname}-${version}";
   pname = "Nikola";
-  version = "7.8.10";
+  version = "7.8.15";
 
   # Nix contains only Python 3 supported version of doit, which is a dependency
   # of Nikola. Python 2 support would require older doit 0.29.0 (which on the
   # other hand doesn't support Python 3.3). So, just disable Python 2.
   disabled = !isPy3k;
 
-  buildInputs = [ pytest pytestcov pytest-mock glibcLocales ];
+  checkInputs = [ pytest pytestcov mock glibcLocales ];
 
   propagatedBuildInputs = [
     pygments pillow dateutil docutils Mako unidecode lxml Yapsy PyRSS2Gen
@@ -47,7 +46,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "e242c3d0dd175d95a0baf5268b108081ba160b83ceafec8c9bc2ec0a24a56537";
+    sha256 = "182b4b9254f0d710603ba491853429ad6ef3f955f3e718191336b44cfd649000";
   };
 
   meta = {

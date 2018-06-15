@@ -97,7 +97,8 @@ let
       res self;
     in res;
 
-  aliases = self: super: import ./aliases.nix super;
+  aliases = self: super: if config.skipAliases or false then {}
+                         else import ./aliases.nix super;
 
   # stdenvOverrides is used to avoid having multiple of versions
   # of certain dependencies that were used in bootstrapping the
@@ -116,7 +117,9 @@ let
     lib.optionalAttrs allowCustomOverrides
       ((config.packageOverrides or (super: {})) super);
 
-  # The complete chain of package set builders, applied from top to bottom
+  # The complete chain of package set builders, applied from top to bottom.
+  # stdenvOverlays must be last as it brings package forward from the
+  # previous bootstrapping phases which have already been overlayed.
   toFix = lib.foldl' (lib.flip lib.extends) (self: {}) ([
     stdenvBootstappingAndPlatforms
     platformCompat
@@ -125,9 +128,9 @@ let
     splice
     allPackages
     aliases
-    stdenvOverrides
     configOverrides
-  ] ++ overlays);
+  ] ++ overlays ++ [
+    stdenvOverrides ]);
 
 in
   # Return the complete set of packages.

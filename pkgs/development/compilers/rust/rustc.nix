@@ -1,5 +1,5 @@
 { stdenv, targetPackages
-, fetchurl, fetchgit, fetchzip, file, python2, tzdata, procps
+, fetchurl, fetchgit, fetchzip, file, python2, tzdata, ps
 , llvm, jemalloc, ncurses, darwin, rustPlatform, git, cmake, curl
 , which, libffi, gdb
 , version
@@ -17,13 +17,11 @@
 
 let
   inherit (stdenv.lib) optional optionalString;
-
-  procps = if stdenv.isDarwin then darwin.ps else args.procps;
+  inherit (darwin.apple_sdk.frameworks) Security;
 
   llvmShared = llvm.override { enableSharedLibraries = true; };
 
   target = builtins.replaceStrings [" "] [","] (builtins.toString targets);
-
 in
 
 stdenv.mkDerivation {
@@ -37,6 +35,12 @@ stdenv.mkDerivation {
   # The build will fail at the very end on AArch64 without this.
   dontUpdateAutotoolsGnuConfigScripts = if stdenv.isAarch64 then true else null;
 
+  # Running the default `strip -S` command on Darwin corrupts the
+  # .rlib files in "lib/".
+  #
+  # See https://github.com/NixOS/nixpkgs/pull/34227
+  stripDebugList = if stdenv.isDarwin then [ "bin" ] else null;
+
   NIX_LDFLAGS = optionalString stdenv.isDarwin "-rpath ${llvmShared}/lib";
 
   # Enable nightly features in stable compiles (used for
@@ -49,15 +53,22 @@ stdenv.mkDerivation {
   RUSTFLAGS = "-Ccodegen-units=10";
 
   # We need rust to build rust. If we don't provide it, configure will try to download it.
+  # Reference: https://github.com/rust-lang/rust/blob/master/src/bootstrap/configure.py
   configureFlags = configureFlags
                 ++ [ "--enable-local-rust" "--local-rust-root=${rustPlatform.rust.rustc}" "--enable-rpath" ]
-                ++ [ "--enable-vendor" "--disable-locked-deps" ]
+                ++ [ "--enable-vendor" ]
                 # ++ [ "--jemalloc-root=${jemalloc}/lib"
-                ++ [ "--default-linker=${targetPackages.stdenv.cc}/bin/cc" "--default-ar=${targetPackages.stdenv.cc.bintools}/bin/ar" ]
+                ++ [ "--default-linker=${targetPackages.stdenv.cc}/bin/cc" ]
                 ++ optional (!forceBundledLLVM) [ "--enable-llvm-link-shared" ]
-                ++ optional (stdenv.cc.cc ? isClang) "--enable-clang"
                 ++ optional (targets != []) "--target=${target}"
                 ++ optional (!forceBundledLLVM) "--llvm-root=${llvmShared}";
+
+  # The boostrap.py will generated a Makefile that then executes the build.
+  # The BOOTSTRAP_ARGS used by this Makefile must include all flags to pass
+  # to the bootstrap builder.
+  postConfigure = ''
+    substituteInPlace Makefile --replace 'BOOTSTRAP_ARGS :=' 'BOOTSTRAP_ARGS := --jobs $(NIX_BUILD_CORES)'
+  '';
 
   patches = patches ++ targetPatches;
 
@@ -67,6 +78,8 @@ stdenv.mkDerivation {
   passthru.target = target;
 
   postPatch = ''
+    patchShebangs src/etc
+
     # Fix dynamic linking against llvm
     #${optionalString (!forceBundledLLVM) ''sed -i 's/, kind = \\"static\\"//g' src/etc/mklldeps.py''}
 
@@ -79,8 +92,9 @@ stdenv.mkDerivation {
     #[ -f src/liballoc_jemalloc/lib.rs ] && sed -i 's,je_,,g' src/liballoc_jemalloc/lib.rs
     #[ -f src/liballoc/heap.rs ] && sed -i 's,je_,,g' src/liballoc/heap.rs # Remove for 1.4.0+
 
-    # Disable fragile linker-output-non-utf8 test
+    # Disable fragile tests.
     rm -vr src/test/run-make/linker-output-non-utf8 || true
+    rm -vr src/test/run-make/issue-26092 || true
 
     # Remove test targeted at LLVM 3.9 - https://github.com/rust-lang/rust/issues/36835
     rm -vr src/test/run-pass/issue-36023.rs || true
@@ -92,26 +106,16 @@ stdenv.mkDerivation {
     # On Hydra: `TcpListener::bind(&addr)`: Address already in use (os error 98)'
     sed '/^ *fn fast_rebind()/i#[ignore]' -i src/libstd/net/tcp.rs
 
-    # Disable some failing gdb tests. Try re-enabling these when gdb
-    # is updated past version 7.12.
-    rm src/test/debuginfo/basic-types-globals.rs
-    rm src/test/debuginfo/basic-types-mut-globals.rs
-    rm src/test/debuginfo/c-style-enum.rs
-    rm src/test/debuginfo/lexical-scopes-in-block-expression.rs
-    rm src/test/debuginfo/limited-debuginfo.rs
-    rm src/test/debuginfo/simple-struct.rs
-    rm src/test/debuginfo/simple-tuple.rs
-    rm src/test/debuginfo/union-smoke.rs
-    rm src/test/debuginfo/vec-slices.rs
-    rm src/test/debuginfo/vec.rs
-
     # Useful debugging parameter
     # export VERBOSE=1
-  ''
-  + optionalString stdenv.isDarwin ''
+  '' + optionalString stdenv.isDarwin ''
     # Disable all lldb tests.
     # error: Can't run LLDB test because LLDB's python path is not set
     rm -vr src/test/debuginfo/*
+    rm -v src/test/run-pass/backtrace-debuginfo.rs
+
+    # error: No such file or directory
+    rm -v src/test/run-pass/issue-45731.rs
 
     # Disable tests that fail when sandboxing is enabled.
     substituteInPlace src/libstd/sys/unix/ext/net.rs \
@@ -122,34 +126,30 @@ stdenv.mkDerivation {
     rm -v src/test/run-pass/sync-send-in-std.rs  # FIXME: ???
   '';
 
-  preConfigure = ''
-    # Needed flags as the upstream configure script has a broken prefix substitution
-    configureFlagsArray+=("--datadir=$out/share")
-    configureFlagsArray+=("--infodir=$out/share/info")
-  '';
-
   # rustc unfortunately need cmake for compiling llvm-rt but doesn't
   # use it for the normal build. This disables cmake in Nix.
   dontUseCmakeConfigure = true;
 
   # ps is needed for one of the test cases
   nativeBuildInputs =
-    [ file python2 procps rustPlatform.rust.rustc git cmake
+    [ file python2 ps rustPlatform.rust.rustc git cmake
       which libffi
     ]
     # Only needed for the debuginfo tests
     ++ optional (!stdenv.isDarwin) gdb;
 
   buildInputs = [ ncurses ] ++ targetToolchains
+    ++ optional stdenv.isDarwin Security
     ++ optional (!forceBundledLLVM) llvmShared;
 
   outputs = [ "out" "man" "doc" ];
   setOutputFlags = false;
 
-  # Disable codegen units for the tests.
+  # Disable codegen units and hardening for the tests.
   preCheck = ''
     export RUSTFLAGS=
     export TZDIR=${tzdata}/share/zoneinfo
+    export hardeningDisable=all
   '' +
   # Ensure TMPDIR is set, and disable a test that removing the HOME
   # variable from the environment falls back to another home
@@ -168,7 +168,7 @@ stdenv.mkDerivation {
   # enableParallelBuilding = false;
 
   meta = with stdenv.lib; {
-    homepage = http://www.rust-lang.org/;
+    homepage = https://www.rust-lang.org/;
     description = "A safe, concurrent, practical language";
     maintainers = with maintainers; [ madjar cstrahan wizeman globin havvy wkennington ];
     license = [ licenses.mit licenses.asl20 ];

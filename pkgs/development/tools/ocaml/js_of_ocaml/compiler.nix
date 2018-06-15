@@ -8,13 +8,13 @@ else
 
 stdenv.mkDerivation rec {
 	name = "js_of_ocaml-compiler-${version}";
-	version = "3.0.0";
+	version = "3.1.0";
 
 	src = fetchFromGitHub {
 		owner = "ocsigen";
 		repo = "js_of_ocaml";
 		rev = version;
-		sha256 = "17w1pqjk521jd4yp34miyif0cxjxchnw59xhj188qfl635ykb4k8";
+		sha256 = "17a0kb39bcx2qq41cq7kjrxghm67l1yahrs47yakgb1avna0pqd9";
 	};
 
 	buildInputs = [ ocaml findlib jbuilder cmdliner cppo ];

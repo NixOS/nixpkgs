@@ -9,6 +9,7 @@ buildPerlPackage rec {
     sha256 = "1j8zdn7fy7i0bjk3jf0hxnbnshc2yf054vxq64imxdpfd7n5zgfy";
   };
 
+  # perl packages by default get devdoc which isn't present
   outputs = [ "out" ];
 
   buildInputs = with perlPackages; [ IOSocketSSL DigestSHA1 ];
@@ -25,7 +26,12 @@ buildPerlPackage rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     install -Dm755 ddclient $out/bin/ddclient
+    install -Dm644 -t $out/share/doc/ddclient COP* ChangeLog README.* RELEASENOTE
+
+    runHook postInstall
   '';
 
   # there are no tests distributed with ddclient

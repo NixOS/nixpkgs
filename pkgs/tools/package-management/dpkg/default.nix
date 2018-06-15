@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "dpkg-${version}";
-  version = "1.19.0.4";
+  version = "1.19.0.5";
 
   src = fetchurl {
     url = "mirror://debian/pool/main/d/dpkg/dpkg_${version}.tar.xz";
-    sha256 = "02lrwrkl2g1jwj71088rwswx07a1zq1jkq7193lbvy8jj2qnp9lq";
+    sha256 = "1dc5kp3fqy1k66fly6jfxkkg7w6d0jy8szddpfyc2xvzga94d041";
   };
 
   configureFlags = [
@@ -69,6 +69,6 @@ stdenv.mkDerivation rec {
     homepage = https://wiki.debian.org/Teams/Dpkg;
     license = licenses.gpl2Plus;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ mornfall nckx ];
+    maintainers = with maintainers; [ ];
   };
 }

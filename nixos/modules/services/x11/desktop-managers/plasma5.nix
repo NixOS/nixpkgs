@@ -25,8 +25,8 @@ in
         type = types.bool;
         default = true;
         description = ''
-          Enable support for Qt 4-based applications. Particularly, install the
-          Qt 4 version of the Breeze theme and a default backend for Phonon.
+          Enable support for Qt 4-based applications. Particularly, install a
+          default backend for Phonon.
         '';
       };
 
@@ -47,6 +47,18 @@ in
             ${getBin config.hardware.pulseaudio.package}/bin/pactl load-module module-device-manager "do_routing=1"
           ''}
 
+          if [ -f "$HOME/.config/kdeglobals" ]
+          then
+              # Remove extraneous font style names.
+              # See also: https://phabricator.kde.org/D9070
+              ${getBin pkgs.gnused}/bin/sed -i "$HOME/.config/kdeglobals" \
+                  -e '/^fixed=/ s/,Regular$//' \
+                  -e '/^font=/ s/,Regular$//' \
+                  -e '/^menuFont=/ s/,Regular$//' \
+                  -e '/^smallestReadableFont=/ s/,Regular$//' \
+                  -e '/^toolBarFont=/ s/,Regular$//'
+          fi
+
           exec "${getBin plasma5.plasma-workspace}/bin/startkde"
         '';
       };
@@ -54,6 +66,10 @@ in
       security.wrappers = {
         kcheckpass.source = "${lib.getBin plasma5.plasma-workspace}/lib/libexec/kcheckpass";
         "start_kdeinit".source = "${lib.getBin pkgs.kinit}/lib/libexec/kf5/start_kdeinit";
+        kwin_wayland = {
+          source = "${lib.getBin plasma5.kwin}/bin/kwin_wayland";
+          capabilities = "cap_sys_nice+ep";
+        };
       };
 
       environment.systemPackages = with pkgs; with qt5; with libsForQt5; with plasma5; with kdeApplications;
@@ -138,15 +154,17 @@ in
           print-manager
 
           breeze-icons
-          pkgs.hicolor_icon_theme
+          pkgs.hicolor-icon-theme
 
           kde-gtk-config breeze-gtk
+
+          qtvirtualkeyboard
 
           libsForQt56.phonon-backend-gstreamer
           libsForQt5.phonon-backend-gstreamer
         ]
 
-        ++ lib.optionals cfg.enableQt4Support [ breeze-qt4 pkgs.phonon-backend-gstreamer ]
+        ++ lib.optionals cfg.enableQt4Support [ pkgs.phonon-backend-gstreamer ]
 
         # Optional hardware support features
         ++ lib.optional config.hardware.bluetooth.enable bluedevil

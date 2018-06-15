@@ -3,11 +3,11 @@
 pythonPackages.buildPythonPackage rec {
   pname = "vowpalwabbit";
   name = "${pname}-${version}";
-  version = "8.3.2";
+  version = "8.5.0";
 
   src = fetchurl{
     url = "mirror://pypi/v/vowpalwabbit/${name}.tar.gz";
-    sha256 = "0qm8rlrs2gfgamqnpx4lapxakpzgh0yh3kp1lbd7lhb0r748m3k7";
+    sha256 = "0b517371fc64f1c728a0af42a31fa93def27306e9b4d25d6e5fd01bcff1b7304";
   };
   # vw tries to write some explicit things to home
   # python installed: The directory '/homeless-shelter/.cache/pip/http'

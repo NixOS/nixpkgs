@@ -14,6 +14,7 @@ rec {
     , defaultText ? null # Textual representation of the default, for in the manual.
     , example ? null # Example value used in the manual.
     , description ? null # String describing the option.
+    , relatedPackages ? null # Related packages used in the manual (see `genRelatedPackages` in ../nixos/doc/manual/default.nix).
     , type ? null # Option type, providing type-checking and value merging.
     , apply ? null # Function that converts the option value to something else.
     , internal ? null # Whether the option is for NixOS developers only.
@@ -76,7 +77,6 @@ rec {
   getValues = map (x: x.value);
   getFiles = map (x: x.file);
 
-
   # Generate documentation template from the list of option declaration like
   # the set generated with filterOptionSets.
   optionAttrSetToDocList = optionAttrSetToDocList' [];
@@ -85,6 +85,7 @@ rec {
     concatMap (opt:
       let
         docOption = rec {
+          loc = opt.loc;
           name = showOption opt.loc;
           description = opt.description or (throw "Option `${name}' has no description.");
           declarations = filter (x: x != unknownModule) opt.declarations;
@@ -93,9 +94,10 @@ rec {
           readOnly = opt.readOnly or false;
           type = opt.type.description or null;
         }
-        // (if opt ? example then { example = scrubOptionValue opt.example; } else {})
-        // (if opt ? default then { default = scrubOptionValue opt.default; } else {})
-        // (if opt ? defaultText then { default = opt.defaultText; } else {});
+        // optionalAttrs (opt ? example) { example = scrubOptionValue opt.example; }
+        // optionalAttrs (opt ? default) { default = scrubOptionValue opt.default; }
+        // optionalAttrs (opt ? defaultText) { default = opt.defaultText; }
+        // optionalAttrs (opt ? relatedPackages && opt.relatedPackages != null) { inherit (opt) relatedPackages; };
 
         subOptions =
           let ss = opt.type.getSubOptions opt.loc;
@@ -125,7 +127,20 @@ rec {
 
 
   /* Helper functions. */
-  showOption = concatStringsSep ".";
+
+  # Convert an option, described as a list of the option parts in to a
+  # safe, human readable version. ie:
+  #
+  # (showOption ["foo" "bar" "baz"]) == "foo.bar.baz"
+  # (showOption ["foo" "bar.baz" "tux"]) == "foo.\"bar.baz\".tux"
+  showOption = parts: let
+    escapeOptionPart = part:
+      let
+        escaped = lib.strings.escapeNixString part;
+      in if escaped == "\"${part}\""
+         then part
+         else escaped;
+    in (concatStringsSep ".") (map escapeOptionPart parts);
   showFiles = files: concatStringsSep " and " (map (f: "`${f}'") files);
   unknownModule = "<unknown-file>";
 

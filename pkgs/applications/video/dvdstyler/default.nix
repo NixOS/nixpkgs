@@ -15,11 +15,11 @@ stdenv.mkDerivation rec {
 
   name = "dvdstyler-${version}";
   srcName = "DVDStyler-${version}";
-  version = "3.0.3";
+  version = "3.0.4";
 
   src = fetchurl {
     url = "mirror://sourceforge/project/dvdstyler/dvdstyler/${version}/${srcName}.tar.bz2";
-    sha256 = "1j432kszmwmsd3nz398h5514dbm5vsrn4rr3iil72ckjj1h3i00q";
+    sha256 = "0lwc0hn94m9r8fi07sjqz3fr618l6lnw3zsakxw7nlgnxbjsk7pi";
   };
 
   nativeBuildInputs = 

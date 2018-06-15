@@ -2,29 +2,33 @@
 
 stdenv.mkDerivation rec {
   name = "crystal-${version}";
-  version = "0.23.1";
+  version = "0.24.2";
 
   src = fetchurl {
     url = "https://github.com/crystal-lang/crystal/archive/${version}.tar.gz";
-    sha256 = "8cf1b9a4eab29fca2f779ea186ae18f7ce444ce189c621925fa1a0c61dd5ff55";
+    sha256 = "1l7nrrfgz1yxxjphypwzlxj6dbari20p71zb4l0gix09lmas8l6y";
   };
 
-  prebuiltName = "crystal-0.23.0-1";
+  prebuiltName = "crystal-0.24.2-1";
   prebuiltSrc = let arch = {
     "x86_64-linux" = "linux-x86_64";
     "i686-linux" = "linux-i686";
     "x86_64-darwin" = "darwin-x86_64";
   }."${stdenv.system}" or (throw "system ${stdenv.system} not supported");
   in fetchurl {
-    url = "https://github.com/crystal-lang/crystal/releases/download/0.23.0/${prebuiltName}-${arch}.tar.gz";
+    url = "https://github.com/crystal-lang/crystal/releases/download/0.24.2/${prebuiltName}-${arch}.tar.gz";
     sha256 = {
-      "x86_64-linux" = "0nhs7swbll8hrk15kmmywngkhij80x62axiskb1gjmiwvzhlh0qx";
-      "i686-linux" = "03xp8d3lqflzzm26lpdn4yavj87qzgd6xyrqxp2pn9ybwrq8fx8a";
-      "x86_64-darwin" = "1prz6c1gs8z7dgpdy2id2mjn1c8f5p2bf9b39985bav448njbyjz";
+      "x86_64-linux" = "1xf6riwd5k5f95988m1hsppsfii5v96svgmy12ncy7mgmm7k4dh3";
+      "i686-linux" = "0ar05kj89pm3zxfnxwhf0mz9vrd9q5p47y4969sh0r6knccri0kp";
+      "x86_64-darwin" = "1vz8bi5rfgggiic4ayxbcf6pfmdjvqcg4lsivnk2fyshr1m8l0h5";
     }."${stdenv.system}";
   };
 
-  srcs = [ src prebuiltSrc ];
+  unpackPhase = ''
+    mkdir ${prebuiltName}
+    tar --strip-components=1 -C ${prebuiltName} -xf ${prebuiltSrc}
+    tar xf ${src}
+  '';
 
   # crystal on Darwin needs libiconv to build
   libs = [
@@ -41,25 +45,17 @@ stdenv.mkDerivation rec {
 
   sourceRoot = "${name}";
 
-  fixPrebuiltBinary = if stdenv.isDarwin then ''
-    wrapProgram ../${prebuiltName}/embedded/bin/crystal \
-        --suffix DYLD_LIBRARY_PATH : $libPath
-  ''
-  else ''
-    patchelf --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker) \
-      ../${prebuiltName}/embedded/bin/crystal
-    patchelf --set-rpath ${ stdenv.lib.makeLibraryPath [ stdenv.cc.cc ] } \
-      ../${prebuiltName}/embedded/bin/crystal
-  '';
-
   preBuild = ''
     patchShebangs bin/crystal
     patchShebangs ../${prebuiltName}/bin/crystal
-    ${fixPrebuiltBinary}
     export PATH="$(pwd)/../${prebuiltName}/bin:$PATH"
   '';
 
-  makeFlags = [ "CRYSTAL_CONFIG_VERSION=${version}" "release=1" "all" "doc" ];
+  makeFlags = [ "CRYSTAL_CONFIG_VERSION=${version}"
+                "FLAGS=--no-debug"
+                "release=1"
+                "all" "docs"
+              ];
 
   installPhase = ''
     install -Dm755 .build/crystal $out/bin/crystal
@@ -70,7 +66,7 @@ stdenv.mkDerivation rec {
     cp -r src/* $out/lib/crystal/
 
     install -dm755 $out/share/doc/crystal/api
-    cp -r doc/* $out/share/doc/crystal/api/
+    cp -r docs/* $out/share/doc/crystal/api/
     cp -r samples $out/share/doc/crystal/
 
     install -Dm644 etc/completion.bash $out/share/bash-completion/completions/crystal

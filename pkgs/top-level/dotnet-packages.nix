@@ -299,17 +299,27 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
 
   Boogie = buildDotnetPackage rec {
     baseName = "Boogie";
-    version = "2017-01-03";
+    version = "2018-05-28";
     name = "${baseName}-unstable-${version}";
 
     src = fetchFromGitHub {
       owner = "boogie-org";
       repo = "boogie";
-      rev = "5e42f0dd2891b2b85a9198052e55592a2943b7ef";
-      sha256 = "1mjnf96hbn9abgzyvmrfxlhnm213290xb9wca7rnnl12i4fa4ahl";
+      rev = "fc97aac639505f46cda7904dae95c9557716d037";
+      sha256 = "1hjksc5sapw1shxjwg0swja5afman8i15wnv5b6rzkqd4mg8y6nz";
     };
 
-    buildInputs = [ dotnetPackages.NUnitRunners ];
+    # emulate `nuget restore Source/Boogie.sln`
+    # which installs in $srcdir/Source/packages
+    preBuild = ''
+      mkdir -p Source/packages/NUnit.2.6.3
+      ln -sn ${dotnetPackages.NUnit}/lib/dotnet/NUnit Source/packages/NUnit.2.6.3/lib
+    '';
+
+    buildInputs = [
+      dotnetPackages.NUnit
+      dotnetPackages.NUnitRunners
+    ];
 
     xBuildFiles = [ "Source/Boogie.sln" ];
 
@@ -318,11 +328,23 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
     postInstall = ''
         mkdir -pv "$out/lib/dotnet/${baseName}"
         ln -sv "${pkgs.z3}/bin/z3" "$out/lib/dotnet/${baseName}/z3.exe"
+
+        # so that this derivation can be used as a vim plugin to install syntax highlighting
+        vimdir=$out/share/vim-plugins/boogie
+        install -Dt $vimdir/syntax/ Util/vim/syntax/boogie.vim
+        mkdir $vimdir/ftdetect
+        echo 'au BufRead,BufNewFile *.bpl set filetype=boogie' > $vimdir/ftdetect/bpl.vim
     '';
 
     meta = with stdenv.lib; {
       description = "An intermediate verification language";
       homepage = "https://github.com/boogie-org/boogie";
+      longDescription = ''
+        Boogie is an intermediate verification language (IVL), intended as a
+        layer on which to build program verifiers for other languages.
+
+        This derivation may be used as a vim plugin to provide syntax highlighting.
+      '';
       license = licenses.mspl;
       maintainers = [ maintainers.taktoa ];
       platforms = with platforms; (linux ++ darwin);
@@ -331,12 +353,19 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
 
   Dafny = buildDotnetPackage rec {
     baseName = "Dafny";
-    version = "1.9.8";
+    version = "2.1.0";
 
     src = fetchurl {
       url = "https://github.com/Microsoft/dafny/archive/v${version}.tar.gz";
-      sha256 = "0n4pk4cv7d2zsn4xmyjlxvpfl9avq79r06c7kzmrng24p3k4qj6s";
+      sha256 = "1iyhy0zpi6wvqif7826anzgdipgsy5bk775ds9qqwfw27j7x6fy5";
     };
+
+    postPatch = ''
+      sed -i \
+        -e 's/ Visible="False"//' \
+        -e "s/Exists(\$(CodeContractsInstallDir))/Exists('\$(CodeContractsInstallDir)')/" \
+        Source/*/*.csproj
+    '';
 
     preBuild = ''
       ln -s ${pkgs.z3} Binaries/z3
@@ -345,7 +374,7 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
     buildInputs = [ Boogie ];
 
     xBuildFiles = [ "Source/Dafny.sln" ];
-    xBuildFlags = [ ];
+    xBuildFlags = [ "/p:Configuration=Checked" "/p:Platform=Any CPU" "/t:Rebuild" ];
 
     outputFiles = [ "Binaries/*" ];
 
@@ -715,7 +744,7 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
 
     meta = {
       description = "Math.NET Numerics is an opensource numerical library for .Net, Silverlight and Mono";
-      homepage = http://numerics.mathdotnet.com/;
+      homepage = https://numerics.mathdotnet.com/;
       license = stdenv.lib.licenses.mit;
       maintainers = with stdenv.lib.maintainers; [ obadz ];
       platforms = with stdenv.lib.platforms; linux;
@@ -872,7 +901,7 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
 
     meta = {
       description = "Popular high-performance JSON framework for .NET";
-      homepage = "http://www.newtonsoft.com/json";
+      homepage = "https://www.newtonsoft.com/json";
       license = stdenv.lib.licenses.mit;
       maintainers = with stdenv.lib.maintainers; [ obadz ];
       platforms = with stdenv.lib.platforms; linux;
@@ -881,13 +910,13 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
 
   Nuget = buildDotnetPackage {
     baseName = "Nuget";
-    version = "2.8.5";
+    version = "3.4.3";
 
     src = fetchFromGitHub {
       owner = "mono";
       repo = "nuget-binary";
-      rev = "da1f2102f8172df6f7a1370a4998e3f88b91c047";
-      sha256 = "1hbnckc4gvqkknf8gh1k7iwqb4vdzifdjd19i60fnczly5v8m1c3";
+      rev = "1f3025c2eb13bfcb56b47ddd77329ac3d9911d1c";
+      sha256 = "01snk05hcrp5i2ys3p1y34r05q1b460q6wb8p3vwpba2q2czdax5";
     };
 
     buildInputs = [ unzip ];
@@ -896,7 +925,7 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
 
     outputFiles = [ "*" ];
     dllFiles = [ "NuGet*.dll" ];
-    exeFiles = [ "NuGet.exe" ];
+    exeFiles = [ "nuget.exe" ];
   };
 
   Paket = buildDotnetPackage rec {

@@ -34,6 +34,8 @@ stdenv.mkDerivation rec {
       ++ stdenv.lib.optional (cyrus_sasl == null) "--without-cyrus-sasl"
       ++ stdenv.lib.optional stdenv.isFreeBSD "--with-pic";
 
+  doCheck = false; # needs a running LDAP server
+
   installFlags = [ "sysconfdir=$(out)/etc" "localstatedir=$(out)/var" ];
 
   # 1. Fixup broken libtool
@@ -57,7 +59,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     homepage    = http://www.openldap.org/;
     description = "An open source implementation of the Lightweight Directory Access Protocol";
-    maintainers = with maintainers; [ lovek323 mornfall ];
+    maintainers = with maintainers; [ lovek323 ];
     platforms   = platforms.unix;
   };
 }

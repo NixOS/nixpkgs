@@ -1,5 +1,5 @@
 { stdenv, fetchgit, libusb, libusb1, autoconf, automake, confuse, pkgconfig
-, gccCross ? null, crossPrefix
+, gccCross ? null
 }:
 
 let
@@ -19,8 +19,10 @@ stdenv.mkDerivation {
   '';
 
   configureFlags = if gccCross != null then
-    "--enable-firmware CROSS_COMPILE=${crossPrefix}-"
+    "--enable-firmware CROSS_COMPILE=${gccCross.targetPrefix}"
     else "";
+
+  hardeningDisable = [ "pic" "stackprotector" ];
 
   # Not to strip cross build binaries (this is for the gcc-cross-wrapper)
   dontCrossStrip = true;

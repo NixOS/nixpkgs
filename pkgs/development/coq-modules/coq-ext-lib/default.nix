@@ -1,11 +1,12 @@
 { stdenv, fetchFromGitHub, coq }:
 
-let param =
+let params =
   {
     "8.5" = { version = "0.9.4"; sha256 = "1y66pamgsdxlq2w1338lj626ln70cwj7k53hxcp933g8fdsa4hp0"; };
     "8.6" = { version = "0.9.5"; sha256 = "1b4cvz3llxin130g13calw5n1zmvi6wdd5yb8a41q7yyn2hd3msg"; };
     "8.7" = { version = "0.9.5"; sha256 = "1b4cvz3llxin130g13calw5n1zmvi6wdd5yb8a41q7yyn2hd3msg"; };
-  }."${coq.coq-version}";
+  };
+  param = params."${coq.coq-version}";
 in
 
 stdenv.mkDerivation rec {
@@ -34,4 +35,7 @@ stdenv.mkDerivation rec {
     platforms = coq.meta.platforms;
   };
 
+  passthru = {
+    compatibleCoqVersions = v: builtins.hasAttr v params;
+  };
 }

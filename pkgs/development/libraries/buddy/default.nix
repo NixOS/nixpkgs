@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     description = "Binary decision diagram package";
     license = "as-is";
 
-    platforms = with stdenv.lib.platforms; allBut cygwin;
+    platforms = stdenv.lib.platforms.unix; # Once had cygwin problems
     maintainers = [ stdenv.lib.maintainers.peti ];
   };
 }

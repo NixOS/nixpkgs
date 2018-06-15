@@ -2,22 +2,22 @@
 
 let
   platform =
-    if lib.elem stdenv.system lib.platforms.unix then "unix"
+    if stdenv.hostPlatform.isUnix then "unix"
     else throw "Unknown platform for NetHack: ${stdenv.system}";
   unixHint =
-    if stdenv.isLinux then "linux"
-    else if stdenv.isDarwin then "macosx10.10"
+    /**/ if stdenv.hostPlatform.isLinux  then "linux"
+    else if stdenv.hostPlatform.isDarwin then "macosx10.10"
     # We probably want something different for Darwin
     else "unix";
   userDir = "~/.config/nethack";
   binPath = lib.makeBinPath [ coreutils less ];
 
 in stdenv.mkDerivation {
-  name = "nethack-3.6.0";
+  name = "nethack-3.6.1";
 
   src = fetchurl {
-    url = "mirror://sourceforge/nethack/nethack-360-src.tgz";
-    sha256 = "12mi5kgqw3q029y57pkg3gnp930p7yvlqi118xxdif2qhj6nkphs";
+    url = "http://nethack.org/download/3.6.1/nethack-361-src.tgz";
+    sha256 = "1dha0ijvxhx7c9hr0452h93x81iiqsll8bc9msdnp7xdqcfbz32b";
   };
 
   buildInputs = [ ncurses ];

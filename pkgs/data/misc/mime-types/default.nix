@@ -1,21 +1,15 @@
-{ stdenv, fetchurl }:
+{ stdenv, fetchzip }:
 
-stdenv.mkDerivation rec {
-  name = "mime-types-${version}";
+let
   version = "9";
-
-  src = fetchurl {
-    url = "https://mirrors.kernel.org/gentoo/distfiles/${name}.tar.bz2";
-    sha256 = "0pib8v0f5xwwm3xj2ygdi2dlxxvbq6p95l3fah5f66qj9xrqlqxl";
-  };
-
-  dontBuild = true;
-
-  installPhase = ''
-    runHook preInstall
-    install -Dm644 -t $out/etc mime.types
-    runHook postInstall
+in fetchzip rec {
+  name = "mime-types-${version}";
+  url = "https://mirrors.kernel.org/gentoo/distfiles/${name}.tar.bz2";
+  postFetch = ''
+    mkdir -p $out/etc
+    tar xjvf $downloadedFile --directory=$out/etc --strip-components=1
   '';
+  sha256 = "0gyla4wfiaccs0qh0hw7n08kdpnkkssglcg0z2jblb2lsdr4qna0";
 
   meta = with stdenv.lib; {
     description = "A database of common mappings of file extensions to MIME types";

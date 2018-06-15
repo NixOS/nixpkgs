@@ -19,6 +19,8 @@ let
     iptables -w -t nat -D POSTROUTING -j nixos-nat-post 2>/dev/null || true
     iptables -w -t nat -F nixos-nat-post 2>/dev/null || true
     iptables -w -t nat -X nixos-nat-post 2>/dev/null || true
+
+    ${cfg.extraStopCommands}
   '';
 
   setupNat = ''
@@ -36,28 +38,54 @@ let
     # NAT the marked packets.
     ${optionalString (cfg.internalInterfaces != []) ''
       iptables -w -t nat -A nixos-nat-post -m mark --mark 1 \
-        -o ${cfg.externalInterface} ${dest}
+        ${optionalString (cfg.externalInterface != null) "-o ${cfg.externalInterface}"} ${dest}
     ''}
 
     # NAT packets coming from the internal IPs.
     ${concatMapStrings (range: ''
       iptables -w -t nat -A nixos-nat-post \
-        -s '${range}' -o ${cfg.externalInterface} ${dest}
+        -s '${range}' ${optionalString (cfg.externalInterface != null) "-o ${cfg.externalInterface}"} ${dest}
     '') cfg.internalIPs}
 
     # NAT from external ports to internal ports.
     ${concatMapStrings (fwd: ''
       iptables -w -t nat -A nixos-nat-pre \
-        -i ${cfg.externalInterface} -p ${fwd.proto} \
+        -i ${toString cfg.externalInterface} -p ${fwd.proto} \
         --dport ${builtins.toString fwd.sourcePort} \
         -j DNAT --to-destination ${fwd.destination}
+
+      ${concatMapStrings (loopbackip:
+        let
+          m                = builtins.match "([0-9.]+):([0-9-]+)" fwd.destination;
+          destinationIP    = if (m == null) then throw "bad ip:ports `${fwd.destination}'" else elemAt m 0;
+          destinationPorts = if (m == null) then throw "bad ip:ports `${fwd.destination}'" else elemAt m 1;
+        in ''
+          # Allow connections to ${loopbackip}:${toString fwd.sourcePort} from the host itself
+          iptables -w -t nat -A OUTPUT \
+            -d ${loopbackip} -p ${fwd.proto} \
+            --dport ${builtins.toString fwd.sourcePort} \
+            -j DNAT --to-destination ${fwd.destination}
+
+          # Allow connections to ${loopbackip}:${toString fwd.sourcePort} from other hosts behind NAT
+          iptables -w -t nat -A nixos-nat-pre \
+            -d ${loopbackip} -p ${fwd.proto} \
+            --dport ${builtins.toString fwd.sourcePort} \
+            -j DNAT --to-destination ${fwd.destination}
+
+          iptables -w -t nat -A nixos-nat-post \
+            -d ${destinationIP} -p ${fwd.proto} \
+            --dport ${destinationPorts} \
+            -j SNAT --to-source ${loopbackip}
+        '') fwd.loopbackIPs}
     '') cfg.forwardPorts}
 
     ${optionalString (cfg.dmzHost != null) ''
       iptables -w -t nat -A nixos-nat-pre \
-        -i ${cfg.externalInterface} -j DNAT \
-	--to-destination ${cfg.dmzHost}
+        -i ${toString cfg.externalInterface} -j DNAT \
+        --to-destination ${cfg.dmzHost}
     ''}
+
+    ${cfg.extraCommands}
 
     # Append our chains to the nat tables
     iptables -w -t nat -A PREROUTING -j nixos-nat-pre
@@ -106,7 +134,8 @@ in
     };
 
     networking.nat.externalInterface = mkOption {
-      type = types.str;
+      type = types.nullOr types.str;
+      default = null;
       example = "eth1";
       description =
         ''
@@ -148,6 +177,13 @@ in
             example = "udp";
             description = "Protocol of forwarded connection";
           };
+
+          loopbackIPs = mkOption {
+            type = types.listOf types.str;
+            default = [];
+            example = literalExample ''[ "55.1.2.3" ]'';
+            description = "Public IPs for NAT reflection; for connections to `loopbackip:sourcePort' from the host itself and from other hosts behind NAT";
+          };
         };
       });
       default = [];
@@ -170,6 +206,28 @@ in
         '';
     };
 
+    networking.nat.extraCommands = mkOption {
+      type = types.lines;
+      default = "";
+      example = "iptables -A INPUT -p icmp -j ACCEPT";
+      description =
+        ''
+          Additional shell commands executed as part of the nat
+          initialisation script.
+        '';
+    };
+
+    networking.nat.extraStopCommands = mkOption {
+      type = types.lines;
+      default = "";
+      example = "iptables -D INPUT -p icmp -j ACCEPT || true";
+      description =
+        ''
+          Additional shell commands executed as part of the nat
+          teardown script.
+        '';
+    };
+
   };
 
 
@@ -178,6 +236,15 @@ in
   config = mkMerge [
     { networking.firewall.extraCommands = mkBefore flushNat; }
     (mkIf config.networking.nat.enable {
+
+      assertions = [
+        { assertion = (cfg.dmzHost != null)    -> (cfg.externalInterface != null);
+          message = "networking.nat.dmzHost requires networking.nat.externalInterface";
+        }
+        { assertion = (cfg.forwardPorts != []) -> (cfg.externalInterface != null);
+          message = "networking.nat.forwardPorts requires networking.nat.externalInterface";
+        }
+      ];
 
       environment.systemPackages = [ pkgs.iptables ];
 

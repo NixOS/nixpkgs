@@ -61,6 +61,9 @@ in {
     junit_3_8_2
     junit_4_12;
 
+  inherit (callPackage ../development/java-modules/jogl { })
+    jogl_2_3_2;
+
   inherit (callPackage ../development/java-modules/log4j { inherit fetchMaven; })
     log4j_1_2_12;
 

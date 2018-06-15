@@ -110,7 +110,7 @@ in
       };
 
       enableCompletion = mkOption {
-        default = false;
+        default = true;
         description = ''
           Enable Bash completion for all interactive bash shells.
         '';
@@ -126,7 +126,7 @@ in
     programs.bash = {
 
       shellInit = ''
-        . ${config.system.build.setEnvironment}
+        ${config.system.build.setEnvironment.text}
 
         ${cfge.shellInit}
       '';
@@ -210,6 +210,9 @@ in
       "/etc/bash_completion.d"
       "/share/bash-completion"
     ];
+
+    environment.systemPackages = optional cfg.enableCompletion
+      pkgs.nix-bash-completions;
 
     environment.shells =
       [ "/run/current-system/sw/bin/bash"

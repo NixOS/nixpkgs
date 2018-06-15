@@ -8,7 +8,8 @@ stdenv.mkDerivation rec {
   };
 
   patches = [
-    (fetchpatch { # CVE-2016-5104
+    (fetchpatch {
+      name = "CVE-2016-5104.patch";
       url = "https://github.com/libimobiledevice/libusbmuxd/commit/4397b3376dc4e4cb1c991d0aed61ce6482614196.patch";
       sha256 = "0cl3vys7bkwbdzf64d0rz3zlqpfc30w4l7j49ljv01agh42ywhgk";
     })

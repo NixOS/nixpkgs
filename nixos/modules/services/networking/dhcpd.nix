@@ -36,6 +36,7 @@ let
 
       preStart = ''
         mkdir -m 755 -p ${cfg.stateDir}
+        chown dhcpd:nogroup ${cfg.stateDir}
         touch ${cfg.stateDir}/dhcpd.leases
       '';
 

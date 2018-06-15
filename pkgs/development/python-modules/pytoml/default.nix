@@ -1,18 +1,22 @@
-{ stdenv, buildPythonPackage, fetchgit
-, python }:
+{ stdenv
+, buildPythonPackage
+, fetchgit
+, python
+}:
 
 buildPythonPackage rec {
   pname = "pytoml";
-  version = "0.1.11";
-  name = "${pname}-${version}";
+  version = "0.1.14";
 
-  checkPhase = "${python.interpreter} test/test.py";
+  checkPhase = ''
+    ${python.interpreter} test/test.py
+  '';
 
   # fetchgit used to ensure test submodule is available
   src = fetchgit {
     url = "${meta.homepage}.git";
     rev = "refs/tags/v${version}";
-    sha256 = "1jiw04zk9ccynr8kb1vqh9r1p2kh0al7g7b1f94911iazg7dgs9j";
+    sha256 = "1ip71yqxnyi4jhw5x1q7a0za61ndhpfh0vbx08jfv0w4ayng6rgv";
   };
 
   meta = with stdenv.lib; {

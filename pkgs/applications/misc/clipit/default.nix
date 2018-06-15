@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, intltool, pkgconfig, gtk2, xdotool, hicolor_icon_theme }:
+{ fetchurl, stdenv, intltool, pkgconfig, gtk2, xdotool, hicolor-icon-theme }:
 
 stdenv.mkDerivation rec {
   name = "clipit-${version}";
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ intltool gtk2 xdotool hicolor_icon_theme ];
+  buildInputs = [ intltool gtk2 xdotool hicolor-icon-theme ];
 
   meta = with stdenv.lib; {
     description = "Lightweight GTK+ Clipboard Manager";

@@ -9,22 +9,28 @@ assert sslSupport -> openssl != null;
 
 stdenv.mkDerivation rec {
   name = "lynx-${version}";
-  version = "2.8.9dev.16";
+  version = "2.8.9dev.17";
 
   src = fetchurl {
-    url = "http://invisible-mirror.net/archives/lynx/tarballs/lynx${version}.tar.bz2";
-    sha256 = "1j0vx871ghkm7fgrafnvd2ml3ywcl8d3gyhq02fhfb851c88lc84";
+    urls = [
+      "ftp://ftp.invisible-island.net/lynx/tarballs/lynx${version}.tar.bz2"
+      "https://invisible-mirror.net/archives/lynx/tarballs/lynx${version}.tar.bz2"
+    ];
+    sha256 = "1lvfsnrw5mmwrmn1m76q9mx287xwm3h5lg8sv7bcqilc0ywi2f54";
   };
 
   enableParallelBuilding = true;
 
   hardeningEnable = [ "pie" ];
 
-  configureFlags = [ "--enable-widec" ] ++ stdenv.lib.optional sslSupport "--with-ssl";
+  configureFlags = [
+    "--enable-widec"
+    "--enable-ipv6"
+  ] ++ stdenv.lib.optional sslSupport "--with-ssl";
 
-  nativeBuildInputs = stdenv.lib.optional sslSupport pkgconfig
-    ++ stdenv.lib.optional (hostPlatform != buildPlatform) buildPackages.stdenv.cc
-    ++ [ nukeReferences ];
+  depsBuildBuild = [ buildPackages.stdenv.cc ];
+  nativeBuildInputs = [ nukeReferences ]
+    ++ stdenv.lib.optional sslSupport pkgconfig;
 
   buildInputs = [ ncurses gzip ] ++ stdenv.lib.optional sslSupport openssl.dev;
 
@@ -37,7 +43,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A text-mode web browser";
-    homepage = http://lynx.invisible-island.net/;
+    homepage = https://lynx.invisible-island.net/;
     license = licenses.gpl2Plus;
     platforms = platforms.unix;
   };

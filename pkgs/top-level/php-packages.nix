@@ -74,14 +74,14 @@ let
   };
 
   php_excel = assert isPhp7; buildPecl rec {
-    name = "php_excel";
+    name = "php_excel-${version}";
     version = "1.0.2";
     phpVersion = "php7";
 
     buildInputs = [ pkgs.libxl ];
 
     src = pkgs.fetchurl {
-      url = "https://github.com/iliaal/${name}/releases/download/Excel-1.0.2-PHP7/excel-${version}-${phpVersion}.tgz";
+      url = "https://github.com/iliaal/php_excel/releases/download/Excel-1.0.2-PHP7/excel-${version}-${phpVersion}.tgz";
       sha256 = "0dpvih9gpiyh1ml22zi7hi6kslkilzby00z1p8x248idylldzs2n";
     };
 
@@ -179,7 +179,7 @@ let
     buildInputs = [ pkgs.spidermonkey_1_8_5 ];
   };
 
-  xdebug = if isPhp7 then xdebug25 else xdebug23;
+  xdebug = if isPhp7 then xdebug26 else xdebug23;
 
   xdebug23 = assert !isPhp7; buildPecl {
     name = "xdebug-2.3.1";
@@ -190,10 +190,10 @@ let
     checkTarget = "test";
   };
 
-  xdebug25 = buildPecl {
-    name = "xdebug-2.5.0";
+  xdebug26 = assert isPhp7; buildPecl {
+    name = "xdebug-2.6.0";
 
-    sha256 = "03c9y25a3gc3kpav0cdgmhjixcaly6974hx7wgihi0wlchgavmlb";
+    sha256 = "1p6b54ypi5lq4ka3pyy2gswdf1d5vjb9y8lp9fqcp3zn7g04q9mm";
 
     doCheck = true;
     checkTarget = "test";
@@ -328,12 +328,13 @@ let
 
   composer = pkgs.stdenv.mkDerivation rec {
     name = "composer-${version}";
-    version = "1.5.1";
+    version = "1.6.3";
 
     src = pkgs.fetchurl {
       url = "https://getcomposer.org/download/${version}/composer.phar";
-      sha256 = "107v8hdgmi2s15zsd9ffrr3jyw01qkwv174y9gw9fbpdrjwffi97";
+      sha256 = "1dna9ng77nw002l7hq60b6vz0f1snmnsxj1l7cg4f877msxppjsj";
     };
+
     unpackPhase = ":";
 
     buildInputs = [ pkgs.makeWrapper ];
@@ -382,11 +383,11 @@ let
 
   php-cs-fixer = pkgs.stdenv.mkDerivation rec {
     name = "php-cs-fixer-${version}";
-    version = "2.9.0";
+    version = "2.12.1";
 
     src = pkgs.fetchurl {
       url = "https://github.com/FriendsOfPHP/PHP-CS-Fixer/releases/download/v${version}/php-cs-fixer.phar";
-      sha256 = "12z1fan4yyxll03an51zhx6npr1d49s84dvmrvnzzf9jhckl5mqd";
+      sha256 = "1ifwb30wddp5blqnrkdmf0x11dk7nbxj4z2v5403fn7wfhgvibd2";
     };
 
     phases = [ "installPhase" ];
@@ -409,13 +410,13 @@ let
 
   php-parallel-lint = pkgs.stdenv.mkDerivation rec {
     name = "php-parallel-lint-${version}";
-    version = "0.9.2";
+    version = "1.0.0";
 
     src = pkgs.fetchFromGitHub {
       owner = "JakubOnderka";
       repo = "PHP-Parallel-Lint";
       rev = "v${version}";
-      sha256 = "0dzyi6arwpwbjgr366vw3qxibc3naq863p75q433ahznbdygzzm1";
+      sha256 = "16nv8yyk2z3l213dg067l6di4pigg5rd8yswr5xgd18jwbys2vnw";
     };
 
     buildInputs = [ pkgs.makeWrapper composer box ];
@@ -442,11 +443,11 @@ let
 
   phpcs = pkgs.stdenv.mkDerivation rec {
     name = "phpcs-${version}";
-    version = "2.6.0";
+    version = "3.3.0";
 
     src = pkgs.fetchurl {
       url = "https://github.com/squizlabs/PHP_CodeSniffer/releases/download/${version}/phpcs.phar";
-      sha256 = "02mlv44x508rnkzkwiyh7lg2ah7aqyxcq65q9ycj06czm0xdzs41";
+      sha256 = "1zl35vcq8dmspsj7ww338h30ah75dg91j6a1dy8avkzw5zljqi4h";
     };
 
     phases = [ "installPhase" ];
@@ -463,17 +464,17 @@ let
       description = "PHP coding standard tool";
       license = licenses.bsd3;
       homepage = https://squizlabs.github.io/PHP_CodeSniffer/;
-      maintainers = with maintainers; [ javaguirre ];
+      maintainers = with maintainers; [ javaguirre etu ];
     };
   };
 
   phpcbf = pkgs.stdenv.mkDerivation rec {
     name = "phpcbf-${version}";
-    version = "2.6.0";
+    version = "3.3.0";
 
     src = pkgs.fetchurl {
       url = "https://github.com/squizlabs/PHP_CodeSniffer/releases/download/${version}/phpcbf.phar";
-      sha256 = "1ijf52cgd85ypvw431nnmzij6156ryhfvmajpkr7plfw0iccqc5j";
+      sha256 = "1ah065gzmr11njp1if5bc4b19f4izilqwr06m84yb7af18qr77ls";
     };
 
     phases = [ "installPhase" ];
@@ -490,7 +491,7 @@ let
       description = "PHP coding standard beautifier and fixer";
       license = licenses.bsd3;
       homepage = https://squizlabs.github.io/PHP_CodeSniffer/;
-      maintainers = with maintainers; [ cmcdragonkai ];
+      maintainers = with maintainers; [ cmcdragonkai etu ];
     };
   };
 }; in self

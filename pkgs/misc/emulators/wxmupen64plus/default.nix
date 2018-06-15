@@ -1,4 +1,4 @@
-{stdenv, fetchurl, python, wxGTK29, mupen64plus, SDL, libX11, mesa}:
+{stdenv, fetchurl, python, wxGTK29, mupen64plus, SDL, libX11, libGLU_combined}:
 
 stdenv.mkDerivation {
   name = "wxmupen64plus-0.3";
@@ -7,7 +7,7 @@ stdenv.mkDerivation {
     sha256 = "1mnxi4k011dd300k35li2p6x4wccwi6im21qz8dkznnz397ps67c";
   };
 
-  buildInputs = [ python wxGTK29 SDL libX11 mesa ];
+  buildInputs = [ python wxGTK29 SDL libX11 libGLU_combined ];
 
   configurePhase = ''
     tar xf ${mupen64plus.src}

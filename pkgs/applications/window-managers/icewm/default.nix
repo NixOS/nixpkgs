@@ -25,6 +25,11 @@ stdenv.mkDerivation rec {
     export cmakeFlags="-DPREFIX=$out -DCFGDIR=/etc/icewm"
   '';
 
+  patches = [ ./fix-strlcat_strlcpy.patch ] ++
+    stdenv.lib.optional stdenv.hostPlatform.isMusl ./musl.patch;
+
+  patchFlags = [ "-p0" ];
+
   meta = {
     description = "A simple, lightweight X window manager";
     longDescription = ''
@@ -34,6 +39,6 @@ stdenv.mkDerivation rec {
     homepage = http://www.icewm.org/;
     license = licenses.lgpl2;
     maintainers = [ maintainers.AndersonTorres ];
-    platforms = platforms.unix;
+    platforms = platforms.linux;
   };
 }

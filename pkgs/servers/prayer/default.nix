@@ -18,6 +18,7 @@ stdenv.mkDerivation rec {
       ${ssl} \
       -e 's/CCLIENT_LIBS=.*/CCLIENT_LIBS=-lc-client/' \
       -e 's,^PREFIX .*,PREFIX='$out, \
+      -e 's,^CCLIENT_DIR=.*,CCLIENT_DIR=${uwimap}/include/c-client,' \
       Config
     sed -i -e s,/usr/bin/perl,${perl}/bin/perl, \
       templates/src/*.pl

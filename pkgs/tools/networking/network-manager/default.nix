@@ -1,19 +1,19 @@
-{ stdenv, fetchurl, intltool, pkgconfig, dbus_glib
+{ stdenv, fetchurl, intltool, pkgconfig, dbus-glib, gnome3
 , systemd, libgudev, libnl, libuuid, polkit, gnutls, ppp, dhcp, iptables
 , libgcrypt, dnsmasq, bluez5, readline
 , gobjectIntrospection, modemmanager, openresolv, libndp, newt, libsoup
 , ethtool, iputils, gnused, coreutils, file, inetutils, kmod, jansson, libxslt
 , python3Packages, docbook_xsl, fetchpatch, openconnect, curl, autoreconfHook }:
 
-stdenv.mkDerivation rec {
-  name    = "network-manager-${version}";
+let
   pname   = "NetworkManager";
-  major   = "1.10";
-  version = "${major}.0";
+  version = "1.10.6";
+in stdenv.mkDerivation rec {
+  name    = "network-manager-${version}";
 
   src = fetchurl {
-    url    = "mirror://gnome/sources/${pname}/${major}/${pname}-${version}.tar.xz";
-    sha256 = "1ph45rqpl8p9k4rirhss0hpf104clm8fp322p6kh6q75y06ddfwa";
+    url    = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "0xmc3x41dbcaxjm85wfv405xq1a1n3xw8m8zg645ywm3avlb3w3a";
   };
 
   outputs = [ "out" "dev" ];
@@ -81,9 +81,11 @@ stdenv.mkDerivation rec {
   buildInputs = [ systemd libgudev libnl libuuid polkit ppp libndp curl
                   bluez5 dnsmasq gobjectIntrospection modemmanager readline newt libsoup jansson ];
 
-  propagatedBuildInputs = [ dbus_glib gnutls libgcrypt python3Packages.pygobject3 ];
+  propagatedBuildInputs = [ dbus-glib gnutls libgcrypt python3Packages.pygobject3 ];
 
   nativeBuildInputs = [ autoreconfHook intltool pkgconfig libxslt docbook_xsl ];
+
+  doCheck = false; # requires /sys, the net
 
   preInstall = ''
     installFlagsArray=( "sysconfdir=$out/etc" "localstatedir=$out/var" "runstatedir=$out/var/run" )
@@ -104,8 +106,15 @@ stdenv.mkDerivation rec {
     ln -s $out/etc/systemd/system/network-manager.service $out/etc/systemd/system/dbus-org.freedesktop.NetworkManager.service
   '';
 
+  passthru = {
+    updateScript = gnome3.updateScript {
+      packageName = pname;
+      attrPath = "networkmanager";
+    };
+  };
+
   meta = with stdenv.lib; {
-    homepage    = http://projects.gnome.org/NetworkManager/;
+    homepage    = https://wiki.gnome.org/Projects/NetworkManager;
     description = "Network configuration and management tool";
     license     = licenses.gpl2Plus;
     maintainers = with maintainers; [ phreedom rickynils domenkozar obadz ];

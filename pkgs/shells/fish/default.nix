@@ -1,6 +1,6 @@
 { stdenv, fetchurl, coreutils, utillinux,
   nettools, kbd, bc, which, gnused, gnugrep,
-  groff, man-db, glibc, libiconv, pcre2,
+  groff, man-db, getent, libiconv, pcre2,
   gettext, ncurses, python3
 
   , writeText
@@ -88,7 +88,7 @@ let
 
   fish = stdenv.mkDerivation rec {
     name = "fish-${version}";
-    version = "2.7.0";
+    version = "2.7.1";
 
     etcConfigAppendix = builtins.toFile "etc-config.appendix.fish" etcConfigAppendixText;
 
@@ -96,7 +96,7 @@ let
       # There are differences between the release tarball and the tarball github packages from the tag
       # Hence we cannot use fetchFromGithub
       url = "https://github.com/fish-shell/fish-shell/releases/download/${version}/${name}.tar.gz";
-      sha256 = "1jvvm27hp46w0cia14lfz6161dkz8b935j1m7j38i7rgx75bfxis";
+      sha256 = "0nhc3yc5lnnan7zmxqqxm07rdpwjww5ijy45ll2njdc6fnfb2az4";
     };
 
     buildInputs = [ ncurses libiconv pcre2 ];
@@ -142,7 +142,7 @@ let
       sed -e "s| ul| ${utillinux}/bin/ul|" \
           -i "$out/share/fish/functions/__fish_print_help.fish"
       for cur in $out/share/fish/functions/*.fish; do
-        sed -e "s|/usr/bin/getent|${glibc.bin}/bin/getent|" \
+        sed -e "s|/usr/bin/getent|${getent}/bin/getent|" \
             -i "$cur"
       done
 

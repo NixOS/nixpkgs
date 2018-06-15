@@ -1,5 +1,6 @@
-{stdenv, buildOcamlJane, fetchurl, async, comparelib, core, ctypes, openssl,
- fieldslib, herelib, pipebang, sexplib, ocaml_oasis}:
+{ stdenv, ocaml, buildOcamlJane, fetchurl, async, comparelib, core, ctypes
+, openssl, fieldslib, herelib, pipebang, sexplib, ocaml_oasis, integers
+}:
 
 buildOcamlJane rec {
   name = "async_ssl";

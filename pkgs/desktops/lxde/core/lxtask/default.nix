@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, intltool, gtk3 }:
+{ stdenv, fetchurl, pkgconfig, intltool, gtk3, libintl }:
 
 stdenv.mkDerivation rec {
   name = "lxtask-${version}";
@@ -10,8 +10,8 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkgconfig intltool ];
-  
-  buildInputs = [ gtk3 ];
+
+  buildInputs = [ gtk3 libintl ];
 
   configureFlags = [ "--enable-gtk3" ];
 
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
       Desktop Environment, it's totally desktop independent and only
       requires pure gtk+.
     '';
-    homepage = https://wiki.lxde.org/en/LXTask; 
+    homepage = https://wiki.lxde.org/en/LXTask;
     license = stdenv.lib.licenses.gpl2Plus;
     platforms = stdenv.lib.platforms.unix;
     maintainers = [ stdenv.lib.maintainers.romildo ];

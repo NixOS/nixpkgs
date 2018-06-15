@@ -41,7 +41,7 @@ in
   # fix-point made by Nixpkgs.
   overlays ? let
       isDir = path: pathExists (path + "/.");
-      pathOverlays = try <nixpkgs-overlays> "";
+      pathOverlays = try (toString <nixpkgs-overlays>) "";
       homeOverlaysFile = homeDir + "/.config/nixpkgs/overlays.nix";
       homeOverlaysDir = homeDir + "/.config/nixpkgs/overlays";
       overlays = path:

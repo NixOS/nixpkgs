@@ -10,10 +10,9 @@ with lib;
 
   # This isn't perfect, but let's expect the user specifies an UTF-8 defaultLocale
   i18n.supportedLocales = [ (config.i18n.defaultLocale + "/UTF-8") ];
-  services.nixosManual.enable = mkDefault false;
 
-  programs.man.enable = mkDefault false;
-  programs.info.enable = mkDefault false;
+  documentation.enable = mkDefault false;
+  services.nixosManual.enable = mkDefault false;
 
   sound.enable = mkDefault false;
 }

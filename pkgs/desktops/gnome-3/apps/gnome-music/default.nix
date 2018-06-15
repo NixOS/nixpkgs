@@ -1,25 +1,46 @@
-{ stdenv, intltool, fetchurl, gdk_pixbuf, tracker, tracker-miners
-, libxml2, python3Packages, libnotify, wrapGAppsHook
-, pkgconfig, gtk3, glib, cairo
-, makeWrapper, itstool, gnome3, librsvg, gst_all_1 }:
+{ stdenv, meson, ninja, gettext, fetchurl, gdk_pixbuf, tracker
+, libxml2, python3, libnotify, wrapGAppsHook, libmediaart
+, gobjectIntrospection, gnome-online-accounts, grilo, grilo-plugins
+, pkgconfig, gtk3, glib, cairo, desktop-file-utils, appstream-glib
+, itstool, gnome3, gst_all_1 }:
 
-stdenv.mkDerivation rec {
-  inherit (import ./src.nix fetchurl) name src;
+python3.pkgs.buildPythonApplication rec {
+  pname = "gnome-music";
+  version = "3.28.2.1";
 
-  propagatedUserEnvPkgs = [ gnome3.gnome_themes_standard ];
+  format = "other";
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ gtk3 glib intltool itstool gnome3.libmediaart
-                  gdk_pixbuf gnome3.defaultIconTheme librsvg python3Packages.python
-                  gnome3.grilo gnome3.grilo-plugins gnome3.totem-pl-parser libxml2 libnotify
-                  python3Packages.pycairo python3Packages.dbus-python python3Packages.requests
-                  python3Packages.pygobject3 gst_all_1.gstreamer gst_all_1.gst-plugins-base
-                  gst_all_1.gst-plugins-good gst_all_1.gst-plugins-bad wrapGAppsHook
-                  gnome3.gsettings_desktop_schemas makeWrapper tracker tracker-miners ];
+  src = fetchurl {
+    url = "mirror://gnome/sources/${pname}/${gnome3.versionBranch version}/${pname}-${version}.tar.xz";
+    sha256 = "09lvpiqhijiq0kddnfi9rmmw806qh9a03czfhssqczd9fxmmbx5v";
+  };
 
-  wrapPrefixVariables = [ "PYTHONPATH" ];
+  nativeBuildInputs = [ meson ninja gettext itstool pkgconfig libxml2 wrapGAppsHook desktop-file-utils appstream-glib gobjectIntrospection ];
+  buildInputs = with gst_all_1; [
+    gtk3 glib libmediaart gnome-online-accounts
+    gdk_pixbuf gnome3.defaultIconTheme python3
+    grilo grilo-plugins libnotify
+    gnome3.gsettings-desktop-schemas tracker
+    gstreamer gst-plugins-base gst-plugins-good gst-plugins-bad gst-plugins-ugly
+  ];
+  propagatedBuildInputs = with python3.pkgs; [ pycairo dbus-python requests pygobject3 ];
 
-  enableParallelBuilding = true;
+
+  postPatch = ''
+    for f in meson_post_conf.py meson_post_install.py; do
+      chmod +x $f
+      patchShebangs $f
+    done
+  '';
+
+  doCheck = false;
+
+  passthru = {
+    updateScript = gnome3.updateScript {
+      packageName = pname;
+      attrPath = "gnome3.${pname}";
+    };
+  };
 
   meta = with stdenv.lib; {
     homepage = https://wiki.gnome.org/Apps/Music;

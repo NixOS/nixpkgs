@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, autoreconfHook, pkgconfig, glib, gtk_doc, gtk, gobjectIntrospection }:
+{ stdenv, lib, fetchFromGitHub, autoreconfHook, pkgconfig, glib, gtk-doc, gtk, gobjectIntrospection }:
 
 stdenv.mkDerivation rec {
   name = "gtk-mac-integration-2.0.8";
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     sha256 = "1fbhnvj0rqc3089ypvgnpkp6ad2rr37v5qk38008dgamb9h7f3qs";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkgconfig gtk_doc gobjectIntrospection ];
+  nativeBuildInputs = [ autoreconfHook pkgconfig gtk-doc gobjectIntrospection ];
   buildInputs = [ glib ];
   propagatedBuildInputs = [ gtk ];
 

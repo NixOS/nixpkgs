@@ -123,7 +123,7 @@ stdenv.mkDerivation (
 
       # Tarball builds are generally important, so give them a high
       # default priority.
-      schedulingPriority = "200";
+      schedulingPriority = 200;
     };
   }
 

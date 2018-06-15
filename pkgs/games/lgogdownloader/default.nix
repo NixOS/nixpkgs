@@ -3,13 +3,13 @@
 
 stdenv.mkDerivation rec {
   name = "lgogdownloader-${version}";
-  version = "3.2";
+  version = "3.3";
 
   src = fetchFromGitHub {
     owner = "Sude-";
     repo = "lgogdownloader";
     rev = "v${version}";
-    sha256 = "0p1zh2l8g4y2z02xj0fndbfhcxgcpwhf5d9izwsdi3yljvqv23np";
+    sha256 = "056idwwxjcp2zjqk5h7l3py1h45sax4vbsm93bz9shnfx1s1h3gc";
   };
 
   nativeBuildInputs = [ cmake pkgconfig help2man ];

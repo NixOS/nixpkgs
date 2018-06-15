@@ -25,6 +25,5 @@ stdenv.mkDerivation rec {
     description = "Compile libpcap filter expressions into BPF opcodes";
     license = licenses.gpl3;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ nckx ];
   };
 }

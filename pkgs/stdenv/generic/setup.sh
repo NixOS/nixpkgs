@@ -188,16 +188,6 @@ addToSearchPath() {
     addToSearchPathWithCustomDelimiter "${PATH_DELIMITER}" "$@"
 }
 
-
-ensureDir() {
-    echo "warning: ‘ensureDir’ is deprecated; use ‘mkdir’ instead" >&2
-    local dir
-    for dir in "$@"; do
-        if ! [ -x "$dir" ]; then mkdir -p "$dir"; fi
-    done
-}
-
-
 # Add $1/lib* into rpaths.
 # The function is used in multiple-outputs.sh hook,
 # so it is defined here but tried after the hook.
@@ -300,11 +290,83 @@ runHook preHook
 runHook addInputsHook
 
 
-# Recursively find all build inputs.
+# Package accumulators
+
+# shellcheck disable=SC2034
+declare -a pkgsBuildBuild pkgsBuildHost pkgsBuildTarget
+declare -a pkgsHostHost pkgsHostTarget
+declare -a pkgsTargetTarget
+
+declare -ra pkgBuildAccumVars=(pkgsBuildBuild pkgsBuildHost pkgsBuildTarget)
+declare -ra pkgHostAccumVars=(pkgsHostHost pkgsHostTarget)
+declare -ra pkgTargetAccumVars=(pkgsTargetTarget)
+
+declare -ra pkgAccumVarVars=(pkgBuildAccumVars pkgHostAccumVars pkgTargetAccumVars)
+
+
+# Hooks
+
+declare -a envBuildBuildHooks envBuildHostHooks envBuildTargetHooks
+declare -a envHostHostHooks envHostTargetHooks
+declare -a envTargetTargetHooks
+
+declare -ra pkgBuildHookVars=(envBuildBuildHook envBuildHostHook envBuildTargetHook)
+declare -ra pkgHostHookVars=(envHostHostHook envHostTargetHook)
+declare -ra pkgTargetHookVars=(envTargetTargetHook)
+
+declare -ra pkgHookVarVars=(pkgBuildHookVars pkgHostHookVars pkgTargetHookVars)
+
+# Add env hooks for all sorts of deps with the specified host offset.
+addEnvHooks() {
+    local depHostOffset="$1"
+    shift
+    local pkgHookVarsSlice="${pkgHookVarVars[$depHostOffset + 1]}[@]"
+    local pkgHookVar
+    for pkgHookVar in "${!pkgHookVarsSlice}"; do
+        eval "${pkgHookVar}s"'+=("$@")'
+    done
+}
+
+
+# Propagated dep files
+
+declare -ra propagatedBuildDepFiles=(
+    propagated-build-build-deps
+    propagated-native-build-inputs # Legacy name for back-compat
+    propagated-build-target-deps
+)
+declare -ra propagatedHostDepFiles=(
+    propagated-host-host-deps
+    propagated-build-inputs # Legacy name for back-compat
+)
+declare -ra propagatedTargetDepFiles=(
+    propagated-target-target-deps
+)
+declare -ra propagatedDepFilesVars=(
+    propagatedBuildDepFiles
+    propagatedHostDepFiles
+    propagatedTargetDepFiles
+)
+
+# Platform offsets: build = -1, host = 0, target = 1
+declare -ra allPlatOffsets=(-1 0 1)
+
+
+# Mutually-recursively find all build inputs. See the dependency section of the
+# stdenv chapter of the Nixpkgs manual for the specification this algorithm
+# implements.
 findInputs() {
-    local pkg="$1"; shift
-    local var="$1"; shift
-    local propagatedBuildInputsFiles=("$@")
+    local -r pkg="$1"
+    local -ri hostOffset="$2"
+    local -ri targetOffset="$3"
+
+    # Sanity check
+    (( "$hostOffset" <= "$targetOffset" )) || exit -1
+
+    local varVar="${pkgAccumVarVars[$hostOffset + 1]}"
+    local varRef="$varVar[\$targetOffset - \$hostOffset]"
+    local var="${!varRef}"
+    unset -v varVar varRef
 
     # TODO(@Ericson2314): Restore using associative array once Darwin
     # nix-shell doesn't use impure bash. This should replace the O(n)
@@ -324,21 +386,106 @@ findInputs() {
         exit 1
     fi
 
-    local file
-    for file in "${propagatedBuildInputsFiles[@]}"; do
-        file="$pkg/nix-support/$file"
-        [[ -f "$file" ]] || continue
+    # The current package's host and target offset together
+    # provide a <=-preserving homomorphism from the relative
+    # offsets to current offset
+    function mapOffset() {
+        local -ri inputOffset="$1"
+        if (( "$inputOffset" <= 0 )); then
+            local -ri outputOffset="$inputOffset + $hostOffset"
+        else
+            local -ri outputOffset="$inputOffset - 1 + $targetOffset"
+        fi
+        echo "$outputOffset"
+    }
 
-        local pkgNext
-        for pkgNext in $(< "$file"); do
-            findInputs "$pkgNext" "$var" "${propagatedBuildInputsFiles[@]}"
+    # Host offset relative to that of the package whose immediate
+    # dependencies we are currently exploring.
+    local -i relHostOffset
+    for relHostOffset in "${allPlatOffsets[@]}"; do
+        # `+ 1` so we start at 0 for valid index
+        local files="${propagatedDepFilesVars[$relHostOffset + 1]}"
+
+        # Host offset relative to the package currently being
+        # built---as absolute an offset as will be used.
+        local -i hostOffsetNext
+        hostOffsetNext="$(mapOffset relHostOffset)"
+
+        # Ensure we're in bounds relative to the package currently
+        # being built.
+        [[ "${allPlatOffsets[*]}" = *"$hostOffsetNext"*  ]] || continue
+
+        # Target offset relative to the *host* offset of the package
+        # whose immediate dependencies we are currently exploring.
+        local -i relTargetOffset
+        for relTargetOffset in "${allPlatOffsets[@]}"; do
+            (( "$relHostOffset" <= "$relTargetOffset" )) || continue
+
+            local fileRef="${files}[$relTargetOffset - $relHostOffset]"
+            local file="${!fileRef}"
+            unset -v fileRef
+
+            # Target offset relative to the package currently being
+            # built.
+            local -i targetOffsetNext
+            targetOffsetNext="$(mapOffset relTargetOffset)"
+
+            # Once again, ensure we're in bounds relative to the
+            # package currently being built.
+            [[ "${allPlatOffsets[*]}" = *"$targetOffsetNext"* ]] || continue
+
+            [[ -f "$pkg/nix-support/$file" ]] || continue
+
+            local pkgNext
+            for pkgNext in $(< "$pkg/nix-support/$file"); do
+                findInputs "$pkgNext" "$hostOffsetNext" "$targetOffsetNext"
+            done
         done
     done
 }
 
+# Make sure all are at least defined as empty
+: ${depsBuildBuild=} ${depsBuildBuildPropagated=}
+: ${nativeBuildInputs=} ${propagatedNativeBuildInputs=} ${defaultNativeBuildInputs=}
+: ${depsBuildTarget=} ${depsBuildTargetPropagated=}
+: ${depsHostHost=} ${depsHostHostPropagated=}
+: ${buildInputs=} ${propagatedBuildInputs=} ${defaultBuildInputs=}
+: ${depsTargetTarget=} ${depsTargetTargetPropagated=}
+
+for pkg in $depsBuildBuild $depsBuildBuildPropagated; do
+    findInputs "$pkg" -1 -1
+done
+for pkg in $nativeBuildInputs $propagatedNativeBuildInputs; do
+    findInputs "$pkg" -1  0
+done
+for pkg in $depsBuildTarget $depsBuildTargetPropagated; do
+    findInputs "$pkg" -1  1
+done
+for pkg in $depsHostHost $depsHostHostPropagated; do
+    findInputs "$pkg"  0  0
+done
+for pkg in $buildInputs $propagatedBuildInputs ; do
+    findInputs "$pkg"  0  1
+done
+for pkg in $depsTargetTarget $depsTargetTargetPropagated; do
+    findInputs "$pkg"  1  1
+done
+# Default inputs must be processed last
+for pkg in $defaultNativeBuildInputs; do
+    findInputs "$pkg" -1  0
+done
+for pkg in $defaultBuildInputs; do
+    findInputs "$pkg"  0  1
+done
+
 # Add package to the future PATH and run setup hooks
 activatePackage() {
     local pkg="$1"
+    local -ri hostOffset="$2"
+    local -ri targetOffset="$3"
+
+    # Sanity check
+    (( "$hostOffset" <= "$targetOffset" )) || exit -1
 
     if [ -f "$pkg" ]; then
         local oldOpts="$(shopt -po nounset)"
@@ -347,11 +494,18 @@ activatePackage() {
         eval "$oldOpts"
     fi
 
-    if [ -d "$pkg/bin" ]; then
+    # Only dependencies whose host platform is guaranteed to match the
+    # build platform are included here. That would be `depsBuild*`,
+    # and legacy `nativeBuildInputs`, in general. If we aren't cross
+    # compiling, however, everything can be put on the PATH. To ease
+    # the transition, we do include everything in thatcase.
+    #
+    # TODO(@Ericson2314): Don't special-case native compilation
+    if [[ ( -z "${strictDeps-}" ||  "$hostOffset" -le -1 ) && -d "$pkg/bin" ]]; then
         addToSearchPath _PATH "$pkg/bin"
     fi
 
-    if [ -f "$pkg/nix-support/setup-hook" ]; then
+    if [[ -f "$pkg/nix-support/setup-hook" ]]; then
         local oldOpts="$(shopt -po nounset)"
         set +u
         source "$pkg/nix-support/setup-hook"
@@ -359,67 +513,72 @@ activatePackage() {
     fi
 }
 
-declare -a nativePkgs crossPkgs
-if [ -z "${crossConfig:-}" ]; then
-    # Not cross-compiling - both buildInputs (and variants like propagatedBuildInputs)
-    # are handled identically to nativeBuildInputs
-    for i in ${nativeBuildInputs:-} ${buildInputs:-} \
-             ${defaultNativeBuildInputs:-} ${defaultBuildInputs:-} \
-             ${propagatedNativeBuildInputs:-} ${propagatedBuildInputs:-}; do
-        findInputs "$i" nativePkgs propagated-native-build-inputs propagated-build-inputs
-    done
-else
-    for i in ${nativeBuildInputs:-} ${defaultNativeBuildInputs:-} ${propagatedNativeBuildInputs:-}; do
-        findInputs "$i" nativePkgs propagated-native-build-inputs
-    done
-    for i in ${buildInputs:-} ${defaultBuildInputs:-} ${propagatedBuildInputs:-}; do
-        findInputs "$i" crossPkgs propagated-build-inputs
-    done
-fi
+_activatePkgs() {
+    local -i hostOffset targetOffset
+    local pkg
 
-for i in ${nativePkgs+"${nativePkgs[@]}"} ${crossPkgs+"${crossPkgs[@]}"}; do
-    activatePackage "$i"
-done
+    for hostOffset in "${allPlatOffsets[@]}"; do
+        local pkgsVar="${pkgAccumVarVars[$hostOffset + 1]}"
+        for targetOffset in "${allPlatOffsets[@]}"; do
+            (( "$hostOffset" <= "$targetOffset" )) || continue
+            local pkgsRef="${pkgsVar}[$targetOffset - $hostOffset]"
+            local pkgsSlice="${!pkgsRef}[@]"
+            for pkg in ${!pkgsSlice+"${!pkgsSlice}"}; do
+                activatePackage "$pkg" "$hostOffset" "$targetOffset"
+            done
+        done
+    done
+}
 
+# Run the package setup hooks and build _PATH
+_activatePkgs
 
 # Set the relevant environment variables to point to the build inputs
 # found above.
 #
-# These `depOffset`s tell the env hook what sort of dependency
-# (ignoring propagatedness) is being passed to the env hook. In a real
-# language, we'd append a closure with this information to the
-# relevant env hook array, but bash doesn't have closures, so it's
-# easier to just pass this in.
+# These `depOffset`s, beyond indexing the arrays, also tell the env
+# hook what sort of dependency (ignoring propagatedness) is being
+# passed to the env hook. In a real language, we'd append a closure
+# with this information to the relevant env hook array, but bash
+# doesn't have closures, so it's easier to just pass this in.
+_addToEnv() {
+    local -i depHostOffset depTargetOffset
+    local pkg
 
-_addToNativeEnv() {
-    local pkg="$1"
-    if [[ -n "${crossConfig:-}" ]]; then
-        local -i depOffset=-1
-    else
-        local -i depOffset=0
-    fi
-
-    # Run the package-specific hooks set by the setup-hook scripts.
-    runHook envHook "$pkg"
+    for depHostOffset in "${allPlatOffsets[@]}"; do
+        local hookVar="${pkgHookVarVars[$depHostOffset + 1]}"
+        local pkgsVar="${pkgAccumVarVars[$depHostOffset + 1]}"
+        for depTargetOffset in "${allPlatOffsets[@]}"; do
+            (( "$depHostOffset" <= "$depTargetOffset" )) || continue
+            local hookRef="${hookVar}[$depTargetOffset - $depHostOffset]"
+            if [[ -z "${strictDeps-}" ]]; then
+                # Apply environment hooks to all packages during native
+                # compilation to ease the transition.
+                #
+                # TODO(@Ericson2314): Don't special-case native compilation
+                for pkg in \
+                    ${pkgsBuildBuild+"${pkgsBuildBuild[@]}"} \
+                    ${pkgsBuildHost+"${pkgsBuildHost[@]}"} \
+                    ${pkgsBuildTarget+"${pkgsBuildTarget[@]}"} \
+                    ${pkgsHostHost+"${pkgsHostHost[@]}"} \
+                    ${pkgsHostTarget+"${pkgsHostTarget[@]}"} \
+                    ${pkgsTargetTarget+"${pkgsTargetTarget[@]}"}
+                do
+                    runHook "${!hookRef}" "$pkg"
+                done
+            else
+                local pkgsRef="${pkgsVar}[$depTargetOffset - $depHostOffset]"
+                local pkgsSlice="${!pkgsRef}[@]"
+                for pkg in ${!pkgsSlice+"${!pkgsSlice}"}; do
+                    runHook "${!hookRef}" "$pkg"
+                done
+            fi
+        done
+    done
 }
 
-# Old bash empty array hack
-for i in ${nativePkgs+"${nativePkgs[@]}"}; do
-    _addToNativeEnv "$i"
-done
-
-_addToCrossEnv() {
-    local pkg="$1"
-    local -i depOffset=0
-
-    # Run the package-specific hooks set by the setup-hook scripts.
-    runHook crossEnvHook "$pkg"
-}
-
-# Old bash empty array hack
-for i in ${crossPkgs+"${crossPkgs[@]}"}; do
-    _addToCrossEnv "$i"
-done
+# Run the package-specific hooks set by the setup-hook scripts.
+_addToEnv
 
 
 _addRpathPrefix "$out"
@@ -482,22 +641,9 @@ fi
 # Textual substitution functions.
 
 
-substitute() {
-    local input="$1"
-    local output="$2"
-    shift 2
-
-    if [ ! -f "$input" ]; then
-      echo "substitute(): ERROR: file '$input' does not exist" >&2
-      return 1
-    fi
-
-    local content
-    # read returns non-0 on EOF, so we want read to fail
-    if IFS='' read -r -N 0 content < "$input"; then
-        echo "substitute(): ERROR: File \"$input\" has null bytes, won't process" >&2
-        return 1
-    fi
+substituteStream() {
+    local var=$1
+    shift
 
     while (( "$#" )); do
         case "$1" in
@@ -512,7 +658,7 @@ substitute() {
                 shift 2
                 # check if the used nix attribute name is a valid bash name
                 if ! [[ "$varName" =~ ^[a-zA-Z_][a-zA-Z0-9_]*$ ]]; then
-                    echo "substitute(): ERROR: substitution variables must be valid Bash names, \"$varName\" isn't." >&2
+                    echo "substituteStream(): ERROR: substitution variables must be valid Bash names, \"$varName\" isn't." >&2
                     return 1
                 fi
                 pattern="@$varName@"
@@ -526,18 +672,41 @@ substitute() {
                 ;;
 
             *)
-                echo "substitute(): ERROR: Invalid command line argument: $1" >&2
+                echo "substituteStream(): ERROR: Invalid command line argument: $1" >&2
                 return 1
                 ;;
         esac
 
-        content="${content//"$pattern"/$replacement}"
+        eval "$var"'=${'"$var"'//"$pattern"/"$replacement"}'
     done
 
-    if [ -e "$output" ]; then chmod +w "$output"; fi
-    printf "%s" "$content" > "$output"
+    printf "%s" "${!var}"
 }
 
+consumeEntire() {
+    # read returns non-0 on EOF, so we want read to fail
+    if IFS='' read -r -N 0 $1; then
+        echo "consumeEntire(): ERROR: Input null bytes, won't process" >&2
+        return 1
+    fi
+}
+
+substitute() {
+    local input="$1"
+    local output="$2"
+    shift 2
+
+    if [ ! -f "$input" ]; then
+        echo "substitute(): ERROR: file '$input' does not exist" >&2
+        return 1
+    fi
+
+    local content
+    consumeEntire content < "$input"
+
+    if [ -e "$output" ]; then chmod +w "$output"; fi
+    substituteStream content "$@" > "$output"
+}
 
 substituteInPlace() {
     local fileName="$1"
@@ -545,20 +714,30 @@ substituteInPlace() {
     substitute "$fileName" "$fileName" "$@"
 }
 
-
-# Substitute all environment variables that start with a lowercase character and
-# are valid Bash names.
-substituteAll() {
-    local input="$1"
-    local output="$2"
-    local -a args=()
-
+_allFlags() {
     for varName in $(awk 'BEGIN { for (v in ENVIRON) if (v ~ /^[a-z][a-zA-Z0-9_]*$/) print v }'); do
         if (( "${NIX_DEBUG:-0}" >= 1 )); then
             printf "@%s@ -> %q\n" "${varName}" "${!varName}"
         fi
         args+=("--subst-var" "$varName")
     done
+}
+
+substituteAllStream() {
+    local -a args=()
+    _allFlags
+
+    substituteStream "$1" "${args[@]}"
+}
+
+# Substitute all environment variables that start with a lowercase character and
+# are valid Bash names.
+substituteAll() {
+    local input="$1"
+    local output="$2"
+
+    local -a args=()
+    _allFlags
 
     substitute "$input" "$output" "${args[@]}"
 }
@@ -610,7 +789,7 @@ _defaultUnpack() {
         # We can't preserve hardlinks because they may have been
         # introduced by store optimization, which might break things
         # in the build.
-        cp -pr --reflink=auto "$fn" "$(stripHash "$fn")"
+        cp -pr --reflink=auto -- "$fn" "$(stripHash "$fn")"
 
     else
 
@@ -707,7 +886,7 @@ unpackPhase() {
     # necessary when sources have been copied from other store
     # locations.
     if [ "${dontMakeSourcesWritable:-0}" != 1 ]; then
-        chmod -R u+w "$sourceRoot"
+        chmod -R u+w -- "$sourceRoot"
     fi
 
     runHook postUnpack
@@ -809,9 +988,11 @@ buildPhase() {
     # set to empty if unset
     : ${makeFlags=}
 
-    if [[ -z "$makeFlags" && ! ( -n "${makefile:-}" || -e Makefile || -e makefile || -e GNUmakefile ) ]]; then
+    if [[ -z "$makeFlags" && -z "${makefile:-}" && ! ( -e Makefile || -e makefile || -e GNUmakefile ) ]]; then
         echo "no Makefile, doing nothing"
     else
+        foundMakefile=1
+
         # See https://github.com/NixOS/nixpkgs/pull/1354#issuecomment-31260409
         makeFlags="SHELL=$SHELL $makeFlags"
 
@@ -835,18 +1016,38 @@ buildPhase() {
 checkPhase() {
     runHook preCheck
 
-    # Old bash empty array hack
-    # shellcheck disable=SC2086
-    local flagsArray=(
-        ${enableParallelBuilding:+-j${NIX_BUILD_CORES} -l${NIX_BUILD_CORES}}
-        $makeFlags ${makeFlagsArray+"${makeFlagsArray[@]}"}
-        ${checkFlags:-VERBOSE=y} ${checkFlagsArray+"${checkFlagsArray[@]}"}
-        ${checkTarget:-check}
-    )
+    if [[ -z "${foundMakefile:-}" ]]; then
+        echo "no Makefile or custom buildPhase, doing nothing"
+        runHook postCheck
+        return
+    fi
 
-    echoCmd 'check flags' "${flagsArray[@]}"
-    make ${makefile:+-f $makefile} "${flagsArray[@]}"
-    unset flagsArray
+    if [[ -z "${checkTarget:-}" ]]; then
+        #TODO(@oxij): should flagsArray influence make -n?
+        if make -n ${makefile:+-f $makefile} check >/dev/null 2>&1; then
+            checkTarget=check
+        elif make -n ${makefile:+-f $makefile} test >/dev/null 2>&1; then
+            checkTarget=test
+        fi
+    fi
+
+    if [[ -z "${checkTarget:-}" ]]; then
+        echo "no check/test target in ${makefile:-Makefile}, doing nothing"
+    else
+        # Old bash empty array hack
+        # shellcheck disable=SC2086
+        local flagsArray=(
+            ${enableParallelBuilding:+-j${NIX_BUILD_CORES} -l${NIX_BUILD_CORES}}
+            $makeFlags ${makeFlagsArray+"${makeFlagsArray[@]}"}
+            ${checkFlags:-VERBOSE=y} ${checkFlagsArray+"${checkFlagsArray[@]}"}
+            ${checkTarget}
+        )
+
+        echoCmd 'check flags' "${flagsArray[@]}"
+        make ${makefile:+-f $makefile} "${flagsArray[@]}"
+
+        unset flagsArray
+    fi
 
     runHook postCheck
 }
@@ -859,14 +1060,12 @@ installPhase() {
         mkdir -p "$prefix"
     fi
 
-    installTargets="${installTargets:-install}"
-
     # Old bash empty array hack
     # shellcheck disable=SC2086
     local flagsArray=(
-        $installTargets
         $makeFlags ${makeFlagsArray+"${makeFlagsArray[@]}"}
         $installFlags ${installFlagsArray+"${installFlagsArray[@]}"}
+        ${installTargets:-install}
     )
 
     echoCmd 'install flags' "${flagsArray[@]}"
@@ -882,6 +1081,7 @@ installPhase() {
 # propagated-build-inputs.
 fixupPhase() {
     # Make sure everything is writable so "strip" et al. work.
+    local output
     for output in $outputs; do
         if [ -e "${!output}" ]; then chmod -R u+w "${!output}"; fi
     done
@@ -895,24 +1095,53 @@ fixupPhase() {
     done
 
 
-    # Propagate build inputs and setup hook into the development output.
+    # Propagate dependencies & setup hook into the development output.
+    declare -ra flatVars=(
+        # Build
+        depsBuildBuildPropagated
+        propagatedNativeBuildInputs
+        depsBuildTargetPropagated
+        # Host
+        depsHostHostPropagated
+        propagatedBuildInputs
+        # Target
+        depsTargetTargetPropagated
+    )
+    declare -ra flatFiles=(
+        "${propagatedBuildDepFiles[@]}"
+        "${propagatedHostDepFiles[@]}"
+        "${propagatedTargetDepFiles[@]}"
+    )
 
-    if [ -n "${propagatedBuildInputs:-}" ]; then
+    local propagatedInputsIndex
+    for propagatedInputsIndex in "${!flatVars[@]}"; do
+        local propagatedInputsSlice="${flatVars[$propagatedInputsIndex]}[@]"
+        local propagatedInputsFile="${flatFiles[$propagatedInputsIndex]}"
+
+        [[ "${!propagatedInputsSlice}" ]] || continue
+
         mkdir -p "${!outputDev}/nix-support"
         # shellcheck disable=SC2086
-        printWords $propagatedBuildInputs > "${!outputDev}/nix-support/propagated-build-inputs"
-    fi
-
-    if [ -n "${propagatedNativeBuildInputs:-}" ]; then
-        mkdir -p "${!outputDev}/nix-support"
-        # shellcheck disable=SC2086
-        printWords $propagatedNativeBuildInputs > "${!outputDev}/nix-support/propagated-native-build-inputs"
-    fi
+        printWords ${!propagatedInputsSlice} > "${!outputDev}/nix-support/$propagatedInputsFile"
+    done
 
 
     if [ -n "${setupHook:-}" ]; then
         mkdir -p "${!outputDev}/nix-support"
         substituteAll "$setupHook" "${!outputDev}/nix-support/setup-hook"
+    fi
+
+    # TODO(@Ericson2314): Remove after https://github.com/NixOS/nixpkgs/pull/31414
+    if [ -n "${setupHooks:-}" ]; then
+        mkdir -p "${!outputDev}/nix-support"
+        local hook
+        for hook in $setupHooks; do
+            local content
+            consumeEntire content < "$hook"
+            substituteAllStream content >> "${!outputDev}/nix-support/setup-hook"
+            unset -v content
+        done
+        unset -v hook
     fi
 
     # Propagate user-env packages into the output with binaries, TODO?
@@ -930,18 +1159,26 @@ fixupPhase() {
 installCheckPhase() {
     runHook preInstallCheck
 
-    # Old bash empty array hack
-    # shellcheck disable=SC2086
-    local flagsArray=(
-        ${enableParallelBuilding:+-j${NIX_BUILD_CORES} -l${NIX_BUILD_CORES}}
-        $makeFlags ${makeFlagsArray+"${makeFlagsArray[@]}"}
-        $installCheckFlags ${installCheckFlagsArray+"${installCheckFlagsArray[@]}"}
-        ${installCheckTarget:-installcheck}
-    )
+    if [[ -z "${foundMakefile:-}" ]]; then
+        echo "no Makefile or custom buildPhase, doing nothing"
+    #TODO(@oxij): should flagsArray influence make -n?
+    elif [[ -z "${installCheckTarget:-}" ]] \
+       && ! make -n ${makefile:+-f $makefile} ${installCheckTarget:-installcheck} >/dev/null 2>&1; then
+        echo "no installcheck target in ${makefile:-Makefile}, doing nothing"
+    else
+        # Old bash empty array hack
+        # shellcheck disable=SC2086
+        local flagsArray=(
+            ${enableParallelBuilding:+-j${NIX_BUILD_CORES} -l${NIX_BUILD_CORES}}
+            $makeFlags ${makeFlagsArray+"${makeFlagsArray[@]}"}
+            $installCheckFlags ${installCheckFlagsArray+"${installCheckFlagsArray[@]}"}
+            ${installCheckTarget:-installcheck}
+        )
 
-    echoCmd 'installcheck flags' "${flagsArray[@]}"
-    make ${makefile:+-f $makefile} "${flagsArray[@]}"
-    unset flagsArray
+        echoCmd 'installcheck flags' "${flagsArray[@]}"
+        make ${makefile:+-f $makefile} "${flagsArray[@]}"
+        unset flagsArray
+    fi
 
     runHook postInstallCheck
 }

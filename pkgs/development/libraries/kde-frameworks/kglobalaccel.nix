@@ -13,8 +13,4 @@ mkDerivation {
     qtx11extras
   ];
   propagatedBuildInputs = [ qtbase ];
-  postPatch = ''
-    sed -i src/runtime/org.kde.kglobalaccel.service.in \
-        -e "s|@CMAKE_INSTALL_PREFIX@|''${!outputBin}|"
-  '';
 }

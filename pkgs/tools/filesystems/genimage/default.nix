@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, libconfuse }:
+{ stdenv, fetchurl, pkgconfig, libconfuse, gettext }:
 
 stdenv.mkDerivation rec {
   name = "genimage-${version}";
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ libconfuse ];
+  buildInputs = [ libconfuse gettext ];
 
   postInstall = ''
     # As there is no manpage or built-in --help, add the README file for

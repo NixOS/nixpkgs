@@ -1,11 +1,11 @@
 { stdenv, fetchurl, python }:
 
 stdenv.mkDerivation rec {
-  name = "cmdstan-2.9.0";
+  name = "cmdstan-2.17.1";
 
   src = fetchurl {
-    url = "https://github.com/stan-dev/cmdstan/releases/download/v2.9.0/cmdstan-2.9.0.tar.gz";
-    sha256 = "08bim6nxgam989152hm0ga1rfb33mr71pwsym1nmfmavma68bwm9";
+    url = "https://github.com/stan-dev/cmdstan/releases/download/v2.17.1/cmdstan-2.17.1.tar.gz";
+    sha256 = "1vq1cnrkvrvbfl40j6ajc60jdrjcxag1fi6kff5pqmadfdz9564j";
   };
 
   buildFlags = "build";
@@ -37,6 +37,6 @@ stdenv.mkDerivation rec {
     '';
     homepage = http://mc-stan.org/interfaces/cmdstan.html;
     license = stdenv.lib.licenses.bsd3;
-    platforms = stdenv.lib.platforms.linux;
+    platforms = stdenv.lib.platforms.all;
   };
 }

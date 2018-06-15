@@ -12,7 +12,7 @@ pythonPackages.buildPythonApplication rec {
     sha256 = "04sgns9qczzw2152gqdr6bjyy4fmgs26cz8n3qck94l0j51rxhz8";
   };
 
-  propagatedBuildInputs = with pythonPackages; [ msgpack pyqt4 numpy pyopencl ] ++ [ openssl ];
+  propagatedBuildInputs = with pythonPackages; [ msgpack-python pyqt4 numpy pyopencl ] ++ [ openssl ];
 
   preConfigure = ''
     # Remove interaction and misleading output

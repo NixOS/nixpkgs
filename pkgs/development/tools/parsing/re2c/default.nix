@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   name = "re2c-${version}";
-  version = "0.16";
+  version = "1.0.3";
 
   sourceRoot = "${src.name}/re2c";
 
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     owner  = "skvadrik";
     repo   = "re2c";
     rev    = version;
-    sha256 = "0cijgmbyx34nwl2jmsswggkgvzy364871rkbxz8biq9x8xrhhjw5";
+    sha256 = "0grx7nl9fwcn880v5ssjljhcb9c5p2a6xpwil7zxpmv0rwnr3yqi";
   };
 
   nativeBuildInputs = [ autoreconfHook ];

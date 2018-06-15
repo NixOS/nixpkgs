@@ -5,11 +5,11 @@
 buildPythonPackage rec {
     name = "${pname}-${version}";
     pname = "agate";
-    version = "1.6.0";
+    version = "1.6.1";
 
     src = fetchPypi {
       inherit pname version;
-      sha256 = "02pb5jjvzjqfpsa7q12afbk9nqj06xdpw1s7qa6a1bnalikfniqm";
+      sha256 = "c93aaa500b439d71e4a5cf088d0006d2ce2c76f1950960c8843114e5f361dfd3";
     };
 
     propagatedBuildInputs = [ discid six parsedatetime

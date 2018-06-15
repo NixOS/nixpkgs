@@ -27,7 +27,7 @@ rec {
       patches = [];
     });
 
-    docker-containerd = containerd.overrideAttrs (oldAttrs: rec {
+    docker-containerd = (containerd.override { inherit go; }).overrideAttrs (oldAttrs: rec {
       name = "docker-containerd";
       src = fetchFromGitHub {
         owner = "docker";
@@ -39,13 +39,6 @@ rec {
       hardeningDisable = [ "fortify" ];
 
       buildInputs = [ removeReferencesTo go btrfs-progs ];
-
-      # This should go into the containerd derivation once 1.0.0 is out
-      preBuild = ''
-        export GOPATH=$(pwd)/vendor
-        mkdir $(pwd)/vendor/src
-        mv $(pwd)/vendor/{github.com,golang.org,google.golang.org} $(pwd)/vendor/src/
-      '' + oldAttrs.preBuild;
     });
 
     docker-tini = tini.overrideAttrs  (oldAttrs: rec {
@@ -105,6 +98,7 @@ rec {
       cd ./components/engine
       export AUTO_GOPATH=1
       export DOCKER_GITCOMMIT="${rev}"
+      export VERSION="${version}"
       ./hack/make.sh dynbinary
       cd -
     '') + ''
@@ -136,11 +130,7 @@ rec {
     extraPath = optionals (stdenv.isLinux) (makeBinPath [ iproute iptables e2fsprogs xz xfsprogs procps utillinux ]);
 
     installPhase = optionalString (stdenv.isLinux) ''
-      if [ -d "./components/engine/bundles/${version}" ]; then
-        install -Dm755 ./components/engine/bundles/${version}/dynbinary-daemon/dockerd-${version} $out/libexec/docker/dockerd
-      else
-        install -Dm755 ./components/engine/bundles/dynbinary-daemon/dockerd-${version} $out/libexec/docker/dockerd
-      fi
+      install -Dm755 ./components/engine/bundles/dynbinary-daemon/dockerd $out/libexec/docker/dockerd
 
       makeWrapper $out/libexec/docker/dockerd $out/bin/dockerd \
         --prefix PATH : "$out/libexec/docker:$extraPath"
@@ -205,28 +195,28 @@ rec {
   });
 
   # Get revisions from
-  # https://github.com/docker/docker-ce/blob/v${version}/components/engine/hack/dockerfile/binaries-commits
+  # https://github.com/docker/docker-ce/tree/v${version}/components/engine/hack/dockerfile/install/*
 
-  docker_17_09 = dockerGen rec {
-    version = "17.09.1-ce";
-    rev = "19e2cf6259bd7f027a3fff180876a22945ce4ba8"; # git commit
-    sha256 = "10glpbaw7bg2acgf1nmfn79is2b3xsm4shz67rp72dmpzzaavb42";
-    runcRev = "3f2f8b84a77f73d38244dd690525642a72156c64";
-    runcSha256 = "0vaagmav8443kmyxac2y1y5l2ipcs1c7gdmsnvj48y9bafqx72rq";
-    containerdRev = "06b9cb35161009dcb7123345749fef02f7cea8e0";
-    containerdSha256 = "10hms8a2nn69nfnwly6923jzx40c3slpsdhjhff4bxh36flpf9gd";
+  docker_18_03 = dockerGen rec {
+    version = "18.03.1-ce";
+    rev = "9ee9f402cd1eba817c5591a64f1d770c87c421a4"; # git commit
+    sha256 = "1jm3jmcbkvvy3s8pi3xcpir6mwxjfbad46lbif4bnpjfd2r5irrx";
+    runcRev = "4fc53a81fb7c994640722ac585fa9ca548971871";
+    runcSha256 = "1ikqw39jn8dzb4snc4pcg3z85jb67ivskdhx028k17ss29bf4062";
+    containerdRev = "773c489c9c1b21a6d78b5c538cd395416ec50f88";
+    containerdSha256 = "0k1zjn0mpd7q3p5srxld2fr4k6ijzbk0r34r6w69sh0d0rd2fvbs";
     tiniRev = "949e6facb77383876aeff8a6944dde66b3089574";
     tiniSha256 = "0zj4kdis1vvc6dwn4gplqna0bs7v6d1y2zc8v80s3zi018inhznw";
   };
 
-  docker_17_11 = dockerGen rec {
-    version = "17.11.0-ce";
-    rev = "1caf76ce6baa889133ece59fab3c36aaf143d4ef"; # git commit
-    sha256 = "09s7lxcs4wdjj69l7z3nybbms7iqspk1wy7qnr4r52s8vr3fd5s4";
-    runcRev = "0351df1c5a66838d0c392b4ac4cf9450de844e2d";
-    runcSha256 = "1cmkdv6rli7v0y0fddqxvrvzd486fg9ssp3kgkya3szkljzz4xj0";
-    containerdRev = "992280e8e265f491f7a624ab82f3e238be086e49";
-    containerdSha256 = "1ci6jlgrrgz4ph451035sl98lj2jd467pd4qnv85ma9gzblrxs7n";
+  docker_18_05 = dockerGen rec {
+    version = "18.05.0-ce";
+    rev = "f150324782643a5268a04e7d1a675587125da20e"; # git commit
+    sha256 = "0vgh03qwlfm25sm3yaa6vf5ap2ag575f814ccgcrp5zlcal13r0z";
+    runcRev = "4fc53a81fb7c994640722ac585fa9ca548971871";
+    runcSha256 = "1ikqw39jn8dzb4snc4pcg3z85jb67ivskdhx028k17ss29bf4062";
+    containerdRev = "773c489c9c1b21a6d78b5c538cd395416ec50f88";
+    containerdSha256 = "0k1zjn0mpd7q3p5srxld2fr4k6ijzbk0r34r6w69sh0d0rd2fvbs";
     tiniRev = "949e6facb77383876aeff8a6944dde66b3089574";
     tiniSha256 = "0zj4kdis1vvc6dwn4gplqna0bs7v6d1y2zc8v80s3zi018inhznw";
   };

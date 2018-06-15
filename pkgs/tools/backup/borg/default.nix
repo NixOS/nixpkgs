@@ -1,14 +1,12 @@
-{ stdenv, fetchurl, python3Packages, acl, lz4, openssl, openssh }:
+{ stdenv, python3Packages, acl, libb2, lz4, zstd, openssl, openssh }:
 
 python3Packages.buildPythonApplication rec {
-  name = "borgbackup-${version}";
-  version = "1.1.3";
-  namePrefix = "";
+  pname = "borgbackup";
+  version = "1.1.6";
 
-  src = fetchurl {
-    url = "https://github.com/borgbackup/borg/releases/download/"
-      + "${version}/${name}.tar.gz";
-    sha256 = "1rvn8b6clzd1r317r9jkvk34r31risi0dxfjc7jffhnwasck4anc";
+  src = python3Packages.fetchPypi {
+    inherit pname version;
+    sha256 = "a1d2e474c85d3ad3d59b3f8209b5549653c88912082ea0159d27a2e80c910930";
   };
 
   nativeBuildInputs = with python3Packages; [
@@ -16,15 +14,17 @@ python3Packages.buildPythonApplication rec {
     sphinx guzzle_sphinx_theme
   ];
   buildInputs = [
-    lz4 openssl python3Packages.setuptools_scm
+    libb2 lz4 zstd openssl python3Packages.setuptools_scm
   ] ++ stdenv.lib.optionals stdenv.isLinux [ acl ];
   propagatedBuildInputs = with python3Packages; [
-    cython msgpack
+    cython msgpack-python
   ] ++ stdenv.lib.optionals (!stdenv.isDarwin) [ llfuse ];
 
   preConfigure = ''
     export BORG_OPENSSL_PREFIX="${openssl.dev}"
     export BORG_LZ4_PREFIX="${lz4.dev}"
+    export BORG_LIBB2_PREFIX="${libb2}"
+    export BORG_LIBZSTD_PREFIX="${zstd}"
   '';
 
   makeWrapperArgs = [
@@ -39,16 +39,22 @@ python3Packages.buildPythonApplication rec {
     make -C docs man
     mkdir -p $out/share/man
     cp -R docs/_build/man $out/share/man/man1
-  '';
 
-  # tests fail due to missing test command in nix_run_setup.py
-  doCheck = false;
+    mkdir -p $out/share/bash-completion/completions
+    cp scripts/shell_completions/bash/borg $out/share/bash-completion/completions/
+
+    mkdir -p $out/share/fish/vendor_completions.d
+    cp scripts/shell_completions/fish/borg.fish $out/share/fish/vendor_completions.d/
+
+    mkdir -p $out/share/zsh/site-functions
+    cp scripts/shell_completions/zsh/_borg $out/share/zsh/site-functions/
+  '';
 
   meta = with stdenv.lib; {
     description = "A deduplicating backup program (attic fork)";
-    homepage = https://borgbackup.github.io/;
+    homepage = https://www.borgbackup.org;
     license = licenses.bsd3;
     platforms = platforms.unix; # Darwin and FreeBSD mentioned on homepage
-    maintainers = with maintainers; [ nckx flokli ];
+    maintainers = with maintainers; [ flokli ];
   };
 }

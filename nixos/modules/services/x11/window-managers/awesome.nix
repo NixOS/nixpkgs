@@ -6,7 +6,11 @@ let
 
   cfg = config.services.xserver.windowManager.awesome;
   awesome = cfg.package;
-  inherit (pkgs.luaPackages) getLuaPath getLuaCPath;
+  getLuaPath = lib : dir : "${lib}/${dir}/lua/${pkgs.luaPackages.lua.luaversion}";
+  makeSearchPath = lib.concatMapStrings (path:
+    " --search " + (getLuaPath path "share") +
+    " --search " + (getLuaPath path "lib")
+  );
 in
 
 {
@@ -33,6 +37,11 @@ in
         apply = pkg: if pkg == null then pkgs.awesome else pkg;
       };
 
+      noArgb = mkOption {
+        default = false;
+        type = types.bool;
+        description = "Disable client transparency support, which can be greatly detrimental to performance in some setups";
+      };
     };
 
   };
@@ -46,10 +55,7 @@ in
       { name = "awesome";
         start =
           ''
-            export LUA_CPATH="${lib.concatStringsSep ";" (map getLuaCPath cfg.luaModules)}"
-            export LUA_PATH="${lib.concatStringsSep ";" (map getLuaPath cfg.luaModules)}"
-
-            ${awesome}/bin/awesome &
+            ${awesome}/bin/awesome ${lib.optionalString cfg.noArgb "--no-argb"} ${makeSearchPath cfg.luaModules} &
             waitPID=$!
           '';
       };

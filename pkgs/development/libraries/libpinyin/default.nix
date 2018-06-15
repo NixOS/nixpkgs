@@ -2,14 +2,13 @@
 
 let
   modelData = fetchurl {
-    url    = "mirror://sourceforge/libpinyin/models/model12.text.tar.gz";
-    sha256 = "1fijhhnjgj8bj1xr5pp7c4qxf11cqybgfqg7v36l3x780d84hfnd";
+    url    = "mirror://sourceforge/libpinyin/models/model14.text.tar.gz";
+    sha256 = "0qqk30nflj07zjhs231c95ln4yj4ipzwxxiwrxazrg4hb8bhypqq";
   };
 in
-
 stdenv.mkDerivation rec {
   name = "libpinyin-${version}";
-  version = "1.6.0";
+  version = "2.1.91";
 
   nativeBuildInputs = [ autoreconfHook glib db pkgconfig ];
 
@@ -21,7 +20,7 @@ stdenv.mkDerivation rec {
     owner  = "libpinyin";
     repo   = "libpinyin";
     rev    = version;
-    sha256 = "0k40a7wfp8zj9d426afv0am5sr3m2i2p309fq0vf8qrb050hj17f";
+    sha256 = "0jbvn65p3zh0573hh27aasd3qly5anyfi8jnps2dxi0my09wbrq3";
   };
 
   meta = with stdenv.lib; {

@@ -15,12 +15,13 @@ stdenv.mkDerivation rec {
     sha256 = "0bs94iv521ac2n53n3k8mw3s6v0hi3hhxhjsr0ips3n99al8wndi";
   };
 
-  buildInputs = [ cmake boost ]
+  nativeBuildInputs = [ cmake ];
+  buildInputs = [ boost llvmPackages.libclang ]
     ++ stdenv.lib.optional stdenv.isDarwin [ fixDarwinDylibNames Cocoa ];
 
   buildPhase = ''
     export EXTRA_CMAKE_ARGS=-DPATH_TO_LLVM_ROOT=${llvmPackages.clang-unwrapped}
-    ${python.interpreter} build.py --clang-completer --system-boost
+    ${python.interpreter} build.py --system-libclang --clang-completer --system-boost
   '';
 
   patches = [ ./dont-symlink-clang.patch ];

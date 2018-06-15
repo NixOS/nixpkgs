@@ -20,7 +20,7 @@ let
 
       configureFlags = [ "--with-colm=${colm}" ];
 
-      NIX_CFLAGS_COMPILE = "-std=gnu++98";
+      NIX_CFLAGS_COMPILE = stdenv.lib.optional stdenv.cc.isGNU "-std=gnu++98";
 
       doCheck = true;
 
@@ -43,8 +43,8 @@ in
   };
 
   ragelDev = generic {
-    version = "7.0.0.10";
-    sha256 = "1v4ddzxal4gf8l8nkn32qabba6nbpd2mg8sphgmdn8kaqv52nmj0";
+    version = "7.0.0.11";
+    sha256 = "0h2k9bfz9i7x9mvr9rbsrzz8fk17756zwwrkf3fppvm9ivzwdfh8";
     license = stdenv.lib.licenses.mit;
   };
 }

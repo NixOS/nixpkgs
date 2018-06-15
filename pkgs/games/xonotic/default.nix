@@ -2,7 +2,7 @@
 , # required for both
   unzip, libjpeg, zlib, libvorbis, curl, patchelf
 , # glx
-  libX11, mesa, libXpm, libXext, libXxf86vm, alsaLib
+  libX11, libGLU_combined, libXpm, libXext, libXxf86vm, alsaLib
 , # sdl
   SDL2
 }:
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     # required for both
     unzip libjpeg
     # glx
-    libX11 mesa libXpm libXext libXxf86vm alsaLib
+    libX11 libGLU_combined libXpm libXext libXxf86vm alsaLib
     # sdl
     SDL2
     zlib libvorbis curl

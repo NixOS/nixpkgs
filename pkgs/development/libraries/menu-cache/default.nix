@@ -1,12 +1,12 @@
 { stdenv, fetchurl, glib, pkgconfig, libfm-extra }:
 
-let name = "menu-cache-1.0.2";
+let name = "menu-cache-1.1.0";
 in
 stdenv.mkDerivation {
   inherit name;
   src = fetchurl {
     url = "mirror://sourceforge/lxde/${name}.tar.xz";
-    sha256 = "1m8j40npykfcfqs43kc0fmksal2jfmfi8lnb3mq3xy1lvvrfv0vg";
+    sha256 = "1iry4zlpppww8qai2cw4zid4081hh7fz8nzsp5lqyffbkm2yn0pd";
   };
 
   nativeBuildInputs = [ pkgconfig ];

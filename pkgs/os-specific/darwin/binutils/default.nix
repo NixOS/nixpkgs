@@ -1,13 +1,13 @@
-{ stdenv, binutils-raw, cctools
+{ stdenv, binutils-unwrapped, cctools
 , hostPlatform, targetPlatform
 }:
 
 # Make sure both underlying packages claim to have prepended their binaries
 # with the same targetPrefix.
-assert binutils-raw.targetPrefix == cctools.targetPrefix;
+assert binutils-unwrapped.targetPrefix == cctools.targetPrefix;
 
 let
-  inherit (binutils-raw) targetPrefix;
+  inherit (binutils-unwrapped) targetPrefix;
   cmds = [
     "ar" "ranlib" "as" "dsymutil" "install_name_tool"
     "ld" "strip" "otool" "lipo" "nm" "strings" "size"
@@ -21,7 +21,7 @@ stdenv.mkDerivation {
   buildCommand = ''
     mkdir -p $out/bin $out/include
 
-    ln -s ${binutils-raw.bintools.out}/bin/${targetPrefix}c++filt $out/bin/${targetPrefix}c++filt
+    ln -s ${binutils-unwrapped.out}/bin/${targetPrefix}c++filt $out/bin/${targetPrefix}c++filt
 
     # We specifically need:
     # - ld: binutils doesn't provide it on darwin
@@ -38,15 +38,15 @@ stdenv.mkDerivation {
       ln -sf "${cctools}/bin/$i" "$out/bin/$i"
     done
 
-    ln -s ${binutils-raw.bintools.out}/share $out/share
+    ln -s ${binutils-unwrapped.out}/share $out/share
 
     ln -s ${cctools}/libexec $out/libexec
 
     mkdir -p "$info/nix-support" "$man/nix-support"
-    printWords ${binutils-raw.bintools.info} \
+    printWords ${binutils-unwrapped.info} \
       >> $info/nix-support/propagated-build-inputs
     # FIXME: cctools missing man pages
-    printWords ${binutils-raw.bintools.man} \
+    printWords ${binutils-unwrapped.man} \
       >> $man/nix-support/propagated-build-inputs
   '';
 

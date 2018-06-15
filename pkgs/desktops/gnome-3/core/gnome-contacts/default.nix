@@ -1,41 +1,55 @@
-{ stdenv, intltool, fetchurl, evolution_data_server, db
-, pkgconfig, gtk3, glib, libsecret
-, libchamplain, clutter_gtk, geocode_glib
-, bash, wrapGAppsHook, itstool, folks, libnotify, libxml2
-, gnome3, librsvg, gdk_pixbuf, file, telepathy_glib, nspr, nss
-, libsoup, vala, dbus_glib, automake, autoconf }:
+{ stdenv, gettext, fetchurl, evolution-data-server
+, pkgconfig, libxslt, docbook_xsl, docbook_xml_dtd_42, gtk3, glib, cheese
+, libchamplain, clutter-gtk, geocode-glib, gnome-desktop, gnome-online-accounts
+, wrapGAppsHook, folks, libxml2, gnome3, telepathy-glib
+, vala, meson, ninja }:
 
-stdenv.mkDerivation rec {
-  inherit (import ./src.nix fetchurl) name src;
+let
+  version = "3.28.2";
+in stdenv.mkDerivation rec {
+  name = "gnome-contacts-${version}";
+
+  src = fetchurl {
+    url = "mirror://gnome/sources/gnome-contacts/${gnome3.versionBranch version}/${name}.tar.xz";
+    sha256 = "1ilgmvgprn1slzmrzbs0zwgbzxp04rn5ycqd9c8zfvyh6zzwwr8w";
+  };
+
+  propagatedUserEnvPkgs = [ evolution-data-server ];
+
+  nativeBuildInputs = [
+    meson ninja pkgconfig vala gettext libxslt docbook_xsl docbook_xml_dtd_42 wrapGAppsHook
+  ];
+
+  buildInputs = [
+    gtk3 glib evolution-data-server gnome3.gsettings-desktop-schemas
+    folks gnome-desktop telepathy-glib
+    libxml2 gnome-online-accounts cheese
+    gnome3.defaultIconTheme libchamplain clutter-gtk geocode-glib
+  ];
+
+  postPatch = ''
+    chmod +x meson_post_install.py
+    patchShebangs meson_post_install.py
+  '';
+
+  # In file included from src/gnome-contacts@exe/contacts-avatar-selector.c:30:0:
+  # /nix/store/*-cheese-3.28.0/include/cheese/cheese-widget.h:26:10: fatal error: clutter-gtk/clutter-gtk.h: No such file or directory
+  #  #include <clutter-gtk/clutter-gtk.h>
+  #           ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+  NIX_CFLAGS_COMPILE = "-I${clutter-gtk}/include/clutter-gtk-1.0";
 
   doCheck = true;
 
-  propagatedUserEnvPkgs = [ gnome3.gnome_themes_standard evolution_data_server ];
-
-  # force build from vala
-  preBuild = ''
-   touch src/*.vala
-  '';
-
-  nativeBuildInputs = [ vala automake autoconf pkgconfig intltool itstool wrapGAppsHook file ];
-  buildInputs = [ gtk3 glib evolution_data_server gnome3.gsettings_desktop_schemas libnotify
-                  folks gnome3.gnome_desktop telepathy_glib libsecret dbus_glib
-                  libxml2 libsoup gnome3.gnome_online_accounts nspr nss
-                  gdk_pixbuf gnome3.defaultIconTheme libchamplain clutter_gtk geocode_glib db ];
-
-  preFixup = ''
-    gappsWrapperArgs+=(
-      --prefix XDG_DATA_DIRS : "${gnome3.gnome_themes_standard}/share"
-    )
-  '';
-
-  patches = [ ./gio_unix.patch ];
-
-  patchFlags = "-p0";
+  passthru = {
+    updateScript = gnome3.updateScript {
+      packageName = "gnome-contacts";
+      attrPath = "gnome3.gnome-contacts";
+    };
+  };
 
   meta = with stdenv.lib; {
     homepage = https://wiki.gnome.org/Apps/Contacts;
-    description = "Contacts is GNOME's integrated address book";
+    description = "GNOME’s integrated address book";
     maintainers = gnome3.maintainers;
     license = licenses.gpl2;
     platforms = platforms.linux;

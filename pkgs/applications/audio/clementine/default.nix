@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, boost, cmake, chromaprint, gettext, gst_all_1, liblastfm
+{ stdenv, fetchurl, fetchpatch, boost, cmake, chromaprint, gettext, gst_all_1, liblastfm
 , qt4, taglib, fftw, glew, qjson, sqlite, libgpod, libplist, usbmuxd, libmtp
 , libpulseaudio, gvfs, libcdio, libechonest, libspotify, pcre, projectm, protobuf
 , qca2, pkgconfig, sparsehash, config, makeWrapper, runCommand, gst_plugins }:
@@ -24,6 +24,11 @@ let
     # Required so as to avoid adding libspotify as a build dependency (as it is 
     # unfree and thus would prevent us from having a free package).
     ./clementine-spotify-blob-remove-from-build.patch
+    (fetchpatch {
+      # Fix w/gcc7
+      url = "https://github.com/clementine-player/Clementine/pull/5630.patch";
+      sha256 = "0px7xp1m4nvrncx8sga1qlxppk562wrk2qqk19iiry84nxg20mk4";
+    })
   ];
 
   nativeBuildInputs = [ cmake pkgconfig ];
@@ -65,11 +70,20 @@ let
 
   free = stdenv.mkDerivation {
     name = "clementine-free-${version}";
-    inherit src patches nativeBuildInputs buildInputs postPatch;
+    inherit src patches nativeBuildInputs postPatch;
+
+    buildInputs = buildInputs ++ [ makeWrapper ];
 
     cmakeFlags = [ "-DUSE_SYSTEM_PROJECTM=ON" ];
 
     enableParallelBuilding = true;
+
+    passthru.unfree = unfree;
+
+    postInstall = ''
+      wrapProgram $out/bin/clementine \
+        --prefix GST_PLUGIN_SYSTEM_PATH_1_0 : "$GST_PLUGIN_SYSTEM_PATH_1_0"
+    '';
 
     meta = with stdenv.lib; {
       homepage = http://www.clementine-player.org;
@@ -80,8 +94,8 @@ let
     };
   };
 
-  # Spotify blob for Clementine
-  blob = stdenv.mkDerivation {
+  # Unfree Spotify blob for Clementine
+  unfree = stdenv.mkDerivation {
     name = "clementine-blob-${version}";
     # Use the same patches and sources as Clementine
     inherit src nativeBuildInputs postPatch;
@@ -90,7 +104,7 @@ let
       ./clementine-spotify-blob.patch
     ];
 
-    buildInputs = buildInputs ++ [ libspotify ];
+    buildInputs = buildInputs ++ [ libspotify makeWrapper gst_plugins ];
     # Only build and install the Spotify blob
     preBuild = ''
       cd ext/clementine-spotifyblob
@@ -99,6 +113,14 @@ let
       mkdir -p $out/libexec/clementine
       mv $out/bin/clementine-spotifyblob $out/libexec/clementine
       rmdir $out/bin
+
+      makeWrapper ${free}/bin/clementine $out/bin/clementine \
+        --set CLEMENTINE_SPOTIFYBLOB $out/libexec/clementine
+
+      mkdir -p $out/share
+      for dir in applications icons kde4; do
+        ln -s "$free/share/$dir" "$out/share/$dir"
+      done
     '';
     enableParallelBuilding = true;
     meta = with stdenv.lib; {
@@ -111,34 +133,4 @@ let
     };
   };
 
-in
-
-with stdenv.lib;
-
-runCommand "clementine-${version}"
-{
-  inherit blob free;
-  buildInputs = [ makeWrapper ] ++ gst_plugins; # for the setup-hooks
-  dontPatchELF = true;
-  dontStrip = true;
-  meta = {
-    description = "A multiplatform music player"
-      + " (" + (optionalString withSpotify "with Spotify, ")
-      + "with gstreamer plugins: "
-      + concatStrings (intersperse ", " (map (x: x.name) gst_plugins))
-      + ")";
-    license = licenses.gpl3Plus;
-    inherit (free.meta) homepage platforms maintainers;
-  };
-}
-''
-  mkdir -p $out/bin
-  makeWrapper "$free/bin/${exeName}" "$out/bin/${exeName}" \
-      ${optionalString withSpotify "--set CLEMENTINE_SPOTIFYBLOB \"$blob/libexec/clementine\""} \
-      --prefix GST_PLUGIN_SYSTEM_PATH_1_0 : "$GST_PLUGIN_SYSTEM_PATH_1_0"
-
-  mkdir -p $out/share
-  for dir in applications icons kde4; do
-      ln -s "$free/share/$dir" "$out/share/$dir"
-  done
-''
+in free
