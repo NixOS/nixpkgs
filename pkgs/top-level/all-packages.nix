@@ -6590,7 +6590,8 @@ with pkgs;
     hadoop_2_7
     hadoop_2_8
     hadoop_2_9
-    hadoop_3_0;
+    hadoop_3_0
+    hadoop_3_1;
   hadoop = hadoop_2_7;
 
   io = callPackage ../development/interpreters/io { };
