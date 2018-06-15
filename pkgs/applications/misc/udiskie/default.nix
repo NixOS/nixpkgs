@@ -3,10 +3,8 @@
 , udisks2, wrapGAppsHook
 , buildPythonApplication
 , docopt
-, gbulb
 , pygobject3
 , pyyaml
-, wheel
 }:
 
 buildPythonApplication rec {
@@ -25,11 +23,10 @@ buildPythonApplication rec {
     hicolor-icon-theme
     wrapGAppsHook
     librsvg              # required for loading svg icons (udiskie uses svg icons)
-    wheel
   ];
 
   propagatedBuildInputs = [
-    gettext gobjectIntrospection gtk3 libnotify docopt gbulb
+    gettext gobjectIntrospection gtk3 libnotify docopt
     pygobject3 pyyaml udisks2 libappindicator-gtk3
   ];
 
