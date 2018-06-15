@@ -1,7 +1,5 @@
 { stdenv, fetchurl, fetchhg, go, sqlite}:
 
-assert stdenv.isLinux && (stdenv.isi686 || stdenv.isx86_64 || stdenv.isArm);
-
 stdenv.mkDerivation rec {
   name = "storebrowse-20130318212204";
 
@@ -28,9 +26,9 @@ stdenv.mkDerivation rec {
     GOSQLITE=$GOPATH/src/code.google.com/p/gosqlite
     mkdir -p $GOSQLITE
     cp -R $srcGoSqlite/* $GOSQLITE/
-    export CGO_CFLAGS=-I${sqlite}/include
-    export CGO_LDFLAGS=-L${sqlite}/lib
-    go build -ldflags "-r ${sqlite}/lib" -o storebrowse
+    export CGO_CFLAGS=-I${sqlite.dev}/include
+    export CGO_LDFLAGS=-L${sqlite.out}/lib
+    go build -ldflags "-r ${sqlite.out}/lib" -o storebrowse
   '';
 
   installPhase = ''
@@ -41,5 +39,6 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = http://viric.name/cgi-bin/storebrowse;
     license = stdenv.lib.licenses.agpl3Plus;
+    broken = true;
   };
 }

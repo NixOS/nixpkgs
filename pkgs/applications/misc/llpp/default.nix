@@ -1,35 +1,40 @@
-{ stdenv, makeWrapper, fetchgit, pkgconfig, ninja, ocaml, findlib, mupdf, lablgl
-, gtk3, openjpeg, jbig2dec, mujs, xsel, openssl }:
+{ stdenv, lib, makeWrapper, fetchgit, pkgconfig, ninja, ocaml, findlib, mupdf
+, lablgl, gtk3, openjpeg, jbig2dec, mujs, xsel, openssl, freetype, ncurses }:
+
+assert lib.versionAtLeast (lib.getVersion ocaml) "4.02";
 
 let ocamlVersion = (builtins.parseDrvName (ocaml.name)).version;
 in stdenv.mkDerivation rec {
   name = "llpp-${version}";
-  version = "21-git-2015-07-30";
+  version = "2018-03-02";
 
   src = fetchgit {
     url = "git://repo.or.cz/llpp.git";
-    rev = "e9fe06d684b145a104cc319673076e069e853cac";
-    sha256 = "0x3hgn6sfjln2sqdw40ylcj943rn732a6mlfwz01llx8ykiyvsvq";
+    rev = "0ab1fbbf142b6df6d6bae782e3af2ec50f32dec9";
+    sha256 = "1h0hrmxwm7ripgp051788p8ad0q38dc9nvjx87mdwlkwk9qc0dis";
     fetchSubmodules = false;
   };
 
-  buildInputs = [ pkgconfig ninja makeWrapper ocaml findlib mupdf lablgl
-                  gtk3 jbig2dec openjpeg mujs openssl ];
+  nativeBuildInputs = [ pkgconfig makeWrapper ninja ];
+  buildInputs = [ ocaml findlib mupdf gtk3 jbig2dec openjpeg mujs openssl freetype ncurses ];
+
+  dontStrip = true;
 
   configurePhase = ''
-      sh configure.sh -O -F ${mupdf}
-      sed -i 's;-lopenjpeg;-lopenjp2;g' .config
-      sed -i 's;$builddir/link\.so;link.so;g' build.ninja
+    sed -i -e 's+ocamlc --version+ocamlc -version+' build.sh
+    sed -i -e 's+-I \$srcdir/mupdf/include -I \$srcdir/mupdf/thirdparty/freetype/include+-I ${freetype.dev}/include+' build.sh
+    sed -i -e 's+-lmupdf +-lfreetype -lz -lharfbuzz -ljbig2dec -lopenjp2 -ljpeg -lmupdf +' build.sh
+    sed -i -e 's+-L\$srcdir/mupdf/build/native ++' build.sh
   '';
 
-  buildPhase = "${ninja}/bin/ninja";
+  buildPhase = ''
+    sh ./build.sh build
+  '';
 
   installPhase = ''
     install -d $out/bin $out/lib
     install build/llpp $out/bin
-    install link.so $out/lib
     wrapProgram $out/bin/llpp \
-        --prefix CAML_LD_LIBRARY_PATH ":" "${lablgl}/lib/ocaml/${ocamlVersion}/site-lib/lablgl" \
         --prefix CAML_LD_LIBRARY_PATH ":" "$out/lib" \
         --prefix PATH ":" "${xsel}/bin"
   '';

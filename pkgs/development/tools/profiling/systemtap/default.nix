@@ -1,74 +1,65 @@
-{ fetchurl, stdenv, elfutils, latex2html, xmlto, docbook_xml_dtd_412
-, libxml2, docbook_xsl, libxslt, texLive, texLiveExtra, ghostscript, pkgconfig
-, gtkmm, libglademm, boost, perl, sqlite }:
+{ fetchgit, pkgconfig, gettext, runCommand, makeWrapper
+, elfutils, kernel, gnumake, python2, python2Packages
+}:
 
-stdenv.mkDerivation rec {
-  name = "systemtap-1.2";
+let
+  ## fetchgit info
+  url = git://sourceware.org/git/systemtap.git;
+  rev = "4051c70c9318c837981384cbb23f3e9eb1bd0892";
+  sha256 = "0sd8n3j3rishks3gyqj2jyqhps7hmlfjyz8i0w8v98cczhhh04rq";
+  version = "2017.10.18";
 
-  src = fetchurl {
-    url = "http://sources.redhat.com/systemtap/ftp/releases/${name}.tar.gz";
-    sha256 = "0kxgjr8p1pnncc0l4941gzx0jsyyqjzjqar2qkcjzp266ajn9qz6";
+  inherit (kernel) stdenv;
+  inherit (stdenv) lib;
+
+  ## stap binaries
+  stapBuild = stdenv.mkDerivation {
+    name = "systemtap-${version}";
+    src = fetchgit { inherit url rev sha256; };
+    nativeBuildInputs = [ pkgconfig ];
+    buildInputs = [ elfutils gettext python2 python2Packages.setuptools ];
+    # FIXME: Workaround for bug in kbuild, where quoted -I"/foo" flags would get mangled in out-of-tree kbuild dirs
+    postPatch = ''
+      substituteInPlace buildrun.cxx --replace \
+        'o << "EXTRA_CFLAGS += -I\"" << s.runtime_path << "\"" << endl;' \
+        'o << "EXTRA_CFLAGS += -I" << s.runtime_path << endl;'
+    '';
+    enableParallelBuilding = true;
   };
 
-  patches =
-    stdenv.lib.optional (stdenv ? glibc) ./nixos-kernel-store-path.patch;
+  ## a kernel build dir as expected by systemtap
+  kernelBuildDir = runCommand "kbuild-${kernel.version}-merged" { } ''
+    mkdir -p $out
+    for f in \
+        ${kernel}/System.map \
+        ${kernel.dev}/vmlinux \
+        ${kernel.dev}/lib/modules/${kernel.modDirVersion}/build/{*,.*}
+    do
+      ln -s $(readlink -f $f) $out
+    done
+  '';
 
-  postPatch =
-    '' sed -i scripts/kernel-doc -e 's|/usr/bin/perl|${perl}/bin/perl|g'
-    '';
+  pypkgs = with python2Packages; makePythonPath [ pyparsing ];
 
-  preConfigure =
-    # XXX: This should really be handled by TeXLive's setup-hook.
-    '' export TEXINPUTS="${latex2html}/texinputs:$TEXINPUTS"
-       export TEXINPUTS="${texLiveExtra}/texmf-dist/tex/latex/preprint:$TEXINPUTS"
-       echo "\$TEXINPUTS is \`$TEXINPUTS'"
-    '';
-
-  postConfigure =
-    /* Work around this:
-
-        StapParser.cxx:118:   instantiated from here
-        /...-boost-1.42.0/include/boost/algorithm/string/compare.hpp:43: error: comparison between signed and unsigned integer expressions
-
-     */
-    '' sed -i "grapher/Makefile" -e's/-Werror//g'
-    '';
-
-  buildInputs =
-    [ elfutils latex2html xmlto texLive texLiveExtra ghostscript
-      pkgconfig gtkmm libglademm boost sqlite
-      docbook_xml_dtd_412 libxml2
-      docbook_xsl libxslt
-    ];
-
+in runCommand "systemtap-${kernel.version}-${version}" {
+  inherit stapBuild kernelBuildDir;
+  buildInputs = [ makeWrapper ];
   meta = {
-    description = "SystemTap, tools to gather information about a running GNU/Linux system";
-
-    longDescription =
-      '' SystemTap provides free software (GPL) infrastructure to simplify
-         the gathering of information about the running GNU/Linux system.
-         This assists diagnosis of a performance or functional problem.
-         SystemTap eliminates the need for the developer to go through the
-         tedious and disruptive instrument, recompile, install, and reboot
-         sequence that may be otherwise required to collect data.
-
-         SystemTap provides a simple command line interface and scripting
-         language for writing instrumentation for a live running kernel.  We
-         are publishing samples, as well as enlarging the internal "tapset"
-         script library to aid reuse and abstraction.
-
-         Among other tracing/probing tools, SystemTap is the tool of choice
-         for complex tasks that may require live analysis, programmable
-         on-line response, and whole-system symbolic access.  SystemTap can
-         also handle simple tracing jobs.
-      '';
-
-    homepage = http://sourceware.org/systemtap/;
-
-    license = stdenv.lib.licenses.gpl2Plus;
-
-    maintainers = [ ];
-    platforms = stdenv.lib.platforms.linux;
-    broken = true;
+    homepage = https://sourceware.org/systemtap/;
+    repositories.git = url;
+    description = "Provides a scripting language for instrumentation on a live kernel plus user-space";
+    license = lib.licenses.gpl2;
+    platforms = lib.platforms.linux;
   };
-}
+} ''
+  mkdir -p $out/bin
+  for bin in $stapBuild/bin/*; do # hello emacs */
+    ln -s $bin $out/bin
+  done
+  rm $out/bin/stap $out/bin/dtrace
+  makeWrapper $stapBuild/bin/stap $out/bin/stap \
+    --add-flags "-r $kernelBuildDir" \
+    --prefix PATH : ${lib.makeBinPath [ stdenv.cc.cc stdenv.cc.bintools elfutils gnumake ]}
+  makeWrapper $stapBuild/bin/dtrace $out/bin/dtrace \
+    --prefix PYTHONPATH : ${pypkgs}
+''

@@ -1,20 +1,22 @@
 { stdenv, fetchurl, boost, pkgconfig, librevenge, zlib }:
 
-let version = "0.4.2"; in
 stdenv.mkDerivation rec {
   name = "libwps-${version}";
+  version = "0.4.9";
 
   src = fetchurl {
-    url = "mirror://sourceforge/libwps/${name}.tar.gz";
-    sha256 = "0c90i3zafxxsj989bd9bs577blx3mrb90rj52iv6ijc4qivi4wkr";
+    url = "mirror://sourceforge/libwps/${name}.tar.bz2";
+    sha256 = "1wn5lvx7c9dp98d9akqjhkv5fk94725hbvqzbjpy1v8y4mm9knb6";
   };
 
-  buildInputs = [ boost pkgconfig librevenge zlib ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ boost librevenge zlib ];
+
+  NIX_CFLAGS_COMPILE = [ "-Wno-error=implicit-fallthrough" ]; # newly detected by gcc-7
 
   meta = with stdenv.lib; {
-    inherit version;
     homepage = http://libwps.sourceforge.net/;
-    description = "Microsoft Works file word processor format import filter library";
+    description = "Microsoft Works document format import filter library";
     platforms = platforms.linux;
     license = licenses.lgpl21;
   };

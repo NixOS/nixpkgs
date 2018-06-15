@@ -1,13 +1,12 @@
-{ stdenv, fetchurl, patchelf, glibc, libX11, mesa }:
+{ stdenv, fetchurl, patchelf, glibc, libX11, libGLU_combined }:
 
 with stdenv.lib;
-assert stdenv.isi686;
 stdenv.mkDerivation {
-  name = "tibia-10.81";
+  name = "tibia-10.90";
 
   src = fetchurl {
-    url = http://static.tibia.com/download/tibia1081.tgz;
-    sha256 = "19p102fg31slrwg09q8dzhvz48qp8yrkpq69djn0jb9hrs7k7fpr";
+    url = http://static.tibia.com/download/tibia1090.tgz;
+    sha256 = "11mkh2dynmbpay51yfaxm5dmcys3rnpk579s9ypfkhblsrchbkhx";
   };
 
   shell = stdenv.shell;
@@ -24,8 +23,8 @@ stdenv.mkDerivation {
     mkdir -pv $out/res
     cp -r * $out/res
 
-    patchelf --set-interpreter ${glibc}/lib/ld-linux.so.2 \
-             --set-rpath ${stdenv.cc.cc}/lib:${libX11}/lib:${mesa}/lib \
+    patchelf --set-interpreter ${glibc.out}/lib/ld-linux.so.2 \
+             --set-rpath ${stdenv.lib.makeLibraryPath [ stdenv.cc.cc libX11 libGLU_combined ]} \
              "$out/res/Tibia"
 
     # We've patchelf'd the files. The main ‘Tibia’ binary is a bit
@@ -41,7 +40,7 @@ stdenv.mkDerivation {
     cat << EOF > "$out/bin/Tibia"
     #!${stdenv.shell}
     cd $out/res
-    ${glibc}/lib/ld-linux.so.2 --library-path \$LD_LIBRARY_PATH ./Tibia "\$@"
+    ${glibc.out}/lib/ld-linux.so.2 --library-path \$LD_LIBRARY_PATH ./Tibia "\$@"
     EOF
 
     chmod +x $out/bin/Tibia
@@ -50,7 +49,7 @@ stdenv.mkDerivation {
 
   meta = {
     description = "Top-down MMORPG set in a fantasy world";
-    homepage = "http://tibia.com";
+    homepage = http://tibia.com;
     license = stdenv.lib.licenses.unfree;
     platforms = ["i686-linux"];
     maintainers = with stdenv.lib.maintainers; [ fuuzetsu ];

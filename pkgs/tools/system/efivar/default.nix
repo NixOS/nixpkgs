@@ -1,32 +1,32 @@
-{ stdenv, fetchFromGitHub, popt }:
+{ stdenv, fetchFromGitHub, pkgconfig, popt }:
 
 stdenv.mkDerivation rec {
   name = "efivar-${version}";
-  version = "0.21";
+  version = "35";
+
+  outputs = [ "bin" "out" "dev" "man" ];
 
   src = fetchFromGitHub {
     owner = "rhinstaller";
     repo = "efivar";
     rev = version;
-    sha256 = "0iakv8prvl61mb2wnll02sxlg3kfzh3d4qb41d0bklmnljjkqr8p";
+    sha256 = "0hc7l5z0hw5472bm6p4d9n24bbggv9lgw7px1hqrdkfjghqfnlxh";
   };
 
+  nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ popt ];
 
-  # 0.21 Has build warnings so disable -Werror
-  postPatch = ''
-    sed -i 's,-Werror,,g' Make.defaults
-  '';
-
-  installFlags = [
+  makeFlags = [
+    "prefix=$(out)"
     "libdir=$(out)/lib"
-    "mandir=$(out)/share/man"
-    "includedir=$(out)/include"
-    "bindir=$(out)/bin"
+    "bindir=$(bin)/bin"
+    "mandir=$(man)/share/man"
+    "includedir=$(dev)/include"
+    "PCDIR=$(dev)/lib/pkgconfig"
   ];
 
   meta = with stdenv.lib; {
-    homepage = http://github.com/vathpela/efivar;
+    inherit (src.meta) homepage;
     description = "Tools and library to manipulate EFI variables";
     platforms = platforms.linux;
     license = licenses.lgpl21;

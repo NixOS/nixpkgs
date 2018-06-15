@@ -1,40 +1,30 @@
 { stdenv, fetchurl, which }:
-let
-  s = # Generated upstream information
-  rec {
-    baseName="eprover";
-    version="1.9";
-    name="${baseName}-${version}";
-    hash="0vipapqjg0339lpc98vpvz58m6xkqrhgxylmp0hrnld4lrhmcdn4";
-    url="http://wwwlehre.dhbw-stuttgart.de/~sschulz/WORK/E_DOWNLOAD/V_1.9/E.tgz";
-    sha256="0vipapqjg0339lpc98vpvz58m6xkqrhgxylmp0hrnld4lrhmcdn4";
-  };
-in
-stdenv.mkDerivation {
-  inherit (s) name;
+
+stdenv.mkDerivation rec {
+  name = "eprover-${version}";
+  version = "2.0";
 
   src = fetchurl {
-    name = "E-${s.version}.tar.gz";
-    inherit (s) url sha256;
+    url = "http://wwwlehre.dhbw-stuttgart.de/~sschulz/WORK/E_DOWNLOAD/V_${version}/E.tgz";
+    sha256 = "1xmwr32pd8lv3f6yh720mdqhi3na505y3zbgcsgh2hwb7b5i3ngb";
   };
 
   buildInputs = [ which ];
 
-  preConfigure = "sed -e 's@^EXECPATH\\s.*@EXECPATH = '\$out'/bin@' -i Makefile.vars";
+  preConfigure = ''
+    sed -e 's/ *CC *= *gcc$//' -i Makefile.vars
+  '';
+  configureFlags = "--exec-prefix=$(out) --man-prefix=$(out)/share/man";
 
-  buildPhase = "make install";
-
-  installPhase = ''
-    mkdir -p $out/bin
-    make install
-    echo eproof -xAuto --tstp-in --tstp-out '"$@"' > $out/bin/eproof-tptp
-    chmod a+x $out/bin/eproof-tptp
+  postInstall = ''
+    sed -e s,EXECPATH=.\*,EXECPATH=$out/bin, -i $out/bin/eproof{,_ram}
   '';
 
-  meta = {
-    inherit (s) version;
+  meta = with stdenv.lib; {
     description = "Automated theorem prover for full first-order logic with equality";
-    maintainers = [stdenv.lib.maintainers.raskin];
-    platforms = stdenv.lib.platforms.all;
+    homepage = http://www.eprover.org/;
+    license = licenses.gpl2;
+    maintainers = with maintainers; [ raskin gebner ];
+    platforms = platforms.all;
   };
 }

@@ -1,36 +1,33 @@
-{ stdenv, fetchzip, ocaml, findlib, re, sexplib, stringext, ounit }:
+{ stdenv, fetchurl, ocaml, findlib, jbuilder, ppx_sexp_conv, ounit
+, ppx_deriving, re, sexplib, stringext
+}:
 
-assert stdenv.lib.versionAtLeast (stdenv.lib.getVersion ocaml) "4";
+stdenv.mkDerivation rec {
+  version = "1.9.6";
+  name = "ocaml${ocaml.version}-uri-${version}";
 
-let version = "1.9.1"; in
-
-stdenv.mkDerivation {
-  name = "ocaml-uri-${version}";
-
-  src = fetchzip {
-    url = "https://github.com/mirage/ocaml-uri/archive/v${version}.tar.gz";
-    sha256 = "0v3jxqgyi4kj92r3x83rszfpnvvzy9lyb913basch4q64yka3w85";
+  src = fetchurl {
+    url = "https://github.com/mirage/ocaml-uri/releases/download/v${version}/uri-${version}.tbz";
+    sha256 = "1m845rwd70wi4iijkrigyz939m1x84ba70hvv0d9sgk6971w4kz0";
   };
 
-  buildInputs = [ ocaml findlib ounit ];
-  propagatedBuildInputs = [ re sexplib stringext ];
+  unpackCmd = "tar -xjf $curSrc";
 
-  configurePhase = "ocaml setup.ml -configure --prefix $out --enable-tests";
-  buildPhase = ''
-    ocaml setup.ml -build
-    ocaml setup.ml -doc
-  '';
+  buildInputs = [ ocaml findlib jbuilder ppx_sexp_conv ounit ];
+  propagatedBuildInputs = [ ppx_deriving re sexplib stringext ];
+
+  buildPhase = "jbuilder build";
+
   doCheck = true;
-  checkPhase = "ocaml setup.ml -test";
-  installPhase = "ocaml setup.ml -install";
+  checkPhase = "jbuilder runtest";
 
-  createFindlibDestdir = true;
+  inherit (jbuilder) installPhase;
 
   meta = {
-    homepage = https://github.com/mirage/ocaml-uri;
-    platforms = ocaml.meta.platforms;
+    homepage = "https://github.com/mirage/ocaml-uri";
     description = "RFC3986 URI parsing library for OCaml";
     license = stdenv.lib.licenses.isc;
-    maintainers = with stdenv.lib.maintainers; [ vbgl ];
+    maintainers = [ stdenv.lib.maintainers.vbgl ];
+    inherit (ocaml.meta) platforms;
   };
 }

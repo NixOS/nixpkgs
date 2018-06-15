@@ -1,4 +1,4 @@
-{ stdenv, fetchhg, openssl, pcre, qt4, boost, pkcs11helper }:
+{ stdenv, fetchhg, openssl, pcre-cpp, qt4, boost, pkcs11helper }:
 
 stdenv.mkDerivation {
   name = "meo-20121113";
@@ -11,7 +11,7 @@ stdenv.mkDerivation {
 
   buildFlags = "QMAKE=qmake";
 
-  buildInputs = [ openssl pcre qt4 boost pkcs11helper ];
+  buildInputs = [ openssl pcre-cpp qt4 boost pkcs11helper ];
 
   preConfigure = ''
     sed -i s,-mt$,, meo-gui/meo-gui.pro

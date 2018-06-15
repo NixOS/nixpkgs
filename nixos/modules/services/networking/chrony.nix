@@ -8,25 +8,28 @@ let
 
   stateDir = "/var/lib/chrony";
 
-  chronyUser = "chrony";
+  keyFile = "/etc/chrony.keys";
 
   cfg = config.services.chrony;
 
   configFile = pkgs.writeText "chrony.conf" ''
-    ${toString (map (server: "server " + server + "\n") cfg.servers)}
+    ${concatMapStringsSep "\n" (server: "server " + server) cfg.servers}
 
-    ${optionalString cfg.initstepslew.enabled ''
-      initstepslew ${toString cfg.initstepslew.threshold} ${toString (map (server: server + " ") cfg.initstepslew.servers)}
-    ''}
+    ${optionalString
+      cfg.initstepslew.enabled
+      "initstepslew ${toString cfg.initstepslew.threshold} ${concatStringsSep " " cfg.initstepslew.servers}"
+    }
 
     driftfile ${stateDir}/chrony.drift
+
+    keyfile ${keyFile}
 
     ${optionalString (!config.time.hardwareClockInLocalTime) "rtconutc"}
 
     ${cfg.extraConfig}
   '';
 
-  chronyFlags = "-m -f ${configFile} -u ${chronyUser}";
+  chronyFlags = "-n -m -u chrony -f ${configFile} ${toString cfg.extraFlags}";
 
 in
 
@@ -47,12 +50,7 @@ in
       };
 
       servers = mkOption {
-        default = [
-          "0.nixos.pool.ntp.org"
-          "1.nixos.pool.ntp.org"
-          "2.nixos.pool.ntp.org"
-          "3.nixos.pool.ntp.org"
-        ];
+        default = config.networking.timeServers;
         description = ''
           The set of NTP servers from which to synchronise.
         '';
@@ -72,11 +70,19 @@ in
       };
 
       extraConfig = mkOption {
+        type = types.lines;
         default = "";
         description = ''
           Extra configuration directives that should be added to
           <literal>chrony.conf</literal>
         '';
+      };
+
+      extraFlags = mkOption {
+        default = [];
+        example = [ "-s" ];
+        type = types.listOf types.str;
+        description = "Extra flags passed to the chronyd command.";
       };
     };
 
@@ -85,33 +91,48 @@ in
 
   ###### implementation
 
-  config = mkIf config.services.chrony.enable {
+  config = mkIf cfg.enable {
 
     # Make chronyc available in the system path
     environment.systemPackages = [ pkgs.chrony ];
 
+    users.extraGroups = singleton
+      { name = "chrony";
+        gid = config.ids.gids.chrony;
+      };
+
     users.extraUsers = singleton
-      { name = chronyUser;
+      { name = "chrony";
         uid = config.ids.uids.chrony;
+        group = "chrony";
         description = "chrony daemon user";
         home = stateDir;
       };
 
-    jobs.chronyd =
-      { description = "chrony daemon";
+    systemd.services.timesyncd.enable = mkForce false;
+
+    systemd.services.chronyd =
+      { description = "chrony NTP daemon";
 
         wantedBy = [ "multi-user.target" ];
+        wants = [ "time-sync.target" ];
+        before = [ "time-sync.target" ];
         after = [ "network.target" ];
+        conflicts = [ "ntpd.service" "systemd-timesyncd.service" ];
 
-        path = [ chrony ];
+        path = [ pkgs.chrony ];
 
         preStart =
           ''
             mkdir -m 0755 -p ${stateDir}
-            chown ${chronyUser} ${stateDir}
+            touch ${keyFile}
+            chmod 0640 ${keyFile}
+            chown chrony:chrony ${stateDir} ${keyFile}
           '';
 
-        exec = "chronyd -n ${chronyFlags}";
+        serviceConfig =
+          { ExecStart = "${pkgs.chrony}/bin/chronyd ${chronyFlags}";
+          };
       };
 
   };

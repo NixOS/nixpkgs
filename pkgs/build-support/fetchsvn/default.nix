@@ -1,14 +1,17 @@
-{stdenv, subversion, sshSupport ? false, openssh ? null}:
-{url, rev ? "HEAD", md5 ? "", sha256 ? "", ignoreExternals ? false, name ? null}:
+{stdenvNoCC, subversion, glibcLocales, sshSupport ? false, openssh ? null}:
+{url, rev ? "HEAD", md5 ? "", sha256 ? "",
+ ignoreExternals ? false, ignoreKeywords ? false, name ? null}:
 
 let
-  repoName = with stdenv.lib;
+  repoName = with stdenvNoCC.lib;
     let
       fst = head;
       snd = l: head (tail l);
       trd = l: head (tail (tail l));
-      path_ = reverseList (splitString "/" url);
-      path = if head path_ == "" then tail path_ else path_;
+      path_ =
+        (p: if head p == "" then tail p else p) # ~ drop final slash if any
+        (reverseList (splitString "/" url));
+      path = [ (removeSuffix "/" (head path_)) ] ++ (tail path_);
     in
       # ../repo/trunk -> repo
       if fst path == "trunk" then snd path
@@ -22,24 +25,20 @@ let
   name_ = if name == null then "${repoName}-r${toString rev}" else name;
 in
 
-stdenv.mkDerivation {
+if md5 != "" then
+  throw "fetchsvn does not support md5 anymore, please use sha256"
+else
+stdenvNoCC.mkDerivation {
   name = name_;
   builder = ./builder.sh;
-  buildInputs = [subversion];
+  nativeBuildInputs = [ subversion glibcLocales ];
 
-  outputHashAlgo = if sha256 == "" then "md5" else "sha256";
+  outputHashAlgo = "sha256";
   outputHashMode = "recursive";
-  outputHash = if sha256 == "" then md5 else sha256;
-  
-  inherit url rev sshSupport openssh ignoreExternals;
+  outputHash = sha256;
 
-  impureEnvVars = [
-    # We borrow these environment variables from the caller to allow
-    # easy proxy configuration.  This is impure, but a fixed-output
-    # derivation like fetchurl is allowed to do so since its result is
-    # by definition pure.
-    "http_proxy" "https_proxy" "ftp_proxy" "all_proxy" "no_proxy"
-    ];
+  inherit url rev sshSupport openssh ignoreExternals ignoreKeywords;
 
+  impureEnvVars = stdenvNoCC.lib.fetchers.proxyImpureEnvVars;
   preferLocalBuild = true;
 }

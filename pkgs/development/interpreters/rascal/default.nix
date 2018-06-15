@@ -24,5 +24,6 @@ stdenv.mkDerivation rec {
     description = "Command-line REPL for the Rascal metaprogramming language";
     license = stdenv.lib.licenses.epl10;
     maintainers = [ stdenv.lib.maintainers.eelco ];
+    platforms = stdenv.lib.platforms.unix;
   };
 }

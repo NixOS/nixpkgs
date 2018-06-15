@@ -16,10 +16,11 @@ agda.mkDerivation (self: rec {
   topSourceDirectories = [ "../$sourceRoot" ];
 
   meta = with stdenv.lib; {
-    homepage = "http://www.cse.chalmers.se/~nad/publications/danielsson-parser-combinators.html";
+    homepage = http://www.cse.chalmers.se/~nad/publications/danielsson-parser-combinators.html;
     description = "A monadic parser combinator library which guarantees termination of parsing";
     license = stdenv.lib.licenses.mit;
     platforms = stdenv.lib.platforms.unix;
     maintainers = with maintainers; [ fuuzetsu ];
+    broken = true;
   };
 })

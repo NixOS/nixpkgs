@@ -1,4 +1,4 @@
-{ fetchurl, stdenv }:
+{ fetchurl, stdenv, fetchpatch }:
 
 stdenv.mkDerivation rec {
   name = "nss-mdns-0.10";
@@ -20,6 +20,16 @@ stdenv.mkDerivation rec {
       "--localstatedir=/var"
     ];
 
+  patches = stdenv.lib.optional stdenv.hostPlatform.isMusl
+    (
+      fetchpatch
+      {
+        url = "https://raw.githubusercontent.com/openembedded/openembedded-core/94f780e889f194b67a48587ac68b3200288bee10/meta/recipes-connectivity/libnss-mdns/libnss-mdns/0001-check-for-nss.h.patch";
+        sha256 = "1l1kjbdw8z31br4vib3l5b85jy7kxin760a2f24lww8v6lqdpgds";
+      }
+    );
+
+
   meta = {
     description = "The mDNS Name Service Switch (NSS) plug-in";
     longDescription = ''
@@ -34,7 +44,7 @@ stdenv.mkDerivation rec {
     license = stdenv.lib.licenses.lgpl2Plus;
 
     # Supports both the GNU and FreeBSD NSS.
-    platforms = stdenv.lib.platforms.gnu ++ stdenv.lib.platforms.freebsd;
+    platforms = stdenv.lib.platforms.gnu ++ stdenv.lib.platforms.linux ++ stdenv.lib.platforms.freebsd;
 
     maintainers = [ ];
   };

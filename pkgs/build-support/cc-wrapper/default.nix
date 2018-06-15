@@ -5,46 +5,114 @@
 # script that sets up the right environment variables so that the
 # compiler and the linker just "work".
 
-{ name ? "", stdenv, nativeTools, nativeLibc, nativePrefix ? ""
-, cc ? null, libc ? null, binutils ? null, coreutils ? null, shell ? stdenv.shell
-, zlib ? null, extraPackages ? [], extraBuildCommands ? ""
-, dyld ? null # TODO: should this be a setup-hook on dyld?
-, isGNU ? false, isClang ? cc.isClang or false
+{ name ? ""
+, stdenvNoCC, nativeTools, propagateDoc ? !nativeTools, noLibc ? false, nativeLibc, nativePrefix ? ""
+, cc ? null, libc ? null, bintools, coreutils ? null, shell ? stdenvNoCC.shell
+, extraPackages ? [], extraBuildCommands ? ""
+, isGNU ? false, isClang ? cc.isClang or false, gnugrep ? null
+, buildPackages ? {}
 }:
 
-with stdenv.lib;
+with stdenvNoCC.lib;
 
-assert nativeTools -> nativePrefix != "";
-assert !nativeTools -> cc != null && binutils != null && coreutils != null;
-assert !nativeLibc -> libc != null;
-
-# For ghdl (the vhdl language provider to gcc) we need zlib in the wrapper.
-assert cc.langVhdl or false -> zlib != null;
+assert nativeTools -> !propagateDoc && nativePrefix != "";
+assert !nativeTools ->
+  cc != null && coreutils != null && gnugrep != null;
+assert !(nativeLibc && noLibc);
+assert (noLibc || nativeLibc) == (libc == null);
 
 let
+  stdenv = stdenvNoCC;
+  inherit (stdenv) hostPlatform targetPlatform;
+
+  # Prefix for binaries. Customarily ends with a dash separator.
+  #
+  # TODO(@Ericson2314) Make unconditional, or optional but always true by
+  # default.
+  targetPrefix = stdenv.lib.optionalString (targetPlatform != hostPlatform)
+                                           (targetPlatform.config + "-");
 
   ccVersion = (builtins.parseDrvName cc.name).version;
   ccName = (builtins.parseDrvName cc.name).name;
 
+  libc_bin = if libc == null then null else getBin libc;
+  libc_dev = if libc == null then null else getDev libc;
+  libc_lib = if libc == null then null else getLib libc;
+  cc_solib = getLib cc;
+  # The wrapper scripts use 'cat' and 'grep', so we may need coreutils.
+  coreutils_bin = if nativeTools then "" else getBin coreutils;
+
+  default_cxx_stdlib_compile = optionalString (targetPlatform.isLinux && !(cc.isGNU or false) && !nativeTools && cc ? gcc)
+    "-isystem $(echo -n ${cc.gcc}/include/c++/*) -isystem $(echo -n ${cc.gcc}/include/c++/*)/$(${cc.gcc}/bin/gcc -dumpmachine)";
+
+  dashlessTarget = stdenv.lib.replaceStrings ["-"] ["_"] targetPlatform.config;
+
+  # The "infix salt" is a arbitrary string added in the middle of env vars
+  # defined by cc-wrapper's hooks so that multiple cc-wrappers can be used
+  # without interfering. For the moment, it is defined as the target triple,
+  # adjusted to be a valid bash identifier. This should be considered an
+  # unstable implementation detail, however.
+  infixSalt = dashlessTarget;
+
+  expand-response-params =
+    if buildPackages.stdenv.cc or null != null && buildPackages.stdenv.cc != "/dev/null"
+    then import ../expand-response-params { inherit (buildPackages) stdenv; }
+    else "";
+
 in
 
+# Ensure bintools matches
+assert libc_bin == bintools.libc_bin;
+assert libc_dev == bintools.libc_dev;
+assert libc_lib == bintools.libc_lib;
+assert nativeTools == bintools.nativeTools;
+assert nativeLibc == bintools.nativeLibc;
+assert nativePrefix == bintools.nativePrefix;
+
 stdenv.mkDerivation {
-  name =
-    (if name != "" then name else ccName + "-wrapper") +
-    (if cc != null && ccVersion != "" then "-" + ccVersion else "");
+  name = targetPrefix
+    + (if name != "" then name else stdenv.lib.removePrefix targetPrefix "${ccName}-wrapper")
+    + (stdenv.lib.optionalString (cc != null && ccVersion != "") "-${ccVersion}");
 
   preferLocalBuild = true;
 
-  inherit cc shell;
-  libc = if nativeLibc then null else libc;
-  binutils = if nativeTools then null else binutils;
-  # The wrapper scripts use 'cat', so we may need coreutils.
-  coreutils = if nativeTools then null else coreutils;
+  inherit cc libc_bin libc_dev libc_lib bintools coreutils_bin;
+  shell = getBin shell + stdenv.lib.optionalString (stdenv ? shellPath) stdenv.shellPath;
+  gnugrep_bin = if nativeTools then "" else gnugrep;
 
-  passthru = { inherit nativeTools nativeLibc nativePrefix isGNU isClang; };
+  inherit targetPrefix infixSalt;
 
-  buildCommand =
+  outputs = [ "out" ] ++ optionals propagateDoc [ "man" "info" ];
+
+  passthru = {
+    # "cc" is the generic name for a C compiler, but there is no one for package
+    # providing the linker and related tools. The two we use now are GNU
+    # Binutils, and Apple's "cctools"; "bintools" as an attempt to find an
+    # unused middle-ground name that evokes both.
+    inherit bintools;
+    inherit libc nativeTools nativeLibc nativePrefix isGNU isClang default_cxx_stdlib_compile;
+
+    emacsBufferSetup = pkgs: ''
+      ; We should handle propagation here too
+      (mapc
+        (lambda (arg)
+          (when (file-directory-p (concat arg "/include"))
+            (setenv "NIX_${infixSalt}_CFLAGS_COMPILE" (concat (getenv "NIX_${infixSalt}_CFLAGS_COMPILE") " -isystem " arg "/include"))))
+        '(${concatStringsSep " " (map (pkg: "\"${pkg}\"") pkgs)}))
+    '';
+  };
+
+  dontBuild = true;
+  dontConfigure = true;
+
+  unpackPhase = ''
+    src=$PWD
+  '';
+
+  installPhase =
     ''
+      set -u
+
       mkdir -p $out/bin $out/nix-support
 
       wrap() {
@@ -56,26 +124,104 @@ stdenv.mkDerivation {
       }
     ''
 
-    + optionalString (!nativeLibc) (if (!stdenv.isDarwin) then ''
-      dynamicLinker="$libc/lib/$dynamicLinker"
-      echo $dynamicLinker > $out/nix-support/dynamic-linker
+    + (if nativeTools then ''
+      echo ${if targetPlatform.isDarwin then cc else nativePrefix} > $out/nix-support/orig-cc
 
-      if [ -e $libc/lib/32/ld-linux.so.2 ]; then
-        echo $libc/lib/32/ld-linux.so.2 > $out/nix-support/dynamic-linker-m32
-      fi
-
-      # The dynamic linker is passed in `ldflagsBefore' to allow
-      # explicit overrides of the dynamic linker by callers to gcc/ld
-      # (the *last* value counts, so ours should come first).
-      echo "-dynamic-linker" $dynamicLinker > $out/nix-support/libc-ldflags-before
+      ccPath="${if targetPlatform.isDarwin then cc else nativePrefix}/bin"
     '' else ''
-      echo $dynamicLinker > $out/nix-support/dynamic-linker
+      echo $cc > $out/nix-support/orig-cc
 
-      echo "export LD_DYLD_PATH=\"$dynamicLinker\"" >> $out/nix-support/setup-hook
+      ccPath="${cc}/bin"
     '')
 
-    + optionalString (!nativeLibc) ''
-      # The "-B$libc/lib/" flag is a quick hack to force gcc to link
+    + ''
+      # Create symlinks to everything in the bintools wrapper.
+      for bbin in $bintools/bin/*; do
+        mkdir -p "$out/bin"
+        ln -s "$bbin" "$out/bin/$(basename $bbin)"
+      done
+
+      # We export environment variables pointing to the wrapped nonstandard
+      # cmds, lest some lousy configure script use those to guess compiler
+      # version.
+      export named_cc=${targetPrefix}cc
+      export named_cxx=${targetPrefix}c++
+
+      export default_cxx_stdlib_compile="${default_cxx_stdlib_compile}"
+
+      if [ -e $ccPath/${targetPrefix}gcc ]; then
+        wrap ${targetPrefix}gcc ${./cc-wrapper.sh} $ccPath/${targetPrefix}gcc
+        ln -s ${targetPrefix}gcc $out/bin/${targetPrefix}cc
+        export named_cc=${targetPrefix}gcc
+        export named_cxx=${targetPrefix}g++
+      elif [ -e $ccPath/clang ]; then
+        wrap ${targetPrefix}clang ${./cc-wrapper.sh} $ccPath/clang
+        ln -s ${targetPrefix}clang $out/bin/${targetPrefix}cc
+        export named_cc=${targetPrefix}clang
+        export named_cxx=${targetPrefix}clang++
+      fi
+
+      if [ -e $ccPath/${targetPrefix}g++ ]; then
+        wrap ${targetPrefix}g++ ${./cc-wrapper.sh} $ccPath/${targetPrefix}g++
+        ln -s ${targetPrefix}g++ $out/bin/${targetPrefix}c++
+      elif [ -e $ccPath/clang++ ]; then
+        wrap ${targetPrefix}clang++ ${./cc-wrapper.sh} $ccPath/clang++
+        ln -s ${targetPrefix}clang++ $out/bin/${targetPrefix}c++
+      fi
+
+      if [ -e $ccPath/cpp ]; then
+        wrap ${targetPrefix}cpp ${./cc-wrapper.sh} $ccPath/cpp
+      fi
+    ''
+
+    + optionalString cc.langFortran or false ''
+      wrap ${targetPrefix}gfortran ${./cc-wrapper.sh} $ccPath/${targetPrefix}gfortran
+      ln -sv ${targetPrefix}gfortran $out/bin/${targetPrefix}g77
+      ln -sv ${targetPrefix}gfortran $out/bin/${targetPrefix}f77
+    ''
+
+    + optionalString cc.langJava or false ''
+      wrap ${targetPrefix}gcj ${./cc-wrapper.sh} $ccPath/${targetPrefix}gcj
+    ''
+
+    + optionalString cc.langGo or false ''
+      wrap ${targetPrefix}gccgo ${./cc-wrapper.sh} $ccPath/${targetPrefix}gccgo
+    '';
+
+  strictDeps = true;
+  propagatedBuildInputs = [ bintools ];
+  depsTargetTargetPropagated = extraPackages;
+
+  wrapperName = "CC_WRAPPER";
+
+  setupHooks = [
+    ../setup-hooks/role.bash
+    ./setup-hook.sh
+  ];
+
+  postFixup =
+    ''
+      set -u
+
+      # Backwards compatability for packages expecting this file, e.g. with
+      # `$NIX_CC/nix-support/dynamic-linker`.
+      #
+      # TODO(@Ericson2314): Remove this after stable release and force
+      # everyone to refer to bintools-wrapper directly.
+      if [[ -f "$bintools/nix-support/dynamic-linker" ]]; then
+        ln -s "$bintools/nix-support/dynamic-linker" "$out/nix-support"
+      fi
+      if [[ -f "$bintools/nix-support/dynamic-linker-m32" ]]; then
+        ln -s "$bintools/nix-support/dynamic-linker-m32" "$out/nix-support"
+      fi
+    ''
+
+    + optionalString (libc != null) ''
+      ##
+      ## General libc support
+      ##
+
+      # The "-B${libc_lib}/lib/" flag is a quick hack to force gcc to link
       # against the crt1.o from our own glibc, rather than the one in
       # /usr/lib.  (This is only an issue when using an `impure'
       # compiler/linker, i.e., one that searches /usr/lib and so on.)
@@ -86,184 +232,70 @@ stdenv.mkDerivation {
       # compile, because it uses "#include_next <limits.h>" to find the
       # limits.h file in ../includes-fixed. To remedy the problem,
       # another -idirafter is necessary to add that directory again.
-      echo "-B$libc/lib/ -idirafter $libc/include -idirafter $cc/lib/gcc/*/*/include-fixed" > $out/nix-support/libc-cflags
+      echo "-B${libc_lib}/lib/ -idirafter ${libc_dev}/include ${optionalString isGNU "-idirafter ${cc}/lib/gcc/*/*/include-fixed"}" > $out/nix-support/libc-cflags
 
-      echo "-L$libc/lib" > $out/nix-support/libc-ldflags
-
-      echo $libc > $out/nix-support/orig-libc
+      echo "${libc_lib}" > $out/nix-support/orig-libc
+      echo "${libc_dev}" > $out/nix-support/orig-libc-dev
     ''
 
-    + (if nativeTools then ''
-      ccPath="${if stdenv.isDarwin then cc else nativePrefix}/bin"
-      ldPath="${nativePrefix}/bin"
-    '' else ''
-      echo $cc > $out/nix-support/orig-cc
+    + optionalString (!nativeTools) ''
+      ##
+      ## Initial CFLAGS
+      ##
 
-      # GCC shows $cc/lib in `gcc -print-search-dirs', but not
-      # $cc/lib64 (even though it does actually search there...)..
+      # GCC shows ${cc_solib}/lib in `gcc -print-search-dirs', but not
+      # ${cc_solib}/lib64 (even though it does actually search there...)..
       # This confuses libtool.  So add it to the compiler tool search
       # path explicitly.
-      if [ -e "$cc/lib64" -a ! -L "$cc/lib64" ]; then
-        ccLDFlags+=" -L$cc/lib64"
-        ccCFlags+=" -B$cc/lib64"
+      if [ -e "${cc_solib}/lib64" -a ! -L "${cc_solib}/lib64" ]; then
+        ccLDFlags+=" -L${cc_solib}/lib64"
+        ccCFlags+=" -B${cc_solib}/lib64"
       fi
-      ccLDFlags+=" -L$cc/lib"
-
-      ${optionalString cc.langVhdl or false ''
-        ccLDFlags+=" -L${zlib}/lib"
-      ''}
-
-      # Find the gcc libraries path (may work only without multilib).
-      ${optionalString cc.langAda or false ''
-        basePath=`echo $cc/lib/*/*/*`
-        ccCFlags+=" -B$basePath -I$basePath/adainclude"
-        gnatCFlags="-aI$basePath/adainclude -aO$basePath/adalib"
-        echo "$gnatCFlags" > $out/nix-support/gnat-cflags
-      ''}
-
-      if [ -e $ccPath/clang ]; then
-        # Need files like crtbegin.o from gcc
-        # It's unclear if these will ever be provided by an LLVM project
-        ccCFlags="$ccCFlags -B$basePath"
-        ccCFlags="$ccCFlags -isystem$cc/lib/clang/$ccVersion/include"
-      fi
+      ccLDFlags+=" -L${cc_solib}/lib"
+      ccCFlags+=" -B${cc_solib}/lib"
 
       echo "$ccLDFlags" > $out/nix-support/cc-ldflags
       echo "$ccCFlags" > $out/nix-support/cc-cflags
-
-      ccPath="$cc/bin"
-      ldPath="$binutils/bin"
-
-      # Propagate the wrapped cc so that if you install the wrapper,
-      # you get tools like gcov, the manpages, etc. as well (including
-      # for binutils and Glibc).
-      echo $cc $binutils $libc > $out/nix-support/propagated-user-env-packages
-
-      echo ${toString extraPackages} > $out/nix-support/propagated-native-build-inputs
     ''
 
-    + optionalString (stdenv.isSunOS && nativePrefix != "") ''
-      # Solaris needs an additional ld wrapper.
-      ldPath="${nativePrefix}/bin"
-      ld="$out/bin/ld-solaris"
-      wrap ld-solaris ${./ld-solaris-wrapper.sh}
-    '')
+    + optionalString propagateDoc ''
+      ##
+      ## Man page and info support
+      ##
 
-    + ''
-      # Create a symlink to as (the assembler).  This is useful when a
-      # cc-wrapper is installed in a user environment, as it ensures that
-      # the right assembler is called.
-      if [ -e $ldPath/as ]; then
-        ln -s $ldPath/as $out/bin/as
-      fi
-
-      wrap ld ${./ld-wrapper.sh} ''${ld:-$ldPath/ld}
-
-      if [ -e $binutils/bin/ld.gold ]; then
-        wrap ld.gold ${./ld-wrapper.sh} $binutils/bin/ld.gold
-      fi
-
-      if [ -e $binutils/bin/ld.bfd ]; then
-        wrap ld.bfd ${./ld-wrapper.sh} $binutils/bin/ld.bfd
-      fi
-
-      export real_cc=cc
-      export real_cxx=c++
-      export default_cxx_stdlib_compile="${
-        if stdenv.isLinux && !(cc.isGNU or false)
-          then "-isystem $(echo -n ${cc.gcc}/include/c++/*) -isystem $(echo -n ${cc.gcc}/include/c++/*)/$(${cc.gcc}/bin/gcc -dumpmachine)"
-          else ""
-      }"
-
-      if [ -e $ccPath/gcc ]; then
-        wrap gcc ${./cc-wrapper.sh} $ccPath/gcc
-        ln -s gcc $out/bin/cc
-        export real_cc=gcc
-        export real_cxx=g++
-      elif [ -e $ccPath/clang ]; then
-        wrap clang ${./cc-wrapper.sh} $ccPath/clang
-        ln -s clang $out/bin/cc
-        export real_cc=clang
-        export real_cxx=clang++
-      fi
-
-      if [ -e $ccPath/g++ ]; then
-        wrap g++ ${./cc-wrapper.sh} $ccPath/g++
-        ln -s g++ $out/bin/c++
-      elif [ -e $ccPath/clang++ ]; then
-        wrap clang++ ${./cc-wrapper.sh} $ccPath/clang++
-        ln -s clang++ $out/bin/c++
-      fi
-
-      if [ -e $ccPath/cpp ]; then
-        wrap cpp ${./cc-wrapper.sh} $ccPath/cpp
-      fi
-    ''
-
-    + optionalString cc.langFortran or false ''
-      wrap gfortran ${./cc-wrapper.sh} $ccPath/gfortran
-      ln -sv gfortran $out/bin/g77
-      ln -sv gfortran $out/bin/f77
-    ''
-
-    + optionalString cc.langJava or false ''
-      wrap gcj ${./cc-wrapper.sh} $ccPath/gcj
-    ''
-
-    + optionalString cc.langGo or false ''
-      wrap gccgo ${./cc-wrapper.sh} $ccPath/gccgo
-    ''
-
-    + optionalString cc.langAda or false ''
-      wrap gnatgcc ${./cc-wrapper.sh} $ccPath/gnatgcc
-      wrap gnatmake ${./gnat-wrapper.sh} $ccPath/gnatmake
-      wrap gnatbind ${./gnat-wrapper.sh} $ccPath/gnatbind
-      wrap gnatlink ${./gnatlink-wrapper.sh} $ccPath/gnatlink
-    ''
-
-    + optionalString cc.langVhdl or false ''
-      ln -s $ccPath/ghdl $out/bin/ghdl
+      mkdir -p $man/nix-support $info/nix-support
+      printWords ${cc.man or ""}  > $man/nix-support/propagated-user-env-packages
+      printWords ${cc.info or ""}  > $info/nix-support/propagated-user-env-packages
     ''
 
     + ''
-      substituteAll ${./setup-hook.sh} $out/nix-support/setup-hook.tmp
-      cat $out/nix-support/setup-hook.tmp >> $out/nix-support/setup-hook
-      rm $out/nix-support/setup-hook.tmp
+      ##
+      ## Hardening support
+      ##
 
-      substituteAll ${./add-flags} $out/nix-support/add-flags.sh
-      cp -p ${./utils.sh} $out/nix-support/utils.sh
+      export hardening_unsupported_flags="${builtins.concatStringsSep " " (cc.hardeningUnsupportedFlags or [])}"
     ''
+
+    + optionalString hostPlatform.isCygwin ''
+      hardening_unsupported_flags+=" pic"
+    ''
+
+    + ''
+      substituteAll ${./add-flags.sh} $out/nix-support/add-flags.sh
+      substituteAll ${./add-hardening.sh} $out/nix-support/add-hardening.sh
+      substituteAll ${../wrapper-common/utils.bash} $out/nix-support/utils.bash
+
+      ##
+      ## Extra custom steps
+      ##
+    ''
+
     + extraBuildCommands;
 
-  # The dynamic linker has different names on different Linux platforms.
-  dynamicLinker =
-    if !nativeLibc then
-      (if stdenv.system == "i686-linux" then "ld-linux.so.2" else
-       if stdenv.system == "x86_64-linux" then "ld-linux-x86-64.so.2" else
-       # ARM with a wildcard, which can be "" or "-armhf".
-       if stdenv.isArm then "ld-linux*.so.3" else
-       if stdenv.system == "powerpc-linux" then "ld.so.1" else
-       if stdenv.system == "mips64el-linux" then "ld.so.1" else
-       if stdenv.system == "x86_64-darwin" then "/usr/lib/dyld" else
-       abort "Don't know the name of the dynamic linker for this platform.")
-    else "";
+  inherit expand-response-params;
 
-  crossAttrs = {
-    shell = shell.crossDrv + shell.crossDrv.shellPath;
-    libc = stdenv.ccCross.libc;
-    coreutils = coreutils.crossDrv;
-    binutils = binutils.crossDrv;
-    cc = cc.crossDrv;
-    #
-    # This is not the best way to do this. I think the reference should be
-    # the style in the gcc-cross-wrapper, but to keep a stable stdenv now I
-    # do this sufficient if/else.
-    dynamicLinker =
-      (if stdenv.cross.arch == "arm" then "ld-linux.so.3" else
-       if stdenv.cross.arch == "mips" then "ld.so.1" else
-       if stdenv.lib.hasSuffix "pc-gnu" stdenv.cross.config then "ld.so.1" else
-       abort "don't know the name of the dynamic linker for this platform");
-  };
+  # for substitution in utils.bash
+  expandResponseParams = "${expand-response-params}/bin/expand-response-params";
 
   meta =
     let cc_ = if cc != null then cc else {}; in
@@ -271,5 +303,5 @@ stdenv.mkDerivation {
     { description =
         stdenv.lib.attrByPath ["meta" "description"] "System C compiler" cc_
         + " (wrapper script)";
-    };
+  };
 }

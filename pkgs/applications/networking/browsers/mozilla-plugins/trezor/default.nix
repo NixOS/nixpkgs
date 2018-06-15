@@ -1,7 +1,5 @@
 { stdenv, fetchurl, dpkg, zlib }:
 
-assert stdenv.system == "x86_64-linux" || stdenv.system == "i686-linux";
-
 stdenv.mkDerivation {
   name = "TREZOR-bridge-1.0.5";
 
@@ -38,7 +36,11 @@ stdenv.mkDerivation {
     { description = "Plugin for browser to TREZOR device communication";
       homepage = https://mytrezor.com;
       license = licenses.unfree;
-      maintainers = with maintainers; [ emery ];
-    };
+      maintainers = with maintainers; [ ehmry ];
+      # Download URL, .deb content & hash (yikes) changed, not version.
+      # New archive doesn't contain any Mozilla plugin at all.
+      broken = true;
+      platforms = platforms.linux;
+   };
 
 }

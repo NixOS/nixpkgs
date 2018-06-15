@@ -1,76 +1,48 @@
 { stdenv, fetchurl, pkgconfig
 
-# Optinal Dependencies
-, openssl ? null, libev ? null, zlib ? null, jansson ? null, boost ? null
-, libxml2 ? null, jemalloc ? null
-
-# Extra argument
-, prefix ? ""
+# Optional Dependencies
+, openssl ? null, libev ? null, zlib ? null, c-ares ? null
+, enableHpack ? false, jansson ? null
+, enableAsioLib ? false, boost ? null
+, enableGetAssets ? false, libxml2 ? null
+, enableJemalloc ? false, jemalloc ? null
 }:
 
-let
-  mkFlag = trueStr: falseStr: cond: name: val:
-    if cond == null then null else
-      "--${if cond != false then trueStr else falseStr}${name}${if val != null && cond != false then "=${val}" else ""}";
-  mkEnable = mkFlag "enable-" "disable-";
-  mkWith = mkFlag "with-" "without-";
-  mkOther = mkFlag "" "" true;
+assert enableHpack -> jansson != null;
+assert enableAsioLib -> boost != null;
+assert enableGetAssets -> libxml2 != null;
+assert enableJemalloc -> jemalloc != null;
 
-  shouldUsePkg = pkg: if pkg != null && stdenv.lib.any (x: x == stdenv.system) pkg.meta.platforms then pkg else null;
+let inherit (stdenv.lib) optional; in
 
-  isLib = prefix == "lib";
-
-  optOpenssl = if isLib then null else shouldUsePkg openssl;
-  optLibev = if isLib then null else shouldUsePkg libev;
-  optZlib = if isLib then null else shouldUsePkg zlib;
-
-  hasApp = optOpenssl != null && optLibev != null && optZlib != null;
-
-  optJansson = if isLib then null else shouldUsePkg jansson;
-  #optBoost = if isLib then null else shouldUsePkg boost;
-  optBoost = null; # Currently detection is broken
-  optLibxml2 = if !hasApp then null else shouldUsePkg libxml2;
-  optJemalloc = if !hasApp then null else shouldUsePkg jemalloc;
-in
 stdenv.mkDerivation rec {
-  name = "${prefix}nghttp2-${version}";
-  version = "1.2.1";
+  name = "nghttp2-${version}";
+  version = "1.32.0";
 
-  # Don't use fetchFromGitHub since this needs a bootstrap curl
   src = fetchurl {
-    url = "http://pub.wak.io/nixos/tarballs/nghttp2-${version}.tar.bz2";
-    sha256 = "8027461a231d205394890b2fee34d1c3751e28e7d3f7c1ebc1b557993ea4045e";
+    url = "https://github.com/nghttp2/nghttp2/releases/download/v${version}/nghttp2-${version}.tar.bz2";
+    sha256 = "0jlndbp4bnyvdg8b59pznrzz0bvwb9nmag7zgcflg51lm1pq2q06";
   };
 
-  # Configure script searches for a symbol which does not exist in jemalloc on Darwin
-  # Reported upstream in https://github.com/tatsuhiro-t/nghttp2/issues/233
-  postPatch = if (stdenv.isDarwin && optJemalloc != null) then ''
-    substituteInPlace configure --replace "malloc_stats_print" "je_malloc_stats_print"
-  '' else null;
+  outputs = [ "bin" "out" "dev" "lib" ];
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ optJansson optBoost optLibxml2 optJemalloc ]
-    ++ stdenv.lib.optionals hasApp [ optOpenssl optLibev optZlib ];
+  buildInputs = [ openssl libev zlib c-ares ]
+    ++ optional enableHpack jansson
+    ++ optional enableAsioLib boost
+    ++ optional enableGetAssets libxml2
+    ++ optional enableJemalloc jemalloc;
 
-  configureFlags = [
-    (mkEnable false                 "werror"          null)
-    (mkEnable false                 "debug"           null)
-    (mkEnable true                  "threads"         null)
-    (mkEnable hasApp                "app"             null)
-    (mkEnable (optJansson != null)  "hpack-tools"     null)
-    (mkEnable (optBoost != null)    "asio-lib"        null)
-    (mkEnable false                 "examples"        null)
-    (mkEnable false                 "python-bindings" null)
-    (mkEnable false                 "failmalloc"      null)
-    (mkWith   (optLibxml2 != null)  "libxml2"         null)
-    (mkWith   (optJemalloc != null) "jemalloc"        null)
-    (mkWith   false                 "spdylay"         null)
-    (mkWith   false                 "cython"          null)
-  ];
+  enableParallelBuilding = true;
+
+  configureFlags = [ "--with-spdylay=no" "--disable-examples" "--disable-python-bindings" "--enable-app" ]
+    ++ optional enableAsioLib "--enable-asio-lib --with-boost-libdir=${boost}/lib";
+
+  #doCheck = true;  # requires CUnit ; currently failing at test_util_localtime_date in util_test.cc
 
   meta = with stdenv.lib; {
-    homepage = http://nghttp2.org/;
-    description = "an implementation of HTTP/2 in C";
+    homepage = https://nghttp2.org/;
+    description = "A C implementation of HTTP/2";
     license = licenses.mit;
     platforms = platforms.all;
     maintainers = with maintainers; [ wkennington ];

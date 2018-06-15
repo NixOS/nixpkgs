@@ -14,12 +14,12 @@ stdenv.mkDerivation rec {
       --replace @shell@ "${stdenv.shell}" \
       --replace @coreutils@ "${coreutils}/bin" \
       --replace @findutils@ "${findutils}/bin" \
-      --replace @nix@ "${nix}/bin" \
-      --replace @xz@ "${xz}/bin" \
-      --replace @bzip2@ "${bzip2}/bin" \
+      --replace @nix@ "${nix.out}/bin" \
+      --replace @xz@ "${xz.bin}/bin" \
+      --replace @bzip2@ "${bzip2.bin}/bin" \
       --replace @gnused@ "${gnused}/bin" \
       --replace @gnugrep@ "${gnugrep}/bin" \
-      --replace @openssl@ "${openssl}/bin" \
+      --replace @openssl@ "${openssl.bin}/bin" \
       --replace @lighttpd@ "${lighttpd}/sbin" \
       --replace @iproute@ "${iproute}/sbin" \
       --replace "xXxXx" "xXxXx"
@@ -31,12 +31,12 @@ stdenv.mkDerivation rec {
       --replace @shell@ "${stdenv.shell}" \
       --replace @coreutils@ "${coreutils}/bin" \
       --replace @findutils@ "${findutils}/bin" \
-      --replace @nix@ "${nix}/bin" \
-      --replace @xz@ "${xz}/bin" \
-      --replace @bzip2@ "${bzip2}/bin" \
+      --replace @nix@ "${nix.out}/bin" \
+      --replace @xz@ "${xz.bin}/bin" \
+      --replace @bzip2@ "${bzip2.bin}/bin" \
       --replace @gnused@ "${gnused}/bin" \
       --replace @gnugrep@ "${gnugrep}/bin" \
-      --replace @openssl@ "${openssl}/bin" \
+      --replace @openssl@ "${openssl.bin}/bin" \
       --replace @lighttpd@ "${lighttpd}/sbin" \
       --replace @iproute@ "${iproute}/sbin" \
       --replace "xXxXx" "xXxXx"

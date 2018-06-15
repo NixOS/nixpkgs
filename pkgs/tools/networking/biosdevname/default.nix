@@ -1,26 +1,18 @@
-{stdenv, fetchgit, automake, autoconf, zlib, pciutils}:
-let
-  version = "0.6.1";
-in
-stdenv.mkDerivation {
+{ stdenv, fetchFromGitHub, autoreconfHook, zlib, pciutils }:
+
+stdenv.mkDerivation rec {
   name = "biosdevname-${version}";
-  
-  src = fetchgit {
-    url = git://linux.dell.com/biosdevname.git;
-    rev = "refs/tags/v${version}";
-    sha256 = "11g2pziss0i65mr4y3mwjlcdgpygaxa06lr4q8plmrwl9cick1qa";
+  version = "0.7.3";
+
+  src = fetchFromGitHub {
+    owner = "dell";
+    repo = "biosdevname";
+    rev = "v${version}";
+    sha256 = "19wbb79x9h79k55sgd4dylvdbhhrvfaiaknbw9s1wvfmirkxa1dz";
   };
 
-  buildInputs = [
-    automake
-    autoconf
-    zlib
-    pciutils
-  ];
-
-  preConfigure = ''
-    autoreconf -i
-  '';
+  nativeBuildInputs = [ autoreconfHook ];
+  buildInputs = [ zlib pciutils ];
 
   # Don't install /lib/udev/rules.d/*-biosdevname.rules
   patches = [ ./makefile.patch ];
@@ -30,7 +22,7 @@ stdenv.mkDerivation {
   meta = with stdenv.lib; {
     description = "Udev helper for naming devices per BIOS names";
     license = licenses.gpl2;
-    platforms = platforms.linux;
+    platforms = ["x86_64-linux" "i686-linux"];
     maintainers = with maintainers; [ cstrahan ];
   };
 }

@@ -1,22 +1,27 @@
-{ stdenv, fetchurl, mesa_glu, xlibsWrapper, libXmu, libXi }:
+{ stdenv, fetchurl, libGLU, xlibsWrapper, libXmu, libXi
+, buildPlatform, hostPlatform
+}:
 
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  name = "glew-1.11.0";
+  name = "glew-2.1.0";
 
   src = fetchurl {
     url = "mirror://sourceforge/glew/${name}.tgz";
-    sha256 = "1mhkllxz49l1x680dmzrv2i82qjrq017sykah3xc90f2d8qcxfv9";
+    sha256 = "159wk5dc0ykjbxvag5i1m2mhp23zkk6ra04l26y3jc3nwvkr3ph4";
   };
 
-  nativeBuildInputs = [ xlibsWrapper libXmu libXi ];
-  propagatedNativeBuildInputs = [ mesa_glu ]; # GL/glew.h includes GL/glu.h
+  outputs = [ "bin" "out" "dev" "doc" ];
+
+  buildInputs = [ xlibsWrapper libXmu libXi ];
+  propagatedBuildInputs = [ libGLU ]; # GL/glew.h includes GL/glu.h
 
   patchPhase = ''
     sed -i 's|lib64|lib|' config/Makefile.linux
-    ${optionalString (stdenv ? cross) ''
-    sed -i -e 's/\(INSTALL.*\)-s/\1/' Makefile
+    substituteInPlace config/Makefile.darwin --replace /usr/local "$out"
+    ${optionalString (hostPlatform != buildPlatform) ''
+      sed -i -e 's/\(INSTALL.*\)-s/\1/' Makefile
     ''}
   '';
 
@@ -24,23 +29,22 @@ stdenv.mkDerivation rec {
   installFlags = [ "install.all" ];
 
   preInstall = ''
-    export GLEW_DEST="$out"
+    makeFlagsArray+=(GLEW_DEST=$out BINDIR=$bin/bin INCDIR=$dev/include/GL)
   '';
 
   postInstall = ''
     mkdir -pv $out/share/doc/glew
     mkdir -p $out/lib/pkgconfig
     cp glew*.pc $out/lib/pkgconfig
-    cp -r README.txt LICENSE.txt doc $out/share/doc/glew
+    cp -r README.md LICENSE.txt doc $out/share/doc/glew
+    rm $out/lib/*.a
   '';
 
-  crossAttrs.makeFlags = [
-    "CC=${stdenv.cross.config}-gcc"
-    "LD=${stdenv.cross.config}-gcc"
-    "AR=${stdenv.cross.config}-ar"
-    "STRIP="
-  ] ++ optional (stdenv.cross.libc == "msvcrt") "SYSTEM=mingw"
-    ++ optional (stdenv.cross.libc == "libSystem") "SYSTEM=darwin";
+  makeFlags = [
+    "SYSTEM=${if hostPlatform.isMinGW then "mingw" else hostPlatform.parsed.kernel.name}"
+  ];
+
+  enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
     description = "An OpenGL extension loading library for C(++)";

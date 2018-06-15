@@ -1,16 +1,16 @@
-{ stdenv, fetchurl, openssl }:
+{ stdenv, fetchurl, openssl, readline }:
 
 stdenv.mkDerivation rec {
-  name = "socat-1.7.3.0";
+  name = "socat-1.7.3.2";
 
   src = fetchurl {
     url = "http://www.dest-unreach.org/socat/download/${name}.tar.bz2";
-    sha256 = "011ydc0x8camplf8l6mshs3v5fswarld8v0wf7grz6rjq18fhrq7";
+    sha256 = "0lcj6zpra33xhgvhmz9l3cqz10v8ybafb8dd1yqkwf1rhy01ymp3";
   };
 
-  buildInputs = [ openssl ];
+  buildInputs = [ openssl readline ];
 
-  patches = [ ./enable-ecdhe.patch ];
+  hardeningEnable = [ "pie" ];
 
   meta = {
     description = "A utility for bidirectional data transfer between two independent data channels";

@@ -1,24 +1,37 @@
-{stdenv, fetchurl, libtiff, openexr, imagemagick, libjpeg, qt4, mesa,
-freeglut, bzip2, libX11, libpng, expat, pkgconfig }:
+{ stdenv, fetchurl, cmake, pkgconfig
+, openexr, zlib, imagemagick, libGLU_combined, freeglut, fftwFloat
+, fftw, gsl, libexif, perl, opencv, qt4
+}:
 
 stdenv.mkDerivation rec {
-  name = "pfstools-1.8.5";
+  name = "${pname}-${version}";
+  pname = "pfstools";
+  version = "2.1.0";
 
   src = fetchurl {
-    url = "mirror://sourceforge/pfstools/${name}.tar.gz";
-    sha256 = "01kk2r8afrb3vrhm8abfjdhhan97lzpapc4n8w1mpdp3kv9miy9c";
+    url = "mirror://sourceforge/${pname}/${version}/${name}.tgz";
+    sha256 = "04rlb705gmdiphcybf9dyr0d5lla2cfs3c308zz37x0vwi445six";
   };
 
-  configureFlags = "--with-moc=${qt4}/bin/moc";
+  outputs = [ "out" "dev" "man"];
 
-  buildInputs = [ libtiff openexr imagemagick libjpeg qt4 mesa freeglut
-    bzip2 libX11 libpng expat ];
+  cmakeFlags = ''
+    -DWITH_MATLAB=false 
+  '';
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ cmake pkgconfig ];
+  buildInputs = [
+    openexr zlib imagemagick libGLU_combined freeglut fftwFloat
+    fftw gsl libexif perl opencv qt4
+  ];
 
-  meta = {
+  patches = [ ./threads.patch ./pfstools.patch ];
+
+  meta = with stdenv.lib; {
     homepage = http://pfstools.sourceforge.net/;
     description = "Toolkit for manipulation of HDR images";
-    license = "GPL";
+    platforms = platforms.linux;
+    license = licenses.lgpl2;
+    maintainers = [ maintainers.juliendehos ];
   };
 }

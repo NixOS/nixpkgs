@@ -12,7 +12,7 @@ stdenv.mkDerivation rec{
 
   meta = with stdenv.lib; {
     homepage = https://github.com/clusterlabs/libqb;
-    description = "a library providing high performance logging, tracing, ipc, and poll";
+    description = "A library providing high performance logging, tracing, ipc, and poll";
     license = licenses.lgpl21;
     platforms = platforms.unix;
     maintainers = with maintainers; [ wkennington ];

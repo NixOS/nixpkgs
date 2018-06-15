@@ -1,22 +1,45 @@
-{ stdenv, fetchFromGitHub, freetype, imlib2, jbig2dec, libjpeg, libX11
-, mujs, mupdf, ncurses, openjpeg, openssl }:
+{ stdenv, fetchFromGitHub
+, freetype, harfbuzz, jbig2dec, libjpeg, libX11, mupdf, ncurses, openjpeg
+, openssl
+
+, imageSupport ? true, imlib2 ? null }:
 
 let
-  version = "0.5.1";
-  binaries = [ "jfbpdf" "jfbview" "jpdfcat" "jpdfgrep" ];
+  package = if imageSupport
+    then "jfbview"
+    else "jfbpdf";
+  binaries = if imageSupport
+    then [ "jfbview" "jpdfcat" "jpdfgrep" ] # all require imlib2
+    else [ "jfbpdf" ]; # does not
 in
-stdenv.mkDerivation {
-  name = "jfbview-${version}";
+
+stdenv.mkDerivation rec {
+  name = "${package}-${version}";
+  version = "0.5.5";
 
   src = fetchFromGitHub {
-    sha256 = "113bkf49q04k9rjps5l28ychmzsfjajp9cjhr433s9ld0972z01m";
-    rev = version;
     repo = "JFBView";
     owner = "jichu4n";
+    rev = version;
+    sha256 = "1w844ha9lp49ik79yfislib34455nl9gcksbx22hiz30gmqwzakz";
   };
 
-  buildInputs = [ freetype imlib2 jbig2dec libjpeg libX11 mujs mupdf
-    ncurses openjpeg openssl ];
+  hardeningDisable = [ "format" ];
+
+  buildInputs = [
+    freetype harfbuzz jbig2dec libjpeg libX11 mupdf ncurses openjpeg
+    openssl
+  ] ++ stdenv.lib.optionals imageSupport [
+    imlib2
+  ];
+
+  configurePhase = ''
+    # Hack. Probing (`ldconfig -p`) fails with ‘cannot execute binary file’.
+    # Overriding `OPENJP2 =` later works, but makes build output misleading:
+    substituteInPlace Makefile --replace "ldconfig -p" "echo libopenjp2"
+
+    make config.mk
+  '';
 
   buildFlags = binaries;
   enableParallelBuilding = true;
@@ -27,7 +50,6 @@ stdenv.mkDerivation {
   '';
 
   meta = with stdenv.lib; {
-    inherit version;
     description = "PDF and image viewer for the Linux framebuffer";
     longDescription = ''
       A very fast PDF and image viewer for the Linux framebuffer with some
@@ -39,9 +61,8 @@ stdenv.mkDerivation {
       - Asynchronous background rendering of the next page
       - Customizable multi-threaded caching
     '';
-    homepage = http://seasonofcode.com/pages/jfbview.html;
+    homepage = https://seasonofcode.com/pages/jfbview.html;
     license = licenses.asl20;
-    platforms = with platforms; linux;
-    maintainers = with maintainers; [ nckx ];
+    platforms = platforms.linux;
   };
 }

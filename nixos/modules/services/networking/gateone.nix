@@ -21,7 +21,7 @@ options = {
 };
 config = mkIf cfg.enable {
   environment.systemPackages = with pkgs.pythonPackages; [
-    gateone pkgs.openssh pkgs.procps pkgs.coreutils ];
+    gateone pkgs.openssh pkgs.procps pkgs.coreutils pkgs.cacert];
 
   users.extraUsers.gateone = {
     description = "GateOne privilege separation user";
@@ -49,8 +49,6 @@ config = mkIf cfg.enable {
       User = "gateone";
       Group = "gateone";
       WorkingDirectory = cfg.settingsDir;
-      PermissionsStartOnly = true;
-
     };
 
     wantedBy = [ "multi-user.target" ];

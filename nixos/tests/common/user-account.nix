@@ -1,9 +1,14 @@
 { lib, ... }:
 
-{ users.extraUsers = lib.singleton
+{ users.extraUsers.alice =
     { isNormalUser = true;
-      name = "alice";
       description = "Alice Foobar";
+      password = "foobar";
+    };
+
+  users.extraUsers.bob =
+    { isNormalUser = true;
+      description = "Bob Foobar";
       password = "foobar";
     };
 }

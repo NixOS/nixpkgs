@@ -1,23 +1,28 @@
-{stdenv, fetchurl, pkgconfig, glib, gperf, utillinux}:
+{stdenv, fetchurl, pkgconfig, glib, gperf, utillinux, kmod}:
 let
   s = # Generated upstream information
   rec {
     baseName="eudev";
-    version = "3.1.2";
+    version = "3.2.5";
     name="${baseName}-${version}";
     url="http://dev.gentoo.org/~blueness/eudev/eudev-${version}.tar.gz";
-    sha256 = "0wq2w67ip957l5bi21jj3w2rv7s7klcrnlg6zpg1g0fxjfgbd4s3";
+    sha256 = "1bwh72brp4dvr2dm6ng0lflic6abl87h8zk209im5lna0m0x1hj9";
   };
+
+  nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
-    glib pkgconfig gperf utillinux
+    glib gperf utillinux kmod
   ];
 in
 stdenv.mkDerivation {
   inherit (s) name version;
-  inherit buildInputs;
+  inherit nativeBuildInputs buildInputs;
   src = fetchurl {
     inherit (s) url sha256;
   };
+  patches = [
+  ];
+
   configureFlags = [
     "--localstatedir=/var"
     "--sysconfdir=/etc"
@@ -48,7 +53,7 @@ stdenv.mkDerivation {
     license = stdenv.lib.licenses.gpl2Plus ;
     maintainers = [stdenv.lib.maintainers.raskin];
     platforms = stdenv.lib.platforms.linux;
-    homepage = ''http://www.gentoo.org/proj/en/eudev/'';
+    homepage = ''https://www.gentoo.org/proj/en/eudev/'';
     downloadPage = ''http://dev.gentoo.org/~blueness/eudev/'';
     updateWalker = true;
   };

@@ -1,14 +1,14 @@
 { stdenv, fetchFromGitHub, scons, lua }:
 
 stdenv.mkDerivation rec {
-  version = "1.0.92";
+  version = "1.0.93";
   name = "toluapp-${version}";
 
   src = fetchFromGitHub {
-    owner = "eddieringle";
+    owner = "LuaDist";
     repo  = "toluapp";
-    rev   = "b1e680dc486c17128a3c21f89db1693ff06c02b1";
-    sha256 = "1d1a9bll9825dg4mz71vwykvfd3s5zi2yvzbfsvlr3qz1l3zqfwb";
+    rev   = "${version}";
+    sha256 = "0zd55bc8smmgk9j4cf0jpibb03lgsvl0knpwhplxbv93mcdnw7s0";
   };
 
   buildInputs = [ lua scons ];
@@ -20,14 +20,15 @@ stdenv.mkDerivation rec {
       --replace /usr/local $out
   '';
 
-  NIX_CFLAGS_COMPILE = "-fPIC";
-
   buildPhase = ''scons'';
 
   installPhase = ''scons install'';
 
-  meta = {
-    license = stdenv.lib.licenses.mit;
+  meta = with stdenv.lib; {
+    description = "A tool to integrate C/Cpp code with Lua";
+    homepage = http://www.codenix.com/~tolua/;
+    license = licenses.mit;
+    maintainers = with maintainers; [ vrthra ];
+    platforms = with platforms; unix;
   };
-
 }

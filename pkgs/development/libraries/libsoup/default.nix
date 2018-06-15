@@ -1,37 +1,54 @@
-{ stdenv, fetchurl, glib, libxml2, pkgconfig
-, gnomeSupport ? false, libgnome_keyring, sqlite, glib_networking, gobjectIntrospection
-, libintlOrEmpty
-, intltool, python }:
+{ stdenv, fetchurl, glib, libxml2, pkgconfig, gnome3
+, gnomeSupport ? true, sqlite, glib-networking, gobjectIntrospection
+, valaSupport ? true, vala_0_40
+, intltool, python3 }:
+
 let
-  majorVersion = "2.50";
-  version = "${majorVersion}.0";
+  pname = "libsoup";
+  version = "2.62.2";
 in
-stdenv.mkDerivation {
-  name = "libsoup-${version}";
+stdenv.mkDerivation rec {
+  name = "${pname}-${version}";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/libsoup/${majorVersion}/libsoup-${version}.tar.xz";
-    sha256 = "1e01365ac4af3817187ea847f9d3588c27eee01fc519a5a7cb212bb78b0f667b";
+    url = "mirror://gnome/sources/${pname}/${gnome3.versionBranch version}/${name}.tar.xz";
+    sha256 = "1dkrz1iwsswscayfmjxqv2q00b87snlq9nxdccn5vck0vbinylwy";
   };
 
-  patchPhase = ''
+  prePatch = ''
     patchShebangs libsoup/
+  '' + stdenv.lib.optionalString valaSupport
+  ''
+     substituteInPlace libsoup/Makefile.in --replace "\$(DESTDIR)\$(vapidir)" "\$(DESTDIR)\$(girdir)/../vala/vapi"
   '';
 
-  buildInputs = libintlOrEmpty ++ [ intltool python sqlite ];
-  nativeBuildInputs = [ pkgconfig ];
-  propagatedBuildInputs = [ glib libxml2 gobjectIntrospection ]
-    ++ stdenv.lib.optionals gnomeSupport [ libgnome_keyring ];
-  passthru.propagatedUserEnvPackages = [ glib_networking ];
+  outputs = [ "out" "dev" ];
 
-  # glib_networking is a runtime dependency, not a compile-time dependency
-  configureFlags = "--disable-tls-check" + stdenv.lib.optionalString (!gnomeSupport) " --without-gnome";
+  buildInputs = [ python3 sqlite ];
+  nativeBuildInputs = [ pkgconfig intltool gobjectIntrospection ]
+    ++ stdenv.lib.optionals valaSupport [ vala_0_40 ];
+  propagatedBuildInputs = [ glib libxml2 ];
 
-  NIX_CFLAGS_COMPILE = stdenv.lib.optionalString stdenv.isDarwin "-lintl";
+  # glib-networking is a runtime dependency, not a compile-time dependency
+  configureFlags = [
+    "--disable-tls-check"
+    "--enable-vala=${if valaSupport then "yes" else "no"}"
+    "--with-gnome=${if gnomeSupport then "yes" else "no"}"
+  ];
 
-  postInstall = "rm -rf $out/share/gtk-doc";
+  doCheck = false; # fails with "no: command not found"
+
+  passthru = {
+    propagatedUserEnvPackages = [ glib-networking.out ];
+    updateScript = gnome3.updateScript {
+      packageName = pname;
+    };
+  };
 
   meta = {
+    description = "HTTP client/server library for GNOME";
+    homepage = https://wiki.gnome.org/Projects/libsoup;
+    license = stdenv.lib.licenses.gpl2;
     inherit (glib.meta) maintainers platforms;
   };
 }

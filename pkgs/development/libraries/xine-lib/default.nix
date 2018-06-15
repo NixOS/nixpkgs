@@ -1,27 +1,27 @@
-{ stdenv, fetchurl, pkgconfig, xorg, alsaLib, mesa, aalib
+{ stdenv, fetchurl, pkgconfig, xorg, alsaLib, libGLU_combined, aalib
 , libvorbis, libtheora, speex, zlib, libdvdcss, perl, ffmpeg
 , flac, libcaca, libpulseaudio, libmng, libcdio, libv4l, vcdimager
 , libmpcdec
 }:
 
 stdenv.mkDerivation rec {
-  name = "xine-lib-1.2.4";
-  
+  name = "xine-lib-1.2.9";
+
   src = fetchurl {
     url = "mirror://sourceforge/xine/${name}.tar.xz";
-    sha256 = "1pdv7bs683ily548arv4wsxabslyf3x3laij5jb921dxyx71nnww";
+    sha256 = "13clir4qxl2zvsvvjd9yv3yrdhsnvcn5s7ambbbn5dzy9604xcrj";
   };
 
   nativeBuildInputs = [ pkgconfig perl ];
 
   buildInputs = [
     xorg.libX11 xorg.libXv xorg.libXinerama xorg.libxcb xorg.libXext
-    alsaLib mesa aalib libvorbis libtheora speex perl ffmpeg flac
+    alsaLib libGLU_combined aalib libvorbis libtheora speex perl ffmpeg flac
     libcaca libpulseaudio libmng libcdio libv4l vcdimager libmpcdec
   ];
 
-  NIX_LDFLAGS = "-rpath ${libdvdcss}/lib -L${libdvdcss}/lib -ldvdcss";
-  
+  NIX_LDFLAGS = "-lxcb-shm";
+
   propagatedBuildInputs = [zlib];
 
   enableParallelBuilding = true;
@@ -29,5 +29,6 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = http://www.xine-project.org/;
     description = "A high-performance, portable and reusable multimedia playback engine";
+    platforms = stdenv.lib.platforms.linux;
   };
 }

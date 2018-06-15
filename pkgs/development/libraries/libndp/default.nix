@@ -1,11 +1,11 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "libndp-1.5";
+  name = "libndp-1.6";
 
   src = fetchurl {
     url = "http://libndp.org/files/${name}.tar.gz";
-    sha256 = "15f743hjc7yy2sv3hzvfc27s1gny4mh5aww59vn195fff2midwgs";
+    sha256 = "03mczwrxqbp54msafxzzyhaazkvjdwm2kipjkrb5xg8kw22glz8c";
   };
 
   meta = with stdenv.lib; {

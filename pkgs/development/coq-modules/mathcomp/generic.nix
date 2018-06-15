@@ -1,25 +1,30 @@
-{ stdenv, fetchurl, coq, ssreflect
-, graphviz, ocamlPackages, withDoc ? true
-, src
+{ stdenv, fetchurl, coq, ncurses, which
+, graphviz, withDoc ? false
+, src, name
 }:
 
 stdenv.mkDerivation {
 
-  name = "coq-mathcomp-1.5-${coq.coq-version}";
-
+  inherit name;
   inherit src;
 
-  nativeBuildInputs = stdenv.lib.optionals withDoc
-    ([ graphviz ] ++ (with ocamlPackages; [ ocaml camlp5_transitional ]));
-  propagatedBuildInputs = [ ssreflect ];
+  nativeBuildInputs = stdenv.lib.optionals withDoc [ graphviz ];
+  buildInputs = [ coq.ocaml coq.findlib coq.camlp5 ncurses which ];
+  propagatedBuildInputs = [ coq ];
 
   enableParallelBuilding = true;
 
   buildFlags = stdenv.lib.optionalString withDoc "doc";
 
-  installFlags = "COQLIB=$(out)/lib/coq/${coq.coq-version}/";
+  preBuild = ''
+    patchShebangs etc/utils/ssrcoqdep || true
+    cd mathcomp
+    export COQBIN=${coq}/bin/
+  '';
 
-  postInstall = stdenv.lib.optionalString withDoc ''
+  installPhase = ''
+    make -f Makefile.coq COQLIB=$out/lib/coq/${coq.coq-version}/ install
+  '' + stdenv.lib.optionalString withDoc ''
     make -f Makefile.coq install-doc DOCDIR=$out/share/coq/${coq.coq-version}/
   '';
 
@@ -28,6 +33,10 @@ stdenv.mkDerivation {
     license = licenses.cecill-b;
     maintainers = [ maintainers.vbgl maintainers.jwiegley ];
     platforms = coq.meta.platforms;
+  };
+
+  passthru = {
+    compatibleCoqVersions = v: builtins.elem v [ "8.5" "8.6" "8.7" "8.8" ];
   };
 
 }

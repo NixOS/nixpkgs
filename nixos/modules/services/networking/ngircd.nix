@@ -34,6 +34,7 @@ in {
         type = types.package;
 
         default = pkgs.ngircd;
+        defaultText = "pkgs.ngircd";
       };
     };
   };

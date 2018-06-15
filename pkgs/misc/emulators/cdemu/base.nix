@@ -4,7 +4,7 @@ let name = "${pkgName}-${version}";
 in stdenv.mkDerivation ({
   inherit name buildInputs;
   src = fetchurl {
-    url = "http://downloads.sourceforge.net/cdemu/${name}.tar.bz2";
+    url = "mirror://sourceforge/cdemu/${name}.tar.bz2";
     sha256 = pkgSha256;
   };
   nativeBuildInputs = [ pkgconfig cmake ];
@@ -32,6 +32,6 @@ in stdenv.mkDerivation ({
     homepage = http://cdemu.sourceforge.net/;
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
-    maintainers = [ "Rok Mandeljc <mrok AT users DOT sourceforge DOT net>" ];
+    maintainers = with stdenv.lib.maintainers; [ bendlas ];
   };
 } // drvParams)

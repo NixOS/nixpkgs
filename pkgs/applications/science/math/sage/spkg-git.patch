@@ -1,10 +1,17 @@
---- old/build/pkgs/git/spkg-install	2015-07-26 15:34:43.000000000 +0200
-+++ new/build/pkgs/git/spkg-install	2015-09-17 08:28:03.586657451 +0200
-@@ -45,6 +45,8 @@
-     fi
- done
+diff --git a/build/pkgs/git/spkg-install b/build/pkgs/git/spkg-install
+index 87874de3d8..b0906245fa 100644
+--- a/build/pkgs/git/spkg-install
++++ b/build/pkgs/git/spkg-install
+@@ -33,6 +33,13 @@ fi
  
-+find . -exec sed -e 's@/usr/bin/perl@perl@g' -i '{}' ';'
+ cd src
+ 
++# Fix hardcoded paths, while making sure to only update timestamps of actually
++# changed files (otherwise confuses make)
++grep -rlF '/usr/bin/perl' . | while read file
++do
++	sed -e 's@/usr/bin/perl@perl@g' -i "$file"
++done
 +
  # We don't want to think about Fink or Macports
  export NO_FINK=1

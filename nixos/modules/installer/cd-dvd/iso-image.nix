@@ -39,10 +39,31 @@ let
     DEFAULT boot
 
     LABEL boot
-    MENU LABEL NixOS ${config.system.nixosVersion}${config.isoImage.appendToMenuLabel}
-    LINUX /boot/bzImage
+    MENU LABEL NixOS ${config.system.nixos.label}${config.isoImage.appendToMenuLabel}
+    LINUX /boot/${config.system.boot.loader.kernelFile}
     APPEND init=${config.system.build.toplevel}/init ${toString config.boot.kernelParams}
-    INITRD /boot/initrd
+    INITRD /boot/${config.system.boot.loader.initrdFile}
+
+    # A variant to boot with 'nomodeset'
+    LABEL boot-nomodeset
+    MENU LABEL NixOS ${config.system.nixos.label}${config.isoImage.appendToMenuLabel} (nomodeset)
+    LINUX /boot/${config.system.boot.loader.kernelFile}
+    APPEND init=${config.system.build.toplevel}/init ${toString config.boot.kernelParams} nomodeset
+    INITRD /boot/${config.system.boot.loader.initrdFile}
+
+    # A variant to boot with 'copytoram'
+    LABEL boot-copytoram
+    MENU LABEL NixOS ${config.system.nixos.label}${config.isoImage.appendToMenuLabel} (copytoram)
+    LINUX /boot/${config.system.boot.loader.kernelFile}
+    APPEND init=${config.system.build.toplevel}/init ${toString config.boot.kernelParams} copytoram
+    INITRD /boot/${config.system.boot.loader.initrdFile}
+
+    # A variant to boot with verbose logging to the console
+    LABEL boot-debug
+    MENU LABEL NixOS ${config.system.nixos.label}${config.isoImage.appendToMenuLabel} (debug)
+    LINUX /boot/${config.system.boot.loader.kernelFile}
+    APPEND init=${config.system.build.toplevel}/init ${toString config.boot.kernelParams} loglevel=7
+    INITRD /boot/${config.system.boot.loader.initrdFile}
   '';
 
   isolinuxMemtest86Entry = ''
@@ -52,19 +73,52 @@ let
     APPEND ${toString config.boot.loader.grub.memtest86.params}
   '';
 
-  isolinuxCfg = baseIsolinuxCfg + (optionalString config.boot.loader.grub.memtest86.enable isolinuxMemtest86Entry);
+  isolinuxCfg = concatStringsSep "\n"
+    ([ baseIsolinuxCfg ] ++ optional config.boot.loader.grub.memtest86.enable isolinuxMemtest86Entry);
 
   # The EFI boot image.
   efiDir = pkgs.runCommand "efi-directory" {} ''
     mkdir -p $out/EFI/boot
-    cp -v ${pkgs.gummiboot}/lib/gummiboot/gummiboot${targetArch}.efi $out/EFI/boot/boot${targetArch}.efi
+    cp -v ${pkgs.systemd}/lib/systemd/boot/efi/systemd-boot${targetArch}.efi $out/EFI/boot/boot${targetArch}.efi
     mkdir -p $out/loader/entries
-    echo "title NixOS Live CD" > $out/loader/entries/nixos-livecd.conf
-    echo "linux /boot/bzImage" >> $out/loader/entries/nixos-livecd.conf
-    echo "initrd /boot/initrd" >> $out/loader/entries/nixos-livecd.conf
-    echo "options init=${config.system.build.toplevel}/init ${toString config.boot.kernelParams}" >> $out/loader/entries/nixos-livecd.conf
-    echo "default nixos-livecd" > $out/loader/loader.conf
-    echo "timeout ${builtins.toString config.boot.loader.gummiboot.timeout}" >> $out/loader/loader.conf
+
+    cat << EOF > $out/loader/entries/nixos-iso.conf
+    title NixOS ${config.system.nixos.label}${config.isoImage.appendToMenuLabel}
+    linux /boot/${config.system.boot.loader.kernelFile}
+    initrd /boot/${config.system.boot.loader.initrdFile}
+    options init=${config.system.build.toplevel}/init ${toString config.boot.kernelParams}
+    EOF
+
+    # A variant to boot with 'nomodeset'
+    cat << EOF > $out/loader/entries/nixos-iso-nomodeset.conf
+    title NixOS ${config.system.nixos.label}${config.isoImage.appendToMenuLabel}
+    version nomodeset
+    linux /boot/${config.system.boot.loader.kernelFile}
+    initrd /boot/${config.system.boot.loader.initrdFile}
+    options init=${config.system.build.toplevel}/init ${toString config.boot.kernelParams} nomodeset
+    EOF
+
+    # A variant to boot with 'copytoram'
+    cat << EOF > $out/loader/entries/nixos-iso-copytoram.conf
+    title NixOS ${config.system.nixos.label}${config.isoImage.appendToMenuLabel}
+    version copytoram
+    linux /boot/${config.system.boot.loader.kernelFile}
+    initrd /boot/${config.system.boot.loader.initrdFile}
+    options init=${config.system.build.toplevel}/init ${toString config.boot.kernelParams} copytoram
+    EOF
+
+    # A variant to boot with verbose logging to the console
+    cat << EOF > $out/loader/entries/nixos-iso-debug.conf
+    title NixOS ${config.system.nixos.label}${config.isoImage.appendToMenuLabel} (debug)
+    linux /boot/${config.system.boot.loader.kernelFile}
+    initrd /boot/${config.system.boot.loader.initrdFile}
+    options init=${config.system.build.toplevel}/init ${toString config.boot.kernelParams} loglevel=7
+    EOF
+
+    cat << EOF > $out/loader/loader.conf
+    default nixos-iso
+    timeout ${builtins.toString config.boot.loader.timeout}
+    EOF
   '';
 
   efiImg = pkgs.runCommand "efi-image_eltorito" { buildInputs = [ pkgs.mtools pkgs.libfaketime ]; }
@@ -74,8 +128,8 @@ let
       mkdir ./contents && cd ./contents
       cp -rp "${efiDir}"/* .
       mkdir ./boot
-      cp -p "${config.boot.kernelPackages.kernel}/bzImage" \
-        "${config.system.build.initialRamdisk}/initrd" ./boot/
+      cp -p "${config.boot.kernelPackages.kernel}/${config.system.boot.loader.kernelFile}" \
+        "${config.system.build.initialRamdisk}/${config.system.boot.loader.initrdFile}" ./boot/
       touch --date=@0 ./*
 
       usage_size=$(du -sb --apparent-size . | tr -cd '[:digit:]')
@@ -157,13 +211,12 @@ in
 
     isoImage.includeSystemBuildDependencies = mkOption {
       default = false;
-      example = true;
       description = ''
         Set this option to include all the needed sources etc in the
         image. It significantly increases image size. Use that when
         you want to be able to keep all the sources needed to build your
         system or when you are going to install the system on a computer
-        with slow on non-existent network connection.
+        with slow or non-existent network connection.
       '';
     };
 
@@ -217,8 +270,6 @@ in
     system.boot.loader.kernelFile = "bzImage";
     environment.systemPackages = [ pkgs.grub2 pkgs.grub2_efi pkgs.syslinux ];
 
-    boot.consoleLogLevel = mkDefault 7;
-
     # In stage 1 of the boot, mount the CD as the root FS by label so
     # that we don't need to know its device.  We pass the label of the
     # root filesystem on the kernel command line, rather than in
@@ -230,12 +281,11 @@ in
     boot.kernelParams =
       [ "root=LABEL=${config.isoImage.volumeID}"
         "boot.shell_on_fail"
-        "nomodeset"
       ];
 
     fileSystems."/" =
       { fsType = "tmpfs";
-        options = "mode=0755";
+        options = [ "mode=0755" ];
       };
 
     # Note that /dev/root is a symlink to the actual root device
@@ -252,23 +302,23 @@ in
     fileSystems."/nix/.ro-store" =
       { fsType = "squashfs";
         device = "/iso/nix-store.squashfs";
-        options = "loop";
+        options = [ "loop" ];
         neededForBoot = true;
       };
 
     fileSystems."/nix/.rw-store" =
       { fsType = "tmpfs";
-        options = "mode=0755";
+        options = [ "mode=0755" ];
         neededForBoot = true;
       };
 
     fileSystems."/nix/store" =
       { fsType = "unionfs-fuse";
         device = "unionfs";
-        options = "allow_other,cow,nonempty,chroot=/mnt-root,max_files=32768,hide_meta_files,dirs=/nix/.rw-store=rw:/nix/.ro-store=ro";
+        options = [ "allow_other" "cow" "nonempty" "chroot=/mnt-root" "max_files=32768" "hide_meta_files" "dirs=/nix/.rw-store=rw:/nix/.ro-store=ro" ];
       };
 
-    boot.initrd.availableKernelModules = [ "squashfs" "iso9660" "usb-storage" ];
+    boot.initrd.availableKernelModules = [ "squashfs" "iso9660" "usb-storage" "uas" ];
 
     boot.blacklistedKernelModules = [ "nouveau" ];
 
@@ -282,8 +332,7 @@ in
         config.system.build.toplevel.drvPath;
 
     # Create the squashfs image that contains the Nix store.
-    system.build.squashfsStore = import ../../../lib/make-squashfs.nix {
-      inherit (pkgs) stdenv squashfsTools perl pathsFromGraph;
+    system.build.squashfsStore = pkgs.callPackage ../../../lib/make-squashfs.nix {
       storeContents = config.isoImage.storeContents;
     };
 
@@ -297,11 +346,11 @@ in
           };
           target = "/isolinux/isolinux.cfg";
         }
-        { source = config.boot.kernelPackages.kernel + "/bzImage";
-          target = "/boot/bzImage";
+        { source = config.boot.kernelPackages.kernel + "/" + config.system.boot.loader.kernelFile;
+          target = "/boot/" + config.system.boot.loader.kernelFile;
         }
-        { source = config.system.build.initialRamdisk + "/initrd";
-          target = "/boot/initrd";
+        { source = config.system.build.initialRamdisk + "/" + config.system.boot.loader.initrdFile;
+          target = "/boot/" + config.system.boot.loader.initrdFile;
         }
         { source = config.system.build.squashfsStore;
           target = "/nix-store.squashfs";
@@ -311,6 +360,9 @@ in
         }
         { source = config.isoImage.splashImage;
           target = "/isolinux/background.png";
+        }
+        { source = pkgs.writeText "version" config.system.nixos.label;
+          target = "/version.txt";
         }
       ] ++ optionals config.isoImage.makeEfiBootable [
         { source = efiImg;
@@ -331,11 +383,8 @@ in
     boot.loader.timeout = 10;
 
     # Create the ISO image.
-    system.build.isoImage = import ../../../lib/make-iso9660-image.nix ({
-      inherit (pkgs) stdenv perl pathsFromGraph xorriso syslinux;
-
+    system.build.isoImage = pkgs.callPackage ../../../lib/make-iso9660-image.nix ({
       inherit (config.isoImage) isoName compressImage volumeID contents;
-
       bootable = true;
       bootImage = "/isolinux/isolinux.bin";
     } // optionalAttrs config.isoImage.makeUsbBootable {
@@ -350,12 +399,12 @@ in
       ''
         # After booting, register the contents of the Nix store on the
         # CD in the Nix database in the tmpfs.
-        ${config.nix.package}/bin/nix-store --load-db < /nix/store/nix-path-registration
+        ${config.nix.package.out}/bin/nix-store --load-db < /nix/store/nix-path-registration
 
         # nixos-rebuild also requires a "system" profile and an
         # /etc/NIXOS tag.
         touch /etc/NIXOS
-        ${config.nix.package}/bin/nix-env -p /nix/var/nix/profiles/system --set /run/current-system
+        ${config.nix.package.out}/bin/nix-env -p /nix/var/nix/profiles/system --set /run/current-system
       '';
 
     # Add vfat support to the initrd to enable people to copy the

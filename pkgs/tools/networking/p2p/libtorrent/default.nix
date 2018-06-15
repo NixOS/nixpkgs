@@ -1,21 +1,30 @@
-{ stdenv, fetchurl, pkgconfig, openssl, libsigcxx, zlib }:
+# NOTE: this is rakshava's version of libtorrent, used mainly by rtorrent
+# This is NOT libtorrent-rasterbar, used by Deluge, qbitttorent, and others
+{ stdenv, fetchFromGitHub, pkgconfig
+, libtool, autoconf, automake, cppunit
+, openssl, libsigcxx, zlib }:
 
 stdenv.mkDerivation rec {
   name = "libtorrent-${version}";
-  version = "0.13.6";
+  version = "20161212";
 
-  src = fetchurl {
-    url = "http://rtorrent.net/downloads/${name}.tar.gz";
-    sha256 = "012s1nwcvz5m5r4d2z9klgy2n34kpgn9kgwgzxm97zgdjs6a0f18";
+  src = fetchFromGitHub {
+    owner = "rakshasa";
+    repo = "libtorrent";
+    rev = "c167c5a9e0bcf0df23ae5efd91396aae0e37eb87";
+    sha256 = "0y9759sxx5dyamyw8w58dsxq7bmnn57q7s2f4cw2zln2pp5gripw";
   };
 
-  buildInputs = [ pkgconfig openssl libsigcxx zlib ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ libtool autoconf automake cppunit openssl libsigcxx zlib ];
+
+  preConfigure = "./autogen.sh";
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/rakshasa/libtorrent/;
+    homepage = "http://rtorrent.net/downloads/";
     description = "A BitTorrent library written in C++ for *nix, with focus on high performance and good code";
 
     platforms = platforms.unix;
-    maintainers = with maintainers; [ simons ebzzry ];
+    maintainers = with maintainers; [ ebzzry codyopel ];
   };
 }

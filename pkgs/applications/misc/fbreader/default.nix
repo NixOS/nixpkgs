@@ -9,18 +9,21 @@ stdenv.mkDerivation {
     sha256 = "1sdq3vvwkq4bkyrvh0p884d66gaddz8hlab3m798ji9ixbak2z1x";
   };
 
+  nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
-    pkgconfig bzip2 curl expat fribidi libunibreak
+    bzip2 curl expat fribidi libunibreak
     qt4 sqlite zlib
   ];
 
   makeFlags = "INSTALLDIR=$(out)";
 
+  NIX_CFLAGS_COMPILE = [ "-Wno-error=narrowing" ]; # since gcc-6
+
   patchPhase = ''
     # don't try to use ccache
     substituteInPlace makefiles/arch/desktop.mk \
       --replace "CCACHE = " "# CCACHE = "
-  
+
     substituteInPlace fbreader/desktop/Makefile \
       --replace "/usr/share" "$out/share"
   '';

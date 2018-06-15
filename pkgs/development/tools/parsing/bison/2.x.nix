@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   # M4 = "${m4}/bin/m4";
 
   meta = {
-    homepage = "http://www.gnu.org/software/bison/";
+    homepage = http://www.gnu.org/software/bison/;
     description = "Yacc-compatible parser generator";
     license = stdenv.lib.licenses.gpl3Plus;
 
@@ -33,7 +33,6 @@ stdenv.mkDerivation rec {
       to use Bison.
     '';
 
-    maintainers = [ stdenv.lib.maintainers.simons ];
     platforms = stdenv.lib.platforms.unix;
   };
 

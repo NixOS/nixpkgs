@@ -1,73 +1,96 @@
-{ stdenv, fetchurl, writeScript, ncurses, gzip, flex, bison }:
+{ stdenv, lib, fetchurl, writeScript, coreutils, ncurses, gzip, flex, bison, less }:
 
-stdenv.mkDerivation rec {
-  name = "nethack-3.4.3";
+let
+  platform =
+    if stdenv.hostPlatform.isUnix then "unix"
+    else throw "Unknown platform for NetHack: ${stdenv.system}";
+  unixHint =
+    /**/ if stdenv.hostPlatform.isLinux  then "linux"
+    else if stdenv.hostPlatform.isDarwin then "macosx10.10"
+    # We probably want something different for Darwin
+    else "unix";
+  userDir = "~/.config/nethack";
+  binPath = lib.makeBinPath [ coreutils less ];
+
+in stdenv.mkDerivation {
+  name = "nethack-3.6.1";
 
   src = fetchurl {
-    url = "mirror://sourceforge/nethack/nethack-343-src.tgz";
-    sha256 = "1r3ghqj82j0bar62z3b0lx9hhx33pj7p1ppxr2hg8bgfm79c6fdv";
+    url = "http://nethack.org/download/3.6.1/nethack-361-src.tgz";
+    sha256 = "1dha0ijvxhx7c9hr0452h93x81iiqsll8bc9msdnp7xdqcfbz32b";
   };
 
   buildInputs = [ ncurses ];
 
   nativeBuildInputs = [ flex bison ];
 
-  preBuild = ''
-    ( cd sys/unix ; sh setup.sh )
+  makeFlags = [ "PREFIX=$(out)" ];
 
-    sed -e '/define COMPRESS/d' -i include/config.h
-    sed -e '1i\#define COMPRESS "${gzip}/bin/gzip"' -i include/config.h
-    sed -e '1i\#define COMPRESS_EXTENSION ".gz"' -i include/config.h
-    sed -e '/define CHDIR/d' -i include/config.h
-
-    sed -e '/extern char [*]tparm/d' -i win/tty/*.c
-
-    sed -e 's/-ltermlib/-lncurses/' -i src/Makefile
-    sed -e 's/^YACC *=.*/YACC = bison -y/' -i util/Makefile
-    sed -e 's/^LEX *=.*/LEX = flex/' -i util/Makefile
-
-    sed -re 's@^(CH...).*@\1 = true@' -i Makefile
-
+  patchPhase = ''
     sed -e '/^ *cd /d' -i sys/unix/nethack.sh
+    sed \
+      -e 's/^YACC *=.*/YACC = bison -y/' \
+      -e 's/^LEX *=.*/LEX = flex/' \
+      -i sys/unix/Makefile.utl
+    sed \
+      -e 's,/bin/gzip,${gzip}/bin/gzip,g' \
+      -e 's,^WINTTYLIB=.*,WINTTYLIB=-lncurses,' \
+      -i sys/unix/hints/linux
+    sed \
+      -e 's,^CC=.*$,CC=cc,' \
+      -e 's,^HACKDIR=.*$,HACKDIR=\$(PREFIX)/games/lib/\$(GAME)dir,' \
+      -e 's,^SHELLDIR=.*$,SHELLDIR=\$(PREFIX)/games,' \
+      -i sys/unix/hints/macosx10.10
+    sed -e '/define CHDIR/d' -i include/config.h
+  '';
+
+  configurePhase = ''
+    cd sys/${platform}
+    ${lib.optionalString (platform == "unix") ''
+      sh setup.sh hints/${unixHint}
+    ''}
+    cd ../..
   '';
 
   postInstall = ''
-    for i in logfile perm record save; do
-      rm -rf $out/games/lib/nethackdir/$i
+    mkdir -p $out/games/lib/nethackuserdir
+    for i in xlogfile logfile perm record save; do
+      mv $out/games/lib/nethackdir/$i $out/games/lib/nethackuserdir
     done
 
     mkdir -p $out/bin
     cat <<EOF >$out/bin/nethack
-      #! ${stdenv.shell} -e
-      if [ ! -d ~/.nethack ]; then
-        mkdir -p ~/.nethack/save
-        for i in logfile perm record; do
-          [ ! -e ~/.nethack/\$i ] && touch ~/.nethack/\$i
-        done
-      fi
+    #! ${stdenv.shell} -e
+    PATH=${binPath}:\$PATH
 
-      cd ~/.nethack
+    if [ ! -d ${userDir} ]; then
+      mkdir -p ${userDir}
+      cp -r $out/games/lib/nethackuserdir/* ${userDir}
+      chmod -R +w ${userDir}
+    fi
 
-      cleanup() {
-        for i in $out/games/lib/nethackdir/*; do
-          rm -rf \$(basename \$i)
-        done
-      }
-      trap cleanup EXIT
+    RUNDIR=\$(mktemp -d)
 
-      for i in $out/games/lib/nethackdir/*; do
-        ln -s \$i \$(basename \$i)
-      done
-      $out/games/nethack
+    cleanup() {
+      rm -rf \$RUNDIR
+    }
+    trap cleanup EXIT
+
+    cd \$RUNDIR
+    for i in ${userDir}/*; do
+      ln -s \$i \$(basename \$i)
+    done
+    for i in $out/games/lib/nethackdir/*; do
+      ln -s \$i \$(basename \$i)
+    done
+    $out/games/nethack
     EOF
     chmod +x $out/bin/nethack
   '';
 
-  makeFlags = [ "PREFIX=$(out)" ];
-
   meta = with stdenv.lib; {
     description = "Rogue-like game";
-    homepage = "http://nethack.org/";
+    homepage = http://nethack.org/;
     license = "nethack";
     platforms = platforms.unix;
     maintainers = with maintainers; [ abbradar ];

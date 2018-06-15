@@ -1,42 +1,46 @@
-{ stdenv, fetchurl, python, buildPythonPackage
-, numpy, hdf5, cython
-, mpiSupport ? false, mpi4py ? null, mpi ? null }:
+{ stdenv, fetchPypi, fetchpatch, isPy27, python, buildPythonPackage
+, numpy, hdf5, cython, six, pkgconfig, unittest2
+, mpi4py ? null, openssh }:
 
-assert mpiSupport == hdf5.mpiSupport;
-assert mpiSupport -> mpi != null
-  && mpi4py != null
-  && mpi == mpi4py.mpi
-  && mpi == hdf5.mpi
-  ;
+assert hdf5.mpiSupport -> mpi4py != null && hdf5.mpi == mpi4py.mpi;
 
 with stdenv.lib;
 
-buildPythonPackage rec {
-  name = "h5py-2.3.1";
+let
+  mpi = hdf5.mpi;
+  mpiSupport = hdf5.mpiSupport;
+in buildPythonPackage rec {
+  version = "2.8.0";
+  pname = "h5py";
 
-  src = fetchurl {
-    url = "https://pypi.python.org/packages/source/h/h5py/${name}.tar.gz";
-    md5 = "8f32f96d653e904d20f9f910c6d9dd91";
+  src = fetchPypi {
+    inherit pname version;
+    sha256 = "0mdr6wrq02ac93m1aqx9kad0ppfzmm4imlxqgyy1x4l7hmdcc9p6";
   };
 
-  setupPyBuildFlags = [ "--hdf5=${hdf5}" ]
-    ++ optional mpiSupport "--mpi"
-    ;
-  setupPyInstallFlags = setupPyBuildFlags;
+  configure_flags = "--hdf5=${hdf5}" + optionalString mpiSupport " --mpi";
+
+  postConfigure = ''
+    ${python.executable} setup.py configure ${configure_flags}
+
+    # Needed to run the tests reliably. See:
+    # https://bitbucket.org/mpi4py/mpi4py/issues/87/multiple-test-errors-with-openmpi-30
+    ${optionalString mpiSupport "export OMPI_MCA_rmaps_base_oversubscribe=yes"}
+  '';
 
   preBuild = if mpiSupport then "export CC=${mpi}/bin/mpicc" else "";
 
+  checkInputs = optional isPy27 unittest2;
+  nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ hdf5 cython ]
-    ++ optional mpiSupport mpi
-    ;
-  propagatedBuildInputs = [ numpy ]
-    ++ optional mpiSupport mpi4py
-    ;
+    ++ optional mpiSupport mpi;
+  propagatedBuildInputs = [ numpy six]
+    ++ optionals mpiSupport [ mpi4py openssh ];
 
   meta = {
     description =
       "Pythonic interface to the HDF5 binary data format";
-    homepage = "http://www.h5py.org/";
+    homepage = http://www.h5py.org/;
     license = stdenv.lib.licenses.bsd2;
   };
 }

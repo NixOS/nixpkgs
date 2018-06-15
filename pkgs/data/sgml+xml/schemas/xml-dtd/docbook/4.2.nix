@@ -1,11 +1,11 @@
-{stdenv, fetchurl, unzip}:
+{stdenv, fetchurl, unzip, findXMLCatalogs}:
 
 import ./generic.nix {
-  inherit stdenv fetchurl unzip;
+  inherit stdenv fetchurl unzip findXMLCatalogs;
   name = "docbook-xml-4.2";
   src = fetchurl {
     url = http://www.docbook.org/xml/4.2/docbook-xml-4.2.zip;
-    md5 = "73fe50dfe74ca631c1602f558ed8961f";
+    sha256 = "acc4601e4f97a196076b7e64b368d9248b07c7abf26b34a02cca40eeebe60fa2";
   };
   meta = {
     branch = "4.2";

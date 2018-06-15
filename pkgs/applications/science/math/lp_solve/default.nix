@@ -3,16 +3,22 @@
 stdenv.mkDerivation rec {
 
   name = "lp_solve-${version}";
-  version = "5.5.2.0";
+  version = "5.5.2.5";
 
   src = fetchurl {
-    url = "http://sourceforge.net/projects/lpsolve/files/lpsolve/${version}/lp_solve_${version}_source.tar.gz";
-    sha256 = "176c7f023mb6b8bfmv4rfqnrlw88lsg422ca74zjh19i2h5s69sq";
+    url = "mirror://sourceforge/project/lpsolve/lpsolve/${version}/lp_solve_${version}_source.tar.gz";
+    sha256 = "12pj1idjz31r7c2mb5w03vy1cmvycvbkx9z29s40qdmkp1i7q6i0";
   };
+
+  patches = [ ./isnan.patch ];
 
   buildCommand = ''
     . $stdenv/setup
     tar xvfz $src
+    (
+    cd lp_solve*
+    eval patchPhase
+    )
     (
     cd lp_solve*/lpsolve55
     bash ccc
@@ -32,7 +38,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    description = "lp_solve is a Mixed Integer Linear Programming (MILP) solver.";
+    description = "A Mixed Integer Linear Programming (MILP) solver";
     homepage    = "http://lpsolve.sourceforge.net";
     license     = licenses.gpl2Plus;
     maintainers = with maintainers; [ smironov ];

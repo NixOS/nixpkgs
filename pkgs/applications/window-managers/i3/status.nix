@@ -1,22 +1,22 @@
-{ fetchurl, stdenv, confuse, yajl, alsaLib, wirelesstools
+{ fetchurl, stdenv, confuse, yajl, alsaLib, libpulseaudio, libnl, pkgconfig
   }:
 
 stdenv.mkDerivation rec {
-  name = "i3status-2.9";
+  name = "i3status-2.12";
 
   src = fetchurl {
-    url = "http://i3wm.org/i3status/${name}.tar.bz2";
-    sha256 = "1qwxbrga2fi5wf742hh9ajwa8b2kpzkjjnhjlz4wlpv21i80kss2";
+    url = "https://i3wm.org/i3status/${name}.tar.bz2";
+    sha256 = "06krpbijv4yi33nypg6qcn4hilcrdyarsdpd9fmr2cq46qaqiikg";
   };
 
-  buildInputs = [ confuse yajl alsaLib wirelesstools ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ confuse yajl alsaLib libpulseaudio libnl ];
 
-  makeFlags = "all";
-  installFlags = "PREFIX=\${out}";
+  makeFlags = [ "all" "PREFIX=$(out)" ];
 
   meta = {
     description = "A tiling window manager";
-    homepage = http://i3wm.org;
+    homepage = https://i3wm.org;
     maintainers = [ stdenv.lib.maintainers.garbas ];
     license = stdenv.lib.licenses.bsd3;
     platforms = stdenv.lib.platforms.all;

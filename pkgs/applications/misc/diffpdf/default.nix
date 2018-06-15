@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, qt4, poppler_qt4 }:
+{ stdenv, fetchurl, fetchpatch, qmake, qttools, qtbase, poppler_qt5 }:
 
 stdenv.mkDerivation rec {
   version = "2.1.3";
@@ -9,16 +9,21 @@ stdenv.mkDerivation rec {
     sha256 = "0cr468fi0d512jjj23r5flfzx957vibc9c25gwwhi0d773h2w566";
   };
 
-  patches = [ ./fix_path_poppler_qt4.patch ];
+  patches = [
+    (fetchpatch {
+      url = https://raw.githubusercontent.com/gentoo/gentoo/9b971631588ff46e7c2d501bc35cd0d9ce2d98e2/app-text/diffpdf/files/diffpdf-2.1.3-qt5.patch;
+      sha256 = "0sax8gcqcmzf74hmdr3rarqs4nsxmml9qmh6pqyjmgl3lypxhafg";
+    })
+    ./fix_path_poppler_qt5.patch
+  ];
 
-  buildInputs = [ qt4 poppler_qt4 ];
+  nativeBuildInputs = [ qmake qttools ];
+  buildInputs = [ qtbase poppler_qt5 ];
 
-  preBuild = ''
-    substituteInPlace diffpdf.pro --replace @@NIX_POPPLER_QT4@@ ${poppler_qt4}
-    [ -e "*.qm" ] && make clean
+  preConfigure = ''
+    substituteInPlace diffpdf.pro --replace @@NIX_POPPLER_QT5@@ ${poppler_qt5.dev}
     lrelease diffpdf.pro
-    qmake -makefile PREFIX=\$out
-    '';
+  '';
 
   installPhase = ''
     mkdir -p $out/bin $out/share/man/man1

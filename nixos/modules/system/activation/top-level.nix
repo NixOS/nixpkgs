@@ -26,11 +26,12 @@ let
      cloner false config.nesting.children
   ++ cloner true config.nesting.clone;
 
-
   systemBuilder =
     let
       kernelPath = "${config.boot.kernelPackages.kernel}/" +
         "${config.system.boot.loader.kernelFile}";
+      initrdPath = "${config.system.build.initialRamdisk}/" +
+        "${config.system.boot.loader.initrdFile}";
     in ''
       mkdir $out
 
@@ -45,10 +46,15 @@ let
 
         ln -s ${kernelPath} $out/kernel
         ln -s ${config.system.modulesTree} $out/kernel-modules
+        ${optionalString (pkgs.stdenv.platform.kernelDTB or false) ''
+          ln -s ${config.boot.kernelPackages.kernel}/dtbs $out/dtbs
+        ''}
 
         echo -n "$kernelParams" > $out/kernel-params
 
-        ln -s ${config.system.build.initialRamdisk}/initrd $out/initrd
+        ln -s ${initrdPath} $out/initrd
+
+        ln -s ${config.system.build.initialRamdiskSecretAppender}/bin/append-initrd-secrets $out
 
         ln -s ${config.hardware.firmware}/lib/firmware $out/firmware
       ''}
@@ -67,7 +73,7 @@ let
 
       echo -n "$configurationName" > $out/configuration-name
       echo -n "systemd ${toString config.systemd.package.interfaceVersion}" > $out/init-interface-version
-      echo -n "$nixosVersion" > $out/nixos-version
+      echo -n "$nixosLabel" > $out/nixos-version
       echo -n "$system" > $out/system
 
       mkdir $out/fine-tune
@@ -78,6 +84,7 @@ let
       done
 
       mkdir $out/bin
+      export localeArchive="${config.i18n.glibcLocales}/lib/locale/locale-archive"
       substituteAll ${./switch-to-configuration.pl} $out/bin/switch-to-configuration
       chmod +x $out/bin/switch-to-configuration
 
@@ -98,10 +105,10 @@ let
   # `switch-to-configuration' that activates the configuration and
   # makes it bootable.
   baseSystem = showWarnings (
-    if [] == failed then pkgs.stdenv.mkDerivation {
+    if [] == failed then pkgs.stdenvNoCC.mkDerivation {
       name = let hn = config.networking.hostName;
                  nn = if (hn != "") then hn else "unnamed";
-          in "nixos-system-${nn}-${config.system.nixosVersion}";
+          in "nixos-system-${nn}-${config.system.nixos.label}";
       preferLocalBuild = true;
       allowSubstitutes = false;
       buildCommand = systemBuilder;
@@ -115,12 +122,13 @@ let
         config.system.build.installBootLoader
         or "echo 'Warning: do not know how to make this configuration bootable; please enable a boot loader.' 1>&2; true";
       activationScript = config.system.activationScripts.script;
-      nixosVersion = config.system.nixosVersion;
+      nixosLabel = config.system.nixos.label;
 
       configurationName = config.boot.loader.grub.configurationName;
 
       # Needed by switch-to-configuration.
-      perl = "${pkgs.perl}/bin/perl -I${pkgs.perlPackages.FileSlurp}/lib/perl5/site_perl";
+
+      perl = "${pkgs.perl}/bin/perl " + (concatMapStringsSep " " (lib: "-I${lib}/${pkgs.perl.libPrefix}") (with pkgs.perlPackages; [ FileSlurp NetDBus XMLParser XMLTwig ]));
   } else throw "\nFailed assertions:\n${concatStringsSep "\n" (map (x: "- ${x}") failed)}");
 
   # Replace runtime dependencies
@@ -136,6 +144,7 @@ in
     system.build = mkOption {
       internal = true;
       default = {};
+      type = types.attrs;
       description = ''
         Attribute set of derivations used to setup the system.
       '';
@@ -173,14 +182,24 @@ in
       '';
     };
 
+    system.boot.loader.initrdFile = mkOption {
+      internal = true;
+      default = "initrd";
+      type = types.str;
+      description = ''
+        Name of the initrd file to be passed to the bootloader.
+      '';
+    };
+
     system.copySystemConfiguration = mkOption {
       type = types.bool;
       default = false;
       description = ''
         If enabled, copies the NixOS configuration file
-        <literal>$NIXOS_CONFIG</literal> (usually
-        <filename>/etc/nixos/configuration.nix</filename>)
-        to the system store path.
+        (usually <filename>/etc/nixos/configuration.nix</filename>)
+        and links it from the resulting system
+        (getting to <filename>/run/current-system/configuration.nix</filename>).
+        Note that only this single file is copied, even if it imports others.
       '';
     };
 
@@ -205,7 +224,7 @@ in
 
     system.replaceRuntimeDependencies = mkOption {
       default = [];
-      example = lib.literalExample "[ ({ original = pkgs.openssl; replacement = pkgs.callPackage /path/to/openssl { ... }; }) ]";
+      example = lib.literalExample "[ ({ original = pkgs.openssl; replacement = pkgs.callPackage /path/to/openssl { }; }) ]";
       type = types.listOf (types.submodule (
         { options, ... }: {
           options.original = mkOption {
@@ -238,7 +257,9 @@ in
     system.extraSystemBuilderCmds =
       optionalString
         config.system.copySystemConfiguration
-        "cp ${maybeEnv "NIXOS_CONFIG" "/etc/nixos/configuration.nix"} $out";
+        ''ln -s '${import ../../../lib/from-env.nix "NIXOS_CONFIG" <nixos-config>}' \
+            "$out/configuration.nix"
+        '';
 
     system.build.toplevel = system;
 

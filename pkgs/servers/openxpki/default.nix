@@ -8,7 +8,7 @@ buildPerlPackage {
   src = fetchgit {
     url = "https://github.com/openxpki/openxpki";
     rev = "5cb76c553b6b1a81ede380857700628a7521f6e3";
-    sha256 = "7c93bdce7a205c58b08c91c249e566e885ed08f9d43cc2ac652c705c1f7e4490";
+    sha256 = "05bmhani2c7ays488xv3hx5xbxb612bnwq5rdjwmsj51xpaz454p";
   };
 
   buildInputs = [ perl openssl gettext python34Packages.sphinx ];
@@ -50,7 +50,10 @@ buildPerlPackage {
       lib libapreq2 libnet podlators threads threadsshared version ];
 
   preConfigure = ''
-    export OPENSSL_PREFIX=${openssl}
+    substituteInPlace core/server/Makefile.PL \
+      --replace "my \$openssl_inc_dir = ''';" "my \$openssl_inc_dir = '${openssl.dev}/include';" \
+      --replace "my \$openssl_lib_dir = ''';" "my \$openssl_lib_dir = '${openssl.out}/lib';" \
+      --replace "my \$openssl_binary  = ''';" "my \$openssl_binary  = '${openssl.bin}/bin/openssl';"
     substituteInPlace tools/vergen --replace "#!/usr/bin/perl" "#!${perl}/bin/perl"
     cp ${./vergen_revision_state} .vergen_revision_state
     cd core/server
@@ -69,9 +72,10 @@ buildPerlPackage {
   doCheck = false;
 
   meta = {
-    homepage = "http://www.openxpki.org";
+    homepage = http://www.openxpki.org;
     description = "Enterprise-grade PKI/Trustcenter software";
     license = stdenv.lib.licenses.asl20;
     maintainers = with stdenv.lib.maintainers; [ tstrobel ];
+    platforms = with stdenv.lib.platforms; linux;
   };
 }

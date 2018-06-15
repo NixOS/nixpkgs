@@ -1,28 +1,29 @@
-{ stdenv, fetchurl, python, xrandr, pythonPackages }:
+{ stdenv, fetchurl, xrandr, python2Packages }:
 
-pythonPackages.buildPythonPackage rec {
-  name = "arandr-0.1.8";
+let
+  inherit (python2Packages) buildPythonApplication docutils pygtk;
+in buildPythonApplication rec {
+  name = "arandr-0.1.9";
 
   src = fetchurl {
     url = "http://christian.amsuess.com/tools/arandr/files/${name}.tar.gz";
-    sha256 = "0d574mbmhaqmh7kivaryj2hpghz6xkvic9ah43s1hf385y7c33kd";
+    sha256 = "1i3f1agixxbfy4kxikb2b241p7c2lg73cl9wqfvlwz3q6zf5faxv";
   };
 
-  buildPhase = ''
+  patchPhase = ''
     rm -rf data/po/*
-    python setup.py build
   '';
 
   # no tests
   doCheck = false;
 
-  buildInputs = [pythonPackages.docutils];
-  propagatedBuildInputs = [ xrandr pythonPackages.pygtk ];
+  buildInputs = [ docutils ];
+  propagatedBuildInputs = [ xrandr pygtk ];
 
   meta = {
     homepage = http://christian.amsuess.com/tools/arandr/;
     description = "A simple visual front end for XRandR";
     license = stdenv.lib.licenses.gpl3;
-    maintainers = [ stdenv.lib.maintainers.iElectric ];
+    maintainers = [ stdenv.lib.maintainers.domenkozar ];
   };
 }

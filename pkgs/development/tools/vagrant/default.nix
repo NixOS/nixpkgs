@@ -1,104 +1,67 @@
-{ stdenv, fetchurl, dpkg, curl, libarchive, openssl, ruby, buildRubyGem, libiconv
-, libxml2, libxslt }:
-
-assert stdenv.system == "x86_64-linux" || stdenv.system == "i686-linux";
+{ lib, fetchurl, buildRubyGem, bundlerEnv, ruby, libarchive }:
 
 let
-  version = "1.7.4";
-  rake = buildRubyGem {
+  version = "2.1.1";
+  url = "https://github.com/hashicorp/vagrant/archive/v${version}.tar.gz";
+  sha256 = "0kgsb33f3wh6x4450x74wri6z78ky92sfrv7ba7h7zmxsadb6m4b";
+
+  deps = bundlerEnv rec {
+    name = "${pname}-${version}";
+    pname = "vagrant";
+    inherit version;
+
     inherit ruby;
-    name = "rake-10.3.2";
-    sha256 = "0nvpkjrpsk8xxnij2wd1cdn6arja9q11sxx4aq4fz18bc6fss15m";
-  };
-
-in
-stdenv.mkDerivation rec {
-  name = "vagrant-${version}";
-
-  src =
-    if stdenv.system == "x86_64-linux" then
-      fetchurl {
-        url    = "https://dl.bintray.com/mitchellh/vagrant/vagrant_${version}_x86_64.deb";
-        sha256 = "0dl3cskpz7d8mmv0ah86426vlx0lj1wkjdlb5gc868dfsysw5lnw";
-      }
-    else
-      fetchurl {
-        url    = "https://dl.bintray.com/mitchellh/vagrant/vagrant_${version}_i686.deb";
-        sha256 = "0sns9q48c6b2sabp6bwkppx8ffp774jhv69jrv225qrnifx12105";
+    gemdir = ./.;
+    gemset = lib.recursiveUpdate (import ./gemset.nix) {
+      vagrant = {
+        source = {
+          type = "url";
+          inherit url sha256;
+        };
+        inherit version;
       };
-
-  meta = with stdenv.lib; {
-    description = "A tool for building complete development environments";
-    homepage    = http://vagrantup.com;
-    license     = licenses.mit;
-    maintainers = with maintainers; [ lovek323 globin jgeerds ];
-    platforms   = platforms.linux;
+    };
   };
 
-  unpackPhase = ''
-    ${dpkg}/bin/dpkg-deb -x ${src} .
+in buildRubyGem rec {
+  name = "${gemName}-${version}";
+  gemName = "vagrant";
+  inherit version;
+
+  doInstallCheck = true;
+  dontBuild = false;
+  src = fetchurl { inherit url sha256; };
+
+  patches = [
+    ./unofficial-installation-nowarn.patch
+  ];
+
+  # PATH additions:
+  #   - libarchive: Make `bsdtar` available for extracting downloaded boxes
+  postInstall = ''
+    wrapProgram "$out/bin/vagrant" \
+      --set GEM_PATH "${deps}/lib/ruby/gems/${ruby.version.libDir}" \
+      --prefix PATH ':' "${lib.getBin libarchive}/bin"
   '';
 
-  buildPhase = false;
-
-  installPhase = ''
-    sed -i "s|/opt|$out/opt|" usr/bin/vagrant
-
-    # overwrite embedded binaries
-
-    # curl: curl
-    rm opt/vagrant/embedded/bin/curl
-    ln -s ${curl}/bin/curl opt/vagrant/embedded/bin
-
-    # libarchive: bsdtar, bsdcpio
-    rm opt/vagrant/embedded/bin/{bsdtar,bsdcpio}
-    ln -s ${libarchive}/bin/bsdtar opt/vagrant/embedded/bin
-    ln -s ${libarchive}/bin/bsdcpio opt/vagrant/embedded/bin
-
-    # openssl: c_rehash, openssl
-    rm opt/vagrant/embedded/bin/{c_rehash,openssl}
-    ln -s ${openssl}/bin/c_rehash opt/vagrant/embedded/bin
-    ln -s ${openssl}/bin/openssl opt/vagrant/embedded/bin
-
-    # ruby: erb, gem, irb, rake, rdoc, ri, ruby, testrb
-    rm opt/vagrant/embedded/bin/{erb,gem,irb,rake,rdoc,ri,ruby,testrb}
-    ln -s ${ruby}/bin/erb opt/vagrant/embedded/bin
-    ln -s ${ruby}/bin/gem opt/vagrant/embedded/bin
-    ln -s ${ruby}/bin/irb opt/vagrant/embedded/bin
-    ln -s ${rake}/bin/rake opt/vagrant/embedded/bin
-    ln -s ${ruby}/bin/rdoc opt/vagrant/embedded/bin
-    ln -s ${ruby}/bin/ri opt/vagrant/embedded/bin
-    ln -s ${ruby}/bin/ruby opt/vagrant/embedded/bin
-    ln -s ${ruby}/bin/testrb opt/vagrant/embedded/bin
-
-    # libiconv: iconv
-    rm opt/vagrant/embedded/bin/iconv
-    ln -s ${libiconv}/bin/iconv opt/vagrant/embedded/bin
-
-    # libxml: xml2-config, xmlcatalog, xmllint
-    rm opt/vagrant/embedded/bin/{xml2-config,xmlcatalog,xmllint}
-    ln -s ${libxml2}/bin/xml2-config opt/vagrant/embedded/bin
-    ln -s ${libxml2}/bin/xmlcatalog opt/vagrant/embedded/bin
-    ln -s ${libxml2}/bin/xmllint opt/vagrant/embedded/bin
-
-    # libxslt: xslt-config, xsltproc
-    rm opt/vagrant/embedded/bin/{xslt-config,xsltproc}
-    ln -s ${libxslt}/bin/xslt-config opt/vagrant/embedded/bin
-    ln -s ${libxslt}/bin/xsltproc opt/vagrant/embedded/bin
-
-    mkdir -p "$out"
-    cp -r opt "$out"
-    cp -r usr/bin "$out"
+  installCheckPhase = ''
+    if [[ "$("$out/bin/vagrant" --version)" == "Vagrant ${version}" ]]; then
+      echo 'Vagrant smoke check passed'
+    else
+      echo 'Vagrant smoke check failed'
+      return 1
+    fi
   '';
 
-  preFixup = ''
-    # 'hide' the template file from shebang-patching
-    chmod -x $out/opt/vagrant/embedded/gems/gems/bundler-1.10.5/lib/bundler/templates/Executable
-    chmod -x $out/opt/vagrant/embedded/gems/gems/vagrant-${version}/plugins/provisioners/salt/bootstrap-salt.sh
-  '';
+  passthru = {
+    inherit ruby deps;
+  };
 
-  postFixup = ''
-    chmod +x $out/opt/vagrant/embedded/gems/gems/bundler-1.10.5/lib/bundler/templates/Executable
-    chmod +x $out/opt/vagrant/embedded/gems/gems/vagrant-${version}/plugins/provisioners/salt/bootstrap-salt.sh
-  '';
+  meta = with lib; {
+    description = "A tool for building complete development environments";
+    homepage = https://www.vagrantup.com/;
+    license = licenses.mit;
+    maintainers = with maintainers; [ aneeshusa ];
+    platforms = with platforms; linux ++ darwin;
+  };
 }

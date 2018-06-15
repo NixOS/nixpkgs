@@ -97,7 +97,7 @@ in
       script = ''
         cd /var/lib/minetest
 
-        exec ${pkgs.minetest}/bin/minetestserver ${concatStrings flags}
+        exec ${pkgs.minetest}/bin/minetest --server ${concatStrings flags}
       '';
     };
   };

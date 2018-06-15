@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, ocaml, findlib, menhir, yojson, ulex, pprint, fix, functory }:
+{ stdenv, fetchFromGitHub, ocaml, findlib, ocamlbuild, menhir, yojson, ulex, pprint, fix, functory }:
 
 let
   check-ocaml-version = with stdenv.lib; versionAtLeast (getVersion ocaml);
@@ -17,7 +17,7 @@ stdenv.mkDerivation {
     sha256 = "0yck5r6di0935s3iy2mm9538jkf77ssr789qb06ms7sivd7g3ip6";
   };
 
-  buildInputs = [ ocaml findlib yojson menhir ulex pprint fix functory ];
+  buildInputs = [ ocaml findlib ocamlbuild yojson menhir ulex pprint fix functory ];
 
   # Sets warning 3 as non-fatal
   prePatch = stdenv.lib.optionalString (check-ocaml-version "4.02") ''
@@ -36,7 +36,7 @@ stdenv.mkDerivation {
     homepage = http://protz.github.io/mezzo/;
     description = "A programming language in the ML tradition, which places strong emphasis on the control of aliasing and access to mutable memory";
     license = licenses.gpl2;
-    platforms = ocaml.meta.platforms;
+    platforms = ocaml.meta.platforms or [];
   };
 }
 

@@ -1,0 +1,45 @@
+diff --git a/default.build b/default.build
+index e48fd9e..b0dee4f 100644
+--- a/default.build
++++ b/default.build
+@@ -23,14 +23,14 @@
+ 	<property name="skip.ast" value="False" />
+ 	<property name="skip.vs" value="False" />
+ 
+-	<property name="gsv.name" value="gtksourceview-1.0" />
++	<property name="gsv.name" value="gtksourceview-2.0" />
+ 	
+ 	<property name="build.dir" value="build" dynamic="True"/>
+ 	<property name="distrobuild.dir" value="distrobuild"/>
+ 	<property name="docs.dir" value="docs" />
+ 	<property name="examples.dir" value="examples" />
+ 
+-	<property name="install.prefix" value="/usr/local" />
++	<property name="install.prefix" value="$out" />
+ 	<property name="install.destdir" value="/" />
+ 
+ 	<property name="install.share" value="${path::combine(install.prefix,'share')}" />
+@@ -575,9 +575,9 @@
+ 		key files for mime detection, etc
+ 		-->
+ 
+-		<property name="sharedmime.prefix" value="${pkg-config::get-variable('shared-mime-info','prefix')}" />
++		<property name="sharedmime.prefix" value="$out" />
+ 		<property name="fakeroot.sharedmime" value="${fakeroot}/${sharedmime.prefix}" />
+-		<property name="gsv.prefix" value="${pkg-config::get-variable(gsv.name,'prefix')}" />
++		<property name="gsv.prefix" value="$out" />
+ 		<property name="fakeroot.gsv" value="${fakeroot}/${gsv.prefix}" />
+ 
+ 		<mkdir dir="${fakeroot.boolib}"/>
+@@ -707,9 +707,9 @@
+ 		key files for mime detection, etc
+ 		-->
+ 
+-		<property name="sharedmime.prefix" value="${pkg-config::get-variable('shared-mime-info','prefix')}" />
++		<property name="sharedmime.prefix" value="$out" />
+ 		<property name="fakeroot.sharedmime" value="${fakeroot}/${sharedmime.prefix}" />
+-		<property name="gsv.prefix" value="${pkg-config::get-variable(gsv.name,'prefix')}" />
++		<property name="gsv.prefix" value="$out" />
+ 		<property name="fakeroot.gsv" value="${fakeroot}/${gsv.prefix}" />
+ 		
+ 		<foreach item="File" property="filename">

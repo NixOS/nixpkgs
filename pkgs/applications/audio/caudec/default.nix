@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   postFixup = ''
     for executable in $(cd $out/bin && ls); do
 	wrapProgram $out/bin/$executable \
-	  --prefix PATH : "${bc}/bin:${findutils}/bin:${sox}/bin:${procps}/bin:${opusTools}/bin:${lame}/bin:${flac}/bin"
+	  --prefix PATH : "${stdenv.lib.makeBinPath [ bc findutils sox procps opusTools lame flac ]}"
     done
   '';
 
@@ -34,6 +34,5 @@ stdenv.mkDerivation rec {
     description = "A multiprocess audio converter that supports many formats (FLAC, MP3, Ogg Vorbis, Windows codecs and many more)";
     license     = licenses.gpl3;
     platforms   = platforms.linux ++ platforms.darwin;
-    maintainers = with maintainers; [ hiberno ];
   };
 }

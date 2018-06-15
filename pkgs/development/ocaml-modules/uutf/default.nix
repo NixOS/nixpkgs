@@ -1,40 +1,29 @@
-{stdenv, fetchurl, ocaml, findlib, opam}:
+{ stdenv, fetchurl, ocaml, findlib, ocamlbuild, cmdliner , topkg, uchar }:
 let
   pname = "uutf";
-  version = "0.9.3";
   webpage = "http://erratique.ch/software/${pname}";
-  ocaml_version = (builtins.parseDrvName ocaml.name).version;
 in
 
-assert stdenv.lib.versionAtLeast ocaml_version "3.12";
-
 stdenv.mkDerivation rec {
-
-  name = "ocaml-${pname}-${version}";
+  name = "ocaml${ocaml.version}-${pname}-${version}";
+  version = "1.0.1";
 
   src = fetchurl {
     url = "${webpage}/releases/${pname}-${version}.tbz";
-    sha256 = "0xvq20knmq25902ijpbk91ax92bkymsqkbfklj1537hpn64lydhz";
+    sha256 = "1gp96dcggq7s84934vimxh89caaxa77lqiff1yywbwkilkkjcfqj";
   };
 
-  buildInputs = [ ocaml findlib opam ];
-
-  createFindlibDestdir = true;
+  buildInputs = [ ocaml findlib ocamlbuild topkg cmdliner ];
+  propagatedBuildInputs = [ uchar ];
 
   unpackCmd = "tar xjf $src";
 
-  buildPhase = "./pkg/build true";
-
-  installPhase = ''
-    opam-installer --script --prefix=$out ${pname}.install > install.sh
-    sh install.sh
-    ln -s $out/lib/${pname} $out/lib/ocaml/${ocaml_version}/site-lib/
-  '';
+  inherit (topkg) buildPhase installPhase;
 
   meta = with stdenv.lib; {
     description = "Non-blocking streaming Unicode codec for OCaml";
     homepage = "${webpage}";
-    platforms = ocaml.meta.platforms;
+    platforms = ocaml.meta.platforms or [];
     license = licenses.bsd3;
     maintainers = [ maintainers.vbgl ];
   };

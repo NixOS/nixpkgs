@@ -1,14 +1,22 @@
-{stdenv, fetchurl, gperf, flex, bison}:
+{ stdenv, fetchFromGitHub, autoconf, gperf, flex, bison }:
 
 stdenv.mkDerivation rec {
-  name = "verilog-0.9.7";
+  name = "iverilog-${version}";
+  version = "2017.08.12";
 
-  src = fetchurl {
-    url = "mirror://sourceforge/iverilog/${name}.tar.gz";
-    sha256 = "0m3liqw7kq24vn7k8wvi630ljz0awz23r3sd4rcklk7vgghp4pks";
+  src = fetchFromGitHub {
+    owner = "steveicarus";
+    repo = "iverilog";
+    rev = "ac87138c44cd6089046668c59a328b4d14c16ddc";
+    sha256 = "1npv0533h0h2wxrxkgiaxqiasw2p4kj2vv5bd69w5xld227xcwpg";
   };
 
-  buildInputs = [ gperf flex bison ];
+  patchPhase = ''
+    chmod +x $PWD/autoconf.sh
+    $PWD/autoconf.sh
+  '';
+
+  buildInputs = [ autoconf gperf flex bison ];
 
   meta = {
     description = "Icarus Verilog compiler";

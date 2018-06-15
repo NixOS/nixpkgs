@@ -1,5 +1,6 @@
 { stdenv, fetchgit, libusb, libusb1, autoconf, automake, confuse, pkgconfig
-, gccCross ? null }:
+, gccCross ? null
+}:
 
 let
   version = "2011-12-26";
@@ -10,7 +11,7 @@ stdenv.mkDerivation {
   src = fetchgit {
     url = git://projects.qi-hardware.com/xburst-tools.git;
     rev = "c71ce8e15db25fe49ce8702917cb17720882e341";
-    sha256 = "abe4c4591183f2bc5ca6363451d1cd7d966c080b4f5bfb0fedf7e9a4f70267a4";
+    sha256 = "1hzdngs1l5ivvwnxjwzc246am6w1mj1aidcf0awh9yw0crzcjnjr";
   };
 
   preConfigure = ''
@@ -18,8 +19,10 @@ stdenv.mkDerivation {
   '';
 
   configureFlags = if gccCross != null then
-    "--enable-firmware CROSS_COMPILE=${gccCross.crossConfig}-"
+    "--enable-firmware CROSS_COMPILE=${gccCross.targetPrefix}"
     else "";
+
+  hardeningDisable = [ "pic" "stackprotector" ];
 
   # Not to strip cross build binaries (this is for the gcc-cross-wrapper)
   dontCrossStrip = true;
@@ -33,6 +36,6 @@ stdenv.mkDerivation {
     license = stdenv.lib.licenses.gpl3;
     homepage = http://www.linux-mtd.infradead.org/;
     maintainers = with stdenv.lib.maintainers; [viric];
-    platforms = with stdenv.lib.platforms; linux;
+    platforms = stdenv.lib.platforms.x86_64;
   };
 }

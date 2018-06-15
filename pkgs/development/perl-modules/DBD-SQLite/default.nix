@@ -1,39 +1,31 @@
 { stdenv, fetchurl, buildPerlPackage, DBI, sqlite }:
 
 buildPerlPackage rec {
-  name = "DBD-SQLite-1.48";
+  name = "DBD-SQLite-1.58";
 
   src = fetchurl {
-    url = "mirror://cpan/authors/id/I/IS/ISHIGAKI/${name}.tar.gz";
-    sha256 = "19hf0fc4dlnpmxsxx3jjbh2z6d2jafgdlqhwz4irkp2cbl7j75xk";
+    url = mirror://cpan/authors/id/I/IS/ISHIGAKI/DBD-SQLite-1.58.tar.gz;
+    sha256 = "0fqx386jgs9mmrknr7smmzapf07izgivza7x08lfm39ks2cxs83i";
   };
 
   propagatedBuildInputs = [ DBI ];
-
-  makeMakerFlags = "SQLITE_LOCATION=${sqlite}";
+  buildInputs = [ sqlite ];
 
   patches = [
     # Support building against our own sqlite.
     ./external-sqlite.patch
   ];
 
-  preBuild =
-    ''
-      substituteInPlace Makefile --replace -L/usr/lib ""
-    '';
+  makeMakerFlags = "SQLITE_INC=${sqlite.dev}/include SQLITE_LIB=${sqlite.out}/lib";
 
-  postInstall =
-    ''
-      # Prevent warnings from `strip'.
-      chmod -R u+w $out
+  postInstall = ''
+    # Get rid of a pointless copy of the SQLite sources.
+    rm -rf $out/lib/perl5/site_perl/*/*/auto/share
+  '';
 
-      # Get rid of a pointless copy of the SQLite sources.
-      rm -rf $out/lib/perl5/site_perl/*/*/auto/share
-    '';
-
-  # Disabled because the tests can randomly fail due to timeouts
-  # (e.g. "database is locked(5) at dbdimp.c line 402 at t/07busy.t").
-  doCheck = false;
-
-  meta.platforms = stdenv.lib.platforms.unix;
+  meta = with stdenv.lib; {
+    description = "Self Contained SQLite RDBMS in a DBI Driver";
+    license = with licenses; [ artistic1 gpl1Plus ];
+    platforms = platforms.unix;
+  };
 }

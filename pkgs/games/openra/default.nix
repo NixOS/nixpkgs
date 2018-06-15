@@ -1,34 +1,47 @@
-{ stdenv, fetchurl, mono, makeWrapper, lua
-, SDL2, freetype, openal, systemd, pkgconfig
+{ stdenv, fetchFromGitHub, mono, makeWrapper, lua
+, SDL2, freetype, openal, systemd, pkgconfig,
+  dotnetPackages, gnome3, curl, unzip, which, python
 }:
 
-let
-  version = "20141029";
-in stdenv.mkDerivation rec {
+stdenv.mkDerivation rec {
   name = "openra-${version}";
+  version = "20180307";
 
   meta = with stdenv.lib; {
-    description = "Real Time Strategy game engine recreates the C&C titles";
-    homepage    = "http://www.open-ra.org/";
+    description = "Real Time Strategy game engine recreating the C&C titles";
+    homepage    = "http://www.openra.net/";
+    maintainers = [ maintainers.rardiol ];
     license     = licenses.gpl3;
     platforms   = platforms.linux;
-    maintainers = with maintainers; [ iyzsong ];
   };
 
-  src = fetchurl {
-    name = "${name}.tar.gz";
-    url = "https://github.com/OpenRA/OpenRA/archive/release-${version}.tar.gz";
-    sha256 = "082rwcy866k636s4qhbry3ja2p81mdz58bh1dw2mic5mv2q6p67r";
+  src = fetchFromGitHub {
+    owner = "OpenRA";
+    repo = "OpenRA";
+    rev = "release-${version}";
+    sha256 = "05c6vrmlgzfxgfx1idqmp6czmr079px3n57q5ahnwzqvcl11a2jj";
+
+    extraPostFetch = ''
+      sed -i 's,curl,curl --insecure,g' $out/thirdparty/{fetch-thirdparty-deps,noget}.sh
+      $out/thirdparty/fetch-thirdparty-deps.sh
+    '';
   };
 
   dontStrip = true;
 
-  buildInputs = [ lua ];
-  nativeBuildInputs = [ mono makeWrapper lua pkgconfig ];
+  buildInputs = (with dotnetPackages;
+     [ NUnit3 NewtonsoftJson MonoNat FuzzyLogicLibrary SmartIrc4net SharpZipLib MaxMindGeoIP2 MaxMindDb SharpFont StyleCopMSBuild StyleCopPlusMSBuild RestSharp NUnitConsole OpenNAT ])
+     ++ [ curl unzip lua gnome3.zenity ];
+  nativeBuildInputs = [ curl unzip mono makeWrapper lua pkgconfig ];
 
-  patchPhase = ''
-    sed -i 's/^VERSION.*/VERSION = release-${version}/g' Makefile
-    substituteInPlace configure --replace /bin/bash "$shell" --replace /usr/local/lib "${lua}/lib"
+  postPatch = ''
+    mkdir Support
+    sed -i \
+      -e 's/^VERSION.*/VERSION = release-${version}/g' \
+      -e '/GeoLite2-Country.mmdb.gz/d' \
+      -e '/fetch-geoip-db.sh/d' \
+      Makefile
+    substituteInPlace thirdparty/configure-native-deps.sh --replace "locations=\"" "locations=\"${lua}/lib "
   '';
 
   preConfigure = ''
@@ -36,16 +49,24 @@ in stdenv.mkDerivation rec {
     make version
   '';
 
+  buildFlags = [ "DEBUG=false" "default" "man-page" ];
+
+  doCheck = true;
+
+  #TODO: check
+  checkTarget = "nunit test";
+
+  installTargets = [ "install" "install-linux-icons" "install-linux-desktop" "install-linux-appdata" "install-linux-mime" "install-man-page" ];
+
   postInstall = with stdenv.lib; let
     runtime = makeLibraryPath [ SDL2 freetype openal systemd lua ];
+    binaries= makeBinPath [ which mono gnome3.zenity python ];
   in ''
     wrapProgram $out/lib/openra/launch-game.sh \
-      --prefix PATH : "${mono}/bin" \
-      --set PWD $out/lib/openra/ \
+      --prefix PATH : "${binaries}" \
       --prefix LD_LIBRARY_PATH : "${runtime}"
-      
+
     mkdir -p $out/bin
-    echo "cd $out/lib/openra && $out/lib/openra/launch-game.sh" > $out/bin/openra
-    chmod +x $out/bin/openra
+    makeWrapper $out/lib/openra/launch-game.sh $out/bin/openra --run "cd $out/lib/openra"
   '';
 }

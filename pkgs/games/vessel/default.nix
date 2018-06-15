@@ -6,7 +6,7 @@ stdenv.mkDerivation rec {
   goBuyItNow = '' 
     We cannot download the full version automatically, as you require a license.
     Once you bought a license, you need to add your downloaded version to the nix store.
-    You can do this by using "nix-prefetch-url file://${name}-bin" in the
+    You can do this by using "nix-prefetch-url file://\$PWD/${name}-bin" in the
     directory where you saved it.
   ''; 
 
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
       message = goBuyItNow;
       name = "${name}-bin";
       sha256 = "1vpwcrjiln2mx43h7ib3jnccyr3chk7a5x2bw9kb4lw8ycygvg96";
-    } else throw "unsupported platform ${stdenv.s:ystem} only i686-linux supported for now.";
+    } else throw "unsupported platform ${stdenv.system} only i686-linux supported for now.";
 
   phases = "installPhase";
   ld_preload = ./isatty.c;

@@ -1,4 +1,5 @@
 { stdenv, fetchurl }:
+
 stdenv.mkDerivation rec {
   name = "tsocks-${version}";
   version = "1.8beta5";
@@ -16,11 +17,19 @@ stdenv.mkDerivation rec {
     export configureFlags="$configureFlags --libdir=$out/lib"
   '';
 
+  preBuild = ''
+    # We don't need the saveme binary, it is in fact never stored and we're
+    # never injecting stuff into ld.so.preload anyway
+    sed -i \
+      -e "s,TARGETS=\(.*\)..SAVE.\(.*\),TARGETS=\1\2," \
+      -e "/SAVE/d" Makefile
+  '';
+
   meta = with stdenv.lib; {
     description = "Transparent SOCKS v4 proxying library";
     homepage = http://tsocks.sourceforge.net/;
     license = stdenv.lib.licenses.gpl2;
     maintainers = with maintainers; [ edwtjo phreedom ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

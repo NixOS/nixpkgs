@@ -1,0 +1,242 @@
+From b5c70461822003238784ff56f4c8eead10cfc2c1 Mon Sep 17 00:00:00 2001
+From: Joachim Nilsson <troglobit@gmail.com>
+Date: Sun, 2 Jul 2017 21:01:33 +0200
+Subject: [PATCH] Remove UNUSED() macro and disable the compiler warning
+ instead
+
+Signed-off-by: Joachim Nilsson <troglobit@gmail.com>
+
+diff --git a/plugins/common.c b/plugins/common.c
+index 55c1ac3..9e7ba7b 100644
+--- a/plugins/common.c
++++ b/plugins/common.c
+@@ -64,7 +64,7 @@ int common_request(ddns_t *ctx, ddns_info_t *info, ddns_alias_t *alias)
+  * DynDNS response validator -- common to many other DDNS providers as well
+  *  'good' or 'nochg' are the good answers,
+  */
+-int common_response(http_trans_t *trans, ddns_info_t *UNUSED(info), ddns_alias_t *UNUSED(alias))
++int common_response(http_trans_t *trans, ddns_info_t *info, ddns_alias_t *alias)
+ {
+ 	char *body = trans->rsp_body;
+ 
+diff --git a/plugins/ddnss.c b/plugins/ddnss.c
+index fea41e9..5184db0 100644
+--- a/plugins/ddnss.c
++++ b/plugins/ddnss.c
+@@ -60,7 +60,7 @@ static int request(ddns_t *ctx, ddns_info_t *info, ddns_alias_t *alias)
+ 			info->user_agent);
+ }
+ 
+-static int response(http_trans_t *trans, ddns_info_t *UNUSED(info), ddns_alias_t *UNUSED(alias))
++static int response(http_trans_t *trans, ddns_info_t *info, ddns_alias_t *alias)
+ {
+ 	char *resp = trans->rsp_body;
+ 
+diff --git a/plugins/dhis.c b/plugins/dhis.c
+index 11edd2c..b6e8e0b 100644
+--- a/plugins/dhis.c
++++ b/plugins/dhis.c
+@@ -65,7 +65,7 @@ static int request(ddns_t *ctx, ddns_info_t *info, ddns_alias_t *alias)
+ 			info->user_agent);
+ }
+ 
+-static int response(http_trans_t *trans, ddns_info_t *UNUSED(info), ddns_alias_t *alias)
++static int response(http_trans_t *trans, ddns_info_t *info, ddns_alias_t *alias)
+ {
+ 	char *rsp = trans->rsp_body;
+ 
+diff --git a/plugins/dnsexit.c b/plugins/dnsexit.c
+index c456f38..4bf0a08 100644
+--- a/plugins/dnsexit.c
++++ b/plugins/dnsexit.c
+@@ -62,7 +62,7 @@ static int request(ddns_t *ctx, ddns_info_t *info, ddns_alias_t *alias)
+ 			info->user_agent);
+ }
+ 
+-static int response(http_trans_t *trans, ddns_info_t *UNUSED(info), ddns_alias_t *UNUSED(alias))
++static int response(http_trans_t *trans, ddns_info_t *info, ddns_alias_t *alias)
+ {
+ 	int   code = -1;
+ 	char *tmp;
+diff --git a/plugins/dtdns.c b/plugins/dtdns.c
+index e7996fe..38f0977 100644
+--- a/plugins/dtdns.c
++++ b/plugins/dtdns.c
+@@ -58,7 +58,7 @@ static int request(ddns_t *ctx, ddns_info_t *info, ddns_alias_t *alias)
+ 			info->user_agent);
+ }
+ 
+-static int response(http_trans_t *trans, ddns_info_t *UNUSED(info), ddns_alias_t *UNUSED(alias))
++static int response(http_trans_t *trans, ddns_info_t *info, ddns_alias_t *alias)
+ {
+ 	char *resp = trans->rsp_body;
+ 
+diff --git a/plugins/duckdns.c b/plugins/duckdns.c
+index 9ca46ae..66d9c25 100755
+--- a/plugins/duckdns.c
++++ b/plugins/duckdns.c
+@@ -78,7 +78,7 @@ static int request(ddns_t *ctx, ddns_info_t *info, ddns_alias_t *alias)
+ 			info->user_agent);
+ }
+ 
+-static int response(http_trans_t *trans, ddns_info_t *UNUSED(info), ddns_alias_t *UNUSED(alias))
++static int response(http_trans_t *trans, ddns_info_t *info, ddns_alias_t *alias)
+ {
+ 	char *resp = trans->rsp_body;
+ 
+diff --git a/plugins/duiadns.c b/plugins/duiadns.c
+index 7c4ced3..7dc09c9 100644
+--- a/plugins/duiadns.c
++++ b/plugins/duiadns.c
+@@ -58,7 +58,7 @@ static int request(ddns_t *ctx, ddns_info_t *info, ddns_alias_t *alias)
+ 			info->user_agent);
+ }
+ 
+-static int response(http_trans_t *trans, ddns_info_t *UNUSED(info), ddns_alias_t *UNUSED(alias))
++static int response(http_trans_t *trans, ddns_info_t *info, ddns_alias_t *alias)
+ {
+ 	char *resp = trans->rsp_body;
+ 
+diff --git a/plugins/dynv6-ipv4.c b/plugins/dynv6-ipv4.c
+index 5dab9f1..f37215a 100644
+--- a/plugins/dynv6-ipv4.c
++++ b/plugins/dynv6-ipv4.c
+@@ -59,7 +59,7 @@ static int request(ddns_t *ctx, ddns_info_t *info, ddns_alias_t *alias)
+ 			info->user_agent);
+ }
+ 
+-static int response(http_trans_t *trans, ddns_info_t *UNUSED(info), ddns_alias_t *UNUSED(alias))
++static int response(http_trans_t *trans, ddns_info_t *info, ddns_alias_t *alias)
+ {
+ 	char *resp = trans->rsp_body;
+ 
+diff --git a/plugins/dynv6.c b/plugins/dynv6.c
+index 84b7c40..03b1b4c 100644
+--- a/plugins/dynv6.c
++++ b/plugins/dynv6.c
+@@ -59,7 +59,7 @@ static int request(ddns_t *ctx, ddns_info_t *info, ddns_alias_t *alias)
+ 			info->user_agent);
+ }
+ 
+-static int response(http_trans_t *trans, ddns_info_t *UNUSED(info), ddns_alias_t *UNUSED(alias))
++static int response(http_trans_t *trans, ddns_info_t *info, ddns_alias_t *alias)
+ {
+ 	char *resp = trans->rsp_body;
+ 
+diff --git a/plugins/easydns.c b/plugins/easydns.c
+index c9d8059..7718c56 100644
+--- a/plugins/easydns.c
++++ b/plugins/easydns.c
+@@ -70,7 +70,7 @@ static int request(ddns_t *ctx, ddns_info_t *info, ddns_alias_t *alias)
+ /*
+  * NOERROR is the OK code here
+  */
+-static int response(http_trans_t *trans, ddns_info_t *UNUSED(info), ddns_alias_t *UNUSED(alias))
++static int response(http_trans_t *trans, ddns_info_t *info, ddns_alias_t *alias)
+ {
+ 	char *resp = trans->rsp_body;
+ 
+diff --git a/plugins/freedns.c b/plugins/freedns.c
+index 2c56ca4..2a2991f 100644
+--- a/plugins/freedns.c
++++ b/plugins/freedns.c
+@@ -134,7 +134,7 @@ static int request(ddns_t *ctx, ddns_info_t *info, ddns_alias_t *alias)
+     fail blabla and n.n.n.n
+     are the good answers. We search our own IP address in response and that's enough.
+ */
+-static int response(http_trans_t *trans, ddns_info_t *UNUSED(info), ddns_alias_t *alias)
++static int response(http_trans_t *trans, ddns_info_t *info, ddns_alias_t *alias)
+ {
+ 	char *resp = trans->rsp_body;
+ 
+diff --git a/plugins/generic.c b/plugins/generic.c
+index 8f23de4..3cee1f2 100644
+--- a/plugins/generic.c
++++ b/plugins/generic.c
+@@ -238,7 +238,7 @@ static int request(ddns_t *ctx, ddns_info_t *info, ddns_alias_t *alias)
+ 	return ret;
+ }
+ 
+-static int response(http_trans_t *trans, ddns_info_t *info, ddns_alias_t *UNUSED(alias))
++static int response(http_trans_t *trans, ddns_info_t *info, ddns_alias_t *alias)
+ {
+ 	char *resp = trans->rsp_body;
+ 	size_t i;
+diff --git a/plugins/giradns.c b/plugins/giradns.c
+index 2d6043e..ea19f77 100644
+--- a/plugins/giradns.c
++++ b/plugins/giradns.c
+@@ -57,7 +57,7 @@ static int request(ddns_t *ctx, ddns_info_t *info, ddns_alias_t *alias)
+ 			info->server_name.name, info->user_agent);
+ }
+ 
+-static int response(http_trans_t *trans, ddns_info_t *UNUSED(info), ddns_alias_t *UNUSED(alias))
++static int response(http_trans_t *trans, ddns_info_t *info, ddns_alias_t *alias)
+ {
+ 	char *resp = trans->rsp_body;
+ 
+diff --git a/plugins/sitelutions.c b/plugins/sitelutions.c
+index c484a62..611c865 100644
+--- a/plugins/sitelutions.c
++++ b/plugins/sitelutions.c
+@@ -64,7 +64,7 @@ static int request(ddns_t *ctx, ddns_info_t *info, ddns_alias_t *alias)
+ 			info->user_agent);
+ }
+ 
+-static int response(http_trans_t *trans, ddns_info_t *UNUSED(info), ddns_alias_t *UNUSED(alias))
++static int response(http_trans_t *trans, ddns_info_t *info, ddns_alias_t *alias)
+ {
+ 	char *resp = trans->rsp_body;
+ 
+diff --git a/plugins/tunnelbroker.c b/plugins/tunnelbroker.c
+index 1f58990..17eb2b9 100644
+--- a/plugins/tunnelbroker.c
++++ b/plugins/tunnelbroker.c
+@@ -77,7 +77,7 @@ static int request(ddns_t *ctx, ddns_info_t *info, ddns_alias_t *alias)
+  * Hurricate Electric IPv6 tunnelbroker specific response validator
+  * Own IP address and 'already in use' are the good answers.
+  */
+-static int response(http_trans_t *trans, ddns_info_t *UNUSED(info), ddns_alias_t *alias)
++static int response(http_trans_t *trans, ddns_info_t *info, ddns_alias_t *alias)
+ {
+ 	char *resp = trans->rsp_body;
+ 
+diff --git a/plugins/tzo.c b/plugins/tzo.c
+index 0a36e87..eba3da4 100644
+--- a/plugins/tzo.c
++++ b/plugins/tzo.c
+@@ -66,7 +66,7 @@ static int request(ddns_t *ctx, ddns_info_t *info, ddns_alias_t *alias)
+ }
+ 
+ /* TZO specific response validator. */
+-static int response(http_trans_t *trans, ddns_info_t *UNUSED(info), ddns_alias_t *UNUSED(alias))
++static int response(http_trans_t *trans, ddns_info_t *info, ddns_alias_t *alias)
+ {
+ 	int code = -1;
+ 
+diff --git a/plugins/zerigo.c b/plugins/zerigo.c
+index 4fb29ab..cc71348 100644
+--- a/plugins/zerigo.c
++++ b/plugins/zerigo.c
+@@ -70,7 +70,7 @@ static int request(ddns_t *ctx, ddns_info_t *info, ddns_alias_t *alias)
+  * Server error
+  *  Status: 5xx
+  */
+-static int response(http_trans_t *trans, ddns_info_t *UNUSED(info), ddns_alias_t *UNUSED(alias))
++static int response(http_trans_t *trans, ddns_info_t *info, ddns_alias_t *alias)
+ {
+ 	char *ptr, *rsp = trans->rsp_body;
+ 
+diff --git a/plugins/zoneedit.c b/plugins/zoneedit.c
+index 7178b9c..464ed66 100644
+--- a/plugins/zoneedit.c
++++ b/plugins/zoneedit.c
+@@ -65,7 +65,7 @@ static int request(ddns_t *ctx, ddns_info_t *info, ddns_alias_t *alias)
+  *  CODE=200, 201
+  *  CODE=707, for duplicated updates
+  */
+-static int response(http_trans_t *trans, ddns_info_t *UNUSED(info), ddns_alias_t *UNUSED(alias))
++static int response(http_trans_t *trans, ddns_info_t *info, ddns_alias_t *alias)
+ {
+ 	int code = -1;
+ 

@@ -10,13 +10,29 @@ stdenv.mkDerivation rec {
     sha256 = "0qafmy2i6dzx4n1dqp6pygyy6gjljnb7hwjcj2z11c1wgclsq4dw";
   };
 
-  patches = [( fetchurl {
-    url = http://sources.gentoo.org/cgi-bin/viewvc.cgi/gentoo-x86/dev-libs/dbus-c%2B%2B/files/dbus-c%2B%2B-0.9.0-gcc-4.7.patch;
-    name = "gcc-4.7.patch";
-    sha256 = "0rwcz9pvc13b3yfr0lkifnfz0vb5q6dg240bzgf37ni4s8rpc72g";
-  })];
+  patches = [
+    (fetchurl {
+      name = "gcc-4.7.patch";
+      url = "http://sources.gentoo.org/cgi-bin/viewvc.cgi/gentoo-x86/dev-libs/"
+          + "dbus-c%2B%2B/files/dbus-c%2B%2B-0.9.0-gcc-4.7.patch";
+      sha256 = "0rwcz9pvc13b3yfr0lkifnfz0vb5q6dg240bzgf37ni4s8rpc72g";
+    })
+    (fetchurl {
+      name = "writechar.patch"; # since gcc7
+      url = "https://src.fedoraproject.org/cgit/rpms/dbus-c++.git/plain/"
+          + "dbus-c++-writechar.patch?id=7f371172f5c";
+      sha256 = "1kkg4gbpm4hp87l25zw2a3r9c58g7vvgzcqgiman734i66zsbb9l";
+    })
+    (fetchurl {
+      name = "threading.patch"; # since gcc7
+      url = "https://src.fedoraproject.org/cgit/rpms/dbus-c++.git/plain/"
+          + "dbus-c++-threading.patch?id=7f371172f5c";
+      sha256 = "1h362anx3wyxm5lq0v8girmip1jmkdbijrmbrq7k5pp47zkhwwrq";
+    })
+  ];
 
-  buildInputs = [ dbus glib pkgconfig expat ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ dbus glib expat ];
 
   configureFlags = "--disable-ecore";
 

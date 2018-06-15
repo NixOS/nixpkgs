@@ -1,62 +1,55 @@
-# This file defines the various standard build environments.
+# This file chooses a sane default stdenv given the system, platform, etc.
 #
-# On Linux systems, the standard build environment consists of
-# Nix-built instances glibc and the `standard' Unix tools, i.e., the
-# Posix utilities, the GNU C compiler, and so on.  On other systems,
-# we use the native C library.
+# Rather than returning a stdenv, this returns a list of functions---one per
+# each bootstrapping stage. See `./booter.nix` for exactly what this list should
+# contain.
 
-{ system, allPackages ? import ../.., platform, config, lib }:
+{ # Args just for stdenvs' usage
+  lib
+  # Args to pass on to the pkgset builder, too
+, localSystem, crossSystem, config, overlays
+} @ args:
 
-
-rec {
-
-
+let
   # The native (i.e., impure) build environment.  This one uses the
   # tools installed on the system outside of the Nix environment,
   # i.e., the stuff in /bin, /usr/bin, etc.  This environment should
   # be used with care, since many Nix packages will not build properly
   # with it (e.g., because they require GNU Make).
-  stdenvNative = (import ./native {
-    inherit system allPackages config;
-  }).stdenv;
-
-  stdenvNativePkgs = allPackages {
-    bootStdenv = stdenvNative;
-    noSysDirs = false;
-  };
-
+  stagesNative = import ./native args;
 
   # The Nix build environment.
-  stdenvNix = import ./nix {
-    inherit config lib;
-    stdenv = stdenvNative;
-    pkgs = stdenvNativePkgs;
-  };
+  stagesNix = import ./nix (args // { bootStages = stagesNative; });
 
-  # Linux standard environment.
-  stdenvLinux = (import ./linux { inherit system allPackages platform config lib; }).stdenvLinux;
+  stagesFreeBSD = import ./freebsd args;
 
-  # Darwin standard environment.
-  stdenvDarwin = (import ./darwin { inherit system allPackages platform config;}).stdenvDarwin;
+  # On Linux systems, the standard build environment consists of Nix-built
+  # instances glibc and the `standard' Unix tools, i.e., the Posix utilities,
+  # the GNU C compiler, and so on.
+  stagesLinux = import ./linux args;
 
-  # Pure Darwin standard environment. Allows building with the sandbox enabled. To use,
-  # you can add this to your nixpkgs config:
-  #
-  #   replaceStdenv = {pkgs}: pkgs.allStdenvs.stdenvDarwinPure
-  stdenvDarwinPure = (import ./pure-darwin { inherit system allPackages platform config;}).stage5;
+  inherit (import ./darwin args) stagesDarwin;
 
-  # Select the appropriate stdenv for the platform `system'.
-  stdenv =
-    if system == "i686-linux" then stdenvLinux else
-    if system == "x86_64-linux" then stdenvLinux else
-    if system == "armv5tel-linux" then stdenvLinux else
-    if system == "armv6l-linux" then stdenvLinux else
-    if system == "armv7l-linux" then stdenvLinux else
-    if system == "mips64el-linux" then stdenvLinux else
-    if system == "powerpc-linux" then /* stdenvLinux */ stdenvNative else
-    if system == "x86_64-darwin" then stdenvDarwin else
-    if system == "x86_64-solaris" then stdenvNix else
-    if system == "i686-cygwin" then stdenvNative else
-    if system == "x86_64-cygwin" then stdenvNative else
-    stdenvNative;
-}
+  stagesCross = import ./cross args;
+
+  stagesCustom = import ./custom args;
+
+  # Select the appropriate stages for the platform `system'.
+in
+  if crossSystem != null then stagesCross
+  else if config ? replaceStdenv then stagesCustom
+  else { # switch
+    "i686-linux" = stagesLinux;
+    "x86_64-linux" = stagesLinux;
+    "armv5tel-linux" = stagesLinux;
+    "armv6l-linux" = stagesLinux;
+    "armv7l-linux" = stagesLinux;
+    "aarch64-linux" = stagesLinux;
+    "mipsel-linux" = stagesLinux;
+    "powerpc-linux" = /* stagesLinux */ stagesNative;
+    "x86_64-darwin" = stagesDarwin;
+    "x86_64-solaris" = stagesNix;
+    "i686-cygwin" = stagesNative;
+    "x86_64-cygwin" = stagesNative;
+    "x86_64-freebsd" = stagesFreeBSD;
+  }.${localSystem.system} or stagesNative

@@ -2,14 +2,15 @@
 
 stdenv.mkDerivation rec {
   name = "openocd-${version}";
-  version = "0.9.0";
+  version = "0.10.0";
 
   src = fetchurl {
     url = "mirror://sourceforge/openocd/openocd-${version}.tar.bz2";
-    sha256 = "0hzlnm19c4b35vsxs6ik94xbigv3ykdgr8gzrdir6sqmkan44w43";
+    sha256 = "1bhn2c85rdz4gf23358kg050xlzh7yxbbwmqp24c0akmh3bff4kk";
   };
 
-  buildInputs = [ libftdi libusb1 pkgconfig hidapi ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ libftdi libusb1 hidapi ];
 
   configureFlags = [
     "--enable-jtag_vpi"
@@ -24,9 +25,20 @@ stdenv.mkDerivation rec {
     "--enable-remote-bitbang"
   ];
 
+  NIX_CFLAGS_COMPILE = [
+    "-Wno-implicit-fallthrough"
+    "-Wno-format-truncation"
+    "-Wno-format-overflow"
+  ];
+
   postInstall = ''
     mkdir -p "$out/etc/udev/rules.d"
-    ln -s "$out/share/openocd/contrib/99-openocd.rules" "$out/etc/udev/rules.d/99-openocd.rules"
+    rules="$out/share/openocd/contrib/60-openocd.rules"
+    if [ ! -f "$rules" ]; then
+        echo "$rules is missing, must update the Nix file."
+        exit 1
+    fi
+    ln -s "$rules" "$out/etc/udev/rules.d/"
   '';
 
   meta = with stdenv.lib; {

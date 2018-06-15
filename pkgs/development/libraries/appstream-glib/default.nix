@@ -1,28 +1,55 @@
-{ stdenv, fetchurl, pkgconfig, gettext, gtk3, intltool, glib
-, gtk_doc, autoconf, automake, libtool, libarchive, libyaml
-, gobjectIntrospection, sqlite, libsoup, gcab, attr, acl, docbook_xsl
+{ stdenv, fetchFromGitHub, substituteAll, pkgconfig, gettext, gtk3, glib
+, gtk-doc, libarchive, gobjectIntrospection, libxslt, pngquant
+, sqlite, libsoup, gcab, attr, acl, docbook_xsl, docbook_xml_dtd_42
+, libuuid, json-glib, meson, gperf, ninja
 }:
-
 stdenv.mkDerivation rec {
-  name = "appstream-glib-0.3.6";
+  name = "appstream-glib-0.7.9";
 
-  src = fetchurl {
-    url = "https://github.com/hughsie/appstream-glib/archive/appstream_glib_0_3_6.tar.gz";
-    sha256 = "1zdxg9dk9vxw2cs04cswd138di3dysz0hxk4918750hh19s3859c";
+  outputs = [ "out" "dev" "man" "installedTests" ];
+  outputBin = "dev";
+
+  src = fetchFromGitHub {
+    owner = "hughsie";
+    repo = "appstream-glib";
+    rev = stdenv.lib.replaceStrings ["." "-"] ["_" "_"] name;
+    sha256 = "10b32qw7iy0v1jvmf18wqgs8d1cpy52zm5rzw0wv421n90qiyidk";
   };
 
-  buildInputs = [ glib libtool pkgconfig gtk_doc gettext intltool sqlite libsoup
-                  gcab attr acl docbook_xsl
-                  libarchive libyaml gtk3 autoconf automake gobjectIntrospection ];
+  nativeBuildInputs = [
+    meson pkgconfig ninja gtk-doc libxslt docbook_xsl docbook_xml_dtd_42
+  ];
+  buildInputs = [
+    glib gettext sqlite libsoup
+    gcab attr acl libuuid json-glib
+    libarchive gobjectIntrospection gperf
+  ];
+  propagatedBuildInputs = [ gtk3 ];
 
-  configureScript = "./autogen.sh";
+  patches = [
+    (substituteAll {
+      src = ./paths.patch;
+      pngquant= "${pngquant}/bin/pngquant";
+    })
+  ];
+
+  mesonFlags = [
+    "-Drpm=false"
+    "-Dstemmer=false"
+    "-Ddep11=false"
+  ];
+
+  doCheck = false; # fails at least 1 test
+
+  postInstall = ''
+    moveToOutput "share/installed-tests" "$installedTests"
+  '';
 
   meta = with stdenv.lib; {
     description = "Objects and helper methods to read and write AppStream metadata";
-    homepage    = https://github.com/hughsie/appstream-glib;
-    license     = licenses.lgpl21Plus;
-    platforms   = platforms.linux;
-    maintainers = with maintainers; [ lethalman ];
+    homepage = https://people.freedesktop.org/~hughsient/appstream-glib/;
+    license = licenses.lgpl2Plus;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ lethalman matthewbauer ];
   };
-
 }

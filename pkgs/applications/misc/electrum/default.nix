@@ -1,45 +1,73 @@
-{ stdenv, fetchurl, buildPythonPackage, pythonPackages, slowaes }:
+{ stdenv, fetchurl, python3, python3Packages, zbar, fetchpatch }:
 
-buildPythonPackage rec {
+python3Packages.buildPythonApplication rec {
   name = "electrum-${version}";
-  version = "2.4.3";
+  version = "3.1.3";
 
   src = fetchurl {
-    url = "https://download.electrum.org/Electrum-${version}.tar.gz";
-    sha256 = "00z02rdlhasryccjsw1j7563xl76i6x40ah1lnn9asad1gp6520f";
+    url = "https://download.electrum.org/${version}/Electrum-${version}.tar.gz";
+    sha256 = "05m28yd3zr9awjhaqikf4rg08j5i4ygm750ip1z27wl446sysniy";
   };
 
-  propagatedBuildInputs = with pythonPackages; [
-    dns
+  propagatedBuildInputs = with python3Packages; [
+    dnspython
     ecdsa
+    jsonrpclib-pelix
+    matplotlib
     pbkdf2
     protobuf
-    pyasn1
-    pyasn1-modules
+    pyaes
     pycrypto
-    pyqt4
+    pyqt5
+    pysocks
     qrcode
     requests
-    slowaes
     tlslite
+
+    # plugins
+    keepkey
+    trezor
+
+    # TODO plugins
+    # amodem
+    # btchip
   ];
 
-  preInstall = ''
-    mkdir -p $out/share
-    sed -i 's@usr_share = .*@usr_share = os.getenv("out")+"/share"@' setup.py
-    pyrcc4 icons.qrc -o gui/qt/icons_rc.py
+  preBuild = ''
+    sed -i 's,usr_share = .*,usr_share = "'$out'/share",g' setup.py
+    pyrcc5 icons.qrc -o gui/qt/icons_rc.py
+    # Recording the creation timestamps introduces indeterminism to the build
+    sed -i '/Created: .*/d' gui/qt/icons_rc.py
+    sed -i "s|name = 'libzbar.*'|name='${zbar}/lib/libzbar.so'|" lib/qrscanner.py
+  '';
+
+  postInstall = ''
+    # Despite setting usr_share above, these files are installed under
+    # $out/nix ...
+    mv $out/${python3.sitePackages}/nix/store"/"*/share $out
+    rm -rf $out/${python3.sitePackages}/nix
+
+    substituteInPlace $out/share/applications/electrum.desktop \
+      --replace "Exec=electrum %u" "Exec=$out/bin/electrum %u"
+  '';
+
+  doCheck = false;
+
+  doInstallCheck = true;
+  installCheckPhase = ''
+    $out/bin/electrum help >/dev/null
   '';
 
   meta = with stdenv.lib; {
-    description = "Bitcoin thin-client";
+    description = "A lightweight Bitcoin wallet";
     longDescription = ''
       An easy-to-use Bitcoin client featuring wallets generated from
       mnemonic seeds (in addition to other, more advanced, wallet options)
       and the ability to perform transactions without downloading a copy
       of the blockchain.
     '';
-    homepage = https://electrum.org;
-    license = licenses.gpl3;
-    maintainers = with maintainers; [ emery joachifm ];
+    homepage = https://electrum.org/;
+    license = licenses.mit;
+    maintainers = with maintainers; [ ehmry joachifm np ];
   };
 }

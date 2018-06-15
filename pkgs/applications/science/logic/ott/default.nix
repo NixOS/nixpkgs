@@ -1,17 +1,18 @@
-# - coqide compilation can be disabled by setting lablgtk to null;
-
-{stdenv, fetchurl, pkgconfig, ocaml, camlp5}:
+{ stdenv, fetchFromGitHub, pkgconfig, ocaml }:
 
 stdenv.mkDerivation rec {
   name = "ott-${version}";
-  version = "0.25";
+  version = "0.28";
 
-  src = fetchurl {
-    url = "http://www.cl.cam.ac.uk/~pes20/ott/ott_distro_${version}.tar.gz";
-    sha256 = "0i8ad1yrz9nrrgpi8db4z0aii5s0sy35mmzdfw5nq183mvbx8qqd";
+  src = fetchFromGitHub {
+    owner = "ott-lang";
+    repo = "ott";
+    rev = version;
+    sha256 = "0mzbrvqayqpns9zzg4m1scxx24dv9askhn51dawyb9pisvlyvai0";
   };
 
-  buildInputs = [ pkgconfig ocaml camlp5 ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ ocaml ];
 
   installPhase = ''
     mkdir -p $out/bin
@@ -19,7 +20,7 @@ stdenv.mkDerivation rec {
     ln -s $out/bin/ott.opt $out/bin/ott
 
     mkdir -p $out/share/emacs/site-lisp
-    cp emacs/ottmode.el $out/share/emacs/site-lisp
+    cp emacs/ott-mode.el $out/share/emacs/site-lisp
     '';
 
   meta = {

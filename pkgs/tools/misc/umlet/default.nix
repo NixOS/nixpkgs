@@ -1,14 +1,14 @@
 { stdenv, fetchurl, jre, unzip }:
 
 stdenv.mkDerivation rec {
-  major = "13";
-  minor = "3";
+  major = "14";
+  minor = "2";
   version = "${major}.${minor}";
   name = "umlet-${version}";
 
   src = fetchurl {
-    url = "http://www.umlet.com/umlet_${major}_${minor}/umlet_${version}.zip";
-    sha256 = "0fbr51xknk98qz576lcl25qz0s1snns2yb0j54d77xkw7pnxmvzr";
+    url = "http://www.umlet.com/umlet_${major}_${minor}/umlet-standalone-${version}.zip";
+    sha256 = "1fcc7ms92vcc4b8jh56bd3zrqdb0bwhbbzdxycc952fb0j6m62fw";
   };
 
   buildInputs = [ unzip ];
@@ -40,12 +40,12 @@ stdenv.mkDerivation rec {
       draw UML diagrams fast, produce sequence and activity diagrams from
       plain text, export diagrams to eps, pdf, jpg, svg, and clipboard,
       share diagrams using Eclipse, and create new, custom UML elements.
-      UMLet runs stand-alone or as Eclipse plug-in on Windows, OS X and
+      UMLet runs stand-alone or as Eclipse plug-in on Windows, macOS and
       Linux.
     '';
     homepage = http://www.umlet.com;
     license = licenses.gpl3;
-    maintainers = [ maintainers.DamienCassou ];
+    maintainers = [ ];
     platforms = platforms.all;
   };
 }

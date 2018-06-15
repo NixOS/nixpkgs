@@ -1,7 +1,19 @@
-if ! builtins ? nixVersion || builtins.compareVersions "1.8" builtins.nixVersion == 1 then
+let requiredVersion = import ./lib/minver.nix; in
 
-  abort "This version of Nixpkgs requires Nix >= 1.8, please upgrade! See https://nixos.org/wiki/How_to_update_when_nix_is_too_old_to_evaluate_nixpkgs"
+if ! builtins ? nixVersion || builtins.compareVersions requiredVersion builtins.nixVersion == 1 then
+
+  abort ''
+
+    This version of Nixpkgs requires Nix >= ${requiredVersion}, please upgrade:
+
+    - If you are running NixOS, use `nixos-rebuild' to upgrade your system.
+
+    - If you installed Nix using the install script (https://nixos.org/nix/install),
+      it is safe to upgrade by running it again:
+
+          curl https://nixos.org/nix/install | sh
+  ''
 
 else
 
-  import ./pkgs/top-level/all-packages.nix
+  import ./pkgs/top-level/impure.nix

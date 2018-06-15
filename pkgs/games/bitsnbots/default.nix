@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, SDL, lua, mesa }:
+{ stdenv, fetchurl, SDL, lua, libGLU_combined }:
 
 stdenv.mkDerivation rec {
   name = "bitsnbots-20111230";
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   makefile = "Makefile.linux";
 
-  NIX_CFLAGS_COMPILE = "-I${SDL}/include/SDL";
+  NIX_CFLAGS_COMPILE = "-I${SDL.dev}/include/SDL";
 
   NIX_LDFLAGS = "-lGL";
 
@@ -25,11 +25,11 @@ stdenv.mkDerivation rec {
     ln -s $out/share/${name}/bitsnbots $out/bin
   '';
 
-  buildInputs = [ SDL lua mesa ];
+  buildInputs = [ SDL lua libGLU_combined ];
 
   meta = {
     description = "Simple puzzle game with moving robots";
-    homepage = "http://moikmellah.org/blog/?page_id=19";
+    homepage = http://moikmellah.org/blog/?page_id=19;
     license = stdenv.lib.licenses.gpl3Plus;
     platforms = with stdenv.lib.platforms; linux;
   };

@@ -1,0 +1,13 @@
+diff --git a/plugins/Installation/FormDatabaseSetup.php b/plugins/Installation/FormDatabaseSetup.php
+index 9364f49870..2625cbb91b 100644
+--- a/plugins/Installation/FormDatabaseSetup.php
++++ b/plugins/Installation/FormDatabaseSetup.php
+@@ -82,7 +82,7 @@ class FormDatabaseSetup extends QuickForm2
+ 
+         // default values
+         $this->addDataSource(new HTML_QuickForm2_DataSource_Array(array(
+-                                                                       'host'          => '127.0.0.1',
++                                                                       'host'          => 'localhost',
+                                                                        'type'          => $defaultDatabaseType,
+                                                                        'tables_prefix' => 'matomo_',
+                                                                   )));

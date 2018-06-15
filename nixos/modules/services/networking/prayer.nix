@@ -18,7 +18,7 @@ let
     var_prefix = "${stateDir}"
     prayer_user = "${prayerUser}"
     prayer_group = "${prayerGroup}"
-    sendmail_path = "/var/setuid-wrappers/sendmail"
+    sendmail_path = "/run/wrappers/bin/sendmail"
 
     use_http_port ${cfg.port}
 
@@ -56,6 +56,7 @@ in
       };
 
       extraConfig = mkOption {
+        type = types.lines;
         default = "" ;
         description = ''
           Extra configuration. Contents will be added verbatim to the configuration file.
@@ -83,21 +84,14 @@ in
         gid = config.ids.gids.prayer;
       };
 
-    jobs.prayer =
-      { name = "prayer";
-
-        startOn = "startup";
-
-        preStart =
-          ''
-            mkdir -m 0755 -p ${stateDir}
-            chown ${prayerUser}.${prayerGroup} ${stateDir}
-          '';
-
-        daemonType = "daemon";
-
-        exec = "${prayer}/sbin/prayer --config-file=${prayerCfg}";
-      };
+    systemd.services.prayer = {
+      wantedBy = [ "multi-user.target" ];
+      serviceConfig.Type = "forking";
+      preStart = ''
+        mkdir -m 0755 -p ${stateDir}
+        chown ${prayerUser}.${prayerGroup} ${stateDir}
+      '';
+      script = "${prayer}/sbin/prayer --config-file=${prayerCfg}";
+    };
   };
-
 }

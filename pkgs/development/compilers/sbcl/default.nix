@@ -1,15 +1,20 @@
-{ stdenv, fetchurl, sbclBootstrap, sbclBootstrapHost ? "${sbclBootstrap}/bin/sbcl --disable-debugger --no-userinit --no-sysinit", which }:
+{ stdenv, fetchurl, writeText, sbclBootstrap
+, sbclBootstrapHost ? "${sbclBootstrap}/bin/sbcl --disable-debugger --no-userinit --no-sysinit"
+, threadSupport ? (stdenv.isi686 || stdenv.isx86_64 || "aarch64-linux" == stdenv.system)
+  # Meant for sbcl used for creating binaries portable to non-NixOS via save-lisp-and-die.
+  # Note that the created binaries still need `patchelf --set-interpreter ...`
+  # to get rid of ${glibc} dependency.
+, purgeNixReferences ? false
+}:
 
 stdenv.mkDerivation rec {
   name    = "sbcl-${version}";
-  version = "1.2.16";
+  version = "1.4.7";
 
   src = fetchurl {
     url    = "mirror://sourceforge/project/sbcl/sbcl/${version}/${name}-source.tar.bz2";
-    sha256 = "08bg99dhjpvfi3fg4ak6c8kcrfb2ssdsfwwj46nfwniq0jmavacf";
+    sha256 = "1wmxly94pn8527092hyzg5mq58mg7qlc46nm31f268wb2dm67rvm";
   };
-
-  buildInputs = [ which ];
 
   patchPhase = ''
     echo '"${version}.nixos"' > version.lisp-expr
@@ -19,17 +24,18 @@ stdenv.mkDerivation rec {
                (pushnew x features))
              (disable (x)
                (setf features (remove x features))))
-        #-arm
-        (enable :sb-thread)
-        #+arm
-        (enable :arm))) " > customize-target-features.lisp
+    ''
+    + (if threadSupport then "(enable :sb-thread)" else "(disable :sb-thread)")
+    + stdenv.lib.optionalString stdenv.isAarch32 "(enable :arm)"
+    + ''
+      )) " > customize-target-features.lisp
 
     pwd
 
     # SBCL checks whether files are up-to-date in many places..
     # Unfortunately, same timestamp is not good enough
     sed -e 's@> x y@>= x y@' -i contrib/sb-aclrepl/repl.lisp
-    sed -e '/(date)/i((= date 2208988801) 2208988800)' -i contrib/asdf/asdf.lisp
+    #sed -e '/(date)/i((= date 2208988801) 2208988800)' -i contrib/asdf/asdf.lisp
     sed -i src/cold/slam.lisp -e \
       '/file-write-date input/a)'
     sed -i src/cold/slam.lisp -e \
@@ -38,9 +44,6 @@ stdenv.mkDerivation rec {
       '/date defaulted-fasl/a)'
     sed -i src/code/target-load.lisp -e \
       '/date defaulted-source/i(or (and (= 2208988801 (file-write-date defaulted-source-truename)) (= 2208988801 (file-write-date defaulted-fasl-truename)))'
-
-    # Fix software version retrieval
-    sed -e "s@/bin/uname@$(which uname)@g" -i src/code/*-os.lisp
 
     # Fix the tests
     sed -e '/deftest pwent/inil' -i contrib/sb-posix/posix-tests.lisp
@@ -56,7 +59,21 @@ stdenv.mkDerivation rec {
 
     substituteInPlace src/runtime/Config.x86-64-darwin \
       --replace mmacosx-version-min=10.4 mmacosx-version-min=10.5
-  '';
+  ''
+  + (if purgeNixReferences
+    then
+      # This is the default location to look for the core; by default in $out/lib/sbcl
+      ''
+        sed 's@^\(#define SBCL_HOME\) .*$@\1 "/no-such-path"@' \
+          -i src/runtime/runtime.c
+      ''
+    else
+      # Fix software version retrieval
+      ''
+        sed -e "s@/bin/uname@$(command -v uname)@g" -i src/code/*-os.lisp
+      ''
+    );
+
 
   preBuild = ''
     export INSTALL_ROOT=$out
@@ -70,6 +87,14 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     INSTALL_ROOT=$out sh install.sh
+  '';
+
+  # Specifying $SBCL_HOME is only truly needed with `purgeNixReferences = true`.
+  setupHook = writeText "setupHook.sh" ''
+    addEnvHooks "$targetOffset" _setSbclHome
+    _setSbclHome() {
+      export SBCL_HOME='@out@/lib/sbcl/'
+    }
   '';
 
   meta = sbclBootstrap.meta // {

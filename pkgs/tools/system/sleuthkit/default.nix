@@ -1,16 +1,23 @@
-{ stdenv, fetchurl, libewf, afflib, openssl, zlib }:
+{ stdenv, fetchFromGitHub, autoreconfHook, libewf, afflib, openssl, zlib }:
 
 stdenv.mkDerivation rec {
-  version = "4.1.3";
+  version = "4.6.1";
   name = "sleuthkit-${version}";
 
-  src = fetchurl {
-    url = "mirror://sourceforge/sleuthkit/${name}.tar.gz";
-    sha256 = "09q3ky4rpv18jasf5gc2hlivzadzl70jy4nnk23db1483aix5yb7";
+  src = fetchFromGitHub {
+    owner = "sleuthkit";
+    repo = "sleuthkit";
+    rev = name;
+    sha256 = "1hf783mwa5ws9qvjpj6zgvivi0cfhs8r8m1869ajz5m80lv8fggw";
   };
+
+  postPatch = ''
+    substituteInPlace tsk/img/ewf.c --replace libewf_handle_read_random libewf_handle_read_buffer_at_offset
+  '';
 
   enableParallelBuilding = true;
 
+  nativeBuildInputs = [ autoreconfHook ];
   buildInputs = [ libewf afflib openssl zlib ];
 
   # Hack to fix the RPATH.
@@ -18,6 +25,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "A forensic/data recovery tool";
+    homepage = https://www.sleuthkit.org/;
     maintainers = [ stdenv.lib.maintainers.raskin ];
     platforms = stdenv.lib.platforms.linux;
     license = stdenv.lib.licenses.ipl10;

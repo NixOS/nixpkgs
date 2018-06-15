@@ -1,6 +1,7 @@
 { stdenv, fetchurl, adns, curl, gettext, gmp, gnutls, libextractor
 , libgcrypt, libgnurl, libidn, libmicrohttpd, libtool, libunistring
-, makeWrapper, ncurses, pkgconfig, libxml2, sqlite, zlib }:
+, makeWrapper, ncurses, pkgconfig, libxml2, sqlite, zlib
+, libpulseaudio, libopus, libogg }:
 
 stdenv.mkDerivation rec {
   name = "gnunet-0.10.1";
@@ -13,32 +14,28 @@ stdenv.mkDerivation rec {
   buildInputs = [
     adns curl gettext gmp gnutls libextractor libgcrypt libgnurl libidn
     libmicrohttpd libtool libunistring libxml2 makeWrapper ncurses
-    pkgconfig sqlite zlib
+    pkgconfig sqlite zlib libpulseaudio libopus libogg
   ];
 
   preConfigure = ''
     # Brute force: since nix-worker chroots don't provide
     # /etc/{resolv.conf,hosts}, replace all references to `localhost'
     # by their IPv4 equivalent.
-    for i in $(find . \( -name \*.c -or -name \*.conf \) \
-                    -exec grep -l '\<localhost\>' {} \;)
-    do
-      echo "$i: substituting \`127.0.0.1' to \`localhost'..."
-      sed -i "$i" -e's/\<localhost\>/127.0.0.1/g'
-    done
+    find . \( -name \*.c -or -name \*.conf \) | \
+      xargs sed -ie 's|\<localhost\>|127.0.0.1|g'
 
     # Make sure the tests don't rely on `/tmp', for the sake of chroot
     # builds.
-    for i in $(find . \( -iname \*test\*.c -or -name \*.conf \) \
-                    -exec grep -l /tmp {} \;)
-    do
-      echo "$i: replacing references to \`/tmp' by \`$TMPDIR'..."
-      substituteInPlace "$i" --replace "/tmp" "$TMPDIR"
-    done
+    find . \( -iname \*test\*.c -or -name \*.conf \) | \
+      xargs sed -ie "s|/tmp|$TMPDIR|g"
 
     # Ensure NSS installation works fine
     configureFlags="$configureFlags --with-nssdir=$out/lib"
     patchShebangs src/gns/nss/install-nss-plugin.sh
+
+    sed -ie 's|@LDFLAGS@|@LDFLAGS@ $(Z_LIBS)|g' \
+      src/regex/Makefile.in \
+      src/fs/Makefile.in
   '';
 
   doCheck = false;
@@ -53,7 +50,7 @@ stdenv.mkDerivation rec {
     '';
   */
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "GNU's decentralized anonymous and censorship-resistant P2P framework";
 
     longDescription = ''
@@ -71,11 +68,11 @@ stdenv.mkDerivation rec {
       network are rewarded with better service.
     '';
 
-    homepage = http://gnunet.org/;
+    homepage = https://gnunet.org/;
 
-    license = stdenv.lib.licenses.gpl2Plus;
+    license = licenses.gpl2Plus;
 
-    maintainers = with stdenv.lib.maintainers; [ viric ];
-    platforms = stdenv.lib.platforms.gnu;
+    maintainers = with maintainers; [ viric vrthra ];
+    platforms = platforms.gnu ++ platforms.linux;
   };
 }

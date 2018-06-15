@@ -1,28 +1,36 @@
-{ stdenv, fetchurl, libtoxcore
+{ stdenv, fetchgit, libtoxcore
 , conf ? null }:
 
 with stdenv.lib;
 
-stdenv.mkDerivation rec {
-  name = "ratox-0.2.1";
+let
+  configFile = optionalString (conf!=null) (builtins.toFile "config.h" conf);
 
-  src = fetchurl {
-    url = "nix-prefetch-url http://git.2f30.org/ratox/snapshot/${name}.tar.gz";
-    sha256 = "1fm9b3clvnc2nf0pd1z8g08kfszwhk1ij1lyx57wl8vd51z4xsi5";
+in stdenv.mkDerivation rec {
+  name = "ratox-0.4.20180303";
+
+  src = fetchgit {
+    url = "git://git.2f30.org/ratox.git";
+    rev = "269f7f97fb374a8f9c0b82195c21de15b81ddbbb";
+    sha256 = "0bpn37h8jvsqd66fkba8ky42nydc8acawa5x31yxqlxc8mc66k74";
   };
 
   buildInputs = [ libtoxcore ];
 
-  configFile = optionalString (conf!=null) (builtins.toFile "config.h" conf);
-  preConfigure = optionalString (conf!=null) "cp ${configFile} config.def.h";
+  preConfigure = ''
+    substituteInPlace config.mk \
+      --replace '-lsodium -lopus -lvpx ' ""
 
-  preBuild = "makeFlags=PREFIX=$out";
+    ${optionalString (conf!=null) "cp ${configFile} config.def.h"}
+  '';
 
-  meta =
-    { description = "FIFO based tox client";
-      homepage = http://ratox.2f30.org/;
-      license = licenses.isc;
-      maintainers = with maintainers; [ emery ];
-      platforms = platforms.linux;
-    };
+  makeFlags = [ "PREFIX=$(out)" ];
+
+  meta = {
+    description = "FIFO based tox client";
+    homepage = http://ratox.2f30.org/;
+    license = licenses.isc;
+    maintainers = with maintainers; [ ehmry ];
+    platforms = platforms.linux;
+  };
 }

@@ -5,8 +5,10 @@ with lib;
 let
   cfg = config.services.dnsmasq;
   dnsmasq = pkgs.dnsmasq;
+  stateDir = "/var/lib/dnsmasq";
 
   dnsmasqConf = pkgs.writeText "dnsmasq.conf" ''
+    dhcp-leasefile=${stateDir}/dnsmasq.leases
     ${optionalString cfg.resolveLocalQueries ''
       conf-file=/etc/dnsmasq-conf.conf
       resolv-file=/etc/dnsmasq-resolv.conf
@@ -53,6 +55,14 @@ in
         '';
       };
 
+      alwaysKeepRunning = mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          If enabled, systemd will always respawn dnsmasq even if shut down manually. The default, disabled, will only restart it on error.
+        '';
+      };
+
       extraConfig = mkOption {
         type = types.lines;
         default = "";
@@ -76,12 +86,11 @@ in
 
     services.dbus.packages = [ dnsmasq ];
 
-    users.extraUsers = singleton
-      { name = "dnsmasq";
-        uid = config.ids.uids.dnsmasq;
-        description = "Dnsmasq daemon user";
-        home = "/var/empty";
-      };
+    users.extraUsers = singleton {
+      name = "dnsmasq";
+      uid = config.ids.uids.dnsmasq;
+      description = "Dnsmasq daemon user";
+    };
 
     systemd.services.dnsmasq = {
         description = "Dnsmasq Daemon";
@@ -89,6 +98,9 @@ in
         wantedBy = [ "multi-user.target" ];
         path = [ dnsmasq ];
         preStart = ''
+          mkdir -m 755 -p ${stateDir}
+          touch ${stateDir}/dnsmasq.leases
+          chown -R dnsmasq ${stateDir}
           touch /etc/dnsmasq-{conf,resolv}.conf
           dnsmasq --test
         '';
@@ -97,10 +109,12 @@ in
           BusName = "uk.org.thekelleys.dnsmasq";
           ExecStart = "${dnsmasq}/bin/dnsmasq -k --enable-dbus --user=dnsmasq -C ${dnsmasqConf}";
           ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
+          PrivateTmp = true;
+          ProtectSystem = true;
+          ProtectHome = true;
+          Restart = if cfg.alwaysKeepRunning then "always" else "on-failure";
         };
         restartTriggers = [ config.environment.etc.hosts.source ];
     };
-
   };
-
 }

@@ -2,6 +2,7 @@
 
 let
   version = "2.6.2";
+  SHLIB_EXT = stdenv.hostPlatform.extensions.sharedLibrary;
 in stdenv.mkDerivation {
   name = "tinyxml-${version}";
 
@@ -16,7 +17,17 @@ in stdenv.mkDerivation {
 
     # http://sourceforge.net/tracker/index.php?func=detail&aid=3031828&group_id=13559&atid=313559
     ./2.6.2-entity.patch
+
+    # Use CC, CXX, and LD from environment
+    ./2.6.2-cxx.patch
   ];
+
+  preConfigure = "export LD=${if stdenv.isDarwin then "clang++" else "g++"}";
+
+  hardeningDisable = [ "format" ];
+
+  NIX_CFLAGS_COMPILE =
+    stdenv.lib.optional stdenv.isDarwin "-mmacosx-version-min=10.9";
 
   buildInputs = [ unzip ];
   buildPhase = ''
@@ -28,9 +39,9 @@ in stdenv.mkDerivation {
     make
 
     # build the lib as a shared library
-    g++ -Wall -O2 -shared -fpic tinyxml.cpp \
+    ''${CXX} -Wall -O2 -shared -fpic tinyxml.cpp \
     tinyxmlerror.cpp tinyxmlparser.cpp      \
-    tinystr.cpp -o libtinyxml.so
+    tinystr.cpp -o libtinyxml${SHLIB_EXT}
   '';
 
   doCheck = true;
@@ -47,7 +58,7 @@ in stdenv.mkDerivation {
     mkdir -pv $out/lib/pkgconfig/
     mkdir -pv $out/share/doc/tinyxml/
 
-    cp -v libtinyxml.so $out/lib/
+    cp -v libtinyxml${SHLIB_EXT} $out/lib/
     cp -v *.h $out/include/
 
     substituteInPlace tinyxml.pc --replace "@out@" "$out"
@@ -55,11 +66,14 @@ in stdenv.mkDerivation {
     cp -v tinyxml.pc $out/lib/pkgconfig/
 
     cp -v docs/* $out/share/doc/tinyxml/
+  '' + stdenv.lib.optionalString stdenv.isDarwin ''
+    install_name_tool -id $out/lib/libtinyxml.dylib $out/lib/libtinyxml.dylib
   '';
 
   meta = {
     description = "Simple, small, C++ XML parser that can be easily integrating into other programs";
-    homepage = "http://www.grinninglizard.com/tinyxml/index.html";
+    homepage = http://www.grinninglizard.com/tinyxml/index.html;
     license = stdenv.lib.licenses.free;
+    platforms = stdenv.lib.platforms.unix;
   };
 }

@@ -1,8 +1,8 @@
 { stdenv, fetchurl, SDL, zlib, libmpeg2, libmad, libogg, libvorbis, flac, alsaLib
-, openglSupport ? false, mesa ? null
+, openglSupport ? false, libGLU_combined ? null
 }:
 
-assert openglSupport -> mesa != null;
+assert openglSupport -> libGLU_combined != null;
 
 with stdenv.lib;
 
@@ -16,15 +16,15 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ stdenv SDL zlib libmpeg2 libmad libogg libvorbis flac alsaLib ]
-    ++ optional openglSupport [ mesa ];
+    ++ optional openglSupport libGLU_combined;
 
-  configureFlags="--enable-all-engines";
+  configureFlags = [ "--enable-all-engines" ];
 
   meta = {
     description = "Interpreter for LucasArts' Lua-based 3D adventure games";
     homepage = http://residualvm.org/;
     repositories.git = https://github.com/residualvm/residualvm.git;
-    licencse = licenses.gpl2;
+    license = licenses.gpl2;
     platforms = stdenv.lib.platforms.linux;
   };
 }

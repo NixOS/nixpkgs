@@ -13,4 +13,8 @@ stdenv.mkDerivation rec {
   buildInputs = [ glib libgsf libxml2 ];
 
   nativeBuildInputs = [ pkgconfig bzip2 ];
+
+  meta = {
+    platforms = stdenv.lib.platforms.unix;
+  };
 }

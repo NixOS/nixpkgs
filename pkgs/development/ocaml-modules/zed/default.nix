@@ -1,19 +1,34 @@
-{ stdenv, fetchzip, ocaml, findlib, camomile, ocaml_react }:
+{ stdenv, fetchzip, ocaml, findlib, ocamlbuild, camomile, react, jbuilder }:
 
-stdenv.mkDerivation rec {
-  version = "1.4";
+let param =
+  if stdenv.lib.versionAtLeast ocaml.version "4.02" then
+  {
+    version = "1.6";
+    sha256 = "00hhxcjf3bj3w2qm8nzs9x6vrqkadf4i0277s5whzy2rmiknj63v";
+    buildInputs = [ jbuilder ];
+    extra = {
+     buildPhase = "jbuilder build -p zed";
+     inherit (jbuilder) installPhase; };
+  } else {
+    version = "1.4";
+    sha256 = "0d8qfy0qiydrrqi8qc9rcwgjigql6vx9gl4zp62jfz1lmjgb2a3w";
+    buildInputs = [];
+    extra = { createFindlibDestdir = true; };
+  }
+; in
+
+stdenv.mkDerivation (rec {
+  inherit (param) version;
   name = "ocaml-zed-${version}";
 
   src = fetchzip {
     url = "https://github.com/diml/zed/archive/${version}.tar.gz";
-    sha256 = "0d8qfy0qiydrrqi8qc9rcwgjigql6vx9gl4zp62jfz1lmjgb2a3w";
+    inherit (param) sha256;
   };
 
-  buildInputs = [ ocaml findlib ocaml_react ];
+  buildInputs = [ ocaml findlib ocamlbuild ] ++ param.buildInputs;
 
-  propagatedBuildInputs = [ camomile ];
-
-  createFindlibDestdir = true;
+  propagatedBuildInputs = [ react camomile ];
 
   meta = {
     description = "Abstract engine for text edition in OCaml";
@@ -26,9 +41,9 @@ stdenv.mkDerivation rec {
     '';
     homepage = https://github.com/diml/zed;
     license = stdenv.lib.licenses.bsd3;
-    platforms = ocaml.meta.platforms;
+    platforms = ocaml.meta.platforms or [];
     maintainers = [
       stdenv.lib.maintainers.gal_bolle
     ];
   };
-}
+} // param.extra)

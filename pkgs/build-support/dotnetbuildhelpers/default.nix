@@ -1,5 +1,5 @@
-{ helperFunctions, mono, pkgconfig }:
-  helperFunctions.runCommand
+{ runCommand, mono, pkgconfig }:
+  runCommand
     "dotnetbuildhelpers"
     { preferLocalBuild = true; }
     ''

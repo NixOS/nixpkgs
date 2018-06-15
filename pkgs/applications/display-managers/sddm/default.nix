@@ -1,24 +1,37 @@
-{ stdenv, fetchpatch, makeWrapper, fetchFromGitHub, cmake, pkgconfig, libxcb, libpthreadstubs
-, libXdmcp, libXau, qtbase, qtdeclarative, qttools, pam, systemd }:
+{ mkDerivation, lib, fetchFromGitHub, fetchpatch
+, cmake, extra-cmake-modules, pkgconfig, libxcb, libpthreadstubs, lndir
+, libXdmcp, libXau, qtbase, qtdeclarative, qttools, pam, systemd
+}:
 
 let
-  version = "0.12.0";
-in
-stdenv.mkDerivation rec {
+  version = "0.17.0";
+
+in mkDerivation rec {
   name = "sddm-${version}";
 
   src = fetchFromGitHub {
     owner = "sddm";
     repo = "sddm";
     rev = "v${version}";
-    sha256 = "09amr61srvl52nvxlqqgs9fzn33pc2gjv5hc83gxx43x6q2j19gg";
+    sha256 = "1m35ly6miwy8ivsln3j1bfv0nxbc4gyqnj7f847zzp53jsqrm3mq";
   };
 
-  patches = [ ./sddm-ignore-config-mtime.patch ];
+  patches = [
+    ./sddm-ignore-config-mtime.patch
+    ./qt511.patch
+  ];
 
-  nativeBuildInputs = [ cmake pkgconfig qttools ];
+  postPatch =
+    # Fix missing include for gettimeofday()
+    ''
+      sed -e '1i#include <sys/time.h>' -i src/helper/HelperApp.cpp
+    '';
 
-  buildInputs = [ libxcb libpthreadstubs libXdmcp libXau qtbase qtdeclarative pam systemd ];
+  nativeBuildInputs = [ cmake extra-cmake-modules pkgconfig qttools ];
+
+  buildInputs = [
+    libxcb libpthreadstubs libXdmcp libXau pam qtbase qtdeclarative systemd
+  ];
 
   cmakeFlags = [
     "-DCONFIG_FILE=/etc/sddm.conf"
@@ -32,20 +45,22 @@ stdenv.mkDerivation rec {
   ];
 
   preConfigure = ''
-    export cmakeFlags="$cmakeFlags -DQT_IMPORTS_DIR=$out/lib/qt5/qml -DCMAKE_INSTALL_SYSCONFDIR=$out/etc -DSYSTEMD_SYSTEM_UNIT_DIR=$out/lib/systemd/system"
+    export cmakeFlags="$cmakeFlags -DQT_IMPORTS_DIR=$out/$qtQmlPrefix -DCMAKE_INSTALL_SYSCONFDIR=$out/etc -DSYSTEMD_SYSTEM_UNIT_DIR=$out/lib/systemd/system"
   '';
 
   postInstall = ''
-    wrapQtProgram $out/bin/sddm
-    wrapQtProgram $out/bin/sddm-greeter
+    # remove empty scripts
+    rm "$out/share/sddm/scripts/Xsetup" "$out/share/sddm/scripts/Xstop"
+    for f in $out/share/sddm/themes/**/theme.conf ; do
+      substituteInPlace $f \
+        --replace 'background=' "background=$(dirname $f)/"
+    done
   '';
 
-  enableParallelBuilding = true;
-
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "QML based X11 display manager";
-    homepage = https://github.com/sddm/sddm;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ abbradar ];
+    homepage    = https://github.com/sddm/sddm;
+    maintainers = with maintainers; [ abbradar ttuegel ];
+    platforms   = platforms.linux;
   };
 }

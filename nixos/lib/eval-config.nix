@@ -1,4 +1,4 @@
-# From an end-user configuration file (`configuration'), build a NixOS
+# From an end-user configuration file (`configuration.nix'), build a NixOS
 # configuration object (`config') from which we can retrieve option
 # values.
 
@@ -26,7 +26,7 @@
 , lib ? import ../../lib
 }:
 
-let extraArgs_ = extraArgs; pkgs_ = pkgs; system_ = system;
+let extraArgs_ = extraArgs; pkgs_ = pkgs;
     extraModules = let e = builtins.getEnv "NIXOS_EXTRA_MODULE_PATH";
                    in if e == "" then [] else [(import (builtins.toPath e))];
 in
@@ -36,7 +36,7 @@ let
     _file = ./eval-config.nix;
     key = _file;
     config = {
-      nixpkgs.system = lib.mkDefault system_;
+      nixpkgs.localSystem = lib.mkDefault { inherit system; };
       _module.args.pkgs = lib.mkIf (pkgs_ != null) (lib.mkForce pkgs_);
     };
   };

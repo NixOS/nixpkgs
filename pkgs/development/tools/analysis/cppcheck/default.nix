@@ -1,36 +1,39 @@
-{ stdenv, fetchurl, libxslt, docbook_xsl, docbook_xml_dtd_45 }:
+{ stdenv, fetchurl, libxslt, docbook_xsl, docbook_xml_dtd_45, pcre }:
 
-let
-  name = "cppcheck";
-  version = "1.69";
-in
-stdenv.mkDerivation {
-  name = "${name}-${version}";
+stdenv.mkDerivation rec {
+  pname = "cppcheck";
+  version = "1.84";
+  name = "${pname}-${version}";
 
   src = fetchurl {
-    url = "mirror://sourceforge/${name}/${name}-${version}.tar.bz2";
-    sha256 = "0bjkqy4c6ph6nzparcnbxrdn52i3hiind4jc99v2kvsq281wimab";
+    url = "mirror://sourceforge/${pname}/${name}.tar.bz2";
+    sha256 = "1rp8j0akxzcpvr2na5zchz8zxq5ldngiwj7f6sibjq5p3dcyn2w5";
   };
 
-  buildInputs = [ libxslt docbook_xsl docbook_xml_dtd_45 ];
+  buildInputs = [ pcre ];
+  nativeBuildInputs = [ libxslt docbook_xsl docbook_xml_dtd_45 ];
 
-  makeFlags = ''PREFIX=$(out) CFGDIR=$(out)/cfg'';
+  makeFlags = ''PREFIX=$(out) CFGDIR=$(out)/cfg HAVE_RULES=yes'';
+
+  outputs = [ "out" "man" ];
+
+  enableParallelBuilding = true;
 
   postInstall = ''
     make DB2MAN=${docbook_xsl}/xml/xsl/docbook/manpages/docbook.xsl man
-    mkdir -p $out/share/man/man1
-    cp cppcheck.1 $out/share/man/man1/cppcheck.1
+    mkdir -p $man/share/man/man1
+    cp cppcheck.1 $man/share/man/man1/cppcheck.1
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "A static analysis tool for C/C++ code";
     longDescription = ''
-      Check C/C++ code for memory leaks, mismatching
-      allocation-deallocation, buffer overruns and more.
+      Check C/C++ code for memory leaks, mismatching allocation-deallocation,
+      buffer overruns and more.
     '';
     homepage = http://cppcheck.sourceforge.net/;
-    license = stdenv.lib.licenses.gpl3Plus;
-    platforms = stdenv.lib.platforms.unix;
-    maintainers = [ stdenv.lib.maintainers.simons ];
+    license = licenses.gpl3Plus;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ joachifm ];
   };
 }

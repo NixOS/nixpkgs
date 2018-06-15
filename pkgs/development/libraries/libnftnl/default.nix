@@ -1,20 +1,22 @@
 { stdenv, fetchurl, pkgconfig, libmnl }:
 
 stdenv.mkDerivation rec {
-  name = "libnftnl-1.0.5";
+  version = "1.1.0";
+  name = "libnftnl-${version}";
 
   src = fetchurl {
-    url = "netfilter.org/projects/libnftnl/files/${name}.tar.bz2";
-    sha256 = "15z4kcsklbvy94d24p2r0avyhc2rsvygjqr3gyccg2z30akzbm7n";
+    url = "https://netfilter.org/projects/libnftnl/files/${name}.tar.bz2";
+    sha256 = "0v4gywcjvv2vg4zk632al1zv3ad0lx87nshynv110l8n3fhsq3pc";
   };
 
-  buildInputs = [ pkgconfig libmnl ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ libmnl ];
 
   meta = with stdenv.lib; {
-    description = "a userspace library providing a low-level netlink API to the in-kernel nf_tables subsystem";
+    description = "A userspace library providing a low-level netlink API to the in-kernel nf_tables subsystem";
     homepage = http://netfilter.org/projects/libnftnl;
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ wkennington ];
+    maintainers = with maintainers; [ wkennington fpletz ];
   };
 }

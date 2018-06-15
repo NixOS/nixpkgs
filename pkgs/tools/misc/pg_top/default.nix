@@ -1,16 +1,16 @@
-{stdenv, fetchurl, ncurses, postgresql}:
+{ stdenv, fetchurl, ncurses, postgresql }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   name = "pg_top-3.7.0";
 
   src = fetchurl {
-    url = http://pgfoundry.org/frs/download.php/1781/pg_top-3.7.0.tar.gz;
+    url = "http://pgfoundry.org/frs/download.php/1781/${name}.tar.gz";
     sha256 = "17xrv0l58rv3an06gkajzw0gg6v810xx6vl137an1iykmhvfh7h2";
   };
 
-  buildInputs = [ncurses postgresql]; 
+  buildInputs = [ ncurses postgresql ];
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "A 'top' like tool for PostgreSQL";
     longDescription = '' 
       pg_top allows you to: 
@@ -21,8 +21,10 @@ stdenv.mkDerivation {
         <listitem>View user table statistics.</listitem>
         <listitem>View user index statistics.</listitem>
       </itemizedlist>
-    ''; 
+    '';
 
     homepage = http://ptop.projects.postgresql.org/;
+    platforms = platforms.linux;
+    license = licenses.free; # see commands.c
   };
 }

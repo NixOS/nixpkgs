@@ -7,14 +7,16 @@ with stdenv.lib;
 
 stdenv.mkDerivation rec {
   name = "librep-${version}";
-  version = "0.92.5";
+  version = "0.92.7";
+  sourceName = "librep_${version}";
 
   src = fetchurl {
-    url = "https://github.com/SawfishWM/librep/archive/${name}.tar.gz";
-    sha256 = "1ly425cgs0yi3lb5l84v3bacljw7m2nmzgky3acy1anp709iwi76";
+    url = "http://download.tuxfamily.org/librep/${sourceName}.tar.xz";
+    sha256 = "1bmcjl1x1rdh514q9z3hzyjmjmwwwkziipjpjsl301bwmiwrd8a8";
   };
 
-  buildInputs = [ pkgconfig autoreconfHook readline texinfo ];
+  nativeBuildInputs = [ autoreconfHook pkgconfig ];
+  buildInputs = [ readline texinfo ];
   propagatedBuildInputs = [ gdbm gmp libffi ];
 
   configureFlags = [
@@ -30,9 +32,10 @@ stdenv.mkDerivation rec {
       interpreter, a byte-code compiler, and a virtual
       machine. It can serve as an application extension language
       but is also suitable for standalone scripts.
-    '';
+     '';
     homepage = http://sawfish.wikia.com;
     license = licenses.gpl2;
     maintainers = [ maintainers.AndersonTorres ];
   };
 }
+# TODO: investigate fetchFromGithub

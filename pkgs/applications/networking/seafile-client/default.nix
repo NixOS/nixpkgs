@@ -1,39 +1,37 @@
-{stdenv, fetchurl, writeScript, pkgconfig, cmake, qt4, seafile-shared, ccnet, makeWrapper}:
+{ stdenv, fetchFromGitHub, writeScript, pkgconfig, cmake, qtbase, qttools
+, seafile-shared, ccnet, makeWrapper
+, withShibboleth ? true, qtwebengine }:
 
-stdenv.mkDerivation rec
-{
-  version = "4.0.6";
+with stdenv.lib;
+
+stdenv.mkDerivation rec {
+  version = "6.1.8";
   name = "seafile-client-${version}";
 
-  src = fetchurl
-  {
-    url = "https://github.com/haiwen/seafile-client/archive/v${version}.tar.gz";
-    sha256 = "0hx8zjmgj4ki2p5fkdyz32fy8db60p6rvi3my9l59j7fslv71k1z";
+  src = fetchFromGitHub {
+    owner = "haiwen";
+    repo = "seafile-client";
+    rev = "v${version}";
+    sha256 = "0gy7jfxr5f8qvbqj80g7fzaw9b3vax750c4z5cr7f43rv99284pc";
   };
 
-  buildInputs = [ pkgconfig cmake qt4 seafile-shared makeWrapper ];
+  nativeBuildInputs = [ pkgconfig cmake makeWrapper ];
+  buildInputs = [ qtbase qttools seafile-shared ]
+    ++ optional withShibboleth qtwebengine;
 
-  builder = writeScript "${name}-builder.sh" ''
-    source $stdenv/setup
+  cmakeFlags = [ "-DCMAKE_BUILD_TYPE=Release" ]
+    ++ optional withShibboleth "-DBUILD_SHIBBOLETH_SUPPORT=ON";
 
-    tar xvfz $src
-    cd seafile-client-*
-
-    cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_SKIP_BUILD_RPATH=ON -DCMAKE_INSTALL_PREFIX="$out" .
-    make -j1
-
-    make install
-
+  postInstall = ''
     wrapProgram $out/bin/seafile-applet \
-      --suffix PATH : ${ccnet}/bin:${seafile-shared}/bin
-    '';
+      --suffix PATH : ${stdenv.lib.makeBinPath [ ccnet seafile-shared ]}
+  '';
 
-  meta =
-  {
-    homepage = "https://github.com/haiwen/seafile-clients";
+  meta = with stdenv.lib; {
+    homepage = https://github.com/haiwen/seafile-client;
     description = "Desktop client for Seafile, the Next-generation Open Source Cloud Storage";
-    license = stdenv.lib.licenses.asl20;
-    platforms = stdenv.lib.platforms.linux;
-    maintainers = [ stdenv.lib.maintainers.calrama ];
+    license = licenses.asl20;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ dotlambda ];
   };
 }

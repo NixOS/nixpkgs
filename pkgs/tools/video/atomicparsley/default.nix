@@ -1,19 +1,19 @@
-{ stdenv, pkgs, fetchurl }:
+{ stdenv, fetchhg, autoreconfHook, zlib, darwin }:
 
 stdenv.mkDerivation rec {
-  name = "${product}-${version}";
-  product = "AtomicParsley";
-  version = "0.9.0";
+  name = "atomicparsley-${version}";
+  version = "0.9.6";
 
-  src = fetchurl {
-    url = "mirror://sourceforge/atomicparsley/${product}-source-${version}.zip";
-    sha256 = "de83f219f95e6fe59099b277e3ced86f0430ad9468e845783092821dff15a72e";
+  src = fetchhg {
+    url = "https://bitbucket.org/wez/atomicparsley";
+    sha256 = "05n4kbn91ps52h3wi1qb2jwygjsc01qzx4lgkv5mvwl5i49rj8fm";
   };
 
-  buildInputs = with pkgs; [ unzip ];
-  patches = [ ./casts.patch ];
-  setSourceRoot = "sourceRoot=${product}-source-${version}";
-  buildPhase = "bash build";
+  buildInputs =
+    [ autoreconfHook
+      zlib
+    ] ++ stdenv.lib.optional stdenv.isDarwin darwin.apple_sdk.frameworks.Cocoa;
+
   installPhase = "install -D AtomicParsley $out/bin/AtomicParsley";
 
   meta = with stdenv.lib; {
@@ -22,7 +22,11 @@ stdenv.mkDerivation rec {
       setting metadata into MPEG-4 files
     '';
 
-    homepage = http://atomicparsley.sourceforge.net/;
+    longDescription = ''
+      This is a maintained fork of the original AtomicParsley.
+    '';
+
+    homepage = https://bitbucket.org/wez/atomicparsley;
     license = licenses.gpl2;
     platforms = platforms.unix;
     maintainers = with maintainers; [ pjones ];

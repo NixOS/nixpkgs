@@ -42,13 +42,16 @@ in
 
   config = mkIf cfg.enable {
 
-    security.setuidOwners = map (program: {
-      inherit program;
+    # Not wrapping "batch" because it's a shell script (kernel drops perms
+    # anyway) and it's patched to invoke the "at" setuid wrapper.
+    security.wrappers = builtins.listToAttrs (
+      map (program: { name = "${program}"; value = {
+      source = "${at}/bin/${program}";
       owner = "atd";
       group = "atd";
       setuid = true;
       setgid = true;
-    }) [ "at" "atq" "atrm" "batch" ];
+    };}) [ "at" "atq" "atrm" ]);
 
     environment.systemPackages = [ at ];
 
@@ -66,49 +69,47 @@ in
         gid = config.ids.gids.atd;
       };
 
-    jobs.atd =
-      { description = "Job Execution Daemon (atd)";
+    systemd.services.atd = {
+      description = "Job Execution Daemon (atd)";
+      after = [ "systemd-udev-settle.service" ];
+      wants = [ "systemd-udev-settle.service" ];
+      wantedBy = [ "multi-user.target" ];
 
-        startOn = "stopped udevtrigger";
+      path = [ at ];
 
-        path = [ at ];
+      preStart = ''
+        # Snippets taken and adapted from the original `install' rule of
+        # the makefile.
 
-        preStart =
-          ''
-            # Snippets taken and adapted from the original `install' rule of
-            # the makefile.
+        # We assume these values are those actually used in Nixpkgs for
+        # `at'.
+        spooldir=/var/spool/atspool
+        jobdir=/var/spool/atjobs
+        etcdir=/etc/at
 
-            # We assume these values are those actually used in Nixpkgs for
-            # `at'.
-            spooldir=/var/spool/atspool
-            jobdir=/var/spool/atjobs
-            etcdir=/etc/at
+        for dir in "$spooldir" "$jobdir" "$etcdir"; do
+          if [ ! -d "$dir" ]; then
+              mkdir -p "$dir"
+              chown atd:atd "$dir"
+          fi
+        done
+        chmod 1770 "$spooldir" "$jobdir"
+        ${if cfg.allowEveryone then ''chmod a+rwxt "$spooldir" "$jobdir" '' else ""}
+        if [ ! -f "$etcdir"/at.deny ]; then
+            touch "$etcdir"/at.deny
+            chown root:atd "$etcdir"/at.deny
+            chmod 640 "$etcdir"/at.deny
+        fi
+        if [ ! -f "$jobdir"/.SEQ ]; then
+            touch "$jobdir"/.SEQ
+            chown atd:atd "$jobdir"/.SEQ
+            chmod 600 "$jobdir"/.SEQ
+        fi
+      '';
 
-            for dir in "$spooldir" "$jobdir" "$etcdir"; do
-              if [ ! -d "$dir" ]; then
-                  mkdir -p "$dir"
-                  chown atd:atd "$dir"
-              fi
-            done
-            chmod 1770 "$spooldir" "$jobdir"
-            ${if cfg.allowEveryone then ''chmod a+rwxt "$spooldir" "$jobdir" '' else ""}
-            if [ ! -f "$etcdir"/at.deny ]; then
-                touch "$etcdir"/at.deny
-                chown root:atd "$etcdir"/at.deny
-                chmod 640 "$etcdir"/at.deny
-            fi
-            if [ ! -f "$jobdir"/.SEQ ]; then
-                touch "$jobdir"/.SEQ
-                chown atd:atd "$jobdir"/.SEQ
-                chmod 600 "$jobdir"/.SEQ
-            fi
-          '';
+      script = "atd";
 
-        exec = "atd";
-
-        daemonType = "fork";
-      };
-
+      serviceConfig.Type = "forking";
+    };
   };
-
 }

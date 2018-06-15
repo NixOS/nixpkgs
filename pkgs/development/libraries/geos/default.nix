@@ -1,23 +1,16 @@
-{ composableDerivation, fetchurl, python }:
+{ stdenv, fetchurl, fetchpatch, python }:
 
-let inherit (composableDerivation) edf; in
-
-composableDerivation.composableDerivation {} rec {
-
-  flags =
-  # python and ruby untested 
-    edf { name = "python"; enable = { buildInputs = [ python ]; }; };
-    # (if args.use_svn then ["libtool" "autoconf" "automake" "swig"] else [])
-    # // edf { name = "ruby"; enable = { buildInputs = [ ruby ]; };}
-
-  name = "geos-3.5.0";
+stdenv.mkDerivation rec {
+  name = "geos-3.6.2";
 
   src = fetchurl {
     url = "http://download.osgeo.org/geos/${name}.tar.bz2";
-    sha256 = "49982b23bcfa64a53333dab136b82e25354edeb806e5a2e2f5b8aa98b1d0ae02";
+    sha256 = "0ak5szby29l9l0vy43dm5z2g92xzdky20q1gc1kah1fnhkgi6nh4";
   };
 
   enableParallelBuilding = true;
+
+  buildInputs = [ python ];
 
   meta = {
     description = "C++ port of the Java Topology Suite (JTS)";

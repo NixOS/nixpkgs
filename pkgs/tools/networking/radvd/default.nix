@@ -1,20 +1,22 @@
 { stdenv, fetchurl, pkgconfig, libdaemon, bison, flex, check }:
 
 stdenv.mkDerivation rec {
-  name = "radvd-2.11";
-  
+  name = "radvd-${version}";
+  version = "2.17";
+
   src = fetchurl {
     url = "http://www.litech.org/radvd/dist/${name}.tar.xz";
-    sha256 = "1k2sbfs4w2lkgz2mh4zh66fgahjrn2hvxcpfc091bykrzj464qq4";
+    sha256 = "1md6n63sg1n9x8yv0p7fwm1xxaiadj1q3mpadiqsvn14y1ddc2av";
   };
 
-  buildInputs = [ pkgconfig libdaemon bison flex check ];
+  nativeBuildInputs = [ pkgconfig bison flex check ];
+  buildInputs = [ libdaemon ];
 
   meta = with stdenv.lib; {
     homepage = http://www.litech.org/radvd/;
     description = "IPv6 Router Advertisement Daemon";
     platforms = platforms.linux;
     license = licenses.bsdOriginal;
-    maintainers = with maintainers; [ wkennington ];
+    maintainers = with maintainers; [ wkennington fpletz ];
   };
 }

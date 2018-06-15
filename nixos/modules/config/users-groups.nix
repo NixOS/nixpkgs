@@ -1,9 +1,8 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, utils, pkgs, ... }:
 
 with lib;
 
 let
-
   ids = config.ids;
   cfg = config.users;
 
@@ -26,7 +25,7 @@ let
   '';
 
   hashedPasswordDescription = ''
-    To generate hashed password install <literal>mkpassword</literal>
+    To generate hashed password install <literal>mkpasswd</literal>
     package and run <literal>mkpasswd -m sha-512</literal>.
   '';
 
@@ -36,6 +35,7 @@ let
 
       name = mkOption {
         type = types.str;
+        apply = x: assert (builtins.stringLength x < 32 || abort "Username '${x}' is longer than 31 characters which is not allowed!"); x;
         description = ''
           The name of the user account. If undefined, the name of the
           attribute set will be used.
@@ -92,6 +92,7 @@ let
 
       group = mkOption {
         type = types.str;
+        apply = x: assert (builtins.stringLength x < 32 || abort "Group name '${x}' is longer than 31 characters which is not allowed!"); x;
         default = "nogroup";
         description = "The user's primary group.";
       };
@@ -103,7 +104,7 @@ let
       };
 
       home = mkOption {
-        type = types.str;
+        type = types.path;
         default = "/var/empty";
         description = "The user's home directory.";
       };
@@ -118,19 +119,26 @@ let
       };
 
       shell = mkOption {
-        type = types.str;
-        default = "/run/current-system/sw/bin/nologin";
-        description = "The path to the user's shell.";
+        type = types.either types.shellPackage types.path;
+        default = pkgs.nologin;
+        defaultText = "pkgs.nologin";
+        example = literalExample "pkgs.bashInteractive";
+        description = ''
+          The path to the user's shell. Can use shell derivations,
+          like <literal>pkgs.bashInteractive</literal>. Don’t
+          forget to enable your shell in
+          <literal>programs</literal> if necessary,
+          like <code>programs.zsh.enable = true;</code>.
+        '';
       };
 
       subUidRanges = mkOption {
-        type = types.listOf types.optionSet;
+        type = with types; listOf (submodule subordinateUidRange);
         default = [];
         example = [
           { startUid = 1000; count = 1; }
           { startUid = 100001; count = 65534; }
         ];
-        options = [ subordinateUidRange ];
         description = ''
           Subordinate user ids that user is allowed to use.
           They are set into <filename>/etc/subuid</filename> and are used
@@ -139,13 +147,12 @@ let
       };
 
       subGidRanges = mkOption {
-        type = types.listOf types.optionSet;
+        type = with types; listOf (submodule subordinateGidRange);
         default = [];
         example = [
           { startGid = 100; count = 1; }
           { startGid = 1001; count = 999; }
         ];
-        options = [ subordinateGidRange ];
         description = ''
           Subordinate group ids that user is allowed to use.
           They are set into <filename>/etc/subgid</filename> and are used
@@ -239,6 +246,17 @@ let
         '';
       };
 
+      packages = mkOption {
+        type = types.listOf types.package;
+        default = [];
+        example = literalExample "[ pkgs.firefox pkgs.thunderbird ]";
+        description = ''
+          The set of packages that should be made availabe to the user.
+          This is in contrast to <option>environment.systemPackages</option>,
+          which adds packages to all users.
+        '';
+      };
+
     };
 
     config = mkMerge
@@ -303,32 +321,36 @@ let
   };
 
   subordinateUidRange = {
-    startUid = mkOption {
-      type = types.int;
-      description = ''
-        Start of the range of subordinate user ids that user is
-        allowed to use.
-      '';
-    };
-    count = mkOption {
-      type = types.int;
-      default = 1;
-      description = ''Count of subordinate user ids'';
+    options = {
+      startUid = mkOption {
+        type = types.int;
+        description = ''
+          Start of the range of subordinate user ids that user is
+          allowed to use.
+        '';
+      };
+      count = mkOption {
+        type = types.int;
+        default = 1;
+        description = ''Count of subordinate user ids'';
+      };
     };
   };
 
   subordinateGidRange = {
-    startGid = mkOption {
-      type = types.int;
-      description = ''
-        Start of the range of subordinate group ids that user is
-        allowed to use.
-      '';
-    };
-    count = mkOption {
-      type = types.int;
-      default = 1;
-      description = ''Count of subordinate group ids'';
+    options = {
+      startGid = mkOption {
+        type = types.int;
+        description = ''
+          Start of the range of subordinate group ids that user is
+          allowed to use.
+        '';
+      };
+      count = mkOption {
+        type = types.int;
+        default = 1;
+        description = ''Count of subordinate group ids'';
+      };
     };
   };
 
@@ -359,11 +381,12 @@ let
 
   spec = pkgs.writeText "users-groups.json" (builtins.toJSON {
     inherit (cfg) mutableUsers;
-    users = mapAttrsToList (n: u:
+    users = mapAttrsToList (_: u:
       { inherit (u)
-          name uid group description home shell createHome isSystemUser
+          name uid group description home createHome isSystemUser
           password passwordFile hashedPassword
           initialPassword initialHashedPassword;
+        shell = utils.toShellPath u.shell;
       }) cfg.users;
     groups = mapAttrsToList (n: g:
       { inherit (g) name gid;
@@ -372,6 +395,12 @@ let
         ));
       }) cfg.groups;
   });
+
+  systemShells =
+    let
+      shells = mapAttrsToList (_: u: u.shell) cfg.users;
+    in
+      filter types.shellPackage.check shells;
 
 in {
 
@@ -414,7 +443,7 @@ in {
 
     users.users = mkOption {
       default = {};
-      type = types.loaOf types.optionSet;
+      type = with types; loaOf (submodule userOpts);
       example = {
         alice = {
           uid = 1234;
@@ -430,7 +459,6 @@ in {
         Additional user accounts to be created automatically by the system.
         This can also be used to set options for root.
       '';
-      options = [ userOpts ];
     };
 
     users.groups = mkOption {
@@ -439,11 +467,10 @@ in {
         { students.gid = 1001;
           hackers = { };
         };
-      type = types.loaOf types.optionSet;
+      type = with types; loaOf (submodule groupOpts);
       description = ''
         Additional groups to be created automatically by the system.
       '';
-      options = [ groupOpts ];
     };
 
     # FIXME: obsolete - will remove.
@@ -468,7 +495,6 @@ in {
         home = "/root";
         shell = mkDefault cfg.defaultUserShell;
         group = "root";
-        extraGroups = [ "grsecurity" ];
         initialHashedPassword = mkDefault config.security.initialRootPassword;
       };
       nobody = {
@@ -497,12 +523,14 @@ in {
       nixbld.gid = ids.gids.nixbld;
       utmp.gid = ids.gids.utmp;
       adm.gid = ids.gids.adm;
-      grsecurity.gid = ids.gids.grsecurity;
       input.gid = ids.gids.input;
     };
 
-    system.activationScripts.users = stringAfter [ "etc" ]
+    system.activationScripts.users = stringAfter [ "stdio" ]
       ''
+        install -m 0700 -d /root
+        install -m 0755 -d /home
+
         ${pkgs.perl}/bin/perl -w \
           -I${pkgs.perlPackages.FileSlurp}/lib/perl5/site_perl \
           -I${pkgs.perlPackages.JSON}/lib/perl5/site_perl \
@@ -512,14 +540,29 @@ in {
     # for backwards compatibility
     system.activationScripts.groups = stringAfter [ "users" ] "";
 
-    environment.etc."subuid" = {
-      text = subuidFile;
-      mode = "0644";
-    };
-    environment.etc."subgid" = {
-      text = subgidFile;
-      mode = "0644";
-    };
+    # Install all the user shells
+    environment.systemPackages = systemShells;
+
+    environment.etc = {
+      "subuid" = {
+        text = subuidFile;
+        mode = "0644";
+      };
+      "subgid" = {
+        text = subgidFile;
+        mode = "0644";
+      };
+    } // (mapAttrs' (name: { packages, ... }: {
+      name = "profiles/per-user/${name}";
+      value.source = pkgs.buildEnv {
+        name = "user-environment";
+        paths = packages;
+        inherit (config.environment) pathsToLink extraOutputsToInstall;
+        inherit (config.system.path) ignoreCollisions postBuild;
+      };
+    }) (filterAttrs (_: u: u.packages != []) cfg.users));
+
+    environment.profiles = [ "/etc/profiles/per-user/$USER" ];
 
     assertions = [
       { assertion = !cfg.enforceIdUniqueness || (uidsAreUnique && gidsAreUnique);

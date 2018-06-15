@@ -13,6 +13,8 @@ stdenv.mkDerivation {
   inherit xauth fontDirectories perl;
   gcc = stdenv.cc.cc;
 
+  hardeningDisable = [ "format" ];
+
   buildInputs = [ xlibsWrapper zlib libjpeg imake gccmakedep libXmu libXaw
                   libXpm libXp xauth openssh ];
 
@@ -60,7 +62,7 @@ stdenv.mkDerivation {
 
   meta = {
     license = stdenv.lib.licenses.gpl2Plus;
-    homepage = "http://vnc-tight.sourceforge.net/";
+    homepage = http://vnc-tight.sourceforge.net/;
     description = "Improved version of VNC";
 
     longDescription = ''

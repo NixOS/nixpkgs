@@ -1,4 +1,6 @@
-{ fetchurl, stdenv }:
+{ stdenv, fetchurl, fetchpatch,  dejagnu, doCheck ? false
+, buildPlatform, hostPlatform, autoreconfHook
+}:
 
 stdenv.mkDerivation rec {
   name = "libffi-3.2.1";
@@ -8,21 +10,64 @@ stdenv.mkDerivation rec {
     sha256 = "0dya49bnhianl0r65m65xndz6ls2jn1xngyn72gd28ls3n7bnvnh";
   };
 
-  patches = if stdenv.isCygwin then [ ./3.2.1-cygwin.patch ] else null;
+  patches = stdenv.lib.optional stdenv.isCygwin ./3.2.1-cygwin.patch
+    ++ stdenv.lib.optional stdenv.isAarch64 (fetchpatch {
+      url = https://src.fedoraproject.org/rpms/libffi/raw/ccffc1700abfadb0969495a6e51b964117fc03f6/f/libffi-aarch64-rhbz1174037.patch;
+      sha256 = "1vpirrgny43hp0885rswgv3xski8hg7791vskpbg3wdjdpb20wbc";
+    })
+    ++ stdenv.lib.optional hostPlatform.isMusl (fetchpatch {
+      name = "gnu-linux-define.patch";
+      url = "https://git.alpinelinux.org/cgit/aports/plain/main/libffi/gnu-linux-define.patch?id=bb024fd8ec6f27a76d88396c9f7c5c4b5800d580";
+      sha256 = "11pvy3xkhyvnjfyy293v51f1xjy3x0azrahv1nw9y9mw8bifa2j2";
+    })
+    ++ stdenv.lib.optional hostPlatform.isRiscV (fetchpatch {
+      name = "riscv-support.patch";
+      url = https://github.com/sorear/libffi-riscv/commit/e46492e8bb1695a19bc1053ed869e6c2bab02ff2.patch;
+      sha256 = "1vl1vbvdkigs617kckxvj8j4m2cwg62kxm1clav1w5rnw9afxg0y";
+    })
+    ++ stdenv.lib.optionals stdenv.isMips [
+      (fetchpatch {
+        name = "0001-mips-Use-compiler-internal-define-for-linux.patch";
+        url = "http://cgit.openembedded.org/openembedded-core/plain/meta/recipes-support/libffi/libffi/0001-mips-Use-compiler-internal-define-for-linux.patch?id=318e33a708378652edcf61ce7d9d7f3a07743000";
+        sha256 = "1gc53lw90p6hc0cmhj3csrwincfz7va5ss995ksw5gm0yrr9mrvb";
+      })
+      (fetchpatch {
+        name = "0001-mips-fix-MIPS-softfloat-build-issue.patch";
+        url = "http://cgit.openembedded.org/openembedded-core/plain/meta/recipes-support/libffi/libffi/0001-mips-fix-MIPS-softfloat-build-issue.patch?id=318e33a708378652edcf61ce7d9d7f3a07743000";
+        sha256 = "0l8xgdciqalg4z9rcwyk87h8fdxpfv4hfqxwsy2agpnpszl5jjdq";
+      })
+    ];
+
+  outputs = [ "out" "dev" "man" "info" ];
+
+  buildInputs = stdenv.lib.optional doCheck dejagnu;
+
+  nativeBuildInputs = stdenv.lib.optional hostPlatform.isRiscV autoreconfHook;
 
   configureFlags = [
     "--with-gcc-arch=generic" # no detection of -march= or -mtune=
     "--enable-pax_emutramp"
   ];
 
-  dontStrip = stdenv ? cross; # Don't run the native `strip' when cross-compiling.
-
-  # Install headers in the right place.
-  postInstall = ''
-    ln -s${if (stdenv.isFreeBSD || stdenv.isOpenBSD || stdenv.isDarwin) then "" else "r"}v "$out/lib/"libffi*/include "$out/include"
+  preCheck = ''
+    # The tests use -O0 which is not compatible with -D_FORTIFY_SOURCE.
+    NIX_HARDENING_ENABLE=''${NIX_HARDENING_ENABLE/fortify/}
   '';
 
-  meta = {
+  inherit doCheck;
+
+  dontStrip = hostPlatform != buildPlatform; # Don't run the native `strip' when cross-compiling.
+
+  # Install headers and libs in the right places.
+  postFixup = ''
+    mkdir -p "$dev/"
+    mv "$out/lib/${name}/include" "$dev/include"
+    rmdir "$out/lib/${name}"
+    substituteInPlace "$dev/lib/pkgconfig/libffi.pc" \
+      --replace 'includedir=''${libdir}/libffi-3.2.1' "includedir=$dev"
+  '';
+
+  meta = with stdenv.lib; {
     description = "A foreign function call interface library";
     longDescription = ''
       The libffi library provides a portable, high level programming
@@ -40,8 +85,8 @@ stdenv.mkDerivation rec {
     '';
     homepage = http://sourceware.org/libffi/;
     # See http://github.com/atgreen/libffi/blob/master/LICENSE .
-    license = stdenv.lib.licenses.free;
+    license = licenses.free;
     maintainers = [ ];
-    platforms = stdenv.lib.platforms.all;
+    platforms = platforms.all;
   };
 }

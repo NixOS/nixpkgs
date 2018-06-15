@@ -1,49 +1,18 @@
-{stdenv, fetchurl, unzip, bdftopcf, mkfontdir, mkfontscale}:
+{ stdenv, fetchzip }:
 
-stdenv.mkDerivation rec {
+let
   version = "2.92";
+in fetchzip rec {
   name = "dina-font-${version}";
 
-  src = fetchurl {
-    url = "http://www.donationcoder.com/Software/Jibz/Dina/downloads/Dina.zip";
-    sha256 = "1kq86lbxxgik82aywwhawmj80vsbz3hfhdyhicnlv9km7yjvnl8z";
-  };
+  url = "http://www.donationcoder.com/Software/Jibz/Dina/downloads/Dina.zip";
 
-  buildInputs = [ unzip bdftopcf mkfontdir mkfontscale ];
-
-  dontBuild = true;
-  patchPhase = "sed -i 's/microsoft-cp1252/ISO8859-1/' *.bdf";
-  installPhase = ''
-    _get_font_size() {
-      _pt=$\{1%.bdf}
-      _pt=$\{_pt#*-}
-      echo $_pt
-    }
-
-    for i in Dina_i400-*.bdf; do
-        bdftopcf -t -o DinaItalic$(_get_font_size $i).pcf $i
-    done
-    for i in Dina_i700-*.bdf; do
-        bdftopcf -t -o DinaBoldItalic$(_get_font_size $i).pcf $i
-    done
-    for i in Dina_r400-*.bdf; do
-        bdftopcf -t -o DinaMedium$(_get_font_size $i).pcf $i
-    done
-    for i in Dina_r700-*.bdf; do
-        bdftopcf -t -o DinaBold$(_get_font_size $i).pcf $i
-    done
-    gzip *.pcf
-
-    fontDir="$out/share/fonts/misc"
-    mkdir -p "$fontDir"
-    mv *.pcf.gz "$fontDir"
-
-    cd "$fontDir"
-    mkfontdir
-    mkfontscale
+  postFetch = ''
+    mkdir -p $out/share/fonts
+    unzip -j $downloadedFile \*.bdf -d $out/share/fonts
   '';
 
-  preferLocalBuild = true;
+  sha256 = "02a6hqbq18sw69npylfskriqhvj1nsk65hjjyd05nl913ycc6jl7";
 
   meta = with stdenv.lib; {
     description = "A monospace bitmap font aimed at programmers";

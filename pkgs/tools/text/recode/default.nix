@@ -1,5 +1,5 @@
-{ stdenv, fetchFromGitHub, python, perl, autoconf, automake, libtool, intltool, flex,
-texinfo, libiconv }:
+{ stdenv, fetchFromGitHub, python, perl, intltool, flex, autoreconfHook
+, texinfo, libiconv, libintl }:
 
 stdenv.mkDerivation rec {
   name = "recode-3.7-2fd838565";
@@ -11,20 +11,14 @@ stdenv.mkDerivation rec {
     sha256 = "06vyjqaraamcc5vka66mlvxj27ihccqc74aymv2wn8nphr2rhh03";
   };
 
-  nativeBuildInputs = [ python perl autoconf automake libtool intltool flex texinfo
-  libiconv ];
+  nativeBuildInputs = [ python perl intltool flex texinfo autoreconfHook libiconv ];
+  buildInputs = [ libintl ];
 
-  preConfigure = ''
+  preAutoreconf = ''
     # fix build with new automake, https://bugs.gentoo.org/show_bug.cgi?id=419455
-    #rm acinclude.m4
     substituteInPlace Makefile.am --replace "ACLOCAL = ./aclocal.sh @ACLOCAL@" ""
     sed -i '/^AM_C_PROTOTYPES/d' configure.ac
     substituteInPlace src/Makefile.am --replace "ansi2knr" ""
-
-    autoreconf -fi
-  ''
-  + stdenv.lib.optionalString stdenv.isDarwin ''
-    export LDFLAGS=-lintl
   '';
 
   #doCheck = true; # doesn't work yet
@@ -34,7 +28,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    homepage = "http://www.gnu.org/software/recode/";
+    homepage = http://www.gnu.org/software/recode/;
     description = "Converts files between various character sets and usages";
     platforms = stdenv.lib.platforms.unix;
     license = stdenv.lib.licenses.gpl2Plus;

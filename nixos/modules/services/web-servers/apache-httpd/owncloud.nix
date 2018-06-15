@@ -70,7 +70,7 @@ let
       "proxyuserpwd" => "",
 
       /* List of trusted domains, to prevent host header poisoning ownCloud is only using these Host headers */
-      'trusted_domains' => array('${config.trustedDomain}'),
+      ${if config.trustedDomain != "" then "'trusted_domains' => array('${config.trustedDomain}')," else ""}
 
       /* Theme to use for ownCloud */
       "theme" => "",
@@ -188,8 +188,7 @@ let
       /* date format to be used while writing to the owncloud logfile */
       'logdateformat' => 'F d, Y H:i:s',
 
-      /* timezone used while writing to the owncloud logfile (default: UTC) */
-      'logtimezone' => '${serverInfo.fullConfig.time.timeZone}',
+      ${tzSetting}
 
       /* Append all database queries and parameters to the log file.
        (watch out, this option can increase the size of your log file)*/
@@ -331,13 +330,38 @@ let
        */
       'share_folder' => '/',
 
-      'version' => '${pkgs.owncloud.version}',
+      'version' => '${config.package.version}',
 
-      'openssl' => '${pkgs.openssl}/bin/openssl'
+      'openssl' => '${pkgs.openssl.bin}/bin/openssl'
 
       );
 
     '';
+
+  tzSetting = let tz = serverInfo.fullConfig.time.timeZone; in optionalString (!isNull tz) ''
+    /* timezone used while writing to the owncloud logfile (default: UTC) */
+    'logtimezone' => '${tz}',
+  '';
+
+  postgresql = serverInfo.fullConfig.services.postgresql.package;
+
+  setupDb = pkgs.writeScript "setup-owncloud-db" ''
+    #!${pkgs.runtimeShell}
+    PATH="${postgresql}/bin"
+    createuser --no-superuser --no-createdb --no-createrole "${config.dbUser}" || true
+    createdb "${config.dbName}" -O "${config.dbUser}" || true
+    psql -U postgres -d postgres -c "alter user ${config.dbUser} with password '${config.dbPassword}';" || true
+
+    QUERY="CREATE TABLE appconfig
+             ( appid       VARCHAR( 255 ) NOT NULL
+             , configkey   VARCHAR( 255 ) NOT NULL
+             , configvalue VARCHAR( 255 ) NOT NULL
+             );
+           GRANT ALL ON appconfig TO ${config.dbUser};
+           ALTER TABLE appconfig OWNER TO ${config.dbUser};"
+
+    psql -h "/tmp" -U postgres -d ${config.dbName} -Atw -c "$QUERY" || true
+  '';
 
 in
 
@@ -345,16 +369,15 @@ rec {
 
   extraConfig =
     ''
-      ServerName ${config.siteName}
-      ServerAdmin ${config.adminAddr}
-      DocumentRoot ${documentRoot}
+      ${if config.urlPrefix != "" then "Alias ${config.urlPrefix} ${config.package}" else ''
 
-      RewriteEngine On
-      RewriteCond %{DOCUMENT_ROOT}%{REQUEST_URI} !-f
-      RewriteCond %{DOCUMENT_ROOT}%{REQUEST_URI} !-d
+        RewriteEngine On
+        RewriteCond %{DOCUMENT_ROOT}%{REQUEST_URI} !-f
+        RewriteCond %{DOCUMENT_ROOT}%{REQUEST_URI} !-d
+      ''}
 
-      <Directory ${pkgs.owncloud}>
-        ${builtins.readFile "${pkgs.owncloud}/.htaccess"}
+      <Directory ${config.package}>
+        Include ${config.package}/.htaccess
       </Directory>
     '';
 
@@ -362,11 +385,29 @@ rec {
     { name = "OC_CONFIG_PATH"; value = "${config.dataDir}/config/"; }
   ];
 
-  documentRoot = pkgs.owncloud;
+  documentRoot = if config.urlPrefix == "" then config.package else null;
 
   enablePHP = true;
 
   options = {
+
+    package = mkOption {
+      type = types.package;
+      default = pkgs.owncloud70;
+      defaultText = "pkgs.owncloud70";
+      example = literalExample "pkgs.owncloud70";
+      description = ''
+          ownCloud package to use.
+      '';
+    };
+
+    urlPrefix = mkOption {
+      default = "";
+      example = "/owncloud";
+      description = ''
+        The URL prefix under which the owncloud service appears.
+      '';
+    };
 
     id = mkOption {
       default = "main";
@@ -552,25 +593,27 @@ rec {
       cp ${owncloudConfig} ${config.dataDir}/config/config.php
       mkdir -p ${config.dataDir}/storage
       mkdir -p ${config.dataDir}/apps
-      cp -r ${pkgs.owncloud}/apps/* ${config.dataDir}/apps/
+      cp -r ${config.package}/apps/* ${config.dataDir}/apps/
       chmod -R ug+rw ${config.dataDir}
       chmod -R o-rwx ${config.dataDir}
       chown -R wwwrun:wwwrun ${config.dataDir}
 
-      ${pkgs.postgresql}/bin/createuser -s -r postgres
-      ${pkgs.postgresql}/bin/createuser --no-superuser --no-createdb --no-createrole "${config.dbUser}" || true
-      ${pkgs.postgresql}/bin/createdb "${config.dbName}" -O "${config.dbUser}" || true
-      ${pkgs.sudo}/bin/sudo -u postgres ${pkgs.postgresql}/bin/psql -U postgres -d postgres -c "alter user ${config.dbUser} with password '${config.dbPassword}';" || true
-
-      QUERY="CREATE TABLE appconfig (appid VARCHAR( 255 ) NOT NULL ,configkey VARCHAR( 255 ) NOT NULL ,configvalue VARCHAR( 255 ) NOT NULL); GRANT ALL ON appconfig TO ${config.dbUser}; ALTER TABLE appconfig OWNER TO ${config.dbUser};"
-      ${pkgs.sudo}/bin/sudo -u postgres ${pkgs.postgresql}/bin/psql -h "/tmp" -U postgres -d ${config.dbName} -Atw -c "$QUERY" || true
+      ${pkgs.sudo}/bin/sudo -u postgres ${setupDb}
     fi
 
-    ${php}/bin/php ${pkgs.owncloud}/occ upgrade || true
+    if [ -e ${config.package}/config/ca-bundle.crt ]; then
+      cp -f ${config.package}/config/ca-bundle.crt ${config.dataDir}/config/
+    fi
+
+    ${php}/bin/php ${config.package}/occ upgrade >> ${config.dataDir}/upgrade.log || true
 
     chown wwwrun:wwwrun ${config.dataDir}/owncloud.log || true
 
-    QUERY="INSERT INTO groups (gid) values('admin'); INSERT INTO users (uid,password) values('${config.adminUser}','${builtins.hashString "sha1" config.adminPassword}'); INSERT INTO group_user (gid,uid) values('admin','${config.adminUser}');"
-    ${pkgs.sudo}/bin/sudo -u postgres ${pkgs.postgresql}/bin/psql -h "/tmp" -U postgres -d ${config.dbName} -Atw -c "$QUERY" || true
+    QUERY="INSERT INTO groups (gid) values('admin');
+           INSERT INTO users (uid,password)
+             values('${config.adminUser}','${builtins.hashString "sha1" config.adminPassword}');
+           INSERT INTO group_user (gid,uid)
+             values('admin','${config.adminUser}');"
+    ${pkgs.sudo}/bin/sudo -u postgres ${postgresql}/bin/psql -h "/tmp" -U postgres -d ${config.dbName} -Atw -c "$QUERY" || true
   '';
 }

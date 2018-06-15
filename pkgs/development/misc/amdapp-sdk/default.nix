@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, makeWrapper, perl, mesa, xorg,
+{ stdenv, fetchurl, makeWrapper, perl, libGLU_combined, xorg,
   version? "2.8", # What version
   samples? false # Should samples be installed
 }:
@@ -22,6 +22,7 @@ let
       url = "http://download2-developer.amd.com/amd/APPSDK/AMD-APP-SDK-v2.7-lnx${bits}.tgz";
       x86 = "1v26n7g1xvlg5ralbfk3qiy34gj8fascpnjzm3120b6sgykfp16b";
       x86_64 = "08bi43bgnsxb47vbirh09qy02w7zxymqlqr8iikk9aavfxjlmch1";
+      patches = [ ./gcc-5.patch];
     };
 
     "2.8" = {
@@ -30,7 +31,7 @@ let
       x86_64 = "d9c120367225bb1cd21abbcf77cb0a69cfb4bb6932d0572990104c566aab9681";
 
       # TODO: Add support for aparapi, java parallel api
-      patches = [ ./01-remove-aparapi-samples.patch ];
+      patches = [ ./01-remove-aparapi-samples.patch ./gcc-5.patch];
     };
   };
 
@@ -45,7 +46,7 @@ in stdenv.mkDerivation rec {
   patches = stdenv.lib.attrByPath [version "patches"] [] src_info;
 
   patchFlags = "-p0";
-  buildInputs = [ makeWrapper perl mesa xorg.libX11 xorg.libXext xorg.libXaw xorg.libXi xorg.libXxf86vm ];
+  buildInputs = [ makeWrapper perl libGLU_combined xorg.libX11 xorg.libXext xorg.libXaw xorg.libXi xorg.libXxf86vm ];
   propagatedBuildInputs = [ stdenv.cc ];
   NIX_LDFLAGS = "-lX11 -lXext -lXmu -lXi -lXxf86vm";
   doCheck = false;
@@ -87,7 +88,7 @@ in stdenv.mkDerivation rec {
 
     # Create wrappers
     patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" $out/bin/clinfo
-    patchelf --set-rpath ${stdenv.cc.cc}/lib64:${stdenv.cc.cc}/lib $out/bin/clinfo
+    patchelf --set-rpath ${stdenv.cc.cc.lib}/lib64:${stdenv.cc.cc.lib}/lib $out/bin/clinfo
 
     # Fix modes
     find "$out/" -type f -exec chmod 644 {} \;
@@ -98,7 +99,7 @@ in stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "AMD Accelerated Parallel Processing (APP) SDK, with OpenCL 1.2 support";
-    homepage = http://developer.amd.com/tools/heterogeneous-computing/amd-accelerated-parallel-processing-app-sdk/;
+    homepage = https://developer.amd.com/amd-accelerated-parallel-processing-app-sdk/;
     license = licenses.amd;
     maintainers = [ maintainers.offline ];
     platforms = [ "i686-linux" "x86_64-linux" ];

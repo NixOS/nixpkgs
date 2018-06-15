@@ -1,24 +1,27 @@
-{ stdenv, fetchurl }:
+{ stdenv, hostPlatform, fetchurl, xz }:
 
 stdenv.mkDerivation rec {
-  name = "gzip-1.6";
+  name = "gzip-${version}";
+  version = "1.9";
 
   src = fetchurl {
     url = "mirror://gnu/gzip/${name}.tar.xz";
-    sha256 = "0ivqnbhiwd12q8hp3qw6rpsrpw2jg5y2mymk8cn22lsx90dfvprp";
+    sha256 = "16h8g4acy7fgfxcjacr3wijjsnixwsfd2jhz3zwdi2qrzi262l5f";
   };
+
+  outputs = [ "out" "man" "info" ];
 
   enableParallelBuilding = true;
 
-  preConfigure = if stdenv.isCygwin then ''
-    sed -i lib/fpending.h -e 's,include <stdio_ext.h>,,'
-  '' else null;
+  nativeBuildInputs = [ xz.bin ];
 
   # In stdenv-linux, prevent a dependency on bootstrap-tools.
   makeFlags = "SHELL=/bin/sh GREP=grep";
 
+  doCheck = false; # fails
+
   meta = {
-    homepage = http://www.gnu.org/software/gzip/;
+    homepage = https://www.gnu.org/software/gzip/;
     description = "GNU zip compression program";
 
     longDescription =

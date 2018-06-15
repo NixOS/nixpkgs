@@ -1,49 +1,72 @@
 { stdenv, lib, fetchurl, pkgconfig, jansson
+# plugins: list of strings, eg. [ "python2" "python3" ]
 , plugins
-, pam, withPAM ? stdenv.isLinux
-, systemd, withSystemd ? stdenv.isLinux
+, pam, withPAM ? false
+, systemd, withSystemd ? false
 , python2, python3, ncurses
+, ruby, php-embed, mysql
 }:
 
-let pythonPlugin = pkg : { name = "python${if pkg ? isPy2 then "2" else "3"}";
-                           interpreter = pkg;
+let pythonPlugin = pkg : lib.nameValuePair "python${if pkg ? isPy2 then "2" else "3"}" {
+                           interpreter = pkg.interpreter;
                            path = "plugins/python";
-                           deps = [ pkg ncurses ];
+                           inputs = [ pkg ncurses ];
                            install = ''
                              install -Dm644 uwsgidecorators.py $out/${pkg.sitePackages}/uwsgidecorators.py
                              ${pkg.executable} -m compileall $out/${pkg.sitePackages}/
                              ${pkg.executable} -O -m compileall $out/${pkg.sitePackages}/
                            '';
                          };
-    available = [ (pythonPlugin python2)
+
+    available = lib.listToAttrs [
+                  (pythonPlugin python2)
                   (pythonPlugin python3)
+                  (lib.nameValuePair "rack" {
+                    path = "plugins/rack";
+                    inputs = [ ruby ];
+                  })
+                  (lib.nameValuePair "cgi" {
+                    # usage: https://uwsgi-docs.readthedocs.io/en/latest/CGI.html?highlight=cgi
+                    path = "plugins/cgi";
+                    inputs = [ ];
+                  })
+                  (lib.nameValuePair "php" {
+                    # usage: https://uwsgi-docs.readthedocs.io/en/latest/PHP.html#running-php-apps-with-nginx
+                    path = "plugins/php";
+                    inputs = [ php-embed ] ++ php-embed.buildInputs;
+                    NIX_CFLAGS_LINK = [ "-L${mysql.connector-c}/lib/mysql" ];
+                  })
                 ];
-     needed = builtins.filter (x: lib.any (y: x.name == y) plugins) available;
+
+    getPlugin = name:
+      let all = lib.concatStringsSep ", " (lib.attrNames available);
+      in if lib.hasAttr name available
+         then lib.getAttr name available // { inherit name; }
+         else throw "Unknown UWSGI plugin ${name}, available : ${all}";
+
+    needed = builtins.map getPlugin plugins;
 in
 
-assert builtins.filter (x: lib.all (y: y.name != x) available) plugins == [];
-
 stdenv.mkDerivation rec {
-  name = "uwsgi-2.0.11.1";
+  name = "uwsgi-${version}";
+  version = "2.0.17";
 
   src = fetchurl {
     url = "http://projects.unbit.it/downloads/${name}.tar.gz";
-    sha256 = "11v2j9n204hlvi1p1wp4r3nn22fqyd1qlbqcfqddi77sih9x79vm";
+    sha256 = "1wlbaairsmhp6bx5wv282q9pgh6w7w6yrb8vxjznfaxrinsfkhix";
   };
 
   nativeBuildInputs = [ python3 pkgconfig ];
 
-  buildInputs =  with stdenv.lib;
-                 [ jansson ]
-              ++ optional withPAM pam
-              ++ optional withSystemd systemd
-              ++ lib.concatMap (x: x.deps) needed
+  buildInputs =  [ jansson ]
+              ++ lib.optional withPAM pam
+              ++ lib.optional withSystemd systemd
+              ++ lib.concatMap (x: x.inputs) needed
               ;
 
-  basePlugins =  with stdenv.lib;
-                 concatStringsSep ","
-                 (  optional withPAM "pam"
-                 ++ optional withSystemd "systemd_logger"
+  basePlugins =  lib.concatStringsSep ","
+                 (  lib.optional withPAM "pam"
+                 ++ lib.optional withSystemd "systemd_logger"
                  );
 
   passthru = {
@@ -58,19 +81,21 @@ stdenv.mkDerivation rec {
   buildPhase = ''
     mkdir -p $pluginDir
     python3 uwsgiconfig.py --build nixos
-    ${lib.concatMapStringsSep ";" (x: "${x.interpreter.interpreter} uwsgiconfig.py --plugin ${x.path} nixos ${x.name}") needed}
+    ${lib.concatMapStringsSep ";" (x: "${x.preBuild or ""}\n ${x.interpreter or "python3"} uwsgiconfig.py --plugin ${x.path} nixos ${x.name}") needed}
   '';
 
   installPhase = ''
     install -Dm755 uwsgi $out/bin/uwsgi
-    #cp *_plugin.so $pluginDir || true
-    ${lib.concatMapStringsSep "\n" (x: x.install) needed}
+    ${lib.concatMapStringsSep "\n" (x: x.install or "") needed}
   '';
+
+  NIX_CFLAGS_LINK = [ "-lsystemd" ] ++ lib.concatMap (x: x.NIX_CFLAGS_LINK or []) needed;
 
   meta = with stdenv.lib; {
     homepage = http://uwsgi-docs.readthedocs.org/en/latest/;
     description = "A fast, self-healing and developer/sysadmin-friendly application container server coded in pure C";
     license = licenses.gpl2;
-    maintainers = with maintainers; [ abbradar ];
+    maintainers = with maintainers; [ abbradar schneefux ];
+    platforms = platforms.linux;
   };
 }

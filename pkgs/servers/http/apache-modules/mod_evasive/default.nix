@@ -28,7 +28,7 @@ stdenv.mkDerivation {
   '';
 
   meta = {
-    homepage = "http://www.zdziarski.com/blog/?page_id=442";
+    homepage = http://www.zdziarski.com/blog/?page_id=442;
     description = "Evasive maneuvers module for Apache to provide evasive action in the event of an HTTP DoS or DDoS attack or brute force attack";
     platforms = stdenv.lib.platforms.linux;
   };

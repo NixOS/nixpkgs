@@ -1,22 +1,24 @@
-{ stdenv, fetchzip, vim, avrdude, avrgcclibc, makeWrapper }:
+{ stdenv, fetchzip, vim, avrdude, avrbinutils, avrgcc, avrlibc, makeWrapper }:
 
 stdenv.mkDerivation rec {
   name = "microscheme-${version}";
-  version = "0.9.2";
+  version = "0.9.3";
 
   src = fetchzip {
     name = "${name}-src";
     url = "https://github.com/ryansuchocki/microscheme/archive/v${version}.tar.gz";
-    sha256 = "0ly1cphvnsip70kng9q0blb07pkyp9allav42sr6ybswqfqg60j9";
+    sha256 = "1r3ng4pw1s9yy1h5rafra1rq19d3vmb5pzbpcz1913wz22qdd976";
   };
 
+  # Just a guess
+  propagatedBuildInputs = [ avrlibc ];
   buildInputs = [ makeWrapper vim ];
 
   installPhase = ''
     make install PREFIX=$out
 
     wrapProgram $out/bin/microscheme \
-      --prefix PATH : "${avrdude}/bin:${avrgcclibc}/bin"
+      --prefix PATH : "${stdenv.lib.makeBinPath [ avrdude avrgcc avrbinutils ]}"
   '';
 
   meta = with stdenv.lib; {

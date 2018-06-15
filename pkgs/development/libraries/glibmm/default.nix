@@ -1,7 +1,7 @@
-{ stdenv, fetchurl, pkgconfig, glib, libsigcxx }:
+{ stdenv, fetchurl, fetchpatch, pkgconfig, gnum4, glib, libsigcxx }:
 
 let
-  ver_maj = "2.44";
+  ver_maj = "2.56";
   ver_min = "0";
 in
 stdenv.mkDerivation rec {
@@ -9,22 +9,33 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnome/sources/glibmm/${ver_maj}/${name}.tar.xz";
-    sha256 = "1a1fczy7hcpn24fglyn4i79f4yjc8s50is70q03mb294bm1c02hv";
+    sha256 = "1abrkqhca5p8n6ly3vp1232rny03s7lrd8f8iz2m2m141nxgqx3f";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  outputs = [ "out" "dev" ];
+
+  patchFlags = "-p0";
+  patches = [
+    (fetchpatch {
+      url = "https://raw.githubusercontent.com/macports/macports-ports/e864b2340be9ef003d8ff4aef92e7151d06287dd/devel/glibmm/files/0001-ustring-Fix-wchar-conversion-on-macOS-with-libc.patch";
+      sha256 = "02qvnailw1i59cjbj3cy7y02kfcivsvkdjrf4njkp4plarayyqp9";
+    })
+  ];
+
+  nativeBuildInputs = [ pkgconfig gnum4 ];
   propagatedBuildInputs = [ glib libsigcxx ];
 
+  enableParallelBuilding = true;
   #doCheck = true; # some tests need network
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "C++ interface to the GLib library";
 
-    homepage = http://gtkmm.org/;
+    homepage = https://gtkmm.org/;
 
-    license = stdenv.lib.licenses.lgpl2Plus;
+    license = licenses.lgpl2Plus;
 
-    maintainers = with stdenv.lib.maintainers; [urkud raskin];
-    platforms = stdenv.lib.platforms.unix;
+    maintainers = with maintainers; [raskin];
+    platforms = platforms.unix;
   };
 }

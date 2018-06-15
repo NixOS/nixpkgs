@@ -1,39 +1,40 @@
-{ stdenv, fetchurl, python, wrapPython, distutils-cfg }:
+{ stdenv
+, fetchPypi
+, python
+, wrapPython
+, unzip
+}:
 
+# Should use buildPythonPackage here somehow
 stdenv.mkDerivation rec {
-  shortName = "setuptools-${version}";
-  name = "${python.executable}-${shortName}";
+  pname = "setuptools";
+  version = "39.0.1";
+  name = "${python.libPrefix}-${pname}-${version}";
 
-  version = "18.2";
-
-  src = fetchurl {
-    url = "http://pypi.python.org/packages/source/s/setuptools/${shortName}.tar.gz";
-    sha256 = "07avbdc26yl2a46s76fc7m4vg611g8sh39l26x9dr9byya6sb509";
+  src = fetchPypi {
+    inherit pname version;
+    extension = "zip";
+    sha256 = "bec7badf0f60e7fc8153fac47836edc41b74e5d541d7692e614e635720d6a7c7";
   };
 
-  buildInputs = [ python wrapPython distutils-cfg ];
-
-  buildPhase = "${python}/bin/${python.executable} setup.py build";
-
-  installPhase =
-    ''
-      dst=$out/lib/${python.libPrefix}/site-packages
+  nativeBuildInputs = [ unzip wrapPython ];
+  buildInputs = [ python ];
+  doCheck = false;  # requires pytest
+  installPhase = ''
+      dst=$out/${python.sitePackages}
       mkdir -p $dst
       export PYTHONPATH="$dst:$PYTHONPATH"
-      ${python}/bin/${python.executable} setup.py install --prefix=$out --install-lib=$out/lib/${python.libPrefix}/site-packages
+      ${python.interpreter} setup.py install --prefix=$out
       wrapPythonPrograms
-    '';
-
-  doCheck = false;  # requires pytest
-
-  checkPhase = ''
-    ${python}/bin/${python.executable} setup.py test
   '';
+
+  pythonPath = [];
 
   meta = with stdenv.lib; {
     description = "Utilities to facilitate the installation of Python packages";
-    homepage = http://pypi.python.org/pypi/setuptools;
-    license = [ "PSF" "ZPL" ];
+    homepage = https://pypi.python.org/pypi/setuptools;
+    license = with licenses; [ psfl zpl20 ];
     platforms = platforms.all;
+    priority = 10;
   };
 }

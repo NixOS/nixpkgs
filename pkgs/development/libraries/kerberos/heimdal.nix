@@ -1,7 +1,7 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, python, perl, yacc, flex
+{ stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, python2, perl, yacc, flex
 , texinfo, perlPackages
 , openldap, libcap_ng, sqlite, openssl, db, libedit, pam
-
+, CoreFoundation, Security, SystemConfiguration
 # Extra Args
 , type ? ""
 }:
@@ -11,19 +11,24 @@ let
 in
 with stdenv.lib;
 stdenv.mkDerivation rec {
-  name = "${type}heimdal-2015-09-13";
+  name = "${type}heimdal-${version}";
+  version = "7.5.0";
 
   src = fetchFromGitHub {
     owner = "heimdal";
     repo = "heimdal";
-    rev = "c81572ab5dcee3062e715b9e25ca7a20f6ec456b";
-    sha256 = "1r60i4v6y5lpll0l2qpn0ycp6q6f1xjg7k1csi547zls8k96yk9s";
+    rev = "heimdal-${version}";
+    sha256 = "1j38wjj4k0q8vx168k3d3k0fwa8j1q5q8f2688nnx1b9qgjd6w1d";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkgconfig python perl yacc flex ]
+  patches = [ ./heimdal-make-missing-headers.patch ];
+
+  nativeBuildInputs = [ autoreconfHook pkgconfig python2 perl yacc flex ]
     ++ (with perlPackages; [ JSON ])
     ++ optional (!libOnly) texinfo;
-  buildInputs = [ libcap_ng sqlite openssl db libedit ]
+  buildInputs = optionals (stdenv.isLinux) [ libcap_ng ]
+    ++ [ db sqlite openssl libedit ]
+    ++ optionals (stdenv.isDarwin) [ CoreFoundation Security SystemConfiguration ]
     ++ optionals (!libOnly) [ openldap pam ];
 
   ## ugly, X should be made an option
@@ -31,15 +36,21 @@ stdenv.mkDerivation rec {
     "--sysconfdir=/etc"
     "--localstatedir=/var"
     "--enable-hdb-openldap-module"
-    "--with-capng"
-    "--with-sqlite3=${sqlite}"
-    "--with-berkeley-db=${db}"
+    "--with-sqlite3=${sqlite.dev}"
     "--with-libedit=${libedit}"
-    "--with-openssl=${openssl}"
+    "--with-openssl=${openssl.dev}"
     "--without-x"
+    "--with-berkeley-db"
+    "--with-berkeley-db-include=${db.dev}/include"
   ] ++ optionals (!libOnly) [
-    "--with-openldap=${openldap}"
+    "--with-openldap=${openldap.dev}"
+  ] ++ optionals (stdenv.isLinux) [
+    "--with-capng"
   ];
+
+  postUnpack = ''
+    sed -i '/^DEFAULT_INCLUDES/ s,$, -I..,' source/cf/Makefile.am.common
+  '';
 
   buildPhase = optionalString libOnly ''
     (cd include; make -j $NIX_BUILD_CORES)
@@ -83,7 +94,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "An implementation of Kerberos 5 (and some more stuff)";
     license = licenses.bsd3;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
     maintainers = with maintainers; [ wkennington ];
   };
 

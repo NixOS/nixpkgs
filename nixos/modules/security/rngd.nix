@@ -18,7 +18,7 @@ with lib;
   config = mkIf config.security.rngd.enable {
     services.udev.extraRules = ''
       KERNEL=="random", TAG+="systemd"
-      SUBSYSTEM=="cpu", ENV{MODALIAS}=="x86cpu:*feature:*009E*", TAG+="systemd", ENV{SYSTEMD_WANTS}+="rngd.service"
+      SUBSYSTEM=="cpu", ENV{MODALIAS}=="cpu:type:x86,*feature:*009E*", TAG+="systemd", ENV{SYSTEMD_WANTS}+="rngd.service"
       KERNEL=="hw_random", TAG+="systemd", ENV{SYSTEMD_WANTS}+="rngd.service"
       ${if config.services.tcsd.enable then "" else ''KERNEL=="tpm0", TAG+="systemd", ENV{SYSTEMD_WANTS}+="rngd.service"''}
     '';

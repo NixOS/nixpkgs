@@ -1,25 +1,24 @@
 { stdenv, fetchurl, kernel, which }:
 
-assert stdenv.isLinux;
-# Don't bother with older versions, though some would probably work:
-assert stdenv.lib.versionAtLeast kernel.version "4.2";
-# Disable on grsecurity kernels, which break module building:
-assert !kernel.features ? grsecurity;
+# Don't bother with older versions, though some might even work:
+assert stdenv.lib.versionAtLeast kernel.version "4.10";
 
 let
   release = "0.4.0";
-  revbump = "rev18"; # don't forget to change forum download id...
-  version = "${release}-${revbump}";
-in stdenv.mkDerivation {
+  revbump = "rev25"; # don't forget to change forum download id...
+in stdenv.mkDerivation rec {
   name = "linux-phc-intel-${version}-${kernel.version}";
+  version = "${release}-${revbump}";
 
   src = fetchurl {
-    sha256 = "1480y75yid4nw7dhzm97yb10dykinzjz34abvavsrqpq7qclhv27";
-    url = "http://www.linux-phc.org/forum/download/file.php?id=167";
+    sha256 = "1w91hpphd8i0br7g5qra26jdydqar45zqwq6jq8yyz6l0vb10zlz";
+    url = "http://www.linux-phc.org/forum/download/file.php?id=194";
     name = "phc-intel-pack-${revbump}.tar.bz2";
   };
 
-  buildInputs = [ which ];
+  nativeBuildInputs = [ which ] ++ kernel.moduleBuildDependencies;
+
+  hardeningDisable = [ "pic" ];
 
   makeFlags = with kernel; [
     "DESTDIR=$(out)"
@@ -33,12 +32,11 @@ in stdenv.mkDerivation {
   enableParallelBuilding = false;
 
   installPhase = ''
-    install -m 755   -d $out/lib/modules/${kernel.version}/extra/
-    install -m 644 *.ko $out/lib/modules/${kernel.version}/extra/
+    install -m 755   -d $out/lib/modules/${kernel.modDirVersion}/extra/
+    install -m 644 *.ko $out/lib/modules/${kernel.modDirVersion}/extra/
   '';
 
   meta = with stdenv.lib; {
-    inherit version;
     description = "Undervolting kernel driver for Intel processors";
     longDescription = ''
       PHC is a Linux kernel patch to undervolt processors. This can divide the
@@ -49,7 +47,6 @@ in stdenv.mkDerivation {
     homepage = http://www.linux-phc.org/;
     downloadPage = "http://www.linux-phc.org/forum/viewtopic.php?f=7&t=267";
     license = licenses.gpl2;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ nckx ];
+    platforms = [ "x86_64-linux" "i686-linux" ];
   };
 }

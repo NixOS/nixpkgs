@@ -1,18 +1,29 @@
-{ stdenv, fetchurl, pkgconfig, libusb1, libtool, libexif, libjpeg, gettext }:
+{ stdenv, fetchpatch, fetchFromGitHub, pkgconfig, libusb1, libtool, libexif, libjpeg, gettext, autoreconfHook }:
 
 stdenv.mkDerivation rec {
   name = "libgphoto2-${meta.version}";
 
-  src = fetchurl {
-    url = "mirror://sourceforge/gphoto/${name}.tar.bz2";
-    sha256 = "1di7iv2r5ghzrylfbpvp694gpqbwjj3ngrmg4kvl7big6hp2c6h3";
+  src = fetchFromGitHub {
+    owner = "gphoto";
+    repo = "libgphoto2";
+    rev = "${meta.tag}";
+    sha256 = "0pbfg89817qkb35mmajsw2iz6j9nhkkj67m419f8x8yxpqkaa0wb";
   };
 
-  nativeBuildInputs = [ pkgconfig gettext ];
-  buildInputs = [ libtool libjpeg libusb1 ];
+  patches = [];
+
+  nativeBuildInputs = [ pkgconfig gettext autoreconfHook ];
+  buildInputs = [ libtool libjpeg libusb1  ];
 
   # These are mentioned in the Requires line of libgphoto's pkg-config file.
   propagatedBuildInputs = [ libexif ];
+
+  hardeningDisable = [ "format" ];
+
+  postInstall = ''
+    mkdir -p $out/lib/udev/rules.d
+    $out/lib/libgphoto2/print-camera-list udev-rules version 175 group camera >$out/lib/udev/rules.d/40-gphoto2.rules
+  '';
 
   meta = {
     homepage = http://www.gphoto.org/proj/libgphoto2/;
@@ -22,11 +33,11 @@ stdenv.mkDerivation rec {
       MTP, and other vendor specific protocols for controlling and transferring data
       from digital cameras.
     '';
-    version = "2.5.8";
+    version = "2.5.17";
+    tag = "libgphoto2-2_5_17-release";
     # XXX: the homepage claims LGPL, but several src files are lgpl21Plus
     license = stdenv.lib.licenses.lgpl21Plus;
     platforms = with stdenv.lib.platforms; unix;
     maintainers = with stdenv.lib.maintainers; [ jcumming ];
   };
 }
-

@@ -9,9 +9,10 @@ stdenv.mkDerivation rec {
     sha256 = "db4e1655fc58f31e5770a17dfca4e6c89028ad8b2c8e043febc87a0beedeef05";
   };
 
-  buildInputs = [ intltool gnome3.gtk pkgconfig texinfo ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ intltool gnome3.gtk texinfo ];
   meta = {
-    description = "a GTK enabled dropin replacement for xmessage";
+    description = "A GTK enabled dropin replacement for xmessage";
     homepage = "http://homepages.ihug.co.nz/~trmusson/programs.html#gxmessage";
     license = stdenv.lib.licenses.gpl3;
     maintainers = with stdenv.lib.maintainers; [jfb];

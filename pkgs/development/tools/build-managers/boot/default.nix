@@ -1,27 +1,25 @@
-{ stdenv, fetchurl, makeWrapper, jdk }:
+{ stdenv, fetchurl, jdk }:
 
 stdenv.mkDerivation rec {
-  version = "2.2.0";
+  version = "2.7.2";
   name = "boot-${version}";
 
   src = fetchurl {
-    url = "https://github.com/boot-clj/boot/releases/download/${version}/boot.sh";
-    sha256 = "0czavpdhmpgp20vywf326ix1f94dky51mqiwyblrmrd33d89qz9f";
+    url = "https://github.com/boot-clj/boot-bin/releases/download/${version}/boot.sh";
+    sha256 = "1hqp3xxmsj5vkym0l3blhlaq9g3w0lhjgmp37g6y3rr741znkk8c";
   };
 
   inherit jdk;
   
   builder = ./builder.sh;
 
-  buildInputs = [ makeWrapper ];
-
   propagatedBuildInputs = [ jdk ];
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "Build tooling for Clojure";
     homepage = http://boot-clj.com/;
-    license = stdenv.lib.licenses.epl10;
-    platforms = stdenv.lib.platforms.linux ++ stdenv.lib.platforms.darwin;
-    maintainers = [ stdenv.lib.maintainers.ragge ];
+    license = licenses.epl10;
+    platforms = platforms.linux ++ platforms.darwin;
+    maintainers = with maintainers; [ ragge ];
   };
 }

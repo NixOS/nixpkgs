@@ -1,12 +1,13 @@
 { stdenv, autoreconfHook, pkgconfig, SDL, SDL_mixer, SDL_net, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "chocolate-doom-2.2.1";
+  name = "chocolate-doom-2.3.0";
   src = fetchurl {
     url = "https://github.com/chocolate-doom/chocolate-doom/archive/${name}.tar.gz";
-    sha256 = "140xnz0vc14ypy30l6yxbb9s972g2ffwd4lbic54zp6ayd9414ma";
+    sha256 = "0i57smxmbhxj0wgvxq845ba9zsn5nx5wmzkl71rdchyd4q5jmida";
   };
-  buildInputs = [ autoreconfHook pkgconfig SDL SDL_mixer SDL_net ];
+  nativeBuildInputs = [ autoreconfHook pkgconfig ];
+  buildInputs = [ SDL SDL_mixer SDL_net ];
   patchPhase = ''
     sed -e 's#/games#/bin#g' -i src{,/setup}/Makefile.am
   '';

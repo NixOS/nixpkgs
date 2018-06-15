@@ -1,28 +1,16 @@
-{ lib, stdenv, fetchurl }:
+{ lib, stdenv, fetchurl, libiconv }:
 
 stdenv.mkDerivation rec {
   name = "wavpack-${version}";
-  version = "4.75.0";
+  version = "5.1.0";
 
   enableParallelBuilding = true;
 
-  patches = [
-    # backported from
-    # https://github.com/dbry/WavPack/commit/12867b33e2de3e95b88d7cb6f449ce0c5c87cdd5
-    ./wavpack_clang.patch
-  ];
-
-  preConfigure = ''
-    sed -i '2iexec_prefix=@exec_prefix@' wavpack.pc.in
-  '';
-
-  # --disable-asm is required for clang
-  # https://github.com/dbry/WavPack/issues/3
-  configureFlags = lib.optionalString stdenv.cc.isClang "--disable-asm";
+  buildInputs = stdenv.lib.optional stdenv.isDarwin libiconv;
 
   src = fetchurl {
     url = "http://www.wavpack.com/${name}.tar.bz2";
-    sha256 = "0bmgwcvch3cjcivk7pyasqysj0s81wkg40j3zfrcd7bl0qhmqgn6";
+    sha256 = "0i19c6krc0p9krwrqy9s5xahaafigqzxcn31piidmlaqadyn4f8r";
   };
 
   meta = with stdenv.lib; {

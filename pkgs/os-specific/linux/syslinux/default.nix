@@ -1,25 +1,40 @@
-{ stdenv, fetchurl, nasm, perl, libuuid }:
+{ stdenv, fetchFromGitHub, fetchurl, nasm, perl, python, libuuid, mtools, makeWrapper }:
 
 stdenv.mkDerivation rec {
-  name = "syslinux-6.03";
+  name = "syslinux-2015-11-09";
 
-  src = fetchurl {
-    url = "mirror://kernel/linux/utils/boot/syslinux/${name}.tar.xz";
-    sha256 = "03l5iifwlg1wyb4yh98i0b7pd4j55a1c9y74q1frs47a5dnrilr6";
+  src = fetchFromGitHub {
+    owner = "geneC";
+    repo = "syslinux";
+    rev = "0cc9a99e560a2f52bcf052fd85b1efae35ee812f";
+    sha256 = "0wk3r5ki4lc334f9jpml07wpl8d0bnxi9h1l4h4fyf9a0d7n4kmw";
   };
 
-  # gcc5-fix should be in 6.04+, so remove if it fails to apply.
-  patches = [ ./perl-deps.patch ./gcc5-fix.patch ];
+  patches = [
+    ./perl-deps.patch
+    (fetchurl {
+      # ldlinux.elf: Not enough room for program headers, try linking with -N
+      name = "not-enough-room.patch";
+      url = "https://anonscm.debian.org/cgit/collab-maint/syslinux.git/plain/"
+          + "debian/patches/0014_fix_ftbfs_no_dynamic_linker.patch?id=a556ad7";
+      sha256 = "0ijqjsjmnphmvsx0z6ppnajsfv6xh6crshy44i2a5klxw4nlvrsw";
+    })
+  ];
 
-  buildInputs = [ nasm perl libuuid ];
+  nativeBuildInputs = [ nasm perl python ];
+  buildInputs = [ libuuid makeWrapper ];
 
-  enableParallelBuilding = true;
+  enableParallelBuilding = false; # Fails very rarely with 'No rule to make target: ...'
+  hardeningDisable = [ "pic" "stackprotector" "fortify" ];
 
   preBuild = ''
     substituteInPlace Makefile --replace /bin/pwd $(type -P pwd)
     substituteInPlace gpxe/src/Makefile.housekeeping --replace /bin/echo $(type -P echo)
+    substituteInPlace utils/ppmtolss16 --replace /usr/bin/perl $(type -P perl)
     substituteInPlace gpxe/src/Makefile --replace /usr/bin/perl $(type -P perl)
   '';
+
+  stripDebugList = "bin sbin share/syslinux/com32";
 
   makeFlags = [
     "BINDIR=$(out)/bin"
@@ -32,10 +47,18 @@ stdenv.mkDerivation rec {
     "bios"
   ];
 
+  postInstall = ''
+    wrapProgram $out/bin/syslinux \
+      --prefix PATH : "${mtools}/bin"
+
+    # Delete com32 headers to save space, nobody seems to be using them
+    rm -rf $out/share/syslinux/com32
+  '';
+
   meta = with stdenv.lib; {
     homepage = http://www.syslinux.org/;
     description = "A lightweight bootloader";
     license = licenses.gpl2;
-    platforms = platforms.linux;
+    platforms = [ "i686-linux" "x86_64-linux" ];
   };
 }

@@ -11,43 +11,58 @@ in
 with stdenv.lib;
 stdenv.mkDerivation rec {
   name = "${type}krb5-${version}";
-  version = "1.13.2";
+  majorVersion = "1.15";
+  version = "${majorVersion}.2";
 
   src = fetchurl {
-    url = "${meta.homepage}dist/krb5/1.13/krb5-${version}-signed.tar";
-    sha256 = "1qbdzyrws7d0q4filsibh28z54pd5l987jr0ygv43iq9085w6a75";
+    url = "${meta.homepage}dist/krb5/${majorVersion}/krb5-${version}.tar.gz";
+    sha256 = "0zn8s7anb10hw3nzwjz7vg10fgmmgvwnibn2zrn3nppjxn9f6f8n";
   };
 
-  nativeBuildInputs = [ pkgconfig perl yacc ]
+  outputs = [ "out" "dev" ];
+
+  configureFlags = [ "--with-tcl=no" "--localstatedir=/var/lib"]
+    ++ optional stdenv.isFreeBSD ''WARN_CFLAGS=""''
+    ++ optionals (stdenv.buildPlatform != stdenv.hostPlatform)
+       [ "krb5_cv_attr_constructor_destructor=yes,yes"
+         "ac_cv_func_regcomp=yes"
+         "ac_cv_printf_positional=yes"
+       ];
+
+  nativeBuildInputs = [ pkgconfig perl ]
+    ++ optional (!libOnly) yacc
     # Provides the mig command used by the build scripts
-    ++ stdenv.lib.optional stdenv.isDarwin bootstrap_cmds;
+    ++ optional stdenv.isDarwin bootstrap_cmds;
   buildInputs = [ openssl ]
     ++ optionals (!libOnly) [ openldap libedit ];
 
-  unpackPhase = ''
-    tar -xf $src
-    tar -xzf krb5-${version}.tar.gz
-    cd krb5-${version}/src
-  '';
+  preConfigure = "cd ./src";
 
   buildPhase = optionalString libOnly ''
-    (cd util; make -j $NIX_BUILD_CORES)
-    (cd include; make -j $NIX_BUILD_CORES)
-    (cd lib; make -j $NIX_BUILD_CORES)
-    (cd build-tools; make -j $NIX_BUILD_CORES)
+    MAKE="make -j $NIX_BUILD_CORES -l $NIX_BUILD_CORES"
+    (cd util; $MAKE)
+    (cd include; $MAKE)
+    (cd lib; $MAKE)
+    (cd build-tools; $MAKE)
   '';
 
   installPhase = optionalString libOnly ''
-    mkdir -p $out/{bin,include/{gssapi,gssrpc,kadm5,krb5},lib/pkgconfig,sbin,share/{et,man/man1}}
-    (cd util; make -j $NIX_BUILD_CORES install)
-    (cd include; make -j $NIX_BUILD_CORES install)
-    (cd lib; make -j $NIX_BUILD_CORES install)
-    (cd build-tools; make -j $NIX_BUILD_CORES install)
-    rm -rf $out/{sbin,share}
-    find $out/bin -type f | grep -v 'krb5-config' | xargs rm
+    mkdir -p "$out"/{bin,sbin,lib/pkgconfig,share/{et,man/man1}} \
+      "$dev"/include/{gssapi,gssrpc,kadm5,krb5}
+    (cd util; $MAKE install)
+    (cd include; $MAKE install)
+    (cd lib; $MAKE install)
+    (cd build-tools; $MAKE install)
+    ${postInstall}
+  '';
+
+  # not via outputBin, due to reference from libkrb5.so
+  postInstall = ''
+    moveToOutput bin "$dev"
   '';
 
   enableParallelBuilding = true;
+  doCheck = false; # fails with "No suitable file for testing purposes"
 
   meta = {
     description = "MIT Kerberos 5";

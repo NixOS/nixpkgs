@@ -11,7 +11,7 @@ mkDerivation rec {
     description = "Export an RCS or CVS history as a fast-import stream";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ dfoxfranke ];
-    homepage = "http://www.catb.org/esr/cvs-fast-export/";
+    homepage = http://www.catb.org/esr/cvs-fast-export/;
     platforms = platforms.all;
   };
 
@@ -39,7 +39,7 @@ mkDerivation rec {
 
   postInstall =
     let
-      binpath = makeSearchPath "bin" [ out rcs cvs git coreutils rsync ];
+      binpath = makeBinPath [ out rcs cvs git coreutils rsync ];
     in ''
       for prog in cvs-fast-export cvsconvert cvssync; do
         wrapProgram $out/bin/$prog \

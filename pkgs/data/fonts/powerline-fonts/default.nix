@@ -1,25 +1,28 @@
-{ stdenv, fetchFromGitHub }:
+{ stdenv, fetchzip}:
 
-stdenv.mkDerivation {
-  name = "powerline-fonts-2015-06-29";
+fetchzip {
+  name = "powerline-fonts-2017-05-25";
 
-  src = fetchFromGitHub {
-    owner = "powerline";
-    repo = "fonts";
-    rev = "97dc451724fb24e1dd9892c988642b239b5dc67c";
-    sha256 = "1m0a8k916s74iv2k0kk36dz7d2hfb2zgf8m0b9hg71w4yd3bmj4w";
-  };
+  url = https://github.com/powerline/fonts/archive/fe396ef6f6b9b315f30af7d7229ff21f67a66e12.zip;
 
-  buildPhase = "true";
+  postFetch = ''
+    mkdir -p $out/share/fonts/opentype
+    unzip -j $downloadedFile '*.otf' -d $out/share/fonts/opentype
 
-  installPhase =
-    ''
-      mkdir -p $out/share/fonts/opentype
-      cp -v */*.otf $out/share/fonts/opentype
+    mkdir -p $out/share/fonts/truetype
+    unzip -j $downloadedFile '*.ttf' -d $out/share/fonts/truetype
 
-      mkdir -p $out/share/fonts/truetype
-      cp -v */*.ttf $out/share/fonts/truetype
-    '';
+    mkdir -p $out/share/fonts/bdf
+    unzip -j $downloadedFile '*/BDF/*.bdf' -d $out/share/fonts/bdf
+
+    mkdir -p $out/share/fonts/pcf
+    unzip -j $downloadedFile '*/PCF/*.pcf.gz' -d $out/share/fonts/pcf
+
+    mkdir -p $out/share/fonts/psf
+    unzip -j $downloadedFile '*/PSF/*.psf.gz' -d $out/share/fonts/psf
+  '';
+
+  sha256 = "07yjbwri7nnnnynps86sz0dlivwqw7gfw045v63q969nab9dw388";
 
   meta = with stdenv.lib; {
     homepage = https://github.com/powerline/fonts;
@@ -29,6 +32,6 @@ stdenv.mkDerivation {
     '';
     license = with licenses; [ asl20 free ofl ];
     platforms = platforms.all;
-    maintainer = with maintainers; [ malyn ];
+    maintainers = with maintainers; [ malyn ];
   };
 }

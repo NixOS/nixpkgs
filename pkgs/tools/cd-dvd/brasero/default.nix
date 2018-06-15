@@ -1,15 +1,13 @@
-{ stdenv, fetchurl, pkgconfig, gtk3, itstool, gst_all_1, libxml2, libnotify
-, libcanberra_gtk3, intltool, gnome3, makeWrapper, dvdauthor, cdrdao
-, dvdplusrwtools, cdrtools, libdvdcss }:
+{ stdenv, lib, fetchurl, pkgconfig, gtk3, itstool, gst_all_1, libxml2, libnotify
+, libcanberra-gtk3, intltool, makeWrapper, dvdauthor, libburn, libisofs
+, vcdimager, wrapGAppsHook, hicolor-icon-theme }:
+
+# libdvdcss is "too old" (in fast "too new"), see https://bugs.launchpad.net/ubuntu/+source/brasero/+bug/611590
 
 let
   major = "3.12";
-  minor = "0";
-  GST_PLUGIN_PATH = stdenv.lib.makeSearchPath "lib/gstreamer-1.0" [
-    gst_all_1.gst-plugins-base
-    gst_all_1.gst-plugins-good
-    gst_all_1.gst-plugins-bad
-    gst_all_1.gst-libav ];
+  minor = "2";
+  binpath = lib.makeBinPath [ dvdauthor vcdimager ];
 
 in stdenv.mkDerivation rec {
   version = "${major}.${minor}";
@@ -17,35 +15,30 @@ in stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "http://download.gnome.org/sources/brasero/${major}/${name}.tar.xz";
-    sha256 = "68fef2699b772fa262d855dac682100dbfea05563a7e4056eff8fe6447aec2fc";
+    sha256 = "0h90y674j26rvjahb8cc0w79zx477rb6zaqcj26wzvq8kmpic8k8";
   };
 
-  propagatedUserEnvPkgs = [ gnome3.gnome_themes_standard dvdauthor
-    cdrdao dvdplusrwtools cdrtools ];
+  nativeBuildInputs = [ pkgconfig itstool intltool wrapGAppsHook ];
 
-  buildInputs = [ pkgconfig gtk3 itstool libxml2 libnotify libcanberra_gtk3
-                  intltool gnome3.gsettings_desktop_schemas makeWrapper libdvdcss
-                  gst_all_1.gstreamer gst_all_1.gst-plugins-base gnome3.dconf
-                  gst_all_1.gst-plugins-good gst_all_1.gst-plugins-bad ];
+  buildInputs = [ gtk3 libxml2 libnotify libcanberra-gtk3 libburn libisofs
+                  hicolor-icon-theme
+                  gst_all_1.gstreamer gst_all_1.gst-plugins-base
+                  gst_all_1.gst-plugins-good gst_all_1.gst-plugins-bad
+                  gst_all_1.gst-plugins-ugly gst_all_1.gst-libav ];
 
   # brasero checks that the applications it uses aren't symlinks, but this
   # will obviously not work on nix
   patches = [ ./remove-symlink-check.patch ];
 
+  enableParallelBuilding = true;
+
   configureFlags = [
     "--with-girdir=$out/share/gir-1.0"
-    "--with-typelibdir=$out/lib/girepository-1.0" ];
+    "--with-typelibdir=$out/lib/girepository-1.0"
+  ];
 
   preFixup = ''
-    for f in $out/bin/* $out/libexec/*; do
-      wrapProgram "$f" \
-        --prefix XDG_DATA_DIRS : "${gnome3.gnome_themes_standard}/share:$XDG_ICON_DIRS:$GSETTINGS_SCHEMAS_PATH" \
-        --prefix GST_PLUGIN_SYSTEM_PATH_1_0 : "$GST_PLUGIN_SYSTEM_PATH_1_0" \
-        --prefix GST_PLUGIN_PATH : "${GST_PLUGIN_PATH}" \
-        --prefix GIO_EXTRA_MODULES : "${gnome3.dconf}/lib/gio/modules" \
-        --prefix LD_LIBRARY_PATH : ${libdvdcss}/lib
-    done
-    rm $out/share/icons/hicolor/icon-theme.cache
+    gappsWrapperArgs+=(--prefix PATH : "${binpath}" --prefix GST_PLUGIN_SYSTEM_PATH : "$GST_PLUGIN_SYSTEM_PATH")
   '';
 
   meta = with stdenv.lib; {

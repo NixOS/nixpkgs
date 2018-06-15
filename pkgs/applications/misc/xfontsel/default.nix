@@ -1,17 +1,18 @@
 # This program used to come with xorg releases, but now I could only find it
-# at http://www.x.org/releases/individual/.
+# at https://www.x.org/releases/individual/.
 # That is why this expression is not inside pkgs.xorg
 
 {stdenv, fetchurl, makeWrapper, libX11, pkgconfig, libXaw}:
 stdenv.mkDerivation rec {
-  name = "xfontsel-1.0.5";
+  name = "xfontsel-1.0.6";
 
   src = fetchurl {
     url = "mirror://xorg/individual/app/${name}.tar.bz2";
-    sha256 = "1grir464hy52a71r3mpm9mzvkf7nwr3vk0b1vc27pd3gp588a38p";
+    sha256 = "0700lf6hx7dg88wq1yll7zjvf9gbwh06xff20yffkxb289y0pai5";
   };
 
-  buildInputs = [libX11 makeWrapper pkgconfig libXaw];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [libX11 makeWrapper libXaw];
 
   # Without this, it gets Xmu as a dependency, but without rpath entry
   NIX_LDFLAGS = "-lXmu";
@@ -26,7 +27,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    homepage = http://www.x.org/;
+    homepage = https://www.x.org/;
     description = "Allows testing the fonts available in an X server";
     license = stdenv.lib.licenses.free;
     maintainers = with stdenv.lib.maintainers; [viric];

@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
   name = "coan-${version}";
 
   src = fetchurl {
-    url = "http://downloads.sourceforge.net/project/coan2/v${version}/${name}.tar.gz";
+    url = "mirror://sourceforge/project/coan2/v${version}/${name}.tar.gz";
     sha256 = "1d041j0nd1hc0562lbj269dydjm4rbzagdgzdnmwdxr98544yw44";
   };
 
@@ -28,7 +28,6 @@ stdenv.mkDerivation rec {
     '';
     homepage = http://coan2.sourceforge.net/;
     license = licenses.bsd3;
-    platforms = with platforms; linux;
-    maintainers = with maintainers; [ nckx ];
+    platforms = platforms.linux;
   };
 }

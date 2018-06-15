@@ -1,29 +1,70 @@
-{ stdenv, fetchurl, pythonPackages }:
+{ stdenv, python3Packages, glibcLocales, rustPlatform }:
 
-pythonPackages.buildPythonPackage rec {
-  version = "0.6.0";
-  name = "vdirsyncer-${version}";
-  namePrefix = "";
-
-  src = fetchurl {
-    url = "https://pypi.python.org/packages/source/v/vdirsyncer/${name}.tar.gz";
-    sha256 = "1mb0pws5vsgnmyp5dp5m5jvgl6jcvdamxjz7wmgvxkw6n1vrcahd";
+# Packaging documentation at:
+# https://github.com/untitaker/vdirsyncer/blob/master/docs/packaging.rst
+let
+  pythonPackages = python3Packages;
+  version = "0.17.0a2";
+  pname = "vdirsyncer";
+  name = pname + "-" + version;
+  src = pythonPackages.fetchPypi {
+    inherit pname version;
+    sha256 = "0y464rsx5la6bp94z2g0nnkbl4nwfya08abynvifw4c84vs1gr4q";
   };
+  native = rustPlatform.buildRustPackage {
+    name = name + "-native";
+    inherit src;
+    sourceRoot = name + "/rust";
+    cargoSha256 = "1cr7xs11gbsc3x5slga9qahchwc22qq49amf28g4jgs9lzf57qis";
+    postInstall = ''
+      mkdir $out/include $out/lib
+      cp $out/bin/libvdirsyncer_rustext* $out/lib
+      rm -r $out/bin
+      cp target/vdirsyncer_rustext.h $out/include
+    '';
+  };
+in pythonPackages.buildPythonApplication rec {
+  inherit version pname src;
 
   propagatedBuildInputs = with pythonPackages; [
-    click
-    lxml
-    setuptools
-    setuptools_scm
+    click click-log click-threading
     requests_toolbelt
-    requests2
+    requests
+    requests_oauthlib # required for google oauth sync
     atomicwrites
+    milksnake
   ];
 
+  buildInputs = with pythonPackages; [ setuptools_scm ];
+
+  checkInputs = with pythonPackages; [ hypothesis pytest pytest-localserver pytest-subtesthack ] ++ [ glibcLocales ];
+
+  postPatch = ''
+    sed -i "/cargo build/d" Makefile
+  '';
+
+  preBuild = ''
+    mkdir -p rust/target/release
+    ln -s ${native}/lib/libvdirsyncer_rustext* rust/target/release/
+    ln -s ${native}/include/vdirsyncer_rustext.h rust/target/
+  '';
+
+  LC_ALL = "en_US.utf8";
+
+  preCheck = ''
+    ln -sf ../dist/tmpbuild/vdirsyncer/vdirsyncer/_native__lib.so vdirsyncer
+  '';
+
+  checkPhase = ''
+    runHook preCheck
+    make DETERMINISTIC_TESTS=true test
+    runHook postCheck
+  '';
+
   meta = with stdenv.lib; {
-    homepage = https://github.com/untitaker/vdirsyncer;
+    homepage = https://github.com/pimutils/vdirsyncer;
     description = "Synchronize calendars and contacts";
-    maintainers = with maintainers; [ matthiasbeyer jgeerds ];
+    maintainers = with maintainers; [ jgeerds ];
     platforms = platforms.all;
     license = licenses.mit;
   };

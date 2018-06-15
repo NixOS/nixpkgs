@@ -10,9 +10,9 @@ let
       preferLocalBuild = true;
     } ''
       cd ${srcStr}
-      ROOT=$(git rev-parse --show-toplevel) # path to repo
+      DOT_GIT=$(git rev-parse --resolve-git-dir .git) # path to repo
 
-      cp $ROOT/.git/index $ROOT/.git/index-user # backup index
+      cp $DOT_GIT/index $DOT_GIT/index-user # backup index
       git reset # reset index
       git add . # add current directory
 
@@ -21,7 +21,7 @@ let
       git rev-parse $(git write-tree) \
         | tr -d '\n' > $out
 
-      mv $ROOT/.git/index-user $ROOT/.git/index # restore index
+      mv $DOT_GIT/index-user $DOT_GIT/index # restore index
     '';
 
   gitHash = builtins.readFile gitHashFile; # cache against git hash
@@ -34,7 +34,7 @@ let
 
       # dump tar of *current directory* at given revision
       git -C ${srcStr} archive --format=tar ${gitHash} \
-        | tar xvf - -C $out
+        | tar xf - -C $out
     '';
 
 in nixPath

@@ -8,9 +8,9 @@ stdenv.mkDerivation {
     ln -s /usr/bin/xcode-select
     ln -s /usr/bin/security
     ln -s /usr/bin/codesign
+    ln -s /usr/bin/xcrun
     ln -s "${xcodeBaseDir}/Contents/Developer/usr/bin/xcodebuild"
-    ln -s "${xcodeBaseDir}/Contents/Developer/usr/bin/xcrun"
-    ln -s "${xcodeBaseDir}/Contents/Developer/Applications/iOS Simulator.app/Contents/MacOS/iOS Simulator"
+    ln -s "${xcodeBaseDir}/Contents/Developer/Applications/Simulator.app/Contents/MacOS/Simulator"
 
     cd ..
     ln -s "${xcodeBaseDir}/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs"

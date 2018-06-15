@@ -1,29 +1,29 @@
-{ stdenv, fetchurl, python, makeWrapper, docutils, unzip, hg-git, dulwich
-, guiSupport ? false, tk ? null, hg-crecord ? null, curses
+{ stdenv, fetchurl, python2Packages, makeWrapper, docutils, unzip
+, guiSupport ? false, tk ? null
 , ApplicationServices, cf-private }:
 
 let
-  version = "3.5.1";
+  # if you bump version, update pkgs.tortoisehg too or ping maintainer
+  version = "4.5.2";
   name = "mercurial-${version}";
-in
-
-stdenv.mkDerivation {
+  inherit (python2Packages) docutils hg-git dulwich python;
+in python2Packages.buildPythonApplication {
   inherit name;
+  format = "other";
 
   src = fetchurl {
-    url = "http://mercurial.selenic.com/release/${name}.tar.gz";
-    sha256 = "1795ia6ghbqwfp4d6bz0qwlvzymh76zdgk2viikrkqq3ldfs8zcr";
+    url = "https://mercurial-scm.org/release/${name}.tar.gz";
+    sha256 = "14732hhw2ibvy5khqxjc8a983z3rib5vp9lqfbws80lm3kyryjm4";
   };
 
   inherit python; # pass it so that the same version can be used in hg2git
-  pythonPackages = [ curses ];
 
-  buildInputs = [ python makeWrapper docutils unzip ];
+  buildInputs = [ makeWrapper docutils unzip ]
+    ++ stdenv.lib.optionals stdenv.isDarwin [ ApplicationServices ];
 
-  propagatedBuildInputs = stdenv.lib.optionals stdenv.isDarwin
-    [ ApplicationServices cf-private ];
+  propagatedBuildInputs = [ hg-git dulwich ];
 
-  makeFlags = "PREFIX=$(out)";
+  makeFlags = [ "PREFIX=$(out)" ];
 
   postInstall = (stdenv.lib.optionalString guiSupport
     ''
@@ -34,29 +34,15 @@ stdenv.mkDerivation {
       hgk=$out/lib/${python.libPrefix}/site-packages/hgext/hgk.py
       EOF
       # setting HG so that hgk can be run itself as well (not only hg view)
-      WRAP_TK=" --set TK_LIBRARY \"${tk}/lib/${tk.libPrefix}\"
-                --set HG \"$out/bin/hg\"
-                --prefix PATH : \"${tk}/bin\" "
-    '') + (stdenv.lib.optionalString (hg-crecord != null)
-    ''
-      mkdir -p $out/etc/mercurial
-      cat >> $out/etc/mercurial/hgrc << EOF
-      [extensions]
-      crecord=${hg-crecord}/${python.sitePackages}/crecord
-      EOF
+      WRAP_TK=" --set TK_LIBRARY ${tk}/lib/${tk.libPrefix}
+                --set HG $out/bin/hg
+                --prefix PATH : ${tk}/bin "
     '') +
     ''
       for i in $(cd $out/bin && ls); do
         wrapProgram $out/bin/$i \
-          --prefix PYTHONPATH : "$(toPythonPath "$out ${curses}"):$(toPythonPath "$out ${hg-git}"):$(toPythonPath "$out ${dulwich}")" \
           $WRAP_TK
       done
-
-      mkdir -p $out/etc/mercurial
-      cat >> $out/etc/mercurial/hgrc << EOF
-      [web]
-      cacerts = /etc/ssl/certs/ca-certificates.crt
-      EOF
 
       # copy hgweb.cgi to allow use in apache
       mkdir -p $out/share/cgi-bin
@@ -70,9 +56,11 @@ stdenv.mkDerivation {
   meta = {
     inherit version;
     description = "A fast, lightweight SCM system for very large distributed projects";
-    homepage = "http://mercurial.selenic.com/";
+    homepage = http://mercurial.selenic.com/;
     downloadPage = "http://mercurial.selenic.com/release/";
     license = stdenv.lib.licenses.gpl2;
     maintainers = [ stdenv.lib.maintainers.eelco ];
+    updateWalker = true;
+    platforms = stdenv.lib.platforms.unix;
   };
 }

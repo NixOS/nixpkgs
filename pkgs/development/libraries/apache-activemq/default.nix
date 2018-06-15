@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "apache-activemq-${version}";
-  version = "5.8.0";
+  version = "5.14.5";
 
   src = fetchurl {
-    url = "mirror://apache/activemq/apache-activemq/${version}/${name}-bin.tar.gz";
-    sha256 = "12a1lmmqapviqdgw307jm07vw1z5q53r56pkbp85w9wnqwspjrbk";
+    sha256 = "0vm8z7rxb9n10xg5xjahy357704fw3q477hmpb83kd1zrc633g54";
+    url = "mirror://apache/activemq/${version}/${name}-bin.tar.gz";
   };
 
   phases = [ "unpackPhase" "installPhase" ];
@@ -24,6 +24,7 @@ stdenv.mkDerivation rec {
     homepage = http://activemq.apache.org/;
     description = "Messaging and Integration Patterns server written in Java";
     license = stdenv.lib.licenses.asl20;
+    platforms = stdenv.lib.platforms.unix;
   };
 
 }

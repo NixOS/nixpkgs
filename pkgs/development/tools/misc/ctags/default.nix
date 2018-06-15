@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
   revision = "816";
 
   src = fetchsvn {
-    url = "https://ctags.svn.sourceforge.net/svnroot/ctags/trunk";
+    url = https://svn.code.sf.net/p/ctags/code/trunk;
     rev = revision;
     sha256 = "0jmbkrmscbl64j71qffcc39x005jrmphx8kirs1g2ws44wil39hf";
   };
@@ -27,8 +27,10 @@ stdenv.mkDerivation rec {
     '';
     homepage = http://ctags.sourceforge.net/;
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ simons ];
     platforms = platforms.unix;
+
+    # So that Exuberant ctags is preferred over emacs's ctags
+    priority = 1;
   };
 
 }

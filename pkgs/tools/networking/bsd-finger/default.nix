@@ -17,4 +17,8 @@ stdenv.mkDerivation rec {
   preBuild = "cd finger";
 
   preInstall = '' mkdir -p $out/man/man1 $out/bin '';
+
+  meta = {
+    platforms = stdenv.lib.platforms.linux;
+  };
 }

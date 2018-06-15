@@ -1,14 +1,14 @@
-{ stdenv, fetchurl, perl, bdftopcf, mkfontdir, mkfontscale }:
+{ stdenv, fetchurl, python3, bdftopcf, mkfontdir, mkfontscale }:
 
 stdenv.mkDerivation rec {
-  name = "terminus-font-4.39";
+  name = "terminus-font-4.46";
 
   src = fetchurl {
     url = "mirror://sourceforge/project/terminus-font/${name}/${name}.tar.gz";
-    sha256 = "1gzmn7zakvy6yrvmswyjfklnsvqrjm0imhq8rjws8rdkhqwkh21i";
+    sha256 = "1kavqw38aarz0vpwz4b7l6l8xkyc5096zaf9ypqnvdwraqz46aaf";
   };
 
-  buildInputs = [ perl bdftopcf mkfontdir mkfontscale ];
+  buildInputs = [ python3 bdftopcf mkfontdir mkfontscale ];
 
   patchPhase = ''
     substituteInPlace Makefile --replace 'fc-cache' '#fc-cache'
@@ -39,6 +39,6 @@ stdenv.mkDerivation rec {
     homepage = http://www.is-vn.bg/hamster/;
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ astsmtl ];
-    platforms = with platforms; linux;
+    platforms = platforms.linux;
   };
 }

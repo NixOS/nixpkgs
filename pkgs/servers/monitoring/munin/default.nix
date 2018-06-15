@@ -1,14 +1,16 @@
-{ stdenv, fetchurl, makeWrapper, which, coreutils, rrdtool, perl, perlPackages
-, python, ruby, jre, nettools
+{ stdenv, fetchFromGitHub, makeWrapper, which, coreutils, rrdtool, perl, perlPackages
+, python, ruby, jre, nettools, bc
 }:
 
 stdenv.mkDerivation rec {
-  version = "2.0.25";
+  version = "2.0.37";
   name = "munin-${version}";
 
-  src = fetchurl {
-    url = "https://github.com/munin-monitoring/munin/archive/${version}.tar.gz";
-    sha256 = "1ig67l3p5fnx44fcvbbinajxlin9i7g9cbac93h2hcvb2qhzzzra";
+  src = fetchFromGitHub {
+    owner = "munin-monitoring";
+    repo = "munin";
+    rev = version;
+    sha256 = "10niyzckx90dwdr4d7vj07d1qjy3nk7xzp30nqnlxzbaww7n5v78";
   };
 
   buildInputs = [ 
@@ -55,7 +57,7 @@ stdenv.mkDerivation rec {
   doCheck = false;
 
   checkPhase = ''
-   export PERL5LIB="$PERL5LIB:${rrdtool}/lib/perl"
+   export PERL5LIB="$PERL5LIB:${rrdtool}/lib/perl5/site_perl"
    LC_ALL=C make -j1 test 
   '';
 
@@ -65,6 +67,9 @@ stdenv.mkDerivation rec {
 
     # https://github.com/munin-monitoring/munin/pull/134
     ./adding_servicedir_munin-node.patch
+
+    ./adding_sconfdir_munin-node.patch
+    ./preserve_environment.patch
   ];
 
   preBuild = ''
@@ -97,10 +102,11 @@ stdenv.mkDerivation rec {
 
   postFixup = ''
     echo "Removing references to /usr/{bin,sbin}/ from munin plugins..."
-    find "$out/lib/plugins" -type f -print0 | xargs -0 -L1 sed -i -e "s|/usr/bin/||g" -e "s|/usr/sbin/||g"
+    find "$out/lib/plugins" -type f -print0 | xargs -0 -L1 \
+        sed -i -e "s|/usr/bin/||g" -e "s|/usr/sbin/||g" -e "s|\<bc\>|${bc}/bin/bc|g"
 
-    if test -e $out/nix-support/propagated-native-build-inputs; then
-        ln -s $out/nix-support/propagated-native-build-inputs $out/nix-support/propagated-user-env-packages
+    if test -e $out/nix-support/propagated-build-inputs; then
+        ln -s $out/nix-support/propagated-build-inputs $out/nix-support/propagated-user-env-packages
     fi
 
     for file in "$out"/bin/munindoc "$out"/sbin/munin-* "$out"/lib/munin-* "$out"/www/cgi/*; do
@@ -109,10 +115,10 @@ stdenv.mkDerivation rec {
             *.jar) continue;;
         esac
         wrapProgram "$file" \
-          --set PERL5LIB "$out/lib/perl5/site_perl:${rrdtool}/lib/perl:${with perlPackages; stdenv.lib.makePerlPath [
+          --set PERL5LIB "$out/lib/perl5/site_perl:${with perlPackages; stdenv.lib.makePerlPath [
                 Log4Perl IOSocketInet6 Socket6 URI DBFile DateManip
                 HTMLTemplate FileCopyRecursive FCGI NetCIDR NetSNMP NetServer
-                ListMoreUtils TimeHiRes DBDPg LWPUserAgent
+                ListMoreUtils TimeHiRes DBDPg LWPUserAgent rrdtool
                 ]}"
     done
   '';
@@ -127,7 +133,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = http://munin-monitoring.org/;
     license = licenses.gpl2;
-    maintainers = [ maintainers.iElectric maintainers.bjornfor ];
+    maintainers = [ maintainers.domenkozar maintainers.bjornfor ];
     platforms = platforms.linux;
   };
 }

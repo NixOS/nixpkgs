@@ -1,22 +1,21 @@
 { stdenv, fetchurl, pythonPackages }:
 
-pythonPackages.buildPythonPackage rec {
-  name = "httpie-0.9.2";
-  namePrefix = "";
+pythonPackages.buildPythonApplication rec {
+  name = "httpie-0.9.9";
 
   src = fetchurl {
-    url = "http://pypi.python.org/packages/source/h/httpie/${name}.tar.gz";
-    sha256 = "0s0dsj1iimn17h0xyziwk4kz4ga9s0vy9rhzixh8dna32za84fdg";
+    url = "mirror://pypi/h/httpie/${name}.tar.gz";
+    sha256 = "1jsgfkyzzizgfy1b0aicb4cp34d5pwskz9c4a8kf4rq3lrpjw87i";
   };
 
-  propagatedBuildInputs = with pythonPackages; [ pygments requests2 curses ];
+  propagatedBuildInputs = with pythonPackages; [ pygments requests ];
 
   doCheck = false;
 
   meta = {
     description = "A command line HTTP client whose goal is to make CLI human-friendly";
-    homepage = http://httpie.org/;
+    homepage = https://httpie.org/;
     license = stdenv.lib.licenses.bsd3;
-    maintainers = with stdenv.lib.maintainers; [ antono relrod ];
+    maintainers = with stdenv.lib.maintainers; [ antono relrod schneefux ];
   };
 }

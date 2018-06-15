@@ -1,48 +1,86 @@
-{ stdenv, fetchurl, libevent, openssl, zlib, torsocks, libseccomp }:
+{ stdenv, fetchurl, pkgconfig, libevent, openssl, zlib, torsocks
+, libseccomp, systemd, libcap
+
+# for update.nix
+, writeScript
+, runCommand
+, common-updater-scripts
+, bash
+, coreutils
+, curl
+, gnugrep
+, gnupg
+, gnused
+, nix
+}:
 
 stdenv.mkDerivation rec {
-  name = "tor-0.2.6.10";
+  name = "tor-0.3.3.7";
 
   src = fetchurl {
-    url = "https://archive.torproject.org/tor-package-archive/${name}.tar.gz";
-    sha256 = "0542c0efe43b86619337862fa7eb02c7a74cb23a79d587090628a5f0f1224b8d";
+    url = "https://dist.torproject.org/${name}.tar.gz";
+    sha256 = "036ybfvldj7yfci9ipjki8smpzyxdg8c5r12bghc9yxdqh9basza";
   };
 
-  # Note: torsocks is specified as a dependency, as the distributed
-  # 'torify' wrapper attempts to use it; although there is no
-  # ./configure time check for any of this.
-  buildInputs = [ libevent openssl zlib torsocks libseccomp ];
+  outputs = [ "out" "geoip" ];
+
+  enableParallelBuilding = true;
+
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ libevent openssl zlib ] ++
+    stdenv.lib.optionals stdenv.isLinux [ libseccomp systemd libcap ];
 
   NIX_CFLAGS_LINK = stdenv.lib.optionalString stdenv.cc.isGNU "-lgcc_s";
 
-  # Patch 'torify' to point directly to torsocks.
-  patchPhase = ''
+  postPatch = ''
     substituteInPlace contrib/client-tools/torify \
       --replace 'pathfind torsocks' true          \
       --replace 'exec torsocks' 'exec ${torsocks}/bin/torsocks'
   '';
 
+  postInstall = ''
+    mkdir -p $geoip/share/tor
+    mv $out/share/tor/geoip{,6} $geoip/share/tor
+    rm -rf $out/share/tor
+  '';
+
   doCheck = true;
 
-  meta = {
-    homepage = http://www.torproject.org/;
-    repositories.git = https://git.torproject.org/git/tor;
-    description = "Anonymous network router to improve privacy on the Internet";
+  passthru.updateScript = import ./update.nix {
+    inherit (stdenv) lib;
+    inherit
+      writeScript
+      runCommand
+      common-updater-scripts
+      bash
+      coreutils
+      curl
+      gnupg
+      gnugrep
+      gnused
+      nix
+    ;
+  };
 
-    longDescription=''
-      Tor protects you by bouncing your communications around a distributed
-      network of relays run by volunteers all around the world: it prevents
-      somebody watching your Internet connection from learning what sites you
-      visit, and it prevents the sites you visit from learning your physical
-      location. Tor works with many of your existing applications, including
-      web browsers, instant messaging clients, remote login, and other
-      applications based on the TCP protocol.
+  meta = with stdenv.lib; {
+    homepage = https://www.torproject.org/;
+    repositories.git = https://git.torproject.org/git/tor;
+    description = "Anonymizing overlay network";
+
+    longDescription = ''
+      Tor helps improve your privacy by bouncing your communications around a
+      network of relays run by volunteers all around the world: it makes it
+      harder for somebody watching your Internet connection to learn what sites
+      you visit, and makes it harder for the sites you visit to track you. Tor
+      works with many of your existing applications, including web browsers,
+      instant messaging clients, remote login, and other applications based on
+      the TCP protocol.
     '';
 
-    license="mBSD";
+    license = licenses.bsd3;
 
-    maintainers = with stdenv.lib.maintainers;
-      [ phreedom doublec thoughtpolice ];
-    platforms = stdenv.lib.platforms.unix;
+    maintainers = with maintainers;
+      [ phreedom doublec thoughtpolice joachifm ];
+    platforms = platforms.unix;
   };
 }

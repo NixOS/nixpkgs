@@ -26,5 +26,6 @@ stdenv.mkDerivation rec {
     homepage = https://github.com/luabind/luabind;
     description = "A library that helps you create bindings between C++ and Lua";
     license = stdenv.lib.licenses.mit;
+    platforms = stdenv.lib.platforms.linux;
   };
 }

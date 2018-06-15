@@ -8,7 +8,7 @@ let
 
   devices = map (nr: "zram${toString nr}") (range 0 (cfg.numDevices - 1));
 
-  modprobe = "${config.system.sbin.modprobe}/sbin/modprobe";
+  modprobe = "${pkgs.kmod}/bin/modprobe";
 
 in
 
@@ -25,16 +25,16 @@ in
         type = types.bool;
         description = ''
           Enable in-memory compressed swap space provided by the zram kernel
-          module. It is recommended to enable only for kernel 3.14 or higher.
+          module.
+          See https://www.kernel.org/doc/Documentation/blockdev/zram.txt
         '';
       };
 
       numDevices = mkOption {
-        default = 4;
+        default = 1;
         type = types.int;
         description = ''
-          Number of zram swap devices to create. It should be equal to the
-          number of CPU cores your system has.
+          Number of zram swap devices to create.
         '';
       };
 
@@ -93,16 +93,14 @@ in
             serviceConfig = {
               Type = "oneshot";
               RemainAfterExit = true;
-              ExecStop = "${pkgs.stdenv.shell} -c 'echo 1 > /sys/class/block/${dev}/reset'";
+              ExecStop = "${pkgs.runtimeShell} -c 'echo 1 > /sys/class/block/${dev}/reset'";
             };
             script = ''
               set -u
               set -o pipefail
-
-              PATH=${pkgs.procps}/bin:${pkgs.gnugrep}/bin:${pkgs.gnused}/bin
-
+              
               # Calculate memory to use for zram
-              totalmem=$(free | grep -e "^Mem:" | sed -e 's/^Mem: *//' -e 's/  *.*//')
+              totalmem=$(${pkgs.gnugrep}/bin/grep 'MemTotal: ' /proc/meminfo | ${pkgs.gawk}/bin/awk '{print $2}')
               mem=$(((totalmem * ${toString cfg.memoryPercent} / 100 / ${toString cfg.numDevices}) * 1024))
 
               echo $mem > /sys/class/block/${dev}/disksize

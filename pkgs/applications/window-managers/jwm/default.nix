@@ -1,29 +1,34 @@
-{ stdenv, fetchurl, libX11, libXext, libXinerama, libXpm, libXft, freetype,
-  fontconfig }:
+{ stdenv, fetchFromGitHub, pkgconfig, automake, autoconf, libtool,
+  gettext, which, xorg, libX11, libXext, libXinerama, libXpm, libXft,
+  libXau, libXdmcp, libXmu, libpng, libjpeg, expat, xproto, xextproto,
+  xineramaproto, librsvg, freetype, fontconfig }:
 
 stdenv.mkDerivation rec {
-  name = "jwm-2.2.2";
+  name = "jwm-${version}";
+  version = "1685";
   
-  src = fetchurl {
-     url = "http://www.joewing.net/projects/jwm/releases/${name}.tar.xz";
-     sha256 = "0nhyy78c6imk85d47bakk460x0cfhkyghqq82zghmb00dhwiryln";
+  src = fetchFromGitHub {
+    owner = "joewing";
+    repo = "jwm";
+    rev = "s${version}";
+    sha256 = "1kyvy022sij898g2hm5spy5vq0kw6aqd7fsnawl2xyh06gwh29wg";
   };
 
-  buildInputs = [ libX11 libXext libXinerama libXpm libXft freetype 
-    fontconfig ];
+  nativeBuildInputs = [ pkgconfig automake autoconf libtool gettext which ];
 
-  preConfigure = ''
-    export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -I${freetype}/include/freetype2 "
-    export NIX_LDFLAGS="$NIX_LDFLAGS -lXft -lfreetype -lfontconfig "
-  '';
+  buildInputs = [ libX11 libXext libXinerama libXpm libXft xorg.libXrender
+    libXau libXdmcp libXmu libpng libjpeg expat xproto xextproto xineramaproto
+    librsvg freetype fontconfig ];
 
-  postInstall =
-    ''
-      sed -i -e s/rxvt/xterm/g $out/etc/system.jwmrc
-      sed -i -e "s/.*Swallow.*\|.*xload.*//" $out/etc/system.jwmrc
-    '';
+  enableParallelBuilding = true;
+
+  preConfigure = "./autogen.sh";
 
   meta = {
-    description = "A window manager for X11 that requires only Xlib";
+    homepage = http://joewing.net/projects/jwm/;
+    description = "Joe's Window Manager is a light-weight X11 window manager";
+    license = stdenv.lib.licenses.gpl2;
+    platforms   = stdenv.lib.platforms.unix;
+    maintainers = [ stdenv.lib.maintainers.romildo ];
   };
 }

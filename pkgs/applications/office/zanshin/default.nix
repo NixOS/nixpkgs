@@ -1,21 +1,39 @@
-{ stdenv, fetchurl, automoc4, cmake, perl, pkgconfig
-, kdelibs, kdepimlibs, boost }:
+{
+  mkDerivation, lib,
+  fetchFromGitHub,
+  extra-cmake-modules,
+  qtbase, boost,
+  akonadi-calendar, akonadi-notes, akonadi-search, kidentitymanagement, kontactinterface, kldap,
+  krunner, kwallet
+}:
 
-stdenv.mkDerivation rec {
-  name = "zanshin-0.2.1";
+mkDerivation rec {
+  pname = "zanshin";
+  version = "2017-11-25";
+  name = "${pname}-${version}";
 
-  src = fetchurl {
-    url = "http://files.kde.org/zanshin/${name}.tar.bz2";
-    sha256 = "155k72vk7kw0p0x9dhlky6q017kanzcbwvp4dpf1hcbr1dsr55fx";
+  src = fetchFromGitHub {
+    owner = "KDE";
+    repo = "zanshin";
+    rev = "3df91dd81682d2ccfe542c4582dc1d5f98537c89";
+    sha256 = "18wx7bdqzp81xmwi266gphh2lfbcp5s0fzyp654gki40yhkqph6m";
   };
 
-  nativeBuildInputs = [ automoc4 cmake perl pkgconfig ];
+  nativeBuildInputs = [
+    extra-cmake-modules
+  ];
 
-  buildInputs = [ kdelibs kdepimlibs boost ];
+  buildInputs = [
+    qtbase boost
+    akonadi-calendar akonadi-notes akonadi-search kidentitymanagement kontactinterface kldap
+    krunner kwallet
+  ];
 
-  meta = {
-    description = "GTD for KDE";
-    maintainers = [ stdenv.lib.maintainers.urkud ];
-    inherit (kdelibs.meta) platforms;
+  meta = with lib; {
+    description = "A powerful yet simple application to manage your day to day actions, getting your mind like water";
+    homepage = https://zanshin.kde.org/;
+    maintainers = with maintainers; [ zraexy ];
+    platforms = platforms.linux;
+    license = licenses.gpl2Plus;
   };
 }

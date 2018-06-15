@@ -6,7 +6,7 @@ stdenv.mkDerivation {
 
   src = fetchgit {
     url = "https://github.com/pippijn/aldor";
-    sha256 = "1l9fc2cgwabifwbijcp293abc8hcv40nzx2w31jkxh8n0plbiczn";
+    sha256 = "19v07ffq4r1gjnmg7a8ifgjkwan9a3rwbj0qjz8fycwy221844m6";
     rev = "15471e75f3d65b93150f414ebcaf59a03054b68d";
   };
 
@@ -28,7 +28,9 @@ stdenv.mkDerivation {
   '';
 
   meta = {
-    homepage = "http://www.aldor.org/";
+    # Please become a maintainer to fix this package
+    broken = true;
+    homepage = http://www.aldor.org/;
     description = "Programming language with an expressive type system";
     license = stdenv.lib.licenses.asl20;
 
@@ -45,7 +47,6 @@ stdenv.mkDerivation {
       and powerful properties of functional, object-oriented and aspect-oriented styles.
     '';
 
-    maintainers = [ stdenv.lib.maintainers.simons ];
     platforms = stdenv.lib.platforms.linux;
   };
 }

@@ -1,10 +1,10 @@
 {stdenv, fetchurl, apacheAnt, jdk, axis2, dbus_java}:
 
 stdenv.mkDerivation {
-  name = "DisnixWebService-0.4";
+  name = "DisnixWebService-0.8";
   src = fetchurl {
-    url = http://hydra.nixos.org/build/23484798/download/4/DisnixWebService-0.4.tar.bz2;
-    sha256 = "1rfzmh4rxip8nq25fvi6vw51xb7h0nch4l06s0xgwwv4gw8p0lhm";
+    url = https://github.com/svanderburg/DisnixWebService/files/1756703/DisnixWebService-0.8.tar.gz;
+    sha256 = "05hmyz17rmqlph0i321kmhabnpw84kqz32lgc5cd4shxyzsal9hz";
   };
   buildInputs = [ apacheAnt jdk ];
   PREFIX = ''''${env.out}'';
@@ -23,5 +23,6 @@ stdenv.mkDerivation {
     description = "A SOAP interface and client for Disnix";
     license = stdenv.lib.licenses.mit;
     maintainers = [ stdenv.lib.maintainers.sander ];
+    platforms = stdenv.lib.platforms.linux;
   };
 }

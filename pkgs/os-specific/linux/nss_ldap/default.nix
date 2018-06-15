@@ -28,4 +28,8 @@ stdenv.mkDerivation {
   '';
 
   buildInputs = [ openldap perl ];
+
+  meta = {
+    platforms = stdenv.lib.platforms.linux;
+  };
 }

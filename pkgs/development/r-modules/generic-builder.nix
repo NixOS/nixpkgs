@@ -1,10 +1,14 @@
-{ stdenv, R, xvfb_run, utillinux }:
+{ stdenv, R, libcxx, xvfb_run, utillinux, Cocoa, Foundation, gettext, gfortran }:
 
 { name, buildInputs ? [], ... } @ attrs:
 
 stdenv.mkDerivation ({
-  buildInputs = buildInputs ++ [R] ++
-                stdenv.lib.optionals attrs.requireX [utillinux xvfb_run];
+  buildInputs = buildInputs ++ [R gettext] ++
+                stdenv.lib.optionals attrs.requireX [utillinux xvfb_run] ++
+                stdenv.lib.optionals stdenv.isDarwin [Cocoa Foundation gfortran];
+
+  NIX_CFLAGS_COMPILE =
+    stdenv.lib.optionalString stdenv.isDarwin "-I${libcxx}/include/c++/v1";
 
   configurePhase = ''
     runHook preConfigure
@@ -37,8 +41,8 @@ stdenv.mkDerivation ({
   '';
 
   postFixup = ''
-    if test -e $out/nix-support/propagated-native-build-inputs; then
-        ln -s $out/nix-support/propagated-native-build-inputs $out/nix-support/propagated-user-env-packages
+    if test -e $out/nix-support/propagated-build-inputs; then
+        ln -s $out/nix-support/propagated-build-inputs $out/nix-support/propagated-user-env-packages
     fi
   '';
 

@@ -14,6 +14,7 @@ stdenv.mkDerivation rec {
     description = "Library for managing 3D-Studio Release 3 and 4 \".3DS\" files";
     homepage = http://lib3ds.sourceforge.net/;
     license = "LGPL";
+    platforms = stdenv.lib.platforms.unix;
   };
 }
 

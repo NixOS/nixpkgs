@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, cmake, wxGTK, itk, mesa, libXft, libXext, libXi, zlib, libXmu,
+{ fetchurl, stdenv, cmake, wxGTK, itk, libGLU_combined, libXft, libXext, libXi, zlib, libXmu,
 libuuid }:
 
 assert (stdenv ? glibc);
@@ -13,8 +13,8 @@ stdenv.mkDerivation {
   patches = [ ./cstdio.patch ];
 
   cmakeFlags = [
-    "-DM_LIBRARY=${stdenv.glibc}/lib/libm.so"
-    "-DDL_LIBRARY=${stdenv.glibc}/lib/libdl.so"
+    "-DM_LIBRARY=${stdenv.glibc.out}/lib/libm.so"
+    "-DDL_LIBRARY=${stdenv.glibc.out}/lib/libdl.so"
     "-DBUILD_UTILS=1"
     "-DBUILD_SEG3D=1"
     "-DBUILD_DATAFLOW=0"
@@ -47,5 +47,9 @@ stdenv.mkDerivation {
     exit 1
   '';
 
-  buildInputs = [ cmake wxGTK itk mesa libXft libXext libXi zlib libXmu libuuid ];
+  buildInputs = [ cmake wxGTK itk libGLU_combined libXft libXext libXi zlib libXmu libuuid ];
+
+  meta = {
+    broken = true;
+  };
 }

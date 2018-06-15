@@ -1,50 +1,67 @@
-{ stdenv, fetchurl, automoc4, cmake, kdelibs, attica, perl, zlib, libpng, boost, mesa
-, kdepimlibs, createresources ? null, eigen, qca2, exiv2, soprano, marble, lcms2
-, fontconfig, freetype, sqlite, icu, libwpd, libwpg, pkgconfig, poppler_qt4
-, libkdcraw, libxslt, fftw, glew, gsl, shared_desktop_ontologies, okular
-, libvisio, kactivities, mysql, postgresql, freetds, xbase, openexr, ilmbase
-, libodfgen, opencolorio, openjpeg, pstoedit, librevenge
+{
+  mkDerivation, lib, fetchurl, fetchpatch, extra-cmake-modules, kdoctools, makeWrapper,
+  boost, qtwebkit, qtx11extras, shared-mime-info,
+  breeze-icons, kactivities, karchive, kcodecs, kcompletion, kconfig, kconfigwidgets,
+  kcoreaddons, kdbusaddons, kdiagram, kguiaddons, khtml, ki18n,
+  kiconthemes, kitemviews, kjobwidgets, kcmutils, kdelibs4support, kio, kross,
+  knotifications, knotifyconfig, kparts, ktextwidgets, kwallet, kwidgetsaddons,
+  kwindowsystem, kxmlgui, sonnet, threadweaver,
+  kcontacts, akonadi, akonadi-calendar, akonadi-contacts,
+  eigen, git, gsl, ilmbase, kproperty, kreport, lcms2, marble, libgit2, libodfgen,
+  librevenge, libvisio, libwpd, libwpg, libwps, okular, openexr, openjpeg, phonon,
+  poppler, pstoedit, qca-qt5, vc
+# TODO: package Spnav, m2mml LibEtonyek, Libqgit2
 }:
 
-stdenv.mkDerivation rec {
-  name = "calligra-2.8.7";
+mkDerivation rec {
+  pname = "calligra";
+  version = "3.1.0";
+  name = "${pname}-${version}";
 
   src = fetchurl {
-    url = "mirror://kde/stable/${name}/${name}.tar.xz";
-    sha256 = "1d8fx0xn8n8y6jglw8hhpk7kr6kbhsbaxqwqlfzmnzh7x9s8nsxg";
+    url = "mirror://kde/stable/${pname}/${version}/${name}.tar.xz";
+    sha256 = "0w782k0hprpb6viixnqz34sp0z5csv3prdby46z22qqkcipcs638";
   };
 
-  nativeBuildInputs = [ automoc4 cmake perl pkgconfig ];
+  enableParallelBuilding = true;
 
-# TODO: package Vc, libWPS, Spnav, m2mml, LibEtonyek, poppler-qt4-xpdf-headers
-# not found: xbase, openjpeg(too new)
+  nativeBuildInputs = [ extra-cmake-modules kdoctools makeWrapper ];
 
   buildInputs = [
-    kdelibs attica zlib libpng boost mesa kdepimlibs
-    createresources eigen qca2 exiv2 soprano marble lcms2 fontconfig freetype
-    sqlite icu libwpd libwpg poppler_qt4 libkdcraw libxslt fftw glew gsl
-    shared_desktop_ontologies okular libodfgen opencolorio openjpeg
-    libvisio kactivities mysql.lib postgresql freetds xbase openexr pstoedit
-    librevenge
+    boost qtwebkit qtx11extras shared-mime-info
+    kactivities karchive kcodecs kcompletion kconfig kconfigwidgets kcoreaddons
+    kdbusaddons kdiagram kguiaddons khtml ki18n kiconthemes kitemviews
+    kjobwidgets kcmutils kdelibs4support kio kross knotifications knotifyconfig kparts
+    ktextwidgets kwallet kwidgetsaddons kwindowsystem kxmlgui sonnet threadweaver
+    kcontacts akonadi akonadi-calendar akonadi-contacts
+    eigen git gsl ilmbase kproperty kreport lcms2 marble libgit2 libodfgen librevenge
+    libvisio libwpd libwpg libwps okular openexr openjpeg phonon poppler qca-qt5 vc
   ];
 
-  patches = [ ./librevenge.patch ];
+  propagatedUserEnvPkgs = [ kproperty ];
 
-  NIX_CFLAGS_COMPILE = "-I${ilmbase}/include/OpenEXR";
+  NIX_CFLAGS_COMPILE = "-I${ilmbase.dev}/include/OpenEXR";
 
-  meta = {
+  postInstall = ''
+    for i in $out/bin/*; do
+      wrapProgram $i \
+        --prefix PATH ':' "${pstoedit.out}/bin" \
+        --prefix XDG_DATA_DIRS ':' "${breeze-icons}/share"
+    done
+  '';
+
+  meta = with lib; {
     description = "A suite of productivity applications";
     longDescription = ''
       Calligra Suite is a set of applications written to help
       you to accomplish your work. Calligra includes efficient
       and capable office components: Words for text processing,
-      Sheets for computations, Stage for presentations, Plan for
-      planning, Flow for flowcharts, Kexi for database creation,
-      Krita for painting and raster drawing, and Karbon for
+      Sheets for computations, Plan for planning, and Karbon for
       vector graphics.
     '';
-    homepage = http://calligra.org;
-    maintainers = with stdenv.lib.maintainers; [ urkud phreedom ];
-    inherit (kdelibs.meta) platforms;
+    homepage = https://www.calligra.org/;
+    maintainers = with maintainers; [ phreedom ebzzry zraexy ];
+    platforms = platforms.linux;
+    license = with licenses; [ gpl2 lgpl2 ];
   };
 }

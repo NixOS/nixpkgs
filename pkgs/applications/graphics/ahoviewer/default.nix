@@ -1,0 +1,56 @@
+{ stdenv, pkgs, fetchurl, fetchFromGitHub, pkgconfig, libconfig,
+  gtkmm2, glibmm, libxml2, libsecret, curl, libzip,
+  librsvg, gst_all_1, autoreconfHook, makeWrapper,
+  useUnrar ? false, unrar
+}:
+
+assert useUnrar -> unrar != null;
+
+stdenv.mkDerivation rec {
+  name = "ahoviewer-${version}";
+  version = "1.5.0";
+
+  src = fetchFromGitHub {
+    owner = "ahodesuka";
+    repo = "ahoviewer";
+    rev = version;
+    sha256 = "1adzxp30fwh41y339ha8i5qp89zf21dw18vcicqqnzvyxbk5r3ig";
+  };
+
+  enableParallelBuilding = true;
+
+  nativeBuildInputs = [ autoreconfHook pkgconfig makeWrapper ];
+  buildInputs = [
+    glibmm libconfig gtkmm2 glibmm libxml2
+    libsecret curl libzip librsvg
+    gst_all_1.gstreamer
+    gst_all_1.gst-plugins-good
+    gst_all_1.gst-libav
+    gst_all_1.gst-plugins-base
+  ] ++ stdenv.lib.optional useUnrar unrar;
+
+  # https://github.com/ahodesuka/ahoviewer/issues/60
+  # Already fixed in the master branch
+  # TODO: remove this next release
+  makeFlags = [ ''LIBS=-lssl -lcrypto'' ];
+
+  postPatch = ''patchShebangs version.sh'';
+
+  postInstall = ''
+    wrapProgram $out/bin/ahoviewer \
+    --prefix GST_PLUGIN_SYSTEM_PATH_1_0 : "$GST_PLUGIN_SYSTEM_PATH_1_0" \
+    --set GDK_PIXBUF_MODULE_FILE "$GDK_PIXBUF_MODULE_FILE"
+  '';
+
+  meta = with stdenv.lib; {
+    homepage = https://github.com/ahodesuka/ahoviewer;
+    description = "A GTK2 image viewer, manga reader, and booru browser";
+    maintainers = with maintainers; [ skrzyp xzfc ];
+    license = licenses.mit;
+    # Unintentionally not working on Darwin:
+    # https://github.com/ahodesuka/ahoviewer/issues/62
+    platforms = platforms.linux;
+  };
+}
+
+

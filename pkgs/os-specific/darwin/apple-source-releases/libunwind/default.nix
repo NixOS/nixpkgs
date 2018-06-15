@@ -1,28 +1,16 @@
-{ stdenv, appleDerivation, dyld }:
+{ stdenv, appleDerivation }:
 
 appleDerivation {
-  phases = [ "unpackPhase" "buildPhase" "installPhase" ];
+  buildPhase = ":";
 
-  buildInputs = [ dyld ];
-
-  buildPhase = ''
-    # cd src
-    # cc -I$PWD/../include -c libuwind.cxx
-    # cc -I$PWD/../include -c Registers.s
-    # cc -I$PWD/../include -c unw_getcontext.s
-    # cc -I$PWD/../include -c UnwindLevel1.c
-    # cc -I$PWD/../include -c UnwindLevel1-gcc-ext.c
-    # cc -I$PWD/../include -c Unwind-sjlj.c
-  '';
-
+  # install headers only
   installPhase = ''
-    mkdir -p $out
-
-    cp -r include $out
+    mkdir -p $out/lib
+    cp -R include $out/include
   '';
 
   meta = with stdenv.lib; {
-    maintainers = with maintainers; [ copumpkin ];
+    maintainers = with maintainers; [ copumpkin lnl7 ];
     platforms   = platforms.darwin;
     license     = licenses.apsl20;
   };

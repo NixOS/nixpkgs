@@ -1,13 +1,16 @@
-{ stdenv, fetchurl, zlib, apngSupport ? true }:
+{ stdenv, fetchurl, zlib, apngSupport ? true
+, buildPlatform, hostPlatform
+}:
 
 assert zlib != null;
 
 let
-  version = "1.6.18";
-  sha256 = "0qq96rf31483kxz32h6l6921hy6p2v2pfqfvc74km229g4xw241f";
+  version = "1.6.34";
+  patchVersion = "1.6.34";
+  sha256 = "1xjr0v34fyjgnhvaa1zixcpx5yvxcg4zwvfh0fyklfyfj86rc7ig";
   patch_src = fetchurl {
-    url = "mirror://sourceforge/libpng-apng/libpng-${version}-apng.patch.gz";
-    sha256 = "0g2ljh2vhclas1hacys1c4gk6l6hyy6sngb2yvdsnjz50nyq16kv";
+    url = "mirror://sourceforge/libpng-apng/libpng-${patchVersion}-apng.patch.gz";
+    sha256 = "1ha4npf9mfrzp0srg8a5amks5ww84xzfpjbsj8k3yjjpai798qg6";
   };
   whenPatched = stdenv.lib.optionalString apngSupport;
 
@@ -18,12 +21,16 @@ in stdenv.mkDerivation rec {
     url = "mirror://sourceforge/libpng/libpng-${version}.tar.xz";
     inherit sha256;
   };
-
   postPatch = whenPatched "gunzip < ${patch_src} | patch -Np1";
+
+  outputs = [ "out" "dev" "man" ];
+  outputBin = "dev";
 
   propagatedBuildInputs = [ zlib ];
 
-  doCheck = true;
+  # it's hard to cross-run tests and some check programs didn't compile anyway
+  makeFlags = stdenv.lib.optional (!doCheck) "check_PROGRAMS=";
+  doCheck = true; # not cross;
 
   passthru = { inherit zlib; };
 

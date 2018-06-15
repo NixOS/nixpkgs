@@ -15,10 +15,6 @@ stdenv.mkDerivation {
 
   patches =
     [
-      # Provide nested log output for subsequent pretty-printing by
-      # nix-log2xml.
-      ./log.patch
-
       # Purity: don't look for library dependencies (of the form
       # `-lfoo') in /lib and /usr/lib.  It's a stupid feature anyway.
       # Likewise, when searching for included Makefiles, don't look in
@@ -37,6 +33,9 @@ stdenv.mkDerivation {
       ./construct-command-line.patch
       ./long-command-line.patch
       ./darwin-library_search-dylib.patch
+
+      # Fix support for glibc 2.27's glob
+      ../4.2/glibc-2.27-glob.patch
     ];
   patchFlags = "-p0";
 

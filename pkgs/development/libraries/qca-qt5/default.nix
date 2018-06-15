@@ -1,25 +1,31 @@
-{ stdenv, fetchgit, cmake, openssl, pkgconfig, qtbase }:
+{ stdenv, fetchurl, cmake, openssl, pkgconfig, qtbase }:
 
-let
-  rev = "088ff642fc2990871e3555e73c94c9287e7514a9";
-  shortrev = builtins.substring 0 7 rev;
-in
 stdenv.mkDerivation rec {
-  name = "qca-qt5-20150422-${shortrev}";
-  src = fetchgit {
-    url = "git://anongit.kde.org/qca.git";
-    branchName = "qt5";
-    inherit rev;
-    sha256 = "fe1c7d5d6f38445a4032548ae3ea22c74d4327dfaf2dc88492a95facbca398f8";
+  name = "qca-qt5-2.1.3";
+
+  src = fetchurl {
+    url = "http://download.kde.org/stable/qca/2.1.3/src/qca-2.1.3.tar.xz";
+    sha256 = "0lz3n652z208daxypdcxiybl0a9fnn6ida0q7fh5f42269mdhgq0";
   };
 
   buildInputs = [ openssl qtbase ];
   nativeBuildInputs = [ cmake pkgconfig ];
+
+  # Without this patch cmake fails with a "No known features for CXX compiler"
+  # error on darwin
+  patches = stdenv.lib.optional stdenv.isDarwin ./move-project.patch ;
+
+  # tells CMake to use this CA bundle file if it is accessible
+  preConfigure = ''export QC_CERTSTORE_PATH=/etc/ssl/certs/ca-certificates.crt'';
+
+  # tricks CMake into using this CA bundle file if it is not accessible (in a sandbox)
+  cmakeFlags = [ "-Dqca_CERTSTORE=/etc/ssl/certs/ca-certificates.crt" ];
 
   meta = with stdenv.lib; {
     description = "Qt 5 Cryptographic Architecture";
     homepage = http://delta.affinix.com/qca;
     maintainers = with maintainers; [ ttuegel ];
     license = licenses.lgpl21Plus;
+    platforms = with platforms; unix;
   };
 }

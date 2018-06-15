@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     description = "The SDK for the LADSPA audio plugin standard";
     longDescription = ''
       The LADSPA SDK, including the ladspa.h API header file,
-      ten example LADSPA plugins and 
+      ten example LADSPA plugins and
       three example programs (applyplugin, analyseplugin and listplugins).
     '';
     homepage = http://www.ladspa.org/ladspa_sdk/overview.html;

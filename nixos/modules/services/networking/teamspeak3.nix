@@ -10,13 +10,12 @@ let
 in
 
 {
-  
+
   ###### interface
 
   options = {
 
     services.teamspeak3 = {
-
       enable = mkOption {
         type = types.bool;
         default = false;
@@ -97,46 +96,43 @@ in
   ###### implementation
 
   config = mkIf cfg.enable {
+    users.users.teamspeak = {
+      description = "Teamspeak3 voice communication server daemon";
+      group = group;
+      uid = config.ids.uids.teamspeak;
+      home = cfg.dataDir;
+      createHome = true;
+    };
 
-    users.extraUsers.teamspeak =
-      { name = "teamspeak";
-        description = "Teamspeak3 voice communication server daemon";
-        group = group;
-        uid = config.ids.uids.teamspeak;
-      };
+    users.groups.teamspeak = {
+      gid = config.ids.gids.teamspeak;
+    };
 
-    users.extraGroups.teamspeak =
-      { name = "teamspeak";
-        gid = config.ids.gids.teamspeak;
-      };
-
-    systemd.services.teamspeak3-server = { 
+    systemd.services.teamspeak3-server = {
       description = "Teamspeak3 voice communication server daemon";
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
 
       preStart = ''
-        mkdir -p ${cfg.dataDir}
         mkdir -p ${cfg.logPath}
-        chown ${user}:${group} ${cfg.dataDir}
         chown ${user}:${group} ${cfg.logPath}
       '';
 
-      serviceConfig =
-        { ExecStart = ''
-            ${ts3}/bin/ts3server \
-              dbsqlpath=${ts3}/lib/teamspeak/sql/ logpath=${cfg.logPath} \
-              voice_ip=${cfg.voiceIP} default_voice_port=${toString cfg.defaultVoicePort} \
-              filetransfer_ip=${cfg.fileTransferIP} filetransfer_port=${toString cfg.fileTransferPort} \
-              query_ip=${cfg.queryIP} query_port=${toString cfg.queryPort}
-          '';
-          WorkingDirectory = cfg.dataDir;
-          User = user;
-          Group = group;
-          PermissionsStartOnly = true; # preStart needs to run with root permissions
-        };
+      serviceConfig = {
+        ExecStart = ''
+          ${ts3}/bin/ts3server \
+            dbsqlpath=${ts3}/lib/teamspeak/sql/ logpath=${cfg.logPath} \
+            voice_ip=${cfg.voiceIP} default_voice_port=${toString cfg.defaultVoicePort} \
+            filetransfer_ip=${cfg.fileTransferIP} filetransfer_port=${toString cfg.fileTransferPort} \
+            query_ip=${cfg.queryIP} query_port=${toString cfg.queryPort}
+        '';
+        WorkingDirectory = cfg.dataDir;
+        User = user;
+        Group = group;
+        PermissionsStartOnly = true;
       };
-
+    };
   };
 
+  meta.maintainers = with lib.maintainers; [ arobyn ];
 }

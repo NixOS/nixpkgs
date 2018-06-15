@@ -1,35 +1,36 @@
 { stdenv, fetchurl, openssl, zlib, asciidoc, libxml2, libxslt
 , docbook_xml_xslt, pkgconfig, luajit
 , gzip, bzip2, xz
+, python, wrapPython, pygments, markdown
 }:
 
 stdenv.mkDerivation rec {
   name = "cgit-${version}";
-  version = "0.11.2";
+  version = "1.1";
 
   src = fetchurl {
     url = "http://git.zx2c4.com/cgit/snapshot/${name}.tar.xz";
-    sha256 = "0fryh56kyah7v9a8zzhbhwlyy2j116w87sxmgrn2kmwk0rvnw4if";
+    sha256 = "142qcgs8dwnzhymn0a7xx47p9fc2z5wrb86ah4a9iz0mpqlsz288";
   };
 
   # cgit is tightly coupled with git and needs a git source tree to build.
   # IMPORTANT: Remember to check which git version cgit needs on every version
-  # bump (look in the Makefile).
-  # NOTE: as of 0.10.1, the git version is compatible from 1.9.0 to
-  # 1.9.2 (see the repository history)
+  # bump (look for "GIT_VER" in the top-level Makefile).
   gitSrc = fetchurl {
-    url    = "mirror://kernel/software/scm/git/git-2.3.2.tar.xz";
-    sha256 = "09gqijsjfnxlbsxbxzlvllg37bfs9f4jwa2plqsanmba09i89sqq";
+    url    = "mirror://kernel/software/scm/git/git-2.10.2.tar.xz";
+    sha256 = "0wc64dzcxrzgi6kwcljz6y3cwm3ajdgf6aws7g58azbhvl1jk04l";
   };
 
+  nativeBuildInputs = [ pkgconfig ] ++ [ python wrapPython ];
   buildInputs = [
-    openssl zlib asciidoc libxml2 libxslt docbook_xml_xslt pkgconfig luajit
+    openssl zlib asciidoc libxml2 libxslt docbook_xml_xslt luajit
   ];
+  pythonPath = [ pygments markdown ];
 
   postPatch = ''
     sed -e 's|"gzip"|"${gzip}/bin/gzip"|' \
-        -e 's|"bzip2"|"${bzip2}/bin/bzip2"|' \
-        -e 's|"xz"|"${xz}/bin/xz"|' \
+        -e 's|"bzip2"|"${bzip2.bin}/bin/bzip2"|' \
+        -e 's|"xz"|"${xz.bin}/bin/xz"|' \
         -i ui-snapshot.c
   '';
 
@@ -51,10 +52,12 @@ stdenv.mkDerivation rec {
     a2x --no-xmllint -f manpage cgitrc.5.txt
     mkdir -p "$out/share/man/man5"
     cp cgitrc.5 "$out/share/man/man5"
+
+    wrapPythonProgramsIn "$out/lib/cgit/filters" "$out $pythonPath"
   '';
 
   meta = {
-    homepage = http://git.zx2c4.com/cgit/about/;
+    homepage = https://git.zx2c4.com/cgit/about/;
     repositories.git = git://git.zx2c4.com/cgit;
     description = "Web frontend for git repositories";
     license = stdenv.lib.licenses.gpl2;

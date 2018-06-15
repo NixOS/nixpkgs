@@ -1,33 +1,25 @@
-{ fetchurl, stdenv, python, gnupg }:
+{ fetchFromGitHub, stdenv, pythonPackages, gnupg }:
 
-let version = "2.0.11"; in
-stdenv.mkDerivation {
+let version = "2.2.6"; in
+pythonPackages.buildPythonApplication {
   name = "pius-${version}";
   namePrefix = "";
 
-  src = fetchurl {
-    url = "mirror://sourceforge/pgpius/pius/${version}/pius-${version}.tar.bz2";
-    sha256 = "0pdbyqz6k0bm182cz81ss7yckmpms5qhrrw0wcr4a1srzcjyzf5f";
+  src = fetchFromGitHub {
+    owner = "jaymzh";
+    repo = "pius";
+    rev = "v${version}";
+    sha256 = "1rffwyjd84rwx1w5yyqckirm1kdj80ldfwjlw91kk74swhpbpzzj";
   };
 
-  buildInputs = [ python ];
-
-  patchPhase =
-    '' sed -i "pius" -e's|/usr/bin/gpg|${gnupg}/bin/gpg2|g'
-    '';
-
-  buildPhase = "true";
-
-  installPhase =
-    '' mkdir -p "$out/bin"
-       cp -v pius "$out/bin"
-
-       mkdir -p "$out/doc/pius-${version}"
-       cp -v README "$out/doc/pius-${version}"
-    '';
+  patchPhase = ''
+    for file in libpius/constants.py pius-keyring-mgr; do
+      sed -i "$file" -E -e's|/usr/bin/gpg2?|${gnupg}/bin/gpg|g'
+    done
+  '';
 
   meta = {
-    homepage = http://www.phildev.net/pius/;
+    homepage = https://www.phildev.net/pius/;
 
     description = "PGP Individual UID Signer (PIUS), quickly and easily sign UIDs on a set of PGP keys";
 
@@ -40,7 +32,7 @@ stdenv.mkDerivation {
 
     license = stdenv.lib.licenses.gpl2;
 
-    platforms = stdenv.lib.platforms.gnu;
-    maintainers = with stdenv.lib.maintainers; [ fuuzetsu ];
+    platforms = stdenv.lib.platforms.gnu ++ stdenv.lib.platforms.linux;
+    maintainers = with stdenv.lib.maintainers; [ fuuzetsu kierdavis ];
   };
 }

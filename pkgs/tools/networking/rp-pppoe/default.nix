@@ -1,42 +1,29 @@
-a @ {ppp, ...} :
+{ stdenv, fetchurl, ppp } :
 let
-  fetchurl = a.fetchurl;
-
-  version = a.lib.attrByPath ["version"] "3.11" a;
-  buildInputs = with a; [
-    ppp
-  ];
+  version = "3.12";
 in
-rec {
+stdenv.mkDerivation rec {
+  name = "rp-pppoe-" + version;
   src = fetchurl {
     url = "http://www.roaringpenguin.com/files/download/rp-pppoe-${version}.tar.gz";
-    sha256 = "083pfjsb8w7afqgygbvgndwajgwkfmcnqla5vnk4z9yf5zcs98c6";
+    sha256 = "1hl6rjvplapgsyrap8xj46kc9kqwdlm6ya6gp3lv0ihm0c24wy80";
   };
 
-  inherit buildInputs;
-  configureFlags = [];
+  buildInputs = [ ppp ];
 
-  /* doConfigure should be removed if not needed */
-  phaseNames = ["exportVars" "doConfigure" "patchInstall" "makeDirs" "doMakeInstall"];
 
-  goSrcDir = "cd src";
-  exportVars = a.noDepEntry(''
-    export PATH="$PATH:${a.ppp}/sbin"
-    export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -L${a.ppp}/lib/${a.ppp.version}"
-    export PPPD=${a.ppp}/sbin/pppd
-  '');
+  preConfigure = ''
+    cd src
+    export PPPD=${ppp}/sbin/pppd
+  '';
+  postConfigure = ''
+    sed -i Makefile -e 's@DESTDIR)/etc/ppp@out)/etc/ppp@'
+    sed -i Makefile -e 's@PPPOESERVER_PPPD_OPTIONS=@&$(out)@'
+  '';
 
-  patchInstall = a.fullDepEntry(''
-    sed -i Makefile -e 's@DESTDIR)/etc/ppp@out)/share/${name}/etc/ppp@'
-    sed -i Makefile -e 's@PPPOESERVER_PPPD_OPTIONS=@&$(out)/share/${name}@'
-  '') ["minInit" "doUnpack"];
-
-  makeDirs = a.fullDepEntry(''
-    mkdir -p $out/share/${name}/etc/ppp
-  '') ["minInit" "defEnsureDir"];
-
-  name = "rp-pppoe-" + version;
   meta = {
     description = "Roaring Penguin Point-to-Point over Ethernet tool";
+    platforms = stdenv.lib.platforms.linux;
+    homepage = https://www.roaringpenguin.com/products/pppoe;
   };
 }

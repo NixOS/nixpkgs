@@ -8,9 +8,11 @@ stdenv.mkDerivation rec {
     sha256 = "11khipjpy3y84j1pp7yyx76y64jccvyhh3klwzqxylff49vjc2fc";
   };
 
-  configureFlags = "--with-apxs=${apacheHttpd}/bin/apxs --with-java-home=${jdk}";
+  configureFlags = "--with-apxs=${apacheHttpd.dev}/bin/apxs --with-java-home=${jdk}";
 
-  sourceRoot = "${name}-src/native";
+  setSourceRoot = ''
+    sourceRoot=$(echo */native)
+  '';
 
   installPhase = ''
     mkdir -p $out/modules
@@ -18,4 +20,8 @@ stdenv.mkDerivation rec {
   '';
 
   buildInputs = [ apacheHttpd jdk ];
+
+  meta = {
+    platforms = stdenv.lib.platforms.unix;
+  };
 }

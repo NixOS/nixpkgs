@@ -1,31 +1,30 @@
-{ stdenv, fetchurl, jre, gnutar, bash }:
+{ stdenv, fetchurl, jre, makeWrapper }:
 
 stdenv.mkDerivation rec {
   name = "closure-compiler-${version}";
-  version = "20150609";
+  version = "20180610";
 
   src = fetchurl {
-    url = "http://dl.google.com/closure-compiler/compiler-${version}.tar.gz";
-    sha256 = "0347j50kg41agrvpb29vp69ra912ljhp206z9kbrk84lxpmx19rp";
+    url = "https://dl.google.com/closure-compiler/compiler-${version}.tar.gz";
+    sha256 = "1qg9a1whmrkrifqrsb9m541cgr3rf1nnkqlv4q7rq30m8bdilvk5";
   };
 
-  phases = [ "installPhase" ];
+  sourceRoot = ".";
 
-  buildInputs = [ gnutar ];
+  nativeBuildInputs = [ makeWrapper ];
+  buildInputs = [ jre ];
 
   installPhase = ''
     mkdir -p $out/share/java $out/bin
-    tar -xzf $src
-    cp -r compiler.jar $out/share/java/
-    echo "#!${bash}/bin/bash" > $out/bin/closure-compiler
-    echo "${jre}/bin/java -jar $out/share/java/compiler.jar \"\$@\"" >> $out/bin/closure-compiler
-    chmod +x $out/bin/closure-compiler
+    cp closure-compiler-v${version}.jar $out/share/java
+    makeWrapper ${jre}/bin/java $out/bin/closure-compiler \
+      --add-flags "-jar $out/share/java/closure-compiler-v${version}.jar"
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "A tool for making JavaScript download and run faster";
     homepage = https://developers.google.com/closure/compiler/;
-    license = stdenv.lib.licenses.asl20;
-    platforms = stdenv.lib.platforms.linux;
+    license = licenses.asl20;
+    platforms = platforms.all;
   };
 }

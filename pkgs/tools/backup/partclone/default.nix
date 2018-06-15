@@ -1,20 +1,38 @@
-{stdenv, fetchurl
-, pkgconfig, libuuid
-, e2fsprogs
+{ stdenv, fetchFromGitHub, autoreconfHook
+, pkgconfig, libuuid, e2fsprogs, nilfs-utils, ntfs3g
 }:
-stdenv.mkDerivation {
-  name = "partclone-stable";
-  enableParallelBuilding = true;
 
-  src = fetchurl {
-    url = https://codeload.github.com/Thomas-Tsai/partclone/legacy.tar.gz/stable;
-    sha256 = "12bnhljc4n4951p5c05gc7z5qwdsjpx867ad1npmgsm8d9w941sn";
-    name = "Thomas-Tsai-partclone-stable-20150722.tar.gz";
+stdenv.mkDerivation rec {
+  name = "partclone-${version}";
+  version = "0.3.11";
+
+  src = fetchFromGitHub {
+    owner = "Thomas-Tsai";
+    repo = "partclone";
+    rev = version;
+    sha256 = "0bv15i0gxym4dv48rgaavh8p94waryn1l6viis6qh5zm9cd08skg";
   };
 
-  buildInputs = [e2fsprogs pkgconfig libuuid];
+  nativeBuildInputs = [ autoreconfHook pkgconfig ];
+  buildInputs = [
+    e2fsprogs libuuid stdenv.cc.libc nilfs-utils ntfs3g 
+    (stdenv.lib.getOutput "static" stdenv.cc.libc)
+  ];
 
-  installPhase = ''make INSTPREFIX=$out install'';
+  configureFlags = [
+    "--enable-xfs"
+    "--enable-extfs"
+    "--enable-hfsp"
+    "--enable-fat"
+    "--enable-exfat"
+    "--enable-ntfs"
+    "--enable-btrfs"
+    "--enable-minix"
+    "--enable-f2fs"
+    "--enable-nilfs2"
+  ];
+
+  enableParallelBuilding = true;
 
   meta = {
     description = "Utilities to save and restore used blocks on a partition";

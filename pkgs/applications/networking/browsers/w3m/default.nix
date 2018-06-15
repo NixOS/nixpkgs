@@ -1,37 +1,64 @@
-{ stdenv, fetchurl
-, sslSupport ? true
-, graphicsSupport ? false
-, mouseSupport ? false
-, ncurses, openssl ? null, boehmgc, gettext, zlib
-, imlib2 ? null, xlibsWrapper ? null, fbcon ? null
-, gpm-ncurses ? null
+{ stdenv, fetchFromGitHub, fetchpatch
+, ncurses, boehmgc, gettext, zlib
+, sslSupport ? true, openssl ? null
+, graphicsSupport ? true, imlib2 ? null
+, x11Support ? graphicsSupport, libX11 ? null
+, mouseSupport ? !stdenv.isDarwin, gpm-ncurses ? null
+, perl, man, pkgconfig
 }:
 
 assert sslSupport -> openssl != null;
-assert graphicsSupport -> imlib2 != null && (xlibsWrapper != null || fbcon != null);
+assert graphicsSupport -> imlib2 != null;
+assert x11Support -> graphicsSupport && libX11 != null;
 assert mouseSupport -> gpm-ncurses != null;
 
-stdenv.mkDerivation rec {
-  name = "w3m-0.5.3";
+with stdenv.lib;
 
-  src = fetchurl {
-    url = "mirror://sourceforge/w3m/${name}.tar.gz";
-    sha256 = "1qx9f0kprf92r1wxl3sacykla0g04qsi0idypzz24b7xy9ix5579";
+stdenv.mkDerivation rec {
+  name = "w3m-0.5.3+git20161120";
+
+  src = fetchFromGitHub {
+    owner = "tats";
+    repo = "w3m";
+    rev = "v0.5.3+git20161120";
+    sha256 = "06n5a9jdyihkd4xdjmyci32dpqp1k2l5awia5g9ng0bn256bacdc";
   };
 
-  patches = [ ./glibc214.patch ]
-    # Patch for the newer unstable boehm-gc 7.2alpha. Not all platforms use that
-    # alpha. At the time of writing this, boehm-gc-7.1 is the last stable.
-    ++ stdenv.lib.optional (boehmgc.name != "boehm-gc-7.1") [ ./newgc.patch ]
-    ++ stdenv.lib.optional stdenv.isCygwin ./cygwin.patch;
+  NIX_LDFLAGS = optionalString stdenv.isSunOS "-lsocket -lnsl";
 
-  buildInputs = [ncurses boehmgc gettext zlib]
-    ++ stdenv.lib.optional sslSupport openssl
-    ++ stdenv.lib.optional mouseSupport gpm-ncurses
-    ++ stdenv.lib.optionals graphicsSupport [imlib2 xlibsWrapper fbcon];
+  # we must set these so that the generated files (e.g. w3mhelp.cgi) contain
+  # the correct paths.
+  PERL = "${perl}/bin/perl";
+  MAN = "${man}/bin/man";
 
-  configureFlags = "--with-ssl=${openssl} --with-gc=${boehmgc}"
-    + stdenv.lib.optionalString graphicsSupport " --enable-image=x11,fb";
+  patches = [
+    ./RAND_egd.libressl.patch
+    (fetchpatch {
+      name = "https.patch";
+      url = "https://aur.archlinux.org/cgit/aur.git/plain/https.patch?h=w3m-mouse&id=5b5f0fbb59f674575e87dd368fed834641c35f03";
+      sha256 = "08skvaha1hjyapsh8zw5dgfy433mw2hk7qy9yy9avn8rjqj7kjxk";
+    })
+  ] ++ optional (graphicsSupport && !x11Support) [ ./no-x11.patch ];
+
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ ncurses boehmgc gettext zlib ]
+    ++ optional sslSupport openssl
+    ++ optional mouseSupport gpm-ncurses
+    ++ optional graphicsSupport imlib2
+    ++ optional x11Support libX11;
+
+  postInstall = optionalString graphicsSupport ''
+    ln -s $out/libexec/w3m/w3mimgdisplay $out/bin
+  '';
+
+  hardeningDisable = [ "format" ];
+
+  configureFlags =
+    [ "--with-ssl=${openssl.dev}" "--with-gc=${boehmgc.dev}" ]
+    ++ optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
+      "ac_cv_func_setpgrp_void=yes"
+    ]
+    ++ optional graphicsSupport "--enable-image=${optionalString x11Support "x11,"}fb";
 
   preConfigure = ''
     substituteInPlace ./configure --replace "/lib /usr/lib /usr/local/lib /usr/ucblib /usr/ccslib /usr/ccs/lib /lib64 /usr/lib64" /no-such-path
@@ -40,9 +67,14 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = false;
 
-  meta = with stdenv.lib; {
+  # for w3mimgdisplay
+  # see: https://bbs.archlinux.org/viewtopic.php?id=196093
+  LIBS = optionalString x11Support "-lX11";
+
+  meta = {
     homepage = http://w3m.sourceforge.net/;
     description = "A text-mode web browser";
-    maintainers = [ maintainers.mornfall ];
+    maintainers = [ maintainers.cstrahan ];
+    platforms = stdenv.lib.platforms.unix;
   };
 }

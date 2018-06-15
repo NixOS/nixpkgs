@@ -1,65 +1,98 @@
-{ stdenv, fetchurl, db, glibc, openssl, cyrus_sasl
-, coreutils, findutils, gnused, gnugrep, bison, perl
+{ stdenv, lib, fetchurl, makeWrapper, gnused, db, openssl, cyrus_sasl, libnsl
+, coreutils, findutils, gnugrep, gawk, icu, pcre
+, withPgSQL ? false, postgresql
+, withMySQL ? false, mysql
+, withSQLite ? false, sqlite
+, withLDAP ? false, openldap
 }:
 
-assert stdenv.isLinux;
+let
+  ccargs = lib.concatStringsSep " " ([
+    "-DUSE_TLS" "-DUSE_SASL_AUTH" "-DUSE_CYRUS_SASL" "-I${cyrus_sasl.dev}/include/sasl"
+    "-DHAS_DB_BYPASS_MAKEDEFS_CHECK"
+   ] ++ lib.optional withPgSQL "-DHAS_PGSQL"
+     ++ lib.optionals withMySQL [ "-DHAS_MYSQL" "-I${mysql.connector-c}/include/mysql" "-L${mysql.connector-c}/lib/mysql" ]
+     ++ lib.optional withSQLite "-DHAS_SQLITE"
+     ++ lib.optional withLDAP "-DHAS_LDAP");
+   auxlibs = lib.concatStringsSep " " ([
+     "-ldb" "-lnsl" "-lresolv" "-lsasl2" "-lcrypto" "-lssl"
+   ] ++ lib.optional withPgSQL "-lpq"
+     ++ lib.optional withMySQL "-lmysqlclient"
+     ++ lib.optional withSQLite "-lsqlite3"
+     ++ lib.optional withLDAP "-lldap");
 
-stdenv.mkDerivation rec {
-  name = "postfix-2.8.12";
+in stdenv.mkDerivation rec {
+
+  name = "postfix-${version}";
+
+  version = "3.3.1";
 
   src = fetchurl {
     url = "ftp://ftp.cs.uu.nl/mirror/postfix/postfix-release/official/${name}.tar.gz";
-    sha256 = "11z07mjy53l1fnl7k4101yk4ilibgqr1164628mqcbmmr8bh2szl";
+    sha256 = "0fvymsklp32njsv0ngc1f45j01kcy61r5in99g5palibwkd19xal";
   };
 
-  buildInputs = [db openssl cyrus_sasl bison perl];
+  nativeBuildInputs = [ makeWrapper ];
+  buildInputs = [ db openssl cyrus_sasl icu libnsl pcre ]
+                ++ lib.optional withPgSQL postgresql
+                ++ lib.optional withMySQL mysql.connector-c
+                ++ lib.optional withSQLite sqlite
+                ++ lib.optional withLDAP openldap;
 
-  patches = [ ./postfix-2.2.9-db.patch  ./postfix-2.2.9-lib.patch ./db-linux3.patch ];
+  hardeningDisable = [ "format" ];
+  hardeningEnable = [ "pie" ];
 
-  postPatch = ''
-    sed -i -e s,/usr/bin,/var/run/current-system/sw/bin, \
-      -e s,/usr/sbin,/var/run/current-system/sw/bin, \
-      -e s,:/sbin,, src/util/sys_defs.h
-  '';
+  patches = [
+    ./postfix-script-shell.patch
+    ./postfix-3.0-no-warnings.patch
+    ./post-install-script.patch
+    ./relative-symlinks.patch
+  ];
 
   preBuild = ''
-    export daemon_directory=$out/libexec/postfix
-    export command_directory=$out/sbin
-    export queue_directory=/var/spool/postfix
-    export sendmail_path=$out/bin/sendmail
-    export mailq_path=$out/bin/mailq
-    export newaliases_path=$out/bin/newaliases
-    export html_directory=$out/share/postfix/doc/html
-    export manpage_directory=$out/share/man
-    export sample_directory=$out/share/postfix/doc/samples
-    export readme_directory=$out/share/postfix/doc
-
-    make makefiles CCARGS='-DUSE_TLS -DUSE_SASL_AUTH -DUSE_CYRUS_SASL -I${cyrus_sasl}/include/sasl -fPIE -fstack-protector-all --param ssp-buffer-size=4 -O2 -D_FORTIFY_SOURCE=2' AUXLIBS='-lssl -lcrypto -lsasl2 -ldb -lnsl -pie -Wl,-z,relro,-z,now'
-  '';
-
-  installPhase = ''
     sed -e '/^PATH=/d' -i postfix-install
-    $SHELL postfix-install install_root=out -non-interactive -package
+    sed -e "s|@PACKAGE@|$out|" -i conf/post-install
 
-    mkdir -p $out
-    mv -v "out$out/"* $out/
+    # post-install need skip permissions check/set on all symlinks following to /nix/store
+    sed -e "s|@NIX_STORE@|$NIX_STORE|" -i conf/post-install
 
-    mkdir -p $out/share/postfix
-    mv conf $out/share/postfix/
-    mv LICENSE TLS_LICENSE $out/share/postfix/
+    export command_directory=$out/sbin
+    export config_directory=/etc/postfix
+    export meta_directory=$out/etc/postfix
+    export daemon_directory=$out/libexec/postfix
+    export data_directory=/var/lib/postfix/data
+    export html_directory=$out/share/postfix/doc/html
+    export mailq_path=$out/bin/mailq
+    export manpage_directory=$out/share/man
+    export newaliases_path=$out/bin/newaliases
+    export queue_directory=/var/lib/postfix/queue
+    export readme_directory=$out/share/postfix/doc
+    export sendmail_path=$out/bin/sendmail
 
-    sed -e 's@^PATH=.*@PATH=${coreutils}/bin:${findutils}/bin:${gnused}/bin:${gnugrep}/bin:'$out'/sbin@' -i $out/share/postfix/conf/post-install $out/libexec/postfix/post-install
-    sed -e '2aPATH=${coreutils}/bin:${findutils}/bin:${gnused}/bin:${gnugrep}/bin:'$out'/sbin' -i $out/share/postfix/conf/postfix-script $out/libexec/postfix/postfix-script
-    chmod a+x $out/share/postfix/conf/{postfix-script,post-install}
+    make makefiles CCARGS='${ccargs}' AUXLIBS='${auxlibs}'
   '';
 
-  inherit glibc;
+  installTargets = [ "non-interactive-package" ];
+
+  installFlags = [ "install_root=installdir" ];
+
+  postInstall = ''
+    mkdir -p $out
+    mv -v installdir/$out/* $out/
+    cp -rv installdir/etc $out
+    sed -e '/^PATH=/d' -i $out/libexec/postfix/post-install
+    wrapProgram $out/libexec/postfix/post-install \
+      --prefix PATH ":" ${lib.makeBinPath [ coreutils findutils gnugrep ]}
+    wrapProgram $out/libexec/postfix/postfix-script \
+      --prefix PATH ":" ${lib.makeBinPath [ coreutils findutils gnugrep gawk gnused ]}
+  '';
 
   meta = {
-    homepage = "http://www.postfix.org/";
-    description = "a fast, easy to administer, and secure mail server";
-    license = stdenv.lib.licenses.bsdOriginal;
-    platforms = stdenv.lib.platforms.linux;
-    maintainers = [ stdenv.lib.maintainers.simons ];
+    homepage = http://www.postfix.org/;
+    description = "A fast, easy to administer, and secure mail server";
+    license = with lib.licenses; [ ipl10 epl20 ];
+    platforms = lib.platforms.linux;
+    maintainers = [ lib.maintainers.rickynils ];
   };
+
 }

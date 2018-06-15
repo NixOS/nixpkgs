@@ -1,5 +1,5 @@
-{ stdenv, fetchurl, makeWrapper, glib, glib_networking, gtk, libsoup, libX11, perl,
-  pkgconfig, webkit, gsettings_desktop_schemas }:
+{ stdenv, fetchurl, makeWrapper, glib, glib-networking, gtk2, libsoup, libX11, perl,
+  pkgconfig, webkit, gsettings-desktop-schemas }:
 
 stdenv.mkDerivation rec {
   version = "1.4.2";
@@ -9,15 +9,16 @@ stdenv.mkDerivation rec {
     sha256 = "13jdximksh9r3cgd2f8vms0pbsn3x0gxvyqdqiw16xp5fmdx5kzr";
   };
 
-  buildInputs = [ makeWrapper gtk libsoup libX11 perl pkgconfig webkit gsettings_desktop_schemas ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ makeWrapper gtk2 libsoup libX11 perl webkit gsettings-desktop-schemas ];
 
-  installPhase = ''
-    make PREFIX=/ DESTDIR=$out install
-  '';
+  hardeningDisable = [ "format" ];
+
+  installFlags = "PREFIX=/ DESTDIR=$(out)";
 
   preFixup = ''
     wrapProgram "$out/bin/vimprobable2" \
-      --prefix GIO_EXTRA_MODULES : "${glib_networking}/lib/gio/modules" \
+      --prefix GIO_EXTRA_MODULES : "${glib-networking.out}/lib/gio/modules" \
       --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH"
   '';
 
@@ -32,9 +33,9 @@ stdenv.mkDerivation rec {
       GTK bindings). The goal of Vimprobable is to build a completely
       keyboard-driven, efficient and pleasurable browsing-experience. Its
       featureset might be considered "minimalistic", but not as minimalistic as
-      being completely featureless. 
+      being completely featureless.
     '';
-    homepage = "http://sourceforge.net/apps/trac/vimprobable";
+    homepage = https://sourceforge.net/apps/trac/vimprobable;
     license = stdenv.lib.licenses.mit;
     maintainers = [ stdenv.lib.maintainers.aforemny ];
     platforms = with stdenv.lib.platforms; linux;

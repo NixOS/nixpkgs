@@ -1,19 +1,21 @@
 { stdenv, fetchurl, gperf, pkgconfig, librevenge, libxml2, boost, icu
-, cppunit, zlib
+, cppunit, zlib, liblangtag
 }:
 
 let
   s = # Generated upstream information
   rec {
     baseName="libe-book";
-    version="0.1.2";
+    version="0.1.3";
     name="${baseName}-${version}";
-    hash="1v48pd32r2pfysr3a3igc4ivcf6vvb26jq4pdkcnq75p70alp2bz";
-    url="mirror://sourceforge/project/libebook/libe-book-0.1.2/libe-book-0.1.2.tar.xz";
-    sha256="1v48pd32r2pfysr3a3igc4ivcf6vvb26jq4pdkcnq75p70alp2bz";
+    hash="1yg1vws1wggzhjw672bpgh2x541g5i9wryf67g51m0r79zrqz3by";
+    url="https://kent.dl.sourceforge.net/project/libebook/libe-book-0.1.3/libe-book-0.1.3.tar.xz";
+    sha256="1yg1vws1wggzhjw672bpgh2x541g5i9wryf67g51m0r79zrqz3by";
   };
+
+  nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
-    gperf pkgconfig librevenge libxml2 boost icu cppunit zlib
+    gperf librevenge libxml2 boost icu cppunit zlib liblangtag
   ];
 
   # Boost 1.59 compatability fix
@@ -24,10 +26,11 @@ let
 in
 stdenv.mkDerivation {
   inherit (s) name version;
-  inherit buildInputs postPatch;
+  inherit nativeBuildInputs buildInputs postPatch;
   src = fetchurl {
     inherit (s) url sha256;
   };
+  NIX_CFLAGS_COMPILE = "-Wno-error=unused-function";
   meta = {
     inherit (s) version;
     description = ''Library for import of reflowable e-book formats'';

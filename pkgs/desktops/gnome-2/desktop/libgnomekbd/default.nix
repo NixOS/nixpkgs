@@ -1,4 +1,4 @@
-{stdenv, fetchurl, pkgconfig, dbus_glib, libxklavier, glib, gtk, intltool, GConf, libglade}:
+{stdenv, fetchurl, pkgconfig, dbus-glib, libxklavier, glib, gtk, intltool, GConf, libglade}:
 
 stdenv.mkDerivation {
   name = "libgnomekbd-2.32.0";
@@ -8,5 +8,6 @@ stdenv.mkDerivation {
     sha256 = "0mnjhdryx94c106fghzz01dyc1vlp16wn6sajvpxffnqqx62rmfx";
   };
 
-  buildInputs = [ pkgconfig dbus_glib libxklavier glib gtk intltool GConf libglade ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ dbus-glib libxklavier glib gtk intltool GConf libglade ];
 }

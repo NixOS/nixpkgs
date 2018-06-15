@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgconfig, intltool, exo, gtk, libxfce4util, libxfce4ui
-, xfconf, udev, libnotify }:
+, xfconf, udev, libgudev, libnotify }:
 
 stdenv.mkDerivation rec {
   p_name  = "thunar-volman";
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
 
   buildInputs =
-    [ pkgconfig intltool exo gtk udev libxfce4ui libxfce4util
+    [ pkgconfig intltool exo gtk udev libgudev libxfce4ui libxfce4util
       xfconf libnotify
     ];
   preFixup = "rm $out/share/icons/hicolor/icon-theme.cache";

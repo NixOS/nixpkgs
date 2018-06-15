@@ -1,12 +1,14 @@
 { stdenv, fetchgit, fetchurl
 # build tools
-, gfortran, m4, makeWrapper, patchelf, perl, which, python2
+, gfortran, m4, makeWrapper, patchelf, perl, which, python2, paxctl
 # libjulia dependencies
 , libunwind, llvm, readline, utf8proc, zlib
 # standard library dependencies
 , curl, fftwSinglePrec, fftw, gmp, libgit2, mpfr, openlibm, openspecfun, pcre2
 # linear algebra
 , openblas, arpack, suitesparse
+# Darwin frameworks
+, CoreServices, ApplicationServices
 }:
 
 with stdenv.lib;
@@ -19,6 +21,9 @@ in
 let
   arpack = arpack_.override { inherit openblas; };
   suitesparse = suitesparse_.override { inherit openblas; };
+  llvmShared = if stdenv.isDarwin
+               then llvm.override { enableSharedLibraries = true; }
+               else llvm;
 in
 
 let
@@ -28,27 +33,27 @@ let
     sha256 = "03kaqbjbi6viz0n33dk5jlf6ayxqlsq4804n7kwkndiga9s4hd42";
   };
 
-  libuvVersion = "28f5f06b5ff6f010d666ec26552e0badaca5cdcd";
+  libuvVersion = "efb40768b7c7bd9f173a7868f74b92b1c5a61a0e";
   libuv = fetchurl {
     url = "https://api.github.com/repos/JuliaLang/libuv/tarball/${libuvVersion}";
-    sha256 = "1ksns0aiayxmxffvq2kc96904mxlmbkfc30xxck69xnidr2jvr4a";
+    sha256 = "1znkxyv1cy9pjap7afypipzsn04533ni3pqjd191fdgw2sv9cal7";
   };
 
   rmathVersion = "0.1";
   rmath-julia = fetchurl {
     url = "https://api.github.com/repos/JuliaLang/Rmath-julia/tarball/v${rmathVersion}";
-    sha256 = "0ai5dhjc43zcvangz123ryxmlbm51s21rg13bllwyn98w67arhb4";
+    sha256 = "1qyps217175qhid46l8f5i1v8i82slgp23ia63x2hzxwfmx8617p";
   };
 in
 
 stdenv.mkDerivation rec {
   pname = "julia";
-  version = "0.4.0";
+  version = "0.4.7";
   name = "${pname}-${version}";
 
   src = fetchurl {
     url = "https://github.com/JuliaLang/${pname}/releases/download/v${version}/${name}.tar.gz";
-    sha256 = "00k53hzbawpqvmkkyzcvbmf1d0ycshzdqk19nwsifv1rmiwjj7ss";
+    sha256 = "09f531jhs8pyd1xng5c26x994w7q0sxxr28mr3qfw9wpkbmsc2pf";
   };
 
   prePatch = ''
@@ -61,19 +66,21 @@ stdenv.mkDerivation rec {
     ./0001-use-system-utf8proc.patch
     ./0002-use-system-suitesparse.patch
     ./0003-no-ldconfig.patch
-  ];
+  ] ++ stdenv.lib.optional stdenv.needsPax ./0004-hardened-0.4.7.patch;
 
   postPatch = ''
     patchShebangs . contrib
   '';
 
   buildInputs = [
-    arpack fftw fftwSinglePrec gmp libgit2 libunwind llvm mpfr
-    pcre2 openblas openlibm openspecfun readline suitesparse utf8proc
+    arpack fftw fftwSinglePrec gmp libgit2 libunwind llvmShared mpfr
+    pcre2.dev openblas openlibm openspecfun readline suitesparse utf8proc
     zlib
-  ];
+  ] ++
+    stdenv.lib.optionals stdenv.isDarwin [CoreServices ApplicationServices] ;
 
-  nativeBuildInputs = [ curl gfortran m4 makeWrapper patchelf perl python2 which ];
+  nativeBuildInputs = [ curl gfortran m4 makeWrapper patchelf perl python2 which ]
+    ++ stdenv.lib.optional stdenv.needsPax paxctl;
 
   makeFlags =
     let
@@ -115,6 +122,8 @@ stdenv.mkDerivation rec {
       "USE_SYSTEM_OPENSPECFUN=1"
       "USE_SYSTEM_PATCHELF=1"
       "USE_SYSTEM_PCRE=1"
+      "PCRE_CONFIG=${pcre2.dev}/bin/pcre2-config"
+      "PCRE_INCL_PATH=${pcre2.dev}/include/pcre2.h"
       "USE_SYSTEM_READLINE=1"
       "USE_SYSTEM_UTF8PROC=1"
       "USE_SYSTEM_ZLIB=1"
@@ -122,10 +131,12 @@ stdenv.mkDerivation rec {
 
   NIX_CFLAGS_COMPILE = [ "-fPIC" ];
 
-  LD_LIBRARY_PATH = makeSearchPath "lib" [
+  LD_LIBRARY_PATH = makeLibraryPath [
     arpack fftw fftwSinglePrec gmp libgit2 mpfr openblas openlibm
     openspecfun pcre2 suitesparse
   ];
+
+  NIX_LDFLAGS = optionalString stdenv.isDarwin "-rpath ${llvmShared}/lib";
 
   dontStrip = true;
   dontPatchELF = true;
@@ -143,15 +154,17 @@ stdenv.mkDerivation rec {
     for prog in "$out/bin/julia" "$out/bin/julia-debug"; do
         wrapProgram "$prog" \
             --prefix LD_LIBRARY_PATH : "$LD_LIBRARY_PATH" \
-            --prefix PATH : "${curl}/bin"
+            --prefix PATH : "${stdenv.lib.makeBinPath [ curl ]}"
     done
   '';
 
   meta = {
     description = "High-level performance-oriented dynamical language for technical computing";
-    homepage = "http://julialang.org/";
+    homepage = https://julialang.org/;
     license = stdenv.lib.licenses.mit;
-    maintainers = with stdenv.lib.maintainers; [ raskin ttuegel ];
+    maintainers = with stdenv.lib.maintainers; [ raskin ];
     platforms = [ "i686-linux" "x86_64-linux" "x86_64-darwin" ];
+    #broken = stdenv.isi686;
+    broken = true; # 2018-04-10
   };
 }

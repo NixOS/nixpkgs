@@ -1,20 +1,35 @@
-{ stdenv, fetchurl, libpcap, gnumake3 }:
+{ lib, stdenv, fetchFromGitHub, fetchpatch, autoreconfHook, libpcap, gnumake3, pcre }:
 
 stdenv.mkDerivation rec {
-  name = "ngrep-1.45";
+  name = "ngrep-${version}";
+  version = "1.47";
 
-  src = fetchurl {
-    url = "mirror://sourceforge/ngrep/${name}.tar.bz2";
-    sha256 = "19rg8339z5wscw877mz0422wbsadds3mnfsvqx3ihy58glrxv9mf";
+  src = fetchFromGitHub {
+    owner = "jpr5";
+    repo = "ngrep";
+    rev = "V${lib.replaceStrings ["."] ["_"] version}";
+    sha256 = "1x2fyd7wdqlj1r76ilal06cl2wmbz0ws6i3ys204sbjh1cj6dcl7";
   };
 
-  buildInputs = [ gnumake3 libpcap ];
+  patches = [
+    (fetchpatch {
+      url = "https://patch-diff.githubusercontent.com/raw/jpr5/ngrep/pull/11.patch";
+      sha256 = "0k5qzvj8j3r1409qwwvzp7m3clgs2g7hs4q68bhrqbrsvvb2h5dh";
+    })
+  ];
+
+  nativeBuildInputs = [ autoreconfHook gnumake3 ];
+  buildInputs = [ libpcap pcre ];
+
+  configureFlags = [
+    "--enable-ipv6"
+    "--enable-pcre"
+    "--disable-pcap-restart"
+    "--with-pcap-includes=${libpcap}/include"
+  ];
 
   preConfigure = ''
-    # Fix broken test for BPF header file
     sed -i "s|BPF=.*|BPF=${libpcap}/include/pcap/bpf.h|" configure
-
-    configureFlags="$configureFlags --with-pcap-includes=${libpcap}/include"
   '';
 
   meta = with stdenv.lib; {
@@ -28,7 +43,7 @@ stdenv.mkDerivation rec {
       null interfaces, and understands BPF filter logic in the same fashion as
       more common packet sniffing tools, such as tcpdump and snoop.
     '';
-    homepage = http://ngrep.sourceforge.net/;
+    homepage = https://github.com/jpr5/ngrep/;
     # <ngrep>/doc/README.txt says that ngrep itself is licensed under a
     # 'BSD-like' license but that the 'regex' library (in the ngrep tarball) is
     # GPLv2.

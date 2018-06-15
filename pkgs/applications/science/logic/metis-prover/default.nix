@@ -1,18 +1,20 @@
-{ stdenv, fetchurl, perl, mlton }:
+{ stdenv, fetchFromGitHub, perl, mlton }:
 
 stdenv.mkDerivation rec {
   name = "metis-prover-${version}";
-  version = "2.3";
+  version = "2.3.20160713";
 
-  src = fetchurl {
-    url = "http://www.gilith.com/software/metis/metis.tar.gz";
-    sha256 = "07wqhic66i5ip2j194x6pswwrxyxrimpc4vg0haa5aqv9pfpmxad";
+  src = fetchFromGitHub {
+    owner = "gilith";
+    repo = "metis";
+    rev = "f0b1a17cd57eb098077e963ab092477aee9fb340";
+    sha256 = "1i7paax7b4byk8110f5zk4071mh5603r82bq7hbprqzljvsiipk7";
   };
 
   nativeBuildInputs = [ perl ];
   buildInputs = [ mlton ];
 
-  patchPhase = "patchShebangs scripts/mlpp";
+  patchPhase = "patchShebangs .";
 
   buildPhase = "make mlton";
 
@@ -25,5 +27,6 @@ stdenv.mkDerivation rec {
     homepage = http://www.gilith.com/research/metis/;
     license = licenses.mit;
     maintainers = with maintainers; [ gebner ];
+    platforms = platforms.unix;
   };
 }

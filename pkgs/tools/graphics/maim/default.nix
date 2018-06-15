@@ -1,22 +1,28 @@
-{ stdenv, fetchurl, cmake, gengetopt, imlib2, libXrandr, libXfixes
-, cppcheck}:
+{ stdenv, fetchFromGitHub, cmake, pkgconfig
+, zlib, libpng, libjpeg, libGLU_combined, glm
+, libX11, libXext, libXfixes, libXrandr, libXcomposite, slop, icu
+}:
 
 stdenv.mkDerivation rec {
   name = "maim-${version}";
-  version = "3.4.46";
+  version = "5.5.2";
 
-  src = fetchurl {
-    url = "https://github.com/naelstrof/maim/archive/v${version}.tar.gz";
-    sha256 = "04gb858g0rrvdiva2dxwsfd7dmq62r67irnc8cpd0r02hr92dr6n";
+  src = fetchFromGitHub {
+    owner = "naelstrof";
+    repo = "maim";
+    rev = "v${version}";
+    sha256 = "14mfxdm39kc5jk8wysrzx05ag2g4sk9l24i8m5pzqn8j611150v3";
   };
 
-  buildInputs = [ cmake gengetopt imlib2 libXrandr libXfixes ]
-                ++ stdenv.lib.optional doCheck cppcheck;
+  nativeBuildInputs = [ cmake pkgconfig ];
+  buildInputs =
+    [ zlib libpng libjpeg libGLU_combined glm
+      libX11 libXext libXfixes libXrandr libXcomposite slop icu ];
 
   doCheck = false;
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/naelstrof/maim;
+    inherit (src.meta) homepage;
     description = "A command-line screenshot utility";
     longDescription = ''
       maim (make image) takes screenshots of your desktop. It has options to
@@ -25,6 +31,6 @@ stdenv.mkDerivation rec {
     '';
     platforms = stdenv.lib.platforms.all;
     license = stdenv.lib.licenses.gpl3Plus;
-    maintainers = with maintainers; [ mbakke ];
+    maintainers = with maintainers; [ primeos mbakke ];
   };
 }

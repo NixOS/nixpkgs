@@ -10,7 +10,6 @@ stdenv.mkDerivation {
   buildInputs = [ cmake isl python gmp ];
 
   cmakeFlags = [
-    "-DCMAKE_BUILD_TYPE=Release"
     "-DCMAKE_CXX_FLAGS=-std=c++11"
     "-DLLVM_INSTALL_ROOT=${llvm}"
   ];
@@ -20,7 +19,7 @@ stdenv.mkDerivation {
   meta = {
     description = "A polyhedral optimizer for llvm";
     homepage    = http://llvm.org/;
-    license     = stdenv.lib.licenses.bsd3;
+    license     = stdenv.lib.licenses.ncsa;
     platforms   = stdenv.lib.platforms.all;
   };
 }

@@ -20,7 +20,8 @@ stdenv.mkDerivation {
     done
   '';
 
-  buildInputs = [ libogg libvorbis libao pkgconfig curl speex flac ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ libogg libvorbis libao curl speex flac ];
 
   meta = with stdenv.lib; {
     description = "Extra tools for Ogg-Vorbis audio codec";

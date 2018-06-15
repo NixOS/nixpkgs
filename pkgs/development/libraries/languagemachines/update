@@ -1,0 +1,79 @@
+#!/usr/bin/env nix-shell
+#!nix-shell --packages curl
+#!nix-shell --packages jq
+#!nix-shell --packages parallel
+#!nix-shell -i bash
+
+# Exit immediately if a command exits with a non-zero status.
+# Exit when a producer fails in a pipe
+# Treat undefined variable references as errors
+set -e -o pipefail -u
+
+# Check if working directory is (probably) right
+test "./update" = $0 || {
+    echo "The working directory ought to be the same is the update script location. Please invoke as ./update" 1>&2
+    exit 1
+}
+
+# Create temporary directory with automatic cleanup
+readonly MY_TMP="$(mktemp -d)"
+cleanup () {
+    rm -rf "$MY_TMP"
+}
+trap cleanup EXIT
+
+# stdout: file containing release info and a convenient placeholder
+# for the sha256 attribute
+getRelease () {
+    local owner="$1"
+    local repo="$2"
+    local out="$MY_TMP/$owner--$repo-release"
+    curl -fSs https://api.github.com/repos/"$owner"/"$repo"/releases/latest \
+        | jq '{ version: .name, url: .tarball_url, sha256: "__SHA256__" }' \
+             > "$out"
+    echo "$out"
+}
+
+# 'getters' for the release info file
+
+# stdout: unquoted tarball url
+releaseUrl () {
+    local file="$1"
+    jq -r '.url' <"$file"
+}
+
+# stdout: unquoted version
+releaseVersion () {
+    local file="$1"
+    jq -r '.version' <"$file"
+}
+
+# Fetch release tarball and compute hash
+# stdout: base32 sha256 to be used in fetchurl
+getReleaseHash () {
+    local file="$1"
+    local name="$2"
+    nix-prefetch-url "$(releaseUrl "$file")" --name "$name-$(releaseVersion "$file").tar.gz"
+}
+
+# Write a release info file to release-info/$owner-$repo.json
+updateRelease () {
+    local owner="$1"
+    local repo="$2"
+    local r="$(getRelease "$owner" "$repo")"
+    local hash="$(getReleaseHash "$r" "$repo")"
+    sed \
+      -e s/__SHA256__/"$hash"/\
+      <"$r" \
+      >"release-info/$owner-$repo.json"
+}
+
+updateRelease LanguageMachines frogdata
+updateRelease LanguageMachines frog
+updateRelease LanguageMachines libfolia
+updateRelease LanguageMachines mbt
+updateRelease LanguageMachines ticcutils
+updateRelease LanguageMachines timbl
+updateRelease LanguageMachines timblserver
+updateRelease LanguageMachines ucto
+updateRelease LanguageMachines uctodata

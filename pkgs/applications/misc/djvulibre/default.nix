@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, libjpeg, libtiff, librsvg, libintlOrEmpty }:
+{ stdenv, fetchurl, libjpeg, libtiff, librsvg, libiconv }:
 
 stdenv.mkDerivation rec {
   name = "djvulibre-3.5.27";
@@ -8,15 +8,15 @@ stdenv.mkDerivation rec {
     sha256 = "0psh3zl9dj4n4r3lx25390nx34xz0bg0ql48zdskhq354ljni5p6";
   };
 
-  buildInputs = [ libjpeg libtiff librsvg ] ++ libintlOrEmpty;
+  outputs = [ "bin" "dev" "out" ];
 
-  NIX_LDFLAGS = stdenv.lib.optionalString stdenv.isDarwin "-lintl";
+  buildInputs = [ libjpeg libtiff librsvg libiconv ];
 
   meta = with stdenv.lib; {
     description = "A library and viewer for the DJVU file format for scanned images";
     homepage = http://djvu.sourceforge.net;
     license = licenses.gpl2;
-    maintainers = with maintainers; [ urkud ];
+    maintainers = with maintainers; [ ];
     platforms = platforms.all;
   };
 }

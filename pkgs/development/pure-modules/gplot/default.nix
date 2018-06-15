@@ -10,13 +10,13 @@ stdenv.mkDerivation rec {
     sha256 = "841ded98e4d1cdfaf78f95481e5995d0440bfda2d5df533d6741a6e7058a882c";
   };
 
-  buildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkgconfig ];
   propagatedBuildInputs = [ pure gnuplot ];
   makeFlags = "libdir=$(out)/lib prefix=$(out)/";
   setupHook = ../generic-setup-hook.sh;
 
   meta = {
-    description = "a pure binding to gnuplot";
+    description = "A pure binding to gnuplot";
     homepage = http://puredocs.bitbucket.org/pure-gplot.html;
     license = stdenv.lib.licenses.lgpl3Plus;
     platforms = stdenv.lib.platforms.linux;

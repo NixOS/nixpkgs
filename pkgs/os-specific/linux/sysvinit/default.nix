@@ -1,13 +1,13 @@
 { stdenv, fetchurl, withoutInitTools ? false }:
 
-let version = "2.88dsf"; in
+let version = "2.89"; in
 
 stdenv.mkDerivation {
   name = (if withoutInitTools then "sysvtools" else "sysvinit") + "-" + version;
 
   src = fetchurl {
     url = "mirror://savannah/sysvinit/sysvinit-${version}.tar.bz2";
-    sha256 = "068mvzaz808a673zigyaqb63xc8bndh2klk16zi5c83rw70wifv0";
+    sha256 = "0rdw5lgg2rpcfdmq90br388qr01w89vsqmpvrqcqjqsmxk9zw3c2";
   };
 
   prePatch = ''
@@ -15,11 +15,7 @@ stdenv.mkDerivation {
     sed -i -e "s,/sbin/,$out/sbin/," src/halt.c src/init.c src/paths.h
   '';
 
-  makeFlags = "SULOGINLIBS=-lcrypt ROOT=$(out) MANDIR=/share/man";
-
-  crossAttrs = {
-    makeFlags = "SULOGINLIBS=-lcrypt ROOT=$(out) MANDIR=/share/man CC=${stdenv.cross.config}-gcc";
-  };
+  makeFlags = [ "SULOGINLIBS=-lcrypt" "ROOT=$(out)" "MANDIR=/share/man" ];
 
   preInstall =
     ''

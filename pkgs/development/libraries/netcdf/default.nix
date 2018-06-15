@@ -1,22 +1,38 @@
-{ stdenv, fetchurl,
-  zlib, hdf5, m4,
-  curl # for DAP
+{ stdenv
+, fetchurl
+, hdf5
+, m4
+, curl # for DAP
 }:
-    
-stdenv.mkDerivation rec {
-    name = "netcdf-4.3.3.1";
-    src = fetchurl {
-        url = "http://www.unidata.ucar.edu/downloads/netcdf/ftp/${name}.tar.gz";
-        sha256 = "06ds8zm4qvjlqvv4qb637cqr0xgvbhnghrddisad5vj81s5kvpmx";
-    };
 
-    buildInputs = [
-        zlib hdf5 m4 curl
-    ];
+let
+  mpiSupport = hdf5.mpiSupport;
+  mpi = hdf5.mpi;
+in stdenv.mkDerivation rec {
+  name = "netcdf-4.6.1";
 
-    configureFlags = [
-        "--enable-netcdf-4"
-        "--enable-dap"
-        "--enable-shared"
-    ];
+  src = fetchurl {
+    url = "https://www.unidata.ucar.edu/downloads/netcdf/ftp/${name}.tar.gz";
+    sha256 = "0hi61cdihwwvz5jz1l7yq712j7ca1cj4bhr8x0x7c2vlb1s9biw9";
+  };
+
+  nativeBuildInputs = [ m4 ];
+  buildInputs = [ hdf5 curl mpi ];
+
+  passthru = {
+    mpiSupport = mpiSupport;
+    inherit mpi;
+  };
+
+  configureFlags = [
+      "--enable-netcdf-4"
+      "--enable-dap"
+      "--enable-shared"
+  ]
+  ++ (stdenv.lib.optionals mpiSupport [ "--enable-parallel-tests" "CC=${mpi}/bin/mpicc" ]);
+
+  meta = {
+      platforms = stdenv.lib.platforms.unix;
+      homepage = https://www.unidata.ucar.edu/software/netcdf/;
+  };
 }

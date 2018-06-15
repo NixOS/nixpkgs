@@ -20,15 +20,16 @@ in
 
       enable = mkOption {
         default = false;
-        description = "
+        description = ''
           Mount filesystems on demand. Unmount them automatically.
-          You may also be interested in afuese.
-        ";
+          You may also be interested in afuse.
+        '';
       };
 
       autoMaster = mkOption {
+        type = types.str;
         example = literalExample ''
-          autoMaster = let
+          let
             mapConf = pkgs.writeText "auto" '''
              kernel    -ro,soft,intr       ftp.kernel.org:/pub/linux
              boot      -fstype=ext2        :/dev/hda1
@@ -44,10 +45,9 @@ in
             /auto file:''${mapConf}
           '''
         '';
-        description = "
-          file contents of /etc/auto.master. See man auto.master
-          See man 5 auto.master and man 5 autofs.
-        ";
+        description = ''
+          Contents of <literal>/etc/auto.master</literal> file. See <command>auto.master(5)</command> and <command>autofs(5)</command>.
+        '';
       };
 
       timeout = mkOption {
@@ -57,9 +57,9 @@ in
 
       debug = mkOption {
         default = false;
-        description = "
-        pass -d and -7 to automount and write log to /var/log/autofs
-        ";
+        description = ''
+          Pass -d and -7 to automount and write log to the system journal.
+        '';
       };
 
     };
@@ -71,48 +71,25 @@ in
 
   config = mkIf cfg.enable {
 
-    environment.etc = singleton
-      { target = "auto.master";
-        source = pkgs.writeText "auto.master" cfg.autoMaster;
-      };
-
     boot.kernelModules = [ "autofs4" ];
 
-    jobs.autofs =
-      { description = "Filesystem automounter";
+    systemd.services.autofs =
+      { description = "Automounts filesystems on demand";
+        after = [ "network.target" "ypbind.service" "sssd.service" "network-online.target" ];
+        wants = [ "network-online.target" ];
+        wantedBy = [ "multi-user.target" ];
 
-        startOn = "started network-interfaces";
-        stopOn = "stopping network-interfaces";
+        preStart = ''
+          # There should be only one autofs service managed by systemd, so this should be safe.
+          rm -f /tmp/autofs-running
+        '';
 
-        path = [ pkgs.nfs-utils pkgs.sshfsFuse ];
-
-        preStop =
-          ''
-            set -e; while :; do pkill -TERM automount; sleep 1; done
-          '';
-
-        # automount doesn't clean up when receiving SIGKILL.
-        # umount -l should unmount the directories recursively when they are no longer used
-        # It does, but traces are left in /etc/mtab. So unmount recursively..
-        postStop =
-          ''
-          PATH=${pkgs.gnused}/bin:${pkgs.coreutils}/bin
-          exec &> /tmp/logss
-          # double quote for sed:
-          escapeSpaces(){ sed 's/ /\\\\040/g'; }
-          unescapeSpaces(){ sed 's/\\040/ /g'; }
-          sed -n 's@^\s*\(\([^\\ ]\|\\ \)*\)\s.*@\1@p' ${autoMaster} | sed 's/[\\]//' | while read mountPoint; do
-            sed -n "s@[^ ]\+\s\+\($(echo "$mountPoint"| escapeSpaces)[^ ]*\).*@\1@p" /proc/mounts | sort -r | unescapeSpaces| while read smountP; do
-              ${pkgs.utillinux}/bin/umount -l "$smountP" || true
-            done
-          done
-          '';
-
-        script =
-          ''
-            ${if cfg.debug then "exec &> /var/log/autofs" else ""}
-            exec ${pkgs.autofs5}/sbin/automount ${if cfg.debug then "-d" else ""} -f -t ${builtins.toString cfg.timeout} "${autoMaster}" ${if cfg.debug then "-l7" else ""}
-          '';
+        serviceConfig = {
+          Type = "forking";
+          PIDFile = "/run/autofs.pid";
+          ExecStart = "${pkgs.autofs5}/bin/automount ${optionalString cfg.debug "-d"} -p /run/autofs.pid -t ${builtins.toString cfg.timeout} ${autoMaster}";
+          ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
+        };
       };
 
   };

@@ -3,7 +3,7 @@
 stdenv.mkDerivation {
   name = "mp3gain-1.5.2";
   src = fetchurl {
-    url = "http://downloads.sourceforge.net/mp3gain/mp3gain-1_5_2-src.zip";
+    url = "mirror://sourceforge/mp3gain/mp3gain-1_5_2-src.zip";
     sha256 = "1jkgry59m8cnnfq05b9y1h4x4wpy3iq8j68slb9qffwa3ajcgbfv";
   };
 

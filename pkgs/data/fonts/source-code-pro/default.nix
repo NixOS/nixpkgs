@@ -1,27 +1,24 @@
-{ stdenv, fetchurl }:
+{ stdenv, fetchzip }:
 
-stdenv.mkDerivation rec {
+let
+  version = "2.030";
+in fetchzip {
   name = "source-code-pro-${version}";
-  version = "2.010";
-  version_italic = "1.030";
 
-  src = fetchurl {
-    url="https://github.com/adobe-fonts/source-code-pro/archive/${version}R-ro/${version_italic}R-it.tar.gz";
-    sha256="12wijgxrdzqxpw2q420nsq9aj454vhg3rq6n81jbqvgzxhxjpf7w";
-  };
+  url = https://github.com/adobe-fonts/source-code-pro/archive/2.030R-ro/1.050R-it.zip;
 
-  phases = "unpackPhase installPhase";
-
-  installPhase = ''
-    mkdir -p $out/share/fonts/opentype
-    find . -name "*.otf" -exec cp {} $out/share/fonts/opentype \;
+  postFetch = ''
+    mkdir -p $out/share/fonts
+    unzip -j $downloadedFile \*.otf -d $out/share/fonts/opentype
   '';
+
+  sha256 = "0d8qwzjgnz264wlm4qim048z3236z4hbblvc6yplw13f6b65j6fv";
 
   meta = {
     description = "A set of monospaced OpenType fonts designed for coding environments";
     maintainers = with stdenv.lib.maintainers; [ relrod ];
     platforms = with stdenv.lib.platforms; all;
-    homepage = "http://blog.typekit.com/2012/09/24/source-code-pro/";
+    homepage = https://blog.typekit.com/2012/09/24/source-code-pro/;
     license = stdenv.lib.licenses.ofl;
   };
 }

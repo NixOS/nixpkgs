@@ -1,13 +1,30 @@
 { fetchurl, stdenv, libuuid, popt, icu, ncurses }:
 
 stdenv.mkDerivation rec {
-  name = "gptfdisk-1.0.0";
+  name = "gptfdisk-${version}";
+  version = "1.0.3";
 
   src = fetchurl {
+    # http://www.rodsbooks.com/gdisk/${name}.tar.gz also works, but the home
+    # page clearly implies a preference for using SourceForge's bandwidth:
     url = "mirror://sourceforge/gptfdisk/${name}.tar.gz";
-    sha256 = "0v0xl0mzwabdf9yisgsvkhpyi48kbik35c6df42gr6d78dkrarjv";
+    sha256 = "0p0vr67lnqdsgdv2y144xmjqa1a2nijrrd3clc8dc2f46pn5mzc9";
   };
+  # https://sourceforge.net/p/gptfdisk/code/merge-requests/9/
+  patches = [ ./cross-makefile.patch ];
 
+  postPatch = stdenv.lib.optionalString stdenv.isDarwin ''
+    substituteInPlace Makefile.mac --replace \
+      "-mmacosx-version-min=10.4" "-mmacosx-version-min=10.6"
+    substituteInPlace Makefile.mac --replace \
+      " -arch i386" ""
+    substituteInPlace Makefile.mac --replace \
+      " -I/opt/local/include -I /usr/local/include -I/opt/local/include" ""
+    substituteInPlace Makefile.mac --replace \
+      "/opt/local/lib/libncurses.a" "${ncurses.out}/lib/libncurses.dylib"
+  '';
+
+  buildPhase = stdenv.lib.optionalString stdenv.isDarwin "make -f Makefile.mac";
   buildInputs = [ libuuid popt icu ncurses ];
 
   installPhase = ''
@@ -20,13 +37,10 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  meta = {
-    description = "A set of text-mode partitioning tools for Globally Unique Identifier (GUID) Partition Table (GPT) disks";
-
-    license = stdenv.lib.licenses.gpl2;
-
+  meta = with stdenv.lib; {
+    description = "Set of text-mode partitioning tools for Globally Unique Identifier (GUID) Partition Table (GPT) disks";
+    license = licenses.gpl2;
     homepage = http://www.rodsbooks.com/gdisk/;
-
-    platforms = stdenv.lib.platforms.linux;
+    platforms = platforms.all;
   };
 }

@@ -8,6 +8,8 @@ stdenv.mkDerivation rec {
     sha256 = "1jjc5f26hj7bk8nkjxsa8znfxcf8pgry2ipnwmj2fr6ky0dhm3rv";
   };
 
+  hardeningDisable = [ "format" ];
+
   preBuild =
     ''
       # Ouch, the tarball contains pre-compiled binaries.
@@ -18,12 +20,13 @@ stdenv.mkDerivation rec {
     ''
       mkdir -p $out/sbin
       cp vconfig $out/sbin/
-      
+
       mkdir -p $out/share/man/man8
       cp vconfig.8 $out/share/man/man8/
     '';
 
-  meta = { 
+  meta = {
     description = "User mode programs to enable VLANs on Ethernet devices";
+    platforms = stdenv.lib.platforms.linux;
   };
 }

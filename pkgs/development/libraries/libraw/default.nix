@@ -2,22 +2,26 @@
 
 stdenv.mkDerivation rec {
   name = "libraw-${version}";
-  version = "0.17.0";
+  version = "0.18.11";
 
   src = fetchurl {
     url = "http://www.libraw.org/data/LibRaw-${version}.tar.gz";
-    sha256 = "043kckxjqanw8dl3m9f6kvsf0l20ywxmgxd1xb0slj6m8l4w4hz6";
+    sha256 = "07a7k83hx7icahh6jaxfbd7pw5jjm5i11xcqjj31b28d1aj29xvw";
   };
 
-  buildInputs = [ lcms2 jasper ] ;
+  outputs = [ "out" "lib" "dev" "doc" ];
+
+  buildInputs = [ jasper ];
+
+  propagatedBuildInputs = [ lcms2 ];
 
   nativeBuildInputs = [ pkgconfig ];
 
   meta = {
     description = "Library for reading RAW files obtained from digital photo cameras (CRW/CR2, NEF, RAF, DNG, and others)";
-    homepage = http://www.libraw.org/;
+    homepage = https://www.libraw.org/;
     license = stdenv.lib.licenses.gpl2Plus;
-    platforms = stdenv.lib.platforms.all;
+    platforms = stdenv.lib.platforms.unix;
   };
 }
 

@@ -8,6 +8,6 @@ chmod -v 755 $boot_bin
 
 patchShebangs $boot_bin
 
-wrapProgram $boot_bin \
-            --set JAVA_HOME "${jdk}" \
-            --prefix PATH ":" "${jdk}/bin"
+sed -i \
+    -e "s;\${BOOT_JAVA_COMMAND:-java};\${BOOT_JAVA_COMMAND:-${jdk}/bin/java};g" \
+    $boot_bin

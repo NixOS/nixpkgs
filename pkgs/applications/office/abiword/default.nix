@@ -1,34 +1,39 @@
-{ stdenv, fetchurl, pkgconfig, gtk3, libglade, libgnomecanvas, fribidi
+{ stdenv, fetchurl, pkgconfig, gtk3, fribidi
 , libpng, popt, libgsf, enchant, wv, librsvg, bzip2, libjpeg, perl
-, boost, libxslt, goffice, makeWrapper, iconTheme
+, boost, libxslt, goffice, wrapGAppsHook, iconTheme
 }:
 
 stdenv.mkDerivation rec {
   name = "abiword-${version}";
-  version = "3.0.1";
+  version = "3.0.2";
 
   src = fetchurl {
-    url = "http://www.abisource.org/downloads/abiword/${version}/source/${name}.tar.gz";
-    sha256 = "1ik591rx15nn3n1297cwykl8wvrlgj78i528id9wbidgy3xzd570";
+    url = "https://www.abisource.com/downloads/abiword/${version}/source/${name}.tar.gz";
+    sha256 = "08imry821g81apdwym3gcs4nss0l9j5blqk31j5rv602zmcd9gxg";
   };
 
   enableParallelBuilding = true;
 
-  buildInputs =
-    [ pkgconfig gtk3 libglade librsvg bzip2 libgnomecanvas fribidi libpng popt
-      libgsf enchant wv libjpeg perl boost libxslt goffice makeWrapper iconTheme
-    ];
+  patches = [
+    # https://bugzilla.abisource.com/show_bug.cgi?id=13791
+    (fetchurl {
+      url = https://bugzilla.abisource.com/attachment.cgi?id=5860;
+      sha256 = "02p8kz02xm1197zcpzjs010mna9hxsbq5lwgxr8b7qhh9yxja7al";
+    })
+  ];
 
-  postFixup = ''
-    wrapProgram "$out/bin/abiword" \
-      --prefix XDG_DATA_DIRS : "$XDG_ICON_DIRS:$GSETTINGS_SCHEMAS_PATH"
-  '';
+  nativeBuildInputs = [ pkgconfig wrapGAppsHook ];
+
+  buildInputs = [
+    gtk3 librsvg bzip2 fribidi libpng popt
+    libgsf enchant wv libjpeg perl boost libxslt goffice iconTheme
+  ];
 
   meta = with stdenv.lib; {
     description = "Word processing program, similar to Microsoft Word";
-    homepage = http://www.abisource.com/;
+    homepage = https://www.abisource.com/;
     license = licenses.gpl3;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ pSub ];
+    maintainers = with maintainers; [ pSub ylwghst ];
   };
 }

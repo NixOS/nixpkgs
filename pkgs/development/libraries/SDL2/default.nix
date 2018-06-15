@@ -1,66 +1,100 @@
-{ stdenv, fetchurl, pkgconfig, audiofile
-, openglSupport ? false, mesa ? null
-, alsaSupport ? true, alsaLib ? null
-, x11Support ? true, xlibsWrapper ? null, libXrandr ? null
-, pulseaudioSupport ? true, libpulseaudio ? null
+{ stdenv, lib, fetchurl, pkgconfig, audiofile
+, openglSupport ? false, libGL
+, alsaSupport ? true, alsaLib
+, x11Support ? true, libICE, libXi, libXScrnSaver, libXcursor, libXinerama, libXext, libXxf86vm, libXrandr
+, waylandSupport ? true, wayland, wayland-protocols, libxkbcommon
+, dbusSupport ? false, dbus
+, udevSupport ? false, udev
+, ibusSupport ? false, ibus
+, pulseaudioSupport ? true, libpulseaudio
+, AudioUnit, Cocoa, CoreAudio, CoreServices, ForceFeedback, OpenGL
+, libiconv
 }:
 
-# OSS is no longer supported, for it's much crappier than ALSA and
-# PulseAudio.
+# NOTE: When editing this expression see if the same change applies to
+# SDL expression too
+
+with lib;
+
 assert !stdenv.isDarwin -> alsaSupport || pulseaudioSupport;
+assert openglSupport -> (stdenv.isDarwin || x11Support && libGL != null);
 
-assert openglSupport -> (stdenv.isDarwin || mesa != null && x11Support);
-assert x11Support -> (xlibsWrapper != null && libXrandr != null);
-assert alsaSupport -> alsaLib != null;
-assert pulseaudioSupport -> libpulseaudio != null;
-
-let
-  configureFlagsFun = attrs: ''
-        --disable-oss --disable-x11-shared
-        --disable-pulseaudio-shared --disable-alsa-shared
-        ${if alsaSupport then "--with-alsa-prefix=${attrs.alsaLib}/lib" else ""}
-        ${if (!x11Support) then "--without-x" else ""}
-      '';
-in
 stdenv.mkDerivation rec {
-  name = "SDL2-2.0.3";
+  name = "SDL2-${version}";
+  version = "2.0.8";
 
   src = fetchurl {
     url = "http://www.libsdl.org/release/${name}.tar.gz";
-    sha256 = "0369ngvb46x6c26h8zva4x22ywgy6mvn0wx87xqwxg40pxm9m9m5";
+    sha256 = "1v4js1gkr75hzbxzhwzzif0sf9g07234sd23x1vdaqc661bprizd";
   };
 
-  # Since `libpulse*.la' contain `-lgdbm', PulseAudio must be propagated.
-  propagatedBuildInputs = stdenv.lib.optionals x11Support [ xlibsWrapper libXrandr ] ++
-    stdenv.lib.optional pulseaudioSupport libpulseaudio;
+  outputs = [ "out" "dev" ];
+  outputBin = "dev"; # sdl-config
 
-  buildInputs = [ pkgconfig audiofile ] ++
-    stdenv.lib.optional openglSupport mesa ++
-    stdenv.lib.optional alsaSupport alsaLib;
+  patches = [ ./find-headers.patch ];
 
-  # https://bugzilla.libsdl.org/show_bug.cgi?id=1431
-  dontDisableStatic = true;
+  nativeBuildInputs = [ pkgconfig ];
 
-  # XXX: By default, SDL wants to dlopen() PulseAudio, in which case
-  # we must arrange to add it to its RPATH; however, `patchelf' seems
-  # to fail at doing this, hence `--disable-pulseaudio-shared'.
-  configureFlags = configureFlagsFun { inherit alsaLib; };
+  propagatedBuildInputs = [ libiconv ]
+    ++ optional  dbusSupport dbus
+    ++ optional  udevSupport udev
+    ++ optionals x11Support [ libICE libXi libXScrnSaver libXcursor libXinerama libXext libXrandr libXxf86vm ]
+    ++ optionals waylandSupport [ wayland wayland-protocols libxkbcommon ]
+    ++ optional  alsaSupport alsaLib
+    ++ optional  pulseaudioSupport libpulseaudio;
 
-  crossAttrs = {
-      configureFlags = configureFlagsFun { alsaLib = alsaLib.crossDrv; };
-  };
+  buildInputs = [ audiofile ]
+    ++ optional  openglSupport libGL
+    ++ optional  ibusSupport ibus
+    ++ optionals stdenv.isDarwin [ AudioUnit Cocoa CoreAudio CoreServices ForceFeedback OpenGL ];
+
+  # /build/SDL2-2.0.7/src/video/wayland/SDL_waylandevents.c:41:10: fatal error:
+  #   pointer-constraints-unstable-v1-client-protocol.h: No such file or directory
+  enableParallelBuilding = false;
+
+  configureFlags = [
+    "--disable-oss"
+  ] ++ optional (!x11Support) "--without-x"
+    ++ optional alsaSupport "--with-alsa-prefix=${alsaLib.out}/lib"
+    ++ optional stdenv.isDarwin "--disable-sdltest";
 
   postInstall = ''
+    moveToOutput lib/libSDL2main.a "$dev"
     rm $out/lib/*.a
+    moveToOutput bin/sdl2-config "$dev"
   '';
 
-  passthru = {inherit openglSupport;};
+  # SDL is weird in that instead of just dynamically linking with
+  # libraries when you `--enable-*` (or when `configure` finds) them
+  # it `dlopen`s them at runtime. In principle, this means it can
+  # ignore any missing optional dependencies like alsa, pulseaudio,
+  # some x11 libs, wayland, etc if they are missing on the system
+  # and/or work with wide array of versions of said libraries. In
+  # nixpkgs, however, we don't need any of that. Moreover, since we
+  # don't have a global ld-cache we have to stuff all the propagated
+  # libraries into rpath by hand or else some applications that use
+  # SDL API that requires said libraries will fail to start.
+  #
+  # You can grep SDL sources with `grep -rE 'SDL_(NAME|.*_SYM)'` to
+  # confirm that they actually use most of the `propagatedBuildInputs`
+  # from above in this way. This is pretty weird.
+  postFixup = ''
+    for lib in $out/lib/*.so* ; do
+      if [[ -L "$lib" ]]; then
+        patchelf --set-rpath "$(patchelf --print-rpath $lib):${lib.makeLibraryPath propagatedBuildInputs}" "$lib"
+      fi
+    done
+  '';
 
-  meta = {
+  setupHook = ./setup-hook.sh;
+
+  passthru = { inherit openglSupport; };
+
+  meta = with stdenv.lib; {
     description = "A cross-platform multimedia library";
     homepage = http://www.libsdl.org/;
-    license = stdenv.lib.licenses.zlib;
-    platforms = stdenv.lib.platforms.all;
-    maintainers = [ stdenv.lib.maintainers.page ];
+    license = licenses.zlib;
+    platforms = platforms.all;
+    maintainers = with maintainers; [ cpages ];
   };
 }

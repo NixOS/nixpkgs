@@ -2,14 +2,14 @@
 
 stdenv.mkDerivation rec {
   name="dfu-util-${version}";
-  version = "0.8";
+  version = "0.9";
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ libusb1 ];
 
   src = fetchurl {
-    url = "mirror://debian/pool/main/d/dfu-util/dfu-util_0.8.orig.tar.gz";
-    sha256 = "0n7h08avlzin04j93m6hkq9id6hxjiiix7ff9gc2n89aw6dxxjsm";
+    url = "http://dfu-util.sourceforge.net/releases/${name}.tar.gz";
+    sha256 = "0czq73m92ngf30asdzrfkzraag95hlrr74imbanqq25kdim8qhin";
   };
 
   meta = with stdenv.lib; {

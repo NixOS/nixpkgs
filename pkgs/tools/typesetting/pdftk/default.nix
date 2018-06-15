@@ -8,7 +8,9 @@ stdenv.mkDerivation {
     sha256 = "1hdq6zm2dx2f9h7bjrp6a1hfa1ywgkwydp14i2sszjiszljnm3qi";
   };
 
-  buildInputs = [ gcj unzip ];
+  nativeBuildInputs = [ gcj unzip ];
+
+  hardeningDisable = [ "fortify" "format" ];
 
   preBuild = ''
     cd pdftk
@@ -32,7 +34,7 @@ stdenv.mkDerivation {
 
   meta = {
     description = "Simple tool for doing everyday things with PDF documents";
-    homepage = "https://www.pdflabs.com/tools/pdftk-server/";
+    homepage = https://www.pdflabs.com/tools/pdftk-server/;
     license = stdenv.lib.licenses.gpl2;
     maintainers = with stdenv.lib.maintainers; [viric raskin];
     platforms = with stdenv.lib.platforms; linux;

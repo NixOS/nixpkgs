@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, glib, qt4, pkgconfig, libnl, pygobject, python }:
+{ stdenv, fetchurl, glib, qt4, pkgconfig, libnl, python }:
 
 let
   version = "016";
@@ -29,6 +29,6 @@ stdenv.mkDerivation rec {
     description = "Network Connectivity Tracking library for Desktop Applications";
     homepage = https://launchpad.net/ntrack;
     platforms = stdenv.lib.platforms.linux;
-    maintainers = [ stdenv.lib.maintainers.urkud ];
+    maintainers = [ ];
   };
 }

@@ -5,20 +5,19 @@ let
     if stdenv.system == "i686-linux" then fetchurl {
       name = "rescuetime-installer.deb";
       url = "https://www.rescuetime.com/installers/rescuetime_current_i386.deb";
-      sha256 = "15x3nvhxk4f0rga0i99c6lhaa1rwdi446kxnx1l4jprhbl788sx6";
+      sha256 = "06q1jwqsrjvlj820dd4vl80jznwafsqshsg0p6si8qx4721blryz";
     } else fetchurl {
       name = "rescuetime-installer.deb";
       url = "https://www.rescuetime.com/installers/rescuetime_current_amd64.deb";
-      sha256 = "0ibdlx8fdlmh81908d1syb7c5lf88pqp49fl7r43cj6bybpdx411";
+      sha256 = "0b56iglg8g45biddwsdn1hmx9gsz4kxr64civwyy7f69f022ppab";
     };
-
-in
-
-stdenv.mkDerivation {
+in stdenv.mkDerivation {
   # https://www.rescuetime.com/updates/linux_release_notes.html
-  name = "rescuetime-2.8.9.1170";
+  name = "rescuetime-2.10.0.1322";
   inherit src;
   buildInputs = [ dpkg makeWrapper ];
+  # avoid https://github.com/NixOS/patchelf/issues/99
+  dontStrip = true;
   unpackPhase = ''
     mkdir pkg
     dpkg-deb -x $src pkg
@@ -30,10 +29,8 @@ stdenv.mkDerivation {
 
     ${patchelf}/bin/patchelf \
       --interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
+      --set-rpath "${lib.makeLibraryPath [ qt4 libXtst libXext libX11 libXScrnSaver ]}" \
       $out/bin/rescuetime
-
-    wrapProgram $out/bin/rescuetime \
-      --prefix LD_PRELOAD : ${qt4}/lib/libQtGui.so.4:${qt4}/lib/libQtCore.so.4:${libXtst}/lib/libXtst.so.6:${libXext}/lib/libXext.so.6:${libX11}/lib/libX11.so.6:${libXScrnSaver}/lib/libXss.so.1
   '';
   meta = with lib; {
     description = "Helps you understand your daily habits so you can focus and be more productive";

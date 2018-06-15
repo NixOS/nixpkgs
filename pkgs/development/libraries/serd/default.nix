@@ -1,15 +1,15 @@
-{ stdenv, fetchurl, pcre, pkgconfig, python }:
+{ stdenv, fetchurl, pkgconfig, python }:
 
 stdenv.mkDerivation rec {
   name = "serd-${version}";
-  version = "0.20.0";
+  version = "0.28.0";
 
   src = fetchurl {
     url = "http://download.drobilla.net/${name}.tar.bz2";
-    sha256 = "1gxbzqsm212wmn8qkdd3lbl6wbv7fwmaf9qh2nxa4yxjbr7mylb4";
+    sha256 = "1v4ai4zyj1q3255nghicns9817jkwb3bh60ssprsjmnjfj41mwhx";
   };
 
-  buildInputs = [ pcre pkgconfig python ];
+  nativeBuildInputs = [ pkgconfig python ];
 
   configurePhase = "python waf configure --prefix=$out";
 

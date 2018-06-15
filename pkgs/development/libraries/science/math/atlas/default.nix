@@ -45,15 +45,17 @@
 
 let
   inherit (stdenv.lib) optional optionalString;
-  version = "3.10.2";
+  # Don't upgrade until https://github.com/math-atlas/math-atlas/issues/44
+  # is resolved.
+  version = "3.10.3";
 in
 
 stdenv.mkDerivation {
-  name = "atlas-${version}" + optionalString withLapack "-with-lapack";
+  name = "atlas${optionalString withLapack "-with-lapack"}-${version}";
 
   src = fetchurl {
     url = "mirror://sourceforge/math-atlas/atlas${version}.tar.bz2";
-    sha256 = "0bqh4bdnjdyww4mcpg6kn0x7338mfqbdgysn97dzrwwb26di7ars";
+    sha256 = "1dyjlq3fiparvm8ypwk6rsmjzmnwk81l88gkishphpvc79ryp216";
   };
 
   buildInputs = [ gfortran ];
@@ -63,7 +65,10 @@ stdenv.mkDerivation {
   # performance timings. We ignore that check, however, because with binaries
   # being pre-built on Hydra those timings aren't accurate for the local
   # machine in the first place.
-  patches = optional tolerateCpuTimingInaccuracy ./disable-timing-accuracy-check.patch;
+  patches = optional tolerateCpuTimingInaccuracy ./disable-timing-accuracy-check.patch
+    ++ optional stdenv.isDarwin ./tmpdir.patch;
+
+  hardeningDisable = [ "format" ];
 
   # Configure outside of the source directory.
   preConfigure = ''
@@ -72,14 +77,9 @@ stdenv.mkDerivation {
     configureScript=../configure
   '';
 
-  # * -fPIC is passed even in non-shared builds so that the ATLAS code can be
-  #   used to inside of shared libraries, like Octave does.
-  #
   # * -t 0 disables use of multi-threading. It's not quite clear what the
   #   consequences of that setting are and whether it's necessary or not.
   configureFlags = [
-    "-Fa alg"
-    "-fPIC"
     "-t ${threads}"
     cpuConfig
   ] ++ optional shared "--shared"
@@ -102,10 +102,15 @@ stdenv.mkDerivation {
     fi
   '';
 
+  # 1. /buildATLAS/build/bin/ATLrun.sh: multiple segfaults.
+  # 2. "atlas does its own parallel builds"
+  enableParallelBuilding = false;
+
   meta = {
-    homepage = "http://math-atlas.sourceforge.net/";
+    homepage = http://math-atlas.sourceforge.net/;
     description = "Automatically Tuned Linear Algebra Software (ATLAS)";
     license = stdenv.lib.licenses.bsd3;
+    platforms = stdenv.lib.platforms.unix;
 
     longDescription = ''
       The ATLAS (Automatically Tuned Linear Algebra Software) project is an

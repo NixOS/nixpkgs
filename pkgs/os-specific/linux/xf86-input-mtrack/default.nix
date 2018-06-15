@@ -1,34 +1,28 @@
 {
   stdenv
 , fetchurl
-, autoconf
-, automake
 , utilmacros
 , pkgconfig
-, libtool
 , mtdev
 , xorgserver
 , xproto
 , inputproto
 , pixman
+, autoreconfHook
 }:
 
 stdenv.mkDerivation {
   name = "xf86-input-mtrack-0.3.0";
 
-  preConfigure = "autoreconf -vfi";
-
   buildInputs = [
-    autoconf
-    automake
     utilmacros
     pkgconfig
-    libtool
     mtdev
     xorgserver
     xproto
     inputproto
     pixman
+    autoreconfHook
   ];
 
   CFLAGS = "-I${pixman}/include/pixman-1";
@@ -45,5 +39,6 @@ stdenv.mkDerivation {
     description = "An Xorg driver for multitouch trackpads";
 
     license = stdenv.lib.licenses.gpl2;
+    platforms = stdenv.lib.platforms.linux;
   };
 }

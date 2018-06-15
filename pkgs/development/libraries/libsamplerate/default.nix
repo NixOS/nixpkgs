@@ -1,38 +1,36 @@
-{ stdenv, fetchurl, pkgconfig
-, fftw, libsndfile
-}:
+{ stdenv, fetchurl, pkgconfig, libsndfile, ApplicationServices, Carbon, CoreServices }:
 
-stdenv.mkDerivation rec {
-  name = "libsamplerate-0.1.8";
+let
+  inherit (stdenv.lib) optionals optionalString;
+
+in stdenv.mkDerivation rec {
+  name = "libsamplerate-0.1.9";
 
   src = fetchurl {
     url = "http://www.mega-nerd.com/SRC/${name}.tar.gz";
-    sha256 = "01hw5xjbjavh412y63brcslj5hi9wdgkjd3h9csx5rnm8vglpdck";
+    sha256 = "1ha46i0nbibq0pl0pjwcqiyny4hj8lp1bnl4dpxm64zjw9lb2zha";
   };
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ fftw libsndfile ];
+  buildInputs = [ libsndfile ]
+    ++ optionals stdenv.isDarwin [ ApplicationServices CoreServices ];
 
-  # maybe interesting configure flags:
-  #--disable-fftw          disable usage of FFTW
-  #--disable-cpu-clip      disable tricky cpu specific clipper
+  configureFlags = [ "--disable-fftw" ];
 
-  postConfigure = stdenv.lib.optionalString stdenv.isDarwin
-    ''
-      # need headers from the Carbon.framework in /System/Library/Frameworks to
-      # compile this on darwin -- not sure how to handle
-      NIX_CFLAGS_COMPILE+=" -I$SDKROOT/System/Library/Frameworks/Carbon.framework/Versions/A/Headers"
+  outputs = [ "bin" "dev" "out" ];
 
-      substituteInPlace examples/Makefile --replace "-fpascal-strings" ""
-    '';
+  postConfigure = optionalString stdenv.isDarwin ''
+    # need headers from the Carbon.framework in /System/Library/Frameworks to
+    # compile this on darwin -- not sure how to handle
+    NIX_CFLAGS_COMPILE+=" -I${Carbon}/Library/Frameworks/Carbon.framework/Headers"
+
+    substituteInPlace examples/Makefile --replace "-fpascal-strings" ""
+  '';
 
   meta = with stdenv.lib; {
     description = "Sample Rate Converter for audio";
     homepage    = http://www.mega-nerd.com/SRC/index.html;
-    # you can choose one of the following licenses:
-    # GPL or a commercial-use license (available at
-    # http://www.mega-nerd.com/SRC/libsamplerate-cul.pdf)
-    licenses    = with licenses; [ gpl3.shortName unfree ];
+    license     = licenses.bsd2;
     maintainers = with maintainers; [ lovek323 wkennington ];
     platforms   = platforms.all;
   };

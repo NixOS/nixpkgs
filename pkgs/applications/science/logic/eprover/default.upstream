@@ -1,3 +1,0 @@
-url http://wwwlehre.dhbw-stuttgart.de/~sschulz/E/Download.html
-version_link '[.]tgz$'
-version '.*[/]V_([0-9.]+)[/].*' '\1'

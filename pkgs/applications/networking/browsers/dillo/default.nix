@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   configureFlags =  "--enable-ssl";
 
   meta = with stdenv.lib; {
-    homepage = http://www.dillo.org/;
+    homepage = https://www.dillo.org/;
     description = "A fast graphical web browser with a small footprint";
     longDescription = ''
       Dillo is a small, fast web browser, tailored for older machines.

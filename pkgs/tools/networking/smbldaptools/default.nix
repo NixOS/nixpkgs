@@ -1,13 +1,13 @@
 {stdenv, fetchurl, perl, NetLDAP, makeWrapper, CryptSmbHash, DigestSHA1}:
 
 let
-  version = "0.9.10";
+  version = "0.9.11";
 in
 stdenv.mkDerivation {
   name = "smbldap-tools-${version}";
   src = fetchurl {
     url = "http://download.gna.org/smbldap-tools/sources/${version}/smbldap-tools-${version}.tar.gz";
-    sha256 = "19hsvslfs61pk9nhyqdkd68gc95z26kpkmsj10b8zvzlhqmwdvy4";
+    sha256 = "1xcxmpz74r82vjp731axyac3cyksfiarz9jk5g5m2bzfdixkq9mz";
   };
 
   buildInputs = [ perl NetLDAP makeWrapper CryptSmbHash DigestSHA1 ];
@@ -27,7 +27,6 @@ stdenv.mkDerivation {
     homepage = http://gna.org/projects/smbldap-tools/;
     description = "SAMBA LDAP tools";
     license = stdenv.lib.licenses.gpl2Plus;
-    # pod2man: unable to format smbldap-config.cmd
-    broken = true;
+    platforms = stdenv.lib.platforms.unix;
   };
 }

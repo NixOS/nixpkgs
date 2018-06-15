@@ -1,5 +1,6 @@
 { stdenv, fetchurl, fetchgit, autogen, flex, bison, python, autoconf, automake
 , gettext, ncurses, libusb, freetype, qemu, devicemapper
+, for_HP_laptop ? false
 }:
 
 with stdenv.lib;
@@ -11,7 +12,7 @@ let
 
   inPCSystems = any (system: stdenv.system == system) (mapAttrsToList (name: _: name) pcSystems);
 
-  version = "1.2.1";
+  version = if for_HP_laptop then "1.2.1" else "1.2.0";
 
   unifont_bdf = fetchurl {
     url = "http://unifoundry.com/unifont-5.1.20080820.bdf.gz";
@@ -25,20 +26,30 @@ let
 
   };
 
-in (
+in
 
 stdenv.mkDerivation rec {
   name = "trustedGRUB2-${version}";
 
-  src = fetchgit {
-    url = "https://github.com/Sirrix-AG/TrustedGRUB2";
-    rev = "ab483d389bda3115ca0ae4202fd71f2e4a31ad41";
-    sha256 = "4b715837f8632278720d8b29aec06332f5302c6ba78183ced5f48d3c376d89c0";
-  };
+  src = if for_HP_laptop
+        then fetchgit {
+          url = "https://github.com/Sirrix-AG/TrustedGRUB2";
+          rev = "ab483d389bda3115ca0ae4202fd71f2e4a31ad41";
+          sha256 = "1760d9hsnqkdvlag9nn8f613mqhnsxmidgvdkpmb37b0yi7p6lhz";
+        }
+        else fetchgit {
+          url = "https://github.com/Sirrix-AG/TrustedGRUB2";
+          rev = "1ff54a5fbe02ea01df5a7de59b1e0201e08d4f76";
+          sha256 = "0yrfwx67gpg9gij5raq0cfbx3jj769lkg3diqgb7i9n86hgcdh4k";
+        };
 
   nativeBuildInputs = [ autogen flex bison python autoconf automake ];
   buildInputs = [ ncurses libusb freetype gettext devicemapper ]
     ++ optional doCheck qemu;
+
+  hardeningDisable = [ "stackprotector" "pic" ];
+
+  NIX_CFLAGS_COMPILE = "-Wno-error"; # generated code redefines yyfree
 
   preConfigure =
     '' for i in "tests/util/"*.in
@@ -87,6 +98,6 @@ stdenv.mkDerivation rec {
     description = "GRUB 2.0 extended with TCG (TPM) support for integrity measured boot process (trusted boot)";
     homepage = https://github.com/Sirrix-AG/TrustedGRUB2;
     license = licenses.gpl3Plus;
-    platforms = platforms.gnu;
+    platforms = platforms.gnu ++ platforms.linux;
   };
-})
+}

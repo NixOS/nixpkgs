@@ -1,11 +1,11 @@
-diff -ru orig/bzrlib/transport/http/_urllib2_wrappers.py bzr-2.6.0/bzrlib/transport/http/_urllib2_wrappers.py
---- orig/bzrlib/transport/http/_urllib2_wrappers.py	2013-07-27 13:50:53.000000000 +0200
-+++ bzr-2.6.0/bzrlib/transport/http/_urllib2_wrappers.py	2014-02-04 18:34:15.838622492 +0100
-@@ -86,6 +86,7 @@
-     u"/usr/local/share/certs/ca-root-nss.crt", # FreeBSD
+diff -ru orig/bzrlib/transport/http/_urllib2_wrappers.py bzr-2.7.0/bzrlib/transport/http/_urllib2_wrappers.py
+--- orig/bzr-2.7.0/bzrlib/transport/http/_urllib2_wrappers.py	2016-02-01 20:49:17.000000000 +0100
++++ bzr-2.7.0/bzrlib/transport/http/_urllib2_wrappers.py	2016-06-18 23:15:21.089511349 +0200
+@@ -95,6 +95,7 @@
+     u"/usr/local/share/certs/ca-root-nss.crt",  # FreeBSD
      # XXX: Needs checking, can't trust the interweb ;) -- vila 2012-01-25
-     u'/etc/openssl/certs/ca-certificates.crt', # Solaris
+     u'/etc/openssl/certs/ca-certificates.crt',  # Solaris
 +    u'@certPath@',
-     ]
- def default_ca_certs():
-     if sys.platform == 'win32':
+ ]
+
+

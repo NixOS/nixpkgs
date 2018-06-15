@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, pure, freeglut, mesa, xlibsWrapper }:
+{ stdenv, fetchurl, pkgconfig, pure, freeglut, libGLU_combined, xlibsWrapper }:
 
 stdenv.mkDerivation rec {
   baseName = "gl";
@@ -10,8 +10,8 @@ stdenv.mkDerivation rec {
     sha256 = "edd594222f89ae372067eda6679a37488986b9739b5b79b4a25ac48255d31bba";
   };
 
-  buildInputs = [ pkgconfig ];
-  propagatedBuildInputs = [ pure freeglut mesa xlibsWrapper ];
+  nativeBuildInputs = [ pkgconfig ];
+  propagatedBuildInputs = [ pure freeglut libGLU_combined xlibsWrapper ];
   makeFlags = "libdir=$(out)/lib prefix=$(out)/";
   setupHook = ../generic-setup-hook.sh;
 

@@ -1,43 +1,60 @@
-{ stdenv, fetchurl, ncurses, which, perl, autoreconfHook
-, sslSupport ? true
-, imapSupport ? true
-, headerCache ? true
-, saslSupport ? true
-, gpgmeSupport ? true
+{ stdenv, fetchurl, fetchpatch, ncurses, which, perl
 , gdbm ? null
 , openssl ? null
 , cyrus_sasl ? null
+, gnupg ? null
 , gpgme ? null
-, withSidebar ? false
+, kerberos ? null
+, headerCache  ? true
+, sslSupport   ? true
+, saslSupport  ? true
+, smimeSupport ? false
+, gpgSupport   ? false
+, gpgmeSupport ? true
+, imapSupport  ? true
+, withSidebar  ? true
+, gssSupport   ? true
 }:
 
-assert headerCache -> gdbm != null;
-assert sslSupport -> openssl != null;
-assert saslSupport -> cyrus_sasl != null;
-assert gpgmeSupport -> gpgme != null;
+assert headerCache  -> gdbm       != null;
+assert sslSupport   -> openssl    != null;
+assert saslSupport  -> cyrus_sasl != null;
+assert smimeSupport -> openssl    != null;
+assert gpgSupport   -> gnupg      != null;
+assert gpgmeSupport -> gpgme      != null && openssl != null;
 
-let
-  version = "1.5.24";
-in
+with stdenv.lib;
+
 stdenv.mkDerivation rec {
-  name = "mutt${stdenv.lib.optionalString withSidebar "-with-sidebar"}-${version}";
+  name = "mutt-${version}";
+  version = "1.10.0";
 
   src = fetchurl {
-    url = "http://ftp.mutt.org/pub/mutt/mutt-${version}.tar.gz";
-    sha256 = "0012njrgxf1barjksqkx7ccid2l0xyikhna9mjs9vcfpbrvcm4m2";
+    url = "http://ftp.mutt.org/pub/mutt/${name}.tar.gz";
+    sha256 = "0nskymwr2cdapxlfv0ysz3bjwhb4kcvl5a3c39237k7r1vwva582";
   };
 
-  buildInputs = with stdenv.lib;
+  patches = optional smimeSupport (fetchpatch {
+    url    = "https://sources.debian.net/src/mutt/1.7.2-1/debian/patches/misc/smime.rc.patch";
+    sha256 = "0mdqa9w1p6cmli6976v4wi0sw9r4p5prkj7lzfd1877wk11c9c73";
+  });
+
+  buildInputs =
     [ ncurses which perl ]
-    ++ optional headerCache gdbm
-    ++ optional sslSupport openssl
-    ++ optional saslSupport cyrus_sasl
+    ++ optional headerCache  gdbm
+    ++ optional sslSupport   openssl
+    ++ optional gssSupport   kerberos
+    ++ optional saslSupport  cyrus_sasl
     ++ optional gpgmeSupport gpgme;
 
-  nativeBuildInputs = stdenv.lib.optional withSidebar autoreconfHook;
-
   configureFlags = [
-    "--with-mailpath=" "--enable-smtp"
+    (enableFeature headerCache  "hcache")
+    (enableFeature gpgmeSupport "gpgme")
+    (enableFeature imapSupport  "imap")
+    (enableFeature withSidebar  "sidebar")
+    "--enable-smtp"
+    "--enable-pop"
+    "--with-mailpath="
 
     # Look in $PATH at runtime, instead of hardcoding /usr/bin/sendmail
     "ac_cv_path_SENDMAIL=sendmail"
@@ -45,36 +62,35 @@ stdenv.mkDerivation rec {
     # This allows calls with "-d N", that output debug info into ~/.muttdebug*
     "--enable-debug"
 
-    "--enable-pop" "--enable-imap"
-
     # The next allows building mutt without having anything setgid
     # set by the installer, and removing the need for the group 'mail'
     # I set the value 'mailbox' because it is a default in the configure script
     "--with-homespool=mailbox"
-    (if headerCache then "--enable-hcache" else "--disable-hcache")
-    (if sslSupport then "--with-ssl" else "--without-ssl")
-    (if imapSupport then "--enable-imap" else "--disable-imap")
-    (if saslSupport then "--with-sasl" else "--without-sasl")
-    (if gpgmeSupport then "--enable-gpgme" else "--disable-gpgme")
-  ];
+  ] ++ optional sslSupport  "--with-ssl"
+    ++ optional gssSupport  "--with-gss"
+    ++ optional saslSupport "--with-sasl";
 
-  # Adding the sidebar
-  patches = stdenv.lib.optional withSidebar [
-    ./trash-folder.patch
-    ./sidebar.patch
-    ./sidebar-dotpathsep.patch
-    ./sidebar-utf8.patch
-    ./sidebar-newonly.patch
-    ./sidebar-delimnullwide.patch
-    ./sidebar-compose.patch
-    ./sidebar-new.patch
-  ];
+  postPatch = optionalString (smimeSupport || gpgmeSupport) ''
+    sed -i 's#/usr/bin/openssl#${openssl}/bin/openssl#' smime_keys.pl
+  '';
 
-  meta = with stdenv.lib; {
+  postInstall = optionalString smimeSupport ''
+    # S/MIME setup
+    cp contrib/smime.rc $out/etc/smime.rc
+    sed -i 's#openssl#${openssl}/bin/openssl#' $out/etc/smime.rc
+    echo "source $out/etc/smime.rc" >> $out/etc/Muttrc
+  '' + optionalString gpgSupport ''
+    # GnuPG setup
+    cp contrib/gpg.rc $out/etc/gpg.rc
+    sed -i 's#\(command="\)gpg #\1${gnupg}/bin/gpg #' $out/etc/gpg.rc
+    echo "source $out/etc/gpg.rc" >> $out/etc/Muttrc
+  '';
+
+  meta = {
     description = "A small but very powerful text-based mail client";
     homepage = http://www.mutt.org;
-    license = stdenv.lib.licenses.gpl2Plus;
+    license = licenses.gpl2Plus;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ the-kenny ];
+    maintainers = with maintainers; [ the-kenny rnhmjoj ];
   };
 }

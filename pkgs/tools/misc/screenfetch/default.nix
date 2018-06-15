@@ -1,51 +1,62 @@
-{ stdenv, fetchgit, makeWrapper
-, coreutils, gawk, procps, gnused, findutils, xdpyinfo, xprop, gnugrep
+{ stdenv, lib, fetchFromGitHub, makeWrapper, coreutils, gawk, procps, gnused
+, bc, findutils, xdpyinfo, xprop, gnugrep, ncurses
+, darwin
 }:
 
-stdenv.mkDerivation {
-  name = "screenFetch-2015-04-20";
+let
+  path = lib.makeBinPath ([
+    coreutils gawk gnused findutils
+    gnugrep ncurses bc
+  ] ++ lib.optionals stdenv.isLinux [
+    procps
+    xdpyinfo
+    xprop
+  ] ++ lib.optionals stdenv.isDarwin (with darwin; [
+    adv_cmds
+    DarwinTools
+    system_cmds
+    "/usr" # some commands like defaults is not available to us
+  ]));
 
-  src = fetchgit {
-    url = git://github.com/KittyKatt/screenFetch.git;
-    rev = "53e1c0cccacf648e846057938a68dda914f532a1";
-    sha256 = "1wyvy1sn7vnclwrzd32jqlq6iirjkhp2ak55brhkpp9rj1qxk3q6";
+in stdenv.mkDerivation rec {
+  name = "screenFetch-${version}";
+  version = "3.8.0";
+
+  src = fetchFromGitHub {
+    owner  = "KittyKatt";
+    repo   = "screenFetch";
+    rev    = "v${version}";
+    sha256 = "00ibv72cb7cqfpljyzgvajhbp0clqsqliz18nyv83bfy3gkf2qs8";
   };
 
   nativeBuildInputs = [ makeWrapper ];
 
   installPhase = ''
     install -Dm 0755 screenfetch-dev $out/bin/screenfetch
-    install -Dm 0644 screenfetch.1 $out/man/man1/screenfetch.1
+    install -Dm 0644 screenfetch.1 $out/share/man/man1/screenfetch.1
+    install -Dm 0644 -t $out/share/doc/screenfetch CHANGELOG COPYING README.mkdn TODO
 
-    # Fix all of the depedencies of screenfetch
+    # Fix all of the dependencies of screenfetch
     patchShebangs $out/bin/screenfetch
     wrapProgram "$out/bin/screenfetch" \
-      --set PATH : "" \
-      --prefix PATH : "${coreutils}/bin" \
-      --prefix PATH : "${gawk}/bin" \
-      --prefix PATH : "${procps}/bin" \
-      --prefix PATH : "${gnused}/bin" \
-      --prefix PATH : "${findutils}/bin" \
-      --prefix PATH : "${xdpyinfo}/bin" \
-      --prefix PATH : "${xprop}/bin" \
-      --prefix PATH : "${gnugrep}/bin"
+      --prefix PATH : ${path}
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Fetches system/theme information in terminal for Linux desktop screenshots";
     longDescription = ''
-    screenFetch is a "Bash Screenshot Information Tool". This handy Bash
-    script can be used to generate one of those nifty terminal theme
-    information + ASCII distribution logos you see in everyone's screenshots
-    nowadays. It will auto-detect your distribution and display an ASCII
-    version of that distribution's logo and some valuable information to the
-    right. There are options to specify no ascii art, colors, taking a
-    screenshot upon displaying info, and even customizing the screenshot
-    command! This script is very easy to add to and can easily be extended.
+      screenFetch is a "Bash Screenshot Information Tool". This handy Bash
+      script can be used to generate one of those nifty terminal theme
+      information + ASCII distribution logos you see in everyone's screenshots
+      nowadays. It will auto-detect your distribution and display an ASCII
+      version of that distribution's logo and some valuable information to the
+      right. There are options to specify no ascii art, colors, taking a
+      screenshot upon displaying info, and even customizing the screenshot
+      command! This script is very easy to add to and can easily be extended.
     '';
-    license = stdenv.lib.licenses.gpl3;
-    homepage = http://git.silverirc.com/cgit.cgi/screenfetch-dev.git/;
-    maintainers = with stdenv.lib.maintainers; [relrod];
-    platforms = stdenv.lib.platforms.all;
+    license = licenses.gpl3;
+    homepage = https://github.com/KittyKatt/screenFetch;
+    maintainers = with maintainers; [ relrod ];
+    platforms = platforms.all;
   };
 }

@@ -4,26 +4,46 @@
 { config, lib, pkgs, ... }:
 
 with lib;
+with import ../../lib/qemu-flags.nix { inherit pkgs; };
 
-let kernel = config.boot.kernelPackages.kernel; in
+let
+  kernel = config.boot.kernelPackages.kernel;
+in
 
 {
+
+  # This option is a dummy that if used in conjunction with
+  # modules/virtualisation/qemu-vm.nix gets merged with the same option defined
+  # there and only is declared here because some modules use
+  # test-instrumentation.nix but not qemu-vm.nix.
+  #
+  # One particular example are the boot tests where we want instrumentation
+  # within the images but not other stuff like setting up 9p filesystems.
+  options.virtualisation.qemu.program = mkOption { type = types.path; };
 
   config = {
 
     systemd.services.backdoor =
       { wantedBy = [ "multi-user.target" ];
-        requires = [ "dev-hvc0.device" "dev-ttyS0.device" ];
-        after = [ "dev-hvc0.device" "dev-ttyS0.device" ];
+        requires = [ "dev-hvc0.device" "dev-${qemuSerialDevice}.device" ];
+        after = [ "dev-hvc0.device" "dev-${qemuSerialDevice}.device" ];
         script =
           ''
             export USER=root
             export HOME=/root
             export DISPLAY=:0.0
+
             source /etc/profile
+
+            # Don't use a pager when executing backdoor
+            # actions. Because we use a tty, commands like systemctl
+            # or nix-store get confused into thinking they're running
+            # interactively.
+            export PAGER=
+
             cd /tmp
             exec < /dev/hvc0 > /dev/hvc0
-            while ! exec 2> /dev/ttyS0; do sleep 0.1; done
+            while ! exec 2> /dev/${qemuSerialDevice}; do sleep 0.1; done
             echo "connecting to host..." >&2
             stty -F /dev/hvc0 raw -echo # prevent nl -> cr/nl conversion
             echo
@@ -32,16 +52,19 @@ let kernel = config.boot.kernelPackages.kernel; in
         serviceConfig.KillSignal = "SIGHUP";
       };
 
-    # Prevent agetty from being instantiated on ttyS0, since it
-    # interferes with the backdoor (writes to ttyS0 will randomly fail
+    # Prevent agetty from being instantiated on the serial device, since it
+    # interferes with the backdoor (writes to it will randomly fail
     # with EIO).  Likewise for hvc0.
-    systemd.services."serial-getty@ttyS0".enable = false;
+    systemd.services."serial-getty@${qemuSerialDevice}".enable = false;
     systemd.services."serial-getty@hvc0".enable = false;
 
-    # Don't use a pager when executing backdoor actions. Because we
-    # use a tty, commands like systemctl or nix-store get confused
-    # into thinking they're running interactively.
-    environment.variables.PAGER = "";
+    # Only use a serial console, no TTY.
+    virtualisation.qemu.consoles = [ qemuSerialDevice ];
+
+    boot.initrd.preDeviceCommands =
+      ''
+        echo 600 > /proc/sys/kernel/hung_task_timeout_secs
+      '';
 
     boot.initrd.postDeviceCommands =
       ''
@@ -71,7 +94,7 @@ let kernel = config.boot.kernelPackages.kernel; in
     # Panic if an error occurs in stage 1 (rather than waiting for
     # user intervention).
     boot.kernelParams =
-      [ "console=ttyS0" "panic=1" "boot.panic_on_fail" ];
+      [ "console=${qemuSerialDevice}" "panic=1" "boot.panic_on_fail" ];
 
     # `xwininfo' is used by the test driver to query open windows.
     environment.systemPackages = [ pkgs.xorg.xwininfo ];
@@ -105,6 +128,10 @@ let kernel = config.boot.kernelPackages.kernel; in
     # Make it easy to log in as root when running the test interactively.
     users.extraUsers.root.initialHashedPassword = mkOverride 150 "";
 
+    services.xserver.displayManager.job.logToJournal = true;
+
+    # set default stateVersion to avoid warnings during eval
+    system.nixos.stateVersion = mkDefault "18.03";
   };
 
 }

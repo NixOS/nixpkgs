@@ -1,6 +1,6 @@
 { stdenv, fetchurl, jre }:
 
-let version = "5.2.1"; in
+let version = "6.1.3"; in
 
 stdenv.mkDerivation rec {
   name = "subsonic-${version}";
@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://sourceforge/subsonic/subsonic-${version}-standalone.tar.gz";
-    sha256 = "523fa8357c961c1ae742a15f0ceaabdd41fcba9137c29d244957922af90ee791";
+    sha256 = "1v21gfymaqcx6n6d88hvha60q9hgj5z1wsac5gcwq7cjah1893jx";
   };
 
   inherit jre;
@@ -29,6 +29,7 @@ stdenv.mkDerivation rec {
     description = "Personal media streamer";
     license = stdenv.lib.licenses.gpl3;
     maintainers = with stdenv.lib.maintainers; [ telotortium ];
+    platforms = with stdenv.lib.platforms; unix;
   };
 
   phases = ["unpackPhase" "installPhase"];

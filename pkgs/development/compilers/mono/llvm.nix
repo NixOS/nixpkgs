@@ -5,7 +5,7 @@
 , cmake
 , python
 , libffi
-, binutils
+, libbfd
 , libxml2
 , valgrind
 , ncurses
@@ -41,9 +41,8 @@ stdenv.mkDerivation rec {
   postBuild = "rm -fR $out";
 
   cmakeFlags = with stdenv; [
-    "-DCMAKE_BUILD_TYPE=Release"
     "-DLLVM_ENABLE_FFI=ON"
-    "-DLLVM_BINUTILS_INCDIR=${binutils}/include"
+    "-DLLVM_BINUTILS_INCDIR=${libbfd.dev}/include"
     "-DCMAKE_CXX_FLAGS=-std=c++11"
   ] ++ stdenv.lib.optional (!isDarwin) "-DBUILD_SHARED_LIBS=ON";
 

@@ -20,15 +20,15 @@ stdenv.mkDerivation rec {
     substituteInPlace planet.py \
         --replace "#!/usr/bin/env python" "#!${python}/bin/python"
     substituteInPlace tests/test_apply.py \
-        --replace "'xsltproc" "'${libxslt}/bin/xsltproc"
+        --replace "'xsltproc" "'${libxslt.bin}/bin/xsltproc"
     substituteInPlace planet/shell/xslt.py \
-        --replace "'xsltproc" "'${libxslt}/bin/xsltproc"
+        --replace "'xsltproc" "'${libxslt.bin}/bin/xsltproc"
   '';
 
   doCheck = true;
   checkPhase = "python runtests.py";
 
-  buildInputs = [ python python.modules.bsddb libxslt
+  buildInputs = [ python libxslt
     libxml2 pythonPackages.genshi pythonPackages.lxml makeWrapper ];
 
   installPhase = ''
@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
       feeds published by web sites and aggregates their content together into a
       single combined feed, latest news first.
     '';
-    homepage = "http://intertwingly.net/code/venus/docs/index.html";
+    homepage = http://intertwingly.net/code/venus/docs/index.html;
     license = stdenv.lib.licenses.psfl;
     platforms = stdenv.lib.platforms.all;
     maintainers = [ stdenv.lib.maintainers.garbas ];

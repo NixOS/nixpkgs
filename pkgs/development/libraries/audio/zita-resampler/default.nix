@@ -2,10 +2,10 @@
 
 stdenv.mkDerivation rec {
   name = "zita-resampler-${version}";
-  version = "1.3.0";
+  version = "1.6.0";
   src = fetchurl {
     url = "http://kokkinizita.linuxaudio.org/linuxaudio/downloads/${name}.tar.bz2";
-    sha256 = "0r9ary5sc3y8vba5pad581ha7mgsrlyai83w7w4x2fmhfy64q0wq";
+    sha256 = "1w48lp99jn4wh687cvbnbnjgaraqzkb4bgir16cp504x55v8v20h";
   };
 
   makeFlags = [
@@ -23,9 +23,9 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    description = "resample library by Fons Adriaensen";
+    description = "Resample library by Fons Adriaensen";
     version = "${version}";
-    homepage = "http://kokkinizita.linuxaudio.org/linuxaudio/downloads/index.html";
+    homepage = http://kokkinizita.linuxaudio.org/linuxaudio/downloads/index.html;
     license = stdenv.lib.licenses.gpl2;
     maintainers = [ stdenv.lib.maintainers.magnetophon ];
     platforms = stdenv.lib.platforms.linux;

@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, ocaml, findlib, js_of_ocaml, camlp4 }:
+{ stdenv, fetchgit, ocaml, findlib, ocamlbuild, js_of_ocaml, js_of_ocaml-camlp4, camlp4, lwt3, react }:
 
 stdenv.mkDerivation rec {
   version = "0.1";
@@ -6,11 +6,11 @@ stdenv.mkDerivation rec {
   src = fetchgit {
     url = https://github.com/ocsigen/ojquery.git;
     rev = "refs/tags/${version}";
-    sha256 = "1x3cidxxjyw0g7afvczdy6chw3nxb0dcz2psgxchqgv34dcwf0l0";
+    sha256 = "1n01bsk4car40p94fk1ssvww0inqapwwhdylmrb7vv40drsdldp1";
   };
 
-  buildInputs = [ ocaml findlib ];
-  propagatedBuildInputs = [ js_of_ocaml camlp4 ];
+  buildInputs = [ ocaml findlib ocamlbuild js_of_ocaml-camlp4 camlp4 ];
+  propagatedBuildInputs = [ js_of_ocaml lwt3 react ];
 
   createFindlibDestdir = true;
 
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     description = "jQuery Binding for Eliom";
     homepage = http://ocsigen.org/ojquery/;
     license = stdenv.lib.licenses.lgpl3;
-    platforms = ocaml.meta.platforms;
+    platforms = ocaml.meta.platforms or [];
     maintainers = with stdenv.lib.maintainers; [ vbgl ];
   };
 }

@@ -1,27 +1,27 @@
-{ stdenv, fetchurl, SDL2, libpng, libjpeg, libtiff, libungif, libXpm, zlib }:
+{ stdenv, fetchurl, SDL2, libpng, libjpeg, libtiff, libungif, libXpm, zlib, Foundation }:
 
 stdenv.mkDerivation rec {
-  name = "SDL2_image-2.0.0";
+  name = "SDL2_image-${version}";
+  version = "2.0.3";
 
   src = fetchurl {
     url = "http://www.libsdl.org/projects/SDL_image/release/${name}.tar.gz";
-    sha256 = "0d3jlhkmr0j5a2dd5h6y29jfcsj7mkl16wghm6n3nqqp7g3ib65j";
+    sha256 = "0s13dmakn21q6yw8avl67d4zkxzl1wap6l5nwf6cvzrmlxfw441m";
   };
 
-  buildInputs = [SDL2 libpng libjpeg libtiff libungif libXpm zlib];
+  buildInputs = [ SDL2 libpng libjpeg libtiff libungif libXpm zlib ]
+    ++ stdenv.lib.optional stdenv.isDarwin Foundation;
 
-  postInstall = ''
-    sed -i -e 's,"SDL.h",<SDL2/SDL.h>,' \
-      -e 's,"SDL_version.h",<SDL2/SDL_version.h>,' \
-      -e 's,"begin_code.h",<SDL2/begin_code.h>,' \
-      -e 's,"close_code.h",<SDL2/close_code.h>,' \
-      $out/include/SDL2/SDL_image.h
-    ln -sv SDL2/SDL_image.h $out/include/SDL_image.h
-  '';
 
-  meta = {
+  configureFlags = stdenv.lib.optional stdenv.isDarwin "--disable-sdltest";
+
+  enableParallelBuilding = true;
+
+  meta = with stdenv.lib; {
     description = "SDL image library";
-    homepage = "http://www.libsdl.org/projects/SDL_image/";
-    platforms = stdenv.lib.platforms.unix;
+    homepage = http://www.libsdl.org/projects/SDL_image/;
+    platforms = platforms.unix;
+    license = licenses.zlib;
+    maintainers = with maintainers; [ cpages ];
   };
 }

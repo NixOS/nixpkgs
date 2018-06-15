@@ -39,7 +39,7 @@ with lib;
         mkdir -m 0755 -p /var/lib/udisks2
       '';
 
-    #services.udev.packages = [ pkgs.udisks2 ];
+    services.udev.packages = [ pkgs.udisks2 ];
     
     systemd.services.udisks2 = {
       description = "Udisks2 service";

@@ -1,28 +1,40 @@
 { stdenv, fetchurl, gmp, gwenhywfar, libtool, libxml2, libxslt
-, pkgconfig, xmlsec, zlib
+, pkgconfig, gettext, xmlsec, zlib
 }:
 
-stdenv.mkDerivation rec {
-  name = "aqbanking-5.5.1";
+let
+  inherit ((import ./sources.nix).aqbanking) sha256 releaseId version;
+in stdenv.mkDerivation rec {
+  name = "aqbanking-${version}";
+  inherit version;
 
-  src = fetchurl {
-    url = "http://www2.aquamaniac.de/sites/download/download.php?package=03&release=118&file=01&dummy=${name}.tar.gz";
+  src = let
+    qstring = "package=03&release=${releaseId}&file=02";
+    mkURLs = map (base: "${base}/sites/download/download.php?${qstring}");
+  in fetchurl {
     name = "${name}.tar.gz";
-    sha256 = "1pxd5xv2xls1hyizr1vbknzgb66babhlp72777rcxq46gp91g3r3";
+    urls = mkURLs [ "http://www.aquamaniac.de" "http://www2.aquamaniac.de" ];
+    inherit sha256;
   };
+
+  postPatch = ''
+    sed -i -e '/^aqbanking_plugindir=/ {
+      c aqbanking_plugindir="\''${libdir}/gwenhywfar/plugins"
+    }' configure
+  '';
 
   buildInputs = [ gmp gwenhywfar libtool libxml2 libxslt xmlsec zlib ];
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkgconfig gettext ];
 
-  configureFlags = "--with-gwen-dir=${gwenhywfar}";
+  configureFlags = [ "--with-gwen-dir=${gwenhywfar}" ];
 
   meta = with stdenv.lib; {
     description = "An interface to banking tasks, file formats and country information";
-    homepage = "http://www2.aquamaniac.de/sites/download/packages.php?package=03&showall=1";
+    homepage = http://www2.aquamaniac.de/sites/download/packages.php?package=03&showall=1;
     hydraPlatforms = [];
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ goibhniu urkud ];
+    maintainers = with maintainers; [ goibhniu ];
     platforms = platforms.linux;
   };
 }

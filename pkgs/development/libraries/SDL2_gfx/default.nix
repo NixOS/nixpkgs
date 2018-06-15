@@ -1,54 +1,45 @@
-{stdenv, fetchsvn, SDL2} :
+{ stdenv, darwin, fetchurl, SDL2 }:
 
-let rev = 5; in
 stdenv.mkDerivation rec {
-  name = "SDL2_gfx-${toString rev}";
+  name = "${pname}-${version}";
+  pname = "SDL2_gfx";
+  version = "1.0.4";
 
-  src = fetchsvn {
-    url = http://svn.code.sf.net/p/sdl2gfx/code/trunk;
-    inherit rev;
-    sha256 = "1hzilbn1412m2b44mygrbdfh1gvks4v5p0kmafz248jf9ifsvmzp";
+  src = fetchurl {
+    url = "http://www.ferzkopp.net/Software/${pname}/${name}.tar.gz";
+    sha256 = "0qk2ax7f7grlxb13ba0ll3zlm8780s7j8fmrhlpxzjgdvldf1q33";
   };
 
-  buildInputs = [ SDL2 ] ;
+  buildInputs = [ SDL2 ]
+    ++ stdenv.lib.optional stdenv.isDarwin darwin.libobjc;
 
-  configureFlags = "--disable-mmx";
+  configureFlags = [(if stdenv.isi686 || stdenv.isx86_64 then "--enable-mmx" else "--disable-mmx")]
+     ++ stdenv.lib.optional stdenv.isDarwin "--disable-sdltest";
 
-  postInstall = ''
-    sed -i -e 's,"SDL.h",<SDL2/SDL.h>,' \
-      $out/include/SDL2/*.h
-    
-    ln -s $out/include/SDL2/SDL2_framerate.h $out/include/SDL2/SDL_framerate.h;
-    ln -s $out/include/SDL2/SDL2_gfxPrimitives.h $out/include/SDL2/SDL_gfxPrimitives.h;
-    ln -s $out/include/SDL2/SDL2_rotozoom.h $out/include/SDL2/SDL_rotozoom.h;
-    ln -s $out/include/SDL2/*.h $out/include/;
-  '';
-
-  meta = {
+  meta = with stdenv.lib; {
     description = "SDL graphics drawing primitives and support functions";
 
-    longDescription =
-      '' The SDL_gfx library evolved out of the SDL_gfxPrimitives code
-	 which provided basic drawing routines such as lines, circles or
-	 polygons and SDL_rotozoom which implemented a interpolating
-	 rotozoomer for SDL surfaces.
+    longDescription = ''
+      The SDL_gfx library evolved out of the SDL_gfxPrimitives code
+      which provided basic drawing routines such as lines, circles or
+      polygons and SDL_rotozoom which implemented a interpolating
+      rotozoomer for SDL surfaces.
 
-	 The current components of the SDL_gfx library are:
+      The current components of the SDL_gfx library are:
 
-	    * Graphic Primitives (SDL_gfxPrimitves.h)
-	    * Rotozoomer (SDL_rotozoom.h)
-	    * Framerate control (SDL_framerate.h)
-	    * MMX image filters (SDL_imageFilter.h)
-	    * Custom Blit functions (SDL_gfxBlitFunc.h)
+          * Graphic Primitives (SDL_gfxPrimitves.h)
+          * Rotozoomer (SDL_rotozoom.h)
+          * Framerate control (SDL_framerate.h)
+          * MMX image filters (SDL_imageFilter.h)
+          * Custom Blit functions (SDL_gfxBlitFunc.h)
 
-	 The library is backwards compatible to the above mentioned
-         code. Its is written in plain C and can be used in C++ code.
-       '';
+      The library is backwards compatible to the above mentioned
+      code. Its is written in plain C and can be used in C++ code.
+    '';
 
-    homepage = https://sourceforge.net/projects/sdlgfx/;
-    license = stdenv.lib.licenses.lgpl2Plus;
-
-    maintainers = [ stdenv.lib.maintainers.bjg ];
-    platforms = stdenv.lib.platforms.unix;
+    homepage = http://www.ferzkopp.net/wordpress/2016/01/02/sdl_gfx-sdl2_gfx/;
+    license = licenses.zlib;
+    maintainers = with maintainers; [ cpages ];
+    platforms = platforms.unix;
   };
 }

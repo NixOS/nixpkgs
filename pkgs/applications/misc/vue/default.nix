@@ -2,10 +2,10 @@
 
 stdenv.mkDerivation rec {
   name = "vue-${version}";
-  version = "3.2.2";
+  version = "3.3.0";
   src = fetchurl {
-    url = "releases.atech.tufts.edu/jenkins/job/VUE/64/deployedArtifacts/download/artifact.2";
-    sha256 = "0sb1kgan8fvph2cqfxk3906cwx5wy83zni2vlz4zzi6yg4zvfxld";
+    url = "http://releases.atech.tufts.edu/jenkins/job/VUE/116/deployedArtifacts/download/artifact.1";
+    sha256 = "0yfzr80pw632lkayg4qfmwzrqk02y30yz8br7isyhmgkswyp5rnx";
   };
 
   phases = "installPhase";

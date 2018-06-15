@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, gtk, imlib2, file, lcms2, libexif } :
+{ stdenv, fetchurl, pkgconfig, gtk2, imlib2, file, lcms2, libexif } :
 
 stdenv.mkDerivation (rec {
   version = "2.3.1";
@@ -9,7 +9,8 @@ stdenv.mkDerivation (rec {
     sha256 = "1rlf5h67vhj7n1y7jqkm9k115nfnzpwngj3kzqsi2lg676srclv7";
   };
 
-  buildInputs = [ pkgconfig gtk imlib2 file lcms2 libexif ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ gtk2 imlib2 file lcms2 libexif ];
 
   preBuild=''
     substituteInPlace Makefile --replace /usr/local "$out"
@@ -20,5 +21,6 @@ stdenv.mkDerivation (rec {
     description = "Quick image viewer";
     homepage = http://spiegl.de/qiv/;
     inherit version;
+    platforms = stdenv.lib.platforms.linux;
   };
 })

@@ -1,24 +1,12 @@
 --- a/src/_tags	2014-10-01 16:19:35.000000000 +0100
 +++ b/src/_tags	2014-11-09 16:55:34.470663377 +0000
-@@ -39,7 +39,7 @@
+@@ -40,7 +40,7 @@
  <lib/server/monitor/*.ml{,i}>:I(src/lib/server)
  
- <syntax/pa_*.ml{,i}>: syntax(camlp4o),package(camlp4.quotations.o,camlp4.extend)
+ <syntax/pa_*.*>: syntax(camlp4o),package(camlp4.quotations.o,camlp4.extend,bytes)
 -<syntax/pa_*.ml{,i}>: I(+camlp4/Camlp4Parsers)
 +<syntax/pa_*.ml{,i}>: use_camlp4_full
  
+ <ppx/**/*>: package(ppx_tools, compiler-libs.common, ppx_tools.metaquot)
  
- <ocamlbuild/ocamlbuild_eliom.ml{,i}>: package(ocamlbuild,js_of_ocaml.ocamlbuild)
-
---- a/src/lib/eliom_registration.server.ml	2014-10-01 16:19:35.000000000 +0100
-+++ b/src/lib/eliom_registration.server.ml	2014-11-09 17:26:16.093198699 +0000
-@@ -2440,7 +2440,7 @@
-       (Ocaml.register_post_coservice'
-          ?scope ?options ?charset ?code ?content_type ?headers ?secure_session ?name
-          ?csrf_safe ?csrf_scope ?csrf_secure ?max_use ?timeout ?https ?error_handler
--         ~post_params:Eliom_parameter.(ocaml "argument" argument_type)
-+         ~post_params:(Eliom_parameter.ocaml "argument" argument_type)
-          (fun () argument -> f argument))
-       (Eliom_wrap.create_unwrapper
-          (Eliom_wrap.id_of_int Eliom_common_base.server_function_unwrap_id_int))
 

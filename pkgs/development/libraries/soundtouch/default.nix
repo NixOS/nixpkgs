@@ -2,15 +2,15 @@
 
 stdenv.mkDerivation rec {
   pName = "soundtouch";
-  name = "${pName}-1.8.0";
+  name = "${pName}-2.0.0";
   src = fetchurl {
     url = "http://www.surina.net/soundtouch/${name}.tar.gz";
-    sha256 = "3d4161d74ca25c5a98c69dbb8ea10fd2be409ba1a3a0bf81db407c4c261f166b";
+    sha256 = "09cxr02mfyj2bg731bj0i9hh565x8l9p91aclxs8wpqv8b8zf96j";
   };
 
   buildInputs = [ autoconf automake libtool ];
 
-  preConfigurePhases = "./bootstrap";
+  preConfigure = "./bootstrap";
 
   meta = {
       description = "A program and library for changing the tempo, pitch and playback rate of audio";

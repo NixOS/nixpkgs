@@ -1,6 +1,6 @@
-{ stdenv, fetchFromGitHub, buildPythonPackage, python, pycrypto, hping }:
+{ stdenv, fetchFromGitHub, python2Packages, hping }:
 
-buildPythonPackage rec {
+python2Packages.buildPythonApplication rec {
   rev  = "bf14bbff";
   name = "knockknock-r${rev}";
 
@@ -11,9 +11,13 @@ buildPythonPackage rec {
     sha256 = "1chpfs3w2vkjrgay69pbdr116z1jldv53fi768a1i05fdqhy1px4";
   };
 
-  propagatedBuildInputs = [ pycrypto ];
+  propagatedBuildInputs = [ python2Packages.pycrypto ];
+
+  # No tests
+  doCheck = false;
 
   patchPhase = ''
+    sed -i '/build\//d' setup.py
     substituteInPlace setup.py --replace "/etc" "$out/etc"
     substituteInPlace knockknock.py --replace 'existsInPath("hping3")' '"${hping}/bin/hping3"'
   '';
@@ -23,7 +27,7 @@ buildPythonPackage rec {
     homepage    = "http://www.thoughtcrime.org/software/knockknock/";
     license     = licenses.gpl3;
     maintainers = with maintainers; [ copumpkin ];
-    platforms   = with platforms; linux;
+    platforms   = platforms.linux;
   };
 }
 

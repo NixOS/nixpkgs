@@ -1,0 +1,22 @@
+diff --git a/lib/CatalystX/Script/Server/Starman.pm b/lib/CatalystX/Script/Server/Starman.pm
+index 670bd74..7b3bd2e 100644
+--- a/lib/CatalystX/Script/Server/Starman.pm
++++ b/lib/CatalystX/Script/Server/Starman.pm
+@@ -9,7 +9,7 @@ our $VERSION = '0.02';
+ 
+ extends 'Catalyst::Script::Server';
+ 
+-has '+fork' => ( default => 1, init_arg => undef );
++has '+fork' => ( default => 1 );
+ 
+ has [qw/ keepalive restart restart_delay restart_regex restart_directory/] => ( init_arg => undef, is => 'ro' );
+ 
+@@ -70,7 +70,7 @@ CatalystX::Script::Server::Starman - Replace the development server with Starman
+ 
+        -d --debug           force debug mode
+        -f --fork            handle each request in a new process
+-                            (defaults to false)
++                            (defaults to true)
+        -? --help            display this help and exits
+        -h --host            host (defaults to all)
+        -p --port            port (defaults to 3000)

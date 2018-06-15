@@ -1,28 +1,41 @@
-{ stdenv, fetchurl, openssl, libidn, ncurses, pcre, libssh, postgresql92 }:
+{ stdenv, lib, fetchurl, zlib, openssl, ncurses, libidn, pcre, libssh, mysql, postgresql
+, withGUI ? false, makeWrapper, pkgconfig, gtk2 }:
 
-with stdenv.lib;
+let
+  makeDirs = output: subDir: pkgs: lib.concatStringsSep " " (map (path: lib.getOutput output path + "/" + subDir) pkgs);
 
-stdenv.mkDerivation rec {
+in stdenv.mkDerivation rec {
   name = "thc-hydra-${version}";
-  version = "7.5";
+  version = "8.5";
 
   src = fetchurl {
     url = "http://www.thc.org/releases/hydra-${version}.tar.gz";
-    sha256 = "1dhavbn2mcm6c2c1qw29ipbpmczax3vhhlxzwn49c8cq471yg4vj";
+    sha256 = "0vfx6xwmw0r7nd0s232y7rckcj58fc1iqjgp4s56rakpz22b4yjm";
   };
 
   preConfigure = ''
-   substituteInPlace configure --replace "\$LIBDIRS" "${openssl}/lib ${pcre}/lib ${libssh}/lib ${postgresql92}/lib"
-   substituteInPlace configure --replace "\$INCDIRS" "${openssl}/include ${pcre}/include ${libssh}/include ${postgresql92}/include"
+    substituteInPlace configure \
+      --replace "\$LIBDIRS" "${makeDirs "lib" "lib" buildInputs}" \
+      --replace "\$INCDIRS" "${makeDirs "dev" "include" buildInputs}" \
+      --replace "/usr/include/math.h" "${lib.getDev stdenv.cc.libc}/include/math.h" \
+      --replace "libcurses.so" "libncurses.so" \
+      --replace "-lcurses" "-lncurses"
   '';
 
-  buildInputs = [ openssl libidn ncurses pcre libssh ];
+  nativeBuildInputs = lib.optionals withGUI [ pkgconfig makeWrapper ];
+  buildInputs = [ zlib openssl ncurses libidn pcre libssh mysql.connector-c postgresql ]
+                ++ lib.optional withGUI gtk2;
 
-  meta = {
+  postInstall = lib.optionalString withGUI ''
+    wrapProgram $out/bin/xhydra \
+      --add-flags --hydra-path --add-flags "$out/bin/hydra"
+  '';
+
+  meta = with stdenv.lib; {
     description = "A very fast network logon cracker which support many different services";
     license = licenses.agpl3;
     homepage = https://www.thc.org/thc-hydra/;
     maintainers = with maintainers; [offline];
-    platforms = with platforms; unix;
+    platforms = platforms.linux;
   };
 }

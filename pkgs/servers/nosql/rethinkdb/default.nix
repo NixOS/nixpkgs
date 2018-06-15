@@ -1,31 +1,53 @@
 { stdenv, fetchurl, which, m4, python
-, protobuf, boost, zlib, curl, openssl, icu, jemalloc
+, protobuf, boost, zlib, curl, openssl, icu, jemalloc, libtool
+, python2Packages, makeWrapper
 }:
 
 stdenv.mkDerivation rec {
   name = "rethinkdb-${version}";
-  version = "2.1.3";
+  version = "2.3.6";
 
   src = fetchurl {
-    url = "http://download.rethinkdb.com/dist/${name}.tgz";
-    sha256 = "03w9fq3wcvwy04b3x6zb3hvwar7b9jfbpq77rmxdlgh5w64vvgwd";
+    url = "https://download.rethinkdb.com/dist/${name}.tgz";
+    sha256 = "0a6wlgqa2flf87jrp4fq4y9aihwyhgwclmss56z03b8hd5k5j8f4";
   };
+
+  patches = [
+    (fetchurl {
+        url = "https://github.com/rethinkdb/rethinkdb/commit/871bd3705a1f29c4ab07a096d562a4b06231a97c.patch";
+        sha256 = "05nagixlwnq3x7441fhll5vs70pxppbsciw8qjqp660bdb5m4jm1";
+    })
+  ];
+
+  postPatch = stdenv.lib.optionalString stdenv.isDarwin ''
+    sed -i 's/raise.*No Xcode or CLT version detected.*/version = "7.0.0"/' external/v8_3.30.33.16/build/gyp/pylib/gyp/xcode_emulation.py
+
+    # very meta
+    substituteInPlace mk/support/pkg/re2.sh --replace "-i '''" "-i"
+  '';
 
   preConfigure = ''
     export ALLOW_WARNINGS=1
     patchShebangs .
   '';
 
-  configureFlags = [
+  configureFlags = stdenv.lib.optionals (!stdenv.isDarwin) [
     "--with-jemalloc"
     "--lib-path=${jemalloc}/lib"
   ];
 
-  buildInputs = [ protobuf boost zlib curl openssl icu jemalloc ];
+  buildInputs = [ protobuf boost zlib curl openssl icu makeWrapper ]
+    ++ stdenv.lib.optional (!stdenv.isDarwin) jemalloc
+    ++ stdenv.lib.optional stdenv.isDarwin libtool;
 
-  nativeBuildInputs = [ which m4 python ];
+  nativeBuildInputs = [ which m4 python2Packages.python ];
 
   enableParallelBuilding = true;
+
+  postInstall = ''
+    wrapProgram $out/bin/rethinkdb \
+      --prefix PATH ":" "${python2Packages.rethinkdb}/bin"
+  '';
 
   meta = {
     description = "An open-source distributed database built with love";

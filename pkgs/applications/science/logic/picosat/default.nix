@@ -2,21 +2,32 @@
 
 stdenv.mkDerivation rec {
   name    = "picosat-${version}";
-  version = "960";
+  version = "965";
 
   src = fetchurl {
     url = "http://fmv.jku.at/picosat/${name}.tar.gz";
-    sha256 = "05z8cfjk84mkna5ryqlq2jiksjifg3jhlgbijaq36sbn0i51iczd";
+    sha256 = "0m578rpa5rdn08d10kr4lbsdwp4402hpavrz6n7n53xs517rn5hm";
   };
 
-  dontAddPrefix = true;
-  configureFlags = "--shared";
+  prePatch = ''
+    substituteInPlace picosat.c --replace "sys/unistd.h" "unistd.h"
+
+    substituteInPlace makefile.in \
+      --replace 'ar rc' '$(AR) rc' \
+      --replace 'ranlib' '$(RANLIB)'
+  '';
+
+  configurePhase = "./configure.sh --shared --trace";
+
+  makeFlags = stdenv.lib.optional stdenv.isDarwin
+    "SONAME=-Wl,-install_name,$(out)/lib/libpicosat.so";
 
   installPhase = ''
-   mkdir -p $out/bin $out/lib $out/include/picosat
-   cp picomus "$out"/bin
-   cp picosat "$out"/bin
+   mkdir -p $out/bin $out/lib $out/share $out/include/picosat
+   cp picomus picomcs picosat picogcnf "$out"/bin
 
+   cp VERSION      "$out"/share/picosat.version
+   cp picosat.o    "$out"/lib
    cp libpicosat.a "$out"/lib
    cp libpicosat.so "$out"/lib
 

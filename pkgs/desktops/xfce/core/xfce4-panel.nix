@@ -1,41 +1,56 @@
 { stdenv, fetchurl, pkgconfig, intltool, gtk, libxfce4util, libxfce4ui
-, libwnck, exo, garcon, xfconf, libstartup_notification
-, makeWrapper, xfce4mixer }:
-
-stdenv.mkDerivation rec {
+, libxfce4ui_gtk3, libwnck, exo, garcon, xfconf, libstartup_notification
+, makeWrapper, xfce4-mixer, hicolor-icon-theme
+, withGtk3 ? false, gtk3, gettext, glib-networking
+}:
+let
+  inherit (stdenv.lib) optional;
   p_name  = "xfce4-panel";
   ver_maj = "4.12";
-  ver_min = "0";
+  ver_min = "2";
+in
+stdenv.mkDerivation rec {
+  name = "${p_name}-${ver_maj}.${ver_min}";
 
   src = fetchurl {
     url = "mirror://xfce/src/xfce/${p_name}/${ver_maj}/${name}.tar.bz2";
-    sha256 = "1c4p3ckghvsad1sj5v8wmar5mh9cbhail9mmhad2f9pwwb10z4ih";
+    sha256 = "1s8cvsrgmkmmm84g6mghpj2k4777gm22g5lrsf8pdy5qh6xql1a2";
   };
-  name = "${p_name}-${ver_maj}.${ver_min}";
 
   patches = [ ./xfce4-panel-datadir.patch ];
   patchFlags = "-p1";
 
+  postPatch = ''
+    for f in $(find . -name \*.sh); do
+      substituteInPlace $f --replace gettext ${gettext}/bin/gettext
+    done
+  '';
+
+  outputs = [ "out" "dev" "devdoc" ];
+
   buildInputs =
     [ pkgconfig intltool gtk libxfce4util exo libwnck
-      garcon xfconf libstartup_notification makeWrapper
-    ] ++ xfce4mixer.gst_plugins;
-  propagatedBuildInputs = [ libxfce4ui ];
+      garcon xfconf libstartup_notification makeWrapper hicolor-icon-theme
+    ] ++ xfce4-mixer.gst_plugins
+      ++ optional withGtk3 gtk3;
+
+  propagatedBuildInputs = [ (if withGtk3 then libxfce4ui_gtk3 else libxfce4ui) ];
+
+  configureFlags = optional withGtk3 "--enable-gtk3";
 
   postInstall = ''
     wrapProgram "$out/bin/xfce4-panel" \
-      --prefix GST_PLUGIN_SYSTEM_PATH : "$GST_PLUGIN_SYSTEM_PATH"
+      --prefix GST_PLUGIN_SYSTEM_PATH : "$GST_PLUGIN_SYSTEM_PATH" \
+      --prefix GIO_EXTRA_MODULES : "${glib-networking}/lib/gio/modules"
   '';
-
-  preFixup = "rm $out/share/icons/hicolor/icon-theme.cache";
 
   enableParallelBuilding = true;
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = http://www.xfce.org/projects/xfce4-panel;
     description = "Xfce panel";
-    license = stdenv.lib.licenses.gpl2Plus;
-    platforms = stdenv.lib.platforms.linux;
-    maintainers = [ stdenv.lib.maintainers.eelco ];
+    license = licenses.gpl2Plus;
+    platforms = platforms.linux;
+    maintainers = [ maintainers.eelco ];
   };
 }

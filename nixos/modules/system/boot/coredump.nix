@@ -15,8 +15,11 @@ with lib;
           Enables storing core dumps in systemd.
           Note that this alone is not enough to enable core dumps. The maximum
           file size for core dumps must be specified in limits.conf as well. See
-          <option>security.pam.loginLimits</option> as well as the limits.conf(5)
-          man page.
+          <option>security.pam.loginLimits</option> and the limits.conf(5)
+          man page (these specify the core dump limits for user login sessions)
+          and <option>systemd.extraConfig</option> (where e.g.
+          <literal>DefaultLimitCORE=1000000</literal> can be specified to set
+          the core dump limit for systemd system-level services).
         '';
       };
 
@@ -33,19 +36,31 @@ with lib;
 
   };
 
-  config = mkIf config.systemd.coredump.enable {
+  config = mkMerge [
+    (mkIf config.systemd.coredump.enable {
 
-    environment.etc."systemd/coredump.conf".text =
-      ''
-        [Coredump]
-        ${config.systemd.coredump.extraConfig}
-      '';
+      systemd.additionalUpstreamSystemUnits = [ "systemd-coredump.socket" "systemd-coredump@.service" ];
 
-    # Have the kernel pass core dumps to systemd's coredump helper binary.
-    # From systemd's 50-coredump.conf file. See:
-    # <https://github.com/systemd/systemd/blob/v218/sysctl.d/50-coredump.conf.in>
-    boot.kernel.sysctl."kernel.core_pattern" = "|${pkgs.systemd}/lib/systemd/systemd-coredump %p %u %g %s %t %e";
+      environment.etc."systemd/coredump.conf".text =
+        ''
+          [Coredump]
+          ${config.systemd.coredump.extraConfig}
+        '';
 
-  };
+      # Have the kernel pass core dumps to systemd's coredump helper binary.
+      # From systemd's 50-coredump.conf file. See:
+      # <https://github.com/systemd/systemd/blob/v218/sysctl.d/50-coredump.conf.in>
+      boot.kernel.sysctl."kernel.core_pattern" = "|${pkgs.systemd}/lib/systemd/systemd-coredump %P %u %g %s %t %c %e";
+    })
+
+    (mkIf (!config.systemd.coredump.enable) {
+      boot.kernel.sysctl."kernel.core_pattern" = mkDefault "core";
+
+      systemd.extraConfig =
+        ''
+          DefaultLimitCORE=0:infinity
+        '';
+    })
+  ];
 
 }

@@ -11,6 +11,8 @@ in stdenv.mkDerivation rec {
     sha256 = "0x0zwxyj4dwbk7l64s3lgny10mjf0ba8jwrbafsm4d72sncmacv0";
   };
 
+  hardeningDisable = [ "format" ];
+
   # taken from redmine (2.5.1-2~bpo70+3) in debian wheezy-backports
   # needed to separate run-time and build-time directories
   patches = [
@@ -18,6 +20,7 @@ in stdenv.mkDerivation rec {
     ./2004_FHS_plugins_assets.patch
     ./2003_externalize_session_config.patch
   ];
+
   postPatch = ''
     substituteInPlace lib/redmine/plugin.rb --replace "File.join(Rails.root, 'plugins')" "ENV['RAILS_PLUGINS']"
     substituteInPlace lib/redmine/plugin.rb --replace "File.join(Rails.root, 'plugins', id.to_s, 'db', 'migrate')" "File.join(ENV['RAILS_PLUGINS'], id.to_s, 'db', 'migrate')"
@@ -45,7 +48,7 @@ in stdenv.mkDerivation rec {
     mkdir -p vendor/cache
     ${stdenv.lib.concatStrings (map (gem: "ln -s ${gem} vendor/cache/${gem.name};") gemspec)}
 
-    bundle config build.nokogiri --use-system-libraries --with-iconv-dir="${libiconv}" --with-xslt-dir="${libxslt}" --with-xml2-dir="${libxml2}"
+    bundle config build.nokogiri --use-system-libraries --with-iconv-dir="${libiconv}" --with-xslt-dir="${libxslt.dev}" --with-xml2-dir="${libxml2.dev}"
 
     bundle install --verbose --local --deployment
 
@@ -64,5 +67,8 @@ in stdenv.mkDerivation rec {
     platforms = platforms.linux;
     maintainers = [ maintainers.garbas ];
     license = licenses.gpl2;
+    # Marked as broken due to needing an update for security issues.
+    # See: https://github.com/NixOS/nixpkgs/issues/18856
+    broken = true;
   };
 }

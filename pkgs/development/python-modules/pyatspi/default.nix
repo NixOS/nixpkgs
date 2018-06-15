@@ -1,22 +1,35 @@
-{ stdenv, fetchurl, pkgconfig, python3, python3Packages, at_spi2_core }:
+{ stdenv, fetchurl, pkgconfig, buildPythonPackage, isPy3k, at-spi2-core, pygobject3, gnome3 }:
 
-stdenv.mkDerivation rec {
-  version = "2.16.0";
-  name = "pyatspi-${version}";
+buildPythonPackage rec {
+  pname = "pyatspi";
+  version = "2.26.0";
+  format = "other";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/pyatspi/2.16/${name}.tar.xz";
-    sha256 = "185lwgv9bk1fc6vw2xypznzr7p8fhp84ggnrb706zwgalmy8aym6";
+    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "0xdnix7gxzgf75xy9ris4dd6b05mqwicw190b98xqmypydyf95n6";
   };
 
   buildInputs = [
-    pkgconfig python3 python3Packages.pygobject3 at_spi2_core
+    at-spi2-core
+    pkgconfig
+    pygobject3
   ];
 
+  disabled = !isPy3k;
+
+  passthru = {
+    updateScript = gnome3.updateScript {
+      packageName = pname;
+      attrPath = "python3.pkgs.${pname}";
+    };
+  };
+
   meta = with stdenv.lib; {
-    description = "Python 3 bindings for at-spi";
-    homepage = http://www.linuxfoundation.org/en/AT-SPI_on_D-Bus;
+    description = "Python client bindings for D-Bus AT-SPI";
+    homepage = https://wiki.linuxfoundation.org/accessibility/d-bus;
     license = licenses.gpl2;
-    maintainers = with maintainers; [ jgeerds ];
+    maintainers = with maintainers; [ jgeerds jtojnar ];
+    platforms = with platforms; unix;
   };
 }

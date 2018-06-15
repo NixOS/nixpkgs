@@ -1,5 +1,11 @@
-{ stdenv, fetchurl, libevent }:
-
+{ stdenv, fetchurl, libevent, buildEnv }:
+let
+  # failed to find a better way to make it work
+  libevent-comb = buildEnv {
+    inherit (libevent.out) name;
+    paths = [ libevent.dev libevent.out ];
+  };
+in
 stdenv.mkDerivation {
   name = "nylon-1.21";
   src = fetchurl {
@@ -9,7 +15,7 @@ stdenv.mkDerivation {
 
   patches = [ ./configure-use-solib.patch ];
 
-  configureFlags = [ "--with-libevent=${libevent}" ];
+  configureFlags = [ "--with-libevent=${libevent-comb}" ];
 
   buildInputs = [ libevent ];
 
@@ -18,6 +24,6 @@ stdenv.mkDerivation {
     description = "Proxy server, supporting SOCKS 4 and 5, as well as a mirror mode";
     license = licenses.bsdOriginal;
     maintainers = with maintainers; [ edwtjo viric ];
-    platform = platforms.linux;
+    platforms = platforms.linux;
   };
 }

@@ -1,7 +1,7 @@
 # This module defines a global environment configuration and
 # a common configuration for all shells.
 
-{ config, lib, pkgs, ... }:
+{ config, lib, utils, pkgs, ... }:
 
 with lib;
 
@@ -36,12 +36,12 @@ in
       default = {};
       description = ''
         A set of environment variables used in the global environment.
-        These variables will be set on shell initialisation.
+        These variables will be set on shell initialisation (e.g. in /etc/profile).
         The value of each variable can be either a string or a list of
         strings.  The latter is concatenated, interspersed with colon
         characters.
       '';
-      type = types.attrsOf (types.loeOf types.str);
+      type = with types; attrsOf (either str (listOf str));
       apply = mapAttrs (n: v: if isList v then concatStringsSep ":" v else v);
     };
 
@@ -55,7 +55,7 @@ in
 
     environment.profileRelativeEnvVars = mkOption {
       type = types.attrsOf (types.listOf types.str);
-      example = { PATH = [ "/bin" "/sbin" ]; MANPATH = [ "/man" "/share/man" ]; };
+      example = { PATH = [ "/bin" ]; MANPATH = [ "/man" "/share/man" ]; };
       description = ''
         Attribute set of environment variable.  Each attribute maps to a list
         of relative paths.  Each relative path is appended to the each profile
@@ -119,6 +119,7 @@ in
 
     environment.binsh = mkOption {
       default = "${config.system.build.binsh}/bin/sh";
+      defaultText = "\${config.system.build.binsh}/bin/sh";
       example = literalExample ''
         "''${pkgs.dash}/bin/dash"
       '';
@@ -134,13 +135,13 @@ in
 
     environment.shells = mkOption {
       default = [];
-      example = [ "/run/current-system/sw/bin/zsh" ];
+      example = literalExample "[ pkgs.bashInteractive pkgs.zsh ]";
       description = ''
         A list of permissible login shells for user accounts.
         No need to mention <literal>/bin/sh</literal>
         here, it is placed into this list implicitly.
       '';
-      type = types.listOf types.path;
+      type = types.listOf (types.either types.shellPackage types.path);
     };
 
   };
@@ -157,7 +158,7 @@ in
 
     environment.etc."shells".text =
       ''
-        ${concatStringsSep "\n" cfg.shells}
+        ${concatStringsSep "\n" (map utils.toShellPath cfg.shells)}
         /bin/sh
       '';
 
@@ -166,9 +167,6 @@ in
          ${exportedEnvVars}
 
          ${cfg.extraInit}
-
-         # The setuid wrappers override other bin directories.
-         export PATH="${config.security.wrapperDir}:$PATH"
 
          # ~/bin if it exists overrides other bin directories.
          export PATH="$HOME/bin:$PATH"

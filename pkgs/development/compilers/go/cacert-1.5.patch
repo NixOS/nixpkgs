@@ -1,8 +1,0 @@
---- a/src/crypto/x509/root_linux.go	2015-08-19 23:06:11.115133174 +0200
-+++ b/src/crypto/x509/root_linux.go	2015-08-19 23:07:04.238507161 +0200
-@@ -10,4 +10,5 @@
- 	"/etc/pki/tls/certs/ca-bundle.crt",   // Fedora/RHEL
- 	"/etc/ssl/ca-bundle.pem",             // OpenSUSE
- 	"/etc/pki/tls/cacert.pem",            // OpenELEC
-+	"/etc/ssl/certs/ca-bundle.crt",       // NixOS
- }

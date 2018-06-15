@@ -1,48 +1,47 @@
-{ stdenv, cmake, fetchurl, gnumake, pkgconfig
-, boost, gettext, tclap, wxGTK
-, freeglut, glew, libXi, libXmu, mesa
-, autopanosiftc, enblend-enfuse, exiv2, ilmbase, lensfun, libpng, libtiff
-, openexr, panotools, perlPackages
+{ stdenv, cmake, fetchurl, gnumake, makeWrapper, pkgconfig
+, autopanosiftc, boost, cairo, enblend-enfuse, exiv2, fftw, flann, gettext
+, glew, ilmbase, lcms2, lensfun, libjpeg, libpng, libtiff, libX11, libXi
+, libXmu, libGLU_combined, openexr, panotools, perlPackages, sqlite, vigra, wxGTK, zlib
 }:
 
 stdenv.mkDerivation rec {
-  name = "hugin-2013.0.0";
+  name = "hugin-2018.0.0";
 
   src = fetchurl {
     url = "mirror://sourceforge/hugin/${name}.tar.bz2";
-    sha256 = "1mgbvg09xvf0zcm9jfv5lb65nd292l86ffa23yp4pzm6izaiwkj8";
+    sha256 = "1jv5wpqbq49fhbl5g521g1qxhdm1rm7acxd18fr3n3n5d830vbyk";
   };
 
-  NIX_CFLAGS_COMPILE = "-I${ilmbase}/include/OpenEXR";
+  buildInputs = [
+    boost cairo exiv2 fftw flann gettext glew ilmbase lcms2 lensfun libjpeg
+    libpng libtiff libX11 libXi libXmu libGLU_combined openexr panotools sqlite vigra
+    wxGTK zlib
+  ];
 
-  buildInputs = [ boost gettext tclap wxGTK
-                  freeglut glew libXi libXmu mesa
-                  exiv2 ilmbase lensfun libtiff libpng openexr panotools
-                ];
+  nativeBuildInputs = [ cmake makeWrapper pkgconfig ];
 
   # disable installation of the python scripting interface
   cmakeFlags = [ "-DBUILD_HSI:BOOl=OFF" ];
 
-  nativeBuildInputs = [ cmake pkgconfig ];
-
   enableParallelBuilding = true;
 
-  # commandline tools needed by the hugin batch processor
-  # you may have to tell hugin (in the preferences) where these binaries reside
-  propagatedUserEnvPackages = [ autopanosiftc enblend-enfuse gnumake
-                                perlPackages.ImageExifTool
-                              ];
+  NIX_CFLAGS_COMPILE = "-I${ilmbase.dev}/include/OpenEXR";
 
   postInstall = ''
-    mkdir -p "$out/nix-support"
-    echo $propagatedUserEnvPackages > $out/nix-support/propagated-user-env-packages
+    for p in $out/bin/*; do
+      wrapProgram "$p" \
+        --suffix PATH : ${autopanosiftc}/bin \
+        --suffix PATH : ${enblend-enfuse}/bin \
+        --suffix PATH : ${gnumake}/bin \
+        --suffix PATH : ${perlPackages.ImageExifTool}/bin
+    done
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = http://hugin.sourceforge.net/;
     description = "Toolkit for stitching photographs and assembling panoramas, together with an easy to use graphical front end";
-    license = stdenv.lib.licenses.gpl2Plus;
-    maintainers = with stdenv.lib.maintainers; [viric];
-    platforms = with stdenv.lib.platforms; linux;
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ viric hrdinka ];
+    platforms = platforms.linux;
   };
 }

@@ -1,6 +1,6 @@
-{ stdenv, fetchurl, pkgconfig, zlib, expat, openssl
+{ stdenv, lib, fetchurl, fetchpatch, pkgconfig, zlib, expat, openssl, autoconf
 , libjpeg, libpng, libtiff, freetype, fontconfig, lcms2, libpaper, jbig2dec
-, libiconv
+, libiconv, ijs
 , x11Support ? false, xlibsWrapper ? null
 , cupsSupport ? false, cups ? null
 }:
@@ -8,8 +8,9 @@
 assert x11Support -> xlibsWrapper != null;
 assert cupsSupport -> cups != null;
 let
-  version = "9.15";
-  sha256 = "0p1isp6ssfay141klirn7n9s8b546vcz6paksfmksbwy0ljsypg6";
+  version = "9.${ver_min}";
+  ver_min = "22";
+  sha256 = "1fyi4yvdj39bjgs10klr31cda1fbx1ar7a7b7yz7v68gykk65y61";
 
   fonts = stdenv.mkDerivation {
     name = "ghostscript-fonts";
@@ -37,64 +38,75 @@ stdenv.mkDerivation rec {
   name = "ghostscript-${version}";
 
   src = fetchurl {
-    url = "http://downloads.ghostscript.com/public/${name}.tar.bz2";
+    url = "https://github.com/ArtifexSoftware/ghostpdl-downloads/releases/download/gs9${ver_min}/${name}.tar.xz";
     inherit sha256;
   };
 
-  outputs = [ "out" "doc" ];
+  outputs = [ "out" "man" "doc" ];
 
   enableParallelBuilding = true;
 
+  nativeBuildInputs = [ pkgconfig autoconf ];
   buildInputs =
-    [ pkgconfig zlib expat openssl
+    [ zlib expat openssl
       libjpeg libpng libtiff freetype fontconfig lcms2 libpaper jbig2dec
-      libiconv
+      libiconv ijs
     ]
-    ++ stdenv.lib.optional x11Support xlibsWrapper
-    ++ stdenv.lib.optional cupsSupport cups
-    # [] # maybe sometimes jpeg2000 support
+    ++ lib.optional x11Support xlibsWrapper
+    ++ lib.optional cupsSupport cups
     ;
 
   patches = [
     ./urw-font-files.patch
-    # fetched from debian's ghostscript 9.15_dfsg-1 (called 020150707~0c0b085.patch there)
-    ./CVE-2015-3228.patch
   ];
 
-  makeFlags = [ "cups_serverroot=$(out)" "cups_serverbin=$(out)/lib/cups" ];
-
   preConfigure = ''
-    rm -rf jpeg libpng zlib jasper expat tiff lcms{,2} jbig2dec openjpeg freetype cups/libs
+    # requires in-tree (heavily patched) openjpeg
+    rm -rf jpeg libpng zlib jasper expat tiff lcms{,2} jbig2dec freetype cups/libs ijs
 
     sed "s@if ( test -f \$(INCLUDE)[^ ]* )@if ( true )@; s@INCLUDE=/usr/include@INCLUDE=/no-such-path@" -i base/unix-aux.mak
+    sed "s@^ZLIBDIR=.*@ZLIBDIR=${zlib.dev}/include@" -i configure.ac
+
+    autoconf
+  '' + lib.optionalString cupsSupport ''
+    configureFlags="$configureFlags --with-cups-serverbin=$out/lib/cups --with-cups-serverroot=$out/etc/cups --with-cups-datadir=$out/share/cups"
   '';
 
   configureFlags =
     [ "--with-system-libtiff"
       "--enable-dynamic"
-      (if x11Support then "--with-x" else "--without-x")
-      (if cupsSupport then "--enable-cups" else "--disable-cups")
-    ];
+    ] ++ lib.optional x11Support "--with-x"
+      ++ lib.optional cupsSupport "--enable-cups";
 
   doCheck = true;
-  preCheck = "mkdir ./obj";
-  # parallel check sometimes gave: Fatal error: can't create ./obj/whitelst.o
 
   # don't build/install statically linked bin/gs
-  buildFlags = "so";
-  installTargets="soinstall";
+  buildFlags = [ "so" ];
+  installTargets = [ "soinstall" ];
 
   postInstall = ''
     ln -s gsc "$out"/bin/gs
+
+    cp -r Resource "$out/share/ghostscript/${version}"
 
     mkdir -p "$doc/share/ghostscript/${version}"
     mv "$out/share/ghostscript/${version}"/{doc,examples} "$doc/share/ghostscript/${version}/"
 
     ln -s "${fonts}" "$out/share/ghostscript/fonts"
+  '' + stdenv.lib.optionalString stdenv.isDarwin ''
+    for file in $out/lib/*.dylib* ; do
+      install_name_tool -id "$file" $file
+    done
   '';
 
+  preFixup = lib.optionalString stdenv.isDarwin ''
+    install_name_tool -change libgs.dylib.${version} $out/lib/libgs.dylib.${version} $out/bin/gs
+  '';
+
+  passthru = { inherit version; };
+
   meta = {
-    homepage = "http://www.ghostscript.com/";
+    homepage = https://www.ghostscript.com/;
     description = "PostScript interpreter (mainline version)";
 
     longDescription = ''
@@ -106,7 +118,7 @@ stdenv.mkDerivation rec {
       of output drivers for various file formats and printers.
     '';
 
-    license = stdenv.lib.licenses.gpl3Plus;
+    license = stdenv.lib.licenses.agpl3;
 
     platforms = stdenv.lib.platforms.all;
     maintainers = [ stdenv.lib.maintainers.viric ];

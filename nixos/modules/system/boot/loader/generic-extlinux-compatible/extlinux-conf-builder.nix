@@ -5,5 +5,4 @@ pkgs.substituteAll {
   isExecutable = true;
   path = [pkgs.coreutils pkgs.gnused pkgs.gnugrep];
   inherit (pkgs) bash;
-  kernelDTB = pkgs.stdenv.platform.kernelDTB or false;
 }

@@ -1,24 +1,28 @@
 { stdenv, fetchFromGitHub, valgrind }:
 
-let version = "131"; in
 stdenv.mkDerivation rec {
   name = "lz4-${version}";
+  version = "1.8.2";
 
   src = fetchFromGitHub {
-    sha256 = "1bhvcq8fxxsqnpg5qa6k3nsyhq0nl0iarh08sqzclww27hlpyay2";
-    rev = "r${version}";
+    sha256 = "0xbjbjrvgzypk8dnldakir06gb8m946d064lxx0qc4ky6m8n9hn2";
+    rev = "v${version}";
     repo = "lz4";
-    owner = "Cyan4973";
+    owner = "lz4";
   };
+
+  outputs = [ "out" "dev" ];
 
   buildInputs = stdenv.lib.optional doCheck valgrind;
 
   enableParallelBuilding = true;
 
-  makeFlags = "PREFIX=$(out)";
+  makeFlags = [ "PREFIX=$(out)" "INCLUDEDIR=$(dev)/include" ];
 
   doCheck = false; # tests take a very long time
   checkTarget = "test";
+
+  postInstall = "rm $out/lib/*.a";
 
   meta = with stdenv.lib; {
     description = "Extremely fast compression algorithm";
@@ -29,9 +33,8 @@ stdenv.mkDerivation rec {
       multiple GB/s per core, typically reaching RAM speed limits on
       multi-core systems.
     '';
-    homepage = https://code.google.com/p/lz4/;
+    homepage = https://lz4.github.io/lz4/;
     license = with licenses; [ bsd2 gpl2Plus ];
-    platforms = with platforms; linux;
-    maintainers = with maintainers; [ nckx ];
+    platforms = platforms.unix;
   };
 }

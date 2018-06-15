@@ -1,33 +1,46 @@
-{stdenv, fetchFromGitHub, python3Packages}:
+{ stdenv, fetchFromGitHub, python3Packages, glibcLocales, coreutils }:
 
-python3Packages.buildPythonPackage rec {
+python3Packages.buildPythonApplication rec {
   name = "xonsh-${version}";
-  version = "0.1.3";
-
-  # The logo xonsh prints during build contains unicode characters, and this
-  # fails because locales have not been set up in the build environment.
-  # We can fix this on Linux by setting:
-  #    export LOCALE_ARCHIVE=${pkgs.glibcLocales}/lib/locale/locale-archive
-  # but this would not be a cross platform solution, so it's simpler to just
-  # patch the setup.py script to not print the logo during build.
-  prePatch = ''
-    substituteInPlace setup.py --replace "print(logo)" ""
-  '';
-
-  propagatedBuildInputs = [ python3Packages.ply ];
+  version = "0.6.6";
 
   src = fetchFromGitHub {
     owner = "scopatz";
     repo = "xonsh";
     rev = version;
-    sha256 = "04qnjqpz5y38g22irpph13j2a4hy7mk9pqvqz1mfimaf8zgmyh1n";
+    sha256= "09w7656qhqv3al52cl5lgzawvkbkpwjfnxyg0vyx0gbjs1hwiqjj";
   };
+
+  LC_ALL = "en_US.UTF-8";
+  postPatch = ''
+    rm xonsh/winutils.py
+
+    sed -ie "s|/bin/ls|${coreutils}/bin/ls|" tests/test_execer.py
+    sed -ie 's|/usr/bin/env|${coreutils}/bin/env|' scripts/xon.sh
+
+    patchShebangs .
+  '';
+
+  checkPhase = ''
+    HOME=$TMPDIR XONSH_INTERACTIVE=0 \
+      pytest \
+        -k 'not test_man_completion and not test_printfile and not test_sourcefile and not test_printname ' \
+        tests
+  '';
+
+  checkInputs = with python3Packages; [ pytest glibcLocales ];
+
+  propagatedBuildInputs = with python3Packages; [ ply prompt_toolkit ];
 
   meta = with stdenv.lib; {
     description = "A Python-ish, BASHwards-compatible shell";
-    homepage = "http://xonsh.org";
+    homepage = http://xon.sh/;
     license = licenses.bsd3;
-    maintainers = [ maintainers.spwhitt ];
+    maintainers = with maintainers; [ spwhitt garbas vrthra ];
     platforms = platforms.all;
+  };
+
+  passthru = {
+    shellPath = "/bin/xonsh";
   };
 }

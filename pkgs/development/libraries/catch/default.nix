@@ -1,36 +1,27 @@
-{ stdenv, lib, cmake, fetchFromGitHub }:
+{ stdenv, fetchFromGitHub, cmake }:
 
 stdenv.mkDerivation rec {
-
   name = "catch-${version}";
-  version = "1.2.1";
+  version = "1.12.0";
 
   src = fetchFromGitHub {
-    owner = "philsquared";
+    owner = "catchorg";
     repo = "Catch";
-    rev = "v" + version;
-    sha256 = "0rz2nmvvh66x6w2nb7l08vc5x9aqg1qfz2qfiykaz1ybc19fwck2";
+    rev = "v${version}";
+    sha256 = "0hkcmycvyyazzi9dywnyiipnmbx399iirh5xk5g957c8zl0505kd";
   };
 
-  buildInputs = [ cmake ];
-  dontUseCmakeConfigure = true;
+  nativeBuildInputs = [ cmake ];
+  cmakeFlags = [ "-DUSE_CPP14=ON" ];
 
-  buildPhase = ''
-    cmake -Hprojects/CMake -BBuild -DCMAKE_BUILD_TYPE=Release
-    cd Build
-    make
-    cd ..
-  '';
-
-  installPhase = ''
-    mkdir -p $out
-    mv include $out/.
-  '';
+  doCheck = true;
+  checkTarget = "test";
 
   meta = with stdenv.lib; {
     description = "A multi-paradigm automated test framework for C++ and Objective-C (and, maybe, C)";
-    homepage = "http://catch-lib.net";
+    homepage = http://catch-lib.net;
     license = licenses.boost;
-    maintainers = with maintainers; [ edwtjo ];
+    maintainers = with maintainers; [ edwtjo knedlsepp ];
+    platforms = with platforms; unix;
   };
 }

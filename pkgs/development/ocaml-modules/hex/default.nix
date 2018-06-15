@@ -1,24 +1,34 @@
-{ stdenv, fetchzip, ocaml, findlib, cstruct }:
+{ stdenv, fetchurl, ocaml, findlib, jbuilder, cstruct }:
 
-let version = "0.2.0"; in
+if !stdenv.lib.versionAtLeast ocaml.version "4.02"
+then throw "hex is not available for OCaml ${ocaml.version}"
+else
+
+let version = "1.2.0"; in
 
 stdenv.mkDerivation {
-  name = "ocaml-hex-${version}";
+  name = "ocaml${ocaml.version}-hex-${version}";
 
-  src = fetchzip {
-    url = "https://github.com/mirage/ocaml-hex/archive/${version}.tar.gz";
-    sha256 = "13vmpxwg5vb2qvkdqz37rx1ya19r9cp4dwylx8jj15mn77hpy7xg";
+  src = fetchurl {
+    url = "https://github.com/mirage/ocaml-hex/releases/download/v1.2.0/hex-1.2.0.tbz";
+    sha256 = "17hqf7z5afp2z2c55fk5myxkm7cm74259rqm94hcxkqlpdaqhm8h";
   };
 
-  buildInputs = [ ocaml findlib ];
+  unpackCmd = "tar -xjf $curSrc";
+
+  buildInputs = [ ocaml findlib jbuilder ];
   propagatedBuildInputs = [ cstruct ];
-  createFindlibDestdir = true;
+
+  buildPhase = "jbuilder build -p hex";
+  doCheck = true;
+  checkPhase = "jbuilder runtest";
+  inherit (jbuilder) installPhase;
 
   meta = {
     description = "Mininal OCaml library providing hexadecimal converters";
     homepage = https://github.com/mirage/ocaml-hex;
     license = stdenv.lib.licenses.isc;
     maintainers = with stdenv.lib.maintainers; [ vbgl ];
-    platforms = ocaml.meta.platforms;
+    platforms = ocaml.meta.platforms or [];
   };
 }

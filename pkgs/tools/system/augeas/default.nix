@@ -2,20 +2,20 @@
 
 stdenv.mkDerivation rec {
   name = "augeas-${version}";
-  version = "1.2.0";
+  version = "1.10.1";
 
   src = fetchurl {
     url = "http://download.augeas.net/${name}.tar.gz";
-    sha256 = "1q41yilxc0nvjz5h9phm38k2b73k2v0b9jg11y92228bps7b5bpl";
+    sha256 = "0k9nssn7lk58cl5zv3c8kv2zx9cm2yks3sj7q4fd6qdjz9m2bnsj";
   };
-
-  buildInputs = [ pkgconfig readline libxml2 ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ readline libxml2 ];
 
   meta = with stdenv.lib; {
     description = "Configuration editing tool";
     license = licenses.lgpl2;
     homepage = http://augeas.net/;
-    maintainers = with maintainers; [offline];
-    platforms = with platforms; unix;
+    maintainers = with maintainers; [ offline ndowens ];
+    platforms = platforms.unix;
   };
 }

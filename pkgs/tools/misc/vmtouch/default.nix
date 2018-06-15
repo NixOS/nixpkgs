@@ -2,14 +2,14 @@
 
 stdenv.mkDerivation rec {
   pname = "vmtouch";
-  version = "git-20150310";
-  name = "${pname}-${version}";
+  version = "1.3.0";
+  name = "${pname}-git-${version}";
 
   src = fetchFromGitHub {
     owner = "hoytech";
     repo = "vmtouch";
-    rev = "4e1b106e59942678c1e6e490e2c7ca7df50eb7a3";
-    sha256 = "1m37gvlypyfizd33mfyfha4hhwiyfzsj8gb2h5im6wzis4j15d0y";
+    rev = "v${version}";
+    sha256 = "0xpigfpwidk25k605y2m2g1952nzl5fgp0wn65hhn7hbra7srglf";
   };
 
   buildInputs = [perl];
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Portable file system cache diagnostics and control";
     longDescription = "vmtouch is a tool for learning about and controlling the file system cache of unix and unix-like systems.";
-    homepage = "http://hoytech.com/vmtouch/vmtouch.html";
+    homepage = https://hoytech.com/vmtouch/;
     license = stdenv.lib.licenses.bsd3;
     maintainers = [ stdenv.lib.maintainers.garrison ];
     platforms = stdenv.lib.platforms.all;

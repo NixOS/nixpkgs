@@ -1,21 +1,20 @@
-{ stdenv, fetchdarcs, ocaml, findlib,  lablgl, camlimages, mesa, freeglut, ocaml_mysql, mysql, mlgmp, mpfr, gmp, libtiff, libjpeg, libpng, giflib }:
-
-let
-  ocaml_version = (builtins.parseDrvName ocaml.name).version;
-in
+{ stdenv, fetchurl, ocamlPackages, libGLU_combined, freeglut
+, mysql, mpfr, gmp, libtiff, libjpeg, libpng, giflib
+}:
 
 stdenv.mkDerivation {
-  name = "glsurf-3.3";
+  name = "glsurf-3.3.1";
 
-  src = fetchdarcs {
-    url = "http://lama.univ-savoie.fr/~raffalli/GlSurf";
-    rev = "3.3";
-    sha256 = "0ljvvzz31j7l8rvsv63x1kj70nhw3al3k294m79hpmwjvym1mzfa";
+  src = fetchurl {
+    url = "http://lama.univ-savoie.fr/~raffalli/glsurf/glsurf-3.3.1.tar.gz";
+    sha256 = "0w8xxfnw2snflz8wdr2ca9f5g91w5vbyp1hwlx1v7vg83d4bwqs7";
   };
 
-  buildInputs = [ ocaml findlib freeglut mesa
-  	          lablgl camlimages ocaml_mysql mysql.lib mlgmp mpfr gmp
-		  libtiff libjpeg libpng giflib ];
+  buildInputs = [ freeglut libGLU_combined mysql.connector-c mpfr gmp
+    libtiff libjpeg libpng giflib ]
+  ++ (with ocamlPackages; [
+    ocaml findlib ocaml_mysql lablgl camlimages_4_0 mlgmpidl
+  ]);
 
   installPhase = ''
     mkdir -p $out/bin $out/share/doc/glsurf

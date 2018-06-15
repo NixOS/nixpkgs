@@ -1,6 +1,6 @@
-{ stdenv, fetchurl, fetchgit, pkgconfig
-, qt4, qt5, avahi, boost, libopus, libsndfile, protobuf, speex, libcap
-, alsaLib
+{ stdenv, fetchurl, fetchgit, fetchpatch, pkgconfig
+, qt4, qmake4Hook, qt5, avahi, boost, libopus, libsndfile, protobuf, speex, libcap
+, alsaLib, python
 , jackSupport ? false, libjack2 ? null
 , speechdSupport ? false, speechd ? null
 , pulseSupport ? false, libpulseaudio ? null
@@ -17,16 +17,16 @@ let
   generic = overrides: source: stdenv.mkDerivation (source // overrides // {
     name = "${overrides.type}-${source.version}";
 
-    patches = optional jackSupport ./mumble-jack-support.patch;
+    patches = (source.patches or []) ++ optional jackSupport ./mumble-jack-support.patch;
 
-    nativeBuildInputs = [ pkgconfig ]
-      ++ { qt4 = [ qt4 ]; qt5 = [ qt5.base ]; }."qt${toString source.qtVersion}"
+    nativeBuildInputs = [ pkgconfig python ]
+      ++ { qt4 = [ qmake4Hook ]; qt5 = [ qt5.qmake ]; }."qt${toString source.qtVersion}"
       ++ (overrides.nativeBuildInputs or [ ]);
     buildInputs = [ boost protobuf avahi ]
-      ++ { qt4 = [ qt4 ]; qt5 = [ qt5.base ]; }."qt${toString source.qtVersion}"
+      ++ { qt4 = [ qt4 ]; qt5 = [ qt5.qtbase ]; }."qt${toString source.qtVersion}"
       ++ (overrides.buildInputs or [ ]);
 
-    configureFlags = [
+    qmakeFlags = [
       "CONFIG+=shared"
       "CONFIG+=no-g15"
       "CONFIG+=packaged"
@@ -37,10 +37,12 @@ let
       "CONFIG+=no-bundled-speex"
     ] ++ optional (!speechdSupport) "CONFIG+=no-speechd"
       ++ optional jackSupport "CONFIG+=no-oss CONFIG+=no-alsa CONFIG+=jackaudio"
+      ++ optional (!iceSupport) "CONFIG+=no-ice"
       ++ (overrides.configureFlags or [ ]);
 
-    configurePhase = ''
-      qmake $configureFlags DEFINES+="PLUGIN_PATH=$out/lib"
+    preConfigure = ''
+       qmakeFlags="$qmakeFlags DEFINES+=PLUGIN_PATH=$out/lib"
+       patchShebangs scripts
     '';
 
     makeFlags = [ "release" ];
@@ -54,9 +56,11 @@ let
       cp man/mum* $out/share/man/man1
     '' + (overrides.installPhase or "");
 
+    enableParallelBuilding = true;
+
     meta = {
       description = "Low-latency, high quality voice chat software";
-      homepage = "http://mumble.sourceforge.net/";
+      homepage = https://mumble.info;
       license = licenses.bsd3;
       maintainers = with maintainers; [ viric jgeerds wkennington ];
       platforms = platforms.linux;
@@ -66,9 +70,9 @@ let
   client = source: generic {
     type = "mumble";
 
-    nativeBuildInputs = optional (source.qtVersion == 5) qt5.tools;
+    nativeBuildInputs = optionals (source.qtVersion == 5) [ qt5.qttools ];
     buildInputs = [ libopus libsndfile speex ]
-      ++ optional (source.qtVersion == 5) qt5.svg
+      ++ optional (source.qtVersion == 5) qt5.qtsvg
       ++ optional stdenv.isLinux alsaLib
       ++ optional jackSupport libjack2
       ++ optional speechdSupport speechd
@@ -78,16 +82,15 @@ let
       "CONFIG+=no-server"
     ];
 
-    installPhase = ''
-      cp scripts/mumble-overlay $out/bin
-      sed -i "s,/usr/lib,$out/lib,g" $out/bin/mumble-overlay
+    NIX_CFLAGS_COMPILE = optional speechdSupport "-I${speechd}/include/speech-dispatcher";
 
+    installPhase = ''
       mkdir -p $out/share/applications
       cp scripts/mumble.desktop $out/share/applications
 
       mkdir -p $out/share/icons{,/hicolor/scalable/apps}
       cp icons/mumble.svg $out/share/icons
-      ln -s $out/share/icon/mumble.svg $out/share/icons/hicolor/scalable/apps
+      ln -s $out/share/icons/mumble.svg $out/share/icons/hicolor/scalable/apps
     '';
   } source;
 
@@ -95,59 +98,49 @@ let
     type = "murmur";
 
     postPatch = optional iceSupport ''
-      sed -i 's,/usr/share/Ice/,${zeroc_ice}/,g' src/murmur/murmur.pro
+      grep -Rl '/usr/share/Ice' . | xargs sed -i 's,/usr/share/Ice/,${zeroc_ice}/,g'
     '';
 
     configureFlags = [
       "CONFIG+=no-client"
     ];
 
-    buildInputs = [ libcap ] ++ optional iceSupport [ zeroc_ice ];
+    buildInputs = [ libcap ] ++ optional iceSupport zeroc_ice;
   };
 
   stableSource = rec {
-    version = "1.2.10";
+    version = "1.2.19";
     qtVersion = 4;
 
     src = fetchurl {
       url = "https://github.com/mumble-voip/mumble/releases/download/${version}/mumble-${version}.tar.gz";
-      sha256 = "012vm0xf84x13414jlsx964c5a1nwnbn41jnspkciajlxxipldn6";
+      sha256 = "1s60vaici3v034jzzi20x23hsj6mkjlc0glipjq4hffrg9qgnizh";
     };
+
+    # Fix compile error against boost 1.66 (#33655):
+    patches = singleton (fetchpatch {
+      url = "https://github.com/mumble-voip/mumble/commit/"
+          + "ea861fe86743c8402bbad77d8d1dd9de8dce447e.patch";
+      sha256 = "1r50dc8dcl6jmbj4abhnay9div7y56kpmajzqd7ql0pm853agwbh";
+    });
   };
 
   gitSource = rec {
-    version = "1.3.0-git-2015-09-27";
+    version = "2018-01-12";
     qtVersion = 5;
 
+    # Needs submodules
     src = fetchgit {
       url = "https://github.com/mumble-voip/mumble";
-      rev = "13e494c60beb20748eeb8be126b27e1226d168c8";
-      sha256 = "1vihassis5i7hyljbb8qjihjj4y80n5l380x5dl0nwb55j2mylhg";
+      rev = "e348e47f4af68eaa8e0f87d1d9fc28c5583e421e";
+      sha256 = "12z41qfaq6w3i4wcw8pvyb8wwwa8gs3ar5zx6aqx6yssc6513lr3";
     };
-
-    # TODO: Remove fetchgit as it requires git
-    /*src = fetchFromGitHub {
-      owner = "mumble-voip";
-      repo = "mumble";
-      rev = "13e494c60beb20748eeb8be126b27e1226d168c8";
-      sha256 = "024my6wzahq16w7fjwrbksgnq98z4jjbdyy615kfyd9yk2qnpl80";
-    };
-
-    theme = fetchFromGitHub {
-      owner = "mumble-voip";
-      repo = "mumble-theme";
-      rev = "16b61d958f131ca85ab0f601d7331601b63d8f30";
-      sha256 = "0rbh825mwlh38j6nv2sran2clkiwvzj430mhvkdvzli9ysjxgsl3";
-    };
-
-    prePatch = ''
-      rmdir themes/Mumble
-      ln -s ${theme} themes/Mumble
-    '';*/
   };
 in {
   mumble     = client stableSource;
   mumble_git = client gitSource;
   murmur     = server stableSource;
-  murmur_git = server gitSource;
+  murmur_git = (server gitSource).overrideAttrs (old: {
+    meta = old.meta // { broken = iceSupport; };
+  });
 }

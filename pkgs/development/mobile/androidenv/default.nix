@@ -1,21 +1,24 @@
-{pkgs, pkgs_i686}:
+{ buildPackages, pkgs, pkgs_i686, targetPackages
+, includeSources ? true
+}:
 
 rec {
   platformTools = import ./platform-tools.nix {
-    inherit (pkgs) stdenv fetchurl unzip;
-    stdenv_32bit = pkgs_i686.stdenv;
+    inherit buildPackages pkgs;
   };
-  
+
   buildTools = import ./build-tools.nix {
-    inherit (pkgs) stdenv fetchurl unzip;
+    inherit (pkgs) stdenv fetchurl unzip zlib file;
     stdenv_32bit = pkgs_i686.stdenv;
     zlib_32bit = pkgs_i686.zlib;
+    ncurses_32bit = pkgs_i686.ncurses5;
+    ncurses = pkgs.ncurses5;
   };
-  
+
   support = import ./support.nix {
     inherit (pkgs) stdenv fetchurl unzip;
   };
-  
+
   supportRepository = import ./support-repository.nix {
     inherit (pkgs) stdenv fetchurl unzip;
   };
@@ -38,30 +41,26 @@ rec {
     inherit (pkgs) stdenv fetchurl unzip;
   };
 
+  sources = import ./sources.nix {
+    inherit (pkgs) stdenv fetchurl unzip;
+  };
+
   androidsdk = import ./androidsdk.nix {
     inherit (pkgs) stdenv fetchurl unzip makeWrapper;
-    inherit (pkgs) freetype fontconfig glib gtk atk mesa file alsaLib jdk coreutils;
-    inherit (pkgs.xorg) libX11 libXext libXrender libxcb libXau libXdmcp libXtst;
-    
-    inherit platformTools buildTools support supportRepository platforms sysimages addons;
-    
+    inherit (pkgs) zlib glxinfo freetype fontconfig glib gtk2 atk libGLU_combined file alsaLib jdk coreutils libpulseaudio dbus;
+    inherit (pkgs.xorg) libX11 libXext libXrender libxcb libXau libXdmcp libXtst xkeyboardconfig;
+
+    inherit platformTools buildTools support supportRepository platforms sysimages addons sources includeSources;
+
     stdenv_32bit = pkgs_i686.stdenv;
-    zlib_32bit = pkgs_i686.zlib;
-    libX11_32bit = pkgs_i686.xorg.libX11;
-    libxcb_32bit = pkgs_i686.xorg.libxcb;
-    libXau_32bit = pkgs_i686.xorg.libXau;
-    libXdmcp_32bit = pkgs_i686.xorg.libXdmcp;
-    libXext_32bit = pkgs_i686.xorg.libXext;
-    mesa_32bit = pkgs_i686.mesa;
-    alsaLib_32bit = pkgs_i686.alsaLib;
   };
-  
+
   androidsdk_2_1 = androidsdk {
     platformVersions = [ "7" ];
     abiVersions = [ "armeabi-v7a" ];
     useGoogleAPIs = true;
   };
-  
+
   androidsdk_2_2 = androidsdk {
     platformVersions = [ "8" ];
     abiVersions = [ "armeabi-v7a" ];
@@ -73,49 +72,49 @@ rec {
     abiVersions = [ "armeabi-v7a" ];
     useGoogleAPIs = true;
   };
-  
+
   androidsdk_3_0 = androidsdk {
     platformVersions = [ "11" ];
     abiVersions = [ "armeabi-v7a" ];
     useGoogleAPIs = true;
   };
-  
+
   androidsdk_3_1 = androidsdk {
     platformVersions = [ "12" ];
     abiVersions = [ "armeabi-v7a" ];
     useGoogleAPIs = true;
   };
-  
+
   androidsdk_3_2 = androidsdk {
     platformVersions = [ "13" ];
     abiVersions = [ "armeabi-v7a" ];
     useGoogleAPIs = true;
   };
-  
+
   androidsdk_4_0 = androidsdk {
     platformVersions = [ "14" ];
     abiVersions = [ "armeabi-v7a" ];
     useGoogleAPIs = true;
   };
-  
+
   androidsdk_4_0_3 = androidsdk {
     platformVersions = [ "15" ];
     abiVersions = [ "armeabi-v7a" ];
     useGoogleAPIs = true;
   };
-  
+
   androidsdk_4_1 = androidsdk {
     platformVersions = [ "16" ];
     abiVersions = [ "armeabi-v7a" ];
     useGoogleAPIs = true;
   };
-  
+
   androidsdk_4_2 = androidsdk {
     platformVersions = [ "17" ];
     abiVersions = [ "armeabi-v7a" ];
     useGoogleAPIs = true;
   };
-  
+
   androidsdk_4_3 = androidsdk {
     platformVersions = [ "18" ];
     abiVersions = [ "armeabi-v7a" "x86" ];
@@ -155,32 +154,146 @@ rec {
     useExtraSupportLibs = true;
     useGooglePlayServices = true;
   };
-  
+
   androidsdk_6_0 = androidsdk {
     platformVersions = [ "23" ];
     abiVersions = [ "armeabi-v7a" "x86" "x86_64"];
     useGoogleAPIs = true;
   };
 
-  androidndk = import ./androidndk.nix {
-    inherit (pkgs) stdenv fetchurl zlib ncurses p7zip lib makeWrapper;
-    inherit (pkgs) coreutils file findutils gawk gnugrep gnused jdk which;
+  androidsdk_6_0_extras = androidsdk {
+    platformVersions = [ "23" ];
+    abiVersions = [ "armeabi-v7a" "x86" "x86_64"];
+    useGoogleAPIs = true;
+    useExtraSupportLibs = true;
+    useGooglePlayServices = true;
+    useInstantApps = true;
+  };
+
+  androidsdk_7_0 = androidsdk {
+    platformVersions = [ "24" ];
+    abiVersions = [ "x86" "x86_64"];
+    useGoogleAPIs = true;
+  };
+
+  androidsdk_7_0_extras = androidsdk {
+    platformVersions = [ "24" ];
+    abiVersions = [ "x86" "x86_64"];
+    useGoogleAPIs = true;
+    useExtraSupportLibs = true;
+    useGooglePlayServices = true;
+    useInstantApps = true;
+  };
+
+  androidsdk_7_1_1 = androidsdk {
+    platformVersions = [ "25" ];
+    abiVersions = [ "x86" "x86_64"];
+    useGoogleAPIs = true;
+  };
+
+  androidsdk_7_1_1_extras = androidsdk {
+    platformVersions = [ "25" ];
+    abiVersions = [ "x86" "x86_64"];
+    useGoogleAPIs = true;
+    useExtraSupportLibs = true;
+    useGooglePlayServices = true;
+    useInstantApps = true;
+  };
+
+  androidsdk_8_0 = androidsdk {
+    platformVersions = [ "26" ];
+    abiVersions = [ "x86" "x86_64"];
+    useGoogleAPIs = true;
+  };
+
+  androidsdk_8_0_extras = androidsdk {
+    platformVersions = [ "26" ];
+    abiVersions = [ "x86" "x86_64"];
+    useGoogleAPIs = true;
+    useExtraSupportLibs = true;
+    useGooglePlayServices = true;
+    useInstantApps = true;
+  };
+
+  androidndk_10e = import ./androidndk.nix {
+    inherit (buildPackages)
+      p7zip makeWrapper;
+    inherit (pkgs)
+      stdenv fetchurl zlib ncurses5 lib python3 libcxx
+      coreutils file findutils gawk gnugrep gnused jdk which;
     inherit platformTools;
+    version = "10e";
+    sha256 = "032j3sgk93bjbkny84i17ph61dhjmsax9ddqng1zbi2p7dgl0pzf";
+  };
+
+  androidndk_16b = import ./androidndk.nix {
+    inherit (buildPackages)
+      p7zip makeWrapper;
+    inherit (pkgs)
+      stdenv fetchurl zlib ncurses5 lib python3 libcxx
+      coreutils file findutils gawk gnugrep gnused jdk which;
+    inherit platformTools;
+    version = "16b";
+    sha256 = "00frcnvpcsngv00p6l2vxj4cwi2mwcm9lnjvm3zv4wrp6pss9pmw";
+  };
+
+  androidndk = import ./androidndk.nix {
+    inherit (buildPackages)
+      p7zip makeWrapper;
+    inherit (pkgs)
+      stdenv fetchurl zlib ncurses5 lib python3 libcxx
+      coreutils file findutils gawk gnugrep gnused jdk which;
+    inherit platformTools;
+    version = "17";
+    sha256 = "1jj3zy958zsidywqd5nwdyrnr72rf9zhippkl8rbqxfy8wxq2gds";
   };
 
   androidndk_r8e = import ./androidndk_r8e.nix {
-    inherit (pkgs) stdenv fetchurl zlib ncurses lib makeWrapper;
-    inherit (pkgs) coreutils file findutils gawk gnugrep gnused jdk which;
+    inherit (buildPackages)
+      makeWrapper;
+    inherit (pkgs)
+      stdenv fetchurl zlib ncurses lib
+      coreutils file findutils gawk gnugrep gnused jdk which;
     inherit platformTools;
   };
-  
+
   buildApp = import ./build-app.nix {
     inherit (pkgs) stdenv jdk ant gnumake gawk file which;
     inherit androidsdk androidndk;
   };
-  
+
   emulateApp = import ./emulate-app.nix {
     inherit (pkgs) stdenv;
     inherit androidsdk;
+  };
+
+  androidndkPkgs = import ./androidndk-pkgs.nix {
+    inherit (buildPackages)
+      makeWrapper;
+    inherit (pkgs)
+      lib hostPlatform targetPlatform
+      runCommand wrapBintoolsWith wrapCCWith;
+    # buildPackages.foo rather than buildPackages.buildPackages.foo would work,
+    # but for splicing messing up on infinite recursion for the variants we
+    # *dont't* use. Using this workaround, but also making a test to ensure
+    # these two really are the same.
+    buildAndroidndk = buildPackages.buildPackages.androidenv.androidndk;
+    inherit androidndk;
+    targetAndroidndkPkgs = targetPackages.androidenv.androidndkPkgs;
+  };
+
+  androidndkPkgs_10e = import ./androidndk-pkgs.nix {
+    inherit (buildPackages)
+      makeWrapper;
+    inherit (pkgs)
+      lib hostPlatform targetPlatform
+      runCommand wrapBintoolsWith wrapCCWith;
+    # buildPackages.foo rather than buildPackages.buildPackages.foo would work,
+    # but for splicing messing up on infinite recursion for the variants we
+    # *dont't* use. Using this workaround, but also making a test to ensure
+    # these two really are the same.
+    buildAndroidndk = buildPackages.buildPackages.androidenv.androidndk_10e;
+    androidndk = androidndk_10e;
+    targetAndroidndkPkgs = targetPackages.androidenv.androidndkPkgs_10e;
   };
 }

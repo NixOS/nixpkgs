@@ -1,11 +1,24 @@
-args@{fetchurl, composableDerivation, stdenv, perl, libxml2, postgresql, geos, proj, flex, gdal, json_c, pkgconfig, file, ...}:
+{ fetchurl
+, fetchpatch
+, stdenv
+, perl
+, libxml2
+, postgresql
+, geos
+, proj
+, flex
+, gdal
+, json_c
+, pkgconfig
+, file
+}:
 
   /*
 
   ### NixOS - usage:
   ==================
 
-    services.postgresql.extraPlugins = [ (pkgs.postgis.override { postgresql = pkgs.postgresql94; }).v_2_1_4 ];
+    services.postgresql.extraPlugins = [ (pkgs.postgis.override { postgresql = pkgs.postgresql95; }) ];
 
 
   ### important Postgis implementation details:
@@ -31,78 +44,64 @@ args@{fetchurl, composableDerivation, stdenv, perl, libxml2, postgresql, geos, p
 
 
 let
-  pgDerivationBase = composableDerivation.composableDerivation {} ( fix :
+  version = "2.4.4";
+  sha256 = "1hm8migjb53cymp4qvg1h20yqllmy9f7x0awv5450391i6syyqq6";
+in stdenv.mkDerivation rec {
+  name = "postgis-${version}";
 
-  let version = fix.fixed.version; in {
+  src = fetchurl {
+    url = "http://download.osgeo.org/postgis/source/postgis-${builtins.toString version}.tar.gz";
+    inherit sha256;
+  };
 
-    name = "postgis-${version}";
+  # don't pass these vars to the builder
+  removeAttrs = ["sql_comments" "sql_srcs"];
 
-    src = fetchurl {
-      url = "http://postgis.refractions.net/download/postgis-${fix.fixed.version}.tar.gz";
-      inherit (fix.fixed) sha256;
-    };
+  preInstall = ''
+    mkdir -p $out/bin
+  '';
 
-    # don't pass these vars to the builder
-    removeAttrs = ["hash" "sql_comments" "sql_srcs"];
+  # create aliases for all commands adding version information
+  postInstall = ''
+    sql_srcs=$(for sql in ${builtins.toString sql_srcs}; do echo -n "$(find $out -iname "$sql") "; done )
 
-    preConfigure = ''
-      configureFlags="--datadir=$out/share --datarootdir=$out/share --bindir=$out/bin"
-      makeFlags="PERL=${perl}/bin/perl datadir=$out/share pkglibdir=$out/lib bindir=$out/bin"
-    '';
+    for prog in $out/bin/*; do # */
+      ln -s $prog $prog-${version}
+    done
 
-    # create aliases for all commands adding version information
-    postInstall = ''
+    cp -r doc $out
+  '';
 
-      sql_srcs=$(for sql in ${builtins.toString fix.fixed.sql_srcs}; do echo -n "$(find $out -iname "$sql") "; done )
+  buildInputs = [ libxml2 postgresql geos proj perl gdal json_c pkgconfig ];
 
-      for prog in $out/bin/*; do # */
-        ln -s $prog $prog-${version}
-      done
+  sql_comments = "postgis_comments.sql";
 
-      cp -r doc $out
-    '';
+  sql_srcs = ["postgis.sql" "spatial_ref_sys.sql"];
 
-    buildInputs = [libxml2 postgresql geos proj perl];
+  # postgis config directory assumes /include /lib from the same root for json-c library
+  NIX_LDFLAGS = "-L${stdenv.lib.getLib json_c}/lib";
 
-    sql_comments = "postgis_comments.sql";
+  dontDisableStatic = true;
+  preConfigure = ''
+    sed -i 's@/usr/bin/file@${file}/bin/file@' configure
+    configureFlags="--datadir=$out/share --datarootdir=$out/share --bindir=$out/bin --with-gdalconfig=${gdal}/bin/gdal-config --with-jsondir=${json_c.dev}"
+    makeFlags="PERL=${perl}/bin/perl datadir=$out/share pkglibdir=$out/lib bindir=$out/bin"
+  '';
+  postConfigure = ''
+    sed -i "s|@mkdir -p \$(DESTDIR)\$(PGSQL_BINDIR)||g ;
+            s|\$(DESTDIR)\$(PGSQL_BINDIR)|$prefix/bin|g
+            " \
+        "raster/loader/Makefile";
+    sed -i "s|\$(DESTDIR)\$(PGSQL_BINDIR)|$prefix/bin|g
+            " \
+        "raster/scripts/python/Makefile";
+  '';
 
-    meta = {
-      description = "Geographic Objects for PostgreSQL";
-      homepage = "http://postgis.refractions.net";
-      license = stdenv.lib.licenses.gpl2;
-      maintainers = [stdenv.lib.maintainers.marcweber];
-      platforms = stdenv.lib.platforms.linux;
-    };
-  });
-
-  pgDerivationBaseNewer = pgDerivationBase.merge (fix: {
-    src = fetchurl {
-      url = "http://download.osgeo.org/postgis/source/postgis-${builtins.toString fix.fixed.version}.tar.gz";
-      inherit (fix.fixed) sha256;
-    };
-  });
-
-in rec {
-
-  v_2_1_4 = pgDerivationBaseNewer.merge ( fix : {
-    version = "2.1.4";
-    sha256 = "1z00n5654r7l38ydkn2grbwl5gg0mravjwxfdipp7j18hjiw4wyd";
-    sql_srcs = ["postgis.sql" "spatial_ref_sys.sql"];
-    builtInputs = [gdal json_c pkgconfig];
-    dontDisableStatic = true;
-    preConfigure = ''
-      sed -i 's@/usr/bin/file@${file}/bin/file@' configure
-      configureFlags="$configureFlags --with-gdalconfig=${gdal}/bin/gdal-config --with-jsondir=${json_c}"
-    '';
-    postConfigure = ''
-      sed -i "s|@mkdir -p \$(DESTDIR)\$(PGSQL_BINDIR)||g ;
-              s|\$(DESTDIR)\$(PGSQL_BINDIR)|$prefix/bin|g
-              " \
-          "raster/loader/Makefile";
-      sed -i "s|\$(DESTDIR)\$(PGSQL_BINDIR)|$prefix/bin|g
-              " \
-          "raster/scripts/python/Makefile";
-    '';
-  });
-
+  meta = with stdenv.lib; {
+    description = "Geographic Objects for PostgreSQL";
+    homepage = http://postgis.refractions.net;
+    license = licenses.gpl2;
+    maintainers = [ maintainers.marcweber ];
+    platforms = platforms.linux;
+  };
 }

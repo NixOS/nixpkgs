@@ -1,23 +1,27 @@
-{stdenv, fetchurl, qt4, boost, proj, gdal_1_11_2}:
+{ stdenv, fetchFromGitHub, qmake, pkgconfig, boost, gdal, proj
+, qtbase, qtsvg, qtwebkit }:
 
 stdenv.mkDerivation rec {
-  name = "merkaartor-0.18.1";
-  src = fetchurl {
-    url = "http://merkaartor.be/attachments/download/301/merkaartor-0.18.1.tar.bz2";
-    sha256 = "17qk45pmlxqigla1915dvn9pp91y85d2bkcaap4g3m8mk1crcsix";
+  name = "merkaartor-${version}";
+  version = "0.18.3";
+
+  src = fetchFromGitHub {
+    owner = "openstreetmap";
+    repo = "merkaartor";
+    rev = version;
+    sha256 = "0ls3q8m1hxiwyrypy6qca8wczhl4969ncl0sszfdwfv70rzxjk88";
   };
 
-  configurePhase = ''
-    qmake -makefile PREFIX=$out
-  '';
+  nativeBuildInputs = [ qmake pkgconfig ];
 
-  buildInputs = [ qt4 boost proj gdal_1_11_2 ];
+  buildInputs = [ boost gdal proj qtbase qtsvg qtwebkit ];
 
-  meta = {
-    description = "An openstreetmap editor";
-    homepage = http://merkaartor.org/;
-    license = stdenv.lib.licenses.gpl2Plus;
-    maintainers = with stdenv.lib.maintainers; [viric urkud];
-    inherit (qt4.meta) platforms;
+  enableParallelBuilding = true;
+
+  meta = with stdenv.lib; {
+    description = "OpenStreetMap editor";
+    homepage = http://merkaartor.be/;
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ viric ];
   };
 }

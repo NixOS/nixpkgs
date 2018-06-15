@@ -63,7 +63,7 @@ stdenv.mkDerivation rec {
 
   ldpath = stdenv.lib.makeLibraryPath buildInputs
     + stdenv.lib.optionalString (stdenv.system == "x86_64-linux")
-      (":" + stdenv.lib.makeSearchPath "lib64" buildInputs);
+      (":" + stdenv.lib.makeSearchPathOutput "lib" "lib64" buildInputs);
 
   phases = "unpackPhase installPhase fixupPhase";
 
@@ -118,7 +118,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Wolfram Mathematica computational software system";
-    homepage = "http://www.wolfram.com/mathematica/";
+    homepage = http://www.wolfram.com/mathematica/;
     license = stdenv.lib.licenses.unfree;
   };
 }

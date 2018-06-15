@@ -9,19 +9,6 @@
 
 with lib;
 
-let
-
-  # Wrap Xvfb to set some flags/variables.
-  xvfbWrapper = pkgs.writeScriptBin "Xvfb"
-    ''
-      #! ${pkgs.stdenv.shell}
-      export XKB_BINDIR=${pkgs.xorg.xkbcomp}/bin
-      export XORG_DRI_DRIVER_PATH=${pkgs.mesa}/lib/dri
-      exec ${pkgs.xorg.xorgserver}/bin/Xvfb "$@" -xkbdir ${pkgs.xkeyboard_config}/etc/X11/xkb
-    '';
-
-in
-
 {
 
   config = {
@@ -29,18 +16,8 @@ in
     services.xserver.enable = true;
     services.xserver.videoDrivers = [];
 
-    # Enable KDM.  Any display manager will do as long as it supports XDMCP.
-    services.xserver.displayManager.kdm.enable = true;
-    services.xserver.displayManager.kdm.enableXDMCP = true;
-    services.xserver.displayManager.kdm.extraConfig =
-      ''
-        [General]
-        # We're headless, so don't bother starting an X server.
-        StaticServers=
-
-        [Xdmcp]
-        Xaccess=${pkgs.writeText "Xaccess" "localhost"}
-      '';
+    # Enable GDM.  Any display manager will do as long as it supports XDMCP.
+    services.xserver.displayManager.gdm.enable = true;
 
     systemd.sockets.terminal-server =
       { description = "Terminal Server Socket";
@@ -54,7 +31,7 @@ in
       { description = "Terminal Server";
 
         path =
-          [ xvfbWrapper pkgs.gawk pkgs.which pkgs.openssl pkgs.xorg.xauth
+          [ pkgs.xorg.xorgserver.out pkgs.gawk pkgs.which pkgs.openssl pkgs.xorg.xauth
             pkgs.nettools pkgs.shadow pkgs.procps pkgs.utillinux pkgs.bash
           ];
 

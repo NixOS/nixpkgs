@@ -1,29 +1,23 @@
-{ stdenv, buildPythonPackage, fetchurl, gettext
-, pkgconfig, libofa, ffmpeg, chromaprint
-, pyqt4, mutagen, python-libdiscid
-}:
+{ stdenv, python2Packages, fetchurl, gettext, chromaprint }:
 
-let version = "1.3.2"; in
-buildPythonPackage {
+let
+  version = "1.4.2";
+  pythonPackages = python2Packages;
+in pythonPackages.buildPythonApplication {
   name = "picard-${version}";
   namePrefix = "";
 
   src = fetchurl {
     url = "http://ftp.musicbrainz.org/pub/musicbrainz/picard/picard-${version}.tar.gz";
-    sha256 = "0821xb7gyg0rhch8s3qkzmak90wjpcxkv9a364yv6bmqc12j6a77";
+    sha256 = "0d12k40d9fbcn801gp5zdsgvjdrh4g97vda3ga16rmmvfwwfxbgh";
   };
 
-  buildInputs = [
-    pkgconfig
-    ffmpeg
-    libofa
-    gettext
-  ];
+  buildInputs = [ gettext ];
 
-  propagatedBuildInputs = [
+  propagatedBuildInputs = with pythonPackages; [
     pyqt4
     mutagen
-    python-libdiscid
+    discid
   ];
 
   installPhase = ''
@@ -33,9 +27,9 @@ buildPythonPackage {
   doCheck = false;
 
   meta = with stdenv.lib; {
-    homepage = "http://musicbrainz.org/doc/MusicBrainz_Picard";
+    homepage = http://musicbrainz.org/doc/MusicBrainz_Picard;
     description = "The official MusicBrainz tagger";
-    maintainers = with maintainers; [ emery ];
+    maintainers = with maintainers; [ ehmry ];
     license = licenses.gpl2;
     platforms = platforms.all;
   };

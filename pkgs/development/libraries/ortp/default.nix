@@ -1,12 +1,19 @@
-{ stdenv, fetchurl }:
+{ stdenv, fetchurl, cmake, fetchFromGitHub, bctoolbox }:
 
 stdenv.mkDerivation rec {
-  name = "ortp-0.24.2";
+  baseName = "ortp";
+  version = "1.0.2";
+  name = "${baseName}-${version}";
 
-  src = fetchurl {
-    url = "mirror://savannah/linphone/ortp/sources/${name}.tar.gz";
-    sha256 = "05k6ianphr533qnjwxsv7jnh7fb2sq0dj1pdy1bk2w5khmlwfdyb";
+  src = fetchFromGitHub {
+    owner = "BelledonneCommunications";
+    repo = "${baseName}";
+    rev = "${version}";
+    sha256 = "12cwv593bsdnxs0zfcp07vwyk7ghlz2wv7vdbs1ksv293w3vj2rv";
   };
+
+  buildInputs = [ bctoolbox ];
+  nativeBuildInputs = [ cmake ];
 
   meta = with stdenv.lib; {
     description = "A Real-Time Transport Protocol (RFC3550) stack";

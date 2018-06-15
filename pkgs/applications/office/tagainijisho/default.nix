@@ -11,12 +11,12 @@ stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "A free, open-source Japanese dictionary and kanji lookup tool";
-    homepage = http://www.tagaini.net/;
+    homepage = https://www.tagaini.net/;
     license = with licenses; [
       /* program */ gpl3Plus
       /* data */ cc-by-sa-30
     ];
-    platforms = platforms.unix;
+    platforms = platforms.linux;
     maintainers = with maintainers; [ vbgl ];
   };
 }

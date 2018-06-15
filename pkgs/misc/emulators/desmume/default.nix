@@ -1,11 +1,11 @@
-{ stdenv, fetchurl
+{ stdenv, fetchurl, fetchpatch
 , pkgconfig, libtool, intltool
 , libXmu
 , lua
 , agg, alsaLib, soundtouch, openal
-, desktop_file_utils
+, desktop-file-utils
 , gtk2, gtkglext, libglade, pangox_compat
-, mesa, mesa_glu, libpcap, SDL, zziplib }:
+, libGLU, libpcap, SDL, zziplib }:
 
 with stdenv.lib;
 stdenv.mkDerivation rec {
@@ -14,17 +14,26 @@ stdenv.mkDerivation rec {
   version = "0.9.11";
 
   src = fetchurl {
-    url = "http://downloads.sourceforge.net/project/desmume/desmume/${version}/${name}.tar.gz";
+    url = "mirror://sourceforge/project/desmume/desmume/${version}/${name}.tar.gz";
     sha256 = "15l8wdw3q61fniy3h93d84dnm6s4pyadvh95a0j6d580rjk4pcrs";
   };
 
+  patches = [
+    (fetchpatch {
+      name = "gcc6_fixes.patch";
+      url = "https://anonscm.debian.org/viewvc/pkg-games/packages/trunk/desmume/debian/patches/gcc6_fixes.patch?revision=15925";
+      sha256 = "0j3fmxz0mfb3f4biks03pyz8f9hy958ks6qplisl60rzq9v9qpks";
+     })
+  ];
+
+  CXXFLAGS = "-fpermissive";
+
   buildInputs =
   [ pkgconfig libtool intltool libXmu lua agg alsaLib soundtouch
-    openal desktop_file_utils gtk2 gtkglext libglade pangox_compat
-    mesa mesa_glu libpcap SDL zziplib ];
+    openal desktop-file-utils gtk2 gtkglext libglade pangox_compat
+    libGLU libpcap SDL zziplib ];
 
   configureFlags = [
-    "--disable-osmesa" # Failing on compile step
     "--disable-glade"  # Failing on compile step
     "--enable-openal"
     "--enable-glx"
@@ -46,4 +55,4 @@ stdenv.mkDerivation rec {
     platforms = platforms.linux;
   };
 }
-# TODO: investigate osmesa and glade
+# TODO: investigate glade

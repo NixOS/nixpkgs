@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, apacheHttpd, python }:
+{ stdenv, fetchurl, apacheHttpd, python2 }:
 
 stdenv.mkDerivation rec {
   name = "mod_python-3.5.0";
@@ -23,10 +23,11 @@ stdenv.mkDerivation rec {
 
   passthru = { inherit apacheHttpd; };
 
-  buildInputs = [ apacheHttpd python ];
+  buildInputs = [ apacheHttpd python2 ];
 
   meta = {
     homepage = http://modpython.org/;
     description = "An Apache module that embeds the Python interpreter within the server";
+    platforms = stdenv.lib.platforms.unix;
   };
 }

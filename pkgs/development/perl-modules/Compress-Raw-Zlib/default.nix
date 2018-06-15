@@ -1,18 +1,18 @@
 { fetchurl, buildPerlPackage, zlib, stdenv }:
 
 buildPerlPackage rec {
-  name = "Compress-Raw-Zlib-2.065";
+  name = "Compress-Raw-Zlib-2.081";
 
   src = fetchurl {
     url = "mirror://cpan/authors/id/P/PM/PMQS/${name}.tar.gz";
-    sha256 = "1i09h3dvn8ipaj1l2nq2qd19wzhn7wcpbsipdkcniwi0sgy1kf1p";
+    sha256 = "06rsm9ahp20xfyvd3jc69sd0k8vqysryxc6apzdbn96jbcsdwmp1";
   };
 
   preConfigure = ''
     cat > config.in <<EOF
       BUILD_ZLIB   = False
-      INCLUDE      = ${zlib}/include
-      LIB          = ${zlib}/lib
+      INCLUDE      = ${zlib.dev}/include
+      LIB          = ${zlib.out}/lib
       OLD_ZLIB     = False
       GZIP_OS_CODE = AUTO_DETECT
     EOF

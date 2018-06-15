@@ -1,0 +1,11 @@
+--- a/url.c  2014-07-14 12:31:30.476563116 +0200
++++ b/url.c   2014-07-14 12:32:16.364918248 +0200
+@@ -268,7 +268,7 @@ init_PRNG()
+     if (RAND_status())
+ 	return;
+     if ((file = RAND_file_name(buffer, sizeof(buffer)))) {
+-#ifdef USE_EGD
++#if defined(USE_EGD) && defined(HAVE_SSL_RAND_EGD)
+ 	if (RAND_egd(file) > 0)
+ 	    return;
+ #endif

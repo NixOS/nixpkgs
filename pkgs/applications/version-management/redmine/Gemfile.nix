@@ -115,9 +115,9 @@ version = "2.0.3";
 }
 {
 name = "json";
-hash = "961bfbbfa9fda1e857e9c791e964e6664e0d43bf687b19669dfbc7cdbc5e0200";
-url = "http://rubygems.org/downloads/json-1.8.1.gem";
-version = "1.8.1";
+hash = "1nsby6ry8l9xg3yw4adlhk2pnc7i0h0rznvcss4vk3v74qg0k8lc";
+url = "http://rubygems.org/downloads/json-1.8.3.gem";
+version = "1.8.3";
 }
 {
 name = "mail";

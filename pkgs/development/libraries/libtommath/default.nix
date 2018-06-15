@@ -1,26 +1,35 @@
-{stdenv, fetchurl, libtool}:
+{ stdenv, fetchurl, libtool }:
 
-stdenv.mkDerivation {
-  name = "libtommath-0.39";
-  
+stdenv.mkDerivation rec {
+  name = "libtommath-${version}";
+  version = "1.0.1";
+
   src = fetchurl {
-    url = http://math.libtomcrypt.com/files/ltm-0.39.tar.bz2;
-    sha256 = "1kjx8rrw62nanzc5qp8fj6r3ybhw8ca60ahkyb70f10aiij49zs2";
+    url = "https://github.com/libtom/libtommath/releases/download/v${version}/ltm-${version}.tar.xz";
+    sha256 = "0sbccdwbkfc680id2fi0x067j23biqcjqilwkk7y9339knrjy0s7";
   };
 
-  buildInputs = [libtool];
+  nativeBuildInputs = [ libtool ];
+
+  postPatch = ''
+    substituteInPlace makefile.shared --replace "LT:=glibtool" "LT:=libtool"
+    substituteInPlace makefile_include.mk --replace "shell arch" "shell uname -m"
+  '';
 
   preBuild = ''
-    makeFlagsArray=(LIBPATH=$out/lib INCPATH=$out/include \
-      DATAPATH=$out/share/doc/libtommath/pdf \
+    makeFlagsArray=(PREFIX=$out \
       INSTALL_GROUP=$(id -g) \
       INSTALL_USER=$(id -u))
   '';
 
   makefile = "makefile.shared";
 
-  meta = {
-    homepage = http://math.libtomcrypt.com/;
+  enableParallelBuilding = true;
+
+  meta = with stdenv.lib; {
+    homepage = http://www.libtom.net/LibTomMath/;
     description = "A library for integer-based number-theoretic applications";
+    license = with licenses; [ publicDomain wtfpl ];
+    platforms = platforms.unix;
   };
 }

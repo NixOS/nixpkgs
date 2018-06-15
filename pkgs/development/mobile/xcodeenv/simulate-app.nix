@@ -16,16 +16,16 @@ stdenv.mkDerivation {
         echo "Please provide a UDID of a simulator:"
         read udid
     else
-        # If a parameter has been provided, consider that a device UDID an use that
+        # If a parameter has been provided, consider that a device UDID and use that
         udid="$1"
     fi
     
     # Open the simulator instance
-    open -a "$(readlink "${xcodewrapper}/bin/iOS Simulator")" --args -CurrentDeviceUDID $udid
+    open -a "$(readlink "${xcodewrapper}/bin/Simulator")" --args -CurrentDeviceUDID $udid
     
     # Copy the app and restore the write permissions
     appTmpDir=$(mktemp -d -t appTmpDir)
-    cp -r "$(echo ${app}/*.app)" $appTmpDir
+    cp -r "$(echo ${app}/*.app)" "$appTmpDir"
     chmod -R 755 "$(echo $appTmpDir/*.app)"
     
     # Wait for the simulator to start
@@ -33,7 +33,7 @@ stdenv.mkDerivation {
     read
     
     # Install the app
-    xcrun simctl install $udid "$(echo $appTmpDir/*.app)"
+    xcrun simctl install "$udid" "$(echo $appTmpDir/*.app)"
     
     # Remove the app tempdir
     rm -Rf $appTmpDir
@@ -45,4 +45,3 @@ stdenv.mkDerivation {
     chmod +x $out/bin/run-test-simulator
   '';
 }
-

@@ -1,50 +1,39 @@
-{ stdenv, fetchurl, p7zip, patchelf, gmp }:
+{ stdenv, fetchurl, makeWrapper, opencl-headers, ocl-icd }:
 
-assert stdenv.isLinux;
-
-let
-  bits    = if stdenv.system == "x86_64-linux" then "64" else "32";
-  libPath = stdenv.lib.makeLibraryPath [ stdenv.cc.libc gmp ];
-
-  fixBin = x: ''
-    patchelf --interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
-      --set-rpath ${libPath} ${x}
-  '';
-in
 stdenv.mkDerivation rec {
   name    = "hashcat-${version}";
-  version = "0.49";
+  version = "4.1.0";
 
   src = fetchurl {
-    url    = "http://hashcat.net/files/${name}.7z";
-    sha256 = "0va07flncihgmnri5wj0jn636w86x5qwm4jmj2halcyg7qwqijh2";
+    url = "https://hashcat.net/files/hashcat-${version}.tar.gz";
+    sha256 = "170i2y32ykgzb1qf1wz3klwn31c09bviz4x3bnrwia65adqrj8xx";
   };
 
-  buildInputs = [ p7zip patchelf ];
+  nativeBuildInputs = [ makeWrapper ];
+  buildInputs = [ opencl-headers ];
 
-  unpackPhase = "7z x $src > /dev/null && cd ${name}";
+  makeFlags = [
+    "OPENCL_HEADERS_KHRONOS=${opencl-headers}/include"
+    "COMPTIME=1337"
+    "VERSION_TAG=${version}"
+  ];
 
-  installPhase = ''
-    mkdir -p $out/bin $out/libexec
-    cp -R * $out/libexec
-
-    echo -n "/" > $out/bin/eula.accepted
-    ln -s $out/libexec/hashcat-cli${bits}.bin $out/bin/hashcat
-    ln -s $out/libexec/hashcat-cliXOP.bin $out/bin/hashcat-xop
-    ln -s $out/libexec/hashcat-cliAVX.bin $out/bin/hashcat-avx
+  # $out is not known until the build has started.
+  configurePhase = ''
+    runHook preConfigure
+    makeFlags="$makeFlags PREFIX=$out"
+    runHook postConfigure
   '';
 
-  fixupPhase = ''
-    ${fixBin "$out/libexec/hashcat-cli${bits}.bin"}
-    ${fixBin "$out/libexec/hashcat-cliXOP.bin"}
-    ${fixBin "$out/libexec/hashcat-cliAVX.bin"}
+  postFixup = ''
+    wrapProgram $out/bin/hashcat --prefix LD_LIBRARY_PATH : ${ocl-icd}/lib
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "Fast password cracker";
-    homepage    = "http://hashcat.net/hashcat/";
-    license     = stdenv.lib.licenses.unfreeRedistributable;
-    platforms   = stdenv.lib.platforms.linux;
-    maintainers = [ stdenv.lib.maintainers.thoughtpolice ];
+    homepage    = https://hashcat.net/hashcat/;
+    license     = licenses.mit;
+    platforms   = platforms.linux;
+    maintainers = with maintainers; [ kierdavis zimbatm ];
   };
 }

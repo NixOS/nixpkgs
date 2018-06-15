@@ -2,7 +2,7 @@
 # small subset of Nixpkgs, mostly useful for servers that need fast
 # security updates.
 
-{ nixpkgs ? { outPath = ./..; revCount = 56789; shortRev = "gfedcba"; }
+{ nixpkgs ? { outPath = (import ../lib).cleanSource ./..; revCount = 56789; shortRev = "gfedcba"; }
 , stableBranch ? false
 , supportedSystems ? [ "x86_64-linux" ] # no i686-linux
 }:
@@ -31,7 +31,8 @@ in rec {
     inherit (nixos') channel manual iso_minimal dummy;
     tests = {
       inherit (nixos'.tests)
-        containers
+        containers-imperative
+        containers-ipv4
         firewall
         ipv6
         login
@@ -39,6 +40,8 @@ in rec {
         nat
         nfs3
         openssh
+        php-pcre
+        predictable-interface-names
         proxy
         simple;
       installer = {
@@ -47,13 +50,16 @@ in rec {
           separateBoot
           simple;
       };
+      boot = {
+        inherit (nixos'.tests.boot)
+          biosCdrom;
+      };
     };
   };
 
   nixpkgs = {
     inherit (nixpkgs')
-      apacheHttpd_2_2
-      apacheHttpd_2_4
+      apacheHttpd
       cmake
       cryptsetup
       emacs
@@ -62,14 +68,12 @@ in rec {
       imagemagick
       jdk
       linux
-      mysql51
-      mysql55
+      mysql
       nginx
       nodejs
       openssh
       php
-      postgresql92
-      postgresql93
+      postgresql
       python
       rsyslog
       stdenv

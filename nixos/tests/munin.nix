@@ -4,7 +4,7 @@
 import ./make-test.nix ({ pkgs, ...} : {
   name = "munin";
   meta = with pkgs.stdenv.lib.maintainers; {
-    maintainers = [ iElectric eelco chaoflow ];
+    maintainers = [ domenkozar eelco chaoflow ];
   };
 
   nodes = {
@@ -29,6 +29,7 @@ import ./make-test.nix ({ pkgs, ...} : {
     startAll;
 
     $one->waitForUnit("munin-node.service");
+    $one->succeed('systemctl start munin-cron');
     $one->waitForFile("/var/lib/munin/one/one-uptime-uptime-g.rrd");
     $one->waitForFile("/var/www/munin/one/index.html");
   '';

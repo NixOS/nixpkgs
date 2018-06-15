@@ -1,25 +1,31 @@
-{ stdenv, fetchurl, python, pythonPackages, cdparanoia, cdrdao
-, pygobject, gst_python, gst_plugins_base, gst_plugins_good
-, setuptools, utillinux, makeWrapper, substituteAll }:
+{ stdenv, fetchgit, pythonPackages, cdparanoia, cdrdao
+, gst-python, gst-plugins-base, gst-plugins-good
+, utillinux, makeWrapper, substituteAll, autoreconfHook }:
 
-stdenv.mkDerivation rec {
+let
+  inherit (pythonPackages) python;
+in stdenv.mkDerivation rec {
   name = "morituri-${version}";
-  version = "0.2.3";
+  version = "0.2.3.20151109";
   namePrefix = "";
 
-  src = fetchurl {
-    url = "http://thomas.apestaart.org/download/morituri/${name}.tar.bz2";
-    sha256 = "1b30bs1y8azl04izsrl01gw9ys0lhzkn5afxi4p8qbiri2h4v210";
+  src = fetchgit {
+    url = "https://github.com/thomasvs/morituri.git";
+    fetchSubmodules = true;
+    rev = "135b2f7bf27721177e3aeb1d26403f1b29116599";
+    sha256 = "1sl5y5j3gdbynf2v0gf9dwd2hzawj8lm8ywadid7qm34yn8lx12k";
   };
 
-  pythonPath = [
-    pygobject gst_python pythonPackages.musicbrainzngs
-    pythonPackages.pycdio pythonPackages.pyxdg setuptools
+  pythonPath = with pythonPackages; [
+    pygobject2 gst-python musicbrainzngs
+    pycdio pyxdg setuptools
+    CDDB
   ];
 
+  nativeBuildInputs = [ autoreconfHook ];
   buildInputs = [
     python cdparanoia cdrdao utillinux makeWrapper
-    gst_plugins_base gst_plugins_good
+    gst-plugins-base gst-plugins-good
   ] ++ pythonPath;
 
   patches = [
@@ -44,5 +50,6 @@ stdenv.mkDerivation rec {
     description = "A CD ripper aiming for accuracy over speed";
     maintainers = with maintainers; [ rycee jgeerds ];
     license = licenses.gpl3Plus;
+    platforms = platforms.linux;
   };
 }

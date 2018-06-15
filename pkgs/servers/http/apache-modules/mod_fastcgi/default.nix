@@ -20,11 +20,11 @@ stdenv.mkDerivation rec {
 
   preBuild = ''
     cp Makefile.AP2 Makefile
-    makeFlags="top_dir=${apacheHttpd} prefix=$out"
+    makeFlags="top_dir=${apacheHttpd.dev}/share prefix=$out"
   '';
 
   meta = {
-    homepage = "http://www.fastcgi.com/";
+    homepage = http://www.fastcgi.com/;
     description = "Provide support for the FastCGI protocol";
 
     longDescription = ''
@@ -39,6 +39,6 @@ stdenv.mkDerivation rec {
     '';
 
     platforms = stdenv.lib.platforms.linux;
-    maintainers = [ stdenv.lib.maintainers.simons ];
+    maintainers = [ stdenv.lib.maintainers.peti ];
   };
 }

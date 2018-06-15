@@ -1,0 +1,22 @@
+--- webkitgtk-2.4.9-orig/Source/WebCore/plugins/PluginView.cpp	2016-02-02 13:23:23.000000000 -0500
++++ webkitgtk-2.4.9/Source/WebCore/plugins/PluginView.cpp	2016-02-02 18:28:07.000000000 -0500
+@@ -839,7 +839,7 @@
+ #if defined(XP_MACOSX)
+     , m_contextRef(0)
+ #endif
+-#if defined(XP_UNIX) && ENABLE(NETSCAPE_PLUGIN_API)
++#if defined(X11) && ENABLE(NETSCAPE_PLUGIN_API)
+     , m_hasPendingGeometryChange(true)
+     , m_drawable(0)
+     , m_visual(0)
+--- webkitgtk-2.4.9-orig/Source/WebCore/plugins/PluginView.h	2016-02-02 13:23:23.000000000 -0500
++++ webkitgtk-2.4.9/Source/WebCore/plugins/PluginView.h	2016-02-02 18:26:37.000000000 -0500
+@@ -378,7 +378,7 @@
+         void setNPWindowIfNeeded();
+ #endif
+ 
+-#if defined(XP_UNIX) && ENABLE(NETSCAPE_PLUGIN_API)
++#if PLATFORM(X11) && ENABLE(NETSCAPE_PLUGIN_API)
+         bool m_hasPendingGeometryChange;
+         Pixmap m_drawable;
+         Visual* m_visual;

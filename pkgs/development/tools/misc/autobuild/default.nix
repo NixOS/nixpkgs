@@ -12,11 +12,6 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  postInstall = ''
-    wrapProgram $out/bin/ab{put,build}-sourceforge \
-      --prefix PATH ":" "${openssh}/bin:${rsync}/bin"
-  '';
-
   meta = {
     description = "Continuous integration tool";
 

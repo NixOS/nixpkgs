@@ -1,28 +1,37 @@
-{ stdenv, fetchurl, ncurses, ocamlPackages, graphviz
-, ltl2ba, coq, alt-ergo, why3 }:
+{ stdenv, fetchurl, makeWrapper, ncurses, ocamlPackages, graphviz
+, ltl2ba, coq, alt-ergo, why3, autoconf
+}:
+
+let
+  mkocamlpath = p: "${p}/lib/ocaml/${ocamlPackages.ocaml.version}/site-lib";
+  ocamlpath = "${mkocamlpath ocamlPackages.apron}:${mkocamlpath ocamlPackages.mlgmpidl}";
+in
 
 stdenv.mkDerivation rec {
   name    = "frama-c-${version}";
-  version = "20150201";
-  slang   = "Sodium";
+  version = "20171101";
+  slang   = "Sulfur";
 
   src = fetchurl {
     url    = "http://frama-c.com/download/frama-c-${slang}-${version}.tar.gz";
-    sha256 = "0zask160vj8bxgc07dzxj5hqbdp6gz5g00j6za5397961imxhxaq";
+    sha256 = "1vwjfqmm1r36gkybsy3a7m89q5zicf4rnz5vlsn9imnpjpl9gjw1";
   };
 
   why2 = fetchurl {
-    url    = "http://why.lri.fr/download/why-2.34.tar.gz";
-    sha256 = "1335bhq9v3h46m8aba2c5myi9ghm87q41in0m15xvdrwq5big1jg";
+    url    = "http://why.lri.fr/download/why-2.39.tar.gz";
+    sha256 = "0nf17jl00s7q9z8gkbamnf7mglvxqrm3967c17ic4c9xz8g125a8";
   };
+
+  nativeBuildInputs = [ autoconf makeWrapper ];
 
   buildInputs = with ocamlPackages; [
     ncurses ocaml findlib alt-ergo ltl2ba ocamlgraph
-    lablgtk coq graphviz zarith why3 zarith
+    lablgtk coq graphviz zarith why3 apron camlp4
   ];
 
 
-  enableParallelBuilding = true;
+  # Experimentally, the build segfaults with high core counts
+  enableParallelBuilding = false;
 
   unpackPhase = ''
     tar xf $src
@@ -32,41 +41,33 @@ stdenv.mkDerivation rec {
   buildPhase = ''
     cd frama*
     ./configure --prefix=$out
-    make -j$NIX_BUILD_CORES
+    # It is not parallel safe
+    make
     make install
     cd ../why*
     FRAMAC=$out/bin/frama-c ./configure --prefix=$out
     make
     make install
+    for p in $out/bin/frama-c{,-gui};
+    do
+      wrapProgram $p --prefix OCAMLPATH ':' ${ocamlpath}
+    done
   '';
-
 
   # Enter frama-c directory before patching
   prePatch = ''cd frama*'';
+  patches = [ ./dynamic.diff ];
   postPatch = ''
     # strip absolute paths to /usr/bin
-    for file in ./configure ./share/Makefile.common ./src/*/configure; do
+    for file in ./configure ./share/Makefile.common ./src/*/configure; do #*/
       substituteInPlace $file  --replace '/usr/bin/' ""
     done
 
-    # find library paths
-    OCAMLGRAPH_HOME=`ocamlfind query ocamlgraph`
-    LABLGTK_HOME=`ocamlfind query lablgtk2`
-
-    # patch search paths
-    # ensure that the tests against the ocamlgraph version succeeds
-    # filter out the additional search paths from ocamldep
-    substituteInPlace ./configure \
-      --replace '$OCAMLLIB/ocamlgraph' "$OCAMLGRAPH_HOME" \
-      --replace '$OCAMLLIB/lablgtk2' "$LABLGTK_HOME" \
-      --replace '+ocamlgraph' "$OCAMLGRAPH_HOME" \
-    substituteInPlace ./Makefile --replace '+lablgtk2' "$LABLGTK_HOME" \
-      --replace '$(patsubst +%,.,$(INCLUDES) $(GUI_INCLUDES))' \
-                '$(patsubst /%,.,$(patsubst +%,.,$(INCLUDES) $(GUI_INCLUDES)))'
-
-    substituteInPlace ./src/aorai/aorai_register.ml --replace '"ltl2ba' '"${ltl2ba}/bin/ltl2ba'
+    substituteInPlace ./src/plugins/aorai/aorai_register.ml --replace '"ltl2ba' '"${ltl2ba}/bin/ltl2ba'
 
     cd ../why*
+
+    substituteInPlace ./Makefile.in --replace '-warn-error A' '-warn-error A-3'    
     substituteInPlace ./frama-c-plugin/Makefile --replace 'shell frama-c' "shell $out/bin/frama-c"
     substituteInPlace ./jc/jc_make.ml --replace ' why-dp '       " $out/bin/why-dp "
     substituteInPlace ./jc/jc_make.ml --replace "?= why@\n"      "?= $out/bin/why@\n"
@@ -82,10 +83,10 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    description = "Frama-C is an extensible tool for source-code analysis of C software";
+    description = "An extensible and collaborative platform dedicated to source-code analysis of C software";
     homepage    = http://frama-c.com/;
     license     = stdenv.lib.licenses.lgpl21;
     maintainers = with stdenv.lib.maintainers; [ thoughtpolice amiddelk ];
-    platforms   = stdenv.lib.platforms.linux;
+    platforms   = stdenv.lib.platforms.unix;
   };
 }

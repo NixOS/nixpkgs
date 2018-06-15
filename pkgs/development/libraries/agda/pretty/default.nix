@@ -16,10 +16,11 @@ agda.mkDerivation (self: rec {
   topSourceDirectories = [ "../$sourceRoot" ];
 
   meta = with stdenv.lib; {
-    homepage = "http://www.cse.chalmers.se/~nad/publications/danielsson-correct-pretty.html";
+    homepage = http://www.cse.chalmers.se/~nad/publications/danielsson-correct-pretty.html;
     description = "Correct-by-Construction Pretty-Printing";
     license = stdenv.lib.licenses.mit;
     platforms = stdenv.lib.platforms.unix;
     maintainers = with maintainers; [ fuuzetsu ];
+    broken = true; # 2018-04-11
   };
 })

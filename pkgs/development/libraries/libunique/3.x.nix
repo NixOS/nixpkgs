@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgconfig
-, dbus, dbus_glib, gtk3, gobjectIntrospection
+, dbus, dbus-glib, gtk3, gobjectIntrospection
 , gtkdoc, docbook_xml_dtd_45, docbook_xsl
 , libxslt, libxml2 }:
 
@@ -17,12 +17,14 @@ stdenv.mkDerivation rec {
     sha256 = "0f70lkw66v9cj72q0iw1s2546r6bwwcd8idcm3621fg2fgh2rw58";
   };
 
-  buildInputs = [ pkgconfig dbus dbus_glib gtk3 gobjectIntrospection gtkdoc docbook_xml_dtd_45 docbook_xsl libxslt libxml2 ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ dbus dbus-glib gtk3 gobjectIntrospection gtkdoc docbook_xml_dtd_45 docbook_xsl libxslt libxml2 ];
 
   meta = {
     homepage = https://wiki.gnome.org/Attic/LibUnique;
     description = "A library for writing single instance applications";
     license = licenses.lgpl21;
     maintainers = [ maintainers.AndersonTorres ];
+    platforms = stdenv.lib.platforms.linux;
   };
 }

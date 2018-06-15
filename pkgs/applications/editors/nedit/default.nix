@@ -1,18 +1,22 @@
 { stdenv, fetchurl, xlibsWrapper, motif, libXpm }:
 
-assert stdenv.isLinux;
-
 stdenv.mkDerivation rec {
-  name = "nedit-5.6";
+  name = "nedit-${version}";
+  version = "5.7";
   
   src = fetchurl {
     url = "mirror://sourceforge/nedit/nedit-source/${name}-src.tar.gz";
-    sha256 = "023hwpqc57mnzvg6p7jda6193afgjzxzajlhwhqvk3jq2kdv6zna";
+    sha256 = "0ym1zhjx9976rf2z5nr7dj4mjkxcicimhs686snjhdcpzxwsrndd";
   };
 
-  buildInputs = [ xlibsWrapper motif libXpm ];
+  hardeningDisable = [ "format" ];
 
-  buildFlags = if stdenv.isLinux then "linux" else "";
+  nativeBuildInputs = [ xlibsWrapper ];
+  buildInputs = [ motif libXpm ];
+
+  buildFlags = if stdenv.isLinux then "linux" else
+               # the linux config works fine on darwin too!
+               if stdenv.isDarwin then "linux" else "";
 
   NIX_CFLAGS_COMPILE="-DBUILD_UNTESTED_NEDIT -L${motif}/lib";
 
@@ -21,7 +25,8 @@ stdenv.mkDerivation rec {
     cp -p source/nedit source/nc $out/bin
   '';
 
-  meta = {
-    homepage = http://www.nedit.org;
+  meta = with stdenv.lib; {
+    homepage = https://sourceforge.net/projects/nedit;
+    platforms = with platforms; linux ++ darwin;
   };
 }

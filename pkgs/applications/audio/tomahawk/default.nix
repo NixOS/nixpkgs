@@ -1,19 +1,17 @@
 { stdenv, fetchurl, cmake, pkgconfig, attica, boost, gnutls, libechonest
-, liblastfm, lucenepp, phonon, phonon_backend_vlc, qca2, qjson, qt4
+, liblastfm, lucenepp, phonon, phonon-backend-vlc, qca2, qjson, qt4
 , qtkeychain, quazip, sparsehash, taglib, websocketpp, makeWrapper
 
 , enableXMPP      ? true,  libjreen     ? null
-, enableKDE       ? false, kdelibs      ? null
-, enableTelepathy ? false, telepathy_qt ? null
+, enableKDE       ? false, kdelibs4     ? null
+, enableTelepathy ? false, telepathy-qt ? null
 }:
 
 assert enableXMPP      -> libjreen     != null;
-assert enableKDE       -> kdelibs      != null;
-assert enableTelepathy -> telepathy_qt != null;
+assert enableKDE       -> kdelibs4     != null;
+assert enableTelepathy -> telepathy-qt != null;
 
-let
-  quazipQt4 = quazip.override { qt = qt4; };
-in stdenv.mkDerivation rec {
+stdenv.mkDerivation rec {
   name = "tomahawk-${version}";
   version = "0.8.4";
 
@@ -27,17 +25,18 @@ in stdenv.mkDerivation rec {
     "-DLUCENEPP_LIBRARY_DIR=${lucenepp}/lib"
   ];
 
+  nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
-    cmake pkgconfig attica boost gnutls libechonest liblastfm lucenepp phonon
-    qca2 qjson qt4 qtkeychain quazipQt4 sparsehash taglib websocketpp
+    cmake attica boost gnutls libechonest liblastfm lucenepp phonon
+    qca2 qjson qt4 qtkeychain quazip sparsehash taglib websocketpp
     makeWrapper
   ] ++ stdenv.lib.optional enableXMPP      libjreen
-    ++ stdenv.lib.optional enableKDE       kdelibs
-    ++ stdenv.lib.optional enableTelepathy telepathy_qt;
+    ++ stdenv.lib.optional enableKDE       kdelibs4
+    ++ stdenv.lib.optional enableTelepathy telepathy-qt;
 
   postInstall = let
     pluginPath = stdenv.lib.concatStringsSep ":" [
-      "${phonon_backend_vlc}/lib/kde4/plugins"
+      "${phonon-backend-vlc}/lib/kde4/plugins"
     ];
   in ''
     for i in "$out"/bin/*; do
@@ -48,10 +47,9 @@ in stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
-    description = "A multi-source music player";
-    homepage = "http://tomahawk-player.org/";
+    description = "A multi-source music player (unmaintained)";
+    homepage = http://tomahawk-player.org/;
     license = licenses.gpl3Plus;
     platforms = platforms.all;
-    maintainers = [ maintainers.aszlig ];
   };
 }

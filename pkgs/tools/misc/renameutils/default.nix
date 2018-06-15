@@ -15,5 +15,6 @@ stdenv.mkDerivation {
   meta = {
     homepage = http://www.nongnu.org/renameutils/;
     description = "A set of programs to make renaming of files faster";
+    platforms = stdenv.lib.platforms.unix;
   };
 }

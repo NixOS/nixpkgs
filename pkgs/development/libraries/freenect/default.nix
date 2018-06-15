@@ -1,23 +1,29 @@
-{ stdenv, fetchzip, cmake, libusb, pkgconfig, freeglut, mesa, libXi, libXmu }:
+{ stdenv, lib, fetchFromGitHub, cmake, libusb, pkgconfig, freeglut, libGLU_combined, libXi, libXmu
+, GLUT, Cocoa
+ }:
 
 stdenv.mkDerivation rec {
   name = "freenect-${version}";
-  version = "0.5.2";
+  version = "0.5.7";
 
-  src = fetchzip {
-    url = "https://github.com/OpenKinect/libfreenect/archive/v${version}.tar.gz";
-    sha256 = "04p4q19fkh97bn7kf0xsk6mrig2aj10i3s9z6hdrr70l6dfpf4w9";
+  src = fetchFromGitHub {
+    owner = "OpenKinect";
+    repo = "libfreenect";
+    rev = "v${version}";
+    sha256 = "0vnc7z2avckh4mccqq6alsd2z7xvsh3kaslc5b0gnfxw0j269gl6";
   };
 
-  buildInputs = [ libusb freeglut mesa libXi libXmu ];
+  buildInputs = [ libusb freeglut libGLU_combined libXi libXmu ]
+    ++ lib.optionals stdenv.isDarwin [ GLUT Cocoa ];
+
   nativeBuildInputs = [ cmake pkgconfig ];
 
   meta = {
-    description = "Drivers and libraries for the Xbox Kinect device on Windows, Linux, and OS X";
+    description = "Drivers and libraries for the Xbox Kinect device on Windows, Linux, and macOS";
     inherit version;
     homepage = http://openkinect.org;
-    license = with stdenv.lib.licenses; [ gpl2 asl20 ];
-    maintainers = with stdenv.lib.maintainers; [ bennofs ];
-    platforms = stdenv.lib.platforms.linux;
+    license = with lib.licenses; [ gpl2 asl20 ];
+    maintainers = with lib.maintainers; [ bennofs ];
+    platforms = with lib.platforms; linux ++ darwin ;
   };
 }

@@ -1,4 +1,4 @@
-{stdenv, fetchurl, cabextract}:
+{ stdenv, fetchurl, cabextract }:
 
 let
 
@@ -32,7 +32,7 @@ stdenv.mkDerivation {
     inherit sha256;
   }) fonts;
 
-  buildInputs = [cabextract];
+  nativeBuildInputs = [cabextract];
 
   buildCommand = ''
     for i in $exes; do
@@ -59,7 +59,15 @@ stdenv.mkDerivation {
     done
   '';
 
-  meta = {
+  outputHashAlgo = "sha256";
+  outputHashMode = "recursive";
+  outputHash = "0baadsrgpqj15fgjmcn0aim0k0nk7mvivcxinw1zwg61kkcwhalx";
+
+  meta = with stdenv.lib; {
+    homepage = http://corefonts.sourceforge.net/;
+    description = "Microsoft's TrueType core fonts for the Web";
+    platforms = platforms.all;
+    license = licenses.unfreeRedistributable;
     # Set a non-zero priority to allow easy overriding of the
     # fontconfig configuration files.
     priority = 5;

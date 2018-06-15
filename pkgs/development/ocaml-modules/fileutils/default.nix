@@ -1,14 +1,14 @@
-{ stdenv, fetchurl, ocaml, findlib, ounit }:
+{ stdenv, fetchurl, ocaml, findlib, ocamlbuild, ounit }:
 
 stdenv.mkDerivation {
-  name = "ocaml-fileutils-0.5.0";
+  name = "ocaml${ocaml.version}-fileutils-0.5.3";
 
   src = fetchurl {
-    url = https://forge.ocamlcore.org/frs/download.php/1531/ocaml-fileutils-0.5.0.tar.gz;
-    sha256 = "0xs96nlrrm335mcsgsxnqzspiqyfn26b0jjxm72br7c7ax534n47";
+    url = https://forge.ocamlcore.org/frs/download.php/1728/ocaml-fileutils-0.5.3.tar.gz;
+    sha256 = "1rc4cqlvdhbs55i85zfbfhz938fsy4fj6kwlkfm3ra7bpwn8bmpd";
   };
 
-  buildInputs = [ ocaml findlib ounit ];
+  buildInputs = [ ocaml findlib ocamlbuild ounit ];
 
   configureFlags = "--enable-tests";
   doCheck = true;
@@ -20,7 +20,7 @@ stdenv.mkDerivation {
 
   meta = {
     homepage = https://forge.ocamlcore.org/projects/ocaml-fileutils/;
-    platforms = ocaml.meta.platforms;
+    platforms = ocaml.meta.platforms or [];
     description = "Library to provide pure OCaml functions to manipulate real file (POSIX like) and filename";
     license = stdenv.lib.licenses.lgpl21Plus;
     maintainers = with stdenv.lib.maintainers; [ vbgl ];

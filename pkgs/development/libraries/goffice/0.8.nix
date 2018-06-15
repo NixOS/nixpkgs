@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, pkgconfig, glib, gtk, libglade, bzip2
+{ fetchurl, stdenv, pkgconfig, glib, gtk2, libglade, bzip2
 , pango, libgsf, libxml2, libart, intltool, gettext
 , cairo, gconf, libgnomeui, pcre, goffice/*just meta*/ }:
 
@@ -13,14 +13,15 @@ stdenv.mkDerivation rec {
   # fix linking error: undefined reference to pcre_info
   patches = [ ./pcre_info.patch ]; # inspired by https://bugs.php.net/bug.php?id=60986
 
+  nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
-    pkgconfig libglade bzip2 libart intltool gettext
+    libglade bzip2 libart intltool gettext
     gconf libgnomeui pcre
   ];
 
   propagatedBuildInputs = [
     # All these are in the "Requires:" field of `libgoffice-0.6.pc'.
-    glib libgsf libxml2 gtk libglade libart cairo pango
+    glib libgsf libxml2 gtk2 libglade libart cairo pango
   ];
 
   postInstall =

@@ -16,8 +16,9 @@ stdenv.mkDerivation {
 
   meta = {
     description = "Linux DVB API applications and utilities";
-    homepage = http://linuxtv.org/;
+    homepage = https://linuxtv.org/;
     platforms = stdenv.lib.platforms.linux;
     license = stdenv.lib.licenses.gpl2;
+    broken = true; # 2018-04-10
   };
 }

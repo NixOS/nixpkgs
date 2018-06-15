@@ -1,4 +1,5 @@
-#!/bin/sh
+#! /usr/bin/env nix-shell
+#! nix-shell -i bash --pure -p androidsdk curl libxslt
 
 # this shows a list of available xmls
 android list sdk | grep 'Parse XML:' | cut -f8- -d\  # | xargs -n 1 curl -O
@@ -12,3 +13,4 @@ curl -o sys-img.xml       https://dl.google.com/android/repository/sys-img/andro
 ./generate-addons.sh
 ./generate-platforms.sh
 ./generate-sysimages.sh
+./generate-sources.sh

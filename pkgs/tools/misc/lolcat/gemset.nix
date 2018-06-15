@@ -1,27 +1,35 @@
 {
-  "lolcat" = {
-    version = "42.1.0";
+  lolcat = {
+    dependencies = ["manpages" "paint" "trollop"];
     source = {
+      remotes = ["http://rubygems.org"];
+      sha256 = "1z0j354sj2qm2srgz3i28s347fwylvv1j614806cr33zcd1j4mwp";
       type = "gem";
-      sha256 = "1jp0g7k958dg709dm1qs7nr8dmi4vlgvmcvqcr1zhk8ygx89rwgc";
     };
-    dependencies = [
-      "paint"
-      "trollop"
-    ];
+    version = "99.9.11";
   };
-  "paint" = {
-    version = "0.8.7";
+  manpages = {
     source = {
+      remotes = ["http://rubygems.org"];
+      sha256 = "11p6ilnfda6af15ks3xiz2pr0hkvdvadnk1xm4ahqlf84dld3fnd";
       type = "gem";
-      sha256 = "0nl1x0190d44bfczlxdy16gxsvm95y14kxv3k9n92h9ap2zvdyd8";
     };
+    version = "0.6.1";
   };
-  "trollop" = {
-    version = "1.16.2";
+  paint = {
     source = {
+      remotes = ["http://rubygems.org"];
+      sha256 = "1gnh9cihc84w4xbw51pg15crjvhblbq6nkzljrp7kmn3434nsg0d";
       type = "gem";
-      sha256 = "0frrp90dw266h3kf9g925dppir9l7p8jxknw6dn5nz6fa6c4g5lg";
     };
+    version = "2.0.1";
+  };
+  trollop = {
+    source = {
+      remotes = ["http://rubygems.org"];
+      sha256 = "0415y63df86sqj43c0l82and65ia5h64if7n0znkbrmi6y0jwhl8";
+      type = "gem";
+    };
+    version = "2.1.2";
   };
 }

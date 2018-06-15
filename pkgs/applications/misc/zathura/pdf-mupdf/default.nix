@@ -1,32 +1,35 @@
-{ stdenv, lib, fetchgit, pkgconfig, zathura_core, gtk, girara, mupdf, openssl, openjpeg, libjpeg, jbig2dec }:
+{ stdenv, lib, meson, ninja, fetchurl, pkgconfig, zathura_core, cairo,
+gtk-mac-integration, girara, mupdf, openssl , libjpeg, jbig2dec,
+openjpeg, fetchpatch }:
 
 stdenv.mkDerivation rec {
-  version = "0.2.7";
+  version = "0.3.3";
   name = "zathura-pdf-mupdf-${version}";
 
-  src = fetchgit {
-    url = "https://git.pwmt.org/zathura-pdf-mupdf.git";
-    rev = "99bff723291f5aa2558e5c8b475f496025105f4a";
-    sha256 = "14mfp116a8dmazss3dcipvjs6dclazp36vsbcc53lr8lal5ccfnf";
+  src = fetchurl {
+    url = "https://pwmt.org/projects/zathura-pdf-mupdf/download/${name}.tar.xz";
+    sha256 = "1zbdqimav4wfgimpy3nfzl10qj7vyv23rdy2z5z7z93jwbp2rc2j";
   };
 
-  buildInputs = [ pkgconfig zathura_core gtk girara openssl mupdf openjpeg libjpeg jbig2dec ];
+  nativeBuildInputs = [ meson ninja pkgconfig ];
 
-  makeFlags = "PREFIX=$(out) PLUGINDIR=$(out)/lib";
-
-  patches = [
-    ./config.patch
+  buildInputs = [
+    zathura_core girara mupdf cairo
+  ] ++ stdenv.lib.optional stdenv.isDarwin [
+    gtk-mac-integration
   ];
 
+  PKG_CONFIG_ZATHURA_PLUGINDIR= "lib/zathura";
+
   meta = with lib; {
-    homepage = http://pwmt.org/projects/zathura/;
+    homepage = https://pwmt.org/projects/zathura-pdf-mupdf/;
     description = "A zathura PDF plugin (mupdf)";
     longDescription = ''
       The zathura-pdf-mupdf plugin adds PDF support to zathura by
       using the mupdf rendering library.
     '';
     license = licenses.zlib;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
     maintainers = with maintainers; [ cstrahan ];
   };
 }

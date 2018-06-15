@@ -1,66 +1,51 @@
-{ stdenv, fetchFromGitHub, fetchpatch, makeWrapper, pandoc
-, coreutils, iptables, nettools, openssh, procps,  pythonPackages }:
-  
-let version = "0.71"; in
-stdenv.mkDerivation rec {
-  name = "sshuttle-${version}";
+{ stdenv, python3Packages, fetchurl, makeWrapper, pandoc
+, coreutils, iptables, nettools, openssh, procps, fetchpatch }:
 
-  src = fetchFromGitHub {
-    sha256 = "0yr8nih97jg6azfj3k7064lfbh3g36l6vwyjlngl4ph6mgcki1cm";
-    rev = name;
-    repo = "sshuttle";
-    owner = "sshuttle";
+python3Packages.buildPythonApplication rec {
+  name = "sshuttle-${version}";
+  version = "0.78.3";
+
+  src = fetchurl {
+    sha256 = "12xyq5h77b57cnkljdk8qyjxzys512b73019s20x6ck5brj1m8wa";
+    url = "mirror://pypi/s/sshuttle/${name}.tar.gz";
   };
 
   patches = [
+    ./sudo.patch
     (fetchpatch {
-      sha256 = "1yrjyvdz6k6zk020dmbagf8w49w8vhfbzgfpsq9jqdh2hbykv3m3";
-      url = https://github.com/sshuttle/sshuttle/commit/3cf5002b62650c26a50e18af8d8c5c91d754bab9.patch;
+      url = "https://github.com/sshuttle/sshuttle/commit/91aa6ff625f7c89a19e6f8702425cfead44a146f.patch";
+      sha256 = "0sqcc6kj53wlas2d3klbyilhns6vakzwbbp8y7j9wlmbnc530pks";
     })
+    # fix macos patch
     (fetchpatch {
-      sha256 = "091gg28cnmx200q46bcnxpp9ih9p5qlq0r3bxfm0f4qalg8rmp2g";
-      url = https://github.com/sshuttle/sshuttle/commit/d70b5f2b89e593506834cf8ea10785d96c801dfc.patch;
-    })
-    (fetchpatch {
-      sha256 = "17l9h8clqlbyxdkssavxqpb902j7b3yabrrdalybfpkhj69x8ghk";
-      url = https://github.com/sshuttle/sshuttle/commit/a38963301e9c29fbe3232f0a41ea080b642c5ad2.patch;
+      url = "https://github.com/sshuttle/sshuttle/commit/884bd6deb0b699a5648bb1c7bdfbc7be8ea0e7df.patch";
+      sha256 = "1nn0wx0rckxl9yzw9dxjji44zw4xqz7ws4qwjdvfn48w1f786lmz";
     })
   ];
 
-  nativeBuildInputs = [ makeWrapper pandoc ];
+  nativeBuildInputs = [ makeWrapper python3Packages.setuptools_scm ] ++ stdenv.lib.optional (stdenv.system != "i686-linux") pandoc;
   buildInputs =
-    [ coreutils iptables nettools openssh procps pythonPackages.python ];
-  pythonPaths = with pythonPackages; [ PyXAPI ];
+    [ coreutils openssh procps nettools ]
+    ++ stdenv.lib.optionals stdenv.isLinux [ iptables ];
 
-  preConfigure = ''
-    cd src
-  '';
+  checkInputs = with python3Packages; [ mock pytest pytestrunner ];
 
-  installPhase = let
+  postInstall = let
     mapPath = f: x: stdenv.lib.concatStringsSep ":" (map f x);
   in ''
-    mkdir -p $out/share/sshuttle
-    cp -R sshuttle *.py compat $out/share/sshuttle
-
-    mkdir -p $out/bin
-    ln -s $out/share/sshuttle/sshuttle $out/bin
-    wrapProgram $out/bin/sshuttle \
-      --prefix PATH : "${mapPath (x: "${x}/bin") buildInputs}" \
-      --prefix PYTHONPATH : "${mapPath (x: "$(toPythonPath ${x})") pythonPaths}"
-
-    install -Dm644 sshuttle.8 $out/share/man/man8/sshuttle.8
+  wrapProgram $out/bin/sshuttle \
+    --prefix PATH : "${mapPath (x: "${x}/bin") buildInputs}" \
   '';
-  
+
   meta = with stdenv.lib; {
-    inherit version;
-    inherit (src.meta) homepage;
+    homepage = https://github.com/sshuttle/sshuttle/;
     description = "Transparent proxy server that works as a poor man's VPN";
     longDescription = ''
       Forward connections over SSH, without requiring administrator access to the
       target network (though it does require Python 2 at both ends).
       Works with Linux and Mac OS and supports DNS tunneling.
     '';
-    maintainers = with maintainers; [ iElectric nckx ];
+    maintainers = with maintainers; [ domenkozar ];
     platforms = platforms.unix;
   };
 }

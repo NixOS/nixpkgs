@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, cmake, pkgconfig, pcre, zlib, sqlite }:
 
 stdenv.mkDerivation rec {
-  name = "faclon-${version}";
+  name = "falcon-${version}";
   version = "2013-09-19";
 
   src = fetchFromGitHub {
@@ -11,11 +11,13 @@ stdenv.mkDerivation rec {
     sha256 = "1x3gdcz1gqhi060ngqi0ghryf69v8bn50yrbzfad8bhblvhzzdlf";
   };
 
-  buildInputs = [ cmake pkgconfig pcre zlib sqlite ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ cmake pcre zlib sqlite ];
 
   meta = with stdenv.lib; {
     description = "Programming language with macros and syntax at once";
     license = licenses.gpl2;
     maintainers = with maintainers; [ pSub ];
+    platforms = with platforms; linux;
   };
 }

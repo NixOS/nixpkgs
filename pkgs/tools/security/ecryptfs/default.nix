@@ -1,22 +1,26 @@
-{ stdenv, fetchurl, pkgconfig, perl, utillinux, keyutils, nss, nspr, python, pam
+{ stdenv, fetchurl, pkgconfig, perl, utillinux, keyutils, nss, nspr, python2, pam
 , intltool, makeWrapper, coreutils, bash, gettext, cryptsetup, lvm2, rsync, which, lsof }:
 
 stdenv.mkDerivation rec {
   name = "ecryptfs-${version}";
-  version = "108";
+  version = "111";
 
   src = fetchurl {
     url = "http://launchpad.net/ecryptfs/trunk/${version}/+download/ecryptfs-utils_${version}.orig.tar.gz";
-    sha256 = "1pfpzc907m4qi5h2rxmkqq072c6g22pik2rilj4bl4qishd8p0sj";
+    sha256 = "0zwq19siiwf09h7lwa7n7mgmrr8cxifp45lmwgcfr8c1gviv6b0i";
   };
 
-  #TODO: replace wrapperDir below with from <nixos> config.security.wrapperDir;
+  # TODO: replace wrapperDir below with from <nixos> config.security.wrapperDir;
+  wrapperDir = "/run/wrappers/bin";
+
   postPatch = ''
     FILES="$(grep -r '/bin/sh' src/utils -l; find src -name \*.c)"
     for file in $FILES; do
       substituteInPlace "$file" \
-        --replace /sbin/mount.ecryptfs_private /var/setuid-wrappers/mount.ecryptfs_private \
-        --replace /sbin/umount.ecryptfs_private /var/setuid-wrappers/umount.ecryptfs_private \
+        --replace /bin/mount ${utillinux}/bin/mount \
+        --replace /bin/umount ${utillinux}/bin/umount \
+        --replace /sbin/mount.ecryptfs_private ${wrapperDir}/mount.ecryptfs_private \
+        --replace /sbin/umount.ecryptfs_private ${wrapperDir}/umount.ecryptfs_private \
         --replace /sbin/mount.ecryptfs $out/sbin/mount.ecryptfs \
         --replace /sbin/umount.ecryptfs $out/sbin/umount.ecryptfs \
         --replace /usr/bin/ecryptfs-rewrite-file $out/bin/ecryptfs-rewrite-file \
@@ -24,14 +28,13 @@ stdenv.mkDerivation rec {
         --replace /usr/bin/ecryptfs-setup-private $out/bin/ecryptfs-setup-private \
         --replace /sbin/cryptsetup ${cryptsetup}/sbin/cryptsetup \
         --replace /sbin/dmsetup ${lvm2}/sbin/dmsetup \
-        --replace /bin/mount ${utillinux}/bin/mount \
-        --replace /bin/umount ${utillinux}/bin/umount \
-        --replace /sbin/unix_chkpwd /var/setuid-wrappers/unix_chkpwd \
+        --replace /sbin/unix_chkpwd ${wrapperDir}/unix_chkpwd \
         --replace /bin/bash ${bash}/bin/bash
     done
   '';
 
-  buildInputs = [ pkgconfig perl nss nspr python pam intltool makeWrapper ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ perl nss nspr python2 pam intltool makeWrapper ];
   propagatedBuildInputs = [ coreutils gettext cryptsetup lvm2 rsync keyutils which ];
 
   postInstall = ''
@@ -50,8 +53,8 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Enterprise-class stacked cryptographic filesystem";
-    license = licenses.gpl2Plus;
-    maintainers = [ maintainers.obadz ];
-    platforms = platforms.linux;
+    license     = licenses.gpl2Plus;
+    maintainers = with maintainers; [ obadz ];
+    platforms   = platforms.linux;
   };
 }

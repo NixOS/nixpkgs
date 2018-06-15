@@ -1,23 +1,28 @@
 { stdenv, fetchFromGitHub, asciidoc, dbus, docbook_xml_dtd_45,
-  docbook_xml_xslt, libconfig, libdrm, libxml2, libxslt, mesa, pcre,
+  docbook_xml_xslt, libconfig, libdrm, libxml2, libxslt, libGLU_combined, pcre,
   pkgconfig, libXcomposite, libXdamage, libXext, libXfixes, libXinerama,
-  libXrandr, libXrender }:
+  libXrandr, libXrender, xwininfo }:
 
-stdenv.mkDerivation {
-  name = "compton-git-2015-04-20";
+stdenv.mkDerivation rec {
+  name = "compton-git-${version}";
+  version = "2018-05-21";
 
   src = fetchFromGitHub {
-    owner  = "chjj";
+    owner  = "yshui";
     repo   = "compton";
-    rev    = "b1889c1245e6f47eedfae6063100d5a16f584e2b";
-    sha256 = "0brnbidxi7wg08yiwgnijzcyqv5lnkd74xzfymvb0i7pgy465vaf";
+    rev    = "9b24550814b7c69065f90039b0a5d0a2281b9f81";
+    sha256 = "09nn0q9lgv59chfxljips0n8vnwwxi1yz6hmcsiggsl3zvpabpxl";
   };
 
-  buildInputs = [
+  nativeBuildInputs = [
     asciidoc
-    dbus
     docbook_xml_dtd_45
     docbook_xml_xslt
+    pkgconfig
+  ];
+
+  buildInputs = [
+    dbus
     libXcomposite
     libXdamage
     libXext
@@ -29,26 +34,27 @@ stdenv.mkDerivation {
     libdrm
     libxml2
     libxslt
-    mesa
+    libGLU_combined
     pcre
-    pkgconfig
   ];
+
+  propagatedBuildInputs = [ xwininfo ];
 
   installFlags = "PREFIX=$(out)";
 
   meta = with stdenv.lib; {
     description =
       "A fork of XCompMgr, a sample compositing manager for X servers (git version)";
-    homepage = https://github.com/chjj/compton/;
+    homepage = https://github.com/yshui/compton/;
     license = licenses.mit;
     longDescription = ''
       A fork of XCompMgr, which is a sample compositing manager for X
       servers supporting the XFIXES, DAMAGE, RENDER, and COMPOSITE
-      extensions.  It enables basic eye-candy effects. This fork adds
+      extensions. It enables basic eye-candy effects. This fork adds
       additional features, such as additional effects, and a fork at a
       well-defined and proper place.
     '';
-    maintainer = maintainers.ertes;
+    maintainers = [ maintainers.ertes maintainers.twey ];
     platforms = platforms.linux;
   };
 }

@@ -6,7 +6,9 @@ in
 stdenv.mkDerivation rec {
   name = "prelink-${version}";
 
-  buildInputs = [ libelf ];
+  buildInputs = [
+    libelf stdenv.cc.libc (stdenv.lib.getOutput "static" stdenv.cc.libc)
+  ];
 
   src = fetchurl {
     url = "http://people.redhat.com/jakub/prelink/prelink-${version}.tar.bz2";
@@ -17,6 +19,6 @@ stdenv.mkDerivation rec {
     homepage = http://people.redhat.com/jakub/prelink/;
     license = "GPL";
     description = "ELF prelinking utility to speed up dynamic linking";
-    platforms = stdenv.lib.platforms.all;
+    platforms = stdenv.lib.platforms.linux;
   };
 }

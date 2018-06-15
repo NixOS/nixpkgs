@@ -1,38 +1,43 @@
 { stdenv, fetchurl, pkgconfig, intltool, glib, libxml2, gtk3, gtkvnc, gmp
-, libgcrypt, gnupg, cyrus_sasl, shared_mime_info, libvirt, libcap_ng, yajl
-, gsettings_desktop_schemas, makeWrapper
-, spiceSupport ? true, spice_gtk ? null, spice_protocol ? null, libcap ? null, gdbm ? null
+, libgcrypt, gnupg, cyrus_sasl, shared-mime-info, libvirt, yajl, xen
+, gsettings-desktop-schemas, makeWrapper, libvirt-glib, libcap_ng, numactl
+, libapparmor, gst_all_1
+, spiceSupport ? true
+, spice-gtk ? null, spice-protocol ? null, libcap ? null, gdbm ? null
 }:
 
 assert spiceSupport ->
-  spice_gtk != null && spice_protocol != null && libcap != null && gdbm != null;
+  spice-gtk != null && spice-protocol != null && libcap != null && gdbm != null;
 
 with stdenv.lib;
 
-let sourceInfo = rec {
-    baseName="virt-viewer";
-    version="2.0";
-    name="${baseName}-${version}";
-    url="http://virt-manager.org/download/sources/${baseName}/${name}.tar.gz";
-    hash="0dylhpk5rq9jz0l1cxs50q2s74z0wingygm1m33bmnmcnny87ig9";
-}; in
-
-stdenv.mkDerivation  {
-  inherit (sourceInfo) name version;
+stdenv.mkDerivation rec {
+  baseName = "virt-viewer";
+  version = "6.0";
+  name = "${baseName}-${version}";
 
   src = fetchurl {
-    url = sourceInfo.url;
-    sha256 = sourceInfo.hash;
+    url = "http://virt-manager.org/download/sources/${baseName}/${name}.tar.gz";
+    sha256 = "1chqrf658niivzfh85cbwkbv9vyg8sv1mv3i31vawkfsfdvvsdwh";
   };
 
-  buildInputs = [ 
-    pkgconfig intltool glib libxml2 gtk3 gtkvnc gmp libgcrypt gnupg cyrus_sasl
-    shared_mime_info libvirt libcap_ng yajl gsettings_desktop_schemas makeWrapper
-  ] ++ optionals spiceSupport [ spice_gtk spice_protocol libcap gdbm ];
+  nativeBuildInputs = [ pkgconfig intltool ];
+  buildInputs = [
+    glib libxml2 gtk3 gtkvnc gmp libgcrypt gnupg cyrus_sasl shared-mime-info
+    libvirt yajl gsettings-desktop-schemas makeWrapper libvirt-glib
+    libcap_ng numactl libapparmor
+  ] ++ optionals stdenv.isx86_64 [
+    xen
+  ] ++ optionals spiceSupport [
+    spice-gtk spice-protocol libcap gdbm
+    gst_all_1.gst-plugins-base gst_all_1.gst-plugins-good
+  ];
 
   postInstall = ''
     for f in "$out"/bin/*; do
-        wrapProgram "$f" --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH"
+        wrapProgram "$f" \
+          --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH" \
+          --prefix GST_PLUGIN_SYSTEM_PATH_1_0 : "$GST_PLUGIN_SYSTEM_PATH_1_0"
     done
   '';
 

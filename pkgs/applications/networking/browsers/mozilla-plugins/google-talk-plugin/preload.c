@@ -6,6 +6,7 @@
 #include <stdio.h>
 #include <stdarg.h>
 #include <stdlib.h>
+#include <string.h>
 #include <dlfcn.h>
 #include <sys/types.h>
 #include <sys/stat.h>

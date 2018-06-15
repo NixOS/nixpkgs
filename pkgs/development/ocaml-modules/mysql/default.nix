@@ -1,42 +1,39 @@
-{ stdenv, fetchurl, ocaml, findlib, mysql, camlp4 }:
+{ stdenv, fetchurl, fetchpatch, ocaml, findlib, mysql, openssl }:
 
 # TODO: la versione stabile da' un errore di compilazione dovuto a
 # qualche cambiamento negli header .h
 # TODO: compilazione di moduli dipendenti da zip, ssl, tcl, gtk, gtk2
 
 let
-  ocaml_version = (builtins.parseDrvName ocaml.name).version;
   pname = "ocaml-mysql";
-  version = "1.1.1";
 in
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   name = "${pname}-${version}";
+  version = "1.2.1";
 
   src = fetchurl {
-    url = "https://forge.ocamlcore.org/frs/download.php/870/${pname}-${version}.tar.gz";
-    sha256 = "f896fa101a05d81b85af8122fe1c2809008a5e5fdca00f9ceeb7eec356369e3a";
+    url = "http://ygrek.org.ua/p/release/ocaml-mysql/${name}.tar.gz";
+    sha256 = "06mb2bq7v37wn0lza61917zqgb4bsg1xxb73myjyn88p6khl6yl2";
   };
 
   configureFlags = [ 
      "--prefix=$out" 
-     "--libdir=$out/lib/ocaml/${ocaml_version}/site-lib/mysql"
+     "--libdir=$out/lib/ocaml/${ocaml.version}/site-lib/mysql"
   ];
 
-  buildInputs = [ocaml findlib mysql.lib camlp4 ];
+  buildInputs = [ ocaml findlib ];
 
   createFindlibDestdir = true;
 
-  propagatedBuildInputs = [ mysql.lib ];
+  propagatedBuildInputs = [ mysql.connector-c ];
 
-  preConfigure = ''
-    export LDFLAGS="-L${mysql.lib}/lib/mysql"
-  '';
-
-  buildPhase = ''
-    make
-    make opt
-  '';
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/ygrek/ocaml-mysql/compare/v1.2.1...d6d1b3b262ae2cf493ef56f1dd7afcf663a70a26.patch";
+      sha256 = "0018s2wcrvbsw9yaqmwq500qmikwffrgdp5xg9b8v7ixhd4gi6hn";
+    })
+  ];
 
   meta = {
     homepage = http://ocaml-mysql.forge.ocamlcore.org;

@@ -1,5 +1,5 @@
-{ stdenv, fetchurl, libxslt, glib, libxml2, telepathy_glib, avahi, libsoup
-, libuuid, openssl, sqlite, pkgconfigUpstream }:
+{ stdenv, fetchurl, libxslt, glib, libxml2, telepathy-glib, avahi, libsoup
+, libuuid, openssl, pcre, sqlite, pkgconfigUpstream }:
 
 stdenv.mkDerivation rec {
   pname = "telepathy-salut";
@@ -10,15 +10,17 @@ stdenv.mkDerivation rec {
     sha256 = "13k112vrr3zghzr03pnbqc1id65qvpj0sn0virlbf4dmr2511fbh";
   };
 
-  buildInputs = [ glib libxml2 telepathy_glib avahi libsoup libuuid openssl
-    sqlite ];
+  # pcre needed because https://github.com/NixOS/nixpkgs/pull/15046
+  buildInputs = [ glib libxml2 telepathy-glib avahi libsoup libuuid openssl
+    sqlite pcre telepathy-glib.python ];
 
   nativeBuildInputs = [ libxslt pkgconfigUpstream ];
 
   configureFlags = "--disable-avahi-tests";
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "Link-local XMPP connection manager for Telepathy";
-    platforms = stdenv.lib.platforms.gnu; # Random choice
+    platforms = platforms.gnu ++ platforms.linux; # Random choice
+    maintainers = [ maintainers.lethalman ];
   };
 }

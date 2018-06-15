@@ -1,15 +1,24 @@
-{ stdenv, fetchurl, m4, cxx ? true, withStatic ? true }:
+{ stdenv, fetchurl, m4, cxx ? true
+, buildPackages
+, withStatic ? false }:
 
-with { inherit (stdenv.lib) optional optionalString; };
+let inherit (stdenv.lib) optional optionalString; in
 
-stdenv.mkDerivation rec {
-  name = "gmp-6.0.0a";
+let self = stdenv.mkDerivation rec {
+  name = "gmp-6.1.2";
 
   src = fetchurl { # we need to use bz2, others aren't in bootstrapping stdenv
     urls = [ "mirror://gnu/gmp/${name}.tar.bz2" "ftp://ftp.gmplib.org/pub/${name}/${name}.tar.bz2" ];
-    sha256 = "1bwsfmf0vrx3rwl4xmi5jhhy3v1qx1xj0m7p9hb0fvcw9f09m3kz";
+    sha256 = "1clg7pbpk6qwxj5b2mw0pghzawp2qlm3jf9gdd8i6fl6yh2bnxaj";
   };
 
+  #outputs TODO: split $cxx due to libstdc++ dependency
+  # maybe let ghc use a version with *.so shared with rest of nixpkgs and *.a added
+  # - see #5855 for related discussion
+  outputs = [ "out" "dev" "info" ];
+  passthru.static = self.out;
+
+  depsBuildBuild = [ buildPackages.stdenv.cc ];
   nativeBuildInputs = [ m4 ];
 
   configureFlags =
@@ -18,29 +27,30 @@ stdenv.mkDerivation rec {
     # See <http://hydra.nixos.org/build/2760931>, for instance.
     #
     # no darwin because gmp uses ASM that clang doesn't like
-    optional (!stdenv.isSunOS) "--enable-fat"
+    optional (!stdenv.isSunOS && stdenv.hostPlatform.isx86) "--enable-fat"
     ++ (if cxx then [ "--enable-cxx"  ]
                else [ "--disable-cxx" ])
     ++ optional (cxx && stdenv.isDarwin) "CPPFLAGS=-fexceptions"
-    ++ optional stdenv.isDarwin "ABI=64"
+    ++ optional (stdenv.isDarwin && stdenv.is64bit) "ABI=64"
     ++ optional stdenv.is64bit "--with-pic"
+    ++ optional (with stdenv.hostPlatform; useAndroidPrebuilt || useiOSPrebuilt) "--disable-assembly"
     ;
 
   # The config.guess in GMP tries to runtime-detect various
   # ARM optimization flags via /proc/cpuinfo (and is also
   # broken on multicore CPUs). Avoid this impurity.
-  preConfigure = optionalString stdenv.isArm ''
+  preConfigure = optionalString stdenv.isAarch32 ''
       configureFlagsArray+=("--build=$(./configfsf.guess)")
     '';
 
-  doCheck = true;
+  doCheck = true; # not cross;
 
   dontDisableStatic = withStatic;
 
   enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
-    homepage = "http://gmplib.org/";
+    homepage = https://gmplib.org/;
     description = "GNU multiple precision arithmetic library";
     license = licenses.gpl3Plus;
 
@@ -67,6 +77,7 @@ stdenv.mkDerivation rec {
       '';
 
     platforms = platforms.all;
-    maintainers = [ maintainers.simons ];
+    maintainers = [ maintainers.peti maintainers.vrthra ];
   };
-}
+};
+  in self

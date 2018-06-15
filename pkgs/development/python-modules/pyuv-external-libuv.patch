@@ -1,27 +1,25 @@
 diff --git a/setup.py b/setup.py
-index ec0caac..2c1fdb6 100644
+index 5071c3b..4b4a176 100644
 --- a/setup.py
 +++ b/setup.py
-@@ -6,7 +6,6 @@ try:
+@@ -7,7 +7,6 @@ try:
      from setuptools import setup, Extension
  except ImportError:
      from distutils.core import setup, Extension
 -from setup_libuv import libuv_build_ext, libuv_sdist
- 
- 
- __version__ = "0.11.5"
-@@ -32,12 +31,11 @@ setup(name             = "pyuv",
+
+
+ def get_version():
+@@ -35,11 +34,10 @@ setup(name             = "pyuv",
            "Programming Language :: Python :: 3.3",
            "Programming Language :: Python :: 3.4"
        ],
 -      cmdclass     = {'build_ext': libuv_build_ext,
 -                      'sdist'    : libuv_sdist},
-       ext_modules  = [Extension('pyuv',
+       packages     = ['pyuv'],
+       ext_modules  = [Extension('pyuv._cpyuv',
                                  sources = ['src/pyuv.c'],
-+                                libraries = ['uv'],
-                                 define_macros=[('MODULE_VERSION', __version__),
--                                               ('LIBUV_REVISION', libuv_build_ext.libuv_revision)]
-+                                               ('LIBUV_REVISION', 'unknown')]
++                                libraries = ['uv']
                       )]
       )
- 
+

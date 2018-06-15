@@ -1,33 +1,32 @@
-{ mkDerivation, fetchurl, ghc, aeson, aeson-pretty, base, binary, bytestring
-, directory, filepath, HTF, HUnit, mtl, parsec, process, shelly
-, stdenv, text, transformers, unix, xdg-basedir
-, happy
+{ mkDerivation, fetchgit, aeson, aeson-pretty, base, bytestring, directory
+, filepath, hspec, hspec-core, HUnit, mtl, optparse-applicative
+, parsec, process, pureMD5, QuickCheck, shelly, stdenv, text
+, transformers, unix
 }:
-
-mkDerivation rec {
+mkDerivation {
   pname = "super-user-spark";
-  version = "0.1.0.0";
-
-  src = fetchurl {
-    url = "https://github.com/NorfairKing/super-user-spark/archive/v0.1.tar.gz";
-    sha256 = "90258cb2d38f35b03867fdf82dbd49500cdec04f3cf05d0eaa18592cb44fe13f";
+  version = "0.3.2.0-dev";
+  src = fetchgit {
+    url = "https://github.com/NorfairKing/super-user-spark";
+    sha256 = "0akyc51bghzkk8j75n0i8v8rrsklidwvljhx3aibxfbkqp33372g";
+    rev = "ab8635682d67842b9e6d909cf3c618014e4157f2";
   };
-
-  isLibrary = false;
+  isLibrary = true;
   isExecutable = true;
+  libraryHaskellDepends = [
+    aeson aeson-pretty base bytestring directory filepath mtl
+    optparse-applicative parsec process pureMD5 shelly text
+    transformers unix
+  ];
+  executableHaskellDepends = [ base ];
+  testHaskellDepends = [
+    aeson aeson-pretty base bytestring directory filepath hspec
+    hspec-core HUnit mtl optparse-applicative parsec process pureMD5
+    QuickCheck shelly text transformers unix
+  ];
   jailbreak = true;
-
-  buildDepends = [
-    aeson aeson-pretty base binary bytestring directory filepath HTF
-    mtl parsec process shelly text transformers unix xdg-basedir happy
-  ];
-  testDepends = [
-    aeson aeson-pretty base binary bytestring directory filepath HTF
-    HUnit mtl parsec process shelly text transformers unix xdg-basedir
-  ];
+  description = "Configure your dotfile deployment with a DSL";
   license = stdenv.lib.licenses.mit;
-  homepage = "https://github.com/NorfairKing/super-user-spark";
-  description = "A safe way to never worry about your beautifully configured system again";
-  platforms = ghc.meta.platforms;
+  homepage = https://github.com/NorfairKing/super-user-spark;
   maintainers = [ stdenv.lib.maintainers.badi ];
 }

@@ -1,41 +1,38 @@
-{ stdenv, fetchgit, go, Security }:
+{ stdenv, fetchgit, go, ronn, groff, utillinux, Security }:
 
 stdenv.mkDerivation rec {
   name = "hub-${version}";
-  version = "2.2.1";
+  version = "2.4.0";
 
   src = fetchgit {
     url = https://github.com/github/hub.git;
     rev = "refs/tags/v${version}";
-    sha256 = "1rklqm5b0n5rcbdsr6kvk24cw7dc505ylb1608fva7qman49vlls";
+    sha256 = "1lr6vg0zhg2air9bnzcl811g97jraxq05l3cs46wqqflwy57xpz2";
   };
 
 
-  buildInputs = [ go ] ++ stdenv.lib.optional stdenv.isDarwin Security;
-
-  phases = [ "unpackPhase" "buildPhase" "installPhase" ];
+  buildInputs = [ go ronn groff utillinux ]
+    ++ stdenv.lib.optional stdenv.isDarwin Security;
 
   buildPhase = ''
+    mkdir bin
+    ln -s ${ronn}/bin/ronn bin/ronn
+
     patchShebangs .
-    sh script/build
+    make all man-pages
   '';
 
   installPhase = ''
-    mkdir -p "$out/bin"
-    cp hub "$out/bin/"
-
-    mkdir -p "$out/share/man/man1"
-    cp "man/hub.1" "$out/share/man/man1/"
+    prefix=$out sh -x < script/install.sh
 
     mkdir -p "$out/share/zsh/site-functions"
     cp "etc/hub.zsh_completion" "$out/share/zsh/site-functions/_hub"
 
-# Broken: https://github.com/github/hub/issues/592
-#    mkdir -p "$out/etc/bash_completion.d"
-#    cp "etc/hub.bash_completion.sh" "$out/etc/bash_completion.d/"
+    mkdir -p "$out/etc/bash_completion.d"
+    cp "etc/hub.bash_completion.sh" "$out/etc/bash_completion.d/"
 
-# Should we also install provided git-hooks?
-# ?
+    # Should we also install provided git-hooks?
+    # And fish completion?
   '';
 
   meta = with stdenv.lib; {
@@ -44,5 +41,6 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     homepage = https://hub.github.com/;
     maintainers = with maintainers; [ the-kenny ];
+    platforms = with platforms; unix;
   };
 }

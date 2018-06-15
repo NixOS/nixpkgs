@@ -5,17 +5,50 @@ with lib;
 let
   cfg = config.services.dockerRegistry;
 
-in {
-  ###### interface
+  blobCache = if cfg.enableRedisCache
+    then "redis"
+    else "inmemory";
 
-  options.services.dockerRegistry = {
-    enable = mkOption {
-      description = "Whether to enable docker registry server.";
-      default = false;
-      type = types.bool;
+  registryConfig = {
+    version =  "0.1";
+    log.fields.service = "registry";
+    storage = {
+      cache.blobdescriptor = blobCache;
+      filesystem.rootdirectory = cfg.storagePath;
+      delete.enabled = cfg.enableDelete;
     };
+    http = {
+      addr = ":${builtins.toString cfg.port}";
+      headers.X-Content-Type-Options = ["nosniff"];
+    };
+    health.storagedriver = {
+      enabled = true;
+      interval = "10s";
+      threshold = 3;
+    };
+  };
 
-    host = mkOption {
+  registryConfig.redis = mkIf cfg.enableRedisCache {
+    addr = "${cfg.redisUrl}";
+    password = "${cfg.redisPassword}";
+    db = 0;
+    dialtimeout = "10ms";
+    readtimeout = "10ms";
+    writetimeout = "10ms";
+    pool = {
+      maxidle = 16;
+      maxactive = 64;
+      idletimeout = "300s";
+    };
+  };
+
+  configFile = pkgs.writeText "docker-registry-config.yml" (builtins.toJSON (registryConfig // cfg.extraConfig));
+
+in {
+  options.services.dockerRegistry = {
+    enable = mkEnableOption "Docker Registry";
+
+    listenAddress = mkOption {
       description = "Docker registry host or ip to bind to.";
       default = "127.0.0.1";
       type = types.str;
@@ -33,13 +66,45 @@ in {
       description = "Docker registry storage path.";
     };
 
+    enableDelete = mkOption {
+      type = types.bool;
+      default = false;
+      description = "Enable delete for manifests and blobs.";
+    };
+
+    enableRedisCache = mkEnableOption "redis as blob cache";
+
+    redisUrl = mkOption {
+      type = types.str;
+      default = "localhost:6379";
+      description = "Set redis host and port.";
+    };
+
+    redisPassword = mkOption {
+      type = types.str;
+      default = "";
+      description = "Set redis password.";
+    };
+
     extraConfig = mkOption {
       description = ''
-        Docker extra registry configuration. See
-        <link xlink:href="https://github.com/docker/docker-registry/blob/master/config/config_sample.yml"/>
+        Docker extra registry configuration via environment variables.
       '';
       default = {};
       type = types.attrsOf types.str;
+    };
+
+    enableGarbageCollect = mkEnableOption "garbage collect";
+
+    garbageCollectDates = mkOption {
+      default = "daily";
+      type = types.str;
+      description = ''
+        Specification (in the format described by
+        <citerefentry><refentrytitle>systemd.time</refentrytitle>
+        <manvolnum>7</manvolnum></citerefentry>) of the time at
+        which the garbage collect will occur.
+      '';
     };
   };
 
@@ -48,34 +113,35 @@ in {
       description = "Docker Container Registry";
       wantedBy = [ "multi-user.target" ];
       after = [ "network.target" ];
-
-      environment = {
-        REGISTRY_HOST = cfg.host;
-        REGISTRY_PORT = toString cfg.port;
-        GUNICORN_OPTS = "[--preload]"; # see https://github.com/docker/docker-registry#sqlalchemy
-        STORAGE_PATH = cfg.storagePath;
-      } // cfg.extraConfig;
+      script = ''
+        ${pkgs.docker-distribution}/bin/registry serve ${configFile}
+      '';
 
       serviceConfig = {
-        ExecStart = "${pkgs.pythonPackages.docker_registry}/bin/docker-registry";
         User = "docker-registry";
-        Group = "docker";
-        PermissionsStartOnly = true;
         WorkingDirectory = cfg.storagePath;
       };
-
-      postStart = ''
-        until ${pkgs.curl}/bin/curl -s -o /dev/null 'http://${cfg.host}:${toString cfg.port}/'; do
-          sleep 1;
-        done
-      '';
     };
 
-    users.extraGroups.docker.gid = mkDefault config.ids.gids.docker;
+    systemd.services.docker-registry-garbage-collect = {
+      description = "Run Garbage Collection for docker registry";
+
+      restartIfChanged = false;
+      unitConfig.X-StopOnRemoval = false;
+
+      serviceConfig.Type = "oneshot";
+
+      script = ''
+        ${pkgs.docker-distribution}/bin/registry garbage-collect ${configFile}
+        ${pkgs.systemd}/bin/systemctl restart docker-registry.service
+      '';
+
+      startAt = optional cfg.enableGarbageCollect cfg.garbageCollectDates;
+    };
+
     users.extraUsers.docker-registry = {
       createHome = true;
       home = cfg.storagePath;
-      uid = config.ids.uids.docker-registry;
     };
   };
 }

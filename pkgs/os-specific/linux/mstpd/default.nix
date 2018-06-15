@@ -1,22 +1,22 @@
-{ stdenv, fetchsvn }:
+{ stdenv, fetchFromGitHub, autoreconfHook }:
 
-stdenv.mkDerivation rec {
-  name = "mstpd-svn-${toString version}";
-  version = 61;
+stdenv.mkDerivation {
+  name = "mstpd-0.0.5.20171113";
 
-  src = fetchsvn {
-    url = "svn://svn.code.sf.net/p/mstpd/code/trunk";
-    rev = version;
-    sha256 = "0n5vqqqq8hk6iqdz100j9ps4zkz71vyl5qgz5bzjhayab2dyq1fd";
+  src = fetchFromGitHub {
+    owner = "mstpd";
+    repo = "mstpd";
+    rev = "2522c6eed201bce8dd81e1583f28748e9c552d0d";
+    sha256 = "0ckk386inwcx3776hf15w78hpw4db2rgv4zgf0i3zcylr83hhsr2";
   };
 
-  patches = [ ./fixes.patch ];
+  nativeBuildInputs = [ autoreconfHook ];
 
-  installFlags = [ "DESTDIR=\${out}" ];
+  installFlags = [ "DESTDIR=$(out)" ];
 
   meta = with stdenv.lib; {
     description = "Multiple Spanning Tree Protocol daemon";
-    homepage = http://sourceforge.net/projects/mstpd/;
+    homepage = https://sourceforge.net/projects/mstpd/;
     license = licenses.gpl2;
     platforms = platforms.linux;
     maintainers = with maintainers; [ wkennington ];

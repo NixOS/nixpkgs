@@ -2,15 +2,20 @@
 
 stdenv.mkDerivation rec {
   name = "usbredir-${version}";
-  version = "0.7";
+  version = "0.7.1";
 
   src = fetchurl {
     url = "http://spice-space.org/download/usbredir/${name}.tar.bz2";
-    sha256 = "1ah64271r83lvh8hrpkxzv0iwpga1wkrfkx4rkljpijx5dqs0qqa";
+    sha256 = "1wsnmk4wjpdhbn1zaxg6bmyxspcki2zgy0am9lk037rnl4krwzj0";
   };
 
-  buildInputs = [ pkgconfig libusb ];
+  NIX_CFLAGS_COMPILE = [ "-Wno-error" ];
+
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ libusb ];
   propagatedBuildInputs = [ libusb ];
+
+  outputs = [ "out" "dev" ];
 
   meta = with stdenv.lib; {
     description = "USB traffic redirection protocol";

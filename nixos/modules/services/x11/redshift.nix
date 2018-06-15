@@ -12,7 +12,6 @@ in {
     enable = mkOption {
       type = types.bool;
       default = false;
-      example = true;
       description = ''
         Enable Redshift to change your screen's colour temperature depending on
         the time of day.
@@ -20,16 +19,31 @@ in {
     };
 
     latitude = mkOption {
-      type = types.str;
+      type = types.nullOr types.str;
+      default = null;
       description = ''
-        Your current latitude.
+        Your current latitude, between
+        <literal>-90.0</literal> and <literal>90.0</literal>. Must be provided
+        along with longitude.
       '';
     };
 
     longitude = mkOption {
-      type = types.str;
+      type = types.nullOr types.str;
+      default = null;
       description = ''
-        Your current longitude.
+        Your current longitude, between
+        between <literal>-180.0</literal> and <literal>180.0</literal>. Must be
+        provided along with latitude.
+      '';
+    };
+
+    provider = mkOption {
+      type = types.enum [ "manual" "geoclue2" ];
+      default = "manual";
+      description = ''
+        The location provider to use for determining your location. If set to
+        <literal>manual</literal> you must also provide latitude/longitude.
       '';
     };
 
@@ -38,14 +52,16 @@ in {
         type = types.int;
         default = 5500;
         description = ''
-          Colour temperature to use during the day.
+          Colour temperature to use during the day, between
+          <literal>1000</literal> and <literal>25000</literal> K.
         '';
       };
       night = mkOption {
         type = types.int;
         default = 3700;
         description = ''
-          Colour temperature to use at night.
+          Colour temperature to use at night, between
+          <literal>1000</literal> and <literal>25000</literal> K.
         '';
       };
     };
@@ -72,6 +88,7 @@ in {
     package = mkOption {
       type = types.package;
       default = pkgs.redshift;
+      defaultText = "pkgs.redshift";
       description = ''
         redshift derivation to use.
       '';
@@ -89,20 +106,40 @@ in {
   };
 
   config = mkIf cfg.enable {
-    systemd.services.redshift = {
+    assertions = [ 
+      {
+        assertion = 
+          if cfg.provider == "manual"
+          then (cfg.latitude != null && cfg.longitude != null) 
+          else (cfg.latitude == null && cfg.longitude == null);
+        message = "Latitude and longitude must be provided together, and with provider set to null.";
+      }
+    ];
+
+    services.geoclue2.enable = mkIf (cfg.provider == "geoclue2") true;
+
+    systemd.user.services.redshift = 
+    let
+      providerString = 
+        if cfg.provider == "manual"
+        then "${cfg.latitude}:${cfg.longitude}"
+        else cfg.provider;
+    in
+    {
       description = "Redshift colour temperature adjuster";
-      requires = [ "display-manager.service" ];
-      after = [ "display-manager.service" ];
-      wantedBy = [ "graphical.target" ];
-      serviceConfig.ExecStart = ''
-        ${cfg.package}/bin/redshift \
-          -l ${cfg.latitude}:${cfg.longitude} \
-          -t ${toString cfg.temperature.day}:${toString cfg.temperature.night} \
-          -b ${toString cfg.brightness.day}:${toString cfg.brightness.night} \
-          ${lib.strings.concatStringsSep " " cfg.extraOptions}
-      '';
-      environment = { DISPLAY = ":0"; };
-      serviceConfig.Restart = "always";
+      wantedBy = [ "graphical-session.target" ];
+      partOf = [ "graphical-session.target" ];
+      serviceConfig = {
+        ExecStart = ''
+          ${cfg.package}/bin/redshift \
+            -l ${providerString} \
+            -t ${toString cfg.temperature.day}:${toString cfg.temperature.night} \
+            -b ${toString cfg.brightness.day}:${toString cfg.brightness.night} \
+            ${lib.strings.concatStringsSep " " cfg.extraOptions}
+        '';
+        RestartSec = 3;
+        Restart = "always";
+      };
     };
   };
 

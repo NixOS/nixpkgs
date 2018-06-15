@@ -16,12 +16,17 @@ in
 
 stdenv.mkDerivation rec {
   name = "x265-${version}";
-  version = "1.7";
+  version = "2.7";
 
   src = fetchurl {
-    url = "https://github.com/videolan/x265/archive/${version}.tar.gz";
-    sha256 = "18w3whmbjlalvysny51kdq9b228iwg3rdav4kmifazksvrm4yacq";
+    urls = [
+      "http://get.videolan.org/x265/x265_${version}.tar.gz"
+      "https://github.com/videolan/x265/archive/${version}.tar.gz"
+    ];
+    sha256 = "18llni1m8kfvdwy5bp950z6gyd0nijmvi3hzd6gd8vpy5yk5zrym";
   };
+
+  enableParallelBuilding = true;
 
   patchPhase = ''
     sed -i 's/unknown/${version}/g' source/cmake/version.cmake
@@ -42,6 +47,10 @@ stdenv.mkDerivation rec {
 
   preConfigure = ''
     cd source
+  '';
+
+  postInstall = ''
+    rm $out/lib/*.a
   '';
 
   nativeBuildInputs = [ cmake yasm ];

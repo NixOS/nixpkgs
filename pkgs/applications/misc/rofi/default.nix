@@ -1,28 +1,42 @@
-{ stdenv, fetchurl, autoconf, automake, pkgconfig
-, libX11, libXinerama, libXft, pango
-, i3Support ? false, i3
+{ stdenv, fetchurl, autoreconfHook, pkgconfig, libxkbcommon, pango, which, git
+, cairo, glib, libxcb, xcbutil, xcbutilwm, xcbutilxrm, libstartup_notification
+, bison, flex, librsvg, check
 }:
 
 stdenv.mkDerivation rec {
-  name = "rofi-${version}";
-  version = "0.15.8";
+  version = "1.5.1";
+  name = "rofi-unwrapped-${version}";
 
   src = fetchurl {
-    url = "https://github.com/DaveDavenport/rofi/archive/${version}.tar.gz";
-    sha256 = "1qhj8xrxfnzy16g577w0zxg1cy885rbqydlbbxgfk0dpjvq70lq6";
+    url = "https://github.com/DaveDavenport/rofi/releases/download/${version}/rofi-${version}.tar.gz";
+    sha256 = "1dc33zf33z38jcxb0lxpyd31waalpf6d4cd9z5f9m5qphdk1g679";
   };
 
-  buildInputs = [ autoconf automake pkgconfig libX11 libXinerama libXft pango
-                ] ++ stdenv.lib.optional i3Support i3;
+  # config.patch may be removed in the future - https://github.com/DaveDavenport/rofi/pull/781
+  patches = [ ./config.patch ];
 
   preConfigure = ''
-    autoreconf -vif
+    patchShebangs "script"
+    # root not present in build /etc/passwd
+    sed -i 's/~root/~nobody/g' test/helper-expand.c
   '';
 
-  meta = {
-      description = "Window switcher, run dialog and dmenu replacement";
-      homepage = https://davedavenport.github.io/rofi;
-      license = stdenv.lib.licenses.mit;
-      maintainers = [ stdenv.lib.maintainers.mbakke ];
+  postFixup = ''
+    substituteInPlace "$out"/bin/rofi-theme-selector \
+        --replace "%ROFIOUT%" "$out/share"
+  '';
+
+  nativeBuildInputs = [ autoreconfHook pkgconfig ];
+  buildInputs = [ libxkbcommon pango cairo git bison flex librsvg check
+    libstartup_notification libxcb xcbutil xcbutilwm xcbutilxrm which
+  ];
+  doCheck = false;
+
+  meta = with stdenv.lib; {
+    description = "Window switcher, run dialog and dmenu replacement";
+    homepage = https://davedavenport.github.io/rofi;
+    license = licenses.mit;
+    maintainers = with maintainers; [ mbakke garbas ma27 ];
+    platforms = with platforms; unix;
   };
 }

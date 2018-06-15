@@ -1,44 +1,47 @@
-{ stdenv, fetchFromGitHub, pkgconfig, libtoxcore, dbus, libvpx, libX11, openal, freetype, libv4l
-, libXrender, fontconfig, libXext, libXft }:
+{ stdenv, lib, fetchFromGitHub, check, cmake, pkgconfig
+, libtoxcore, filter-audio, dbus, libvpx, libX11, openal, freetype, libv4l
+, libXrender, fontconfig, libXext, libXft, utillinux, libsodium, libopus }:
 
-let
+stdenv.mkDerivation rec {
+  name = "utox-${version}";
 
-  filteraudio = stdenv.mkDerivation rec {
-    name = "filter_audio-20150128";
-
-    src = fetchFromGitHub {
-      owner = "irungentoo";
-      repo = "filter_audio";
-      rev = "76428a6cda";
-      sha256 = "0c4wp9a7dzbj9ykfkbsxrkkyy0nz7vyr5map3z7q8bmv9pjylbk9";
-    };
-
-    doCheck = false;
-
-    makeFlags = "PREFIX=$(out)";
-  };
-
-in stdenv.mkDerivation rec {
-  name = "utox-dev-20150130";
+  version = "0.17.0";
 
   src = fetchFromGitHub {
-    owner = "notsecure";
-    repo = "uTox";
-    rev = "cb7b8d09b08";
-    sha256 = "0vg9h07ipwyf7p54p43z9bcymy0skiyjbm7zvyjg7r5cvqxv1vpa";
+    owner  = "uTox";
+    repo   = "uTox";
+    rev    = "v${version}";
+    sha256 = "12wbq883il7ikldayh8hm0cjfrkp45vn05xx9s1jbfz6gmkidyar";
+    fetchSubmodules = true;
   };
 
-  buildInputs = [ pkgconfig libtoxcore dbus libvpx libX11 openal freetype
-                  libv4l libXrender fontconfig libXext libXft filteraudio ];
+  buildInputs = [
+    libtoxcore dbus libvpx libX11 openal freetype
+    libv4l libXrender fontconfig libXext libXft filter-audio
+    libsodium libopus
+  ];
 
-  doCheck = false;
-  
-  makeFlags = "PREFIX=$(out)";
+  nativeBuildInputs = [
+    check cmake pkgconfig
+  ];
+
+  cmakeFlags = [
+    "-DENABLE_AUTOUPDATE=OFF"
+  ] ++ lib.optional (doCheck) "-DENABLE_TESTS=ON";
+
+  doCheck = stdenv.isLinux;
+
+  checkPhase = ''
+    runHook preCheck
+    ctest -VV
+    runHook postCheck
+  '';
 
   meta = with stdenv.lib; {
     description = "Lightweight Tox client";
+    homepage = https://github.com/uTox/uTox;
     license = licenses.gpl3;
-    maintainers = with maintainers; [ iElectric jgeerds ];
+    maintainers = with maintainers; [ domenkozar jgeerds ];
     platforms = platforms.all;
   };
 }

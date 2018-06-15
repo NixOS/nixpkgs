@@ -1,38 +1,46 @@
 { stdenv, fetchurl, protobuf, protobufc, asciidoc
-, xmlto, utillinux, docbook_xsl, libpaper }:
+, xmlto, utillinux, docbook_xsl, libpaper, libnl, libcap, libnet, pkgconfig
+, python }:
 
 stdenv.mkDerivation rec {
   name    = "criu-${version}";
-  version = "1.3-rc2";
+  version = "3.9";
 
   src = fetchurl {
     url    = "http://download.openvz.org/criu/${name}.tar.bz2";
-    sha256 = "1h9ii91aq8cja22j3520vg3qb3y9h6c064s4115s2ldylm8jmi0s";
+    sha256 = "0l71lmklr42pc2bj37pkp7y8va8bx42n9f6i4q4idsx4wrdd75fx";
   };
 
   enableParallelBuilding = true;
-  buildInputs = [ protobuf protobufc asciidoc xmlto libpaper ];
+  nativeBuildInputs = [ pkgconfig docbook_xsl ];
+  buildInputs = [ protobuf protobufc asciidoc xmlto libpaper libnl libcap libnet python ];
 
-  patchPhase = ''
-    chmod +w ./scripts/gen-offsets.sh
-    substituteInPlace ./scripts/gen-offsets.sh --replace hexdump ${utillinux}/bin/hexdump
+  postPatch = ''
     substituteInPlace ./Documentation/Makefile --replace "2>/dev/null" ""
-    substituteInPlace ./Documentation/Makefile --replace "--skip-validation" "--skip-validation -x ${docbook_xsl}/xml/xsl/docbook/manpages/docbook.xsl"
+    substituteInPlace ./Documentation/Makefile --replace "-m custom.xsl" "-m custom.xsl --skip-validation -x ${docbook_xsl}/xml/xsl/docbook/manpages/docbook.xsl"
+    substituteInPlace ./criu/Makefile --replace "-I/usr/include/libnl3" "-I${libnl.dev}/include/libnl3"
+    substituteInPlace ./Makefile --replace "head-name := \$(shell git tag -l v\$(CRIU_VERSION))" "head-name = ${version}.0"
+    ln -sf ${protobuf}/include/google/protobuf/descriptor.proto ./images/google/protobuf/descriptor.proto
   '';
 
-  configurePhase = "make config PREFIX=$out";
-  buildPhase     = "make PREFIX=$out";
+  buildPhase = "make PREFIX=$out";
+
+  makeFlags = "PREFIX=$(out)";
+
+  hardeningDisable = [ "stackprotector" "fortify" ];
+  # dropping fortify here as well as package uses it by default:
+  # command-line>:0:0: error: "_FORTIFY_SOURCE" redefined [-Werror]
 
   installPhase = ''
     mkdir -p $out/etc/logrotate.d
     make install PREFIX=$out LIBDIR=$out/lib ASCIIDOC=${asciidoc}/bin/asciidoc XMLTO=${xmlto}/bin/xmlto
   '';
 
-  meta = {
-    description = "userspace checkpoint/restore for Linux";
-    homepage    = "http://criu.org";
-    license     = stdenv.lib.licenses.gpl2;
+  meta = with stdenv.lib; {
+    description = "Userspace checkpoint/restore for Linux";
+    homepage    = https://criu.org;
+    license     = licenses.gpl2;
     platforms   = [ "x86_64-linux" ];
-    maintainers = [ stdenv.lib.maintainers.thoughtpolice ];
+    maintainers = [ maintainers.thoughtpolice ];
   };
 }

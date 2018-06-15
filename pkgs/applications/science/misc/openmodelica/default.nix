@@ -1,7 +1,7 @@
 {stdenv, fetchgit, fetchsvn, autoconf, automake, libtool, gfortran, clang, cmake, gnumake,
 hwloc, jre, liblapack, blas, hdf5, expat, ncurses, readline, qt4, webkit, which,
 lp_solve, omniorb, sqlite, libatomic_ops, pkgconfig, file, gettext, flex, bison,
-doxygen, boost, openscenegraph, gnome, pangox_compat, xorg, git, bash, gtk, makeWrapper }:
+doxygen, boost, openscenegraph, gnome2, pangox_compat, xorg, git, bash, gtk2, makeWrapper }:
 
 let
 
@@ -17,8 +17,12 @@ stdenv.mkDerivation {
   buildInputs = [autoconf cmake automake libtool gfortran clang gnumake
     hwloc jre liblapack blas hdf5 expat ncurses readline qt4 webkit which
     lp_solve omniorb sqlite libatomic_ops pkgconfig file gettext flex bison
-    doxygen boost openscenegraph gnome.gtkglext pangox_compat xorg.libXmu
-    git gtk makeWrapper];
+    doxygen boost openscenegraph gnome2.gtkglext pangox_compat xorg.libXmu
+    git gtk2 makeWrapper];
+
+  hardeningDisable = [ "format" ];
+
+  enableParallelBuilding = true;
 
   patchPhase = ''
     cp -fv ${fakegit}/bin/checkout-git.sh libraries/checkout-git.sh
@@ -26,6 +30,8 @@ stdenv.mkDerivation {
   '';
 
   configurePhase = ''
+    export NIX_LDFLAGS="$NIX_LDFLAGS -L${gfortran.cc.lib}/lib"
+
     autoconf
     ./configure CC=${clang}/bin/clang CXX=${clang}/bin/clang++ --prefix=$out
   '';
@@ -34,7 +40,7 @@ stdenv.mkDerivation {
     for e in $(cd $out/bin && ls); do
       wrapProgram $out/bin/$e \
         --prefix PATH : "${gnumake}/bin" \
-        --prefix LIBRARY_PATH : "${liblapack}/lib:${blas}/lib"
+        --prefix LIBRARY_PATH : "${stdenv.lib.makeLibraryPath [ liblapack blas ]}"
     done
   '';
 
@@ -44,6 +50,7 @@ stdenv.mkDerivation {
     license     = licenses.gpl3;
     maintainers = with maintainers; [ smironov ];
     platforms   = platforms.linux;
+    broken      = true;
   };
 }
 

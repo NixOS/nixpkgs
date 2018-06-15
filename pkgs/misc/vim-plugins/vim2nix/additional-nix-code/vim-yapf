@@ -1,0 +1,4 @@
+    buildPhase = ''
+      substituteInPlace ftplugin/python_yapf.vim \
+        --replace '"yapf"' '"${python3Packages.yapf}/bin/yapf"'
+    '';

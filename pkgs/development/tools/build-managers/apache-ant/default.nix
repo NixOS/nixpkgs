@@ -1,6 +1,6 @@
 { fetchurl, stdenv, coreutils, makeWrapper }:
 
-let version = "1.9.6"; in
+let version = "1.10.2"; in
 
 stdenv.mkDerivation {
   name = "ant-${version}";
@@ -9,7 +9,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "mirror://apache/ant/binaries/apache-ant-${version}-bin.tar.bz2";
-    sha256 = "1cwd5vq175gyicw0hkm8idwa33zxwhf7xlxywaqxcqqdjql0jfx4";
+    sha256 = "0662qammjvibh9kgkxzadkayfn2r7iwnagbwaw28crqqclrb2rp1";
   };
 
   contrib = fetchurl {
@@ -23,9 +23,14 @@ stdenv.mkDerivation {
       mv * $out/lib/ant/
 
       # Get rid of the manual (35 MiB).  Maybe we should put this in a
-      # separate output.  Also get rid of the Ant scripts since we
-      # provide our own.
+      # separate output.  Keep the antRun script since it's vanilla sh
+      # and needed for the <exec/> task (but since we set ANT_HOME to
+      # a weird value, we have to move antRun to a weird location).
+      # Get rid of the other Ant scripts since we provide our own.
+      mv $out/lib/ant/bin/antRun $out/bin/
       rm -rf $out/lib/ant/{manual,bin,WHATSNEW}
+      mkdir $out/lib/ant/bin
+      mv $out/bin/antRun $out/lib/ant/bin/
 
       # Install ant-contrib.
       unpackFile $contrib

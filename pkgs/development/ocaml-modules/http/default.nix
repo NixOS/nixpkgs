@@ -1,5 +1,9 @@
 {stdenv, fetchurl, ocaml_pcre, ocamlnet, ocaml, findlib, camlp4}:
 
+if stdenv.lib.versionAtLeast ocaml.version "4.06"
+then throw "ocaml-http is not available for OCaml ${ocaml.version}"
+else
+
 stdenv.mkDerivation {
   name = "ocaml-http-0.1.5";
 
@@ -27,8 +31,8 @@ stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     homepage = http://ocaml-http.forge.ocamlcore.org/;
-    platforms = ocaml.meta.platforms;
-    description = "do it yourself (OCaml) HTTP daemon";
+    platforms = ocaml.meta.platforms or [];
+    description = "Do it yourself (OCaml) HTTP daemon";
     license = licenses.lgpl2;
     maintainers = with maintainers; [ roconnor vbgl ];
   };

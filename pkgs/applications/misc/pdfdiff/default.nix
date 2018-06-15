@@ -2,7 +2,7 @@
 let
   py = pythonPackages;
 in
-py.buildPythonPackage rec {
+py.buildPythonApplication rec {
   name = "pdfdiff-${version}";
   version = "0.92";
 

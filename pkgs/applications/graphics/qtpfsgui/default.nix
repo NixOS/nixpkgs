@@ -1,4 +1,4 @@
-{stdenv, fetchurl, qt4, exiv2, openexr, fftwSinglePrec, libtiff, ilmbase }:
+{stdenv, fetchurl, qt4, qmake4Hook, exiv2, openexr, fftwSinglePrec, libtiff, ilmbase }:
 
 stdenv.mkDerivation rec {
   name = "qtpfsgui-1.9.3";
@@ -9,14 +9,20 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ qt4 exiv2 openexr fftwSinglePrec libtiff ];
+  nativeBuildInputs = [ qmake4Hook ];
 
-  configurePhase = ''
-    export CPATH="${ilmbase}/include/OpenEXR:$CPATH"
-    qmake PREFIX=$out EXIV2PATH=${exiv2}/include/exiv2  \
-      OPENEXRDIR=${openexr}/include/OpenEXR             \
-      FFTW3DIR=${fftwSinglePrec}/include                \
-      LIBTIFFDIR=${libtiff}/include
+  hardeningDisable = [ "format" ];
+
+  preConfigure = ''
+    export CPATH="${ilmbase.dev}/include/OpenEXR:$CPATH"
   '';
+
+  qmakeFlags = [
+    "EXIV2PATH=${exiv2.dev}/include/exiv2"
+    "OPENEXRDIR=${openexr.dev}/include/OpenEXR"
+    "FFTW3DIR=${fftwSinglePrec.dev}/include"
+    "LIBTIFFDIR=${libtiff.dev}/include"
+  ];
 
   meta = {
     homepage = http://qtpfsgui.sourceforge.net/;
@@ -30,6 +36,6 @@ stdenv.mkDerivation rec {
     license = stdenv.lib.licenses.gpl2Plus;
 
     maintainers = [ ];
-    platforms = stdenv.lib.platforms.gnu;
+    platforms = stdenv.lib.platforms.gnu ++ stdenv.lib.platforms.linux;
   };
 }

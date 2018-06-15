@@ -1,4 +1,10 @@
-{ CoreServices, Foundation, PCSC, Security, GSS, Kerberos, makeWrapper, apple_sdk, fetchurl, gnustep-make, libobjc, libsecurity_apple_csp, libsecurity_apple_cspdl, libsecurity_apple_file_dl, libsecurity_apple_x509_cl, libsecurity_apple_x509_tp, libsecurity_asn1, libsecurity_cdsa_client, libsecurity_cdsa_plugin, libsecurity_cdsa_utilities, libsecurity_cdsa_utils, libsecurity_cssm, libsecurity_filedb, libsecurity_keychain, libsecurity_mds, libsecurity_pkcs12, libsecurity_sd_cspdl, libsecurity_utilities, libsecurityd, osx_private_sdk, stdenv }:
+{ CoreServices, Foundation, PCSC, Security, GSS, Kerberos, makeWrapper, apple_sdk,
+fetchurl, gnustep, libobjc, libsecurity_apple_csp, libsecurity_apple_cspdl,
+libsecurity_apple_file_dl, libsecurity_apple_x509_cl, libsecurity_apple_x509_tp,
+libsecurity_asn1, libsecurity_cdsa_client, libsecurity_cdsa_plugin,
+libsecurity_cdsa_utilities, libsecurity_cdsa_utils, libsecurity_cssm, libsecurity_filedb,
+libsecurity_keychain, libsecurity_mds, libsecurity_pkcs12, libsecurity_sd_cspdl,
+libsecurity_utilities, libsecurityd, osx_private_sdk, Security-framework, stdenv }:
 
 stdenv.mkDerivation rec {
   version = "55115";
@@ -11,7 +17,7 @@ stdenv.mkDerivation rec {
 
   patchPhase = ''
     # copied from libsecurity_generic
-    ln -s ${osx_private_sdk}/System/Library/Frameworks/Security.framework/Versions/A/PrivateHeaders Security
+    cp -R ${osx_private_sdk}/include/SecurityPrivateHeaders Security
 
     substituteInPlace cmsutil.c --replace \
       '<CoreServices/../Frameworks/CarbonCore.framework/Headers/MacErrors.h>' \
@@ -33,18 +39,22 @@ stdenv.mkDerivation rec {
 
   NIX_LDFLAGS = "-no_dtrace_dof";
 
-  makeFlags = "-f ${./GNUmakefile} MAKEFILE_NAME=${./GNUmakefile}";
+  makeFlags = [
+    "-f ${./GNUmakefile}"
+    "MAKEFILE_NAME=${./GNUmakefile}"
+    "GNUSTEP_MAKEFILES=${gnustep.make}/share/GNUstep/Makefiles"
+  ];
 
   installFlags = [
     "security_INSTALL_DIR=\$(out)/bin"
   ];
 
-  propagatedBuildInputs = [ GSS Kerberos Security PCSC Foundation ];
+  propagatedBuildInputs = [ GSS Kerberos Security-framework PCSC Foundation ];
 
   __propagatedImpureHostDeps = [ "/System/Library/Keychains" ];
 
   buildInputs = [
-    gnustep-make
+    gnustep.make
     libsecurity_asn1
     libsecurity_utilities
     libsecurity_cdsa_utilities
@@ -78,7 +88,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    description = "Command line interface to Mac OS X keychains and Security framework";
+    description = "Command line interface to macOS keychains and Security framework";
     maintainers = with maintainers; [
       copumpkin
       joelteon

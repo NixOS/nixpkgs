@@ -11,7 +11,8 @@ stdenv.mkDerivation rec {
 
   patches = [ ./0001-Fix-scan-build-to-use-NIX_CFLAGS_COMPILE.patch ];
   buildInputs = [ clang llvmPackages.clang perl makeWrapper ];
-  buildPhase = "true";
+
+  dontBuild = true;
 
   installPhase = ''
     mkdir -p $out/bin $out/libexec

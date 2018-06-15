@@ -7,7 +7,7 @@ let
       gmp4
       ncurses
       zlib
-    ] + ":${stdenv.cc.cc}/lib64";
+    ] + ":${stdenv.cc.cc.lib}/lib64";
 
   url = "https://github.com/GaloisInc/saw-script/releases/download";
 
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
     mv doc $out/share
 
     # Hack around lack of libtinfo in NixOS
-    ln -s ${ncurses}/lib/libncursesw.so.5       $out/lib/libtinfo.so.5
+    ln -s ${ncurses.out}/lib/libncursesw.so.5       $out/lib/libtinfo.so.5
     ln -s ${stdenv.cc.libc}/lib/libpthread.so.0 $out/lib/libpthread.so.0
 
     # Add a clang symlink for easy building with a suitable compiler.

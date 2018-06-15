@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Command-line shell and Unix scripting interface for Drupal";
-    homepage    = http://github.com/drush-ops/drush;
+    homepage    = https://github.com/drush-ops/drush;
     license     = licenses.gpl2;
     maintainers = with maintainers; [ lovek323 ];
     platforms   = platforms.all;
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
     mkdir -p "$out"
     cp -r . "$out/src"
     mkdir "$out/bin"
-    wrapProgram "$out/src/drush" --prefix PATH : "${which}/bin:${php}/bin:${bash}/bin:${coreutils}/bin:${ncurses}/bin"
+    wrapProgram "$out/src/drush" --prefix PATH : "${stdenv.lib.makeBinPath [ which php bash coreutils ncurses ]}"
     ln -s "$out/src/drush" "$out/bin/drush"
   '';
 }

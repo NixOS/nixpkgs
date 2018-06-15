@@ -1,23 +1,35 @@
-{stdenv, fetchurl}:
+{ stdenv, fetchurl, bison, flex, pkgconfig
+, libnetfilter_conntrack, libnftnl, libmnl }:
 
 stdenv.mkDerivation rec {
   name = "iptables-${version}";
-  version = "1.4.21";
+  version = "1.6.2";
 
   src = fetchurl {
     url = "http://www.netfilter.org/projects/iptables/files/${name}.tar.bz2";
-    sha256 = "1q6kg7sf0pgpq0qhab6sywl23cngxxfzc9zdzscsba8x09l4q02j";
+    sha256 = "0crp0lvh5m2f15pr8cw97h8yb8zjj10x95zj06j46cr68vx2vl2m";
   };
+
+  nativeBuildInputs = [ bison flex pkgconfig ];
+
+  buildInputs = [ libnetfilter_conntrack libnftnl libmnl ];
+
+  preConfigure = ''
+    export NIX_LDFLAGS="$NIX_LDFLAGS -lmnl -lnftnl"
+  '';
 
   configureFlags = ''
     --enable-devel
     --enable-shared
   '';
 
-  meta = {
+  outputs = [ "out" "dev" ];
+
+  meta = with stdenv.lib; {
     description = "A program to configure the Linux IP packet filtering ruleset";
     homepage = http://www.netfilter.org/projects/iptables/index.html;
-    platforms = stdenv.lib.platforms.linux;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ fpletz ];
     downloadPage = "http://www.netfilter.org/projects/iptables/files/";
     updateWalker = true;
     inherit version;

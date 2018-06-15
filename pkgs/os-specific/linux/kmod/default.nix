@@ -1,31 +1,42 @@
-{ stdenv, fetchurl, xz, zlib, pkgconfig, libxslt }:
+{ stdenv, buildPackages, lib, fetchurl, autoreconfHook, pkgconfig, libxslt, xz }:
 
-stdenv.mkDerivation rec {
-  name = "kmod-21";
+let
+  systems = [ "/run/current-system/kernel-modules" "/run/booted-system/kernel-modules" "" ];
+  modulesDirs = lib.concatMapStringsSep ":" (x: "${x}/lib/modules") systems;
+
+in stdenv.mkDerivation rec {
+  name = "kmod-${version}";
+  version = "25";
 
   src = fetchurl {
     url = "mirror://kernel/linux/utils/kernel/kmod/${name}.tar.xz";
-    sha256 = "1h4m1mkknxcshsz1qbg9riszmynix2ikg7q8inq7bkvlmx4982hn";
+    sha256 = "1kgixs4m3jvwk7fb3d18n6j77qhgi9qfv4csj35rs5ancr4ycrbi";
   };
 
-  # Disable xz/zlib support to prevent needing them in the initrd.
-  
-  buildInputs = [ pkgconfig libxslt /* xz zlib */ ];
+  nativeBuildInputs = [ autoreconfHook pkgconfig libxslt ];
+  buildInputs = [ xz ];
+  # HACK until BUG issue #21191 is addressed
+  crossAttrs.preUnpack = ''PATH="${buildPackages.xz}/bin''${PATH:+:}$PATH"'';
 
-  configureFlags = [ "--sysconfdir=/etc" /* "--with-xz" "--with-zlib" */ ];
+  configureFlags = [
+    "--sysconfdir=/etc"
+    "--with-xz"
+    "--with-modulesdirs=${modulesDirs}"
+  ];
 
   patches = [ ./module-dir.patch ];
 
   postInstall = ''
-    ln -s kmod $out/bin/lsmod
-    mkdir -p $out/sbin
-    for prog in rmmod insmod modinfo modprobe depmod; do
-      ln -sv $out/bin/kmod $out/sbin/$prog
+    for prog in rmmod insmod lsmod modinfo modprobe depmod; do
+      ln -sv $out/bin/kmod $out/bin/$prog
     done
+
+    # Backwards compatibility
+    ln -s bin $out/sbin
   '';
 
   meta = {
-    homepage = http://www.kernel.org/pub/linux/utils/kernel/kmod/;
+    homepage = https://www.kernel.org/pub/linux/utils/kernel/kmod/;
     description = "Tools for loading and managing Linux kernel modules";
     platforms = stdenv.lib.platforms.linux;
   };

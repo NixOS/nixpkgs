@@ -1,28 +1,38 @@
-{ stdenv, fetchgit, pkgconfig, glib, babl, libpng, cairo, libjpeg, which
-, librsvg, pango, gtk, bzip2, intltool, libtool, automake, autoconf, json_glib }:
+{ stdenv, fetchurl, pkgconfig, glib, babl, libpng, cairo, libjpeg, which
+, librsvg, pango, gtk, bzip2, json-glib, intltool, autoreconfHook, libraw
+, libwebp, gnome3, libintl }:
 
 stdenv.mkDerivation rec {
-  name = "gegl-0.3.0-20140619";
+  name = "gegl-0.3.34";
 
-  src = fetchgit {
-    url = "https://git.gnome.org/browse/gegl";
-    sha256 = "1rjmv2y7z34zrnlqczmmh0bm724iszzdf6jpibszxnp3w0npwjrb";
-    rev = "0014eb1bad50244314ed09592fe57efa9322678c";
+  src = fetchurl {
+    url = "http://download.gimp.org/pub/gegl/0.3/${name}.tar.bz2";
+    sha256 = "010k86wn8cmr07rqwa4lccrmiiqrwbnkxvic4lpapwgbamv258jw";
   };
 
-  configureScript = "./autogen.sh";
+  hardeningDisable = [ "format" ];
 
   # needs fonts otherwise  don't know how to pass them
   configureFlags = "--disable-docs";
 
-  buildInputs = [ babl libpng cairo libjpeg librsvg pango gtk bzip2 intltool
-                  autoconf automake libtool which json_glib ];
+  enableParallelBuilding = true;
 
-  nativeBuildInputs = [ pkgconfig ];
+  doCheck = true;
 
-  meta = { 
+  buildInputs = [
+    libpng cairo libjpeg librsvg pango gtk bzip2
+    libraw libwebp gnome3.gexiv2
+  ];
+
+  propagatedBuildInputs = [ glib json-glib babl ]; # for gegl-3.0.pc
+
+  nativeBuildInputs = [ pkgconfig intltool which autoreconfHook libintl ];
+
+  meta = with stdenv.lib; {
     description = "Graph-based image processing framework";
     homepage = http://www.gegl.org;
-    license = stdenv.lib.licenses.gpl3;
+    license = licenses.gpl3;
+    maintainers = with maintainers; [ jtojnar ];
+    platforms = platforms.unix;
   };
 }

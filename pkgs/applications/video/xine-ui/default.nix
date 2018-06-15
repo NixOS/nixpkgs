@@ -1,15 +1,15 @@
 {stdenv, fetchurl, pkgconfig, xorg, libpng, xineLib, readline, ncurses, curl
-, lirc, shared_mime_info, libjpeg }:
+, lirc, shared-mime-info, libjpeg }:
 
 stdenv.mkDerivation rec {
-  name = "xine-ui-0.99.9";
+  name = "xine-ui-0.99.10";
   
   src = fetchurl {
     url = "mirror://sourceforge/xine/${name}.tar.xz";
-    sha256 = "18liwmkbj75xs9bipw3vr67a7cwmdfcp04v5lph7nsjlkwhq1lcd";
+    sha256 = "0i3jzhiipfs5p1jbxviwh42zcfzag6iqc6yycaan0vrqm90an86a";
   };
   
-  nativeBuildInputs = [ pkgconfig shared_mime_info ];
+  nativeBuildInputs = [ pkgconfig shared-mime-info ];
 
   buildInputs =
     [ xineLib libpng readline ncurses curl lirc libjpeg
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   patchPhase = ''sed -e '/curl\/types\.h/d' -i src/xitk/download.c'';
 
-  configureFlags = "--with-readline=${readline}";
+  configureFlags = "--with-readline=${readline.dev}";
   
   LIRC_CFLAGS="-I${lirc}/include";
   LIRC_LIBS="-L ${lirc}/lib -llirc_client";
@@ -28,5 +28,6 @@ stdenv.mkDerivation rec {
   meta = { 
     homepage = http://www.xine-project.org/;
     description = "Xlib-based interface to Xine, a video player";
+    platforms = stdenv.lib.platforms.linux;
   };
 }

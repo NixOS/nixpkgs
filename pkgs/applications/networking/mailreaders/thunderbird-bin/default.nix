@@ -1,21 +1,22 @@
-{ stdenv, fetchurl, config
+{ stdenv, fetchurl, config, makeWrapper
 , gconf
 , alsaLib
-, at_spi2_atk
+, at-spi2-atk
 , atk
 , cairo
 , cups
 , curl
-, dbus_glib
+, dbus-glib
 , dbus_libs
 , fontconfig
 , freetype
 , gdk_pixbuf
 , glib
 , glibc
-, gst_plugins_base
+, gst-plugins-base
 , gstreamer
-, gtk
+, gtk2
+, gtk3
 , kerberos
 , libX11
 , libXScrnSaver
@@ -26,19 +27,24 @@
 , libXinerama
 , libXrender
 , libXt
-, libcanberra
+, libcanberra-gtk2
 , libgnome
 , libgnomeui
-, mesa
+, defaultIconTheme
+, libGLU_combined
 , nspr
 , nss
 , pango
+, writeScript
+, xidel
+, coreutils
+, gnused
+, gnugrep
+, gnupg
 }:
 
-assert stdenv.isLinux;
-
 # imports `version` and `sources`
-with (import ./sources.nix);
+with (import ./release_sources.nix);
 
 let
   arch = if stdenv.system == "i686-linux"
@@ -57,14 +63,15 @@ let
 
   source = stdenv.lib.findFirst (sourceMatches systemLocale) defaultSource sources;
 
+  name = "thunderbird-bin-${version}";
 in
 
 stdenv.mkDerivation {
-  name = "thunderbird-bin-${version}";
+  inherit name;
 
   src = fetchurl {
     url = "http://download-installer.cdn.mozilla.net/pub/thunderbird/releases/${version}/${source.arch}/${source.locale}/thunderbird-${version}.tar.bz2";
-    inherit (source) sha1;
+    inherit (source) sha512;
   };
 
   phases = "unpackPhase installPhase";
@@ -73,21 +80,22 @@ stdenv.mkDerivation {
     [ stdenv.cc.cc
       gconf
       alsaLib
-      at_spi2_atk
+      at-spi2-atk
       atk
       cairo
       cups
       curl
-      dbus_glib
+      dbus-glib
       dbus_libs
       fontconfig
       freetype
       gdk_pixbuf
       glib
       glibc
-      gst_plugins_base
+      gst-plugins-base
       gstreamer
-      gtk
+      gtk2
+      gtk3
       kerberos
       libX11
       libXScrnSaver
@@ -98,16 +106,20 @@ stdenv.mkDerivation {
       libXinerama
       libXrender
       libXt
-      libcanberra
+      libcanberra-gtk2
       libgnome
       libgnomeui
-      mesa
+      libGLU_combined
       nspr
       nss
       pango
-    ] + ":" + stdenv.lib.makeSearchPath "lib64" [
+    ] + ":" + stdenv.lib.makeSearchPathOutput "lib" "lib64" [
       stdenv.cc.cc
     ];
+
+  buildInputs = [ gtk3 defaultIconTheme ];
+
+  nativeBuildInputs = [ makeWrapper ];
 
   installPhase =
     ''
@@ -139,8 +151,20 @@ stdenv.mkDerivation {
       GenericName=Mail Reader
       Categories=Application;Network;
       EOF
+
+      wrapProgram "$out/bin/thunderbird" \
+        --argv0 "$out/bin/.thunderbird-wrapped" \
+        --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH:" \
+        --suffix XDG_DATA_DIRS : "$XDG_ICON_DIRS"
     '';
 
+  passthru.updateScript = import ./../../browsers/firefox-bin/update.nix {
+    inherit name writeScript xidel coreutils gnused gnugrep curl gnupg;
+    baseName = "thunderbird";
+    channel = "release";
+    basePath = "pkgs/applications/networking/mailreaders/thunderbird-bin";
+    baseUrl = "http://archive.mozilla.org/pub/thunderbird/releases/";
+  };
   meta = with stdenv.lib; {
     description = "Mozilla Thunderbird, a full-featured email client (binary package)";
     homepage = http://www.mozilla.org/thunderbird/;

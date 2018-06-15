@@ -1,12 +1,12 @@
-{ stdenv, fetchurl, coreutils, gnugrep, utillinux, module_init_tools
+{ stdenv, fetchurl, coreutils, gnugrep, utillinux, kmod
 , procps, kbd, dbus_tools }:
 
 let
 
-  binPath = stdenv.lib.makeSearchPath "bin"
-    [ coreutils gnugrep utillinux module_init_tools procps kbd dbus_tools ];
+  binPath = stdenv.lib.makeBinPath
+    [ coreutils gnugrep utillinux kmod procps kbd dbus_tools ];
 
-  sbinPath = stdenv.lib.makeSearchPath "sbin"
+  sbinPath = stdenv.lib.makeSearchPathOutput "bin" "sbin"
     [ procps ];
 
 in
@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
     '';
 
   meta = {
-    homepage = http://pm-utils.freedesktop.org/wiki/;
+    homepage = https://pm-utils.freedesktop.org/wiki/;
     description = "A small collection of scripts that handle suspend and resume on behalf of HAL";
     license = stdenv.lib.licenses.gpl2;
     platforms = stdenv.lib.platforms.linux;

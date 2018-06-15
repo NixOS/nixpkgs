@@ -1,37 +1,44 @@
-{ stdenv, fetchurl, pkgconfig, xlibsWrapper, glib, cairo, libpng, harfbuzz
-, fontconfig, freetype, libintlOrEmpty, gobjectIntrospection
+{ stdenv, fetchurl, fetchpatch, pkgconfig, libXft, cairo, harfbuzz
+, libintl, gobjectIntrospection, darwin
 }:
 
+with stdenv.lib;
+
 let
-  ver_maj = "1.36";
-  ver_min = "8";
+  ver_maj = "1.40";
+  ver_min = "14";
 in
 stdenv.mkDerivation rec {
   name = "pango-${ver_maj}.${ver_min}";
 
   src = fetchurl {
     url = "mirror://gnome/sources/pango/${ver_maj}/${name}.tar.xz";
-    sha256 = "01rdzjh68w8l5zn0648yibyarj8p6g7yfn59nw5awaz1i8dvbnqq";
+    sha256 = "90af1beaa7bf9e4c52db29ec251ec4fd0a8f2cc185d521ad1f88d01b3a6a17e3";
   };
 
-  buildInputs = with stdenv.lib; [ gobjectIntrospection ]
-    ++ optionals stdenv.isDarwin [ fontconfig ];
-  nativeBuildInputs = [ pkgconfig ];
+  outputs = [ "bin" "dev" "out" "devdoc" ];
 
-  propagatedBuildInputs = [ xlibsWrapper glib cairo libpng fontconfig freetype harfbuzz ] ++ libintlOrEmpty;
+  buildInputs = [ gobjectIntrospection ];
+  nativeBuildInputs = [ pkgconfig ]
+    ++ optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
+       Carbon
+       CoreGraphics
+       CoreText
+    ]);
+  propagatedBuildInputs = [ cairo harfbuzz libXft libintl ];
 
   enableParallelBuilding = true;
 
-  doCheck = false; # test-layout fails on 1.36.8
+  doCheck = false; # test-layout fails on 1.40.3 (fails to find font config)
   # jww (2014-05-05): The tests currently fail on Darwin:
   #
   # ERROR:testiter.c:139:iter_char_test: assertion failed: (extents.width == x1 - x0)
   # .../bin/sh: line 5: 14823 Abort trap: 6 srcdir=. PANGO_RC_FILE=./pangorc ${dir}$tst
   # FAIL: testiter
 
-  postInstall = "rm -rf $out/share/gtk-doc";
+  configureFlags = optional stdenv.isDarwin "--without-x";
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "A library for laying out and rendering of text, with an emphasis on internationalization";
 
     longDescription = ''
@@ -43,9 +50,9 @@ stdenv.mkDerivation rec {
     '';
 
     homepage = http://www.pango.org/;
-    license = stdenv.lib.licenses.lgpl2Plus;
+    license = licenses.lgpl2Plus;
 
-    maintainers = with stdenv.lib.maintainers; [ raskin urkud ];
-    hydraPlatforms = stdenv.lib.platforms.linux ++ stdenv.lib.platforms.darwin;
+    maintainers = with maintainers; [ raskin ];
+    platforms = platforms.linux ++ platforms.darwin;
   };
 }

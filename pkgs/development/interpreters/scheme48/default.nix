@@ -7,6 +7,7 @@ stdenv.mkDerivation {
     homepage = http://s48.org/;
     description = "Scheme 48";
     maintainers = with stdenv.lib.maintainers; [ the-kenny ];
+    platforms = with stdenv.lib.platforms; unix;
   };
 
   src = fetchurl {

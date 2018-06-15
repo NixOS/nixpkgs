@@ -1,5 +1,5 @@
 { stdenv, fetchgit, pkgconfig, qt4, SDL, SDL_image, libvorbis, libtar, libxml2
-, gamin
+, gamin, qmake4Hook
 }:
 
 stdenv.mkDerivation rec {
@@ -9,16 +9,13 @@ stdenv.mkDerivation rec {
   src = fetchgit {
     url = "git://git.code.sf.net/p/linuxstopmotion/code";
     rev = "refs/tags/${version}";
-    sha256 = "1xkkrhllgy2d7k0vrdj794ya7y3g3n7xh8c2qgnb26yrarz79dqj";
+    sha256 = "19v9d0v3laiwi0f1n92lvj2s5s1mxsrfygna0xyw9pkcnk3b26q6";
   };
 
-  buildInputs = [ pkgconfig qt4 SDL SDL_image libvorbis libtar libxml2 gamin ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ qt4 SDL SDL_image libvorbis libtar libxml2 gamin qmake4Hook ];
 
   patches = [ ./linuxstopmotion-fix-wrong-isProcess-logic.patch ];
-
-  configurePhase = ''
-    qmake PREFIX="$out"
-  '';
 
   # Installation breaks without this
   preInstall = ''

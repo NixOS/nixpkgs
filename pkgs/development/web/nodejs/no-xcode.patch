@@ -1,7 +1,8 @@
-diff -Naur a/tools/gyp/pylib/gyp/xcode_emulation.py b/tools/gyp/pylib/gyp/xcode_emulation.py
---- a/tools/gyp/pylib/gyp/xcode_emulation.py	2014-01-23 06:05:51.000000000 +0100
-+++ b/tools/gyp/pylib/gyp/xcode_emulation.py	2014-02-04 17:49:48.000000000 +0100
-@@ -302,10 +302,17 @@
+diff --git a/tools/gyp/pylib/gyp/xcode_emulation.py b/tools/gyp/pylib/gyp/xcode_emulation.py
+index 407ead0..8bf64e7 100644
+--- a/tools/gyp/pylib/gyp/xcode_emulation.py
++++ b/tools/gyp/pylib/gyp/xcode_emulation.py
+@@ -446,10 +446,16 @@ class XcodeSettings(object):
  
    def _XcodeSdkPath(self, sdk_root):
      if sdk_root not in XcodeSettings._sdk_path_cache:
@@ -19,11 +20,10 @@ diff -Naur a/tools/gyp/pylib/gyp/xcode_emulation.py b/tools/gyp/pylib/gyp/xcode_
 +        # the user is probably on a CLT-only system, where there
 +        # is no valid SDK root
 +        XcodeSettings._sdk_path_cache[sdk_root] = None
-+        
      return XcodeSettings._sdk_path_cache[sdk_root]
  
    def _AppendPlatformVersionMinFlags(self, lst):
-@@ -420,10 +427,12 @@
+@@ -572,10 +578,11 @@ class XcodeSettings(object):
        framework_root = sdk_root
      else:
        framework_root = ''
@@ -31,7 +31,6 @@ diff -Naur a/tools/gyp/pylib/gyp/xcode_emulation.py b/tools/gyp/pylib/gyp/xcode_
 -    framework_dirs = config.get('mac_framework_dirs', [])
 -    for directory in framework_dirs:
 -      cflags.append('-F' + directory.replace('$(SDKROOT)', framework_root))
-+    
 +    if 'SDKROOT' in self._Settings():
 +      config = self.spec['configurations'][self.configname]
 +      framework_dirs = config.get('mac_framework_dirs', [])
@@ -40,7 +39,7 @@ diff -Naur a/tools/gyp/pylib/gyp/xcode_emulation.py b/tools/gyp/pylib/gyp/xcode_
  
      self.configname = None
      return cflags
-@@ -673,10 +682,12 @@
+@@ -826,10 +833,11 @@ class XcodeSettings(object):
      sdk_root = self._SdkPath()
      if not sdk_root:
        sdk_root = ''
@@ -48,25 +47,11 @@ diff -Naur a/tools/gyp/pylib/gyp/xcode_emulation.py b/tools/gyp/pylib/gyp/xcode_
 -    framework_dirs = config.get('mac_framework_dirs', [])
 -    for directory in framework_dirs:
 -      ldflags.append('-F' + directory.replace('$(SDKROOT)', sdk_root))
-+    
 +    if 'SDKROOT' in self._Settings():
 +      config = self.spec['configurations'][self.configname]
 +      framework_dirs = config.get('mac_framework_dirs', [])
 +      for directory in framework_dirs:
 +        ldflags.append('-F' + directory.replace('$(SDKROOT)', sdk_root))
  
-     self.configname = None
-     return ldflags
-@@ -863,7 +874,11 @@
-     sdk_root = self._SdkPath(config_name)
-     if not sdk_root:
-       sdk_root = ''
--    return l.replace('$(SDKROOT)', sdk_root)
-+    
-+    if self._SdkPath():
-+      return l.replace('$(SDKROOT)', sdk_root)
-+    else:
-+      return l
- 
-   def AdjustLibraries(self, libraries, config_name=None):
-     """Transforms entries like 'Cocoa.framework' in libraries into entries like
+     is_extension = self._IsIosAppExtension() or self._IsIosWatchKitExtension()
+     if sdk_root and is_extension:

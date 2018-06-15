@@ -1,44 +1,44 @@
-{ stdenv, fetchFromGitHub, which, sqlite, lua5_1, perl, zlib, pkgconfig, ncurses
-, dejavu_fonts, libpng, SDL2, SDL2_image, mesa, freetype
-, tileMode ? true
+{ stdenv, lib, fetchFromGitHub, which, sqlite, lua5_1, perl, zlib, pkgconfig, ncurses
+, dejavu_fonts, libpng, SDL2, SDL2_image, libGLU_combined, freetype, pngcrush, advancecomp
+, tileMode ? false
 }:
 
-let version = "0.16.1";
-in
 stdenv.mkDerivation rec {
-  name = "crawl-${version}" + (if tileMode then "-tiles" else "");
+  name = "crawl-${version}${lib.optionalString tileMode "-tiles"}";
+  version = "0.21.1";
+
   src = fetchFromGitHub {
     owner = "crawl-ref";
     repo = "crawl-ref";
     rev = version;
-    sha256 = "0gciqaij05qr5bwkk5mblvk5k0p6bzjd58czk1b6x5xx5qcp6mmh";
+    sha256 = "191pmd7vpp9qni5l13fb5s8g1axniah8a6hhi31gp0848c8n7hlh";
   };
 
   patches = [ ./crawl_purify.patch ];
 
-  nativeBuildInputs = [ pkgconfig which perl ];
+  nativeBuildInputs = [ pkgconfig which perl pngcrush advancecomp ];
 
   # Still unstable with luajit
   buildInputs = [ lua5_1 zlib sqlite ncurses ]
-             ++ stdenv.lib.optionals tileMode
-                [ libpng SDL2 SDL2_image freetype mesa ];
+                ++ lib.optionals tileMode [ libpng SDL2 SDL2_image freetype libGLU_combined ];
 
   preBuild = ''
     cd crawl-ref/source
     echo "${version}" > util/release_ver
-    # Related to issue #1963
-    sed -i 's/-fuse-ld=gold//g' Makefile
     for i in util/*; do
       patchShebangs $i
     done
     patchShebangs util/gen-mi-enum
+    rm -rf contrib
   '';
 
-  makeFlags = [ "prefix=$(out)" "FORCE_CC=gcc" "FORCE_CXX=g++" "HOSTCXX=g++"
-                "SAVEDIR=~/.crawl" "sqlite=${sqlite}" ]
-           ++ stdenv.lib.optionals tileMode [ "TILES=y" "dejavu_fonts=${dejavu_fonts}" ];
+  fontsPath = lib.optionalString tileMode dejavu_fonts;
 
-  postInstall = if tileMode then "mv $out/bin/crawl $out/bin/crawl-tiles" else "";
+  makeFlags = [ "prefix=$(out)" "FORCE_CC=cc" "FORCE_CXX=c++" "HOSTCXX=c++"
+                "SAVEDIR=~/.crawl" "sqlite=${sqlite.dev}"
+              ] ++ lib.optional tileMode "TILES=y";
+
+  postInstall = lib.optionalString tileMode "mv $out/bin/crawl $out/bin/crawl-tiles";
 
   enableParallelBuilding = true;
 

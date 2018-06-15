@@ -13,18 +13,18 @@ let
 
   askPasswordWrapper = pkgs.writeScript "ssh-askpass-wrapper"
     ''
-      #! ${pkgs.stdenv.shell} -e
+      #! ${pkgs.runtimeShell} -e
       export DISPLAY="$(systemctl --user show-environment | ${pkgs.gnused}/bin/sed 's/^DISPLAY=\(.*\)/\1/; t; d')"
       exec ${askPassword}
     '';
 
   knownHosts = map (h: getAttr h cfg.knownHosts) (attrNames cfg.knownHosts);
 
-  knownHostsText = flip (concatMapStringsSep "\n") knownHosts
+  knownHostsText = (flip (concatMapStringsSep "\n") knownHosts
     (h: assert h.hostNames != [];
       concatStringsSep "," h.hostNames + " "
       + (if h.publicKey != null then h.publicKey else readFile h.publicKeyFile)
-    );
+    )) + "\n";
 
 in
 {
@@ -36,6 +36,7 @@ in
 
       askPassword = mkOption {
         type = types.str;
+        default = "${pkgs.x11_ssh_askpass}/libexec/x11-ssh-askpass";
         description = ''Program used by SSH to ask for passwords.'';
       };
 
@@ -55,7 +56,6 @@ in
 
       setXAuthLocation = mkOption {
         type = types.bool;
-        default = config.services.xserver.enable;
         description = ''
           Whether to set the path to <command>xauth</command> for X11-forwarded connections.
           This causes a dependency on X11 packages.
@@ -74,7 +74,7 @@ in
 
       startAgent = mkOption {
         type = types.bool;
-        default = true;
+        default = false;
         description = ''
           Whether to start the OpenSSH agent when you log in.  The OpenSSH agent
           remembers private keys for you so that you don't have to type in
@@ -93,7 +93,9 @@ in
       };
 
       package = mkOption {
+        type = types.package;
         default = pkgs.openssh;
+        defaultText = "pkgs.openssh";
         description = ''
           The package used for the openssh client and daemon.
         '';
@@ -142,16 +144,18 @@ in
         description = ''
           The set of system-wide known SSH hosts.
         '';
-        example = [
-          {
-            hostNames = [ "myhost" "myhost.mydomain.com" "10.10.1.4" ];
-            publicKeyFile = literalExample "./pubkeys/myhost_ssh_host_dsa_key.pub";
-          }
-          {
-            hostNames = [ "myhost2" ];
-            publicKeyFile = literalExample "./pubkeys/myhost2_ssh_host_dsa_key.pub";
-          }
-        ];
+        example = literalExample ''
+          [
+            {
+              hostNames = [ "myhost" "myhost.mydomain.com" "10.10.1.4" ];
+              publicKeyFile = ./pubkeys/myhost_ssh_host_dsa_key.pub;
+            }
+            {
+              hostNames = [ "myhost2" ];
+              publicKeyFile = ./pubkeys/myhost2_ssh_host_dsa_key.pub;
+            }
+          ]
+        '';
       };
 
     };
@@ -159,6 +163,9 @@ in
   };
 
   config = {
+
+    programs.ssh.setXAuthLocation =
+      mkDefault (config.services.xserver.enable || config.programs.ssh.forwardX11 || config.services.openssh.forwardX11);
 
     assertions =
       [ { assertion = cfg.forwardX11 -> cfg.setXAuthLocation;
@@ -182,15 +189,18 @@ in
 
         ForwardX11 ${if cfg.forwardX11 then "yes" else "no"}
 
+        # Allow DSA keys for now. (These were deprecated in OpenSSH 7.0.)
+        PubkeyAcceptedKeyTypes +ssh-dss
+        HostKeyAlgorithms +ssh-dss
+
         ${cfg.extraConfig}
       '';
 
     environment.etc."ssh/ssh_known_hosts".text = knownHostsText;
 
     # FIXME: this should really be socket-activated for über-awesomeness.
-    systemd.user.services.ssh-agent =
-      { enable = cfg.startAgent;
-        description = "SSH Agent";
+    systemd.user.services.ssh-agent = mkIf cfg.startAgent
+      { description = "SSH Agent";
         wantedBy = [ "default.target" ];
         serviceConfig =
           { ExecStartPre = "${pkgs.coreutils}/bin/rm -f %t/ssh-agent";
@@ -217,12 +227,7 @@ in
         fi
       '';
 
-    environment.interactiveShellInit = optionalString config.services.xserver.enable
-      ''
-        export SSH_ASKPASS=${askPassword}
-      '';
-
-    programs.ssh.askPassword = mkDefault "${pkgs.x11_ssh_askpass}/libexec/x11-ssh-askpass";
+    environment.variables.SSH_ASKPASS = optionalString config.services.xserver.enable askPassword;
 
   };
 }

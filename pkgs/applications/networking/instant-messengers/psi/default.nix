@@ -1,5 +1,5 @@
-{ stdenv, fetchurl, aspell, qt4, zlib, sox, libX11, xproto, libSM
-, libICE, qca2, pkgconfig, liboil, speex, callPackage, which, glib
+{ stdenv, fetchurl, enchant, qt4, zlib, sox, libX11, xproto, libSM
+, libICE, qca2, pkgconfig, callPackage, which, glib
 , libXScrnSaver, scrnsaverproto
 }:
 
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs =
-    [ aspell qt4 zlib sox libX11 xproto libSM libICE
+    [ enchant qt4 zlib sox libX11 xproto libSM libICE
       qca2 pkgconfig which glib scrnsaverproto libXScrnSaver
     ];
 
@@ -20,19 +20,7 @@ stdenv.mkDerivation rec {
 
   NIX_LDFLAGS="-lqca";
 
-  psiMedia = callPackage ./psimedia.nix { };
-
   enableParallelBuilding = true;
-
-  configureFlags = [
-    "--with-aspell-inc=${aspell}/include"
-    ];
-
-  postInstall = ''
-    PSI_PLUGINS="$out/lib/psi/plugins"
-    mkdir -p "$PSI_PLUGINS"
-    ln -s "${psiMedia}"/share/psi/plugins/*.so "$PSI_PLUGINS"
-  '';
 
   meta = {
     description = "Psi, an XMPP (Jabber) client";

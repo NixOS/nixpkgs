@@ -1,0 +1,15 @@
+GEM
+  remote: https://rubygems.org/
+  specs:
+    foreman (0.78.0)
+      thor (~> 0.19.1)
+    thor (0.19.1)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  foreman
+
+BUNDLED WITH
+   1.11.2

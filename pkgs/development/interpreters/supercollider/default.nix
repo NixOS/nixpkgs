@@ -1,40 +1,39 @@
 { stdenv, fetchurl, cmake, pkgconfig
 , libjack2, libsndfile, fftw, curl, gcc
-, libXt, qt, readline
+, libXt, qtbase, qttools, qtwebkit, readline
 , useSCEL ? false, emacs
 }:
-  
-let optional = stdenv.lib.optional; in
 
-stdenv.mkDerivation rec {  
-  name = "supercollider-3.6.6";
+let optional = stdenv.lib.optional;
+in
 
-  meta = {
-    description = "Programming language for real time audio synthesis";
-    homepage = "http://supercollider.sourceforge.net/";
-    license = stdenv.lib.licenses.gpl3Plus;
-    platforms = stdenv.lib.platforms.linux;
-  };
+stdenv.mkDerivation rec {
+  name = "supercollider-${version}";
+  version = "3.9.3";
+
 
   src = fetchurl {
-    url = "mirror://sourceforge/supercollider/Source/3.6/SuperCollider-3.6.6-Source.tar.bz2";
-    sha256 = "11khrv6jchs0vv0lv43am8lp0x1rr3h6l2xj9dmwrxcpdayfbalr";
+    url = "https://github.com/supercollider/supercollider/releases/download/Version-${version}/SuperCollider-${version}-Source-linux.tar.bz2";
+    sha256 = "1d8ixfl100jvlialxdizp8wqsl1mp5pi2bam25vp97bhjd59cfdr";
   };
 
-  # QGtkStyle unavailable
-  patchPhase = ''
-    substituteInPlace editors/sc-ide/widgets/code_editor/autocompleter.cpp \
-      --replace Q_WS_X11 Q_GTK_STYLE
-  '';
+  hardeningDisable = [ "stackprotector" ];
 
   cmakeFlags = ''
     -DSC_WII=OFF
-    -DSC_EL=${if useSCEL then "ON" else "OFF"} 
+    -DSC_EL=${if useSCEL then "ON" else "OFF"}
   '';
 
-  nativeBuildInputs = [ cmake pkgconfig ];
+  nativeBuildInputs = [ cmake pkgconfig qttools ];
 
-  buildInputs = [ 
-    gcc libjack2 libsndfile fftw curl libXt qt readline ]
-    ++ optional useSCEL emacs;
+  buildInputs = [
+    gcc libjack2 libsndfile fftw curl libXt qtbase qtwebkit readline ]
+      ++ optional useSCEL emacs;
+
+  meta = {
+    description = "Programming language for real time audio synthesis";
+    homepage = http://supercollider.sourceforge.net/;
+    license = stdenv.lib.licenses.gpl3Plus;
+    platforms = stdenv.lib.platforms.linux;
+  };
 }

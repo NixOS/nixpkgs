@@ -45,7 +45,7 @@ in
         description = ''
           Specification (in the format described by
           <citerefentry><refentrytitle>systemd.time</refentrytitle>
-          <manvolnum>5</manvolnum></citerefentry>) of the time at
+          <manvolnum>7</manvolnum></citerefentry>) of the time at
           which the Venus will collect feeds.
         '';
       };
@@ -99,6 +99,7 @@ in
       };
 
       outputTheme = mkOption {
+        default = "${pkgs.venus}/themes/classic_fancy";
         type = types.path;
         description = ''
           Directory containing a config.ini file which is merged with this one.
@@ -165,11 +166,8 @@ in
         script = "exec venus-planet ${configFile}";
         serviceConfig.User = "${cfg.user}";
         serviceConfig.Group = "${cfg.group}";
-        environment.SSL_CERT_FILE = "/etc/ssl/certs/ca-bundle.crt";
         startAt = cfg.dates;
       };
-
-    services.venus.outputTheme = mkDefault "${pkgs.venus}/themes/classic_fancy";
 
   };
 }

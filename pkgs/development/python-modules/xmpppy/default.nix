@@ -1,30 +1,27 @@
-a @ {python, setuptools, ... } :
-let
-  fetchurl = a.fetchurl;
+{ stdenv, buildPythonPackage, fetchurl, isPy3k }:
+buildPythonPackage rec {
+  pname = "xmpp.py";
+  name = "${pname}-${version}";
+  version = "0.5.0rc1";
 
-  version = a.lib.attrByPath ["version"] "0.5.0rc1" a;
-  buildInputs = with a; [
-    python setuptools
-  ];
-in
-rec {
+  patches = [ ./ssl.patch ];
+
   src = fetchurl {
     url = "mirror://sourceforge/xmpppy/xmpppy-${version}.tar.gz";
     sha256 = "16hbh8kwc5n4qw2rz1mrs8q17rh1zq9cdl05b1nc404n7idh56si";
   };
 
-  inherit buildInputs;
-  configureFlags = [];
-
-  /* doConfigure should be removed if not needed */
-  phaseNames = ["mkDirs" "installPythonPackage"];
-  mkDirs = a.fullDepEntry(''
+  preInstall = ''
     mkdir -p $out/bin $out/lib $out/share $(toPythonPath $out)
     export PYTHONPATH=$PYTHONPATH:$(toPythonPath $out)
-  '') ["defEnsureDir" "addInputs"];
+  '';
 
-  name = "xmpp.py-" + version;
-  meta = {
+  disabled = isPy3k;
+
+  meta = with stdenv.lib; {
     description = "XMPP python library";
+    homepage = http://xmpppy.sourceforge.net/;
+    license = licenses.gpl3;
+    maintainers = [ maintainers.mic92 ];
   };
 }

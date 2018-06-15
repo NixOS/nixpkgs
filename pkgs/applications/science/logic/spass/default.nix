@@ -1,49 +1,42 @@
-x@{builderDefsPackage
-  , ...}:
-builderDefsPackage
-(a :  
-let 
-  helperArgNames = ["stdenv" "fetchurl" "builderDefsPackage"] ++ 
-    [];
+{ stdenv, fetchurl, bison, flex }:
 
-  buildInputs = map (n: builtins.getAttr n x)
-    (builtins.attrNames (builtins.removeAttrs x helperArgNames));
-  sourceInfo = rec {
-    baseName="spass";
-    baseVersion="3";
-    minorVersion="7";
-    version="${baseVersion}.${minorVersion}";
-    name="${baseName}-${version}";
-    url="http://www.spass-prover.org/download/sources/${baseName}${baseVersion}${minorVersion}.tgz";
-    hash="1k5a98kr3vzga54zs7slwwaaf6v6agk1yfcayd8bl55q15g7xihk";
-  };
+let
+  baseVersion="3";
+  minorVersion="9";
+
+  extraTools = "FLOTTER prolog2dfg dfg2otter dfg2dimacs dfg2tptp"
+    + " dfg2ascii dfg2dfg tptp2dfg dimacs2dfg pgen rescmp";
 in
-rec {
-  src = a.fetchurl {
-    url = sourceInfo.url;
-    sha256 = sourceInfo.hash;
+
+stdenv.mkDerivation rec {
+  name = "spass-${version}";
+  version = "${baseVersion}.${minorVersion}";
+
+  src = fetchurl {
+    url = "http://www.spass-prover.org/download/sources/spass${baseVersion}${minorVersion}.tgz";
+    sha256 = "11cyn3kcff4r79rsw2s0xm6rdb8bi0kpkazv2b48jhcms7xw75qp";
   };
 
-  inherit (sourceInfo) name version;
-  inherit buildInputs;
+  sourceRoot = ".";
 
-  /* doConfigure should be removed if not needed */
-  phaseNames = ["doConfigure" "doMakeInstall"];
-      
-  meta = {
-    description = "An automated theorem preover for FOL";
-    maintainers = with a.lib.maintainers;
+  nativeBuildInputs = [ bison flex ];
+
+  buildPhase = ''
+    make RM="rm -f" proparser.c ${extraTools} opt
+  '';
+  installPhase = ''
+    mkdir -p $out/bin
+    install -m0755 SPASS ${extraTools} $out/bin/
+  '';
+
+  meta = with stdenv.lib; {
+    description = "Automated theorem prover for first-order logic";
+    maintainers = with maintainers;
     [
       raskin
     ];
-    platforms = with a.lib.platforms;
-      linux;
-    license = a.lib.licenses.bsd2;
+    platforms = platforms.unix;
+    license = licenses.bsd2;
+    downloadPage = "http://www.spass-prover.org/download/index.html";
   };
-  passthru = {
-    updateInfo = {
-      downloadPage = "http://www.spass-prover.org/download/index.html";
-    };
-  };
-}) x
-
+}

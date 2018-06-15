@@ -1,34 +1,45 @@
-{stdenv, fetchurl, automake, libiconv, vanilla ? false}:
+{stdenv, fetchurl, automake, libiconv, vanilla ? false }:
 
-stdenv.mkDerivation (rec {
-  name = "pkg-config-0.28";
-  
+with stdenv.lib;
+
+stdenv.mkDerivation rec {
+  name = "pkg-config-0.29.2";
+
   setupHook = ./setup-hook.sh;
-  
+
   src = fetchurl {
-    url = "http://pkgconfig.freedesktop.org/releases/${name}.tar.gz";
-    sha256 = "0igqq5m204w71m11y0nipbdf5apx87hwfll6axs12hn4dqfb6vkb";
+    urls = [
+      "https://pkgconfig.freedesktop.org/releases/${name}.tar.gz"
+      "http://fossies.org/linux/misc/${name}.tar.gz"
+    ];
+    sha256 = "14fmwzki1rlz8bs2p810lk6jqdxsk966d8drgsjmi54cd00rrikg";
   };
-
-  buildInputs = stdenv.lib.optional (stdenv.isCygwin || stdenv.isDarwin) libiconv;
-
-  configureFlags = [ "--with-internal-glib" ];
-
-  patches = (if vanilla then [] else [
     # Process Requires.private properly, see
     # http://bugs.freedesktop.org/show_bug.cgi?id=4738.
-    ./requires-private.patch
-  ]) ++ stdenv.lib.optional stdenv.isCygwin ./2.36.3-not-win32.patch;
+  patches = optional (!vanilla) ./requires-private.patch
+    ++ optional stdenv.isCygwin ./2.36.3-not-win32.patch;
+
+  preConfigure = ""; # TODO(@Ericson2314): Remove next mass rebuild
+  buildInputs = optional (stdenv.isCygwin || stdenv.isDarwin || stdenv.isSunOS) libiconv;
+
+  configureFlags = [ "--with-internal-glib" ]
+    ++ optional (stdenv.isSunOS) [ "--with-libiconv=gnu" "--with-system-library-path" "--with-system-include-path" "CFLAGS=-DENABLE_NLS" ]
+       # Can't run these tests while cross-compiling
+    ++ optional (stdenv.hostPlatform != stdenv.buildPlatform)
+       [ "glib_cv_stack_grows=no"
+         "glib_cv_uscore=no"
+         "ac_cv_func_posix_getpwuid_r=yes"
+         "ac_cv_func_posix_getgrgid_r=yes"
+       ];
+
+  doCheck = false; # fails
+
+  postInstall = ''rm -f "$out"/bin/*-pkg-config''; # clean the duplicate file
 
   meta = {
     description = "A tool that allows packages to find out information about other packages";
     homepage = http://pkg-config.freedesktop.org/wiki/;
-    platforms = stdenv.lib.platforms.all;
+    platforms = platforms.all;
   };
 
-} // (if stdenv.system == "mips64el-linux" then
-  {
-    preConfigure = ''
-      cp -v ${automake}/share/automake*/config.{sub,guess} .
-    '';
-  } else {}))
+}

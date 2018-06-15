@@ -1,24 +1,26 @@
-{ stdenv, fetchurl, pkgconfig, python, gst-plugins-base, orc
+{ stdenv, fetchurl, fetchpatch, meson, ninja, gettext
+, pkgconfig, python, gst-plugins-base, orc
 , faacSupport ? false, faac ? null
 , faad2, libass, libkate, libmms
-, libmodplug, mpeg2dec, mpg123
+, libmodplug, mpeg2dec
 , openjpeg, libopus, librsvg
 , wildmidi, fluidsynth, libvdpau, wayland
-, libwebp, xvidcore, gnutls
-, mesa, libintlOrEmpty
+, libwebp, xvidcore, gnutls, mjpegtools
+, libGLU_combined, libintl, libgme
+, openssl, x265, libxml2
 }:
 
 assert faacSupport -> faac != null;
 
 let
-  inherit (stdenv.lib) optional optionalString;
+  inherit (stdenv.lib) optional;
 in
 stdenv.mkDerivation rec {
-  name = "gst-plugins-bad-1.4.5";
+  name = "gst-plugins-bad-1.14.0";
 
   meta = with stdenv.lib; {
     description = "Gstreamer Bad Plugins";
-    homepage    = "http://gstreamer.freedesktop.org";
+    homepage    = "https://gstreamer.freedesktop.org";
     longDescription = ''
       a set of plug-ins that aren't up to par compared to the
       rest.  They might be close to being good quality, but they're missing
@@ -26,31 +28,51 @@ stdenv.mkDerivation rec {
       a real live maintainer, or some actual wide use.
     '';
     license     = licenses.lgpl2Plus;
-    platforms   = platforms.unix;
-    maintainers = with maintainers; [ iyzsong ];
+    platforms   = platforms.linux ++ platforms.darwin;
+    maintainers = with maintainers; [ matthewbauer ];
   };
+
+  preConfigure = ''
+    patchShebangs .
+  '';
+
+  patches = [
+    (fetchpatch {
+        url = "https://bug794856.bugzilla-attachments.gnome.org/attachment.cgi?id=370409";
+        sha256 = "0hy0rcn35alq65yqwri4fqjz2hf3nyyg5c7rnndk51msmqjxpprk";
+    })
+    ./fix_pkgconfig_includedir.patch
+  ];
 
   src = fetchurl {
     url = "${meta.homepage}/src/gst-plugins-bad/${name}.tar.xz";
-    sha256 = "0g4q9yqq71z32pz7zj54wigkcf438a2mcv5kvvwp4gb8a1rasbqm";
+    sha256 = "17sgzgx1c54k5rzz7ljyz3is0n7yj56k74vv05h8z1gjnsnjnppd";
   };
 
-  nativeBuildInputs = [ pkgconfig python ];
+  outputs = [ "out" "dev" ];
+
+  nativeBuildInputs = [ meson ninja pkgconfig python gettext ];
 
   buildInputs = [
     gst-plugins-base orc
     faad2 libass libkate libmms
-    libmodplug mpeg2dec mpg123
+    libmodplug mpeg2dec
     openjpeg libopus librsvg
     fluidsynth libvdpau
-    libwebp xvidcore gnutls mesa
+    libwebp xvidcore gnutls libGLU_combined
+    libgme openssl x265 libxml2
+    libintl
   ]
-    ++ libintlOrEmpty
     ++ optional faacSupport faac
     ++ optional stdenv.isLinux wayland
     # wildmidi requires apple's OpenAL
     # TODO: package apple's OpenAL, fix wildmidi, include on Darwin
-    ++ optional (!stdenv.isDarwin) wildmidi;
+    ++ optional (!stdenv.isDarwin) wildmidi
+    # TODO: mjpegtools uint64_t is not compatible with guint64 on Darwin
+    ++ optional (!stdenv.isDarwin) mjpegtools;
 
-  LDFLAGS = optionalString stdenv.isDarwin "-lintl";
+  enableParallelBuilding = true;
+
+  doCheck = false; # fails 20 out of 58 tests, expensive
+
 }

@@ -1,13 +1,15 @@
 perl:
 
-{ buildInputs ? [], ... } @ attrs:
+{ nativeBuildInputs ? [], name, ... } @ attrs:
 
 perl.stdenv.mkDerivation (
   {
+    outputs = [ "out" "devdoc" ];
+
     doCheck = true;
-    
+
     checkTarget = "test";
-    
+
     # Prevent CPAN downloads.
     PERL_AUTOINSTALL = "--skipdeps";
 
@@ -23,8 +25,9 @@ perl.stdenv.mkDerivation (
   attrs
   //
   {
-    name = "perl-" + attrs.name;
+    name = "perl-" + name;
     builder = ./builder.sh;
-    buildInputs = buildInputs ++ [ perl ];
+    nativeBuildInputs = nativeBuildInputs ++ [ (perl.dev or perl) ];
+    inherit perl;
   }
 )

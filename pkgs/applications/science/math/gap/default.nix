@@ -1,68 +1,103 @@
-x@{builderDefsPackage
-  , pari ? null
-  , ...}:
-builderDefsPackage
-(a :
-let
-  helperArgNames = ["stdenv" "fetchurl" "builderDefsPackage"] ++
-    [];
+{ stdenv
+, fetchurl
+, fetchpatch
+, m4
+, gmp
+# don't remove any packages -- results in a ~1.3G size increase
+# see https://github.com/NixOS/nixpkgs/pull/38754 for a discussion
+, keepAllPackages ? true
+}:
 
-  buildInputs = map (n: builtins.getAttr n x)
-    (builtins.attrNames (builtins.removeAttrs x helperArgNames));
-  sourceInfo = rec {
-    baseName="gap";
-    version="4r4p12";
-    name="${baseName}-${version}";
-    url="ftp://ftp.gap-system.org/pub/gap/gap4/tar.gz/${baseName}${version}.tar.gz";
-    hash="0flap5lbkvpms3zznq1zwxyxyj0ax3fk7m24f3bvhvr37vyxnf40";
-    pkgVer="2012_01_12-10_47_UTC";
-    pkgURL="ftp://ftp.gap-system.org/pub/gap/gap4/tar.bz2/packages-${pkgVer}.tar.bz2";
-    pkgHash="0z9ncy1m5gvv4llkclxd1vpcgpb0b81a2pfmnhzvw8x708frhmnb";
-  };
-in
-rec {
-  src = a.fetchurl {
-    url = sourceInfo.url;
-    sha256 = sourceInfo.hash;
-  };
+stdenv.mkDerivation rec {
+  pname = "gap";
+  # https://www.gap-system.org/Releases/
+  # newer versions (4.9.0) are available, but still considered beta (https://github.com/gap-system/gap/wiki/GAP-4.9-release-notes)
+  version = "4r8p10";
+  pkgVer = "2018_01_15-13_02";
+  name = "${pname}-${version}";
 
-  pkgSrc = a.fetchurl {
-    url=sourceInfo.pkgURL;
-    sha256=sourceInfo.pkgHash;
+  src = let
+    # 4r8p10 -> 48
+    majorminor = stdenv.lib.replaceStrings ["r"] [""] (
+      builtins.head (stdenv.lib.splitString "p" version) # 4r8p10 -> 4r8
+    );
+  in
+    fetchurl {
+    url = "https://www.gap-system.org/pub/gap/gap${majorminor}/tar.bz2/gap${version}_${pkgVer}.tar.bz2";
+    sha256 = "0wzfdjnn6sfiaizbk5c7x44rhbfayis4lf57qbqqg84c7dqlwr6f";
   };
 
-  inherit (sourceInfo) name version;
-  inherit buildInputs;
+  # remove all non-essential packages (which take up a lot of space)
+  preConfigure = stdenv.lib.optionalString (!keepAllPackages) ''
+    find pkg -type d -maxdepth 1 -mindepth 1 \
+       -not -name 'GAPDoc-*' \
+       -not -name 'autpgrp*' \
+       -exec echo "Removing package {}" \; \
+       -exec rm -r {} \;
+  '';
 
-  /* doConfigure should be removed if not needed */
-  phaseNames = ["doConfigure" "doMake" "doDeploy"];
+  configureFlags = [ "--with-gmp=system" ];
+  buildInputs = [ m4 gmp ];
 
-  doDeploy = a.fullDepEntry ''
+  patches = [
+    #  fix infinite loop in writeandcheck() when writing an error message fails.
+    (fetchpatch {
+      url = "https://git.sagemath.org/sage.git/plain/build/pkgs/gap/patches/writeandcheck.patch?id=07d6c37d18811e2b377a9689790a7c5e24da16ba";
+      sha256 = "1r1511x4kc2i2mbdq1b61rb6p3misvkf1v5qy3z6fmn6vqwziaz1";
+    })
+  ];
+
+  doCheck = true;
+  checkTarget = "testinstall";
+  # "teststandard" is a superset of testinstall. It takes ~1h instead of ~1min.
+  # tests are run twice, once with all packages loaded and once without
+  # checkTarget = "teststandard";
+
+  preCheck = ''
+    # gap tests check that the home directory exists
+    export HOME="$TMP/gap-home"
+    mkdir -p "$HOME"
+  '';
+
+  postCheck = ''
+    # The testsuite doesn't exit with a non-zero exit code on failure.
+    # It leaves its logs in dev/log however.
+
+    # grep for error messages
+    if grep ^##### dev/log/*; then
+        exit 1
+    fi
+  '';
+
+  postBuild = ''
+    pushd pkg
+    bash ../bin/BuildPackages.sh
+    popd
+  '';
+
+  installPhase = ''
     mkdir -p "$out/bin" "$out/share/gap/"
 
     cp -r . "$out/share/gap/build-dir"
 
-    tar xf "${pkgSrc}" -C "$out/share/gap/build-dir/pkg"
-
-    ${if a.pari != null then
-      ''sed -e '2iexport PATH=$PATH:${pari}/bin' -i "$out/share/gap/build-dir/bin/gap.sh" ''
-    else ""}
     sed -e "/GAP_DIR=/aGAP_DIR='$out/share/gap/build-dir/'" -i "$out/share/gap/build-dir/bin/gap.sh"
 
-    ln -s "$out/share/gap/build-dir/bin/gap.sh" "$out/bin"
-  '' ["doMake" "minInit" "defEnsureDir"];
+    ln -s "$out/share/gap/build-dir/bin/gap.sh" "$out/bin/gap"
+  '';
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "Computational discrete algebra system";
-    maintainers = with a.lib.maintainers;
+    maintainers = with maintainers;
     [
       raskin
+      chrisjefferson
     ];
-    platforms = with a.lib.platforms;
-      linux;
-    license = with a.lib.licenses;
-      gpl2;
-    homepage = "http://gap-system.org/";
-    broken = true;
+    platforms = platforms.all;
+    # keeping all packages increases the package size considerably, wchich
+    # is why a local build is preferable in that situation. The timeframe
+    # is reasonable and that way the binary cache doesn't get overloaded.
+    hydraPlatforms = stdenv.lib.optionals (!keepAllPackages) meta.platforms;
+    license = licenses.gpl2;
+    homepage = http://gap-system.org/;
   };
-}) x
+}

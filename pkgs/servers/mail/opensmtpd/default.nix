@@ -1,32 +1,51 @@
-{ stdenv, fetchurl, autoconf, automake, libtool, bison
-, libasr, libevent, zlib, openssl, db, pam, cacert
+{ stdenv, lib, fetchurl, autoconf, automake, libtool, bison
+, libasr, libevent, zlib, openssl, db, pam
+
+# opensmtpd requires root for no reason to encrypt passwords, this patch fixes it
+# see also https://github.com/OpenSMTPD/OpenSMTPD/issues/678
+, unpriviledged_smtpctl_encrypt ? true
+
+# Deprecated: use the subaddressing-delimiter in the config file going forward
+, tag_char ? null
 }:
 
-stdenv.mkDerivation rec {
+if (tag_char != null)
+then throw "opensmtpd: the tag_char argument is deprecated as it can now be specified at runtime via the 'subaddressing-delimiter' option of the configuration file"
+else stdenv.mkDerivation rec {
   name = "opensmtpd-${version}";
-  version = "5.7.1p1";
+  version = "6.0.3p1";
 
   nativeBuildInputs = [ autoconf automake libtool bison ];
   buildInputs = [ libasr libevent zlib openssl db pam ];
 
   src = fetchurl {
-    url = "http://www.opensmtpd.org/archives/${name}.tar.gz";
-    sha256 = "67e9dd9682ca8c181e84e66c76245a4a8f6205834f915a2c021cdfeb22049e3a";
+    url = "https://www.opensmtpd.org/archives/${name}.tar.gz";
+    sha256 = "291881862888655565e8bbe3cfb743310f5dc0edb6fd28a889a9a547ad767a81";
   };
 
   patches = [ ./proc_path.diff ];
+
+  postPatch = with builtins; with lib;
+    optionalString unpriviledged_smtpctl_encrypt ''
+      substituteInPlace smtpd/smtpctl.c --replace \
+        'if (geteuid())' \
+        'if (geteuid() != 0 && !(argc > 1 && !strcmp(argv[1], "encrypt")))'
+      substituteInPlace mk/smtpctl/Makefile.in --replace "chmod 2555" "chmod 0555"
+    '';
 
   configureFlags = [
     "--sysconfdir=/etc"
     "--localstatedir=/var"
     "--with-mantype=doc"
-    "--with-pam"
-    "--without-bsd-auth"
-    "--with-sock-dir=/run"
-    "--with-privsep-user=smtpd"
-    "--with-queue-user=smtpq"
-    "--with-ca-file=/etc/ssl/certs/ca-certificates.crt"
-    "--with-libevent-dir=${libevent}"
+    "--with-auth-pam"
+    "--without-auth-bsdauth"
+    "--with-path-socket=/run"
+    "--with-user-smtpd=smtpd"
+    "--with-user-queue=smtpq"
+    "--with-group-queue=smtpq"
+    "--with-path-CAfile=/etc/ssl/certs/ca-certificates.crt"
+    "--with-libevent=${libevent.dev}"
+    "--with-table-db"
   ];
 
   installFlags = [
@@ -34,14 +53,14 @@ stdenv.mkDerivation rec {
     "localstatedir=\${TMPDIR}"
   ];
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = https://www.opensmtpd.org/;
     description = ''
       A free implementation of the server-side SMTP protocol as defined by
       RFC 5321, with some additional standard extensions
     '';
-    license = stdenv.lib.licenses.isc;
-    platforms = stdenv.lib.platforms.linux;
-    maintainers = [ stdenv.lib.maintainers.rickynils ];
+    license = licenses.isc;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ rickynils obadz ];
   };
 }

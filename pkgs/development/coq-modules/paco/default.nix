@@ -3,11 +3,11 @@
 stdenv.mkDerivation rec {
 
   name = "coq-paco-${coq.coq-version}-${version}";
-  version = "1.2.7";
+  version = "1.2.8";
 
   src = fetchurl {
     url = "http://plv.mpi-sws.org/paco/paco-${version}.zip";
-    sha256 = "010fs74c0cmb9sz5dmrgzg4pmb2mgwia4gm0g9l7j2fq5xxcschb";
+    sha256 = "1lcmdr0y2d7gzyvr8dal3pi7fibbd60bpi1l32fw89xiyrgqhsqy";
   };
 
   buildInputs = [ coq.ocaml coq.camlp5 unzip ];
@@ -26,6 +26,10 @@ stdenv.mkDerivation rec {
     description = "A Coq library implementing parameterized coinduction";
     maintainers = with maintainers; [ jwiegley ];
     platforms = coq.meta.platforms;
+  };
+
+  passthru = {
+    compatibleCoqVersions = v: builtins.elem v [ "8.5" "8.6" "8.7" ];
   };
 
 }

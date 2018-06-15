@@ -1,11 +1,14 @@
-{ stdenv, fetchurl, nasm }:
+{ stdenv, fetchFromGitHub, nasm }:
 
 stdenv.mkDerivation rec {
-  name = "openh264-1.4.0";
+  name = "openh264-${version}";
+  version = "1.7.0";
 
-  src = fetchurl {
-    url = "https://github.com/cisco/openh264/archive/v1.4.0.tar.gz";
-    sha256 = "08haj0xkyjlwbpqdinxk0cmvqw89bx89ly0kqs9lf87fy6ksgfd1";
+  src = fetchFromGitHub {
+    owner = "cisco";
+    repo = "openh264";
+    rev = "v${version}";
+    sha256 = "0ywrqni05bh925ws5fmd24bm6h9n6z2wp1q19v545v06biiwr46a";
   };
 
   buildInputs = [ nasm ];
@@ -18,5 +21,6 @@ stdenv.mkDerivation rec {
     description = "A codec library which supports H.264 encoding and decoding";
     homepage = http://www.openh264.org;
     license = stdenv.lib.licenses.bsd2;
+    platforms = platforms.unix;
   };
 }

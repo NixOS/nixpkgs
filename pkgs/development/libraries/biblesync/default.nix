@@ -7,11 +7,12 @@ stdenv.mkDerivation rec{
   version = "1.1.2";
 
   src = fetchurl{
-    url = "http://downloads.sourceforge.net/project/gnomesword/BibleSync/1.1.2/${name}.tar.gz";
+    url = "mirror://sourceforge/project/gnomesword/BibleSync/1.1.2/${name}.tar.gz";
     sha256 = "0190q2da0ppif2242lahl8xfz01n9sijy60aq1a0545qcp0ilvl8";
   };
 
-  buildInputs = [ pkgconfig cmake libuuid ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ cmake libuuid ];
 
   meta = {
     homepage = http://www.crosswire.org/wiki/BibleSync;
@@ -28,5 +29,6 @@ stdenv.mkDerivation rec{
     '';
     license = licenses.publicDomain;
     maintainers = [ maintainers.AndersonTorres ]; 
+    platforms = stdenv.lib.platforms.linux;
   };
 }

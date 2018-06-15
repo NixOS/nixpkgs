@@ -1,32 +1,87 @@
-{ stdenv, fetchgit, pkgconfig, ffmpeg, mesa, nvidia_cg_toolkit
-, freetype, libxml2, libv4l, coreutils, python34, which, udev, alsaLib
-, libX11, libXext, libXxf86vm, libXdmcp, SDL, libpulseaudio ? null }:
+{ stdenv, fetchFromGitHub, which, pkgconfig, makeWrapper
+, ffmpeg, libGLU_combined, freetype, libxml2, python34
+, libobjc, AppKit, Foundation
+, alsaLib ? null
+, libpulseaudio ? null
+, libv4l ? null
+, libX11 ? null
+, libXdmcp ? null
+, libXext ? null
+, libXxf86vm ? null
+, SDL2 ? null
+, udev ? null
+, enableNvidiaCgToolkit ? false, nvidia_cg_toolkit ? null
+, withVulkan ? stdenv.isLinux, vulkan-loader ? null
+, targetPlatform, fetchurl
+}:
 
-stdenv.mkDerivation rec {
-  name = "retroarch-bare-${version}";
-  version = "20141224";
+with stdenv.lib;
 
-  src = fetchgit {
-    url = git://github.com/libretro/RetroArch.git;
-    rev = "8b4176263988e750daf0c6d709fdceb4672e111e";
-    sha256 = "1l2iqgb7vlkh6kcwr4ggcn58ldyh63v9zvjmv26z8pxiqa1zr1xs";
+let
+
+  # ibtool is closed source so we have to download the blob
+  osx-MainMenu = fetchurl {
+    url = "https://github.com/matthewbauer/RetroArch/raw/b146a9ac6b2b516652a7bf05a9db5a804eab323d/pkg/apple/OSX/en.lproj/MainMenu.nib";
+    sha256 = "13k1l628wy0rp6wxrpwr4g1m9c997d0q8ks50f8zhmh40l5j2sp8";
   };
 
-  buildInputs = [ pkgconfig ffmpeg mesa nvidia_cg_toolkit freetype libxml2 libv4l coreutils
-                  python34 which udev alsaLib libX11 libXext libXxf86vm libXdmcp SDL libpulseaudio ];
+in stdenv.mkDerivation rec {
+  name = "retroarch-bare-${version}";
+  version = "1.7.1";
 
-  patchPhase = ''
-    export GLOBAL_CONFIG_DIR=$out/etc
-    sed -e 's#/bin/true#${coreutils}/bin/true#' -i qb/qb.libs.sh
-  '';
+  src = fetchFromGitHub {
+    owner = "libretro";
+    repo = "RetroArch";
+    sha256 = "0qv8ci76f5kwv5b49ijgpc6jdfp6sm21fw5hq06mq6ygyiy9vdzf";
+    rev = "v${version}";
+  };
+
+  nativeBuildInputs = [ pkgconfig ]
+                      ++ optional withVulkan [ makeWrapper ];
+
+  buildInputs = [ ffmpeg freetype libxml2 libGLU_combined python34 SDL2 which ]
+                ++ optional enableNvidiaCgToolkit nvidia_cg_toolkit
+                ++ optional withVulkan [ vulkan-loader ]
+                ++ optionals stdenv.isDarwin [ libobjc AppKit Foundation ]
+                ++ optionals stdenv.isLinux [ alsaLib libpulseaudio libv4l libX11
+                                              libXdmcp libXext libXxf86vm udev ];
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
-    homepage = http://libretro.org/;
+  postInstall = optionalString withVulkan ''
+    wrapProgram $out/bin/retroarch --prefix LD_LIBRARY_PATH ':' ${vulkan-loader}/lib
+  '' + optionalString targetPlatform.isDarwin ''
+    EXECUTABLE_NAME=RetroArch
+    PRODUCT_NAME=RetroArch
+    MACOSX_DEPLOYMENT_TARGET=10.5
+    app=$out/Applications/$PRODUCT_NAME.app
+
+    install -D pkg/apple/OSX/Info.plist $app/Contents/Info.plist
+    echo "APPL????" > $app/Contents/PkgInfo
+    mkdir -p $app/Contents/MacOS
+    ln -s $out/bin/retroarch $app/Contents/MacOS/$EXECUTABLE_NAME
+
+    # Hack to fill in Info.plist template w/o using xcode
+    sed -i -e 's,''${EXECUTABLE_NAME}'",$EXECUTABLE_NAME," \
+           -e 's,''${MACOSX_DEPLOYMENT_TARGET}'",$MACOSX_DEPLOYMENT_TARGET," \
+           -e 's,''${PRODUCT_NAME}'",$PRODUCT_NAME," \
+           -e 's,''${PRODUCT_NAME:rfc1034identifier}'",$PRODUCT_NAME," \
+           $app/Contents/Info.plist
+
+    install -D ${osx-MainMenu} \
+               $app/Contents/Resources/en.lproj/MainMenu.nib
+    install -D pkg/apple/OSX/en.lproj/InfoPlist.strings \
+               $app/Contents/Resources/en.lproj/InfoPlist.strings
+    install -D media/retroarch.icns $app/Contents/Resources/retroarch.icns
+  '';
+
+  preFixup = "rm $out/bin/retroarch-cg2glsl";
+
+  meta = {
+    homepage = https://libretro.com;
     description = "Multi-platform emulator frontend for libretro cores";
     license = licenses.gpl3;
-    platforms = stdenv.lib.platforms.linux;
-    maintainers = with maintainers; [ MP2E ];
+    platforms = platforms.all;
+    maintainers = with maintainers; [ MP2E edwtjo matthewbauer ];
   };
 }

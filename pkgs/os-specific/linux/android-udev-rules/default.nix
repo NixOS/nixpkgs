@@ -1,12 +1,18 @@
-{ stdenv, fetchgit }:
+{ stdenv, fetchFromGitHub }:
 
-stdenv.mkDerivation {
-  name = "android-udev-rules-20150821";
+## Usage
+# In NixOS, simply add this package to services.udev.packages:
+#   services.udev.packages = [ pkgs.android-udev-rules ];
 
-  src = fetchgit {
-    url = "https://github.com/M0Rf30/android-udev-rules";
-    rev = "07ccded2a89c2bb6da984e596c015c5e9546e497";
-    sha256 = "953fc10bd0de46afef999dc1c1b20801b3d6e289af48d18fa96b1cac3ac54518";
+stdenv.mkDerivation rec {
+  name = "android-udev-rules-${version}";
+  version = "20180112";
+
+  src = fetchFromGitHub {
+    owner = "M0Rf30";
+    repo = "android-udev-rules";
+    rev = version;
+    sha256 = "13gj79nnd04szqlrrzzkdr6wi1fky08pi7x8xfbg0jj3d3v0giah";
   };
 
   installPhase = ''

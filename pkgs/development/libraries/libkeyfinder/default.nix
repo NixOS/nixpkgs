@@ -1,8 +1,8 @@
-{ stdenv, fetchFromGitHub, fftw, qtbase }:
+{ stdenv, fetchFromGitHub, fftw, qtbase, qmake }:
 
-let version = "2.1"; in
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   name = "libkeyfinder-${version}";
+  version = "2.1";
 
   src = fetchFromGitHub {
     sha256 = "07kc0cl6kirgmpdgkgmp6r3yvyf7b1w569z01g8rfl1cig80qdc7";
@@ -11,25 +11,13 @@ stdenv.mkDerivation {
     owner = "ibsh";
   };
 
-  meta = with stdenv.lib; {
-    inherit version;
-    description = "Musical key detection for digital audio (C++ library)";
-    homepage = http://www.ibrahimshaath.co.uk/keyfinder/;
-    license = licenses.gpl3Plus;
-    platforms = with platforms; linux;
-    maintainers = with maintainers; [ nckx ];
-  };
-
+  nativeBuildInputs = [ qmake ];
   buildInputs = [ fftw qtbase ];
 
   postPatch = ''
     substituteInPlace LibKeyFinder.pro \
       --replace "/usr/local" "$out" \
       --replace "-stdlib=libc++" ""
-  '';
-
-  configurePhase = ''
-    qmake
   '';
 
   enableParallelBuilding = true;
@@ -40,4 +28,11 @@ stdenv.mkDerivation {
     mkdir -p $out/lib
     cp -a lib*.so* $out/lib
   '';
+
+  meta = with stdenv.lib; {
+    description = "Musical key detection for digital audio (C++ library)";
+    homepage = http://www.ibrahimshaath.co.uk/keyfinder/;
+    license = licenses.gpl3Plus;
+    platforms = platforms.linux;
+  };
 }

@@ -1,8 +1,11 @@
-{ newScope, stdenv, isl, fetchurl, overrideCC, wrapCC }:
-let
-  callPackage = newScope (self // { inherit stdenv isl version fetch; });
+{ newScope, stdenv, libstdcxxHook, cmake, libxml2, python2, isl, fetchurl
+, overrideCC, wrapCCWith, darwin
+, buildLlvmTools # tools, but from the previous stage, for cross
+, targetLlvmLibraries # libraries, but from the next stage, for cross
+}:
 
-  version = "3.7.0";
+let
+  version = "3.7.1";
 
   fetch = fetch_v version;
   fetch_v = ver: name: sha256: fetchurl {
@@ -10,26 +13,47 @@ let
     inherit sha256;
   };
 
-  compiler-rt_src = fetch "compiler-rt" "02rbsqdnj1dw9q3d8w5wwmvz5gfraiv8xp18lis4kj8baacajzr2";
-  clang-tools-extra_src = fetch "clang-tools-extra" "1k894zkx4w8grigmgv5y4q9zrcic2ypz0zfn28270ykbm6is1s4a";
+  compiler-rt_src = fetch "compiler-rt" "10c1mz2q4bdq9bqfgr3dirc6hz1h3sq8573srd5q5lr7m7j6jiwx";
+  clang-tools-extra_src = fetch "clang-tools-extra" "0sxw2l3q5msbrwxv1ck72arggdw6n5ysi929gi69ikniranfv4aa";
 
-  self = {
+  tools = stdenv.lib.makeExtensible (tools: let
+    callPackage = newScope (tools // { inherit stdenv isl version fetch; });
+  in {
     llvm = callPackage ./llvm.nix {
-      inherit compiler-rt_src stdenv;
+      inherit compiler-rt_src;
+      inherit (targetLlvmLibraries) libcxxabi;
     };
 
     clang-unwrapped = callPackage ./clang {
-      inherit clang-tools-extra_src stdenv;
+      inherit clang-tools-extra_src;
     };
 
-    clang = wrapCC self.clang-unwrapped;
+    clang = if stdenv.cc.isGNU then tools.libstdcxxClang else tools.libcxxClang;
 
-    stdenv = overrideCC stdenv self.clang;
+    libstdcxxClang = wrapCCWith {
+      cc = tools.clang-unwrapped;
+      extraPackages = [ libstdcxxHook ];
+    };
+
+    libcxxClang = wrapCCWith {
+      cc = tools.clang-unwrapped;
+      extraPackages = [ targetLlvmLibraries.libcxx targetLlvmLibraries.libcxxabi ];
+    };
 
     lldb = callPackage ./lldb.nix {};
+  });
+
+  libraries = stdenv.lib.makeExtensible (libraries: let
+    callPackage = newScope (libraries // buildLlvmTools // { inherit stdenv isl version fetch; });
+  in {
+
+    stdenv = overrideCC stdenv buildLlvmTools.clang;
+
+    libcxxStdenv = overrideCC stdenv buildLlvmTools.libcxxClang;
 
     libcxx = callPackage ./libc++ {};
 
     libcxxabi = callPackage ./libc++abi.nix {};
-  };
-in self
+  });
+
+in { inherit tools libraries; } // libraries // tools

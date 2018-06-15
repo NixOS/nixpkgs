@@ -11,12 +11,13 @@
   <xsl:output method='xml' encoding="UTF-8" />
 
   <xsl:param name="revision" />
+  <xsl:param name="program" />
 
 
   <xsl:template match="/expr/list">
-
-      <variablelist>
-
+    <appendix>
+      <title>Configuration Options</title>
+      <variablelist xml:id="configuration-variable-list">
         <xsl:for-each select="attrs">
           <xsl:variable name="id" select="concat('opt-', str:replace(str:replace(str:replace(str:replace(attr[@name = 'name']/string/@value, '*', '_'), '&lt;', '_'), '>', '_'), '?', '_'))" />
           <varlistentry>
@@ -69,6 +70,15 @@
                 </para>
               </xsl:if>
 
+              <xsl:if test="attr[@name = 'relatedPackages']">
+                <para>
+                  <emphasis>Related packages:</emphasis>
+                  <xsl:text> </xsl:text>
+                  <xsl:value-of disable-output-escaping="yes"
+                                select="attr[@name = 'relatedPackages']/string/@value" />
+                </para>
+              </xsl:if>
+
               <xsl:if test="count(attr[@name = 'declarations']/list/*) != 0">
                 <para>
                   <emphasis>Declared by:</emphasis>
@@ -90,7 +100,7 @@
         </xsl:for-each>
 
       </variablelist>
-
+    </appendix>
   </xsl:template>
 
 
@@ -188,7 +198,7 @@
                 </xsl:otherwise>
               </xsl:choose>
             </xsl:when>
-            <xsl:when test="$revision != 'local' and contains(@value, 'nixops') and contains(@value, '/nix/')">
+            <xsl:when test="$revision != 'local' and $program = 'nixops' and contains(@value, '/nix/')">
               <xsl:attribute name="xlink:href">https://github.com/NixOS/nixops/blob/<xsl:value-of select="$revision"/>/nix/<xsl:value-of select="substring-after(@value, '/nix/')"/></xsl:attribute>
             </xsl:when>
             <xsl:otherwise>

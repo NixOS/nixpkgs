@@ -18,11 +18,13 @@ in {
   };
 
   config = mkIf cfg.enable {
-    systemd.services.devmon = {
+    systemd.user.services.devmon = {
       description = "devmon automatic device mounting daemon";
-      wantedBy = [ "multi-user.target" ];
-      path = [ pkgs.udevil ];
+      wantedBy = [ "default.target" ];
+      path = [ pkgs.udevil pkgs.procps pkgs.udisks2 pkgs.which ];
       serviceConfig.ExecStart = "${pkgs.udevil}/bin/devmon";
     };
+
+    services.udisks2.enable = true;
   };
 }

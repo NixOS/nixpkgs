@@ -1,12 +1,14 @@
-{ stdenv, fetchgit }:
+{ stdenv, fetchFromGitHub }:
 
-stdenv.mkDerivation {
-  name = "urxvt-perls-2015-03-28";
+stdenv.mkDerivation rec {
+  name = "urxvt-perls-${version}";
+  version = "2.2";
 
-  src = fetchgit {
-    url = "git://github.com/muennich/urxvt-perls";
-    rev = "e4dbde31edd19e2f4c2b6c91117ee91e2f83ddd7";
-    sha256 = "1f8a27c3d54377fdd4ab0be2f4efb8329d4900bb1c792b306dc23b5ee59260b1";
+  src = fetchFromGitHub {
+    owner = "muennich";
+    repo = "urxvt-perls";
+    rev = version;
+    sha256 = "1cb0jbjmwfy2dlq2ny8wpc04k79jp3pz9qhbmgagsxs3sp1jg2hz";
   };
 
   installPhase = ''
@@ -19,8 +21,9 @@ stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "Perl extensions for the rxvt-unicode terminal emulator";
-    homepage = "https://github.com/muennich/urxvt-perls";
+    homepage = https://github.com/muennich/urxvt-perls;
     license = licenses.gpl2;
     maintainers = with maintainers; [ abbradar ];
+    platforms = with platforms; unix;
   };
 }

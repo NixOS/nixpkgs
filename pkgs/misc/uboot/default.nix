@@ -1,62 +1,259 @@
-{ stdenv, fetchurl, bc, dtc
-, toolsOnly ? false
-, defconfig ? "allnoconfig"
-, targetPlatforms
-, filesToInstall
+{ stdenv, fetchurl, fetchpatch, bc, dtc, openssl, python2, swig
+, armTrustedFirmwareAllwinner
+, hostPlatform, buildPackages
 }:
 
 let
-  platform = stdenv.platform;
-  crossPlatform = stdenv.cross.platform;
-  makeTarget = if toolsOnly then "tools NO_SDL=1" else "all";
-  installDir = if toolsOnly then "$out/bin" else "$out";
-  buildFun = kernelArch:
-    ''
-      if test -z "$crossConfig"; then
-          make ${makeTarget}
-      else
-          make ${makeTarget} ARCH=${kernelArch} CROSS_COMPILE=$crossConfig-
-      fi
+  # Various changes for 64-bit sunxi boards, (hopefully) destined for 2018.05
+  sunxiPatch = fetchpatch {
+    name = "sunxi.patch";
+    url = "https://github.com/u-boot/u-boot/compare/v2018.05...dezgeg:2018-05-sunxi.patch";
+    sha256 = "1dfv4s1f71iv80vjxgyghv4pcwjv4mjphk75a8hfl3jdbpd66d36";
+  };
+
+  buildUBoot = { filesToInstall
+            , installDir ? "$out"
+            , defconfig
+            , extraPatches ? []
+            , extraMakeFlags ? []
+            , extraMeta ? {}
+            , ... } @ args:
+           stdenv.mkDerivation (rec {
+
+    name = "uboot-${defconfig}-${version}";
+    version = "2018.05";
+
+    src = fetchurl {
+      url = "ftp://ftp.denx.de/pub/u-boot/u-boot-${version}.tar.bz2";
+      sha256 = "0j60p4iskzb4hamxgykc6gd7xchxfka1zwh8hv08r9rrc4m3r8ad";
+    };
+
+    patches = [
+      (fetchpatch {
+        url = https://github.com/dezgeg/u-boot/commit/rpi-2018-05-patch1.patch;
+        sha256 = "0xvw16mp6mm36987rd5yb8bw0n5b3p1gq35wch2gbj15wx55450p";
+      })
+      (fetchpatch {
+        url = https://github.com/dezgeg/u-boot/commit/rpi-2018-05-patch2.patch;
+        sha256 = "0q1a5l5rfgddncxrjk59qr1f5587dwbvcf6z15bsfl2invs19m2b";
+      })
+      (fetchpatch {
+        url = https://github.com/dezgeg/u-boot/commit/pythonpath-2018-03.patch;
+        sha256 = "1rhhlhrwhv7ic1n5i720jfh2cxwrkssrkvinllyjy3j9k9bpzcqd";
+      })
+      (fetchpatch {
+        url = https://github.com/dezgeg/u-boot/commit/extlinux-path-length-2018-03.patch;
+        sha256 = "07jafdnxvqv8lz256qy29agjc2k1zj5ad4k28r1w5qkhwj4ixmf8";
+      })
+    ] ++ extraPatches;
+
+    postPatch = ''
+      patchShebangs tools
     '';
-in
 
-stdenv.mkDerivation rec {
-  name = "uboot-${defconfig}-${version}";
-  version = "2015.07";
+    nativeBuildInputs = [ bc dtc openssl python2 swig ];
+    depsBuildBuild = [ buildPackages.stdenv.cc ];
 
-  src = fetchurl {
-    url = "ftp://ftp.denx.de/pub/u-boot/u-boot-${version}.tar.bz2";
-    sha256 = "1nclmyii5a1igvgjc4kxvi1fk2y82hp2iy4iywp34b3zf6ywjj0b";
+    hardeningDisable = [ "all" ];
+
+    makeFlags = [
+      "DTC=dtc"
+      "CROSS_COMPILE=${stdenv.cc.targetPrefix}"
+    ] ++ extraMakeFlags;
+
+    configurePhase = ''
+      runHook preConfigure
+
+      make ${defconfig}
+
+      runHook postConfigure
+    '';
+
+    installPhase = ''
+      runHook preInstall
+
+      mkdir -p ${installDir}
+      cp ${stdenv.lib.concatStringsSep " " filesToInstall} ${installDir}
+
+      runHook postInstall
+    '';
+
+    # make[2]: *** No rule to make target 'lib/efi_loader/helloworld.efi', needed by '__build'.  Stop.
+    enableParallelBuilding = false;
+
+    dontStrip = true;
+
+    meta = with stdenv.lib; {
+      homepage = http://www.denx.de/wiki/U-Boot/;
+      description = "Boot loader for embedded systems";
+      license = licenses.gpl2;
+      maintainers = [ maintainers.dezgeg ];
+    } // extraMeta;
+  } // removeAttrs args [ "extraMeta" ]);
+
+in rec {
+  inherit buildUBoot;
+
+  ubootTools = buildUBoot rec {
+    defconfig = "allnoconfig";
+    installDir = "$out/bin";
+    hardeningDisable = [];
+    dontStrip = false;
+    extraMeta.platforms = stdenv.lib.platforms.linux;
+    extraMakeFlags = [ "HOST_TOOLS_ALL=y" "CROSS_BUILD_TOOLS=1" "NO_SDL=1" "tools" ];
+    postConfigure = ''
+      sed -i '/CONFIG_SYS_TEXT_BASE/c\CONFIG_SYS_TEXT_BASE=0x00000000' .config
+    '';
+    filesToInstall = [
+      "tools/dumpimage"
+      "tools/fdtgrep"
+      "tools/kwboot"
+      "tools/mkenvimage"
+      "tools/mkimage"
+    ];
   };
 
-  patches = [ ./vexpress-Use-config_distro_bootcmd.patch ];
-
-  nativeBuildInputs = [ bc dtc ];
-
-  configurePhase = ''
-    make ${defconfig}
-  '';
-
-  buildPhase = assert (platform ? kernelArch);
-    buildFun platform.kernelArch;
-
-  installPhase = ''
-    mkdir -p ${installDir}
-    cp ${stdenv.lib.concatStringsSep " " filesToInstall} ${installDir}
-  '';
-
-  dontStrip = !toolsOnly;
-
-  crossAttrs = {
-    buildPhase = assert (crossPlatform ? kernelArch);
-      buildFun crossPlatform.kernelArch;
+  ubootA20OlinuxinoLime = buildUBoot rec {
+    defconfig = "A20-OLinuXino-Lime_defconfig";
+    extraMeta.platforms = ["armv7l-linux"];
+    filesToInstall = ["u-boot-sunxi-with-spl.bin"];
   };
 
-  meta = with stdenv.lib; {
-    homepage = "http://www.denx.de/wiki/U-Boot/";
-    description = "Boot loader for embedded systems";
-    license = licenses.gpl2;
-    maintainers = [ maintainers.dezgeg ];
-    platforms = targetPlatforms;
+  ubootBananaPi = buildUBoot rec {
+    defconfig = "Bananapi_defconfig";
+    extraMeta.platforms = ["armv7l-linux"];
+    filesToInstall = ["u-boot-sunxi-with-spl.bin"];
+  };
+
+  ubootBeagleboneBlack = buildUBoot rec {
+    defconfig = "am335x_boneblack_defconfig";
+    extraMeta.platforms = ["armv7l-linux"];
+    filesToInstall = ["MLO" "u-boot.img"];
+  };
+
+  # http://git.denx.de/?p=u-boot.git;a=blob;f=board/solidrun/clearfog/README;hb=refs/heads/master
+  ubootClearfog = buildUBoot rec {
+    defconfig = "clearfog_defconfig";
+    extraMeta.platforms = ["armv7l-linux"];
+    filesToInstall = ["u-boot-spl.kwb"];
+  };
+
+  ubootGuruplug = buildUBoot rec {
+    defconfig = "guruplug_defconfig";
+    extraMeta.platforms = ["armv5tel-linux"];
+    filesToInstall = ["u-boot.bin"];
+  };
+
+  ubootJetsonTK1 = buildUBoot rec {
+    defconfig = "jetson-tk1_defconfig";
+    extraMeta.platforms = ["armv7l-linux"];
+    filesToInstall = ["u-boot" "u-boot.dtb" "u-boot-dtb-tegra.bin" "u-boot-nodtb-tegra.bin"];
+    # tegra-uboot-flasher expects this exact directory layout, sigh...
+    postInstall = ''
+      mkdir -p $out/spl
+      cp spl/u-boot-spl $out/spl/
+    '';
+  };
+
+  ubootOdroidXU3 = buildUBoot rec {
+    defconfig = "odroid-xu3_defconfig";
+    extraMeta.platforms = ["armv7l-linux"];
+    filesToInstall = ["u-boot-dtb.bin"];
+  };
+
+  ubootOrangePiPc = buildUBoot rec {
+    defconfig = "orangepi_pc_defconfig";
+    extraMeta.platforms = ["armv7l-linux"];
+    filesToInstall = ["u-boot-sunxi-with-spl.bin"];
+  };
+
+  ubootPcduino3Nano = buildUBoot rec {
+    defconfig = "Linksprite_pcDuino3_Nano_defconfig";
+    extraMeta.platforms = ["armv7l-linux"];
+    filesToInstall = ["u-boot-sunxi-with-spl.bin"];
+  };
+
+  ubootPine64 = buildUBoot rec {
+    extraPatches = [sunxiPatch];
+    defconfig = "pine64_plus_defconfig";
+    extraMeta.platforms = ["aarch64-linux"];
+    BL31 = "${armTrustedFirmwareAllwinner}/bl31.bin";
+    filesToInstall = ["u-boot-sunxi-with-spl.bin"];
+  };
+
+  ubootQemuAarch64 = buildUBoot rec {
+    defconfig = "qemu_arm64_defconfig";
+    extraMeta.platforms = ["aarch64-linux"];
+    filesToInstall = ["u-boot.bin"];
+  };
+
+  ubootQemuArm = buildUBoot rec {
+    defconfig = "qemu_arm_defconfig";
+    extraMeta.platforms = ["armv7l-linux"];
+    filesToInstall = ["u-boot.bin"];
+  };
+
+  ubootRaspberryPi = buildUBoot rec {
+    defconfig = "rpi_defconfig";
+    extraMeta.platforms = ["armv6l-linux"];
+    filesToInstall = ["u-boot.bin"];
+  };
+
+  ubootRaspberryPi2 = buildUBoot rec {
+    defconfig = "rpi_2_defconfig";
+    extraMeta.platforms = ["armv7l-linux"];
+    filesToInstall = ["u-boot.bin"];
+  };
+
+  ubootRaspberryPi3_32bit = buildUBoot rec {
+    defconfig = "rpi_3_32b_defconfig";
+    extraMeta.platforms = ["armv7l-linux"];
+    filesToInstall = ["u-boot.bin"];
+  };
+
+  ubootRaspberryPi3_64bit = buildUBoot rec {
+    defconfig = "rpi_3_defconfig";
+    extraMeta.platforms = ["aarch64-linux"];
+    filesToInstall = ["u-boot.bin"];
+  };
+
+  ubootRaspberryPiZero = buildUBoot rec {
+    defconfig = "rpi_0_w_defconfig";
+    extraMeta.platforms = ["armv6l-linux"];
+    filesToInstall = ["u-boot.bin"];
+  };
+
+  ubootSheevaplug = buildUBoot rec {
+    defconfig = "sheevaplug_defconfig";
+    extraMeta.platforms = ["armv5tel-linux"];
+    filesToInstall = ["u-boot.bin"];
+  };
+
+  ubootSopine = buildUBoot rec {
+    extraPatches = [sunxiPatch];
+    defconfig = "sopine_baseboard_defconfig";
+    extraMeta.platforms = ["aarch64-linux"];
+    BL31 = "${armTrustedFirmwareAllwinner}/bl31.bin";
+    filesToInstall = ["u-boot-sunxi-with-spl.bin"];
+  };
+
+  ubootUtilite = buildUBoot rec {
+    defconfig = "cm_fx6_defconfig";
+    extraMeta.platforms = ["armv7l-linux"];
+    filesToInstall = ["u-boot-with-nand-spl.imx"];
+    buildFlags = "u-boot-with-nand-spl.imx";
+    postConfigure = ''
+      cat >> .config << EOF
+      CONFIG_CMD_SETEXPR=y
+      EOF
+    '';
+    # sata init; load sata 0 $loadaddr u-boot-with-nand-spl.imx
+    # sf probe; sf update $loadaddr 0 80000
+  };
+
+  ubootWandboard = buildUBoot rec {
+    defconfig = "wandboard_defconfig";
+    extraMeta.platforms = ["armv7l-linux"];
+    filesToInstall = ["u-boot.img" "SPL"];
   };
 }

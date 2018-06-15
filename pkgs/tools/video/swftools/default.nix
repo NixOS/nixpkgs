@@ -19,5 +19,6 @@ stdenv.mkDerivation rec {
     homepage = http://www.swftools.org/about.html;
     license = licenses.gpl2;
     maintainers = [ maintainers.koral ];
+    platforms = stdenv.lib.platforms.unix;
   };
 }

@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ libclthreads libX11 libXft xorg.xproto ];
 
-  NIX_CFLAGS_COMPILE = "-I${xorg.xproto}/include -I${libXft}/include";
+  NIX_CFLAGS_COMPILE = "-I${xorg.xproto}/include -I${libXft.dev}/include";
 
   patchPhase = ''
     sed -e "s@ldconfig@@" -i Makefile
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Zita X11 library";
-    homepage = "http://kokkinizita.linuxaudio.org/linuxaudio/downloads/index.html";
+    homepage = http://kokkinizita.linuxaudio.org/linuxaudio/downloads/index.html;
     license = licenses.lgpl21;
     maintainers = with maintainers; [ magnetophon ];
     platforms = platforms.linux;

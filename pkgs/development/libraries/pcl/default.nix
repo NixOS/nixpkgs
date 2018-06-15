@@ -1,25 +1,34 @@
-{ stdenv, fetchzip, cmake, qhull, flann, boost, vtk, eigen, pkgconfig, qt4
-, libusb1, libpcap, libXt
+{ stdenv, fetchFromGitHub, cmake, qhull, flann, boost, vtk, eigen, pkgconfig, qtbase
+, libusb1, libpcap, libXt, libpng, Cocoa, AGL, cf-private, OpenGL
 }:
 
 stdenv.mkDerivation rec {
-  name = "pcl-1.7.2";
+  name = "pcl-1.8.1";
 
-  src = fetchzip {
-    name = name + "-src";
-    url = "https://github.com/PointCloudLibrary/pcl/archive/${name}.tar.gz";
-    sha256 = "0sm19p6wcls2d9l0vi5fgwqp7l372nh3g7bdin42w31zr8dmz8h8";
+  src = fetchFromGitHub {
+    owner = "PointCloudLibrary";
+    repo = "pcl";
+    rev = name;
+    sha256 = "05wvqqi2fyk5innw4mg356r71c1hmc9alc7xkf4g81ds3b3867xq";
   };
 
   enableParallelBuilding = true;
 
-  buildInputs = [ cmake qhull flann boost vtk eigen pkgconfig qt4 libusb1 libpcap libXt ];
+  nativeBuildInputs = [ pkgconfig cmake ];
+  buildInputs = [ qhull flann boost eigen libusb1 libpcap
+                  libpng vtk qtbase libXt ]
+
+    ++ stdenv.lib.optionals stdenv.isDarwin [ Cocoa AGL cf-private ];
+  cmakeFlags = stdenv.lib.optionals stdenv.isDarwin [
+    "-DCMAKE_OSX_SYSROOT=" "-DCMAKE_OSX_DEPLOYMENT_TARGET="
+    "-DOPENGL_INCLUDE_DIR=${OpenGL}/Library/Frameworks"
+  ];
 
   meta = {
     homepage = http://pointclouds.org/;
     description = "Open project for 2D/3D image and point cloud processing";
     license = stdenv.lib.licenses.bsd3;
     maintainers = with stdenv.lib.maintainers; [viric];
-    platforms = with stdenv.lib.platforms; linux;
+    platforms = with stdenv.lib.platforms; linux ++ darwin;
   };
 }

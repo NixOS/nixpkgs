@@ -1,4 +1,4 @@
-{ stdenv, curl }: # Note that `curl' may be `null', in case of the native stdenv.
+{ lib, stdenvNoCC, curl }: # Note that `curl' may be `null', in case of the native stdenvNoCC.
 
 let
 
@@ -10,7 +10,7 @@ let
   # resulting store derivations (.drv files) much smaller, which in
   # turn makes nix-env/nix-instantiate faster.
   mirrorsFile =
-    stdenv.mkDerivation ({
+    stdenvNoCC.mkDerivation ({
       name = "mirrors-list";
       builder = ./write-mirror-list.sh;
       preferLocalBuild = true;
@@ -20,13 +20,7 @@ let
   # "gnu", etc.).
   sites = builtins.attrNames mirrors;
 
-  impureEnvVars = [
-    # We borrow these environment variables from the caller to allow
-    # easy proxy configuration.  This is impure, but a fixed-output
-    # derivation like fetchurl is allowed to do so since its result is
-    # by definition pure.
-    "http_proxy" "https_proxy" "ftp_proxy" "all_proxy" "no_proxy"
-
+  impureEnvVars = lib.fetchers.proxyImpureEnvVars ++ [
     # This variable allows the user to pass additional options to curl
     "NIX_CURL_FLAGS"
 
@@ -61,8 +55,16 @@ in
 , md5 ? ""
 , sha1 ? ""
 , sha256 ? ""
+, sha512 ? ""
 
 , recursiveHash ? false
+
+, # Shell code to build a netrc file for BASIC auth
+  netrcPhase ? null
+
+, # Impure env vars (http://nixos.org/nix/manual/#sec-advanced-attributes)
+  # needed for netrcPhase
+  netrcImpureEnvVars ? []
 
 , # Shell code executed after the file has been fetched
   # successfully. This can do things like check or transform the file.
@@ -73,28 +75,40 @@ in
   # is communicated to postFetch via $downloadedFile.
   downloadToTemp ? false
 
+, # If true, set executable bit on downloaded file
+  executable ? false
+
 , # If set, don't download the file, but write a list of all possible
   # URLs (resulting from resolving mirror:// URLs) to $out.
   showURLs ? false
 
 , # Meta information, if any.
   meta ? {}
+
+  # Passthru information, if any.
+, passthru ? {}
 }:
 
-assert builtins.isList urls;
-assert urls != [] -> url == "";
-assert url != "" -> urls == [];
-
+assert sha512 != "" -> builtins.compareVersions "1.11" builtins.nixVersion <= 0;
 
 let
+  urls_ =
+    if urls != [] && url == "" then
+      (if lib.isList urls then urls
+       else throw "`urls` is not a list")
+    else if urls == [] && url != "" then [url]
+    else throw "fetchurl requires either `url` or `urls` to be set";
 
-  hasHash = showURLs || (outputHash != "" && outputHashAlgo != "")
-    || md5 != "" || sha1 != "" || sha256 != "";
-  urls_ = if urls != [] then urls else [url];
-
+  hash_ =
+    if md5 != "" then throw "fetchurl does not support md5 anymore, please use sha256 or sha512"
+    else if (outputHash != "" && outputHashAlgo != "") then { inherit outputHashAlgo outputHash; }
+    else if sha512 != "" then { outputHashAlgo = "sha512"; outputHash = sha512; }
+    else if sha256 != "" then { outputHashAlgo = "sha256"; outputHash = sha256; }
+    else if sha1   != "" then { outputHashAlgo = "sha1";   outputHash = sha1; }
+    else throw "fetchurl requires a hash for fixed-output derivation: ${lib.concatStringsSep ", " urls_}";
 in
 
-if (!hasHash) then throw "Specify hash for fetchurl fixed-output derivation: ${stdenv.lib.concatStringsSep ", " urls_}" else stdenv.mkDerivation {
+stdenvNoCC.mkDerivation {
   name =
     if showURLs then "urls"
     else if name != "" then name
@@ -102,7 +116,7 @@ if (!hasHash) then throw "Specify hash for fetchurl fixed-output derivation: ${s
 
   builder = ./builder.sh;
 
-  buildInputs = [ curl ];
+  nativeBuildInputs = [ curl ];
 
   urls = urls_;
 
@@ -111,18 +125,25 @@ if (!hasHash) then throw "Specify hash for fetchurl fixed-output derivation: ${s
   preferHashedMirrors = true;
 
   # New-style output content requirements.
-  outputHashAlgo = if outputHashAlgo != "" then outputHashAlgo else
-      if sha256 != "" then "sha256" else if sha1 != "" then "sha1" else "md5";
-  outputHash = if outputHash != "" then outputHash else
-      if sha256 != "" then sha256 else if sha1 != "" then sha1 else md5;
+  inherit (hash_) outputHashAlgo outputHash;
 
-  outputHashMode = if recursiveHash then "recursive" else "flat";
+  outputHashMode = if (recursiveHash || executable) then "recursive" else "flat";
 
-  inherit curlOpts showURLs mirrorsFile impureEnvVars postFetch downloadToTemp;
+  inherit curlOpts showURLs mirrorsFile postFetch downloadToTemp executable;
+
+  impureEnvVars = impureEnvVars ++ netrcImpureEnvVars;
+
+  nixpkgsVersion = lib.trivial.release;
 
   # Doing the download on a remote machine just duplicates network
   # traffic, so don't do that.
   preferLocalBuild = true;
 
+  postHook = if netrcPhase == null then null else ''
+    ${netrcPhase}
+    curlOpts="$curlOpts --netrc-file $PWD/netrc"
+  '';
+
   inherit meta;
+  inherit passthru;
 }

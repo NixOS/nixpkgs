@@ -1,8 +1,14 @@
-{ bundlerEnv }:
+{ bundlerEnv, lib, ruby }:
 
 bundlerEnv {
-  name = "riemann-dash-0.2.9";
-  gemfile = ./Gemfile;
-  lockfile = ./Gemfile.lock;
-  gemset = ./gemset.nix;
+  inherit ruby;
+  pname = "riemann-dash";
+  gemdir = ./.;
+
+  meta = with lib; {
+    description = "A javascript, websockets-powered dashboard for Riemann";
+    homepage = https://github.com/riemann/riemann-dash;
+    license = licenses.mit;
+    platforms = platforms.unix;
+  };
 }

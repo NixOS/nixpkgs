@@ -5,11 +5,23 @@ with lib;
 let
   cfg = config.services.elasticsearch;
 
+  es5 = builtins.compareVersions (builtins.parseDrvName cfg.package.name).version "5" >= 0;
+  es6 = builtins.compareVersions (builtins.parseDrvName cfg.package.name).version "6" >= 0;
+
   esConfig = ''
-    network.host: ${cfg.host}
-    network.port: ${toString cfg.port}
-    network.tcp.port: ${toString cfg.tcp_port}
+    network.host: ${cfg.listenAddress}
     cluster.name: ${cfg.cluster_name}
+
+    ${if es5 then ''
+      http.port: ${toString cfg.port}
+      transport.tcp.port: ${toString cfg.tcp_port}
+    '' else ''
+      network.port: ${toString cfg.port}
+      network.tcp.port: ${toString cfg.tcp_port}
+      # TODO: find a way to enable security manager
+      security.manager.enabled: false
+    ''}
+
     ${cfg.extraConf}
   '';
 
@@ -17,13 +29,21 @@ let
     name = "elasticsearch-config";
     paths = [
       (pkgs.writeTextDir "elasticsearch.yml" esConfig)
-      (pkgs.writeTextDir "logging.yml" cfg.logging)
+      (if es5 then (pkgs.writeTextDir "log4j2.properties" cfg.logging)
+              else (pkgs.writeTextDir "logging.yml" cfg.logging))
     ];
+    postBuild = concatStringsSep "\n" (concatLists [
+      # Elasticsearch 5.x won't start when the scripts directory does not exist
+      (optional es5 "${pkgs.coreutils}/bin/mkdir -p $out/scripts")
+      (optional es6 "ln -s ${cfg.package}/config/jvm.options $out/jvm.options")
+    ]);
   };
 
   esPlugins = pkgs.buildEnv {
     name = "elasticsearch-plugins";
     paths = cfg.plugins;
+    # Elasticsearch 5.x won't start when the plugins directory does not exist
+    postBuild = if es5 then "${pkgs.coreutils}/bin/mkdir -p $out/plugins" else "";
   };
 
 in {
@@ -39,11 +59,12 @@ in {
 
     package = mkOption {
       description = "Elasticsearch package to use.";
-      default = pkgs.elasticsearch;
+      default = pkgs.elasticsearch2;
+      defaultText = "pkgs.elasticsearch2";
       type = types.package;
     };
 
-    host = mkOption {
+    listenAddress = mkOption {
       description = "Elasticsearch listen address.";
       default = "127.0.0.1";
       type = types.str;
@@ -75,25 +96,35 @@ in {
         node.name: "elasticsearch"
         node.master: true
         node.data: false
-        index.number_of_shards: 5
-        index.number_of_replicas: 1
       '';
     };
 
     logging = mkOption {
       description = "Elasticsearch logging configuration.";
-      default = ''
-        rootLogger: INFO, console
-        logger:
-          action: INFO
-          com.amazonaws: WARN
-        appender:
-          console:
-            type: console
-            layout:
-              type: consolePattern
-              conversionPattern: "[%d{ISO8601}][%-5p][%-25c] %m%n"
-      '';
+      default =
+        if es5 then ''
+          logger.action.name = org.elasticsearch.action
+          logger.action.level = info
+
+          appender.console.type = Console
+          appender.console.name = console
+          appender.console.layout.type = PatternLayout
+          appender.console.layout.pattern = [%d{ISO8601}][%-5p][%-25c{1.}] %marker%m%n
+
+          rootLogger.level = info
+          rootLogger.appenderRef.console.ref = console
+        '' else ''
+          rootLogger: INFO, console
+          logger:
+            action: INFO
+            com.amazonaws: WARN
+          appender:
+            console:
+              type: console
+              layout:
+                type: consolePattern
+                conversionPattern: "[%d{ISO8601}][%-5p][%-25c] %m%n"
+        '';
       type = types.str;
     };
 
@@ -107,6 +138,12 @@ in {
 
     extraCmdLineOptions = mkOption {
       description = "Extra command line options for the elasticsearch launcher.";
+      default = [];
+      type = types.listOf types.str;
+    };
+
+    extraJavaOptions = mkOption {
+      description = "Extra command line options for Java.";
       default = [];
       type = types.listOf types.str;
       example = [ "-Djava.net.preferIPv4Stack=true" ];
@@ -126,35 +163,50 @@ in {
     systemd.services.elasticsearch = {
       description = "Elasticsearch Daemon";
       wantedBy = [ "multi-user.target" ];
-      after = [ "network-interfaces.target" ];
-      environment = { ES_HOME = cfg.dataDir; };
+      after = [ "network.target" ];
+      path = [ pkgs.inetutils ];
+      environment = {
+        ES_HOME = cfg.dataDir;
+        ES_JAVA_OPTS = toString ( optional (!es6) [ "-Des.path.conf=${configDir}" ]
+                                  ++ cfg.extraJavaOptions);
+      } // optionalAttrs es6 {
+        ES_PATH_CONF = configDir;
+      };
       serviceConfig = {
-        ExecStart = "${cfg.package}/bin/elasticsearch -Des.path.conf=${configDir} ${toString cfg.extraCmdLineOptions}";
+        ExecStart = "${cfg.package}/bin/elasticsearch ${toString cfg.extraCmdLineOptions}";
         User = "elasticsearch";
         PermissionsStartOnly = true;
+        LimitNOFILE = "1024000";
       };
       preStart = ''
+        ${optionalString (!config.boot.isContainer) ''
+          # Only set vm.max_map_count if lower than ES required minimum
+          # This avoids conflict if configured via boot.kernel.sysctl
+          if [ `${pkgs.procps}/bin/sysctl -n vm.max_map_count` -lt 262144 ]; then
+            ${pkgs.procps}/bin/sysctl -w vm.max_map_count=262144
+          fi
+        ''}
+
         mkdir -m 0700 -p ${cfg.dataDir}
-        if [ "$(id -u)" = 0 ]; then chown -R elasticsearch ${cfg.dataDir}; fi
 
         # Install plugins
-        rm ${cfg.dataDir}/plugins || true
-        ln -s ${esPlugins}/plugins ${cfg.dataDir}/plugins
-      '';
-      postStart = mkBefore ''
-        until ${pkgs.curl}/bin/curl -s -o /dev/null ${cfg.host}:${toString cfg.port}; do
-          sleep 1
-        done
+        ln -sfT ${esPlugins}/plugins ${cfg.dataDir}/plugins
+        ln -sfT ${cfg.package}/lib ${cfg.dataDir}/lib
+        ln -sfT ${cfg.package}/modules ${cfg.dataDir}/modules
+        if [ "$(id -u)" = 0 ]; then chown -R elasticsearch ${cfg.dataDir}; fi
       '';
     };
 
     environment.systemPackages = [ cfg.package ];
 
-    users.extraUsers = singleton {
-      name = "elasticsearch";
-      uid = config.ids.uids.elasticsearch;
-      description = "Elasticsearch daemon user";
-      home = cfg.dataDir;
+    users = {
+      groups.elasticsearch.gid = config.ids.gids.elasticsearch;
+      users.elasticsearch = {
+        uid = config.ids.uids.elasticsearch;
+        description = "Elasticsearch daemon user";
+        home = cfg.dataDir;
+        group = "elasticsearch";
+      };
     };
   };
 }

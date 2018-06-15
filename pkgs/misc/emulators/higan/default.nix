@@ -1,56 +1,53 @@
 { stdenv, fetchurl
-, pkgconfig
+, p7zip, pkgconfig
 , libX11, libXv
 , udev
-, mesa, SDL
+, libGLU_combined, SDL
 , libao, openal, libpulseaudio
-, profile ? "performance" # Options: accuracy, balanced, performance
-, guiToolkit ? "gtk" # can be gtk or qt4
-, gtk ? null, qt4 ? null }:
-
-assert guiToolkit == "gtk" || guiToolkit == "qt4";
-assert (guiToolkit == "gtk" -> gtk != null) || (guiToolkit == "qt4" -> qt4 != null);
+, gtk2, gtksourceview }:
 
 with stdenv.lib;
 stdenv.mkDerivation rec {
 
   name = "higan-${version}";
-  version = "094";
+  version = "106";
   sourceName = "higan_v${version}-source";
 
   src = fetchurl {
-    urls = [ "http://files.byuu.org/download/${sourceName}.tar.xz" ];
-    sha256 = "06qm271pzf3qf2labfw2lx6k0xcd89jndmn0jzmnc40cspwrs52y";
+    urls = [ "http://download.byuu.org/${sourceName}.7z" ];
+    sha256 = "063dzp9wrdnbvagraxi31xg0154y2gf67rrd0mnc8h104cgzjr35";
     curlOpts = "--user-agent 'Mozilla/5.0'"; # the good old user-agent trick...
   };
 
-  buildInputs =
-  [ pkgconfig libX11 libXv udev mesa SDL libao openal libpulseaudio ]
-  ++ optionals (guiToolkit == "gtk") [ gtk ]
-  ++ optionals (guiToolkit == "qt4") [ qt4 ];
+  patches = [ ./0001-change-flags.diff ];
+  postPatch = "sed '1i#include <cmath>' -i higan/fc/ppu/ppu.cpp";
 
-  buildPhase = ''
-    make phoenix=${guiToolkit} profile=${profile} -C ananke
-    make phoenix=${guiToolkit} profile=${profile}
+  buildInputs =
+  [ p7zip pkgconfig libX11 libXv udev libGLU_combined SDL libao openal libpulseaudio gtk2 gtksourceview ];
+
+  unpackPhase = ''
+    7z x $src
+    sourceRoot=${sourceName}
   '';
 
+  buildPhase = ''
+    make compiler=c++ -C icarus
+    make compiler=c++ -C higan
+  '';
+
+  # Now the cheats file will be distributed separately
   installPhase = ''
-    install -dm 755 $out/share/applications $out/share/pixmaps $out/share/higan/Video\ Shaders $out/bin $out/lib
-
-    install -m 644 data/higan.desktop $out/share/applications/
-    install -m 644 data/higan.png $out/share/pixmaps/
-    cp -dr --no-preserve=ownership profile/* data/cheats.bml $out/share/higan/
-    cp -dr --no-preserve=ownership shaders/*.shader $out/share/higan/Video\ Shaders/
-
-    install -m 755 out/higan $out/bin/higan
-    install -m 644 ananke/libananke.so $out/lib/libananke.so.1
-    (cd $out/lib && ln -s libananke.so.1 libananke.so)
+    install -dm 755 $out/bin $out/share/applications $out/share/higan $out/share/pixmaps
+    install -m 755 icarus/out/icarus $out/bin/
+    install -m 755 higan/out/higan $out/bin/
+    install -m 644 higan/data/higan.desktop $out/share/applications/
+    install -m 644 higan/data/higan.png $out/share/pixmaps/higan-icon.png
+    install -m 644 higan/resource/logo/higan.png $out/share/pixmaps/higan-logo.png
+    cp --recursive --no-dereference --preserve='links' --no-preserve='ownership' \
+      higan/systems/* $out/share/higan/
   '';
 
   fixupPhase = ''
-    oldRPath=$(patchelf --print-rpath $out/bin/higan)
-    patchelf --set-rpath $oldRPath:$out/lib $out/bin/higan
-
     # A dirty workaround, suggested by @cpages:
     # we create a first-run script to populate
     # the local $HOME with all the auxiliary
@@ -59,8 +56,8 @@ stdenv.mkDerivation rec {
     cat <<EOF > $out/bin/higan-init.sh
     #!${stdenv.shell}
 
-    cp --update --recursive $out/share/higan \$HOME/.config
-    chmod --recursive u+w \$HOME/.config/higan
+    cp --recursive --update $out/share/higan/*.sys \$HOME/.local/share/higan/
+
     EOF
 
     chmod +x $out/bin/higan-init.sh
@@ -69,22 +66,18 @@ stdenv.mkDerivation rec {
   meta = {
     description = "An open-source, cycle-accurate Nintendo multi-system emulator";
     longDescription = ''
-      Higan (formerly bsnes) is a Nintendo multi-system emulator.
+      Higan (formerly bsnes) is a multi-system game console emulator.
       It currently supports the following systems:
-        Famicom; Super Famicom;
-        Game Boy; Game Boy Color; Game Boy Advance
-      higan also supports the following subsystems:
-        Super Game Boy; BS-X Satellaview; Sufami Turbo
+        - Nintendo's Famicom, Super Famicom (with subsystems: 
+          Super Game Boy, BS-X Satellaview, Sufami Turbo); 
+          Game Boy, Game Boy Color, Game Boy Advance;
+        - Sega's Master System, Game Gear, Mega Drive;
+        - NEC's PC Engine, SuperGrafx;
+        - Bandai's WonderSwan, WonderSwan Color.
     '';
-    homepage = http://byuu.org/higan/;
+    homepage = https://byuu.org/higan/;
     license = licenses.gpl3Plus;
-    maintainers = [ maintainers.AndersonTorres ];
-    platforms = platforms.linux;
+    maintainers = with maintainers; [ AndersonTorres ];
+    platforms = with platforms; unix;
   };
 }
-
-#
-# TODO:
-#   - fix the BML and BIOS paths - maybe submitting
-#     a custom patch to Higan project would not be a bad idea...
-#   - Qt support

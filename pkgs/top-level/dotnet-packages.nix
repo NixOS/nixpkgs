@@ -46,6 +46,20 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
     outputFiles = [ "lib/net40/*" ];
   };
 
+  FSharpCore = fetchNuGet {
+    baseName = "FSharp.Core";
+    version = "4.0.0.1";
+    sha256 = "01nhjcxdz8l1r5vvdzhmgy5x7z5fqppab3ki34qg14axgf8jjygn";
+    outputFiles = [ "*" ];
+  };
+
+  FSharpData225 = fetchNuGet {
+    baseName = "FSharp.Data";
+    version = "2.2.5";
+    sha256 = "1c9l6bk0d2srccash2980y9phq3kmfm0m76k4wghnysnq94vm724";
+    outputFiles = [ "*" ];
+  };
+
   FSharpDataSQLProvider = fetchNuGet {
     baseName = "SQLProvider";
     version = "0.0.9-alpha";
@@ -60,11 +74,39 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
     outputFiles = [ "lib/net45/*" ];
   };
 
+  FsCheck262 = fetchNuGet {
+    baseName = "FsCheck";
+    version = "2.6.2";
+    sha256 = "0fh9yvsc4i61z31qf00d6gjv6xxd54pv1ykf5bpv95a5crc3qfvl";
+    outputFiles = [ "*" ];
+  };
+
   FsCheckNunit = fetchNuGet {
     baseName = "FsCheck.Nunit";
     version = "1.0.4";
     sha256 = "1s62jrsa5hxqy1ginl8r29rjdc8vbkwmz7mb0hglhwccdqfyr5xy";
     outputFiles = [ "lib/net45/*" ];
+  };
+
+  FSharpCompilerTools = fetchNuGet {
+    baseName = "FSharp.Compiler.Tools";
+    version = "4.1.4";
+    sha256 = "0vsp0khlnwh15ibg8s161rw6a6i8rlriclpq53paga447jllf0m8";
+    outputFiles = [ "*" ];
+  };
+
+  FsLexYacc = fetchNuGet {
+    baseName = "FsLexYacc";
+    version = "6.1.0";
+    sha256 = "1v5myn62zqs431i046gscqw2v0c969fc7pdplx7z9cnpy0p2s4rv";
+    outputFiles = [ "build/*" ];
+  };
+
+  FsLexYacc704 = fetchNuGet {
+    baseName = "FsLexYacc";
+    version = "7.0.4";
+    sha256 = "01zpdb0pybdf0by02rwd7pb1g0cmnn8jxm2pibzxjxw6f4l43ywi";
+    outputFiles = [ "*" ];
   };
 
   FsPickler = fetchNuGet {
@@ -88,11 +130,132 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
     outputFiles = [ "lib/net40/*" ];
   };
 
-  NUnit = fetchNuGet {
+  NUnit3 = fetchNuGet {
+    baseName = "NUnit";
+    version = "3.0.1";
+    sha256 = "1g3j3kvg9vrapb1vjgq65nvn1vg7bzm66w7yjnaip1iww1yn1b0p";
+    outputFiles = [ "lib/*" ];
+  };
+
+  NUnit350 = fetchNuGet {
+    baseName = "NUnit";
+    version = "3.5.0";
+    sha256 = "19fxq9cf754ygda5c8rn1zqs71pfxi7mb96jwqhlichnqih6i16z";
+    outputFiles = [ "*" ];
+  };
+
+  NUnit2 = fetchNuGet {
     baseName = "NUnit";
     version = "2.6.4";
     sha256 = "1acwsm7p93b1hzfb83ia33145x0w6fvdsfjm9xflsisljxpdx35y";
     outputFiles = [ "lib/*" ];
+  };
+
+  NUnit = NUnit2;
+
+  NUnitConsole = fetchNuGet {
+    baseName = "NUnit.Console";
+    version = "3.0.1";
+    sha256 = "154bqwm2n95syv8nwd67qh8qsv0b0h5zap60sk64z3kd3a9ffi5p";
+    outputFiles = [ "tools/*" ];
+  };
+
+  MaxMindDb = fetchNuGet {
+    baseName = "MaxMind.Db";
+    version = "1.1.0.0";
+    sha256 = "0lixl76f7k3ldiqzg94zh13gn82w5mm5dx72y97fcqvp8g6nj3ds";
+    outputFiles = [ "lib/*" ];
+  };
+
+  MaxMindGeoIP2 = fetchNuGet {
+    baseName = "MaxMind.GeoIP2";
+    version = "2.3.1";
+    sha256 = "1s44dvjnmj1aimbrgkmpj6h5dn1w6acgqjch1axc76yz6hwknqgf";
+    outputFiles = [ "lib/*" ];
+  };
+
+  SharpZipLib = fetchNuGet {
+    baseName = "SharpZipLib";
+    version = "0.86.0";
+    sha256 = "01w2038gckfnq31pncrlgm7d0c939pwr1x4jj5450vcqpd4c41jr";
+    outputFiles = [ "lib/*" ];
+  };
+
+  StyleCopMSBuild = fetchNuGet {
+    baseName = "StyleCop.MSBuild";
+    version = "4.7.49.0";
+    sha256 = "0rpfyvcggm881ynvgr17kbx5hvj7ivlms0bmskmb2zyjlpddx036";
+    outputFiles = [ "tools/*" ];
+  };
+
+  StyleCopPlusMSBuild = fetchNuGet {
+    baseName = "StyleCopPlus.MSBuild";
+    version = "4.7.49.5";
+    sha256 = "1hv4lfxw72aql8siyqc4n954vzdz8p6jx9f2wrgzz0jy1k98x2mr";
+    outputFiles = [ "tools/*" ];
+  };
+
+  SystemValueTuple = fetchNuGet {
+    baseName = "System.ValueTuple";
+    version = "4.3.0";
+    sha256 = "00p5s753xh5417arw3k6npf1pc1k3m1s9mrlkw5vmc7pg8lm6n88";
+    outputFiles = [ "*" ];
+  };
+
+  RestSharp = fetchNuGet {
+    baseName = "RestSharp";
+    version = "105.2.3";
+    sha256 = "1br48124ppz80x92m84sfyil1gn23hxg2ml9i9hsd0lp86vlaa1m";
+    outputFiles = [ "lib/*" ];
+  };
+
+  SharpFont = fetchNuGet {
+    baseName = "SharpFont";
+    version = "3.1.0";
+    sha256 = "137y514i4zi0i0qsx7nv4ibl4kifbr8xr23rqdkwf7yxf88jjmh2";
+    outputFiles = [ "lib/*" "config/*" ];
+  };
+
+  SmartIrc4net = fetchNuGet {
+    baseName = "SmartIrc4net";
+    version = "0.4.5.1";
+    sha256 = "1d531sj39fvwmj2wgplqfify301y3cwp7kwr9ai5hgrq81jmjn2b";
+    outputFiles = [ "lib/*" ];
+  };
+
+  FuzzyLogicLibrary = fetchNuGet {
+    baseName = "FuzzyLogicLibrary";
+    version = "1.2.0";
+    sha256 = "0x518i8d3rw9n51xwawa4sywvqd722adj7kpcgcm63r66s950r5l";
+    outputFiles = [ "bin/*" ];
+  };
+
+  OpenNAT = fetchNuGet {
+    baseName = "Open.NAT";
+    version = "2.1.0";
+    sha256 = "1jyd30fwycdwx5ck96zhp2xf20yz0sp7g3pjbqhmay4kd322mfwk";
+    outputFiles = [ "lib/*" ];
+  };
+
+  MonoNat = fetchNuGet {
+    baseName = "Mono.Nat";
+    version = "1.2.24";
+    sha256 = "0vfkach11kkcd9rcqz3s38m70d5spyb21gl99iqnkljxj5555wjs";
+    outputFiles = [ "lib/*" ];
+  };
+
+  MicrosoftDiaSymReader = fetchNuGet {
+    baseName = "Microsoft.DiaSymReader";
+    version = "1.1.0";
+    sha256 = "04dgwy6nyxksd1nb24k5c5vz8naggg7hryadvwqnm2v3alkh6g88";
+    outputFiles = [ "*" ];
+  };
+
+  MicrosoftDiaSymReaderPortablePdb = fetchNuGet {
+    baseName = "Microsoft.DiaSymReader.PortablePdb";
+    version = "1.2.0";
+    sha256 = "0qa8sqg0lzz9galkkfyi8rkbkali0nxm3qd5y4dlxp96ngrq5ldz";
+    outputFiles = [ "*" ];
   };
 
   NUnitRunners = fetchNuGet {
@@ -110,6 +273,20 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
     outputFiles = [ "lib/portable-net45+win8+wp8+wpa81/*" ];
   };
 
+  SystemCollectionsImmutable131 = fetchNuGet {
+    baseName = "System.Collections.Immutable";
+    version = "1.3.1";
+    sha256 = "149fcp7k7r9iw24dv5hbaij0c38kcv28dyhzbkggilfh4x2hy8c2";
+    outputFiles = [ "*" ];
+  };
+
+  SystemReflectionMetadata = fetchNuGet {
+    baseName = "System.Reflection.Metadata";
+    version = "1.4.2";
+    sha256 = "19fhdgd35yg52gyckhgwrphq07nv7v7r73hcg69ns94xfg1i6r7i";
+    outputFiles = [ "*" ];
+  };
+
   Suave = fetchNuGet {
     baseName = "Suave";
     version = "0.29.0";
@@ -119,6 +296,112 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
   };
 
   # SOURCE PACKAGES
+
+  Boogie = buildDotnetPackage rec {
+    baseName = "Boogie";
+    version = "2018-05-28";
+    name = "${baseName}-unstable-${version}";
+
+    src = fetchFromGitHub {
+      owner = "boogie-org";
+      repo = "boogie";
+      rev = "fc97aac639505f46cda7904dae95c9557716d037";
+      sha256 = "1hjksc5sapw1shxjwg0swja5afman8i15wnv5b6rzkqd4mg8y6nz";
+    };
+
+    # emulate `nuget restore Source/Boogie.sln`
+    # which installs in $srcdir/Source/packages
+    preBuild = ''
+      mkdir -p Source/packages/NUnit.2.6.3
+      ln -sn ${dotnetPackages.NUnit}/lib/dotnet/NUnit Source/packages/NUnit.2.6.3/lib
+    '';
+
+    buildInputs = [
+      dotnetPackages.NUnit
+      dotnetPackages.NUnitRunners
+    ];
+
+    xBuildFiles = [ "Source/Boogie.sln" ];
+
+    outputFiles = [ "Binaries/*" ];
+
+    postInstall = ''
+        mkdir -pv "$out/lib/dotnet/${baseName}"
+        ln -sv "${pkgs.z3}/bin/z3" "$out/lib/dotnet/${baseName}/z3.exe"
+
+        # so that this derivation can be used as a vim plugin to install syntax highlighting
+        vimdir=$out/share/vim-plugins/boogie
+        install -Dt $vimdir/syntax/ Util/vim/syntax/boogie.vim
+        mkdir $vimdir/ftdetect
+        echo 'au BufRead,BufNewFile *.bpl set filetype=boogie' > $vimdir/ftdetect/bpl.vim
+    '';
+
+    meta = with stdenv.lib; {
+      description = "An intermediate verification language";
+      homepage = "https://github.com/boogie-org/boogie";
+      longDescription = ''
+        Boogie is an intermediate verification language (IVL), intended as a
+        layer on which to build program verifiers for other languages.
+
+        This derivation may be used as a vim plugin to provide syntax highlighting.
+      '';
+      license = licenses.mspl;
+      maintainers = [ maintainers.taktoa ];
+      platforms = with platforms; (linux ++ darwin);
+    };
+  };
+
+  Dafny = buildDotnetPackage rec {
+    baseName = "Dafny";
+    version = "2.1.0";
+
+    src = fetchurl {
+      url = "https://github.com/Microsoft/dafny/archive/v${version}.tar.gz";
+      sha256 = "1iyhy0zpi6wvqif7826anzgdipgsy5bk775ds9qqwfw27j7x6fy5";
+    };
+
+    postPatch = ''
+      sed -i \
+        -e 's/ Visible="False"//' \
+        -e "s/Exists(\$(CodeContractsInstallDir))/Exists('\$(CodeContractsInstallDir)')/" \
+        Source/*/*.csproj
+    '';
+
+    preBuild = ''
+      ln -s ${pkgs.z3} Binaries/z3
+    '';
+
+    buildInputs = [ Boogie ];
+
+    xBuildFiles = [ "Source/Dafny.sln" ];
+    xBuildFlags = [ "/p:Configuration=Checked" "/p:Platform=Any CPU" "/t:Rebuild" ];
+
+    outputFiles = [ "Binaries/*" ];
+
+    # Do not wrap the z3 executable, only dafny-related ones.
+    exeFiles = [ "Dafny*.exe" ];
+
+    # Dafny needs mono in its path.
+    makeWrapperArgs = "--set PATH ${mono}/bin";
+
+    # Boogie as an input is not enough. Boogie libraries need to be at the same
+    # place as Dafny ones. Same for "*.dll.mdb". No idea why or how to fix.
+    postFixup = ''
+      for lib in ${Boogie}/lib/dotnet/${Boogie.baseName}/*.dll{,.mdb}; do
+        ln -s $lib $out/lib/dotnet/${baseName}/
+      done
+      # We generate our own executable scripts
+      rm -f $out/lib/dotnet/${baseName}/dafny{,-server}
+    '';
+
+    meta = with stdenv.lib; {
+      description = "A programming language with built-in specification constructs";
+      homepage = "http://research.microsoft.com/dafny";
+      maintainers = with maintainers; [ layus ];
+      license = licenses.mit;
+      platforms = with platforms; (linux ++ darwin);
+    };
+  };
 
   Deedle = buildDotnetPackage rec {
     baseName = "Deedle";
@@ -189,7 +472,7 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
 
     meta = {
       description = "Excel-DNA is an independent project to integrate .NET into Excel";
-      homepage = "http://excel-dna.net/";
+      homepage = "https://excel-dna.net/";
       license = stdenv.lib.licenses.mit;
       maintainers = with stdenv.lib.maintainers; [ obadz ];
       platforms = with stdenv.lib.platforms; linux;
@@ -388,13 +671,61 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
   #   outputFiles = [ "build/*" ];
   #
   #   meta = {
-  #     description = "FSharpx.Extras is a collection of libraries and tools for use with F#.";
+  #     description = "FSharpx.Extras is a collection of libraries and tools for use with F#";
   #     homepage = "http://fsprojects.github.io/FSharpx.Extras/";
   #     license = stdenv.lib.licenses.asl20;
   #     maintainers = with stdenv.lib.maintainers; [ obadz ];
   #     platforms = with stdenv.lib.platforms; linux;
   #   };
   # };
+
+  GitVersionTree = buildDotnetPackage rec {
+    baseName = "GitVersionTree";
+    version = "2013-10-01";
+
+    src = fetchFromGitHub {
+      owner = "crc8";
+      repo = "GitVersionTree";
+      rev = "58dc39c43cffea44f721ee4425835e56518f7da2";
+      sha256 = "0mna5pkpqkdr5jgn8paz004h1pa24ncsvmi2c8s4gp94nfw34x05";
+    };
+
+    buildInputs = with pkgs; [ ed ];
+
+    postPatch = ''
+      ed -v -p: -s GitVersionTree/Program.cs << EOF
+      /Main()
+      c
+      static void Main(string[] args)
+      .
+      /EnableVisualStyles
+      i
+      Reg.Write("GitPath", "${pkgs.gitMinimal}/bin/git");
+      Reg.Write("GraphvizPath", "${pkgs.graphviz}/bin/dot");
+      if (args.Length > 0) {
+        Reg.Write("GitRepositoryPath", args[0]);
+      }
+      .
+      w
+      EOF
+
+      substituteInPlace GitVersionTree/Forms/MainForm.cs \
+        --replace 'Directory.GetParent(Application.ExecutablePath)' 'Environment.CurrentDirectory' \
+        --replace '\\' '/' \
+        --replace '@"\"' '"/"'
+    '';
+
+    outputFiles = [ "GitVersionTree/bin/Release/*" ];
+    exeFiles = [ "GitVersionTree.exe" ];
+
+    meta = with stdenv.lib; {
+      description = "A tool to help visualize git revisions and branches";
+      homepage = https://github.com/crc8/GitVersionTree;
+      license = licenses.gpl2;
+      maintainers = with maintainers; [ obadz ];
+      platforms = platforms.all;
+    };
+  };
 
   MathNetNumerics = buildDotnetPackage rec {
     baseName = "MathNet.Numerics";
@@ -412,68 +743,102 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
     outputFiles = [ "out/lib/Net40/*" "src/FSharp/MathNet.Numerics.fsx" "src/FSharp/MathNet.Numerics.IfSharp.fsx" ];
 
     meta = {
-      description = "Math.NET Numerics is an opensource numerical library for .Net, Silverlight and Mono.";
-      homepage = http://numerics.mathdotnet.com/;
+      description = "Math.NET Numerics is an opensource numerical library for .Net, Silverlight and Mono";
+      homepage = https://numerics.mathdotnet.com/;
       license = stdenv.lib.licenses.mit;
       maintainers = with stdenv.lib.maintainers; [ obadz ];
       platforms = with stdenv.lib.platforms; linux;
     };
   };
 
-  MonoDevelopFSharpBinding = buildDotnetPackage rec {
-    baseName = "MonoDevelop.FSharpBinding";
-    version = "git-a09c8185eb";
+  MonoAddins = buildDotnetPackage rec {
+    baseName = "Mono.Addins";
+    version = "1.2";
+
+    xBuildFiles = [
+      "Mono.Addins/Mono.Addins.csproj"
+      "Mono.Addins.Setup/Mono.Addins.Setup.csproj"
+      "Mono.Addins.Gui/Mono.Addins.Gui.csproj"
+      "Mono.Addins.CecilReflector/Mono.Addins.CecilReflector.csproj"
+    ];
+    outputFiles = [ "bin/*" ];
 
     src = fetchFromGitHub {
-      owner = "fsharp";
-      repo = "fsharpbinding";
-      rev = "a09c8185ebf23fe2f7d22b14b4af2e3268d4f011";
-      sha256 = "1zp5gig42s1h681kch0rw5ykbbj0mcsmdvpyz1319wy9s7n2ng91";
+      owner = "mono";
+      repo = "mono-addins";
+      rev = "mono-addins-${version}";
+      sha256 = "1hnn0a2qsjcjprsxas424bzvhsdwy0yc2jj5xbp698c0m9kfk24y";
     };
 
-    buildInputs = [
-      fsharp
-      monodevelop
-      pkgs.gtk-sharp
-      pkgs.gnome-sharp
-      dotnetPackages.ExtCore
-      dotnetPackages.FSharpCompilerService
-      dotnetPackages.FSharpCompilerCodeDom
-      dotnetPackages.FSharpAutoComplete
-      dotnetPackages.Fantomas
-    ];
-
-    patches = [
-      ../development/dotnet-modules/patches/monodevelop-fsharpbinding.references.patch
-      ../development/dotnet-modules/patches/monodevelop-fsharpbinding.addin-xml.patch
-    ];
-
-    preConfigure = ''
-      substituteInPlace monodevelop/configure.fsx --replace /usr/lib/monodevelop ${monodevelop}/lib/monodevelop
-      substituteInPlace monodevelop/configure.fsx --replace bin/MonoDevelop.exe ../../bin/monodevelop
-      (cd monodevelop; fsharpi ./configure.fsx)
-    '';
-
-    # This will not work as monodevelop probably looks in absolute nix store path rather than path
-    # relative to its executable. Need to ln -s /run/current-system/sw/lib/dotnet/MonoDevelop.FSharpBinding
-    # ~/.local/share/MonoDevelop-5.0/LocalInstall/Addins/ to install until we have a better way
-
-    # postInstall = ''
-    #   mkdir -p "$out/lib/monodevelop/AddIns"
-    #   ln -sv "$out/lib/dotnet/${baseName}" "$out/lib/monodevelop/AddIns"
-    # '';
-
-    xBuildFiles = [ "monodevelop/MonoDevelop.FSharpBinding/MonoDevelop.FSharp.mac-linux.fsproj" ];
-    outputFiles = [ "monodevelop/bin/mac-linux/Release/*" ];
+    buildInputs = [ pkgs.gtk-sharp-2_0 ];
 
     meta = {
-      description = "F# addin for MonoDevelop 5.9";
-      homepage = "https://github.com/fsharp/fsharpbinding/tree/5.9";
-      license = stdenv.lib.licenses.asl20;
-      maintainers = with stdenv.lib.maintainers; [ obadz ];
-      platforms = with stdenv.lib.platforms; linux;
+      description = "A generic framework for creating extensible applications";
+      homepage = http://www.mono-project.com/Mono.Addins;
+      longDescription = ''
+        A generic framework for creating extensible applications,
+        and for creating libraries which extend those applications.
+      '';
+      license = stdenv.lib.licenses.mit;
     };
   };
+
+  # MonoDevelopFSharpBinding = buildDotnetPackage rec {
+  #   baseName = "MonoDevelop.FSharpBinding";
+  #   version = "git-a09c8185eb";
+
+  #   broken = true;
+
+  #   src = fetchFromGitHub {
+  #     owner = "fsharp";
+  #     repo = "fsharpbinding";
+  #     rev = "a09c8185ebf23fe2f7d22b14b4af2e3268d4f011";
+  #     sha256 = "1zp5gig42s1h681kch0rw5ykbbj0mcsmdvpyz1319wy9s7n2ng91";
+  #   };
+
+  #   buildInputs = [
+  #     fsharp
+  #     monodevelop
+  #     pkgs.gtk-sharp
+  #     pkgs.gnome-sharp
+  #     dotnetPackages.ExtCore
+  #     dotnetPackages.FSharpCompilerService
+  #     dotnetPackages.FSharpCompilerCodeDom
+  #     dotnetPackages.FSharpAutoComplete
+  #     dotnetPackages.Fantomas
+  #   ];
+
+  #   patches = [
+  #     ../development/dotnet-modules/patches/monodevelop-fsharpbinding.references.patch
+  #     ../development/dotnet-modules/patches/monodevelop-fsharpbinding.addin-xml.patch
+  #   ];
+
+  #   preConfigure = ''
+  #     substituteInPlace monodevelop/configure.fsx --replace /usr/lib/monodevelop ${monodevelop}/lib/monodevelop
+  #     substituteInPlace monodevelop/configure.fsx --replace bin/MonoDevelop.exe ../../bin/monodevelop
+  #     (cd monodevelop; fsharpi ./configure.fsx)
+  #   '';
+
+  #   # This will not work as monodevelop probably looks in absolute nix store path rather than path
+  #   # relative to its executable. Need to ln -s /run/current-system/sw/lib/dotnet/MonoDevelop.FSharpBinding
+  #   # ~/.local/share/MonoDevelop-5.0/LocalInstall/Addins/ to install until we have a better way
+
+  #   # postInstall = ''
+  #   #   mkdir -p "$out/lib/monodevelop/AddIns"
+  #   #   ln -sv "$out/lib/dotnet/${baseName}" "$out/lib/monodevelop/AddIns"
+  #   # '';
+
+  #   xBuildFiles = [ "monodevelop/MonoDevelop.FSharpBinding/MonoDevelop.FSharp.mac-linux.fsproj" ];
+  #   outputFiles = [ "monodevelop/bin/mac-linux/Release/*" ];
+
+  #   meta = {
+  #     description = "F# addin for MonoDevelop 5.9";
+  #     homepage = "https://github.com/fsharp/fsharpbinding/tree/5.9";
+  #     license = stdenv.lib.licenses.asl20;
+  #     maintainers = with stdenv.lib.maintainers; [ obadz ];
+  #     platforms = with stdenv.lib.platforms; linux;
+  #   };
+  # };
 
   NDeskOptions = stdenv.mkDerivation rec {
     baseName = "NDesk.Options";
@@ -490,10 +855,6 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
       mono
       pkgconfig
     ];
-
-    preConfigure = ''
-      substituteInPlace configure --replace gmcs mcs
-    '';
 
     postInstall = ''
       # Otherwise pkg-config won't find it and the DLL will get duplicated
@@ -540,7 +901,7 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
 
     meta = {
       description = "Popular high-performance JSON framework for .NET";
-      homepage = "http://www.newtonsoft.com/json";
+      homepage = "https://www.newtonsoft.com/json";
       license = stdenv.lib.licenses.mit;
       maintainers = with stdenv.lib.maintainers; [ obadz ];
       platforms = with stdenv.lib.platforms; linux;
@@ -549,13 +910,13 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
 
   Nuget = buildDotnetPackage {
     baseName = "Nuget";
-    version = "2.8.5";
+    version = "3.4.3";
 
     src = fetchFromGitHub {
       owner = "mono";
       repo = "nuget-binary";
-      rev = "da1f2102f8172df6f7a1370a4998e3f88b91c047";
-      sha256 = "1hbnckc4gvqkknf8gh1k7iwqb4vdzifdjd19i60fnczly5v8m1c3";
+      rev = "1f3025c2eb13bfcb56b47ddd77329ac3d9911d1c";
+      sha256 = "01snk05hcrp5i2ys3p1y34r05q1b460q6wb8p3vwpba2q2czdax5";
     };
 
     buildInputs = [ unzip ];
@@ -564,7 +925,7 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
 
     outputFiles = [ "*" ];
     dllFiles = [ "NuGet*.dll" ];
-    exeFiles = [ "NuGet.exe" ];
+    exeFiles = [ "nuget.exe" ];
   };
 
   Paket = buildDotnetPackage rec {

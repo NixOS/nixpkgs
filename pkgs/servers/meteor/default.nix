@@ -2,14 +2,14 @@
 
 let
   bootstrap = fetchurl {
-    url = "https://d3sqy0vbqsdhku.cloudfront.net/packages-bootstrap/1.2.0.1/meteor-bootstrap-os.linux.x86_64.tar.gz";
-    sha256 = "0jc516qyig7f5a8ns4y6d9031f0ww2sd90n837kz6x97nin7655s";
+    url = "https://meteorinstall-4168.kxcdn.com/packages-bootstrap/1.5/meteor-bootstrap-os.linux.x86_64.tar.gz";
+    sha256 = "0cwwqv88h1ji7g4zmfz34xsrxkn640wr11ddjq5c6b9ygcljci3p";
   };
 in
 
 stdenv.mkDerivation rec {
   name = "meteor-${version}";
-  version = "1.2.0.1";
+  version = "1.5";
 
   dontStrip = true;
 
@@ -40,29 +40,29 @@ stdenv.mkDerivation rec {
     popd
     substituteInPlace $out/tools/cli/main.js \
       --replace "@INTERPRETER@" "$(cat $NIX_CC/nix-support/dynamic-linker)" \
-      --replace "@RPATH@" "${stdenv.cc.cc}/lib:${zlib}/lib" \
+      --replace "@RPATH@" "${lib.makeLibraryPath [ stdenv.cc.cc zlib ]}" \
       --replace "@PATCHELF@" "${patchelf}/bin/patchelf"
 
     # Patch node.
     node=$devBundle/bin/node
     patchelf \
       --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker) \
-      --set-rpath "$(patchelf --print-rpath $node):${stdenv.cc.cc}/lib" \
+      --set-rpath "$(patchelf --print-rpath $node):${stdenv.cc.cc.lib}/lib" \
       $node
 
     # Patch mongo.
     for p in $devBundle/mongodb/bin/mongo{,d}; do
       patchelf \
         --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker) \
-        --set-rpath "$(patchelf --print-rpath $p):${stdenv.cc.cc}/lib:${zlib}/lib" \
+        --set-rpath "$(patchelf --print-rpath $p):${lib.makeLibraryPath [ stdenv.cc.cc zlib ]}" \
         $p
     done
 
     # Patch node dlls.
     for p in $(find $out/packages -name '*.node'); do
       patchelf \
-        --set-rpath "$(patchelf --print-rpath $p):${stdenv.cc.cc}/lib" \
-        $p
+        --set-rpath "$(patchelf --print-rpath $p):${stdenv.cc.cc.lib}/lib" \
+        $p || true
     done
 
     # Meteor needs an initial package-metadata in $HOME/.meteor,
@@ -85,7 +85,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Complete open source platform for building web and mobile apps in pure JavaScript";
-    homepage = "http://www.meteor.com";
+    homepage = http://www.meteor.com;
     license = licenses.mit;
     platforms = [ "x86_64-linux" ];
     maintainers = with maintainers; [ cstrahan ];

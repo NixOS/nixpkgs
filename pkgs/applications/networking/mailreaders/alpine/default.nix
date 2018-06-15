@@ -1,38 +1,33 @@
 {stdenv, fetchurl, ncurses, tcl, openssl, pam, pkgconfig, gettext, kerberos
 , openldap
 }:
-let
-  s = 
-  rec {
-    version = "2.00";
-    url = "ftp://ftp.cac.washington.edu/alpine/alpine-${version}.tar.bz2";
-    sha256 = "19m2w21dqn55rhxbh5lr9qarc2fqa9wmpj204jx7a0zrb90bhpf8";
-    baseName = "alpine";
-    name = "${baseName}-${version}";
+
+# NOTE: Please check if any changes here are applicable to ../realpine/ as well
+stdenv.mkDerivation rec {
+  name = "alpine-${version}";
+  version = "2.21";
+
+  src = fetchurl {
+    url = "http://alpine.freeiz.com/alpine/release/src/${name}.tar.xz";
+    sha256 = "0f3llxrmaxw7w9w6aixh752md3cdc91mwfmbarkm8s413f4bcc30";
   };
+
   buildInputs = [
     ncurses tcl openssl pam kerberos openldap
   ];
-in
-stdenv.mkDerivation {
-  inherit (s) name version;
-  inherit buildInputs;
-  src = fetchurl {
-    inherit (s) url sha256;
-  };
+
+  hardeningDisable = [ "format" ];
+
   configureFlags = [
-    "--with-ssl-include-dir=${openssl}/include/openssl"
-    "--with-tcl-lib=${tcl.libPrefix}"
-    ];
-  preConfigure = ''
-    export NIX_LDFLAGS="$NIX_LDFLAGS -lgcc_s"
-  '';
+    "--with-ssl-include-dir=${openssl.dev}/include/openssl"
+    "--with-passfile=.pine-passfile"
+  ];
+
   meta = {
-    inherit (s) version;
-    description = ''Console mail reader'';
+    description = "Console mail reader";
     license = stdenv.lib.licenses.asl20;
     maintainers = [stdenv.lib.maintainers.raskin];
     platforms = stdenv.lib.platforms.linux;
-    homepage = "https://www.washington.edu/alpine/";
+    homepage = https://www.washington.edu/alpine/;
   };
 }

@@ -1,8 +1,8 @@
 { stdenv, fetchurl, flac, fuse, lame, libid3tag, pkgconfig }:
 
-let version = "0.91"; in
 stdenv.mkDerivation rec {
   name = "mp3fs-${version}";
+  version = "0.91";
 
   src = fetchurl {
     url = "https://github.com/khenriks/mp3fs/releases/download/v${version}/${name}.tar.gz";
@@ -25,9 +25,8 @@ stdenv.mkDerivation rec {
       which only understands the MP3 format, or transcode files through
       simple drag-and-drop in a file browser.
     '';
-    homepage = http://khenriks.github.io/mp3fs/;
+    homepage = https://khenriks.github.io/mp3fs/;
     license = licenses.gpl3Plus;
-    platforms = with platforms; linux;
-    maintainers = with maintainers; [ nckx ];
+    platforms = platforms.linux;
   };
 }

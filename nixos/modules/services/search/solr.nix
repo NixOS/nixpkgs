@@ -15,8 +15,6 @@ let
       sha256 = "01mzvh53wrs1p2ym765jwd00gl6kn8f9k3nhdrnhdqr8dhimfb2p";
     };
 
-    buildPhases = [ "unpackPhase" "installPhase" ];
-
     installPhase = ''
       mkdir -p $out/lib
       cp common/lib/*.jar $out/lib/
@@ -45,6 +43,7 @@ in {
       javaPackage = mkOption {
         type = types.package;
         default = pkgs.jre;
+        defaultText = "pkgs.jre";
         description = ''
           Which Java derivation to use for running solr.
         '';
@@ -53,6 +52,7 @@ in {
       solrPackage = mkOption {
         type = types.package;
         default = pkgs.solr;
+        defaultText = "pkgs.solr";
         description = ''
           Which solr derivation to use for running solr.
         '';

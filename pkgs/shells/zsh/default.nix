@@ -1,12 +1,11 @@
-{ stdenv, fetchurl, ncurses, coreutils, pcre }:
+{ stdenv, fetchurl, ncurses, pcre }:
 
 let
-
-  version = "5.1.1";
+  version = "5.5.1";
 
   documentation = fetchurl {
     url = "mirror://sourceforge/zsh/zsh-${version}-doc.tar.gz";
-    sha256 = "0p99dr7kck0a6im1w9qiiz2ai78mgy53gbbn87bam9ya2885gf05";
+    sha256 = "0bm9n7lycdzvw5hmgi4a920pqbb5yxvmyhfxx8jbign2hzgf7g01";
   };
 
 in
@@ -16,23 +15,31 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "mirror://sourceforge/zsh/zsh-${version}.tar.gz";
-    sha256 = "11shllzhq53fg8ngy3bgbmpf09fn2czifg7hsb41nxi3410mpvcl";
+    sha256 = "10705qnnr3p416bwfjaip9r7yw187vczzjrk60yg79dfwy4slk3p";
   };
 
-  buildInputs = [ ncurses coreutils pcre ];
+  buildInputs = [ ncurses pcre ];
 
+  configureFlags = [
+    "--enable-maildir-support"
+    "--enable-multibyte"
+    "--with-tcsetpgrp"
+    "--enable-pcre"
+  ];
   preConfigure = ''
-    configureFlags="--enable-maildir-support --enable-multibyte --enable-zprofile=$out/etc/zprofile --with-tcsetpgrp --enable-pcre"
+    configureFlagsArray+=(--enable-zprofile=$out/etc/zprofile)
   '';
 
-  # Some tests fail on hydra, see
-  # http://hydra.nixos.org/build/25637689/nixlog/1
-  doCheck = false;
+  # the zsh/zpty module is not available on hydra
+  # so skip groups Y Z
+  checkFlags = map (T: "TESTNUM=${T}") (stdenv.lib.stringToCharacters "ABCDEVW");
 
   # XXX: think/discuss about this, also with respect to nixos vs nix-on-X
   postInstall = ''
-    mkdir -p $out/share/
+    mkdir -p $out/share/info
     tar xf ${documentation} -C $out/share
+    ln -s $out/share/zsh-*/Doc/zsh.info* $out/share/info/
+
     mkdir -p $out/etc/
     cat > $out/etc/zprofile <<EOF
 if test -e /etc/NIXOS; then
@@ -72,8 +79,12 @@ EOF
       a host of other features.
     '';
     license = "MIT-like";
-    homepage = "http://www.zsh.org/";
+    homepage = http://www.zsh.org/;
     maintainers = with stdenv.lib.maintainers; [ chaoflow pSub ];
     platforms = stdenv.lib.platforms.unix;
+  };
+
+  passthru = {
+    shellPath = "/bin/zsh";
   };
 }

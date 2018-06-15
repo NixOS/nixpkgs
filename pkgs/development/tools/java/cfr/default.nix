@@ -1,16 +1,23 @@
-{ stdenv, fetchurl, jre }:
+{ stdenv, makeWrapper, fetchurl, jre }:
 
-let version = "0_101"; in
 stdenv.mkDerivation rec {
   name = "cfr-${version}";
+  version = "0.128";
 
   src = fetchurl {
-    sha256 = "0zwl3whypdm2qrw3hwaqjnifkb4wcdn8fx9scrjkli54bhr6dqch";
     url = "http://www.benf.org/other/cfr/cfr_${version}.jar";
+    sha256 = "09mx1f6d1p57q5r05nvgm1xrhqv34n7v7rwq875whb441h1dnsix";
   };
 
+  buildInputs = [ makeWrapper ];
+
+  buildCommand = ''
+    jar=$out/share/java/cfr_${version}.jar
+    install -Dm444 $src $jar
+    makeWrapper ${jre}/bin/java $out/bin/cfr --add-flags "-jar $jar"
+  '';
+
   meta = with stdenv.lib; {
-    inherit version;
     description = "Another java decompiler";
     longDescription = ''
       CFR will decompile modern Java features - Java 8 lambdas (pre and post
@@ -19,23 +26,6 @@ stdenv.mkDerivation rec {
     '';
     homepage = http://www.benf.org/other/cfr/;
     license = licenses.mit;
-    platforms = with platforms; all;
-    maintainers = with maintainers; [ nckx ];
+    platforms = platforms.all;
   };
-
-  buildInputs = [ jre ];
-
-  phases = [ "installPhase" ];
-
-  installPhase = ''
-    jar=$out/share/cfr/cfr_${version}.jar
-
-    install -Dm644 ${src} $jar
-
-    cat << EOF > cfr
-    #!${stdenv.shell}
-    exec ${jre}/bin/java -jar $jar "\''${@}"
-    EOF
-    install -Dm755 cfr $out/bin/cfr
-  '';
 }

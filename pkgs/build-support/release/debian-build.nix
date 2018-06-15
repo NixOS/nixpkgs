@@ -54,11 +54,15 @@ vmTools.runInLinuxImage (stdenv.mkDerivation (
       eval "$preInstall"
       export LOGNAME=root
 
+      # otherwise build hangs when it wants to display
+      # the log file
+      export PAGER=cat
       ${checkinstall}/sbin/checkinstall --nodoc -y -D \
         --fstrans=${if fsTranslation then "yes" else "no"} \
         --requires="${concatStringsSep "," debRequires}" \
         --provides="${concatStringsSep "," debProvides}" \
-        ${optionalString (src ? version) "--pkgversion=$(echo ${src.version} | tr _ -)"} \
+        ${if (src ? version) then "--pkgversion=$(echo ${src.version} | tr _ -)"
+                             else "--pkgversion=0.0.0"} \
         ''${debMaintainer:+--maintainer="'$debMaintainer'"} \
         ''${debName:+--pkgname="'$debName'"} \
         $checkInstallFlags \
@@ -74,10 +78,10 @@ vmTools.runInLinuxImage (stdenv.mkDerivation (
         header "Generated DEB package: $i"
         dpkg-deb --info "$i"
         pkgName=$(dpkg-deb -W "$i" | awk '{print $1}')
-        dpkg -i "$i"
         echo "file deb $i" >> $out/nix-support/hydra-build-products
         stopNest
       done
+      dpkg -i $out/debs/*.deb
 
       for i in $extraDebs; do
         echo "file deb-extra $(ls $i/debs/*.deb | sort | head -1)" >> $out/nix-support/hydra-build-products

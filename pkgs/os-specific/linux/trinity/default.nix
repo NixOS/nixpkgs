@@ -1,23 +1,25 @@
-{ stdenv, fetchFromGitHub }:
+{ stdenv, fetchurl, fetchFromGitHub, linuxHeaders }:
 
 stdenv.mkDerivation rec {
   name = "trinity-${version}";
-  version = "1.5";
+  version = "1.8-git-2017-02-13";
 
   src = fetchFromGitHub {
     owner = "kernelslacker";
     repo = "trinity";
-    rev = "v${version}";
-    sha256 = "0diwkda6n7yw8plfanivncwangk2kv1acxv0kyk3ly5jhlajwc0s";
+    rev = "2989c11ce77bc7bec23da62987e2c3a0dd8a83c9";
+    sha256 = "19asyrypjhx2cgjdmwfvmgc0hk3xg00zvgkl89vwxngdb40bkwfq";
   };
 
-  patchPhase = ''
-    patchShebangs ./configure.sh
+  # Fails on 32-bit otherwise
+  NIX_CFLAGS_COMPILE = "-Wno-error";
+
+  postPatch = ''
+    patchShebangs ./configure
     patchShebangs ./scripts/
-    substituteInPlace Makefile --replace '/usr/bin/wc' 'wc'
   '';
 
-  configurePhase = "./configure.sh";
+  enableParallelBuilding = true;
 
   installPhase = "make DESTDIR=$out install";
 

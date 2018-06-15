@@ -1,13 +1,12 @@
-{stdenv, fetchurl, automake, ocaml, autoconf, gnum4, pkgconfig, freetype, lablgtk, unzip, cairo, findlib, gdk_pixbuf, glib, gtk, pango }:
+{stdenv, fetchurl, automake, ocaml, autoconf, gnum4, pkgconfig, freetype, lablgtk, unzip, cairo, findlib, gdk_pixbuf, glib, gtk2, pango }:
 
 let
-  ocaml_version = (builtins.parseDrvName ocaml.name).version;
   pname = "ocaml-cairo";
-  version = "1.2.0";
 in
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   name = "${pname}-${version}";
+  version = "1.2.0";
 
   src = fetchurl {
     url = "http://cgit.freedesktop.org/cairo-ocaml/snapshot/cairo-ocaml-${version}.zip";
@@ -16,8 +15,9 @@ stdenv.mkDerivation {
 
   patches = [ ./META.patch ];
 
-  buildInputs = [ ocaml automake gnum4 autoconf unzip pkgconfig
-                  findlib freetype lablgtk cairo gdk_pixbuf gtk pango ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ ocaml automake gnum4 autoconf unzip
+                  findlib freetype lablgtk cairo gdk_pixbuf gtk2 pango ];
 
   createFindlibDestdir = true;
 
@@ -25,21 +25,21 @@ stdenv.mkDerivation {
    aclocal -I support
    autoconf
    export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE `pkg-config --cflags cairo gdk-pixbuf glib gtk+ pango`"
-   export LABLGTKDIR=${lablgtk}/lib/ocaml/${ocaml_version}/site-lib/lablgtk2
-   cp ${lablgtk}/lib/ocaml/${ocaml_version}/site-lib/lablgtk2/pango.ml ./src
-   cp ${lablgtk}/lib/ocaml/${ocaml_version}/site-lib/lablgtk2/gaux.ml ./src
+   export LABLGTKDIR=${lablgtk}/lib/ocaml/${ocaml.version}/site-lib/lablgtk2
+   cp ${lablgtk}/lib/ocaml/${ocaml.version}/site-lib/lablgtk2/pango.ml ./src
+   cp ${lablgtk}/lib/ocaml/${ocaml.version}/site-lib/lablgtk2/gaux.ml ./src
   '';
 
   postInstall = ''
-    cp META $out/lib/ocaml/${ocaml_version}/site-lib/cairo/
+    cp META $out/lib/ocaml/${ocaml.version}/site-lib/cairo/
   '';
 
-  makeFlags = "INSTALLDIR=$(out)/lib/ocaml/${ocaml_version}/site-lib/cairo";
+  makeFlags = "INSTALLDIR=$(out)/lib/ocaml/${ocaml.version}/site-lib/cairo";
 
   meta = {
     homepage = http://cairographics.org/cairo-ocaml;
     description = "ocaml bindings for cairo library";
     license = stdenv.lib.licenses.gpl2;
-    platforms = ocaml.meta.platforms;
+    platforms = ocaml.meta.platforms or [];
   };
 }

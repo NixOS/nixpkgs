@@ -1,50 +1,32 @@
-x@{builderDefsPackage
-  
-  , ...}:
-builderDefsPackage
-(a :  
-let 
-  helperArgNames = ["stdenv" "fetchurl" "builderDefsPackage"] ++ 
-    [];
+{ stdenv, fetchurl }:
 
-  buildInputs = map (n: builtins.getAttr n x)
-    (builtins.attrNames (builtins.removeAttrs x helperArgNames));
-  sourceInfo = rec {
-    baseName="altermime";
-    version="0.3.10";
-    name="${baseName}-${version}";
-    url="http://www.pldaniels.com/${baseName}/${name}.tar.gz";
-    hash="0vn3vmbcimv0n14khxr1782m76983zz9sf4j2kz5v86lammxld43";
-  };
-in
-rec {
-  src = a.fetchurl {
-    url = sourceInfo.url;
-    sha256 = sourceInfo.hash;
+stdenv.mkDerivation rec {
+  baseName = "altermime";
+  name = "${baseName}-${version}";
+  version = "0.3.11";
+
+  src = fetchurl {
+    url = "http://www.pldaniels.com/${baseName}/${name}.tar.gz";
+    sha256 = "15zxg6spcmd35r6xbidq2fgcg2nzyv1sbbqds08lzll70mqx4pj7";
   };
 
-  inherit (sourceInfo) name version;
-  inherit buildInputs;
+  NIX_CFLAGS_COMPILE = [ "-Wno-error=format"
+    "-Wno-error=format-truncation"
+    "-Wno-error=pointer-compare"
+    "-Wno-error=memset-elt-size"
+  ];
 
-  patches = map a.fetchurl (import ./debian-patches.nix);
-
-  phaseNames = ["doPatch" "fixTarget" "doMakeInstall"];
-  fixTarget = a.fullDepEntry (''
+  postPatch = ''
     sed -i Makefile -e "s@/usr/local@$out@"
     mkdir -p "$out/bin"
-  '') ["doUnpack" "minInit" "defEnsureDir"];
-      
+  '';
+
   meta = {
     description = "MIME alteration tool";
-    maintainers = with a.lib.maintainers;
-    [
+    maintainers = with stdenv.lib.maintainers; [
       raskin
     ];
-    platforms = with a.lib.platforms;
-      linux;
+    platforms = with stdenv.lib.platforms; linux;
     downloadPage = "http://www.pldaniels.com/altermime/";
-    inherit version;
-    updateWalker = true;
   };
-}) x
-
+}

@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl3Plus;
 
     # libevent fails to build on Cygwin and Guile has troubles on Darwin.
-    platforms = lib.platforms.gnu;
+    platforms = lib.platforms.gnu ++ lib.platforms.linux;
 
     broken = true; # needs patch for gets()
   };

@@ -11,13 +11,8 @@ stdenv.mkDerivation rec {
     sha256 = "0q5jl7hcds3f0rhly3iy4fhhbyh9cdrfaw7zdrazzf1wswwhyssz";
   };
 
-  buildInputs = [ pkgconfig autoconf automake openssl libgsf gmp ];
-
-  patchPhase = ''
-    substituteInPlace Makefile.in \
-      --replace '-march=native' "" \
-      --replace '-mtune=native' ""
-  '';
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ autoconf automake openssl libgsf gmp ];
 
   installPhase =
   ''

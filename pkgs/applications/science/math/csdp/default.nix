@@ -8,13 +8,14 @@ stdenv.mkDerivation {
     sha256 = "1f9ql6cjy2gwiyc51ylfan24v1ca9sjajxkbhszlds1lqmma8n05";
   };
 
-  buildInputs = [ blas gfortran liblapack ];
+  buildInputs = [ blas gfortran.cc.lib liblapack ];
 
   postPatch = ''
     substituteInPlace Makefile --replace /usr/local/bin $out/bin
   '';
 
   preInstall = ''
+    rm -f INSTALL
     mkdir -p $out/bin
   '';
 
@@ -23,5 +24,6 @@ stdenv.mkDerivation {
     license = lib.licenses.cpl10;
     maintainers = [ lib.maintainers.roconnor ];
     description = "A C Library for Semidefinite Programming";
+    platforms = stdenv.lib.platforms.unix;
   };
 }

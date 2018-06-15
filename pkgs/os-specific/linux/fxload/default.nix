@@ -30,5 +30,6 @@ stdenv.mkDerivation {
   meta = {
     homepage = http://linux-hotplug.sourceforge.net/?selected=usb;
     description = "Tool to upload firmware to Cypress EZ-USB microcontrollers";
+    platforms = stdenv.lib.platforms.linux;
   };
 }

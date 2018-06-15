@@ -1,58 +1,87 @@
-{ stdenv, fetchurl, zlib, openssl, perl, libedit, pkgconfig, pam
+{ stdenv, fetchurl, fetchpatch, zlib, openssl, perl, libedit, pkgconfig, pam, autoreconfHook
 , etcDir ? null
 , hpnSupport ? false
-, withKerberos ? false
+, withKerberos ? true
+, withGssapiPatches ? false
 , kerberos
+, linkOpenssl? true
 }:
-
-assert withKerberos -> kerberos != null;
 
 let
 
-  hpnSrc = fetchurl {
-    url = mirror://sourceforge/hpnssh/openssh-6.6p1-hpnssh14v5.diff.gz;
-    sha256 = "682b4a6880d224ee0b7447241b684330b731018585f1ba519f46660c10d63950";
+  # **please** update this patch when you update to a new openssh release.
+  gssapiPatch = fetchpatch {
+    name = "openssh-gssapi.patch";
+    url = "https://salsa.debian.org/ssh-team/openssh/raw/"
+      + "e395eed38096fcda74398424ea94de3ec44effd5"
+      + "/debian/patches/gssapi.patch";
+    sha256 = "0x7xysgdahb4jaq0f28g2d7yzp0d3mh59i4xnffszvjndhvbk27x";
   };
 
 in
 with stdenv.lib;
 stdenv.mkDerivation rec {
-  name = "openssh-6.9p1";
+  name = "openssh-${version}";
+  version = if hpnSupport then "7.7p1" else "7.7p1";
 
-  src = fetchurl {
-    url = "mirror://openbsd/OpenSSH/portable/${name}.tar.gz";
-    sha256 = "1zkci5nbpb4frmzj2vr3kv9j47x2h72kvybcpr0d8mzk73sls1vf";
-  };
+  src = if hpnSupport then
+      fetchurl {
+        url = "https://github.com/rapier1/openssh-portable/archive/hpn-KitchenSink-7_7_P1.tar.gz";
+        sha256 = "1l4k8mg3gnzxbz53cma8s6ak56waz03ijsr08p8vgpi0c2rc5ri5";
+      }
+    else
+      fetchurl {
+        url = "mirror://openbsd/OpenSSH/portable/${name}.tar.gz";
+        sha256 = "13vbbrvj3mmfhj83qyrg5c0ipr6bzw5s65dy4k8gr7p9hkkfffyp";
+      };
 
-  prePatch = optionalString hpnSupport
+  patches =
+    [
+      ./locale_archive.patch
+      ./fix-host-key-algorithms-plus.patch
+
+      # See discussion in https://github.com/NixOS/nixpkgs/pull/16966
+      ./dont_create_privsep_path.patch
+    ]
+    ++ optional withGssapiPatches (assert withKerberos; gssapiPatch);
+
+  postPatch =
+    # On Hydra this makes installation fail (sometimes?),
+    # and nix store doesn't allow such fancy permission bits anyway.
     ''
-      gunzip -c ${hpnSrc} | patch -p1
-      export NIX_LDFLAGS="$NIX_LDFLAGS -lgcc_s"
+      substituteInPlace Makefile.in --replace '$(INSTALL) -m 4711' '$(INSTALL) -m 0711'
     '';
 
-  patches = [ ./locale_archive.patch ./openssh-6.9p1-security-7.0.patch];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ zlib openssl libedit pam ]
+    ++ optional withKerberos kerberos
+    ++ optional hpnSupport autoreconfHook
+    ;
 
-  buildInputs = [ zlib openssl libedit pkgconfig pam ]
-    ++ optional withKerberos [ kerberos ];
+  preConfigure = ''
+    # Setting LD causes `configure' and `make' to disagree about which linker
+    # to use: `configure' wants `gcc', but `make' wants `ld'.
+    unset LD
+  '';
 
   # I set --disable-strip because later we strip anyway. And it fails to strip
   # properly when cross building.
   configureFlags = [
+    "--sbindir=\${out}/bin"
     "--localstatedir=/var"
+    "--with-pid-dir=/run"
     "--with-mantype=man"
     "--with-libedit=yes"
     "--disable-strip"
     (if pam != null then "--with-pam" else "--without-pam")
   ] ++ optional (etcDir != null) "--sysconfdir=${etcDir}"
-    ++ optional withKerberos "--with-kerberos5=${kerberos}"
-    ++ optional stdenv.isDarwin "--disable-libutil";
-
-  preConfigure = ''
-    configureFlagsArray+=("--with-privsep-path=$out/empty")
-    mkdir -p $out/empty
-  '';
+    ++ optional withKerberos (assert kerberos != null; "--with-kerberos5=${kerberos}")
+    ++ optional stdenv.isDarwin "--disable-libutil"
+    ++ optional (!linkOpenssl) "--without-openssl";
 
   enableParallelBuilding = true;
+
+  hardeningEnable = [ "pie" ];
 
   postInstall = ''
     # Install ssh-copy-id, it's very useful.
@@ -61,16 +90,16 @@ stdenv.mkDerivation rec {
     cp contrib/ssh-copy-id.1 $out/share/man/man1/
   '';
 
+  installTargets = [ "install-nokeys" ];
   installFlags = [
     "sysconfdir=\${out}/etc/ssh"
   ];
 
   meta = {
-    homepage = "http://www.openssh.org/";
+    homepage = http://www.openssh.com/;
     description = "An implementation of the SSH protocol";
     license = stdenv.lib.licenses.bsd2;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ eelco ];
-    broken = hpnSupport; # probably after 6.7 update
+    maintainers = with maintainers; [ eelco aneeshusa ];
   };
 }

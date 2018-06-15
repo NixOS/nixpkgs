@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, pythonPackages }:
 
-pythonPackages.buildPythonPackage rec {
+pythonPackages.buildPythonApplication rec {
   name = "python2nix-20140927";
  
   src = fetchFromGitHub {
@@ -13,7 +13,7 @@ pythonPackages.buildPythonPackage rec {
   propagatedBuildInputs = with pythonPackages; [ requests pip setuptools ];
 
   meta = with stdenv.lib; {
-    maintainers = [ maintainers.iElectric ];
+    maintainers = [ maintainers.domenkozar ];
     platforms = platforms.all;
   };
 }

@@ -1,25 +1,34 @@
-{ stdenv, fetchurl, iproute, lzo, openssl, pam, systemd, pkgconfig }:
+{ stdenv, fetchurl, iproute, lzo, openssl, pam, pkgconfig
+, useSystemd ? stdenv.isLinux, systemd ? null
+, pkcs11Support ? false, pkcs11helper ? null,
+}:
+
+assert useSystemd -> (systemd != null);
+assert pkcs11Support -> (pkcs11helper != null);
 
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  name = "openvpn-2.3.7";
+  name = "openvpn-${version}";
+  version = "2.4.6";
 
   src = fetchurl {
-    url = "http://swupdate.openvpn.net/community/releases/${name}.tar.gz";
-    sha256 = "0vhl0ddpxqfibc0ah0ci7ix9bs0cn5shhmhijg550qpbdb6s80hz";
+    url = "https://swupdate.openvpn.net/community/releases/${name}.tar.xz";
+    sha256 = "09lck4wmkas3iyrzaspin9gn3wiclqb1m9sf8diy7j8wakx38r2g";
   };
 
-  patches = optional stdenv.isLinux ./systemd-notify.patch;
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ lzo openssl ]
+                  ++ optionals stdenv.isLinux [ pam iproute ]
+                  ++ optional useSystemd systemd
+                  ++ optional pkcs11Support pkcs11helper;
 
-  buildInputs = [ iproute lzo openssl pam pkgconfig ] ++ optional stdenv.isLinux systemd;
-
-  configureFlags = ''
-    --enable-password-save
-    --enable-iproute2
-    --enable-systemd
-    IPROUTE=${iproute}/sbin/ip
-  '';
+  configureFlags = optionals stdenv.isLinux [
+    "--enable-iproute2"
+    "IPROUTE=${iproute}/sbin/ip" ]
+    ++ optional useSystemd "--enable-systemd"
+    ++ optional pkcs11Support "--enable-pkcs11"
+    ++ optional stdenv.isDarwin "--disable-plugin-auth-pam";
 
   postInstall = ''
     mkdir -p $out/share/doc/openvpn/examples
@@ -30,13 +39,13 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  NIX_LDFLAGS = optionalString stdenv.isLinux "-lsystemd-daemon"; # hacky
-
   meta = {
     description = "A robust and highly flexible tunneling application";
-    homepage = http://openvpn.net/;
+    homepage = https://openvpn.net/;
+    downloadPage = "https://openvpn.net/index.php/open-source/downloads.html";
     license = stdenv.lib.licenses.gpl2;
     maintainers = [ stdenv.lib.maintainers.viric ];
-    platforms = stdenv.lib.platforms.linux;
+    platforms = stdenv.lib.platforms.unix;
+    updateWalker = true;
   };
 }

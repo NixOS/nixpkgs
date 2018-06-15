@@ -1,27 +1,26 @@
-{stdenv, fetchurl }:
+{ stdenv, fetchFromGitHub }:
 
-let
+stdenv.mkDerivation rec {
+  name = "raspberrypi-firmware-${version}";
+  version = "1.20180417";
 
-  rev = "b7bbd3d1683e9f3bb11ef86b952adee71e83862f";
-
-in stdenv.mkDerivation {
-  name = "raspberrypi-firmware-${rev}";
-
-  src = fetchurl {
-    url = "https://github.com/raspberrypi/firmware/archive/${rev}.tar.gz";
-    sha256 = "16wpwa1y3imd3la477b3rfbfypssvlh0zjdag3hgkm33aysizijp";
+  src = fetchFromGitHub {
+    owner = "raspberrypi";
+    repo = "firmware";
+    rev = version;
+    sha256 = "17mnnhni0wgdnc3mw60nfhcj9v6p5dwcqkwnbpvzczab3r2hziji";
   };
 
   installPhase = ''
     mkdir -p $out/share/raspberrypi/boot
     cp -R boot/* $out/share/raspberrypi/boot
-    cp -R hardfp/opt/vc/* $out
-    cp opt/vc/LICENCE $out/share/raspberrypi
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "Firmware for the Raspberry Pi board";
-    homepage = https://github.com/raspberrypi;
-    license = stdenv.lib.licenses.unfree;
+    homepage = https://github.com/raspberrypi/firmware;
+    license = licenses.unfreeRedistributableFirmware; # See https://github.com/raspberrypi/firmware/blob/master/boot/LICENCE.broadcom
+    platforms = [ "armv6l-linux" "armv7l-linux" "aarch64-linux" ];
+    maintainers = with maintainers; [ dezgeg viric tavyc ];
   };
 }

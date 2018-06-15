@@ -1,25 +1,35 @@
-{ stdenv, fetchurl, glib, gtk, intltool, menu-cache, pango, pkgconfig, vala
-, extraOnly ? false }:
+{ stdenv, fetchurl, glib, intltool, menu-cache, pango, pkgconfig, vala_0_34
+, extraOnly ? false
+, withGtk3 ? false, gtk2, gtk3 }:
 let
+    gtk = if withGtk3 then gtk3 else gtk2;
     inherit (stdenv.lib) optional;
 in
-stdenv.mkDerivation {
-  name = if extraOnly then "libfm-extra-1.2.3" else "libfm-1.2.3";
+stdenv.mkDerivation rec {
+  name = if extraOnly
+    then "libfm-extra-${version}"
+    else "libfm-${version}";
+  version = "1.3.0.2";
+
   src = fetchurl {
-    url = "mirror://sourceforge/pcmanfm/libfm-1.2.3.tar.xz";
-    sha256 = "1ygvw52262r3jp1f45m9cdpx5xgvd4rkyfszslfqvg2c99ig34n6";
+    url = "mirror://sourceforge/pcmanfm/libfm-${version}.tar.xz";
+    sha256 = "0wkwbi1nyvqza3r1dhrq846axiiq0fy0dqgngnagh76fjrwnzl0q";
   };
 
-  buildInputs = [ glib gtk intltool pango pkgconfig vala ]
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ glib gtk intltool pango vala_0_34 ]
                 ++ optional (!extraOnly) menu-cache;
 
-  configureFlags = optional extraOnly "--with-extra-only";
+  configureFlags = [ (optional extraOnly "--with-extra-only")
+                     (optional withGtk3 "--with-gtk=3") ];
+
+  enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
-    homepage = "http://blog.lxde.org/?cat=28/";
+    homepage = http://blog.lxde.org/?cat=28/;
     license = licenses.lgpl21Plus;
     description = "A glib-based library for file management";
     maintainers = [ maintainers.ttuegel ];
-    platforms = platforms.linux;
+    platforms = platforms.linux ++ platforms.darwin;
   };
 }

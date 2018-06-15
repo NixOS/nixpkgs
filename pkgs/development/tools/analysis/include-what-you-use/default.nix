@@ -1,15 +1,21 @@
-{ stdenv, fetchurl, cmake, llvmPackages_36 }:
+{ stdenv, fetchurl, cmake, llvmPackages }:
 
-let
-  version = "0.4";
-  llvmPackages = llvmPackages_36;
-in stdenv.mkDerivation rec {
+stdenv.mkDerivation rec {
   name = "include-what-you-use-${version}";
+  # Also bump llvmPackages in all-packages.nix to the supported version!
+  version = "0.8";
 
   src = fetchurl {
-    sha256 = "19pwhgwvfr86n8ks099p9r02v7zh8d3qs7g7snzkhpdgq1azww85";
+    sha256 = "0r6n5gqicl0f9c8jrphq40kc2cis952gmnkm3643m3jwad0mn33d";
     url = "${meta.homepage}/downloads/${name}.src.tar.gz";
   };
+
+  buildInputs = with llvmPackages; [ clang-unwrapped llvm ];
+  nativeBuildInputs = [ cmake ];
+
+  cmakeFlags = [ "-DIWYU_LLVM_ROOT_PATH=${llvmPackages.clang-unwrapped}" ];
+
+  enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
     description = "Analyze #includes in C/C++ source files with clang";
@@ -21,16 +27,8 @@ in stdenv.mkDerivation rec {
       actually needed for this file (for both .cc and .h files), and by
       replacing #includes with forward-declares when possible.
     '';
-    homepage = http://include-what-you-use.org;
+    homepage = https://include-what-you-use.org;
     license = licenses.bsd3;
-    platforms = with platforms; linux;
-    maintainers = with maintainers; [ nckx ];
+    platforms = platforms.unix;
   };
-
-  buildInputs = with llvmPackages; [ clang llvm ];
-  nativeBuildInputs = [ cmake ];
-
-  cmakeFlags = "-DIWYU_LLVM_ROOT_PATH=${llvmPackages.clang-unwrapped}";
-
-  enableParallelBuilding = true;
 }

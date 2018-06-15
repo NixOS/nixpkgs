@@ -1,20 +1,23 @@
 { stdenv, fetchurl, cmake, cfitsio, libusb, zlib, boost, libnova
-, libjpeg, gsl }:
+, curl, libjpeg, gsl }:
 
 stdenv.mkDerivation {
-  name = "indilib-1.0.0";
+  name = "indilib-1.1.0";
 
   src = fetchurl {
-    url = mirror://sourceforge/indi/libindi_1.0.0.tar.gz;
-    sha256 = "0f66jykpjk8mv50lc3rywbqj9mqr4p2n1igfb1222h5fs83c1jhm";
+    url = mirror://sourceforge/indi/libindi_1.1.0.tar.gz;
+    sha256 = "1bs6lkwqd4aashg93mqqkc7nrg7fbx9mdw85qs5263jqa6sr780w";
   };
 
   patches = [ ./udev-dir.patch ] ;
 
-  propagatedBuildInputs = [ cmake cfitsio libusb zlib boost
+  buildInputs = [ curl cmake cfitsio libusb zlib boost
                             libnova libjpeg gsl ];
 
   meta = {
-    homepage = http://indi.sf.net;
+    homepage = http://www.indilib.org/;
+    license = stdenv.lib.licenses.lgpl2Plus;
+    description = "Implementaion of the INDI protocol for POSIX operating systems";
+    platforms = stdenv.lib.platforms.unix;
   };
 }

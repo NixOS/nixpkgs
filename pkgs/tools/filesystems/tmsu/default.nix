@@ -2,25 +2,25 @@
 
 stdenv.mkDerivation rec {
   name = "tmsu-${version}";
-  version = "0.5.2";
+  version = "0.7.0";
 
   go-sqlite3 = fetchgit {
     url = "git://github.com/mattn/go-sqlite3";
     rev = "c9a0db5d8951646743317f0756da0339fe144dd5";
-    sha256 = "0j01nr3q89qs9n9zzp8gsr94hl9v0gnis6hmndl9ms554bhlv99p";
+    sha256 = "1m0q9869fis0dhg34g5wc5xi6pby491spfxi23w461h29higbrqh";
   };
 
   go-fuse = fetchgit {
     url = "git://github.com/hanwen/go-fuse";
     rev = "8c85ded140ac1889372a0e22d8d21e3d10a303bd";
-    sha256 = "1kssndvrbcxvf85x6c6lgn5kpcl7d788z3sxrv1szik4acb6n2sa";
+    sha256 = "1iph2hpvby2mfwqg9pp39xjqdl9a09h4442yfdn5l67pznljh2bi";
   };
 
   src = fetchFromGitHub {
     owner = "oniony";
     repo = "tmsu";
     rev = "v${version}";
-    sha256 = "090wzhcd4sr3358p1f640psy42r4kd3kkhgnf8196qsh2vcx8arc";
+    sha256 = "0vccxb8mlr7wf92xawnqpvzwlw2xs3b962hjn09dnd6yxqscql64";
   };
 
   buildInputs = [ go fuse ];
@@ -34,6 +34,8 @@ stdenv.mkDerivation rec {
 
     mkdir -p src/github.com/oniony/tmsu
     ln -s ${src}/* src/github.com/oniony/tmsu
+
+    patchShebangs tests/.
 
     export GOPATH=$PWD
   '';
@@ -54,6 +56,6 @@ stdenv.mkDerivation rec {
     description = "A tool for tagging your files using a virtual filesystem";
     maintainers = with maintainers; [ pSub ];
     license     = licenses.gpl3;
-    platforms   = platforms.all;
+    platforms   = platforms.linux;
   };
 }

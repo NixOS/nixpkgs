@@ -1,33 +1,33 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, boost, libevent, double_conversion, glog
-, google-gflags, python, libiberty, openssl }:
+{ stdenv, fetchFromGitHub, fetchpatch, autoreconfHook, pkgconfig, boost, libevent
+, double-conversion, glog, google-gflags, python, libiberty, openssl }:
 
 stdenv.mkDerivation rec {
-  version = "2015-09-17";
   name = "folly-${version}";
+  version = "2018.05.28.00";
 
   src = fetchFromGitHub {
     owner = "facebook";
     repo = "folly";
-    rev = "e4527fb5d04f5fec823bd6a2402b620a6e1a64e3";
-    sha256 = "0iicq19yylafr7qs221xgk8pcwf6nnyx6srgsx9y9cyf72siadcb";
+    rev = "v${version}";
+    sha256 = "1n5zic8bgm4dfc7prjj3af2ipxalia6w7dk6w9pmrz1nkrpyd68c";
   };
 
-  nativeBuildInputs = [ autoreconfHook python ];
-  buildInputs = [ libiberty boost libevent double_conversion glog google-gflags openssl ];
+  nativeBuildInputs = [ autoreconfHook python pkgconfig ];
+  buildInputs = [ libiberty boost libevent double-conversion glog google-gflags openssl ];
 
-  postUnpack = "sourceRoot=\${sourceRoot}/folly";
+  postPatch = "cd folly";
   preBuild = ''
     patchShebangs build
   '';
 
-  configureFlags = [ "--with-boost-libdir=${boost.lib}/lib" ];
+  configureFlags = [ "--with-boost-libdir=${boost.out}/lib" ];
 
   enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
     description = "An open-source C++ library developed and used at Facebook";
     homepage = https://github.com/facebook/folly;
-    license = licenses.mit;
+    license = licenses.asl20;
     # 32bit is not supported: https://github.com/facebook/folly/issues/103
     platforms = [ "x86_64-linux" ];
     maintainers = with maintainers; [ abbradar ];

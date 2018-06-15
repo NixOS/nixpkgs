@@ -1,10 +1,10 @@
 { stdenv, fetchFromGitHub, pkgconfig, nettools, gettext, libtool, flex
-, readline ? null, openssl ? null, python ? null, ncurses ? null
-, sqlite ? null, postgresql ? null, libmysql ? null, zlib ? null, lzo ? null
+, readline ? null, openssl ? null, python2 ? null, ncurses ? null, rocksdb
+, sqlite ? null, postgresql ? null, mysql ? null, zlib ? null, lzo ? null
 , jansson ? null, acl ? null, glusterfs ? null, libceph ? null, libcap ? null
 }:
 
-assert sqlite != null || postgresql != null || libmysql != null;
+assert sqlite != null || postgresql != null || mysql != null;
 
 with stdenv.lib;
 let
@@ -12,20 +12,20 @@ let
 in
 stdenv.mkDerivation rec {
   name = "bareos-${version}";
-  version = "15.2.1";
+  version = "17.2.5";
 
   src = fetchFromGitHub {
     owner = "bareos";
     repo = "bareos";
     rev = "Release/${version}";
     name = "${name}-src";
-    sha256 = "01vnqahzjj598jjk4y7qzfnq415jh227v40sgkrdl4qcpn76spxi";
+    sha256 = "1mgh25lhd05m26sq1sj5ir2b4n7560x93ib25cvf9vmmypm1c7pn";
   };
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
-    nettools gettext readline openssl python flex ncurses sqlite postgresql
-    libmysql zlib lzo jansson acl glusterfs libceph libcap
+    nettools gettext readline openssl python2 flex ncurses sqlite postgresql
+    mysql.connector-c zlib lzo jansson acl glusterfs libceph libcap rocksdb
   ];
 
   postPatch = ''
@@ -50,13 +50,13 @@ stdenv.mkDerivation rec {
     "--enable-dynamic-cats-backends"
     "--enable-sql-pooling"
     "--enable-scsi-crypto"
-  ] ++ optionals (readline != null) [ "--disable-conio" "--enable-readline" "--with-readline=${readline}" ]
-    ++ optional (python != null) "--with-python=${python}"
-    ++ optional (openssl != null) "--with-openssl=${openssl}"
-    ++ optional (sqlite != null) "--with-sqlite3=${sqlite}"
+  ] ++ optionals (readline != null) [ "--disable-conio" "--enable-readline" "--with-readline=${readline.dev}" ]
+    ++ optional (python2 != null) "--with-python=${python2}"
+    ++ optional (openssl != null) "--with-openssl=${openssl.dev}"
+    ++ optional (sqlite != null) "--with-sqlite3=${sqlite.dev}"
     ++ optional (postgresql != null) "--with-postgresql=${postgresql}"
-    ++ optional (libmysql != null) "--with-mysql=${libmysql}"
-    ++ optional (zlib != null) "--with-zlib=${zlib}"
+    ++ optional (mysql != null) "--with-mysql=${mysql.connector-c}"
+    ++ optional (zlib != null) "--with-zlib=${zlib.dev}"
     ++ optional (lzo != null) "--with-lzo=${lzo}"
     ++ optional (jansson != null) "--with-jansson=${jansson}"
     ++ optional (acl != null) "--enable-acl"

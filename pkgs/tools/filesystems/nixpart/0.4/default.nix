@@ -1,16 +1,18 @@
-{ stdenv, fetchurl, python, buildPythonPackage
+{ stdenv, fetchurl, python, buildPythonApplication
 # Propagated to blivet
-, useNixUdev ? true, udevSoMajor ? null
+, useNixUdev ? true
+# No longer needed, but kept for backwards-compatibility with older NixOps.
+, udevSoMajor ? null
 # Propagated dependencies
 , pkgs, urlgrabber
 }:
 
 let
   blivet = import ./blivet.nix {
-    inherit stdenv fetchurl buildPythonPackage;
+    inherit stdenv fetchurl buildPythonApplication;
     inherit pykickstart pyparted pyblock cryptsetup multipath_tools;
-    inherit useNixUdev udevSoMajor;
-    inherit (pkgs) lsof utillinux udev;
+    inherit useNixUdev;
+    inherit (pkgs) lsof utillinux systemd;
     libselinux = pkgs.libselinux.override { enablePython = true; };
   };
 
@@ -27,12 +29,12 @@ let
 
   lvm2 = import ./lvm2.nix {
     inherit stdenv fetchurl;
-    inherit (pkgs) pkgconfig utillinux udev coreutils;
+    inherit (pkgs) pkgconfig utillinux systemd coreutils;
   };
 
   multipath_tools = import ./multipath-tools.nix {
     inherit stdenv fetchurl lvm2;
-    inherit (pkgs) readline udev libaio gzip;
+    inherit (pkgs) readline systemd libaio gzip;
   };
 
   parted = import ./parted.nix {
@@ -46,15 +48,15 @@ let
   };
 
   pykickstart = import ./pykickstart.nix {
-    inherit stdenv fetchurl python buildPythonPackage urlgrabber;
+    inherit stdenv fetchurl python buildPythonApplication urlgrabber;
   };
 
   pyparted = import ./pyparted.nix {
-    inherit stdenv fetchurl python buildPythonPackage parted;
+    inherit stdenv fetchurl python buildPythonApplication parted;
     inherit (pkgs) pkgconfig e2fsprogs;
   };
 
-in buildPythonPackage rec {
+in buildPythonApplication rec {
   name = "nixpart-${version}";
   version = "0.4.1";
 

@@ -35,7 +35,7 @@ in
         sha1 = "9b6e86d8568558de4d606a7debc4f6049608dbd0";
       };
       meta = {
-        description = "Android + Google APIs, revision 2";
+        description = "Android + Google APIs";
         url = http://developer.android.com/;
       };
     };
@@ -47,7 +47,7 @@ in
         sha1 = "46eaeb56b645ee7ffa24ede8fa17f3df70db0503";
       };
       meta = {
-        description = "Android + Google APIs, revision 1";
+        description = "Android + Google APIs";
         url = http://developer.android.com/;
       };
     };
@@ -59,7 +59,7 @@ in
         sha1 = "5ff545d96e031e09580a6cf55713015c7d4936b2";
       };
       meta = {
-        description = "Android + Google APIs, revision 1";
+        description = "Android + Google APIs";
         url = http://developer.android.com/;
       };
     };
@@ -71,7 +71,7 @@ in
         sha1 = "2e7f91e0fe34fef7f58aeced973c6ae52361b5ac";
       };
       meta = {
-        description = "Android + Google APIs, revision 1";
+        description = "Android + Google APIs";
         url = http://developer.android.com/;
       };
     };
@@ -83,7 +83,7 @@ in
         sha1 = "3079958e7ec87222cac1e6b27bc471b27bf2c352";
       };
       meta = {
-        description = "Android + Google APIs, API 8, revision 2";
+        description = "Android + Google APIs";
         url = http://developer.android.com/;
       };
     };
@@ -95,7 +95,7 @@ in
         sha1 = "78664645a1e9accea4430814f8694291a7f1ea5d";
       };
       meta = {
-        description = "Android + Google APIs, API 9, revision 2";
+        description = "Android + Google APIs";
         url = http://developer.android.com/;
       };
     };
@@ -107,7 +107,7 @@ in
         sha1 = "cc0711857c881fa7534f90cf8cc09b8fe985484d";
       };
       meta = {
-        description = "Android + Google APIs, API 10, revision 2";
+        description = "Android + Google APIs";
         url = http://developer.android.com/;
       };
     };
@@ -119,7 +119,7 @@ in
         sha1 = "5eab5e81addee9f3576d456d205208314b5146a5";
       };
       meta = {
-        description = "Android + Google APIs, API 11, revision 1";
+        description = "Android + Google APIs";
         url = http://developer.android.com/;
       };
     };
@@ -131,7 +131,7 @@ in
         sha1 = "e9999f4fa978812174dfeceec0721c793a636e5d";
       };
       meta = {
-        description = "Android + Google APIs, API 12, revision 1";
+        description = "Android + Google APIs";
         url = http://developer.android.com/;
       };
     };
@@ -143,7 +143,7 @@ in
         sha1 = "3b153edd211c27dc736c893c658418a4f9041417";
       };
       meta = {
-        description = "Android + Google APIs, API 13, revision 1";
+        description = "Android + Google APIs";
         url = http://developer.android.com/;
       };
     };
@@ -211,8 +211,8 @@ in
   google_apis_19 = buildGoogleApis {
     name = "google_apis-19";
       src = fetchurl {
-        url = https://dl.google.com/android/repository/google_apis-19_r16.zip;
-        sha1 = "d92f2a2fe219e578633c6445397e1f675edc6a28";
+        url = https://dl.google.com/android/repository/google_apis-19_r20.zip;
+        sha1 = "5b933abe830b2f25b4c0f171d45e9e0651e56311";
       };
       meta = {
         description = "Android + Google APIs";
@@ -256,11 +256,35 @@ in
       };
     };
 
+  google_apis_24 = buildGoogleApis {
+    name = "google_apis-24";
+      src = fetchurl {
+        url = https://dl.google.com/android/repository/google_apis-24_r1.zip;
+        sha1 = "31361c2868f27343ee917fbd259c1463821b6145";
+      };
+      meta = {
+        description = "Android + Google APIs";
+
+      };
+    };
+
+  google_apis_25 = buildGoogleApis {
+    name = "google_apis-25";
+      src = fetchurl {
+        url = https://dl.google.com/android/repository/google_apis-25_r1.zip;
+        sha1 = "550e83eea9513ab11c44919ac6da54b36084a9f3";
+      };
+      meta = {
+        description = "Android + Google APIs";
+
+      };
+    };
+
   android_support_extra = buildGoogleApis {
     name = "android_support_extra";
     src = fetchurl {
-      url = https://dl.google.com/android/repository/support_r23.0.1.zip;
-      sha1 = "fbe529716943053d0ce0d7f058d79f1a848cdff9";
+      url = https://dl.google.com/android/repository/support_r23.2.1.zip;
+      sha1 = "41121bbc412c2fce0be170d589d20cfa3e78e857";
     };
     meta = {
       description = "Android Support Library";
@@ -268,15 +292,28 @@ in
     };
   };
 
+
   google_play_services = buildGoogleApis {
     name = "google_play_services";
     src = fetchurl {
-      url = https://dl.google.com/android/repository/google_play_services_8115000_r27.zip;
-      sha1 = "cdb13f826ca82d3c3730cf1df9f3bf58565fd4bb";
+      url = https://dl.google.com/android/repository/google_play_services_v12_1_rc11.zip;
+      sha1 = "d2bb583a3f62b068d448df10544c1852d910526f";
     };
     meta = {
       description = "Google Play services client library and sample code";
       url = http://developer.android.com/;
+    };
+  };
+
+  instant_apps = buildGoogleApis {
+    name = "instant_apps_sdk";
+    src = fetchurl {
+      url = https://dl.google.com/android/repository/aiasdk-1.0.0.zip;
+      sha1 = "50074a0f0312ee1d0d81d2cddc3d84a8a9e97a53";
+    };
+    meta = {
+      description = "Android Instant Apps Development SDK";
+      url = "https://developer.android.com/";
     };
   };
 

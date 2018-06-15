@@ -1,46 +1,48 @@
-{ stdenv, lib, bundler, fetchgit, bundlerEnv, defaultGemConfig, libiconv, ruby
-, tzdata, git
+{ pkgs, stdenv, lib, bundler, fetchurl, fetchFromGitHub, bundlerEnv, libiconv
+, ruby, tzdata, git, procps, nettools
 }:
 
 let
-  gitlab = fetchgit {
-    url = "https://github.com/gitlabhq/gitlabhq.git";
-    rev = "477743a154e85c411e8a533980abce460b5669fc";
-    fetchSubmodules = false;
-    sha256 = "1gk77j886w6zvw5cawpgja6f87qirmjx7y4g5i3psxm4j67llxdp";
-  };
-
-  env = bundlerEnv {
-    name = "gitlab";
+  rubyEnv = bundlerEnv {
+    name = "gitlab-env-${version}";
     inherit ruby;
-    gemfile = ./Gemfile;
-    lockfile = ./Gemfile.lock;
-    gemset = ./gemset.nix;
+    gemdir = ./.;
+    groups = [ "default" "unicorn" "ed25519" "metrics" ];
     meta = with lib; {
       homepage = http://www.gitlab.com/;
       platforms = platforms.linux;
-      maintainers = [ ];
+      maintainers = with maintainers; [ fpletz globin ];
       license = licenses.mit;
     };
+  };
+
+  version = "10.8.0";
+
+  gitlabDeb = fetchurl {
+    url = "https://packages.gitlab.com/gitlab/gitlab-ce/packages/debian/jessie/gitlab-ce_${version}-ce.0_amd64.deb/download";
+    sha256 = "0j5jrlwfpgwfirjnqb9w4snl9w213kdxb1ajyrla211q603d4j34";
   };
 
 in
 
 stdenv.mkDerivation rec {
   name = "gitlab-${version}";
-  version = "7.4.2";
-  buildInputs = [ ruby bundler tzdata git ];
-  unpackPhase = ''
-    runHook preUnpack
-    cp -r ${gitlab}/* .
-    chmod -R +w .
-    cp ${./Gemfile} Gemfile
-    cp ${./Gemfile.lock} Gemfile.lock
-    runHook postUnpack
-  '';
+
+  src = fetchFromGitHub {
+    owner = "gitlabhq";
+    repo = "gitlabhq";
+    rev = "v${version}";
+    sha256 = "1idvi27xpghvvb3sv62afhcnnswvjlrbg5lld79a761kd4187cym";
+  };
+
+  buildInputs = [
+    rubyEnv rubyEnv.wrappedRuby rubyEnv.bundler tzdata git procps nettools
+  ];
+
   patches = [
     ./remove-hardcoded-locations.patch
   ];
+
   postPatch = ''
     # For reasons I don't understand "bundle exec" ignores the
     # RAILS_ENV causing tests to be executed that fail because we're
@@ -48,12 +50,17 @@ stdenv.mkDerivation rec {
     # tests works though.:
     rm lib/tasks/test.rake
 
-    mv config/gitlab.yml.example config/gitlab.yml
+    rm config/initializers/gitlab_shell_secret_token.rb
+
+    substituteInPlace app/controllers/admin/background_jobs_controller.rb \
+        --replace "ps -U" "${procps}/bin/ps -U"
+
+    sed -i '/ask_to_continue/d' lib/tasks/gitlab/two_factor.rake
 
     # required for some gems:
     cat > config/database.yml <<EOF
       production:
-        adapter: postgresql
+        adapter: <%= ENV["GITLAB_DATABASE_ADAPTER"] || sqlite %>
         database: gitlab
         host: <%= ENV["GITLAB_DATABASE_HOST"] || "127.0.0.1" %>
         password: <%= ENV["GITLAB_DATABASE_PASSWORD"] || "blerg" %>
@@ -61,16 +68,40 @@ stdenv.mkDerivation rec {
         encoding: utf8
     EOF
   '';
+
   buildPhase = ''
-    export GEM_HOME=${env}/${ruby.gemPath}
-    bundle exec rake assets:precompile RAILS_ENV=production
+    mv config/gitlab.yml.example config/gitlab.yml
+
+    # work around unpacking deb containing binary with suid bit
+    ar p ${gitlabDeb} data.tar.gz | gunzip > gitlab-deb-data.tar
+    tar -f gitlab-deb-data.tar --delete ./opt/gitlab/embedded/bin/ksu
+    tar -xf gitlab-deb-data.tar
+
+    mv -v opt/gitlab/embedded/service/gitlab-rails/public/assets public
+    rm -rf opt
+
+    mv config/gitlab.yml config/gitlab.yml.example
+    rm -f config/secrets.yml
+    mv config config.dist
   '';
+
   installPhase = ''
+    rm -r tmp
     mkdir -p $out/share
     cp -r . $out/share/gitlab
+    rm -rf $out/share/gitlab/log
+    ln -sf /run/gitlab/log $out/share/gitlab/log
+    ln -sf /run/gitlab/uploads $out/share/gitlab/public/uploads
+    ln -sf /run/gitlab/config $out/share/gitlab/config
+    ln -sf /run/gitlab/tmp $out/share/gitlab/tmp
+
+    # rake tasks to mitigate CVE-2017-0882
+    # see https://about.gitlab.com/2017/03/20/gitlab-8-dot-17-dot-4-security-release/
+    cp ${./reset_token.rake} $out/share/gitlab/lib/tasks/reset_token.rake
   '';
+
   passthru = {
-    inherit env;
-    inherit ruby;
+    inherit rubyEnv;
+    ruby = rubyEnv.wrappedRuby;
   };
 }

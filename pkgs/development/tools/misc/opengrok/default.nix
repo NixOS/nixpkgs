@@ -1,11 +1,22 @@
 { fetchurl, stdenv, jre, ctags, makeWrapper, coreutils, git }:
 
 stdenv.mkDerivation rec {
-  name = "opengrok-0.12.1";
+  name = "opengrok-${version}";
+  version = "1.0";
 
+  # 1.0 is the latest distributed as a .tar.gz file.
+  # Newer are distribued as .zip so a source build is required.
+
+  # if builded from source
+  #src = fetchurl {
+  #  url = "https://github.com/OpenGrok/OpenGrok/archive/${version}.tar.gz";
+  #  sha256 = "01r7ipnj915rnyxyqrnmjfagkip23q5lx9g787qb7qrnbvgfi118";
+  #};
+
+  # binary distribution
   src = fetchurl {
-    url = "http://java.net/projects/opengrok/downloads/download/${name}.tar.gz";
-    sha256 = "0ihaqgf1z2gsjmy2q96m0s07dpnh92j3ss3myiqjdsh9957fwg79";
+    url = https://github.com/OpenGrok/OpenGrok/files/213268/opengrok-0.12.1.5.tar.gz;
+    sha256 = "1bafiq4s9sqldinl6fy931rm0x8zj2magfdlbi3nqlnidsghgkn3";
   };
 
   buildInputs = [ makeWrapper ];
@@ -15,14 +26,14 @@ stdenv.mkDerivation rec {
     cp -a * $out/
     substituteInPlace $out/bin/OpenGrok --replace /bin/uname ${coreutils}/bin/uname
     wrapProgram $out/bin/OpenGrok \
-      --prefix PATH : "${ctags}/bin:${git}/bin" \
+      --prefix PATH : "${stdenv.lib.makeBinPath [ ctags git ]}" \
       --set JAVA_HOME "${jre}" \
       --set OPENGROK_TOMCAT_BASE "/var/tomcat"
   '';
 
   meta = with stdenv.lib; {
     description = "Source code search and cross reference engine";
-    homepage = http://opengrok.github.io/OpenGrok/;
+    homepage = https://opengrok.github.io/OpenGrok/;
     license = licenses.cddl;
     maintainers = [ maintainers.lethalman ];
   };

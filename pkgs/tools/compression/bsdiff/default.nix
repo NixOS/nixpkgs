@@ -13,8 +13,8 @@ stdenv.mkDerivation rec {
   patches = [ ./include-systypes.patch ];
 
   buildPhase = ''
-    cc -O3 -lbz2 bspatch.c -o bspatch
-    cc -O3 -lbz2 bsdiff.c  -o bsdiff
+    $CC -O3 -lbz2 bspatch.c -o bspatch
+    $CC -O3 -lbz2 bsdiff.c  -o bsdiff
   '';
 
   installPhase = ''

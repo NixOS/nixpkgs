@@ -23,7 +23,7 @@ in
         strings.  The latter is concatenated, interspersed with colon
         characters.
       '';
-      type = types.attrsOf (types.loeOf types.str);
+      type = with types; attrsOf (either str (listOf str));
       apply = mapAttrs (n: v: if isList v then concatStringsSep ":" v else v);
     };
 

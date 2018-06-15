@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, qt4, gnuradio, boost, gnuradio-osmosdr
+{ stdenv, fetchFromGitHub, cmake, qtbase, qtsvg, gnuradio, boost, gnuradio-osmosdr
 # drivers (optional):
 , rtl-sdr, hackrf
 , pulseaudioSupport ? true, libpulseaudio
@@ -8,25 +8,25 @@ assert pulseaudioSupport -> libpulseaudio != null;
 
 stdenv.mkDerivation rec {
   name = "gqrx-${version}";
-  version = "2.3.2";
+  version = "2.11.5";
 
-  src = fetchurl {
-    url = "mirror://sourceforge/project/gqrx/${version}/${name}.tar.xz";
-    sha256 = "1vfqqa976xlbapqkpc9nka364zydvsy18xiwfqjy015kpasshdz1";
+  src = fetchFromGitHub {
+    owner = "csete";
+    repo = "gqrx";
+    rev = "v${version}";
+    sha256 = "0q9i0dhd6blagxzk84pzqjq8n4ym3jc1mkkhygg8yncr4vq2saaf";
   };
 
+  nativeBuildInputs = [ cmake ];
   buildInputs = [
-    qt4 gnuradio boost gnuradio-osmosdr rtl-sdr hackrf
+    qtbase qtsvg gnuradio boost gnuradio-osmosdr rtl-sdr hackrf
   ] ++ stdenv.lib.optionals pulseaudioSupport [ libpulseaudio ];
 
-  configurePhase = ''qmake PREFIX="$out"'';
+  enableParallelBuilding = true;
 
   postInstall = ''
-    mkdir -p "$out/share/applications"
-    mkdir -p "$out/share/icons"
-
-    cp gqrx.desktop "$out/share/applications/"
-    cp icons/gqrx.svg "$out/share/icons/"
+    install -vD $src/gqrx.desktop -t "$out/share/applications/"
+    install -vD $src/resources/icons/gqrx.svg -t "$out/share/icons/"
   '';
 
   meta = with stdenv.lib; {
@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
     # Some of the code comes from the Cutesdr project, with a BSD license, but
     # it's currently unknown which version of the BSD license that is.
     license = licenses.gpl3Plus;
-    platforms = platforms.linux;  # should work on Darwin / OS X too
-    maintainers = with maintainers; [ bjornfor the-kenny ];
+    platforms = platforms.linux;  # should work on Darwin / macOS too
+    maintainers = with maintainers; [ bjornfor the-kenny fpletz ];
   };
 }

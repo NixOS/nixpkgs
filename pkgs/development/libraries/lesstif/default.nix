@@ -18,4 +18,8 @@ stdenv.mkDerivation rec {
     ./c-render_table_crash.patch 
     ./c-xpmpipethrough.patch
     ];
+
+  meta = {
+    platforms = stdenv.lib.platforms.unix;
+  };
 }

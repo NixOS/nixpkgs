@@ -1,26 +1,30 @@
 { stdenv, fetchurl
-, boost, freeglut, glew, gsl, lcms2, libpng, libtiff, libxmi, mesa, vigra
-, help2man, pkgconfig, perl }:
+, boost, freeglut, glew, gsl, lcms2, libpng, libtiff, libGLU_combined, vigra
+, help2man, pkgconfig, perl, texlive }:
 
-let version = "4.1.4"; in
 stdenv.mkDerivation rec {
   name = "enblend-enfuse-${version}";
+  version = "4.2";
 
   src = fetchurl {
     url = "mirror://sourceforge/enblend/${name}.tar.gz";
-    sha256 = "0208x01i129hqylmy6jh3krwdac47mx6fi8xccjm9h35c18c7xl5";
+    sha256 = "0j5x011ilalb47ssah50ag0a4phgh1b0wdgxdbbp1gcyjcjf60w7";
   };
 
-  buildInputs = [ boost freeglut glew gsl lcms2 libpng libtiff libxmi mesa vigra ];
+  buildInputs = [ boost freeglut glew gsl lcms2 libpng libtiff libGLU_combined vigra ];
 
-  nativeBuildInputs = [ help2man perl pkgconfig ];
+  nativeBuildInputs = [ help2man perl pkgconfig texlive.combined.scheme-small ];
+
+  preConfigure = ''
+    patchShebangs src/embrace
+  '';
 
   enableParallelBuilding = true;
 
-  meta = {
-    inherit version;
+  meta = with stdenv.lib; {
     homepage = http://enblend.sourceforge.net/;
     description = "Blends away the seams in a panoramic image mosaic using a multiresolution spline";
-    license = stdenv.lib.licenses.gpl2;
+    license = licenses.gpl2;
+    platforms = with platforms; linux;
   };
 }

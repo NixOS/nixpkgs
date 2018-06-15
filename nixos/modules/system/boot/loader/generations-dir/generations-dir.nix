@@ -44,10 +44,10 @@ in
       copyKernels = mkOption {
         default = false;
         type = types.bool;
-        description = "
+        description = ''
           Whether copy the necessary boot files into /boot, so
           /nix/store is not needed by the boot loader.
-        ";
+        '';
       };
 
     };

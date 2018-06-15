@@ -11,17 +11,29 @@ with lib;
 let cfg = config.ec2; in
 
 {
-  imports = [ ../profiles/headless.nix ./ec2-data.nix ./amazon-grow-partition.nix ];
+  imports = [ ../profiles/headless.nix ./ec2-data.nix ./amazon-init.nix ];
 
   config = {
+
+    assertions = [
+      { assertion = cfg.hvm;
+        message = "Paravirtualized EC2 instances are no longer supported.";
+      }
+    ];
+
+    boot.growPartition = cfg.hvm;
 
     fileSystems."/" = {
       device = "/dev/disk/by-label/nixos";
       autoResize = true;
     };
 
-    boot.initrd.kernelModules = [ "xen-blkfront" ];
-    boot.kernelModules = [ "xen-netfront" ];
+    boot.extraModulePackages =
+      [ config.boot.kernelPackages.ixgbevf
+        config.boot.kernelPackages.ena
+      ];
+    boot.initrd.kernelModules = [ "xen-blkfront" "xen-netfront" ];
+    boot.initrd.availableKernelModules = [ "ixgbevf" "ena" "nvme" ];
     boot.kernelParams = mkIf cfg.hvm [ "console=ttyS0" ];
 
     # Prevent the nouveau kernel module from being loaded, as it
@@ -33,16 +45,10 @@ let cfg = config.ec2; in
     # Generate a GRUB menu.  Amazon's pv-grub uses this to boot our kernel/initrd.
     boot.loader.grub.version = if cfg.hvm then 2 else 1;
     boot.loader.grub.device = if cfg.hvm then "/dev/xvda" else "nodev";
-    boot.loader.grub.timeout = 0;
     boot.loader.grub.extraPerEntryConfig = mkIf (!cfg.hvm) "root (hd0)";
+    boot.loader.timeout = 0;
 
-    boot.initrd.postDeviceCommands =
-      ''
-        # Force udev to exit to prevent random "Device or resource busy
-        # while trying to open /dev/xvda" errors from fsck.
-        udevadm control --exit || true
-        kill -9 -1
-      '';
+    boot.initrd.network.enable = true;
 
     # Mount all formatted ephemeral disks and activate all swap devices.
     # We cannot do this with the ‘fileSystems’ and ‘swapDevices’ options
@@ -55,6 +61,27 @@ let cfg = config.ec2; in
     # Nix operations.
     boot.initrd.postMountCommands =
       ''
+        metaDir=$targetRoot/etc/ec2-metadata
+        mkdir -m 0755 -p "$metaDir"
+
+        echo "getting EC2 instance metadata..."
+
+        if ! [ -e "$metaDir/ami-manifest-path" ]; then
+          wget -q -O "$metaDir/ami-manifest-path" http://169.254.169.254/1.0/meta-data/ami-manifest-path
+        fi
+
+        if ! [ -e "$metaDir/user-data" ]; then
+          wget -q -O "$metaDir/user-data" http://169.254.169.254/1.0/user-data && chmod 600 "$metaDir/user-data"
+        fi
+
+        if ! [ -e "$metaDir/hostname" ]; then
+          wget -q -O "$metaDir/hostname" http://169.254.169.254/1.0/meta-data/hostname
+        fi
+
+        if ! [ -e "$metaDir/public-keys-0-openssh-key" ]; then
+          wget -q -O "$metaDir/public-keys-0-openssh-key" http://169.254.169.254/1.0/meta-data/public-keys/0/openssh-key
+        fi
+
         diskNr=0
         diskForUnionfs=
         for device in /dev/xvd[abcde]*; do
@@ -66,7 +93,6 @@ let cfg = config.ec2; in
             elif [ "$fsType" = ext3 ]; then
                 mp="/disk$diskNr"
                 diskNr=$((diskNr + 1))
-                echo "mounting $device on $mp..."
                 if mountFS "$device" "$mp" "" ext3; then
                     if [ -z "$diskForUnionfs" ]; then diskForUnionfs="$mp"; fi
                 fi
@@ -81,7 +107,7 @@ let cfg = config.ec2; in
             mkdir -m 1777 -p $targetRoot/$diskForUnionfs/root/tmp $targetRoot/tmp
             mount --bind $targetRoot/$diskForUnionfs/root/tmp $targetRoot/tmp
 
-            if [ ! -e $targetRoot/.ebs ]; then
+            if [ "$(cat "$metaDir/ami-manifest-path")" != "(unknown)" ]; then
                 mkdir -m 755 -p $targetRoot/$diskForUnionfs/root/var $targetRoot/var
                 mount --bind $targetRoot/$diskForUnionfs/root/var $targetRoot/var
 
@@ -110,7 +136,7 @@ let cfg = config.ec2; in
     # Allow root logins only using the SSH key that the user specified
     # at instance creation time.
     services.openssh.enable = true;
-    services.openssh.permitRootLogin = "without-password";
+    services.openssh.permitRootLogin = "prohibit-password";
 
     # Force getting the hostname from EC2.
     networking.hostName = mkDefault "";
@@ -119,5 +145,8 @@ let cfg = config.ec2; in
     environment.systemPackages = [ pkgs.cryptsetup ];
 
     boot.initrd.supportedFilesystems = [ "unionfs-fuse" ];
+    
+    # EC2 has its own NTP server provided by the hypervisor
+    networking.timeServers = [ "169.254.169.123" ];
   };
 }

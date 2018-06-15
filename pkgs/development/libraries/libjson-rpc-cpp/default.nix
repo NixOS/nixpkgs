@@ -1,30 +1,67 @@
-{ stdenv, fetchurl, cmake, curl }:
+{ stdenv, fetchFromGitHub, cmake, jsoncpp, argtable, curl, libmicrohttpd
+, doxygen, catch, pkgconfig, git
+}:
 
-let
-  basename = "libjson-rpc-cpp";
-  version = "0.2.1";
-in
+stdenv.mkDerivation rec {
+  name = "libjson-rpc-cpp-${version}";
+  version = "0.7.0";
 
-stdenv.mkDerivation {
-  name = "${basename}-${version}";
-
-  src = fetchurl {
-    url = "https://github.com/cinemast/${basename}/archive/${version}.tar.gz";
-    sha256 = "1pc9nn4968qkda8vr4f9dijn2fcldm8i0ymwmql29h4cl5ghdnpw";
+  src = fetchFromGitHub {
+    owner = "cinemast";
+    repo = "libjson-rpc-cpp";
+    sha256 = "07bg4nyvx0yyhy8c4x9i22kwqpx5jlv36dvpabgbb46ayyndhr7a";
+    rev = "v${version}";
   };
 
-  buildInputs = [ cmake curl ];
+  NIX_CFLAGS_COMPILE = "-I${catch}/include/catch";
 
-  NIX_LDFLAGS = "-lpthread";
+  postPatch = ''
+    for f in cmake/FindArgtable.cmake \
+             src/stubgenerator/stubgenerator.cpp \
+             src/stubgenerator/stubgeneratorfactory.cpp
+    do
+      sed -i -re 's/argtable2/argtable3/g' $f
+    done
+
+    sed -i -re 's#MATCHES "jsoncpp"#MATCHES ".*/jsoncpp/json$"#g' cmake/FindJsoncpp.cmake
+  '';
+
+  configurePhase = ''
+    mkdir -p Build/Install
+    pushd Build
+
+    cmake .. -DCMAKE_INSTALL_PREFIX=$(pwd)/Install \
+             -DCMAKE_BUILD_TYPE=Release
+  '';
+
+  installPhase = ''
+    mkdir -p $out
+
+    function fixRunPath {
+      p=$(patchelf --print-rpath $1)
+      q="$p:${stdenv.lib.makeLibraryPath [ jsoncpp argtable libmicrohttpd curl ]}:$out/lib"
+      patchelf --set-rpath $q $1
+    }
+
+    make install
+
+    sed -i -re "s#-([LI]).*/Build/Install(.*)#-\1$out\2#g" Install/lib/pkgconfig/*.pc
+    for f in Install/lib/*.so* $(find Install/bin -executable -type f); do
+      fixRunPath $f
+    done
+
+    cp -r Install/* $out
+  '';
+
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ cmake jsoncpp argtable curl libmicrohttpd doxygen catch ];
+
   enableParallelBuilding = true;
-  doCheck = true;
 
-  checkPhase = "LD_LIBRARY_PATH=out/ ctest";
-
-  meta = {
+  meta = with stdenv.lib; {
     description = "C++ framework for json-rpc (json remote procedure call)";
     homepage = https://github.com/cinemast/libjson-rpc-cpp;
-    license = stdenv.lib.licenses.mit;
-    platforms = stdenv.lib.platforms.linux;
+    license = licenses.mit;
+    platforms = platforms.linux;
   };
 }

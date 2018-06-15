@@ -1,8 +1,9 @@
-diff -Nurp morituri-0.2.3-orig/doc/Makefile.in morituri-0.2.3/doc/Makefile.in
---- morituri-0.2.3-orig/doc/Makefile.in	2014-12-23 12:44:46.222410092 +0100
-+++ morituri-0.2.3/doc/Makefile.in	2014-12-23 12:46:49.619756940 +0100
-@@ -486,7 +486,7 @@ morituri.ics: $(top_srcdir)/morituri.doa
- 	-moap doap -f $(top_srcdir)/morituri.doap ical > morituri.ics
+diff --git a/doc/Makefile.am b/doc/Makefile.am
+index c115c2c..78c883e 100644
+--- a/doc/Makefile.am
++++ b/doc/Makefile.am
+@@ -24,7 +24,7 @@ morituri.ics: $(top_srcdir)/morituri.doap
+ man_MANS = rip.1
  
  rip.1: $(top_srcdir)/morituri/extern/python-command/scripts/help2man $(top_srcdir)/morituri
 -	PYTHONPATH=$(top_srcdir) $(PYTHON) $(top_srcdir)/morituri/extern/python-command/scripts/help2man morituri.rip.main.Rip rip > rip.1
@@ -10,9 +11,10 @@ diff -Nurp morituri-0.2.3-orig/doc/Makefile.in morituri-0.2.3/doc/Makefile.in
  
  clean-local:
  	@rm -rf reference
-diff -Nurp morituri-0.2.3-orig/morituri/common/program.py morituri-0.2.3/morituri/common/program.py
---- morituri-0.2.3-orig/morituri/common/program.py	2014-12-23 12:44:46.218410048 +0100
-+++ morituri-0.2.3/morituri/common/program.py	2014-12-23 12:46:49.647757245 +0100
+diff --git a/morituri/common/program.py b/morituri/common/program.py
+index d340fdd..15cb751 100644
+--- a/morituri/common/program.py
++++ b/morituri/common/program.py
 @@ -92,13 +92,13 @@ class Program(log.Loggable):
          """
          Load the given device.
@@ -38,19 +40,12 @@ diff -Nurp morituri-0.2.3-orig/morituri/common/program.py morituri-0.2.3/moritur
  
      def getFastToc(self, runner, toc_pickle, device):
          """
-diff -Nurp morituri-0.2.3-orig/morituri/extern/python-command/scripts/help2man morituri-0.2.3/morituri/extern/python-command/scripts/help2man
---- morituri-0.2.3-orig/morituri/extern/python-command/scripts/help2man	2014-12-23 12:44:46.206409916 +0100
-+++ morituri-0.2.3/morituri/extern/python-command/scripts/help2man	2014-12-23 12:46:49.631757074 +0100
-@@ -1,4 +1,4 @@
--#!/usr/bin/python
-+#!@python@/bin/python
- 
- # -*- Mode: Python -*-
- # vi:si:et:sw=4:sts=4:ts=4
-diff -Nurp morituri-0.2.3-orig/morituri/program/cdparanoia.py morituri-0.2.3/morituri/program/cdparanoia.py
---- morituri-0.2.3-orig/morituri/program/cdparanoia.py	2014-12-23 12:44:46.202409873 +0100
-+++ morituri-0.2.3/morituri/program/cdparanoia.py	2014-12-23 12:46:49.659757376 +0100
-@@ -278,7 +278,7 @@ class ReadTrackTask(log.Loggable, task.T
+Submodule morituri/extern/python-command contains modified content
+diff --git a/morituri/program/cdparanoia.py b/morituri/program/cdparanoia.py
+index 46176d5..fce14a5 100644
+--- a/morituri/program/cdparanoia.py
++++ b/morituri/program/cdparanoia.py
+@@ -278,7 +278,7 @@ class ReadTrackTask(log.Loggable, task.Task):
              stopTrack, stopOffset)
  
          bufsize = 1024
@@ -68,9 +63,10 @@ diff -Nurp morituri-0.2.3-orig/morituri/program/cdparanoia.py morituri-0.2.3/mor
          _VERSION_RE,
          "%(version)s %(release)s")
  
-diff -Nurp morituri-0.2.3-orig/morituri/program/cdrdao.py morituri-0.2.3/morituri/program/cdrdao.py
---- morituri-0.2.3-orig/morituri/program/cdrdao.py	2014-12-23 12:44:46.202409873 +0100
-+++ morituri-0.2.3/morituri/program/cdrdao.py	2014-12-23 12:46:49.667757463 +0100
+diff --git a/morituri/program/cdrdao.py b/morituri/program/cdrdao.py
+index c6fba64..c4d0306 100644
+--- a/morituri/program/cdrdao.py
++++ b/morituri/program/cdrdao.py
 @@ -257,7 +257,7 @@ class CDRDAOTask(ctask.PopenTask):
  
      def start(self, runner):

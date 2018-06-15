@@ -1,15 +1,24 @@
-{stdenv, fetchsvn, zlib, autoconf, automake, libtool}:
+{ stdenv, fetchFromGitHub, cmake, zlib, openssl }:
 
-stdenv.mkDerivation {
-  name = "unshield-0.7pre3955";
-  src = fetchsvn {
-    url = https://synce.svn.sourceforge.net/svnroot/synce/trunk/unshield;
-    rev = 3955;
-    sha256 = "0rpk7sb7b0v19qn4jn0iih505l4zkpns3mrbmm88p61xiz06zg7a";
+stdenv.mkDerivation rec {
+  name = "unshield-${version}";
+  version = "1.4.2";
+
+  src = fetchFromGitHub {
+    owner = "twogood";
+    repo = "unshield";
+    rev = version;
+    sha256 = "07lmh8vmrbqy4kd6zl5yc1ar3bg33w5cymlzwfijy6arg77hjgq9";
   };
-  configureFlags = "--with-zlib=${zlib}";
-  buildInputs = [autoconf automake libtool];
-  preConfigure = ''
-    ./bootstrap
-  '';
+
+
+  nativeBuildInputs = [ cmake ];
+  buildInputs = [ zlib openssl ];
+
+  meta = with stdenv.lib; {
+    description = "Tool and library to extract CAB files from InstallShield installers";
+    homepage = https://github.com/twogood/unshield;
+    license = licenses.mit;
+    platforms = platforms.linux;
+  };
 }

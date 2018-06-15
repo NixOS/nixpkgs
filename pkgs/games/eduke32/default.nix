@@ -1,32 +1,37 @@
-{ stdenv, fetchurl, flac, gtk, libvorbis, libvpx, makeDesktopItem, mesa, nasm
+{ stdenv, fetchurl, flac, gtk2, libvorbis, libvpx, makeDesktopItem, libGLU_combined, nasm
 , pkgconfig, SDL2, SDL2_mixer }:
 
 let
+  year = "2015";
   date = "20150420";
   rev = "5160";
-  version = "${date}-${rev}";
 in stdenv.mkDerivation rec {
   name = "eduke32-${version}";
+  version = "${date}-${rev}";
 
   src = fetchurl {
-    url = "http://dukeworld.duke4.net/eduke32/synthesis/${version}/eduke32_src_${version}.tar.xz";
+    url = "http://dukeworld.duke4.net/eduke32/synthesis/old/${year}/${version}/eduke32_src_${version}.tar.xz";
     sha256 = "1nlq5jbglg00c1z1vsyl627fh0mqfxvk5qyxav5vzla2b4svik2v";
   };
 
-  buildInputs = [ flac gtk libvorbis libvpx mesa SDL2 SDL2_mixer ]
+  buildInputs = [ flac gtk2 libvorbis libvpx libGLU_combined SDL2 SDL2_mixer ]
     ++ stdenv.lib.optional (stdenv.system == "i686-linux") nasm;
   nativeBuildInputs = [ pkgconfig ];
 
   postPatch = ''
     substituteInPlace build/src/glbuild.c \
-      --replace libGL.so	${mesa}/lib/libGL.so \
-      --replace libGLU.so	${mesa}/lib/libGLU.so
+      --replace libGL.so	${libGLU_combined}/lib/libGL.so \
+      --replace libGLU.so	${libGLU_combined}/lib/libGLU.so
   '';
 
-  NIX_CFLAGS_COMPILE = "-I${SDL2}/include/SDL";
+  NIX_CFLAGS_COMPILE = "-I${SDL2.dev}/include/SDL2 -I${SDL2_mixer}/include/SDL2";
   NIX_LDFLAGS = "-L${SDL2}/lib";
 
-  makeFlags = "LINKED_GTK=1 SDLCONFIG=${SDL2}/bin/sdl2-config VC_REV=${rev}";
+  makeFlags = [
+    "LINKED_GTK=1"
+    "SDLCONFIG=${SDL2}/bin/sdl2-config"
+    "VC_REV=${rev}"
+  ];
 
   desktopItem = makeDesktopItem {
     name = "eduke32";
@@ -62,10 +67,10 @@ in stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    inherit version;
     description = "Enhanched port of Duke Nukem 3D for various platforms";
     license = licenses.gpl2Plus;
     homepage = http://eduke32.com;
-    maintainers = with maintainers; [ nckx sander ];
+    maintainers = with maintainers; [ sander ];
+    platforms = with platforms; linux;
   };
 }

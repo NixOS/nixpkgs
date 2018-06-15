@@ -1,34 +1,17 @@
-{ stdenv, fetchurl, gtk, glib, pkgconfig, mesa, wxGTK, libX11, xproto }:
+{ stdenv, fetchurl, gtk2, glib, pkgconfig, libGLU_combined, wxGTK, libX11, xproto }:
 
 stdenv.mkDerivation {
   name = "fsg-4.4";
 
   src = fetchurl {
-    #url = http://www.piettes.com/fallingsandgame/fsg-src-4.4.tar.gz;
     url = http://www.sourcefiles.org/Games/Simulation/Other/fsg-src-4.4.tar.gz;
     sha256 = "1756y01rkvd3f1pkj88jqh83fqcfl2fy0c48mcq53pjzln9ycv8c";
   };
 
-  buildInputs = [ gtk glib pkgconfig mesa wxGTK libX11 xproto ];
+  hardeningDisable = [ "format" ];
 
-/*  
-#	One day Unicode will overcome?
-
-	preBuild = "
-		sed -e '
-			s/\\(str\\.Printf(\\)\\(\".*\"\\)/\\1_(\\2)/; 
-			s@\\<fopen(\\([^\"),]\\+\\)@fopen(wxConvertWX2MB(\\1)@
-			s@\\<wxString(\\([^)]\\+\\)@wxString(wxConvertMB2WX(\\1)@
-			s/\\(wxString str(\\)\\(\".*\"\\)/\\1_(\\2)/; 
-			' -i MainFrame.cpp Canvas.cpp;
-		sed -e '
-		s@\\(^[^\"]*([^\"]*[^(]\\|^[^\"].*[^_](\\)\\(\"\\([^\"]\\|\\\"\\)*\"\\)@\\1_(\\2)@;
-		' -i DownloadFileDialog.cpp;
-		sed -e '
-		s@currentProbIndex != 100@0@;
-		' -i MainFrame.cpp;
-		cp -r . /tmp/fsg
-	";*/
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ gtk2 glib libGLU_combined wxGTK libX11 xproto ];
 
   preBuild = ''
     sed -e '
@@ -47,5 +30,6 @@ stdenv.mkDerivation {
   meta = {
     description = "Cellular automata engine tuned towards the likes of Falling Sand";
     maintainers = [stdenv.lib.maintainers.raskin];
+    platforms = stdenv.lib.platforms.linux;
   };
 }

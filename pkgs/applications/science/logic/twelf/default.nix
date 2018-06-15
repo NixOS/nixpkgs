@@ -9,7 +9,8 @@ stdenv.mkDerivation rec {
     sha256 = "0fi1kbs9hrdrm1x4k13angpjasxlyd1gc3ys8ah54i75qbcd9c4i";
   };
 
-  buildInputs = [ pkgconfig smlnj rsync ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ smlnj rsync ];
 
   buildPhase = ''
     export SMLNJ_HOME=${smlnj}
@@ -20,6 +21,9 @@ stdenv.mkDerivation rec {
     mkdir -p $out/bin
     rsync -av bin/{*,.heap} $out/bin/
     bin/.mkexec ${smlnj}/bin/sml $out/ twelf-server twelf-server
+
+    substituteInPlace emacs/twelf-init.el \
+      --replace '(concat twelf-root "emacs")' '(concat twelf-root "share/emacs/site-lisp/twelf")'
 
     mkdir -p $out/share/emacs/site-lisp/twelf/
     rsync -av emacs/ $out/share/emacs/site-lisp/twelf/

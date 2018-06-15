@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, gtk, freeglut, SDL, mesa, libXi, libXmu}:
+{ stdenv, fetchurl, pkgconfig, gtk2, freeglut, SDL, libGLU_combined, libXi, libXmu}:
 
 stdenv.mkDerivation {
   name = "crack-attack-1.1.14";
@@ -8,7 +8,10 @@ stdenv.mkDerivation {
     sha256 = "1sakj9a2q05brpd7lkqxi8q30bccycdzd96ns00s6jbxrzjlijkm";
   };
 
-  buildInputs = [ pkgconfig gtk freeglut SDL mesa libXi libXmu ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ gtk2 freeglut SDL libGLU_combined libXi libXmu ];
+
+  hardeningDisable = [ "format" ];
 
   meta = {
     description = "A fast-paced puzzle game inspired by the classic Super NES title Tetris Attack!";

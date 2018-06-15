@@ -1,26 +1,50 @@
-{ stdenv, fetchurl }:
+{ stdenv, fetchurl, buildPackages, ncurses }:
+
+let dialect = with stdenv.lib; last (splitString "-" stdenv.system); in
 
 stdenv.mkDerivation rec {
   name = "lsof-${version}";
-  version = "4.89";
+  version = "4.91";
+
+  depsBuildBuild = [ buildPackages.stdenv.cc ];
+  buildInputs = [ ncurses ];
 
   src = fetchurl {
-    urls = map (
-      # the tarball is moved after new version is released
-      isOld: "ftp://sunsite.ualberta.ca/pub/Mirror/lsof/"
-      + "${stdenv.lib.optionalString isOld "OLD/"}lsof_${version}.tar.bz2"
-    ) [ false true ];
-    sha256 = "061p18v0mhzq517791xkjs8a5dfynq1418a1mwxpji69zp2jzb41";
+    urls = ["https://fossies.org/linux/misc/lsof_${version}.tar.bz2"] ++ # Mirrors seem to be down...
+      ["ftp://lsof.itap.purdue.edu/pub/tools/unix/lsof/lsof_${version}.tar.bz2"]
+      ++ map (
+        # the tarball is moved after new version is released
+        isOld: "ftp://sunsite.ualberta.ca/pub/Mirror/lsof/"
+        + "${stdenv.lib.optionalString isOld "OLD/"}lsof_${version}.tar.bz2"
+      ) [ false true ]
+      ++ map (
+        # the tarball is moved after new version is released
+        isOld: "http://www.mirrorservice.org/sites/lsof.itap.purdue.edu/pub/tools/unix/lsof/"
+        + "${stdenv.lib.optionalString isOld "OLD/"}lsof_${version}.tar.bz2"
+      ) [ false true ]
+      ;
+    sha256 = "18sh4hbl9jw2szkf0gvgan8g13f3g4c6s2q9h3zq5gsza9m99nn9";
   };
 
   unpackPhase = "tar xvjf $src; cd lsof_*; tar xvf lsof_*.tar; sourceRoot=$( echo lsof_*/); ";
-  
-  preBuild = "sed -i Makefile -e 's/^CFGF=/&	-DHASIPv6=1/;';";
-  
-  configurePhase = if stdenv.isDarwin
-    then "./Configure -n darwin;"
-    else "./Configure -n linux;";
-  
+
+  patches = stdenv.lib.optional stdenv.isDarwin ./darwin-dfile.patch;
+
+  postPatch = stdenv.lib.optionalString stdenv.hostPlatform.isMusl ''
+    substituteInPlace dialects/linux/dlsof.h --replace "defined(__UCLIBC__)" 1
+  '' + stdenv.lib.optionalString stdenv.isDarwin ''
+    sed -i 's|lcurses|lncurses|g' Configure
+  '';
+
+  # Stop build scripts from searching global include paths
+  LSOF_INCLUDE = "${stdenv.lib.getDev stdenv.cc.libc}/include";
+  configurePhase = "LINUX_CONF_CC=$CC_FOR_BUILD LSOF_CC=$CC LSOF_AR=\"$AR cr\" LSOF_RANLIB=$RANLIB ./Configure -n ${dialect}";
+  preBuild = ''
+    for filepath in $(find dialects/${dialect} -type f); do
+      sed -i "s,/usr/include,$LSOF_INCLUDE,g" $filepath
+    done
+  '';
+
   installPhase = ''
     mkdir -p $out/bin $out/man/man8
     cp lsof.8 $out/man/man8/
@@ -35,6 +59,7 @@ stdenv.mkDerivation rec {
       socket (IPv6/IPv4/UNIX local), or partition (by opening a file
       from it).
     '';
-    maintainers = [ stdenv.lib.maintainers.mornfall ];
+    maintainers = [ stdenv.lib.maintainers.dezgeg ];
+    platforms = stdenv.lib.platforms.unix;
   };
 }

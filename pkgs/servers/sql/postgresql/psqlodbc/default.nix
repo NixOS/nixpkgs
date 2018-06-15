@@ -16,5 +16,6 @@ stdenv.mkDerivation rec {
     homepage = http://psqlodbc.projects.postgresql.org/;
     description = "ODBC driver for PostgreSQL";
     license = licenses.lgpl2;
+    platforms = platforms.linux;
   };
 }

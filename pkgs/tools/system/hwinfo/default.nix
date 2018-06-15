@@ -1,35 +1,40 @@
-{ stdenv, fetchurl, libx86emu, flex, perl }:
+{ stdenv, fetchFromGitHub, libx86emu, flex, perl }:
 
 stdenv.mkDerivation rec {
   name = "hwinfo-${version}";
-  version = "21.12";
+  version = "21.53";
 
-  src = fetchurl {
-    url = "https://github.com/opensuse/hwinfo/archive/${version}.tar.gz";
-    sha256 = "01y5jk2jns0a3mgsgmvmpvi5yyc0df7b3yqsg32hn5r2nv17i47p";
+  src = fetchFromGitHub {
+    owner = "opensuse";
+    repo = "hwinfo";
+    rev = "${version}";
+    sha256 = "1hrazksr95pxl5p0r0x3cdph1ps98cls2v9avg0qs0qf9y18hady";
   };
 
   patchPhase = ''
-    # VERSION and changelog is usually generated using Git
-    echo "${version}" > VERSION
+    # VERSION and changelog are usually generated using Git
+    # unless HWINFO_VERSION is defined (see Makefile)
+    export HWINFO_VERSION="${version}"
     sed -i 's|^\(TARGETS\s*=.*\)\<changelog\>\(.*\)$|\1\2|g' Makefile
 
-    sed -i 's|lex isdn_cdb.lex|${flex}/bin/flex isdn_cdb.lex|g' src/isdn/cdb/Makefile
-    sed -i 's|/sbin|/bin|g' Makefile
-    sed -i 's|/usr/|/|g' Makefile
+    substituteInPlace Makefile --replace "/sbin" "/bin" --replace "/usr/" "/"
+    substituteInPlace src/isdn/cdb/Makefile --replace "lex isdn_cdb.lex" "flex isdn_cdb.lex"
+    substituteInPlace hwinfo.pc.in --replace "prefix=/usr" "prefix=$out"
   '';
 
-  installPhase = ''
-    make install DESTDIR=$out
-  '';
+  nativeBuildInputs = [ flex ];
+  buildInputs = [ libx86emu perl ];
 
-  buildInputs = [ libx86emu flex perl ];
+  makeFlags = [ "LIBDIR=/lib" ];
+  #enableParallelBuilding = true;
+
+  installFlags = [ "DESTDIR=$(out)" ];
 
   meta = with stdenv.lib; {
     description = "Hardware detection tool from openSUSE";
     license = licenses.gpl2;
     homepage = https://github.com/openSUSE/hwinfo;
-    maintainers = with maintainers; [ bobvanderlinden ];
-    platforms = platforms.unix;
+    maintainers = with maintainers; [ bobvanderlinden ndowens ];
+    platforms = platforms.linux;
   };
 }

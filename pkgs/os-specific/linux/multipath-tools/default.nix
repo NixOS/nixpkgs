@@ -1,30 +1,35 @@
-{ stdenv, fetchurl, lvm2, libaio, gzip, readline, udev }:
+{ stdenv, fetchurl, lvm2, libaio, gzip, readline, systemd, liburcu }:
 
 stdenv.mkDerivation rec {
-  name = "multipath-tools-0.4.9";
+  name = "multipath-tools-0.6.2";
 
   src = fetchurl {
-    url = "http://christophe.varoqui.free.fr/multipath-tools/${name}.tar.bz2";
-    sha256 = "04n7kazp1zrlqfza32phmqla0xkcq4zwn176qff5ida4a60whi4d";
+    name = "${name}.tar.gz";
+    url = "http://git.opensvc.com/?p=multipath-tools/.git;a=snapshot;h=e165b73a16fc9027aa3306df40052038c175be1b;sf=tgz";
+    sha256 = "159hxvbk9kh1qay9x04w0gsqzg0hkl5yghfc1wi9kv2n5pcwbkpm";
   };
 
-  sourceRoot = ".";
+  postPatch = ''
+    sed -i -re '
+      s,^( *#define +DEFAULT_MULTIPATHDIR\>).*,\1 "'"$out/lib/multipath"'",
+    ' libmultipath/defaults.h
+    sed -i -e 's,\$(DESTDIR)/\(usr/\)\?,$(prefix)/,g' \
+      kpartx/Makefile libmpathpersist/Makefile
+    sed -i -e "s,GZIP = .*, GZIP = gzip -9n -c," \
+      Makefile.inc
+  '';
 
-  buildInputs = [ lvm2 libaio readline ];
+  nativeBuildInputs = [ gzip ];
+  buildInputs = [ systemd lvm2 libaio readline liburcu ];
 
-  preBuild =
-    ''
-      makeFlagsArray=(GZIP="${gzip}/bin/gzip -9n -c" prefix=$out mandir=$out/share/man/man8 man5dir=$out/share/man/man5 LIB=lib)
-      
-      substituteInPlace multipath/Makefile --replace /etc $out/etc
-      substituteInPlace kpartx/Makefile --replace /etc $out/etc
-      
-      substituteInPlace kpartx/kpartx.rules --replace /sbin/kpartx $out/sbin/kpartx
-      substituteInPlace kpartx/kpartx_id --replace /sbin/dmsetup ${lvm2}/sbin/dmsetup
-
-      substituteInPlace libmultipath/defaults.h --replace /lib/udev/scsi_id ${udev}/lib/udev/scsi_id
-      substituteInPlace libmultipath/hwtable.c --replace /lib/udev/scsi_id ${udev}/lib/udev/scsi_id
-    '';
+  makeFlags = [
+    "LIB=lib"
+    "prefix=$(out)"
+    "mandir=$(out)/share/man/man8"
+    "man5dir=$(out)/share/man/man5"
+    "man3dir=$(out)/share/man/man3"
+    "unitdir=$(out)/lib/systemd/system"
+  ];
 
   meta = {
     description = "Tools for the Linux multipathing driver";

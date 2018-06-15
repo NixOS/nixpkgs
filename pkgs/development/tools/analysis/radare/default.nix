@@ -1,15 +1,15 @@
 {stdenv, fetchurl, pkgconfig, libusb, readline, lua, libewf, perl,
-gtk ? null, vte ? null, gtkdialog ? null,
+gtk2 ? null, vte ? null, gtkdialog ? null,
 python ? null,
 ruby ? null,
 useX11, rubyBindings, pythonBindings, luaBindings}:
 
-assert useX11 -> (gtk != null && vte != null && gtkdialog != null);
+assert useX11 -> (gtk2 != null && vte != null && gtkdialog != null);
 assert rubyBindings -> ruby != null;
 assert pythonBindings -> python != null;
 
-let 
-  optional = stdenv.lib.optional;
+let
+  inherit (stdenv.lib) optional;
 in
 stdenv.mkDerivation rec {
   name = "radare-1.5.2";
@@ -19,9 +19,11 @@ stdenv.mkDerivation rec {
     sha256 = "1qdrmcnzfvfvqb27c7pknwm8jl2hqa6c4l66wzyddwlb8yjm46hd";
   };
 
+  hardeningDisable = [ "format" ];
 
-  buildInputs = [pkgconfig readline libusb perl]
-    ++ optional useX11 [gtkdialog vte gtk]
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ readline libusb perl]
+    ++ optional useX11 [gtkdialog vte gtk2]
     ++ optional rubyBindings [ruby]
     ++ optional pythonBindings [python]
     ++ optional luaBindings [lua];
@@ -31,6 +33,6 @@ stdenv.mkDerivation rec {
     homepage = http://radare.org/;
     license = stdenv.lib.licenses.gpl2Plus;
     maintainers = with stdenv.lib.maintainers; [viric];
-    platforms = with stdenv.lib.platforms; all;
+    platforms = with stdenv.lib.platforms; linux;
   };
 }

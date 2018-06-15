@@ -1,4 +1,6 @@
-{ stdenv, fetchurl, pkgconfig, freetype, expat }:
+{ stdenv, fetchurl, pkgconfig, freetype, expat
+, hostPlatform
+}:
 
 stdenv.mkDerivation rec {
   name = "fontconfig-2.10.2";
@@ -8,32 +10,21 @@ stdenv.mkDerivation rec {
     sha256 = "0llraqw86jmw4vzv7inskp3xxm2gc64my08iwq5mzncgfdbfza4f";
   };
 
-  infinality_patch =
-    let subvers = "1";
-      in fetchurl {
-        url = http://www.infinality.net/fedora/linux/zips/fontconfig-infinality-1-20130104_1.tar.bz2;
-        sha256 = "1fm5xx0mx2243jrq5rxk4v0ajw2nawpj23399h710bx6hd1rviq7";
-      }
-    ;
+  outputs = [ "bin" "dev" "lib" "out" ]; # $out contains all the config
 
   propagatedBuildInputs = [ freetype ];
-  buildInputs = [ pkgconfig expat ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ expat ];
 
   configureFlags = [
+    "--with-arch=${hostPlatform.parsed.cpu.name}"
     "--sysconfdir=/etc"
     "--with-cache-dir=/var/cache/fontconfig"
     "--disable-docs"
     "--with-default-fonts="
+  ] ++ stdenv.lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+    "--with-arch=${hostPlatform.parsed.cpu.name}"
   ];
-
-  # We should find a better way to access the arch reliably.
-  crossArch = stdenv.cross.arch or null;
-
-  preConfigure = ''
-    if test -n "$crossConfig"; then
-      configureFlags="$configureFlags --with-arch=$crossArch";
-    fi
-  '';
 
   enableParallelBuilding = true;
 
@@ -41,10 +32,6 @@ stdenv.mkDerivation rec {
 
   # Don't try to write to /var/cache/fontconfig at install time.
   installFlags = "sysconfdir=$(out)/etc fc_cachedir=$(TMPDIR)/dummy RUN_FC_CACHE_TEST=false";
-
-  postInstall = ''
-    cd "$out/etc/fonts" && tar xvf ${infinality_patch}
-  '';
 
   passthru = {
     # Empty for backward compatibility, there was no versioning before 2.11

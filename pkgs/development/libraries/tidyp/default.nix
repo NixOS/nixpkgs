@@ -8,6 +8,8 @@ stdenv.mkDerivation rec {
     sha256 = "0f5ky0ih4vap9c6j312jn73vn8m2bj69pl2yd3a5nmv35k9zmc10";
   };
 
+  hardeningDisable = [ "format" ];
+
   meta = with stdenv.lib; {
     description = "A program that can validate your HTML, as well as modify it to be more clean and standard";
     homepage = http://tidyp.com/;

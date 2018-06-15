@@ -17,7 +17,7 @@ let
   gititSh = hsPkgs: extras: with pkgs; let
     env = gititWithPkgs hsPkgs extras;
   in writeScript "gitit" ''
-    #!${stdenv.shell}
+    #!${runtimeShell}
     cd $HOME
     export NIX_GHC="${env}/bin/ghc"
     export NIX_GHCPKG="${env}/bin/ghc-pkg"
@@ -663,7 +663,7 @@ in
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
       path = with pkgs; [ curl ]
-             ++ optional cfg.pdfExport texLiveFull
+             ++ optional cfg.pdfExport texlive.combined.scheme-basic
 	     ++ optional (cfg.repositoryType == "darcs") darcs
 	     ++ optional (cfg.repositoryType == "mercurial") mercurial
 	     ++ optional (cfg.repositoryType == "git") git;

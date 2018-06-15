@@ -1,6 +1,6 @@
 # Configuration for the pwdutils suite of tools: passwd, useradd, etc.
 
-{ config, lib, pkgs, ... }:
+{ config, lib, utils, pkgs, ... }:
 
 with lib;
 
@@ -26,8 +26,9 @@ let
       # Ensure privacy for newly created home directories.
       UMASK        077
 
-      # Uncomment this to allow non-root users to change their account
-      #information.  This should be made configurable.
+      # Uncomment this and install chfn SUID to allow non-root
+      # users to change their account GECOS information.
+      # This should be made configurable.
       #CHFN_RESTRICT frwh
 
     '';
@@ -43,13 +44,13 @@ in
     users.defaultUserShell = lib.mkOption {
       description = ''
         This option defines the default shell assigned to user
-        accounts.  This must not be a store path, since the path is
+        accounts. This can be either a full system path or a shell package.
+
+        This must not be a store path, since the path is
         used outside the store (in particular in /etc/passwd).
-        Rather, it should be the path of a symlink that points to the
-        actual shell in the Nix store.
       '';
-      example = "/run/current-system/sw/bin/zsh";
-      type = types.path;
+      example = literalExample "pkgs.zsh";
+      type = types.either types.path types.shellPackage;
     };
 
   };
@@ -60,7 +61,9 @@ in
   config = {
 
     environment.systemPackages =
-      lib.optional config.users.mutableUsers pkgs.shadow;
+      lib.optional config.users.mutableUsers pkgs.shadow ++
+      lib.optional (types.shellPackage.check config.users.defaultUserShell)
+        config.users.defaultUserShell;
 
     environment.etc =
       [ { # /etc/login.defs: global configuration for pwdutils.  You
@@ -74,7 +77,7 @@ in
             ''
               GROUP=100
               HOME=/home
-              SHELL=${config.users.defaultUserShell}
+              SHELL=${utils.toShellPath config.users.defaultUserShell}
             '';
           target = "default/useradd";
         }
@@ -97,15 +100,16 @@ in
         groupdel = { rootOK = true; };
         login = { startSession = true; allowNullPassword = true; showMotd = true; updateWtmp = true; };
         chpasswd = { rootOK = true; };
-        chgpasswd = { rootOK = true; };
       };
 
-    security.setuidPrograms = [ "su" "chfn" ]
-      ++ lib.optionals config.users.mutableUsers
-      [ "passwd" "sg" "newgrp"
-        "newuidmap" "newgidmap" # new in shadow 4.2.x
-      ];
-
+    security.wrappers = {
+      su.source        = "${pkgs.shadow.su}/bin/su";
+      sg.source        = "${pkgs.shadow.out}/bin/sg";
+      newgrp.source    = "${pkgs.shadow.out}/bin/newgrp";
+      newuidmap.source = "${pkgs.shadow.out}/bin/newuidmap";
+      newgidmap.source = "${pkgs.shadow.out}/bin/newgidmap";
+    } // (if config.users.mutableUsers then {
+      passwd.source    = "${pkgs.shadow.out}/bin/passwd";
+    } else {});
   };
-
 }

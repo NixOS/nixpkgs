@@ -1,14 +1,12 @@
 {stdenv, fetchurl, ocaml, findlib, gdome2, libxslt, pkgconfig}:
 
 let
-  ocaml_version = (builtins.parseDrvName ocaml.name).version;
-  version = "0.2.6";
   pname = "gmetadom";
-
 in
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   name = "${pname}-${version}";
+  version = "0.2.6";
 
   src = fetchurl {
     url = "mirror://sourceforge/project/${pname}/${pname}/${version}/${pname}-${version}.tar.gz";
@@ -20,11 +18,12 @@ stdenv.mkDerivation {
   dontDisableStatic = true;
 
   preConfigure=''
-    configureFlags="--with-ocaml-lib-prefix=$out/lib/ocaml/${ocaml_version}/site-lib"
+    configureFlags="--with-ocaml-lib-prefix=$out/lib/ocaml/${ocaml.version}/site-lib"
   '';
 
 
-  buildInputs = [ocaml findlib pkgconfig gdome2 libxslt];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ocaml findlib gdome2 libxslt];
   propagatedBuildInputs = [gdome2];
 
   meta = {

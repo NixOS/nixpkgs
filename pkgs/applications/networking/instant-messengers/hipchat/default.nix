@@ -1,58 +1,50 @@
-{ stdenv, fetchurl, libtool, xorg, freetype, fontconfig, openssl, glib
-, mesa, gstreamer, gst_plugins_base, dbus, alsaLib, zlib, libuuid
-, libxml2, libxslt, sqlite, libogg, libvorbis, xz, libcanberra
-, makeWrapper, libredirect, xkeyboard_config, xcbutilkeysyms }:
+{ stdenv, fetchurl, xorg, freetype, fontconfig, openssl, glib, nss, nspr, expat
+, alsaLib, dbus, zlib, libxml2, libxslt, makeWrapper, xkeyboard_config, systemd
+, libGL, xcbutilkeysyms, xdg_utils, libtool }:
 
 let
 
-  version = "2.2.1388";
+  version = "4.30.4.1672";
 
-  rpath = stdenv.lib.makeSearchPath "lib" [
-    stdenv.glibc
-    libtool
+  rpath = stdenv.lib.makeLibraryPath [
+    xdg_utils
     xorg.libXext
     xorg.libSM
     xorg.libICE
     xorg.libX11
-    xorg.libXft
-    xorg.libXau
-    xorg.libXdmcp
+    xorg.libXrandr
+    xorg.libXdamage
     xorg.libXrender
     xorg.libXfixes
     xorg.libXcomposite
+    xorg.libXcursor
     xorg.libxcb
     xorg.libXi
+    xorg.libXScrnSaver
+    xorg.libXtst
     freetype
     fontconfig
     openssl
     glib
-    mesa
-    gstreamer
-    gst_plugins_base
+    nss
+    nspr
     dbus
     alsaLib
     zlib
-    libuuid
+    libtool
     libxml2
     libxslt
-    sqlite
-    libogg
-    libvorbis
-    xz
-    libcanberra
+    expat
     xcbutilkeysyms
-  ] + ":${stdenv.cc.cc}/lib${stdenv.lib.optionalString stdenv.is64bit "64"}";
+    systemd
+    libGL
+  ] + ":${stdenv.cc.cc.lib}/lib64";
 
   src =
     if stdenv.system == "x86_64-linux" then
       fetchurl {
-        url = "http://downloads.hipchat.com/linux/arch/x86_64/hipchat-${version}-x86_64.pkg.tar.xz";
-        sha256 = "18vl0c7xgyzd2miwkfzc638z0wzszgsdlbnslkkvxmg95ykdrdnz";
-      }
-    else if stdenv.system == "i686-linux" then
-      fetchurl {
-        url = "http://downloads.hipchat.com/linux/arch/i686/hipchat-${version}-i686.pkg.tar.xz";
-        sha256 = "12q8hf3gmcgrqg6v9xqyknwsmwywpwm76jc54sfniiqv5ngq24hl";
+        url = "https://atlassian.artifactoryonline.com/atlassian/hipchat-apt-client/pool/HipChat4-${version}-Linux.deb";
+        sha256 = "1xrwndhbyhcmjcg8h1ib8lp1g51f7jxdhc6p7776zmhlfw94n3rx";
       }
     else
       throw "HipChat is not supported on ${stdenv.system}";
@@ -67,36 +59,39 @@ stdenv.mkDerivation {
   buildInputs = [ makeWrapper ];
 
   buildCommand = ''
-    tar xf ${src}
+    ar x $src
+    tar xfvz data.tar.gz
 
-    mkdir -p $out/libexec/hipchat/bin
+    mkdir -p $out/libexec/hipchat
     d=$out/libexec/hipchat/lib
-    rm -rfv opt/HipChat/lib/{libstdc++*,libz*,libuuid*,libxml2*,libxslt*,libsqlite*,libogg*,libvorbis*,liblzma*,libcanberra.*,libcanberra-*}
-    mv opt/HipChat/lib/ $d
+    mv opt/HipChat4/* $out/libexec/hipchat/
     mv usr/share $out
 
     for file in $(find $d -type f); do
         patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" $file || true
-        patchelf --set-rpath ${rpath}:\$ORIGIN $file || true
+        patchelf --set-rpath ${rpath}:$out/libexec/hipchat/lib:\$ORIGIN $file || true
     done
 
-    substituteInPlace $out/share/applications/hipchat.desktop \
-      --replace /opt/HipChat/bin $out/bin
+    patchShebangs $d/linuxbrowserlaunch.sh
 
-    makeWrapper $d/hipchat.bin $out/bin/hipchat \
-      --set HIPCHAT_LD_LIBRARY_PATH '"$LD_LIBRARY_PATH"' \
-      --set HIPCHAT_QT_PLUGIN_PATH '"$QT_PLUGIN_PATH"' \
-      --set LD_PRELOAD "${libredirect}/lib/libredirect.so" \
-      --set NIX_REDIRECTS /usr/share/X11/xkb=${xkeyboard_config}/share/X11/xkb
+    substituteInPlace $out/share/applications/hipchat4.desktop \
+      --replace /opt/HipChat4/bin/HipChat4 $out/bin/hipchat
 
-    mv opt/HipChat/bin/linuxbrowserlaunch $out/libexec/hipchat/bin/
+    makeWrapper $d/HipChat.bin $out/bin/hipchat \
+      --run 'export HIPCHAT_LD_LIBRARY_PATH=$LD_LIBRARY_PATH' \
+      --run 'export HIPCHAT_QT_PLUGIN_PATH=$QT_PLUGIN_PATH' \
+      --set QT_XKB_CONFIG_ROOT ${xkeyboard_config}/share/X11/xkb \
+      --set QTWEBENGINEPROCESS_PATH $d/QtWebEngineProcess
+
+    makeWrapper $d/QtWebEngineProcess.bin $d/QtWebEngineProcess \
+      --set QT_PLUGIN_PATH "$d/plugins"
   '';
 
   meta = with stdenv.lib; {
     description = "Desktop client for HipChat services";
     homepage = http://www.hipchat.com;
     license = licenses.unfree;
-    platforms = [ "i686-linux" "x86_64-linux" ];
-    maintainers = with maintainers; [ jgeerds ];
+    platforms = [ "x86_64-linux" ];
+    maintainers = with maintainers; [ jgeerds puffnfresh ];
   };
 }

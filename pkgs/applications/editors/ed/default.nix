@@ -1,32 +1,19 @@
-{ fetchurl, stdenv }:
+{ stdenv, fetchurl, lzip
+, buildPlatform, hostPlatform
+}:
 
-stdenv.mkDerivation rec {
-  name = "ed-1.12";
+stdenv.mkDerivation (rec {
+  name = "ed-${version}";
+  version = "1.14.2";
 
   src = fetchurl {
-    # gnu only provides *.lz tarball, which is unfriendly for stdenv bootstrapping
-    #url = "mirror://gnu/ed/${name}.tar.gz";
-    # When updating, please make sure the sources pulled match those upstream by
-    # Unpacking both tarballs and running `find . -type f -exec sha256sum \{\} \; | sha256sum`
-    # in the resulting directory
-    url = "http://fossies.org/linux/privat/${name}.tar.gz";
-    sha256 = "111ci6x43bcmylqhrzr32l0q8pplmpb4kiq5pb6cyp0yxkb2dhgj";
+    url = "mirror://gnu/ed/${name}.tar.lz";
+    sha256 = "1nqhk3n1s1p77g2bjnj55acicsrlyb2yasqxqwpx0w0djfx64ygm";
   };
 
-  /* FIXME: Tests currently fail on Darwin:
+  nativeBuildInputs = [ lzip ];
 
-       building test scripts for ed-1.5...
-       testing ed-1.5...
-       *** Output e1.o of script e1.ed is incorrect ***
-       *** Output r3.o of script r3.ed is incorrect ***
-       make: *** [check] Error 127
-
-    */
-  doCheck = !stdenv.isDarwin;
-
-  crossAttrs = {
-    compileFlags = [ "CC=${stdenv.cross.config}-gcc" ];
-  };
+  doCheck = true; # not cross;
 
   meta = {
     description = "An implementation of the standard Unix editor";
@@ -47,5 +34,11 @@ stdenv.mkDerivation rec {
     homepage = http://www.gnu.org/software/ed/;
 
     maintainers = [ ];
+    platforms = stdenv.lib.platforms.unix;
   };
-}
+} // stdenv.lib.optionalAttrs (hostPlatform != buildPlatform) {
+  # This may be moved above during a stdenv rebuild.
+  preConfigure = ''
+    configureFlagsArray+=("CC=$CC")
+  '';
+})

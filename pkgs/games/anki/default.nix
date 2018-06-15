@@ -1,57 +1,122 @@
-{ stdenv, lib, fetchurl, lame, mplayer, libpulseaudio, portaudio
-, python, pyqt4, pythonPackages
+{ stdenv
+, buildPythonApplication
+, callPackage
+, lib
+, python
+, fetchurl
+, substituteAll
+, lame
+, mplayer
+, libpulseaudio
+, pyqt4
+, sqlalchemy
+, pyaudio
+, httplib2
+, matplotlib
+, pytest
+, glibcLocales
+, nose
 # This little flag adds a huge number of dependencies, but we assume that
 # everyone wants Anki to draw plots with statistics by default.
-, plotsSupport ? true }:
+, plotsSupport ? true
+}:
 
 let
-    py = pythonPackages;
-    version = "2.0.32";
-in
-stdenv.mkDerivation rec {
+    # Development version of anki has bumped to beautifulsoup4
+    beautifulsoup = callPackage ./beautifulsoup.nix { };
+
+    qt4 = pyqt4.qt;
+
+in buildPythonApplication rec {
+    version = "2.0.52";
     name = "anki-${version}";
+
     src = fetchurl {
       urls = [
-        "http://ankisrs.net/download/mirror/${name}.tgz"
-        "http://ankisrs.net/download/mirror/archive/${name}.tgz"
+        "https://apps.ankiweb.net/downloads/current/${name}-source.tgz"
+        # "http://ankisrs.net/download/mirror/${name}.tgz"
+        # "http://ankisrs.net/download/mirror/archive/${name}.tgz"
       ];
-      sha256 = "0g5rmg0yqh40a3g8ci3y3if7vw4jl5nrpq8ki1a13a3xmgch13rr";
+      sha256 = "0yjyxgpk79rplz9z2r93kmlk09ari6xxfrz1cfm2yl9v8zfw1n6l";
     };
 
-    pythonPath = [ pyqt4 py.pysqlite py.sqlalchemy9 py.pyaudio ]
-              ++ lib.optional plotsSupport py.matplotlib;
+    propagatedBuildInputs = [ pyqt4 sqlalchemy pyaudio beautifulsoup httplib2 ]
+                            ++ lib.optional plotsSupport matplotlib;
 
-    buildInputs = [ python py.wrapPython lame mplayer libpulseaudio ];
+    checkInputs = [ pytest glibcLocales nose ];
 
-    preConfigure = ''
-      substituteInPlace anki/anki \
-        --replace /usr/share/ $out/share/
+    buildInputs = [ lame mplayer libpulseaudio  ];
 
-      substituteInPlace Makefile \
-        --replace PREFIX=/usr PREFIX=$out \
-        --replace /local/bin/ /bin/
+    patches = [
+      # Disable updated version check.
+      ./no-version-check.patch
 
-      sed -i '/xdg-mime/ d' Makefile
+      (substituteAll {
+        src = ./fix-paths.patch;
+        inherit lame mplayer qt4;
+        qt4name = qt4.name;
+      })
+    ];
+
+    buildPhase = ''
+      # Dummy build phase
+      # Anki does not use setup.py
     '';
 
-    preInstall = ''
+    postPatch = ''
+      substituteInPlace oldanki/lang.py --subst-var-by anki $out
+      substituteInPlace anki/lang.py --subst-var-by anki $out
+
+      # Remove unused starter. We'll create our own, minimalistic,
+      # starter.
+      rm anki/anki
+
+      # Remove QT translation files. We'll use the standard QT ones.
+      rm "locale/"*.qm
+    '';
+
+    # UTF-8 locale needed for testing
+    LC_ALL = "en_US.UTF-8";
+
+    checkPhase = ''
+      # - Anki writes some files to $HOME during tests
+      # - Skip tests using network
+      env HOME=$TMP pytest --ignore tests/test_sync.py
+    '';
+
+    installPhase = ''
+      pp=$out/lib/${python.libPrefix}/site-packages
+
       mkdir -p $out/bin
-      mkdir -p $out/share/pixmaps
       mkdir -p $out/share/applications
+      mkdir -p $out/share/doc/anki
       mkdir -p $out/share/man/man1
-    '';
+      mkdir -p $out/share/mime/packages
+      mkdir -p $out/share/pixmaps
+      mkdir -p $pp
 
-    postInstall = ''
-      mkdir -p "$out/lib/${python.libPrefix}/site-packages"
-      ln -s "$out/share/anki/"* $out/lib/${python.libPrefix}/site-packages/
-      export PYTHONPATH="$out/lib/${python.libPrefix}/site-packages:$PYTHONPATH"
+      cat > $out/bin/anki <<EOF
+      #!${python}/bin/python
+      import aqt
+      aqt.run()
+      EOF
+      chmod 755 $out/bin/anki
+
+      cp -v anki.desktop $out/share/applications/
+      cp -v README* LICENSE* $out/share/doc/anki/
+      cp -v anki.1 $out/share/man/man1/
+      cp -v anki.xml $out/share/mime/packages/
+      cp -v anki.{png,xpm} $out/share/pixmaps/
+      cp -rv locale $out/share/
+      cp -rv anki aqt thirdparty/send2trash $pp/
+
       wrapPythonPrograms
     '';
 
-    meta = {
+    meta = with stdenv.lib; {
       homepage = http://ankisrs.net/;
       description = "Spaced repetition flashcard program";
-      license = stdenv.lib.licenses.gpl3;
+      license = licenses.gpl3;
 
       longDescription = ''
         Anki is a program which makes remembering things easy. Because it is a lot
@@ -66,7 +131,7 @@ stdenv.mkDerivation rec {
         or even practicing guitar chords!
       '';
 
-      maintainers = with stdenv.lib.maintainers; [ the-kenny ];
-      platforms = stdenv.lib.platforms.mesaPlatforms;
+      maintainers = with maintainers; [ the-kenny ];
+      platforms = platforms.mesaPlatforms;
     };
 }

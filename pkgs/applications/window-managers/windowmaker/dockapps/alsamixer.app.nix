@@ -8,7 +8,8 @@ stdenv.mkDerivation {
      sha256 = "0g9cwhlqg065fbhav4g4n16a4cqkk9jykl3y0zwbn5whhacfqyhl";
   };
 
-  buildInputs = [ pkgconfig libX11 libXpm libXext alsaLib ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ libX11 libXpm libXext alsaLib ];
 
   postUnpack = "sourceRoot=\${sourceRoot}/AlsaMixer.app";
 
@@ -19,7 +20,7 @@ stdenv.mkDerivation {
 
   meta = {
     description = "Alsa mixer application for Windowmaker";
-    homepage = "http://windowmaker.org/dockapps/?name=AlsaMixer.app";
+    homepage = http://windowmaker.org/dockapps/?name=AlsaMixer.app;
     license = stdenv.lib.licenses.gpl2;
     maintainers = [ stdenv.lib.maintainers.bstrik ];
   };

@@ -18,7 +18,7 @@ stdenv.mkDerivation {
     { description = "Serve 9P from Unix";
       homepage = http://plan9.bell-labs.com/magic/man2html/4/u9fs;
       license = licenses.free;
-      maintainers = [ maintainers.emery ];
+      maintainers = [ maintainers.ehmry ];
       platforms = platforms.unix;
     };
 }

@@ -1,12 +1,14 @@
-{ stdenv, fetchgit, emacs, python }:
+{ stdenv, fetchFromGitHub, emacs, python }:
 
 stdenv.mkDerivation rec {
-  name = "cask-0.7.3";
+  version = "0.8.1";
+  name = "cask-${version}";
 
-  src = fetchgit {
-    url = "https://github.com/cask/cask.git";
-    rev = "717b64a9ba7640ec366e8573da0c01f9c4d57b0c";
-    sha256 = "0j18rzgpibisfcci6kcgjs8nlkfi1dw33dxp6ab6zaiarydwgcs5";
+  src = fetchFromGitHub {
+    owner = "cask";
+    repo = "cask";
+    rev = "v${version}";
+    sha256 = "1sl094adnchjvf189c3l1njawrj5ww1sv5vvjr9hb1ng2rw20z7b";
   };
 
   buildInputs = [ emacs python ];
@@ -44,7 +46,7 @@ stdenv.mkDerivation rec {
         building, packaging and more. Cask can also be used to manage
         dependencies for your local Emacs configuration.
       '';
-    homepage = "https://github.com/cask/cask";
+    homepage = https://github.com/cask/cask;
     license = licenses.gpl3Plus;
     platforms = platforms.all;
     maintainers = [ maintainers.jgeerds ];

@@ -7,9 +7,8 @@ let
 
   conf = pkgs.writeText "collectd.conf" ''
     BaseDir "${cfg.dataDir}"
-    PIDFile "${cfg.pidFile}"
-    AutoLoadPlugin ${if cfg.autoLoadPlugin then "true" else "false"}
-    Hostname ${config.networking.hostName}
+    AutoLoadPlugin ${boolToString cfg.autoLoadPlugin}
+    Hostname "${config.networking.hostName}"
 
     LoadPlugin syslog
     <Plugin "syslog">
@@ -26,12 +25,15 @@ let
 
 in {
   options.services.collectd = with types; {
-    enable = mkOption {
-      default = false;
+    enable = mkEnableOption "collectd agent";
+
+    package = mkOption {
+      default = pkgs.collectd;
+      defaultText = "pkgs.collectd";
       description = ''
-        Whether to enable collectd agent.
+        Which collectd package to use.
       '';
-      type = bool;
+      type = package;
     };
 
     user = mkOption {
@@ -46,14 +48,6 @@ in {
       default = "/var/lib/collectd";
       description = ''
         Data directory for collectd agent.
-      '';
-      type = path;
-    };
-
-    pidFile = mkOption {
-      default = "/var/run/collectd.pid";
-      description = ''
-        Location of collectd pid file.
       '';
       type = path;
     };
@@ -91,26 +85,20 @@ in {
       wantedBy = [ "multi-user.target" ];
 
       serviceConfig = {
-        ExecStart = "${pkgs.collectd}/sbin/collectd -C ${conf} -P ${cfg.pidFile}";
-        Type = "forking";
-        PIDFile = cfg.pidFile;
-        User = optional (cfg.user!="root") cfg.user;
+        ExecStart = "${cfg.package}/sbin/collectd -C ${conf} -f";
+        User = cfg.user;
         PermissionsStartOnly = true;
       };
 
       preStart = ''
-        mkdir -m 0700 -p ${cfg.dataDir}
-        install -D /dev/null ${cfg.pidFile}
-        if [ "$(id -u)" = 0 ]; then
-          chown -R ${cfg.user} ${cfg.dataDir};
-          chown ${cfg.user} ${cfg.pidFile}
-        fi
+        mkdir -p "${cfg.dataDir}"
+        chmod 755 "${cfg.dataDir}"
+        chown -R ${cfg.user} "${cfg.dataDir}"
       '';
-    }; 
+    };
 
     users.extraUsers = optional (cfg.user == "collectd") {
       name = "collectd";
-      uid = config.ids.uids.collectd;
     };
   };
 }

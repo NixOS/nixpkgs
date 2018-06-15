@@ -1,11 +1,11 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "cutter-1.03";
+  name = "cutter-1.04";
 
   src = fetchurl {
     url = "http://www.digitage.co.uk/digitage/files/cutter/${name}.tgz";
-    sha256 = "05cn22wi70l9ybhmzw0sy3fd6xxz0lq49fws4zxzm2i0qb3zmx2d";
+    sha256 = "100iy31a3njif6vh9gfsqrm14hac05rrflla275gd4rkxdlnqcqv";
   };
 
   installPhase = ''

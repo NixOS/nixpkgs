@@ -1,18 +1,23 @@
-{stdenv, fetchurl, pkgconfig, openssl, libogg, libopus}:
+{ stdenv, fetchurl, pkgconfig, openssl, libogg, libopus }:
 
 stdenv.mkDerivation rec {
-  name = "opusfile-0.6";
+  name = "opusfile-0.10";
   src = fetchurl {
     url = "http://downloads.xiph.org/releases/opus/${name}.tar.gz";
-    sha256 = "19iys2kld75k0210b807i4illrdmj3cmmnrgxlc9y4vf6mxp2a14";
+    sha256 = "0bs1376sd131qdh7198jp64vv5d17az5wyy4y7srrvw7p8k3bq28";
   };
 
-  buildInputs = [ pkgconfig openssl libogg libopus ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ openssl libogg ];
+  propagatedBuildInputs = [ libopus ];
+  patches = [ ./include-multistream.patch ];
+  configureFlags = [ "--disable-examples" ];
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "High-level API for decoding and seeking in .opus files";
     homepage = http://www.opus-codec.org/;
-    license = stdenv.lib.licenses.bsd3;
-    maintainers = with stdenv.lib.maintainers; [ fuuzetsu ];
+    license = licenses.bsd3;
+    platforms = platforms.linux ++ platforms.darwin;
+    maintainers = with maintainers; [ fuuzetsu ];
   };
 }

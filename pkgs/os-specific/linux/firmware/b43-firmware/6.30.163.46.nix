@@ -1,9 +1,8 @@
 { stdenv, fetchurl, b43FirmwareCutter }:
 
-let version = "6.30.163.46"; in
-
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   name = "b43-firmware-${version}";
+  version = "6.30.163.46";
 
   src = fetchurl {
     url = "http://www.lwfinger.com/b43-firmware/broadcom-wl-${version}.tar.bz2";
@@ -26,6 +25,5 @@ stdenv.mkDerivation {
     homepage = http://wireless.kernel.org/en/users/Drivers/b43;
     downloadPage = http://www.lwfinger.com/b43-firmware;
     license = licenses.unfree;
-    maintainers = with maintainers; [ nckx ];
   };
 }

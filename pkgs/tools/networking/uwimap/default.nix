@@ -14,20 +14,23 @@ stdenv.mkDerivation {
     # -fPIC is required to compile php with imap on x86_64 systems
     + stdenv.lib.optionalString stdenv.isx86_64 " EXTRACFLAGS=-fPIC";
 
+  hardeningDisable = [ "format" ];
+
   buildInputs = [ openssl ]
     ++ stdenv.lib.optional (!stdenv.isDarwin) pam;
 
   patchPhase = ''
-    sed -i -e s,/usr/local/ssl,${openssl}, \
-      src/osdep/unix/Makefile
+    sed -i src/osdep/unix/Makefile -e 's,/usr/local/ssl,${openssl.dev},'
+    sed -i src/osdep/unix/Makefile -e 's,^SSLCERTS=.*,SSLCERTS=/etc/ssl/certs,'
+    sed -i src/osdep/unix/Makefile -e 's,^SSLLIB=.*,SSLLIB=${openssl.out}/lib,'
   '';
 
   NIX_CFLAGS_COMPILE = stdenv.lib.optionalString stdenv.isDarwin
-    "-I${openssl}/include/openssl";
+    "-I${openssl.dev}/include/openssl";
 
   installPhase = ''
-    mkdir -p $out/bin $out/lib $out/include
-    cp c-client/*.h c-client/linkage.c $out/include
+    mkdir -p $out/bin $out/lib $out/include/c-client
+    cp c-client/*.h osdep/unix/*.h c-client/linkage.c c-client/auths.c $out/include/c-client/
     cp c-client/c-client.a $out/lib/libc-client.a
     cp mailutil/mailutil imapd/imapd dmail/dmail mlock/mlock mtest/mtest tmail/tmail \
       tools/{an,ua} $out/bin

@@ -1,24 +1,25 @@
-{ stdenv, fetchurl, pkgconfig, openssl, autoconf, automake, libtool }:
+{ stdenv, fetchFromGitHub, pkgconfig, openssl, autoreconfHook }:
 
-let
-  rev = "5d412bad60";
-in
 stdenv.mkDerivation rec {
-  name = "pkcs11-helper-20121123-${rev}";
-  
-  src = fetchurl {
-    url = "https://github.com/alonbl/pkcs11-helper/tarball/${rev}";
-    name = "${name}.tar.gz";
-    sha256 = "1mih6mha39yr5s5m18lg4854qc105asgnwmjw7f95kgmzni62kxp";
+  name = "pkcs11-helper-${version}";
+  version = "1.23";
+
+  src = fetchFromGitHub {
+    owner = "OpenSC";
+    repo = "pkcs11-helper";
+    rev = "${name}";
+    sha256 = "1m3fp3v6c903cs36bvvg0h65p1sdamsmzy13ww0zyvplcycarz0n";
   };
 
-  preConfigure = "autoreconf -vfi";
-  
-  buildInputs = [ pkgconfig openssl autoconf automake libtool ];
+  nativeBuildInputs = [ autoreconfHook pkgconfig ];
+  buildInputs = [ openssl ];
+
+  enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
-    homepage = https://www.opensc-project.org/opensc/wiki/pkcs11-helper;
-    license = with licenses; [ "BSD" gpl2 ];
+    homepage = https://github.com/OpenSC/pkcs11-helper;
+    license = with licenses; [ bsd3 gpl2 ];
     description = "Library that simplifies the interaction with PKCS#11 providers";
+    platforms = platforms.unix;
   };
 }

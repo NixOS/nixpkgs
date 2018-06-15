@@ -3,27 +3,29 @@
 , httpServer ? false # build web interface for the daemon
 , client ? false # build amule remote gui
 , fetchurl, stdenv, zlib, wxGTK, perl, cryptopp, libupnp, gettext, libpng ? null
-, pkgconfig, makeWrapper }:
+, pkgconfig, makeWrapper, libX11 ? null }:
 
 assert httpServer -> libpng != null;
+assert client -> libX11 != null;
 with stdenv;
 let
   # Enable/Disable Feature
   edf = enabled: flag: if enabled then "--enable-" + flag else "--disable-" + flag;
 in
 mkDerivation rec {
-  name = "aMule-2.3.1";
+  name = "aMule-2.3.2";
 
   src = fetchurl {
     url = "mirror://sourceforge/amule/${name}.tar.xz";
-    sha256 = "0hvpx3c005nvxsfand5bwfxxiq3mv0mpykajfm2lkygjh1rw2383";
+    sha256 = "0a1rd33hjl30qyzgb5y8m7dxs38asci3kjnlvims1ky6r3yj0izn";
   };
 
   buildInputs =
     [ zlib wxGTK perl cryptopp libupnp gettext pkgconfig makeWrapper ]
-    ++ lib.optional httpServer libpng;
+    ++ lib.optional httpServer libpng
+    ++ lib.optional client libX11;
 
-  patches = [ ./gcc47.patch ]; # from Gentoo
+  enableParallelBuilding = true;
 
   configureFlags = ''
     --with-crypto-prefix=${cryptopp}
@@ -63,7 +65,7 @@ mkDerivation rec {
 
     license = stdenv.lib.licenses.gpl2Plus;
 
-    platforms = stdenv.lib.platforms.gnu;  # arbitrary choice
+    platforms = stdenv.lib.platforms.gnu ++ stdenv.lib.platforms.linux;  # arbitrary choice
     maintainers = [ stdenv.lib.maintainers.phreedom ];
   };
 }

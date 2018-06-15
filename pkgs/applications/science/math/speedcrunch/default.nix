@@ -1,30 +1,26 @@
-{ stdenv, fetchurl, qt, cmake }:
+{ mkDerivation, lib, fetchgit, cmake, qtbase, qttools }:
 
-stdenv.mkDerivation rec {
-  name = "speedcrunch-0.11-alpha";
+mkDerivation rec {
+  name = "speedcrunch-${version}";
+  version = "0.12.0";
 
-  src = fetchurl {
-    url = "http://speedcrunch.googlecode.com/files/${name}.tar.gz";
-    sha256 = "c6d6328e0c018cd8b98a0e86fb6c49fedbab5dcc831b47fbbc1537730ff80882";
+  src = fetchgit {
+    # the tagging is not standard, so you probably need to check this when updating
+    rev = "refs/tags/release-${version}";
+    url = "https://bitbucket.org/heldercorreia/speedcrunch";
+    sha256 = "0vh7cd1915bjqzkdp3sk25ngy8cq624mkh8c53c5bnzk357kb0fk";
   };
 
-  patches = [./speedcrunch-0.11-alpha-dso_linking.patch];
+  buildInputs = [ qtbase qttools ];
 
-  buildInputs = [cmake qt];
-
-  dontUseCmakeBuildDir = true;
-
-  cmakeDir = "../src";
+  nativeBuildInputs = [ cmake ];
 
   preConfigure = ''
-    mkdir -p build
-    cd build
+    cd src
   '';
 
-  buildFlags = "VERBOSE=1";
-
-  meta = with stdenv.lib; {
-    homepage    = "http://speedcrunch.digitalfanatics.org";
+  meta = with lib; {
+    homepage    = http://speedcrunch.org;
     license     = licenses.gpl2Plus;
     description = "A fast power user calculator";
     longDescription = ''
@@ -33,6 +29,9 @@ stdenv.mkDerivation rec {
       precisions, unlimited variable storage, intelligent automatic completion
       full keyboard-friendly and more than 15 built-in math function.
     '';
+    maintainers = with maintainers; [ gebner ];
+    inherit (qtbase.meta) platforms;
+    # works with qt 5.6 and qt 5.8
+    broken = builtins.compareVersions qtbase.version "5.7.0" == 0;
   };
-
 }

@@ -1,16 +1,23 @@
-{ stdenv, fetchFromGitHub, pkgconfig, cmake
+{ stdenv, fetchFromGitHub, fetchpatch, pkgconfig, cmake
 
 # dependencies
-, glib
+, glib, libXinerama
 
 # optional features without extra dependencies
 , mpdSupport          ? true
 , ibmSupport          ? true # IBM/Lenovo notebooks
 
 # optional features with extra dependencies
+
+# ouch, this is ugly, but this gives the man page
+, docsSupport         ? true, docbook2x, libxslt ? null
+                            , man ? null, less ? null
+                            , docbook_xsl ? null , docbook_xml_dtd_44 ? null
+
 , ncursesSupport      ? true      , ncurses       ? null
 , x11Support          ? true      , xlibsWrapper           ? null
 , xdamageSupport      ? x11Support, libXdamage    ? null
+, doubleBufferSupport ? x11Support
 , imlib2Support       ? x11Support, imlib2        ? null
 
 , luaSupport          ? true      , lua           ? null
@@ -19,6 +26,8 @@
 , toluapp ? null
 
 , wirelessSupport     ? true      , wirelesstools ? null
+, nvidiaSupport       ? false     , libXNVCtrl ? null
+, pulseSupport        ? false     , libpulseaudio ? null
 
 , curlSupport         ? true      , curl ? null
 , rssSupport          ? curlSupport
@@ -26,6 +35,10 @@
 , weatherXoapSupport  ? curlSupport
 , libxml2 ? null
 }:
+
+assert docsSupport         -> docbook2x != null && libxslt != null
+                           && man != null && less != null
+                           && docbook_xsl != null && docbook_xml_dtd_44 != null;
 
 assert ncursesSupport      -> ncurses != null;
 
@@ -41,6 +54,8 @@ assert luaCairoSupport || luaImlib2Support
                            -> lua.luaversion == "5.1";
 
 assert wirelessSupport     -> wirelesstools != null;
+assert nvidiaSupport       -> libXNVCtrl != null;
+assert pulseSupport        -> libpulseaudio != null;
 
 assert curlSupport         -> curl != null;
 assert rssSupport          -> curlSupport && libxml2 != null;
@@ -51,18 +66,30 @@ with stdenv.lib;
 
 stdenv.mkDerivation rec {
   name = "conky-${version}";
-  version = "1.10.0";
+  version = "1.10.8";
 
   src = fetchFromGitHub {
     owner = "brndnmtthws";
     repo = "conky";
     rev = "v${version}";
-    sha256 = "00vyrf72l54j3majqmn6vykqvvb15vygsaby644nsb5vpma6b1cn";
+    sha256 = "18kxjmaplqvn81vmvybvpc9qczm7wgcgd4af3a8vsqdv77cn5bwq";
   };
+
+  postPatch = ''
+    sed -i -e '/include.*CheckIncludeFile)/i include(CheckIncludeFiles)' \
+      cmake/ConkyPlatformChecks.cmake
+  '' + optionalString docsSupport ''
+    # Drop examples, since they contain non-ASCII characters that break docbook2x :(
+    sed -i 's/ Example: .*$//' doc/config_settings.xml
+
+    substituteInPlace cmake/Conky.cmake --replace "#set(RELEASE true)" "set(RELEASE true)"
+  '';
 
   NIX_LDFLAGS = "-lgcc_s";
 
-  buildInputs = [ pkgconfig glib cmake ]
+  nativeBuildInputs = [ cmake pkgconfig ];
+  buildInputs = [ glib libXinerama ]
+    ++ optionals docsSupport        [ docbook2x docbook_xsl docbook_xml_dtd_44 libxslt man less ]
     ++ optional  ncursesSupport     ncurses
     ++ optional  x11Support         xlibsWrapper
     ++ optional  xdamageSupport     libXdamage
@@ -74,9 +101,12 @@ stdenv.mkDerivation rec {
     ++ optional  curlSupport        curl
     ++ optional  rssSupport         libxml2
     ++ optional  weatherXoapSupport libxml2
+    ++ optional  nvidiaSupport      libXNVCtrl
+    ++ optional  pulseSupport       libpulseaudio
     ;
 
-  cmakeFlags = [ "-DCMAKE_BUILD_TYPE=Release" ]
+  cmakeFlags = []
+    ++ optional docsSupport         "-DMAINTAINER_MODE=ON"
     ++ optional curlSupport         "-DBUILD_CURL=ON"
     ++ optional (!ibmSupport)       "-DBUILD_IBM=OFF"
     ++ optional imlib2Support       "-DBUILD_IMLIB2=ON"
@@ -87,15 +117,23 @@ stdenv.mkDerivation rec {
     ++ optional rssSupport          "-DBUILD_RSS=ON"
     ++ optional (!x11Support)       "-DBUILD_X11=OFF"
     ++ optional xdamageSupport      "-DBUILD_XDAMAGE=ON"
+    ++ optional doubleBufferSupport "-DBUILD_XDBE=ON"
     ++ optional weatherMetarSupport "-DBUILD_WEATHER_METAR=ON"
     ++ optional weatherXoapSupport  "-DBUILD_WEATHER_XOAP=ON"
     ++ optional wirelessSupport     "-DBUILD_WLAN=ON"
+    ++ optional nvidiaSupport       "-DBUILD_NVIDIA=ON"
+    ++ optional pulseSupport        "-DBUILD_PULSEAUDIO=ON"
     ;
+
+  # `make -f src/CMakeFiles/conky.dir/build.make src/CMakeFiles/conky.dir/conky.cc.o`:
+  # src/conky.cc:137:23: fatal error: defconfig.h: No such file or directory
+  enableParallelBuilding = false;
 
   meta = with stdenv.lib; {
     homepage = http://conky.sourceforge.net/;
     description = "Advanced, highly configurable system monitor based on torsmo";
     maintainers = [ maintainers.guibert ];
     license = licenses.gpl3Plus;
+    platforms = platforms.linux;
   };
 }

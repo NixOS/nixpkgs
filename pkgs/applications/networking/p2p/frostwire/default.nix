@@ -1,36 +1,94 @@
-{ stdenv, fetchurl, jre }:
+{ stdenv, lib, fetchFromGitHub, gradle, perl, jre, makeWrapper, makeDesktopItem, mplayer }:
 
-with stdenv.lib;
+let
+  version = "6.6.7-build-529";
+  name = "frostwire-desktop-${version}";
 
-stdenv.mkDerivation rec {
-  version = "6.0.0";
-  name = "frostwire-${version}";
-
-  src = fetchurl {
-    url = "http://dl.frostwire.com/frostwire/${version}/frostwire-${version}.x86_64.tar.gz";
-    sha256 = "16rpfh235jj75vm4rx6qqw25ax3rk2p21l6lippbm0pi13lp2pdh";
+  src = fetchFromGitHub {
+    owner = "frostwire";
+    repo = "frostwire";
+    rev = name;
+    sha256 = "03wdj2kr8akzx8m1scvg98132zbaxh81qjdsxn2645b3gahjwz0m";
   };
 
-  inherit jre;
+  desktopItem = makeDesktopItem {
+    name = "frostwire";
+    desktopName = "FrostWire";
+    genericName = "P2P Bittorrent client";
+    exec = "frostwire";
+    icon = "frostwire";
+    comment = "Search and explore all kinds of files on the Bittorrent network";
+    categories = "Network;FileTransfer;P2P;";
+  };
 
-  installPhase = ''
-    jar=$(ls */*.jar)
-    
-    mkdir -p $out/share/java
-    mv $jar $out/share/java
-    
-    mkdir -p $out/bin
-    cat > $out/bin/frostwire <<EOF
-    #! $SHELL -e
-    exec $out/share/java/frostwire
-    EOF
-    chmod +x $out/bin/frostwire
+  # fake build to pre-download deps into fixed-output derivation
+  deps = stdenv.mkDerivation {
+    name = "${name}-deps";
+    inherit src;
+    buildInputs = [ gradle perl ];
+    buildPhase = ''
+      export GRADLE_USER_HOME=$(mktemp -d)
+      ( cd desktop
+        gradle --no-daemon build
+      )
+    '';
+    # perl code mavenizes pathes (com.squareup.okio/okio/1.13.0/a9283170b7305c8d92d25aff02a6ab7e45d06cbe/okio-1.13.0.jar -> com/squareup/okio/okio/1.13.0/okio-1.13.0.jar)
+    installPhase = ''
+      find $GRADLE_USER_HOME -type f -regex '.*\.\(jar\|pom\)' \
+        | perl -pe 's#(.*/([^/]+)/([^/]+)/([^/]+)/[0-9a-f]{30,40}/([^/\s]+))$# ($x = $2) =~ tr|\.|/|; "install -Dm444 $1 \$out/$x/$3/$4/$5" #e' \
+        | sh
+    '';
+    outputHashAlgo = "sha256";
+    outputHashMode = "recursive";
+    outputHash = "11zd98g0d0fdgls4lsskkagwfxyh26spfd6c6g9cahl89czvlg3c";
+  };
+
+in stdenv.mkDerivation {
+  inherit name src;
+
+  nativeBuildInputs = [ makeWrapper ];
+  buildInputs = [ gradle ];
+
+  buildPhase = ''
+    export GRADLE_USER_HOME=$(mktemp -d)
+    ( cd desktop
+
+      # disable auto-update (anyway it won't update frostwire installed in nix store)
+      substituteInPlace src/com/frostwire/gui/updates/UpdateManager.java \
+        --replace 'um.checkForUpdates' '// um.checkForUpdates'
+
+      # fix path to mplayer
+      substituteInPlace src/com/frostwire/gui/player/MediaPlayerLinux.java \
+        --replace /usr/bin/mplayer ${mplayer}/bin/mplayer
+
+      substituteInPlace build.gradle \
+        --replace 'mavenCentral()' 'mavenLocal(); maven { url uri("${deps}") }'
+      gradle --offline --no-daemon build
+    )
   '';
 
-  meta = {
+  installPhase = ''
+    mkdir -p $out/lib $out/share/java
+
+    cp desktop/build/libs/frostwire.jar $out/share/java/frostwire.jar
+
+    cp ${ { x86_64-darwin = "desktop/lib/native/*.dylib";
+            x86_64-linux  = "desktop/lib/native/lib{jlibtorrent,SystemUtilities}.so";
+            i686-linux    = "desktop/lib/native/lib{jlibtorrent,SystemUtilities}X86.so";
+          }.${stdenv.system} or (throw "unsupported system ${stdenv.system}")
+        } $out/lib
+
+    cp -dpR ${desktopItem}/share $out
+
+    makeWrapper ${jre}/bin/java $out/bin/frostwire \
+      --add-flags "-Djava.library.path=$out/lib -jar $out/share/java/frostwire.jar"
+  '';
+
+  meta = with stdenv.lib; {
     homepage = http://www.frostwire.com/;
     description = "BitTorrent Client and Cloud File Downloader";
-    license = stdenv.lib.licenses.gpl2;
-    maintainers = [ stdenv.lib.maintainers.gavin ];
+    license = licenses.gpl2;
+    maintainers = with maintainers; [ gavin ];
+    platforms = [ "x86_64-darwin" "x86_64-linux" "i686-linux" ];
   };
 }

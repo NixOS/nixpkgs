@@ -1,25 +1,22 @@
-{ stdenv, fetchurl, pkgconfig, automake, autoconf, libtool, makeWrapper
+{ stdenv, fetchurl, pkgconfig, autoreconfHook, makeWrapper
 , perl, libxml2, IOStringy }:
 
 stdenv.mkDerivation rec {
   name = "hivex-${version}";
-  version = "1.3.11";
+  version = "1.3.15";
 
   src = fetchurl {
     url = "http://libguestfs.org/download/hivex/${name}.tar.gz";
-    sha256 = "0y3nqykwy58divxkv7gmsb067dasyfz3apbp437hl57rgrndyfn6";
+    sha256 = "02vzipzrp1gr87rn7mkhyzr4zdjkp2dzcvvb223x7i0ch8ci7r4c";
   };
 
   patches = [ ./hivex-syms.patch ];
 
+  nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
-    pkgconfig automake autoconf libtool makeWrapper
+    autoreconfHook makeWrapper
     perl libxml2 IOStringy
   ];
-
-  preConfigure = ''
-    AUTOPOINT=true autoreconf --verbose --install 
-  '';
 
   postInstall = ''
     for bin in $out/bin/*; do
@@ -32,6 +29,6 @@ stdenv.mkDerivation rec {
     license = licenses.lgpl2;
     homepage = https://github.com/libguestfs/hivex;
     maintainers = with maintainers; [offline];
-    platforms = with platforms; linux;
+    platforms = platforms.linux;
   };
 }

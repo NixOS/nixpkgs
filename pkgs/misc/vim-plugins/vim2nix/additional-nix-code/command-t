@@ -1,0 +1,5 @@
+    buildInputs = [ ruby rake ];
+    buildPhase = ''
+      rake make
+      rm ruby/command-t/ext/command-t/*.o
+    '';

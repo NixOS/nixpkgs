@@ -14,13 +14,16 @@ let
   bashCompletion = optionalString cfg.enableCompletion ''
     # Check whether we're running a version of Bash that has support for
     # programmable completion. If we do, enable all modules installed in
-    # the system (and user profile).
+    # the system and user profile in obsolete /etc/bash_completion.d/
+    # directories. Bash loads completions in all
+    # $XDG_DATA_DIRS/share/bash-completion/completions/
+    # on demand, so they do not need to be sourced here.
     if shopt -q progcomp &>/dev/null; then
-      . "${pkgs.bashCompletion}/etc/profile.d/bash_completion.sh"
+      . "${pkgs.bash-completion}/etc/profile.d/bash_completion.sh"
       nullglobStatus=$(shopt -p nullglob)
       shopt -s nullglob
       for p in $NIX_PROFILES; do
-        for m in "$p/etc/bash_completion.d/"* "$p/share/bash-completion/completions/"*; do
+        for m in "$p/etc/bash_completion.d/"*; do
           . $m
         done
       done
@@ -56,7 +59,7 @@ in
       */
 
       shellAliases = mkOption {
-        default = config.environment.shellAliases // { which = "type -P"; };
+        default = config.environment.shellAliases;
         description = ''
           Set of aliases for bash shell. See <option>environment.shellAliases</option>
           for an option format description.
@@ -90,12 +93,14 @@ in
 
       promptInit = mkOption {
         default = ''
-          # Provide a nice prompt.
-          PROMPT_COLOR="1;31m"
-          let $UID && PROMPT_COLOR="1;32m"
-          PS1="\n\[\033[$PROMPT_COLOR\][\u@\h:\w]\\$\[\033[0m\] "
-          if test "$TERM" = "xterm"; then
-            PS1="\[\033]2;\h:\u:\w\007\]$PS1"
+          # Provide a nice prompt if the terminal supports it.
+          if [ "$TERM" != "dumb" -o -n "$INSIDE_EMACS" ]; then
+            PROMPT_COLOR="1;31m"
+            let $UID && PROMPT_COLOR="1;32m"
+            PS1="\n\[\033[$PROMPT_COLOR\][\u@\h:\w]\\$\[\033[0m\] "
+            if test "$TERM" = "xterm"; then
+              PS1="\[\033]2;\h:\u:\w\007\]$PS1"
+            fi
           fi
         '';
         description = ''
@@ -105,7 +110,7 @@ in
       };
 
       enableCompletion = mkOption {
-        default = false;
+        default = true;
         description = ''
           Enable Bash completion for all interactive bash shells.
         '';
@@ -121,7 +126,7 @@ in
     programs.bash = {
 
       shellInit = ''
-        . ${config.system.build.setEnvironment}
+        ${config.system.build.setEnvironment.text}
 
         ${cfge.shellInit}
       '';
@@ -195,15 +200,19 @@ in
         fi
       '';
 
-    # Configuration for readline in bash.
-    environment.etc."inputrc".source = ./inputrc;
+    # Configuration for readline in bash. We use "option default"
+    # priority to allow user override using both .text and .source.
+    environment.etc."inputrc".source = mkOptionDefault ./inputrc;
 
-    users.defaultUserShell = mkDefault "/run/current-system/sw/bin/bash";
+    users.defaultUserShell = mkDefault pkgs.bashInteractive;
 
     environment.pathsToLink = optionals cfg.enableCompletion [
       "/etc/bash_completion.d"
       "/share/bash-completion"
     ];
+
+    environment.systemPackages = optional cfg.enableCompletion
+      pkgs.nix-bash-completions;
 
     environment.shells =
       [ "/run/current-system/sw/bin/bash"

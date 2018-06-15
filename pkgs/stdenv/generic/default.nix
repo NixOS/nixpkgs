@@ -1,7 +1,7 @@
 let lib = import ../../../lib; in lib.makeOverridable (
 
-{ system, name ? "stdenv", preHook ? "", initialPath, cc, shell
-, allowedRequisites ? null, extraAttrs ? {}, overrides ? (pkgs: {}), config
+{ name ? "stdenv", preHook ? "", initialPath, cc, shell
+, allowedRequisites ? null, extraAttrs ? {}, overrides ? (self: super: {}), config
 
 , # The `fetchurl' to use for downloading curl and its dependencies
   # (see all-packages.nix).
@@ -9,203 +9,71 @@ let lib = import ../../../lib; in lib.makeOverridable (
 
 , setupScript ? ./setup.sh
 
+, extraNativeBuildInputs ? []
 , extraBuildInputs ? []
 , __stdenvImpureHostDeps ? []
 , __extraImpureHostDeps ? []
+, stdenvSandboxProfile ? ""
+, extraSandboxProfile ? ""
+
+  ## Platform parameters
+  ##
+  ## The "build" "host" "target" terminology below comes from GNU Autotools. See
+  ## its documentation for more information on what those words mean. Note that
+  ## each should always be defined, even when not cross compiling.
+  ##
+  ## For purposes of bootstrapping, think of each stage as a "sliding window"
+  ## over a list of platforms. Specifically, the host platform of the previous
+  ## stage becomes the build platform of the current one, and likewise the
+  ## target platform of the previous stage becomes the host platform of the
+  ## current one.
+  ##
+
+, # The platform on which packages are built. Consists of `system`, a
+  # string (e.g.,`i686-linux') identifying the most import attributes of the
+  # build platform, and `platform` a set of other details.
+  buildPlatform
+
+, # The platform on which packages run.
+  hostPlatform
+
+, # The platform which build tools (especially compilers) build for in this stage,
+  targetPlatform
 }:
 
 let
-
-  allowUnfree = config.allowUnfree or false || builtins.getEnv "NIXPKGS_ALLOW_UNFREE" == "1";
-
-  whitelist = config.whitelistedLicenses or [];
-  blacklist = config.blacklistedLicenses or [];
-
-  ifDarwin = attrs: if system == "x86_64-darwin" then attrs else {};
-
-  onlyLicenses = list:
-    lib.lists.all (license:
-      let l = lib.licenses.${license.shortName or "BROKEN"} or false; in
-      if license == l then true else
-        throw ''‘${showLicense license}’ is not an attribute of lib.licenses''
-    ) list;
-
-  mutuallyExclusive = a: b:
-    (builtins.length a) == 0 ||
-    (!(builtins.elem (builtins.head a) b) &&
-     mutuallyExclusive (builtins.tail a) b);
-
-  areLicenseListsValid =
-    if mutuallyExclusive whitelist blacklist then
-      assert onlyLicenses whitelist; assert onlyLicenses blacklist; true
-    else
-      throw "whitelistedLicenses and blacklistedLicenses are not mutually exclusive.";
-
-  hasLicense = attrs:
-    builtins.hasAttr "meta" attrs && builtins.hasAttr "license" attrs.meta;
-
-  hasWhitelistedLicense = assert areLicenseListsValid; attrs:
-    hasLicense attrs && builtins.elem attrs.meta.license whitelist;
-
-  hasBlacklistedLicense = assert areLicenseListsValid; attrs:
-    hasLicense attrs && builtins.elem attrs.meta.license blacklist;
-
-  allowBroken = config.allowBroken or false || builtins.getEnv "NIXPKGS_ALLOW_BROKEN" == "1";
-
-  isUnfree = licenses: lib.lists.any (l:
-    !l.free or true || l == "unfree" || l == "unfree-redistributable") licenses;
-
-  # Alow granular checks to allow only some unfree packages
-  # Example:
-  # {pkgs, ...}:
-  # {
-  #   allowUnfree = false;
-  #   allowUnfreePredicate = (x: pkgs.lib.hasPrefix "flashplayer-" x.name);
-  # }
-  allowUnfreePredicate = config.allowUnfreePredicate or (x: false);
-
-  # Check whether unfree packages are allowed and if not, whether the
-  # package has an unfree license and is not explicitely allowed by the
-  # `allowUNfreePredicate` function.
-  hasDeniedUnfreeLicense = attrs:
-    !allowUnfree &&
-    hasLicense attrs &&
-    isUnfree (lib.lists.toList attrs.meta.license) &&
-    !allowUnfreePredicate attrs;
-
-  showLicense = license: license.shortName or "unknown";
-
-  defaultNativeBuildInputs = extraBuildInputs ++
+  defaultNativeBuildInputs = extraNativeBuildInputs ++
     [ ../../build-support/setup-hooks/move-docs.sh
       ../../build-support/setup-hooks/compress-man-pages.sh
       ../../build-support/setup-hooks/strip.sh
       ../../build-support/setup-hooks/patch-shebangs.sh
+    ]
+      # FIXME this on Darwin; see
+      # https://github.com/NixOS/nixpkgs/commit/94d164dd7#commitcomment-22030369
+    ++ lib.optional hostPlatform.isLinux ../../build-support/setup-hooks/audit-tmpdir.sh
+    ++ [
+      ../../build-support/setup-hooks/multiple-outputs.sh
       ../../build-support/setup-hooks/move-sbin.sh
       ../../build-support/setup-hooks/move-lib64.sh
+      ../../build-support/setup-hooks/set-source-date-epoch-to-latest.sh
       cc
     ];
 
-  # Add a utility function to produce derivations that use this
-  # stdenv and its shell.
-  mkDerivation =
-    { buildInputs ? []
-    , nativeBuildInputs ? []
-    , propagatedBuildInputs ? []
-    , propagatedNativeBuildInputs ? []
-    , crossConfig ? null
-    , meta ? {}
-    , passthru ? {}
-    , pos ? null # position used in error messages and for meta.position
-    , separateDebugInfo ? false
-    , outputs ? [ "out" ]
-    , __impureHostDeps ? []
-    , __propagatedImpureHostDeps ? []
-    , ... } @ attrs:
-    let
-      pos' =
-        if pos != null then
-          pos
-        else if attrs.meta.description or null != null then
-          builtins.unsafeGetAttrPos "description" attrs.meta
-        else
-          builtins.unsafeGetAttrPos "name" attrs;
-      pos'' = if pos' != null then "‘" + pos'.file + ":" + toString pos'.line + "’" else "«unknown-file»";
-
-      throwEvalHelp = unfreeOrBroken: whatIsWrong:
-        assert builtins.elem unfreeOrBroken ["Unfree" "Broken" "blacklisted"];
-
-        throw ("Package ‘${attrs.name or "«name-missing»"}’ in ${pos''} ${whatIsWrong}, refusing to evaluate."
-        + (lib.strings.optionalString (unfreeOrBroken != "blacklisted") ''
-
-          For `nixos-rebuild` you can set
-            { nixpkgs.config.allow${unfreeOrBroken} = true; }
-          in configuration.nix to override this.
-          For `nix-env` you can add
-            { allow${unfreeOrBroken} = true; }
-          to ~/.nixpkgs/config.nix.
-        ''));
-
-      licenseAllowed = attrs:
-        if hasDeniedUnfreeLicense attrs && !(hasWhitelistedLicense attrs) then
-          throwEvalHelp "Unfree" "has an unfree license (‘${showLicense attrs.meta.license}’)"
-        else if hasBlacklistedLicense attrs then
-          throwEvalHelp "blacklisted" "has a blacklisted license (‘${showLicense attrs.meta.license}’)"
-        else if !allowBroken && attrs.meta.broken or false then
-          throwEvalHelp "Broken" "is marked as broken"
-        else if !allowBroken && attrs.meta.platforms or null != null && !lib.lists.elem result.system attrs.meta.platforms then
-          throwEvalHelp "Broken" "is not supported on ‘${result.system}’"
-        else true;
-
-      outputs' =
-        outputs ++
-        (if separateDebugInfo then assert result.isLinux; [ "debug" ] else []);
-
-      buildInputs' = buildInputs ++
-        (if separateDebugInfo then [ ../../build-support/setup-hooks/separate-debug-info.sh ] else []);
-
-    in
-      assert licenseAllowed attrs;
-
-      lib.addPassthru (derivation (
-        (removeAttrs attrs
-          ["meta" "passthru" "crossAttrs" "pos"
-           "__impureHostDeps" "__propagatedImpureHostDeps"])
-        // (let
-          # TODO: remove lib.unique once nix has a list canonicalization primitive
-          computedImpureHostDeps =
-            lib.unique (lib.concatMap (input: input.__propagatedImpureHostDeps or []) (extraBuildInputs ++ buildInputs ++ nativeBuildInputs));
-          computedPropagatedImpureHostDeps =
-            lib.unique (lib.concatMap (input: input.__propagatedImpureHostDeps or []) (propagatedBuildInputs ++ propagatedNativeBuildInputs));
-        in
-        {
-          builder = attrs.realBuilder or shell;
-          args = attrs.args or ["-e" (attrs.builder or ./default-builder.sh)];
-          stdenv = result;
-          system = result.system;
-          userHook = config.stdenv.userHook or null;
-          __ignoreNulls = true;
-
-          # Inputs built by the cross compiler.
-          buildInputs = if crossConfig != null then buildInputs' else [];
-          propagatedBuildInputs = if crossConfig != null then propagatedBuildInputs else [];
-          # Inputs built by the usual native compiler.
-          nativeBuildInputs = nativeBuildInputs ++ (if crossConfig == null then buildInputs' else []);
-          propagatedNativeBuildInputs = propagatedNativeBuildInputs ++
-            (if crossConfig == null then propagatedBuildInputs else []);
-        } // ifDarwin {
-          __impureHostDeps = computedImpureHostDeps ++ computedPropagatedImpureHostDeps ++ __propagatedImpureHostDeps ++ __impureHostDeps ++ __extraImpureHostDeps ++ [
-            "/dev/zero"
-            "/dev/random"
-            "/dev/urandom"
-            "/bin/sh"
-          ];
-          __propagatedImpureHostDeps = computedPropagatedImpureHostDeps ++ __propagatedImpureHostDeps;
-        } // (if outputs' != [ "out" ] then {
-          outputs = outputs';
-        } else { })))) (
-      {
-        # The meta attribute is passed in the resulting attribute set,
-        # but it's not part of the actual derivation, i.e., it's not
-        # passed to the builder and is not a dependency.  But since we
-        # include it in the result, it *is* available to nix-env for
-        # queries.  We also a meta.position attribute here to
-        # identify the source location of the package.
-        meta = meta // (if pos' != null then {
-          position = pos'.file + ":" + toString pos'.line;
-        } else {});
-        inherit passthru;
-      } //
-      # Pass through extra attributes that are not inputs, but
-      # should be made available to Nix expressions using the
-      # derivation (e.g., in assertions).
-      passthru);
+  defaultBuildInputs = extraBuildInputs;
 
   # The stdenv that we are producing.
-  result =
+  stdenv =
     derivation (
-    (if isNull allowedRequisites then {} else { allowedRequisites = allowedRequisites ++ defaultNativeBuildInputs; }) //
-    {
-      inherit system name;
+    lib.optionalAttrs (allowedRequisites != null) {
+      allowedRequisites = allowedRequisites
+        ++ defaultNativeBuildInputs ++ defaultBuildInputs;
+    }
+    // {
+      inherit name;
+
+      # Nix itself uses the `system` field of a derivation to decide where to
+      # build it. This is a bit confusing for cross compilation.
+      inherit (buildPlatform) system;
 
       builder = shell;
 
@@ -213,67 +81,56 @@ let
 
       setup = setupScript;
 
-      inherit preHook initialPath shell defaultNativeBuildInputs;
+      # We pretty much never need rpaths on Darwin, since all library path references
+      # are absolute unless we go out of our way to make them relative (like with CF)
+      # TODO: This really wants to be in stdenv/darwin but we don't have hostPlatform
+      # there (yet?) so it goes here until then.
+      preHook = preHook+ lib.optionalString buildPlatform.isDarwin ''
+        export NIX_BUILD_DONT_SET_RPATH=1
+      '' + lib.optionalString hostPlatform.isDarwin ''
+        export NIX_DONT_SET_RPATH=1
+        export NIX_NO_SELF_RPATH=1
+      ''
+      # TODO this should be uncommented, but it causes stupid mass rebuilds. I
+      # think the best solution would just be to fixup linux RPATHs so we don't
+      # need to set `-rpath` anywhere.
+      # + lib.optionalString targetPlatform.isDarwin ''
+      #   export NIX_TARGET_DONT_SET_RPATH=1
+      # ''
+      ;
+
+      inherit initialPath shell
+        defaultNativeBuildInputs defaultBuildInputs;
     }
-    // ifDarwin {
+    // lib.optionalAttrs buildPlatform.isDarwin {
+      __sandboxProfile = stdenvSandboxProfile;
       __impureHostDeps = __stdenvImpureHostDeps;
     })
 
     // rec {
 
-      meta.description = "The default build environment for Unix packages in Nixpkgs";
+      meta = {
+        description = "The default build environment for Unix packages in Nixpkgs";
+        platforms = lib.platforms.all;
+      };
+
+      inherit buildPlatform hostPlatform targetPlatform;
+
+      inherit extraNativeBuildInputs extraBuildInputs
+        __extraImpureHostDeps extraSandboxProfile;
 
       # Utility flags to test the type of platform.
-      isDarwin = system == "x86_64-darwin";
-      isLinux = system == "i686-linux"
-             || system == "x86_64-linux"
-             || system == "powerpc-linux"
-             || system == "armv5tel-linux"
-             || system == "armv6l-linux"
-             || system == "armv7l-linux"
-             || system == "mips64el-linux";
-      isGNU = system == "i686-gnu"; # GNU/Hurd
-      isGlibc = isGNU # useful for `stdenvNative'
-             || isLinux
-             || system == "x86_64-kfreebsd-gnu";
-      isSunOS = system == "i686-solaris"
-             || system == "x86_64-solaris";
-      isCygwin = system == "i686-cygwin"
-              || system == "x86_64-cygwin";
-      isFreeBSD = system == "i686-freebsd"
-               || system == "x86_64-freebsd";
-      isOpenBSD = system == "i686-openbsd"
-               || system == "x86_64-openbsd";
-      isi686 = system == "i686-linux"
-            || system == "i686-gnu"
-            || system == "i686-freebsd"
-            || system == "i686-openbsd"
-            || system == "i686-cygwin"
-            || system == "i386-sunos";
-      isx86_64 = system == "x86_64-linux"
-              || system == "x86_64-darwin"
-              || system == "x86_64-freebsd"
-              || system == "x86_64-openbsd"
-              || system == "x86_64-cygwin"
-              || system == "x86_64-solaris";
-      is64bit = system == "x86_64-linux"
-             || system == "x86_64-darwin"
-             || system == "x86_64-freebsd"
-             || system == "x86_64-openbsd"
-             || system == "x86_64-cygwin"
-             || system == "x86_64-solaris"
-             || system == "mips64el-linux";
-      isMips = system == "mips-linux"
-            || system == "mips64el-linux";
-      isArm = system == "armv5tel-linux"
-           || system == "armv6l-linux"
-           || system == "armv7l-linux";
-      isBigEndian = system == "powerpc-linux";
+      inherit (hostPlatform)
+        isDarwin isLinux isSunOS isHurd isCygwin isFreeBSD isOpenBSD
+        isi686 isx86_64 is64bit isAarch32 isAarch64 isMips isBigEndian;
+      isArm = builtins.trace "stdenv.isArm is deprecated after 18.03" hostPlatform.isArm;
 
       # Whether we should run paxctl to pax-mark binaries.
       needsPax = isLinux;
 
-      inherit mkDerivation;
+      inherit (import ./make-derivation.nix {
+        inherit lib config stdenv;
+      }) mkDerivation;
 
       # For convenience, bring in the library functions in lib/ so
       # packages don't have to do that themselves.
@@ -284,6 +141,8 @@ let
       inherit overrides;
 
       inherit cc;
+
+      isCross = targetPlatform != buildPlatform;
     }
 
     # Propagate any extra attributes.  For instance, we use this to
@@ -292,4 +151,4 @@ let
     # like curl = if stdenv ? curl then stdenv.curl else ...).
     // extraAttrs;
 
-in result)
+in stdenv)

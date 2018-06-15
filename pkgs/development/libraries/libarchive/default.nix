@@ -1,40 +1,65 @@
-{ fetchurl, stdenv, acl, openssl, libxml2, attr, zlib, bzip2, e2fsprogs, xz
-, sharutils }:
+{
+  fetchurl, fetchpatch, stdenv, pkgconfig,
+  acl, attr, bzip2, e2fsprogs, libxml2, lzo, openssl, sharutils, xz, zlib,
+
+  # Optional but increases closure only negligibly.
+  xarSupport ? true,
+}:
+
+assert xarSupport -> libxml2 != null;
 
 stdenv.mkDerivation rec {
-  name = "libarchive-3.1.2";
+  name = "libarchive-${version}";
+  version = "3.3.2";
 
   src = fetchurl {
-    urls = [
-      "http://pkgs.fedoraproject.org/repo/pkgs/libarchive/libarchive-3.1.2.tar.gz/efad5a503f66329bb9d2f4308b5de98a/${name}.tar.gz"
-      "${meta.homepage}/downloads/${name}.tar.gz"
-    ];
-    sha256 = "0pixqnrcf35dnqgv0lp7qlcw7k13620qkhgxr288v7p4iz6ym1zb";
+    url = "${meta.homepage}/downloads/${name}.tar.gz";
+    sha256 = "1km0mzfl6in7l5vz9kl09a88ajx562rw93ng9h2jqavrailvsbgd";
   };
 
   patches = [
-    ./CVE-2013-0211.patch # https://github.com/libarchive/libarchive/commit/22531545
-    ./CVE-2015-1197.patch # https://github.com/NixOS/nixpkgs/issues/6799
-      # ^ it's CVE-2015-2304 specific to libarchive
+    ./CVE-2017-14166.patch
+    ./CVE-2017-14502.patch
+
+    # LibreSSL patch; this is from upstream, and can be removed when the next release is made.
+    (fetchpatch {
+      url = "https://github.com/libarchive/libarchive/commit/5da00ad75b09e262774ec3675bbe4d5a4502a852.patch";
+      sha256 = "0np1i9r6mfxmbksj7mmf5abpnmlmg63704p9z3ihjh2rnq596c1v";
+    })
   ];
 
-  buildInputs = [ sharutils libxml2 zlib bzip2 openssl xz ] ++
-    stdenv.lib.optionals stdenv.isLinux [ e2fsprogs attr acl ];
+  outputs = [ "out" "lib" "dev" ];
+
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ sharutils zlib bzip2 openssl xz lzo ]
+    ++ stdenv.lib.optionals stdenv.isLinux [ e2fsprogs attr acl ]
+    ++ stdenv.lib.optional xarSupport libxml2;
+
+  # Without this, pkgconfig-based dependencies are unhappy
+  propagatedBuildInputs = stdenv.lib.optionals stdenv.isLinux [ attr acl ];
+
+  configureFlags = stdenv.lib.optional (!xarSupport) "--without-xml2";
 
   preBuild = if stdenv.isCygwin then ''
     echo "#include <windows.h>" >> config.h
   '' else null;
 
+  doCheck = false; # fails
+
   preFixup = ''
-    sed 's|-lcrypto|-L${openssl}/lib -lcrypto|' -i $out/lib/libarchive.la
+    sed -i $lib/lib/libarchive.la \
+      -e 's|-lcrypto|-L${openssl.out}/lib -lcrypto|' \
+      -e 's|-llzo2|-L${lzo}/lib -llzo2|'
   '';
+
+  enableParallelBuilding = true;
 
   meta = {
     description = "Multi-format archive and compression library";
     longDescription = ''
       This library has code for detecting and reading many archive formats and
       compressions formats including (but not limited to) tar, shar, cpio, zip, and
-      compressed with gzip, bzip2, lzma, xz, .. 
+      compressed with gzip, bzip2, lzma, xz, ...
     '';
     homepage = http://libarchive.org;
     license = stdenv.lib.licenses.bsd3;

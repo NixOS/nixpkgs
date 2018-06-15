@@ -1,21 +1,22 @@
-{ lib, stdenv, fetchurl, pkgconfig, libjpeg, libpng, flex, zlib, perl, libxml2
+{ lib, stdenv, fetchsvn, pkgconfig, libjpeg, libpng, flex, zlib, perl, libxml2
 , makeWrapper, libtiff
 , enableX11 ? false, libX11 }:
 
 stdenv.mkDerivation rec {
-  name = "netpbm-10.66.00";
+  # Determine version and revision from:
+  # https://sourceforge.net/p/netpbm/code/HEAD/log/?path=/advanced
+  name = "netpbm-10.77.02";
 
-  src = fetchurl {
-    url = "mirror://gentoo/distfiles/${name}.tar.xz";
-    sha256 = "1z33pxdir92m7jlvp5c2q44gxwj7jyf8skiqkr71kgirw4w4zsbz";
+  src = fetchsvn {
+    url = "https://svn.code.sf.net/p/netpbm/code/advanced";
+    rev = 2883;
+    sha256 = "1lxa5gasmqrwgihkk8ij7vb9kgdw3d5mp25kydkrf6x4wibg1w5f";
   };
 
   postPatch = /* CVE-2005-2471, from Arch */ ''
     substituteInPlace converter/other/pstopnm.c \
       --replace '"-DSAFER"' '"-DPARANOIDSAFER"'
   '';
-
-  NIX_CFLAGS_COMPILE = "-fPIC"; # Gentoo adds this on every platform
 
   buildInputs =
     [ pkgconfig flex zlib perl libpng libjpeg libxml2 makeWrapper libtiff ]
@@ -25,8 +26,14 @@ stdenv.mkDerivation rec {
     cp config.mk.in config.mk
     echo "STATICLIB_TOO = n" >> config.mk
     substituteInPlace "config.mk" \
-        --replace "TIFFLIB = NONE" "TIFFLIB = ${libtiff}/lib/libtiff.so" \
-        --replace "TIFFHDR_DIR =" "TIFFHDR_DIR = ${libtiff}/include"
+        --replace "TIFFLIB = NONE" "TIFFLIB = ${libtiff.out}/lib/libtiff.so" \
+        --replace "TIFFHDR_DIR =" "TIFFHDR_DIR = ${libtiff.dev}/include" \
+        --replace "JPEGLIB = NONE" "JPEGLIB = ${libjpeg.out}/lib/libjpeg.so" \
+        --replace "JPEGHDR_DIR =" "JPEGHDR_DIR = ${libjpeg.dev}/include"
+   '' + stdenv.lib.optionalString stdenv.isDarwin ''
+    echo "LDSHLIB=-dynamiclib -install_name $out/lib/libnetpbm.\$(MAJ).dylib" >> config.mk
+    echo "NETPBMLIBTYPE = dylib" >> config.mk
+    echo "NETPBMLIBSUFFIX = dylib" >> config.mk
   '';
 
   preBuild = ''
@@ -38,7 +45,7 @@ stdenv.mkDerivation rec {
     touch lib/standardppmdfont.c
   '';
 
-  enableParallelBuilding = true;
+  enableParallelBuilding = false;
 
   installPhase = ''
     make package pkgdir=$out
@@ -58,6 +65,6 @@ stdenv.mkDerivation rec {
     homepage = http://netpbm.sourceforge.net/;
     description = "Toolkit for manipulation of graphic images";
     license = "GPL,free";
-    platforms = stdenv.lib.platforms.linux;
+    platforms = with stdenv.lib.platforms; linux ++ darwin;
   };
 }

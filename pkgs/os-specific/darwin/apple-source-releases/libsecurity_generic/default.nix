@@ -10,7 +10,7 @@ name: version: sha256: args: let
 
       patchPhase = ''
         # allows including <Security/some-private-header.h>
-        ln -s ${pkgs.darwin.osx_private_sdk}/System/Library/Frameworks/Security.framework/Versions/A/PrivateHeaders Security
+        cp -R ${pkgs.darwin.osx_private_sdk}/include/SecurityPrivateHeaders Security
 
         grep -Rl MacErrors.h . | while read file; do
           substituteInPlace "''$file" --replace \
@@ -29,12 +29,16 @@ name: version: sha256: args: let
         makeFlagsArray=(-j''$NIX_BUILD_CORES)
       '';
       buildInputs = [
-        pkgs.gnustep-make
+        pkgs.gnustep.make
+        pkgs.darwin.apple_sdk.frameworks.AppKit
+        pkgs.darwin.apple_sdk.frameworks.Foundation
+        pkgs.darwin.cf-private
       ];
       makeFlags = [
         "-f${makeFile}"
         "MAKEFILE_NAME=${makeFile}"
         "GNUSTEP_ABSOLUTE_INSTALL_PATHS=yes"
+        "GNUSTEP_MAKEFILES=${pkgs.gnustep.make}/share/GNUstep/Makefiles"
         "LIB_LINK_INSTALL_DIR=\$(out)/lib"
       ];
       installFlags = [

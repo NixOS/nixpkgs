@@ -9,9 +9,12 @@ stdenv.mkDerivation rec {
     sha256 = "2c4ddc3ab71877ba184523e47b0637526e6f3701bd9afb6472e6dfc25646aed7";
   };
 
-  buildInputs = [ pkgconfig libxml2 gtk2 ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ libxml2 gtk2 ];
 
   configureFlags = "--with-all-plugins";
+
+  hardeningDisable = [ "format" ];
 
   meta = with stdenv.lib; {
     description = "Visualization program for exploring high-dimensional data";

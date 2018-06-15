@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, autoconf, automake }:
+{ stdenv, fetchurl, fetchpatch, autoconf, automake, libiconv }:
 
 stdenv.mkDerivation rec {
   name = "unrtf-${version}";
@@ -9,9 +9,21 @@ stdenv.mkDerivation rec {
     sha256 = "1pcdzf2h1prn393dkvg93v80vh38q0v817xnbwrlwxbdz4k7i8r2";
   };
 
-  buildInputs = [ autoconf automake ];
+  patches = [
+    (fetchpatch {
+      name = "CVE-2016-10091-0001-convert.c-Use-safe-buffer-size-and-snprintf.patch";
+      url = "https://bugs.debian.org/cgi-bin/bugreport.cgi?att=1;bug=849705;filename=0001-convert.c-Use-safe-buffer-size-and-snprintf.patch;msg=20";
+      sha256 = "0s0fjvm3zdm9967sijlipfrwjs0h23n2n8fa6f40xxp8y5qq5a0b";
+    })
+  ];
+
+  nativeBuildInputs = [ autoconf automake ];
+
+  buildInputs = [ libiconv ];
 
   preConfigure = "./bootstrap";
+
+  outputs = [ "out" "man" ];
 
   meta = with stdenv.lib; {
     description = "A converter from Rich Text Format to other formats";

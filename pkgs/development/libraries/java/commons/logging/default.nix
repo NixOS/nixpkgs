@@ -17,6 +17,7 @@ stdenv.mkDerivation {
     description = "Wrapper around a variety of logging API implementations";
     homepage = http://commons.apache.org/proper/commons-logging;
     license = stdenv.lib.licenses.asl20;
+    platforms = stdenv.lib.platforms.unix;
   };
 }
 

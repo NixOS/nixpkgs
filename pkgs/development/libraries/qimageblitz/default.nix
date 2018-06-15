@@ -21,5 +21,6 @@ stdenv.mkDerivation {
     description = "Graphical effect and filter library for KDE4";
     license = stdenv.lib.licenses.bsd2;
     homepage = "http://${pn}.sourceforge.net";
+    platforms = stdenv.lib.platforms.linux;
   };
 }

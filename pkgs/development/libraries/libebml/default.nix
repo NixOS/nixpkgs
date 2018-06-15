@@ -1,17 +1,17 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "libebml-1.3.1";
+  name = "libebml-1.3.5";
 
   src = fetchurl {
-    url = "http://dl.matroska.org/downloads/libebml/${name}.tar.bz2";
-    sha256 = "15a2d15rq0x9lp7rfsv0jxaw5c139xs7s5dwr5bmd9dc3arr8n0r";
+    url = "http://dl.matroska.org/downloads/libebml/${name}.tar.xz";
+    sha256 = "005a0ipqnfbsq47zrc61zszi439jw32q5xd6dc1jyb3lc0zl266q";
   };
 
   meta = with stdenv.lib; {
     description = "Extensible Binary Meta Language library";
     license = licenses.lgpl21;
-    homepage = http://dl.matroska.org/downloads/libebml/;
+    homepage = https://dl.matroska.org/downloads/libebml/;
     maintainers = [ maintainers.spwhitt ];
     platforms = platforms.unix;
   };

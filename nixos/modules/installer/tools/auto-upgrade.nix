@@ -42,6 +42,17 @@ let cfg = config.system.autoUpgrade; in
         '';
       };
 
+      dates = mkOption {
+        default = "04:40";
+        type = types.str;
+        description = ''
+          Specification (in the format described by
+          <citerefentry><refentrytitle>systemd.time</refentrytitle>
+          <manvolnum>7</manvolnum></citerefentry>) of the time at
+          which the update will occur.
+        '';
+      };
+
     };
 
   };
@@ -63,17 +74,17 @@ let cfg = config.system.autoUpgrade; in
       serviceConfig.Type = "oneshot";
 
       environment = config.nix.envVars //
-        { inherit (config.environment.sessionVariables) NIX_PATH SSL_CERT_FILE;
+        { inherit (config.environment.sessionVariables) NIX_PATH;
           HOME = "/root";
-        };
+        } // config.networking.proxy.envVars;
 
-      path = [ pkgs.gnutar pkgs.xz config.nix.package ];
+      path = [ pkgs.gnutar pkgs.xz.bin config.nix.package.out ];
 
       script = ''
         ${config.system.build.nixos-rebuild}/bin/nixos-rebuild switch ${toString cfg.flags}
       '';
 
-      startAt = mkIf cfg.enable "04:40";
+      startAt = optional cfg.enable cfg.dates;
     };
 
   };

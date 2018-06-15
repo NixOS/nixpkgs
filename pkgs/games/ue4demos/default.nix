@@ -1,8 +1,5 @@
 { stdenv, fetchurl, unzip, patchelf, xorg, openal }:
 
-assert stdenv.isLinux;
-assert stdenv.isx86_64;
-
 let
   buildDemo = { name, src }:
     stdenv.mkDerivation rec {
@@ -12,7 +9,7 @@ let
 
       rtdeps = stdenv.lib.makeLibraryPath
         [ xorg.libXxf86vm xorg.libXext openal ]
-        + ":" + stdenv.lib.makeSearchPath "lib64" [ stdenv.cc.cc ];
+        + ":" + stdenv.lib.makeSearchPathOutput "lib" "lib64" [ stdenv.cc.cc ];
 
       buildCommand =
       ''
@@ -20,7 +17,7 @@ let
         cd $out
         unzip $src
 
-        interpreter=$(echo ${stdenv.glibc}/lib/ld-linux*.so.2)
+        interpreter=$(echo ${stdenv.glibc.out}/lib/ld-linux*.so.2)
         binary=$(find . -executable -type f)
         patchelf \
           --set-interpreter $interpreter \
@@ -47,7 +44,7 @@ let
       meta = {
         description = "Unreal Engine 4 Linux demos";
         homepage = https://wiki.unrealengine.com/Linux_Demos;
-        platforms = stdenv.lib.platforms.linux;
+        platforms = [ "x86_64-linux" ];
         license = stdenv.lib.licenses.unfree;
       };
     };
@@ -189,4 +186,3 @@ in {
     };
   };
 }
-

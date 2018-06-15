@@ -8,6 +8,8 @@ perlPackages.buildPerlPackage rec {
     sha256 = "0jjxpq91x7y2mgixz7ghqp01m24qa37wl3zz515rrzv7x8cyy4cf";
   };
 
+  setOutputFlags = false;
+
   # Getting lots of Non-ASCII character errors from pod2man.
   # Inserting =encoding utf8 before the first =head occurrence.
   # Wasn't able to fix mp4h.
@@ -19,12 +21,14 @@ perlPackages.buildPerlPackage rec {
     sed -i 's/ doc / /g' wml_backend/p2_mp4h/Makefile.in
     sed -i '/p2_mp4h\/doc/d' Makefile.in
   '';
-  
+
   buildInputs = with perlPackages; 
     [ perl TermReadKey GD BitVector ncurses lynx makeWrapper ImageSize ];
 
   patches = [ ./redhat-with-thr.patch ./dynaloader.patch ./no_bitvector.patch ];
-  
+
+  hardeningDisable = [ "format" ];
+
   postPatch = ''
     substituteInPlace wml_frontend/wml.src \
       --replace "File::PathConvert::realpath" "Cwd::realpath" \

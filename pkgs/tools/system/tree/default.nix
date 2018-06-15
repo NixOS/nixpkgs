@@ -42,8 +42,8 @@ stdenv.mkDerivation {
   '';
 
   meta = {
-    homepage = "http://mama.indstate.edu/users/ice/tree/";
-    description = "command to produce a depth indented directory listing";
+    homepage = http://mama.indstate.edu/users/ice/tree/;
+    description = "Command to produce a depth indented directory listing";
     license = stdenv.lib.licenses.gpl2;
 
     longDescription = ''
@@ -53,6 +53,6 @@ stdenv.mkDerivation {
     '';
 
     platforms = stdenv.lib.platforms.all;
-    maintainers = [stdenv.lib.maintainers.simons];
+    maintainers = [stdenv.lib.maintainers.peti];
   };
 }

@@ -1,12 +1,22 @@
-{ stdenv, fetchurl }:
+{ stdenv, fetchurl, openssl, fetchpatch }:
 
 stdenv.mkDerivation rec {
-  name = "iperf-3.0.11";
+  name = "iperf-3.5";
 
   src = fetchurl {
     url = "http://downloads.es.net/pub/iperf/${name}.tar.gz";
-    sha256 = "0vkzx7yxhah49l83jb5r3y4zzfdqypj5y2b3fjc7rxj7dyzba7g0";
+    sha256 = "1m9cyycv70s8nlbgr1lqwr155ixk17np0nzqgwaw3f51vkndk6sk";
   };
+
+  buildInputs = [ openssl ];
+
+  patches = stdenv.lib.optionals stdenv.hostPlatform.isMusl [
+    (fetchpatch {
+      url = "http://git.alpinelinux.org/cgit/aports/plain/main/iperf3/remove-pg-flags.patch";
+      name = "remove-pg-flags.patch";
+      sha256 = "0lnczhass24kgq59drgdipnhjnw4l1cy6gqza7f2ah1qr4q104rm";
+    })
+  ];
 
   postInstall = ''
     ln -s iperf3 $out/bin/iperf
@@ -17,6 +27,6 @@ stdenv.mkDerivation rec {
     description = "Tool to measure IP bandwidth using UDP or TCP";
     platforms = platforms.unix;
     license = "as-is";
-    maintainers = with maintainers; [ wkennington ];
+    maintainers = with maintainers; [ wkennington fpletz ];
   };
 }

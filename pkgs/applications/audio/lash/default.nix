@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, alsaLib, gtk, libjack2, libuuid, libxml2
+{ stdenv, fetchurl, alsaLib, gtk2, libjack2, libuuid, libxml2
 , makeWrapper, pkgconfig, readline }:
 
 assert libuuid != null;
@@ -15,8 +15,9 @@ stdenv.mkDerivation  rec {
   # http://permalink.gmane.org/gmane.linux.redhat.fedora.extras.cvs/822346
   patches = [ ./socket.patch ./gcc-47.patch ];
 
-  buildInputs = [ alsaLib gtk libjack2 libuuid libxml2 makeWrapper
+  buildInputs = [ alsaLib gtk2 libjack2 libxml2 makeWrapper
     pkgconfig readline ];
+  propagatedBuildInputs = [ libuuid ];
 
   postInstall = ''
     for i in lash_control lash_panel

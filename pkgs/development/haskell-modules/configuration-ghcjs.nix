@@ -1,59 +1,148 @@
-{ pkgs }:
+# GHCJS package fixes
+#
+# Please insert new packages *alphabetically*
+# in the OTHER PACKAGES section.
+{ pkgs, haskellLib }:
 
-with import ./lib.nix { inherit pkgs; };
+let
+  removeLibraryHaskellDepends = pnames: depends:
+    builtins.filter (e: !(builtins.elem (e.pname or "") pnames)) depends;
+in
 
-self: super: {
+with haskellLib;
+
+self: super:
+
+## GENERAL SETUP BASE PACKAGES
+
+  let # The stage 1 packages
+      stage1 = pkgs.lib.genAttrs super.ghc.stage1Packages (pkg: null);
+      # The stage 2 packages. Regenerate with ../compilers/ghcjs/gen-stage2.rb
+      stage2 = super.ghc.mkStage2 {
+        inherit (self) callPackage;
+      };
+  in stage1 // stage2 // {
+
+  network = addBuildTools super.network (pkgs.lib.optional pkgs.stdenv.isDarwin pkgs.darwin.libiconv);
+  zlib = addBuildTools super.zlib (pkgs.lib.optional pkgs.stdenv.isDarwin pkgs.darwin.libiconv);
+  unix-compat = addBuildTools super.unix-compat (pkgs.lib.optional pkgs.stdenv.isDarwin pkgs.darwin.libiconv);
 
   # LLVM is not supported on this GHC; use the latest one.
   inherit (pkgs) llvmPackages;
 
-  inherit (pkgs.haskell.packages.ghc7102) jailbreak-cabal alex happy gtk2hs-buildtools;
+  inherit (self.ghc.bootPkgs)
+    jailbreak-cabal alex happy gtk2hs-buildtools rehoo hoogle;
 
-  # Many packages fail with:
-  #   haddock: internal error: expectJust getPackageDetails
-  mkDerivation = drv: super.mkDerivation (drv // { doHaddock = false; });
+  # Don't set integer-simple to null!
+  # GHCJS uses integer-gmp, so any package expression that depends on
+  # integer-simple is wrong.
+  #integer-simple = null;
 
-  # This is the list of packages that are built into a booted ghcjs installation
-  # It can be generated with the command:
-  # nix-shell '<nixpkgs>' -A pkgs.haskellPackages_ghcjs.ghc --command "ghcjs-pkg list | sed -n 's/^    \(.*\)-\([0-9.]*\)$/\1_\2/ p' | sed 's/\./_/g' | sed 's/-\(.\)/\U\1/' | sed 's/^\([^_]*\)\(.*\)$/\1 = null;/'"
-  Cabal = null;
-  aeson = null;
-  array = null;
-  async = null;
-  attoparsec = null;
-  base = null;
-  binary = null;
-  rts = null;
-  bytestring = null;
-  case-insensitive = null;
-  containers = null;
-  deepseq = null;
-  directory = null;
-  dlist = null;
-  extensible-exceptions = null;
-  filepath = null;
-  ghc-prim = null;
-  ghcjs-base = null;
-  ghcjs-prim = null;
-  hashable = null;
-  integer-gmp = null;
-  mtl = null;
-  old-locale = null;
-  old-time = null;
-  parallel = null;
-  pretty = null;
-  primitive = null;
-  process = null;
-  scientific = null;
-  stm = null;
-  syb = null;
-  template-haskell = null;
-  text = null;
-  time = null;
-  transformers = null;
-  unix = null;
-  unordered-containers = null;
-  vector = null;
+  # These packages are core libraries in GHC 7.10.x, but not here.
+  bin-package-db = null;
+  haskeline = self.haskeline_0_7_3_1;
+  hoopl = self.hoopl_3_10_2_1;
+  hpc = self.hpc_0_6_0_2;
+  terminfo = self.terminfo_0_4_1_1;
+  xhtml = self.xhtml_3000_2_1;
+
+## OTHER PACKAGES
+
+  # haddock throws the error: No input file(s).
+  fail = dontHaddock super.fail;
+
+  cereal = addBuildDepend super.cereal [ self.fail ];
+
+  entropy = overrideCabal super.entropy (old: {
+    postPatch = old.postPatch or "" + ''
+      # cabal doesn’t find ghc in this script, since it’s in the bootPkgs
+      sed -e '/Simple.Program/a import Distribution.Simple.Program.Types' \
+          -e 's|mConf.*=.*$|mConf = Just $ simpleConfiguredProgram "ghc" (FoundOnSystem "${self.ghc.bootPkgs.ghc}/bin/ghc")|g' -i Setup.hs
+    '';
+  });
+
+  # https://github.com/kazu-yamamoto/logger/issues/97
+  fast-logger = overrideCabal super.fast-logger (old: {
+    postPatch = old.postPatch or "" + ''
+      # remove the Safe extensions, since ghcjs-boot directory
+      # doesn’t provide Trustworthy
+      sed -ie '/LANGUAGE Safe/d' System/Log/FastLogger/*.hs
+      cat System/Log/FastLogger/Date.hs
+    '';
+  });
+
+  # experimental
+  ghcjs-ffiqq = self.callPackage
+    ({ mkDerivation, base, template-haskell, ghcjs-base, split, containers, text, ghc-prim
+     }:
+     mkDerivation {
+       pname = "ghcjs-ffiqq";
+       version = "0.1.0.0";
+       src = pkgs.fetchFromGitHub {
+         owner = "ghcjs";
+         repo = "ghcjs-ffiqq";
+         rev = "b52338c2dcd3b0707bc8aff2e171411614d4aedb";
+         sha256 = "08zxfm1i6zb7n8vbz3dywdy67vkixfyw48580rwfp48rl1s2z1c7";
+       };
+       libraryHaskellDepends = [
+         base template-haskell ghcjs-base split containers text ghc-prim
+       ];
+       description = "FFI QuasiQuoter for GHCJS";
+       license = pkgs.stdenv.lib.licenses.mit;
+     }) {};
+  # experimental
+  ghcjs-vdom = self.callPackage
+    ({ mkDerivation, base, ghc-prim, ghcjs-ffiqq, ghcjs-base, ghcjs-prim
+      , containers, split, template-haskell
+    }:
+    mkDerivation rec {
+      pname = "ghcjs-vdom";
+      version = "0.2.0.0";
+      src = pkgs.fetchFromGitHub {
+        owner = "ghcjs";
+        repo = pname;
+        rev = "1c1175ba22eca6d7efa96f42a72290ade193c148";
+        sha256 = "0c6l1dk2anvz94yy5qblrfh2iv495rjq4qmhlycc24dvd02f7n9m";
+      };
+      libraryHaskellDepends = [
+        base ghc-prim ghcjs-ffiqq ghcjs-base ghcjs-prim containers split
+        template-haskell
+      ];
+      license = pkgs.stdenv.lib.licenses.mit;
+      description = "bindings for https://github.com/Matt-Esch/virtual-dom";
+      inherit (src) homepage;
+    }) {};
+
+  ghcjs-dom = overrideCabal super.ghcjs-dom (drv: {
+    libraryHaskellDepends = with self; [
+      ghcjs-base ghcjs-dom-jsffi text transformers
+    ];
+    configureFlags = [ "-fjsffi" "-f-webkit" ];
+  });
+
+  ghcjs-dom-jsffi = overrideCabal super.ghcjs-dom-jsffi (drv: {
+    setupHaskellDepends = (drv.setupHaskellDepends or []) ++ [ self.Cabal_1_24_2_0 ];
+    libraryHaskellDepends = (drv.libraryHaskellDepends or []) ++ [ self.ghcjs-base self.text ];
+    isLibrary = true;
+  });
+
+  ghc-paths = overrideCabal super.ghc-paths (drv: {
+    patches = [ ./patches/ghc-paths-nix-ghcjs.patch ];
+  });
+
+  http2 = addBuildDepends super.http2 [ self.aeson self.aeson-pretty self.hex self.unordered-containers self.vector self.word8 ];
+  # ghcjsBoot uses async 2.0.1.6, protolude wants 2.1.*
+
+  # These are the correct dependencies specified when calling `cabal2nix --compiler ghcjs`
+  # By default, the `miso` derivation present in hackage-packages.nix
+  # does not contain dependencies suitable for ghcjs
+  miso = overrideCabal super.miso (drv: {
+      libraryHaskellDepends = with self; [
+        BoundedChan bytestring containers ghcjs-base aeson base
+        http-api-data http-types network-uri scientific servant text
+        transformers unordered-containers vector
+      ];
+    });
 
   pqueue = overrideCabal super.pqueue (drv: {
     postPatch = ''
@@ -66,94 +155,46 @@ self: super: {
     '';
   });
 
-  transformers-compat = overrideCabal super.transformers-compat (drv: {
-    configureFlags = [];
-  });
-
   profunctors = overrideCabal super.profunctors (drv: {
     preConfigure = ''
       sed -i 's/^{-# ANN .* #-}//' src/Data/Profunctor/Unsafe.hs
     '';
   });
 
-  ghcjs-dom = overrideCabal super.ghcjs-dom (drv: {
-    buildDepends = [ self.base self.mtl self.text self.ghcjs-base ];
-    libraryHaskellDepends = [ ];
-  });
-
-  ghc-paths = overrideCabal super.ghc-paths (drv: {
-    patches = [ ./patches/ghc-paths-nix-ghcjs.patch ];
-  });
+  protolude = doJailbreak super.protolude;
 
   # reflex 0.3, made compatible with the newest GHCJS.
   reflex = overrideCabal super.reflex (drv: {
     src = pkgs.fetchFromGitHub {
-      owner = "k0001";
+      owner = "ryantrinkle";
       repo = "reflex";
-      rev = "e9b2f777ad07875149614e8337507afd5b1a2466";
-      sha256 = "005hr3s6y369pxfdlixi4wabgav0bb653j98788kq9q9ssgijlwn";
+      rev = "cc62c11a6cde31412582758c236919d4bb766ada";
+      sha256 = "1j4vw0636bkl46lj8ry16i04vgpivjc6bs3ls54ppp1wfp63q7w4";
     };
-    libraryHaskellDepends = [
-      self.base self.containers self.dependent-map_0_1_1_3
-      self.dependent-sum_0_2_0_1 self.exception-transformers self.mtl
-      self.primitive self.ref-tf self.semigroups self.template-haskell
-      self.these self.transformers self.transformers-compat
-    ];
   });
 
   # reflex-dom 0.2, made compatible with the newest GHCJS.
   reflex-dom = overrideCabal super.reflex-dom (drv: {
     src = pkgs.fetchFromGitHub {
-      owner = "k0001";
+      owner = "ryantrinkle";
       repo = "reflex-dom";
-      rev = "a117eae8e101198977611f87605a5cb2ae752fc7";
-      sha256 = "18m8ng2fgsfbqdvx5jxy23ndyyhafnxflq8apg5psdz3aqkfimzh";
+      rev = "639d9ca13c2def075e83344c9afca6eafaf24219";
+      sha256 = "0166ihbh3dbfjiym9w561svpgvj0x4i8i8ws70xaafi0cmpsxrar";
     };
-    libraryHaskellDepends = [
-      self.aeson self.base self.bifunctors self.bytestring self.containers
-      self.data-default self.dependent-map_0_1_1_3 self.dependent-sum_0_2_0_1
-      self.dependent-sum-template self.directory
-      self.exception-transformers self.ghcjs-dom self.lens self.mtl self.ref-tf
-      self.reflex self.safe self.semigroups self.text self.these self.time
-      self.transformers
-    ];
+    libraryHaskellDepends =
+      removeLibraryHaskellDepends [
+        "glib" "gtk3" "webkitgtk3" "webkitgtk3-javascriptcore" "raw-strings-qq" "unix"
+      ] drv.libraryHaskellDepends;
   });
 
-  # required by reflex, reflex-dom
-  dependent-map_0_1_1_3 = self.callPackage (
-    { mkDerivation, base, containers, dependent-sum_0_2_0_1, stdenv
-    }:
-    mkDerivation {
-      pname = "dependent-map";
-      version = "0.1.1.3";
-      sha256 = "1by83rrv8dfn5lxrpx3qzs1lg31fhnzlqy979h8ampyxd0w93pa4";
-      libraryHaskellDepends = [ base containers dependent-sum_0_2_0_1 ];
-      homepage = "https://github.com/mokus0/dependent-map";
-      description = "Dependent finite maps (partial dependent products)";
-      license = "unknown";
-    }
-  ) {};
-
-  # required by reflex, reflex-dom
-  dependent-sum_0_2_0_1 = self.callPackage (
-    { mkDerivation, base, stdenv
-    }:
-    mkDerivation {
-      pname = "dependent-sum";
-      version = "0.2.1.0";
-      sha256 = "1h6wsrh206k6q3jcfdxvlsswbm47x30psp6x30l2z0j9jyf7jpl3";
-      libraryHaskellDepends = [ base ];
-      homepage = "https://github.com/mokus0/dependent-sum";
-      description = "Dependent sum type";
-      license = stdenv.lib.licenses.publicDomain;
-    }
-  ) {};
-
-  # required by reflex-dom
-  dependent-sum-template = overrideCabal super.dependent-sum-template (drv: {
-    libraryHaskellDepends = [
-      self.base self.dependent-sum_0_2_0_1 self.template-haskell self.th-extras
-    ];
+  transformers-compat = overrideCabal super.transformers-compat (drv: {
+    configureFlags = [];
   });
 
+  # triggers an internal pattern match failure in haddock
+  # https://github.com/haskell/haddock/issues/553
+  wai = dontHaddock super.wai;
+
+  base-orphans = dontCheck super.base-orphans;
+  distributive = dontCheck super.distributive;
 }

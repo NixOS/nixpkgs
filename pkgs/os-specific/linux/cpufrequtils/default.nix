@@ -1,7 +1,5 @@
 { stdenv, fetchurl, libtool, gettext }:
 
-assert stdenv.system == "i686-linux" || stdenv.system == "x86_64-linux";
-
 stdenv.mkDerivation rec {
   name = "cpufrequtils-008";
 
@@ -21,7 +19,7 @@ stdenv.mkDerivation rec {
       -i Makefile
   '';
 
-  buildInputs = [ stdenv.cc.libc.kernelHeaders libtool gettext ];
+  buildInputs = [ stdenv.cc.libc.linuxHeaders libtool gettext ];
 
   meta = {
     description = "Tools to display or change the CPU governor settings";

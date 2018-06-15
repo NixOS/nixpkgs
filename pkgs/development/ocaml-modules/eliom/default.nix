@@ -1,37 +1,48 @@
-{ stdenv, fetchurl, ocaml, findlib, which, ocsigen_server, ocsigen_deriving,
-  js_of_ocaml, ocaml_react, ocaml_lwt, calendar, cryptokit, tyxml,
-  ipaddr, ocamlnet, ocaml_ssl, ocaml_pcre, ocaml_optcomp,
-  reactivedata, opam}:
+{ stdenv, fetchurl, which, ocsigen_server, ocsigen_deriving, ocaml, camlp4,
+  js_of_ocaml, lwt_react, cryptokit,
+  ipaddr, ocamlnet, lwt_ssl, ocaml_pcre,
+  opaline, ppx_tools, ppx_deriving, findlib
+, js_of_ocaml-ocamlbuild, js_of_ocaml-ppx, js_of_ocaml-ppx_deriving_json
+, js_of_ocaml-lwt
+, js_of_ocaml-tyxml
+}:
+
+assert stdenv.lib.versionAtLeast ocaml.version "4.03";
 
 stdenv.mkDerivation rec
 {
   pname = "eliom";
-  version = "4.1.0";
+  version = "6.3.0";
   name = "${pname}-${version}";
 
   src = fetchurl {
-    url = https://github.com/ocsigen/eliom/archive/4.1.0.tar.gz;
-    sha256 = "10v7mrq3zsbxdlg8k8xif777mbvcdpabvnd1g7p2yqivr7f1qm24";
+    url = "https://github.com/ocsigen/eliom/archive/${version}.tar.gz";
+    sha256 = "137hgdzv9fwkzf6xdksqy437lrf8xvrycf5jwc3z4cmpsigs6x7v";
   };
 
   patches = [ ./camlp4.patch ];
 
-  buildInputs = [ocaml which ocsigen_server findlib ocsigen_deriving
-                 js_of_ocaml ocaml_optcomp opam];
+  buildInputs = [ ocaml which findlib js_of_ocaml-ocamlbuild js_of_ocaml-ppx_deriving_json opaline ppx_tools
+    ocsigen_deriving
+  ];
 
-  propagatedBuildInputs = [ ocaml_lwt reactivedata tyxml ipaddr
-                            calendar cryptokit ocamlnet ocaml_react ocaml_ssl
-                            ocaml_pcre ];
+  propagatedBuildInputs = [
+    camlp4
+    cryptokit
+    ipaddr
+    js_of_ocaml-lwt
+    js_of_ocaml-ppx
+    js_of_ocaml-tyxml
+    lwt_react
+    lwt_ssl
+    ocamlnet ocaml_pcre
+    ocsigen_server
+    ppx_deriving
+  ];
 
-  installPhase =
-  let ocamlVersion = (builtins.parseDrvName (ocaml.name)).version;
-  in
-  ''opam-installer --script --prefix=$out ${pname}.install > install.sh
-    sh install.sh
-    ln -s $out/lib/${pname} $out/lib/ocaml/${ocamlVersion}/site-lib/
-  '';
+  installPhase = "opaline -prefix $out -libdir $OCAMLFIND_DESTDIR";
 
-  createFindlibDestdir = true;
+  setupHook = [ ./setup-hook.sh ];
 
   meta = {
     homepage = http://ocsigen.org/eliom/;
@@ -48,8 +59,6 @@ stdenv.mkDerivation rec
     Ocsigen Js_of_ocaml.'';
 
     license = stdenv.lib.licenses.lgpl21;
-
-    platforms = ocaml.meta.platforms;
 
     maintainers = [ stdenv.lib.maintainers.gal_bolle ];
   };

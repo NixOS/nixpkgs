@@ -1,16 +1,17 @@
-{ stdenv, fetchurl, kernelHeaders, kernel, perl }:
+{ stdenv, fetchurl, linuxHeaders, perl
+, buildPlatform, hostPlatform
+}:
 
 let
-  version = "2.0.4";
-
   commonMakeFlags = [
     "prefix=$(out)"
     "SHLIBDIR=$(out)/lib"
   ];
 in
 
-stdenv.mkDerivation {
-  name = "klibc-${version}-${kernel.version}";
+stdenv.mkDerivation rec {
+  name = "klibc-${version}";
+  version = "2.0.4";
 
   src = fetchurl {
     url = "mirror://kernel/linux/libs/klibc/2.0/klibc-${version}.tar.xz";
@@ -21,18 +22,15 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [ perl ];
 
-  makeFlags = commonMakeFlags ++ [
-    "KLIBCARCH=${stdenv.platform.kernelArch}"
-    "KLIBCKERNELSRC=${kernelHeaders}"
-  ] ++ stdenv.lib.optional (stdenv.platform.kernelArch == "arm") "CONFIG_AEABI=y";
+  hardeningDisable = [ "format" "stackprotector" ];
 
-  crossAttrs = {
-    makeFlags = commonMakeFlags ++ [
-      "KLIBCARCH=${stdenv.cross.platform.kernelArch}"
-      "KLIBCKERNELSRC=${kernelHeaders.crossDrv}"
-      "CROSS_COMPILE=${stdenv.cross.config}-"
-    ] ++ stdenv.lib.optional (stdenv.cross.platform.kernelArch == "arm") "CONFIG_AEABI=y";
-  };
+  makeFlags = commonMakeFlags ++ [
+    "KLIBCARCH=${hostPlatform.platform.kernelArch}"
+    "KLIBCKERNELSRC=${linuxHeaders}"
+  ] # TODO(@Ericson2314): We now can get the ABI from
+    # `hostPlatform.parsed.abi`, is this still a good idea?
+    ++ stdenv.lib.optional (hostPlatform.platform.kernelArch == "arm") "CONFIG_AEABI=y"
+    ++ stdenv.lib.optional (hostPlatform != buildPlatform) "CROSS_COMPILE=${stdenv.cc.targetPrefix}";
 
   # Install static binaries as well.
   postInstall = ''
@@ -41,8 +39,12 @@ stdenv.mkDerivation {
     cp $(find $(find . -name static) -type f ! -name "*.g" -a ! -name ".*") $dir/
     cp usr/dash/sh $dir/
 
-    for file in ${kernelHeaders}/include/*; do
+    for file in ${linuxHeaders}/include/*; do
       ln -sv $file $out/lib/klibc/include
     done
   '';
+
+  meta = {
+    platforms = [ "x86_64-linux" ];
+  };
 }

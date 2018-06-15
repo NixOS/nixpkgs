@@ -1,27 +1,27 @@
-{ stdenv, fetchFromGitHub, autoconf, automake, libtool, pkgconfig, file
-, protobufc }:
+{ stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, file , protobufc }:
 
 stdenv.mkDerivation rec {
-  name = "riemann-c-client-${version}";
-
-  version = "1.7.0";
+  name = "riemann-c-client-1.10.1";
 
   src = fetchFromGitHub {
     owner = "algernon";
     repo = "riemann-c-client";
-    rev = "54f4a656793d6c5ca0bf1ff2388693fb6b2b82a7";
-    sha256 = "0jc2bbw7sp2gr4cswx78srs0p1kp81prcarq4ivqpfw4bmzg6xg4";
+    rev = "${name}";
+    sha256 = "1pzyngvj9aq1w2185qpg6rxrjn406pnpy40bnh4c21fn4ql5kk9p";
   };
 
-  buildInputs = [ autoconf automake libtool pkgconfig file protobufc ];
+  nativeBuildInputs = [ autoreconfHook pkgconfig ];
+  buildInputs = [ file protobufc ];
 
-  preConfigure = "autoreconf -i";
+  preBuild = ''
+    make lib/riemann/proto/riemann.pb-c.h
+  '';
 
   meta = with stdenv.lib; {
     homepage = https://github.com/algernon/riemann-c-client;
     description = "A C client library for the Riemann monitoring system";
     license = licenses.gpl3;
-    maintainers = [ maintainers.rickynils ];
+    maintainers = with maintainers; [ rickynils pradeepchhetri ];
     platforms = platforms.linux;
   };
 }

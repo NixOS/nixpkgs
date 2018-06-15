@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, autoconf, automake, libtool, pkgconfig, python
+{ stdenv, fetchurl, fetchpatch, autoconf, automake, libtool, pkgconfig, python2
 , boost, db, openssl, geoip, libiconv, miniupnpc
 , srcOnly, fetchgit
 }:
@@ -15,12 +15,12 @@ let
 
 in stdenv.mkDerivation rec {
   name = "twister-${version}";
-  version = "0.9.30";
+  version = "0.9.34";
 
   src = fetchurl {
     url = "https://github.com/miguelfreitas/twister-core/"
         + "archive/v${version}.tar.gz";
-    sha256 = "1i39iqq6z25rh869vi5k76g84rmyh30p05xid7z9sqjrqdfpyyzk";
+    sha256 = "1bi8libivd9y2bn9fc7vbc5q0jnal0pykpzgri6anqaww22y58jq";
   };
 
   configureFlags = [
@@ -29,13 +29,20 @@ in stdenv.mkDerivation rec {
     "--disable-deprecated-functions"
     "--enable-tests"
     "--enable-python-binding"
-    "--with-boost-libdir=${boost.lib}/lib"
+    "--with-boost-libdir=${boost.out}/lib"
   ];
 
+  nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
-    autoconf automake libtool pkgconfig python
+    autoconf automake libtool python2
     boost db openssl geoip miniupnpc libiconv
   ];
+
+  patches = stdenv.lib.singleton (fetchpatch {
+    url = "https://github.com/miguelfreitas/twister-core/commit/"
+        + "dd4f5a176958ea6ed855dc3fcef79680c1c0c92c.patch";
+    sha256 = "06fgmqnjyl83civ3ixiq673k8zjgm8n2w4w46nsh810nprqim8s6";
+  });
 
   postPatch = ''
     sed -i -e '/-htmldir/s|(default: [^)]*)|(default: ${twisterHTML})|' \
@@ -55,8 +62,9 @@ in stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = {
-    homepage = "http://www.twister.net.co/";
+    homepage = http://www.twister.net.co/;
     description = "Peer-to-peer microblogging";
     license = stdenv.lib.licenses.mit;
+    platforms = stdenv.lib.platforms.linux;
   };
 }

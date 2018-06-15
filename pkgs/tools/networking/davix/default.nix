@@ -1,14 +1,15 @@
 { stdenv, fetchFromGitHub, cmake, pkgconfig, openssl, libxml2, boost }:
 
 stdenv.mkDerivation rec {
-  name = "davix-0.4.0";
-  buildInputs = [ stdenv pkgconfig cmake openssl libxml2 boost ];
+  name = "davix-0.6.4";
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ stdenv cmake openssl libxml2 boost ];
 
   src = fetchFromGitHub {
     owner = "cern-it-sdc-id";
     repo = "davix";
-    rev = "R_0_4_0-1";
-    sha256 = "0i6ica7rmpc3hbybjql5mr500cd43w4qzc69cj1djkc6bqqb752v";
+    rev = "R_0_6_4";
+    sha256 = "10hg7rs6aams96d4ghldgkrrnikskdpmn8vy6hj5j0s17a2yms6q";
   };
 
 

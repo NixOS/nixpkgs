@@ -5,7 +5,7 @@
 }:
 
 let
-  shouldUsePkg = pkg: if pkg != null && stdenv.lib.any (x: x == stdenv.system) pkg.meta.platforms then pkg else null;
+  shouldUsePkg = pkg: if pkg != null && pkg.meta.available then pkg else null;
 
   optAlsaLib = shouldUsePkg alsaLib;
   optDb = shouldUsePkg db;
@@ -15,11 +15,11 @@ let
 in
 stdenv.mkDerivation rec {
   name = "jack1-${version}";
-  version = "0.124.1";
+  version = "0.125.0";
 
   src = fetchurl {
     url = "http://jackaudio.org/downloads/jack-audio-connection-kit-${version}.tar.gz";
-    sha256 = "1mk1wnx33anp6haxfjjkfhwbaknfblsvj35nxvz0hvspcmhdyhpb";
+    sha256 = "0i6l25dmfk2ji2lrakqq9icnwjxklgcjzzk65dmsff91z2zva5rm";
   };
   
   configureFlags = ''
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
   
   meta = with stdenv.lib; {
     description = "JACK audio connection kit";
-    homepage = "http://jackaudio.org";
+    homepage = http://jackaudio.org;
     license = "GPL";
     platforms = platforms.unix;
     maintainers = with maintainers; [ wkennington ];

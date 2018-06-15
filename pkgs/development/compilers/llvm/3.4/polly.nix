@@ -1,4 +1,4 @@
-{ stdenv, fetch, cmake, isl, python, gmp, llvm, version }:
+{ stdenv, fetch, cmake, isl, python2, gmp, llvm, version }:
 
 stdenv.mkDerivation {
   name = "polly-${version}";
@@ -7,10 +7,9 @@ stdenv.mkDerivation {
 
   patches = [ ./polly-separate-build.patch ];
 
-  buildInputs = [ cmake isl python gmp ];
+  buildInputs = [ cmake isl python2 gmp ];
 
   cmakeFlags = [
-    "-DCMAKE_BUILD_TYPE=Release"
     "-DCMAKE_CXX_FLAGS=-std=c++11"
     "-DLLVM_INSTALL_ROOT=${llvm}"
   ];
@@ -20,7 +19,7 @@ stdenv.mkDerivation {
   meta = {
     description = "A polyhedral optimizer for llvm";
     homepage    = http://llvm.org/;
-    license     = stdenv.lib.licenses.bsd3;
+    license     = stdenv.lib.licenses.ncsa;
     platforms   = stdenv.lib.platforms.all;
   };
 }

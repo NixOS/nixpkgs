@@ -1,5 +1,7 @@
 { stdenv, fetchFromGitHub, emacs, texinfo }:
 
+# Use "emacsMelpa.haskell-mode" instead.
+
 let
   version = "13.14-169-g0d3569d";      # git describe --tags
 in
@@ -30,10 +32,11 @@ stdenv.mkDerivation {
   installCheckTarget = "check";
 
   meta = {
-    homepage = "http://github.com/haskell/haskell-mode";
+    homepage = https://github.com/haskell/haskell-mode;
     description = "Haskell mode for Emacs";
 
     platforms = stdenv.lib.platforms.unix;
-    maintainers = [ stdenv.lib.maintainers.simons ];
+    maintainers = [ stdenv.lib.maintainers.peti ];
+    broken = true;  # no longer compiles and this package is obsolete anyway
   };
 }

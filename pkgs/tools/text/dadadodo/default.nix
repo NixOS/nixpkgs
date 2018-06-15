@@ -14,9 +14,12 @@ stdenv.mkDerivation rec {
     cp dadadodo $out/bin
   '';
 
+  hardeningDisable = [ "format" ];
+
   meta = with stdenv.lib; {
     description = "Markov chain-based text generator";
     homepage = http://www.jwz.org/dadadodo;
     maintainers = with maintainers; [ pSub ];
+    platforms = with platforms; linux;
   };
 }

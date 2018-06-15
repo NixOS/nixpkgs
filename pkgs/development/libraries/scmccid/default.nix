@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ patchelf ];
 
   installPhase = ''
-    RPATH=${libusb}/lib:${stdenv.cc.libc}/lib
+    RPATH=${libusb.out}/lib:${stdenv.cc.libc.out}/lib
 
     for a in proprietary/*/Contents/Linux/*.so*; do
         if ! test -L $a; then

@@ -1,26 +1,28 @@
-{ debug ? false, ... } @ args:
+{ system ? builtins.currentSystem, debug ? false }:
 
-import ./make-test.nix ({ pkgs, ... }: with pkgs.lib; let
+with import ../lib/testing.nix { inherit system; };
+with pkgs.lib;
 
-  testVMConfig = vmName: attrs: { config, pkgs, ... }: let
+let
+  testVMConfig = vmName: attrs: { config, pkgs, lib, ... }: let
     guestAdditions = pkgs.linuxPackages.virtualboxGuestAdditions;
 
     miniInit = ''
       #!${pkgs.stdenv.shell} -xe
-      export PATH="${pkgs.coreutils}/bin:${pkgs.utillinux}/bin"
+      export PATH="${lib.makeBinPath [ pkgs.coreutils pkgs.utillinux ]}"
 
-      mkdir -p /etc/dbus-1 /var/run/dbus
+      mkdir -p /run/dbus
       cat > /etc/passwd <<EOF
       root:x:0:0::/root:/bin/false
-      messagebus:x:1:1::/var/run/dbus:/bin/false
+      messagebus:x:1:1::/run/dbus:/bin/false
       EOF
       cat > /etc/group <<EOF
       root:x:0:
       messagebus:x:1:
       EOF
-      cp -v "${pkgs.dbus.daemon}/etc/dbus-1/system.conf" \
-        /etc/dbus-1/system.conf
-      "${pkgs.dbus.daemon}/bin/dbus-daemon" --fork --system
+
+      "${pkgs.dbus.daemon}/bin/dbus-daemon" --fork \
+        --config-file="${pkgs.dbus.daemon}/share/dbus-1/system.conf"
 
       ${guestAdditions}/bin/VBoxService
       ${(attrs.vmScript or (const "")) pkgs}
@@ -40,6 +42,9 @@ import ./make-test.nix ({ pkgs, ... }: with pkgs.lib; let
       "boot.trace" "panic=1" "boot.panic_on_fail"
       "init=${pkgs.writeScript "mini-init.sh" miniInit}"
     ];
+
+    # XXX: Remove this once TSS location detection has been fixed in VirtualBox
+    boot.kernelPackages = pkgs.linuxPackages_4_9;
 
     fileSystems."/" = {
       device = "vboxshare";
@@ -63,7 +68,7 @@ import ./make-test.nix ({ pkgs, ... }: with pkgs.lib; let
       touch /mnt-root/boot-done
       hostname "${vmName}"
       mkdir -p /nix/store
-      unshare -m "@shell@" -c '
+      unshare -m ${escapeShellArg pkgs.stdenv.shell} -c '
         mount -t vboxsf nixstore /nix/store
         exec "$stage2Init"
       '
@@ -105,11 +110,8 @@ import ./make-test.nix ({ pkgs, ... }: with pkgs.lib; let
 
     buildInputs = [ pkgs.utillinux pkgs.perl ];
   } ''
-    ${pkgs.parted}/sbin/parted /dev/vda mklabel msdos
-    ${pkgs.parted}/sbin/parted /dev/vda -- mkpart primary ext2 1M -1s
-    . /sys/class/block/vda1/uevent
-    mknod /dev/vda1 b $MAJOR $MINOR
-
+    ${pkgs.parted}/sbin/parted --script /dev/vda mklabel msdos
+    ${pkgs.parted}/sbin/parted --script /dev/vda -- mkpart primary ext2 1M -1s
     ${pkgs.e2fsprogs}/sbin/mkfs.ext4 /dev/vda1
     ${pkgs.e2fsprogs}/sbin/tune2fs -c 0 -i 0 /dev/vda1
     mkdir /mnt
@@ -142,6 +144,7 @@ import ./make-test.nix ({ pkgs, ... }: with pkgs.lib; let
       "--uart1 0x3F8 4"
       "--uartmode1 client /run/virtualbox-log-${name}.sock"
       "--memory 768"
+      "--audio none"
     ] ++ (attrs.vmFlags or []));
 
     controllerFlags = mkFlags [
@@ -271,9 +274,12 @@ import ./make-test.nix ({ pkgs, ... }: with pkgs.lib; let
 
       sub shutdownVM_${name} {
         $machine->succeed(ru "touch ${sharePath}/shutdown");
-        $machine->waitUntilSucceeds(
-          "test ! -e ${sharePath}/shutdown ".
-          "  -a ! -e ${sharePath}/boot-done"
+        $machine->execute(
+          'set -e; i=0; '.
+          'while test -e ${sharePath}/shutdown '.
+          '        -o -e ${sharePath}/boot-done; do '.
+          'sleep 1; i=$(($i + 1)); [ $i -le 3600 ]; '.
+          'done'
         );
         waitForShutdown_${name};
       }
@@ -293,9 +299,9 @@ import ./make-test.nix ({ pkgs, ... }: with pkgs.lib; let
       -pf /run/dhclient.pid \
       -v eth0 eth1
 
-    otherIP="$(${pkgs.netcat}/bin/netcat -clp 1234 || :)"
+    otherIP="$(${pkgs.netcat}/bin/nc -l 1234 || :)"
     ${pkgs.iputils}/bin/ping -I eth1 -c1 "$otherIP"
-    echo "$otherIP reachable" | ${pkgs.netcat}/bin/netcat -clp 5678 || :
+    echo "$otherIP reachable" | ${pkgs.netcat}/bin/nc -l 5678 || :
   '';
 
   sysdDetectVirt = pkgs: ''
@@ -312,140 +318,159 @@ import ./make-test.nix ({ pkgs, ... }: with pkgs.lib; let
 
     test2.vmFlags = hostonlyVMFlags;
     test2.vmScript = dhcpScript;
+
+    headless.virtualisation.virtualbox.headless = true;
+    headless.services.xserver.enable = false;
   };
 
-in {
-  name = "virtualbox";
-  meta = with pkgs.stdenv.lib.maintainers; {
-    maintainers = [ aszlig wkennington ];
-  };
+  mkVBoxTest = name: testScript: makeTest {
+    name = "virtualbox-${name}";
 
-  machine = { pkgs, lib, config, ... }: {
-    imports = let
-      mkVMConf = name: val: val.machine // { key = "${name}-config"; };
-      vmConfigs = mapAttrsToList mkVMConf vboxVMs;
-    in [ ./common/user-account.nix ./common/x11.nix ] ++ vmConfigs;
-    virtualisation.memorySize = 2048;
-    virtualisation.virtualbox.host.enable = true;
-    users.extraUsers.alice.extraGroups = let
-      inherit (config.virtualisation.virtualbox.host) enableHardening;
-    in lib.mkIf enableHardening (lib.singleton "vboxusers");
-  };
-
-  testScript = ''
-    sub ru ($) {
-      my $esc = $_[0] =~ s/'/'\\${"'"}'/gr;
-      return "su - alice -c '$esc'";
-    }
-
-    sub vbm {
-      $machine->succeed(ru("VBoxManage ".$_[0]));
+    machine = { lib, config, ... }: {
+      imports = let
+        mkVMConf = name: val: val.machine // { key = "${name}-config"; };
+        vmConfigs = mapAttrsToList mkVMConf vboxVMs;
+      in [ ./common/user-account.nix ./common/x11.nix ] ++ vmConfigs;
+      virtualisation.memorySize = 2048;
+      virtualisation.virtualbox.host.enable = true;
+      services.xserver.displayManager.auto.user = "alice";
+      users.extraUsers.alice.extraGroups = let
+        inherit (config.virtualisation.virtualbox.host) enableHardening;
+      in lib.mkIf enableHardening (lib.singleton "vboxusers");
     };
 
-    ${concatStrings (mapAttrsToList (_: getAttr "testSubs") vboxVMs)}
+    testScript = ''
+      sub ru ($) {
+        my $esc = $_[0] =~ s/'/'\\${"'"}'/gr;
+        return "su - alice -c '$esc'";
+      }
 
-    $machine->waitForX;
+      sub vbm {
+        $machine->succeed(ru("VBoxManage ".$_[0]));
+      };
 
-    ${mkLog "$HOME/.config/VirtualBox/VBoxSVC.log" "HOST-SVC"}
+      sub removeUUIDs {
+        return join("\n", grep { $_ !~ /^UUID:/ } split(/\n/, $_[0]))."\n";
+      }
 
+      ${concatStrings (mapAttrsToList (_: getAttr "testSubs") vboxVMs)}
+
+      $machine->waitForX;
+
+      ${mkLog "$HOME/.config/VirtualBox/VBoxSVC.log" "HOST-SVC"}
+
+      ${testScript}
+    '';
+
+    meta = with pkgs.stdenv.lib.maintainers; {
+      maintainers = [ aszlig wkennington ];
+    };
+  };
+
+in mapAttrs mkVBoxTest {
+  simple-gui = ''
     createVM_simple;
-
-    subtest "simple-gui", sub {
-      $machine->succeed(ru "VirtualBox &");
-      $machine->waitForWindow(qr/Oracle VM VirtualBox Manager/);
-      $machine->sleep(5);
-      $machine->screenshot("gui_manager_started");
+    $machine->succeed(ru "VirtualBox &");
+    $machine->waitUntilSucceeds(
+      ru "xprop -name 'Oracle VM VirtualBox Manager'"
+    );
+    $machine->sleep(5);
+    $machine->screenshot("gui_manager_started");
+    $machine->sendKeys("ret");
+    $machine->screenshot("gui_manager_sent_startup");
+    waitForStartup_simple (sub {
       $machine->sendKeys("ret");
-      $machine->screenshot("gui_manager_sent_startup");
-      waitForStartup_simple (sub {
-        $machine->sendKeys("ret");
-      });
-      $machine->screenshot("gui_started");
-      waitForVMBoot_simple;
-      $machine->screenshot("gui_booted");
-      shutdownVM_simple;
-      $machine->sleep(5);
-      $machine->screenshot("gui_stopped");
-      $machine->sendKeys("ctrl-q");
-      $machine->sleep(5);
-      $machine->screenshot("gui_manager_stopped");
-    };
+    });
+    $machine->screenshot("gui_started");
+    waitForVMBoot_simple;
+    $machine->screenshot("gui_booted");
+    shutdownVM_simple;
+    $machine->sleep(5);
+    $machine->screenshot("gui_stopped");
+    $machine->sendKeys("ctrl-q");
+    $machine->sleep(5);
+    $machine->screenshot("gui_manager_stopped");
+    destroyVM_simple;
+  '';
 
-    cleanup_simple;
+  simple-cli = ''
+    createVM_simple;
+    vbm("startvm simple");
+    waitForStartup_simple;
+    $machine->screenshot("cli_started");
+    waitForVMBoot_simple;
+    $machine->screenshot("cli_booted");
 
-    subtest "simple-cli", sub {
-      vbm("startvm simple");
-      waitForStartup_simple;
-      $machine->screenshot("cli_started");
-      waitForVMBoot_simple;
-      $machine->screenshot("cli_booted");
-      shutdownVM_simple;
-    };
-
-    subtest "privilege-escalation", sub {
+    $machine->nest("Checking for privilege escalation", sub {
       $machine->fail("test -e '/root/VirtualBox VMs'");
       $machine->fail("test -e '/root/.config/VirtualBox'");
       $machine->succeed("test -e '/home/alice/VirtualBox VMs'");
-    };
+    });
 
+    shutdownVM_simple;
     destroyVM_simple;
-
-    sub removeUUIDs {
-      return join("\n", grep { $_ !~ /^UUID:/ } split(/\n/, $_[0]))."\n";
-    }
-
-    subtest "host-usb-permissions", sub {
-      my $userUSB = removeUUIDs vbm("list usbhost");
-      print STDERR $userUSB;
-      my $rootUSB = removeUUIDs $machine->succeed("VBoxManage list usbhost");
-      print STDERR $rootUSB;
-
-      die "USB host devices differ for root and normal user"
-        if $userUSB ne $rootUSB;
-      die "No USB host devices found" if $userUSB =~ /<none>/;
-    };
-
-    subtest "systemd-detect-virt", sub {
-      createVM_detectvirt;
-      vbm("startvm detectvirt");
-      waitForStartup_detectvirt;
-      waitForVMBoot_detectvirt;
-      shutdownVM_detectvirt;
-      my $result = $machine->succeed("cat '$detectvirt_sharepath/result'");
-      chomp $result;
-      destroyVM_detectvirt;
-      die "systemd-detect-virt returned \"$result\" instead of \"oracle\""
-        if $result ne "oracle";
-    };
-
-    subtest "net-hostonlyif", sub {
-      createVM_test1;
-      createVM_test2;
-
-      vbm("startvm test1");
-      waitForStartup_test1;
-      waitForVMBoot_test1;
-
-      vbm("startvm test2");
-      waitForStartup_test2;
-      waitForVMBoot_test2;
-
-      $machine->screenshot("net_booted");
-
-      my $test1IP = waitForIP_test1 1;
-      my $test2IP = waitForIP_test2 1;
-
-      $machine->succeed("echo '$test2IP' | netcat -c '$test1IP' 1234");
-      $machine->succeed("echo '$test1IP' | netcat -c '$test2IP' 1234");
-
-      $machine->waitUntilSucceeds("netcat -c '$test1IP' 5678 >&2");
-      $machine->waitUntilSucceeds("netcat -c '$test2IP' 5678 >&2");
-
-      shutdownVM_test1;
-      shutdownVM_test2;
-
-      destroyVM_test1;
-      destroyVM_test2;
-    };
   '';
-}) args
+
+  headless = ''
+    createVM_headless;
+    $machine->succeed(ru("VBoxHeadless --startvm headless & disown %1"));
+    waitForStartup_headless;
+    waitForVMBoot_headless;
+    shutdownVM_headless;
+    destroyVM_headless;
+  '';
+
+  host-usb-permissions = ''
+    my $userUSB = removeUUIDs vbm("list usbhost");
+    print STDERR $userUSB;
+    my $rootUSB = removeUUIDs $machine->succeed("VBoxManage list usbhost");
+    print STDERR $rootUSB;
+
+    die "USB host devices differ for root and normal user"
+      if $userUSB ne $rootUSB;
+    die "No USB host devices found" if $userUSB =~ /<none>/;
+  '';
+
+  systemd-detect-virt = ''
+    createVM_detectvirt;
+    vbm("startvm detectvirt");
+    waitForStartup_detectvirt;
+    waitForVMBoot_detectvirt;
+    shutdownVM_detectvirt;
+    my $result = $machine->succeed("cat '$detectvirt_sharepath/result'");
+    chomp $result;
+    destroyVM_detectvirt;
+    die "systemd-detect-virt returned \"$result\" instead of \"oracle\""
+      if $result ne "oracle";
+  '';
+
+  net-hostonlyif = ''
+    createVM_test1;
+    createVM_test2;
+
+    vbm("startvm test1");
+    waitForStartup_test1;
+    waitForVMBoot_test1;
+
+    vbm("startvm test2");
+    waitForStartup_test2;
+    waitForVMBoot_test2;
+
+    $machine->screenshot("net_booted");
+
+    my $test1IP = waitForIP_test1 1;
+    my $test2IP = waitForIP_test2 1;
+
+    $machine->succeed("echo '$test2IP' | nc -N '$test1IP' 1234");
+    $machine->succeed("echo '$test1IP' | nc -N '$test2IP' 1234");
+
+    $machine->waitUntilSucceeds("nc -N '$test1IP' 5678 < /dev/null >&2");
+    $machine->waitUntilSucceeds("nc -N '$test2IP' 5678 < /dev/null >&2");
+
+    shutdownVM_test1;
+    shutdownVM_test2;
+
+    destroyVM_test1;
+    destroyVM_test2;
+  '';
+}

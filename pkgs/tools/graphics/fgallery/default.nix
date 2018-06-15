@@ -1,24 +1,22 @@
-{ stdenv, fetchurl, unzip, makeWrapper, perl, ImageExifTool, JSON
-, coreutils, zip, imagemagick, pngcrush, lcms2, fbida
-}:
+{ stdenv, fetchurl, unzip, makeWrapper, perl, ImageExifTool
+, CpanelJSONXS, coreutils, zip, imagemagick, pngcrush, lcms2
+, facedetect, fbida }:
 
 # TODO: add optional dependencies (snippet from fgallery source):
 #
 # if(system("jpegoptim -V >/dev/null 2>&1")) {
 #   $jpegoptim = 0;
 # }
-# if($facedet && system("facedetect -h >/dev/null 2>&1")) {
-#   fatal("cannot run \"facedetect\" (see http://www.thregr.org/~wavexx/hacks/facedetect/)");
 
 stdenv.mkDerivation rec {
-  name = "fgallery-1.7";
+  name = "fgallery-1.8.2";
 
   src = fetchurl {
     url = "http://www.thregr.org/~wavexx/software/fgallery/releases/${name}.zip";
-    sha256 = "1iix6p8viwnsq3zn9vg99sx20nmgk2p5als3j1lk914nz3anvai4";
+    sha256 = "18wlvqbxcng8pawimbc8f2422s8fnk840hfr6946lzsxr0ijakvf";
   };
 
-  buildInputs = [ unzip makeWrapper perl ImageExifTool JSON ];
+  buildInputs = [ unzip makeWrapper perl ImageExifTool CpanelJSONXS ];
 
   installPhase = ''
     mkdir -p "$out/bin"
@@ -34,8 +32,8 @@ stdenv.mkDerivation rec {
 
     wrapProgram "$out/share/fgallery/fgallery" \
         --set PERL5LIB "$PERL5LIB" \
-        --set PATH "${stdenv.lib.makeSearchPath "bin"
-                     [ coreutils zip imagemagick pngcrush lcms2 fbida ]}"
+        --set PATH "${stdenv.lib.makeBinPath
+                     [ coreutils zip imagemagick pngcrush lcms2 facedetect fbida ]}"
   '';
 
   meta = with stdenv.lib; {

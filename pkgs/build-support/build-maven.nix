@@ -11,7 +11,7 @@
  *        the project.
  */
 infoFile: let
-  info = builtins.fromJSON (builtins.readFile infoFile);
+  info = lib.importJSON infoFile;
 
   script = writeText "build-maven-repository.sh" ''
     ${lib.concatStrings (map (dep: let

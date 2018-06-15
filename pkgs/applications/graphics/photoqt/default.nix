@@ -1,32 +1,33 @@
-{ stdenv, fetchurl, cmake, makeWrapper, qt5, exiv2, graphicsmagick }:
+{ stdenv, fetchurl, cmake, exiv2, graphicsmagick, libraw
+, qtbase, qtdeclarative, qtmultimedia, qtquickcontrols, qttools, qtgraphicaleffects
+}:
 
-let
-  version = "1.3";
-  qmlPath = stdenv.lib.makeSearchPath "lib/qt5/qml/" [
-    qt5.quickcontrols
-    qt5.declarative
-    qt5.multimedia
-  ];
-in
 stdenv.mkDerivation rec {
   name = "photoqt-${version}";
+  version = "1.5.1";
+
   src = fetchurl {
-    url = "http://photoqt.org/pkgs/photoqt-${version}.tar.gz";
-    sha256 = "0j2kvxfb5pd9abciv161nkcsyam6n8kfqs8ymwj2mxiqflwbmfl1";
+    url = "https://photoqt.org/pkgs/photoqt-${version}.tar.gz";
+    sha256 = "17kkpzkmzfnigs26jjyd75iy58qffjsclif81cmviq73lzmqy0b1";
   };
 
-  buildInputs = [ cmake makeWrapper qt5.base qt5.tools exiv2 graphicsmagick ];
+  patches = [ ./photoqt-1.5.1-qt-5.9.patch ];
+
+  nativeBuildInputs = [ cmake ];
+
+  buildInputs = [
+    qtbase qtquickcontrols qttools exiv2 graphicsmagick
+    qtmultimedia qtdeclarative libraw qtgraphicaleffects
+  ];
 
   preConfigure = ''
     export MAGICK_LOCATION="${graphicsmagick}/include/GraphicsMagick"
   '';
 
-  postInstall = ''
-    wrapProgram $out/bin/photoqt --set QML2_IMPORT_PATH "${qmlPath}"
-  '';
+  enableParallelBuilding = true;
 
   meta = {
-    homepage = "http://photoqt.org/";
+    homepage = https://photoqt.org/;
     description = "Simple, yet powerful and good looking image viewer";
     license = stdenv.lib.licenses.gpl2Plus;
     platforms = stdenv.lib.platforms.unix;

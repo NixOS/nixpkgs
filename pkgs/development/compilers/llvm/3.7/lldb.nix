@@ -8,14 +8,14 @@
 , libedit
 , llvm
 , clang-unwrapped
-, python
+, python2
 , version
 }:
 
 stdenv.mkDerivation {
   name = "lldb-${version}";
 
-  src = fetch "lldb" "1sbi9c6c4m73wfw249dn0n2974p444i03brk82m4w10iq5dm1mzl";
+  src = fetch "lldb" "008fdbyza13ym3v0xpans4z4azw4y16hcbgrrnc4rx2mxwaw62ws";
 
   patchPhase = ''
     sed -i 's|/usr/bin/env||' \
@@ -23,7 +23,7 @@ stdenv.mkDerivation {
       scripts/Python/build-swig-Python.sh
   '';
 
-  buildInputs = [ cmake python which swig ncurses zlib libedit ];
+  buildInputs = [ cmake python2 which swig ncurses zlib libedit ];
 
   preConfigure = ''
     export CXXFLAGS="-pthread"
@@ -31,11 +31,11 @@ stdenv.mkDerivation {
   '';
 
   cmakeFlags = [
-    "-DCMAKE_BUILD_TYPE=Release"
     "-DLLDB_PATH_TO_LLVM_BUILD=${llvm}"
     "-DLLDB_PATH_TO_CLANG_BUILD=${clang-unwrapped}"
     "-DPYTHON_VERSION_MAJOR=2"
     "-DPYTHON_VERSION_MINOR=7"
+    "-DLLDB_DISABLE_LIBEDIT=1" # https://llvm.org/bugs/show_bug.cgi?id=28898
   ];
 
   enableParallelBuilding = true;
@@ -43,7 +43,7 @@ stdenv.mkDerivation {
   meta = {
     description = "A next-generation high-performance debugger";
     homepage    = http://llvm.org/;
-    license     = stdenv.lib.licenses.bsd3;
+    license     = stdenv.lib.licenses.ncsa;
     platforms   = stdenv.lib.platforms.all;
   };
 }

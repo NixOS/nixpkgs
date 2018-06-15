@@ -1,21 +1,28 @@
-{ stdenv, fetchurl, cmake, pkgconfig, libevent, openssl}:
+{ stdenv, fetchFromGitHub, cmake, pkgconfig, libevent, openssl}:
 
-stdenv.mkDerivation {
-  name = "libcouchbase-2.5.2";
-  src = fetchurl {
-    url = "https://github.com/couchbase/libcouchbase/archive/2.5.2.tar.gz";
-    sha256 = "0ka1hix38a2kdhxz6n8frssyznf78ra0irga9d8lr5683y73xw24";
+stdenv.mkDerivation rec {
+  name = "libcouchbase-${version}";
+  version = "2.9.0";
+
+  src = fetchFromGitHub {
+    owner = "couchbase";
+    repo = "libcouchbase";
+    rev = version;
+    sha256 = "12s2iw4akil3hlvsccns7qw2c90yw5h67zj3wq03q938w8xcw0d0";
   };
 
   cmakeFlags = "-DLCB_NO_MOCK=ON";
 
   nativeBuildInputs = [ cmake pkgconfig ];
-  buildInputs = [ libevent openssl];
+  buildInputs = [ libevent openssl ];
 
-  meta = {
+  doCheck = (!stdenv.isDarwin);
+  checkPhase = "ctest";
+
+  meta = with stdenv.lib; {
     description = "C client library for Couchbase";
-    homepage = "https://github.com/couchbase/libcouchbase";
-    license = stdenv.lib.licenses.asl20;
-    platforms = stdenv.lib.platforms.unix;
+    homepage = https://github.com/couchbase/libcouchbase;
+    license = licenses.asl20;
+    platforms = platforms.unix;
   };
 }

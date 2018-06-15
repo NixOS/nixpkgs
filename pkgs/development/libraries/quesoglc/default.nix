@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, mesa, glew, freetype, fontconfig, fribidi, libX11 }:
+{ stdenv, fetchurl, libGLU_combined, glew, freetype, fontconfig, fribidi, libX11 }:
 stdenv.mkDerivation rec {
   pname = "quesoglc";
   version = "0.7.2";
@@ -7,7 +7,7 @@ stdenv.mkDerivation rec {
     url = "mirror://sourceforge/${pname}/${name}.tar.bz2";
     sha256 = "0cf9ljdzii5d4i2m23gdmf3kn521ljcldzq69lsdywjid3pg5zjl";
   };
-  buildInputs = [ mesa glew freetype fontconfig fribidi libX11 ];
+  buildInputs = [ libGLU_combined glew freetype fontconfig fribidi libX11 ];
   # FIXME: Configure fails to use system glew.
   meta = with stdenv.lib; {
     description = "A free implementation of the OpenGL Character Renderer";
@@ -20,6 +20,6 @@ stdenv.mkDerivation rec {
     homepage = http://quesoglc.sourceforge.net/;
     license = licenses.lgpl21Plus;
     maintainers = with maintainers; [ astsmtl ];
-    platforms = with platforms; linux;
+    platforms = platforms.linux;
   };
 }

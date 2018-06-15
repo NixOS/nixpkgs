@@ -1,9 +1,12 @@
-{ stdenv, fetchurl, python, libev}:
-stdenv.mkDerivation {
-  name = "weighttp-0.3";
-  src = fetchurl {
-    url = http://cgit.lighttpd.net/weighttp.git/snapshot/weighttp-0.3.tar.gz;
-    sha256 = "0gl83vnip3nj7fdgbwqkmrx7kxp51sri9jfiwd04q9iz8f9bsmz5";
+{ stdenv, fetchgit, python, libev}:
+stdenv.mkDerivation rec {
+  name = "weighttp-${version}";
+  version = "0.4";
+
+  src = fetchgit {
+    url = https://git.lighttpd.net/weighttp.git;
+    rev = "refs/tags/weighttp-${version}";
+    sha256 = "14yjmdx9p8g8c3zlrx5qid8k156lsagfwhl3ny54162nxjf7kzgr";
   };
 
   buildInputs = [ python libev ];
@@ -12,4 +15,8 @@ stdenv.mkDerivation {
     python waf build
     python waf install
   '';
+
+  meta = {
+    platforms = stdenv.lib.platforms.unix;
+  };
 }

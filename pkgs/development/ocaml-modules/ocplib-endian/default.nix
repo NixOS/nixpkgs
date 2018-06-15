@@ -1,16 +1,16 @@
-{ stdenv, fetchzip, ocaml, findlib, cppo }:
+{ stdenv, fetchzip, ocaml, findlib, ocamlbuild, cppo }:
 
-let version = "0.8"; in
+let version = "1.0"; in
 
 stdenv.mkDerivation {
-  name = "ocaml-ocplib-endian-${version}";
+  name = "ocaml${ocaml.version}-ocplib-endian-${version}";
 
   src = fetchzip {
     url = "https://github.com/OCamlPro/ocplib-endian/archive/${version}.tar.gz";
-    sha256 = "12xjvzw245mj4s02dgi4k2sx5gam7wxi4mbxmz6k18zg64n48yjd";
+    sha256 = "0s1ld3kavz892b8awyxyg1mr98h2g61gy9ci5v6yb49bsii6wicw";
   };
 
-  buildInputs = [ ocaml findlib cppo ];
+  buildInputs = [ ocaml findlib ocamlbuild cppo ];
 
   createFindlibDestdir = true;
 
@@ -18,7 +18,7 @@ stdenv.mkDerivation {
     description = "Optimised functions to read and write int16/32/64";
     homepage = https://github.com/OCamlPro/ocplib-endian;
     license = stdenv.lib.licenses.lgpl21;
-    platforms = ocaml.meta.platforms;
+    platforms = ocaml.meta.platforms or [];
     maintainers = with stdenv.lib.maintainers; [ vbgl ];
   };
 }

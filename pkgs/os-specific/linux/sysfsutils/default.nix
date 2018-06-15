@@ -17,5 +17,6 @@ stdenv.mkDerivation rec {
         device tree.
       '';
     license = with stdenv.lib.licenses; [ gpl2 lgpl21 ];
+    platforms = stdenv.lib.platforms.linux;
   };
 }

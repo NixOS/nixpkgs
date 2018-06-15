@@ -1,29 +1,91 @@
-{ stdenv, fetchgit, python, buildPythonPackage, qt5, pyqt5, jinja2, pygments, pyyaml, pypeg2,
-  gst_plugins_base, gst_plugins_good, gst_ffmpeg }:
+{ stdenv, lib, fetchurl, fetchzip, python3Packages
+, makeWrapper, wrapGAppsHook, qtbase, glib-networking
+, asciidoc, docbook_xml_dtd_45, docbook_xsl, libxml2
+, libxslt, gst_all_1 ? null
+, withPdfReader        ? true
+, withMediaPlayback    ? true
+, withWebEngineDefault ? true
+}:
 
-let version = "0.4.1"; in
+assert withMediaPlayback -> gst_all_1 != null;
 
-buildPythonPackage {
-  name = "qutebrowser-${version}";
+let
+  pdfjs = stdenv.mkDerivation rec {
+    name = "pdfjs-${version}";
+    version = "1.7.225";
+
+    src = fetchzip {
+      url = "https://github.com/mozilla/pdf.js/releases/download/v${version}/${name}-dist.zip";
+      sha256 = "0bsmbz7bbh0zpd70dlhss4fjdw7zq356091wld9s7kxnb2rixqd8";
+      stripRoot = false;
+    };
+
+    buildCommand = ''
+      mkdir $out
+      cp -r $src $out
+    '';
+  };
+
+in python3Packages.buildPythonApplication rec {
+  name = "qutebrowser-${version}${versionPostfix}";
   namePrefix = "";
+  version = "1.3.1";
+  versionPostfix = "";
 
-  src = fetchgit {
-    url = "https://github.com/The-Compiler/qutebrowser.git";
-    rev = "8d9e9851f1dcff5deb6363586ad0f1edec040b72";
-    sha256 = "1qsdad10swnk14qw4pfyvb94y6valhkscyvl46zbxxs7ck6llsm2";
+  # the release tarballs are different from the git checkout!
+  src = fetchurl {
+    url = "https://github.com/qutebrowser/qutebrowser/releases/download/v${version}/${name}.tar.gz";
+    sha256 = "121fz549vlxdasw0lcx6v394x8g34nadvrfs4svw3b65n0shv1ky";
   };
 
   # Needs tox
   doCheck = false;
 
-  propagatedBuildInputs = [
-    python pyyaml pyqt5 jinja2 pygments pypeg2
+  buildInputs = [
+    qtbase
+    glib-networking
+  ] ++ lib.optionals withMediaPlayback (with gst_all_1; [
+    gst-plugins-base gst-plugins-good
+    gst-plugins-bad gst-plugins-ugly gst-libav
+  ]) ++ lib.optional (!withWebEngineDefault) python3Packages.qtwebkit-plugins;
+
+  nativeBuildInputs = [
+    makeWrapper wrapGAppsHook asciidoc
+    docbook_xml_dtd_45 docbook_xsl libxml2 libxslt
   ];
 
-  makeWrapperArgs = ''
-    --prefix GST_PLUGIN_PATH : "${stdenv.lib.makeSearchPath "lib/gstreamer-0.10"
-       [ gst_plugins_base gst_plugins_good gst_ffmpeg ]}"
-    --prefix QT_PLUGIN_PATH : "${qt5.multimedia}/lib/qt5/plugins"
+  propagatedBuildInputs = with python3Packages; [
+    pyyaml pyqt5 jinja2 pygments
+    pypeg2 cssutils pyopengl attrs
+  ];
+
+  postPatch = ''
+    sed -i "s,/usr/share/qutebrowser,$out/share/qutebrowser,g" qutebrowser/utils/standarddir.py
+  '' + lib.optionalString withPdfReader ''
+    sed -i "s,/usr/share/pdf.js,${pdfjs},g" qutebrowser/browser/pdfjs.py
+  '';
+
+  postBuild = ''
+    a2x -f manpage doc/qutebrowser.1.asciidoc
+  '';
+
+  postInstall = ''
+    install -Dm644 doc/qutebrowser.1 "$out/share/man/man1/qutebrowser.1"
+    install -Dm644 misc/qutebrowser.desktop \
+        "$out/share/applications/qutebrowser.desktop"
+    for i in 16 24 32 48 64 128 256 512; do
+        install -Dm644 "icons/qutebrowser-''${i}x''${i}.png" \
+            "$out/share/icons/hicolor/''${i}x''${i}/apps/qutebrowser.png"
+    done
+    install -Dm644 icons/qutebrowser.svg \
+        "$out/share/icons/hicolor/scalable/apps/qutebrowser.svg"
+    install -Dm755 -t "$out/share/qutebrowser/userscripts/" misc/userscripts/*
+    install -Dm755 -t "$out/share/qutebrowser/scripts/" \
+      scripts/{importer.py,dictcli.py,keytester.py,open_url_in_instance.sh,utils.py}
+  '';
+
+  postFixup = lib.optionalString (! withWebEngineDefault) ''
+    wrapProgram $out/bin/qutebrowser --add-flags "--backend webkit"
   '';
 
   meta = {

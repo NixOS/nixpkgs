@@ -1,39 +1,54 @@
-x@{builderDefsPackage
-  , imagemagickBig, pkgconfig, python, pygtk, perl, libX11, libv4l
-  , qt4, lzma, gtk2
-  , ...}:
-builderDefsPackage
-(a :  
-let 
-  helperArgNames = ["stdenv" "fetchurl" "builderDefsPackage"] ++ 
-    [];
+{ stdenv, fetchurl, imagemagickBig, pkgconfig, python2Packages, perl
+, libX11, libv4l, qt4, lzma, gtk2, fetchpatch, autoreconfHook
+, enableVideo ? stdenv.isLinux
+}:
 
-  buildInputs = map (n: builtins.getAttr n x)
-    (builtins.attrNames (builtins.removeAttrs x helperArgNames));
-  sourceInfo = rec {
-    baseName="zbar";
-    version="0.10";
-    name="${baseName}-${version}";
-    pName="${baseName}";
-    url="mirror://sourceforge/project/${pName}/${baseName}/${version}/${name}.tar.bz2";
-    hash="1imdvf5k34g1x2zr6975basczkz3zdxg6xnci50yyp5yvcwznki3";
-  };
-in
-rec {
-  src = a.fetchurl {
-    url = sourceInfo.url;
-    sha256 = sourceInfo.hash;
+let
+  inherit (python2Packages) pygtk python;
+in stdenv.mkDerivation rec {
+  name = "${pname}-${version}";
+  pname = "zbar";
+  version = "0.10";
+  src = fetchurl {
+    url = "mirror://sourceforge/project/${pname}/${pname}/${version}/${name}.tar.bz2";
+    sha256 = "1imdvf5k34g1x2zr6975basczkz3zdxg6xnci50yyp5yvcwznki3";
   };
 
-  inherit (sourceInfo) name version;
-  inherit buildInputs;
+  patches = [
+    (fetchpatch {
+      name = "0001-Description-Linux-2.6.38-and-later-do-not-support-th.patch";
+      url = "https://git.recluse.de/raw/debian/pkg-zbar.git/35182c3ac2430c986579b25f1826fe1b7dfd15de/debian!patches!0001-Description-Linux-2.6.38-and-later-do-not-support-th.patch";
+      sha256 = "1zy1wdyhmpw877pv6slfhjy0c6dm0gxli0i4zs1akpvh052j4a69";
+    })
+    (fetchpatch {
+      name = "python-zbar-import-fix-am.patch";
+      url = "https://git.recluse.de/raw/debian/pkg-zbar.git/1f15f52e53ee0bf7b4761d673dc859c6b10e6be5/debian!patches!python-zbar-import-fix-am.patch";
+      sha256 = "15xx9ms137hvwpynbgvbc6zgmmzfaf7331rfhls24rgbnywbgirx";
+    })
+    (fetchpatch {
+      name = "new_autotools_build_fix.patch";
+      url = "https://git.recluse.de/raw/debian/pkg-zbar.git/2c641cc94d4f728421ed750d95d6d1c2d06a534d/debian!patches!new_autotools_build_fix.patch";
+      sha256 = "0jhl5jnnjhfdv51xqimkbkdvj8d38z05fhd11yx1sgmw82f965s3";
+    })
+    (fetchpatch {
+      name = "threading-fix.patch";
+      url = "https://git.recluse.de/raw/debian/pkg-zbar.git/d3eba6e2c3acb0758d19519015bf1a53ffb8e645/debian!patches!threading-fix.patch";
+      sha256 = "1jjgrx9nc7788vfriai4z26mm106sg5ylm2w5rdyrwx7420x1wh7";
+    })
+  ];
 
-  /* doConfigure should be removed if not needed */
-  phaseNames = ["doConfigure" "doMakeInstall"];
+  buildInputs =
+    [ imagemagickBig pkgconfig python pygtk perl libX11
+      lzma autoreconfHook ] ++
+    stdenv.lib.optionals enableVideo [ libv4l gtk2 qt4 ];
 
-  configureFlags = ["--disable-video"];
-      
-  meta = {
+  configureFlags = stdenv.lib.optionals (!enableVideo) [
+    "--disable-video" "--without-gtk" "--without-qt"
+  ];
+
+  hardeningDisable = [ "fortify" ];
+
+  meta = with stdenv.lib; {
     description = "Bar code reader";
     longDescription = ''
       ZBar is an open source software suite for reading bar codes from various
@@ -42,18 +57,15 @@ rec {
       EAN-13/UPC-A, UPC-E, EAN-8, Code 128, Code 39, Interleaved 2 of 5 and QR
       Code.
     '';
-    maintainers = with a.lib.maintainers;
-    [
-      raskin
-    ];
-    platforms = with a.lib.platforms;
-      linux;
-    license = a.lib.licenses.lgpl21;
+    maintainers = with maintainers; [ raskin ];
+    platforms = platforms.unix;
+    license = licenses.lgpl21;
+    homepage = http://zbar.sourceforge.net/;
   };
+
   passthru = {
     updateInfo = {
       downloadPage = "http://zbar.sourceforge.net/";
     };
   };
-}) x
-
+}

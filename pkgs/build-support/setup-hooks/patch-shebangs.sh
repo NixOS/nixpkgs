@@ -19,12 +19,12 @@ patchShebangs() {
     local newInterpreterLine
 
     find "$dir" -type f -perm -0100 | while read f; do
-        if [ "$(head -1 "$f" | head -c +2)" != '#!' ]; then
+        if [ "$(head -1 "$f" | head -c+2)" != '#!' ]; then
             # missing shebang => not a script
             continue
         fi
 
-        oldInterpreterLine=$(head -1 "$f" | tail -c +3)
+        oldInterpreterLine=$(head -1 "$f" | tail -c+3)
         read -r oldPath arg0 args <<< "$oldInterpreterLine"
 
         if $(echo "$oldPath" | grep -q "/bin/env$"); then
@@ -46,14 +46,19 @@ patchShebangs() {
             args="$arg0 $args"
         fi
 
-        newInterpreterLine="$newPath $args"
+        # Strip trailing whitespace introduced when no arguments are present
+        newInterpreterLine="$(echo "$newPath $args" | sed 's/[[:space:]]*$//')"
 
         if [ -n "$oldPath" -a "${oldPath:0:${#NIX_STORE}}" != "$NIX_STORE" ]; then
             if [ -n "$newPath" -a "$newPath" != "$oldPath" ]; then
                 echo "$f: interpreter directive changed from \"$oldInterpreterLine\" to \"$newInterpreterLine\""
                 # escape the escape chars so that sed doesn't interpret them
                 escapedInterpreterLine=$(echo "$newInterpreterLine" | sed 's|\\|\\\\|g')
+                # Preserve times, see: https://github.com/NixOS/nixpkgs/pull/33281
+                touch -r "$f" "$f.timestamp"
                 sed -i -e "1 s|.*|#\!$escapedInterpreterLine|" "$f"
+                touch -r "$f.timestamp" "$f"
+                rm "$f.timestamp"
             fi
         fi
     done

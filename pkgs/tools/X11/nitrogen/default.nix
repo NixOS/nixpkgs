@@ -1,20 +1,22 @@
-{ stdenv, fetchurl, pkgconfig, glib, gtk2, gtkmm }:
+{ stdenv, fetchurl, pkgconfig, glib, gtkmm2 }:
 
-let version = "1.5.2";
+let version = "1.6.1";
 in
 stdenv.mkDerivation rec {
   name = "nitrogen-${version}";
 
   src = fetchurl {
-    url = "http://projects.l3ib.org/nitrogen/files/nitrogen-${version}.tar.gz";
-    sha256 = "60a2437ce6a6c0ba44505fc8066c1973140d4bb48e1e5649f525c7b0b8bf9fd2";
+    url = "http://projects.l3ib.org/nitrogen/files/${name}.tar.gz";
+    sha256 = "0zc3fl1mbhq0iyndy4ysmy8vv5c7xwf54rbgamzfhfvsgdq160pl";
   };
 
-  buildInputs = [ glib gtk2 gtkmm pkgconfig ];
+  nativeBuildInputs = [ pkgconfig ];
 
-  NIX_LDFLAGS = "-lX11";
+  buildInputs = [ glib gtkmm2 ];
 
-  patchPhase = "patchShebangs data/icon-theme-installer";
+  patchPhase = ''
+    patchShebangs data/icon-theme-installer
+  '';
 
   meta = {
     description = "A wallpaper browser and setter for X11";

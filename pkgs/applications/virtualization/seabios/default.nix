@@ -3,14 +3,16 @@
 stdenv.mkDerivation rec {
 
   name = "seabios-${version}";
-  version = "1.7.5.2";
+  version = "1.11.0";
 
   src = fetchurl {
     url = "http://code.coreboot.org/p/seabios/downloads/get/${name}.tar.gz";
-    sha256 = "1syd3gi5gq0gj2pjvmdis64xc3j1xf0jgy49ngymap0pdpm0cmh0";
+    sha256 = "1xwvp77djxbxbxg82hzj26pv6zka3556vkdcp09hnfwapcp46av2";
   };
 
   buildInputs = [ iasl python ];
+
+  hardeningDisable = [ "pic" "stackprotector" "fortify" ];
 
   configurePhase = ''
     # build SeaBIOS for CSM
@@ -21,12 +23,12 @@ stdenv.mkDerivation rec {
     EOF
 
     make olddefconfig
-    '';
+  '';
 
   installPhase = ''
     mkdir $out
     cp out/Csm16.bin $out/Csm16.bin
-    '';
+  '';
 
   meta = with stdenv.lib; {
     description = "Open source implementation of a 16bit X86 BIOS";
@@ -38,7 +40,7 @@ stdenv.mkDerivation rec {
     homepage = http://www.seabios.org;
     license = licenses.lgpl3;
     maintainers = [ maintainers.tstrobel ];
-    platforms = platforms.linux;
+    platforms = [ "i686-linux" "x86_64-linux" ];
   };
 }
 

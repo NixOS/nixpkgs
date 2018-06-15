@@ -1,26 +1,39 @@
-{ stdenv, fetchurl, pkgconfig, yacc, flex, xkeyboard_config, libxcb }:
+{ stdenv, fetchurl, fetchpatch, meson, ninja, pkgconfig, yacc, xkeyboard_config, libxcb, libX11, doxygen }:
 
 stdenv.mkDerivation rec {
-  name = "libxkbcommon-0.5.0";
+  name = "libxkbcommon-0.8.0";
 
   src = fetchurl {
-    url = "http://xkbcommon.org/download/${name}.tar.xz";
-    sha1 = "z9dvxrkcyb4b7f2zybgkrqb9zcxrj9vi";
+    url = "https://xkbcommon.org/download/${name}.tar.xz";
+    sha256 = "0vgy84vfbig5bqznr137h5arjidnfwrxrdli0pxyn2jfn1fjcag8";
   };
 
-  buildInputs = [ pkgconfig yacc flex xkeyboard_config libxcb ];
+  outputs = [ "out" "dev" "doc" ];
 
-  configureFlags = ''
-    --with-xkb-config-root=${xkeyboard_config}/etc/X11/xkb
-  '';
+  nativeBuildInputs = [ meson ninja pkgconfig yacc doxygen ];
+  buildInputs = [ xkeyboard_config libxcb ];
 
-  preBuild = stdenv.lib.optionalString stdenv.isDarwin ''
-    sed -i 's/,--version-script=.*$//' Makefile
-  '';
+  patches = [
+    # darwin compatibility
+    (fetchpatch {
+      url = https://github.com/xkbcommon/libxkbcommon/commit/edb1c662394578a54b7bbed231d918925e5d8150.patch;
+      sha256 = "0ydjlir32r3xfsbqhnsx1bz6ags2m908yhf9i09i1s7sgcimbcx5";
+    })
+  ];
 
-  meta = {
+  mesonFlags = [
+    "-Denable-wayland=false"
+    "-Dxkb-config-root=${xkeyboard_config}/etc/X11/xkb"
+    "-Dx-locale-root=${libX11.out}/share/X11/locale"
+  ];
+
+  doCheck = false; # fails, needs unicode locale
+
+  meta = with stdenv.lib; {
     description = "A library to handle keyboard descriptions";
-    homepage = http://xkbcommon.org;
+    homepage = https://xkbcommon.org;
+    license = licenses.mit;
+    maintainers = with maintainers; [ garbas ttuegel ];
+    platforms = with platforms; unix;
   };
 }
-

@@ -2,7 +2,7 @@
 
 let version = "3.2";
 in
-  pythonPackages.buildPythonPackage {
+  pythonPackages.buildPythonApplication {
     name = "mimms-${version}";
     src = fetchurl {
       url = "http://download.savannah.gnu.org/releases/mimms/mimms-${version}.tar.bz2";

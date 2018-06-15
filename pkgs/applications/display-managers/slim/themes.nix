@@ -176,8 +176,8 @@ in {
   nixosSlim = buildTheme {
     fullName = "nixos-slim";
     src = fetchurl {
-      url = "https://github.com/jagajaga/nixos-slim-theme/archive/1.1.tar.gz";
-      sha256 = "66c3020a6716130a20c3898567339b990fbd7888a3b7bbcb688f6544d1c05c31";
+      url = "https://github.com/jagajaga/nixos-slim-theme/archive/2.0.tar.gz";
+      sha256 = "0lldizhigx7bjhxkipii87y432hlf5wdvamnfxrryf9z7zkfypc8";
     };
   };
 }

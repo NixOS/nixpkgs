@@ -1,12 +1,12 @@
-{ stdenv, fetchurl, cmake }:
+{ stdenv, fetchurl, cmake, vtk }:
 
 stdenv.mkDerivation rec {
-  version = "2.4.4";
+  version = "2.8.6";
   name = "gdcm-${version}";
 
   src = fetchurl {
     url = "mirror://sourceforge/gdcm/${name}.tar.bz2";
-    sha256 = "07svgp7c928sw712gq6rx4h0c6wp2kr1n8fmxjlzb031l51jzkf5";
+    sha256 = "07q7w2qvpknvncp3g6m5f6b3m1ld4pzns52bqah8da7pabgwspjy";
   };
 
   dontUseCmakeBuildDir = true;
@@ -19,10 +19,11 @@ stdenv.mkDerivation rec {
   cmakeFlags = ''
     -DGDCM_BUILD_APPLICATIONS=ON
     -DGDCM_BUILD_SHARED_LIBS=ON
+    -DGDCM_USE_VTK=ON
   '';
 
   enableParallelBuilding = true;
-  buildInputs = [ cmake ];
+  buildInputs = [ cmake vtk ];
   propagatedBuildInputs = [ ];
 
   meta = {

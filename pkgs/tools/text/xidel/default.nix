@@ -1,8 +1,8 @@
-{ stdenv, fetchurl, dpkg, patchelf }:
+{ stdenv, fetchurl, dpkg }:
 
 stdenv.mkDerivation rec {
   name = "xidel-${version}";
-  version = "0.8.4";
+  version = "0.9.6";
 
   ## Source archive lacks file (manageUtils.sh), using pre-built package for now.
   #src = fetchurl {
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     if stdenv.system == "x86_64-linux" then
       fetchurl {
         url = "mirror://sourceforge/videlibri/Xidel/Xidel%20${version}/xidel_${version}-1_amd64.deb";
-        sha256 = "0gq95ag2661hsw8b7ii6z07ian832cz8g21lvq2cvps4a80ql1gi";
+        sha256 = "0hskc74y7p4j1x33yx0w4fvr610p2yimas8pxhr6bs7mb9b300h7";
       }
     else if stdenv.system == "i686-linux" then
       fetchurl {
@@ -23,20 +23,18 @@ stdenv.mkDerivation rec {
       }
     else throw "xidel is not supported on ${stdenv.system}";
 
-  buildInputs = [ dpkg patchelf ];
+  buildInputs = [ dpkg ];
 
   unpackPhase = ''
     dpkg-deb -x ${src} ./
   '';
 
-  buildPhase = "true";
+  dontBuild = true;
 
   installPhase = ''
     mkdir -p "$out/bin"
     cp -a usr/* "$out/"
-    interpreter="$(echo ${stdenv.glibc}/lib/ld-linux*)"
-    patchelf --set-interpreter "$interpreter" "$out/bin/xidel"
-    patchelf --set-rpath "${stdenv.lib.makeLibraryPath [stdenv.glibc]}" "$out/bin/xidel"
+    patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" "$out/bin/xidel"
   '';
 
   meta = with stdenv.lib; {
@@ -45,7 +43,7 @@ stdenv.mkDerivation rec {
     # source contains no license info (AFAICS), but sourceforge says GPLv2
     license = licenses.gpl2;
     # more platforms will be supported when we switch to source build
-    platforms = [ "i686-linux" "x86_64-linux" ];
+    platforms = platforms.linux;
     maintainers = [ maintainers.bjornfor ];
   };
 }

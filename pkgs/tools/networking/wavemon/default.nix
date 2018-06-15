@@ -1,45 +1,26 @@
-x@{builderDefsPackage
-  , ncurses
-  , ...}:
-builderDefsPackage
-(a :  
-let 
-  helperArgNames = ["stdenv" "fetchurl" "builderDefsPackage"] ++ 
-    [];
+{ stdenv, fetchFromGitHub, ncurses, libnl, pkgconfig }:
 
-  buildInputs = map (n: builtins.getAttr n x)
-    (builtins.attrNames (builtins.removeAttrs x helperArgNames));
-  sourceInfo = rec {
-    baseName="wavemon";
-    version = "0.7.6";
-    name="${baseName}-${version}";
-    url="http://eden-feed.erg.abdn.ac.uk/wavemon/stable-releases/${name}.tar.bz2";
-  };
-in
-rec {
-  src = a.fetchurl {
-    url = sourceInfo.url;
-    sha256 = "18cwlzgmwzy7z9dfr6lwd8kmkv0pqiihizm4gi0kkm52bzz6836y";
+stdenv.mkDerivation rec {
+  version = "0.8.2";
+  baseName = "wavemon";
+  name = "${baseName}-${version}";
+
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ ncurses libnl ];
+
+  src = fetchFromGitHub {
+    owner = "uoaerg";
+    repo = "wavemon";
+    rev = "v${version}";
+    sha256 = "0rqpp7rhl9rlwnihsapaiy62v33h45fm3d0ia2nhdjw7fwkwcqvs";
   };
 
-  inherit (sourceInfo) name version;
-  inherit buildInputs;
-
-  /* doConfigure should be removed if not needed */
-  phaseNames = ["doConfigure" "doMakeInstall"];
-      
-  meta = {
-    description = "WiFi state monitor";
-    maintainers = with a.lib.maintainers;
-    [
-      raskin
-    ];
-    platforms = with a.lib.platforms;
-      linux;
-    license = a.lib.licenses.gpl2Plus;
-    downloadPage = "http://eden-feed.erg.abdn.ac.uk/wavemon/";
+  meta = with stdenv.lib; {
     inherit version;
-    updateWalker = true;
+    description = "Ncurses-based monitoring application for wireless network devices";
+    homepage = https://github.com/uoaerg/wavemon;
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ raskin fpletz ];
+    platforms = stdenv.lib.platforms.linux;
   };
-}) x
-
+}

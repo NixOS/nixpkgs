@@ -1,40 +1,40 @@
-{ stdenv, fetchFromGitHub, pkgconfig, qt5, libarchive, xorg }:
+{ stdenv, fetchFromGitHub, cmake, extra-cmake-modules, pkgconfig
+, qtbase, qtimageformats, qtwebkit, qtx11extras
+, libarchive, libXdmcp, libpthreadstubs, xcbutilkeysyms  }:
 
 stdenv.mkDerivation rec {
-  version = "0.1.1";
   name = "zeal-${version}";
+  version = "0.6.0";
 
   src = fetchFromGitHub {
-    owner = "zealdocs";
-    repo = "zeal";
-    rev = "v${version}";
-    sha256 = "172wf50fq1l5p8hq1irvpwr7ljxkjaby71afrm82jz3ixl6dg2ii";
+    owner  = "zealdocs";
+    repo   = "zeal";
+    rev    = "v${version}";
+    sha256 = "0zsrb89jz04b8in1d69p7mg001yayyljc47vdlvm48cjbhvxwj0k";
   };
 
+  # while ads can be disabled from the user settings, by default they are not so
+  # we patch it out completely instead
+  patches = [ ./remove_ads.patch ];
+
+  nativeBuildInputs = [ cmake extra-cmake-modules pkgconfig ];
   buildInputs = [
-    xorg.xcbutilkeysyms pkgconfig qt5.base qt5.webkit qt5.imageformats libarchive
+    qtbase qtimageformats qtwebkit qtx11extras
+    libarchive
+    libXdmcp libpthreadstubs xcbutilkeysyms
   ];
-
-  configurePhase = ''
-    qmake PREFIX=/
-  '';
-
-  installPhase = ''
-    make INSTALL_ROOT=$out install
-  '';
 
   enableParallelBuilding = true;
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "A simple offline API documentation browser";
     longDescription = ''
-      Zeal is a simple offline API documentation browser inspired by Dash (OS X
+      Zeal is a simple offline API documentation browser inspired by Dash (macOS
       app), available for Linux and Windows.
     '';
-    homepage = "http://zealdocs.org/";
-    license = stdenv.lib.licenses.gpl3;
-    platforms = stdenv.lib.platforms.linux;
-    maintainers = with stdenv.lib.maintainers; [ skeidel ];
+    homepage    = https://zealdocs.org/;
+    license     = licenses.gpl3;
+    maintainers = with maintainers; [ skeidel peterhoeg ];
+    platforms   = platforms.linux;
   };
 }
-

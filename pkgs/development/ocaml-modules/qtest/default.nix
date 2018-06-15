@@ -1,25 +1,28 @@
-{ stdenv, fetchzip, ocaml, oasis, findlib, ounit }:
+{ stdenv, fetchzip, ocaml, findlib, ocamlbuild, qcheck, ounit }:
 
-let version = "2.0.1"; in
+if !stdenv.lib.versionAtLeast ocaml.version "4"
+then throw "qtest is not available for OCaml ${ocaml.version}"
+else
+
+let version = "2.7"; in
 
 stdenv.mkDerivation {
-  name = "ocaml-qtest-${version}";
+  name = "ocaml${ocaml.version}-qtest-${version}";
   src = fetchzip {
     url = "https://github.com/vincent-hugot/iTeML/archive/v${version}.tar.gz";
-    sha256 = "00sir7q7z78s22w8fzrgw9gqm7r8ww0bgwqxrq6nsbbclgxj9c6i";
+    sha256 = "0z72m2drp67qchvsxx4sg2qjrrq8hp6p9kzdx16ibx58pvpw1sh2";
   };
 
-  buildInputs = [ ocaml oasis findlib ];
-  propagatedBuildInputs = [ ounit ];
+  buildInputs = [ ocaml findlib ocamlbuild ];
+  propagatedBuildInputs = [ qcheck ounit ];
 
-  buildPhase = "ocaml do.ml qtest build $out";
-  createFindlibDestdir = true;
-  installPhase = "ocaml do.ml qtest install $out";
+  installFlags = [ "BIN=$(out)/bin" ];
+  preInstall = "mkdir -p $out/bin";
 
   meta = {
     description = "Inline (Unit) Tests for OCaml (formerly “qtest”)";
     homepage = https://github.com/vincent-hugot/iTeML;
-    platforms = ocaml.meta.platforms;
+    platforms = ocaml.meta.platforms or [];
     maintainers = with stdenv.lib.maintainers; [ vbgl ];
   };
 }

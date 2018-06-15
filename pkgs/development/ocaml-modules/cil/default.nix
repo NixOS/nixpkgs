@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, perl, ocaml, findlib }:
+{ stdenv, fetchurl, perl, ocaml, findlib, ocamlbuild }:
 stdenv.mkDerivation {
   name = "ocaml-cil-1.7.3";
   src = fetchurl {
@@ -6,11 +6,12 @@ stdenv.mkDerivation {
     sha256 = "05739da0b0msx6kmdavr3y2bwi92jbh3szc35d7d8pdisa8g5dv9";
   };
 
-  buildInputs = [ perl ocaml findlib ];
+  buildInputs = [ perl ocaml findlib ocamlbuild ];
 
   createFindlibDestdir = true;
 
   preConfigure = ''
+    substituteInPlace Makefile.in --replace 'MACHDEPCC=gcc' 'MACHDEPCC=$(CC)'
     export FORCE_PERL_PREFIX=1
   '';
   prefixKey = "-prefix=";
@@ -20,6 +21,6 @@ stdenv.mkDerivation {
     description = "A front-end for the C programming language that facilitates program analysis and transformation";
     license = licenses.bsd3;
     maintainers = [ maintainers.vbgl ];
-    platforms = ocaml.meta.platforms;
+    platforms = ocaml.meta.platforms or [];
   };
 }

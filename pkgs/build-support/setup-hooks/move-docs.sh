@@ -2,7 +2,7 @@
 # $out/share/man to $man/share/man; and moves $out/share/doc to
 # $man/share/doc.
 
-preFixupHooks+=(_moveDocs)
+preFixupHooks+=(_moveToShare)
 
 _moveToShare() {
     forceShare=${forceShare:=man doc info}
@@ -21,31 +21,3 @@ _moveToShare() {
     done
 }
 
-_moveToOutput() {
-    local d="$1"
-    local dst="$2"
-    if [ -z "$dst" -a ! -e $dst/$d ]; then return; fi
-    local output
-    for output in $outputs; do
-        if [ "${!output}" = "$dst" ]; then continue; fi
-        if [ -d "${!output}/$d" ]; then
-            echo "moving ${!output}/$d to $dst/$d"
-            mkdir -p $dst/share
-            mv ${!output}/$d $dst/$d
-            break
-        fi
-    done
-}
-
-_moveDocs() {
-    _moveToShare
-    _moveToOutput share/man "$man"
-    _moveToOutput share/info "$info"
-    _moveToOutput share/doc "$doc"
-    _moveToOutput share/gtk-doc "$doc"
-
-    # Remove empty share directory.
-    if [ -d "$out/share" ]; then
-        rmdir $out/share 2> /dev/null || true
-    fi
-}

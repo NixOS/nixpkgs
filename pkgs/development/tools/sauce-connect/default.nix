@@ -1,22 +1,27 @@
-{ stdenv, lib, fetchurl, zlib }:
+{ stdenv, lib, fetchurl, zlib, unzip }:
 
 with lib;
 
 stdenv.mkDerivation rec {
   name = "sauce-connect-${version}";
-  version = "4.3.6";
+  version = "4.4.12";
 
   src = fetchurl (
     if stdenv.system == "x86_64-linux" then {
       url = "https://saucelabs.com/downloads/sc-${version}-linux.tar.gz";
-      sha1 = "0d7d2dc12766ac137e62a3e4dad3025b590f9782";
-    } else {
+      sha256 = "1yqvx64bgiq27hdhwkzgmzyib8pbjn1idpq6783srxq64asf6iyw";
+    } else if stdenv.system == "i686-linux" then {
       url = "https://saucelabs.com/downloads/sc-${version}-linux32.tar.gz";
-      sha1 = "ee2c3002eae3b29df801a2ac1db77bb5f1c97bcc";
+      sha256 = "02kib56lv4lhwkj5r15484lvvbyjvf9ydi5vccsmxgsxrzmddnl6";
+    } else {
+      url = "https://saucelabs.com/downloads/sc-${version}-osx.zip";
+      sha256 = "1gqsbw9f6nachk3c86knbqq417smqyf19mi63fmrfxrbxzy2fkv2";
     }
   );
 
-  patchPhase = ''
+  buildInputs = [ unzip ];
+
+  patchPhase = stdenv.lib.optionalString stdenv.isLinux ''
     patchelf \
       --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
       --set-rpath "$out/lib:${makeLibraryPath [zlib]}" \
@@ -35,6 +40,6 @@ stdenv.mkDerivation rec {
     license = licenses.unfree;
     homepage = https://docs.saucelabs.com/reference/sauce-connect/;
     maintainers = with maintainers; [offline];
-    platforms = with platforms; platforms.linux;
+    platforms = platforms.linux ++ platforms.darwin;
   };
 }

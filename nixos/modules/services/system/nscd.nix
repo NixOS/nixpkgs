@@ -9,8 +9,6 @@ let
 
   inherit (lib) singleton;
 
-  cfgFile = pkgs.writeText "nscd.conf" cfg.config;
-
 in
 
 {
@@ -41,6 +39,7 @@ in
   ###### implementation
 
   config = mkIf cfg.enable {
+    environment.etc."nscd.conf".text = cfg.config;
 
     users.extraUsers.nscd =
       { isSystemUser = true;
@@ -61,17 +60,21 @@ in
             mkdir -m 0755 -p /var/db/nscd
           '';
 
-        restartTriggers = [ config.environment.etc.hosts.source config.environment.etc."nsswitch.conf".source ];
+        restartTriggers = [
+          config.environment.etc.hosts.source
+          config.environment.etc."nsswitch.conf".source
+          config.environment.etc."nscd.conf".source
+        ];
 
         serviceConfig =
-          { ExecStart = "@${pkgs.glibc}/sbin/nscd nscd -f ${cfgFile}";
+          { ExecStart = "@${pkgs.glibc.bin}/sbin/nscd nscd";
             Type = "forking";
             PIDFile = "/run/nscd/nscd.pid";
             Restart = "always";
             ExecReload =
-              [ "${pkgs.glibc}/sbin/nscd --invalidate passwd"
-                "${pkgs.glibc}/sbin/nscd --invalidate group"
-                "${pkgs.glibc}/sbin/nscd --invalidate hosts"
+              [ "${pkgs.glibc.bin}/sbin/nscd --invalidate passwd"
+                "${pkgs.glibc.bin}/sbin/nscd --invalidate group"
+                "${pkgs.glibc.bin}/sbin/nscd --invalidate hosts"
               ];
           };
 
@@ -79,7 +82,7 @@ in
         # its pid. So wait until it's ready.
         postStart =
           ''
-            while ! ${pkgs.glibc}/sbin/nscd -g -f ${cfgFile} > /dev/null; do
+            while ! ${pkgs.glibc.bin}/sbin/nscd -g > /dev/null; do
               sleep 0.2
             done
           '';

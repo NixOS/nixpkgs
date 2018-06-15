@@ -1,5 +1,5 @@
 { stdenv, fetchurl, which, pkgconfig
-, ocaml, ocamlPackages
+, ocamlPackages
 , libao, portaudio, alsaLib, libpulseaudio, libjack2
 , libsamplerate, libmad, taglib, lame, libogg
 , libvorbis, speex, libtheora, libopus, fdk_aac
@@ -26,7 +26,7 @@ stdenv.mkDerivation {
   configureFlags = [ "--localstatedir=/var" ];
 
   buildInputs =
-    [ which ocaml ocamlPackages.findlib pkgconfig
+    [ which ocamlPackages.ocaml ocamlPackages.findlib pkgconfig
       libao portaudio alsaLib libpulseaudio libjack2
       libsamplerate libmad taglib lame libogg
       libvorbis speex libtheora libopus fdk_aac
@@ -38,8 +38,8 @@ stdenv.mkDerivation {
   meta = with stdenv.lib; {
     description = "Swiss-army knife for multimedia streaming";
     homepage = http://liquidsoap.fm/;
-    maintainers = with maintainers; [ emery ];
+    maintainers = with maintainers; [ ehmry ];
     license = licenses.gpl2;
-    platforms = ocaml.meta.platforms;
+    platforms = ocamlPackages.ocaml.meta.platforms or [];
   };
 }

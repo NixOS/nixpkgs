@@ -1,21 +1,23 @@
-{ stdenv, fetchFromGitHub, ocamlPackages, zlib }:
+{ stdenv, fetchFromGitHub, zlib
+, ocaml, jbuilder, opam, ocamlfuse, findlib, gapi_ocaml, ocaml_sqlite3, camlidl }:
 
 stdenv.mkDerivation rec {
   name = "google-drive-ocamlfuse-${version}";
-  version = "0.5.18";
+  version = "0.6.25";
 
   src = fetchFromGitHub {
-    owner  = "astrada";
-    repo   = "google-drive-ocamlfuse";
-    rev    = "v${version}";
-    sha256 = "0a545zalsqw3jndrvkc0bsn4aab74cf8lwnsw09b5gjm8pm79b9r";
+    owner = "astrada";
+    repo = "google-drive-ocamlfuse";
+    rev = "v${version}";
+    sha256 = "1rjm2jcc93sz7l25zbgqal81534vvvbmwy7847s0k8fkr5nq97gp";
   };
 
-  buildInputs = [ zlib ] ++ (with ocamlPackages; [ocaml ocamlfuse findlib gapi_ocaml ocaml_sqlite3 camlidl]);
+  nativeBuildInputs = [ jbuilder opam ];
 
-  configurePhase = "ocaml setup.ml -configure --prefix \"$out\"";
-  buildPhase = "ocaml setup.ml -build";
-  installPhase = "ocaml setup.ml -install";
+  buildInputs = [ zlib ocaml ocamlfuse findlib gapi_ocaml ocaml_sqlite3 camlidl ];
+
+  buildPhase = "jbuilder build @install";
+  installPhase = "mkdir $out && jbuilder install --prefix $out";
 
   meta = {
     homepage = http://gdfuse.forge.ocamlcore.org/;

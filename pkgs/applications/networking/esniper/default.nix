@@ -1,11 +1,13 @@
-{ stdenv, fetchurl, openssl, curl, coreutils, gawk, bash, which }:
+{ stdenv, fetchFromGitHub, openssl, curl, coreutils, gawk, bash, which }:
 
-stdenv.mkDerivation {
-  name = "esniper-2.31.0";
+stdenv.mkDerivation rec {
+  name = "esniper-2.33.0.2017-11-06";
 
-  src = fetchurl {
-    url    = "mirror://sourceforge/esniper/esniper-2-31-0.tgz";
-    sha256 = "0xn6gdyr0c18khwcsi2brp49wkancrsrxxca7hvbawhbf263glih";
+  src = fetchFromGitHub {
+    owner = "yhfudev";
+    repo = "esniper";
+    rev = "c95140d376db3c991300a7462e6c172b0ccf3eb5";
+    sha256 = "1dfb5hmcrvm3yg9ask362c6s5ylxs21szw23dm737a94br37j890";
   };
 
   buildInputs = [ openssl curl ];
@@ -16,7 +18,7 @@ stdenv.mkDerivation {
 
   postInstall = ''
     sed <"frontends/snipe" >"$out/bin/snipe" \
-      -e "2i export PATH=\"$out/bin:${coreutils}/bin:${gawk}/bin:${bash}/bin:${which}/bin:\$PATH\""
+      -e "2i export PATH=\"$out/bin:${stdenv.lib.makeBinPath [ coreutils gawk bash which ]}:\$PATH\""
     chmod 555 "$out/bin/snipe"
   '';
 
@@ -24,7 +26,7 @@ stdenv.mkDerivation {
     description = "Simple, lightweight tool for sniping eBay auctions";
     homepage    = http://esniper.sourceforge.net;
     license     = licenses.gpl2;
-    maintainers = with maintainers; [ lovek323 simons ];
+    maintainers = with maintainers; [ lovek323 peti ];
     platforms   = platforms.all;
   };
 }

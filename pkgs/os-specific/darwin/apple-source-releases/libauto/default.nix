@@ -13,7 +13,8 @@ appleDerivation {
       --replace "#include <msgtracer_client.h>" ''$'#include <asl.h>\nstatic void msgtracer_log_with_keys(...) { };'
 
     substituteInPlace Definitions.h \
-      --replace "#include <System/pthread_machdep.h>" ""
+      --replace "#include <System/pthread_machdep.h>" "" \
+      --replace 'void * const, void * const' 'void * const, void *'
 
     # getspecific_direct is more efficient, but this should be equivalent...
     substituteInPlace Zone.h \
@@ -76,4 +77,8 @@ appleDerivation {
     cp auto_zone.h auto_weak.h auto_tester/auto_tester.h auto_gdb_interface.h $out/include
     cp libauto.dylib $out/lib
   '';
+
+  meta = {
+    platforms = stdenv.lib.platforms.darwin;
+  };
 }

@@ -4,6 +4,12 @@ rec {
     "/usr/lib/libsqlite3.dylib"
     "/usr/lib/libxml2.2.dylib"
   ];
+  ForceFeedback = [
+    "/System/Library/Frameworks/ForceFeedback.framework"
+  ];
+  AGL = [
+    "/System/Library/Frameworks/AGL.framework"
+  ];
   IOKit = [
     "/System/Library/Frameworks/IOKit.framework"
   ];
@@ -245,5 +251,8 @@ rec {
   ];
   SecurityFoundation = [
     "/System/Library/Frameworks/SecurityFoundation.framework"
+  ];
+  Kernel = [
+    "/System/Library/Frameworks/Kernel.framework"
   ];
 }

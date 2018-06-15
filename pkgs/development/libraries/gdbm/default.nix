@@ -1,16 +1,42 @@
-{ stdenv, fetchurl }:
+{ stdenv, lib, buildPlatform, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "gdbm-1.11";
+  name = "gdbm-1.14.1";
 
   src = fetchurl {
     url = "mirror://gnu/gdbm/${name}.tar.gz";
-    sha256 = "1hz3jgh3pd4qzp6jy0l8pd8x01g9abw7csnrlnj1a2sxy122z4cd";
+    sha256 = "0pxwz3jlwvglq2mrbxvrjgr8pa0aj73p3v9sxmdlj570zw0gzknd";
   };
 
-  doCheck = true;
+  doCheck = true; # not cross;
 
-  meta = {
+  # Linking static stubs on cygwin requires correct ordering.
+  # Consider upstreaming this.
+
+  # Disable dbmfetch03.at test because it depends on unlink()
+  # failing on a link in a chmod -w directory, which cygwin
+  # apparently allows.
+  postPatch = lib.optionalString buildPlatform.isCygwin ''
+      substituteInPlace tests/Makefile.in --replace \
+        '_LDADD = ../src/libgdbm.la ../compat/libgdbm_compat.la' \
+        '_LDADD = ../compat/libgdbm_compat.la ../src/libgdbm.la'
+      substituteInPlace tests/testsuite.at --replace \
+        'm4_include([dbmfetch03.at])' ""
+  '';
+  configureFlags = [ "--enable-libgdbm-compat" ];
+
+  postInstall = ''
+    # create symlinks for compatibility
+    install -dm755 $out/include/gdbm
+    (
+      cd $out/include/gdbm
+      ln -s ../gdbm.h gdbm.h
+      ln -s ../ndbm.h ndbm.h
+      ln -s ../dbm.h  dbm.h
+    )
+  '';
+
+  meta = with lib; {
     description = "GNU dbm key/value database library";
 
     longDescription =
@@ -33,8 +59,8 @@ stdenv.mkDerivation rec {
       '';
 
     homepage = http://www.gnu.org/software/gdbm/;
-    license = stdenv.lib.licenses.gpl3Plus;
-    platforms = stdenv.lib.platforms.all;
-    maintainers = [ ];
+    license = licenses.gpl3Plus;
+    platforms = platforms.all;
+    maintainers = [ maintainers.vrthra ];
   };
 }

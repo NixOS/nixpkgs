@@ -6,9 +6,22 @@ let
 
 cfg = config.services.tlp;
 
-tlp = pkgs.tlp.override { kmod = config.system.sbin.modprobe; };
+enableRDW = config.networking.networkmanager.enable;
 
-confFile = pkgs.writeText "tlp" (builtins.readFile "${tlp}/etc/default/tlp" + cfg.extraConfig);
+tlp = pkgs.tlp.override {
+  inherit enableRDW;
+};
+
+# XXX: We can't use writeTextFile + readFile here because it triggers
+# TLP build to get the .drv (even on --dry-run).
+confFile = pkgs.runCommand "tlp"
+  { config = cfg.extraConfig;
+    passAsFile = [ "config" ];
+  }
+  ''
+    cat ${tlp}/etc/default/tlp > $out
+    cat $configPath >> $out
+  '';
 
 in
 
@@ -27,7 +40,7 @@ in
       };
 
       extraConfig = mkOption {
-        type = types.str;
+        type = types.lines;
         default = "";
         description = "Additional configuration variables for TLP";
       };
@@ -41,13 +54,22 @@ in
 
   config = mkIf cfg.enable {
 
+    powerManagement.scsiLinkPolicy = null;
+    powerManagement.cpuFreqGovernor = null;
+
+    systemd.sockets."systemd-rfkill".enable = false;
+
     systemd.services = {
+      "systemd-rfkill@".enable = false;
+      "systemd-rfkill".enable = false;
+
       tlp = {
         description = "TLP system startup/shutdown";
 
         after = [ "multi-user.target" ];
         wantedBy = [ "multi-user.target" ];
         before = [ "shutdown.target" ];
+        restartTriggers = [ confFile ];
 
         serviceConfig = {
           Type = "oneshot";
@@ -81,12 +103,14 @@ in
     environment.etc = [{ source = confFile;
                          target = "default/tlp";
                        }
-                      ] ++ optional tlp.enableRDW {
+                      ] ++ optional enableRDW {
                         source = "${tlp}/etc/NetworkManager/dispatcher.d/99tlp-rdw-nm";
                         target = "NetworkManager/dispatcher.d/99tlp-rdw-nm";
                       };
 
     environment.systemPackages = [ tlp ];
+
+    boot.kernelModules = [ "msr" ];
 
   };
 

@@ -1,21 +1,21 @@
 { stdenv, fetchurl, cmake }:
 
-let version = "1.0.10"; in
+let version = "2.1.0.1"; in
 
 stdenv.mkDerivation {
-  name = "libcec-${version}";
+  name = "p8-platform-${version}";
 
   src = fetchurl {
-    url = "https://github.com/Pulse-Eight/platform/archive/${version}.tar.gz";
-    sha256 = "1kdmi9b62nky4jrb5519ddnw5n7s7m6qyj7rzhg399f0n6f278vb";
+    url = "https://github.com/Pulse-Eight/platform/archive/p8-platform-${version}.tar.gz";
+    sha256 = "18381y54f7d18ckpzf9cfxbz1ws6imprbbm9pvhcg5c86ln8skq6";
   };
 
   nativeBuildInputs = [ cmake ];
 
   meta = with stdenv.lib; {
     description = "Platform library for libcec and Kodi addons";
-    homepage = "https://github.com/Pulse-Eight/platform";
-    repositories.git = "https://github.com/Pulse-Eight/libcec.git";
+    homepage = https://github.com/Pulse-Eight/platform;
+    repositories.git = "https://github.com/Pulse-Eight/platform.git";
     license = stdenv.lib.licenses.gpl2Plus;
     platforms = platforms.linux;
     maintainers = [ maintainers.titanous ];

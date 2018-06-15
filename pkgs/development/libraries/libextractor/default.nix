@@ -7,11 +7,11 @@ assert gtkSupport -> glib != null && gtk3 != null;
 assert videoSupport -> ffmpeg != null && libmpeg2 != null;
 
 stdenv.mkDerivation rec {
-  name = "libextractor-1.2";
+  name = "libextractor-1.6";
 
   src = fetchurl {
     url = "mirror://gnu/libextractor/${name}.tar.gz";
-    sha256 = "1n7z6s5ils6xmf6b0z1xda41maxj94c1n6wlyyxmacs5lrkh2a96";
+    sha256 = "17gnpgspdhfgcr27j8sn9105vb4lw22yqdrhic62l79q5v5avm16";
   };
 
   preConfigure =
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
 
   configureFlags = "--disable-ltdl-install "
     + "--with-ltdl-include=${libtool}/include "
-    + "--with-ltdl-lib=${libtool}/lib "
+    + "--with-ltdl-lib=${libtool.lib}/lib "
     + "--enable-xpdf";
 
   # Checks need to be run after "make install", otherwise plug-ins are not in
@@ -66,5 +66,6 @@ stdenv.mkDerivation rec {
     license = stdenv.lib.licenses.gpl2Plus;
 
     maintainers = [ ];
+    platforms = stdenv.lib.platforms.linux;
   };
 }

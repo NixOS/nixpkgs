@@ -5,7 +5,7 @@ with lib;
 let
 
   smbToString = x: if builtins.typeOf x == "bool"
-                   then (if x then "true" else "false")
+                   then boolToString x
                    else toString x;
 
   cfg = config.services.samba;
@@ -28,9 +28,9 @@ let
   configFile = pkgs.writeText "smb.conf"
     (if cfg.configText != null then cfg.configText else
     ''
-      [ global ]
+      [global]
       security = ${cfg.securityType}
-      passwd program = /var/setuid-wrappers/passwd %u
+      passwd program = /run/wrappers/bin/passwd %u
       pam password change = ${smbToString cfg.syncPasswordsByPam}
       invalid users = ${smbToString cfg.invalidUsers}
 
@@ -54,8 +54,12 @@ let
       };
 
       serviceConfig = {
-        ExecStart = "${samba}/sbin/${appName} ${args}";
+        ExecStart = "${samba}/sbin/${appName} --foreground --no-process-group ${args}";
         ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
+        LimitNOFILE = 16384;
+        PIDFile = "/run/${appName}.pid";
+        Type = "notify";
+        NotifyAccess = "all"; #may not do anything...
       };
 
       restartTriggers = [ configFile ];
@@ -79,13 +83,42 @@ in
         description = ''
           Whether to enable Samba, which provides file and print
           services to Windows clients through the SMB/CIFS protocol.
+
+          <note>
+            <para>If you use the firewall consider adding the following:</para>
+            <programlisting>
+              networking.firewall.allowedTCPPorts = [ 139 445 ];
+              networking.firewall.allowedUDPPorts = [ 137 138 ];
+            </programlisting>
+          </note>
+        '';
+      };
+
+      enableNmbd = mkOption {
+        type = types.bool;
+        default = true;
+        description = ''
+          Whether to enable Samba's nmbd, which replies to NetBIOS over IP name
+          service requests. It also participates in the browsing protocols
+          which make up the Windows "Network Neighborhood" view.
+        '';
+      };
+
+      enableWinbindd = mkOption {
+        type = types.bool;
+        default = true;
+        description = ''
+          Whether to enable Samba's winbindd, which provides a number of services
+          to the Name Service Switch capability found in most modern C libraries,
+          to arbitrary applications via PAM and ntlm_auth and to Samba itself.
         '';
       };
 
       package = mkOption {
         type = types.package;
         default = pkgs.samba;
-        example = pkgs.samba4;
+        defaultText = "pkgs.samba";
+        example = literalExample "pkgs.samba3";
         description = ''
           Defines which package should be used for the samba server.
         '';
@@ -116,6 +149,10 @@ in
         default = "";
         description = ''
           Additional global section and extra section lines go in here.
+        '';
+        example = ''
+          guest account = nobody
+          map to guest = bad user
         '';
       };
 
@@ -153,11 +190,13 @@ in
         '';
         type = types.attrsOf (types.attrsOf types.unspecified);
         example =
-          { srv =
-             { path = "/srv";
-               "read only" = true;
-                comment = "Public samba share.";
-             };
+          { public =
+            { path = "/srv/public";
+              "read only" = true;
+              browseable = "yes";
+              "guest ok" = "yes";
+              comment = "Public samba share.";
+            };
           };
       };
 
@@ -169,7 +208,12 @@ in
   ###### implementation
 
   config = mkMerge
-    [ { # Always provide a smb.conf to shut up programs like smbclient and smbspool.
+    [ { assertions =
+          [ { assertion = cfg.nsswins -> cfg.enableWinbindd;
+              message   = "If samba.nsswins is enabled, then samba.enableWinbindd must also be enabled";
+            }
+          ];
+        # Always provide a smb.conf to shut up programs like smbclient and smbspool.
         environment.etc = singleton
           { source =
               if cfg.enable then configFile
@@ -178,7 +222,7 @@ in
           };
       }
 
-      (mkIf config.services.samba.enable {
+      (mkIf cfg.enable {
 
         system.nssModules = optional cfg.nsswins samba;
 
@@ -189,11 +233,12 @@ in
             after = [ "samba-setup.service" "network.target" ];
             wantedBy = [ "multi-user.target" ];
           };
-
+          # Refer to https://github.com/samba-team/samba/tree/master/packaging/systemd
+          # for correct use with systemd
           services = {
-            "samba-nmbd" = daemonService "nmbd" "-F";
-            "samba-smbd" = daemonService "smbd" "-F";
-            "samba-winbindd" = daemonService "winbindd" "-F";
+            "samba-smbd" = daemonService "smbd" "";
+            "samba-nmbd" = mkIf cfg.enableNmbd (daemonService "nmbd" "");
+            "samba-winbindd" = mkIf cfg.enableWinbindd (daemonService "winbindd" "");
             "samba-setup" = {
               description = "Samba Setup Task";
               script = setupScript;
@@ -202,7 +247,7 @@ in
           };
         };
 
-        security.pam.services.sambda = {};
+        security.pam.services.samba = {};
 
       })
     ];

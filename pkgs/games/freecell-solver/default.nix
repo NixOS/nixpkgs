@@ -1,19 +1,32 @@
-{ stdenv, fetchurl, pkgconfig, cmake, perl, gmp, libtap, perlPackages }:
+{ stdenv, fetchurl, pkgconfig, cmake
+, perl, gmp, libtap, gperf
+, perlPackages, python3 }:
 
 with stdenv.lib;
 stdenv.mkDerivation rec{
 
   name = "freecell-solver-${version}";
-  version = "3.26.0";
+  version = "4.18.0";
 
   src = fetchurl {
-    url = "http://fc-solve.shlomifish.org/downloads/fc-solve/${name}.tar.bz2";
-    sha256 = "0pm6xk4fmwgzva70qxb0pqymdfvpasnvqiwwmm8hpx7g37y11wqk";
+    url = "http://fc-solve.shlomifish.org/downloads/fc-solve/${name}.tar.xz";
+    sha256 = "1cmaib69pijmcpvgjvrdry8j4xys8l906l80b8z21vvyhdwrfdnn";
   };
 
-  buildInputs = [ pkgconfig cmake perl gmp libtap
-    perlPackages.TemplateToolkit perlPackages.StringShellQuote
-    perlPackages.GamesSolitaireVerify ];
+  nativeBuildInputs = [
+    cmake perl pkgconfig
+  ] ++ (with perlPackages; TaskFreecellSolverTesting.buildInputs ++ [
+    GamesSolitaireVerify StringShellQuote TaskFreecellSolverTesting TemplateToolkit
+  ]);
+
+  buildInputs = [
+    gmp libtap gperf
+    python3 python3.pkgs.random2
+  ];
+
+  # "ninja t/CMakeFiles/delta-states-test.t.exe.dir/__/delta_states.c.o" fails
+  # to depend on the generated "is_king.h".
+  enableParallelBuilding = false;
 
   meta = {
     description = "A FreeCell automatic solver";
@@ -26,5 +39,6 @@ stdenv.mkDerivation rec{
     homepage = http://fc-solve.shlomifish.org/;
     license = licenses.mit;
     maintainers = [ maintainers.AndersonTorres ];
+    platforms = platforms.unix;
   };
 }

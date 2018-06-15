@@ -1,26 +1,32 @@
-{ stdenv, fetchurl, pkgconfig, intltool, gtk2 }:
+{ stdenv, fetchurl, pkgconfig, intltool, gtk2, hicolor-icon-theme
+, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
-
-  name = "yad-0.25.1";
+  name = "yad-0.40.0";
 
   src = fetchurl {
-    url = "http://yad.googlecode.com/files/${name}.tar.xz";
-    sha256 = "1pljs9799xa2w3y2vjg93gqkv76z0pjh947djd7179yq3kryb57a";
+    url = "http://sourceforge.net/projects/yad-dialog/files/${name}.tar.xz";
+    sha256 = "1x0fsv8nfkm8lchdawnf3zw79jaqbnvhv87sk5r8g86knv8vgl62";
   };
 
   configureFlags = [
     "--enable-icon-browser"
   ];
 
-  buildInputs = [ gtk2 ];
+  # for gcc5: c11 inline semantics breaks the build
+  NIX_CFLAGS_COMPILE = "-fgnu89-inline";
 
-  nativeBuildInputs = [ pkgconfig intltool ];
+  buildInputs = [ gtk2 hicolor-icon-theme ];
 
-  preFixup = "rm $out/share/icons/hicolor/icon-theme.cache";
+  nativeBuildInputs = [ pkgconfig intltool wrapGAppsHook ];
+
+  postPatch = ''
+    sed -i src/file.c -e '21i#include <glib/gprintf.h>'
+    sed -i src/form.c -e '21i#include <stdlib.h>'
+  '';
 
   meta = {
-    homepage = "http://code.google.com/p/yad/";
+    homepage = http://yad-dialog.sourceforge.net/;
     description = "GUI dialog tool for shell scripts";
     longDescription = ''
       Yad (yet another dialog) is a GUI dialog tool for shell scripts. It is a

@@ -1,23 +1,25 @@
-{ stdenv, fetchurl, wxGTK, libuuid, xercesc, zip , libXt, libXtst
-, libXi, xextproto, gettext, perl, pkgconfig, libyubikey, ykpers
+{ stdenv, fetchFromGitHub, wxGTK, libuuid, xercesc, zip , libXt, libXtst
+, libXi, xextproto, gettext, perl, pkgconfig, libyubikey, yubikey-personalization
 }:
 
 stdenv.mkDerivation rec {
   name = "pwsafe-${version}";
-  version = "0.95";
+  version = "0.99";
 
-  src = fetchurl {
-    url = "mirror://sourceforge/passwordsafe/pwsafe-${version}BETA-src.tgz";
-    sha256 = "f0b081bc358fee97fce20f352e360960d2813989023b837102b90ba6ed787d46";
+  src = fetchFromGitHub {
+    owner = "pwsafe";
+    repo = "pwsafe";
+    rev = "${version}BETA";
+    sha256 = "1bkimz4g9v9kfjkqr3dqddh4jps7anzc1hgmirmmhwpac0xdp60g";
   };
 
   makefile = "Makefile.linux";
-  makeFlags = "YBPERS_LIBPATH=${ykpers}/lib";
+  makeFlags = "YBPERS_LIBPATH=${yubikey-personalization}/lib";
 
   buildFlags = "unicoderelease";
   buildInputs = [ wxGTK libuuid gettext perl zip
                   xercesc libXt libXtst libXi xextproto
-                  pkgconfig libyubikey ykpers ];
+                  pkgconfig libyubikey yubikey-personalization ];
 
   postPatch = ''
     # Fix perl scripts used during the build.
@@ -29,6 +31,9 @@ stdenv.mkDerivation rec {
     for f in `grep -Rl /usr/share/ src`; do
       substituteInPlace $f --replace /usr/share/ $out/share/
     done
+
+    # Fix hard coded zip path.
+    substituteInPlace help/Makefile.linux --replace /usr/bin/zip ${zip}/bin/zip
 
     for f in `grep -Rl /usr/bin/ .`; do
       substituteInPlace $f --replace /usr/bin/ ""
@@ -45,7 +50,7 @@ stdenv.mkDerivation rec {
              $out/share/locale
 
     (cd help && make -f Makefile.linux)
-    cp help/help.zip $out/share/doc/passwordsafe/help
+    cp help/help*.zip $out/share/doc/passwordsafe/help
 
     (cd src/ui/wxWidgets/I18N && make mos)
     cp -dr src/ui/wxWidgets/I18N/mos/* $out/share/locale/

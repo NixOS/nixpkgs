@@ -1,6 +1,6 @@
-{ stdenv, fetchurl, buildPythonPackage, blivet }:
+{ stdenv, fetchurl, buildPythonApplication, blivet }:
 
-buildPythonPackage rec {
+buildPythonApplication rec {
   name = "nixpart-${version}";
   version = "1.0.0";
 

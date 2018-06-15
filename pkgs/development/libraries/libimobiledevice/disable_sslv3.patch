@@ -1,0 +1,25 @@
+From e19de4f0d4cb70e30017edfc6b4ca1b89ffbd381 Mon Sep 17 00:00:00 2001
+From: Franz Pletz <fpletz@fnordicwalking.de>
+Date: Thu, 14 Jan 2016 14:58:23 +0100
+Subject: [PATCH] Disable SSLv3
+
+---
+ src/idevice.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/idevice.c b/src/idevice.c
+index ce27495..8f03094 100644
+--- a/src/idevice.c
++++ b/src/idevice.c
+@@ -678,7 +678,7 @@ LIBIMOBILEDEVICE_API idevice_error_t idevice_connection_enable_ssl(idevice_conne
+ 	}
+ 	BIO_set_fd(ssl_bio, (int)(long)connection->data, BIO_NOCLOSE);
+ 
+-	SSL_CTX *ssl_ctx = SSL_CTX_new(SSLv3_method());
++	SSL_CTX *ssl_ctx = SSL_CTX_new(SSLv23_method());
+ 	if (ssl_ctx == NULL) {
+ 		debug_info("ERROR: Could not create SSL context.");
+ 		BIO_free(ssl_bio);
+-- 
+2.7.0
+

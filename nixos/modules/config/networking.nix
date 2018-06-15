@@ -11,18 +11,48 @@ let
                    config.services.dnsmasq.resolveLocalQueries;
   hasLocalResolver = config.services.bind.enable || dnsmasqResolve;
 
+  resolvconfOptions = cfg.resolvconfOptions
+    ++ optional cfg.dnsSingleRequest "single-request"
+    ++ optional cfg.dnsExtensionMechanism "edns0";
 in
 
 {
 
   options = {
 
+    networking.hosts = lib.mkOption {
+      type = types.attrsOf ( types.listOf types.str );
+      default = {};
+      example = literalExample ''
+        {
+          "127.0.0.1" = [ "foo.bar.baz" ];
+          "192.168.0.2" = [ "fileserver.local" "nameserver.local" ];
+        };
+      '';
+      description = ''
+        Locally defined maps of hostnames to IP addresses.
+      '';
+    };
+
     networking.extraHosts = lib.mkOption {
       type = types.lines;
       default = "";
       example = "192.168.0.1 lanlocalhost";
       description = ''
-        Additional entries to be appended to <filename>/etc/hosts</filename>.
+        Additional verbatim entries to be appended to <filename>/etc/hosts</filename>.
+      '';
+    };
+
+    networking.hostConf = lib.mkOption {
+      type = types.lines;
+      default = "multi on";
+      example = ''
+        multi on
+        reorder on
+        trim lan
+      '';
+      description = ''
+        The contents of <filename>/etc/host.conf</filename>. See also <citerefentry><refentrytitle>host.conf</refentrytitle><manvolnum>5</manvolnum></citerefentry>.
       '';
     };
 
@@ -39,6 +69,17 @@ in
       '';
     };
 
+    networking.dnsExtensionMechanism = lib.mkOption {
+      type = types.bool;
+      default = true;
+      description = ''
+        Enable the <code>edns0</code> option in <filename>resolv.conf</filename>. With
+        that option set, <code>glibc</code> supports use of the extension mechanisms for
+        DNS (EDNS) specified in RFC 2671. The most popular user of that feature is DNSSEC,
+        which does not work without it.
+      '';
+    };
+
     networking.extraResolvconfConf = lib.mkOption {
       type = types.lines;
       default = "";
@@ -48,6 +89,26 @@ in
       '';
     };
 
+    networking.resolvconfOptions = lib.mkOption {
+      type = types.listOf types.str;
+      default = [];
+      example = [ "ndots:1" "rotate" ];
+      description = ''
+        Set the options in <filename>/etc/resolv.conf</filename>.
+      '';
+    };
+
+    networking.timeServers = mkOption {
+      default = [
+        "0.nixos.pool.ntp.org"
+        "1.nixos.pool.ntp.org"
+        "2.nixos.pool.ntp.org"
+        "3.nixos.pool.ntp.org"
+      ];
+      description = ''
+        The set of NTP servers from which to synchronise.
+      '';
+    };
 
     networking.proxy = {
 
@@ -96,6 +157,15 @@ in
         example = "http://127.0.0.1:3128";
       };
 
+      allProxy = lib.mkOption {
+        type = types.nullOr types.str;
+        default = cfg.proxy.default;
+        description = ''
+          This option specifies the all_proxy environment variable.
+        '';
+        example = "http://127.0.0.1:3128";
+      };
+
       noProxy = lib.mkOption {
         type = types.nullOr types.str;
         default = null;
@@ -122,23 +192,37 @@ in
 
     environment.etc =
       { # /etc/services: TCP/UDP port assignments.
-        "services".source = pkgs.iana_etc + "/etc/services";
+        "services".source = pkgs.iana-etc + "/etc/services";
 
         # /etc/protocols: IP protocol numbers.
-        "protocols".source  = pkgs.iana_etc + "/etc/protocols";
+        "protocols".source  = pkgs.iana-etc + "/etc/protocols";
 
         # /etc/rpc: RPC program numbers.
-        "rpc".source = pkgs.glibc + "/etc/rpc";
+        "rpc".source = pkgs.glibc.out + "/etc/rpc";
 
         # /etc/hosts: Hostname-to-IP mappings.
         "hosts".text =
+          let oneToString = set : ip : ip + " " + concatStringsSep " " ( getAttr ip set );
+              allToString = set : concatMapStringsSep "\n" ( oneToString set ) ( attrNames set );
+              userLocalHosts = optionalString
+                ( builtins.hasAttr "127.0.0.1" cfg.hosts )
+                ( concatStringsSep " " ( remove "localhost" cfg.hosts."127.0.0.1" ));
+              userLocalHosts6 = optionalString
+                ( builtins.hasAttr "::1" cfg.hosts )
+                ( concatStringsSep " " ( remove "localhost" cfg.hosts."::1" ));
+              otherHosts = allToString ( removeAttrs cfg.hosts [ "127.0.0.1" "::1" ]);
+          in
           ''
-            127.0.0.1 localhost
+            127.0.0.1 ${userLocalHosts} localhost
             ${optionalString cfg.enableIPv6 ''
-              ::1 localhost
+              ::1 ${userLocalHosts6} localhost
             ''}
+            ${otherHosts}
             ${cfg.extraHosts}
           '';
+
+        # /etc/host.conf: resolver configuration file
+        "host.conf".text = cfg.hostConf;
 
         # /etc/resolvconf.conf: Configuration for openresolv.
         "resolvconf.conf".text =
@@ -151,9 +235,9 @@ in
               # Invalidate the nscd cache whenever resolv.conf is
               # regenerated.
               libc_restart='${pkgs.systemd}/bin/systemctl try-restart --no-block nscd.service 2> /dev/null'
-            '' + optionalString cfg.dnsSingleRequest ''
-              # only send one DNS request at a time
-              resolv_conf_options='single-request'
+            '' + optionalString (length resolvconfOptions > 0) ''
+              # Options as described in resolv.conf(5)
+              resolv_conf_options='${concatStringsSep " " resolvconfOptions}'
             '' + optionalString hasLocalResolver ''
               # This hosts runs a full-blown DNS resolver.
               name_servers='127.0.0.1'
@@ -163,13 +247,13 @@ in
             '' + cfg.extraResolvconfConf + ''
             '';
 
-      } // (optionalAttrs config.services.resolved.enable (
-        if dnsmasqResolve then {
-          "dnsmasq-resolv.conf".source = "/run/systemd/resolve/resolv.conf";
-        } else {
-          "resolv.conf".source = "/run/systemd/resolve/resolv.conf";
-        }
-      ));
+      } // optionalAttrs config.services.resolved.enable {
+        # symlink the static version of resolv.conf as recommended by upstream:
+        # https://www.freedesktop.org/software/systemd/man/systemd-resolved.html#/etc/resolv.conf
+        "resolv.conf".source = "${pkgs.systemd}/lib/systemd/resolv.conf";
+      } // optionalAttrs (config.services.resolved.enable && dnsmasqResolve) {
+        "dnsmasq-resolv.conf".source = "/run/systemd/resolve/resolv.conf";
+      };
 
       networking.proxy.envVars =
         optionalAttrs (cfg.proxy.default != null) {
@@ -183,6 +267,8 @@ in
           rsync_proxy = cfg.proxy.rsyncProxy;
         } // optionalAttrs (cfg.proxy.ftpProxy != null) {
           ftp_proxy   = cfg.proxy.ftpProxy;
+        } // optionalAttrs (cfg.proxy.allProxy != null) {
+          all_proxy   = cfg.proxy.allProxy;
         } // optionalAttrs (cfg.proxy.noProxy != null) {
           no_proxy    = cfg.proxy.noProxy;
         };
@@ -190,16 +276,11 @@ in
     # Install the proxy environment variables
     environment.sessionVariables = cfg.proxy.envVars;
 
-    # The ‘ip-up’ target is started when we have IP connectivity.  So
-    # services that depend on IP connectivity (like ntpd) should be
-    # pulled in by this target.
-    systemd.targets.ip-up.description = "Services Requiring IP Connectivity";
-
     # This is needed when /etc/resolv.conf is being overriden by networkd
     # and other configurations. If the file is destroyed by an environment
     # activation then it must be rebuilt so that applications which interface
     # with /etc/resolv.conf directly don't break.
-    system.activationScripts.resolvconf = stringAfter [ "etc" "tmpfs" "var" ]
+    system.activationScripts.resolvconf = stringAfter [ "etc" "specialfs" "var" ]
       ''
         # Systemd resolved controls its own resolv.conf
         rm -f /run/resolvconf/interfaces/systemd
@@ -209,8 +290,8 @@ in
           ln -s /run/systemd/resolve/resolv.conf /run/resolvconf/interfaces/systemd
         ''}
 
-        # Make sure resolv.conf is up to date if not managed by systemd
-        ${optionalString (!config.services.resolved.enable) ''
+        # Make sure resolv.conf is up to date if not managed manually or by systemd
+        ${optionalString (!config.environment.etc?"resolv.conf") ''
           ${pkgs.openresolv}/bin/resolvconf -u
         ''}
       '';

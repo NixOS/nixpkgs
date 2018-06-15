@@ -1,11 +1,14 @@
 { stdenv, fetchurl, perl /*, xmlto */}:
 
-stdenv.mkDerivation {
-  name = "colordiff-1.0.15";
+stdenv.mkDerivation rec {
+  name = "colordiff-1.0.18";
 
   src = fetchurl {
-    url = http://www.colordiff.org/colordiff-1.0.15.tar.gz;
-    sha256 = "0icx4v2h1gy08vhh3qqi2qfyfjp37vgj27hq1fnjz83bg7ly8pjr";
+    urls = [
+      "http://www.colordiff.org/${name}.tar.gz"
+      "http://www.colordiff.org/archive/${name}.tar.gz"
+    ];
+    sha256 = "1q6n60n4b9fnzccxyxv04mxjsql4ddq17vl2c74ijvjdhpcfrkr9";
   };
 
   buildInputs = [ perl /* xmlto */ ];
@@ -16,9 +19,8 @@ stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "Wrapper for 'diff' that produces the same output but with pretty 'syntax' highlighting";
-    homepage = http://www.colordiff.org/;
+    homepage = https://www.colordiff.org/;
     license = licenses.gpl3;
     platforms = platforms.linux ++ platforms.darwin;
-    maintainer = with maintainers; [ nckx ];
   };
 }

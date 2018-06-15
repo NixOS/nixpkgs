@@ -1,16 +1,16 @@
-{ stdenv, fetchsvn, python }:
+{ stdenv, fetchurl, python2 }:
 
 stdenv.mkDerivation rec {
   name = "ctemplate-${version}";
 
   version = "2.3";
 
-  src = fetchsvn {
-    url = "http://ctemplate.googlecode.com/svn/tags/${name}";
-    sha256 = "1kvh82mhazf4qz7blnv0rcax7vi524dmz6v6rp89z2h3qjilbvc7";
+  src = fetchurl {
+    url = "https://github.com/OlafvdSpek/ctemplate/archive/ctemplate-${version}.tar.gz";
+    sha256 = "0mi5g2xlws10z1g4x0cj6kd1r673kkav35pgzyqxa1w47xnwprcr";
   };
 
-  buildInputs = [ python ];
+  buildInputs = [ python2 ];
 
   postPatch = ''
     patchShebangs .
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
       emphasizes separating logic from presentation: it is impossible to
       embed application logic in this template language.
     '';
-    homepage = http://code.google.com/p/google-ctemplate/;
-    license = "bsd";
+    homepage = https://github.com/OlafvdSpek/ctemplate;
+    license = stdenv.lib.licenses.bsd3;
   };
 }

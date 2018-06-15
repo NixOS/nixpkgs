@@ -4,7 +4,7 @@
 }:
 
 let
-  version = "3.0.3";
+  version = "3.0.4";
 
 in
 
@@ -12,17 +12,17 @@ stdenv.mkDerivation rec {
   name = "gtkspellmm-${version}";
 
   src = fetchurl {
-    url = "http://downloads.sourceforge.net/project/gtkspell/gtkspellmm/" +
+    url = "mirror://sourceforge/project/gtkspell/gtkspellmm/" +
           "${name}.tar.gz";
-    sha256 = "f9dcc0991621c08e7a972f33487afd6b37491468f0b654f50c741a7e6d810624";
+    sha256 = "0x6zx928dl62f0c0x6b2s32i06lvn18wx7crrgs1j9yjgkim4k4k";
   };
 
   propagatedBuildInputs = [
     gtkspell3
   ];
 
+  nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
-    pkgconfig
     gtk3 glib glibmm gtkmm3
   ];
 

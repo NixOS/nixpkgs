@@ -1,6 +1,6 @@
-{ stdenv, fetchurl, buildPythonPackage, pythonPackages, python }:
+{ stdenv, fetchurl, pythonPackages, glibcLocales }:
 
-buildPythonPackage rec {
+pythonPackages.buildPythonApplication rec {
   name = "i3minator-${version}";
   version = "0.0.4";
 
@@ -9,7 +9,12 @@ buildPythonPackage rec {
     sha256 = "11dn062788kwfs8k2ry4v8zr2gn40r6lsw770s9g2gvhl5n469dw";
   };
 
+  LC_ALL = "en_US.UTF-8";
+  buildInputs = [ glibcLocales ];
   propagatedBuildInputs = [ pythonPackages.pyyaml pythonPackages.i3-py ];
+
+  # No tests
+  doCheck = false;
 
   meta = with stdenv.lib; {
     description = "i3 project manager similar to tmuxinator";
@@ -20,7 +25,7 @@ buildPythonPackage rec {
     '';
     homepage = https://github.com/carlesso/i3minator;
     license = stdenv.lib.licenses.wtfpl;
-    maintainers = with maintainers; [ iElectric ];
+    maintainers = with maintainers; [ domenkozar ];
     platforms = stdenv.lib.platforms.linux;
   };
 

@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  NIX_CFLAGS_COMPILE = if stdenv.isDarwin then "-std=gnu99" else null;
+  NIX_CFLAGS_COMPILE = [ "-std=c99" ];
 
   meta = {
     homepage = http://www.gnu.org/software/rcs/;
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
       '';
 
     license = stdenv.lib.licenses.gpl3Plus;
-    maintainers = with stdenv.lib.maintainers; [ eelco simons ];
-    platforms = stdenv.lib.platforms.all;
+    maintainers = with stdenv.lib.maintainers; [ eelco ];
+    platforms = stdenv.lib.platforms.linux;
   };
 }

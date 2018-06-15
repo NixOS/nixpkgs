@@ -1,28 +1,28 @@
-{ stdenv, fetchurl, SDL, ftgl, pkgconfig, libpng, libjpeg, pcre
-, SDL_image, glew, mesa, boost, glm
+{ stdenv, fetchurl, SDL2, ftgl, pkgconfig, libpng, libjpeg, pcre
+, SDL2_image, freetype, glew, libGLU_combined, boost, glm
 }:
 
 stdenv.mkDerivation rec {
-  version = "0.43";
+  version = "0.48";
   name = "gource-${version}";
 
   src = fetchurl {
     url = "https://github.com/acaudwell/Gource/releases/download/${name}/${name}.tar.gz";
-    sha256 = "1r5x9ai86f609hf584n0xaf5hxkbilj5qihn89v7ghpmwk40m945";
+    sha256 = "04qxcm05qiyr9rg2kv6abfy7kkzqr8ziw4iyp1d14lniv93m61dp";
   };
 
+  nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
-    glew SDL ftgl pkgconfig libpng libjpeg pcre SDL_image mesa
-    boost glm
+    glew SDL2 ftgl libpng libjpeg pcre SDL2_image libGLU_combined
+    boost glm freetype
   ];
 
-  configureFlags = [ "--with-boost-libdir=${boost.lib}/lib" ];
+  configureFlags = [ "--with-boost-libdir=${boost.out}/lib" ];
 
-  NIX_CFLAGS_COMPILE = "-fpermissive " + # fix build with newer gcc versions
-                       "-std=c++11"; # fix build with glm >= 0.9.6.0
+  enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
-    homepage = http://code.google.com/p/gource/;
+    homepage = http://gource.io/;
     description = "A Software version control visualization tool";
     license = licenses.gpl3Plus;
     longDescription = ''
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
       Mercurial and Bazaar and SVN. Gource can also parse logs produced
       by several third party tools for CVS repositories.
     '';
-    platforms = platforms.linux;
+    platforms = platforms.unix;
     maintainers = with maintainers; [ pSub ];
   };
 }

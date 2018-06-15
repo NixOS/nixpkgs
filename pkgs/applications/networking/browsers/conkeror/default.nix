@@ -1,12 +1,14 @@
-{ stdenv, fetchgit, unzip, firefox, makeWrapper }:
+{ stdenv, fetchgit, unzip, firefox-esr, makeWrapper }:
 
-stdenv.mkDerivation {
-  name = "conkeror-1.0pre-20150730";
-
+stdenv.mkDerivation rec {
+  pkgname = "conkeror";
+  version = "1.0.4";
+  name = "${pkgname}-${version}";
+ 
   src = fetchgit {
     url = git://repo.or.cz/conkeror.git;
-    rev = "a1f7e879b129df5cf14ea4ce80a9c1407380ed58";
-    sha256 = "12d8949a81a670037664dd930f7efe3d54b321aad48deea68343eba9aaea8785";
+    rev = "refs/tags/${version}";
+    sha256 = "10c57wqybp9kcjpkb01wxq0h3vafcdb1g5kb4k8sb2zajg59afv8";
   };
 
   buildInputs = [ unzip makeWrapper ];
@@ -15,7 +17,7 @@ stdenv.mkDerivation {
     mkdir -p $out/libexec/conkeror
     cp -r * $out/libexec/conkeror
 
-    makeWrapper ${firefox}/bin/firefox $out/bin/conkeror \
+    makeWrapper ${firefox-esr}/bin/firefox $out/bin/conkeror \
       --add-flags "-app $out/libexec/conkeror/application.ini"
   '';
 
@@ -32,6 +34,6 @@ stdenv.mkDerivation {
     homepage = http://conkeror.org/;
     license = with licenses; [ mpl11 gpl2 lgpl21 ];
     maintainers = with maintainers; [ astsmtl chaoflow ];
-    platforms = with platforms; linux;
+    platforms = platforms.linux;
   };
 }

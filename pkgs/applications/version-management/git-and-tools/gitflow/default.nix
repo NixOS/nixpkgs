@@ -1,16 +1,29 @@
-{ stdenv, fetchurl }:
+{ pkgs, stdenv, fetchFromGitHub }:
+
+with pkgs.lib;
 
 stdenv.mkDerivation rec {
-  name = "gitflow-${version}";
-  version = "1.8.0";
+  pname = "gitflow";
+  version = "1.11.0";
+  name = "${pname}-${version}";
 
-  src = fetchurl {
-    url = "https://github.com/petervanderdoes/gitflow/archive/${version}.tar.gz";
-    sha256 = "1vxdawx4sinl19g59ifmrdalmr2dl5pkgawyj9z0s5mcildi6fc2";
+  src = fetchFromGitHub {
+    owner = "petervanderdoes";
+    repo = pname;
+    rev = version;
+    sha256 = "0zk53g0wd5n1zlhkwlfp124i6agx8kl0cwvy0dia3jh1p51vsc1q";
   };
+
+  buildInputs = [ pkgs.makeWrapper ];
 
   preBuild = ''
     makeFlagsArray+=(prefix="$out")
+  '';
+
+  postInstall = ''
+    wrapProgram $out/bin/git-flow \
+      --set FLAGS_GETOPT_CMD ${pkgs.getopt}/bin/getopt \
+      --suffix PATH : ${pkgs.git}/bin
   '';
 
   meta = with stdenv.lib; {

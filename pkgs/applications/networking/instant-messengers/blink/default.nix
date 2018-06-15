@@ -1,13 +1,14 @@
-{ stdenv, fetchurl, pythonPackages, pyqt4, cython, libvncserver, zlib, twisted
-, gnutls, libvpx }:
+{ stdenv, fetchdarcs, pythonPackages, libvncserver, zlib
+, gnutls, libvpx, makeDesktopItem }:
 
-pythonPackages.buildPythonPackage rec {
+pythonPackages.buildPythonApplication rec {
   name = "blink-${version}";
-  version = "1.4.1";
-  
-  src = fetchurl {
-    url = "http://download.ag-projects.com/BlinkQt/${name}.tar.gz";
-    sha256 = "0lpc3gm0hk55m7i2hlmk2p76akcfvnqxg0hyamfhha90nv6fk7sf";
+  version = "3.0.3";
+
+  src = fetchdarcs {
+    url = http://devel.ag-projects.com/repositories/blink-qt;
+    rev = "release-${version}";
+    sha256 = "1vj6zzfvxygz0fzr8bhymcw6j4v8xmr0kba53d6qg285j7hj1bdi";
   };
 
   patches = [ ./pythonpath.patch ];
@@ -15,21 +16,34 @@ pythonPackages.buildPythonPackage rec {
     sed -i 's|@out@|'"''${out}"'|g' blink/resources.py
   '';
 
-  propagatedBuildInputs = with pythonPackages;[ pyqt4 cjson sipsimple twisted
-    ];
+  propagatedBuildInputs = with pythonPackages; [ pyqt5 cjson sipsimple twisted google_api_python_client ];
 
-  buildInputs = [ cython zlib libvncserver libvpx ];
+  buildInputs = [ pythonPackages.cython zlib libvncserver libvpx ];
+
+  desktopItem = makeDesktopItem {
+    name = "Blink";
+    exec = "blink";
+    comment = meta.description;
+    desktopName = "Blink";
+    icon = "blink";
+    genericName = "Instant Messaging";
+    categories = "Application;Internet;";
+  };
 
   postInstall = ''
     wrapProgram $out/bin/blink \
-      --prefix LD_LIBRARY_PATH ":" ${gnutls}/lib
+      --prefix LD_LIBRARY_PATH ":" ${gnutls.out}/lib
+    mkdir -p "$out/share/applications"
+    mkdir -p "$out/share/pixmaps"
+    cp "$desktopItem"/share/applications/* "$out/share/applications"
+    cp "$out"/share/blink/icons/blink.* "$out/share/pixmaps"
   '';
 
   meta = with stdenv.lib; {
     homepage = http://icanblink.com/;
-    description = "A state of the art, easy to use SIP client";
+    description = "A state of the art, easy to use SIP client for Voice, Video and IM";
     platforms = platforms.linux;
-    license = licenses.mit;
+    license = licenses.gpl3;
     maintainers = with maintainers; [ pSub ];
   };
 }

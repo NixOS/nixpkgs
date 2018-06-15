@@ -1,13 +1,15 @@
-{ system, minimal ? false }:
+{ system, minimal ? false, config ? {} }:
 
-let pkgs = import ../.. { config = {}; inherit system; }; in
+let pkgs = import ../.. { inherit system config; }; in
 
 with pkgs.lib;
-with import ../lib/qemu-flags.nix;
+with import ../lib/qemu-flags.nix { inherit pkgs; };
 
 rec {
 
   inherit pkgs;
+
+  qemu = pkgs.qemu_test;
 
 
   # Build a virtual network from an attribute set `{ machine1 =
@@ -27,6 +29,7 @@ rec {
         [ ../modules/virtualisation/qemu-vm.nix
           ../modules/testing/test-instrumentation.nix # !!! should only get added for automated test runs
           { key = "no-manual"; services.nixosManual.enable = false; }
+          { key = "qemu"; system.build.qemu = qemu; }
         ] ++ optional minimal ../modules/testing/minimal-kernel.nix;
       extraArgs = { inherit nodes; };
     };
@@ -48,7 +51,7 @@ rec {
             let
               interfacesNumbered = zipLists config.virtualisation.vlans (range 1 255);
               interfaces = flip map interfacesNumbered ({ fst, snd }:
-                nameValuePair "eth${toString snd}" { ip4 =
+                nameValuePair "eth${toString snd}" { ipv4.addresses =
                   [ { address = "192.168.${toString fst}.${toString m.snd}";
                       prefixLength = 24;
                   } ];
@@ -61,7 +64,7 @@ rec {
                   networking.interfaces = listToAttrs interfaces;
 
                   networking.primaryIPAddress =
-                    optionalString (interfaces != []) (head (head interfaces).value.ip4).address;
+                    optionalString (interfaces != []) (head (head interfaces).value.ipv4.addresses).address;
 
                   # Put the IP addresses of all VMs in this machine's
                   # /etc/hosts file.  If a machine has multiple

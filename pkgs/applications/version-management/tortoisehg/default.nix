@@ -1,29 +1,31 @@
-{ pkgs, lib, mercurial, pyPackages ? pkgs.python27Packages }:
+{lib, fetchurl, mercurial, python2Packages}:
 
-pkgs.buildPythonPackage rec {
+python2Packages.buildPythonApplication rec {
     name = "tortoisehg-${version}";
-    version = "3.4.2";
-    namePrefix = "";
+    version = "4.5.2";
 
-    src = pkgs.fetchurl {
+    src = fetchurl {
       url = "https://bitbucket.org/tortoisehg/targz/downloads/${name}.tar.gz";
-      sha256 = "18a587c8fybfjxbcj8i2smypxy7vfzmmrzibs74n3zy6dlb949nj";
+      sha256 = "0q12zjpgafdch4ns31k4afy25g837xm7v2qwj62806l2dz4rm4h9";
     };
 
-    pythonPath = [ pkgs.pyqt4 mercurial ]
-       ++ (with pyPackages; [qscintilla iniparse]);
+    pythonPath = with python2Packages; [ pyqt4 mercurial qscintilla iniparse ];
 
-    propagatedBuildInputs = with pyPackages; [ qscintilla iniparse ];
-    
-    doCheck = false;
+    propagatedBuildInputs = with python2Packages; [ qscintilla iniparse ];
 
-    postUnpack = ''
-     substituteInPlace $sourceRoot/setup.py \
-       --replace "/usr/share/" "$out/share/"
+    doCheck = false; # tests fail with "thg: cannot connect to X server"
+    dontStrip = true;
+    buildPhase = "";
+    installPhase = ''
+      ${python2Packages.python.executable} setup.py install --prefix=$out
+      mkdir -p $out/share/doc/tortoisehg
+      cp COPYING.txt $out/share/doc/tortoisehg/Copying.txt.gz
+      ln -s $out/bin/thg $out/bin/tortoisehg     #convenient alias
     '';
 
-    postInstall = ''
-     ln -s $out/bin/thg $out/bin/tortoisehg     #convenient alias
+    checkPhase = ''
+      echo "test: thg version"
+      $out/bin/thg version
     '';
 
     meta = {
@@ -31,6 +33,6 @@ pkgs.buildPythonPackage rec {
       homepage = http://tortoisehg.bitbucket.org/;
       license = lib.licenses.gpl2;
       platforms = lib.platforms.linux;
-      maintainers = [ "abcz2.uprola@gmail.com" ];
+      maintainers = with lib.maintainers; [ danbst ];
     };
 }

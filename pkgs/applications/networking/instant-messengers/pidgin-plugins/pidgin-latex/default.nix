@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, pidgin, texLive, imagemagick, glib, gtk }:
+{ stdenv, fetchurl, pkgconfig, pidgin, texLive, imagemagick, glib, gtk2 }:
 
 let version = "1.5.0";
 in
@@ -11,7 +11,7 @@ stdenv.mkDerivation {
   };
 
   nativeBuildInputs = [pkgconfig];
-  buildInputs = [gtk glib pidgin];
+  buildInputs = [gtk2 glib pidgin];
   makeFlags = "PREFIX=$(out)";
 
   postPatch = ''
@@ -19,11 +19,11 @@ stdenv.mkDerivation {
   '';
 
   passthru = {
-    wrapArgs = "--prefix PATH ':' ${texLive}/bin:${imagemagick}/bin";
+    wrapArgs = "--prefix PATH ':' ${stdenv.lib.makeBinPath [ texLive imagemagick ]}";
   };
 
   meta = with stdenv.lib; {
-    homepage = http://sourceforge.net/projects/pidgin-latex/;
+    homepage = https://sourceforge.net/projects/pidgin-latex/;
     description = "LaTeX rendering plugin for Pidgin IM";
     license = licenses.gpl2;
     platforms = platforms.linux;

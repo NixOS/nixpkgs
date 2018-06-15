@@ -3,41 +3,38 @@
         xmlns:xi="http://www.w3.org/2001/XInclude"
         version="5.0"
         xml:id="sec-running-nixos-tests">
-<title>Running Tests interactively</title>
+ <title>Running Tests interactively</title>
 
-<para>The test itself can be run interactively.  This is
-particularly useful when developing or debugging a test:
-
+ <para>
+  The test itself can be run interactively. This is particularly useful when
+  developing or debugging a test:
 <screen>
 $ nix-build nixos/tests/login.nix -A driver
 $ ./result/bin/nixos-test-driver
 starting VDE switch for network 1
 &gt;
 </screen>
-
-You can then take any Perl statement, e.g.
-
+  You can then take any Perl statement, e.g.
 <screen>
 &gt; startAll
 &gt; testScript
 &gt; $machine->succeed("touch /tmp/foo")
 </screen>
+  The function <command>testScript</command> executes the entire test script
+  and drops you back into the test driver command line upon its completion.
+  This allows you to inspect the state of the VMs after the test (e.g. to debug
+  the test script).
+ </para>
 
-The function <command>testScript</command> executes the entire test
-script and drops you back into the test driver command line upon its
-completion.  This allows you to inspect the state of the VMs after the
-test (e.g. to debug the test script).</para>
-
-<para>To just start and experiment with the VMs, run:
-
+ <para>
+  To just start and experiment with the VMs, run:
 <screen>
 $ nix-build nixos/tests/login.nix -A driver
 $ ./result/bin/nixos-run-vms
 </screen>
-
-The script <command>nixos-run-vms</command> starts the virtual
-machines defined by test.  The root file system of the VMs is created
-on the fly and kept across VM restarts in
-<filename>./</filename><varname>hostname</varname><filename>.qcow2</filename>.</para>
-
+  The script <command>nixos-run-vms</command> starts the virtual machines
+  defined by test. The root file system of the VMs is created on the fly and
+  kept across VM restarts in
+  <filename>./</filename><varname>hostname</varname><filename>.qcow2</filename>.
+ </para>
 </section>

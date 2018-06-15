@@ -1,26 +1,31 @@
-{ stdenv, fetchurl, bzip2, gfortran, libX11, libXmu, libXt
-, libjpeg, libpng, libtiff, ncurses, pango, pcre, perl, readline, tcl
-, texLive, tk, xz, zlib, less, texinfo, graphviz, icu, pkgconfig, bison
-, imake, which, jdk, openblas
+{ stdenv, fetchurl, bzip2, gfortran, libX11, libXmu, libXt, libjpeg, libpng
+, libtiff, ncurses, pango, pcre, perl, readline, tcl, texLive, tk, xz, zlib
+, less, texinfo, graphviz, icu, pkgconfig, bison, imake, which, jdk, openblas
+, curl, Cocoa, Foundation, cf-private, libobjc, libcxx, tzdata, fetchpatch
 , withRecommendedPackages ? true
+, enableStrictBarrier ? false
 }:
 
 stdenv.mkDerivation rec {
-  name = "R-3.2.2";
+  name = "R-3.5.0";
 
   src = fetchurl {
     url = "http://cran.r-project.org/src/base/R-3/${name}.tar.gz";
-    sha256 = "07a6s865bjnh7w0fqsrkv1pva76w99v86w0w787qpdil87km54cw";
+    sha256 = "0w38865laqg28cdhikxdxhx4rfp0kgcn72gakwypsy91br9ja5zx";
   };
 
-  buildInputs = [ bzip2 gfortran libX11 libXmu libXt
-    libXt libjpeg libpng libtiff ncurses pango pcre perl readline tcl
-    texLive tk xz zlib less texinfo graphviz icu pkgconfig bison imake
-    which jdk openblas
-  ];
+  buildInputs = [
+    bzip2 gfortran libX11 libXmu libXt libXt libjpeg libpng libtiff ncurses
+    pango pcre perl readline texLive xz zlib less texinfo graphviz icu
+    pkgconfig bison imake which jdk openblas curl
+  ] ++ stdenv.lib.optionals (!stdenv.isDarwin) [ tcl tk ]
+    ++ stdenv.lib.optionals stdenv.isDarwin [ Cocoa Foundation libobjc libcxx ];
 
-  patches = [ ./no-usr-local-search-paths.patch
-              ./fix-tests-without-recommended-packages.patch ];
+  patches = [ ./no-usr-local-search-paths.patch ];
+
+  prePatch = stdenv.lib.optionalString stdenv.isDarwin ''
+    substituteInPlace configure --replace "-install_name libR.dylib" "-install_name $out/lib/R/lib/libR.dylib"
+  '';
 
   preConfigure = ''
     configureFlagsArray=(
@@ -34,37 +39,44 @@ stdenv.mkDerivation rec {
       --with-libpng
       --with-jpeglib
       --with-libtiff
-      --with-system-zlib
-      --with-system-bzlib
-      --with-system-pcre
-      --with-system-xz
       --with-ICU
+      ${stdenv.lib.optionalString enableStrictBarrier "--enable-strict-barrier"}
       --enable-R-shlib
       AR=$(type -p ar)
       AWK=$(type -p gawk)
-      CC=$(type -p gcc)
-      CXX=$(type -p g++)
+      CC=$(type -p cc)
+      CXX=$(type -p c++)
       FC="${gfortran}/bin/gfortran" F77="${gfortran}/bin/gfortran"
       JAVA_HOME="${jdk}"
-      LDFLAGS="-L${gfortran.cc}/lib"
       RANLIB=$(type -p ranlib)
       R_SHELL="${stdenv.shell}"
+  '' + stdenv.lib.optionalString stdenv.isDarwin ''
+      --without-tcltk
+      --without-aqua
+      --disable-R-framework
+      OBJC="clang"
+      CPPFLAGS="-isystem ${libcxx}/include/c++/v1"
+      LDFLAGS="-L${libcxx}/lib"
+  '' + ''
     )
-    echo "TCLLIBPATH=${tk}/lib" >>etc/Renviron.in
+    echo >>etc/Renviron.in "TCLLIBPATH=${tk}/lib"
+    echo >>etc/Renviron.in "TZDIR=${tzdata}/share/zoneinfo"
   '';
 
   installTargets = [ "install" "install-info" "install-pdf" ];
 
-  doCheck = true;
+  doCheck = withRecommendedPackages;  # R 3.5.0 fails the test suite if the
+                                      # recommended packages are not built
+  preCheck = "export TZ=CET; bin/Rscript -e 'sessionInfo()'";
 
   enableParallelBuilding = true;
 
   setupHook = ./setup-hook.sh;
 
-  meta = {
-    homepage = "http://www.r-project.org/";
+  meta = with stdenv.lib; {
+    homepage = http://www.r-project.org/;
     description = "Free software environment for statistical computing and graphics";
-    license = stdenv.lib.licenses.gpl2Plus;
+    license = licenses.gpl2Plus;
 
     longDescription = ''
       GNU R is a language and environment for statistical computing and
@@ -85,9 +97,9 @@ stdenv.mkDerivation rec {
       user-defined recursive functions and input and output facilities.
     '';
 
-    platforms = stdenv.lib.platforms.all;
-    hydraPlatforms = stdenv.lib.platforms.linux;
+    platforms = platforms.all;
+    hydraPlatforms = platforms.linux;
 
-    maintainers = [ stdenv.lib.maintainers.simons ];
+    maintainers = [ maintainers.peti ];
   };
 }

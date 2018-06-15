@@ -1,6 +1,100 @@
---- ./giscanner/utils.py.orig	2014-08-14 22:05:05.055334080 +0200
-+++ ./giscanner/utils.py	2014-08-14 22:05:24.687497334 +0200
-@@ -110,17 +110,11 @@
+--- a/giscanner/scannermain.py
++++ b/giscanner/scannermain.py
+@@ -100,6 +100,39 @@
+     return group
+ 
+ 
++def _get_default_fallback_libpath():
++    # Newer multiple-output-optimized stdenv has an environment variable
++    # $outputLib which in turn specifies another variable which then is used as
++    # the destination for the library contents (${!outputLib}/lib).
++    store_path = os.environ.get(os.environ.get("outputLib"))
++    if store_path is None:
++        outputs = os.environ.get("outputs", "out").split()
++        if "lib" in outputs:
++            # For multiple output derivations let's try whether there is a $lib
++            # environment variable and use that as the base store path.
++            store_path = os.environ.get("lib")
++        elif "out" in outputs:
++            # Otherwise we have a single output derivation, so the libraries
++            # most certainly will end up in "$out/lib".
++            store_path = os.environ.get("out")
++
++    if store_path is not None:
++        # Even if we have a $lib as output, there still should be a $lib/lib
++        # directory.
++        return os.path.join(store_path, 'lib')
++    else:
++        # If we haven't found a possible scenario, let's return an empty string
++        # so that the shared library won't be prepended with a path.
++        #
++        # Note that this doesn't mean that all hope is lost, because after all
++        # we can still use --fallback-library-path to set one.
++        #
++        # Also, we're not returning None, because that would make it very
++        # difficult to disable adding fallback paths altogether using something
++        # like: --fallback-library-path=""
++        return ""
++
++
+ def _get_option_parser():
+     parser = optparse.OptionParser('%prog [options] sources')
+     parser.add_option('', "--quiet",
+@@ -209,6 +242,10 @@
+     parser.add_option("", "--filelist",
+                       action="store", dest="filelist", default=[],
+                       help="file containing headers and sources to be scanned")
++    parser.add_option("", "--fallback-library-path",
++                      action="store", dest="fallback_libpath",
++                      default=_get_default_fallback_libpath(),
++                      help="Path to prepend to unknown shared libraries")
+ 
+     group = get_preprocessor_option_group(parser)
+     parser.add_option_group(group)
+--- a/giscanner/shlibs.py
++++ b/giscanner/shlibs.py
+@@ -63,6 +63,11 @@
+         pattern = "([^\s]*lib*%s[^A-Za-z0-9_-][^\s\(\)]*)"
+     return re.compile(pattern % re.escape(library_name))
+ 
++def _ldd_library_nix_pattern(library_name):
++    nix_store_dir = re.escape('@nixStoreDir@'.rstrip('/'))
++    pattern = r'(%s(?:/[^/]*)+lib%s[^A-Za-z0-9_-][^\s\(\)]*)'
++    return re.compile(pattern % (nix_store_dir, re.escape(library_name)))
++
+ 
+ # This is a what we do for non-la files. We assume that we are on an
+ # ELF-like system where ldd exists and the soname extracted with ldd is
+@@ -112,7 +117,7 @@
+         proc = subprocess.Popen(args, stdout=subprocess.PIPE)
+         patterns = {}
+         for library in libraries:
+-            patterns[library] = _ldd_library_pattern(library)
++            patterns[library] = (_ldd_library_pattern(library), _ldd_library_nix_pattern(library))
+ 
+         shlibs = []
+         for line in proc.stdout:
+@@ -122,11 +127,14 @@
+             # possible for the name of the binary to match _ldd_library_pattern.
+             if line == binary.args[0] + ':\n':
+                 continue
+-            for library, pattern in patterns.items():
+-                m = pattern.search(line)
++            for library, (pattern, nix_pattern) in patterns.items():
++                if line.find('@nixStoreDir@') != -1:
++                    m = nix_pattern.search(line)
++                else:
++                    m = pattern.search(line)
+                 if m:
+                     del patterns[library]
+-                    shlibs.append(m.group(1))
++                    shlibs.append(os.path.join(options.fallback_libpath, m.group(1)))
+                     break
+ 
+         if len(patterns) > 0:
+--- a/giscanner/utils.py
++++ b/giscanner/utils.py
+@@ -113,17 +113,11 @@
      if dlname is None:
          return None
  

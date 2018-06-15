@@ -30,8 +30,8 @@ let
                             --with-g4install-dir=${geant4} \
                             --with-python-incdir=${python}/include/python${python.majorVersion} \
                             --with-python-libdir=${python}/lib \
-                            --with-boost-incdir=${boost}/include \
-                            --with-boost-libdir=${boost}/lib
+                            --with-boost-incdir=${boost.dev}/include \
+                            --with-boost-libdir=${boost.out}/lib
       '';
 
       enableParallelBuilding = true;
@@ -47,24 +47,28 @@ let
       meta = {
         description = "Python bindings and utilities for Geant4";
         longDescription = ''
-          Geant4 is a toolkit for the simulation of the passage of particles through matter.      
-          Its areas of application include high energy, nuclear and accelerator physics, as well as studies in medical and space science.
-          The two main reference papers for Geant4 are published in Nuclear Instruments and Methods in Physics Research A 506 (2003) 250-303, and IEEE Transactions on Nuclear Science 53 No. 1 (2006) 270-278.
+          Geant4 is a toolkit for the simulation of the passage of particles
+          through matter.  Its areas of application include high energy,
+          nuclear and accelerator physics, as well as studies in medical and
+          space science.  The two main reference papers for Geant4 are
+          published in Nuclear Instruments and Methods in Physics Research A
+          506 (2003) 250-303, and IEEE Transactions on Nuclear Science 53 No. 1
+          (2006) 270-278.
         '';
         homepage = http://www.geant4.org;
         license = stdenv.lib.licenses.g4sl;
         maintainers = [ ];
         platforms = stdenv.lib.platforms.all;
-      }; 
+      };
     };
 
     fetchGeant4 = import ../fetch.nix {
       inherit stdenv fetchurl;
-    };  
+    };
 
 in {
   v10_0_2 = buildG4py {
     inherit (fetchGeant4.v10_0_2) version src;
     geant4 = geant4.v10_0_2;
-  };  
-} 
+  };
+}

@@ -16,13 +16,11 @@ stdenv.mkDerivation rec {
   patchPhase = ''patchShebangs .'';
   buildInputs = [ perl zlib ];
 
-  makeFlags = "CFLAGS=-fPIC";
-
   meta = {
     description = "Hebrew spell checker";
     homepage = http://hspell.ivrix.org.il/;
     platforms = stdenv.lib.platforms.all;
-    maintainers = [ stdenv.lib.maintainers.urkud ];
+    maintainers = [ ];
 # Note that I don't speak hebrew, so I can only fix compile problems
   };
 }

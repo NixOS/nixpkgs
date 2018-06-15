@@ -1,23 +1,50 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, bison, flex, pkgconfig }:
+{ stdenv, file, lib, fetchFromGitHub, fetchpatch, autoreconfHook, bison, flex, pkgconfig
+, pythonSupport ? true, swig ? null, python}:
 
-let version = "3.2.26"; in
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   name = "libnl-${version}";
+  version = "3.4.0";
 
   src = fetchFromGitHub {
-    sha256 = "1cbqdhirn6hxmv8xkm8xp3n6ayyxw7sbi15fym167rdz0h9rkhmm";
-    rev = "libnl3_2_26";
     repo = "libnl";
     owner = "thom311";
+    rev = "libnl${lib.replaceStrings ["."] ["_"] version}";
+    sha256 = "1bqf1f5glwf285sa98k5pkj9gg79lliixk1jk85j63v5510fbagp";
   };
 
-  nativeBuildInputs = [ autoreconfHook bison flex pkgconfig ];
+  outputs = [ "bin" "dev" "out" "man" ] ++ lib.optional pythonSupport "py";
 
-  meta = {
+  patches = stdenv.lib.optional stdenv.hostPlatform.isMusl
+    (fetchpatch {
+      url = "https://raw.githubusercontent.com/gentoo/musl/48d2a28710ae40877fd3e178ead1fb1bb0baa62c/dev-libs/libnl/files/libnl-3.3.0_rc1-musl.patch";
+      sha256 = "0dd7xxikib201i99k2if066hh7gwf2i4ffckrjplq6lr206jn00r";
+    });
+
+  enableParallelBuilding = true;
+
+  nativeBuildInputs = [ autoreconfHook bison flex pkgconfig file ]
+    ++ lib.optional pythonSupport swig;
+
+  postBuild = lib.optionalString (pythonSupport) ''
+      cd python
+      ${python}/bin/python setup.py install --prefix=../pythonlib
+      cd -
+  '';
+
+  postFixup = lib.optionalString pythonSupport ''
+    mv "pythonlib/" "$py"
+  '';
+
+  passthru = {
+    inherit pythonSupport;
+  };
+
+  meta = with lib; {
     inherit version;
-    homepage = "http://www.infradead.org/~tgr/libnl/";
-    description = "Linux NetLink interface library";
-    maintainers = [ stdenv.lib.maintainers.urkud ];
-    platforms = stdenv.lib.platforms.linux;
+    homepage = http://www.infradead.org/~tgr/libnl/;
+    description = "Linux Netlink interface library suite";
+    license = licenses.lgpl21;
+    maintainers = with maintainers; [ fpletz ];
+    platforms = platforms.linux;
   };
 }

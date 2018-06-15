@@ -8,13 +8,15 @@ stdenv.mkDerivation {
     sha256 = "1193a61b0e08acaa6eee0eecf29709179ee49c71baebc59b682a25c3b5a45671";
   };
 
+  hardeningDisable = stdenv.lib.optional stdenv.isi686 "stackprotector";
+
   configurePhase = "sed -i -e 's/MYCFLAGS=.*/MYCFLAGS=-O3 -fomit-frame-pointer -fPIC/' config";
   buildFlags = "all so sobin";
   installFlags = "INSTALL_ROOT=$$out";
   installTargets = "install soinstall";
 
   meta = {
-    homepage = "http://www.lua.org";
+    homepage = http://www.lua.org;
     description = "Powerful, fast, lightweight, embeddable scripting language";
     longDescription = ''
       Lua combines simple procedural syntax with powerful data
@@ -25,5 +27,6 @@ stdenv.mkDerivation {
       for configuration, scripting, and rapid prototyping.
     '';
     license = stdenv.lib.licenses.mit;
+    platforms = stdenv.lib.platforms.linux;
   };
 }

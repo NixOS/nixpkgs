@@ -11,7 +11,7 @@ let
   home = cfg.homeDir;
 
   startupScript = class: configPath: pkgs.writeScript "xtreemfs-osd.sh" ''
-    #! ${pkgs.stdenv.shell}
+    #! ${pkgs.runtimeShell}
     JAVA_HOME="${pkgs.jdk}"
     JAVADIR="${xtreemfs}/share/java"
     JAVA_CALL="$JAVA_HOME/bin/java -ea -cp $JAVADIR/XtreemFS.jar:$JAVADIR/BabuDB.jar:$JAVADIR/Flease.jar:$JAVADIR/protobuf-java-2.5.0.jar:$JAVADIR/Foundation.jar:$JAVADIR/jdmkrt.jar:$JAVADIR/jdmktk.jar:$JAVADIR/commons-codec-1.3.jar"
@@ -153,6 +153,7 @@ in
           '';
         };
         extraConfig = mkOption {
+          type = types.lines;
           default = "";
           example = ''
             # specify whether SSL is required
@@ -173,6 +174,7 @@ in
         replication = {
           enable = mkEnableOption "XtreemFS DIR replication plugin";
           extraConfig = mkOption {
+            type = types.lines;
             example = ''
               # participants of the replication including this replica
               babudb.repl.participant.0 = 192.168.0.10
@@ -269,6 +271,7 @@ in
           '';
         };
         extraConfig = mkOption {
+          type = types.lines;
           example = ''
             osd_check_interval = 300
             no_atime = true
@@ -307,6 +310,7 @@ in
         replication = {
           enable = mkEnableOption "XtreemFS MRC replication plugin";
           extraConfig = mkOption {
+            type = types.lines;
             example = ''
               # participants of the replication including this replica
               babudb.repl.participant.0 = 192.168.0.10
@@ -385,6 +389,7 @@ in
           '';
         };
         extraConfig = mkOption {
+          type = types.lines;
           example = ''
             local_clock_renewal = 0
             remote_time_sync = 30000

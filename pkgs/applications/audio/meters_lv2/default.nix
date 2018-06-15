@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgconfig
-, lv2, mesa, gtk2, cairo, pango, fftw }:
+, lv2, libGLU_combined, gtk2, cairo, pango, fftw }:
 
 let
   version = "0.8.1";
@@ -25,7 +25,8 @@ in
 stdenv.mkDerivation {
   inherit name;
 
-  buildInputs = [ pkgconfig lv2 mesa gtk2 cairo pango fftw ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ lv2 libGLU_combined gtk2 cairo pango fftw ];
 
   srcs = [ src robtkSrc ];
   sourceRoot = name;
@@ -40,7 +41,7 @@ stdenv.mkDerivation {
   meta = with stdenv.lib;
     { description = "Collection of audio level meters with GUI in LV2 plugin format";
       homepage = http://x42.github.io/meters.lv2/;
-      maintainers = with maintainers; [ emery ];
+      maintainers = with maintainers; [ ehmry ];
       license = licenses.gpl2;
       platforms = platforms.linux;
     };

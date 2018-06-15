@@ -22,7 +22,7 @@ in
         description = ''
           Enable USB login for all login systems that support it.  For
           more information, visit <link
-          xlink:href="http://pamusb.org/doc/quickstart#setting_up" />.
+          xlink:href="https://github.com/aluzzardi/pam_usb/wiki/Getting-Started#setting-up-devices-and-users" />.
         '';
       };
 
@@ -32,10 +32,12 @@ in
 
   config = mkIf (cfg.enable || anyUsbAuth) {
 
-    # pmount need to have a set-uid bit to make pam_usb works in user
-    # environment. (like su, sudo)
+    # Make sure pmount and pumount are setuid wrapped.
+    security.wrappers = {
+      pmount.source = "${pkgs.pmount.out}/bin/pmount";
+      pumount.source = "${pkgs.pmount.out}/bin/pumount";
+    };
 
-    security.setuidPrograms = [ "pmount" "pumount" ];
     environment.systemPackages = [ pkgs.pmount ];
 
   };

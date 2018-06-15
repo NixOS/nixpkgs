@@ -1,13 +1,17 @@
-{ stdenv, fetchzip, kernel }:
+{ stdenv, fetchFromGitHub, kernel }:
+
+assert stdenv.lib.versionOlder kernel.version "4.13";
 
 let
-  sourceAttrs = (import ./source.nix) { inherit fetchzip; };
+  sourceAttrs = (import ./source.nix) { inherit fetchFromGitHub; };
 in
 
 stdenv.mkDerivation {
   name = "jool-${sourceAttrs.version}-${kernel.version}";
 
   src = sourceAttrs.src;
+
+  hardeningDisable = [ "pic" ];
 
   prePatch = ''
     sed -e 's@/lib/modules/\$(.*)@${kernel.dev}/lib/modules/${kernel.modDirVersion}@' -i mod/*/Makefile

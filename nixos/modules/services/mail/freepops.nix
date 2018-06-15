@@ -72,15 +72,17 @@ in
   };
 
   config = mkIf cfg.enable {
-    jobs.freepopsd = {
+    systemd.services.freepopsd = {
       description = "Freepopsd (webmail over POP3)";
-      startOn = "ip-up";
-      exec = ''${pkgs.freepops}/bin/freepopsd \
-        -p ${toString cfg.port} \
-        -t ${toString cfg.threads} \
-        -b ${cfg.bind} \
-        -vv -l ${cfg.logFile} \
-        -s ${cfg.suid.user}.${cfg.suid.group}
+      after = [ "network.target" ];
+      wantedBy = [ "multi-user.target" ];
+      script = ''
+        ${pkgs.freepops}/bin/freepopsd \
+          -p ${toString cfg.port} \
+          -t ${toString cfg.threads} \
+          -b ${cfg.bind} \
+          -vv -l ${cfg.logFile} \
+          -s ${cfg.suid.user}.${cfg.suid.group}
       '';
     };
   };

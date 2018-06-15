@@ -1,27 +1,33 @@
-{ stdenv, fetchurl, pkgconfig, autoreconfHook, openssl, db48, boost
-, zlib, miniupnpc, qt4, utillinux, protobuf, qrencode
+{ stdenv, fetchurl, pkgconfig, autoreconfHook, openssl, db48, boost, zeromq
+, zlib, miniupnpc, qtbase ? null, qttools ? null, utillinux, protobuf, qrencode, libevent
 , withGui }:
 
 with stdenv.lib;
 stdenv.mkDerivation rec{
-
   name = "bitcoin" + (toString (optional (!withGui) "d")) + "-" + version;
-  core_version = "0.11.0";
-  version = core_version;
+  version = "0.16.0";
 
   src = fetchurl {
-    urls = [ "https://bitcoin.org/bin/bitcoin-core-${core_version}/bitcoin-${version}.tar.gz"
-             "mirror://sourceforge/bitcoin/Bitcoin/bitcoin-${core_version}/bitcoin-${version}.tar.gz"
+    urls = [ "https://bitcoincore.org/bin/bitcoin-core-${version}/bitcoin-${version}.tar.gz"
+             "https://bitcoin.org/bin/bitcoin-core-${version}/bitcoin-${version}.tar.gz"
            ];
-    sha256 = "51ba1756addfa71567559e3f22331c1d908a63571891287689fff7113035d09f";
+    sha256 = "0h7flgsfjzbqajwv8ih686yyxxljhf8krhm8jxranb4kglww1glc";
   };
 
-  buildInputs = [ pkgconfig autoreconfHook openssl db48 boost zlib
-                  miniupnpc utillinux protobuf ]
-                  ++ optionals withGui [ qt4 qrencode ];
+  nativeBuildInputs = [ pkgconfig autoreconfHook ];
+  buildInputs = [ openssl db48 boost zlib zeromq
+                  miniupnpc protobuf libevent]
+                  ++ optionals stdenv.isLinux [ utillinux ]
+                  ++ optionals withGui [ qtbase qttools qrencode ];
 
-  configureFlags = [ "--with-boost-libdir=${boost.lib}/lib" ]
-                     ++ optionals withGui [ "--with-gui=qt4" ];
+  configureFlags = [ "--with-boost-libdir=${boost.out}/lib" ]
+                     ++ optionals withGui [ "--with-gui=qt5"
+                                            "--with-qt-bindir=${qtbase.dev}/bin:${qttools.dev}/bin"
+                                          ];
+
+  # Fails with "This application failed to start because it could not
+  # find or load the Qt platform plugin "minimal""
+  doCheck = false;
 
   meta = {
     description = "Peer-to-peer electronic cash system";
@@ -31,9 +37,10 @@ stdenv.mkDerivation rec{
       parties. Users hold the crypto keys to their own money and transact directly
       with each other, with the help of a P2P network to check for double-spending.
     '';
-    homepage = "http://www.bitcoin.org/";
+    homepage = http://www.bitcoin.org/;
     maintainers = with maintainers; [ roconnor AndersonTorres ];
     license = licenses.mit;
-    platforms = platforms.unix;
+    # bitcoin needs hexdump to build, which doesn't seem to build on darwin at the moment.
+    platforms = platforms.linux;
   };
 }

@@ -9,4 +9,8 @@ stdenv.mkDerivation {
   };
 
   buildInputs = [zlib];
+
+  meta = {
+    platforms = stdenv.lib.platforms.linux;
+  };
 }

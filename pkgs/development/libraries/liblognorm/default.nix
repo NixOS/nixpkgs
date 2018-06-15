@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     homepage = http://www.liblognorm.com/;
-    description = "help to make sense out of syslog data, or, actually, any event data that is present in text form";
+    description = "Help to make sense out of syslog data, or, actually, any event data that is present in text form";
     license = licenses.lgpl21;
     platforms = platforms.all;
     maintainers = with maintainers; [ wkennington ];

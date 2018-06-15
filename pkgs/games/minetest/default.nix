@@ -1,20 +1,22 @@
-{ stdenv, fetchgit, cmake, irrlicht, libpng, bzip2, curl, libogg, jsoncpp
-, libjpeg, libXxf86vm, mesa, openal, libvorbis, xlibsWrapper, sqlite, luajit, freetype
-, gettext
+{ stdenv, fetchFromGitHub, cmake, irrlicht, libpng, bzip2, curl, libogg, jsoncpp
+, libjpeg, libXxf86vm, libGLU_combined, openal, libvorbis, xlibsWrapper, sqlite, luajit
+, freetype, gettext, doxygen, ncurses, leveldb
 }:
 
 let
-  version = "0.4.12";
+  version = "0.4.16";
   sources = {
-    src = fetchgit {
-      url = "https://github.com/minetest/minetest.git";
-      rev = "7993a403f2c17a215e4895ba1848aaf69bb61980";
-      sha256 = "04v6fd9r9by8g47xbjzkhkgac5zpik01idngbbx2in4fxrg3ac7c";
+    src = fetchFromGitHub {
+      owner = "minetest";
+      repo = "minetest";
+      rev = "${version}";
+      sha256 = "048m8as01bw4pnwfxx04wfnyljxq7ivk88l214zi18prrrkfamj3";
     };
-    data = fetchgit {
-      url = "https://github.com/minetest/minetest_game.git";
-      rev = "03c00a831d5c2fd37096449bee49557879068af1";
-      sha256 = "1qqhlfz296rmi3mmlvq1rwv7hq5w964w1scry095xaih7y11ycmk";
+    data = fetchFromGitHub {
+      owner = "minetest";
+      repo = "minetest_game";
+      rev = "${version}";
+      sha256 = "0alikzyjvj9hd8s3dd6ghpz0y982w2j0yd2zgd7a047mxw21hrcn";
     };
   };
 in stdenv.mkDerivation {
@@ -25,13 +27,18 @@ in stdenv.mkDerivation {
   cmakeFlags = [
     "-DENABLE_FREETYPE=1"
     "-DENABLE_GETTEXT=1"
-    "-DCURL_INCLUDE_DIR=${curl}/include/curl"
+    "-DENABLE_SYSTEM_JSONCPP=1"
+    "-DGETTEXT_INCLUDE_DIR=${gettext}/include/gettext"
+    "-DCURL_INCLUDE_DIR=${curl.dev}/include/curl"
     "-DIRRLICHT_INCLUDE_DIR=${irrlicht}/include/irrlicht"
   ];
 
+  NIX_CFLAGS_COMPILE = [ "-DluaL_reg=luaL_Reg" ]; # needed since luajit-2.1.0-beta3
+
   buildInputs = [
-    cmake irrlicht libpng bzip2 libjpeg curl libogg jsoncpp libXxf86vm mesa
-    openal libvorbis xlibsWrapper sqlite luajit freetype gettext
+    cmake irrlicht libpng bzip2 libjpeg curl libogg jsoncpp libXxf86vm libGLU_combined
+    openal libvorbis xlibsWrapper sqlite luajit freetype gettext doxygen ncurses
+    leveldb
   ];
 
   postInstall = ''

@@ -13,8 +13,10 @@ in stdenv.mkDerivation rec {
     url = "http://www.redmine.org/releases/${name}.tar.gz";
     sha256 = "0x0zwxyj4dwbk7l64s3lgny10mjf0ba8jwrbafsm4d72sncmacv0";
   };
+
+  nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
-    ruby bundler libiconv libxslt libxml2 pkgconfig
+    ruby bundler libiconv libxslt libxml2
     libffi imagemagickBig postgresql which stdenv
   ];
   installPhase = ''
@@ -32,8 +34,8 @@ in stdenv.mkDerivation rec {
 
     bundle config --local build.nokogiri --use-system-libraries \
       --with-iconv-dir=${libiconv} \
-      --with-xslt-dir=${libxslt} \
-      --with-xml2-dir=${libxml2} \
+      --with-xslt-dir=${libxslt.out} \
+      --with-xml2-dir=${libxml2.out} \
       --with-pkg-config \
       --with-pg-config=${postgresql}/bin/pg_config
 

@@ -1,13 +1,22 @@
-{ stdenv, fetchurl, pkgconfig, cairo, expat, ncurses, libX11
-, pciutils, numactl }:
+{ stdenv, fetchurl, pkgconfig, expat, ncurses, pciutils, numactl
+, x11Support ? false, libX11 ? null, cairo ? null
+}:
+
+assert x11Support -> libX11 != null && cairo != null;
+
+with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  name = "hwloc-1.6";
+  name = "hwloc-1.11.10";
 
   src = fetchurl {
-    url = "http://www.open-mpi.org/software/hwloc/v1.6/downloads/${name}.tar.bz2";
-    sha256 = "0y561bryiqp1f5af5lm432dcw93xwp1jw55si7wa6skxnd6ch25w";
+    url = "http://www.open-mpi.org/software/hwloc/v1.11/downloads/${name}.tar.bz2";
+    sha256 = "1ryibcng40xcq22lsj85fn2vcvrksdx9rr3wwxpq8dw37lw0is1b";
   };
+
+  configureFlags = [
+    "--localstatedir=/var"
+  ];
 
   # XXX: libX11 is not directly needed, but needed as a propagated dep of Cairo.
   nativeBuildInputs = [ pkgconfig ];
@@ -16,17 +25,17 @@ stdenv.mkDerivation rec {
   # derivation and set optional dependencies to `null'.
   buildInputs = stdenv.lib.filter (x: x != null)
    ([ expat ncurses ]
-     ++  (stdenv.lib.optionals (!stdenv.isCygwin) [ cairo libX11 ])
-     ++  (stdenv.lib.optionals stdenv.isLinux [ numactl ]));
+     ++  (optionals x11Support [ cairo libX11 ])
+     ++  (optionals stdenv.isLinux [ numactl ]));
 
   propagatedBuildInputs =
     # Since `libpci' appears in `hwloc.pc', it must be propagated.
-    stdenv.lib.optional stdenv.isLinux pciutils;
+    optional stdenv.isLinux pciutils;
 
   enableParallelBuilding = true;
 
   postInstall =
-    stdenv.lib.optionalString (stdenv.isLinux && numactl != null)
+    optionalString (stdenv.isLinux && numactl != null)
       '' if [ -d "${numactl}/lib64" ]
          then
              numalibdir="${numactl}/lib64"
@@ -35,17 +44,18 @@ stdenv.mkDerivation rec {
              test -d "$numalibdir"
          fi
 
-         sed -i "$out/lib/libhwloc.la" \
+         sed -i "$lib/lib/libhwloc.la" \
              -e "s|-lnuma|-L$numalibdir -lnuma|g"
       '';
 
-  # XXX: A test hangs on Cygwin, see
-  # <http://hydra.bordeaux.inria.fr/build/51474/nixlog/1/raw>.
-  doCheck = !stdenv.isCygwin;
+  # Checks disabled because they're impure (hardware dependent) and
+  # fail on some build machines.
+  doCheck = false;
 
-  meta = with stdenv.lib; {
+  outputs = [ "out" "lib" "dev" "doc" "man" ];
+
+  meta = {
     description = "Portable abstraction of hierarchical architectures for high-performance computing";
-
     longDescription = ''
        hwloc provides a portable abstraction (across OS,
        versions, architectures, ...) of the hierarchical topology of
@@ -64,10 +74,8 @@ stdenv.mkDerivation rec {
 
     # http://www.open-mpi.org/projects/hwloc/license.php
     license = licenses.bsd3;
-
-    homepage = http://www.open-mpi.org/projects/hwloc/;
-
-    maintainers = [ ];
+    homepage = https://www.open-mpi.org/projects/hwloc/;
+    maintainers = with maintainers; [ fpletz ];
     platforms = platforms.all;
   };
 }

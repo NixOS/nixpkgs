@@ -2,19 +2,19 @@ This patch does two things: (1) use the right name for `docbook2texi',
 and (2) make sure `gitman.info' isn't produced since it's broken (duplicate
 node names).
 
-diff -ru git-1.8.4-orig/Documentation/Makefile git-1.8.4/Documentation/Makefile
---- git-1.8.4-orig/Documentation/Makefile	2013-08-23 21:38:43.000000000 +0200
-+++ git-1.8.4/Documentation/Makefile	2013-09-30 14:48:51.532890378 +0200
-@@ -101,7 +101,7 @@
+diff --git a/Documentation/Makefile b/Documentation/Makefile
+--- a/Documentation/Makefile
++++ b/Documentation/Makefile
+@@ -122,7 +122,7 @@
  
  MAKEINFO = makeinfo
  INSTALL_INFO = install-info
 -DOCBOOK2X_TEXI = docbook2x-texi
 +DOCBOOK2X_TEXI = docbook2texi
  DBLATEX = dblatex
- ifndef PERL_PATH
- 	PERL_PATH = /usr/bin/perl
-@@ -205,7 +205,7 @@
+ ASCIIDOC_DBLATEX_DIR = /etc/asciidoc/dblatex
+ DBLATEX_COMMON = -p $(ASCIIDOC_DBLATEX_DIR)/asciidoc-dblatex.xsl -s $(ASCIIDOC_DBLATEX_DIR)/asciidoc-dblatex.sty
+@@ -240,7 +240,7 @@
  man5: $(DOC_MAN5)
  man7: $(DOC_MAN7)
  
@@ -23,7 +23,7 @@ diff -ru git-1.8.4-orig/Documentation/Makefile git-1.8.4/Documentation/Makefile
  
  pdf: user-manual.pdf
  
-@@ -221,10 +221,9 @@
+@@ -256,10 +256,9 @@
  
  install-info: info
  	$(INSTALL) -d -m 755 $(DESTDIR)$(infodir)

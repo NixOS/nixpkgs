@@ -46,7 +46,7 @@ stdenv.mkDerivation {
 
     homepage = http://www.gnu.org/software/hurd/microkernel/mach/mig/gnu_mig.html;
 
-    # platforms = stdenv.lib.platforms.gnu;  # really GNU/Hurd
+    # platforms = stdenv.lib.platforms.gnu ++ stdenv.lib.platforms.linux;  # really GNU/Hurd
     maintainers = [ stdenv.lib.maintainers.ludo ];
   };
 }

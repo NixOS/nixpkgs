@@ -15,7 +15,7 @@ let
     logfile=/var/log/murmur/murmurd.log
     pidfile=${cfg.pidfile}
 
-    welcome="${cfg.welcome}"
+    welcometext="${cfg.welcometext}"
     port=${toString cfg.port}
 
     ${if cfg.hostName == "" then "" else "host="+cfg.hostName}
@@ -26,19 +26,22 @@ let
 
     textmessagelength=${toString cfg.textMsgLength}
     imagemessagelength=${toString cfg.imgMsgLength}
-    allowhtml=${if cfg.allowHtml then "true" else "false"}
+    allowhtml=${boolToString cfg.allowHtml}
     logdays=${toString cfg.logDays}
-    bonjour=${if cfg.bonjour then "true" else "false"}
-    sendversion=${if cfg.sendVersion then "true" else "false"}
+    bonjour=${boolToString cfg.bonjour}
+    sendversion=${boolToString cfg.sendVersion}
 
     ${if cfg.registerName     == "" then "" else "registerName="+cfg.registerName}
     ${if cfg.registerPassword == "" then "" else "registerPassword="+cfg.registerPassword}
     ${if cfg.registerUrl      == "" then "" else "registerUrl="+cfg.registerUrl}
     ${if cfg.registerHostname == "" then "" else "registerHostname="+cfg.registerHostname}
 
-    certrequired=${if cfg.clientCertRequired then "true" else "false"}
+    certrequired=${boolToString cfg.clientCertRequired}
     ${if cfg.sslCert == "" then "" else "sslCert="+cfg.sslCert}
     ${if cfg.sslKey  == "" then "" else "sslKey="+cfg.sslKey}
+    ${if cfg.sslCa   == "" then "" else "sslCA="+cfg.sslCa}
+
+    ${cfg.extraConfig}
   '';
 in
 {
@@ -77,11 +80,11 @@ in
 
       pidfile = mkOption {
         type = types.path;
-        default = "/tmp/murmurd.pid";
+        default = "/run/murmur/murmurd.pid";
         description = "Path to PID file for Murmur daemon.";
       };
 
-      welcome = mkOption {
+      welcometext = mkOption {
         type = types.str;
         default = "";
         description = "Welcome message for connected clients.";
@@ -219,6 +222,18 @@ in
         default = "";
         description = "Path to your SSL key.";
       };
+
+      sslCa = mkOption {
+        type = types.str;
+        default = "";
+        description = "Path to your SSL CA certificate.";
+      };
+
+      extraConfig = mkOption {
+        type = types.lines;
+        default = "";
+        description = "Extra configuration to put into mumur.ini.";
+      };
     };
   };
 
@@ -237,6 +252,7 @@ in
 
       serviceConfig = {
         Type      = "forking";
+        RuntimeDirectory = "murmur";
         PIDFile   = cfg.pidfile;
         Restart   = "always";
         User      = "murmur";

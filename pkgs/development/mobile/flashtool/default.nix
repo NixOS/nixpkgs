@@ -1,7 +1,5 @@
 { stdenv, requireFile, p7zip, jre, libusb1, platformTools, gtk2, glib, libXtst }:
 
-assert stdenv.system == "i686-linux";
-
 # TODO:
 #
 #   The FlashTool and FlashToolConsole scripts are messy and should probably we
@@ -33,7 +31,7 @@ stdenv.mkDerivation rec {
   buildPhase = ''
     ln -s ${platformTools}/platform-tools/adb x10flasher_lib/adb.linux
     ln -s ${platformTools}/platform-tools/fastboot x10flasher_lib/fastboot.linux
-    ln -s ${libusb1}/lib/libusb-1.0.so.0 ./x10flasher_lib/linux/lib32/libusbx-1.0.so
+    ln -s ${libusb1.out}/lib/libusb-1.0.so.0 ./x10flasher_lib/linux/lib32/libusbx-1.0.so
 
     chmod +x x10flasher_lib/unyaffs.linux.x86 x10flasher_lib/bin2elf x10flasher_lib/bin2sin
     patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" x10flasher_lib/unyaffs.linux.x86
@@ -44,7 +42,7 @@ stdenv.mkDerivation rec {
     sed -i \
       -e 's|$(uname -m)|i686|' \
       -e 's|export JAVA_HOME=.*|export JAVA_HOME=${jre}|' \
-      -e 's|export LD_LIBRARY_PATH=.*|export LD_LIBRARY_PATH=${libXtst}/lib:${glib}/lib:${gtk2}/lib:./x10flasher_lib/linux/lib32|' \
+      -e 's|export LD_LIBRARY_PATH=.*|export LD_LIBRARY_PATH=${stdenv.lib.makeLibraryPath [ libXtst glib gtk2 ]}:./x10flasher_lib/linux/lib32|' \
       FlashTool FlashToolConsole
   '';
 
@@ -54,11 +52,11 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    homepage = "http://www.flashtool.net/";
+    homepage = http://www.flashtool.net/;
     description = "S1 flashing software for Sony phones from X10 to Xperia Z Ultra";
     license = stdenv.lib.licenses.unfreeRedistributableFirmware;
-    platforms = stdenv.lib.platforms.linux;
+    platforms = [ "i686-linux" ];
     hydraPlatforms = stdenv.lib.platforms.none;
-    maintainers = [ stdenv.lib.maintainers.simons ];
+    broken = true;
   };
 }

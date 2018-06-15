@@ -17,38 +17,6 @@ let
   nodeCfg = config.services.munin-node;
   cronCfg = config.services.munin-cron;
 
-  muninPlugins = pkgs.stdenv.mkDerivation {
-    name = "munin-available-plugins";
-    buildCommand = ''
-      mkdir -p $out
-
-      cp --preserve=mode ${pkgs.munin}/lib/plugins/* $out/
-
-      for file in $out/*; do
-        case "$file" in
-            plugin.sh) continue;;
-        esac
-
-        # read magic makers from the file
-        family=$(sed -nr 's/.*#%#\s+family\s*=\s*(\S+)\s*/\1/p' $file)
-        cap=$(sed -nr 's/.*#%#\s+capabilities\s*=\s*(.+)/\1/p' $file)
-
-        wrapProgram $file \
-          --set PATH "/var/setuid-wrappers:/run/current-system/sw/bin:/run/current-system/sw/bin" \
-          --set MUNIN_LIBDIR "${pkgs.munin}/lib" \
-          --set MUNIN_PLUGSTATE "/var/run/munin"
-
-        # munin uses markers to tell munin-node-configure what a plugin can do
-        echo "#%# family=$family" >> $file
-        echo "#%# capabilities=$cap" >> $file
-      done
-
-      # NOTE: we disable disktstats because plugin seems to fail and it hangs html generation (100% CPU + memory leak)
-      rm -f $out/diskstats
-    '';
-    buildInputs = [ pkgs.makeWrapper ];
-  };
-
   muninConf = pkgs.writeText "munin.conf"
     ''
       dbdir     /var/lib/munin
@@ -76,10 +44,34 @@ let
       # wrapped plugins by makeWrapper being with dots
       ignore_file ^\.
 
+      allow ^::1$
       allow ^127\.0\.0\.1$
 
       ${nodeCfg.extraConfig}
     '';
+
+  pluginConf = pkgs.writeText "munin-plugin-conf"
+    ''
+      [hddtemp_smartctl]
+      user root
+      group root
+
+      [meminfo]
+      user root
+      group root
+
+      [ipmi*]
+      user root
+      group root
+    '';
+
+  pluginConfDir = pkgs.stdenv.mkDerivation {
+    name = "munin-plugin-conf.d";
+    buildCommand = ''
+      mkdir $out
+      ln -s ${pluginConf} $out/nixos-config
+    '';
+  };
 in
 
 {
@@ -100,6 +92,7 @@ in
 
       extraConfig = mkOption {
         default = "";
+        type = types.lines;
         description = ''
           <filename>munin-node.conf</filename> extra configuration. See
           <link xlink:href='http://munin-monitoring.org/wiki/munin-node.conf' />
@@ -122,21 +115,6 @@ in
           HTML output is in <filename>/var/www/munin/</filename>, configure your
           favourite webserver to serve static files.
         '';
-        example = literalExample ''
-          services = {
-             munin-node.enable = true;
-             munin-cron = {
-               enable = true;
-               hosts = '''
-                 [''${config.networking.hostName}]
-                 address localhost
-               ''';
-               extraGlobalConfig = '''
-                 contact.email.command mail -s "Munin notification for ''${var:host}" someone@example.com
-               ''';
-             };
-          };
-        '';
       };
 
       extraGlobalConfig = mkOption {
@@ -146,6 +124,9 @@ in
           See <link xlink:href='http://munin-monitoring.org/wiki/munin.conf' />.
           Useful to setup notifications, see
           <link xlink:href='http://munin-monitoring.org/wiki/HowToContact' />
+        '';
+        example = ''
+          contact.email.command mail -s "Munin notification for ''${var:host}" someone@example.com
         '';
       };
 
@@ -187,30 +168,52 @@ in
       description = "Munin Node";
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
-      path = [ pkgs.munin ];
+      path = with pkgs; [ munin smartmontools "/run/current-system/sw" "/run/wrappers" ];
+      environment.MUNIN_LIBDIR = "${pkgs.munin}/lib";
       environment.MUNIN_PLUGSTATE = "/var/run/munin";
+      environment.MUNIN_LOGDIR = "/var/log/munin";
       preStart = ''
         echo "updating munin plugins..."
 
         mkdir -p /etc/munin/plugins
         rm -rf /etc/munin/plugins/*
-        PATH="/var/setuid-wrappers:/run/current-system/sw/bin:/run/current-system/sw/bin" ${pkgs.munin}/sbin/munin-node-configure --shell --families contrib,auto,manual --config ${nodeConf} --libdir=${muninPlugins} --servicedir=/etc/munin/plugins 2>/dev/null | ${pkgs.bash}/bin/bash
+        ${pkgs.munin}/bin/munin-node-configure --suggest --shell --families contrib,auto,manual --config ${nodeConf} --libdir=${pkgs.munin}/lib/plugins --servicedir=/etc/munin/plugins --sconfdir=${pluginConfDir} 2>/dev/null | ${pkgs.bash}/bin/bash
+
+        # NOTE: we disable disktstats because plugin seems to fail and it hangs html generation (100% CPU + memory leak)
+        rm /etc/munin/plugins/diskstats || true
       '';
       serviceConfig = {
-        ExecStart = "${pkgs.munin}/sbin/munin-node --config ${nodeConf} --servicedir /etc/munin/plugins/";
+        ExecStart = "${pkgs.munin}/sbin/munin-node --config ${nodeConf} --servicedir /etc/munin/plugins/ --sconfdir=${pluginConfDir}";
       };
     };
 
+    # munin_stats plugin breaks as of 2.0.33 when this doesn't exist
+    systemd.tmpfiles.rules = [ "d /var/run/munin 0755 munin munin -" ];
+
   }) (mkIf cronCfg.enable {
 
-    services.cron.systemCronJobs = [
-      "*/5 * * * * munin ${pkgs.munin}/bin/munin-cron --config ${muninConf}"
+    systemd.timers.munin-cron = {
+      description = "batch Munin master programs";
+      wantedBy = [ "timers.target" ];
+      timerConfig.OnCalendar = "*:0/5";
+    };
+
+    systemd.services.munin-cron = {
+      description = "batch Munin master programs";
+      unitConfig.Documentation = "man:munin-cron(8)";
+
+      serviceConfig = {
+        Type = "oneshot";
+        User = "munin";
+        ExecStart = "${pkgs.munin}/bin/munin-cron --config ${muninConf}";
+      };
+    };
+
+    systemd.tmpfiles.rules = [
+      "d /var/run/munin 0755 munin munin -"
+      "d /var/log/munin 0755 munin munin -"
+      "d /var/www/munin 0755 munin munin -"
+      "d /var/lib/munin 0755 munin munin -"
     ];
-
-    system.activationScripts.munin-cron = stringAfter [ "users" "groups" ] ''
-      mkdir -p /var/{run,log,www,lib}/munin
-      chown -R munin:munin /var/{run,log,www,lib}/munin
-    '';
-
   })];
 }

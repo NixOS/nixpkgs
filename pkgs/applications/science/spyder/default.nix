@@ -1,33 +1,34 @@
-{ stdenv, fetchurl, unzip, buildPythonPackage, makeDesktopItem
+{ stdenv, fetchPypi, unzip, buildPythonApplication, makeDesktopItem
 # mandatory
-, pyside
-# recommended
-, pyflakes ? null, rope ? null, sphinx ? null, numpy ? null, scipy ? null, matplotlib ? null
+, numpydoc, qtconsole, qtawesome, jedi, pycodestyle, psutil
+, pyflakes, rope, sphinx, nbconvert, mccabe, pyopengl, cloudpickle
 # optional
-, ipython ? null, pylint ? null, pep8 ? null
+, numpy ? null, scipy ? null, matplotlib ? null
+# optional
+, pylint ? null
 }:
 
-buildPythonPackage rec {
-  name = "spyder-${version}";
-  version = "2.3.6";
-  namePrefix = "";
+buildPythonApplication rec {
+  pname = "spyder";
+  version = "3.2.8";
 
-  src = fetchurl {
-    url = "https://pypi.python.org/packages/source/s/spyder/${name}.zip";
-    sha256 = "0e6502e0d3f270ea8916d1a3d7ca29915801d31932db399582bc468c01d535e2";
+  src = fetchPypi {
+    inherit pname version;
+    sha256 = "0iwcby2bxvayz0kp282yh864br55w6gpd8rqcdj1cp3jbn3q6vg5";
   };
 
-  buildInputs = [ unzip ];
-  propagatedBuildInputs =
-    [ pyside pyflakes rope sphinx numpy scipy matplotlib ipython pylint pep8 ];
+  # Somehow setuptools can't find pyqt5. Maybe because the dist-info folder is missing?
+  postPatch = ''
+    sed -i -e '/pyqt5/d' setup.py
+  '';
+
+  propagatedBuildInputs = [
+    jedi pycodestyle psutil pyflakes rope numpy scipy matplotlib pylint
+    numpydoc qtconsole qtawesome nbconvert mccabe pyopengl cloudpickle
+  ];
 
   # There is no test for spyder
   doCheck = false;
-
-  # Use setuptools instead of distutils.
-  preConfigure = ''
-    export USE_SETUPTOOLS=True
-  '';
 
   desktopItem = makeDesktopItem {
     name = "Spyder";
@@ -41,11 +42,9 @@ buildPythonPackage rec {
 
   # Create desktop item
   postInstall = ''
-    mkdir -p $out/share/applications
-    cp $desktopItem/share/applications/* $out/share/applications/
-
     mkdir -p $out/share/icons
-    cp spyderlib/images/spyder.svg $out/share/icons/
+    cp spyder/images/spyder.svg $out/share/icons
+    cp -r $desktopItem/share/applications/ $out/share
   '';
 
   meta = with stdenv.lib; {
@@ -58,6 +57,5 @@ buildPythonPackage rec {
     homepage = https://github.com/spyder-ide/spyder/;
     license = licenses.mit;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ bjornfor fridh ];
   };
 }

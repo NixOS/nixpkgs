@@ -34,14 +34,15 @@ in stdenv.mkDerivation rec {
     cp -R . $out
     cp -R ${modulesSrc}/* $out/modules/
     wrapProgram "$out/prey.sh" \
-      --prefix PATH ":" "${xawtv}/bin:${imagemagick}/bin:${curl}/bin:${scrot}/bin:${inetutils}/bin:${coreutils}/bin" \
+      --prefix PATH ":" "${stdenv.lib.makeBinPath [ xawtv imagemagick curl scrot inetutils coreutils ]}" \
       --set CURL_CA_BUNDLE "/etc/ssl/certs/ca-certificates.crt"
   '';
 
   meta = with stdenv.lib; {
     homepage = http://preyproject.com;
     description = "Proven tracking software that helps you find, lock and recover your devices when stolen or missing";
-    maintainers = with maintainers; [ iElectric ];
+    maintainers = with maintainers; [ domenkozar ];
     license = licenses.gpl3;
+    platforms = with platforms; linux;
   };
 }

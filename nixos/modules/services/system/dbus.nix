@@ -8,57 +8,12 @@ let
 
   cfg = config.services.dbus;
 
-  homeDir = "/var/run/dbus";
+  homeDir = "/run/dbus";
 
-  configDir = pkgs.stdenv.mkDerivation {
-    name = "dbus-conf";
-
-    preferLocalBuild = true;
-    allowSubstitutes = false;
-
-    buildCommand = ''
-      mkdir -p $out
-
-      cp -v ${pkgs.dbus.daemon}/etc/dbus-1/system.conf $out/system.conf
-
-      # !!! Hm, these `sed' calls are rather error-prone...
-
-      # Tell the daemon where the setuid wrapper around
-      # dbus-daemon-launch-helper lives.
-      sed -i $out/system.conf \
-          -e 's|<servicehelper>.*/libexec/dbus-daemon-launch-helper|<servicehelper>${config.security.wrapperDir}/dbus-daemon-launch-helper|'
-
-      # Add the system-services and system.d directories to the system
-      # bus search path.
-      sed -i $out/system.conf \
-          -e 's|<standard_system_servicedirs/>|${systemServiceDirs}|' \
-          -e 's|<includedir>system.d</includedir>|${systemIncludeDirs}|'
-
-      cp ${pkgs.dbus.daemon}/etc/dbus-1/session.conf $out/session.conf
-
-      # Add the services and session.d directories to the session bus
-      # search path.
-      sed -i $out/session.conf \
-          -e 's|<standard_session_servicedirs />|${sessionServiceDirs}&|' \
-          -e 's|<includedir>session.d</includedir>|${sessionIncludeDirs}|'
-    ''; # */
+  configDir = pkgs.makeDBusConf {
+    suidHelper = "${config.security.wrapperDir}/dbus-daemon-launch-helper";
+    serviceDirectories = cfg.packages;
   };
-
-  systemServiceDirs = concatMapStrings
-    (d: "<servicedir>${d}/share/dbus-1/system-services</servicedir> ")
-    cfg.packages;
-
-  systemIncludeDirs = concatMapStrings
-    (d: "<includedir>${d}/etc/dbus-1/system.d</includedir> ")
-    cfg.packages;
-
-  sessionServiceDirs = concatMapStrings
-    (d: "<servicedir>${d}/share/dbus-1/services</servicedir> ")
-    cfg.packages;
-
-  sessionIncludeDirs = concatMapStrings
-    (d: "<includedir>${d}/etc/dbus-1/session.d</includedir> ")
-    cfg.packages;
 
 in
 
@@ -72,7 +27,7 @@ in
 
       enable = mkOption {
         type = types.bool;
-        default = true;
+        default = false;
         internal = true;
         description = ''
           Whether to start the D-Bus message bus daemon, which is
@@ -82,26 +37,34 @@ in
 
       packages = mkOption {
         type = types.listOf types.path;
-        default = [];
+        default = [ ];
         description = ''
           Packages whose D-Bus configuration files should be included in
-          the configuration of the D-Bus system-wide message bus.
-          Specifically, every file in
+          the configuration of the D-Bus system-wide or session-wide
+          message bus.  Specifically, files in the following directories
+          will be included into their respective DBus configuration paths:
           <filename><replaceable>pkg</replaceable>/etc/dbus-1/system.d</filename>
-          is included.
+          <filename><replaceable>pkg</replaceable>/share/dbus-1/system-services</filename>
+          <filename><replaceable>pkg</replaceable>/etc/dbus-1/session.d</filename>
+          <filename><replaceable>pkg</replaceable>/share/dbus-1/services</filename>
         '';
       };
 
+      socketActivated = mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          Make the user instance socket activated.
+        '';
+      };
     };
-
   };
-
 
   ###### implementation
 
   config = mkIf cfg.enable {
 
-    environment.systemPackages = [ pkgs.dbus.daemon pkgs.dbus_tools ];
+    environment.systemPackages = [ pkgs.dbus.daemon pkgs.dbus ];
 
     environment.etc = singleton
       { source = configDir;
@@ -119,28 +82,35 @@ in
 
     systemd.packages = [ pkgs.dbus.daemon ];
 
-    security.setuidOwners = singleton
-      { program = "dbus-daemon-launch-helper";
-        source = "${pkgs.dbus_daemon}/libexec/dbus-daemon-launch-helper";
-        owner = "root";
-        group = "messagebus";
-        setuid = true;
-        setgid = false;
-        permissions = "u+rx,g+rx,o-rx";
+    security.wrappers.dbus-daemon-launch-helper = {
+      source = "${pkgs.dbus.daemon}/libexec/dbus-daemon-launch-helper";
+      owner = "root";
+      group = "messagebus";
+      setuid = true;
+      setgid = false;
+      permissions = "u+rx,g+rx,o-rx";
+    };
+
+    services.dbus.packages = [
+      pkgs.dbus.out
+      config.system.path
+    ];
+
+    systemd.services.dbus = {
+      # Don't restart dbus-daemon. Bad things tend to happen if we do.
+      reloadIfChanged = true;
+      restartTriggers = [ configDir ];
+    };
+
+    systemd.user = {
+      services.dbus = {
+        # Don't restart dbus-daemon. Bad things tend to happen if we do.
+        reloadIfChanged = true;
+        restartTriggers = [ configDir ];
       };
-
-    services.dbus.packages =
-      [ "/nix/var/nix/profiles/default"
-        config.system.path
-      ];
-
-    # Don't restart dbus-daemon. Bad things tend to happen if we do.
-    systemd.services.dbus.reloadIfChanged = true;
-
-    systemd.services.dbus.restartTriggers = [ configDir ];
+      sockets.dbus.wantedBy = mkIf cfg.socketActivated [ "sockets.target" ];
+    };
 
     environment.pathsToLink = [ "/etc/dbus-1" "/share/dbus-1" ];
-
   };
-
 }

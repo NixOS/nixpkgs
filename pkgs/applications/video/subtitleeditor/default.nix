@@ -1,45 +1,63 @@
-{ stdenv, fetchurl, desktop_file_utils, enchant, gnome, gstreamer, gstreamermm,
-  gst_plugins_base, gst_plugins_good, intltool, hicolor_icon_theme,
-  libsigcxx, libxmlxx, makeWrapper, xdg_utils, pkgconfig } :
+{ stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, intltool, file,
+  desktop-file-utils, enchant, gnome3, gst_all_1, hicolor-icon-theme,
+  libsigcxx, libxmlxx, xdg_utils, isocodes, wrapGAppsHook
+}:
 
 let
-  ver_maj = "0.41";
-  ver_min = "0";
+  version = "0.54.0";
 in
 
 stdenv.mkDerivation rec {
-  name = "subtitle-editor-${ver_maj}.${ver_min}";
+  name = "subtitleeditor-${version}";
 
-  buildInputs =  [
-    desktop_file_utils enchant gnome.gtk gnome.gtkmm gstreamer gstreamermm
-    gst_plugins_base gst_plugins_good intltool hicolor_icon_theme libsigcxx libxmlxx
-    makeWrapper xdg_utils pkgconfig
-  ];
-
-  src = fetchurl {
-    url = "http://download.gna.org/subtitleeditor/${ver_maj}/subtitleeditor-${ver_maj}.${ver_min}.tar.gz";
-    md5 = "3c21ccd8296001dcb1a02c62396db1b6";
+  src = fetchFromGitHub {
+    owner = "kitone";
+    repo = "subtitleeditor";
+    rev = version;
+    sha256 = "0vxcscc9m6gymgj173ahk2g9hlk9588z5fdaavmkpyriqdlhwm11";
   };
 
-  doCheck = true;
+  nativeBuildInputs =  [
+    autoreconfHook
+    pkgconfig
+    intltool
+    file
+    wrapGAppsHook
+  ];
 
-  postInstall = ''
-    wrapProgram "$out/bin/subtitleeditor" --prefix \
-      GST_PLUGIN_SYSTEM_PATH ":" "$GST_PLUGIN_SYSTEM_PATH"                                                     \
-  '';
+  buildInputs =  [
+    desktop-file-utils
+    enchant
+    gnome3.gtk
+    gnome3.gtkmm
+    gst_all_1.gstreamer
+    gst_all_1.gstreamermm
+    gst_all_1.gst-plugins-base
+    gst_all_1.gst-plugins-good
+    hicolor-icon-theme
+    libsigcxx
+    libxmlxx
+    xdg_utils
+    isocodes
+  ];
 
+  enableParallelBuilding = true;
+
+  preConfigure = "substituteInPlace ./configure --replace /usr/bin/file ${file}/bin/file";
+
+  configureFlags = [ "--disable-debug" ];
 
   meta = {
-    description = "GTK+2 application to edit video subtitles";
+    description = "GTK+3 application to edit video subtitles";
     longDescription = ''
-      Subtitle Editor is a GTK+2 tool to edit subtitles for GNU/Linux/*BSD. It can be
-      used for new subtitles or as a tool to transform, edit, correct and refine
-      existing subtitle. This program also shows sound waves, which makes it easier
-      to synchronise subtitles to voices.
+      Subtitle Editor is a GTK+3 tool to edit subtitles for GNU/Linux/*BSD. It
+      can be used for new subtitles or as a tool to transform, edit, correct
+      and refine existing subtitle. This program also shows sound waves, which
+      makes it easier to synchronise subtitles to voices.
       '';
-    homepage = http://home.gna.org/subtitleeditor;
-    license = stdenv.lib.licenses.gpl3;
-    maintainers = [ stdenv.lib.maintainers.plcplc ];
+    homepage = http://kitone.github.io/subtitleeditor/;
+    license = stdenv.lib.licenses.gpl3Plus;
     platforms = stdenv.lib.platforms.linux;
+    maintainers = [ stdenv.lib.maintainers.plcplc ];
   };
 }

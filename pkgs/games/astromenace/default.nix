@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, cmake, xlibsWrapper, mesa, SDL, openal, freealut, libogg, libvorbis }:
+{ fetchurl, stdenv, cmake, xlibsWrapper, libGLU_combined, SDL, openal, freealut, libogg, libvorbis }:
 
 stdenv.mkDerivation rec {
   version = "1.3.2";
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "1rkz6lwjcd5mwv72kf07ghvx6z46kf3xs250mjbmnmjpn7r5sxwv";
   };
 
-  buildInputs = [ cmake xlibsWrapper mesa SDL openal freealut libogg libvorbis ];
+  buildInputs = [ cmake xlibsWrapper libGLU_combined SDL openal freealut libogg libvorbis ];
 
   buildPhase = ''
     cmake ./
@@ -20,8 +20,8 @@ stdenv.mkDerivation rec {
     mkdir -p $out/bin
     cp AstroMenace $out
     cp gamedata.vfs $out
-    cat > $out/bin/AstroMenace << EOF 
-    #!/bin/bash
+    cat > $out/bin/AstroMenace << EOF
+    #!${stdenv.shell}
     $out/AstroMenace --dir=$out
     EOF
     chmod 755 $out/bin/AstroMenace

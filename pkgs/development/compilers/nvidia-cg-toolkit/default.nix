@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   installPhase = ''
     for b in cgc cgfxcat cginfo
     do
-        patchelf --set-interpreter ${stdenv.glibc}/lib/ld-linux*.so.? "bin/$b"
+        patchelf --set-interpreter ${stdenv.glibc.out}/lib/ld-linux*.so.? "bin/$b"
     done
     # FIXME: cgfxcat and cginfo need more patchelf
     mkdir -p "$out/bin/"

@@ -1,10 +1,12 @@
 # Miscellaneous small tests that don't warrant their own VM run.
 
-import ./make-test.nix ({ pkgs, ...} : {
+import ./make-test.nix ({ pkgs, ...} : rec {
   name = "misc";
   meta = with pkgs.stdenv.lib.maintainers; {
     maintainers = [ eelco chaoflow ];
   };
+
+  foo = pkgs.writeText "foo" "Hello World";
 
   machine =
     { config, lib, pkgs, ... }:
@@ -16,23 +18,34 @@ import ./make-test.nix ({ pkgs, ...} : {
       systemd.tmpfiles.rules = [ "d /tmp 1777 root root 10d" ];
       fileSystems = mkVMOverride { "/tmp2" =
         { fsType = "tmpfs";
-          options = "mode=1777,noauto";
+          options = [ "mode=1777" "noauto" ];
         };
       };
       systemd.automounts = singleton
         { wantedBy = [ "multi-user.target" ];
           where = "/tmp2";
         };
+      users.users.sybil = { isNormalUser = true; group = "wheel"; };
+      security.sudo = { enable = true; wheelNeedsPassword = false; };
+      boot.kernel.sysctl."vm.swappiness" = 1;
+      boot.kernelParams = [ "vsyscall=emulate" ];
+      system.extraDependencies = [ foo ];
     };
 
   testScript =
     ''
+      subtest "nix-db", sub {
+          my $json = $machine->succeed("nix path-info --json ${foo}");
+          $json =~ /"narHash":"sha256:0afw0d9j1hvwiz066z93jiddc33nxg6i6qyp26vnqyglpyfivlq5"/ or die "narHash not set";
+          $json =~ /"narSize":128/ or die "narSize not set";
+      };
+
       subtest "nixos-version", sub {
           $machine->succeed("[ `nixos-version | wc -w` = 2 ]");
       };
 
       subtest "nixos-rebuild", sub {
-          $machine->succeed("nixos-rebuild --help | grep SYNOPSIS");
+          $machine->succeed("nixos-rebuild --help | grep 'NixOS module' ");
       };
 
       # Sanity check for uid/gid assignment.
@@ -80,9 +93,10 @@ import ./make-test.nix ({ pkgs, ...} : {
       };
 
       # Test whether systemd-udevd automatically loads modules for our hardware.
+      $machine->succeed("systemctl start systemd-udev-settle.service");
       subtest "udev-auto-load", sub {
           $machine->waitForUnit('systemd-udev-settle.service');
-          $machine->succeed('lsmod | grep psmouse');
+          $machine->succeed('lsmod | grep mousedev');
       };
 
       # Test whether systemd-tmpfiles-clean works.
@@ -108,6 +122,19 @@ import ./make-test.nix ({ pkgs, ...} : {
 
       subtest "nix-db", sub {
           $machine->succeed("nix-store -qR /run/current-system | grep nixos-");
+      };
+
+      # Test sysctl
+      subtest "sysctl", sub {
+          $machine->waitForUnit("systemd-sysctl.service");
+          $machine->succeed('[ `sysctl -ne vm.swappiness` = 1 ]');
+          $machine->execute('sysctl vm.swappiness=60');
+          $machine->succeed('[ `sysctl -ne vm.swappiness` = 60 ]');
+      };
+
+      # Test boot parameters
+      subtest "bootparam", sub {
+          $machine->succeed('grep -Fq vsyscall=emulate /proc/cmdline');
       };
     '';
 })

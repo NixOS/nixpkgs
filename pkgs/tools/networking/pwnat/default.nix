@@ -1,11 +1,15 @@
-{ stdenv, fetchurl }:
+{ stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
-  name = "pwnat-0.3-beta";
+  name  = "${pname}-${date}";
+  pname = "pwnat";
+  date  = "2014-09-08";
 
-  src = fetchurl {
-    url = "http://samy.pl/pwnat/${name}.tgz";
-    sha256 = "18ihs6wk7zni2w0pqip7i61hyi6n60v5rgj6z7j543fgy4afmmnm";
+  src = fetchFromGitHub {
+    owner  = "samyk";
+    repo   = pname;
+    rev    = "1d07c2eb53171733831c0cd01e4e96a3204ec446";
+    sha256 = "056xhlnf1axa6k90i018xwijkwc9zc7fms35hrkzwgs40g9ybrx5";
   };
 
   installPhase = ''
@@ -14,11 +18,11 @@ stdenv.mkDerivation rec {
     cp README* COPYING* $out/share/pwnat
   '';
 
-  meta = {
-    homepage = http://samy.pl/pwnat/;
+  meta = with stdenv.lib; {
+    homepage    = http://samy.pl/pwnat/;
     description = "ICMP NAT to NAT client-server communication";
-    license = stdenv.lib.licenses.gpl3Plus;
-    maintainers = with stdenv.lib.maintainers; [viric];
-    platforms = with stdenv.lib.platforms; linux;
+    license     = stdenv.lib.licenses.gpl3Plus;
+    maintainers = with maintainers; [viric];
+    platforms   = with platforms; linux;
   };
 }

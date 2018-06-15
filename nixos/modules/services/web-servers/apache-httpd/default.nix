@@ -6,15 +6,29 @@ let
 
   mainCfg = config.services.httpd;
 
-  httpd = mainCfg.package;
+  httpd = mainCfg.package.out;
 
   version24 = !versionOlder httpd.version "2.4";
 
   httpdConf = mainCfg.configFile;
 
-  php = pkgs.php.override { apacheHttpd = httpd; };
+  php = mainCfg.phpPackage.override { apacheHttpd = httpd.dev; /* otherwise it only gets .out */ };
 
-  getPort = cfg: if cfg.port != 0 then cfg.port else if cfg.enableSSL then 443 else 80;
+  phpMajorVersion = head (splitString "." php.version);
+
+  mod_perl = pkgs.apacheHttpdPackages.mod_perl.override { apacheHttpd = httpd; };
+
+  defaultListen = cfg: if cfg.enableSSL
+    then [{ip = "*"; port = 443;}]
+    else [{ip = "*"; port = 80;}];
+
+  getListen = cfg:
+    let list = (lib.optional (cfg.port != 0) {ip = "*"; port = cfg.port;}) ++ cfg.listen;
+    in if list == []
+        then defaultListen cfg
+        else list;
+
+  listenToString = l: "${l.ip}:${toString l.port}";
 
   extraModules = attrByPath ["extraModules"] [] mainCfg;
   extraForeignModules = filter isAttrs extraModules;
@@ -23,10 +37,13 @@ let
 
   makeServerInfo = cfg: {
     # Canonical name must not include a trailing slash.
-    canonicalName =
-      (if cfg.enableSSL then "https" else "http") + "://" +
-      cfg.hostName +
-      (if getPort cfg != (if cfg.enableSSL then 443 else 80) then ":${toString (getPort cfg)}" else "");
+    canonicalNames =
+      let defaultPort = (head (defaultListen cfg)).port; in
+      map (port:
+        (if cfg.enableSSL then "https" else "http") + "://" +
+        cfg.hostName +
+        (if port != defaultPort then ":${toString port}" else "")
+        ) (map (x: x.port) (getListen cfg));
 
     # Admin address: inherit from the main server if not specified for
     # a virtual host.
@@ -46,6 +63,8 @@ let
       let
         svcFunction =
           if svc ? function then svc.function
+          # instead of using serviceType="mediawiki"; you can copy mediawiki.nix to any location outside nixpkgs, modify it at will, and use serviceExpression=./mediawiki.nix;
+          else if svc ? serviceExpression then import (toString svc.serviceExpression)
           else import (toString "${toString ./.}/${if svc ? serviceType then svc.serviceType else svc.serviceName}.nix");
         config = (evalModules
           { modules = [ { options = res.options; config = svc.config or svc; } ];
@@ -61,6 +80,7 @@ let
           robotsEntries = "";
           startupScript = "";
           enablePHP = false;
+          enablePerl = false;
           phpOptions = "";
           options = {};
           documentRoot = null;
@@ -173,7 +193,8 @@ let
     SSLRandomSeed connect builtin
 
     SSLProtocol All -SSLv2 -SSLv3
-    SSLCipherSuite HIGH:MEDIUM:!aNULL:!MD5:!EXP
+    SSLCipherSuite HIGH:!aNULL:!MD5:!EXP
+    SSLHonorCipherOrder on
   '';
 
 
@@ -221,7 +242,7 @@ let
         ++ (map (svc: svc.robotsEntries) subservices)));
 
   in ''
-    ServerName ${serverInfo.canonicalName}
+    ${concatStringsSep "\n" (map (n: "ServerName ${n}") serverInfo.canonicalNames)}
 
     ${concatMapStrings (alias: "ServerAlias ${alias}\n") cfg.serverAliases}
 
@@ -323,9 +344,10 @@ let
     </IfModule>
 
     ${let
-        ports = map getPort allHosts;
-        uniquePorts = uniqList {inputList = ports;};
-      in concatMapStrings (port: "Listen ${toString port}\n") uniquePorts
+        listen = concatMap getListen allHosts;
+        toStr = listen: "Listen ${listenToString listen}\n";
+        uniqueListen = uniqList {inputList = map toStr listen;};
+      in concatStrings uniqueListen
     }
 
     User ${mainCfg.user}
@@ -336,7 +358,9 @@ let
         allModules =
           concatMap (svc: svc.extraModulesPre) allSubservices
           ++ map (name: {inherit name; path = "${httpd}/modules/mod_${name}.so";}) apacheModules
-          ++ optional enablePHP { name = "php5"; path = "${php}/modules/libphp5.so"; }
+          ++ optional mainCfg.enableMellon { name = "auth_mellon"; path = "${pkgs.apacheHttpdPackages.mod_auth_mellon}/modules/mod_auth_mellon.so"; }
+          ++ optional enablePHP { name = "php${phpMajorVersion}"; path = "${php}/modules/libphp${phpMajorVersion}.so"; }
+          ++ optional enablePerl { name = "perl"; path = "${mod_perl}/modules/mod_perl.so"; }
           ++ concatMap (svc: svc.extraModules) allSubservices
           ++ extraForeignModules;
       in concatMapStrings load allModules
@@ -378,15 +402,15 @@ let
 
     # Always enable virtual hosts; it doesn't seem to hurt.
     ${let
-        ports = map getPort allHosts;
-        uniquePorts = uniqList {inputList = ports;};
-        directives = concatMapStrings (port: "NameVirtualHost *:${toString port}\n") uniquePorts;
+        listen = concatMap getListen allHosts;
+        uniqueListen = uniqList {inputList = listen;};
+        directives = concatMapStrings (listen: "NameVirtualHost ${listenToString listen}\n") uniqueListen;
       in optionalString (!version24) directives
     }
 
     ${let
         makeVirtualHost = vhost: ''
-          <VirtualHost *:${toString (getPort vhost)}>
+          <VirtualHost ${concatStringsSep " " (map listenToString (getListen vhost))}>
               ${perServerConf false vhost}
           </VirtualHost>
         '';
@@ -397,6 +421,8 @@ let
 
   enablePHP = mainCfg.enablePHP || any (svc: svc.enablePHP) allSubservices;
 
+  enablePerl = mainCfg.enablePerl || any (svc: svc.enablePerl) allSubservices;
+
 
   # Generate the PHP configuration file.  Should probably be factored
   # out into a separate module.
@@ -405,7 +431,7 @@ let
         ([ mainCfg.phpOptions ] ++ (map (svc: svc.phpOptions) allSubservices));
     }
     ''
-      cat ${php}/etc/php-recommended.ini > $out
+      cat ${php}/etc/php.ini > $out
       echo "$options" >> $out
     '';
 
@@ -429,6 +455,7 @@ in
       package = mkOption {
         type = types.package;
         default = pkgs.apacheHttpd;
+        defaultText = "pkgs.apacheHttpd";
         description = ''
           Overridable attribute of the Apache HTTP Server package to use.
         '';
@@ -437,7 +464,8 @@ in
       configFile = mkOption {
         type = types.path;
         default = confFile;
-        example = literalExample ''pkgs.writeText "httpd.conf" "# my custom config file ...";'';
+        defaultText = "confFile";
+        example = literalExample ''pkgs.writeText "httpd.conf" "# my custom config file ..."'';
         description = ''
           Override the configuration file used by Apache. By default,
           NixOS generates one automatically.
@@ -538,10 +566,31 @@ in
         '';
       };
 
+      enableMellon = mkOption {
+        type = types.bool;
+        default = false;
+        description = "Whether to enable the mod_auth_mellon module.";
+      };
+
       enablePHP = mkOption {
         type = types.bool;
         default = false;
         description = "Whether to enable the PHP module.";
+      };
+
+      phpPackage = mkOption {
+        type = types.package;
+        default = pkgs.php;
+        defaultText = "pkgs.php";
+        description = ''
+          Overridable attribute of the PHP package to use.
+        '';
+      };
+
+      enablePerl = mkOption {
+        type = types.bool;
+        default = false;
+        description = "Whether to enable the Perl module (mod_perl).";
       };
 
       phpOptions = mkOption {
@@ -607,6 +656,8 @@ in
                      message = "SSL is enabled for httpd, but sslServerCert and/or sslServerKey haven't been specified."; }
                  ];
 
+    warnings = map (cfg: ''apache-httpd's port option is deprecated. Use listen = [{/*ip = "*"; */ port = ${toString cfg.port}";}]; instead'' ) (lib.filter (cfg: cfg.port != 0) allHosts);
+
     users.extraUsers = optionalAttrs (mainCfg.user == "wwwrun") (singleton
       { name = "wwwrun";
         group = mainCfg.group;
@@ -625,6 +676,7 @@ in
       ''
         ; Needed for PHP's mail() function.
         sendmail_path = sendmail -t -i
+      '' + optionalString (!isNull config.time.timeZone) ''
 
         ; Apparently PHP doesn't use $TZ.
         date.timezone = "${config.time.timeZone}"
@@ -647,6 +699,7 @@ in
 
         environment =
           optionalAttrs enablePHP { PHPRC = phpIni; }
+          // optionalAttrs mainCfg.enableMellon { LD_LIBRARY_PATH  = "${pkgs.xmlsec}/lib"; }
           // (listToAttrs (concatMap (svc: svc.globalEnvVars) allSubservices));
 
         preStart =
@@ -658,13 +711,6 @@ in
               [ $(id -u) != 0 ] || chown root.${mainCfg.group} "${mainCfg.stateDir}/runtime"
             ''}
             mkdir -m 0700 -p ${mainCfg.logDir}
-
-            ${optionalString (mainCfg.documentRoot != null)
-            ''
-              # Create the document root directory if does not exists yet
-              mkdir -p ${mainCfg.documentRoot}
-            ''
-            }
 
             # Get rid of old semaphores.  These tend to accumulate across
             # server restarts, eventually preventing it from restarting
@@ -682,6 +728,7 @@ in
 
         serviceConfig.ExecStart = "@${httpd}/bin/httpd httpd -f ${httpdConf}";
         serviceConfig.ExecStop = "${httpd}/bin/httpd -f ${httpdConf} -k graceful-stop";
+        serviceConfig.ExecReload = "${httpd}/bin/httpd -f ${httpdConf} -k graceful";
         serviceConfig.Type = "forking";
         serviceConfig.PIDFile = "${mainCfg.stateDir}/httpd.pid";
         serviceConfig.Restart = "always";
@@ -689,5 +736,4 @@ in
       };
 
   };
-
 }

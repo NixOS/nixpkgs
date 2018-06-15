@@ -1,8 +1,11 @@
-{stdenv, fetchurl, python, pygobject, pycairo, pyGtkGlade, pythonDBus, 
- wpa_supplicant, dhcp, dhcpcd, wirelesstools, nettools, openresolv, iproute, iputils,
- pythonPackages, locale ? "C" }:
+{ stdenv, fetchurl, python2Packages
+, wpa_supplicant, dhcp, dhcpcd, wirelesstools
+, nettools, openresolv, iproute, iputils
+, locale ? "C" }:
 
-stdenv.mkDerivation rec {
+let
+  inherit (python2Packages) python pygobject2 dbus-python pyGtkGlade pycairo;
+in stdenv.mkDerivation rec {
   name = "wicd-${version}";
   version = "1.7.2.4";
   
@@ -11,9 +14,8 @@ stdenv.mkDerivation rec {
     sha256 = "15ywgh60xzmp5z8l1kzics7yi95isrjg1paz42dvp7dlpdfzpzfw";
   };
 
-  buildInputs = [
-    python pythonPackages.Babel
-    pythonPackages.urwid pythonPackages.notify
+  buildInputs = with python2Packages; [
+    python Babel urwid notify
   ];
 
   patches = [
@@ -24,26 +26,27 @@ stdenv.mkDerivation rec {
     ./fix-app-icon.patch
     ./fix-gtk-issues.patch
     ./urwid-api-update.patch
+    ./fix-curses.patch
     ];
 
-  # Should I be using pygtk's propogated build inputs?
+  # Should I be using pygtk's propagated build inputs?
   # !!! Should use makeWrapper.
   postPatch = ''
     # We don't have "python2".
-    substituteInPlace wicd/wicd-daemon.py --replace 'misc.find_path("python2")' "'${python}/bin/python'"
+    substituteInPlace wicd/wicd-daemon.py --replace 'misc.find_path("python2")' "'${python.interpreter}'"
     
     substituteInPlace in/scripts=wicd.in --subst-var-by TEMPLATE-DEFAULT $out/share/other/dhclient.conf.template.default
 
-    sed -i "2iexport PATH=${python}/bin:${wpa_supplicant}/sbin:${dhcpcd}/sbin:${dhcp}/sbin:${wirelesstools}/sbin:${nettools}/sbin:${nettools}/bin:${iputils}/bin:${openresolv}/sbin:${iproute}/sbin\$\{PATH:+:\}\$PATH" in/scripts=wicd.in
-    sed -i "3iexport PYTHONPATH=$(toPythonPath $out):$(toPythonPath ${pygobject}):$(toPythonPath ${pythonDBus})\$\{PYTHONPATH:+:\}\$PYTHONPATH" in/scripts=wicd.in
+    sed -i "2iexport PATH=${stdenv.lib.makeBinPath [ python wpa_supplicant dhcpcd dhcp wirelesstools nettools nettools iputils openresolv iproute ]}\$\{PATH:+:\}\$PATH" in/scripts=wicd.in
+    sed -i "3iexport PYTHONPATH=$(toPythonPath $out):$(toPythonPath ${pygobject2}):$(toPythonPath ${dbus-python})\$\{PYTHONPATH:+:\}\$PYTHONPATH" in/scripts=wicd.in
     sed -i "2iexport PATH=${python}/bin\$\{PATH:+:\}\$PATH" in/scripts=wicd-client.in
-    sed -i "3iexport PYTHONPATH=$(toPythonPath $out):$(toPythonPath ${pyGtkGlade})/gtk-2.0:$(toPythonPath ${pygobject}):$(toPythonPath ${pygobject})/gtk-2.0:$(toPythonPath ${pycairo}):$(toPythonPath ${pythonDBus})\$\{PYTHONPATH:+:\}\$PYTHONPATH" in/scripts=wicd-client.in
+    sed -i "3iexport PYTHONPATH=$(toPythonPath $out):$(toPythonPath ${pyGtkGlade})/gtk-2.0:$(toPythonPath ${pygobject2}):$(toPythonPath ${pygobject2})/gtk-2.0:$(toPythonPath ${pycairo}):$(toPythonPath ${dbus-python})\$\{PYTHONPATH:+:\}\$PYTHONPATH" in/scripts=wicd-client.in
     sed -i "2iexport PATH=${python}/bin\$\{PATH:+:\}\$PATH" in/scripts=wicd-gtk.in
-    sed -i "3iexport PYTHONPATH=$(toPythonPath $out):$(toPythonPath ${pyGtkGlade})/gtk-2.0:$(toPythonPath ${pygobject}):$(toPythonPath ${pygobject})/gtk-2.0:$(toPythonPath ${pycairo}):$(toPythonPath ${pythonDBus}):$(toPythonPath ${pythonPackages.notify})\$\{PYTHONPATH:+:\}\$PYTHONPATH" in/scripts=wicd-gtk.in
+    sed -i "3iexport PYTHONPATH=$(toPythonPath $out):$(toPythonPath ${pyGtkGlade})/gtk-2.0:$(toPythonPath ${pygobject2}):$(toPythonPath ${pygobject2})/gtk-2.0:$(toPythonPath ${pycairo}):$(toPythonPath ${dbus-python}):$(toPythonPath ${python2Packages.notify})\$\{PYTHONPATH:+:\}\$PYTHONPATH" in/scripts=wicd-gtk.in
     sed -i "2iexport PATH=${python}/bin\$\{PATH:+:\}\$PATH" in/scripts=wicd-cli.in
-    sed -i "3iexport PYTHONPATH=$(toPythonPath $out):$(toPythonPath ${pyGtkGlade})/gtk-2.0:$(toPythonPath ${pygobject}):$(toPythonPath ${pycairo}):$(toPythonPath ${pythonDBus})\$\{PYTHONPATH:+:\}\$PYTHONPATH" in/scripts=wicd-cli.in
+    sed -i "3iexport PYTHONPATH=$(toPythonPath $out):$(toPythonPath ${pyGtkGlade})/gtk-2.0:$(toPythonPath ${pygobject2}):$(toPythonPath ${pycairo}):$(toPythonPath ${dbus-python})\$\{PYTHONPATH:+:\}\$PYTHONPATH" in/scripts=wicd-cli.in
     sed -i "2iexport PATH=${python}/bin\$\{PATH:+:\}\$PATH" in/scripts=wicd-curses.in
-    sed -i "3iexport PYTHONPATH=$(toPythonPath $out):$(toPythonPath ${pyGtkGlade})/gtk-2.0:$(toPythonPath ${pygobject}):$(toPythonPath ${pycairo}):$(toPythonPath ${pythonDBus}):$(toPythonPath ${pythonPackages.urwid}):$(toPythonPath ${pythonPackages.curses})\$\{PYTHONPATH:+:\}\$PYTHONPATH" in/scripts=wicd-curses.in
+    sed -i "3iexport PYTHONPATH=$(toPythonPath $out):$(toPythonPath ${pyGtkGlade})/gtk-2.0:$(toPythonPath ${pygobject2}):$(toPythonPath ${pycairo}):$(toPythonPath ${dbus-python}):$(toPythonPath ${python2Packages.urwid})\$\{PYTHONPATH:+:\}\$PYTHONPATH" in/scripts=wicd-curses.in
     rm po/ast.po
   '';
 
@@ -89,7 +92,7 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
-    python setup.py install --prefix=$out --install-lib=$out/lib/${python.libPrefix}/site-packages
+    python setup.py install --prefix=$out --install-lib=$out/${python.sitePackages}
     mkdir -p $out/share/other
     cp other/dhclient.conf.template.default $out/share/other/dhclient.conf.template.default
 
@@ -114,5 +117,6 @@ stdenv.mkDerivation rec {
     '';
     maintainers = [ maintainers.roconnor ];
     license = licenses.gpl2;
+    platforms = platforms.linux;
   };
 }

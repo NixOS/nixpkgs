@@ -1,35 +1,49 @@
-{ stdenv, fetchzip, fetchgit, bashCompletion
-, glib, polkit, pkgconfig, intltool, gusb, libusb1, lcms2, sqlite, systemd, dbus
-, automake, autoconf, libtool, gtk_doc, which, gobjectIntrospection, argyllcms }:
+{ stdenv, fetchurl, bash-completion
+, glib, polkit, pkgconfig, gettext, gusb, lcms2, sqlite, systemd, dbus
+, gobjectIntrospection, argyllcms, meson, ninja, libxml2, vala_0_40
+, libgudev, sane-backends, udev, gnome3, makeWrapper }:
 
 stdenv.mkDerivation rec {
-  name = "colord-1.2.12";
+  name = "colord-1.4.2";
 
-  src = fetchzip {
+  src = fetchurl {
     url = "http://www.freedesktop.org/software/colord/releases/${name}.tar.xz";
-    sha256 = "0rvvbpxd5x479v4p6pck317mlf3j29s154i1n8hlx8n4znhwrb0k";
+    sha256 = "19zc9gldz469jshl16av7na459kwr5nhvs2pz98xm5lw582xaw2c";
   };
 
-  enableParallelBuilding = true;
-
-  configureFlags = [
-    "--with-udevrulesdir=$out/lib/udev/rules.d"
-    "--with-systemdsystemunitdir=$(out)/etc/systemd/system"
-    "--disable-bash-completion"
+  mesonFlags = [
+    "-Denable-sane=true"
+    "-Denable-vala=true"
+    "--localstatedir=/var"
+    "-Denable-bash-completion=true"
+    # TODO: man page cannot be build with docbook2x
+    "-Denable-man=false"
+    "-Denable-docs=false"
   ];
 
-  buildInputs = [ glib polkit pkgconfig intltool gusb libusb1 lcms2 sqlite systemd dbus gobjectIntrospection
-                  bashCompletion argyllcms automake autoconf ];
+  nativeBuildInputs = [ meson pkgconfig vala_0_40 ninja gettext libxml2 gobjectIntrospection makeWrapper ];
+
+  buildInputs = [ glib polkit gusb lcms2 sqlite systemd dbus bash-completion argyllcms libgudev sane-backends ];
 
   postInstall = ''
-    rm -fr $out/var/lib/colord
-    mkdir -p $out/etc/bash_completion.d
-    cp -v data/colormgr $out/etc/bash_completion.d
+    glib-compile-schemas $out/share/glib-2.0/schemas
+  '';
+
+  PKG_CONFIG_SYSTEMD_SYSTEMDSYSTEMUNITDIR = "lib/systemd/system";
+  PKG_CONFIG_SYSTEMD_SYSTEMDUSERUNITDIR = "lib/systemd/user";
+  PKG_CONFIG_SYSTEMD_TMPFILESDIR = "lib/tmpfiles.d";
+  PKG_CONFIG_BASH_COMPLETION_COMPLETIONSDIR= "share/bash-completion/completions";
+  PKG_CONFIG_UDEV_UDEVDIR = "lib/udev";
+
+  postFixup = ''
+    wrapProgram "$out/libexec/colord-session" \
+      --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH:$out/share" \
+      --prefix GIO_EXTRA_MODULES : "${stdenv.lib.getLib gnome3.dconf}/lib/gio/modules"
   '';
 
   meta = {
-    description = "system service that makes it easy to manage, install and generate color profiles to accurately color manage input and output devices";
-    homepage = http://www.freedesktop.org/software/colord/intro.html;
+    description = "System service to manage, install and generate color profiles to accurately color manage input and output devices";
+    homepage = https://www.freedesktop.org/software/colord/;
     license = stdenv.lib.licenses.lgpl2Plus;
     maintainers = [stdenv.lib.maintainers.marcweber];
     platforms = stdenv.lib.platforms.linux;

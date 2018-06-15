@@ -29,5 +29,6 @@ stdenv.mkDerivation {
     description = "X11 brigthness and gamma software control";
     homepage = http://shallowsky.com/software;
     license = stdenv.lib.licenses.mit;
+    platforms = stdenv.lib.platforms.linux;
   };
 }

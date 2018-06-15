@@ -1,15 +1,15 @@
 { stdenv, fetchurl, pcsclite, pkgconfig, libusb1, perl }:
 
 stdenv.mkDerivation rec {
-  version = "1.4.20";
+  version = "1.4.27";
   name = "ccid-${version}";
 
   src = fetchurl {
-    url = "https://alioth.debian.org/frs/download.php/file/4140/ccid-1.4.20.tar.bz2";
-    sha256 = "1g0w4pv6q30d8lhs3kd6nywkhh34nhf9fbcbcvbxdvk3pdjvh320";
+    url = "https://alioth.debian.org/frs/download.php/file/4218/ccid-1.4.27.tar.bz2";
+    sha256 = "0dyikpmhsph36ndgd61bs4yx437v5y0bmm8ahjacp1k9c1ly4q56";
   };
 
-  patchPhase = ''
+  postPatch = ''
     patchShebangs .
     substituteInPlace src/Makefile.in --replace /bin/echo echo
   '';
@@ -26,6 +26,6 @@ stdenv.mkDerivation rec {
     homepage = http://pcsclite.alioth.debian.org/;
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ viric wkennington ];
-    platforms = with platforms; linux;
+    platforms = platforms.linux;
   };
 }

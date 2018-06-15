@@ -3,15 +3,16 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "tdb-1.3.7";
+  name = "tdb-1.3.15";
 
   src = fetchurl {
     url = "mirror://samba/tdb/${name}.tar.gz";
-    sha256 = "04k42cjvjc5wsqsqf44397hclq3nxlm9avjcsbz2hsn01k59akd6";
+    sha256 = "0a37jhpij8wr4f4pjqdlwnffy2l6a2vkqdpz1bqxj6v06cwbz8dl";
   };
 
+  nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
-    python pkgconfig readline libxslt docbook_xsl docbook_xml_dtd_42
+    python readline libxslt docbook_xsl docbook_xml_dtd_42
   ];
 
   preConfigure = ''

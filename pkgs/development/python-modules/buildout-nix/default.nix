@@ -1,11 +1,13 @@
 { fetchurl, stdenv, buildPythonPackage }:
 
-buildPythonPackage {
-  name = "zc.buildout-nix-2.4.3";
+buildPythonPackage rec {
+  pname = "zc.buildout";
+  version = "2.11.4";
+  name = "${pname}-nix-${version}";
 
   src = fetchurl {
-    url = "https://pypi.python.org/packages/source/z/zc.buildout/zc.buildout-2.4.3.tar.gz";
-    sha256 = "db877d791e058a6207ac716e1017296e6862e4f1b5388dd145702eb19d902580";
+    url = "mirror://pypi/${builtins.substring 0 1 pname}/${pname}/${pname}-${version}.tar.gz";
+    sha256 = "20b22d9c99c99909b6b2dc679e8acd9e1fcf9f58e23f336d8b2c5be70617fbb2";
   };
 
   patches = [ ./nix.patch ];
@@ -13,9 +15,9 @@ buildPythonPackage {
   postInstall = "mv $out/bin/buildout{,-nix}";
 
   meta = {
-    homepage = "http://www.buildout.org";
+    homepage = http://www.buildout.org;
     description = "A software build and configuration system";
-    license = stdenv.lib.licenses.zpt21;
+    license = stdenv.lib.licenses.zpl21;
     maintainers = [ stdenv.lib.maintainers.goibhniu ];
   };
 }

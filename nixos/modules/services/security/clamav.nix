@@ -3,78 +3,143 @@ with lib;
 let
   clamavUser = "clamav";
   stateDir = "/var/lib/clamav";
+  runDir = "/run/clamav";
   clamavGroup = clamavUser;
   cfg = config.services.clamav;
+  pkg = pkgs.clamav;
+
+  clamdConfigFile = pkgs.writeText "clamd.conf" ''
+    DatabaseDirectory ${stateDir}
+    LocalSocket ${runDir}/clamd.ctl
+    PidFile ${runDir}/clamd.pid
+    TemporaryDirectory /tmp
+    User clamav
+    Foreground yes
+
+    ${cfg.daemon.extraConfig}
+  '';
+
+  freshclamConfigFile = pkgs.writeText "freshclam.conf" ''
+    DatabaseDirectory ${stateDir}
+    Foreground yes
+    Checks ${toString cfg.updater.frequency}
+
+    ${cfg.updater.extraConfig}
+
+    DatabaseMirror database.clamav.net
+  '';
 in
 {
-  ###### interface
-
   options = {
-
     services.clamav = {
-      updater = {
-	enable = mkOption {
-	  default = false;
-	  description = ''
-	    Whether to enable automatic ClamAV virus definitions database updates.
-	  '';
-	};
+      daemon = {
+        enable = mkEnableOption "ClamAV clamd daemon";
 
-	frequency = mkOption {
-	  default = 12;
-	  description = ''
-	    Number of database checks per day.
-	  '';
-	};
-
-	config = mkOption {
-	  default = "";
-	  description = ''
-	    Extra configuration for freshclam. Contents will be added verbatim to the
-	    configuration file.
-	  '';
-	};
-      };
-    };
-  };
-
-  ###### implementation
-
-  config = mkIf cfg.updater.enable {
-    environment.systemPackages = [ pkgs.clamav ];
-    users.extraUsers = singleton
-      { name = clamavUser;
-        uid = config.ids.uids.clamav;
-        description = "ClamAV daemon user";
-        home = stateDir;
-      };
-
-    users.extraGroups = singleton
-      { name = clamavGroup;
-        gid = config.ids.gids.clamav;
-      };
-
-    services.clamav.updater.config = ''
-      DatabaseDirectory ${stateDir}
-      Foreground yes
-      Checks ${toString cfg.updater.frequency}
-      DatabaseMirror database.clamav.net
-    '';
-
-    jobs = {
-      clamav_updater = {
-	name = "clamav-updater";
-          startOn = "started network-interfaces";
-          stopOn = "stopping network-interfaces";
-
-          preStart = ''
-            mkdir -m 0755 -p ${stateDir}
-            chown ${clamavUser}:${clamavGroup} ${stateDir}
+        extraConfig = mkOption {
+          type = types.lines;
+          default = "";
+          description = ''
+            Extra configuration for clamd. Contents will be added verbatim to the
+            configuration file.
           '';
-          exec = "${pkgs.clamav}/bin/freshclam --daemon --config-file=${pkgs.writeText "freshclam.conf" cfg.updater.config}";
-      }; 
-    };
+        };
+      };
+      updater = {
+        enable = mkEnableOption "ClamAV freshclam updater";
 
+        frequency = mkOption {
+          type = types.int;
+          default = 12;
+          description = ''
+            Number of database checks per day.
+          '';
+        };
+
+        interval = mkOption {
+          type = types.str;
+          default = "hourly";
+          description = ''
+            How often freshclam is invoked. See systemd.time(7) for more
+            information about the format.
+          '';
+        };
+
+        extraConfig = mkOption {
+          type = types.lines;
+          default = "";
+          description = ''
+            Extra configuration for freshclam. Contents will be added verbatim to the
+            configuration file.
+          '';
+        };
+      };
+    };
   };
 
+  config = mkIf (cfg.updater.enable || cfg.daemon.enable) {
+    environment.systemPackages = [ pkg ];
+
+    users.extraUsers = singleton {
+      name = clamavUser;
+      uid = config.ids.uids.clamav;
+      group = clamavGroup;
+      description = "ClamAV daemon user";
+      home = stateDir;
+    };
+
+    users.extraGroups = singleton {
+      name = clamavGroup;
+      gid = config.ids.gids.clamav;
+    };
+
+    environment.etc."clamav/freshclam.conf".source = freshclamConfigFile;
+    environment.etc."clamav/clamd.conf".source = clamdConfigFile;
+
+    systemd.services.clamav-daemon = optionalAttrs cfg.daemon.enable {
+      description = "ClamAV daemon (clamd)";
+      after = optional cfg.updater.enable "clamav-freshclam.service";
+      requires = optional cfg.updater.enable "clamav-freshclam.service";
+      wantedBy = [ "multi-user.target" ];
+      restartTriggers = [ clamdConfigFile ];
+
+      preStart = ''
+        mkdir -m 0755 -p ${runDir}
+        chown ${clamavUser}:${clamavGroup} ${runDir}
+      '';
+
+      serviceConfig = {
+        ExecStart = "${pkg}/bin/clamd";
+        ExecReload = "${pkgs.coreutils}/bin/kill -USR2 $MAINPID";
+        PrivateTmp = "yes";
+        PrivateDevices = "yes";
+        PrivateNetwork = "yes";
+      };
+    };
+
+    systemd.timers.clamav-freshclam = optionalAttrs cfg.updater.enable {
+      description = "Timer for ClamAV virus database updater (freshclam)";
+      wantedBy = [ "timers.target" ];
+      timerConfig = {
+        OnCalendar = cfg.updater.interval;
+        Unit = "clamav-freshclam.service";
+      };
+    };
+
+    systemd.services.clamav-freshclam = optionalAttrs cfg.updater.enable {
+      description = "ClamAV virus database updater (freshclam)";
+      restartTriggers = [ freshclamConfigFile ];
+
+      preStart = ''
+        mkdir -m 0755 -p ${stateDir}
+        chown ${clamavUser}:${clamavGroup} ${stateDir}
+      '';
+
+      serviceConfig = {
+        Type = "oneshot";
+        ExecStart = "${pkg}/bin/freshclam";
+        PrivateTmp = "yes";
+        PrivateDevices = "yes";
+      };
+    };
+  };
 }

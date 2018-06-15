@@ -1,6 +1,6 @@
-{ stdenv, fetchFromGitHub, pkgconfig, xfce4_dev_tools
+{ stdenv, fetchFromGitHub, pkgconfig, xfce4-dev-tools
 , gtk
-, thunar
+, thunarx-2-dev
 , exo, libxfce4util, libxfce4ui
 , xfconf, udev, libnotify
 }:
@@ -18,10 +18,10 @@ stdenv.mkDerivation rec {
     sha256 = "0l8715x23qmk0jkywiza3qx0xxmafxi4grp7p82kkc5df5ccs8kx";
   };
 
+  nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
-    pkgconfig
-    xfce4_dev_tools
-    thunar
+    xfce4-dev-tools
+    thunarx-2-dev
     exo gtk libxfce4util libxfce4ui
     xfconf udev libnotify
   ];

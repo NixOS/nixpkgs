@@ -1,58 +1,41 @@
-{ fetchgit, stdenv, guile, guile_lib, gwrap
-, pkgconfig, gconf, glib, gnome_vfs, gtk
+{ fetchurl, stdenv, guile, guile-lib, gwrap
+, pkgconfig, gconf, glib, gnome_vfs, gtk2
 , libglade, libgnome, libgnomecanvas, libgnomeui
-, pango, guileCairo, autoconf, automake, texinfo }:
+, pango, guile-cairo, texinfo
+}:
 
 stdenv.mkDerivation rec {
-  name = "guile-gnome-platform-20150123";
+  name = "${pname}-${version}";
+  pname = "guile-gnome-platform";
+  version = "2.16.4";
 
-  src = fetchgit {
-    url = "git://git.sv.gnu.org/guile-gnome.git";
-    rev = "0fcbe69797b9501b8f1283a78eb92bf43b08d080";
-    sha256 = "1vqlzb356ggmp8jh833gksg59c53vbmmhycbcf52qj0fdz09mpb5";
+  src = fetchurl {
+    url = "mirror://gnu/guile-gnome/${pname}/${name}.tar.gz";
+    sha256 = "adabd48ed5993d8528fd604e0aa0d96ad81a61d06da6cdd68323572ad6c216c3";
   };
 
   buildInputs = [
-    autoconf
-    automake
-    texinfo
-    guile
-    gwrap
-    pkgconfig
-    gconf
-    glib
-    gnome_vfs
-    gtk
-    libglade
-    libgnome
-    libgnomecanvas
-    libgnomeui
-    pango
-    guileCairo
-  ] ++ stdenv.lib.optional doCheck guile_lib;
-
-  preConfigure = ''
-      ./autogen.sh
-  '';
+    texinfo guile gwrap pkgconfig gconf glib gnome_vfs gtk2
+    libglade libgnome libgnomecanvas libgnomeui pango guile-cairo
+  ] ++ stdenv.lib.optional doCheck guile-lib;
 
   # The test suite tries to open an X display, which fails.
   doCheck = false;
 
-  meta = {
+  GUILE_AUTO_COMPILE = 0;
+
+  meta = with stdenv.lib; {
     description = "GNOME bindings for GNU Guile";
-
-    longDescription =
-      '' GNU guile-gnome brings the power of Scheme to your graphical
-         application.  guile-gnome modules support the entire Gnome library
-         stack: from Pango to GnomeCanvas, Gtk+ to GStreamer, Glade to
-         GtkSourceView, you will find in guile-gnome a comprehensive
-         environment for developing modern applications.
-      '';
-
-    homepage = http://www.gnu.org/software/guile-gnome/;
-
-    license = stdenv.lib.licenses.gpl2Plus;
-
-    maintainers = [ stdenv.lib.maintainers.taktoa ];
+    longDescription = ''
+      GNU guile-gnome brings the power of Scheme to your graphical application.
+      guile-gnome modules support the entire Gnome library stack: from Pango to
+      GnomeCanvas, Gtk+ to GStreamer, Glade to GtkSourceView, you will find in
+      guile-gnome a comprehensive environment for developing modern
+      applications.
+    '';
+    homepage = "http://www.gnu.org/software/guile-gnome/";
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ vyp ];
+    platforms = platforms.linux;
   };
 }

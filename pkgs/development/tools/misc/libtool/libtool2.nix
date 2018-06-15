@@ -1,4 +1,6 @@
-{ stdenv, fetchurl, m4, perl, help2man }:
+{ stdenv, fetchurl, m4, perl, help2man
+, buildPlatform, hostPlatform
+}:
 
 stdenv.mkDerivation rec {
   name = "libtool-2.4.6";
@@ -8,8 +10,10 @@ stdenv.mkDerivation rec {
     sha256 = "1qq61k6lp1fp75xs398yzi6wvbx232l7xbyn3p13cnh27mflvgg3";
   };
 
-  propagatedNativeBuildInputs = [ m4 ];
-  nativeBuildInputs = [ perl help2man ];
+  outputs = [ "out" "lib" ];
+
+  nativeBuildInputs = [ perl help2man m4 ];
+  propagatedBuildInputs = [ m4 ];
 
   # Don't fixup "#! /bin/sh" in Libtool, otherwise it will use the
   # "fixed" path in generated files!
@@ -18,10 +22,11 @@ stdenv.mkDerivation rec {
   # XXX: The GNU ld wrapper does all sorts of nasty things wrt. RPATH, which
   # leads to the failure of a number of tests.
   doCheck = false;
+  doInstallCheck = false;
 
   # Don't run the native `strip' when cross-compiling.  This breaks at least
   # with `.a' files for MinGW.
-  dontStrip = stdenv ? cross;
+  dontStrip = hostPlatform != buildPlatform;
 
   meta = {
     description = "GNU Libtool, a generic library support script";
@@ -41,6 +46,6 @@ stdenv.mkDerivation rec {
     license = stdenv.lib.licenses.gpl2Plus;
 
     maintainers = [ ];
+    platforms = stdenv.lib.platforms.unix;
   };
 }
-

@@ -1,36 +1,51 @@
-{ stdenv, fetchurl, automoc4, cmake, perl, pkgconfig
-, gettext, kdelibs, libXtst, libfakekey, makeWrapper, qca2, qjson
+{ stdenv
+, lib
+, fetchurl
+, extra-cmake-modules
+, kcmutils
+, kconfigwidgets
+, kdbusaddons
+, kdoctools
+, kiconthemes
+, ki18n
+, knotifications
+, qca-qt5
+, libfakekey
+, libXtst
+, qtx11extras
+, sshfs
+, makeWrapper
+, kwayland
 }:
 
 stdenv.mkDerivation rec {
-  name = "kdeconnect-${version}";
-  version = "0.7.3";
+  pname = "kdeconnect";
+  version = "1.3.1";
+  name = "${pname}-${version}";
 
   src = fetchurl {
-    url = "http://download.kde.org/unstable/kdeconnect/${version}/src/kdeconnect-kde-${version}.tar.xz";
-    sha256 = "1vrr047bq5skxvibv5pb9ch9dxh005zmar017jzbyb9hilxr8kg4";
+    url = "mirror://kde/stable/${pname}/${version}/src/${pname}-kde-${version}.tar.xz";
+    sha256 = "0rzjbn4d2lh81n19dd3a5ilm8qml3zs3g3ahg75avcw8770rr344";
   };
 
-  buildInputs = [ gettext kdelibs libXtst libfakekey makeWrapper qca2 qjson ];
+  buildInputs = [
+    libfakekey libXtst
+    ki18n kiconthemes kcmutils kconfigwidgets kdbusaddons knotifications
+    qca-qt5 qtx11extras makeWrapper kwayland
+  ];
 
-  nativeBuildInputs = [ automoc4 cmake perl pkgconfig ];
+  nativeBuildInputs = [ extra-cmake-modules kdoctools ];
 
-  meta = with stdenv.lib; {
-    description = "A tool to connect and sync your devices with KDE";
-    longDescription = ''
-        The corresponding Android app, "KDE Connect", is available in
-        F-Droid and Google play and has the following features:
+  postInstall = ''
+    wrapProgram $out/lib/libexec/kdeconnectd --prefix PATH : ${lib.makeBinPath [ sshfs ]}
+  '';
 
-        - Share files and URLs to KDE from any app
-        - Clipboard share: copy from or to your desktop
-        - Notifications sync (4.3+): Read your Android notifications from KDE
-        - Multimedia remote control: Use your phone as a remote control
-        - WiFi connection: no usb wire or bluetooth needed
-        - RSA Encryption: your information is safe 
-    '';
-    license = licenses.gpl2;
-    homepage = https://projects.kde.org/projects/playground/base/kdeconnect-kde;
-    platforms = platforms.linux;
-    maintainers = [ maintainers.goibhniu ];
+  enableParallelBuilding = true;
+
+  meta = with lib; {
+    description = "KDE Connect provides several features to integrate your phone and your computer";
+    homepage    = https://community.kde.org/KDEConnect;
+    license     = with licenses; [ gpl2 ];
+    maintainers = with maintainers; [ fridh ];
   };
 }

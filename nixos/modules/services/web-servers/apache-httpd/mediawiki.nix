@@ -43,7 +43,7 @@ let
         # Paths to external programs.
         $wgDiff3 = "${pkgs.diffutils}/bin/diff3";
         $wgDiff = "${pkgs.diffutils}/bin/diff";
-        $wgImageMagickConvertCommand = "${pkgs.imagemagick}/bin/convert";
+        $wgImageMagickConvertCommand = "${pkgs.imagemagick.out}/bin/convert";
 
         #$wgDebugLogFile = "/tmp/mediawiki_debug_log.txt";
 
@@ -83,19 +83,23 @@ let
 
   # Unpack Mediawiki and put the config file in its root directory.
   mediawikiRoot = pkgs.stdenv.mkDerivation rec {
-    name= "mediawiki-1.23.9";
+    name= "mediawiki-1.29.1";
 
     src = pkgs.fetchurl {
-      url = "http://download.wikimedia.org/mediawiki/1.23/${name}.tar.gz";
-      sha256 = "1l7k4g0pgz92yvrfr52w26x740s4362v0gc95pk0i30vn2sp5bql";
+      url = "http://download.wikimedia.org/mediawiki/1.29/${name}.tar.gz";
+      sha256 = "03mpazbxvb011s2nmlw5p6dc43yjgl5yrsilmj1imyykm57bwb3m";
     };
 
     skins = config.skins;
+    extensions = config.extensions;
 
     buildPhase =
       ''
         for skin in $skins; do
           cp -prvd $skin/* skins/
+        done
+        for extension in $extensions; do
+          cp -prvd $extension/* extensions/
         done
       ''; # */
 
@@ -287,7 +291,18 @@ in
         '';
     };
 
+    extensions = mkOption {
+      default = [];
+      type = types.listOf types.path;
+      description =
+        ''
+          List of paths whose content is copied to the 'extensions'
+          subdirectory of the MediaWiki installation.
+        '';
+    };
+
     extraConfig = mkOption {
+      type = types.lines;
       default = "";
       example =
         ''

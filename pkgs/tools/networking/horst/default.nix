@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "horst-${version}";
-  version = "git-2015-07-22";
+  version = "5.0";
 
   src = fetchFromGitHub {
     owner = "br101";
     repo = "horst";
-    rev = "b62fc20b98690061522a431cb278d989e21141d8";
-    sha256 = "176yma8v2bsab2ypgmgzvjg0bsbnk9sga3xpwkx33mwm6q79kd6g";
+    rev = "version-${version}";
+    sha256 = "0m7gc6dj816z8wyq5bdkqj7fw6rmxaah84s34ncsaispz2llva1x";
   };
 
   nativeBuildInputs = [ pkgconfig ];

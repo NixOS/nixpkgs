@@ -1,55 +1,64 @@
-{ stdenv, fetchgit, cmake, qt5, polkit_qt5, libyamlcpp, python, boost, parted
-, extra-cmake-modules, kconfig, ki18n, kcoreaddons, solid, utillinux, libatasmart
-, ckbcomp, glibc, tzdata, xkeyboard_config }:
+{ stdenv, fetchurl, boost, cmake, extra-cmake-modules, kparts, kpmcore
+, kservice, libatasmart, libxcb, libyamlcpp, parted, polkit-qt, python, qtbase
+, qtquickcontrols, qtsvg, qttools, qtwebengine, utillinux, glibc, tzdata
+, ckbcomp, xkeyboard_config
+}:
 
 stdenv.mkDerivation rec {
-  name = "calamares-${version}";
-  version = "1.0";
+  name = "${pname}-${version}";
+  pname = "calamares";
+  version = "3.2.0";
 
-  src = fetchgit {
-    url = "https://github.com/calamares/calamares.git";
-    rev = "dabfb68a68cb012a90cd7b94a22e1ea08f7dd8ad";
-    sha256 = "2851ce487aaac61d2df342a47f91ec87fe52ff036227ef697caa7056fe5f188c";
+  # release including submodule
+  src = fetchurl {
+    url = "https://github.com/${pname}/${pname}/releases/download/v${version}/${name}.tar.gz";
+    sha256 = "1i5q3hffjqi1id9kv8sixhddxd90d5qqmbc7gf5vf9m3c54pln64";
   };
 
   buildInputs = [
-    cmake qt5.base qt5.tools libyamlcpp python boost polkit_qt5 parted
-    extra-cmake-modules kconfig ki18n kcoreaddons solid utillinux libatasmart
+    boost cmake extra-cmake-modules kparts.dev kpmcore.out kservice.dev
+    libatasmart libxcb libyamlcpp parted polkit-qt python qtbase
+    qtquickcontrols qtsvg qttools qtwebengine.dev utillinux
   ];
+
+  enableParallelBuilding = false;
 
   cmakeFlags = [
     "-DPYTHON_LIBRARY=${python}/lib/libpython${python.majorVersion}m.so"
     "-DPYTHON_INCLUDE_DIR=${python}/include/python${python.majorVersion}m"
-    "-DWITH_PARTITIONMANAGER=1"
+    "-DCMAKE_VERBOSE_MAKEFILE=True"
+    "-DCMAKE_BUILD_TYPE=Release"
+    "-DWITH_PYTHONQT:BOOL=ON"
   ];
 
+  POLKITQT-1_POLICY_FILES_INSTALL_DIR = "$(out)/share/polkit-1/actions";
+
   patchPhase = ''
-      sed -e "s,/usr/bin/calamares,$out/bin/calamares," \
-          -i calamares.desktop \
-          -i com.github.calamares.calamares.policy
+    sed -e "s,/usr/bin/calamares,$out/bin/calamares," \
+        -i calamares.desktop \
+        -i com.github.calamares.calamares.policy
 
-      sed -e 's,/usr/share/zoneinfo,${tzdata}/share/zoneinfo,' \
-          -i src/modules/locale/timezonewidget/localeconst.h \
-          -i src/modules/locale/SetTimezoneJob.cpp
+    sed -e 's,/usr/share/zoneinfo,${tzdata}/share/zoneinfo,' \
+        -i src/modules/locale/timezonewidget/localeconst.h \
+        -i src/modules/locale/SetTimezoneJob.cpp
 
-      sed -e 's,/usr/share/i18n/locales,${glibc}/share/i18n/locales,' \
-          -i src/modules/locale/timezonewidget/localeconst.h
+    sed -e 's,/usr/share/i18n/locales,${glibc.out}/share/i18n/locales,' \
+        -i src/modules/locale/timezonewidget/localeconst.h
 
-      sed -e 's,/usr/share/X11/xkb/rules/base.lst,${xkeyboard_config}/share/X11/xkb/rules/base.lst,' \
-          -i src/modules/keyboard/keyboardwidget/keyboardglobal.h
+    sed -e 's,/usr/share/X11/xkb/rules/base.lst,${xkeyboard_config}/share/X11/xkb/rules/base.lst,' \
+        -i src/modules/keyboard/keyboardwidget/keyboardglobal.h
 
-      sed -e 's,"ckbcomp","${ckbcomp}/bin/ckbcomp",' \
-          -i src/modules/keyboard/keyboardwidget/keyboardpreview.cpp
-  '';
+    sed -e 's,"ckbcomp","${ckbcomp}/bin/ckbcomp",' \
+        -i src/modules/keyboard/keyboardwidget/keyboardpreview.cpp
 
-  preInstall = ''
-    substituteInPlace cmake_install.cmake --replace "${polkit_qt5}" "$out"
+    sed "s,\''${POLKITQT-1_POLICY_FILES_INSTALL_DIR},''${out}/share/polkit-1/actions," \
+        -i CMakeLists.txt
   '';
 
   meta = with stdenv.lib; {
     description = "Distribution-independent installer framework";
     license = licenses.gpl3;
-    maintainers = with stdenv.lib.maintainers; [ tstrobel ];
+    maintainers = with stdenv.lib.maintainers; [ manveru ];
     platforms = platforms.linux;
   };
 }

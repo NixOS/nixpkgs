@@ -1,0 +1,62 @@
+diff --git a/./CMake/FindLLVM.cmake b/../Beignet-1.1.2-Source_new/CMake/FindLLVM.cmake
+index a148321..96cafb8 100644
+--- a/./CMake/FindLLVM.cmake
++++ b/../Beignet-1.1.2-Source_new/CMake/FindLLVM.cmake
+@@ -22,6 +22,7 @@ if (LLVM_CONFIG_EXECUTABLE)
+ else (LLVM_CONFIG_EXECUTABLE)
+   message(FATAL_ERROR "Could NOT find LLVM executable, please add -DLLVM_INSTALL_DIR=/path/to/llvm-config/ in cmake command")
+ endif (LLVM_CONFIG_EXECUTABLE)
++
+ execute_process(
+   COMMAND ${LLVM_CONFIG_EXECUTABLE} --version
+   OUTPUT_VARIABLE LLVM_VERSION
+@@ -44,10 +45,16 @@ if (LLVM_FIND_VERSION_MAJOR AND LLVM_FIND_VERSION_MINOR)
+   endif (LLVM_VERSION_NODOT VERSION_LESS LLVM_FIND_VERSION_NODOT)
+ endif (LLVM_FIND_VERSION_MAJOR AND LLVM_FIND_VERSION_MINOR)
+ 
+-if (LLVM_INSTALL_DIR)
++if (CLANG_INSTALL_DIR)
+   find_program(CLANG_EXECUTABLE
+                NAMES clang-${LLVM_VERSION_NODOT} clang-${LLVM_VERSION_NOPATCH} clang
+-               PATHS ${LLVM_INSTALL_DIR} NO_DEFAULT_PATH)
++               PATHS ${CLANG_INSTALL_DIR} NO_DEFAULT_PATH)
++else (CLANG_INSTALL_DIR)
++  find_program(CLANG_EXECUTABLE
++               NAMES clang-${LLVM_VERSION_NODOT} clang-${LLVM_VERSION_NOPATCH} clang)
++endif (CLANG_INSTALL_DIR)
++
++if (LLVM_INSTALL_DIR)
+   find_program(LLVM_AS_EXECUTABLE
+                NAMES llvm-as-${LLVM_VERSION_NODOT} llvm-as-${LLVM_VERSION_NOPATCH} llvm-as
+                PATHS ${LLVM_INSTALL_DIR} NO_DEFAULT_PATH)
+@@ -55,8 +62,6 @@ if (LLVM_INSTALL_DIR)
+                NAMES llvm-link-${LLVM_VERSION_NODOT} llvm-link-${LLVM_VERSION_NOPATCH} llvm-link
+                PATHS ${LLVM_INSTALL_DIR} NO_DEFAULT_PATH)
+ else (LLVM_INSTALL_DIR)
+-  find_program(CLANG_EXECUTABLE
+-               NAMES clang-${LLVM_VERSION_NODOT} clang-${LLVM_VERSION_NOPATCH} clang)
+   find_program(LLVM_AS_EXECUTABLE
+                NAMES llvm-as-${LLVM_VERSION_NODOT} llvm-as-${LLVM_VERSION_NOPATCH} llvm-as)
+   find_program(LLVM_LINK_EXECUTABLE
+@@ -105,7 +110,7 @@ endif (LLVM_VERSION_NODOT VERSION_GREATER 34)
+ macro(add_one_lib name)
+   FIND_LIBRARY(CLANG_LIB
+     NAMES ${name}
+-    PATHS ${LLVM_LIBRARY_DIR} NO_DEFAULT_PATH)
++    PATHS ${CLANG_LIBRARY_DIR} NO_DEFAULT_PATH)
+   set(CLANG_LIBRARIES ${CLANG_LIBRARIES} ${CLANG_LIB})
+ 	unset(CLANG_LIB CACHE)
+ endmacro()
+diff --git a/./CMakeLists.txt b/../Beignet-1.1.2-Source_new/CMakeLists.txt
+index 88985d7..01bca9e 100644
+--- a/./CMakeLists.txt
++++ b/../Beignet-1.1.2-Source_new/CMakeLists.txt
+@@ -205,7 +205,7 @@ IF(OCLIcd_FOUND)
+     "intel-beignet.icd.in"
+     "${ICD_FILE_NAME}"
+   )
+-  install (FILES ${CMAKE_CURRENT_BINARY_DIR}/${ICD_FILE_NAME} DESTINATION /etc/OpenCL/vendors)
++  install (FILES ${CMAKE_CURRENT_BINARY_DIR}/${ICD_FILE_NAME} DESTINATION ${CMAKE_INSTALL_PREFIX}/etc/OpenCL/vendors)
+ ELSE(OCLIcd_FOUND)
+   MESSAGE(STATUS "Looking for OCL ICD header file - not found")
+ ENDIF(OCLIcd_FOUND)

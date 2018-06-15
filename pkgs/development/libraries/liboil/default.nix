@@ -8,9 +8,12 @@ stdenv.mkDerivation rec {
     sha256 = "0sgwic99hxlb1av8cm0albzh8myb7r3lpcwxfm606l0bkc3h4pqh";
   };
 
-  buildInputs = [ pkgconfig ];
-
   patches = [ ./x86_64-cpuid.patch ];
+
+  outputs = [ "out" "dev" "devdoc" ];
+  outputBin = "dev"; # oil-bugreport
+
+  nativeBuildInputs = [ pkgconfig ];
 
   # fix "argb_paint_i386.c:53:Incorrect register `%rax' used with `l' suffix"
   # errors
@@ -21,7 +24,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A library of simple functions that are optimized for various CPUs";
-    homepage    = http://liboil.freedesktop.org;
+    homepage    = https://liboil.freedesktop.org;
     license     = licenses.bsd2;
     maintainers = with maintainers; [ lovek323 ];
     platforms   = platforms.all;

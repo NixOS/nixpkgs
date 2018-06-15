@@ -1,18 +1,28 @@
-{ stdenv, fetchgit, openssl }:
+{ stdenv, fetchFromGitHub, luajit, openssl, perl }:
 
-let
-  version = "4.0.0";
-
-in stdenv.mkDerivation rec {
+stdenv.mkDerivation rec {
   name = "wrk-${version}";
+  version = "4.1.0";
 
-  src = fetchgit {
-    url = "https://github.com/wg/wrk.git";
-    rev = "7cdede916a53da253c995767a92eec36a245a2cc";
-    sha256 = "0m8i5pk2rj40v28bzrskkzw54v9jqdby52dwfcypannhlhgqnhy2";
+  src = fetchFromGitHub {
+    owner = "wg";
+    repo = "wrk";
+    rev = version;
+    sha256 = "0dblb3qdg8mbgb8iiks0g420pza13npbr33b2xkc5dgv7kcwmvqj";
   };
 
-  buildInputs = [ openssl ];
+  buildInputs = [ luajit openssl perl ];
+
+  makeFlags = [ "WITH_LUAJIT=${luajit}" "WITH_OPENSSL=${openssl.dev}" "VER=${version}" ];
+
+  preBuild = ''
+    for f in src/*.h; do
+      substituteInPlace $f \
+        --replace "#include <luajit-2.0/" "#include <"
+    done
+  '';
+
+  NIX_CFLAGS_COMPILE = [ "-DluaL_reg=luaL_Reg" ]; # needed since luajit-2.1.0-beta3
   
   installPhase = ''
     mkdir -p $out/bin
@@ -21,7 +31,7 @@ in stdenv.mkDerivation rec {
   
   meta = with stdenv.lib; {
     description = "HTTP benchmarking tool";
-    homepage = http://github.com/wg/wrk;
+    homepage = https://github.com/wg/wrk;
     longDescription = ''
       wrk is a modern HTTP benchmarking tool capable of generating
       significant load when run on a single multi-core CPU. It
@@ -30,6 +40,6 @@ in stdenv.mkDerivation rec {
     '';
     license = licenses.asl20;
     maintainers = with maintainers; [ ragge ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

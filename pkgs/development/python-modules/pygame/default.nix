@@ -1,34 +1,45 @@
-{ stdenv, fetchurl, buildPythonPackage, pkgconfig, smpeg, libX11
-, SDL, SDL_image, SDL_mixer, SDL_ttf, libpng, libjpeg, portmidi
+{ stdenv, lib, fetchurl, buildPythonPackage, python, smpeg, libX11
+, SDL, SDL_image, SDL_mixer, SDL_ttf, libpng, libjpeg, portmidi, freetype
 }:
 
-buildPythonPackage {
-  name = "pygame-1.9.1";
+buildPythonPackage rec {
+  pname = "pygame";
+  name = "${pname}-${version}";
+  version = "1.9.3";
 
   src = fetchurl {
-    url = "http://www.pygame.org/ftp/pygame-1.9.1release.tar.gz";
-    sha256 = "0cyl0ww4fjlf289pjxa53q4klyn55ajvkgymw0qrdgp4593raq52";
+    url = "mirror://pypi/p/pygame/pygame-${version}.tar.gz";
+    sha256 = "1hlydiyygl444bq5m5g8n3jsxsgrdyxlm42ipmfbw36wkf0j243m";
   };
 
   buildInputs = [
-    pkgconfig SDL SDL_image SDL_mixer SDL_ttf libpng libjpeg
-    smpeg portmidi libX11
+    SDL SDL_image SDL_mixer SDL_ttf libpng libjpeg
+    portmidi libX11 freetype
   ];
 
-  patches = [ ./pygame-v4l.patch ];
+  # Tests fail because of no audio device and display.
+  doCheck = false;
 
   preConfigure = ''
-    for i in ${SDL_image} ${SDL_mixer} ${SDL_ttf} ${libpng} ${libjpeg} ${portmidi} ${libX11}; do
-      sed -e "/origincdirs =/a'$i/include'," -i config_unix.py
-      sed -e "/origlibdirs =/aoriglibdirs += '$i/lib'," -i config_unix.py
-    done
-
-    LOCALBASE=/ python config.py
+    sed \
+      -e "s/^origincdirs = .*/origincdirs = []/" \
+      -e "s/^origlibdirs = .*/origlibdirs = []/" \
+      -e "/\/include\/smpeg/d" \
+      -i config_unix.py
+    ${lib.concatMapStrings (dep: ''
+      sed \
+        -e "/^origincdirs =/aorigincdirs += ['${lib.getDev dep}/include']" \
+        -e "/^origlibdirs =/aoriglibdirs += ['${lib.getLib dep}/lib']" \
+        -i config_unix.py
+      '') buildInputs
+    }
+    LOCALBASE=/ ${python.interpreter} config.py
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "Python library for games";
-    homepage = "http://www.pygame.org/";
-    license = stdenv.lib.licenses.lgpl21Plus;
+    homepage = http://www.pygame.org/;
+    license = licenses.lgpl21Plus;
+    platforms = platforms.linux;
   };
 }

@@ -1,4 +1,4 @@
-{ stdenv, fetchsvn, SDL, autoconf, automake, libtool, gtk, m4, pkgconfig, mesa, makeWrapper }:
+{ stdenv, fetchsvn, SDL, autoconf, automake, libtool, gtk2, m4, pkgconfig, libGLU_combined, makeWrapper }:
 
 stdenv.mkDerivation rec {
   name = "smpeg-svn${version}";
@@ -10,9 +10,14 @@ stdenv.mkDerivation rec {
     sha256 = "0ynwn7ih5l2b1kpzpibns9bb9wzfjak7mgrb1ji0dkn2q5pv6lr0";
   };
 
+  patches = [
+    ./format.patch
+    ./gcc6.patch
+  ];
+
   enableParallelBuilding = true;
 
-  buildInputs = [ SDL gtk mesa ];
+  buildInputs = [ SDL gtk2 libGLU_combined ];
 
   nativeBuildInputs = [ autoconf automake libtool m4 pkgconfig makeWrapper ];
 
@@ -31,12 +36,13 @@ stdenv.mkDerivation rec {
 
     wrapProgram $out/bin/smpeg-config \
       --prefix PATH ":" "${pkgconfig}/bin" \
-      --prefix PKG_CONFIG_PATH ":" "${SDL}/lib/pkgconfig"
+      --prefix PKG_CONFIG_PATH ":" "${SDL.dev}/lib/pkgconfig"
   '';
 
   meta = {
     homepage = http://icculus.org/smpeg/;
     description = "MPEG decoding library";
     license = stdenv.lib.licenses.gpl2Plus;
+    platforms = stdenv.lib.platforms.unix;
   };
 }

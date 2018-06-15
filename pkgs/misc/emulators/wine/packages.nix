@@ -1,58 +1,34 @@
-{ system, stdenv, stdenv_32bit, lib, pkgs, pkgsi686Linux, fetchurl,
-  wineRelease ? "stable"
+{ system, stdenv, stdenv_32bit, lib, pkgs, pkgsi686Linux, callPackage, callPackage_i686,
+  wineRelease ? "stable",
+  supportFlags
 }:
 
-let sources = with lib.getAttr wineRelease (import ./versions.nix); {
-      version = wineVersion;
-      src = fetchurl {
-        url = "mirror://sourceforge/wine/wine-${wineVersion}.tar.bz2";
-        sha256 = wineSha256;
-      };
-
-      wineGecko32 = fetchurl {
-        url = "mirror://sourceforge/wine/wine_gecko-${geckoVersion}-x86.msi";
-        sha256 = geckoSha256;
-      };
-
-      wineGecko64 = fetchurl {
-        url = "mirror://sourceforge/wine/wine_gecko-${gecko64Version}-x86_64.msi";
-        sha256 = gecko64Sha256;
-      };
-
-      wineMono = fetchurl {
-        url = "mirror://sourceforge/wine/wine-mono-${monoVersion}.msi";
-        sha256 = monoSha256;
-      };
-    };
-    inherit (sources) version;
-in {
-  wine32 = import ./base.nix {
+let src = lib.getAttr wineRelease (callPackage ./sources.nix {});
+in with src; {
+  wine32 = callPackage_i686 ./base.nix {
     name = "wine-${version}";
-    inherit (sources) version src;
-    inherit (pkgsi686Linux) lib stdenv;
+    inherit src version supportFlags;
     pkgArches = [ pkgsi686Linux ];
-    geckos = with sources; [ wineGecko32 ];
-    monos = with sources; [ wineMono ];
+    geckos = [ gecko32 ];
+    monos =  [ mono ];
     platforms = [ "i686-linux" "x86_64-linux" ];
   };
-  wine64 = import ./base.nix {
+  wine64 = callPackage ./base.nix {
     name = "wine64-${version}";
-    inherit (sources) version src;
-    inherit lib stdenv;
+    inherit src version supportFlags;
     pkgArches = [ pkgs ];
-    geckos = with sources; [ wineGecko64 ];
-    monos = with sources; [ wineMono ];
-    configureFlags = "--enable-win64";
-    platforms = [ "x86_64-linux" ];
+    geckos = [ gecko64 ];
+    monos =  [ mono ];
+    configureFlags = [ "--enable-win64" ];
+    platforms = [ "x86_64-linux" "x86_64-darwin" ];
   };
-  wineWow = import ./base.nix {
+  wineWow = callPackage ./base.nix {
     name = "wine-wow-${version}";
-    inherit (sources) version src;
-    inherit lib;
+    inherit src version supportFlags;
     stdenv = stdenv_32bit;
     pkgArches = [ pkgs pkgsi686Linux ];
-    geckos = with sources; [ wineGecko32 wineGecko64 ];
-    monos = with sources; [ wineMono ];
+    geckos = [ gecko32 gecko64 ];
+    monos =  [ mono ];
     buildScript = ./builder-wow.sh;
     platforms = [ "x86_64-linux" ];
   };

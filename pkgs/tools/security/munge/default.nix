@@ -1,30 +1,33 @@
-{ stdenv, fetchurl, gnused, perl, libgcrypt, zlib, bzip2 }:
+{ stdenv, fetchFromGitHub, autoreconfHook, gawk, gnused, libgcrypt, zlib, bzip2 }:
 
 stdenv.mkDerivation rec {
-  name = "munge-0.5.11";
+  name = "munge-0.5.13";
 
-  src = fetchurl {
-    url = "http://munge.googlecode.com/files/${name}.tar.bz2";
-    sha256 = "19aijdrjij2g0xpqgl198jh131j94p4gvam047gsdc0wz0a5c1wf";
+  src = fetchFromGitHub {
+    owner = "dun";
+    repo = "munge";
+    rev = "${name}";
+    sha256 = "1c4ff3d8ad3inbliszr4slym3b4cn19bn6mxm13mzy20jyi2rm70";
   };
 
-  buildInputs = [ gnused perl libgcrypt zlib bzip2 ];
+  nativeBuildInputs = [ autoreconfHook gawk gnused ];
+  buildInputs = [ libgcrypt zlib bzip2 ];
 
-  preConfigure = ''
+  preAutoreconf = ''
     # Remove the install-data stuff, since it tries to write to /var
-    sed -i '505,511d' src/etc/Makefile.in
+    substituteInPlace src/Makefile.am --replace "etc \\" "\\"
   '';
 
   configureFlags = [
     "--localstatedir=/var"
   ];
 
-  meta = {
-    homepage = http://code.google.com/p/munge/;
+  meta = with stdenv.lib; {
     description = ''
       An authentication service for creating and validating credentials
     '';
-    maintainers = [ stdenv.lib.maintainers.rickynils ];
-    platforms = stdenv.lib.platforms.linux;
+    license = licenses.lgpl3;
+    platforms = platforms.unix;
+    maintainers = [ maintainers.rickynils ];
   };
 }

@@ -1,59 +1,55 @@
-{ stdenv, fetchurl, intltool, glib, pkgconfig, polkit, python, sqlite }:
+{ stdenv, fetchFromGitHub, lib
+, intltool, glib, pkgconfig, polkit, python, sqlite, systemd
+, gobjectIntrospection, vala_0_38, gtk-doc, autoreconfHook, autoconf-archive
+# TODO: set enableNixBackend to true, as soon as it builds
+, nix, enableNixBackend ? false, boost
+, enableCommandNotFound ? false
+, enableBashCompletion ? false, bash-completion ? null }:
 
-let version = "1.0.8"; in
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   name = "packagekit-${version}";
+  version = "1.1.10";
 
-  src = fetchurl {
-    sha256 = "1vaxn4kwdwx6p03n88k4pnbd2l6lb0cbxpcs88kjack1jml17c3l";
-    url = "http://www.freedesktop.org/software/PackageKit/releases/PackageKit-${version}.tar.xz";
+  src = fetchFromGitHub {
+    owner = "hughsie";
+    repo = "PackageKit";
+    rev = "PACKAGEKIT_${lib.replaceStrings ["."] ["_"] version}";
+    sha256 = "11drd6ixx75q3w12am3z1npwllq1kxnhbxv0npng92c69kn291zs";
   };
 
-  buildInputs = [ glib polkit python ];
-  propagatedBuildInputs = [ sqlite ];
-  nativeBuildInputs = [ intltool pkgconfig ];
+  buildInputs = [ glib polkit systemd python gobjectIntrospection vala_0_38 ]
+                  ++ lib.optional enableBashCompletion bash-completion;
+  propagatedBuildInputs = [ sqlite nix boost ];
+  nativeBuildInputs = [ intltool pkgconfig autoreconfHook autoconf-archive gtk-doc ];
 
-  configureFlags = ''
-    --disable-static
-    --disable-python3
-    --disable-networkmanager
-    --disable-connman
-    --disable-systemd
-    --disable-bash-completion
-    --disable-browser-plugin
-    --disable-gstreamer-plugin
-    --disable-gtk-module
-    --disable-command-not-found
-    --disable-cron
-    --disable-daemon-tests
-    --disable-alpm
-    --disable-aptcc
-    --enable-dummy
-    --disable-entropy
-    --disable-hif
-    --disable-pisi
-    --disable-poldek
-    --disable-portage
-    --disable-ports
-    --disable-katja
-    --disable-urmpi
-    --disable-yum
-    --disable-zypp
+  preAutoreconf = ''
+    gtkdocize
+    intltoolize
   '';
+
+  configureFlags = [
+    "--enable-systemd"
+    "--disable-dummy"
+    "--disable-cron"
+    "--disable-introspection"
+    "--disable-offline-update"
+    "--localstatedir=/var"
+    "--sysconfdir=/etc"
+    "--with-dbus-sys=$(out)/etc/dbus-1/system.d"
+    "--with-systemdsystemunitdir=$(out)/lib/systemd/system/"
+  ]
+  ++ lib.optional enableNixBackend "--enable-nix"
+  ++ lib.optional (!enableBashCompletion) "--disable-bash-completion"
+  ++ lib.optional (!enableCommandNotFound) "--disable-command-not-found";
 
   enableParallelBuilding = true;
 
-  preInstall = ''
-    # Don't install anything to e.g. $out/var/cache:
-    for dir in src data; do
-      substituteInPlace $dir/Makefile \
-        --replace " install-data-hook" "" \
-        --replace " install-databaseDATA" ""
-    done
-  '';
+  installFlags = [
+    "sysconfdir=\${out}/etc"
+    "localstatedir=\${TMPDIR}"
+  ];
 
-  meta = with stdenv.lib; {
-    inherit version;
+  meta = with lib; {
     description = "System to facilitate installing and updating packages";
     longDescription = ''
       PackageKit is a system designed to make installing and updating software
@@ -68,6 +64,6 @@ stdenv.mkDerivation {
     homepage = http://www.packagekit.org/;
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ nckx ];
+    maintainers = with maintainers; [ matthewbauer ];
   };
 }

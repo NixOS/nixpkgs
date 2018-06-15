@@ -1,20 +1,19 @@
-{stdenv, fetchurl, ncurses, ocaml, findlib, ocaml_pcre, camlzip, openssl, ocaml_ssl, cryptokit }:
+{ stdenv, fetchurl, pkgconfig, ncurses, ocaml, findlib, ocaml_pcre, camlzip
+, gnutls, nettle
+}:
 
-let
-  ocaml_version = (builtins.parseDrvName ocaml.name).version;
-in
+let version = "4.1.6"; in
 
 stdenv.mkDerivation {
-  name = "ocamlnet-3.7.7";
+  name = "ocaml${ocaml.version}-ocamlnet-${version}";
 
   src = fetchurl {
-    url = http://download.camlcity.org/download/ocamlnet-3.7.7.tar.gz;
-    sha256 = "02bnks9jshpq9nqva5lky5hl009yp19cgvf1izjca620hx54d3jv";
+    url = "http://download.camlcity.org/download/ocamlnet-${version}.tar.gz";
+    sha256 = "1j0k0drybcjpysvs8xpq3cnpg3wqk6d5sy7y1h5rq8jk7hrirf0k";
   };
 
-  buildInputs = [ncurses ocaml findlib ocaml_pcre camlzip openssl ocaml_ssl cryptokit];
-
-  propagatedbuildInputs = [ncurses ocaml_pcre camlzip openssl ocaml_ssl cryptokit];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ ncurses ocaml findlib ocaml_pcre camlzip gnutls nettle ];
 
   createFindlibDestdir = true;
 
@@ -23,13 +22,12 @@ stdenv.mkDerivation {
   preConfigure = ''
     configureFlagsArray=(
       -bindir $out/bin
-      -enable-ssl
+      -enable-gnutls
       -enable-zip
       -enable-pcre
-      -enable-crypto
       -disable-gtk2
       -with-nethttpd
-      -datadir $out/lib/ocaml/${ocaml_version}/ocamlnet
+      -datadir $out/lib/ocaml/${ocaml.version}/ocamlnet
     )
   '';
 
@@ -42,7 +40,7 @@ stdenv.mkDerivation {
     homepage = http://projects.camlcity.org/projects/ocamlnet.html;
     description = "A library implementing Internet protocols (http, cgi, email, etc.) for OCaml";
     license = "Most Ocamlnet modules are released under the zlib/png license. The HTTP server module Nethttpd is, however, under the GPL.";
-    platforms = ocaml.meta.platforms;
+    platforms = ocaml.meta.platforms or [];
     maintainers = [
       stdenv.lib.maintainers.z77z
     ];

@@ -1,45 +1,65 @@
-{ stdenv, lib, fetchurl, makeWrapper, autoconf, automake,
-  libmspack, openssl, pam, xercesc, icu, libdnet, procps, 
-  xlibsWrapper, libXinerama, libXi, libXrender, libXrandr, libXtst,
-  pkgconfig, glib, gtk, gtkmm }:
+{ stdenv, lib, fetchFromGitHub, makeWrapper, autoreconfHook,
+  fuse, libmspack, openssl, pam, xercesc, icu, libdnet, procps,
+  libX11, libXext, libXinerama, libXi, libXrender, libXrandr, libXtst,
+  pkgconfig, glib, gtk, gtkmm, iproute, dbus, systemd, which,
+  withX ? true }:
 
-let
-  majorVersion = "9.10";
-  minorVersion = "0";
-  patchSet = "2476743";
-  version = "${majorVersion}.${minorVersion}-${patchSet}";
-
-in stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   name = "open-vm-tools-${version}";
-  src = fetchurl {
-    url = "mirror://sourceforge/project/open-vm-tools/open-vm-tools/stable-${majorVersion}.x/open-vm-tools-${version}.tar.gz";
-    sha256 = "15lwayrz9bpx4z12fj616hsn25m997y72licwwz7kms4sx9ssip1";
+  version = "10.1.10";
+
+  src = fetchFromGitHub {
+    owner  = "vmware";
+    repo   = "open-vm-tools";
+    rev    = "stable-${version}";
+    sha256 = "13ifpi53rc2463ka8xw9zx407d1fz119x8sb9k48g5mwxm6c85fm";
   };
 
-  buildInputs = 
-    [ autoconf automake makeWrapper libmspack openssl pam xercesc icu libdnet procps
-      pkgconfig glib gtk gtkmm xlibsWrapper libXinerama libXi libXrender libXrandr libXtst ];
+  sourceRoot = "${src.name}/open-vm-tools";
 
-  patchPhase = ''
-     sed -i s,-Werror,,g configure.ac
-     sed -i 's,^confdir = ,confdir = ''${prefix},' scripts/Makefile.am
-     sed -i 's,etc/vmware-tools,''${prefix}/etc/vmware-tools,' services/vmtoolsd/Makefile.am
-  '';
+  outputs = [ "out" "dev" ];
+
+  nativeBuildInputs = [ autoreconfHook makeWrapper pkgconfig ];
+  buildInputs = [ fuse glib icu libdnet libmspack openssl pam procps xercesc ]
+      ++ lib.optionals withX [ gtk gtkmm libX11 libXext libXinerama libXi libXrender libXrandr libXtst ];
 
   patches = [ ./recognize_nixos.patch ];
+  postPatch = ''
+     # Build bugfix for 10.1.0, stolen from Arch PKGBUILD
+     mkdir -p common-agent/etc/config
+     sed -i 's|.*common-agent/etc/config/Makefile.*|\\|' configure.ac
 
-  preConfigure = "autoreconf";
-  configureFlags = "--without-kernel-modules --without-xmlsecurity";
+     sed -i 's,^confdir = ,confdir = ''${prefix},' scripts/Makefile.am
+     sed -i 's,etc/vmware-tools,''${prefix}/etc/vmware-tools,' services/vmtoolsd/Makefile.am
+     sed -i 's,$(PAM_PREFIX),''${prefix}/$(PAM_PREFIX),' services/vmtoolsd/Makefile.am
+     sed -i 's,$(UDEVRULESDIR),''${prefix}/$(UDEVRULESDIR),' udev/Makefile.am
+
+     # Avoid a glibc >= 2.25 deprecation warning that gets fatal via -Werror.
+     sed 1i'#include <sys/sysmacros.h>' -i lib/wiper/wiperPosix.c
+
+     # Make reboot work, shutdown is not in /sbin on NixOS
+     sed -i 's,/sbin/shutdown,shutdown,' lib/system/systemLinux.c
+  '';
+
+  configureFlags = [ "--without-kernel-modules" "--without-xmlsecurity" ]
+    ++ lib.optional (!withX) "--without-x";
+
+  enableParallelBuilding = true;
+
+  postInstall = ''
+    wrapProgram "$out/etc/vmware-tools/scripts/vmware/network" \
+      --prefix PATH ':' "${lib.makeBinPath [ iproute dbus systemd which ]}"
+  '';
 
   meta = with stdenv.lib; {
-    homepage = "https://github.com/vmware/open-vm-tools";
+    homepage = https://github.com/vmware/open-vm-tools;
     description = "Set of tools for VMWare guests to improve host-guest interaction";
     longDescription = ''
-      A set of services and modules that enable several features in VMware products for 
-      better management of, and seamless user interactions with, guests. 
+      A set of services and modules that enable several features in VMware products for
+      better management of, and seamless user interactions with, guests.
     '';
     license = licenses.gpl2;
-    platforms = platforms.linux;
+    platforms =  [ "x86_64-linux" "i686-linux" ];
     maintainers = with maintainers; [ joamaki ];
   };
 }

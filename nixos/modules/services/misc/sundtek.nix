@@ -23,7 +23,7 @@ in
         Type = "oneshot";
         ExecStart = ''
           ${pkgs.sundtek}/bin/mediasrv -d -v -p ${pkgs.sundtek}/bin ;\
-          ${pkgs.sundtek}/bin/mediaclient --start=5 --wait-for-devices
+          ${pkgs.sundtek}/bin/mediaclient --start --wait-for-devices
           '';
         ExecStop = "${pkgs.sundtek}/bin/mediaclient --shutdown";
         RemainAfterExit = true;

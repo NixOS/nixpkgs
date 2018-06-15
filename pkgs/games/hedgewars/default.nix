@@ -1,43 +1,47 @@
-{ SDL_image, SDL_ttf, SDL_net, fpc, qt4, ghcWithPackages, ffmpeg, freeglut
-, stdenv, makeWrapper, fetchurl, cmake, pkgconfig, lua5_1, SDL, SDL_mixer
-, zlib, libpng, mesa, physfs
+{ SDL2_image, SDL2_ttf, SDL2_net, fpc, qt4, ghcWithPackages, ffmpeg, freeglut
+, stdenv, makeWrapper, fetchurl, cmake, pkgconfig, lua5_1, SDL2, SDL2_mixer
+, zlib, libpng, libGLU_combined, physfs
 }:
 
 let
   ghc = ghcWithPackages (pkgs: with pkgs; [
-          network vector utf8-string bytestring-show random hslogger dataenc SHA entropy zlib
+          network vector utf8-string bytestring-show random hslogger
+          SHA entropy pkgs.zlib sandi regex-tdfa
         ]);
 in
 stdenv.mkDerivation rec {
-  version = "0.9.21";
+  version = "0.9.23";
   name = "hedgewars-${version}";
   src = fetchurl {
-    url = "http://download.gna.org/hedgewars/hedgewars-src-${version}.tar.bz2";
-    sha256 = "0abnzpyq6sxlfcz5b0kh6r7n1692dwrgsdsr4s216xhh9n19xm0w";
+    url = "http://www.hedgewars.org/download/releases/hedgewars-src-${version}.tar.bz2";
+    sha256 = "12df5ar3zk186ah51c3myr4hlzyybcshmf1w1wf6vr9b0h44jbns";
   };
 
+  nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
-    SDL_ttf SDL_net cmake pkgconfig lua5_1 SDL SDL_mixer SDL_image fpc
+    SDL2_ttf SDL2_net cmake lua5_1 SDL2 SDL2_mixer SDL2_image fpc
     qt4 ghc ffmpeg freeglut makeWrapper physfs
   ];
 
-  patches = [ ./21eb5b79072b147d0a9b7fafca98501e7056c834.patch ];
+  postPatch = ''
+    substituteInPlace gameServer/CMakeLists.txt --replace mask evaluate
+  '';
 
   preBuild = ''
-    export NIX_LDFLAGS="$NIX_LDFLAGS -rpath ${SDL_image}/lib
-                                     -rpath ${SDL_mixer}/lib
-                                     -rpath ${SDL_net}/lib
-                                     -rpath ${SDL_ttf}/lib
-                                     -rpath ${SDL}/lib
-                                     -rpath ${libpng}/lib
+    export NIX_LDFLAGS="$NIX_LDFLAGS -rpath ${SDL2_image}/lib
+                                     -rpath ${SDL2_mixer}/lib
+                                     -rpath ${SDL2_net}/lib
+                                     -rpath ${SDL2_ttf}/lib
+                                     -rpath ${SDL2.out}/lib
+                                     -rpath ${libpng.out}/lib
                                      -rpath ${lua5_1}/lib
-                                     -rpath ${mesa}/lib
-                                     -rpath ${zlib}/lib
+                                     -rpath ${libGLU_combined}/lib
+                                     -rpath ${zlib.out}/lib
                                      "
   '';
 
   postInstall = ''
-    wrapProgram $out/bin/hwengine --prefix LD_LIBRARY_PATH : $LD_LIBRARY_PATH:${mesa}/lib/:${freeglut}/lib:${physfs}/lib
+    wrapProgram $out/bin/hwengine --prefix LD_LIBRARY_PATH : $LD_LIBRARY_PATH:${stdenv.lib.makeLibraryPath [ libGLU_combined freeglut physfs ]}
   '';
 
   meta = with stdenv.lib; {
@@ -67,7 +71,7 @@ stdenv.mkDerivation rec {
        contact with explosions, to zero (the damage dealt to the attacked
        hedgehog or hedgehogs after a player's or CPU turn is shown only when
        all movement on the battlefield has ceased).'';
-    maintainers = with maintainers; [ kragniz ];
+    maintainers = with maintainers; [ kragniz fpletz ];
     platforms = ghc.meta.platforms;
   };
 }

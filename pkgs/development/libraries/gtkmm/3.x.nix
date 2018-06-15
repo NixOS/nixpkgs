@@ -1,25 +1,30 @@
-{ stdenv, fetchurl, pkgconfig, gtk3, glibmm, cairomm, pangomm, atkmm }:
+{ stdenv, fetchurl, pkgconfig, gtk3, glibmm, cairomm, pangomm, atkmm, epoxy }:
 
 let
-  ver_maj = "3.16";
-  ver_min = "0";
+  ver_maj = "3.22";
+  ver_min = "2";
 in
 stdenv.mkDerivation rec {
   name = "gtkmm-${ver_maj}.${ver_min}";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gtkmm/${ver_maj}/${name}.tar.xz";
-    sha256 = "036xn22jkaf3akpid7w23b8vkqa3xxqz93mwacmyar5vw7slm3cv";
+    sha256 = "91afd98a31519536f5f397c2d79696e3d53143b80b75778521ca7b48cb280090";
   };
 
+  outputs = [ "out" "dev" ];
+
   nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ epoxy ];
 
   propagatedBuildInputs = [ glibmm gtk3 atkmm cairomm pangomm ];
 
   enableParallelBuilding = true;
-  doCheck = true;
 
-  meta = {
+  # https://bugzilla.gnome.org/show_bug.cgi?id=764521
+  doCheck = false;
+
+  meta = with stdenv.lib; {
     description = "C++ interface to the GTK+ graphical user interface library";
 
     longDescription = ''
@@ -32,11 +37,11 @@ stdenv.mkDerivation rec {
       tutorial.
     '';
 
-    homepage = http://gtkmm.org/;
+    homepage = https://gtkmm.org/;
 
-    license = stdenv.lib.licenses.lgpl2Plus;
+    license = licenses.lgpl2Plus;
 
-    maintainers = with stdenv.lib.maintainers; [ raskin urkud vcunat ];
-    platforms = stdenv.lib.platforms.unix;
+    maintainers = with maintainers; [ raskin vcunat ];
+    platforms = platforms.unix;
   };
 }

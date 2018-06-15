@@ -1,39 +1,47 @@
-{ stdenv, fetchurl, gettext, glib, gtk, hicolor_icon_theme, json_c
-, lcms2, libpng , makeWrapper, pkgconfig, pygtk, python, pythonPackages
-, scons, swig
-}:
+{ stdenv, fetchFromGitHub, gtk3, intltool, json_c, lcms2, libpng, librsvg, gobjectIntrospection, hicolor-icon-theme
+, gdk_pixbuf, pkgconfig, python2Packages, scons, swig, wrapGAppsHook }:
 
-stdenv.mkDerivation rec {
+let
+  inherit (python2Packages) python pycairo pygobject3 numpy;
+in stdenv.mkDerivation rec {
   name = "mypaint-${version}";
-  version = "1.1.0";
+  version = "1.2.1";
 
-  src = fetchurl {
-    url = "http://download.gna.org/mypaint/${name}.tar.bz2";
-    sha256 = "0f7848hr65h909c0jkcx616flc0r4qh53g3kd1cgs2nr1pjmf3bq";
+  src = fetchFromGitHub {
+    owner = "mypaint";
+    repo = "mypaint";
+    rev = "bcf5a28d38bbd586cc9d4cee223f849fa303864f";
+    sha256 = "1zwx7n629vz1jcrqjqmw6vl6sxdf81fq6a5jzqiga8167gg8s9pf";
+    fetchSubmodules = true;
   };
 
-  buildInputs = [
-    gettext glib gtk json_c lcms2 libpng makeWrapper pkgconfig pygtk
-    python scons swig
+  nativeBuildInputs = [
+    intltool pkgconfig scons swig wrapGAppsHook
+    gobjectIntrospection # for setup hook
   ];
 
-  propagatedBuildInputs = [ hicolor_icon_theme pythonPackages.numpy ];
+  buildInputs = [
+    gtk3 gdk_pixbuf json_c lcms2 libpng librsvg pycairo pygobject3 python hicolor-icon-theme
+  ];
+
+  propagatedBuildInputs = [ numpy ];
 
   buildPhase = "scons prefix=$out";
 
   installPhase = ''
     scons prefix=$out install
     sed -i -e 's|/usr/bin/env python2.7|${python}/bin/python|' $out/bin/mypaint
-    wrapProgram $out/bin/mypaint \
-      --prefix PYTHONPATH : $PYTHONPATH \
-      --prefix XDG_DATA_DIRS ":" "${hicolor_icon_theme}/share"
+  '';
+
+  preFixup = ''
+    gappsWrapperArgs+=(--prefix PYTHONPATH : $PYTHONPATH)
   '';
 
   meta = with stdenv.lib; {
     description = "A graphics application for digital painters";
-    homepage = http://mypaint.intilinux.com;
+    homepage = http://mypaint.org/;
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
-    maintainers = [ maintainers.goibhniu ];
+    maintainers = with maintainers; [ goibhniu jtojnar ];
   };
 }

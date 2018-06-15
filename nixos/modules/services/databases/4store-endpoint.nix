@@ -2,7 +2,7 @@
 let
   cfg = config.services.fourStoreEndpoint;
   endpointUser = "fourstorehttp";
-  run = "${pkgs.su}/bin/su -s ${pkgs.stdenv.shell} ${endpointUser} -c";
+  run = "${pkgs.su}/bin/su -s ${pkgs.runtimeShell} ${endpointUser} -c";
 in
 with lib;
 {
@@ -60,11 +60,11 @@ with lib;
 
     services.avahi.enable = true;
 
-    jobs.fourStoreEndpoint = {
-      name = "4store-endpoint";
-      startOn = "ip-up";
+    systemd.services."4store-endpoint" = {
+      after = [ "network.target" ];
+      wantedBy = [ "multi-user.target" ];
 
-      exec = ''
+      script = ''
         ${run} '${pkgs.rdf4store}/bin/4s-httpd -D ${cfg.options} ${if cfg.listenAddress!=null then "-H ${cfg.listenAddress}" else "" } -p ${toString cfg.port} ${cfg.database}'
       '';
     };

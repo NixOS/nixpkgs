@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "i2c-tools-${version}";
-  version = "3.1.1";
+  version = "4.0";
 
   src = fetchurl {
-    url = "http://dl.lm-sensors.org/i2c-tools/releases/${name}.tar.bz2";
-    sha256 = "000pvg995qy1b15ks59gd0klri55hb33kqpg5czy84hw1pbdgm0l";
+    url = "https://www.kernel.org/pub/software/utils/i2c-tools/${name}.tar.xz";
+    sha256 = "1mi8mykvl89y6liinc9jv1x8m2q093wrdc2hm86a47n524fcl06r";
   };
 
   buildInputs = [ perl ];

@@ -6,7 +6,7 @@
 import ./make-test.nix ({ pkgs, ...} : {
   name = "jenkins";
   meta = with pkgs.stdenv.lib.maintainers; {
-    maintainers = [ bjornfor coconnor iElectric eelco chaoflow ];
+    maintainers = [ bjornfor coconnor domenkozar eelco chaoflow ];
   };
 
   nodes = {
@@ -36,6 +36,9 @@ import ./make-test.nix ({ pkgs, ...} : {
     startAll;
 
     $master->waitForUnit("jenkins");
+
+    $master->mustSucceed("curl http://localhost:8080 | grep 'Authentication required'");
+
     print $master->execute("sudo -u jenkins groups");
     $master->mustSucceed("sudo -u jenkins groups | grep jenkins | grep users");
 

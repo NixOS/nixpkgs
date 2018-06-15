@@ -1,20 +1,19 @@
-{ fetchurl, stdenv, lib, flex, bison, db, iptables, pkgconfig
-, enableFan ? false
-}:
+{ fetchurl, stdenv, config, lib, flex, bash, bison, db, iptables, pkgconfig }:
 
 stdenv.mkDerivation rec {
-  name = "iproute2-4.2.0";
+  name = "iproute2-${version}";
+  version = "4.16.0";
 
   src = fetchurl {
     url = "mirror://kernel/linux/utils/net/iproute2/${name}.tar.xz";
-    sha256 = "0c0gyf46ad3jlalm9a7c9iiwvpcrjr4gylrkyranp8qd7rs1w454";
+    sha256 = "02pfalg319jpbjz273ph725br8dnkzpfvi98azi9yd6p1w128p0c";
   };
-
-  patches = lib.optionals enableFan [ ./ubuntu-fan.patch ];
 
   preConfigure = ''
     patchShebangs ./configure
     sed -e '/ARPDDIR/d' -i Makefile
+    # Don't build netem tools--they're not installed and require HOSTCC
+    substituteInPlace Makefile --replace " netem " " "
   '';
 
   makeFlags = [
@@ -22,11 +21,14 @@ stdenv.mkDerivation rec {
     "LIBDIR=$(out)/lib"
     "SBINDIR=$(out)/sbin"
     "MANDIR=$(out)/share/man"
+    "BASH_COMPDIR=$(out)/share/bash-completion/completions"
     "DOCDIR=$(TMPDIR)/share/doc/${name}" # Don't install docs
+    "HDRDIR=$(TMPDIR)/include/iproute2" # Don't install headers
   ];
 
+  # enable iproute2 module if you want this folder to be created
   buildFlags = [
-    "CONFDIR=/etc/iproute2"
+    "CONFDIR=${config.iproute2.confDir or "/run/iproute2"}"
   ];
 
   installFlags = [
@@ -38,11 +40,15 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+  postInstall = ''
+    PATH=${bash}/bin:$PATH patchShebangs $out/sbin
+  '';
+
   meta = with stdenv.lib; {
-    homepage = http://www.linuxfoundation.org/collaborate/workgroups/networking/iproute2;
+    homepage = https://wiki.linuxfoundation.org/networking/iproute2;
     description = "A collection of utilities for controlling TCP/IP networking and traffic control in Linux";
     platforms = platforms.linux;
     license = licenses.gpl2;
-    maintainers = with maintainers; [ eelco wkennington ];
+    maintainers = with maintainers; [ eelco wkennington fpletz ];
   };
 }

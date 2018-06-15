@@ -1,32 +1,40 @@
 { stdenv, fetchurl, intltool, pkgconfig, readline, openldap, cyrus_sasl, libupnp
-, zlib, libxml2, gtk2, libnotify, speex, ffmpeg, libX11, polarssl, libsoup, udev
-, ortp, mediastreamer, sqlite, belle-sip, libosip, libexosip
-, mediastreamer-openh264, makeWrapper
+, zlib, libxml2, gtk2, libnotify, speex, ffmpeg, libX11, libsoup, udev
+, ortp, mediastreamer, sqlite, belle-sip, libosip, libexosip, bzrtp
+, mediastreamer-openh264, bctoolbox, makeWrapper, fetchFromGitHub, cmake
+, libmatroska, bcunit, doxygen, gdk_pixbuf, glib, cairo, pango, polarssl
+, python, graphviz, belcard
 }:
 
 stdenv.mkDerivation rec {
-  name = "linphone-3.8.5";
+  baseName = "linphone";
+  version = "3.12.0";
+  name = "${baseName}-${version}";
 
-  src = fetchurl {
-    url = "mirror://savannah/linphone/3.8.x/sources/${name}.tar.gz";
-    sha256 = "10brlbwkk61nhd5v2sim1vfv11xm138l1cqqh3imhs2sigmzzlax";
+  src = fetchFromGitHub {
+    owner = "BelledonneCommunications";
+    repo = "${baseName}";
+    rev = "${version}";
+    sha256 = "0az2ywrpx11sqfb4s4r2v726avcjf4k15bvrqj7xvhz7hdndmh0j";
   };
 
   buildInputs = [
     readline openldap cyrus_sasl libupnp zlib libxml2 gtk2 libnotify speex ffmpeg libX11
     polarssl libsoup udev ortp mediastreamer sqlite belle-sip libosip libexosip
+    bctoolbox libmatroska bcunit gdk_pixbuf glib cairo pango bzrtp belcard
   ];
 
-  nativeBuildInputs = [ intltool pkgconfig makeWrapper ];
-
-  configureFlags = [
-    "--enable-ldap"
-    "--with-ffmpeg=${ffmpeg}"
-    "--with-polarssl=${polarssl}"
-    "--enable-lime"
-    "--enable-external-ortp"
-    "--enable-external-mediastreamer"
+  nativeBuildInputs = [
+    intltool pkgconfig makeWrapper cmake doxygen graphviz
+    (python.withPackages (ps: [ ps.pystache ps.six ]))
   ];
+
+  NIX_CFLAGS_COMPILE = " -Wno-error -I${glib.dev}/include/glib-2.0
+    -I${glib.out}/lib/glib-2.0/include -I${gtk2.dev}/include/gtk-2.0/
+    -I${cairo.dev}/include/cairo -I${pango.dev}/include/pango-1.0
+    -I${gtk2}/lib/gtk-2.0/include
+    -DLIBLINPHONE_GIT_VERSION=\"v${version}\"
+    ";
 
   postInstall = ''
     for i in $(cd $out/bin && ls); do

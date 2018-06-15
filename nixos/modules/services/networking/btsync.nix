@@ -9,16 +9,16 @@ let
 
   listenAddr = cfg.httpListenAddr + ":" + (toString cfg.httpListenPort);
 
-  boolStr = x: if x then "true" else "false";
   optionalEmptyStr = b: v: optionalString (b != "") v;
 
   webUIConfig = optionalString cfg.enableWebUI
     ''
       "webui":
       {
-        ${optionalEmptyStr cfg.httpLogin "\"login\":    \"${cfg.httpLogin}\","}
-        ${optionalEmptyStr cfg.httpPass  "\"password\": \"${cfg.httpPass}\","}
-        ${optionalEmptyStr cfg.apiKey    "\"api_key\":  \"${cfg.apiKey}\","}
+        ${optionalEmptyStr cfg.httpLogin     "\"login\":          \"${cfg.httpLogin}\","}
+        ${optionalEmptyStr cfg.httpPass      "\"password\":       \"${cfg.httpPass}\","}
+        ${optionalEmptyStr cfg.apiKey        "\"api_key\":        \"${cfg.apiKey}\","}
+        ${optionalEmptyStr cfg.directoryRoot "\"directory_root\": \"${cfg.directoryRoot}\","}
         "listen": "${listenAddr}"
       }
     '';
@@ -30,7 +30,7 @@ let
   sharedFoldersRecord =
     concatStringsSep "," (map (entry:
       let helper = attr: v:
-        if (entry ? attr) then boolStr entry.attr else boolStr v;
+        if (entry ? attr) then boolToString entry.attr else boolToString v;
       in
       ''
         {
@@ -64,11 +64,11 @@ let
         "listening_port":  ${toString cfg.listeningPort},
         "use_gui":         false,
 
-        "check_for_updates": ${boolStr cfg.checkForUpdates},
-        "use_upnp":          ${boolStr cfg.useUpnp},
+        "check_for_updates": ${boolToString cfg.checkForUpdates},
+        "use_upnp":          ${boolToString cfg.useUpnp},
         "download_limit":    ${toString cfg.downloadLimit},
         "upload_limit":      ${toString cfg.uploadLimit},
-        "lan_encrypt_data":  ${boolStr cfg.encryptLAN},
+        "lan_encrypt_data":  ${boolToString cfg.encryptLAN},
 
         ${webUIConfig}
         ${sharedFoldersConfig}
@@ -82,15 +82,13 @@ in
         type = types.bool;
         default = false;
         description = ''
-          If enabled, start the Bittorrent Sync daemon. Once enabled,
-          you can interact with the service through the Web UI, or
-          configure it in your NixOS configuration. Enabling the
-          <literal>btsync</literal> service also installs a
-          multi-instance systemd unit which can be used to start
-          user-specific copies of the daemon. Once installed, you can
-          use <literal>systemctl start btsync@user</literal> to start
-          the daemon only for user <literal>user</literal>, using the
-          configuration file located at
+          If enabled, start the Bittorrent Sync daemon. Once enabled, you can
+          interact with the service through the Web UI, or configure it in your
+          NixOS configuration. Enabling the <literal>btsync</literal> service
+          also installs a systemd user unit which can be used to start
+          user-specific copies of the daemon. Once installed, you can use
+          <literal>systemctl --user start btsync</literal> as your user to start
+          the daemon using the configuration file located at
           <literal>$HOME/.config/btsync.conf</literal>.
         '';
       };
@@ -209,9 +207,10 @@ in
       storagePath = mkOption {
         type = types.path;
         default = "/var/lib/btsync/";
-        example = "/var/lib/btsync/";
         description = ''
-          Where to store the bittorrent sync files.
+          Where BitTorrent Sync will store it's database files (containing
+          things like username info and licenses). Generally, you should not
+          need to ever change this.
         '';
       };
 
@@ -219,6 +218,13 @@ in
         type = types.str;
         default = "";
         description = "API key, which enables the developer API.";
+      };
+
+      directoryRoot = mkOption {
+        type = types.str;
+        default = "";
+        example = "/media";
+        description = "Default directory to add folders in the web UI.";
       };
 
       sharedFolders = mkOption {
@@ -303,12 +309,11 @@ in
       };
     };
 
-    systemd.services."btsync@" = with pkgs; {
-      description = "Bittorrent Sync Service for %i";
+    systemd.user.services.btsync = with pkgs; {
+      description = "Bittorrent Sync user service";
       after       = [ "network.target" "local-fs.target" ];
       serviceConfig = {
         Restart   = "on-abort";
-        User      = "%i";
         ExecStart =
           "${bittorrentSync}/bin/btsync --nodaemon --config %h/.config/btsync.conf";
       };

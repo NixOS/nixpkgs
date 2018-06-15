@@ -1,20 +1,18 @@
+# This expression provides Python bindings to ImageMagick. Python libraries are supposed to be called via `python-packages.nix`.
+
 {stdenv, fetchurl, python, boost, pkgconfig, imagemagick}:
-
-let
-
-  version = "0.9.11";
-
-in
 
 stdenv.mkDerivation rec {
   name = "pythonmagick-${version}";
+  version = "0.9.16";
 
   src = fetchurl {
-    url = "http://www.imagemagick.org/download/python/releases/PythonMagick-${version}.tar.gz";
-    sha256 = "01z01mlqkk0lvrh2jsmf84qjw29sq4rpj0653x7nqy7mrszwwp2v";
+    url = "mirror://imagemagick/python/releases/PythonMagick-${version}.tar.xz";
+    sha256 = "137278mfb5079lns2mmw73x8dhpzgwha53dyl00mmhj2z25varpn";
   };
 
-  buildInputs = [python boost pkgconfig imagemagick];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [python boost imagemagick];
 
   meta = {
     homepage = http://www.imagemagick.org/script/api.php;

@@ -1,5 +1,5 @@
 { fetchurl, stdenv, SDL, openal, SDL_mixer, libxml2, pkgconfig, libvorbis
-, libpng, mesa, makeWrapper, zlib }:
+, libpng, libGLU_combined, makeWrapper, zlib, freetype }:
 
 let
   pname = "naev";
@@ -19,11 +19,11 @@ stdenv.mkDerivation {
     sha256 = "0gahi91lmpra0wvxsz49zwwb28q9w2v1s3y7r70252hq6v80kanb";
   };
 
-  buildInputs = [ SDL SDL_mixer openal libxml2 libvorbis libpng mesa zlib ];
+  buildInputs = [ SDL SDL_mixer openal libxml2 libvorbis libpng libGLU_combined zlib freetype ];
 
   nativeBuildInputs = [ pkgconfig makeWrapper ];
 
-  NIX_CFLAGS_COMPILE="-include ${zlib}/include/zlib.h";
+  NIX_CFLAGS_COMPILE="-include ${zlib.dev}/include/zlib.h";
 
   postInstall = ''
     mkdir -p $out/share/naev

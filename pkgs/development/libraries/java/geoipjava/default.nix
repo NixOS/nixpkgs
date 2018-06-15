@@ -22,5 +22,6 @@ stdenv.mkDerivation {
     description = "GeoIP Java API";
     license = stdenv.lib.licenses.lgpl21Plus;
     maintainers = [ stdenv.lib.maintainers.sander ];
+    platforms = stdenv.lib.platforms.unix;
   };
 }

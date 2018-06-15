@@ -6,25 +6,47 @@ let
 
   cfg = config.services.statsd;
 
+  isBuiltinBackend = name:
+    builtins.elem name [ "graphite" "console" "repeater" ];
+
+  backendsToPackages = let
+    mkMap = list: name:
+      if isBuiltinBackend name then list
+      else list ++ [ pkgs.nodePackages.${name} ];
+  in foldl mkMap [];
+
   configFile = pkgs.writeText "statsd.conf" ''
     {
-      address: "${cfg.host}",
+      address: "${cfg.listenAddress}",
       port: "${toString cfg.port}",
       mgmt_address: "${cfg.mgmt_address}",
       mgmt_port: "${toString cfg.mgmt_port}",
-      backends: [${concatMapStringsSep "," (el: if (nixType el) == "string" then ''"./backends/${el}"'' else ''"${head el.names}"'') cfg.backends}],
+      backends: [${
+        concatMapStringsSep "," (name:
+          if (isBuiltinBackend name)
+          then ''"./backends/${name}"''
+          else ''"${name}"''
+        ) cfg.backends}],
       ${optionalString (cfg.graphiteHost!=null) ''graphiteHost: "${cfg.graphiteHost}",''}
       ${optionalString (cfg.graphitePort!=null) ''graphitePort: "${toString cfg.graphitePort}",''}
       console: {
         prettyprint: false
       },
       log: {
-        backend: "syslog"
+        backend: "stdout"
       },
       automaticConfigReload: false${optionalString (cfg.extraConfig != null) ","}
       ${cfg.extraConfig}
     }
   '';
+
+  deps = pkgs.buildEnv {
+    name = "statsd-runtime-deps";
+    pathsToLink = [ "/lib" ];
+    ignoreCollisions = true;
+
+    paths = backendsToPackages cfg.backends;
+  };
 
 in
 
@@ -34,13 +56,9 @@ in
 
   options.services.statsd = {
 
-    enable = mkOption {
-      description = "Whether to enable statsd stats aggregation service";
-      default = false;
-      type = types.bool;
-    };
+    enable = mkEnableOption "statsd";
 
-    host = mkOption {
+    listenAddress = mkOption {
       description = "Address that statsd listens on over UDP";
       default = "127.0.0.1";
       type = types.str;
@@ -66,9 +84,16 @@ in
 
     backends = mkOption {
       description = "List of backends statsd will use for data persistence";
-      default = ["graphite"];
-      example = ["graphite" pkgs.nodePackages."statsd-influxdb-backend"];
-      type = types.listOf (types.either types.str types.package);
+      default = [];
+      example = [
+        "graphite"
+        "console"
+        "repeater"
+        "statsd-librato-backend"
+        "stackdriver-statsd-backend"
+        "statsd-influxdb-backend"
+      ];
+      type = types.listOf types.str;
     };
 
     graphiteHost = mkOption {
@@ -95,6 +120,11 @@ in
 
   config = mkIf cfg.enable {
 
+    assertions = map (backend: {
+      assertion = !isBuiltinBackend backend -> hasAttrByPath [ backend ] pkgs.nodePackages;
+      message = "Only builtin backends (graphite, console, repeater) or backends enumerated in `pkgs.nodePackages` are allowed!";
+    }) cfg.backends;
+
     users.extraUsers = singleton {
       name = "statsd";
       uid = config.ids.uids.statsd;
@@ -105,15 +135,15 @@ in
       description = "Statsd Server";
       wantedBy = [ "multi-user.target" ];
       environment = {
-        NODE_PATH=concatMapStringsSep ":" (el: "${el}/lib/node_modules") (filter (el: (nixType el) != "string") cfg.backends);
+        NODE_PATH = "${deps}/lib/node_modules";
       };
       serviceConfig = {
-        ExecStart = "${pkgs.nodePackages.statsd}/bin/statsd ${configFile}";
+        ExecStart = "${pkgs.statsd}/bin/statsd ${configFile}";
         User = "statsd";
       };
     };
 
-    environment.systemPackages = [pkgs.nodePackages.statsd];
+    environment.systemPackages = [ pkgs.statsd ];
 
   };
 

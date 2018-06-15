@@ -11,7 +11,15 @@ stdenv.mkDerivation {
 
   buildInputs = [ zlib libX11 libpng ];
 
+  hardeningDisable = [ "format" ];
+
   patches = [ ./ploticus-install.patch ];
+
+  # Make the symlink relative instead of absolute.
+  # Otherwise it breaks when auto-moved to $out/share.
+  preFixup = ''
+    ln -sf pl.1 "$out"/man/man1/ploticus.1
+  '';
 
   meta = with stdenv.lib; {
     description = "A non-interactive software package for producing plots and charts";
@@ -24,5 +32,6 @@ stdenv.mkDerivation {
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ pSub ];
     homepage = http://ploticus.sourceforge.net/;
+    platforms = with platforms; linux;
   };
 }

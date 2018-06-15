@@ -1,38 +1,56 @@
 { stdenv, fetchurl, cairo, fontconfig, freetype, gdk_pixbuf, glib
-, glibc, gtk, libX11, makeWrapper, nspr, nss, pango, unzip, gconf
+, glibc, gtk2, libX11, makeWrapper, nspr, nss, pango, unzip, gconf
 , libXi, libXrender, libXext
 }:
+let
+  allSpecs = {
+    "x86_64-linux" = {
+      system = "linux64";
+      sha256 = "1rkdlf9v5lciaq3yp7cp2vwmca612vngbcnz55ck76jgx6rknh3g";
+    };
 
-# note: there is a i686 version available as well
-assert stdenv.system == "x86_64-linux";
-
-stdenv.mkDerivation rec {
-  product = "chromedriver_linux64";
-  name = "${product}-2.14";
-  version = "2.14";
-
-  src = fetchurl {
-    url = "http://chromedriver.storage.googleapis.com/${version}/${product}.zip";
-    sha256 = "18kpky1v5pc3fv6kv9i2mf4wr4qicmfhf27h9zqy18gh16rlwrin";
+    "x86_64-darwin" = {
+      system = "mac64";
+      sha256 = "11hs4mmlvxjaanq41h0dljj4sff0lfwk31svvdmzfg91idlikpsz";
+    };
   };
 
-  buildInputs = [ unzip makeWrapper ];
+  spec = allSpecs."${stdenv.system}"
+    or (throw "missing chromedriver binary for ${stdenv.system}");
+
+  libs = stdenv.lib.makeLibraryPath [
+    stdenv.cc.cc.lib
+    cairo fontconfig freetype
+    gdk_pixbuf glib gtk2 gconf
+    libX11 nspr nss pango libXrender
+    gconf libXext libXi
+  ];
+in
+stdenv.mkDerivation rec {
+  name = "chromedriver-${version}";
+  version = "2.39";
+
+  src = fetchurl {
+    url = "http://chromedriver.storage.googleapis.com/${version}/chromedriver_${spec.system}.zip";
+    sha256 = spec.sha256;
+  };
+
+  nativeBuildInputs = [ unzip makeWrapper ];
 
   unpackPhase = "unzip $src";
 
   installPhase = ''
-    mkdir -p $out/bin
-    mv chromedriver $out/bin
-    patchelf --set-interpreter ${glibc}/lib/ld-linux-x86-64.so.2 $out/bin/chromedriver
-    wrapProgram "$out/bin/chromedriver" \
-      --prefix LD_LIBRARY_PATH : "$(cat ${stdenv.cc}/nix-support/orig-cc)/lib64:${cairo}/lib:${fontconfig}/lib:${freetype}/lib:${gdk_pixbuf}/lib:${glib}/lib:${gtk}/lib:${libX11}/lib:${nspr}/lib:${nss}/lib:${pango}/lib:${libXrender}/lib:${gconf}/lib:${libXext}/lib:${libXi}/lib:\$LD_LIBRARY_PATH"
+    install -m755 -D chromedriver $out/bin/chromedriver
+  '' + stdenv.lib.optionalString (!stdenv.isDarwin) ''
+    patchelf --set-interpreter ${glibc.out}/lib/ld-linux-x86-64.so.2 $out/bin/chromedriver
+    wrapProgram "$out/bin/chromedriver" --prefix LD_LIBRARY_PATH : "${libs}:\$LD_LIBRARY_PATH"
   '';
 
   meta = with stdenv.lib; {
-    homepage = http://code.google.com/p/chromedriver/;
+    homepage = https://sites.google.com/a/chromium.org/chromedriver;
     description = "A WebDriver server for running Selenium tests on Chrome";
     license = licenses.bsd3;
     maintainers = [ maintainers.goibhniu ];
-    platforms = platforms.linux;
+    platforms = attrNames allSpecs;
   };
 }

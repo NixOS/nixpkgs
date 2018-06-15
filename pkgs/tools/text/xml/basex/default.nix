@@ -1,11 +1,12 @@
 { stdenv, fetchurl, unzip, jre, coreutils, makeDesktopItem }:
 
 stdenv.mkDerivation rec {
-  name = "basex-7.8.2";
+  name = "basex-${version}";
+  version = "8.6.6";
 
   src = fetchurl {
-    url = "http://files.basex.org/releases/7.8.2/BaseX782.zip";
-    sha256 = "0i9h7fsvn8cy1g44f23iyqndwamvx4kvyc4y3i00j15qm6qd2kbm";
+    url = "http://files.basex.org/releases/${version}/BaseX866.zip";
+    sha256 = "1kws6swisdaa17yhijjvkh2ikwz9rd5cw8mdjvkqw6vlcp1nq6m4";
   };
 
   buildInputs = [ unzip jre ];
@@ -21,9 +22,8 @@ stdenv.mkDerivation rec {
     mimeType = "text/xml";
   };
 
-  # We're using a pre-built package
-  configurePhase = "true";
-  buildPhase = "true";
+  dontBuild = true;
+
   installPhase = ''
     mkdir -p "$out"
     cp -r * "$out"

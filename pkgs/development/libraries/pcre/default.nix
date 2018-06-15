@@ -1,42 +1,57 @@
-{ stdenv, fetchurl, autoreconfHook, unicodeSupport ? true, cplusplusSupport ? true
-, windows ? null
+{ stdenv, fetchurl
+, pcre, windows ? null
+, buildPlatform, hostPlatform
+, variant ? null
 }:
 
 with stdenv.lib;
 
-stdenv.mkDerivation rec {
-  name = "pcre-8.37";
+assert elem variant [ null "cpp" "pcre16" "pcre32" ];
+
+let
+  version = "8.41";
+  pname = if (variant == null) then "pcre"
+    else  if (variant == "cpp") then "pcre-cpp"
+    else  variant;
+
+in stdenv.mkDerivation rec {
+  name = "${pname}-${version}";
 
   src = fetchurl {
-    url = "ftp://ftp.csx.cam.ac.uk/pub/software/programming/pcre/${name}.tar.bz2";
-    sha256 = "17bqykp604p7376wj3q2nmjdhrb6v1ny8q08zdwi7qvc02l9wrsi";
+    url = "ftp://ftp.csx.cam.ac.uk/pub/software/programming/pcre/pcre-${version}.tar.bz2";
+    sha256 = "0c5m469p5pd7jip621ipq6hbgh7128lzh7xndllfgh77ban7wb76";
   };
 
-  nativeBuildInputs = [ autoreconfHook ];
+  outputs = [ "bin" "dev" "out" "doc" "man" ];
 
-  # A bundle of fixes which should be removed for 8.38
-  patchPhase = ''
-    patch -p0 -i ${./fixes.patch}
+  configureFlags = optional (!hostPlatform.isRiscV) "--enable-jit" ++ [
+    "--enable-unicode-properties"
+    "--disable-cpp"
+  ]
+    ++ optional (variant != null) "--enable-${variant}";
+
+  buildInputs = optional (hostPlatform.libc == "msvcrt") windows.mingw_w64_pthreads;
+
+  # https://bugs.exim.org/show_bug.cgi?id=2173
+  patches = [ ./stacksize-detection.patch ];
+
+  preCheck = ''
+    patchShebangs RunGrepTest
   '';
 
-  outputs = [ "out" "doc" "man" ];
-
-  configureFlags = ''
-    --enable-jit
-    ${if unicodeSupport then "--enable-unicode-properties" else ""}
-    ${if !cplusplusSupport then "--disable-cpp" else ""}
-  '';
-
-  doCheck = with stdenv; !(isCygwin || isFreeBSD);
+  doCheck = !(with hostPlatform; isCygwin || isFreeBSD) && hostPlatform == buildPlatform;
     # XXX: test failure on Cygwin
     # we are running out of stack on both freeBSDs on Hydra
 
-  crossAttrs = optionalAttrs (stdenv.cross.libc == "msvcrt") {
-    buildInputs = [ windows.mingw_w64_pthreads.crossDrv ];
-  };
+  postFixup = ''
+    moveToOutput bin/pcre-config "$dev"
+  ''
+    + optionalString (variant != null) ''
+    ln -sf -t "$out/lib/" '${pcre.out}'/lib/libpcre{,posix}.{so.*.*.*,*dylib}
+  '';
 
   meta = {
-    homepage = "http://www.pcre.org/";
+    homepage = http://www.pcre.org/;
     description = "A library for Perl Compatible Regular Expressions";
     license = stdenv.lib.licenses.bsd3;
 
@@ -49,6 +64,5 @@ stdenv.mkDerivation rec {
     '';
 
     platforms = platforms.all;
-    maintainers = [ maintainers.simons ];
   };
 }

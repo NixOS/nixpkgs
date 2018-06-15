@@ -33,9 +33,20 @@ sub new {
         $startCommand =
             "qemu-kvm -m 384 " .
             "-net nic,model=virtio \$QEMU_OPTS ";
-        my $iface = $args->{hdaInterface} || "virtio";
-        $startCommand .= "-drive file=" . Cwd::abs_path($args->{hda}) . ",if=$iface,werror=report "
-            if defined $args->{hda};
+
+        if (defined $args->{hda}) {
+            if ($args->{hdaInterface} eq "scsi") {
+                $startCommand .= "-drive id=hda,file="
+                               . Cwd::abs_path($args->{hda})
+                               . ",werror=report,if=none "
+                               . "-device scsi-hd,drive=hda ";
+            } else {
+                $startCommand .= "-drive file=" . Cwd::abs_path($args->{hda})
+                               . ",if=" . $args->{hdaInterface}
+                               . ",werror=report ";
+            }
+        }
+
         $startCommand .= "-cdrom $args->{cdrom} "
             if defined $args->{cdrom};
         $startCommand .= "-device piix3-usb-uhci -drive id=usbdisk,file=$args->{usb},if=none,readonly -device usb-storage,drive=usbdisk "
@@ -146,6 +157,7 @@ sub start {
             ($self->{allowReboot} ? "" : "-no-reboot ") .
             "-monitor unix:./monitor -chardev socket,id=shell,path=./shell " .
             "-device virtio-serial -device virtconsole,chardev=shell " .
+            "-device virtio-rng-pci " .
             ($showGraphics ? "-serial stdio" : "-nographic") . " " . ($ENV{QEMU_OPTS} || "");
         chdir $self->{stateDir} or die;
         exec $self->{startCommand};
@@ -219,8 +231,8 @@ sub waitForMonitorPrompt {
 sub retry {
     my ($coderef) = @_;
     my $n;
-    for ($n = 0; $n < 900; $n++) {
-        return if &$coderef;
+    for ($n = 899; $n >=0; $n--) {
+        return if &$coderef($n);
         sleep 1;
     }
     die "action timed out after $n seconds";
@@ -361,8 +373,8 @@ sub mustFail {
 
 
 sub getUnitInfo {
-    my ($self, $unit) = @_;
-    my ($status, $lines) = $self->execute("systemctl --no-pager show '$unit'");
+    my ($self, $unit, $user) = @_;
+    my ($status, $lines) = $self->systemctl("--no-pager show \"$unit\"", $user);
     return undef if $status != 0;
     my $info = {};
     foreach my $line (split '\n', $lines) {
@@ -372,15 +384,49 @@ sub getUnitInfo {
     return $info;
 }
 
+sub systemctl {
+    my ($self, $q, $user) = @_;
+    if ($user) {
+        $q =~ s/'/\\'/g;
+        return $self->execute("su -l $user -c \$'XDG_RUNTIME_DIR=/run/user/`id -u` systemctl --user $q'");
+    }
+
+    return $self->execute("systemctl $q");
+}
+
+# Fail if the given systemd unit is not in the "active" state.
+sub requireActiveUnit {
+    my ($self, $unit) = @_;
+    $self->nest("checking if unit ‘$unit’ has reached state 'active'", sub {
+        my $info = $self->getUnitInfo($unit);
+        my $state = $info->{ActiveState};
+        if ($state ne "active") {
+            die "Expected unit ‘$unit’ to to be in state 'active' but it is in state ‘$state’\n";
+        };
+    });
+}
 
 # Wait for a systemd unit to reach the "active" state.
 sub waitForUnit {
-    my ($self, $unit) = @_;
+    my ($self, $unit, $user) = @_;
     $self->nest("waiting for unit ‘$unit’", sub {
         retry sub {
-            my $info = $self->getUnitInfo($unit);
+            my $info = $self->getUnitInfo($unit, $user);
             my $state = $info->{ActiveState};
             die "unit ‘$unit’ reached state ‘$state’\n" if $state eq "failed";
+            if ($state eq "inactive") {
+                # If there are no pending jobs, then assume this unit
+                # will never reach active state.
+                my ($status, $jobs) = $self->systemctl("list-jobs --full 2>&1", $user);
+                if ($jobs =~ /No jobs/) {  # FIXME: fragile
+                    # Handle the case where the unit may have started
+                    # between the previous getUnitInfo() and
+                    # list-jobs.
+                    my $info2 = $self->getUnitInfo($unit);
+                    die "unit ‘$unit’ is inactive and there are no pending jobs\n"
+                        if $info2->{ActiveState} eq $state;
+                }
+            }
             return 1 if $state eq "active";
         };
     });
@@ -405,14 +451,14 @@ sub waitForFile {
 }
 
 sub startJob {
-    my ($self, $jobName) = @_;
-    $self->execute("systemctl start $jobName");
+    my ($self, $jobName, $user) = @_;
+    $self->systemctl("start $jobName", $user);
     # FIXME: check result
 }
 
 sub stopJob {
-    my ($self, $jobName) = @_;
-    $self->execute("systemctl stop $jobName");
+    my ($self, $jobName, $user) = @_;
+    $self->systemctl("stop $jobName", $user);
 }
 
 
@@ -491,6 +537,37 @@ sub screenshot {
     }, { image => $name } );
 }
 
+# Get the text of TTY<n>
+sub getTTYText {
+    my ($self, $tty) = @_;
+
+    my ($status, $out) = $self->execute("fold -w\$(stty -F /dev/tty${tty} size | awk '{print \$2}') /dev/vcs${tty}");
+    return $out;
+}
+
+# Wait until TTY<n>'s text matches a particular regular expression
+sub waitUntilTTYMatches {
+    my ($self, $tty, $regexp) = @_;
+
+    $self->nest("waiting for $regexp to appear on tty $tty", sub {
+        retry sub {
+            my ($retries_remaining) = @_;
+            if ($retries_remaining == 0) {
+                $self->log("Last chance to match /$regexp/ on TTY$tty, which currently contains:");
+                $self->log($self->getTTYText($tty));
+            }
+
+            return 1 if $self->getTTYText($tty) =~ /$regexp/;
+        }
+    });
+}
+
+# Debugging: Dump the contents of the TTY<n>
+sub dumpTTYContents {
+    my ($self, $tty) = @_;
+
+    $self->execute("fold -w 80 /dev/vcs${tty} | systemd-cat");
+}
 
 # Take a screenshot and return the result as text using optical character
 # recognition.
@@ -504,16 +581,20 @@ sub getScreenText {
     $self->nest("performing optical character recognition", sub {
         my $tmpbase = Cwd::abs_path(".")."/ocr";
         my $tmpin = $tmpbase."in.ppm";
-        my $tmpout = "$tmpbase.ppm";
 
         $self->sendMonitorCommand("screendump $tmpin");
-        system("ppmtopgm $tmpin | pamscale 4 -filter=lanczos > $tmpout") == 0
-            or die "cannot scale screenshot";
+
+        my $magickArgs = "-filter Catrom -density 72 -resample 300 "
+                       . "-contrast -normalize -despeckle -type grayscale "
+                       . "-sharpen 1 -posterize 3 -negate -gamma 100 "
+                       . "-blur 1x65535";
+        my $tessArgs = "-c debug_file=/dev/null --psm 11 --oem 2";
+
+        $text = `convert $magickArgs $tmpin tiff:- | tesseract - - $tessArgs`;
+        my $status = $? >> 8;
         unlink $tmpin;
-        system("tesseract $tmpout $tmpbase") == 0 or die "OCR failed";
-        unlink $tmpout;
-        $text = read_file("$tmpbase.txt");
-        unlink "$tmpbase.txt";
+
+        die "OCR failed with exit code $status" if $status != 0;
     });
     return $text;
 }
@@ -524,6 +605,12 @@ sub waitForText {
     my ($self, $regexp) = @_;
     $self->nest("waiting for $regexp to appear on the screen", sub {
         retry sub {
+            my ($retries_remaining) = @_;
+            if ($retries_remaining == 0) {
+                $self->log("Last chance to match /$regexp/ on the screen, which currently contains:");
+                $self->log($self->getScreenText);
+            }
+
             return 1 if $self->getScreenText =~ /$regexp/;
         }
     });
@@ -536,9 +623,9 @@ sub waitForX {
     my ($self, $regexp) = @_;
     $self->nest("waiting for the X11 server", sub {
         retry sub {
-            my ($status, $out) = $self->execute("journalctl -b SYSLOG_IDENTIFIER=systemd | grep 'session opened'");
+            my ($status, $out) = $self->execute("journalctl -b SYSLOG_IDENTIFIER=systemd | grep 'Reached target Current graphical'");
             return 0 if $status != 0;
-            ($status, $out) = $self->execute("xwininfo -root > /dev/null 2>&1");
+            ($status, $out) = $self->execute("[ -e /tmp/.X11-unix/X0 ]");
             return 1 if $status == 0;
         }
     });
@@ -558,6 +645,13 @@ sub waitForWindow {
     $self->nest("waiting for a window to appear", sub {
         retry sub {
             my @names = $self->getWindowNames;
+
+            my ($retries_remaining) = @_;
+            if ($retries_remaining == 0) {
+                $self->log("Last chance to match /$regexp/ on the the window list, which currently contains:");
+                $self->log(join(", ", @names));
+            }
+
             foreach my $n (@names) {
                 return 1 if $n =~ /$regexp/;
             }
@@ -569,15 +663,32 @@ sub waitForWindow {
 sub copyFileFromHost {
     my ($self, $from, $to) = @_;
     my $s = `cat $from` or die;
-    $self->mustSucceed("echo '$s' > $to"); # !!! escaping
+    $s =~ s/'/'\\''/g;
+    $self->mustSucceed("echo '$s' > $to");
 }
+
+
+my %charToKey = (
+    'A' => "shift-a", 'N' => "shift-n",  '-' => "0x0C", '_' => "shift-0x0C", '!' => "shift-0x02",
+    'B' => "shift-b", 'O' => "shift-o",  '=' => "0x0D", '+' => "shift-0x0D", '@' => "shift-0x03",
+    'C' => "shift-c", 'P' => "shift-p",  '[' => "0x1A", '{' => "shift-0x1A", '#' => "shift-0x04",
+    'D' => "shift-d", 'Q' => "shift-q",  ']' => "0x1B", '}' => "shift-0x1B", '$' => "shift-0x05",
+    'E' => "shift-e", 'R' => "shift-r",  ';' => "0x27", ':' => "shift-0x27", '%' => "shift-0x06",
+    'F' => "shift-f", 'S' => "shift-s", '\'' => "0x28", '"' => "shift-0x28", '^' => "shift-0x07",
+    'G' => "shift-g", 'T' => "shift-t",  '`' => "0x29", '~' => "shift-0x29", '&' => "shift-0x08",
+    'H' => "shift-h", 'U' => "shift-u", '\\' => "0x2B", '|' => "shift-0x2B", '*' => "shift-0x09",
+    'I' => "shift-i", 'V' => "shift-v",  ',' => "0x33", '<' => "shift-0x33", '(' => "shift-0x0A",
+    'J' => "shift-j", 'W' => "shift-w",  '.' => "0x34", '>' => "shift-0x34", ')' => "shift-0x0B",
+    'K' => "shift-k", 'X' => "shift-x",  '/' => "0x35", '?' => "shift-0x35",
+    'L' => "shift-l", 'Y' => "shift-y",  ' ' => "spc",
+    'M' => "shift-m", 'Z' => "shift-z", "\n" => "ret",
+);
 
 
 sub sendKeys {
     my ($self, @keys) = @_;
     foreach my $key (@keys) {
-        $key = "spc" if $key eq " ";
-        $key = "ret" if $key eq "\n";
+        $key = $charToKey{$key} if exists $charToKey{$key};
         $self->sendMonitorCommand("sendkey $key");
     }
 }

@@ -1,16 +1,16 @@
-{stdenv, fetchurl, ocaml, findlib, camlp4, minimal ? true}:
+{ stdenv, fetchurl, ocaml, findlib, cppo, minimal ? true }:
 
 assert stdenv.lib.versionAtLeast (stdenv.lib.getVersion ocaml) "3.11";
 
 stdenv.mkDerivation {
-  name = "ocaml-extlib-1.6.1";
+  name = "ocaml-extlib-1.7.4";
 
   src = fetchurl {
-    url = http://ocaml-extlib.googlecode.com/files/extlib-1.6.1.tar.gz;
-    sha256 = "1jmfj2w0f3ap0swz8k3qqmrl6x2y4gkmg88vv024xnmliiiv7m48";
+    url = http://ygrek.org.ua/p/release/ocaml-extlib/extlib-1.7.4.tar.gz;
+    sha256 = "18jb4rvkk6p3mqnkamwb41x8q49shgn43h020bs4cp4vac7nrhnr";
   };
 
-  buildInputs = [ocaml findlib camlp4];
+  buildInputs = [ ocaml findlib cppo ];
 
   createFindlibDestdir = true;
 
@@ -20,9 +20,9 @@ stdenv.mkDerivation {
   installPhase   = "make ${if minimal then "minimal=1" else ""} install";
 
   meta = {
-    homepage = http://code.google.com/p/ocaml-extlib/;
+    homepage = https://github.com/ygrek/ocaml-extlib;
     description = "Enhancements to the OCaml Standard Library modules";
     license = stdenv.lib.licenses.lgpl21;
-    platforms = ocaml.meta.platforms;
+    platforms = ocaml.meta.platforms or [];
   };
 }

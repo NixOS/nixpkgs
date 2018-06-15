@@ -1,29 +1,41 @@
-{stdenv, fetchurl, zlib, ocaml, findlib, ncurses}:
+{ stdenv, fetchurl, zlib, ocaml, findlib, ocamlbuild, zarith, ncurses }:
 
-let
-  ocaml_version = (builtins.parseDrvName ocaml.name).version;
+assert stdenv.lib.versionAtLeast ocaml.version "3.12";
+
+let param =
+  if stdenv.lib.versionAtLeast ocaml.version "4.02"
+  then {
+    version = "1.13";
+    url = https://github.com/xavierleroy/cryptokit/archive/release113.tar.gz;
+    sha256 = "1f4jjnp2a911nqw0hbijyv9vygkk6kw5zx75qs49hfm3by6ij8rq";
+    inherit zarith;
+  } else {
+    version = "1.10";
+    url = http://forge.ocamlcore.org/frs/download.php/1493/cryptokit-1.10.tar.gz;
+    sha256 = "1k2f2ixm7jcsgrzn9lz1hm9qqgq71lk9lxy3v3cwsd8xdrj3jrnv";
+    zarith = null;
+  };
 in
 
-assert stdenv.lib.versionAtLeast ocaml_version "3.12";
-
-stdenv.mkDerivation {
-  name = "cryptokit-1.9";
+stdenv.mkDerivation rec {
+  name = "cryptokit-${version}";
+  inherit (param) version;
 
   src = fetchurl {
-    url = http://forge.ocamlcore.org/frs/download.php/1166/cryptokit-1.9.tar.gz;
-    sha256 = "1jh0jqiwkjy9qplnfcm5r25zdgyk36sxb0c87ks3rjj7khrw1a2n";
+    inherit (param) url sha256;
   };
 
-  buildInputs = [zlib ocaml findlib ncurses];
+  buildInputs = [ zlib ocaml findlib ocamlbuild ncurses ];
+  propagatedBuildInputs = [ param.zarith ];
 
   buildFlags = "setup.data build";
 
-  preBuild = "mkdir -p $out/lib/ocaml/${ocaml_version}/site-lib/cryptokit";
+  preBuild = "mkdir -p $out/lib/ocaml/${ocaml.version}/site-lib/cryptokit";
 
   meta = {
-    homepage = "http://pauillac.inria.fr/~xleroy/software.html";
+    homepage = http://pauillac.inria.fr/~xleroy/software.html;
     description = "A library of cryptographic primitives for OCaml";
-    platforms = ocaml.meta.platforms;
+    platforms = ocaml.meta.platforms or [];
     maintainers = [
       stdenv.lib.maintainers.z77z
     ];

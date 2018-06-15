@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, pkgconfig, gettext, gtk, gconf
+{ fetchurl, stdenv, pkgconfig, gettext, gtk2, gconf
 , curl, libexif, sqlite, libxml2 }:
 
 stdenv.mkDerivation rec {
@@ -9,7 +9,8 @@ stdenv.mkDerivation rec {
     sha256 = "15q2kkrv4mfsivfdzjgpxr7s2amw7d501q2ayjl3ff4vmvfn5516";
   };
 
-  buildInputs = [ pkgconfig gettext gtk gconf curl libexif sqlite libxml2 ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ gettext gtk2 gconf curl libexif sqlite libxml2 ];
 
   # bogus includes fail with newer library version
   postPatch = ''
@@ -39,5 +40,6 @@ stdenv.mkDerivation rec {
     #homepage = http://www.tangogps.org/; # no longer valid, I couldn't find any other
 
     license = stdenv.lib.licenses.gpl2Plus;
+    platforms = stdenv.lib.platforms.unix;
   };
 }

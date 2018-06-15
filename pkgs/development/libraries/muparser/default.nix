@@ -16,5 +16,6 @@ stdenv.mkDerivation rec {
     homepage = http://muparser.sourceforge.net;
     description = "An extensible high performance math expression parser library written in C++";
     license = stdenv.lib.licenses.mit;
+    platforms = stdenv.lib.platforms.linux;
   };
 }

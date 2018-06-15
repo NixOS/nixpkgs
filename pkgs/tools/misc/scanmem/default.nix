@@ -1,23 +1,27 @@
 { stdenv, autoconf, automake, intltool, libtool, fetchFromGitHub, readline }:
 
 stdenv.mkDerivation rec {
-  version = "0.15.2";
+  version = "0.17";
   name = "scanmem-${version}";
+
   src = fetchFromGitHub {
     owner  = "scanmem";
     repo   = "scanmem";
     rev    = "v${version}";
-    sha256 = "0f93ac5rycf46q60flab5nl7ksadjls13axijg5j5wy1yif0k094";
+    sha256 = "17p8sh0rj8yqz36ria5bp48c8523zzw3y9g8sbm2jwq7sc27i7s9";
   };
-  buildInputs = [ autoconf automake intltool libtool readline ];
+
+  nativeBuildInputs = [ autoconf automake intltool libtool ];
+  buildInputs = [ readline ];
+
   preConfigure = ''
     ./autogen.sh
   '';
-  meta = {
-    homepage = "https://github.com/scanmem/scanmem";
+  meta = with stdenv.lib; {
+    homepage = https://github.com/scanmem/scanmem;
     description = "Memory scanner for finding and poking addresses in executing processes";
-    maintainers = [ stdenv.lib.maintainers.chattered  ];
-    platforms = stdenv.lib.platforms.linux;
-    license = stdenv.lib.licenses.gpl3;
+    maintainers = [ maintainers.chattered ];
+    platforms = platforms.linux;
+    license = licenses.gpl3;
   };
 }

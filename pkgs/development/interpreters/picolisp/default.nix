@@ -3,13 +3,13 @@ with stdenv.lib;
 
 stdenv.mkDerivation rec {
   name = "picoLisp-${version}";
-  version = "3.1.11";
+  version = "16.12";
   src = fetchurl {
     url = "http://www.software-lab.de/${name}.tgz";
-    sha256 = "01kgyz0lkz36lxvibv07qd06gwdxvvbain9f9cnya7a12kq3009i";
+    sha256 = "1k3x6mvk9b34iiyml142bzh3gf241f25ywjlaagbxzb9vklpws75";
   };
   buildInputs = optional stdenv.is64bit jdk;
-  patchPhase = optionalString stdenv.isArm ''
+  patchPhase = optionalString stdenv.isAarch32 ''
     sed -i s/-m32//g Makefile
     cat >>Makefile <<EOF
     ext.o: ext.c
@@ -38,11 +38,11 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    description = "A simple Lisp with an integrated database.";
-    homepage = http://picolisp.com/;
+    description = "A simple Lisp with an integrated database";
+    homepage = https://picolisp.com/;
     license = licenses.mit;
-    platform = platforms.all;
-    maintainers = with maintainers; [ raskin ];
+    platforms = platforms.all;
+    maintainers = with maintainers; [ raskin tohl ];
   };
 
   passthru = {

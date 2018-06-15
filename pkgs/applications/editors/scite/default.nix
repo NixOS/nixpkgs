@@ -1,18 +1,16 @@
-{ stdenv, fetchurl, pkgconfig, gtk }:
+{ stdenv, fetchurl, pkgconfig, gtk2 }:
 
-let
-  version = "3.3.7";
-
-  version_short = stdenv.lib.replaceChars [ "." ] [ "" ] "${version}";
-in stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   name = "scite-${version}";
+  version = "4.0.5";
 
   src = fetchurl {
-    url = "mirror://sourceforge/project/scintilla/SciTE/${version}/scite${version_short}.tgz";
-    sha256 = "0x7i6yxq50frsjkrp3lc5zy0d1ssq2n91igjn0dmqajpg7kls2dd";
+    url = http://www.scintilla.org/scite405.tgz;
+    sha256 = "0h16wk2986nkkhhdv5g4lxlcn02qwyja24x1r6vf02r1hf46b9q2";
   };
 
-  buildInputs = [ pkgconfig gtk ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ gtk2 ];
   sourceRoot = "scintilla/gtk";
 
   buildPhase = ''
@@ -25,11 +23,11 @@ in stdenv.mkDerivation {
     make install prefix=$out/
   '';
 
-  meta = {
-    homepage = "http://www.scintilla.org/SciTE.html";
+  meta = with stdenv.lib; {
+    homepage = http://www.scintilla.org/SciTE.html;
     description = "SCIntilla based Text Editor";
-    license = stdenv.lib.licenses.mit;
-    platforms = stdenv.lib.platforms.linux;
-    maintainers = [ stdenv.lib.maintainers.rszibele ];
+    license = licenses.mit;
+    platforms = platforms.linux;
+    maintainers = [ maintainers.rszibele ];
   };
 }

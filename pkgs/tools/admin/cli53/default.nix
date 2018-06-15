@@ -1,25 +1,35 @@
-{ lib, buildPythonPackage, pythonPackages, fetchurl }:
+{ lib, python2, fetchurl }:
 
-buildPythonPackage rec {
+python2.pkgs.buildPythonApplication rec {
   name = "cli53-${version}";
-  namePrefix = "";  # Suppress "python27-" name prefix
   version = "0.4.4";
 
   src = fetchurl {
-    url = "https://pypi.python.org/packages/source/c/cli53/${name}.tar.gz";
+    url = "mirror://pypi/c/cli53/${name}.tar.gz";
     sha256 = "0s9jzigq6a16m2c3qklssx2lz16cf13g5zh80vh24kxazaxqzbig";
   };
 
-  propagatedBuildInputs = with pythonPackages; [
+  postPatch = ''
+    substituteInPlace setup.py --replace "'argparse', " ""
+  '';
+
+  checkPhase = ''
+    ${python2.interpreter} -m unittest discover -s tests
+  '';
+
+  # Tests do not function
+  doCheck = false;
+
+  propagatedBuildInputs = with python2.pkgs; [
     argparse
     boto
-    dns
+    dnspython
   ];
 
-  meta = {
+  meta = with lib; {
     description = "CLI tool for the Amazon Route 53 DNS service";
     homepage = https://github.com/barnybug/cli53;
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ benley ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ benley ];
   };
 }

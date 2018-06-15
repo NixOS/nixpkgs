@@ -1,15 +1,19 @@
-{ stdenv, fetchurl, tcl }:
+{ stdenv, fetchFromGitHub, tcl }:
 
 stdenv.mkDerivation rec {
   name = "eggdrop-${version}";
-  version = "1.6.21";
+  version = "1.6.21-nix1";
 
-  src = fetchurl {
-    url = "ftp://ftp.eggheads.org/pub/eggdrop/GNU/1.6/eggdrop${version}.tar.gz";
-    sha256 = "1galvbh9y4c3msrg1s9na0asm077mh1g2i2vsv1vczmfrbgq92vs";
+  src = fetchFromGitHub {
+    owner = "eggheads";
+    repo = "eggdrop";
+    rev = "9ec109a13c016c4cdc7d52b7e16e4b9b6fbb9331";
+    sha256 = "0mf1vcbmpnvmf5mxk7gi3z32fxpcbynsh9jni8z8frrscrdf5lp5";
   };
 
   buildInputs = [ tcl ];
+
+  hardeningDisable = [ "format" ];
 
   preConfigure = ''
     prefix=$out/eggdrop
@@ -21,7 +25,7 @@ stdenv.mkDerivation rec {
   '';
 
   configureFlags = [
-    "--with-tcllib=${tcl}/lib/lib${tcl.libPrefix}.so"
+    "--with-tcllib=${tcl}/lib/lib${tcl.libPrefix}${stdenv.hostPlatform.extensions.sharedLibrary}"
     "--with-tclinc=${tcl}/include/tcl.h"
   ];
 

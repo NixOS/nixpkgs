@@ -1,63 +1,108 @@
-{ fetchurl, stdenv, bash, emacs, fixDarwinDylibNames
-, gdb, glib, gmime, gnupg
-, pkgconfig, talloc, xapian
-, sphinx, python
+{ fetchurl, stdenv, fixDarwinDylibNames
+, pkgconfig, gnupg
+, xapian, gmime, talloc, zlib
+, doxygen, perl
+, pythonPackages
+, bash-completion
+, emacs
+, ruby
+, which, dtach, openssl, bash, gdb, man
 }:
 
+with stdenv.lib;
+
 stdenv.mkDerivation rec {
-  name = "notmuch-0.20.2";
+  version = "0.27";
+  name = "notmuch-${version}";
 
   passthru = {
     pythonSourceRoot = "${name}/bindings/python";
+    inherit version;
   };
 
   src = fetchurl {
     url = "http://notmuchmail.org/releases/${name}.tar.gz";
-    sha256 = "1v5dcnlg4km5hfaq0i0qywq5fn66fi0rq4aaibyqkwxz8mis4hgp";
+    sha256 = "0xh8vq2sa7r07xb3n13drc6gdiqhcgl0pj0za5xj43qkiwpikls0";
   };
 
-  buildInputs = [ bash emacs glib gmime gnupg pkgconfig talloc xapian sphinx python ]
-    ++ stdenv.lib.optional stdenv.isDarwin fixDarwinDylibNames
-    ++ stdenv.lib.optional (!stdenv.isDarwin) gdb;
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [
+    gnupg # undefined dependencies
+    xapian gmime talloc zlib  # dependencies described in INSTALL
+    doxygen perl  # (optional) api docs
+    pythonPackages.sphinx pythonPackages.python  # (optional) documentation -> doc/INSTALL
+    bash-completion  # (optional) dependency to install bash completion
+    emacs  # (optional) to byte compile emacs code
+    ruby  # (optional) ruby bindings
+    which dtach openssl bash  # test dependencies
+  ]
+  ++ optional stdenv.isDarwin fixDarwinDylibNames
+  ++ optionals (!stdenv.isDarwin) [ gdb man ]; # test dependencies
 
-  patchPhase = ''
-    find test -type f -exec \
+  postPatch = ''
+    patchShebangs configure
+
+    find test/ -type f -exec \
       sed -i \
-        "1s_#!/usr/bin/env bash_#!${bash}/bin/bash_" \
+        -e "1s|#!/usr/bin/env bash|#!${bash}/bin/bash|" \
         "{}" ";"
 
     for src in \
-      crypto.c \
-      notmuch-config.c \
-      emacs/notmuch-crypto.el
+      util/crypto.c \
+      notmuch-config.c
     do
       substituteInPlace "$src" \
-        --replace \"gpg\" \"${gnupg}/bin/gpg2\"
+        --replace \"gpg\" \"${gnupg}/bin/gpg\"
     done
   '';
+
+  # Notmuch doesn't use autoconf and consequently doesn't tag --bindir and
+  # friends
+  setOutputFlags = false;
+  enableParallelBuilding = true;
+  makeFlags = "V=1";
+
+  preFixup = optionalString stdenv.isDarwin ''
+    set -e
+
+    die() {
+      >&2 echo "$@"
+      exit 1
+    }
+
+    prg="$out/bin/notmuch"
+    lib="$(find "$out/lib" -name 'libnotmuch.?.dylib')"
+
+    [[ -s "$prg" ]] || die "couldn't find notmuch binary"
+    [[ -s "$lib" ]] || die "couldn't find libnotmuch"
+
+    badname="$(otool -L "$prg" | awk '$1 ~ /libtalloc/ { print $1 }')"
+    goodname="$(find "${talloc}/lib" -name 'libtalloc.*.*.*.dylib')"
+
+    [[ -n "$badname" ]]  || die "couldn't find libtalloc reference in binary"
+    [[ -n "$goodname" ]] || die "couldn't find libtalloc in nix store"
+
+    echo "fixing libtalloc link in $lib"
+    install_name_tool -change "$badname" "$goodname" "$lib"
+
+    echo "fixing libtalloc link in $prg"
+    install_name_tool -change "$badname" "$goodname" "$prg"
+  '';
+
+  doCheck = !stdenv.isDarwin && (versionAtLeast gmime.version "3.0");
+  checkTarget = "test V=1";
 
   postInstall = ''
     make install-man
   '';
 
-  preFixup = if stdenv.isDarwin then
-    ''
-      prg="$out/bin/notmuch"
-      target="libnotmuch.3.dylib"
-      echo "$prg: fixing link to $target"
-      install_name_tool -change "$target" "$out/lib/$target" "$prg"
-    ''
-  else
-    "";
-
-  # XXX: emacs tests broken
-  doCheck = false;
-  checkTarget = "test";
+  dontGzipMan = true; # already compressed
 
   meta = {
     description = "Mail indexer";
-    license = stdenv.lib.licenses.gpl3;
-    maintainers = with stdenv.lib.maintainers; [ chaoflow garbas ];
-    platforms = stdenv.lib.platforms.gnu;
+    homepage    = https://notmuchmail.org/;
+    license     = licenses.gpl3;
+    maintainers = with maintainers; [ chaoflow flokli garbas the-kenny ];
+    platforms   = platforms.unix;
   };
 }

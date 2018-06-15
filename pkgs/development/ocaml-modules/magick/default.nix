@@ -12,6 +12,8 @@ stdenv.mkDerivation {
 
   createFindlibDestdir = true;
 
+  preConfigure = "substituteInPlace Makefile --replace gcc $CC";
+
   installTargets = [ "find_install" ];
 
   meta = {

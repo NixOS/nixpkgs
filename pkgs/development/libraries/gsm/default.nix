@@ -9,11 +9,11 @@ in
 
 stdenv.mkDerivation rec {
   name = "gsm-${version}";
-  version = "1.0.14";
+  version = "1.0.18";
 
   src = fetchurl {
     url = "http://www.quut.com/gsm/${name}.tar.gz";
-    sha256 = "0b1mx69jq88wva3wk0hi6fcl5a52qhnq2f9p3f3jdh5k61ma252q";
+    sha256 = "041amvpz8cvxykl3pwqldrzxligmmzcg8ncdnxbg32rlqf3q1xh4";
   };
 
   patchPhase = ''
@@ -40,8 +40,6 @@ stdenv.mkDerivation rec {
   ] ++ optional stdenv.cc.isClang "CC=clang";
 
   preInstall = "mkdir -p $out/{bin,lib,man/man1,man/man3,include/gsm}";
-
-  NIX_CFLAGS_COMPILE = optional (!staticSupport) "-fPIC";
 
   parallelBuild = false;
 

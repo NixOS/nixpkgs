@@ -1,34 +1,39 @@
-{ stdenv, fetchurl, pkgconfig, libxml2, perl }:
+{ stdenv, fetchFromGitHub, pkgconfig, autoreconfHook, help2man, gettext
+, libxml2, perl, python3, doxygen }:
 
-let
-  name = "libsmbios-2.2.28";
-in
-stdenv.mkDerivation {
-  inherit name;
 
-  src = fetchurl {
-    url = "http://linux.dell.com/libsmbios/download/libsmbios/${name}/${name}.tar.gz";
-    sha256 = "03m0n834w49acwbf5cf9ync1ksnn2jkwaysvy7584y60qpmngb91";
+stdenv.mkDerivation rec {
+  name = "libsmbios-${version}";
+  version = "2.4.1";
+
+  src = fetchFromGitHub {
+    owner = "dell";
+    repo = "libsmbios";
+    rev = "v${version}";
+    sha256 = "158w5fz777is7nr5yhpr69b17nn6i1pavycxq1q9899frrpkzbsc";
   };
 
-  buildInputs = [ pkgconfig libxml2 perl ];
+  nativeBuildInputs = [ autoreconfHook doxygen gettext libxml2 help2man perl pkgconfig ];
 
-  # It tries to install some Python stuff even when Python is disabled.
-  installFlags = "pkgpythondir=$(TMPDIR)/python";
+  buildInputs = [ python3 ];
 
-  # It forgets to install headers.
-  postInstall =
-    ''
-      cp -va "src/include/"* "$out/include/"
-      cp -va "out/public-include/"* "$out/include/"
-    '';
+  configureFlags = [ "--disable-graphviz" ];
 
-  meta = {
-    homepage = "http://linux.dell.com/libsmbios/main";
-    description = "a library to obtain BIOS information";
-    license = stdenv.lib.licenses.gpl2Plus; # alternatively, under the Open Software License version 2.1
+  enableParallelBuilding = true;
 
-    platforms = stdenv.lib.platforms.linux;
-    maintainers = [ stdenv.lib.maintainers.simons ];
+  postInstall = ''
+    mkdir -p $out/include
+    cp -a src/include/smbios_c $out/include/
+    cp -a out/public-include/smbios_c $out/include/
+  '';
+
+  preFixup = ''rm -rf "$(pwd)" ''; # Hack to avoid TMPDIR in RPATHs
+
+  meta = with stdenv.lib; {
+    homepage = https://github.com/dell/libsmbios;
+    description = "A library to obtain BIOS information";
+    license = with licenses; [ osl21 gpl2Plus ];
+    maintainers = with maintainers; [ ];
+    platforms = [ "i686-linux" "x86_64-linux" ];
   };
 }

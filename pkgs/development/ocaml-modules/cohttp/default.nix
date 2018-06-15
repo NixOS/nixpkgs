@@ -1,29 +1,32 @@
-{stdenv, buildOcaml, fetchurl, cmdliner, re, uri, fieldslib, sexplib, conduit,
- stringext, base64, magic-mime, ounit, alcotest, lwt ? null,
- async ? null, async_ssl ? null}:
+{ stdenv, fetchFromGitHub, ocaml, findlib, jbuilder
+, ppx_fields_conv, ppx_sexp_conv, ppx_deriving
+, base64, fieldslib, jsonm, logs, re, stringext, uri
+}:
 
-buildOcaml rec {
-  name = "cohttp";
-  version = "0.17.1";
+stdenv.mkDerivation rec {
+	version = "1.0.2";
+	name = "ocaml${ocaml.version}-cohttp-${version}";
 
-  minimumSupportedOcamlVersion = "4.02";
+	src = fetchFromGitHub {
+		owner = "mirage";
+		repo = "ocaml-cohttp";
+		rev = "v${version}";
+		sha256 = "0zgn32axmjvkmbvyfkbjcqximzc4zcfxs118b98xyrqnvwb0k7ka";
+	};
 
-  src = fetchurl {
-    url = "https://github.com/mirage/ocaml-cohttp/archive/v${version}.tar.gz";
-    sha256 = "fb124fb2fb5ff2e74559bf380627f6a537e208c1518ddcb01f0d37b62b55f673";
-  };
+	buildInputs = [ ocaml findlib jbuilder jsonm ppx_fields_conv ppx_sexp_conv ];
 
-  buildInputs = [ alcotest ];
-  propagatedBuildInputs = [ cmdliner re uri fieldslib sexplib sexplib
-                            conduit stringext base64 magic-mime ounit async
-                            async_ssl lwt ];
+	propagatedBuildInputs = [ ppx_deriving base64 fieldslib re stringext uri ];
 
-  buildFlags = "PREFIX=$(out)";
+	buildPhase = "jbuilder build -p cohttp";
 
-  meta = with stdenv.lib; {
-    homepage = https://github.com/mirage/ocaml-cohttp;
-    description = "Very lightweight HTTP server using Lwt or Async";
-    license = licenses.mit;
-    maintainers = [ maintainers.ericbmerritt ];
-  };
+	inherit (jbuilder) installPhase;
+
+	meta = {
+		description = "HTTP(S) library for Lwt, Async and Mirage";
+		license = stdenv.lib.licenses.isc;
+		maintainers = [ stdenv.lib.maintainers.vbgl ];
+		inherit (src.meta) homepage;
+		inherit (ocaml.meta) platforms;
+	};
 }

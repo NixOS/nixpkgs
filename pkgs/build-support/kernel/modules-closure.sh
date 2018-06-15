@@ -1,8 +1,18 @@
 source $stdenv/setup
 
-set -o pipefail
-
-PATH=$kmod/sbin:$PATH
+# When no modules are built, the $out/lib/modules directory will not
+# exist. Because the rest of the script assumes it does exist, we
+# handle this special case first.
+if ! test -d "$kernel/lib/modules"; then
+    if test -z "$rootModules" || test -n "$allowMissing"; then
+        mkdir -p "$out"
+        exit 0
+    else
+        echo "Required modules: $rootModules"
+        echo "Can not derive a closure of kernel modules because no modules were provided."
+        exit 1
+    fi
+fi
 
 version=$(cd $kernel/lib/modules && ls -d *)
 
@@ -35,6 +45,15 @@ for module in $closure; do
     # the whole kernel from being included in the initrd.
     nuke-refs $target
     echo $target >> $out/insmod-list
+done
+
+mkdir -p $out/lib/firmware
+for module in $closure; do
+    for i in $(modinfo -F firmware $module); do
+        mkdir -p "$out/lib/firmware/$(dirname "$i")"
+        echo "firmware for $module: $i"
+        cp "$firmware/lib/firmware/$i" "$out/lib/firmware/$i" 2>/dev/null || if test -z "$allowMissing"; then exit 1; fi
+    done
 done
 
 depmod -b $out -a $version

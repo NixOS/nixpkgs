@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, qt4, trousers }:
+{ stdenv, fetchgit, qt4, qmake4Hook, trousers }:
 
 stdenv.mkDerivation rec {
   version = "0.8.1";
@@ -10,11 +10,9 @@ stdenv.mkDerivation rec {
     sha256 = "24a606f88fed67ed0d0e61dc220295e9e1ab8db3ef3d028fa34b04ff30652d8e";
   };
 
-  buildInputs = [ qt4 trousers ];
+  nativeBuildInputs = [ qmake4Hook ];
 
-  preBuild = ''
-    qmake -makefile PREFIX=\$out
-    '';
+  buildInputs = [ qt4 trousers ];
 
   installPhase = ''
     mkdir -p $out/bin

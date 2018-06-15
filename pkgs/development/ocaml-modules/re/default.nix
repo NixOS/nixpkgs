@@ -1,18 +1,20 @@
-{ stdenv, fetchzip, ocaml, findlib, ounit }:
+{ stdenv, fetchzip, ocaml, findlib, ocamlbuild, ounit }:
 
 stdenv.mkDerivation rec {
-  name = "ocaml-re-1.4.1";
+  name = "ocaml-re-${version}";
+  version = "1.7.1";
 
   src = fetchzip {
-    url = "https://github.com/ocaml/ocaml-re/archive/${name}.tar.gz";
-    sha256 = "1wmfgazydd20hc796zisqpmsw0sb5lv9g3x77ckmf50v3z8hyhvk";
+    url = "https://github.com/ocaml/ocaml-re/archive/${version}.tar.gz";
+    sha256 = "1z2z4fjrpdbl0q50fdxvy3746w1vx6ybxcb0k81hqm1342nylbmw";
   };
 
-  buildInputs = [ ocaml findlib ounit ];
+  buildInputs = [ ocaml findlib ocamlbuild ounit ];
 
-  configurePhase = "ocaml setup.ml -configure --prefix $out --enable-tests";
+  configurePhase = "ocaml setup.ml -configure --prefix $out"
+  + stdenv.lib.optionalString doCheck " --enable-tests";
   buildPhase = "ocaml setup.ml -build";
-  doCheck = true;
+  doCheck = !stdenv.lib.versionAtLeast ocaml.version "4.06";
   checkPhase = "ocaml setup.ml -test";
   installPhase = "ocaml setup.ml -install";
 
@@ -20,7 +22,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = https://github.com/ocaml/ocaml-re;
-    platforms = ocaml.meta.platforms;
+    platforms = ocaml.meta.platforms or [];
     description = "Pure OCaml regular expressions, with support for Perl and POSIX-style strings";
     license = stdenv.lib.licenses.lgpl2;
     maintainers = with stdenv.lib.maintainers; [ vbgl ];

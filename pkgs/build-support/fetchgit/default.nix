@@ -1,6 +1,7 @@
-{stdenv, git, cacert}: let
+{stdenvNoCC, git, cacert}: let
   urlToName = url: rev: let
-    base = baseNameOf (stdenv.lib.removeSuffix "/" url);
+    inherit (stdenvNoCC.lib) removeSuffix splitString last;
+    base = last (splitString ":" (baseNameOf (removeSuffix "/" url)));
 
     matched = builtins.match "(.*).git" base;
 
@@ -15,6 +16,9 @@ in
 , fetchSubmodules ? true, deepClone ? false
 , branchName ? null
 , name ? urlToName url rev
+, # Shell code executed after the file has been fetched
+  # successfully. This can do things like check or transform the file.
+  postFetch ? ""
 }:
 
 /* NOTE:
@@ -26,7 +30,7 @@ in
    Cloning branches will make the hash check fail when there is an update.
    But not all patches we want can be accessed by tags.
 
-   The workaround is getting the last n commits so that it's likly that they
+   The workaround is getting the last n commits so that it's likely that they
    still contain the hash we want.
 
    for now : increase depth iteratively (TODO)
@@ -39,30 +43,28 @@ in
    server admins start using the new version?
 */
 
-assert md5 != "" || sha256 != "";
 assert deepClone -> leaveDotGit;
 
-stdenv.mkDerivation {
+if md5 != "" then
+  throw "fetchgit does not support md5 anymore, please use sha256"
+else
+stdenvNoCC.mkDerivation {
   inherit name;
   builder = ./builder.sh;
-  fetcher = ./nix-prefetch-git;
-  buildInputs = [git];
+  fetcher = "${./nix-prefetch-git}";  # This must be a string to ensure it's called with bash.
+  nativeBuildInputs = [git];
 
-  outputHashAlgo = if sha256 == "" then "md5" else "sha256";
+  outputHashAlgo = "sha256";
   outputHashMode = "recursive";
-  outputHash = if sha256 == "" then md5 else sha256;
+  outputHash = sha256;
 
-  inherit url rev leaveDotGit fetchSubmodules deepClone branchName;
+  inherit url rev leaveDotGit fetchSubmodules deepClone branchName postFetch;
 
   GIT_SSL_CAINFO = "${cacert}/etc/ssl/certs/ca-bundle.crt";
 
-  impureEnvVars = [
-    # We borrow these environment variables from the caller to allow
-    # easy proxy configuration.  This is impure, but a fixed-output
-    # derivation like fetchurl is allowed to do so since its result is
-    # by definition pure.
-    "http_proxy" "https_proxy" "ftp_proxy" "all_proxy" "no_proxy"
-    ];
+  impureEnvVars = stdenvNoCC.lib.fetchers.proxyImpureEnvVars ++ [
+    "GIT_PROXY_COMMAND" "SOCKS_SERVER"
+  ];
 
   preferLocalBuild = true;
 }

@@ -21,6 +21,8 @@ stdenv.mkDerivation {
 
   sourceRoot=".";
 
+  hardeningDisable = [ "format" ];
+
   buildPhase = "./cc";
   installPhase = ''
     mkdir -p "$out"/{bin,share/doc/mi2ly}
@@ -34,5 +36,6 @@ stdenv.mkDerivation {
     license = stdenv.lib.licenses.gpl2Plus ;
     maintainers = [stdenv.lib.maintainers.raskin];
     platforms = stdenv.lib.platforms.linux;
+    broken = true; # 2018-04-11
   };
 }

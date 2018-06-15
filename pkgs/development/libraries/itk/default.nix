@@ -1,30 +1,34 @@
-{stdenv, fetchurl, cmake, libX11, libuuid, xz}:
+{ stdenv, fetchurl, fetchpatch, cmake, libX11, libuuid, xz, vtk }:
 
 stdenv.mkDerivation rec {
-  name = "itk-4.0.0";
+  name = "itk-4.13.0";
 
   src = fetchurl {
-    url = mirror://sourceforge/itk/InsightToolkit-4.0.0.tar.xz;
-    sha256 = "05z49sw612cbyiaghcsda0xylrkf06jh81ql79si5632w1hpgbd9";
+    url = mirror://sourceforge/itk/InsightToolkit-4.13.0.tar.xz;
+    sha256 = "09d1gmqx3wbdfgwf7r91r12m2vknviv0i8wxwh2q9w1vrpizrczy";
   };
 
   cmakeFlags = [
     "-DBUILD_TESTING=OFF"
     "-DBUILD_EXAMPLES=OFF"
     "-DBUILD_SHARED_LIBS=ON"
-    "-DCMAKE_CXX_FLAGS=-fPIC"
+    "-DModule_ITKMINC=ON"
+    "-DModule_ITKIOMINC=ON"
+    "-DModule_ITKIOTransformMINC=ON"
+    "-DModule_ITKVtkGlue=ON"
+    "-DModule_ITKReview=ON"
   ];
 
   enableParallelBuilding = true;
 
   nativeBuildInputs = [ cmake xz ];
-  buildInputs = [ libX11 libuuid ];
+  buildInputs = [ libX11 libuuid vtk ];
 
   meta = {
     description = "Insight Segmentation and Registration Toolkit";
     homepage = http://www.itk.org/;
     license = stdenv.lib.licenses.asl20;
     maintainers = with stdenv.lib.maintainers; [viric];
-    platforms = with stdenv.lib.platforms; linux;
+    platforms = with stdenv.lib.platforms; linux ++ darwin;
   };
 }

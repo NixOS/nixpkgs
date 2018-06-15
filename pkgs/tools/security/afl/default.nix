@@ -1,5 +1,6 @@
 { stdenv, fetchurl, bash, callPackage, makeWrapper
-, clang, llvm, which, libcgroup }:
+, clang, llvm, which, libcgroup
+}:
 
 let
   afl-qemu = callPackage ./qemu.nix {};
@@ -7,23 +8,24 @@ let
     else if stdenv.system == "i686-linux" then "qemu-i386"
     else throw "afl: no support for ${stdenv.system}!";
 in
+
 stdenv.mkDerivation rec {
   name    = "afl-${version}";
-  version = "1.94b";
+  version = "2.52b";
 
   src = fetchurl {
     url    = "http://lcamtuf.coredump.cx/afl/releases/${name}.tgz";
-    sha256 = "1c36yz3ajd66m3c5aiai3wf59pzxivn80cvlib3dw45d4zqiymqp";
+    sha256 = "0ig0ij4n1pwry5dw1hk4q88801jzzy2cric6y2gd6560j55lnqa3";
   };
 
   # Note: libcgroup isn't needed for building, just for the afl-cgroup
   # script.
-  buildInputs  = [ makeWrapper clang llvm which ];
+  buildInputs  = [ makeWrapper llvm which ];
 
   buildPhase   = ''
     make PREFIX=$out
     cd llvm_mode
-    make PREFIX=$out CC=${clang}/bin/clang CXX=${clang}/bin/clang++
+    make PREFIX=$out
     cd ..
   '';
   installPhase = ''
@@ -51,10 +53,13 @@ stdenv.mkDerivation rec {
     for x in $out/bin/afl-clang-fast $out/bin/afl-clang-fast++; do
       wrapProgram $x \
         --prefix AFL_PATH : "$out/lib/afl" \
-        --prefix AFL_CC   : "${clang}/bin/clang" \
-        --prefix AFL_CXX  : "${clang}/bin/clang++"
+        --run 'export AFL_CC=''${AFL_CC:-${clang}/bin/clang} AFL_CXX=''${AFL_CXX:-${clang}/bin/clang++}'
     done
   '';
+
+  passthru = {
+    qemu = afl-qemu;
+  };
 
   meta = {
     description = "Powerful fuzzer via genetic algorithms and instrumentation";
@@ -70,7 +75,7 @@ stdenv.mkDerivation rec {
     '';
     homepage    = "http://lcamtuf.coredump.cx/afl/";
     license     = stdenv.lib.licenses.asl20;
-    platforms   = stdenv.lib.platforms.linux;
+    platforms   = ["x86_64-linux" "i686-linux"];
     maintainers = [ stdenv.lib.maintainers.thoughtpolice ];
   };
 }

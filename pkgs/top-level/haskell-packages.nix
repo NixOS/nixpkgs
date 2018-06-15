@@ -1,281 +1,210 @@
-{ pkgs, callPackage, stdenv }:
+{ buildPackages, pkgs
+, newScope, stdenv
+, buildPlatform, targetPlatform
+}:
 
-rec {
+let
+  # These are attributes in compiler and packages that don't support integer-simple.
+  integerSimpleExcludes = [
+    "ghc7103Binary"
+    "ghc821Binary"
+    "ghcjs"
+    "ghcjs710"
+    "ghcjs80"
+    "ghcjs82"
+    "ghcjs84"
+    "integer-simple"
+  ];
 
-  lib = import ../development/haskell-modules/lib.nix { inherit pkgs; };
+  haskellLib = import ../development/haskell-modules/lib.nix {
+    inherit (pkgs) lib;
+    inherit pkgs;
+  };
+
+  callPackage = newScope {
+    inherit haskellLib;
+    overrides = pkgs.haskell.packageOverrides;
+  };
+
+  bootstrapPackageSet = self: super: {
+    mkDerivation = drv: super.mkDerivation (drv // {
+      doCheck = false;
+      doHaddock = false;
+      enableExecutableProfiling = false;
+      enableLibraryProfiling = false;
+      enableSharedExecutables = false;
+      enableSharedLibraries = false;
+    });
+  };
+
+in rec {
+  lib = haskellLib;
 
   compiler = {
 
-    ghc6102Binary = callPackage ../development/compilers/ghc/6.10.2-binary.nix { gmp = pkgs.gmp4; };
-    ghc704Binary = callPackage ../development/compilers/ghc/7.0.4-binary.nix ({ gmp = pkgs.gmp4; } // stdenv.lib.optionalAttrs stdenv.isDarwin {
-      libiconv = pkgs.darwin.libiconv;
-    });
-    ghc742Binary = callPackage ../development/compilers/ghc/7.4.2-binary.nix ({ gmp = pkgs.gmp4; } // stdenv.lib.optionalAttrs stdenv.isDarwin {
-      libiconv = pkgs.darwin.libiconv;
-    });
+    ghc7103Binary = callPackage ../development/compilers/ghc/7.10.3-binary.nix { };
+    ghc821Binary = callPackage ../development/compilers/ghc/8.2.1-binary.nix { };
 
-    ghc6104 = callPackage ../development/compilers/ghc/6.10.4.nix { ghc = compiler.ghc6102Binary; };
-    ghc6123 = callPackage ../development/compilers/ghc/6.12.3.nix { ghc = compiler.ghc6102Binary; };
-    ghc704 = callPackage ../development/compilers/ghc/7.0.4.nix ({ ghc = compiler.ghc704Binary; } // stdenv.lib.optionalAttrs stdenv.isDarwin {
-      libiconv = pkgs.darwin.libiconv;
-    });
-    ghc722 = callPackage ../development/compilers/ghc/7.2.2.nix ({ ghc = compiler.ghc704Binary; } // stdenv.lib.optionalAttrs stdenv.isDarwin {
-      libiconv = pkgs.darwin.libiconv;
-    });
-    ghc742 = callPackage ../development/compilers/ghc/7.4.2.nix ({ ghc = compiler.ghc704Binary; } // stdenv.lib.optionalAttrs stdenv.isDarwin {
-      libiconv = pkgs.darwin.libiconv;
-    });
-    ghc763 = callPackage ../development/compilers/ghc/7.6.3.nix ({ ghc = compiler.ghc704Binary; } // stdenv.lib.optionalAttrs stdenv.isDarwin {
-      libiconv = pkgs.darwin.libiconv;
-    });
-    ghc783 = callPackage ../development/compilers/ghc/7.8.3.nix ({ ghc = compiler.ghc742Binary; } // stdenv.lib.optionalAttrs stdenv.isDarwin {
-      libiconv = pkgs.darwin.libiconv;
-    });
-    ghc784 = callPackage ../development/compilers/ghc/7.8.4.nix ({ ghc = compiler.ghc742Binary; } // stdenv.lib.optionalAttrs stdenv.isDarwin {
-      libiconv = pkgs.darwin.libiconv;
-    });
-    ghc7102 = callPackage ../development/compilers/ghc/7.10.2.nix ({ ghc = compiler.ghc784; inherit (packages.ghc784) hscolour; } // stdenv.lib.optionalAttrs stdenv.isDarwin {
-      libiconv = pkgs.darwin.libiconv;
-    });
-    ghcHEAD = callPackage ../development/compilers/ghc/head.nix ({ inherit (packages.ghc784) ghc alex happy; } // stdenv.lib.optionalAttrs stdenv.isDarwin {
-      libiconv = pkgs.darwin.libiconv;
-    });
-    ghcNokinds = callPackage ../development/compilers/ghc/nokinds.nix ({ inherit (packages.ghc784) ghc alex happy; } // stdenv.lib.optionalAttrs stdenv.isDarwin {
-      libiconv = pkgs.darwin.libiconv;
-    });
-
-    ghcjs = packages.ghc7102.callPackage ../development/compilers/ghcjs {
-      ghc = compiler.ghc7102;
+    ghc7103 = callPackage ../development/compilers/ghc/7.10.3.nix rec {
+      bootPkgs = packages.ghc7103Binary;
+      inherit (bootPkgs) hscolour;
+      buildLlvmPackages = buildPackages.llvmPackages_35;
+      llvmPackages = pkgs.llvmPackages_35;
+    };
+    ghc802 = callPackage ../development/compilers/ghc/8.0.2.nix rec {
+      bootPkgs = packages.ghc7103Binary;
+      inherit (bootPkgs) hscolour;
+      sphinx = pkgs.python27Packages.sphinx;
+      buildLlvmPackages = buildPackages.llvmPackages_37;
+      llvmPackages = pkgs.llvmPackages_37;
+    };
+    ghc822 = callPackage ../development/compilers/ghc/8.2.2.nix rec {
+      bootPkgs = packages.ghc821Binary;
+      inherit (bootPkgs) hscolour alex happy;
+      inherit buildPlatform targetPlatform;
+      sphinx = pkgs.python3Packages.sphinx;
+      buildLlvmPackages = buildPackages.llvmPackages_39;
+      llvmPackages = pkgs.llvmPackages_39;
+    };
+    ghc842 = callPackage ../development/compilers/ghc/8.4.2.nix rec {
+      bootPkgs = packages.ghc821Binary;
+      inherit (bootPkgs) alex happy hscolour;
+      buildLlvmPackages = buildPackages.llvmPackages_5;
+      llvmPackages = pkgs.llvmPackages_5;
+    };
+    ghc843 = callPackage ../development/compilers/ghc/8.4.3.nix rec {
+      bootPkgs = packages.ghc821Binary;
+      inherit (bootPkgs) alex happy hscolour;
+      buildLlvmPackages = buildPackages.llvmPackages_5;
+      llvmPackages = pkgs.llvmPackages_5;
+    };
+    ghcHEAD = callPackage ../development/compilers/ghc/head.nix rec {
+      bootPkgs = packages.ghc821Binary;
+      inherit (bootPkgs) alex happy hscolour;
+      buildLlvmPackages = buildPackages.llvmPackages_5;
+      llvmPackages = pkgs.llvmPackages_5;
+    };
+    ghcjs = compiler.ghcjs82;
+    ghcjs710 = packages.ghc7103.callPackage ../development/compilers/ghcjs {
+      bootPkgs = packages.ghc7103;
+      inherit (pkgs) cabal-install;
+    };
+    ghcjs80 = packages.ghc802.callPackage ../development/compilers/ghcjs/head.nix {
+      bootPkgs = packages.ghc802;
+      inherit (pkgs) cabal-install;
+    };
+    ghcjs82 = callPackage ../development/compilers/ghcjs-ng rec {
+      bootPkgs = packages.ghc822;
+      inherit (bootPkgs) alex happy;
+      ghcjsSrcJson = ../development/compilers/ghcjs-ng/8.2/git.json;
+      stage0 = ../development/compilers/ghcjs-ng/8.2/stage0.nix;
+    };
+    ghcjs84 = callPackage ../development/compilers/ghcjs-ng rec {
+      bootPkgs = packages.ghc842;
+      inherit (bootPkgs) alex happy;
+      ghcjsSrcJson = ../development/compilers/ghcjs-ng/8.4/git.json;
+      stage0 = ../development/compilers/ghcjs-ng/8.4/stage0.nix;
+      ghcjsDepOverrides = callPackage ../development/compilers/ghcjs-ng/8.4/dep-overrides.nix {};
     };
 
-    jhc = callPackage ../development/compilers/jhc {
-      inherit (packages.ghc763) ghcWithPackages;
-    };
-
-    uhc = callPackage ../development/compilers/uhc/default.nix ({
-      stdenv = pkgs.clangStdenv;
-      inherit (pkgs.haskellPackages) ghcWithPackages;
-    });
-
+    # The integer-simple attribute set contains all the GHC compilers
+    # build with integer-simple instead of integer-gmp.
+    integer-simple = let
+      integerSimpleGhcNames = pkgs.lib.filter
+        (name: ! builtins.elem name integerSimpleExcludes)
+        (pkgs.lib.attrNames compiler);
+    in pkgs.recurseIntoAttrs (pkgs.lib.genAttrs
+      integerSimpleGhcNames
+      (name: compiler."${name}".override { enableIntegerSimple = true; }));
   };
 
-  packages = {
+  # Default overrides that are applied to all package sets.
+  packageOverrides = self : super : {};
 
-    # Support for this compiler is broken, because it can't deal with directory-based package databases.
-    # ghc6104 = callPackage ../development/haskell-modules { ghc = compiler.ghc6104; };
-    ghc6123 = callPackage ../development/haskell-modules {
-      ghc = compiler.ghc6123;
-      compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-6.12.x.nix { };
-    };
-    ghc704 = callPackage ../development/haskell-modules {
-      ghc = compiler.ghc704;
-      compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-7.0.x.nix { };
-    };
-    ghc722 = callPackage ../development/haskell-modules {
-      ghc = compiler.ghc722;
-      compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-7.2.x.nix { };
-    };
-    ghc742 = callPackage ../development/haskell-modules {
-      ghc = compiler.ghc742;
-      compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-7.4.x.nix { };
-    };
-    ghc763 = callPackage ../development/haskell-modules {
-      ghc = compiler.ghc763;
-      compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-7.6.x.nix { };
-    };
-    ghc783 = callPackage ../development/haskell-modules {
-      ghc = compiler.ghc783;
-      compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-7.8.x.nix { };
-    };
-    ghc784 = callPackage ../development/haskell-modules {
-      ghc = compiler.ghc784;
-      compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-7.8.x.nix { };
-    };
-    ghc7102 = callPackage ../development/haskell-modules {
-      ghc = compiler.ghc7102;
+  # Always get compilers from `buildPackages`
+  packages = let bh = buildPackages.haskell; in {
+
+    ghc7103 = callPackage ../development/haskell-modules {
+      buildHaskellPackages = bh.packages.ghc7103;
+      ghc = bh.compiler.ghc7103;
       compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-7.10.x.nix { };
     };
+    ghc7103Binary = callPackage ../development/haskell-modules {
+      buildHaskellPackages = bh.packages.ghc7103Binary;
+      ghc = bh.compiler.ghc7103Binary;
+      compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-7.10.x.nix { };
+      packageSetConfig = bootstrapPackageSet;
+    };
+    ghc802 = callPackage ../development/haskell-modules {
+      buildHaskellPackages = bh.packages.ghc802;
+      ghc = bh.compiler.ghc802;
+      compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-8.0.x.nix { };
+    };
+    ghc821Binary = callPackage ../development/haskell-modules {
+      buildHaskellPackages = bh.packages.ghc821Binary;
+      ghc = bh.compiler.ghc821Binary;
+      compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-8.2.x.nix { };
+      packageSetConfig = bootstrapPackageSet;
+    };
+    ghc822 = callPackage ../development/haskell-modules {
+      buildHaskellPackages = bh.packages.ghc822;
+      ghc = bh.compiler.ghc822;
+      compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-8.2.x.nix { };
+    };
+    ghc842 = callPackage ../development/haskell-modules {
+      buildHaskellPackages = bh.packages.ghc842;
+      ghc = bh.compiler.ghc842;
+      compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-8.4.x.nix { };
+    };
+    ghc843 = callPackage ../development/haskell-modules {
+      buildHaskellPackages = bh.packages.ghc843;
+      ghc = bh.compiler.ghc843;
+      compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-8.4.x.nix { };
+    };
     ghcHEAD = callPackage ../development/haskell-modules {
-      ghc = compiler.ghcHEAD;
+      buildHaskellPackages = bh.packages.ghcHEAD;
+      ghc = bh.compiler.ghcHEAD;
       compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-head.nix { };
     };
-    ghcNokinds = callPackage ../development/haskell-modules {
-      ghc = compiler.ghcNokinds;
-      compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-nokinds.nix { };
+    ghcjs = packages.ghcjs82;
+    ghcjs710 = callPackage ../development/haskell-modules rec {
+      buildHaskellPackages = ghc.bootPkgs;
+      ghc = bh.compiler.ghcjs710;
+      compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-7.10.x.nix { };
+      packageSetConfig = callPackage ../development/haskell-modules/configuration-ghcjs.nix { };
     };
-    ghcjs = callPackage ../development/haskell-modules {
-      ghc = compiler.ghcjs;
-      compilerConfig = callPackage ../development/haskell-modules/configuration-ghcjs.nix { };
+    ghcjs80 = callPackage ../development/haskell-modules rec {
+      buildHaskellPackages = ghc.bootPkgs;
+      ghc = bh.compiler.ghcjs80;
+      compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-8.0.x.nix { };
+      packageSetConfig = callPackage ../development/haskell-modules/configuration-ghcjs.nix { };
     };
-
-    lts-0_0 = packages.ghc783.override {
-      packageSetConfig = callPackage ../development/haskell-modules/configuration-lts-0.0.nix { };
+    ghcjs82 = callPackage ../development/haskell-modules rec {
+      buildHaskellPackages = ghc.bootPkgs;
+      ghc = bh.compiler.ghcjs82;
+      compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-8.2.x.nix { };
+      packageSetConfig = callPackage ../development/haskell-modules/configuration-ghcjs.nix { };
     };
-    lts-0_1 = packages.ghc783.override {
-      packageSetConfig = callPackage ../development/haskell-modules/configuration-lts-0.1.nix { };
-    };
-    lts-0_2 = packages.ghc783.override {
-      packageSetConfig = callPackage ../development/haskell-modules/configuration-lts-0.2.nix { };
-    };
-    lts-0_3 = packages.ghc783.override {
-      packageSetConfig = callPackage ../development/haskell-modules/configuration-lts-0.3.nix { };
-    };
-    lts-0_4 = packages.ghc783.override {
-      packageSetConfig = callPackage ../development/haskell-modules/configuration-lts-0.4.nix { };
-    };
-    lts-0_5 = packages.ghc783.override {
-      packageSetConfig = callPackage ../development/haskell-modules/configuration-lts-0.5.nix { };
-    };
-    lts-0_6 = packages.ghc783.override {
-      packageSetConfig = callPackage ../development/haskell-modules/configuration-lts-0.6.nix { };
-    };
-    lts-0_7 = packages.ghc783.override {
-      packageSetConfig = callPackage ../development/haskell-modules/configuration-lts-0.7.nix { };
+    ghcjs84 = callPackage ../development/haskell-modules rec {
+      buildHaskellPackages = ghc.bootPkgs;
+      ghc = bh.compiler.ghcjs84;
+      compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-8.4.x.nix { };
+      packageSetConfig = callPackage ../development/haskell-modules/configuration-ghcjs.nix { };
     };
 
-    lts-1_0 = packages.ghc784.override {
-      packageSetConfig = callPackage ../development/haskell-modules/configuration-lts-1.0.nix { };
-    };
-    lts-1_1 = packages.ghc784.override {
-      packageSetConfig = callPackage ../development/haskell-modules/configuration-lts-1.1.nix { };
-    };
-    lts-1_2 = packages.ghc784.override {
-      packageSetConfig = callPackage ../development/haskell-modules/configuration-lts-1.2.nix { };
-    };
-    lts-1_4 = packages.ghc784.override {
-      packageSetConfig = callPackage ../development/haskell-modules/configuration-lts-1.4.nix { };
-    };
-    lts-1_5 = packages.ghc784.override {
-      packageSetConfig = callPackage ../development/haskell-modules/configuration-lts-1.5.nix { };
-    };
-    lts-1_7 = packages.ghc784.override {
-      packageSetConfig = callPackage ../development/haskell-modules/configuration-lts-1.7.nix { };
-    };
-    lts-1_8 = packages.ghc784.override {
-      packageSetConfig = callPackage ../development/haskell-modules/configuration-lts-1.8.nix { };
-    };
-    lts-1_9 = packages.ghc784.override {
-      packageSetConfig = callPackage ../development/haskell-modules/configuration-lts-1.9.nix { };
-    };
-    lts-1_10 =packages.ghc784.override {
-      packageSetConfig = callPackage ../development/haskell-modules/configuration-lts-1.10.nix { };
-    };
-    lts-1_11 =packages.ghc784.override {
-      packageSetConfig = callPackage ../development/haskell-modules/configuration-lts-1.11.nix { };
-    };
-    lts-1_12 =packages.ghc784.override {
-      packageSetConfig = callPackage ../development/haskell-modules/configuration-lts-1.12.nix { };
-    };
-    lts-1_13 =packages.ghc784.override {
-      packageSetConfig = callPackage ../development/haskell-modules/configuration-lts-1.13.nix { };
-    };
-    lts-1_14 =packages.ghc784.override {
-      packageSetConfig = callPackage ../development/haskell-modules/configuration-lts-1.14.nix { };
-    };
-    lts-1_15 =packages.ghc784.override {
-      packageSetConfig = callPackage ../development/haskell-modules/configuration-lts-1.15.nix { };
-    };
-
-    lts-2_0 = packages.ghc784.override {
-      packageSetConfig = callPackage ../development/haskell-modules/configuration-lts-2.0.nix { };
-    };
-    lts-2_1 = packages.ghc784.override {
-      packageSetConfig = callPackage ../development/haskell-modules/configuration-lts-2.1.nix { };
-    };
-    lts-2_2 = packages.ghc784.override {
-      packageSetConfig = callPackage ../development/haskell-modules/configuration-lts-2.2.nix { };
-    };
-    lts-2_3 = packages.ghc784.override {
-      packageSetConfig = callPackage ../development/haskell-modules/configuration-lts-2.3.nix { };
-    };
-    lts-2_4 = packages.ghc784.override {
-      packageSetConfig = callPackage ../development/haskell-modules/configuration-lts-2.4.nix { };
-    };
-    lts-2_5 = packages.ghc784.override {
-      packageSetConfig = callPackage ../development/haskell-modules/configuration-lts-2.5.nix { };
-    };
-    lts-2_6 = packages.ghc784.override {
-      packageSetConfig = callPackage ../development/haskell-modules/configuration-lts-2.6.nix { };
-    };
-    lts-2_7 = packages.ghc784.override {
-      packageSetConfig = callPackage ../development/haskell-modules/configuration-lts-2.7.nix { };
-    };
-    lts-2_8 = packages.ghc784.override {
-      packageSetConfig = callPackage ../development/haskell-modules/configuration-lts-2.8.nix { };
-    };
-    lts-2_9 = packages.ghc784.override {
-      packageSetConfig = callPackage ../development/haskell-modules/configuration-lts-2.9.nix { };
-    };
-    lts-2_10 = packages.ghc784.override {
-      packageSetConfig = callPackage ../development/haskell-modules/configuration-lts-2.10.nix { };
-    };
-    lts-2_11 = packages.ghc784.override {
-      packageSetConfig = callPackage ../development/haskell-modules/configuration-lts-2.11.nix { };
-    };
-    lts-2_12 = packages.ghc784.override {
-      packageSetConfig = callPackage ../development/haskell-modules/configuration-lts-2.12.nix { };
-    };
-    lts-2_13 = packages.ghc784.override {
-      packageSetConfig = callPackage ../development/haskell-modules/configuration-lts-2.13.nix { };
-    };
-    lts-2_14 = packages.ghc784.override {
-      packageSetConfig = callPackage ../development/haskell-modules/configuration-lts-2.14.nix { };
-    };
-    lts-2_15 = packages.ghc784.override {
-      packageSetConfig = callPackage ../development/haskell-modules/configuration-lts-2.15.nix { };
-    };
-    lts-2_16 = packages.ghc784.override {
-      packageSetConfig = callPackage ../development/haskell-modules/configuration-lts-2.16.nix { };
-    };
-    lts-2_17 = packages.ghc784.override {
-      packageSetConfig = callPackage ../development/haskell-modules/configuration-lts-2.17.nix { };
-    };
-    lts-2_18 = packages.ghc784.override {
-      packageSetConfig = callPackage ../development/haskell-modules/configuration-lts-2.18.nix { };
-    };
-    lts-2_19 = packages.ghc784.override {
-      packageSetConfig = callPackage ../development/haskell-modules/configuration-lts-2.19.nix { };
-    };
-    lts-2_20 = packages.ghc784.override {
-      packageSetConfig = callPackage ../development/haskell-modules/configuration-lts-2.20.nix { };
-    };
-    lts-2_21 = packages.ghc784.override {
-      packageSetConfig = callPackage ../development/haskell-modules/configuration-lts-2.21.nix { };
-    };
-    lts-2_22 = packages.ghc784.override {
-      packageSetConfig = callPackage ../development/haskell-modules/configuration-lts-2.22.nix { };
-    };
-
-    lts-3_0 = packages.ghc7102.override {
-      packageSetConfig = callPackage ../development/haskell-modules/configuration-lts-3.0.nix { };
-    };
-    lts-3_1 = packages.ghc7102.override {
-      packageSetConfig = callPackage ../development/haskell-modules/configuration-lts-3.1.nix { };
-    };
-    lts-3_2 = packages.ghc7102.override {
-      packageSetConfig = callPackage ../development/haskell-modules/configuration-lts-3.2.nix { };
-    };
-    lts-3_3 = packages.ghc7102.override {
-      packageSetConfig = callPackage ../development/haskell-modules/configuration-lts-3.3.nix { };
-    };
-    lts-3_4 = packages.ghc7102.override {
-      packageSetConfig = callPackage ../development/haskell-modules/configuration-lts-3.4.nix { };
-    };
-    lts-3_5 = packages.ghc7102.override {
-      packageSetConfig = callPackage ../development/haskell-modules/configuration-lts-3.5.nix { };
-    };
-    lts-3_6 = packages.ghc7102.override {
-      packageSetConfig = callPackage ../development/haskell-modules/configuration-lts-3.6.nix { };
-    };
-    lts-3_7 = packages.ghc7102.override {
-      packageSetConfig = callPackage ../development/haskell-modules/configuration-lts-3.7.nix { };
-    };
-    lts-3_8 = packages.ghc7102.override {
-      packageSetConfig = callPackage ../development/haskell-modules/configuration-lts-3.8.nix { };
-    };
-    lts-3_9 = packages.ghc7102.override {
-      packageSetConfig = callPackage ../development/haskell-modules/configuration-lts-3.9.nix { };
-    };
+    # The integer-simple attribute set contains package sets for all the GHC compilers
+    # using integer-simple instead of integer-gmp.
+    integer-simple = let
+      integerSimpleGhcNames = pkgs.lib.filter
+        (name: ! builtins.elem name integerSimpleExcludes)
+        (pkgs.lib.attrNames packages);
+    in pkgs.lib.genAttrs integerSimpleGhcNames (name: packages."${name}".override {
+      ghc = bh.compiler.integer-simple."${name}";
+      overrides = _self : _super : {
+        integer-simple = null;
+        integer-gmp = null;
+      };
+    });
 
   };
 }

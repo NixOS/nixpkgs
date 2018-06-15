@@ -16,6 +16,8 @@ stdenv.mkDerivation rec {
       ln -fs ${samba}/lib/libsmbclient.so $out/lib/libsmbclient.so.0
     '';
 
+  hardeningDisable = [ "format" ];
+
   meta = {
     description = "Samba mounted via FUSE";
     homepage = http://www.ricardis.tudelft.nl/~vincent/fusesmb/;

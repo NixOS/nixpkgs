@@ -1,15 +1,26 @@
-{ stdenv, fetchurl, cmake, libX11, freetype, libjpeg, openal, libsndfile
-, glew, libXrandr, libXrender, udev
+{ stdenv, fetchurl, cmake, libX11, freetype, libjpeg, openal, flac, libvorbis
+, glew, libXrandr, libXrender, udev, xcbutilimage
+, IOKit, Foundation, AppKit, OpenAL
 }:
+
+let
+  version = "2.5.0";
+in
+
 stdenv.mkDerivation rec {
-  name = "sfml-2.2";
+  name = "sfml-${version}";
   src = fetchurl {
-    url = "https://github.com/LaurentGomila/SFML/archive/2.2.tar.gz";
-    sha256 = "1xbpzkqwgbsjdda7n3c2z5m16bhppz1z9rbhmhb8r1im7s95hd2l";
+    url = "https://github.com/SFML/SFML/archive/${version}.tar.gz";
+    sha256 = "1x3yvhdrln5b6h4g5r4mds76gq8zsxw6icxqpwqkmxsqcq5yviab";
   };
-  buildInputs = [ cmake libX11 freetype libjpeg openal libsndfile glew
-                  libXrandr libXrender udev
-                ];
+  buildInputs = [ cmake libX11 freetype libjpeg openal flac libvorbis glew
+                  libXrandr libXrender xcbutilimage
+                ] ++ stdenv.lib.optional stdenv.isLinux udev
+                  ++ stdenv.lib.optionals stdenv.isDarwin [ IOKit Foundation AppKit OpenAL ];
+  cmakeFlags = [ "-DSFML_INSTALL_PKGCONFIG_FILES=yes"
+                 "-DSFML_MISC_INSTALL_PREFIX=share/SFML"
+                 "-DSFML_BUILD_FRAMEWORKS=no"
+                 "-DSFML_USE_SYSTEM_DEPS=yes" ];
   meta = with stdenv.lib; {
     homepage = http://www.sfml-dev.org/;
     description = "Simple and fast multimedia library";
@@ -20,5 +31,6 @@ stdenv.mkDerivation rec {
     '';
     license = licenses.zlib;
     maintainers = [ maintainers.astsmtl ];
+    platforms = platforms.unix;
   };
 }

@@ -1,37 +1,40 @@
-{ stdenv, fetchurl, unzip }:
+{ stdenv, fetchurl, unzip
+, buildPlatform, hostPlatform
+}:
+
 let
-  s = # Generated upstream information
-  rec {
+  # Generated upstream information
+  s = rec {
     baseName="zpaqd";
-    version="633";
+    version="715";
     name="${baseName}-${version}";
-    hash="00zgc4mcmsd3d4afgzmrp6ymcyy8gb9kap815d5a3f9zhhzkz4dx";
-    url="http://mattmahoney.net/dc/zpaqd633.zip";
-    sha256="00zgc4mcmsd3d4afgzmrp6ymcyy8gb9kap815d5a3f9zhhzkz4dx";
+    hash="0868lynb45lm79yvx5f10lj5h6bfv0yck8whcls2j080vmk3n7rk";
+    url="http://mattmahoney.net/dc/zpaqd715.zip";
+    sha256="0868lynb45lm79yvx5f10lj5h6bfv0yck8whcls2j080vmk3n7rk";
   };
-  buildInputs = [
-    unzip
-  ];
-  isUnix = with stdenv; isLinux || isGNU || isDarwin || isFreeBSD || isOpenBSD;
-  isx86 = stdenv.isi686 || stdenv.isx86_64;
-  compileFlags = ""
-    + (stdenv.lib.optionalString isUnix " -Dunix -pthread ")
-    + (stdenv.lib.optionalString (!isx86) " -DNOJIT ")
-    + " -DNDEBUG "
-    + " -fPIC "
-    ;
+
+  compileFlags = stdenv.lib.concatStringsSep " " ([ "-O3" "-mtune=generic" "-DNDEBUG" ]
+    ++ stdenv.lib.optional (hostPlatform.isUnix) "-Dunix -pthread"
+    ++ stdenv.lib.optional (hostPlatform.isi686) "-march=i686"
+    ++ stdenv.lib.optional (hostPlatform.isx86_64) "-march=nocona"
+    ++ stdenv.lib.optional (!hostPlatform.isx86) "-DNOJIT");
 in
 stdenv.mkDerivation {
   inherit (s) name version;
-  inherit buildInputs;
+
   src = fetchurl {
     inherit (s) url sha256;
   };
+
   sourceRoot = ".";
+
+  buildInputs = [ unzip ];
+
   buildPhase = ''
-    g++ -shared -O3 libzpaq.cpp ${compileFlags} -o libzpaq.so
-    g++ -O3 -L. -L"$out/lib" -lzpaq zpaqd.cpp -o zpaqd
+    g++ ${compileFlags} -fPIC --shared libzpaq.cpp -o libzpaq.so
+    g++ ${compileFlags} -L. -L"$out/lib" -lzpaq zpaqd.cpp -o zpaqd
   '';
+
   installPhase = ''
     mkdir -p "$out"/{bin,include,lib,share/doc/zpaq}
     cp libzpaq.so "$out/lib"
@@ -39,11 +42,11 @@ stdenv.mkDerivation {
     cp libzpaq.h "$out/include"
     cp readme_zpaqd.txt "$out/share/doc/zpaq"
   '';
-  meta = {
-    inherit (s) version;
-    description = ''ZPAQ archiver decompressor and algorithm development tool'';
-    license = stdenv.lib.licenses.gpl3Plus ;
-    maintainers = [stdenv.lib.maintainers.raskin];
-    platforms = stdenv.lib.platforms.linux;
+
+  meta = with stdenv.lib; {
+    description = "ZPAQ archive (de)compressor and algorithm development tool";
+    license = licenses.gpl3Plus ;
+    maintainers = with maintainers; [ raskin ];
+    platforms = platforms.linux;
   };
 }

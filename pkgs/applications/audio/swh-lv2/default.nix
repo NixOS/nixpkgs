@@ -1,20 +1,21 @@
-{ stdenv, fetchgit, fftwSinglePrec, libxslt, lv2, pkgconfig }:
+{ stdenv, fetchurl, fftwSinglePrec, libxslt, lv2, pkgconfig }:
 
 stdenv.mkDerivation rec {
-  name = "swh-lv2-git-2013-05-17";
+  name = "swh-lv2-${version}";
+  version = "1.0.16";
 
-  src = fetchgit {
-    url = "https://github.com/swh/lv2.git";
-    rev = "978d5d8f549fd22048157a6d044af0faeaacbd7f";
-    sha256 = "3a9c042785b856623339aedafa5bc019b41beb8034d8594c7bbd6c9c26368065";
+  src = fetchurl {
+    url = "https://github.com/swh/lv2/archive/v${version}.tar.gz";
+    sha256 = "0j1mih0lp4fds07knp5i32in515sh0df1qi6694pmyz2wqnm295w";
   };
 
   patchPhase = ''
-    sed -e "s#xsltproc#${libxslt}/bin/xsltproc#" -i Makefile
+    sed -e "s#xsltproc#${libxslt.bin}/bin/xsltproc#" -i Makefile
     sed -e "s#PREFIX = /usr/local#PREFIX = $out#" -i Makefile
   '';
 
-  buildInputs = [ fftwSinglePrec lv2 pkgconfig ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ fftwSinglePrec lv2 ];
 
   installPhase = "make install-system";
 

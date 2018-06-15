@@ -82,7 +82,7 @@ in stdenv.mkDerivation rec {
   '';
 
   meta = {
-    description = "load testing software for Web applications to realistically simulate user activity and analyze server behavior";
+    description = "Load testing software for Web applications to realistically simulate user activity and analyze server behavior";
 
     homepage = https://www.neotys.com/product/overview-neoload.html;
 

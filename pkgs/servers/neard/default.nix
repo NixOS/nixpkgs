@@ -1,15 +1,16 @@
-{ stdenv, fetchgit, autoreconfHook, pkgconfig, systemd, glib, dbus, libnl, pythonPackages }:
+{ stdenv, fetchurl, autoreconfHook, pkgconfig, systemd, glib, dbus, libnl, pythonPackages }:
 
 stdenv.mkDerivation rec {
-  name = "neard-0.15-post-git-20510929";
+  name = "neard-0.16";
 
-  src = fetchgit {
-    url    = "https://git.kernel.org/pub/scm/network/nfc/neard.git";
-    sha256 = "08327b536ad8460a08bdceeec48c561e75ca56e5e0ee034c40d02cd1545906c0";
+  src = fetchurl {
+    url = "https://git.kernel.org/pub/scm/network/nfc/neard.git/snapshot/${name}.tar.gz";
+    sha256 = "0bpdmyxvd3z54p95apz4bjb5jp8hbc04sicjapcryjwa8mh6pbil";
   };
 
-  buildInputs = [ autoreconfHook pkgconfig systemd glib dbus libnl pythonPackages.python pythonPackages.wrapPython ];
-  pythonPath = [ pythonPackages.pygobject pythonPackages.dbus pythonPackages.pygtk ];
+  nativeBuildInputs = [ autoreconfHook pkgconfig ];
+  buildInputs = [ systemd glib dbus libnl pythonPackages.python pythonPackages.wrapPython ];
+  pythonPath = [ pythonPackages.pygobject2 pythonPackages.dbus-python pythonPackages.pygtk ];
 
   configureFlags = [ "--disable-debug" "--enable-tools" "--enable-ese" "--with-systemdsystemunitdir=$out/lib/systemd/system" ];
 

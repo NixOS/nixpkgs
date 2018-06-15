@@ -1,15 +1,14 @@
-{stdenv, fetchurl, fetchgit, zip, unzip, firefox, bash}:
+{stdenv, fetchurl, fetchgit, fetchFromGitHub, zip, unzip, firefox, bash}:
 let
   s = # Generated upstream information
   rec {
     baseName="slimerjs";
-    version="0.9.6.2015.08.20";
+    version="1.0.0";
     name="${baseName}-${version}";
-    hash="0wry296iv63bmvm3qbkbgk42nbs80cbir0kv27v0ah5f6kvjc9cq";
-    #url="http://download.slimerjs.org/releases/0.9.6/slimerjs-0.9.6.zip";
-    url = "https://github.com/laurentj/slimerjs.git";
-    rev = "87e0ff1d666897754a914131d8f1744195ee4d7a";
-    sha256="0ifgr8pi40id7vcv8ipc754bys22bhij0kkhd691285x19f52alc";
+    owner = "laurentj";
+    repo = "${baseName}";
+    sha256="1w4sfrv520isbs7r1rlzl5y3idrpad7znw9fc92yz40jlwz7sxs4";
+    rev = "${version}";
   };
   buildInputs = [
     unzip zip
@@ -21,8 +20,11 @@ stdenv.mkDerivation {
   #src = fetchurl {
   #  inherit (s) url sha256;
   #};
-  src = fetchgit {
-    inherit (s) url sha256 rev;
+  #src = fetchgit {
+  #  inherit (s) url sha256 rev;
+  #};
+  src = fetchFromGitHub {
+    inherit (s) owner repo rev sha256;
   };
   preConfigure = ''
     test -d src && cd src
@@ -36,7 +38,7 @@ stdenv.mkDerivation {
     echo 'export SLIMERJSLAUNCHER=${firefox}/bin/firefox' >>  "$out/bin/slimerjs"
     echo "'$out/lib/slimerjs/slimerjs' \"\$@\"" >> "$out/bin/slimerjs"
     chmod a+x "$out/bin/slimerjs"
-    sed -e 's@MaxVersion=3[0-9][.]@MaxVersion=40.@' -i "$out/lib/slimerjs/application.ini"
+    sed -e 's@MaxVersion=[3456][0-9][.]@MaxVersion=99.@' -i "$out/lib/slimerjs/application.ini"
   '';
   meta = {
     inherit (s) version;

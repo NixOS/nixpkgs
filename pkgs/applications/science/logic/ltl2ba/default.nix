@@ -2,12 +2,19 @@
 
 stdenv.mkDerivation rec {
   name = "ltl2ba-${version}";
-  version = "1.1";
+  version = "1.2b1";
 
   src = fetchurl {
     url    = "http://www.lsv.ens-cachan.fr/~gastin/ltl2ba/${name}.tar.gz";
-    sha256 = "16z0gc7a9dkarwn0l6rvg5jdhw1q4qyn4501zlchy0zxqddz0sx6";
+    sha256 = "1f4jnkfkyj8lcc5qfqbiypfc11rhhpqqi6xs9xx5dysg6r6303wm";
   };
+
+  hardeningDisable = [ "format" ];
+
+  preConfigure = ''
+    substituteInPlace Makefile \
+    --replace "CC=gcc" ""
+  '';
 
   installPhase = ''
     mkdir -p $out/bin
@@ -15,10 +22,10 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    description = "fast translation from LTL formulae to Buchi automata";
+    description = "Fast translation from LTL formulae to Buchi automata";
     homepage    = "http://www.lsv.ens-cachan.fr/~gastin/ltl2ba";
     license     = stdenv.lib.licenses.gpl2Plus;
-    platforms   = stdenv.lib.platforms.linux;
+    platforms   = stdenv.lib.platforms.darwin ++ stdenv.lib.platforms.linux;
     maintainers = [ stdenv.lib.maintainers.thoughtpolice ];
   };
 }

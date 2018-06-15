@@ -36,7 +36,7 @@ let
   });
 in
 {
-    <xsl:for-each select="sdk:platform">
+    <xsl:for-each select="sdk:platform"><xsl:sort select="sdk:api-level" data-type="number"/>
   platform_<xsl:value-of select="sdk:api-level" /> = buildPlatform {
     name = "android-platform-<xsl:value-of select="sdk:version" />";
     src = fetchurl {
@@ -45,7 +45,7 @@ in
     };
     meta = {
       description = "<xsl:value-of select="sdk:description" />";
-<xsl:for-each select="sdk:desc-url">      url = <xsl:value-of select="." />;</xsl:for-each>
+<xsl:for-each select="sdk:desc-url">      homepage = <xsl:value-of select="." />;</xsl:for-each>
     };
   };
 </xsl:for-each>

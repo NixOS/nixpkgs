@@ -1,81 +1,62 @@
-{ stdenv, fetchurl, pkgconfig, perl, perlXMLParser, gtk, libXft
-, libpng, zlib, popt, boehmgc, libxml2, libxslt, glib, gtkmm
-, glibmm, libsigcxx, lcms, boost, gettext, makeWrapper, intltool
-, gsl, python, pyxml, lxml, poppler, imagemagick, libwpg, librevenge
-, libvisio, libcdr, libexif, unzip
-, boxMakerPlugin ? false # boxmaker plugin
+{ stdenv, fetchurl, fetchpatch, pkgconfig, perl, perlXMLParser, libXft
+, libpng, zlib, popt, boehmgc, libxml2, libxslt, glib, gtkmm2
+, glibmm, libsigcxx, lcms, boost, gettext, makeWrapper
+, gsl, python2, poppler, imagemagick, libwpg, librevenge
+, libvisio, libcdr, libexif, potrace, cmake
 }:
 
-let 
-
-boxmaker = fetchurl {
-  # http://www.inkscapeforum.com/viewtopic.php?f=11&t=10403
-  url = "http://www.keppel.demon.co.uk/111000/files/BoxMaker0.91.zip";
-  sha256 = "5c5697f43dc3a95468f61f479cb50b7e2b93379a1729abf19e4040ac9f43a1a8";
-};
-
+let
+  python2Env = python2.withPackages(ps: with ps; [ numpy lxml ]);
 in
 
 stdenv.mkDerivation rec {
-  name = "inkscape-0.91";
+  name = "inkscape-0.92.3";
 
   src = fetchurl {
-    url = "https://inkscape.global.ssl.fastly.net/media/resources/file/"
-        + "${name}.tar.bz2";
-    sha256 = "06ql3x732x2rlnanv0a8aharsnj91j5kplksg574090rks51z42d";
+    url = "https://media.inkscape.org/dl/resources/file/${name}.tar.bz2";
+    sha256 = "1chng2yw8dsjxc9gf92aqv7plj11cav8ax321wmakmv5bb09cch6";
   };
+
+  unpackPhase = ''
+    cp $src ${name}.tar.bz2
+    tar xvjf ${name}.tar.bz2 > /dev/null
+    cd ${name}
+  '';
 
   postPatch = ''
     patchShebangs share/extensions
-  ''
-  # Clang gets misdetected, so hardcode the right answer
-  + stdenv.lib.optionalString stdenv.cc.isClang ''
-    substituteInPlace src/ui/tool/node.h \
-      --replace "#if __cplusplus >= 201103L" "#if true"
-  '';
+    patchShebangs fix-roff-punct
 
-  propagatedBuildInputs = [
     # Python is used at run-time to execute scripts, e.g., those from
     # the "Effects" menu.
-    python pyxml lxml
+    substituteInPlace src/extension/implementation/script.cpp \
+      --replace '"python-interpreter", "python"' '"python-interpreter", "${python2Env}/bin/python"'
+  '';
+
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [
+    perl perlXMLParser libXft libpng zlib popt boehmgc
+    libxml2 libxslt glib gtkmm2 glibmm libsigcxx lcms boost gettext
+    makeWrapper gsl poppler imagemagick libwpg librevenge
+    libvisio libcdr libexif potrace cmake python2Env
   ];
 
-  buildInputs = [
-    pkgconfig perl perlXMLParser gtk libXft libpng zlib popt boehmgc
-    libxml2 libxslt glib gtkmm glibmm libsigcxx lcms boost gettext
-    makeWrapper intltool gsl poppler imagemagick libwpg librevenge
-    libvisio libcdr libexif
-  ] ++ stdenv.lib.optional boxMakerPlugin unzip;
-
   enableParallelBuilding = true;
-  doCheck = true;
 
   postInstall = ''
-    ${if boxMakerPlugin then "
-      mkdir -p $out/share/inkscape/extensions/
-      # boxmaker packaged version 0.91 in a directory called 0.85 ?!??
-      unzip ${boxmaker};
-      cp boxmake-upd-0.85/* $out/share/inkscape/extensions/
-      rm -Rf boxmake-upd-0.85
-      "
-    else 
-      ""
-    }
-
     # Make sure PyXML modules can be found at run-time.
-    for i in "$out/bin/"*
-    do
-      wrapProgram "$i" --prefix PYTHONPATH :      \
-       "$(toPythonPath ${pyxml}):$(toPythonPath ${lxml})"  \
-       --prefix PATH : ${python}/bin ||  \
-        exit 2
-    done
     rm "$out/share/icons/hicolor/icon-theme.cache"
+  '' + stdenv.lib.optionalString stdenv.isDarwin ''
+    install_name_tool -change $out/lib/libinkscape_base.dylib $out/lib/inkscape/libinkscape_base.dylib $out/bin/inkscape
+    install_name_tool -change $out/lib/libinkscape_base.dylib $out/lib/inkscape/libinkscape_base.dylib $out/bin/inkview
   '';
+
+  # 0.92.3 complains about an invalid conversion from const char * to char *
+  NIX_CFLAGS_COMPILE = " -fpermissive ";
 
   meta = with stdenv.lib; {
     license = "GPL";
-    homepage = http://www.inkscape.org;
+    homepage = https://www.inkscape.org;
     description = "Vector graphics editor";
     platforms = platforms.all;
     longDescription = ''

@@ -1,13 +1,15 @@
-{ stdenv, fetchurl, curl, jansson }:
+{ stdenv, fetchurl, curl, jansson, perl }:
 
 stdenv.mkDerivation rec {
   name = "cpuminer-${version}";
-  version = "2.4.2";
+  version = "2.5.0";
 
   src = fetchurl {
     url = "mirror://sourceforge/cpuminer/pooler-${name}.tar.gz";
-    sha256 = "1ds5yfxf25pd8y5z5gh689qb80m4dqw2dy3yx87hibnprlaiym0n";
+    sha256 = "1xalrfrk5hvh1jh9kbqhib2an82ypd46vl9glaxhz3rbjld7c5pa";
   };
+
+  patchPhase = if stdenv.cc.isClang then "${perl}/bin/perl ./nomacro.pl" else null;
 
   buildInputs = [ curl jansson ];
 

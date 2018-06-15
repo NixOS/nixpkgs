@@ -1,40 +1,47 @@
-{ stdenv, fetchFromGitHub, buildPythonPackage, python27Packages, pkgs }:
+{ stdenv, fetchFromGitHub, python27Packages, glib, cairo, pango, pkgconfig, libxcb, xcbutilcursor }:
 
-buildPythonPackage rec {
+let cairocffi-xcffib = python27Packages.cairocffi.override {
+    withXcffib = true;
+  };
+in
+
+python27Packages.buildPythonApplication rec {
   name = "qtile-${version}";
-  version = "0.10.1";
+  version = "0.11.1";
 
   src = fetchFromGitHub {
     owner = "qtile";
     repo = "qtile";
     rev = "v${version}";
-    sha256 = "1g02lvk2cqy6w6y6nw6dnsmy4i9k4fyawyibpkf0a7a1nfrd6a99";
+    sha256 = "1jw6mh9m5yrijhm218lc51sc89lc2ihvyx30jhrkxy2mzllhjgrs";
   };
 
-  patches = [ ./restart_executable.patch ];
+  patches = [
+    ./0001-Substitution-vars-for-absolute-paths.patch
+    ./0002-Restore-PATH-and-PYTHONPATH.patch
+    ./0003-Restart-executable.patch
+  ];
 
   postPatch = ''
     substituteInPlace libqtile/manager.py --subst-var-by out $out
+    substituteInPlace libqtile/pangocffi.py --subst-var-by glib ${glib.out}
+    substituteInPlace libqtile/pangocffi.py --subst-var-by pango ${pango.out}
+    substituteInPlace libqtile/xcursors.py --subst-var-by xcb-cursor ${xcbutilcursor.out}
   '';
 
-  buildInputs = [ pkgs.pkgconfig pkgs.glib pkgs.xorg.libxcb pkgs.cairo pkgs.pango python27Packages.xcffib ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ glib libxcb cairo pango python27Packages.xcffib ];
 
-  cairocffi-xcffib = python27Packages.cairocffi.override {
-    LD_LIBRARY_PATH = "${pkgs.xorg.libxcb}/lib:${pkgs.cairo}/lib";
-    pythonPath = [ python27Packages.xcffib ];
-  };
-
-  pythonPath = with python27Packages; [ xcffib cairocffi-xcffib trollius readline ];
-
-  LD_LIBRARY_PATH = "${pkgs.xorg.libxcb}/lib:${pkgs.cairo}/lib";
+  pythonPath = with python27Packages; [ xcffib cairocffi-xcffib trollius ];
 
   postInstall = ''
     wrapProgram $out/bin/qtile \
-      --prefix LD_LIBRARY_PATH : ${pkgs.xorg.libxcb}/lib \
-      --prefix LD_LIBRARY_PATH : ${pkgs.glib}/lib \
-      --prefix LD_LIBRARY_PATH : ${pkgs.cairo}/lib \
-      --prefix LD_LIBRARY_PATH : ${pkgs.pango}/lib
+      --run 'export QTILE_WRAPPER=$0' \
+      --run 'export QTILE_SAVED_PYTHONPATH=$PYTHONPATH' \
+      --run 'export QTILE_SAVED_PATH=$PATH'
   '';
+
+  doCheck = false; # Requires X server.
 
   meta = with stdenv.lib; {
     homepage = http://www.qtile.org/;
@@ -44,4 +51,3 @@ buildPythonPackage rec {
     maintainers = with maintainers; [ kamilchm ];
   };
 }
-

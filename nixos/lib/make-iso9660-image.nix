@@ -1,4 +1,4 @@
-{ stdenv, perl, pathsFromGraph, xorriso, syslinux
+{ stdenv, perl, closureInfo, xorriso, syslinux
 
 , # The file name of the resulting ISO image.
   isoName ? "cd.iso"
@@ -22,7 +22,7 @@
 , # Whether this should be an efi-bootable El-Torito CD.
   efiBootable ? false
 
-, # Wheter this should be an hybrid CD (bootable from USB as well as CD).
+, # Whether this should be an hybrid CD (bootable from USB as well as CD).
   usbBootable ? false
 
 , # The path (in the ISO file system) of the boot image.
@@ -39,7 +39,6 @@
 
 , # The volume ID.
   volumeID ? ""
-
 }:
 
 assert bootable -> bootImage != "";
@@ -47,11 +46,11 @@ assert efiBootable -> efiBootImage != "";
 assert usbBootable -> isohybridMbrImage != "";
 
 stdenv.mkDerivation {
-  name = "iso9660-image";
+  name = isoName;
   builder = ./make-iso9660-image.sh;
-  buildInputs = [perl xorriso syslinux];
+  buildInputs = [ xorriso syslinux ];
 
-  inherit isoName bootable bootImage compressImage volumeID pathsFromGraph efiBootImage efiBootable isohybridMbrImage usbBootable;
+  inherit isoName bootable bootImage compressImage volumeID efiBootImage efiBootable isohybridMbrImage usbBootable;
 
   # !!! should use XML.
   sources = map (x: x.source) contents;
@@ -62,6 +61,5 @@ stdenv.mkDerivation {
   symlinks = map (x: x.symlink) storeContents;
 
   # For obtaining the closure of `storeContents'.
-  exportReferencesGraph =
-    map (x: [("closure-" + baseNameOf x.object) x.object]) storeContents;
+  closureInfo = closureInfo { rootPaths = map (x: x.object) storeContents; };
 }

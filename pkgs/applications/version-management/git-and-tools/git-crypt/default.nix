@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, openssl }:
+{ fetchFromGitHub, git, gnupg1compat, makeWrapper, openssl, stdenv }:
 
 stdenv.mkDerivation rec {
 
@@ -12,15 +12,21 @@ stdenv.mkDerivation rec {
     inherit name;
   };
 
-  buildInputs = [ openssl ];
+  buildInputs = [ openssl makeWrapper ];
+
+  patchPhase = ''
+    substituteInPlace commands.cpp \
+      --replace '(escape_shell_arg(our_exe_path()))' '= "git-crypt"'
+  '';
 
   installPhase = ''
     make install PREFIX=$out
+    wrapProgram $out/bin/* --prefix PATH : $out/bin:${git}/bin:${gnupg1compat}/bin
   '';
 
-  meta = {
-    homepage = "https://www.agwa.name/projects/git-crypt";
-    description = "transparent file encryption in git";
+  meta = with stdenv.lib; {
+    homepage = https://www.agwa.name/projects/git-crypt;
+    description = "Transparent file encryption in git";
     longDescription = ''
       git-crypt enables transparent encryption and decryption of files in a git
       repository. Files which you choose to protect are encrypted when
@@ -33,9 +39,10 @@ stdenv.mkDerivation rec {
       entire repository.
     '';
     downloadPage = "https://github.com/AGWA/git-crypt/releases";
-    license = stdenv.lib.licenses.gpl3;
+    license = licenses.gpl3;
     version = "0.5.0";
-    maintainers = [ "Desmond O. Chang <dochang@gmail.com>" ];
+    maintainers = [ maintainers.dochang ];
+    platforms = platforms.unix;
   };
 
 }

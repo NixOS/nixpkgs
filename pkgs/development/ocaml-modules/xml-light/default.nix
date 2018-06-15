@@ -35,9 +35,9 @@ stdenv.mkDerivation {
       entirely written in OCaml, hence it does not require additional C
       library.
     '';
-    homepage = "http://tech.motion-twin.com/xmllight.html";
+    homepage = http://tech.motion-twin.com/xmllight.html;
     license = stdenv.lib.licenses.lgpl21;
     maintainers = [ stdenv.lib.maintainers.romildo ];
-    platforms = ocaml.meta.platforms;
+    platforms = ocaml.meta.platforms or [];
   };
 }

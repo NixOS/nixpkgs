@@ -1,25 +1,25 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, pkgs, utils, ... }:
 
 with lib;
 
 let
-  cfg = config.services.tarsnap;
+  gcfg = config.services.tarsnap;
 
-  configFile = cfg: ''
-    cachedir ${config.services.tarsnap.cachedir}
-    keyfile  ${config.services.tarsnap.keyfile}
+  configFile = name: cfg: ''
+    keyfile ${cfg.keyfile}
+    ${optionalString (cfg.cachedir != null) "cachedir ${cfg.cachedir}"}
     ${optionalString cfg.nodump "nodump"}
     ${optionalString cfg.printStats "print-stats"}
     ${optionalString cfg.printStats "humanize-numbers"}
     ${optionalString (cfg.checkpointBytes != null) ("checkpoint-bytes "+cfg.checkpointBytes)}
     ${optionalString cfg.aggressiveNetworking "aggressive-networking"}
-    ${concatStringsSep "\n" (map (v: "exclude "+v) cfg.excludes)}
-    ${concatStringsSep "\n" (map (v: "include "+v) cfg.includes)}
+    ${concatStringsSep "\n" (map (v: "exclude ${v}") cfg.excludes)}
+    ${concatStringsSep "\n" (map (v: "include ${v}") cfg.includes)}
     ${optionalString cfg.lowmem "lowmem"}
     ${optionalString cfg.verylowmem "verylowmem"}
-    ${optionalString (cfg.maxbw != null) ("maxbw "+toString cfg.maxbw)}
-    ${optionalString (cfg.maxbwRateUp != null) ("maxbw-rate-up "+toString cfg.maxbwRateUp)}
-    ${optionalString (cfg.maxbwRateDown != null) ("maxbw-rate-down "+toString cfg.maxbwRateDown)}
+    ${optionalString (cfg.maxbw != null) "maxbw ${toString cfg.maxbw}"}
+    ${optionalString (cfg.maxbwRateUp != null) "maxbw-rate-up ${toString cfg.maxbwRateUp}"}
+    ${optionalString (cfg.maxbwRateDown != null) "maxbw-rate-down ${toString cfg.maxbwRateDown}"}
   '';
 in
 {
@@ -41,30 +41,66 @@ in
           account.
           Create the keyfile with <command>tarsnap-keygen</command>.
 
+          Note that each individual archive (specified below) may also have its
+          own individual keyfile specified. Tarsnap does not allow multiple
+          concurrent backups with the same cache directory and key (starting a
+          new backup will cause another one to fail). If you have multiple
+          archives specified, you should either spread out your backups to be
+          far apart, or specify a separate key for each archive. By default
+          every archive defaults to using
+          <literal>"/root/tarsnap.key"</literal>.
+
+          It's recommended for backups that you generate a key for every archive
+          using <literal>tarsnap-keygen(1)</literal>, and then generate a
+          write-only tarsnap key using <literal>tarsnap-keymgmt(1)</literal>,
+          and keep your master key(s) for a particular machine off-site.
+
           The keyfile name should be given as a string and not a path, to
           avoid the key being copied into the Nix store.
         '';
       };
 
-      cachedir = mkOption {
-        type    = types.nullOr types.path;
-        default = "/var/cache/tarsnap";
-        description = ''
-          The cache allows tarsnap to identify previously stored data
-          blocks, reducing archival time and bandwidth usage.
-
-          Should the cache become desynchronized or corrupted, tarsnap
-          will refuse to run until you manually rebuild the cache with
-          <command>tarsnap --fsck</command>.
-
-          Set to <literal>null</literal> to disable caching.
-        '';
-      };
-
       archives = mkOption {
-        type = types.attrsOf (types.submodule (
+        type = types.attrsOf (types.submodule ({ config, ... }:
           {
             options = {
+              keyfile = mkOption {
+                type = types.str;
+                default = gcfg.keyfile;
+                description = ''
+                  Set a specific keyfile for this archive. This defaults to
+                  <literal>"/root/tarsnap.key"</literal> if left unspecified.
+
+                  Use this option if you want to run multiple backups
+                  concurrently - each archive must have a unique key. You can
+                  generate a write-only key derived from your master key (which
+                  is recommended) using <literal>tarsnap-keymgmt(1)</literal>.
+
+                  Note: every archive must have an individual master key. You
+                  must generate multiple keys with
+                  <literal>tarsnap-keygen(1)</literal>, and then generate write
+                  only keys from those.
+
+                  The keyfile name should be given as a string and not a path, to
+                  avoid the key being copied into the Nix store.
+                '';
+              };
+
+              cachedir = mkOption {
+                type = types.nullOr types.path;
+                default = "/var/cache/tarsnap/${utils.escapeSystemdPath config.keyfile}";
+                description = ''
+                  The cache allows tarsnap to identify previously stored data
+                  blocks, reducing archival time and bandwidth usage.
+
+                  Should the cache become desynchronized or corrupted, tarsnap
+                  will refuse to run until you manually rebuild the cache with
+                  <command>tarsnap --fsck</command>.
+
+                  Set to <literal>null</literal> to disable caching.
+                '';
+              };
+
               nodump = mkOption {
                 type = types.bool;
                 default = true;
@@ -79,7 +115,7 @@ in
                 description = ''
                   Print global archive statistics upon completion.
                   The output is available via
-                  <command>systemctl status tarsnap@archive-name</command>.
+                  <command>systemctl status tarsnap-archive-name</command>.
                 '';
               };
 
@@ -194,6 +230,28 @@ in
                   Download bandwidth rate limit in bytes.
                 '';
               };
+
+              verbose = mkOption {
+                type = types.bool;
+                default = false;
+                description = ''
+                  Whether to produce verbose logging output.
+                '';
+              };
+              explicitSymlinks = mkOption {
+                type = types.bool;
+                default = false;
+                description = ''
+                  Whether to follow symlinks specified as archives.
+                '';
+              };
+              followSymlinks = mkOption {
+                type = types.bool;
+                default = false;
+                description = ''
+                  Whether to follow all symlinks in archive trees.
+                '';
+              };
             };
           }
         ));
@@ -207,7 +265,7 @@ in
               };
 
             gamedata =
-              { directories = [ "/var/lib/minecraft "];
+              { directories = [ "/var/lib/minecraft" ];
                 period      = "*:30";
               };
           }
@@ -220,8 +278,8 @@ in
           archive names are suffixed by a 1 second resolution timestamp.
 
           For each member of the set is created a timer which triggers the
-          instanced <literal>tarsnap@</literal> service unit. You may use
-          <command>systemctl start tarsnap@archive-name</command> to
+          instanced <literal>tarsnap-archive-name</literal> service unit. You may use
+          <command>systemctl start tarsnap-archive-name</command> to
           manually trigger creation of <literal>archive-name</literal> at
           any time.
         '';
@@ -229,51 +287,115 @@ in
     };
   };
 
-  config = mkIf cfg.enable {
+  config = mkIf gcfg.enable {
     assertions =
       (mapAttrsToList (name: cfg:
         { assertion = cfg.directories != [];
           message = "Must specify paths for tarsnap to back up";
-        }) cfg.archives) ++
+        }) gcfg.archives) ++
       (mapAttrsToList (name: cfg:
         { assertion = !(cfg.lowmem && cfg.verylowmem);
           message = "You cannot set both lowmem and verylowmem";
-        }) cfg.archives);
+        }) gcfg.archives);
 
-    systemd.services."tarsnap@" = {
-      description = "Tarsnap archive '%i'";
-      requires    = [ "network.target" ];
+    systemd.services =
+      (mapAttrs' (name: cfg: nameValuePair "tarsnap-${name}" {
+        description = "Tarsnap archive '${name}'";
+        requires    = [ "network-online.target" ];
+        after       = [ "network-online.target" ];
 
-      path = [ pkgs.tarsnap pkgs.coreutils ];
-      scriptArgs = "%i";
-      script = ''
-        mkdir -p -m 0755 ${dirOf cfg.cachedir}
-        mkdir -p -m 0700 ${cfg.cachedir}
-        chown root:root ${cfg.cachedir}
-        chmod 0700 ${cfg.cachedir}
-        DIRS=`cat /etc/tarsnap/$1.dirs`
-        exec tarsnap --configfile /etc/tarsnap/$1.conf -c -f $1-$(date +"%Y%m%d%H%M%S") $DIRS
-      '';
+        path = with pkgs; [ iputils tarsnap utillinux ];
 
-      serviceConfig = {
-        IOSchedulingClass = "idle";
-        NoNewPrivileges = "true";
-        CapabilityBoundingSet = "CAP_DAC_READ_SEARCH";
-      };
-    };
+        # In order for the persistent tarsnap timer to work reliably, we have to
+        # make sure that the tarsnap server is reachable after systemd starts up
+        # the service - therefore we sleep in a loop until we can ping the
+        # endpoint.
+        preStart = ''
+          while ! ping -q -c 1 v1-0-0-server.tarsnap.com &> /dev/null; do sleep 3; done
+        '';
 
-    systemd.timers = mapAttrs' (name: cfg: nameValuePair "tarsnap@${name}"
+        script = let
+          tarsnap = ''tarsnap --configfile "/etc/tarsnap/${name}.conf"'';
+          run = ''${tarsnap} -c -f "${name}-$(date +"%Y%m%d%H%M%S")" \
+                        ${optionalString cfg.verbose "-v"} \
+                        ${optionalString cfg.explicitSymlinks "-H"} \
+                        ${optionalString cfg.followSymlinks "-L"} \
+                        ${concatStringsSep " " cfg.directories}'';
+          in if (cfg.cachedir != null) then ''
+            mkdir -p ${cfg.cachedir}
+            chmod 0700 ${cfg.cachedir}
+
+            ( flock 9
+              if [ ! -e ${cfg.cachedir}/firstrun ]; then
+                ( flock 10
+                  flock -u 9
+                  ${tarsnap} --fsck
+                  flock 9
+                ) 10>${cfg.cachedir}/firstrun
+              fi
+            ) 9>${cfg.cachedir}/lockf
+
+             exec flock ${cfg.cachedir}/firstrun ${run}
+          '' else "exec ${run}";
+
+        serviceConfig = {
+          Type = "oneshot";
+          IOSchedulingClass = "idle";
+          NoNewPrivileges = "true";
+          CapabilityBoundingSet = [ "CAP_DAC_READ_SEARCH" ];
+          PermissionsStartOnly = "true";
+        };
+      }) gcfg.archives) //
+
+      (mapAttrs' (name: cfg: nameValuePair "tarsnap-restore-${name}"{
+        description = "Tarsnap restore '${name}'";
+        requires    = [ "network-online.target" ];
+
+        path = with pkgs; [ iputils tarsnap utillinux ];
+
+        script = let
+          tarsnap = ''tarsnap --configfile "/etc/tarsnap/${name}.conf"'';
+          lastArchive = ''$(${tarsnap} --list-archives | sort | tail -1)'';
+          run = ''${tarsnap} -x -f "${lastArchive}" ${optionalString cfg.verbose "-v"}'';
+
+        in if (cfg.cachedir != null) then ''
+          mkdir -p ${cfg.cachedir}
+          chmod 0700 ${cfg.cachedir}
+
+          ( flock 9
+            if [ ! -e ${cfg.cachedir}/firstrun ]; then
+              ( flock 10
+                flock -u 9
+                ${tarsnap} --fsck
+                flock 9
+              ) 10>${cfg.cachedir}/firstrun
+            fi
+          ) 9>${cfg.cachedir}/lockf
+
+           exec flock ${cfg.cachedir}/firstrun ${run}
+        '' else "exec ${run}";
+
+        serviceConfig = {
+          Type = "oneshot";
+          IOSchedulingClass = "idle";
+          NoNewPrivileges = "true";
+          CapabilityBoundingSet = [ "CAP_DAC_READ_SEARCH" ];
+          PermissionsStartOnly = "true";
+        };
+      }) gcfg.archives);
+
+    # Note: the timer must be Persistent=true, so that systemd will start it even
+    # if e.g. your laptop was asleep while the latest interval occurred.
+    systemd.timers = mapAttrs' (name: cfg: nameValuePair "tarsnap-${name}"
       { timerConfig.OnCalendar = cfg.period;
+        timerConfig.Persistent = "true";
         wantedBy = [ "timers.target" ];
-      }) cfg.archives;
+      }) gcfg.archives;
 
     environment.etc =
-      (mapAttrs' (name: cfg: nameValuePair "tarsnap/${name}.conf"
-        { text = configFile cfg;
-        }) cfg.archives) //
-      (mapAttrs' (name: cfg: nameValuePair "tarsnap/${name}.dirs"
-        { text = concatStringsSep " " cfg.directories;
-        }) cfg.archives);
+      mapAttrs' (name: cfg: nameValuePair "tarsnap/${name}.conf"
+        { text = configFile name cfg;
+        }) gcfg.archives;
 
     environment.systemPackages = [ pkgs.tarsnap ];
   };

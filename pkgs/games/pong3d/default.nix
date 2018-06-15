@@ -18,5 +18,6 @@ stdenv.mkDerivation {
     homepage = http://www.newbreedsoftware.com/3dpong/;
     description = "One or two player 3d sports game based on Pong from Atari";
     license = stdenv.lib.licenses.gpl2Plus;
+    platforms = stdenv.lib.platforms.linux;
   };
 }

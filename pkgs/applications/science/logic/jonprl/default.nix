@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     url = "https://github.com/jonsterling/JonPRL.git";
     deepClone = true;
     rev = "refs/tags/v${version}";
-    sha256 = "1z0d8dq1nb4dycic58nnk617hbfgafz0vmwr8gkl0i6405gfg1zy";
+    sha256 = "0czs13syvnw8fz24d075n4pmsyfs8rs8c7ksmvd7cgb3h55fvp4p";
   };
 
   buildInputs = [ smlnj which ];
@@ -29,6 +29,6 @@ stdenv.mkDerivation rec {
     homepage = http://www.jonprl.org/;
     license = stdenv.lib.licenses.mit;
     maintainers = with stdenv.lib.maintainers; [ puffnfresh ];
-    platforms = stdenv.lib.platforms.unix;
+    platforms = stdenv.lib.platforms.linux;
   };
 }

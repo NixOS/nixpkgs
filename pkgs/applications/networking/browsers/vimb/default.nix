@@ -1,23 +1,24 @@
-{ stdenv, fetchurl, pkgconfig, libsoup, webkit, gtk, glib_networking
-, gsettings_desktop_schemas, makeWrapper
+{ stdenv, fetchurl, pkgconfig, libsoup, webkit, gtk2, glib-networking
+, gsettings-desktop-schemas, makeWrapper
 }:
 
 stdenv.mkDerivation rec {
   name = "vimb-${version}";
-  version = "2.9";
+  version = "3.1.0";
 
   src = fetchurl {
     url = "https://github.com/fanglingsu/vimb/archive/${version}.tar.gz";
-    sha256 = "0h9m5qfs09lb0dz8a79yccmm3a5rv6z8gi5pkyfh8fqkgkh2940p";
+    sha256 = "1gws028c2v1zh6r142hmjvi2m447lwqqh65m6z3dzcar2yw35z3f";
   };
 
-  buildInputs = [ makeWrapper gtk libsoup pkgconfig webkit gsettings_desktop_schemas ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ makeWrapper gtk2 libsoup webkit gsettings-desktop-schemas ];
 
   makeFlags = [ "PREFIX=$(out)" ];
 
   preFixup = ''
     wrapProgram "$out/bin/vimb" \
-      --prefix GIO_EXTRA_MODULES : "${glib_networking}/lib/gio/modules" \
+      --prefix GIO_EXTRA_MODULES : "${glib-networking.out}/lib/gio/modules" \
       --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH"
   '';
 
@@ -29,7 +30,7 @@ stdenv.mkDerivation rec {
       editor and also easily configurable during runtime. Vimb is mostly
       keyboard driven and does not detract you from your daily work.
     '';
-    homepage = "http://fanglingsu.github.io/vimb/";
+    homepage = https://fanglingsu.github.io/vimb/;
     license = stdenv.lib.licenses.gpl3;
     maintainers = [ stdenv.lib.maintainers.rickynils ];
     platforms = with stdenv.lib.platforms; linux;

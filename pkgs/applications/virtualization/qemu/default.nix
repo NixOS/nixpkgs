@@ -1,70 +1,155 @@
-{ stdenv, fetchurl, python, zlib, pkgconfig, glib, ncurses, perl, pixman
-, attr, libcap, vde2, alsaLib, texinfo, libuuid, flex, bison, lzo, snappy
-, libseccomp, libaio, libcap_ng, gnutls, nettle
+{ stdenv, fetchurl, fetchpatch, python2, zlib, pkgconfig, glib
+, ncurses, perl, pixman, vde2, alsaLib, texinfo, flex
+, bison, lzo, snappy, libaio, gnutls, nettle, curl
 , makeWrapper
-, pulseSupport ? true, libpulseaudio
-, sdlSupport ? true, SDL
+, attr, libcap, libcap_ng
+, CoreServices, Cocoa, rez, setfile
+, numaSupport ? stdenv.isLinux && !stdenv.isAarch32, numactl
+, seccompSupport ? stdenv.isLinux, libseccomp
+, pulseSupport ? !stdenv.isDarwin, libpulseaudio
+, sdlSupport ? !stdenv.isDarwin, SDL2
+, gtkSupport ? !stdenv.isDarwin && !xenSupport, gtk3, gettext, gnome3
 , vncSupport ? true, libjpeg, libpng
-, spiceSupport ? true, spice, spice_protocol, usbredir
-, x86Only ? false
+, spiceSupport ? !stdenv.isDarwin, spice, spice-protocol
+, usbredirSupport ? spiceSupport, usbredir
+, xenSupport ? false, xen
+, openGLSupport ? sdlSupport, mesa_noglu, epoxy, libdrm
+, virglSupport ? openGLSupport, virglrenderer
+, smbdSupport ? false, samba
+, hostCpuOnly ? false
+, nixosTestRunner ? false
 }:
 
 with stdenv.lib;
 let
-  version = "2.4.0.1";
+  version = "2.12.0";
+  sha256 = "17377xxbmwbrnh895a108z944pqi39hzrbw4jzgj8pcipi3s3x69";
   audio = optionalString (hasSuffix "linux" stdenv.system) "alsa,"
     + optionalString pulseSupport "pa,"
     + optionalString sdlSupport "sdl,";
+
+  hostCpuTargets = if stdenv.isx86_64 then "i386-softmmu,x86_64-softmmu"
+                   else if stdenv.isi686 then "i386-softmmu"
+                   else if stdenv.isAarch32 then "arm-softmmu"
+                   else if stdenv.isAarch64 then "aarch64-softmmu"
+                   else throw "Don't know how to build a 'hostCpuOnly = true' QEMU";
 in
 
 stdenv.mkDerivation rec {
-  name = "qemu-" + stdenv.lib.optionalString x86Only "x86-only-" + version;
+  name = "qemu-"
+    + stdenv.lib.optionalString xenSupport "xen-"
+    + stdenv.lib.optionalString hostCpuOnly "host-cpu-only-"
+    + stdenv.lib.optionalString nixosTestRunner "for-vm-tests-"
+    + version;
 
   src = fetchurl {
     url = "http://wiki.qemu.org/download/qemu-${version}.tar.bz2";
-    sha256 = "1nqv5p94zpnhcaqkifnn83ap7dd0qrb0qiicswbyhhby0f48pzpc";
+    inherit sha256;
   };
 
   buildInputs =
-    [ python zlib pkgconfig glib ncurses perl pixman attr libcap
-      vde2 texinfo libuuid flex bison makeWrapper lzo snappy libseccomp
-      libcap_ng gnutls nettle
+    [ python2 zlib pkgconfig glib ncurses perl pixman
+      vde2 texinfo flex bison makeWrapper lzo snappy
+      gnutls nettle curl
     ]
+    ++ optionals stdenv.isDarwin [ CoreServices Cocoa rez setfile ]
+    ++ optionals seccompSupport [ libseccomp ]
+    ++ optionals numaSupport [ numactl ]
     ++ optionals pulseSupport [ libpulseaudio ]
-    ++ optionals sdlSupport [ SDL ]
+    ++ optionals sdlSupport [ SDL2 ]
+    ++ optionals gtkSupport [ gtk3 gettext gnome3.vte ]
     ++ optionals vncSupport [ libjpeg libpng ]
-    ++ optionals spiceSupport [ spice_protocol spice usbredir ]
-    ++ optionals (hasSuffix "linux" stdenv.system) [ alsaLib libaio ];
+    ++ optionals spiceSupport [ spice-protocol spice ]
+    ++ optionals usbredirSupport [ usbredir ]
+    ++ optionals stdenv.isLinux [ alsaLib libaio libcap_ng libcap attr ]
+    ++ optionals xenSupport [ xen ]
+    ++ optionals openGLSupport [ mesa_noglu epoxy libdrm ]
+    ++ optionals virglSupport [ virglrenderer ]
+    ++ optionals smbdSupport [ samba ];
 
   enableParallelBuilding = true;
 
-  patches = [ ./no-etc-install.patch ];
+  outputs = [ "out" "ga" ];
+
+  patches = [ ./no-etc-install.patch ]
+    ++ optional nixosTestRunner ./force-uid0-on-9p.patch
+    ++ optional pulseSupport ./fix-hda-recording.patch
+    ++ optionals stdenv.hostPlatform.isMusl [
+    (fetchpatch {
+      url = https://raw.githubusercontent.com/alpinelinux/aports/2bb133986e8fa90e2e76d53369f03861a87a74ef/main/qemu/xattr_size_max.patch;
+      sha256 = "1xfdjs1jlvs99hpf670yianb8c3qz2ars8syzyz8f2c2cp5y4bxb";
+    })
+    (fetchpatch {
+      url = https://raw.githubusercontent.com/alpinelinux/aports/2bb133986e8fa90e2e76d53369f03861a87a74ef/main/qemu/musl-F_SHLCK-and-F_EXLCK.patch;
+      sha256 = "1gm67v41gw6apzgz7jr3zv9z80wvkv0jaxd2w4d16hmipa8bhs0k";
+    })
+    (fetchpatch {
+      url = https://raw.githubusercontent.com/alpinelinux/aports/61a7a1b77a868e3b940c0b25e6c2b2a6c32caf20/main/qemu/0006-linux-user-signal.c-define-__SIGRTMIN-MAX-for-non-GN.patch;
+      sha256 = "1ar6r1vpmhnbs72v6mhgyahcjcf7b9b4xi7asx17sy68m171d2g6";
+    })
+    (fetchpatch {
+      url = https://raw.githubusercontent.com/alpinelinux/aports/2bb133986e8fa90e2e76d53369f03861a87a74ef/main/qemu/fix-sigevent-and-sigval_t.patch;
+      sha256 = "0wk0rrcqywhrw9hygy6ap0lfg314m9z1wr2hn8338r5gfcw75mav";
+    })
+  ];
+
+  hardeningDisable = [ "stackprotector" ];
+
+  preConfigure = ''
+    unset CPP # intereferes with dependency calculation
+  '' + optionalString stdenv.hostPlatform.isMusl ''
+    NIX_CFLAGS_COMPILE+=" -D_LINUX_SYSINFO_H"
+  '';
 
   configureFlags =
-    [ "--enable-seccomp"
-      "--smbd=smbd" # use `smbd' from $PATH
-      "--audio-drv-list=${audio}"
+    [ "--audio-drv-list=${audio}"
       "--sysconfdir=/etc"
       "--localstatedir=/var"
     ]
+    # disable sysctl check on darwin.
+    ++ optional stdenv.isDarwin "--cpu=x86_64"
+    ++ optional numaSupport "--enable-numa"
+    ++ optional seccompSupport "--enable-seccomp"
     ++ optional spiceSupport "--enable-spice"
-    ++ optional x86Only "--target-list=i386-softmmu,x86_64-softmmu"
-    ++ optional (hasSuffix "linux" stdenv.system) "--enable-linux-aio";
+    ++ optional usbredirSupport "--enable-usb-redir"
+    ++ optional hostCpuOnly "--target-list=${hostCpuTargets}"
+    ++ optional stdenv.isDarwin "--enable-cocoa"
+    ++ optional stdenv.isLinux "--enable-linux-aio"
+    ++ optional gtkSupport "--enable-gtk"
+    ++ optional xenSupport "--enable-xen"
+    ++ optional openGLSupport "--enable-opengl"
+    ++ optional virglSupport "--enable-virglrenderer"
+    ++ optional smbdSupport "--smbd=${samba}/bin/smbd";
 
-  postInstall =
+  doCheck = false; # tries to access /dev
+
+  postFixup =
     ''
-      # Add a ‘qemu-kvm’ wrapper for compatibility/convenience.
-      p="$out/bin/qemu-system-${if stdenv.system == "x86_64-linux" then "x86_64" else "i386"}"
-      if [ -e "$p" ]; then
-        makeWrapper "$p" $out/bin/qemu-kvm --add-flags "\$([ -e /dev/kvm ] && echo -enable-kvm)"
-      fi
+      for exe in $out/bin/qemu-system-* ; do
+        paxmark m $exe
+      done
+      # copy qemu-ga (guest agent) to separate output
+      mkdir -p $ga/bin
+      cp $out/bin/qemu-ga $ga/bin/
     '';
+
+  # Add a ‘qemu-kvm’ wrapper for compatibility/convenience.
+  postInstall =
+    if stdenv.isx86_64       then ''makeWrapper $out/bin/qemu-system-x86_64  $out/bin/qemu-kvm --add-flags "\$([ -e /dev/kvm ] && echo -enable-kvm)"''
+    else if stdenv.isi686    then ''makeWrapper $out/bin/qemu-system-i386    $out/bin/qemu-kvm --add-flags "\$([ -e /dev/kvm ] && echo -enable-kvm)"''
+    else if stdenv.isAarch32 then ''makeWrapper $out/bin/qemu-system-arm     $out/bin/qemu-kvm --add-flags "\$([ -e /dev/kvm ] && echo -enable-kvm)"''
+    else if stdenv.isAarch64 then ''makeWrapper $out/bin/qemu-system-aarch64 $out/bin/qemu-kvm --add-flags "\$([ -e /dev/kvm ] && echo -enable-kvm)"''
+    else "";
+
+  passthru = {
+    qemu-system-i386 = "bin/qemu-system-i386";
+  };
 
   meta = with stdenv.lib; {
     homepage = http://www.qemu.org/;
     description = "A generic and open source machine emulator and virtualizer";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ viric eelco ];
-    platforms = platforms.linux;
+    platforms = platforms.linux ++ platforms.darwin;
   };
 }

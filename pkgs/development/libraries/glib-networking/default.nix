@@ -1,28 +1,45 @@
-{ stdenv, fetchurl, pkgconfig, glib, intltool, gnutls, libproxy
-, gsettings_desktop_schemas }:
+{ stdenv, fetchurl, fetchpatch, meson, ninja, pkgconfig, glib, gettext, gnutls, p11-kit, libproxy, gnome3
+, gsettings-desktop-schemas }:
 
 let
-  ver_maj = "2.44";
-  ver_min = "0";
+  pname = "glib-networking";
+  version = "2.56.0";
 in
 stdenv.mkDerivation rec {
-  name = "glib-networking-${ver_maj}.${ver_min}";
+  name = "${pname}-${version}";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/glib-networking/${ver_maj}/${name}.tar.xz";
-    sha256 = "8f8a340d3ba99bfdef38b653da929652ea6640e27969d29f7ac51fbbe11a4346";
+    url = "mirror://gnome/sources/${pname}/${gnome3.versionBranch version}/${name}.tar.xz";
+    sha256 = "14vw8xwajd7m31bpavg2psk693plhjikwpk8bzf3jl1fmsy11za7";
   };
 
-  configureFlags = "--with-ca-certificates=/etc/ssl/certs/ca-certificates.crt";
+  outputs = [ "out" "dev" ]; # to deal with propagatedBuildInputs
 
-  preBuild = ''
-    sed -e "s@${glib}/lib/gio/modules@$out/lib/gio/modules@g" -i $(find . -name Makefile)
+  patches = [
+    # Use GNUTLS system trust for certificates
+    (fetchpatch {
+      url = https://gitlab.gnome.org/GNOME/glib-networking/commit/f1c8feee014007cc913b71357acb609f8d1200df.patch;
+      sha256 = "1rbxqsrcb5if3xs2d18pqzd9xnjysdj715ijc41n5w326fsawg7i";
+    })
+  ];
+
+  PKG_CONFIG_GIO_2_0_GIOMODULEDIR = "lib/gio/modules";
+
+  postPatch = ''
+    chmod +x meson_post_install.py # patchShebangs requires executable file
+    patchShebangs meson_post_install.py
   '';
 
-  nativeBuildInputs = [ pkgconfig intltool ];
-  propagatedBuildInputs = [ glib gnutls libproxy gsettings_desktop_schemas ];
+  nativeBuildInputs = [ meson ninja pkgconfig gettext ];
+  propagatedBuildInputs = [ glib gnutls p11-kit libproxy gsettings-desktop-schemas ];
 
   doCheck = false; # tests need to access the certificates (among other things)
+
+  passthru = {
+    updateScript = gnome3.updateScript {
+      packageName = pname;
+    };
+  };
 
   meta = with stdenv.lib; {
     description = "Network-related giomodules for glib";
@@ -30,4 +47,3 @@ stdenv.mkDerivation rec {
     platforms = platforms.unix;
   };
 }
-

@@ -6,7 +6,6 @@ let
 
   cfg = config.services.ihaskell;
   ihaskell = pkgs.ihaskell.override {
-    inherit (cfg.haskellPackages) ihaskell ghcWithPackages;
     packages = self: cfg.extraPackages self;
   };
 
@@ -17,20 +16,7 @@ in
     services.ihaskell = {
       enable = mkOption {
         default = false;
-        example = true;
         description = "Autostart an IHaskell notebook service.";
-      };
-
-      haskellPackages = mkOption {
-        default = pkgs.haskellngPackages;
-        defaultText = "pkgs.haskellngPackages";
-        example = literalExample "pkgs.haskell-ng.packages.ghc784";
-        description = ''
-          haskellPackages used to build IHaskell and other packages.
-          This can be used to change the GHC version used to build
-          IHaskell and the packages listed in
-          <varname>extraPackages</varname>.
-        '';
       };
 
       extraPackages = mkOption {
@@ -69,7 +55,7 @@ in
       serviceConfig = {
         User = config.users.extraUsers.ihaskell.name;
         Group = config.users.extraGroups.ihaskell.name;
-        ExecStart = "${pkgs.stdenv.shell} -c \"cd $HOME;${ihaskell}/bin/ihaskell-notebook\"";
+        ExecStart = "${pkgs.runtimeShell} -c \"cd $HOME;${ihaskell}/bin/ihaskell-notebook\"";
       };
     };
   };

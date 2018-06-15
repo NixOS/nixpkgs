@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, gstreamer, gst_plugins_base, boost, glib, qt4, cmake
+{ stdenv, fetchurl, gstreamer, gst-plugins-base, boost155, glib, qt4, cmake
 , automoc4, flex, bison, pkgconfig }:
 
 stdenv.mkDerivation rec {
@@ -6,12 +6,12 @@ stdenv.mkDerivation rec {
   pname = "qt-gstreamer";
 
   src = fetchurl {
-    url = "http://gstreamer.freedesktop.org/src/${pname}/${name}.tar.bz2";
+    url = "https://gstreamer.freedesktop.org/src/${pname}/${name}.tar.bz2";
     sha256 = "1pqg9sxzk8sdrf7pazb5v21hasqai9i4l203gbdqz29w2ll1ybsl";
   };
 
-  buildInputs = [ gstreamer gst_plugins_base glib qt4 ];
-  propagatedBuildInputs = [ boost ];
+  buildInputs = [ gstreamer gst-plugins-base glib qt4 ];
+  propagatedBuildInputs = [ boost155 ];
   nativeBuildInputs = [ cmake automoc4 flex bison pkgconfig ];
 
   cmakeFlags = "-DUSE_QT_PLUGIN_DIR=OFF -DUSE_GST_PLUGIN_DIR=OFF";

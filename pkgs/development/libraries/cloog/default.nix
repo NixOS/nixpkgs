@@ -1,11 +1,11 @@
 { fetchurl, stdenv, gmp, isl }:
 
 stdenv.mkDerivation rec {
-  name = "cloog-0.18.3";
+  name = "cloog-0.18.4";
 
   src = fetchurl {
     url = "http://www.bastoul.net/cloog/pages/download/count.php3?url=./${name}.tar.gz";
-    sha256 = "0d4pqs4rs1qx0302wpv06ww1nwyg4yv5cw9qpfzxz36b19s6q326";
+    sha256 = "03km1aqaiy3sbqc2f046ms9x0mlmacxlvs5rxsvjj8nf20vxynij";
   };
 
   buildInputs = [ gmp ];
@@ -59,6 +59,6 @@ stdenv.mkDerivation rec {
        make[3]: *** [Box.lo] Error 1
 
     */
-    platforms = with stdenv.lib.platforms; allBut cygwin;
+    platforms = stdenv.lib.platforms.unix; # Once had cygwin problems
   };
 }

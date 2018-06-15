@@ -9,6 +9,8 @@ stdenv.mkDerivation {
 
   buildInputs = [xlibsWrapper];
 
+  buildFlags = [ "CC=cc" ];
+
   installPhase = ''
     mkdir -pv "$out/bin"
     mkdir -pv "$out/share/man/man1"
@@ -28,7 +30,8 @@ stdenv.mkDerivation {
 
           unclutter -idle 1 &
     '';
-    maintainers = with maintainers; [ iElectric ];
+    maintainers = with maintainers; [ domenkozar ];
     platforms = platforms.unix;
+    license = stdenv.lib.licenses.publicDomain;
   };
 }

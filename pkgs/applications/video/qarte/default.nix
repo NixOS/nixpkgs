@@ -1,23 +1,23 @@
-{ stdenv, fetchbzr, python, pyqt4, sip, rtmpdump, makeWrapper }:
+{ stdenv, fetchbzr, python3, rtmpdump, makeWrapper }:
 
-stdenv.mkDerivation {
-  name = "qarte-2.3.0";
+let
+  pythonEnv = python3.withPackages (ps: with ps; [ pyqt5 sip ]);
+in stdenv.mkDerivation {
+  name = "qarte-3.10.0+188";
   src = fetchbzr {
-    url = http://bazaar.launchpad.net/~vincent-vandevyvre/qarte/trunk;
-    rev = "148";
-    sha256 = "0bp2qbl2g3dygmb31lwlarki9lybkb9zxixda4lwrlz628w93fxh";
+    url = http://bazaar.launchpad.net/~vincent-vandevyvre/qarte/qarte-3;
+    rev = "188";
+    sha256 = "06xpkjgm5ci5gfkza9f44m8l4jj32gfmr65cqs4x0j2ihrc6b4r9";
   };
 
-  buildInputs = [ makeWrapper ];
+  buildInputs = [ makeWrapper pythonEnv ];
 
   installPhase = ''
     mkdir -p $out/bin
     mv qarte $out/bin/
     substituteInPlace $out/bin/qarte \
-      --replace '/usr/bin/python' "${python.interpreter}" \
       --replace '/usr/share' "$out/share"
     wrapProgram $out/bin/qarte \
-      --prefix PYTHONPATH : "${pyqt4}/lib/${python.libPrefix}/site-packages:${sip}/lib/${python.libPrefix}/site-packages" \
       --prefix PATH : "${rtmpdump}/bin"
 
     mkdir -p $out/share/man/man1/

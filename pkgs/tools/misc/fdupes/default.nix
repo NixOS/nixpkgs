@@ -1,31 +1,28 @@
-{stdenv, fetchFromGitHub}:
+{ stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
-  name = "fdupes-20150902";
+  name = "fdupes-${version}";
+  version = "1.6.1";
 
   src = fetchFromGitHub {
-    owner = "jbruchon";
-    repo  = "fdupes-jody";
-    rev   = "414b1fd64c0a739d4c52228eb72487782855b939";
-    sha256 = "1q6jcj79pljm1f24fqgk8x53xz2x0p1986znw75iljxqyzbvw0ap";
+    owner = "adrianlopezroche";
+    repo  = "fdupes";
+    rev   = "v${version}";
+    sha256 = "19b6vqblddaw8ccw4sn0qsqzbswlhrz8ia6n4m3hymvcxn8skpz9";
   };
 
-  makeFlags = "PREFIX=\${out}";
+  makeFlags = "PREFIX=$(out)";
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "Identifies duplicate files residing within specified directories";
     longDescription = ''
-      FDUPES compares inodes' stats, hash sums, and byte by byte file
-      contents to find duplicate files within a set of directories and
-      then applies various actions to those sets, e.g.:
-      * remove some of the duplicates,
-      * turn all the files in a set into hardlinks.
+      fdupes searches the given path for duplicate files.
+      Such files are found by comparing file sizes and MD5 signatures,
+      followed by a byte-by-byte comparison.
     '';
-    homepage = src.meta.homepage;
-    license = stdenv.lib.licenses.mit;
-    platforms = stdenv.lib.platforms.all;
-    maintainers = [
-      stdenv.lib.maintainers.z77z
-    ];
+    homepage = https://github.com/adrianlopezroche/fdupes;
+    license = licenses.mit;
+    platforms = platforms.all;
+    maintainers = [ maintainers.z77z ];
   };
 }

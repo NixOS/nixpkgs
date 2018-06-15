@@ -2,20 +2,20 @@
  
 stdenv.mkDerivation rec {
   name = "gupnp-${version}";
-  majorVersion = "0.20";
-  version = "${majorVersion}.14";
+  majorVersion = "1.0";
+  version = "${majorVersion}.2";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gupnp/${majorVersion}/gupnp-${version}.tar.xz";
-    sha256 = "77ffb940ba77c4a6426d09d41004c75d92652dcbde86c84ac1c847dbd9ad59bd";
+    sha256 = "043nqxlj030a3wvd6x4c9z8fjarjjjsl2pjarl0nn70ig6kzswsi";
   };
 
   nativeBuildInputs = [ pkgconfig ];
   propagatedBuildInputs = [ glib gssdp libsoup libxml2 libuuid ];
 
   postInstall = ''
-    ln -sv ${libsoup}/include/*/libsoup $out/include
-    ln -sv ${libxml2}/include/*/libxml $out/include
+    ln -sv ${libsoup.dev}/include/libsoup-2*/libsoup $out/include
+    ln -sv ${libxml2.dev}/include/*/libxml $out/include
     ln -sv ${gssdp}/include/*/libgssdp $out/include
   '';
 

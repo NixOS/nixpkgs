@@ -1,88 +1,110 @@
-{ fetchurl, stdenv, cmake, perl, ruby, boost, lua5_1, graphviz, libsigcxx
-, libunwind, elfutils
+{ stdenv, fetchFromGitHub, cmake, elfutils, perl, python3, boost, valgrind
+# Optional requirements
+# Lua 5.3 needed and not available now
+#, luaSupport ? false, lua5
+, fortranSupport ? false, gfortran
+, buildDocumentation ? false, transfig, ghostscript, doxygen
+, buildJavaBindings ? false, openjdk
+, modelCheckingSupport ? false, libunwind, libevent # Inside elfutils - , libelf, libevent, libdw
+, debug ? false
+, moreTests ? false
 }:
 
-stdenv.mkDerivation rec {
-  version = "3.11.1";
-  name = "simgrid-${version}";
+with stdenv.lib;
 
-  src = fetchurl {
-    url = "https://gforge.inria.fr/frs/download.php/33686/${name}.tar.gz";
-    sha256 = "0mkrzxpf42lmn96khfl1791vram67r2nqsgmppd2yil889nyz5kp";
+let
+  optionOnOff = option: "${if option then "on" else "off"}";
+in
+
+stdenv.mkDerivation rec {
+  name = "simgrid-${version}";
+  version = "3.19.1";
+
+  src = fetchFromGitHub {
+    owner = "simgrid";
+    repo = "simgrid";
+    rev = "v${version}";
+    sha256 = "0vpgcp40xv20hcpslx5wz2mf2phaq41f7x8yr0bm7mknqd3zwxih";
   };
 
-  buildInputs = [ cmake perl ruby boost lua5_1 graphviz libsigcxx libunwind
-    elfutils
-    ];
+  nativeBuildInputs = [ cmake perl elfutils python3 boost valgrind ]
+      ++ optionals fortranSupport [ gfortran ]
+      ++ optionals buildJavaBindings [ openjdk ]
+      ++ optionals buildDocumentation [ transfig ghostscript doxygen ]
+      ++ optionals modelCheckingSupport [ libunwind libevent ];
 
-  preConfigure =
-    # Make it so that libsimgrid.so will be found when running programs from
-    # the build dir.
-    '' export LD_LIBRARY_PATH="$PWD/src/.libs"
-       export cmakeFlags="-Dprefix=$out"
+  #buildInputs = optional luaSupport lua5;
 
-       export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE
-         -isystem $(echo "${libsigcxx}/lib/"sigc++*/include)
-	 -isystem $(echo "${libsigcxx}/include"/sigc++* )
-	 "
-       export CMAKE_PREFIX_PATH="$CMAKE_PREFIX_PATH:$(echo "${libsigcxx}/lib/"sigc++*)"
+  # Make it so that libsimgrid.so will be found when running programs from
+  # the build dir.
+  preConfigure = ''
+    export LD_LIBRARY_PATH="$PWD/build/lib"
+  '';
 
-       # Enable more functionality.
-       export cmakeFlags="$cmakeFlags -Denable_tracing=on -Denable_jedule=on
-         -Denable_latency_bound_tracking=on -Denable_lua=on
-	 -Denable_ns3=on -Denable_gtnets=on
-	 "
-    '';
+  # Release mode is not supported in SimGrid
+  cmakeBuildType = "Debug";
 
-  makeFlags = "VERBOSE=1";
+  # Disable/Enable functionality
+  # Note: those packages are not packaged in Nixpkgs yet so some options
+  # are disabled:
+  # - papi:   for enable_smpi_papi
+  # - ns3:    for enable_ns3
+  # - lua53:  for enable_lua
+  #
+  # For more information see:
+  # http://simgrid.gforge.inria.fr/simgrid/latest/doc/install.html#install_cmake_list
+  cmakeFlags= ''
+    -Denable_documentation=${optionOnOff buildDocumentation}
+    -Denable_java=${optionOnOff buildJavaBindings}
+    -Denable_fortran=${optionOnOff fortranSupport}
+    -Denable_model-checking=${optionOnOff modelCheckingSupport}
+    -Denable_ns3=off
+    -Denable_lua=off
+    -Denable_lib_in_jar=off
+    -Denable_maintainer_mode=off
+    -Denable_mallocators=on
+    -Denable_debug=on
+    -Denable_smpi=on
+    -Denable_smpi_ISP_testsuite=${optionOnOff moreTests}
+    -Denable_smpi_MPICH3_testsuite=${optionOnOff moreTests}
+    -Denable_compile_warnings=${optionOnOff debug}
+    -Denable_compile_optimizations=${optionOnOff (!debug)}
+    -Denable_lto=${optionOnOff (!debug)}
+  '';
+  # -Denable_lua=${optionOnOff luaSupport}
+  # -Denable_smpi_papi=${optionOnOff moreTests}
 
-  preBuild =
-    /* Work around this:
+  makeFlags = optionalString debug "VERBOSE=1";
 
-      [ 20%] Generating _msg_handle_simulator.c, _msg_handle_client.c, _msg_handle_server.c
-      cd /tmp/nix-build-7yc8ghmf2yb8zi3bsri9b6qadwmfpzhr-simgrid-3.5.drv-0/simgrid-3.5/build/teshsuite/gras/msg_handle && ../../../bin/gras_stub_generator msg_handle /tmp/nix-build-7yc8ghmf2yb8zi3bsri9b6qadwmfpzhr-simgrid-3.5.drv-0/simgrid-3.5/teshsuite/gras/msg_handle/msg_handle.xml
-      ../../../bin/gras_stub_generator: error while loading shared libraries: libsimgrid.so.3.5: cannot open shared object file: No such file or directory
-      make[2]: *** [teshsuite/gras/msg_handle/_msg_handle_simulator.c] Error 127
-      make[2]: Leaving directory `/tmp/nix-build-7yc8ghmf2yb8zi3bsri9b6qadwmfpzhr-simgrid-3.5.drv-0/simgrid-3.5/build'
+  # Some Perl scripts are called to generate test during build which
+  # is before the fixupPhase, so do this manualy here:
+  preBuild = ''
+    patchShebangs ..
+  '';
 
-    */
-    '' export LD_LIBRARY_PATH="$PWD/lib:$LD_LIBRARY_PATH"
-       echo "\$LD_LIBRARY_PATH is \`$LD_LIBRARY_PATH'"
-    '';
-
-  patchPhase =
-    '' for i in "src/smpi/"*
-       do
-         test -f "$i" &&
-         sed -i "$i" -e's|/bin/bash|/bin/sh|g'
-       done
-
-       for i in $(grep -rl /usr/bin/perl .)
-       do
-         sed -i "$i" -e's|/usr/bin/perl|${perl}/bin/perl|g'
-       done
-    '';
-
-  # Fixing the few tests that fail is left as an exercise to the reader.
-  doCheck = false;
+  doCheck = true;
+  
+  checkPhase = ''
+    runHook preCheck
+    ctest --output-on-failure -E smpi-replay-multiple
+    runHook postCheck
+  '';
+    
+  enableParallelBuilding = true;
 
   meta = {
-    description = "Simulator for distributed applications in heterogeneous environments";
-
-    longDescription =
-      '' SimGrid is a toolkit that provides core functionalities for the
-         simulation of distributed applications in heterogeneous distributed
-         environments.  The specific goal of the project is to facilitate
-         research in the area of distributed and parallel application
-         scheduling on distributed computing platforms ranging from simple
-         network of workstations to Computational Grids.
-      '';
-
+    description = "Framework for the simulation of distributed applications";
+    longDescription = ''
+      SimGrid is a toolkit that provides core functionalities for the
+      simulation of distributed applications in heterogeneous distributed
+      environments.  The specific goal of the project is to facilitate
+      research in the area of distributed and parallel application
+      scheduling on distributed computing platforms ranging from simple
+      network of workstations to Computational Grids.
+    '';
     homepage = http://simgrid.gforge.inria.fr/;
-
-    license = stdenv.lib.licenses.lgpl2Plus;
-
-    maintainers = [ ];
-    platforms = stdenv.lib.platforms.gnu;  # arbitrary choice
+    license = licenses.lgpl2Plus;
+    maintainers = with maintainers; [ mickours ];
+    platforms = platforms.x86_64;
   };
 }

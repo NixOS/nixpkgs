@@ -1,6 +1,8 @@
-{ stdenv, fetchgit, fetchurl, ocaml, unzip, ncurses, curl }:
+{ stdenv, lib, fetchgit, fetchurl, makeWrapper,
+  ocaml, unzip, ncurses, curl, aspcud
+}:
 
-assert stdenv.lib.versionAtLeast (stdenv.lib.getVersion ocaml) "3.12.1";
+assert lib.versionAtLeast ocaml.version "3.12.1";
 
 let
   srcs = {
@@ -45,7 +47,7 @@ in stdenv.mkDerivation rec {
   name = "opam-${version}";
   version = "1.2.2";
 
-  buildInputs = [ unzip curl ncurses ocaml ];
+  buildInputs = [ unzip curl ncurses ocaml makeWrapper ];
 
   src = srcs.opam;
 
@@ -68,6 +70,15 @@ in stdenv.mkDerivation rec {
 
   # Dirty, but apparently ocp-build requires a TERM
   makeFlags = ["TERM=screen"];
+
+  # change argv0 to "opam" as a workaround for
+  # https://github.com/ocaml/opam/issues/2142
+  postInstall = ''
+    mv $out/bin/opam $out/bin/.opam-wrapped
+    makeWrapper $out/bin/.opam-wrapped $out/bin/opam \
+      --argv0 "opam" \
+      --suffix PATH : ${aspcud}/bin:${unzip}/bin:${curl}/bin
+  '';
 
   doCheck = false;
 

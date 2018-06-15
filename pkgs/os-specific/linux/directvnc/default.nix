@@ -1,26 +1,25 @@
-a @ { libjpeg, pkgconfig, zlib, directfb, xproto, ... } :
-let
-  s = import ./src-for-default.nix;
-  buildInputs = with a; [
-    directfb zlib libjpeg pkgconfig xproto
-  ];
-in
-rec {
-  src = a.fetchUrlFromSrcInfo s;
+{ stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, directfb, zlib, libjpeg, xproto }:
 
-  inherit (s) name;
-  inherit buildInputs;
-  configureFlags = [];
+stdenv.mkDerivation rec {
+  name = "directvnc-${version}";
+  version = "0.7.7.2015-04-16";
 
-  /* doConfigure should be removed if not needed */
-  phaseNames = ["doConfigure" "doMakeInstall"];
+  src = fetchFromGitHub {
+    owner = "drinkmilk";
+    repo = "directvnc";
+    rev = "d336f586c5865da68873960092b7b5fbc9f8617a";
+    sha256 = "16x7mr7x728qw7nbi6rqhrwsy73zsbpiz8pbgfzfl2aqhfdiz88b";
+  };
 
-  meta = {
+  nativeBuildInputs = [ autoreconfHook pkgconfig ];
+
+  buildInputs = [ directfb zlib libjpeg xproto ];
+
+  meta = with stdenv.lib; {
     description = "DirectFB VNC client";
-    maintainers = [
-      a.lib.maintainers.raskin
-    ];
-    platforms = with a.lib.platforms;
-      linux;
+    homepage = http://drinkmilk.github.io/directvnc/;
+    license = licenses.gpl2;
+    maintainers = [ maintainers.raskin ];
+    platforms = platforms.linux;
   };
 }

@@ -8,7 +8,8 @@ stdenv.mkDerivation rec {
     sha256 = "1bi7wsz3p5slb43kj7lgb3r6lb91lvb6ldi556k4y50ix6b5khyb";
   };
 
-  buildInputs = [ cmake pkgconfig libxml2 libzip ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ cmake libxml2 libzip ];
 
   preConfigure = 
     ''
@@ -16,9 +17,9 @@ stdenv.mkDerivation rec {
     '';
 
   meta = {
-    homepage = "http://ebook-tools.sourceforge.net";
+    homepage = http://ebook-tools.sourceforge.net;
     description = "Tools and library for dealing with various ebook file formats";
-    maintainers = [ stdenv.lib.maintainers.urkud ];
+    maintainers = [ ];
     platforms = stdenv.lib.platforms.all;
   };
 }

@@ -5,13 +5,18 @@ with lib;
 let
 
   # Build a Subversion instance with Apache modules and Swig/Python bindings.
-  subversion = pkgs.subversion.override (origArgs: {
+  subversion = pkgs.subversion.override {
     bdbSupport = true;
     httpServer = true;
     pythonBindings = true;
-  });
+    apacheHttpd = httpd;
+  };
 
   pythonLib = p: "${p}/";
+
+  httpd = serverInfo.serverConfig.package;
+
+  versionPre24 = versionOlder httpd.version "2.4";
 
 in
 
@@ -82,7 +87,7 @@ in
         AuthName "${config.ldapAuthentication.name}"
         AuthBasicProvider "ldap"
         AuthLDAPURL "${config.ldapAuthentication.url}"
-        authzldapauthoritative Off
+        ${if versionPre24 then "authzldapauthoritative Off" else ""}
         require valid-user
       </LocationMatch>
     '' else ""}
@@ -91,13 +96,12 @@ in
   globalEnvVars = singleton
     { name = "PYTHONPATH";
       value =
-        makeSearchPath "lib/${pkgs.python.libPrefix}/site-packages"
+        makeSearchPathOutput "lib" "lib/${pkgs.python.libPrefix}/site-packages"
           [ pkgs.mod_python
             pkgs.pythonPackages.trac
-            pkgs.setuptools
+            pkgs.pythonPackages.setuptools
             pkgs.pythonPackages.genshi
             pkgs.pythonPackages.psycopg2
-            pkgs.python.modules.sqlite3
             subversion
           ];
     };

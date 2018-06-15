@@ -1,99 +1,21 @@
-diff --git a/qt/antimony.pro b/qt/antimony.pro
-index 9d586f4..b055a6d 100644
---- a/qt/antimony.pro
-+++ b/qt/antimony.pro
-@@ -12,14 +12,9 @@ QMAKE_CXXFLAGS_RELEASE += -O3
+diff --git a/app/CMakeLists.txt b/app/CMakeLists.txt
+index ddc5c9b..d80728a 100644
+--- a/app/CMakeLists.txt
++++ b/app/CMakeLists.txt
+@@ -158,16 +158,6 @@ target_link_libraries(${ANTIMONY_APP}
  
- QMAKE_CXXFLAGS += -Werror=switch
+ ################################################################################
  
--GITREV = $$system(git log --pretty=format:'%h' -n 1)
--GITDIFF = $$system(git diff --quiet --exit-code || echo "+")
--GITTAG = $$system(git describe --exact-match --tags 2> /dev/null)
--GITBRANCH = $$system(git rev-parse --abbrev-ref HEAD)
+-execute_process(COMMAND git log --pretty=format:'%h' -n 1
+-                OUTPUT_VARIABLE GITREV)
+-execute_process(COMMAND bash -c "git diff --quiet --exit-code || echo +"
+-                OUTPUT_VARIABLE GITDIFF)
+-execute_process(COMMAND git describe --exact-match --tags
+-                OUTPUT_VARIABLE GITTAG
+-                ERROR_QUIET)
+-execute_process(COMMAND git rev-parse --abbrev-ref HEAD
+-                OUTPUT_VARIABLE GITBRANCH)
 -
--QMAKE_CXXFLAGS += "-D'GITREV=\"$${GITREV}$${GITDIFF}\"'"
--QMAKE_CXXFLAGS += "-D'GITTAG=\"$${GITTAG}\"'"
--QMAKE_CXXFLAGS += "-D'GITBRANCH=\"$${GITBRANCH}\"'"
-+QMAKE_CXXFLAGS += "-D'GITREV=\"$$(GITREV)\"'"
-+QMAKE_CXXFLAGS += "-D'GITTAG=\"$$(GITTAG)\"'"
-+QMAKE_CXXFLAGS += "-D'GITBRANCH=\"$$(GITBRANCH)\"'"
- 
- OLD_GL_SET = $$(OLD_GL)
- equals(OLD_GL_SET, "true") {
-@@ -125,11 +120,11 @@ macx {
- }
- 
- linux {
--    executable.path = /usr/local/bin
-+    executable.path = $$(out)/bin
-     executable.files = antimony
--    nodes_folder.path = /usr/local/bin/sb/nodes
-+    nodes_folder.path = $$(out)/bin/sb/nodes
-     nodes_folder.files = ../py/nodes/*
--    fab_folder.path = /usr/local/bin/sb/fab
-+    fab_folder.path = $$(out)/bin/sb/fab
-     fab_folder.files = ../py/fab/*
-     INSTALLS += executable nodes_folder fab_folder
- }
-diff --git a/qt/fab.pri b/qt/fab.pri
-index a54813b..b500536 100644
---- a/qt/fab.pri
-+++ b/qt/fab.pri
-@@ -54,7 +54,7 @@ DEFINES += '_STATIC_= '
- 
- linux {
-     QMAKE_CFLAGS += -std=gnu99
--    QMAKE_CXXFLAGS += $$system(/usr/bin/python3-config --includes)
-+    QMAKE_CXXFLAGS += $$system(python3-config --includes)
-     LIBS += -lpng
- }
- 
-diff --git a/qt/shared.pri b/qt/shared.pri
-index e7d0e3a..026eae3 100644
---- a/qt/shared.pri
-+++ b/qt/shared.pri
-@@ -39,41 +39,11 @@ macx {
- }
- 
- linux {
--    QMAKE_CXXFLAGS += $$system(/usr/bin/python3-config --includes)
--    QMAKE_LFLAGS   += $$system(/usr/bin/python3-config --ldflags)
-+    QMAKE_CXXFLAGS += $$system(python3-config --includes)
-+    QMAKE_LFLAGS   += $$system(python3-config --ldflags)
- 
-     # Even though this is in QMAKE_LFLAGS, the linker is picky about
-     # library ordering (so it needs to be here too).
-     LIBS += -lpython3.4m
--
--    # ldconfig is being used to find libboost_python, but it's in a different
--    # place in different distros (and is not in the default $PATH on Debian).
--    # First, check to see if it's on the default $PATH.
--    system(which ldconfig > /dev/null) {
--        LDCONFIG_BIN = "ldconfig"
--    }
--    # If that failed, then search for it in its usual places.
--    isEmpty(LDCONFIG_BIN) {
--        for(p, $$list(/sbin/ldconfig /usr/bin/ldconfig)) {
--            exists($$p): LDCONFIG_BIN = $$p
--        }
--    }
--    # If that search failed too, then exit with an error.
--    isEmpty(LDCONFIG_BIN) {
--        error("Could not find ldconfig!")
--    }
--
--    # Check for different boost::python naming schemes
--    LDCONFIG_OUT = $$system($$LDCONFIG_BIN -p|grep python)
--    for (b, $$list(boost_python-py34 boost_python3)) {
--        contains(LDCONFIG_OUT, "lib$${b}.so") {
--            LIBS += "-l$$b"
--            GOT_BOOST_PYTHON = True
--        }
--    }
--
--    # If we couldn't find boost::python, exit with an error.
--    isEmpty(GOT_BOOST_PYTHON) {
--        error("Could not find boost::python3")
--    }
-+    LIBS += -lboost_python3
- }
+ add_definitions(-D'GITREV="${GITREV}${GITDIFF}"'
+                 -D'GITTAG="${GITTAG}"'
+                 -D'GITBRANCH="${GITBRANCH}"')

@@ -1,32 +1,34 @@
-{ stdenv, fetchurl, fetchpatch, perl, gdb }:
+{ stdenv, fetchurl, fetchpatch, perl, gdb, llvm, cctools, xnu, bootstrap_cmds }:
 
 stdenv.mkDerivation rec {
-  name = "valgrind-3.11.0";
+  name = "valgrind-3.13.0";
 
   src = fetchurl {
-    url = "http://valgrind.org/downloads/${name}.tar.bz2";
-    sha256 = "0hiv871b9bk689mv42mkhp76za78l5773glszfkdbpf1m1qn4fbc";
+    url = "https://sourceware.org/pub/valgrind/${name}.tar.bz2";
+    sha256 = "0fqc3684grrbxwsic1rc5ryxzxmigzjx9p5vf3lxa37h0gpq0rnp";
   };
 
-  patches =
-    [ (fetchpatch {
-        name = "glibc-2.21.patch";
-        url = "https://projects.archlinux.org/svntogit/packages.git/plain/trunk"
-          + "/valgrind-3.9.0-glibc-2.21.patch?h=packages/valgrind&id=41e87313b69";
-        sha256 = "14sgsvjjalbcqpcayyv5cndc9hfm5bigkp684b6cr6virksmlk19";
-      })
-    ];
+  outputs = [ "out" "dev" "man" "doc" ];
 
-  outputs = [ "out" "doc" ];
+  hardeningDisable = [ "stackprotector" ];
 
   # Perl is needed for `cg_annotate'.
   # GDB is needed to provide a sane default for `--db-command'.
-  nativeBuildInputs = [ perl ];
-  buildInputs = stdenv.lib.optional (!stdenv.isDarwin) gdb;
+  buildInputs = [ perl gdb ]  ++ stdenv.lib.optionals (stdenv.isDarwin) [ bootstrap_cmds xnu ];
 
   enableParallelBuilding = true;
 
-  postPatch =
+  preConfigure = stdenv.lib.optionalString stdenv.isDarwin (
+    let OSRELEASE = ''
+      $(awk -F '"' '/#define OSRELEASE/{ print $2 }' \
+      <${xnu}/Library/Frameworks/Kernel.framework/Headers/libkern/version.h)'';
+    in ''
+      echo "Don't derive our xnu version using uname -r."
+      substituteInPlace configure --replace "uname -r" "echo ${OSRELEASE}"
+    ''
+  );
+
+  postPatch = stdenv.lib.optionalString (stdenv.isDarwin)
     # Apple's GCC doesn't recognize `-arch' (as of version 4.2.1, build 5666).
     ''
       echo "getting rid of the \`-arch' GCC option..."
@@ -35,10 +37,29 @@ stdenv.mkDerivation rec {
 
       sed -i coregrind/link_tool_exe_darwin.in \
           -e 's/^my \$archstr = .*/my $archstr = "x86_64";/g'
+
+      echo "substitute hardcoded /usr/include/mach with ${xnu}/include/mach"
+      substituteInPlace coregrind/Makefile.in \
+         --replace /usr/include/mach ${xnu}/include/mach
+
+      echo "substitute hardcoded dsymutil with ${llvm}/bin/llvm-dsymutil"
+      find -name "Makefile.in" | while read file; do
+         substituteInPlace "$file" \
+           --replace dsymutil ${llvm}/bin/llvm-dsymutil
+      done
+
+      substituteInPlace coregrind/m_debuginfo/readmacho.c \
+         --replace /usr/bin/dsymutil ${llvm}/bin/llvm-dsymutil
+
+      echo "substitute hardcoded /usr/bin/ld with ${cctools}/bin/ld"
+      substituteInPlace coregrind/link_tool_exe_darwin.in \
+        --replace /usr/bin/ld ${cctools}/bin/ld
     '';
 
   configureFlags =
     stdenv.lib.optional (stdenv.system == "x86_64-linux" || stdenv.system == "x86_64-darwin") "--enable-only64bit";
+
+  doCheck = false; # fails
 
   postInstall = ''
     for i in $out/lib/valgrind/*.supp; do
@@ -66,6 +87,6 @@ stdenv.mkDerivation rec {
     license = stdenv.lib.licenses.gpl2Plus;
 
     maintainers = [ stdenv.lib.maintainers.eelco ];
-    platforms = stdenv.lib.platforms.linux;
+    platforms = stdenv.lib.platforms.unix;
   };
 }

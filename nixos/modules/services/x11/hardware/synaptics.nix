@@ -19,7 +19,7 @@ let cfg = config.services.xserver.synaptics;
       Option "TapButton3" "0"
     '';
   pkg = pkgs.xorg.xf86inputsynaptics;
-  etcFile = "X11/xorg.conf.d/50-synaptics.conf";
+  etcFile = "X11/xorg.conf.d/70-synaptics.conf";
 in {
 
   options = {
@@ -29,8 +29,7 @@ in {
       enable = mkOption {
         type = types.bool;
         default = false;
-        example = true;
-        description = "Whether to enable touchpad support.";
+        description = "Whether to enable touchpad support. Deprecated: Consider services.xserver.libinput.enable.";
       };
 
       dev = mkOption {
@@ -60,6 +59,13 @@ in {
         type = types.nullOr types.string;
         default = "1.0";
         description = "Cursor speed factor for highest-speed finger motion.";
+      };
+
+      scrollDelta = mkOption {
+        type = types.nullOr types.int;
+        default = null;
+        example = 75;
+        description = "Move distance of the finger for a scroll event.";
       };
 
       twoFingerScroll = mkOption {
@@ -95,7 +101,6 @@ in {
       tapButtons = mkOption {
         type = types.bool;
         default = true;
-        example = false;
         description = "Whether to enable tap buttons.";
       };
 
@@ -118,14 +123,26 @@ in {
       palmDetect = mkOption {
         type = types.bool;
         default = false;
-        example = true;
         description = "Whether to enable palm detection (hardware support required)";
+      };
+
+      palmMinWidth = mkOption {
+        type = types.nullOr types.int;
+        default = null;
+        example = 5;
+        description = "Minimum finger width at which touch is considered a palm";
+      };
+
+      palmMinZ = mkOption {
+        type = types.nullOr types.int;
+        default = null;
+        example = 20;
+        description = "Minimum finger pressure at which touch is considered a palm";
       };
 
       horizontalScroll = mkOption {
         type = types.bool;
         default = true;
-        example = false;
         description = "Whether to enable horizontal scrolling (on touchpad)";
       };
 
@@ -148,10 +165,10 @@ in {
 
   config = mkIf cfg.enable {
 
-    services.xserver.modules = [ pkg ];
+    services.xserver.modules = [ pkg.out ];
 
     environment.etc."${etcFile}".source =
-      "${pkg}/share/X11/xorg.conf.d/50-synaptics.conf";
+      "${pkg.out}/share/X11/xorg.conf.d/70-synaptics.conf";
 
     environment.systemPackages = [ pkg ];
 
@@ -174,11 +191,22 @@ in {
           Option "HorizTwoFingerScroll" "${if cfg.horizTwoFingerScroll then "1" else "0"}"
           Option "VertEdgeScroll" "${if cfg.vertEdgeScroll then "1" else "0"}"
           Option "HorizEdgeScroll" "${if cfg.horizEdgeScroll then "1" else "0"}"
-          ${if cfg.palmDetect then ''Option "PalmDetect" "1"'' else ""}
-          ${if cfg.horizontalScroll then "" else ''Option "HorizScrollDelta" "0"''}
+          ${optionalString cfg.palmDetect ''Option "PalmDetect" "1"''}
+          ${optionalString (cfg.palmMinWidth != null) ''Option "PalmMinWidth" "${toString cfg.palmMinWidth}"''}
+          ${optionalString (cfg.palmMinZ != null) ''Option "PalmMinZ" "${toString cfg.palmMinZ}"''}
+          ${optionalString (cfg.scrollDelta != null) ''Option "VertScrollDelta" "${toString cfg.scrollDelta}"''}
+          ${if !cfg.horizontalScroll then ''Option "HorizScrollDelta" "0"''
+            else (optionalString (cfg.scrollDelta != null) ''Option "HorizScrollDelta" "${toString cfg.scrollDelta}"'')}
           ${cfg.additionalOptions}
         EndSection
       '';
+
+    assertions = [
+      {
+        assertion = !config.services.xserver.libinput.enable;
+        message = "Synaptics and libinput are incompatible, you cannot enable both (in services.xserver).";
+      }
+    ];
 
   };
 

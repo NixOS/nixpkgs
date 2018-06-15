@@ -20,6 +20,20 @@ let
 in
 {
   options.sdImage = {
+    imageName = mkOption {
+      default = "${config.sdImage.imageBaseName}-${config.system.nixos.label}-${pkgs.stdenv.system}.img";
+      description = ''
+        Name of the generated image file.
+      '';
+    };
+
+    imageBaseName = mkOption {
+      default = "nixos-sd-image";
+      description = ''
+        Prefix of the name of the generated image file.
+      '';
+    };
+
     storePaths = mkOption {
       type = with types; listOf package;
       example = literalExample "[ pkgs.stdenv ]";
@@ -30,7 +44,7 @@ in
 
     bootSize = mkOption {
       type = types.int;
-      default = 128;
+      default = 120;
       description = ''
         Size of the /boot partition, in megabytes.
       '';
@@ -61,32 +75,38 @@ in
     sdImage.storePaths = [ config.system.build.toplevel ];
 
     system.build.sdImage = pkgs.stdenv.mkDerivation {
-      name = "sd-image-${pkgs.stdenv.system}.img";
+      name = config.sdImage.imageName;
 
       buildInputs = with pkgs; [ dosfstools e2fsprogs mtools libfaketime utillinux ];
 
       buildCommand = ''
-        # Create the image file sized to fit /boot and /, plus 4M of slack
+        mkdir -p $out/nix-support $out/sd-image
+        export img=$out/sd-image/${config.sdImage.imageName}
+
+        echo "${pkgs.stdenv.system}" > $out/nix-support/system
+        echo "file sd-image $img" >> $out/nix-support/hydra-build-products
+
+        # Create the image file sized to fit /boot and /, plus 20M of slack
         rootSizeBlocks=$(du -B 512 --apparent-size ${rootfsImage} | awk '{ print $1 }')
         bootSizeBlocks=$((${toString config.sdImage.bootSize} * 1024 * 1024 / 512))
-        imageSize=$((rootSizeBlocks * 512 + bootSizeBlocks * 512 + 4096 * 1024))
-        truncate -s $imageSize $out
+        imageSize=$((rootSizeBlocks * 512 + bootSizeBlocks * 512 + 20 * 1024 * 1024))
+        truncate -s $imageSize $img
 
         # type=b is 'W95 FAT32', type=83 is 'Linux'.
-        sfdisk $out <<EOF
+        sfdisk $img <<EOF
             label: dos
             label-id: 0x2178694e
 
-            start=1M, size=$bootSizeBlocks, type=b, bootable
-            type=83
+            start=8M, size=$bootSizeBlocks, type=b, bootable
+            start=${toString (8 + config.sdImage.bootSize)}M, type=83
         EOF
 
         # Copy the rootfs into the SD image
-        eval $(partx $out -o START,SECTORS --nr 2 --pairs)
-        dd conv=notrunc if=${rootfsImage} of=$out seek=$START count=$SECTORS
+        eval $(partx $img -o START,SECTORS --nr 2 --pairs)
+        dd conv=notrunc if=${rootfsImage} of=$img seek=$START count=$SECTORS
 
         # Create a FAT32 /boot partition of suitable size into bootpart.img
-        eval $(partx $out -o START,SECTORS --nr 1 --pairs)
+        eval $(partx $img -o START,SECTORS --nr 1 --pairs)
         truncate -s $((SECTORS * 512)) bootpart.img
         faketime "1970-01-01 00:00:00" mkfs.vfat -i 0x2178694e -n NIXOS_BOOT bootpart.img
 
@@ -96,7 +116,7 @@ in
 
         # Copy the populated /boot into the SD image
         (cd boot; mcopy -bpsvm -i ../bootpart.img ./* ::)
-        dd conv=notrunc if=bootpart.img of=$out seek=$START count=$SECTORS
+        dd conv=notrunc if=bootpart.img of=$img seek=$START count=$SECTORS
       '';
     };
 
@@ -113,11 +133,11 @@ in
         ${pkgs.e2fsprogs}/bin/resize2fs $rootPart
 
         # Register the contents of the initial Nix store
-        ${config.nix.package}/bin/nix-store --load-db < /nix-path-registration
+        ${config.nix.package.out}/bin/nix-store --load-db < /nix-path-registration
 
         # nixos-rebuild also requires a "system" profile and an /etc/NIXOS tag.
         touch /etc/NIXOS
-        ${config.nix.package}/bin/nix-env -p /nix/var/nix/profiles/system --set /run/current-system
+        ${config.nix.package.out}/bin/nix-env -p /nix/var/nix/profiles/system --set /run/current-system
 
         # Prevents this from running on later boots.
         rm -f /nix-path-registration

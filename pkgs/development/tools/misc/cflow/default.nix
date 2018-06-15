@@ -1,11 +1,11 @@
 { stdenv, fetchurl, gettext, emacs }:
 
 stdenv.mkDerivation rec {
-  name = "cflow-1.4";
+  name = "cflow-1.5";
 
   src = fetchurl {
     url = "mirror://gnu/cflow/${name}.tar.bz2";
-    sha256 = "1jkbq97ajcf834z68hbn3xfhiz921zhn39gklml1racf0kb3jzh3";
+    sha256 = "0yq33k5ap1zpnja64n89iai4zh018ffr72wki5a6mzczd880mr3g";
   };
 
   patchPhase = ''
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "Tool to analyze the control flow of C programs";
 
     longDescription = ''
@@ -39,11 +39,11 @@ stdenv.mkDerivation rec {
       produced flowcharts in Emacs.
     '';
 
-    license = stdenv.lib.licenses.gpl3Plus;
+    license = licenses.gpl3Plus;
 
     homepage = http://www.gnu.org/software/cflow/;
 
-    maintainers = [ ];
+    maintainers = [ maintainers.vrthra ];
 
     /* On Darwin, build fails with:
 
@@ -52,6 +52,6 @@ stdenv.mkDerivation rec {
              _argp_program_version$non_lazy_ptr in libcflow.a(argp-parse.o)
        ld: symbol(s) not found
      */
-    platforms = stdenv.lib.platforms.linux;
+    platforms = platforms.linux;
   };
 }

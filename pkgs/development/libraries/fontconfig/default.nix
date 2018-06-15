@@ -1,5 +1,7 @@
-{ stdenv, fetchurl, fetchpatch, pkgconfig, freetype, expat, libxslt, fontbhttf
-, substituteAll }:
+{ stdenv, substituteAll, fetchurl, fetchpatch
+, pkgconfig, freetype, expat, libxslt, gperf, dejavu_fonts
+, hostPlatform
+}:
 
 /** Font configuration scheme
  - ./config-compat.patch makes fontconfig try the following root configs, in order:
@@ -16,44 +18,36 @@ let
   configVersion = "2.11"; # bump whenever fontconfig breaks compatibility with older configurations
 in
 stdenv.mkDerivation rec {
-  name = "fontconfig-2.11.1";
+  name = "fontconfig-${version}";
+  version = "2.12.6";
 
   src = fetchurl {
     url = "http://fontconfig.org/release/${name}.tar.bz2";
-    sha256 = "16baa4g5lswkyjlyf1h5lwc0zjap7c4d8grw79349a5w6dsl8qnw";
+    sha256 = "05zh65zni11kgnhg726gjbrd55swspdvhqbcnj5a5xh8gn03036g";
   };
 
   patches = [
-    (fetchpatch ({
-        url = "http://cgit.freedesktop.org/fontconfig/patch/?id=f44157c809d280e2a0ce87fb078fc4b278d24a67";
-        sha256 = "19s5irclg4irj2yxd7xw9yikbazs9263px8qbv4r21asw06nfalv";
-        name = "fc-cache-bug-77252.patch";
-      }
-    ))
     (substituteAll {
       src = ./config-compat.patch;
       inherit configVersion;
     })
   ];
 
+  outputs = [ "bin" "dev" "lib" "out" ]; # $out contains all the config
+
   propagatedBuildInputs = [ freetype ];
-  buildInputs = [ pkgconfig expat ];
+  nativeBuildInputs = [ pkgconfig gperf ];
+  buildInputs = [ expat ];
 
   configureFlags = [
+    "--with-arch=${hostPlatform.parsed.cpu.name}"
     "--with-cache-dir=/var/cache/fontconfig" # otherwise the fallback is in $out/
     "--disable-docs"
-    # just ~1MB; this is what you get when loading config fails for some reason
-    "--with-default-fonts=${fontbhttf}"
+    # just <1MB; this is what you get when loading config fails for some reason
+    "--with-default-fonts=${dejavu_fonts.minimal}"
+  ] ++ stdenv.lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+    "--with-arch=${hostPlatform.parsed.cpu.name}"
   ];
-
-  # We should find a better way to access the arch reliably.
-  crossArch = stdenv.cross.arch or null;
-
-  preConfigure = ''
-    if test -n "$crossConfig"; then
-      configureFlags="$configureFlags --with-arch=$crossArch";
-    fi
-  '';
 
   enableParallelBuilding = true;
 
@@ -64,9 +58,7 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     cd "$out/etc/fonts"
-    rm conf.d/{50-user,51-local}.conf
-    "${libxslt}/bin/xsltproc" --stringparam fontDirectories "${fontbhttf}" \
-      --stringparam fontconfig "$out" \
+    "${libxslt.bin}/bin/xsltproc" --stringparam fontDirectories "${dejavu_fonts.minimal}" \
       --stringparam fontconfigConfigVersion "${configVersion}" \
       --path $out/share/xml/fontconfig \
       ${./make-fonts-conf.xsl} $out/etc/fonts/fonts.conf \

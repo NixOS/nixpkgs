@@ -1,4 +1,6 @@
-{ fetchurl, stdenv, ncurses }:
+{ fetchurl, stdenv, ncurses
+, buildPlatform, hostPlatform
+}:
 
 stdenv.mkDerivation (rec {
   name = "readline-6.2";
@@ -50,12 +52,13 @@ stdenv.mkDerivation (rec {
 
     maintainers = [ ];
     branch = "6.2";
+    platforms = stdenv.lib.platforms.unix;
   };
 }
 
 //
 
 # Don't run the native `strip' when cross-compiling.
-(if (stdenv ? cross)
+(if hostPlatform != buildPlatform
  then { dontStrip = true; }
  else { }))

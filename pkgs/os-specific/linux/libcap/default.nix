@@ -1,29 +1,56 @@
-{ stdenv, fetchurl, attr, perl }:
+{ stdenv, buildPackages, fetchurl, attr, perl, pam }:
 
 stdenv.mkDerivation rec {
   name = "libcap-${version}";
-  version = "2.24";
-  
+  version = "2.25";
+
   src = fetchurl {
     url = "mirror://kernel/linux/libs/security/linux-privs/libcap2/${name}.tar.xz";
-    sha256 = "0rbc9qbqs5bp9am9s9g83wxj5k4ixps2agy9dxr1v1fwg27mdr6f";
+    sha256 = "0qjiqc5pknaal57453nxcbz3mn1r4hkyywam41wfcglq3v2qlg39";
   };
-  
+
+  outputs = [ "out" "dev" "lib" "man" "doc" "pam" ];
+
+  depsBuildBuild = [ buildPackages.stdenv.cc ];
   nativeBuildInputs = [ perl ];
+
+  buildInputs = [ pam ];
+
   propagatedBuildInputs = [ attr ];
 
-  preConfigure = "cd libcap";
+  makeFlags = [
+    "lib=lib"
+    "PAM_CAP=yes"
+    "BUILD_CC=$(CC_FOR_BUILD)"
+    "CC:=$(CC)"
+  ];
 
-  makeFlags = "lib=lib prefix=$(out)";
+  prePatch = ''
+    # use relative bash path
+    substituteInPlace progs/capsh.c --replace "/bin/bash" "bash"
 
-  passthru = {
-    postinst = n : ''
-      mkdir -p $out/share/doc/${n}
-      cp ../License $out/share/doc/${n}/License
-    '';
-  };
+    # ensure capsh can find bash in $PATH
+    substituteInPlace progs/capsh.c --replace execve execvpe
 
-  postInstall = passthru.postinst name;
+    # set prefixes
+    substituteInPlace Make.Rules \
+      --replace 'prefix=/usr' "prefix=$lib" \
+      --replace 'exec_prefix=' "exec_prefix=$out" \
+      --replace 'lib_prefix=$(exec_prefix)' "lib_prefix=$lib" \
+      --replace 'inc_prefix=$(prefix)' "inc_prefix=$dev" \
+      --replace 'man_prefix=$(prefix)' "man_prefix=$doc"
+  '';
+
+  installFlags = "RAISE_SETFCAP=no";
+
+  postInstall = ''
+    rm "$lib"/lib/*.a
+    mkdir -p "$doc/share/doc/${name}"
+    cp License "$doc/share/doc/${name}/"
+  '' + stdenv.lib.optionalString (pam != null) ''
+    mkdir -p "$pam/lib/security"
+    mv "$lib"/lib/security "$pam/lib"
+  '';
 
   meta = {
     description = "Library for working with POSIX capabilities";

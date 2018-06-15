@@ -1,14 +1,11 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "alsa-lib-1.0.29";
+  name = "alsa-lib-1.1.6";
 
   src = fetchurl {
-    urls = [
-     "ftp://ftp.alsa-project.org/pub/lib/${name}.tar.bz2"
-     "http://alsa.cybermirror.org/lib/${name}.tar.bz2"
-    ];
-    sha256 = "1l5xzhq7xjy8xap087zbbyi14gr1bhil18pn987vwdlnxcskq13k";
+    url = "mirror://alsa/lib/${name}.tar.bz2";
+    sha256 = "096pwrnhj36yndldvs2pj4r871zhcgisks0is78f1jkjn9sd4b2z";
   };
 
   patches = [
@@ -25,11 +22,7 @@ stdenv.mkDerivation rec {
     sed -i -e 's/u_int\([0-9]*\)_t/uint\1_t/g' include/pcm.h
   '';
 
-  crossAttrs = {
-    patchPhase = ''
-      sed -i s/extern/static/g include/iatomic.h
-    '';
-  };
+  outputs = [ "out" "dev" ];
 
   meta = with stdenv.lib; {
     homepage = http://www.alsa-project.org/;

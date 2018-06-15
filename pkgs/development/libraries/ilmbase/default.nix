@@ -1,18 +1,22 @@
 { stdenv, fetchurl, automake, autoconf, libtool, which }:
 
 stdenv.mkDerivation rec {
-  name = "ilmbase-2.2.0";
+  name = "ilmbase-2.2.1";
 
   src = fetchurl {
     url = "http://download.savannah.nongnu.org/releases/openexr/${name}.tar.gz";
-    sha256 = "1izddjwbh1grs8080vmaix72z469qy29wrvkphgmqmcm0sv1by7c";
+    sha256 = "17k0hq19wplx9s029kjrq6c51x2ryrfmaavcappkd0g67gk0dhna";
   };
+
+  outputs = [ "out" "dev" ];
 
   preConfigure = ''
     ./bootstrap
   '';
 
   buildInputs = [ automake autoconf libtool which ];
+
+  NIX_CFLAGS_LINK = [ "-pthread" ];
 
   patches = [ ./bootstrap.patch ];
 

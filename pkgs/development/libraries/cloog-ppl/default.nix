@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, ppl, autoconf, automake, libtool }:
+{ fetchurl, stdenv, ppl, autoreconfHook }:
 
 stdenv.mkDerivation rec {
   name = "cloog-ppl-0.15.11";
@@ -10,24 +10,15 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = [ ppl ];
 
-  nativeBuildInputs = [ automake autoconf libtool ];
+  nativeBuildInputs = [ autoreconfHook ];
 
   patches = [ ./fix-ppl-version.patch ];
 
   configureFlags = "--with-ppl=${ppl}";
 
-  preConfigure = ''
+  preAutoreconf = ''
     touch NEWS ChangeLog AUTHORS
-    ${libtool}/bin/libtoolize -c --force
-    ${automake}/bin/aclocal
-    ${automake}/bin/automake --add-missing
-    ${automake}/bin/automake -a -c --foreign
-    ${autoconf}/bin/autoreconf
   '';
-
-  crossAttrs = {
-    configureFlags = "--with-ppl=${ppl.crossDrv}";
-  };
 
   doCheck = true;
 
@@ -74,6 +65,6 @@ stdenv.mkDerivation rec {
        make[3]: *** [Box.lo] Error 1
 
     */
-    platforms = with stdenv.lib.platforms; allBut cygwin;
+    platforms = stdenv.lib.platforms.unix; # Once had cygwin problems
   };
 }

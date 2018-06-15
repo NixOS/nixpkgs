@@ -1,24 +1,29 @@
-{ stdenv, fetchgit, cmake, perl }:
+{ stdenv, fetchgit, cmake, perl, go }:
 
+# reference: https://boringssl.googlesource.com/boringssl/+/2661/BUILDING.md
 stdenv.mkDerivation rec {
   name = "boringssl-${version}";
-  version = "20140820-a7d1363f";
+  version = "2017-02-23";
 
   src = fetchgit {
     url    = "https://boringssl.googlesource.com/boringssl";
-    rev    = "a7d1363fcb1f0d825ec2393c06be3d58b0c57efd";
-    sha256 = "d27dd1416de1a2ea4ec2c219248b2ed2cce5c0405e56adb394077ddc7c319bab";
+    rev    = "be2ee342d3781ddb954f91f8a7e660c6f59e87e5";
+    sha256 = "022zq7wlkhrg6al7drr3555lam3zw5bb10ylf9mznp83s854f975";
   };
 
-  buildInputs = [ cmake perl ];
+  buildInputs = [ cmake perl go ];
   enableParallelBuilding = true;
-  NIX_CFLAGS_COMPILE = "-Wno-error=cpp";
+  NIX_CFLAGS_COMPILE = "-Wno-error";
 
   installPhase = ''
     mkdir -p $out/bin $out/include $out/lib
 
-    mv tool/bssl    $out/bin
-    mv ssl/libssl.a $out/lib
+    mv tool/bssl $out/bin
+
+    mv ssl/libssl.a           $out/lib
+    mv crypto/libcrypto.a     $out/lib
+    mv decrepit/libdecrepit.a $out/lib
+
     mv ../include/openssl $out/include
   '';
 

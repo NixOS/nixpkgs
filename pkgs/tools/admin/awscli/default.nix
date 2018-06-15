@@ -1,27 +1,52 @@
-{ stdenv, fetchFromGitHub, pythonPackages, groff }:
+{ lib
+, python
+, groff
+, less
+}:
 
-pythonPackages.buildPythonPackage rec {
-  name = "awscli-${version}";
-  version = "1.7.47";
-  namePrefix = "";
-
-  src = fetchFromGitHub {
-    owner = "aws";
-    repo = "aws-cli";
-    rev = version;
-    sha256 = "1955y1ar2mqzqgfngpwp8pc78wphh1qdgwwy0gs6i352jaqzkvwi";
+let
+  py = python.override {
+    packageOverrides = self: super: {
+      colorama = super.colorama.overridePythonAttrs (oldAttrs: rec {
+        version = "0.3.7";
+        src = oldAttrs.src.override {
+          inherit version;
+          sha256 = "0avqkn6362v7k2kg3afb35g4sfdvixjgy890clip4q174p9whhz0";
+        };
+      });
+    };
   };
 
-  propagatedBuildInputs = [
-    pythonPackages.botocore
-    pythonPackages.bcdoc
-    pythonPackages.six
-    pythonPackages.colorama
-    pythonPackages.docutils
-    pythonPackages.rsa
-    pythonPackages.pyasn1
+in py.pkgs.buildPythonApplication rec {
+  pname = "awscli";
+  version = "1.15.10";
+
+  src = py.pkgs.fetchPypi {
+    inherit pname version;
+    sha256 = "0nwpanbfx5h0bad8wwvvbhpjf9r6n885bbv2w8mw7vijdgclkq8x";
+  };
+
+  # No tests included
+  doCheck = false;
+
+  propagatedBuildInputs = with py.pkgs; [
+    botocore
+    bcdoc
+    s3transfer
+    six
+    colorama
+    docutils
+    rsa
+    pyyaml
     groff
+    less
   ];
+
+  postPatch = ''
+    for i in {py,cfg}; do
+      substituteInPlace setup.$i --replace "botocore==1.10.10" "botocore>=1.10.9,<=1.11"
+    done
+  '';
 
   postInstall = ''
     mkdir -p $out/etc/bash_completion.d
@@ -31,10 +56,10 @@ pythonPackages.buildPythonPackage rec {
     rm $out/bin/aws.cmd
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = https://aws.amazon.com/cli/;
     description = "Unified tool to manage your AWS services";
-    license = stdenv.lib.licenses.asl20;
-    maintainers = with stdenv.lib.maintainers; [ muflax ];
+    license = licenses.asl20;
+    maintainers = with maintainers; [ muflax ];
   };
 }

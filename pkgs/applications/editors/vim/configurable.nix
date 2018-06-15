@@ -1,13 +1,23 @@
 # TODO tidy up eg The patchelf code is patching gvim even if you don't build it..
 # but I have gvim with python support now :) - Marc
-args@{pkgs, source ? "default", fetchurl, fetchhg, stdenv, ncurses, pkgconfig, gettext
-, composableDerivation, lib, config, glib, gtk, python, perl, tcl, ruby
+args@{ source ? "default", callPackage, fetchurl, stdenv, ncurses, pkgconfig, gettext
+, composableDerivation, writeText, lib, config, glib, gtk2, gtk3, python, perl, tcl, ruby
 , libX11, libXext, libSM, libXpm, libXt, libXaw, libXau, libXmu
-, libICE, ... }: with args;
+, libICE
+, vimPlugins
+, makeWrapper
+
+# apple frameworks
+, CoreServices, CoreData, Cocoa, Foundation, libobjc, cf-private
+
+, wrapPythonDrv ? false
+
+, ... }: with args;
 
 
-let inherit (args.composableDerivation) composableDerivation edf;
-  nixosRuntimepath = pkgs.writeText "nixos-vimrc" ''
+let
+  inherit (args.composableDerivation) composableDerivation edf;
+  nixosRuntimepath = writeText "nixos-vimrc" ''
     set nocompatible
     syntax on
 
@@ -18,6 +28,10 @@ let inherit (args.composableDerivation) composableDerivation edf;
           let pluginname = substitute(d, ".*/", "", "")
           if !has_key(seen, pluginname)
             exec 'set runtimepath^='.d
+            let after = d."/after"
+            if isdirectory(after)
+              exec 'set runtimepath^='.after
+            endif
             let seen[pluginname] = 1
           endif
         endfor
@@ -32,24 +46,18 @@ let inherit (args.composableDerivation) composableDerivation edf;
       source /etc/vim/vimrc
     endif
   '';
+
+  common = callPackage ./common.nix {};
 in
 composableDerivation {
 } (fix: rec {
 
     name = "vim_configurable-${version}";
-    version = "7.4.826";
 
-    enableParallelBuilding = true; # test this
+    inherit (common) version postPatch hardeningDisable enableParallelBuilding meta;
 
-    src =
-      builtins.getAttr source {
-      "default" =
-        # latest release
-      args.fetchhg {
-            url = "http://vim.googlecode.com/hg/";
-            rev = "v${version}";
-            sha256 = "01m67lvnkz0ad28ifj964zcg63y5hixplbnzas5xarj8vl3pc5a0";
-      };
+    src = builtins.getAttr source {
+      "default" = common.src; # latest release
 
       "vim-nox" =
           {
@@ -61,34 +69,36 @@ composableDerivation {
           }.src;
       };
 
-    prePatch = "cd src";
-
-    # if darwin support is enabled, we want to make sure we're not building with
-    # OS-installed python framework
-    patches = stdenv.lib.optionals
-      (stdenv.isDarwin && (config.vim.darwin or true))
-      [ ./python_framework.patch ];
+    patches = [ ./cflags-prune.diff ];
 
     configureFlags
       = [ "--enable-gui=${args.gui}" "--with-features=${args.features}" ];
 
-    nativeBuildInputs
-      = [ ncurses pkgconfig gtk libX11 libXext libSM libXpm libXt libXaw libXau
-          libXmu glib libICE ];
+    nativeBuildInputs = [ pkgconfig ];
+
+    buildInputs
+      = [ ncurses libX11 libXext libSM libXpm libXt libXaw libXau
+          libXmu glib libICE ] ++ (if args.gui == "gtk3" then [gtk3] else [gtk2]);
 
     # most interpreters aren't tested yet.. (see python for example how to do it)
     flags = {
         ftNix = {
-          # because we cd to src in the main patch phase, we can't just add this
-          # patch to the list, we have to apply it manually
-          postPatch = ''
-            cd ../runtime
-            patch -p2 < ${./ft-nix-support.patch}
-            cd ..
+          patches = [ ./ft-nix-support.patch ];
+          preConfigure = ''
+            cp ${vimPlugins.vim-nix.src}/ftplugin/nix.vim runtime/ftplugin/nix.vim
+            cp ${vimPlugins.vim-nix.src}/indent/nix.vim runtime/indent/nix.vim
+            cp ${vimPlugins.vim-nix.src}/syntax/nix.vim runtime/syntax/nix.vim
           '';
         };
       }
-      // edf { name = "darwin"; } #Disable Darwin (Mac OS X) support.
+      // edf {
+        name = "darwin";
+        enable = {
+          buildInputs = [ CoreServices CoreData Cocoa Foundation libobjc cf-private ];
+          NIX_LDFLAGS = stdenv.lib.optional stdenv.isDarwin
+            "/System/Library/Frameworks/CoreFoundation.framework/Versions/A/CoreFoundation";
+        };
+      } #Disable Darwin (macOS) support.
       // edf { name = "xsmp"; } #Disable XSMP session management
       // edf { name = "xsmp_interact"; } #Disable XSMP interaction
       // edf { name = "mzscheme"; feat = "mzschemeinterp";} #Include MzScheme interpreter.
@@ -96,36 +106,29 @@ composableDerivation {
 
       // edf {
         name = "python";
-        feat = "pythoninterp";
+        feat = "python${if python ? isPy3 then "3" else ""}interp";
         enable = {
-          nativeBuildInputs = [ python ];
+          buildInputs = [ python ];
+        } // lib.optionalAttrs wrapPythonDrv {
+          nativeBuildInputs = [ makeWrapper ];
+          postInstall = ''
+            wrapProgram "$out/bin/vim" --prefix PATH : "${python}/bin"
+          '';
         } // lib.optionalAttrs stdenv.isDarwin {
           configureFlags
-            = [ "--enable-pythoninterp=yes"
-                "--with-python-config-dir=${python}/lib" ];
+            = [ "--enable-python${if python ? isPy3 then "3" else ""}interp=yes"
+                "--with-python${if python ? isPy3 then "3" else ""}-config-dir=${python}/lib"
+                "--disable-python${if python ? isPy3 then "" else "3"}interp" ];
         };
       }
 
-      // edf {
-        name = "python3";
-        feat = "python3interp";
-        enable = {
-          nativeBuildInputs = [ pkgs.python3 ];
-        } // lib.optionalAttrs stdenv.isDarwin {
-          configureFlags
-            = [ "--enable-python3interp=yes"
-                "--with-python3-config-dir=${pkgs.python3}/lib"
-                "--disable-pythoninterp" ];
-        };
-      }
-
-      // edf { name = "tcl"; feat = "tclinterp"; enable = { nativeBuildInputs = [tcl]; }; } #Include Tcl interpreter.
-      // edf { name = "ruby"; feat = "rubyinterp"; enable = { nativeBuildInputs = [ruby]; };} #Include Ruby interpreter.
+      // edf { name = "tcl"; feat = "tclinterp"; enable = { buildInputs = [tcl]; }; } #Include Tcl interpreter.
+      // edf { name = "ruby"; feat = "rubyinterp"; enable = { buildInputs = [ruby]; };} #Include Ruby interpreter.
       // edf {
         name = "lua";
         feat = "luainterp";
         enable = {
-          nativeBuildInputs = [lua];
+          buildInputs = [lua];
           configureFlags = [
             "--with-lua-prefix=${args.lua}"
             "--enable-luainterp"
@@ -148,13 +151,13 @@ composableDerivation {
   cfg = {
     luaSupport       = config.vim.lua or true;
     pythonSupport    = config.vim.python or true;
-    python3Support   = config.vim.python3 or false;
     rubySupport      = config.vim.ruby or true;
     nlsSupport       = config.vim.nls or false;
     tclSupport       = config.vim.tcl or false;
     multibyteSupport = config.vim.multibyte or false;
     cscopeSupport    = config.vim.cscope or true;
     netbeansSupport  = config.netbeans or true; # eg envim is using it
+    ximSupport       = config.vim.xim or true; # less than 15KB, needed for deadkeys
 
     # by default, compile with darwin support if we're compiling on darwin, but
     # allow this to be disabled by setting config.vim.darwin to false
@@ -164,7 +167,7 @@ composableDerivation {
     ftNixSupport     = config.vim.ftNix or true;
   };
 
-  #--enable-gui=OPTS     X11 GUI default=auto OPTS=auto/no/gtk/gtk2/gnome/gnome2/motif/athena/neXtaw/photon/carbon
+  #--enable-gui=OPTS     X11 GUI default=auto OPTS=auto/no/gtk/gtk2/gtk3/gnome/gnome2/motif/athena/neXtaw/photon/carbon
     /*
       // edf "gtk_check" "gtk_check" { } #If auto-select GUI, check for GTK default=yes
       // edf "gtk2_check" "gtk2_check" { } #If GTK GUI, check for GTK+ 2 default=yes
@@ -176,27 +179,17 @@ composableDerivation {
       // edf "gtktest" "gtktest" { } #Do not try to compile and run a test GTK program
     */
 
-  postInstall = stdenv.lib.optionalString stdenv.isLinux ''
-    rpath=`patchelf --print-rpath $out/bin/vim`;
-    for i in $nativeBuildInputs; do
-      echo adding $i/lib
-      rpath=$rpath:$i/lib
-    done
-    echo $nativeBuildInputs
-    echo $rpath
-    patchelf --set-rpath $rpath $out/bin/{vim,gvim}
+  preInstall = ''
+    mkdir -p $out/share/applications $out/share/icons/{hicolor,locolor}/{16x16,32x32,48x48}/apps
+  '';
 
-    ln -sfn ${nixosRuntimepath} $out/share/vim/vimrc
+  postInstall = stdenv.lib.optionalString stdenv.isLinux ''
+    patchelf --set-rpath \
+      "$(patchelf --print-rpath $out/bin/vim):${lib.makeLibraryPath buildInputs}" \
+      "$out"/bin/{vim,gvim}
+
+    ln -sfn '${nixosRuntimepath}' "$out"/share/vim/vimrc
   '';
 
   dontStrip = 1;
-
-  meta = with stdenv.lib; {
-    description = "The most popular clone of the VI editor";
-    homepage    = http://www.vim.org;
-    license = licenses.vim;
-    maintainers = with maintainers; [ lovek323 ];
-    platforms   = platforms.unix;
-  };
 })
-

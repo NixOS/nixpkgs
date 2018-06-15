@@ -1,4 +1,4 @@
-{ stdenv, gmp, gnum4
+{ stdenv, buildPackages, gmp, gnum4
 
 # Version specific args
 , version, src
@@ -9,7 +9,11 @@ stdenv.mkDerivation (rec {
 
   inherit src;
 
-  buildInputs = [ gnum4 ];
+  outputs = [ "out" "dev" ];
+  outputBin = "dev";
+
+  depsBuildBuild = [ buildPackages.stdenv.cc ];
+  nativeBuildInputs = [ gnum4 ];
   propagatedBuildInputs = [ gmp ];
 
   doCheck = (stdenv.system != "i686-cygwin" && !stdenv.isDarwin);
@@ -61,5 +65,5 @@ stdenv.lib.optionalAttrs stdenv.isSunOS {
   # /usr/include/mp.h from OpenSolaris.  See
   # <https://lists.gnu.org/archive/html/hydra-users/2012-08/msg00000.html>
   # for details.
-  configureFlags = [ "--with-include-path=${gmp}/include" ];
+  configureFlags = [ "--with-include-path=${gmp.dev}/include" ];
 })

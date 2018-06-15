@@ -1,72 +1,78 @@
-{ pkgs, stdenv, fetchurl, python, buildPythonPackage, pythonPackages, mygpoclient, intltool,
-  ipodSupport ? true, libgpod, gnome3 }:
+{ stdenv, fetchFromGitHub, python3, python3Packages, intltool
+, glibcLocales, gnome3, gtk3, wrapGAppsHook
+, ipodSupport ? false, libgpod, gobjectIntrospection
+}:
 
-with pkgs.lib;
+python3Packages.buildPythonApplication rec {
+  name = "gpodder-${version}";
+  version = "3.10.1";
 
-let
-  inherit (pythonPackages) coverage feedparser minimock sqlite3 dbus pygtk eyeD3;
+  format = "other";
 
-in buildPythonPackage rec {
-  name = "gpodder-3.8.4";
-
-  src = fetchurl {
-    url = "http://gpodder.org/src/${name}.tar.gz";
-    sha256 = "0cjpk92qjsws7ddbnq0r2h7vm5019zlpafgbxwsgllmjzkknj6pn";
+  src = fetchFromGitHub {
+    owner = "gpodder";
+    repo = "gpodder";
+    rev = version;
+    sha256 = "1cqhm5h0kkdb2m691dbj8i3bixl7bw0iww2pl6k1jkz8mgafyd9d";
   };
 
-  buildInputs = [
-    coverage feedparser minimock sqlite3 mygpoclient intltool
-    gnome3.gnome_themes_standard gnome3.defaultIconTheme
-    gnome3.gsettings_desktop_schemas
+  postPatch = with stdenv.lib; ''
+    sed -i -re 's,^( *gpodder_dir *= *).*,\1"'"$out"'",' bin/gpodder
+  '';
+
+  nativeBuildInputs = [
+    intltool
+    wrapGAppsHook
+    glibcLocales
   ];
 
-  propagatedUserEnvPkgs = [ gnome3.gnome_themes_standard ];
+  buildInputs = [
+    python3
+    gobjectIntrospection
+    gnome3.defaultIconTheme
+  ];
 
-  pythonPath = [ feedparser dbus mygpoclient sqlite3 pygtk eyeD3 ]
-    ++ stdenv.lib.optional ipodSupport libgpod;
+  checkInputs = with python3Packages; [
+    coverage minimock
+  ];
 
-  postPatch = "sed -ie 's/PYTHONPATH=src/PYTHONPATH=\$(PYTHONPATH):src/' makefile";
+  doCheck = true;
 
-  checkPhase = "make unittest";
+  propagatedBuildInputs = with python3Packages; [
+    feedparser
+    dbus-python
+    mygpoclient
+    pygobject3
+    eyeD3
+    podcastparser
+    html5lib
+    gtk3
+  ] ++ stdenv.lib.optional ipodSupport libgpod;
 
-  preFixup = ''
-    wrapProgram $out/bin/gpodder \
-      --prefix XDG_DATA_DIRS : "${gnome3.gnome_themes_standard}/share:$XDG_ICON_DIRS:$GSETTINGS_SCHEMAS_PATH"
+  makeFlags = [
+    "PREFIX=$(out)"
+    "share/applications/gpodder-url-handler.desktop"
+    "share/applications/gpodder.desktop"
+    "share/dbus-1/services/org.gpodder.service"
+  ];
+
+  preBuild = ''
+    export LC_ALL="en_US.UTF-8"
   '';
 
-  # The `wrapPythonPrograms` script in the postFixup phase breaks gpodder. The
-  # easiest way to fix this is to call wrapPythonPrograms and then to clean up
-  # the wrapped file.
-  postFixup = ''
-    wrapPythonPrograms
-
-    if test -e $out/nix-support/propagated-build-inputs; then
-        ln -s $out/nix-support/propagated-build-inputs $out/nix-support/propagated-user-env-packages
-    fi
-
-    createBuildInputsPth build-inputs "$buildInputStrings"
-    for inputsfile in propagated-build-inputs propagated-native-build-inputs; do
-      if test -e $out/nix-support/$inputsfile; then
-          createBuildInputsPth $inputsfile "$(cat $out/nix-support/$inputsfile)"
-      fi
-    done
-
-    sed -i "$out/bin/..gpodder-wrapped-wrapped" -e '{
-        /import sys; sys.argv/d
-    }'
+  installCheckPhase = ''
+    LC_ALL=C PYTHONPATH=./src:$PYTHONPATH python3 -m gpodder.unittests
   '';
 
-  installPhase = "DESTDIR=/ PREFIX=$out make install";
-
-  meta = {
+  meta = with stdenv.lib; {
     description = "A podcatcher written in python";
     longDescription = ''
       gPodder downloads and manages free audio and video content (podcasts)
       for you. Listen directly on your computer or on your mobile devices.
     '';
-    homepage = "http://gpodder.org/";
-    license = stdenv.lib.licenses.gpl3;
-    platforms = stdenv.lib.platforms.linux ++ stdenv.lib.platforms.darwin;
-    maintainers = [ stdenv.lib.maintainers.skeidel ];
+    homepage = http://gpodder.org/;
+    license = licenses.gpl3;
+    platforms = platforms.linux ++ platforms.darwin;
+    maintainers = with maintainers; [ skeidel mic92 ];
   };
 }

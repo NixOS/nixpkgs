@@ -1,5 +1,5 @@
 { stdenv, fetchurl, perl, libX11, libjpeg, libpng, libtiff, pkgconfig,
-librsvg, glib, gtk, libXext, libXxf86vm, poppler, xineLib }:
+librsvg, glib, gtk2, libXext, libXxf86vm, poppler, xineLib }:
 
 stdenv.mkDerivation rec {
   name = "eaglemode-0.86.0";
@@ -9,8 +9,9 @@ stdenv.mkDerivation rec {
     sha256 = "1a2hzyck95g740qg4p4wd4fjwsmlknh75i9sbx5r5v9pyr4i3m4f";
   };
 
-  buildInputs = [ perl libX11 libjpeg libpng libtiff pkgconfig
-    librsvg glib gtk libXxf86vm libXext poppler xineLib ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ perl libX11 libjpeg libpng libtiff
+    librsvg glib gtk2 libXxf86vm libXext poppler xineLib ];
 
   # The program tries to dlopen both Xxf86vm and Xext, so we use the
   # trick on NIX_LDFLAGS and dontPatchELF to make it find them.
@@ -32,10 +33,11 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = "http://eaglemode.sourceforge.net";
+    homepage = http://eaglemode.sourceforge.net;
     description = "Zoomable User Interface";
     license = licenses.gpl3;
     maintainers = with maintainers; [ viric ];
-    platforms = with platforms; linux;
+    platforms = platforms.linux;
+    broken = true;
   };
 }

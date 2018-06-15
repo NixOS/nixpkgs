@@ -1,28 +1,26 @@
-{ stdenv, fetchurl, buildPythonPackage, gnome, librsvg, makeWrapper, pygtk
-, pythonPackages }:
+{ stdenv, fetchurl, gnome2, librsvg, pythonPackages }:
 
-buildPythonPackage rec {
+pythonPackages.buildPythonApplication rec {
   name = "key-mon-${version}";
   version = "1.17";
   namePrefix = "";
 
   src = fetchurl {
-    url = "http://key-mon.googlecode.com/files/${name}.tar.gz";
+    url = "https://storage.googleapis.com/google-code-archive-downloads/v2/code.google.com/key-mon/${name}.tar.gz";
     sha256 = "1liz0dxcqmchbnl1xhlxkqm3gh76wz9jxdxn9pa7dy77fnrjkl5q";
   };
 
   propagatedBuildInputs =
-    [ gnome.python_rsvg librsvg makeWrapper pygtk pythonPackages.xlib ];
+    [ gnome2.python_rsvg librsvg pythonPackages.pygtk pythonPackages.xlib ];
 
   doCheck = false;
 
-  postInstall = ''
-      wrapProgram $out/bin/key-mon --prefix GDK_PIXBUF_MODULE_FILE : \
-      ${librsvg}/lib/gdk-pixbuf/loaders.cache
-    '';
+  preFixup = ''
+      export makeWrapperArgs="--set GDK_PIXBUF_MODULE_FILE $GDK_PIXBUF_MODULE_FILE"
+  '';
 
   meta = with stdenv.lib; {
-    homepage = http://code.google.com/p/key-mon;
+    homepage = https://code.google.com/archive/p/key-mon;
     description = "Utility to show live keyboard and mouse status for teaching and screencasts";
     license = licenses.asl20;
     maintainers = [ maintainers.goibhniu ];

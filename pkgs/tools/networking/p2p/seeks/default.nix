@@ -1,4 +1,4 @@
-{ fetchgit, stdenv, zlib, docbook2x, pcre, curl, libxml2, libevent, perl
+{ fetchgit, stdenv, zlib, bzip2, docbook2x, pcre, curl, libxml2, libevent, perl
 , pkgconfig, protobuf, tokyocabinet, tokyotyrant, opencv, autoconf, automake
 , libtool, seeks_confDir ? ""
 }:
@@ -9,18 +9,18 @@ stdenv.mkDerivation {
   src = fetchgit {
     url = "git://github.com/beniz/seeks.git";
     rev = "1168b3a2f3111c3fca31dd961135194c3e8df5fd";
-    sha256 = "159k9fk1ry8cybrq38jxm1qyxks9hlkfz624hzwxlzah6xb2j8a4";
+    sha256 = "18s2pxal9a2aayv63hc19vnkx5a5y9rhbipdpvkinbni5283iiar";
   };
 
   buildInputs =
-    [ zlib docbook2x pcre curl libxml2 libevent perl pkgconfig
+    [ zlib bzip2 docbook2x pcre curl libxml2 libevent perl pkgconfig
       protobuf tokyocabinet tokyotyrant opencv autoconf automake libtool
     ];
 
   configureFlags =
     [ # Enable the built-in web server providing a web search interface.
       "--enable-httpserv-plugin=yes"
-      "--with-libevent=${libevent}"
+      "--with-libevent=${libevent.dev}"
     ];
 
   preConfigure = ''
@@ -63,6 +63,7 @@ stdenv.mkDerivation {
     maintainers = [
       stdenv.lib.maintainers.matejc
     ];
-    platforms = stdenv.lib.platforms.gnu;  # arbitrary choice
+    platforms = stdenv.lib.platforms.gnu ++ stdenv.lib.platforms.linux;  # arbitrary choice
+    broken = true; # 2018-04-11
   };
 }

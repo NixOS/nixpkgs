@@ -1,21 +1,14 @@
-{ stdenv, appleDerivation, icu, dyld, libdispatch, launchd, libclosure }:
+{ stdenv, appleDerivation, ICU, dyld, libdispatch, libplatform, launchd, libclosure }:
 
 # this project uses blocks, a clang-only extension
 assert stdenv.cc.isClang;
 
 appleDerivation {
-  buildInputs = [ dyld icu libdispatch launchd libclosure ];
+  buildInputs = [ dyld ICU libdispatch libplatform launchd libclosure ];
 
-  patches = [ ./add-cf-initialize.patch ./add-cfmachport.patch ./cf-bridging.patch ];
+  patches = [ ./add-cfmachport.patch ./cf-bridging.patch ./remove-xpc.patch ];
 
-  # CFAttributedString.h is in the SDK only, not on opensource.apple.com or github
-  __propagatedImpureHostDeps = [
-    "/System/Library/Frameworks/CoreFoundation.framework"
-    "/usr/lib/libc++.1.dylib"
-    "/usr/lib/libc++abi.dylib"
-    "/usr/lib/libicucore.A.dylib"
-    "/usr/lib/libz.1.dylib"
-  ];
+  __propagatedImpureHostDeps = [ "/System/Library/Frameworks/CoreFoundation.framework/CoreFoundation" ];
 
   preBuild = ''
     substituteInPlace Makefile \
@@ -25,10 +18,13 @@ appleDerivation {
       --replace "/usr/sbin/" "" \
       --replace "/bin/" "" \
       --replace "INSTALLNAME=/System" "INSTALLNAME=$out" \
-      --replace "install_name_tool -id /System" "install_name_tool -id $out" \
-      --replace "-licucore.A" "-licui18n -licuuc" \
+      --replace "install_name_tool -id /System/Library/Frameworks" "install_name_tool -id @rpath" \
       --replace 'chown -RH -f root:wheel $(DSTBASE)/CoreFoundation.framework' "" \
       --replace 'chmod -RH' 'chmod -R'
+
+    # with this file present, CoreFoundation gets a _main symbol defined, which can
+    # interfere with linking other programs
+    rm plconvert.c
 
     replacement=''$'#define __PTK_FRAMEWORK_COREFOUNDATION_KEY5 55\n#define _pthread_getspecific_direct(key) pthread_getspecific((key))\n#define _pthread_setspecific_direct(key, val) pthread_setspecific((key), (val))'
 
@@ -49,5 +45,7 @@ appleDerivation {
   postInstall = ''
     mv $out/System/* $out
     rmdir $out/System
+    mv $out/Library/Frameworks/CoreFoundation.framework/Versions/A/PrivateHeaders/* \
+       $out/Library/Frameworks/CoreFoundation.framework/Versions/A/Headers
   '';
 }

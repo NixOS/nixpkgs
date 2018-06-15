@@ -6,16 +6,17 @@
 stdenv.mkDerivation rec {
 
   name = "tilda-${version}";
-  version = "1.2.2";
+  version = "1.4.1";
 
   src = fetchurl {
     url = "https://github.com/lanoxx/tilda/archive/${name}.tar.gz";
-    sha256 = "1mzly0llsrxpc2yd1hml3gmwm023my2j3aszjw383pp34dab2nl5";
+    sha256 = "0w2hry2bqcqrkik4l100b1a9jlsih6sq8zwhfpl8zzfq20i00lfs";
   };
 
-  buildInputs = [ pkgconfig autoreconfHook gettext confuse vte gtk makeWrapper ];
+  nativeBuildInputs = [ autoreconfHook pkgconfig ];
+  buildInputs = [ gettext confuse vte gtk makeWrapper ];
 
-  LD_LIBRARY_PATH = "${expat}/lib"; # ugly hack for xgettext to work during build
+  LD_LIBRARY_PATH = "${expat.out}/lib"; # ugly hack for xgettext to work during build
 
   # The config locking scheme relies on the binary being called "tilda",
   # (`pgrep -C tilda`), so a simple `wrapProgram` won't suffice:

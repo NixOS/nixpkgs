@@ -6,22 +6,34 @@ let
   cfg = config.services.transmission;
   apparmor = config.security.apparmor.enable;
 
-  homeDir = "/var/lib/transmission";
+  homeDir = cfg.home;
   downloadDir = "${homeDir}/Downloads";
   incompleteDir = "${homeDir}/.incomplete";
-  
+
   settingsDir = "${homeDir}/.config/transmission-daemon";
   settingsFile = pkgs.writeText "settings.json" (builtins.toJSON fullSettings);
 
   # Strings must be quoted, ints and bools must not (for settings.json).
   toOption = x:
-    if x == true then "true"
-    else if x == false then "false"
+    if isBool x then boolToString x
     else if isInt x then toString x
     else toString ''"${x}"'';
 
   # for users in group "transmission" to have access to torrents
-  fullSettings = cfg.settings // { umask = 2; };
+  fullSettings = { umask = 2; download-dir = downloadDir; incomplete-dir = incompleteDir; } // cfg.settings;
+
+  # Directories transmission expects to exist and be ug+rwx.
+  directoriesToManage = [ homeDir settingsDir fullSettings.download-dir fullSettings.incomplete-dir ];
+
+  preStart = pkgs.writeScript "transmission-pre-start" ''
+    #!${pkgs.runtimeShell}
+    set -ex
+    for DIR in ${escapeShellArgs directoriesToManage}; do
+      mkdir -p "$DIR"
+      chmod 770 "$DIR"
+    done
+    cp -f ${settingsFile} ${settingsDir}/settings.json
+  '';
 in
 {
   options = {
@@ -35,7 +47,7 @@ in
           Transmission daemon can be controlled via the RPC interface using
           transmission-remote or the WebUI (http://localhost:9091/ by default).
 
-          Torrents are downloaded to ${homeDir}/Downloads/ by default and are
+          Torrents are downloaded to ${downloadDir} by default and are
           accessible to users in the "transmission" group.
         '';
       };
@@ -60,8 +72,8 @@ in
           time the service starts). String values must be quoted, integer and
           boolean values must not.
 
-          See https://trac.transmissionbt.com/wiki/EditConfigFiles for
-          documentation.
+          See https://github.com/transmission/transmission/wiki/Editing-Configuration-Files
+          for documentation.
         '';
       };
 
@@ -69,6 +81,14 @@ in
         type = types.int;
         default = 9091;
         description = "TCP port number to run the RPC/web interface.";
+      };
+
+      home = mkOption {
+        type = types.path;
+        default = "/var/lib/transmission";
+        description = ''
+          The directory where transmission will create files.
+        '';
       };
     };
   };
@@ -82,9 +102,7 @@ in
 
       # 1) Only the "transmission" user and group have access to torrents.
       # 2) Optionally update/force specific fields into the configuration file.
-      serviceConfig.ExecStartPre = ''
-          ${pkgs.stdenv.shell} -c "chmod 770 ${homeDir} && mkdir -p ${settingsDir} ${downloadDir} ${incompleteDir} && rm -f ${settingsDir}/settings.json && cp -f ${settingsFile} ${settingsDir}/settings.json"
-      '';
+      serviceConfig.ExecStartPre = preStart;
       serviceConfig.ExecStart = "${pkgs.transmission}/bin/transmission-daemon -f --port ${toString config.services.transmission.port}";
       serviceConfig.ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
       serviceConfig.User = "transmission";
@@ -113,21 +131,28 @@ in
           #include <abstractions/base>
           #include <abstractions/nameservice>
 
-          ${pkgs.glibc}/lib/*.so               mr,
-          ${pkgs.libevent}/lib/libevent*.so*   mr,
-          ${pkgs.curl}/lib/libcurl*.so*        mr,
-          ${pkgs.openssl}/lib/libssl*.so*      mr,
-          ${pkgs.openssl}/lib/libcrypto*.so*   mr,
-          ${pkgs.zlib}/lib/libz*.so*           mr,
-          ${pkgs.libssh2}/lib/libssh2*.so*     mr,
-          ${pkgs.systemd}/lib/libsystemd*.so*  mr,
-          ${pkgs.xz}/lib/liblzma*.so*          mr,
-          ${pkgs.libgcrypt}/lib/libgcrypt*.so* mr,
-          ${pkgs.libgpgerror}/lib/libgpg-error*.so* mr,
+          ${getLib pkgs.glibc}/lib/*.so                    mr,
+          ${getLib pkgs.libevent}/lib/libevent*.so*        mr,
+          ${getLib pkgs.curl}/lib/libcurl*.so*             mr,
+          ${getLib pkgs.openssl}/lib/libssl*.so*           mr,
+          ${getLib pkgs.openssl}/lib/libcrypto*.so*        mr,
+          ${getLib pkgs.zlib}/lib/libz*.so*                mr,
+          ${getLib pkgs.libssh2}/lib/libssh2*.so*          mr,
+          ${getLib pkgs.systemd}/lib/libsystemd*.so*       mr,
+          ${getLib pkgs.xz}/lib/liblzma*.so*               mr,
+          ${getLib pkgs.libgcrypt}/lib/libgcrypt*.so*      mr,
+          ${getLib pkgs.libgpgerror}/lib/libgpg-error*.so* mr,
+          ${getLib pkgs.nghttp2}/lib/libnghttp2*.so*       mr,
+          ${getLib pkgs.c-ares}/lib/libcares*.so*          mr,
+          ${getLib pkgs.libcap}/lib/libcap*.so*            mr,
+          ${getLib pkgs.attr}/lib/libattr*.so*             mr,
+          ${getLib pkgs.lz4}/lib/liblz4*.so*               mr,
+          ${getLib pkgs.libkrb5}/lib/lib*.so*              mr,
 
           @{PROC}/sys/kernel/random/uuid   r,
           @{PROC}/sys/vm/overcommit_memory r,
 
+          ${pkgs.openssl.out}/etc/**                     r,
           ${pkgs.transmission}/share/transmission/** r,
 
           owner ${settingsDir}/** rw,

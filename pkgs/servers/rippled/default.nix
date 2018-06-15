@@ -15,7 +15,8 @@ stdenv.mkDerivation rec {
     sed -i -e "s@ENV = dict.*@ENV = os.environ@g" SConstruct
   '';
 
-  buildInputs = [ scons pkgconfig openssl protobuf boost zlib ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ scons openssl protobuf boost zlib ];
 
   buildPhase = "scons";
 
@@ -27,8 +28,9 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     description = "Ripple P2P payment network reference server";
     homepage = https://ripple.com;
-    maintainers = with maintainers; [ emery offline ];
+    maintainers = with maintainers; [ ehmry offline ];
     license = licenses.isc;
     platforms = [ "x86_64-linux" ];
+    broken = true;
   };
 }

@@ -1,13 +1,13 @@
 { stdenv, fetchurl, cmake, irrlicht, libpng, bzip2, sqlite
-, libjpeg, libXxf86vm, mesa, openal, libvorbis, xlibsWrapper, pkgconfig }:
+, libjpeg, libXxf86vm, libGLU_combined, openal, libvorbis, xlibsWrapper, pkgconfig }:
 
 stdenv.mkDerivation rec {
   name = "voxelands-${version}";
-  version = "1506.00";
+  version = "1512.00";
 
   src = fetchurl {
-      url = "http://voxelands.com/downloads/${name}-src.tar.bz2";
-      sha256 = "0j82zidxv2rzx7fmw5z27nfldqkixbrs1f6l3fs433xr3d05406y";
+    url = "http://voxelands.com/downloads/${name}-src.tar.bz2";
+    sha256 = "0bims0y0nyviv2f2nxfj37s3258cjbfp9xd97najz0yylnk3qdfw";
   };
 
   cmakeFlags = [
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     cmake irrlicht libpng bzip2 libjpeg sqlite
-    libXxf86vm mesa openal libvorbis xlibsWrapper pkgconfig
+    libXxf86vm libGLU_combined openal libvorbis xlibsWrapper pkgconfig
   ];
 
   meta = with stdenv.lib; {

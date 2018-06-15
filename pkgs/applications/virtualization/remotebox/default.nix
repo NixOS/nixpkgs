@@ -1,12 +1,12 @@
 { stdenv, fetchurl, makeWrapper, perl, perlPackages }:
 
-let version = "2.0"; in
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   name = "remotebox-${version}";
+  version = "2.5";
 
   src = fetchurl {
     url = "http://remotebox.knobgoblin.org.uk/downloads/RemoteBox-${version}.tar.bz2";
-    sha256 = "0c73i53wdjd2m2sdgq3r3xp30irxh5z5rak2rk79yb686s6bv759";
+    sha256 = "0dajc9fg57gj915h5dxavbia4wx10frn4xc61pv0l8r5zp7xvqal";
   };
 
   buildInputs = with perlPackages; [ perl Glib Gtk2 Pango SOAPLite ];
@@ -26,7 +26,6 @@ stdenv.mkDerivation {
   '';
 
   meta = with stdenv.lib; {
-    inherit version;
     description = "VirtualBox client with remote management";
     homepage = http://remotebox.knobgoblin.org.uk/;
     license = licenses.gpl2Plus;
@@ -38,7 +37,6 @@ stdenv.mkDerivation {
       RemoteBox aims to fill this gap by providing a graphical VirtualBox
       client which is able to manage a VirtualBox server installation.
     '';
-    maintainers = with maintainers; [ nckx ];
     platforms = platforms.all;
   };
 }

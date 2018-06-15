@@ -1,21 +1,44 @@
-{stdenv, fetchurl, zlib, libpng, freetype, libjpeg, fontconfig}:
+{ stdenv, fetchurl
+, pkgconfig
+, zlib
+, libpng
+, libjpeg ? null
+, libwebp ? null
+, libtiff ? null
+, libXpm ? null
+, fontconfig
+, freetype
+}:
 
-stdenv.mkDerivation {
-  name = "gd-2.0.35";
-  
+stdenv.mkDerivation rec {
+  name = "gd-${version}";
+  version = "2.2.5";
+
   src = fetchurl {
-    url = http://www.libgd.org/releases/gd-2.0.35.tar.bz2;
-    sha256 = "1y80lcmb8qbzf0a28841zxhq9ndfapmh2fsrqfd9lalxfj8288mz";
+    url = "https://github.com/libgd/libgd/releases/download/${name}/libgd-${version}.tar.xz";
+    sha256 = "0lfy5f241sbv8s3splm2zqiaxv7lxrcshh875xryryk7yk5jqc4c";
   };
-  
-  buildInputs = [zlib libpng freetype];
 
-  propagatedBuildInputs = [libjpeg fontconfig]; # urgh
+  hardeningDisable = [ "format" ];
 
-  configureFlags = "--without-x";
+  # -pthread gets passed to clang, causing warnings
+  configureFlags = stdenv.lib.optional stdenv.isDarwin "--enable-werror=no";
 
-  meta = {
-    homepage = http://www.libgd.org/;
-    description = "An open source code library for the dynamic creation of images by programmers";
+  nativeBuildInputs = [ pkgconfig ];
+
+  buildInputs = [ zlib fontconfig freetype ];
+  propagatedBuildInputs = [ libpng libjpeg libwebp libtiff libXpm ];
+
+  outputs = [ "bin" "dev" "out" ];
+
+  postFixup = ''moveToOutput "bin/gdlib-config" $dev'';
+
+  enableParallelBuilding = true;
+
+  meta = with stdenv.lib; {
+    homepage = https://libgd.github.io/;
+    description = "A dynamic image creation library";
+    license = licenses.free; # some custom license
+    platforms = platforms.unix;
   };
 }

@@ -1,4 +1,4 @@
-{stdenv, fetchurl, openssl}:
+{ stdenv, fetchurl, openssl }:
 
 stdenv.mkDerivation rec {
   name = "mysocketw-031026";
@@ -9,11 +9,14 @@ stdenv.mkDerivation rec {
 
   patches = [ ./gcc.patch ];
 
-  configurePhase = ''
-    sed -i s,/usr/local,$out, Makefile.conf
+  buildInputs = [ openssl ];
+
+  postPatch = stdenv.lib.optionalString stdenv.isDarwin ''
+    substituteInPlace src/Makefile \
+        --replace -Wl,-soname, -Wl,-install_name,$out/lib/
   '';
 
-  buildInputs = [ openssl ];
+  makeFlags = [ "PREFIX=$(out)" "CXX=c++" ];
 
   meta = {
     description = "Cross platform (Linux/FreeBSD/Unix/Win32) streaming socket C++";

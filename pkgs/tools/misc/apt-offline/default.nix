@@ -1,6 +1,6 @@
-{ stdenv, fetchurl, bash, buildPythonPackage }:
+{ stdenv, fetchurl, bash, pythonPackages }:
 
-buildPythonPackage rec {
+pythonPackages.buildPythonApplication rec {
   version = "1.3";
   name = "apt-offline-${version}";
 
@@ -12,15 +12,13 @@ buildPythonPackage rec {
     sha256 = "1sp7ai2abzhbg9y84700qziybphvpzl2nk3mz1d1asivzyjvxlxy";
   };
 
-  buildInputs = [ ];
-
   doCheck = false;
 
   # Requires python-qt4 (feel free to get it working).
   preFixup = ''rm "$out/bin/apt-offline-gui"'';
 
   meta = with stdenv.lib; {
-    description = "offline APT package manager";
+    description = "Offline APT package manager";
     license = licenses.gpl3;
     maintainers = [ maintainers.falsifian ];
     platforms = platforms.linux;

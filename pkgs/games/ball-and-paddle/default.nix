@@ -37,7 +37,6 @@ stdenv.mkDerivation rec {
 
     maintainers = [ ];
 
-    # The fancy libs aren't available on {Cyg,Dar}win.
-    platforms = stdenv.lib.platforms.linux;
+    platforms = stdenv.lib.platforms.unix;
   };
 }

@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, opal, ptlib }:
+{ stdenv, fetchFromGitHub, opal, ptlib }:
 
 stdenv.mkDerivation rec {
 
@@ -6,9 +6,10 @@ stdenv.mkDerivation rec {
 
   name = "sipcmd-${rev}";
   
-  src = fetchgit {
-    url = "https://github.com/tmakkonen/sipcmd";
-    rev = "${rev}";
+  src = fetchFromGitHub {
+    repo = "sipcmd";
+    owner = "tmakkonen";
+    inherit rev;
     sha256 = "072h9qapmz46r8pxbzkfmc4ikd7dv9g8cgrfrw21q942icbrvq2c";
   };
 
@@ -25,7 +26,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = https://github.com/tmakkonen/sipcmd;
-    description = "sipcmd - the command line SIP/H.323/RTP softphone";
+    description = "The command line SIP/H.323/RTP softphone";
     platforms = with stdenv.lib.platforms; linux;
   };
 }

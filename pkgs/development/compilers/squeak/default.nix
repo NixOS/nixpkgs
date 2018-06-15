@@ -1,17 +1,35 @@
 { stdenv, fetchurl, cmake, coreutils, dbus, freetype, glib, gnused
 , libpthreadstubs, pango, pkgconfig, libpulseaudio, which }:
 
-let version = "4.10.2.2614"; in
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   name = "squeak-${version}";
+  version = "4.10.2.2614";
 
   src = fetchurl {
     sha256 = "0bpwbnpy2sb4gylchfx50sha70z36bwgdxraym4vrr93l8pd3dix";
     url = "http://squeakvm.org/unix/release/Squeak-${version}-src.tar.gz";
   };
 
+  buildInputs = [ coreutils dbus freetype glib gnused libpthreadstubs
+    pango libpulseaudio which ];
+  nativeBuildInputs = [ cmake pkgconfig ];
+
+  postPatch = ''
+    for i in squeak.in squeak.sh.in; do
+      substituteInPlace unix/cmake/$i --replace "PATH=" \
+        "PATH=${stdenv.lib.makeBinPath [ coreutils gnused which ]} #"
+    done
+  '';
+
+  configurePhase = ''
+    unix/cmake/configure --prefix=$out --enable-mpg-{mmx,pthreads}
+  '';
+
+  enableParallelBuilding = true;
+
+  hardeningDisable = [ "format" ];
+
   meta = with stdenv.lib; {
-    inherit version;
     description = "Smalltalk programming language and environment";
     longDescription = ''
       Squeak is a full-featured implementation of the Smalltalk programming
@@ -24,24 +42,6 @@ stdenv.mkDerivation {
     homepage = http://squeakvm.org/;
     downloadPage = http://squeakvm.org/unix/index.html;
     license = with licenses; [ asl20 mit ];
-    platforms = with platforms; linux;
-    maintainers = with maintainers; [ nckx ];
+    platforms = platforms.linux;
   };
-
-  buildInputs = [ coreutils dbus freetype glib gnused libpthreadstubs
-    pango libpulseaudio which ];
-  nativeBuildInputs = [ cmake pkgconfig ];
-
-  postPatch = ''
-    for i in squeak.in squeak.sh.in; do
-      substituteInPlace unix/cmake/$i --replace "PATH=" \
-        "PATH=${coreutils}/bin:${gnused}/bin:${which}/bin #"
-    done
-  '';
-
-  configurePhase = ''
-    unix/cmake/configure --prefix=$out --enable-mpg-{mmx,pthreads}
-  '';
-
-  enableParallelBuilding = true;
 }

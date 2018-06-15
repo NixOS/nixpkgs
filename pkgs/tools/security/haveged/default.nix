@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "haveged-${version}";
-  version = "1.9.1";
+  version = "1.9.2";
 
   src = fetchurl {
     url = "http://www.issihosts.com/haveged/haveged-${version}.tar.gz";
-    sha256 = "059pxlfd4l5dqhd6r3lynzfz4wby2f17294fy17pi9j2jpnn68ww";
+    sha256 = "0w5ypz6451msckivjriwyw8djydlwffam7x23xh626s2vzdrlzgp";
   };
 
   meta = {
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = http://www.issihosts.com/haveged/;
     license = stdenv.lib.licenses.gpl3;
-    maintainers = [ stdenv.lib.maintainers.iElectric ];
+    maintainers = [ stdenv.lib.maintainers.domenkozar ];
     platforms = stdenv.lib.platforms.unix;
   };
 }

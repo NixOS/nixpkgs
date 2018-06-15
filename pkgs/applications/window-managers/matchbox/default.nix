@@ -1,12 +1,14 @@
 { stdenv, fetchurl, libmatchbox, pkgconfig}:
 
 stdenv.mkDerivation rec {
-  name = "matchbox-1.2";
+  name = "matchbox-${version}";
+  version = "1.2";
 
-  buildInputs = [ libmatchbox pkgconfig ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ libmatchbox ];
 
   src = fetchurl {
-    url = http://matchbox-project.org/sources/matchbox-window-manager/1.2/matchbox-window-manager-1.2.tar.bz2;
+    url = "http://downloads.yoctoproject.org/releases/matchbox/matchbox-window-manager/${version}/matchbox-window-manager-${version}.tar.bz2";
     sha256 = "1zyfq438b466ygcz78nvsmnsc5bhg4wcfnpxb43kbkwpyx53m8l1";
   };
 
@@ -14,5 +16,6 @@ stdenv.mkDerivation rec {
     description = "X window manager for non-desktop embedded systems";
     homepage = http://matchbox-project.org/;
     license = stdenv.lib.licenses.gpl2Plus;
+    platforms = stdenv.lib.platforms.linux;
   };
 }

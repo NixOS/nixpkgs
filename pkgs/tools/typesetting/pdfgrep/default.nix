@@ -1,32 +1,28 @@
-{ fetchurl, stdenv, pkgconfig, poppler, poppler_data, makeWrapper }:
+{ stdenv, fetchurl, pkgconfig, poppler, libgcrypt, pcre, asciidoc }:
 
 stdenv.mkDerivation rec {
   name = "pdfgrep-${version}";
-  version = "1.3.1";
+  version = "2.1.1";
 
   src = fetchurl {
-    url = "http://downloads.sourceforge.net/project/pdfgrep/${version}/${name}.tar.gz";
-    sha256 = "6e8bcaf8b219e1ad733c97257a97286a94124694958c27506b2ea7fc8e532437";
+    url = "https://pdfgrep.org/download/${name}.tar.gz";
+    sha256 = "02qcl5kmr5qzjfc99qpbpfb1890bxlrq3r208gnding51zrmb09c";
   };
 
-  buildInputs = [ pkgconfig poppler poppler_data makeWrapper ];
-
-  patchPhase = ''
-    sed -i -e "s%cpp/poppler-document.h%poppler/cpp/poppler-document.h%" pdfgrep.cc
-    sed -i -e "s%cpp/poppler-page.h%poppler/cpp/poppler-page.h%" pdfgrep.cc
+  postPatch = ''
+    for i in ./src/search.h ./src/pdfgrep.cc ./src/search.cc; do
+      substituteInPlace $i --replace '<cpp/' '<'
+    done
   '';
 
-  # workarround since it can't be hardcoded in pdfgrep
-  preFixup = ''
-    wrapProgram "$out/bin/pdfgrep" \
-      --set POPPLER_DATADIR "${poppler_data}/share/poppler"
-  '';
+  nativeBuildInputs = [ pkgconfig asciidoc ];
+  buildInputs = [ poppler libgcrypt pcre ];
 
   meta = {
-    description = "a tool to search text in PDF files";
-    homepage = http://pdfgrep.sourceforge.net/;
-    license = stdenv.lib.licenses.free;
-    maintainers = with stdenv.lib.maintainers; [qknight];
+    description = "Commandline utility to search text in PDF files";
+    homepage = https://pdfgrep.org/;
+    license = stdenv.lib.licenses.gpl2Plus;
+    maintainers = with stdenv.lib.maintainers; [ qknight fpletz ];
     platforms = with stdenv.lib.platforms; linux;
   };
 }

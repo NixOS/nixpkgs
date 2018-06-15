@@ -19,12 +19,10 @@ in
         services.mysql.enable = true;
         services.mysql.package = pkgs.mysql;
         services.mysql.replication.role = "master";
+        services.mysql.replication.slaveHost = "%";
+        services.mysql.replication.masterUser = replicateUser;
+        services.mysql.replication.masterPassword = replicatePassword;
         services.mysql.initialDatabases = [ { name = "testdb"; schema = ./testdb.sql; } ];
-        services.mysql.initialScript = pkgs.writeText "initmysql"
-          ''
-            create user '${replicateUser}'@'%' identified by '${replicatePassword}';
-            grant replication slave on *.* to '${replicateUser}'@'%';
-          '';
         networking.firewall.allowedTCPPorts = [ 3306 ];
       };
 
@@ -56,12 +54,28 @@ in
   };
 
   testScript = ''
-    startAll;
+    $master->start;
+    $master->waitForUnit("mysql");
+    $master->waitForOpenPort(3306);
+    # Wait for testdb to be fully populated (5 rows).
+    $master->waitUntilSucceeds("mysql -u root -D testdb -N -B -e 'select count(id) from tests' | grep -q 5");
 
-    $master->waitForUnit("mysql");
-    $master->waitForUnit("mysql");
+    $slave1->start;
+    $slave2->start;
+    $slave1->waitForUnit("mysql");
+    $slave1->waitForOpenPort(3306);
     $slave2->waitForUnit("mysql");
-    $slave2->sleep(100); # Hopefully this is long enough!!
-    $slave2->succeed("echo 'use testdb; select * from tests' | mysql -u root -N | grep 4");
+    $slave2->waitForOpenPort(3306);
+
+    # wait for replications to finish
+    $slave1->waitUntilSucceeds("mysql -u root -D testdb -N -B -e 'select count(id) from tests' | grep -q 5");
+    $slave2->waitUntilSucceeds("mysql -u root -D testdb -N -B -e 'select count(id) from tests' | grep -q 5");
+
+    $slave2->succeed("systemctl stop mysql");
+    $master->succeed("echo 'insert into testdb.tests values (123, 456);' | mysql -u root -N");
+    $slave2->succeed("systemctl start mysql");
+    $slave2->waitForUnit("mysql");
+    $slave2->waitForOpenPort(3306);
+    $slave2->waitUntilSucceeds("echo 'select * from testdb.tests where Id = 123;' | mysql -u root -N | grep 456");
   '';
 })

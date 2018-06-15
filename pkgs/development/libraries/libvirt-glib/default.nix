@@ -1,35 +1,29 @@
 { stdenv, fetchurl, pkgconfig, libvirt, glib, libxml2, intltool, libtool, yajl
-, nettle, libgcrypt, python, pygobject, gobjectIntrospection, libcap_ng
+, nettle, libgcrypt, pythonPackages, gobjectIntrospection, libcap_ng, numactl
+, xen, libapparmor, vala
 }:
 
-stdenv.mkDerivation rec {
-  name = "libvirt-glib-0.2.0";
+let
+  inherit (pythonPackages) python pygobject2;
+in stdenv.mkDerivation rec {
+  name = "libvirt-glib-1.0.0";
+
+  outputs = [ "out" "dev" ];
 
   src = fetchurl {
     url = "http://libvirt.org/sources/glib/${name}.tar.gz";
-    sha256 = "02saqkk4wzsimsan7s9yc5bx05xn7j00hnxhq4sczkgr4krf1drh";
+    sha256 = "0iwa5sdbii52pjpdm5j37f67sdmf0kpcky4liwhy1nf43k85i4fa";
   };
 
+  nativeBuildInputs = [ pkgconfig vala ];
   buildInputs = [
-    pkgconfig libvirt glib libxml2 intltool libtool yajl nettle libgcrypt
-    python pygobject gobjectIntrospection libcap_ng
+    libvirt glib libxml2 intltool libtool yajl nettle libgcrypt
+    python pygobject2 gobjectIntrospection libcap_ng numactl libapparmor
+  ] ++ stdenv.lib.optionals stdenv.isx86_64 [
+    xen
   ];
 
-  # Compiler flag -fstack-protector-all fixes this build error:
-  #
-  #   ./.libs/libvirt-glib-1.0.so: undefined reference to `__stack_chk_guard'
-  #
-  # And the extra include path fixes this build error:
-  #
-  #   In file included from ../libvirt-gobject/libvirt-gobject-domain-device.h:30:0,
-  #                    from /tmp/nix-build-libvirt-glib-0.1.7.drv-2/libvirt-glib-0.1.7/libvirt-gobject/libvirt-gobject.h:33,
-  #                    from <stdin>:4:
-  #   ../libvirt-gobject/libvirt-gobject-domain.h:33:29: fatal error: libvirt/libvirt.h: No such file or directory
-  #   compilation terminated.
-  #   make[3]: *** [LibvirtGObject-1.0.gir] Error 1
-  preConfigure = ''
-    export NIX_CFLAGS_COMPILE="-fstack-protector-all -I${libvirt}/include"
-  '';
+  enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
     description = "Library for working with virtual machines";

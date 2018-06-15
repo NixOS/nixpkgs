@@ -11,11 +11,19 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ e2fsprogs ];
 
+  # inode field i_dir_acl was repurposed as i_size_high in e2fsprogs 1.44,
+  # breaking the build
+  patchPhase = ''
+    substituteInPlace src/insertionops.cc \
+      --replace "Directory ACL:" "High 32 bits of size:" \
+      --replace "inode.i_dir_acl" "inode.i_size_high"
+  '';
+
   meta = with stdenv.lib; {
-    description = "utility that can recover deleted files from an ext3 or ext4 partition";
+    description = "Utility that can recover deleted files from an ext3 or ext4 partition";
     homepage = http://extundelete.sourceforge.net/;
     license = licenses.gpl2;
     platforms = platforms.linux;
-    maintainers = [ maintainers.iElectric ];
+    maintainers = [ maintainers.domenkozar ];
   };
 }

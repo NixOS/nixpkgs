@@ -12,7 +12,6 @@ let
       # the sequence of address assignment less stochastic.
       networking.useDHCP = false;
 
-      networking.interfaces.eth1.prefixLength = 24;
       # CJDNS output is incompatible with the XML log.
       systemd.services.cjdns.serviceConfig.StandardOutput = "null";
       #networking.firewall.enable = true;
@@ -25,7 +24,7 @@ in
 import ./make-test.nix ({ pkgs, ...} : {
   name = "cjdns";
   meta = with pkgs.stdenv.lib.maintainers; {
-    maintainers = [ emery ];
+    maintainers = [ ehmry ];
   };
 
   nodes = rec
@@ -49,12 +48,14 @@ import ./make-test.nix ({ pkgs, ...} : {
 
           { imports = [ basicConfig ];
 
-          networking.interfaces.eth1.ipAddress = "192.168.0.2";
+          networking.interfaces.eth1.ipv4.addresses = [
+            { address = "192.168.0.2"; prefixLength = 24; }
+          ];
 
           services.cjdns =
             { UDPInterface =
                 { bind = "0.0.0.0:1024";
-                  connectTo."192.168.0.1:1024}" =
+                  connectTo."192.168.0.1:1024" =
                     { password = carolPassword;
                       publicKey = carolPubKey;
                     };
@@ -76,7 +77,9 @@ import ./make-test.nix ({ pkgs, ...} : {
             CJDNS_ADMIN_PASSWORD=FOOBAR
           '';
 
-          networking.interfaces.eth1.ipAddress = "192.168.0.1";
+          networking.interfaces.eth1.ipv4.addresses = [
+            { address = "192.168.0.1"; prefixLength = 24; }
+          ];
 
           services.cjdns =
             { authorizedPasswords = [ carolPassword ];
@@ -109,14 +112,14 @@ import ./make-test.nix ({ pkgs, ...} : {
 
       # ping a few times each to let the routing table establish itself
 
-      $alice->succeed("ping6 -c 4 $carolIp6");
-      $bob->succeed("ping6 -c 4 $carolIp6");
+      $alice->succeed("ping -c 4 $carolIp6");
+      $bob->succeed("ping -c 4 $carolIp6");
 
-      $carol->succeed("ping6 -c 4 $aliceIp6");
-      $carol->succeed("ping6 -c 4 $bobIp6");
+      $carol->succeed("ping -c 4 $aliceIp6");
+      $carol->succeed("ping -c 4 $bobIp6");
 
-      $alice->succeed("ping6 -c 4 $bobIp6");
-      $bob->succeed("ping6 -c 4 $aliceIp6");
+      $alice->succeed("ping -c 4 $bobIp6");
+      $bob->succeed("ping -c 4 $aliceIp6");
 
       $alice->waitForUnit("httpd.service");
 

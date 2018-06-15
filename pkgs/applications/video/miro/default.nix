@@ -1,8 +1,8 @@
-{ stdenv, fetchurl, python, buildPythonPackage, pythonPackages, pkgconfig
-, pyrex096, ffmpeg, boost, glib, pygobject, gtk2, webkitgtk2, libsoup, pygtk
-, taglib, sqlite, pycurl, mutagen, pycairo, pythonDBus, pywebkitgtk
-, libtorrentRasterbar, glib_networking, gsettings_desktop_schemas
-, gst_python, gst_plugins_base, gst_plugins_good, gst_ffmpeg
+{ stdenv, fetchurl, pkgconfig
+, pythonPackages, pyrex096, ffmpeg, boost, glib, gtk2, webkitgtk24x-gtk2, libsoup
+, taglib, sqlite
+, libtorrentRasterbar, glib-networking, gsettings-desktop-schemas
+, gst-python, gst-plugins-base, gst-plugins-good, gst-ffmpeg
 , enableBonjour ? false, avahi ? null
 }:
 
@@ -10,10 +10,11 @@ assert enableBonjour -> avahi != null;
 
 with stdenv.lib;
 
-buildPythonPackage rec {
-  name = "miro-${version}";
-  namePrefix = "";
+let
+  inherit (pythonPackages) python buildPythonApplication;
   version = "6.0";
+in buildPythonApplication rec {
+  name = "miro-${version}";
 
   src = fetchurl {
     url = "http://ftp.osuosl.org/pub/pculture.org/miro/src/${name}.tar.gz";
@@ -33,7 +34,7 @@ buildPythonPackage rec {
     sed -i -e 's|/usr/bin/||' -e 's|/usr||' \
            -e 's/BUILD_TIME[^,]*/BUILD_TIME=0/' setup.py
 
-    sed -i -e 's|default="/usr/bin/ffmpeg"|default="${ffmpeg}/bin/ffmpeg"|' \
+    sed -i -e 's|default="/usr/bin/ffmpeg"|default="${ffmpeg.bin}/bin/ffmpeg"|' \
       plat/options.py
 
     sed -i -e 's|/usr/share/miro/themes|'"$out/share/miro/themes"'|' \
@@ -56,7 +57,7 @@ buildPythonPackage rec {
 
   preInstall = ''
     # see https://bitbucket.org/pypa/setuptools/issue/130/install_data-doesnt-respect-prefix
-    ${python}/bin/${python.executable} setup.py install_data --root=$out
+    ${python.interpreter} setup.py install_data --root=$out
     sed -i '/data_files=data_files/d' setup.py
   '';
 
@@ -64,23 +65,23 @@ buildPythonPackage rec {
     mv "$out/bin/miro.real" "$out/bin/miro"
     wrapProgram "$out/bin/miro" \
       --prefix GST_PLUGIN_SYSTEM_PATH : "$GST_PLUGIN_SYSTEM_PATH" \
-      --prefix GIO_EXTRA_MODULES : "${glib_networking}/lib/gio/modules" \
+      --prefix GIO_EXTRA_MODULES : "${glib-networking.out}/lib/gio/modules" \
       --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH:$out/share"
   '';
 
-  buildInputs = [
-    pkgconfig pyrex096 ffmpeg boost glib pygobject gtk2 webkitgtk2 libsoup
-    pygtk taglib gsettings_desktop_schemas sqlite
+  buildInputs = with pythonPackages; [ pygtk pygobject2 ] ++ [
+    pkgconfig pyrex096 ffmpeg boost glib gtk2 webkitgtk24x-gtk2 libsoup
+    taglib gsettings-desktop-schemas sqlite
   ];
 
-  propagatedBuildInputs = [
-    pygobject pygtk pycurl python.modules.sqlite3 mutagen pycairo pythonDBus
-    pywebkitgtk libtorrentRasterbar
-    gst_python gst_plugins_base gst_plugins_good gst_ffmpeg
+  propagatedBuildInputs = with pythonPackages; [
+    pygobject2 pygtk pycurl mutagen pycairo dbus-python
+    pywebkitgtk] ++ [ libtorrentRasterbar
+    gst-python gst-plugins-base gst-plugins-good gst-ffmpeg
   ] ++ optional enableBonjour avahi;
 
   meta = {
-    homepage = "http://www.getmiro.com/";
+    homepage = http://www.getmiro.com/;
     description = "Video and audio feed aggregator";
     license = licenses.gpl2Plus;
     maintainers = [ maintainers.aszlig ];

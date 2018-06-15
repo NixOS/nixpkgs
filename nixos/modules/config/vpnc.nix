@@ -17,16 +17,16 @@ in
       services = mkOption {
        type = types.attrsOf types.str;
        default = {};
-       example = {
-         test = 
-          ''
-           IPSec gateway 192.168.1.1 
-           IPSec ID someID
-           IPSec secret secretKey
-           Xauth username name
-           Xauth password pass
-          '';
-       };
+       example = literalExample ''
+         { test = '''
+             IPSec gateway 192.168.1.1
+             IPSec ID someID
+             IPSec secret secretKey
+             Xauth username name
+             Xauth password pass
+           ''';
+         }
+       '';
        description = 
          ''
            The names of cisco VPNs and their associated definitions

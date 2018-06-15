@@ -1,49 +1,78 @@
-{ stdenv, fetchurl, buildEnv, makeDesktopItem, makeWrapper, zlib, glib, alsaLib
-, dbus, gtk, atk, pango, freetype, fontconfig, libgnome_keyring3, gdk_pixbuf
-, cairo, cups, expat, libgpgerror, nspr, gconf, nss, xorg, libcap, unzip
-, systemd
-}:
+{ stdenv, lib, libXScrnSaver, makeWrapper, fetchurl, unzip, atomEnv }:
+
 let
-  atomEnv = buildEnv {
-    name = "env-atom";
-    paths = [
-      stdenv.cc.cc zlib glib dbus gtk atk pango freetype libgnome_keyring3
-      fontconfig gdk_pixbuf cairo cups expat libgpgerror alsaLib nspr gconf nss
-      xorg.libXrender xorg.libX11 xorg.libXext xorg.libXdamage xorg.libXtst
-      xorg.libXcomposite xorg.libXi xorg.libXfixes xorg.libXrandr
-      xorg.libXcursor libcap systemd
-    ];
-  };
-in stdenv.mkDerivation rec {
+  version = "1.8.2";
   name = "electron-${version}";
-  version = "0.28.2";
 
-  src = fetchurl {
-    url = "https://github.com/atom/electron/releases/download/v${version}/electron-v${version}-linux-x64.zip";
-    sha256 = "55b0880e2f78a60d95a58e83cd75006c34cb6ed90836e1f34e3359c3e5d0b8f0";
-    name = "${name}.zip";
-  };
-
-  buildInputs = [ atomEnv makeWrapper unzip ];
-
-  phases = [ "installPhase" "fixupPhase" ];
-
-  unpackCmd = "unzip";
-
-  installPhase = ''
-    mkdir -p $out/bin
-    unzip -d $out/bin $src
-    patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
-    $out/bin/electron
-    wrapProgram $out/bin/electron \
-    --prefix "LD_LIBRARY_PATH" : "${atomEnv}/lib:${atomEnv}/lib64"
-  '';
+  throwSystem = throw "Unsupported system: ${stdenv.system}";
 
   meta = with stdenv.lib; {
     description = "Cross platform desktop application shell";
-    homepage = https://github.com/atom/electron;
+    homepage = https://github.com/electron/electron;
     license = licenses.mit;
-    maintainers = [ maintainers.travisbhartwell ];
-    platforms = [ "x86_64-linux" ];
+    maintainers = with maintainers; [ travisbhartwell manveru ];
+    platforms = [ "x86_64-darwin" "x86_64-linux" "i686-linux" "armv7l-linux" "aarch64-linux" ];
   };
-}
+
+  linux = {
+    inherit name version meta;
+
+    src = {
+      i686-linux = fetchurl {
+        url = "https://github.com/electron/electron/releases/download/v${version}/electron-v${version}-linux-ia32.zip";
+        sha256 = "12q5h6gh9zzhndg6yfka821rblq3l80d2qzqrq4nbq6rlsshjp9d";
+      };
+      x86_64-linux = fetchurl {
+        url = "https://github.com/electron/electron/releases/download/v${version}/electron-v${version}-linux-x64.zip";
+        sha256 = "07ggq9wgfz3z5z0lwzzgs6im0qs83pz0pcfwr0r42zgmwg7j78b8";
+      };
+      armv7l-linux = fetchurl {
+        url = "https://github.com/electron/electron/releases/download/v${version}/electron-v${version}-linux-armv7l.zip";
+        sha256 = "1b0p5x9zigyd6d8gz2hxc4scllrpnbx1dzzwlsvw6ilqbj1ypc7i";
+      };
+      aarch64-linux = fetchurl {
+        url = "https://github.com/electron/electron/releases/download/v${version}/electron-v${version}-linux-arm64.zip";
+        sha256 = "0k4np2d4y15x1qfay8y9m8v9y223vdpbq5fdxa3ywbbyf8j361zd";
+      };
+    }.${stdenv.system} or throwSystem;
+
+    buildInputs = [ unzip makeWrapper ];
+
+    buildCommand = ''
+      mkdir -p $out/lib/electron $out/bin
+      unzip -d $out/lib/electron $src
+      ln -s $out/lib/electron/electron $out/bin
+
+      fixupPhase
+
+      patchelf \
+        --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
+        --set-rpath "${atomEnv.libPath}:$out/lib/electron" \
+        $out/lib/electron/electron
+
+      wrapProgram $out/lib/electron/electron \
+        --prefix LD_PRELOAD : ${stdenv.lib.makeLibraryPath [ libXScrnSaver ]}/libXss.so.1
+    '';
+  };
+
+  darwin = {
+    inherit name version meta;
+
+    src = fetchurl {
+      url = "https://github.com/electron/electron/releases/download/v${version}/electron-v${version}-darwin-x64.zip";
+      sha256 = "0pq587vr1i87jdwcpbf6n136i9dp6i39dp5s95kihnm9qglxr42b";
+    };
+
+    buildInputs = [ unzip ];
+
+    buildCommand = ''
+      mkdir -p $out/Applications
+      unzip $src
+      mv Electron.app $out/Applications
+      mkdir -p $out/bin
+      ln -s $out/Applications/Electron.app/Contents/MacOs/Electron $out/bin/electron
+    '';
+  };
+in
+
+  stdenv.mkDerivation (if stdenv.isDarwin then darwin else linux)

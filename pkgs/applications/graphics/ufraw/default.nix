@@ -1,19 +1,35 @@
-{ fetchurl, stdenv, pkgconfig, gtk, gettext, bzip2, zlib
-, libjpeg, libtiff, cfitsio, exiv2, lcms, gtkimageview, lensfun }:
+{ fetchurl, stdenv, pkgconfig, gtk2, gettext, bzip2, zlib
+, withGimpPlugin ? true, gimp ? null
+, libjpeg, libtiff, cfitsio, exiv2, lcms2, gtkimageview, lensfun }:
+
+assert withGimpPlugin -> gimp != null;
 
 stdenv.mkDerivation rec {
-  name = "ufraw-0.20";
+  name = "ufraw-0.22";
 
   src = fetchurl {
     # XXX: These guys appear to mutate uploaded tarballs!
     url = "mirror://sourceforge/ufraw/${name}.tar.gz";
-    sha256 = "1q51p0ynzayxwfpilj0s38aapgkfga00gbl7xi0ndx9q6bvk1kbd";
+    sha256 = "0pm216pg0vr44gwz9vcvq3fsf8r5iayljhf5nis2mnw7wn6d5azp";
   };
 
-  buildInputs =
-    [ pkgconfig gtk gtkimageview gettext bzip2 zlib
-      libjpeg libtiff cfitsio exiv2 lcms lensfun
-    ];
+  outputs = [ "out" ] ++ stdenv.lib.optional withGimpPlugin "gimpPlugin";
+
+  nativeBuildInputs = [ pkgconfig gettext ];
+  buildInputs = [
+    gtk2 gtkimageview bzip2 zlib
+    libjpeg libtiff cfitsio exiv2 lcms2 lensfun
+  ] ++ stdenv.lib.optional withGimpPlugin gimp;
+
+  configureFlags = [
+    "--enable-extras"
+    "--enable-dst-correction"
+    "--enable-contrast"
+  ] ++ stdenv.lib.optional withGimpPlugin "--with-gimp";
+
+  postInstall = stdenv.lib.optionalString withGimpPlugin ''
+    moveToOutput "lib/gimp" "$gimpPlugin"
+  '';
 
   meta = {
     homepage = http://ufraw.sourceforge.net/;
@@ -33,6 +49,6 @@ stdenv.mkDerivation rec {
     license = stdenv.lib.licenses.gpl2Plus;
 
     maintainers = [ ];
-    platforms = stdenv.lib.platforms.gnu;  # needs GTK+
+    platforms = stdenv.lib.platforms.gnu ++ stdenv.lib.platforms.linux;  # needs GTK+
   };
 }

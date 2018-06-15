@@ -1,40 +1,44 @@
 { stdenv, fetchurl, pkgconfig, intltool, alsaLib, libpulseaudio, speex, gsm
-, libopus, ffmpeg, libX11, libXv, mesa, glew, libtheora, libvpx, SDL, libupnp
-, ortp, libv4l, libpcap, srtp, vim
+, libopus, ffmpeg, libX11, libXv, libGLU_combined, glew, libtheora, libvpx, SDL, libupnp
+, ortp, libv4l, libpcap, srtp, fetchFromGitHub, cmake, bctoolbox, doxygen
+, python, libXext, libmatroska, openssl, fetchpatch
 }:
 
 stdenv.mkDerivation rec {
-  name = "mediastreamer-2.11.2";
+  baseName = "mediastreamer2";
+  version = "2.16.1";
+  name = "${baseName}-${version}";
 
-  src = fetchurl {
-    url = "mirror://savannah/linphone/mediastreamer/${name}.tar.gz";
-    sha256 = "1g6gawrlz1lixzs1kzckm3rxc401ww8pi00x7r5kb84bdijb02cc";
+  src = fetchFromGitHub {
+    owner = "BelledonneCommunications";
+    repo = "${baseName}";
+    rev = "${version}";
+    sha256 = "02745bzl2r1jqvdqzyv94fjd4w92zr976la4c4nfvsy52waqah7j";
   };
 
-  patches = [ ./plugins_dir.patch ];
+  patches = [
+    (fetchpatch {
+      name = "allow-build-without-git.patch";
+      url = "https://github.com/BelledonneCommunications/mediastreamer2/commit/de3a24b795d7a78e78eab6b974e7ec5abf2259ac.patch";
+      sha256 = "1zqkrab42n4dha0knfsyj4q0wc229ma125gk9grj67ps7r7ipscy";
+    })
+    ./plugins_dir.patch
+  ];
 
-  postPatch = ''
-    sed -i "s/\(SRTP_LIBS=\"\$SRTP_LIBS -lsrtp\"\)/SRTP_LIBS=\"$(pkg-config --libs-only-l libsrtp)\"/g" configure
-  '';
-
-  nativeBuildInputs = [ pkgconfig intltool ];
+  nativeBuildInputs = [ pkgconfig intltool cmake doxygen python ];
 
   propagatedBuildInputs = [
     alsaLib libpulseaudio speex gsm libopus
-    ffmpeg libX11 libXv mesa glew libtheora libvpx SDL libupnp
-    ortp libv4l libpcap srtp
-    vim
+    ffmpeg libX11 libXv libGLU_combined glew libtheora libvpx SDL libupnp
+    ortp libv4l libpcap srtp bctoolbox libXext libmatroska
+    openssl
   ];
 
-  configureFlags = [
-    "--enable-external-ortp"
-    "--with-srtp=${srtp}"
-    "--enable-xv"
-    "--enable-glx"
-  ];
+  NIX_CFLAGS_COMPILE = " -DGIT_VERSION=\"v2.14.0\" -Wno-error=deprecated-declarations ";
+  NIX_LDFLAGS = " -lXext -lssl ";
 
   meta = with stdenv.lib; {
-    description = "a powerful and lightweight streaming engine specialized for voice/video telephony applications";
+    description = "A powerful and lightweight streaming engine specialized for voice/video telephony applications";
     homepage = http://www.linphone.org/technical-corner/mediastreamer2/overview;
     license = licenses.gpl2;
     platforms = platforms.linux;

@@ -1,5 +1,6 @@
-{ stdenv, fetchurl, mesa, SDL, scons, SDL_ttf, SDL_image, zlib, SDL_net
+{ stdenv, fetchurl, libGLU_combined, SDL, scons, SDL_ttf, SDL_image, zlib, SDL_net
 , speex, libvorbis, libogg, boost, fribidi, bsdiff
+, fetchpatch
 }:
 let
   version = "0.9.4";
@@ -18,7 +19,12 @@ stdenv.mkDerivation rec {
     sha256 = "1f0l2cqp2g3llhr9jl6jj15k0wb5q8n29vqj99xy4p5hqs78jk8g";
   };
 
-  patches = [ ./header-order.patch ./public-buildproject.patch ];
+  patches = [ ./header-order.patch ./public-buildproject.patch
+    (fetchpatch {
+	  url = https://bitbucket.org/giszmo/glob2/commits/c9dc715624318e4fea4abb24e04f0ebdd9cd8d2a/raw;
+	  sha256 = "0017xg5agj3dy0hx71ijdcrxb72bjqv7x6aq7c9zxzyyw0mkxj0k";
+	})
+  ];
 
   postPatch = ''
     cp campaigns/tutorial-part4.map{,.orig}
@@ -26,7 +32,7 @@ stdenv.mkDerivation rec {
     sed -i -e "s@env = Environment()@env = Environment( ENV = os.environ )@" SConstruct
   '';
 
-  buildInputs = [ mesa SDL scons SDL_ttf SDL_image zlib SDL_net speex libvorbis libogg boost fribidi bsdiff ];
+  buildInputs = [ libGLU_combined SDL scons SDL_ttf SDL_image zlib SDL_net speex libvorbis libogg boost fribidi bsdiff ];
 
   buildPhase = ''
     scons

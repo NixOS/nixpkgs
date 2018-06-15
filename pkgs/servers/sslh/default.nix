@@ -1,17 +1,17 @@
-{ stdenv, fetchurl, libcap, libconfig, perl, tcp_wrappers }:
+{ stdenv, fetchurl, libcap, libconfig, perl, tcp_wrappers, pcre }:
 
 stdenv.mkDerivation rec {
   name = "sslh-${version}";
-  version = "1.17";
+  version = "1.19c";
 
   src = fetchurl {
-    url = "https://github.com/yrutschle/sslh/archive/v${version}.tar.gz";
-    sha256 = "1l8ssm47f0hwiisgfj0ca5j2z8j98pir4pf2acrj1798fnzw6mxm";
+    url = "http://www.rutschle.net/tech/sslh/sslh-v${version}.tar.gz";
+    sha256 = "1wvvqj9r293skgqi28q4ixz7zwf301h1bf514p41xbi7ifldy4dv";
   };
 
   postPatch = "patchShebangs *.sh";
 
-  buildInputs = [ libcap libconfig perl tcp_wrappers ];
+  buildInputs = [ libcap libconfig perl tcp_wrappers pcre ];
 
   makeFlags = "USELIBCAP=1 USELIBWRAP=1";
 
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     description = "Applicative Protocol Multiplexer (e.g. share SSH and HTTPS on the same port)";
     license = licenses.gpl2Plus;
     homepage = http://www.rutschle.net/tech/sslh.shtml;
-    maintainers = [ maintainers.koral ];
+    maintainers = with maintainers; [ koral fpletz ];
     platforms = platforms.all;
   };
 }

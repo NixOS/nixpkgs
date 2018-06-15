@@ -1,32 +1,37 @@
-{ stdenv, fetchurl, ncurses, pam ? null }:
+{ stdenv, fetchurl, fetchpatch, ncurses, utmp, pam ? null }:
 
 stdenv.mkDerivation rec {
-  name = "screen-4.3.1";
+  name = "screen-${version}";
+  version = "4.6.2";
 
   src = fetchurl {
     url = "mirror://gnu/screen/${name}.tar.gz";
-    sha256 = "0qwxd4axkgvxjigz9xs0kcv6qpfkrzr2gm43w9idx0z2mvw4jh7s";
+    sha256 = "0fps0fsipfbh7c2cnp7rjw9n79j0ysq21mk8hzifa33a1r924s8v";
   };
 
-  preConfigure = ''
-    configureFlags="--enable-telnet --enable-pam --infodir=$out/share/info --mandir=$out/share/man --with-sys-screenrc=/etc/screenrc --enable-colors256"
-    sed -i -e "s|/usr/local|/non-existent|g" -e "s|/usr|/non-existent|g" configure Makefile.in */Makefile.in
-  '';
+  configureFlags= [
+    "--enable-telnet"
+    "--enable-pam"
+    "--with-sys-screenrc=/etc/screenrc"
+    "--enable-colors256"
+  ];
 
-  # TODO: remove when updating the version of screen. Only a patch for 4.3.1
-  patches = stdenv.lib.optional stdenv.isDarwin (fetchurl {
-    url = "http://savannah.gnu.org/file/screen-utmp.patch\?file_id=34815";
-    sha256 = "192dsa8hm1zw8m638avzhwhnrddgizhyrwaxgwa96zr9vwai2nvc";
-  });
+  patches = stdenv.lib.optional stdenv.hostPlatform.isMusl
+    (fetchpatch {
+      url = https://gist.githubusercontent.com/yujinakayama/4608863/raw/76b9f89af5e5a2e97d9a0f36aac989fb56cf1447/gistfile1.diff;
+      sha256 = "0f9bf83p8zdxaa1pr75jyf5g8xr3r8kv7cyzzbpraa1q4j15ss1p";
+      stripLen = 1;
+    });
 
-  buildInputs = [ ncurses ] ++ stdenv.lib.optional stdenv.isLinux pam;
+  buildInputs = [ ncurses ] ++ stdenv.lib.optional stdenv.isLinux pam
+                            ++ stdenv.lib.optional stdenv.isDarwin utmp;
 
   doCheck = true;
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = http://www.gnu.org/software/screen/;
     description = "A window manager that multiplexes a physical terminal";
-    license = stdenv.lib.licenses.gpl2Plus;
+    license = licenses.gpl2Plus;
 
     longDescription =
       '' GNU Screen is a full-screen window manager that multiplexes a physical
@@ -50,7 +55,7 @@ stdenv.mkDerivation rec {
          terminal.
       '';
 
-    platforms = stdenv.lib.platforms.unix;
-    maintainers = with stdenv.lib.maintainers; [ simons jgeerds ];
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ peti jgeerds vrthra ];
   };
 }

@@ -1,18 +1,22 @@
 { fetchurl, stdenv, gettext, emacs, curl, check, bc }:
 
 stdenv.mkDerivation rec {
-  name = "recutils-1.5";
+  name = "recutils-1.7";
 
   src = fetchurl {
     url = "mirror://gnu/recutils/${name}.tar.gz";
-    sha256 = "1v2xzwwwhc5j5kmvg4sv6baxjpsfqh8ln7ilv4mgb1408rs7xmky";
+    sha256 = "0cdwa4094x3yx7vn98xykvnlp9rngvd58d19vs3vh5hrvggccg93";
   };
-
-  patches = [ ./glibc.patch ];
 
   doCheck = true;
 
+  hardeningDisable = [ "format" ];
+
   buildInputs = [ curl emacs ] ++ (stdenv.lib.optionals doCheck [ check bc ]);
+
+  postInstall = ''
+    ${emacs}/bin/emacs -Q -batch -f batch-byte-compile $out/share/emacs/site-lisp/*.el #*/
+  '';
 
   meta = {
     description = "Tools and libraries to access human-editable, text-based databases";

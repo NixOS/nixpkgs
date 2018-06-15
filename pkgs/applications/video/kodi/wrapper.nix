@@ -14,7 +14,7 @@ stdenv.mkDerivation {
   buildInputs = [ makeWrapper ];
 
   buildCommand = ''
-    mkdir -p $out/share/kodi/addons/packages
+    mkdir -p $out/share/kodi/addons
     ${stdenv.lib.concatMapStrings
         (plugin: "ln -s ${plugin.out
                             + plugin.kodiPlugin
@@ -39,7 +39,7 @@ stdenv.mkDerivation {
     done)
   '';
 
-  preferLocalBuilds = true;
+  preferLocalBuild = true;
 
   meta = with kodi.meta; {
     inherit license homepage;
@@ -48,6 +48,7 @@ stdenv.mkDerivation {
                 + lib.concatStrings (lib.intersperse ", " (map (x: ""+x.name) plugins))
                 + ")";
 
+    platforms = stdenv.lib.platforms.linux;
   };
 
 }

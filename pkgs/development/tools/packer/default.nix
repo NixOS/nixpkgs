@@ -1,35 +1,24 @@
-{ stdenv, lib, go, gox, fetchgit, fetchhg, fetchbzr, fetchFromGitHub }:
+{ stdenv, buildGoPackage, fetchFromGitHub }:
+buildGoPackage rec {
+  name = "packer-${version}";
+  version = "1.2.4";
 
-stdenv.mkDerivation rec {
-  name = "packer-0.7.5";
+  goPackagePath = "github.com/hashicorp/packer";
 
-  src = import ./deps.nix {
-    inherit stdenv lib fetchgit fetchhg fetchbzr fetchFromGitHub;
+  subPackages = [ "." ];
+
+  src = fetchFromGitHub {
+    owner = "hashicorp";
+    repo = "packer";
+    rev = "v${version}";
+    sha256 = "06prn2mq199476zlxi5hxk5yn21mqzbqk8v0fy8s6h91g8h6205n";
   };
-
-  buildInputs = [ go gox ];
-
-  installPhase = ''
-    export GOPATH=$src
-    XC_ARCH=$(go env GOARCH)
-    XC_OS=$(go env GOOS)
-
-    mkdir -p $out/bin
-
-    cd $src/src/github.com/mitchellh/packer
-    gox \
-        -os="''${XC_OS}" \
-        -arch="''${XC_ARCH}" \
-        -output "$out/bin/packer-{{.Dir}}" \
-        ./...
-    mv $out/bin/packer{*packer*,}
-  '';
 
   meta = with stdenv.lib; {
     description = "A tool for creating identical machine images for multiple platforms from a single source configuration";
-    homepage    = "http://www.packer.io";
+    homepage    = https://www.packer.io;
     license     = licenses.mpl20;
-    maintainers = with maintainers; [ cstrahan ];
+    maintainers = with maintainers; [ cstrahan zimbatm ];
     platforms   = platforms.unix;
   };
 }

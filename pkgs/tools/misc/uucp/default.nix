@@ -8,7 +8,14 @@ stdenv.mkDerivation rec {
     sha256 = "0b5nhl9vvif1w3wdipjsk8ckw49jj1w85xw1mmqi3zbcpazia306";
   };
 
-  doCheck = true;
+  hardeningDisable = [ "format" ];
+
+  prePatch = ''
+    # do not set sticky bit in nix store
+    substituteInPlace Makefile.in \
+      --replace 4555 0555
+    sed -i '/chown $(OWNER)/d' Makefile.in
+  '';
 
   meta = {
     description = "Unix-unix cp over serial line, also includes cu program";

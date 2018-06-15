@@ -1,27 +1,39 @@
-{ mkDerivation, aeson, aeson-pretty, ansi-wl-pprint, base, binary
-, bytestring, containers, directory, elm-compiler, fetchgit
-, filepath, HTTP, http-client, http-client-tls, http-types, mtl
-, network, optparse-applicative, pretty, process, stdenv, text
-, time, unordered-containers, vector, zip-archive
+{ mkDerivation, aeson, aeson-pretty_0_7_2, ansi-wl-pprint, base, binary
+, bytestring, containers, directory, edit-distance, elm-compiler
+, fetchgit, fetchurl, filepath, HTTP, http-client, http-client-tls
+, http-types, mtl, network, optparse-applicative, parallel-io
+, pretty, stdenv, text, time, unordered-containers, vector
+, zip-archive
 }:
 mkDerivation {
   pname = "elm-package";
-  version = "0.5.1";
+  version = "0.18";
   src = fetchgit {
     url = "https://github.com/elm-lang/elm-package";
-    sha256 = "0d69e68831f4a86c6c02aed33fc3a6aca87636a7fb0bb6e39ffc74ddd15b5435";
-    rev = "365e2d86a8222c92e50951c7d30b3c5db44c383d";
+    sha256 = "19krnkjvfk02gmmic5h5i1i0lw7s30927bnd5g57cj8nqbigysv7";
+    rev = "8bd150314bacab5b6fc451927aa01deec2276fbf";
+  };
+  patches = fetchurl {
+    url = https://github.com/jerith666/elm-package/commit/40bab60c2fbff70812cc24cdd97f5e09db3844ad.patch;
+    sha256 = "0j6pi6cv3h9s6vz68bh0c73fysvk83yhhk56kgshvnrmnpcb3jib";
   };
   isLibrary = true;
   isExecutable = true;
-  buildDepends = [
-    aeson aeson-pretty ansi-wl-pprint base binary bytestring containers
-    directory elm-compiler filepath HTTP http-client http-client-tls
-    http-types mtl network optparse-applicative pretty process text
-    time unordered-containers vector zip-archive
+  libraryHaskellDepends = [
+    aeson aeson-pretty_0_7_2 ansi-wl-pprint base binary bytestring containers
+    directory edit-distance elm-compiler filepath HTTP http-client
+    http-client-tls http-types mtl network parallel-io text time
+    unordered-containers vector zip-archive
+  ];
+  executableHaskellDepends = [
+    aeson aeson-pretty_0_7_2 ansi-wl-pprint base binary bytestring containers
+    directory edit-distance elm-compiler filepath HTTP http-client
+    http-client-tls http-types mtl network optparse-applicative
+    parallel-io pretty text time unordered-containers vector
+    zip-archive
   ];
   jailbreak = true;
-  homepage = "http://github.com/elm-lang/elm-package";
+  homepage = https://github.com/elm-lang/elm-package;
   description = "Package manager for Elm libraries";
   license = stdenv.lib.licenses.bsd3;
 }

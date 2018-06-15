@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     cp -r target/* "$out/share/java/zvtm/"
 
     echo '#!/bin/sh' > "$out/bin/zgrviewer"
-    echo "java -jar '$out/share/java/zvtm/zgrviewer-${version}.jar'" >> "$out/bin/zgrviewer"
+    echo "${jre}/lib/openjdk/jre/bin/java -jar '$out/share/java/zvtm/zgrviewer-${version}.jar' \"\$@\"" >> "$out/bin/zgrviewer"
     chmod a+x "$out/bin/zgrviewer"
   '';
   meta = {
@@ -26,5 +26,6 @@ stdenv.mkDerivation rec {
     maintainers = with stdenv.lib.maintainers; [raskin];
     license = stdenv.lib.licenses.lgpl21Plus;
     description = "GraphViz graph viewer/navigator";
+    platforms = with stdenv.lib.platforms; unix;
   };
 }

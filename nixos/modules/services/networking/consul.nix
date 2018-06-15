@@ -7,7 +7,7 @@ let
   cfg = config.services.consul;
 
   configOptions = { data_dir = dataDir; } //
-    (if cfg.webUi then { ui_dir = "${pkgs.consul.ui}"; } else { }) //
+    (if cfg.webUi then { ui_dir = "${cfg.package.ui}"; } else { }) //
     cfg.extraConfig;
 
   configFiles = [ "/etc/consul.json" "/etc/consul-addrs.json" ]
@@ -29,6 +29,16 @@ in
           Enables the consul daemon.
         '';
       };
+
+      package = mkOption {
+        type = types.package;
+        default = pkgs.consul;
+        defaultText = "pkgs.consul";
+        description = ''
+          The package used for the Consul agent and CLI.
+        '';
+      };
+
 
       webUi = mkOption {
         type = types.bool;
@@ -109,6 +119,7 @@ in
         package = mkOption {
           description = "Package to use for consul-alerts.";
           default = pkgs.consul-alerts;
+          defaultText = "pkgs.consul-alerts";
           type = types.package;
         };
 
@@ -155,7 +166,7 @@ in
         etc."consul.json".text = builtins.toJSON configOptions;
         # We need consul.d to exist for consul to start
         etc."consul.d/dummy.json".text = "{ }";
-        systemPackages = with pkgs; [ consul ];
+        systemPackages = [ cfg.package ];
       };
 
       systemd.services.consul = {
@@ -167,14 +178,15 @@ in
             (filterAttrs (n: _: hasPrefix "consul.d/" n) config.environment.etc);
 
         serviceConfig = {
-          ExecStart = "@${pkgs.consul}/bin/consul consul agent -config-dir /etc/consul.d"
+          ExecStart = "@${cfg.package.bin}/bin/consul consul agent -config-dir /etc/consul.d"
             + concatMapStrings (n: " -config-file ${n}") configFiles;
-          ExecReload = "${pkgs.consul}/bin/consul reload";
+          ExecReload = "${cfg.package.bin}/bin/consul reload";
           PermissionsStartOnly = true;
           User = if cfg.dropPrivileges then "consul" else null;
+          Restart = "on-failure";
           TimeoutStartSec = "0";
         } // (optionalAttrs (cfg.leaveOnStop) {
-          ExecStop = "${pkgs.consul}/bin/consul leave";
+          ExecStop = "${cfg.package.bin}/bin/consul leave";
         });
 
         path = with pkgs; [ iproute gnugrep gawk consul ];
@@ -221,11 +233,11 @@ in
         wantedBy = [ "multi-user.target" ];
         after = [ "consul.service" ];
 
-        path = [ pkgs.consul ];
+        path = [ cfg.package ];
 
         serviceConfig = {
           ExecStart = ''
-            ${cfg.alerts.package}/bin/consul-alerts start \
+            ${cfg.alerts.package.bin}/bin/consul-alerts start \
               --alert-addr=${cfg.alerts.listenAddr} \
               --consul-addr=${cfg.alerts.consulAddr} \
               ${optionalString cfg.alerts.watchChecks "--watch-checks"} \

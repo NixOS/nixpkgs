@@ -1,0 +1,16 @@
+# Description Fix CMakeLists.txt to install binaries. Fixed in 1.5 upstream.
+# Author "Nathan R. Moore <natedevv@gmail.com>"
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -359,6 +359,11 @@
+   "${MODPLUG_LIBRARY}"
+ )
+ 
++# Set files to install
++install(TARGETS solarus-quest-editor
++    RUNTIME DESTINATION bin
++)
++
+ # Platform specific.
+ 
+ # Windows: disable the console.

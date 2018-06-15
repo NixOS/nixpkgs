@@ -1,4 +1,4 @@
-#! /usr/bin/perl -w
+#! /usr/bin/env perl
 
 # Typical command to generate the list of tarballs:
 
@@ -11,6 +11,7 @@
 
 
 use strict;
+use warnings;
 
 my $tmpDir = "/tmp/xorg-unpack";
 
@@ -25,7 +26,7 @@ my %pcMap;
 my %extraAttrs;
 
 
-my @missingPCs = ("fontconfig", "libdrm", "libXaw", "zlib", "perl", "python", "mesa", "mkfontscale", "mkfontdir", "bdftopcf", "libxslt", "openssl", "gperf", "m4");
+my @missingPCs = ("fontconfig", "libdrm", "libXaw", "zlib", "perl", "python", "mkfontscale", "mkfontdir", "bdftopcf", "libxslt", "openssl", "gperf", "m4");
 $pcMap{$_} = $_ foreach @missingPCs;
 $pcMap{"freetype2"} = "freetype";
 $pcMap{"libpng12"} = "libpng";
@@ -33,7 +34,8 @@ $pcMap{"libpng"} = "libpng";
 $pcMap{"dbus-1"} = "dbus";
 $pcMap{"uuid"} = "libuuid";
 $pcMap{"libudev"} = "udev";
-$pcMap{"gl"} = "mesa";
+$pcMap{"gl"} = "libGL";
+$pcMap{"gbm"} = "mesa_noglu";
 $pcMap{"\$PIXMAN"} = "pixman";
 $pcMap{"\$RENDERPROTO"} = "renderproto";
 $pcMap{"\$DRI3PROTO"} = "dri3proto";
@@ -61,7 +63,7 @@ while (<>) {
       #next unless $pkg eq "xcbutil";
     }
 
-    $tarball =~ /\/([^\/]*)\.tar\.bz2$/;
+    $tarball =~ /\/([^\/]*)\.tar\.(bz2|gz|xz)$/;
     my $pkgName = $1;
 
     print "  $pkg $pkgName\n";
@@ -82,7 +84,7 @@ while (<>) {
     print "\nunpacking $path\n";
     system "rm -rf '$tmpDir'";
     mkdir $tmpDir, 0700;
-    system "cd '$tmpDir' && tar xfj '$path'";
+    system "cd '$tmpDir' && tar xf '$path'";
     die "cannot unpack `$path'" if $? != 0;
     print "\n";
 
@@ -230,7 +232,7 @@ print OUT "";
 print OUT <<EOF;
 # THIS IS A GENERATED FILE.  DO NOT EDIT!
 args @ { clangStdenv, fetchurl, fetchgit, fetchpatch, stdenv, pkgconfig, intltool, freetype, fontconfig
-, libxslt, expat, libpng, zlib, perl, mesa_drivers, spice_protocol
+, libxslt, expat, libpng, zlib, perl, mesa_noglu, mesa_drivers, spice-protocol
 , dbus, libuuid, openssl, gperf, m4, libevdev, tradcpp, libinput, mcpp, makeWrapper, autoreconfHook
 , autoconf, automake, libtool, xmlto, asciidoc, flex, bison, python, mtdev, pixman, ... }: with args;
 
@@ -239,7 +241,9 @@ let
   mkDerivation = name: attrs:
     let newAttrs = (overrides."\${name}" or (x: x)) attrs;
         stdenv = newAttrs.stdenv or args.stdenv;
-    in stdenv.mkDerivation (removeAttrs newAttrs [ "stdenv" ]);
+      in stdenv.mkDerivation ((removeAttrs newAttrs [ "stdenv" ]) // {
+        hardeningDisable = [ "bindnow" "relro" ];
+      });
 
   overrides = import ./overrides.nix {inherit args xorg;};
 
@@ -279,7 +283,9 @@ foreach my $pkg (sort (keys %pkgURLs)) {
       url = $pkgURLs{$pkg};
       sha256 = "$pkgHashes{$pkg}";
     };
-    buildInputs = [pkgconfig $inputs];$extraAttrs
+    nativeBuildInputs = [ pkgconfig ];
+    buildInputs = [ $inputs];$extraAttrs
+    meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit $inputs;};
 
 EOF

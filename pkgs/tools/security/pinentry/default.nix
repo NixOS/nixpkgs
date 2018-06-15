@@ -1,54 +1,56 @@
-{ fetchurl, stdenv, pkgconfig
-, libgpgerror, libassuan, libcap ? null, ncurses ? null, gtk2 ? null, qt4 ? null
+{ fetchurl, fetchpatch, stdenv, lib, pkgconfig
+, libgpgerror, libassuan, libcap ? null, libsecret ? null, ncurses ? null,  gtk2 ? null, gcr ? null, qt ? null
+, enableEmacs ? false
 }:
 
 let
   mkFlag = pfxTrue: pfxFalse: cond: name: "--${if cond then pfxTrue else pfxFalse}-${name}";
   mkEnable = mkFlag "enable" "disable";
   mkWith = mkFlag "with" "without";
-  hasX = gtk2 != null || qt4 != null;
 in
-with stdenv.lib;
 stdenv.mkDerivation rec {
-  name = "pinentry-0.9.5";
+  name = "pinentry-1.1.0";
 
   src = fetchurl {
     url = "mirror://gnupg/pinentry/${name}.tar.bz2";
-    sha256 = "1338hj1h3sh34897120y30x12b64wyj3xjzzk5asm2hdzhxgsmva";
+    sha256 = "0w35ypl960pczg5kp6km3dyr000m1hf0vpwwlh72jjkjza36c1v8";
   };
 
-  buildInputs = [ libgpgerror libassuan libcap gtk2 ncurses qt4 ];
+  buildInputs = [ libgpgerror libassuan libcap libsecret gtk2 gcr ncurses qt ];
 
   prePatch = ''
     substituteInPlace pinentry/pinentry-curses.c --replace ncursesw ncurses
   '';
 
-  # configure cannot find moc on its own
-  preConfigure = stdenv.lib.optionalString (qt4 != null) ''
-    export QTDIR="${qt4}"
-    export MOC="${qt4}/bin/moc"
-  '';
+  patches = lib.optionals (gtk2 != null) [
+    (fetchpatch {
+      url = https://sources.debian.org/data/main/p/pinentry/1.1.0-1/debian/patches/0007-gtk2-When-X11-input-grabbing-fails-try-again-over-0..patch;
+      sha256 = "15r1axby3fdlzz9wg5zx7miv7gqx2jy4immaw4xmmw5skiifnhfd";
+    })
+  ];
 
   configureFlags = [
-    (mkWith   (libcap != null)  "libcap")
-    (mkWith   (hasX)            "x")
-    (mkEnable (ncurses != null) "pinentry-curses")
-    (mkEnable true              "pinentry-tty")
-    (mkEnable (gtk2 != null)    "pinentry-gtk2")
-    (mkEnable (qt4 != null)     "pinentry-qt4")
+    (mkWith   (libcap != null)    "libcap")
+    (mkEnable (libsecret != null) "libsecret")
+    (mkEnable (ncurses != null)   "pinentry-curses")
+    (mkEnable true                "pinentry-tty")
+    (mkEnable enableEmacs         "pinentry-emacs")
+    (mkEnable (gtk2 != null)      "pinentry-gtk2")
+    (mkEnable (gcr != null)       "pinentry-gnome3")
+    (mkEnable (qt != null)        "pinentry-qt")
   ];
 
   nativeBuildInputs = [ pkgconfig ];
 
-  meta = {
-    homepage = "http://gnupg.org/aegypten2/";
-    description = "GnuPG's interface to passphrase input";
-    license = stdenv.lib.licenses.gpl2Plus;
-    platforms = stdenv.lib.platforms.all;
+  meta = with stdenv.lib; {
+    homepage = http://gnupg.org/aegypten2/;
+    description = "GnuPG’s interface to passphrase input";
+    license = licenses.gpl2Plus;
+    platforms = platforms.all;
     longDescription = ''
       Pinentry provides a console and (optional) GTK+ and Qt GUIs allowing users
       to enter a passphrase when `gpg' or `gpg2' is run and needs it.
     '';
-    maintainers = [ stdenv.lib.maintainers.ttuegel ];
+    maintainers = [ maintainers.ttuegel ];
   };
 }

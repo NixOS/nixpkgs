@@ -1,12 +1,12 @@
 {stdenv, fetchurl, lzo, openssl, zlib}:
 
 stdenv.mkDerivation rec {
-  version = "1.0.26";
+  version = "1.0.34";
   name = "tinc-${version}";
 
   src = fetchurl {
     url = "http://www.tinc-vpn.org/packages/tinc-${version}.tar.gz";
-    sha256 = "08ds8s32cjslms1q227ihd6jz35583v378ij4pknfa5xngfijhrb";
+    sha256 = "1nngdp2x5kykrgh13q5wjry8m82vahqv53csvlb22ifxvrhrnfn0";
   };
 
   buildInputs = [ lzo openssl zlib ];
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     "--sysconfdir=/etc"
   ];
 
-  meta = { 
+  meta = {
     description = "VPN daemon with full mesh routing";
     longDescription = ''
       tinc is a Virtual Private Network (VPN) daemon that uses tunnelling and
@@ -26,5 +26,6 @@ stdenv.mkDerivation rec {
     '';
     homepage="http://www.tinc-vpn.org/";
     license = stdenv.lib.licenses.gpl2Plus;
+    platforms = stdenv.lib.platforms.unix;
   };
 }

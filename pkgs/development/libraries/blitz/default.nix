@@ -31,8 +31,9 @@ stdenv.mkDerivation rec {
 
   patches = [ ./blitz-gcc47.patch ./blitz-testsuite-stencil-et.patch ];
 
-  buildInputs = [ pkgconfig gfortran texinfo ]
-    ++ optional (boost != null) [ boost.lib ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ gfortran texinfo ]
+    ++ optional (boost != null) boost;
 
   configureFlags =
     [ "--enable-shared"
@@ -49,7 +50,7 @@ stdenv.mkDerivation rec {
     ++ optional enablePadding "--enable-array-length-padding"
     ++ optional enableSerialization "--enable-serialization"
     ++ optionals (boost != null) [ "--with-boost=${boost.dev}"
-                                   "--with-boost-libdir=${boost.lib}/lib" ]
+                                   "--with-boost-libdir=${boost.out}/lib" ]
     ++ optional stdenv.is64bit "--enable-64bit"
     ;
 
@@ -63,7 +64,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Fast multi-dimensional array library for C++";
-    homepage = http://sourceforge.net/projects/blitz/;
+    homepage = https://sourceforge.net/projects/blitz/;
     license = stdenv.lib.licenses.lgpl3;
     platforms = stdenv.lib.platforms.linux ++ stdenv.lib.platforms.darwin;
     maintainers = [ stdenv.lib.maintainers.aherrmann ];
@@ -75,5 +76,7 @@ stdenv.mkDerivation rec {
       random number generators, and small vectors (useful for representing
       multicomponent or vector fields).
     '';
+
+    broken = true; # failing test, ancient version, no library user in nixpkgs => if you care to fix it, go ahead
   };
 }

@@ -1,37 +1,36 @@
-{stdenv, fetchzip, which, cryptopp, ocaml, findlib, ocaml_react, ocaml_ssl, libev, pkgconfig, ncurses, ocaml_oasis, ocaml_text, glib, camlp4}:
+{ stdenv, fetchzip, pkgconfig, ncurses, libev, jbuilder
+, ocaml, findlib, camlp4, cppo
+, ocaml-migrate-parsetree, ppx_tools_versioned, result
+}:
 
-let
-  version = "2.4.6";
-  inherit (stdenv.lib) optional getVersion versionAtLeast;
-  ocaml_version = getVersion ocaml;
-in
-
-stdenv.mkDerivation {
-
-
-  name = "ocaml-lwt-${version}";
+stdenv.mkDerivation rec {
+  version = "3.3.0";
+  name = "ocaml${ocaml.version}-lwt-${version}";
 
   src = fetchzip {
     url = "https://github.com/ocsigen/lwt/archive/${version}.tar.gz";
-    sha256 = "0idci0zadpb8hmblszsrvg6yf36w5a9y6rsdwjc3jww71dgrw5d9";
+    sha256 = "0n87hcyl4svy0risj439wyfq6bl77qxq3nraqgdr1qbz5lskbq2j";
   };
 
-  buildInputs = [ocaml_oasis pkgconfig which cryptopp ocaml findlib glib ncurses camlp4];
+  preConfigure = ''
+    ocaml src/util/configure.ml -use-libev true -use-camlp4 true
+  '';
 
-  propagatedBuildInputs = [ ocaml_react ocaml_ssl ocaml_text libev ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ ncurses ocaml findlib jbuilder camlp4 cppo
+    ocaml-migrate-parsetree ppx_tools_versioned ];
+  propagatedBuildInputs = [ libev result ];
 
-  configureFlags = [ "--enable-react" "--enable-glib" "--enable-ssl" "--enable-text" "--disable-ppx" ]
-  ++ optional (versionAtLeast ocaml_version "4.0" && ! versionAtLeast ocaml_version "4.02") "--enable-toplevel";
+  installPhase = ''
+    ocaml src/util/install_filter.ml
+    ${jbuilder.installPhase}
+  '';
 
-  createFindlibDestdir = true;
-
-  meta = with stdenv.lib; {
-    homepage = http://ocsigen.org/lwt;
-    description = "Lightweight thread library for Objective Caml";
-    license = licenses.lgpl21;
-    platforms = ocaml.meta.platforms;
-    maintainers = with maintainers; [
-      z77z vbgl gal_bolle
-    ];
+  meta = {
+    homepage = "https://ocsigen.org/lwt/";
+    description = "A cooperative threads library for OCaml";
+    maintainers = [ stdenv.lib.maintainers.vbgl ];
+    license = stdenv.lib.licenses.lgpl21;
+    inherit (ocaml.meta) platforms;
   };
 }

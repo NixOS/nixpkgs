@@ -1,4 +1,4 @@
-{ fetchcvs, stdenv, emacs, w3m, imagemagick, texinfo, autoconf }:
+{ fetchcvs, stdenv, emacs, w3m, imagemagick, texinfo, autoreconfHook }:
 
 let date = "2013-03-21"; in
 stdenv.mkDerivation rec {
@@ -13,24 +13,24 @@ stdenv.mkDerivation rec {
     sha256 = "1lmcj8rf83w13q8q68hh7sa1abc2m6j2zmfska92xdp7hslhdgc5";
   };
 
-  buildInputs = [ emacs w3m texinfo autoconf ];
+  nativeBuildInputs = [ autoreconfHook ];
+  buildInputs = [ emacs w3m texinfo ];
 
   # XXX: Should we do the same for xpdf/evince, gv, gs, etc.?
   patchPhase = ''
     sed -i "w3m.el" \
         -e 's|defcustom w3m-command nil|defcustom w3m-command "${w3m}/bin/w3m"|g ;
-            s|(w3m-which-command "display")|"${imagemagick}/bin/display"|g'
+            s|(w3m-which-command "display")|"${imagemagick.out}/bin/display"|g'
 
     sed -i "w3m-image.el" \
-        -e 's|(w3m-which-command "convert")|"${imagemagick}/bin/convert"|g ;
-            s|(w3m-which-command "identify")|"${imagemagick}/bin/identify"|g'
+        -e 's|(w3m-which-command "convert")|"${imagemagick.out}/bin/convert"|g ;
+            s|(w3m-which-command "identify")|"${imagemagick.out}/bin/identify"|g'
   '';
 
-  configurePhase = ''
-    autoreconf -vfi && \
-    ./configure --prefix="$out" --with-lispdir="$out/share/emacs/site-lisp" \
-                --with-icondir="$out/share/emacs/site-lisp/images/w3m"
-  '';
+  configureFlags = [
+    "--with-lispdir=$(out)/share/emacs/site-lisp"
+    "--with-icondir=$(out)/share/emacs/site-lisp/images/w3m"
+  ];
 
   postInstall = ''
     cd "$out/share/emacs/site-lisp"
@@ -56,6 +56,6 @@ stdenv.mkDerivation rec {
 
     homepage = http://emacs-w3m.namazu.org/;
 
-    maintainers = [ stdenv.lib.maintainers.mornfall ];
+    maintainers = [ ];
   };
 }

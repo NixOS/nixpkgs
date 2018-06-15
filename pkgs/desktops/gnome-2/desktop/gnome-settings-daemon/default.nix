@@ -1,5 +1,6 @@
-{ stdenv, fetchurl, pkgconfig, dbus_glib, libxklavier, gtk
-, intltool, GConf, gnome_desktop, libglade, libgnomekbd, polkit, libpulseaudio }:
+{ stdenv, fetchurl, pkgconfig, dbus-glib, libxklavier, gtk
+, intltool, GConf, gnome-desktop, libglade, libgnomekbd, polkit, libpulseaudio
+, libSM }:
 
 stdenv.mkDerivation {
   name = "gnome-settings-daemon-2.32.1";
@@ -10,8 +11,8 @@ stdenv.mkDerivation {
   };
 
   buildInputs =
-    [ dbus_glib libxklavier gtk GConf gnome_desktop libglade libgnomekbd polkit
-      libpulseaudio
+    [ dbus-glib libxklavier gtk GConf gnome-desktop libglade libgnomekbd polkit
+      libpulseaudio libSM
     ];
 
   nativeBuildInputs = [ pkgconfig intltool ];
