@@ -1,7 +1,6 @@
 { stdenv, pythonPackages, fetchFromGitHub }:
 
 pythonPackages.buildPythonApplication rec {
-  name = "${pname}-${version}";
   pname = "dosage";
   version = "2018.04.08";
   PBR_VERSION = version;

@@ -7,7 +7,6 @@
 buildPythonPackage rec {
   pname = "scikit-learn";
   version = "0.19.1";
-  name = "${pname}-${version}";
   disabled = stdenv.isi686;  # https://github.com/scikit-learn/scikit-learn/issues/5534
 
   src = fetchPypi {

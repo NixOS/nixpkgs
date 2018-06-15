@@ -3,7 +3,6 @@
 with python3Packages;
 
 buildPythonApplication rec {
-  name = "${pname}-${version}";
   pname = "khal";
   version = "0.9.9";
 

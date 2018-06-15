@@ -3,7 +3,6 @@
 buildPythonPackage rec {
   pname = "html5-parser";
   version = "0.4.5";
-  name = "${pname}-${version}";
 
   src = fetchPypi {
     inherit pname version;

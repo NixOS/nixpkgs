@@ -3,15 +3,15 @@
 let
   wheel_source = fetchPypi {
     pname = "wheel";
-    version = "0.31.0";
+    version = "0.31.1";
     format = "wheel";
-    sha256 = "9cdc8ab2cc9c3c2e2727a4b67c22881dbb0e1c503d592992594c5e131c867107";
+    sha256 = "80044e51ec5bbf6c894ba0bc48d26a8c20a9ba629f4ca19ea26ecfcf87685f5f";
   };
   setuptools_source = fetchPypi {
     pname = "setuptools";
-    version = "39.0.1";
+    version = "39.2.0";
     format = "wheel";
-    sha256 = "8010754433e3211b9cdbbf784b50f30e80bf40fc6b05eb5f865fab83300599b8";
+    sha256 = "8fca9275c89964f13da985c3656cb00ba029d7f3916b37990927ffdf264e7926";
   };
 
 in stdenv.mkDerivation rec {

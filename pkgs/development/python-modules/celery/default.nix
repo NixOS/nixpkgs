@@ -4,11 +4,11 @@
 
 buildPythonPackage rec {
   pname = "celery";
-  version = "4.1.0";
+  version = "4.1.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0dcb0s6kdcd3vc9pwvazngppkdbhwpmpjmghq6rifsld34q3gzvp";
+    sha256 = "d1f2a3359bdbdfb344edce98b8e891f5fe64f8a11c5a45538ec20ac237c971f5";
   };
 
   # make /etc/protocols accessible to fix socket.getprotobyname('tcp') in sandbox

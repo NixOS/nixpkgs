@@ -1,5 +1,6 @@
-{ stdenv, fetchurl, cmake, bison, ncurses, openssl, readline, zlib, perl
-, boost, cctools, CoreServices, developer_cmds }:
+{ stdenv, fetchurl, cmake, bison
+, boost, libedit, libevent, lz4, ncurses, openssl, protobuf, readline, zlib, perl
+, cctools, CoreServices, developer_cmds }:
 
 # Note: zlib is not required; MySQL can use an internal zlib.
 
@@ -18,7 +19,9 @@ self = stdenv.mkDerivation rec {
     export PATH=$PATH:$TMPDIR
   '';
 
-  buildInputs = [ cmake bison ncurses openssl readline zlib boost ]
+  nativeBuildInputs = [ cmake bison ];
+
+  buildInputs = [ boost libedit libevent lz4 ncurses openssl protobuf readline zlib ]
      ++ stdenv.lib.optionals stdenv.isDarwin [ perl cctools CoreServices developer_cmds ];
 
   enableParallelBuilding = true;
@@ -30,7 +33,11 @@ self = stdenv.mkDerivation rec {
     "-DWITH_SSL=yes"
     "-DWITH_EMBEDDED_SERVER=yes"
     "-DWITH_UNIT_TESTS=no"
-    "-DWITH_ZLIB=yes"
+    "-DWITH_EDITLINE=system"
+    "-DWITH_LIBEVENT=system"
+    "-DWITH_LZ4=system"
+    "-DWITH_PROTOBUF=system"
+    "-DWITH_ZLIB=system"
     "-DWITH_ARCHIVE_STORAGE_ENGINE=yes"
     "-DWITH_BLACKHOLE_STORAGE_ENGINE=yes"
     "-DWITH_FEDERATED_STORAGE_ENGINE=yes"
