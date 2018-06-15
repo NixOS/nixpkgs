@@ -18832,6 +18832,8 @@ in
 
   luppp = callPackage ../applications/audio/luppp { };
 
+  lutris = callPackage ../applications/misc/lutris { };
+
   lv2bm = callPackage ../applications/audio/lv2bm { };
 
   lynx = callPackage ../applications/networking/browsers/lynx { };
