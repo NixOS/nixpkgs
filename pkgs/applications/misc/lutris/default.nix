@@ -1,5 +1,5 @@
 { stdenv, buildFHSUserEnv, makeDesktopItem, fetchFromGitHub, python3, gtk3
-, gobjectIntrospection, wrapGAppsHook, xterm, xrandr }:
+, gobjectIntrospection, wrapGAppsHook, xterm }:
 
 let
   inherit (python3.pkgs) buildPythonApplication pyyaml pygobject3 pyxdg evdev;
@@ -7,7 +7,6 @@ let
   lutris = buildPythonApplication rec {
     name = "lutris-${version}";
     version = "v0.4.18";
-
     enableParallelBuilding = true;
     nativeBuildInputs = [ wrapGAppsHook ];
 
@@ -53,15 +52,17 @@ let
     categories = "Network;Game;Emulator;";
     startupNotify = "false";
   };
-in
-
-buildFHSUserEnv rec {
+in buildFHSUserEnv rec {
   name = "lutris";
-  targetPkgs = pkgs: with pkgs; [ lutris xrandr xterm wine ];
   runScript = "lutris";
 
+  targetPkgs = pkgs: with pkgs; with xorg; [
+    lutris wine xrandr xterm libX11 libXrandr libGL gtk2 gdk_pixbuf cairo pango
+    glib libxml2 SDL alsaLib dbus pulseaudio zlib harfbuzz freetype psmisc
+  ];
+
   extraInstallCommands = ''
-    mkdir -p "$out/share/applications"
-    cp "${desktopItem}/share/applications/"* $out/share/applications
+    mkdir -p $out/share/applications
+    cp ${desktopItem}/share/applications/* $out/share/applications
   '';
 }
