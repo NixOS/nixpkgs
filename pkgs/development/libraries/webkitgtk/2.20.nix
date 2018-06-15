@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     description = "Web content rendering engine, GTK+ port";
     homepage = https://webkitgtk.org/;
     license = licenses.bsd2;
-    platforms = with platforms; linux ++ darwin;
+    platforms = platforms.linux;
     hydraPlatforms = [];
     maintainers = with maintainers; [ ];
   };
