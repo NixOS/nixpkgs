@@ -124,27 +124,33 @@ let
 
 in {
   hadoop_2_7 = common {
-    version = "2.7.5";
-    sha256 = "0dvgi4z2pi45b0yzzm9zxjp0lwvd8lwqn4903mxlqh7xv2g3llnp";
-    dependencies-sha256 = "137v077q022997ih41n412l2xq4ynypk5dl5p4n16i16745k9lk2";
+    version = "2.7.6";
+    sha256 = "0wmg0iy0qxrf43fzajzmx03gxp4yx197vxacqwkxaj45clqwl010";
+    dependencies-sha256 = "1lsr9nvrynzspxqcamb10d596zlnmnfpxhkd884gdiva0frm0b1r";
     tomcat = tomcat_6_0_48;
   };
   hadoop_2_8 = common {
-    version = "2.8.3";
-    sha256 = "0ziairmgfi05iqmib66lysanlabrp1cq6palnmwkiss098b5dcjd";
-    dependencies-sha256 = "1qmdmiprr0l0i0q3w9nv964db5cm3615iqczywrs5v8qaaf580b3";
+    version = "2.8.4";
+    sha256 = "16c3ljhrzibkjn3y1bmjxdgf0kn60l23ay5hqpp7vpbnqx52x68w";
+    dependencies-sha256 = "1j4f461487fydgr5978nnm245ksv4xbvskfr8pbmfhcyss6b7w03";
     tomcat = tomcat_6_0_48;
   };
   hadoop_2_9 = common {
-    version = "2.9.0";
-    sha256 = "03mh193bccm4bi7cq6ym651zal82d0kvl00yhnzzrsnwq10j2h62";
-    dependencies-sha256 = "0773lw4d03r89dcrrsglbr4zgcz2m9b15587nxdz4clm2f5gqiw5";
+    version = "2.9.1";
+    sha256 = "0qgmpfbpv7f521fkjy5ldzdb4lwiblhs0hyl8qy041ws17y5x7d7";
+    dependencies-sha256 = "1d5i8jj5y746rrqb9lscycnd7acmxlkz64ydsiyqsh5cdqgy2x7x";
     tomcat = tomcat_6_0_48;
   };
   hadoop_3_0 = common {
-    version = "3.0.0";
-    sha256 = "0h22mdpgvg9v4rbc8gn4m8vrpkq45lwk7m8f5c25fvnzdyrc8fzc";
-    dependencies-sha256 = "0ghbl768al3wpgz0rx2mqbnf6p7cdqpkq6yk6hgf65b4qab4aw9v";
+    version = "3.0.3";
+    sha256 = "1vvkci0kx4b48dg0niifn2d3r4wwq8pb3c5z20wy8pqsqrqhlci5";
+    dependencies-sha256 = "1kzkna9ywacm2m1cirj9cyip66bgqjhid2xf9rrhq6g10lhr8j9m";
+    tomcat = null;
+  };
+  hadoop_3_1 = common {
+    version = "3.1.0";
+    sha256 = "0lig25jkffkzc2bfgyrnm3wymapgyw9fkai8sk9fnmp7cljia314";
+    dependencies-sha256 = "1ri6a7lrijh538vy7v0fzgvkw603pf8jkh3ldl1kl7l0dvszd70d";
     tomcat = null;
   };
 }
