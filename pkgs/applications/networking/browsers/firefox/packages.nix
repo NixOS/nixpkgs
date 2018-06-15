@@ -137,23 +137,6 @@ rec {
 
 in rec {
 
-  tor-browser-7-0 = common (rec {
-    pname = "tor-browser";
-    version = "7.0.1";
-    isTorBrowserLike = true;
-
-    # FIXME: fetchFromGitHub is not ideal, unpacked source is >900Mb
-    src = fetchFromGitHub {
-      owner = "SLNOS";
-      repo  = "tor-browser";
-      # branch "tor-browser-52.5.0esr-7.0-1-slnos";
-      rev   = "830ff8d622ef20345d83f386174f790b0fc2440d";
-      sha256 = "169mjkr0bp80yv9nzza7kay7y2k03lpnx71h4ybcv9ygxgzdgax5";
-    };
-
-    patches = nixpkgsPatches;
-  } // commonAttrs) {};
-
   tor-browser-7-5 = common (rec {
     pname = "tor-browser";
     version = "7.5.5";
