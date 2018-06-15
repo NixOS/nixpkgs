@@ -12,7 +12,7 @@ mkDerivation rec {
   src = fetchFromGitHub {
     owner  = "KDE";
     repo   = "elisa";
-    rev    = version;
+    rev    = "v${version}";
     sha256 = "1kyvdxbsfi692zazw8vjy6mwyy0sa4r1cim8gsiv9pphfh5bpxb1";
   };
 
