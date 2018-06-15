@@ -5038,6 +5038,9 @@ with pkgs;
 
   snabb = callPackage ../tools/networking/snabb { } ;
 
+  snapcast-client = callPackage ../applications/audio/snapcast/client.nix { };
+  snapcast-server = callPackage ../applications/audio/snapcast/server.nix { };
+
   sng = callPackage ../tools/graphics/sng {
     libpng = libpng12;
   };
