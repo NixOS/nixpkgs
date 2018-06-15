@@ -349,4 +349,16 @@ mapAliases (rec {
   ocaml_4_02   = ocamlPackages_4_02.ocaml;
   ocaml_4_03   = ocamlPackages_4_03.ocaml;
   ocaml        = ocamlPackages.ocaml;
-}))
+}) // # Old versions of Nixpkgs for convenience
+  self.lib.mapAttrs (n: v: import (builtins.fetchTarball
+      "https://nixos.org/channels/nixos-${v}/nixexprs.tar.xz") {}) {
+    aardvark    = "13.10";
+    baboon      = "14.04";
+    caterpillar = "14.12";
+    dingo       = "15.09";
+    emu         = "16.03";
+    flounder    = "16.09";
+    gorilla     = "17.03";
+    hummingbird = "17.09";
+    impala      = "18.03";
+})
