@@ -20729,6 +20729,8 @@ with pkgs;
 
   brgenml1cupswrapper = callPackage ../misc/cups/drivers/brgenml1cupswrapper {};
 
+  brightnessctl = callPackage ../misc/brightnessctl { };
+
   calaos_installer = libsForQt5.callPackage ../misc/calaos/installer {};
 
   click = callPackage ../applications/networking/cluster/click { };
