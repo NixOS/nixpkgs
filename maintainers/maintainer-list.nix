@@ -571,7 +571,7 @@
     email = "brandon.barker@gmail.com";
     github = "bbarker";
     name = "Brandon Elam Barker";
-  };  
+  };
   bcarrell = {
     email = "brandoncarrell@gmail.com";
     github = "bcarrell";
@@ -1161,6 +1161,11 @@
     email = "nixos@sodosopa.io";
     github = "e-user";
     name = "Alexander Kahl";
+  };
+  eadwu = {
+    email = "edmund.wu@protonmail.com";
+    github = "eadwu";
+    name = "Edmund Wu";
   };
   earldouglas = {
     email = "james@earldouglas.com";
