@@ -16195,6 +16195,8 @@ with pkgs;
 
   linssid = libsForQt5.callPackage ../applications/networking/linssid { };
 
+  lollypop = callPackage ../applications/audio/lollypop { };
+
   m32edit = callPackage ../applications/audio/midas/m32edit.nix {};
 
   manuskript = callPackage ../applications/editors/manuskript { };
