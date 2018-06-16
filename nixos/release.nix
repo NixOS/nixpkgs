@@ -338,6 +338,7 @@ in rec {
   tests.mesos = callTest tests/mesos.nix {};
   tests.misc = callTest tests/misc.nix {};
   tests.mongodb = callTest tests/mongodb.nix {};
+  tests.mpd = callTest tests/mpd.nix {};
   tests.mumble = callTest tests/mumble.nix {};
   tests.munin = callTest tests/munin.nix {};
   tests.mutableUsers = callTest tests/mutable-users.nix {};
