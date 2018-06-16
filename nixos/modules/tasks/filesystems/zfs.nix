@@ -342,7 +342,7 @@ in
               sleep 0.25
               echo -n .
               trial=$(($trial + 1))
-              if [[ $trial -eq 60 ]]; then
+              if [[ $trial -eq 240 ]]; then
                 break
               fi
             done
@@ -393,7 +393,21 @@ in
             };
             script = ''
               zpool_cmd="${packages.zfsUser}/sbin/zpool"
-              ("$zpool_cmd" list "${pool}" >/dev/null) || "$zpool_cmd" import -d ${cfgZfs.devNodes} -N ${optionalString cfgZfs.forceImportAll "-f"} "${pool}"
+              imported() {
+                "$zpool_cmd" list "${pool}" >/dev/null 2>/dev/null
+              }
+              imported && exit
+              echo -n "importing ZFS pool \"${pool}\"..."
+              # Loop across the import until it succeeds, because the devices needed may not be discovered yet.
+              for trial in `seq 1 60`; do
+                "$zpool_cmd" import -d ${cfgZfs.devNodes} -N ${optionalString cfgZfs.forceImportAll "-f"} "${pool}" && break
+                sleep 1
+              done
+              if imported; then
+                echo "Successfully imported ${pool}"
+              else
+                exit 1
+              fi
             '';
           };
 
