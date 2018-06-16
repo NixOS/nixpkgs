@@ -150,10 +150,6 @@ with pkgs;
 
   ebook2cw = callPackage ../applications/misc/ebook2cw { };
 
-  vsenv = callPackage ../build-support/vsenv {
-    vs = vs90wrapper;
-  };
-
   fetchbower = callPackage ../build-support/fetchbower {
     inherit (nodePackages) bower2nix;
   };
@@ -7069,8 +7065,6 @@ with pkgs;
     vala;
 
   valadoc = callPackage ../development/tools/valadoc { };
-
-  vs90wrapper = callPackage ../development/compilers/vs90wrapper { };
 
   wla-dx = callPackage ../development/compilers/wla-dx { };
 
