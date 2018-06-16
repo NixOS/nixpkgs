@@ -19402,8 +19402,6 @@ with pkgs;
 
   megaglest = callPackage ../games/megaglest {};
 
-  micropolis = callPackage ../games/micropolis { };
-
   minecraft = callPackage ../games/minecraft {
     useAlsa = config.minecraft.alsa or false;
   };
