@@ -1172,6 +1172,11 @@
     github = "e-user";
     name = "Alexander Kahl";
   };
+  eadwu = {
+    email = "edmund.wu@protonmail.com";
+    github = "eadwu";
+    name = "Edmund Wu";
+  };
   earldouglas = {
     email = "james@earldouglas.com";
     github = "earldouglas";
