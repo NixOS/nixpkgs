@@ -78,6 +78,11 @@
     github = "DmitryTsygankov";
     name = "Dmitry Tsygankov";
   };
+  Dje4321 = {
+    email = "dje4321@gmail.com";
+    github = "dje4321";
+    name = "Dje4321";
+  };
   Esteth = {
     email = "adam.copp@gmail.com";
     name = "Adam Copp";
