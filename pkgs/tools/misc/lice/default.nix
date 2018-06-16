@@ -2,23 +2,19 @@
 
 python3Packages.buildPythonPackage rec {
 
-  package = "lice";
   version = "0.4";
-  name = "${package}-${version}";
+  name = "lice-${version}";
 
   src = fetchFromGitHub {
     owner = "licenses";
     repo = "lice";
-    rev = "71635c2544d5edf9e93af4141467763916a86624";
-    sha256 = "059f9mnq7a5pxz2iiaih0nczq1v11m9zxr221agzv85qbwr7ii9f";
+    rev = version;
+    sha256 = "0yxf70fi8ds3hmwjply2815k466r99k8n22r0ppfhwjvp3rn60qx";
     fetchSubmodules = true;
   };
 
   meta = with stdenv.lib; {
-    description = "";
-    longDescription = ''
-
-  '';
+    description = "Print license based on selection and user options.";
     homepage = https://github.com/licenses/lice;
     license = licenses.bsd3;
     maintainers = with maintainers; [ swflint ];
