@@ -1,5 +1,5 @@
 # TODO check that no license information gets lost
-{ fetchurl, stdenv, python, go, cmake, vim, vimUtils, perl, ruby
+{ fetchurl, stdenv, python, git, go, cmake, vim, vimUtils, perl, ruby
 , which, fetchgit, llvmPackages, rustPlatform
 , xkb_switch, rustracerd, fzf, skim
 , python3, boost, icu, ncurses
@@ -7,7 +7,7 @@
 , pythonPackages, python3Packages
 , substituteAll
 , languagetool
-, Cocoa ? null, git
+, Cocoa, CoreFoundation, CoreServices
 }:
 
 let
@@ -195,6 +195,13 @@ rec {
       src = LanguageClient-neovim-src;
 
       cargoSha256 = "1vafyi650qdaq1f7fc8d4nzrv1i6iz28fs5z66hsnz4xkwb3qq9w";
+      buildInputs = stdenv.lib.optionals stdenv.isDarwin [ CoreServices ];
+
+      # FIXME: Use impure version of CoreFoundation because of missing symbols.
+      #   Undefined symbols for architecture x86_64: "_CFURLResourceIsReachable"
+      preConfigure = stdenv.lib.optionalString stdenv.isDarwin ''
+        export NIX_LDFLAGS="-F${CoreFoundation}/Library/Frameworks -framework CoreFoundation $NIX_LDFLAGS"
+      '';
     };
   in buildVimPluginFrom2Nix {
     name = "LanguageClient-neovim-2018-06-12";
