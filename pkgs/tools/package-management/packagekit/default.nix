@@ -65,7 +65,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = http://www.packagekit.org/;
     license = licenses.gpl2Plus;
-    platforms = platforms.darwin;
+    platforms = platforms.unix;
     maintainers = with maintainers; [ matthewbauer ];
   };
 }
