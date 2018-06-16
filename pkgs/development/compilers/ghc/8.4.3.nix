@@ -121,6 +121,8 @@ stdenv.mkDerivation rec {
     export NIX_LDFLAGS+=" -rpath $out/lib/ghc-${version}"
   '' + stdenv.lib.optionalString stdenv.isDarwin ''
     export NIX_LDFLAGS+=" -no_dtrace_dof"
+  '' + stdenv.lib.optionalString targetPlatform.useAndroidPrebuilt ''
+    sed -i -e '5i ,("armv7a-unknown-linux-androideabi", ("e-m:e-p:32:32-i64:64-v128:64:128-a:0:32-n32-S64", "cortex-a8", ""))' llvm-targets
   '';
 
   # TODO(@Ericson2314): Always pass "--target" and always prefix.
