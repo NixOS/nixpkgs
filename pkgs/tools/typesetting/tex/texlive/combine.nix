@@ -30,7 +30,7 @@ let
     pkgNeedsRuby = pkg: pkg.tlType == "run" && pkg.pname == "match-parens";
     extraInputs =
       lib.optional (lib.any pkgNeedsPython splitBin.wrong) python
-      ++ lib.optional (lib.any pkgNeedsPython splitBin.wrong) ruby;
+      ++ lib.optional (lib.any pkgNeedsRuby splitBin.wrong) ruby;
   };
 
   mkUniquePkgs = pkgs: fastUnique (a: b: a < b) # highlighting hack: >

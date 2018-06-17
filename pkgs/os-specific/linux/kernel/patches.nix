@@ -63,6 +63,11 @@ rec {
     patch = ./tag-hardened.patch;
   };
 
+  copperhead_4_14 = rec {
+    name = "copperhead-4.14";
+    patch = ./copperhead-4-14.patch;
+  };
+
   copperhead_4_16 = rec {
     name = "copperhead-4.16";
     patch = ./copperhead-4-16.patch;

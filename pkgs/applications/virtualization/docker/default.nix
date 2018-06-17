@@ -27,7 +27,7 @@ rec {
       patches = [];
     });
 
-    docker-containerd = containerd.overrideAttrs (oldAttrs: rec {
+    docker-containerd = (containerd.override { inherit go; }).overrideAttrs (oldAttrs: rec {
       name = "docker-containerd";
       src = fetchFromGitHub {
         owner = "docker";

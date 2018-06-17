@@ -79,7 +79,7 @@ in
       webapps = mkOption {
         type = types.listOf types.package;
         default = [ tomcat.webapps ];
-        defaultText = "[ tomcat.webapps ]";
+        defaultText = "[ pkgs.tomcat85.webapps ]";
         description = "List containing WAR files or directories with WAR files which are web applications to be deployed on Tomcat";
       };
 

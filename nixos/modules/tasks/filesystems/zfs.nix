@@ -401,6 +401,9 @@ in
           nameValuePair "zfs-sync-${pool}" {
             description = "Sync ZFS pool \"${pool}\"";
             wantedBy = [ "shutdown.target" ];
+            unitConfig = {
+              DefaultDependencies = false;
+            };
             serviceConfig = {
               Type = "oneshot";
               RemainAfterExit = true;
@@ -409,12 +412,15 @@ in
               ${packages.zfsUser}/sbin/zfs set nixos:shutdown-time="$(date)" "${pool}"
             '';
           };
+        createZfsService = serv:
+          nameValuePair serv {
+            after = [ "systemd-modules-load.service" ];
+            wantedBy = [ "zfs.target" ];
+          };
 
-      in listToAttrs (map createImportService dataPools ++ map createSyncService allPools) // {
-        "zfs-mount" = { after = [ "systemd-modules-load.service" ]; };
-        "zfs-share" = { after = [ "systemd-modules-load.service" ]; };
-        "zfs-zed" = { after = [ "systemd-modules-load.service" ]; };
-      };
+      in listToAttrs (map createImportService dataPools ++
+                      map createSyncService allPools ++
+                      map createZfsService [ "zfs-mount" "zfs-share" "zfs-zed" ]);
 
       systemd.targets."zfs-import" =
         let
@@ -423,6 +429,7 @@ in
           {
             requires = services;
             after = services;
+            wantedBy = [ "zfs.target" ];
           };
 
       systemd.targets."zfs".wantedBy = [ "multi-user.target" ];
