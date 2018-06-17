@@ -1,4 +1,4 @@
-{ stdenv, hostPlatform, fetchcvs, lib, groff, mandoc, zlib, coreutils
+{ stdenv, hostPlatform, fetchcvs, lib, groff, mandoc, zlib, buildPackages
 , yacc, flex, libressl, bash, less, writeText }:
 
 let
@@ -178,7 +178,7 @@ let
 
     # temporarily use gnuinstall for bootstrapping
     # bsdinstall will be built later
-    makeFlags = [ "INSTALL=${coreutils}/bin/install" ];
+    makeFlags = [ "INSTALL=${buildPackages.coreutils}/bin/install" ];
     installFlags = [];
     RENAME = "-D";
 
