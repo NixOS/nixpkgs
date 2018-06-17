@@ -111,6 +111,7 @@
     github = "KibaFox";
     name = "Kiba Fox";
   };
+  
   MP2E = {
     email = "MP2E@archlinux.us";
     github = "MP2E";
@@ -2437,6 +2438,11 @@
     email = "mdaiter8121@gmail.com";
     github = "mdaiter";
     name = "Matthew S. Daiter";
+  };
+  melsigl = {
+    email = "melanie.bianca.sigl@gmail.com";
+    github = "melsigl";
+    name = "Melanie B. Sigl";
   };
   meditans = {
     email = "meditans@gmail.com";
