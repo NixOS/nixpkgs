@@ -3237,6 +3237,8 @@ with pkgs;
 
   journalbeat = callPackage ../tools/system/journalbeat { };
 
+  journaldriver = callPackage ../tools/misc/journaldriver { };
+
   jp = callPackage ../development/tools/jp { };
 
   jp2a = callPackage ../applications/misc/jp2a { };
