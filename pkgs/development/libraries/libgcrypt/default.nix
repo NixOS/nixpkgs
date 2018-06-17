@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
   '';
 
   # TODO: reenable with next update?
-  doCheck = !stdenv.isDarwin;
+  doCheck = !stdenv.isDarwin && !stdenv.hostPlatform.isMusl;
 
   meta = with stdenv.lib; {
     homepage = https://www.gnu.org/software/libgcrypt/;
