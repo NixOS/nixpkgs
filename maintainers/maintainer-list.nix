@@ -2695,6 +2695,11 @@
     github = "muflax";
     name = "Stefan Dorn";
   };
+  mupf = {
+    email = "mail@michael-fitzmayer.de";
+    github = "mupfelofen-de";
+    name = "Michael Fitzmayer";
+  };
   myrl = {
     email = "myrl.0xf@gmail.com";
     github = "myrl";
