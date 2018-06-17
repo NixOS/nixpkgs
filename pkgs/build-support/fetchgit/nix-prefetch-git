@@ -356,7 +356,7 @@ print_results() {
   "rev": "$(json_escape "$fullRev")",
   "date": "$(json_escape "$commitDateStrict8601")",
   "$(json_escape "$hashType")": "$(json_escape "$hash")",
-  "fetchSubmodules": $([[ -n "fetchSubmodules" ]] && echo true || echo false)
+  "fetchSubmodules": $([[ -n "$fetchSubmodules" ]] && echo true || echo false)
 }
 EOF
     fi
