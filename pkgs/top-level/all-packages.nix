@@ -23367,6 +23367,8 @@ in
 
   sam-ba = callPackage ../tools/misc/sam-ba { };
 
+  sndio = callPackage ../misc/sndio { };
+
   opkg = callPackage ../tools/package-management/opkg { };
 
   opkg-utils = callPackage ../tools/package-management/opkg-utils { };
