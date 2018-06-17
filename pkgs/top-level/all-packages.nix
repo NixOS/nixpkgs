@@ -21087,6 +21087,8 @@ with pkgs;
 
   dpkg = callPackage ../tools/package-management/dpkg { };
 
+  dumb = callPackage ../misc/dumb { };
+
   ekiga = newScope pkgs.gnome2 ../applications/networking/instant-messengers/ekiga { };
 
   emulationstation = callPackage ../misc/emulators/emulationstation {
