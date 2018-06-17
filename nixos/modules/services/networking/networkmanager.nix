@@ -38,6 +38,8 @@ let
 
     [device]
     wifi.scan-rand-mac-address=${if cfg.wifi.scanRandMacAddress then "yes" else "no"}
+
+    ${cfg.extraConfig}
   '';
 
   /*
@@ -117,6 +119,14 @@ in {
           configured. If enabled, a group <literal>networkmanager</literal>
           will be created. Add all users that should have permission
           to change network settings to this group.
+        '';
+      };
+
+      extraConfig = mkOption {
+        type = types.lines;
+        default = "";
+        description = ''
+          Configuration appended to the generated NetworkManager.conf.
         '';
       };
 
