@@ -11843,6 +11843,8 @@ with pkgs;
 
   sofia_sip = callPackage ../development/libraries/sofia-sip { };
 
+  soil = callPackage ../development/libraries/soil { };
+  
   sonic = callPackage ../development/libraries/sonic { };
 
   soprano = callPackage ../development/libraries/soprano { };
@@ -20936,6 +20938,8 @@ with pkgs;
 
   spyder = pythonPackages.spyder;
 
+  openspace = callPackage ../applications/science/astronomy/openspace { };
+  
   stellarium = libsForQt5.callPackage ../applications/science/astronomy/stellarium { };
 
   tulip = callPackage ../applications/science/misc/tulip {
