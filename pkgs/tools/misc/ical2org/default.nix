@@ -22,6 +22,6 @@ buildGoPackage rec {
     license = licenses.gpl3;
     maintainers = with maintainers; [ swflint ];
     platforms = platforms.unix;
-  }
+  };
   
 }
