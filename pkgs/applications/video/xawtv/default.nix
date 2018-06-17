@@ -2,10 +2,10 @@
 , libFS, fontsproto, libXaw, libXpm, libXext, libSM, libICE, perl, xextproto, linux}:
 
 stdenv.mkDerivation rec {
-  name = "xawtv-3.103";
+  name = "xawtv-3.104";
   src = fetchurl {
     url = "http://linuxtv.org/downloads/xawtv/${name}.tar.bz2";
-    sha256 = "0lnxr3xip80g0rz7h6n14n9d1qy0cm56h0g1hsyr982rbldskwrc";
+    sha256 = "0jnvbahxmx9jw8g2519wmc1dq9afnlqcrzc876fcbf2x1iz39qxr";
   };
 
   preConfigure = ''
