@@ -66,12 +66,6 @@ in rec {
       buildLlvmPackages = buildPackages.llvmPackages_39;
       llvmPackages = pkgs.llvmPackages_39;
     };
-    ghc842 = callPackage ../development/compilers/ghc/8.4.2.nix rec {
-      bootPkgs = packages.ghc821Binary;
-      inherit (bootPkgs) alex happy hscolour;
-      buildLlvmPackages = buildPackages.llvmPackages_5;
-      llvmPackages = pkgs.llvmPackages_5;
-    };
     ghc843 = callPackage ../development/compilers/ghc/8.4.3.nix rec {
       bootPkgs = packages.ghc821Binary;
       inherit (bootPkgs) alex happy hscolour;
@@ -100,7 +94,7 @@ in rec {
       stage0 = ../development/compilers/ghcjs-ng/8.2/stage0.nix;
     };
     ghcjs84 = callPackage ../development/compilers/ghcjs-ng rec {
-      bootPkgs = packages.ghc842;
+      bootPkgs = packages.ghc843;
       inherit (bootPkgs) alex happy;
       ghcjsSrcJson = ../development/compilers/ghcjs-ng/8.4/git.json;
       stage0 = ../development/compilers/ghcjs-ng/8.4/stage0.nix;
@@ -150,11 +144,6 @@ in rec {
       buildHaskellPackages = bh.packages.ghc822;
       ghc = bh.compiler.ghc822;
       compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-8.2.x.nix { };
-    };
-    ghc842 = callPackage ../development/haskell-modules {
-      buildHaskellPackages = bh.packages.ghc842;
-      ghc = bh.compiler.ghc842;
-      compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-8.4.x.nix { };
     };
     ghc843 = callPackage ../development/haskell-modules {
       buildHaskellPackages = bh.packages.ghc843;
