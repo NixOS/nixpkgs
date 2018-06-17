@@ -92,6 +92,7 @@ stdenv.mkDerivation rec {
   # The following is required on grsecurity/PaX due to spidermonkey's JIT
   postBuild = stdenv.lib.optionalString stdenv.isLinux ''
     paxmark mr src/polkitbackend/.libs/polkitd
+  '' + stdenv.lib.optionalString (stdenv.isLinux && doCheck) ''
     paxmark mr test/polkitbackend/.libs/polkitbackendjsauthoritytest
   '';
 
