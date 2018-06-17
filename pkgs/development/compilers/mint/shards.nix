@@ -8,26 +8,26 @@
   ameba = {
     owner = "veelenga";
     repo = "ameba";
-    rev = "v0.6.0";
-    sha256 = "16jfyrkfc909h16si513lw944qp3dyapymczcqc2ic0jaal0af5b";
+    rev = "v0.7.0";
+    sha256 = "01h0a1ba5l254r04mgkqhjdfn21cs0q7fmvk4gj35cj5lpr2bp17";
   };
   baked_file_system = {
     owner = "schovi";
     repo = "baked_file_system";
-    rev = "v0.9.6";
-    sha256 = "06cpriaizp5pcqwdq3jl2lm4sz9b2gcxg3a9q3lh0fqk2acajzmx";
+    rev = "e1447549d5ac0560720fae62179b2f2c62c9bfd1";
+    sha256 = "1fi6zag1a6h4xwrfizy01dls3hhraqw0cmpwj7rjv1qcddjgig5z";
   };
   duktape = {
     owner = "jessedoyle";
     repo = "duktape.cr";
-    rev = "v0.13.0";
-    sha256 = "0v0nckprgr7idmsx97g98as1a7z4hmlmwl924dbbaqvyslv5ls6w";
+    rev = "v0.14.1";
+    sha256 = "0fkay3qspzych050xl8xjkrphmxpzaj0dcf9jl22xwz8cx1l89f1";
   };
   kemal = {
     owner = "kemalcr";
     repo = "kemal";
-    rev = "v0.22.0";
-    sha256 = "0gq3c27grgh90fykbj9fdsz507lwd41gk686qfnig6npndqv1v10";
+    rev = "a5870e7d24e5ec75c956bcf3e4423f55a2c4ff78";
+    sha256 = "1f2bm4xmfg6zqs3a8744pbk1vx964flf17g1mj01yslfcnzxywal";
   };
   kilt = {
     owner = "jeromegn";
@@ -50,8 +50,8 @@
   time_format = {
     owner = "vladfaust";
     repo = "time_format.cr";
-    rev = "v0.1.0";
-    sha256 = "1f3rssdlcw2a5f74qa8bzlf1rh5dzvyg1d32w9qlisf2cc4lkh9g";
+    rev = "v0.1.1";
+    sha256 = "0mmssnabf476i07sajm7s3rlvfcav4lkh0n8g12rybxr6c9f683v";
   };
   tree_template = {
     owner = "anykeyh";
