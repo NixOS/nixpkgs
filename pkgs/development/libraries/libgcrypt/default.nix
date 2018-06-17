@@ -23,6 +23,8 @@ stdenv.mkDerivation rec {
 
   depsBuildBuild = stdenv.lib.optional stdenv.isCross buildPackages.stdenv.cc;
 
+  patches = [ ./fix-jent-locking.patch ];
+
   buildInputs = [ libgpgerror ]
     ++ stdenv.lib.optional stdenv.isDarwin gettext
     ++ stdenv.lib.optional enableCapabilities libcap;
