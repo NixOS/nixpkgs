@@ -22960,6 +22960,8 @@ in
 
   ekiga = callPackage ../applications/networking/instant-messengers/ekiga { };
 
+  dumb = callPackage ../misc/dumb { };
+
   emulationstation = callPackage ../misc/emulators/emulationstation {
     stdenv = overrideCC stdenv gcc5;
   };
