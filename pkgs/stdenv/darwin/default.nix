@@ -323,8 +323,16 @@ in rec {
         coreutils findutils diffutils patchutils;
 
       llvmPackages_5 = super.llvmPackages_5 // (let
-        tools = super.llvmPackages_5.tools.extend (_: _: {
-          inherit (llvmPackages_5) llvm clang-unwrapped;
+        tools = super.llvmPackages_5.tools.extend (_: super: {
+          # Build man pages with final stdenv not before
+          llvm = lib.extendDerivation
+            true
+            { inherit (super.llvm) man; }
+            llvmPackages_5.llvm;
+          clang-unwrapped = lib.extendDerivation
+            true
+            { inherit (super.clang-unwrapped) man; }
+            llvmPackages_5.clang-unwrapped;
         });
         libraries = super.llvmPackages_5.libraries.extend (_: _: {
           inherit (llvmPackages_5) libcxx libcxxabi;
@@ -370,7 +378,8 @@ in rec {
         inherit (prevStage) stdenv;
       };
       inherit (pkgs) coreutils gnugrep;
-      cc       = pkgs.llvmPackages.clang-unwrapped;
+      # Hack to avoid man pages in stdenv to avoid mass rebuild
+      cc       = builtins.removeAttrs pkgs.llvmPackages.clang-unwrapped [ "man" ];
       bintools = pkgs.darwin.binutils;
       libc     = pkgs.darwin.Libsystem;
       extraPackages = [ pkgs.libcxx ];
