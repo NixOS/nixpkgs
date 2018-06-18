@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "0amxhcikcgj04z81272kz35m5h5q4jx9x7v71h8yl1rv4b2lzh7z";
   };
 
-  makeFlags = "MODE=0 PREFIX=/ DESTDIR=$(out)";
+  makeFlags = "MODE=0755 PREFIX=/ DESTDIR=$(out)";
 
   patchPhase = ''
     substituteInPlace 90-brightnessctl.rules --replace /bin/ ${coreutils}/bin/
