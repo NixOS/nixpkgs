@@ -1,6 +1,6 @@
 { stdenv, lib, fetchurl, bash, cpio, pkgconfig, file, which, unzip, zip, cups, freetype
 , alsaLib, bootjdk, cacert, perl, liberation_ttf, fontconfig, zlib, lndir
-, libX11, libICE, libXrender, libXext, libXt, libXtst, libXi, libXinerama, libXcursor
+, libX11, libICE, libXrender, libXext, libXt, libXtst, libXi, libXinerama, libXcursor, libXrandr
 , libjpeg, giflib
 , setJavaClassPath
 , minimal ? false
@@ -36,7 +36,7 @@ let
     buildInputs = [
       cpio file which unzip zip perl bootjdk zlib cups freetype alsaLib
       libjpeg giflib libX11 libICE libXext libXrender libXtst libXt libXtst
-      libXi libXinerama libXcursor lndir fontconfig
+      libXi libXinerama libXcursor libXrandr lndir fontconfig
     ] ++ lib.optionals (!minimal && enableGnome2) [
       gtk3 gnome_vfs GConf glib
     ];
