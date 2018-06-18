@@ -1,6 +1,6 @@
 { fetchurl, stdenv, meson, ninja, pkgconfig, gnome3, glib, gtk, gsettings-desktop-schemas
 , gnome-desktop, dbus, json-glib, libICE, xmlto, docbook_xsl, docbook_xml_dtd_412
-, libxslt, gettext, makeWrapper, systemd, xorg, epoxy }:
+, libxslt, gettext, makeWrapper, systemd, xorg, epoxy, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
   name = "gnome-session-${version}";
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     meson ninja pkgconfig gettext makeWrapper
     xmlto libxslt docbook_xsl docbook_xml_dtd_412
-    dbus # for DTD
+    wrapGAppsHook dbus # for DTD
   ];
 
   buildInputs = [
