@@ -58,6 +58,10 @@ stdenv.mkDerivation rec {
       url = "https://git.archlinux.org/svntogit/packages.git/plain/trunk/vlc-qt5.11.patch?h=packages/vlc";
       sha256 = "0yh65bhhaz876cazhagnafs1dr61184lpj3y0m3y7k37bswykj8p";
     })
+    (fetchpatch {
+      url = "https://github.com/videolan/vlc/commit/26e2d3906658c30f2f88f4b1bc9630ec43bf5525.patch";
+      sha256 = "0sm73cbzxva8sww526bh5yin1k2pdkvj826wdlmqnj7xf0f3mki4";
+    })
   ];
 
   postPatch = ''
