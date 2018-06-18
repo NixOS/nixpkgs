@@ -126,6 +126,10 @@ let
       ${optionalString (any (fs: fs.autoResize) fileSystems) ''
         # We need mke2fs in the initrd.
         copy_bin_and_libs ${pkgs.e2fsprogs}/sbin/resize2fs
+        # Copy also f2fs-tools' fsck and resize
+        # TODO: separate these in case no f2fs fs are present
+        copy_bin_and_libs ${pkgs.f2fs-tools}/sbin/fsck.f2fs
+        copy_bin_and_libs ${pkgs.f2fs-tools}/sbin/resize.f2fs
       ''}
 
       # Copy secrets if needed.
