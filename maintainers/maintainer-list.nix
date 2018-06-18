@@ -33,6 +33,11 @@
     github = "Anton-Latukha";
     name = "Anton Latukha";
   };
+  ariutta = {
+    email = "anders.riutta@gmail.com";
+    github = "ariutta";
+    name = "Anders Riutta";
+  };
   Baughn = {
     email = "sveina@gmail.com";
     github = "Baughn";
