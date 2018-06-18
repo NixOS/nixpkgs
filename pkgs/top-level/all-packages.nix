@@ -4369,6 +4369,8 @@ with pkgs;
 
   patchage = callPackage ../applications/audio/patchage { };
 
+  patchwork-classic = callPackage ../applications/networking/ssb/patchwork-classic { };
+
   pcapfix = callPackage ../tools/networking/pcapfix { };
 
   pbzip2 = callPackage ../tools/compression/pbzip2 { };
