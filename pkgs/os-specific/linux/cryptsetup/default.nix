@@ -1,23 +1,27 @@
-{ stdenv, fetchurl, devicemapper, openssl, libuuid, pkgconfig, popt
-, enablePython ? false, python2 ? null
-}:
+{ stdenv, fetchurl, devicemapper, json_c, openssl, libuuid, pkgconfig, popt
+, enablePython ? false, python2 ? null }:
 
 assert enablePython -> python2 != null;
 
 stdenv.mkDerivation rec {
-  name = "cryptsetup-1.7.5";
+  name = "cryptsetup-2.0.2";
 
   src = fetchurl {
-    url = "mirror://kernel/linux/utils/cryptsetup/v1.7/${name}.tar.xz";
-    sha256 = "1gail831j826lmpdx2gsc83lp3br6wfnwh3vqwxaa1nn1lfwsc1b";
+    url = "mirror://kernel/linux/utils/cryptsetup/v2.0/${name}.tar.xz";
+    sha256 = "15wyjfgcqjf0wy5gxnmjj8aah33csv5v6n1hv9c8sxdzygbhb0ag";
   };
 
-  configureFlags = [ "--enable-cryptsetup-reencrypt" "--with-crypto_backend=openssl" ]
-                ++ stdenv.lib.optional enablePython "--enable-python";
+  NIX_LDFLAGS = "-lgcc_s";
+
+  configureFlags = [
+    "--disable-kernel_crypto"
+    "--enable-cryptsetup-reencrypt"
+    "--with-crypto_backend=openssl"
+  ] ++ stdenv.lib.optional enablePython "--enable-python";
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ devicemapper openssl libuuid popt ]
-             ++ stdenv.lib.optional enablePython python2;
+  buildInputs = [ devicemapper json_c openssl libuuid popt ]
+    ++ stdenv.lib.optional enablePython python2;
 
   meta = {
     homepage = https://gitlab.com/cryptsetup/cryptsetup/;
