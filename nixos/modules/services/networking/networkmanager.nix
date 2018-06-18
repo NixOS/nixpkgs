@@ -124,7 +124,7 @@ in {
       
       extraConfig = mkOption {
         type = types.lines;
-        default = '''';
+        default = "";
         description = ''
           Configuration appended to the generated NetworkManager.conf. 
         '';
