@@ -150,10 +150,6 @@ with pkgs;
 
   ebook2cw = callPackage ../applications/misc/ebook2cw { };
 
-  vsenv = callPackage ../build-support/vsenv {
-    vs = vs90wrapper;
-  };
-
   fetchbower = callPackage ../build-support/fetchbower {
     inherit (nodePackages) bower2nix;
   };
@@ -399,6 +395,8 @@ with pkgs;
   setupDebugInfoDirs = makeSetupHook { } ../build-support/setup-hooks/setup-debug-info-dirs.sh;
 
   useOldCXXAbi = makeSetupHook { } ../build-support/setup-hooks/use-old-cxx-abi.sh;
+
+  ical2org = callPackage ../tools/misc/ical2org {};
 
   iconConvTools = callPackage ../build-support/icon-conv-tools {};
 
@@ -1488,6 +1486,8 @@ with pkgs;
   mcelog = callPackage ../os-specific/linux/mcelog {
     utillinux = utillinuxMinimal;
   };
+
+  sqlint = callPackage ../development/tools/sqlint { };
 
   antibody = callPackage ../shells/zsh/antibody { };
 
@@ -4066,7 +4066,7 @@ with pkgs;
 
   niff = callPackage ../tools/package-management/niff { };
 
-  nifskope = callPackage ../tools/graphics/nifskope { };
+  nifskope = libsForQt59.callPackage ../tools/graphics/nifskope { };
 
   nilfs-utils = callPackage ../tools/filesystems/nilfs-utils {};
 
@@ -5043,6 +5043,8 @@ with pkgs;
   };
 
   snort = callPackage ../applications/networking/ids/snort { };
+
+  soapui = callPackage ../applications/networking/soapui { };
 
   sshguard = callPackage ../tools/security/sshguard {};
 
@@ -7070,8 +7072,6 @@ with pkgs;
 
   valadoc = callPackage ../development/tools/valadoc { };
 
-  vs90wrapper = callPackage ../development/compilers/vs90wrapper { };
-
   wla-dx = callPackage ../development/compilers/wla-dx { };
 
   wrapCCWith =
@@ -7518,7 +7518,10 @@ with pkgs;
   spark_22 = callPackage ../applications/networking/cluster/spark { version = "2.2.1"; };
 
   spidermonkey_1_8_5 = callPackage ../development/interpreters/spidermonkey/1.8.5.nix { };
-  spidermonkey_17 = callPackage ../development/interpreters/spidermonkey/17.nix { };
+  spidermonkey_17 = callPackage ../development/interpreters/spidermonkey/17.nix {
+    inherit (darwin) libobjc;
+    stdenv = gccStdenv;
+  };
   spidermonkey_31 = callPackage ../development/interpreters/spidermonkey/31.nix { };
   spidermonkey_38 = callPackage ../development/interpreters/spidermonkey/38.nix ({
     inherit (darwin) libobjc;
@@ -11316,10 +11319,10 @@ with pkgs;
 
   libsForQt59 = lib.makeScope qt59.newScope mkLibsForQt5;
 
-  qt510 = recurseIntoAttrs (makeOverridable
-    (import ../development/libraries/qt-5/5.10) {
+  qt511 = recurseIntoAttrs (makeOverridable
+    (import ../development/libraries/qt-5/5.11) {
       inherit newScope;
-      inherit stdenv fetchurl makeSetupHook makeWrapper;
+      inherit stdenv fetchurl fetchFromGitHub makeSetupHook makeWrapper;
       bison = bison2; # error: too few arguments to function 'int yylex(...
       inherit cups;
       harfbuzz = harfbuzz-icu;
@@ -11329,10 +11332,10 @@ with pkgs;
       inherit (gnome3) gtk3 dconf;
     });
 
-  libsForQt510 = recurseIntoAttrs (lib.makeScope qt510.newScope mkLibsForQt5);
+  libsForQt511 = recurseIntoAttrs (lib.makeScope qt511.newScope mkLibsForQt5);
 
-  qt5 = qt510;
-  libsForQt5 = libsForQt510;
+  qt5 = qt511;
+  libsForQt5 = libsForQt511;
 
   qt5ct = libsForQt5.callPackage ../tools/misc/qt5ct { };
 
@@ -15705,7 +15708,7 @@ with pkgs;
 
   emacsPackagesNgGen = emacs: import ./emacs-packages.nix {
     inherit lib newScope stdenv;
-    inherit fetchFromGitHub fetchgit fetchhg fetchurl;
+    inherit fetchFromGitHub fetchgit fetchhg fetchurl fetchpatch;
     inherit emacs texinfo makeWrapper runCommand;
     inherit (xorg) lndir;
 
@@ -15761,9 +15764,7 @@ with pkgs;
 
   eterm = callPackage ../applications/misc/eterm { };
 
-  etherape = callPackage ../applications/networking/sniffers/etherape {
-    inherit (gnome2) libgnomecanvas libglade;
-  };
+  etherape = callPackage ../applications/networking/sniffers/etherape { };
 
   evilvte = callPackage ../applications/misc/evilvte {
     configH = config.evilvte.config or "";
@@ -16194,6 +16195,8 @@ with pkgs;
   libquvi = callPackage ../applications/video/quvi/library.nix { };
 
   linssid = libsForQt5.callPackage ../applications/networking/linssid { };
+
+  lollypop = callPackage ../applications/audio/lollypop { };
 
   m32edit = callPackage ../applications/audio/midas/m32edit.nix {};
 
@@ -19402,8 +19405,6 @@ with pkgs;
 
   megaglest = callPackage ../games/megaglest {};
 
-  micropolis = callPackage ../games/micropolis { };
-
   minecraft = callPackage ../games/minecraft {
     useAlsa = config.minecraft.alsa or false;
   };
@@ -19974,8 +19975,8 @@ with pkgs;
     bluedevil breeze-gtk breeze-qt5 breeze-grub breeze-plymouth
     kactivitymanagerd kde-cli-tools kde-gtk-config kdeplasma-addons kgamma5
     kinfocenter kmenuedit kscreen kscreenlocker ksshaskpass ksysguard
-    kwallet-pam kwayland-integration kwin kwrited milou oxygen plasma-desktop
-    plasma-integration plasma-nm plasma-pa plasma-vault plasma-workspace
+    kwallet-pam kwayland-integration kwin kwrited milou oxygen plasma-browser-integration
+    plasma-desktop plasma-integration plasma-nm plasma-pa plasma-vault plasma-workspace
     plasma-workspace-wallpapers polkit-kde-agent powerdevil sddm-kcm
     systemsettings user-manager xdg-desktop-portal-kde;
 
@@ -20732,6 +20733,8 @@ with pkgs;
 
   brgenml1cupswrapper = callPackage ../misc/cups/drivers/brgenml1cupswrapper {};
 
+  brightnessctl = callPackage ../misc/brightnessctl { };
+
   calaos_installer = libsForQt5.callPackage ../misc/calaos/installer {};
 
   click = callPackage ../applications/networking/cluster/click { };
@@ -21099,6 +21102,8 @@ with pkgs;
 
   lkproof = callPackage ../tools/typesetting/tex/lkproof { };
 
+  lice = callPackage ../tools/misc/lice {};
+
   m33-linux = callPackage ../misc/drivers/m33-linux { };
 
   mnemonicode = callPackage ../misc/mnemonicode { };
@@ -21377,7 +21382,7 @@ with pkgs;
   vimUtils = callPackage ../misc/vim-plugins/vim-utils.nix { };
 
   vimPlugins = recurseIntoAttrs (callPackage ../misc/vim-plugins {
-    inherit (darwin.apple_sdk.frameworks) Cocoa;
+    inherit (darwin.apple_sdk.frameworks) Cocoa CoreFoundation CoreServices;
     llvmPackages = llvmPackages_39;
   });
 

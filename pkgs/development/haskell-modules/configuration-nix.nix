@@ -269,6 +269,10 @@ self: super: builtins.intersectAttrs super {
     );
 
   llvm-hs = super.llvm-hs.override { llvm-config = pkgs.llvm; };
+  llvm-hs_6_2_0 = super.llvm-hs_6_2_0.override {
+    llvm-config = pkgs.llvm_6;
+    llvm-hs-pure = super.llvm-hs-pure_6_2_0;
+  };
 
   # Needs help finding LLVM.
   spaceprobe = addBuildTool super.spaceprobe self.llvmPackages.llvm;

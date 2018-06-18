@@ -1,24 +1,24 @@
 { stdenv, fetchFromGitHub
 , pkgconfig, SDL2, SDL, SDL2_ttf, openssl, spice-protocol, fontconfig
-, libX11, freefont_ttf
+, libX11, freefont_ttf, nettle, libconfig
 }:
 
 stdenv.mkDerivation rec {
   name = "looking-glass-client-${version}";
-  version = "a10";
+  version = "a11";
 
   src = fetchFromGitHub {
     owner = "gnif";
     repo = "LookingGlass";
     rev = version;
-    sha256 = "10jxnkrvskjzkg86iz3hnb5v91ykzx6pvcnpy1v4436g5f2d62wn";
+    sha256 = "0q4isn86pl5wddf6h8qd62fw3577ns2sd2myzw969sbl796bwcil";
   };
 
   nativeBuildInputs = [ pkgconfig ];
 
   buildInputs = [
     SDL SDL2 SDL2_ttf openssl spice-protocol fontconfig
-    libX11 freefont_ttf
+    libX11 freefont_ttf nettle libconfig
   ];
 
   enableParallelBuilding = true;

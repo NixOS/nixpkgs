@@ -312,7 +312,7 @@ For example, installing the following environment
 allows one to browse module documentation index [not too dissimilar to
 this](https://downloads.haskell.org/~ghc/latest/docs/html/libraries/index.html)
 for all the specified packages and their dependencies by directing a browser of
-choice to `~/.nix-profiles/share/doc/hoogle/index.html` (or
+choice to `~/.nix-profile/share/doc/hoogle/index.html` (or
 `/run/current-system/sw/share/doc/hoogle/index.html` in case you put it in
 `environment.systemPackages` in NixOS).
 

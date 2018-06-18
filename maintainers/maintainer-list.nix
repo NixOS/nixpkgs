@@ -33,6 +33,11 @@
     github = "Anton-Latukha";
     name = "Anton Latukha";
   };
+  ariutta = {
+    email = "anders.riutta@gmail.com";
+    github = "ariutta";
+    name = "Anders Riutta";
+  };
   Baughn = {
     email = "sveina@gmail.com";
     github = "Baughn";
@@ -77,6 +82,11 @@
     email = "dmitry.tsygankov@gmail.com";
     github = "DmitryTsygankov";
     name = "Dmitry Tsygankov";
+  };
+  Dje4321 = {
+    email = "dje4321@gmail.com";
+    github = "dje4321";
+    name = "Dje4321";
   };
   Esteth = {
     email = "adam.copp@gmail.com";
@@ -2452,6 +2462,11 @@
     email = "meister@krutt.org";
     github = "meisternu";
     name = "Matt Miemiec";
+  };
+  melsigl = {
+    email = "melanie.bianca.sigl@gmail.com";
+    github = "melsigl";
+    name = "Melanie B. Sigl";
   };
   metabar = {
     email = "softs@metabarcoding.org";

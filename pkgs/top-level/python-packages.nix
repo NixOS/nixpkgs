@@ -1239,9 +1239,9 @@ in {
   cypari2 = callPackage ../development/python-modules/cypari2 { };
 
   dlib = buildPythonPackage rec {
-    inherit (pkgs.dlib) name src nativeBuildInputs meta;
+    inherit (pkgs.dlib) name src nativeBuildInputs meta buildInputs;
 
-    buildInputs = pkgs.dlib.buildInputs ++ [ self.boost ];
+    patches = [ ../development/python-modules/dlib/build-cores.patch ];
 
     checkInputs = with self; [ pytest ];
   };
@@ -15050,6 +15050,8 @@ EOF
       license = licenses.gpl2Plus;
     };
   });
+
+  xml2rfc = callPackage ../development/python-modules/xml2rfc { };
 
   xmltodict = callPackage ../development/python-modules/xmltodict { };
 

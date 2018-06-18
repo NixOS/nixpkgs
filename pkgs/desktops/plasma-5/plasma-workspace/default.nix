@@ -9,8 +9,9 @@
   baloo, kactivities, kcmutils, kconfig, kcrash, kdbusaddons, kdeclarative,
   kdelibs4support, kdesu, kglobalaccel, kidletime, kinit, kjsembed, knewstuff,
   knotifyconfig, kpackage, krunner, kscreenlocker, ktexteditor, ktextwidgets,
-  kwallet, kwayland, kwin, kxmlrpcclient, libkscreen, libksysguard,
-  networkmanager-qt, phonon, plasma-framework, prison, solid,
+  kwallet, kwayland, kwin, kxmlrpcclient, libkscreen, libksysguard, libqalculate,
+  networkmanager-qt, phonon, plasma-framework, prison, solid, kholidays,
+  breeze-qt5,
 
   qtgraphicaleffects, qtquickcontrols, qtquickcontrols2, qtscript, qttools,
   qtwayland, qtx11extras,
@@ -28,8 +29,8 @@ mkDerivation {
     baloo kactivities kcmutils kconfig kcrash kdbusaddons kdeclarative
     kdelibs4support kdesu kglobalaccel kidletime kjsembed knewstuff
     knotifyconfig kpackage krunner kscreenlocker ktexteditor ktextwidgets
-    kwallet kwayland kwin kxmlrpcclient libkscreen libksysguard
-    networkmanager-qt phonon plasma-framework prison solid
+    kwallet kwayland kwin kxmlrpcclient libkscreen libksysguard libqalculate
+    networkmanager-qt phonon plasma-framework prison solid kholidays
 
     qtgraphicaleffects qtquickcontrols qtquickcontrols2 qtscript qtwayland qtx11extras
   ];
@@ -51,6 +52,7 @@ mkDerivation {
     "-DNIXPKGS_GREP=${getBin gnugrep}/bin/grep"
     "-DNIXPKGS_KDEINIT5_SHUTDOWN=${getBin kinit}/bin/kdeinit5_shutdown"
     "-DNIXPKGS_SED=${getBin gnused}/bin/sed"
+    "-DNIXPKGS_WALLPAPER_INSTALL_DIR=${getBin breeze-qt5}/share/wallpapers/"
   ];
 
   # To regenerate ./plasma-workspace.patch,

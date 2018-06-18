@@ -29,6 +29,7 @@
   ./config/vpnc.nix
   ./config/zram.nix
   ./hardware/all-firmware.nix
+  ./hardware/brightnessctl.nix
   ./hardware/ckb.nix
   ./hardware/cpu/amd-microcode.nix
   ./hardware/cpu/intel-microcode.nix
@@ -50,6 +51,7 @@
   ./hardware/video/bumblebee.nix
   ./hardware/video/displaylink.nix
   ./hardware/video/nvidia.nix
+  ./hardware/video/uvcvideo/default.nix
   ./hardware/video/webcam/facetimehd.nix
   ./i18n/input-method/default.nix
   ./i18n/input-method/fcitx.nix

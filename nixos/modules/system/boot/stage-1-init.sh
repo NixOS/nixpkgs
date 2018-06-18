@@ -251,6 +251,9 @@ checkFS() {
     # Skip fsck for bcachefs - not implemented yet.
     if [ "$fsType" = bcachefs ]; then return 0; fi
 
+    # Skip fsck for nilfs2 - not needed by design and no fsck tool for this filesystem.
+    if [ "$fsType" = nilfs2 ]; then return 0; fi
+
     # Skip fsck for inherently readonly filesystems.
     if [ "$fsType" = squashfs ]; then return 0; fi
 

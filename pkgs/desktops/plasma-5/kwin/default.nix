@@ -30,13 +30,7 @@ mkDerivation {
     libcap
   ];
   outputs = [ "bin" "dev" "out" ];
-  patches = copyPathsToStore (lib.readPathsFromFile ./. ./series) ++ [
-    # This patch should be removed in 5.12.2
-    (fetchpatch {
-      url = "https://github.com/KDE/kwin/commit/6e5f5d92daab4c60f7bf241d90a91b3bea27acfd.patch";
-      sha256 = "1yq9wjvch46z7qx051s0ws0gyqbqhkvx7xl4pymd97vz8v6gnx4x";
-    })
-  ];
+  patches = copyPathsToStore (lib.readPathsFromFile ./. ./series);
   CXXFLAGS = [
     ''-DNIXPKGS_XWAYLAND=\"${lib.getBin xwayland}/bin/Xwayland\"''
   ];

@@ -97,6 +97,7 @@ in
     # xrdp can run X11 program even if "services.xserver.enable = false"
     environment.pathsToLink =
       [ "/etc/xdg" "/share/xdg" "/share/applications" "/share/icons" "/share/pixmaps" ];
+    fonts.enableDefaultFonts = mkDefault true;
 
     systemd = {
       services.xrdp = {
