@@ -8930,6 +8930,8 @@ with pkgs;
 
   eclib = callPackage ../development/libraries/eclib {};
 
+  editline = callPackage ../development/libraries/editline { };
+
   eigen = callPackage ../development/libraries/eigen {};
   eigen3_3 = callPackage ../development/libraries/eigen/3.3.nix {};
 
