@@ -72,6 +72,7 @@ in
   # preferred.
   imports = [
     ./lightdm-greeters/gtk.nix
+    ./lightdm-greeters/mini.nix
   ];
 
   options = {
