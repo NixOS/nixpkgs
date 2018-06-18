@@ -52,8 +52,7 @@ stdenv.mkDerivation rec {
     cp src/.libs/libgcrypt.20.dylib $out/lib
   '';
 
-  # TODO: reenable with next update?
-  doCheck = !stdenv.isDarwin;
+  doCheck = true;
 
   meta = with stdenv.lib; {
     homepage = https://www.gnu.org/software/libgcrypt/;
