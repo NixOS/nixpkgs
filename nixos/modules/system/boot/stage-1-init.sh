@@ -336,7 +336,7 @@ mountFS() {
                 echo "resizing $device..."
                 e2fsck -fp "$device"
                 resize2fs "$device"
-            else [ "$fsType" = f2fs ]; then
+            elif [ "$fsType" = f2fs ]; then
                 echo "resizing $device..."
                 fsck.f2fs -fp "$device"
                 resize.f2fs "$device" 
