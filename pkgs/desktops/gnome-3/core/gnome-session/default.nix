@@ -14,14 +14,30 @@ stdenv.mkDerivation rec {
   mesonFlags = [ "-Dsystemd=true" ];
 
   nativeBuildInputs = [
-    meson ninja pkgconfig gettext makeWrapper
-    xmlto libxslt docbook_xsl docbook_xml_dtd_412
-    wrapGAppsHook dbus # for DTD
+    dbus # for DTD
+    docbook_xml_dtd_412
+    docbook_xsl
+    gettext
+    libxslt
+    meson
+    ninja
+    pkgconfig
+    wrapGAppsHook
+    xmlto
   ];
 
   buildInputs = [
-    glib gtk libICE gnome-desktop json-glib xorg.xtrans gnome3.defaultIconTheme
-    gnome3.gnome-settings-daemon gsettings-desktop-schemas systemd epoxy
+    epoxy
+    glib
+    gnome-desktop
+    gnome3.defaultIconTheme
+    gnome3.gnome-settings-daemon
+    gsettings-desktop-schemas
+    gtk
+    json-glib
+    libICE
+    systemd
+    xorg.xtrans
   ];
 
   postPatch = ''
