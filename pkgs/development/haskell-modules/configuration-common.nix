@@ -364,6 +364,7 @@ self: super: {
   notcpp = dontCheck super.notcpp;
   ntp-control = dontCheck super.ntp-control;
   numerals = dontCheck super.numerals;
+  odpic-raw = dontCheck super.odpic-raw; # needs a running oracle database server
   opaleye = dontCheck super.opaleye;
   openpgp = dontCheck super.openpgp;
   optional = dontCheck super.optional;
