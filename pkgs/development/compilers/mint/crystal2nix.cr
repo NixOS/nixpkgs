@@ -8,7 +8,7 @@ end
 File.open "shards.nix", "w+" do |file|
   file.puts %({)
   yaml = YAML.parse(File.read("shard.lock"))
-  yaml["shards"].each do |key, value|
+  yaml["shards"].as_h.each do |key, value|
     owner, repo = value["github"].as_s.split("/")
     url = "https://github.com/#{value["github"]}"
     rev = if value["version"]?
