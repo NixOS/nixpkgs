@@ -8930,6 +8930,8 @@ with pkgs;
 
   eclib = callPackage ../development/libraries/eclib {};
 
+  editline = callPackage ../development/libraries/editline { };
+
   eigen = callPackage ../development/libraries/eigen {};
   eigen3_3 = callPackage ../development/libraries/eigen/3.3.nix {};
 
@@ -18019,6 +18021,8 @@ with pkgs;
   lightdm_gtk_greeter = callPackage ../applications/display-managers/lightdm/gtk-greeter.nix {
     inherit (xfce) exo;
   };
+
+  lightdm-mini-greeter = callPackage ../applications/display-managers/lightdm-mini-greeter { };
 
   slic3r = callPackage ../applications/misc/slic3r { };
 

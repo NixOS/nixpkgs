@@ -283,10 +283,7 @@ in rec {
 
       llvmPackages_5 = super.llvmPackages_5 // (let
         tools = super.llvmPackages_5.tools.extend (llvmSelf: _: {
-          inherit (llvmPackages_5) llvm;
-          # The .override that was here before had the side affect of removing
-          # the hacked-in "man" output.
-          clang-unwrapped = builtins.removeAttrs llvmPackages_5.clang-unwrapped [ "man" ];
+          inherit (llvmPackages_5) llvm clang-unwrapped;
         });
         libraries = super.llvmPackages_5.libraries.extend (llvmSelf: _: {
           inherit (llvmPackages_5) libcxx libcxxabi compiler-rt;
@@ -327,8 +324,16 @@ in rec {
         coreutils findutils diffutils patchutils;
 
       llvmPackages_5 = super.llvmPackages_5 // (let
-        tools = super.llvmPackages_5.tools.extend (_: _: {
-          inherit (llvmPackages_5) llvm clang-unwrapped;
+        tools = super.llvmPackages_5.tools.extend (_: super: {
+          # Build man pages with final stdenv not before
+          llvm = lib.extendDerivation
+            true
+            { inherit (super.llvm) man; }
+            llvmPackages_5.llvm;
+          clang-unwrapped = lib.extendDerivation
+            true
+            { inherit (super.clang-unwrapped) man; }
+            llvmPackages_5.clang-unwrapped;
         });
         libraries = super.llvmPackages_5.libraries.extend (_: _: {
           inherit (llvmPackages_5) compiler-rt libcxx libcxxabi;
@@ -365,7 +370,10 @@ in rec {
     initialPath = import ../common-path.nix { inherit pkgs; };
     shell       = "${pkgs.bash}/bin/bash";
 
-    cc = pkgs.llvmPackages.libcxxClang;
+    # Hack to avoid man pages in stdenv, building bootstrap python
+    cc = pkgs.llvmPackages.libcxxClang.override {
+      cc = builtins.removeAttrs pkgs.llvmPackages.clang-unwrapped [ "man" ];
+    };
 
     extraNativeBuildInputs = [];
     extraBuildInputs = [ pkgs.darwin.CF ];
