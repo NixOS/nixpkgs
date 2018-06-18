@@ -1,4 +1,4 @@
-{ stdenv, buildPackages, hostPlatform, fetchurl, perl, buildLinux, libelf, utillinux, ... } @ args:
+{ stdenv, buildPackages, hostPlatform, fetchFromGitHub, perl, buildLinux, libelf, utillinux, ... } @ args:
 
 buildLinux (args // rec {
   version = "4.14.47-139";
@@ -9,9 +9,11 @@ buildLinux (args // rec {
   # branchVersion needs to be x.y. 
   extraMeta.branch = "4.14";
 
-  src = fetchurl {
-    url = "https://github.com/hardkernel/linux/archive/${version}.tar.gz";
-    sha256 = "1n43a3rhpjq851qrn17r1dkibv6sqlmwxvl3hras4qr391x61y6n";
+  src = fetchFromGitHub {
+    owner = "hardkernel";
+    repo = "linux";
+    rev = version;
+    sha256 = "0jjgrmvi1h8zs8snnvghnjd422yfmn7jv9y1n7xikmfv4nvwqrkv";
   };
 
 } // (args.argsOverride or {}))
