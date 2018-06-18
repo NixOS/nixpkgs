@@ -3,8 +3,8 @@
 
 let
   qt5Deps = with pkgs; with qt5; [ qtbase qtmultimedia ];
-  gnome2Deps = with pkgs; with gnome2; [ libglade gtkglext GConf ];
-  gnome3Deps = with pkgs; with gnome3; [ zenity ];
+  gnome2Deps = with pkgs; with gnome2; [ libglade gtkglext GConf gtksourceview ];
+  gnome3Deps = with pkgs; with gnome3; [ zenity gtksourceview ];
   python2Deps = with pkgs; with python2Packages; [ pygtk ];
 
   python3Deps = with pkgs; with python3Packages; [
@@ -30,7 +30,7 @@ let
     libjack2 libsamplerate libzip libmad libaio libcap libtiff libva libgphoto2
     libxslt libtxc_dxtn libsndfile giflib zlib glib alsaLib zziplib bash dbus
     keyutils zip cabextract freetype unzip coreutils readline gcc SDL SDL2 curl
-    graphite2 gtk2 gtk3 udev gtksourceview ncurses wayland
+    graphite2 gtk2 gtk3 udev ncurses wayland
 
     # Lutris
     gobjectIntrospection gdk_pixbuf pango openssl sqlite xterm
