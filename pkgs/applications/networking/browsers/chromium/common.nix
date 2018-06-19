@@ -22,7 +22,6 @@
 
 # package customization
 , enableNaCl ? false
-, enableHotwording ? false
 , enableWideVine ? false
 , gnomeSupport ? false, gnome ? null
 , gnomeKeyringSupport ? false, libgnome-keyring3 ? null
@@ -215,11 +214,8 @@ let
       proprietary_codecs = false;
       use_sysroot = false;
       use_gnome_keyring = gnomeKeyringSupport;
-      ## FIXME remove use_gconf after chromium 65 has become stable
-      use_gconf = gnomeSupport;
       use_gio = gnomeSupport;
       enable_nacl = enableNaCl;
-      enable_hotwording = enableHotwording;
       enable_widevine = enableWideVine;
       use_cups = cupsSupport;
 
@@ -259,7 +255,10 @@ let
       libExecPath="${libExecPath}"
       python build/linux/unbundle/replace_gn_files.py \
         --system-libraries ${toString gnSystemLibraries}
-      gn gen --args=${escapeShellArg gnFlags} out/Release
+      gn gen --args=${escapeShellArg gnFlags} out/Release | tee gn-gen-outputs.txt
+
+      # Fail if `gn gen` contains a WARNING.
+      grep -o WARNING gn-gen-outputs.txt && echo "Found gn WARNING, exiting nix build" && exit 1
 
       runHook postConfigure
     '';
