@@ -645,6 +645,8 @@ with pkgs;
 
   enpass = callPackage ../tools/security/enpass { };
 
+  esh = callPackage ../tools/text/esh { };
+
   ezstream = callPackage ../tools/audio/ezstream { };
 
   genymotion = callPackage ../development/mobile/genymotion { };
