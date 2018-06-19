@@ -2,11 +2,12 @@
 
 let
   name = "plexmediaserver-${version}";
-  version = "1.9.6.4429-23901a099";
+  version = "1.13.2.5154-fd05be322";
 
+  # https://downloads.plex.tv/plex-media-server/1.13.2.5154-fd05be322/plexmediaserver-1.13.2.5154-fd05be322.x86_64.rpm
   src = fetchurl {
     url = "https://downloads.plex.tv/plex-media-server/${version}/${name}.x86_64.rpm";
-    sha256 = "0bmqf8b2d9h2h5q3n4ahs8y6a9aihj63rch7wd82rcr1l9xnqk9d";
+    sha256 = "09hy9xhhv17jbzplyls13xrzaxndlc278amp6k3w8q4j6wpsi6np";
   };
 
   shellScript = content: writeScript "script" "#!${stdenv.shell}\n${content}";
