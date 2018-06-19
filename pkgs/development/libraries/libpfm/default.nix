@@ -21,6 +21,6 @@ stdenv.mkDerivation rec {
     '';
     license = licenses.gpl2;
     maintainers = [ maintainers.pierron ];
-    platforms = platforms.all;
+    platforms = platforms.linux;
   };
 }
