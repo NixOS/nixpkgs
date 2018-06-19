@@ -1,13 +1,10 @@
-{ stdenv, fetchFromGitHub, pkgconfig, cmake, makeWrapper, bluez, ffmpeg, libao, libGLU_combined, gtk2, glib
-, pcre, gettext, libpthreadstubs, libXrandr, libXext, libXxf86vm, libXinerama, libSM, readline
-, openal, libXdmcp, portaudio, libusb, libevdev, curl, qt5
-, vulkan-loader ? null
-, libpulseaudio ? null
+{ stdenv, fetchFromGitHub, pkgconfig, cmake, makeWrapper, bluez, ffmpeg, libao
+, libGLU_combined, gtk2, glib, pcre, gettext, libpthreadstubs, libXrandr, libusb
+, libXext, libXxf86vm, libXinerama, libSM, readline, openal, libXdmcp, libevdev
+, portaudio, curl, qt5, vulkan-loader ? null, libpulseaudio ? null
+
 # - Inputs used for Darwin
-, CoreBluetooth, cf-private, ForceFeedback, IOKit, OpenGL
-, wxGTK
-, libpng
-, hidapi
+, CoreBluetooth, cf-private, ForceFeedback, IOKit, OpenGL, wxGTK, libpng, hidapi
 
 # options
 , dolphin-wxgui ? true
@@ -18,13 +15,25 @@ assert dolphin-wxgui || dolphin-qtgui;
 assert !(dolphin-wxgui && dolphin-qtgui);
 
 stdenv.mkDerivation rec {
-  name = "dolphin-emu-20180609";
+  name = "dolphin-emu-20180618";
   src = fetchFromGitHub {
     owner = "dolphin-emu";
     repo = "dolphin";
-    rev = "1d87584d69e3fdd730502127274fcbd85cebd591";
-    sha256 = "0sxzmmv8gvfsy96p1x1aya1cpq0237gip3zkl4bks4grgxf8958b";
+    rev = "091efcc41d59dbe0e478ea96f891c1b47b99ddde";
+    sha256 = "1djsd41kdaphyyd3jyk669hjl39mskm186v86nijwg4a0c70kb2r";
   };
+
+  enableParallelBuilding = true;
+  nativeBuildInputs = [ cmake pkgconfig ]
+    ++ stdenv.lib.optionals stdenv.isLinux [ makeWrapper ];
+
+  buildInputs = [
+    curl ffmpeg libao libGLU_combined gtk2 glib pcre gettext libpthreadstubs
+    libXrandr libXext libXxf86vm libXinerama libSM readline openal libXdmcp
+    portaudio libusb libpulseaudio libpng hidapi
+  ] ++ stdenv.lib.optionals stdenv.isDarwin [ wxGTK CoreBluetooth cf-private ForceFeedback IOKit OpenGL ]
+    ++ stdenv.lib.optionals stdenv.isLinux [ bluez libevdev vulkan-loader ]
+    ++ stdenv.lib.optionals dolphin-qtgui [ qt5.qtbase ];
 
   cmakeFlags = [
     "-DGTK2_GLIBCONFIG_INCLUDE_DIR=${glib.out}/lib/glib-2.0/include"
@@ -33,18 +42,6 @@ stdenv.mkDerivation rec {
     "-DENABLE_LTO=True"
   ] ++ stdenv.lib.optionals (!dolphin-qtgui)  [ "-DENABLE_QT2=False" ]
     ++ stdenv.lib.optionals stdenv.isDarwin [ "-DOSX_USE_DEFAULT_SEARCH_PATH=True" ];
-
-  enableParallelBuilding = true;
-
-  nativeBuildInputs = [ cmake pkgconfig ]
-                      ++ stdenv.lib.optionals stdenv.isLinux [ makeWrapper ];
-
-  buildInputs = [ curl ffmpeg libao libGLU_combined gtk2 glib pcre
-                  gettext libpthreadstubs libXrandr libXext libXxf86vm libXinerama libSM readline openal
-                  libXdmcp portaudio libusb libpulseaudio libpng hidapi
-                ] ++ stdenv.lib.optionals stdenv.isDarwin [ wxGTK CoreBluetooth cf-private ForceFeedback IOKit OpenGL ]
-                  ++ stdenv.lib.optionals stdenv.isLinux [ bluez libevdev vulkan-loader ]
-                  ++ stdenv.lib.optionals dolphin-qtgui [ qt5.qtbase ];
 
   # - Change install path to Applications relative to $out
   # - Allow Dolphin to use nix-provided libraries instead of building them
@@ -63,11 +60,11 @@ stdenv.mkDerivation rec {
     wrapProgram $out/bin/dolphin-emu-wx --prefix LD_LIBRARY_PATH : ${vulkan-loader}/lib
   '';
 
-  meta = {
-    homepage = http://dolphin-emu.org/;
+  meta = with stdenv.lib; {
+    homepage = "http://dolphin-emu.org";
     description = "Gamecube/Wii/Triforce emulator for x86_64 and ARM";
-    license = stdenv.lib.licenses.gpl2;
-    maintainers = with stdenv.lib.maintainers; [ MP2E ];
+    license = licenses.gpl2;
+    maintainers = with maintainers; [ MP2E ];
     branch = "master";
     # x86_32 is an unsupported platform.
     # Enable generic build if you really want a JIT-less binary.
