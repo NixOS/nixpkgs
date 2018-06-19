@@ -122,14 +122,14 @@ let
       copy_bin_and_libs ${pkgs.kmod}/bin/kmod
       ln -sf kmod $out/bin/modprobe
 
-      # Copy resize2fs if needed.
-      ${optionalString (any (fs: fs.autoResize) fileSystems) ''
+      # Copy resize2fs if any ext* filesystems are to be resized
+      ${optionalString (any (fs: fs.autoResize && (lib.hasPrefix "ext" fs.fsType)) fileSystems) ''
         # We need mke2fs in the initrd.
         copy_bin_and_libs ${pkgs.e2fsprogs}/sbin/resize2fs
       ''}
 
       # Copy f2fs-tools' fsck and resize if needed
-      ${optionalString (any (fs: fs.autoResize) (filter (x: x.fsType == "f2fs") fileSystems)) ''
+      ${optionalString (any (fs: fs.autoResize && fs.fsType = "f2fs") fileSystems) ''
         # We need f2fs-tools' tools to resize filesystems
         copy_bin_and_libs ${pkgs.f2fs-tools}/sbin/fsck.f2fs
         copy_bin_and_libs ${pkgs.f2fs-tools}/sbin/resize.f2fs
