@@ -120,21 +120,27 @@ specialMount() {
 }
 source @earlyMountScript@
 
-# Log the script output to /dev/kmsg or /run/log/stage-1-init.log.
-mkdir -p /tmp
+# Extract the list of secondary consoles from kernel. /sys/class/tty/console/active contains a list
+# of all the active consoles, from which we filter out the primary console (the last one in the file).
+# See https://www.kernel.org/doc/Documentation/ABI/testing/sysfs-tty.
+secondaryConsoles="$(cat /sys/class/tty/console/active | sed -e 's/[^ ]*$//')"
+
+# Log the script output to either /dev/kmsg or /run/log/stage-1-init.log and to all secondary consoles.
+mkdir -p /tmp /run/log
 mkfifo /tmp/stage-1-init.log.fifo
 logOutFd=8 && logErrFd=9
 eval "exec $logOutFd>&1 $logErrFd>&2"
-if test -w /dev/kmsg; then
-    tee -i < /tmp/stage-1-init.log.fifo /proc/self/fd/"$logOutFd" | while read -r line; do
-        if test -n "$line"; then
-            echo "<7>stage-1-init: $line" > /dev/kmsg
-        fi
-    done &
-else
-    mkdir -p /run/log
-    tee -i < /tmp/stage-1-init.log.fifo /run/log/stage-1-init.log &
-fi
+tee -i < /tmp/stage-1-init.log.fifo /proc/self/fd/"$logOutFd" | while read -r line; do
+    if test -w /dev/kmsg; then
+        echo "<7>stage-1-init: $line" > /dev/kmsg
+    else
+        echo "$line" >> /run/log/stage-1-init.log
+    fi
+
+    for c in $secondaryConsoles; do
+        echo "$line" >> "/dev/$c"
+    done
+done &
 exec > /tmp/stage-1-init.log.fifo 2>&1
 
 
