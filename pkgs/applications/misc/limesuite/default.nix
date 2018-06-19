@@ -4,7 +4,7 @@
 } :
 
 let
-  version = "18.04.1";
+  version = "18.06.0";
 
 in stdenv.mkDerivation {
   name = "limesuite-${version}";
@@ -13,7 +13,7 @@ in stdenv.mkDerivation {
     owner = "myriadrf";
     repo = "LimeSuite";
     rev = "v${version}";
-    sha256 = "1aaqnwif1j045hvj011k5dyqxgxx72h33r4al74h5f8al81zvzj9";
+    sha256 = "0j6mxlvij2k6ib1d9jwzvilmqgm1h0q7wy9sf8a6bvidwlphvy25";
   };
 
   nativeBuildInputs = [ cmake ];
