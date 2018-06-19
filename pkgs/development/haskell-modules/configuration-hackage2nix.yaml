@@ -2652,6 +2652,7 @@ dont-distribute-packages:
   accelerate-fourier-benchmark:                 [ i686-linux, x86_64-linux, x86_64-darwin ]
   accelerate-llvm-ptx:                          [ i686-linux, x86_64-linux, x86_64-darwin ]
   bindings-yices:                               [ i686-linux, x86_64-linux, x86_64-darwin ]
+  boolector:                                    [ i686-linux, x86_64-linux, x86_64-darwin ]
   ccelerate-cuda:                               [ i686-linux, x86_64-linux, x86_64-darwin ]
   cublas:                                       [ i686-linux, x86_64-linux, x86_64-darwin ]
   cufft:                                        [ i686-linux, x86_64-linux, x86_64-darwin ]
