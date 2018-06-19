@@ -385,7 +385,7 @@ in
       };
 
       default = mkOption {
-        default = 0;
+        default = "0";
         type = types.str;
         description = ''
           Index of the default menu item to be booted.
