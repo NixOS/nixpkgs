@@ -1,7 +1,6 @@
 #! @shell@
 
 targetRoot=/mnt-root
-console=tty1
 
 extraUtils="@extraUtils@"
 export LD_LIBRARY_PATH=@extraUtils@/lib
@@ -23,6 +22,15 @@ fail() {
     if [ -n "$panicOnFail" ]; then exit 1; fi
 
     @preFailCommands@
+
+    # Figure out a console device to use for the interactive shell.
+    # Plain /dev/console isn't good because terminal size queries don't work (useful for e.g. less).
+    # Same approach is taken by Debian's initramfs-tools and dracut.
+    console=$(cat /proc/consoles | head -n1 | cut -d' ' -f1)
+    if [ "$console" = tty0 ] || [ -z "$console" ]; then
+        # tty0 is a pseudo-console representing the current VT, replace that with a specific VT.
+        console=tty1
+    fi
 
     # If starting stage 2 failed, allow the user to repair the problem
     # in an interactive shell.
@@ -134,12 +142,6 @@ exec > /tmp/stage-1-init.log.fifo 2>&1
 export stage2Init=/init
 for o in $(cat /proc/cmdline); do
     case $o in
-        console=*)
-            set -- $(IFS==; echo $o)
-            params=$2
-            set -- $(IFS=,; echo $params)
-            console=$1
-            ;;
         init=*)
             set -- $(IFS==; echo $o)
             stage2Init=$2
