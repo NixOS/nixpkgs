@@ -38,7 +38,7 @@ buildGoPackage rec {
     '';
     homepage = https://godoc.org/github.com/gokcehan/lf;
     license = licenses.mit;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
     maintainers = with maintainers; [ primeos ];
   };
 }
