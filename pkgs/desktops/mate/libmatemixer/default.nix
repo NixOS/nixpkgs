@@ -6,11 +6,11 @@
 
 stdenv.mkDerivation rec {
   name = "libmatemixer-${version}";
-  version = "1.20.0";
+  version = "1.20.1";
 
   src = fetchurl {
     url = "http://pub.mate-desktop.org/releases/${mate.getRelease version}/${name}.tar.xz";
-    sha256 = "0jpfaqbspn2mjv6ysgzdmzhb07gx61yiiiwmrw94qymld2igrzb5";
+    sha256 = "00p67mi0flsbgn15qpwq60rzf917s5islbmhirbvz6npcvv0d493";
   };
 
   nativeBuildInputs = [ pkgconfig intltool ];
