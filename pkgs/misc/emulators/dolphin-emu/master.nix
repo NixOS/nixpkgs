@@ -1,7 +1,9 @@
-{ stdenv, fetchFromGitHub, pkgconfig, cmake, makeWrapper, bluez, ffmpeg, libao
-, libGLU_combined, gtk2, glib, pcre, gettext, libpthreadstubs, libXrandr, libusb
-, libXext, libXxf86vm, libXinerama, libSM, readline, openal, libXdmcp, libevdev
-, portaudio, curl, qt5, vulkan-loader ? null, libpulseaudio ? null
+{ stdenv, fetchFromGitHub, makeWrapper, makeDesktopItem, pkgconfig, cmake, qt5
+, bluez, ffmpeg, libao, libGLU_combined, gtk2, glib, pcre, gettext, libXrandr
+, libpthreadstubs, libusb, libXext, libXxf86vm, libXinerama, libSM, libXdmcp
+, readline, openal, libevdev, portaudio, curl
+, vulkan-loader ? null
+, libpulseaudio ? null
 
 # - Inputs used for Darwin
 , CoreBluetooth, cf-private, ForceFeedback, IOKit, OpenGL, wxGTK, libpng, hidapi
@@ -14,7 +16,19 @@
 assert dolphin-wxgui || dolphin-qtgui;
 assert !(dolphin-wxgui && dolphin-qtgui);
 
-stdenv.mkDerivation rec {
+let
+  desktopItem = makeDesktopItem {
+    name = "dolphin-emu-master";
+    exec = stdenv.lib.optionalString dolphin-wxgui "dolphin-emu-wx"
+         + stdenv.lib.optionalString dolphin-qtgui "dolphin-emu-qt";
+    icon = "dolphin-emu";
+    comment = "A Wii/GameCube Emulator";
+    desktopName = "Dolphin Emulator (master)";
+    genericName = "Wii/GameCube Emulator";
+    categories = "Game;Emulator;";
+    startupNotify = "false";
+  };
+in stdenv.mkDerivation rec {
   name = "dolphin-emu-20180618";
   src = fetchFromGitHub {
     owner = "dolphin-emu";
@@ -31,9 +45,10 @@ stdenv.mkDerivation rec {
     curl ffmpeg libao libGLU_combined gtk2 glib pcre gettext libpthreadstubs
     libXrandr libXext libXxf86vm libXinerama libSM readline openal libXdmcp
     portaudio libusb libpulseaudio libpng hidapi
-  ] ++ stdenv.lib.optionals stdenv.isDarwin [ wxGTK CoreBluetooth cf-private ForceFeedback IOKit OpenGL ]
+  ] ++ stdenv.lib.optionals dolphin-qtgui [ qt5.qtbase ]
     ++ stdenv.lib.optionals stdenv.isLinux [ bluez libevdev vulkan-loader ]
-    ++ stdenv.lib.optionals dolphin-qtgui [ qt5.qtbase ];
+    ++ stdenv.lib.optionals stdenv.isDarwin [ wxGTK CoreBluetooth cf-private
+                                              ForceFeedback IOKit OpenGL ];
 
   cmakeFlags = [
     "-DGTK2_GLIBCONFIG_INCLUDE_DIR=${glib.out}/lib/glib-2.0/include"
@@ -41,13 +56,17 @@ stdenv.mkDerivation rec {
     "-DGTK2_INCLUDE_DIRS=${gtk2.dev}/include/gtk-2.0"
     "-DENABLE_LTO=True"
   ] ++ stdenv.lib.optionals (!dolphin-qtgui)  [ "-DENABLE_QT2=False" ]
-    ++ stdenv.lib.optionals stdenv.isDarwin [ "-DOSX_USE_DEFAULT_SEARCH_PATH=True" ];
+    ++ stdenv.lib.optionals stdenv.isDarwin [
+      "-DOSX_USE_DEFAULT_SEARCH_PATH=True"
+    ];
 
   # - Change install path to Applications relative to $out
   # - Allow Dolphin to use nix-provided libraries instead of building them
   preConfigure = stdenv.lib.optionalString stdenv.isDarwin ''
-    sed -i -e 's,/Applications,Applications,g' Source/Core/DolphinWX/CMakeLists.txt
-    sed -i -e 's,if(LIBUSB_FOUND AND NOT APPLE),if(LIBUSB_FOUND),g' CMakeLists.txt
+    sed -i -e 's,/Applications,Applications,g' \
+      Source/Core/DolphinWX/CMakeLists.txt
+    sed -i -e 's,if(LIBUSB_FOUND AND NOT APPLE),if(LIBUSB_FOUND),g' \
+      CMakeLists.txt
     sed -i -e 's,if(NOT APPLE),if(true),g' CMakeLists.txt
   '';
 
@@ -55,9 +74,17 @@ stdenv.mkDerivation rec {
     mkdir -p "$out/Applications"
   '';
 
-  postInstall = stdenv.lib.optionalString stdenv.isLinux ''
-    wrapProgram $out/bin/dolphin-emu-nogui --prefix LD_LIBRARY_PATH : ${vulkan-loader}/lib
-    wrapProgram $out/bin/dolphin-emu-wx --prefix LD_LIBRARY_PATH : ${vulkan-loader}/lib
+  postInstall = ''
+    cp -r ${desktopItem}/share/applications $out/share
+  '' + stdenv.lib.optionalString stdenv.isLinux ''
+    wrapProgram $out/bin/dolphin-emu-nogui --prefix LD_LIBRARY_PATH : \
+      ${vulkan-loader}/lib
+    wrapProgram $out/bin/dolphin-emu-wx --prefix LD_LIBRARY_PATH : \
+      ${vulkan-loader}/lib
+  '' + stdenv.lib.optionalString (dolphin-qtgui && stdenv.isLinux) ''
+    wrapProgram $out/bin/dolphin-emu --prefix LD_LIBRARY_PATH : \
+      ${vulkan-loader}/lib
+    ln -sf $out/bin/dolphin-emu $out/bin/dolphin-emu-qt
   '';
 
   meta = with stdenv.lib; {
