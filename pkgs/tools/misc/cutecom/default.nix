@@ -2,12 +2,12 @@
 
 stdenv.mkDerivation rec {
   name = "cutecom-${version}";
-  version = "0.40.0";
+  version = "0.45.0";
   src = fetchFromGitHub {
     owner = "neundorf";
     repo = "CuteCom";
     rev = "v${version}";
-    sha256 = "1bn6vndqlvn73riq6p0nanmcl35ja9gsil5hvfpf509r7i8gx4ds";
+    sha256 = "07h1r7bcz86fvcvxq6g5zyh7fsginx27jbp81a7hjhhhn6v0dsmh";
   };
 
   preConfigure = ''
