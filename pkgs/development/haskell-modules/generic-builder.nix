@@ -211,18 +211,6 @@ let
       cp -f "$p/lib/${ghcName}/package.conf.d/"*.conf ${packageConfDir}/
       continue
     fi
-    if [ -d "$p/include" ]; then
-      configureFlags+=" --extra-include-dirs=$p/include"
-    fi
-    if [ -d "$p/lib" ]; then
-      configureFlags+=" --extra-lib-dirs=$p/lib"
-    fi
-  ''
-  # It is not clear why --extra-framework-dirs does work fine on Linux
-  + optionalString (!buildPlatform.isDarwin || versionAtLeast nativeGhc.version "8.0") ''
-    if [[ -d "$p/Library/Frameworks" ]]; then
-      configureFlags+=" --extra-framework-dirs=$p/Library/Frameworks"
-    fi
   '';
 
 in
@@ -287,6 +275,19 @@ stdenv.mkDerivation ({
   + ''
     for p in "''${pkgsHostHost[@]}" "''${pkgsHostTarget[@]}"; do
       ${buildPkgDb ghc.name "$packageConfDir"}
+      if [ -d "$p/include" ]; then
+        configureFlags+=" --extra-include-dirs=$p/include"
+      fi
+      if [ -d "$p/lib" ]; then
+        configureFlags+=" --extra-lib-dirs=$p/lib"
+      fi
+    ''
+    # It is not clear why --extra-framework-dirs does work fine on Linux
+    + optionalString (!buildPlatform.isDarwin || versionAtLeast nativeGhc.version "8.0") ''
+      if [[ -d "$p/Library/Frameworks" ]]; then
+        configureFlags+=" --extra-framework-dirs=$p/Library/Frameworks"
+      fi
+  '' + ''
     done
   ''
   # only use the links hack if we're actually building dylibs. otherwise, the
