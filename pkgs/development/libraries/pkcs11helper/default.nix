@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "pkcs11-helper-${version}";
-  version = "1.23";
+  version = "1.24";
 
   src = fetchFromGitHub {
     owner = "OpenSC";
     repo = "pkcs11-helper";
     rev = "${name}";
-    sha256 = "1m3fp3v6c903cs36bvvg0h65p1sdamsmzy13ww0zyvplcycarz0n";
+    sha256 = "07ij6i76abf6bdhczsq1wkln3q0y0wkfbsi882vj3gl2wvxh0d1i";
   };
 
   nativeBuildInputs = [ autoreconfHook pkgconfig ];
