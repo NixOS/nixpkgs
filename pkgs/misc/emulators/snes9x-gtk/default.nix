@@ -1,5 +1,5 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, intltool, pkgconfig, SDL2, zlib
-, gtk3, libxml2, libXv, epoxy, minizip, portaudio }:
+{ stdenv, fetchFromGitHub, autoreconfHook, wrapGAppsHook, intltool, pkgconfig
+, SDL2, zlib, gtk3, libxml2, libXv, epoxy, minizip, portaudio }:
 
 stdenv.mkDerivation rec {
   name = "snes9x-gtk-${version}";
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   };
 
   enableParallelBuilding = true;
-  nativeBuildInputs = [ autoreconfHook intltool pkgconfig ];
+  nativeBuildInputs = [ autoreconfHook wrapGAppsHook intltool pkgconfig ];
   buildInputs = [ SDL2 zlib gtk3 libxml2 libXv epoxy minizip portaudio ];
 
   preAutoreconf = ''
@@ -21,11 +21,9 @@ stdenv.mkDerivation rec {
     intltoolize
   '';
 
-  installPhase = "install -Dt $out/bin snes9x-gtk";
-
   meta = with stdenv.lib; {
     homepage = "http://www.snes9x.com";
-    description = "A portable, freeware Super Nintendo Entertainment System (SNES) emulator";
+    description = "Super Nintendo Entertainment System (SNES) emulator";
 
     longDescription = ''
       Snes9x is a portable, freeware Super Nintendo Entertainment System (SNES)
