@@ -1051,6 +1051,8 @@ self: super: {
     strictDeps = true;
   });
 
+  # dhall-json requires a very particular dhall version
+  dhall-json_1_2_0 = super.dhall-json_1_2_0.override { dhall = self.dhall_1_14_0; };
 }
 
 //
