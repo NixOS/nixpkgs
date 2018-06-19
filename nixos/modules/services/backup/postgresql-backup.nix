@@ -34,7 +34,7 @@ let
         User = "postgres";
       };
 
-      startAt = cfg.period;
+      startAt = cfg.startAt;
     };
 
 in {
@@ -50,10 +50,10 @@ in {
         '';
       };
 
-      period = mkOption {
+      startAt = mkOption {
         default = "*-*-* 01:15:00";
         description = ''
-          This option defines (in the format used by <literal>systemd.time</literal>) when the
+          This option defines (see <literal>systemd.time</literal> for format) when the
           databases should be dumped.
           The default is to update at 01:15 (at night) every day.
         '';
