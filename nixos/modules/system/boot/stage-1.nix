@@ -128,13 +128,6 @@ let
         copy_bin_and_libs ${pkgs.e2fsprogs}/sbin/resize2fs
       ''}
 
-      # Copy f2fs-tools' fsck and resize if needed
-      ${optionalString (any (fs: fs.autoResize && fs.fsType = "f2fs") fileSystems) ''
-        # We need f2fs-tools' tools to resize filesystems
-        copy_bin_and_libs ${pkgs.f2fs-tools}/sbin/fsck.f2fs
-        copy_bin_and_libs ${pkgs.f2fs-tools}/sbin/resize.f2fs
-      ''}
-
       # Copy secrets if needed.
       ${optionalString (!config.boot.loader.supportsInitrdSecrets)
           (concatStringsSep "\n" (mapAttrsToList (dest: source:
