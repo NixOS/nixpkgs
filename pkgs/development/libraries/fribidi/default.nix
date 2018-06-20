@@ -4,6 +4,7 @@
 , meson
 , ninja
 , pkgconfig
+, fixDarwinDylibNames
 }:
 
 stdenv.mkDerivation rec {
@@ -18,6 +19,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ meson ninja pkgconfig ];
+  buildInputs = stdenv.lib.optional stdenv.isDarwin fixDarwinDylibNames;
 
   outputs = [ "out" "devdoc" ];
 
