@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, devicemapper }:
+{ stdenv, fetchurl, fetchpatch, devicemapper }:
 
 stdenv.mkDerivation rec {
   name = "dmraid-1.0.0.rc16";
@@ -8,10 +8,20 @@ stdenv.mkDerivation rec {
     sha256 = "0m92971gyqp61darxbiri6a48jz3wq3gkp8r2k39320z0i6w8jgq";
   };
 
-  patches = [ ./hardening-format.patch ];
+  patches = [ ./hardening-format.patch ]
+    ++ stdenv.lib.optionals stdenv.hostPlatform.isMusl [
+      (fetchpatch {
+        url = "https://raw.githubusercontent.com/void-linux/void-packages/fceed4b8e96b3c1da07babf6f67b6ed1588a28b2/srcpkgs/dmraid/patches/006-musl-libc.patch";
+        sha256 = "1j8xda0fpz8lxjxnqdidy7qb866qrzwpbca56yjdg6vf4x21hx6w";
+        stripLen = 2;
+        extraPrefix = "1.0.0.rc16/";
+      })
+    ];
 
   postPatch = ''
     sed -i 's/\[\[[^]]*\]\]/[ "''$''${n##*.}" = "so" ]/' */lib/Makefile.in
+  '' + stdenv.lib.optionalString stdenv.hostPlatform.isMusl ''
+    NIX_CFLAGS_COMPILE+=" -D_GNU_SOURCE"
   '';
 
   preConfigure = "cd */";

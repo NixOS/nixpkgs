@@ -19,7 +19,12 @@ stdenv.mkDerivation rec {
       src = ./fix-paths.patch;
       inherit coreutils;
     })
+    ./hardcode-gsettings.patch
   ];
+
+  postPatch = ''
+    substituteInPlace deja-dup/nautilus/NautilusExtension.c --subst-var-by DEJA_DUP_GSETTINGS_PATH $out/share/gsettings-schemas/${name}/glib-2.0/schemas
+  '';
 
   nativeBuildInputs = [
     meson ninja pkgconfig vala_0_40 gettext itstool

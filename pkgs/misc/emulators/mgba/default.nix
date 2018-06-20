@@ -1,7 +1,19 @@
-{ stdenv, fetchFromGitHub, fetchpatch, pkgconfig, cmake, libzip, epoxy, ffmpeg
-, imagemagick, SDL2, qtbase, qtmultimedia, qttools, libedit, minizip }:
+{ stdenv, fetchFromGitHub, fetchpatch, makeDesktopItem, makeWrapper, pkgconfig
+, cmake, epoxy, libzip, ffmpeg, imagemagick, SDL2, qtbase, qtmultimedia, libedit
+, qttools, minizip }:
 
-stdenv.mkDerivation rec {
+let
+  desktopItem = makeDesktopItem {
+    name = "mgba";
+    exec = "mgba-qt";
+    icon = "mgba";
+    comment = "A Game Boy Advance Emulator";
+    desktopName = "mgba";
+    genericName = "Game Boy Advance Emulator";
+    categories = "Game;Emulator;";
+    startupNotify = "false";
+  };
+in stdenv.mkDerivation rec {
   name = "mgba-${version}";
   version = "0.6.3";
 
@@ -13,7 +25,7 @@ stdenv.mkDerivation rec {
   };
 
   enableParallelBuilding = true;
-  nativeBuildInputs = [ pkgconfig cmake ];
+  nativeBuildInputs = [ makeWrapper pkgconfig cmake ];
 
   buildInputs = [
     libzip epoxy ffmpeg imagemagick SDL2 qtbase qtmultimedia libedit minizip
@@ -24,6 +36,12 @@ stdenv.mkDerivation rec {
       url = "https://github.com/mgba-emu/mgba/commit/7f41dd354176b720c8e3310553c6b772278b9dca.patch";
       sha256 = "0j334v8wf594kg8s1hngmh58wv1pi003z8avy6fjhj5qpjmbbavh";
   })];
+
+  postInstall = ''
+    cp -r ${desktopItem}/share/applications $out/share
+    wrapProgram $out/bin/mgba-qt --suffix QT_PLUGIN_PATH : \
+      ${qtbase.bin}/${qtbase.qtPluginPrefix}
+  '';
 
   meta = with stdenv.lib; {
     homepage = https://mgba.io;
