@@ -2237,6 +2237,8 @@ with pkgs;
     callPackage ../servers/search/elasticsearch/plugins.nix { }
   );
 
+  embree2 = callPackage ../development/libraries/embree/2.x.nix { };
+
   emem = callPackage ../applications/misc/emem { };
 
   emv = callPackage ../tools/misc/emv { };
@@ -3708,6 +3710,8 @@ with pkgs;
 
   lzip = callPackage ../tools/compression/lzip { };
 
+  luxcorerender = callPackage ../tools/graphics/luxcorerender { };
+  
   xz = callPackage ../tools/compression/xz { };
 
   lz4 = callPackage ../tools/compression/lz4 { };
