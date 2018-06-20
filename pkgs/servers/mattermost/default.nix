@@ -1,7 +1,7 @@
 { stdenv, fetchurl, fetchFromGitHub, buildGoPackage, buildEnv }:
 
 let
-  version = "4.10.0";
+  version = "5.0.0";
 
   mattermost-server = buildGoPackage rec {
     name = "mattermost-server-${version}";
@@ -10,7 +10,7 @@ let
       owner = "mattermost";
       repo = "mattermost-server";
       rev = "v${version}";
-      sha256 = "02isw8qapp35pgriy4w1ar1ppvgc5a10j550hjbc1mylnhzkg1jf";
+      sha256 = "12wiw8k5is78ppazrf26y2xq73kwbafa9w75wjnb1839v2k9sark";
     };
 
     goPackagePath = "github.com/mattermost/mattermost-server";
@@ -20,11 +20,6 @@ let
         -X ${goPackagePath}/model.BuildNumber=nixpkgs-${version}
     '';
 
-    postInstall = ''
-      ln -s $bin/bin/mattermost-server $bin/bin/platform
-      ln -s $bin/bin/mattermost-server $bin/bin/mattermost-platform
-    '';
-
   };
 
   mattermost-webapp = stdenv.mkDerivation {
@@ -32,7 +27,7 @@ let
 
     src = fetchurl {
       url = "https://releases.mattermost.com/${version}/mattermost-${version}-linux-amd64.tar.gz";
-      sha256 = "0pfj2dxl4qrv4w6yj0385nw0fa4flcg95kkahs0arwhan5bgifl5";
+      sha256 = "1pal65di6w9idf3rwxh77la1v816h8kama1ilkbs40cpp2vazw3b";
     };
 
     installPhase = ''
