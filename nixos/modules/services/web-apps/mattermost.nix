@@ -25,7 +25,7 @@ in
 {
   options = {
     services.mattermost = {
-      enable = mkEnableOption "Mattermost chat platform";
+      enable = mkEnableOption "Mattermost chat server";
 
       statePath = mkOption {
         type = types.str;
@@ -167,7 +167,7 @@ in
       '';
 
       systemd.services.mattermost = {
-        description = "Mattermost chat platform service";
+        description = "Mattermost chat service";
         wantedBy = [ "multi-user.target" ];
         after = [ "network.target" "postgresql.service" ];
 
@@ -201,7 +201,7 @@ in
           PermissionsStartOnly = true;
           User = cfg.user;
           Group = cfg.group;
-          ExecStart = "${pkgs.mattermost}/bin/mattermost-platform";
+          ExecStart = "${pkgs.mattermost}/bin/mattermost";
           WorkingDirectory = "${cfg.statePath}";
           Restart = "always";
           RestartSec = "10";
