@@ -35,11 +35,10 @@ stdenv.mkDerivation rec {
     sed "s_/usr/bin/nice_''${NICE}_" -i src/jobs/meltjob.cpp src/jobs/ffmpegjob.cpp
   '';
 
-  patchFlags = "-p0";
   patches = [ (fetchpatch {
-    url = https://github.com/mltframework/shotcut/files/2075592/shotcut-18.06.02-qt.patch.txt;
+    url = https://github.com/mltframework/shotcut/commit/f304b7403cc7beb57b1610afd9c5c8173749e80b.patch;
     name = "qt511.patch";
-    sha256 = "0kxpj2724zm2ka4y1yhfkjglri3p0ck459g93i814pv0j5wqs590";
+    sha256 = "1ynvyjchcb33a33x4w1ddnah2gyzmnm125ailgg6xy60lqsnsmp9";
     } ) ];
 
   postInstall = ''
