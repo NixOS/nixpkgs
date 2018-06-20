@@ -155,7 +155,10 @@ stdenv.mkDerivation rec {
     [ $(./main) == "yes" ]
   '';
 
-  passthru = { targetPrefix = ""; };
+  passthru = {
+    targetPrefix = "";
+    enableShared = true;
+  };
 
   meta.license = stdenv.lib.licenses.bsd3;
   # AArch64 should work in theory but eventually some builds start segfaulting
