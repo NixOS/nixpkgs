@@ -193,6 +193,7 @@ stdenv.mkDerivation rec {
     inherit bootPkgs targetPrefix;
 
     inherit llvmPackages;
+    inherit enableShared;
 
     # Our Cabal compiler name
     haskellCompilerName = "ghc-8.4.3";
