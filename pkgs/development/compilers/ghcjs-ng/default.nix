@@ -69,7 +69,8 @@ in stdenv.mkDerivation {
     ] ++ lib.optionals stdenv.isDarwin [
       gcc # https://github.com/ghcjs/ghcjs/issues/663
     ];
-    phases = ["unpackPhase" "buildPhase"];
+    dontConfigure = true;
+    dontInstall = true;
     buildPhase = ''
       export HOME=$TMP
       mkdir $HOME/.cabal

@@ -1,8 +1,8 @@
 diff --git a/CMakeLists.txt b/CMakeLists.txt
-index b8eb5a16..319d81dc 100644
+index 71921740..156ea6dc 100644
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
-@@ -447,12 +447,6 @@ elseif(CLANG AND DEPS AND NOT FREEBSD)
+@@ -456,12 +456,6 @@ elseif(CLANG AND DEPS AND NOT FREEBSD)
    set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -flto=thin")
  endif()
  
@@ -15,7 +15,7 @@ index b8eb5a16..319d81dc 100644
  # Make sure deps were built before compiling (else show warning).
  execute_process(
    COMMAND "${CMAKE_SOURCE_DIR}/tools/provision.sh" check "${CMAKE_BINARY_DIR}"
-@@ -518,6 +512,8 @@ endif()
+@@ -528,6 +522,8 @@ endif()
  
  if(APPLE)
    LOG_PLATFORM("OS X")
@@ -24,7 +24,7 @@ index b8eb5a16..319d81dc 100644
  elseif(OSQUERY_BUILD_PLATFORM STREQUAL "debian")
    LOG_PLATFORM("Debian")
  elseif(OSQUERY_BUILD_PLATFORM STREQUAL "ubuntu")
-@@ -567,7 +563,6 @@ if(POSIX AND DEPS)
+@@ -577,7 +573,6 @@ if(POSIX AND DEPS)
    endif()
  endif()
  
@@ -32,7 +32,7 @@ index b8eb5a16..319d81dc 100644
  include_directories("${CMAKE_SOURCE_DIR}/include")
  include_directories("${CMAKE_SOURCE_DIR}")
  
-@@ -655,18 +650,6 @@ if(FREEBSD OR "${HAVE_TR1_TUPLE}" STREQUAL "")
+@@ -668,18 +663,6 @@ if(FREEBSD OR "${HAVE_TR1_TUPLE}" STREQUAL "")
    add_definitions(-DGTEST_USE_OWN_TR1_TUPLE=0)
  endif()
  
@@ -52,7 +52,7 @@ index b8eb5a16..319d81dc 100644
    add_subdirectory("${CMAKE_SOURCE_DIR}/third-party/linenoise-ng")
  endif()
 diff --git a/osquery/CMakeLists.txt b/osquery/CMakeLists.txt
-index 1c8201ee..a89e6821 100644
+index c8cbac4e..a4382420 100644
 --- a/osquery/CMakeLists.txt
 +++ b/osquery/CMakeLists.txt
 @@ -35,8 +35,6 @@ if(CLANG AND POSIX)
@@ -64,7 +64,7 @@ index 1c8201ee..a89e6821 100644
      -Wno-unused-parameter
      -Wno-gnu-case-range
      -Weffc++
-@@ -61,14 +59,7 @@ endif()
+@@ -65,14 +63,7 @@ endif()
  
  # Construct a set of all object files, starting with third-party and all
  # of the osquery core objects (sources from ADD_CORE_LIBRARY macros).
@@ -80,7 +80,7 @@ index 1c8201ee..a89e6821 100644
  
  # Add subdirectories
  add_subdirectory(config)
-@@ -147,10 +138,11 @@ if(APPLE OR LINUX)
+@@ -153,10 +144,11 @@ if(APPLE OR LINUX)
    ADD_OSQUERY_LINK_ADDITIONAL("rocksdb_lite")
  elseif(FREEBSD)
    ADD_OSQUERY_LINK_CORE("icuuc")
@@ -93,15 +93,20 @@ index 1c8201ee..a89e6821 100644
  if(POSIX)
    ADD_OSQUERY_LINK_CORE("boost_system")
    ADD_OSQUERY_LINK_CORE("boost_filesystem")
-@@ -168,6 +160,8 @@ endif()
+@@ -174,10 +166,10 @@ endif()
  ADD_OSQUERY_LINK_CORE("glog${WO_KEY}")
  
  if(POSIX)
+-  # Hashing methods in core use libcrypto.
+-  ADD_OSQUERY_LINK_CORE("crypto")
+-
 +  ADD_OSQUERY_LINK_ADDITIONAL("benchmark")
 +  ADD_OSQUERY_LINK_ADDITIONAL("snappy")
    ADD_OSQUERY_LINK_ADDITIONAL("ssl")
-   ADD_OSQUERY_LINK_ADDITIONAL("crypto")
++  ADD_OSQUERY_LINK_ADDITIONAL("crypto")
    ADD_OSQUERY_LINK_ADDITIONAL("libpthread")
+   ADD_OSQUERY_LINK_ADDITIONAL("magic")
+ endif()
 diff --git a/osquery/extensions/CMakeLists.txt b/osquery/extensions/CMakeLists.txt
 index 52f3bf80..066ed1c0 100644
 --- a/osquery/extensions/CMakeLists.txt

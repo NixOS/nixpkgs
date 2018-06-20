@@ -201,7 +201,6 @@
 "github:shougo/tabpagebuffer.vim"
 "github:shougo/unite.vim"
 "github:shougo/vimproc.vim"
-"github:shougo/vimshell.vim"
 "github:SirVer/ultisnips"
 "github:sjl/gundo.vim"
 "github:slashmili/alchemist.vim"

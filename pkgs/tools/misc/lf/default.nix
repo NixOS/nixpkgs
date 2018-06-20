@@ -2,13 +2,13 @@
 
 buildGoPackage rec {
   name = "lf-${version}";
-  version = "4";
+  version = "5";
 
   src = fetchFromGitHub {
     owner = "gokcehan";
     repo = "lf";
     rev = "r${version}";
-    sha256 = "0wvx5hhkj3l68xjcr0i5lk623zi3si79hhvwi6mw9s52i43irr31";
+    sha256 = "0qgvaa69xs97x42j1ikb03bzpm497z9h3qk7adbdippaqcj40s70";
   };
 
   goPackagePath = "github.com/gokcehan/lf";
@@ -38,7 +38,7 @@ buildGoPackage rec {
     '';
     homepage = https://godoc.org/github.com/gokcehan/lf;
     license = licenses.mit;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
     maintainers = with maintainers; [ primeos ];
   };
 }

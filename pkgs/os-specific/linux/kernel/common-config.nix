@@ -368,7 +368,7 @@ with stdenv.lib;
   ${optionalString (! stdenv.hostPlatform.isAarch32)
     (if versionOlder version "3.14" then ''
         CC_STACKPROTECTOR? y # Detect buffer overflows on the stack
-      '' else ''
+      '' else optionalString (versionOlder version "4.18") ''
         CC_STACKPROTECTOR_REGULAR? y
       '')}
   ${optionalString (versionAtLeast version "3.12") ''
@@ -647,7 +647,7 @@ with stdenv.lib;
     X86_X2APIC y
     IRQ_REMAP y
   ''}
-  
+
   # needed for iwd WPS support (wpa_supplicant replacement)
   ${optionalString (versionAtLeast version "4.7") ''
     KEY_DH_OPERATIONS y
@@ -690,10 +690,12 @@ with stdenv.lib;
 
   CRC32_SELFTEST? n
   CRYPTO_TEST? n
-  DRM_DEBUG_MM_SELFTEST? n
+  ${optionalString (versionOlder version "4.18") ''
+    DRM_DEBUG_MM_SELFTEST? n
+    LNET_SELFTEST? n
+  ''}
   EFI_TEST? n
   GLOB_SELFTEST? n
-  LNET_SELFTEST? n
   LOCK_TORTURE_TEST? n
   MTD_TESTS? n
   NOTIFIER_ERROR_INJECTION? n

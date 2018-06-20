@@ -1,26 +1,27 @@
-{ stdenv, fetchurl, boehmgc, libatomic_ops, pcre, libevent, libiconv, llvm, makeWrapper }:
+{ stdenv, fetchurl, makeWrapper
+, boehmgc, libatomic_ops, pcre, libevent, libiconv, llvm, clang }:
 
 stdenv.mkDerivation rec {
   name = "crystal-${version}";
-  version = "0.24.2";
+  version = "0.25.0";
 
   src = fetchurl {
     url = "https://github.com/crystal-lang/crystal/archive/${version}.tar.gz";
-    sha256 = "1l7nrrfgz1yxxjphypwzlxj6dbari20p71zb4l0gix09lmas8l6y";
+    sha256 = "1pnx21ky6cqfyv6df4mmjnyd1yh1bvcqkdzq6f0mk0yrkcl57k3q";
   };
 
-  prebuiltName = "crystal-0.24.2-1";
+  prebuiltName = "crystal-0.25.0-1";
   prebuiltSrc = let arch = {
     "x86_64-linux" = "linux-x86_64";
     "i686-linux" = "linux-i686";
     "x86_64-darwin" = "darwin-x86_64";
   }."${stdenv.system}" or (throw "system ${stdenv.system} not supported");
   in fetchurl {
-    url = "https://github.com/crystal-lang/crystal/releases/download/0.24.2/${prebuiltName}-${arch}.tar.gz";
+    url = "https://github.com/crystal-lang/crystal/releases/download/0.25.0/${prebuiltName}-${arch}.tar.gz";
     sha256 = {
-      "x86_64-linux" = "1xf6riwd5k5f95988m1hsppsfii5v96svgmy12ncy7mgmm7k4dh3";
-      "i686-linux" = "0ar05kj89pm3zxfnxwhf0mz9vrd9q5p47y4969sh0r6knccri0kp";
-      "x86_64-darwin" = "1vz8bi5rfgggiic4ayxbcf6pfmdjvqcg4lsivnk2fyshr1m8l0h5";
+      "x86_64-linux" = "1q006086pbbvhmscbjzzgbdq1jkppd4p4kl9z9fn9j6np8fhi8ms";
+      "i686-linux" = "074ndm9n0mzsa7dkl3chhf234l85msm99yjksa5980lyqynyrw1d";
+      "x86_64-darwin" = "006f2j5984dkp5lsq8kns5mkxbhj50syjvzqk9z931pxl92wc7iy";
     }."${stdenv.system}";
   };
 
@@ -60,6 +61,7 @@ stdenv.mkDerivation rec {
   installPhase = ''
     install -Dm755 .build/crystal $out/bin/crystal
     wrapProgram $out/bin/crystal \
+        --suffix PATH : ${clang}/bin \
         --suffix CRYSTAL_PATH : lib:$out/lib/crystal \
         --suffix LIBRARY_PATH : $libPath
     install -dm755 $out/lib/crystal
@@ -79,7 +81,7 @@ stdenv.mkDerivation rec {
 
   dontStrip = true;
 
-  enableParallelBuilding = true;
+  enableParallelBuilding = false;
 
   meta = {
     description = "A compiled language with Ruby like syntax and type inference";

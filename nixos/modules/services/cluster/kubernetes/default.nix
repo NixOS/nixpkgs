@@ -332,11 +332,11 @@ in {
 
       authorizationMode = mkOption {
         description = ''
-          Kubernetes apiserver authorization mode (AlwaysAllow/AlwaysDeny/ABAC/RBAC). See
+          Kubernetes apiserver authorization mode (AlwaysAllow/AlwaysDeny/ABAC/Webhook/RBAC/Node). See
           <link xlink:href="https://kubernetes.io/docs/reference/access-authn-authz/authorization/"/>
         '';
         default = ["RBAC" "Node"];
-        type = types.listOf (types.enum ["AlwaysAllow" "AlwaysDeny" "ABAC" "RBAC" "Node"]);
+        type = types.listOf (types.enum ["AlwaysAllow" "AlwaysDeny" "ABAC" "Webhook" "RBAC" "Node"]);
       };
 
       authorizationPolicy = mkOption {
@@ -346,6 +346,15 @@ in {
         '';
         default = [];
         type = types.listOf types.attrs;
+      };
+
+      webhookConfig = mkOption {
+        description = ''
+          Kubernetes apiserver Webhook config file. It uses the kubeconfig file format.
+          See <link xlink:href="https://kubernetes.io/docs/reference/access-authn-authz/webhook/"/>
+        '';
+        default = null;
+        type = types.nullOr types.path;
       };
 
       allowPrivileged = mkOption {
@@ -942,6 +951,9 @@ in {
                 pkgs.writeText "kube-auth-policy.jsonl"
                 (concatMapStringsSep "\n" (l: builtins.toJSON l) cfg.apiserver.authorizationPolicy)
               }"
+            } \
+            ${optionalString (elem "Webhook" cfg.apiserver.authorizationMode)
+              "--authorization-webhook-config-file=${cfg.apiserver.webhookConfig}"
             } \
             --secure-port=${toString cfg.apiserver.securePort} \
             --service-cluster-ip-range=${cfg.apiserver.serviceClusterIpRange} \

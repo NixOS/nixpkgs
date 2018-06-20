@@ -11,11 +11,11 @@ let
 in
 stdenv.mkDerivation rec {
   name = "sssd-${version}";
-  version = "1.16.1";
+  version = "1.16.2";
 
   src = fetchurl {
     url = "https://fedorahosted.org/released/sssd/${name}.tar.gz";
-    sha256 = "0vjh1c5960wh86zjsamdjhljls7bb5fz5jpcazgzrpmga5w6ggrd";
+    sha256 = "032ppk57qs1lnvz7pb7lw9ldwm9i1yagh9fzgqgn6na3bg61ynzy";
   };
 
   # Something is looking for <libxml/foo.h> instead of <libxml2/libxml/foo.h>

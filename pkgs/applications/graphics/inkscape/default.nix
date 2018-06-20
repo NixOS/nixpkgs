@@ -17,6 +17,12 @@ stdenv.mkDerivation rec {
     sha256 = "1chng2yw8dsjxc9gf92aqv7plj11cav8ax321wmakmv5bb09cch6";
   };
 
+  # Inkscape hits the ARGMAX when linking on macOS. It appears to be
+  # CMake’s ARGMAX check doesn’t offer enough padding for NIX_LDFLAGS.
+  # Setting strictDeps it avoids duplicating some dependencies so it
+  # will leave us under ARGMAX.
+  strictDeps = true;
+
   unpackPhase = ''
     cp $src ${name}.tar.bz2
     tar xvjf ${name}.tar.bz2 > /dev/null
@@ -33,19 +39,19 @@ stdenv.mkDerivation rec {
       --replace '"python-interpreter", "python"' '"python-interpreter", "${python2Env}/bin/python"'
   '';
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkgconfig cmake makeWrapper python2Env perl perlXMLParser ];
   buildInputs = [
-    perl perlXMLParser libXft libpng zlib popt boehmgc
+    libXft libpng zlib popt boehmgc
     libxml2 libxslt glib gtkmm2 glibmm libsigcxx lcms boost gettext
-    makeWrapper gsl poppler imagemagick libwpg librevenge
-    libvisio libcdr libexif potrace cmake python2Env
+    gsl poppler imagemagick libwpg librevenge
+    libvisio libcdr libexif potrace
   ];
 
   enableParallelBuilding = true;
 
   postInstall = ''
     # Make sure PyXML modules can be found at run-time.
-    rm "$out/share/icons/hicolor/icon-theme.cache"
+    rm -f "$out/share/icons/hicolor/icon-theme.cache"
   '' + stdenv.lib.optionalString stdenv.isDarwin ''
     install_name_tool -change $out/lib/libinkscape_base.dylib $out/lib/inkscape/libinkscape_base.dylib $out/bin/inkscape
     install_name_tool -change $out/lib/libinkscape_base.dylib $out/lib/inkscape/libinkscape_base.dylib $out/bin/inkview

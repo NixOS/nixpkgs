@@ -24,7 +24,7 @@ in stdenv.mkDerivation rec {
 
   patches = [
     (fetchpatch {
-      # CVE-2018-10289
+      name = "CVE-2018-10289.patch";
       url = "https://bugs.ghostscript.com/attachment.cgi?id=15230";
       sha256 = "0jmpacxd9930g6k57kda9jrcrbk75whdlv8xwmqg5jwn848qvy4q";
     })

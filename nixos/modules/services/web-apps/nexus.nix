@@ -13,6 +13,12 @@ in
     services.nexus = {
       enable = mkEnableOption "Sonatype Nexus3 OSS service";
 
+      package = mkOption {
+        type = types.package;
+        default = pkgs.nexus;
+        description = "Package which runs Nexus3";
+      };
+
       user = mkOption {
         type = types.str;
         default = "nexus";
@@ -55,10 +61,10 @@ in
           -XX:LogFile=${cfg.home}/nexus3/log/jvm.log
           -XX:-OmitStackTraceInFastThrow
           -Djava.net.preferIPv4Stack=true
-          -Dkaraf.home=${pkgs.nexus}
-          -Dkaraf.base=${pkgs.nexus}
-          -Dkaraf.etc=${pkgs.nexus}/etc/karaf
-          -Djava.util.logging.config.file=${pkgs.nexus}/etc/karaf/java.util.logging.properties
+          -Dkaraf.home=${cfg.package}
+          -Dkaraf.base=${cfg.package}
+          -Dkaraf.etc=${cfg.package}/etc/karaf
+          -Djava.util.logging.config.file=${cfg.package}/etc/karaf/java.util.logging.properties
           -Dkaraf.data=${cfg.home}/nexus3
           -Djava.io.tmpdir=${cfg.home}/nexus3/tmp
           -Dkaraf.startLocalConsole=false
@@ -112,7 +118,7 @@ in
         fi
       '';
 
-      script = "${pkgs.nexus}/bin/nexus run";
+      script = "${cfg.package}/bin/nexus run";
 
       serviceConfig = {
         User = cfg.user;

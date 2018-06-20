@@ -150,10 +150,6 @@ with pkgs;
 
   ebook2cw = callPackage ../applications/misc/ebook2cw { };
 
-  vsenv = callPackage ../build-support/vsenv {
-    vs = vs90wrapper;
-  };
-
   fetchbower = callPackage ../build-support/fetchbower {
     inherit (nodePackages) bower2nix;
   };
@@ -399,6 +395,8 @@ with pkgs;
   setupDebugInfoDirs = makeSetupHook { } ../build-support/setup-hooks/setup-debug-info-dirs.sh;
 
   useOldCXXAbi = makeSetupHook { } ../build-support/setup-hooks/use-old-cxx-abi.sh;
+
+  ical2org = callPackage ../tools/misc/ical2org {};
 
   iconConvTools = callPackage ../build-support/icon-conv-tools {};
 
@@ -647,6 +645,8 @@ with pkgs;
 
   enpass = callPackage ../tools/security/enpass { };
 
+  esh = callPackage ../tools/text/esh { };
+
   ezstream = callPackage ../tools/audio/ezstream { };
 
   genymotion = callPackage ../development/mobile/genymotion { };
@@ -679,6 +679,8 @@ with pkgs;
   pass = callPackage ../tools/security/pass { };
 
   passExtensions = recurseIntoAttrs pass.extensions;
+
+  asc-key-to-qr-code-gif = callPackage ../tools/security/asc-key-to-qr-code-gif { };
 
   gopass = callPackage ../tools/security/gopass { };
 
@@ -1489,6 +1491,8 @@ with pkgs;
     utillinux = utillinuxMinimal;
   };
 
+  sqlint = callPackage ../development/tools/sqlint { };
+
   antibody = callPackage ../shells/zsh/antibody { };
 
   antigen = callPackage ../shells/zsh/antigen { };
@@ -1990,6 +1994,10 @@ with pkgs;
   dd_rescue = callPackage ../tools/system/dd_rescue { };
 
   ddrescue = callPackage ../tools/system/ddrescue { };
+
+  ddrescueview = callPackage ../tools/system/ddrescueview { };
+
+  ddrutility = callPackage ../tools/system/ddrutility { };
 
   deluge = callPackage ../applications/networking/p2p/deluge {
     pythonPackages = python2Packages;
@@ -3229,6 +3237,8 @@ with pkgs;
 
   journalbeat = callPackage ../tools/system/journalbeat { };
 
+  journaldriver = callPackage ../tools/misc/journaldriver { };
+
   jp = callPackage ../development/tools/jp { };
 
   jp2a = callPackage ../applications/misc/jp2a { };
@@ -4066,7 +4076,7 @@ with pkgs;
 
   niff = callPackage ../tools/package-management/niff { };
 
-  nifskope = callPackage ../tools/graphics/nifskope { };
+  nifskope = libsForQt59.callPackage ../tools/graphics/nifskope { };
 
   nilfs-utils = callPackage ../tools/filesystems/nilfs-utils {};
 
@@ -4368,6 +4378,8 @@ with pkgs;
   patch = gnupatch;
 
   patchage = callPackage ../applications/audio/patchage { };
+
+  patchwork-classic = callPackage ../applications/networking/ssb/patchwork-classic { };
 
   pcapfix = callPackage ../tools/networking/pcapfix { };
 
@@ -5043,6 +5055,8 @@ with pkgs;
   };
 
   snort = callPackage ../applications/networking/ids/snort { };
+
+  soapui = callPackage ../applications/networking/soapui { };
 
   sshguard = callPackage ../tools/security/sshguard {};
 
@@ -7070,8 +7084,6 @@ with pkgs;
 
   valadoc = callPackage ../development/tools/valadoc { };
 
-  vs90wrapper = callPackage ../development/compilers/vs90wrapper { };
-
   wla-dx = callPackage ../development/compilers/wla-dx { };
 
   wrapCCWith =
@@ -7518,7 +7530,10 @@ with pkgs;
   spark_22 = callPackage ../applications/networking/cluster/spark { version = "2.2.1"; };
 
   spidermonkey_1_8_5 = callPackage ../development/interpreters/spidermonkey/1.8.5.nix { };
-  spidermonkey_17 = callPackage ../development/interpreters/spidermonkey/17.nix { };
+  spidermonkey_17 = callPackage ../development/interpreters/spidermonkey/17.nix {
+    inherit (darwin) libobjc;
+    stdenv = gccStdenv;
+  };
   spidermonkey_31 = callPackage ../development/interpreters/spidermonkey/31.nix { };
   spidermonkey_38 = callPackage ../development/interpreters/spidermonkey/38.nix ({
     inherit (darwin) libobjc;
@@ -8926,6 +8941,8 @@ with pkgs;
   eccodes = callPackage ../development/libraries/eccodes { };
 
   eclib = callPackage ../development/libraries/eclib {};
+
+  editline = callPackage ../development/libraries/editline { };
 
   eigen = callPackage ../development/libraries/eigen {};
   eigen3_3 = callPackage ../development/libraries/eigen/3.3.nix {};
@@ -11062,7 +11079,6 @@ with pkgs;
   openvdb = callPackage ../development/libraries/openvdb {};
 
   inherit (callPackages ../development/libraries/libressl { })
-    libressl_2_5
     libressl_2_6
     libressl_2_7;
 
@@ -13644,6 +13660,13 @@ with pkgs;
       ];
   };
 
+  linux_hardkernel_4_14 = callPackage ../os-specific/linux/kernel/linux-hardkernel-4.14.nix {
+    kernelPatches = [
+      kernelPatches.bridge_stp_helper
+      kernelPatches.modinst_arg_list_too_long
+    ];
+  };
+
   /* Linux kernel modules are inherently tied to a specific kernel.  So
      rather than provide specific instances of those packages for a
      specific kernel, we have a function that builds those packages
@@ -13866,6 +13889,11 @@ with pkgs;
   linuxPackages_samus_4_12 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_samus_4_12);
   linuxPackages_samus_latest = linuxPackages_samus_4_12;
   linux_samus_latest = linuxPackages_samus_latest.kernel;
+
+  # Hardkernel (Odroid) kernels.
+  linuxPackages_hardkernel_4_14 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_hardkernel_4_14);
+  linuxPackages_hardkernel_latest = linuxPackages_hardkernel_4_14;
+  linux_hardkernel_latest = linuxPackages_hardkernel_latest.kernel;
 
   # A function to build a manually-configured kernel
   linuxManualConfig = makeOverridable (callPackage ../os-specific/linux/kernel/manual-config.nix {});
@@ -15705,7 +15733,7 @@ with pkgs;
 
   emacsPackagesNgGen = emacs: import ./emacs-packages.nix {
     inherit lib newScope stdenv;
-    inherit fetchFromGitHub fetchgit fetchhg fetchurl;
+    inherit fetchFromGitHub fetchgit fetchhg fetchurl fetchpatch;
     inherit emacs texinfo makeWrapper runCommand;
     inherit (xorg) lndir;
 
@@ -15761,9 +15789,7 @@ with pkgs;
 
   eterm = callPackage ../applications/misc/eterm { };
 
-  etherape = callPackage ../applications/networking/sniffers/etherape {
-    inherit (gnome2) libgnomecanvas libglade;
-  };
+  etherape = callPackage ../applications/networking/sniffers/etherape { };
 
   evilvte = callPackage ../applications/misc/evilvte {
     configH = config.evilvte.config or "";
@@ -15955,6 +15981,7 @@ with pkgs;
 
   wireshark = callPackage ../applications/networking/sniffers/wireshark {
     withQt = true;
+    qt5 = qt59;
     withGtk = false;
     inherit (darwin.apple_sdk.frameworks) ApplicationServices SystemConfiguration;
   };
@@ -16194,6 +16221,8 @@ with pkgs;
   libquvi = callPackage ../applications/video/quvi/library.nix { };
 
   linssid = libsForQt5.callPackage ../applications/networking/linssid { };
+
+  lollypop = callPackage ../applications/audio/lollypop { };
 
   m32edit = callPackage ../applications/audio/midas/m32edit.nix {};
 
@@ -18017,6 +18046,8 @@ with pkgs;
     inherit (xfce) exo;
   };
 
+  lightdm-mini-greeter = callPackage ../applications/display-managers/lightdm-mini-greeter { };
+
   slic3r = callPackage ../applications/misc/slic3r { };
 
   slic3r-prusa3d = callPackage ../applications/misc/slic3r/prusa3d.nix { };
@@ -18579,7 +18610,7 @@ with pkgs;
 
   vwm = callPackage ../applications/window-managers/vwm { };
 
-  vym = callPackage ../applications/misc/vym { };
+  vym = qt5.callPackage ../applications/misc/vym { };
 
   w3m = callPackage ../applications/networking/browsers/w3m {
     graphicsSupport = !stdenv.isDarwin;
@@ -19401,8 +19432,6 @@ with pkgs;
   mars = callPackage ../games/mars { };
 
   megaglest = callPackage ../games/megaglest {};
-
-  micropolis = callPackage ../games/micropolis { };
 
   minecraft = callPackage ../games/minecraft {
     useAlsa = config.minecraft.alsa or false;
@@ -20732,6 +20761,8 @@ with pkgs;
 
   brgenml1cupswrapper = callPackage ../misc/cups/drivers/brgenml1cupswrapper {};
 
+  brightnessctl = callPackage ../misc/brightnessctl { };
+
   calaos_installer = libsForQt5.callPackage ../misc/calaos/installer {};
 
   click = callPackage ../applications/networking/cluster/click { };
@@ -21099,6 +21130,8 @@ with pkgs;
 
   lkproof = callPackage ../tools/typesetting/tex/lkproof { };
 
+  lice = callPackage ../tools/misc/lice {};
+
   m33-linux = callPackage ../misc/drivers/m33-linux { };
 
   mnemonicode = callPackage ../misc/mnemonicode { };
@@ -21377,7 +21410,7 @@ with pkgs;
   vimUtils = callPackage ../misc/vim-plugins/vim-utils.nix { };
 
   vimPlugins = recurseIntoAttrs (callPackage ../misc/vim-plugins {
-    inherit (darwin.apple_sdk.frameworks) Cocoa;
+    inherit (darwin.apple_sdk.frameworks) Cocoa CoreFoundation CoreServices;
     llvmPackages = llvmPackages_39;
   });
 

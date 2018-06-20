@@ -364,6 +364,7 @@ self: super: {
   notcpp = dontCheck super.notcpp;
   ntp-control = dontCheck super.ntp-control;
   numerals = dontCheck super.numerals;
+  odpic-raw = dontCheck super.odpic-raw; # needs a running oracle database server
   opaleye = dontCheck super.opaleye;
   openpgp = dontCheck super.openpgp;
   optional = dontCheck super.optional;
@@ -1044,6 +1045,12 @@ self: super: {
   # Work around overspecified constraint on github ==0.18.
   github-backup = doJailbreak super.github-backup;
 
+  # Work around large number of repeated arguments
+  # https://github.com/NixOS/nixpkgs/issues/40013
+  taffybar = super.taffybar.overrideDerivation (drv: {
+    strictDeps = true;
+  });
+
 }
 
 //
@@ -1062,3 +1069,14 @@ self: super: {
 in {
   inherit amazonka amazonka-core amazonka-test;
 })
+
+//
+
+# The actual Cabal library gets built while building its `Setup.hs`.
+(let
+  inherit (pkgs.lib) filterAttrs flip mapAttrs hasPrefix;
+  cabals = filterAttrs (n: v: hasPrefix "Cabal_" n) super;
+  fixCabal = n: v: addSetupDepends v [ self.mtl self.parsec ];
+in
+  mapAttrs fixCabal cabals
+)
