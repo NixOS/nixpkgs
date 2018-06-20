@@ -1501,6 +1501,8 @@ with pkgs;
 
   appdata-tools = callPackage ../tools/misc/appdata-tools { };
 
+  appleseed = callPackage ../tools/graphics/appleseed { };
+
   arping = callPackage ../tools/networking/arping { };
 
   arpoison = callPackage ../tools/networking/arpoison { };
@@ -4263,6 +4265,8 @@ with pkgs;
 
   os-prober = callPackage ../tools/misc/os-prober {};
 
+  osl = callPackage ../development/compilers/osl { };
+
   ossec = callPackage ../tools/security/ossec {};
 
   ostree = callPackage ../tools/misc/ostree { };
@@ -4945,6 +4949,8 @@ with pkgs;
 
   securefs = callPackage ../tools/filesystems/securefs { };
 
+  seexpr = callPackage ../development/compilers/seexpr { };
+ 
   setroot = callPackage  ../tools/X11/setroot { };
 
   setserial = callPackage ../tools/system/setserial { };
