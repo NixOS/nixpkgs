@@ -21,6 +21,7 @@ stdenv.mkDerivation rec {
   # The build enables -O2 by default for everything else.
   hardeningDisable = stdenv.lib.optional stdenv.cc.isClang "fortify";
 
+  # Accepted upstream, should be in next update: #42150, https://dev.gnupg.org/T4034
   patches = [ ./fix-jent-locking.patch ];
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
