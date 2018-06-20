@@ -21,6 +21,9 @@ stdenv.mkDerivation rec {
   # The build enables -O2 by default for everything else.
   hardeningDisable = stdenv.lib.optional stdenv.cc.isClang "fortify";
 
+  # Accepted upstream, should be in next update: #42150, https://dev.gnupg.org/T4034
+  patches = [ ./fix-jent-locking.patch ];
+
   depsBuildBuild = [ buildPackages.stdenv.cc ];
 
   buildInputs = [ libgpgerror ]
@@ -49,8 +52,7 @@ stdenv.mkDerivation rec {
     cp src/.libs/libgcrypt.20.dylib $out/lib
   '';
 
-  # TODO: reenable with next update?
-  doCheck = !stdenv.isDarwin;
+  doCheck = true;
 
   meta = with stdenv.lib; {
     homepage = https://www.gnu.org/software/libgcrypt/;
