@@ -1,20 +1,20 @@
 { stdenv, fetchFromGitHub, SDL2, frei0r, gettext, mlt, jack1, pkgconfig, qtbase
 , qtmultimedia, qtwebkit, qtx11extras, qtwebsockets, qtquickcontrols
 , qtgraphicaleffects, libmlt
-, qmake, makeWrapper }:
+, qmake, makeWrapper, fetchpatch, qttools }:
 
 assert stdenv.lib.versionAtLeast libmlt.version "6.8.0";
 assert stdenv.lib.versionAtLeast mlt.version "6.8.0";
 
 stdenv.mkDerivation rec {
   name = "shotcut-${version}";
-  version = "18.05.08";
+  version = "18.06.02";
 
   src = fetchFromGitHub {
     owner = "mltframework";
     repo = "shotcut";
     rev = "v${version}";
-    sha256 = "1qm1ycsx93qpw2vga25m3cr82vzqla1qqardjiln3iqfa0m93qsk";
+    sha256 = "1pqpgsb8ix1akq326chf46vvl5h02dwmdskskf2n6impygsy4x7v";
   };
 
   enableParallelBuilding = true;
@@ -26,6 +26,7 @@ stdenv.mkDerivation rec {
   ];
 
   NIX_CFLAGS_COMPILE = "-I${libmlt}/include/mlt++ -I${libmlt}/include/mlt";
+  qmakeFlags = [ "QMAKE_LRELEASE=${stdenv.lib.getDev qttools}/bin/lrelease" ];
 
   prePatch = ''
     sed 's_shotcutPath, "qmelt"_"${mlt}/bin/melt"_' -i src/jobs/meltjob.cpp
@@ -33,6 +34,13 @@ stdenv.mkDerivation rec {
     NICE=$(type -P nice)
     sed "s_/usr/bin/nice_''${NICE}_" -i src/jobs/meltjob.cpp src/jobs/ffmpegjob.cpp
   '';
+
+  patchFlags = "-p0";
+  patches = [ (fetchpatch {
+    url = https://github.com/mltframework/shotcut/files/2075592/shotcut-18.06.02-qt.patch.txt;
+    name = "qt511.patch";
+    sha256 = "0kxpj2724zm2ka4y1yhfkjglri3p0ck459g93i814pv0j5wqs590";
+    } ) ];
 
   postInstall = ''
     mkdir -p $out/share/shotcut
