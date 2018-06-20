@@ -1995,6 +1995,8 @@ with pkgs;
 
   ddrescueview = callPackage ../tools/system/ddrescueview { };
 
+  ddrutility = callPackage ../tools/system/ddrutility { };
+
   deluge = callPackage ../applications/networking/p2p/deluge {
     pythonPackages = python2Packages;
   };
