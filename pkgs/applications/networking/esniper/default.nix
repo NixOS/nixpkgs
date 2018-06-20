@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, openssl, curl, coreutils, gawk, bash, which }:
 
 stdenv.mkDerivation rec {
-  name = "esniper-2.33.0.2017-11-06";
+  name = "esniper-2.35.0";
 
   src = fetchFromGitHub {
     owner = "yhfudev";
