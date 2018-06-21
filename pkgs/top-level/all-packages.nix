@@ -15003,6 +15003,8 @@ with pkgs;
 
   audio-recorder = callPackage ../applications/audio/audio-recorder { };
 
+  autokey = callPackage ../applications/office/autokey { };
+
   autotrace = callPackage ../applications/graphics/autotrace {};
 
   avocode = callPackage ../applications/graphics/avocode {};
