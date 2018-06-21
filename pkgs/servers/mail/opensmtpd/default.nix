@@ -5,27 +5,27 @@
 # see also https://github.com/OpenSMTPD/OpenSMTPD/issues/678
 , unpriviledged_smtpctl_encrypt ? true
 
-# Deprecated: use the subaddressing-delimiter in the config file going forward
+# This enables you to override the '+' character which typically separates the user from the tag in user+tag@domain.tld
 , tag_char ? null
 }:
 
 stdenv.mkDerivation rec {
   name = "opensmtpd-${version}";
-  version = "6.0.3p1";
+  version = "6.0.2p1";
 
   nativeBuildInputs = [ autoconf automake libtool bison ];
   buildInputs = [ libasr libevent zlib openssl db pam ];
 
   src = fetchurl {
     url = "https://www.opensmtpd.org/archives/${name}.tar.gz";
-    sha256 = "291881862888655565e8bbe3cfb743310f5dc0edb6fd28a889a9a547ad767a81";
+    sha256 = "1b4h64w45hpmfq5721smhg4s0shs64gbcjqjpx3fbiw4hz8bdy9a";
   };
 
   patches = [
     ./proc_path.diff
     (fetchpatch {
-      url = "https://github.com/OpenSMTPD/OpenSMTPD/commit/725ba4fa2ddf23bbcd1ff9ec92e86bbfaa6825c8.diff";
-      sha256 = "19rla0b2r53jpdiz25fcza29c2msz6j6paivxhp9jcy1xl457dqa";
+      url = "https://github.com/Ekleog/OpenSMTPD/commit/80172fb0cd3c90c112bdd9c04fe05d84e6f562c6.diff";
+      sha256 = "1xgfm0mydhv70ndn212fsvlwaf3axl3wdg2v1nqnrbyl919y5a10";
     })
   ];
 
