@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, pkgconfig, systemd, libudev, utillinux, coreutils, libuuid
+{ stdenv, fetchurl, fetchpatch, pkgconfig, eudev, libudev, utillinux, coreutils, libuuid
 , thin-provisioning-tools, enable_dmeventd ? false }:
 
 let
@@ -32,7 +32,7 @@ stdenv.mkDerivation {
   preConfigure =
     ''
       substituteInPlace scripts/lvm2_activation_generator_systemd_red_hat.c \
-        --replace /usr/bin/udevadm ${systemd}/bin/udevadm
+        --replace /usr/bin/udevadm ${eudev}/bin/udevadm
 
       sed -i /DEFAULT_SYS_DIR/d Makefile.in
       sed -i /DEFAULT_PROFILE_DIR/d conf/Makefile.in
