@@ -3,7 +3,6 @@
 with python3Packages;
 
 buildPythonApplication rec {
-  name = "${pname}-${version}";
   pname = "pirate-get";
   version = "0.3.1";
 
@@ -14,7 +13,7 @@ buildPythonApplication rec {
     sha256 = "9d7cc4b15dd8c6a82f9e03a666372e38613ccafdc846ad4c1226ba936beea68d";
   };
 
-  propagatedBuildInputs = [ colorama veryprettytable beautifulsoup4 ];
+  propagatedBuildInputs = [ colorama veryprettytable beautifulsoup4 pyperclip ];
 
   meta = with stdenv.lib; {
     description = "A command line interface for The Pirate Bay";
