@@ -1,8 +1,9 @@
 { stdenv, fetchFromGitHub, substituteAll, libtool, pkgconfig, intltool, gnused
 , gnome3, gtk-doc, acl, systemd, glib, libatasmart, polkit, coreutils, bash
-, expat, libxslt, docbook_xsl, utillinux, mdadm, libgudev, libblockdev, parted
+, expat, libxslt, docbook_xsl, utillinuxMinimal, mdadm, libgudev, libblockdev, parted
 , gobjectIntrospection, docbook_xml_dtd_412, docbook_xml_dtd_43
 , libxfs, f2fs-tools, dosfstools, e2fsprogs, btrfs-progs, exfat, nilfs-utils, udftools, ntfs3g
+, minimal ? false
 }:
 
 let
@@ -23,7 +24,7 @@ in stdenv.mkDerivation rec {
     (substituteAll {
       src = ./fix-paths.patch;
       bash = "${bash}/bin/bash";
-      blkid = "${utillinux}/bin/blkid";
+      blkid = "${utillinuxMinimal}/bin/blkid";
       false = "${coreutils}/bin/false";
       mdadm = "${mdadm}/bin/mdadm";
       sed = "${gnused}/bin/sed";
@@ -33,7 +34,7 @@ in stdenv.mkDerivation rec {
     })
     (substituteAll {
       src = ./force-path.patch;
-      path = stdenv.lib.makeBinPath [ btrfs-progs coreutils dosfstools e2fsprogs exfat f2fs-tools nilfs-utils libxfs ntfs3g parted utillinux ];
+      path = stdenv.lib.makeBinPath ([ utillinuxMinimal ] ++ stdenv.lib.optionals (!minimal) [ btrfs-progs coreutils dosfstools e2fsprogs exfat f2fs-tools nilfs-utils libxfs ntfs3g parted ]);
     })
   ];
 
@@ -49,7 +50,7 @@ in stdenv.mkDerivation rec {
   '';
 
   buildInputs = [
-    expat libgudev libblockdev acl systemd glib libatasmart polkit
+    expat libgudev (libblockdev.override { inherit minimal; }) acl systemd glib libatasmart polkit
   ];
 
   preConfigure = "./autogen.sh";
@@ -59,6 +60,8 @@ in stdenv.mkDerivation rec {
     "--localstatedir=/var"
     "--with-systemdsystemunitdir=$(out)/etc/systemd/system"
     "--with-udevdir=$(out)/lib/udev"
+  ] ++ stdenv.lib.optionals minimal [
+    "--disable-lvm2"
   ];
 
   makeFlags = [

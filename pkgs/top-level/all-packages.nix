@@ -14390,6 +14390,7 @@ with pkgs;
   udisks1 = callPackage ../os-specific/linux/udisks/1-default.nix { };
   udisks2 = callPackage ../os-specific/linux/udisks/2-default.nix { };
   udisks = udisks2;
+  udisksMinimal = udisks2.override { minimal = true; };
 
   udisks_glue = callPackage ../os-specific/linux/udisks-glue { };
 

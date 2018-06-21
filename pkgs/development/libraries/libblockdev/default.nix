@@ -1,6 +1,7 @@
 { stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, gtk-doc, libxslt, docbook_xsl
 , docbook_xml_dtd_43, python3, gobjectIntrospection, glib, libudev, kmod, parted, libyaml
-, cryptsetup, devicemapper, dmraid, utillinux, libbytesize, libndctl, nss, volume_key
+, cryptsetup, devicemapper, dmraid, utillinuxMinimal, libbytesize, libndctl, nss, volume_key
+, minimal ? false
 }:
 
 let
@@ -25,9 +26,21 @@ in stdenv.mkDerivation rec {
     autoreconfHook pkgconfig gtk-doc libxslt docbook_xsl docbook_xml_dtd_43 python3 gobjectIntrospection
   ];
 
-  buildInputs = [
-    glib libudev kmod parted cryptsetup devicemapper dmraid utillinux libbytesize libndctl nss volume_key libyaml
+  configureFlags = stdenv.lib.optionals minimal [
+    "--without-btrfs"
+    "--without-dm"
+    "--without-dmraid"
+    "--without-escrow"
+    "--without-kbd"
+    "--without-lvm"
+    "--without-lvm_dbus"
+    "--without-mpath"
+    "--without-vdo"
   ];
+
+  buildInputs = [
+    glib libudev devicemapper kmod parted cryptsetup utillinuxMinimal libbytesize libndctl nss
+  ] ++ stdenv.lib.optionals (!minimal) [ dmraid volume_key libyaml ];
 
   meta = with stdenv.lib; {
     description = "A library for manipulating block devices";
