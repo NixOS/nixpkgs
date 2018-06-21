@@ -75,6 +75,11 @@ with stdenv.lib;
   ''}
   INTEL_IDLE y
   CPU_FREQ_DEFAULT_GOV_PERFORMANCE y
+  ${optionalString (versionAtLeast version "4.9") ''
+    CPU_FREQ_GOV_SCHEDUTIL y
+    CPU_FREQ_DEFAULT_GOV_SCHEDUTIL y
+    CPU_FREQ_DEFAULT_GOV_PERFORMANCE n
+  ''}
   ${optionalString (versionOlder version "3.10") ''
     USB_SUSPEND y
   ''}
