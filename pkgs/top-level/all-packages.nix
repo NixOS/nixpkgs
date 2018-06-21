@@ -7600,6 +7600,8 @@ with pkgs;
     samples = true;
   };
 
+  amtk = callPackage ../development/libraries/amtk { };
+
   avrgcclibc = throw "avrgcclibs are now separate packages, install avrbinutils, avrgcc and avrlibc";
 
   avrbinutils = callPackage ../development/misc/avr/binutils {};
@@ -8080,6 +8082,8 @@ with pkgs;
   gnome-desktop-testing = callPackage ../development/tools/gnome-desktop-testing {};
 
   gnome-usage = callPackage ../applications/misc/gnome-usage {};
+
+  gnome-latex = callPackage ../applications/editors/gnome-latex/default.nix { };
 
   gnum4 = callPackage ../development/tools/misc/gnum4 { };
   m4 = gnum4;
@@ -11863,6 +11867,8 @@ with pkgs;
   tecla = callPackage ../development/libraries/tecla { };
 
   tectonic = callPackage ../tools/typesetting/tectonic { };
+
+  tepl = callPackage ../development/libraries/tepl { };
 
   telepathy-glib = callPackage ../development/libraries/telepathy/glib { };
 
