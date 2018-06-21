@@ -1,4 +1,4 @@
-{stdenv, fetchurl, fetchpatch, utillinux, libuuid
+{stdenv, fetchurl, fetchpatch, utillinuxMinimal, libuuid
 , crypto ? false, libgcrypt, gnutls, pkgconfig}:
 
 stdenv.mkDerivation rec {
@@ -27,8 +27,8 @@ stdenv.mkDerivation rec {
     substituteInPlace src/Makefile.in --replace /sbin '@sbindir@'
     substituteInPlace ntfsprogs/Makefile.in --replace /sbin '@sbindir@'
     substituteInPlace libfuse-lite/mount_util.c \
-      --replace /bin/mount ${utillinux}/bin/mount \
-      --replace /bin/umount ${utillinux}/bin/umount
+      --replace /bin/mount ${utillinuxMinimal}/bin/mount \
+      --replace /bin/umount ${utillinuxMinimal}/bin/umount
   '';
 
   configureFlags = [
