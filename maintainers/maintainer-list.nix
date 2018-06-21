@@ -1722,6 +1722,11 @@
     github = "IvanMalison";
     name = "Ivan Malison";
   };
+  imalsogreg = {
+    email = "imalsogreg@gmail.com";
+    github = "imalsogreg";
+    name = "Greg Hale";
+  };
   infinisil = {
     email = "infinisil@icloud.com";
     github = "infinisil";
