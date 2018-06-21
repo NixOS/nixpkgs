@@ -11993,7 +11993,7 @@ let self = _self // overrides; _self = with self; {
     };
     buildInputs = [ pkgs.pcsclite ];
     nativeBuildInputs = [ pkgs.pkgconfig ];
-    NIX_CFLAGS_LINK = "-L${pkgs.pcsclite}/lib -lpcsclite";
+    NIX_CFLAGS_LINK = "-L${stdenv.lib.getLib pkgs.pcsclite}/lib -lpcsclite";
     # tests fail; look unfinished
     doCheck = false;
     meta = {

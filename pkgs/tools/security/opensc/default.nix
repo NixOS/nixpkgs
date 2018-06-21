@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
     "--localstatedir=/var"
     "--sysconfdir=/etc"
     "--with-xsl-stylesheetsdir=${docbook_xsl}/xml/xsl/docbook"
-    "--with-pcsc-provider=${pcsclite}/lib/libpcsclite.so"
+    "--with-pcsc-provider=${stdenv.lib.getLib pcsclite}/lib/libpcsclite.so"
   ];
 
   installFlags = [

@@ -10,11 +10,11 @@ buildPythonPackage rec {
   };
 
   postPatch = ''
-    sed -e 's!"libpcsclite\.so\.1"!"${pcsclite}/lib/libpcsclite.so.1"!' \
+    sed -e 's!"libpcsclite\.so\.1"!"${stdenv.lib.getLib pcsclite}/lib/libpcsclite.so.1"!' \
         -i smartcard/scard/winscarddll.c
   '';
 
-  NIX_CFLAGS_COMPILE = "-isystem ${pcsclite}/include/PCSC/";
+  NIX_CFLAGS_COMPILE = "-isystem ${stdenv.lib.getDev pcsclite}/include/PCSC/";
 
   propagatedBuildInputs = [ pcsclite ];
   buildInputs = [ swig ] ++ stdenv.lib.optional stdenv.isDarwin PCSC;

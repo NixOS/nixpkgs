@@ -18,7 +18,7 @@ python27Packages.buildPythonApplication rec {
 
     # Need LD_PRELOAD for libykpers as the Nix cpython disables ctypes.cdll.LoadLibrary
     # support that the yubicommon library uses to load libykpers
-    makeWrapperArgs = ''--prefix LD_LIBRARY_PATH : "${pcsclite}/lib:${yubikey-personalization}/lib" --prefix LD_PRELOAD : "${yubikey-personalization}/lib/libykpers-1.so"'';
+    makeWrapperArgs = ''--prefix LD_LIBRARY_PATH : "${stdenv.lib.getLib pcsclite}/lib:${yubikey-personalization}/lib" --prefix LD_PRELOAD : "${yubikey-personalization}/lib/libykpers-1.so"'';
 
     postInstall = ''
       mkdir -p $out/share/applications

@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
     ./fix-libusb-include-path.patch
   ];
   postPatch = stdenv.lib.optionalString stdenv.isLinux ''
-    sed -i 's,"libpcsclite\.so[^"]*","${pcsclite}/lib/libpcsclite.so",g' scd/scdaemon.c
+    sed -i 's,"libpcsclite\.so[^"]*","${stdenv.lib.getLib pcsclite}/lib/libpcsclite.so",g' scd/scdaemon.c
   ''; #" fix Emacs syntax highlighting :-(
 
   pinentryBinaryPath = pinentry.binaryPath or "bin/pinentry";
