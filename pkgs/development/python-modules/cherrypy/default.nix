@@ -6,11 +6,11 @@
 
 buildPythonPackage rec {
   pname = "CherryPy";
-  version = "15.0.0";
+  version = "16.0.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "7404638da9cf8c6be672505168ccb63e16d33cb3aa16a02ec30a44641f7546af";
+    sha256 = "858fbff27235a392026b1d821ad815b587815c94fbb14312e2e64cc23766b9c3";
   };
 
   propagatedBuildInputs = [ cheroot portend routes six ];
