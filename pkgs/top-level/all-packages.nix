@@ -17423,6 +17423,8 @@ with pkgs;
 
   osmctools = callPackage ../applications/misc/osmctools { };
 
+  owamp = callPackage ../applications/networking/owamp { };
+
   vivaldi = callPackage ../applications/networking/browsers/vivaldi {};
 
   vivaldi-ffmpeg-codecs = callPackage ../applications/networking/browsers/vivaldi/ffmpeg-codecs.nix {};
