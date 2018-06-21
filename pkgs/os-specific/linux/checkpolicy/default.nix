@@ -13,10 +13,10 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ bison flex ];
   buildInputs = [ libsepol ];
 
-  preBuild = ''
-    makeFlagsArray+=("LIBDIR=${libsepol}/lib")
-    makeFlagsArray+=("PREFIX=$out")
-  '';
+  makeFlags = [
+    "PREFIX=$(out)"
+    "LIBSEPOLA=${stdenv.lib.getLib libsepol}/lib/libsepol.a"
+  ];
 
   meta = libsepol.meta // {
     description = "SELinux policy compiler";
