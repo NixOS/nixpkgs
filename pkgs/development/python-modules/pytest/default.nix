@@ -1,9 +1,9 @@
 { stdenv, buildPythonPackage, fetchPypi, isPy26, argparse, attrs, hypothesis, py
 , setuptools_scm, setuptools, six, pluggy, funcsigs, isPy3k, more-itertools
-, atomicwrites
+, atomicwrites, mock
 }:
 buildPythonPackage rec {
-  version = "3.6.1";
+  version = "3.6.2";
   pname = "pytest";
 
   preCheck = ''
@@ -13,10 +13,10 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "32c49a69566aa7c333188149ad48b58ac11a426d5352ea3d8f6ce843f88199cb";
+    sha256 = "8ea01fc4fcc8e1b1e305252b4bc80a1528019ab99fd3b88666c9dc38d754406c";
   };
 
-  checkInputs = [ hypothesis ];
+  checkInputs = [ hypothesis mock ];
   buildInputs = [ setuptools_scm ];
   propagatedBuildInputs = [ attrs py setuptools six pluggy more-itertools atomicwrites]
     ++ (stdenv.lib.optional (!isPy3k) funcsigs)
