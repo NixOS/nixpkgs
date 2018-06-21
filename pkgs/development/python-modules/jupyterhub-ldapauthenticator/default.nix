@@ -7,11 +7,11 @@
 
 buildPythonPackage rec {
   pname = "jupyterhub-ldapauthenticator";
-  version = "1.2.1";
+  version = "1.2.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "192406a8872727fdf4651aaa0d47cc91401c173399db1b835084ef86dbba49e2";
+    sha256 = "5bba2ee246834130c9f86c13d39585b1af21563b814fa03aacb26b6696dd7e20";
   };
 
   # No tests implemented
