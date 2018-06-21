@@ -2,12 +2,12 @@
 
 stdenv.mkDerivation rec {
 
-  version = "3.10.1.1212";
+  version = "3.10.4.1218";
   name = "libdigidoc-${version}";
   
   src = fetchurl {
-    url = "https://installer.id.ee/media/ubuntu/pool/main/libd/libdigidoc/libdigidoc_3.10.1.1212.orig.tar.xz";
-    sha256 = "ad5e0603aea2e02977f17318cc93a53c3a19a815e57b2347d97136d11c110807";
+    url = "https://installer.id.ee/media/ubuntu/pool/main/libd/libdigidoc/libdigidoc_3.10.4.1218.orig.tar.xz";
+    sha256 = "0nq9z7sq2f6f8h8scirh2djafzb44l37p6h87nvs4a92yv1z4pjr";
   };
 
   unpackPhase = ''
