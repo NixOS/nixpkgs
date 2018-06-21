@@ -1,22 +1,28 @@
-{ stdenv, buildGoPackage, fetchgit, pkgconfig, ffmpeg-full, graphicsmagick, ghostscript, quicktemplate,
-  go-bindata, easyjson, nodePackages, cmake, emscripten }:
+{ stdenv, buildGoPackage, fetchgit, pkgconfig, ffmpeg-full, graphicsmagick
+, ghostscript, quicktemplate, go-bindata, easyjson, nodePackages, cmake
+, emscripten }:
 
 buildGoPackage rec {
   name = "meguca-unstable-${version}";
-  version = "2018-06-11";
-  rev = "0c10e89fade68da414a574b5b0fa2f0dba432ea8";
+  version = "2018-06-21";
+  rev = "a60b75afd10ca99ce05a362ffeb586a1ece3d41d";
   goPackagePath = "github.com/bakape/meguca";
   goDeps = ./server_deps.nix;
-  enableParallelBuilding = true;
-  nativeBuildInputs = [ pkgconfig cmake ];
-  buildInputs = [ ffmpeg-full graphicsmagick ghostscript quicktemplate go-bindata easyjson emscripten ];
 
   src = fetchgit {
     inherit rev;
     url = "https://github.com/bakape/meguca";
-    sha256 = "1nw0hfa0ikbk8d5rsj3fbdwhzwnxjqkw8ypswd0hyw8nwsaxyyq8";
+    sha256 = "0dh168j4lfn7rk64difdq3mxcp82j8h799pvpkz40h4sw2l81qc9";
     fetchSubmodules = true;
   };
+
+  enableParallelBuilding = true;
+  nativeBuildInputs = [ pkgconfig cmake ];
+
+  buildInputs = [
+    ffmpeg-full graphicsmagick ghostscript quicktemplate go-bindata easyjson
+    emscripten 
+  ];
 
   buildPhase = ''
     export HOME=$PWD
@@ -38,7 +44,7 @@ buildGoPackage rec {
 
   meta = with stdenv.lib; {
     homepage = "https://github.com/bakape/meguca";
-    description = "Anonymous realtime imageboard focused on high performance, free speech and transparent moderation";
+    description = "High performance anonymous realtime imageboard";
     license = licenses.agpl3Plus;
     maintainers = with maintainers; [ chiiruno ];
     platforms = platforms.all;
