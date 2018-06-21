@@ -13,7 +13,7 @@ in stdenv.mkDerivation rec {
     sha256 = "16qdi5s6ycsh0iyc362gly7ggrwamky8i0zgbd4ajp3ymk9vqdva";
   };
 
-  outputs = [ "out" "man" "dev" ];
+  outputs = [ "out" "man" "dev" "py" ];
 
   nativeBuildInputs = [ autoreconfHook pkgconfig gettext python2 swig ];
 
@@ -26,6 +26,11 @@ in stdenv.mkDerivation rec {
       url = https://pagure.io/fork/cathay4t/volume_key/c/8eda66d3b734ea335e37cf9d7d173b9e8ebe2fd9.patch;
       sha256 = "01lr1zijk0imkk681zynm4w5ad3y6c9vdrmrzaib7w7ima75iczr";
     })
+  ];
+
+  makeFlags = [
+    "pyexecdir=$(py)/${python2.sitePackages}"
+    "pythondir=$(py)/${python2.sitePackages}"
   ];
 
   meta = with stdenv.lib; {
