@@ -1,5 +1,6 @@
-{ stdenv, buildPythonPackage, isPy3k, fetchFromGitHub, fetchurl
-, utillinux, pygit2, gitMinimal, git-annex }:
+{ stdenv, buildPythonPackage, isPy3k, fetchFromGitHub, fetchpatch
+, utillinux, pygit2, gitMinimal, git-annex
+}:
 
 buildPythonPackage rec {
   pname = "git-annex-adapter";
@@ -22,10 +23,13 @@ buildPythonPackage rec {
   '';
 
   # TODO: Remove for next version
-  patches = fetchurl {
-    url = "https://github.com/alpernebbi/git-annex-adapter/commit/9f64c4b99cae7b681820c6c7382e1e40489f4d1e.patch";
-    sha256 = "1hbw8651amjskakvs1wv2msd1wryrq0vpryvbispg5267rs8q7hp";
-  };
+  patches = [
+    ./not-a-git-repo-testcase.patch
+    (fetchpatch {
+      url = "https://github.com/alpernebbi/git-annex-adapter/commit/9f64c4b99cae7b681820c6c7382e1e40489f4d1e.patch";
+      sha256 = "0yh66gial6bx7kbl7s7lkzljnkpgvgr8yahqqcq9z76d0w752dir";
+    })
+  ];
 
   checkInputs = [
     utillinux # `rev` is needed in tests/test_process.py
@@ -43,6 +47,6 @@ buildPythonPackage rec {
     homepage = https://github.com/alpernebbi/git-annex-adapter;
     description = "Call git-annex commands from Python";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ dotlambda ];
+    maintainers = with maintainers; [ dotlambda ma27 ];
   };
 }
