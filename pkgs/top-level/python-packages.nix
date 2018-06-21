@@ -462,6 +462,8 @@ in {
 
   salmon-mail = callPackage ../development/python-modules/salmon-mail { };
 
+  seekpath = callPackage ../development/python-modules/seekpath { };
+
   serversyncstorage = callPackage ../development/python-modules/serversyncstorage {};
 
   simpleeval = callPackage ../development/python-modules/simpleeval { };
