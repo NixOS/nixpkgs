@@ -222,6 +222,8 @@ rec {
     useInstantApps = true;
   };
 
+  androidsdk_latest = androidsdk_8_0;
+
   androidndk_10e = import ./androidndk.nix {
     inherit (buildPackages)
       p7zip makeWrapper;
