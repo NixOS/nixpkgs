@@ -3,18 +3,41 @@
 with lib;
 
 let
-  inherit (pkgs) gzip;
 
-  location = config.services.postgresqlBackup.location;
+  cfg = config.services.postgresqlBackup;
 
-  postgresqlBackupCron = db:
-    ''
-      ${config.services.postgresqlBackup.period} root ${config.services.postgresql.package}/bin/pg_dump ${db} | ${gzip}/bin/gzip -c > ${location}/${db}.gz
-    '';
+  postgresqlBackupService = db :
+    {
+      enable = true;
 
-in
+      description = "Backup of database ${db}";
 
-{
+      requires = [ "postgresql.service" ];
+
+      preStart = ''
+        mkdir -m 0700 -p ${cfg.location}
+        chown postgres ${cfg.location}
+      '';
+
+      script = ''
+        if [ -e ${cfg.location}/${db}.sql.gz ]; then
+          ${pkgs.coreutils}/bin/mv ${cfg.location}/${db}.sql.gz ${cfg.location}/${db}.prev.sql.gz
+        fi
+
+        ${config.services.postgresql.package}/bin/pg_dump ${cfg.pgdumpOptions} ${db} | \
+          ${pkgs.gzip}/bin/gzip -c > ${cfg.location}/${db}.sql.gz
+      '';
+
+      serviceConfig = {
+        Type = "oneshot";
+        PermissionsStartOnly = "true";
+        User = "postgres";
+      };
+
+      startAt = cfg.startAt;
+    };
+
+in {
 
   options = {
 
@@ -27,10 +50,10 @@ in
         '';
       };
 
-      period = mkOption {
-        default = "15 01 * * *";
+      startAt = mkOption {
+        default = "*-*-* 01:15:00";
         description = ''
-          This option defines (in the format used by cron) when the
+          This option defines (see <literal>systemd.time</literal> for format) when the
           databases should be dumped.
           The default is to update at 01:15 (at night) every day.
         '';
@@ -49,18 +72,23 @@ in
           Location to put the gzipped PostgreSQL database dumps.
         '';
       };
+
+      pgdumpOptions = mkOption {
+        type = types.string;
+        default = "-Cbo";
+        description = ''
+          Command line options for pg_dump.
+        '';
+      };
     };
 
   };
 
   config = mkIf config.services.postgresqlBackup.enable {
-    services.cron.systemCronJobs = map postgresqlBackupCron config.services.postgresqlBackup.databases;
 
-    system.activationScripts.postgresqlBackup = stringAfter [ "stdio" "users" ]
-      ''
-        mkdir -m 0700 -p ${config.services.postgresqlBackup.location}
-        chown root ${config.services.postgresqlBackup.location}
-      '';
+    systemd.services = listToAttrs (map (db : {
+          name = "postgresqlBackup-${db}";
+          value = postgresqlBackupService db; } ) cfg.databases);
   };
 
 }

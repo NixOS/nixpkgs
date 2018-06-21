@@ -75,7 +75,7 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   meta = with stdenv.lib; {
-    description = "GNU Emacs 25, the extensible, customizable text editor";
+    description = "The extensible, customizable text editor";
     homepage    = http://www.gnu.org/software/emacs/;
     license     = licenses.gpl3Plus;
     maintainers = with maintainers; [ jwiegley matthewbauer ];
@@ -97,7 +97,7 @@ stdenv.mkDerivation rec {
       extensions are distributed with GNU Emacs; others are available
       separately.
 
-      This is "Mac port" addition to GNU Emacs 25. This provides a native
+      This is the "Mac port" addition to GNU Emacs 26. This provides a native
       GUI support for Mac OS X 10.6 - 10.12. Note that Emacs 23 and later
       already contain the official GUI support via the NS (Cocoa) port for
       Mac OS X 10.4 and later. So if it is good enough for you, then you
