@@ -34,6 +34,7 @@ should look like:
 | Lenovo ThinkPad X220      | ~<nixos-hardware/lenovo/thinkpad/x220>~    |
 | Lenovo ThinkPad X230      | ~<nixos-hardware/lenovo/thinkpad/x230>~    |
 | Lenovo ThinkPad X250      | ~<nixos-hardware/lenovo/thinkpad/x250>~    |
+| Lenovo ThinkPad X270      | ~<nixos-hardware/lenovo/thinkpad/x270>~    |
 | [[file:microsoft/surface-pro/3][Microsoft Surface Pro 3]]   | ~<nixos-hardware/microsoft/surface-pro/3>~ |
 | PC Engines APU            | ~<nixos-hardware/pcengines/apu>~           |
 | [[file:raspberry-pi/2][Raspberry Pi 2]]            | ~<nixos-hardware/raspberry-pi/2>~          |
