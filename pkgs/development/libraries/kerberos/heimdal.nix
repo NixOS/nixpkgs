@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     sha256 = "1j38wjj4k0q8vx168k3d3k0fwa8j1q5q8f2688nnx1b9qgjd6w1d";
   };
 
-  outputs = [ "out" "bin" "dev" "man" ];
+  outputs = [ "out" "bin" "dev" "man" "info" ];
 
   patches = [ ./heimdal-make-missing-headers.patch ];
 
@@ -30,6 +30,7 @@ stdenv.mkDerivation rec {
   configureFlags = [
     "--sysconfdir=/etc"
     "--localstatedir=/var"
+    "--infodir=$info/share/info"
     "--enable-hdb-openldap-module"
     "--with-sqlite3=${sqlite.dev}"
 
@@ -66,7 +67,6 @@ stdenv.mkDerivation rec {
     (cd lib/hcrypto; make -j $NIX_BUILD_CORES)
   '';
 
-  # FIXME: share/info hits $bin, IDK why, but I decide is to minor to block
   postInstall = ''
     # Install hcrypto
     (cd include/hcrypto; make -j $NIX_BUILD_CORES install)
