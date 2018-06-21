@@ -179,6 +179,8 @@ in mkDerivation (rec {
     # let us assume ghcjs is never actually cross compiled
     targetPrefix = "";
 
+    enableShared = true;
+
     inherit stage1Packages;
     mkStage2 = stage2 {
       inherit ghcjsBoot;
