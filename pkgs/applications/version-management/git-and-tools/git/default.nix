@@ -109,6 +109,7 @@ stdenv.mkDerivation {
   preInstall = stdenv.lib.optionalString stdenv.isDarwin ''
     mkdir -p $out/bin
     cp -a $PWD/contrib/credential/osxkeychain/git-credential-osxkeychain $out/bin
+    rm -f $PWD/contrib/credential/osxkeychain/git-credential-osxkeychain.o
   '';
 
   postInstall =
