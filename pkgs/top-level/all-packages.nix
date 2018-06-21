@@ -10158,6 +10158,8 @@ with pkgs;
 
   libf2c = callPackage ../development/libraries/libf2c {};
 
+  libfive = callPackage ../development/libraries/libfive {};
+
   libfixposix = callPackage ../development/libraries/libfixposix {};
 
   libffcall = callPackage ../development/libraries/libffcall { };
