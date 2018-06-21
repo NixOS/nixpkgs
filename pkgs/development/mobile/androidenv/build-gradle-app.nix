@@ -1,66 +1,48 @@
-{ stdenv, androidsdk, jdk, androidndk, gnumake, gawk, file, which, gradle, fetchurl, buildEnv }:
+{ stdenv, androidsdk, jdk, androidndk, gnumake, gawk, file
+, which, gradle, fetchurl, buildEnv, runCommand }:
 
-args@{ name, src, platformVersions ? [ "8" ], useGoogleAPIs ? false, useExtraSupportLibs ? false, useGooglePlayServices ? false
-, release ? false, keyStore ? null, keyAlias ? null, keyStorePassword ? null, keyAliasPassword ? null
-, useNDK ? false, buildInputs ? [], mavenDeps, gradleTask, buildDirectory ? "./.", acceptAndroidSdkLicenses ? false
-}:
+args@{ name, src, platformVersions ? [ "8" ], useGoogleAPIs ? false
+     , useExtraSupportLibs ? false, useGooglePlayServices ? false
+     , release ? false, keyStore ? null, keyAlias ? null
+     , keyStorePassword ? null, keyAliasPassword ? null
+     , useNDK ? false, buildInputs ? [], mavenDeps, gradleTask
+     , buildDirectory ? "./.", acceptAndroidSdkLicenses ? false }:
 
-assert release -> keyStore != null && keyAlias != null && keyStorePassword != null && keyAliasPassword != null;
+assert release -> keyStore != null;
+assert release -> keyAlias != null;
+assert release -> keyStorePassword != null;
+assert release -> keyAliasPassword != null;
 assert acceptAndroidSdkLicenses;
 
 let
-  m2install = { repo, version, artifactId, groupId, jarSha256, pomSha256, aarSha256, suffix ? "" }:
+  inherit (stdenv.lib) optionalString;
+
+  m2install = { repo, version, artifactId, groupId
+              , jarSha256, pomSha256, aarSha256, suffix ? "" }:
     let m2Name = "${artifactId}-${version}";
         m2Path = "${builtins.replaceStrings ["."] ["/"] groupId}/${artifactId}/${version}";
-        m2PomFilename = "${m2Name}${suffix}.pom";
-        m2JarFilename = "${m2Name}${suffix}.jar";
-        m2AarFilename = "${m2Name}${suffix}.aar";
-        m2Jar = 
-          if jarSha256 == null
-            then null
-            else fetchurl {
-              sha256 = jarSha256;
-              url = "${repo}${m2Path}/${m2JarFilename}";
-            };
-        m2Pom =
-          if pomSha256 == null
-            then null
-            else fetchurl {
-              sha256 = pomSha256;
-              url = "${repo}${m2Path}/${m2PomFilename}";
-            };
-        m2Aar = 
-          if aarSha256 == null
-            then null
-            else fetchurl {
-              sha256 = aarSha256;
-              url = "${repo}${m2Path}/${m2AarFilename}";
-            };
-    in stdenv.mkDerivation rec {
-      name = m2Name;
-      inherit m2Name m2Path m2Pom m2Jar m2Aar m2JarFilename m2PomFilename m2AarFilename;
-
-      installPhase = ''
-        mkdir -p $out/m2/$m2Path
-        ${if m2Jar != null 
-            then "cp $m2Jar $out/m2/$m2Path/$m2JarFilename"
-            else ""}
-        ${if m2Pom != null
-            then "cp $m2Pom $out/m2/$m2Path/$m2PomFilename"
-            else ""}
-        ${if m2Aar != null 
-            then "cp $m2Aar $out/m2/$m2Path/$m2AarFilename"
-            else ""}
-      '';
-
-      phases = "installPhase";
-    };
-  platformName = if stdenv.system == "i686-linux" || stdenv.system == "x86_64-linux" then "linux"
-    else if stdenv.system == "x86_64-darwin" then "macosx"
-    else throw "Platform: ${stdenv.system} is not supported!";
+    in runCommand m2Name {} (''
+         mkdir -p $out/m2/${m2Path}
+       '' + optionalString (jarSha256 != null) ''
+         install -D ${fetchurl {
+                        url = "${repo}${m2Path}/${m2Name}${suffix}.jar";
+                        sha256 = jarSha256;
+                      }} $out/m2/${m2Path}/${m2Name}${suffix}.jar
+       '' + optionalString (pomSha256 != null) ''
+         install -D ${fetchurl {
+                        url = "${repo}${m2Path}/${m2Name}${suffix}.pom";
+                        sha256 = pomSha256;
+                      }} $out/m2/${m2Path}/${m2Name}${suffix}.pom
+       '' + optionalString (aarSha256 != null) ''
+         install -D ${fetchurl {
+                        url = "${repo}${m2Path}/${m2Name}${suffix}.aar";
+                        sha256 = aarSha256;
+                      }} $out/m2/${m2Path}/${m2Name}${suffix}.aar
+       '');
 
   androidsdkComposition = androidsdk {
-    inherit platformVersions useGoogleAPIs useExtraSupportLibs useGooglePlayServices;
+    inherit platformVersions useGoogleAPIs
+            useExtraSupportLibs useGooglePlayServices;
     abiVersions = [ "armeabi-v7a" ];
   };
 in
@@ -68,7 +50,7 @@ stdenv.mkDerivation ({
   name = stdenv.lib.replaceChars [" "] [""] name;
 
   ANDROID_HOME = "${androidsdkComposition}/libexec";
-  ANDROID_NDK_HOME = "${androidndk}/libexec/android-ndk-r10e";
+  ANDROID_NDK_HOME = "${androidndk}/libexec/${androidndk.name}";
 
   buildInputs = [ jdk gradle ] ++
     stdenv.lib.optional useNDK [ androidndk gnumake gawk file which ] ++
@@ -79,7 +61,7 @@ stdenv.mkDerivation ({
                           };
 
   buildPhase = ''
-    ${stdenv.lib.optionalString release ''
+    ${optionalString release ''
       # Provide key signing attributes
       ( echo "RELEASE_STORE_FILE=${keyStore}"
         echo "RELEASE_KEY_ALIAS=${keyAlias}"
@@ -91,9 +73,11 @@ stdenv.mkDerivation ({
     cp -r $ANDROID_HOME $buildDir/local_sdk
     chmod -R 755 local_sdk
     export ANDROID_HOME=$buildDir/local_sdk
-    export ANDROID_SDK_HOME=`pwd` # Key files cannot be stored in the user's home directory. This overrides it.
+    # Key files cannot be stored in the user's home directory. This
+    # overrides it.
+    export ANDROID_SDK_HOME=`pwd`
 
-    mkdir "$ANDROID_HOME/licenses" || true
+    mkdir -p "$ANDROID_HOME/licenses"
     echo -e "\n8933bad161af4178b1185d1a37fbf41ea5269c55" > "$ANDROID_HOME/licenses/android-sdk-license"
     echo -e "\n84831b9409646a918e30573bab4c9c91346d8abd" > "$ANDROID_HOME/licenses/android-sdk-preview-license"
 
@@ -113,9 +97,8 @@ stdenv.mkDerivation ({
   installPhase = ''
     mkdir -p $out
     mv ${buildDirectory}/build/outputs/apk/*.apk $out
-    
+
     mkdir -p $out/nix-support
     echo "file binary-dist \"$(echo $out/*.apk)\"" > $out/nix-support/hydra-build-products
   '';
-} //
-builtins.removeAttrs args ["name" "mavenDeps"])
+} // builtins.removeAttrs args ["name" "mavenDeps"])

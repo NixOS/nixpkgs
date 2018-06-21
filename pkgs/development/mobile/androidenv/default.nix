@@ -2,6 +2,8 @@
 , includeSources ? true
 }:
 
+# TODO: use callPackage instead of import to avoid so many inherits
+
 rec {
   platformTools = import ./platform-tools.nix {
     inherit buildPackages pkgs;
@@ -46,11 +48,16 @@ rec {
   };
 
   androidsdk = import ./androidsdk.nix {
-    inherit (pkgs) stdenv fetchurl unzip makeWrapper;
-    inherit (pkgs) zlib glxinfo freetype fontconfig glib gtk2 atk libGLU_combined file alsaLib jdk coreutils libpulseaudio dbus;
-    inherit (pkgs.xorg) libX11 libXext libXrender libxcb libXau libXdmcp libXtst xkeyboardconfig;
+    inherit (pkgs) stdenv fetchurl unzip makeWrapper zlib
+                   glxinfo freetype fontconfig glib gtk2 atk
+                   libGLU_combined file alsaLib jdk coreutils
+                   libpulseaudio dbus fetchzip;
+    inherit (pkgs.xorg) libX11 libXext libXrender
+                        libxcb libXau libXdmcp libXtst xkeyboardconfig;
 
-    inherit platformTools buildTools support supportRepository platforms sysimages addons sources includeSources;
+    inherit platformTools buildTools support
+            supportRepository platforms sysimages
+            addons sources includeSources;
 
     stdenv_32bit = pkgs_i686.stdenv;
   };
@@ -298,7 +305,8 @@ rec {
   };
 
   buildGradleApp = import ./build-gradle-app.nix {
-    inherit (pkgs) stdenv jdk gnumake gawk file which gradle fetchurl buildEnv;
+    inherit (pkgs) stdenv jdk gnumake gawk file runCommand
+                   which gradle fetchurl buildEnv;
     inherit androidsdk androidndk;
   };
 }

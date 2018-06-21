@@ -176,7 +176,7 @@ stdenv.mkDerivation rec {
     ${stdenv.lib.optionalString useInstantApps
        "ln -s ${addons.instant_apps}/whsdk instantapps"}
 
-    ln -s ${googleRepository}/m2repository
+    ln -s ${googleRepository} m2repository
 
     cd ../..
 
