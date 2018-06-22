@@ -52,13 +52,10 @@ let
       This index includes documentation for many Haskell modules.
     '';
 
-  # Packages like base and bytestring are null. These must be removed
-  # to prevent eval errors.
-  nonNullPackages = builtins.filter (p: p != null) packages;
   # TODO: closePropagation is deprecated; replace
   docPackages = lib.closePropagation
     # we grab the doc outputs
-    (map (lib.getOutput "doc") nonNullPackages);
+    (map (lib.getOutput "doc") packages);
 
 in
 stdenv.mkDerivation {
@@ -70,10 +67,10 @@ stdenv.mkDerivation {
   inherit docPackages;
 
   buildPhase = ''
-    ${lib.optionalString (nonNullPackages != [] -> docPackages == [])
+    ${lib.optionalString (packages != [] -> docPackages == [])
        ("echo WARNING: localHoogle package list empty, even though"
        + " the following were specified: "
-       + lib.concatMapStringsSep ", " (p: p.name) nonNullPackages)}
+       + lib.concatMapStringsSep ", " (p: p.name) packages)}
     mkdir -p $out/share/doc/hoogle
 
     echo importing builtin packages
@@ -89,9 +86,10 @@ stdenv.mkDerivation {
     ${lib.concatMapStringsSep "\n" (el: ''
         ln -sfn ${el.haddockDir} "$out/share/doc/hoogle/${el.name}"
       '')
-      (builtins.map (p: { haddockDir = if p ? haddockDir then p.haddockDir p else null;
-                          name = p.pname; })
-        docPackages)}
+      (lib.filter (el: el.haddockDir != null)
+        (builtins.map (p: { haddockDir = if p ? haddockDir then p.haddockDir p else null;
+                            name = p.pname; })
+          docPackages))}
 
     echo building hoogle database
     hoogle generate --database $out/share/doc/hoogle/default.hoo --local=$out/share/doc/hoogle
