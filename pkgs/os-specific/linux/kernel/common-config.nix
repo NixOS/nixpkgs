@@ -56,17 +56,15 @@ let
       DETECT_HUNG_TASK          = yes;
       CRASH_DUMP                = option no;
       # Easier debugging of NFS issues.
-      SUNRPC_DEBUG              = whenAtLeast "3.4" yes;
+      SUNRPC_DEBUG              = yes;
     };
 
     power-management = {
-      PM_RUNTIME                       = whenOlder "3.19" yes;
       PM_ADVANCED_DEBUG                = yes;
-      X86_INTEL_LPSS                   = whenAtLeast "3.11" yes;
-      X86_INTEL_PSTATE                 = whenAtLeast "3.10" yes;
+      X86_INTEL_LPSS                   = yes;
+      X86_INTEL_PSTATE                 = yes;
       INTEL_IDLE                       = yes;
       CPU_FREQ_DEFAULT_GOV_PERFORMANCE = yes;
-      USB_SUSPEND                      = whenOlder "3.10" yes;
       PM_WAKELOCKS                     = yes;
     };
 
@@ -110,7 +108,6 @@ let
     networking = {
       NET                = yes;
       IP_PNP             = no;
-      IPV6_PRIVACY       = whenOlder "3.13" yes;
       NETFILTER          = yes;
       NETFILTER_ADVANCED = yes;
       IP_VS_PROTO_TCP    = yes;
@@ -163,7 +160,7 @@ let
       HOSTAP_FIRMWARE_NVRAM = option yes;
       ATH9K_PCI             = option yes; # Detect Atheros AR9xxx cards on PCI(e) bus
       ATH9K_AHB             = option yes; # Ditto, AHB bus
-      B43_PHY_HT            = option (whenAtLeast "3.2" yes);
+      B43_PHY_HT            = option yes;
       BCMA_HOST_PCI         = option yes;
     };
 
@@ -182,7 +179,7 @@ let
       FB_VESA             = yes;
       FRAMEBUFFER_CONSOLE = yes;
       FRAMEBUFFER_CONSOLE_ROTATION = yes;
-      FB_GEODE            = when (versionOlder version "3.9" || stdenv.system == "i686-linux") yes;
+      FB_GEODE            = when (stdenv.system == "i686-linux") yes;
     };
 
     video = {
@@ -190,7 +187,6 @@ let
       DRM_I915_KMS           = whenOlder "4.3" yes;
       # Allow specifying custom EDID on the kernel command line
       DRM_LOAD_EDID_FIRMWARE = yes;
-      DRM_RADEON_KMS         = option (whenOlder "3.9" yes);
       VGA_SWITCHEROO         = yes; # Hybrid graphics support
       DRM_GMA600             = yes;
       DRM_GMA3600            = yes;
@@ -221,7 +217,8 @@ let
     usb-serial = {
       USB_SERIAL_GENERIC          = yes; # USB Generic Serial Driver
     } // optionalAttrs (versionOlder version "4.16") {
-      USB_SERIAL_KEYSPAN_MPR      = yes; # include firmware for various USB serial devices
+      # include firmware for various USB serial devices
+      USB_SERIAL_KEYSPAN_MPR      = yes;
       USB_SERIAL_KEYSPAN_USA28    = yes;
       USB_SERIAL_KEYSPAN_USA28X   = yes;
       USB_SERIAL_KEYSPAN_USA28XA  = yes;
@@ -236,7 +233,7 @@ let
     };
 
     usb = {
-      USB_DEBUG            = option (whenOlder "3.15" no);
+      USB_DEBUG            = option no;
       USB_EHCI_ROOT_HUB_TT = yes; # Root Hub Transaction Translators
       USB_EHCI_TT_NEWSCHED = yes; # Improved transaction translator scheduling
     };
@@ -288,14 +285,14 @@ let
       NFSD_V3                = yes;
       NFSD_V3_ACL            = yes;
       NFSD_V4                = yes;
-      NFSD_V4_SECURITY_LABEL = whenAtLeast "3.11" yes;
+      NFSD_V4_SECURITY_LABEL = yes;
 
       NFS_FSCACHE           = yes;
-      NFS_SWAP              = whenAtLeast "3.6" yes;
+      NFS_SWAP              = yes;
       NFS_V3_ACL            = yes;
-      NFS_V4_1              = whenAtLeast "3.11" yes;  # NFSv4.1 client support
-      NFS_V4_2              = whenAtLeast "3.11" yes;
-      NFS_V4_SECURITY_LABEL = whenAtLeast "3.11" yes;
+      NFS_V4_1              = yes;  # NFSv4.1 client support
+      NFS_V4_2              = yes;
+      NFS_V4_SECURITY_LABEL = yes;
 
       CIFS_XATTR        = yes;
       CIFS_POSIX        = yes;
@@ -305,25 +302,24 @@ let
       CIFS_UPCALL       = yes;
       CIFS_ACL          = yes;
       CIFS_DFS_UPCALL   = yes;
-      CIFS_SMB2         = whenOlder "4.13" yes;
 
-      CEPH_FSCACHE      = whenAtLeast "3.12" yes;
-      CEPH_FS_POSIX_ACL = whenAtLeast "3.14" yes;
+      CEPH_FSCACHE      = yes;
+      CEPH_FS_POSIX_ACL = yes;
 
-      SQUASHFS_FILE_DIRECT         = whenAtLeast "3.13" yes;
-      SQUASHFS_DECOMP_MULTI_PERCPU = whenAtLeast "3.13" yes;
+      SQUASHFS_FILE_DIRECT         = yes;
+      SQUASHFS_DECOMP_MULTI_PERCPU = yes;
       SQUASHFS_XATTR               = yes;
       SQUASHFS_ZLIB                = yes;
       SQUASHFS_LZO                 = yes;
       SQUASHFS_XZ                  = yes;
-      SQUASHFS_LZ4                 = whenAtLeast "3.19" yes;
+      SQUASHFS_LZ4                 = yes;
 
       # Native Language Support modules, needed by some filesystems
-      NLS   = yes;
-      NLS_DEFAULT =  "utf8";
-      NLS_UTF8    = module;
-      NLS_CODEPAGE_437 = module; # VFAT default for the codepage= mount option
-      NLS_ISO8859_1 = module;    # VFAT default for the iocharset= mount option
+      NLS              = yes;
+      NLS_DEFAULT      =  "utf8";
+      NLS_UTF8         = module;
+      NLS_CODEPAGE_437 = module; # VFAT default for the codepage    = mount option
+      NLS_ISO8859_1    = module;    # VFAT default for the iocharset= mount option
 
       DEVTMPFS = yes;
     };
@@ -338,16 +334,14 @@ let
       SECURITY_YAMA                    = option yes;
       DEVKMEM                          = when (!grsecurity) no; # Disable /dev/kmem
 
-      USER_NS                          = whenAtLeast "3.12" yes; # Support for user namespaces
+      USER_NS                          = yes; # Support for user namespaces
 
       SECURITY_APPARMOR                = yes;
       DEFAULT_SECURITY_APPARMOR        = yes;
 
-      AUDIT_LOGINUID_IMMUTABLE = whenBetween "3.3" "3.13" yes;
     } // optionalAttrs (!stdenv.hostPlatform.isAarch32) {
 
       # Detect buffer overflows on the stack
-      CC_STACKPROTECTOR         = option (whenOlder "3.14" yes);
       CC_STACKPROTECTOR_REGULAR = option (whenOlder "4.18" yes);
     };
 
@@ -356,9 +350,9 @@ let
       MICROCODE_INTEL = yes;
       MICROCODE_AMD   = yes;
 
-      MICROCODE_EARLY       = whenBetween "3.11" "4.4" yes;
-      MICROCODE_INTEL_EARLY = whenBetween "3.11" "4.4" yes;
-      MICROCODE_AMD_EARLY   = whenBetween "3.11" "4.4" yes;
+      MICROCODE_EARLY       = whenOlder "4.4" yes;
+      MICROCODE_INTEL_EARLY = whenOlder "4.4" yes;
+      MICROCODE_AMD_EARLY   = whenOlder "4.4" yes;
     } // optionalAttrs (versionAtLeast version "4.10") {
       # Write Back Throttling
       # https://lwn.net/Articles/682582/
@@ -373,10 +367,8 @@ let
       RT_GROUP_SCHED = no;
       CGROUP_DEVICE  = option yes;
 
-      MEMCG                    = whenAtLeast "3.6" yes;
-      MEMCG_SWAP               = whenAtLeast "3.6" yes;
-      CGROUP_MEM_RES_CTLR      = whenOlder "3.6" yes;
-      CGROUP_MEM_RES_CTLR_SWAP = whenOlder "3.6" yes;
+      MEMCG                    = yes;
+      MEMCG_SWAP               = yes;
 
       DEVPTS_MULTIPLE_INSTANCES = whenOlder "4.7" yes;
       BLK_DEV_THROTTLING        = yes;
@@ -415,25 +407,23 @@ let
     virtualisation = {
       PARAVIRT = option yes;
 
-      HYPERVISOR_GUEST = when (!grsecurity && versionAtLeast version "3.10") yes;
-      PARAVIRT_GUEST   = option (when (!grsecurity && versionOlder   version "3.10") yes);
+      HYPERVISOR_GUEST = when (!grsecurity) yes;
       PARAVIRT_SPINLOCKS  = option yes;
 
       KVM_APIC_ARCHITECTURE             = whenOlder "4.8" yes;
       KVM_ASYNC_PF                      = yes;
-      KVM_CLOCK                         = option (whenOlder   "3.7"  yes);
       KVM_COMPAT                        = option (whenBetween "4.0" "4.12"  yes);
       KVM_DEVICE_ASSIGNMENT             = option (whenBetween "3.10" "4.12" yes);
       KVM_GENERIC_DIRTYLOG_READ_PROTECT = whenAtLeast "4.0"  yes;
       KVM_GUEST                         = when (!grsecurity) yes;
       KVM_MMIO                          = yes;
-      KVM_VFIO                          = whenAtLeast "3.13" yes;
+      KVM_VFIO                          = yes;
       KSM = yes;
       VIRT_DRIVERS = yes;
       # We nneed 64 GB (PAE) support for Xen guest support
       HIGHMEM64G = option (when (!stdenv.is64bit) yes);
 
-      VFIO_PCI_VGA = when (versionAtLeast version "3.9" && stdenv.is64bit) yes;
+      VFIO_PCI_VGA = when stdenv.is64bit yes;
 
     } // optionalAttrs (stdenv.isx86_64 || stdenv.isi686) ({
       XEN = option yes;
@@ -441,7 +431,7 @@ let
       # XXX: why isn't this in the xen-dom0 conditional section below?
       XEN_DOM0 = option yes;
 
-    } // optionalAttrs (versionAtLeast version "3.18" && xen_dom0) {
+    } // optionalAttrs xen_dom0 {
       PCI_XEN                     = option yes;
       HVC_XEN                     = option yes;
       HVC_XEN_FRONTEND            = option yes;
@@ -490,7 +480,7 @@ let
       ZRAM     = module;
       ZSWAP    = option yes;
       ZBUD     = option yes;
-      ZSMALLOC = if (versionOlder version "3.18") then yes else module;
+      ZSMALLOC = module;
     };
 
     brcmfmac = {
@@ -567,15 +557,13 @@ let
 
 
     misc = {
-      MODULE_COMPRESS    = whenAtLeast "3.18" yes;
-      MODULE_COMPRESS_XZ = whenAtLeast "3.18" yes;
+      MODULE_COMPRESS    = yes;
+      MODULE_COMPRESS_XZ = yes;
       KERNEL_XZ          = yes;
 
-      # Unix domain sockets.
-      UNIX               = yes;
+      UNIX               = yes;  # Unix domain sockets.
 
-      # Device mapper (RAID, LVM, etc.)
-      MD = yes;
+      MD                 = yes;     # Device mapper (RAID, LVM, etc.)
 
       # Enable initrd support.
       BLK_DEV_RAM       = yes;
@@ -588,7 +576,6 @@ let
       DONGLE               = whenOlder "4.17" yes; # Serial dongle support
       HIPPI                = yes;
       MTD_COMPLEX_MAPPINGS = yes; # needed for many devices
-      NET_POCKET           = whenOlder "3.2" yes; # enable pocket and portable adapters
 
       SCSI_LOWLEVEL        = yes; # enable lots of SCSI devices
       SCSI_LOWLEVEL_PCMCIA = yes;
@@ -604,7 +591,6 @@ let
       AIC79XX_DEBUG_ENABLE = no;
       AIC7XXX_DEBUG_ENABLE = no;
       AIC94XX_DEBUG = no;
-      AUDIT_LOGINUID_IMMUTABLE = whenBetween "3.3" "3.13" yes;
       B43_PCMCIA = option (whenOlder "4.4" yes);
 
       BLK_DEV_INTEGRITY       = yes;
@@ -614,26 +600,24 @@ let
       BT_HCIUART_BCSP = option yes;
       BT_HCIUART_H4   = option yes; # UART (H4) protocol support
       BT_HCIUART_LL   = option yes;
-      BT_RFCOMM_TTY   = option (whenAtLeast "3.4" yes); # RFCOMM TTY support
+      BT_RFCOMM_TTY   = option yes; # RFCOMM TTY support
 
       CLEANCACHE = option yes;
-      CRASH_DUMP  = option no;
-
-      DMAR = option (whenOlder "3.1" no); # experimental
+      CRASH_DUMP = option no;
 
       DVB_DYNAMIC_MINORS = option yes; # we use udev
 
-      EFI_STUB = whenAtLeast "3.3" yes; # EFI bootloader in the bzImage itself
-      CGROUPS      = yes; # used by systemd
-      FHANDLE      = yes; # used by systemd
-      SECCOMP      = yes; # used by systemd >= 231
-      SECCOMP_FILTER = yes; # ditto
-      POSIX_MQUEUE = yes;
-      FRONTSWAP    = yes;
-      FUSION       = yes; # Fusion MPT device support
-      IDE          = no; # deprecated IDE support
-      IDLE_PAGE_TRACKING  = whenAtLeast "4.3" yes;
-      IRDA_ULTRA   = whenOlder "4.17" yes; # Ultra (connectionless) protocol
+      EFI_STUB            = yes; # EFI bootloader in the bzImage itself
+      CGROUPS             = yes; # used by systemd
+      FHANDLE             = yes; # used by systemd
+      SECCOMP             = yes; # used by systemd >= 231
+      SECCOMP_FILTER      = yes; # ditto
+      POSIX_MQUEUE        = yes;
+      FRONTSWAP           = yes;
+      FUSION              = yes; # Fusion MPT device support
+      IDE                 = no; # deprecated IDE support
+      IDLE_PAGE_TRACKING  = yes;
+      IRDA_ULTRA          = whenOlder "4.17" yes; # Ultra (connectionless) protocol
 
       JOYSTICK_IFORCE_232 = option yes; # I-Force Serial joysticks and wheels
       JOYSTICK_IFORCE_USB = option yes; # I-Force USB joysticks and wheels
@@ -650,23 +634,23 @@ let
       MEDIA_ATTACH          = yes;
       MEGARAID_NEWGEN       = yes;
 
-      MLX4_EN_VXLAN = whenBetween "3.15" "4.8" yes;
+      MLX4_EN_VXLAN = whenOlder "4.8" yes;
 
       MODVERSIONS        = whenOlder "4.9" yes;
       MOUSE_PS2_ELANTECH = yes; # Elantech PS/2 protocol extension
       MTRR_SANITIZER     = yes;
       NET_FC             = yes; # Fibre Channel driver support
       # GPIO on Intel Bay Trail, for some Chromebook internal eMMC disks
-      PINCTRL_BAYTRAIL   = whenAtLeast "3.11" yes;
+      PINCTRL_BAYTRAIL   = yes;
       # 8 is default. Modern gpt tables on eMMC may go far beyond 8.
       MMC_BLOCK_MINORS   = "32";
 
 
       REGULATOR  = yes; # Voltage and Current Regulator Support
-      RC_DEVICES = option (whenAtLeast "3.6" yes); # Enable IR devices
+      RC_DEVICES = option yes; # Enable IR devices
 
       RT2800USB_RT53XX = yes;
-      RT2800USB_RT55XX = whenAtLeast "3.10" yes;
+      RT2800USB_RT55XX = yes;
 
       SCHED_AUTOGROUP  = yes;
       CFS_BANDWIDTH    = yes;
@@ -679,22 +663,22 @@ let
 
       HWMON         = yes;
       THERMAL_HWMON = yes; # Hardware monitoring support
-      UEVENT_HELPER = whenAtLeast "3.15" no;
+      UEVENT_HELPER = no;
 
-      USERFAULTFD   = whenAtLeast "4.3" yes;
+      USERFAULTFD   = yes;
       X86_CHECK_BIOS_CORRUPTION = yes;
       X86_MCE                   = yes;
 
       # Our initrd init uses shebang scripts, so can't be modular.
-      BINFMT_SCRIPT = whenAtLeast "3.10" yes;
+      BINFMT_SCRIPT = yes;
       # For systemd-binfmt
       BINFMT_MISC   = option yes;
 
       # Disable the firmware helper fallback, udev doesn't implement it any more
       FW_LOADER_USER_HELPER_FALLBACK = option no;
 
-      HOTPLUG_PCI_ACPI  = whenAtLeast "3.12" yes; # PCI hotplug using ACPI
-      HOTPLUG_PCI_PCIE = whenAtLeast "3.12" yes; # PCI-Expresscard hotplug support
+      HOTPLUG_PCI_ACPI = yes; # PCI hotplug using ACPI
+      HOTPLUG_PCI_PCIE = yes; # PCI-Expresscard hotplug support
 
     } // optionalAttrs (stdenv.hostPlatform.system == "x86_64-linux" || stdenv.hostPlatform.system == "aarch64-linux") {
       # Bump the maximum number of CPUs to support systems like EC2 x1.*
