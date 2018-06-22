@@ -226,7 +226,7 @@ rec {
 
   androidndk_10e = import ./androidndk.nix {
     inherit (buildPackages)
-      p7zip makeWrapper;
+      unzip makeWrapper;
     inherit (pkgs)
       stdenv fetchurl zlib ncurses5 lib python3 libcxx
       coreutils file findutils gawk gnugrep gnused jdk which;
@@ -237,7 +237,7 @@ rec {
 
   androidndk_16b = import ./androidndk.nix {
     inherit (buildPackages)
-      p7zip makeWrapper;
+       unzip makeWrapper;
     inherit (pkgs)
       stdenv fetchurl zlib ncurses5 lib python3 libcxx
       coreutils file findutils gawk gnugrep gnused jdk which;
@@ -248,7 +248,7 @@ rec {
 
   androidndk_17 = import ./androidndk.nix {
     inherit (buildPackages)
-      p7zip makeWrapper;
+      unzip makeWrapper;
     inherit (pkgs)
       stdenv fetchurl zlib ncurses5 lib python3 libcxx
       coreutils file findutils gawk gnugrep gnused jdk which;
