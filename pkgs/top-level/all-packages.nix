@@ -2656,6 +2656,8 @@ with pkgs;
     stdenv = overrideCC stdenv gcc49;
   };
 
+  gnirehtet = callPackage ../tools/networking/gnirehtet { };
+
   gnome15 = callPackage ../applications/misc/gnome15 {
     inherit (gnome2) gnome_python gnome_python_desktop;
   };
