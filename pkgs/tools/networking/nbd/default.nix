@@ -1,14 +1,12 @@
 { stdenv, fetchurl, pkgconfig, glib }:
 
 stdenv.mkDerivation rec {
-  name = "nbd-3.14";
+  name = "nbd-3.17";
 
   src = fetchurl {
     url = "mirror://sourceforge/nbd/${name}.tar.xz";
-    sha256 = "0cc6wznvkgjv0fxsj3diy92qfsjrsw92m7yq13f044qarh726gad";
+    sha256 = "12fil2hb3gkxslr3nl9kak93n4iyhfs3zdwrmx9vjcxblfqnnp6r";
   };
-
-  patches = [ ./dont-run-make-in-broken-systemd-subdir.patch ];
 
   buildInputs =
     [ pkgconfig glib ]
