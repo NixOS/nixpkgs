@@ -35,11 +35,6 @@ stdenv.mkDerivation rec {
     cd $out/libexec
     unzip -qq $src
 
-    # Steps to reduce output size
-    rm -rf docs sources tests
-    # We only support cross compiling with gcc for now
-    rm -rf toolchains/*-clang* toolchains/llvm-*
-
     patchShebangs ${pkg_path}
 
     # so that it doesn't fail because of read-only permissions set
@@ -59,6 +54,11 @@ stdenv.mkDerivation rec {
         ''
     }
     cd ${pkg_path}
+
+    # Steps to reduce output size
+    rm -rf ${pkg_path}/docs ${pkg_path}/sources ${pkg_path}/tests
+    # We only support cross compiling with gcc for now
+    rm -rf ${pkg_path}/toolchains/*-clang* ${pkg_path}/toolchains/llvm-*
 
     find ${pkg_path}/toolchains \( \
         \( -type f -a -name "*.so*" \) -o \
