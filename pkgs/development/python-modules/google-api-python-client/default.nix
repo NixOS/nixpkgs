@@ -1,5 +1,5 @@
 { lib, buildPythonPackage, fetchPypi
-, httplib2, six, oauth2client, uritemplate }:
+, httplib2, six, google-auth-httplib2, uritemplate }:
 
 buildPythonPackage rec {
   pname = "google-api-python-client";
@@ -13,7 +13,7 @@ buildPythonPackage rec {
   # No tests included in archive
   doCheck = false;
 
-  propagatedBuildInputs = [ httplib2 six oauth2client uritemplate ];
+  propagatedBuildInputs = [ httplib2 google-auth-httplib2 six uritemplate ];
 
   meta = with lib; {
     description = "The core Python library for accessing Google APIs";
