@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, zlib, ncurses5, p7zip, lib, makeWrapper
+{ stdenv, fetchurl, zlib, ncurses5, unzip, lib, makeWrapper
 , coreutils, file, findutils, gawk, gnugrep, gnused, jdk, which
 , platformTools, python3, libcxx, version, sha256
 }:
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   phases = "buildPhase";
 
-  nativeBuildInputs = [ p7zip makeWrapper file ];
+  nativeBuildInputs = [ unzip makeWrapper file ];
 
   buildCommand = let
     bin_path = "$out/bin";
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
   in ''
     mkdir -pv $out/libexec
     cd $out/libexec
-    7z x $src
+    unzip -qq $src
 
     patchShebangs ${pkg_path}
 
