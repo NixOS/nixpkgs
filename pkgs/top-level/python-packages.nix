@@ -12116,31 +12116,7 @@ in {
   };
 
 
-  django-haystack = buildPythonPackage rec {
-    name = "django-haystack-${version}";
-    version = "2.4.1";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/d/django-haystack/django-haystack-${version}.tar.gz";
-      sha256 = "04cva8qg79xig4zqhb4dwkpm7734dvhzqclzvrdz70fh59ki5b4f";
-    };
-
-    doCheck = false;  # no tests in source
-
-    buildInputs = with self; [ coverage mock nose geopy ];
-    propagatedBuildInputs = with self; [
-      django dateutil_1_5 whoosh pysolr elasticsearch
-    ];
-
-    patchPhase = ''
-      sed -i 's/geopy==/geopy>=/' setup.py
-      sed -i 's/whoosh==/Whoosh>=/' setup.py
-    '';
-
-    meta = with stdenv.lib; {
-      homepage = "http://haystacksearch.org/";
-    };
-  };
+  django-haystack = callPackage ../development/python-modules/django-haystack { };
 
   geoalchemy2 = buildPythonPackage rec {
     name = "GeoAlchemy2-${version}";
