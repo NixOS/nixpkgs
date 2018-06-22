@@ -10,8 +10,8 @@
 
 # options
 , dolphin-wxgui ? true
-, dolphin-qtgui ? false
-}:
+, dolphin-qtgui ? false }:
+
 # XOR: ensure only wx XOR qt are enabled
 assert dolphin-wxgui || dolphin-qtgui;
 assert !(dolphin-wxgui && dolphin-qtgui);
@@ -29,12 +29,14 @@ let
     startupNotify = "false";
   };
 in stdenv.mkDerivation rec {
-  name = "dolphin-emu-20180618";
+  name = "dolphin-emu-${version}";
+  version = "2018-06-22";
+
   src = fetchFromGitHub {
     owner = "dolphin-emu";
     repo = "dolphin";
-    rev = "091efcc41d59dbe0e478ea96f891c1b47b99ddde";
-    sha256 = "1djsd41kdaphyyd3jyk669hjl39mskm186v86nijwg4a0c70kb2r";
+    rev = "971972069cc2813ee7fa5b630c67baab2b35d12d";
+    sha256 = "0kf6dzvwmvhqb1iy15ldap0mmfbyyzl5f14jc65a110vwv5sww7n";
   };
 
   enableParallelBuilding = true;
@@ -77,13 +79,13 @@ in stdenv.mkDerivation rec {
   postInstall = ''
     cp -r ${desktopItem}/share/applications $out/share
   '' + stdenv.lib.optionalString stdenv.isLinux ''
-    wrapProgram $out/bin/dolphin-emu-nogui --prefix LD_LIBRARY_PATH : \
-      ${vulkan-loader}/lib
-    wrapProgram $out/bin/dolphin-emu-wx --prefix LD_LIBRARY_PATH : \
-      ${vulkan-loader}/lib
+    wrapProgram $out/bin/dolphin-emu-nogui \
+      --prefix LD_LIBRARY_PATH : ${vulkan-loader}/lib
+    wrapProgram $out/bin/dolphin-emu-wx \
+      --prefix LD_LIBRARY_PATH : ${vulkan-loader}/lib
   '' + stdenv.lib.optionalString (dolphin-qtgui && stdenv.isLinux) ''
-    wrapProgram $out/bin/dolphin-emu --prefix LD_LIBRARY_PATH : \
-      ${vulkan-loader}/lib
+    wrapProgram $out/bin/dolphin-emu \
+      --prefix LD_LIBRARY_PATH : ${vulkan-loader}/lib
     ln -sf $out/bin/dolphin-emu $out/bin/dolphin-emu-qt
   '';
 
