@@ -32,9 +32,6 @@ stdenv.mkDerivation rec {
     ]) + ":${platformTools}/platform-tools";
   in ''
     mkdir -pv $out/libexec
-    mkdir -pv $out/lib64
-    ln -s ${ncurses5.out}/lib/libncursesw.so.5 $out/lib64/libtinfo.so.5
-    ln -s ${ncurses5.out}/lib/libncurses.so.5 $out/lib64/libncurses.so.5
     cd $out/libexec
     7z x $src
 
@@ -58,11 +55,11 @@ stdenv.mkDerivation rec {
     }
     cd ${pkg_path}
 
-    find $out \( \
+    find ${pkg_path}/toolchains \( \
         \( -type f -a -name "*.so*" \) -o \
         \( -type f -a -perm -0100 \) \
         \) -exec patchelf --set-interpreter ${stdenv.cc.libc.out}/lib/ld-*so.? \
-                          --set-rpath $out/lib64:${stdenv.lib.makeLibraryPath [ libcxx.out zlib.out ncurses5 ]} {} \;
+                          --set-rpath ${stdenv.lib.makeLibraryPath [ libcxx zlib ncurses5 ]} {} \;
     # fix ineffective PROGDIR / MYNDKDIR determination
     for i in ndk-build ${lib.optionalString (version == "10e") "ndk-gdb ndk-gdb-py"}
     do
