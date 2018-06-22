@@ -276,16 +276,20 @@ EOF
 
     # XXX: I failed to understand why this one fails.
     # Could someone try to re-enable it on the next release ?
+    # Tested to fail: 2.18.0
     disable_test t1700-split-index "null sha1"
 
+    # Tested to fail: 2.18.0
     disable_test t7005-editor "editor with a space"
     disable_test t7005-editor "core.editor with a space"
 
+    # Tested to fail: 2.18.0
     disable_test t9902-completion "sourcing the completion script clears cached --options"
   '' + stdenv.lib.optionalString stdenv.hostPlatform.isMusl ''
     # Test fails (as of 2.17.0, musl 1.1.19)
     disable_test t3900-i18n-commit
     # Fails largely due to assumptions about BOM
+    # Tested to fail: 2.18.0
     disable_test t0028-working-tree-encoding
   '';
 
