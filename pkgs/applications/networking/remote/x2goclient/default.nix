@@ -14,7 +14,9 @@ stdenv.mkDerivation rec {
                   qtbase qtsvg qtx11extras qttools phonon ];
   nativeBuildInputs = [ makeWrapper ];
 
-  patchPhase = ''
+  patches = [ ./qt511.patch ];
+
+  postPatch = ''
      substituteInPlace Makefile \
        --replace "SHELL=/bin/bash" "SHELL=$SHELL" \
        --replace "lrelease-qt4" "${qttools.dev}/bin/lrelease" \
