@@ -280,6 +280,8 @@ EOF
   '' + stdenv.lib.optionalString stdenv.hostPlatform.isMusl ''
     # Test fails (as of 2.17.0, musl 1.1.19)
     disable_test t3900-i18n-commit
+    # Fails largely due to assumptions about BOM
+    disable_test t0028-working-tree-encoding
   '';
 
 
