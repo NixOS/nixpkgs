@@ -1,19 +1,20 @@
 { stdenv, fetchFromGitHub, rustPlatform, nix, boost, graphviz }:
 rustPlatform.buildRustPackage rec {
   name = "nix-du-${version}";
-  version = "0.1.2";
+  version = "0.2.0";
 
   src = fetchFromGitHub {
     owner = "symphorien";
     repo = "nix-du";
     rev = "v${version}";
-    sha256 = "1y7ifr4c3v1494swh6akvna0d0rxjy9jw3mw2wdd6vj1xphvmimq";
+    sha256 = "1n1qgqjbwbb59xnzgz0dn8h8pckh6yq3crh0w6x2sngijwh678x8";
   };
-  cargoSha256 = "0qq7a6ncxnbjvnmly99awqrk9f3z9b55ifil7b0bn5yhk4h9sa6y";
+  cargoSha256 = "1qidbrkdpf4kliyvy2040qi3a67s8mr2r46rjcblr1v2gar0xgs0";
 
-  doCheck = true;
+  # switch to true when nix includes https://github.com/NixOS/nix/pull/2223 and 
+  # https://github.com/NixOS/nix/pull/2234
+  doCheck = false;
   checkInputs = [ graphviz ];
-  nativeBuildInputs = [] ++ stdenv.lib.optionals doCheck checkInputs;
 
   buildInputs = [
     boost
@@ -25,6 +26,6 @@ rustPlatform.buildRustPackage rec {
     homepage = https://github.com/symphorien/nix-du;
     license = licenses.lgpl3;
     maintainers = [ maintainers.symphorien ];
-    platforms = platforms.all;
+    platforms = platforms.unix;
   };
 }
