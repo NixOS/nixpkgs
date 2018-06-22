@@ -46,6 +46,12 @@ buildPythonPackage rec {
     echo "" > setup.cfg
   '';
 
+  postPatch = ''
+    # Remove selenium tests
+    rm -rf notebook/tests/selenium
+
+  '';
+
   checkPhase = ''
     runHook preCheck
     mkdir tmp
