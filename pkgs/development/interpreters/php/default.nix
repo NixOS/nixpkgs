@@ -230,6 +230,14 @@ let
           configureFlags = ["--with-sodium=${libsodium.dev}"];
           buildInputs = [libsodium];
         };
+
+        imagick = {
+          configureFlags = ["--enable-imagick"];
+        };
+
+        mailparse = {
+          configureFlags = ["--enable-mailparse"];
+        };
       };
 
       cfg = {
@@ -270,6 +278,8 @@ let
         ztsSupport = config.php.zts or false;
         calendarSupport = config.php.calendar or true;
         sodiumSupport = (lib.versionAtLeast version "7.2") && config.php.sodium or true;
+        imagickSupport = config.php.imagick or true;
+        mailparseSupport = config.php.mailparse or true;
       };
 
       hardeningDisable = [ "bindnow" ];
