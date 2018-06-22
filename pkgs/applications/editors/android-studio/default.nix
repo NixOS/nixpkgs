@@ -13,9 +13,9 @@ let
     sha256Hash = "196yaswbxh2nd83gimjxr8ggr5xkdxq7n3xlh6ax73v59pj4hryq";
   };
   latestVersion = {
-    version = "3.2.0.17"; # "Android Studio 3.2 Canary 18"
-    build = "181.4830125";
-    sha256Hash = "14yarl1vqhy21ljrn5k2dy8z0y407g9nqw4lqzjbxb7zmascnlx4";
+    version = "3.2.0.18"; # "Android Studio 3.2 Beta 1"
+    build = "181.4847800";
+    sha256Hash = "1ipdvrx3qxwygq72jlf0dl4haxviscl41q18kclg519r1zbzd4cw";
   };
 in rec {
   # Old alias
@@ -40,7 +40,7 @@ in rec {
     };
   });
 
-  beta = mkStudio (stableVersion // {
+  beta = mkStudio (latestVersion // {
     pname = "android-studio-preview";
     #pname = "android-studio-beta"; # TODO: Rename and provide symlink
 
