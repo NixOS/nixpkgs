@@ -16460,6 +16460,8 @@ with pkgs;
 
   i3cat = callPackage ../tools/misc/i3cat { };
 
+  i3ipc-glib = callPackage ../applications/window-managers/i3/i3ipc-glib.nix { };
+
   i3lock = callPackage ../applications/window-managers/i3/lock.nix {
     cairo = cairo.override { xcbSupport = true; };
   };
