@@ -56,9 +56,9 @@ stdenv.mkDerivation rec {
     cd ${pkg_path}
 
     # Steps to reduce output size
-    rm -rf ${pkg_path}/docs ${pkg_path}/sources ${pkg_path}/tests
+    rm -rf docs sources tests
     # We only support cross compiling with gcc for now
-    rm -rf ${pkg_path}/toolchains/*-clang* ${pkg_path}/toolchains/llvm-*
+    rm -rf toolchains/*-clang* toolchains/llvm*
 
     find ${pkg_path}/toolchains \( \
         \( -type f -a -name "*.so*" \) -o \
