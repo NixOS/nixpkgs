@@ -98,7 +98,7 @@ let
                         else "package-conf";
 
   # the target dir for haddock documentation
-  docdir = docoutput: docoutput + "/share/doc";
+  docdir = docoutput: docoutput + "/share/doc/" + pname + "-" + version;
 
   newCabalFileUrl = "http://hackage.haskell.org/package/${pname}-${version}/revision/${revision}.cabal";
   newCabalFile = fetchurl {
