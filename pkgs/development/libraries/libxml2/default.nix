@@ -3,6 +3,7 @@
 , buildPlatform, hostPlatform
 , pythonSupport ? buildPlatform == hostPlatform
 , icuSupport ? false, icu ? null
+, enableStatic ? false
 }:
 
 let
@@ -18,7 +19,8 @@ in stdenv.mkDerivation rec {
   };
 
   outputs = [ "bin" "dev" "out" "man" "doc" ]
-    ++ lib.optional pythonSupport "py";
+    ++ lib.optional pythonSupport "py"
+    ++ lib.optional enableStatic "static";
   propagatedBuildOutputs = "out bin" + lib.optionalString pythonSupport " py";
 
   buildInputs = lib.optional pythonSupport python
@@ -32,7 +34,8 @@ in stdenv.mkDerivation rec {
   configureFlags =
        lib.optional pythonSupport "--with-python=${python}"
     ++ lib.optional icuSupport    "--with-icu"
-    ++ [ "--exec_prefix=$dev" ];
+    ++ [ "--exec_prefix=$dev" ]
+    ++ lib.optional enableStatic "--enable-static";
 
   enableParallelBuilding = true;
 
@@ -57,6 +60,8 @@ in stdenv.mkDerivation rec {
     moveToOutput bin/xml2-config "$dev"
     moveToOutput lib/xml2Conf.sh "$dev"
     moveToOutput share/man/man1 "$bin"
+  '' + lib.optionalString enableStatic ''
+    moveToOutput lib/libxml2.a "$static"
   '';
 
   passthru = { inherit version; pythonSupport = pythonSupport; };
