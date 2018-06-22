@@ -277,6 +277,9 @@ EOF
     # XXX: I failed to understand why this one fails.
     # Could someone try to re-enable it on the next release ?
     disable_test t1700-split-index "null sha1"
+
+    disable_test t7005-editor "editor with a space"
+    disable_test t7005-editor "core.editor with a space"
   '' + stdenv.lib.optionalString stdenv.hostPlatform.isMusl ''
     # Test fails (as of 2.17.0, musl 1.1.19)
     disable_test t3900-i18n-commit
