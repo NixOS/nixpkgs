@@ -35,6 +35,11 @@ stdenv.mkDerivation rec {
     cd $out/libexec
     unzip -qq $src
 
+    # Steps to reduce output size
+    rm -rf docs sources tests
+    # We only support cross compiling with gcc for now
+    rm -rf toolchains/*-clang* toolchains/llvm-*
+
     patchShebangs ${pkg_path}
 
     # so that it doesn't fail because of read-only permissions set

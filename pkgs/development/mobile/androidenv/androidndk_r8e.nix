@@ -49,6 +49,11 @@ stdenv.mkDerivation rec {
         -d $out/libexec/${name} < ${ ./make-standalone-toolchain_r8e.patch }
     cd ${pkg_path}
 
+    # Steps to reduce output size
+    rm -rf docs sources tests
+    # We only support cross compiling with gcc for now
+    rm -rf toolchains/*-clang* toolchains/llvm-*
+
     find ${pkg_path}/toolchains \( \
         \( -type f -a -name "*.so*" \) -o \
         \( -type f -a -perm -0100 \) \
