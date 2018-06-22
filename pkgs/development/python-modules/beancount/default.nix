@@ -1,7 +1,7 @@
 { stdenv, buildPythonPackage, fetchPypi, isPy3k
 , beautifulsoup4, bottle, chardet, dateutil
 , google_api_python_client, lxml, ply, python_magic
-, nose }:
+, nose, requests }:
 
 buildPythonPackage rec {
   version = "2.1.2";
@@ -31,6 +31,7 @@ buildPythonPackage rec {
     lxml
     ply
     python_magic
+    requests
   ];
 
   meta = {
