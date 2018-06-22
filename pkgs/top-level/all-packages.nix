@@ -3030,6 +3030,8 @@ with pkgs;
 
   http-prompt = callPackage ../tools/networking/http-prompt { };
 
+  http-getter = callPackage ../applications/networking/flent/http-getter.nix { };
+
   httpie = callPackage ../tools/networking/httpie { };
 
   httping = callPackage ../tools/networking/httping {};
