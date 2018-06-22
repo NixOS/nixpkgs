@@ -1566,6 +1566,8 @@ in {
 
   cherrypy = callPackage ../development/python-modules/cherrypy {};
 
+  cftime = callPackage ../development/python-modules/cftime {};
+
   cjson = callPackage ../development/python-modules/cjson { };
 
   cld2-cffi = callPackage ../development/python-modules/cld2-cffi {};
