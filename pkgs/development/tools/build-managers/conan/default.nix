@@ -28,6 +28,11 @@ in newPython.pkgs.buildPythonApplication rec {
     sha256 = "1g03f8rw9l198w9ph0gi0q3g84ilp1dxxc9nmj0dgnymcfgpf89n";
   };
 
+  postPatch = ''
+    # Remove pylint constraint
+    substituteInPlace conans/requirements.txt --replace ", <1.9.0" ""
+  '';
+
   checkInputs = with newPython.pkgs; [
     nose
     parameterized
