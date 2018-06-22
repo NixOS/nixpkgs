@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, automake, autoconf, boost, openssl, lib, libtool, pkgconfig, zlib, python, libiconv, geoip, ... }:
+{ stdenv, fetchurl, automake, autoconf, boost166, openssl, lib, libtool, pkgconfig, zlib, python, libiconv, geoip, ... }:
 
 stdenv.mkDerivation rec {
   name = "libtorrent-rasterbar-${version}";
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     };
 
   nativeBuildInputs = [ automake autoconf libtool pkgconfig ];
-  buildInputs = [ boost openssl zlib python libiconv geoip ];
+  buildInputs = [ boost166 openssl zlib python libiconv geoip ];
 
   preConfigure = "./autotool.sh";
 
@@ -20,8 +20,8 @@ stdenv.mkDerivation rec {
     "--enable-python-binding"
     "--with-libgeoip=system"
     "--with-libiconv=yes"
-    "--with-boost=${boost.dev}"
-    "--with-boost-libdir=${boost.out}/lib"
+    "--with-boost=${boost166.dev}"
+    "--with-boost-libdir=${boost166.out}/lib"
     "--with-libiconv=yes"
   ];
 
