@@ -26,6 +26,9 @@ buildGoPackage rec {
       $bin/share/bash-completion/completions \
       $bin/share/zsh/site-functions \
       $bin/share/fish/vendor_completions.d
+    # by default, gopass tries to write configuration to /homeless-shelter
+    # during startup, which lands in stdout
+    export GOPASS_CONFIG=/dev/null
     $bin/bin/gopass completion bash > $bin/share/bash-completion/completions/_gopass
     $bin/bin/gopass completion zsh  > $bin/share/zsh/site-functions/_gopass
     $bin/bin/gopass completion fish > $bin/share/fish/vendor_completions.d/gopass.fish
