@@ -42,6 +42,8 @@ let
     inherit (bootGhcjs) version;
     isGhcjs = true;
 
+    enableShared = true;
+
     socket-io = nodePackages."socket.io";
 
     # Relics of the old GHCJS build system
@@ -96,4 +98,3 @@ in stdenv.mkDerivation {
 
     meta.platforms = passthru.bootPkgs.ghc.meta.platforms;
   }
-

@@ -31,8 +31,8 @@ in
       environment.systemPackages = with pkgs; [ thefuck ];
       environment.shellInit = initScript;
 
-      programs.zsh.shellInit = mkIf prg.zsh.enable initScript;
-      programs.fish.shellInit = mkIf prg.fish.enable ''
+      programs.zsh.interactiveShellInit = mkIf prg.zsh.enable initScript;
+      programs.fish.interactiveShellInit = mkIf prg.fish.enable ''
         ${pkgs.thefuck}/bin/thefuck --alias | source
       '';
     };
