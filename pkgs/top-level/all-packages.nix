@@ -16559,6 +16559,8 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) ApplicationServices;
   });
 
+  imapnotify = nodePackages.imapnotify;
+  
   # Impressive, formerly known as "KeyJNote".
   impressive = callPackage ../applications/office/impressive { };
 
