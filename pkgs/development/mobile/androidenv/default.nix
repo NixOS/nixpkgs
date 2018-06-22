@@ -246,7 +246,7 @@ rec {
     sha256 = "00frcnvpcsngv00p6l2vxj4cwi2mwcm9lnjvm3zv4wrp6pss9pmw";
   };
 
-  androidndk = import ./androidndk.nix {
+  androidndk_17 = import ./androidndk.nix {
     inherit (buildPackages)
       p7zip makeWrapper;
     inherit (pkgs)
@@ -256,6 +256,7 @@ rec {
     version = "17";
     sha256 = "1jj3zy958zsidywqd5nwdyrnr72rf9zhippkl8rbqxfy8wxq2gds";
   };
+  androidndk = androidndk_17;
 
   androidndk_r8e = import ./androidndk_r8e.nix {
     inherit (buildPackages)
@@ -276,7 +277,7 @@ rec {
     inherit androidsdk;
   };
 
-  androidndkPkgs = import ./androidndk-pkgs.nix {
+  androidndkPkgs_17 = import ./androidndk-pkgs.nix {
     inherit (buildPackages)
       makeWrapper;
     inherit (pkgs)
@@ -286,10 +287,11 @@ rec {
     # but for splicing messing up on infinite recursion for the variants we
     # *dont't* use. Using this workaround, but also making a test to ensure
     # these two really are the same.
-    buildAndroidndk = buildPackages.buildPackages.androidenv.androidndk;
-    inherit androidndk;
-    targetAndroidndkPkgs = targetPackages.androidenv.androidndkPkgs;
+    buildAndroidndk = buildPackages.buildPackages.androidenv.androidndk_17;
+    androidndk = androidndk_17;
+    targetAndroidndkPkgs = targetPackages.androidenv.androidndkPkgs_17;
   };
+  androidndkPkgs = androidndkPkgs_17;
 
   androidndkPkgs_10e = import ./androidndk-pkgs.nix {
     inherit (buildPackages)
