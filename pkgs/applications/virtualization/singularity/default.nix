@@ -51,7 +51,9 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ autoreconfHook makeWrapper ];
-  buildInputs = [ coreutils gnugrep python e2fsprogs which gnutar squashfsTools gzip gnused curl utillinux libarchive file ];
+  buildInputs = [ coreutils gnugrep python e2fsprogs which gnutar squashfsTools gzip gnused curl utillinux libarchive file];
+
+  installCheckTarget = "test";
 
   meta = with stdenv.lib; {
     homepage = http://singularity.lbl.gov/;
