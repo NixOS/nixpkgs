@@ -6194,6 +6194,8 @@ in {
 
   googleapis_common_protos = callPackage ../development/python-modules/googleapis_common_protos { };
 
+  google-auth-httplib2 = callPackage ../development/python-modules/google-auth-httplib2 { };
+
   google_api_core = callPackage ../development/python-modules/google_api_core { };
 
   google_api_python_client = callPackage ../development/python-modules/google-api-python-client { };
