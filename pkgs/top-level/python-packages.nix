@@ -2118,9 +2118,6 @@ in {
   # Alias that we should deprecate
   dateutil = self.python-dateutil;
 
-  # Buildbot 0.8.7p1 needs dateutil==1.5
-  dateutil_1_5 = callPackage ../development/python-modules/dateutil/1_5.nix { };
-
   decorator = callPackage ../development/python-modules/decorator { };
 
   deform = callPackage ../development/python-modules/deform { };
