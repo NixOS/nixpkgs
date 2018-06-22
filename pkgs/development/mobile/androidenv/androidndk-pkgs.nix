@@ -18,7 +18,7 @@ let
     "armv5tel-unknown-linux-androideabi" = {
       arch = "arm";
       triple = "arm-linux-androideabi";
-      gccVer = "4.9";
+      gccVer = "4.8";
     };
     "armv7a-unknown-linux-androideabi" = {
       arch = "arm";

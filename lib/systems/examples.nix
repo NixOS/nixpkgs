@@ -31,7 +31,8 @@ rec {
 
   armv5te-android-prebuilt = rec {
     config = "armv5tel-unknown-linux-androideabi";
-    sdkVer = "24";
+    sdkVer = "21";
+    ndkVer = "10e";
     platform = platforms.armv5te-android;
     useAndroidPrebuilt = true;
   };
@@ -39,6 +40,7 @@ rec {
   armv7a-android-prebuilt = rec {
     config = "armv7a-unknown-linux-androideabi";
     sdkVer = "24";
+    ndkVer = "17";
     platform = platforms.armv7a-android;
     useAndroidPrebuilt = true;
   };
@@ -46,6 +48,7 @@ rec {
   aarch64-android-prebuilt = rec {
     config = "aarch64-unknown-linux-android";
     sdkVer = "24";
+    ndkVer = "17";
     platform = platforms.aarch64-multiplatform;
     useAndroidPrebuilt = true;
   };
