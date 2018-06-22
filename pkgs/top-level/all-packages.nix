@@ -13616,6 +13616,7 @@ with pkgs;
         # kernelPatches.cpu-cgroup-v2."4.11"
         kernelPatches.modinst_arg_list_too_long
         kernelPatches.bcm2835_mmal_v4l2_camera_driver # Only needed for 4.16!
+        kernelPatches.force_stack_protector_x64
       ];
   };
 
@@ -13627,6 +13628,7 @@ with pkgs;
         # kernelPatches.cpu-cgroup-v2."4.11"
         kernelPatches.modinst_arg_list_too_long
         kernelPatches.bcm2835_mmal_v4l2_camera_driver # Only needed for 4.16!
+        kernelPatches.force_stack_protector_x64
       ];
   };
 
