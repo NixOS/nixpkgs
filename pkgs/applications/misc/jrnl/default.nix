@@ -1,13 +1,12 @@
 { stdenv
-, python
+, python3
 }:
 
-with python.pkgs;
+with python3.pkgs;
 
 buildPythonApplication rec {
   pname = "jrnl";
   version = "1.9.8";
-  disabled = isPy3k;
 
   src = fetchPypi {
     inherit pname version;
@@ -15,7 +14,7 @@ buildPythonApplication rec {
   };
 
   propagatedBuildInputs = [
-    pytz six tzlocal keyring argparse dateutil_1_5
+    pytz six tzlocal keyring argparse dateutil
     parsedatetime pycrypto
   ];
 
