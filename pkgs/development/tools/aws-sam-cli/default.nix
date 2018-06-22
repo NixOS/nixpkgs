@@ -2,21 +2,21 @@
 , python
 }:
 
-with python;
+with python.pkgs;
 
-pkgs.buildPythonApplication rec {
+buildPythonApplication rec {
   pname = "aws-sam-cli";
-  version = "0.3.0";
+  version = "0.4.0";
 
-  src = pkgs.fetchPypi {
+  src = fetchPypi {
     inherit pname version;
-    sha256 = "7e7275a34e7e9d926198fd9516404310faa2a9681b7a8b0c8b2f9aa31aeb1bfb";
+    sha256 = "4740bfa23f39880d807aa75a2143259f7f15eec34c5fa5dde8fc04d8563ef521";
   };
 
   # Tests are not included in the PyPI package
   doCheck = false;
 
-  propagatedBuildInputs = with pkgs; [
+  propagatedBuildInputs = [
     aws-sam-translator
     boto3
     click
