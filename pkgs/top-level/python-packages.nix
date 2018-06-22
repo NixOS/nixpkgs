@@ -464,6 +464,8 @@ in {
 
   sip = callPackage ../development/python-modules/sip { };
 
+  sklearn-deap = callPackage ../development/python-modules/sklearn-deap { };
+
   spglib = callPackage ../development/python-modules/spglib { };
 
   supervise_api = callPackage ../development/python-modules/supervise_api { };
