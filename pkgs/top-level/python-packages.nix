@@ -12094,27 +12094,7 @@ in {
 
   rjsmin = callPackage ../development/python-modules/rjsmin { };
 
-  pysolr = buildPythonPackage rec {
-    name = "pysolr-${version}";
-    version = "3.3.3";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/p/pysolr/pysolr-${version}.tar.gz";
-      sha256 = "1wapg9n7myn7c82r3nzs2gisfzx52nip8w2mrfy0yih1zn02mnd6";
-    };
-
-    propagatedBuildInputs = with self; [
-      requests
-    ];
-    buildInputs = with self; [
-
-    ];
-
-    meta = with stdenv.lib; {
-      homepage = "http://github.com/toastdriven/pysolr/";
-    };
-  };
-
+  pysolr = callPackage ../development/python-modules/pysolr { };
 
   django-haystack = callPackage ../development/python-modules/django-haystack { };
 
