@@ -12,8 +12,8 @@ let
   apcu = if isPhp7 then apcu51 else apcu40;
 
   apcu40 = assert !isPhp7; buildPecl {
-    name = "apcu-4.0.7";
-    sha256 = "1mhbz56mbnq7dryf2d64l84lj3fpr5ilmg2424glans3wcg772hp";
+    name = "apcu-4.0.11";
+    sha256 = "002d1gklkf0z170wkbhmm2z1p9p5ghhq3q1r9k54fq1sq4p30ks5";
     buildInputs = [ pkgs.pcre ];
   };
 
