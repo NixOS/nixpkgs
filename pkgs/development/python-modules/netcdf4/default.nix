@@ -1,23 +1,25 @@
-{ stdenv, buildPythonPackage, fetchurl, isPyPy
-, numpy, zlib, netcdf, hdf5, curl, libjpeg, cython
+{ stdenv, buildPythonPackage, fetchPypi, isPyPy, pytest
+, numpy, zlib, netcdf, hdf5, curl, libjpeg, cython, cftime
 }:
 buildPythonPackage rec {
   pname = "netCDF4";
-  name = "${pname}-${version}";
-  version = "1.3.1";
+  version = "1.4.0";
 
   disabled = isPyPy;
 
-  src = fetchurl {
-    url = "mirror://pypi/n/netCDF4/${name}.tar.gz";
-    sha256 = "570ea59992aa6d98a9b672c71161d11ba5683f787da53446086077470a869957";
+  src = fetchPypi {
+    inherit pname version;
+    sha256 = "a6c0b46f410f101c09d60b8cc460aafec06732f0130c6cb2730717bcc605b388";
   };
+
+  checkInputs = [ pytest ];
 
   buildInputs = [
     cython
   ];
 
   propagatedBuildInputs = [
+    cftime
     numpy
     zlib
     netcdf
@@ -25,6 +27,13 @@ buildPythonPackage rec {
     curl
     libjpeg
   ];
+
+  checkPhase = ''
+    py.test test/tst_*.py
+  '';
+
+  # Tests need fixing.
+  doCheck = false;
 
   # Variables used to configure the build process
   USE_NCCONFIG="0";

@@ -4,11 +4,11 @@
 
 buildPythonPackage rec {
   pname = "requests-mock";
-  version = "1.4.0";
+  version = "1.5.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "2931887853c42e1d73879983d5bf03041109472991c5b4b8dba5d11ed23b9d0b";
+    sha256 = "a029fe6c5244963ef042c6224ff787049bfc5bab958a1b7e5b632ef0bbb05de4";
   };
 
   patchPhase = ''

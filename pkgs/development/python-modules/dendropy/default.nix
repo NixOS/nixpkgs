@@ -6,11 +6,11 @@
 
 buildPythonPackage rec {
   pname   = "DendroPy";
-  version = "4.3.0";
+  version = "4.4.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "bd5b35ce1a1c9253209b7b5f3939ac22beaa70e787f8129149b4f7ffe865d510";
+    sha256 = "f0a0e2ce78b3ed213d6c1791332d57778b7f63d602430c1548a5d822acf2799c";
   };
 
   prePatch = ''
