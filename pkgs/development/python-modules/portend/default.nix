@@ -1,5 +1,5 @@
 { stdenv, buildPythonPackage, fetchPypi
-, pytest, setuptools_scm, tempora }:
+, pytest, setuptools_scm, tempora, pytest-flake8 }:
 
 buildPythonPackage rec {
   pname = "portend";
@@ -14,7 +14,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ tempora ];
 
-  checkInputs = [ pytest ];
+  checkInputs = [ pytest pytest-flake8 ];
 
   checkPhase = ''
     py.test
