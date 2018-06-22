@@ -31,14 +31,14 @@ rec {
 
   armv5te-android-prebuilt = rec {
     config = "armv5tel-unknown-linux-androideabi";
-    sdkVer = "21";
+    sdkVer = "24";
     platform = platforms.armv5te-android;
     useAndroidPrebuilt = true;
   };
 
   armv7a-android-prebuilt = rec {
     config = "armv7a-unknown-linux-androideabi";
-    sdkVer = "21";
+    sdkVer = "24";
     platform = platforms.armv7a-android;
     useAndroidPrebuilt = true;
   };
