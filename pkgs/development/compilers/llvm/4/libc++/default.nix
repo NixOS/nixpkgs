@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     ./xlocale-glibc-2.26.patch
   ] ++ stdenv.lib.optionals stdenv.hostPlatform.isMusl [
     ../../libcxx-0001-musl-hacks.patch
-    ./max_align_t.patch
+    ../../libcxx-max_align_t.patch
   ];
 
   prePatch = ''
