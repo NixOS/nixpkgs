@@ -2,7 +2,7 @@
 , pkgconfig, intltool, autoreconfHook, substituteAll
 , file, expat, libdrm, xorg, wayland, wayland-protocols, openssl
 , llvmPackages, libffi, libomxil-bellagio, libva-minimal
-, libelf, libvdpau, valgrind-light, python2
+, libelf, libvdpau, valgrind-light, python2, python27Packages
 , libglvnd
 , grsecEnabled ? false
 , enableRadv ? true
@@ -67,7 +67,7 @@ let
 in
 
 let
-  version = "18.0.3";
+  version = "18.1.2";
   branch  = head (splitString "." version);
 in
 
@@ -81,7 +81,7 @@ let self = stdenv.mkDerivation {
       "ftp://ftp.freedesktop.org/pub/mesa/older-versions/${branch}.x/${version}/mesa-${version}.tar.xz"
       "https://mesa.freedesktop.org/archive/mesa-${version}.tar.xz"
     ];
-    sha256 = "0c4yskqwmh5k0wavjrkfcldafvnpcx8gjcx584bscxks69krd789";
+    sha256 = "1ydivzm4c2k53b65lvm11d62z140xlmd7viw63bl5cm5idjg02q7";
   };
 
   prePatch = "patchShebangs .";
@@ -154,7 +154,7 @@ let self = stdenv.mkDerivation {
     libX11 libXext libxcb libXt libXfixes libxshmfence
     libffi wayland wayland-protocols libvdpau libelf libXvMC
     libomxil-bellagio libva-minimal libpthreadstubs openssl/*or another sha1 provider*/
-    valgrind-light python2
+    valgrind-light python2 python27Packages.Mako
   ];
 
   enableParallelBuilding = true;
