@@ -45,5 +45,6 @@ stdenv.mkDerivation rec {
     description = "A reimplementation of the Ultima VII game engine";
     maintainers = [ stdenv.lib.maintainers.eelco ];
     platforms = stdenv.lib.platforms.unix;
+    hydraPlatforms = stdenv.lib.platforms.linux; # darwin times out
   };
 }
