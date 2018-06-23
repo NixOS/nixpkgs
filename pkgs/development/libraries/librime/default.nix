@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
-    homepage    = http://rime.im/;
+    homepage    = https://rime.im/;
     description = "Rime Input Method Engine, the core library";
     license     = licenses.bsd3;
     maintainers = with maintainers; [ sifmelcara ];

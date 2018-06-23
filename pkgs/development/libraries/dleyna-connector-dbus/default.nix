@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A D-Bus API for the dLeyna services";
-    homepage = http://01.org/dleyna;
+    homepage = https://01.org/dleyna;
     maintainers = [ maintainers.jtojnar ];
     platforms = platforms.linux;
     license = licenses.lgpl21;

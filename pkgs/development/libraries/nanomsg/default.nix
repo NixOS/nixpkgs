@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description= "Socket library that provides several common communication patterns";
-    homepage = http://nanomsg.org/;
+    homepage = https://nanomsg.org/;
     license = licenses.mit;
     platforms = platforms.unix;
   };

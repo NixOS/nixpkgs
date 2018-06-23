@@ -60,7 +60,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "An open source Global Navigation Satellite Systems software-defined receiver";
-    homepage = http://gnss-sdr.org/;
+    homepage = https://gnss-sdr.org/;
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
   };

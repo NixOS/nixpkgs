@@ -2293,7 +2293,7 @@ in {
     '';
 
     meta = {
-      homepage = "http://editorconfig.org";
+      homepage = https://editorconfig.org;
       description = "EditorConfig File Locator and Interpreter for Python";
       license = stdenv.lib.licenses.psfl;
     };
@@ -7780,7 +7780,7 @@ in {
 
     meta = {
       description = "EditorConfig File Locator and Interpreter for Python";
-      homepage = "http://editorconfig.org/";
+      homepage = https://editorconfig.org/;
       license = licenses.psfl;
     };
   };
@@ -9155,7 +9155,7 @@ in {
    ];
 
    meta = with stdenv.lib; {
-     homepage = "http://github.com/bcwaldon/warlock";
+     homepage = https://github.com/bcwaldon/warlock;
    };
  };
 
@@ -11599,7 +11599,7 @@ in {
     doCheck = false;
 
     meta = {
-      homepage = "http://github.com/mongodb/mongo-python-driver";
+      homepage = https://github.com/mongodb/mongo-python-driver;
       license = licenses.asl20;
       description = "Python driver for MongoDB ";
     };
@@ -12805,7 +12805,7 @@ in {
 
     meta = {
       description = "sqlite-backed dictionary";
-      homepage = "http://github.com/Yelp/sqlite3dbm";
+      homepage = https://github.com/Yelp/sqlite3dbm;
       license = licenses.asl20;
     };
   };
