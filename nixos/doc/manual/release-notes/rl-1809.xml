@@ -322,6 +322,14 @@ inherit (pkgs.nixos {
      <literal>kubectl delete clusterrolebinding kubernetes-dashboard</literal>
     </para>
    </listitem>
+   <listitem>
+    <para>
+     The <varname>programs.screen</varname> module provides allows to configure
+     <literal>/etc/screenrc</literal>, however the module behaved fairly counterintuitive as
+     the config exists, but the package wasn't available. Since 18.09 <literal>pkgs.screen</literal>
+     will be added to <literal>environment.systemPackages</literal>.
+    </para>
+   </listitem>
   </itemizedlist>
  </section>
 </section>
