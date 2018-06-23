@@ -22,6 +22,12 @@ in stdenv.mkDerivation rec {
     cp ../application/resources/multimc/scalable/multimc.svg $out/share/pixmaps
     cp ../application/package/linux/multimc.desktop $out/share/applications
     wrapProgram $out/bin/MultiMC --add-flags "-d \$HOME/.multimc/" --set GAME_LIBRARY_PATH /run/opengl-driver/lib:${libpath} --prefix PATH : ${jdk}/bin/
+
+    # As of https://github.com/MultiMC/MultiMC5/blob/7ea1d68244fdae1e7672fb84199ee71e168b31ca/application/package/linux/multimc.desktop,
+    # the desktop icon refers to `multimc`, but the executable actually gets
+    # installed as `MultiMC`. Create compatibility symlink to fix the desktop
+    # icon.
+    ln -sf $out/bin/MultiMC $out/bin/multimc
   '';
 
   meta = with stdenv.lib; {
