@@ -6354,10 +6354,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   ForksSuper = buildPerlPackage {
-    name = "Forks-Super-0.93";
+    name = "Forks-Super-0.94";
     src = fetchurl {
-      url = mirror://cpan/authors/id/M/MO/MOB/Forks-Super-0.93.tar.gz;
-      sha256 = "1blkhi3kpkqv6dlnbxz5r9j9lbr58vag3aa2c9yqpkqk59hivbgg";
+      url = mirror://cpan/authors/id/M/MO/MOB/Forks-Super-0.94.tar.gz;
+      sha256 = "145nj2wsymr5vr93ikrakjx3dd07q63fxb1bq7lkiranm9974v8s";
     };
     doCheck = false;
     meta = {
