@@ -50,8 +50,8 @@
     fetch = {
       type = "git";
       url = "https://github.com/bakape/thumbnailer";
-      rev = "cd096c6823fae426b69921662bcfaf142e395d05";
-      sha256 = "1xd1g36s3a0ynaxg4gf49r40ri9y154dlkd40dcpkhj6q294s02k";
+      rev = "cca71d50e2f2a18f255652068be06977740fd2d5";
+      sha256 = "07mwy19z8jk0v9dvsvkr48hhhiigclban6gr5fap8531hj9m5mqc";
     };
   }
   {
@@ -239,8 +239,8 @@
     fetch = {
       type = "git";
       url = "https://go.googlesource.com/sys";
-      rev = "ad87a3a340fa7f3bed189293fbfa7a9b7e021ae1";
-      sha256 = "0d38dpn3cl3h0ksxdnkwk2z3rsjwihqzd4ggwrnwmj405zgv1ar9";
+      rev = "63fc586f45fe72d95d5240a5d5eb95e6503907d3";
+      sha256 = "1272649cna3w2mw64qld6m1w4l5zm4jy00nhpcii03pxj3m2dqlr";
     };
   }
   {
