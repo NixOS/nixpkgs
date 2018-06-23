@@ -16898,6 +16898,8 @@ with pkgs;
     lua = lua5_1;
   };
 
+  lutris = callPackage ../applications/misc/lutris { };
+
   lv2bm = callPackage ../applications/audio/lv2bm { };
 
   lynx = callPackage ../applications/networking/browsers/lynx { };
@@ -20848,6 +20850,8 @@ with pkgs;
 
   dpkg = callPackage ../tools/package-management/dpkg { };
 
+  dumb = callPackage ../misc/dumb { };
+
   ekiga = newScope pkgs.gnome2 ../applications/networking/instant-messengers/ekiga { };
 
   emulationstation = callPackage ../misc/emulators/emulationstation {
@@ -21153,6 +21157,8 @@ with pkgs;
   rucksack = callPackage ../development/tools/rucksack { };
 
   sam-ba = callPackage ../tools/misc/sam-ba { };
+
+  sndio = callPackage ../misc/sndio { };
 
   opkg = callPackage ../tools/package-management/opkg { };
 
