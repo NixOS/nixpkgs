@@ -477,10 +477,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   ArchiveTar = buildPerlPackage rec {
-    name = "Archive-Tar-2.26";
+    name = "Archive-Tar-2.28";
     src = fetchurl {
       url = "mirror://cpan/authors/id/B/BI/BINGOS/${name}.tar.gz";
-      sha256 = "01246ffbadb6e76a04a32bf689894cf56ef9d34d58101ff1c51af8f6f1ef5843";
+      sha256 = "2e9144f6c96f6d3d76cd14f4e871e8defc4542cdd39245a16fca29090648a70d";
     };
     meta = {
       description = "Manipulates TAR archives";
