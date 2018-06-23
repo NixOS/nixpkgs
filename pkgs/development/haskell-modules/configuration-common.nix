@@ -1053,6 +1053,10 @@ self: super: {
 
   # dhall-json requires a very particular dhall version
   dhall-json_1_2_0 = super.dhall-json_1_2_0.override { dhall = self.dhall_1_14_0; };
+
+  # https://github.com/fpco/streaming-commons/issues/49
+  streaming-commons = dontCheck super.streaming-commons;
+
 }
 
 //
@@ -1071,14 +1075,3 @@ self: super: {
 in {
   inherit amazonka amazonka-core amazonka-test;
 })
-
-//
-
-# The actual Cabal library gets built while building its `Setup.hs`.
-(let
-  inherit (pkgs.lib) filterAttrs flip mapAttrs hasPrefix;
-  cabals = filterAttrs (n: v: hasPrefix "Cabal_" n) super;
-  fixCabal = n: v: addSetupDepends v [ self.mtl self.parsec ];
-in
-  mapAttrs fixCabal cabals
-)

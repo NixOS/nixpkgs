@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, automake, autoconf, boost, openssl, lib, libtool, pkgconfig, zlib, python, libiconv, geoip, ... }:
+{ stdenv, fetchurl, fetchpatch, automake, autoconf, boost, openssl, lib, libtool, pkgconfig, zlib, python, libiconv, geoip, ... }:
 
 stdenv.mkDerivation rec {
   name = "libtorrent-rasterbar-${version}";
@@ -10,6 +10,13 @@ stdenv.mkDerivation rec {
       url = "https://github.com/arvidn/libtorrent/archive/libtorrent-${formattedVersion}.tar.gz";
       sha256 = "0vbw7wcw8x9787rq5fwaibpvvspm3237l8ahbf20gjpzxhn4yfwc";
     };
+
+patches = [
+  (fetchpatch {
+    url = "https://github.com/arvidn/libtorrent/commit/64d6b4900448097b0157abb328621dd211e2947d.patch";
+    sha256 = "0d4h0g129rsgm8xikybxypgv6nnya7ap7kskl7q78p4h6y2a0fhc";
+  })
+];
 
   nativeBuildInputs = [ automake autoconf libtool pkgconfig ];
   buildInputs = [ boost openssl zlib python libiconv geoip ];

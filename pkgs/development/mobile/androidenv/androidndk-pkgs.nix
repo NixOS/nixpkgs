@@ -23,7 +23,7 @@ let
     "armv7a-unknown-linux-androideabi" = {
       arch = "arm";
       triple = "arm-linux-androideabi";
-      gccVer = "4.8";
+      gccVer = "4.9";
     };
     "aarch64-unknown-linux-android" = {
       arch = "arm64";

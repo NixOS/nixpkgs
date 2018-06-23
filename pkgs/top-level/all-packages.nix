@@ -2656,6 +2656,8 @@ with pkgs;
     stdenv = overrideCC stdenv gcc49;
   };
 
+  gnirehtet = callPackage ../tools/networking/gnirehtet { };
+
   gnome15 = callPackage ../applications/misc/gnome15 {
     inherit (gnome2) gnome_python gnome_python_desktop;
   };
@@ -8697,7 +8699,7 @@ with pkgs;
 
   # TODO(@Ericson2314): Build bionic libc from source
   bionic = assert hostPlatform.useAndroidPrebuilt;
-    androidenv.androidndkPkgs.libraries;
+    androidenv."androidndkPkgs_${hostPlatform.ndkVer}".libraries;
 
   bobcat = callPackage ../development/libraries/bobcat { };
 
@@ -16559,6 +16561,8 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) ApplicationServices;
   });
 
+  inherit (nodePackages) imapnotify;
+  
   # Impressive, formerly known as "KeyJNote".
   impressive = callPackage ../applications/office/impressive { };
 
