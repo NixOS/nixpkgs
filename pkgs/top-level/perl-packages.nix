@@ -17992,10 +17992,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   YAMLLibYAML = buildPerlPackage rec {
-    name = "YAML-LibYAML-0.69";
+    name = "YAML-LibYAML-0.70";
     src = fetchurl {
       url = "mirror://cpan/authors/id/T/TI/TINITA/${name}.tar.gz";
-      sha256 = "06msvj3vmjszl5zj1k7g47ll0kkds9gdb5sky0q27lh4zw1vlj33";
+      sha256 = "1lqgal20v79ij68jhrpg57vxsv4sdahgmqdv88vg0388y776n95j";
     };
   };
 
