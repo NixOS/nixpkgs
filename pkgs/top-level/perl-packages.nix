@@ -6886,11 +6886,11 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  HashMoreUtils = buildPerlModule rec {
-    name = "Hash-MoreUtils-0.05";
+  HashMoreUtils = buildPerlPackage rec {
+    name = "Hash-MoreUtils-0.06";
     src = fetchurl {
       url = "mirror://cpan/authors/id/R/RE/REHSACK/${name}.tar.gz";
-      sha256 = "5e9c8458457eb18315a5669e3bef68488cd5ed8c2220011ac7429ff983288ab1";
+      sha256 = "db9a8fb867d50753c380889a5e54075651b5e08c9b3b721cb7220c0883547de8";
     };
     meta = {
       description = "Provide the stuff missing in Hash::Util";
