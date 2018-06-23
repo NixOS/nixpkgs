@@ -107,6 +107,8 @@ in stdenv.mkDerivation rec {
       substituteInPlace lib/esan/esan_sideline_linux.cpp \
         --replace 'struct sigaltstack' 'stack_t'
     )
+  '' + stdenv.lib.optionalString stdenv.hostPlatform.isMusl ''
+    patch -p1 -i ${./sanitizers-nongnu.patch} -d projects/compiler-rt
   '';
 
   # hacky fix: created binaries need to be run before installation
