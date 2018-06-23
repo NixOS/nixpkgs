@@ -62,7 +62,10 @@ in stdenv.mkDerivation rec {
       url = https://github.com/llvm-mirror/llvm/commit/5340b5b3d970069aebf3dde49d8964583742e01a.patch;
       sha256 = "095f8knplwqbc2p7rad1kq8633i34qynni9jna93an7kyc80wdxl";
    })
-  ];
+   ] ++ stdenv.lib.optionals stdenv.hostPlatform.isMusl [
+     ../TLI-musl.patch
+     ./dynamiclibrary-musl.patch
+   ];
 
   postPatch = ""
   + ''
