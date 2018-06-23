@@ -40,7 +40,7 @@ in stdenv.mkDerivation {
   ];
 
   meta = with stdenv.lib; {
-    homepage = "http://www.rasterbar.com/products/libtorrent";
+    homepage = "https://libtorrent.org/";
     description = "A C++ BitTorrent implementation focusing on efficiency and scalability";
     license = licenses.bsd3;
     maintainers = [ maintainers.phreedom ];
