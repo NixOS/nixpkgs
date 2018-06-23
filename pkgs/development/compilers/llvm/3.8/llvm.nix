@@ -49,7 +49,7 @@ in stdenv.mkDerivation rec {
       --replace 'set(CMAKE_INSTALL_NAME_DIR "@rpath")' "set(CMAKE_INSTALL_NAME_DIR "$out/lib")" \
       --replace 'set(CMAKE_INSTALL_RPATH "@executable_path/../lib")' ""
   ''
-  + stdenv.lib.optionalString (stdenv ? glibc) ''
+  + ''
     (
       cd projects/compiler-rt
       patch -p1 < ${
