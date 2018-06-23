@@ -502,6 +502,8 @@ with pkgs;
     buildTools = androidenv.buildTools;
   };
 
+  appimage-run = callPackage ../tools/package-management/appimage-run {};
+
   apt-cacher-ng = callPackage ../servers/http/apt-cacher-ng { };
 
   apt-offline = callPackage ../tools/misc/apt-offline { };
