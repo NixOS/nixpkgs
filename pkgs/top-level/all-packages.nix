@@ -19749,8 +19749,6 @@ with pkgs;
 
   unnethack = callPackage ../games/unnethack { };
 
-  unvanquished = callPackage ../games/unvanquished { };
-
   uqm = callPackage ../games/uqm { };
 
   urbanterror = callPackage ../games/urbanterror { };
