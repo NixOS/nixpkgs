@@ -25,7 +25,7 @@ stdenv.mkDerivation {
 
   meta = {
     description = "C++ URI library";
-    homepage = http://cpp-netlib.org;
+    homepage = https://cpp-netlib.org;
     license = stdenv.lib.licenses.boost;
     platforms = stdenv.lib.platforms.all;
   };
