@@ -29,6 +29,8 @@ let
     postPatch = ''
       sed -i -e 's/Args.hasArg(options::OPT_nostdlibinc)/true/' lib/Driver/Tools.cpp
       sed -i -e 's/DriverArgs.hasArg(options::OPT_nostdlibinc)/true/' lib/Driver/ToolChains.cpp
+    '' + stdenv.lib.optionalString stdenv.hostPlatform.isMusl ''
+      sed -i -e 's/lgcc_s/lgcc_eh/' lib/Driver/Tools.cpp
     '';
 
     outputs = [ "out" "lib" "python" ];
