@@ -16023,10 +16023,10 @@ let self = _self // overrides; _self = with self; {
   Testuseok = TestSimple;
 
   TestWarn = buildPerlPackage {
-    name = "Test-Warn-0.34";
+    name = "Test-Warn-0.35";
     src = fetchurl {
-      url = mirror://cpan/authors/id/B/BI/BIGJ/Test-Warn-0.34.tar.gz;
-      sha256 = "1zzqfl47l3y3agwplnxl9ypcpph0qjj12sspk1y0x10ygkn12yl1";
+      url = mirror://cpan/authors/id/B/BI/BIGJ/Test-Warn-0.35.tar.gz;
+      sha256 = "1ialnc0q5277p7v01mvk7nljw8qx5qr5wiqzhmvbz8y87jb11r14";
     };
     propagatedBuildInputs = [ SubUplevel ];
     meta = {
