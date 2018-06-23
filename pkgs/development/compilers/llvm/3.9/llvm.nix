@@ -64,7 +64,7 @@ in stdenv.mkDerivation rec {
    })
    ] ++ stdenv.lib.optionals stdenv.hostPlatform.isMusl [
      ../TLI-musl.patch
-     ./dynamiclibrary-musl.patch
+     ../dynamiclibrary-musl.patch
    ];
 
   postPatch = ""

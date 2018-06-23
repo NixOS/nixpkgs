@@ -83,7 +83,7 @@ in stdenv.mkDerivation (rec {
     patch -p0 < ${../aarch64.patch}
   '' + stdenv.lib.optionalString stdenv.hostPlatform.isMusl ''
     patch -p1 -i ${../TLI-musl.patch}
-    patch -p1 -i ${./dynamiclibrary-musl.patch}
+    patch -p1 -i ${../dynamiclibrary-musl.patch}
     patch -p1 -i ${./sanitizers-nongnu.patch} -d projects/compiler-rt
   '';
 
