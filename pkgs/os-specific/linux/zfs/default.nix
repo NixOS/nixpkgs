@@ -61,7 +61,7 @@ let
       # for zdb to get the rpath to libgcc_s, needed for pthread_cancel to work
       NIX_CFLAGS_LINK = "-lgcc_s";
 
-      hardeningDisable = [ "pic" ];
+      hardeningDisable = [ "fortify" "stackprotector" "pic" ];
 
       preConfigure = ''
         substituteInPlace ./module/zfs/zfs_ctldir.c   --replace "umount -t zfs"           "${utillinux}/bin/umount -t zfs"
@@ -157,7 +157,7 @@ in {
   # to be adapted
   zfsStable = common {
     # comment/uncomment if breaking kernel versions are known
-    incompatibleKernelVersion = "4.16";
+    incompatibleKernelVersion = null;
 
     # this package should point to the latest release.
     version = "0.7.9";
@@ -176,7 +176,7 @@ in {
 
   zfsUnstable = common rec {
     # comment/uncomment if breaking kernel versions are known
-    incompatibleKernelVersion = "4.16";
+    incompatibleKernelVersion = null;
 
     # this package should point to a version / git revision compatible with the latest kernel release
     version = "2018-05-22";
@@ -199,7 +199,7 @@ in {
   # also remove boot.zfs.enableLegacyCrypto
   zfsLegacyCrypto = common {
     # comment/uncomment if breaking kernel versions are known
-    incompatibleKernelVersion = "4.16";
+    incompatibleKernelVersion = null;
 
     # this package should point to a version / git revision compatible with the latest kernel release
     version = "2018-02-01";
