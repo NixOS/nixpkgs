@@ -6740,7 +6740,6 @@ let self = _self // overrides; _self = with self; {
       url = "mirror://cpan/authors/id/A/AG/AGROLMS/${name}.tar.gz";
       sha256 = "1mkhwxjjlhr58pd770i9gnf7zy7jj092iv6jfbnb8bvnc5xjr3vx";
     };
-    buildInputs = [ TestPod ];
     propagatedBuildInputs = [ pkgs.krb5Full.dev ];
     meta = {
       maintainers = [ maintainers.limeytexan ];
