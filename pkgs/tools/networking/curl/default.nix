@@ -63,6 +63,10 @@ stdenv.mkDerivation rec {
   '';
 
   configureFlags = [
+      # Disable default CA bundle, use NIX_SSL_CERT_FILE or fallback
+      # to nss-cacert from the default profile.
+      "--without-ca-bundle"
+      "--without-ca-path"
       "--with-ca-fallback"
       "--disable-manual"
       ( if sslSupport then "--with-ssl=${openssl.dev}" else "--without-ssl" )
