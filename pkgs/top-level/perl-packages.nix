@@ -4982,10 +4982,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   EmailAddressXS = buildPerlPackage rec {
-     name = "Email-Address-XS-1.03";
+     name = "Email-Address-XS-1.04";
      src = fetchurl {
-       url = mirror://cpan/authors/id/P/PA/PALI/Email-Address-XS-1.03.tar.gz;
-       sha256 = "1knf1i9rr20bpzscbvaqsqjgw51pnnga4zlnkgsvw7jpqh4cyj6i";
+       url = mirror://cpan/authors/id/P/PA/PALI/Email-Address-XS-1.04.tar.gz;
+       sha256 = "0gjrrl81z3sfwavgx5kwjd87gj44mlnbbqsm3dgdv1xllw26spwr";
      };
      meta = {
        description = "Parse and format RFC 2822 email addresses and groups";
