@@ -2,7 +2,6 @@
 , ecdsa , mnemonic, protobuf, hidapi, trezor }:
 
 buildPythonPackage rec {
-  name = "${pname}-${version}";
   pname = "keepkey";
   version = "4.0.0";
 

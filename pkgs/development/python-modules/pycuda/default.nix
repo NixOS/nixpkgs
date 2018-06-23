@@ -23,7 +23,6 @@ in
 buildPythonPackage rec {
   pname = "pycuda";
   version = "2017.1.1";
-  name = "${pname}-${version}";
 
   src = fetchPypi {
     inherit pname version;

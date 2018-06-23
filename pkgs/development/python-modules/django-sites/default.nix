@@ -2,7 +2,6 @@
 
 buildPythonPackage rec {
   pname = "django-sites";
-  name = "${pname}-${version}";
   version = "0.9";
 
   meta = {

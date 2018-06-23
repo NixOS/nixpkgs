@@ -3,7 +3,6 @@
 , pytest }:
 
 buildPythonPackage rec {
-  name = "${pname}-${version}";
   pname = "zetup";
   version = "0.2.43";
 

@@ -8,7 +8,6 @@
 buildPythonPackage rec {
   pname = "pytest-timeout";
   version = "1.3.0";
-  name = "${pname}-${version}";
 
   src = fetchPypi {
     inherit pname version;

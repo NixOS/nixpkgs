@@ -3,7 +3,6 @@
 buildPythonPackage rec {
   pname = "amqplib";
   version = "0.6.1";
-  name = "${pname}-${version}";
 
   src = fetchurl {
     url = https://github.com/barryp/py-amqplib/archive/0.6.1.tar.gz;

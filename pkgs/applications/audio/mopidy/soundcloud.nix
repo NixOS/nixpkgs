@@ -1,8 +1,7 @@
 { stdenv, fetchFromGitHub, pythonPackages, mopidy }:
 
 pythonPackages.buildPythonApplication rec {
-  name = "mopidy-soundcloud-${version}";
-
+  pname = "mopidy-soundcloud";
   version = "2.0.2";
 
   src = fetchFromGitHub {

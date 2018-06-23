@@ -6,7 +6,6 @@
 
 buildPythonPackage rec {
   pname = "Django";
-  name = "${pname}-${version}";
   version = "2.0.6";
 
   disabled = !isPy3k;

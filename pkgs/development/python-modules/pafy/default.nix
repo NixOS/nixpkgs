@@ -1,6 +1,5 @@
 { lib, buildPythonPackage, youtube-dl, fetchPypi }:
 buildPythonPackage rec {
-  name = "${pname}-${version}";
   pname = "pafy";
   version = "0.5.4";
 

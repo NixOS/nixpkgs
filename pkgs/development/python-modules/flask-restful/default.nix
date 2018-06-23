@@ -4,7 +4,6 @@
 }:
 
 buildPythonPackage rec {
-  name = "${pname}-${version}";
   pname = "Flask-RESTful";
   version = "0.3.6";
 

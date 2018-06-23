@@ -3,7 +3,6 @@
 if isPyPy then null else buildPythonPackage rec {
   pname = "cffi";
   version = "1.11.5";
-  name = "${pname}-${version}";
 
   src = fetchPypi {
     inherit pname version;

@@ -10,7 +10,6 @@
 }:
 
 buildPythonPackage rec {
-  name = "${pname}-${version}";
   pname = "botocore";
   version = "1.10.9";
 

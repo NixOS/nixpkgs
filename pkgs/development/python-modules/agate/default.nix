@@ -3,7 +3,6 @@
   leather, python-slugify }:
 
 buildPythonPackage rec {
-    name = "${pname}-${version}";
     pname = "agate";
     version = "1.6.1";
 

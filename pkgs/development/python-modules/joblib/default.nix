@@ -12,7 +12,6 @@
 
 buildPythonPackage rec {
   pname = "joblib";
-  name = "${pname}-${version}";
   version = "0.11";
   src = fetchPypi {
     inherit pname version;

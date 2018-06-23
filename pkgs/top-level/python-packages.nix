@@ -149,7 +149,6 @@ in {
   setuptools = toPythonModule (callPackage ../development/python-modules/setuptools { });
 
   vowpalwabbit = callPackage ../development/python-modules/vowpalwabbit {
-    pythonPackages = self;
     boost = pkgs.boost160;
   };
 
@@ -363,7 +362,7 @@ in {
 
   pydocstyle = callPackage ../development/python-modules/pydocstyle { };
 
-  pyexiv2 = disabledIf isPy3k (callPackage ../development/python-modules/pyexiv2 {});
+  pyexiv2 = disabledIf isPy3k (toPythonModule (callPackage ../development/python-modules/pyexiv2 {}));
 
   py3exiv2 = callPackage ../development/python-modules/py3exiv2 { };
 
@@ -6909,7 +6908,7 @@ in {
 
   keyring = callPackage ../development/python-modules/keyring { };
 
-  keyutils = callPackage ../development/python-modules/keyutils { };
+  keyutils = callPackage ../development/python-modules/keyutils { inherit (pkgs) keyutils; };
 
   kiwisolver = callPackage ../development/python-modules/kiwisolver { };
 
@@ -11255,7 +11254,7 @@ in {
   pyls-isort = callPackage ../development/python-modules/pyls-isort {};
 
   pyudev = callPackage ../development/python-modules/pyudev {
-    inherit (pkgs) fetchurl systemd;
+    inherit (pkgs) systemd;
   };
 
   pynmea2 = callPackage ../development/python-modules/pynmea2 {};

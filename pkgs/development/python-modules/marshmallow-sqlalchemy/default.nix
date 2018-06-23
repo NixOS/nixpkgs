@@ -4,7 +4,6 @@
 
 buildPythonPackage rec {
   pname = "marshmallow-sqlalchemy";
-  name = "${pname}-${version}";
   version = "0.14.0";
 
   meta = {

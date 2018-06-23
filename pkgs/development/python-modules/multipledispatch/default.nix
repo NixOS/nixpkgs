@@ -6,7 +6,6 @@
 buildPythonPackage rec {
   pname = "multipledispatch";
   version = "0.5.0";
-  name = "${pname}-${version}";
 
   src = fetchPypi {
     inherit pname version;

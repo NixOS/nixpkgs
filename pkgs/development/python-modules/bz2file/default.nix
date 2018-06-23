@@ -7,7 +7,6 @@
 buildPythonPackage rec {
   pname = "bz2file";
   version = "0.98";
-  name = "${pname}-${version}";
 
   src = fetchPypi {
     inherit pname version;

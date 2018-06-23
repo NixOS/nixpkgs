@@ -4,7 +4,6 @@
 }:
 
 buildPythonPackage rec {
-  name = "${pname}-${version}";
   pname = "flake8";
   version = "3.5.0";
 

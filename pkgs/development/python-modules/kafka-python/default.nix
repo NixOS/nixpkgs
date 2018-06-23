@@ -1,7 +1,6 @@
 { stdenv, buildPythonPackage, fetchPypi, pytest, six, mock }:
 
 buildPythonPackage rec {
-  name = "${pname}-${version}";
   version = "1.4.3";
   pname = "kafka-python";
 

@@ -1,7 +1,6 @@
 { stdenv, fetchPypi, buildPythonPackage, nose, numpy }:
 
 buildPythonPackage rec {
-  name = "${pname}-${version}";
   pname = "uncertainties";
   version = "3.0.2";
 

@@ -1,12 +1,12 @@
-{ stdenv, buildPythonPackage, fetchurl }:
+{ stdenv, buildPythonPackage, fetchPypi }:
 
 buildPythonPackage rec {
   pname = "distorm3";
   version = "3.3.4";
-  name = "${pname}-${version}";
 
-  src = fetchurl {
-    url = "mirror://pypi/d/${pname}/${name}.zip";
+  src = fetchPypi {
+    inherit pname version;
+    extension = "zip";
     sha256 = "1bh9xdiz9mkf9lfffimfn3hgd0mh60y7wl1micgkxzpl7hnxrpd4";
   };
 

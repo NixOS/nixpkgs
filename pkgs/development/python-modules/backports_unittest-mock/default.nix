@@ -1,7 +1,6 @@
 { stdenv, buildPythonPackage, fetchPypi, setuptools_scm, mock }:
 
 buildPythonPackage rec {
-  name = "${pname}-${version}";
   pname = "backports.unittest_mock";
   version = "1.3";
 

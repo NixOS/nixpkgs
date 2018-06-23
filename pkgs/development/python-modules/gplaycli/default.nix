@@ -3,8 +3,8 @@
 }:
 
 buildPythonPackage rec {
+  pname = "gplaycli";
   version = "3.21";
-  name = "gplaycli-${version}";
 
   src = fetchFromGitHub {
     owner = "matlink";

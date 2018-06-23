@@ -7,7 +7,6 @@
 buildPythonPackage rec {
   pname = "pexpect";
   version = "4.6.0";
-  name = "${pname}-${version}";
 
   src = fetchPypi {
     inherit pname version;

@@ -1,7 +1,6 @@
 { stdenv, buildPythonPackage, fetchPypi }:
 buildPythonPackage rec {
     pname = "pyparsing";
-    name = "${pname}-${version}";
     version = "2.2.0";
 
     src = fetchPypi {

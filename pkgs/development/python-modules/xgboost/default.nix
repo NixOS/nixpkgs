@@ -1,6 +1,4 @@
 { stdenv
-, lib
-, pkgs
 , buildPythonPackage
 , nose
 , scipy
@@ -8,15 +6,14 @@
 }:
 
 buildPythonPackage rec {
-  name = "xgboost-${version}";
-
+  pname = "xgboost";
   inherit (xgboost) version src meta;
 
   propagatedBuildInputs = [ scipy ];
   checkInputs = [ nose ];
 
   postPatch = let
-    libname = if stdenv.isDarwin then "libxgboost.dylib" else "libxgboost.so";
+    libname = "libxgboost.${stdenv.hostPlatform.extensions.sharedLibrary}";
 
   in ''
     cd python-package

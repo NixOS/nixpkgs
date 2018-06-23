@@ -3,7 +3,6 @@
 buildPythonPackage rec {
   pname = "pyflakes";
   version = "1.6.0";
-  name = "${pname}-${version}";
 
   src = fetchPypi {
     inherit pname version;

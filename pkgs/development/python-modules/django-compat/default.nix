@@ -3,7 +3,6 @@
 }:
 buildPythonPackage rec {
   pname = "django-compat";
-  name = "${pname}-${version}";
   version = "1.0.14";
 
   # the pypi packages don't include everything required for the tests

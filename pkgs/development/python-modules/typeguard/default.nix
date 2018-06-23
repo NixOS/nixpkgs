@@ -7,7 +7,6 @@
 }:
 
 buildPythonPackage rec {
-  name = "${pname}-${version}";
   pname = "typeguard";
   version = "2.1.4";
 

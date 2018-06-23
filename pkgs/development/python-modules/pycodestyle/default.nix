@@ -3,7 +3,6 @@
 buildPythonPackage rec {
   pname = "pycodestyle";
   version = "2.3.1";
-  name = "${pname}-${version}";
 
   src = fetchPypi {
     inherit pname version;

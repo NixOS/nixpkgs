@@ -1,11 +1,11 @@
-{ lib, buildPythonPackage, fetchurl, tornado }:
+{ lib, buildPythonPackage, fetchPypi, tornado }:
 
 buildPythonPackage rec {
-  name = "sockjs-tornado-${version}";
+  pname = "sockjs-tornado";
   version = "1.0.3";
 
-  src = fetchurl {
-    url = "mirror://pypi/s/sockjs-tornado/${name}.tar.gz";
+  src = fetchPypi {
+    inherit pname version;
     sha256 = "16cff40nniqsyvda1pb2j3b4zwmrw7y2g1vqq78lp20xpmhnwwkd";
   };
 

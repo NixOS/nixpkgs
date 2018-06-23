@@ -2,7 +2,6 @@
 
 buildPythonPackage rec {
   pname = "emoji";
-  name = "${pname}-${version}";
   version = "0.5.0";
 
   src = fetchPypi {

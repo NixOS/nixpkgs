@@ -9,7 +9,6 @@
 buildPythonPackage rec {
   pname = "future";
   version = "0.16.0";
-  name = "${pname}-${version}";
 
   src = fetchPypi {
     inherit pname version;

@@ -2,7 +2,6 @@
   pytest, pytestrunner,  mccabe, configparser, backports_functools_lru_cache }:
 
 buildPythonPackage rec {
-  name = "${pname}-${version}";
   pname = "pylint";
   version = "1.9.2";
 

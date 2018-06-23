@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, python, buildPythonPackage, pycairo, backports_functools_lru_cache
+{ stdenv, fetchPypi, python, buildPythonPackage, pycairo, backports_functools_lru_cache
 , which, cycler, dateutil, nose, numpy, pyparsing, sphinx, tornado, kiwisolver
 , freetype, libpng, pkgconfig, mock, pytz, pygobject3, functools32, subprocess32
 , enableGhostscript ? false, ghostscript ? null, gtk3
@@ -23,10 +23,9 @@ assert enableQt -> pyqt4 != null;
 buildPythonPackage rec {
   version = "2.2.2";
   pname = "matplotlib";
-  name = "${pname}-${version}";
 
-  src = fetchurl {
-    url = "mirror://pypi/m/matplotlib/${name}.tar.gz";
+  src = fetchPypi {
+    inherit pname version;
     sha256 = "4dc7ef528aad21f22be85e95725234c5178c0f938e2228ca76640e5e84d8cde8";
   };
 

@@ -2,7 +2,6 @@
 buildPythonPackage rec {
   pname = "redis";
   version = "2.10.6";
-  name = "${pname}-${version}";
 
   src = fetchPypi {
     inherit pname version;

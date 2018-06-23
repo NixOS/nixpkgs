@@ -4,7 +4,6 @@
 buildPythonPackage rec {
   pname = "alabaster";
   version = "0.7.11";
-  name = "${pname}-${version}";
 
   src = fetchPypi {
     inherit pname version;

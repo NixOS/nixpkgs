@@ -2,7 +2,6 @@
   mistune, docutils } :
 buildPythonPackage rec {
   pname = "m2r";
-  name = "${pname}-${version}";
   version = "0.1.14";
 
   src = fetchPypi {

@@ -3,7 +3,6 @@
 buildPythonPackage rec {
   pname = "django-redis";
   version = "4.9.0";
-  name = "${pname}-${version}";
 
   src = fetchPypi {
     inherit pname version;

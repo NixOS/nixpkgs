@@ -7,7 +7,6 @@
 buildPythonPackage rec {
   pname = "simplejson";
   version = "3.15.0";
-  name = "${pname}-${version}";
   doCheck = !stdenv.isDarwin;
 
   src = fetchPypi {

@@ -1,7 +1,6 @@
 { stdenv, buildPythonPackage, fetchPypi, pytest }:
 
 buildPythonPackage rec {
-  name = "${pname}-${version}";
   pname = "Whoosh";
   version = "2.7.4";
   src = fetchPypi {

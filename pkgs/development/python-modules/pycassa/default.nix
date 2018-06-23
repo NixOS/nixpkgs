@@ -3,7 +3,6 @@
 buildPythonPackage rec {
   pname = "pycassa";
   version = "1.11.2";
-  name = "${pname}-${version}";
 
   src = fetchPypi {
     inherit pname version;

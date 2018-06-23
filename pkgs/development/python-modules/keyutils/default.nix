@@ -1,16 +1,15 @@
-{ lib, buildPythonPackage, fetchurl, pkgs, pytestrunner }:
+{ lib, buildPythonPackage, fetchPypi, keyutils, pytestrunner }:
 
 buildPythonPackage rec {
   pname = "keyutils";
   version = "0.5";
-  name = "${pname}-${version}";
 
-  src = fetchurl {
-    url = "mirror://pypi/k/${pname}/${name}.tar.gz";
+  src = fetchPypi {
+    inherit pname version;
     sha256 = "0dskys71vkn59vlsfs1ljli0qnzk7b10iv4pawxawnk2hvyjrf10";
   };
 
-  buildInputs = [ pkgs.keyutils pytestrunner ];
+  checkInputs = [ keyutils pytestrunner ];
 
   doCheck = false;
 

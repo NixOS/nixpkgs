@@ -2,7 +2,6 @@
 buildPythonPackage rec {
   pname = "django-appconf";
   version = "1.0.2";
-  name = "${pname}-${version}";
 
   src = fetchPypi {
     inherit pname version;

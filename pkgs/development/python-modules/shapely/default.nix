@@ -4,7 +4,6 @@
 }:
 
 buildPythonPackage rec {
-  name = "${pname}-${version}";
   pname = "Shapely";
   version = "1.6.4.post1";
 

@@ -8,7 +8,6 @@
 
 buildPythonPackage rec {
   pname = "Flask-PyMongo";
-  name = "${pname}-${version}";
   version = "0.5.2";
 
   src = fetchPypi {

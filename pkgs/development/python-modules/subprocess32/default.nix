@@ -10,7 +10,6 @@
 buildPythonPackage rec {
   pname = "subprocess32";
   version = "3.5.2";
-  name = "${pname}-${version}";
   disabled = isPy3k;
 
   src = fetchPypi {

@@ -8,13 +8,12 @@ let
   cryptsetupWithPython = cryptsetup.override pyenable;
 in buildPythonPackage rec {
   pname = "blivet";
-  name = "${pname}-${version}";
   version = "0.67";
 
   src = fetchFromGitHub {
     owner = "dwlehman";
     repo = "blivet";
-    rev = name;
+    rev = "${pname}-${version}";
     sha256 = "1gk94ghjrxfqnx53hph1j2s7qcv86fjz48is7l099q9c24rjv8ky";
   };
 
