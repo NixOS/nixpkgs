@@ -24,8 +24,9 @@
 }:
 
 let
-  inherit (stdenv.lib) optional optionalString concatStringsSep;
+  inherit (stdenv.lib) optional optionals optionalString concatStringsSep;
   inherit (stdenv) isDarwin;
+
 in buildPythonPackage rec {
   pname = "pandas";
   version = "0.23.1";
@@ -67,6 +68,24 @@ in buildPythonPackage rec {
                 "['pandas/src/klib', 'pandas/src', '$cpp_sdk']"
   '';
 
+
+  disabledTests = stdenv.lib.concatMapStringsSep " and " (s: "not " + s) ([
+    # since dateutil 0.6.0 the following fails: test_fallback_plural, test_ambiguous_flags, test_ambiguous_compat
+    # was supposed to be solved by https://github.com/dateutil/dateutil/issues/321, but is not the case
+    "test_fallback_plural"
+    "test_ambiguous_flags"
+    "test_ambiguous_compat"
+    # Locale-related
+    "test_names"
+    "test_dt_accessor_datetime_name_accessors"
+    "test_datetime_name_accessors"
+    # Can't import from test folder
+    "test_oo_optimizable"
+  ] ++ optionals isDarwin [
+    "test_locale"
+    "test_clipboard"
+  ]);
+
   checkPhase = ''
     runHook preCheck
   ''
@@ -79,13 +98,7 @@ in buildPythonPackage rec {
     chmod a+x pbcopy pbpaste
     export PATH=$(pwd):$PATH
   '' + ''
-    # since dateutil 0.6.0 the following fails: test_fallback_plural, test_ambiguous_flags, test_ambiguous_compat
-    # was supposed to be solved by https://github.com/dateutil/dateutil/issues/321, but is not the case
-    py.test $out/${python.sitePackages}/pandas --skip-slow --skip-network \
-      -k "not test_fallback_plural and \
-          not test_ambiguous_flags and \
-          not test_ambiguous_compat \
-          ${optionalString isDarwin "and not test_locale and not test_clipboard"}"
+    py.test $out/${python.sitePackages}/pandas --skip-slow --skip-network -k "$disabledTests"
     runHook postCheck
   '';
 
