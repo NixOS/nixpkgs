@@ -1694,10 +1694,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   CatalystXScriptServerStarman = buildPerlPackage {
-    name = "CatalystX-Script-Server-Starman-0.02";
+    name = "CatalystX-Script-Server-Starman-0.03";
     src = fetchurl {
-      url = mirror://cpan/authors/id/A/AB/ABRAXXA/CatalystX-Script-Server-Starman-0.02.tar.gz;
-      sha256 = "0h02mpkc4cmi3jpvcd7iw7xyzx55bqvvl1qkf967gqkvpklm0qx5";
+      url = mirror://cpan/authors/id/A/AB/ABRAXXA/CatalystX-Script-Server-Starman-0.03.tar.gz;
+      sha256 = "08jvibq4v8xjj0c3cr93h0w8w0c88ajwjn37xjy7ygxl9krlffp6";
     };
     patches = [
       # See Nixpkgs issues #16074 and #17624
