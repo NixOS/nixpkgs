@@ -12609,10 +12609,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   PPIxRegexp = buildPerlModule rec {
-    name = "PPIx-Regexp-0.059";
+    name = "PPIx-Regexp-0.060";
     src = fetchurl {
       url = "mirror://cpan/authors/id/W/WY/WYANT/${name}.tar.gz";
-      sha256 = "f2464c449d9cb21866f8adc7b5299d1f611cef5322b9d885ec55790243458635";
+      sha256 = "885e172bbfde54c240bdfd6013fc6e1b76bdd19c211901d2128f3873938ff377";
     };
     propagatedBuildInputs = [ PPI ];
     meta = {
