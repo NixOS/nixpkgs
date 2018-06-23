@@ -3991,10 +3991,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   DevelChecklib = buildPerlPackage rec {
-    name = "Devel-CheckLib-1.12";
+    name = "Devel-CheckLib-1.13";
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/MA/MATTN/${name}.tar.gz";
-      sha256 = "0lcmpp5spa6rx3b0lv8lzj55hxl72g332lngnhqhmp22aimvw2m9";
+      sha256 = "1a19qkwxwz3wqb16cdabymfbf9kiydiifw90nd5srpq5hy8gvb94";
     };
     buildInputs = [ IOCaptureOutput MockConfig ];
   };
