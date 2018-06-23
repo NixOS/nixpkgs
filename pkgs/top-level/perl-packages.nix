@@ -4391,10 +4391,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   DevelHide = buildPerlPackage rec {
-    name = "Devel-Hide-0.0009";
+    name = "Devel-Hide-0.0010";
     src = fetchurl {
       url = "mirror://cpan/authors/id/F/FE/FERREIRA/${name}.tar.gz";
-      sha256 = "1phnzbw58v6551nhv6sg86m72nx9w5j4msh1hg4jvkakkq5w9pki";
+      sha256 = "10jyv9nmv513hs75rls5yx2xn82513xnnhjir3dxiwgb1ykfyvvm";
     };
   };
 
