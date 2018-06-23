@@ -4,12 +4,14 @@ let
   libpath = with xorg; stdenv.lib.makeLibraryPath [ libX11 libXext libXcursor libXrandr libXxf86vm libpulseaudio ];
 in stdenv.mkDerivation rec {
   name = "multimc-${version}";
-  version = "0.6.2";
+  # Current release as of 2018-06-23 (v0.6.2) breaks under Qt 5.11—see
+  # https://github.com/NixOS/nixpkgs/issues/42387
+  version = "unstable-2018-06-04";
   src = fetchFromGitHub {
     owner = "MultiMC";
     repo = "MultiMC5";
-    rev = version;
-    sha256 = "07jrr6si8nzfqwf073zhgw47y6snib23ad3imh1ik1nn5r7wqy3c";
+    rev = "19bb50b872da2702b8e0b65f3f7b6b54c1c5b071";
+    sha256 = "01frkk2klm1axr7ywnj23ikxn5pkgj8q6w8vqbslsvmh8bni8rk0";
     fetchSubmodules = true;
   };
   nativeBuildInputs = [ cmake file makeWrapper ];
