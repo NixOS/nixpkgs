@@ -15579,10 +15579,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   TestPAUSEPermissions = buildPerlPackage rec {
-     name = "Test-PAUSE-Permissions-0.06";
+     name = "Test-PAUSE-Permissions-0.07";
      src = fetchurl {
-       url = mirror://cpan/authors/id/I/IS/ISHIGAKI/Test-PAUSE-Permissions-0.06.tar.gz;
-       sha256 = "1rspdxwfr1mxjrpcsd4asd5q1qpmiyw0sm7g008yy1gsz6i2yl88";
+       url = mirror://cpan/authors/id/S/SK/SKAJI/Test-PAUSE-Permissions-0.07.tar.gz;
+       sha256 = "0gh7f67g1y30yggmwj1pq6xgrx3cfjibj2378nl3gilvyaxw2w2m";
      };
      propagatedBuildInputs = [ ConfigIdentity PAUSEPermissions ParseLocalDistribution ];
      buildInputs = [ ExtUtilsMakeMakerCPANfile TestUseAllModules ];
