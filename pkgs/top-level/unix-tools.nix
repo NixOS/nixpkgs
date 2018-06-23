@@ -19,14 +19,12 @@ let
     in runCommand "${cmd}-${version}" {
       meta.platforms = map (n: { kernel.name = n; }) (pkgs.lib.attrNames providers);
     } ''
-      mkdir -p $out/bin
-
       if ! [ -x "${provider}" ]; then
         echo "Cannot find command ${cmd}"
         exit 1
       fi
 
-      ln -s "${provider}" "$out/bin/${cmd}"
+      install -D "${provider}" "$out/bin/${cmd}"
     '';
 
   # more is unavailable in darwin

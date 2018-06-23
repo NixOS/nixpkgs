@@ -24,11 +24,11 @@
 
 buildPythonPackage rec {
   pname = "notebook";
-  version = "5.4.1";
+  version = "5.5.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "01l6yp78sp27vns4cxh8ybr7x0pixxn97cp0i3w6s0lv1v8l6qbx";
+    sha256 = "fa915c231e64a30d19cc2c70ccab6444cbaa93e44e92b5f8233dd9147ad0e664";
   };
 
   LC_ALL = "en_US.utf8";
@@ -44,6 +44,12 @@ buildPythonPackage rec {
   # disable warning_filters
   preCheck = lib.optionalString (!isPy3k) ''
     echo "" > setup.cfg
+  '';
+
+  postPatch = ''
+    # Remove selenium tests
+    rm -rf notebook/tests/selenium
+
   '';
 
   checkPhase = ''
