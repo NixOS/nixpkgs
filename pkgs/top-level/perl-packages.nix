@@ -3623,10 +3623,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   DateManip = buildPerlPackage rec {
-    name = "Date-Manip-6.71";
+    name = "Date-Manip-6.72";
     src = fetchurl {
       url = "mirror://cpan/authors/id/S/SB/SBECK/${name}.tar.gz";
-      sha256 = "1v998nvj81av6w3cvfc80ya91k61zdv9nx9mw9skg3ifc8qycwzv";
+      sha256 = "19jdm73kqbv1biw4v8bdzy5qr2xvqdrfz8lxgg59445ljjfxvx1q";
     };
     # for some reason, parsing /etc/localtime does not work anymore - make sure that the fallback "/bin/date +%Z" will work
     patchPhase = ''
