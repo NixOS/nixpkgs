@@ -219,7 +219,6 @@ mapAliases ({
   pltScheme = racket; # just to be sure
   polarssl = mbedtls; # added 2018-04-25
   poppler_qt5 = libsForQt5.poppler;  # added 2015-12-19
-  postage = pgmanage; # added 2017-11-03
   procps = procps-ng; # added 2018-04-25
   prometheus-statsd-bridge = prometheus-statsd-exporter;  # added 2017-08-27
   pulseaudioLight = pulseaudio; # added 2018-04-25
