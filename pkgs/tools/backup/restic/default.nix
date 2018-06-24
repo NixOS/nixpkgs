@@ -2,7 +2,7 @@
 
 buildGoPackage rec {
   name = "restic-${version}";
-  version = "0.9.0";
+  version = "0.9.1";
 
   goPackagePath = "github.com/restic/restic";
 
@@ -10,7 +10,7 @@ buildGoPackage rec {
     owner = "restic";
     repo = "restic";
     rev = "v${version}";
-    sha256 = "09520ggr98w7nn6kl3yx0nrx4f79q4vhg4q1hiv2nlwxd0jz1p6y";
+    sha256 = "116dc86fjmflmk0n2nywvv2f6z1jig3czqxz0cx0z77n8rmj9npv";
   };
 
   buildPhase = ''
