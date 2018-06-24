@@ -1,0 +1,11 @@
+fixes build with qt 5.11
+--- a/src/gui/entry/EditEntryWidget.cpp
++++ b/src/gui/entry/EditEntryWidget.cpp
+@@ -31,6 +31,7 @@
+ #include <QTemporaryFile>
+ #include <QMimeData>
+ #include <QEvent>
+ #include <QColorDialog>
++#include <QButtonGroup>
+
+ #include "autotype/AutoType.h"
