@@ -581,11 +581,11 @@
     md5name = "2c7b21892f84a4c67546f84611eccdad6259875c971e98ddb027da66ea0ac9c2-libodfgen-0.1.6.tar.bz2";
   }
   {
-    name = "odfvalidator-1.1.8-incubating-SNAPSHOT-jar-with-dependencies.jar";
-    url = "http://dev-www.libreoffice.org/src/../extern/a084cd548b586552cb7d3ee51f1af969-odfvalidator-1.1.8-incubating-SNAPSHOT-jar-with-dependencies.jar";
-    sha256 = "a0bd3e0186e043223bfb231a888e2bfb06c78ee2e07c2f0eca434236d173cf34";
-    md5 = "a084cd548b586552cb7d3ee51f1af969";
-    md5name = "a084cd548b586552cb7d3ee51f1af969-odfvalidator-1.1.8-incubating-SNAPSHOT-jar-with-dependencies.jar";
+    name = "odfvalidator-1.2.0-incubating-SNAPSHOT-jar-with-dependencies+ODFTOOLKIT-460+ODFTOOLKIT-475.jar";
+    url = "http://dev-www.libreoffice.org/src/../extern/odfvalidator-1.2.0-incubating-SNAPSHOT-jar-with-dependencies+ODFTOOLKIT-460+ODFTOOLKIT-475.jar";
+    sha256 = "702413413a5d8076c17fe79c0808dfba145a7260020f6c8627ea529a0cf83769";
+    md5 = "";
+    md5name = "702413413a5d8076c17fe79c0808dfba145a7260020f6c8627ea529a0cf83769-odfvalidator-1.2.0-incubating-SNAPSHOT-jar-with-dependencies+ODFTOOLKIT-460+ODFTOOLKIT-475.jar";
   }
   {
     name = "officeotron-0.7.4-master.jar";

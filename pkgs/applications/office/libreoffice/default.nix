@@ -42,14 +42,14 @@ let
 
     translations = fetchSrc {
       name = "translations";
-      sha256 = "0bjl3hdckd5bcgskh46xqna1hpxjjx0ycgpnilyk7j8l6407hpw6";
+      sha256 = "1p8gb9jxv4n8ggksbfsqzdw5amxg575grxifsabhgjllpisjzrlr";
     };
 
     # TODO: dictionaries
 
     help = fetchSrc {
       name = "help";
-      sha256 = "1z21bk5lwd5gxsyjdwh0fmgkys4lhnx7flbjd6dbn9d99paz1w6f";
+      sha256 = "1dkzm766zi4msk6w35bvfk5b5bx1xyqg2wx58wklr5375kjv6ba9";
     };
 
   };
@@ -264,10 +264,9 @@ in stdenv.mkDerivation rec {
       libxshmfence libatomic_ops graphite2 harfbuzz gpgme utillinux
       librevenge libe-book libmwaw glm glew ncurses epoxy
       libodfgen CoinMP librdf_rasqal defaultIconTheme gettext
-      gdb
     ]
     ++ lib.optional kdeIntegration kdelibs4;
-  nativeBuildInputs = [ wrapGAppsHook ];
+  nativeBuildInputs = [ wrapGAppsHook gdb ];
 
   passthru = {
     inherit srcs jdk;
