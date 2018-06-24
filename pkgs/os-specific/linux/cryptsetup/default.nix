@@ -4,11 +4,11 @@
 assert enablePython -> python2 != null;
 
 stdenv.mkDerivation rec {
-  name = "cryptsetup-2.0.2";
+  name = "cryptsetup-2.0.3";
 
   src = fetchurl {
     url = "mirror://kernel/linux/utils/cryptsetup/v2.0/${name}.tar.xz";
-    sha256 = "15wyjfgcqjf0wy5gxnmjj8aah33csv5v6n1hv9c8sxdzygbhb0ag";
+    sha256 = "1m01wl8njjraz69fsk97l3nqfc32nbpr1la5s1l4mzzmq42clv2d";
   };
 
   NIX_LDFLAGS = "-lgcc_s";
