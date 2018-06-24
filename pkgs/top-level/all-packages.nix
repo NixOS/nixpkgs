@@ -5634,6 +5634,8 @@ with pkgs;
 
   znapzend = callPackage ../tools/backup/znapzend { };
 
+  targetcli = callPackage ../os-specific/linux/targetcli { };
+
   tarsnap = callPackage ../tools/backup/tarsnap { };
 
   tarsnapper = callPackage ../tools/backup/tarsnapper { };
