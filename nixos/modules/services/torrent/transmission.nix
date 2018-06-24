@@ -23,8 +23,12 @@ let
     #!${pkgs.runtimeShell}
     set -ex
     for DIR in ${escapeShellArgs directoriesToManage}; do
-      mkdir -p "$DIR"
-      chmod 770 "$DIR"
+      if [ ! -e $DIR ]
+      then
+        mkdir -p -m 755 "$DIR"
+        chmod 770 "$DIR"
+        chown transmission:transmission "$DIR"
+      fi
     done
     cp -f ${settingsFile} ${settingsDir}/settings.json
   '';
@@ -100,6 +104,7 @@ in
       serviceConfig.ExecStart = "${pkgs.transmission}/bin/transmission-daemon -f --port ${toString config.services.transmission.port}";
       serviceConfig.ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
       serviceConfig.User = "transmission";
+      serviceConfig.PermissionsStartOnly = true;
       # NOTE: transmission has an internal umask that also must be set (in settings.json)
       serviceConfig.UMask = "0002";
     };

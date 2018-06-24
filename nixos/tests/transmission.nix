@@ -9,7 +9,12 @@ import ./make-test.nix ({ pkgs, ...} : {
 
     networking.firewall.allowedTCPPorts = [ 9091 ];
 
-    services.transmission.enable = true;
+    services.transmission = {
+      enable = true;
+      settings = {
+        download-dir = "/srv/torrents/";
+      };
+    };
   };
 
   testScript =
