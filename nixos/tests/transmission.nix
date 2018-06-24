@@ -17,10 +17,19 @@ import ./make-test.nix ({ pkgs, ...} : {
     };
   };
 
-  testScript =
+  testScript = with pkgs;
+    let
+      torrentFile = ./transmission/debian-9.4.0-amd64-netinst.iso.torrent;
+    in
     ''
       startAll;
       $machine->waitForUnit("transmission");
+
+      # Perform a quick smoke-test to ensure transmission can access it's directories and config
+      # Pardon the blasphemy ;)
+      $machine->succeed("${transmission}/bin/transmission-remote -a ${torrentFile}");
+      $machine->succeed("${transmission}/bin/transmission-remote -t all -S");
+
       $machine->shutdown;
     '';
 })
