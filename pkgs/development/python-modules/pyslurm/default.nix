@@ -1,4 +1,4 @@
-{ lib, fetchFromGitHub, buildPythonPackage, cython, slurm }:
+{ lib, fetchFromGitHub, buildPythonPackage, cython, slurm, nose }:
 
 buildPythonPackage rec {
   pname = "pyslurm";
@@ -13,6 +13,14 @@ buildPythonPackage rec {
 
   buildInputs = [ cython slurm ];
   setupPyBuildFlags = [ "--slurm-lib=${slurm}/lib" "--slurm-inc=${slurm.dev}/include" ];
+
+  # Test cases need /etc/slurm/slurm.conf and require a working slurm installation
+  doCheck = false;
+
+  checkInputs = [ nose ];
+  checkPhase = ''
+    nosetests -v
+  '';
 
   meta = with lib; {
     homepage = https://github.com/PySlurm/pyslurm;
