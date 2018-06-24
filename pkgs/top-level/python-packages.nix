@@ -3867,6 +3867,8 @@ in {
 
   phpserialize = callPackage ../development/python-modules/phpserialize { };
 
+  plaid-python = callPackage ../development/python-modules/plaid-python { };
+
   plaster = callPackage ../development/python-modules/plaster {};
 
   plaster-pastedeploy = callPackage ../development/python-modules/plaster-pastedeploy {};
