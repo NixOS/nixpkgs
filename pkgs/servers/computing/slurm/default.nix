@@ -8,11 +8,11 @@
 
 stdenv.mkDerivation rec {
   name = "slurm-${version}";
-  version = "17.11.5";
+  version = "17.11.6";
 
   src = fetchurl {
     url = "https://download.schedmd.com/slurm/${name}.tar.bz2";
-    sha256 = "07ghyyz12k4rksm06xf7dshwp1ndm13zphdbqja99401q4xwbx9r";
+    sha256 = "0bdsrrzjfdqain1wwjpxmxq4fzsmy25ichax1p923rsaykl5xilp";
   };
 
   outputs = [ "out" "dev" ];
