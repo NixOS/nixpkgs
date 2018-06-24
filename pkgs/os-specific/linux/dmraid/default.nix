@@ -16,6 +16,12 @@ stdenv.mkDerivation rec {
         stripLen = 2;
         extraPrefix = "1.0.0.rc16/";
       })
+      (fetchpatch {
+        url = "https://raw.githubusercontent.com/void-linux/void-packages/fceed4b8e96b3c1da07babf6f67b6ed1588a28b2/srcpkgs/dmraid/patches/007-fix-loff_t-musl.patch";
+        sha256 = "0msnq39qnzg3b1pdksnz1dgqwa3ak03g41pqh0lw3h7w5rjc016k";
+        stripLen = 2;
+        extraPrefix = "1.0.0.rc16/";
+      })
     ];
 
   postPatch = ''
