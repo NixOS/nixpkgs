@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "mate-sensors-applet-${version}";
-  version = "1.20.1";
+  version = "1.20.2";
 
   src = fetchurl {
     url = "http://pub.mate-desktop.org/releases/${mate.getRelease version}/${name}.tar.xz";
-    sha256 = "0lnr3jjq30zw1i2rv5n69dhsa3x39lc91xcgbj4vyj1rxj9ff05x";
+    sha256 = "0khxzwjjf2gp9ma6ji0ynvvqlw6hhr8j4gff9klkrn60xbg5h16b";
   };
 
   nativeBuildInputs = [
