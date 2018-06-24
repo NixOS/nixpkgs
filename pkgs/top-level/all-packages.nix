@@ -3341,6 +3341,8 @@ with pkgs;
 
   kronometer = libsForQt5.callPackage ../tools/misc/kronometer { };
 
+  krop = callPackage ../applications/graphics/krop { };
+
   elisa = libsForQt5.callPackage ../applications/audio/elisa { };
 
   kdiff3 = libsForQt5.callPackage ../tools/text/kdiff3 { };
