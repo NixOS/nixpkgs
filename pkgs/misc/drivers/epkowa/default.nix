@@ -6,7 +6,7 @@ libxslt,
 libusb,
 sane-backends,
 rpm, cpio,
-eject,
+getopt,
 patchelf, gcc
 }:
 
@@ -55,6 +55,7 @@ let plugins = {
         '';
       hw = "Perfection V500 Photo";
       };
+    meta = common_meta // { description = "iscan esci x770 plugin for "+passthru.hw; };
     };
   f720 = stdenv.mkDerivation rec {
     name = "iscan-gt-f720-bundle";
@@ -155,7 +156,7 @@ stdenv.mkDerivation rec {
     '';
   postFixup = ''
     # iscan-registry is a shell script requiring getopt
-    wrapProgram $out/bin/iscan-registry --prefix PATH : ${eject}/bin
+    wrapProgram $out/bin/iscan-registry --prefix PATH : ${getopt}/bin
     registry=$out/bin/iscan-registry;
     '' +
     stdenv.lib.concatStrings (stdenv.lib.mapAttrsToList (name: value: ''
