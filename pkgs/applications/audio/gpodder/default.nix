@@ -5,7 +5,7 @@
 
 python3Packages.buildPythonApplication rec {
   name = "gpodder-${version}";
-  version = "3.10.2";
+  version = "3.10.3";
 
   format = "other";
 
@@ -13,7 +13,7 @@ python3Packages.buildPythonApplication rec {
     owner = "gpodder";
     repo = "gpodder";
     rev = version;
-    sha256 = "0nbhyh44cympslcf4miwc2n1gccm5ghjf9slg0r8xnpvg921jv04";
+    sha256 = "0j0amjq1wvr5p10vckg900a8xfnxw6z028qw72ayh58216m5jb5l";
   };
 
   postPatch = with stdenv.lib; ''
