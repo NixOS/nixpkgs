@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = http://pcman.ptt.cc;
+    homepage = https://pcman.ptt.cc;
     license = licenses.gpl2;
     description = "Telnet BBS browser with GTK+ interface";
     maintainers = [ maintainers.sifmelcara ];
