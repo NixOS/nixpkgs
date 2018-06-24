@@ -1,4 +1,8 @@
-{ stdenv, fetchFromGitHub, fetchpatch, meson, ninja, pkgconfig, sphinx, acl, curl, fuse, libselinux, udev, xz, zstd }:
+{ stdenv, fetchFromGitHub, fetchpatch
+, meson, ninja, pkgconfig, sphinx
+, acl, curl, fuse, libselinux, udev, xz, zstd
+, glibcLocales, rsync
+}:
 
 stdenv.mkDerivation rec {
   name = "casync-${version}";
@@ -13,8 +17,21 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ acl curl fuse libselinux udev xz zstd ];
   nativeBuildInputs = [ meson ninja pkgconfig sphinx ];
+  checkInputs = [ glibcLocales rsync ];
+
+  postPatch = ''
+    for f in test/test-*.sh.in; do
+      patchShebangs $f
+    done
+    patchShebangs test/http-server.py
+  '';
 
   PKG_CONFIG_UDEV_UDEVDIR = "lib/udev";
+
+  doCheck = true;
+  preCheck = ''
+    export LC_ALL="en_US.utf-8"
+  '';
 
   meta = with stdenv.lib; {
     description = "Content-Addressable Data Synchronizer";
