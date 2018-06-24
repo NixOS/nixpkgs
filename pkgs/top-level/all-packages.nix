@@ -21012,6 +21012,8 @@ with pkgs;
 
   mupen64plus = callPackage ../misc/emulators/mupen64plus { };
 
+  muse = callPackage ../applications/audio/muse { };
+
   mynewt-newt = callPackage ../tools/package-management/mynewt-newt { };
 
   inherit (callPackages ../tools/package-management/nix {
