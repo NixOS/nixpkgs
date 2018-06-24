@@ -42,8 +42,6 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     libjack2
-    qt5.qtbase
-    qt5.qtx11extras
     qt5.qtsvg
     qt5.qttools
     cmake
