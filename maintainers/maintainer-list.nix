@@ -571,7 +571,7 @@
     email = "brandon.barker@gmail.com";
     github = "bbarker";
     name = "Brandon Elam Barker";
-  };  
+  };
   bcarrell = {
     email = "brandoncarrell@gmail.com";
     github = "bcarrell";
@@ -3959,6 +3959,11 @@
     email = "twey@twey.co.uk";
     github = "twey";
     name = "James ‘Twey’ Kay";
+  };
+  tycho01 = {
+    email = "tychogrouwstra@gmail.com";
+    github = "tycho01";
+    name = "Tycho Grouwstra";
   };
   typetetris = {
     email = "ericwolf42@mail.com";

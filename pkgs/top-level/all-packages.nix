@@ -4163,6 +4163,8 @@ with pkgs;
 
   offlineimap = callPackage ../tools/networking/offlineimap { };
 
+  oh-my-fish = callPackage ../shells/fish/oh-my-fish { };
+
   oh-my-zsh = callPackage ../shells/zsh/oh-my-zsh { };
 
   ola = callPackage ../applications/misc/ola { };
