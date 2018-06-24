@@ -107,8 +107,8 @@ let
   };
 
   imagick = buildPecl {
-    name = "imagick-3.4.3RC1";
-    sha256 = "0siyxpszjz6s095s2g2854bhprjq49rf22v6syjiwvndg1pc9fsh";
+    name = "imagick-3.4.3";
+    sha256 = "0z2nc92xfc5axa9f2dy95rmsd2c81q8cs1pm4anh0a50x9g5ng0z";
     configureFlags = "--with-imagick=${pkgs.imagemagick.dev}";
     nativeBuildInputs = [ pkgs.pkgconfig ];
     buildInputs = [ pkgs.pcre ];
