@@ -3783,6 +3783,8 @@ in {
 
   rpy2 = callPackage ../development/python-modules/rpy2 {};
 
+  rtslib = callPackage ../development/python-modules/rtslib {};
+
   Rtree = callPackage ../development/python-modules/Rtree { inherit (pkgs) libspatialindex; };
 
   typing = callPackage ../development/python-modules/typing { };
