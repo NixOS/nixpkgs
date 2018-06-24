@@ -22,7 +22,7 @@
 
 , # Whether to build dynamic libs for the standard library (on the target
   # platform). Static libs are always built.
-  enableShared ? !targetPlatform.isWindows && !targetPlatform.useAndroidPrebuilt && !targetPlatform.useiOSPrebuilt
+  enableShared ? !targetPlatform.isWindows && !targetPlatform.useiOSPrebuilt
 
 , # Whetherto build terminfo.
   enableTerminfo ? !targetPlatform.isWindows
