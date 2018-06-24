@@ -1,4 +1,4 @@
-{ config, lib, ... }:
+{ config, lib, pkgs, ... }:
 
 with lib;
 
@@ -39,6 +39,8 @@ in
     environment.etc."npmrc".text = cfg.npmrc;
 
     environment.variables.NPM_CONFIG_GLOBALCONFIG = "/etc/npmrc";
+
+    environment.systemPackages = [ pkgs.nodePackages.npm ];
   };
 
 }
