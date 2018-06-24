@@ -1,0 +1,11 @@
+--- a/src/aboutdialog/ExtendedAboutDialog.cpp
++++ b/src/aboutdialog/ExtendedAboutDialog.cpp
+@@ -30,6 +30,7 @@
+ #include <QLayout>
+ #include <QPushButton>
+ #include <QScrollBar>
++#include <QStyle>
+ #include <QTabWidget>
+ 
+ #include <qapplication.h>
+

@@ -21,6 +21,8 @@ in mkDerivation {
     sha256 = "05w7kl6qfmkjz0y1bhgkkbmsqdll30bkjd6npkzvivrvp7dplmbh";
   };
 
+  patches = [ ./qt5_11.patch ];
+
   nativeBuildInputs = [ extra-cmake-modules kdoctools ];
   propagatedBuildInputs = [
     qca-qt5 qjson qtscript qtwebkit
