@@ -280,6 +280,10 @@ stdenv.mkDerivation {
       hardening_unsupported_flags+=" pic"
     ''
 
+    + optionalString targetPlatform.isMinGW ''
+      hardening_unsupported_flags+=" stackprotector"
+    ''
+
     + ''
       substituteAll ${./add-flags.sh} $out/nix-support/add-flags.sh
       substituteAll ${./add-hardening.sh} $out/nix-support/add-hardening.sh
