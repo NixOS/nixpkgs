@@ -23,6 +23,8 @@ mkDerivation rec {
     sha256 = "0w782k0hprpb6viixnqz34sp0z5csv3prdby46z22qqkcipcs638";
   };
 
+  patches = [ ./qt5_11.patch ];
+
   enableParallelBuilding = true;
 
   nativeBuildInputs = [ extra-cmake-modules kdoctools makeWrapper ];
