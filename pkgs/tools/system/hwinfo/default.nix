@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "hwinfo-${version}";
-  version = "21.53";
+  version = "21.55";
 
   src = fetchFromGitHub {
     owner = "opensuse";
     repo = "hwinfo";
     rev = "${version}";
-    sha256 = "1hrazksr95pxl5p0r0x3cdph1ps98cls2v9avg0qs0qf9y18hady";
+    sha256 = "005xf5j2bbalsi6z2j9q9r4zf80a04f7mz0bd2jyb8rh3lnac6w8";
   };
 
   patchPhase = ''
