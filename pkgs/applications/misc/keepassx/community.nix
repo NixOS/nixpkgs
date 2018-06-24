@@ -47,7 +47,10 @@ stdenv.mkDerivation rec {
       --replace "/usr/local/share/man" "../share/man"
   '';
   NIX_LDFLAGS = stdenv.lib.optionalString stdenv.isDarwin "-rpath ${libargon2}/lib";
-  patches = [ ./darwin.patch ];
+  patches = [ 
+    ./darwin.patch
+    ./keepassxc-qt-5.11.patch
+  ];
 
   cmakeFlags = [
     "-DKEEPASSXC_BUILD_TYPE=Release"
