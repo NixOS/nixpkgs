@@ -5129,6 +5129,8 @@ with pkgs;
 
   sstp = callPackage ../tools/networking/sstp {};
 
+  structure-synth = callPackage ../tools/graphics/structure-synth { };
+
   su-exec = callPackage ../tools/security/su-exec {};
 
   subsurface = libsForQt5.callPackage ../applications/misc/subsurface { };
