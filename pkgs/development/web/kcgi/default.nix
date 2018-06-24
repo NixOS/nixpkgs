@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   pname = "kcgi";
-  version = "0.10.5";
+  version = "0.10.6";
   underscoreVersion = stdenv.lib.replaceChars ["."] ["_"] version;
   name = "${pname}-${version}";
 
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     owner = "kristapsdz";
     repo = pname;
     rev = "VERSION_${underscoreVersion}";
-    sha256 = "0ksdjqibkj7h1a99i84i6y0949c0vwx789q0sslzdkkgqvjnw3xw";
+    sha256 = "0vaqz7krlvkjlc0189pkcj1al1p5ic577dn6bb4ivca1bss1i3m2";
   };
   patchPhase = ''substituteInPlace configure \
     --replace /usr/local /
