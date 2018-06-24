@@ -995,6 +995,8 @@ in {
 
   colour = callPackage ../development/python-modules/colour {};
 
+  configshell = callPackage ../development/python-modules/configshell { };
+
   constantly = callPackage ../development/python-modules/constantly { };
 
   cornice = callPackage ../development/python-modules/cornice { };
