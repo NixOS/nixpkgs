@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi, requests }:
+{ lib, buildPythonPackage, fetchPypi, requests, pytest }:
 
 buildPythonPackage rec {
   version = "2.3.0";
@@ -9,8 +9,9 @@ buildPythonPackage rec {
     sha256 = "0kp0crzjginmga6qvwwppar5b2pbdvwryf6vdpxgx7kkwzv33w97";
   };
 
-  # Upstream has tests in a makefile, but they're not configured to run in setup.py
-  doCheck = false;
+  checkInputs = [ pytest ];
+  # Integration tests require API keys and internet access
+  checkPhase = "py.test -rxs ./tests/unit";
 
   propagatedBuildInputs = [ requests ];
 
