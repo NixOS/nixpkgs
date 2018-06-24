@@ -231,6 +231,12 @@ lib.mapAttrs (n: v: v // { shortName = n; }) rec {
     fullName = "Eiffel Forum License v2.0";
   };
 
+  elastic = {
+    fullName = "ELASTIC LICENSE";
+    url = https://github.com/elastic/elasticsearch/blob/master/licenses/ELASTIC-LICENSE.txt;
+    free = false;
+  };
+
   epl10 = spdx {
     spdxId = "EPL-1.0";
     fullName = "Eclipse Public License 1.0";

@@ -25,18 +25,17 @@ let
     ${cfg.extraConf}
   '';
 
-  configDir = pkgs.buildEnv {
-    name = "elasticsearch-config";
-    paths = [
-      (pkgs.writeTextDir "elasticsearch.yml" esConfig)
-      (if es5 then (pkgs.writeTextDir "log4j2.properties" cfg.logging)
-              else (pkgs.writeTextDir "logging.yml" cfg.logging))
-    ];
-    postBuild = concatStringsSep "\n" (concatLists [
-      # Elasticsearch 5.x won't start when the scripts directory does not exist
-      (optional es5 "${pkgs.coreutils}/bin/mkdir -p $out/scripts")
-      (optional es6 "ln -s ${cfg.package}/config/jvm.options $out/jvm.options")
-    ]);
+  configDir = cfg.dataDir + "/config";
+
+  elasticsearchYml = pkgs.writeTextFile {
+    name = "elasticsearch.yml";
+    text = esConfig;
+  };
+
+  loggingConfigFilename = if es5 then "log4j2.properties" else "logging.yml";
+  loggingConfigFile = pkgs.writeTextFile {
+    name = loggingConfigFilename;
+    text = cfg.logging;
   };
 
   esPlugins = pkgs.buildEnv {
@@ -193,7 +192,24 @@ in {
         ln -sfT ${esPlugins}/plugins ${cfg.dataDir}/plugins
         ln -sfT ${cfg.package}/lib ${cfg.dataDir}/lib
         ln -sfT ${cfg.package}/modules ${cfg.dataDir}/modules
-        if [ "$(id -u)" = 0 ]; then chown -R elasticsearch ${cfg.dataDir}; fi
+
+        # elasticsearch needs to create the elasticsearch.keystore in the config directory
+        # so this directory needs to be writable.
+        mkdir -m 0700 -p ${configDir}
+
+        # Note that we copy config files from the nix store instead of symbolically linking them
+        # because otherwise X-Pack Security will raise the following exception:
+        # java.security.AccessControlException:
+        # access denied ("java.io.FilePermission" "/var/lib/elasticsearch/config/elasticsearch.yml" "read")
+
+        cp ${elasticsearchYml} ${configDir}/elasticsearch.yml
+        # Make sure the logging configuration for old elasticsearch versions is removed:
+        rm -f ${if es5 then "${configDir}/logging.yml" else "${configDir}/log4j2.properties"}
+        cp ${loggingConfigFile} ${configDir}/${loggingConfigFilename}
+        ${optionalString es5 "mkdir -p ${configDir}/scripts"}
+        ${optionalString es6 "cp ${cfg.package}/config/jvm.options ${configDir}/jvm.options"}
+
+        if [ "$(id -u)" = 0 ]; then chown -R elasticsearch:elasticsearch ${cfg.dataDir}; fi
       '';
     };
 
