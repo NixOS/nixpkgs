@@ -58,6 +58,9 @@ rec {
   binutils = wrapBintoolsWith {
     bintools = binaries;
     libc = targetAndroidndkPkgs.libraries;
+    extraBuildCommands = ''
+      echo "--build-id" >> $out/nix-support/libc-ldflags
+    '';
   };
 
   gcc = wrapCCWith {
