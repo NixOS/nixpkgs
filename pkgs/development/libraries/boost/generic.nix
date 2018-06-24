@@ -1,8 +1,7 @@
 { stdenv, fetchurl, icu, expat, zlib, bzip2, python, fixDarwinDylibNames, libiconv
 , which
 , buildPackages, buildPlatform, hostPlatform
-, toolset ? /**/ if stdenv.cc.isClang                                then "clang"
-            else if stdenv.cc.isGNU && hostPlatform != buildPlatform then "gcc-cross"
+, toolset ? /**/ if stdenv.cc.isClang  then "clang"
             else null
 , enableRelease ? true
 , enableDebug ? false
@@ -58,16 +57,26 @@ let
     "link=${link}"
     "-sEXPAT_INCLUDE=${expat.dev}/include"
     "-sEXPAT_LIBPATH=${expat.out}/lib"
+
+    # TODO: make this unconditional
+  ] ++ optionals (hostPlatform != buildPlatform) [
+    "address-model=${toString hostPlatform.parsed.cpu.bits}"
+    "architecture=${toString hostPlatform.parsed.cpu.family}"
+    "binary-format=${toString hostPlatform.parsed.kernel.execFormat.name}"
+    "target-os=${toString hostPlatform.parsed.kernel.name}"
+
+    # adapted from table in boost manual
+    # https://www.boost.org/doc/libs/1_66_0/libs/context/doc/html/context/architectures.html
+    "abi=${if hostPlatform.parsed.cpu.family == "arm" then "aapcs"
+           else if hostPlatform.isWindows then "ms"
+           else if hostPlatform.isMips then "o32"
+           else "sysv"}"
   ] ++ optional (link != "static") "runtime-link=${runtime-link}"
     ++ optional (variant == "release") "debug-symbols=off"
     ++ optional (toolset != null) "toolset=${toolset}"
     ++ optional (mpi != null || hostPlatform != buildPlatform) "--user-config=user-config.jam"
     ++ optionals (hostPlatform.libc == "msvcrt") [
-    "target-os=windows"
     "threadapi=win32"
-    "binary-format=pe"
-    "address-model=${toString hostPlatform.parsed.cpu.bits}"
-    "architecture=x86"
   ]);
 
 in
