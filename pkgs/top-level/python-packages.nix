@@ -248,6 +248,8 @@ in {
 
   dkimpy = callPackage ../development/python-modules/dkimpy { };
 
+  dictionaries = callPackage ../development/python-modules/dictionaries { };
+
   diff_cover = callPackage ../development/python-modules/diff_cover { };
 
   emcee = callPackage ../development/python-modules/emcee { };
