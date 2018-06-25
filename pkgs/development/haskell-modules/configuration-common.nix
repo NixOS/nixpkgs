@@ -47,7 +47,7 @@ self: super: {
   hoogleLocal = { packages ? [] }: self.callPackage ./hoogle.nix { inherit packages; };
 
   # Break infinite recursions.
-  attoparsec-varword = super.attoparsec-varword.override { bytestring-builder-varword = dontCheck self.bytestring-builder-varword; };
+  attoparsec-varword = addTestToolDepend (super.attoparsec-varword.override { bytestring-builder-varword = dontCheck self.bytestring-builder-varword; }) self.hspec-discover;
   clock = dontCheck super.clock;
   Dust-crypto = dontCheck super.Dust-crypto;
   hasql-postgres = dontCheck super.hasql-postgres;
@@ -341,7 +341,7 @@ self: super: {
   hsbencher = dontCheck super.hsbencher;
   hsexif = dontCheck super.hsexif;
   hspec-server = dontCheck super.hspec-server;
-  HTF = dontCheck super.HTF;
+  HTF = addTestToolDepend (dontCheck super.HTF) self.cpphs;
   htsn = dontCheck super.htsn;
   htsn-import = dontCheck super.htsn-import;
   http-link-header = dontCheck super.http-link-header; # non deterministic failure https://hydra.nixos.org/build/75041105
@@ -559,9 +559,6 @@ self: super: {
   # https://ghc.haskell.org/trac/ghc/ticket/9825
   vimus = overrideCabal super.vimus (drv: { broken = pkgs.stdenv.isLinux && pkgs.stdenv.isi686; });
 
-  # https://github.com/hspec/mockery/issues/6
-  mockery = overrideCabal super.mockery (drv: { preCheck = "export TRAVIS=true"; });
-
   # https://github.com/alphaHeavy/lzma-conduit/issues/5
   lzma-conduit = dontCheck super.lzma-conduit;
 
@@ -661,9 +658,9 @@ self: super: {
   }));
 
   # Need newer versions of their dependencies than the ones we have in LTS-11.x.
-  cabal2nix = super.cabal2nix.overrideScope (self: super: { hpack = self.hpack_0_28_2; hackage-db = self.hackage-db_2_0_1; });
+  cabal2nix = super.cabal2nix.overrideScope (self: super: { hpack = addTestToolDepend (self.hpack_0_28_2) self.hspec-discover; hackage-db = self.hackage-db_2_0_1; });
   dbus-hslogger = super.dbus-hslogger.overrideScope (self: super: { dbus = self.dbus_1_0_1; });
-  graphviz = (addBuildTool super.graphviz pkgs.graphviz).overrideScope (self: super: { wl-pprint-text = self.wl-pprint-text_1_2_0_0; base-compat = self.base-compat_0_10_1; });
+  graphviz = (addBuildTool (addTestToolDepend super.graphviz self.hspec-discover) pkgs.graphviz).overrideScope (self: super: { wl-pprint-text = self.wl-pprint-text_1_2_0_0; base-compat = self.base-compat_0_10_1; });
   status-notifier-item = super.status-notifier-item.overrideScope (self: super: { dbus = self.dbus_1_0_1; });
 
   # https://github.com/bos/configurator/issues/22
@@ -819,7 +816,7 @@ self: super: {
   http-api-data = dontCheck super.http-api-data;
 
   # https://github.com/snoyberg/yaml/issues/106
-  yaml = disableCabalFlag super.yaml "system-libyaml";
+  yaml = addTestToolDepend (disableCabalFlag super.yaml "system-libyaml") self.hspec-discover;
 
   # https://github.com/diagrams/diagrams-lib/issues/288
   diagrams-lib = overrideCabal super.diagrams-lib (drv: { doCheck = !pkgs.stdenv.isi686; });
@@ -1074,38 +1071,77 @@ self: super: {
   #
   #   2. https://github.com/hspec/hspec/pull/355 The buildTool will be properly
   #      cabal2nixed when run on the patched cabal file.
-  #
-  #   3. Force 2.5.1 as only it has patch for proper build-tool-depends deps.
-  hspec_2_5_1 = let
-    breakCycles = super.hspec_2_5_1.override { stringbuilder = dontCheck self.stringbuilder; };
-  in appendPatch (addTestToolDepend breakCycles self.hspec-meta) (pkgs.fetchpatch {
-    url = "https://github.com/hspec/hspec/commit/8007227da5c8f2e294c1455a9f2c9855917dc461.diff";
-    includes = [ "hspec.cabal" ];
-    sha256 = "0qk7lsg7s1j42mf9zbh4ga1ca5qbh1qsnsidvlp4rjjifw6jq3vz";
-  });
-  hspec-core_2_5_1 = let
-    breakCycles = super.hspec-core_2_5_1.override { silently = dontCheck self.silently; temporary = dontCheck self.temporary; };
-  in appendPatch (addTestToolDepend breakCycles self.hspec-meta) (pkgs.fetchpatch {
-    url = "https://github.com/hspec/hspec/commit/8007227da5c8f2e294c1455a9f2c9855917dc461.diff";
-    includes = [ "hspec-core.cabal" ];
-    sha256 = "0rwlz24mqh67gpkcrnhm8js594783v4gikzmdwi148w0h6hw2435";
-    stripLen = 1;
-  });
-  hspec-discover_2_5_1 = appendPatch (addTestToolDepend super.hspec-discover_2_5_1 self.hspec-meta) (pkgs.fetchpatch {
-    url = "https://github.com/hspec/hspec/commit/8007227da5c8f2e294c1455a9f2c9855917dc461.diff";
-    includes = [ "hspec-discover.cabal" ];
-    sha256 = "1c343flwxaq7cpnwyjf4y1c5smqs5q90i48sda9kyhl88mslq63b";
-    stripLen = 1;
-  });
-  hspec = self.hspec_2_5_1;
-  hspec-core = self.hspec-core_2_5_1;
-  hspec-discover = self.hspec-discover_2_5_1;
-  hspec-smallcheck = self.hspec-smallcheck_0_5_2;
+  hspec = let
+    breakCycles = super.hspec.override { stringbuilder = dontCheck self.stringbuilder; };
+  in addTestToolDepend breakCycles self.hspec-meta;
+  hspec-core = let
+    breakCycles = super.hspec-core.override { silently = dontCheck self.silently; temporary = dontCheck self.temporary; };
+  in addTestToolDepend breakCycles self.hspec-meta;
+  hspec-discover = addTestToolDepend super.hspec-discover self.hspec-meta;
+  hspec-smallcheck = addTestToolDepend super.hspec-smallcheck self.hspec-meta;
+  hspec-attoparsec = addTestToolDepend super.hspec-attoparsec self.hspec-meta;
+  hspec-contrib = addTestToolDepend super.hspec-contrib self.hspec-meta;
 
   # The build-tool-depends this hacks around has been added on master.
   base-compat = addTestToolDepend super.base-compat self.hspec-discover;
   with-location = addTestToolDepend super.with-location self.hspec-discover;
   text-conversions = addTestToolDepend super.text-conversions self.hspec-discover;
+  logging-facade = addTestToolDepend super.logging-facade self.hspec-discover;
+  distributive = addTestToolDepend super.distributive self.hspec-discover;
+  doctest = addTestToolDepend super.doctest self.hspec-discover;
+  http-types = addTestToolDepend super.http-types self.hspec-discover;
+  interpolate = addTestToolDepend super.interpolate self.hspec-discover;
+  mockery = addTestToolDepend super.mockery self.hspec-discover;
+  slim = addTestToolDepend super.slim self.hspec-discover;
+  string-conversions = addTestToolDepend super.string-conversions self.hspec-discover;
+  catamorphism = addTestToolDepend super.catamorphism self.hspec-discover;
+  unliftio = addTestToolDepend super.unliftio self.hspec-discover;
+  word8 = addTestToolDepend super.word8 self.hspec-discover;
+  iproute = addTestToolDepend super.iproute self.hspec-discover;
+  mime-mail = addTestToolDepend super.mime-mail self.hspec-discover;
+  unix-time = addTestToolDepend super.unix-time self.hspec-discover;
+  ClustalParser = addTestToolDepend super.ClustalParser self.hspec-discover;
+  ascii-progress = addTestToolDepend super.ascii-progress self.hspec-discover;
+  safe-exceptions = addTestToolDepend super.safe-exceptions self.hspec-discover;
+  markdown-unlit = addTestToolDepend super.markdown-unlit self.hspec-discover;
+  rio = addTestToolDepend super.rio self.hspec-discover;
+  conduit-extra = addTestToolDepend super.conduit-extra self.hspec-discover;
+  http-date = addTestToolDepend super.http-date self.hspec-discover;
+  ip = addTestToolDepend super.ip self.hspec-discover;
+  megaparsec = addTestToolDepend super.megaparsec self.hspec-discover;
+  text-zipper = addTestToolDepend super.text-zipper self.hspec-discover;
+  yi-rope = addTestToolDepend super.yi-rope self.hspec-discover;
+  yate = addTestToolDepend super.yate self.hspec-discover;
+  bitset-word8 = addTestToolDepend super.bitset-word8 self.hspec-discover;
+  io-choice = addTestToolDepend super.io-choice self.hspec-discover;
+  th-utilities = addTestToolDepend super.th-utilities self.hspec-discover;
+  sum-type-boilerplace = addTestToolDepend super.sum-type-boilerplate self.hspec-discover;
+  ViennaRNAParser = addTestToolDepend super.ViennaRNAParser self.hspec-discover;
+  base58string = addTestToolDepend super.base58string self.hspec-discover;
+  hpack = addTestToolDepend super.hpack self.hspec-discover;
+  fast-logger = addTestToolDepend super.fast-logger self.hspec-discover;
+  bitcoin-script = addTestToolDepend super.bitcoin-script self.hspec-discover;
+  hexstring = addTestToolDepend super.hexstring self.hspec-discover;
+  language-docker = addTestToolDepend super.language-docker self.hspec-discover;
+  say = addTestToolDepend super.say self.hspec-discover;
+  prometheus-client = addTestToolDepend super.prometheus-client self.hspec-discover;
+  Parallel-Arrows-BaseSpec = addTestToolDepend super.Parallel-Arrows-BaseSpec self.hspec-discover;
+  http2 = addTestToolDepend super.http2 self.hspec-discover;
+  wai-extra = addTestToolDepend super.wai-extra self.hspec-discover;
+  aeson-qq = addTestToolDepend super.aeson-qq self.hspec-discover;
+  shakespeare = addTestToolDepend super.shakespeare self.hspec-discover;
+  elm-export = addTestToolDepend super.elm-export self.hspec-discover;
+  fold-debounce = addTestToolDepend super.fold-debounce self.hspec-discover;
+  bitcoin-types = addTestToolDepend super.bitcoin-types self.hspec-discover;
+  quickcheck-arbitrary-adt = addTestToolDepend super.quickcheck-arbitrary-adt self.hspec-discover;
+  haddock-library = addTestToolDepend super.haddock-library self.hspec-discover;
+  sum-type-boilerplate = addTestToolDepend super.sum-type-boilerplate self.hspec-discover;
+  eve = addTestToolDepend super.eve self.hspec-discover;
+  jvm = addTestToolDepend super.jvm self.hspec-discover;
+  xmobar = addTestToolDepend super.xmobar self.hspec-discover;
+  wild-bind = addTestToolDepend super.wild-bind self.hspec-discover;
+  test-fixture = addTestToolDepend super.test-fixture self.hspec-discover;
+  streaming-binary = addTestToolDepend super.streaming-binary self.hspec-discover;
 }
 
 //
@@ -1113,7 +1149,7 @@ self: super: {
 (let
   amazonkaOverrides = self: super: {
     conduit = self.conduit_1_2_13_1;
-    conduit-extra = self.conduit-extra_1_2_3_2;
+    conduit-extra = addTestToolDepend super.conduit-extra_1_2_3_2 self.hspec-discover;
     resourcet = self.resourcet_1_1_11;
     xml-conduit = self.xml-conduit_1_7_1_2;
     http-conduit = self.http-conduit_2_2_4;

@@ -53,7 +53,7 @@ self: super: builtins.intersectAttrs super {
 
   # Use the default version of mysql to build this package (which is actually mariadb).
   # test phase requires networking
-  mysql = dontCheck (super.mysql.override { mysql = pkgs.mysql.connector-c; });
+  mysql = dontCheck (addBuildTool (super.mysql.override { mysql = pkgs.mysql.connector-c; }) pkgs.mysql);
 
   # CUDA needs help finding the SDK headers and libraries.
   cuda = overrideCabal super.cuda (drv: {
@@ -516,4 +516,15 @@ self: super: builtins.intersectAttrs super {
   # Tests require a browser: https://github.com/ku-fpg/blank-canvas/issues/73
   blank-canvas = dontCheck super.blank-canvas;
   blank-canvas_0_6_2 = dontCheck super.blank-canvas_0_6_2;
+
+  # cabal2nix generates a dependency on base-compat, which is the wrong version
+  base-compat-batteries = super.base-compat-batteries.override {
+    base-compat = super.base-compat_0_10_1;
+  };
+
+  # Custom setup needs pg_config
+  HDBC-postgresql = addBuildTool super.HDBC-postgresql pkgs.postgresql;
+
+  # Custom setup needs sdl-config
+  SDL = addBuildTool super.SDL pkgs.SDL;
 }
