@@ -75,7 +75,7 @@ let
   targetCC = builtins.head toolsForTarget;
 
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (rec {
   version = "8.4.3";
   name = "${targetPrefix}ghc-${version}";
 
@@ -209,4 +209,8 @@ stdenv.mkDerivation rec {
     inherit (ghc.meta) license platforms;
   };
 
-}
+} // stdenv.lib.optionalAttrs targetPlatform.useAndroidPrebuilt {
+  dontStrip = true;
+  dontPatchELF = true;
+  noAuditTmpdir = true;
+})
