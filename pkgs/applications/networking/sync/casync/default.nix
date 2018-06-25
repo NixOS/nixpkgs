@@ -1,6 +1,9 @@
 { stdenv, fetchFromGitHub, fetchpatch
 , meson, ninja, pkgconfig, sphinx
 , acl, curl, fuse, libselinux, udev, xz, zstd
+, fuseSupport ? true
+, selinuxSupport ? true
+, udevSupport ? true
 , glibcLocales, rsync
 }:
 
@@ -15,7 +18,10 @@ stdenv.mkDerivation rec {
     sha256 = "0zx6zvj5a6rr3w9s207rvpfw7gwssiqmp1p3c75bsirmz4nmsdf0";
   };
 
-  buildInputs = [ acl curl fuse libselinux udev xz zstd ];
+  buildInputs = [ acl curl xz zstd ]
+                ++ stdenv.lib.optionals (fuseSupport) [ fuse ]
+                ++ stdenv.lib.optionals (selinuxSupport) [ libselinux ]
+                ++ stdenv.lib.optionals (udevSupport) [ udev ];
   nativeBuildInputs = [ meson ninja pkgconfig sphinx ];
   checkInputs = [ glibcLocales rsync ];
 
@@ -27,6 +33,9 @@ stdenv.mkDerivation rec {
   '';
 
   PKG_CONFIG_UDEV_UDEVDIR = "lib/udev";
+  mesonFlags = stdenv.lib.optionals (!fuseSupport) [ "-Dfuse=false" ]
+               ++ stdenv.lib.optionals (!udevSupport) [ "-Dudev=false" ]
+               ++ stdenv.lib.optionals (!selinuxSupport) [ "-Dselinux=false" ];
 
   doCheck = true;
   preCheck = ''
