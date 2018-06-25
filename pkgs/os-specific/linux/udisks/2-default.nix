@@ -42,6 +42,12 @@ in stdenv.mkDerivation rec {
     gtk-doc libxslt docbook_xml_dtd_412 docbook_xml_dtd_43 docbook_xsl
   ];
 
+  postPatch = stdenv.lib.optionalString stdenv.hostPlatform.isMusl ''
+      substituteInPlace udisks/udisksclient.c \
+        --replace 'defined( __GNUC_PREREQ)' 1 \
+        --replace '__GNUC_PREREQ(4,6)' 1
+  '';
+
   buildInputs = [
     expat libgudev libblockdev acl systemd glib libatasmart polkit
   ];
