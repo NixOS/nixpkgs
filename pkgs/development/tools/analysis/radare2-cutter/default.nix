@@ -1,23 +1,28 @@
-{ stdenv, fetchFromGitHub, fetchpatch, qmake, pkgconfig, qtbase, qtsvg, radare2 }:
+{ stdenv, fetchFromGitHub
+# nativeBuildInputs
+, qmake, pkgconfig
+# Qt
+, qtbase, qtsvg, qtwebengine
+# buildInputs
+, radare2
+, python3 }:
 
 
 stdenv.mkDerivation rec {
   name = "radare2-cutter-${version}";
-  version = "1.3";
+  version = "1.4";
 
   src = fetchFromGitHub {
     owner = "radareorg";
     repo = "cutter";
     rev = "v${version}";
-    sha256 = "1z76yz2i9k8mxjk85k2agdj941szdbl2gi66p3dh50878zqavfrr";
+    sha256 = "0wsxb6jfpsmgsigmbnh08j99779bsjz02v6aasqcwl6hwjx0mjfk";
   };
 
   postUnpack = "export sourceRoot=$sourceRoot/src";
 
-  patchFlags = [ "-p2" ];
-
   nativeBuildInputs = [ qmake pkgconfig ];
-  buildInputs = [ qtbase qtsvg radare2 ];
+  buildInputs = [ qtbase qtsvg qtwebengine radare2 python3 ];
 
   enableParallelBuilding = true;
 
