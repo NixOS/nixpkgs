@@ -1036,7 +1036,7 @@ self: super: {
 
   # The test suite does not know how to find the 'alex' binary.
   alex = overrideCabal super.alex (drv: {
-    testToolDepends = (drv.testSystemDepends or []) ++ [ buildPackages.which ];
+    testToolDepends = (drv.testToolDepends or []) ++ [ buildPackages.which ];
     preCheck = ''export PATH="$PWD/dist/build/alex:$PATH"'';
   });
 
@@ -1104,6 +1104,7 @@ self: super: {
 
   # The build-tool-depends this hacks around has been added on master.
   base-compat = addTestToolDepend super.base-compat self.hspec-discover;
+  with-location = addTestToolDepend super.with-location self.hspec-discover;
 }
 
 //
