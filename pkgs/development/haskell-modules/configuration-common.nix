@@ -1101,6 +1101,9 @@ self: super: {
   hspec-core = self.hspec-core_2_5_1;
   hspec-discover = self.hspec-discover_2_5_1;
   hspec-smallcheck = self.hspec-smallcheck_0_5_2;
+
+  # The build-tool-depends this hacks around has been added on master.
+  base-compat = addTestToolDepend super.base-compat self.hspec-discover;
 }
 
 //
