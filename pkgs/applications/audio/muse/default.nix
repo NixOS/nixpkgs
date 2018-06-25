@@ -1,4 +1,5 @@
 { stdenv
+, fetchFromGitHub
 , libjack2
 , qt5
 , cmake
@@ -34,9 +35,11 @@ stdenv.mkDerivation rec {
   };
 
   src =
-    fetchGit {
-      url = "https://github.com/muse-sequencer/muse.git";
+    fetchFromGitHub {
+      owner = "muse-sequencer";
+      repo = "muse";
       rev = "02d9dc6abd757c3c1783fdd46dacd3c4ef2c0a6d";
+      sha256 = "0pn0mcg79z3bhjwxbss3ylypdz3gg70q5d1ij3x8yw65ryxbqf51";
     };
 
 
