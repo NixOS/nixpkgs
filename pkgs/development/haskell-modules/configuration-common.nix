@@ -1086,6 +1086,7 @@ self: super: {
   base-compat = addTestToolDepend super.base-compat self.hspec-discover;
   # https://github.com/sol/with-location/pull/1
   with-location = addTestToolDepend super.with-location self.hspec-discover;
+  # https://github.com/cjdev/text-conversions/pull/6
   text-conversions = addTestToolDepend super.text-conversions self.hspec-discover;
   logging-facade = addTestToolDepend super.logging-facade self.hspec-discover;
   distributive = addTestToolDepend super.distributive self.hspec-discover;
