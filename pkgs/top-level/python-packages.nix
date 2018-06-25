@@ -25,6 +25,7 @@ let
   isPy34 = python.pythonVersion == "3.4";
   isPy35 = python.pythonVersion == "3.5";
   isPy36 = python.pythonVersion == "3.6";
+  isPy37 = python.pythonVersion == "3.7";
   isPyPy = python.executable == "pypy";
   isPy3k = strings.substring 0 1 python.pythonVersion == "3";
 
@@ -131,7 +132,7 @@ let
 
 in {
 
-  inherit python bootstrapped-pip pythonAtLeast pythonOlder isPy27 isPy33 isPy34 isPy35 isPy36 isPyPy isPy3k buildPythonPackage buildPythonApplication;
+  inherit python bootstrapped-pip pythonAtLeast pythonOlder isPy27 isPy33 isPy34 isPy35 isPy36 isPy37 isPyPy isPy3k buildPythonPackage buildPythonApplication;
   inherit fetchPypi callPackage;
   inherit hasPythonModule requiredPythonModules makePythonPath disabledIf;
   inherit toPythonModule toPythonApplication;
@@ -230,6 +231,8 @@ in {
   bugseverywhere = callPackage ../applications/version-management/bugseverywhere {};
 
   cdecimal = callPackage ../development/python-modules/cdecimal { };
+
+  clustershell = callPackage ../development/python-modules/clustershell { };
 
   dendropy = callPackage ../development/python-modules/dendropy { };
 
@@ -2289,7 +2292,7 @@ in {
     '';
 
     meta = {
-      homepage = "http://editorconfig.org";
+      homepage = https://editorconfig.org;
       description = "EditorConfig File Locator and Interpreter for Python";
       license = stdenv.lib.licenses.psfl;
     };
@@ -7768,7 +7771,7 @@ in {
 
     meta = {
       description = "EditorConfig File Locator and Interpreter for Python";
-      homepage = "http://editorconfig.org/";
+      homepage = https://editorconfig.org/;
       license = licenses.psfl;
     };
   };
@@ -9142,7 +9145,7 @@ in {
    ];
 
    meta = with stdenv.lib; {
-     homepage = "http://github.com/bcwaldon/warlock";
+     homepage = https://github.com/bcwaldon/warlock;
    };
  };
 
@@ -11586,7 +11589,7 @@ in {
     doCheck = false;
 
     meta = {
-      homepage = "http://github.com/mongodb/mongo-python-driver";
+      homepage = https://github.com/mongodb/mongo-python-driver;
       license = licenses.asl20;
       description = "Python driver for MongoDB ";
     };
@@ -12789,7 +12792,7 @@ in {
 
     meta = {
       description = "sqlite-backed dictionary";
-      homepage = "http://github.com/Yelp/sqlite3dbm";
+      homepage = https://github.com/Yelp/sqlite3dbm;
       license = licenses.asl20;
     };
   };

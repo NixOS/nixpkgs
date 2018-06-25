@@ -109,7 +109,7 @@ in
         home = stateDir;
       };
 
-    systemd.services.timesyncd.enable = mkForce false;
+    services.timesyncd.enable = mkForce false;
 
     systemd.services.chronyd =
       { description = "chrony NTP daemon";

@@ -1,7 +1,15 @@
-{ stdenv, buildGoPackage, fetchFromGitHub, fetchurl, go-bindata, libvirt, qemu, docker-machine-kvm,
-  gpgme, makeWrapper, hostPlatform, vmnet, python }:
+{ stdenv, buildGoPackage, fetchFromGitHub, fetchurl, go-bindata, libvirt, qemu
+, gpgme, makeWrapper, hostPlatform, vmnet, python, pkgconfig
+, docker-machine-kvm, docker-machine-kvm2
+, extraDrivers ? []
+}:
 
-let binPath = stdenv.lib.optionals stdenv.isLinux [ libvirt qemu docker-machine-kvm ];
+let
+  drivers = stdenv.lib.filter (d: d != null) (extraDrivers
+            ++ stdenv.lib.optionals stdenv.isLinux [ docker-machine-kvm docker-machine-kvm2 ]);
+
+  binPath = drivers
+            ++ stdenv.lib.optionals stdenv.isLinux ([ libvirt qemu ]);
 
 in buildGoPackage rec {
   pname   = "minikube";

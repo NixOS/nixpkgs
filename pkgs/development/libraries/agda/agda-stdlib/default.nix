@@ -23,6 +23,7 @@ agda.mkDerivation (self: rec {
     description = "A standard library for use with the Agda compiler";
     license = stdenv.lib.licenses.mit;
     platforms = stdenv.lib.platforms.unix;
+    broken = stdenv.isDarwin;
     maintainers = with maintainers; [ jwiegley fuuzetsu mudri ];
   };
 })

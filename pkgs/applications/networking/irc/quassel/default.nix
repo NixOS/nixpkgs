@@ -71,6 +71,8 @@ in with stdenv; mkDerivation rec {
           --prefix GIO_EXTRA_MODULES : "${dconf}/lib/gio/modules"
     '';
 
+  patches = [ ./qt5_11.patch ];
+
   meta = with stdenv.lib; {
     homepage = https://quassel-irc.org/;
     description = "Qt/KDE distributed IRC client suppporting a remote daemon";

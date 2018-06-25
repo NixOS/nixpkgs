@@ -36,8 +36,12 @@ in stdenv.mkDerivation rec {
 
   # Fix a segfault in llc
   # See http://lists.llvm.org/pipermail/llvm-dev/2016-October/106500.html
-  patches = [ ./D17533-1.patch ] ++
-    stdenv.lib.optionals (!stdenv.isDarwin) [./fix-llvm-config.patch];
+  patches = [ ./D17533-1.patch ]
+   ++ stdenv.lib.optional (!stdenv.isDarwin) ./fix-llvm-config.patch
+   ++ stdenv.lib.optionals stdenv.hostPlatform.isMusl [
+     ../TLI-musl.patch
+     ../dynamiclibrary-musl.patch
+   ];
 
   # hacky fix: New LLVM releases require a newer macOS SDK than
   # 10.9. This is a temporary measure until nixpkgs darwin support is
@@ -49,7 +53,7 @@ in stdenv.mkDerivation rec {
       --replace 'set(CMAKE_INSTALL_NAME_DIR "@rpath")' "set(CMAKE_INSTALL_NAME_DIR "$out/lib")" \
       --replace 'set(CMAKE_INSTALL_RPATH "@executable_path/../lib")' ""
   ''
-  + stdenv.lib.optionalString (stdenv ? glibc) ''
+  + ''
     (
       cd projects/compiler-rt
       patch -p1 < ${
@@ -81,6 +85,14 @@ in stdenv.mkDerivation rec {
     ++ stdenv.lib.optionals ( isDarwin) [
     "-DLLVM_ENABLE_LIBCXX=ON"
     "-DCAN_TARGET_i386=false"
+  ] ++ stdenv.lib.optionals stdenv.hostPlatform.isMusl [
+    "-DLLVM_HOST_TRIPLE=${stdenv.hostPlatform.config}"
+    "-DLLVM_DEFAULT_TARGET_TRIPLE=${stdenv.targetPlatform.config}"
+    "-DTARGET_TRIPLE=${stdenv.targetPlatform.config}"
+    # Not yet supported
+    "-DCOMPILER_RT_BUILD_SANITIZERS=OFF"
+    "-DCOMPILER_RT_BUILD_XRAY=OFF"
+
   ];
 
   postBuild = ''

@@ -12,7 +12,7 @@
 , libatomic_ops, graphite2, harfbuzz, libodfgen, libzmf
 , librevenge, libe-book, libmwaw, glm, glew, gst_all_1
 , gdb, commonsLogging, librdf_rasqal, wrapGAppsHook
-, defaultIconTheme, glib, ncurses, xmlsec, epoxy, gpgme
+, defaultIconTheme, glib, ncurses, epoxy, gpgme
 , langs ? [ "ca" "de" "en-GB" "en-US" "eo" "es" "fr" "hu" "it" "nl" "pl" "ru" "sl" ]
 , withHelp ? true
 , kdeIntegration ? false
@@ -42,14 +42,14 @@ let
 
     translations = fetchSrc {
       name = "translations";
-      sha256 = "16g85bn6qkql81a0k9iv3nwrpg2kpvz5nk4r7lab5jzlcl20qplc";
+      sha256 = "05ixmqbs3pkdpyqcwadz9i3wg797vimsm75rmfby7z71wc3frcyk";
     };
 
     # TODO: dictionaries
 
     help = fetchSrc {
       name = "help";
-      sha256 = "02382d09svcgmp5q2xglhbx1na9ycd77f5cbcj9jgs8lpkgwbxxc";
+      sha256 = "0ifyh4m8mwpkb16g6883ivk2s2qybr4s4s7pdjzp4cpx1nalzibl";
     };
 
   };
@@ -238,6 +238,7 @@ in stdenv.mkDerivation rec {
     "--without-system-libstaroffice"
     # https://github.com/NixOS/nixpkgs/commit/5c5362427a3fa9aefccfca9e531492a8735d4e6f
     "--without-system-orcus"
+    "--without-system-xmlsec"
   ];
 
   checkPhase = ''
@@ -258,12 +259,11 @@ in stdenv.mkDerivation rec {
       python3 sablotron sane-backends unzip vigra which zip zlib
       mdds bluez5 glibc libcmis libwps libabw libzmf libtool
       libxshmfence libatomic_ops graphite2 harfbuzz gpgme
-      librevenge libe-book libmwaw glm glew ncurses xmlsec epoxy
+      librevenge libe-book libmwaw glm glew ncurses epoxy
       libodfgen CoinMP librdf_rasqal defaultIconTheme
-      gdb
     ]
     ++ lib.optional kdeIntegration kdelibs4;
-  nativeBuildInputs = [ wrapGAppsHook ];
+  nativeBuildInputs = [ wrapGAppsHook gdb ];
 
   passthru = {
     inherit srcs jdk;
