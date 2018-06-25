@@ -52,6 +52,7 @@ let
         description = "Ceph target allowing to start/stop all ceph-${daemonType} services at once";
         partOf = [ "ceph.target" ];
         before = [ "ceph.target" ];
+        wantedBy = [ "ceph.target" ];
       };
     }
   );
@@ -347,7 +348,7 @@ in
       services = [] 
         ++ optional cfg.mon.enable (generateDaemonList "mon" cfg.mon.daemons { RestartSec = "10"; }) 
         ++ optional cfg.mds.enable (generateDaemonList "mds" cfg.mds.daemons { StartLimitBurst = "3"; })
-        ++ optional cfg.osd.enable (generateDaemonList "osd" cfg.osd.daemons { StartLimitBurst = "30"; RestartSec = "20s"; })
+        ++ optional cfg.osd.enable (generateDaemonList "osd" cfg.osd.daemons { StartLimitBurst = "30"; RestartSec = "20s"; PrivateDevices = "no"; })
         ++ optional cfg.rgw.enable (generateDaemonList "rgw" cfg.rgw.daemons { })
         ++ optional cfg.mgr.enable (generateDaemonList "mgr" cfg.mgr.daemons { StartLimitBurst = "3"; });
       in 
@@ -355,7 +356,10 @@ in
 
     systemd.targets = let
       targets = [
-        { "ceph" = { description = "Ceph target allowing to start/stop all ceph service instances at once"; }; }
+        { "ceph" = {
+                     description = "Ceph target allowing to start/stop all ceph service instances at once";
+                     wantedBy = [ "multi-user.target" ];
+                   }; }
       ] ++ optional cfg.mon.enable (generateTargetFile "mon")
         ++ optional cfg.mds.enable (generateTargetFile "mds")
         ++ optional cfg.osd.enable (generateTargetFile "osd")
