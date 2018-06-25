@@ -31,14 +31,14 @@ lib.mapAttrs (n: v: pkgs v) {
   staticLinux = {
     config = {
       enableStatic = true;
-      enableDynamic = false;
+      enableShared = false;
     };
     localSystem = { system = "x86_64-linux"; };
   };
   staticDarwin = {
     config = {
       enableStatic = true;
-      enableDynamic = false;
+      enableShared = false;
     };
     localSystem = { system = "x86_64-darwin"; };
   };

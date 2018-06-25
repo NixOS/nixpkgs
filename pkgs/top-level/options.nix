@@ -126,12 +126,12 @@ with lib;
     '';
   };
 
-  enableDynamic = mkOption {
+  enableShared = mkOption {
     default = true;
     type = types.bool;
     description = ''
 
-      Whether to build packages with dynamic linking. This has
+      Whether to build packages with shared linking. This has
       historically been the default everywhere in Nixpkgs.
 
     '';
@@ -145,8 +145,8 @@ with lib;
       Whether to build packages with static linking if available. Note
       that not all packages support this.
 
-      Packages using this option may or may not also build dynamic
-      libraries. Set enableDynamic to disable those.
+      Packages using this option may or may not also build shared
+      libraries. Set enableShare to disable those.
 
     '';
   };
