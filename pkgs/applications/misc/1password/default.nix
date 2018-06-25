@@ -1,4 +1,4 @@
-{ stdenv, fetchzip }:
+{ stdenv, fetchzip, gnupg }:
 
 stdenv.mkDerivation rec {
   name = "1password-${version}";
@@ -23,6 +23,19 @@ stdenv.mkDerivation rec {
         stripRoot = false;
       }
     else throw "Architecture not supported";
+
+  nativeBuildInputs = [ gnupg ];
+
+  doCheck = true;
+  checkPhase = ''
+    export GNUPGHOME=.gnupgtmp
+    rm -rf $GNUPGHOME # make sure it's a fresh empty dir
+    mkdir -p -m 700 $GNUPGHOME
+    # import upstream public key
+    cat ${./AC2D62742012EA22.asc} | gpg --import -q
+    # check binary signature with upstream signing key
+    gpgv --keyring pubring.kbx op.sig op
+  '';
 
   installPhase = ''
     install -D op $out/bin/op
