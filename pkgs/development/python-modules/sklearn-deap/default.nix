@@ -14,7 +14,6 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ numpy scipy deap scikitlearn ];
 
-  #doCheck = false;
   checkPhase = ''
     ${python.interpreter} test.py
   '';
