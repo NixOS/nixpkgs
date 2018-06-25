@@ -61,6 +61,8 @@ let
     efiBootStub = true;
     needsCifsUtils = true;
     netfilterRPFilter = true;
+    grsecurity = false;
+    xen_dom0 = false;
   } // features) kernelPatches;
 
   intermediateNixConfig = import ./common-config.nix {
