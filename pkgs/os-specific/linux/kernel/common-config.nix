@@ -21,7 +21,7 @@
 # legacy extraConfig as string
 , extraConfig ? ""
 
-, features ? {}
+, features ? { grsecurity = false; xen_dom0 = false; }
 }:
 
 assert (mkValueOverride == null) || (builtins.isFunction mkValueOverride);
@@ -31,12 +31,8 @@ with stdenv.lib;
 with import ../../../../lib/kernel.nix { inherit (stdenv) lib; inherit version; };
 
 let
-  # temporary hack
-  grsecurity = false;
-  xen_dom0 = false;
 
-
-  # TODO configuration items have to be part of subattrs. Remove this constraint
+  # configuration items have to be part of a subattrs
   flattenKConf =  nested: mapAttrs (_: head) (zipAttrs (attrValues nested));
 
   options = {
@@ -50,7 +46,7 @@ let
       DEBUG_NX_TEST             = whenOlder "4.11" no;
       CPU_NOTIFIER_ERROR_INJECT = whenOlder "4.4" (option no);
       DEBUG_STACK_USAGE         = no;
-      DEBUG_STACKOVERFLOW       = when (!grsecurity) no;
+      DEBUG_STACKOVERFLOW       = when (!features.grsecurity) no;
       RCU_TORTURE_TEST          = no;
       SCHEDSTATS                = no;
       DETECT_HUNG_TASK          = yes;
@@ -333,7 +329,7 @@ let
       SECURITY_SELINUX_BOOTPARAM_VALUE = "0"; # Disable SELinux by default
       # Prevent processes from ptracing non-children processes
       SECURITY_YAMA                    = option yes;
-      DEVKMEM                          = when (!grsecurity) no; # Disable /dev/kmem
+      DEVKMEM                          = when (!features.grsecurity) no; # Disable /dev/kmem
 
       USER_NS                          = yes; # Support for user namespaces
 
@@ -408,7 +404,7 @@ let
     virtualisation = {
       PARAVIRT = option yes;
 
-      HYPERVISOR_GUEST = when (!grsecurity) yes;
+      HYPERVISOR_GUEST = when (!features.grsecurity) yes;
       PARAVIRT_SPINLOCKS  = option yes;
 
       KVM_APIC_ARCHITECTURE             = whenOlder "4.8" yes;
@@ -416,7 +412,7 @@ let
       KVM_COMPAT                        = option (whenBetween "4.0" "4.12"  yes);
       KVM_DEVICE_ASSIGNMENT             = option (whenBetween "3.10" "4.12" yes);
       KVM_GENERIC_DIRTYLOG_READ_PROTECT = whenAtLeast "4.0"  yes;
-      KVM_GUEST                         = when (!grsecurity) yes;
+      KVM_GUEST                         = when (!features.grsecurity) yes;
       KVM_MMIO                          = yes;
       KVM_VFIO                          = yes;
       KSM = yes;
@@ -432,7 +428,7 @@ let
       # XXX: why isn't this in the xen-dom0 conditional section below?
       XEN_DOM0 = option yes;
 
-    } // optionalAttrs xen_dom0 {
+    } // optionalAttrs features.xen_dom0 {
       PCI_XEN                     = option yes;
       HVC_XEN                     = option yes;
       HVC_XEN_FRONTEND            = option yes;
