@@ -2854,6 +2854,11 @@
     github = "nthorne";
     name = "Niklas Thörne";
   };
+  numinit = {
+    email = "me@numin.it";
+    github = "numinit";
+    name = "Morgan Jones";
+  };
   nyanloutre = {
     email = "paul@nyanlout.re";
     github = "nyanloutre";
