@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi, isPy26, argparse, attrs, hypothesis, py
+{ stdenv, buildPythonPackage, fetchPypi, attrs, hypothesis, py
 , setuptools_scm, setuptools, six, pluggy, funcsigs, isPy3k, more-itertools
 , atomicwrites, mock
 }:
@@ -19,8 +19,7 @@ buildPythonPackage rec {
   checkInputs = [ hypothesis mock ];
   buildInputs = [ setuptools_scm ];
   propagatedBuildInputs = [ attrs py setuptools six pluggy more-itertools atomicwrites]
-    ++ (stdenv.lib.optional (!isPy3k) funcsigs)
-    ++ (stdenv.lib.optional isPy26 argparse);
+    ++ (stdenv.lib.optional (!isPy3k) funcsigs);
 
   checkPhase = ''
     runHook preCheck

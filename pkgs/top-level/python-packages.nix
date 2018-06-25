@@ -20,7 +20,6 @@ let
 let
   pythonAtLeast = versionAtLeast python.pythonVersion;
   pythonOlder = versionOlder python.pythonVersion;
-  isPy26 = python.pythonVersion == "2.6";
   isPy27 = python.pythonVersion == "2.7";
   isPy33 = python.pythonVersion == "3.3";
   isPy34 = python.pythonVersion == "3.4";
@@ -132,7 +131,7 @@ let
 
 in {
 
-  inherit python bootstrapped-pip pythonAtLeast pythonOlder isPy26 isPy27 isPy33 isPy34 isPy35 isPy36 isPyPy isPy3k buildPythonPackage buildPythonApplication;
+  inherit python bootstrapped-pip pythonAtLeast pythonOlder isPy27 isPy33 isPy34 isPy35 isPy36 isPyPy isPy3k buildPythonPackage buildPythonApplication;
   inherit fetchPypi callPackage;
   inherit hasPythonModule requiredPythonModules makePythonPath disabledIf;
   inherit toPythonModule toPythonApplication;
@@ -970,7 +969,7 @@ in {
     name = "${pname}-${version}";
     version = "0.2.2";
     pname = "basiciw";
-    disabled = isPy26 || isPy27 || isPyPy;
+    disabled = isPy27 || isPyPy;
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/b/${pname}/${name}.tar.gz";
@@ -1016,7 +1015,7 @@ in {
     propagatedBuildInputs = [
       self.sqlalchemy
       self.pycrypto
-    ] ++ optionals (isPy26 || isPy27) [
+    ] ++ optionals (isPy27) [
       self.funcsigs
       self.pycryptopp
     ];
@@ -1943,7 +1942,7 @@ in {
   };
 
   # Needed for celery
-  pytest_32 = self.pytest_36.overrideAttrs( oldAttrs: rec {
+  pytest_32 = self.pytest_36.overridePythonAttrs( oldAttrs: rec {
     version = "3.2.5";
     src = oldAttrs.src.override {
       inherit version;
@@ -2927,8 +2926,6 @@ in {
     name = "gtimelog-${version}";
     version = "0.9.1";
 
-    disabled = isPy26;
-
     src = pkgs.fetchurl {
       url = "https://github.com/gtimelog/gtimelog/archive/${version}.tar.gz";
       sha256 = "0qk8fv8cszzqpdi3wl9vvkym1jil502ycn6sic4jrxckw5s9jsfj";
@@ -3167,7 +3164,7 @@ in {
   ipfsapi = buildPythonPackage rec {
     name = "ipfsapi-${version}";
     version = "0.4.2.post1";
-    disabled = isPy26 || isPy27;
+    disabled = isPy27;
 
     src = pkgs.fetchFromGitHub {
       owner = "ipfs";
@@ -4093,7 +4090,7 @@ in {
       virtualenv
       webtest
       zope_component
-    ] ++ optional isPy26 unittest2;
+    ];
 
     propagatedBuildInputs = with self; [
       hupper
@@ -4626,11 +4623,8 @@ in {
       sha256 = "0va95cml7wfjpvgj3dc9xdn8psyjh3zbk6v51b0hcqv2fzh409vb";
     } ;
 
-    buildInputs = with self; [] ++ optionals isPy26 [ ordereddict unittest2 ];
-
     meta = {
-       maintainers = with maintainers; [ garbas domenkozar ];
-      platforms = platforms.all;
+      maintainers = with maintainers; [ garbas domenkozar ];
     };
   };
 
@@ -5235,7 +5229,6 @@ in {
       sha256 = "8ad8c4783bf61ded74527bffb48ed9b54166685e4230386a9ed9b1279e2df5b1";
     };
 
-    buildInputs = optional isPy26 self.ordereddict;
     checkPhase = ''
       ${python.interpreter} -m unittest discover
     '';
@@ -5586,7 +5579,7 @@ in {
     # This is fixed in master I believe but not yet in 2.1;
     doCheck = false;
 
-    propagatedBuildInputs = with self; ([ Babel ] ++ (optionals isPy26 [ ordereddict ]));
+    propagatedBuildInputs = with self; [ Babel ];
 
     meta = {
       homepage = https://github.com/wtforms/wtforms;
@@ -6032,7 +6025,7 @@ in {
       sha256 = "c77d007cc32cdff836ecf8df6192371767976c108a75b055e057bb6f4a09cd42";
     };
 
-    buildInputs = with self; [ setuptools ] ++ (optional isPy26 argparse);
+    buildInputs = with self; [ setuptools ];
 
     meta = {
       description = "Automatically generated zsh completion function for Python's option parser modules";
@@ -6047,7 +6040,7 @@ in {
 
   gipc = buildPythonPackage rec {
     name = "gipc-0.5.0";
-    disabled = !isPy26 && !isPy27;
+    disabled = !isPy27;
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/g/gipc/${name}.zip";
@@ -6569,7 +6562,7 @@ in {
   importlib = buildPythonPackage rec {
     name = "importlib-1.0.2";
 
-    disabled = (!isPy26) || isPyPy;
+    disabled = isPyPy;
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/i/importlib/importlib-1.0.2.tar.gz";
@@ -6784,7 +6777,7 @@ in {
       sha256 = "0y3w1x9935qzx8w6m2r6g4ghyjmxn33wryiif6xb56q7cj9w1433";
     };
 
-    disabled = ! (isPy26 || isPy27);
+    disabled = !isPy27;
 
     buildInputs = [ self.nose ];
 
@@ -7399,8 +7392,6 @@ in {
       rev = "v${version}";
       sha256 = "0xzz7j8xskj5y6as178mjmm0i2xbhd4q4mwmdnvghpd2aqq3qx1c";
     };
-
-    disabled = isPy26;
 
     buildInputs = with self; [ pexpect ];
 
@@ -8571,7 +8562,7 @@ in {
 
   nose-exclude = callPackage ../development/python-modules/nose-exclude { };
 
-  nose2 = if isPy26 then null else (buildPythonPackage rec {
+  nose2 = buildPythonPackage rec {
     name = "nose2-0.5.0";
     src = pkgs.fetchurl {
       url = "mirror://pypi/n/nose2/${name}.tar.gz";
@@ -8583,7 +8574,7 @@ in {
     propagatedBuildInputs = with self; [ six ];
     # AttributeError: 'module' object has no attribute 'collector'
     doCheck = false;
-  });
+  };
 
   nose-cover3 = buildPythonPackage rec {
     name = "nose-cover3-${version}";
@@ -8859,7 +8850,6 @@ in {
     buildInputs = [ pkgs.makeWrapper ];
 
     propagatedBuildInputs = with self; [ pkgs.rtmpdump pycrypto requests ]
-      ++ optionals isPy26 [ singledispatch futures argparse ]
       ++ optionals isPy27 [ singledispatch futures ]
       ++ optionals isPy33 [ singledispatch ];
 
@@ -9427,7 +9417,7 @@ in {
     name = "paho-mqtt-${version}";
     version = "1.1";
 
-    disabled = isPyPy || isPy26;
+    disabled = isPyPy;
 
     src = pkgs.fetchurl {
         url = "mirror://pypi/p/paho-mqtt/${name}.tar.gz";
@@ -11709,7 +11699,7 @@ in {
   python-wifi = buildPythonPackage rec {
     name = "python-wifi-${version}";
     version = "0.6.1";
-    disabled = ! (isPy26 || isPy27 );
+    disabled = !isPy27;
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/p/python-wifi/${name}.tar.bz2";
@@ -12045,7 +12035,6 @@ in {
 
   repocheck = buildPythonPackage rec {
     name = "repocheck-2015-08-05";
-    disabled = isPy26 || isPy27;
 
     src = pkgs.fetchFromGitHub {
       sha256 = "1jc4v5zy7z7xlfmbfzvyzkyz893f5x2k6kvb3ni3rn2df7jqhc81";
@@ -12635,8 +12624,6 @@ in {
     name = "shortuuid-${version}";
     version = "0.4.3";
 
-    disabled = isPy26;
-
     src = pkgs.fetchurl {
       url = "mirror://pypi/s/shortuuid/${name}.tar.gz";
       sha256 = "4606dbb19124d98109c00e2cafae2df8117aec02115623e18fb2abe3f766d293";
@@ -12869,7 +12856,7 @@ in {
     buildInputs = with self; [ pytest ];
     propagatedBuildInputs = with self; [ praw xmltodict pytz pyenchant pygeoip ];
 
-    disabled = isPyPy || isPy26 || isPy27;
+    disabled = isPyPy || isPy27;
 
     checkPhase = ''
     ${python.interpreter} test/*.py                                         #*/
@@ -14059,7 +14046,7 @@ in {
     src = py;
     format = "other";
 
-    disabled = isPy26 || isPyPy;
+    disabled = isPyPy;
 
     installPhase = ''
       # Move the tkinter module
@@ -14863,11 +14850,6 @@ EOF
       substituteInPlace setup.py --replace "nose<1.3.0" "nose"
     '';
 
-    # XXX: skipping two tests fails in python2.6
-    doCheck = ! isPy26;
-
-    buildInputs = with self; optionals isPy26 [ ordereddict unittest2 ];
-
     propagatedBuildInputs = with self; [
       nose
       webob
@@ -15309,7 +15291,7 @@ EOF
       sha256 = "1p943jdxb587dh7php4vx04qvn7b2877hr4qs5zyckvp5afhhank";
     };
 
-    propagatedBuildInputs = with self; [ zope_location zope_event zope_interface zope_testing ] ++ optional isPy26 ordereddict;
+    propagatedBuildInputs = with self; [ zope_location zope_event zope_interface zope_testing ];
 
     # ImportError: No module named 'zope.event'
     # even though zope_event has been included.
@@ -16934,7 +16916,7 @@ EOF
 
   jenkins-job-builder = buildPythonPackage rec {
     name = "jenkins-job-builder-2.0.0.0b2";
-    disabled = ! (isPy26 || isPy27);
+    disabled = !isPy27;
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/j/jenkins-job-builder/${name}.tar.gz";
@@ -16956,10 +16938,6 @@ EOF
       pyyaml
       six
       stevedore
-    ] ++ optionals isPy26 [
-      ordereddict
-      argparse
-      ordereddict
     ];
 
     meta = {

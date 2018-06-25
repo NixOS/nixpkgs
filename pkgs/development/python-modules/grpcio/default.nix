@@ -1,5 +1,5 @@
 { stdenv, buildPythonPackage, fetchPypi, lib
-, six, protobuf, enum34, futures, isPy26, isPy27, isPy34 }:
+, six, protobuf, enum34, futures, isPy27, isPy34 }:
 
 buildPythonPackage rec {
   pname = "grpcio";
@@ -11,8 +11,8 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [ six protobuf ]
-                        ++ lib.optionals (isPy26 || isPy27 || isPy34) [ enum34 ]
-                        ++ lib.optionals (isPy26 || isPy27) [ futures ];
+                        ++ lib.optionals (isPy27 || isPy34) [ enum34 ]
+                        ++ lib.optionals (isPy27) [ futures ];
 
   meta = with stdenv.lib; {
     description = "HTTP/2-based RPC framework";
