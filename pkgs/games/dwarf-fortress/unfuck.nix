@@ -3,7 +3,7 @@
 , ncurses, glib, gtk2, libsndfile, zlib
 }:
 
-let dfVersion = "0.44.10"; in
+let dfVersion = "0.44.11"; in
 
 stdenv.mkDerivation {
   name = "dwarf_fortress_unfuck-${dfVersion}";
@@ -12,7 +12,7 @@ stdenv.mkDerivation {
     owner = "svenstaro";
     repo = "dwarf_fortress_unfuck";
     rev = dfVersion;
-    sha256 = "0vb19qx2ibc79j4bgbk9lskb883qfb0815zw1dfz9k7rqwal8mzj";
+    sha256 = "0kkk8md2xq8l0c4m9hkg66qqjad3xi4jbb5z2ginhqixxpfbz8rf";
   };
 
   cmakeFlags = [

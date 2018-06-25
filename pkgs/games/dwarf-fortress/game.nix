@@ -9,7 +9,7 @@ with lib;
 
 let
   baseVersion = "44";
-  patchVersion = "10";
+  patchVersion = "11";
   dfVersion = "0.${baseVersion}.${patchVersion}";
 
   libpath = makeLibraryPath [ stdenv.cc.cc stdenv.cc.libc dwarf-fortress-unfuck SDL ];
@@ -21,15 +21,15 @@ let
   srcs = {
     "x86_64-linux" = fetchurl {
       url = "${homepage}df_${baseVersion}_${patchVersion}_linux.tar.bz2";
-      sha256 = "1cqm43hn3ar9d8a7y7dwq48ajp72cirn1gclh8r2fykkypprxmp2";
+      sha256 = "1qizfkxl2k6pn70is4vz94q4k55bc3pm13b2r6yqi6lw1cnna4sf";
     };
     "i686-linux" = fetchurl {
       url = "${homepage}df_${baseVersion}_${patchVersion}_linux32.tar.bz2";
-      sha256 = "0gdb6sq8725nwdisxwha8f5b6arq570s73aj4gdrh611gxh13r6n";
+      sha256 = "11m39lfyrsxlw1g7f269q7fzwichg06l21fxhqzgvlvmzmxsf8q5";
     };
     "x86_64-darwin" = fetchurl {
       url = "${homepage}df_${baseVersion}_${patchVersion}_osx.tar.bz2";
-      sha256 = "1wpa45d81q8f5mhqmaxvdkz93k6cm3pg7vpsqjjjsp5s961gd74g";
+      sha256 = "1cxckszjh5fi9czywr1kl5kj9zxzaszhqdal5gd8ww0ihcbl7fcd";
     };
   };
 
@@ -88,6 +88,6 @@ stdenv.mkDerivation {
     inherit homepage;
     license = licenses.unfreeRedistributable;
     platforms = attrNames srcs;
-    maintainers = with maintainers; [ a1russell robbinch roconnor the-kenny abbradar ];
+    maintainers = with maintainers; [ a1russell robbinch roconnor the-kenny abbradar numinit ];
   };
 }
