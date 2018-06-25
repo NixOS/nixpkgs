@@ -1084,6 +1084,7 @@ self: super: {
 
   # The build-tool-depends this hacks around has been added on master.
   base-compat = addTestToolDepend super.base-compat self.hspec-discover;
+  # https://github.com/sol/with-location/pull/1
   with-location = addTestToolDepend super.with-location self.hspec-discover;
   text-conversions = addTestToolDepend super.text-conversions self.hspec-discover;
   logging-facade = addTestToolDepend super.logging-facade self.hspec-discover;
