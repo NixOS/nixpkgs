@@ -534,6 +534,8 @@ let
     piqi = callPackage ../development/ocaml-modules/piqi { };
     piqi-ocaml = callPackage ../development/ocaml-modules/piqi-ocaml { };
 
+    psmt2-frontend = callPackage ../development/ocaml-modules/psmt2-frontend { };
+
     psq = callPackage ../development/ocaml-modules/psq { };
 
     ptime = callPackage ../development/ocaml-modules/ptime { };
