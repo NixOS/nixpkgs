@@ -385,6 +385,10 @@ in {
   pygtail = callPackage ../development/python-modules/pygtail { };
 
   pygtk = callPackage ../development/python-modules/pygtk { libglade = null; };
+  pygtkglext = callPackage ../development/python-modules/pygtkglext {
+    libglade = pkgs.gnome2.libglade;
+    gtkglext = pkgs.gnome2.gtkglext;
+  };
 
   pygtksourceview = callPackage ../development/python-modules/pygtksourceview { };
 
