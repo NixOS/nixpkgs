@@ -23,6 +23,7 @@ let
     wantedBy = [ "ceph-${daemonType}.target" ];
 
     serviceConfig = {
+      User = "ceph";
       LimitNOFILE = 1048576;
       LimitNPROC = 1048576;
       Environment = "CLUSTER=${clusterName}";
@@ -34,7 +35,7 @@ let
       Restart = "on-failure";
       StartLimitBurst = "5";
       StartLimitInterval = "30min";
-      ExecStart = "${ceph.out}/bin/${if daemonType == "rgw" then "radosgw" else "ceph-${daemonType}"} -f --cluster ${clusterName} --id ${if daemonType == "rgw" then "client.${daemonId}" else daemonId} --setuser ceph --setgroup ceph";
+      ExecStart = "${ceph.out}/bin/${if daemonType == "rgw" then "radosgw" else "ceph-${daemonType}"} -f --cluster ${clusterName} --id ${if daemonType == "rgw" then "client.${daemonId}" else daemonId}";
     } // extraServiceConfig
       // optionalAttrs (daemonType == "osd") { ExecStartPre = "${ceph.out}/libexec/ceph/ceph-osd-prestart.sh --id ${daemonId} --cluster ${clusterName}"; };
     } // optionalAttrs (builtins.elem daemonType [ "mds" "mon" "rgw" "mgr" ]) { preStart = ''
@@ -337,8 +338,9 @@ in
       name = "ceph";
       uid = config.ids.uids.ceph;
       description = "Ceph daemon user";
+      group = "ceph";
+      extraGroups = [ "disk" ];
     };
-
     users.extraGroups = singleton {
       name = "ceph";
       gid = config.ids.gids.ceph;
