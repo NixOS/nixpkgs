@@ -198,7 +198,7 @@ in rec {
   };
 
   perl526 = common {
-    version = "5.26.1";
-    sha256 = "1p81wwvr5jb81m41d07kfywk5gvbk0axdrnvhc2aghcdbr4alqz7";
+    version = "5.26.2";
+    sha256 = "03gpnxx1g6hvlh0v4aqx00580h787sfywp1vlvw64q2xcbm9qbsp";
   };
 }
