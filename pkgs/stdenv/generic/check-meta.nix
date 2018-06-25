@@ -151,6 +151,7 @@ let
     platforms = listOf (either str lib.systems.parsedPlatform.types.system);
     hydraPlatforms = listOf str;
     broken = bool;
+    releaseNews = str;
 
     # Weirder stuff that doesn't appear in the documentation?
     knownVulnerabilities = listOf str;
