@@ -1353,6 +1353,8 @@ with pkgs;
 
   languagetool = callPackage ../tools/text/languagetool {  };
 
+  lief = callPackage ../development/libraries/lief {};
+
   loadwatch = callPackage ../tools/system/loadwatch { };
 
   loccount = callPackage ../development/tools/misc/loccount { };
