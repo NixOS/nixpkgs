@@ -2,7 +2,7 @@
 
 let
   version = "0.10.0";
-  name = "mist-${version}";
+  name = "hmetis-${version}";
 
   throwSystem = throw "Unsupported system: ${stdenv.system}";
 
@@ -17,15 +17,15 @@ let
   urlVersion = builtins.replaceStrings ["."] ["-"] version;
 
   desktopItem = makeDesktopItem rec {
-    name = "Mist";
-    exec = "mist";
-    icon = "mist";
+    name = "Hmetis";
+    exec = "hmetis";
+    icon = "hmetis";
     desktopName = name;
     genericName = "Mist Browser";
     categories = "Network;";
   };
 
-  mist = stdenv.lib.appendToName "unwrapped" (stdenv.mkDerivation {
+  hmetis = stdenv.lib.appendToName "unwrapped" (stdenv.mkDerivation {
     inherit name version;
 
     src = {
@@ -42,16 +42,16 @@ let
     buildInputs = [ unzip makeWrapper ];
 
     buildCommand = ''
-      mkdir -p $out/lib/mist $out/bin
-      unzip -d $out/lib/mist $src
-      ln -s $out/lib/mist/mist $out/bin
+      mkdir -p $out/lib/hmetis $out/bin
+      unzip -d $out/lib/hmetis $src
+      ln -s $out/lib/hmetis/hmetis $out/bin
       fixupPhase
       mkdir -p $out/share/applications
       ln -s ${desktopItem}/share/applications/* $out/share/applications
       patchelf \
         --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
-        --set-rpath "${atomEnv.libPath}:$out/lib/mist" \
-        $out/lib/mist/mist
+        --set-rpath "${atomEnv.libPath}:$out/lib/hmetis" \
+        $out/lib/hmetis/hmetis
     '';
   });
 in
@@ -59,7 +59,7 @@ buildFHSUserEnv {
   inherit name;
 
   targetPkgs = pkgs: with pkgs; [
-     mist
+     hmetis
   ];
 
   extraInstallCommands = ''
@@ -67,5 +67,5 @@ buildFHSUserEnv {
     cp "${desktopItem}/share/applications/"* $out/share/applications
   '';
 
-  runScript = "mist";
+  runScript = "hmetis";
 }
