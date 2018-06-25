@@ -14,7 +14,9 @@ stdenv.mkDerivation rec  {
   };
 
   nativeBuildInputs = with python36Packages; [
+    appstream-glib
     desktop-file-utils
+    gobjectIntrospection
     meson
     ninja
     pkgconfig
@@ -22,9 +24,7 @@ stdenv.mkDerivation rec  {
     wrapPython
   ];
 
-  buildInputs = [
-    appstream-glib glib gobjectIntrospection
-  ] ++ (with gnome3; [
+  buildInputs = [ glib ] ++ (with gnome3; [
     easytag gsettings_desktop_schemas gtk3 libsecret libsoup totem-pl-parser
   ]) ++ (with gst_all_1; [
     gst-libav gst-plugins-bad gst-plugins-base gst-plugins-good gst-plugins-ugly
