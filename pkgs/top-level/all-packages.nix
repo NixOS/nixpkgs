@@ -18718,6 +18718,8 @@ with pkgs;
   wings = callPackage ../applications/graphics/wings {
     erlang = erlangR18;
   };
+  
+  write_stylus = callPackage ../applications/office/write_stylus { };
 
   alsamixer.app = callPackage ../applications/window-managers/windowmaker/dockapps/alsamixer.app.nix { };
 
