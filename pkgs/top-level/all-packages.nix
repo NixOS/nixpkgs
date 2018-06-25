@@ -8884,6 +8884,8 @@ with pkgs;
 
   cutee = callPackage ../development/libraries/cutee { };
 
+  cutelyst = libsForQt5.callPackage ../development/libraries/cutelyst { };
+
   cxxtools = callPackage ../development/libraries/cxxtools { };
 
   cwiid = callPackage ../development/libraries/cwiid { };
