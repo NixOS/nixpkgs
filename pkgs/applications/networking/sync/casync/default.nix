@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
     description = "Content-Addressable Data Synchronizer";
     homepage    = https://github.com/systemd/casync;
     license     = licenses.lgpl21;
-    platforms   = platforms.all;
+    platforms   = platforms.linux;
     maintainers = with maintainers; [ flokli ];
   };
 }
