@@ -185,7 +185,7 @@ init_submodules(){
 
         # checkout each submodule
         hash=$(echo "$l" | awk '{print $1}' | tr -d '-')
-        dir=$(echo "$l" | sed -n 's/^ \{0,1\}[^ ]* \(.*\) ([^ ]*)$/\1/p')
+        dir=$(echo "$l" | sed -n 's/^.[0-9a-f]\+ \(.*[^)]*\)\( (.*)\)\?$/\1/p')
         name=$(
             git config -f .gitmodules --get-regexp submodule\..*\.path |
             sed -n "s,^\(.*\)\.path $dir\$,\\1,p")
