@@ -2409,6 +2409,8 @@ with pkgs;
 
   flvstreamer = callPackage ../tools/networking/flvstreamer { };
 
+  hmetis = callPackage ../applications/science/math/hmetis { };
+
   libbsd = callPackage ../development/libraries/libbsd { };
 
   libbladeRF = callPackage ../development/libraries/libbladeRF { };
