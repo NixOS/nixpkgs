@@ -993,6 +993,10 @@ with pkgs;
   capstone = callPackage ../development/libraries/capstone { };
   unicorn-emu = callPackage ../development/libraries/unicorn-emu { };
 
+  casync = callPackage ../applications/networking/sync/casync {
+    sphinx = python3Packages.sphinx;
+  };
+
   cataract          = callPackage ../applications/misc/cataract { };
   cataract-unstable = callPackage ../applications/misc/cataract/unstable.nix { };
 
