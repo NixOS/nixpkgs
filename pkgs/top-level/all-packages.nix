@@ -12,24 +12,7 @@ with pkgs;
 
 {
 
-  # Allow callPackage to fill in the pkgs argument
   inherit pkgs;
-
-
-  # Override system. This is useful to build i686 packages on x86_64-linux.
-  forceSystem = system: kernel: nixpkgsFun {
-    localSystem = {
-      inherit system;
-      platform = platform // { kernelArch = kernel; };
-    };
-  };
-
-  # Used by wine, firefox with debugging version of Flash, ...
-  pkgsi686Linux = forceSystem "i686-linux" "i386";
-
-  callPackage_i686 = if stdenv.system == "i686-linux" || stdenv.system == "x86_64-linux"
-    then pkgsi686Linux.callPackage
-    else throw "callPackage_i686 not supported on system '${stdenv.system}'";
 
   # A stdenv capable of building 32-bit binaries.  On x86_64-linux,
   # it uses GCC compiled with multilib support; on i686-linux, it's

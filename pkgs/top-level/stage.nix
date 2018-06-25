@@ -117,6 +117,14 @@ let
     lib.optionalAttrs allowCustomOverrides
       ((config.packageOverrides or (super: {})) super);
 
+  # Override system. This is useful to build i686 packages on x86_64-linux.
+  forceSystem = system: kernel: nixpkgsFun {
+    localSystem = {
+      inherit system;
+      platform = stdenv.hostPlatform.platform // { kernelArch = kernel; };
+    };
+  };
+
   # Convenience attributes for instantitating nixpkgs. Each of these
   # will instantiate a new version of allPackages. They map example
   # attributes to their own thing.
@@ -127,6 +135,13 @@ let
      pkgsLocal = lib.mapAttrs (n: localSystem:
                               nixpkgsFun { inherit localSystem; })
                               lib.systems.examples;
+
+     # Used by wine, firefox with debugging version of Flash, ...
+     pkgsi686Linux = forceSystem "i686-linux" "i386";
+
+     callPackage_i686 = if stdenv.system == "i686-linux" || stdenv.system == "x86_64-linux"
+       then self.pkgsi686Linux.callPackage
+       else throw "callPackage_i686 not supported on system '${stdenv.system}'";
   };
 
   # The complete chain of package set builders, applied from top to bottom.
