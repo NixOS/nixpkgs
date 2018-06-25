@@ -1,4 +1,4 @@
-{ lib, callPackage, stdenv, overrideCC, gcc5, fetchurl, fetchFromGitHub, fetchpatch }:
+{ lib, callPackage, stdenv, overrideCC, gcc5, fetchurl, fetchFromGitHub, fetchpatch, python3 }:
 
 let
 
@@ -6,10 +6,6 @@ let
 
   nixpkgsPatches = [
     ./env_var_for_system_dir.patch
-
-    # this one is actually an omnipresent bug
-    # https://bugzilla.mozilla.org/show_bug.cgi?id=1444519
-    ./fix-pa-context-connect-retval.patch
   ];
 
   firefox60_aarch64_skia_patch = fetchpatch {
@@ -24,15 +20,17 @@ rec {
 
   firefox = common rec {
     pname = "firefox";
-    version = "60.0.2";
+    version = "61.0";
     src = fetchurl {
       url = "mirror://mozilla/firefox/releases/${version}/source/firefox-${version}.source.tar.xz";
-      sha512 = "2my4v8al3swwbiqcp3a5y89imly6apc2p9q0cbkhbiz0sqylc0l02jh0qp95migmik56m4prwqdi81kgqs7cw5r2np3mm6sc1b45mkg";
+      sha512 = "0ww2j5gxr7h142lfi0xvckvd7vmnha72j8c0wyyqmmp1rr341f10vfd0hvawiagik4ih6dz8h5pmkl67zdnwqc3z75vwnci20ajlg2s";
     };
 
     patches = nixpkgsPatches ++ [
       ./no-buildconfig.patch
-    ] ++ lib.optional stdenv.isAarch64 firefox60_aarch64_skia_patch;
+    ];
+
+    extraNativeBuildInputs = [ python3 ];
 
     meta = {
       description = "A web browser built from Firefox source tree";
@@ -53,7 +51,11 @@ rec {
       sha512 = "a4883550fdf62e66b10f1de7416d3614a2cb0ce3a004d9a79ecc37a726794d7bbdb0a6767faab4ea97278d2192462597551fc13b7e9a9c38d043c2879d51095a";
     };
 
-    patches = nixpkgsPatches;
+    patches = nixpkgsPatches ++ [
+      # this one is actually an omnipresent bug
+      # https://bugzilla.mozilla.org/show_bug.cgi?id=1444519
+      ./fix-pa-context-connect-retval.patch
+    ];
 
     meta = firefox.meta // {
       description = "A web browser built from Firefox Extended Support Release source tree";
@@ -74,6 +76,10 @@ rec {
 
     patches = nixpkgsPatches ++ [
       ./no-buildconfig.patch
+
+      # this one is actually an omnipresent bug
+      # https://bugzilla.mozilla.org/show_bug.cgi?id=1444519
+      ./fix-pa-context-connect-retval.patch
     ] ++ lib.optional stdenv.isAarch64 firefox60_aarch64_skia_patch;
 
     meta = firefox.meta // {
