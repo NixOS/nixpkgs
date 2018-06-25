@@ -20169,6 +20169,8 @@ with pkgs;
 
   varscan = callPackage ../applications/science/biology/varscan { };
 
+  hmmer = callPackage ../applications/science/biology/hmmer { };
+
   bwa = callPackage ../applications/science/biology/bwa { };
 
   ### SCIENCE/MACHINE LEARNING
