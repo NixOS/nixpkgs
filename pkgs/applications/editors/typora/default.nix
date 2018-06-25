@@ -80,7 +80,6 @@ stdenv.mkDerivation rec {
     wrapProgram $out/bin/typora \
       "''${gappsWrapperArgs[@]}" \
       --suffix XDG_DATA_DIRS : "${gtk3}/share/gsettings-schemas/${gtk3.name}/" \
-      --set XDG_RUNTIME_DIR "XDG-RUNTIME-DIR" \
       --prefix XDG_DATA_DIRS : "${gnome3.defaultIconTheme}/share"
 
     # Fix the desktop link
