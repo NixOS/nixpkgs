@@ -39,23 +39,7 @@ self: super: {
   unix = null;
   xhtml = null;
 
-  ## Shadowed:
-
-  ## Needs bump to a versioned attribute
-  ## Issue: https://github.com/sol/doctest/issues/189
-  doctest = overrideCabal super.doctest_0_15_0 (drv: {
-    ## Setup: Encountered missing dependencies:
-    ## ghc >=7.0 && <8.4
-    ##
-    ## Setup: Encountered missing dependencies:
-    ## QuickCheck >=2.11.3
-    doCheck         = false;
-  });
-
-  ## Needs bump to a versioned attribute
-  ## Setup: Encountered missing dependencies:
-  ## Cabal <2.2
-  ## Older versions don't compile.
+  doctest = dontCheck super.doctest_0_16_0;  # tests depend on very recent QuickCheck
   hackage-db = super.hackage-db_2_0_1;
 
   ## Needs bump to a versioned attribute
