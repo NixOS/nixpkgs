@@ -1,14 +1,13 @@
 { stdenv, newScope, makeWrapper, electron, xdg_utils, makeDesktopItem
 , auth0ClientID ? "0spuNKfIGeLAQ_Iki9t3fGxbfJl3k8SU"
-, auth0Domain ? "nixpkgs.auth0.com"
-, disableTooltips ? false }:
+, auth0Domain ? "nixpkgs.auth0.com" }:
 
 let
   callPackage = newScope self;
   self = {
     fetchNodeModules = callPackage ./fetchNodeModules.nix {};
     rambox-bare = callPackage ./bare.nix {
-      inherit auth0ClientID auth0Domain disableTooltips;
+      inherit auth0ClientID auth0Domain;
     };
     sencha = callPackage ./sencha {};
   };
