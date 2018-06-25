@@ -794,7 +794,7 @@
     "sensor.cups" = ps: with ps; [ pycups ];
     "sensor.currencylayer" = ps: with ps; [  ];
     "sensor.daikin" = ps: with ps; [  ];
-    "sensor.darksky" = ps: with ps; [  ];
+    "sensor.darksky" = ps: with ps; [ python-forecastio ];
     "sensor.deconz" = ps: with ps; [  ];
     "sensor.deluge" = ps: with ps; [ deluge-client ];
     "sensor.demo" = ps: with ps; [  ];
@@ -1183,7 +1183,7 @@
     "weather" = ps: with ps; [  ];
     "weather.bom" = ps: with ps; [  ];
     "weather.buienradar" = ps: with ps; [  ];
-    "weather.darksky" = ps: with ps; [  ];
+    "weather.darksky" = ps: with ps; [ python-forecastio ];
     "weather.demo" = ps: with ps; [  ];
     "weather.ecobee" = ps: with ps; [  ];
     "weather.ipma" = ps: with ps; [  ];
