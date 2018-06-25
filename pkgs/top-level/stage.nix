@@ -117,11 +117,17 @@ let
     lib.optionalAttrs allowCustomOverrides
       ((config.packageOverrides or (super: {})) super);
 
-  # Convenient way to reference cross
-  # Used in aliases for now but should not be used in Nixpkgs.
-  cross = self: super: { pkgsCross = lib.mapAttrs (n: crossSystem:
-                                     nixpkgsFun { inherit crossSystem; })
-                                     lib.systems.examples; };
+  # Convenience attributes for instantitating nixpkgs. Each of these
+  # will instantiate a new version of allPackages. They map example
+  # attributes to their own thing.
+  extraPkgs = self: super: {
+     pkgsCross = lib.mapAttrs (n: crossSystem:
+                              nixpkgsFun { inherit crossSystem; })
+                              lib.systems.examples;
+     pkgsLocal = lib.mapAttrs (n: localSystem:
+                              nixpkgsFun { inherit localSystem; })
+                              lib.systems.examples;
+  };
 
   # The complete chain of package set builders, applied from top to bottom.
   # stdenvOverlays must be last as it brings package forward from the
@@ -133,7 +139,7 @@ let
     trivialBuilders
     splice
     allPackages
-    cross
+    extraPkgs
     aliases
     configOverrides
   ] ++ overlays ++ [
