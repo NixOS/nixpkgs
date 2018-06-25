@@ -93,7 +93,7 @@ let
 
   allPackages = self: super:
     let res = import ./all-packages.nix
-      { inherit lib nixpkgsFun noSysDirs config; }
+      { inherit lib noSysDirs config; }
       res self;
     in res;
 
@@ -138,10 +138,8 @@ let
 
      # Used by wine, firefox with debugging version of Flash, ...
      pkgsi686Linux = forceSystem "i686-linux" "i386";
-
-     callPackage_i686 = if stdenv.system == "i686-linux" || stdenv.system == "x86_64-linux"
-       then self.pkgsi686Linux.callPackage
-       else throw "callPackage_i686 not supported on system '${stdenv.system}'";
+     callPackage_i686 = self.pkgsi686Linux.callPackage;
+     inherit forceSystem;
   };
 
   # The complete chain of package set builders, applied from top to bottom.
