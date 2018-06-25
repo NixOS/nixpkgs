@@ -143,6 +143,12 @@ rec {
   addBuildTool = drv: x: addBuildTools drv [x];
   addBuildTools = drv: xs: overrideCabal drv (drv: { buildTools = (drv.buildTools or []) ++ xs; });
 
+  addTestToolDepend = drv: x: addTestToolDepends drv [x];
+  addTestToolDepends = drv: xs: overrideCabal drv (drv: { testToolDepends = (drv.testToolDepends or []) ++ xs; });
+
+  addBenchmarkToolDepend = drv: x: addBenchmarkToolDepends drv [x];
+  addBenchmarkToolDepends = drv: xs: overrideCabal drv (drv: { benchmarkToolDepends = (drv.benchmarkToolDepends or []) ++ xs; });
+
   addExtraLibrary = drv: x: addExtraLibraries drv [x];
   addExtraLibraries = drv: xs: overrideCabal drv (drv: { extraLibraries = (drv.extraLibraries or []) ++ xs; });
 
