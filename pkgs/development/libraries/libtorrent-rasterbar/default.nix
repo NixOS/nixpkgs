@@ -1,19 +1,33 @@
-{ stdenv, fetchurl, automake, autoconf, boost, openssl, lib, libtool, pkgconfig, zlib, python, libiconv, geoip, ... }:
+{ stdenv, lib, fetchFromGitHub, fetchpatch, pkgconfig, automake, autoconf, zlib
+, boost, openssl, libtool, python, libiconv, geoip }:
 
-stdenv.mkDerivation rec {
-  name = "libtorrent-rasterbar-${version}";
+let
   version = "1.1.7";
+  formattedVersion = lib.replaceChars ["."] ["_"] version;
+in stdenv.mkDerivation {
+  name = "libtorrent-rasterbar-${version}";
 
-  src =
-    let formattedVersion = lib.replaceChars ["."] ["_"] version;
-    in fetchurl {
-      url = "https://github.com/arvidn/libtorrent/archive/libtorrent-${formattedVersion}.tar.gz";
-      sha256 = "0vbw7wcw8x9787rq5fwaibpvvspm3237l8ahbf20gjpzxhn4yfwc";
-    };
+  src = fetchFromGitHub {
+    owner = "arvidn";
+    repo = "libtorrent";
+    rev = "libtorrent-${formattedVersion}";
+    sha256 = "073nb7yca5jg1i8z5h76qrmddl2hdy8fc1pnchkg574087an31r3";
+  };
 
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/arvidn/libtorrent/commit/64d6b4900448097b0157abb328621dd211e2947d.patch";
+      sha256 = "1bdv0icqzbg1il60sckcly4y22lkdbkkwdjadwdzxv7cdj586bzd";
+    })
+    (fetchpatch {
+      url = "https://github.com/arvidn/libtorrent/commit/9cd0ae67e74a507c1b9ff9c057ee97dda38ccb81.patch";
+      sha256 = "1cscqpc6fq9iwspww930dsxf0yb01bgrghzf5hdhl09a87r6q2zg";
+    })
+  ];
+
+  enableParallelBuilding = true;
   nativeBuildInputs = [ automake autoconf libtool pkgconfig ];
   buildInputs = [ boost openssl zlib python libiconv geoip ];
-
   preConfigure = "./autotool.sh";
 
   configureFlags = [
@@ -25,12 +39,8 @@ stdenv.mkDerivation rec {
     "--with-libiconv=yes"
   ];
 
-  enableParallelBuilding = true;
-
-  doCheck = false; # fails to link
-
   meta = with stdenv.lib; {
-    homepage = http://www.rasterbar.com/products/libtorrent/;
+    homepage = "https://libtorrent.org/";
     description = "A C++ BitTorrent implementation focusing on efficiency and scalability";
     license = licenses.bsd3;
     maintainers = [ maintainers.phreedom ];

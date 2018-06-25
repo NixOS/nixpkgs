@@ -30,10 +30,7 @@ let
       "-DSPHINX_OUTPUT_MAN=ON"
       "-DSPHINX_OUTPUT_HTML=OFF"
       "-DSPHINX_WARNINGS_AS_ERRORS=OFF"
-    ]
-    # Maybe with compiler-rt this won't be needed?
-    ++ stdenv.lib.optional stdenv.isLinux "-DGCC_INSTALL_PREFIX=${gcc}"
-    ++ stdenv.lib.optional (stdenv.cc.libc != null) "-DC_INCLUDE_DIRS=${stdenv.cc.libc}/include";
+    ];
 
     patches = [ ./purity.patch ];
 
@@ -50,13 +47,12 @@ let
 
     outputs = [ "out" "lib" "python" ];
 
+    # Clang expects to find LLVMgold in its own prefix
     postInstall = ''
-      # Clang expects to find LLVMgold in its own prefix
       if [ -e ${llvm}/lib/LLVMgold.so ]; then
         ln -sv ${llvm}/lib/LLVMgold.so $out/lib
       fi
-      # Clang expects to find sanitizer libraries in its own prefix
-      ln -sv ${llvm}/lib/clang/${release_version}/lib $out/lib/clang/${release_version}/
+
       ln -sv $out/bin/clang $out/bin/cpp
 
       # Move libclang to 'lib' output

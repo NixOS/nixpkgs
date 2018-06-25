@@ -1,10 +1,10 @@
 {stdenv, fetchurl, xlibsWrapper, imake, gccmakedep, libXmu, libXpm, libXp, bison, flex, pkgconfig}:
 
 stdenv.mkDerivation {
-  name = "Xaw3d-1.6.2";
+  name = "Xaw3d-1.6.3";
   src = fetchurl {
-    url = https://www.x.org/releases/individual/lib/libXaw3d-1.6.2.tar.bz2;
-    sha256 = "0awplv1nf53ywv01yxphga3v6dcniwqnxgnb0cn4khb121l12kxp";
+    url = https://www.x.org/releases/individual/lib/libXaw3d-1.6.3.tar.bz2;
+    sha256 = "0i653s8g25cc0mimkwid9366bqkbyhdyjhckx7bw77j20hzrkfid";
   };
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [imake gccmakedep libXpm libXp bison flex];

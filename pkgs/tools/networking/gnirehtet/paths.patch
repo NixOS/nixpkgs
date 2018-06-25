@@ -1,0 +1,35 @@
+diff --git a/relay-rust/src/main.rs b/relay-rust/src/main.rs
+index 4f1be53..96d2e78 100644
+--- a/relay-rust/src/main.rs
++++ b/relay-rust/src/main.rs
+@@ -299,7 +299,7 @@ impl Command for RelayCommand {
+ 
+ fn cmd_install(serial: Option<&String>) -> Result<(), CommandExecutionError> {
+     info!(target: TAG, "Installing gnirehtet client...");
+-    exec_adb(serial, vec!["install", "-r", "gnirehtet.apk"])
++    exec_adb(serial, vec!["install", "-r", "@apk@/gnirehtet.apk"])
+ }
+ 
+ fn cmd_uninstall(serial: Option<&String>) -> Result<(), CommandExecutionError> {
+@@ -467,8 +467,8 @@ fn exec_adb<S: Into<String>>(
+     args: Vec<S>,
+ ) -> Result<(), CommandExecutionError> {
+     let adb_args = create_adb_args(serial, args);
+-    debug!(target: TAG, "Execute: adb {:?}", adb_args);
+-    match process::Command::new("adb").args(&adb_args[..]).status() {
++    debug!(target: TAG, "Execute: @adb@ {:?}", adb_args);
++    match process::Command::new("@adb@").args(&adb_args[..]).status() {
+         Ok(exit_status) => {
+             if exit_status.success() {
+                 Ok(())
+@@ -490,8 +490,8 @@ fn must_install_client(serial: Option<&String>) -> Result<bool, CommandExecution
+         serial,
+         vec!["shell", "dumpsys", "package", "com.genymobile.gnirehtet"],
+     );
+-    debug!(target: TAG, "Execute: adb {:?}", args);
+-    match process::Command::new("adb").args(&args[..]).output() {
++    debug!(target: TAG, "Execute: @adb@ {:?}", args);
++    match process::Command::new("@adb@").args(&args[..]).output() {
+         Ok(output) => {
+             if output.status.success() {
+                 // the "regex" crate makes the binary far bigger, so just parse the versionCode

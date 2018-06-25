@@ -42,6 +42,7 @@ stdenv.mkDerivation rec {
     homepage = https://picolisp.com/;
     license = licenses.mit;
     platforms = platforms.all;
+    broken = stdenv.isDarwin; # times out
     maintainers = with maintainers; [ raskin tohl ];
   };
 

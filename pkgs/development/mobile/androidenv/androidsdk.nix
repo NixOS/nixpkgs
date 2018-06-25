@@ -1,4 +1,4 @@
-{ stdenv, stdenv_32bit, fetchurl, unzip, makeWrapper
+{ stdenv, stdenv_32bit, fetchurl, fetchzip, unzip, makeWrapper
 , platformTools, buildTools, support, supportRepository, platforms, sysimages, addons, sources
 , libX11, libXext, libXrender, libxcb, libXau, libXdmcp, libXtst, libGLU_combined, alsaLib
 , freetype, fontconfig, glib, gtk2, atk, file, jdk, coreutils, libpulseaudio, dbus
@@ -8,7 +8,15 @@
 { platformVersions, abiVersions, useGoogleAPIs, useExtraSupportLibs ? false
 , useGooglePlayServices ? false, useInstantApps ? false }:
 
-let inherit (stdenv.lib) makeLibraryPath; in
+let inherit (stdenv.lib) makeLibraryPath;
+
+    googleRepository = let version = "gms_v9_rc41_wear_2_0_rc6";
+      in fetchzip rec {
+        url = "https://dl-ssl.google.com/android/repository/google_m2repository_${version}.zip";
+        sha256 = "0k99xmynv0k62d301zx5jnjkddflr51i5lb02l9incg7m5cn8kzx";
+      };
+
+in
 
 stdenv.mkDerivation rec {
   name = "android-sdk-${version}";
@@ -167,6 +175,8 @@ stdenv.mkDerivation rec {
 
     ${stdenv.lib.optionalString useInstantApps
        "ln -s ${addons.instant_apps}/whsdk instantapps"}
+
+    ln -s ${googleRepository} m2repository
 
     cd ../..
 

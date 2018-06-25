@@ -1,17 +1,17 @@
 { stdenv, buildPythonPackage, fetchPypi, isPy3k
 , beautifulsoup4, bottle, chardet, dateutil
 , google_api_python_client, lxml, ply, python_magic
-, nose }:
+, nose, requests }:
 
 buildPythonPackage rec {
-  version = "2.0.0";
+  version = "2.1.2";
   pname = "beancount";
 
   disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0wxwf02d3raglwqsxdsgf89fniakv1m19q825w76k5z004g18y42";
+    sha256 = "d0d5f7088cb6b699cc4d030dad42d20b8228232cdb445bb1330d4ef5e3581f52";
   };
 
   checkInputs = [ nose ];
@@ -31,6 +31,7 @@ buildPythonPackage rec {
     lxml
     ply
     python_magic
+    requests
   ];
 
   meta = {

@@ -20,13 +20,18 @@ let newPython = python.override {
 };
 
 in newPython.pkgs.buildPythonApplication rec {
-  version = "1.4.4";
+  version = "1.4.5";
   pname = "conan";
 
   src = newPython.pkgs.fetchPypi {
     inherit pname version;
-    sha256 = "1g03f8rw9l198w9ph0gi0q3g84ilp1dxxc9nmj0dgnymcfgpf89n";
+    sha256 = "1mjakrv1d7la3lrxsv6jjqprqwmslpjmfxkw3z7pk56rzlp99nv2";
   };
+
+  postPatch = ''
+    # Remove pylint constraint
+    substituteInPlace conans/requirements.txt --replace ", <1.9.0" ""
+  '';
 
   checkInputs = with newPython.pkgs; [
     nose

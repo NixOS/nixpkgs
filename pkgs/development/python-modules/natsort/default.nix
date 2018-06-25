@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "natsort";
-  version = "5.2.0";
+  version = "5.3.2";
 
   checkInputs = [
     hypothesis
@@ -31,7 +31,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "c960082d2145b04723041c4b85092546560538e29664dd197a1344d5b090bc91";
+    sha256 = "94056276c41be501d9fad3ade61d4eb4edf3b37fea53829b3294b75dc1d23708";
   };
 
   # testing based on project's tox.ini

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, zlib, ncurses5, p7zip, lib, makeWrapper
+{ stdenv, fetchurl, zlib, ncurses5, unzip, lib, makeWrapper
 , coreutils, file, findutils, gawk, gnugrep, gnused, jdk, which
 , platformTools, python3, libcxx, version, sha256
 }:
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   phases = "buildPhase";
 
-  nativeBuildInputs = [ p7zip makeWrapper file ];
+  nativeBuildInputs = [ unzip makeWrapper file ];
 
   buildCommand = let
     bin_path = "$out/bin";
@@ -32,11 +32,8 @@ stdenv.mkDerivation rec {
     ]) + ":${platformTools}/platform-tools";
   in ''
     mkdir -pv $out/libexec
-    mkdir -pv $out/lib64
-    ln -s ${ncurses5.out}/lib/libncursesw.so.5 $out/lib64/libtinfo.so.5
-    ln -s ${ncurses5.out}/lib/libncurses.so.5 $out/lib64/libncurses.so.5
     cd $out/libexec
-    7z x $src
+    unzip -qq $src
 
     patchShebangs ${pkg_path}
 
@@ -58,11 +55,16 @@ stdenv.mkDerivation rec {
     }
     cd ${pkg_path}
 
-    find $out \( \
+    # Steps to reduce output size
+    rm -rf docs sources tests
+    # We only support cross compiling with gcc for now
+    rm -rf toolchains/*-clang* toolchains/llvm*
+
+    find ${pkg_path}/toolchains \( \
         \( -type f -a -name "*.so*" \) -o \
         \( -type f -a -perm -0100 \) \
         \) -exec patchelf --set-interpreter ${stdenv.cc.libc.out}/lib/ld-*so.? \
-                          --set-rpath $out/lib64:${stdenv.lib.makeLibraryPath [ libcxx.out zlib.out ncurses5 ]} {} \;
+                          --set-rpath ${stdenv.lib.makeLibraryPath [ libcxx zlib ncurses5 ]} {} \;
     # fix ineffective PROGDIR / MYNDKDIR determination
     for i in ndk-build ${lib.optionalString (version == "10e") "ndk-gdb ndk-gdb-py"}
     do

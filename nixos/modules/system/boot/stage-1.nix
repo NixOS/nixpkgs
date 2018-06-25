@@ -56,6 +56,12 @@ let
       left=("''${left[@]:3}")
       if [ -z ''${seen[$next]+x} ]; then
         seen[$next]=1
+
+        # Ignore the dynamic linker which for some reason appears as a DT_NEEDED of glibc but isn't in glibc's RPATH.
+        case "$next" in
+          ld*.so.?) continue;;
+        esac
+
         IFS=: read -ra paths <<< $rpath
         res=
         for path in "''${paths[@]}"; do

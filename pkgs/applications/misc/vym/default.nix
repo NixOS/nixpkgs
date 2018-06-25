@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, qt5 }:
+{ stdenv, fetchurl, pkgconfig, qmake, qtsvg }:
 
 stdenv.mkDerivation rec {
   name = "vym-${version}";
@@ -11,8 +11,8 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = [ "format" ];
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ qt5.full qt5.qmake ];
+  nativeBuildInputs = [ pkgconfig qmake ];
+  buildInputs = [ qtsvg ];
 
   meta = with stdenv.lib; {
     description = "A mind-mapping software";

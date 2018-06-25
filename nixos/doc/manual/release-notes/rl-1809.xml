@@ -306,6 +306,30 @@ inherit (pkgs.nixos {
      was not used and thus has been removed.
     </para>
    </listitem>
+   <listitem>
+    <para>
+     The option <varname>services.kubernetes.addons.dashboard.enableRBAC</varname>
+     was renamed to <varname>services.kubernetes.addons.dashboard.rbac.enable</varname>.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     The Kubernetes Dashboard now has only minimal RBAC permissions by default.
+     If dashboard cluster-admin rights are desired,
+     set <varname>services.kubernetes.addons.dashboard.rbac.clusterAdmin</varname> to true.
+     On existing clusters, in order for the revocation of privileges to take effect,
+     the current ClusterRoleBinding for kubernetes-dashboard must be manually removed:
+     <literal>kubectl delete clusterrolebinding kubernetes-dashboard</literal>
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     The <varname>programs.screen</varname> module provides allows to configure
+     <literal>/etc/screenrc</literal>, however the module behaved fairly counterintuitive as
+     the config exists, but the package wasn't available. Since 18.09 <literal>pkgs.screen</literal>
+     will be added to <literal>environment.systemPackages</literal>.
+    </para>
+   </listitem>
   </itemizedlist>
  </section>
 </section>

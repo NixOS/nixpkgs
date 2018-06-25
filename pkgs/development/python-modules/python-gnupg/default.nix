@@ -3,11 +3,11 @@
 buildPythonPackage rec {
   name    = "${pname}-${version}";
   pname   = "python-gnupg";
-  version = "0.4.2";
+  version = "0.4.3";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0wzvx8y4ii1y1vch28a0m6f2y4px9r7qd8fpimsx6y5z4pfscm2s";
+    sha256 = "2d158dfc6b54927752b945ebe57e6a0c45da27747fa3b9ae66eccc0d2147ac0d";
   };
 
   propagatedBuildInputs = [ gnupg1 ];

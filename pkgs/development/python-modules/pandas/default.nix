@@ -24,20 +24,23 @@
 }:
 
 let
-  inherit (stdenv.lib) optional optionalString concatStringsSep;
+  inherit (stdenv.lib) optional optionals optionalString concatStringsSep;
   inherit (stdenv) isDarwin;
+
 in buildPythonPackage rec {
   pname = "pandas";
-  version = "0.22.0";
-  name = "${pname}-${version}";
+  version = "0.23.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "44a94091dd71f05922eec661638ec1a35f26d573c119aa2fad964f10a2880e6c";
+    sha256 = "50b52af2af2e15f4aeb2fe196da073a8c131fa02e433e105d95ce40016df5690";
   };
 
   LC_ALL = "en_US.UTF-8";
-  buildInputs = [ pytest glibcLocales ] ++ optional isDarwin libcxx;
+
+  checkInputs = [ pytest glibcLocales moto ];
+
+  buildInputs = [] ++ optional isDarwin libcxx;
   propagatedBuildInputs = [
     cython
     dateutil
@@ -55,8 +58,6 @@ in buildPythonPackage rec {
     xlwt
   ];
 
-  patches = [ ./pandas-0.22.0-pytest-3.5.1.patch ];
-
   # For OSX, we need to add a dependency on libcxx, which provides
   # `complex.h` and other libraries that pandas depends on to build.
   postPatch = optionalString isDarwin ''
@@ -67,7 +68,24 @@ in buildPythonPackage rec {
                 "['pandas/src/klib', 'pandas/src', '$cpp_sdk']"
   '';
 
-  checkInputs = [ moto ];
+
+  disabledTests = stdenv.lib.concatMapStringsSep " and " (s: "not " + s) ([
+    # since dateutil 0.6.0 the following fails: test_fallback_plural, test_ambiguous_flags, test_ambiguous_compat
+    # was supposed to be solved by https://github.com/dateutil/dateutil/issues/321, but is not the case
+    "test_fallback_plural"
+    "test_ambiguous_flags"
+    "test_ambiguous_compat"
+    # Locale-related
+    "test_names"
+    "test_dt_accessor_datetime_name_accessors"
+    "test_datetime_name_accessors"
+    # Can't import from test folder
+    "test_oo_optimizable"
+  ] ++ optionals isDarwin [
+    "test_locale"
+    "test_clipboard"
+  ]);
+
   checkPhase = ''
     runHook preCheck
   ''
@@ -80,13 +98,7 @@ in buildPythonPackage rec {
     chmod a+x pbcopy pbpaste
     export PATH=$(pwd):$PATH
   '' + ''
-    # since dateutil 0.6.0 the following fails: test_fallback_plural, test_ambiguous_flags, test_ambiguous_compat
-    # was supposed to be solved by https://github.com/dateutil/dateutil/issues/321, but is not the case
-    py.test $out/${python.sitePackages}/pandas --skip-slow --skip-network \
-      -k "not test_fallback_plural and \
-          not test_ambiguous_flags and \
-          not test_ambiguous_compat \
-          ${optionalString isDarwin "and not test_locale and not test_clipboard"}"
+    py.test $out/${python.sitePackages}/pandas --skip-slow --skip-network -k "$disabledTests"
     runHook postCheck
   '';
 

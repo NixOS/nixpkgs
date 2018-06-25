@@ -1,18 +1,18 @@
 { stdenv, buildGoPackage, fetchFromGitHub, git, gnupg, xclip, makeWrapper }:
 
 buildGoPackage rec {
-  version = "1.7.1";
+  version = "1.8.1";
   name = "gopass-${version}";
 
-  goPackagePath = "github.com/justwatchcom/gopass";
+  goPackagePath = "github.com/gopasspw/gopass";
 
   nativeBuildInputs = [ makeWrapper ];
 
   src = fetchFromGitHub {
-    owner = "justwatchcom";
+    owner = "gopasspw";
     repo = "gopass";
     rev = "v${version}";
-    sha256 = "01cif6a2xa3c8nki0pas9mywdxs8d9niv8z13mii5hcfqvm0s7aw";
+    sha256 = "1b3caydxz3zf1ky6qvkx0dgidlalvpmga6cjh3gqc269n00lwh6w";
   };
 
   wrapperPath = with stdenv.lib; makeBinPath ([
@@ -26,6 +26,9 @@ buildGoPackage rec {
       $bin/share/bash-completion/completions \
       $bin/share/zsh/site-functions \
       $bin/share/fish/vendor_completions.d
+    # by default, gopass tries to write configuration to /homeless-shelter
+    # during startup, which lands in stdout
+    export GOPASS_CONFIG=/dev/null
     $bin/bin/gopass completion bash > $bin/share/bash-completion/completions/_gopass
     $bin/bin/gopass completion zsh  > $bin/share/zsh/site-functions/_gopass
     $bin/bin/gopass completion fish > $bin/share/fish/vendor_completions.d/gopass.fish
@@ -38,7 +41,7 @@ buildGoPackage rec {
 
   meta = with stdenv.lib; {
     description     = "The slightly more awesome Standard Unix Password Manager for Teams. Written in Go.";
-    homepage        = https://www.justwatch.com/gopass/;
+    homepage        = https://www.gopass.pw/;
     license         = licenses.mit;
     maintainers     = with maintainers; [ andir ];
     platforms       = platforms.unix;
