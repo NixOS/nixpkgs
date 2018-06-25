@@ -10102,15 +10102,6 @@ in {
 
   psutil = callPackage ../development/python-modules/psutil { };
 
-  psutil_1 = self.psutil.overrideAttrs (oldAttrs: rec {
-    name = "${oldAttrs.pname}-${version}";
-    version = "1.2.1";
-    src = oldAttrs.src.override {
-      inherit version;
-      sha256 = "0ibclqy6a4qmkjhlk3g8jhpvnk0v9aywknc61xm3hfi5r124m3jh";
-    };
-  });
-
   psycopg2 = buildPythonPackage rec {
     name = "psycopg2-2.7.1";
     disabled = isPyPy;
