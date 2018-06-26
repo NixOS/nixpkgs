@@ -4909,6 +4909,8 @@ with pkgs;
 
   salut_a_toi = callPackage ../applications/networking/instant-messengers/salut-a-toi {};
 
+  saml2aws = callPackage ../tools/security/saml2aws {};
+
   samplicator = callPackage ../tools/networking/samplicator { };
 
   sasview = callPackage ../applications/science/misc/sasview {};
