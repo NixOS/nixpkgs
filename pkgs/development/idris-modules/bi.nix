@@ -8,15 +8,15 @@
 }:
 build-idris-package  {
   name = "bi";
-  version = "2018-01-17";
+  version = "2018-06-25";
 
   idrisDeps = [ prelude contrib pruviloj ];
 
   src = fetchFromGitHub {
     owner = "sbp";
     repo = "idris-bi";
-    rev = "8ab40bc482ca948ac0f6ffb5b4c545a73688dd3a";
-    sha256 = "1lra945q2d6anwzjs94srprqj867lrz66rsns08p8828vg55fv97";
+    rev = "6bd90fb30b06ab02438efb5059e2fc699fdc7787";
+    sha256 = "1px550spigl8k1m1r64mjrw7qjvipa43xy95kz1pb5ibmy84d6r3";
   };
 
   meta = {
