@@ -47,7 +47,7 @@ in
   iosSdkPkgs = darwin.callPackage ../os-specific/darwin/ios-sdk-pkgs {
     buildIosSdk = buildPackages.darwin.iosSdkPkgs.sdk;
     targetIosSdkPkgs = targetPackages.darwin.iosSdkPkgs;
-    xcode = darwin.xcode_8_2;
+    xcode = darwin.xcode;
     inherit (pkgs.llvmPackages) clang-unwrapped;
   };
 
