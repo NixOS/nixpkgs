@@ -1,13 +1,13 @@
 { stdenv, fetchFromGitHub, perl }:
 
 stdenv.mkDerivation rec {
-  name = "mbedtls-2.10.0";
+  name = "mbedtls-2.11.0";
 
   src = fetchFromGitHub {
     owner = "ARMmbed";
     repo = "mbedtls";
     rev = name;
-    sha256 = "0im83kqf7a64ywxh6dnv0by3gwxww93zx5wpdqglr6xp7b8yg4xk";
+    sha256 = "1d4a0jc08q3h051amv8hhh3hmqp4f1rk5z7ffyfs2g8dassm78ir";
   };
 
   nativeBuildInputs = [ perl ];
