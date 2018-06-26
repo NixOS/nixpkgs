@@ -2,8 +2,8 @@
 , src, patches ? [], extraConfigureFlags ? [], extraMakeFlags ? [], overrides ? {}, meta
 , isTorBrowserLike ? false }:
 
-{ lib, stdenv, pkgconfig, pango, perl, python, zip, libIDL
-, libjpeg, zlib, dbus, dbus-glib, bzip2, xorg
+{ lib, stdenv, pkgconfig, pango, perl, python2, python3, zip, libIDL
+, libjpeg, zlib, dbus, dbus-glib, glib, bzip2, xorg
 , freetype, fontconfig, file, nspr, nss, libnotify
 , yasm, libGLU_combined, sqlite, unzip, makeWrapper
 , hunspell, libevent, libstartup_notification, libvpx
@@ -94,10 +94,13 @@ stdenv.mkDerivation (rec {
   NIX_CFLAGS_COMPILE = "-I${nspr.dev}/include/nspr -I${nss.dev}/include/nss";
 
   nativeBuildInputs =
-    [ autoconf213 which gnused pkgconfig perl python cargo rustc ]
-    ++ lib.optional gtk3Support wrapGAppsHook;
+    [ autoconf213 which gnused pkgconfig perl python2 cargo rustc ]
+    ++ lib.optional gtk3Support wrapGAppsHook
+    ++ lib.optional (lib.versionAtLeast version "61.0") python3;
 
-  preConfigure = ''
+  preConfigure = let
+    servoBindgenToken = if lib.versionAtLeast version "61" then "-DRUST_BINDGEN" else "-DMOZ_STYLO";
+  in ''
     # remove distributed configuration files
     rm -f configure
     rm -f js/src/configure
@@ -112,8 +115,7 @@ stdenv.mkDerivation (rec {
   '') + ''
     cxxLib=$( echo -n ${gcc}/include/c++/* )
     archLib=$cxxLib/$( ${gcc}/bin/gcc -dumpmachine )
-
-    test -f layout/style/ServoBindings.toml && sed -i -e '/"-DMOZ_STYLO"/ a , "-cxx-isystem", "'$cxxLib'", "-isystem", "'$archLib'"' layout/style/ServoBindings.toml
+    test -f layout/style/ServoBindings.toml && sed -i -e '/"${servoBindgenToken}"/ a , "-cxx-isystem", "'$cxxLib'", "-isystem", "'$archLib'"' layout/style/ServoBindings.toml
   '' + lib.optionalString googleAPISupport ''
     # Google API key used by Chromium and Firefox.
     # Note: These are for NixOS/nixpkgs use ONLY. For your own distribution,
@@ -122,6 +124,10 @@ stdenv.mkDerivation (rec {
     configureFlagsArray+=("--with-google-api-keyfile=$TMPDIR/ga")
   '' + lib.optionalString (lib.versionOlder version "58") ''
     cd obj-*
+  '';
+
+  postPatch = lib.optionalString (lib.versionAtLeast version "61") ''
+    echo 'CXXFLAGS += ["-I${glib.dev}/include/gio-unix-2.0/"]' >> widget/gtk/moz.build
   '';
 
   configureFlags = [
