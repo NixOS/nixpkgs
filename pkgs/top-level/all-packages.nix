@@ -15324,6 +15324,8 @@ with pkgs;
 
   clipit = callPackage ../applications/misc/clipit { };
 
+  clipit-gtk3 = callPackage ../applications/misc/clipit-gtk3 { };
+
   cloud-print-connector = callPackage ../servers/cloud-print-connector { };
 
   clp = callPackage ../applications/science/math/clp { };
