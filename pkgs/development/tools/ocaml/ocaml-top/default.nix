@@ -10,7 +10,7 @@ stdenv.mkDerivation {
   };
 
   buildInputs = [ ncurses jbuilder ]
-  ++ (with ocamlPackages; [ ocaml ocpBuild findlib lablgtk ocp-index ]);
+  ++ (with ocamlPackages; [ ocaml ocp-build findlib lablgtk ocp-index ]);
 
   configurePhase = ''
     export TERM=xterm

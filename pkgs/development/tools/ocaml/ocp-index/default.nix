@@ -1,9 +1,9 @@
-{ stdenv, fetchFromGitHub, fetchpatch, ocaml, findlib, ocpBuild, ocpIndent, opam, cmdliner, ncurses, re, lambdaTerm, libev }:
+{ stdenv, fetchFromGitHub, fetchpatch, ocaml, findlib, ocp-build, ocpIndent, opam, cmdliner, ncurses, re, lambdaTerm, libev }:
 
 let inherit (stdenv.lib) getVersion versionAtLeast optional; in
 
 assert versionAtLeast (getVersion ocaml) "4";
-assert versionAtLeast (getVersion ocpBuild) "1.99.13-beta";
+assert versionAtLeast (getVersion ocp-build) "1.99.13-beta";
 assert versionAtLeast (getVersion ocpIndent) "1.4.2";
 
 let
@@ -26,7 +26,7 @@ stdenv.mkDerivation {
     sha256 = "07snnydczkzapradh1c22ggv9vaff67nc36pi3218azb87mb1p7z";
   }) ];
 
-  buildInputs = [ ocaml findlib ocpBuild opam cmdliner ncurses re libev ]
+  buildInputs = [ ocaml findlib ocp-build opam cmdliner ncurses re libev ]
   ++ optional (versionAtLeast (getVersion lambdaTerm) "1.7") lambdaTerm;
   propagatedBuildInputs = [ ocpIndent ];
 
