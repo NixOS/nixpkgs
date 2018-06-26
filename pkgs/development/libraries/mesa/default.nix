@@ -2,7 +2,7 @@
 , pkgconfig, intltool, autoreconfHook, substituteAll
 , file, expat, libdrm, xorg, wayland, wayland-protocols, openssl
 , llvmPackages, libffi, libomxil-bellagio, libva-minimal
-, libelf, libvdpau, valgrind-light, python2, python27Packages
+, libelf, libvdpau, valgrind-light, python2
 , libglvnd
 , grsecEnabled ? false
 , enableRadv ? true
@@ -154,7 +154,7 @@ let self = stdenv.mkDerivation {
     libX11 libXext libxcb libXt libXfixes libxshmfence
     libffi wayland wayland-protocols libvdpau libelf libXvMC
     libomxil-bellagio libva-minimal libpthreadstubs openssl/*or another sha1 provider*/
-    valgrind-light python2 python27Packages.Mako
+    valgrind-light python2 python2.pkgs.Mako
   ];
 
   enableParallelBuilding = true;
