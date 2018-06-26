@@ -5932,6 +5932,8 @@ with pkgs;
 
   xwinwrap = callPackage ../tools/X11/xwinwrap {};
 
+  yafaray-core = callPackage ../tools/graphics/yafaray-core { };
+
   yaft = callPackage ../applications/misc/yaft { };
 
   yarn = callPackage ../development/tools/yarn  { };
