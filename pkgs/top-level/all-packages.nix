@@ -16106,8 +16106,6 @@ with pkgs;
     python = python27;
   };
 
-  git-sync = callPackage ../applications/version-management/git-and-tools/git-sync { };
-
   gitolite = callPackage ../applications/version-management/gitolite { };
 
   inherit (gnome3) gitg;
