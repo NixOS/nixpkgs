@@ -3212,7 +3212,7 @@ with pkgs;
 
   jd = callPackage ../development/tools/jd { };
 
-  jd-gui = callPackage_i686 ../tools/security/jd-gui { };
+  jd-gui = callPackage ../tools/security/jd-gui { };
 
   jdiskreport = callPackage ../tools/misc/jdiskreport { };
 
@@ -16562,7 +16562,7 @@ with pkgs;
   });
 
   inherit (nodePackages) imapnotify;
-  
+
   # Impressive, formerly known as "KeyJNote".
   impressive = callPackage ../applications/office/impressive { };
 
