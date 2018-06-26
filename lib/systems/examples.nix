@@ -101,6 +101,7 @@ rec {
     # config = "aarch64-apple-darwin14";
     sdkVer = "10.2";
     xcodeVer = "8.2";
+    xcodePlatform = "iPhoneOS";
     useiOSPrebuilt = true;
     platform = {};
   };
@@ -110,6 +111,7 @@ rec {
     # config = "arm-apple-darwin10";
     sdkVer = "10.2";
     xcodeVer = "8.2";
+    xcodePlatform = "iPhoneOS";
     useiOSPrebuilt = true;
     platform = {};
   };
@@ -119,8 +121,8 @@ rec {
     # config = "x86_64-apple-darwin14";
     sdkVer = "10.2";
     xcodeVer = "8.2";
+    xcodePlatform = "iPhoneSimulator";
     useiOSPrebuilt = true;
-    isiPhoneSimulator = true;
     platform = {};
   };
 
@@ -129,8 +131,8 @@ rec {
     # config = "i386-apple-darwin11";
     sdkVer = "10.2";
     xcodeVer = "8.2";
+    xcodePlatform = "iPhoneSimulator";
     useiOSPrebuilt = true;
-    isiPhoneSimulator = true;
     platform = {};
   };
 
