@@ -942,7 +942,7 @@ in {
         Enable hardware offload for this CHILD_SA, if supported by the IPsec
         implementation. The value <literal>yes</literal> enforces offloading
         and the installation will fail if it's not supported by either kernel or
-        device. The value <literal>auto<literal> enables offloading, if it's
+        device. The value <literal>auto</literal> enables offloading, if it's
         supported, but the installation does not fail otherwise.
       '';
 
