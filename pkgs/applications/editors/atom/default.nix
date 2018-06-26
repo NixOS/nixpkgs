@@ -1,7 +1,7 @@
 { stdenv, pkgs, fetchurl, lib, makeWrapper, gvfs, atomEnv}:
 
 let
-  common = pname: {version, sha256, beta}: stdenv.mkDerivation rec {
+  common = pname: {version, sha256}: stdenv.mkDerivation rec {
     name = "${pname}-${version}";
     inherit version;
 
@@ -36,7 +36,7 @@ let
         --set-rpath "${atomEnv.libPath}" \
         $share/resources/app/apm/bin/node
       patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
-        $out/share/atom${lib.optionalString beta "-beta"}/resources/app.asar.unpacked/node_modules/symbols-view/vendor/ctags-linux
+        $share/resources/app.asar.unpacked/node_modules/symbols-view/vendor/ctags-linux
 
       dugite=$share/resources/app.asar.unpacked/node_modules/dugite
       rm -f $dugite/git/bin/git
@@ -62,12 +62,10 @@ in stdenv.lib.mapAttrs common {
   atom = {
     version = "1.28.0";
     sha256 = "0k09316897qb9ypkqm6w78nz7sj5385xfdm9bm97m8pka7v61g7h";
-    beta = false;
   };
 
   atom-beta = {
     version = "1.29.0-beta0";
     sha256 = "05xk63wsjfssf8ckph2bgrxaf99fhz3gs8n8pira8cc9yjk7diz7";
-    beta = true;
   };
 }
