@@ -13191,6 +13191,7 @@ let self = _self // overrides; _self = with self; {
       url = "mirror://cpan/authors/id/J/JD/JDUNCAN/${name}.tar.gz";
       sha256 = "09c8xb43p1s6ala6g4274az51mf33phyjkp66dpvgkgbi1xfnawp";
     };
+    meta.broken = true;
   };
 
   RegexpGrammars = buildPerlModule rec {
@@ -14088,6 +14089,7 @@ let self = _self // overrides; _self = with self; {
     };
 
     buildInputs = [ ArchiveZip_1_53 pkgs.file ];
+    meta.broken = true;
   };
 
 
@@ -14107,6 +14109,7 @@ let self = _self // overrides; _self = with self; {
       license = licenses.gpl3;
       platforms = platforms.all;
       maintainers = with maintainers; [ pSub ];
+      meta.broken = true;
     };
   };
 
