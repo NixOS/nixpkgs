@@ -1095,6 +1095,8 @@ in {
   };
 
   blessed = callPackage ../development/python-modules/blessed {};
+  
+  block-io = callPackage ../development/python-modules/block-io {};
 
   # Build boost for this specific Python version
   # TODO: use separate output for libboost_python.so
