@@ -1,4 +1,4 @@
-{ stdenv, fetchzip, ocaml, findlib, ocpBuild, opam, cmdliner }:
+{ stdenv, fetchzip, ocaml, findlib, jbuilder, ocpBuild, cmdliner }:
 
 let inherit (stdenv.lib) getVersion versionAtLeast; in
 
@@ -8,7 +8,7 @@ assert versionAtLeast (getVersion ocpBuild) "1.99.6-beta";
 
 stdenv.mkDerivation rec {
 
-  name = "ocp-indent-${version}";
+  name = "ocaml${ocaml.version}-ocp-indent-${version}";
   version = "1.6.1";
 
   src = fetchzip {
@@ -16,16 +16,10 @@ stdenv.mkDerivation rec {
     sha256 = "0rcaa11mjqka032g94wgw9llqpflyk3ywr3lr6jyxbh1rjvnipnw";
   };
 
-  nativeBuildInputs = [ ocpBuild opam ];
+  nativeBuildInputs = [ ocpBuild ];
   buildInputs = [ ocaml findlib cmdliner ];
 
-  createFindlibDestdir = true;
-
-  preConfigure = "patchShebangs ./install.sh";
-
-  postInstall = ''
-    mv $out/lib/{ocp-indent,ocaml/${getVersion ocaml}/site-lib/}
-  '';
+  inherit (jbuilder) installPhase;
 
   meta = with stdenv.lib; {
     homepage = http://typerex.ocamlpro.com/ocp-indent.html;
