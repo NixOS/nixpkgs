@@ -980,6 +980,8 @@ in {
     inherit (pkgs) gcc wirelesstools;
   };
 
+  base58 = callPackage ../development/python-modules/base58 {};
+
   batinfo = callPackage ../development/python-modules/batinfo {};
 
   bcdoc = callPackage ../development/python-modules/bcdoc {};
