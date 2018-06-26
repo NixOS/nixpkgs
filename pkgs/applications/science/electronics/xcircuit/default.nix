@@ -2,7 +2,7 @@
 , cairo, ghostscript, ngspice, tcl, tk, xorg, zlib }:
 
 let
-  version = "3.9.73";
+  version = "3.10.10";
   name = "xcircuit-${version}";
   inherit (stdenv.lib) getBin;
 
@@ -11,7 +11,7 @@ in stdenv.mkDerivation {
 
   src = fetchurl {
     url = "http://opencircuitdesign.com/xcircuit/archive/${name}.tgz";
-    sha256 = "1kj9hayipplzm4960kx48vxddqj154qnxkccaqj9cnkp62b7q3jg";
+    sha256 = "0fd5ycrlnk7jq34hlanhjs1pj2skd4qmm0shidigcrw0q5gc39pa";
   };
 
   nativeBuildInputs = [ autoreconfHook automake pkgconfig ];
