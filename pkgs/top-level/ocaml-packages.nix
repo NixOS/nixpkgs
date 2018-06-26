@@ -139,8 +139,6 @@ let
 
     cil = callPackage ../development/ocaml-modules/cil { };
 
-    cmdliner_0_9 = callPackage ../development/ocaml-modules/cmdliner/0.9.nix { };
-
     cmdliner = callPackage ../development/ocaml-modules/cmdliner { };
 
     cohttp_p4 = callPackage ../development/ocaml-modules/cohttp/0.19.3.nix {
