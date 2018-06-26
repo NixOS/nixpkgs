@@ -499,7 +499,7 @@ let
     ocp-indent = callPackage ../development/tools/ocaml/ocp-indent { };
     ocp-indent_1_5_2 = callPackage ../development/tools/ocaml/ocp-indent/1.5.2.nix { cmdliner = cmdliner_0_9; };
 
-    ocp-index = callPackage ../development/tools/ocaml/ocp-index { ocp-indent = ocp-indent_1_5_2; };
+    ocp-index = callPackage ../development/tools/ocaml/ocp-index { };
 
     ocp-ocamlres = callPackage ../development/ocaml-modules/ocp-ocamlres { };
 
