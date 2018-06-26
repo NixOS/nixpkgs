@@ -1039,7 +1039,7 @@ self: super: {
   vulkan = super.vulkan.override { vulkan = pkgs.vulkan-loader; };
 
   # Builds only with the latest version of indexed-list-literals.
-  vector-sized_1_0_2_0 = super.vector-sized_1_0_2_0.override {
+  vector-sized_1_0_3_0 = super.vector-sized_1_0_3_0.override {
     indexed-list-literals = self.indexed-list-literals_0_2_1_1;
   };
 
