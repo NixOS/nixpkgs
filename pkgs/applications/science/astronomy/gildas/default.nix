@@ -1,5 +1,5 @@
 { stdenv, fetchurl, gtk2-x11 , pkgconfig , python27 , gfortran , lesstif
-, cfitsio , getopt , perl , groff , which , openblas
+, cfitsio , getopt , perl , groff , which
 }:
 
 let
@@ -20,14 +20,14 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig groff perl getopt gfortran which ];
 
-  buildInputs = [ gtk2-x11 lesstif cfitsio python27Env openblas ];
+  buildInputs = [ gtk2-x11 lesstif cfitsio python27Env ];
 
-  patches = [ ./wrapper.patch ./return-error-code.patch ./openblas.patch ./clang.patch ];
+  patches = [ ./wrapper.patch ./return-error-code.patch ./clang.patch ];
 
   configurePhase=''
     substituteInPlace admin/wrapper.sh --replace '%%OUT%%' $out
     substituteInPlace admin/wrapper.sh --replace '%%PYTHONHOME%%' ${python27Env}
-    source admin/gildas-env.sh -c gfortran -o openmp -s ${openblas}/lib
+    source admin/gildas-env.sh -c gfortran -o openmp
     echo "gag_doc:        $out/share/doc/" >> kernel/etc/gag.dico.lcl
   '';
 
