@@ -1,23 +1,23 @@
-{ stdenv, lib, rustPlatform, fetchFromGitHub, dbus, gdk_pixbuf, libnotify, makeWrapper, pkgconfig, xorg, alsaUtils }:
+{ stdenv, lib, rustPlatform, fetchFromGitHub, dbus, gdk_pixbuf, libnotify, makeWrapper, pkgconfig, xorg
+, enableAlsaUtils ? true, alsaUtils }:
 
 rustPlatform.buildRustPackage rec {
   name = "dwm-status-${version}";
-  version = "0.5.1";
+  version = "1.0.0";
 
   src = fetchFromGitHub {
     owner = "Gerschtli";
     repo = "dwm-status";
     rev = version;
-    sha256 = "1mppj57h5yr0azypf5d2cgz2wv3k52mg3k4npyfhbmfy1393qbjs";
+    sha256 = "0r0irzm5y9xvqxrr8gvvn4x9c56qwgynljnzba4mh5s5dpbmz0iq";
   };
 
   nativeBuildInputs = [ makeWrapper pkgconfig ];
   buildInputs = [ dbus gdk_pixbuf libnotify xorg.libX11 ];
 
-  cargoSha256 = "0qr999hwrqn7a4n4kvbrpli7shxp9jchj8csxzsw951qmzq32qwv";
+  cargoSha256 = "13ibcbk8shfajk200d8v2p6y3zfrz5dlvxqfw1zsm630s5dmy6qx";
 
-  # needed because alsaUtils is an optional runtime dependency
-  postInstall = lib.optionalString (alsaUtils != null) ''
+  postInstall = lib.optionalString enableAlsaUtils ''
     wrapProgram $out/bin/dwm-status \
       --prefix "PATH" : "${alsaUtils}/bin"
   '';
