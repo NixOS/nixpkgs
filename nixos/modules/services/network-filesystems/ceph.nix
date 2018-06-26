@@ -23,6 +23,7 @@ let
     wantedBy = [ "ceph-${daemonType}.target" ];
 
     serviceConfig = {
+      User = "ceph";
       LimitNOFILE = 1048576;
       LimitNPROC = 1048576;
       Environment = "CLUSTER=${clusterName}";
@@ -34,7 +35,7 @@ let
       Restart = "on-failure";
       StartLimitBurst = "5";
       StartLimitInterval = "30min";
-      ExecStart = "${ceph.out}/bin/${if daemonType == "rgw" then "radosgw" else "ceph-${daemonType}"} -f --cluster ${clusterName} --id ${if daemonType == "rgw" then "client.${daemonId}" else daemonId} --setuser ceph --setgroup ceph";
+      ExecStart = "${ceph.out}/bin/${if daemonType == "rgw" then "radosgw" else "ceph-${daemonType}"} -f --cluster ${clusterName} --id ${if daemonType == "rgw" then "client.${daemonId}" else daemonId}";
     } // extraServiceConfig
       // optionalAttrs (daemonType == "osd") { ExecStartPre = "${ceph.out}/libexec/ceph/ceph-osd-prestart.sh --id ${daemonId} --cluster ${clusterName}"; };
     } // optionalAttrs (builtins.elem daemonType [ "mds" "mon" "rgw" "mgr" ]) { preStart = ''
@@ -52,6 +53,7 @@ let
         description = "Ceph target allowing to start/stop all ceph-${daemonType} services at once";
         partOf = [ "ceph.target" ];
         before = [ "ceph.target" ];
+        wantedBy = [ "ceph.target" ];
       };
     }
   );
@@ -336,8 +338,9 @@ in
       name = "ceph";
       uid = config.ids.uids.ceph;
       description = "Ceph daemon user";
+      group = "ceph";
+      extraGroups = [ "disk" ];
     };
-
     users.extraGroups = singleton {
       name = "ceph";
       gid = config.ids.gids.ceph;
@@ -347,7 +350,7 @@ in
       services = [] 
         ++ optional cfg.mon.enable (generateDaemonList "mon" cfg.mon.daemons { RestartSec = "10"; }) 
         ++ optional cfg.mds.enable (generateDaemonList "mds" cfg.mds.daemons { StartLimitBurst = "3"; })
-        ++ optional cfg.osd.enable (generateDaemonList "osd" cfg.osd.daemons { StartLimitBurst = "30"; RestartSec = "20s"; })
+        ++ optional cfg.osd.enable (generateDaemonList "osd" cfg.osd.daemons { StartLimitBurst = "30"; RestartSec = "20s"; PrivateDevices = "no"; })
         ++ optional cfg.rgw.enable (generateDaemonList "rgw" cfg.rgw.daemons { })
         ++ optional cfg.mgr.enable (generateDaemonList "mgr" cfg.mgr.daemons { StartLimitBurst = "3"; });
       in 
@@ -355,7 +358,10 @@ in
 
     systemd.targets = let
       targets = [
-        { "ceph" = { description = "Ceph target allowing to start/stop all ceph service instances at once"; }; }
+        { "ceph" = {
+                     description = "Ceph target allowing to start/stop all ceph service instances at once";
+                     wantedBy = [ "multi-user.target" ];
+                   }; }
       ] ++ optional cfg.mon.enable (generateTargetFile "mon")
         ++ optional cfg.mds.enable (generateTargetFile "mds")
         ++ optional cfg.osd.enable (generateTargetFile "osd")
