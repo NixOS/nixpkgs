@@ -80,12 +80,12 @@ in stdenv.mkDerivation {
       cd lib/boot
 
       mkdir -p $out/bin
-      mkdir -p $out/libexec
+      mkdir -p $out/lib/${bootGhcjs.name}
       lndir ${libexec} $out/bin
 
-      wrapProgram $out/bin/ghcjs --add-flags "-B$out/libexec"
-      wrapProgram $out/bin/haddock-ghcjs --add-flags "-B$out/libexec"
-      wrapProgram $out/bin/ghcjs-pkg --add-flags "--global-package-db=$out/libexec/package.conf.d"
+      wrapProgram $out/bin/ghcjs --add-flags "-B$out/lib/${bootGhcjs.name}"
+      wrapProgram $out/bin/haddock-ghcjs --add-flags "-B$out/lib/${bootGhcjs.name}"
+      wrapProgram $out/bin/ghcjs-pkg --add-flags "--global-package-db=$out/lib/${bootGhcjs.name}/package.conf.d"
 
       env PATH=$out/bin:$PATH $out/bin/ghcjs-boot -j1 --with-ghcjs-bin $out/bin
     '';
