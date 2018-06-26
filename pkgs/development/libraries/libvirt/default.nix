@@ -93,7 +93,10 @@ in stdenv.mkDerivation rec {
     "sysconfdir=$(out)/var/lib"
   ];
 
-  postInstall = ''
+
+  postInstall = let
+    binPath = [ iptables iproute pmutils numad numactl bridge-utils dmidecode dnsmasq ebtables ] ++ optionals enableIscsi [ openiscsi ];
+  in ''
     substituteInPlace $out/libexec/libvirt-guests.sh \
       --replace 'ON_SHUTDOWN=suspend' 'ON_SHUTDOWN=''${ON_SHUTDOWN:-suspend}' \
       --replace "$out/bin"            '${gettext}/bin' \
@@ -106,7 +109,7 @@ in stdenv.mkDerivation rec {
     substituteInPlace $out/lib/systemd/system/libvirtd.service --replace /bin/kill ${coreutils}/bin/kill
     rm $out/lib/systemd/system/{virtlockd,virtlogd}.*
     wrapProgram $out/sbin/libvirtd \
-      --prefix PATH : /run/libvirt/nix-emulators:${makeBinPath [ iptables iproute pmutils numad numactl bridge-utils dmidecode dnsmasq ebtables ]}
+      --prefix PATH : /run/libvirt/nix-emulators:${makeBinPath binPath}
   '';
 
   enableParallelBuilding = true;
