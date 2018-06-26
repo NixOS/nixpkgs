@@ -1,10 +1,10 @@
-{ stdenv, fetchzip, ocaml, findlib, jbuilder, ocpBuild, cmdliner }:
+{ stdenv, fetchzip, ocaml, findlib, jbuilder, ocp-build, cmdliner }:
 
 let inherit (stdenv.lib) getVersion versionAtLeast; in
 
 assert versionAtLeast (getVersion ocaml) "3.12.1";
 assert versionAtLeast (getVersion cmdliner) "1.0.0";
-assert versionAtLeast (getVersion ocpBuild) "1.99.6-beta";
+assert versionAtLeast (getVersion ocp-build) "1.99.6-beta";
 
 stdenv.mkDerivation rec {
 
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     sha256 = "0rcaa11mjqka032g94wgw9llqpflyk3ywr3lr6jyxbh1rjvnipnw";
   };
 
-  nativeBuildInputs = [ ocpBuild ];
+  nativeBuildInputs = [ ocp-build ];
   buildInputs = [ ocaml findlib cmdliner ];
 
   inherit (jbuilder) installPhase;
