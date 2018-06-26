@@ -919,6 +919,7 @@ self: super: {
   # With ghc-8.2.x haddock would time out for unknown reason
   # See https://github.com/haskell/haddock/issues/679
   language-puppet = dontHaddock super.language-puppet;
+  filecache = dontCheck super.filecache;
 
   # Missing FlexibleContexts in testsuite
   # https://github.com/EduardSergeev/monad-memo/pull/4
