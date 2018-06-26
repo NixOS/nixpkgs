@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, ocaml, findlib, jbuilder, ocp-build, ocpIndent, cmdliner, re }:
+{ stdenv, fetchFromGitHub, ocaml, findlib, jbuilder, ocp-build, ocp-indent, cmdliner, re }:
 
 stdenv.mkDerivation rec {
 
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ ocaml findlib jbuilder ocp-build cmdliner re ];
-  propagatedBuildInputs = [ ocpIndent ];
+  propagatedBuildInputs = [ ocp-indent ];
 
   buildPhase = "jbuilder build -p ocp-index";
 
