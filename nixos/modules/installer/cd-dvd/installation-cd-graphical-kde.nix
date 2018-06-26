@@ -6,18 +6,9 @@
 with lib;
 
 {
-  imports = [ ./installation-cd-base.nix ];
+  imports = [ ./installation-cd-graphical-base.nix ];
 
   services.xserver = {
-    enable = true;
-
-    # Automatically login as root.
-    displayManager.slim = {
-      enable = true;
-      defaultUser = "root";
-      autoLogin = true;
-    };
-
     desktopManager.plasma5 = {
       enable = true;
       enableQt4Support = false;
@@ -27,34 +18,14 @@ with lib;
     synaptics.enable = true;
   };
 
-  environment.systemPackages =
-    [ pkgs.glxinfo
-
-      # Include gparted for partitioning disks.
-      pkgs.gparted
-
-      # Firefox for reading the manual.
-      pkgs.firefox
-
-      # Include some editors.
-      pkgs.vim
-      pkgs.bvi # binary editor
-      pkgs.joe
-    ];
-
-  # Provide networkmanager for easy wireless configuration.
-  networking.networkmanager.enable = true;
-  networking.wireless.enable = mkForce false;
-
-  # KDE complains if power management is disabled (to be precise, if
-  # there is no power management backend such as upower).
-  powerManagement.enable = true;
-
-  # Don't start the X server by default.
-  services.xserver.autorun = mkForce false;
+  environment.systemPackages = with pkgs; [
+    # Graphical text editor
+    kate
+  ];
 
   system.activationScripts.installerDesktop = let
-    desktopFile = pkgs.writeText "nixos-manual.desktop" ''
+
+    manualDesktopFile = pkgs.writeScript "nixos-manual.desktop" ''
       [Desktop Entry]
       Version=1.0
       Type=Application
@@ -63,11 +34,23 @@ with lib;
       Icon=text-html
     '';
 
+    # Replace default gparted desktop file with one that does "sudo gparted"
+    gpartedDesktopFile = pkgs.runCommand "gparted.desktop" {} ''
+      mkdir -p $out
+      cp ${pkgs.gparted}/share/applications/gparted.desktop $out/gparted.desktop
+      substituteInPlace $out/gparted.desktop --replace "Exec=" "Exec=sudo "
+    '';
+
+    desktopDir = "/home/live/Desktop/";
+
   in ''
-    mkdir -p /root/Desktop
-    ln -sfT ${desktopFile} /root/Desktop/nixos-manual.desktop
-    ln -sfT ${pkgs.konsole}/share/applications/org.kde.konsole.desktop /root/Desktop/org.kde.konsole.desktop
-    ln -sfT ${pkgs.gparted}/share/applications/gparted.desktop /root/Desktop/gparted.desktop
+    mkdir -p ${desktopDir}
+    chown live /home/live ${desktopDir}
+
+    ln -sfT ${manualDesktopFile} ${desktopDir + "nixos-manual.desktop"}
+    ln -sfT ${gpartedDesktopFile}/gparted.desktop ${desktopDir + "gparted.desktop"}
+
+    ln -sfT ${pkgs.konsole}/share/applications/org.kde.konsole.desktop ${desktopDir + "org.kde.konsole.desktop"}
   '';
 
 }
