@@ -16774,6 +16774,8 @@ with pkgs;
 
   kubecfg = callPackage ../applications/networking/cluster/kubecfg { };
 
+  ksonnet = callPackage ../applications/networking/cluster/ksonnet { };
+
   kubernetes = callPackage ../applications/networking/cluster/kubernetes {  };
 
   kubectl = (kubernetes.override { components = [ "cmd/kubectl" ]; }).overrideAttrs(oldAttrs: {
