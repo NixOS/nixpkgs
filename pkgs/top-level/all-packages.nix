@@ -14958,6 +14958,8 @@ with pkgs;
     stdenv = overrideCC stdenv gcc49;
   };
 
+  agedu = callPackage ../tools/misc/agedu { };
+
   ahoviewer = callPackage ../applications/graphics/ahoviewer {
     useUnrar = config.ahoviewer.useUnrar or false;
   };
