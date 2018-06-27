@@ -8837,6 +8837,8 @@ with pkgs;
 
   cmocka = callPackage ../development/libraries/cmocka { };
 
+  cmrt = callPackage ../development/libraries/cmrt { };
+
   cogl = callPackage ../development/libraries/cogl { };
 
   coin3d = callPackage ../development/libraries/coin3d { };
