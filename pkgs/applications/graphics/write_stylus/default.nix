@@ -1,6 +1,7 @@
 { stdenv, lib, qt5, makeWrapper, fetchurl, makeDesktopItem }:
 stdenv.mkDerivation rec {
-  name = "write_stylus";
+  name = "write_stylus-${version}";
+  version = "209";
 
   desktopItem = makeDesktopItem {
     name = "Write";
@@ -12,7 +13,7 @@ stdenv.mkDerivation rec {
   };
 
   src = fetchurl {
-    url = "http://www.styluslabs.com/write/write209.tar.gz";
+    url = "http://www.styluslabs.com/write/write${version}.tar.gz";
     sha256 = "1p6glp4vdpwl8hmhypayc4cvs3j9jfmjfhhrgqm2xkgl5bfbv2qd";
   };
   sourceRoot = ".";
