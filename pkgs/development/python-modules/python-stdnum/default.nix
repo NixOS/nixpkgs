@@ -11,7 +11,7 @@ buildPythonPackage rec {
     sha256 = "d587a520182f9d8aef7659cca429f4382881589c8883a0a55322b2f94970bdb3";
   };
   meta = {
-    homepage = http://arthurdejong.org/python-stdnum/;
+    homepage = https://arthurdejong.org/python-stdnum/;
     description = "Python module to handle standardized numbers and codes";
     maintainers = with lib.maintainers; [ johbo ];
     license = lib.licenses.lgpl2Plus;

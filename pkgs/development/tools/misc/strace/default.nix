@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   configureFlags = stdenv.lib.optional (stdenv.hostPlatform.isAarch64 || stdenv.hostPlatform.isRiscV) "--enable-mpers=check";
 
   meta = with stdenv.lib; {
-    homepage = http://strace.io/;
+    homepage = https://strace.io/;
     description = "A system call tracer for Linux";
     license = licenses.bsd3;
     platforms = platforms.linux;

@@ -47,7 +47,7 @@ stdenv.mkDerivation  rec {
 
   meta = with stdenv.lib; {
     description = "Open source firmware for mp3 players";
-    homepage = http://www.rockbox.org;
+    homepage = https://www.rockbox.org;
     license = licenses.gpl2;
     platforms = platforms.linux;
     maintainers = with maintainers; [ goibhniu jgeerds ];

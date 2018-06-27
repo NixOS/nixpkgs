@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
       This means that vnStat won't actually be sniffing any traffic and also
       ensures light use of system resources.
     '';
-    homepage = http://humdi.net/vnstat/;
+    homepage = https://humdi.net/vnstat/;
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
   };

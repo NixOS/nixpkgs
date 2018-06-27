@@ -16,7 +16,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = with lib;{
-    homepage =  http://jquery.org;
+    homepage =  https://jquery.org;
     description = "jquery packaged static files for python";
     license = licenses.mit;
     maintainers = with maintainers; [ makefu ];

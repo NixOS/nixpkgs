@@ -24,7 +24,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "PyTorch vision library";
-    homepage    = http://pytorch.org/;
+    homepage    = https://pytorch.org/;
     license     = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ ericsagnes ];
   };

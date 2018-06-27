@@ -29,7 +29,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "A library to parse MT940 files and returns smart Python collections for statistics and manipulation";
-    homepage = "http://pythonhosted.org/mt-940/";
+    homepage = https://pythonhosted.org/mt-940/;
     license = licenses.bsd3;
   };
 }

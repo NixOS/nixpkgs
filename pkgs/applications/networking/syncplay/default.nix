@@ -21,7 +21,7 @@ python2Packages.buildPythonApplication rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = http://syncplay.pl/;
+    homepage = https://syncplay.pl/;
     description = "Free software that synchronises media players";
     license = licenses.asl20;
     platforms = platforms.linux;

@@ -20,7 +20,7 @@ buildPythonPackage rec {
 
   meta = with lib;{
     description = "py.test plugin to abort hanging tests";
-    homepage = http://bitbucket.org/pytest-dev/pytest-timeout/;
+    homepage = https://bitbucket.org/pytest-dev/pytest-timeout/;
     license = licenses.mit;
     maintainers = with maintainers; [ makefu ];
   };
