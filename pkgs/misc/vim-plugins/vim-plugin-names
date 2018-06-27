@@ -260,6 +260,7 @@
 "github:vim-scripts/wombat256.vim"
 "github:vim-scripts/YankRing.vim"
 "github:vimwiki/vimwiki"
+"github:vmchale/dhall-vim"
 "github:w0rp/ale"
 "github:wakatime/vim-wakatime"
 "github:wellle/targets.vim"
