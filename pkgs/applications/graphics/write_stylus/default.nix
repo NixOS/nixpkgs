@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   };
 
   src = fetchurl {
-    url = "http://www.styluslabs.com/download/write-tgz";
+    url = "http://www.styluslabs.com/write/write209.tar.gz";
     sha256 = "1p6glp4vdpwl8hmhypayc4cvs3j9jfmjfhhrgqm2xkgl5bfbv2qd";
   };
   sourceRoot = ".";
