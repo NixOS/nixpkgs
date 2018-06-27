@@ -67,6 +67,8 @@ stdenv.mkDerivation {
 
   hardeningEnable = optional (!stdenv.isDarwin) "pie";
 
+  enableParallelBuilding = true;
+
   postInstall = ''
     mv $out/sbin $out/bin
   '';
