@@ -27,7 +27,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "Lightweight pipelining: using Python functions as pipeline jobs";
-    homepage = http://pythonhosted.org/joblib/;
+    homepage = https://pythonhosted.org/joblib/;
     license = lib.licenses.bsd3;
   };
 }

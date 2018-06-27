@@ -200,7 +200,7 @@ building Python libraries is `buildPythonPackage`. Let's see how we can build th
     doCheck = false;
 
     meta = {
-      homepage = "http://github.com/pytoolz/toolz/";
+      homepage = "https://github.com/pytoolz/toolz/";
       description = "List processing tools and functional utilities";
       license = licenses.bsd3;
       maintainers = with maintainers; [ fridh ];
@@ -245,7 +245,7 @@ with import <nixpkgs> {};
       doCheck = false;
 
       meta = {
-        homepage = "http://github.com/pytoolz/toolz/";
+        homepage = "https://github.com/pytoolz/toolz/";
         description = "List processing tools and functional utilities";
       };
     };

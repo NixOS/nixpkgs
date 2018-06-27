@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "An Emacs mode for editing Scala code";
 
-    homepage = http://www.scala-lang.org/node/354;
+    homepage = https://www.scala-lang.org/node/354;
 
     # non-copyleft, BSD-style
     license = "permissive";

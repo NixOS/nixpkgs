@@ -39,6 +39,6 @@ buildPythonPackage rec {
     '';
     license = licenses.bsd2;
     maintainers = with maintainers; [ timokau ];
-    homepage = http://pythonhosted.org/Flask-AutoIndex/;
+    homepage = https://pythonhosted.org/Flask-AutoIndex/;
   };
 }
