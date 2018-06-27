@@ -181,6 +181,7 @@ rec {
       outputHashAlgo = hashAlgo;
       outputHash = hash;
       preferLocalBuild = true;
+      allowSubstitutes = false;
       builder = writeScript "restrict-message" ''
         source ${stdenvNoCC}/setup
         cat <<_EOF_
