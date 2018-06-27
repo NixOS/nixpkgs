@@ -139,8 +139,6 @@ let
 
     cil = callPackage ../development/ocaml-modules/cil { };
 
-    cmdliner_0_9 = callPackage ../development/ocaml-modules/cmdliner/0.9.nix { };
-
     cmdliner = callPackage ../development/ocaml-modules/cmdliner { };
 
     cohttp_p4 = callPackage ../development/ocaml-modules/cohttp/0.19.3.nix {
@@ -494,12 +492,11 @@ let
 
     ocf = callPackage ../development/ocaml-modules/ocf { };
 
-    ocpBuild = callPackage ../development/tools/ocaml/ocp-build { };
+    ocp-build = callPackage ../development/tools/ocaml/ocp-build { };
 
-    ocpIndent = callPackage ../development/tools/ocaml/ocp-indent { };
-    ocpIndent_1_5_2 = callPackage ../development/tools/ocaml/ocp-indent/1.5.2.nix { cmdliner = cmdliner_0_9; };
+    ocp-indent = callPackage ../development/tools/ocaml/ocp-indent { };
 
-    ocp-index = callPackage ../development/tools/ocaml/ocp-index { ocpIndent = ocpIndent_1_5_2; };
+    ocp-index = callPackage ../development/tools/ocaml/ocp-index { };
 
     ocp-ocamlres = callPackage ../development/ocaml-modules/ocp-ocamlres { };
 
