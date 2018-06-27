@@ -358,7 +358,7 @@ let self = _self // overrides; _self = with self; {
     propagatedBuildInputs = [ Clone ConfigGitLike DBI DateTime EncodeLocale FileHomeDir HashMerge IOPager IPCRun3 IPCSystemSimple ListMoreUtils PathClass PerlIOutf8_strict StringFormatter StringShellQuote TemplateTiny Throwable TypeTiny URIdb libintl_perl ];
     doCheck = false;  # Can't find home directory.
     meta = {
-      homepage = http://sqitch.org/;
+      homepage = https://sqitch.org/;
       description = "Sane database change management";
       license = stdenv.lib.licenses.mit;
     };
@@ -2352,7 +2352,7 @@ let self = _self // overrides; _self = with self; {
      meta = {
        description = "Engine for tidyall, your all-in-one code tidier and validator";
        license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
-       homepage = "http://metacpan.org/release/Code-TidyAll";
+       homepage = https://metacpan.org/release/Code-TidyAll;
      };
   };
 
@@ -9759,7 +9759,7 @@ let self = _self // overrides; _self = with self; {
      meta = {
        description = "Generate Kwalitee ratings for a distribution";
        license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
-       homepage = "http://cpants.cpanauthors.org";
+       homepage = https://cpants.cpanauthors.org;
      };
   };
 
@@ -10088,7 +10088,7 @@ let self = _self // overrides; _self = with self; {
       sha256 = "70c5f211ba81982752eae189ca7aea0ea14fb7534449114d0a3d47d96c0d05c4";
     };
     meta = {
-      homepage = http://mojolicious.org;
+      homepage = https://mojolicious.org/;
       description = "Real-time web framework";
       license = with stdenv.lib.licenses; [ artistic2 ];
     };
@@ -11914,7 +11914,7 @@ let self = _self // overrides; _self = with self; {
      meta = {
        description = "Build an optimized subroutine parameter validator once, use it forever";
        license = with stdenv.lib.licenses; [ artistic2 ];
-       homepage = "http://metacpan.org/release/Params-ValidationCompiler";
+       homepage = https://metacpan.org/release/Params-ValidationCompiler;
      };
   };
 
@@ -13658,7 +13658,7 @@ let self = _self // overrides; _self = with self; {
      meta = {
        description = "Type constraints and coercions for Perl";
        license = with stdenv.lib.licenses; [ artistic2 ];
-       homepage = "http://metacpan.org/release/Specio";
+       homepage = https://metacpan.org/release/Specio;
      };
   };
 
@@ -13673,7 +13673,7 @@ let self = _self // overrides; _self = with self; {
      meta = {
        description = "Path::Tiny types and coercions for Specio";
        license = with stdenv.lib.licenses; [ asl20 ];
-       homepage = "http://metacpan.org/release/Specio-Library-Path-Tiny";
+       homepage = https://metacpan.org/release/Specio-Library-Path-Tiny;
      };
   };
 
@@ -13888,7 +13888,7 @@ let self = _self // overrides; _self = with self; {
       sha256 = "0fs2n9zw6isfkha2kbqrvl9mwg572x1x0jlfaps0qsyynn846bcv";
     };
     meta = {
-      homepage = http://plackperl.org;
+      homepage = https://plackperl.org;
       description = "Temporary buffer to save bytes";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
@@ -14885,7 +14885,7 @@ let self = _self // overrides; _self = with self; {
      meta = {
        description = "Fail if tests warn";
        license = with stdenv.lib.licenses; [ artistic2 ];
-       homepage = "http://metacpan.org/release/Test2-Plugin-NoWarnings";
+       homepage = https://metacpan.org/release/Test2-Plugin-NoWarnings;
      };
   };
 

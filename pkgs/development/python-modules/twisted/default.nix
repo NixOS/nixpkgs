@@ -45,7 +45,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = with stdenv.lib; {
-    homepage = http://twistedmatrix.com/;
+    homepage = https://twistedmatrix.com/;
     description = "Twisted, an event-driven networking engine written in Python";
     longDescription = ''
       Twisted is an event-driven networking engine written in Python

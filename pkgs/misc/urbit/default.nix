@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "An operating function";
-    homepage = http://urbit.org;
+    homepage = https://urbit.org;
     license = licenses.mit;
     maintainers = with maintainers; [ mudri ];
     platforms = with platforms; linux;

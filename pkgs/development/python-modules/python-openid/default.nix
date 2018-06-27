@@ -14,7 +14,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "OpenID support for modern servers and consumers";
-    homepage = http://github.com/openid/python-openid;
+    homepage = https://github.com/openid/python-openid;
     license = licenses.asl20;
   };
 }
