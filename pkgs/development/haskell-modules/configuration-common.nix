@@ -717,7 +717,7 @@ self: super: {
   });
 
   # The standard libraries are compiled separately
-  idris = doJailbreak (dontCheck super.idris);
+  idris = generateOptparseApplicativeCompletions ["idris"] (doJailbreak (dontCheck super.idris));
 
   # https://github.com/bos/math-functions/issues/25
   math-functions = dontCheck super.math-functions;
