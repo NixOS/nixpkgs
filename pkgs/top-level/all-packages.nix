@@ -2399,6 +2399,8 @@ with pkgs;
 
   fio = callPackage ../tools/system/fio { };
 
+  firebird-emu = libsForQt5.callPackage ../misc/emulators/firebird-emu { };
+
   flamerobin = callPackage ../applications/misc/flamerobin { };
 
   flashtool = callPackage_i686 ../development/mobile/flashtool {
