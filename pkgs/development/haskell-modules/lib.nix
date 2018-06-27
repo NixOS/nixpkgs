@@ -187,6 +187,42 @@ rec {
 
   disableHardening = drv: flags: overrideCabal drv (drv: { hardeningDisable = flags; });
 
+  /* Register the bash completion scripts that are provided by
+   * optparse-applicative. The resulting package will have a
+   * share/bash-completion/completions/${command} file.
+   *
+   *   generateOptparseApplicativeCompletion command pkg
+   *
+   *     command: name of an executable
+   *         pkg: Haskell package that build the executable
+   */
+  generateOptparseApplicativeCompletion = command: pkg:
+    overrideCabal pkg (old: {
+      postInstall = old.postInstall or "" + ''
+        echo "installing bash completion script for ${command}"
+        mkdir -p $out/share/bash-completion/completions
+        $out/bin/${command} --bash-completion-script $out/bin/${command} \
+          >$out/share/bash-completion/completions/${command}
+        # Sanity check
+        grep -F ${command} <$out/share/bash-completion/completions/${command} >/dev/null || {
+          echo 'Could not find ${command} in completion script.'
+          exit 1
+        }
+      '';
+    });
+
+  /* Register the bash completion scripts that are provided by
+   * optparse-applicative. The resulting package will have
+   * share/bash-completion/completions/<command> files.
+   *
+   *   generateOptparseApplicativeCompletions commands pkg
+   *
+   *    commands: names of executables
+   *         pkg: Haskell package that builds the executables
+   */
+  generateOptparseApplicativeCompletions = commands: pkg:
+    pkgs.lib.foldr generateOptparseApplicativeCompletion pkg commands;
+
   /* Let Nix strip the binary files.
    * This removes debugging symbols.
    */
