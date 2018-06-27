@@ -18,13 +18,13 @@ in
 
 stdenv.mkDerivation rec {
   name = "simgrid-${version}";
-  version = "3.19.1";
+  version = "3.20";
 
   src = fetchFromGitHub {
     owner = "simgrid";
     repo = "simgrid";
     rev = "v${version}";
-    sha256 = "0vpgcp40xv20hcpslx5wz2mf2phaq41f7x8yr0bm7mknqd3zwxih";
+    sha256 = "0xb20qhvsah2dz2hvn850i3w9a5ghsbcx8vka2ap6xsdkxf593gy";
   };
 
   nativeBuildInputs = [ cmake perl elfutils python3 boost valgrind ]
