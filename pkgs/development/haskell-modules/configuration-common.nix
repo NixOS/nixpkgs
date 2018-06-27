@@ -1093,7 +1093,7 @@ self: super: {
   doctest = addTestToolDepend super.doctest self.hspec-discover;
   http-types = addTestToolDepend super.http-types self.hspec-discover;
   interpolate = addTestToolDepend super.interpolate self.hspec-discover;
-  mockery = addTestToolDepend super.mockery self.hspec-discover;
+  mockery = addTestToolDepend (overrideCabal super.mockery (drv: { preCheck = "export TRAVIS=true"; })) self.hspec-discover;
   slim = addTestToolDepend super.slim self.hspec-discover;
   string-conversions = addTestToolDepend super.string-conversions self.hspec-discover;
   catamorphism = addTestToolDepend super.catamorphism self.hspec-discover;
