@@ -7645,6 +7645,8 @@ with pkgs;
 
   guile-opengl = callPackage ../development/guile-modules/guile-opengl { };
 
+  guile-reader = callPackage ../development/guile-modules/guile-reader { };
+
   guile-sdl = callPackage ../development/guile-modules/guile-sdl { };
 
   guile-sdl2 = callPackage ../development/guile-modules/guile-sdl2 { };
