@@ -2429,6 +2429,8 @@ with pkgs;
 
   fdk_aac = callPackage ../development/libraries/fdk-aac { };
 
+  feedgnuplot = callPackage ../tools/graphics/feedgnuplot { };
+
   fim = callPackage ../tools/graphics/fim { };
 
   flac123 = callPackage ../applications/audio/flac123 { };
