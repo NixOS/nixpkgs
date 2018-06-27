@@ -1,4 +1,5 @@
-{ stdenv, cmake, fetchFromGitHub, zlib, libxml2, libpng, CoreServices, CoreGraphics, ImageIO, ninja }:
+{ stdenv, cmake, fetchFromGitHub, zlib, libxml2, libpng
+, CoreServices, CoreGraphics, ImageIO, ninja }:
 
 let
   googletest = fetchFromGitHub {
@@ -17,7 +18,8 @@ let
 in stdenv.mkDerivation rec {
   name    = "xcbuild-${version}";
 
-  # Once a version is released that includes https://github.com/facebook/xcbuild/commit/183c087a6484ceaae860c6f7300caf50aea0d710,
+  # Once a version is released that includes
+  # https://github.com/facebook/xcbuild/commit/183c087a6484ceaae860c6f7300caf50aea0d710,
   # we can stop doing this -pre thing.
   version = "0.1.2-pre";
 

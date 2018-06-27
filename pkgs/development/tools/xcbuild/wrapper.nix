@@ -1,5 +1,5 @@
-{ stdenv, callPackage, makeWrapper, writeText, CoreServices, ImageIO, CoreGraphics
-, cctools, bootstrap_cmds, binutils}:
+{ stdenv, buildPackages, makeWrapper, writeText, runCommand
+, CoreServices, ImageIO, CoreGraphics }:
 
 let
 
@@ -7,20 +7,20 @@ let
   platformName = "com.apple.platform.macosx";
   sdkName = "macosx10.10";
 
-  xcbuild = callPackage ./default.nix {
+  xcbuild = buildPackages.callPackage ./default.nix {
     inherit CoreServices ImageIO CoreGraphics;
   };
 
-  toolchain = callPackage ./toolchain.nix {
-    inherit cctools bootstrap_cmds toolchainName xcbuild binutils stdenv;
+  toolchain = buildPackages.callPackage ./toolchain.nix {
+    inherit toolchainName;
   };
 
-  sdk = callPackage ./sdk.nix {
-    inherit toolchainName sdkName xcbuild;
+  sdk = buildPackages.callPackage ./sdk.nix {
+    inherit toolchainName sdkName;
   };
 
-  platform = callPackage ./platform.nix {
-    inherit sdk platformName xcbuild;
+  platform = buildPackages.callPackage ./platform.nix {
+    inherit sdk platformName;
   };
 
   xcconfig = writeText "nix.xcconfig" ''
@@ -32,7 +32,7 @@ in
 stdenv.mkDerivation {
   name = "xcbuild-wrapper-${xcbuild.version}";
 
-  buildInputs = [ xcbuild makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
 
   setupHook = ./setup-hook.sh;
 
@@ -40,22 +40,21 @@ stdenv.mkDerivation {
 
   installPhase = ''
     mkdir -p $out/bin
-    cd $out/bin/
 
     for file in ${xcbuild}/bin/*; do
-      ln -s $file
+      ln -s $file $out/bin
     done
 
-    mkdir $out/usr
+    mkdir -p $out/usr
     ln -s $out/bin $out/usr/bin
 
-    mkdir -p $out/Library/Xcode/
+    mkdir -p $out/Library/Xcode
     ln -s ${xcbuild}/Library/Xcode/Specifications $out/Library/Xcode/Specifications
 
-    mkdir -p $out/Platforms/
+    mkdir -p $out/Platforms
     ln -s ${platform} $out/Platforms/nixpkgs.platform
 
-    mkdir -p $out/Toolchains/
+    mkdir -p $out/Toolchains
     ln -s ${toolchain} $out/Toolchains/nixpkgs.xctoolchain
 
     wrapProgram $out/bin/xcodebuild \
