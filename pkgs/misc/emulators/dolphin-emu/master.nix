@@ -9,8 +9,9 @@
 , CoreBluetooth, cf-private, ForceFeedback, IOKit, OpenGL, wxGTK, libpng, hidapi
 
 # options
-, dolphin-wxgui ? true
-, dolphin-qtgui ? false }:
+# wxWidgets will be deprecated and removed soon according to upstream
+, dolphin-qtgui ? true
+, dolphin-wxgui ? false }:
 
 # XOR: ensure only wx XOR qt are enabled
 assert dolphin-wxgui || dolphin-qtgui;
@@ -30,13 +31,13 @@ let
   };
 in stdenv.mkDerivation rec {
   name = "dolphin-emu-${version}";
-  version = "2018-06-22";
+  version = "2018-06-27";
 
   src = fetchFromGitHub {
     owner = "dolphin-emu";
     repo = "dolphin";
-    rev = "971972069cc2813ee7fa5b630c67baab2b35d12d";
-    sha256 = "0kf6dzvwmvhqb1iy15ldap0mmfbyyzl5f14jc65a110vwv5sww7n";
+    rev = "52dd41fa95649ede0ff0af2a3d173e541339986f";
+    sha256 = "1dvdbdk0nj5yymhmwmrj9850dar25zvxzlrk9kq5c5hsk1li16zz";
   };
 
   enableParallelBuilding = true;
