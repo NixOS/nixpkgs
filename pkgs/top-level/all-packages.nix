@@ -14568,6 +14568,10 @@ with pkgs;
 
   freefont_ttf = callPackage ../data/fonts/freefont-ttf { };
 
+  fontin = callPackage ../data/fonts/fontin { };
+
+  fontin-sans = callPackage ../data/fonts/fontin-sans { };
+
   font-droid = callPackage ../data/fonts/droid { };
 
   freepats = callPackage ../data/misc/freepats { };
