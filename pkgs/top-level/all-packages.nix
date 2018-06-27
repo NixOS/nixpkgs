@@ -17988,6 +17988,8 @@ with pkgs;
 
   setbfree = callPackage ../applications/audio/setbfree { };
 
+  shadowfox = callPackage ../tools/networking/shadowfox { };
+
   shfmt = callPackage ../tools/text/shfmt { };
 
   shutter = callPackage ../applications/graphics/shutter { };
