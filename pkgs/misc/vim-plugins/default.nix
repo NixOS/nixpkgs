@@ -716,6 +716,17 @@ rec {
 
   };
 
+  dhall-vim = buildVimPluginFrom2Nix { # created by nix#NixDerivation
+    name = "dhall-vim-2018-06-04";
+    src = fetchgit {
+      url = "https://github.com/vmchale/dhall-vim";
+      rev = "290c2ec86b5c3d35dd3913cbb6ab9d2139074e38";
+      sha256 = "03jhcaz6r2lbd4drc8acc9kv2k0287nzvw7lyl36jjkk3qy4c499";
+    };
+    dependencies = [];
+
+  };
+
   clighter8 = buildVimPluginFrom2Nix { # created by nix#NixDerivation
     name = "clighter8-2018-04-15";
     src = fetchgit {
