@@ -11,6 +11,8 @@ stdenv.mkDerivation rec {
     sha256 = "0jkqnhc2pq31nmq4daxhmqdjgv2qi4ib27hwms2r5zhnmvvzlr67";
   };
 
+  enableParallelBuilding = true;
+
   buildInputs = [ autoconf automake libtool libjack2 alsaLib rtmidi ];
 
   preConfigure = ''
