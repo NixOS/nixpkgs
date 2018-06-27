@@ -8570,8 +8570,7 @@ with pkgs;
 
   xcbuild  = callPackage ../development/tools/xcbuild/wrapper.nix {
     inherit (darwin.apple_sdk.frameworks) CoreServices CoreGraphics ImageIO;
-    inherit (darwin) cctools bootstrap_cmds binutils;
-    stdenv = clangStdenv;
+    stdenv = buildPackages.clangStdenv;
   };
 
   xmlindent = callPackage ../development/web/xmlindent {};
