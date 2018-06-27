@@ -16870,6 +16870,8 @@ with pkgs;
     libreoffice = libreoffice-still-unwrapped;
   });
 
+  libvmi = callPackage ../development/libraries/libvmi { };
+
   liferea = callPackage ../applications/networking/newsreaders/liferea {
     inherit (gnome3) libpeas gsettings-desktop-schemas dconf;
   };
