@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
   name = "flink-${flinkVersion}";
 
   src = fetchurl {
-    url = "mirror://apache/flink/${name}/${name}-bin${hadoopBundle}-scala_${scalaVersion}.tgz";
+    url = "mirror://apache/flink/${name}/${name}-bin-scala_${hadoopBundle}${scalaVersion}.tgz";
     inherit sha256;
   };
 

@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   name = "recoll-${ver}";
 
   src = fetchurl {
-    url = "http://www.lesbonscomptes.com/recoll/${name}.tar.gz";
+    url = "https://www.lesbonscomptes.com/recoll/${name}.tar.gz";
     sha256 = "186bj8zx2xw9hwrzvzxdgdin9nj7msiqh5j57w5g7j4abdlsisjn";
   };
 

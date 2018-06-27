@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   name = "ntp-4.2.8p11";
 
   src = fetchurl {
-    url = "http://www.eecis.udel.edu/~ntp/ntp_spool/ntp4/ntp-4.2/${name}.tar.gz";
+    url = "https://www.eecis.udel.edu/~ntp/ntp_spool/ntp4/ntp-4.2/${name}.tar.gz";
     sha256 = "13i7rp1va29ffjdk08fvsfl6n47zzwsp147zhgb550k8agvkjjpi";
   };
 

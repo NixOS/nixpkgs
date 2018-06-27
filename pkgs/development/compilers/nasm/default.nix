@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
   version = "2.13.03";
 
   src = fetchurl {
-    url = "http://www.nasm.us/pub/nasm/releasebuilds/${version}/${name}.tar.bz2";
+    url = "https://www.nasm.us/pub/nasm/releasebuilds/${version}/${name}.tar.bz2";
     sha256 = "04bh736zfj3xy5ihh1whshpjxsisv7hqkz954clzdw6kg93qdv33";
   };
 

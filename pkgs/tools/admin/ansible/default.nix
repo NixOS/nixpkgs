@@ -21,7 +21,7 @@ let
     inherit version;
 
     src = fetchurl {
-      url = "http://releases.ansible.com/ansible/${pname}-${version}.tar.gz";
+      url = "https://releases.ansible.com/ansible/${pname}-${version}.tar.gz";
       inherit sha256;
     };
 

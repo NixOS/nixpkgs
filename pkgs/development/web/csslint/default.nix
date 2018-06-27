@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
   name = "csslint-${version}";
 
   src = fetchurl {
-    url = "http://registry.npmjs.org/csslint/-/${name}.tgz";
+    url = "https://registry.npmjs.org/csslint/-/${name}.tgz";
     sha256 = "1gq2x0pf2p4jhccvn3y3kjhm1lmb4jsfdbzjdh924w8m3sr9jdid";
   };
 

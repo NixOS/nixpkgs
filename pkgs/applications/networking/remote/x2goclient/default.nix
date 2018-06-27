@@ -6,7 +6,7 @@ stdenv.mkDerivation rec {
   version = "4.1.2.0";
 
   src = fetchurl {
-    url = "http://code.x2go.org/releases/source/x2goclient/${name}.tar.gz";
+    url = "https://code.x2go.org/releases/source/x2goclient/${name}.tar.gz";
     sha256 = "1x1iiyszz6mbrnsqacxzclyx172djq865bw3y83ya7lc9j8a71zn";
   };
 

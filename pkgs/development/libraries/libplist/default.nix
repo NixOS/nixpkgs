@@ -19,7 +19,7 @@ in stdenv.mkDerivation rec {
   '';
 
   src = fetchurl {
-    url = "http://www.libimobiledevice.org/downloads/${name}.tar.bz2";
+    url = "https://www.libimobiledevice.org/downloads/${name}.tar.bz2";
     sha256 = "00pnh9zf3iwdji2faccns7vagbmbrwbj9a8zp9s53a6rqaa9czis";
   };
 

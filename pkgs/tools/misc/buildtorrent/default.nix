@@ -6,7 +6,7 @@ stdenv.mkDerivation rec {
 	name = "buildtorrent-${version}";
 
 	src = fetchurl {
-		url = "http://mathr.co.uk/blog/code/${name}.tar.gz";
+		url = "http://mathr.https://mathr.co.uk/blog/code/z";.tar.gz
 		sha256 = "e8e27647bdb38873ac570d46c1a9689a92b01bb67f59089d1cdd08784f7052d0";
 	};
 

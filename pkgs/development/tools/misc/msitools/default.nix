@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
   name = "msitools-${version}";
 
   src = fetchurl {
-    url = "http://ftp.gnome.org/pub/GNOME/sources/msitools/0.97/${name}.tar.xz";
+    url = "https://ftp.gnome.org/pub/GNOME/sources/msitools/0.97/${name}.tar.xz";
     sha256 = "0pn6izlgwi4ngpk9jk2n38gcjjpk29nm15aad89bg9z3k9n2hnrs";
   };
 

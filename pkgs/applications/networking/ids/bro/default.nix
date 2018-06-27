@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
   name = "bro-2.5.4";
 
   src = fetchurl {
-    url = "http://www.bro.org/downloads/${name}.tar.gz";
+    url = "https://www.bro.org/downloads/${name}.tar.gz";
     sha256 = "07sz1i4ly30257677b8vfrbsvxhz2awijyzn5ihg4m567x1ymnl0";
   };
 

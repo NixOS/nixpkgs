@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   name = "polkit-0.113";
 
   src = fetchurl {
-    url = "http://www.freedesktop.org/software/polkit/releases/${name}.tar.gz";
+    url = "https://www.freedesktop.org/software/polkit/releases/${name}.tar.gz";
     sha256 = "109w86kfqrgz83g9ivggplmgc77rz8kx8646izvm2jb57h4rbh71";
   };
 

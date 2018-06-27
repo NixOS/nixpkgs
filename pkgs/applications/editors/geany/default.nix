@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   name = "geany-${version}";
 
   src = fetchurl {
-    url = "http://download.geany.org/${name}.tar.bz2";
+    url = "https://download.geany.org/${name}.tar.bz2";
     sha256 = "66baaff43f12caebcf0efec9a5533044dc52837f799c73a1fd7312caa86099c2";
   };
 

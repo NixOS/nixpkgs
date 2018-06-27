@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
   version = "3.3c";
 
   src = fetchurl {
-    url = "http://www.cs.cornell.edu/andru/release/${name}.tar.gz";
+    url = "https://www.cs.cornell.edu/andru/release/${name}.tar.gz";
     sha256 = "006lp8y22b9pi81x1a9ldfgkl1fbmkdzfw0lqw5y9svmisbafbr9";
   };
 

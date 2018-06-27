@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   version = "1.11.0";
 
   src = fetchurl {
-    url = "http://www.freedesktop.org/software/libinput/${name}.tar.xz";
+    url = "https://www.freedesktop.org/software/libinput/${name}.tar.xz";
     sha256 = "04mwl1v51b785h7q3v23hahr0qzr48qq1jzj7d3msjvgh97nr8v4";
   };
 

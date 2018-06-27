@@ -4,7 +4,7 @@ stdenv.mkDerivation rec {
   name = "scala-2.10.7";
 
   src = fetchurl {
-    url = "http://www.scala-lang.org/files/archive/${name}.tgz";
+    url = "https://www.scala-lang.org/files/archive/${name}.tgz";
     sha256 = "04gi55lzgrhsb78qw8jmnccqim92rw6898knw0a7gfzn2sci30wj";
   };
 

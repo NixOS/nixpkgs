@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
   version = "2018.06.13";
 
   src = fetchzip {
-    url = "http://ifdo.ca/~seymour/runabc/${name}.zip";
+    url = "https://ifdo.ca/~seymour/runabc/${name}.zip";
     sha256 = "0mmr0wfdwx9vfz17gp0arspv835l5gka78hm5hkri4h3cvxpflfy";
   };
 
