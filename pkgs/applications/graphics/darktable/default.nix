@@ -3,6 +3,7 @@
 , ilmbase, gtk3, intltool, lcms2, lensfun, libX11, libexif, libgphoto2, libjpeg
 , libpng, librsvg, libtiff, openexr, osm-gps-map, pkgconfig, sqlite, libxslt
 , openjpeg, lua, pugixml, colord, colord-gtk, libwebp, libsecret, gnome3
+, ocl-icd
 }:
 
 stdenv.mkDerivation rec {
@@ -21,9 +22,9 @@ stdenv.mkDerivation rec {
     libgphoto2 libjpeg libpng librsvg libtiff openexr sqlite libxslt
     libsoup graphicsmagick json-glib openjpeg lua pugixml
     colord colord-gtk libwebp libsecret gnome3.adwaita-icon-theme
-    osm-gps-map
+    osm-gps-map ocl-icd
   ];
-
+    
   cmakeFlags = [
     "-DBUILD_USERMANUAL=False"
   ];
@@ -34,7 +35,7 @@ stdenv.mkDerivation rec {
   # the wrappers:
   preFixup = ''
     gappsWrapperArgs+=(
-      --prefix LD_LIBRARY_PATH ":" "$out/lib/darktable"
+      --prefix LD_LIBRARY_PATH ":" "$out/lib/darktable:${ocl-icd}/lib"
     )
   '';
 
