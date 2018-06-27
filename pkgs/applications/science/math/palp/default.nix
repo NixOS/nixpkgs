@@ -77,6 +77,6 @@ stdenv.mkDerivation rec {
     # the right license.
     license = licenses.gpl2;
     maintainers = with maintainers; [ timokau ];
-    platforms = platforms.all;
+    platforms = platforms.linux;
   };
 }
