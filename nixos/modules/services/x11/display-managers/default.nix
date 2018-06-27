@@ -110,12 +110,14 @@ let
 
       # Speed up application start by 50-150ms according to
       # http://kdemonkey.blogspot.nl/2008/04/magic-trick.html
-      rm -rf "$HOME/.compose-cache"
-      mkdir "$HOME/.compose-cache"
+      compose_cache="''${$XCOMPOSECACHE:-$HOME/.compose-cache}"
+      rm -rf "$compose_cache"
+      mkdir -p "$compose_cache"
 
       # Work around KDE errors when a user first logs in and
       # .local/share doesn't exist yet.
-      mkdir -p "$HOME/.local/share"
+      xdg_data_home="''${XDG_DATA_HOME:-$HOME/.local/share}"
+      mkdir -p "$xdg_data_home"
 
       unset _DID_SYSTEMD_CAT
 
