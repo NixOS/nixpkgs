@@ -1,10 +1,10 @@
 {stdenv, fetchurl, perl }:
 
 stdenv.mkDerivation rec {
-  name = "redo-1.2";
+  name = "redo-1.3";
   src = fetchurl {
     url = "https://jdebp.eu./Repository/freebsd/${name}.tar.gz";
-    sha256 = "0qr8plllxfn32r4rgnalzlhcs3b4l8a4ga8ig9v8i5iy1qnfhqnf";
+    sha256 = "1yx7nd59s01j096hr1zbnbx6mvd6ljzd4vgawh7p2l644jgwj70r";
   };
 
   nativeBuildInputs = [ perl /* for pod2man */ ];
