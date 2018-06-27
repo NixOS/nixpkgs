@@ -254,7 +254,7 @@ self: super: {
   digit = doJailbreak super.digit;
 
   # https://github.com/jwiegley/hnix/issues/98 - tied to an older deriving-compat
-  hnix = (overrideCabal super.hnix (old: {
+  hnix = generateOptparseApplicativeCompletions ["hnix"] (overrideCabal super.hnix (old: {
     patches = old.patches or [] ++ [
       # should land in hnix-5.2
       (pkgs.fetchpatch {
