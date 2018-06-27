@@ -32,6 +32,7 @@ stdenv.mkDerivation rec {
     description = "Third-party multi-platform emulator of the ARM-based TI-Nspire™ calculators";
     license = stdenv.lib.licenses.gpl3;
     maintainers = with stdenv.lib.maintainers; [ pneumaticat ];
-    platforms = stdenv.lib.platforms.unix;
+    # Only tested on Linux, but likely possible to build on, e.g. macOS
+    platforms = stdenv.lib.platforms.linux;
   };
 }
