@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
       details of a running virtual machine by viewing its memory, trapping on hardware events,
       and accessing the vCPU registers.
     '';
-    license = [ licenses.lgpl3 ];
+    license = with licenses; [ gpl3 lgpl3 ];
     maintainers = with maintainers; [ lschuermann ];
   };
 }
