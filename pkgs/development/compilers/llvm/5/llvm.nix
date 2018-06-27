@@ -80,6 +80,10 @@ in stdenv.mkDerivation (rec {
     "-DLLVM_BUILD_TESTS=ON"
     "-DLLVM_ENABLE_FFI=ON"
     "-DLLVM_ENABLE_RTTI=ON"
+
+    "-DLLVM_HOST_TRIPLE=${stdenv.hostPlatform.config}"
+    "-DLLVM_DEFAULT_TARGET_TRIPLE=${stdenv.targetPlatform.config}"
+    "-DTARGET_TRIPLE=${stdenv.targetPlatform.config}"
   ]
   ++ stdenv.lib.optional enableSharedLibraries
     "-DLLVM_LINK_LLVM_DYLIB=ON"
@@ -95,11 +99,6 @@ in stdenv.mkDerivation (rec {
   ++ stdenv.lib.optionals (isDarwin) [
     "-DLLVM_ENABLE_LIBCXX=ON"
     "-DCAN_TARGET_i386=false"
-  ]
-  ++ stdenv.lib.optionals stdenv.hostPlatform.isMusl [
-    "-DLLVM_HOST_TRIPLE=${stdenv.hostPlatform.config}"
-    "-DLLVM_DEFAULT_TARGET_TRIPLE=${stdenv.targetPlatform.config}"
-    "-DTARGET_TRIPLE=${stdenv.targetPlatform.config}"
   ];
 
   postBuild = ''
