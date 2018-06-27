@@ -4078,6 +4078,8 @@ with pkgs;
 
   pasystray = callPackage ../tools/audio/pasystray { };
 
+  phash = callPackage ../development/libraries/phash { };
+
   pnmixer = callPackage ../tools/audio/pnmixer { };
 
   pulsemixer = callPackage ../tools/audio/pulsemixer { };
