@@ -3022,6 +3022,8 @@ with pkgs;
     inherit (llvmPackages_38) stdenv;
   });
 
+  holochain-go = callPackage ../servers/holochain-go { };
+
   homesick = callPackage ../tools/misc/homesick { };
 
   honcho = callPackage ../tools/system/honcho { };
