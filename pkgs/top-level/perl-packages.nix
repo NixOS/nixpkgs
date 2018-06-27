@@ -5,11 +5,13 @@
    for each package in a separate file: the call to the function would
    be almost as much code as the function itself. */
 
-{pkgs, overrides}:
+{config, pkgs, fetchurl, fetchFromGitHub, stdenv, fetchsvn, gnused, perl, overrides}:
 
 let self = _self // overrides; _self = with self; {
 
-  inherit (pkgs) buildPerlPackage fetchurl fetchFromGitHub stdenv perl fetchsvn gnused;
+  inherit perl;
+
+  inherit (pkgs) buildPerlPackage;
 
   inherit (stdenv.lib) maintainers;
 
@@ -508,19 +510,10 @@ let self = _self // overrides; _self = with self; {
       sha256 = "02y2ylq83hy9kgj57sc0239x65br9sm98c0chsm61s08yc2mpiza";
     };
     buildInputs = [ TestMockModule ];
-  };
-
-  ArchiveZip_1_53 = buildPerlPackage {
-    name = "Archive-Zip-1.60";
-    src = fetchurl {
-      url = mirror://cpan/authors/id/P/PH/PHRED/Archive-Zip-1.60.tar.gz;
-      sha256 = "eac75b05f308e860aa860c3094aa4e7915d3d31080e953e49bc9c38130f5c20b";
-    };
     meta = {
       description = "Provide an interface to ZIP archive files";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
-    buildInputs = [ TestMockModule ];
   };
 
   AudioScan = buildPerlPackage rec {
@@ -644,8 +637,6 @@ let self = _self // overrides; _self = with self; {
     buildInputs = [ IPCSystemSimple TestFatal ];
   };
 
-  Autobox = self.autobox;
-
   Autodia = buildPerlPackage rec {
     name = "Autodia-2.14";
     src = fetchurl {
@@ -676,10 +667,6 @@ let self = _self // overrides; _self = with self; {
     };
     buildInputs = [ DBI ];
   };
-
-  autodie = null; # part of Perl
-
-  AutoLoader = null; # part of Perl 5.22
 
   autovivification = buildPerlPackage rec {
     name = "autovivification-0.18";
@@ -1465,8 +1452,6 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  CatalystPluginUnicodeEncoding = CatalystRuntime;
-
   CatalystPluginHTMLWidget = buildPerlPackage rec {
     name = "Catalyst-Plugin-HTML-Widget-1.1";
     src = fetchurl {
@@ -1916,8 +1901,6 @@ let self = _self // overrides; _self = with self; {
     propagatedBuildInputs = [ ClassAccessor ];
   };
 
-  ClassAccessorFast = ClassAccessor;
-
   ClassAccessorGrouped = buildPerlPackage {
     name = "Class-Accessor-Grouped-0.10012";
     src = fetchurl {
@@ -2155,8 +2138,6 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  ClassMOP = Moose;
-
   ClassReturnValue = buildPerlPackage rec {
     name = "Class-ReturnValue-0.55";
     src = fetchurl {
@@ -2370,9 +2351,6 @@ let self = _self // overrides; _self = with self; {
      };
   };
 
-  # For backwards compatibility.
-  CommonSense = self.commonsense;
-
   commonsense = buildPerlPackage rec {
     name = "common-sense-3.74";
     src = fetchurl {
@@ -2421,8 +2399,6 @@ let self = _self // overrides; _self = with self; {
     inherit fetchurl buildPerlPackage stdenv;
     inherit (pkgs) zlib;
   };
-
-  CompressZlib = IOCompress;
 
   CompressUnLZMA = buildPerlPackage rec {
     name = "Compress-unLZMA-0.05";
@@ -2672,8 +2648,6 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  constant = null; # part of Perl 5.22
-
   constantboolean = buildPerlModule {
     name = "constant-boolean-0.02";
     src = fetchurl {
@@ -2698,8 +2672,6 @@ let self = _self // overrides; _self = with self; {
        license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
      };
   };
-
-  constantdefer = pkgs.perlPackages.constant-defer;
 
   constant-defer = buildPerlPackage rec {
     name = "constant-defer-6";
@@ -4035,8 +4007,6 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  DevelSelfStubber = null; # part of Perl 5.22
-
   DevelSizeMe = buildPerlPackage {
     name = "Devel-SizeMe-0.19";
     src = fetchurl {
@@ -4480,8 +4450,6 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  Digest = null; # part of Perl 5.22
-
   DigestCRC = buildPerlPackage rec {
     name = "Digest-CRC-0.22.2";
     src = fetchurl {
@@ -4503,20 +4471,6 @@ let self = _self // overrides; _self = with self; {
     meta = {
       description = "Keyed-Hashing for Message Authentication";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
-    };
-  };
-
-  DigestHMAC_SHA1 = buildPerlPackage {
-    name = "Digest-HMAC_SHA1-1.03";
-    src = fetchurl {
-      url = mirror://cpan/authors/id/G/GA/GAAS/Digest-HMAC-1.03.tar.gz;
-      sha256 = "0naavabbm1c9zgn325ndy66da4insdw9l3mrxwxdfi7i7xnjrirv";
-    };
-    meta = {
-      description = "Keyed-Hashing for Message Authentication";
-      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
-      maintainers = with maintainers; [ ];
-      platforms   = stdenv.lib.platforms.unix;
     };
   };
 
@@ -4578,8 +4532,6 @@ let self = _self // overrides; _self = with self; {
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
-
-  DigestSHA = null;
 
   DigestSHA1 = buildPerlPackage {
     name = "Digest-SHA1-2.13";
@@ -4668,8 +4620,6 @@ let self = _self // overrides; _self = with self; {
     };
     buildInputs = [ TestMojibake ];
   };
-
-  DistZillaPluginNoTabsTests = DistZillaPluginTestNoTabs;
 
   DistZillaPluginPodWeaver = buildPerlPackage {
     name = "Dist-Zilla-Plugin-PodWeaver-4.008";
@@ -5097,8 +5047,6 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  EmailMIMEModifier = EmailMIME;
-
   EmailSend = buildPerlPackage rec {
     name = "Email-Send-2.201";
     src = fetchurl {
@@ -5441,8 +5389,6 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  ExtUtilsCommand = ExtUtilsMakeMaker;
-
   Expect = buildPerlPackage {
     name = "Expect-1.35";
     src = fetchurl {
@@ -5455,8 +5401,6 @@ let self = _self // overrides; _self = with self; {
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
-
-  Exporter = null; # part of Perl 5.22
 
   ExtUtilsCBuilder = buildPerlPackage rec {
     name = "ExtUtils-CBuilder-0.280230";
@@ -6225,8 +6169,6 @@ let self = _self // overrides; _self = with self; {
       maintainers = [ maintainers.limeytexan ];
     };
   };
-
-  FileTemp = null;
 
   FileTouch = buildPerlPackage rec {
     name = "File-Touch-0.11";
@@ -7552,8 +7494,6 @@ let self = _self // overrides; _self = with self; {
      };
   };
 
-  I18NCollate = null; # part of Perl 5.22
-
   iCalParser = buildPerlPackage rec {
     name = "iCal-Parser-1.21";
     src = fetchurl {
@@ -7565,11 +7505,6 @@ let self = _self // overrides; _self = with self; {
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
-
-  "if" = null;
-
-  # For backwards compatibility.
-  if_ = self."if";
 
   ImageInfo = buildPerlPackage rec {
     name = "Image-Info-1.41";
@@ -7864,8 +7799,6 @@ let self = _self // overrides; _self = with self; {
       sha256 = "2a3f4ad8442d9070780e58ef43722d19d1ee21a803bf7c8206877a10482de5a0";
     };
   };
-
-  IOstringy = pkgs.perlPackages.IOStringy;
 
   IOStringy = buildPerlPackage rec {
     name = "IO-stringy-2.111";
@@ -8242,8 +8175,6 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  lib_ = null; # part of Perl 5.22
-
   libapreq2 = buildPerlPackage {
     name = "libapreq2-2.13";
     src = fetchurl {
@@ -8273,8 +8204,6 @@ let self = _self // overrides; _self = with self; {
       license = stdenv.lib.licenses.asl20;
     };
   };
-
-  libintlperl = pkgs.perlPackages.libintl_perl;
 
   libintl_perl = buildPerlPackage rec {
     name = "libintl-perl-1.29";
@@ -8696,8 +8625,6 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  LocaleMaketextSimple = null; # part of Perl 5.22
-
   LocaleMsgfmt = buildPerlPackage {
     name = "Locale-Msgfmt-0.15";
     src = fetchurl {
@@ -8937,9 +8864,6 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  # For backwards compatibility.
-  Log4Perl = self.LogLog4perl;
-
   LogDispatchArray = buildPerlPackage {
     name = "Log-Dispatch-Array-1.003";
     src = fetchurl {
@@ -9023,8 +8947,6 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  LWPProtocolconnect = pkgs.perlPackages.LWPProtocolConnect;
-
   LWPProtocolConnect = buildPerlPackage {
     name = "LWP-Protocol-connect-6.09";
     src = fetchurl {
@@ -9038,8 +8960,6 @@ let self = _self // overrides; _self = with self; {
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
-
-  LWPProtocolhttps = pkgs.perlPackages.LWPProtocolHttps;
 
   LWPProtocolHttps = buildPerlPackage rec {
     name = "LWP-Protocol-https-6.07";
@@ -9070,8 +8990,6 @@ let self = _self // overrides; _self = with self; {
        license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
      };
   };
-
-  LWPUserAgent = LWP;
 
   LWPUserAgentDetermined = buildPerlPackage {
     name = "LWP-UserAgent-Determined-1.07";
@@ -9372,8 +9290,6 @@ let self = _self // overrides; _self = with self; {
     buildInputs = [ ExtUtilsCppGuess ExtUtilsTypemapsDefault ExtUtilsXSpp ModuleBuildWithXSpp TestDeep ];
   };
 
-  MathComplex = null; # part of Perl 5.22
-
   MathConvexHullMonotoneChain = buildPerlPackage rec {
     name = "Math-ConvexHull-MonotoneChain-0.01";
     src = fetchurl {
@@ -9535,8 +9451,6 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  MIMEBase64 = null; # part of Perl 5.22
-
   MIMECharset = buildPerlPackage {
     name = "MIME-Charset-1.012.2";
     src = fetchurl {
@@ -9572,8 +9486,6 @@ let self = _self // overrides; _self = with self; {
       maintainers = [ maintainers.rycee ];
     };
   };
-
-  MIMEtools = MIMETools;
 
   MIMETools = buildPerlPackage rec {
     name = "MIME-tools-5.509";
@@ -10451,8 +10363,6 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  MouseXGetOpt = self.MouseXGetopt;
-
   MouseXGetopt = buildPerlModule rec {
     name = "MouseX-Getopt-0.37";
     src = fetchurl {
@@ -11105,12 +11015,6 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  # Deprecated.
-  NamespaceAutoclean = self.namespaceautoclean;
-
-  # Deprecated.
-  NamespaceClean = self.namespaceclean;
-
   NetIdent = buildPerlPackage rec {
     name = "Net-Ident-1.24";
     src = fetchurl {
@@ -11394,8 +11298,6 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  NetLDAP = perlldap;
-
   NetOAuth = buildPerlModule {
     name = "Net-OAuth-0.28";
     src = fetchurl {
@@ -11471,8 +11373,6 @@ let self = _self // overrides; _self = with self; {
        license = with stdenv.lib.licenses; [ mit ];
      };
   };
-
-  NetSMTP = libnet;
 
   NetSMTPSSL = buildPerlPackage {
     name = "Net-SMTP-SSL-1.04";
@@ -11654,9 +11554,6 @@ let self = _self // overrides; _self = with self; {
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
-
-  # For backwards compatibility. Please use OLEStorage_Lite instead.
-  OLEStorageLight = OLEStorage_Lite;
 
   OLEStorage_Lite = buildPerlPackage rec {
     name = "OLE-Storage_Lite-0.19";
@@ -11971,8 +11868,6 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  ParseCPANMeta = CPANMeta;
-
   ParseDebControl = buildPerlPackage rec {
     name = "Parse-DebControl-2.005";
     src = fetchurl {
@@ -12202,8 +12097,6 @@ let self = _self // overrides; _self = with self; {
       sha256 = "0jbb3xpbqzmr625blvnjszd69l3cwxzi7bhmkj5x48dgv3s7mkca";
     };
   };
-
-  PerlIOviaQuotedPrint = null; # part of Perl 5.22
 
   PerlIOviasymlink = buildPerlPackage {
     name = "PerlIO-via-symlink-0.05";
@@ -12859,8 +12752,6 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  PodEscapes = null; # part of Perl 5.22
-
   PodEventual = buildPerlPackage {
     name = "Pod-Eventual-0.094001";
     src = fetchurl {
@@ -13359,8 +13250,6 @@ let self = _self // overrides; _self = with self; {
     propagatedBuildInputs = [ DateTimeFormatDateParse Error LWP ParamsValidate ];
   };
 
-  Safe = null; # part of Perl 5.22
-
   SafeIsa = buildPerlPackage {
     name = "Safe-Isa-1.000010";
     src = fetchurl {
@@ -13427,8 +13316,6 @@ let self = _self // overrides; _self = with self; {
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
-
-  SearchDict = null; # part of Perl 5.22
 
   SelfLoader = buildPerlPackage {
     name = "SelfLoader-1.24";
@@ -14183,21 +14070,6 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  SubExporterUtil = let version = "0.987"; in buildPerlPackage {
-    name = "Sub-Exporter-Util-${version}";
-    src = fetchurl {
-      url = "mirror://cpan/authors/id/R/RJ/RJBS/Sub-Exporter-${version}.tar.gz";
-      sha256 = "1ml3n1ck4ln9qjm2mcgkczj1jb5n1fkscz9c4x23v4db0glb4g2l";
-    };
-    propagatedBuildInputs = [ DataOptList ParamsUtil SubInstall ];
-    meta = {
-      inherit version;
-      homepage = https://github.com/rjbs/sub-exporter;
-      description = "A sophisticated exporter for custom-built routines";
-      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
-    };
-  };
-
   SubIdentify = buildPerlPackage rec {
     name = "Sub-Identify-0.14";
     src = fetchurl {
@@ -14872,8 +14744,6 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  Test = null; # part of Perl 5.22
-
   Test2PluginNoWarnings = buildPerlPackage rec {
      name = "Test2-Plugin-NoWarnings-0.06";
      src = fetchurl {
@@ -15457,8 +15327,6 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  TestMoose = Moose;
-
   TestMockTime = buildPerlPackage rec {
     name = "Test-MockTime-0.17";
     src = fetchurl {
@@ -15505,8 +15373,6 @@ let self = _self // overrides; _self = with self; {
        license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
      };
   };
-
-  TestMore = TestSimple;
 
   TestMost = buildPerlPackage {
     name = "Test-Most-0.35";
@@ -15878,8 +15744,6 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  TestSimple = null;
-
   TestSimple13 = buildPerlPackage rec {
     name = "Test-Simple-1.302136";
     src = fetchurl {
@@ -15968,8 +15832,6 @@ let self = _self // overrides; _self = with self; {
     buildInputs = [ TestSharedFork ];
   };
 
-  TestTester = TestSimple;
-
   TestTime = buildPerlPackage rec {
     name = "Test-Time-0.05";
     src = fetchurl {
@@ -16020,8 +15882,6 @@ let self = _self // overrides; _self = with self; {
       platforms   = stdenv.lib.platforms.unix;
     };
   };
-
-  Testuseok = TestSimple;
 
   TestWarn = buildPerlPackage {
     name = "Test-Warn-0.35";
@@ -16145,8 +16005,6 @@ let self = _self // overrides; _self = with self; {
     };
     buildInputs = [ TestBase ];
   };
-
-  TextAbbrev = null; # part of Perl 5.22
 
   TextAligner = buildPerlModule rec {
     name = "Text-Aligner-0.13";
@@ -16540,8 +16398,6 @@ let self = _self // overrides; _self = with self; {
       platforms = stdenv.lib.platforms.linux;
     };
   };
-
-  TextTabsWrap = null; # part of Perl 5.22
 
   TextTabularDisplay = buildPerlPackage rec {
     name = "Text-TabularDisplay-1.38";
@@ -18015,5 +17871,62 @@ let self = _self // overrides; _self = with self; {
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
+
+} // stdenv.lib.optionalAttrs (config.skipAliases or false == false) {
+  autodie = null; # part of Perl
+  AutoLoader = null; # part of Perl 5.22
+  constant = null; # part of Perl 5.22
+  DevelSelfStubber = null; # part of Perl 5.22
+  Digest = null; # part of Perl 5.22
+  Exporter = null; # part of Perl 5.22
+  I18NCollate = null; # part of Perl 5.22
+  lib_ = null; # part of Perl 5.22
+  LocaleMaketextSimple = null; # part of Perl 5.22
+  MathComplex = null; # part of Perl 5.22
+  MIMEBase64 = null; # part of Perl 5.22
+  PerlIOviaQuotedPrint = null; # part of Perl 5.22
+  PodEscapes = null; # part of Perl 5.22
+  Safe = null; # part of Perl 5.22
+  SearchDict = null; # part of Perl 5.22
+  Test = null; # part of Perl 5.22
+  TextAbbrev = null; # part of Perl 5.22
+  TextTabsWrap = null; # part of Perl 5.22
+  DigestSHA = null;
+  FileTemp = null;
+  "if" = null;
+  TestSimple = null;
+
+  ArchiveZip_1_53 = self.ArchiveZip;
+  Autobox = self.autobox;
+  CommonSense = self.commonsense; # For backwards compatibility.
+  if_ = self."if"; # For backwards compatibility.
+  Log4Perl = self.LogLog4perl; # For backwards compatibility.
+  MouseXGetOpt = self.MouseXGetopt;
+  NamespaceAutoclean = self.namespaceautoclean; # Deprecated.
+  NamespaceClean = self.namespaceclean; # Deprecated.
+  CatalystPluginUnicodeEncoding = self.CatalystRuntime;
+  ClassAccessorFast = self.ClassAccessor;
+  ClassMOP = self.Moose;
+  CompressZlib = self.IOCompress;
+  constantdefer = self.constant-defer;
+  DigestHMAC_SHA1 = self.DigestHMAC;
+  DistZillaPluginNoTabsTests = self.DistZillaPluginTestNoTabs;
+  EmailMIMEModifier = self.EmailMIME;
+  ExtUtilsCommand = self.ExtUtilsMakeMaker;
+  IOstringy = self.IOStringy;
+  libintlperl = self.libintl_perl;
+  LWPProtocolconnect = self.LWPProtocolConnect;
+  LWPProtocolhttps = self.LWPProtocolHttps;
+  LWPUserAgent = self.LWP;
+  MIMEtools = self.MIMETools;
+  NetLDAP = self.perlldap;
+  NetSMTP = self.libnet;
+  OLEStorageLight = self.OLEStorage_Lite; # For backwards compatibility. Please use OLEStorage_Lite instead.
+  ParseCPANMeta = self.CPANMeta;
+  TestMoose = self.Moose;
+  TestMore = self.TestSimple;
+  TestTester = self.TestSimple;
+  Testuseok = self.TestSimple;
+  SubExporterUtil = self.SubExporter;
 
 }; in self
