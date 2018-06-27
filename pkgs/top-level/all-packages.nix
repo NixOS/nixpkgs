@@ -5054,6 +5054,10 @@ with pkgs;
 
   sipcalc = callPackage ../tools/networking/sipcalc { };
 
+  skribilo = callPackage ../tools/typesetting/skribilo {
+    tex = texlive.combined.scheme-small;
+  };
+
   sleuthkit = callPackage ../tools/system/sleuthkit {};
 
   sleepyhead = callPackage ../applications/misc/sleepyhead {};
