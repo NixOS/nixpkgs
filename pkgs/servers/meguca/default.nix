@@ -1,18 +1,18 @@
-{ stdenv, buildGoPackage, fetchgit, pkgconfig, ffmpeg-full, graphicsmagick
-, ghostscript, quicktemplate, go-bindata, easyjson, nodePackages, cmake
-, emscripten }:
+{ stdenv, buildGoPackage, fetchgit, pkgconfig, cmake, libcxx, libcxxabi
+, ffmpeg-full, graphicsmagick, ghostscript, quicktemplate, go-bindata, easyjson
+, nodePackages, emscripten }:
 
 buildGoPackage rec {
   name = "meguca-unstable-${version}";
-  version = "2018-06-23";
-  rev = "5a156e1c2a972c6d799a667f3a1a189355ea8655";
+  version = "2018-06-27";
+  rev = "4780ed4c51475e5e0382fe70ff8ab2187fbbf447";
   goPackagePath = "github.com/bakape/meguca";
   goDeps = ./server_deps.nix;
 
   src = fetchgit {
     inherit rev;
     url = "https://github.com/bakape/meguca";
-    sha256 = "1asa5vccgl6f9c01nddpjjkw54yammbsj3wg80sbpmq9nc0djdjj";
+    sha256 = "1yc22qv5rrawlc3923a8zmhz21b00pidk1ij4fxmm9a001cm3fi3";
     fetchSubmodules = true;
   };
 
@@ -21,8 +21,8 @@ buildGoPackage rec {
 
   buildInputs = [
     ffmpeg-full graphicsmagick ghostscript quicktemplate go-bindata easyjson
-    emscripten 
-  ];
+    emscripten
+  ] ++ stdenv.lib.optionals stdenv.isDarwin [ libcxx libcxxabi ];
 
   buildPhase = ''
     export HOME=$PWD
