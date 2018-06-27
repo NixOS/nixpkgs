@@ -80,11 +80,11 @@ stdenv.mkDerivation (rec {
     nspr libnotify xorg.pixman yasm libGLU_combined
     xorg.libXScrnSaver xorg.scrnsaverproto
     xorg.libXext xorg.xextproto sqlite unzip makeWrapper
-    hunspell libevent libstartup_notification libvpx /* cairo */
+    libevent libstartup_notification libvpx /* cairo */
     icu libpng jemalloc
   ]
   ++ lib.optionals (!isTorBrowserLike) [ nss ]
-
+  ++ lib.optional (lib.versionOlder version "61") hunspell
   ++ lib.optional  alsaSupport alsaLib
   ++ lib.optional  pulseaudioSupport libpulseaudio # only headers are needed
   ++ lib.optionals ffmpegSupport [ gstreamer gst-plugins-base ]
@@ -140,7 +140,6 @@ stdenv.mkDerivation (rec {
     "--with-system-png" # needs APNG support
     "--with-system-icu"
     "--enable-system-ffi"
-    "--enable-system-hunspell"
     "--enable-system-pixman"
     "--enable-system-sqlite"
     #"--enable-system-cairo"
@@ -154,6 +153,7 @@ stdenv.mkDerivation (rec {
     "--disable-gconf"
     "--enable-default-toolkit=cairo-gtk${if gtk3Support then "3" else "2"}"
   ]
+  ++ lib.optional (lib.versionOlder version "61") "--enable-system-hunspell"
   ++ lib.optionals (lib.versionAtLeast version "56" && !stdenv.hostPlatform.isi686) [
     # on i686-linux: --with-libclang-path is not available in this configuration
     "--with-libclang-path=${llvmPackages.libclang}/lib"
