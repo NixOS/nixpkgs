@@ -1072,6 +1072,8 @@ self: super: {
   dhall-nix = generateOptparseApplicativeCompletions ["dhall-to-nix"] (
     super.dhall-nix.override { dhall = self.dhall_1_15_0; });
 
+  purescript = generateOptparseApplicativeCompletions ["purs"] super.purescript;
+
   # https://github.com/fpco/streaming-commons/issues/49
   streaming-commons = dontCheck super.streaming-commons;
 
