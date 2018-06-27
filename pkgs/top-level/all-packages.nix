@@ -21418,6 +21418,8 @@ with pkgs;
 
   trufflehog = callPackage ../tools/security/trufflehog { };
 
+  tvbrowser-bin = callPackage ../applications/misc/tvbrowser/bin.nix { };
+
   tvheadend = callPackage ../servers/tvheadend { };
 
   ums = callPackage ../servers/ums { };
