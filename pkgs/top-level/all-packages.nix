@@ -21741,7 +21741,7 @@ with pkgs;
   unixtools = recurseIntoAttrs (callPackages ./unix-tools.nix { });
   inherit (unixtools) hexdump ps logger eject umount
                       mount wall hostname more sysctl getconf
-                      getent locale;
+                      getent locale killall;
 
   fts = if hostPlatform.isMusl then netbsd.fts else null;
 
