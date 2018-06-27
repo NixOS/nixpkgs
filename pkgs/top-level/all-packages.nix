@@ -12010,6 +12010,8 @@ with pkgs;
 
   vaapiIntel = callPackage ../development/libraries/vaapi-intel { };
 
+  vaapi-intel-hybrid = callPackage ../development/libraries/vaapi-intel-hybrid { };
+
   vaapiVdpau = callPackage ../development/libraries/vaapi-vdpau { };
 
   vale = callPackage ../tools/text/vale { };
