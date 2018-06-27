@@ -1,20 +1,33 @@
-{ stdenv, xen, which, autoreconfHook, fetchFromGitHub, yacc, bison, flex, glib, libtool, autoconf, automake, pkgconfig, libvirt }:
+{ stdenv,
+  fetchFromGitHub,
+  which,
+  autoreconfHook,
+  autoconf,
+  automake,
+  libtool,
+  yacc,
+  bison,
+  flex,
+  glib,
+  pkgconfig,
+  json_c,
+  xen,
+  libvirt }:
 
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
   name = "libvmi-${version}";
-  version = "${stdenv.lib.strings.substring 0 7 rev}-2017-05-27";
-  rev = "3e4114a64f012f1d3e2eb660bc65dcd130295d49";
+  version = "0.12";
 
   src = fetchFromGitHub {
-    inherit rev;
     owner = "libvmi";
     repo = "libvmi";
-    sha256 = "0vbmrj0ij19i55afkqj64q7sgh0scpwk3c99qx6p6gn1qcy2wdss";
+    rev = "6934e8a4758018983ec53ec791dd14a7d6ac31a9";
+    sha256 = "0wbi2nasb1gbci6cq23g6kq7i10rwi1y7r44rl03icr5prqjpdyv";
   };
 
-  buildInputs = [ glib xen which libvirt ];
+  buildInputs = [ glib which libvirt json_c xen ];
   nativeBuildInputs = [ autoreconfHook yacc bison flex libtool autoconf automake pkgconfig ];
 
   meta = with stdenv.lib; {
