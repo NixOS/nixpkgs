@@ -493,7 +493,7 @@ rec {
       inherit priority content;
     };
 
-  mkOptionDefault = mkOverride 1001; # priority of option defaults
+  mkOptionDefault = mkOverride 1500; # priority of option defaults
   mkDefault = mkOverride 1000; # used in config sections of non-user modules to set a default
   mkForce = mkOverride 50;
   mkVMOverride = mkOverride 10; # used by ‘nixos-rebuild build-vm’
