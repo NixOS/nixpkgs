@@ -1406,7 +1406,7 @@
     name = "Jim Garrison";
   };
   gavin = {
-    email = "gavin@praxeology.co.uk";
+    email = "gavin.rogers@holo.host";
     github = "gavinrogers";
     name = "Gavin Rogers";
   };
