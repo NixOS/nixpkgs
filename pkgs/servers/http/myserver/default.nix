@@ -1,5 +1,5 @@
 { lib, fetchurl, stdenv, libgcrypt, libevent, libidn, gnutls
-, libxml2, zlib, guile, texinfo, cppunit, psmisc }:
+, libxml2, zlib, guile, texinfo, cppunit, killall }:
 
 let version = "0.11"; in
 
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
 
   # On GNU/Linux the `test_suite' process sometimes stays around, so
   # forcefully terminate it.
-  postCheck = lib.optionalString stdenv.isLinux "${psmisc}/bin/killall test_suite || true";
+  postCheck = "${killall}/bin/killall test_suite || true";
 
   meta = {
     description = "GNU MyServer, a powerful and easy to configure web server";
