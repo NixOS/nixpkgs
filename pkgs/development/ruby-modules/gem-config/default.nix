@@ -354,6 +354,10 @@ in
     buildInputs = [ kerberos ];
   };
 
+  tiny_tds = attrs: {
+    nativeBuildInputs = [ pkgconfig openssl ];
+  };
+
   therubyracer = attrs: {
     buildFlags = [
       "--with-v8-dir=${v8}"
