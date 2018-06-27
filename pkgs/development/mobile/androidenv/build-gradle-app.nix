@@ -103,6 +103,6 @@ stdenv.mkDerivation ({
   '';
 
   meta = {
-    license = stdenv.lib.licenses.unfree
+    license = stdenv.lib.licenses.unfree;
   };
 } // builtins.removeAttrs args ["name" "mavenDeps"])
