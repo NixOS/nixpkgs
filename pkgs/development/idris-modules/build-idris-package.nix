@@ -1,5 +1,5 @@
 # Build an idris package
-{ stdenv, idrisPackages, gmp }:
+{ stdenv, idrisPackages, gmp, expect }:
   { idrisDeps ? []
   , name
   , version
@@ -27,7 +27,7 @@ stdenv.mkDerivation ({
   '';
 
   buildPhase = ''
-    ${idris-with-packages}/bin/idris --build *.ipkg
+    unbuffer ${idris-with-packages}/bin/idris --build *.ipkg
   '';
 
   checkPhase = ''
@@ -40,7 +40,7 @@ stdenv.mkDerivation ({
     ${idris-with-packages}/bin/idris --install *.ipkg --ibcsubdir $out/libs
   '';
 
-  buildInputs = [ gmp ] ++ extraBuildInputs;
+  buildInputs = [ gmp expect ] ++ extraBuildInputs;
 
   propagatedBuildInputs = idrisDeps;
 })
