@@ -1,25 +1,41 @@
-{ stdenv, fetchurl }:
+{ stdenv, fetchurl, patchelf }:
 
 stdenv.mkDerivation rec {
-  name = "hmetis-${version}";
-  version = "2.10";
+  name = "hmetis-${version}-i686";
+  version = "1.5";
 
-  src = fetchurl {
-    url = "mirror://gnu/hello/${name}.tar.gz";
-    sha256 = "0ssi1wpaf7plaswqqjwigppsg5fyh99vdlb9kzl7c9lng89ndq1i";
+  buildInputs = [ patchelf ];
+
+  hmetissrc = fetchurl {
+    url = "http://glaros.dtc.umn.edu/gkhome/fetch/sw/hmetis/hmetis-${version}-linux.tar.gz";
+    sha256 = "e835a098c046e9c26cecb8addfea4d18ff25214e49585ffd87038e72819be7e1";
   };
+  src = [ hmetissrc ];
+
+  unpackPhase = ''
+    tar xzvf ${hmetissrc} 
+  '';
 
   doCheck = true;
 
+  installPhase = ''
+    mkdir -p $out/bin
+    cp hmetis-${version}-linux/hmetis $out/bin/
+    patchelf --set-interpreter ${stdenv.glibc}/lib/ld-linux.so.2 $out/bin/hmetis
+    patchelf --set-rpath ${stdenv.glibc}/lib $out/bin/hmetis
+    cp hmetis-${version}-linux/khmetis $out/bin/
+    patchelf --set-interpreter ${stdenv.glibc}/lib/ld-linux.so.2 $out/bin/khmetis
+    patchelf --set-rpath ${stdenv.glibc}/lib $out/bin/khmetis
+    cp hmetis-${version}-linux/shmetis $out/bin/
+    patchelf --set-interpreter ${stdenv.glibc}/lib/ld-linux.so.2 $out/bin/shmetis
+    patchelf --set-rpath ${stdenv.glibc}/lib $out/bin/shmetis
+  '';
+
   meta = with stdenv.lib; {
-    description = "A program that produces a familiar, friendly greeting";
-    longDescription = ''
-      GNU Hello is a program that prints "Hello, world!" when you run it.
-      It is fully customizable.
-    '';
+    description = "hMETIS is a set of programs for partitioning hypergraphs";
     homepage = http://www.gnu.org/software/hello/manual/;
     license = licenses.gpl3Plus;
     maintainers = [ maintainers.eelco ];
-    platforms = platforms.all;
+    platforms = [ "i686-linux" "x86_64-linux" ];
   };
 }
