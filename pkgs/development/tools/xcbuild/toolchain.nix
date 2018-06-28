@@ -58,6 +58,12 @@ runCommand "nixpkgs.xctoolchain" {
   ln -s ${buildPackages.indent}/bin/indent $out/usr/bin/indent
   ln -s ${buildPackages.ctags}/bin/ctags $out/usr/bin/ctags
 '' + optionalString stdenv.isDarwin ''
+  for bin in ${getBin buildPackages.darwin.cctools}/bin/*; do
+    if ! [ -e "$out/usr/bin/$(basename $bin)" ]; then
+      ln -s $bin $out/usr/bin
+    fi
+  done
+
   ln -s ${buildPackages.darwin.bootstrap_cmds}/bin/mig $out/usr/bin
   ln -s ${mkdep-darwin-src} $out/usr/bin/mkdep
 '')
