@@ -19153,7 +19153,7 @@ with pkgs;
 
   zim = callPackage ../applications/office/zim { };
 
-  zoom-us = callPackage ../applications/networking/instant-messengers/zoom-us { };
+  zoom-us = libsForQt5.callPackage ../applications/networking/instant-messengers/zoom-us { };
 
   zotero = callPackage ../applications/office/zotero { };
 
