@@ -16,7 +16,6 @@ buildGoPackage rec {
 
   goDeps = ./deps.nix;
 
-  # TODO: add metadata https://nixos.org/nixpkgs/manual/#sec-standard-meta-attributes
   meta = {
     description = "core implementation of validating DHT dApps in go";
     longDescription = "Holographic storage for distributed applications -- a validating monotonic DHT backed by authoritative hashchains for data provenance";
