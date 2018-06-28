@@ -176,7 +176,7 @@ in
           interactive prompt (keylocation=prompt) and from a file
           (keylocation=file://). Note that for data pools the encryption key can
           be only loaded from a file and not via interactive prompt since the
-          import is processed in an background systemd service.
+          import is processed in a background systemd service.
         '';
       };
 
