@@ -7,7 +7,7 @@ stdenv.mkDerivation rec {
   name = "drumgizmo-${version}";
 
   src = fetchurl {
-    url = "http://www.drumgizmo.org/releases/${name}/${name}.tar.gz";
+    url = "https://www.drumgizmo.org/releases/${name}/${name}.tar.gz";
     sha256 = "1q2jghjz0ygaja8dgvxp914if8yyzpa204amdcwb9yyinpxsahz4";
   };
 

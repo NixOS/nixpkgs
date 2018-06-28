@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
   name = "EZTrace-${version}";
 
   src = fetchurl {
-    url = "http://gforge.inria.fr/frs/download.php/file/34082/eztrace-${version}.tar.gz";
+    url = "https://gforge.inria.fr/frs/download.php/file/34082/eztrace-${version}.tar.gz";
     sha256 = "06q5y9qmdn1h0wjmy28z6gwswskmph49j7simfqcqwv05gvd9svr";
   };
 

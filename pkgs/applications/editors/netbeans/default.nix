@@ -15,7 +15,7 @@ in
 stdenv.mkDerivation {
   name = "netbeans-8.2";
   src = fetchurl {
-    url = http://download.netbeans.org/netbeans/8.2/final/zip/netbeans-8.2-201609300101.zip;
+    url = https://download.netbeans.org/netbeans/8.2/final/zip/netbeans-8.2-201609300101.zip;
     sha256 = "0j092qw7aqfc9vpnvr3ix1ii94p4ik6frcnw708iyv4s9crqi65d";
   };
 

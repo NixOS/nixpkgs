@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
   version = "4.1.1";
 
   src = fetchurl {
-    url = "http://cdn.primatelabs.com/Geekbench-${version}-Linux.tar.gz";
+    url = "https://cdn.primatelabs.com/Geekbench-${version}-Linux.tar.gz";
     sha256 = "1n9jyzf0a0w37hb30ip76hz73bvim76jd2fgd6131hh0shp1s4v6";
   };
 

@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   };
 
   src = fetchurl {
-    url = "http://notmuchmail.org/releases/${name}.tar.gz";
+    url = "https://notmuchmail.org/releases/${name}.tar.gz";
     sha256 = "0xh8vq2sa7r07xb3n13drc6gdiqhcgl0pj0za5xj43qkiwpikls0";
   };
 

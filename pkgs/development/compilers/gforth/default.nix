@@ -6,7 +6,7 @@ in
 stdenv.mkDerivation {
   name = "gforth-${version}";
   src = fetchurl {
-    url = "http://ftp.gnu.org/gnu/gforth/gforth-${version}.tar.gz";
+    url = "https://ftp.gnu.org/gnu/gforth/gforth-${version}.tar.gz";
     sha256 = "1c1bahc9ypmca8rv2dijiqbangm1d9av286904yw48ph7ciz4qig";
   };
 

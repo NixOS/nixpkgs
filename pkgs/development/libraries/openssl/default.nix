@@ -12,7 +12,7 @@ let
     name = "openssl-${version}";
 
     src = fetchurl {
-      url = "http://www.openssl.org/source/${name}.tar.gz";
+      url = "https://www.openssl.org/source/${name}.tar.gz";
       inherit sha256;
     };
 

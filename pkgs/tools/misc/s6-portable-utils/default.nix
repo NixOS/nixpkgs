@@ -7,7 +7,7 @@ stdenv.mkDerivation rec {
   version = "2.2.1.1";
 
   src = fetchurl {
-    url = "http://www.skarnet.org/software/s6-portable-utils/${name}.tar.gz";
+    url = "https://www.skarnet.org/software/s6-portable-utils/${name}.tar.gz";
     sha256 = "0ca5iiq3n6isj64jb81xpwjzjx1q8jg145nnnn91ra2qqk93kqka";
   };
 

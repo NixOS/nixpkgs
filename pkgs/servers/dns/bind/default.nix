@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   name = "bind-${version}";
 
   src = fetchurl {
-    url = "http://ftp.isc.org/isc/bind9/${version}/${name}.tar.gz";
+    url = "https://ftp.isc.org/isc/bind9/${version}/${name}.tar.gz";
     sha256 = "0a9dvyg1dk7vpqn9gz7p5jas3bz7z22bjd66b98g1qk16i2w7rqd";
   };
 

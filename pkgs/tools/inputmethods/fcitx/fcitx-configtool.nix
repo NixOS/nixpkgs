@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   };
 
   src = fetchurl {
-    url = "http://download.fcitx-im.org/fcitx-configtool/${name}.tar.xz";
+    url = "https://download.fcitx-im.org/fcitx-configtool/${name}.tar.xz";
     sha256 = "1ypr2jr3vzs2shqfrvhqy69xvagrn9x507180i9wxy14hb97a82r";
   };
 
