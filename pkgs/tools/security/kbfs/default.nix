@@ -2,7 +2,7 @@
 
 buildGoPackage rec {
   name = "kbfs-${version}";
-  version = "1.0.44";
+  version = "2.1.1";
 
   goPackagePath = "github.com/keybase/kbfs";
   subPackages = [ "kbfsfuse" "kbfsgit/git-remote-keybase" ];
@@ -13,7 +13,7 @@ buildGoPackage rec {
     owner = "keybase";
     repo = "kbfs";
     rev = "v${version}";
-    sha256 = "1vjgzif8ki9xrlcghpzkvqwfwvaq63llf52s03m3d2vkyigmgp78";
+    sha256 = "1s1bgi9hcilz2is8w2kkvzi928i7w6m5j2x8avkb8zl9s3mrqz3q";
   };
 
   buildFlags = [ "-tags production" ];
