@@ -11,11 +11,11 @@ in
 
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";
-  version = "3.15.1";
+  version = "3.16.1";
 
   src = fetchurl {
     url = "https://github.com/balabit/${pname}/releases/download/${name}/${name}.tar.gz";
-    sha256 = "1vzrg6s30wc2as2s42h7a1qvyxqx26nq895r9y75aasfcwlbvnm2";
+    sha256 = "0a9snxvs3fsv0gm5q9xkrcg0hwgs3c8q1rb434cnzn4qbqfnzvn7";
   };
 
   nativeBuildInputs = [ pkgconfig which ];

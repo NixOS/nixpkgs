@@ -19,6 +19,7 @@
 , bzip2
 , coreutils
 , cpio
+, curl
 , elfutils
 , flatpak
 , gitMinimal
@@ -35,7 +36,7 @@
 }:
 
 let
-  version = "0.10.10";
+  version = "0.99.1";
 in stdenv.mkDerivation rec {
   name = "flatpak-builder-${version}";
 
@@ -43,7 +44,7 @@ in stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://github.com/flatpak/flatpak-builder/releases/download/${version}/${name}.tar.xz";
-    sha256 = "0b0c2rmf2vj596600blbhsiv2dg7qwpr33lgdcn0bnqc4ddri6f2";
+    sha256 = "0xgywl4qsxq7lw1v7hmvczzv3pl12bzz3jv59y8s5gbk54rzbyi5";
   };
 
   nativeBuildInputs = [
@@ -62,6 +63,7 @@ in stdenv.mkDerivation rec {
   buildInputs = [
     acl
     bzip2
+    curl
     elfutils
     flatpak
     glib

@@ -4,7 +4,7 @@ stdenv.mkDerivation rec {
   name = "ptask-1.0.0";
 
   src = fetchurl {
-    url = "http://wpitchoune.net/ptask/files/${name}.tar.gz";
+    url = "https://wpitchoune.net/ptask/files/${name}.tar.gz";
     sha256 = "13nirr7b29bv3w2zc8zxphhmc9ayhs61i11jl4819nabk7vy1kdq";
   };
 

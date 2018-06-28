@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
   };
 
   src = fetchurl {
-    url = "http://webkitgtk.org/releases/${name}.tar.xz";
+    url = "https://webkitgtk.org/releases/${name}.tar.xz";
     sha256 = "1n0dy94bm7wvxln4jis1gp8plv8n4a01g41724zsf5psg1yk16sp";
   };
 

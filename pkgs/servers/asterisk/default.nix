@@ -26,7 +26,7 @@ let
     '';
 
     src = fetchurl {
-      url = "http://downloads.asterisk.org/pub/telephony/asterisk/old-releases/asterisk-${version}.tar.gz";
+      url = "https://downloads.asterisk.org/pub/telephony/asterisk/old-releases/asterisk-${version}.tar.gz";
       inherit sha256;
     };
 

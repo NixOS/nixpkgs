@@ -3,7 +3,7 @@
 stdenv.mkDerivation rec {
   name = "slang-2.3.2";
   src = fetchurl {
-    url = "http://www.jedsoft.org/releases/slang/${name}.tar.bz2";
+    url = "https://www.jedsoft.org/releases/slang/${name}.tar.bz2";
     sha256 = "06p379fqn6w38rdpqi98irxi2bf4llb0rja3dlgkqz7nqh7kp7pw";
   };
 

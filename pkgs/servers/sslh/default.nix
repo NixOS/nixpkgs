@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
   version = "1.19c";
 
   src = fetchurl {
-    url = "http://www.rutschle.net/tech/sslh/sslh-v${version}.tar.gz";
+    url = "https://www.rutschle.net/tech/sslh/sslh-v${version}.tar.gz";
     sha256 = "1wvvqj9r293skgqi28q4ixz7zwf301h1bf514p41xbi7ifldy4dv";
   };
 

@@ -6,7 +6,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     sha256 = "0sk4sg3hn88n44dxikipf3ggfj3ixrp22asb7nry9p0bkfaqdvrj";
-    url = "http://www.mavetju.org/download/dhcping-${version}.tar.gz";
+    url = "https://www.mavetju.org/download/dhcping-${version}.tar.gz";
   };
 
   enableParallelBuilding = true;

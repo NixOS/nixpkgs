@@ -95,6 +95,8 @@ rec {
 
   git-stree = callPackage ./git-stree { };
 
+  git-sync = callPackage ./git-sync { };
+
   git2cl = callPackage ./git2cl { };
 
   gitFastExport = callPackage ./fast-export { };

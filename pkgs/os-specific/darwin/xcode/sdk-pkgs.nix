@@ -25,9 +25,9 @@ rec {
   sdk = rec {
     name = "ios-sdk";
     type = "derivation";
-    outPath = xcode + "/Contents/Developer/Platforms/iPhone${sdkType}.platform/Developer/SDKs/iPhone${sdkType}${version}.sdk";
+    outPath = xcode + "/Contents/Developer/Platforms/${platform}.platform/Developer/SDKs/${platform}${version}.sdk";
 
-    sdkType = if targetPlatform.isiPhoneSimulator then "Simulator" else "OS";
+    platform = targetPlatform.xcodePlatform;
     version = targetPlatform.sdkVer;
   };
 
@@ -48,7 +48,10 @@ rec {
       mv cc-cflags.tmp $out/nix-support/cc-cflags
       echo "-target ${targetPlatform.config} -arch ${iosPlatformArch targetPlatform}" >> $out/nix-support/cc-cflags
       echo "-isystem ${sdk}/usr/include -isystem ${sdk}/usr/include/c++/4.2.1/ -stdlib=libstdc++" >> $out/nix-support/cc-cflags
-      echo "${if targetPlatform.isiPhoneSimulator then "-mios-simulator-version-min" else "-miphoneos-version-min"}=${minSdkVersion}" >> $out/nix-support/cc-cflags
+    '' + stdenv.lib.optionalString (sdk.platform == "iPhoneSimulator") ''
+      echo "-mios-simulator-version-min=${minSdkVersion}" >> $out/nix-support/cc-cflags
+    '' + stdenv.lib.optionalString (sdk.platform == "iPhoneOS") ''
+      echo "-miphoneos-version-min=${minSdkVersion}" >> $out/nix-support/cc-cflags
     '';
   }) // {
     inherit sdk;
@@ -60,7 +63,7 @@ rec {
     };
   } ''
     if ! [ -d ${sdk} ]; then
-        echo "You must have version ${sdk.version} of the iPhone${sdk.sdkType} sdk installed at ${sdk}" >&2
+        echo "You must have version ${sdk.version} of the ${sdk.platform} sdk installed at ${sdk}" >&2
         exit 1
     fi
     ln -s ${sdk}/usr $out

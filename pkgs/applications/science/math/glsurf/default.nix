@@ -6,7 +6,7 @@ stdenv.mkDerivation {
   name = "glsurf-3.3.1";
 
   src = fetchurl {
-    url = "http://lama.univ-savoie.fr/~raffalli/glsurf/glsurf-3.3.1.tar.gz";
+    url = "https://lama.univ-savoie.fr/~raffalli/glsurf/glsurf-3.3.1.tar.gz";
     sha256 = "0w8xxfnw2snflz8wdr2ca9f5g91w5vbyp1hwlx1v7vg83d4bwqs7";
   };
 

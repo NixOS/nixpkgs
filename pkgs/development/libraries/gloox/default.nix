@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   name = "gloox-${version}";
 
   src = fetchurl {
-    url = "http://camaya.net/download/gloox-${version}.tar.bz2";
+    url = "https://camaya.net/download/gloox-${version}.tar.bz2";
     sha256 = "1k57qgif1yii515m6jaqaibkdysfab6394bpawd2l67321f1a4rw";
   };
 

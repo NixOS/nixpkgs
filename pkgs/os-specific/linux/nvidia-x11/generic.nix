@@ -55,6 +55,7 @@ let
     outputDev = if libsOnly then null else "bin";
 
     kernel = if libsOnly then null else kernel.dev;
+    kernelVersion = if libsOnly then null else kernel.modDirVersion;
 
     hardeningDisable = [ "pic" "format" ];
 

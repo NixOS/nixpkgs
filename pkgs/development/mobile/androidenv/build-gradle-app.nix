@@ -101,4 +101,8 @@ stdenv.mkDerivation ({
     mkdir -p $out/nix-support
     echo "file binary-dist \"$(echo $out/*.apk)\"" > $out/nix-support/hydra-build-products
   '';
+
+  meta = {
+    license = stdenv.lib.licenses.unfree;
+  };
 } // builtins.removeAttrs args ["name" "mavenDeps"])

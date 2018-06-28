@@ -36,7 +36,7 @@ let
         --set-rpath "${atomEnv.libPath}" \
         $share/resources/app/apm/bin/node
       patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
-        $out/share/atom/resources/app.asar.unpacked/node_modules/symbols-view/vendor/ctags-linux
+        $share/resources/app.asar.unpacked/node_modules/symbols-view/vendor/ctags-linux
 
       dugite=$share/resources/app.asar.unpacked/node_modules/dugite
       rm -f $dugite/git/bin/git

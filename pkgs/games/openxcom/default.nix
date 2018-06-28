@@ -16,7 +16,7 @@ stdenv.mkDerivation {
 
   meta = {
     description = "Open source clone of UFO: Enemy Unknown";
-    homepage = http://openxcom.org;
+    homepage = https://openxcom.org;
     repositories.git = https://github.com/SupSuper/OpenXcom.git;
     maintainers = [ stdenv.lib.maintainers.cpages ];
     platforms = stdenv.lib.platforms.linux;
