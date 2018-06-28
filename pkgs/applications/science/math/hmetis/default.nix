@@ -16,15 +16,11 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     mkdir -p $out/bin
-    cp hmetis $out/bin/
-    patchelf --set-interpreter ${stdenv.glibc}/lib/ld-linux.so.2 $out/bin/hmetis
-    patchelf --set-rpath ${stdenv.glibc}/lib $out/bin/hmetis
-    cp khmetis $out/bin/
-    patchelf --set-interpreter ${stdenv.glibc}/lib/ld-linux.so.2 $out/bin/khmetis
-    patchelf --set-rpath ${stdenv.glibc}/lib $out/bin/khmetis
-    cp shmetis $out/bin/
-    patchelf --set-interpreter ${stdenv.glibc}/lib/ld-linux.so.2 $out/bin/shmetis
-    patchelf --set-rpath ${stdenv.glibc}/lib $out/bin/shmetis
+    for binaryfile in hmetis khmetis shmetis; do 
+      cp $binaryfile $out/bin
+      patchelf --set-interpreter ${stdenv.glibc}/lib/ld-linux.so.2 \
+        --set-rpath ${stdenv.glibc}/lib $out/bin/$binaryfile
+    done
   '';
 
   meta = with stdenv.lib; {
