@@ -21,7 +21,7 @@ buildGoPackage rec {
     description = "core implementation of validating DHT dApps in go";
     longDescription = "Holographic storage for distributed applications -- a validating monotonic DHT backed by authoritative hashchains for data provenance";
     homepage = "https://holochain.org/";
-    downloadpage = "https://developer.holochain.org/";
+    downloadPage = "https://developer.holochain.org/";
     license = stdenv.lib.licenses.gpl3;
     maintainers = with stdenv.lib.maintainers; [ gavin ];
     platforms = stdenv.lib.platforms.all;
