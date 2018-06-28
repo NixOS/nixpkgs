@@ -1165,6 +1165,7 @@ self: super: {
   text-regex-replace = addTestToolDepend super.text-regex-replace self.hspec-discover;
   system-extra = addTestToolDepend super.system-extra self.hspec-discover;
   t3-game = addTestToolDepend super.t3-game self.hspec-discover;
+  modern-uri = addTestToolDepend super.modern-uri self.hspec-discover;
 
 }
 
