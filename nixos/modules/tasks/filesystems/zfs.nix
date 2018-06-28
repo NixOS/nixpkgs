@@ -171,8 +171,12 @@ in
         default = config.boot.zfs.enableUnstable;
         description = ''
           Request encryption keys or passwords for all encrypted datasets on import.
-
           Dataset encryption is only supported in zfsUnstable at the moment.
+          For root pools the encryption key can be supplied via both an
+          interactive prompt (keylocation=prompt) and from a file
+          (keylocation=file://). Note that for data pools the encryption key can
+          be only loaded from a file and not via interactive prompt since the
+          import is processed in a background systemd service.
         '';
       };
 
@@ -394,6 +398,7 @@ in
             script = ''
               zpool_cmd="${packages.zfsUser}/sbin/zpool"
               ("$zpool_cmd" list "${pool}" >/dev/null) || "$zpool_cmd" import -d ${cfgZfs.devNodes} -N ${optionalString cfgZfs.forceImportAll "-f"} "${pool}"
+              ${optionalString cfgZfs.requestEncryptionCredentials "\"${packages.zfsUser}/sbin/zfs\" load-key -r \"${pool}\""}
             '';
           };
 
