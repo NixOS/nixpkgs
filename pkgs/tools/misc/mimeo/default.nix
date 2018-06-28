@@ -5,7 +5,7 @@ python3Packages.buildPythonApplication rec {
   version = "2017.6.6";
 
   src = fetchurl {
-    url = "http://xyne.archlinux.ca/projects/mimeo/src/${name}.tar.xz";
+    url = "https://xyne.archlinux.ca/projects/mimeo/src/${name}.tar.xz";
     sha256 = "126g3frks6zn6yc1r005qpmxg1pvvvf06ivpyvd9xribn2mwki2z";
   };
 

@@ -3,7 +3,7 @@
 stdenv.mkDerivation rec {
   name = "uni2ascii-4.18";
   src = fetchurl {
-    url = "http://billposer.org/Software/Downloads/${name}.tar.gz";
+    url = "https://billposer.org/Software/Downloads/${name}.tar.gz";
     sha256 = "03lklnzr6ngs4wqiqa7rifd246f441gfvardbsaa5l6fn9pbn94y";
   };
 

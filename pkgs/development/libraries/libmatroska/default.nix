@@ -4,7 +4,7 @@ stdenv.mkDerivation rec {
   name = "libmatroska-1.4.8";
 
   src = fetchurl {
-    url = "http://dl.matroska.org/downloads/libmatroska/${name}.tar.xz";
+    url = "https://dl.matroska.org/downloads/libmatroska/${name}.tar.xz";
     sha256 = "14n9sw974prr3yp4yjb7aadi6x2yz5a0hjw8fs3qigy5shh2piyq";
   };
 

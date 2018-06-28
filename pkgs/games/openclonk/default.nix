@@ -14,7 +14,7 @@ in stdenv.mkDerivation rec {
   name = "openclonk-${version}";
 
   src = fetchurl {
-    url = "http://www.openclonk.org/builds/release/8.1/openclonk-${version}-src.tar.bz2";
+    url = "https://www.openclonk.org/builds/release/8.1/openclonk-${version}-src.tar.bz2";
     sha256 = "0imkqjp8lww5p0cnqf4k4mb2v682mnsas63qmiz17rspakr7fxik";
   };
 

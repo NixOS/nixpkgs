@@ -12,7 +12,7 @@ let
     version = "150";
 
     src = fetchurl {
-      url = "http://wsr.imagej.net/distros/cross-platform/ij150.zip";
+      url = "https://wsr.imagej.net/distros/cross-platform/ij150.zip";
       sha256 = "97aba6fc5eb908f5160243aebcdc4965726693cb1353d9c0d71b8f5dd832cb7b";
     };
     buildInputs = [ unzip makeWrapper ];

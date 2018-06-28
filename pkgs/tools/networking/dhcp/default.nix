@@ -7,7 +7,7 @@ stdenv.mkDerivation rec {
   version = "4.4.1";
 
   src = fetchurl {
-    url = "http://ftp.isc.org/isc/dhcp/${version}/${name}.tar.gz";
+    url = "https://ftp.isc.org/isc/dhcp/${version}/${name}.tar.gz";
     sha256 = "025nfqx4zwdgv4b3rkw26ihcj312vir08jk6yi57ndmb4a4m08ia";
   };
 

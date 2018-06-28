@@ -6,7 +6,7 @@ stdenv.mkDerivation  rec {
   version = "1.6.0";
 
   src = fetchurl {
-    url = "http://download.drobilla.net/${name}.tar.bz2";
+    url = "https://download.drobilla.net/${name}.tar.bz2";
     sha256 = "1x2wpzzx2cgvz3dgdcgsj8dr0w3zsasy62mvl199bsdj5fbjaili";
   };
 

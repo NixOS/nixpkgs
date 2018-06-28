@@ -7,7 +7,7 @@ let
 
   srcs = {
     riak = fetchurl {
-      url = "http://s3.amazonaws.com/downloads.basho.com/riak/2.2/2.2.0/riak-2.2.0.tar.gz";
+      url = "https://s3.amazonaws.com/downloads.basho.com/riak/2.2/2.2.0/riak-2.2.0.tar.gz";
       sha256 = "0kl28bpyzajcllybili46jfr1schl45w5ysii187jr0ssgls2c9p";
     };
     solr = fetchurl {

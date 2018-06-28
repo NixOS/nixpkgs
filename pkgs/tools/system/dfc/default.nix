@@ -4,7 +4,7 @@ stdenv.mkDerivation rec {
   name = "dfc-3.0.5";
 
   src = fetchurl {
-    url = "http://projects.gw-computing.net/attachments/download/467/${name}.tar.gz";
+    url = "https://projects.gw-computing.net/attachments/download/467/${name}.tar.gz";
     sha256 = "0yl5dl1nydinji71zz37c7myg3vg9jzxq89rcjqlfcy5dcfpm51w";
   };
 

@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
   version = "0.5.0";
 
   src = fetchurl {
-    url = "http://www.extatic.org/downloads/uhub/uhub-${version}-src.tar.bz2";
+    url = "https://www.extatic.org/downloads/uhub/uhub-${version}-src.tar.bz2";
     sha256 = "1xcqjz20lxikzn96f4f69mqyl9y985h9g0gyc9f7ckj18q22b5j5";
   };
 
