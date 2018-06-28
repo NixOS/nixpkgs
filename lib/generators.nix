@@ -173,54 +173,53 @@ rec {
                        fna);
       in if fna == {}    then "<λ>"
                          else "<λ:{${showFnas}}>"
-    else abort "toPretty: should never happen (v = ${v})";
+    else abort "generators.toPretty: should never happen (v = ${v})";
 
   # PLIST handling
-  toPLIST = {}: v: let
-    pprExpr = ind: x: with builtins;
+  toPlist = {}: v: let
+    expr = ind: x: with builtins;
       if isNull x then "" else
-      if isBool x then pprBool ind x else
-      if isInt x then pprInt ind x else
-      if isString x then pprStr ind x else
-      if isList x then pprList ind x else
-      if isAttrs x then pprAttrs ind x else
-      abort "pprExpr: should never happen (v = ${v})";
+      if isBool x then bool ind x else
+      if isInt x then int ind x else
+      if isString x then str ind x else
+      if isList x then list ind x else
+      if isAttrs x then attrs ind x else
+      abort "generators.toPlist: should never happen (v = ${v})";
 
-    pprLiteral = ind: x: ind + x;
+    literal = ind: x: ind + x;
 
-    pprBool = ind: x: pprLiteral ind  (if x then "<true/>" else "<false/>");
-    pprInt = ind: x: pprLiteral ind "<integer>${toString x}</integer>";
-    pprStr = ind: x: pprLiteral ind "<string>${x}</string>";
-    pprKey = ind: x: pprLiteral ind "<key>${x}</key>";
+    bool = ind: x: literal ind  (if x then "<true/>" else "<false/>");
+    int = ind: x: literal ind "<integer>${toString x}</integer>";
+    str = ind: x: literal ind "<string>${x}</string>";
+    key = ind: x: literal ind "<key>${x}</key>";
 
-    pprIndent = ind: pprExpr "\t${ind}";
+    indent = ind: expr "\t${ind}";
 
-    pprItem = ind: libStr.concatMapStringsSep "\n" (pprIndent ind);
+    item = ind: libStr.concatMapStringsSep "\n" (indent ind);
 
-    pprList = ind: x: libStr.concatStringsSep "\n" [
-      (pprLiteral ind "<array>")
-      (pprItem ind x)
-      (pprLiteral ind "</array>")
+    list = ind: x: libStr.concatStringsSep "\n" [
+      (literal ind "<array>")
+      (item ind x)
+      (literal ind "</array>")
     ];
 
-    pprAttrs = ind: x: libStr.concatStringsSep "\n" [
-      (pprLiteral ind "<dict>")
-      (pprAttr ind x)
-      (pprLiteral ind "</dict>")
+    attrs = ind: x: libStr.concatStringsSep "\n" [
+      (literal ind "<dict>")
+      (attr ind x)
+      (literal ind "</dict>")
     ];
 
-    pprAttr = let attrFilter = name: value: name != "_module" && value != null;
+    attr = let attrFilter = name: value: name != "_module" && value != null;
     in ind: x: libStr.concatStringsSep "\n" (lib.flatten (lib.mapAttrsToList
       (name: value: lib.optional (attrFilter name value) [
-      (pprKey "\t${ind}" name)
-      (pprExpr "\t${ind}" value)
+      (key "\t${ind}" name)
+      (expr "\t${ind}" value)
     ]) x));
 
-  in ''
-    <?xml version="1.0" encoding="UTF-8"?>
-    <!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
-    <plist version="1.0">
-  ${pprExpr "" v}
-    </plist>'';
+  in ''<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+${expr "" v}
+</plist>'';
 
 }
