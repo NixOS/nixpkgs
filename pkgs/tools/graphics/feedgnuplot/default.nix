@@ -37,8 +37,11 @@ buildPerlPackage rec {
     wrapProgram $out/bin/feedgnuplot \
         --prefix "PATH" ":" "$PATH" \
         --prefix "PERL5LIB" ":" "$PERL5LIB"
+    install -D -m 444 -t $out/share/bash-completion/completions \
+        completions/bash/feedgnuplot
+    install -D -m 444 -t $out/share/zsh/site-functions \
+        completions/zsh/_feedgnuplot
   '';
-
 
   meta = with stdenv.lib; {
     description = "General purpose pipe-oriented plotting tool";
