@@ -3,13 +3,13 @@
 
 rustPlatform.buildRustPackage rec {
   name = "dwm-status-${version}";
-  version = "1.0.0";
+  version = "1.1.1";
 
   src = fetchFromGitHub {
     owner = "Gerschtli";
     repo = "dwm-status";
     rev = version;
-    sha256 = "0r0irzm5y9xvqxrr8gvvn4x9c56qwgynljnzba4mh5s5dpbmz0iq";
+    sha256 = "0k6r72qgns8i2y1ks0k9fwlabgndww5rssd13mis5bvkqla8j9i9";
   };
 
   nativeBuildInputs = [ makeWrapper pkgconfig ];
@@ -23,7 +23,7 @@ rustPlatform.buildRustPackage rec {
   '';
 
   meta = with stdenv.lib; {
-    description = "DWM status service which dynamically updates when needed";
+    description = "Highly performant and configurable DWM status service";
     homepage = https://github.com/Gerschtli/dwm-status;
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ gerschtli ];
