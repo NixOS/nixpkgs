@@ -171,11 +171,12 @@ in
         default = config.boot.zfs.enableUnstable;
         description = ''
           Request encryption keys or passwords for all encrypted datasets on import.
-          This works for root pools with keylocation prompt or file, and for data
-          pools with keylocation file. Data pools with prompt are not working, because
-          the prompt is not handled by systemd yet.
-
           Dataset encryption is only supported in zfsUnstable at the moment.
+          For root pools the encryption key can be supplied via both an
+          interactive prompt (keylocation=prompt) and from a file
+          (keylocation=file://). Note that for data pools the encryption key can
+          be only loaded from a file and not via interactive prompt since the
+          import is processed in an background systemd service.
         '';
       };
 
