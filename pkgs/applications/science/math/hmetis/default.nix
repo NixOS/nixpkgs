@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "hMETIS is a set of programs for partitioning hypergraphs";
-    homepage = http://www.gnu.org/software/hello/manual/;
+    homepage = http://glaros.dtc.umn.edu/gkhome/metis/hmetis/overview;  
     license = licenses.gpl3Plus;
     platforms = [ "i686-linux" "x86_64-linux" ];
   };
