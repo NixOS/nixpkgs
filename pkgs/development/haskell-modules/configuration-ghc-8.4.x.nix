@@ -23,6 +23,7 @@ self: super: {
   ghc-prim = null;
   ghci = null;
   haskeline = null;
+  hoopl = self.hoopl_3_10_2_2;   # no longer a core library in GHC 8.4.x
   hpc = null;
   integer-gmp = null;
   mtl = null;
