@@ -27,7 +27,9 @@ stdenv.mkDerivation rec {
       --set JAVA_HOME "${jre_headless}" \
       --set ES_JVM_OPTIONS "$out/config/jvm.options"
 
-    wrapProgram $out/bin/elasticsearch-plugin --set JAVA_HOME "${jre_headless}"
+    wrapProgram $out/bin/elasticsearch-plugin \
+      --prefix ES_CLASSPATH : "$out/lib/*" \
+      --set JAVA_HOME "${jre_headless}"
   '';
 
   meta = {
