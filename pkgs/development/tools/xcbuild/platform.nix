@@ -286,11 +286,11 @@ let
 in
 
 runCommand "MacOSX.platform" {} ''
-  install -D ${writeText "Info.plist" (toPLIST Info)} $out/Info.plist
-  install -D ${writeText "version.plist" (toPLIST Version)} $out/version.plist
-  install -D ${writeText "Architectures.xcspec" (toPLIST Architectures)} $out/Developer/Library/Xcode/Specifications/Architectures.xcspec
-  install -D ${writeText "PackageTypes.xcspec" (toPLIST PackageTypes)} $out/Developer/Library/Xcode/Specifications/PackageTypes.xcspec
-  install -D ${writeText "ProductTypes.xcspec" (toPLIST ProductTypes)} $out/Developer/Library/Xcode/Specifications/ProductTypes.xcspec
+  install -D ${writeText "Info.plist" (toPLIST {} Info)} $out/Info.plist
+  install -D ${writeText "version.plist" (toPLIST {} Version)} $out/version.plist
+  install -D ${writeText "Architectures.xcspec" (toPLIST {} Architectures)} $out/Developer/Library/Xcode/Specifications/Architectures.xcspec
+  install -D ${writeText "PackageTypes.xcspec" (toPLIST {} PackageTypes)} $out/Developer/Library/Xcode/Specifications/PackageTypes.xcspec
+  install -D ${writeText "ProductTypes.xcspec" (toPLIST {} ProductTypes)} $out/Developer/Library/Xcode/Specifications/ProductTypes.xcspec
 
   mkdir -p $out/Developer/SDKs/
   cd $out/Developer/SDKs/
