@@ -2,7 +2,7 @@
 }:
 
 let
-  version = "60.3";
+  version = "61.1";
 in stdenv.mkDerivation rec {
   name = "libndctl-${version}";
 
@@ -10,7 +10,7 @@ in stdenv.mkDerivation rec {
     owner = "pmem";
     repo = "ndctl";
     rev = "v${version}";
-    sha256 = "0w19yh6f9skf5zy4bhdjlrn3wdx5xx9cq8j6h04cmw4nla6zj9ar";
+    sha256 = "1k996p757nwvkg86firx0yh39dsa9jx5w14rlfl4hlg2h9kkivnx";
   };
 
   outputs = [ "out" "man" "dev" ];
