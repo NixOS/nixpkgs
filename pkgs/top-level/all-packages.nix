@@ -9284,7 +9284,7 @@ with pkgs;
     else if name == "uclibc" then targetPackages.uclibcCross
     else if name == "musl" then targetPackages.muslCross or muslCross
     else if name == "msvcrt" then targetPackages.windows.mingw_w64 or windows.mingw_w64
-    else if targetPlatform.useiOSPrebuilt then targetPackages.iosSdkPkgs.libraries
+    else if targetPlatform.useiOSPrebuilt then targetPackages.darwin.iosSdkPkgs.libraries
     else if name == "libSystem" then darwin.xcode
     else throw "Unknown libc";
 
