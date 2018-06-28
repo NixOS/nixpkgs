@@ -2,8 +2,10 @@
 , fetchPypi
 , buildPythonPackage
 , cython
-, sphinx
+, pariSupport ? true, pari # for interfacing with the PARI/GP signal handler
 }:
+
+assert pariSupport -> pari != null;
 
 buildPythonPackage rec {
   pname = "cysignals";
@@ -14,6 +16,8 @@ buildPythonPackage rec {
     sha256 = "15nky8siwlc7s8v23vv4m0mnxa1z6jcs2qfr26m2mkw9j9g2na2j";
   };
 
+  # explicit check:
+  # build/src/cysignals/implementation.c:27:2: error: #error "cysignals must be compiled without _FORTIFY_SOURCE"
   hardeningDisable = [
     "fortify"
   ];
@@ -25,6 +29,10 @@ buildPythonPackage rec {
     # Make sure cysignals-CSI is in PATH
     export PATH="$out/bin:$PATH"
   '';
+
+  buildInputs = lib.optionals pariSupport [
+    pari
+  ];
 
   propagatedBuildInputs = [
     cython
