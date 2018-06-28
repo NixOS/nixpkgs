@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     description = "hMETIS is a set of programs for partitioning hypergraphs";
     homepage = http://glaros.dtc.umn.edu/gkhome/metis/hmetis/overview;  
-    license = licenses.gpl3Plus;
+    license = licenses.unfree;
     platforms = [ "i686-linux" "x86_64-linux" ];
   };
 }
