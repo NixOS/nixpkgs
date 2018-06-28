@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "lxqt-l10n-${version}";
-  version = "0.12.0";
+  version = "0.13.0";
 
   src = fetchFromGitHub {
     owner = "lxde";
     repo = "lxqt-l10n";
     rev = version;
-    sha256 = "025zg5y9f286p74rab4yxyz4cqlh4hqjq43xxpi76ma2fy2s03a4";
+    sha256 = "0q1hzj6sa4wc8sgqqqsqfldjpnvihacfq73agvc2li3q6qi5rr0k";
   };
 
   nativeBuildInputs = [
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     substituteInPlace CMakeLists.txt \
       --replace "\''${LXQT_TRANSLATIONS_DIR}" "$out"/share/lxqt/translations
   '';
-  
+
   meta = with stdenv.lib; {
     description = "Translations of LXQt";
     homepage = https://github.com/lxde/lxqt-l10n;

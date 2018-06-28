@@ -4,13 +4,13 @@
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";
   pname = "liblxqt";
-  version = "0.12.0";
+  version = "0.13.0";
 
   src = fetchFromGitHub {
-    owner = "lxde";
+    owner = "lxqt";
     repo = pname;
     rev = version;
-    sha256 = "1852vfbkbpw49i8ad682jhqmnskmc9a90qwpalipgak7m64azg3j";
+    sha256 = "1lbvnx6gg15k7fy1bnv5sjji659f603glblcl8c9psh0m1cjdbll";
   };
 
   nativeBuildInputs = [
@@ -31,11 +31,11 @@ stdenv.mkDerivation rec {
     "-DPULL_TRANSLATIONS=NO"
     "-DLXQT_ETC_XDG_DIR=/run/current-system/sw/etc/xdg"
   ];
-  
+
   patchPhase = ''
     sed -i 's|set(LXQT_SHARE_DIR .*)|set(LXQT_SHARE_DIR "/run/current-system/sw/share/lxqt")|' CMakeLists.txt
   '';
-  
+
   meta = with stdenv.lib; {
     description = "Core utility library for all LXQt components";
     homepage = https://github.com/lxde/liblxqt;
