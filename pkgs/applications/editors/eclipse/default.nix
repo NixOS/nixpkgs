@@ -165,7 +165,7 @@ rec {
 
   ### Eclipse SDK
 
-  eclipse-sdk = eclipse-sdk-47; # always point to latest
+  eclipse-sdk = eclipse-sdk-48; # always point to latest
 
   eclipse-sdk-46 = buildEclipse {
     name = "eclipse-sdk-4.6.2";
@@ -193,6 +193,21 @@ rec {
       "i686-linux" = fetchurl {
           url = https://www.eclipse.org/downloads/download.php?r=1&nf=1&file=/eclipse/downloads/drops4/R-4.7.3a-201803300640/eclipse-SDK-4.7.3a-linux-gtk.tar.gz;
           sha512 = "b0b936fd4142ae86ec5c30535cd5e4caf6fe313d814ae5b16f300635e4163a79b748b1eee11792a135114f2265678a74821ec80c2bfd69872769b6d0ccbcde3a";
+        };
+    };
+  };
+
+  eclipse-sdk-48 = buildEclipse {
+    name = "eclipse-sdk-4.8";
+    description = "Eclipse Photon Classic";
+    sources = {
+      "x86_64-linux" = fetchurl {
+          url = https://www.eclipse.org/downloads/download.php?r=1&nf=1&file=/eclipse/downloads/drops4/R-4.8-201806110500/eclipse-SDK-4.8-linux-gtk-x86_64.tar.gz;
+          sha512 = "357ea9e7f426c68ced693f1c7b76eae23f9e3c7893de1f12d17994ec17b447896b5daa7292d5fbf6d9c4e5b7fd637ca5b2a6ba8ce40a2a7c2fe06f2124d31b75";
+        };
+      "i686-linux" = fetchurl {
+          url = https://www.eclipse.org/downloads/download.php?r=1&nf=1&file=/eclipse/downloads/drops4/R-4.8-201806110500/eclipse-SDK-4.8-linux-gtk.tar.gz;
+          sha512 = "c7cae7baa3978d48477090bb9941e85b4c7484021ece9c5c77a7e859e57e5c1f13556262f92b561cfb11f828b934bad7a6018be7b8fd9454e3991e8d5cae9917";
         };
     };
   };
