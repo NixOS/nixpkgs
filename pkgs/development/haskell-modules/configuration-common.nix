@@ -1082,6 +1082,7 @@ self: super: {
   hspec-attoparsec = addTestToolDepend super.hspec-attoparsec self.hspec-meta;
   hspec-contrib = addTestToolDepend super.hspec-contrib self.hspec-meta;
   hspec-wai = addTestToolDepend super.hspec-wai self.hspec-meta;
+  hspec-checkers = addTestToolDepend super.hspec-checkers self.hspec-meta;
 
   # The build-tool-depends this hacks around has been added on master.
   base-compat = addTestToolDepend super.base-compat self.hspec-discover;
@@ -1157,16 +1158,27 @@ self: super: {
   typenums = addTestToolDepend super.typenums self.hspec-discover;
   type-assertions = addTestToolDepend super.type-assertions self.hspec-discover;
   tsne = addTestToolDepend super.tsne self.hspec-discover;
-  tiphys = addTestToolDepend super.tipys self.hspec-discover;
+  tiphys = addTestToolDepend super.tiphys self.hspec-discover;
   ticker = addTestToolDepend super.ticker self.hspec-discover;
   thread-hierarchy = addTestToolDepend super.thread-hierarchy self.hspec-discover;
   th-to-exp = addTestToolDepend super.th-to-exp self.hspec-discover;
-  th-nowq = addTestToolDepend super.th-to-exp self.markdown-unlit;
+  th-nowq = addTestToolDepend super.th-nowq self.markdown-unlit;
   text-regex-replace = addTestToolDepend super.text-regex-replace self.hspec-discover;
   system-extra = addTestToolDepend super.system-extra self.hspec-discover;
   t3-game = addTestToolDepend super.t3-game self.hspec-discover;
   modern-uri = addTestToolDepend super.modern-uri self.hspec-discover;
-  heist = addTestToolDepend super.heist pkgs.pandoc;
+  dimensional = addTestToolDepend super.dimensional self.hspec-discover;
+  eventful-core = addTestToolDepend super.eventful-core self.hspec-discover;
+  gridbox = addTestToolDepend super.gridbox self.hspec-discover;
+  greskell-core = addTestToolDepend super.greskell-core self.hspec-discover;
+  dns = addTestToolDepend super.dns self.hspec-discover;
+  hapistrano = addTestToolDepend super.hapistrano self.hspec-discover;
+  hw-hspec-hedgehog = addTestToolDepend super.hw-hspec-hedgehog self.hspec-discover;
+  update-repos = addTestToolDepend super.update-repos self.hspec-discover;
+  invariant = addTestToolDepend super.invariant self.hspec-discover;
+  ulid = addTestToolDepend super.ulid self.hspec-discover;
+  matrix-market-attoparsec = addTestToolDepend super.matrix-market-attoparsec self.hspec-discover;
+  paymill = addTestToolDepend super.paymill self.hspec-discover;
 
 }
 
