@@ -18719,7 +18719,7 @@ with pkgs;
     erlang = erlangR18;
   };
   
-  write_stylus = callPackage ../applications/graphics/write_stylus/ { };
+  write_stylus = callPackage ../applications/graphics/write_stylus { };
 
   alsamixer.app = callPackage ../applications/window-managers/windowmaker/dockapps/alsamixer.app.nix { };
 
