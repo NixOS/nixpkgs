@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, m4, perl }:
+{ stdenv, lib, fetchurl, m4, perl }:
 
 stdenv.mkDerivation rec {
   name = "bison-2.7";
@@ -10,6 +10,8 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ m4 ] ++ stdenv.lib.optional doCheck perl;
   propagatedBuildInputs = [ m4 ];
+
+  patches = lib.optional stdenv.isDarwin ./darwin-vasnprintf.patch;
 
   doCheck = true;
   # M4 = "${m4}/bin/m4";
