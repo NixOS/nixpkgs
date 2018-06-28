@@ -1166,6 +1166,7 @@ self: super: {
   system-extra = addTestToolDepend super.system-extra self.hspec-discover;
   t3-game = addTestToolDepend super.t3-game self.hspec-discover;
   modern-uri = addTestToolDepend super.modern-uri self.hspec-discover;
+  heist = addTestToolDepend super.heist pkgs.pandoc;
 
 }
 
