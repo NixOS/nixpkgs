@@ -24,15 +24,16 @@ rec {
 
   firefox = common rec {
     pname = "firefox";
-    version = "60.0.2";
+    version = "61.0";
     src = fetchurl {
       url = "mirror://mozilla/firefox/releases/${version}/source/firefox-${version}.source.tar.xz";
-      sha512 = "2my4v8al3swwbiqcp3a5y89imly6apc2p9q0cbkhbiz0sqylc0l02jh0qp95migmik56m4prwqdi81kgqs7cw5r2np3mm6sc1b45mkg";
+      sha512 = "0ww2j5gxr7h142lfi0xvckvd7vmnha72j8c0wyyqmmp1rr341f10vfd0hvawiagik4ih6dz8h5pmkl67zdnwqc3z75vwnci20ajlg2s";
     };
 
-    patches = nixpkgsPatches ++ [
+    patches = [
+      ./env_var_for_system_dir.patch
       ./no-buildconfig.patch
-    ] ++ lib.optional stdenv.isAarch64 firefox60_aarch64_skia_patch;
+    ];
 
     meta = {
       description = "A web browser built from Firefox source tree";
