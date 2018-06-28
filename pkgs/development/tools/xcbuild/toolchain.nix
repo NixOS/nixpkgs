@@ -4,7 +4,7 @@
 let
 
   inherit (lib) getBin optionalString;
-  inherit (lib.generators) toPLIST;
+  inherit (lib.generators) toPlist;
 
   ToolchainInfo = {
     Identifier = toolchainName;
@@ -24,7 +24,7 @@ runCommand "nixpkgs.xctoolchain" {
   nativeBuildInputs = [ makeWrapper ];
 } (''
   mkdir -p $out
-  install -D ${writeText "ToolchainInfo.plist" (toPLIST {} ToolchainInfo)} $out/ToolchainInfo.plist
+  install -D ${writeText "ToolchainInfo.plist" (toPlist {} ToolchainInfo)} $out/ToolchainInfo.plist
 
   mkdir -p $out/usr/include
   mkdir -p $out/usr/lib
