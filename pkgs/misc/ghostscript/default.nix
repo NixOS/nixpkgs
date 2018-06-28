@@ -9,8 +9,8 @@ assert x11Support -> xlibsWrapper != null;
 assert cupsSupport -> cups != null;
 let
   version = "9.${ver_min}";
-  ver_min = "22";
-  sha256 = "1fyi4yvdj39bjgs10klr31cda1fbx1ar7a7b7yz7v68gykk65y61";
+  ver_min = "23";
+  sha256 = "1ng8d9fm5lza7k1f7ybc791275c07z5hcmpkrl2i226nshkxrkhz";
 
   fonts = stdenv.mkDerivation {
     name = "ghostscript-fonts";
@@ -58,6 +58,11 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./urw-font-files.patch
+    (fetchpatch {
+      name = "CVE-2018-10194.patch";
+      url = "http://git.ghostscript.com/?p=ghostpdl.git;a=patch;h=39b1e54b2968620723bf32e96764c88797714879;hp=fb4c58a0e097e39547dde3d46893ce1b05d19539";
+      sha256 = "0zdd22gj0b8zf1rfzd3f6hxqwkfn3q3qgb2fhzclfw009mlszknx";
+    })
   ];
 
   preConfigure = ''
@@ -90,7 +95,7 @@ stdenv.mkDerivation rec {
     cp -r Resource "$out/share/ghostscript/${version}"
 
     mkdir -p "$doc/share/ghostscript/${version}"
-    mv "$out/share/ghostscript/${version}"/{doc,examples} "$doc/share/ghostscript/${version}/"
+    mv "$out/share/ghostscript/${version}"/doc "$doc/share/ghostscript/${version}/"
 
     ln -s "${fonts}" "$out/share/ghostscript/fonts"
   '' + stdenv.lib.optionalString stdenv.isDarwin ''
