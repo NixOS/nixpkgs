@@ -4,7 +4,7 @@ stdenv.mkDerivation rec {
   name = "smem-1.4";
 
   src = fetchurl {
-    url = "http://www.selenic.com/smem/download/${name}.tar.gz";
+    url = "https://www.selenic.com/smem/download/${name}.tar.gz";
     sha256 = "1v31vy23s7szl6vdrllq9zbg58bp36jf5xy3fikjfg6gyiwgia9f";
   };
 

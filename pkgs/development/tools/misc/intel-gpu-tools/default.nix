@@ -6,7 +6,7 @@ stdenv.mkDerivation rec {
   name = "intel-gpu-tools-1.22";
 
   src = fetchurl {
-    url = "http://xorg.freedesktop.org/archive/individual/app/${name}.tar.xz";
+    url = "https://xorg.freedesktop.org/archive/individual/app/${name}.tar.xz";
     sha256 = "0p4swf9577p6hzglw1lh2sz63wjkk37b7691saj2qw8ha7fc2rix";
   };
 

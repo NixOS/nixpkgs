@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
   version = "3.0";
 
   src = fetchurl {
-    url = "http://ftp.gnu.org/gnu/gvpe/gvpe-${version}.tar.gz";
+    url = "https://ftp.gnu.org/gnu/gvpe/gvpe-${version}.tar.gz";
     sha256 = "1v61mj25iyd91z0ir7cmradkkcm1ffbk52c96v293ibsvjs2s2hf";
   };
 

@@ -47,7 +47,7 @@ in stdenv.mkDerivation {
   name = "virtualbox-${version}";
 
   src = fetchurl {
-    url = "http://download.virtualbox.org/virtualbox/${version}/VirtualBox-${version}.tar.bz2";
+    url = "https://download.virtualbox.org/virtualbox/${version}/VirtualBox-${version}.tar.bz2";
     sha256 = main;
   };
 

@@ -9,7 +9,7 @@ in stdenv.mkDerivation rec {
   name = "s6-linux-utils-${version}";
 
   src = fetchurl {
-    url = "http://www.skarnet.org/software/s6-linux-utils/${name}.tar.gz";
+    url = "https://www.skarnet.org/software/s6-linux-utils/${name}.tar.gz";
     sha256 = "0245rmk7wfyyfsi4g7f0niprwlvqlwkbyjxflb8kkbvhwfdavqip";
   };
 

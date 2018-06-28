@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
   version = "1.1";
 
   src = fetchurl {
-    url = "http://www.codon.org.uk/~mjg59/vbetool/download/${name}.tar.gz";
+    url = "https://www.codon.org.uk/~mjg59/vbetool/download/${name}.tar.gz";
     sha256 = "0m7rc9v8nz6w9x4x96maza139kin6lg4hscy6i13fna4672ds9jd";
   };
 

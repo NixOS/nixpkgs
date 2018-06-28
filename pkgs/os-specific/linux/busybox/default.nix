@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
   # nix-build pkgs/stdenv/linux/make-bootstrap-tools.nix -A test
   # still builds after the update.
   src = fetchurl {
-    url = "http://busybox.net/downloads/${name}.tar.bz2";
+    url = "https://busybox.net/downloads/${name}.tar.bz2";
     sha256 = "0smfn8hlds6nx8war62kyaykg3n7mxbjjfcpsgz84znwk4v4mhg3";
   };
 

@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
   '';
 
   src = fetchurl {
-    url = "http://qgis.org/downloads/${name}.tar.bz2";
+    url = "https://qgis.org/downloads/${name}.tar.bz2";
     sha256 = "0bm9sv268lc3v48zjypsjjs62xnyb7zabzrms4jsy020waz6sk9g";
   };
 

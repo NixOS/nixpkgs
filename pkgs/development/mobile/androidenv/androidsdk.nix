@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
 
   src = if (stdenv.system == "i686-linux" || stdenv.system == "x86_64-linux")
     then fetchurl {
-      url = "http://dl.google.com/android/repository/tools_r${version}-linux.zip";
+      url = "https://dl.google.com/android/repository/tools_r${version}-linux.zip";
       sha256 = "0gnk49pkwy4m0nqwm1xnf3w4mfpi9w0kk7841xlawpwbkj0icxap";
     }
     else if stdenv.system == "x86_64-darwin" then fetchurl {

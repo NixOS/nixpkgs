@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   version = "104";
 
   src = fetchurl {
-    url = "http://caml.inria.fr/pub/distrib/ocaml-4.04/ocaml-4.04.0.tar.gz";
+    url = "https://caml.inria.fr/pub/distrib/ocaml-4.04/ocaml-4.04.0.tar.gz";
     sha256 = "1pi2hdm9lxhn45qvfqfss1hpa4jijm14qgmrgajsadxqdiplhqyb";
   };
 

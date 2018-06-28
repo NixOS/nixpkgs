@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
   name = "japa-${version}";
 
   src = fetchurl {
-    url = "http://kokkinizita.linuxaudio.org/linuxaudio/downloads/${name}.tar.bz2";
+    url = "https://kokkinizita.linuxaudio.org/linuxaudio/downloads/${name}.tar.bz2";
     sha256 = "1jhj7s4vqk5c4lchdall0kslvj5sh91902hhfjvs6r3a5nrhwcp0";
   };
 

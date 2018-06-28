@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   version = "3.9";
 
   src = fetchurl {
-    url = "http://distfiles.audacious-media-player.org/audacious-${version}-gtk3.tar.bz2";
+    url = "https://distfiles.audacious-media-player.org/audacious-${version}-gtk3.tar.bz2";
     sha256 = "0dc7fg0v2l2j4h9cz1baz7rf4n0a5jgk09qvsj806sh6jp7w6ipm";
   };
 

@@ -4,7 +4,7 @@ stdenv.mkDerivation rec {
   name = "iperf-3.5";
 
   src = fetchurl {
-    url = "http://downloads.es.net/pub/iperf/${name}.tar.gz";
+    url = "https://downloads.es.net/pub/iperf/${name}.tar.gz";
     sha256 = "1m9cyycv70s8nlbgr1lqwr155ixk17np0nzqgwaw3f51vkndk6sk";
   };
 

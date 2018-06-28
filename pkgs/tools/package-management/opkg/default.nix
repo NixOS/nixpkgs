@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
   version = "0.3.6";
   name = "opkg-${version}";
   src = fetchurl {
-    url = "http://downloads.yoctoproject.org/releases/opkg/opkg-${version}.tar.gz";
+    url = "https://downloads.yoctoproject.org/releases/opkg/opkg-${version}.tar.gz";
     sha256 = "02ykhjpyxmh0qrqvc1s3vlhnr6wyxkcwqb8dplxqmkz83gkg01zn";
   };
 

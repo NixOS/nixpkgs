@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
   version = "1.5";
 
   src = fetchurl {
-    url = "http://cvc4.cs.stanford.edu/downloads/builds/src/cvc4-${version}.tar.gz";
+    url = "https://cvc4.cs.stanford.edu/downloads/builds/src/cvc4-${version}.tar.gz";
     sha256 = "0yxxawgc9vd2cz883swjlm76rbdkj48n7a8dfppsami530y2rvhi";
   };
 

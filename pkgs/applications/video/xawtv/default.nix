@@ -4,7 +4,7 @@
 stdenv.mkDerivation rec {
   name = "xawtv-3.104";
   src = fetchurl {
-    url = "http://linuxtv.org/downloads/xawtv/${name}.tar.bz2";
+    url = "https://linuxtv.org/downloads/xawtv/${name}.tar.bz2";
     sha256 = "0jnvbahxmx9jw8g2519wmc1dq9afnlqcrzc876fcbf2x1iz39qxr";
   };
 

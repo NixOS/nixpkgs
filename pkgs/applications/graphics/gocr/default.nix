@@ -4,7 +4,7 @@ stdenv.mkDerivation rec {
   name = "gocr-0.51";
 
   src = fetchurl {
-    url = "http://www-e.uni-magdeburg.de/jschulen/ocr/${name}.tar.gz";
+    url = "https://www-e.uni-magdeburg.de/jschulen/ocr/${name}.tar.gz";
     sha256 = "14i6zi6q11h6d0qds2cpvgvhbxk5xaa027h8cd0wy1zblh7sxckf";
   };
 

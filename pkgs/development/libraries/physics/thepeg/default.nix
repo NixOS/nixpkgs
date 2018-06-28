@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
   version = "2.1.3";
 
   src = fetchurl {
-    url = "http://www.hepforge.org/archive/thepeg/ThePEG-${version}.tar.bz2";
+    url = "https://www.hepforge.org/archive/thepeg/ThePEG-${version}.tar.bz2";
     sha256 = "030wpk78mwb56iph5iqmblsxgzpydsa25bbkv07bihihfm8gds0n";
   };
 

@@ -8,7 +8,7 @@ in stdenv.mkDerivation rec {
   name = "gegl-${version}";
 
   src = fetchurl {
-    url = "http://download.gimp.org/pub/gegl/${stdenv.lib.versions.majorMinor version}/${name}.tar.bz2";
+    url = "https://download.gimp.org/pub/gegl/${stdenv.lib.versions.majorMinor version}/${name}.tar.bz2";
     sha256 = "13bzl0k5l12pk8bkcq4ar7wscbnw7jswhp34mwfsrf10kp0qndba";
   };
 

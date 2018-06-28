@@ -5,7 +5,7 @@ stdenv.mkDerivation (rec {
   version = "0.12";
 
   src = fetchurl {
-    url = "http://askra.de/software/prooftree/releases/prooftree-${version}.tar.gz";
+    url = "https://askra.de/software/prooftree/releases/prooftree-${version}.tar.gz";
     sha256 = "08yp66j05pdkdpv9xkfqymqy82mir5xbwfh9mkzhh219xkps4b4m";
   };
 

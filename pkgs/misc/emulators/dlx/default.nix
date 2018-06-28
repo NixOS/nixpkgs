@@ -4,7 +4,7 @@ stdenv.mkDerivation {
   name = "dlx-2012.07.08";
 
   src = fetchurl {
-    url = "http://www.davidviner.com/zip/dlx/dlx.zip";
+    url = "https://www.davidviner.com/zip/dlx/dlx.zip";
     sha256 = "0q5hildq2xcig7yrqi26n7fqlanyssjirm7swy2a9icfxpppfpkn";
   };
 

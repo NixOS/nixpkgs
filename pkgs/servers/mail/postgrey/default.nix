@@ -12,7 +12,7 @@ let
     name = "postgrey-${version}";
 in runCommand name {
   src = fetchurl {
-    url = "http://postgrey.schweikert.ch/pub/${name}.tar.gz";
+    url = "https://postgrey.schweikert.ch/pub/${name}.tar.gz";
     sha256 = "1xx51xih4711vrvc6d57il9ccallbljj5zhgqdb07jzmz11rakgz";
   };
   meta = with stdenv.lib; {

@@ -6,7 +6,7 @@ stdenv.mkDerivation {
   src = fetchurl {
     urls = [
       http://diracvideo.org/download/schroedinger/schroedinger-1.0.11.tar.gz
-      http://download.videolan.org/contrib/schroedinger-1.0.11.tar.gz
+      https://download.videolan.org/contrib/schroedinger-1.0.11.tar.gz
     ];
     sha256 = "04prr667l4sn4zx256v1z36a0nnkxfdqyln48rbwlamr6l3jlmqy";
   };

@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
   name = "memcached-${version}";
 
   src = fetchurl {
-    url = "http://memcached.org/files/${name}.tar.gz";
+    url = "https://memcached.org/files/${name}.tar.gz";
     sha256 = "1ppnhsqv9047vm0rrmqla56y972f8qqjdb780iz6v922jjcc723k";
   };
 

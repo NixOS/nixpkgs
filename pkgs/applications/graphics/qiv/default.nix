@@ -5,7 +5,7 @@ stdenv.mkDerivation (rec {
   name = "qiv-${version}";
 
   src = fetchurl {
-    url = "http://spiegl.de/qiv/download/${name}.tgz";
+    url = "https://spiegl.de/qiv/download/${name}.tgz";
     sha256 = "1rlf5h67vhj7n1y7jqkm9k115nfnzpwngj3kzqsi2lg676srclv7";
   };
 

@@ -7,7 +7,7 @@ stdenv.mkDerivation rec {
   version = "1.1.0";
 
   src = fetchurl {
-    url = "http://mcabber.com/files/mcabber-${version}.tar.bz2";
+    url = "https://mcabber.com/files/mcabber-${version}.tar.bz2";
     sha256 = "1ggh865p1rf10ffsnf4g6qv9i8bls36dxdb1nzs5r9vdqci2rz04";
   };
 

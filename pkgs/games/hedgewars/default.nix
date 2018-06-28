@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   version = "0.9.24.1";
   name = "hedgewars-${version}";
   src = fetchurl {
-    url = "http://www.hedgewars.org/download/releases/hedgewars-src-${version}.tar.bz2";
+    url = "https://www.hedgewars.org/download/releases/hedgewars-src-${version}.tar.bz2";
     sha256 = "1f2vbndh9fnwklwjicrhy5zv2ciyhadfsny2cdqnc6lim90hldl1";
   };
 

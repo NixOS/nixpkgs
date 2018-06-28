@@ -4,7 +4,7 @@ stdenv.mkDerivation {
   name = "lua-4.0.1";
 
   src = fetchurl {
-    url = http://www.lua.org/ftp/lua-4.0.1.tar.gz;
+    url = https://www.lua.org/ftp/lua-4.0.1.tar.gz;
     sha256 = "0ajd906hasii365xdihv9mdmi3cixq758blx0289x4znkha6wx6z";
   };
 

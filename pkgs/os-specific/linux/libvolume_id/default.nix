@@ -4,7 +4,7 @@ stdenv.mkDerivation {
   name = "libvolume_id-0.81.1";
    
   src = fetchurl {
-    url = http://www.marcuscom.com/downloads/libvolume_id-0.81.1.tar.bz2;
+    url = https://www.marcuscom.com/downloads/libvolume_id-0.81.1.tar.bz2;
     sha256 = "029z04vdxxsl8gycm9whcljhv6dy4b12ybsxdb99jr251gl1ifs5";
   };
 

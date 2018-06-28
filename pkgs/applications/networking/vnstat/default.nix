@@ -6,7 +6,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     sha256 = "1mc7qqvrnl0zyhgh8n7wx1g1cbwq74xpvbz8rfjmyi77p693a6fp";
-    url = "http://humdi.net/vnstat/${name}.tar.gz";
+    url = "https://humdi.net/vnstat/${name}.tar.gz";
   };
 
   buildInputs = [ gd ncurses ];

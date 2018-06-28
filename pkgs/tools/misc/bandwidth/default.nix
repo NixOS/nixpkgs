@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   version = "1.5.1";
 
   src = fetchurl {
-    url = "http://zsmith.co/archives/${name}.tar.gz";
+    url = "https://zsmith.co/archives/${name}.tar.gz";
     sha256 = "1v9k1a2ilkbhc3viyacgq88c9if60kwsd1fy6rn84317qap4i7ib";
   };
 

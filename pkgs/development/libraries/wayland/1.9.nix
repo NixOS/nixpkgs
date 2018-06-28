@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   version = "1.9.0";
 
   src = fetchurl {
-    url = "http://wayland.freedesktop.org/releases/${name}.tar.xz";
+    url = "https://wayland.freedesktop.org/releases/${name}.tar.xz";
     sha256 = "1yhy62vkbq8j8c9zaa6yzvn75cd99kfa8n2zfdwl80x019r711ww";
   };
 

@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
   version = "1.22.2";
 
   src = fetchurl {
-    url = "http://ftp.postgresql.org/pub/pgadmin/pgadmin3/v${version}/src/pgadmin3-${version}.tar.gz";
+    url = "https://ftp.postgresql.org/pub/pgadmin/pgadmin3/v${version}/src/pgadmin3-${version}.tar.gz";
     sha256 = "1b24b356h8z188nci30xrb57l7kxjqjnh6dq9ws638phsgiv0s4v";
   };
 

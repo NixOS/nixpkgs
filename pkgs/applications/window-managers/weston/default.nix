@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   version = "4.0.0";
 
   src = fetchurl {
-    url = "http://wayland.freedesktop.org/releases/${name}.tar.xz";
+    url = "https://wayland.freedesktop.org/releases/${name}.tar.xz";
     sha256 = "0n2big8xw6g6n46zm1jyf00dv9r4d84visdz5b8vxpw3xzkhmz50";
   };
 

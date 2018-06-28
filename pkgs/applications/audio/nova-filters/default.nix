@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
   name = "nova-filters-${version}";
 
   src = fetchurl {
-    url = http://klingt.org/~tim/nova-filters/nova-filters_0.2-2.tar.gz;
+    url = https://klingt.org/~tim/nova-filters/nova-filters_0.2-2.tar.gz;
     sha256 = "16064vvl2w5lz4xi3lyjk4xx7fphwsxc14ajykvndiz170q32s6i";
   };
 

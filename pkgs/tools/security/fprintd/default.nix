@@ -6,7 +6,7 @@ stdenv.mkDerivation rec {
   version = "0.8.0";
 
   src = fetchurl {
-    url = "http://people.freedesktop.org/~hadess/${name}.tar.xz";
+    url = "https://people.freedesktop.org/~hadess/${name}.tar.xz";
     sha256 = "00i21ycaya4x2qf94mys6s94xnbj5cfm8zhhd5sc91lvqjk4r99k";
   };
 

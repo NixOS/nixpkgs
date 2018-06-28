@@ -4,7 +4,7 @@ stdenv.mkDerivation rec {
   name = "fping-4.0";
 
   src = fetchurl {
-    url = "http://www.fping.org/dist/${name}.tar.gz";
+    url = "https://www.fping.org/dist/${name}.tar.gz";
     sha256 = "1kp81wchi79l8z8rrj602fpjrd8bi84y3i7fsaclzlwap5943sv7";
   };
 

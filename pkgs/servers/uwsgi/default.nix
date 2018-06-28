@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
   version = "2.0.17";
 
   src = fetchurl {
-    url = "http://projects.unbit.it/downloads/${name}.tar.gz";
+    url = "https://projects.unbit.it/downloads/${name}.tar.gz";
     sha256 = "1wlbaairsmhp6bx5wv282q9pgh6w7w6yrb8vxjznfaxrinsfkhix";
   };
 

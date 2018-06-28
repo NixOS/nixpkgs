@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
   name = "loudmouth-${version}";
 
   src = fetchurl {
-    url = "http://mcabber.com/files/loudmouth/${name}.tar.bz2";
+    url = "https://mcabber.com/files/loudmouth/${name}.tar.bz2";
     sha256 = "0b6kd5gpndl9nzis3n6hcl0ldz74bnbiypqgqa1vgb0vrcar8cjl";
   };
 

@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
   name = "yap-${version}";
 
   src = fetchurl {
-    url = "http://www.dcc.fc.up.pt/~vsc/Yap/${name}.tar.gz";
+    url = "https://www.dcc.fc.up.pt/~vsc/Yap/${name}.tar.gz";
     sha256 = "0y7sjwimadqsvgx9daz28c9mxcx9n1znxklih9xg16k6n54v9qxf";
   };
 

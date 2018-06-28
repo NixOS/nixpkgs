@@ -7,7 +7,7 @@ stdenv.mkDerivation  rec {
   version = "3.2.1";
 
   src = fetchurl {
-    url = "http://www.mpich.org/static/downloads/${version}/mpich-${version}.tar.gz";
+    url = "https://www.mpich.org/static/downloads/${version}/mpich-${version}.tar.gz";
     sha256 = "1w9h4g7d46d9l5jbcyfxpaqzpjrc5hyvr9d0ns7278psxpr3pdax";
   };
 

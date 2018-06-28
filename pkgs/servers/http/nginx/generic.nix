@@ -13,7 +13,7 @@ stdenv.mkDerivation {
   name = "nginx-${version}";
 
   src = fetchurl {
-    url = "http://nginx.org/download/nginx-${version}.tar.gz";
+    url = "https://nginx.org/download/nginx-${version}.tar.gz";
     inherit sha256;
   };
 

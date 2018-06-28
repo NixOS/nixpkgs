@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
   version = "2.40";
 
   src = fetchurl {
-    url = "http://chromedriver.storage.googleapis.com/${version}/chromedriver_${spec.system}.zip";
+    url = "https://chromedriver.storage.googleapis.com/${version}/chromedriver_${spec.system}.zip";
     sha256 = spec.sha256;
   };
 

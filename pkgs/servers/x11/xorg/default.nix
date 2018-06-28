@@ -1475,7 +1475,7 @@ let
     name = "xcb-util-cursor-0.1.3";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://xcb.freedesktop.org/dist/xcb-util-cursor-0.1.3.tar.bz2;
+      url = https://xcb.freedesktop.org/dist/xcb-util-cursor-0.1.3.tar.bz2;
       sha256 = "0krr4rcw6r42cncinzvzzdqnmxk3nrgpnadyg2h8k9x10q3hm885";
     };
     nativeBuildInputs = [ pkgconfig ];

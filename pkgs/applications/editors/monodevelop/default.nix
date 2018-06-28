@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   name = "monodevelop-${version}";
 
   src = fetchurl {
-    url = "http://download.mono-project.com/sources/monodevelop/${name}.tar.bz2";
+    url = "https://download.mono-project.com/sources/monodevelop/${name}.tar.bz2";
     sha256 = "0bim4bfv3zwijafl9g0cx3159zq43dlcv74mnyrda41j4p52w5ji";
   };
 

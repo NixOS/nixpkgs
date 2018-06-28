@@ -7,7 +7,7 @@ let
   i686_glibc = callPackage_i686 ({glibc}: glibc) {};
 
   src_canon = fetchurl {
-    url = "http://files.canon-europe.com/files/soft45378/software/o147jen_linuxufrII_0290.zip";
+    url = "https://files.canon-europe.com/files/soft45378/software/o147jen_linuxufrII_0290.zip";
     sha256 = "1qpdmaaw42gm5fi21rp4lf05skffkq42ka5c8xkw8rckzb13sy9j";
   };
 

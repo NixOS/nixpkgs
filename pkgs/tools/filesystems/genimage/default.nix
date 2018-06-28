@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
   version = "9";
 
   src = fetchurl {
-    url = "http://public.pengutronix.de/software/genimage/genimage-${version}.tar.xz";
+    url = "https://public.pengutronix.de/software/genimage/genimage-${version}.tar.xz";
     sha256 = "0y4h8x8lqxam8m90rdfq8cg5137kvilxr3d1qzddpx7nxpvmmwv9";
   };
 

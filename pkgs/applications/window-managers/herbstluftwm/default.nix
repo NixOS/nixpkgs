@@ -4,7 +4,7 @@ stdenv.mkDerivation rec {
   name = "herbstluftwm-0.7.0";
 
   src = fetchurl {
-    url = "http://herbstluftwm.org/tarballs/${name}.tar.gz";
+    url = "https://herbstluftwm.org/tarballs/${name}.tar.gz";
     sha256 = "09xfs213vg1dpird61wik5bqb9yf8kh63ssy18ihf54inwqgqbvy";
   };
 

@@ -4,7 +4,7 @@ stdenv.mkDerivation rec {
   name = "libnice-0.1.14";
 
   src = fetchurl {
-    url = "http://nice.freedesktop.org/releases/${name}.tar.gz";
+    url = "https://nice.freedesktop.org/releases/${name}.tar.gz";
     sha256 = "17404z0fr6z3k7s2pkyyh9xp5gv7yylgyxx01mpl7424bnlhn4my";
   };
 

@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
   version = "7.1.3";
 
   src = fetchurl {
-    url = "http://www.hepforge.org/archive/herwig/Herwig-${version}.tar.bz2";
+    url = "https://www.hepforge.org/archive/herwig/Herwig-${version}.tar.bz2";
     sha256 = "1iq1h5ap86729c4pfkswzfh0l2v20fyvqsb15c35g0407l54wfqm";
   };
 

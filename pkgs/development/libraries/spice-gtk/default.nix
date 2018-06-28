@@ -35,7 +35,7 @@ in stdenv.mkDerivation rec {
   outputs = [ "out" "dev" ];
 
   src = fetchurl {
-    url = "http://www.spice-space.org/download/gtk/${name}.tar.bz2";
+    url = "https://www.spice-space.org/download/gtk/${name}.tar.bz2";
     sha256 = "1vknp72pl6v6nf3dphhwp29hk6gv787db2pmyg4m312z2q0hwwp9";
   };
 

@@ -7,7 +7,7 @@ let
     passthru = { inherit version; };
 
     src = fetchurl {
-      url = "http://oligarchy.co.uk/xapian/${version}/xapian-core-${version}.tar.xz";
+      url = "https://oligarchy.co.uk/xapian/${version}/xapian-core-${version}.tar.xz";
       inherit sha256;
     };
 

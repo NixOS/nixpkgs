@@ -33,7 +33,7 @@ let
     name    = "password-store-${version}";
 
     src = fetchurl {
-      url    = "http://git.zx2c4.com/password-store/snapshot/${name}.tar.xz";
+      url    = "https://git.zx2c4.com/password-store/snapshot/${name}.tar.xz";
       sha256 = "1sl0d7nc85c6c2bmmmyb8rpmn47vhkj831l153mjlkawjvhwas27";
     };
 

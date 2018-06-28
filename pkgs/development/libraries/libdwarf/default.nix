@@ -3,7 +3,7 @@
 let
   version = "20180129";
   src = fetchurl {
-    url = "http://www.prevanders.net/libdwarf-${version}.tar.gz";
+    url = "https://www.prevanders.net/libdwarf-${version}.tar.gz";
     # Upstream displays this hash broken into three parts:
     sha512 = "02f8024bb9959c91a1fe322459f7587a589d096595"
            + "6d643921a173e6f9e0a184db7aef66f0fd2548d669"

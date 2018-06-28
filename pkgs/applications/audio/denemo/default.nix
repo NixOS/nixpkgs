@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
   version = "2.2.0";
 
   src = fetchurl {
-    url = "http://ftp.gnu.org/gnu/denemo/denemo-${version}.tar.gz";
+    url = "https://ftp.gnu.org/gnu/denemo/denemo-${version}.tar.gz";
     sha256 = "18zcs4xmfj4vpzi15dj7k5bjzzzlr3sjf9xhrrgy4samrrdpqzfh";
   };
 

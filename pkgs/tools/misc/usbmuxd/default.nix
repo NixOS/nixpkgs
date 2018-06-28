@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
   version = "1.1.0";
 
   src = fetchurl {
-    url = "http://www.libimobiledevice.org/downloads/${name}.tar.bz2";
+    url = "https://www.libimobiledevice.org/downloads/${name}.tar.bz2";
     sha256 = "0bdlc7a8plvglqqx39qqampqm6y0hcdws76l9dffwl22zss4i29y";
   };
 

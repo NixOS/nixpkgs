@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
   version = "0.7.1";
 
   src = fetchurl {
-    url = "http://spice-space.org/download/usbredir/${name}.tar.bz2";
+    url = "https://spice-space.org/download/usbredir/${name}.tar.bz2";
     sha256 = "1wsnmk4wjpdhbn1zaxg6bmyxspcki2zgy0am9lk037rnl4krwzj0";
   };
 

@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
   version = "2.8";
 
   src = fetchurl {
-    url    = "http://waynemorrison.com/software/vcal";
+    url    = "https://waynemorrison.com/software/vcal";
     sha256 = "0jrm0jzqxb1xjp24hwbzlxsh22gjssay9gj4zszljzdm68r5afvc";
   };
 

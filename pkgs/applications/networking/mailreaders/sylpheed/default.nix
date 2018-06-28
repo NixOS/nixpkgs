@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   version = "3.7.0";
 
   src = fetchurl {
-    url = "http://sylpheed.sraoss.jp/sylpheed/v3.7/${name}.tar.xz";
+    url = "https://sylpheed.sraoss.jp/sylpheed/v3.7/${name}.tar.xz";
     sha256 = "0j9y5vdzch251s264diw9clrn88dn20bqqkwfmis9l7m8vmwasqd";
   };
 

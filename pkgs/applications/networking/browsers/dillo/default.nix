@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   name = "dillo-${version}";
 
   src = fetchurl {
-    url = "http://www.dillo.org/download/${name}.tar.bz2";
+    url = "https://www.dillo.org/download/${name}.tar.bz2";
     sha256 = "12ql8n1lypv3k5zqgwjxlw1md90ixz3ag6j1gghfnhjq3inf26yv";
   };
 

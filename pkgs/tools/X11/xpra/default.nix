@@ -15,7 +15,7 @@ in buildPythonApplication rec {
   version = "2.3.1";
 
   src = fetchurl {
-    url = "http://xpra.org/src/${name}.tar.xz";
+    url = "https://xpra.org/src/${name}.tar.xz";
     sha256 = "0wghjmrw77pkh6agc5rz7ynr6s8yyc68qvj9rnp0vlwa3x1fl3ry";
   };
 

@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
   version = "1.4.193";
 
   src = fetchzip {
-    url = "http://www.h2database.com/h2-2016-10-31.zip";
+    url = "https://www.h2database.com/h2-2016-10-31.zip";
     sha256 = "1da1qcfwi5gvh68i6w6y0qpcqp3rbgakizagkajmjxk2ryc4b3z9";
   };
 

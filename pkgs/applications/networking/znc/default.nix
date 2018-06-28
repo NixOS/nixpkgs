@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   version = "1.7.0";
 
   src = fetchurl {
-    url = "http://znc.in/releases/archive/${name}.tar.gz";
+    url = "https://znc.in/releases/archive/${name}.tar.gz";
     sha256 = "0vxra50418bsjfdpf8vl70fijv8syvasjqdxfyjliff6k91k2zn0";
   };
 

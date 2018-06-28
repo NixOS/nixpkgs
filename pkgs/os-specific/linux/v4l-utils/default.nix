@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   version = "1.14.2";
 
   src = fetchurl {
-    url = "http://linuxtv.org/downloads/v4l-utils/${name}.tar.bz2";
+    url = "https://linuxtv.org/downloads/v4l-utils/${name}.tar.bz2";
     sha256 = "14h6d2p3n4jmxhd8i0p1m5dbwz5vnpb3z88xqd9ghg15n7265fg6";
   };
 

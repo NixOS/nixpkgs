@@ -11,7 +11,7 @@ in stdenv.mkDerivation rec {
   outputs = [ "out" "dev" ];
 
   src = fetchurl {
-    url = "http://libvirt.org/sources/glib/${name}.tar.gz";
+    url = "https://libvirt.org/sources/glib/${name}.tar.gz";
     sha256 = "0iwa5sdbii52pjpdm5j37f67sdmf0kpcky4liwhy1nf43k85i4fa";
   };
 
