@@ -24,6 +24,6 @@ in
 runCommand "MacOSX${version}.sdk" {
   inherit version;
 } ''
-  install -D ${writeText "SDKSettings.plist" (toPLIST SDKSettings)} $out/SDKSettings.plist
-  install -D ${writeText "SystemVersion.plist" (toPLIST SystemVersion)} $out/System/Library/CoreServices/SystemVersion.plist
+  install -D ${writeText "SDKSettings.plist" (toPLIST {} SDKSettings)} $out/SDKSettings.plist
+  install -D ${writeText "SystemVersion.plist" (toPLIST {} SystemVersion)} $out/System/Library/CoreServices/SystemVersion.plist
 ''
