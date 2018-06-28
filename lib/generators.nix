@@ -173,6 +173,53 @@ rec {
                        fna);
       in if fna == {}    then "<λ>"
                          else "<λ:{${showFnas}}>"
-    else abort "toPretty: should never happen (v = ${v})";
+    else abort "generators.toPretty: should never happen (v = ${v})";
+
+  # PLIST handling
+  toPlist = {}: v: let
+    expr = ind: x: with builtins;
+      if isNull x then "" else
+      if isBool x then bool ind x else
+      if isInt x then int ind x else
+      if isString x then str ind x else
+      if isList x then list ind x else
+      if isAttrs x then attrs ind x else
+      abort "generators.toPlist: should never happen (v = ${v})";
+
+    literal = ind: x: ind + x;
+
+    bool = ind: x: literal ind  (if x then "<true/>" else "<false/>");
+    int = ind: x: literal ind "<integer>${toString x}</integer>";
+    str = ind: x: literal ind "<string>${x}</string>";
+    key = ind: x: literal ind "<key>${x}</key>";
+
+    indent = ind: expr "\t${ind}";
+
+    item = ind: libStr.concatMapStringsSep "\n" (indent ind);
+
+    list = ind: x: libStr.concatStringsSep "\n" [
+      (literal ind "<array>")
+      (item ind x)
+      (literal ind "</array>")
+    ];
+
+    attrs = ind: x: libStr.concatStringsSep "\n" [
+      (literal ind "<dict>")
+      (attr ind x)
+      (literal ind "</dict>")
+    ];
+
+    attr = let attrFilter = name: value: name != "_module" && value != null;
+    in ind: x: libStr.concatStringsSep "\n" (lib.flatten (lib.mapAttrsToList
+      (name: value: lib.optional (attrFilter name value) [
+      (key "\t${ind}" name)
+      (expr "\t${ind}" value)
+    ]) x));
+
+  in ''<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+${expr "" v}
+</plist>'';
 
 }
