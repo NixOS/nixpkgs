@@ -96,7 +96,7 @@ rec {
 
   ### Eclipse Platform
 
-  eclipse-platform = eclipse-platform-47; # always point to latest
+  eclipse-platform = eclipse-platform-48; # always point to latest
 
   eclipse-platform-46 = buildEclipse {
     name = "eclipse-platform-4.6.2";
@@ -124,6 +124,21 @@ rec {
       "i686-linux" = fetchurl {
           url = https://www.eclipse.org/downloads/download.php?r=1&nf=1&file=/eclipse/downloads/drops4/R-4.7.3a-201803300640/eclipse-platform-4.7.3a-linux-gtk.tar.gz;
           sha512 = "c633da467774e4ab40f8d51d07b8e7d8403f26f23365c3c3ceeaeec1039b8c23c7508cee1f786bf52db64c7b84e0f91cb31a2848a74ac8271f8504934407bd5c";
+        };
+    };
+  };
+
+  eclipse-platform-48 = buildEclipse {
+    name = "eclipse-platform-4.8";
+    description = "Eclipse Platform Photon";
+    sources = {
+      "x86_64-linux" = fetchurl {
+        url = https://www.eclipse.org/downloads/download.php?r=1&nf=1&file=/eclipse/downloads/drops4/R-4.8-201806110500/eclipse-platform-4.8-linux-gtk-x86_64.tar.gz;
+          sha512 = "ccce2b954938479e42ef3f9b78f74b24ae4cae7499546fa4f9a55ec1849e1acfd06315d4529b11474a8b3d1142c9409c581edfa571baaf1342ab062f02467af2";
+        };
+      "i686-linux" = fetchurl {
+          url = https://www.eclipse.org/downloads/download.php?r=1&nf=1&file=/eclipse/downloads/drops4/R-4.8-201806110500/eclipse-platform-4.8-linux-gtk.tar.gz;
+          sha512 = "f5f407727e22b848931cf38f71b1a0c30a9778aa227c3df137dcceec2fba2ecc309cbfa8b4a660b814d2edb60f65110381497b4325781cab4d6402784139e32b";
         };
     };
   };
