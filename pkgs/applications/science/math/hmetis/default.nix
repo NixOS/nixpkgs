@@ -12,21 +12,17 @@ stdenv.mkDerivation rec {
   };
   src = [ hmetissrc ];
 
-  unpackPhase = ''
-    tar xzvf ${hmetissrc} 
-  '';
-
   doCheck = true;
 
   installPhase = ''
     mkdir -p $out/bin
-    cp hmetis-${version}-linux/hmetis $out/bin/
+    cp hmetis $out/bin/
     patchelf --set-interpreter ${stdenv.glibc}/lib/ld-linux.so.2 $out/bin/hmetis
     patchelf --set-rpath ${stdenv.glibc}/lib $out/bin/hmetis
-    cp hmetis-${version}-linux/khmetis $out/bin/
+    cp khmetis $out/bin/
     patchelf --set-interpreter ${stdenv.glibc}/lib/ld-linux.so.2 $out/bin/khmetis
     patchelf --set-rpath ${stdenv.glibc}/lib $out/bin/khmetis
-    cp hmetis-${version}-linux/shmetis $out/bin/
+    cp shmetis $out/bin/
     patchelf --set-interpreter ${stdenv.glibc}/lib/ld-linux.so.2 $out/bin/shmetis
     patchelf --set-rpath ${stdenv.glibc}/lib $out/bin/shmetis
   '';
@@ -35,7 +31,6 @@ stdenv.mkDerivation rec {
     description = "hMETIS is a set of programs for partitioning hypergraphs";
     homepage = http://www.gnu.org/software/hello/manual/;
     license = licenses.gpl3Plus;
-    maintainers = [ maintainers.eelco ];
     platforms = [ "i686-linux" "x86_64-linux" ];
   };
 }
