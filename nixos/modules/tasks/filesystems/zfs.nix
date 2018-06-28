@@ -397,9 +397,8 @@ in
             };
             script = ''
               zpool_cmd="${packages.zfsUser}/sbin/zpool"
-              zfs_cmd="${packages.zfsUser}/sbin/zfs"
               ("$zpool_cmd" list "${pool}" >/dev/null) || "$zpool_cmd" import -d ${cfgZfs.devNodes} -N ${optionalString cfgZfs.forceImportAll "-f"} "${pool}"
-              ${optionalString cfgZfs.requestEncryptionCredentials "\"$zfs_cmd\" load-key -r \"${pool}\""}
+              ${optionalString cfgZfs.requestEncryptionCredentials "\"${packages.zfsUser}/sbin/zfs\" load-key -r \"${pool}\""}
             '';
           };
 
