@@ -1480,6 +1480,10 @@ with pkgs;
 
   syslogng_incubator = callPackage ../tools/system/syslog-ng-incubator { };
 
+  inherit (callPackages ../servers/rainloop { })
+    rainloop-community
+    rainloop-standard;
+
   ring-daemon = callPackage ../applications/networking/instant-messengers/ring-daemon { };
 
   riot-web = callPackage ../applications/networking/instant-messengers/riot/riot-web.nix {
