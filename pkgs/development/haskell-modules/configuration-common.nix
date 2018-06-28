@@ -1081,6 +1081,7 @@ self: super: {
   hspec-smallcheck = addTestToolDepend super.hspec-smallcheck self.hspec-meta;
   hspec-attoparsec = addTestToolDepend super.hspec-attoparsec self.hspec-meta;
   hspec-contrib = addTestToolDepend super.hspec-contrib self.hspec-meta;
+  hspec-wai = addTestToolDepend super.hspec-wai self.hspec-meta;
 
   # The build-tool-depends this hacks around has been added on master.
   base-compat = addTestToolDepend super.base-compat self.hspec-discover;
@@ -1144,6 +1145,27 @@ self: super: {
   wild-bind = addTestToolDepend super.wild-bind self.hspec-discover;
   test-fixture = addTestToolDepend super.test-fixture self.hspec-discover;
   streaming-binary = addTestToolDepend super.streaming-binary self.hspec-discover;
+  yesod-persistent = addTestToolDepend super.yesod-persistent self.hspec-discover;
+  wss-client = addTestToolDepend super.wss-client self.hspec-discover;
+  word-trie = addTestToolDepend super.word-trie self.hspec-discover;
+  woot = addTestToolDepend super.woot self.hspec-discover;
+  wikicfp-scraper = addTestToolDepend super.wikicfp-scraper self.hspec-discover;
+  hopfli = addTestToolDepend super.hopfli self.hspec-discover;
+  webex-teams-api = addTestToolDepend super.webex-teams-api self.hspec-discover;
+  wave = addTestToolDepend super.wave self.hspec-discover;
+  clay = addTestToolDepend super.clay self.hspec-discover;
+  typenums = addTestToolDepend super.typenums self.hspec-discover;
+  type-assertions = addTestToolDepend super.type-assertions self.hspec-discover;
+  tsne = addTestToolDepend super.tsne self.hspec-discover;
+  tiphys = addTestToolDepend super.tipys self.hspec-discover;
+  ticker = addTestToolDepend super.ticker self.hspec-discover;
+  thread-hierarchy = addTestToolDepend super.thread-hierarchy self.hspec-discover;
+  th-to-exp = addTestToolDepend super.th-to-exp self.hspec-discover;
+  th-nowq = addTestToolDepend super.th-to-exp self.markdown-unlit;
+  text-regex-replace = addTestToolDepend super.text-regex-replace self.hspec-discover;
+  system-extra = addTestToolDepend super.system-extra self.hspec-discover;
+  t3-game = addTestToolDepend super.t3-game self.hspec-discover;
+
 }
 
 //
