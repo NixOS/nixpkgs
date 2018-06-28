@@ -2,15 +2,16 @@
 
 buildGoPackage rec {
   name = "holochain-go${version}";
-  version = "v0.1.0-alpha";
+  version = "0.1.0-alpha";
   rev = "a17510b910a7a377441c152b8dccdbae1999f63f";
 
   goPackagePath = "github.com/holochain/holochain-proto";
 
 
-  src = fetchgit {
+  src = fetchFromGithub {
     inherit rev;
-    url = "https://github.com/holochain/holochain-proto";
+    owner = "holochain";
+    repo = "holochain-proto";
     sha256 = "19l29jnr63ximmyn4i4llv2mdwh306c2mpzmx2anj9z12wjpach0";
   };
 
