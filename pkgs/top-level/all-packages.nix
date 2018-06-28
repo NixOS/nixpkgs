@@ -20569,7 +20569,7 @@ with pkgs;
     boost = boost160;
   };
 
-  librepcb = libsForQt5.callPackage ../applications/science/electronics/librepcb { };
+  librepcb = libsForQt59.callPackage ../applications/science/electronics/librepcb { };
 
   ngspice = callPackage ../applications/science/electronics/ngspice { };
 
