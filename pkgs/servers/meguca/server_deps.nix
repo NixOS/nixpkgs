@@ -104,8 +104,8 @@
     fetch = {
       type = "git";
       url = "https://github.com/go-playground/log";
-      rev = "91a5908e654f9fc444a71ea3c51c72cb5c6c2442";
-      sha256 = "0p67j453pi7ffv3axl5g97qadx8lj22vsi5xrzqrr3v6mj8b0lbm";
+      rev = "736ecb55f80c7121af3754a7ea62e96733451fe1";
+      sha256 = "1gr2658m8nwswiybnz5i54d4gzwx4nk79gnh7j5fj1rcmbxdkkjh";
     };
   }
   {
@@ -248,8 +248,8 @@
     fetch = {
       type = "git";
       url = "https://go.googlesource.com/text";
-      rev = "5cec4b58c438bd98288aeb248bab2c1840713d21";
-      sha256 = "19iyz2nppicvwap5lv796sbzd82glk2jn4yn5w6z6zymwnykfzds";
+      rev = "c0fe8dde8a10c9b32154bd9bdf080b8b3d635127";
+      sha256 = "0zi15k236nmqrlpfy3hgnxnh3f0n1aag0h6gs41xlxdkr9lpmnsz";
     };
   }
   {
