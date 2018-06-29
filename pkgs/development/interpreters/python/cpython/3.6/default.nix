@@ -207,7 +207,7 @@ in stdenv.mkDerivation {
     withPackages = import ../../with-packages.nix { inherit buildEnv pythonPackages;};
     pkgs = pythonPackages;
     isPy3 = true;
-    isPy35 = true;
+    isPy36 = true;
     is_py3k = true;  # deprecated
     interpreter = "${self}/bin/${executable}";
   };
