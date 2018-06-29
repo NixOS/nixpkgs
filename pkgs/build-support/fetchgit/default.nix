@@ -19,6 +19,7 @@ in
 , # Shell code executed after the file has been fetched
   # successfully. This can do things like check or transform the file.
   postFetch ? ""
+, passthru ? {}
 }:
 
 /* NOTE:
@@ -67,4 +68,6 @@ stdenvNoCC.mkDerivation {
   ];
 
   preferLocalBuild = true;
+
+  inherit passthru;
 }

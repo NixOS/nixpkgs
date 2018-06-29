@@ -235,7 +235,7 @@ with pkgs;
   }@args: assert private -> !fetchSubmodules;
   let
     baseUrl = "https://${githubBase}/${owner}/${repo}";
-    passthruAttrs = removeAttrs args [ "owner" "repo" "rev" "fetchSubmodules" "private" "githubBase" "varPrefix" ];
+    fetcherAttrs = removeAttrs args [ "owner" "repo" "rev" "fetchSubmodules" "private" "githubBase" "varPrefix" ];
     varBase = "NIX${if varPrefix == null then "" else "_${varPrefix}"}_GITHUB_PRIVATE_";
     # We prefer fetchzip in cases we don't need submodules as the hash
     # is more stable in that case.
@@ -257,8 +257,8 @@ with pkgs;
     fetcherArgs = (if fetchSubmodules
         then { inherit rev fetchSubmodules; url = "${baseUrl}.git"; }
         else ({ url = "${baseUrl}/archive/${rev}.tar.gz"; } // privateAttrs)
-      ) // passthruAttrs // { inherit name; };
-  in fetcher fetcherArgs // { meta.homepage = baseUrl; inherit rev; };
+      ) // fetcherAttrs // { inherit name; passthru = { inherit owner repo rev; }; };
+  in fetcher fetcherArgs // { meta.homepage = baseUrl; };
 
   fetchFromBitbucket = {
     owner, repo, rev, name ? "source",
