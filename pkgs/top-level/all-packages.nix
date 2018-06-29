@@ -16429,6 +16429,8 @@ with pkgs;
 
   gpxsee = libsForQt5.callPackage ../applications/misc/gpxsee { };
 
+  gspell = callPackage ../development/libraries/gspell { };
+
   gtk2fontsel = callPackage ../applications/misc/gtk2fontsel {
     inherit (gnome2) gtk;
   };
