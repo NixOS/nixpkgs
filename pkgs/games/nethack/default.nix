@@ -1,11 +1,14 @@
-{ stdenv, lib, fetchurl, writeScript, coreutils, ncurses, gzip, flex, bison, less }:
+{ stdenv, lib, fetchurl, writeScript, coreutils, ncurses, gzip, flex, bison, less
+, x11Mode ? false, libXaw, libXext, mkfontdir
+}:
 
 let
   platform =
     if stdenv.hostPlatform.isUnix then "unix"
     else throw "Unknown platform for NetHack: ${stdenv.system}";
   unixHint =
-    /**/ if stdenv.hostPlatform.isLinux  then "linux"
+    if x11Mode then "linux-x11"
+    else if stdenv.hostPlatform.isLinux  then "linux"
     else if stdenv.hostPlatform.isDarwin then "macosx10.10"
     # We probably want something different for Darwin
     else "unix";
@@ -13,16 +16,16 @@ let
   binPath = lib.makeBinPath [ coreutils less ];
 
 in stdenv.mkDerivation {
-  name = "nethack-3.6.1";
+  name = "nethack${lib.optionalString x11Mode "-x11"}-3.6.1";
 
   src = fetchurl {
     url = "https://nethack.org/download/3.6.1/nethack-361-src.tgz";
     sha256 = "1dha0ijvxhx7c9hr0452h93x81iiqsll8bc9msdnp7xdqcfbz32b";
   };
 
-  buildInputs = [ ncurses ];
+  buildInputs = [ ncurses ] ++ lib.optionals x11Mode [ libXaw libXext ];
 
-  nativeBuildInputs = [ flex bison ];
+  nativeBuildInputs = [ flex bison ] ++ lib.optionals x11Mode [ mkfontdir ];
 
   makeFlags = [ "PREFIX=$(out)" ];
 
@@ -86,13 +89,14 @@ in stdenv.mkDerivation {
     $out/games/nethack
     EOF
     chmod +x $out/bin/nethack
+    ${lib.optionalString x11Mode "mv $out/bin/nethack $out/bin/nethack-x11"}
   '';
 
   meta = with stdenv.lib; {
     description = "Rogue-like game";
     homepage = http://nethack.org/;
     license = "nethack";
-    platforms = platforms.unix;
+    platforms = if x11Mode then platforms.linux else platforms.unix;
     maintainers = with maintainers; [ abbradar ];
   };
 }
