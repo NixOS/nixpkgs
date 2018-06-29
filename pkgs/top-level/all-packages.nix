@@ -5054,6 +5054,10 @@ with pkgs;
 
   sipcalc = callPackage ../tools/networking/sipcalc { };
 
+  skribilo = callPackage ../tools/typesetting/skribilo {
+    tex = texlive.combined.scheme-small;
+  };
+
   sleuthkit = callPackage ../tools/system/sleuthkit {};
 
   sleepyhead = callPackage ../applications/misc/sleepyhead {};
@@ -7668,6 +7672,8 @@ with pkgs;
   guile-ncurses = callPackage ../development/guile-modules/guile-ncurses { };
 
   guile-opengl = callPackage ../development/guile-modules/guile-opengl { };
+
+  guile-reader = callPackage ../development/guile-modules/guile-reader { };
 
   guile-sdl = callPackage ../development/guile-modules/guile-sdl { };
 
