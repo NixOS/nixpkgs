@@ -34,7 +34,7 @@ in
   boot.kernelParams = ["cma=32M" "console=ttyS0,115200n8" "console=ttyAMA0,115200n8" "console=tty0"];
 
   # FIXME: this probably should be in installation-device.nix
-  users.extraUsers.root.initialHashedPassword = "";
+  users.users.root.initialHashedPassword = "";
 
   sdImage = {
     populateBootCommands = let
