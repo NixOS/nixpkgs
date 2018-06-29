@@ -4,7 +4,6 @@
 
 buildPythonPackage rec {
   pname = "pyjwkest";
-  name = "${pname}-${version}";
   version = "1.4.0";
 
   meta = {

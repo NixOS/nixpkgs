@@ -2,7 +2,6 @@
 
 buildPythonPackage rec {
   pname = "libsexy";
-  name = "${pname}-${version}";
   version = "0.1.9";
   format = "other";
 

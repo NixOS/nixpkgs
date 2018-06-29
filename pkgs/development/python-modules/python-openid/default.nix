@@ -2,7 +2,6 @@
 
 buildPythonPackage rec {
   pname = "python-openid";
-  name = "${pname}-${version}";
   version = "2.2.5";
 
   src = fetchPypi {

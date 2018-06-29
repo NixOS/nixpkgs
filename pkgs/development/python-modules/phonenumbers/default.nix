@@ -3,7 +3,6 @@
 buildPythonPackage rec {
   pname = "phonenumbers";
   version = "8.9.8";
-  name = "${pname}-${version}";
 
   src = fetchPypi {
     inherit pname version;

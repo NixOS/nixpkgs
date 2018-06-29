@@ -17,7 +17,6 @@
 buildPythonPackage rec {
   pname = "vcrpy";
   version = "1.12.0";
-  name = "${pname}-${version}";
 
   src = fetchPypi {
     inherit pname version;

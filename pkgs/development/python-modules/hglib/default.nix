@@ -3,7 +3,6 @@
 buildPythonPackage rec {
   pname = "python-hglib";
   version = "2.6.1";
-  name = "${pname}-${version}";
 
   src = fetchPypi {
     inherit pname version;

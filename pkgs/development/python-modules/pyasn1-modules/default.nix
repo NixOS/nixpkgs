@@ -1,7 +1,6 @@
 { stdenv, buildPythonPackage, fetchPypi, pyasn1, isPyPy }:
 
 buildPythonPackage rec {
-  name = "${pname}-${version}";
   pname = "pyasn1-modules";
   version = "0.2.1";
   disabled = isPyPy;

@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, python2Packages, makeWrapper, chromaprint }:
 
 python2Packages.buildPythonApplication rec {
-  name = "puddletag-${version}";
+  pname = "puddletag";
   version = "1.2.0";
 
   src = fetchFromGitHub {

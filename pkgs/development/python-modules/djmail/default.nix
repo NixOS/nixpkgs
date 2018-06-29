@@ -4,7 +4,6 @@
 
 buildPythonPackage rec {
   pname = "djmail";
-  name = "${pname}-${version}";
   version = "1.1.0";
 
   meta = {

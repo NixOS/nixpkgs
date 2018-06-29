@@ -3,7 +3,6 @@
 
 buildPythonPackage rec {
   pname = "django-allauth";
-  name = "${pname}-${version}";
   version = "0.36.0";
 
   # no tests on PyPI

@@ -2,7 +2,6 @@
 ,  chardet, lmtpd, pythondaemon, six, jinja2, mock }:
 
 buildPythonPackage rec {
-  name = "${pname}-${version}";
   pname = "salmon-mail";
   version = "3.0.1";
 

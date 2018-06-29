@@ -2,7 +2,6 @@
 , pkgconfig, doctest-ignore-unicode, mock, nose }:
 
 buildPythonPackage rec {
-  name = "${pname}-${version}";
   pname = "pygraphviz";
   version = "1.3.1";
 

@@ -1,10 +1,11 @@
-{ stdenv, buildPythonPackage, fetchzip, pyopenssl }:
+{ stdenv, buildPythonPackage, fetchzip, pyopenssl, python }:
 
-buildPythonPackage rec {
+let
   pname = "nbxmpp";
   version = "0.6.6";
   name = "${pname}-${version}";
-
+in buildPythonPackage rec {
+  inherit pname version;
   # Tests aren't included in PyPI tarball.
   src = fetchzip {
     name = "${name}.tar.bz2";
@@ -18,7 +19,7 @@ buildPythonPackage rec {
   checkPhase = ''
     # Disable tests requiring networking
     echo "" > test/unit/test_xmpp_transports_nb2.py
-    python test/runtests.py
+    ${python.executable} test/runtests.py
   '';
 
   meta = with stdenv.lib; {

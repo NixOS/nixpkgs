@@ -3,7 +3,6 @@
 buildPythonPackage rec {
   pname = "libnacl";
   version = "1.6.1";
-  name = "${pname}-${version}";
 
   src = fetchFromGitHub {
     owner = "saltstack";

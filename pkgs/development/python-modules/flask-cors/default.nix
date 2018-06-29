@@ -2,7 +2,6 @@
 , nose, flask, six }:
 
 buildPythonPackage rec {
-  name = "${pname}-${version}";
   pname = "Flask-Cors";
   version = "3.0.6";
 

@@ -23,11 +23,9 @@
 , tornado
 }:
 
-let
+buildPythonPackage rec {
   pname = "zeep";
   version = "3.0.0";
-in buildPythonPackage {
-  name = "${pname}-${version}";
 
   src = fetchPypi {
     inherit pname version;

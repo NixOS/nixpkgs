@@ -10,7 +10,6 @@
 buildPythonPackage rec {
   pname = "BTrees";
   version = "4.5.0";
-  name = "${pname}-${version}";
 
   buildInputs = [ transaction ];
   propagatedBuildInputs = [ persistent zope_interface ];

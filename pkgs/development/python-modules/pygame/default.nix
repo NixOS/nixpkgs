@@ -4,7 +4,6 @@
 
 buildPythonPackage rec {
   pname = "pygame";
-  name = "${pname}-${version}";
   version = "1.9.3";
 
   src = fetchurl {

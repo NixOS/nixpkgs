@@ -7,7 +7,6 @@
 }:
 
 buildPythonPackage rec {
-  name = "${pname}-${version}";
   pname = "backports.weakref";
   version = "1.0.post1";
   src = fetchPypi {

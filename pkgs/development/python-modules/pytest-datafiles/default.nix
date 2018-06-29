@@ -1,7 +1,6 @@
 { stdenv, buildPythonPackage, fetchPypi, py, pytest }:
 
 buildPythonPackage rec {
-  name = "${pname}-${version}";
   pname = "pytest-datafiles";
   version = "1.0";
   src = fetchPypi {

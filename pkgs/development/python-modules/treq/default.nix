@@ -3,7 +3,6 @@
 }:
 
 buildPythonPackage rec {
-  name = "${pname}-${version}";
   pname = "treq";
   version = "17.8.0";
 

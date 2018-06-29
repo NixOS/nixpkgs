@@ -1,7 +1,6 @@
 { stdenv, fetchPypi, isPy3k, buildPythonPackage }:
 
 buildPythonPackage rec {
-  name = "${pname}-${version}";
   pname = "pyobjc";
   version = "4.2.2";
 

@@ -4,7 +4,6 @@
 , zlib }:
 
 buildPythonPackage rec {
-  name = "${pname}-${version}";
   pname = "Jug";
   version = "1.6.7";
   buildInputs = [ nose numpy ];

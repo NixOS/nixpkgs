@@ -2,7 +2,6 @@
 , enum34, hpack, hyperframe }:
 
 buildPythonPackage rec {
-  name = "${pname}-${version}";
   pname = "h2";
   version = "3.0.1";
 

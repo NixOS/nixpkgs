@@ -1,11 +1,11 @@
-{ lib, buildPythonPackage, fetchurl }:
+{ lib, buildPythonPackage, fetchPypi }:
 
 buildPythonPackage rec {
-  name = "python-axolotl-curve25519-${version}";
+  pname = "python-axolotl-curve25519";
   version = "0.1";
 
-  src = fetchurl {
-    url = "mirror://pypi/p/python-axolotl-curve25519/${name}.tar.gz";
+  src = fetchPypi {
+    inherit pname version;
     sha256 = "1h1rsdr7m8lvgxwrwng7qv0xxmyc9k0q7g9nbcr6ks2ipyjzcnf5";
   };
 

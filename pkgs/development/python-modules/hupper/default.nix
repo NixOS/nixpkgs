@@ -5,7 +5,6 @@
 buildPythonPackage rec {
   pname = "hupper";
   version = "1.3";
-  name = "${pname}-${version}";
 
   src = fetchPypi {
     inherit pname version;

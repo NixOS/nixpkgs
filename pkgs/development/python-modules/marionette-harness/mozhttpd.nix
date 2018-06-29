@@ -8,7 +8,6 @@
 buildPythonPackage rec {
   pname = "mozhttpd";
   version = "0.7";
-  name = "${pname}-${version}";
 
   src = fetchPypi {
     inherit pname version;

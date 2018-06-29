@@ -4,7 +4,6 @@
 
 buildPythonPackage rec {
   pname = "aioamqp";
-  name = "${pname}-${version}";
   version = "0.11.0";
 
   meta = {

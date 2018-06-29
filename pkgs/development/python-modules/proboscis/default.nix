@@ -3,7 +3,6 @@
 buildPythonPackage rec {
   pname = "proboscis";
   version = "1.2.6.0";
-  name = "${pname}-${version}";
 
   src = fetchPypi {
     inherit pname version;

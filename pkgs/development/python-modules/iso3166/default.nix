@@ -1,7 +1,6 @@
 { stdenv, fetchFromGitHub, buildPythonPackage, pytest }:
 
 buildPythonPackage rec {
-  name = "${pname}-${version}";
   pname = "iso3166";
   version = "0.8";
 

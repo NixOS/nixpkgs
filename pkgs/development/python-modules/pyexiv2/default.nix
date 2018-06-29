@@ -1,12 +1,12 @@
-{ stdenv, fetchurl, python, exiv2, scons, boost }:
+{ stdenv, buildPythonPackage, fetchurl, python, exiv2, scons, boost }:
 
-stdenv.mkDerivation rec {
+buildPythonPackage rec {
   pname = "pyexiv2";
   version = "0.3.2";
-  name = "${pname}-${version}";
-  
+  format = "other";
+
   src = fetchurl {
-    url = "http://launchpad.net/pyexiv2/0.3.x/0.3.2/+download/${name}.tar.bz2";
+    url = "http://launchpad.net/pyexiv2/0.3.x/0.3.2/+download/${pname}-${version}.tar.bz2";
     sha256 = "09r1ga6kj5cnmrldpkqzvdhh7xi7aad9g4fbcr1gawgsd9y13g0a";
   };
 
@@ -23,5 +23,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     platforms = stdenv.lib.platforms.linux;
+    # Likely needs an older boost which does not have `boost_pythonXY` but `boost_python`.
+    broken = true; # 2018-06-23
   };
 }

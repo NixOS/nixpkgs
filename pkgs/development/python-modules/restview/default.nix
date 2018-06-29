@@ -9,7 +9,6 @@
 
 buildPythonPackage rec {
   pname = "restview";
-  name = "${pname}-${version}";
   version = "2.9.1";
 
   src = fetchPypi {

@@ -1,7 +1,6 @@
 { stdenv, fetchPypi, buildPythonPackage, pytest, tox }:
 
 buildPythonPackage rec {
-  name = "${pname}-${version}";
   version = "0.7";
   pname = "pluginbase";
 

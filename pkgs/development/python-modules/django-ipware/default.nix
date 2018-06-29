@@ -2,7 +2,6 @@
 
 buildPythonPackage rec {
   pname = "django-ipware";
-  name = "${pname}-${version}";
   version = "2.1.0";
 
   meta = {

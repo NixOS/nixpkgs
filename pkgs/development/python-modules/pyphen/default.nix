@@ -1,7 +1,6 @@
 { stdenv, buildPythonPackage, fetchPypi }:
 
 buildPythonPackage rec {
-  name = "${pname}-${version}";
   pname = "Pyphen";
   version = "0.9.4";
 

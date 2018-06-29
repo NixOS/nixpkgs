@@ -1,12 +1,11 @@
-{ lib, fetchurl, buildPythonPackage, intervaltree, pyflakes, requests, lxml }:
+{ lib, fetchPypi, buildPythonPackage, intervaltree, pyflakes, requests, lxml }:
 
 buildPythonPackage rec {
-  name = "${pname}-${version}";
   pname = "xml2rfc";
   version = "2.9.8";
 
-  src = fetchurl {
-    url = "mirror://pypi/x/${pname}/${name}.tar.gz";
+  src = fetchPypi {
+    inherit pname version;
     sha256 = "1img6941wvwpk71q3vi9526bfjbh949k4lphrvdwlcf4igwy435m";
   };
 

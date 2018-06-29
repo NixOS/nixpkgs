@@ -27,7 +27,6 @@ let
 in buildPythonPackage rec {
   version = "0.4.0";
   pname = "pytorch";
-  name = "${pname}-${version}";
 
   src = fetchFromGitHub {
     owner  = "pytorch";

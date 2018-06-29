@@ -8,7 +8,6 @@
 buildPythonPackage rec {
   pname = "matrix-client";
   version = "0.2.0";
-  name = "${pname}-${version}";
 
   src = fetchPypi {
     inherit pname version;

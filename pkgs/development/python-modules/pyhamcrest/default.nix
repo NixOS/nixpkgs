@@ -5,7 +5,6 @@
 buildPythonApplication rec {
   pname = "PyHamcrest";
   version = "1.9.0";
-  name = "${pname}-${version}";
 
   src = fetchPypi {
     inherit pname version;

@@ -3,7 +3,6 @@
 }:
 buildPythonPackage rec {
   pname = "channels";
-  name = "${pname}-${version}";
   version = "2.1.2";
 
   src = fetchPypi {

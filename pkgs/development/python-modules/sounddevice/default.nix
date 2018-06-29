@@ -8,7 +8,6 @@
 
 buildPythonPackage rec {
   pname = "sounddevice";
-  name = "${pname}-${version}";
   version = "0.3.9";
 
   src = fetchPypi {

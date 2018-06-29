@@ -1,11 +1,10 @@
-{ lib, fetchurl, buildPythonPackage, genshi, lxml, python_magic }:
+{ lib, fetchPypi, buildPythonPackage, genshi, lxml, python_magic }:
 
 buildPythonPackage rec {
   pname = "relatorio";
-  name = "${pname}-${version}";
   version = "0.8.0";
-  src = fetchurl {
-    url = "mirror://pypi/r/relatorio/${name}.tar.gz";
+  src = fetchPypi {
+    inherit pname version;
     sha256 = "bddf85d029c5c85a0f976d73907e14e4c3093065fe8527170c91abf0218546d9";
   };
   propagatedBuildInputs = [

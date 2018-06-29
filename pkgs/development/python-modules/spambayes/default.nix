@@ -1,7 +1,6 @@
 { buildPythonPackage, isPy3k, fetchPypi, bsddb3, pydns, lockfile }:
 
 buildPythonPackage rec {
-  name = "${pname}-${version}";
   pname = "spambayes";
   version = "1.1b2";
 
