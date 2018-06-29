@@ -598,7 +598,13 @@ self: super: {
   bustle = overrideCabal super.bustle (drv: {
     buildDepends = [ pkgs.libpcap ];
     buildTools = with pkgs; [ gettext perl help2man intltool ];
-    doCheck = false; # https://github.com/wjt/bustle/issues/6
+    patches = [
+      # Add missing gio-unix-2.0 dependency
+      (pkgs.fetchpatch {
+        url = https://github.com/wjt/bustle/commit/bcc3d56d367635c0dfdb4eab0d1265829aba6400.patch;
+        sha256 = "1ybviivfbs5janiyw01ww365vxckni6fk0j10609clxk4na2nvb9";
+      })
+    ];
     postInstall = ''
       make install PREFIX=$out
     '';
