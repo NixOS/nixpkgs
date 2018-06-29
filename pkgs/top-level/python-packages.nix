@@ -17253,6 +17253,8 @@ EOF
     };
   });
 
+  xml2rfc = callPackage ../development/python-modules/xml2rfc { };
+
   xmltodict = callPackage ../development/python-modules/xmltodict { };
 
   xarray = callPackage ../development/python-modules/xarray { };

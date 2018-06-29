@@ -348,12 +348,12 @@ in {
   };
 
   php71 = generic {
-    version = "7.1.17";
-    sha256 = "1kyvg1dvn2zddlc7apl8c74wlwz45rxx10fr1s4z6l1cannf6971";
+    version = "7.1.19";
+    sha256 = "1wvhsxzmb78pcr36ginz93iv7rcrxp3p01rb34zxa2h4wdxkxi0k";
   };
 
   php72 = generic {
-    version = "7.2.5";
-    sha256 = "0cb0g64mzkir81js27vjwqr8vh043f62ynqvds5n4ygsivx0x0pk";
+    version = "7.2.7";
+    sha256 = "18ymjqy8vpmwlzzfrxvaz2nsn8n66rmg40pwiy6x2kdgjrd6g0fc";
   };
 }

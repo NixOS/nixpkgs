@@ -9,7 +9,7 @@ let
 
   postgresqlBackupCron = db:
     ''
-      ${config.services.postgresqlBackup.period} root ${config.services.postgresql.package}/bin/pg_dump ${db} | ${gzip}/bin/gzip -c > ${location}/${db}.gz
+      ${config.services.postgresqlBackup.period} root ${config.services.postgresql.package}/bin/pg_dump ${db} -U postgres | ${gzip}/bin/gzip -c > ${location}/${db}.gz
     '';
 
 in

@@ -2259,6 +2259,11 @@
     github = "meisternu";
     name = "Matt Miemiec";
   };
+  melsigl = {
+    email = "melanie.bianca.sigl@gmail.com";
+    github = "melsigl";
+    name = "Melanie B. Sigl";
+  };
   metabar = {
     email = "softs@metabarcoding.org";
     name = "Celine Mercier";

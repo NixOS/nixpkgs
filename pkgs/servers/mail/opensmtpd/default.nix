@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, autoconf, automake, libtool, bison
+{ stdenv, lib, fetchurl, fetchpatch, autoconf, automake, libtool, bison
 , libasr, libevent, zlib, openssl, db, pam
 
 # opensmtpd requires root for no reason to encrypt passwords, this patch fixes it
@@ -21,7 +21,13 @@ stdenv.mkDerivation rec {
     sha256 = "1b4h64w45hpmfq5721smhg4s0shs64gbcjqjpx3fbiw4hz8bdy9a";
   };
 
-  patches = [ ./proc_path.diff ];
+  patches = [
+    ./proc_path.diff
+    (fetchpatch {
+      url = "https://github.com/Ekleog/OpenSMTPD/commit/80172fb0cd3c90c112bdd9c04fe05d84e6f562c6.diff";
+      sha256 = "1xgfm0mydhv70ndn212fsvlwaf3axl3wdg2v1nqnrbyl919y5a10";
+    })
+  ];
 
   postPatch = with builtins; with lib;
     optionalString (isString tag_char) ''
