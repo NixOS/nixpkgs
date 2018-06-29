@@ -55,6 +55,9 @@ ${optionalString (versionOlder version "4.11") ''
 # via the selinux=0 boot parameter.
 ${optionalString (versionAtLeast version "4.12") ''
   SECURITY_SELINUX_DISABLE n
+''}
+
+${optionalString ((versionAtLeast version "4.12") && (versionOlder version "4.17")) ''
   SECURITY_WRITABLE_HOOKS n
 ''}
 
