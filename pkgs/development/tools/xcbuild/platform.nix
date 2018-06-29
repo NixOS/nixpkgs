@@ -1,6 +1,8 @@
-{ stdenv, sdk, writeText, platformName, xcbuild }:
+{ runCommand, lib, sdk, platformName, writeText }:
 
 let
+
+  inherit (lib.generators) toPlist;
 
   Info = {
     CFBundleIdentifier = platformName;
@@ -283,24 +285,14 @@ let
 
 in
 
-stdenv.mkDerivation {
-  name = "MacOSX.platform";
-  buildInputs = [ xcbuild ];
-  buildCommand = ''
-    mkdir -p $out/
-    cd $out/
+runCommand "MacOSX.platform" {} ''
+  install -D ${writeText "Info.plist" (toPlist {} Info)} $out/Info.plist
+  install -D ${writeText "version.plist" (toPlist {} Version)} $out/version.plist
+  install -D ${writeText "Architectures.xcspec" (toPlist {} Architectures)} $out/Developer/Library/Xcode/Specifications/Architectures.xcspec
+  install -D ${writeText "PackageTypes.xcspec" (toPlist {} PackageTypes)} $out/Developer/Library/Xcode/Specifications/PackageTypes.xcspec
+  install -D ${writeText "ProductTypes.xcspec" (toPlist {} ProductTypes)} $out/Developer/Library/Xcode/Specifications/ProductTypes.xcspec
 
-    plutil -convert xml1 -o Info.plist ${writeText "Info.plist" (builtins.toJSON Info)}
-    plutil -convert xml1 -o version.plist ${writeText "version.plist" (builtins.toJSON Version)}
-
-    mkdir -p $out/Developer/Library/Xcode/Specifications/
-    cd $out/Developer/Library/Xcode/Specifications/
-    plutil -convert xml1 -o Architectures.xcspec ${writeText "Architectures.xcspec" (builtins.toJSON Architectures)}
-    plutil -convert xml1 -o PackageTypes.xcspec ${writeText "PackageTypes.xcspec" (builtins.toJSON PackageTypes)}
-    plutil -convert xml1 -o ProductTypes.xcspec ${writeText "ProductTypes.xcspec" (builtins.toJSON ProductTypes)}
-
-    mkdir -p $out/Developer/SDKs/
-    cd $out/Developer/SDKs/
-    cp -r ${sdk} ${sdk.name}
-  '';
-}
+  mkdir -p $out/Developer/SDKs/
+  cd $out/Developer/SDKs/
+  cp -r ${sdk} ${sdk.name}
+''

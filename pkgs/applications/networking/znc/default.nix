@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   version = "1.7.0";
 
   src = fetchurl {
-    url = "http://znc.in/releases/archive/${name}.tar.gz";
+    url = "https://znc.in/releases/archive/${name}.tar.gz";
     sha256 = "0vxra50418bsjfdpf8vl70fijv8syvasjqdxfyjliff6k91k2zn0";
   };
 
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Advanced IRC bouncer";
-    homepage = http://wiki.znc.in/ZNC;
+    homepage = https://wiki.znc.in/ZNC;
     maintainers = with maintainers; [ viric schneefux lnl7 ];
     license = licenses.asl20;
     platforms = platforms.unix;

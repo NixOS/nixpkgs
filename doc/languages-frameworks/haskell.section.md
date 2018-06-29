@@ -735,6 +735,62 @@ sets at once:
 }
 ```
 
+### How to specify source overrides for your Haskell package
+
+When starting a Haskell project you can use `developPackage`
+to define a derivation for your package at the `root` path
+as well as source override versions for Hackage packages, like so:
+
+```nix
+# default.nix
+{ compilerVersion ? "ghc842" }:
+let
+  # pinning nixpkgs using new Nix 2.0 builtin `fetchGit`
+  pkgs = import (fetchGit (import ./version.nix)) { };
+  compiler = pkgs.haskell.packages."${compilerVersion}";
+  pkg = compiler.developPackage {
+    root = ./.;
+    source-overrides = {
+      # Let's say the GHC 8.4.2 haskellPackages uses 1.6.0.0 and your test suite is incompatible with >= 1.6.0.0
+      HUnit = "1.5.0.0";
+    };
+  };
+in pkg
+```
+
+This could be used in place of a simplified `stack.yaml` defining a Nix
+derivation for your Haskell package.
+
+As you can see this allows you to specify only the source version found on
+Hackage and nixpkgs will take care of the rest.
+
+You can also specify `buildInputs` for your Haskell derivation for packages
+that directly depend on external libraries like so:
+
+```nix
+# default.nix
+{ compilerVersion ? "ghc842" }:
+let
+  # pinning nixpkgs using new Nix 2.0 builtin `fetchGit`
+  pkgs = import (fetchGit (import ./version.nix)) { };
+  compiler = pkgs.haskell.packages."${compilerVersion}";
+  pkg = compiler.developPackage {
+    root = ./.;
+    source-overrides = {
+      HUnit = "1.5.0.0"; # Let's say the GHC 8.4.2 haskellPackages uses 1.6.0.0 and your test suite is incompatible with >= 1.6.0.0
+    };
+  };
+  # in case your package source depends on any libraries directly, not just transitively.
+  buildInputs = [ zlib ];
+in pkg.overrideAttrs(attrs: {
+  buildInputs = attrs.buildInputs ++ buildInputs;
+})
+```
+
+Notice that you will need to override (via `overrideAttrs` or similar) the
+derivation returned by the `developPackage` Nix lambda as there is no `buildInputs`
+named argument you can pass directly into the `developPackage` lambda.
+
 ### How to recover from GHC's infamous non-deterministic library ID bug
 
 GHC and distributed build farms don't get along well:

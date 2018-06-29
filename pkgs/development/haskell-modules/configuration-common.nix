@@ -61,6 +61,10 @@ self: super: {
   statistics = dontCheck super.statistics;
   vector-builder = dontCheck super.vector-builder;
 
+  # These packages (and their reverse deps) cannot be built with profiling enabled.
+  ghc-heap-view = disableLibraryProfiling super.ghc-heap-view;
+  ghc-datasize = disableLibraryProfiling super.ghc-datasize;
+
   # This test keeps being aborted because it runs too quietly for too long
   Lazy-Pbkdf2 = if pkgs.stdenv.isi686 then dontCheck super.Lazy-Pbkdf2 else super.Lazy-Pbkdf2;
 
@@ -82,7 +86,7 @@ self: super: {
       name = "git-annex-${drv.version}-src";
       url = "git://git-annex.branchable.com/";
       rev = "refs/tags/" + drv.version;
-      sha256 = "0cz044zjp067xjx0dw1yg3n7vnrkn1j3rvnk9i3jf1aqfvm1szwy";
+      sha256 = "0q9z5q7vrcqa831wni972kchcdivqp55x1z2fgmdp8jfq4pidvyb";
     };
   })).overrideScope (self: super: {
     aws = dontCheck (self.aws_0_18);
@@ -594,7 +598,13 @@ self: super: {
   bustle = overrideCabal super.bustle (drv: {
     buildDepends = [ pkgs.libpcap ];
     buildTools = with pkgs; [ gettext perl help2man intltool ];
-    doCheck = false; # https://github.com/wjt/bustle/issues/6
+    patches = [
+      # Add missing gio-unix-2.0 dependency
+      (pkgs.fetchpatch {
+        url = https://github.com/wjt/bustle/commit/bcc3d56d367635c0dfdb4eab0d1265829aba6400.patch;
+        sha256 = "1ybviivfbs5janiyw01ww365vxckni6fk0j10609clxk4na2nvb9";
+      })
+    ];
     postInstall = ''
       make install PREFIX=$out
     '';
@@ -915,6 +925,7 @@ self: super: {
   # With ghc-8.2.x haddock would time out for unknown reason
   # See https://github.com/haskell/haddock/issues/679
   language-puppet = dontHaddock super.language-puppet;
+  filecache = overrideCabal super.filecache (drv: { doCheck = !pkgs.stdenv.isDarwin; });
 
   # Missing FlexibleContexts in testsuite
   # https://github.com/EduardSergeev/monad-memo/pull/4
@@ -1035,7 +1046,7 @@ self: super: {
   vulkan = super.vulkan.override { vulkan = pkgs.vulkan-loader; };
 
   # Builds only with the latest version of indexed-list-literals.
-  vector-sized_1_0_2_0 = super.vector-sized_1_0_2_0.override {
+  vector-sized_1_0_3_0 = super.vector-sized_1_0_3_0.override {
     indexed-list-literals = self.indexed-list-literals_0_2_1_1;
   };
 

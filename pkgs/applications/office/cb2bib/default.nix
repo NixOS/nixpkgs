@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
   pname = "cb2bib";
   version = "1.9.7";
   src = fetchurl {
-    url = "http://www.molspaces.com/dl/progs/${name}.tar.gz";
+    url = "https://www.molspaces.com/dl/progs/${name}.tar.gz";
     sha256 = "0gr8vmlz1ikw0jiwwac2ays20z26cdv3bjdx9m1nc450hl6m5s7s";
   };
   buildInputs = [ qtbase qtwebkit qtx11extras lzo libX11 ];

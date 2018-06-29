@@ -6,7 +6,7 @@ python27Packages.buildPythonApplication rec {
     version = "3.1.0";
 
     src = fetchurl {
-      url = "http://developers.yubico.com/yubioath-desktop/Releases/yubioath-desktop-${version}.tar.gz";
+      url = "https://developers.yubico.com/yubioath-desktop/Releases/yubioath-desktop-${version}.tar.gz";
       sha256 = "0jfvllgh88g2vwd8sg6willlnn2hq05nd9d3xmv98lhl7gyy1akw";
     };
 

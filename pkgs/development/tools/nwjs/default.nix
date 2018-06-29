@@ -33,7 +33,7 @@ in stdenv.mkDerivation rec {
   version = "0.23.6";
 
   src = fetchurl {
-    url = "http://dl.nwjs.io/v${version}/nwjs-v${version}-linux-${bits}.tar.gz";
+    url = "https://dl.nwjs.io/v${version}/nwjs-v${version}-linux-${bits}.tar.gz";
     sha256 = if bits == "x64" then
       "0ppyjspdvacarhdn4xd5i1pqgmf4z1bxnh1cry780489h25rcjgj" else
       "0c0j73vnzhsry5rdx41d954a29jmjnvzli728cfbjybfr51zdybg";

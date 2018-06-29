@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "bfs-${version}";
-  version = "1.2.1";
+  version = "1.2.2";
 
   src = fetchFromGitHub {
     repo = "bfs";
     owner = "tavianator";
     rev = version;
-    sha256 = "1dgc31l5d20i0v78c51xga4lr78b5x8dz6yzsvbhlgs0abi0nynx";
+    sha256 = "0a7zsipvndvg1kp2i35jrg9y9kncj7i6mp36dhpj8zjmkm5d5b8g";
   };
 
   # Disable fstype test, tries to read /etc/mtab

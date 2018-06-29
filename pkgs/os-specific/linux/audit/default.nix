@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
   name = "audit-2.8.4";
 
   src = fetchurl {
-    url = "http://people.redhat.com/sgrubb/audit/${name}.tar.gz";
+    url = "https://people.redhat.com/sgrubb/audit/${name}.tar.gz";
     sha256 = "0f4ci6ffznnmgblwgv7ich9mjfk3p6y5l6m6h3chhmzw156nj454";
   };
 

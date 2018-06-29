@@ -7,7 +7,7 @@ stdenv.mkDerivation rec {
   name = "mcrl2-${version}";
 
   src = fetchurl {
-    url = "http://www.mcrl2.org/download/release/mcrl2-${version}.${build_nr}.tar.gz";
+    url = "https://www.mcrl2.org/download/release/mcrl2-${version}.${build_nr}.tar.gz";
     sha256 = "1c8h94ja7271ph61zrcgnjgblxppld6v22f7f900prjgzbcfy14m";
   };
 

@@ -7,7 +7,7 @@ stdenv.mkDerivation rec {
   name = "gdal-${version}";
 
   src = fetchurl {
-    url = "http://download.osgeo.org/gdal/${version}/${name}.tar.gz";
+    url = "https://download.osgeo.org/gdal/${version}/${name}.tar.gz";
     sha256 = "561588bdfd9ca91919d4679a77a2b44214b158934ee8b425295ca5be33a1014d";
   };
 

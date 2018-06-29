@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   name = "nsd-4.1.22";
 
   src = fetchurl {
-    url = "http://www.nlnetlabs.nl/downloads/nsd/${name}.tar.gz";
+    url = "https://www.nlnetlabs.nl/downloads/nsd/${name}.tar.gz";
     sha256 = "1704masmx77qcj7b7shzrmgp9hpf9vpd265cnvn3b2kn0mkyi1pi";
   };
 

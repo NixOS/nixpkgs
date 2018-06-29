@@ -22,7 +22,7 @@ buildPythonPackage rec{
   '';
 
   meta = {
-    homepage = "http://github.com/pytoolz/toolz/";
+    homepage = https://github.com/pytoolz/toolz/;
     description = "List processing tools and functional utilities";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ fridh ];

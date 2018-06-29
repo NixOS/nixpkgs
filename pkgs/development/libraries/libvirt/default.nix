@@ -6,6 +6,7 @@
 , dnsmasq, libnl, libpcap, libxslt, xhtml1, numad, numactl, perlPackages
 , curl, libiconv, gmp, zfs, parted, bridge-utils, dmidecode
 , enableXen ? false, xen ? null
+, enableIscsi ? false, openiscsi
 }:
 
 with stdenv.lib;
@@ -42,6 +43,8 @@ in stdenv.mkDerivation rec {
     libapparmor libcap_ng numactl attr parted
   ] ++ optionals (enableXen && stdenv.isLinux && stdenv.isx86_64) [
     xen
+  ] ++ optionals enableIscsi [
+    openiscsi
   ] ++ optionals stdenv.isDarwin [
     libiconv gmp
   ];
@@ -49,7 +52,7 @@ in stdenv.mkDerivation rec {
   preConfigure = ''
     ${ optionalString (!buildFromTarball) "./bootstrap --no-git --gnulib-srcdir=$(pwd)/.gnulib" }
 
-    PATH=${stdenv.lib.makeBinPath ([ dnsmasq ] ++ optionals stdenv.isLinux [ iproute iptables ebtables lvm2 systemd numad ])}:$PATH
+    PATH=${stdenv.lib.makeBinPath ([ dnsmasq ] ++ optionals stdenv.isLinux [ iproute iptables ebtables lvm2 systemd numad ] ++ optionals enableIscsi [ openiscsi ])}:$PATH
 
     # the path to qemu-kvm will be stored in VM's .xml and .save files
     # do not use "''${qemu_kvm}/bin/qemu-kvm" to avoid bound VMs to particular qemu derivations
@@ -79,6 +82,8 @@ in stdenv.mkDerivation rec {
     "--with-storage-disk"
   ] ++ optionals (stdenv.isLinux && zfs != null) [
     "--with-storage-zfs"
+  ] ++ optionals enableIscsi [
+    "--with-storage-iscsi"
   ] ++ optionals stdenv.isDarwin [
     "--with-init-script=none"
   ];
@@ -88,7 +93,10 @@ in stdenv.mkDerivation rec {
     "sysconfdir=$(out)/var/lib"
   ];
 
-  postInstall = ''
+
+  postInstall = let
+    binPath = [ iptables iproute pmutils numad numactl bridge-utils dmidecode dnsmasq ebtables ] ++ optionals enableIscsi [ openiscsi ];
+  in ''
     substituteInPlace $out/libexec/libvirt-guests.sh \
       --replace 'ON_SHUTDOWN=suspend' 'ON_SHUTDOWN=''${ON_SHUTDOWN:-suspend}' \
       --replace "$out/bin"            '${gettext}/bin' \
@@ -101,7 +109,7 @@ in stdenv.mkDerivation rec {
     substituteInPlace $out/lib/systemd/system/libvirtd.service --replace /bin/kill ${coreutils}/bin/kill
     rm $out/lib/systemd/system/{virtlockd,virtlogd}.*
     wrapProgram $out/sbin/libvirtd \
-      --prefix PATH : /run/libvirt/nix-emulators:${makeBinPath [ iptables iproute pmutils numad numactl bridge-utils dmidecode dnsmasq ebtables ]}
+      --prefix PATH : /run/libvirt/nix-emulators:${makeBinPath binPath}
   '';
 
   enableParallelBuilding = true;

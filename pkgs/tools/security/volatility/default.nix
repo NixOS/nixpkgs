@@ -5,7 +5,7 @@ pythonPackages.buildPythonApplication rec {
   name = "volatility-${version}";
 
   src = fetchurl {
-    url = "http://downloads.volatilityfoundation.org/releases/${version}/${name}.zip";
+    url = "https://downloads.volatilityfoundation.org/releases/${version}/${name}.zip";
     sha256 = "15cjrx31nnqa3bpjkv0x05j7f2sb7pq46a72zh7qg55zf86hawsv";
   };
 

@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   name = "rsyslog-8.21.0";
 
   src = fetchurl {
-    url = "http://www.rsyslog.com/files/download/rsyslog/${name}.tar.gz";
+    url = "https://www.rsyslog.com/files/download/rsyslog/${name}.tar.gz";
     sha256 = "1arrhc9fw79sp7dxkf7gyfwibyr2i1000pfds5c7n43mgglgvcdx";
   };
 
@@ -106,7 +106,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = {
-    homepage = http://www.rsyslog.com/;
+    homepage = https://www.rsyslog.com/;
     description = "Enhanced syslog implementation";
     license = licenses.gpl3;
     platforms = platforms.linux;

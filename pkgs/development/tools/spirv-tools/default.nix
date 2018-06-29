@@ -7,14 +7,14 @@ spirv_sources = {
   tools = fetchFromGitHub {
     owner = "KhronosGroup";
     repo = "SPIRV-Tools";
-    rev = "9e19fc0f31ceaf1f6bc907dbf17dcfded85f2ce8";
-    sha256 = "1zpwznq0fyvkzs5h9nnkr7g6svr0w8z6zx62xgnss17c2a5cz0lk";
+    rev = "f2c93c6e124836797311facb8449f9a0b76fefc2";
+    sha256 = "03w5xk2hjijj1rfbx5dw3lhy7vb9zrssfcwvp09q47f77vkgl105";
   };
   headers = fetchFromGitHub {
     owner = "KhronosGroup";
     repo = "SPIRV-Headers";
-    rev = "ce309203d7eceaf908bea8862c27f3e0749f7d00";
-    sha256 = "1sv1iy2d46sg7r3xy591db6fn9h78wd079yvfa87vwmwsdkhiqhm";
+    rev = "12f8de9f04327336b699b1b80aa390ae7f9ddbf4";
+    sha256 = "0fswk5ndvkmy64har3dmhpkv09zmvb0p4knbqc4fdl4qiggz0fvf";
   };
 };
 
@@ -22,7 +22,7 @@ in
 
 stdenv.mkDerivation rec {
   name = "spirv-tools-${version}";
-  version = "2018-02-05";
+  version = "2018-06-06";
 
   src = spirv_sources.tools;
   patchPhase = ''ln -sv ${spirv_sources.headers} external/spirv-headers'';

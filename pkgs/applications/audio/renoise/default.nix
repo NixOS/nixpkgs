@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     if stdenv.system == "x86_64-linux" then
         if builtins.isNull releasePath then
         fetchurl {
-          url = "http://files.renoise.com/demo/Renoise_${urlVersion version}_Demo_x86_64.tar.bz2";
+          url = "https://files.renoise.com/demo/Renoise_${urlVersion version}_Demo_x86_64.tar.bz2";
           sha256 = "0pan68fr22xbj7a930y29527vpry3f07q3i9ya4fp6g7aawffsga";
         }
         else

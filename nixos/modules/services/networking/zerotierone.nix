@@ -47,7 +47,7 @@ in
     };
 
     # ZeroTier does not issue DHCP leases, but some strangers might...
-    networking.dhcpcd.denyInterfaces = [ "zt0" ];
+    networking.dhcpcd.denyInterfaces = [ "zt*" ];
 
     # ZeroTier receives UDP transmissions on port 9993 by default
     networking.firewall.allowedUDPPorts = [ 9993 ];

@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    homepage = http://workcraft.org/;
+    homepage = https://workcraft.org/;
     description = "Framework for interpreted graph modeling, verification and synthesis";
     platforms = stdenv.lib.platforms.linux;
     license = stdenv.lib.licenses.mit;

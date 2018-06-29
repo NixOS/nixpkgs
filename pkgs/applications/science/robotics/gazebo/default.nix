@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
   name = "gazebo-${version}";
 
   src = fetchurl {
-    url = "http://osrf-distributions.s3.amazonaws.com/gazebo/releases/${name}.tar.bz2";
+    url = "https://osrf-distributions.s3.amazonaws.com/gazebo/releases/${name}.tar.bz2";
     sha256 = src-sha256;
   };
 

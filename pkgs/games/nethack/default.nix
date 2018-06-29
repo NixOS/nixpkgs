@@ -16,7 +16,7 @@ in stdenv.mkDerivation {
   name = "nethack-3.6.1";
 
   src = fetchurl {
-    url = "http://nethack.org/download/3.6.1/nethack-361-src.tgz";
+    url = "https://nethack.org/download/3.6.1/nethack-361-src.tgz";
     sha256 = "1dha0ijvxhx7c9hr0452h93x81iiqsll8bc9msdnp7xdqcfbz32b";
   };
 

@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     ++ lib.optional withSQLite sqlite;
 
   src = fetchurl {
-    url = "http://dovecot.org/releases/2.3/${name}.tar.gz";
+    url = "https://dovecot.org/releases/2.3/${name}.tar.gz";
     sha256 = "14zva4f8k64x86sm9n21cp2yvrpph6k6k52bm22a00pxjwdq50q8";
   };
 

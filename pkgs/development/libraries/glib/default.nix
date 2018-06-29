@@ -54,7 +54,10 @@ stdenv.mkDerivation rec {
 
   patches = optional stdenv.isDarwin ./darwin-compilation.patch
     ++ optional doCheck ./skip-timer-test.patch
-    ++ [ ./schema-override-variable.patch ];
+    ++ optionals stdenv.hostPlatform.isMusl [
+      ./quark_init_on_demand.patch
+      ./gobject_init_on_demand.patch
+    ] ++ [ ./schema-override-variable.patch ];
 
   outputs = [ "out" "dev" "devdoc" ];
   outputBin = "dev";

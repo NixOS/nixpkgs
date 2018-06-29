@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
   version = "2.0.2";
 
   src = fetchurl {
-    url = "http://www.libsdl.org/projects/SDL_mixer/release/${name}.tar.gz";
+    url = "https://www.libsdl.org/projects/SDL_mixer/release/${name}.tar.gz";
     sha256 = "1fw3kkqi5346ai5if4pxrcbhs5c4vv3a4smgz6fl6kyaxwkmwqaf";
   };
 
