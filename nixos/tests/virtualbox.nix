@@ -334,7 +334,7 @@ let
       virtualisation.memorySize = 2048;
       virtualisation.virtualbox.host.enable = true;
       services.xserver.displayManager.auto.user = "alice";
-      users.extraUsers.alice.extraGroups = let
+      users.users.alice.extraGroups = let
         inherit (config.virtualisation.virtualbox.host) enableHardening;
       in lib.mkIf enableHardening (lib.singleton "vboxusers");
     };

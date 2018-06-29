@@ -30,7 +30,7 @@ in
         enable = true;
       };
 
-      users.extraUsers.alice = {
+      users.users.alice = {
         isNormalUser = true;
         name = "alice";
         uid = 1000;

@@ -78,8 +78,8 @@ in
             # there's nobody around that can input password
             PreferredAuthentications publickey
         '';
-        users.extraUsers.alice = { isNormalUser = true; };
-        users.extraUsers.bob = { isNormalUser = true; };
+        users.users.alice = { isNormalUser = true; };
+        users.users.bob = { isNormalUser = true; };
       };
 
   };
