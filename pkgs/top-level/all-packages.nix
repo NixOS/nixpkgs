@@ -7437,7 +7437,7 @@ with pkgs;
   # When switching these sets, please update docs at ../../doc/languages-frameworks/python.md
   python = python2;
   python2 = python27;
-  python3 = python36;
+  python3 = python37;
   pypy = pypy27;
 
   # Python interpreter that is build with all modules, including tkinter.
