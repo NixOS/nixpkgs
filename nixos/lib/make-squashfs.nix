@@ -1,5 +1,5 @@
 { stdenv, squashfsTools, closureInfo
-
+, excludeWildcards ? []
 , # The root directory of the squashfs filesystem is filled with the
   # closures of the Nix store paths listed here.
   storeContents ? []
@@ -20,6 +20,7 @@ stdenv.mkDerivation {
 
       # Generate the squashfs image.
       mksquashfs nix-path-registration $(cat $closureInfo/store-paths) $out \
-        -keep-as-directory -all-root -b 1048576 -comp xz -Xdict-size 100%
+        -keep-as-directory -all-root -b 1048576 -comp xz -Xdict-size 100% \
+        -wildcards ${stdenv.lib.concatStringsSep " " (map (f: "-e '${f}' ") excludeWildcards)}
     '';
 }
