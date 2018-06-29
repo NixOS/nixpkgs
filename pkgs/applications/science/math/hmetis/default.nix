@@ -1,7 +1,7 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "hmetis-${version}-i686";
+  name = "hmetis-${version}";
   version = "1.5";
 
   src = fetchurl {
