@@ -131,6 +131,9 @@ in
       };
     };
 
+    # If networkmanager is enabled, ask it to interface with unbound.
+    networking.networkmanager.dns = "unbound";
+
   };
 
 }

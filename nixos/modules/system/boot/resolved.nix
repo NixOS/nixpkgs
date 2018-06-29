@@ -147,6 +147,8 @@ in
       ${config.services.resolved.extraConfig}
     '';
 
+    # If networkmanager is enabled, ask it to interface with resolved.
+    networking.networkmanager.dns = "systemd-resolved";
   };
 
 }
