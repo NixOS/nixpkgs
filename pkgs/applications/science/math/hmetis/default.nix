@@ -1,10 +1,8 @@
-{ stdenv, fetchurl, patchelf }:
+{ stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
   name = "hmetis-${version}-i686";
   version = "1.5";
-
-  buildInputs = [ patchelf ];
 
   src = fetchurl {
     url = "http://glaros.dtc.umn.edu/gkhome/fetch/sw/hmetis/hmetis-${version}-linux.tar.gz";
