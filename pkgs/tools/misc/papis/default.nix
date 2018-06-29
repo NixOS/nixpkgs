@@ -1,12 +1,24 @@
 { buildPythonApplication, lib, fetchFromGitHub, bashInteractive
-, argcomplete, arxiv2bib, beautifulsoup4, bibtexparser
-, configparser, dmenu-python, habanero, papis-python-rofi
-, pylibgen, prompt_toolkit, pyparser, pytest, python_magic
-, pyyaml, requests, unidecode, urwid, vobject, tkinter
-, vim
+, python3, vim
 }:
 
-buildPythonApplication rec {
+let
+  python = python3.override {
+    packageOverrides = self: super: {
+
+      # https://github.com/eventable/vobject/issues/112
+      python-dateutil = super.python-dateutil.overridePythonAttrs (oldAttrs: rec {
+        version = "2.6.1";
+        src = oldAttrs.src.override {
+          inherit version;
+          sha256 = "891c38b2a02f5bb1be3e4793866c8df49c7d19baabf9c1bad62547e0b4866aca";
+        };
+      });
+
+    };
+  };
+
+in python.pkgs.buildPythonApplication rec {
   pname = "papis";
   version = "0.5.3";
 
@@ -23,7 +35,7 @@ buildPythonApplication rec {
     patchShebangs tests
   '';
 
-  propagatedBuildInputs = [
+  propagatedBuildInputs = with python.pkgs; [
     argcomplete arxiv2bib beautifulsoup4 bibtexparser
     configparser dmenu-python habanero papis-python-rofi
     pylibgen prompt_toolkit pyparser python_magic pyyaml
@@ -31,7 +43,7 @@ buildPythonApplication rec {
     vim
   ];
 
-  checkInputs = [ pytest ];
+  checkInputs = with python.pkgs; [ pytest ];
 
   # Papis tries to create the config folder under $HOME during the tests
   checkPhase = ''
