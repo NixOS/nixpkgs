@@ -7,13 +7,13 @@
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";
   pname = "libfm-qt";
-  version = "0.12.0";
+  version = "0.13.1";
 
   src = fetchFromGitHub {
     owner = "lxde";
     repo = pname;
     rev = version;
-    sha256 = "0932yl098pc5rwgy9irrc3ys47jx64m3wm702dvs8yy15alv6x4i";
+    sha256 = "1g8j1lw74qvagqhqsx45b290fjwh3jfl3i0366m0w4la03v0rw5j";
   };
 
   nativeBuildInputs = [
