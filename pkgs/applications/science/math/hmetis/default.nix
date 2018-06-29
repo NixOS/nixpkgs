@@ -12,8 +12,6 @@ stdenv.mkDerivation rec {
   };
   src = [ hmetissrc ];
 
-  doCheck = true;
-
   installPhase = ''
     mkdir -p $out/bin
     for binaryfile in hmetis khmetis shmetis; do 
