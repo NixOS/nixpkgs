@@ -2,6 +2,7 @@
 , cheroot, portend, routes, six
 , setuptools_scm
 , backports_unittest-mock, objgraph, pathpy, pytest, pytestcov
+, backports_functools_lru_cache, requests_toolbelt
 }:
 
 buildPythonPackage rec {
@@ -17,7 +18,7 @@ buildPythonPackage rec {
 
   buildInputs = [ setuptools_scm ];
 
-  checkInputs = [ backports_unittest-mock objgraph pathpy pytest pytestcov ];
+  checkInputs = [ backports_unittest-mock objgraph pathpy pytest pytestcov backports_functools_lru_cache requests_toolbelt ];
 
   checkPhase = ''
     LANG=en_US.UTF-8 pytest
