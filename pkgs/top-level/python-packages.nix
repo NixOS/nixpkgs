@@ -12860,6 +12860,8 @@ in {
 
   shapely = callPackage ../development/python-modules/shapely { };
 
+  soco = callPackage ../development/python-modules/soco { };
+
   sopel = buildPythonPackage rec {
     name = "sopel-6.3.1";
 
