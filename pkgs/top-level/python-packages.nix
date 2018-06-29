@@ -449,6 +449,11 @@ in {
 
   python-hosts = callPackage ../development/python-modules/python-hosts { };
 
+  python-igraph = callPackage ../development/python-modules/python-igraph {
+    pkgconfig = pkgs.pkgconfig;
+    igraph = pkgs.igraph;
+  };
+
   python3-openid = callPackage ../development/python-modules/python3-openid { };
 
   python-periphery = callPackage ../development/python-modules/python-periphery { };
