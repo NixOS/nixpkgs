@@ -521,7 +521,7 @@ merge:"diff3"
     <callout arearefs='ex-dockerTools-buildImage-2'>
      <para>
       <varname>tag</varname> specifies the tag of the resulting image. By
-      default it's <literal>latest</literal>.
+      default it's <literal>null</literal>, which indicates that the nix output hash will be used as tag.
      </para>
     </callout>
     <callout arearefs='ex-dockerTools-buildImage-3'>

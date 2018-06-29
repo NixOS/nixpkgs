@@ -420,8 +420,8 @@ rec {
   buildImage = args@{
     # Image name.
     name,
-    # Image tag.
-    tag ? "latest",
+    # Image tag, when null then the nix output hash will be used.
+    tag ? null,
     # Parent image, to append to.
     fromImage ? null,
     # Name of the parent image; will be read from the image otherwise.
@@ -471,12 +471,19 @@ rec {
         buildInputs = [ jshon pigz coreutils findutils jq ];
         # Image name and tag must be lowercase
         imageName = lib.toLower name;
-        imageTag = lib.toLower tag;
+        imageTag = if tag == null then "" else lib.toLower tag;
         inherit fromImage baseJson;
         layerClosure = writeReferencesToFile layer;
         passthru.buildArgs = args;
         passthru.layer = layer;
       } ''
+        ${lib.optionalString (tag == null) ''
+          outName="$(basename "$out")"
+          outHash=$(echo "$outName" | cut -d - -f 1)
+
+          imageTag=$outHash
+        ''}
+
         # Print tar contents:
         # 1: Interpreted as relative to the root directory
         # 2: With no trailing slashes on directories
