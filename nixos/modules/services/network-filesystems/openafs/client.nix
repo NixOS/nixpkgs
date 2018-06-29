@@ -1,6 +1,7 @@
-{ config, pkgs, lib, ... }:
+{ config, lib, pkgs, ... }:
 
-with import ./lib.nix { inherit lib; };
+# openafsMod, openafsBin, mkCellServDB
+with import ./lib.nix { inherit config lib pkgs; };
 
 let
   inherit (lib) getBin mkOption mkIf optionalString singleton types;
@@ -8,8 +9,8 @@ let
   cfg = config.services.openafsClient;
 
   cellServDB = pkgs.fetchurl {
-    url = http://dl.central.org/dl/cellservdb/CellServDB.2017-03-14;
-    sha256 = "1197z6c5xrijgf66rhaymnm5cvyg2yiy1i20y4ah4mrzmjx0m7sc";
+    url = http://dl.central.org/dl/cellservdb/CellServDB.2018-05-14;
+    sha256 = "1wmjn6mmyy2r8p10nlbdzs4nrqxy8a9pjyrdciy5nmppg4053rk2";
   };
 
   clientServDB = pkgs.writeText "client-cellServDB-${cfg.cellName}" (mkCellServDB cfg.cellName cfg.cellServDB);
@@ -21,8 +22,6 @@ let
     echo "${cfg.mountPoint}:${cfg.cache.directory}:${toString cfg.cache.blocks}" > $out/cacheinfo
   '';
 
-  openafsMod = config.boot.kernelPackages.openafs;
-  openafsBin = lib.getBin pkgs.openafs;
 in
 {
   ###### interface
@@ -147,6 +146,19 @@ in
         '';
       };
 
+      packages = {
+        module = mkOption {
+          default = config.boot.kernelPackages.openafs;
+          type = types.package;
+          description = "OpenAFS kernel module package. MUST match the userland package!";
+        };
+        programs = mkOption {
+          default = getBin pkgs.openafs;
+          type = types.package;
+          description = "OpenAFS programs package. MUST match the kernel module package!";
+        };
+      };
+
       sparse = mkOption {
         default = true;
         type = types.bool;
@@ -180,7 +192,7 @@ in
       }
     ];
 
-    environment.systemPackages = [ pkgs.openafs ];
+    environment.systemPackages = [ openafsBin ];
 
     environment.etc = {
       clientCellServDB = {
