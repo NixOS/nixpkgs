@@ -5527,6 +5527,8 @@ in {
     };
   };
 
+  flask-caching = callPackage ../development/python-modules/flask-caching { };
+
   flask-common = callPackage ../development/python-modules/flask-common { };
 
   flask-compress = callPackage ../development/python-modules/flask-compress { };
