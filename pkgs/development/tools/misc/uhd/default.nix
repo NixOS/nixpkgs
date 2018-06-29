@@ -9,17 +9,15 @@
 
 let
   uhdVer = "v" + version;
-  ImgVer = "uhd-images_3.11.0.git-227-g9277fc58.tar.xz";
 
   # UHD seems to use three different version number styles: x.y.z, xxx_yyy_zzz
   # and xxx.yyy.zzz. Hrmpf... style keeps changing
-  version = "3.11.0.0";
+  version = "3.12.0.0";
 
-  # Firmware images are downloaded (pre-built) from:
-  # http://files.ettus.com/binaries/images/
+  # Firmware images are downloaded (pre-built) from the respective release on Github
   uhdImagesSrc = fetchurl {
-    url = "http://files.ettus.com/binaries/images/${ImgVer}";
-    sha256 = "1z8isnlxc5h0168jjpdvdv7rkd55x4dkfh14m8pc501zsf8azd6z";
+    url = "https://github.com/EttusResearch/uhd/releases/download/${uhdVer}/uhd-images_${version}.tar.xz";
+    sha256 = "1glf2qay4asajbl92fy432idqk0sj5h603najr8sgkbdyyyr933p";
   };
 
 in stdenv.mkDerivation {
@@ -29,7 +27,7 @@ in stdenv.mkDerivation {
     owner = "EttusResearch";
     repo = "uhd";
     rev = "${uhdVer}";
-    sha256 = "1ilx1a8k5zygfq7acm9yk2fi368b1a1l7ll21kmmxjv6ifz8ds5q";
+    sha256 = "0m7vw7dmvn7d01kkzphayzi0bk50m5v9a17rpnxhn0bqhw282ksv";
   };
 
   enableParallelBuilding = true;
@@ -49,8 +47,10 @@ in stdenv.mkDerivation {
 
   postPhases = [ "installFirmware" ];
 
+  # UHD expects images in `$CMAKE_INSTALL_PREFIX/share/uhd/images`
   installFirmware = ''
-    tar --strip-components=1 -xvf "${uhdImagesSrc}" -C "$out"
+    mkdir -p "$out/share/uhd/images"
+    tar --strip-components=1 -xvf "${uhdImagesSrc}" -C "$out/share/uhd/images"
   '';
 
   meta = with stdenv.lib; {
