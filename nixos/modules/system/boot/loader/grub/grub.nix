@@ -9,12 +9,12 @@ let
   efi = config.boot.loader.efi;
 
   realGrub = if cfg.version == 1 then pkgs.grub
-    else if cfg.zfsSupport then pkgs.grub2.override { zfsSupport = true; }
+    else if cfg.zfsSupport then pkgs.grub2_light.override { zfsSupport = true; }
     else if cfg.trustedBoot.enable
          then if cfg.trustedBoot.isHPLaptop
               then pkgs.trustedGrub-for-HP
               else pkgs.trustedGrub
-         else pkgs.grub2;
+         else pkgs.grub2_light;
 
   grub =
     # Don't include GRUB if we're only generating a GRUB menu (e.g.,
