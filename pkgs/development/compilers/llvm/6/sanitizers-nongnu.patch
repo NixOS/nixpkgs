@@ -1,6 +1,6 @@
-From 8c74f8274369f527f2ada3772f4a0b406cb481ec Mon Sep 17 00:00:00 2001
-From: "Jory A. Pratt" <anarchy@gentoo.org>
-Date: Sat, 9 Sep 2017 08:31:15 -0500
+From 7b4b3333a2718628b1d510ec1d8438ad67308299 Mon Sep 17 00:00:00 2001
+From: Will Dietz <w@wdtz.org>
+Date: Fri, 29 Jun 2018 09:48:59 -0500
 Subject: [PATCH] Ported to 6.0, taken from gentoo-musl project.
 
 ------
@@ -11,18 +11,20 @@ Signed-off-by: Jory A. Pratt <anarchy@gentoo.org>
 
 Taken from gentoo-musl project, with a few additional minor fixes.
 ---
- lib/asan/asan_linux.cc                             |  4 +--
- lib/interception/interception_linux.cc             |  2 +-
- lib/interception/interception_linux.h              |  3 +-
- lib/msan/msan_linux.cc                             |  2 +-
- .../sanitizer_common_interceptors_ioctl.inc        |  4 +--
- lib/sanitizer_common/sanitizer_common_syscalls.inc |  2 +-
- lib/sanitizer_common/sanitizer_linux_libcdep.cc    | 10 +++---
- lib/sanitizer_common/sanitizer_platform.h          |  6 ++++
- .../sanitizer_platform_interceptors.h              |  4 +--
- .../sanitizer_platform_limits_posix.cc             | 40 +++++++++++++---------
- lib/tsan/rtl/tsan_platform_linux.cc                |  2 +-
- 11 files changed, 46 insertions(+), 33 deletions(-)
+ lib/asan/asan_linux.cc                        |  4 +-
+ lib/interception/interception_linux.cc        |  2 +-
+ lib/interception/interception_linux.h         |  3 +-
+ lib/msan/msan_linux.cc                        |  2 +-
+ lib/sanitizer_common/sanitizer_allocator.cc   |  2 +-
+ .../sanitizer_common_interceptors_ioctl.inc   |  4 +-
+ .../sanitizer_common_syscalls.inc             |  2 +-
+ lib/sanitizer_common/sanitizer_linux.cc       |  8 +++-
+ .../sanitizer_linux_libcdep.cc                | 10 ++---
+ lib/sanitizer_common/sanitizer_platform.h     |  6 +++
+ .../sanitizer_platform_interceptors.h         |  4 +-
+ .../sanitizer_platform_limits_posix.cc        | 37 +++++++++++--------
+ lib/tsan/rtl/tsan_platform_linux.cc           |  2 +-
+ 13 files changed, 51 insertions(+), 35 deletions(-)
 
 diff --git a/lib/asan/asan_linux.cc b/lib/asan/asan_linux.cc
 index 625f32d40..73cf77aca 100644
@@ -86,6 +88,19 @@ index 4e6321fcb..4d50feb82 100644
  
  #include "msan.h"
  #include "msan_thread.h"
+diff --git a/lib/sanitizer_common/sanitizer_allocator.cc b/lib/sanitizer_common/sanitizer_allocator.cc
+index fc4f7a75a..76cf4f769 100644
+--- a/lib/sanitizer_common/sanitizer_allocator.cc
++++ b/lib/sanitizer_common/sanitizer_allocator.cc
+@@ -23,7 +23,7 @@ namespace __sanitizer {
+ 
+ // ThreadSanitizer for Go uses libc malloc/free.
+ #if SANITIZER_GO || defined(SANITIZER_USE_MALLOC)
+-# if SANITIZER_LINUX && !SANITIZER_ANDROID
++# if SANITIZER_LINUX && !SANITIZER_ANDROID && !SANITIZER_NONGNU
+ extern "C" void *__libc_malloc(uptr size);
+ #  if !SANITIZER_GO
+ extern "C" void *__libc_memalign(uptr alignment, uptr size);
 diff --git a/lib/sanitizer_common/sanitizer_common_interceptors_ioctl.inc b/lib/sanitizer_common/sanitizer_common_interceptors_ioctl.inc
 index 24e7548a5..20259b1d6 100644
 --- a/lib/sanitizer_common/sanitizer_common_interceptors_ioctl.inc
@@ -121,6 +136,37 @@ index 469c8eb7e..24f87867d 100644
  PRE_SYSCALL(prlimit64)(long pid, long resource, const void *new_rlim,
                         void *old_rlim) {
    if (new_rlim) PRE_READ(new_rlim, struct_rlimit64_sz);
+diff --git a/lib/sanitizer_common/sanitizer_linux.cc b/lib/sanitizer_common/sanitizer_linux.cc
+index 6c83e8db4..542c4fe64 100644
+--- a/lib/sanitizer_common/sanitizer_linux.cc
++++ b/lib/sanitizer_common/sanitizer_linux.cc
+@@ -522,13 +522,13 @@ const char *GetEnv(const char *name) {
+ #endif
+ }
+ 
+-#if !SANITIZER_FREEBSD && !SANITIZER_NETBSD
++#if !SANITIZER_FREEBSD && !SANITIZER_NETBSD && !SANITIZER_NONGNU
+ extern "C" {
+   SANITIZER_WEAK_ATTRIBUTE extern void *__libc_stack_end;
+ }
+ #endif
+ 
+-#if !SANITIZER_GO && !SANITIZER_FREEBSD && !SANITIZER_NETBSD
++#if (!SANITIZER_GO || SANITIZER_NONGNU) && !SANITIZER_FREEBSD && !SANITIZER_NETBSD
+ static void ReadNullSepFileToArray(const char *path, char ***arr,
+                                    int arr_size) {
+   char *buff;
+@@ -569,6 +569,10 @@ static void GetArgsAndEnv(char ***argv, char ***envp) {
+ #elif SANITIZER_NETBSD
+   *argv = __ps_strings->ps_argvstr;
+   *argv = __ps_strings->ps_envstr;
++#elif SANITIZER_NONGNU
++    static const int kMaxArgv = 2000, kMaxEnvp = 2000;
++    ReadNullSepFileToArray("/proc/self/cmdline", argv, kMaxArgv);
++    ReadNullSepFileToArray("/proc/self/environ", envp, kMaxEnvp);
+ #else
+ #if !SANITIZER_GO
+   if (&__libc_stack_end) {
 diff --git a/lib/sanitizer_common/sanitizer_linux_libcdep.cc b/lib/sanitizer_common/sanitizer_linux_libcdep.cc
 index 56fdfc870..a932d5db1 100644
 --- a/lib/sanitizer_common/sanitizer_linux_libcdep.cc
@@ -210,7 +256,7 @@ index b99ac4480..628d226a1 100644
  #define SANITIZER_INTERCEPT_RANDOM_R SI_LINUX_NOT_ANDROID
  #define SANITIZER_INTERCEPT_PTHREAD_ATTR_GET SI_POSIX
 diff --git a/lib/sanitizer_common/sanitizer_platform_limits_posix.cc b/lib/sanitizer_common/sanitizer_platform_limits_posix.cc
-index f12e8206a..8880197b0 100644
+index feb7bad6f..4e89ab2a6 100644
 --- a/lib/sanitizer_common/sanitizer_platform_limits_posix.cc
 +++ b/lib/sanitizer_common/sanitizer_platform_limits_posix.cc
 @@ -14,6 +14,9 @@
@@ -243,26 +289,16 @@ index f12e8206a..8880197b0 100644
  #if HAVE_RPC_XDR_H
  # include <rpc/xdr.h>
  #elif HAVE_TIRPC_RPC_XDR_H
-@@ -159,7 +164,8 @@ typedef struct user_fpregs elf_fpregset_t;
- # include <sys/procfs.h>
- #endif
- #include <sys/user.h>
--#include <sys/ustat.h>
-+// #include <sys/ustat.h>
-+#include <sys/statfs.h>
- #include <linux/cyclades.h>
- #include <linux/if_eql.h>
- #include <linux/if_plip.h>
-@@ -252,7 +258,7 @@ namespace __sanitizer {
+@@ -251,7 +256,7 @@ namespace __sanitizer {
    unsigned struct_itimerspec_sz = sizeof(struct itimerspec);
  #endif // SANITIZER_LINUX || SANITIZER_FREEBSD
  
 -#if SANITIZER_LINUX && !SANITIZER_ANDROID
 +#if SANITIZER_LINUX && !SANITIZER_ANDROID && !SANITIZER_NONGNU
-   unsigned struct_ustat_sz = sizeof(struct ustat);
-   unsigned struct_rlimit64_sz = sizeof(struct rlimit64);
-   unsigned struct_statvfs64_sz = sizeof(struct statvfs64);
-@@ -311,7 +317,7 @@ unsigned struct_ElfW_Phdr_sz = sizeof(ElfW(Phdr));
+   // Use pre-computed size of struct ustat to avoid <sys/ustat.h> which
+   // has been removed from glibc 2.28.
+ #if defined(__aarch64__) || defined(__s390x__) || defined (__mips64) \
+@@ -322,7 +327,7 @@ unsigned struct_ElfW_Phdr_sz = sizeof(ElfW(Phdr));
  unsigned struct_ElfW_Phdr_sz = sizeof(Elf_Phdr);
  #endif
  
@@ -271,7 +307,7 @@ index f12e8206a..8880197b0 100644
    int glob_nomatch = GLOB_NOMATCH;
    int glob_altdirfunc = GLOB_ALTDIRFUNC;
  #endif
-@@ -405,7 +411,7 @@ unsigned struct_ElfW_Phdr_sz = sizeof(Elf_Phdr);
+@@ -416,7 +421,7 @@ unsigned struct_ElfW_Phdr_sz = sizeof(Elf_Phdr);
    unsigned struct_termios_sz = sizeof(struct termios);
    unsigned struct_winsize_sz = sizeof(struct winsize);
  
@@ -280,7 +316,7 @@ index f12e8206a..8880197b0 100644
    unsigned struct_arpreq_sz = sizeof(struct arpreq);
    unsigned struct_cdrom_msf_sz = sizeof(struct cdrom_msf);
    unsigned struct_cdrom_multisession_sz = sizeof(struct cdrom_multisession);
-@@ -455,7 +461,7 @@ unsigned struct_ElfW_Phdr_sz = sizeof(Elf_Phdr);
+@@ -466,7 +471,7 @@ unsigned struct_ElfW_Phdr_sz = sizeof(Elf_Phdr);
    unsigned struct_vt_mode_sz = sizeof(struct vt_mode);
  #endif // SANITIZER_LINUX || SANITIZER_FREEBSD
  
@@ -289,7 +325,7 @@ index f12e8206a..8880197b0 100644
    unsigned struct_ax25_parms_struct_sz = sizeof(struct ax25_parms_struct);
    unsigned struct_cyclades_monitor_sz = sizeof(struct cyclades_monitor);
  #if EV_VERSION > (0x010000)
-@@ -823,7 +829,7 @@ unsigned struct_ElfW_Phdr_sz = sizeof(Elf_Phdr);
+@@ -834,7 +839,7 @@ unsigned struct_ElfW_Phdr_sz = sizeof(Elf_Phdr);
    unsigned IOCTL_VT_WAITACTIVE = VT_WAITACTIVE;
  #endif // SANITIZER_LINUX || SANITIZER_FREEBSD
  
@@ -298,7 +334,7 @@ index f12e8206a..8880197b0 100644
    unsigned IOCTL_CYGETDEFTHRESH = CYGETDEFTHRESH;
    unsigned IOCTL_CYGETDEFTIMEOUT = CYGETDEFTIMEOUT;
    unsigned IOCTL_CYGETMON = CYGETMON;
-@@ -978,7 +984,7 @@ CHECK_SIZE_AND_OFFSET(dl_phdr_info, dlpi_phdr);
+@@ -989,7 +994,7 @@ CHECK_SIZE_AND_OFFSET(dl_phdr_info, dlpi_phdr);
  CHECK_SIZE_AND_OFFSET(dl_phdr_info, dlpi_phnum);
  #endif // SANITIZER_LINUX || SANITIZER_FREEBSD
  
@@ -307,7 +343,7 @@ index f12e8206a..8880197b0 100644
  CHECK_TYPE_SIZE(glob_t);
  CHECK_SIZE_AND_OFFSET(glob_t, gl_pathc);
  CHECK_SIZE_AND_OFFSET(glob_t, gl_pathv);
-@@ -1012,6 +1018,7 @@ CHECK_TYPE_SIZE(iovec);
+@@ -1023,6 +1028,7 @@ CHECK_TYPE_SIZE(iovec);
  CHECK_SIZE_AND_OFFSET(iovec, iov_base);
  CHECK_SIZE_AND_OFFSET(iovec, iov_len);
  
@@ -315,7 +351,7 @@ index f12e8206a..8880197b0 100644
  CHECK_TYPE_SIZE(msghdr);
  CHECK_SIZE_AND_OFFSET(msghdr, msg_name);
  CHECK_SIZE_AND_OFFSET(msghdr, msg_namelen);
-@@ -1025,6 +1032,7 @@ CHECK_TYPE_SIZE(cmsghdr);
+@@ -1036,6 +1042,7 @@ CHECK_TYPE_SIZE(cmsghdr);
  CHECK_SIZE_AND_OFFSET(cmsghdr, cmsg_len);
  CHECK_SIZE_AND_OFFSET(cmsghdr, cmsg_level);
  CHECK_SIZE_AND_OFFSET(cmsghdr, cmsg_type);
@@ -323,7 +359,7 @@ index f12e8206a..8880197b0 100644
  
  COMPILER_CHECK(sizeof(__sanitizer_dirent) <= sizeof(dirent));
  CHECK_SIZE_AND_OFFSET(dirent, d_ino);
-@@ -1127,7 +1135,7 @@ CHECK_SIZE_AND_OFFSET(mntent, mnt_passno);
+@@ -1138,7 +1145,7 @@ CHECK_SIZE_AND_OFFSET(mntent, mnt_passno);
  
  CHECK_TYPE_SIZE(ether_addr);
  
@@ -332,7 +368,7 @@ index f12e8206a..8880197b0 100644
  CHECK_TYPE_SIZE(ipc_perm);
  # if SANITIZER_FREEBSD
  CHECK_SIZE_AND_OFFSET(ipc_perm, key);
-@@ -1188,7 +1196,7 @@ CHECK_SIZE_AND_OFFSET(ifaddrs, ifa_dstaddr);
+@@ -1199,7 +1206,7 @@ CHECK_SIZE_AND_OFFSET(ifaddrs, ifa_dstaddr);
  CHECK_SIZE_AND_OFFSET(ifaddrs, ifa_data);
  #endif
  
@@ -341,7 +377,7 @@ index f12e8206a..8880197b0 100644
  COMPILER_CHECK(sizeof(__sanitizer_mallinfo) == sizeof(struct mallinfo));
  #endif
  
-@@ -1238,7 +1246,7 @@ COMPILER_CHECK(__sanitizer_XDR_DECODE == XDR_DECODE);
+@@ -1249,7 +1256,7 @@ COMPILER_CHECK(__sanitizer_XDR_DECODE == XDR_DECODE);
  COMPILER_CHECK(__sanitizer_XDR_FREE == XDR_FREE);
  #endif
  
@@ -350,7 +386,7 @@ index f12e8206a..8880197b0 100644
  COMPILER_CHECK(sizeof(__sanitizer_FILE) <= sizeof(FILE));
  CHECK_SIZE_AND_OFFSET(FILE, _flags);
  CHECK_SIZE_AND_OFFSET(FILE, _IO_read_ptr);
-@@ -1257,7 +1265,7 @@ CHECK_SIZE_AND_OFFSET(FILE, _chain);
+@@ -1268,7 +1275,7 @@ CHECK_SIZE_AND_OFFSET(FILE, _chain);
  CHECK_SIZE_AND_OFFSET(FILE, _fileno);
  #endif
  
@@ -373,5 +409,5 @@ index e14d5f575..389a3bc88 100644
    struct __res_state *statp = (struct __res_state*)state;
    for (int i = 0; i < MAXNS && cnt < nfd; i++) {
 -- 
-2.16.2
+2.18.0
 
