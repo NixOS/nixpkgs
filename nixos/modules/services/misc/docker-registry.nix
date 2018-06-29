@@ -140,7 +140,7 @@ in {
       startAt = optional cfg.enableGarbageCollect cfg.garbageCollectDates;
     };
 
-    users.extraUsers.docker-registry = {
+    users.users.docker-registry = {
       createHome = true;
       home = cfg.storagePath;
     };

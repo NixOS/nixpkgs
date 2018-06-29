@@ -1145,7 +1145,7 @@ in {
       ];
 
       environment.systemPackages = [ cfg.package ];
-      users.extraUsers = singleton {
+      users.users = singleton {
         name = "kubernetes";
         uid = config.ids.uids.kubernetes;
         description = "Kubernetes user";
@@ -1154,7 +1154,7 @@ in {
         home = cfg.dataDir;
         createHome = true;
       };
-      users.extraGroups.kubernetes.gid = config.ids.gids.kubernetes;
+      users.groups.kubernetes.gid = config.ids.gids.kubernetes;
 
 			# dns addon is enabled by default
       services.kubernetes.addons.dns.enable = mkDefault true;

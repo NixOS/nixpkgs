@@ -103,7 +103,7 @@ in {
     systemd.packages = [ pkgs.syncthing ];
 
     users = mkIf (cfg.user == defaultUser) {
-      extraUsers."${defaultUser}" =
+      users."${defaultUser}" =
         { group = cfg.group;
           home  = cfg.dataDir;
           createHome = true;
@@ -111,7 +111,7 @@ in {
           description = "Syncthing daemon user";
         };
 
-      extraGroups."${defaultUser}".gid =
+      groups."${defaultUser}".gid =
         config.ids.gids.syncthing;
     };
 

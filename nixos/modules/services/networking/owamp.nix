@@ -17,13 +17,13 @@ in
   ###### implementation
 
   config = mkIf cfg.enable {
-    users.extraUsers = singleton {
+    users.users = singleton {
       name = "owamp";
       group = "owamp";
       description = "Owamp daemon";
     };
 
-    users.extraGroups = singleton {
+    users.groups = singleton {
       name = "owamp";
     };
 

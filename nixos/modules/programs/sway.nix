@@ -73,7 +73,7 @@ in {
       permissions = "u+rx,g+rx";
     };
 
-    users.extraGroups.sway = {};
+    users.groups.sway = {};
     security.pam.services.swaylock = {};
 
     hardware.opengl.enable = mkDefault true;

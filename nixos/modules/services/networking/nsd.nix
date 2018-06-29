@@ -897,12 +897,12 @@ in
 
     environment.systemPackages = [ nsdPkg ];
 
-    users.extraGroups = singleton {
+    users.groups = singleton {
       name = username;
       gid = config.ids.gids.nsd;
     };
 
-    users.extraUsers = singleton {
+    users.users = singleton {
       name = username;
       description = "NSD service user";
       home = stateDir;

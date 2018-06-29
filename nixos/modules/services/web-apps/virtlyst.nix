@@ -50,7 +50,7 @@ in
   };
 
   config = mkIf cfg.enable {
-    users.extraUsers.virtlyst = {
+    users.users.virtlyst = {
       home = stateDir;
       createHome = true;
       group = mkIf config.virtualisation.libvirtd.enable "libvirtd";

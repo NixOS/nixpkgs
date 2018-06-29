@@ -420,7 +420,7 @@ in {
       9160
     ];
 
-    users.extraUsers.cassandra =
+    users.users.cassandra =
       if config.ids.uids ? "cassandra"
       then { uid = config.ids.uids.cassandra; } // cassandraUser
       else cassandraUser ;

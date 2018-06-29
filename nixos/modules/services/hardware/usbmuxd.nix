@@ -43,13 +43,13 @@ in
 
   config = mkIf cfg.enable {
 
-    users.extraUsers = optional (cfg.user == defaultUserGroup) {
+    users.users = optional (cfg.user == defaultUserGroup) {
       name = cfg.user;
       description = "usbmuxd user";
       group = cfg.group;
     };
 
-    users.extraGroups = optional (cfg.group == defaultUserGroup) {
+    users.groups = optional (cfg.group == defaultUserGroup) {
       name = cfg.group;
     };
 

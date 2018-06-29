@@ -145,13 +145,13 @@ in
           "${configOpts}";
     };
 
-    users.extraUsers.openldap =
+    users.users.openldap =
       { name = cfg.user;
         group = cfg.group;
         uid = config.ids.uids.openldap;
       };
 
-    users.extraGroups.openldap =
+    users.groups.openldap =
       { name = cfg.group;
         gid = config.ids.gids.openldap;
       };

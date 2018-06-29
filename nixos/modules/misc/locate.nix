@@ -101,7 +101,7 @@ in {
   };
 
   config = mkIf cfg.enable {
-    users.extraGroups = mkIf isMLocate { mlocate = {}; };
+    users.groups = mkIf isMLocate { mlocate = {}; };
 
     security.wrappers = mkIf isMLocate {
       locate = {

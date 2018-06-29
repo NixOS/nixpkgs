@@ -268,7 +268,7 @@ in
       '';
     };
 
-    users.extraUsers.sddm = {
+    users.users.sddm = {
       createHome = true;
       home = "/var/lib/sddm";
       group = "sddm";
@@ -277,7 +277,7 @@ in
 
     environment.etc."sddm.conf".source = cfgFile;
 
-    users.extraGroups.sddm.gid = config.ids.gids.sddm;
+    users.groups.sddm.gid = config.ids.gids.sddm;
 
     environment.systemPackages = [ sddm ];
     services.dbus.packages = [ sddm ];

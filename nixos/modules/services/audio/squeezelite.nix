@@ -54,7 +54,7 @@ in {
       };
     };
 
-    users.extraUsers.squeezelite= {
+    users.users.squeezelite= {
       inherit uid;
       group = "nogroup";
       extraGroups = [ "audio" ];

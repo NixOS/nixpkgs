@@ -171,8 +171,8 @@ in
       message   = "A pipe must either encrypt or decrypt";
     }) cfg.config;
 
-    users.extraGroups.spiped.gid = config.ids.gids.spiped;
-    users.extraUsers.spiped = {
+    users.groups.spiped.gid = config.ids.gids.spiped;
+    users.users.spiped = {
       description = "Secure Pipe Service user";
       group       = "spiped";
       uid         = config.ids.uids.spiped;

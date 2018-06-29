@@ -47,12 +47,12 @@ in
   ###### implementation
 
   config = mkIf cfg.enable {
-    users.extraGroups = singleton
+    users.groups = singleton
       { name = "osgi";
         gid = config.ids.gids.osgi;
       };
 
-    users.extraUsers = singleton
+    users.users = singleton
       { name = "osgi";
         uid = config.ids.uids.osgi;
         description = "OSGi user";

@@ -139,7 +139,7 @@ in {
 
     environment.systemPackages = [ cfg.package ];
 
-    users.extraUsers = singleton {
+    users.users = singleton {
       name = "neo4j";
       uid = config.ids.uids.neo4j;
       description = "Neo4j daemon user";

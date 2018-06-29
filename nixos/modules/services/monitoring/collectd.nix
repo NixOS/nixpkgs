@@ -97,7 +97,7 @@ in {
       '';
     };
 
-    users.extraUsers = optional (cfg.user == "collectd") {
+    users.users = optional (cfg.user == "collectd") {
       name = "collectd";
     };
   };

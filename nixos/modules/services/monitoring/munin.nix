@@ -150,14 +150,14 @@ in
 
     environment.systemPackages = [ pkgs.munin ];
 
-    users.extraUsers = [{
+    users.users = [{
       name = "munin";
       description = "Munin monitoring user";
       group = "munin";
       uid = config.ids.uids.munin;
     }];
 
-    users.extraGroups = [{
+    users.groups = [{
       name = "munin";
       gid = config.ids.gids.munin;
     }];

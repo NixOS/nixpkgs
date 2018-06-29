@@ -97,13 +97,13 @@ in
       }
     ];
 
-    users.extraUsers.vault = {
+    users.users.vault = {
       name = "vault";
       group = "vault";
       uid = config.ids.uids.vault;
       description = "Vault daemon user";
     };
-    users.extraGroups.vault.gid = config.ids.gids.vault;
+    users.groups.vault.gid = config.ids.gids.vault;
 
     systemd.services.vault = {
       description = "Vault server daemon";

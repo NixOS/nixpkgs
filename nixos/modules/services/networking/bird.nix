@@ -60,11 +60,11 @@ let
           };
         };
         users = {
-          extraUsers.${variant} = {
+          users.${variant} = {
             description = "BIRD Internet Routing Daemon user";
             group = variant;
           };
-          extraGroups.${variant} = {};
+          groups.${variant} = {};
         };
       };
     };

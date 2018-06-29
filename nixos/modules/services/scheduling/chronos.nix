@@ -49,6 +49,6 @@ in {
       };
     };
 
-    users.extraUsers.chronos.uid = config.ids.uids.chronos;
+    users.users.chronos.uid = config.ids.uids.chronos;
   };
 }

@@ -178,7 +178,7 @@ in {
   config = mkIf cfg.enable {
     environment.systemPackages = [ pkgs."dd-agent" pkgs.sysstat pkgs.procps ];
 
-    users.extraUsers.datadog = {
+    users.users.datadog = {
       description = "Datadog Agent User";
       uid = config.ids.uids.datadog;
       group = "datadog";
@@ -186,7 +186,7 @@ in {
       createHome = true;
     };
 
-    users.extraGroups.datadog.gid = config.ids.gids.datadog;
+    users.groups.datadog.gid = config.ids.gids.datadog;
 
     systemd.services.dd-agent = {
       description = "Datadog agent monitor";

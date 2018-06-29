@@ -170,13 +170,13 @@ in {
       after = wants;
     };
 
-    users.extraUsers.hass = {
+    users.users.hass = {
       home = cfg.configDir;
       createHome = true;
       group = "hass";
       uid = config.ids.uids.hass;
     };
 
-    users.extraGroups.hass.gid = config.ids.gids.hass;
+    users.groups.hass.gid = config.ids.gids.hass;
   };
 }

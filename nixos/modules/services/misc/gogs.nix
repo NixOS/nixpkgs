@@ -254,7 +254,7 @@ in
     };
 
     users = mkIf (cfg.user == "gogs") {
-      extraUsers.gogs = {
+      users.gogs = {
         description = "Go Git Service";
         uid = config.ids.uids.gogs;
         group = "gogs";
@@ -262,7 +262,7 @@ in
         createHome = true;
         shell = pkgs.bash;
       };
-      extraGroups.gogs.gid = config.ids.gids.gogs;
+      groups.gogs.gid = config.ids.gids.gogs;
     };
 
     warnings = optional (cfg.database.password != "")

@@ -83,8 +83,8 @@ in
   };
 
   config = mkIf cfg.enable {
-    users.extraGroups.${cfg.group} = { };
-    users.extraUsers.${cfg.user} = {
+    users.groups.${cfg.group} = { };
+    users.users.${cfg.user} = {
       description = "Oxidized service user";
       group = cfg.group;
       home = cfg.dataDir;

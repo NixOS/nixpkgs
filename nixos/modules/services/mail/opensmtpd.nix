@@ -83,12 +83,12 @@ in {
   ###### implementation
 
   config = mkIf cfg.enable {
-    users.extraGroups = {
+    users.groups = {
       smtpd.gid = config.ids.gids.smtpd;
       smtpq.gid = config.ids.gids.smtpq;
     };
 
-    users.extraUsers = {
+    users.users = {
       smtpd = {
         description = "OpenSMTPD process user";
         uid = config.ids.uids.smtpd;

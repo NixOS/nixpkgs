@@ -149,7 +149,7 @@ in
 
   config = mkIf config.services.bitlbee.enable {
 
-    users.extraUsers = singleton
+    users.users = singleton
       { name = "bitlbee";
         uid = bitlbeeUid;
         description = "BitlBee user";
@@ -157,7 +157,7 @@ in
         createHome = true;
       };
 
-    users.extraGroups = singleton
+    users.groups = singleton
       { name = "bitlbee";
         gid = config.ids.gids.bitlbee;
       };

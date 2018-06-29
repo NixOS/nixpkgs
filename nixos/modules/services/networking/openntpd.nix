@@ -59,7 +59,7 @@ in
 
     environment.etc."ntpd.conf".text = configFile;
 
-    users.extraUsers = singleton {
+    users.users = singleton {
       name = "ntp";
       uid = config.ids.uids.ntp;
       description = "OpenNTP daemon user";

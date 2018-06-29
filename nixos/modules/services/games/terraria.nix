@@ -105,14 +105,14 @@ in
   };
 
   config = mkIf cfg.enable {
-    users.extraUsers.terraria = {
+    users.users.terraria = {
       description = "Terraria server service user";
       home        = "/var/lib/terraria";
       createHome  = true;
       uid         = config.ids.uids.terraria;
     };
 
-    users.extraGroups.terraria = {
+    users.groups.terraria = {
       gid = config.ids.gids.terraria;
       members = [ "terraria" ];
     };

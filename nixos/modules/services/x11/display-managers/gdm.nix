@@ -89,7 +89,7 @@ in
 
     services.xserver.displayManager.slim.enable = false;
 
-    users.extraUsers.gdm =
+    users.users.gdm =
       { name = "gdm";
         uid = config.ids.uids.gdm;
         group = "gdm";
@@ -97,7 +97,7 @@ in
         description = "GDM user";
       };
 
-    users.extraGroups.gdm.gid = config.ids.gids.gdm;
+    users.groups.gdm.gid = config.ids.gids.gdm;
 
     # GDM needs different xserverArgs, presumable because using wayland by default.
     services.xserver.tty = null;

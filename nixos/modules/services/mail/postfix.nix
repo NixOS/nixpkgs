@@ -616,14 +616,14 @@ in
         setgid = true;
       };
 
-      users.extraUsers = optional (user == "postfix")
+      users.users = optional (user == "postfix")
         { name = "postfix";
           description = "Postfix mail server user";
           uid = config.ids.uids.postfix;
           group = group;
         };
 
-      users.extraGroups =
+      users.groups =
         optional (group == "postfix")
         { name = group;
           gid = config.ids.gids.postfix;

@@ -337,7 +337,7 @@ in
     };
 
     users = mkIf (cfg.user == "gitea") {
-      extraUsers.gitea = {
+      users.gitea = {
         description = "Gitea Service";
         home = cfg.stateDir;
         createHome = true;

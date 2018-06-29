@@ -119,13 +119,13 @@ in {
       };
     };
 
-    users.extraUsers.mighttpd2 = {
+    users.users.mighttpd2 = {
       group = "mighttpd2";
       uid = config.ids.uids.mighttpd2;
       isSystemUser = true;
     };
 
-    users.extraGroups.mighttpd2.gid = config.ids.gids.mighttpd2;
+    users.groups.mighttpd2.gid = config.ids.gids.mighttpd2;
   };
 
   meta.maintainers = with lib.maintainers; [ fgaz ];

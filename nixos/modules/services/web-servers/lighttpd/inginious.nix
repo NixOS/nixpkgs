@@ -194,7 +194,7 @@ in
           storageDriver = mkDefault "overlay";
         };
 
-        users.extraUsers."lighttpd".extraGroups = [ "docker" ];
+        users.users."lighttpd".extraGroups = [ "docker" ];
 
         # Ensure that docker has pulled the required images.
         systemd.services.inginious-prefetch = {
