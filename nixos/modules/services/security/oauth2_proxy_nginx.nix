@@ -8,10 +8,16 @@ in
     proxy = mkOption {
       type = types.string;
       default = config.services.oauth2_proxy.httpAddress;
+      description = ''
+        The address of the reverse proxy endpoint for oauth2_proxy
+      '';
     };
     virtualHosts = mkOption {
       type = types.listOf types.string;
       default = [];
+      description = ''
+        A list of nginx virtual hosts to put behind the oauth2 proxy
+      '';
     };
   };
   config.services.oauth2_proxy = mkIf (cfg.virtualHosts != [] && (hasPrefix "127.0.0.1:" cfg.proxy)) {
