@@ -43,7 +43,7 @@ let
           boot.loader.systemd-boot.enable = true;
         ''}
 
-        users.extraUsers.alice = {
+        users.users.alice = {
           isNormalUser = true;
           home = "/home/alice";
           description = "Alice Foobar";

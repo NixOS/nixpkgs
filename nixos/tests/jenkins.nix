@@ -18,7 +18,7 @@ import ./make-test.nix ({ pkgs, ...} : {
         # should have no effect
         services.jenkinsSlave.enable = true;
 
-        users.extraUsers.jenkins.extraGroups = [ "users" ];
+        users.users.jenkins.extraGroups = [ "users" ];
 
         systemd.services.jenkins.serviceConfig.TimeoutStartSec = "6min";
       };
@@ -27,7 +27,7 @@ import ./make-test.nix ({ pkgs, ...} : {
       { config, pkgs, ... }:
       { services.jenkinsSlave.enable = true;
 
-        users.extraUsers.jenkins.extraGroups = [ "users" ];
+        users.users.jenkins.extraGroups = [ "users" ];
       };
 
   };

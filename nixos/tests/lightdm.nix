@@ -16,7 +16,7 @@ import ./make-test.nix ({ pkgs, ...} : {
   enableOCR = true;
 
   testScript = { nodes, ... }: let
-    user = nodes.machine.config.users.extraUsers.alice;
+    user = nodes.machine.config.users.users.alice;
   in ''
     startAll;
     $machine->waitForText(qr/${user.description}/);
