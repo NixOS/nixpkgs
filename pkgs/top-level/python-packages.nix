@@ -434,9 +434,7 @@ in {
 
   python-hosts = callPackage ../development/python-modules/python-hosts { };
 
-  python-openid = callPackage (if isPy3k
-    then ../development/python-modules/python3-openid
-    else ../development/python-modules/python-openid) { };
+  python3-openid = callPackage ../development/python-modules/python3-openid { };
 
   python-periphery = callPackage ../development/python-modules/python-periphery { };
 

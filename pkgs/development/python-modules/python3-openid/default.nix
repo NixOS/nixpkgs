@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi, defusedxml }:
+{ stdenv, isPy3k, buildPythonPackage, fetchPypi, defusedxml }:
 
 buildPythonPackage rec {
   pname = "python3-openid";
@@ -12,6 +12,8 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ defusedxml ];
 
   doCheck = false;
+
+  disabled = !isPy3k;
 
   meta = with stdenv.lib; {
     description = "OpenID support for modern servers and consumers";
