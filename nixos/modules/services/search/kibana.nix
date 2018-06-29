@@ -193,7 +193,7 @@ in {
 
     environment.systemPackages = [ cfg.package ];
 
-    users.extraUsers = singleton {
+    users.users = singleton {
       name = "kibana";
       uid = config.ids.uids.kibana;
       description = "Kibana service user";

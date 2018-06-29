@@ -402,7 +402,7 @@ in
       script = "${pkgs.znc}/bin/znc --foreground --datadir ${cfg.dataDir} ${toString cfg.extraFlags}";
     };
 
-    users.extraUsers = optional (cfg.user == defaultUser)
+    users.users = optional (cfg.user == defaultUser)
       { name = defaultUser;
         description = "ZNC server daemon owner";
         group = defaultUser;
@@ -411,7 +411,7 @@ in
         createHome = true;
       };
 
-    users.extraGroups = optional (cfg.user == defaultUser)
+    users.groups = optional (cfg.user == defaultUser)
       { name = defaultUser;
         gid = config.ids.gids.znc;
         members = [ defaultUser ];

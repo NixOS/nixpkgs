@@ -185,7 +185,7 @@ in {
       ];
     };
 
-    users.extraUsers = singleton
+    users.users = singleton
       { name = "ripple-data-api";
         description = "Ripple data api user";
         uid = config.ids.uids.ripple-data-api;

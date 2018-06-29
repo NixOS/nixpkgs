@@ -114,7 +114,7 @@ in
 
   config = mkIf cfg.enable {
 
-    users.extraUsers.unifi = {
+    users.users.unifi = {
       uid = config.ids.uids.unifi;
       description = "UniFi controller daemon user";
       home = "${stateDir}";

@@ -638,13 +638,13 @@ in {
       cfg.web.enable || cfg.api.enable ||
       cfg.seyren.enable || cfg.pager.enable || cfg.beacon.enable
      ) {
-      users.extraUsers = singleton {
+      users.users = singleton {
         name = "graphite";
         uid = config.ids.uids.graphite;
         description = "Graphite daemon user";
         home = dataDir;
       };
-      users.extraGroups.graphite.gid = config.ids.gids.graphite;
+      users.groups.graphite.gid = config.ids.gids.graphite;
     })
   ];
 }

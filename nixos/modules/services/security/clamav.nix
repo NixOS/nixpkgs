@@ -79,7 +79,7 @@ in
   config = mkIf (cfg.updater.enable || cfg.daemon.enable) {
     environment.systemPackages = [ pkg ];
 
-    users.extraUsers = singleton {
+    users.users = singleton {
       name = clamavUser;
       uid = config.ids.uids.clamav;
       group = clamavGroup;
@@ -87,7 +87,7 @@ in
       home = stateDir;
     };
 
-    users.extraGroups = singleton {
+    users.groups = singleton {
       name = clamavGroup;
       gid = config.ids.gids.clamav;
     };

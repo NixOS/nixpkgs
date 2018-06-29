@@ -444,7 +444,7 @@ in {
     # Use postfix to send out mails.
     services.postfix.enable = mkDefault true;
 
-    users.extraUsers = [
+    users.users = [
       { name = cfg.user;
         group = cfg.group;
         home = "${cfg.statePath}/home";
@@ -453,7 +453,7 @@ in {
       }
     ];
 
-    users.extraGroups = [
+    users.groups = [
       { name = cfg.group;
         gid = config.ids.gids.gitlab;
       }

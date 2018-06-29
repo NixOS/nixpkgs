@@ -113,8 +113,8 @@ in {
 
       extraOptions = mkOption {
         default = [ ];
-        example = [ 
-          "-X debug" 
+        example = [
+          "-X debug"
           "-Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=5005"
           "-verbose:gc"
           "-Xloggc:go-server-gc.log"
@@ -143,12 +143,12 @@ in {
   };
 
   config = mkIf cfg.enable {
-    users.extraGroups = optional (cfg.group == "gocd-server") {
+    users.groups = optional (cfg.group == "gocd-server") {
       name = "gocd-server";
       gid = config.ids.gids.gocd-server;
     };
 
-    users.extraUsers = optional (cfg.user == "gocd-server") {
+    users.users = optional (cfg.user == "gocd-server") {
       name = "gocd-server";
       description = "gocd-server user";
       createHome = true;

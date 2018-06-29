@@ -94,7 +94,7 @@ in {
   config = mkIf cfg.enable {
     environment.systemPackages = [ cfg.package ];
 
-    users.extraUsers = optionalAttrs (cfg.user == "ejabberd") (singleton
+    users.users = optionalAttrs (cfg.user == "ejabberd") (singleton
       { name = "ejabberd";
         group = cfg.group;
         home = cfg.spoolDir;
@@ -102,7 +102,7 @@ in {
         uid = config.ids.uids.ejabberd;
       });
 
-    users.extraGroups = optionalAttrs (cfg.group == "ejabberd") (singleton
+    users.groups = optionalAttrs (cfg.group == "ejabberd") (singleton
       { name = "ejabberd";
         gid = config.ids.gids.ejabberd;
       });

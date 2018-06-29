@@ -111,12 +111,12 @@ in {
   };
 
   config = mkIf (cfg.enable) {
-    users.extraUsers = optional (cfg.user == "infinoted")
+    users.users = optional (cfg.user == "infinoted")
       { name = "infinoted";
         description = "Infinoted user";
         group = cfg.group;
       };
-    users.extraGroups = optional (cfg.group == "infinoted")
+    users.groups = optional (cfg.group == "infinoted")
       { name = "infinoted";
       };
   

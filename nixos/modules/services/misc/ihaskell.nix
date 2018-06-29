@@ -38,23 +38,23 @@ in
 
   config = mkIf cfg.enable {
 
-    users.extraUsers.ihaskell = {
-      group = config.users.extraGroups.ihaskell.name;
+    users.users.ihaskell = {
+      group = config.users.groups.ihaskell.name;
       description = "IHaskell user";
       home = "/var/lib/ihaskell";
       createHome = true;
       uid = config.ids.uids.ihaskell;
     };
 
-    users.extraGroups.ihaskell.gid = config.ids.gids.ihaskell;
+    users.groups.ihaskell.gid = config.ids.gids.ihaskell;
 
     systemd.services.ihaskell = {
       description = "IHaskell notebook instance";
       wantedBy = [ "multi-user.target" ];
       after = [ "network.target" ];
       serviceConfig = {
-        User = config.users.extraUsers.ihaskell.name;
-        Group = config.users.extraGroups.ihaskell.name;
+        User = config.users.users.ihaskell.name;
+        Group = config.users.groups.ihaskell.name;
         ExecStart = "${pkgs.runtimeShell} -c \"cd $HOME;${ihaskell}/bin/ihaskell-notebook\"";
       };
     };

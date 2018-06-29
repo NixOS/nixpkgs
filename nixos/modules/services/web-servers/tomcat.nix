@@ -166,12 +166,12 @@ in
 
   config = mkIf config.services.tomcat.enable {
 
-    users.extraGroups = singleton
+    users.groups = singleton
       { name = "tomcat";
         gid = config.ids.gids.tomcat;
       };
 
-    users.extraUsers = singleton
+    users.users = singleton
       { name = "tomcat";
         uid = config.ids.uids.tomcat;
         description = "Tomcat user";

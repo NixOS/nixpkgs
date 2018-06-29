@@ -544,7 +544,7 @@ in
       cookie.secret = mkDefault null;
     };
 
-    users.extraUsers.oauth2_proxy = {
+    users.users.oauth2_proxy = {
       description = "OAuth2 Proxy";
     };
 
