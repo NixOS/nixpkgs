@@ -1693,13 +1693,14 @@ with pkgs;
   ciopfs = callPackage ../tools/filesystems/ciopfs { };
 
   citrix_receiver = callPackage ../applications/networking/remote/citrix-receiver { };
-  citrix_receiver_13_9_1 = citrix_receiver.override { version = "13.9.1"; };
-  citrix_receiver_13_9_0 = citrix_receiver.override { version = "13.9.0"; };
-  citrix_receiver_13_8_0 = citrix_receiver.override { version = "13.8.0"; };
-  citrix_receiver_13_7_0 = citrix_receiver.override { version = "13.7.0"; };
-  citrix_receiver_13_6_0 = citrix_receiver.override { version = "13.6.0"; };
-  citrix_receiver_13_5_0 = citrix_receiver.override { version = "13.5.0"; };
-  citrix_receiver_13_4_0 = citrix_receiver.override { version = "13.4.0"; };
+  citrix_receiver_13_10_0 = citrix_receiver.override { version = "13.10.0"; };
+  citrix_receiver_13_9_1  = citrix_receiver.override { version = "13.9.1";  };
+  citrix_receiver_13_9_0  = citrix_receiver.override { version = "13.9.0";  };
+  citrix_receiver_13_8_0  = citrix_receiver.override { version = "13.8.0";  };
+  citrix_receiver_13_7_0  = citrix_receiver.override { version = "13.7.0";  };
+  citrix_receiver_13_6_0  = citrix_receiver.override { version = "13.6.0";  };
+  citrix_receiver_13_5_0  = citrix_receiver.override { version = "13.5.0";  };
+  citrix_receiver_13_4_0  = citrix_receiver.override { version = "13.4.0";  };
 
   citra = libsForQt5.callPackage ../misc/emulators/citra { };
 
