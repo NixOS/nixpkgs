@@ -27,7 +27,7 @@
 <screen>
 # nixos-container create foo --config '
   services.openssh.enable = true;
-  users.extraUsers.root.openssh.authorizedKeys.keys = ["ssh-dss AAAAB3N…"];
+  users.users.root.openssh.authorizedKeys.keys = ["ssh-dss AAAAB3N…"];
 '
 </screen>
  </para>

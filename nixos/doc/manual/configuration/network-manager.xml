@@ -19,7 +19,7 @@ networking.networkmanager.enable = true;
   All users that should have permission to change network settings must belong
   to the <code>networkmanager</code> group:
 <programlisting>
-users.extraUsers.youruser.extraGroups = [ "networkmanager" ];
+users.users.alice.extraGroups = [ "networkmanager" ];
 </programlisting>
  </para>
 
