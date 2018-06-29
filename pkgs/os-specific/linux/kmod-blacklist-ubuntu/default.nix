@@ -17,7 +17,7 @@ in stdenv.mkDerivation {
       echo "''\n''\n## file: "`basename "$f"`"''\n''\n" >> "$out"/modprobe.conf
       cat "$f" >> "$out"/modprobe.conf
       # https://bugs.launchpad.net/ubuntu/+source/kmod/+bug/1475945
-      sed -i '/^blacklist i2c_801/d' $out/modprobe.conf
+      sed -i '/^blacklist i2c_i801/d' $out/modprobe.conf
     done
 
     substituteInPlace "$out"/modprobe.conf \
