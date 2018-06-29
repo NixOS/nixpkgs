@@ -127,6 +127,12 @@ $ nix-instantiate -E '(import &lt;nixpkgsunstable&gt; {}).gitFull'
      Make sure the key file is accessible to the daemon.
     </para>
    </listitem>
+   <listitem>
+    <para>
+      <varname>dockerTools.buildImage</varname> now uses <literal>null</literal> as default value for <varname>tag</varname>,
+      which indicates that the nix output hash will be used as tag.
+    </para>
+   </listitem>
   </itemizedlist>
  </section>
 
