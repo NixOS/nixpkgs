@@ -1747,24 +1747,8 @@ in {
 
   mpyq = callPackage ../development/python-modules/mpyq { };
 
-  mxnet = buildPythonPackage rec {
-    inherit (pkgs.mxnet) name version src meta;
-
-    buildInputs = [ pkgs.mxnet ];
-    propagatedBuildInputs = with self; [ requests numpy graphviz ];
-
-    LD_LIBRARY_PATH = makeLibraryPath [ pkgs.mxnet ];
-
-    doCheck = !isPy3k;
-
-    preConfigure = ''
-      cd python
-    '';
-
-    postInstall = ''
-      rm -rf $out/mxnet
-      ln -s ${pkgs.mxnet}/lib/libmxnet.so $out/${python.sitePackages}/mxnet
-    '';
+  mxnet = callPackage ../development/python-modules/mxnet {
+    inherit (pkgs) mxnet;
   };
 
   parsy = callPackage ../development/python-modules/parsy { };
