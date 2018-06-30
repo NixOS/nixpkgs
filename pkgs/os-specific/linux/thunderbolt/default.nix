@@ -27,6 +27,8 @@ stdenv.mkDerivation rec {
   # These can't go in the normal nix cmakeFlags because $out needs to be
   # expanded by the shell, not by cmake or nix.  $ENV{out} doesn't work right
   # either; it results in /build/source/build//nix/store/blahblahblahblah/bin/
+  # TODO: use ${placeholder "out"} when possible.
+  #       See https://github.com/NixOS/nixpkgs/pull/37693
   preConfigure = ''
     cmakeFlags+=" -DUDEV_BIN_DIR=$out/bin"
     cmakeFlags+=" -DUDEV_RULES_DIR=$out/etc/udev/rules.d"
