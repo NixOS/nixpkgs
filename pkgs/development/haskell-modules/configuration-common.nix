@@ -1068,6 +1068,11 @@ self: super: {
   # https://github.com/fpco/streaming-commons/issues/49
   streaming-commons = dontCheck super.streaming-commons;
 
+  # cabal2nix generates a dependency on base-compat, which is the wrong version
+  base-compat-batteries = super.base-compat-batteries.override {
+    base-compat = super.base-compat_0_10_1;
+  };
+
 }
 
 //
