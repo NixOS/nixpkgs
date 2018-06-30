@@ -16582,7 +16582,7 @@ with pkgs;
   });
 
   inherit (nodePackages) imapnotify;
-  
+
   # Impressive, formerly known as "KeyJNote".
   impressive = callPackage ../applications/office/impressive { };
 
@@ -18718,8 +18718,8 @@ with pkgs;
   wings = callPackage ../applications/graphics/wings {
     erlang = erlangR18;
   };
-  
-  write_stylus = callPackage ../applications/graphics/write_stylus { };
+
+  write_stylus = libsForQt5.callPackage ../applications/graphics/write_stylus { };
 
   alsamixer.app = callPackage ../applications/window-managers/windowmaker/dockapps/alsamixer.app.nix { };
 
