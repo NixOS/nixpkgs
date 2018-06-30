@@ -27,11 +27,14 @@ stdenv.mkDerivation rec {
     })
 
     # https://trac.sagemath.org/ticket/25328
+    # https://trac.sagemath.org/ticket/25546
+    # https://trac.sagemath.org/ticket/25722
     (fetchpatch {
-      name = "respect-jupyter-path.patch";
-      url = "https://git.sagemath.org/sage.git/patch?id2=8bdc326ba57d1bb9664f63cf165a9e9920cc1afc&id=029123097d79f2c67bca2d725c470ef667a88ca2";
-      sha256 = "0qw9p541ip0kn2gfvn4i05a06p50f3q46847gqfjjgzxhn62znfw";
+      name = "install-jupyter-kernel-in-correct-prefix.patch";
+      url = "https://git.sagemath.org/sage.git/patch?id=72167b98e3f64326df6b2c78785df25539472fcc";
+      sha256 = "0pscnjhm7r2yr2rxnv4kkkq626vwaja720lixa3m3w9rwlxll5a7";
     })
+    ./patches/test-in-tmpdir.patch
 
     # https://trac.sagemath.org/ticket/25358
     (fetchpatch {
