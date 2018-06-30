@@ -1029,7 +1029,7 @@ To alter a python package using overlays, you would use the following approach:
 
 ```nix
 self: super:
-rec {
+{
   python = super.python.override {
     packageOverrides = python-self: python-super: {
       bepasty-server = python-super.bepasty-server.overrideAttrs ( oldAttrs: {
@@ -1041,7 +1041,7 @@ rec {
       });
     };
   };
-  pythonPackages = python.pkgs;
+  pythonPackages = self.python.pkgs;
 }
 ```
 
