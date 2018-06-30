@@ -61,6 +61,12 @@ let
       ${optionalString hasDefaultUserSession ''
         user-session=${defaultSessionName}
       ''}
+      ${optionalString (dmcfg.setupCommands != "") ''
+        display-setup-script=${pkgs.writeScript "lightdm-display-setup" ''
+          #!${pkgs.bash}/bin/bash
+          ${dmcfg.setupCommands}
+        ''}
+      ''}
       ${cfg.extraSeatDefaults}
     '';
 
