@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "dwarf-therapist-original-${version}";
-  version = "40.0.0";
+  version = "40.1.0";
 
   src = fetchFromGitHub {
     owner = "Dwarf-Therapist";
     repo = "Dwarf-Therapist";
     rev = "v${version}";
-    sha256 = "0b5y7800nzydn0jcc0vglgi9mzkj8f3qhw16wd872cf5396xnag9";
+    sha256 = "1aklwic5npgkp8rkrvz2q9idkipsm1h26mgd8q03135nzl1ld9q3";
   };
 
   buildInputs = [ qtbase qtdeclarative ];
