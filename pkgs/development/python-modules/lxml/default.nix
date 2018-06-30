@@ -20,7 +20,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "Pythonic binding for the libxml2 and libxslt libraries";
-    homepage = http://lxml.de;
+    homepage = https://lxml.de;
     license = stdenv.lib.licenses.bsd3;
     maintainers = with stdenv.lib.maintainers; [ sjourdois ];
   };

@@ -328,7 +328,7 @@ when building the bindings and are therefore added as `buildInputs`.
 
     meta = {
       description = "Pythonic binding for the libxml2 and libxslt libraries";
-      homepage = http://lxml.de;
+      homepage = https://lxml.de;
       license = licenses.bsd3;
       maintainers = with maintainers; [ sjourdois ];
     };
