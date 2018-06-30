@@ -169,6 +169,11 @@ stdenv.mkDerivation rec {
       stripLen = 1;
     })
 
+    # https://trac.sagemath.org/ticket/24927 rebased
+    ./patches/arb-2.13.0.patch
+
+    # https://trac.sagemath.org/ticket/24838 rebased
+    ./patches/pynac-0.7.22.patch
   ];
 
   patches = nixPatches ++ packageUpgradePatches;

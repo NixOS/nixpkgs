@@ -39,18 +39,6 @@ let
         inherit flint ecl pari glpk eclib;
         inherit sage-src openblas-blas-pc openblas-cblas-pc openblas-lapack-pc pynac singular;
         linbox = nixpkgs.linbox.override { withSage = true; };
-        # tracking: https://trac.sagemath.org/ticket/24927
-        arb = nixpkgs.arb.overrideAttrs (attrs: rec {
-          name = "arb-${version}";
-          version = "2.12.0";
-          doCheck = false; # https://github.com/fredrik-johansson/arb/issues/194
-          src = fetchFromGitHub {
-            owner = "fredrik-johansson";
-            repo = attrs.pname;
-            rev = version;
-            sha256 = "18bwxlcbqb70cj7l9x6w1h4yghrqfhmbhdby373q8vdrdfx58niq";
-          };
-        });
       };
 
       sagenb = self.callPackage ./sagenb.nix {
@@ -143,15 +131,7 @@ let
 
   # *not* to confuse with the python package "pynac"
   # https://trac.sagemath.org/ticket/24838 (depends on arb update)
-  pynac = (nixpkgs.pynac.override { inherit singular; }).overrideAttrs (oldAttrs: rec {
-    name = "pynac-0.7.16";
-    src = fetchFromGitHub {
-      owner = "pynac";
-      repo = "pynac";
-      rev = name;
-      sha256 = "106an189sg4rpgzfrmy3699271vg4ddazw9wvh51wx7qnm1v86ik";
-    };
-  });
+  pynac = nixpkgs.pynac.override { inherit singular; };
 
   eclib = nixpkgs.eclib.override { inherit pari; };
 
