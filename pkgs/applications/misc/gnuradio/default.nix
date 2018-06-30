@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, writeText, makeWrapper
 # Dependencies documented @ https://gnuradio.org/doc/doxygen/build_guide.html
 # => core dependencies
-, ninja, cmake, pkgconfig, git, boost, cppunit, fftw
+, cmake, pkgconfig, git, boost, cppunit, fftw
 # => python wrappers
 # May be able to upgrade to swig3
 , python, swig2, numpy, scipy, matplotlib
@@ -32,12 +32,12 @@ stdenv.mkDerivation rec {
     owner = "gnuradio";
     repo = "gnuradio";
     rev = "v${version}";
-    sha256 = "0fqxn1k41xqd52i5z528zdhkn52i9z5hl6cc75ggdx9iqxhvb3jj";
+    sha256 = "1qpa53axqavdv2ykby7rwh7xmhvv964xq1d7rcvbwkry7dngrbib";
     fetchSubmodules = true;
   };
 
   nativeBuildInputs = [
-    cmake pkgconfig git makeWrapper cppunit orc ninja
+    cmake pkgconfig git makeWrapper cppunit orc
   ];
 
   buildInputs = [
