@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, cmake, boost165, pkgconfig, python35
 , tbb, openimageio, libjpeg, libpng, zlib, libtiff, ilmbase
 , freetype, openexr, libXdmcp, libxkbcommon, epoxy, at-spi2-core
-, dbus, doxygen, qt5, c-blosc, mesa_glu, gnome3, pcre
+, dbus, doxygen, qt5, c-blosc, libGLU, gnome3, pcre
 , bison, flex, libpthreadstubs, libX11
 , embree2, makeWrapper, gsettings_desktop_schemas, glib
 , withOpenCL ? true , opencl-headers, ocl-icd, opencl-clhpp
@@ -26,7 +26,7 @@ in stdenv.mkDerivation rec {
   buildInputs =
    [ embree2 pkgconfig cmake zlib boost_static libjpeg
      libtiff libpng ilmbase freetype openexr openimageio
-     tbb qt5.full c-blosc mesa_glu pcre bison
+     tbb qt5.full c-blosc libGLU pcre bison
      flex libX11 libpthreadstubs python35 libXdmcp libxkbcommon
      epoxy at-spi2-core dbus doxygen
      # needed for GSETTINGS_SCHEMAS_PATH

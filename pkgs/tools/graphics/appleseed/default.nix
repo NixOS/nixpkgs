@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, cmake, boost165, pkgconfig, guile,
-eigen3_3, libpng, python, mesa_glu, qt4, openexr, openimageio,
+eigen3_3, libpng, python, libGLU, qt4, openexr, openimageio,
 opencolorio, xercesc, ilmbase, osl, seexpr
 }:
 
@@ -17,7 +17,7 @@ in stdenv.mkDerivation rec {
   };
   buildInputs = [
     cmake pkgconfig boost_static guile eigen3_3 libpng python
-    mesa_glu qt4 openexr openimageio opencolorio xercesc
+    libGLU qt4 openexr openimageio opencolorio xercesc
     osl seexpr
   ];
 
