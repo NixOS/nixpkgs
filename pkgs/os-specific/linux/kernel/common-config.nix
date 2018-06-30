@@ -210,12 +210,11 @@ let
       PSS_MIXER           = whenOlder "4.12" yes;
     };
 
-    # Include firmware for various USB serial devices.
-    # Only applicable for kernels below 4.16, after that no firmware is shipped in the kernel tree.
     usb-serial = {
       USB_SERIAL_GENERIC          = yes; # USB Generic Serial Driver
     } // optionalAttrs (versionOlder version "4.16") {
-      # include firmware for various USB serial devices
+      # Include firmware for various USB serial devices.
+      # Only applicable for kernels below 4.16, after that no firmware is shipped in the kernel tree.
       USB_SERIAL_KEYSPAN_MPR      = yes;
       USB_SERIAL_KEYSPAN_USA28    = yes;
       USB_SERIAL_KEYSPAN_USA28X   = yes;
@@ -315,10 +314,10 @@ let
 
       # Native Language Support modules, needed by some filesystems
       NLS              = yes;
-      NLS_DEFAULT      =  "utf8";
+      NLS_DEFAULT      = "utf8";
       NLS_UTF8         = module;
-      NLS_CODEPAGE_437 = module; # VFAT default for the codepage    = mount option
-      NLS_ISO8859_1    = module;    # VFAT default for the iocharset= mount option
+      NLS_CODEPAGE_437 = module; # VFAT default for the codepage= mount option
+      NLS_ISO8859_1    = module; # VFAT default for the iocharset= mount option
 
       DEVTMPFS = yes;
     };
@@ -494,13 +493,12 @@ let
       IRQ_REMAP  = yes;
     };
 
-
-    # For older kernels, painstakingly disable each symbol.
+    # Disable various self-test modules that have no use in a production system
     tests = {
-      # Disable various self-test modules that have no use in a production system
       # This menu disables all/most of them on >= 4.16
       RUNTIME_TESTING_MENU = option no;
     } // optionalAttrs (versionOlder version "4.16") {
+      # For older kernels, painstakingly disable each symbol.
       ARM_KPROBES_TEST    = option no;
       ASYNC_RAID6_TEST    = option no;
       ATOMIC64_SELFTEST   = option no;
@@ -554,7 +552,6 @@ let
       DEBUG_MEMORY_INIT     = option yes;
     });
 
-
     misc = {
       MODULE_COMPRESS    = yes;
       MODULE_COMPRESS_XZ = yes;
@@ -567,7 +564,6 @@ let
       # Enable initrd support.
       BLK_DEV_RAM       = yes;
       BLK_DEV_INITRD    = yes;
-
 
       PM_TRACE_RTC         = no; # Disable some expensive (?) features.
       ACCESSIBILITY        = yes; # Accessibility support
@@ -582,7 +578,6 @@ let
 
       SPI        = yes; # needed for many devices
       SPI_MASTER = yes;
-
 
       "8139TOO_8129" = yes;
       "8139TOO_PIO"  = no; # PIO is slower
@@ -644,7 +639,6 @@ let
       # 8 is default. Modern gpt tables on eMMC may go far beyond 8.
       MMC_BLOCK_MINORS   = "32";
 
-
       REGULATOR  = yes; # Voltage and Current Regulator Support
       RC_DEVICES = option yes; # Enable IR devices
 
@@ -686,4 +680,3 @@ let
     };
   };
 in (generateNixKConf ((flattenKConf options) // structuredExtraConfig) mkValueOverride) + extraConfig
-
