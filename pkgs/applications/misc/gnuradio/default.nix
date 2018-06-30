@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
     owner = "gnuradio";
     repo = "gnuradio";
     rev = "v${version}";
-    sha256 = "0fqxn1k41xqd52i5z528zdhkn52i9z5hl6cc75ggdx9iqxhvb3jj";
+    sha256 = "1qpa53axqavdv2ykby7rwh7xmhvv964xq1d7rcvbwkry7dngrbib";
     fetchSubmodules = true;
   };
 
