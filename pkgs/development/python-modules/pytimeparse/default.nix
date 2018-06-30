@@ -3,7 +3,6 @@
 buildPythonPackage rec {
     pname = "pytimeparse";
     version = "1.1.8";
-    name = "${pname}-${version}";
 
     src = fetchPypi {
       inherit pname version;

@@ -6,7 +6,6 @@
 buildPythonPackage rec {
   pname = "ramlfications";
   version = "0.1.9";
-  name = "${pname}-${version}";
 
   src = fetchPypi {
     inherit pname version;

@@ -269,9 +269,9 @@ self: super: builtins.intersectAttrs super {
     );
 
   llvm-hs = super.llvm-hs.override { llvm-config = pkgs.llvm; };
-  llvm-hs_6_2_0 = super.llvm-hs_6_2_0.override {
+  llvm-hs_6_3_0 = super.llvm-hs_6_3_0.override {
     llvm-config = pkgs.llvm_6;
-    llvm-hs-pure = super.llvm-hs-pure_6_2_0;
+    llvm-hs-pure = super.llvm-hs-pure_6_2_1;
   };
 
   # Needs help finding LLVM.

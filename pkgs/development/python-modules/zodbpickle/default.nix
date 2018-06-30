@@ -6,7 +6,6 @@
 buildPythonPackage rec {
   pname = "zodbpickle";
   version = "1.0.1";
-  name = "${pname}-${version}";
   disabled = isPyPy; # https://github.com/zopefoundation/zodbpickle/issues/10
 
   src = fetchPypi {

@@ -1,7 +1,6 @@
 { stdenv, buildPythonPackage, fetchPypi, nose }:
 
 buildPythonPackage rec {
-  name = "${pname}-${version}";
   version = "0.3.3";
   pname = "ofxhome";
 

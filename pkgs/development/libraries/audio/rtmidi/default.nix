@@ -11,6 +11,8 @@ stdenv.mkDerivation rec {
     sha256 = "11pl45lp8sq5xkpipwk622w508nw0qcxr03ibicqn1lsws0hva96";
   };
 
+  enableParallelBuilding = true;
+
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ autoconf automake libtool libjack2 alsaLib ];
 

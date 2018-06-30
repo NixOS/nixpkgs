@@ -4,7 +4,7 @@
 }:
 
 buildPythonApplication rec {
-  name = "rednotebook-${version}";
+  pname = "rednotebook";
   version = "2.3";
 
   src = fetchFromGitHub {

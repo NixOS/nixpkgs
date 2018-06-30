@@ -16,7 +16,7 @@
 }:
 
 buildPythonPackage rec {
-  name = "tokenserver-${version}";
+  pname = "tokenserver";
   version = "1.2.27";
 
   src = fetchgit {
@@ -26,11 +26,8 @@ buildPythonPackage rec {
   };
 
   doCheck = false;
-  buildInputs = [ testfixtures ];
+  checkInputs = [ testfixtures ];
   propagatedBuildInputs = [ cornice mozsvc pybrowserid tokenlib
     pymysql umemcache hawkauthlib alembic pymysqlsa paste boto ];
 
-  meta = {
-    platforms = stdenv.lib.platforms.all;
-  };
 }

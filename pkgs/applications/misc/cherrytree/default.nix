@@ -7,7 +7,7 @@ stdenv.mkDerivation rec {
   version = "0.38.4";
 
   src = fetchurl {
-    url = "http://www.giuspen.com/software/${name}.tar.xz";
+    url = "https://www.giuspen.com/software/${name}.tar.xz";
     sha256 = "1zazyxkrli77wahn4c1z24qyz5bwlayl335f2kdxb44dicrx58g2";
   };
 

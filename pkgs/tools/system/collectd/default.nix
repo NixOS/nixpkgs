@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
   name = "collectd-${version}";
 
   src = fetchurl {
-    url = "http://collectd.org/files/${name}.tar.bz2";
+    url = "https://collectd.org/files/${name}.tar.bz2";
     sha256 = "1j8mxgfq8039js2bscphd6cnriy35hk4jrxfjz5k6mghpdvg8vxh";
   };
 

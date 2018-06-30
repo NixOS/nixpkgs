@@ -5,7 +5,6 @@
 buildPythonPackage rec {
   pname = "dogpile.cache";
   version = "0.6.5";
-  name = "${pname}-${version}";
 
   src = fetchPypi {
     inherit pname version;

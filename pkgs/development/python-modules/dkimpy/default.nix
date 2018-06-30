@@ -1,19 +1,19 @@
 { stdenv, fetchurl, openssl, makeWrapper, buildPythonApplication
 , pytest, dnspython }:
 
-buildPythonApplication rec {
-  name = "${pname}-${version}";
-  pname = "dkimpy";
+let
   majorversion = "0.6";
   minorversion = "2";
+in buildPythonApplication rec {
+  pname = "dkimpy";
   version = "${majorversion}.${minorversion}";
 
   src = fetchurl {
-    url = "https://launchpad.net/${pname}/${majorversion}/${majorversion}.${minorversion}/+download/${name}.tar.gz";
+    url = "https://launchpad.net/${pname}/${majorversion}/${majorversion}.${minorversion}/+download/${pname}-${version}.tar.gz";
     sha256 = "1hagz8qk0v4ijfbcdq4z28bpgr2mkpr498z76i1vam2d50chmakl";
   };
 
-  buildInputs = [ pytest ];
+  checkInputs = [ pytest ];
   propagatedBuildInputs =  [ openssl dnspython ];
 
   patchPhase = ''

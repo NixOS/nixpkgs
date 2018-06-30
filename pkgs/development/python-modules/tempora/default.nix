@@ -3,7 +3,6 @@
 , six, pytz}:
 
 buildPythonPackage rec {
-  name = "${pname}-${version}";
   pname = "tempora";
   version = "1.9";
 

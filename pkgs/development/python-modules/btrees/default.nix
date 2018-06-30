@@ -1,12 +1,19 @@
-{ stdenv, fetchPypi, buildPythonPackage, persistent, zope_interface, transaction }:
+{ stdenv
+, fetchPypi
+, buildPythonPackage
+, persistent
+, zope_interface
+, transaction
+, zope_testrunner
+}:
 
 buildPythonPackage rec {
   pname = "BTrees";
   version = "4.5.0";
-  name = "${pname}-${version}";
 
   buildInputs = [ transaction ];
   propagatedBuildInputs = [ persistent zope_interface ];
+  checkInputs = [ zope_testrunner ];
 
   src = fetchPypi {
     inherit pname version;

@@ -4,7 +4,6 @@
 }:
 
 buildPythonPackage rec {
-  name = "${pname}-${version}";
   pname = "jsonrpclib-pelix";
   version = "0.3.1";
 

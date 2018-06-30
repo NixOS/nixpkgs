@@ -4,7 +4,6 @@
 buildPythonPackage rec {
   pname = "zeroconf";
   version = "0.20.0";
-  name = "${pname}-${version}";
 
   src = fetchPypi {
     inherit pname version;

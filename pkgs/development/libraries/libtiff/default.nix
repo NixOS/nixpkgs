@@ -7,7 +7,7 @@ stdenv.mkDerivation rec {
   name = "libtiff-${version}";
 
   src = fetchurl {
-    url = "http://download.osgeo.org/libtiff/tiff-${version}.tar.gz";
+    url = "https://download.osgeo.org/libtiff/tiff-${version}.tar.gz";
     sha256 = "1kfg4q01r4mqn7dj63ifhi6pmqzbf4xax6ni6kkk81ri5kndwyvf";
   };
 

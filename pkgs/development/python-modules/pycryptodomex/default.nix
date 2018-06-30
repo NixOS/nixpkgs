@@ -2,7 +2,6 @@
 
 buildPythonPackage rec {
   pname = "pycryptodomex";
-  name = "${pname}-${version}";
   version = "3.6.2";
 
   meta = {

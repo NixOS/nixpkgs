@@ -18,7 +18,6 @@ buildPythonPackage rec {
   inherit (certbot) src version;
 
   pname = "acme";
-  name = "${pname}-${version}";
 
   propagatedBuildInputs = [
     cryptography pyasn1 pyopenssl pyRFC3339 pytz requests six werkzeug mock

@@ -7,7 +7,6 @@
 
 
 buildPythonPackage rec {
-  name = "${pname}-${version}";
   pname = "transaction";
   version = "2.2.1";
 

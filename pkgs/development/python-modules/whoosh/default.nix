@@ -1,7 +1,6 @@
 { stdenv, buildPythonPackage, fetchPypi, pytest }:
 
 buildPythonPackage rec {
-  name = "${pname}-${version}";
   pname = "Whoosh";
   version = "2.7.4";
   src = fetchPypi {
@@ -22,7 +21,7 @@ buildPythonPackage rec {
   meta = with stdenv.lib; {
     description = "Fast, pure-Python full text indexing, search, and spell
 checking library.";
-    homepage    = "http://bitbucket.org/mchaput/whoosh";
+    homepage    = https://bitbucket.org/mchaput/whoosh;
     license     = licenses.bsd2;
     maintainers = with maintainers; [ nand0p ];
     platforms   = platforms.all;

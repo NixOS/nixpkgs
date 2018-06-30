@@ -2,7 +2,6 @@
 , cherrypy, gevent, tornado }:
 
 buildPythonPackage rec {
-  name = "${pname}-${version}";
   pname = "ws4py";
   version = "0.5.1";
 

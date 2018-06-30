@@ -7,7 +7,6 @@
 buildPythonPackage rec {
   pname = "zope.interface";
   version = "4.5.0";
-  name = "${pname}-${version}";
   
   src = fetchPypi {
     inherit pname version;

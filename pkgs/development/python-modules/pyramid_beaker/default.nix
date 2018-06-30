@@ -1,7 +1,6 @@
 { stdenv, buildPythonPackage, fetchPypi, pytest, beaker, pyramid }:
 
 buildPythonPackage rec {
-  name = "${pname}-${version}";
   pname = "pyramid_beaker";
   version = "0.8";
 

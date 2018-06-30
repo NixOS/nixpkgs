@@ -2,7 +2,6 @@
   pytest, pytestrunner,  mccabe, configparser, backports_functools_lru_cache }:
 
 buildPythonPackage rec {
-  name = "${pname}-${version}";
   pname = "pylint";
   version = "1.9.2";
 
@@ -33,7 +32,7 @@ buildPythonPackage rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = http://www.logilab.org/project/pylint;
+    homepage = https://www.logilab.org/project/pylint;
     description = "A bug and style checker for Python";
     platforms = platforms.all;
     license = licenses.gpl1Plus;

@@ -4,7 +4,7 @@ stdenv.mkDerivation {
   name = "gxneur-0.13.0";
   
   src = fetchurl {
-    url = http://dists.xneur.ru/release-0.13.0/tgz/gxneur-0.13.0.tar.bz2;
+    url = https://dists.xneur.ru/release-0.13.0/tgz/gxneur-0.13.0.tar.bz2;
     sha256 = "f093428a479158247a7ff8424f0aec9af9f7b1d05b191cf30b7c534965a6839f";
   };
 

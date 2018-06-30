@@ -4,7 +4,6 @@
 
 buildPythonPackage rec {
   pname = "flask-marshmallow";
-  name = "${pname}-${version}";
   version = "0.9.0";
 
   meta = {

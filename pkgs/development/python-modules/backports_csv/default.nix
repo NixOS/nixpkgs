@@ -4,7 +4,6 @@ buildPythonPackage rec {
 
   pname = "backports.csv";
   version = "1.0.6";
-  name = "${pname}-${version}";
 
   src = fetchPypi {
     inherit pname version;

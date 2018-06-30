@@ -17,7 +17,6 @@
 buildPythonPackage rec {
   pname = "flask-restplus";
   version = "0.10.1";
-  name = "${pname}-${version}";
 
   src = fetchPypi {
     inherit pname version;

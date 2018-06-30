@@ -2,7 +2,6 @@
 , glibcLocales }:
 
 buildPythonPackage rec {
-  name = "${pname}-${version}";
   pname = "blessed";
   version = "1.15.0";
 

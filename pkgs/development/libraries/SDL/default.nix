@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   version = "1.2.15";
 
   src = fetchurl {
-    url    = "http://www.libsdl.org/release/${name}.tar.gz";
+    url    = "https://www.libsdl.org/release/${name}.tar.gz";
     sha256 = "005d993xcac8236fpvd1iawkz4wqjybkpn8dbwaliqz5jfkidlyn";
   };
 

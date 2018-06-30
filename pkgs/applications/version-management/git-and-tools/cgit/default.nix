@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
   version = "1.1";
 
   src = fetchurl {
-    url = "http://git.zx2c4.com/cgit/snapshot/${name}.tar.xz";
+    url = "https://git.zx2c4.com/cgit/snapshot/${name}.tar.xz";
     sha256 = "142qcgs8dwnzhymn0a7xx47p9fc2z5wrb86ah4a9iz0mpqlsz288";
   };
 

@@ -4,7 +4,6 @@
 buildPythonPackage rec {
   pname = "parse";
   version = "1.8.4";
-  name = "${pname}-${version}";
 
   src = fetchPypi {
     inherit pname version;

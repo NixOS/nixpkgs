@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   version = "2.7.0";
 
   src = fetchurl {
-    url = "http://embed.cs.utah.edu/creduce/${name}.tar.gz";
+    url = "https://embed.cs.utah.edu/creduce/${name}.tar.gz";
     sha256 = "0h8s4d54q6cl6i45x3143l2xmr29b2yhr3m0n5qqx63sr5csip1n";
   };
 

@@ -21,7 +21,6 @@
 buildPythonPackage rec {
   pname = "APScheduler";
   version = "3.5.1";
-  name = "${pname}-${version}";
 
   src = fetchPypi {
     inherit pname version;

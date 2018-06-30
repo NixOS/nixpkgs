@@ -1,8 +1,7 @@
-{ stdenv, buildPythonPackage, fetchPypi, defusedxml }:
+{ stdenv, isPy3k, buildPythonPackage, fetchPypi, defusedxml }:
 
 buildPythonPackage rec {
   pname = "python3-openid";
-  name = "${pname}-${version}";
   version = "3.1.0";
 
   src = fetchPypi {
@@ -14,9 +13,11 @@ buildPythonPackage rec {
 
   doCheck = false;
 
+  disabled = !isPy3k;
+
   meta = with stdenv.lib; {
     description = "OpenID support for modern servers and consumers";
-    homepage = http://github.com/necaris/python3-openid;
+    homepage = https://github.com/necaris/python3-openid;
     license = licenses.asl20;
   };
 }

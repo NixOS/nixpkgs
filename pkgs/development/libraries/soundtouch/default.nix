@@ -4,7 +4,7 @@ stdenv.mkDerivation rec {
   pName = "soundtouch";
   name = "${pName}-2.0.0";
   src = fetchurl {
-    url = "http://www.surina.net/soundtouch/${name}.tar.gz";
+    url = "https://www.surina.net/soundtouch/${name}.tar.gz";
     sha256 = "09cxr02mfyj2bg731bj0i9hh565x8l9p91aclxs8wpqv8b8zf96j";
   };
 

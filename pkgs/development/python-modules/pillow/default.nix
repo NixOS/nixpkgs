@@ -7,7 +7,6 @@
 buildPythonPackage rec {
   pname = "Pillow";
   version = "5.1.0";
-  name = "${pname}-${version}";
 
   src = fetchPypi {
     inherit pname version;

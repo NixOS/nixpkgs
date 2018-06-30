@@ -5,7 +5,6 @@
 
 buildPythonPackage rec {
   pname = "audioread";
-  name = "${pname}-${version}";
   version = "2.1.6";
 
   src = fetchPypi {

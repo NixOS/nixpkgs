@@ -2,7 +2,6 @@
 
 buildPythonPackage rec {
   pname = "django-gravatar2";
-  name = "${pname}-${version}";
   version = "1.4.2";
 
   src = fetchPypi {

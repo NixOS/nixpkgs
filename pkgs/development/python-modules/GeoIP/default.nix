@@ -3,7 +3,6 @@
 , geoip, nose}:
 
 buildPythonPackage rec {
-  name = "${pname}-${version}";
   pname = "GeoIP";
   version = "1.3.2";
 

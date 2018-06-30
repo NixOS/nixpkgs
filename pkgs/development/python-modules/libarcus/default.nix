@@ -1,21 +1,19 @@
-{ stdenv, lib, fetchFromGitHub, python, cmake, sip, protobuf }:
+{ stdenv, lib, buildPythonPackage, fetchFromGitHub
+, python, cmake, sip, protobuf, pythonOlder }:
 
-if lib.versionOlder python.version "3.4.0"
-then throw "libArcus not supported for interpreter ${python.executable}"
-else
-
-stdenv.mkDerivation rec {
+buildPythonPackage rec {
   pname = "libarcus";
-  name = "${pname}-${version}";
   version = "3.3.0";
-  
+
   src = fetchFromGitHub {
     owner = "Ultimaker";
     repo = "libArcus";
     rev = version;
     sha256 = "0mln8myvfl7rq2p4g1vadvlykckd8490jijag4xa5hhj3w3p19bk";
   };
-  
+
+  disabled = pythonOlder "3.4.0";
+
   propagatedBuildInputs = [ sip protobuf ];
   nativeBuildInputs = [ cmake ];
 

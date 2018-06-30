@@ -1,12 +1,11 @@
-{ stdenv, fetchurl, buildPythonPackage, tornado }:
+{ stdenv, fetchPypi, buildPythonPackage, tornado }:
 
 buildPythonPackage rec {
   pname = "snakeviz";
-  name = "${pname}-${version}";
   version = "0.4.1";
 
-  src = fetchurl {
-    url = "mirror://pypi/s/snakeviz/${name}.tar.gz";
+  src = fetchPypi {
+    inherit pname version;
     sha256 = "18vsaw1wmf903fg21zkk6a9b49gj47g52jm5h52g4iygngjhpx79";
   };
 

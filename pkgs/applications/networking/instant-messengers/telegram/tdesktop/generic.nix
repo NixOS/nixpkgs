@@ -90,6 +90,10 @@ mkDerivation rec {
     sed -i Telegram/gyp/qt_rcc.gypi \
       -e "s,/usr/bin/rcc,rcc,g"
 
+    # Build system assumes x86, but it works fine on non-x86 if we patch this one flag out
+    sed -i Telegram/ThirdParty/libtgvoip/libtgvoip.gyp \
+      -e "/-msse2/d"
+
     gyp \
       -Dbuild_defines=${GYP_DEFINES} \
       -Gconfig=Release \
@@ -133,7 +137,7 @@ mkDerivation rec {
     description = "Telegram Desktop messaging app "
       + (if stable then "(stable version)" else "(pre-release)");
     license = licenses.gpl3;
-    platforms = [ "x86_64-linux" "i686-linux" ];
+    platforms = platforms.linux;
     homepage = https://desktop.telegram.org/;
     maintainers = with maintainers; [ primeos abbradar garbas ];
   };

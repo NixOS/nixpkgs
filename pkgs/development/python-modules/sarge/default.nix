@@ -1,11 +1,11 @@
-{ lib, buildPythonPackage, fetchurl }:
+{ lib, buildPythonPackage, fetchPypi }:
 
 buildPythonPackage rec {
-  name = "sarge-${version}";
+  pname = "sarge";
   version = "0.1.4";
 
-  src = fetchurl {
-    url = "mirror://pypi/s/sarge/${name}.tar.gz";
+  src = fetchPypi {
+    inherit pname version;
     sha256 = "08s8896973bz1gg0pkr592w6g4p6v47bkfvws5i91p9xf8b35yar";
   };
 

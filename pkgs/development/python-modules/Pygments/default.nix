@@ -7,7 +7,6 @@
 buildPythonPackage rec {
   pname = "Pygments";
   version = "2.2.0";
-  name = "${pname}-${version}";
 
   src = fetchPypi {
     inherit pname version;

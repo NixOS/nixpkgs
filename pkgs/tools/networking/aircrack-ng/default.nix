@@ -6,7 +6,7 @@ stdenv.mkDerivation rec {
   name = "aircrack-ng-1.2";
 
   src = fetchurl {
-    url = "http://download.aircrack-ng.org/${name}.tar.gz";
+    url = "https://download.aircrack-ng.org/${name}.tar.gz";
     sha256 = "0z7sl1ihgrnc98bpqa1mmkh51w26fnsanvj6ydwcnd8g83azwkvr";
   };
 

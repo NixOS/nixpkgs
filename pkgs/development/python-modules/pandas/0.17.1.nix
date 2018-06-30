@@ -28,7 +28,6 @@ let
 in buildPythonPackage rec {
   pname = "pandas";
   version = "0.17.1";
-  name = "${pname}-${version}";
 
   src = fetchPypi {
     inherit pname version;

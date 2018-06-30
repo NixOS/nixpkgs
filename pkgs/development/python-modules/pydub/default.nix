@@ -1,7 +1,6 @@
 { stdenv, buildPythonPackage, fetchPypi, scipy, ffmpeg-full }:
 
 buildPythonPackage rec {
-  name = "${pname}-${version}";
   pname = "pydub";
   version = "0.22.1";
   src = fetchPypi {

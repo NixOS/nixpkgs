@@ -1,12 +1,11 @@
-{ stdenv, fetchurl, buildPythonPackage, flask, wtforms, nose }:
+{ stdenv, fetchPypi, buildPythonPackage, flask, wtforms, nose }:
 
 buildPythonPackage rec {
   pname = "Flask-WTF";
   version = "0.14.2";
-  name = "${pname}-${version}";
 
-  src = fetchurl {
-    url = "mirror://pypi/F/Flask-WTF/${name}.tar.gz";
+  src = fetchPypi {
+    inherit pname version;
     sha256 = "0dncc5as2k61b28k8kal5yh3prmv7zya1jz7kvci7ximzmfda52x";
   };
 

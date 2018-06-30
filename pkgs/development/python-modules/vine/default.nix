@@ -4,7 +4,6 @@
 buildPythonPackage rec {
   pname = "vine";
   version = "1.1.4";
-  name = "${pname}-${version}";
 
   disable = pythonOlder "2.7";
 

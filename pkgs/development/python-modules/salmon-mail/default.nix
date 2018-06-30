@@ -2,7 +2,6 @@
 ,  chardet, lmtpd, pythondaemon, six, jinja2, mock }:
 
 buildPythonPackage rec {
-  name = "${pname}-${version}";
   pname = "salmon-mail";
   version = "3.0.1";
 
@@ -13,6 +12,12 @@ buildPythonPackage rec {
 
   checkInputs = [ nose jinja2 mock ];
   propagatedBuildInputs = [ chardet dnspython lmtpd pythondaemon six ];
+
+  # The tests use salmon executable installed by salmon itself so we need to add
+  # that to PATH
+  checkPhase = ''
+    PATH=$out/bin:$PATH nosetests .
+  '';
 
   meta = with stdenv.lib; {
     homepage = http://salmon-mail.readthedocs.org/;

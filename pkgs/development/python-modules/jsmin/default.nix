@@ -3,7 +3,6 @@
 buildPythonPackage rec {
   pname = "jsmin";
   version = "2.2.2";
-  name = "${pname}-${version}";
 
   src = fetchPypi {
     inherit pname version;

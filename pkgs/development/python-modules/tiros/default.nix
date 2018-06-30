@@ -4,7 +4,6 @@
 
 buildPythonPackage rec {
   pname = "tiros";
-  name = "${pname}-${version}";
   version = "1.0.44";
 
   src = fetchPypi {

@@ -15,7 +15,6 @@
 buildPythonPackage rec {
   pname = "qtconsole";
   version = "4.3.1";
-  name = "${pname}-${version}";
 
   src = fetchPypi {
     inherit pname version;
