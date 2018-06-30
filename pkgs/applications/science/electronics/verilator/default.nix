@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
   version = "3.924";
 
   src = fetchurl {
-    url    = "https://www.veripool.org/ftp/${name}.tgz";
+    url    = "http://www.veripool.org/ftp/${name}.tgz";
     sha256 = "0xarifraycmdzjxs0lscpwvrwr59z84p8g8dkyjssc463dqikjvx";
   };
 

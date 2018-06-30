@@ -7,7 +7,7 @@ let
       name = "varnish-${version}";
 
       src = fetchurl {
-        url = "https://varnish-cache.org/_downloads/${name}.tgz";
+        url = "http://varnish-cache.org/_downloads/${name}.tgz";
         inherit sha256;
       };
 

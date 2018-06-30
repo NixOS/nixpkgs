@@ -4,7 +4,7 @@ stdenv.mkDerivation rec {
   name = "pam-krb5-4.8";
 
   src = fetchurl {
-    url = "https://archives.eyrie.org/software/kerberos/${name}.tar.gz";
+    url = "http://archives.eyrie.org/software/kerberos/${name}.tar.gz";
     sha256 = "0j96jfaxzkj1ifc3qxagjmaxvgda7ndqaaxx2ka018is9f5lbfrs";
   };
 

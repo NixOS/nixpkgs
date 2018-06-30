@@ -3,7 +3,7 @@
 stdenv.mkDerivation {
   name = "gnu-mdk-1.2.9";
   src = fetchurl {
-    url = https://ftp.gnu.org/gnu/mdk/v1.2.9/mdk-1.2.9.tar.gz;
+    url = http://ftp.gnu.org/gnu/mdk/v1.2.9/mdk-1.2.9.tar.gz;
     sha256 = "0c24wzrzbk0l4z1p5nnxihaqra75amwmw59va44554infkfms9kc";
   };
   nativeBuildInputs = [ pkgconfig ];
