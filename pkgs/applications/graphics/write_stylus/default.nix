@@ -46,6 +46,7 @@ stdenv.mkDerivation rec {
     homepage = http://www.styluslabs.com/;
     description = "Write is a word processor for handwriting.";
     platforms = platforms.linux;
+    license = stdenv.lib.licenses.unfree;
     maintainers = with maintainers; [ oyren ];
   };
 }
