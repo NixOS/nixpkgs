@@ -1,21 +1,24 @@
 { lib, buildPythonPackage, fetchFromGitHub, pythonOlder
-, nose, asynctest, mock, pytz, tzlocal, imaplib2, docutils }:
+, nose, asynctest, mock, pytz, tzlocal, imaplib2, docutils, pyopenssl }:
 
 buildPythonPackage rec {
   pname = "aioimaplib";
-  version = "0.7.13";
+  version = "0.7.14";
 
   # PyPI tarball doesn't ship tests
   src = fetchFromGitHub {
     owner = "bamthomas";
     repo = pname;
     rev = version;
-    sha256 = "19yhk4ixfw46d0bvx6a40r23nvia5a83dzn5rzwaq1wdjr186bbn";
+    sha256 = "150v3czh53sqakfqgjyj1w39mdfcxmpnrk2pbmq63jkq7r6njl0l";
   };
 
-  disbaled = pythonOlder "3.4";
+  disabled = pythonOlder "3.4";
 
-  checkInputs = [ nose asynctest mock pytz tzlocal imaplib2 docutils ];
+  checkInputs = [ nose asynctest mock pytz tzlocal imaplib2 docutils pyopenssl ];
+
+  # https://github.com/bamthomas/aioimaplib/issues/35
+  doCheck = false;
 
   meta = with lib; {
     description = "Python asyncio IMAP4rev1 client library";
