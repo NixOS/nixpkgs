@@ -227,6 +227,17 @@ in
         description = "List of arguments for the X server.";
       };
 
+      setupCommands = mkOption {
+        type = types.lines;
+        default = "";
+        description = ''
+          Shell commands executed just after the X server has started.
+
+          This option is only effective for display managers for which this feature
+          is supported; currently these are LightDM, GDM and SDDM.
+        '';
+      };
+
       sessionCommands = mkOption {
         type = types.lines;
         default = "";

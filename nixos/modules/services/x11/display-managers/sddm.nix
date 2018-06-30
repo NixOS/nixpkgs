@@ -31,6 +31,7 @@ let
     rm -fr /var/lib/sddm/.cache/sddm-greeter/qmlcache
 
     ${cfg.setupScript}
+    ${dmcfg.setupCommands}
   '';
 
   Xstop = pkgs.writeScript "Xstop" ''
@@ -148,7 +149,8 @@ in
           xrandr --auto
         '';
         description = ''
-          A script to execute when starting the display server.
+          A script to execute when starting the display server. DEPRECATED, please
+          use <option>services.xserver.displayManager.setupCommands</option>.
         '';
       };
 

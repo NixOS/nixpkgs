@@ -374,6 +374,12 @@ in
         description = "Contents of the first Monitor section of the X server configuration file.";
       };
 
+      extraConfig = mkOption {
+        type = types.lines;
+        default = "";
+        description = "Additional contents (sections) included in the X server configuration file";
+      };
+
       xrandrHeads = mkOption {
         default = [];
         example = [
@@ -741,6 +747,7 @@ in
             Driver "${driver.driverName or driver.name}"
             ${if cfg.useGlamor then ''Option "AccelMethod" "glamor"'' else ""}
             ${cfg.deviceSection}
+            ${driver.deviceSection or ""}
             ${xrandrDeviceSection}
           EndSection
 
@@ -752,6 +759,7 @@ in
             ''}
 
             ${cfg.screenSection}
+            ${driver.screenSection or ""}
 
             ${optionalString (cfg.defaultDepth != 0) ''
               DefaultDepth ${toString cfg.defaultDepth}
@@ -781,6 +789,8 @@ in
         '')}
 
         ${xrandrMonitorSections}
+
+        ${cfg.extraConfig}
       '';
 
     fonts.enableDefaultFonts = mkDefault true;

@@ -7,6 +7,13 @@ let
   cfg = config.services.xserver.displayManager;
   gdm = pkgs.gnome3.gdm;
 
+  xSessionWrapper = if (cfg.setupCommands == "") then null else
+    pkgs.writeScript "gdm-x-session-wrapper" ''
+      #!${pkgs.bash}/bin/bash
+      ${cfg.setupCommands}
+      exec "$@"
+    '';
+
 in
 
 {
@@ -112,6 +119,11 @@ in
           GDM_SESSIONS_DIR = "${cfg.session.desktops}";
           # Find the mouse
           XCURSOR_PATH = "~/.icons:${pkgs.gnome3.adwaita-icon-theme}/share/icons";
+        } // optionalAttrs (xSessionWrapper != null) {
+          # Make GDM use this wrapper before running the session, which runs the
+          # configured setupCommands. This relies on a patched GDM which supports
+          # this environment variable.
+          GDM_X_SESSION_WRAPPER = "${xSessionWrapper}";
         };
         execCmd = "exec ${gdm}/bin/gdm";
       };
