@@ -330,6 +330,11 @@ inherit (pkgs.nixos {
      will be added to <literal>environment.systemPackages</literal>.
     </para>
    </listitem>
+   <listitem>
+    <para>
+      The module <option>services.networking.hostapd</option> now uses WPA2 by default.
+    </para>
+   </listitem>
   </itemizedlist>
  </section>
 </section>
