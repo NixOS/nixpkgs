@@ -43,6 +43,14 @@ in stdenv.mkDerivation (rec {
 
   propagatedBuildInputs = [ ncurses zlib ];
 
+  patches = [
+    # Fix missing header
+    (fetchpatch {
+      url = https://github.com/llvm-mirror/llvm/commit/7c9054610e354340f9474dcd13a927f929912d1d.patch;
+      sha256 = "1qg4w8j8cwjavi5i4nb7gn6nbhg36ar3q6avyr2za6awb127zrai";
+    })
+  ];
+
   postPatch = stdenv.lib.optionalString stdenv.isDarwin ''
     substituteInPlace cmake/modules/AddLLVM.cmake \
       --replace 'set(_install_name_dir INSTALL_NAME_DIR "@rpath")' "set(_install_name_dir INSTALL_NAME_DIR "$lib/lib")" \
