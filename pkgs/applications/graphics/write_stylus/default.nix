@@ -17,9 +17,6 @@ stdenv.mkDerivation rec {
     sha256 = "1p6glp4vdpwl8hmhypayc4cvs3j9jfmjfhhrgqm2xkgl5bfbv2qd";
   };
   sourceRoot = ".";
-  unpackCmd = ''
-    tar xfz "$src"
-    '';
 
   buildPhase = ":";   # nothing to build
 
