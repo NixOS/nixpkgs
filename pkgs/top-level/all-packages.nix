@@ -2099,7 +2099,6 @@ with pkgs;
   dolphinEmuMaster = callPackage ../misc/emulators/dolphin-emu/master.nix {
     inherit (darwin.apple_sdk.frameworks) CoreBluetooth ForceFeedback IOKit OpenGL;
     inherit (darwin) cf-private;
-    wxGTK = wxGTK31;
   };
 
   doomseeker = qt5.callPackage ../applications/misc/doomseeker { };

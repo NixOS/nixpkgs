@@ -1,27 +1,16 @@
 { stdenv, fetchFromGitHub, makeWrapper, makeDesktopItem, pkgconfig, cmake, qt5
-, bluez, ffmpeg, libao, libGLU_combined, gtk2, glib, pcre, gettext, libXrandr
-, libpthreadstubs, libusb, libXext, libXxf86vm, libXinerama, libSM, libXdmcp
-, readline, openal, libevdev, portaudio, curl
-, vulkan-loader ? null
-, libpulseaudio ? null
+, bluez, ffmpeg, libao, libGLU_combined, pcre, gettext, libXrandr, libusb, lzo
+, libpthreadstubs, libXext, libXxf86vm, libXinerama, libSM, libXdmcp, readline
+, openal, libudev, libevdev, portaudio, curl, alsaLib, miniupnpc, enet, polarssl
+, soundtouch, sfml, vulkan-loader ? null, libpulseaudio ? null
 
 # - Inputs used for Darwin
-, CoreBluetooth, cf-private, ForceFeedback, IOKit, OpenGL, wxGTK, libpng, hidapi
-
-# options
-# wxWidgets will be deprecated and removed soon according to upstream
-, dolphin-qtgui ? true
-, dolphin-wxgui ? false }:
-
-# XOR: ensure only wx XOR qt are enabled
-assert dolphin-wxgui || dolphin-qtgui;
-assert !(dolphin-wxgui && dolphin-qtgui);
+, CoreBluetooth, cf-private, ForceFeedback, IOKit, OpenGL, libpng, hidapi }:
 
 let
   desktopItem = makeDesktopItem {
     name = "dolphin-emu-master";
-    exec = stdenv.lib.optionalString dolphin-wxgui "dolphin-emu-wx"
-         + stdenv.lib.optionalString dolphin-qtgui "dolphin-emu-qt";
+    exec = "dolphin-emu-master";
     icon = "dolphin-emu";
     comment = "A Wii/GameCube Emulator";
     desktopName = "Dolphin Emulator (master)";
@@ -31,63 +20,54 @@ let
   };
 in stdenv.mkDerivation rec {
   name = "dolphin-emu-${version}";
-  version = "2018-06-29";
+  version = "2018-06-30";
 
   src = fetchFromGitHub {
     owner = "dolphin-emu";
     repo = "dolphin";
-    rev = "3eef8145d2206ea16fd074c8cd4318a3692d95e1";
-    sha256 = "1mxg3rfdnv4mxmqgk2pkmg71fqk0iyr2b0z18cx0izpfycvz937p";
+    rev = "e22c5333ab50c3e84774ce831eaeba48bcea5901";
+    sha256 = "13d438q2qk7s4ad1zn58gfpr075iary3qbf5i1pia7mxa8nvjhvq";
   };
 
   enableParallelBuilding = true;
   nativeBuildInputs = [ cmake pkgconfig ]
-    ++ stdenv.lib.optionals stdenv.isLinux [ makeWrapper ];
+  ++ stdenv.lib.optionals stdenv.isLinux [ makeWrapper ];
 
   buildInputs = [
-    curl ffmpeg libao libGLU_combined gtk2 glib pcre gettext libpthreadstubs
-    libXrandr libXext libXxf86vm libXinerama libSM readline openal libXdmcp
-    portaudio libusb libpulseaudio libpng hidapi
-  ] ++ stdenv.lib.optionals dolphin-qtgui [ qt5.qtbase ]
-    ++ stdenv.lib.optionals stdenv.isLinux [ bluez libevdev vulkan-loader ]
-    ++ stdenv.lib.optionals stdenv.isDarwin [ wxGTK CoreBluetooth cf-private
-                                              ForceFeedback IOKit OpenGL ];
+    curl ffmpeg libao libGLU_combined pcre gettext libpthreadstubs libpulseaudio
+    libXrandr libXext libXxf86vm libXinerama libSM readline openal libXdmcp lzo
+    portaudio libusb libpng hidapi miniupnpc enet polarssl soundtouch sfml
+    qt5.qtbase
+  ] ++ stdenv.lib.optionals stdenv.isLinux [
+    bluez libudev libevdev alsaLib vulkan-loader
+  ] ++ stdenv.lib.optionals stdenv.isDarwin [
+    CoreBluetooth cf-private OpenGL ForceFeedback IOKit
+  ];
 
   cmakeFlags = [
-    "-DGTK2_GLIBCONFIG_INCLUDE_DIR=${glib.out}/lib/glib-2.0/include"
-    "-DGTK2_GDKCONFIG_INCLUDE_DIR=${gtk2.out}/lib/gtk-2.0/include"
-    "-DGTK2_INCLUDE_DIRS=${gtk2.dev}/include/gtk-2.0"
-    "-DENABLE_LTO=True"
-  ] ++ stdenv.lib.optionals (!dolphin-qtgui)  [ "-DENABLE_QT2=False" ]
-    ++ stdenv.lib.optionals stdenv.isDarwin [
-      "-DOSX_USE_DEFAULT_SEARCH_PATH=True"
-    ];
+    "-DUSE_SHARED_ENET=ON"
+    "-DENABLE_LTO=ON"
+  ] ++ stdenv.lib.optionals stdenv.isDarwin [
+    "-DOSX_USE_DEFAULT_SEARCH_PATH=True"
+  ];
 
-  # - Change install path to Applications relative to $out
   # - Allow Dolphin to use nix-provided libraries instead of building them
-  preConfigure = stdenv.lib.optionalString stdenv.isDarwin ''
-    sed -i -e 's,/Applications,Applications,g' \
-      Source/Core/DolphinWX/CMakeLists.txt
+  preConfigure = ''
+    sed -i -e 's,DISTRIBUTOR "None",DISTRIBUTOR "NixOS",g' CMakeLists.txt
+  '' + stdenv.lib.optionalString stdenv.isDarwin ''
+    sed -i -e 's,if(NOT APPLE),if(true),g' CMakeLists.txt
     sed -i -e 's,if(LIBUSB_FOUND AND NOT APPLE),if(LIBUSB_FOUND),g' \
       CMakeLists.txt
-    sed -i -e 's,if(NOT APPLE),if(true),g' CMakeLists.txt
-  '';
-
-  preInstall = stdenv.lib.optionalString stdenv.isDarwin ''
-    mkdir -p "$out/Applications"
   '';
 
   postInstall = ''
     cp -r ${desktopItem}/share/applications $out/share
+    ln -sf $out/bin/dolphin-emu $out/bin/dolphin-emu-master
   '' + stdenv.lib.optionalString stdenv.isLinux ''
     wrapProgram $out/bin/dolphin-emu-nogui \
       --prefix LD_LIBRARY_PATH : ${vulkan-loader}/lib
-    wrapProgram $out/bin/dolphin-emu-wx \
-      --prefix LD_LIBRARY_PATH : ${vulkan-loader}/lib
-  '' + stdenv.lib.optionalString (dolphin-qtgui && stdenv.isLinux) ''
     wrapProgram $out/bin/dolphin-emu \
       --prefix LD_LIBRARY_PATH : ${vulkan-loader}/lib
-    ln -sf $out/bin/dolphin-emu $out/bin/dolphin-emu-qt
   '';
 
   meta = with stdenv.lib; {
