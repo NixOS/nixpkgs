@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, qt4, qmake4Hook, unzip, mesa_glu, makeWrapper }:
+{ stdenv, fetchurl, qt4, qmake4Hook, unzip, libGLU, makeWrapper }:
 
 stdenv.mkDerivation rec {
 
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     sha256 = "1kiammx46719az6jzrav8yrwz82nk4m72ybj0kpbnvp9wfl3swbb";
   };
 
-  buildInputs = [ qt4 unzip mesa_glu makeWrapper ];
+  buildInputs = [ qt4 unzip libGLU makeWrapper ];
   nativeBuildInputs = [ qmake4Hook ];
 
   # Thanks to https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=672000#15:
