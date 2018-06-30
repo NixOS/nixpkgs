@@ -7984,22 +7984,8 @@ in {
 
   pyte = callPackage ../development/python-modules/pyte { };
 
-  graphviz = buildPythonPackage rec {
-    name = "graphviz-${version}";
-    version = "0.5.2";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/g/graphviz/${name}.zip";
-      sha256 = "0jh31nlm0qbxwylhdkwnb69pcjlc5z03fcfbs0gvgzp3hfrngsk0";
-    };
-
-    propagatedBuildInputs = [ pkgs.graphviz ];
-
-    meta = {
-      description = "Simple Python interface for Graphviz";
-      homepage = https://github.com/xflr6/graphviz;
-      license = licenses.mit;
-    };
+  graphviz = callPackage ../development/python-modules/graphviz {
+    inherit (pkgs) graphviz;
   };
 
   pygraphviz = callPackage ../development/python-modules/pygraphviz { };
