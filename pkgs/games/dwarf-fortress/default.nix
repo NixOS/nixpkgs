@@ -18,10 +18,7 @@ let
                                               else null;
 
     dwarf-fortress = callPackage ./wrapper {
-      themes = {
-        "phoebus" = phoebus-theme;
-        "cla" = cla-theme;
-      };
+      inherit themes;
     };
 
     dwarf-therapist-original = pkgs.qt5.callPackage ./dwarf-therapist {
