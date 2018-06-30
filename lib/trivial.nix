@@ -102,7 +102,7 @@ rec {
   # Pull in some builtins not included elsewhere.
   inherit (builtins)
     pathExists readFile isBool
-    isInt add sub lessThan
+    isInt isFloat add sub lessThan
     seq deepSeq genericClosure;
 
   inherit (lib.strings) fileContents;
