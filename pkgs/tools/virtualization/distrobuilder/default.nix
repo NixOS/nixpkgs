@@ -27,10 +27,6 @@ buildGoPackage rec {
   '';
   nativeBuildInputs = [ pkgconfig makeWrapper ];
 
-  doCheck = true;
-  preCheck = ''
-    export PATH=$PATH:${binPath}
-  '';
   meta = with stdenv.lib; {
     description = "System container image builder for LXC and LXD";
     homepage = "https://github.com/lxc/distrobuilder";
