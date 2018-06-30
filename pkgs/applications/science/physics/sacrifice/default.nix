@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
   version = "1.0.0";
 
   src = fetchurl {
-    url = "https://www.hepforge.org/archive/agile/Sacrifice-1.0.0.tar.gz";
+    url = "http://www.hepforge.org/archive/agile/Sacrifice-1.0.0.tar.gz";
     sha256 = "10bvpq63kmszy1habydwncm0j1dgvam0fkrmvkgbkvf804dcjp6g";
   };
 

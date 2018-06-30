@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
   name = "goaccess-${version}";
 
   src = fetchurl {
-    url = "https://tar.goaccess.io/goaccess-${version}.tar.gz";
+    url = "http://tar.goaccess.io/goaccess-${version}.tar.gz";
     sha256 = "051lrprg9svl5ccc3sif8fl78vfpkrgjcxgi2wngqn7a81jzdabb";
   };
 

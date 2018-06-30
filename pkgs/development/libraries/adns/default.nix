@@ -8,7 +8,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     urls = [
-      "https://www.chiark.greenend.org.uk/~ian/adns/ftp/adns-${version}.tar.gz"
+      "http://www.chiark.greenend.org.uk/~ian/adns/ftp/adns-${version}.tar.gz"
       "ftp://ftp.chiark.greenend.org.uk/users/ian/adns/adns-${version}.tar.gz"
       "mirror://gnu/adns/adns-${version}.tar.gz"
     ];
