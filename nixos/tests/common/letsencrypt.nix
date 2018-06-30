@@ -193,6 +193,7 @@ let
 
   snakeOilCa = pkgs.runCommand "snakeoil-ca" {
     buildInputs = [ pkgs.openssl ];
+    allowSubstitutes = false;
   } ''
     mkdir "$out"
     openssl req -newkey rsa:4096 -x509 -sha256 -days 36500 \
@@ -215,6 +216,7 @@ let
     '';
   in pkgs.runCommand "snakeoil-certs-${fqdn}" {
     buildInputs = [ pkgs.openssl ];
+    allowSubstitutes = false;
   } ''
     mkdir "$out"
     openssl genrsa -out "$out/snakeoil.key" 4096
