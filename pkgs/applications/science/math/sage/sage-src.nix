@@ -104,13 +104,6 @@ stdenv.mkDerivation rec {
     # https://trac.sagemath.org/ticket/24935
     ./patches/sphinx-1.7.patch
 
-    # https://trac.sagemath.org/ticket/25320
-    (fetchpatch {
-      name = "zero_division_error_formatting.patch";
-      url = "https://git.sagemath.org/sage.git/patch/?h=f79070ddd09fa0ad6b340b097bd8d690a7aa35f0";
-      sha256 = "02wsc3wbp8g8dk5jcjyv18d9v537h3zp5v8lwir46j4na4kj0dlb";
-    })
-
     # Adapt hashes to new boost version
     # https://trac.sagemath.org/ticket/22243
     # (this ticket doesn't only upgrade boost but also avoids this problem in the future)
