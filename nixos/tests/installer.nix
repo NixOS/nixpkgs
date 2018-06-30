@@ -192,7 +192,8 @@ let
     { createPartitions, preBootCommands ? "", extraConfig ? ""
     , extraInstallerConfig ? {}
     , bootLoader ? "grub" # either "grub" or "systemd-boot"
-    , grubVersion ? 2, grubDevice ? "/dev/vda", grubIdentifier ? "uuid", grubUseEfi ? false
+    , grubVersion ? 2, grubDevice ? "/dev/vda", grubIdentifier ? "uuid"
+    , grubUseEfi ? false, grubUseZfs ? false
     , enableOCR ? false, meta ? {}
     }:
     makeTest {
@@ -232,25 +233,29 @@ let
 
             # The test cannot access the network, so any packages we
             # need must be included in the VM.
-            system.extraDependencies = with pkgs;
-              [ sudo
-                libxml2.bin
-                libxslt.bin
-                docbook5
-                docbook5_xsl
-                unionfs-fuse
-                ntp
-                nixos-artwork.wallpapers.gnome-dark
-                perlPackages.XMLLibXML
-                perlPackages.ListCompare
-                xorg.lndir
+            system.extraDependencies = let
+              # This is because the EFI version of grub overrides the base
+              # version of GRUB 2, so we can't just use pkgs.grub2_efi here.
+              grub2 = pkgs.grub2_light.override { zfsSupport = grubUseZfs; };
+              grub2Efi = grub2.override { efiSupport = grubUseEfi; };
+            in with pkgs; [
+              sudo
+              libxml2.bin
+              libxslt.bin
+              docbook5
+              docbook5_xsl
+              unionfs-fuse
+              ntp
+              nixos-artwork.wallpapers.gnome-dark
+              perlPackages.XMLLibXML
+              perlPackages.ListCompare
+              xorg.lndir
 
-                # add curl so that rather than seeing the test attempt to download
-                # curl's tarball, we see what it's trying to download
-                curl
-              ]
-              ++ optional (bootLoader == "grub" && grubVersion == 1) pkgs.grub
-              ++ optionals (bootLoader == "grub" && grubVersion == 2) [ pkgs.grub2 pkgs.grub2_efi ];
+              # add curl so that rather than seeing the test attempt to download
+              # curl's tarball, we see what it's trying to download
+              curl
+            ] ++ optional (bootLoader == "grub" && grubVersion == 1) pkgs.grub
+              ++ optionals (bootLoader == "grub" && grubVersion == 2) [ grub2 grub2Efi ];
 
             services.udisks2.enable = mkDefault false;
 
@@ -417,6 +422,8 @@ in {
               "udevadm settle"
           );
         '';
+
+      grubUseZfs = true;
     };
 
   # Create two physical LVM partitions combined into one volume group
