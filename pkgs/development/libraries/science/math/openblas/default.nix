@@ -79,10 +79,10 @@ let
 in
 stdenv.mkDerivation rec {
   name = "openblas-${version}";
-  version = "0.3.0";
+  version = "0.3.1";
   src = fetchurl {
     url = "https://github.com/xianyi/OpenBLAS/archive/v${version}.tar.gz";
-    sha256 = "18giv3lsh8cva01z4rhsx8jvgliknni0jp7vxkc69qxb14vm8lfg";
+    sha256 = "0czbs2afmcxxij1ivqrm04p0qcksg5fravjifhydvb7k6mpraphz";
     name = "openblas-${version}.tar.gz";
   };
 
