@@ -1620,6 +1620,8 @@ in {
 
   onkyo-eiscp = callPackage ../development/python-modules/onkyo-eiscp { };
 
+  onnx = callPackage ../development/python-modules/onnx { };
+
   pyunifi = callPackage ../development/python-modules/pyunifi { };
 
   tablib = callPackage ../development/python-modules/tablib { };
