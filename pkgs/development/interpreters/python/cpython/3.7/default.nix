@@ -80,6 +80,7 @@ in stdenv.mkDerivation {
     "--without-ensurepip"
     "--with-system-expat"
     "--with-system-ffi"
+    "--with-openssl=${openssl.dev}"
   ];
 
   preConfigure = ''
