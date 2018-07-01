@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   installPhase = ''
     mkdir -p $out/bin
     for binaryfile in $binaryFiles; do 
-      cp $binaryfile $out/bin
+      mv $binaryfile $out/bin
     done
   '';
 
