@@ -4,6 +4,9 @@
 let
   version = "1.1.7";
   formattedVersion = lib.replaceChars ["."] ["_"] version;
+
+  boostPython = boost.override { enablePython = true; };
+
 in stdenv.mkDerivation {
   name = "libtorrent-rasterbar-${version}";
 
@@ -27,15 +30,15 @@ in stdenv.mkDerivation {
 
   enableParallelBuilding = true;
   nativeBuildInputs = [ automake autoconf libtool pkgconfig ];
-  buildInputs = [ boost openssl zlib python libiconv geoip ];
+  buildInputs = [ boostPython openssl zlib python libiconv geoip ];
   preConfigure = "./autotool.sh";
 
   configureFlags = [
     "--enable-python-binding"
     "--with-libgeoip=system"
     "--with-libiconv=yes"
-    "--with-boost=${boost.dev}"
-    "--with-boost-libdir=${boost.out}/lib"
+    "--with-boost=${boostPython.dev}"
+    "--with-boost-libdir=${boostPython.out}/lib"
     "--with-libiconv=yes"
   ];
 
