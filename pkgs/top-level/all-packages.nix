@@ -10234,6 +10234,8 @@ with pkgs;
 
   libhdhomerun = callPackage ../development/libraries/libhdhomerun { };
 
+  libheif = callPackage ../development/libraries/libheif {};
+
   libhttpseverywhere = callPackage ../development/libraries/libhttpseverywhere { };
 
   libHX = callPackage ../development/libraries/libHX { };
