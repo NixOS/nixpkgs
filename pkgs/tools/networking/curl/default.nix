@@ -96,7 +96,7 @@ stdenv.mkDerivation rec {
     configureFlags = [
         ( if sslSupport then "--with-ssl=${openssl.crossDrv}" else "--without-ssl" )
         ( if gnutlsSupport then "--with-gnutls=${gnutls.crossDrv}" else "--without-gnutls" )
-        "--with-random /dev/urandom"
+        "--with-random=/dev/urandom"
       ];
   };
 
