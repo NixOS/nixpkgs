@@ -17424,6 +17424,8 @@ with pkgs;
 
   sawfish = callPackage ../applications/window-managers/sawfish { };
 
+  sidplayfp = callPackage ../applications/audio/sidplayfp { };
+
   sxhkd = callPackage ../applications/window-managers/sxhkd { };
 
   sxhkd-unstable = callPackage ../applications/window-managers/sxhkd/unstable.nix { };
