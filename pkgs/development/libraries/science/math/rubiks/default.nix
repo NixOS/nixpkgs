@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   name = "${pname}-${version}";
 
   src = fetchurl {
-    url = "http://mirrors.mit.edu/sage/spkg/upstream/rubiks/rubiks-${version}.tar.bz2";
+    url = "mirror://sageupstream/rubiks/rubiks-${version}.tar.bz2";
     sha256 = "0zdmkb0j1kyspdpsszzb2k3279xij79jkx0dxd9f3ix1yyyg3yfq";
   };
 

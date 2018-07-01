@@ -1,4 +1,4 @@
-{stdenv, fetchFromGitHub, mpir, gmp, mpfr, flint}:
+{stdenv, fetchFromGitHub, fetchpatch, mpir, gmp, mpfr, flint}:
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";
   pname = "arb";
@@ -17,6 +17,14 @@ stdenv.mkDerivation rec {
     "--with-flint=${flint}"
   ];
   doCheck = true;
+  patches = [
+    # https://github.com/fredrik-johansson/arb/pull/210, included in next release
+    (fetchpatch {
+      url = "https://patch-diff.githubusercontent.com/raw/fredrik-johansson/arb/pull/210.patch";
+      name = "return-exact-zero-where-possible.patch";
+      sha256 = "01j9npnpmwh4dla9i05qdn606hy34gy9bz7c9bbsqm7az3n7pxjg";
+    })
+  ];
   meta = {
     inherit version;
     description = ''A library for arbitrary-precision interval arithmetic'';

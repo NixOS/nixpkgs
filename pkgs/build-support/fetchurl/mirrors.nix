@@ -319,51 +319,48 @@ rec {
   ];
 
   # Sage mirrors (http://www.sagemath.org/mirrors.html)
-  sagemath = [
+  sageupstream = [
     # Africa
-    http://sagemath.polytechnic.edu.na/src/
-    ftp://ftp.sun.ac.za/pub/mirrors/www.sagemath.org/src/
-    http://sagemath.mirror.ac.za/src/
-    https://ftp.leg.uct.ac.za/pub/packages/sage/src/
-    http://mirror.ufs.ac.za/sagemath/src/
+    http://sagemath.polytechnic.edu.na/spkg/upstream/
+    ftp://ftp.sun.ac.za/pub/mirrors/www.sagemath.org/spkg/upstream/
+    http://sagemath.mirror.ac.za/spkg/upstream/
+    https://ftp.leg.uct.ac.za/pub/packages/sage/spkg/upstream/
+    http://mirror.ufs.ac.za/sagemath/spkg/upstream/
 
     # America, North
-    http://mirrors-usa.go-parts.com/sage/sagemath/src/
-    http://mirrors.mit.edu/sage/src/
-    http://www.cecm.sfu.ca/sage/src/
-    http://files.sagemath.org/src/
-    http://mirror.clibre.uqam.ca/sage/src/
-    https://mirrors.xmission.com/sage/src/
+    http://mirrors-usa.go-parts.com/sage/sagemath/spkg/upstream/
+    http://mirrors.mit.edu/sage/spkg/upstream/
+    http://www.cecm.sfu.ca/sage/spkg/upstream/
+    http://files.sagemath.org/spkg/upstream/
+    http://mirror.clibre.uqam.ca/sage/spkg/upstream/
+    https://mirrors.xmission.com/sage/spkg/upstream/
 
     # America, South
-    http://sagemath.c3sl.ufpr.br/src/
-    http://linorg.usp.br/sage/
+    http://sagemath.c3sl.ufpr.br/spkg/upstream/
+    http://linorg.usp.br/sage/spkg/upstream
 
     # Asia
-    http://sage.asis.io/src/
-    http://mirror.hust.edu.cn/sagemath/src/
-    https://ftp.iitm.ac.in/sage/src/
-    http://ftp.kaist.ac.kr/sage/src/
-    http://ftp.riken.jp/sagemath/src/
-    https://mirrors.tuna.tsinghua.edu.cn/sagemath/src/
-    https://mirrors.ustc.edu.cn/sagemath/src/
-    http://ftp.tsukuba.wide.ad.jp/software/sage/src/
-    http://ftp.yz.yamagata-u.ac.jp/pub/math/sage/src/
-    https://mirror.yandex.ru/mirrors/sage.math.washington.edu/src/
+    http://sage.asis.io/spkg/upstream/
+    http://mirror.hust.edu.cn/sagemath/spkg/upstream/
+    https://ftp.iitm.ac.in/sage/spkg/upstream/
+    http://ftp.kaist.ac.kr/sage/spkg/upstream/
+    http://ftp.riken.jp/sagemath/spkg/upstream/
+    https://mirrors.tuna.tsinghua.edu.cn/sagemath/spkg/upstream/
+    https://mirrors.ustc.edu.cn/sagemath/spkg/upstream/
+    http://ftp.tsukuba.wide.ad.jp/software/sage/spkg/upstream/
+    http://ftp.yz.yamagata-u.ac.jp/pub/math/sage/spkg/upstream/
+    https://mirror.yandex.ru/mirrors/sage.math.washington.edu/spkg/upstream/
 
     # Australia
-    http://echidna.maths.usyd.edu.au/sage/src/
+    http://echidna.maths.usyd.edu.au/sage/spkg/upstream/
 
     # Europe
-    http://sage.mirror.garr.it/mirrors/sage/src/
-    http://sunsite.rediris.es/mirror/sagemath/src/
-    http://mirror.switch.ch/mirror/sagemath/src/
-    http://mirrors.fe.up.pt/pub/sage/src/
-    http://www-ftp.lip6.fr/pub/math/sagemath/src/
-    http://ftp.ntua.gr/pub/sagemath/src/
-
-    # Old versions
-    http://sagemath.org/src-old/
+    http://sage.mirror.garr.it/mirrors/sage/spkg/upstream/
+    http://sunsite.rediris.es/mirror/sagemath/spkg/upstream/
+    http://mirror.switch.ch/mirror/sagemath/spkg/upstream/
+    http://mirrors.fe.up.pt/pub/sage/spkg/upstream/
+    http://www-ftp.lip6.fr/pub/math/sagemath/spkg/upstream/
+    http://ftp.ntua.gr/pub/sagemath/spkg/upstream/
   ];
 
   # MySQL mirrors
