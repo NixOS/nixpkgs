@@ -37,6 +37,15 @@
     };
   }
   {
+    goPackagePath = "github.com/badoux/goscraper";
+    fetch = {
+      type = "git";
+      url = "https://github.com/badoux/goscraper";
+      rev = "0213ced7087832e81e8892e8d044150cfc153856";
+      sha256 = "0bw5g6h0hypd38z8gfbh40pbw824n4qhk3c0kasw6gn4darx972w";
+    };
+  }
+  {
     goPackagePath = "github.com/bakape/mnemonics";
     fetch = {
       type = "git";
@@ -232,6 +241,15 @@
       url = "https://go.googlesource.com/crypto";
       rev = "a49355c7e3f8fe157a85be2f77e6e269a0f89602";
       sha256 = "020q1laxjx5kcmnqy4wmdb63zhb0lyq6wpy40axhswzg2nd21s44";
+    };
+  }
+  {
+    goPackagePath = "golang.org/x/net";
+    fetch = {
+      type = "git";
+      url = "https://go.googlesource.com/net";
+      rev = "4cb1c02c05b0e749b0365f61ae859a8e0cfceed9";
+      sha256 = "05xdcj0pn245y3gpy9p5iamx09424zqwh1w34gwwn5kh51ybgv7k";
     };
   }
   {
