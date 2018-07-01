@@ -35,6 +35,7 @@ in stdenv.mkDerivation rec {
 
   configureFlags = [
     "--with-dbus-datadir=$(out)/etc/"
+    "--localstatedir=/var"
     "--disable-systemd-service"
   ];
 
