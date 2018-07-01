@@ -14373,6 +14373,7 @@ with pkgs;
     ubootClearfog
     ubootGuruplug
     ubootJetsonTK1
+    ubootNovena
     ubootOdroidXU3
     ubootOrangePiPc
     ubootPcduino3Nano
