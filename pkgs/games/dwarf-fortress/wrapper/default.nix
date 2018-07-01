@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
     src = ./dwarf-fortress-init.in;
     inherit env;
     exe = if stdenv.isLinux then "libs/Dwarf_Fortress"
-                             else "dwarfort.exe";
+                            else "dwarfort.exe";
   };
 
   runDF = ./dwarf-fortress.in;
@@ -83,3 +83,4 @@ stdenv.mkDerivation rec {
 
   preferLocalBuild = true;
 }
+

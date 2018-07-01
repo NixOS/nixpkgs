@@ -20,11 +20,25 @@ stdenv.mkDerivation {
     "-DGTK2_GDKCONFIG_INCLUDE_DIR=${gtk2.out}/lib/gtk-2.0/include"
   ];
 
+  makeFlags = [
+    ''CFLAGS="-fkeep-inline-functions"''
+    ''CXXFLAGS="-fkeep-inline-functions"''
+  ];
+
   nativeBuildInputs = [ cmake ];
   buildInputs = [
     libSM SDL SDL_image SDL_ttf glew openalSoft
     ncurses gtk2 libsndfile zlib libGL
   ];
+
+  patchPhase = ''
+    substituteInPlace CMakeLists.txt --replace \
+      'set(CMAKE_BUILD_TYPE Release)' \
+      'set(CMAKE_BUILD_TYPE Debug)'
+  '';
+
+  # Don't strip unused symbols; dfhack hooks into some of them.
+  dontStrip = true;
 
   installPhase = ''
     install -D -m755 ../build/libgraphics.so $out/lib/libgraphics.so
@@ -45,3 +59,4 @@ stdenv.mkDerivation {
     maintainers = with maintainers; [ abbradar ];
   };
 }
+

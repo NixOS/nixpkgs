@@ -15,7 +15,7 @@ let
 
     # unfuck is linux-only right now, we will just use it there
     dwarf-fortress-unfuck = if stdenv.isLinux then callPackage ./unfuck.nix { }
-                                              else null;
+                                 else null;
 
     dwarf-fortress = callPackage ./wrapper {
       inherit themes;
