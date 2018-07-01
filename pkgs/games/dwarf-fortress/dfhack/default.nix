@@ -40,7 +40,7 @@ in stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "DFHack";
     repo = "dfhack";
-    sha256 = "16ypcl9378xxnq7ngzh93pmx2haf2i32xgxs2p1q4bvvafdxvirz";
+    sha256 = "1vzrpdw0pn18calayf9dwqpyg37cb7wkzkvskxjx9nak5ilxzywm";
     rev = version;
     fetchSubmodules = true;
   };

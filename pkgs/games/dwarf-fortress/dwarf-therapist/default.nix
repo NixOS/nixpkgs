@@ -20,8 +20,8 @@ stdenv.mkDerivation rec {
   '' else null;
 
   meta = with stdenv.lib; {
-    description = "Tool to manage dwarves in in a running game of Dwarf Fortress";
-    maintainers = with maintainers; [ the-kenny abbradar bendlas ];
+    description = "Tool to manage dwarves in a running game of Dwarf Fortress";
+    maintainers = with maintainers; [ the-kenny abbradar bendlas numinit ];
     license = licenses.mit;
     platforms = platforms.unix;
     homepage = https://github.com/Dwarf-Therapist/Dwarf-Therapist;
