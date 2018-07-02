@@ -3720,7 +3720,7 @@ with pkgs;
   lzip = callPackage ../tools/compression/lzip { };
 
   luxcorerender = callPackage ../tools/graphics/luxcorerender { };
-  
+
   xz = callPackage ../tools/compression/xz { };
 
   lz4 = callPackage ../tools/compression/lz4 { };
@@ -4985,7 +4985,7 @@ with pkgs;
   securefs = callPackage ../tools/filesystems/securefs { };
 
   seexpr = callPackage ../development/compilers/seexpr { };
- 
+
   setroot = callPackage  ../tools/X11/setroot { };
 
   setserial = callPackage ../tools/system/setserial { };
@@ -7789,7 +7789,9 @@ with pkgs;
 
   bazel_0_4 = callPackage ../development/tools/build-managers/bazel/0.4.nix { };
   bazel = callPackage ../development/tools/build-managers/bazel {
+    inherit (darwin) cctools;
     inherit (darwin.apple_sdk.frameworks) CoreFoundation CoreServices Foundation;
+    binutils = binutils-unwrapped;
   };
 
   bazel-buildtools = callPackage ../development/tools/build-managers/bazel/buildtools { };
