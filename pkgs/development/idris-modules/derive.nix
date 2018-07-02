@@ -6,15 +6,16 @@
 }:
 build-idris-package  {
   name = "derive";
-  version = "2018-02-15";
+  version = "2018-07-02";
 
   idrisDeps = [ contrib pruviloj ];
 
+  # https://github.com/david-christiansen/derive-all-the-instances/pull/9
   src = fetchFromGitHub {
-    owner = "davlum";
+    owner = "infinisil";
     repo = "derive-all-the-instances";
-    rev = "2c8956807bd094ba33569227de921c6726401c42";
-    sha256 = "0l7263s04r52ql292vnnx2kngld6s1dipmaz5na7m82lj9p4x17y";
+    rev = "61c3e12e26f599379299fcbb9c40a81bfc3e0604";
+    sha256 = "0g2lb8nrwqwf3gm5fir43cxz6db84n19xiwkv8cmmqc1fgy6v0qn";
   };
 
   meta = {
