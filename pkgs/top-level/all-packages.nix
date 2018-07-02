@@ -14924,6 +14924,8 @@ with pkgs;
 
   source-serif-pro = callPackage ../data/fonts/source-serif-pro { };
 
+  source-han-code-jp = callPackage ../data/fonts/source-han-code-jp { };
+
   sourceHanSansPackages = callPackage ../data/fonts/source-han-sans { };
   source-han-sans-japanese = sourceHanSansPackages.japanese;
   source-han-sans-korean = sourceHanSansPackages.korean;
