@@ -49,13 +49,13 @@ let
         sha1 = "cbc4b9a68981bf0b501ccd06a9058acd65309bf7";
       };
     };
-    "@types/node-10.5.0" = {
+    "@types/node-10.5.1" = {
       name = "_at_types_slash_node";
       packageName = "@types/node";
-      version = "10.5.0";
+      version = "10.5.1";
       src = fetchurl {
-        url = "https://registry.npmjs.org/@types/node/-/node-10.5.0.tgz";
-        sha512 = "baXPuqA7EVcBUpA5so2K26DTzk7NCWBc9xrPMu9PbUMwgusJRm9zJBPhiDmJVEcnTQ3aOxUZeuFHpd9qMYDNRg==";
+        url = "https://registry.npmjs.org/@types/node/-/node-10.5.1.tgz";
+        sha512 = "AFLl1IALIuyt6oK4AYZsgWVJ/5rnyzQWud7IebaZWWV3YmgtPZkQmYio9R5Ze/2pdd7XfqF5bP+hWS11mAKoOQ==";
       };
     };
     "@types/superagent-3.5.6" = {
@@ -571,13 +571,13 @@ let
         sha1 = "1101e9544f4a76b1bc3b26d452ca96d7a35e7978";
       };
     };
-    "bcrypt-pbkdf-1.0.1" = {
+    "bcrypt-pbkdf-1.0.2" = {
       name = "bcrypt-pbkdf";
       packageName = "bcrypt-pbkdf";
-      version = "1.0.1";
+      version = "1.0.2";
       src = fetchurl {
-        url = "https://registry.npmjs.org/bcrypt-pbkdf/-/bcrypt-pbkdf-1.0.1.tgz";
-        sha1 = "63bc5dcb61331b92bc05fd528953c33462a06f8d";
+        url = "https://registry.npmjs.org/bcrypt-pbkdf/-/bcrypt-pbkdf-1.0.2.tgz";
+        sha1 = "a4301d389b6a43f9b67ff3ca11a3f6637e360e9e";
       };
     };
     "bencode-1.0.0" = {
@@ -1289,6 +1289,15 @@ let
       src = fetchurl {
         url = "https://registry.npmjs.org/commander/-/commander-2.15.1.tgz";
         sha512 = "VlfT9F3V0v+jr4yxPc5gg9s62/fIVWsd2Bk2iD435um1NlGMYdVCq+MjcXnhYq2icNOizHr1kK+5TI6H0Hy0ag==";
+      };
+    };
+    "commander-2.16.0" = {
+      name = "commander";
+      packageName = "commander";
+      version = "2.16.0";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/commander/-/commander-2.16.0.tgz";
+        sha512 = "sVXqklSaotK9at437sFlFpyOcJonxe0yST/AG9DkQKUdIE6IqGIMv4SfAQSKaJbSdVEJYItASCrBiVQHq1HQew==";
       };
     };
     "commander-2.3.0" = {
@@ -7420,13 +7429,13 @@ let
         sha512 = "FSs76hQZsSsdI4YeePxb5SQoWmHxDRznImGiAN905O1svyHvcoQ3hYptu3Y9hPxRHeB3lHzJR5KRZy0Byj7qqg==";
       };
     };
-    "uuid-3.3.0" = {
+    "uuid-3.3.2" = {
       name = "uuid";
       packageName = "uuid";
-      version = "3.3.0";
+      version = "3.3.2";
       src = fetchurl {
-        url = "https://registry.npmjs.org/uuid/-/uuid-3.3.0.tgz";
-        sha512 = "ijO9N2xY/YaOqQ5yz5c4sy2ZjWmA6AR6zASb/gdpeKZ8+948CxwfMW9RrKVk5may6ev8c0/Xguu32e2Llelpqw==";
+        url = "https://registry.npmjs.org/uuid/-/uuid-3.3.2.tgz";
+        sha512 = "yXJmeNaw3DnnKAOKJE51sL/ZaYfWJRl1pK9dr19YFCu0ObS231AB1/LbqTKRAQ5kw8A90rA6fr4riOUpTZvQZA==";
       };
     };
     "valid-url-1.0.9" = {
@@ -7768,7 +7777,7 @@ in
       sources."@cycle/isolate-3.3.0"
       sources."@cycle/run-3.4.0"
       sources."@cycle/time-0.10.1"
-      sources."@types/node-10.5.0"
+      sources."@types/node-10.5.1"
       sources."@types/superagent-3.5.6"
       sources."ansi-escapes-3.1.0"
       sources."ansi-regex-2.1.1"
@@ -7933,7 +7942,7 @@ in
       sources."aws-sign2-0.7.0"
       sources."aws4-1.7.0"
       sources."balanced-match-1.0.0"
-      sources."bcrypt-pbkdf-1.0.1"
+      sources."bcrypt-pbkdf-1.0.2"
       sources."bencode-1.0.0"
       (sources."bitfield-rle-2.1.0" // {
         dependencies = [
@@ -8284,7 +8293,7 @@ in
       sources."util-deprecate-1.0.2"
       sources."utile-0.3.0"
       sources."utp-native-1.7.1"
-      sources."uuid-3.3.0"
+      sources."uuid-3.3.2"
       sources."varint-3.0.1"
       sources."verror-1.10.0"
       (sources."winston-2.1.1" // {
@@ -8426,7 +8435,7 @@ in
       sources."aws-sign2-0.6.0"
       sources."aws4-1.7.0"
       sources."balanced-match-1.0.0"
-      sources."bcrypt-pbkdf-1.0.1"
+      sources."bcrypt-pbkdf-1.0.2"
       sources."block-stream-0.0.9"
       sources."boom-2.10.1"
       sources."brace-expansion-1.1.11"
@@ -8525,7 +8534,7 @@ in
       sources."tunnel-agent-0.6.0"
       sources."tweetnacl-0.14.5"
       sources."util-deprecate-1.0.2"
-      sources."uuid-3.3.0"
+      sources."uuid-3.3.2"
       (sources."verror-1.10.0" // {
         dependencies = [
           sources."assert-plus-1.0.0"
@@ -8651,10 +8660,10 @@ in
   pnpm = nodeEnv.buildNodePackage {
     name = "pnpm";
     packageName = "pnpm";
-    version = "2.7.0";
+    version = "2.9.0";
     src = fetchurl {
-      url = "https://registry.npmjs.org/pnpm/-/pnpm-2.7.0.tgz";
-      sha1 = "cfaf3889c04125abfa20117358d7bcec72902faf";
+      url = "https://registry.npmjs.org/pnpm/-/pnpm-2.9.0.tgz";
+      sha1 = "1c2f5ade46b87cc3b1f3b7c66eeb7b0f4df4d968";
     };
     buildInputs = globalBuildInputs;
     meta = {
@@ -8757,7 +8766,7 @@ in
       sources."aws4-1.7.0"
       sources."balanced-match-1.0.0"
       sources."base64-js-0.0.8"
-      sources."bcrypt-pbkdf-1.0.1"
+      sources."bcrypt-pbkdf-1.0.2"
       sources."bl-1.2.2"
       sources."bluebird-3.5.1"
       sources."brace-expansion-1.1.11"
@@ -8791,7 +8800,7 @@ in
       sources."color-convert-1.9.2"
       sources."color-name-1.1.1"
       sources."combined-stream-1.0.6"
-      sources."commander-2.15.1"
+      sources."commander-2.16.0"
       sources."concat-map-0.0.1"
       sources."config-chain-1.1.11"
       sources."consolidate-0.14.5"
@@ -9002,7 +9011,7 @@ in
       sources."url-to-options-1.0.1"
       sources."user-home-2.0.0"
       sources."util-deprecate-1.0.2"
-      sources."uuid-3.3.0"
+      sources."uuid-3.3.2"
       sources."validate-npm-package-name-3.0.0"
       sources."verror-1.10.0"
       sources."ware-1.3.0"
@@ -9137,7 +9146,7 @@ in
       sources."color-convert-1.9.2"
       sources."color-name-1.1.1"
       sources."combined-stream-1.0.6"
-      sources."commander-2.15.1"
+      sources."commander-2.16.0"
       sources."component-emitter-1.2.1"
       sources."concat-map-0.0.1"
       sources."concat-stream-1.6.2"
