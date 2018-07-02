@@ -2522,7 +2522,9 @@ with pkgs;
 
   fuseiso = callPackage ../tools/filesystems/fuseiso { };
 
-  fdbPackages = callPackage ../servers/foundationdb { stdenv = overrideCC stdenv gcc49; };
+  fdbPackages = callPackage ../servers/foundationdb {
+    stdenv49 = overrideCC stdenv gcc49;
+  };
 
   inherit (fdbPackages)
     foundationdb51
