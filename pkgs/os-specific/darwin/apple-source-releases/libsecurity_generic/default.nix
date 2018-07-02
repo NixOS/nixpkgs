@@ -52,6 +52,7 @@ name: version: sha256: args: let
         "-iframework ${pkgs.darwin.Security}/Library/Frameworks"
         "-I."
         "-Wno-deprecated-declarations"
+        "-DNDEBUG"
       ];
       NIX_LDFLAGS = with pkgs.darwin; with apple_sdk.frameworks; [
         "-L${libobjc}/lib"
