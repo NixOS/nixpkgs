@@ -5,7 +5,7 @@
  * to merges. Please use the full-text search of your editor. ;)
  * Hint: ### starts category names.
  */
-{ lib, nixpkgsFun, noSysDirs, config}:
+{ lib, noSysDirs, config}:
 self: pkgs:
 
 with pkgs;
@@ -14,22 +14,6 @@ with pkgs;
 
   # Allow callPackage to fill in the pkgs argument
   inherit pkgs;
-
-
-  # Override system. This is useful to build i686 packages on x86_64-linux.
-  forceSystem = system: kernel: nixpkgsFun {
-    localSystem = {
-      inherit system;
-      platform = platform // { kernelArch = kernel; };
-    };
-  };
-
-  # Used by wine, firefox with debugging version of Flash, ...
-  pkgsi686Linux = forceSystem "i686-linux" "i386";
-
-  callPackage_i686 = if stdenv.system == "i686-linux" || stdenv.system == "x86_64-linux"
-    then pkgsi686Linux.callPackage
-    else throw "callPackage_i686 not supported on system '${stdenv.system}'";
 
   # A stdenv capable of building 32-bit binaries.  On x86_64-linux,
   # it uses GCC compiled with multilib support; on i686-linux, it's
@@ -2420,7 +2404,7 @@ with pkgs;
   fluentd = callPackage ../tools/misc/fluentd { };
 
   flvstreamer = callPackage ../tools/networking/flvstreamer { };
-  
+
   hmetis = callPackage_i686 ../applications/science/math/hmetis { };
 
   libbsd = callPackage ../development/libraries/libbsd { };
@@ -5889,14 +5873,7 @@ with pkgs;
   xbursttools = callPackage ../tools/misc/xburst-tools {
     # It needs a cross compiler for mipsel to build the firmware it will
     # load into the Ben Nanonote
-    gccCross =
-      let
-        pkgsCross = nixpkgsFun {
-          # Ben Nanonote system
-          crossSystem = lib.systems.examples.ben-nanonote;
-        };
-      in
-        pkgsCross.buildPackages.gccCrossStageStatic;
+    gccCross = pkgsCross.ben-nanonote.buildPackages.gccCrossStageStatic;
   };
 
   xclip = callPackage ../tools/misc/xclip { };
