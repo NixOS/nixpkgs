@@ -7,13 +7,13 @@ let
 in
 
 stdenv.mkDerivation rec {
-  srcVersion = "jun18a";
-  version = "20180601_a";
+  srcVersion = "jul18a";
+  version = "20180701_a";
   name = "gildas-${version}";
 
   src = fetchurl {
     url = "http://www.iram.fr/~gildas/dist/gildas-src-${srcVersion}.tar.gz";
-    sha256 = "0k4x0g69fphb1759cwcw6bbs8imwmq0qwj6zqixxk60skk4n4jvb";
+    sha256 = "0kl3zf6b1kv8hgsfrarsnm2gnrdax3vi8f856249y4nxsa7lbv2i";
   };
 
   enableParallelBuilding = true;
@@ -29,11 +29,6 @@ stdenv.mkDerivation rec {
     substituteInPlace admin/wrapper.sh --replace '%%PYTHONHOME%%' ${python27Env}
     source admin/gildas-env.sh -c gfortran -o openmp
     echo "gag_doc:        $out/share/doc/" >> kernel/etc/gag.dico.lcl
-  '';
-
-  buildPhase=''
-    make depend
-    make
   '';
 
   postInstall=''
