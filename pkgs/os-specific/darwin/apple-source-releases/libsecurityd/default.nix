@@ -9,7 +9,7 @@ appleDerivation {
     unpackFile ${libsecurity_cdsa_client.src}
     mv libsecurity_cdsa_client*/lib security_cdsa_client
     ln -s lib securityd_client
-    
+
     patch -p1 < ${./xdr-arity.patch}
   '';
   preBuild = ''
@@ -17,7 +17,7 @@ appleDerivation {
     cp derived_src/* lib
     rm lib/ucspClientC.c
   '';
-  postInstall = ''
-    ln -s ''$out/include/securityd ''$out/include/securityd_client
+  postFixup = ''
+    ln -s $dev/include/securityd $dev/include/securityd_client
   '';
 }
