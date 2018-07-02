@@ -91,6 +91,7 @@ in stdenv.mkDerivation {
   shellHook = ''
     # to be able to run the resulting binary
     export WIRESHARK_RUN_FROM_BUILD_DIRECTORY=1
+    export QT_PLUGIN_PATH=${qt5.qtbase.bin}/${qt5.qtbase.qtPluginPrefix}
   '';
 
   meta = with stdenv.lib; {
