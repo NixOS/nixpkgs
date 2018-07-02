@@ -29,7 +29,7 @@ let
     };
     "x86_64-darwin" = fetchurl {
       url = "${homepage}df_${baseVersion}_${patchVersion}_osx.tar.bz2";
-      sha256 = "1cxckszjh5fi9czywr1kl5kj9zxzaszhqdal5gd8ww0ihcbl7fcd";
+      sha256 = "073hmcj7bm323m3xqi42605rkvmgmv83bnxz1byymgs8aqyfykkx";
     };
   };
 
@@ -91,4 +91,3 @@ stdenv.mkDerivation {
     maintainers = with maintainers; [ a1russell robbinch roconnor the-kenny abbradar numinit ];
   };
 }
-
