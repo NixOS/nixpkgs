@@ -53,6 +53,14 @@ in
         '';
       };
 
+      nowait = mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          don't wait for client connects to poll GPS
+        '';
+      };
+
       port = mkOption {
         type = types.int;
         default = 2947;
@@ -100,6 +108,7 @@ in
           ${pkgs.gpsd}/sbin/gpsd -D "${toString cfg.debugLevel}"  \
             -S "${toString cfg.port}"                             \
             ${if cfg.readonly then "-b" else ""}                  \
+            ${if cfg.nowait   then "-n" else ""}                  \
             "${cfg.device}"
         '';
       };
