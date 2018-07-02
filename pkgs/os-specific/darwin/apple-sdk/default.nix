@@ -160,8 +160,8 @@ in rec {
       installPhase = ''
         mkdir -p $out/include
         pushd $out/include >/dev/null
-        ln -s "${lib.getDev sdk}/include/xpc"
-        ln -s "${lib.getDev sdk}/include/launch.h"
+        cp -r "${lib.getDev sdk}/include/xpc" $out/include/xpc
+        cp "${lib.getDev sdk}/include/launch.h" $out/include/launch.h
         popd >/dev/null
       '';
     };
