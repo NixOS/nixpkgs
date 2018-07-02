@@ -137,12 +137,12 @@ in
   };
 
   config = mkIf cfg.enable {
-    users.extraUsers."${cfg.user}" = {
+    users.users."${cfg.user}" = {
       isSystemUser = true;
       group = cfg.group;
     };
 
-    users.extraGroups."${cfg.group}" = {};
+    users.groups."${cfg.group}" = {};
 
     systemd.services.confluence = {
       description = "Atlassian Confluence";

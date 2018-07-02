@@ -187,14 +187,14 @@ in
 
     services.avahi.hostName = mkDefault config.networking.hostName;
 
-    users.extraUsers = singleton
+    users.users = singleton
       { name = "avahi";
         uid = config.ids.uids.avahi;
         description = "`avahi-daemon' privilege separation user";
         home = "/var/empty";
       };
 
-    users.extraGroups = singleton
+    users.groups = singleton
       { name = "avahi";
         gid = config.ids.gids.avahi;
       };

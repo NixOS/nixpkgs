@@ -30,7 +30,7 @@ with lib;
   boot.loader.grub.memtest86.enable = true;
 
   # Allow the user to log in as root without a password.
-  users.extraUsers.root.initialHashedPassword = "";
+  users.users.root.initialHashedPassword = "";
 
   system.nixos.stateVersion = mkDefault "18.03";
 }

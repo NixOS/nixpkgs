@@ -73,7 +73,7 @@ in
 
   config = mkIf cfg.enable {
 
-    users.extraUsers = mkIf (cfg.user == null) [ {
+    users.users = mkIf (cfg.user == null) [ {
       name = u;
       uid = config.ids.uids.yandexdisk;
       group = "nogroup";

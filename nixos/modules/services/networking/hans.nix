@@ -135,7 +135,7 @@ in
       };
     };
 
-    users.extraUsers = singleton {
+    users.users = singleton {
       name = hansUser;
       description = "Hans daemon user";
     };

@@ -366,7 +366,7 @@ in {
 
     environment.systemPackages = cfg.packages;
 
-    users.extraGroups = [{
+    users.groups = [{
       name = "networkmanager";
       gid = config.ids.gids.networkmanager;
     }
@@ -374,7 +374,7 @@ in {
       name = "nm-openvpn";
       gid = config.ids.gids.nm-openvpn;
     }];
-    users.extraUsers = [{
+    users.users = [{
       name = "nm-openvpn";
       uid = config.ids.uids.nm-openvpn;
       extraGroups = [ "networkmanager" ];

@@ -194,14 +194,14 @@ in
 
     (mkIf cfg.enable {
 
-      users.extraUsers = singleton {
+      users.users = singleton {
         name = cfg.user;
         description = "rmilter daemon";
         uid = config.ids.uids.rmilter;
         group = cfg.group;
       };
 
-      users.extraGroups = singleton {
+      users.groups = singleton {
         name = cfg.group;
         gid = config.ids.gids.rmilter;
       };
@@ -238,12 +238,12 @@ in
     })
 
     (mkIf (cfg.enable && cfg.rspamd.enable && rspamdCfg.enable) {
-      users.extraUsers.${cfg.user}.extraGroups = [ rspamdCfg.group ];
+      users.users.${cfg.user}.extraGroups = [ rspamdCfg.group ];
     })
 
     (mkIf (cfg.enable && cfg.postfix.enable) {
       services.postfix.extraConfig = cfg.postfix.configFragment;
-      users.extraUsers.${postfixCfg.user}.extraGroups = [ cfg.group ];
+      users.users.${postfixCfg.user}.extraGroups = [ cfg.group ];
     })
   ];
 }

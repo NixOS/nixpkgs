@@ -115,7 +115,7 @@ in
       ];
 
     environment.systemPackages = [ pkgs.fcron ];
-    users.extraUsers.fcron = {
+    users.users.fcron = {
       uid = config.ids.uids.fcron;
       home = "/var/spool/fcron";
       group = "fcron";

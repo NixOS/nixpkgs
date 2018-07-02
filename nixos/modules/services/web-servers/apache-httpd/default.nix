@@ -658,14 +658,14 @@ in
 
     warnings = map (cfg: ''apache-httpd's port option is deprecated. Use listen = [{/*ip = "*"; */ port = ${toString cfg.port}";}]; instead'' ) (lib.filter (cfg: cfg.port != 0) allHosts);
 
-    users.extraUsers = optionalAttrs (mainCfg.user == "wwwrun") (singleton
+    users.users = optionalAttrs (mainCfg.user == "wwwrun") (singleton
       { name = "wwwrun";
         group = mainCfg.group;
         description = "Apache httpd user";
         uid = config.ids.uids.wwwrun;
       });
 
-    users.extraGroups = optionalAttrs (mainCfg.group == "wwwrun") (singleton
+    users.groups = optionalAttrs (mainCfg.group == "wwwrun") (singleton
       { name = "wwwrun";
         gid = config.ids.gids.wwwrun;
       });

@@ -139,7 +139,7 @@ in
     };
 
     users = {
-      extraUsers.meguca = {
+      users.meguca = {
         description = "meguca server service user";
         home = cfg.baseDir;
         createHome = true;
@@ -147,7 +147,7 @@ in
         uid = config.ids.uids.meguca;
       };
 
-      extraGroups.meguca = {
+      groups.meguca = {
         gid = config.ids.gids.meguca;
         members = [ "meguca" ];
       };

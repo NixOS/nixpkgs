@@ -686,8 +686,8 @@ in
         always create a container/VM with a separate Tor daemon instance.
       '';
 
-    users.extraGroups.tor.gid = config.ids.gids.tor;
-    users.extraUsers.tor =
+    users.groups.tor.gid = config.ids.gids.tor;
+    users.users.tor =
       { description = "Tor Daemon User";
         createHome  = true;
         home        = torDirectory;

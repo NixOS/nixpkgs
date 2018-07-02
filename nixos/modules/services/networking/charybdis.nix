@@ -71,14 +71,14 @@ in
 
   config = mkIf cfg.enable (lib.mkMerge [
     {
-      users.extraUsers = singleton {
+      users.users = singleton {
         name = cfg.user;
         description = "Charybdis IRC daemon user";
         uid = config.ids.uids.ircd;
         group = cfg.group;
       };
 
-      users.extraGroups = singleton {
+      users.groups = singleton {
         name = cfg.group;
         gid = config.ids.gids.ircd;
       };
