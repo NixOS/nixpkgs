@@ -1139,6 +1139,9 @@ self: super: {
   bitcoin-types = addTestToolDepend super.bitcoin-types self.hspec-discover;
   quickcheck-arbitrary-adt = addTestToolDepend super.quickcheck-arbitrary-adt self.hspec-discover;
   haddock-library = addTestToolDepend super.haddock-library self.hspec-discover;
+  haddock-library_1_2_1 = addTestToolDepend super.haddock-library_1_2_1 self.hspec-discover;
+  haddock-library_1_4_3 = addTestToolDepend super.haddock-library_1_4_3 self.hspec-discover;
+  haddock-api_2_17_4 = addTestToolDepend super.haddock-api_2_17_4 self.hspec-discover;
   sum-type-boilerplate = addTestToolDepend super.sum-type-boilerplate self.hspec-discover;
   eve = addTestToolDepend super.eve self.hspec-discover;
   jvm = addTestToolDepend super.jvm self.hspec-discover;
@@ -1179,6 +1182,12 @@ self: super: {
   ulid = addTestToolDepend super.ulid self.hspec-discover;
   matrix-market-attoparsec = addTestToolDepend super.matrix-market-attoparsec self.hspec-discover;
   paymill = addTestToolDepend super.paymill self.hspec-discover;
+  bitcoin-tx = addTestToolDepend super.bitcoin-tx self.hspec-discover;
+  conduit-extra_1_2_3_2 = addTestToolDepend super.conduit-extra_1_2_3_2 self.hspec-discover;
+  algolia = addTestToolDepend super.algolia self.tasty-discover;
+  clckwrks = addTestToolDepend super.clckwrks self.hsx2hs;
+  HasBigDecimal = addTestToolDepend super.HasBigDecimal self.hspec-discover;
+  classy-prelude-conduit = addTestToolDepend super.classy-prelude-conduit self.hspec-discover;
 
 }
 
