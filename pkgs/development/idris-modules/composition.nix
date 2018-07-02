@@ -1,15 +1,13 @@
 { build-idris-package
 , fetchFromGitHub
-, prelude
 , hezarfen
 , lib
-, idris
 }:
 build-idris-package  {
   name = "composition";
   version = "2017-11-12";
 
-  idrisDeps = [ prelude hezarfen ];
+  idrisDeps = [ hezarfen ];
 
   src = fetchFromGitHub {
     owner = "vmchale";
@@ -23,6 +21,5 @@ build-idris-package  {
     homepage = https://github.com/vmchale/composition;
     license = lib.licenses.bsd3;
     maintainers = [ lib.maintainers.brainrape ];
-    inherit (idris.meta) platforms;
   };
 }

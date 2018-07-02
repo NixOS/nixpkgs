@@ -1,16 +1,14 @@
 { build-idris-package
 , fetchFromGitHub
-, prelude
 , contrib
 , pruviloj
 , lib
-, idris
 }:
 build-idris-package  {
   name = "derive";
   version = "2018-02-15";
 
-  idrisDeps = [ prelude contrib pruviloj ];
+  idrisDeps = [ contrib pruviloj ];
 
   src = fetchFromGitHub {
     owner = "davlum";
@@ -24,6 +22,5 @@ build-idris-package  {
     homepage = https://github.com/davlum/derive-all-the-instances;
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.brainrape ];
-    inherit (idris.meta) platforms;
   };
 }

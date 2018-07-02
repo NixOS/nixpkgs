@@ -1,17 +1,15 @@
 { build-idris-package
 , fetchFromGitHub
-, prelude
 , idrisscript
 , html
 , xhr
 , lib
-, idris
 }:
 build-idris-package  {
   name = "dom";
   version = "2017-04-22";
 
-  idrisDeps = [ prelude idrisscript html xhr ];
+  idrisDeps = [ idrisscript html xhr ];
 
   src = fetchFromGitHub {
     owner = "pierrebeaucamp";
@@ -25,6 +23,5 @@ build-idris-package  {
     homepage = https://github.com/pierrebeaucamp/idris-dom;
     license = lib.licenses.asl20;
     maintainers = [ lib.maintainers.brainrape ];
-    inherit (idris.meta) platforms;
   };
 }

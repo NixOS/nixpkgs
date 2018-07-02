@@ -1,15 +1,10 @@
 { build-idris-package
 , fetchFromGitHub
-, prelude
-, base
 , lib
-, idris
 }:
 build-idris-package  {
   name = "coda";
   version = "2018-01-25";
-
-  idrisDeps = [ prelude base ];
 
   src = fetchFromGitHub {
     owner = "ostera";
@@ -23,6 +18,5 @@ build-idris-package  {
     homepage = https://github.com/ostera/idris-coda;
     license = lib.licenses.bsd3;
     maintainers = [ lib.maintainers.brainrape ];
-    inherit (idris.meta) platforms;
   };
 }

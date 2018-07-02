@@ -1,19 +1,17 @@
 { build-idris-package
 , fetchFromGitHub
-, prelude
 , free
 , composition
 , comonad
 , bifunctors
 , hezarfen
 , lib
-, idris
 }:
 build-idris-package  {
   name = "recursion_schemes";
   version = "2018-01-19";
 
-  idrisDeps = [ prelude free composition comonad bifunctors hezarfen ];
+  idrisDeps = [ free composition comonad bifunctors hezarfen ];
 
   src = fetchFromGitHub {
     owner = "vmchale";
@@ -31,6 +29,5 @@ build-idris-package  {
     homepage = https://github.com/vmchale/recursion_schemes;
     license = lib.licenses.bsd3;
     maintainers = [ lib.maintainers.brainrape ];
-    inherit (idris.meta) platforms;
   };
 }

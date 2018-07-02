@@ -1,15 +1,13 @@
 { build-idris-package
 , fetchFromGitHub
-, prelude
 , effects
 , lib
-, idris
 }:
 build-idris-package  {
   name = "eternal";
   version = "2018-01-25";
 
-  idrisDeps = [ prelude effects ];
+  idrisDeps = [ effects ];
 
   src = fetchFromGitHub {
     owner = "Heather";
@@ -30,6 +28,5 @@ build-idris-package  {
     homepage = https://github.com/Heather/Control.Eternal.Idris;
     license = lib.licenses.bsd3;
     maintainers = [ lib.maintainers.brainrape ];
-    inherit (idris.meta) platforms;
   };
 }

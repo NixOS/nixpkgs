@@ -1,15 +1,10 @@
 { build-idris-package
 , fetchFromGitHub
-, prelude
-, base
 , lib
-, idris
 }:
 build-idris-package  {
   name = "categories";
   version = "2017-03-01";
-
-  idrisDeps = [ prelude base ];
 
   src = fetchFromGitHub {
     owner = "danilkolikov";
@@ -22,6 +17,5 @@ build-idris-package  {
     description = "Category Theory";
     homepage = https://github.com/danilkolikov/categories;
     maintainers = [ lib.maintainers.brainrape ];
-    inherit (idris.meta) platforms;
   };
 }

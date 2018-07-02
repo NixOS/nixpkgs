@@ -1,18 +1,15 @@
 { build-idris-package
 , fetchFromGitHub
-, prelude
 , contrib
 , effects
 , libmicrohttpd
 , lib
-, idris
 }:
-
 build-idris-package  {
   name = "mhd";
   version = "2016-04-22";
 
-  idrisDeps = [ prelude contrib effects ];
+  idrisDeps = [ contrib effects ];
 
   extraBuildInputs = [ libmicrohttpd ];
 
@@ -28,6 +25,5 @@ build-idris-package  {
     homepage = https://github.com/colin-adams/idris-libmicrohttpd;
     license = lib.licenses.lgpl21;
     maintainers = [ lib.maintainers.brainrape ];
-    inherit (idris.meta) platforms;
   };
 }

@@ -1,18 +1,16 @@
 { build-idris-package
 , fetchFromGitHub
-, prelude
 , effects
 , lib
-, idris
 , ncurses
 }:
 build-idris-package  {
   name = "curses";
   version = "2017-10-12";
 
-  idrisDeps = [ prelude effects ];
+  idrisDeps = [ effects ];
 
-  extraBuildInputs = [ ncurses.out ncurses.dev ];
+  extraBuildInputs = [ ncurses ];
 
   postUnpack = ''
     sed -i 's/^libs = curses$/libs = ncurses/g' source/curses.ipkg
@@ -31,6 +29,5 @@ build-idris-package  {
     homepage = https://github.com/JakobBruenker/curses-idris;
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.brainrape ];
-    inherit (idris.meta) platforms;
   };
 }
