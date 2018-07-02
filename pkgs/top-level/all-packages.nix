@@ -5395,7 +5395,7 @@ with pkgs;
 
   torsocks = callPackage ../tools/security/tor/torsocks.nix { };
 
-  toxvpn = callPackage ../tools/networking/toxvpn { libtoxcore = libtoxcore_0_1; };
+  toxvpn = callPackage ../tools/networking/toxvpn { };
 
   tpmmanager = callPackage ../applications/misc/tpmmanager { };
 
