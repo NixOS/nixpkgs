@@ -1,15 +1,13 @@
 { build-idris-package
 , fetchFromGitHub
-, prelude
 , specdris
 , lib
-, idris
 }:
 build-idris-package  {
   name = "patricia";
   version = "2017-10-27";
 
-  idrisDeps = [ prelude specdris ];
+  idrisDeps = [ specdris ];
 
   src = fetchFromGitHub {
     owner = "ChShersh";
@@ -27,6 +25,5 @@ build-idris-package  {
     homepage = https://github.com/ChShersh/idris-patricia;
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.brainrape ];
-    inherit (idris.meta) platforms;
   };
 }

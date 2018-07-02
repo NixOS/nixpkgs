@@ -1,15 +1,10 @@
 { build-idris-package
 , fetchFromGitHub
-, prelude
 , lib
-, idris
 }:
-
 build-idris-package  {
   name = "tparsec";
   version = "2017-12-12";
-
-  idrisDeps = [ prelude ];
 
   src = fetchFromGitHub {
     owner = "gallais";
@@ -23,6 +18,5 @@ build-idris-package  {
     homepage = https://github.com/gallais/idris-tparsec;
     license = lib.licenses.gpl3;
     maintainers = [ lib.maintainers.brainrape ];
-    inherit (idris.meta) platforms;
   };
 }

@@ -1,16 +1,14 @@
 { build-idris-package
 , fetchFromGitHub
-, prelude
 , contrib
 , pruviloj
 , lib
-, idris
 }:
 build-idris-package  {
   name = "bi";
   version = "2018-06-25";
 
-  idrisDeps = [ prelude contrib pruviloj ];
+  idrisDeps = [ contrib pruviloj ];
 
   src = fetchFromGitHub {
     owner = "sbp";
@@ -24,6 +22,5 @@ build-idris-package  {
     homepage = https://github.com/sbp/idris-bi;
     license = lib.licenses.bsd3;
     maintainers = [ lib.maintainers.brainrape ];
-    inherit (idris.meta) platforms;
   };
 }
