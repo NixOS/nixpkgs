@@ -84,7 +84,7 @@ in
   };
 
   config = mkIf cfg.enable {
-    users.extraUsers = optionalAttrs (cfg.user == defaultUser) (singleton
+    users.users = optionalAttrs (cfg.user == defaultUser) (singleton
       { name = defaultUser;
         isSystemUser = true;
         createHome = false;

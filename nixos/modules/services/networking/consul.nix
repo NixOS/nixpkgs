@@ -155,7 +155,7 @@ in
   config = mkIf cfg.enable (
     mkMerge [{
 
-      users.extraUsers."consul" = {
+      users.users."consul" = {
         description = "Consul agent daemon user";
         uid = config.ids.uids.consul;
         # The shell is needed for health checks

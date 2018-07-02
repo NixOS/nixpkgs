@@ -157,14 +157,14 @@ in
       allowedUDPPorts = [ 1900 5353 32410 32412 32413 32414 ];
     };
 
-    users.extraUsers = mkIf (cfg.user == "plex") {
+    users.users = mkIf (cfg.user == "plex") {
       plex = {
         group = cfg.group;
         uid = config.ids.uids.plex;
       };
     };
 
-    users.extraGroups = mkIf (cfg.group == "plex") {
+    users.groups = mkIf (cfg.group == "plex") {
       plex = {
         gid = config.ids.gids.plex;
       };

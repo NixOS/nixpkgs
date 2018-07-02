@@ -108,7 +108,7 @@ in {
 
     boot.kernelModules = [ "tun" ];
 
-    users.extraGroups.libvirtd.gid = config.ids.gids.libvirtd;
+    users.groups.libvirtd.gid = config.ids.gids.libvirtd;
 
     systemd.packages = [ pkgs.libvirt ];
 

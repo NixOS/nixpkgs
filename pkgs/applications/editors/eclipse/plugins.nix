@@ -487,6 +487,29 @@ rec {
     };
   };
 
+  jdt-codemining = buildEclipsePlugin rec {
+    name = "jdt-codemining-${version}";
+    version = "1.0.0.201806221018";
+
+    srcFeature = fetchurl {
+      url = "http://oss.opensagres.fr/jdt-codemining/snapshot/features/jdt-codemining-feature_${version}.jar";
+      sha256 = "1vy30rsb9xifn4r1r2n84d48g6riadzli1xvhfs1mf5pkm5ljwl6";
+    };
+
+    srcPlugin = fetchurl {
+      url = "http://oss.opensagres.fr/jdt-codemining/snapshot/plugins/org.eclipse.jdt.codemining_${version}.jar";
+      sha256 = "0qdzlqcjcm2i4mwhmcdml0am83z1dayrcmf37ji7vmw6iwdk1xmp";
+    };
+
+    meta = with stdenv.lib; {
+      homepage = https://github.com/angelozerr/jdt-codemining;
+      description = "Provides JDT Java CodeMining";
+      license = licenses.epl10;
+      platforms = platforms.all;
+      maintainers = [ maintainers.rycee ];
+    };
+  };
+
   rustdt = buildEclipseUpdateSite rec {
     name = "rustdt-${version}";
     version = "0.6.2";

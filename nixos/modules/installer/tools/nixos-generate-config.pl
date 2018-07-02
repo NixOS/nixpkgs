@@ -619,7 +619,7 @@ $bootLoaderConfig
   # services.xserver.desktopManager.plasma5.enable = true;
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
-  # users.extraUsers.guest = {
+  # users.users.guest = {
   #   isNormalUser = true;
   #   uid = 1000;
   # };

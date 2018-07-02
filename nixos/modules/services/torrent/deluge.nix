@@ -55,7 +55,7 @@ in {
 
     environment.systemPackages = [ pkgs.deluge ];
 
-    users.extraUsers.deluge = {
+    users.users.deluge = {
       group = "deluge";
       uid = config.ids.uids.deluge;
       home = "/var/lib/deluge/";
@@ -63,6 +63,6 @@ in {
       description = "Deluge Daemon user";
     };
 
-    users.extraGroups.deluge.gid = config.ids.gids.deluge;
+    users.groups.deluge.gid = config.ids.gids.deluge;
   };
 }

@@ -52,11 +52,11 @@ with lib;
 
     environment.systemPackages = [ pkgs.haproxy ];
 
-    users.extraUsers.haproxy = {
+    users.users.haproxy = {
       group = "haproxy";
       uid = config.ids.uids.haproxy;
     };
 
-    users.extraGroups.haproxy.gid = config.ids.uids.haproxy;
+    users.groups.haproxy.gid = config.ids.uids.haproxy;
   };
 }

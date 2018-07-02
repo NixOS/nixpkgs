@@ -27,14 +27,14 @@ with lib;
 
   config = mkIf cfg.enable {
 
-    users.extraUsers.clickhouse = {
+    users.users.clickhouse = {
       name = "clickhouse";
       uid = config.ids.uids.clickhouse;
       group = "clickhouse";
       description = "ClickHouse server user";
     };
 
-    users.extraGroups.clickhouse.gid = config.ids.gids.clickhouse;
+    users.groups.clickhouse.gid = config.ids.gids.clickhouse;
 
     systemd.services.clickhouse = {
       description = "ClickHouse server";

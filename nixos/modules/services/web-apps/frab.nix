@@ -174,14 +174,14 @@ in
   config = mkIf cfg.enable {
     environment.systemPackages = [ frab-rake ];
 
-    users.extraUsers = [
+    users.users = [
       { name = cfg.user;
         group = cfg.group;
         home = "${cfg.statePath}";
       }
     ];
 
-    users.extraGroups = [ { name = cfg.group; } ];
+    users.groups = [ { name = cfg.group; } ];
 
     systemd.services.frab = {
       after = [ "network.target" "gitlab.service" ];

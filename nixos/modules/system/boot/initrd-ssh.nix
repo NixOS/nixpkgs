@@ -79,7 +79,7 @@ in
 
     boot.initrd.network.ssh.authorizedKeys = mkOption {
       type = types.listOf types.str;
-      default = config.users.extraUsers.root.openssh.authorizedKeys.keys;
+      default = config.users.users.root.openssh.authorizedKeys.keys;
       description = ''
         Authorized keys for the root user on initrd.
       '';

@@ -1063,7 +1063,10 @@ self: super: {
   });
 
   # dhall-json requires a very particular dhall version
-  dhall-json_1_2_1 = super.dhall-json_1_2_1.override { dhall = self.dhall_1_14_0; };
+  dhall-json_1_2_1 = super.dhall-json_1_2_1.override { dhall = self.dhall_1_15_0; };
+
+  # dhall-nix requires a very particular dhall version
+  dhall-nix = super.dhall-nix.override { dhall = self.dhall_1_15_0; };
 
   # https://github.com/fpco/streaming-commons/issues/49
   streaming-commons = dontCheck super.streaming-commons;

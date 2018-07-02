@@ -5,7 +5,7 @@
  * to merges. Please use the full-text search of your editor. ;)
  * Hint: ### starts category names.
  */
-{ lib, nixpkgsFun, noSysDirs, config}:
+{ lib, noSysDirs, config}:
 self: pkgs:
 
 with pkgs;
@@ -14,22 +14,6 @@ with pkgs;
 
   # Allow callPackage to fill in the pkgs argument
   inherit pkgs;
-
-
-  # Override system. This is useful to build i686 packages on x86_64-linux.
-  forceSystem = system: kernel: nixpkgsFun {
-    localSystem = {
-      inherit system;
-      platform = platform // { kernelArch = kernel; };
-    };
-  };
-
-  # Used by wine, firefox with debugging version of Flash, ...
-  pkgsi686Linux = forceSystem "i686-linux" "i386";
-
-  callPackage_i686 = if stdenv.system == "i686-linux" || stdenv.system == "x86_64-linux"
-    then pkgsi686Linux.callPackage
-    else throw "callPackage_i686 not supported on system '${stdenv.system}'";
 
   # A stdenv capable of building 32-bit binaries.  On x86_64-linux,
   # it uses GCC compiled with multilib support; on i686-linux, it's
@@ -2102,7 +2086,6 @@ with pkgs;
   dolphinEmuMaster = callPackage ../misc/emulators/dolphin-emu/master.nix {
     inherit (darwin.apple_sdk.frameworks) CoreBluetooth ForceFeedback IOKit OpenGL;
     inherit (darwin) cf-private;
-    wxGTK = wxGTK31;
   };
 
   doomseeker = qt5.callPackage ../applications/misc/doomseeker { };
@@ -2421,6 +2404,8 @@ with pkgs;
   fluentd = callPackage ../tools/misc/fluentd { };
 
   flvstreamer = callPackage ../tools/networking/flvstreamer { };
+
+  hmetis = callPackage_i686 ../applications/science/math/hmetis { };
 
   libbsd = callPackage ../development/libraries/libbsd { };
 
@@ -3718,7 +3703,7 @@ with pkgs;
   lzip = callPackage ../tools/compression/lzip { };
 
   luxcorerender = callPackage ../tools/graphics/luxcorerender { };
-  
+
   xz = callPackage ../tools/compression/xz { };
 
   lz4 = callPackage ../tools/compression/lz4 { };
@@ -4983,7 +4968,7 @@ with pkgs;
   securefs = callPackage ../tools/filesystems/securefs { };
 
   seexpr = callPackage ../development/compilers/seexpr { };
- 
+
   setroot = callPackage  ../tools/X11/setroot { };
 
   setserial = callPackage ../tools/system/setserial { };
@@ -5888,14 +5873,7 @@ with pkgs;
   xbursttools = callPackage ../tools/misc/xburst-tools {
     # It needs a cross compiler for mipsel to build the firmware it will
     # load into the Ben Nanonote
-    gccCross =
-      let
-        pkgsCross = nixpkgsFun {
-          # Ben Nanonote system
-          crossSystem = lib.systems.examples.ben-nanonote;
-        };
-      in
-        pkgsCross.buildPackages.gccCrossStageStatic;
+    gccCross = pkgsCross.ben-nanonote.buildPackages.gccCrossStageStatic;
   };
 
   xclip = callPackage ../tools/misc/xclip { };
@@ -7787,7 +7765,9 @@ with pkgs;
 
   bazel_0_4 = callPackage ../development/tools/build-managers/bazel/0.4.nix { };
   bazel = callPackage ../development/tools/build-managers/bazel {
+    inherit (darwin) cctools;
     inherit (darwin.apple_sdk.frameworks) CoreFoundation CoreServices Foundation;
+    binutils = binutils-unwrapped;
   };
 
   bazel-buildtools = callPackage ../development/tools/build-managers/bazel/buildtools { };
@@ -12752,6 +12732,8 @@ with pkgs;
 
   lighttpd = callPackage ../servers/http/lighttpd { };
 
+  livepeer = callPackage ../servers/livepeer { ffmpeg = ffmpeg_3; };
+
   lwan = callPackage ../servers/http/lwan { };
 
   labelImg = callPackage ../applications/science/machine-learning/labelimg { };
@@ -14918,6 +14900,8 @@ with pkgs;
   source-sans-pro = callPackage ../data/fonts/source-sans-pro { };
 
   source-serif-pro = callPackage ../data/fonts/source-serif-pro { };
+
+  source-han-code-jp = callPackage ../data/fonts/source-han-code-jp { };
 
   sourceHanSansPackages = callPackage ../data/fonts/source-han-sans { };
   source-han-sans-japanese = sourceHanSansPackages.japanese;

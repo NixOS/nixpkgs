@@ -182,13 +182,13 @@ in
         '';
     };
 
-    users.extraUsers = optional (cfg.user == "influxdb") {
+    users.users = optional (cfg.user == "influxdb") {
       name = "influxdb";
       uid = config.ids.uids.influxdb;
       description = "Influxdb daemon user";
     };
 
-    users.extraGroups = optional (cfg.group == "influxdb") {
+    users.groups = optional (cfg.group == "influxdb") {
       name = "influxdb";
       gid = config.ids.gids.influxdb;
     };

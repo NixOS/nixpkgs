@@ -194,11 +194,11 @@ in
 
   config = mkIf cfg.enable {
 
-    users.extraGroups.hydra = {
+    users.groups.hydra = {
       gid = config.ids.gids.hydra;
     };
 
-    users.extraUsers.hydra =
+    users.users.hydra =
       { description = "Hydra";
         group = "hydra";
         createHome = true;
@@ -207,7 +207,7 @@ in
         uid = config.ids.uids.hydra;
       };
 
-    users.extraUsers.hydra-queue-runner =
+    users.users.hydra-queue-runner =
       { description = "Hydra queue runner";
         group = "hydra";
         useDefaultShell = true;
@@ -215,7 +215,7 @@ in
         uid = config.ids.uids.hydra-queue-runner;
       };
 
-    users.extraUsers.hydra-www =
+    users.users.hydra-www =
       { description = "Hydra web server";
         group = "hydra";
         useDefaultShell = true;

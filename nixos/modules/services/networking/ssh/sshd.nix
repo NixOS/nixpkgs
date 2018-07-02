@@ -49,7 +49,7 @@ let
         ${concatMapStrings (f: readFile f + "\n") u.openssh.authorizedKeys.keyFiles}
       '';
     };
-    usersWithKeys = attrValues (flip filterAttrs config.users.extraUsers (n: u:
+    usersWithKeys = attrValues (flip filterAttrs config.users.users (n: u:
       length u.openssh.authorizedKeys.keys != 0 || length u.openssh.authorizedKeys.keyFiles != 0
     ));
   in listToAttrs (map mkAuthKeyFile usersWithKeys);
@@ -326,7 +326,7 @@ in
 
   config = mkIf cfg.enable {
 
-    users.extraUsers.sshd =
+    users.users.sshd =
       { isSystemUser = true;
         description = "SSH privilege separation user";
       };

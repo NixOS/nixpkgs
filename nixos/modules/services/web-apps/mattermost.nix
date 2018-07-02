@@ -146,14 +146,14 @@ in
 
   config = mkMerge [
     (mkIf cfg.enable {
-      users.extraUsers = optionalAttrs (cfg.user == "mattermost") (singleton {
+      users.users = optionalAttrs (cfg.user == "mattermost") (singleton {
         name = "mattermost";
         group = cfg.group;
         uid = config.ids.uids.mattermost;
         home = cfg.statePath;
       });
 
-      users.extraGroups = optionalAttrs (cfg.group == "mattermost") (singleton {
+      users.groups = optionalAttrs (cfg.group == "mattermost") (singleton {
         name = "mattermost";
         gid = config.ids.gids.mattermost;
       });

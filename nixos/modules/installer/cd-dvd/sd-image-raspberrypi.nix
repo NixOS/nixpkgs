@@ -28,7 +28,7 @@ in
   boot.kernelPackages = pkgs.linuxPackages_rpi;
 
   # FIXME: this probably should be in installation-device.nix
-  users.extraUsers.root.initialHashedPassword = "";
+  users.users.root.initialHashedPassword = "";
 
   sdImage = {
     populateBootCommands = let

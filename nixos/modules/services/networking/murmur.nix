@@ -238,7 +238,7 @@ in
   };
 
   config = mkIf cfg.enable {
-    users.extraUsers.murmur = {
+    users.users.murmur = {
       description     = "Murmur Service user";
       home            = "/var/lib/murmur";
       createHome      = true;

@@ -150,13 +150,13 @@ in {
       };
     };
 
-    users.extraUsers = optionalAttrs (cfg.user == "uwsgi") (singleton
+    users.users = optionalAttrs (cfg.user == "uwsgi") (singleton
       { name = "uwsgi";
         group = cfg.group;
         uid = config.ids.uids.uwsgi;
       });
 
-    users.extraGroups = optionalAttrs (cfg.group == "uwsgi") (singleton
+    users.groups = optionalAttrs (cfg.group == "uwsgi") (singleton
       { name = "uwsgi";
         gid = config.ids.gids.uwsgi;
       });

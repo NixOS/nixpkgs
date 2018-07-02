@@ -44,7 +44,7 @@ in
     boot.supportedFilesystems = [ "vboxsf" ];
     boot.initrd.supportedFilesystems = [ "vboxsf" ];
 
-    users.extraGroups.vboxsf.gid = config.ids.gids.vboxsf;
+    users.groups.vboxsf.gid = config.ids.gids.vboxsf;
 
     systemd.services.virtualbox =
       { description = "VirtualBox Guest Services";

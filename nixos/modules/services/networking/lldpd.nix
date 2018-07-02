@@ -20,13 +20,13 @@ in
   };
 
   config = mkIf cfg.enable {
-    users.extraUsers._lldpd = {
+    users.users._lldpd = {
       description = "lldpd user";
       group = "_lldpd";
       home = "/var/run/lldpd";
       isSystemUser = true;
     };
-    users.extraGroups._lldpd = {};
+    users.groups._lldpd = {};
 
     environment.systemPackages = [ pkgs.lldpd ];
     systemd.packages = [ pkgs.lldpd ];

@@ -161,11 +161,11 @@ in
   config = mkIf cfg.enable {
 
     users = {
-      extraUsers = singleton {
+      users = singleton {
         name = "uhub";
         uid = config.ids.uids.uhub;
       };
-      extraGroups = singleton {
+      groups = singleton {
         name = "uhub";
         gid = config.ids.gids.uhub;
       };

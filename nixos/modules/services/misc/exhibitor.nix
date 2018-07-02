@@ -408,7 +408,7 @@ in
         chmod -R u+w ${cfg.baseDir}/zookeeper/conf
       '';
     };
-    users.extraUsers = singleton {
+    users.users = singleton {
       name = "zookeeper";
       uid = config.ids.uids.zookeeper;
       description = "Zookeeper daemon user";

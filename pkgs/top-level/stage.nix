@@ -93,7 +93,7 @@ let
 
   allPackages = self: super:
     let res = import ./all-packages.nix
-      { inherit lib nixpkgsFun noSysDirs config; }
+      { inherit lib noSysDirs config; }
       res self;
     in res;
 
@@ -117,6 +117,31 @@ let
     lib.optionalAttrs allowCustomOverrides
       ((config.packageOverrides or (super: {})) super);
 
+  # Override system. This is useful to build i686 packages on x86_64-linux.
+  forceSystem = system: kernel: nixpkgsFun {
+    localSystem = {
+      inherit system;
+      platform = stdenv.hostPlatform.platform // { kernelArch = kernel; };
+    };
+  };
+
+  # Convenience attributes for instantitating nixpkgs. Each of these
+  # will instantiate a new version of allPackages. They map example
+  # attributes to their own thing.
+  extraPkgs = self: super: {
+     pkgsCross = lib.mapAttrs (n: crossSystem:
+                              nixpkgsFun { inherit crossSystem; })
+                              lib.systems.examples;
+     pkgsLocal = lib.mapAttrs (n: localSystem:
+                              nixpkgsFun { inherit localSystem; })
+                              lib.systems.examples;
+
+     # Used by wine, firefox with debugging version of Flash, ...
+     pkgsi686Linux = forceSystem "i686-linux" "i386";
+     callPackage_i686 = self.pkgsi686Linux.callPackage;
+     inherit forceSystem;
+  };
+
   # The complete chain of package set builders, applied from top to bottom.
   # stdenvOverlays must be last as it brings package forward from the
   # previous bootstrapping phases which have already been overlayed.
@@ -127,6 +152,7 @@ let
     trivialBuilders
     splice
     allPackages
+    extraPkgs
     aliases
     configOverrides
   ] ++ overlays ++ [

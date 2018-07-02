@@ -68,7 +68,7 @@ in
 
   config = mkIf cfg.enable {
 
-    users.extraUsers = mkIf (!config.services.zabbixServer.enable) (singleton
+    users.users = mkIf (!config.services.zabbixServer.enable) (singleton
       { name = "zabbix";
         uid = config.ids.uids.zabbix;
         description = "Zabbix daemon user";

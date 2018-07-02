@@ -73,9 +73,9 @@ in
 
     };
 
-    users.extraGroups.lxd.gid = config.ids.gids.lxd;
+    users.groups.lxd.gid = config.ids.gids.lxd;
 
-    users.extraUsers.root = {
+    users.users.root = {
       subUidRanges = [ { startUid = 1000000; count = 65536; } ];
       subGidRanges = [ { startGid = 1000000; count = 65536; } ];
     };

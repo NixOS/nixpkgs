@@ -42,7 +42,7 @@ let
     ''
       [LightDM]
       ${optionalString cfg.greeter.enable ''
-        greeter-user = ${config.users.extraUsers.lightdm.name}
+        greeter-user = ${config.users.users.lightdm.name}
         greeters-directory = ${cfg.greeter.package}
       ''}
       sessions-directory = ${dmcfg.session.desktops}
@@ -252,14 +252,14 @@ in
         session  include   lightdm
     '';
 
-    users.extraUsers.lightdm = {
+    users.users.lightdm = {
       createHome = true;
       home = "/var/lib/lightdm-data";
       group = "lightdm";
       uid = config.ids.uids.lightdm;
     };
 
-    users.extraGroups.lightdm.gid = config.ids.gids.lightdm;
+    users.groups.lightdm.gid = config.ids.gids.lightdm;
     services.xserver.tty     = null; # We might start multiple X servers so let the tty increment themselves..
     services.xserver.display = null; # We specify our own display (and logfile) in xserver-wrapper up there
   };
