@@ -203,6 +203,18 @@ in
       '';
     };
 
+
+    system.copySystemNixpkgs = mkOption {
+      type = types.bool;
+      default = false;
+      description = ''
+        If enabled, copies the Nixpkgs that was used to build this system
+        and links it from the resulting system
+        (getting to <filename>/run/current-system/nixpkgs</filename>).
+        Note that the `.git` directory is not copied (should it exist) to avoid large build times.
+      '';
+    };
+
     system.extraSystemBuilderCmds = mkOption {
       type = types.lines;
       internal = true;
@@ -254,12 +266,19 @@ in
 
   config = {
 
-    system.extraSystemBuilderCmds =
-      optionalString
+    system.extraSystemBuilderCmds = concatStringsSep "\n" [
+      (optionalString
         config.system.copySystemConfiguration
         ''ln -s '${import ../../../lib/from-env.nix "NIXOS_CONFIG" <nixos-config>}' \
             "$out/configuration.nix"
-        '';
+        '')
+      (optionalString
+        config.system.copySystemNixpkgs
+        ''
+          ln -s '${builtins.filterSource (name: _: baseNameOf name != ".git" && baseNameOf name != "nixpkgs") pkgs.path}' \
+            "$out/nixpkgs"
+        '')
+    ];
 
     system.build.toplevel = system;
 
