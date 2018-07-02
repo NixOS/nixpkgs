@@ -1,15 +1,12 @@
-{ symlinkJoin, makeWrapper, stdenv, gcc }: idris: { path, lib }:
+{ lib, symlinkJoin, makeWrapper, idris-no-deps, gcc, gmp }:
 
 symlinkJoin {
-  name = idris.name;
-  src = idris.src;
-  paths = [ idris ];
+  inherit (idris-no-deps) name src meta;
+  paths = [ idris-no-deps ];
   buildInputs = [ makeWrapper ];
-  meta.platforms = idris.meta.platforms;
   postBuild = ''
     wrapProgram $out/bin/idris \
-      --run 'export IDRIS_CC=''${IDRIS_CC:-${stdenv.lib.getBin gcc}/bin/gcc}' \
-      --suffix PATH : ${ stdenv.lib.makeBinPath path } \
-      --suffix LIBRARY_PATH : ${stdenv.lib.makeLibraryPath lib}
-      '';
-  }
+      --run 'export IDRIS_CC=''${IDRIS_CC:-${lib.getBin gcc}/bin/gcc}' \
+      --suffix LIBRARY_PATH : ${lib.makeLibraryPath [ gmp ]}
+  '';
+}
