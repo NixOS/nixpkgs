@@ -749,6 +749,10 @@ let
       patches = [ ./patches/BayesXsrc.patch ];
     });
 
+    rhdf5 = old.rhdf5.overrideDerivation (attrs: {
+      patches = [ ./patches/rhdf5.patch ];
+    });
+
     rJava = old.rJava.overrideDerivation (attrs: {
       preConfigure = ''
         export JAVA_CPPFLAGS=-I${pkgs.jdk}/include/
