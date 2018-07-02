@@ -7,11 +7,11 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "R-3.5.0";
+  name = "R-3.5.1";
 
   src = fetchurl {
     url = "https://cran.r-project.org/src/base/R-3/${name}.tar.gz";
-    sha256 = "0w38865laqg28cdhikxdxhx4rfp0kgcn72gakwypsy91br9ja5zx";
+    sha256 = "0463bff5eea0f3d93fa071f79c18d0993878fd4f2e18ae6cf22c1639d11457ed";
   };
 
   buildInputs = [
@@ -65,8 +65,7 @@ stdenv.mkDerivation rec {
 
   installTargets = [ "install" "install-info" "install-pdf" ];
 
-  doCheck = withRecommendedPackages;  # R 3.5.0 fails the test suite if the
-                                      # recommended packages are not built
+  doCheck = true;
   preCheck = "export TZ=CET; bin/Rscript -e 'sessionInfo()'";
 
   enableParallelBuilding = true;
