@@ -156,6 +156,17 @@ rec {
     let found = filter pred list;
     in if found == [] then default else head found;
 
+  /* Find the index of the first element in the list matching the specified
+     predicate or return -1 if no such element exists.
+  */
+  findFirstIndex = pred: list:
+    if list == [] then -1
+    else if pred (head list) then 0
+    else
+      let i = findFirstIndex pred (tail list); in
+      if i == -1 then -1
+      else i + 1;
+
   /* Return true iff function `pred' returns true for at least element
      of `list'.
 

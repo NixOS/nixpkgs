@@ -244,6 +244,7 @@ rec {
   # Case conversion utilities.
   lowerChars = stringToCharacters "abcdefghijklmnopqrstuvwxyz";
   upperChars = stringToCharacters "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+  hexDigits  = stringToCharacters "0123456789abcdef";
 
   /* Converts an ASCII string to lower-case.
 
@@ -545,4 +546,102 @@ rec {
        => "1.0"
   */
   fileContents = file: removeSuffix "\n" (builtins.readFile file);
+
+  /* Parse a positive hexadecimal number to an integer.
+     '0x' prefix is not allowed.
+  */
+  hexToInt = hex:
+    let
+      chars = stringToCharacters (toLower hex);
+      digitConv = d:
+        let i = lib.findFirstIndex (x: x == d) hexDigits; in
+        if i == "default"
+        then throw "Could not read ${hex} as an hexadecimal number."
+        else i;
+      ints = map digitConv chars;
+    in
+      lib.foldl (a: b: a * 16 + b) 0 ints;
+
+  /* Converts an integer to a hexadecimal number (without '0x' prefix).
+  */
+  intToHex = i:
+    let
+      intToHexImpl = i:
+        if i == 0
+        then ""
+        else
+          let mod = a: b: a - ((a / b) * b); in # TODO: really not yet existing?
+          (intToHexImpl (i / 16) + (builtins.elemAt hexDigits (mod i 16)));
+    in
+    if i == 0
+    then "0"
+    else intToHexImpl i;
+
+  /* Parse an IP address to an integer list.
+     List length will be either 4 for IPv4, or 8 for IPv6
+     TODO: Parse ::ffff:xxx.xxx.xxx.xxx format
+  */
+  parseIPv6 = str:
+    let
+      ndots = lib.count (x: x == ":") (stringToCharacters str);
+      missingndots = 9 - ndots; # 2 + (7 - ndots)
+      missingdots = concatStrings (map (_: ":") (lib.range 1 missingndots));
+      ipv6str = replaceStrings [ "::" ] [ missingdots ] str;
+      # TODO: remove once https://github.com/NixOS/nixpkgs/issues/23681 is fixed
+      ipv6strfix =
+        if lib.last (stringToCharacters ipv6str) == ":"
+        then "${ipv6str}0"
+        else ipv6str;
+      ip = map hexToInt (splitString ":" ipv6strfix);
+    in
+      if length ip == 8 && builtins.all (x: 0 <= x && x <= 65535) ip
+      then ip
+      else throw "Could not parse ${str} as IPv6. (note: ::ffff:x.x.x.x notation is not handled for the time being)";
+  parseIPv4 = str:
+    let
+      ip = map toInt (splitString "." str);
+    in
+      if length ip == 4 && builtins.all (x: 0 <= x && x <= 255) ip
+      then ip
+      else throw "Could not parse ${str} as IPv4.";
+  parseMAC = str:
+    let
+      mac = map hexToInt (splitString ":" str);
+    in
+      if length mac == 6 && builtins.all (x: 0 <= x && x <= 255) mac
+      then mac
+      else throw "Could not parse ${str} as MAC.";
+
+  /* Converts an integer list to an IP.
+     Input list length has to be either 4 for IPv4, or 8 for IPv6
+  */
+  genIPv6 = ip: concatStringsSep ":" (map intToHex ip);
+  genIPv4 = ip: concatStringsSep "." (map toString ip);
+  genMAC = mac:
+    let
+      pad = str: if stringLength str == 0 then "00" else if stringLength str == 1 then "0" + str else str;
+      hexify = x: pad (intToHex x);
+    in
+      concatStringsSep ":" (map hexify mac);
+
+  /* Adds an integer to a list modulo a value (used for adding an integer to an
+     IP)
+  */
+  addToIPorMAC = mod: list: i:
+    let
+      normalize = list:
+        let
+          idx = lib.findFirstIndex (x: x >= mod) list;
+          before = lib.take idx list;
+          after = lib.reverseList (lib.take (length list - idx) (lib.reverseList list));
+          nextstep = (lib.init before) ++ [((lib.last before) + 1)] ++ [((head after) - mod)] ++ (tail after);
+        in
+          if idx == -1
+          then list
+          else normalize nextstep;
+    in
+      normalize ((lib.init list) ++ [ ((lib.last list) + i) ]);
+  addToIPv4 = addToIPorMAC 256;
+  addToIPv6 = addToIPorMAC 65536;
+  addToMAC  = addToIPorMAC 256;
 }
