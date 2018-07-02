@@ -62,6 +62,11 @@ let
       . /etc/profile
       cd "$HOME"
 
+      # Allow the user to execute commands at the beginning of the X session.
+      if test -f ~/.xprofile; then
+          source ~/.xprofile
+      fi
+
       # The first argument of this script is the session type.
       sessionType="$1"
       if [ "$sessionType" = default ]; then sessionType=""; fi
@@ -122,11 +127,6 @@ let
       unset _DID_SYSTEMD_CAT
 
       ${cfg.displayManager.sessionCommands}
-
-      # Allow the user to execute commands at the beginning of the X session.
-      if test -f ~/.xprofile; then
-          source ~/.xprofile
-      fi
 
       # Start systemd user services for graphical sessions
       ${config.systemd.package}/bin/systemctl --user start graphical-session.target
