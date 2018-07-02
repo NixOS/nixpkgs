@@ -12756,6 +12756,8 @@ with pkgs;
 
   lighttpd = callPackage ../servers/http/lighttpd { };
 
+  livepeer = callPackage ../servers/livepeer { ffmpeg = ffmpeg_3; };
+
   lwan = callPackage ../servers/http/lwan { };
 
   labelImg = callPackage ../applications/science/machine-learning/labelimg { };
