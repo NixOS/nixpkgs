@@ -25,21 +25,21 @@ in {
         '';
       };
       vmDerivationName = mkOption {
-        type = types.string;
+        type = types.str;
         default = "nixos-ova-${config.system.nixos.label}-${pkgs.stdenv.system}";
         description = ''
           The name of the derivation for the VirtualBox appliance.
         '';
       };
       vmName = mkOption {
-        type = types.string;
+        type = types.str;
         default = "NixOS ${config.system.nixos.label} (${pkgs.stdenv.system})";
         description = ''
           The name of the VirtualBox appliance.
         '';
       };
       vmFileName = mkOption {
-        type = types.string;
+        type = types.str;
         default = "nixos-${config.system.nixos.label}-${pkgs.stdenv.system}.ova";
         description = ''
           The file name of the VirtualBox appliance.
