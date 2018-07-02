@@ -1150,6 +1150,7 @@ self: super: {
   test-fixture = addTestToolDepend super.test-fixture self.hspec-discover;
   streaming-binary = addTestToolDepend super.streaming-binary self.hspec-discover;
   yesod-persistent = addTestToolDepend super.yesod-persistent self.hspec-discover;
+  yesod-persistent_1_4_3 = addTestToolDepend super.yesod-persistent_1_4_3 self.hspec-discover;
   wss-client = addTestToolDepend super.wss-client self.hspec-discover;
   word-trie = addTestToolDepend super.word-trie self.hspec-discover;
   woot = addTestToolDepend super.woot self.hspec-discover;
