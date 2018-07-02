@@ -517,14 +517,11 @@ self: super: builtins.intersectAttrs super {
   blank-canvas = dontCheck super.blank-canvas;
   blank-canvas_0_6_2 = dontCheck super.blank-canvas_0_6_2;
 
-  # cabal2nix generates a dependency on base-compat, which is the wrong version
-  base-compat-batteries = super.base-compat-batteries.override {
-    base-compat = super.base-compat_0_10_1;
-  };
-
   # Custom setup needs pg_config
   HDBC-postgresql = addBuildTool super.HDBC-postgresql pkgs.postgresql;
 
   # Custom setup needs sdl-config
   SDL = addBuildTool super.SDL pkgs.SDL;
+  neat-interpolation = addBuildTool super.neat-interpolation self.HTF;
+  hnix = addBuildTool super.hnix pkgs.nix;
 }
