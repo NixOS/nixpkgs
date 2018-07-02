@@ -26,7 +26,7 @@ name: version: sha256: args: let
       '';
       preBuild = ''
         ln -s lib ${n}
-        makeFlagsArray=(-j''$NIX_BUILD_CORES)
+        makeFlagsArray=(-j$NIX_BUILD_CORES)
       '';
       buildInputs = [
         pkgs.gnustep.make

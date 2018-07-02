@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
   '';
 
   preBuild = ''
-    makeFlagsArray=(-j''$NIX_BUILD_CORES)
+    makeFlagsArray=(-j$NIX_BUILD_CORES)
   '';
 
   NIX_LDFLAGS = "-no_dtrace_dof";
