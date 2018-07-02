@@ -62,7 +62,7 @@ with lib;
     (mkIf (
         cfg.hdfs.namenode.enabled || cfg.hdfs.datanode.enabled
     ) {
-      users.extraUsers.hdfs = {
+      users.users.hdfs = {
         description = "Hadoop HDFS user";
         group = "hadoop";
         uid = config.ids.uids.hdfs;

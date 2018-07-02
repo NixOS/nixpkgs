@@ -52,9 +52,9 @@ with lib;
 
 
   config = mkMerge [
-    (mkIf (builtins.hasAttr "yarn" config.users.extraUsers ||
-           builtins.hasAttr "hdfs" config.users.extraUsers ) {
-      users.extraGroups.hadoop = {
+    (mkIf (builtins.hasAttr "yarn" config.users.users ||
+           builtins.hasAttr "hdfs" config.users.users) {
+      users.groups.hadoop = {
         gid = config.ids.gids.hadoop;
       };
     })

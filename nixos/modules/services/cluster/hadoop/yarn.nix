@@ -27,7 +27,7 @@ with lib;
         cfg.yarn.resourcemanager.enabled || cfg.yarn.nodemanager.enabled
     ) {
 
-      users.extraUsers.yarn = {
+      users.users.yarn = {
         description = "Hadoop YARN user";
         group = "hadoop";
         uid = config.ids.uids.yarn;
