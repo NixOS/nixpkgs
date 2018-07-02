@@ -1063,10 +1063,15 @@ self: super: {
   });
 
   # dhall-json requires a very particular dhall version
-  dhall-json_1_2_0 = super.dhall-json_1_2_0.override { dhall = self.dhall_1_14_0; };
+  dhall-json_1_2_1 = super.dhall-json_1_2_1.override { dhall = self.dhall_1_14_0; };
 
   # https://github.com/fpco/streaming-commons/issues/49
   streaming-commons = dontCheck super.streaming-commons;
+
+  # cabal2nix generates a dependency on base-compat, which is the wrong version
+  base-compat-batteries = super.base-compat-batteries.override {
+    base-compat = super.base-compat_0_10_1;
+  };
 
 }
 

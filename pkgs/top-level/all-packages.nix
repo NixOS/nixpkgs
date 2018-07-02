@@ -1693,13 +1693,14 @@ with pkgs;
   ciopfs = callPackage ../tools/filesystems/ciopfs { };
 
   citrix_receiver = callPackage ../applications/networking/remote/citrix-receiver { };
-  citrix_receiver_13_9_1 = citrix_receiver.override { version = "13.9.1"; };
-  citrix_receiver_13_9_0 = citrix_receiver.override { version = "13.9.0"; };
-  citrix_receiver_13_8_0 = citrix_receiver.override { version = "13.8.0"; };
-  citrix_receiver_13_7_0 = citrix_receiver.override { version = "13.7.0"; };
-  citrix_receiver_13_6_0 = citrix_receiver.override { version = "13.6.0"; };
-  citrix_receiver_13_5_0 = citrix_receiver.override { version = "13.5.0"; };
-  citrix_receiver_13_4_0 = citrix_receiver.override { version = "13.4.0"; };
+  citrix_receiver_13_10_0 = citrix_receiver.override { version = "13.10.0"; };
+  citrix_receiver_13_9_1  = citrix_receiver.override { version = "13.9.1";  };
+  citrix_receiver_13_9_0  = citrix_receiver.override { version = "13.9.0";  };
+  citrix_receiver_13_8_0  = citrix_receiver.override { version = "13.8.0";  };
+  citrix_receiver_13_7_0  = citrix_receiver.override { version = "13.7.0";  };
+  citrix_receiver_13_6_0  = citrix_receiver.override { version = "13.6.0";  };
+  citrix_receiver_13_5_0  = citrix_receiver.override { version = "13.5.0";  };
+  citrix_receiver_13_4_0  = citrix_receiver.override { version = "13.4.0";  };
 
   citra = libsForQt5.callPackage ../misc/emulators/citra { };
 
@@ -3533,6 +3534,10 @@ with pkgs;
   nodejs-slim-10_x = callPackage ../development/web/nodejs/v10.nix {
     enableNpm = false;
     openssl = openssl_1_1_0;
+  };
+
+  nodePackages_10_x = callPackage ../development/node-packages/default-v10.nix {
+    nodejs = pkgs.nodejs-10_x;
   };
 
   nodePackages_8_x = callPackage ../development/node-packages/default-v8.nix {
@@ -10094,6 +10099,24 @@ with pkgs;
 
   libgadu = callPackage ../development/libraries/libgadu { };
 
+  gap-libgap-compatible = let
+    version = "4r8p6";
+    pkgVer = "2016_11_12-14_25";
+  in
+    (gap.override { keepAllPackages = false; }).overrideAttrs (oldAttrs: {
+      name = "libgap-${oldAttrs.pname}-${version}";
+      src = fetchurl {
+        url = "https://www.gap-system.org/pub/gap/gap48/tar.bz2/gap${version}_${pkgVer}.tar.bz2";
+        sha256 = "19n2p1mdg33s2x9rs51iak7rgndc1cwr56jyqnah0g1ydgg1yh6b";
+      };
+      patches = (oldAttrs.patches or []) ++ [
+        # don't install any packages by default (needed for interop with libgap, probably obsolete  with 4r10
+        (fetchpatch {
+          url = "https://git.sagemath.org/sage.git/plain/build/pkgs/gap/patches/nodefaultpackages.patch?id=07d6c37d18811e2b377a9689790a7c5e24da16ba";
+          sha256 = "1xwj766m3axrxbkyx13hy3q8s2wkqxy3m6mgpwq3c3n4vk3v416v";
+        })
+      ];
+  });
   libgap = callPackage ../development/libraries/libgap { };
 
   libgdata = gnome3.libgdata;
@@ -12818,7 +12841,8 @@ with pkgs;
 
   oauth2_proxy = callPackage ../servers/oauth2_proxy { };
 
-  openafs = callPackage ../servers/openafs { tsmbac = null; ncurses = null; };
+  openafs = callPackage ../servers/openafs/1.6 { tsmbac = null; ncurses = null; };
+  openafs_1_8 = callPackage ../servers/openafs/1.8 { tsmbac = null; ncurses = null; };
 
   openresty = callPackage ../servers/http/openresty { };
 
@@ -13832,7 +13856,8 @@ with pkgs;
 
     rtlwifi_new = callPackage ../os-specific/linux/rtlwifi_new { };
 
-    openafs = callPackage ../servers/openafs/module.nix { };
+    openafs = callPackage ../servers/openafs/1.6/module.nix { };
+    openafs_1_8 = callPackage ../servers/openafs/1.8/module.nix { };
 
     facetimehd = callPackage ../os-specific/linux/facetimehd { };
 
@@ -14579,17 +14604,25 @@ with pkgs;
 
   camingo-code = callPackage ../data/fonts/camingo-code { };
 
+  combinatorial_designs = callPackage ../data/misc/combinatorial_designs { };
+
+  conway_polynomials = callPackage ../data/misc/conway_polynomials { };
+
   dosis = callPackage ../data/fonts/dosis { };
 
   dosemu_fonts = callPackage ../data/fonts/dosemu-fonts { };
 
   eb-garamond = callPackage ../data/fonts/eb-garamond { };
 
+  elliptic_curves = callPackage ../data/misc/elliptic_curves { };
+
   faba-icon-theme = callPackage ../data/icons/faba-icon-theme { };
 
   faba-mono-icons = callPackage ../data/icons/faba-mono-icons { };
 
   fixedsys-excelsior = callPackage ../data/fonts/fixedsys-excelsior { };
+
+  graphs = callPackage ../data/misc/graphs { };
 
   emacs-all-the-icons-fonts = callPackage ../data/fonts/emacs-all-the-icons-fonts { };
 
@@ -14795,7 +14828,13 @@ with pkgs;
   paratype-pt-sans = callPackage ../data/fonts/paratype-pt/sans.nix {};
   paratype-pt-serif = callPackage ../data/fonts/paratype-pt/serif.nix {};
 
+  pari-galdata = callPackage ../data/misc/pari-galdata {};
+
+  pari-seadata-small = callPackage ../data/misc/pari-seadata-small {};
+
   poly = callPackage ../data/fonts/poly { };
+
+  polytopes_db = callPackage ../data/misc/polytopes_db { };
 
   posix_man_pages = callPackage ../data/documentation/man-pages-posix { };
 
@@ -17385,6 +17424,8 @@ with pkgs;
 
   sawfish = callPackage ../applications/window-managers/sawfish { };
 
+  sidplayfp = callPackage ../applications/audio/sidplayfp { };
+
   sxhkd = callPackage ../applications/window-managers/sxhkd { };
 
   sxhkd-unstable = callPackage ../applications/window-managers/sxhkd/unstable.nix { };
@@ -19204,7 +19245,7 @@ with pkgs;
 
   zim = callPackage ../applications/office/zim { };
 
-  zoom-us = callPackage ../applications/networking/instant-messengers/zoom-us { };
+  zoom-us = libsForQt5.callPackage ../applications/networking/instant-messengers/zoom-us { };
 
   zotero = callPackage ../applications/office/zotero { };
 
@@ -19569,6 +19610,8 @@ with pkgs;
   naev = callPackage ../games/naev { };
 
   nethack = callPackage ../games/nethack { };
+
+  nethack-x11 = callPackage ../games/nethack { x11Mode = true; };
 
   neverball = callPackage ../games/neverball { };
 
@@ -20342,7 +20385,10 @@ with pkgs;
 
   petsc = callPackage ../development/libraries/science/math/petsc { };
 
-  sage = callPackage ../applications/science/math/sage { };
+  sage = callPackage ../applications/science/math/sage {
+    nixpkgs = pkgs;
+  };
+  sageWithDoc = sage.override { withDoc = true; };
 
   suitesparse_4_2 = callPackage ../development/libraries/science/math/suitesparse/4.2.nix { };
   suitesparse_4_4 = callPackage ../development/libraries/science/math/suitesparse {};

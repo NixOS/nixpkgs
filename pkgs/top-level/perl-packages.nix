@@ -7927,11 +7927,11 @@ let self = _self // overrides; _self = with self; {
 
   ImageExifTool = buildPerlPackage rec {
     name = "Image-ExifTool-${version}";
-    version = "10.80";
+    version = "11.01";
 
     src = fetchurl {
       url = "https://www.sno.phy.queensu.ca/~phil/exiftool/${name}.tar.gz";
-      sha256 = "14rwr5wk2snqv4yva6fax1gfsdv88941n237m0wyzn3n0xh9dy5w";
+      sha256 = "175w34n73mypdpbaqj2vgqsfp59yvfrn8k7zmx4cawnp895bypvh";
     };
 
     meta = with stdenv.lib; {

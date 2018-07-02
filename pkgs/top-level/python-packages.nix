@@ -264,6 +264,8 @@ in {
 
   diff-match-patch = callPackage ../development/python-modules/diff-match-patch { };
 
+  fido2 = callPackage ../development/python-modules/fido2 {  };
+
   globus-sdk = callPackage ../development/python-modules/globus-sdk { };
 
   goocalendar = callPackage ../development/python-modules/goocalendar { };
@@ -433,9 +435,7 @@ in {
 
   python-hosts = callPackage ../development/python-modules/python-hosts { };
 
-  python-openid = callPackage (if isPy3k
-    then ../development/python-modules/python3-openid
-    else ../development/python-modules/python-openid) { };
+  python3-openid = callPackage ../development/python-modules/python3-openid { };
 
   python-periphery = callPackage ../development/python-modules/python-periphery { };
 
@@ -12847,6 +12847,8 @@ in {
 
   shapely = callPackage ../development/python-modules/shapely { };
 
+  soco = callPackage ../development/python-modules/soco { };
+
   sopel = buildPythonPackage rec {
     name = "sopel-6.3.1";
 
@@ -15489,28 +15491,7 @@ EOF
 
   libarcus = callPackage ../development/python-modules/libarcus { };
 
-  pybrowserid = buildPythonPackage rec {
-    name = "PyBrowserID-${version}";
-    version = "0.9.2";
-    disabled = isPy3k; # Errors in the test suite.
-
-    src = pkgs.fetchgit {
-      url = https://github.com/mozilla/PyBrowserID.git;
-      rev = "refs/tags/${version}";
-      sha256 = "0zsljr45gm8a4c0lxh6mgfc60a5fijhs4pwijb9fdkq16zw0pmf0";
-    };
-
-    doCheck = false;  # some tests use networking
-
-    buildInputs = with self; [ mock unittest2 ];
-    propagatedBuildInputs = with self; [ requests ];
-
-    meta = {
-      description = "Python library for the BrowserID Protocol";
-      homepage    = "https://github.com/mozilla/PyBrowserID";
-      license     = licenses.mpl20;
-    };
-  };
+  pybrowserid = callPackage ../development/python-modules/pybrowserid { };
 
   pyzmq = callPackage ../development/python-modules/pyzmq { };
 

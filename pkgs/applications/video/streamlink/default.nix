@@ -1,21 +1,15 @@
 { stdenv, pythonPackages, fetchFromGitHub, rtmpdump, ffmpeg }:
 
 pythonPackages.buildPythonApplication rec {
-  version = "0.13.0";
+  version = "0.14.2";
   name = "streamlink-${version}";
 
   src = fetchFromGitHub {
     owner = "streamlink";
     repo = "streamlink";
     rev = "${version}";
-    sha256 = "17i5j5a69d28abg13md2r2ycxgmd5h1pjy0pgca1zcqaqfq4v05x";
+    sha256 = "1njwfy1h8a9n5z6crrfnknlw4ys0bap2jam6ga6njgkd10aly9qr";
   };
-
-  postPatch = ''
-    # Fix failing test. This can be removed after version 0.13.0, see:
-    # https://github.com/streamlink/streamlink/commit/a27e1a2d8eec6eb23c6e1dc280c6afc1cd0b5b32
-    substituteInPlace tests/test_plugin.py --replace "lambda: datetime" "datetime"
-  '';
 
   checkInputs = with pythonPackages; [ pytest mock requests-mock freezegun ];
 

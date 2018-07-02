@@ -85,6 +85,6 @@ in {
   };
 
   meta = {
-    maintainers = pkgs.fwupd.maintainers;
+    maintainers = pkgs.fwupd.meta.maintainers;
   };
 }

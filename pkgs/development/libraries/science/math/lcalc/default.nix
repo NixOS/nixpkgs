@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   src = fetchurl {
     # original at http://oto.math.uwaterloo.ca/~mrubinst/L_function_public/CODE/L-${version}.tar.gz, no longer available
     # "newer" version at google code https://code.google.com/archive/p/l-calc/source/default/source
-    url = "http://mirrors.mit.edu/sage/spkg/upstream/lcalc/lcalc-${version}.tar.bz2";
+    url = "mirror://sageupstream/lcalc/lcalc-${version}.tar.bz2";
     sha256 = "1c6dsdshgxhqppjxvxhp8yhpxaqvnz3d1mlh26r571gkq8z2bm43";
   };
 

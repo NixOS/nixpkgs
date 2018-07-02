@@ -17,6 +17,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
+    extension = "tar.bz2";
     sha256 = "a4cc164a781859c74de47f17f0e85f4bce8a3321a9d0892c015c8f80c4158ad9";
   };
 
