@@ -1,6 +1,5 @@
-{ stdenv, buildGoPackage, fetchgit, pkgconfig, cmake, libcxx, libcxxabi
-, ffmpeg-full, graphicsmagick, ghostscript, quicktemplate, go-bindata, easyjson
-, nodePackages, emscripten }:
+{ stdenv, buildGoPackage, fetchgit, pkgconfig, cmake, ffmpeg-full, ghostscript
+, graphicsmagick, quicktemplate, go-bindata, easyjson, nodePackages, emscripten }:
 
 buildGoPackage rec {
   name = "meguca-unstable-${version}";
@@ -22,7 +21,7 @@ buildGoPackage rec {
   buildInputs = [
     ffmpeg-full graphicsmagick ghostscript quicktemplate go-bindata easyjson
     emscripten
-  ] ++ stdenv.lib.optionals stdenv.isDarwin [ libcxx libcxxabi ];
+  ];
 
   buildPhase = ''
     export HOME=$PWD
@@ -32,8 +31,10 @@ buildGoPackage rec {
     sed -i "/npm install --progress false --depth 0/d" Makefile
     make generate_clean
     go generate meguca/...
-    go build -p $NIX_BUILD_CORES meguca
-    make -j $NIX_BUILD_CORES client wasm
+    go build -v -p $NIX_BUILD_CORES meguca
+    make -j $NIX_BUILD_CORES client
+  '' + stdenv.lib.optionalString (!stdenv.isDarwin) ''
+    make -j $NIX_BUILD_CORES wasm
   '';
 
   installPhase = ''
