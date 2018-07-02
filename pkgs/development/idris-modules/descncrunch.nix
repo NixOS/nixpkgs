@@ -21,5 +21,6 @@ build-idris-package  {
     homepage = https://github.com/ahmadsalim/desc-n-crunch;
     license = lib.licenses.gpl3;
     maintainers = [ lib.maintainers.brainrape ];
+    broken = true;
   };
 }
