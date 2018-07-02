@@ -28,6 +28,7 @@ name: version: sha256: args: let
         ln -s lib ${n}
         makeFlagsArray=(-j$NIX_BUILD_CORES)
       '';
+      outputs = [ "out" "dev" ];
       buildInputs = [
         pkgs.gnustep.make
         pkgs.darwin.apple_sdk.frameworks.AppKit
