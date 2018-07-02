@@ -155,6 +155,12 @@ in rec {
     '';
   };
 
+  ubootNovena = buildUBoot rec {
+    defconfig = "novena_defconfig";
+    extraMeta.platforms = ["armv7l-linux"];
+    filesToInstall = ["u-boot.bin" "SPL"];
+  };
+
   ubootOdroidXU3 = buildUBoot rec {
     defconfig = "odroid-xu3_defconfig";
     extraMeta.platforms = ["armv7l-linux"];
