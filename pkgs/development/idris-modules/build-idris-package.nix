@@ -38,6 +38,7 @@ stdenv.mkDerivation ({
 
   installPhase = ''
     ${idris-with-packages}/bin/idris --install *.ipkg --ibcsubdir $out/libs
+    IDRIS_DOC_PATH=$out/doc ${idris-with-packages}/bin/idris --installdoc *.ipkg
   '';
 
   buildInputs = [ gmp ] ++ extraBuildInputs;
