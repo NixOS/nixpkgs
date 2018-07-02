@@ -1,4 +1,4 @@
-{ stdenv, lib, buildEnv, dwarf-fortress-original, dwarf-fortress-unfuck, substituteAll
+{ stdenv, lib, buildEnv, dwarf-fortress-original, substituteAll
 , enableDFHack ? false, dfhack
 , enableSoundSense ? false, soundSense, jdk
 , enableStoneSense ? false
@@ -10,8 +10,6 @@ let
   dfhack_ = dfhack.override {
     inherit enableStoneSense;
   };
-
-  dfVersion = dwarf-fortress-original.dfVersion;
 
   ptheme =
     if builtins.isString theme
@@ -43,11 +41,7 @@ in
 stdenv.mkDerivation rec {
   name = "dwarf-fortress-${dwarf-fortress-original.dfVersion}";
 
-  compatible = lib.all (x: x.dfVersion == dwarf-fortress-original.dfVersion) [
-    dwarf-fortress-original
-    dwarf-fortress-unfuck
-    dfhack
-  ];
+  compatible = lib.all (x: assert (x.dfVersion == dwarf-fortress-original.dfVersion); true) pkgs;
 
   dfInit = substituteAll {
     name = "dwarf-fortress-init";
@@ -83,4 +77,3 @@ stdenv.mkDerivation rec {
 
   preferLocalBuild = true;
 }
-

@@ -31,7 +31,7 @@ stdenv.mkDerivation {
     ncurses gtk2 libsndfile zlib libGL
   ];
 
-  patchPhase = ''
+  postPatch = ''
     substituteInPlace CMakeLists.txt --replace \
       'set(CMAKE_BUILD_TYPE Release)' \
       'set(CMAKE_BUILD_TYPE Debug)'
@@ -59,4 +59,3 @@ stdenv.mkDerivation {
     maintainers = with maintainers; [ abbradar ];
   };
 }
-
