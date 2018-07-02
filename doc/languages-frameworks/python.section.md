@@ -436,7 +436,7 @@ Let's split the package definition from the environment definition.
 We first create a function that builds `toolz` in `~/path/to/toolz/release.nix`
 
 ```nix
-{ pkgs, buildPythonPackage }:
+{ stdenv, pkgs, buildPythonPackage }:
 
 buildPythonPackage rec {
   pname = "toolz";
@@ -447,7 +447,7 @@ buildPythonPackage rec {
     sha256 = "43c2c9e5e7a16b6c88ba3088a9bfc82f7db8e13378be7c78d6c14a5f8ed05afd";
   };
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = "http://github.com/pytoolz/toolz/";
     description = "List processing tools and functional utilities";
     license = licenses.bsd3;
