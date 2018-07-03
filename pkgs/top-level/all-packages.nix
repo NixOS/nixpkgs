@@ -16645,6 +16645,8 @@ with pkgs;
     libxml2 = null;
     openjpeg = null;
     libwebp = null;
+    libheif = null;
+    libde265 = null;
   };
 
   imagemagick = callPackage ../applications/graphics/ImageMagick {
@@ -16672,6 +16674,7 @@ with pkgs;
     libxml2 = null;
     openjpeg = null;
     libwebp = null;
+    libheif = null;
   });
 
   imagemagick7 = lowPrio (imagemagick7Big.override {
