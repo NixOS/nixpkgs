@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   };
   sourceRoot = ".";
 
-  buildPhase = ":";   # nothing to build
+  dontBuild = true;
 
   installPhase = ''
     mkdir -p $out/bin
