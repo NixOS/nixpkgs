@@ -6,7 +6,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://cdist2.perforce.com/perforce/r17.3/bin.linux26x86_64/p4v.tgz";
-    sha256 = "f317607f1bc8877db01ff020b8b0857c2d0f8600474d152749264aea0be66b21";
+    sha256 = "9ded42683141e1808535ec3e87d3149f890315c192d6e97212794fd54862b9a4";
   };
 
   dontBuild = true;
