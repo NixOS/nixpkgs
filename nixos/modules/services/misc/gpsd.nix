@@ -107,8 +107,8 @@ in
         ExecStart = ''
           ${pkgs.gpsd}/sbin/gpsd -D "${toString cfg.debugLevel}"  \
             -S "${toString cfg.port}"                             \
-            ${if cfg.readonly then "-b" else ""}                  \
-            ${if cfg.nowait   then "-n" else ""}                  \
+            ${optionalString cfg.readonly "-b"}                   \
+            ${optionalString cfg.nowait "-n"}                     \
             "${cfg.device}"
         '';
       };
