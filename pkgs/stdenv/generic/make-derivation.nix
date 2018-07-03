@@ -45,9 +45,9 @@ rec {
       # Including it then would cause needless mass rebuilds.
       #
       # TODO(@Ericson2314): Make [ "build" "host" ] always the default.
-      configurePlatforms ? lib.optionals
+      configurePlatforms ? [ "build" ] ++ lib.optional
         (stdenv.hostPlatform != stdenv.buildPlatform)
-        [ "build" "host" ]
+        "host"
 
     # TODO(@Ericson2314): Make unconditional / resolve #33599
     # Check phase
@@ -203,14 +203,16 @@ rec {
           propagatedBuildInputs       = lib.elemAt (lib.elemAt propagatedDependencies 1) 1;
           depsTargetTargetPropagated  = lib.elemAt (lib.elemAt propagatedDependencies 2) 0;
 
-          # This parameter is sometimes a string, sometimes null, and sometimes a list, yuck
-          configureFlags = let inherit (lib) optional elem; in
-            (/**/ if lib.isString configureFlags then [configureFlags]
-             else if configureFlags == null      then []
-             else                                     configureFlags)
-            ++ optional (elem "build"  configurePlatforms) "--build=${stdenv.buildPlatform.config}"
-            ++ optional (elem "host"   configurePlatforms) "--host=${stdenv.hostPlatform.config}"
-            ++ optional (elem "target" configurePlatforms) "--target=${stdenv.targetPlatform.config}";
+          configureFlags = assert lib.isList configureFlags; configureFlags;
+
+          # We use autoconf-style env vars not `--{build,host,arget}` configure
+          # flags to avoid interfering with packages that don't accept those.
+        } // lib.optionalAttrs (lib.elem "build" configurePlatforms) {
+          build_alias = stdenv.buildPlatform.config;
+        } // lib.optionalAttrs (lib.elem "host" configurePlatforms) {
+          host_alias = stdenv.hostPlatform.config;
+        } // lib.optionalAttrs (lib.elem "target" configurePlatforms) {
+          target_alias = stdenv.targetPlatform.config;
 
         } // lib.optionalAttrs (hardeningDisable != [] || hardeningEnable != []) {
           NIX_HARDENING_ENABLE = enabledHardeningOptions;
