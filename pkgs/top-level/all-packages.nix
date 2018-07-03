@@ -13636,14 +13636,6 @@ with pkgs;
     modDirVersionArg = linux_4_14.modDirVersion + "-hardened";
   });
 
-  linux_copperhead_stable = (linux_4_16.override {
-    kernelPatches = linux_4_16.kernelPatches ++ [
-      kernelPatches.copperhead_4_16
-      kernelPatches.tag_hardened
-     ];
-    modDirVersionArg = linux_4_16.modDirVersion + "-hardened";
-  });
-
   # linux mptcp is based on the 4.4 kernel
   linux_mptcp = callPackage ../os-specific/linux/kernel/linux-mptcp.nix {
     kernelPatches =
@@ -13696,17 +13688,6 @@ with pkgs;
         # when adding a new linux version
         kernelPatches.cpu-cgroup-v2."4.11"
         kernelPatches.modinst_arg_list_too_long
-      ];
-  };
-
-  linux_4_16 = callPackage ../os-specific/linux/kernel/linux-4.16.nix {
-    kernelPatches =
-      [ kernelPatches.bridge_stp_helper
-        # See pkgs/os-specific/linux/kernel/cpu-cgroup-v2-patches/README.md
-        # when adding a new linux version
-        # kernelPatches.cpu-cgroup-v2."4.11"
-        kernelPatches.modinst_arg_list_too_long
-        kernelPatches.bcm2835_mmal_v4l2_camera_driver # Only needed for 4.16!
       ];
   };
 
@@ -13924,7 +13905,6 @@ with pkgs;
   linuxPackages_4_4 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_4_4);
   linuxPackages_4_9 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_4_9);
   linuxPackages_4_14 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_4_14);
-  linuxPackages_4_16 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_4_16);
   linuxPackages_4_17 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_4_17);
   # Don't forget to update linuxPackages_latest!
 
@@ -13977,7 +13957,6 @@ with pkgs;
   linuxPackages_latest_xen_dom0_hardened = recurseIntoAttrs (hardenedLinuxPackagesFor (pkgs.linux_latest.override { features.xen_dom0=true; }));
 
   linuxPackages_copperhead_lts = recurseIntoAttrs (hardenedLinuxPackagesFor pkgs.linux_copperhead_lts);
-  linuxPackages_copperhead_stable = recurseIntoAttrs (hardenedLinuxPackagesFor pkgs.linux_copperhead_stable);
 
   # Samus kernels
   linuxPackages_samus_4_12 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_samus_4_12);
