@@ -17,7 +17,6 @@ buildDunePackage rec {
   nativeBuildInputs = [ menhir ];
   buildInputs = [ cmdliner ppxlib ];
 
-  configurePlatforms = [];
   propagatedBuildInputs = [ menhirLib yojson findlib ];
 
   meta = {

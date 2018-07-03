@@ -158,9 +158,6 @@ stdenv.mkDerivation (rec {
     sed -i 's,\(libswanted.*\)pthread,\1,g' Configure
   '';
 
-  # Default perl does not support --host= & co.
-  configurePlatforms = [ ];
-
   setupHook = ./setup-hook.sh;
 
   # copied from python

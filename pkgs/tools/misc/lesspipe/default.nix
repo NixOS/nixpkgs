@@ -21,7 +21,6 @@ stdenv.mkDerivation rec {
   '';
 
   configureFlags = [ "--shell=${bash}/bin/bash" "--prefix=/" ];
-  configurePlatforms = [ ];
 
   dontBuild = true;
 

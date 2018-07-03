@@ -23,7 +23,6 @@ stdenv.mkDerivation rec {
 
   dontAddPrefix = true;
   dontAddStaticConfigureFlags = true;
-  configurePlatforms = [];
 
   preConfigure = ''
     configureFlagsArray=(

@@ -124,7 +124,6 @@ stdenv.mkDerivation {
     "-Wno-error=stringop-overread"
   ] ++ lib.optional stdenv.isDarwin "-Wno-error=deprecated-declarations");
 
-  configurePlatforms = [];
 
   # Disable _multioutConfig hook which adds --bindir=$out/bin into configureFlags,
   # which breaks build, since nginx does not actually use autoconf.

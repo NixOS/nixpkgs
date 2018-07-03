@@ -35,7 +35,6 @@ stdenv.mkDerivation rec {
   configureScript = "./configure.sh";
   dontAddPrefix = "true";
   dontAddStaticConfigureFlags = true;
-  configurePlatforms = [ ];
 
   propagatedBuildInputs = [ camlzip extlib ];
 

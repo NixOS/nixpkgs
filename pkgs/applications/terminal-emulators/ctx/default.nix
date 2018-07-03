@@ -54,7 +54,6 @@ stdenv.mkDerivation {
 
   configureScript = "./configure.sh";
   configureFlags = lib.optional enableFb "--enable-fb";
-  configurePlatforms = [];
   dontAddPrefix = true;
   dontDisableStatic = true;
 

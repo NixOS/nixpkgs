@@ -103,7 +103,6 @@ stdenv.mkDerivation rec {
   outputs = [ "bin" "dev" "out" ];
   setOutputFlags = false;
 
-  configurePlatforms = [];
   configureFlags = [
     (enableFeature (vp8EncoderSupport || vp8DecoderSupport) "vp8")
     (enableFeature vp8EncoderSupport "vp8-encoder")

@@ -43,7 +43,6 @@ buildDunePackage rec {
 
   dontAddPrefix = true;
   dontAddStaticConfigureFlags = true;
-  configurePlatforms = [];
 
   postConfigure = ''
     make -C src confs

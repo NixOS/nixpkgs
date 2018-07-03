@@ -45,8 +45,6 @@ let
 
       dontAddPrefix = true;
 
-      configurePlatforms = [ ];
-
       preBuild = "makeFlagsArray=(dictdir=$out/lib/aspell datadir=$out/lib/aspell)";
 
       meta = {

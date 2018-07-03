@@ -375,9 +375,6 @@ buildStdenv.mkDerivation {
     export LD_PRELOAD=${mimalloc}/lib/libmimalloc.so
   '';
 
-  # firefox has a different definition of configurePlatforms from nixpkgs, see configureFlags
-  configurePlatforms = [ ];
-
   configureFlags = [
     "--disable-tests"
     "--disable-updater"

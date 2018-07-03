@@ -211,7 +211,6 @@ in stdenv.mkDerivation rec {
     rm $out/lib/rustlib/uninstall.sh
   '';
 
-  configurePlatforms = [];
 
   enableParallelBuilding = true;
 

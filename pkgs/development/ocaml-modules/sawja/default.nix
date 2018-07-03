@@ -34,7 +34,6 @@ stdenv.mkDerivation {
   configureScript = "./configure.sh";
   dontAddPrefix = "true";
   dontAddStaticConfigureFlags = true;
-  configurePlatforms = [];
 
   propagatedBuildInputs = [ javalib ];
 

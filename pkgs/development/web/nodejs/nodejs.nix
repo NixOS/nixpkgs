@@ -90,8 +90,6 @@ let
       "--with-arm-float-abi=${gcc.float-abi}"
     ]) ++ extraConfigFlags;
 
-    configurePlatforms = [];
-
     dontDisableStatic = true;
 
     enableParallelBuilding = true;

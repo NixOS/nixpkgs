@@ -21,7 +21,6 @@ stdenv.mkDerivation rec {
   # configure script is not autotools-based, doesn't support these options
   dontAddStaticConfigureFlags = true;
 
-  configurePlatforms = [ ];
 
   configureFlags = [
     "--ar=${stdenv.cc.targetPrefix}ar"

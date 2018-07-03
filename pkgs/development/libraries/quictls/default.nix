@@ -53,7 +53,6 @@ stdenv.mkDerivation rec {
   buildInputs = lib.optional withCryptodev cryptodev;
 
   # TODO(@Ericson2314): Improve with mass rebuild
-  configurePlatforms = [];
   configureScript = {
       armv5tel-linux = "./Configure linux-armv4 -march=armv5te";
       armv6l-linux = "./Configure linux-armv4 -march=armv6";

@@ -42,10 +42,6 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace src/luarocks/core/cfg.lua --subst-var-by 'darwinMinVersion' '${stdenv.targetPlatform.darwinMinVersion}'
   '';
 
-  # Manually written ./configure does not support --build= or --host=:
-  #   Error: Unknown flag: --build=x86_64-unknown-linux-gnu
-  configurePlatforms = [ ];
-
   preConfigure = ''
     lua -e "" || {
         luajit -e "" && {

@@ -19,9 +19,6 @@ stdenv.mkDerivation rec {
     "--mandir=${placeholder "man"}/share/man"
   ];
 
-  # Doesn't recognize platform flags
-  configurePlatforms = [];
-
   outputs = [ "out" "bin" "dev" "man" ];
 
   postInstall = ''

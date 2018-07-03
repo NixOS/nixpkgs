@@ -52,7 +52,6 @@ let
       substituteInPlace ./configure --replace "#! /bin/sh" "#!${bash}/bin/sh"
     '';
 
-    configurePlatforms = [];
     configureFlags = assert lib.all (x: x!=null) buildInputs; [
       "--arch=${stdenv.hostPlatform.parsed.cpu.name}"
       "--target_os=${stdenv.hostPlatform.parsed.kernel.name}"

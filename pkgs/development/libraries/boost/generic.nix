@@ -191,7 +191,6 @@ stdenv.mkDerivation {
     ++ lib.optional enableNumpy python.pkgs.numpy;
 
   configureScript = "./bootstrap.sh";
-  configurePlatforms = [];
   dontDisableStatic = true;
   dontAddStaticConfigureFlags = true;
   configureFlags = [

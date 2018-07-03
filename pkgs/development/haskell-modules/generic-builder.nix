@@ -456,8 +456,6 @@ stdenv.mkDerivation ({
     runHook postCompileBuildDriver
   '';
 
-  # Cabal takes flags like `--configure-option=--host=...` instead
-  configurePlatforms = [];
   inherit configureFlags;
 
   # Note: the options here must be always added, regardless of whether the

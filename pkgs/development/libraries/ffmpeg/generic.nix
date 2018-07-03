@@ -361,7 +361,6 @@ stdenv.mkDerivation (finalAttrs: {
       }
     ));
 
-  configurePlatforms = [];
   setOutputFlags = false; # Only accepts some of them
   configureFlags = [
     #mingw64 is internally treated as mingw32, so 32 and 64 make no difference here

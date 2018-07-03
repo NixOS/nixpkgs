@@ -137,7 +137,6 @@ stdenv.mkDerivation rec {
       find ./ghc-${version}/rts -name "libHSrts*.a" -exec ''${OBJCOPY:-objcopy} --redefine-sym __strdup=strdup {} \;
     '';
 
-  configurePlatforms = [ ];
   configureFlags = [
     "--with-gmp-includes=${lib.getDev gmp}/include"
     # Note `--with-gmp-libraries` does nothing for GHC bindists:

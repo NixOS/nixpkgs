@@ -16,7 +16,6 @@ stdenv.mkDerivation rec {
 
   dontAddPrefix=true;
   dontAddStaticConfigureFlags = true;
-  configurePlatforms = [];
 
   configureFlags = [
       "-bindir" "${placeholder "out"}/bin"

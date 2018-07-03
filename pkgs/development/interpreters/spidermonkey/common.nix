@@ -126,10 +126,6 @@ stdenv.mkDerivation (finalAttrs: rec {
     "--target=${stdenv.hostPlatform.config}"
   ];
 
-  # mkDerivation by default appends --build/--host to configureFlags when cross compiling
-  # These defaults are bogus for Spidermonkey - avoid passing them by providing an empty list
-  configurePlatforms = [ ];
-
   enableParallelBuilding = true;
 
   # cc-rs insists on using -mabi=lp64 (soft-float) for riscv64,

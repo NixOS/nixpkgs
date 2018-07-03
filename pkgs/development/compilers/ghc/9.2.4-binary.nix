@@ -273,7 +273,6 @@ stdenv.mkDerivation rec {
     stdenv.targetPlatform.isAarch32
     "LD=ld.gold";
 
-  configurePlatforms = [ ];
   configureFlags = [
     "--with-gmp-includes=${lib.getDev gmpUsed}/include"
     # Note `--with-gmp-libraries` does nothing for GHC bindists:
