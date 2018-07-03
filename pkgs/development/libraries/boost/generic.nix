@@ -87,11 +87,13 @@ stdenv.mkDerivation {
   inherit src;
 
   patchFlags = optionalString (hostPlatform.libc == "msvcrt") "-p0";
-  patches = patches ++ optional (hostPlatform.libc == "msvcrt") (fetchurl {
-    url = "https://svn.boost.org/trac/boost/raw-attachment/tickaet/7262/"
-        + "boost-mingw.patch";
-    sha256 = "0s32kwll66k50w6r5np1y5g907b7lcpsjhfgr7rsw7q5syhzddyj";
-  });
+  patches = patches
+    ++ optional stdenv.isDarwin ./darwin-no-system-python.patch
+    ++ optional (hostPlatform.libc == "msvcrt") (fetchurl {
+      url = "https://svn.boost.org/trac/boost/raw-attachment/tickaet/7262/"
+          + "boost-mingw.patch";
+      sha256 = "0s32kwll66k50w6r5np1y5g907b7lcpsjhfgr7rsw7q5syhzddyj";
+    });
 
   meta = {
     homepage = http://boost.org/;
