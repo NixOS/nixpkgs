@@ -20,6 +20,8 @@ stdenv.mkDerivation rec {
     ./setup-hook.sh
   ];
 
+  dontAddLibintl = hostPlatform.libc == "glibc" || hostPlatform.libc == "musl";
+
   postPatch =
     lib.optionalString ((hostPlatform != buildPlatform && hostPlatform.libc == "msvcrt") || stdenv.cc.nativeLibc)
       ''

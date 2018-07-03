@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
     ../../../build-support/setup-hooks/role.bash
     ./gettext-setup-hook.sh
   ];
-  gettextNeedsLdflags = hostPlatform.libc != "glibc" && !hostPlatform.isMusl;
+  dontAddLibintl = hostPlatform.libc == "glibc" || hostPlatform.isMusl;
 
   enableParallelBuilding = true;
 

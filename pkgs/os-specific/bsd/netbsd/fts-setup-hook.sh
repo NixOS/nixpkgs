@@ -1,4 +1,7 @@
 # See pkgs/build-support/setup-hooks/role.bash
-getHostRole
 
-export NIX_${role_pre}LDFLAGS+=" -lfts"
+if ! [ -z "$dontAddLibs" ]; then
+    getHostRole
+
+    export NIX_${role_pre}LDFLAGS+=" -lfts"
+fi
