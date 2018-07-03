@@ -28,6 +28,10 @@ mkDerivation rec {
     name = "support_native_browser.patch";
     url = "https://patch-diff.githubusercontent.com/raw/sieren/QSyncthingTray/pull/225.patch";
     sha256 = "0w665xdlsbjxs977pdpzaclxpswf7xys1q3rxriz181lhk2y66yy";
+  }) (fetchpatch {
+    name = "fix-compile-qt-5-11.patch";
+    url = https://github.com/sieren/QSyncthingTray/commit/849061e5edd694513ea93424423cd34752d309e2.patch;
+    sha256 = "11r24bzp1w18mmgvqplaws8699zpw69f3nvcdfz32f2hvdc7dsks";
   }) ] ++ lib.optional (!preferQWebView && !preferNative) ./qsyncthingtray-0.5.8-qt-5.6.3.patch;
 
   postPatch = ''
