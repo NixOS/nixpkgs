@@ -1,4 +1,5 @@
-{ stdenv, buildPackages, buildHaskellPackages, ghc
+{ stdenv, buildPackages, buildHaskellPackages
+, compiler, compilerWithPackages, buildCompiler
 , jailbreak-cabal, hscolour, cpphs, nodejs
 , buildPlatform, hostPlatform
 }:
@@ -11,7 +12,7 @@ let
 in
 
 { pname
-, dontStrip ? (ghc.isGhcjs or false)
+, dontStrip ? (compiler.isGhcjs or false)
 , version, revision ? null
 , sha256 ? null
 , src ? fetchurl { url = "mirror://hackage/${pname}-${version}.tar.gz"; inherit sha256; }
@@ -21,7 +22,7 @@ in
 , configureFlags ? []
 , buildFlags ? []
 , description ? ""
-, doCheck ? !isCross && stdenv.lib.versionOlder "7.4" ghc.version
+, doCheck ? !isCross && stdenv.lib.versionOlder "7.4" compiler.version
 , doBenchmark ? false
 , doHoogle ? true
 , editedCabalFile ? null
@@ -30,10 +31,10 @@ in
 , profilingDetail ? "all-functions"
 # TODO enable shared libs for cross-compiling
 , enableSharedExecutables ? false
-, enableSharedLibraries ? (ghc.enableShared or false)
+, enableSharedLibraries ? (compiler.enableShared or false)
 , enableDeadCodeElimination ? (!stdenv.isDarwin)  # TODO: use -dead_strip for darwin
 , enableStaticLibraries ? !hostPlatform.isWindows
-, enableHsc2hsViaAsm ? hostPlatform.isWindows && stdenv.lib.versionAtLeast ghc.version "8.4"
+, enableHsc2hsViaAsm ? hostPlatform.isWindows && stdenv.lib.versionAtLeast compiler.version "8.4"
 , extraLibraries ? [], librarySystemDepends ? [], executableSystemDepends ? []
 # On macOS, statically linking against system frameworks is not supported;
 # see https://developer.apple.com/library/content/qa/qa1118/_index.html
@@ -48,7 +49,7 @@ in
 , license
 , maintainers ? []
 , doCoverage ? false
-, doHaddock ? !(ghc.isHaLVM or false)
+, doHaddock ? !(compiler.isHaLVM or false)
 , passthru ? {}
 , pkgconfigDepends ? [], libraryPkgconfigDepends ? [], executablePkgconfigDepends ? [], testPkgconfigDepends ? [], benchmarkPkgconfigDepends ? []
 , testDepends ? [], testHaskellDepends ? [], testSystemDepends ? [], testFrameworkDepends ? []
@@ -66,7 +67,7 @@ in
 , shellHook ? ""
 , coreSetup ? false # Use only core packages to build Setup.hs.
 , useCpphs ? false
-, hardeningDisable ? stdenv.lib.optional (ghc.isHaLVM or false) "all"
+, hardeningDisable ? stdenv.lib.optional (compiler.isHaLVM or false) "all"
 , enableSeparateDataOutput ? false
 , enableSeparateDocOutput ? doHaddock
 } @ args:
@@ -82,9 +83,9 @@ let
   inherit (stdenv.lib) optional optionals optionalString versionOlder versionAtLeast
                        concatStringsSep enableFeature optionalAttrs toUpper;
 
-  isGhcjs = ghc.isGhcjs or false;
-  isHaLVM = ghc.isHaLVM or false;
-  packageDbFlag = if isGhcjs || isHaLVM || versionOlder "7.6" ghc.version
+  isGhcjs = compiler.isGhcjs or false;
+  isHaLVM = compiler.isHaLVM or false;
+  packageDbFlag = if isGhcjs || isHaLVM || versionOlder "7.6" compiler.version
                   then "package-db"
                   else "package-conf";
 
@@ -92,8 +93,8 @@ let
   #
   # Same as our GHC, unless we're cross, in which case it is native GHC with the
   # same version, or ghcjs, in which case its the ghc used to build ghcjs.
-  nativeGhc = buildHaskellPackages.ghc;
-  nativePackageDbFlag = if versionOlder "7.6" nativeGhc.version
+  nativeCompiler = buildCompiler;
+  nativePackageDbFlag = if versionOlder "7.6" nativeCompiler.version
                         then "package-db"
                         else "package-conf";
 
@@ -117,15 +118,15 @@ let
   # We cannot enable -j<n> parallelism for libraries because GHC is far more
   # likely to generate a non-determistic library ID in that case. Further
   # details are at <https://github.com/peti/ghc-library-id-bug>.
-  enableParallelBuilding = (versionOlder "7.8" ghc.version && !hasActiveLibrary) || versionOlder "8.0.1" ghc.version;
+  enableParallelBuilding = (versionOlder "7.8" compiler.version && !hasActiveLibrary) || versionOlder "8.0.1" compiler.version;
 
   crossCabalFlags = [
-    "--with-ghc=${ghc.targetPrefix}ghc"
-    "--with-ghc-pkg=${ghc.targetPrefix}ghc-pkg"
+    "--with-ghc=${compiler.targetPrefix}ghc"
+    "--with-ghc-pkg=${compiler.targetPrefix}ghc-pkg"
     "--with-gcc=${stdenv.cc.targetPrefix}cc"
     "--with-ld=${stdenv.cc.bintools.targetPrefix}ld"
     # use the one that comes with the cross compiler.
-    "--with-hsc2hs=${ghc.targetPrefix}hsc2hs"
+    "--with-hsc2hs=${compiler.targetPrefix}hsc2hs"
     "--with-strip=${stdenv.cc.bintools.targetPrefix}strip"
   ] ++ optionals (!isHaLVM) [
     "--hsc2hs-option=--cross-compile"
@@ -139,26 +140,26 @@ let
 
   defaultConfigureFlags = [
     "--verbose" "--prefix=$out" "--libdir=\\$prefix/lib/\\$compiler" "--libsubdir=\\$pkgid"
-    (optionalString enableSeparateDataOutput "--datadir=$data/share/${ghc.name}")
+    (optionalString enableSeparateDataOutput "--datadir=$data/share/${compiler.name}")
     (optionalString enableSeparateDocOutput "--docdir=${docdir "$doc"}")
     "--with-gcc=$CC" # Clang won't work without that extra information.
     "--package-db=$packageConfDir"
-    (optionalString (enableSharedExecutables && stdenv.isLinux) "--ghc-option=-optl=-Wl,-rpath=$out/lib/${ghc.name}/${pname}-${version}")
+    (optionalString (enableSharedExecutables && stdenv.isLinux) "--ghc-option=-optl=-Wl,-rpath=$out/lib/${compiler.name}/${pname}-${version}")
     (optionalString (enableSharedExecutables && stdenv.isDarwin) "--ghc-option=-optl=-Wl,-headerpad_max_install_names")
     (optionalString enableParallelBuilding "--ghc-option=-j$NIX_BUILD_CORES")
     (optionalString useCpphs "--with-cpphs=${cpphs}/bin/cpphs --ghc-options=-cpp --ghc-options=-pgmP${cpphs}/bin/cpphs --ghc-options=-optP--cpp")
-    (enableFeature (enableDeadCodeElimination && !hostPlatform.isAarch32 && !hostPlatform.isAarch64 && (versionAtLeast "8.0.1" ghc.version)) "split-objs")
+    (enableFeature (enableDeadCodeElimination && !hostPlatform.isAarch32 && !hostPlatform.isAarch64 && (versionAtLeast "8.0.1" compiler.version)) "split-objs")
     (enableFeature enableLibraryProfiling "library-profiling")
-    (optionalString ((enableExecutableProfiling || enableLibraryProfiling) && versionOlder "8" ghc.version) "--profiling-detail=${profilingDetail}")
-    (enableFeature enableExecutableProfiling (if versionOlder ghc.version "8" then "executable-profiling" else "profiling"))
+    (optionalString ((enableExecutableProfiling || enableLibraryProfiling) && versionOlder "8" compiler.version) "--profiling-detail=${profilingDetail}")
+    (enableFeature enableExecutableProfiling (if versionOlder compiler.version "8" then "executable-profiling" else "profiling"))
     (enableFeature enableSharedLibraries "shared")
-    (optionalString (versionAtLeast ghc.version "7.10") (enableFeature doCoverage "coverage"))
-    (optionalString (versionOlder "8.4" ghc.version) (enableFeature enableStaticLibraries "static"))
-    (optionalString (isGhcjs || versionOlder "7.4" ghc.version) (enableFeature enableSharedExecutables "executable-dynamic"))
-    (optionalString (isGhcjs || versionOlder "7" ghc.version) (enableFeature doCheck "tests"))
+    (optionalString (versionAtLeast compiler.version "7.10") (enableFeature doCoverage "coverage"))
+    (optionalString (versionOlder "8.4" compiler.version) (enableFeature enableStaticLibraries "static"))
+    (optionalString (isGhcjs || versionOlder "7.4" compiler.version) (enableFeature enableSharedExecutables "executable-dynamic"))
+    (optionalString (isGhcjs || versionOlder "7" compiler.version) (enableFeature doCheck "tests"))
     "--enable-library-vanilla"  # TODO: Should this be configurable?
     "--enable-library-for-ghci" # TODO: Should this be configurable?
-  ] ++ optionals (enableDeadCodeElimination && (stdenv.lib.versionOlder "8.0.1" ghc.version)) [
+  ] ++ optionals (enableDeadCodeElimination && (stdenv.lib.versionOlder "8.0.1" compiler.version)) [
      "--ghc-option=-split-sections"
   ] ++ optionals isGhcjs [
     "--ghcjs"
@@ -168,9 +169,9 @@ let
 
   setupCompileFlags = [
     (optionalString (!coreSetup) "-${nativePackageDbFlag}=$setupPackageConfDir")
-    (optionalString (isGhcjs || isHaLVM || versionOlder "7.8" ghc.version) "-j$NIX_BUILD_CORES")
+    (optionalString (isGhcjs || isHaLVM || versionOlder "7.8" compiler.version) "-j$NIX_BUILD_CORES")
     # https://github.com/haskell/cabal/issues/2398
-    (optionalString (versionOlder "7.10" ghc.version && !isHaLVM) "-threaded")
+    (optionalString (versionOlder "7.10" compiler.version && !isHaLVM) "-threaded")
   ];
 
   isHaskellPkg = x: (x ? pname) && (x ? version) && (x ? env);
@@ -179,8 +180,8 @@ let
   allPkgconfigDepends = pkgconfigDepends ++ libraryPkgconfigDepends ++ executablePkgconfigDepends ++
                         optionals doCheck testPkgconfigDepends ++ optionals doBenchmark benchmarkPkgconfigDepends;
 
-  depsBuildBuild = [ nativeGhc ];
-  nativeBuildInputs = [ ghc removeReferencesTo ] ++ optional (allPkgconfigDepends != []) pkgconfig ++
+  depsBuildBuild = [ nativeCompiler ];
+  nativeBuildInputs = [ compiler removeReferencesTo ] ++ optional (allPkgconfigDepends != []) pkgconfig ++
                       setupHaskellDepends ++
                       buildTools ++ libraryToolDepends ++ executableToolDepends;
   propagatedBuildInputs = buildDepends ++ libraryHaskellDepends ++ executableHaskellDepends ++ libraryFrameworkDepends;
@@ -195,16 +196,16 @@ let
   systemBuildInputs = stdenv.lib.filter isSystemPkg allBuildInputs;
 
   # When not cross compiling, also include Setup.hs dependencies.
-  ghcEnv = ghc.withPackages (p:
+  ghcEnv = compilerWithPackages (p:
     haskellBuildInputs ++ stdenv.lib.optional (!isCross) setupHaskellDepends);
 
   setupCommand = "./Setup";
 
   ghcCommand' = if isGhcjs then "ghcjs" else "ghc";
-  ghcCommand = "${ghc.targetPrefix}${ghcCommand'}";
+  ghcCommand = "${compiler.targetPrefix}${ghcCommand'}";
   ghcCommandCaps= toUpper ghcCommand';
 
-  nativeGhcCommand = "${nativeGhc.targetPrefix}ghc";
+  nativeGhcCommand = "${nativeCompiler.targetPrefix}ghc";
 
   buildPkgDb = ghcName: packageConfDir: ''
     if [ -d "$p/lib/${ghcName}/package.conf.d" ]; then
@@ -250,7 +251,7 @@ stdenv.mkDerivation ({
   setupCompilerEnvironmentPhase = ''
     runHook preSetupCompilerEnvironment
 
-    echo "Build with ${ghc}."
+    echo "Build with ${compiler}."
     ${optionalString (hasActiveLibrary && hyperlinkSource) "export PATH=${hscolour}/bin:$PATH"}
 
     setupPackageConfDir="$TMPDIR/setup-package.conf.d"
@@ -267,14 +268,14 @@ stdenv.mkDerivation ({
   # pkgs* arrays defined in stdenv/setup.hs
   + ''
     for p in "''${pkgsBuildBuild[@]}" "''${pkgsBuildHost[@]}" "''${pkgsBuildTarget[@]}"; do
-      ${buildPkgDb nativeGhc.name "$setupPackageConfDir"}
+      ${buildPkgDb nativeCompiler.name "$setupPackageConfDir"}
     done
     ${nativeGhcCommand}-pkg --${nativePackageDbFlag}="$setupPackageConfDir" recache
   ''
   # For normal components
   + ''
     for p in "''${pkgsHostHost[@]}" "''${pkgsHostTarget[@]}"; do
-      ${buildPkgDb ghc.name "$packageConfDir"}
+      ${buildPkgDb compiler.name "$packageConfDir"}
       if [ -d "$p/include" ]; then
         configureFlags+=" --extra-include-dirs=$p/include"
       fi
@@ -283,7 +284,7 @@ stdenv.mkDerivation ({
       fi
     ''
     # It is not clear why --extra-framework-dirs does work fine on Linux
-    + optionalString (!buildPlatform.isDarwin || versionAtLeast nativeGhc.version "8.0") ''
+    + optionalString (!buildPlatform.isDarwin || versionAtLeast nativeCompiler.version "8.0") ''
       if [[ -d "$p/Library/Frameworks" ]]; then
         configureFlags+=" --extra-framework-dirs=$p/Library/Frameworks"
       fi
@@ -377,7 +378,7 @@ stdenv.mkDerivation ({
 
     ${if !hasActiveLibrary then "${setupCommand} install" else ''
       ${setupCommand} copy
-      local packageConfDir="$out/lib/${ghc.name}/package.conf.d"
+      local packageConfDir="$out/lib/${compiler.name}/package.conf.d"
       local packageConfFile="$packageConfDir/${pname}-${version}.conf"
       mkdir -p "$packageConfDir"
       ${setupCommand} register --gen-pkg-config=$packageConfFile
@@ -400,9 +401,9 @@ stdenv.mkDerivation ({
       done
     ''}
     ${optionalString doCoverage "mkdir -p $out/share && cp -r dist/hpc $out/share"}
-    ${optionalString (enableSharedExecutables && isExecutable && !isGhcjs && stdenv.isDarwin && stdenv.lib.versionOlder ghc.version "7.10") ''
+    ${optionalString (enableSharedExecutables && isExecutable && !isGhcjs && stdenv.isDarwin && stdenv.lib.versionOlder compiler.version "7.10") ''
       for exe in "$out/bin/"* ; do
-        install_name_tool -add_rpath "$out/lib/ghc-${ghc.version}/${pname}-${version}" "$exe"
+        install_name_tool -add_rpath "$out/lib/ghc-${compiler.version}/${pname}-${version}" "$exe"
       done
     ''}
 
@@ -421,7 +422,7 @@ stdenv.mkDerivation ({
 
     inherit pname version;
 
-    compiler = ghc;
+    inherit compiler;
 
     isHaskellLibrary = hasActiveLibrary;
 
@@ -445,8 +446,8 @@ stdenv.mkDerivation ({
         # TODO: is this still valid?
         export NIX_${ghcCommandCaps}_DOCDIR="${ghcEnv}/share/doc/ghc/html"
         ${if isHaLVM
-            then ''export NIX_${ghcCommandCaps}_LIBDIR="${ghcEnv}/lib/HaLVM-${ghc.version}"''
-            else ''export NIX_${ghcCommandCaps}_LIBDIR="${ghcEnv}/lib/${ghcCommand}-${ghc.version}"''}
+            then ''export NIX_${ghcCommandCaps}_LIBDIR="${ghcEnv}/lib/HaLVM-${compiler.version}"''
+            else ''export NIX_${ghcCommandCaps}_LIBDIR="${ghcEnv}/lib/${ghcCommand}-${compiler.version}"''}
         ${shellHook}
       '';
     };

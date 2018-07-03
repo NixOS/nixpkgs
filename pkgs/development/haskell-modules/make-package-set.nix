@@ -20,7 +20,10 @@
   all-cabal-hashes
 
 , # compiler to use
-  ghc
+  compiler
+
+, # native compiler to use
+  buildCompiler
 
 , # A function that takes `{ pkgs, stdenv, callPackage }` as the first arg and
   # `self` as second, and returns a set of haskell packages
@@ -44,7 +47,9 @@ let
     inherit stdenv;
     nodejs = buildPackages.nodejs-slim;
     inherit buildHaskellPackages;
-    inherit (self) ghc;
+    inherit compiler;
+    compilerWithPackages = ghcWithPackages;
+    inherit buildCompiler;
     inherit (buildHaskellPackages) jailbreak-cabal;
     hscolour = overrideCabal buildHaskellPackages.hscolour (drv: {
       isLibrary = false;
@@ -102,9 +107,20 @@ let
   callPackage = drv: args: callPackageWithScope defaultScope drv args;
 
   withPackages = packages: buildPackages.callPackage ./with-packages-wrapper.nix {
-    inherit (self) ghc llvmPackages;
+    inherit (self) llvmPackages;
+    inherit compiler;
     inherit packages;
   };
+
+  ghcWithPackages = selectFrom: withPackages (selectFrom self);
+
+  ghcWithHoogle = selectFrom:
+    let
+      packages = selectFrom self;
+      hoogle = callPackage ./hoogle.nix {
+        inherit packages;
+      };
+    in withPackages (packages ++ [ hoogle ]);
 
   haskellSrc2nix = { name, src, sha256 ? null, extraCabal2nixOptions ? "" }:
     let
@@ -119,7 +135,7 @@ let
       installPhase = ''
         export HOME="$TMP"
         mkdir -p "$out"
-        cabal2nix --compiler=${self.ghc.haskellCompilerName} --system=${hostPlatform.system} ${sha256Arg} "${src}" ${extraCabal2nixOptions} > "$out/default.nix"
+        cabal2nix --compiler=${compiler.haskellCompilerName} --system=${hostPlatform.system} ${sha256Arg} "${src}" ${extraCabal2nixOptions} > "$out/default.nix"
       '';
   };
 
@@ -197,15 +213,8 @@ in package-set { inherit pkgs stdenv callPackage; } self // {
         .callCabal2nix (builtins.baseNameOf root) root {};
       in if returnShellEnv then (modifier drv).env else modifier drv;
 
-    ghcWithPackages = selectFrom: withPackages (selectFrom self);
-
-    ghcWithHoogle = selectFrom:
-      let
-        packages = selectFrom self;
-        hoogle = callPackage ./hoogle.nix {
-          inherit packages;
-        };
-      in withPackages (packages ++ [ hoogle ]);
+    inherit ghcWithPackages;
+    inherit ghcWithHoogle;
 
     # Returns a derivation whose environment contains a GHC with only
     # the dependencies of packages listed in `packages`, not the
@@ -243,7 +252,7 @@ in package-set { inherit pkgs stdenv callPackage; } self // {
             (input: pkgs.lib.all (p: input.outPath != p.outPath) selected)
             (pkgs.lib.concatMap (p: p.haskellBuildInputs) packageInputs);
         systemInputs = pkgs.lib.concatMap (p: p.systemBuildInputs) packageInputs;
-        withPackages = if withHoogle then self.ghcWithHoogle else self.ghcWithPackages;
+        withPackages = if withHoogle then ghcWithHoogle else ghcWithPackages;
         mkDrvArgs = builtins.removeAttrs args ["packages" "withHoogle"];
       in pkgs.stdenv.mkDerivation (mkDrvArgs // {
         name = "ghc-shell-for-packages";
@@ -253,9 +262,9 @@ in package-set { inherit pkgs stdenv callPackage; } self // {
         installPhase = "echo $nativeBuildInputs $buildInputs > $out";
       });
 
-    ghc = ghc // {
-      withPackages = self.ghcWithPackages;
-      withHoogle = self.ghcWithHoogle;
+    ghc = compiler // {
+      withPackages = ghcWithPackages;
+      withHoogle = ghcWithHoogle;
     };
 
   }

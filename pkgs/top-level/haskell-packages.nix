@@ -37,6 +37,8 @@ let
     });
   };
 
+  bh = buildPackages.haskell;
+
 in rec {
   lib = haskellLib;
 
@@ -58,9 +60,9 @@ in rec {
       buildLlvmPackages = buildPackages.llvmPackages_37;
       llvmPackages = pkgs.llvmPackages_37;
     };
-    ghc822 = callPackage ../development/compilers/ghc/8.2.2.nix rec {
-      bootPkgs = packages.ghc821Binary;
-      inherit (bootPkgs) hscolour alex happy;
+    ghc822 = callPackage ../development/compilers/ghc/8.2.2.nix {
+      compiler = bh.compiler.ghc821Binary;
+      inherit (bh.packages.ghc821Binary) hscolour alex happy;
       inherit buildPlatform targetPlatform;
       sphinx = pkgs.python3Packages.sphinx;
       buildLlvmPackages = buildPackages.llvmPackages_39;
@@ -115,68 +117,78 @@ in rec {
   # Default overrides that are applied to all package sets.
   packageOverrides = self : super : {};
 
-  # Always get compilers from `buildPackages`
-  packages = let bh = buildPackages.haskell; in {
+  packages = {
 
     ghc7103 = callPackage ../development/haskell-modules {
+      buildCompiler = bh.compiler.ghc7103;
       buildHaskellPackages = bh.packages.ghc7103;
-      ghc = bh.compiler.ghc7103;
+      compiler = compiler.ghc7103;
       compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-7.10.x.nix { };
     };
     ghc7103Binary = callPackage ../development/haskell-modules {
+      buildCompiler = bh.compiler.ghc7103Binary;
       buildHaskellPackages = bh.packages.ghc7103Binary;
-      ghc = bh.compiler.ghc7103Binary;
+      compiler = compiler.ghc7103Binary;
       compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-7.10.x.nix { };
       packageSetConfig = bootstrapPackageSet;
     };
     ghc802 = callPackage ../development/haskell-modules {
+      buildCompiler = bh.compiler.ghc802;
       buildHaskellPackages = bh.packages.ghc802;
-      ghc = bh.compiler.ghc802;
+      compiler = compiler.ghc802;
       compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-8.0.x.nix { };
     };
     ghc821Binary = callPackage ../development/haskell-modules {
+      buildCompiler = bh.compiler.ghc821Binary;
       buildHaskellPackages = bh.packages.ghc821Binary;
-      ghc = bh.compiler.ghc821Binary;
+      compiler = compiler.ghc821Binary;
       compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-8.2.x.nix { };
       packageSetConfig = bootstrapPackageSet;
     };
     ghc822 = callPackage ../development/haskell-modules {
+      buildCompiler = bh.compiler.ghc822;
       buildHaskellPackages = bh.packages.ghc822;
-      ghc = bh.compiler.ghc822;
+      compiler = compiler.ghc822;
       compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-8.2.x.nix { };
     };
     ghc843 = callPackage ../development/haskell-modules {
+      buildCompiler = bh.compiler.ghc843;
       buildHaskellPackages = bh.packages.ghc843;
-      ghc = bh.compiler.ghc843;
+      compiler = compiler.ghc843;
       compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-8.4.x.nix { };
     };
     ghcHEAD = callPackage ../development/haskell-modules {
+      buildCompiler = bh.compiler.ghcHEAD;
       buildHaskellPackages = bh.packages.ghcHEAD;
-      ghc = bh.compiler.ghcHEAD;
+      compiler = compiler.ghcHEAD;
       compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-head.nix { };
     };
     ghcjs = packages.ghcjs82;
     ghcjs710 = callPackage ../development/haskell-modules rec {
-      buildHaskellPackages = ghc.bootPkgs;
-      ghc = bh.compiler.ghcjs710;
+      buildCompiler = bh.compiler.ghcjs710;
+      buildHaskellPackages = bh.packages.ghcjs710;
+      compiler = compiler.ghcjs710;
       compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-7.10.x.nix { };
       packageSetConfig = callPackage ../development/haskell-modules/configuration-ghcjs.nix { };
     };
     ghcjs80 = callPackage ../development/haskell-modules rec {
-      buildHaskellPackages = ghc.bootPkgs;
-      ghc = bh.compiler.ghcjs80;
+      buildCompiler = bh.compiler.ghcjs80;
+      buildHaskellPackages = bh.packages.ghcjs80;
+      copmiler = compiler.ghcjs80;
       compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-8.0.x.nix { };
       packageSetConfig = callPackage ../development/haskell-modules/configuration-ghcjs.nix { };
     };
     ghcjs82 = callPackage ../development/haskell-modules rec {
-      buildHaskellPackages = ghc.bootPkgs;
-      ghc = bh.compiler.ghcjs82;
+      buildCompiler = bh.compiler.ghcjs82;
+      buildHaskellPackages = bh.packages.ghcjs82;
+      compiler = compiler.ghcjs82;
       compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-8.2.x.nix { };
       packageSetConfig = callPackage ../development/haskell-modules/configuration-ghcjs.nix { };
     };
     ghcjs84 = callPackage ../development/haskell-modules rec {
-      buildHaskellPackages = ghc.bootPkgs;
-      ghc = bh.compiler.ghcjs84;
+      buildCompiler = bh.compiler.ghcjs84;
+      buildHaskellPackages = bh.packages.ghcjs84;
+      compiler = compiler.ghcjs84;
       compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-8.4.x.nix { };
       packageSetConfig = callPackage ../development/haskell-modules/configuration-ghcjs.nix { };
     };
@@ -188,7 +200,7 @@ in rec {
         (name: ! builtins.elem name integerSimpleExcludes)
         (pkgs.lib.attrNames packages);
     in pkgs.lib.genAttrs integerSimpleGhcNames (name: packages."${name}".override {
-      ghc = bh.compiler.integer-simple."${name}";
+      compiler = bh.compiler.integer-simple."${name}";
       overrides = _self : _super : {
         integer-simple = null;
         integer-gmp = null;

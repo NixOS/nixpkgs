@@ -2,7 +2,7 @@
 , buildPlatform, hostPlatform, targetPlatform
 
 # build-tools
-, bootPkgs, alex, happy, hscolour
+, compiler, alex, happy, hscolour
 , autoconf, autoreconfHook, automake, coreutils, fetchurl, fetchpatch, perl, python3, sphinx
 , runCommand
 
@@ -35,8 +35,6 @@
 }:
 
 let
-  inherit (bootPkgs) ghc;
-
   # TODO(@Ericson2314) Make unconditional
   targetPrefix = stdenv.lib.optionalString
     (targetPlatform != hostPlatform)
@@ -180,7 +178,8 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     autoconf autoreconfHook automake perl python3 sphinx
-    ghc alex happy hscolour
+    compiler
+    alex happy hscolour
   ];
 
   # For building runtime libs
@@ -221,7 +220,7 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
-    inherit bootPkgs targetPrefix;
+    inherit targetPrefix;
 
     inherit llvmPackages;
     inherit enableShared;
@@ -234,7 +233,7 @@ stdenv.mkDerivation rec {
     homepage = http://haskell.org/ghc;
     description = "The Glasgow Haskell Compiler";
     maintainers = with stdenv.lib.maintainers; [ marcweber andres peti ];
-    inherit (ghc.meta) license platforms;
+    inherit (compiler.meta) license platforms;
   };
 
 }
