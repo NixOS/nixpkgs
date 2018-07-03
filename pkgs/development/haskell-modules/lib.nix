@@ -382,4 +382,23 @@ rec {
           allPkgconfigDepends;
       };
 
+  # Utility to convert a directory full of `cabal2nix`-generated files into a
+  # package override set
+  #
+  # readDirectory : Directory -> HaskellPackageOverrideSet
+  readDirectory =
+    directory:
+
+    self: super:
+      let
+        haskellPaths = builtins.attrNames (builtins.readDir directory);
+
+        toKeyVal = file: {
+          name  = builtins.replaceStrings [ ".nix" ] [ "" ] file;
+
+          value = self.callPackage (directory + "/${file}") { };
+        };
+
+      in
+        builtins.listToAttrs (map toKeyVal haskellPaths);
 }
