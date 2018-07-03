@@ -85,9 +85,8 @@ in stdenv.mkDerivation {
     # only works for GCC and Apple Clang. This makes distutils to call C++
     # compiler when needed.
     (fetchpatch {
-      url = "https://bugs.python.org/file47046/python-3.x-distutils-C++.patch";
-      sha256 = "0dgdn9k2kmw4wh90vdnjcrnn97ylxgx7mbn9l87fwz6j501jqvk8";
-      extraPrefix = "";
+      url = "https://bugs.python.org/file47669/python-3.8-distutils-C++.patch";
+      sha256 = "0s801d7ww9yrk6ys053jvdhl0wicbznx08idy36f1nrrxsghb3ii";
     })
   ];
 
