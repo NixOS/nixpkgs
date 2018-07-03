@@ -41,7 +41,6 @@ let
     buildInputs = stdenv.lib.optional withCryptodev cryptodev;
 
     # TODO(@Ericson2314): Improve with mass rebuild
-    configurePlatforms = [];
     configureScript = {
         "x86_64-darwin"  = "./Configure darwin64-x86_64-cc";
         "x86_64-solaris" = "./Configure solaris64-x86_64-gcc";

@@ -71,8 +71,6 @@ stdenv.mkDerivation {
 
   NIX_CFLAGS_COMPILE = [ "-I${libxml2.dev}/include/libxml2" ] ++ optional stdenv.isDarwin "-Wno-error=deprecated-declarations";
 
-  configurePlatforms = [];
-
   preConfigure = (concatMapStringsSep "\n" (mod: mod.preConfigure or "") modules);
 
   patches = stdenv.lib.singleton (substituteAll {

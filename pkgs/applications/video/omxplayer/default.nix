@@ -11,7 +11,6 @@ let
       sha256 = "03s1zsprz5p6gjgwwqcf7b6cvzwwid6l8k7bamx9i0f1iwkgdm0j";
     };
     
-    configurePlatforms = [];
     configureFlags = [
       "--arch=${stdenv.hostPlatform.parsed.cpu.name}"
     ] ++ stdenv.lib.optionals stdenv.hostPlatform.isAarch32 [

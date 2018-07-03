@@ -140,7 +140,6 @@ stdenv.mkDerivation rec {
 
   prefixKey = "-prefix ";
 
-  configurePlatforms = [];
   configureFlags = let
     mk = cond: name: "-${lib.optionalString (!cond) "no-"}${name}";
     platformFlag =

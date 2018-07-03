@@ -133,7 +133,6 @@ stdenv.mkDerivation rec {
     ++ (with darwin.apple_sdk.frameworks; optionals stdenv.isDarwin [ Cocoa OpenGL ])
     ;
 
-  configurePlatforms = [ ];
   configureFlags = with stdenv.lib; [
     "--enable-freetype"
     (if fontconfigSupport then "--enable-fontconfig" else "--disable-fontconfig")
