@@ -1,0 +1,12 @@
+diff --git a/configure b/configure
+index e3e21e8..3d947b6 100755
+--- a/configure
++++ b/configure
+@@ -2859,6 +2859,7 @@ fi;
+ 
+ echo "building the bundled hdf5 library...";
+ cd ${BASEPBNAME};
++sed -i 's#/bin/mv#mv#' configure
+ ./configure  --with-pic --enable-shared=no CXX="${CXX}" CXXFLAGS="${CXXFLAGS}" CC="${CC}" CFLAGS="${CFLAGS}" F77="${F77}"
+ $MAKE lib
+ cd ../../
