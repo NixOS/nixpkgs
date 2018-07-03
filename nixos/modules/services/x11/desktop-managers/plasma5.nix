@@ -221,6 +221,11 @@ in
       security.pam.services.sddm.enableKwallet = true;
       security.pam.services.slim.enableKwallet = true;
 
+      # Update the start menu for each user that has `isNormalUser` set.
+      system.activationScripts.plasmaSetup = stringAfter [ "users" "groups" ]
+        (concatStringsSep "\n"
+          (mapAttrsToList (name: value: "${pkgs.su}/bin/su ${name} -c kbuildsycoca5")
+            (filterAttrs (n: v: v.isNormalUser) config.users.users)));
     })
   ];
 
