@@ -16,7 +16,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "HTTP/2-based RPC framework";
-    license = lib.licenses.bsd3;
+    license = lib.licenses.asl20;
     homepage = "https://grpc.io/grpc/python/";
     maintainers = with maintainers; [ vanschelven ];
   };
