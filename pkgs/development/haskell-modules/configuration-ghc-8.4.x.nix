@@ -391,7 +391,7 @@ self: super: {
   enclosed-exceptions = dontCheck super.enclosed-exceptions;
 
   # Older versions don't compile.
-  base-compat = self.base-compat_0_10_1;
+  base-compat = self.base-compat_0_10_4;
   brick = self.brick_0_37_1;
   dhall = self.dhall_1_14_0;
   dhall_1_13_0 = doJailbreak super.dhall_1_14_0;  # support ansi-terminal 0.8.x
