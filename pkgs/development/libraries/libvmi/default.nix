@@ -42,6 +42,7 @@ stdenv.mkDerivation rec {
       and accessing the vCPU registers.
     '';
     license = with licenses; [ gpl3 lgpl3 ];
+    platforms = platforms.linux;
     maintainers = with maintainers; [ lschuermann ];
   };
 }
