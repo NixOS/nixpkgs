@@ -118,6 +118,11 @@ let
   configurePlatforms ? lib.optionals
     (stdenv.hostPlatform != stdenv.buildPlatform || config.configurePlatformsByDefault)
     [ "build" "host" ]
+, # By default we use env var, since this works for autoconf and won't mess
+  # up other build systems. But some of those other build systems also accept
+  # `--build` and `--host`, and those alone, and so we still have the
+  # `configureFlags` method too.
+  configurePlatformsMethod ? "env-vars"
 
 # TODO(@Ericson2314): Make unconditional / resolve #33599
 # Check phase
@@ -357,12 +362,14 @@ else let
       propagatedBuildInputs       = lib.elemAt (lib.elemAt propagatedDependencies 1) 1;
       depsTargetTargetPropagated  = lib.elemAt (lib.elemAt propagatedDependencies 2) 0;
 
-      # This parameter is sometimes a string, sometimes null, and sometimes a list, yuck
+       # This parameter is sometimes a string, sometimes null, and sometimes a list, yuck
       configureFlags = let inherit (lib) optional elem; in
         configureFlags
-        ++ optional (elem "build"  configurePlatforms) "--build=${stdenv.buildPlatform.config}"
-        ++ optional (elem "host"   configurePlatforms) "--host=${stdenv.hostPlatform.config}"
-        ++ optional (elem "target" configurePlatforms) "--target=${stdenv.targetPlatform.config}";
+        ++ lib.optionals (configurePlatformsMethod == "configure-flags") (lib.concatLists [
+          (optional (elem "build" configurePlatforms) "--build=${stdenv.buildPlatform.config}")
+          (optional (elem "host" configurePlatforms) "--host=${stdenv.hostPlatform.config}")
+          (optional (elem "target" configurePlatforms) "--target=${stdenv.targetPlatform.config}")
+        ]);
 
       cmakeFlags =
         cmakeFlags
@@ -411,6 +418,21 @@ else let
       inherit doCheck doInstallCheck;
 
       inherit outputs;
+    } // lib.optionalAttrs (configurePlatformsMethod == "env-var") {
+      # We use autoconf-style env vars not `--{build,host,arget}` configure
+      # flags to avoid interfering with packages that don't accept those.
+      build_alias =
+        if lib.elem "build" configurePlatforms
+        then stdenv.buildPlatform.config
+        else null;
+      host_alias =
+        if lib.elem "host" configurePlatforms
+        then stdenv.hostPlatform.config
+        else null;
+      target_alias =
+        if lib.elem "target" configurePlatforms
+        then stdenv.targetPlatform.config
+        else null;
     } // lib.optionalAttrs (__contentAddressed) {
       inherit __contentAddressed;
       # Provide default values for outputHashMode and outputHashAlgo because
