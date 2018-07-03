@@ -1,10 +1,12 @@
 { stdenv, lib, fetchurl, fetchzip, python3Packages
 , makeWrapper, wrapGAppsHook, qtbase, glib-networking
 , asciidoc, docbook_xml_dtd_45, docbook_xsl, libxml2
-, libxslt, gst_all_1 ? null
-, withPdfReader        ? true
-, withMediaPlayback    ? true
-, withWebEngineDefault ? true
+, libxslt, socat
+, gst_all_1             ? null
+, withPdfReader         ? true
+, withMediaPlayback     ? true
+, withWebEngineDefault  ? true
+, withSocatTrick        ? false
 }:
 
 assert withMediaPlayback -> gst_all_1 != null;
@@ -84,8 +86,16 @@ in python3Packages.buildPythonApplication rec {
       scripts/{importer.py,dictcli.py,keytester.py,open_url_in_instance.sh,utils.py}
   '';
 
-  postFixup = lib.optionalString (! withWebEngineDefault) ''
-    wrapProgram $out/bin/qutebrowser --add-flags "--backend webkit"
+  # https://github.com/qutebrowser/qutebrowser/blob/master/scripts/open_url_in_instance.sh
+  postFixup = lib.optionalString (withSocatTrick || !withWebEngineDefault) ''
+      cat > tmp <<- EOF
+      ipc="\$XDG_RUNTIME_DIR/qutebrowser/ipc-\$(echo -n "\$USER" | md5sum | cut -d' ' -f1)"
+      msg="{\"args\": [\"\$@\"], \"target_arg\": null, \"protocol_version\": 1, \"cwd\": \"\$PWD\"}"
+      [[ "\$@" =~ ^-.* ]] || { ${socat}/bin/socat - UNIX-CONNECT:"\$ipc" 2>/dev/null <<< "\$msg" && exit; }
+      EOF
+      wrapProgram $out/bin/qutebrowser \
+          ${lib.optionalString (!withWebEngineDefault) "--add-flags '--backend webkit'"} \
+          ${lib.optionalString withSocatTrick "--run \"$(cat tmp)\""}
   '';
 
   meta = {
