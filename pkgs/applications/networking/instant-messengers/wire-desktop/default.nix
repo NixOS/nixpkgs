@@ -39,7 +39,7 @@ let
     xorg.libxcb
   ];
 
-  version = "3.0.2816";
+  version = "3.2.2840";
 
   plat = {
     "i686-linux" = "i386";
@@ -48,7 +48,7 @@ let
 
   sha256 = {
     "i686-linux" = "1ds807j1b8dk9hrnzbg4g9mvn44abw24pxrqns9ai62mh3hvi65p";
-    "x86_64-linux" = "13pyyp2c8q0v0ni2hzh2jnbd3i96q68314glbmy4kyh7vm9427lc";
+    "x86_64-linux" = "0qp9ms94smnm7k47b0n0jdzvnm1b7gj25hyinsfc6lghrb6jqw3r";
   }.${stdenv.system};
 
 in
