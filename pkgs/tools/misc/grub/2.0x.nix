@@ -3,7 +3,7 @@
 , fuse # only needed for grub-mount
 , zfs ? null
 , efiSupport ? false
-, zfsSupport ? true
+, zfsSupport ? false
 , xenSupport ? false
 }:
 
