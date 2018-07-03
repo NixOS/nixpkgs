@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, pkgconfig, autoreconfHook
 , zimg, libass, python3, libiconv
-, ApplicationServices, nasm
+, ApplicationServices, nasm, x265
 , ocrSupport ?  false, tesseract ? null
 , imwriSupport? true,  imagemagick7 ? null
 }:
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     (python3.withPackages (ps: with ps; [ sphinx cython ]))
   ] ++ optionals stdenv.isDarwin [ libiconv ApplicationServices ]
     ++ optional ocrSupport   tesseract
-    ++ optional imwriSupport imagemagick7;
+    ++ optionals imwriSupport [ imagemagick7 x265 ];
 
   configureFlags = [
     "--disable-static"
