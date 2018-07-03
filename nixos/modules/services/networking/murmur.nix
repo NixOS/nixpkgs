@@ -248,7 +248,7 @@ in
     systemd.services.murmur = {
       description = "Murmur Chat Service";
       wantedBy    = [ "multi-user.target" ];
-      after       = [ "network.target "];
+      after       = [ "network-online.target "];
 
       serviceConfig = {
         Type      = "forking";
