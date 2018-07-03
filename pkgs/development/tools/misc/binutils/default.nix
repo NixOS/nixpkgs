@@ -100,8 +100,7 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = [ "format" ];
 
-  # TODO(@Ericson2314): Always pass "--target" and always targetPrefix.
-  configurePlatforms = [ "build" "host" ] ++ stdenv.lib.optional (targetPlatform != hostPlatform) "target";
+  configurePlatforms = [ "build" "host" "target" ];
 
   configureFlags = [
     "--enable-targets=all" "--enable-64-bit-bfd"
