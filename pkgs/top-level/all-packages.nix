@@ -9758,8 +9758,8 @@ with pkgs;
   isocodes = callPackage ../development/libraries/iso-codes { };
 
   ispc = callPackage ../development/compilers/ispc {
-    llvmPackages = llvmPackages_4;
-    stdenv = llvmPackages_4.stdenv;
+    llvmPackages = llvmPackages_6;
+    stdenv = llvmPackages_6.stdenv;
   };
 
   isso = callPackage ../servers/isso { };
