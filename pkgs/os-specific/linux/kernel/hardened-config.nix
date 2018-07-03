@@ -28,7 +28,9 @@ ${optionalString (stdenv.platform.kernelArch == "x86_64") ''
   # Reduce attack surface by disabling various emulations
   IA32_EMULATION n
   X86_X32 n
-  MODIFY_LDT_SYSCALL? n
+  ${optionalString (versionOlder version "4.17") ''
+    MODIFY_LDT_SYSCALL? n
+  ''}
 
   VMAP_STACK y # Catch kernel stack overflows
 
