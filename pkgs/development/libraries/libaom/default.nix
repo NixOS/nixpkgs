@@ -1,20 +1,17 @@
-{ stdenv, fetchgit, yasm, perl, cmake,  pkgconfig }:
+{ stdenv, fetchgit, yasm, perl, cmake, pkgconfig, python3Packages }:
 
 stdenv.mkDerivation rec {
-  name = "libaom-0.1.0";
+  name = "libaom-${version}";
+  version = "1.0.0";
 
   src = fetchgit {
     url = "https://aomedia.googlesource.com/aom";
-    rev	= "105e9b195bb90c9b06edcbcb13b6232dab6db0b7";
-    sha256 = "1fl2sca4df01gyn00s0xcwwirxccfnjppvjdrxdnb8f2naj721by";
+    rev	= "v${version}";
+    sha256 = "07h2vhdiq7c3fqaz44rl4vja3dgryi6n7kwbwbj1rh485ski4j82";
   };
 
-  buildInputs = [ perl yasm  ];
-  nativeBuildInputs = [ cmake pkgconfig ];
-
-  cmakeFlags = [
-    "-DCONFIG_UNIT_TESTS=0"
-  ];
+  buildInputs = [ perl yasm ];
+  nativeBuildInputs = [ cmake pkgconfig python3Packages.python ];
 
   meta = with stdenv.lib; {
     description = "AV1 Bitstream and Decoding Library";
