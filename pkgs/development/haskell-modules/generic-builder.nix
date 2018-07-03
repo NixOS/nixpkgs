@@ -166,8 +166,14 @@ let
     "--configure-option=--host=${hostPlatform.config}"
   ] ++ crossCabalFlags);
 
+  useSeparateSetupDb = !hostPlatform.isDarwin || setupHaskellDepends != [] || isCross || isGhcjs;
+
   setupCompileFlags = [
-    (optionalString (!coreSetup) "-${nativePackageDbFlag}=$setupPackageConfDir")
+    (optionalString (!coreSetup) "-${nativePackageDbFlag}=${
+      if useSeparateSetupDb
+      then "$setupPackageConfDir"
+      else "$packageConfDir"
+    }")
     (optionalString (isGhcjs || isHaLVM || versionOlder "7.8" ghc.version) "-j$NIX_BUILD_CORES")
     # https://github.com/haskell/cabal/issues/2398
     (optionalString (versionOlder "7.10" ghc.version && !isHaLVM) "-threaded")
@@ -179,8 +185,9 @@ let
   allPkgconfigDepends = pkgconfigDepends ++ libraryPkgconfigDepends ++ executablePkgconfigDepends ++
                         optionals doCheck testPkgconfigDepends ++ optionals doBenchmark benchmarkPkgconfigDepends;
 
-  depsBuildBuild = [ nativeGhc ];
+  depsBuildBuild = optional useSeparateSetupDb [ nativeGhc ];
   nativeBuildInputs = [ ghc removeReferencesTo ] ++ optional (allPkgconfigDepends != []) pkgconfig ++
+                      optional (!useSeparateSetupDb) nativeGhc ++
                       setupHaskellDepends ++
                       buildTools ++ libraryToolDepends ++ executableToolDepends;
   propagatedBuildInputs = buildDepends ++ libraryHaskellDepends ++ executableHaskellDepends ++ libraryFrameworkDepends;
@@ -253,8 +260,10 @@ stdenv.mkDerivation ({
     echo "Build with ${ghc}."
     ${optionalString (hasActiveLibrary && hyperlinkSource) "export PATH=${hscolour}/bin:$PATH"}
 
+  '' + (optionalString useSeparateSetupDb ''
     setupPackageConfDir="$TMPDIR/setup-package.conf.d"
     mkdir -p $setupPackageConfDir
+  '') + ''
     packageConfDir="$TMPDIR/package.conf.d"
     mkdir -p $packageConfDir
 
@@ -265,13 +274,14 @@ stdenv.mkDerivation ({
   # dependencies for the build machine.
   #
   # pkgs* arrays defined in stdenv/setup.hs
-  + ''
+  + (optionalString useSeparateSetupDb ''
     for p in "''${pkgsBuildBuild[@]}" "''${pkgsBuildHost[@]}" "''${pkgsBuildTarget[@]}"; do
       ${buildPkgDb nativeGhc.name "$setupPackageConfDir"}
     done
     ${nativeGhcCommand}-pkg --${nativePackageDbFlag}="$setupPackageConfDir" recache
-  ''
-  # For normal components
+  '')
+
+    # For normal components
   + ''
     for p in "''${pkgsHostHost[@]}" "''${pkgsHostTarget[@]}"; do
       ${buildPkgDb ghc.name "$packageConfDir"}
