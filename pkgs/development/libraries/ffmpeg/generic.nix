@@ -81,7 +81,6 @@ stdenv.mkDerivation rec {
     ++ optional (reqMin "1.0") "doc" ; # just dev-doc
   setOutputFlags = false; # doesn't accept all and stores configureFlags in libs!
 
-  configurePlatforms = [];
   configureFlags = [
       "--arch=${hostPlatform.parsed.cpu.name}"
       "--target_os=${hostPlatform.parsed.kernel.name}"

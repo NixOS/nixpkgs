@@ -56,9 +56,6 @@ let
           throw "Not sure what configuration to use for ${hostPlatform.config}"
       );
 
-    # TODO(@Ericson2314): Make unconditional on mass rebuild
-    ${if buildPlatform != hostPlatform then "configurePlatforms" else null} = [];
-
     preConfigure = ''
       patchShebangs Configure
     '';

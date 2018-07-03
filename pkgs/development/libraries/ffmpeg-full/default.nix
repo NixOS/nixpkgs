@@ -251,7 +251,6 @@ stdenv.mkDerivation rec {
       --replace /usr/local/lib/frei0r-1 ${frei0r}/lib/frei0r-1
   '';
 
-  configurePlatforms = [];
   configureFlags = [
     "--target_os=${hostPlatform.parsed.kernel.name}"
     "--arch=${hostPlatform.parsed.cpu.name}"

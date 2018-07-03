@@ -117,7 +117,6 @@ stdenv.mkDerivation rec {
 
   # This isn't an autoconf configure script; triples are passed via
   # CMAKE_SYSTEM_NAME, etc.
-  configurePlatforms = [ ];
 
   doCheck = false; # fails
 

@@ -53,7 +53,6 @@ stdenv.mkDerivation rec {
   NIX_CFLAGS_COMPILE = stdenv.lib.optionalString (!hostPlatform.isDarwin) "-static-libgcc";
 
   dontStrip = hostPlatform != buildPlatform && static;
-  configurePlatforms = [];
 
   installFlags = stdenv.lib.optionals (hostPlatform.libc == "msvcrt") [
     "BINARY_PATH=$(out)/bin"

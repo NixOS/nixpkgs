@@ -101,7 +101,6 @@ stdenv.mkDerivation rec {
       sed -i "s|/usr/bin/gcc|gcc\x00        |" ghc-${version}/ghc/stage2/build/tmp/ghc-stage2
     '';
 
-  configurePlatforms = [ ];
   configureFlags = [
     "--with-gmp-libraries=${stdenv.lib.getLib gmp}/lib"
     "--with-gmp-includes=${stdenv.lib.getDev gmp}/include"

@@ -132,7 +132,6 @@ stdenv.mkDerivation {
     ++ optional enableNumpy python.pkgs.numpy;
 
   configureScript = "./bootstrap.sh";
-  configurePlatforms = [];
   configureFlags = [
     "--includedir=$(dev)/include"
     "--libdir=$(out)/lib"

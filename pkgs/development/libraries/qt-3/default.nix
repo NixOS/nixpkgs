@@ -45,7 +45,6 @@ stdenv.mkDerivation {
 
   hardeningDisable = [ "format" ];
 
-  configurePlatforms = [];
   configureFlags = let
     mk = cond: name: "-${stdenv.lib.optionalString cond "no-"}${name}";
   in [
