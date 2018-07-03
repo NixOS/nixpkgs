@@ -1,16 +1,22 @@
 { stdenv, fetchurl, system, makeWrapper, makeDesktopItem, autoPatchelfHook
-, dbus, glib, libGL, libX11, libXfixes, libuuid, libxcb, procps
-, qtbase, qtdeclarative, qtlocation, qtquickcontrols2, qtscript
-, qtwebchannel, qtwebengine
+# Dynamic libraries
+, dbus, glib, libGL, libX11, libXfixes, libuuid, libxcb, qtbase, qtdeclarative
+, qtlocation, qtquickcontrols2, qtscript, qtwebchannel, qtwebengine
+# Runtime
+, libjpeg_turbo, pciutils, procps
+, pulseaudioSupport ? true, libpulseaudio ? null
 }:
 
-let
+assert pulseaudioSupport -> libpulseaudio != null;
 
-  version = "2.2.128100.0627";
+let
+  inherit (stdenv.lib) concatStringsSep makeBinPath optional optionalString;
+
+  version = "2.2.128200.0702";
   srcs = {
     x86_64-linux = fetchurl {
       url = "https://zoom.us/client/${version}/zoom_x86_64.tar.xz";
-      sha256 = "1x98zhs75c22x58zj4vzk8gb9yr7a9hfkbiqhjp5jrvccgz6ncin";
+      sha256 = "0n9kyj94bj35gbpwiz4kq7hc8pwfqwnfqf003g4c8gx5pda3g56w";
     };
   };
 
@@ -24,11 +30,17 @@ in stdenv.mkDerivation {
   buildInputs = [
     dbus glib libGL libX11 libXfixes libuuid libxcb qtbase qtdeclarative
     qtlocation qtquickcontrols2 qtscript qtwebchannel qtwebengine
+    libjpeg_turbo pciutils procps
   ];
+
+  runtimeDependencies = optional pulseaudioSupport libpulseaudio;
+
+  # Don't remove runtimeDependencies from RPATH via patchelf --shrink-rpath
+  dontPatchELF = true;
 
   installPhase =
     let
-      files = stdenv.lib.concatStringsSep " " [
+      files = concatStringsSep " " [
         "*.pcm"
         "*.png"
         "ZXMPPROOT.cer"
@@ -52,8 +64,13 @@ in stdenv.mkDerivation {
 
       cp -ar ${files} $packagePath
 
+      # TODO Patch this somehow; tries to dlopen './libturbojpeg.so' from cwd
+      ln -s $(readlink -e "${libjpeg_turbo.out}/lib/libturbojpeg.so") $packagePath/libturbojpeg.so
+
       makeWrapper $packagePath/zoom $out/bin/zoom-us \
-        --prefix PATH : "${procps}/bin"
+        --prefix PATH : "${makeBinPath [ pciutils procps ]}" \
+        --set QSG_INFO 1 \
+        --run "cd $packagePath"
 
       runHook postInstall
     '';
