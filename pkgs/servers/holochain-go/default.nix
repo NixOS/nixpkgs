@@ -1,4 +1,4 @@
-{ stdenv, buildGoPackage, fetchgit }:
+{ stdenv, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
   name = "holochain-go${version}";
@@ -8,7 +8,7 @@ buildGoPackage rec {
   goPackagePath = "github.com/holochain/holochain-proto";
 
 
-  src = fetchFromGithub {
+  src = fetchFromGitHub {
     inherit rev;
     owner = "holochain";
     repo = "holochain-proto";
