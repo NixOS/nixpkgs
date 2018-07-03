@@ -29,9 +29,10 @@ stdenv.mkDerivation rec {
       sed -i -e '/preload/d' Makefile.in
     '';
 
-  configureFlags = lib.optional stdenv.isFreeBSD "--with-pic"
-    ++ lib.optional enableStatic "--enable-static"
-    ++ lib.optional (!enableShared) "--disable-shared";
+  configureFlags = [
+    (lib.enableFeature enableStatic "static")
+    (lib.enableFeature enableShared "shared")
+  ] ++ lib.optional stdenv.isFreeBSD "--with-pic";
 
   meta = {
     description = "An iconv(3) implementation";
