@@ -21588,7 +21588,17 @@ with pkgs;
     pythonPackages = python3Packages;
   };
 
-  winePackages = recurseIntoAttrs (callPackage ./wine-packages.nix { });
+  winePackagesFor = wineBuild: lib.makeExtensible (self: with self; {
+    callPackage = newScope self;
+
+    inherit wineBuild;
+
+    inherit (callPackage ./wine-packages.nix {})
+      minimal base full stable unstable staging;
+  });
+
+  winePackages = recurseIntoAttrs (winePackagesFor (config.wine.build or "wine32"));
+  wineWowPackages = recurseIntoAttrs (winePackagesFor "wineWow");
 
   wine = winePackages.full;
 
