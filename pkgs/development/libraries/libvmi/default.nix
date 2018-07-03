@@ -19,12 +19,12 @@ with stdenv.lib;
 
 stdenv.mkDerivation rec {
   name = "libvmi-${version}";
-  version = "0.12";
+  version = "0.12.0";
 
   src = fetchFromGitHub {
     owner = "libvmi";
     repo = "libvmi";
-    rev = "6934e8a4758018983ec53ec791dd14a7d6ac31a9";
+    rev = "v${version}";
     sha256 = "0wbi2nasb1gbci6cq23g6kq7i10rwi1y7r44rl03icr5prqjpdyv";
   };
 
