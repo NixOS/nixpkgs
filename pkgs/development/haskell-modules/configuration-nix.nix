@@ -536,7 +536,10 @@ self: super: builtins.intersectAttrs super {
   # Has extra data files which are referred to from the binary output,
   # creating a store reference cycle. Putting data in separate output
   # solves the problem.
-  happy = overrideCabal super.happy (drv: { enableSeparateDataOutput = true; });
+  happy = overrideCabal super.happy (drv: {
+    enableSeparateDataOutput = true;
+    configureFlags = drv.configureFlags or [] ++ ["--libdir=/var/empty"];
+   });
 
   # Override a number of packages with specific references to $out in their
   # derivations
