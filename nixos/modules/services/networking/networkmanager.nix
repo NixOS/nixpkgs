@@ -313,7 +313,7 @@ in {
       { assertion = config.networking.wireless.enable == false;
         message = "You can not use networking.networkmanager with networking.wireless";
       }
-      { assertion = dynamicHostsEnabled && cfg.useDnsmasq;
+      { assertion = !dynamicHostsEnabled || (dynamicHostsEnabled && cfg.useDnsmasq);
         message = ''
           To use networking.networkmanager.dynamicHosts you also need to enable
           networking.networkmanager.useDnsmasq
