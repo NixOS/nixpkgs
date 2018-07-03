@@ -1,15 +1,18 @@
 # Build an idris package
 { stdenv, lib, idrisPackages, gmp }:
   { idrisDeps ? []
-  , includePreludeBase ? true
+  , noPrelude ? false
+  , noBase ? false
   , name
   , version
   , extraBuildInputs ? []
   , ...
   }@attrs:
 let
-  idrisDeps' = idrisDeps ++ lib.optionals includePreludeBase (with idrisPackages; [ prelude base ]);
-  idris-with-packages = idrisPackages.with-packages idrisDeps';
+  allIdrisDeps = idrisDeps
+    ++ lib.optional (!noPrelude) idrisPackages.prelude
+    ++ lib.optional (!noBase) idrisPackages.base;
+  idris-with-packages = idrisPackages.with-packages allIdrisDeps;
   newAttrs = builtins.removeAttrs attrs [ "idrisDeps" "extraBuildInputs" "name" "version" ] // {
     meta = attrs.meta // {
       platforms = attrs.meta.platforms or idrisPackages.idris.meta.platforms;
@@ -20,7 +23,7 @@ stdenv.mkDerivation ({
   name = "${name}-${version}";
 
   buildInputs = [ idris-with-packages gmp ] ++ extraBuildInputs;
-  propagatedBuildInputs = idrisDeps';
+  propagatedBuildInputs = allIdrisDeps;
 
   # Some packages use the style
   # opts = -i ../../path/to/package
