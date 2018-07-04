@@ -45,7 +45,9 @@ in rec {
   compiler = {
 
     ghc7103Binary = callPackage ../development/compilers/ghc/7.10.3-binary.nix { };
-    ghc821Binary = callPackage ../development/compilers/ghc/8.2.1-binary.nix { };
+    ghc821Binary = callPackage ../development/compilers/ghc/8.2.1-binary.nix {
+      inherit haskellLib;
+    };
 
     ghc7103 = callPackage ../development/compilers/ghc/7.10.3.nix rec {
       bootPkgs = packages.ghc7103Binary;
@@ -143,7 +145,7 @@ in rec {
       buildCompiler = bh.compiler.ghc821Binary;
       buildHaskellPackages = bh.packages.ghc821Binary;
       compiler = compiler.ghc821Binary;
-      compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-8.2.x-binary.nix { };
+      compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-8.2.x.nix { };
       packageSetConfig = bootstrapPackageSet;
     };
     ghc822 = callPackage ../development/haskell-modules {
