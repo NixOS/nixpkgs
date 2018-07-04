@@ -25,22 +25,6 @@ self: super: {
   haskeline = null;
   hoopl = self.hoopl_3_10_2_2;   # no longer a core library in GHC 8.4.x
   hpc = null;
-
-  # A few things for hspec*:
-  #
-  #   1. Break cycles for test
-  #
-  #   2. https://github.com/hspec/hspec/pull/355 The buildTool will be properly
-  #      cabal2nixed when run on the patched cabal file.
-  hspec = let
-    breakCycles = super.hspec_2_5_3.override { stringbuilder = dontCheck self.stringbuilder; };
-  in addTestToolDepend breakCycles self.hspec-meta;
-  hspec-core = let
-    breakCycles = super.hspec-core_2_5_3.override { silently = dontCheck self.silently; temporary = dontCheck self.temporary; };
-  in addTestToolDepend breakCycles self.hspec-meta;
-  hspec-discover = addTestToolDepend super.hspec-discover_2_5_3 self.hspec-meta;
-  hspec-smallcheck = addTestToolDepend self.hspec-smallcheck_0_5_2 self.hspec-meta;
-
   integer-gmp = null;
   mtl = null;
   parsec = null;
@@ -412,7 +396,11 @@ self: super: {
   dhall = self.dhall_1_14_0;
   dhall_1_13_0 = doJailbreak super.dhall_1_14_0;  # support ansi-terminal 0.8.x
   HaTeX = self.HaTeX_3_19_0_0;
-  hpack = addTestBuildDepend self.hpack_0_28_2 super.hspec-discover;
+  hpack = self.hpack_0_28_2;
+  hspec = dontCheck super.hspec_2_5_3;
+  hspec-core = dontCheck super.hspec-core_2_5_3;
+  hspec-discover = self.hspec-discover_2_5_3;
+  hspec-smallcheck = self.hspec-smallcheck_0_5_2;
   matrix = self.matrix_0_3_6_1;
   pandoc = self.pandoc_2_2_1;
   pandoc-types = self.pandoc-types_1_17_5_1;
