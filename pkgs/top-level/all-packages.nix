@@ -18822,6 +18822,8 @@ with pkgs;
     erlang = erlangR18;
   };
 
+  write_stylus = libsForQt5.callPackage ../applications/graphics/write_stylus { };
+
   alsamixer.app = callPackage ../applications/window-managers/windowmaker/dockapps/alsamixer.app.nix { };
 
   wllvm = callPackage  ../development/tools/wllvm { };
