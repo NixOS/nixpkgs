@@ -387,7 +387,7 @@ rec {
   #
   # readDirectory : Directory -> HaskellPackageOverrideSet
   readDirectory =
-    directory:
+    { directory }:
 
     self: super:
       let
