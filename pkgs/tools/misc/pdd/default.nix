@@ -2,13 +2,13 @@
 
 buildPythonApplication rec {
   pname = "pdd";
-  version = "1.2";
+  version = "1.3";
 
   src = fetchFromGitHub {
     owner = "jarun";
     repo = "pdd";
     rev = "v${version}";
-    sha256 = "09nyzzch4jlsjfx8axqyxh9d1sw8x4g3vg5fbxz7m16994fzz75i";
+    sha256 = "1r7861qg73jpchgmk8zcz0iki95ic1i3f77sd7j7vf5bvkikv739";
   };
 
   format = "other";
