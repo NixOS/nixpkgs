@@ -2938,6 +2938,11 @@
     github = "oxij";
     name = "Jan Malakhovski";
   };
+  oyren = {
+    email = "m.scheuren@oyra.eu";
+    github = "oyren";
+    name = "Moritz Scheuren";
+  };
   pSub = {
     email = "mail@pascal-wittmann.de";
     github = "pSub";
