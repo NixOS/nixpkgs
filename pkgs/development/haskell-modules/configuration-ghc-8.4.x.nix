@@ -123,9 +123,6 @@ self: super: {
     };
   });
 
-  ## Bounds related: it wants base-compat 0.9.
-  criterion = super.criterion_1_4_1_0;
-
   ## Unmerged
 
   ## Unmerged.  PR: https://github.com/wrengr/bytestring-trie/pull/3
@@ -395,6 +392,7 @@ self: super: {
   # Older versions don't compile.
   base-compat = self.base-compat_0_10_4;
   brick = self.brick_0_37_1;
+  criterion = super.criterion_1_5_0_0;
   dhall = self.dhall_1_15_0;
   # This is probably obsolete:
   # dhall_1_15_0 = doJailbreak super.dhall_1_15_0;  # support ansi-terminal 0.8.x
