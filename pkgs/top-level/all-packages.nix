@@ -872,6 +872,8 @@ with pkgs;
 
   blink1-tool = callPackage ../tools/misc/blink1-tool { };
 
+  bliss = callPackage ../applications/science/math/bliss { };
+
   blitz = callPackage ../development/libraries/blitz {
     boost = boost160;
   };
