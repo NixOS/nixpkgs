@@ -23,7 +23,6 @@ self: super: {
   ghc-prim = null;
   ghci = null;
   haskeline = null;
-  hoopl = self.hoopl_3_10_2_2;   # no longer a core library in GHC 8.4.x
   hpc = null;
   integer-gmp = null;
   mtl = null;
@@ -39,6 +38,9 @@ self: super: {
   transformers = null;
   unix = null;
   xhtml = null;
+
+  # Use to be a core-library, but no longer is since GHC 8.4.x.
+  hoopl = self.hoopl_3_10_2_2;
 
   doctest = dontCheck super.doctest_0_16_0;  # tests depend on very recent QuickCheck
   hackage-db = super.hackage-db_2_0_1;
