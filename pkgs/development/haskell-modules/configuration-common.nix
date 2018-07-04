@@ -989,7 +989,7 @@ self: super: {
       cp -v embeddedfiles/*.info* $out/share/info/
     '';
   });
-  hledger-ui = overrideCabal super.hledger-ui (drv: {
+  hledger-ui = (overrideCabal super.hledger-ui (drv: {
     postInstall = ''
       for i in $(seq 1 9); do
         for j in *.$i; do
@@ -999,8 +999,8 @@ self: super: {
       done
       mkdir -p $out/share/info
       cp -v *.info* $out/share/info/
-    '';
-  });
+    '';  # hledger-ui 1.10 needs newer fsnotify than lts-11 provides.
+  })).overrideScope (self: super: { fsnotify = self.fsnotify_0_3_0_1; });
   hledger-web = overrideCabal super.hledger-web (drv: {
     postInstall = ''
       for i in $(seq 1 9); do
