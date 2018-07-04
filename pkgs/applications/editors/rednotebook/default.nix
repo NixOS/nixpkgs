@@ -1,5 +1,5 @@
 { lib, buildPythonApplication, fetchFromGitHub
-, gdk_pixbuf, glib, gtk3, pango, webkitgtk
+, gdk_pixbuf, glib, gobjectIntrospection, gtk3, pango, webkitgtk
 , pygobject3, pyyaml
 }:
 
@@ -16,6 +16,8 @@ buildPythonApplication rec {
 
   # We have not packaged tests.
   doCheck = false;
+
+  nativeBuildInputs = [ gobjectIntrospection ];
 
   propagatedBuildInputs = [
     gdk_pixbuf glib gtk3 pango webkitgtk
