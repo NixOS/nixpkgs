@@ -3,6 +3,7 @@
 let
   trivialBuilders = import ./trivial-builders.nix {
     inherit lib stdenv stdenvNoCC lndir;
+    inherit (setupHooks) makeWrapper;
   };
 
   setupHooks = import ./setup-hooks {

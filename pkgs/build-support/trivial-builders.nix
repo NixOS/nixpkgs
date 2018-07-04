@@ -1,4 +1,4 @@
-{ lib, stdenv, stdenvNoCC, lndir }:
+{ lib, stdenv, stdenvNoCC, lndir, makeWrapper }:
 
 let
 
@@ -205,5 +205,21 @@ rec {
 
   # Copy a list of paths to the Nix store.
   copyPathsToStore = builtins.map copyPathToStore;
+
+  # Create a wrapped binary from a file
+  wrapCommand = name: # the name of the command
+    { version
+    , executable
+    , ...
+    }@args: runCommand "${name}-${version}" (
+    (builtins.removeAttrs args ["version" "executable"]) // {
+      nativeBuildInputs = [makeWrapper];
+      # Pointless to do this on a remote machine.
+      preferLocalBuild = true;
+      allowSubstitutes = false;
+    }) ''
+      local -a args="($makeWrapperArgs)"
+      makeWrapper ${executable} $out/bin/${name} ''${args[@]}
+  '';
 
 }
