@@ -5,11 +5,11 @@
 }:
 
 let
-  dfVersion = "0.44.10";
-  version = "${dfVersion}-r1";
+  dfVersion = "0.44.11";
+  version = "${dfVersion}-alpha1";
 
   # revision of library/xml submodule
-  xmlRev = "3c0bf63674d5430deadaf7befaec42f0ec1e8bc5";
+  xmlRev = "853bd161270f50b21fe4b751de339458f78f56d6";
 
   arch =
     if stdenv.system == "x86_64-linux" then "64"
@@ -40,7 +40,7 @@ in stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "DFHack";
     repo = "dfhack";
-    sha256 = "15hz90lfg7asgm4bqa2yi2lkwzrljphb42q6616sriwzs66xia6h";
+    sha256 = "1vzrpdw0pn18calayf9dwqpyg37cb7wkzkvskxjx9nak5ilxzywm";
     rev = version;
     fetchSubmodules = true;
   };
@@ -72,6 +72,6 @@ in stdenv.mkDerivation rec {
     homepage = https://github.com/DFHack/dfhack/;
     license = licenses.zlib;
     platforms = [ "x86_64-linux" "i686-linux" ];
-    maintainers = with maintainers; [ robbinch a1russell abbradar ];
+    maintainers = with maintainers; [ robbinch a1russell abbradar numinit ];
   };
 }
