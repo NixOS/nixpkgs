@@ -1,14 +1,14 @@
 { stdenv, fetchFromGitHub, cmake, pkgconfig, bzip2, expat, glib, curl, libxml2, python2, rpm, openssl, sqlite, file, xz, pcre, bash-completion }:
 
 stdenv.mkDerivation rec {
-  rev  = "0.10.0";
+  rev  = "0.11.0";
   name = "createrepo_c-${rev}";
 
   src = fetchFromGitHub {
     inherit rev;
     owner  = "rpm-software-management";
     repo   = "createrepo_c";
-    sha256 = "1sqzdkj9vigkvxsjlih1i0gylv53na2yic5if9w1s2sgxhqqz5zv";
+    sha256 = "1w9yynj8mxhw714gvgr0fibfks584b4y0n4vjckcf7y97cpdhjkn";
   };
 
   patches = [
