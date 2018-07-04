@@ -688,6 +688,8 @@ with pkgs;
 
   browserpass = callPackage ../tools/security/browserpass { };
 
+  passff-host = callPackage ../tools/security/passff-host { };
+
   oracle-instantclient = callPackage ../development/libraries/oracle-instantclient { };
 
   kwakd = callPackage ../servers/kwakd { };
