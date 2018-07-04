@@ -43,6 +43,8 @@ in stdenv.mkDerivation {
 
   passthru = {
     isClang = true;
+    # Prefix for binaries. Customarily ends with a dash separator.
+    targetPrefix = "";
   } // stdenv.lib.optionalAttrs stdenv.isLinux {
     inherit gcc;
   };

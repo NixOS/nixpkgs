@@ -421,6 +421,9 @@ stdenv.mkDerivation ({
     inherit langC langCC langObjC langObjCpp langFortran langGo version;
     isGNU = true;
     hardeningUnsupportedFlags = [ "stackprotector" ];
+
+    # Prefix for binaries. Customarily ends with a dash separator.
+    targetPrefix = targetPlatform.config + "-";
   };
 
   inherit enableParallelBuilding enableMultilib;

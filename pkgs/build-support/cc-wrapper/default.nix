@@ -29,8 +29,10 @@ let
   #
   # TODO(@Ericson2314) Make unconditional, or optional but always true by
   # default.
-  targetPrefix = stdenv.lib.optionalString (targetPlatform != hostPlatform)
-                                           (targetPlatform.config + "-");
+  targetPrefix = targetPlatform.config + "-";
+
+  # The prefix of the unwrapped tools.
+  inPrefix = cc.targetPrefix or "";
 
   ccVersion = (builtins.parseDrvName cc.name).version;
   ccName = (builtins.parseDrvName cc.name).name;
@@ -88,7 +90,7 @@ stdenv.mkDerivation {
     # Binutils, and Apple's "cctools"; "bintools" as an attempt to find an
     # unused middle-ground name that evokes both.
     inherit bintools;
-    inherit libc nativeTools nativeLibc nativePrefix isGNU isClang default_cxx_stdlib_compile;
+    inherit libc nativeTools nativeLibc nativePrefix targetPrefix isGNU isClang default_cxx_stdlib_compile;
 
     emacsBufferSetup = pkgs: ''
       ; We should handle propagation here too
@@ -147,23 +149,23 @@ stdenv.mkDerivation {
 
       export default_cxx_stdlib_compile="${default_cxx_stdlib_compile}"
 
-      if [ -e $ccPath/${targetPrefix}gcc ]; then
-        wrap ${targetPrefix}gcc ${./cc-wrapper.sh} $ccPath/${targetPrefix}gcc
+      if [ -e $ccPath/${inPrefix}gcc ]; then
+        wrap ${targetPrefix}gcc ${./cc-wrapper.sh} $ccPath/${inPrefix}gcc
         ln -s ${targetPrefix}gcc $out/bin/${targetPrefix}cc
         export named_cc=${targetPrefix}gcc
         export named_cxx=${targetPrefix}g++
-      elif [ -e $ccPath/clang ]; then
-        wrap ${targetPrefix}clang ${./cc-wrapper.sh} $ccPath/clang
+      elif [ -e $ccPath/${inPrefix}clang ]; then
+        wrap ${targetPrefix}clang ${./cc-wrapper.sh} $ccPath/${inPrefix}clang
         ln -s ${targetPrefix}clang $out/bin/${targetPrefix}cc
         export named_cc=${targetPrefix}clang
         export named_cxx=${targetPrefix}clang++
       fi
 
-      if [ -e $ccPath/${targetPrefix}g++ ]; then
-        wrap ${targetPrefix}g++ ${./cc-wrapper.sh} $ccPath/${targetPrefix}g++
+      if [ -e $ccPath/${inPrefix}g++ ]; then
+        wrap ${targetPrefix}g++ ${./cc-wrapper.sh} $ccPath/${inPrefix}g++
         ln -s ${targetPrefix}g++ $out/bin/${targetPrefix}c++
-      elif [ -e $ccPath/clang++ ]; then
-        wrap ${targetPrefix}clang++ ${./cc-wrapper.sh} $ccPath/clang++
+      elif [ -e $ccPath/${inPrefix}clang++ ]; then
+        wrap ${targetPrefix}clang++ ${./cc-wrapper.sh} $ccPath/${inPrefix}clang++
         ln -s ${targetPrefix}clang++ $out/bin/${targetPrefix}c++
       fi
 
@@ -173,17 +175,17 @@ stdenv.mkDerivation {
     ''
 
     + optionalString cc.langFortran or false ''
-      wrap ${targetPrefix}gfortran ${./cc-wrapper.sh} $ccPath/${targetPrefix}gfortran
+      wrap ${targetPrefix}gfortran ${./cc-wrapper.sh} $ccPath/${inPrefix}gfortran
       ln -sv ${targetPrefix}gfortran $out/bin/${targetPrefix}g77
       ln -sv ${targetPrefix}gfortran $out/bin/${targetPrefix}f77
     ''
 
     + optionalString cc.langJava or false ''
-      wrap ${targetPrefix}gcj ${./cc-wrapper.sh} $ccPath/${targetPrefix}gcj
+      wrap ${targetPrefix}gcj ${./cc-wrapper.sh} $ccPath/${inPrefix}gcj
     ''
 
     + optionalString cc.langGo or false ''
-      wrap ${targetPrefix}gccgo ${./cc-wrapper.sh} $ccPath/${targetPrefix}gccgo
+      wrap ${targetPrefix}gccgo ${./cc-wrapper.sh} $ccPath/${inPrefix}gccgo
     '';
 
   strictDeps = true;

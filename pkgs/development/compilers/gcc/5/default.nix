@@ -438,8 +438,12 @@ stdenv.mkDerivation ({
       "-Wl,${libpthreadCross.TARGET_LDFLAGS}"
     ]);
 
-  passthru =
-    { inherit langC langCC langObjC langObjCpp langFortran langGo version; isGNU = true; };
+  passthru = {
+    inherit langC langCC langObjC langObjCpp langFortran langGo version; isGNU = true;
+
+    # Prefix for binaries. Customarily ends with a dash separator.
+    targetPrefix = targetPlatform.config + "-";
+  };
 
   inherit enableParallelBuilding enableMultilib;
 

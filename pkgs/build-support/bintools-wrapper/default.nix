@@ -30,8 +30,10 @@ let
   #
   # TODO(@Ericson2314) Make unconditional, or optional but always true by
   # default.
-  targetPrefix = stdenv.lib.optionalString (targetPlatform != hostPlatform)
-                                        (targetPlatform.config + "-");
+  targetPrefix = targetPlatform.config + "-";
+
+  # The prefix of the unwrapped tools.
+  inPrefix = bintools.targetPrefix or "";
 
   bintoolsVersion = (builtins.parseDrvName bintools.name).version;
   bintoolsName = (builtins.parseDrvName bintools.name).name;
@@ -86,7 +88,7 @@ stdenv.mkDerivation {
   outputs = [ "out" ] ++ optionals propagateDoc [ "man" "info" ];
 
   passthru = {
-    inherit bintools libc nativeTools nativeLibc nativePrefix;
+    inherit bintools libc nativeTools nativeLibc nativePrefix targetPrefix;
 
     emacsBufferSetup = pkgs: ''
       ; We should handle propagation here too
@@ -143,21 +145,21 @@ stdenv.mkDerivation {
 
     + ''
       # Create a symlink to as (the assembler).
-      if [ -e $ldPath/${targetPrefix}as ]; then
-        ln -s $ldPath/${targetPrefix}as $out/bin/${targetPrefix}as
+      if [ -e $ldPath/${inPrefix}as ]; then
+        ln -s $ldPath/${inPrefix}as $out/bin/${targetPrefix}as
       fi
 
     '' + (if !useMacosReexportHack then ''
-      wrap ${targetPrefix}ld ${./ld-wrapper.sh} ''${ld:-$ldPath/${targetPrefix}ld}
+      wrap ${targetPrefix}ld ${./ld-wrapper.sh} ''${ld:-$ldPath/${inPrefix}ld}
     '' else ''
       ldInner="${targetPrefix}ld-reexport-delegate"
-      wrap "$ldInner" ${./macos-sierra-reexport-hack.bash} ''${ld:-$ldPath/${targetPrefix}ld}
+      wrap "$ldInner" ${./macos-sierra-reexport-hack.bash} ''${ld:-$ldPath/${inPrefix}ld}
       wrap "${targetPrefix}ld" ${./ld-wrapper.sh} "$out/bin/$ldInner"
       unset ldInner
     '') + ''
 
       for variant in ld.gold ld.bfd ld.lld; do
-        local underlying=$ldPath/${targetPrefix}$variant
+        local underlying=$ldPath/${inPrefix}$variant
         [[ -e "$underlying" ]] || continue
         wrap ${targetPrefix}$variant ${./ld-wrapper.sh} $underlying
       done
@@ -279,10 +281,10 @@ stdenv.mkDerivation {
 
       # some linkers on some platforms don't support specific -z flags
       export hardening_unsupported_flags=""
-      if [[ "$($ldPath/${targetPrefix}ld -z now 2>&1 || true)" =~ un(recognized|known)\ option ]]; then
+      if [[ "$($ldPath/${inPrefix}ld -z now 2>&1 || true)" =~ un(recognized|known)\ option ]]; then
         hardening_unsupported_flags+=" bindnow"
       fi
-      if [[ "$($ldPath/${targetPrefix}ld -z relro 2>&1 || true)" =~ un(recognized|known)\ option ]]; then
+      if [[ "$($ldPath/${inPrefix}ld -z relro 2>&1 || true)" =~ un(recognized|known)\ option ]]; then
         hardening_unsupported_flags+=" relro"
       fi
     ''

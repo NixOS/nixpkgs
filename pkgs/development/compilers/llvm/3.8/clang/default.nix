@@ -64,6 +64,8 @@ let
     passthru = {
       isClang = true;
       inherit llvm;
+      # Prefix for binaries. Customarily ends with a dash separator.
+      targetPrefix = "";
     } // stdenv.lib.optionalAttrs stdenv.isLinux {
       inherit gcc;
     };

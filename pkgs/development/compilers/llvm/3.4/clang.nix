@@ -43,6 +43,8 @@ stdenv.mkDerivation {
     # actually be a gcc
     gcc = stdenv.cc.cc;
     hardeningUnsupportedFlags = [ "stackprotector" ];
+    # Prefix for binaries. Customarily ends with a dash separator.
+    targetPrefix = "";
   };
 
   enableParallelBuilding = true;
