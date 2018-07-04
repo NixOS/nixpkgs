@@ -18590,8 +18590,6 @@ with pkgs;
     flags = [ "python" "X11" ]; # only flag "X11" by now
   });
 
-  xxd = callPackage ../tools/misc/xxd { };
-
   vimNox = lowPrio (vim_configurable.override {
     source = "vim-nox";
     lua = pkgs.lua5_1; # vimNox source is from 2012, requires older lua
@@ -21816,7 +21814,7 @@ with pkgs;
   unixtools = recurseIntoAttrs (callPackages ./unix-tools.nix { });
   inherit (unixtools) hexdump ps logger eject umount
                       mount wall hostname more sysctl getconf
-                      getent locale killall;
+                      getent locale killall xxd;
 
   fts = if hostPlatform.isMusl then netbsd.fts else null;
 
