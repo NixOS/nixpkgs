@@ -1,12 +1,14 @@
 { stdenv, xlibs, fetchgit, libXScrnSaver, libX11 }:
 
-stdenv.mkDerivation {
-  name = "x11idle-unstable-2018-06-16";
+stdenv.mkDerivation rec {
+
+  version = "9.1.9";
+  name = "x11idle-org-${version}";
 
   src = fetchgit {
     url = "https://code.orgmode.org/bzg/org-mode.git";
-    rev = "54abd0f0ead0c98206eb551f639bc3cc727b71b2";
-    sha256 = "08fc8r0krk5awb121a0x3azqx2az6xnbs0yj74d25fja0n2ap7q8";
+    rev = "release-${version}";
+    sha256 = "0wly0nyd8qmchrjfx9079iipav8784kszagp5j3z06b9768cp8jr";
     fetchSubmodules = true;
   };
 
