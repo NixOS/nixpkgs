@@ -10,6 +10,7 @@
 let boost_static = boost165.override {
       python = python35;
       enableStatic = true;
+      enablePython = true;
     };
 
 in stdenv.mkDerivation rec {
