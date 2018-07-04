@@ -541,6 +541,13 @@ self: super: builtins.intersectAttrs super {
     configureFlags = drv.configureFlags or [] ++ ["--libdir=/var/empty"];
    });
 
+  hspec-meta = overrideCabal super.hspec-meta (drv: {
+    enableSeparateDataOutput = true;
+  });
+  hspec-discover = overrideCabal super.hspec-discover (drv: {
+    enableSeparateDataOutput = true;
+  });
+
   # Override a number of packages with specific references to $out in their
   # derivations
   stack = overrideCabal super.stack (drv: {
@@ -570,4 +577,5 @@ self: super: builtins.intersectAttrs super {
   # Tests require a browser: https://github.com/ku-fpg/blank-canvas/issues/73
   blank-canvas = dontCheck super.blank-canvas;
   blank-canvas_0_6_2 = dontCheck super.blank-canvas_0_6_2;
+
 }
