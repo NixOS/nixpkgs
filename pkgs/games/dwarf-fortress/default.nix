@@ -29,6 +29,8 @@ let
 
     dwarf-therapist = callPackage ./dwarf-therapist/wrapper.nix { };
 
+    legends-browser = callPackage ./legends-browser {};
+
     themes = callPackage ./themes {
       stdenv = stdenvNoCC;
     };
