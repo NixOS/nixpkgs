@@ -8,11 +8,7 @@
 
    $ nix-build pkgs/top-level/release.nix -A coreutils.x86_64-linux
 */
-{ nixpkgs ?
-    if builtins.pathExists ../../.git then
-      fetchGit ../..
-    else
-      { outPath = (import ../../lib).cleanSource ../..; revCount = 1234; shortRev = "abcdef"; }
+{ nixpkgs ? { outPath = (import ../../lib).cleanSource ../..; revCount = 1234; shortRev = "abcdef"; }
 , officialRelease ? false
   # The platforms for which we build Nixpkgs.
 , supportedSystems ? [ "x86_64-linux" "x86_64-darwin" "aarch64-linux" ]
