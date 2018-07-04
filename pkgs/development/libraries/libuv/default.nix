@@ -1,5 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, autoconf, automake, libtool, pkgconfig
-, ApplicationServices, CoreServices }:
+{ stdenv, lib, fetchFromGitHub, autoconf, automake, libtool, pkgconfig }:
 
 stdenv.mkDerivation rec {
   version = "1.21.0";
@@ -11,6 +10,8 @@ stdenv.mkDerivation rec {
     rev = "v${version}";
     sha256 = "1jjg34ppnlrnb634q9mla7whl7rm9xmjgnzckrznqcycwzir074b";
   };
+
+  patches = [ ./make-apple-frameworks-optional.patch ];
 
   postPatch = let
     toDisable = [
@@ -27,7 +28,6 @@ stdenv.mkDerivation rec {
     '';
 
   nativeBuildInputs = [ automake autoconf libtool pkgconfig ];
-  buildInputs = stdenv.lib.optionals stdenv.isDarwin [ ApplicationServices CoreServices ];
 
   preConfigure = ''
     LIBTOOLIZE=libtoolize ./autogen.sh
