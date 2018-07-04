@@ -1,7 +1,7 @@
 { stdenv, fetchurl, pkgconfig, zlib, kmod, which }:
 
 stdenv.mkDerivation rec {
-  name = "pciutils-3.6.0"; # with database from 2017-07
+  name = "pciutils-3.6.0"; # with database from 2018-06
 
   src = fetchurl {
     url = "mirror://kernel/software/utils/pciutils/${name}.tar.xz";
