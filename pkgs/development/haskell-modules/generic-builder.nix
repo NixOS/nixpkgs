@@ -487,7 +487,7 @@ stdenv.mkDerivation ({
     # *.conf, we have to also remove the data directory so that it
     # doesn't appear under data-dir field creating a cycle.
     if [ -d ${libDir} ]; then
-      find ${libDir}/ -type f -name '*.conf' -exec \
+      find ${libDir}/ -type f -exec \
         remove-references-to -t ${dataDir} "{}" \;
     fi
     ''}
