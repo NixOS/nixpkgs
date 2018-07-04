@@ -156,6 +156,11 @@ in rec {
       ghc = bh.compiler.ghc843;
       compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-8.4.x.nix { };
     };
+    ghc861 = callPackage ../development/haskell-modules {
+      buildHaskellPackages = bh.packages.ghc861;
+      ghc = bh.compiler.ghc861;
+      compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-8.6.x.nix { };
+    };
     ghcHEAD = callPackage ../development/haskell-modules {
       buildHaskellPackages = bh.packages.ghcHEAD;
       ghc = bh.compiler.ghcHEAD;
