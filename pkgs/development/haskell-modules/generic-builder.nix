@@ -114,6 +114,7 @@ let
                    '';
 
   hasActiveLibrary = isLibrary && (enableStaticLibraries || enableSharedLibraries || enableLibraryProfiling);
+
   hasLibOutput = enableSeparateLibOutput && (hasActiveLibrary || stdenv.isDarwin);
   libDir = if hasLibOutput then "$lib/lib/${ghc.name}" else "$out/lib/${ghc.name}";
   binDir = if enableSeparateBinOutput then "$bin/bin" else "$out/bin";
@@ -475,17 +476,20 @@ stdenv.mkDerivation ({
     # If we don't have separate docs, we have to patch out the ref to
     # docs in package conf. This will likely break Haddock
     # cross-package links but is necessary to break store cycle…
-    find ${libDir}/ -type f -name '*.conf' -exec \
-      remove-references-to -t ${docDir} "{}" \;
+    if [ -d ${libDir} ]; then
+      find ${libDir}/ -type f -name '*.conf' -exec \
+        remove-references-to -t ${docDir} "{}" \;
+    fi
     ''}
 
     ${optionalString (hasLibOutput && ! enableSeparateDataOutput) ''
     # Just like for doc output path in $out potentially landing in
     # *.conf, we have to also remove the data directory so that it
     # doesn't appear under data-dir field creating a cycle.
-    find ${libDir}/ -type f -exec echo Removing ${dataDir} refs from "{}" \;
-    find ${libDir}/ -type f -name '*.conf' -exec \
-      remove-references-to -t ${dataDir} "{}" \;
+    if [ -d ${libDir} ]; then
+      find ${libDir}/ -type f -name '*.conf' -exec \
+        remove-references-to -t ${dataDir} "{}" \;
+    fi
     ''}
 
     ${optionalString enableSeparateDataOutput "mkdir -p ${dataDir}"}
