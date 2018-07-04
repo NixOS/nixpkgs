@@ -64,8 +64,8 @@ let
       stdenvAdapters = res;
     };
 
-  trivialBuilders = self: super:
-    import ../build-support/trivial-builders.nix {
+  buildSupport = self: super:
+    import ../build-support {
       inherit lib; inherit (self) stdenv stdenvNoCC; inherit (self.xorg) lndir;
     };
 
@@ -149,7 +149,7 @@ let
     stdenvBootstappingAndPlatforms
     platformCompat
     stdenvAdapters
-    trivialBuilders
+    buildSupport
     splice
     allPackages
     extraPkgs

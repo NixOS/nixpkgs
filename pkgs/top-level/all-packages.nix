@@ -69,19 +69,6 @@ with pkgs;
     { name = "auto-patchelf-hook"; deps = [ file ]; }
     ../build-support/setup-hooks/auto-patchelf.sh;
 
-  ensureNewerSourcesHook = { year }: makeSetupHook {}
-    (writeScript "ensure-newer-sources-hook.sh" ''
-      postUnpackHooks+=(_ensureNewerSources)
-      _ensureNewerSources() {
-        '${findutils}/bin/find' "$sourceRoot" \
-          '!' -newermt '${year}-01-01' -exec touch -h -d '${year}-01-02' '{}' '+'
-      }
-    '');
-
-  # Zip file format only allows times after year 1980, which makes e.g. Python wheel building fail with:
-  # ValueError: ZIP does not support timestamps before 1980
-  ensureNewerSourcesForZipFilesHook = ensureNewerSourcesHook { year = "1980"; };
-
   updateAutotoolsGnuConfigScriptsHook = makeSetupHook
     { substitutions = { gnu_config = gnu-config;}; }
     ../build-support/setup-hooks/update-autotools-gnu-config-scripts.sh;
@@ -106,8 +93,6 @@ with pkgs;
   };
 
   diffPlugins = (callPackage ../build-support/plugins.nix {}).diffPlugins;
-
-  dieHook = makeSetupHook {} ../build-support/setup-hooks/die.sh;
 
   digitalbitbox = libsForQt5.callPackage ../applications/misc/digitalbitbox { };
 
@@ -294,9 +279,6 @@ with pkgs;
     inherit url;
   };
 
-  ld-is-cc-hook = makeSetupHook { name = "ld-is-cc-hook"; }
-    ../build-support/setup-hooks/ld-is-cc-hook.sh;
-
   libredirect = callPackage ../build-support/libredirect { };
 
   madonctl = callPackage ../applications/misc/madonctl { };
@@ -310,9 +292,6 @@ with pkgs;
       inherit contents compressor prepend;
     };
 
-  makeWrapper = makeSetupHook { deps = [ dieHook ]; }
-                              ../build-support/setup-hooks/make-wrapper.sh;
-
   makeModulesClosure = { kernel, firmware, rootModules, allowMissing ? false }:
     callPackage ../build-support/kernel/modules-closure.nix {
       inherit kernel firmware rootModules allowMissing;
@@ -323,9 +302,6 @@ with pkgs;
   nixBufferBuilders = import ../build-support/emacs/buffer.nix { inherit (pkgs) lib writeText; inherit (emacsPackagesNg) inherit-local; };
 
   pathsFromGraph = ../build-support/kernel/paths-from-graph.pl;
-
-  pruneLibtoolFiles = makeSetupHook { name = "prune-libtool-files"; }
-    ../build-support/setup-hooks/prune-libtool-files.sh;
 
   closureInfo = callPackage ../build-support/closure-info.nix { };
 
@@ -353,14 +329,6 @@ with pkgs;
 
   inherit (lib.systems) platforms;
 
-  setJavaClassPath = makeSetupHook { } ../build-support/setup-hooks/set-java-classpath.sh;
-
-  fixDarwinDylibNames = makeSetupHook { } ../build-support/setup-hooks/fix-darwin-dylib-names.sh;
-
-  keepBuildTree = makeSetupHook { } ../build-support/setup-hooks/keep-build-tree.sh;
-
-  enableGCOVInstrumentation = makeSetupHook { } ../build-support/setup-hooks/enable-coverage-instrumentation.sh;
-
   makeGCOVReport = makeSetupHook
     { deps = [ pkgs.lcov pkgs.enableGCOVInstrumentation ]; }
     ../build-support/setup-hooks/make-coverage-analysis-report.sh;
@@ -368,17 +336,9 @@ with pkgs;
   # intended to be used like nix-build -E 'with <nixpkgs> {}; enableDebugging fooPackage'
   enableDebugging = pkg: pkg.override { stdenv = stdenvAdapters.keepDebugInfo pkg.stdenv; };
 
-  findXMLCatalogs = makeSetupHook { } ../build-support/setup-hooks/find-xml-catalogs.sh;
-
   wrapGAppsHook = makeSetupHook {
     deps = [ gnome3.dconf.lib gnome3.gtk librsvg makeWrapper ];
   } ../build-support/setup-hooks/wrap-gapps-hook.sh;
-
-  separateDebugInfo = makeSetupHook { } ../build-support/setup-hooks/separate-debug-info.sh;
-
-  setupDebugInfoDirs = makeSetupHook { } ../build-support/setup-hooks/setup-debug-info-dirs.sh;
-
-  useOldCXXAbi = makeSetupHook { } ../build-support/setup-hooks/use-old-cxx-abi.sh;
 
   ical2org = callPackage ../tools/misc/ical2org {};
 
