@@ -6040,6 +6040,8 @@ with pkgs;
 
   bash-completion = callPackage ../shells/bash/bash-completion { };
 
+  gradle-completion = callPackage ../shells/zsh/gradle-completion { };
+
   nix-bash-completions = callPackage ../shells/bash/nix-bash-completions { };
 
   dash = callPackage ../shells/dash { };
