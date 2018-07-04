@@ -1,0 +1,10 @@
+diff --git a/sqlitebrowser.pro b/sqlitebrowser.pro
+index 95d4e89..78d526c 100644
+--- a/sqlitebrowser.pro
++++ b/sqlitebrowser.pro
+@@ -5,5 +5,4 @@ CONFIG += debug_and_release
+ SUBDIRS = libs/antlr-2.7.7/antlr.pro \
+     libs/qhexedit/qhexedit.pro \
+     libs/qcustomplot-source/qcustomplot.pro \
+-    libs/qscintilla/Qt4Qt5/qscintilla.pro \
+     src
