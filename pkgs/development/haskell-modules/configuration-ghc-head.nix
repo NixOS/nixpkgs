@@ -7,36 +7,6 @@ self: super: {
   # Use the latest LLVM.
   inherit (pkgs) llvmPackages;
 
-  # Disable GHC 7.11.x core libraries.
-  array = null;
-  base = null;
-  binary = null;
-  bin-package-db = null;
-  bytestring = null;
-  Cabal = null;
-  containers = null;
-  deepseq = null;
-  directory = null;
-  filepath = null;
-  ghc-boot = null;
-  ghc-boot-th = null;
-  ghc-compact = null;
-  ghc-prim = null;
-  ghci = null;
-  haskeline = null;
-  hoopl = null;
-  hpc = null;
-  integer-gmp = null;
-  pretty = null;
-  process = null;
-  rts = null;
-  template-haskell = null;
-  terminfo = null;
-  time = null;
-  transformers = null;
-  unix = null;
-  xhtml = null;
-
   # jailbreak-cabal can use the native Cabal library.
   jailbreak-cabal = pkgs.haskell.packages.ghc802.jailbreak-cabal;
 

@@ -7,38 +7,6 @@ self: super: {
   # Use the latest LLVM.
   inherit (pkgs) llvmPackages;
 
-  # Disable GHC 8.4.x core libraries.
-  array = null;
-  base = null;
-  binary = null;
-  bytestring = null;
-  Cabal = null;
-  containers = null;
-  deepseq = null;
-  directory = null;
-  filepath = null;
-  ghc-boot = null;
-  ghc-boot-th = null;
-  ghc-compact = null;
-  ghc-prim = null;
-  ghci = null;
-  haskeline = null;
-  hpc = null;
-  integer-gmp = null;
-  mtl = null;
-  parsec = null;
-  pretty = null;
-  process = null;
-  rts = null;
-  stm = null;
-  template-haskell = null;
-  terminfo = null;
-  text = null;
-  time = null;
-  transformers = null;
-  unix = null;
-  xhtml = null;
-
   doctest = dontCheck super.doctest_0_16_0;  # tests depend on very recent QuickCheck
   hackage-db = super.hackage-db_2_0_1;
 

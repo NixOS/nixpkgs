@@ -1,8 +1,9 @@
 { stdenv, targetPackages
 , buildPlatform, hostPlatform, targetPlatform
+, haskellLib
 
 # build-tools
-, bootPkgs, hscolour
+, compiler, hscolour
 , coreutils, fetchpatch, fetchurl, perl, sphinx
 
 , libffi, libiconv ? null, ncurses
@@ -30,12 +31,20 @@
 }:
 
 let
-  inherit (bootPkgs) ghc;
-
   # TODO(@Ericson2314) Make unconditional
   targetPrefix = stdenv.lib.optionalString
     (targetPlatform != hostPlatform)
     "${targetPlatform.config}-";
+
+  bootPackages = [
+    "Cabal" "array" "base" "binary" "bytestring" "containers"
+    "deepseq" "directory" "filepath" /*"ghc"*/ "ghc-boot" "ghc-boot-th"
+    "ghc-prim" "ghci" "haskeline" "hoopl" "hpc" "integer-gmp"
+    "pretty" "process" "rts" "template-haskell" "terminfo" "time"
+    "transformers" "unix" "xhtml"
+  ];
+
+  inherit (haskellLib) toOutputName;
 
   buildMK = ''
     BuildFlavour = ${ghcFlavour}
@@ -78,7 +87,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  outputs = [ "out" "man" "doc" ];
+  outputs = [ "out" "man" "doc" ] ++ map toOutputName bootPackages;
 
   patches = [
     ./ghc-gold-linker.patch
@@ -142,7 +151,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     perl sphinx
-    ghc hscolour
+    compiler hscolour
   ];
 
   # For building runtime libs
@@ -168,6 +177,15 @@ stdenv.mkDerivation rec {
       paxmark m "$bin"
     done
 
+    # Make boot packages usable as individual dependencies
+  '' + stdenv.lib.concatMapStringsSep "\n" (lib: ''
+    libOut="''$${toOutputName lib}"
+    libConfDir="$libOut/lib/ghc-${version}/package.conf.d"
+    mkdir -p "$libConfDir"
+    find "$out/lib/ghc-${version}/package.conf.d/" -regex '.*/${lib}-[0-9.]*.conf' -exec \
+      mv {} "$libConfDir"/ \;
+  '') bootPackages + ''
+
     # Install the bash completion file.
     install -D -m 444 utils/completion/ghc.bash $out/share/bash-completion/completions/${targetPrefix}ghc
 
@@ -180,7 +198,8 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
-    inherit bootPkgs targetPrefix;
+    inherit bootPackages;
+    inherit targetPrefix;
 
     inherit llvmPackages;
     inherit enableShared;
@@ -193,7 +212,7 @@ stdenv.mkDerivation rec {
     homepage = http://haskell.org/ghc;
     description = "The Glasgow Haskell Compiler";
     maintainers = with stdenv.lib.maintainers; [ marcweber andres peti ];
-    inherit (ghc.meta) license platforms;
+    inherit (compiler.meta) license platforms;
   };
 
 }

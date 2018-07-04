@@ -40,7 +40,7 @@ self:
 let
   inherit (stdenv) buildPlatform hostPlatform;
 
-  inherit (stdenv.lib) fix' extends makeOverridable;
+  inherit (stdenv.lib) fix' extends genAttrs makeOverridable;
   inherit (haskellLib) overrideCabal getHaskellBuildInputs;
 
   mkDerivationImpl = pkgs.callPackage ./generic-builder.nix {
@@ -262,9 +262,9 @@ in package-set { inherit pkgs stdenv callPackage; } self // {
         installPhase = "echo $nativeBuildInputs $buildInputs > $out";
       });
 
+  } // genAttrs (compiler.passthru.bootPackages or []) (name: compiler."${haskellLib.toOutputName name}") // {
     ghc = compiler // {
       withPackages = ghcWithPackages;
       withHoogle = ghcWithHoogle;
     };
-
   }
