@@ -1,25 +1,16 @@
-{ stdenv, makeWrapper, perl, perlPackages }:
+{ wrapCommand, lib, perl, perlPackages }:
 
-stdenv.mkDerivation {
-  name = "nix-generate-from-cpan-3";
-
+wrapCommand "nix-generate-from-cpan" {
+  version = "3";
   buildInputs = with perlPackages; [
-    makeWrapper perl CPANMeta GetoptLongDescriptive CPANPLUS Readonly Log4Perl
+    perl CPANMeta GetoptLongDescriptive CPANPLUS Readonly Log4Perl
   ];
-
-  phases = [ "installPhase" ];
-
-  installPhase =
-    ''
-      mkdir -p $out/bin
-      cp ${./nix-generate-from-cpan.pl} $out/bin/nix-generate-from-cpan
-      patchShebangs $out/bin/nix-generate-from-cpan
-      wrapProgram $out/bin/nix-generate-from-cpan --set PERL5LIB $PERL5LIB
-    '';
-
-  meta = {
-    maintainers = with stdenv.lib.maintainers; [ eelco rycee ];
+  executable = "${perl}/bin/perl";
+  makeWrapperArgs = [ "--set PERL5LIB $PERL5LIB"
+                      "--add-flags ${./nix-generate-from-cpan.pl}"];
+  meta = with lib; {
+    maintainers = with maintainers; [ eelco rycee ];
     description = "Utility to generate a Nix expression for a Perl package from CPAN";
-    platforms = stdenv.lib.platforms.unix;
+    platforms = platforms.unix;
   };
 }
