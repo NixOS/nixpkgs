@@ -443,6 +443,8 @@ in {
 
   python-periphery = callPackage ../development/python-modules/python-periphery { };
 
+  python-prctl = callPackage ../development/python-modules/python-prctl { };
+
   python-sql = callPackage ../development/python-modules/python-sql { };
 
   python-stdnum = callPackage ../development/python-modules/python-stdnum { };
