@@ -1,11 +1,6 @@
 { stdenv,
   fetchFromGitHub,
-  which,
   autoreconfHook,
-  autoconf,
-  automake,
-  libtool,
-  yacc,
   bison,
   flex,
   glib,
@@ -28,8 +23,8 @@ stdenv.mkDerivation rec {
     sha256 = "0wbi2nasb1gbci6cq23g6kq7i10rwi1y7r44rl03icr5prqjpdyv";
   };
 
-  buildInputs = [ glib which libvirt json_c ] ++ (optional xenSupport xen);
-  nativeBuildInputs = [ autoreconfHook yacc bison flex libtool autoconf automake pkgconfig ];
+  buildInputs = [ glib libvirt json_c ] ++ (optional xenSupport xen);
+  nativeBuildInputs = [ autoreconfHook bison flex pkgconfig ];
 
   configureFlags = optional (!xenSupport) "--disable-xen";
 
