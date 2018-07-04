@@ -21162,6 +21162,7 @@ with pkgs;
       storeDir = config.nix.storeDir or "/nix/store";
       stateDir = config.nix.stateDir or "/nix/var";
       curl = curl_7_59;
+      boehmgc = boehmgc.override { enableLargeConfig = true; };
       })
     nix
     nix1

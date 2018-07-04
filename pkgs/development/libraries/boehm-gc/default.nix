@@ -1,4 +1,5 @@
-{ lib, stdenv, fetchurl, fetchpatch, pkgconfig, libatomic_ops, enableLargeConfig ? false
+{ lib, stdenv, fetchurl, fetchpatch, pkgconfig, libatomic_ops
+, enableLargeConfig ? false # doc: https://github.com/ivmai/bdwgc/blob/v7.6.6/doc/README.macros#L179
 , buildPlatform, hostPlatform
 }:
 
