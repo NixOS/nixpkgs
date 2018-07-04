@@ -43,7 +43,7 @@ let
 
   bootPackages = [
     "Cabal" "array" "base" "binary" "bytestring" "containers"
-    "deepseq" "directory" "filepath" "ghc" "ghc-boot" "ghc-boot-th"
+    "deepseq" "directory" "filepath" /*"ghc"*/ "ghc-boot" "ghc-boot-th"
     "ghc-compact" "ghc-prim" "ghci" "haskeline" "hoopl" "hpc"
     "integer-gmp" "pretty" "process" "rts" "template-haskell" "terminfo"
     "time" "transformers" "unix" "xhtml"
