@@ -456,6 +456,9 @@ self: super: {
   # no haddock since this is an umbrella package.
   cloud-haskell = dontHaddock super.cloud-haskell;
 
+  # Don't haddock because it is only used for bootstrapping.
+  uuagc-bootstrap = dontHaddock super.uuagc-bootstrap;
+
   # This packages compiles 4+ hours on a fast machine. That's just unreasonable.
   CHXHtml = dontDistribute super.CHXHtml;
 
