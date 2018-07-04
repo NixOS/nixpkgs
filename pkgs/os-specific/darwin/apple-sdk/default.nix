@@ -71,6 +71,8 @@ let
     # because we copy files from the system
     preferLocalBuild = true;
 
+    disallowedRequisites = [ sdk ];
+
     installPhase = ''
       linkFramework() {
         local path="$1"
