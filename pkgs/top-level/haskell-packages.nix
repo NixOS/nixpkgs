@@ -61,6 +61,7 @@ in rec {
       llvmPackages = pkgs.llvmPackages_37;
     };
     ghc822 = callPackage ../development/compilers/ghc/8.2.2.nix {
+      inherit haskellLib;
       compiler = bh.compiler.ghc821Binary;
       inherit (bh.packages.ghc821Binary) hscolour alex happy;
       inherit buildPlatform targetPlatform;
@@ -142,7 +143,7 @@ in rec {
       buildCompiler = bh.compiler.ghc821Binary;
       buildHaskellPackages = bh.packages.ghc821Binary;
       compiler = compiler.ghc821Binary;
-      compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-8.2.x.nix { };
+      compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-8.2.x-binary.nix { };
       packageSetConfig = bootstrapPackageSet;
     };
     ghc822 = callPackage ../development/haskell-modules {
