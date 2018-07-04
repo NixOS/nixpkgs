@@ -1,5 +1,5 @@
-{ pkgs, stdenv, lib, haskellLib, ghc, all-cabal-hashes
-, buildHaskellPackages
+{ pkgs, stdenv, lib, haskellLib, compiler, all-cabal-hashes
+, buildCompiler, buildHaskellPackages
 , compilerConfig ? (self: super: {})
 , packageSetConfig ? (self: super: {})
 , overrides ? (self: super: {})
@@ -15,7 +15,7 @@ let
 
   haskellPackages = pkgs.callPackage makePackageSet {
     package-set = initialPackages;
-    inherit stdenv haskellLib ghc buildHaskellPackages extensible-self all-cabal-hashes;
+    inherit stdenv haskellLib compiler buildCompiler buildHaskellPackages extensible-self all-cabal-hashes;
   };
 
   commonConfiguration = configurationCommon { inherit pkgs haskellLib; };

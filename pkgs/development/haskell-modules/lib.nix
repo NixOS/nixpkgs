@@ -382,4 +382,8 @@ rec {
           allPkgconfigDepends;
       };
 
+  # Convert a haskell package name to a valid output name.
+  # Output names cannot contain dashes because they are mapped to shell variables.
+  toOutputName = builtins.replaceStrings ["-"] ["_"];
+
 }
