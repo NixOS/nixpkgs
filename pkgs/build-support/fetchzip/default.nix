@@ -12,6 +12,7 @@
 , url
 , extraPostFetch ? ""
 , name ? "source"
+, passthru ? {}
 , ... } @ args:
 
 lib.overrideDerivation (fetchurl ({
@@ -48,6 +49,8 @@ lib.overrideDerivation (fetchurl ({
       mv "$unpackDir" "$out"
     '') #*/
     + extraPostFetch;
+
+    inherit passthru;
 } // removeAttrs args [ "stripRoot" "extraPostFetch" ]))
 # Hackety-hack: we actually need unzip hooks, too
 (x: {nativeBuildInputs = x.nativeBuildInputs++ [unzip];})
