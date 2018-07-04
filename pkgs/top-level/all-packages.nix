@@ -14202,6 +14202,8 @@ with pkgs;
 
   powertop = callPackage ../os-specific/linux/powertop { };
 
+  pps-tools = callPackage ../os-specific/linux/pps-tools { };
+
   prayer = callPackage ../servers/prayer { };
 
   procps-ng = if stdenv.isLinux then callPackage ../os-specific/linux/procps-ng { }
