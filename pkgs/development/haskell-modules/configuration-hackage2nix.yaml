@@ -1229,8 +1229,6 @@ default-package-overrides:
   - l10n ==0.1.0.1
   - labels ==0.3.3
   - lackey ==1.0.2
-  - lambdabot-core ==5.1.0.1
-  - lambdabot-irc-plugins ==5.1.0.1
   - lame ==0.1.1
   - language-c ==0.7.2
   - language-c-quote ==0.12.1
