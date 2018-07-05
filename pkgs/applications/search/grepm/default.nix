@@ -1,29 +1,16 @@
-{ stdenv, fetchurl, perlPackages, mutt }:
+{ wrapCommand, bash, fetchurl, perlPackages, mutt, lib }:
 
-stdenv.mkDerivation rec {
-  name = "grepm-${version}";
-  version = "0.6";
-
+let
   src = fetchurl {
     url = "http://www.barsnick.net/sw/grepm";
     sha256 = "0ppprhfw06779hz1b10qvq62gsw73shccsav982dyi6xmqb6jqji";
   };
-
-  phases = [ "installPhase" ];
-
-  buildInputs = [ perlPackages.grepmail mutt ];
-
-  installPhase = ''
-    mkdir -p $out/bin
-    cp -a $src $out/bin/grepm
-    chmod +x $out/bin/grepm
-    sed -i \
-      -e "s:^grepmail:${perlPackages.grepmail}/bin/grepmail:" \
-      -e "s:^\( *\)mutt:\1${mutt}/bin/mutt:" \
-      $out/bin/grepm
-  '';
-  
-  meta = with stdenv.lib; {
+in wrapCommand "grepm" {
+  version = "0.6";
+  executable = "${bash}/bin/bash";
+  makeWrapperArgs = [ "--add-flags ${src}"
+                      "--prefix PATH : ${lib.makeBinPath [perlPackages.grepmail mutt]}"];
+  meta = with lib; {
     description = "Wrapper for grepmail utilizing mutt";
     homepage = http://www.barsnick.net/sw/grepm.html;
     license = licenses.free;
