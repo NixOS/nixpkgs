@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, autoconf, automake, libtool, pkgconfig }:
+{ stdenv, lib, fetchpatch, fetchFromGitHub, autoconf, automake, libtool, pkgconfig }:
 
 stdenv.mkDerivation rec {
   version = "1.20.3";
@@ -11,7 +11,12 @@ stdenv.mkDerivation rec {
     sha256 = "1a8a679wni560z7x6w5i431vh2g0f34cznflcn52klx1vwcggrg7";
   };
 
-  patches = [ ./make-apple-frameworks-optional.patch ];
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/libuv/libuv/pull/1909.patch";
+      sha256 = "1s2692h4dvqnzwwicrkpj0zph1i2bhv39w31z5vh7ssgvykaradj";
+    })
+  ];
 
   postPatch = let
     toDisable = [
