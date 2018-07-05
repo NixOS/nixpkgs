@@ -6,6 +6,10 @@ with stdenv.lib;
 
 let withLwt = lwt != null; in
 
+if !versionAtLeast ocaml.version "4.04"
+then throw "tls is not available for OCaml ${ocaml.version}"
+else
+
 stdenv.mkDerivation rec {
   version = "0.9.0";
   name = "ocaml${ocaml.version}-tls-${version}";

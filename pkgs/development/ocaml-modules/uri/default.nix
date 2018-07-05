@@ -1,5 +1,5 @@
 { stdenv, fetchurl, ocaml, findlib, jbuilder, ppx_sexp_conv, ounit
-, ppx_deriving, re, sexplib, stringext
+, re, sexplib, stringext
 }:
 
 stdenv.mkDerivation rec {
@@ -13,8 +13,8 @@ stdenv.mkDerivation rec {
 
   unpackCmd = "tar -xjf $curSrc";
 
-  buildInputs = [ ocaml findlib jbuilder ppx_sexp_conv ounit ];
-  propagatedBuildInputs = [ ppx_deriving re sexplib stringext ];
+  buildInputs = [ ocaml findlib jbuilder ounit ];
+  propagatedBuildInputs = [ ppx_sexp_conv re sexplib stringext ];
 
   buildPhase = "jbuilder build";
 
