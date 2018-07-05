@@ -83,6 +83,8 @@ let
 
     buildFlags = stdenv.lib.optionalString stdenv.isDarwin "macosx";
 
+    disabled = isLua53;
+
     postPatch = stdenv.lib.optionalString stdenv.isDarwin ''
       substituteInPlace Makefile --replace 10.4 10.5
     '';
@@ -220,7 +222,7 @@ let
         EXPAT_INC="-I${expat.dev}/include");
     '';
 
-    disabled = isLuaJIT;
+    disabled = isLua53 || isLuaJIT;
 
     meta = with stdenv.lib; {
       description = "SAX XML parser based on the Expat library";
@@ -500,7 +502,7 @@ let
     patches = [ ../development/lua-modules/zip.patch ];
 
     # Does not currently work under Lua 5.2 or LuaJIT.
-    disabled = isLua52 || isLuaJIT;
+    disabled = isLua52 || isLua53 || isLuaJIT;
 
     meta = with stdenv.lib; {
       description = "Lua library to read files stored inside zip files";
@@ -620,6 +622,8 @@ let
       rev = version;
       sha256 = "05k8zs8nsdmlwja3hdhckwknf7ww5cvbp3sxhk2xd1i3ij6aa10b";
     };
+
+    disabled = isLua53;
 
     buildInputs = [ sqlite ];
 
