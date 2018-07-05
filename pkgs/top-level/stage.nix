@@ -117,29 +117,60 @@ let
     lib.optionalAttrs allowCustomOverrides
       ((config.packageOverrides or (super: {})) super);
 
-  # Override system. This is useful to build i686 packages on x86_64-linux.
-  forceSystem = system: kernel: nixpkgsFun {
-    localSystem = {
-      inherit system;
-      platform = stdenv.hostPlatform.platform // { kernelArch = kernel; };
-    };
-  };
-
-  # Convenience attributes for instantitating nixpkgs. Each of these
-  # will instantiate a new version of allPackages. They map example
-  # attributes to their own thing.
-  extraPkgs = self: super: {
-     pkgsCross = lib.mapAttrs (n: crossSystem:
+  # Convenience attributes for instantitating package sets. Each of
+  # these will instantiate a new version of allPackages. Currently the
+  # following package sets are provided:
+  #
+  # - pkgsCross.<system> where system is a member of lib.systems.examples
+  # - pkgsMusl
+  # - pkgsi686Linux
+  #
+  # In addition some utility functions are included for creating the
+  # above sets.
+  #
+  # - forceLibc
+  # - forceSystem
+  #
+  # For legacy purposes, callPackage_i686 is also included here.
+  otherPackageSets = self: super: {
+    # This maps each entry in lib.systems.examples to its own package
+    # set. Each of these will contain all packages cross compiled for
+    # that target system. For instance, pkgsCross.rasberryPi.hello,
+    # will refer to the "hello" package built for the ARM6-based
+    # Raspberry Pi.
+    pkgsCross = lib.mapAttrs (n: crossSystem:
                               nixpkgsFun { inherit crossSystem; })
                               lib.systems.examples;
-     pkgsLocal = lib.mapAttrs (n: localSystem:
-                              nixpkgsFun { inherit localSystem; })
-                              lib.systems.examples;
 
-     # Used by wine, firefox with debugging version of Flash, ...
-     pkgsi686Linux = forceSystem "i686-linux" "i386";
-     callPackage_i686 = self.pkgsi686Linux.callPackage;
-     inherit forceSystem;
+    # All packages built with the Musl libc. This will override the
+    # default GNU libc on Linux systems. Non-Linux systems are not
+    # supported.
+    pkgsMusl = self.forceLibc "musl";
+
+    # All packages built for i686 Linux.
+    # Used by wine, firefox with debugging version of Flash, ...
+    pkgsi686Linux = self.forceSystem "i686-linux" "i386";
+
+    # Override default libc. Currently this is only useful on Linux
+    # systems where you have the choice between Musl & Glibc. In the
+    # future it may work for other things.
+    forceLibc = libc: nixpkgsFun {
+      localSystem = stdenv.hostPlatform // { inherit libc; };
+    };
+
+    # Override the system while preserving platform configuration.
+    # system refers to the system tuple. kernelArch refers to the
+    # kernel architecture used (only recognized by Linux kernels,
+    # currently).
+    forceSystem = system: kernelArch: nixpkgsFun {
+      localSystem = {
+        inherit system;
+        platform = stdenv.hostPlatform.platform // { inherit kernelArch; };
+      };
+    };
+
+    # Legacy attributes that are slated for removal...
+    callPackage_i686 = self.pkgsi686Linux.callPackage;
   };
 
   # The complete chain of package set builders, applied from top to bottom.
@@ -152,7 +183,7 @@ let
     trivialBuilders
     splice
     allPackages
-    extraPkgs
+    otherPackageSets
     aliases
     configOverrides
   ] ++ overlays ++ [
