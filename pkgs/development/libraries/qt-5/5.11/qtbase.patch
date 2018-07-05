@@ -12,7 +12,7 @@ index 5208379f9a..92fe29a0ac 100644
  
  QMAKE_LFLAGS_REL_RPATH  =
 diff --git a/mkspecs/features/create_cmake.prf b/mkspecs/features/create_cmake.prf
-index 66acedef55..fe01bf8de4 100644
+index 2ed708e085..05e60ff45f 100644
 --- a/mkspecs/features/create_cmake.prf
 +++ b/mkspecs/features/create_cmake.prf
 @@ -21,7 +21,7 @@ load(cmake_functions)
@@ -24,7 +24,7 @@ index 66acedef55..fe01bf8de4 100644
  contains(CMAKE_INSTALL_LIBS_DIR, ^(/usr)?/lib(64)?.*): CMAKE_USR_MOVE_WORKAROUND = $$CMAKE_INSTALL_LIBS_DIR
  
  CMAKE_OUT_DIR = $$MODULE_BASE_OUTDIR/lib/cmake
-@@ -47,49 +47,20 @@ split_incpath {
+@@ -51,45 +51,20 @@ split_incpath {
          $$cmake_extra_source_includes.output
  }
  
@@ -33,11 +33,9 @@ index 66acedef55..fe01bf8de4 100644
 -    CMAKE_INCLUDE_DIR = $$[QT_INSTALL_HEADERS]/
 -    CMAKE_INCLUDE_DIR_IS_ABSOLUTE = True
 -}
--
--isEmpty(QT.$${MODULE}_private.includes)| \
--        !exists($$first(QT.$${MODULE}_private.includes)): \
--    CMAKE_NO_PRIVATE_INCLUDES = true
--
++CMAKE_INCLUDE_DIR = $$NIX_OUTPUT_DEV/include/
++CMAKE_INCLUDE_DIR_IS_ABSOLUTE = True
+ 
 -CMAKE_LIB_DIR = $$cmakeRelativePath($$[QT_INSTALL_LIBS], $$[QT_INSTALL_PREFIX])
 -contains(CMAKE_LIB_DIR,"^\\.\\./.*") {
 -    CMAKE_LIB_DIR = $$[QT_INSTALL_LIBS]/
@@ -48,25 +46,23 @@ index 66acedef55..fe01bf8de4 100644
 -    # installed in $${CMAKE_LIB_DIR}/cmake/Qt5$${CMAKE_MODULE_NAME}
 -    CMAKE_RELATIVE_INSTALL_DIR = "$${CMAKE_RELATIVE_INSTALL_LIBS_DIR}../../"
 -}
-+CMAKE_INCLUDE_DIR = $$NIX_OUTPUT_DEV/include/
-+CMAKE_INCLUDE_DIR_IS_ABSOLUTE = True
++CMAKE_BIN_DIR = $$NIX_OUTPUT_BIN/bin/
++CMAKE_BIN_DIR_IS_ABSOLUTE = True
  
 -CMAKE_BIN_DIR = $$cmakeRelativePath($$[QT_HOST_BINS], $$[QT_INSTALL_PREFIX])
 -contains(CMAKE_BIN_DIR, "^\\.\\./.*") {
 -    CMAKE_BIN_DIR = $$[QT_HOST_BINS]/
 -    CMAKE_BIN_DIR_IS_ABSOLUTE = True
 -}
-+CMAKE_BIN_DIR = $$NIX_OUTPUT_BIN/bin/
-+CMAKE_BIN_DIR_IS_ABSOLUTE = True
++CMAKE_LIB_DIR = $$NIX_OUTPUT_OUT/lib/
++CMAKE_LIB_DIR_IS_ABSOLUTE = True
  
 -CMAKE_PLUGIN_DIR = $$cmakeRelativePath($$[QT_INSTALL_PLUGINS], $$[QT_INSTALL_PREFIX])
 -contains(CMAKE_PLUGIN_DIR, "^\\.\\./.*") {
 -    CMAKE_PLUGIN_DIR = $$[QT_INSTALL_PLUGINS]/
 -    CMAKE_PLUGIN_DIR_IS_ABSOLUTE = True
 -}
-+CMAKE_LIB_DIR = $$NIX_OUTPUT_OUT/lib/
-+CMAKE_LIB_DIR_IS_ABSOLUTE = True
- 
+-
 -win32:!static:!staticlib {
 -    CMAKE_DLL_DIR = $$cmakeRelativePath($$[QT_INSTALL_BINS], $$[QT_INSTALL_PREFIX])
 -    contains(CMAKE_DLL_DIR, "^\\.\\./.*") {
@@ -85,7 +81,7 @@ index 66acedef55..fe01bf8de4 100644
  
  static|staticlib:CMAKE_STATIC_TYPE = true
  
-@@ -169,7 +140,7 @@ contains(CONFIG, plugin) {
+@@ -169,7 +144,7 @@ contains(CONFIG, plugin) {
        cmake_target_file
  
      cmake_qt5_plugin_file.files = $$cmake_target_file.output
@@ -94,7 +90,7 @@ index 66acedef55..fe01bf8de4 100644
      INSTALLS += cmake_qt5_plugin_file
  
      return()
-@@ -316,7 +287,7 @@ exists($$cmake_macros_file.input) {
+@@ -316,7 +291,7 @@ exists($$cmake_macros_file.input) {
      cmake_qt5_module_files.files += $$cmake_macros_file.output
  }
  
@@ -264,13 +260,14 @@ index 27f4c277d6..18b4813e25 100644
          set_target_properties(Qt5::${Plugin} PROPERTIES
              \"IMPORTED_LOCATION_${Configuration}\" ${imported_location}
 diff --git a/mkspecs/features/mac/default_post.prf b/mkspecs/features/mac/default_post.prf
-index 50a1ec6764..d6368b769e 100644
+index 21d487f1f9..a0e5c68b7e 100644
 --- a/mkspecs/features/mac/default_post.prf
 +++ b/mkspecs/features/mac/default_post.prf
-@@ -25,188 +25,3 @@ qt {
+@@ -24,196 +24,3 @@ qt {
+         }
      }
  }
- 
+-
 -# Add the same default rpaths as Xcode does for new projects.
 -# This is especially important for iOS/tvOS/watchOS where no other option is possible.
 -!no_default_rpath {
@@ -456,14 +453,21 @@ index 50a1ec6764..d6368b769e 100644
 -    cache(QMAKE_XCODE_VERSION, stash)
 -
 -QMAKE_XCODE_LIBRARY_SUFFIX = $$qtPlatformTargetSuffix()
+-
+-xcode_product_bundle_identifier_setting.name = PRODUCT_BUNDLE_IDENTIFIER
+-xcode_product_bundle_identifier_setting.value = $$QMAKE_TARGET_BUNDLE_PREFIX
+-isEmpty(xcode_product_bundle_identifier_setting.value): \
+-    xcode_product_bundle_identifier_setting.value = "com.yourcompany"
+-xcode_product_bundle_identifier_setting.value = "$${xcode_product_bundle_identifier_setting.value}.${PRODUCT_NAME:rfc1034identifier}"
+-QMAKE_MAC_XCODE_SETTINGS += xcode_product_bundle_identifier_setting
 diff --git a/mkspecs/features/mac/default_pre.prf b/mkspecs/features/mac/default_pre.prf
-index f1a4ca77b2..61ed486a76 100644
+index e3534561a5..3b01424e67 100644
 --- a/mkspecs/features/mac/default_pre.prf
 +++ b/mkspecs/features/mac/default_pre.prf
-@@ -1,67 +1,3 @@
+@@ -1,60 +1,2 @@
  CONFIG = asset_catalogs rez $$CONFIG
  load(default_pre)
- 
+-
 -isEmpty(QMAKE_XCODE_DEVELOPER_PATH) {
 -    # Get path of Xcode's Developer directory
 -    QMAKE_XCODE_DEVELOPER_PATH = $$system("/usr/bin/xcode-select --print-path 2>/dev/null")
@@ -521,13 +525,6 @@ index f1a4ca77b2..61ed486a76 100644
 -xcode_copy_phase_strip_setting.name = COPY_PHASE_STRIP
 -xcode_copy_phase_strip_setting.value = NO
 -QMAKE_MAC_XCODE_SETTINGS += xcode_copy_phase_strip_setting
--
--xcode_product_bundle_identifier_setting.name = PRODUCT_BUNDLE_IDENTIFIER
--xcode_product_bundle_identifier_setting.value = $$QMAKE_TARGET_BUNDLE_PREFIX
--isEmpty(xcode_product_bundle_identifier_setting.value): \
--    xcode_product_bundle_identifier_setting.value = "com.yourcompany"
--xcode_product_bundle_identifier_setting.value = "$${xcode_product_bundle_identifier_setting.value}.${PRODUCT_NAME:rfc1034identifier}"
--QMAKE_MAC_XCODE_SETTINGS += xcode_product_bundle_identifier_setting
 diff --git a/mkspecs/features/mac/sdk.prf b/mkspecs/features/mac/sdk.prf
 index 8360dd8b38..8b13789179 100644
 --- a/mkspecs/features/mac/sdk.prf
@@ -658,7 +655,7 @@ index 1848f00e90..2af93675c5 100644
 +    MODULE_QMAKE_OUTDIR = $$NIX_OUTPUT_OUT
  }
 diff --git a/mkspecs/features/qt_common.prf b/mkspecs/features/qt_common.prf
-index f4ae5bde80..6d4c6d223f 100644
+index 415044bb64..7163ef56cd 100644
 --- a/mkspecs/features/qt_common.prf
 +++ b/mkspecs/features/qt_common.prf
 @@ -32,8 +32,8 @@ contains(TEMPLATE, .*lib) {
@@ -1044,10 +1041,10 @@ index cc982b3379..0c5005d3d7 100644
  #endif
              }
 diff --git a/src/plugins/platforms/xcb/qxcbcursor.cpp b/src/plugins/platforms/xcb/qxcbcursor.cpp
-index 8d151b760b..a8b39d282a 100644
+index b401100dd4..b45a290065 100644
 --- a/src/plugins/platforms/xcb/qxcbcursor.cpp
 +++ b/src/plugins/platforms/xcb/qxcbcursor.cpp
-@@ -314,10 +314,10 @@ QXcbCursor::QXcbCursor(QXcbConnection *conn, QXcbScreen *screen)
+@@ -316,10 +316,10 @@ QXcbCursor::QXcbCursor(QXcbConnection *conn, QXcbScreen *screen)
  #if QT_CONFIG(xcb_xlib) && QT_CONFIG(library)
      static bool function_ptrs_not_initialized = true;
      if (function_ptrs_not_initialized) {

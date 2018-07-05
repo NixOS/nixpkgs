@@ -20,9 +20,8 @@ index 341d3bccf2..3368234c26 100644
      for (NSString *ifName in wifiInterfaces) {
              scanThread->interfaceName = QString::fromNSString(ifName);
              scanThread->start();
-diff --git a/src/plugins/platforms/cocoa/qcocoascreen.mm b/src/plugins/platforms/cocoa/qcoco
-ascreen.mm
-index a17a02b6..d76c42fa 100644
+diff --git a/src/plugins/platforms/cocoa/qcocoascreen.mm b/src/plugins/platforms/cocoa/qcocoascreen.mm
+index a17a02b629..d76c42fa03 100644
 --- a/src/plugins/platforms/cocoa/qcocoascreen.mm
 +++ b/src/plugins/platforms/cocoa/qcocoascreen.mm
 @@ -114,7 +114,7 @@ void QCocoaScreen::updateGeometry()
@@ -35,10 +34,10 @@ index a17a02b6..d76c42fa 100644
      m_availableGeometry = qt_mac_flip(QRectF::fromCGRect(nsScreen.visibleFrame), primaryScreenGeometry).toRect();
 
 diff --git a/src/plugins/platforms/cocoa/qcocoawindow.mm b/src/plugins/platforms/cocoa/qcocoawindow.mm
-index 54254455e4..e10f62909a 100644
+index 72f3bc0075..a9c058a850 100644
 --- a/src/plugins/platforms/cocoa/qcocoawindow.mm
 +++ b/src/plugins/platforms/cocoa/qcocoawindow.mm
-@@ -1674,7 +1674,7 @@ void QCocoaWindow::applyContentBorderThickness(NSWindow *window)
+@@ -1676,7 +1676,7 @@ void QCocoaWindow::applyContentBorderThickness(NSWindow *window)
  
      if (!m_drawContentBorderGradient) {
          window.styleMask = window.styleMask & ~NSTexturedBackgroundWindowMask;

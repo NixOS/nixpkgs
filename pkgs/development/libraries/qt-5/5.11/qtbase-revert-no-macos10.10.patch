@@ -21,7 +21,7 @@ Reviewed-by: Konstantin Ritt <ritt.ks@gmail.com>
  3 files changed, 4 insertions(+), 34 deletions(-)
 
 diff --git a/src/platformsupport/fontdatabases/mac/qfontengine_coretext.mm b/src/platformsupport/fontdatabases/mac/qfontengine_coretext.mm
-index 98b753ef..489d9cd0 100644
+index 98b753eff9..489d9cd031 100644
 --- a/src/platformsupport/fontdatabases/mac/qfontengine_coretext.mm
 +++ b/src/platformsupport/fontdatabases/mac/qfontengine_coretext.mm
 @@ -47,18 +47,28 @@
@@ -57,7 +57,7 @@ index 98b753ef..489d9cd0 100644
  #define kCTFontWeightThin NSFontWeightThin
  #define kCTFontWeightLight NSFontWeightLight
 diff --git a/src/plugins/platforms/cocoa/qcocoafiledialoghelper.mm b/src/plugins/platforms/cocoa/qcocoafiledialoghelper.mm
-index 94f2125b..272cd9f3 100644
+index 94f2125bad..272cd9f3dc 100644
 --- a/src/plugins/platforms/cocoa/qcocoafiledialoghelper.mm
 +++ b/src/plugins/platforms/cocoa/qcocoafiledialoghelper.mm
 @@ -162,7 +162,11 @@ QT_NAMESPACE_ALIAS_OBJC_CLASS(QNSOpenSavePanelDelegate);
@@ -74,11 +74,11 @@ index 94f2125b..272cd9f3 100644
      if (mOptions->isLabelExplicitlySet(QFileDialogOptions::Accept))
          [mSavePanel setPrompt:[self strip:options->labelText(QFileDialogOptions::Accept)]];
 diff --git a/src/plugins/platforms/cocoa/qnswindowdelegate.mm b/src/plugins/platforms/cocoa/qnswindowdelegate.mm
-index 6e5623d6..cdecd86d 100644
+index 057a4c2943..eb55e50622 100644
 --- a/src/plugins/platforms/cocoa/qnswindowdelegate.mm
 +++ b/src/plugins/platforms/cocoa/qnswindowdelegate.mm
-@@ -80,6 +80,22 @@ static QRegExp whitespaceRegex = QRegExp(QStringLiteral("\\s*"));
-     return NSRectFromCGRect(m_cocoaWindow->screen()->availableGeometry().toCGRect());
+@@ -103,6 +103,22 @@ static QRegExp whitespaceRegex = QRegExp(QStringLiteral("\\s*"));
+     return QCocoaScreen::mapToNative(maximizedFrame);
  }
  
 +#if QT_MACOS_DEPLOYMENT_TARGET_BELOW(__MAC_10_11)
