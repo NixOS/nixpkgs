@@ -4,7 +4,9 @@ let
   callPackage = pkgs.newScope self;
 
   self = rec {
-    dwarf-fortress-original = callPackage ./game.nix { };
+    dwarf-fortress-original = callPackage ./game.nix {
+      dfVersion = "0.44.11";
+    };
 
     dfhack = callPackage ./dfhack {
       inherit (pkgs.perlPackages) XMLLibXML XMLLibXSLT;
