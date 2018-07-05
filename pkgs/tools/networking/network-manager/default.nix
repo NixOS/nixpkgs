@@ -1,19 +1,19 @@
-{ stdenv, fetchurl, intltool, pkgconfig, dbus-glib, gnome3
-, systemd, libgudev, libnl, libuuid, polkit, gnutls, ppp, dhcp, iptables
+{ stdenv, fetchurl, substituteAll, intltool, pkgconfig, dbus-glib, gnome3
+, systemd, libuuid, polkit, gnutls, ppp, dhcp, iptables
 , libgcrypt, dnsmasq, bluez5, readline
 , gobjectIntrospection, modemmanager, openresolv, libndp, newt, libsoup
 , ethtool, iputils, gnused, coreutils, file, inetutils, kmod, jansson, libxslt
-, python3Packages, docbook_xsl, fetchpatch, openconnect, curl, autoreconfHook }:
+, python3Packages, docbook_xsl, openconnect, curl, autoreconfHook }:
 
 let
-  pname   = "NetworkManager";
-  version = "1.10.6";
+  pname = "NetworkManager";
 in stdenv.mkDerivation rec {
-  name    = "network-manager-${version}";
+  name = "network-manager-${version}";
+  version = "1.12.0";
 
   src = fetchurl {
-    url    = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "0xmc3x41dbcaxjm85wfv405xq1a1n3xw8m8zg645ywm3avlb3w3a";
+    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "15bzjkrfa7sw5p5hkdha4a67y1zfnzh1s6za11sh8s1yxmyvkziq";
   };
 
   outputs = [ "out" "dev" ];
@@ -25,11 +25,6 @@ in stdenv.mkDerivation rec {
   preConfigure = ''
     substituteInPlace configure --replace /usr/bin/uname ${coreutils}/bin/uname
     substituteInPlace configure --replace /usr/bin/file ${file}/bin/file
-    substituteInPlace src/devices/nm-device.c \
-       --replace /usr/bin/ping ${inetutils}/bin/ping \
-       --replace /usr/bin/ping6 ${inetutils}/bin/ping
-    substituteInPlace src/devices/nm-arping-manager.c \
-       --replace '("arping", NULL, NULL);' '("arping", "${iputils}/bin/arping", NULL);'
     substituteInPlace data/84-nm-drivers.rules \
       --replace /bin/sh ${stdenv.shell}
     substituteInPlace data/85-nm-unmanaged.rules \
@@ -38,10 +33,6 @@ in stdenv.mkDerivation rec {
       --replace /bin/sed ${gnused}/bin/sed
     substituteInPlace data/NetworkManager.service.in \
       --replace /bin/kill ${coreutils}/bin/kill
-    substituteInPlace clients/common/nm-vpn-helpers.c \
-      --subst-var-by openconnect ${openconnect}
-    substituteInPlace src/nm-core-utils.c \
-      --subst-var-by modprobeBinPath ${kmod}/bin/modprobe
     # to enable link-local connections
     configureFlags="$configureFlags --with-udev-dir=$out/lib/udev"
 
@@ -70,16 +61,32 @@ in stdenv.mkDerivation rec {
     "--with-modem-manager-1"
     "--with-nmtui"
     "--disable-gtk-doc"
+    "--with-libnm-glib" # legacy library, TODO: remove
+    "--disable-tests"
   ];
 
   patches = [
-    ./PppdPath.patch
-    ./openconnect_helper_path.patch
-    ./modprobe.patch
+    # https://bugzilla.gnome.org/show_bug.cgi?id=796752
+    (fetchurl {
+      url = https://bugzilla.gnome.org/attachment.cgi?id=372955;
+      sha256 = "17rl19lprnsz4wjmp54c1qw6a3pf8x97bhd69xavwy7cx6z84b3n";
+    })
+    # https://bugzilla.gnome.org/show_bug.cgi?id=796751
+    (fetchurl {
+      url = https://bugzilla.gnome.org/attachment.cgi?id=372953;
+      sha256 = "1crjplyiiipkhjjlifrv6hhvxinlcxd6irp9ijbc7jij31g44i0a";
+    })
+    (substituteAll {
+      src = ./fix-paths.patch;
+      inherit inetutils kmod openconnect;
+    })
+
   ];
 
-  buildInputs = [ systemd libgudev libnl libuuid polkit ppp libndp curl
-                  bluez5 dnsmasq gobjectIntrospection modemmanager readline newt libsoup jansson ];
+  buildInputs = [
+    systemd libuuid polkit ppp libndp curl
+    bluez5 dnsmasq gobjectIntrospection modemmanager readline newt libsoup jansson
+  ];
 
   propagatedBuildInputs = [ dbus-glib gnutls libgcrypt python3Packages.pygobject3 ];
 
@@ -114,10 +121,10 @@ in stdenv.mkDerivation rec {
   };
 
   meta = with stdenv.lib; {
-    homepage    = https://wiki.gnome.org/Projects/NetworkManager;
+    homepage = https://wiki.gnome.org/Projects/NetworkManager;
     description = "Network configuration and management tool";
-    license     = licenses.gpl2Plus;
+    license = licenses.gpl2Plus;
     maintainers = with maintainers; [ phreedom rickynils domenkozar obadz ];
-    platforms   = platforms.linux;
+    platforms = platforms.linux;
   };
 }
