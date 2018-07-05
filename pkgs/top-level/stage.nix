@@ -124,25 +124,7 @@ let
   # - pkgsCross.<system> where system is a member of lib.systems.examples
   # - pkgsMusl
   # - pkgsi686Linux
-  otherPackageSets = self: super: let
-    # Override default libc. Currently this is only useful on Linux
-    # systems where you have the choice between Musl & Glibc. In the
-    # future it may work for other things.
-    forceLibc = libc: nixpkgsFun {
-      localSystem = stdenv.hostPlatform // { inherit libc; };
-    };
-
-    # Override the system while preserving platform configuration.
-    # system refers to the system tuple. kernelArch refers to the
-    # kernel architecture used (only recognized by Linux kernels,
-    # currently).
-    forceSystem = system: kernelArch: nixpkgsFun {
-      localSystem = {
-        inherit system;
-        platform = stdenv.hostPlatform.platform // { inherit kernelArch; };
-      };
-    };
-  in {
+  otherPackageSets = self: super: {
     # This maps each entry in lib.systems.examples to its own package
     # set. Each of these will contain all packages cross compiled for
     # that target system. For instance, pkgsCross.rasberryPi.hello,
@@ -155,11 +137,27 @@ let
     # All packages built with the Musl libc. This will override the
     # default GNU libc on Linux systems. Non-Linux systems are not
     # supported.
-    pkgsMusl = forceLibc "musl";
+    pkgsMusl = nixpkgsFun {
+      localSystem = {
+        parsed = stdenv.hostPlatform.parsed // {
+          abi = {
+            "gnu" = lib.systems.parse.abis.musl;
+            "gnueabi" = lib.systems.parse.abis.musleabi;
+            "gnueabihf" = lib.systems.parse.abis.musleabihf;
+          }.${stdenv.hostPlatform.parsed.abi.name} or lib.systems.parse.abis.musl;
+        };
+      };
+    };
 
     # All packages built for i686 Linux.
     # Used by wine, firefox with debugging version of Flash, ...
-    pkgsi686Linux = forceSystem "i686-linux" "i386";
+    pkgsi686Linux = nixpkgsFun {
+      localSystem = {
+        parsed = stdenv.hostPlatform.parsed // {
+          cpu = lib.systems.parse.cpuTypes.i686;
+        };
+      };
+    };
   };
 
   # The complete chain of package set builders, applied from top to bottom.
