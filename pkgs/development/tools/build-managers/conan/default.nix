@@ -20,12 +20,12 @@ let newPython = python.override {
 };
 
 in newPython.pkgs.buildPythonApplication rec {
-  version = "1.4.5";
+  version = "1.5.1";
   pname = "conan";
 
   src = newPython.pkgs.fetchPypi {
     inherit pname version;
-    sha256 = "1mjakrv1d7la3lrxsv6jjqprqwmslpjmfxkw3z7pk56rzlp99nv2";
+    sha256 = "1b0iym41fpgv8vwbyys5hrh87pvh3hy2m9c01ybm72z2ki2pwxim";
   };
 
   postPatch = ''
