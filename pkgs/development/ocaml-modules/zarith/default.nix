@@ -5,9 +5,9 @@ assert stdenv.lib.versionAtLeast ocaml.version "3.12.1";
 let param =
   if stdenv.lib.versionAtLeast ocaml.version "4.02"
   then {
-    version = "1.4.1";
-    url = http://forge.ocamlcore.org/frs/download.php/1574/zarith-1.4.1.tgz;
-    sha256 = "0l36hzmfbvdai2kcgynh13vfdim5x2grnaw61fxqalyjm90c3di3";
+    version = "1.7";
+    url = https://github.com/ocaml/Zarith/archive/release-1.7.tar.gz;
+    sha256 = "0fmblap5nsbqq0dab63d6b7lsxpc3snkgz7jfldi2qa4s1kbnhfn";
   } else {
     version = "1.3";
     url = http://forge.ocamlcore.org/frs/download.php/1471/zarith-1.3.tgz;
