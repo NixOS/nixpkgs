@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, meson, ninja, intltool, gtk-doc, pkgconfig, networkmanager, gnome3
+{ stdenv, fetchurl, fetchpatch, meson, ninja, intltool, gtk-doc, pkgconfig, networkmanager, gnome3
 , libnotify, libsecret, polkit, isocodes, modemmanager, libxml2, docbook_xsl
 , mobile-broadband-provider-info, glib-networking, gsettings-desktop-schemas
 , libgudev, hicolor-icon-theme, jansson, wrapGAppsHook, webkitgtk, gobjectIntrospection
@@ -6,18 +6,25 @@
 
 let
   pname = "network-manager-applet";
-  version = "1.8.10";
+  version = "1.8.14";
 in stdenv.mkDerivation rec {
   name = "${pname}-${version}";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "1hy9ni2rwpy68h7jhn5lm2s1zm1vjchfy8lwj8fpm7xlx3x4pp0a";
+    sha256 = "1js0i2kwfklahsn77qgxzdscy33drrlym3mrj1qhlw0zf8ri56ya";
   };
+
+  patches = [
+    (fetchpatch {
+      url = https://gitlab.gnome.org/GNOME/network-manager-applet/merge_requests/12.patch;
+      sha256 = "0q5qbjpbrfvhqsprnwjwz4c42nly59cgnbn41w2zlxvqf29gjvwk";
+    })
+  ];
 
   mesonFlags = [
     "-Dselinux=false"
-    "-Dappindicator=true"
+    "-Dappindicator=yes"
     "-Dgcr=${if withGnome then "true" else "false"}"
   ];
 
@@ -34,7 +41,6 @@ in stdenv.mkDerivation rec {
 
   propagatedUserEnvPkgs = [
     hicolor-icon-theme
-    gnome3.gnome-keyring  # See https://github.com/NixOS/nixpkgs/issues/38967
   ];
 
   NIX_CFLAGS = [
