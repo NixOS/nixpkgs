@@ -17977,7 +17977,9 @@ with pkgs;
 
   rpcs3 = libsForQt5.callPackage ../misc/emulators/rpcs3 { };
 
-  rstudio = libsForQt5.callPackage ../applications/editors/rstudio { };
+  rstudio = libsForQt5.callPackage ../applications/editors/rstudio {
+    boost = boost166;
+  };
 
   rsync = callPackage ../applications/networking/sync/rsync {
     enableACLs = !(stdenv.isDarwin || stdenv.isSunOS || stdenv.isFreeBSD);
