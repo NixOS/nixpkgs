@@ -1,11 +1,10 @@
-{ emscriptenVersion, stdenv, fetchFromGitHub, emscriptenfastcomp, python, nodejs, closurecompiler, pkgs
-, jre, binaryen, enableWasm ? true ,  python2Packages, cmake
+{ stdenv, fetchFromGitHub, emscriptenfastcomp, python, nodejs, closurecompiler
+, jre, binaryen, enableWasm ? true
 }:
 
 let
-  rev = emscriptenVersion;
+  rev = "1.38.6";
   appdir = "share/emscripten";
-  binaryenVersioned = binaryen.override { emscriptenRev = rev; };
 in
 
 stdenv.mkDerivation {
@@ -14,11 +13,9 @@ stdenv.mkDerivation {
   src = fetchFromGitHub {
     owner = "kripken";
     repo = "emscripten";
-    sha256 = "02p0cp86vd1mydlpq544xbydggpnrq9dhbxx7h08j235frjm5cdc";
+    sha256 = "11r4f4vad9smkxhx4q0yz62fd39gmawdi8xgvg1afa0chawdl1cf";
     inherit rev;
   };
-
-  buildInputs = [ nodejs cmake python ];
 
   buildCommand = ''
     mkdir -p $out/${appdir}
@@ -41,30 +38,16 @@ stdenv.mkDerivation {
     echo "COMPILER_ENGINE = NODE_JS" >> $out/${appdir}/config
     echo "CLOSURE_COMPILER = '${closurecompiler}/share/java/closure-compiler-v${closurecompiler.version}.jar'" >> $out/${appdir}/config
     echo "JAVA = '${jre}/bin/java'" >> $out/${appdir}/config
-    # to make the test(s) below work
-    echo "SPIDERMONKEY_ENGINE = []" >> $out/${appdir}/config
   ''
   + stdenv.lib.optionalString enableWasm ''
-    echo "BINARYEN_ROOT = '${binaryenVersioned}'" >> $out/share/emscripten/config
-  ''
-  +
-  ''
-    echo "--------------- running test -----------------"
-    # quick hack to get the test working
-    HOME=$TMPDIR
-    cp $out/${appdir}/config $HOME/.emscripten
-    export PATH=$PATH:$out/bin
-
-    #export EMCC_DEBUG=2  
-    ${python}/bin/python $src/tests/runner.py test_hello_world
-    echo "--------------- /running test -----------------"
+    echo "BINARYEN_ROOT = '${binaryen}'" >> $out/share/emscripten/config
   '';
 
   meta = with stdenv.lib; {
     homepage = https://github.com/kripken/emscripten;
     description = "An LLVM-to-JavaScript Compiler";
     platforms = platforms.all;
-    maintainers = with maintainers; [ qknight matthewbauer ];
+    maintainers = with maintainers; [ qknight matthewbauer mupf ];
     license = licenses.ncsa;
   };
 }
