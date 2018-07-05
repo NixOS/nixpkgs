@@ -130,8 +130,6 @@ let
   #
   # - forceLibc
   # - forceSystem
-  #
-  # For legacy purposes, callPackage_i686 is also included here.
   otherPackageSets = self: super: {
     # This maps each entry in lib.systems.examples to its own package
     # set. Each of these will contain all packages cross compiled for
@@ -168,9 +166,6 @@ let
         platform = stdenv.hostPlatform.platform // { inherit kernelArch; };
       };
     };
-
-    # Legacy attributes that are slated for removal...
-    callPackage_i686 = self.pkgsi686Linux.callPackage;
   };
 
   # The complete chain of package set builders, applied from top to bottom.
