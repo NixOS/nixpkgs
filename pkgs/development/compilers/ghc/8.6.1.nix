@@ -45,9 +45,9 @@ let
     "Cabal" "array" "base" "binary" "bytestring" "containers"
     "deepseq" "directory" "filepath" /*"ghc"*/ "ghc-boot" "ghc-boot-th"
     "ghc-compact" "ghc-heap" "ghc-prim" "ghci" "haskeline" "hpc"
-    "integer-gmp" "mtl" "parsec" "pretty" "process" "rts"
-    "stm" "template-haskell" "terminfo" "text" "time" "transformers"
-    "unix" "xhtml"
+    "integer-gmp" "libiserv" "mtl" "parsec" "pretty" "process"
+    "rts" "stm" "template-haskell" "terminfo" "text" "time"
+    "transformers" "unix" "xhtml"
   ];
 
   inherit (haskellLib) toOutputName;
