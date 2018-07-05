@@ -1,5 +1,6 @@
 { stdenv, targetPackages
 , buildPlatform, hostPlatform, targetPlatform
+, haskellLib
 
 # build-tools
 , bootPkgs, alex, happy, hscolour
@@ -40,6 +41,17 @@ let
   targetPrefix = stdenv.lib.optionalString
     (targetPlatform != hostPlatform)
     "${targetPlatform.config}-";
+
+  bootPackages = [
+    "Cabal" "array" "base" "binary" "bytestring" "containers"
+    "deepseq" "directory" "filepath" /*"ghc"*/ "ghc-boot" "ghc-boot-th"
+    "ghc-compact" "ghc-prim" "ghci" "haskeline" "hpc" "integer-gmp"
+    "mtl" "parsec" "pretty" "process" "rts" "stm"
+    "template-haskell" "terminfo" "text" "time" "transformers" "unix"
+    "xhtml"
+  ];
+
+  inherit (haskellLib) toOutputName;
 
   buildMK = ''
     BuildFlavour = ${ghcFlavour}
@@ -89,7 +101,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  outputs = [ "out" "doc" ];
+  outputs = [ "out" "doc" ] ++ map toOutputName bootPackages;
 
   postPatch = "patchShebangs .";
 
@@ -177,6 +189,15 @@ stdenv.mkDerivation rec {
       paxmark m "$bin"
     done
 
+    # Make boot packages usable as individual dependencies
+  '' + stdenv.lib.concatMapStringsSep "\n" (lib: ''
+    libOut="''$${toOutputName lib}"
+    libConfDir="$libOut/lib/ghc-${version}/package.conf.d"
+    mkdir -p "$libConfDir"
+    find "$out/lib/ghc-${version}/package.conf.d/" -regex '.*/${lib}-[0-9.]*.conf' -exec \
+      mv {} "$libConfDir"/ \;
+  '') bootPackages + ''
+
     # Install the bash completion file.
     install -D -m 444 utils/completion/ghc.bash $out/share/bash-completion/completions/${targetPrefix}ghc
 
@@ -189,7 +210,9 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
-    inherit bootPkgs targetPrefix;
+    inherit bootPackages;
+    inherit bootPkgs;
+    inherit targetPrefix;
 
     inherit llvmPackages;
     inherit enableShared;

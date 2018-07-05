@@ -7,34 +7,6 @@ self: super: {
   # Suitable LLVM version.
   llvmPackages = pkgs.llvmPackages_37;
 
-  # Disable GHC 8.0.x core libraries.
-  array = null;
-  base = null;
-  binary = null;
-  bytestring = null;
-  Cabal = null;
-  containers = null;
-  deepseq = null;
-  directory = null;
-  filepath = null;
-  ghc-boot = null;
-  ghc-boot-th = null;
-  ghc-prim = null;
-  ghci = null;
-  haskeline = null;
-  hoopl = null;
-  hpc = null;
-  integer-gmp = null;
-  pretty = null;
-  process = null;
-  rts = null;
-  template-haskell = null;
-  terminfo = null;
-  time = null;
-  transformers = null;
-  unix = null;
-  xhtml = null;
-
   # https://github.com/bmillwood/applicative-quoters/issues/6
   applicative-quoters = appendPatch super.applicative-quoters (pkgs.fetchpatch {
     url = "https://patch-diff.githubusercontent.com/raw/bmillwood/applicative-quoters/pull/7.patch";

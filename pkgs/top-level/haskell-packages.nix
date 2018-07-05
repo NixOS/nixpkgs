@@ -42,16 +42,22 @@ in rec {
 
   compiler = {
 
-    ghc7103Binary = callPackage ../development/compilers/ghc/7.10.3-binary.nix { };
-    ghc821Binary = callPackage ../development/compilers/ghc/8.2.1-binary.nix { };
+    ghc7103Binary = callPackage ../development/compilers/ghc/7.10.3-binary.nix {
+      inherit haskellLib;
+    };
+    ghc821Binary = callPackage ../development/compilers/ghc/8.2.1-binary.nix {
+      inherit haskellLib;
+    };
 
     ghc7103 = callPackage ../development/compilers/ghc/7.10.3.nix rec {
+      inherit haskellLib;
       bootPkgs = packages.ghc7103Binary;
       inherit (bootPkgs) hscolour;
       buildLlvmPackages = buildPackages.llvmPackages_35;
       llvmPackages = pkgs.llvmPackages_35;
     };
     ghc802 = callPackage ../development/compilers/ghc/8.0.2.nix rec {
+      inherit haskellLib;
       bootPkgs = packages.ghc7103Binary;
       inherit (bootPkgs) hscolour;
       sphinx = pkgs.python27Packages.sphinx;
@@ -59,6 +65,7 @@ in rec {
       llvmPackages = pkgs.llvmPackages_37;
     };
     ghc822 = callPackage ../development/compilers/ghc/8.2.2.nix rec {
+      inherit haskellLib;
       bootPkgs = packages.ghc821Binary;
       inherit (bootPkgs) hscolour alex happy;
       inherit buildPlatform targetPlatform;
@@ -67,18 +74,21 @@ in rec {
       llvmPackages = pkgs.llvmPackages_39;
     };
     ghc843 = callPackage ../development/compilers/ghc/8.4.3.nix rec {
+      inherit haskellLib;
       bootPkgs = packages.ghc821Binary;
       inherit (bootPkgs) alex happy hscolour;
       buildLlvmPackages = buildPackages.llvmPackages_5;
       llvmPackages = pkgs.llvmPackages_5;
     };
     ghc861 = callPackage ../development/compilers/ghc/8.6.1.nix rec {
+      inherit haskellLib;
       bootPkgs = packages.ghc822;
       inherit (bootPkgs) alex happy hscolour;
       buildLlvmPackages = buildPackages.llvmPackages_5;
       llvmPackages = pkgs.llvmPackages_5;
     };
     ghcHEAD = callPackage ../development/compilers/ghc/head.nix rec {
+      inherit haskellLib;
       bootPkgs = packages.ghc821Binary;
       inherit (bootPkgs) alex happy hscolour;
       buildLlvmPackages = buildPackages.llvmPackages_5;

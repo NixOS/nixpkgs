@@ -7,35 +7,6 @@ self: super: {
   # Suitable LLVM version.
   llvmPackages = pkgs.llvmPackages_39;
 
-  # Disable GHC 8.2.x core libraries.
-  array = null;
-  base = null;
-  binary = null;
-  bytestring = null;
-  Cabal = null;
-  containers = null;
-  deepseq = null;
-  directory = null;
-  filepath = null;
-  ghc-boot = null;
-  ghc-boot-th = null;
-  ghc-compact = null;
-  ghc-prim = null;
-  ghci = null;
-  haskeline = null;
-  hoopl = null;
-  hpc = null;
-  integer-gmp = null;
-  pretty = null;
-  process = null;
-  rts = null;
-  template-haskell = null;
-  terminfo = null;
-  time = null;
-  transformers = null;
-  unix = null;
-  xhtml = null;
-
   # Make sure we can still build Cabal 1.x.
   Cabal_1_24_2_0 = overrideCabal super.Cabal_1_24_2_0 (drv: {
     prePatch = "sed -i -e 's/process.*< 1.5,/process,/g' Cabal.cabal";

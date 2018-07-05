@@ -7,35 +7,6 @@ self: super: {
   # Suitable LLVM version.
   llvmPackages = pkgs.llvmPackages_35;
 
-  # Disable GHC 7.10.x core libraries.
-  array = null;
-  base = null;
-  binary = null;
-  bin-package-db = null;
-  bytestring = null;
-  Cabal = null;
-  containers = null;
-  deepseq = null;
-  directory = null;
-  filepath = null;
-  ghc-boot = null;
-  ghc-boot-th = null;
-  ghc-prim = null;
-  ghci = null;
-  haskeline = null;
-  hoopl = null;
-  hpc = null;
-  integer-gmp = null;
-  pretty = null;
-  process = null;
-  rts = null;
-  template-haskell = null;
-  terminfo = null;
-  time = null;
-  transformers = null;
-  unix = null;
-  xhtml = null;
-
   # Build jailbreak-cabal with the latest version of Cabal.
   jailbreak-cabal = super.jailbreak-cabal.override { Cabal = self.Cabal_1_24_2_0; };
 

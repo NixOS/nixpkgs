@@ -1,4 +1,5 @@
 { stdenv
+, haskellLib
 , fetchurl, perl, gcc, llvm_39
 , ncurses5, gmp, libiconv
 }:
@@ -13,6 +14,16 @@ let
 
   libEnvVar = stdenv.lib.optionalString stdenv.hostPlatform.isDarwin "DY"
     + "LD_LIBRARY_PATH";
+
+  bootPackages = [
+    "Cabal" "array" "base" "binary" "bytestring" "containers"
+    "deepseq" "directory" "filepath" /*"ghc"*/ "ghc-boot" "ghc-boot-th"
+    "ghc-compact" "ghc-prim" "ghci" "haskeline" "hoopl" "hpc"
+    "integer-gmp" "pretty" "process" "rts" "template-haskell" "terminfo"
+    "time" "transformers" "unix" "xhtml"
+  ];
+
+  inherit (haskellLib) toOutputName;
 
 in
 
@@ -44,6 +55,8 @@ stdenv.mkDerivation rec {
     };
   }.${stdenv.hostPlatform.system}
     or (throw "cannot bootstrap GHC on this platform"));
+
+  outputs = [ "out" ] ++ map toOutputName bootPackages;
 
   nativeBuildInputs = [ perl ];
   buildInputs = stdenv.lib.optionals (stdenv.targetPlatform.isAarch32 || stdenv.targetPlatform.isAarch64) [ llvm_39 ];
@@ -117,6 +130,14 @@ stdenv.mkDerivation rec {
   # calls install-strip ...
   dontBuild = true;
 
+  postInstall = stdenv.lib.concatMapStringsSep "\n" (lib: ''
+    libOut="''$${toOutputName lib}"
+    libConfDir="$libOut/lib/ghc-${version}/package.conf.d"
+    mkdir -p "$libConfDir"
+    find "$out/lib/ghc-${version}/package.conf.d/" -regex '.*/${lib}-[0-9.]*.conf' -exec \
+      mv {} "$libConfDir"/ \;
+  '') bootPackages;
+
   # On Linux, use patchelf to modify the executables so that they can
   # find editline/gmp.
   preFixup = stdenv.lib.optionalString stdenv.isLinux ''
@@ -156,6 +177,7 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
+    inherit bootPackages;
     targetPrefix = "";
     enableShared = true;
   };

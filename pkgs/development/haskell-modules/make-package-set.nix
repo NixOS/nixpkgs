@@ -37,7 +37,7 @@ self:
 let
   inherit (stdenv) buildPlatform hostPlatform;
 
-  inherit (stdenv.lib) fix' extends makeOverridable;
+  inherit (stdenv.lib) fix' extends genAttrs makeOverridable;
   inherit (haskellLib) overrideCabal getHaskellBuildInputs;
 
   mkDerivationImpl = pkgs.callPackage ./generic-builder.nix {
@@ -105,6 +105,16 @@ let
     inherit (self) ghc llvmPackages;
     inherit packages;
   };
+
+  ghcWithPackages = selectFrom: withPackages (selectFrom self);
+
+  ghcWithHoogle = selectFrom:
+    let
+      packages = selectFrom self;
+      hoogle = callPackage ./hoogle.nix {
+        inherit packages;
+      };
+    in withPackages (packages ++ [ hoogle ]);
 
   haskellSrc2nix = { name, src, sha256 ? null, extraCabal2nixOptions ? "" }:
     let
@@ -197,15 +207,8 @@ in package-set { inherit pkgs stdenv callPackage; } self // {
         .callCabal2nix (builtins.baseNameOf root) root {};
       in if returnShellEnv then (modifier drv).env else modifier drv;
 
-    ghcWithPackages = selectFrom: withPackages (selectFrom self);
-
-    ghcWithHoogle = selectFrom:
-      let
-        packages = selectFrom self;
-        hoogle = callPackage ./hoogle.nix {
-          inherit packages;
-        };
-      in withPackages (packages ++ [ hoogle ]);
+    inherit ghcWithPackages;
+    inherit ghcWithHoogle;
 
     # Returns a derivation whose environment contains a GHC with only
     # the dependencies of packages listed in `packages`, not the
@@ -243,7 +246,7 @@ in package-set { inherit pkgs stdenv callPackage; } self // {
             (input: pkgs.lib.all (p: input.outPath != p.outPath) selected)
             (pkgs.lib.concatMap (p: p.haskellBuildInputs) packageInputs);
         systemInputs = pkgs.lib.concatMap (p: p.systemBuildInputs) packageInputs;
-        withPackages = if withHoogle then self.ghcWithHoogle else self.ghcWithPackages;
+        withPackages = if withHoogle then ghcWithHoogle else ghcWithPackages;
         mkDrvArgs = builtins.removeAttrs args ["packages" "withHoogle"];
       in pkgs.stdenv.mkDerivation (mkDrvArgs // {
         name = "ghc-shell-for-packages";
@@ -253,9 +256,9 @@ in package-set { inherit pkgs stdenv callPackage; } self // {
         installPhase = "echo $nativeBuildInputs $buildInputs > $out";
       });
 
+  } // genAttrs (ghc.passthru.bootPackages or []) (name: ghc."${haskellLib.toOutputName name}") // {
     ghc = ghc // {
-      withPackages = self.ghcWithPackages;
-      withHoogle = self.ghcWithHoogle;
+      withPackages = ghcWithPackages;
+      withHoogle = ghcWithHoogle;
     };
-
   }
