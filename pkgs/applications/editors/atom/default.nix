@@ -21,6 +21,7 @@ let
       mv $out/usr/* $out/
       rm -r $out/share/lintian
       rm -r $out/usr/
+      sed -i "s/${pname})/.${pname}-wrapped)/" $out/bin/${pname}
       # sed -i "s/'${pname}'/'.${pname}-wrapped'/" $out/bin/${pname}
       wrapProgram $out/bin/${pname} \
         --prefix "PATH" : "${gvfs}/bin"
