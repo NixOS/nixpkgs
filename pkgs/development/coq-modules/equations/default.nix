@@ -14,6 +14,12 @@ let param =
       sha256 = "1bavg4zl1xn0jqrdq8iw7xqzdvdf39ligj9saz5m9c507zri952h";
     };
 
+    "8.8" = {
+      version = "1.0";
+      rev = "v1.0-8.8";
+      sha256 = "129rxsdsf88vjcw0xhm74yax1hmnk6f8n9ksg0hcyyjq1ijddiwa";
+    };
+
   }."${coq.coq-version}"
 ; in
 
