@@ -6266,6 +6266,8 @@ in {
 
   grpcio = callPackage ../development/python-modules/grpcio { };
 
+  grpcio-tools = callPackage ../development/python-modules/grpcio-tools { };
+
   gspread = buildPythonPackage rec {
     version = "0.2.3";
     name = "gspread-${version}";
