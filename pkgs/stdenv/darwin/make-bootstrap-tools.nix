@@ -178,6 +178,9 @@ in rec {
   unpack = stdenv.mkDerivation (bootstrapFiles // {
     name = "unpack";
 
+    reexportedLibrariesFile =
+      ../../os-specific/darwin/apple-source-releases/Libsystem/reexported_libraries;
+
     # This is by necessity a near-duplicate of unpack-bootstrap-tools.sh. If we refer to it directly,
     # we can't make any changes to it due to our testing stdenv depending on it. Think of this as the
     # unpack-bootstrap-tools.sh for the next round of bootstrap tools.
@@ -209,7 +212,7 @@ in rec {
         $out/lib/system/libsystem_kernel.dylib
 
       # TODO: this logic basically duplicates similar logic in the Libsystem expression. Deduplicate them!
-      libs=$(otool -arch x86_64 -L /usr/lib/libSystem.dylib | tail -n +3 | awk '{ print $1 }')
+      libs=$(cat $reexportedLibrariesFile | grep -v '^#')
 
       for i in $libs; do
         if [ "$i" != "/usr/lib/system/libsystem_kernel.dylib" ] && [ "$i" != "/usr/lib/system/libsystem_c.dylib" ]; then
