@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ git ];
   buildInputs = [ z3 zlib ];
 
-  makeFlags = [ "vampire_z3_rel" ];
+  makeFlags = [ "vampire_z3_rel" "CC:=$(CC)" "CXX:=$(CXX)" ];
 
   fixupPhase = ''
     rm -rf z3
