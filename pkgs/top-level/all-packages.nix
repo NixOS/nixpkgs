@@ -5529,6 +5529,8 @@ with pkgs;
 
   vacuum = callPackage ../applications/networking/instant-messengers/vacuum {};
 
+  vampire = callPackage ../applications/science/logic/vampire {};
+
   volatility = callPackage ../tools/security/volatility { };
 
   vbetool = callPackage ../tools/system/vbetool { };
