@@ -124,31 +124,7 @@ let
   # - pkgsCross.<system> where system is a member of lib.systems.examples
   # - pkgsMusl
   # - pkgsi686Linux
-  #
-  # In addition some utility functions are included for creating the
-  # above sets.
-  #
-  # - forceLibc
-  # - forceSystem
-  otherPackageSets = self: super: {
-    # This maps each entry in lib.systems.examples to its own package
-    # set. Each of these will contain all packages cross compiled for
-    # that target system. For instance, pkgsCross.rasberryPi.hello,
-    # will refer to the "hello" package built for the ARM6-based
-    # Raspberry Pi.
-    pkgsCross = lib.mapAttrs (n: crossSystem:
-                              nixpkgsFun { inherit crossSystem; })
-                              lib.systems.examples;
-
-    # All packages built with the Musl libc. This will override the
-    # default GNU libc on Linux systems. Non-Linux systems are not
-    # supported.
-    pkgsMusl = self.forceLibc "musl";
-
-    # All packages built for i686 Linux.
-    # Used by wine, firefox with debugging version of Flash, ...
-    pkgsi686Linux = self.forceSystem "i686-linux" "i386";
-
+  otherPackageSets = self: super: let
     # Override default libc. Currently this is only useful on Linux
     # systems where you have the choice between Musl & Glibc. In the
     # future it may work for other things.
@@ -166,6 +142,24 @@ let
         platform = stdenv.hostPlatform.platform // { inherit kernelArch; };
       };
     };
+  in {
+    # This maps each entry in lib.systems.examples to its own package
+    # set. Each of these will contain all packages cross compiled for
+    # that target system. For instance, pkgsCross.rasberryPi.hello,
+    # will refer to the "hello" package built for the ARM6-based
+    # Raspberry Pi.
+    pkgsCross = lib.mapAttrs (n: crossSystem:
+                              nixpkgsFun { inherit crossSystem; })
+                              lib.systems.examples;
+
+    # All packages built with the Musl libc. This will override the
+    # default GNU libc on Linux systems. Non-Linux systems are not
+    # supported.
+    pkgsMusl = forceLibc "musl";
+
+    # All packages built for i686 Linux.
+    # Used by wine, firefox with debugging version of Flash, ...
+    pkgsi686Linux = forceSystem "i686-linux" "i386";
   };
 
   # The complete chain of package set builders, applied from top to bottom.
