@@ -1,24 +1,15 @@
-{stdenv, fetchurl, jre, makeWrapper}:
+{stdenv, fetchurl, jre, wrapCommand}:
 
-stdenv.mkDerivation rec {
-  name = "varscan-${version}";
+let
   version = "2.4.2";
-
-  src = fetchurl {
+  jar = fetchurl {
     url = "https://github.com/dkoboldt/varscan/releases/download/${version}/VarScan.v${version}.jar";
     sha256 = "0cfhshinyqgwc6i7zf8lhbfybyly2x5anrz824zyvdhzz5i69zrl";
   };
-
-  buildInputs = [ jre makeWrapper ];
-
-  phases = [ "installPhase" ];
-
-  installPhase = ''
-    mkdir -p $out/libexec/varscan
-    cp $src $out/libexec/varscan/varscan.jar
-    mkdir -p $out/bin
-    makeWrapper ${jre}/bin/java $out/bin/varscan --add-flags "-jar $out/libexec/varscan/varscan.jar"
-  '';
+in wrapCommand "varscan" {
+  inherit version;
+  executable = "${jre}/bin/java";
+  makeWrapperArgs = [ "--add-flags -jar" "--add-flags ${jar}" ];
 
   meta = with stdenv.lib; {
     description = "Variant calling and somatic mutation/CNV detection for next-generation sequencing data";
@@ -32,5 +23,4 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ jbedo ];
     platforms = platforms.all;
   };
-
 }
