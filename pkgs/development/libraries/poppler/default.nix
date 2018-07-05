@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, cmake, ninja, pkgconfig, libiconv, libintl
+{ stdenv, lib, fetchurl, cmake, ninja, pkgconfig, libiconv, libintl, fetchpatch
 , zlib, curl, cairo, freetype, fontconfig, lcms, libjpeg, openjpeg
 , withData ? true, poppler_data
 , qt5Support ? false, qtbase ? null
@@ -32,6 +32,11 @@ stdenv.mkDerivation rec {
     ++ optional introspectionSupport gobjectIntrospection;
 
   nativeBuildInputs = [ cmake ninja pkgconfig ];
+
+  patches = lib.optional stdenv.isDarwin (fetchpatch {
+    url = "https://cgit.freedesktop.org/poppler/poppler/patch/?id=267228bb071016621c80fc8514927905164aaeea";
+    sha256 = "0i2sbxz1mrsnj75qgqaadayjgs48ay2mhrbkij95djy6am44m54k";
+  });
 
   # Not sure when and how to pass it.  It seems an upstream bug anyway.
   CXXFLAGS = stdenv.lib.optionalString stdenv.cc.isClang "-std=c++11";
