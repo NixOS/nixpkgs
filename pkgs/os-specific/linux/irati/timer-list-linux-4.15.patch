@@ -1,0 +1,70 @@
+diff --git a/kernel/rds/rtimer.c b/kernel/rds/rtimer.c
+index 9bd729a25..8342c25d6 100644
+--- a/kernel/rds/rtimer.c
++++ b/kernel/rds/rtimer.c
+@@ -53,7 +53,11 @@ static struct rtimer * rtimer_create_gfp(gfp_t   flags,
+         tmp->function = function;
+         tmp->data     = data;
+ 
++#ifdef HAVE_KERNEL_TIMER_FUNCTION_TIMER_LIST
++	timer_setup(&tmp->tl, NULL, 0);
++#else
+         init_timer(&tmp->tl);
++#endif
+ 
+         LOG_DBG("Timer %pK created", tmp);
+ 
+@@ -93,7 +97,9 @@ static int __rtimer_start(struct rtimer * timer,
+ 
+         /* FIXME: Crappy, rearrange */
+         timer->tl.function = (void (*)(unsigned long)) timer->function;
++#ifndef HAVE_KERNEL_TIMER_FUNCTION_TIMER_LIST
+         timer->tl.data     = (unsigned long)           timer->data;
++#endif
+         timer->tl.expires  = jiffies + (millisecs * HZ) / 1000;
+ 
+         status = mod_timer(&timer->tl, timer->tl.expires);
+@@ -104,7 +110,9 @@ static int __rtimer_start(struct rtimer * timer,
+                 status ? "active" : "inactive",
+                 timer,
+                 (void *) timer->tl.function,
++#ifndef HAVE_KERNEL_TIMER_FUNCTION_TIMER_LIST
+                 (void *) timer->tl.data,
++#endif
+                 timer->tl.expires,
+                 millisecs);
+ 
+diff --git a/kernel/vmpi/vmpi-guest-impl-xen.c b/kernel/vmpi/vmpi-guest-impl-xen.c
+index b57eff4e8..32f4975e0 100644
+--- a/kernel/vmpi/vmpi-guest-impl-xen.c
++++ b/kernel/vmpi/vmpi-guest-impl-xen.c
+@@ -668,9 +668,13 @@ static struct vmpi_impl_info *xenmpi_create_dev(struct xenbus_device *dev)
+ 	np->rx_min_target = RX_DFL_MIN_TARGET;
+ 	np->rx_max_target = RX_MAX_TARGET;
+ 
++#ifdef HAVE_KERNEL_TIMER_FUNCTION_TIMER_LIST
++	timer_setup(&np->rx_refill_timer, rx_refill_timeout, 0);
++#else
+ 	init_timer(&np->rx_refill_timer);
+ 	np->rx_refill_timer.data = (unsigned long)np;
+ 	np->rx_refill_timer.function = rx_refill_timeout;
++#endif
+ 
+ 	/* Initialise tx_bufs as a free chain containing every entry. */
+ 	np->tx_buf_freelist = 0;
+diff --git a/kernel/vmpi/xen-mpi-back-interface.c b/kernel/vmpi/xen-mpi-back-interface.c
+index d29cc31e7..1e846968a 100644
+--- a/kernel/vmpi/xen-mpi-back-interface.c
++++ b/kernel/vmpi/xen-mpi-back-interface.c
+@@ -184,7 +184,11 @@ struct vmpi_impl_info *xenmpi_alloc(struct device *parent, domid_t domid)
+ 
+ 	vif->credit_bytes = vif->remaining_credit = ~0UL;
+ 	vif->credit_usec  = 0UL;
++#ifdef HAVE_KERNEL_TIMER_FUNCTION_TIMER_LIST
++	timer_setup(&vif->credit_timeout, NULL, 0);
++#else
+ 	init_timer(&vif->credit_timeout);
++#endif
+ 	vif->credit_window_start = get_jiffies_64();
+ 
+         vmpi_queue_init(&vif->tx_queue, 0, VMPI_BUF_SIZE);

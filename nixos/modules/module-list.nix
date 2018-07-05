@@ -504,6 +504,7 @@
   ./services/networking/i2pd.nix
   ./services/networking/i2p.nix
   ./services/networking/iodine.nix
+  ./services/networking/irati.nix
   ./services/networking/ircd-hybrid/default.nix
   ./services/networking/iwd.nix
   ./services/networking/keepalived/default.nix
@@ -561,6 +562,7 @@
   ./services/networking/rdnssd.nix
   ./services/networking/redsocks.nix
   ./services/networking/resilio.nix
+  ./services/networking/rlite.nix
   ./services/networking/rpcbind.nix
   ./services/networking/rxe.nix
   ./services/networking/sabnzbd.nix
