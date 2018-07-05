@@ -1,4 +1,4 @@
-{ stdenv, lib, buildEnv, callPackage_i686, fetchFromGitHub, python27Packages, graphviz
+{ stdenv, lib, buildEnv, pkgsi686Linux, fetchFromGitHub, python27Packages, graphviz
 , includeGUI ? true
 , includeProtocols ? true
 }:
@@ -20,7 +20,7 @@ let
     platforms = platforms.linux;
   };
 
-  cli = callPackage_i686 ./cli.nix {
+  cli = pkgsi686Linux.callPackage ./cli.nix {
     inherit version src meta;
   };
 
@@ -47,7 +47,7 @@ let
       python27Packages.wxPython
       graphviz
     ];
- 
+
     installPhase = ''
       mkdir -p "$out"/gui "$out"/bin
       cp -r gui/* "$out"/gui

@@ -2393,7 +2393,7 @@ with pkgs;
 
   flamerobin = callPackage ../applications/misc/flamerobin { };
 
-  flashtool = callPackage_i686 ../development/mobile/flashtool {
+  flashtool = pkgsi686Linux.callPackage ../development/mobile/flashtool {
     platformTools = androidenv.platformTools;
   };
 
@@ -2407,7 +2407,7 @@ with pkgs;
 
   flvstreamer = callPackage ../tools/networking/flvstreamer { };
 
-  hmetis = callPackage_i686 ../applications/science/math/hmetis { };
+  hmetis = pkgsi686Linux.callPackage ../applications/science/math/hmetis { };
 
   libbsd = callPackage ../development/libraries/libbsd { };
 
@@ -2803,13 +2803,13 @@ with pkgs;
 
   groonga = callPackage ../servers/search/groonga { };
 
-  grub = callPackage_i686 ../tools/misc/grub {
+  grub = pkgsi686Linux.callPackage ../tools/misc/grub {
     buggyBiosCDSupport = config.grub.buggyBiosCDSupport or true;
   };
 
-  trustedGrub = callPackage_i686 ../tools/misc/grub/trusted.nix { };
+  trustedGrub = pkgsi686Linux.callPackage ../tools/misc/grub/trusted.nix { };
 
-  trustedGrub-for-HP = callPackage_i686 ../tools/misc/grub/trusted.nix { for_HP_laptop = true; };
+  trustedGrub-for-HP = pkgsi686Linux.callPackage ../tools/misc/grub/trusted.nix { for_HP_laptop = true; };
 
   grub2 = grub2_full;
 
@@ -3289,7 +3289,7 @@ with pkgs;
 
   kbdd = callPackage ../applications/window-managers/kbdd { };
 
-  kdbplus = callPackage_i686 ../applications/misc/kdbplus { };
+  kdbplus = pkgsi686Linux.callPackage ../applications/misc/kdbplus { };
 
   kde2-decoration = libsForQt5.callPackage ../misc/themes/kde2 { };
 
@@ -3408,7 +3408,7 @@ with pkgs;
 
   kippo = callPackage ../servers/kippo { };
 
-  kzipmix = callPackage_i686 ../tools/compression/kzipmix { };
+  kzipmix = pkgsi686Linux.callPackage ../tools/compression/kzipmix { };
 
   mailcatcher = callPackage ../development/web/mailcatcher { };
 
@@ -6181,7 +6181,7 @@ with pkgs;
 
   cmdstan = callPackage ../development/compilers/cmdstan { };
 
-  cmucl_binary = callPackage_i686 ../development/compilers/cmucl/binary.nix { };
+  cmucl_binary = pkgsi686Linux.callPackage ../development/compilers/cmucl/binary.nix { };
 
   compcert = callPackage ../development/compilers/compcert { };
 
@@ -6488,25 +6488,25 @@ with pkgs;
 
   gcl_2_6_13_pre = callPackage ../development/compilers/gcl/2.6.13-pre.nix { };
 
-  gcc-arm-embedded-4_7 = callPackage_i686 ../development/compilers/gcc-arm-embedded {
+  gcc-arm-embedded-4_7 = pkgsi686Linux.callPackage ../development/compilers/gcc-arm-embedded {
     version = "4.7-2013q3-20130916";
     releaseType = "update";
     sha256 = "1bd9bi9q80xn2rpy0rn1vvj70rh15kb7dmah0qs4q2rv78fqj40d";
     ncurses = pkgsi686Linux.ncurses5;
   };
-  gcc-arm-embedded-4_8 = callPackage_i686 ../development/compilers/gcc-arm-embedded {
+  gcc-arm-embedded-4_8 = pkgsi686Linux.callPackage ../development/compilers/gcc-arm-embedded {
     version = "4.8-2014q1-20140314";
     releaseType = "update";
     sha256 = "ce92859550819d4a3d1a6e2672ea64882b30afa2c08cf67fa8e1d93788c2c577";
     ncurses = pkgsi686Linux.ncurses5;
   };
-  gcc-arm-embedded-4_9 = callPackage_i686 ../development/compilers/gcc-arm-embedded {
+  gcc-arm-embedded-4_9 = pkgsi686Linux.callPackage ../development/compilers/gcc-arm-embedded {
     version = "4.9-2015q1-20150306";
     releaseType = "update";
     sha256 = "c5e0025b065750bbd76b5357b4fc8606d88afbac9ff55b8a82927b4b96178154";
     ncurses = pkgsi686Linux.ncurses5;
   };
-  gcc-arm-embedded-5 = pkgs.callPackage_i686 ../development/compilers/gcc-arm-embedded {
+  gcc-arm-embedded-5 = pkgs.pkgsi686Linux.callPackage ../development/compilers/gcc-arm-embedded {
     dirName = "5.0";
     subdirName = "5-2016-q2-update";
     version = "5.4-2016q2-20160622";
@@ -6872,7 +6872,7 @@ with pkgs;
   manticore = callPackage ../development/compilers/manticore { };
 
   mentorToolchains = recurseIntoAttrs (
-    callPackage_i686 ../development/compilers/mentor {}
+    pkgsi686Linux.callPackage ../development/compilers/mentor {}
   );
 
   mercury = callPackage ../development/compilers/mercury { };
@@ -7059,7 +7059,7 @@ with pkgs;
   smlnjBootstrap = callPackage ../development/compilers/smlnj/bootstrap.nix { };
   smlnj = if stdenv.isDarwin
             then callPackage ../development/compilers/smlnj { }
-            else callPackage_i686 ../development/compilers/smlnj { };
+            else pkgsi686Linux.callPackage ../development/compilers/smlnj { };
 
   solc = callPackage ../development/compilers/solc { };
 
@@ -7570,7 +7570,7 @@ with pkgs;
 
   scheme48 = callPackage ../development/interpreters/scheme48 { };
 
-  self = callPackage_i686 ../development/interpreters/self { };
+  self = pkgsi686Linux.callPackage ../development/interpreters/self { };
 
   spark = spark_22;
   spark_22 = callPackage ../applications/networking/cluster/spark { version = "2.2.1"; };
@@ -15014,7 +15014,7 @@ with pkgs;
       requests requests_toolbelt sqlalchemy fusepy;
   };
 
-  adobe-reader = callPackage_i686 ../applications/misc/adobe-reader { };
+  adobe-reader = pkgsi686Linux.callPackage ../applications/misc/adobe-reader { };
 
   masterpdfeditor = libsForQt5.callPackage ../applications/misc/masterpdfeditor { };
 
@@ -16685,7 +16685,7 @@ with pkgs;
   # Impressive, formerly known as "KeyJNote".
   impressive = callPackage ../applications/office/impressive { };
 
-  inferno = callPackage_i686 ../applications/inferno { };
+  inferno = pkgsi686Linux.callPackage ../applications/inferno { };
 
   inginious = callPackage ../servers/inginious {};
 
@@ -16808,7 +16808,7 @@ with pkgs;
 
   keepnote = callPackage ../applications/office/keepnote { };
 
-  kega-fusion = callPackage_i686 ../misc/emulators/kega-fusion { };
+  kega-fusion = pkgsi686Linux.callPackage ../misc/emulators/kega-fusion { };
 
   kermit = callPackage ../tools/misc/kermit { };
 
@@ -17607,7 +17607,7 @@ with pkgs;
     ffmpeg = ffmpeg_2;
   };
 
-  pcsx2 = callPackage_i686 ../misc/emulators/pcsx2 { };
+  pcsx2 = pkgsi686Linux.callPackage ../misc/emulators/pcsx2 { };
 
   pekwm = callPackage ../applications/window-managers/pekwm { };
 
@@ -19844,7 +19844,7 @@ with pkgs;
 
   terraria-server = callPackage ../games/terraria-server { };
 
-  tibia = callPackage_i686 ../games/tibia { };
+  tibia = pkgsi686Linux.callPackage ../games/tibia { };
 
   tintin = callPackage ../games/tintin { };
 
@@ -19913,7 +19913,7 @@ with pkgs;
 
   vectoroids = callPackage ../games/vectoroids { };
 
-  vessel = callPackage_i686 ../games/vessel { };
+  vessel = pkgsi686Linux.callPackage ../games/vessel { };
 
   vms-empire = callPackage ../games/vms-empire { };
 
@@ -20903,7 +20903,7 @@ with pkgs;
 
   bootil = callPackage ../development/libraries/bootil { };
 
-  brgenml1lpr = callPackage_i686 ../misc/cups/drivers/brgenml1lpr {};
+  brgenml1lpr = pkgsi686Linux.callPackage ../misc/cups/drivers/brgenml1lpr {};
 
   brgenml1cupswrapper = callPackage ../misc/cups/drivers/brgenml1cupswrapper {};
 
@@ -20952,10 +20952,10 @@ with pkgs;
 
   cups-bjnp = callPackage ../misc/cups/drivers/cups-bjnp { };
 
-  cups-brother-hl1110 = callPackage_i686 ../misc/cups/drivers/hl1110 { };
+  cups-brother-hl1110 = pkgsi686Linux.callPackage ../misc/cups/drivers/hl1110 { };
 
   # this driver ships with pre-compiled 32-bit binary libraries
-  cnijfilter_2_80 = callPackage_i686 ../misc/cups/drivers/cnijfilter_2_80 { };
+  cnijfilter_2_80 = pkgsi686Linux.callPackage ../misc/cups/drivers/cnijfilter_2_80 { };
 
   cnijfilter_4_00 = callPackage ../misc/cups/drivers/cnijfilter_4_00 {
     libusb = libusb1;
@@ -21045,7 +21045,7 @@ with pkgs;
 
   gammu = callPackage ../applications/misc/gammu { };
 
-  gensgs = callPackage_i686 ../misc/emulators/gens-gs { };
+  gensgs = pkgsi686Linux.callPackage ../misc/emulators/gens-gs { };
 
   ghostscript = callPackage ../misc/ghostscript rec {
     cupsSupport = config.ghostscript.cups or (!stdenv.isDarwin);
@@ -21384,13 +21384,13 @@ with pkgs;
   hll2390dw-cups = callPackage ../misc/cups/drivers/hll2390dw-cups { };
 
   mfcj470dw-cupswrapper = callPackage ../misc/cups/drivers/mfcj470dwcupswrapper { };
-  mfcj470dwlpr = callPackage_i686 ../misc/cups/drivers/mfcj470dwlpr { };
+  mfcj470dwlpr = pkgsi686Linux.callPackage ../misc/cups/drivers/mfcj470dwlpr { };
 
   mfcj6510dw-cupswrapper = callPackage ../misc/cups/drivers/mfcj6510dwcupswrapper { };
-  mfcj6510dwlpr = callPackage_i686 ../misc/cups/drivers/mfcj6510dwlpr { };
+  mfcj6510dwlpr = pkgsi686Linux.callPackage ../misc/cups/drivers/mfcj6510dwlpr { };
 
   mfcl2700dncupswrapper = callPackage ../misc/cups/drivers/mfcl2700dncupswrapper { };
-  mfcl2700dnlpr = callPackage_i686 ../misc/cups/drivers/mfcl2700dnlpr { };
+  mfcl2700dnlpr = pkgsi686Linux.callPackage ../misc/cups/drivers/mfcl2700dnlpr { };
 
   mfcl2720dwcupswrapper = callPackage ../misc/cups/drivers/mfcl2720dwcupswrapper { };
   mfcl2720dwlpr = callPackage ../misc/cups/drivers/mfcl2720dwlpr { };
@@ -21709,7 +21709,7 @@ with pkgs;
     callPackage ../applications/networking/znc/modules.nix { }
   );
 
-  zsnes = callPackage_i686 ../misc/emulators/zsnes { };
+  zsnes = pkgsi686Linux.callPackage ../misc/emulators/zsnes { };
 
   xcpc = callPackage ../misc/emulators/xcpc { };
 

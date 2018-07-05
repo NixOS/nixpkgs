@@ -1,10 +1,10 @@
-{stdenv, fetchurl, unzip, autoreconfHook, libtool, makeWrapper, cups, ghostscript, callPackage_i686 }:
+{stdenv, fetchurl, unzip, autoreconfHook, libtool, makeWrapper, cups, ghostscript, pkgsi686Linux }:
 
 let
 
-  i686_NIX_GCC = callPackage_i686 ({gcc}: gcc) {};
-  i686_libxml2 = callPackage_i686 ({libxml2}: libxml2) {};
-  i686_glibc = callPackage_i686 ({glibc}: glibc) {};
+  i686_NIX_GCC = pkgsi686Linux.callPackage ({gcc}: gcc) {};
+  i686_libxml2 = pkgsi686Linux.callPackage ({libxml2}: libxml2) {};
+  i686_glibc = pkgsi686Linux.callPackage ({glibc}: glibc) {};
 
   src_canon = fetchurl {
     url = "https://files.canon-europe.com/files/soft45378/software/o147jen_linuxufrII_0290.zip";
