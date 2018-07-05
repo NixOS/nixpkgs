@@ -15,6 +15,7 @@
 let
   isLua51 = lua.luaversion == "5.1";
   isLua52 = lua.luaversion == "5.2";
+  isLua53 = lua.luaversion == "5.3";
   isLuaJIT = (builtins.parseDrvName lua.name).name == "luajit";
 
   platformString =
@@ -660,11 +661,11 @@ let
 
   lpeg = buildLuaPackage rec {
     name = "lpeg-${version}";
-    version = "0.12";
+    version = "1.0.1";
 
     src = fetchurl {
       url = "http://www.inf.puc-rio.br/~roberto/lpeg/${name}.tar.gz";
-      sha256 = "0xlbfw1w7l65a5qhnx5sfw327hkq1zcj8xmg4glfw6fj9ha4b9gg";
+      sha256 = "62d9f7a9ea3c1f215c77e0cadd8534c6ad9af0fb711c3f89188a8891c72f026b";
     };
 
     preBuild = ''
