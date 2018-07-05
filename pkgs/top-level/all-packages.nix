@@ -5040,6 +5040,8 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) CoreFoundation Security;
   };
 
+  sixpair = callPackage ../tools/misc/sixpair {};
+
   skippy-xd = callPackage ../tools/X11/skippy-xd {};
 
   sks = callPackage ../servers/sks { inherit (ocamlPackages_4_02) ocaml camlp4; };
