@@ -2714,7 +2714,7 @@ with pkgs;
 
   goaccess = callPackage ../tools/misc/goaccess { };
 
-  gocryptfs = callPackage ../tools/filesystems/gocrypfs { };
+  gocryptfs = callPackage ../tools/filesystems/gocryptfs { };
 
   godot = callPackage ../development/tools/godot {};
 
