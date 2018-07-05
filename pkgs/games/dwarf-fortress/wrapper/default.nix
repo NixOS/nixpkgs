@@ -2,6 +2,7 @@
 , enableDFHack ? false, dfhack
 , enableSoundSense ? false, soundSense, jdk
 , enableStoneSense ? false
+, enableTWBT ? false, twbt
 , themes ? {}
 , theme ? null
 }:
@@ -9,6 +10,7 @@
 let
   dfhack_ = dfhack.override {
     inherit enableStoneSense;
+    inherit enableTWBT;
   };
 
   ptheme =
@@ -16,10 +18,15 @@ let
     then builtins.getAttr theme themes
     else theme;
 
+  twbtOnlyWithDFHack = assert (enableDFHack || !enableTWBT); true;
+
+  unBool = b: if b then "YES" else "NO";
+
   # These are in inverse order for first packages to override the next ones.
   themePkg = lib.optional (theme != null) ptheme;
   pkgs = lib.optional enableDFHack dfhack_
          ++ lib.optional enableSoundSense soundSense
+         ++ lib.optional enableTWBT twbt.art
          ++ [ dwarf-fortress-original ];
 
   env = buildEnv {

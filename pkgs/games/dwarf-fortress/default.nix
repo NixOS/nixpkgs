@@ -31,6 +31,8 @@ let
 
     legends-browser = callPackage ./legends-browser {};
 
+    twbt = callPackage ./twbt {};
+
     themes = callPackage ./themes {
       stdenv = stdenvNoCC;
     };
