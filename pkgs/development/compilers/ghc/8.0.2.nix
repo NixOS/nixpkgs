@@ -201,8 +201,7 @@ stdenv.mkDerivation rec {
 
   passthru = {
     inherit bootPackages;
-    inherit bootPkgs;
-    inherit targetPrefix;
+    inherit bootPkgs targetPrefix;
 
     inherit llvmPackages;
     inherit enableShared;

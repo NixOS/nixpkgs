@@ -208,6 +208,7 @@ stdenv.mkDerivation (rec {
   '';
 
   passthru = {
+    inherit bootPackages;
     inherit bootPkgs targetPrefix;
 
     inherit llvmPackages;
