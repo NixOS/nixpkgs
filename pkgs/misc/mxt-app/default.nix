@@ -21,6 +21,6 @@ stdenv.mkDerivation rec{
     homepage = https://github.com/atmel-maxtouch/mxt-app;
     license = licenses.bsd2;
     maintainers = [ maintainers.colemickens ];
-    platforms = platforms.unix;
+    platforms = platforms.linux;
   };
 }
