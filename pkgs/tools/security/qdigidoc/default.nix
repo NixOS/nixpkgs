@@ -1,43 +1,46 @@
-{ stdenv, fetchurl, cmake, ccid, qttools, qttranslations, pkgconfig, pcsclite
-, hicolor-icon-theme, libdigidocpp, opensc, shared-mime-info, openldap
-, gettext, desktop-file-utils, makeWrapper }:
+{ stdenv, fetchgit, cmake, gettext, makeWrapper, pkgconfig, libdigidocpp
+, opensc, openldap, openssl, pcsclite, qtbase, qttranslations }:
 
 stdenv.mkDerivation rec {
-
-  version = "3.12.0.1442";
   name = "qdigidoc-${version}";
+  version = "3.13.6";
 
-  src = fetchurl {
-    url = "https://installer.id.ee/media/ubuntu/pool/main/q/qdigidoc/qdigidoc_3.12.0.1442.orig.tar.xz";
-    sha256 = "1a7nsi28q57ic99hrb6x83qlvpqvzvk6acbfl6ncny2j4yaxa4jl";
+  src = fetchgit {
+    url = "https://github.com/open-eid/qdigidoc";
+    rev = "v${version}";
+    sha256 = "1qq9fgvkc7fi37ly3kgxksrm4m5rxk9k5s5cig8z0cszsfk6h9lx";
+    fetchSubmodules = true;
   };
 
-  patches = [ ./certs.patch ./glibc-2_26.patch ];
+  patches = [
+    # https://github.com/open-eid/qdigidoc/pull/163
+    ./qt511.patch
+  ];
 
-  unpackPhase = ''
-    mkdir src
-    tar xf $src -C src
-    cd src
-  '';
+  nativeBuildInputs = [ cmake gettext makeWrapper pkgconfig ];
+
+  buildInputs = [
+    libdigidocpp
+    opensc
+    openldap
+    openssl
+    pcsclite
+    qtbase
+    qttranslations
+  ];
 
   postInstall = ''
     wrapProgram $out/bin/qdigidocclient \
       --prefix LD_LIBRARY_PATH : ${opensc}/lib/pkcs11/
   '';
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ cmake ccid qttools pcsclite qttranslations
-                  hicolor-icon-theme libdigidocpp opensc shared-mime-info
-                  openldap gettext desktop-file-utils makeWrapper
-                ];
-
   enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
-    description = "Qt based UI application for verifying and signing digital signatures";
-    homepage = http://www.id.ee/;
-    license = licenses.lgpl2;
+    description = "Qt-based UI for signing and verifying DigiDoc documents";
+    homepage = https://www.id.ee/;
+    license = licenses.lgpl21Plus;
     platforms = platforms.linux;
-    maintainers = [ maintainers.jagajaga ];
+    maintainers = with maintainers; [ yegortimoshenko ];
   };
 }
