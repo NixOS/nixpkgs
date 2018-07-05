@@ -3,12 +3,12 @@
 
 stdenvNoCC.mkDerivation rec {
   name = "twbt-${version}";
-  version = "6.46";
-  dfVersion = "0.44.10";
+  version = "6.49";
+  dfVersion = "0.44.11";
 
   src = fetchurl {
     url = "https://github.com/mifki/df-twbt/releases/download/v${version}/twbt-${version}-linux.zip";
-    sha256 = "1a4k26z5n547k5j3ij2kx834963rc8vwgwcmbmzmhi893bryb1k6";
+    sha256 = "1qjkc7k33qhxj2g18njzasccjqsis5y8zrw5vl90h4rs3i8ld9xz";
   };
 
   sourceRoot = ".";

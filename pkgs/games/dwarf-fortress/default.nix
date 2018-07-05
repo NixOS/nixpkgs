@@ -1,9 +1,32 @@
-{ pkgs, stdenv, stdenvNoCC, gccStdenv }:
+{ pkgs, stdenv, stdenvNoCC, buildEnv, gccStdenv }:
+
+# To whomever it may concern:
+#
+# This directory menaces with spikes of Nix code. It is terrifying.
+#
+# If this is your first time here, you should probably install the dwarf-fortress-full package,
+# for instance with `environment.systempackages = [ pkgs.dwarf-fortress.dwarf-fortress-full ];`.
+#
+# You can adjust its settings by using override, or compile your own package by
+# using the other packages here. Take a look at lazy-pack.nix to get an idea of
+# how.
+#
+# You will find the configuration files in ~/.local/share/df_linux/data/init. If
+# you un-symlink them and edit, then the scripts will avoid overwriting your
+# changes on later launches, but consider extending the wrapper with your
+# desired options instead.
+#
+# Although both dfhack and dwarf therapist are included in the lazy pack, you
+# can only use one at a time. DFHack does have therapist-like features, so this
+# may or may not be a problem.
 
 let
   callPackage = pkgs.newScope self;
 
   self = rec {
+
+    dwarf-fortress-full = callPackage ./lazy-pack.nix { };
+
     dwarf-fortress-original = callPackage ./game.nix { };
 
     dfhack = callPackage ./dfhack {
@@ -13,7 +36,7 @@ let
 
     soundSense = callPackage ./soundsense.nix { };
 
-    # unfuck is linux-only right now, we will just use it there
+    # unfuck is linux-only right now, we will only use it there.
     dwarf-fortress-unfuck = if stdenv.isLinux then callPackage ./unfuck.nix { }
                                  else null;
 
