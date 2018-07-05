@@ -210,4 +210,21 @@ in
     production = true;
     bypassCache = true;
   };
+  pnpm = nodeEnv.buildNodePackage {
+    name = "pnpm";
+    packageName = "pnpm";
+    version = "2.9.0";
+    src = fetchurl {
+      url = "https://registry.npmjs.org/pnpm/-/pnpm-2.9.0.tgz";
+      sha1 = "1c2f5ade46b87cc3b1f3b7c66eeb7b0f4df4d968";
+    };
+    buildInputs = globalBuildInputs;
+    meta = {
+      description = "Fast, disk space efficient package manager";
+      homepage = https://pnpm.js.org/;
+      license = "MIT";
+    };
+    production = true;
+    bypassCache = true;
+  };
 }
