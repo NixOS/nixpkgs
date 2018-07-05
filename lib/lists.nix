@@ -101,7 +101,7 @@ rec {
        concatMap (x: [x] ++ ["z"]) ["a" "b"]
        => [ "a" "z" "b" "z" ]
   */
-  concatMap = f: list: concatLists (map f list);
+  concatMap = builtins.concatMap or (f: list: concatLists (map f list));
 
   /* Flatten the argument into a single list; that is, nested lists are
      spliced into the top-level lists.
