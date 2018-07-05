@@ -326,26 +326,16 @@ let
     configureFlags = [ "--with-v8js=${pkgs.v8_6_x}" ];
   };
 
-  composer = pkgs.stdenv.mkDerivation rec {
-    name = "composer-${version}";
-    version = "1.6.5";
-
-    src = pkgs.fetchurl {
+  composer = let
+    phar = pkgs.fetchurl {
       url = "https://getcomposer.org/download/${version}/composer.phar";
       sha256 = "0d1lpvq8wylh5qgxhbqb5r7j3c6qk0bz4b5vg187jsl6z6fvxgk7";
     };
-
-    unpackPhase = ":";
-
-    buildInputs = [ pkgs.makeWrapper ];
-
-    installPhase = ''
-      mkdir -p $out/bin
-      install -D $src $out/libexec/composer/composer.phar
-      makeWrapper ${php}/bin/php $out/bin/composer \
-        --add-flags "$out/libexec/composer/composer.phar"
-    '';
-
+    version = "1.6.5";
+  in pkgs.wrapCommand "composer" {
+    inherit version;
+    executable = "${php}/bin/php";
+    makeWrapperArgs = ["--add-flags ${phar}"];
     meta = with pkgs.lib; {
       description = "Dependency Manager for PHP";
       license = licenses.mit;
@@ -354,25 +344,16 @@ let
     };
   };
 
-  box = pkgs.stdenv.mkDerivation rec {
-    name = "box-${version}";
+  box = let
     version = "2.7.5";
-
-    src = pkgs.fetchurl {
+    phar = pkgs.fetchurl {
       url = "https://github.com/box-project/box2/releases/download/${version}/box-${version}.phar";
       sha256 = "1zmxdadrv0i2l8cz7xb38gnfmfyljpsaz2nnkjzqzksdmncbgd18";
     };
-
-    phases = [ "installPhase" ];
-    buildInputs = [ pkgs.makeWrapper ];
-
-    installPhase = ''
-      mkdir -p $out/bin
-      install -D $src $out/libexec/box/box.phar
-      makeWrapper ${php}/bin/php $out/bin/box \
-        --add-flags "-d phar.readonly=0 $out/libexec/box/box.phar"
-    '';
-
+  in pkgs.wrapCommand "box" {
+    inherit version;
+    executable = "${php}/bin/php";
+    makeWrapperArgs = ["--add-flags ${phar}"];
     meta = with pkgs.lib; {
       description = "An application for building and managing Phars";
       license = licenses.mit;
@@ -381,25 +362,16 @@ let
     };
   };
 
-  php-cs-fixer = pkgs.stdenv.mkDerivation rec {
-    name = "php-cs-fixer-${version}";
-    version = "2.12.1";
-
-    src = pkgs.fetchurl {
+  php-cs-fixer = let
+    phar = pkgs.fetchurl {
       url = "https://github.com/FriendsOfPHP/PHP-CS-Fixer/releases/download/v${version}/php-cs-fixer.phar";
       sha256 = "1ifwb30wddp5blqnrkdmf0x11dk7nbxj4z2v5403fn7wfhgvibd2";
     };
-
-    phases = [ "installPhase" ];
-    buildInputs = [ pkgs.makeWrapper ];
-
-    installPhase = ''
-      mkdir -p $out/bin
-      install -D $src $out/libexec/php-cs-fixer/php-cs-fixer.phar
-      makeWrapper ${php}/bin/php $out/bin/php-cs-fixer \
-        --add-flags "$out/libexec/php-cs-fixer/php-cs-fixer.phar"
-    '';
-
+    version = "2.12.1";
+  in pkgs.wrapCommand "php-cs-fixer" {
+    inherit version;
+    executable = "${php}/bin/php";
+    makeWrapperArgs = ["--add-flags ${phar}"];
     meta = with pkgs.lib; {
       description = "A tool to automatically fix PHP coding standards issues";
       license = licenses.mit;
@@ -441,25 +413,16 @@ let
     };
   };
 
-  phpcs = pkgs.stdenv.mkDerivation rec {
-    name = "phpcs-${version}";
-    version = "3.3.0";
-
-    src = pkgs.fetchurl {
+  phpcs = let
+    phar = pkgs.fetchurl {
       url = "https://github.com/squizlabs/PHP_CodeSniffer/releases/download/${version}/phpcs.phar";
       sha256 = "1zl35vcq8dmspsj7ww338h30ah75dg91j6a1dy8avkzw5zljqi4h";
     };
-
-    phases = [ "installPhase" ];
-    buildInputs = [ pkgs.makeWrapper ];
-
-    installPhase = ''
-      mkdir -p $out/bin
-      install -D $src $out/libexec/phpcs/phpcs.phar
-      makeWrapper ${php}/bin/php $out/bin/phpcs \
-        --add-flags "$out/libexec/phpcs/phpcs.phar"
-    '';
-
+    version = "3.3.0";
+  in pkgs.wrapCommand "phpcs" {
+    inherit version;
+    executable = "${php}/bin/php";
+    makeWrapperArgs = [ "--add-flags ${phar}" ];
     meta = with pkgs.lib; {
       description = "PHP coding standard tool";
       license = licenses.bsd3;
@@ -468,25 +431,16 @@ let
     };
   };
 
-  phpcbf = pkgs.stdenv.mkDerivation rec {
-    name = "phpcbf-${version}";
+  phpcbf = let
     version = "3.3.0";
-
-    src = pkgs.fetchurl {
+    phar = pkgs.fetchurl {
       url = "https://github.com/squizlabs/PHP_CodeSniffer/releases/download/${version}/phpcbf.phar";
       sha256 = "1ah065gzmr11njp1if5bc4b19f4izilqwr06m84yb7af18qr77ls";
     };
-
-    phases = [ "installPhase" ];
-    nativeBuildInputs = [ pkgs.makeWrapper ];
-
-    installPhase = ''
-      mkdir -p $out/bin
-      install -D $src $out/libexec/phpcbf/phpcbf.phar
-      makeWrapper ${php}/bin/php $out/bin/phpcbf \
-        --add-flags "$out/libexec/phpcbf/phpcbf.phar"
-    '';
-
+  in wrapCommand "phpcbf" {
+    inherit version;
+    executable = "${php}/bin/php";
+    makeWrapperArgs = ["--add-flags ${phar}"];
     meta = with pkgs.lib; {
       description = "PHP coding standard beautifier and fixer";
       license = licenses.bsd3;
