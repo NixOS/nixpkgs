@@ -1,26 +1,15 @@
-{ stdenv, lib, bundlerEnv, ruby, xsel, makeWrapper }:
+{ wrapCommand, lib, bundlerEnv, ruby, xsel }:
 
-stdenv.mkDerivation rec {
-  name = "pws-1.0.6";
-
+let
   env = bundlerEnv {
-    name = "${name}-gems";
-
+    name = "pws-gems";
     inherit ruby;
-
     gemdir = ./.;
   };
-
-  buildInputs = [ makeWrapper ];
-
-  phases = ["installPhase"];
-
-  installPhase = ''
-    mkdir -p $out/bin
-    makeWrapper ${env}/bin/pws $out/bin/pws \
-      --set PATH '"${xsel}/bin/:$PATH"'
-  '';
-
+in wrapCommand "pws" {
+  inherit (env.gems.pws) version;
+  executable = "${env}/bin/pws";
+  makeWrapperArgs = ["--prefix PATH ${xsel}/bin"];
   meta = with lib; {
     description = "Command-line password safe";
     homepage    = https://github.com/janlelis/pws;

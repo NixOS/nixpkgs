@@ -1,25 +1,14 @@
-{ stdenv, lib, bundlerEnv, makeWrapper, docker, git, gnutar, gzip }:
+{ wrapCommand, lib, bundlerEnv, makeWrapper, docker, git, gnutar, gzip }:
 
-stdenv.mkDerivation rec {
-  name = "cide-${version}";
-  version = "0.9.0";
-
+let
   env = bundlerEnv {
-    name = "${name}-gems";
-
+    name = "cide-gems";
     gemdir = ./.;
   };
-
-  phases = ["installPhase"];
-
-  buildInputs = [ makeWrapper ];
-
-  installPhase = ''
-    mkdir -p $out/bin
-    makeWrapper ${env}/bin/cide $out/bin/cide \
-      --set PATH ${stdenv.lib.makeBinPath [ docker git gnutar gzip ]}
-  '';
-
+in wrapCommand "cide" {
+  inherit (env.gems.cide) version;
+  executable = "${env}/bin/cide";
+  makeWrapperArgs = ["--set PATH ${lib.makeBinPath [ docker git gnutar gzip ]}"];
   meta = with lib; {
     description = "Isolated test runner with Docker";
     homepage    = http://zimbatm.github.io/cide/;

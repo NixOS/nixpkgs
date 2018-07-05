@@ -1,27 +1,15 @@
-{ lib, bundlerEnv, ruby, stdenv, makeWrapper }:
+{ lib, bundlerEnv, ruby, wrapCommand }:
 
-stdenv.mkDerivation rec {
-  name = "rhc-1.38.7";
-
+let
   env = bundlerEnv {
-    name = "rhc-1.38.7-gems";
-
+    name = "rhc-gems";
     inherit ruby;
-
     gemdir = ./.;
   };
-
-  buildInputs = [ makeWrapper ];
-
-  phases = [ "installPhase" ];
-
-  installPhase = ''
-    mkdir -p $out/bin
-    makeWrapper ${env}/bin/rhc $out/bin/rhc
-  '';
-
+in wrapCommand "rhc" {
+  inherit (env.gems.rhc) version;
+  executable = "${env}/bin/rhc";
   meta = with lib; {
-    broken = true; # requires ruby 2.2
     homepage = https://github.com/openshift/rhc;
     description = "OpenShift client tools";
     license = licenses.asl20;

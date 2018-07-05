@@ -1,26 +1,16 @@
-{ stdenv, lib, bundlerEnv, makeWrapper, }:
+{ wrapCommand, lib, bundlerEnv }:
 
-stdenv.mkDerivation rec {
+let
   pname = "jsduck";
-  name = "${pname}-${version}";
-  version = "5.3.4";
-
   env = bundlerEnv {
-    name = "${pname}";
+    name = pname;
     gemfile = ./Gemfile;
     lockfile = ./Gemfile.lock;
     gemset = ./gemset.nix;
   };
-
-  phases = [ "installPhase" ];
-
-  buildInputs = [ env makeWrapper ];
-
-  installPhase = ''
-    mkdir -p $out/bin
-    makeWrapper ${env}/bin/jsduck $out/bin/jsduck
-  '';
-
+in wrapCommand pname {
+  inherit (env.gems.jsduck) version;
+  executable = "${env}/bin/jsduck";
   meta = with lib; {
     description = "Simple JavaScript Duckumentation generator.";
     homepage    = https://github.com/senchalabs/jsduck;

@@ -1,24 +1,14 @@
-{ stdenv, lib, bundlerEnv, makeWrapper, groff }:
+{ wrapCommand, lib, bundlerEnv, makeWrapper, groff }:
 
-stdenv.mkDerivation rec {
-  name = "ronn-${version}";
-  version = env.gems.ronn.version;
-
+let
   env = bundlerEnv rec {
     name = "ronn-gems";
     gemdir = ./.;
   };
-
-  phases = ["installPhase"];
-
-  buildInputs = [ makeWrapper ];
-
-  installPhase = ''
-    mkdir -p $out/bin
-    makeWrapper ${env}/bin/ronn $out/bin/ronn \
-      --set PATH ${groff}/bin
-  '';
-
+in wrapCommand "ronn" {
+  version = env.gems.ronn.version;
+  executable = "${env}/bin/ronn";
+  makeWrapperArgs = ["--set PATH ${groff}/bin"];
   meta = with lib; {
     description = "markdown-based tool for building manpages";
     homepage = https://rtomayko.github.io/ronn/;

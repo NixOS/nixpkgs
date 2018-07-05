@@ -1,28 +1,17 @@
-{ stdenv, bundlerEnv, ruby, makeWrapper
-, git }:
+{ wrapCommand, bundlerEnv, ruby, git, lib }:
 
-stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
+let
   pname = "gollum";
-  version = (import ./gemset.nix).gollum.version;
-
-  nativeBuildInputs = [ makeWrapper ];
-
   env = bundlerEnv {
-    name = "${name}-gems";
+    name = "${pname}-gems";
     inherit pname ruby;
     gemdir = ./.;
   };
-
-  phases = [ "installPhase" ];
-
-  installPhase = ''
-    mkdir -p $out/bin
-    makeWrapper ${env}/bin/gollum $out/bin/gollum \
-      --prefix PATH ":" ${stdenv.lib.makeBinPath [ git ]}
-  '';
-
-  meta = with stdenv.lib; {
+in wrapCommand pname {
+  inherit (env.gems.gollum) version;
+  executable = "${env}/bin/gollum";
+  makeWrapperArgs = [ "--prefix PATH : ${lib.makeBinPath [ git ]}" ];
+  meta = with lib; {
     description = "A simple, Git-powered wiki";
     homepage = https://github.com/gollum/gollum;
     license = licenses.mit;
