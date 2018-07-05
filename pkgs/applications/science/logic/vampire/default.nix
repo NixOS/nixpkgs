@@ -39,6 +39,8 @@ stdenv.mkDerivation rec {
     })
   ];
 
+  enableParallelBuilding = true;
+
   fixupPhase = ''
     rm -rf z3
   '';
