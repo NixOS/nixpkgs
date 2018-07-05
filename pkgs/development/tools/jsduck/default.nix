@@ -15,7 +15,7 @@ in wrapCommand pname {
     description = "Simple JavaScript Duckumentation generator.";
     homepage    = https://github.com/senchalabs/jsduck;
     license     = with licenses; gpl3;
-    maintainers = with stdenv.lib.maintainers; [ periklis ];
+    maintainers = with maintainers; [ periklis ];
     platforms   = platforms.unix;
   };
 }

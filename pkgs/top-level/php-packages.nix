@@ -437,7 +437,7 @@ let
       url = "https://github.com/squizlabs/PHP_CodeSniffer/releases/download/${version}/phpcbf.phar";
       sha256 = "1ah065gzmr11njp1if5bc4b19f4izilqwr06m84yb7af18qr77ls";
     };
-  in wrapCommand "phpcbf" {
+  in pkgs.wrapCommand "phpcbf" {
     inherit version;
     executable = "${php}/bin/php";
     makeWrapperArgs = ["--add-flags ${phar}"];
