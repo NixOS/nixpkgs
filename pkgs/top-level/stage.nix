@@ -137,7 +137,7 @@ let
     # All packages built with the Musl libc. This will override the
     # default GNU libc on Linux systems. Non-Linux systems are not
     # supported.
-    pkgsMusl = nixpkgsFun {
+    pkgsMusl = if stdenv.hostPlatform.isLinux then nixpkgsFun {
       localSystem = {
         parsed = stdenv.hostPlatform.parsed // {
           abi = {
@@ -147,11 +147,11 @@ let
           }.${stdenv.hostPlatform.parsed.abi.name} or lib.systems.parse.abis.musl;
         };
       };
-    };
+    } else throw "Musl libc only supports Linux systems.";
 
     # All packages built for i686 Linux.
     # Used by wine, firefox with debugging version of Flash, ...
-    pkgsi686Linux = nixpkgsFun {
+    pkgsi686Linux = assert stdenv.hostPlatform.isLinux; nixpkgsFun {
       localSystem = {
         parsed = stdenv.hostPlatform.parsed // {
           cpu = lib.systems.parse.cpuTypes.i686;
