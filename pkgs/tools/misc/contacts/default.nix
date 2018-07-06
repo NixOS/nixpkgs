@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, xcbuild, Foundation, AddressBook }:
+{ stdenv, fetchurl, xcbuildHook, Foundation, AddressBook }:
 
 stdenv.mkDerivation rec {
   version = "1.1a-3";
@@ -9,7 +9,8 @@ stdenv.mkDerivation rec {
     sha256 = "0wdqc1ndgrdhqapvvgx5xihc750szv08lp91x4l6n0gh59cpxpg3";
   };
 
-  buildInputs = [ xcbuild Foundation AddressBook ];
+  nativeBuildInputs = [ xcbuildHook ];
+  buildInputs = [ Foundation AddressBook ];
 
   installPhase = ''
     mkdir -p $out/bin
