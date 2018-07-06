@@ -1361,8 +1361,6 @@ in
 
   eggdrop = callPackage ../tools/networking/eggdrop { };
 
-  elementary-icon-theme = callPackage ../data/icons/elementary-icon-theme { };
-
   elementary-xfce-icon-theme = callPackage ../data/icons/elementary-xfce-icon-theme { };
 
   elm-github-install = callPackage ../tools/package-management/elm-github-install { };
