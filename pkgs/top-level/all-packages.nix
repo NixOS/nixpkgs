@@ -7706,6 +7706,8 @@ with pkgs;
 
   alloy = callPackage ../development/tools/alloy { };
 
+  adtool = callPackage ../tools/admin/adtool { };
+
   augeas = callPackage ../tools/system/augeas { };
 
   inherit (callPackages ../tools/admin/ansible {})
