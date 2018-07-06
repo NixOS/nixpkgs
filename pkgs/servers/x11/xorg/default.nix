@@ -1424,11 +1424,11 @@ let
   }) // {inherit libX11 libXau libXext libXmu xproto ;};
 
   xbacklight = (mkDerivation "xbacklight" {
-    name = "xbacklight-1.2.1";
+    name = "xbacklight-1.2.2";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/app/xbacklight-1.2.1.tar.bz2;
-      sha256 = "0arnd1j8vzhzmw72mqhjjcb2qwcbs9qphsy3ps593ajyld8wzxhp";
+      url = mirror://xorg/individual/app/xbacklight-1.2.2.tar.bz2;
+      sha256 = "0pmzaz4kp38qv2lqiw5rnqhwzmwrq65m1x5j001mmv99wh9isnk1";
     };
     nativeBuildInputs = [ pkgconfig ];
     buildInputs = [ libxcb xcbutil ];
