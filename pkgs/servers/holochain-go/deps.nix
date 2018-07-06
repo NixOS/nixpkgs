@@ -181,6 +181,15 @@
     };
   }
   {
+    goPackagePath = "github.com/gxed/GoEndian";
+    fetch = {
+      type = "git";
+      url = "https://github.com/gxed/GoEndian";
+      rev = "0f5c6873267e5abf306ffcdfcfa4bf77517ef4a7";
+      sha256 = "0fn28h9gs1finrpfs388a3ycavlcf3qylsn803cflmrwaj5piqia";
+    };
+  }
+  {
     goPackagePath = "github.com/huin/goupnp";
     fetch = {
       type = "git";
