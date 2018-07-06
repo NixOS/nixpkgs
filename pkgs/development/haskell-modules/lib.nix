@@ -387,7 +387,7 @@ rec {
   #
   # packagesFromDirectory : Directory -> HaskellPackageOverrideSet
   packagesFromDirectory =
-    { directory }:
+    { directory, ... }:
 
     self: super:
       let
