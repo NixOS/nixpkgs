@@ -2704,6 +2704,8 @@ with pkgs;
   # must have AquaTerm installed separately
   gnuplot_aquaterm = gnuplot.override { aquaterm = true; };
 
+  gnu-pw-mgr = callPackage ../tools/security/gnu-pw-mgr { };
+
   gnused = callPackage ../tools/text/gnused { };
   # This is an easy work-around for [:space:] problems.
   gnused_422 = callPackage ../tools/text/gnused/422.nix { };
