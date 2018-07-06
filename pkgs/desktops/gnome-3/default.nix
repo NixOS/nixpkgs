@@ -1,18 +1,6 @@
 { pkgs, lib }:
 
-let
-
-  pkgsFun = overrides:
-    let
-      self = self_ // overrides;
-      self_ = with self; {
-
-  overridePackages = f:
-    let newself = pkgsFun (f newself self);
-    in newself;
-
-  callPackage = pkgs.newScope self;
-
+lib.makeScope pkgs.newScope (self: with self; {
   # Convert a version to branch (3.26.18 → 3.26)
   # Used for finding packages on GNOME mirrors
   versionBranch = version: builtins.concatStringsSep "." (lib.take 2 (lib.splitString "." version));
@@ -431,7 +419,4 @@ let
   yelp_xsl = yelp-xsl; # added 2018-02-25
   yelp_tools = yelp-tools; # added 2018-02-25
 
-    };
-  in self; # pkgsFun
-
-in pkgsFun {}
+})
