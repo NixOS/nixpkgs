@@ -205,6 +205,11 @@ let self = stdenv.mkDerivation {
     for js in $drivers/share/glvnd/egl_vendor.d/*.json; do
       substituteInPlace "$js" --replace '"libEGL_' '"'"$drivers/lib/libEGL_"
     done
+
+    # Update search path used by pkg-config
+    for pc in $dev/lib/pkgconfig/*.pc; do
+      substituteInPlace "$pc" --replace $out $drivers
+    done
   '' + optionalString (vulkanDrivers != []) ''
     # Update search path used by Vulkan (it's pointing to $out but
     # drivers are in $drivers)
