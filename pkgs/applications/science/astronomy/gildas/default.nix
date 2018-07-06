@@ -16,13 +16,13 @@ stdenv.mkDerivation rec {
     sha256 = "0kl3zf6b1kv8hgsfrarsnm2gnrdax3vi8f856249y4nxsa7lbv2i";
   };
 
-  enableParallelBuilding = false;
+  enableParallelBuilding = true;
 
   nativeBuildInputs = [ pkgconfig groff perl getopt gfortran which ];
 
   buildInputs = [ gtk2-x11 lesstif cfitsio python27Env ];
 
-  patches = [ ./wrapper.patch ./return-error-code.patch ./clang.patch ];
+  patches = [ ./wrapper.patch ./return-error-code.patch ./clang.patch ./mod.patch ];
 
   configurePhase=''
     substituteInPlace admin/wrapper.sh --replace '%%OUT%%' $out
