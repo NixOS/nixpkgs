@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, autoconf, automake, asciidoc, docbook_xsl, docbook_xml_dtd_45, libxslt, xmlto, pkgconfig, json_c, kmod, which, systemd, utillinux
+{ stdenv, fetchFromGitHub, fetchpatch, autoreconfHook, autoconf, automake, asciidoc, docbook_xsl, docbook_xml_dtd_45, libxslt, xmlto, pkgconfig, json_c, kmod, which, systemd, utillinux
 }:
 
 let
@@ -21,6 +21,14 @@ in stdenv.mkDerivation rec {
 
   buildInputs = [
     json_c kmod systemd utillinux
+  ];
+
+  patches = [
+    (fetchpatch {
+      name = "add-missing-include-for-ssize_t.patch";
+      url = "https://github.com/pmem/ndctl/commit/8f1798d14dda367c659b87362edb312739830ddf.patch";
+      sha256 = "1jr5kh087938msl22hgjngbf025n9iplz0czmybfp7lavl73m0pm";
+    })
   ];
 
   preAutoreconf = ''
