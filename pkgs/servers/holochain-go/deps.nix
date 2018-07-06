@@ -172,6 +172,15 @@
     };
   }
   {
+    goPackagePath = "github.com/gxed/eventfd";
+    fetch = {
+      type = "git";
+      url = "https://github.com/gxed/eventfd";
+      rev = "80a92cca79a8041496ccc9dd773fcb52a57ec6f9";
+      sha256 = "1p15rsimkcp2flj6wb41flac72zhf97zd8jxrahsw05nyfbp58z5";
+    };
+  }
+  {
     goPackagePath = "github.com/huin/goupnp";
     fetch = {
       type = "git";
