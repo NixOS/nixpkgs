@@ -1,13 +1,13 @@
-{ runCommand, lib, sdk, platformName, writeText }:
+{ runCommand, lib, sdks, xcodePlatform, writeText }:
 
 let
 
   inherit (lib.generators) toPlist;
 
   Info = {
-    CFBundleIdentifier = platformName;
+    CFBundleIdentifier = "com.apple.platform.${lib.toLower xcodePlatform}";
     Type = "Platform";
-    Name = "macosx";
+    Name = lib.toLower xcodePlatform;
   };
 
   Version = {
@@ -285,14 +285,18 @@ let
 
 in
 
-runCommand "MacOSX.platform" {} ''
-  install -D ${writeText "Info.plist" (toPlist {} Info)} $out/Info.plist
-  install -D ${writeText "version.plist" (toPlist {} Version)} $out/version.plist
-  install -D ${writeText "Architectures.xcspec" (toPlist {} Architectures)} $out/Developer/Library/Xcode/Specifications/Architectures.xcspec
-  install -D ${writeText "PackageTypes.xcspec" (toPlist {} PackageTypes)} $out/Developer/Library/Xcode/Specifications/PackageTypes.xcspec
-  install -D ${writeText "ProductTypes.xcspec" (toPlist {} ProductTypes)} $out/Developer/Library/Xcode/Specifications/ProductTypes.xcspec
+runCommand "Platforms" {} ''
+  platform=$out/${xcodePlatform}.platform
 
-  mkdir -p $out/Developer/SDKs/
-  cd $out/Developer/SDKs/
-  cp -r ${sdk} ${sdk.name}
+  install -D ${writeText "Info.plist" (toPlist {} Info)} $platform/Info.plist
+  install -D ${writeText "version.plist" (toPlist {} Version)} $platform/version.plist
+  install -D ${writeText "Architectures.xcspec" (toPlist {} Architectures)} $platform/Developer/Library/Xcode/Specifications/Architectures.xcspec
+  install -D ${writeText "PackageTypes.xcspec" (toPlist {} PackageTypes)} $platform/Developer/Library/Xcode/Specifications/PackageTypes.xcspec
+  install -D ${writeText "ProductTypes.xcspec" (toPlist {} ProductTypes)} $platform/Developer/Library/Xcode/Specifications/ProductTypes.xcspec
+
+  # per-platform bins go here
+  mkdir -p $platform/usr/bin
+
+  mkdir -p $platform/Developer
+  ln -s ${sdks} $platform/Developer/SDKs
 ''
