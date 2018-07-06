@@ -1,7 +1,7 @@
-{ stdenv, lib, fetchurl, gnome2, atk, cairo, gdk_pixbuf, glib, freetype,
-fontconfig, dbus, libX11, xorg, libXi, libXcursor, libXdamage, libXrandr,
-libXcomposite, libXext, libXfixes, libXrender, libXtst, libXScrnSaver, nss,
-nspr, alsaLib, cups, expat, udev }:
+{ stdenv, lib, fetchurl, gnome3, gtk2, pango, atk, cairo, gdk_pixbuf, glib,
+freetype, fontconfig, dbus, libX11, xorg, libXi, libXcursor, libXdamage,
+libXrandr, libXcomposite, libXext, libXfixes, libXrender, libXtst,
+libXScrnSaver, nss, nspr, alsaLib, cups, expat, udev }:
 let
   rpath = lib.makeLibraryPath [
     alsaLib
@@ -14,9 +14,9 @@ let
     freetype
     gdk_pixbuf
     glib
-    gnome2.GConf
-    gnome2.gtk
-    gnome2.pango
+    gnome3.gconf
+    gtk2
+    pango
     libX11
     libXScrnSaver
     libXcomposite
@@ -38,18 +38,18 @@ let
 in
   stdenv.mkDerivation rec {
     name = "mattermost-desktop-${version}";
-    version = "4.1.1";
+    version = "4.1.2";
 
     src =
       if stdenv.system == "x86_64-linux" then
         fetchurl {
           url = "https://releases.mattermost.com/desktop/${version}/${name}-linux-x64.tar.gz";
-          sha256 = "0kq89xylfv2rfmd4wj08d02gjzywlq1p8xmk313i58334xm7srja";
+          sha256 = "16dn6870bs1nfl2082ym9gwvmqb3i5sli48qprap80p7riph6k9s";
         }
       else if stdenv.system == "i686-linux" then
         fetchurl {
           url = "https://releases.mattermost.com/desktop/${version}/${name}-linux-ia32.tar.gz";
-          sha256 = "1jiknxpb44bhxrl0xa57kf3wxlzifbpnn3vblp8l4pr2wx146pzx";
+          sha256 = "145zb1l37fa2slfrrlprlwzcc5km3plxs374yhgix25mlg2afkqr";
         }
       else
         throw "Mattermost-Desktop is not currently supported on ${stdenv.system}";
