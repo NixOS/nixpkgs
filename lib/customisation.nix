@@ -202,7 +202,7 @@ rec {
           callPackage = self.newScope {};
           overrideScope = g:
             makeScope newScope
-            (self_: let super = f self_; in super // g super self_);
+            (lib.fixed-points.extends f g);
           packages = f;
         };
     in self;
