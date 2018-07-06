@@ -263,6 +263,8 @@ in {
 
   distorm3 = callPackage ../development/python-modules/distorm3 { };
 
+  dogtail = callPackage ../development/python-modules/dogtail { };
+
   diff-match-patch = callPackage ../development/python-modules/diff-match-patch { };
 
   fido2 = callPackage ../development/python-modules/fido2 {  };
