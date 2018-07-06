@@ -1,9 +1,13 @@
-{ lib
+{ stdenv
+, lib
+, symlinkJoin
 , buildPythonPackage
 , fetchPypi
 , isPyPy
 , python
 , openblasCompat # build segfaults with regular openblas
+, liblapack # not openblas's lapack because of https://github.com/cvxopt/cvxopt/issues/122
+, gfortran
 , suitesparse
 , glpk ? null
 , gsl ? null
@@ -13,6 +17,23 @@
 , withFftw ? true
 }:
 
+let
+  # cvxopt expects the blas provider and the lapack provider to have the same
+  # prefix
+  library_dirs = symlinkJoin {
+    name = "openblas-liblapack-join";
+    paths = [
+      openblasCompat
+      liblapack
+      # needs to be in the same prefix if liblapack is used
+      # not needed for openblas
+      # FIXME revert to openblas once https://github.com/cvxopt/cvxopt/issues/122
+      # is fixed. This symlinkJoin won't be needed anymore then.
+      # Also set doCheck = true then.
+      gfortran.cc.lib
+    ];
+  };
+in
 buildPythonPackage rec {
   pname = "cvxopt";
   version = "1.2.0";
@@ -27,9 +48,9 @@ buildPythonPackage rec {
   # similar to Gsl, glpk, fftw there is also a dsdp interface
   # but dsdp is not yet packaged in nixpkgs
   preConfigure = ''
-    export CVXOPT_BLAS_LIB_DIR=${openblasCompat}/lib
+    export CVXOPT_BLAS_LIB_DIR=${library_dirs}/lib
     export CVXOPT_BLAS_LIB=openblas
-    export CVXOPT_LAPACK_LIB=openblas
+    export CVXOPT_LAPACK_LIB=${if stdenv.isAarch64 then "openblas" else "lapack"} # aarch64 can't build lapack
     export CVXOPT_SUITESPARSE_LIB_DIR=${suitesparse}/lib
     export CVXOPT_SUITESPARSE_INC_DIR=${suitesparse}/include
   '' + lib.optionalString withGsl ''
@@ -46,6 +67,7 @@ buildPythonPackage rec {
     export CVXOPT_FFTW_INC_DIR=${fftw.dev}/include
   '';
 
+  doCheck = ! stdenv.isAarch64; # https://github.com/cvxopt/cvxopt/issues/122
   checkPhase = ''
     ${python.interpreter} -m unittest discover -s tests
   '';
