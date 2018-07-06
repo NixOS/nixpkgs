@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   name = "edbrowse-${version}";
-  version = "3.7.3";
+  version = "3.7.4";
 
   buildInputs = [ curl pcre readline openssl duktape perl html-tidy ];
 
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     owner = "CMB";
     repo = "edbrowse";
     rev = "v${version}";
-    sha256 = "19qdxigp0qv5vyy0hpn0czcc8papvivsjrxx7p367ihizm39yzla";
+    sha256 = "0i9ivyfy1dd16c89f392kwx6wxgkkpyq2hl32jhzra0fb0zyl0k6";
   };
   meta = with stdenv.lib; {
     description = "Command Line Editor Browser";
