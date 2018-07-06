@@ -33,9 +33,9 @@ stdenv.mkDerivation rec {
 
   buildFlags = if dunstify then [ "dunstify" ] else [];
 
-  postInstall = ''
-    ${if dunstify then "install -Dm755 dunstify $out/bin" else ""}
+  postInstall = stdenv.lib.optionalString dunstify ''
     install -Dm755 dunstify $out/bin
+  '' + ''
     wrapProgram $out/bin/dunst \
       --set GDK_PIXBUF_MODULE_FILE "$GDK_PIXBUF_MODULE_FILE"
   '';
