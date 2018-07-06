@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, curl, expat
-, jansson, libpng, libjpeg, libGLU_combined, pcre
+, jansson, libpng, libjpeg, libGLU_combined, libXxf86vm, pcre
 , pkgconfig, SDL2, vimNox }:
 
 stdenv.mkDerivation rec {
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
-    expat curl jansson libpng libjpeg libGLU_combined pcre SDL2 vimNox
+    expat curl jansson libpng libjpeg libGLU_combined libXxf86vm pcre SDL2 vimNox
   ];
 
   installPhase = with stdenv.lib; let
@@ -27,6 +27,8 @@ stdenv.mkDerivation rec {
     find .
     mv ezquake-${sys}-${arch} $out/bin/ezquake
   '';
+
+  enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
     homepage = http://ezquake.github.io/;

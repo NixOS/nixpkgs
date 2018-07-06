@@ -167,6 +167,13 @@ rec {
         # s32 = sign 32 4294967296;
       };
 
+    float = mkOptionType rec {
+        name = "float";
+        description = "floating point number";
+        check = isFloat;
+        merge = mergeOneOption;
+    };
+
     str = mkOptionType {
       name = "str";
       description = "string";

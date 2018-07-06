@@ -66,6 +66,9 @@ in
     security.sudo.extraRules = mkOption {
       description = ''
         Define specific rules to be in the <filename>sudoers</filename> file.
+        More specific rules should come after more general ones in order to
+        yield the expected behavior. You can use mkBefore/mkAfter to ensure
+        this is the case when configuration options are merged.
       '';
       default = [];
       example = [

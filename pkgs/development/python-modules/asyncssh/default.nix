@@ -12,6 +12,9 @@ buildPythonPackage rec {
     sha256 = "a44736830741e2bb9c4e3992819288b77ac4af217a46d12f415bb57c18ed9c22";
   };
 
+  # See https://github.com/ronf/asyncssh/commit/6a92930e00f3bbc67d9cdf66816917e64f2450e9#r29559647
+  patches = ./mock_getnameinfo.patch;
+
   propagatedBuildInputs = [ 
     bcrypt
     cryptography

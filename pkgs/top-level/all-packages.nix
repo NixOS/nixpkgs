@@ -2505,14 +2505,16 @@ with pkgs;
 
   fuseiso = callPackage ../tools/filesystems/fuseiso { };
 
-  fdbPackages = callPackage ../servers/foundationdb { stdenv = overrideCC stdenv gcc49; };
+  fdbPackages = callPackage ../servers/foundationdb {
+    stdenv49 = overrideCC stdenv gcc49;
+  };
 
   inherit (fdbPackages)
     foundationdb51
     foundationdb52
     foundationdb60;
 
-  foundationdb = callPackage ../servers/foundationdb { stdenv = overrideCC stdenv gcc49; };
+  foundationdb = foundationdb52;
 
   fuse-7z-ng = callPackage ../tools/filesystems/fuse-7z-ng { };
 
@@ -5395,7 +5397,7 @@ with pkgs;
 
   torsocks = callPackage ../tools/security/tor/torsocks.nix { };
 
-  toxvpn = callPackage ../tools/networking/toxvpn { libtoxcore = libtoxcore_0_1; };
+  toxvpn = callPackage ../tools/networking/toxvpn { };
 
   tpmmanager = callPackage ../applications/misc/tpmmanager { };
 
@@ -6763,7 +6765,7 @@ with pkgs;
     fpc = fpc;
   };
 
-  lessc = callPackage ../development/compilers/lessc { };
+  lessc = nodePackages.less;
 
   liquibase = callPackage ../development/tools/database/liquibase { };
 
@@ -9998,6 +10000,8 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) CoreServices;
   };
 
+  libde265 = callPackage ../development/libraries/libde265 {};
+
   libdevil = callPackage ../development/libraries/libdevil {
     inherit (darwin.apple_sdk.frameworks) OpenGL;
   };
@@ -10211,6 +10215,8 @@ with pkgs;
   libharu = callPackage ../development/libraries/libharu { };
 
   libhdhomerun = callPackage ../development/libraries/libhdhomerun { };
+
+  libheif = callPackage ../development/libraries/libheif {};
 
   libhttpseverywhere = callPackage ../development/libraries/libhttpseverywhere { };
 
@@ -13630,14 +13636,6 @@ with pkgs;
     modDirVersionArg = linux_4_14.modDirVersion + "-hardened";
   });
 
-  linux_copperhead_stable = (linux_4_16.override {
-    kernelPatches = linux_4_16.kernelPatches ++ [
-      kernelPatches.copperhead_4_16
-      kernelPatches.tag_hardened
-     ];
-    modDirVersionArg = linux_4_16.modDirVersion + "-hardened";
-  });
-
   # linux mptcp is based on the 4.4 kernel
   linux_mptcp = callPackage ../os-specific/linux/kernel/linux-mptcp.nix {
     kernelPatches =
@@ -13690,17 +13688,6 @@ with pkgs;
         # when adding a new linux version
         kernelPatches.cpu-cgroup-v2."4.11"
         kernelPatches.modinst_arg_list_too_long
-      ];
-  };
-
-  linux_4_16 = callPackage ../os-specific/linux/kernel/linux-4.16.nix {
-    kernelPatches =
-      [ kernelPatches.bridge_stp_helper
-        # See pkgs/os-specific/linux/kernel/cpu-cgroup-v2-patches/README.md
-        # when adding a new linux version
-        # kernelPatches.cpu-cgroup-v2."4.11"
-        kernelPatches.modinst_arg_list_too_long
-        kernelPatches.bcm2835_mmal_v4l2_camera_driver # Only needed for 4.16!
       ];
   };
 
@@ -13918,7 +13905,6 @@ with pkgs;
   linuxPackages_4_4 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_4_4);
   linuxPackages_4_9 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_4_9);
   linuxPackages_4_14 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_4_14);
-  linuxPackages_4_16 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_4_16);
   linuxPackages_4_17 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_4_17);
   # Don't forget to update linuxPackages_latest!
 
@@ -13971,7 +13957,6 @@ with pkgs;
   linuxPackages_latest_xen_dom0_hardened = recurseIntoAttrs (hardenedLinuxPackagesFor (pkgs.linux_latest.override { features.xen_dom0=true; }));
 
   linuxPackages_copperhead_lts = recurseIntoAttrs (hardenedLinuxPackagesFor pkgs.linux_copperhead_lts);
-  linuxPackages_copperhead_stable = recurseIntoAttrs (hardenedLinuxPackagesFor pkgs.linux_copperhead_stable);
 
   # Samus kernels
   linuxPackages_samus_4_12 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_samus_4_12);
@@ -14353,6 +14338,7 @@ with pkgs;
     ubootClearfog
     ubootGuruplug
     ubootJetsonTK1
+    ubootNovena
     ubootOdroidXU3
     ubootOrangePiPc
     ubootPcduino3Nano
@@ -16638,6 +16624,8 @@ with pkgs;
     libxml2 = null;
     openjpeg = null;
     libwebp = null;
+    libheif = null;
+    libde265 = null;
   };
 
   imagemagick = callPackage ../applications/graphics/ImageMagick {
@@ -16665,6 +16653,7 @@ with pkgs;
     libxml2 = null;
     openjpeg = null;
     libwebp = null;
+    libheif = null;
   });
 
   imagemagick7 = lowPrio (imagemagick7Big.override {
@@ -18598,8 +18587,6 @@ with pkgs;
     # optional features by flags
     flags = [ "python" "X11" ]; # only flag "X11" by now
   });
-
-  xxd = callPackage ../tools/misc/xxd { };
 
   vimNox = lowPrio (vim_configurable.override {
     source = "vim-nox";
@@ -21825,7 +21812,7 @@ with pkgs;
   unixtools = recurseIntoAttrs (callPackages ./unix-tools.nix { });
   inherit (unixtools) hexdump ps logger eject umount
                       mount wall hostname more sysctl getconf
-                      getent locale killall;
+                      getent locale killall xxd;
 
   fts = if hostPlatform.isMusl then netbsd.fts else null;
 

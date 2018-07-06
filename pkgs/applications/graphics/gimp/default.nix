@@ -2,7 +2,7 @@
 , pango, cairo, freetype, fontconfig, lcms, libpng, libjpeg, poppler, poppler_data, libtiff
 , libmng, librsvg, libwmf, zlib, libzip, ghostscript, aalib, shared-mime-info
 , python2Packages, libexif, gettext, xorg, glib-networking, libmypaint, gexiv2
-, harfbuzz, mypaint-brushes, libwebp, libgudev, openexr
+, harfbuzz, mypaint-brushes, libwebp, libheif, libgudev, openexr
 , AppKit, Cocoa, gtk-mac-integration }:
 
 let
@@ -21,7 +21,7 @@ in stdenv.mkDerivation rec {
   buildInputs = [
     babl gegl gtk2 glib gdk_pixbuf pango cairo gexiv2 harfbuzz isocodes
     freetype fontconfig lcms libpng libjpeg poppler poppler_data libtiff openexr
-    libmng librsvg libwmf zlib libzip ghostscript aalib shared-mime-info libwebp
+    libmng librsvg libwmf zlib libzip ghostscript aalib shared-mime-info libwebp libheif
     python pygtk libexif xorg.libXpm glib-networking libmypaint mypaint-brushes
   ] ++ stdenv.lib.optionals stdenv.isDarwin [ AppKit Cocoa gtk-mac-integration ]
     ++ stdenv.lib.optionals stdenv.isLinux [ libgudev ];
