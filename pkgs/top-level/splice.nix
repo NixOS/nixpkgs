@@ -34,9 +34,10 @@ let
   defaultHostTargetScope = pkgs // pkgs.xorg;
   defaultTargetTargetScope = pkgs.targetPackages // pkgs.targetPackages.xorg or {};
 
-  splicer = pkgsBuildBuild: pkgsBuildHost: pkgsBuildTarget:
-            pkgsHostHost: pkgsHostTarget:
-            pkgsTargetTarget: let
+  spliceReal = { pkgsBuildBuild, pkgsBuildHost, pkgsBuildTarget
+               , pkgsHostHost, pkgsHostTarget
+               , pkgsTargetTarget
+               }: let
     mash =
       # Other pkgs sets
       pkgsBuildBuild // pkgsBuildTarget // pkgsHostHost // pkgsTargetTarget
@@ -50,7 +51,7 @@ let
         valueBuildBuild = pkgsBuildBuild.${name} or {};
         valueBuildHost = pkgsBuildHost.${name} or {};
         valueBuildTarget = pkgsBuildTarget.${name} or {};
-        valueHostHost = throw "`valueHostHost` unimplemented: pass manually rather than relying on splicer.";
+        valueHostHost = throw "`valueHostHost` unimplemented: pass manually rather than relying on splice.";
         valueHostTarget = pkgsHostTarget.${name} or {};
         valueTargetTarget = pkgsTargetTarget.${name} or {};
         augmentedValue = defaultValue
@@ -77,38 +78,51 @@ let
       in
         # The derivation along with its outputs, which we recur
         # on to splice them together.
-        if lib.isDerivation defaultValue then augmentedValue // splicer
-          (tryGetOutputs valueBuildBuild) (tryGetOutputs valueBuildHost) (tryGetOutputs valueBuildTarget)
-          (tryGetOutputs valueHostHost) (getOutputs valueHostTarget)
-          (tryGetOutputs valueTargetTarget)
+        if lib.isDerivation defaultValue then augmentedValue // spliceReal {
+          pkgsBuildBuild = tryGetOutputs valueBuildBuild;
+          pkgsBuildHost = tryGetOutputs valueBuildHost;
+          pkgsBuildTarget = tryGetOutputs valueBuildTarget;
+          pkgsHostHost = tryGetOutputs valueHostHost;
+          pkgsHostTarget = getOutputs valueHostTarget;
+          pkgsTargetTarget = tryGetOutputs valueTargetTarget;
         # Just recur on plain attrsets
-        else if lib.isAttrs defaultValue then splicer
-          valueBuildBuild valueBuildHost valueBuildTarget
-          {} valueHostTarget
-          valueTargetTarget
+        } else if lib.isAttrs defaultValue then spliceReal {
+          pkgsBuildBuild = valueBuildBuild;
+          pkgsBuildHost = valueBuildHost;
+          pkgsBuildTarget = valueBuildTarget;
+          pkgsHostHost = {};
+          pkgsHostTarget = valueHostTarget;
+          pkgsTargetTarget = valueTargetTarget;
         # Don't be fancy about non-derivations. But we could have used used
         # `__functor__` for functions instead.
-        else defaultValue;
+        } else defaultValue;
     };
   in lib.listToAttrs (map merge (lib.attrNames mash));
 
-  splicedPackages =
-    if actuallySplice
-    then
-      splicer
-        defaultBuildBuildScope defaultBuildHostScope defaultBuildTargetScope
-        defaultHostHostScope defaultHostTargetScope
-        defaultTargetTargetScope
-      // {
-        # These should never be spliced under any circumstances
-        inherit (pkgs) pkgs buildPackages targetPackages
-          buildPlatform targetPlatform hostPlatform;
-      }
-    else pkgs // pkgs.xorg;
+  splicePackages = { pkgsBuildBuild, pkgsBuildHost, pkgsBuildTarget
+                   , pkgsHostHost, pkgsHostTarget
+                   , pkgsTargetTarget
+                   } @ args:
+    if actuallySplice then spliceReal args else pkgsHostTarget;
+
+  splicedPackages = splicePackages {
+    pkgsBuildBuild = defaultBuildBuildScope;
+    pkgsBuildHost = defaultBuildHostScope;
+    pkgsBuildTarget = defaultBuildTargetScope;
+    pkgsHostHost = defaultHostHostScope;
+    pkgsHostTarget = defaultHostTargetScope;
+    pkgsTargetTarget = defaultTargetTargetScope;
+  } // {
+    # These should never be spliced under any circumstances
+    inherit (pkgs) pkgs buildPackages targetPackages
+      buildPlatform targetPlatform hostPlatform;
+  };
 
 in
 
 {
+  inherit splicedPackages;
+
   # We use `callPackage' to be able to omit function arguments that can be
   # obtained `pkgs` or `buildPackages` and their `xorg` package sets. Use
   # `newScope' for sets of packages in `pkgs' (see e.g. `gnome' below).
