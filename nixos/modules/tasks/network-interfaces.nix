@@ -1098,7 +1098,7 @@ in
       };
     } // (listToAttrs (flip map interfaces (i:
       let
-        deviceDependency = if config.boot.isContainer
+        deviceDependency = if (config.boot.isContainer || i.name == "lo")
           then []
           else [ (subsystemDevice i.name) ];
       in
