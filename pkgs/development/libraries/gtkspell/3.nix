@@ -1,4 +1,4 @@
-{stdenv, fetchurl, gtk3, aspell, pkgconfig, enchant, isocodes, intltool, gobjectIntrospection}:
+{stdenv, fetchurl, gtk3, aspell, pkgconfig, enchant, isocodes, intltool, gobjectIntrospection, vala}:
 
 stdenv.mkDerivation rec {
   name = "gtkspell-${version}";
@@ -11,11 +11,14 @@ stdenv.mkDerivation rec {
     sha256 = "09jdicmpipmj4v84gnkqwbmj4lh8v0i6pn967rb9jx4zg2ia9x54";
   };
 
-  nativeBuildInputs = [ pkgconfig intltool gobjectIntrospection ];
+  nativeBuildInputs = [ pkgconfig intltool gobjectIntrospection vala ];
   buildInputs = [ aspell gtk3 enchant isocodes ];
   propagatedBuildInputs = [ enchant ];
 
-  configureFlags = [ "--enable-introspection" ];
+  configureFlags = [
+    "--enable-introspection"
+    "--enable-vala"
+  ];
 
   meta = with stdenv.lib; {
     homepage = http://gtkspell.sourceforge.net/;
