@@ -24,7 +24,6 @@ buildGoPackage rec {
     downloadPage = "https://developer.holochain.org/";
     license = stdenv.lib.licenses.gpl3;
     maintainers = with stdenv.lib.maintainers; [ gavin ];
-    platforms = stdenv.lib.platforms.all;
 
   };
 }
