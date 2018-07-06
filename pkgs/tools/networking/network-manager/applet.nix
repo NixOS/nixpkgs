@@ -6,18 +6,18 @@
 
 let
   pname = "network-manager-applet";
-  version = "1.8.10";
+  version = "1.8.14";
 in stdenv.mkDerivation rec {
   name = "${pname}-${version}";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "1hy9ni2rwpy68h7jhn5lm2s1zm1vjchfy8lwj8fpm7xlx3x4pp0a";
+    sha256 = "1js0i2kwfklahsn77qgxzdscy33drrlym3mrj1qhlw0zf8ri56ya";
   };
 
   mesonFlags = [
     "-Dselinux=false"
-    "-Dappindicator=true"
+    "-Dappindicator=yes"
     "-Dgcr=${if withGnome then "true" else "false"}"
   ];
 
