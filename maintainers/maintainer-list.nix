@@ -3185,6 +3185,11 @@
     github = "qknight";
     name = "Joachim Schiele";
   };
+  qoelet = {
+    email = "kenny@machinesung.com";
+    github = "qoelet";
+    name = "Kenny Shen";
+  };
   ragge = {
     email = "r.dahlen@gmail.com";
     github = "ragnard";
