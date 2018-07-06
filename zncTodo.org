@@ -1,0 +1,14 @@
+[x] Maybe detach old config style from new one? Would clean up stuff
+[x] Certainly move all old config style definitions into their own file, the current file is too big
+- Does lower/upper case config work?
+- Minimize working znc config in example
+- Test it!
+
+Won't do:
+- Can't do much because stuff might be set in extraConfig: Add warnings and assertions that do some checks on the semantic config. Such as a warning when no listeners are configured, assertion that a pass block is defined for each user.
+- Maybe change the type of the semantic config file to something that checks for more properties and adds some convenience functions. E.g. with the current semantic config you have to specify the server as a string of servername, optional "+" if ssl, the server port and the password. Could be made into an option set with these properties instead.
+
+More advanced stuff:
+- Generate module configs, which can currently only be set at runtime through an irc client. These module configs are pretty much just key value pairs, but each module would have to specify its options. And options can be globally, per network or per user.
+- Add proper testing with qemu.
+- znc modules: make them declare which type they are (combination of global/user/network) then use that info to check whether the settings are valid. Automatically add them to the znc modules when they are used somewhere. No more stringly types module adding (the current modules already declare their name already which is nice).
