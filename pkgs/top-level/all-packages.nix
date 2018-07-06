@@ -8608,6 +8608,9 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) CoreServices CoreGraphics ImageIO;
     stdenv = buildPackages.clangStdenv;
   };
+  xcbuildHook = makeSetupHook {
+    deps = [ xcbuild ];
+  } ../development/tools/xcbuild/setup-hook.sh  ;
 
   xmlindent = callPackage ../development/web/xmlindent {};
 

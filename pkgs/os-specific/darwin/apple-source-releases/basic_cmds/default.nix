@@ -1,7 +1,7 @@
-{ stdenv, appleDerivation, fetchurl, xcbuild }:
+{ stdenv, appleDerivation, fetchurl, xcbuildHook }:
 
 appleDerivation rec {
-  buildInputs = [ xcbuild ];
+  nativeBuildInputs = [ xcbuildHook ];
 
   # These PBXcp calls should be patched in xcbuild to allow them to
   # automatically be prefixed.

@@ -1,9 +1,10 @@
-{ appleDerivation, xcbuild, Security
+{ appleDerivation, xcbuildHook, Security
 , libsecurity_codesigning, libsecurity_utilities, libsecurity_cdsa_utilities
 , xnu, osx_private_sdk, pcsclite}:
 
 appleDerivation {
-  buildInputs = [ xcbuild Security libsecurity_utilities
+  nativeBuildInputs = [ xcbuildHook ];
+  buildInputs = [ Security libsecurity_utilities
                   libsecurity_cdsa_utilities libsecurity_codesigning
                   pcsclite ];
 

@@ -1,8 +1,8 @@
-{ stdenv, appleDerivation, xcbuild }:
+{ stdenv, appleDerivation, xcbuildHook }:
 
 # TODO: make this the official libutil expression once we've integrated xcbuild in the bootstrap
 appleDerivation {
-  buildInputs = [ xcbuild ];
+  nativeBuildInputs = [ xcbuildHook ];
 
   prePatch = ''
     substituteInPlace tzlink.c \
