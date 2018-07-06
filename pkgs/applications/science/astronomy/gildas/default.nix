@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     sha256 = "0kl3zf6b1kv8hgsfrarsnm2gnrdax3vi8f856249y4nxsa7lbv2i";
   };
 
-  enableParallelBuilding = true;
+  enableParallelBuilding = false;
 
   nativeBuildInputs = [ pkgconfig groff perl getopt gfortran which ];
 
