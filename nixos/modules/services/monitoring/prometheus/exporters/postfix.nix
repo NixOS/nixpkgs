@@ -8,6 +8,15 @@ in
 {
   port = 9154;
   extraOpts = {
+    group = mkOption {
+      type = types.str;
+      description = ''
+        Group under which the postfix exporter shall be run.
+        It should match the group that is allowed to access the
+        <literal>showq</literal> socket in the <literal>queue/public/</literal> directory.
+        Defaults to <literal>services.postfix.setgidGroup</literal> when postfix is enabled.
+      '';
+    };
     telemetryPath = mkOption {
       type = types.str;
       default = "/metrics";
