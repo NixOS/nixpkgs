@@ -18421,6 +18421,8 @@ with pkgs;
     vte = gnome3.vte-ng;
   };
 
+  termtosvg = callPackage ../tools/misc/termtosvg { };
+
   tesseract = callPackage ../applications/graphics/tesseract { };
   tesseract_4 = lowPrio (callPackage ../applications/graphics/tesseract/4.x.nix { });
 
