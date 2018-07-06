@@ -60,6 +60,7 @@ buildPythonApplication rec {
     idna itsdangerous markupsafe
     plumbum pytz six tzlocal urllib3
     webencodings werkzeug zxcvbn-python
+    backports_functools_lru_cache
   ] ++ lib.optional (pythonOlder "3.4") pathlib
     ++ lib.optional delugeSupport deluge;
 
