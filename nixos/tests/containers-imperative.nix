@@ -10,7 +10,7 @@ import ./make-test.nix ({ pkgs, ...} : {
     { config, pkgs, lib, ... }:
     { imports = [ ../modules/installer/cd-dvd/channel.nix ];
       virtualisation.writableStore = true;
-      virtualisation.memorySize = 768;
+      virtualisation.memorySize = 1024;
       # Make sure we always have all the required dependencies for creating a
       # container available within the VM, because we don't have network access.
       virtualisation.pathsInNixDB = let
