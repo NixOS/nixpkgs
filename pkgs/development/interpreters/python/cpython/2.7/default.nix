@@ -73,7 +73,7 @@ let
       # https://github.com/python/cpython/pull/6118
       (fetchpatch {
         name = "type_getattro.patch";
-        url = "https://github.com/python/cpython/pull/6118/commits/8c6da2d7e7e719c40fb539b7f7cb7583cccc5527.patch";
+        url = "file://${./type_getattro.patch}";
         sha256 = "11v9yx20hs3jmw0wggzvmw39qs4mxay4kb8iq2qjydwy9ya61nrd";
       })
     ] ++ optionals (x11Support && stdenv.isDarwin) [
