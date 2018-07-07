@@ -3,7 +3,7 @@
 , dbus, glib, libGL, libX11, libXfixes, libuuid, libxcb, qtbase, qtdeclarative
 , qtlocation, qtquickcontrols2, qtscript, qtwebchannel, qtwebengine
 # Runtime
-, libjpeg_turbo, pciutils, procps
+, libjpeg_turbo, pciutils, procps, qtimageformats
 , pulseaudioSupport ? true, libpulseaudio ? null
 }:
 
@@ -30,7 +30,7 @@ in stdenv.mkDerivation {
   buildInputs = [
     dbus glib libGL libX11 libXfixes libuuid libxcb qtbase qtdeclarative
     qtlocation qtquickcontrols2 qtscript qtwebchannel qtwebengine
-    libjpeg_turbo pciutils procps
+    libjpeg_turbo
   ];
 
   runtimeDependencies = optional pulseaudioSupport libpulseaudio;
@@ -70,6 +70,8 @@ in stdenv.mkDerivation {
       makeWrapper $packagePath/zoom $out/bin/zoom-us \
         --prefix PATH : "${makeBinPath [ pciutils procps ]}" \
         --set QSG_INFO 1 \
+        --set QT_QPA_PLATFORM_PLUGIN_PATH ${qtbase.bin}/lib/qt-${qtbase.qtCompatVersion}/plugins/platforms \
+        --set QT_PLUGIN_PATH ${qtbase.bin}/${qtbase.qtPluginPrefix}:${qtimageformats}/${qtbase.qtPluginPrefix} \
         --run "cd $packagePath"
 
       runHook postInstall
@@ -92,7 +94,7 @@ in stdenv.mkDerivation {
     description = "zoom.us video conferencing application";
     license = stdenv.lib.licenses.unfree;
     platforms = builtins.attrNames srcs;
-    maintainers = with stdenv.lib.maintainers; [ danbst ];
+    maintainers = with stdenv.lib.maintainers; [ danbst tadfisher ];
   };
 
 }
