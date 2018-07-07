@@ -220,6 +220,7 @@
   ./services/databases/stanchion.nix
   ./services/databases/virtuoso.nix
   ./services/desktops/accountsservice.nix
+  ./services/desktops/bamf.nix
   ./services/desktops/dleyna-renderer.nix
   ./services/desktops/dleyna-server.nix
   ./services/desktops/flatpak.nix
