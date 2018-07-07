@@ -1391,6 +1391,8 @@ with pkgs;
 
   nwipe = callPackage ../tools/security/nwipe { };
 
+  nyx = callPackage ../tools/networking/nyx { };
+
   onboard = callPackage ../applications/misc/onboard { };
 
   optar = callPackage ../tools/graphics/optar {};
