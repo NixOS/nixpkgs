@@ -172,6 +172,8 @@ with pkgs;
 
   fetchpatch = callPackage ../build-support/fetchpatch { };
 
+  fetchpgpkey = callPackage ../build-support/fetchpgpkey { };
+
   fetchs3 = callPackage ../build-support/fetchs3 { };
 
   fetchsvn = callPackage ../build-support/fetchsvn {
