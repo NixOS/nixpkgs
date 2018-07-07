@@ -131,4 +131,8 @@ in
   callPackages = lib.callPackagesWith splicedPackages;
 
   newScope = extra: lib.callPackageWith (splicedPackages // extra);
+
+  # Haskell package sets need this because they reimplement their own
+  # `newScope`.
+  __splicedPackages = splicedPackages // { recurseForDerivations = false; };
 }
