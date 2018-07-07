@@ -12766,6 +12766,10 @@ with pkgs;
 
   zziplib = callPackage ../development/libraries/zziplib { };
 
+  gsignond = callPackage ../development/libraries/gsignond {
+    plugins = [];
+  };
+
   ### DEVELOPMENT / LIBRARIES / AGDA
 
   agda = callPackage ../build-support/agda {
