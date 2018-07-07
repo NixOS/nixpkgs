@@ -467,7 +467,7 @@ rec {
                   contents keepContentsDirlinks runAsRoot diskSize
                   extraCommands;
         };
-      result = runCommand "docker-image-${baseName}.tar.gz" {
+      result = runCommand "docker-image-${baseName}.tar.gz" rec {
         buildInputs = [ jshon pigz coreutils findutils jq ];
         # Image name and tag must be lowercase
         imageName = lib.toLower name;
@@ -476,6 +476,9 @@ rec {
         layerClosure = writeReferencesToFile layer;
         passthru.buildArgs = args;
         passthru.layer = layer;
+        passthru.image.name = imageName;
+        passthru.image.tag = imageTag;
+        passthru.image.fullName = "${imageName}:${imageTag}";
       } ''
         ${lib.optionalString (tag == null) ''
           outName="$(basename "$out")"
