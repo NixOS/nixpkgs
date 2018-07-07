@@ -97,7 +97,20 @@ let
       };
     in stdenv.lib.makeOverridable drvScope (auto // manualArgs);
 
-  mkScope = scope: pkgs // pkgs.xorg // pkgs.gnome2 // { inherit stdenv; } // scope;
+  mkScope = scope: let
+      ps = pkgs.__splicedPackages;
+      scopeSpliced = pkgs.splicePackages {
+        pkgsBuildBuild = scope.buildHaskellPackages.buildHaskellPackages;
+        pkgsBuildHost = scope.buildHaskellPackages;
+        pkgsBuildTarget = {};
+        pkgsHostHost = {};
+        pkgsHostTarget = scope;
+        pkgsTargetTarget = {};
+      } // {
+        # Don't splice these
+        inherit (scope) ghc buildHaskellPackages;
+      };
+    in ps // ps.xorg // ps.gnome2 // { inherit stdenv; } // scopeSpliced;
   defaultScope = mkScope self;
   callPackage = drv: args: callPackageWithScope defaultScope drv args;
 
@@ -150,7 +163,7 @@ let
 
 in package-set { inherit pkgs stdenv callPackage; } self // {
 
-    inherit mkDerivation callPackage haskellSrc2nix hackage2nix;
+    inherit mkDerivation callPackage haskellSrc2nix hackage2nix buildHaskellPackages;
 
     inherit (haskellLib) packageSourceOverrides;
 
