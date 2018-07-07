@@ -8603,10 +8603,11 @@ with pkgs;
 
   xc3sprog = callPackage ../development/tools/misc/xc3sprog { };
 
-  xcbuild  = callPackage ../development/tools/xcbuild/wrapper.nix {
+  xcodebuild = callPackage ../development/tools/xcbuild/wrapper.nix {
     inherit (darwin.apple_sdk.frameworks) CoreServices CoreGraphics ImageIO;
     stdenv = buildPackages.clangStdenv;
   };
+  xcbuild = xcodebuild;
   xcbuildHook = makeSetupHook {
     deps = [ xcbuild ];
   } ../development/tools/xcbuild/setup-hook.sh  ;
