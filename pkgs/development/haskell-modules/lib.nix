@@ -385,7 +385,7 @@ rec {
   # Utility to convert a directory full of `cabal2nix`-generated files into a
   # package override set
   #
-  # packagesFromDirectory : Directory -> HaskellPackageOverrideSet
+  # packagesFromDirectory : { directory : Directory, ... } -> HaskellPackageOverrideSet
   packagesFromDirectory =
     { directory, ... }:
 
