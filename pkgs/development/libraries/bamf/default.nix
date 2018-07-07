@@ -1,11 +1,13 @@
 { stdenv, fetchurl, libgtop, libwnck3, glib, vala, pkgconfig
 , libstartup_notification, gobjectIntrospection, gtk-doc
-, python27, pythonPackages, libxml2 }:
+, xorgserver, dbus, python2 }:
 
 stdenv.mkDerivation rec {
   pname = "bamf";
   version = "0.5.3";
   name = "${pname}-${version}";
+
+  outputs = [ "out" "dev" "devdoc" ];
 
   src = fetchurl {
     url = "https://launchpad.net/${pname}/0.5/${version}/+download/${name}.tar.gz";
@@ -16,21 +18,39 @@ stdenv.mkDerivation rec {
     pkgconfig
     gtk-doc
     gobjectIntrospection
+    vala
+    # Tests
+    xorgserver
+    dbus
+    (python2.withPackages (pkgs: with pkgs; [ libxslt libxml2 ]))
   ];
 
-  buildInputs = [ libgtop libwnck3 vala libstartup_notification
-                  python27 pythonPackages.libxslt libxml2 glib ];
+  buildInputs = [
+    libgtop
+    libwnck3
+    libstartup_notification
+    glib
+  ];
 
+  # Fix hard-coded path
+  # https://bugs.launchpad.net/bamf/+bug/1780557
   postPatch = ''
     substituteInPlace data/Makefile.in \
-      --replace '/usr/lib/systemd/user' '@datarootdir@/systemd/user'
+      --replace '/usr/lib/systemd/user' '@prefix@/lib/systemd/user'
   '';
+
+  configureFlags = [
+    "--enable-headless-tests"
+  ];
 
   # fix paths
   makeFlags = [
-    "INTROSPECTION_GIRDIR=$(out)/share/gir-1.0/"
+    "INTROSPECTION_GIRDIR=$(dev)/share/gir-1.0/"
     "INTROSPECTION_TYPELIBDIR=$(out)/lib/girepository-1.0"
   ];
+
+  # TODO: Requires /etc/machine-id
+  doCheck = false;
 
   # ignore deprecation errors
   NIX_CFLAGS_COMPILE = "-Wno-deprecated-declarations";
