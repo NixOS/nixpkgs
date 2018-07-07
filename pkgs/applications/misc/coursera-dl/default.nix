@@ -4,21 +4,21 @@ let
   pythonPackages = python3.pkgs;
 
 in pythonPackages.buildPythonApplication rec {
-  name = "coursera-dl-${version}";
-  version = "0.10.0";
+  pname = "coursera-dl";
+  version = "0.11.4";
 
   src = fetchFromGitHub {
     owner = "coursera-dl";
     repo = "coursera-dl";
     rev = version;
-    sha256 = "0m3f6ly8c3mkb8yy2y398afswqgy17rz159s1054wzxpb4f85zlb";
+    sha256 = "0dn7a6s98dwba62r0dyabq8pryzga4b2wpx88i9bmp7ja1b1f92f";
   };
 
   nativeBuildInputs = with pythonPackages; [ pandoc ];
 
   buildInputs = with pythonPackages; [ glibcLocales ];
 
-  propagatedBuildInputs = with pythonPackages; [ beautifulsoup4 ConfigArgParse keyring pyasn1 requests six urllib3 ];
+  propagatedBuildInputs = with pythonPackages; [ attrs beautifulsoup4 ConfigArgParse keyring pyasn1 requests six urllib3 ];
 
   checkInputs = with pythonPackages; [ pytest mock ];
 
