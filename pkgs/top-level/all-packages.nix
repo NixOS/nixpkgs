@@ -8115,6 +8115,8 @@ with pkgs;
 
   github-release = callPackage ../development/tools/github/github-release { };
 
+  github-cli = callPackage ../development/tools/github/github-cli { };
+
   global = callPackage ../development/tools/misc/global { };
 
   gnome-doc-utils = callPackage ../development/tools/documentation/gnome-doc-utils {};
