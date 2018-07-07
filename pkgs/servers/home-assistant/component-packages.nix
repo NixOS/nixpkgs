@@ -2,7 +2,7 @@
 # Do not edit!
 
 {
-  version = "0.72.1";
+  version = "0.73.0";
   components = {
     "abode" = ps: with ps; [  ];
     "ads" = ps: with ps; [  ];
@@ -113,6 +113,7 @@
     "binary_sensor.pilight" = ps: with ps; [  ];
     "binary_sensor.ping" = ps: with ps; [  ];
     "binary_sensor.qwikswitch" = ps: with ps; [  ];
+    "binary_sensor.rachio" = ps: with ps; [  ];
     "binary_sensor.raincloud" = ps: with ps; [  ];
     "binary_sensor.rainmachine" = ps: with ps; [  ];
     "binary_sensor.random" = ps: with ps; [  ];
@@ -205,6 +206,7 @@
     "climate.generic_thermostat" = ps: with ps; [  ];
     "climate.heatmiser" = ps: with ps; [  ];
     "climate.hive" = ps: with ps; [  ];
+    "climate.homekit_controller" = ps: with ps; [  ];
     "climate.homematic" = ps: with ps; [ pyhomematic ];
     "climate.homematicip_cloud" = ps: with ps; [  ];
     "climate.honeywell" = ps: with ps; [  ];
@@ -609,7 +611,7 @@
     "media_player.samsungtv" = ps: with ps; [ wakeonlan ];
     "media_player.snapcast" = ps: with ps; [  ];
     "media_player.songpal" = ps: with ps; [  ];
-    "media_player.sonos" = ps: with ps; [  ];
+    "media_player.sonos" = ps: with ps; [ soco ];
     "media_player.soundtouch" = ps: with ps; [ libsoundtouch ];
     "media_player.spotify" = ps: with ps; [ aiohttp-cors ];
     "media_player.squeezebox" = ps: with ps; [  ];
@@ -635,6 +637,9 @@
     "mychevy" = ps: with ps; [  ];
     "mycroft" = ps: with ps; [  ];
     "mysensors" = ps: with ps; [  ];
+    "mysensors.const" = ps: with ps; [  ];
+    "mysensors.device" = ps: with ps; [  ];
+    "mysensors.gateway" = ps: with ps; [  ];
     "namecheapdns" = ps: with ps; [  ];
     "neato" = ps: with ps; [  ];
     "nest" = ps: with ps; [  ];
@@ -715,6 +720,7 @@
     "proximity" = ps: with ps; [  ];
     "python_script" = ps: with ps; [  ];
     "qwikswitch" = ps: with ps; [  ];
+    "rachio" = ps: with ps; [  ];
     "rainbird" = ps: with ps; [  ];
     "raincloud" = ps: with ps; [  ];
     "rainmachine" = ps: with ps; [  ];
@@ -1031,7 +1037,7 @@
     "sleepiq" = ps: with ps; [  ];
     "smappee" = ps: with ps; [  ];
     "snips" = ps: with ps; [ paho-mqtt ];
-    "sonos" = ps: with ps; [  ];
+    "sonos" = ps: with ps; [ soco ];
     "spaceapi" = ps: with ps; [ aiohttp-cors ];
     "spc" = ps: with ps; [ websockets ];
     "splunk" = ps: with ps; [  ];
