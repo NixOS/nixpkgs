@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     cp -R conf docs lib ${name}.jar $out
     mkdir -p $out/bin
     cp -R bin/{zkCli,zkCleanup,zkEnv,zkServer}.sh $out/bin
-    for i in $out/bin/{zkCli,zkCleanup}.sh; do
+    for i in $out/bin/{zkCli,zkCleanup,zkServer}.sh; do
       wrapProgram $i \
         --set JAVA_HOME "${jre}" \
         --prefix PATH : "${bash}/bin"
