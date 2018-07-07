@@ -1,4 +1,4 @@
-{ stdenv, fetchzip, gnupg }:
+{ stdenv, fetchzip, gnupg, fetchpgpkey }:
 
 stdenv.mkDerivation rec {
   name = "1password-${version}";
@@ -26,13 +26,19 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ gnupg ];
 
+  key = fetchpgpkey {
+    url = https://keybase.io/1password/pgp_keys.asc;
+    fingerprint = "3FEF9748469ADBE15DA7CA80AC2D62742012EA22";
+    sha256 = "1v9gic59a3qim3fcffq77jrswycww4m1rd885lk5xgwr0qnqr019";
+  };
+
   doCheck = true;
   checkPhase = ''
     export GNUPGHOME=.gnupgtmp
     rm -rf $GNUPGHOME # make sure it's a fresh empty dir
     mkdir -p -m 700 $GNUPGHOME
     # import upstream public key
-    cat ${./AC2D62742012EA22.asc} | gpg --import -q
+    cat ${key} | gpg --import -q
     # check binary signature with upstream signing key
     gpgv --keyring pubring.kbx op.sig op
   '';
