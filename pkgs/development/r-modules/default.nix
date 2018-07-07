@@ -296,7 +296,6 @@ let
     protolite = [ pkgs.protobuf ];
     qtbase = [ pkgs.qt4 ];
     qtpaint = [ pkgs.qt4 ];
-    R2GUESS = [ pkgs.gsl_1 ];
     R2SWF = [ pkgs.zlib pkgs.libpng pkgs.freetype.dev ];
     RAppArmor = [ pkgs.libapparmor ];
     rapportools = [ pkgs.which ];
@@ -478,7 +477,6 @@ let
     "cpa"
     "DALY"
     "dave"
-    "debug"
     "Deducer"
     "DeducerExtras"
     "DeducerPlugInExample"
@@ -497,7 +495,6 @@ let
     "EasyqpcR"
     "EcoVirtual"
     "ENiRG"
-    "eVenn"
     "exactLoglinTest"
     "fat2Lpoly"
     "fbati"
@@ -596,7 +593,6 @@ let
     "rareNMtests"
     "rAverage"
     "Rcmdr"
-    "RcmdrPlugin_BCA"
     "RcmdrPlugin_coin"
     "RcmdrPlugin_depthTools"
     "RcmdrPlugin_DoE"
@@ -630,7 +626,6 @@ let
     "RcmdrPlugin_temis"
     "RcmdrPlugin_UCA"
     "recluster"
-    "relax"
     "relimp"
     "RenextGUI"
     "reportRx"
@@ -776,10 +771,6 @@ let
       preConfigure = ''
         patchShebangs configure
       '';
-    });
-
-    Mposterior = old.Mposterior.overrideDerivation (attrs: {
-      PKG_LIBS = "-L${pkgs.openblasCompat}/lib -lopenblas";
     });
 
     pbdZMQ = old.pbdZMQ.overrideDerivation (attrs: {

@@ -31,9 +31,7 @@ in with self; {
   CRCL18 = derive2 { name="CRCL18"; version="0.115.0"; sha256="0y2v5fmlfj7hzkvw1l116vnczjnmhxd77gvdqjjynl9cgvlx0smq"; depends=[Biobase]; };
   CardinalWorkflows = derive2 { name="CardinalWorkflows"; version="1.13.0"; sha256="1rjp3ybc0yx8sjqp4ahadgymlld2l2hn3dxxvpng06qpp5jch0zq"; depends=[Cardinal]; };
   CellMapperData = derive2 { name="CellMapperData"; version="1.7.0"; sha256="0zjssdm2z7i6bcp781x9lz09dmh5krvvxg5a0la79dj5vvs72cjp"; depends=[CellMapper ExperimentHub]; };
-  ChAMPdata = derive2 { name="ChAMPdata"; version="2.13.0"; sha256="character(0)"; depends=[BiocGenerics GenomicRanges]; };
   ChIC_data = derive2 { name="ChIC.data"; version="1.1.0"; sha256="07gyyv7bjfxa978c40lkh65m0x2zi855mapvwgpazqgq5qhxyfya"; depends=[caret]; };
-  ChIPXpressData = derive2 { name="ChIPXpressData"; version="1.19.0"; sha256="character(0)"; depends=[bigmemory]; };
   ChIPexoQualExample = derive2 { name="ChIPexoQualExample"; version="1.5.0"; sha256="0y2s4hw7hbfspy1hjsqkaw72pm26k911699k6sw4jhvjh7mkvjbf"; depends=[]; };
   ChimpHumanBrainData = derive2 { name="ChimpHumanBrainData"; version="1.19.0"; sha256="1i2aj1vxak6b53mpcd36q2xwgpddllqpqz3wii7rrsa9mg2gaaza"; depends=[affy hexbin limma qvalue statmod]; };
   ConnectivityMap = derive2 { name="ConnectivityMap"; version="1.17.0"; sha256="1zz0vq192jfnp494mp61xmkxyd94bbh9xs268jd7ynnlpjp9phsx"; depends=[]; };
@@ -66,7 +64,6 @@ in with self; {
   GSVAdata = derive2 { name="GSVAdata"; version="1.17.0"; sha256="1gjc9psmx0i25bwki6l74d8jg3mrvfzjdnxs5bhbqnzab6fzdfh0"; depends=[Biobase GSEABase hgu95a_db]; };
   GWASdata = derive2 { name="GWASdata"; version="1.19.0"; sha256="0i09njrq0fzwvzj6lqsa7kdnwi35lm7z0akywh0mr87i6dlqj8sq"; depends=[GWASTools]; };
   GeuvadisTranscriptExpr = derive2 { name="GeuvadisTranscriptExpr"; version="1.9.0"; sha256="1h6ghr75h1i87lbarsganiw6mgjyiha4zv4hbjdjljc464s11b0d"; depends=[]; };
-  HD2013SGI = derive2 { name="HD2013SGI"; version="1.21.0"; sha256="character(0)"; depends=[EBImage geneplotter gplots limma LSD RColorBrewer splots vcd]; };
   HDCytoData = derive2 { name="HDCytoData"; version="1.1.0"; sha256="1nlalaccb5y6vsl5k63qz2mcjr6k6syciv95l18962acgnlqbpq1"; depends=[ExperimentHub flowCore SummarizedExperiment]; };
   HEEBOdata = derive2 { name="HEEBOdata"; version="1.19.0"; sha256="1z8qb5xrzadg6fxg8cx04dpad3qiab5m8vhgdqw4xs8xdaqd4g1m"; depends=[]; };
   HIVcDNAvantWout03 = derive2 { name="HIVcDNAvantWout03"; version="1.21.0"; sha256="0pgb0r6zp6v0wq16c5zjxzjjwb6cjjp3cn8jnh4p91rwf43za4rh"; depends=[]; };
@@ -200,7 +197,6 @@ in with self; {
   cMap2data = derive2 { name="cMap2data"; version="1.17.0"; sha256="11973w3gjz0qayxacx41mlbf4ji345js8jgjkn2aba0ahnyzb6vw"; depends=[]; };
   cancerdata = derive2 { name="cancerdata"; version="1.19.0"; sha256="02zi60lh6jsg6hlyyq6wzg9lzxjr8m9418kywlk3x3c6kkgkrh69"; depends=[Biobase]; };
   ccTutorial = derive2 { name="ccTutorial"; version="1.19.0"; sha256="0xd3zrcia312h947nvah3ksx9kxzhqzc9c2nm5q6ssvx15s6f6d6"; depends=[affy Biobase Ringo topGO]; };
-  ccdata = derive2 { name="ccdata"; version="1.7.0"; sha256="character(0)"; depends=[]; };
   ceu1kg = derive2 { name="ceu1kg"; version="0.19.0"; sha256="0vs60mflfc1pnc7s725wsyq2jrj44jrvxwzpw4bhlj0qbs602s8l"; depends=[Biobase GGBase GGtools]; };
   ceu1kgv = derive2 { name="ceu1kgv"; version="0.23.0"; sha256="10jnbc8y386racq3ac1hf1dp76wvzlfm8p66c94pk3f2m0w45psv"; depends=[Biobase GGBase]; };
   ceuhm3 = derive2 { name="ceuhm3"; version="0.19.0"; sha256="1qdp85ps5xrlx1pl769j91aig2rgxcix4pdzrsa249nyyq1avdym"; depends=[Biobase GGBase GGtools]; };
@@ -345,8 +341,6 @@ in with self; {
   yeastExpData = derive2 { name="yeastExpData"; version="0.27.0"; sha256="13vz99brk9bb10swlrisiiwilyjn6pl1z3arw47sahm7grw4sgpc"; depends=[graph]; };
   yeastGSData = derive2 { name="yeastGSData"; version="0.19.0"; sha256="06gnrh6kll5rmdvhigrf7blyyap6dz517gkhx2ljvlbwwz1hd35l"; depends=[]; };
   yeastNagalakshmi = derive2 { name="yeastNagalakshmi"; version="1.17.0"; sha256="0xq65383vmh1jnfxnfhrzfdhr5s0qzy0xb844d8lvmsn77mq7jpr"; depends=[]; };
-  yeastRNASeq = derive2 { name="yeastRNASeq"; version="0.19.0"; sha256="character(0)"; depends=[]; };
-  yri1kgv = derive2 { name="yri1kgv"; version="0.23.0"; sha256="character(0)"; depends=[Biobase GGBase]; };
   yriMulti = derive2 { name="yriMulti"; version="0.11.0"; sha256="0gsr2y94hfmjmpz37y7q80wnkhlz8q028qn7dwm15a5rvzvs8ccv"; depends=[dsQTL GenomeInfoDb GenomicFiles GenomicRanges geuvPack gQTLBase Homo_sapiens MultiAssayExperiment SummarizedExperiment VariantAnnotation]; };
   zebrafishRNASeq = derive2 { name="zebrafishRNASeq"; version="0.115.0"; sha256="11lmhpd94vywkir5m02qb7j278k7hjlp085xq9wgaxmr07vxzyy6"; depends=[]; };
 }
