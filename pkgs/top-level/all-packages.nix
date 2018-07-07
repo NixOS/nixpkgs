@@ -4435,6 +4435,8 @@ with pkgs;
 
   pdf-redact-tools = callPackage ../tools/graphics/pdfredacttools { };
 
+  pdfcrack = callPackage ../tools/security/pdfcrack { };
+
   pdf2svg = callPackage ../tools/graphics/pdf2svg { };
 
   fmodex = callPackage ../games/zandronum/fmod.nix { };
