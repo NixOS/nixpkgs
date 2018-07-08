@@ -7,14 +7,14 @@ let
 
 in python.pkgs.buildPythonApplication rec {
   pname = "papis";
-  version = "0.5.3";
+  version = "0.6";
 
   # Missing tests on Pypi
   src = fetchFromGitHub {
     owner = "papis";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1yc4ilb7bw099pi2vwawyf8mi0n1kp87wgwgwcwc841ibq62q8ic";
+    sha256 = "0zy8q154zhpqb75c775nwq3mdl1szhzhkfi0nvyjmzfgsv2g1wa2";
   };
 
   postPatch = ''
@@ -26,7 +26,7 @@ in python.pkgs.buildPythonApplication rec {
     argcomplete arxiv2bib beautifulsoup4 bibtexparser
     configparser dmenu-python habanero papis-python-rofi
     pylibgen prompt_toolkit pyparser python_magic pyyaml
-    requests unidecode urwid vobject tkinter
+    requests unidecode urwid vobject tkinter whoosh
     vim
   ];
 
