@@ -1,21 +1,19 @@
 { build-idris-package
 , fetchFromGitHub
-, prelude
 , effects
 , lib
-, idris
 }:
 build-idris-package  {
   name = "eternal";
-  version = "2018-01-25";
+  version = "2018-07-02";
 
-  idrisDeps = [ prelude effects ];
+  idrisDeps = [ effects ];
 
   src = fetchFromGitHub {
     owner = "Heather";
     repo = "Control.Eternal.Idris";
-    rev = "7ead56ce6065b55104460ace945adbce38fb13eb";
-    sha256 = "0b4zys4mhl6r4rbpdxr7n2n20cdc0nkh4lm8n5v4wxkmjzna5cpd";
+    rev = "2f84b0dd49a7a29a2f852ba96cabfe8322e0852b";
+    sha256 = "1x8cwngiqi05f3wll0niznm47jj2byivx4mh5xf4sb47kciwkxvs";
   };
 
   postUnpack = ''
@@ -30,6 +28,5 @@ build-idris-package  {
     homepage = https://github.com/Heather/Control.Eternal.Idris;
     license = lib.licenses.bsd3;
     maintainers = [ lib.maintainers.brainrape ];
-    inherit (idris.meta) platforms;
   };
 }
