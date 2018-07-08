@@ -12927,6 +12927,8 @@ with pkgs;
 
   libpulseaudio = libpulseaudio-vanilla;
 
+  pulseeffects = callPackage ../applications/audio/pulseeffects { };
+
   tomcat_connectors = callPackage ../servers/http/apache-modules/tomcat-connectors { };
 
   pies = callPackage ../servers/pies { };
