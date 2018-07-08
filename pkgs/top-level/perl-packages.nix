@@ -16912,10 +16912,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   TimeDurationParse = buildPerlPackage rec {
-    name = "Time-Duration-Parse-0.13";
+    name = "Time-Duration-Parse-0.14";
     src = fetchurl {
       url = "mirror://cpan/authors/id/N/NE/NEILB/${name}.tar.gz";
-      sha256 = "0affdzhsiy7dr6dzj2p6m9lynmjh53k31bprfsfa21pz8551hjj1";
+      sha256 = "17nh73r50mqqpgxdf3zpgdiqrizmjy0vdk0zd6xi9zcsdijrdhnc";
     };
     buildInputs = [ TimeDuration ];
     propagatedBuildInputs = [ ExporterLite ];
