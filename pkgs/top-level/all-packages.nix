@@ -615,7 +615,7 @@ with pkgs;
 
   dgsh = callPackage ../shells/dgsh { };
 
-  dkimpy = pythonPackages.dkimpy;
+  dkimpy = with pythonPackages; toPythonApplication dkimpy;
 
   ecdsautils = callPackage ../tools/security/ecdsautils { };
 
