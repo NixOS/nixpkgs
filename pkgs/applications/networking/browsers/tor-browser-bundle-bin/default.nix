@@ -1,5 +1,7 @@
 { stdenv
 , fetchurl
+, fetchpgpkey
+, verifySignatureHook
 , makeDesktopItem
 
 # Common run-time dependencies
@@ -119,6 +121,18 @@ let
       sha256 = "1s0k82ch7ypjyc5k5rb4skb9ylnp7b9ipvf8gb7pdhb8m4zjk461";
     };
   };
+
+  srcSignatures = {
+    "x86_64-linux" = fetchurl {
+      url = "https://dist.torproject.org/torbrowser/${version}/tor-browser-linux64-${version}_${lang}.tar.xz.asc";
+      sha256 = "008r1k3cpwjnvmyywwr3m3rl9bqmynasbzrrzm4kplaisqfg9wkn";
+    };
+
+    "i686-linux" = fetchurl {
+      url = "https://dist.torproject.org/torbrowser/${version}/tor-browser-linux32-${version}_${lang}.tar.xz.asc";
+      sha256 = "000binc825nmapwi255g511yva9mrxlqygj4b1kfk36clmnim5zm";
+    };
+  };
 in
 
 stdenv.mkDerivation rec {
@@ -126,6 +140,15 @@ stdenv.mkDerivation rec {
   inherit version;
 
   src = srcs."${stdenv.system}" or (throw "unsupported system: ${stdenv.system}");
+  srcSignature = srcSignatures."${stdenv.system}" or (throw "unsupported system: ${stdenv.system}");
+
+  signaturePublicKey = fetchpgpkey {
+    url = https://sks-keyservers.net/pks/lookup?op=get&search=0x4E2C6E8793298290;
+    sha256 = "0lnms0cixpqirphp3wkd6dqfxzm3yhs8d3xsaf1a9rmh839r4xi5";
+    fingerprint = "EF6E286DDA85EA2A4BA7DE684E2C6E8793298290";
+  };
+
+  nativeBuildInputs = [ verifySignatureHook ];
 
   preferLocalBuild = true;
   allowSubstitutes = false;
@@ -146,6 +169,7 @@ stdenv.mkDerivation rec {
     interp=$(< $NIX_CC/nix-support/dynamic-linker)
 
     # Unpack & enter
+    verifySrcSignature
     mkdir -p "$TBB_IN_STORE"
     tar xf "${src}" -C "$TBB_IN_STORE" --strip-components=2
     pushd "$TBB_IN_STORE"
