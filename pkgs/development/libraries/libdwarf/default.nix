@@ -1,7 +1,7 @@
 { stdenv, fetchurl, libelf }:
 
 let
-  version = "20180129";
+  version = "20180527";
   src = fetchurl {
     url = "https://www.prevanders.net/libdwarf-${version}.tar.gz";
     # Upstream displays this hash broken into three parts:
