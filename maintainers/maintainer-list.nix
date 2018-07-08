@@ -4199,6 +4199,11 @@
     github = "vyp";
     name = "vyp";
   };
+  waynr = {
+    name = "Wayne Warren";
+    email = "wayne.warren.s@gmail.com";
+    github = "waynr";
+  };
   wchresta = {
     email = "wchresta.nix@chrummibei.ch";
     github = "wchresta";
