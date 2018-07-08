@@ -4,10 +4,10 @@
 # Our own "unfuck" libs for macOS
 , ncurses, fmodex, gcc
 
-, dfVersion
+, dfVersion, df-hashes
 }:
 
-with lib; with builtins;
+with lib;
 
 let
   libpath = makeLibraryPath [ stdenv.cc.cc stdenv.cc.libc dwarf-fortress-unfuck SDL ];
@@ -30,9 +30,8 @@ let
   baseVersion = elemAt dfVersionTriple 1;
   patchVersion = elemAt dfVersionTriple 2;
 
-  games = fromJSON (readFile ./game.json);
-  game = if hasAttr dfVersion games
-         then getAttr dfVersion games
+  game = if hasAttr dfVersion df-hashes
+         then getAttr dfVersion df-hashes
          else throw "Unknown Dwarf Fortress version: ${dfVersion}";
   dfPlatform = if hasAttr stdenv.system platforms
                then getAttr stdenv.system platforms
@@ -47,7 +46,7 @@ assert dwarf-fortress-unfuck != null ->
        dwarf-fortress-unfuck.dfVersion == dfVersion;
 
 stdenv.mkDerivation {
-  name = "dwarf-fortress-original-${dfVersion}";
+  name = "dwarf-fortress-${dfVersion}";
 
   src = fetchurl {
     url = "${homepage}df_${baseVersion}_${patchVersion}_${dfPlatform}.tar.bz2";

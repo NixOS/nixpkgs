@@ -1,12 +1,19 @@
-{ pkgs, stdenv, stdenvNoCC, gccStdenv }:
+{ pkgs, stdenv, stdenvNoCC, gccStdenv, lib }:
 
 let
   callPackage = pkgs.newScope self;
 
-  self = rec {
-    dwarf-fortress-original = callPackage ./game.nix {
-      dfVersion = "0.44.11";
+  df-games = lib.listToAttrs (map (dfVersion: {
+    name = "dwarf-fortress_${lib.replaceStrings ["."] ["_"] dfVersion}";
+    value = callPackage ./wrapper {
+      inherit (self) themes;
+      dwarf-fortress = callPackage ./game.nix { inherit dfVersion; };
     };
+  }) (lib.attrNames self.df-hashes));
+
+  self = rec {
+    df-hashes = builtins.fromJSON (builtins.readFile ./game.json);
+    dwarf-fortress = df-games.dwarf-fortress_0_44_11;
 
     dfhack = callPackage ./dfhack {
       inherit (pkgs.perlPackages) XMLLibXML XMLLibXSLT;
@@ -17,19 +24,16 @@ let
 
     # unfuck is linux-only right now, we will just use it there
     dwarf-fortress-unfuck = if stdenv.isLinux then callPackage ./unfuck.nix { }
-                                 else null;
+                            else null;
 
-    dwarf-fortress = callPackage ./wrapper {
-      inherit themes;
-    };
-
-    dwarf-therapist-original = pkgs.qt5.callPackage ./dwarf-therapist {
-      texlive = pkgs.texlive.combine {
-        inherit (pkgs.texlive) scheme-basic float caption wrapfig adjmulticol sidecap preprint enumitem;
+    dwarf-therapist = callPackage ./dwarf-therapist/wrapper.nix {
+      inherit (dwarf-fortress) dwarf-fortress;
+      dwarf-therapist = pkgs.qt5.callPackage ./dwarf-therapist {
+        texlive = pkgs.texlive.combine {
+          inherit (pkgs.texlive) scheme-basic float caption wrapfig adjmulticol sidecap preprint enumitem;
+        };
       };
     };
-
-    dwarf-therapist = callPackage ./dwarf-therapist/wrapper.nix { };
 
     legends-browser = callPackage ./legends-browser {};
 
@@ -37,9 +41,10 @@ let
       stdenv = stdenvNoCC;
     };
 
+    # aliases
     phoebus-theme = themes.phoebus;
-
     cla-theme = themes.cla;
+    dwarf-fortress-original = dwarf-fortress.dwarf-fortress;
   };
 
-in self
+in self // df-games
