@@ -1,4 +1,4 @@
-{ stdenv, fetchzip, gnupg, fetchpgpkey }:
+{ stdenv, fetchzip, fetchpgpkey, verifySignatureHook }:
 
 stdenv.mkDerivation rec {
   name = "1password-${version}";
@@ -24,9 +24,9 @@ stdenv.mkDerivation rec {
       }
     else throw "Architecture not supported";
 
-  nativeBuildInputs = [ gnupg ];
+  nativeBuildInputs = [ verifySignatureHook ];
 
-  key = fetchpgpkey {
+  publicKey = fetchpgpkey {
     url = https://keybase.io/1password/pgp_keys.asc;
     fingerprint = "3FEF9748469ADBE15DA7CA80AC2D62742012EA22";
     sha256 = "1v9gic59a3qim3fcffq77jrswycww4m1rd885lk5xgwr0qnqr019";
@@ -34,13 +34,7 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
   checkPhase = ''
-    export GNUPGHOME=.gnupgtmp
-    rm -rf $GNUPGHOME # make sure it's a fresh empty dir
-    mkdir -p -m 700 $GNUPGHOME
-    # import upstream public key
-    cat ${key} | gpg --import -q
-    # check binary signature with upstream signing key
-    gpgv --keyring pubring.kbx op.sig op
+    verifySignature op.sig op
   '';
 
   installPhase = ''
