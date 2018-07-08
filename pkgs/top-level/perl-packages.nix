@@ -248,10 +248,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   AppCLI = buildPerlPackage {
-    name = "App-CLI-0.49";
+    name = "App-CLI-0.50";
     src = fetchurl {
-      url = mirror://cpan/authors/id/P/PT/PTC/App-CLI-0.49.tar.gz;
-      sha256 = "0gv4dcscxiacdrb9aqxc9mdl1w8wszicmg2q86zlz31ya5spjvv3";
+      url = mirror://cpan/authors/id/P/PT/PTC/App-CLI-0.50.tar.gz;
+      sha256 = "0ick5agl02rx2pjfxl97d0f9qksy8pjn0asmwm3gn6dm7a1zblsi";
     };
     propagatedBuildInputs = [ CaptureTiny ClassLoad ];
     buildInputs = [ TestKwalitee TestPod ];
