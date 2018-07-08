@@ -10995,25 +10995,7 @@ in {
     };
   };
 
-  PyStemmer = buildPythonPackage (rec {
-    name = "PyStemmer-1.3.0";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/P/PyStemmer/${name}.tar.gz";
-      sha256 = "d1ac14eb64978c1697fcfba76e3ac7ebe24357c9428e775390f634648947cb91";
-    };
-
-    checkPhase = ''
-      ${python.interpreter} runtests.py
-    '';
-
-    meta = {
-      description = "Snowball stemming algorithms, for information retrieval";
-      homepage = http://snowball.tartarus.org/;
-      license = licenses.mit;
-      platforms = platforms.unix;
-    };
-  });
+  PyStemmer = callPackage ../development/python-modules/pystemmer {};
 
   Pyro = callPackage ../development/python-modules/pyro { };
 
