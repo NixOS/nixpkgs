@@ -634,6 +634,26 @@ let
     };
   };
 
+  lfs = buildLuaPackage rec {
+    name = "lfs-${version}";
+    version = "1.7.0.2";
+
+    src = fetchFromGitHub {
+      owner = "keplerproject";
+      repo = "luafilesystem";
+      rev = "v" + stdenv.lib.replaceStrings ["."] ["_"] version;
+      sha256 = "0zmprgkm9zawdf9wnw0v3w6ibaj442wlc6alp39hmw610fl4vghi";
+    };
+
+    meta = with stdenv.lib; {
+      description = "Portable library for filesystem operations";
+      homepage = https://keplerproject.github.com/luafilesystem;
+      license = licenses.mit;
+      maintainers = with maintainers; [ vcunat ];
+      platforms = platforms.all;
+    };
+  };
+
   lpeg = buildLuaPackage rec {
     name = "lpeg-${version}";
     version = "0.12";
