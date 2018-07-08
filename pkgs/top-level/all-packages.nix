@@ -14305,8 +14305,6 @@ with pkgs;
            else unixtools.procps;
   procps-ng = procps; # TODO: move to aliases.nix
 
-  watch = callPackage ../os-specific/linux/procps/watch.nix { };
-
   qemu_kvm = lowPrio (qemu.override { hostCpuOnly = true; });
 
   # See `xenPackages` source for explanations.
