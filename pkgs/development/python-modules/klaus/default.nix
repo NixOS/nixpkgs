@@ -8,7 +8,7 @@ python.pkgs.buildPythonPackage rec {
     owner = "jonashaag";
     repo = pname;
     rev = version;
-    sha256 = "0hkl1ycyd5ccijmknr3yfp3ga43y01m7390xnibqqgaisfvcm9wp";
+    sha256 = "04zjvrpx66x2c0v74nvmq8x7s7c8994cv1zwd5hfn9alq82hqcgr";
   };
 
   prePatch = ''
