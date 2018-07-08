@@ -196,6 +196,8 @@ in {
     inherit (pkgs) augeas;
   };
 
+  authres = callPackage ../development/python-modules/authres { };
+
   autograd = callPackage ../development/python-modules/autograd { };
 
   automat = callPackage ../development/python-modules/automat { };
