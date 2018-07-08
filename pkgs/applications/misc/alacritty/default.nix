@@ -92,6 +92,10 @@ in buildRustPackage rec {
     patchelf --set-rpath "${stdenv.lib.makeLibraryPath rpathLibs}" $out/bin/alacritty
   '') + ''
 
+    install -D alacritty-completions.zsh "$out/share/zsh/site-functions/_alacritty"
+    install -D alacritty-completions.bash "$out/etc/bash_completion.d/alacritty-completions.bash"
+    install -D alacritty-completions.fish "$out/share/fish/vendor_completions.d/alacritty.fish"
+
     runHook postInstall
   '';
 
