@@ -10531,10 +10531,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   MooseXEmulateClassAccessorFast = buildPerlPackage {
-    name = "MooseX-Emulate-Class-Accessor-Fast-0.00903";
+    name = "MooseX-Emulate-Class-Accessor-Fast-0.009032";
     src = fetchurl {
-      url = mirror://cpan/authors/id/F/FL/FLORA/MooseX-Emulate-Class-Accessor-Fast-0.00903.tar.gz;
-      sha256 = "1lkn1h4sxr1483jicsgsgzclbfw63g2i2c3m4v4j9ar75yrb0kh8";
+      url = mirror://cpan/authors/id/H/HA/HAARG/MooseX-Emulate-Class-Accessor-Fast-0.009032.tar.gz;
+      sha256 = "153r30nggcyyx7ai15dbnba2h5145f8jdsh6wj54298d3zpvgvl2";
     };
     buildInputs = [ TestException ];
     propagatedBuildInputs = [ Moose namespaceclean ];
