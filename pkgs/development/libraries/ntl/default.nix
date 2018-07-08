@@ -1,27 +1,60 @@
-{ stdenv, fetchurl, perl, gmp, libtool
+{ stdenv
+, lib
+, fetchurl
+, perl
+, gmp
+, gf2x ? null
+# I asked the ntl maintainer weather or not to include gf2x by default:
+# > If I remember correctly, gf2x is now thread safe, so there's no reason not to use it.
+, withGf2x ? true
+, tune ? false # tune for current system; non reproducible and time consuming
 }:
+
+assert withGf2x -> gf2x != null;
 
 stdenv.mkDerivation rec {
   name = "ntl-${version}";
-  version = "9.11.0";
+  version = "11.2.1";
   src = fetchurl {
     url = "http://www.shoup.net/ntl/ntl-${version}.tar.gz";
-    sha256 = "1wcwxpcby1c50llncz131334qq26lzh3dz21rahymgvakrq0369p";
+    sha256 = "04avzmqflx2a33n7v9jj32g83p7m6z712fg1mw308jk5ca2qp489";
   };
 
-  buildInputs = [ perl gmp libtool ];
+  buildInputs = [
+    gmp
+  ];
+
+  nativeBuildInputs = [
+    perl # needed for ./configure
+  ];
 
   sourceRoot = "${name}/src";
 
   enableParallelBuilding = true;
 
-  dontAddPrefix = true;
+  dontAddPrefix = true; # DEF_PREFIX instead
 
-  configureFlags = [ "DEF_PREFIX=$(out)" "WIZARD=off" "SHARED=on" "NATIVE=off" "CXX=c++" ];
+  # reference: http://shoup.net/ntl/doc/tour-unix.html
+  configureFlags = [
+    "DEF_PREFIX=$(out)"
+    "SHARED=on" # genereate a shared library (as well as static)
+    "NATIVE=off" # don't target code to current hardware (reproducibility, portability)
+    "TUNE=${
+      if tune then
+        "auto"
+      else if stdenv.targetPlatform.isx86 then
+        "x86" # "chooses options that should be well suited for most x86 platforms"
+      else
+        "generic" # "chooses options that should be OK for most platforms"
+    }"
+  ] ++ lib.optionals withGf2x [
+    "NTL_GF2X_LIB=on"
+    "GF2X_PREFIX=${gf2x}"
+  ];
 
-  # doCheck = true; # takes some time
+  doCheck = true; # takes some time
 
-  meta = {
+  meta = with lib; {
     description = "A Library for doing Number Theory";
     longDescription = ''
       NTL is a high-performance, portable C++ library providing data
@@ -30,7 +63,8 @@ stdenv.mkDerivation rec {
       the integers and over finite fields.
     '';
     homepage = http://www.shoup.net/ntl/;
-    license = stdenv.lib.licenses.gpl2Plus;
-    platforms = stdenv.lib.platforms.all;
+    maintainers = with maintainers; [ timokau ];
+    license = licenses.gpl2Plus;
+    platforms = platforms.all;
   };
 }
