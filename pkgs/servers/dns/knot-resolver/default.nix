@@ -62,7 +62,11 @@ unwrapped = stdenv.mkDerivation rec {
 };
 
 wrapped-full = with luajitPackages; let
-    luaPkgs =  [ luasec luasocket ]; # TODO: cqueues and others for http2 module
+    luaPkgs =  [
+      luasec luasocket # trust anchor bootstrap, prefill module
+      lfs # prefill module
+      # TODO: cqueues and others for http2 module
+    ];
   in runCommand unwrapped.name
   {
     nativeBuildInputs = [ makeWrapper ];
