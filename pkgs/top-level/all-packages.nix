@@ -20575,6 +20575,8 @@ with pkgs;
   minisat = callPackage ../applications/science/logic/minisat {};
   minisatUnstable = callPackage ../applications/science/logic/minisat/unstable.nix {};
 
+  monosat = callPackage ../applications/science/logic/monosat {};
+
   opensmt = callPackage ../applications/science/logic/opensmt { };
 
   ott = callPackage ../applications/science/logic/ott { };

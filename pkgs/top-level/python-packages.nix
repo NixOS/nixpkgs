@@ -8283,6 +8283,8 @@ in {
     };
   };
 
+  monosat = disabledIf (!isPy3k) (pkgs.monosat.python { inherit buildPythonPackage; inherit (self) cython; });
+
   monotonic = buildPythonPackage rec {
     pname = "monotonic";
     version = "1.3";
