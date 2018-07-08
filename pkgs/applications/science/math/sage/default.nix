@@ -131,7 +131,6 @@ let
   });
 
   # *not* to confuse with the python package "pynac"
-  # https://trac.sagemath.org/ticket/24838 (depends on arb update)
   pynac = nixpkgs.pynac.override { inherit singular flint; };
 
   eclib = nixpkgs.eclib.override { inherit pari ntl; };
@@ -167,6 +166,7 @@ let
   ecl = nixpkgs.ecl_16_1_2;
 
   # sage currently uses an unreleased version of pari
+  # https://trac.sagemath.org/ticket/25567
   pari = (nixpkgs.pari.override { withThread = false; }).overrideAttrs (attrs: rec {
     version = "2.10-1280-g88fb5b3"; # on update remove pari-stackwarn patch from `sage-src.nix`
     src = fetchurl {
