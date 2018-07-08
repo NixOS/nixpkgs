@@ -6637,7 +6637,7 @@ let self = _self // overrides; _self = with self; {
       url = mirror://cpan/authors/id/T/TI/TIMB/GoferTransport-http-1.017.tar.gz;
       sha256 = "f73effe3ea7afa1907ce8977c87387abb0d4404f85a724ae2637b29a73154a9b";
     };
-    propagatedBuildInputs = [ mod_perl2 DBI HTTPMessage LWP URI ];
+    propagatedBuildInputs = [ DBI LWP mod_perl2 ];
     doCheck = false; # no make target 'test'
     meta = {
       description = "HTTP transport for DBI stateless proxy driver DBD::Gofer";
