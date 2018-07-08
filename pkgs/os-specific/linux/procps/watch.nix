@@ -1,21 +1,11 @@
-{ stdenv, fetchurl, ncurses }:
+{ stdenv, procps-ng }:
 
 stdenv.mkDerivation {
-  name = "watch-0.2.0";
+  name = "watch-${procps-ng.version}";
 
-  src = fetchurl {
-    url = http://procps.sourceforge.net/procps-3.2.8.tar.gz;
-    sha256 = "0d8mki0q4yamnkk4533kx8mc0jd879573srxhg6r2fs3lkc6iv8i";
-  };
+  unpackPhase = "true";
 
-  buildInputs = [ ncurses ];
-
-  makeFlags = "watch usrbin_execdir=$(out)/bin" +
-              (if stdenv.isDarwin then " PKG_LDFLAGS=" else "");
-
-  enableParallelBuilding = true;
-
-  installPhase = "mkdir $out; mkdir -p $out/bin; cp -p watch $out/bin";
+  installPhase = "install -D ${procps-ng}/bin/watch $out/bin/watch";
 
   meta = {
     homepage = https://sourceforge.net/projects/procps/;
