@@ -7,13 +7,13 @@
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";
   pname = "lxqt-qtplugin";
-  version = "0.12.0";
+  version = "0.13.0";
 
   src = fetchFromGitHub {
     owner = "lxde";
     repo = pname;
     rev = version;
-    sha256 = "1i1rga0pg764ccwhq7acdsckxpl1apxwj4lv4gygxxmpkrg62zkv";
+    sha256 = "19y5dvbj7gwyh8glc6vi6hb5snvkd3jwvss6j0sn2sy2gp9g9ryb";
   };
 
   nativeBuildInputs = [
