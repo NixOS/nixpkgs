@@ -9145,12 +9145,12 @@ let self = _self // overrides; _self = with self; {
   };
 
   MailMboxMessageParser = buildPerlPackage rec {
-    name = "Mail-Mbox-MessageParser-1.5105";
+    name = "Mail-Mbox-MessageParser-1.5106";
     src = fetchurl {
       url = "mirror://cpan/authors/id/D/DC/DCOPPIT/${name}.tar.gz";
-      sha256 = "641edd8b7ab74de671ab4931311413c1bd037a1c3eaa0a0c97451cd7b104f2d8";
+      sha256 = "d65fc8e8ce84273abbc14220d15813d93ddf6c7a256cdc24de156cb6c08923be";
     };
-    buildInputs = [ FileSlurp TextDiff URI ];
+    buildInputs = [ FileSlurp TestCompile TextDiff URI ];
     propagatedBuildInputs = [ FileHandleUnget ];
     meta = {
       homepage = https://github.com/coppit/mail-mbox-messageparser;
