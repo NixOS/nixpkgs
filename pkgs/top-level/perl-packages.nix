@@ -313,10 +313,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   Appperlbrew = buildPerlModule rec {
-    name = "App-perlbrew-0.83";
+    name = "App-perlbrew-0.84";
     src = fetchurl {
       url = "mirror://cpan/authors/id/G/GU/GUGOD/${name}.tar.gz";
-      sha256 = "0sdz0y90pk49cw4njfm1jq7zppha6kdx7i1d6nk41672nqrphdhb";
+      sha256 = "0j21pcd82q9raz2hnh1qmsk7hsfzz9pzadvql6skdmhwshs9a5la";
     };
     buildInputs = [ pkgs.curl FileWhich IOAll ModuleBuildTiny PathClass PodMarkdown TestException TestNoWarnings TestOutput TestSpec TestTempDirTiny ];
     propagatedBuildInputs = [ CPANPerlReleases CaptureTiny DevelPatchPerl PodUsage locallib ];
