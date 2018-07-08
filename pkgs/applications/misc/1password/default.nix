@@ -1,4 +1,4 @@
-{ stdenv, fetchzip }:
+{ stdenv, fetchzip, fetchpgpkey, verifySignatureHook }:
 
 stdenv.mkDerivation rec {
   name = "1password-${version}";
@@ -23,6 +23,19 @@ stdenv.mkDerivation rec {
         stripRoot = false;
       }
     else throw "Architecture not supported";
+
+  nativeBuildInputs = [ verifySignatureHook ];
+
+  publicKey = fetchpgpkey {
+    url = https://keybase.io/1password/pgp_keys.asc;
+    fingerprint = "3FEF9748469ADBE15DA7CA80AC2D62742012EA22";
+    sha256 = "1v9gic59a3qim3fcffq77jrswycww4m1rd885lk5xgwr0qnqr019";
+  };
+
+  doCheck = true;
+  checkPhase = ''
+    verifySignature op.sig op
+  '';
 
   installPhase = ''
     install -D op $out/bin/op

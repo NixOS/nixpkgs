@@ -86,6 +86,10 @@ with pkgs;
     { substitutions = { gnu_config = gnu-config;}; }
     ../build-support/setup-hooks/update-autotools-gnu-config-scripts.sh;
 
+  verifySignatureHook = makeSetupHook
+    { name = "verify-signature-hook"; deps = [ gnupg ]; }
+    ../build-support/setup-hooks/verify-signature.sh;
+
   gogUnpackHook = makeSetupHook {
     name = "gog-unpack-hook";
     deps = [ innoextract file-rename ]; }
@@ -171,6 +175,8 @@ with pkgs;
   mht2htm = callPackage ../tools/misc/mht2htm { };
 
   fetchpatch = callPackage ../build-support/fetchpatch { };
+
+  fetchpgpkey = callPackage ../build-support/fetchpgpkey { };
 
   fetchs3 = callPackage ../build-support/fetchs3 { };
 
