@@ -26,7 +26,6 @@ stdenv.mkDerivation rec {
     mv html/* COPYING* $out/share/doc/bliss
     mv *.a $out/lib
     mv *.h *.hh $out/include/bliss
-    export BLISS_DIR=$out
   '';
 
   meta = with stdenv.lib; {
