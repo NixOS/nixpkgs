@@ -15009,10 +15009,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   TestCleanNamespaces = buildPerlPackage {
-    name = "Test-CleanNamespaces-0.22";
+    name = "Test-CleanNamespaces-0.23";
     src = fetchurl {
-      url = mirror://cpan/authors/id/E/ET/ETHER/Test-CleanNamespaces-0.22.tar.gz;
-      sha256 = "862a221994dd413b2f350450f22c96f57cac78784b1aca1a8fc763fc5449aaca";
+      url = mirror://cpan/authors/id/E/ET/ETHER/Test-CleanNamespaces-0.23.tar.gz;
+      sha256 = "c7bf97f3c786b75f84341135904b492a1a36646aa65db3e0fd15a3cbe0864872";
     };
     buildInputs = [ Filepushd Moo Mouse RoleTiny SubExporter TestDeep TestNeeds TestWarnings namespaceclean ];
     propagatedBuildInputs = [ PackageStash SubIdentify ];
