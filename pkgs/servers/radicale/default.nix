@@ -7,12 +7,20 @@ let
   python = python3.override {
     packageOverrides = self: super: {
 
-      # https://github.com/eventable/vobject/issues/112
+      # Packages pinned in setup.py.
+      # Starting with next release, a vendored version of vobject will be used.
       python-dateutil = super.python-dateutil.overridePythonAttrs (oldAttrs: rec {
         version = "2.6.1";
         src = oldAttrs.src.override {
           inherit version;
           sha256 = "891c38b2a02f5bb1be3e4793866c8df49c7d19baabf9c1bad62547e0b4866aca";
+        };
+      });
+      vobject = super.vobject.overridePythonAttrs (oldAttrs: rec {
+        version = "0.9.5";
+        src = oldAttrs.src.override {
+          inherit version;
+          sha256 = "0f56cae196303d875682b9648b4bb43ffc769d2f0f800958e0a506af867b1243";
         };
       });
 
