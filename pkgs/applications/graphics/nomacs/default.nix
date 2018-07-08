@@ -18,12 +18,12 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "3.8.1";
+  version = "3.10.0";
   src = fetchFromGitHub {
     owner = "nomacs";
     repo = "nomacs";
     rev = version;
-    sha256 = "1irms980d7acdqrfn8isw55vgc4d9n26ff86887vk7xfvxs0ayla";
+    sha256 = "07k921r4m6p5kicyb55zdfp58m8mlc94g2csq354d7v20m71zwrv";
   };
 
   name = "nomacs-${version}";
