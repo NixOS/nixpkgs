@@ -3,20 +3,7 @@
 }:
 
 let
-  python = python3.override {
-    packageOverrides = self: super: {
-
-      # https://github.com/eventable/vobject/issues/112
-      python-dateutil = super.python-dateutil.overridePythonAttrs (oldAttrs: rec {
-        version = "2.6.1";
-        src = oldAttrs.src.override {
-          inherit version;
-          sha256 = "891c38b2a02f5bb1be3e4793866c8df49c7d19baabf9c1bad62547e0b4866aca";
-        };
-      });
-
-    };
-  };
+  python = python3;
 
 in python.pkgs.buildPythonApplication rec {
   pname = "papis";
