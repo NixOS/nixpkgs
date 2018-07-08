@@ -16267,10 +16267,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   TextCSV_XS = buildPerlPackage rec {
-    name = "Text-CSV_XS-1.35";
+    name = "Text-CSV_XS-1.36";
     src = fetchurl {
       url = "mirror://cpan/authors/id/H/HM/HMBRAND/${name}.tgz";
-      sha256 = "2b4f111e9486b230b02bfabbbf50c453f959d18ec17351a930e41f0959b358b7";
+      sha256 = "c321b09ad98a332138f25f55afb83befd7c045134085c7cb280fc325e688942c";
     };
     meta = {
       homepage = https://metacpan.org/pod/Text::CSV_XS;
