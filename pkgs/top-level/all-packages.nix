@@ -17381,6 +17381,8 @@ with pkgs;
 
   plank = callPackage ../applications/misc/plank { };
 
+  guix = callPackage ../tools/package-management/guix {};
+
   planner = callPackage ../applications/office/planner { };
 
   playonlinux = callPackage ../applications/misc/playonlinux {
