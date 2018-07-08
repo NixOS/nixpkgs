@@ -1,5 +1,7 @@
 { lib, stdenv, fetchurl, python, pkgconfig, perl, libxslt, docbook_xsl
 , fetchpatch
+, fetchpgpkey
+, verifySignatureHook
 , docbook_xml_dtd_42, docbook_xml_dtd_45, readline, talloc
 , popt, iniparser, libbsd, libarchive, libiconv, gettext
 , krb5Full, zlib, openldap, cups, pam, avahi, acl, libaio, fam, libceph, glusterfs
@@ -29,6 +31,20 @@ stdenv.mkDerivation rec {
     sha256 = "0vkxqp3wh7bpn1fd45lznmrpn2ma1fq75yq28vi08rggr07y7v8y";
   };
 
+  srcSignature = fetchurl {
+    url = "mirror://samba/pub/samba/stable/${name}.tar.asc";
+    sha256 = "0wpcbwbs1bj1y0amhn0z29v55f2hhmzc5p8n7sbwg9kaf0hc5mz5";
+  };
+  signatureUncompressed = true;
+
+  signaturePublicKey = fetchpgpkey {
+    url = https://download.samba.org/pub/samba/samba-pubkey.asc;
+    sha256 = "1fndhq0c34va34z137gvsl9gpwjv30b06makfx8cq5vrmgiax1x1";
+    fingerprint = "52FBC0B86D954B0843324CDC6F33915B6568B7EA";
+  };
+
+  nativeBuildInputs = [ verifySignatureHook ];
+
   outputs = [ "out" "dev" "man" ];
 
   patches =
@@ -40,6 +56,7 @@ stdenv.mkDerivation rec {
         sha256 = "0r6q34vjj0bdzmcbnrkad9rww58k4krbwicv4gs1g3dj49skpvd6";
       })
     ];
+
 
   buildInputs =
     [ python pkgconfig perl libxslt docbook_xsl docbook_xml_dtd_42 /*
