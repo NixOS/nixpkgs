@@ -164,7 +164,7 @@ let
 
       # Strip binaries further than normal.
       chmod -R u+w $out
-      stripDirs "lib bin" "-s"
+      stripDirs "$STRIP" "lib bin" "-s"
 
       # Run patchelf to make the programs refer to the copied libraries.
       find $out/bin $out/lib -type f | while read i; do
