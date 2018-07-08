@@ -9633,11 +9633,11 @@ let self = _self // overrides; _self = with self; {
   };
 
   ModernPerl = buildPerlModule {
-    name = "Modern-Perl-1.20170117";
+    name = "Modern-Perl-1.20180701";
 
     src = fetchurl {
-      url = mirror://cpan/authors/id/C/CH/CHROMATIC/Modern-Perl-1.20170117.tar.gz;
-      sha256 = "5df2a83461163212db22b9c3353606a1a123616820fe50675041c34f004b3628";
+      url = mirror://cpan/authors/id/C/CH/CHROMATIC/Modern-Perl-1.20180701.tar.gz;
+      sha256 = "cfdf390bc565599ef90ef086a81233dc1dfc7867676dc28e1deedcd7e5543da6";
     };
     meta = {
       homepage = https://github.com/chromatic/Modern-Perl;
