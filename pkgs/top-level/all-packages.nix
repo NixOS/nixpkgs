@@ -3518,9 +3518,6 @@ with pkgs;
   nodejs-8_x = callPackage ../development/web/nodejs/v8.nix {};
   nodejs-slim-8_x = callPackage ../development/web/nodejs/v8.nix { enableNpm = false; };
 
-  nodejs-9_x = callPackage ../development/web/nodejs/v9.nix {};
-  nodejs-slim-9_x = callPackage ../development/web/nodejs/v9.nix { enableNpm = false; };
-
   nodejs-10_x = callPackage ../development/web/nodejs/v10.nix {
     openssl = openssl_1_1_0;
   };
