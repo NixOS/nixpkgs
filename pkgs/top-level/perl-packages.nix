@@ -8900,10 +8900,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   MCE = buildPerlPackage rec {
-     name = "MCE-1.835";
+     name = "MCE-1.836";
      src = fetchurl {
-       url = mirror://cpan/authors/id/M/MA/MARIOROY/MCE-1.835.tar.gz;
-       sha256 = "1dxs7gvj97vr1ns74k3inix1i80d8b2j942crnapdx9j90j6cqvi";
+       url = mirror://cpan/authors/id/M/MA/MARIOROY/MCE-1.836.tar.gz;
+       sha256 = "04nkcbs27plwq31w541phfci3391s10p2xv5lmry5wq7fbdw5iwy";
      };
      meta = {
        description = "Many-Core Engine for Perl providing parallel processing capabilities";
