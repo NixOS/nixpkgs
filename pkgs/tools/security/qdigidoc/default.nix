@@ -34,8 +34,6 @@ stdenv.mkDerivation rec {
       --prefix LD_LIBRARY_PATH : ${opensc}/lib/pkcs11/
   '';
 
-  enableParallelBuilding = true;
-
   meta = with stdenv.lib; {
     description = "Qt-based UI for signing and verifying DigiDoc documents";
     homepage = https://www.id.ee/;
