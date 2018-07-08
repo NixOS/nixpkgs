@@ -4222,6 +4222,8 @@ with pkgs;
 
   notify-osd = callPackage ../applications/misc/notify-osd { };
 
+  notify-osd-customizable = callPackage ../applications/misc/notify-osd-customizable { };
+
   nox = callPackage ../tools/package-management/nox { };
 
   nq = callPackage ../tools/system/nq { };
