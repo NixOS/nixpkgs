@@ -18873,6 +18873,10 @@ with pkgs;
     freerdp = freerdp_legacy;
   };
 
+  whitebox-tools = callPackage ../applications/gis/whitebox-tools {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
+
   windowlab = callPackage ../applications/window-managers/windowlab { };
 
   windowmaker = callPackage ../applications/window-managers/windowmaker { };
