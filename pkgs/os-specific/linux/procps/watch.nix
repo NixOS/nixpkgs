@@ -10,6 +10,6 @@ stdenv.mkDerivation {
   meta = {
     homepage = https://sourceforge.net/projects/procps/;
     description = "Utility for watch the output of a given command at intervals";
-    platforms = stdenv.lib.platforms.unix;
+    inherit (procps-ng.meta) platforms;
   };
 }
