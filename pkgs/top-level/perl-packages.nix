@@ -489,10 +489,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   ArchiveTarWrapper = buildPerlPackage rec {
-     name = "Archive-Tar-Wrapper-0.27";
+     name = "Archive-Tar-Wrapper-0.31";
      src = fetchurl {
-       url = mirror://cpan/authors/id/A/AR/ARFREITAS/Archive-Tar-Wrapper-0.27.tar.gz;
-       sha256 = "0ll0p8yh54yb9y9ykaf60icj3frs0lndwz3k4k4ql9fywx40mcck";
+       url = mirror://cpan/authors/id/A/AR/ARFREITAS/Archive-Tar-Wrapper-0.31.tar.gz;
+       sha256 = "18rvqzy7m900ikq7r4hxpja21wcsh3z6rz7qhs4ksgc0dpdqb9qd";
      };
      propagatedBuildInputs = [ FileWhich IPCRun LogLog4perl ];
      meta = {
