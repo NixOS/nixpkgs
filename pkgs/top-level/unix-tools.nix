@@ -22,16 +22,19 @@ let
     in runCommand "${cmd}-${version}" {
       meta.platforms = map (n: { kernel.name = n; }) (attrNames providers);
       passthru = { inherit provider; };
+      preferLocalBuild = true;
     } ''
-      if ! [ -x "${bin}" ]; then
-        echo "Cannot find command ${cmd}"
+      if ! [ -x ${bin} ]; then
+        echo Cannot find command ${cmd}
         exit 1
       fi
 
-      install -D "${bin}" "$out/bin/${cmd}"
+      mkdir -p $out/bin
+      ln -s ${bin} $out/bin/${cmd}
 
-      if [ -f "${manpage}" ]; then
-        install -D "${manpage}" $out/share/man/man1/${cmd}.1.gz
+      if [ -f ${manpage} ]; then
+        mkdir -p $out/share/man/man1
+        ln -s ${manpage} $out/share/man/man1/${cmd}.1.gz
       fi
     '';
 
