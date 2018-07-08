@@ -2968,10 +2968,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   CryptJWT = buildPerlPackage rec {
-    name = "Crypt-JWT-0.021";
+    name = "Crypt-JWT-0.022";
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/MI/MIK/${name}.tar.gz";
-      sha256 = "7227a10d185d6550fea855ef44bb8fb927d8c8644cfb16e0b674959bf103df5f";
+      sha256 = "eb0a591f91c431929d8788dc26cc8cd98d1dc37af2a45b5754ca5039c8282476";
     };
     propagatedBuildInputs = [ CryptX JSONMaybeXS ];
     meta = {
