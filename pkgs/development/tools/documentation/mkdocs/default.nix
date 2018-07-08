@@ -4,13 +4,13 @@ with python.pkgs;
 
 buildPythonApplication rec {
   pname = "mkdocs";
-  version = "0.17.4";
+  version = "0.17.5";
 
   src = fetchFromGitHub {
     owner = "mkdocs";
     repo = "mkdocs";
     rev = version;
-    sha256 = "1hwvy6lnqqmzjia5vqd45jx6gwd9cvf7p5vw245c0cg27zkgpazp";
+    sha256 = "1l1dahpwqikmww3yx2m6j2134npk8vcikg9klsmpqjpza8nigwzw";
   };
 
   postPatch = ''
