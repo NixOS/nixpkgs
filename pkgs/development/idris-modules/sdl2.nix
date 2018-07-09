@@ -1,21 +1,18 @@
 { build-idris-package
 , fetchFromGitHub
-, prelude
 , effects
 , lib
-, idris
 , pkgconfig
 , SDL2
 , SDL2_gfx
 }:
-
 build-idris-package  {
   name = "sdl2";
   version = "2018-01-19";
 
-  idrisDeps = [ prelude effects ];
+  idrisDeps = [ effects ];
 
-  extraBuildInputs = [ idris pkgconfig SDL2 SDL2_gfx ];
+  extraBuildInputs = [ pkgconfig SDL2 SDL2_gfx ];
 
   src = fetchFromGitHub {
     owner = "steshaw";
@@ -28,6 +25,7 @@ build-idris-package  {
     description = "SDL2 binding for Idris";
     homepage = https://github.com/steshaw/idris-sdl2;
     maintainers = [ lib.maintainers.brainrape ];
-    inherit (idris.meta) platforms;
+    # Can't find file sdl2.o
+    broken = true;
   };
 }

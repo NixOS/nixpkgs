@@ -21,6 +21,7 @@ let
       mv $out/usr/* $out/
       rm -r $out/share/lintian
       rm -r $out/usr/
+      sed -i "s/${pname})/.${pname}-wrapped)/" $out/bin/${pname}
       # sed -i "s/'${pname}'/'.${pname}-wrapped'/" $out/bin/${pname}
       wrapProgram $out/bin/${pname} \
         --prefix "PATH" : "${gvfs}/bin"
@@ -60,12 +61,12 @@ let
   };
 in stdenv.lib.mapAttrs common {
   atom = {
-    version = "1.28.0";
-    sha256 = "0k09316897qb9ypkqm6w78nz7sj5385xfdm9bm97m8pka7v61g7h";
+    version = "1.28.1";
+    sha256 = "03phnbsc45i0r799ni9br7s4qjy05fczbca64jd0sr4jhzi7qmlx";
   };
 
   atom-beta = {
-    version = "1.29.0-beta0";
-    sha256 = "05xk63wsjfssf8ckph2bgrxaf99fhz3gs8n8pira8cc9yjk7diz7";
+    version = "1.29.0-beta1";
+    sha256 = "121y716pnq4vpjrymr505prskvi5a2lnn8hw79q8b4hf7yz0j6rb";
   };
 }

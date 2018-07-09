@@ -195,8 +195,9 @@ rec {
           { x = "foo"; y = "bar"; }
        => { x = "x-foo"; y = "y-bar"; }
   */
-  mapAttrs = f: set:
-    listToAttrs (map (attr: { name = attr; value = f attr set.${attr}; }) (attrNames set));
+  mapAttrs = builtins.mapAttrs or
+    (f: set:
+      listToAttrs (map (attr: { name = attr; value = f attr set.${attr}; }) (attrNames set)));
 
 
   /* Like `mapAttrs', but allows the name of each attribute to be

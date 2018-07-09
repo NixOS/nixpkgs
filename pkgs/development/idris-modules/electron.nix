@@ -1,18 +1,15 @@
 { build-idris-package
 , fetchFromGitHub
-, prelude
 , contrib
 , jheiling-extras
 , jheiling-js
 , lib
-, idris
 }:
-
 build-idris-package  {
   name = "electron";
   version = "2016-03-07";
 
-  idrisDeps = [ prelude contrib jheiling-extras jheiling-js ];
+  idrisDeps = [ contrib jheiling-extras jheiling-js ];
 
   src = fetchFromGitHub {
     owner = "jheiling";
@@ -31,6 +28,5 @@ build-idris-package  {
     homepage = https://github.com/jheiling/idris-electron;
     license = lib.licenses.unlicense;
     maintainers = [ lib.maintainers.brainrape ];
-    inherit (idris.meta) platforms;
   };
 }

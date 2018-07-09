@@ -60,7 +60,7 @@ let
         );
       nativeMessagingHosts =
         ([ ]
-          ++ lib.optional (cfg.enableBrowserpass or false) browserpass
+          ++ lib.optional (cfg.enableBrowserpass or false) (lib.getBin browserpass)
           ++ lib.optional (cfg.enableGnomeExtensions or false) chrome-gnome-shell
           ++ lib.optional (cfg.enableUgetIntegrator or false) uget-integrator
           ++ lib.optional (cfg.enablePlasmaBrowserIntegration or false) plasma-browser-integration

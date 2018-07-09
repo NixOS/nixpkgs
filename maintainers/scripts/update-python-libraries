@@ -262,7 +262,7 @@ def _update_package(path, target):
     if new_version == version:
         logging.info("Path {}: no update available for {}.".format(path, pname))
         return False
-    elif new_version <= version:
+    elif Version(new_version) <= Version(version):
         raise ValueError("downgrade for {}.".format(pname))
     if not new_sha256:
         raise ValueError("no file available for {}.".format(pname))

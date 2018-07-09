@@ -17,15 +17,15 @@ let
     else theme;
 
   # These are in inverse order for first packages to override the next ones.
-  pkgs = lib.optional (theme != null) ptheme
-         ++ lib.optional enableDFHack dfhack_
+  themePkg = lib.optional (theme != null) ptheme;
+  pkgs = lib.optional enableDFHack dfhack_
          ++ lib.optional enableSoundSense soundSense
          ++ [ dwarf-fortress-original ];
 
   env = buildEnv {
     name = "dwarf-fortress-env-${dwarf-fortress-original.dfVersion}";
 
-    paths = pkgs;
+    paths = themePkg ++ pkgs;
     pathsToLink = [ "/" "/hack" "/hack/scripts" ];
     ignoreCollisions = true;
 
@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
     src = ./dwarf-fortress-init.in;
     inherit env;
     exe = if stdenv.isLinux then "libs/Dwarf_Fortress"
-                             else "dwarfort.exe";
+                            else "dwarfort.exe";
   };
 
   runDF = ./dwarf-fortress.in;

@@ -88,8 +88,6 @@ stdenv.mkDerivation (rec {
 
   outputs = [ "out" "doc" ];
 
-  patches = stdenv.lib.optional stdenv.isDarwin ./backport-dylib-command-size-limit.patch;
-
   postPatch = "patchShebangs .";
 
   # GHC is a bit confused on its cross terminology.

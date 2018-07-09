@@ -1,15 +1,10 @@
 { build-idris-package
 , fetchFromGitHub
-, prelude
-, base
 , lib
-, idris
 }:
 build-idris-package  {
   name = "refined";
   version = "2017-12-28";
-
-  idrisDeps = [ prelude base ];
 
   src = fetchFromGitHub {
     owner = "janschultecom";
@@ -27,6 +22,5 @@ build-idris-package  {
     homepage = https://github.com/janschultecom/idris-refined;
     license = lib.licenses.asl20;
     maintainers = [ lib.maintainers.brainrape ];
-    inherit (idris.meta) platforms;
   };
 }

@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, ocaml, jbuilder, findlib, defaultVersion ? "0.10.0" }:
+{ stdenv, fetchFromGitHub, ocaml, jbuilder, findlib, defaultVersion ? "0.11.0" }:
 
 { name, version ? defaultVersion, buildInputs ? [], hash, meta, ...}@args:
 

@@ -1,16 +1,14 @@
 { build-idris-package
 , fetchFromGitHub
-, prelude
 , effects
 , lightyear
 , lib
-, idris
 }:
 build-idris-package  {
   name = "idrishighlighter";
   version = "2018-02-22";
 
-  idrisDeps = [ prelude effects lightyear ];
+  idrisDeps = [ effects lightyear ];
 
   src = fetchFromGitHub {
     owner = "david-christiansen";
@@ -24,6 +22,5 @@ build-idris-package  {
     homepage = https://github.com/david-christiansen/idris-code-highlighter;
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.brainrape ];
-    inherit (idris.meta) platforms;
   };
 }

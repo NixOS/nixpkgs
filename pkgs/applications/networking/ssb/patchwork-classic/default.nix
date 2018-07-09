@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
 
   version = "2.12.0";
 
-  name = "patchwork-clasic-${version}";
+  name = "patchwork-classic-${version}";
 
   src = fetchurl {
     url    = "https://github.com/ssbc/patchwork-classic-electron/releases/download/v2.12.0/ssb-patchwork-electron_2.12.0_linux-amd64.deb";
