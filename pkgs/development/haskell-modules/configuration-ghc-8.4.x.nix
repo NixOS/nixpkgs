@@ -393,9 +393,7 @@ self: super: {
   base-compat = self.base-compat_0_10_4;
   brick = self.brick_0_37_1;
   criterion = super.criterion_1_5_0_0;
-  dhall = self.dhall_1_15_0;
-  # This is probably obsolete:
-  # dhall_1_15_0 = doJailbreak super.dhall_1_15_0;  # support ansi-terminal 0.8.x
+  dhall = self.dhall_1_15_1;
   HaTeX = self.HaTeX_3_19_0_0;
   hpack = self.hpack_0_28_2;
   hspec = dontCheck super.hspec_2_5_4;

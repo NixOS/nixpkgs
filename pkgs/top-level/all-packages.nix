@@ -6534,7 +6534,7 @@ with pkgs;
 
   haskell = callPackage ./haskell-packages.nix { };
 
-  haskellPackages = haskell.packages.ghc822.override {
+  haskellPackages = haskell.packages.ghc843.override {
     overrides = config.haskellPackageOverrides or haskell.packageOverrides;
   };
 
