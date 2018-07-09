@@ -8,8 +8,8 @@ with stdenv.lib;
 let
   boolToCmake = x: if x then "ON" else "OFF";
 
-  rev    = "cbaf79cfd01cba97b46cae5a9d7b832771ff442c";
-  sha256 = "1nx3wh34y53lrwgh94cskdrdyrj26jn3py7z2cn4bvacz0wzhi6n";
+  rev    = "2deeadeff214e975c9f7508bc8a24fa05a1a0c32";
+  sha256 = "09yhym2lxmn3xbhw5fcxawnmvms5jd9fw9m7x2wzil7yvy4vwdjn";
 
   pname   = "monosat";
   version = substring 0 7 sha256;
@@ -26,12 +26,6 @@ let
     buildInputs = [ cmake zlib gmp jdk8 ];
 
     cmakeFlags = [ "-DJAVA=${boolToCmake includeJava}" "-DGPL=${boolToCmake includeGplCode}" ];
-
-    # Minor logic bug: https://github.com/sambayless/monosat/issues/11#issuecomment-403297720
-    postPatch = ''
-      substituteInPlace CMakeLists.txt \
-        --replace '"&&" "true"' '"||" "true"'
-    '';
 
     postInstall = optionalString includeJava ''
       mkdir -p $out/share/java
@@ -65,9 +59,6 @@ let
         --replace '../../../../libmonosat.dylib' '${core}/lib/libmonosat.dylib' \
         --replace '../../../../libmonosat.so'  '${core}/lib/libmonosat.so' \
         --replace 'use_cython=False' 'use_cython=True'
-
-      # This seems to be forgotten and unused. See https://github.com/sambayless/monosat/issues/10
-      rm monosat/cnf.py
     '';
   };
 in core
