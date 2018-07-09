@@ -16560,6 +16560,8 @@ with pkgs;
 
   spectrwm = callPackage ../applications/window-managers/spectrwm { };
 
+  super-productivity = callPackage ../applications/networking/super-productivity { };
+
   wlc = callPackage ../development/libraries/wlc { };
   wlroots = callPackage ../development/libraries/wlroots { };
   rootston = wlroots.bin;
