@@ -4,13 +4,13 @@
 
 stdenv.mkDerivation rec {
   name = "scantailor-advanced-${version}";
-  version = "1.0.14";
+  version = "1.0.15";
 
   src = fetchFromGitHub {
     owner = "4lex4";
     repo = "scantailor-advanced";
     rev = "v${version}";
-    sha256 = "1h7lng0hxkjcvwbdf1yx59a382kiwn9bpll42acqs71nsvw65p28";
+    sha256 = "031jqk64ig6lmscl5yg5lp116zwn0jl7xs9rlniqf6a8g4wfbjk9";
   };
 
   nativeBuildInputs = [ cmake qttools ];
