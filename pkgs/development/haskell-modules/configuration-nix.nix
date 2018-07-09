@@ -138,10 +138,10 @@ self: super: builtins.intersectAttrs super {
     else super.x509-system;
 
   # https://github.com/NixOS/cabal2nix/issues/136 and https://github.com/NixOS/cabal2nix/issues/216
-  gio = disableHardening (addPkgconfigDepend (addBuildTool super.gio self.gtk2hs-buildtools) pkgs.glib) ["fortify"];
-  glib = disableHardening (addPkgconfigDepend (addBuildTool super.glib self.gtk2hs-buildtools) pkgs.glib) ["fortify"];
+  gio = disableHardening (addPkgconfigDepend (addBuildTool super.gio self.buildHaskellPackages.gtk2hs-buildtools) pkgs.glib) ["fortify"];
+  glib = disableHardening (addPkgconfigDepend (addBuildTool super.glib self.buildHaskellPackages.gtk2hs-buildtools) pkgs.glib) ["fortify"];
   gtk3 = disableHardening (super.gtk3.override { inherit (pkgs) gtk3; }) ["fortify"];
-  gtk = disableHardening (addPkgconfigDepend (addBuildTool super.gtk self.gtk2hs-buildtools) pkgs.gtk2) ["fortify"];
+  gtk = disableHardening (addPkgconfigDepend (addBuildTool super.gtk self.buildHaskellPackages.gtk2hs-buildtools) pkgs.gtk2) ["fortify"];
   gtksourceview2 = addPkgconfigDepend super.gtksourceview2 pkgs.gtk2;
   gtk-traymanager = addPkgconfigDepend super.gtk-traymanager pkgs.gtk3;
 
@@ -305,7 +305,7 @@ self: super: builtins.intersectAttrs super {
 
   # https://github.com/edwinb/EpiVM/issues/13
   # https://github.com/edwinb/EpiVM/issues/14
-  epic = addExtraLibraries (addBuildTool super.epic self.happy) [pkgs.boehmgc pkgs.gmp];
+  epic = addExtraLibraries (addBuildTool super.epic self.buildHaskellPackages.happy) [pkgs.boehmgc pkgs.gmp];
 
   # https://github.com/ekmett/wl-pprint-terminfo/issues/7
   wl-pprint-terminfo = addExtraLibrary super.wl-pprint-terminfo pkgs.ncurses;
@@ -469,10 +469,10 @@ self: super: builtins.intersectAttrs super {
   io-streams = enableCabalFlag super.io-streams "NoInteractiveTests";
 
   # requires autotools to build
-  secp256k1 = addBuildTools super.secp256k1 [ pkgs.autoconf pkgs.automake pkgs.libtool ];
+  secp256k1 = addBuildTools super.secp256k1 [ pkgs.buildPackages.autoconf pkgs.buildPackages.automake pkgs.buildPackages.libtool ];
 
   # tests require git
-  hapistrano = addBuildTool super.hapistrano pkgs.git;
+  hapistrano = addBuildTool super.hapistrano pkgs.buildPackages.git;
 
   # This propagates this to everything depending on haskell-gi-base
   haskell-gi-base = addBuildDepend super.haskell-gi-base pkgs.gobjectIntrospection;

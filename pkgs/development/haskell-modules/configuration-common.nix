@@ -510,8 +510,14 @@ self: super: {
   doctest-prop = dontCheck super.doctest-prop;
 
   # Depends on itself for testing
-  doctest-discover = addBuildTool super.doctest-discover (dontCheck super.doctest-discover);
-  tasty-discover = addBuildTool super.tasty-discover (dontCheck super.tasty-discover);
+  doctest-discover = addBuildTool super.doctest-discover
+    (if pkgs.buildPlatform != pkgs.hostPlatform
+     then self.buildHaskellPackages.doctest-discover
+     else dontCheck super.doctest-discover);
+  tasty-discover = addBuildTool super.tasty-discover
+    (if pkgs.buildPlatform != pkgs.hostPlatform
+     then self.buildHaskellPackages.tasty-discover
+     else dontCheck super.tasty-discover);
 
   # generic-deriving bound is too tight
   aeson = doJailbreak super.aeson;
@@ -597,7 +603,7 @@ self: super: {
   # Install icons, metadata and cli program.
   bustle = overrideCabal super.bustle (drv: {
     buildDepends = [ pkgs.libpcap ];
-    buildTools = with pkgs; [ gettext perl help2man intltool ];
+    buildTools = with pkgs.buildPackages; [ gettext perl help2man intltool ];
     patches = [
       # Add missing gio-unix-2.0 dependency
       (pkgs.fetchpatch {
@@ -665,7 +671,7 @@ self: super: {
   # Need newer versions of their dependencies than the ones we have in LTS-11.x.
   cabal2nix = super.cabal2nix.overrideScope (self: super: { hpack = self.hpack_0_28_2; hackage-db = self.hackage-db_2_0_1; });
   dbus-hslogger = super.dbus-hslogger.overrideScope (self: super: { dbus = self.dbus_1_0_1; });
-  graphviz = (addBuildTool super.graphviz pkgs.graphviz).overrideScope (self: super: { wl-pprint-text = self.wl-pprint-text_1_2_0_0; base-compat = self.base-compat_0_10_4; });
+  graphviz = (addBuildTool super.graphviz pkgs.buildPackages.graphviz).overrideScope (self: super: { wl-pprint-text = self.wl-pprint-text_1_2_0_0; base-compat = self.base-compat_0_10_4; });
   status-notifier-item = super.status-notifier-item.overrideScope (self: super: { dbus = self.dbus_1_0_1; });
 
   # https://github.com/bos/configurator/issues/22
@@ -698,8 +704,8 @@ self: super: {
   jsaddle = dontCheck super.jsaddle;
 
   # Tools that use gtk2hs-buildtools now depend on them in a custom-setup stanza
-  cairo = addBuildTool super.cairo self.gtk2hs-buildtools;
-  pango = disableHardening (addBuildTool super.pango self.gtk2hs-buildtools) ["fortify"];
+  cairo = addBuildTool super.cairo self.buildHaskellPackages.gtk2hs-buildtools;
+  pango = disableHardening (addBuildTool super.pango self.buildHaskellPackages.gtk2hs-buildtools) ["fortify"];
   gtk =
     if pkgs.stdenv.isDarwin
     then appendConfigureFlag super.gtk "-fhave-quartz-gtk"

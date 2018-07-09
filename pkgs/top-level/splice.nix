@@ -121,7 +121,7 @@ let
 in
 
 {
-  inherit splicedPackages;
+  inherit splicePackages;
 
   # We use `callPackage' to be able to omit function arguments that can be
   # obtained `pkgs` or `buildPackages` and their `xorg` package sets. Use
