@@ -241,6 +241,6 @@ in {
   };
 
   meta = {
-    maintainers = with stdenv.lib.maintainers; [ florianjacob ];
+    maintainers = with lib.maintainers; [ florianjacob ];
   };
 }
