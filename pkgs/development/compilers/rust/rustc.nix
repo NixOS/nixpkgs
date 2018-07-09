@@ -63,7 +63,7 @@ stdenv.mkDerivation {
                 ++ optional (targets != []) "--target=${target}"
                 ++ optional (!forceBundledLLVM) "--llvm-root=${llvmShared}";
 
-  # The boostrap.py will generated a Makefile that then executes the build.
+  # The bootstrap.py will generated a Makefile that then executes the build.
   # The BOOTSTRAP_ARGS used by this Makefile must include all flags to pass
   # to the bootstrap builder.
   postConfigure = ''
