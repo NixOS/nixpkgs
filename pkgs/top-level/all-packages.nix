@@ -4646,6 +4646,8 @@ with pkgs;
 
   pygmentex = callPackage ../tools/typesetting/pygmentex { };
 
+  pyrescene = callPackage ../applications/misc/pyrescene { };
+
   pythonIRClib = pythonPackages.pythonIRClib;
 
   pythonSexy = pythonPackages.libsexy;
