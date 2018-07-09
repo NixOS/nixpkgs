@@ -6,6 +6,6 @@ in
   buildNodejs {
     inherit enableNpm;
     version = "10.6.0";
-    sha256 = "0sxkhjkcqpyf5gkv1nw93w2hmkglwy2qzfsdy2hgx3z1pvxfn1w0";
+    sha256 = "13vyzh53j2c4mv3q3yb0hkdpl1mag5705k7kmb8nmcvdhcm78q0r";
     patches = lib.optionals stdenv.isDarwin [ ./no-xcode-v7.patch ./no-xcodebuild.patch ];
   }
