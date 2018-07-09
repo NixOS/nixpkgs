@@ -96,16 +96,4 @@ self: super: {
     haddock-library = dontHaddock (dontCheck self.haddock-library_1_5_0_1);
   }));
 
-  # Hledger depends indirectly on different versions of base-compat. The
-  # override can probably be removed once we update to LTS 12.x.
-  hledger-lib = super.hledger-lib.overrideScope (self: super: { base-compat = self.base-compat_0_10_4; });
-  hledger = super.hledger.overrideScope (self: super: {
-    base-compat = self.base-compat_0_10_4;
-    aeson = self.aeson_1_4_0_0;
-  });
-  hledger-web = super.hledger-web.overrideScope (self: super: {
-    base-compat = self.base-compat_0_10_4;
-    aeson = self.aeson_1_4_0_0;
-  });
-
 }
