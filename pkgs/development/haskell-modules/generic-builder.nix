@@ -115,13 +115,24 @@ let
 
   hasActiveLibrary = isLibrary && (enableStaticLibraries || enableSharedLibraries || enableLibraryProfiling);
 
-  hasLibOutput = enableSeparateLibOutput && (hasActiveLibrary || stdenv.isDarwin);
+  hasLibOutput = enableSeparateLibOutput && hasActiveLibrary;
   libDir = if hasLibOutput then "$lib/lib/${ghc.name}" else "$out/lib/${ghc.name}";
   binDir = if enableSeparateBinOutput then "$bin/bin" else "$out/bin";
   libexecDir = if enableSeparateBinOutput then "$libexec/bin" else "$out/libexec";
   etcDir = if enableSeparateEtcOutput then "$etc/etc" else "$out/etc";
   docDir = "${if enableSeparateDocOutput then "$doc" else "$out"}/share/doc/" + pname + "-" + version;
   dataDir = if enableSeparateDataOutput then "$data/share/${ghc.name}" else "$out/share/${ghc.name}";
+
+  # Directory for the darwin links hack
+  dynamicLinksDir =
+    if hasActiveLibrary
+    then "${libDir}/links"
+    else if enableSeparateBinOutput
+         then # Can't use $out because of the resulting store cycle.
+              # The links can be considered to be an implementation
+              # detail of the executables.
+              "$bin/lib/links"
+         else "$out/lib/links";
 
   # We cannot enable -j<n> parallelism for libraries because GHC is far more
   # likely to generate a non-determistic library ID in that case. Further
@@ -321,14 +332,14 @@ stdenv.mkDerivation ({
   ''
   # only use the links hack if we're actually building dylibs. otherwise, the
   # "dynamic-library-dirs" point to nonexistent paths, and the ln command becomes
-  # "ln -s $out/lib/links", which tries to recreate the links dir and fails
+  # "ln -s $dynamicLinksDir", which tries to recreate the links dir and fails
   + (optionalString (stdenv.isDarwin && (enableSharedLibraries || enableSharedExecutables)) ''
     # Work around a limit in the macOS Sierra linker on the number of paths
     # referenced by any one dynamic library:
     #
     # Create a local directory with symlinks of the *.dylib (macOS shared
     # libraries) from all the dependencies.
-    local dynamicLinksDir="${libDir}/links"
+    local dynamicLinksDir="${dynamicLinksDir}"
     mkdir -p $dynamicLinksDir
     for d in $(grep dynamic-library-dirs "$packageConfDir/"*|awk '{print $2}'|sort -u); do
       ln -s "$d/"*.dylib $dynamicLinksDir
