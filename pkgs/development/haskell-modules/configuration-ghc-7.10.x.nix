@@ -39,7 +39,7 @@ self: super: {
   # Build jailbreak-cabal with the latest version of Cabal.
   jailbreak-cabal = super.jailbreak-cabal.override { Cabal = self.Cabal_1_24_2_0; };
 
-  gtk2hs-buildtools = super.gtk2hs-buildtools.override { Cabal = self.Cabal_1_24_2_0; };
+  gtk2hs-buildtools = super.gtk2hs-buildtools.override { Cabal = self.buildHaskellPackages.Cabal_1_24_2_0; };
 
   # https://github.com/mrkkrp/megaparsec/issues/282
   megaparsec = addBuildDepend (dontCheck super.megaparsec) self.fail;
