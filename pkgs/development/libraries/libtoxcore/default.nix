@@ -51,7 +51,7 @@ in rec {
   };
 
   libtoxcore_0_2 = generic {
-    version = "0.2.2";
-    sha256 = "1463grbbv009pj2g6dbnyk4lr871vw41962m63v21mmp6dkrr7r5";
+    version = "0.2.3";
+    sha256 = "1z8638cmxssc4jvbf64x549m84pz28729xbxc4c4ss1k792x30ya";
   };
 }
