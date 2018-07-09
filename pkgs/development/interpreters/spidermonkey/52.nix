@@ -1,13 +1,13 @@
 { stdenv, fetchurl, fetchpatch, autoconf213, pkgconfig, perl, python2, zip, which, readline, icu, zlib, nspr }:
 
 let
-  version = "52.8.1";
+  version = "52.9.0";
 in stdenv.mkDerivation rec {
   name = "spidermonkey-${version}";
 
   src = fetchurl {
     url = "mirror://mozilla/firefox/releases/${version}esr/source/firefox-${version}esr.source.tar.xz";
-    sha256 = "0yyg9405y19n22x1gybyl7vp6zglbl5h749rsvgv9bm4x5zlnys8";
+    sha256 = "1mlx34fgh1kaqamrkl5isf0npch3mm6s4lz3jsjb7hakiijhj7f0";
   };
 
   buildInputs = [ readline icu zlib nspr ];
