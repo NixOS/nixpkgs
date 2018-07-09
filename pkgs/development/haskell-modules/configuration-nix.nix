@@ -146,11 +146,7 @@ self: super: builtins.intersectAttrs super {
   gtk-traymanager = addPkgconfigDepend super.gtk-traymanager pkgs.gtk3;
 
   # Add necessary reference to gtk3 package, plus specify needed dbus version, plus turn on strictDeps to fix build
-  taffybar = ((addPkgconfigDepend super.taffybar pkgs.gtk3).overrideDerivation (drv: { strictDeps = true; })).override { dbus = self.dbus_1_0_1; };
-
-  # Specify needed dbus version
-  dbus-hslogger = super.dbus-hslogger.override { dbus = self.dbus_1_0_1; };
-  status-notifier-item = super.status-notifier-item.override { dbus = self.dbus_1_0_1; };
+  taffybar = ((addPkgconfigDepend super.taffybar pkgs.gtk3).overrideDerivation (drv: { strictDeps = true; }));
 
   # Add necessary reference to gtk3 package
   gi-dbusmenugtk3 = addPkgconfigDepend super.gi-dbusmenugtk3 pkgs.gtk3;

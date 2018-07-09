@@ -212,7 +212,7 @@ self: super: {
   # https://github.com/jputcu/serialport/issues/25
   serialport = dontCheck super.serialport;
 
-  serialise = dontCheck super.serialise;
+  # Test suite build depends on ancient tasty 0.11.x.
   cryptohash-sha512 = dontCheck super.cryptohash-sha512;
 
   # https://github.com/kazu-yamamoto/simple-sendfile/issues/17
@@ -264,6 +264,7 @@ self: super: {
        })
     ];
     testHaskellDepends = old.testHaskellDepends or [] ++ [ pkgs.nix ];
+    broken = true;   # can't cope with deriving-compat 0.5.x.
   }));
 
   # Fails for non-obvious reasons while attempting to use doctest.
@@ -668,12 +669,6 @@ self: super: {
     doCheck = false; # https://github.com/chrisdone/hindent/issues/299
   }));
 
-  # Need newer versions of their dependencies than the ones we have in LTS-11.x.
-  cabal2nix = super.cabal2nix.overrideScope (self: super: { hpack = self.hpack_0_28_2; hackage-db = self.hackage-db_2_0_1; });
-  dbus-hslogger = super.dbus-hslogger.overrideScope (self: super: { dbus = self.dbus_1_0_1; });
-  graphviz = (addBuildTool super.graphviz pkgs.buildPackages.graphviz).overrideScope (self: super: { wl-pprint-text = self.wl-pprint-text_1_2_0_0; base-compat = self.base-compat_0_10_4; });
-  status-notifier-item = super.status-notifier-item.overrideScope (self: super: { dbus = self.dbus_1_0_1; });
-
   # https://github.com/bos/configurator/issues/22
   configurator = dontCheck super.configurator;
 
@@ -890,9 +885,6 @@ self: super: {
     testToolDepends = drv.testToolDepends or [] ++ [pkgs.procps];
   });
 
-  # Needs newer versions than what we have in LTS-11.x at the moment.
-  stack = super.stack.overrideScope (self: super: { hpack = self.hpack_0_28_2; });
-
   # These packages depend on each other, forming an infinite loop.
   scalendar = markBroken (super.scalendar.override { SCalendar = null; });
   SCalendar = markBroken (super.SCalendar.override { scalendar = null; });
@@ -1005,8 +997,8 @@ self: super: {
       done
       mkdir -p $out/share/info
       cp -v *.info* $out/share/info/
-    '';  # hledger-ui 1.10 needs newer fsnotify than lts-11 provides.
-  })).overrideScope (self: super: { fsnotify = self.fsnotify_0_3_0_1; });
+    '';
+  }));
   hledger-web = overrideCabal super.hledger-web (drv: {
     postInstall = ''
       for i in $(seq 1 9); do
@@ -1051,10 +1043,10 @@ self: super: {
   # This package refers to the wrong library (itself in fact!)
   vulkan = super.vulkan.override { vulkan = pkgs.vulkan-loader; };
 
-  # Builds only with the latest version of indexed-list-literals.
-  vector-sized_1_0_3_0 = super.vector-sized_1_0_3_0.override {
-    indexed-list-literals = self.indexed-list-literals_0_2_1_1;
-  };
+  # # Builds only with the latest version of indexed-list-literals.
+  # vector-sized_1_0_3_0 = super.vector-sized_1_0_3_0.override {
+  #   indexed-list-literals = self.indexed-list-literals_0_2_1_1;
+  # };
 
   # https://github.com/dmwit/encoding/pull/3
   encoding = appendPatch super.encoding ./patches/encoding-Cabal-2.0.patch;
@@ -1064,23 +1056,40 @@ self: super: {
 
   # Work around large number of repeated arguments
   # https://github.com/NixOS/nixpkgs/issues/40013
-  taffybar = super.taffybar.overrideDerivation (drv: {
-    strictDeps = true;
-  });
+  taffybar = super.taffybar.overrideDerivation (drv: { strictDeps = true; });
 
   # dhall-json requires a very particular dhall version
-  dhall-json_1_2_1 = super.dhall-json_1_2_1.override { dhall = self.dhall_1_15_0; };
+  # dhall-json_1_2_1 = super.dhall-json_1_2_1.override { dhall = self.dhall_1_15_0; };
 
-  # dhall-nix requires a very particular dhall version
-  dhall-nix = super.dhall-nix.override { dhall = self.dhall_1_15_0; };
+  # # dhall-nix requires a very particular dhall version
+  # dhall-nix = super.dhall-nix.override { dhall = self.dhall_1_15_0; };
 
   # https://github.com/fpco/streaming-commons/issues/49
   streaming-commons = dontCheck super.streaming-commons;
 
-  # cabal2nix generates a dependency on base-compat, which is the wrong version
-  base-compat-batteries = super.base-compat-batteries.override {
-    base-compat = super.base-compat_0_10_4;
-  };
+  # # cabal2nix generates a dependency on base-compat, which is the wrong version
+  # base-compat-batteries = super.base-compat-batteries.override {
+  #   base-compat = super.base-compat_0_10_4;
+  # };
+
+  # Test suite depends on old QuickCheck 2.10.x.
+  cassava = dontCheck super.cassava;
+
+  # Test suite depends on cabal-install
+  doctest = dontCheck super.doctest;
+
+  # Over-specified constraint on X11 ==1.8.*.
+  xmonad = doJailbreak super.xmonad;
+
+  # Test has either build errors or fails anyway, depending on the compiler.
+  vector-algorithms = dontCheck super.vector-algorithms;
+
+  # The test suite attempts to use the network.
+  dhall = dontCheck super.dhall;
+
+  # https://github.com/well-typed/cborg/issues/174
+  cborg = doJailbreak super.cborg;
+  serialise = doJailbreak (dontCheck super.serialise);
 
 }
 
