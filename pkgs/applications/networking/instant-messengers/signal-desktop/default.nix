@@ -1,5 +1,5 @@
 { stdenv, lib, fetchurl, dpkg, wrapGAppsHook
-, gnome3, gtk3, atk, cairo, pango, gdk_pixbuf, glib, freetype, fontconfig
+, gnome2, gtk3, atk, cairo, pango, gdk_pixbuf, glib, freetype, fontconfig
 , dbus, libX11, xorg, libXi, libXcursor, libXdamage, libXrandr, libXcomposite
 , libXext, libXfixes, libXrender, libXtst, libXScrnSaver, nss, nspr, alsaLib
 , cups, expat, udev
@@ -17,7 +17,7 @@ let
     freetype
     gdk_pixbuf
     glib
-    gnome3.gconf
+    gnome2.GConf
     gtk3
     pango
     libX11

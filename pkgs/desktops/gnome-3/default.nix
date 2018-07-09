@@ -45,10 +45,8 @@ lib.makeScope pkgs.newScope (self: with self; {
     easytag meld orca rhythmbox shotwell gnome-usage
     clutter clutter-gst clutter-gtk cogl gtkvnc libdazzle;
 
-  inherit (pkgs.gnome2) ORBit2;
   libsoup = pkgs.libsoup.override { gnomeSupport = true; };
   libchamplain = pkgs.libchamplain.override { libsoup = libsoup; };
-  orbit = ORBit2;
   gnome3 = self // { recurseForDerivations = false; };
   gtk = gtk3;
   gtkmm = gtkmm3;
@@ -79,8 +77,6 @@ lib.makeScope pkgs.newScope (self: with self; {
   evince = callPackage ./core/evince { }; # ToDo: dbus would prevent compilation, enable tests
 
   evolution-data-server = callPackage ./core/evolution-data-server { };
-
-  gconf = callPackage ./core/gconf { };
 
   geocode-glib = callPackage ./core/geocode-glib { };
 

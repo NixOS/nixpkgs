@@ -1,6 +1,6 @@
 { stdenv, fetchurl, makeDesktopItem, makeWrapper, autoPatchelfHook
 , xorg, atk, glib, pango, gdk_pixbuf, cairo, freetype, fontconfig, gtk2
-, gnome3, dbus, nss, nspr, alsaLib, cups, expat, udev, libnotify, xdg_utils }:
+, gnome2, dbus, nss, nspr, alsaLib, cups, expat, udev, libnotify, xdg_utils }:
 
 let
   bits = if stdenv.system == "x86_64-linux" then "x64"
@@ -34,7 +34,7 @@ in stdenv.mkDerivation rec {
     libXrender libX11 libXtst libXScrnSaver
   ]) ++ [
     gtk2 atk glib pango gdk_pixbuf cairo freetype fontconfig dbus
-    gnome3.gconf nss nspr alsaLib cups expat stdenv.cc.cc
+    gnome2.GConf nss nspr alsaLib cups expat stdenv.cc.cc
   ];
   runtimeDependencies = [ udev.lib libnotify ];
 
