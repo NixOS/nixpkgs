@@ -1,4 +1,4 @@
-{ stdenv, buildGoPackage, fetchFromGitHub, go }:
+{ stdenv, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
   name = "dnscrypt-proxy2-${version}";
@@ -12,8 +12,6 @@ buildGoPackage rec {
     rev = "${version}";
     sha256 = "0iwvndk1h550zmwhwablb0smv9n2l51hqbmzj354mcgi6frnx819";
   };
-
-  enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
     description = "A tool that provides secure DNS resolution.";
