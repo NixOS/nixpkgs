@@ -36,7 +36,10 @@ in rec {
     # see https://github.com/rust-lang/rust/issues/49807#issuecomment-380860567
     # So we do the same.
     # 2. Tests run out of memory for i686
-    doCheck = !stdenv.isAarch64 && !stdenv.isi686;
+    #doCheck = !stdenv.isAarch64 && !stdenv.isi686;
+
+    # Disabled for now; see https://github.com/NixOS/nixpkgs/pull/42348#issuecomment-402115598.
+    doCheck = false;
   };
 
   cargo = callPackage ./cargo.nix rec {
