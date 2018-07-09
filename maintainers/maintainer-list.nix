@@ -716,6 +716,11 @@
     github = "brian-dawn";
     name = "Brian Dawn";
   };
+  bricewge = {
+    email = "bricewge@gmail.com";
+    github = "bricewge";
+    name = "Brice Waegeneire";
+  };
   bstrik = {
     email = "dutchman55@gmx.com";
     github = "bstrik";

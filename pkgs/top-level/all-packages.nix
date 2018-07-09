@@ -2110,6 +2110,8 @@ with pkgs;
 
   drone = callPackage ../development/tools/continuous-integration/drone { };
 
+  drone-cli = callPackage ../development/tools/continuous-integration/drone-cli { };
+
   dropbear = callPackage ../tools/networking/dropbear { };
 
   dtach = callPackage ../tools/misc/dtach { };
