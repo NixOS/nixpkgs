@@ -1,4 +1,4 @@
-{ stdenv, bazel }:
+{ stdenv, bazel, enableNixHacks ? true }:
 
 args@{ name, bazelFlags ? [], bazelTarget, buildAttrs, fetchAttrs, ... }:
 
@@ -17,14 +17,15 @@ in stdenv.mkDerivation (fBuildAttrs // {
     nativeBuildInputs = fFetchAttrs.nativeBuildInputs or [] ++ [ bazel ];
 
     preHook = fFetchAttrs.preHook or "" + ''
-      export bazelOut="$NIX_BUILD_TOP/output"
+      export bazelOut="$(echo ''${NIX_BUILD_TOP}/output | sed -e 's,//,/,g')"
+      export bazelUserRoot="$(echo ''${NIX_BUILD_TOP}/tmp | sed -e 's,//,/,g')"
       export HOME="$NIX_BUILD_TOP"
     '';
 
     buildPhase = fFetchAttrs.buildPhase or ''
       runHook preBuild
 
-      bazel --output_base="$bazelOut" fetch $bazelFlags $bazelTarget
+      bazel --output_base="$bazelOut" --output_user_root="$bazelUserRoot" fetch $bazelFlags $bazelTarget
 
       runHook postBuild
     '';
@@ -52,10 +53,11 @@ in stdenv.mkDerivation (fBuildAttrs // {
     outputHash = fetchAttrs.sha256;
   });
 
-  nativeBuildInputs = fBuildAttrs.nativeBuildInputs or [] ++ [ (bazel.override { enableNixHacks = true; }) ];
+  nativeBuildInputs = fBuildAttrs.nativeBuildInputs or [] ++ [ (if enableNixHacks then (bazel.override { enableNixHacks = true; }) else bazel) ];
 
   preHook = fBuildAttrs.preHook or "" + ''
     export bazelOut="$NIX_BUILD_TOP/output"
+    export bazelUserRoot="$NIX_BUILD_TOP/tmp"
     export HOME="$NIX_BUILD_TOP"
   '';
 
@@ -71,7 +73,7 @@ in stdenv.mkDerivation (fBuildAttrs // {
   buildPhase = fBuildAttrs.buildPhase or ''
     runHook preBuild
 
-    bazel --output_base="$bazelOut" build -j $NIX_BUILD_CORES $bazelFlags $bazelTarget
+    bazel --output_base="$bazelOut" --output_user_root="$bazelUserRoot" build -j $NIX_BUILD_CORES $bazelFlags $bazelTarget
 
     runHook postBuild
   '';
