@@ -1,4 +1,4 @@
-{ pkgs, stdenv, stdenvNoCC, gccStdenv, lib }:
+{ pkgs, stdenv, stdenvNoCC, gccStdenv, lib, recurseIntoAttrs }:
 
 let
   callPackage = pkgs.newScope self;
@@ -37,9 +37,9 @@ let
 
     legends-browser = callPackage ./legends-browser {};
 
-    themes = callPackage ./themes {
+    themes = recurseIntoAttrs (callPackage ./themes {
       stdenv = stdenvNoCC;
-    };
+    });
 
     # aliases
     phoebus-theme = themes.phoebus;
