@@ -1,4 +1,4 @@
-{ stdenv, lib, buildEnv, dwarf-fortress-original, substituteAll
+{ stdenv, lib, buildEnv, dwarf-fortress, substituteAll
 , enableDFHack ? false, dfhack
 , enableSoundSense ? false, soundSense, jdk
 , enableStoneSense ? false
@@ -20,10 +20,10 @@ let
   themePkg = lib.optional (theme != null) ptheme;
   pkgs = lib.optional enableDFHack dfhack_
          ++ lib.optional enableSoundSense soundSense
-         ++ [ dwarf-fortress-original ];
+         ++ [ dwarf-fortress ];
 
   env = buildEnv {
-    name = "dwarf-fortress-env-${dwarf-fortress-original.dfVersion}";
+    name = "dwarf-fortress-env-${dwarf-fortress.dfVersion}";
 
     paths = themePkg ++ pkgs;
     pathsToLink = [ "/" "/hack" "/hack/scripts" ];
@@ -32,16 +32,16 @@ let
     postBuild = lib.optionalString enableDFHack ''
       rm $out/hack/symbols.xml
       substitute ${dfhack_}/hack/symbols.xml $out/hack/symbols.xml \
-        --replace $(cat ${dwarf-fortress-original}/hash.md5.orig) \
-                  $(cat ${dwarf-fortress-original}/hash.md5)
+        --replace $(cat ${dwarf-fortress}/hash.md5.orig) \
+                  $(cat ${dwarf-fortress}/hash.md5)
     '';
   };
 in
 
 stdenv.mkDerivation rec {
-  name = "dwarf-fortress-${dwarf-fortress-original.dfVersion}";
+  name = "dwarf-fortress-${dwarf-fortress.dfVersion}";
 
-  compatible = lib.all (x: assert (x.dfVersion == dwarf-fortress-original.dfVersion); true) pkgs;
+  compatible = lib.all (x: assert (x.dfVersion == dwarf-fortress.dfVersion); true) pkgs;
 
   dfInit = substituteAll {
     name = "dwarf-fortress-init";
@@ -54,6 +54,8 @@ stdenv.mkDerivation rec {
   runDF = ./dwarf-fortress.in;
   runDFHack = ./dfhack.in;
   runSoundSense = ./soundSense.in;
+
+  passthru = { inherit dwarf-fortress; };
 
   buildCommand = ''
     mkdir -p $out/bin
