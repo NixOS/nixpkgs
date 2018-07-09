@@ -321,6 +321,8 @@ let
 
     inifiles = callPackage ../development/ocaml-modules/inifiles { };
 
+    iri = callPackage ../development/ocaml-modules/iri { };
+
     jingoo = callPackage ../development/ocaml-modules/jingoo {
       pcre = ocaml_pcre;
     };
