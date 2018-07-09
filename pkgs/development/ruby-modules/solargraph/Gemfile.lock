@@ -8,16 +8,16 @@ GEM
     jaro_winkler (1.5.1)
     kramdown (1.17.0)
     mini_portile2 (2.3.0)
-    nokogiri (1.8.2)
+    nokogiri (1.8.4)
       mini_portile2 (~> 2.3.0)
     parallel (1.12.1)
     parser (2.5.1.0)
       ast (~> 2.4.0)
-    powerpack (0.1.1)
+    powerpack (0.1.2)
     rainbow (3.0.0)
     reverse_markdown (1.1.0)
       nokogiri
-    rubocop (0.57.1)
+    rubocop (0.58.0)
       jaro_winkler (~> 1.5.1)
       parallel (~> 1.10)
       parser (>= 2.5)
@@ -26,7 +26,7 @@ GEM
       ruby-progressbar (~> 1.7)
       unicode-display_width (~> 1.0, >= 1.0.1)
     ruby-progressbar (1.9.0)
-    solargraph (0.22.0)
+    solargraph (0.23.3)
       coderay (~> 1.1)
       eventmachine (~> 1.2, >= 1.2.5)
       htmlentities (~> 4.3, >= 4.3.4)
@@ -49,4 +49,4 @@ DEPENDENCIES
   solargraph!
 
 BUNDLED WITH
-   1.14.6
+   1.16.2
