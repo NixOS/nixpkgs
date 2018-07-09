@@ -50,15 +50,18 @@ let
 
     propagatedBuildInputs = [ core cython ];
 
+    # This tells setup.py to use cython
+    MONOSAT_CYTHON = true;
+
     # The relative paths here don't make sense for our Nix build
     # Also, let's use cython since it should produce faster bindings
     # TODO: do we want to just reference the core monosat library rather than copying the
     # shared lib? The current setup.py copies the .dylib/.so...
     postPatch = ''
+
       substituteInPlace setup.py \
         --replace '../../../../libmonosat.dylib' '${core}/lib/libmonosat.dylib' \
-        --replace '../../../../libmonosat.so'  '${core}/lib/libmonosat.so' \
-        --replace 'use_cython=False' 'use_cython=True'
+        --replace '../../../../libmonosat.so'  '${core}/lib/libmonosat.so'
     '';
   };
 in core
