@@ -14668,7 +14668,6 @@ with pkgs;
   iosevka = callPackage ../data/fonts/iosevka {
     nodejs = nodejs-8_x;
   };
-  iosevka-bin = callPackage ../data/fonts/iosevka/bin.nix {};
 
   ipafont = callPackage ../data/fonts/ipafont {};
   ipaexfont = callPackage ../data/fonts/ipaexfont {};
