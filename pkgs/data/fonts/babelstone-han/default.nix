@@ -1,7 +1,7 @@
 {stdenv, fetchzip}:
 
 let
-  version = "11.0.2";
+  version = "11.0.3";
 in fetchzip {
   name = "babelstone-han-${version}";
 
@@ -10,7 +10,7 @@ in fetchzip {
     mkdir -p $out/share/fonts/truetype
     unzip $downloadedFile '*.ttf' -d $out/share/fonts/truetype
   '';
-  sha256 = "003cz520riskjp729y3piqhmnzfw3jyrmb94im7jyvlc7hp14cdh";
+  sha256 = "0c8s21kllyilwivrb8gywq818y67w3zpann34hz36vy0wyiswn1c";
 
   meta = with stdenv.lib; {
     description = "Unicode CJK font with over 36000 Han characters";

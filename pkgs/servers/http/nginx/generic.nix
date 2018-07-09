@@ -1,5 +1,6 @@
 { stdenv, fetchurl, fetchFromGitHub, openssl, zlib, pcre, libxml2, libxslt, expat
 , gd, geoip
+, withDebug ? false
 , withStream ? true
 , withMail ? false
 , modules ? []
@@ -44,6 +45,8 @@ stdenv.mkDerivation {
     "--with-pcre-jit"
     # Install destination problems
     # "--with-http_perl_module"
+  ] ++ optional withDebug [
+    "--with-debug"
   ] ++ optional withStream [
     "--with-stream"
     "--with-stream_geoip_module"
@@ -63,6 +66,8 @@ stdenv.mkDerivation {
   preConfigure = (concatMapStringsSep "\n" (mod: mod.preConfigure or "") modules);
 
   hardeningEnable = optional (!stdenv.isDarwin) "pie";
+
+  enableParallelBuilding = true;
 
   postInstall = ''
     mv $out/sbin $out/bin

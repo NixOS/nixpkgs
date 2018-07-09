@@ -1,15 +1,10 @@
 { build-idris-package
 , fetchFromGitHub
-, prelude
-, base
 , lib
-, idris
 }:
 build-idris-package  {
   name = "comonad";
   version = "2018-02-26";
-
-  idrisDeps = [ prelude base ];
 
   src = fetchFromGitHub {
     owner = "vmchale";
@@ -23,6 +18,5 @@ build-idris-package  {
     homepage = https://github.com/vmchale/comonad;
     license = lib.licenses.bsd3;
     maintainers = [ lib.maintainers.brainrape ];
-    inherit (idris.meta) platforms;
   };
 }

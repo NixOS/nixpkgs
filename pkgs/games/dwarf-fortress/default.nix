@@ -15,13 +15,10 @@ let
 
     # unfuck is linux-only right now, we will just use it there
     dwarf-fortress-unfuck = if stdenv.isLinux then callPackage ./unfuck.nix { }
-                                              else null;
+                                 else null;
 
     dwarf-fortress = callPackage ./wrapper {
-      themes = {
-        "phoebus" = phoebus-theme;
-        "cla" = cla-theme;
-      };
+      inherit themes;
     };
 
     dwarf-therapist-original = pkgs.qt5.callPackage ./dwarf-therapist {
@@ -31,6 +28,8 @@ let
     };
 
     dwarf-therapist = callPackage ./dwarf-therapist/wrapper.nix { };
+
+    legends-browser = callPackage ./legends-browser {};
 
     themes = callPackage ./themes {
       stdenv = stdenvNoCC;

@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, makeWrapper
 , pkgconfig, which, perl, libXrandr
 , cairo, dbus, systemd, gdk_pixbuf, glib, libX11, libXScrnSaver
-, libXinerama, libnotify, libxdg_basedir, pango, xproto, librsvg
+, libXinerama, libnotify, libxdg_basedir, pango, xproto, librsvg, dunstify ? false
 }:
 
 stdenv.mkDerivation rec {
@@ -31,7 +31,11 @@ stdenv.mkDerivation rec {
     "SERVICEDIR_SYSTEMD=$(out)/lib/systemd/user"
   ];
 
-  postInstall = ''
+  buildFlags = if dunstify then [ "dunstify" ] else [];
+
+  postInstall = stdenv.lib.optionalString dunstify ''
+    install -Dm755 dunstify $out/bin
+  '' + ''
     wrapProgram $out/bin/dunst \
       --set GDK_PIXBUF_MODULE_FILE "$GDK_PIXBUF_MODULE_FILE"
   '';

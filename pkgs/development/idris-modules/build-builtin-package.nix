@@ -10,6 +10,9 @@ build-idris-package {
   inherit name version;
   inherit (idris) src;
 
+  noPrelude = true;
+  noBase = true;
+
   idrisDeps = deps;
 
   postUnpack = ''

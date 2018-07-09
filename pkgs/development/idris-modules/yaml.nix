@@ -1,16 +1,14 @@
 { build-idris-package
 , fetchFromGitHub
-, prelude
 , contrib
 , lightyear
 , lib
-, idris
 }:
 build-idris-package  {
   name = "yaml";
   version = "2018-01-25";
 
-  idrisDeps = [ prelude contrib lightyear ];
+  idrisDeps = [ contrib lightyear ];
 
   src = fetchFromGitHub {
     owner = "Heather";
@@ -24,6 +22,5 @@ build-idris-package  {
     homepage = https://github.com/Heather/Idris.Yaml;
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.brainrape ];
-    inherit (idris.meta) platforms;
   };
 }

@@ -1,16 +1,14 @@
 { build-idris-package
 , fetchFromGitHub
-, prelude
 , contrib
 , effects
 , lib
-, idris
 }:
 build-idris-package  {
   name = "idris-hamt";
   version = "2016-11-15";
 
-  idrisDeps = [ prelude contrib effects ];
+  idrisDeps = [ contrib effects ];
 
   src = fetchFromGitHub {
     owner = "bamboo";
@@ -24,6 +22,5 @@ build-idris-package  {
     homepage = https://github.com/bamboo/idris-hamt;
     license = lib.licenses.bsd3;
     maintainers = [ lib.maintainers.brainrape ];
-    inherit (idris.meta) platforms;
   };
 }

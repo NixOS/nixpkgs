@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "boomerang-${version}";
-  version = "0.4.0-alpha-2018-01-18";
+  version = "0.4.0-alpha-2018-07-03";
 
   src = fetchFromGitHub {
     owner = "ceeac";
     repo = "boomerang";
-    rev = "b4ff8d573407a8ed6365d4bfe53d2d47d983e393";
-    sha256 = "0x17vlm6y1paa49fi3pmzz7vzdqms19qkr274hkq32ql342b6i6x";
+    rev = "377ff2d7db93d892c925e2d3e61aef818371ce7d";
+    sha256 = "1ljbyj3b8xckr1wihyii3h576zgq0q88vli0ylpr3p4jxy5sm57j";
   };
 
   nativeBuildInputs = [ cmake ];

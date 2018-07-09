@@ -1,16 +1,14 @@
 { build-idris-package
 , fetchFromGitHub
-, prelude
 , contrib
 , sdl2
 , lib
-, idris
 }:
 build-idris-package  {
   name = "pacman";
   version = "2017-11-10";
 
-  idrisDeps = [ prelude contrib sdl2 ];
+  idrisDeps = [ contrib sdl2 ];
 
   src = fetchFromGitHub {
     owner = "jdublu10";
@@ -27,6 +25,5 @@ build-idris-package  {
     description = "Proof that Idris is pacman complete";
     homepage = https://github.com/jdublu10/pacman;
     maintainers = [ lib.maintainers.brainrape ];
-    inherit (idris.meta) platforms;
   };
 }

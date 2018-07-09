@@ -23,7 +23,6 @@ self: super: {
   ghc-prim = null;
   ghci = null;
   haskeline = null;
-  hoopl = self.hoopl_3_10_2_2;   # no longer a core library in GHC 8.4.x
   hpc = null;
   integer-gmp = null;
   mtl = null;
@@ -39,6 +38,9 @@ self: super: {
   transformers = null;
   unix = null;
   xhtml = null;
+
+  # Use to be a core-library, but no longer is since GHC 8.4.x.
+  hoopl = self.hoopl_3_10_2_2;
 
   doctest = dontCheck super.doctest_0_16_0;  # tests depend on very recent QuickCheck
   hackage-db = super.hackage-db_2_0_1;
@@ -120,9 +122,6 @@ self: super: {
       sha256 = "1swphhnqvs5kh0wlqpjjgx9q91yxi6lasid8akdxp3gqll5ii2hf";
     };
   });
-
-  ## Bounds related: it wants base-compat 0.9.
-  criterion = super.criterion_1_4_1_0;
 
   ## Unmerged
 
@@ -391,15 +390,17 @@ self: super: {
   enclosed-exceptions = dontCheck super.enclosed-exceptions;
 
   # Older versions don't compile.
-  base-compat = self.base-compat_0_10_1;
+  base-compat = self.base-compat_0_10_4;
   brick = self.brick_0_37_1;
-  dhall = self.dhall_1_14_0;
-  dhall_1_13_0 = doJailbreak super.dhall_1_14_0;  # support ansi-terminal 0.8.x
+  criterion = super.criterion_1_5_0_0;
+  dhall = self.dhall_1_15_0;
+  # This is probably obsolete:
+  # dhall_1_15_0 = doJailbreak super.dhall_1_15_0;  # support ansi-terminal 0.8.x
   HaTeX = self.HaTeX_3_19_0_0;
   hpack = self.hpack_0_28_2;
-  hspec = dontCheck super.hspec_2_5_3;
-  hspec-core = dontCheck super.hspec-core_2_5_3;
-  hspec-discover = self.hspec-discover_2_5_3;
+  hspec = dontCheck super.hspec_2_5_4;
+  hspec-core = dontCheck super.hspec-core_2_5_4;
+  hspec-discover = self.hspec-discover_2_5_4;
   hspec-smallcheck = self.hspec-smallcheck_0_5_2;
   matrix = self.matrix_0_3_6_1;
   pandoc = self.pandoc_2_2_1;
@@ -414,19 +415,5 @@ self: super: {
 
   # https://github.com/xmonad/xmonad-contrib/issues/235
   xmonad-contrib = doJailbreak (appendPatch super.xmonad-contrib ./patches/xmonad-contrib-ghc-8.4.1-fix.patch);
-
-  # Contributed by Bertram Felgenhauer <int-e@gmx.de>.
-  arrows = appendPatch super.arrows (pkgs.fetchpatch {
-    url = https://raw.githubusercontent.com/lambdabot/lambdabot/ghc-8.4.1/patches/arrows-0.4.4.1.patch;
-    sha256 = "0j859vclcfnz8n2mw466mv00kjsa9gdbrppjc1m3b68jbypdmfvr";
-  });
-
-  # Contributed by Bertram Felgenhauer <int-e@gmx.de>.
-  flexible-defaults = appendPatch super.flexible-defaults (pkgs.fetchpatch {
-    url = https://raw.githubusercontent.com/lambdabot/lambdabot/ghc-8.4.1/patches/flexible-defaults-0.0.1.2.patch;
-    sha256 = "1bpsqq80h6nxm04wddgcgyzn0fjfsmhccmqb211jqswv5209znx8";
-  });
-
-  lambdabot-core = appendPatch super.lambdabot-core ./patches/lambdabot-core-ghc-8.4.x-fix.patch;
 
 }

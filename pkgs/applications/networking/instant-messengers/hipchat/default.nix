@@ -3,8 +3,7 @@
 , libGL, xcbutilkeysyms, xdg_utils, libtool }:
 
 let
-
-  version = "4.30.4.1672";
+  version = "4.30.5.1676";
 
   rpath = stdenv.lib.makeLibraryPath [
     xdg_utils
@@ -39,22 +38,13 @@ let
     systemd
     libGL
   ] + ":${stdenv.cc.cc.lib}/lib64";
-
-  src =
-    if stdenv.system == "x86_64-linux" then
-      fetchurl {
-        url = "https://atlassian.artifactoryonline.com/atlassian/hipchat-apt-client/pool/HipChat4-${version}-Linux.deb";
-        sha256 = "1xrwndhbyhcmjcg8h1ib8lp1g51f7jxdhc6p7776zmhlfw94n3rx";
-      }
-    else
-      throw "HipChat is not supported on ${stdenv.system}";
-
-in
-
-stdenv.mkDerivation {
+in stdenv.mkDerivation {
   name = "hipchat-${version}";
 
-  inherit src;
+  src = fetchurl {
+    url = "https://atlassian.artifactoryonline.com/atlassian/hipchat-apt-client/pool/HipChat4-${version}-Linux.deb";
+    sha256 = "1fmvarq7zf1cnah2d1l7rxhbiw3dmjcxsldys5is63y204hdh04y";
+  };
 
   buildInputs = [ makeWrapper ];
 

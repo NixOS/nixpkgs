@@ -2,7 +2,7 @@
 , gtk-doc, docbook_xsl, dbus, xvfb_run, glib, gtk3, gnome3 }:
 
 let
-  version = "3.28.2";
+  version = "3.28.3";
   pname = "libdazzle";
 in
 stdenv.mkDerivation {
@@ -13,7 +13,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "mirror://gnome/sources/libdazzle/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "1kfxnyqjwb1r8d4bpr59j1cikd94m6nxf1641hlg7dqlpl9rwlan";
+    sha256 = "0q8apibs99yvrwdxlknq4nayss88wsj0rp5fv2x4hh0bgfw8i7w7";
   };
 
   nativeBuildInputs = [ ninja meson pkgconfig vala gobjectIntrospection libxml2 gtk-doc docbook_xsl dbus xvfb_run ];
