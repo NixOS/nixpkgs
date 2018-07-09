@@ -2,13 +2,19 @@
 , enableDFHack ? false, dfhack
 , enableSoundSense ? false, soundSense, jdk
 , enableStoneSense ? false
+, enableTWBT ? false, twbt
 , themes ? {}
 , theme ? null
+# General config options:
+, enableIntro ? true
+, enableTruetype ? true
+, enableFPS ? false
 }:
 
 let
   dfhack_ = dfhack.override {
     inherit enableStoneSense;
+    inherit enableTWBT;
   };
 
   ptheme =
@@ -16,10 +22,15 @@ let
     then builtins.getAttr theme themes
     else theme;
 
+  twbtOnlyWithDFHack = assert (enableDFHack || !enableTWBT); true;
+
+  unBool = b: if b then "YES" else "NO";
+
   # These are in inverse order for first packages to override the next ones.
   themePkg = lib.optional (theme != null) ptheme;
   pkgs = lib.optional enableDFHack dfhack_
          ++ lib.optional enableSoundSense soundSense
+         ++ lib.optional enableTWBT twbt.art
          ++ [ dwarf-fortress-original ];
 
   env = buildEnv {
@@ -29,11 +40,24 @@ let
     pathsToLink = [ "/" "/hack" "/hack/scripts" ];
     ignoreCollisions = true;
 
-    postBuild = lib.optionalString enableDFHack ''
+    postBuild = ''
+      # De-symlink init.txt
+      cp $out/data/init/init.txt init.txt
+      rm $out/data/init/init.txt
+      mv init.txt $out/data/init/init.txt
+    '' + lib.optionalString enableDFHack ''
       rm $out/hack/symbols.xml
       substitute ${dfhack_}/hack/symbols.xml $out/hack/symbols.xml \
         --replace $(cat ${dwarf-fortress-original}/hash.md5.orig) \
                   $(cat ${dwarf-fortress-original}/hash.md5)
+    '' + lib.optionalString enableTWBT ''
+      substituteInPlace $out/data/init/init.txt \
+        --replace '[PRINT_MODE:2D]' '[PRINT_MODE:TWBT]'
+    '' + ''
+      substituteInPlace $out/data/init/init.txt \
+        --replace '[INTRO:YES]' '[INTRO:${unBool enableIntro}]' \
+        --replace '[TRUETYPE:YES]' '[TRUETYPE:${unBool enableTruetype}]' \
+        --replace '[FPS:NO]' '[FPS:${unBool enableFPS}]'
     '';
   };
 in
