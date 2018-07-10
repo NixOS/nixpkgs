@@ -24,6 +24,10 @@ stdenv.mkDerivation rec {
     sha256 = "18ys6p39yvm9wjjzhhlw35c9m8f5gf4dk9jbshibj19q4js1pnv9";
   };
 
+  patches = [
+    ./CVE-2018-1000168.patch
+  ];
+
   outputs = [ "bin" "out" "dev" "lib" ];
 
   nativeBuildInputs = [ pkgconfig ];
