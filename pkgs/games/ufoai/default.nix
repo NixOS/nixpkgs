@@ -1,17 +1,21 @@
-{ stdenv, fetchurl, libtheora, xvidcore, libGLU_combined, SDL, SDL_ttf, SDL_mixer
+{ stdenv, fetchurl, pkgconfig, zip, libtheora, xvidcore, libGLU_combined, SDL, SDL_image, SDL_ttf, SDL_mixer
 , curl, libjpeg, libpng, gettext, cunit, enableEditor?false }:
 
 stdenv.mkDerivation rec {
-  name = "ufoai-2.4";
+  name = "${pname}-${version}";
+  pname = "ufoai";
+  version = "2.5";
   src = fetchurl {
-    url = "mirror://sourceforge/ufoai/${name}-source.tar.bz2";
-    sha256 = "0kxrbcjrharcwz319s90m789i4my9285ihp5ax6kfhgif2vn2ji5";
+    url = "mirror://sourceforge/${pname}/${name}-source.tar.bz2";
+    sha256 = "13ra337mjc56kw31m7z77lc8vybngkzyhvmy3kvpdcpyksyc6z0c";
   };
 
   srcData = fetchurl {
-    url = "mirror://sourceforge/ufoai/${name}-data.tar";
-    sha256 = "1drhh08cqqkwv1yz3z4ngkplr23pqqrdx6cp8c3isy320gy25cvb";
+    url = "mirror://sourceforge/${pname}/${name}-data.tar";
+    sha256 = "1c6dglmm36qj522q1pzahxrqjkihsqlq2yac1aijwspz9916lw2y";
   };
+
+  nativeBuildInputs = [ pkgconfig zip ];
 
   preConfigure = ''tar xvf "${srcData}"'';
 
@@ -19,9 +23,11 @@ stdenv.mkDerivation rec {
     ++ stdenv.lib.optional enableEditor "--enable-uforadiant";
 
   buildInputs = [
-    libtheora xvidcore libGLU_combined SDL SDL_ttf SDL_mixer
+    libtheora xvidcore libGLU_combined SDL SDL_image SDL_mixer SDL_ttf
     curl libjpeg libpng gettext cunit
   ];
+
+  CXXFLAGS = [ "-std=gnu++98" ];
 
   NIX_CFLAGS_LINK = "-lgcc_s"; # to avoid occasional runtime error in finding libgcc_s.so.1
 
