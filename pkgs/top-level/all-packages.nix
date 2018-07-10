@@ -20352,6 +20352,8 @@ with pkgs;
 
   snpeff = callPackage ../applications/science/biology/snpeff { };
 
+  somatic-sniper = callPackage ../applications/science/biology/somatic-sniper { };
+
   star = callPackage ../applications/science/biology/star { };
 
   varscan = callPackage ../applications/science/biology/varscan { };
