@@ -208,6 +208,45 @@ stdenv.mkDerivation (rec {
 
     # Our Cabal compiler name
     haskellCompilerName = "ghc-8.4.3";
+
+    # Libraries included in this Haskell compiler
+    libraries = [
+      "rts"
+
+      "Cabal-2.3.0.0"
+      "array-0.5.2.0"
+      "base-4.12.0.0"
+      "binary-0.8.5.1"
+      "bytestring-0.10.8.2"
+      "containers-0.6.0.1"
+      "deepseq-1.4.4.0"
+      "directory-1.3.2.3"
+      "filepath-1.4.2"
+      "ghc-8.6.0.20180627"
+      "ghc-boot-8.6.0.20180627"
+      "ghc-boot-th-8.6.0.20180627"
+      "ghc-compact-0.1.0.0"
+      "ghc-heap-8.6.0.20180627"
+      "ghc-prim-0.5.3"
+      "ghci-8.6.0.20180627"
+      "haskeline-0.7.4.2"
+      "hpc-0.6.0.3"
+      "integer-gmp-1.0.2.0"
+      "libiserv-8.6.1"
+      "mtl-2.2.2"
+      "parsec-3.1.13.0.0.0.0.0"
+      "pretty-1.1.3.6"
+      "process-1.6.3.0"
+      "stm-2.5.0.0"
+      "template-haskell-2.14.0.0"
+      "terminfo-0.4.1.1"
+      "text-1.2.3.0"
+      "time-1.8.0.2"
+      "transformers-0.5.5.0"
+      "unix-2.8.0.0"
+      "xhtml-3000.2.2"
+    ];
+
   };
 
   meta = {
