@@ -35,7 +35,7 @@ buildFHSUserEnv {
   targetPkgs = pkgs: with pkgs; with xorg; [
     libICE libSM libX11 libXcomposite libXdamage libXext libXfixes libXrender
     libXxf86vm libxcb xkeyboardconfig
-    curl dbus firefox-bin fontconfig freetype gcc glib gnutar libxml2 libxslt
+    curl dbus firefox fontconfig freetype gcc glib gnutar libxml2 libxslt
     procps zlib
   ];
 

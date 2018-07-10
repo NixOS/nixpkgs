@@ -2495,7 +2495,6 @@ with pkgs;
   frescobaldi = callPackage ../misc/frescobaldi {};
 
   frostwire = callPackage ../applications/networking/p2p/frostwire { };
-  frostwire-bin = callPackage ../applications/networking/p2p/frostwire/frostwire-bin.nix { };
 
   ftgl = callPackage ../development/libraries/ftgl { };
 
@@ -5386,15 +5385,6 @@ with pkgs;
   tor = callPackage ../tools/security/tor { };
 
   tor-arm = callPackage ../tools/security/tor/tor-arm.nix { };
-
-  # added 2017-04-05
-  torbrowser = /* builtins.trace ''
-    [1;31mWARNING[0m: torbrowser package was renamed to tor-browser-bundle-bin.
-
-    Also, consider using nix-built tor-browser-unwrapped package instead. Read its longDescription.
-  '' */ tor-browser-bundle-bin;
-
-  tor-browser-bundle-bin = callPackage ../applications/networking/browsers/tor-browser-bundle-bin { };
 
   tor-browser-bundle = callPackage ../applications/networking/browsers/tor-browser-bundle {
     stdenv = stdenvNoCC;
@@ -14685,7 +14675,6 @@ with pkgs;
   iosevka = callPackage ../data/fonts/iosevka {
     nodejs = nodejs-8_x;
   };
-  iosevka-bin = callPackage ../data/fonts/iosevka/bin.nix {};
 
   ipafont = callPackage ../data/fonts/ipafont {};
   ipaexfont = callPackage ../data/fonts/ipaexfont {};
@@ -16149,52 +16138,6 @@ with pkgs;
   firefox-esr-52 = wrapFirefox firefox-esr-52-unwrapped { };
   firefox-esr-60 = wrapFirefox firefox-esr-60-unwrapped { };
   firefox-esr = firefox-esr-60;
-
-  firefox-bin-unwrapped = callPackage ../applications/networking/browsers/firefox-bin {
-    channel = "release";
-    generated = import ../applications/networking/browsers/firefox-bin/release_sources.nix;
-    gconf = pkgs.gnome2.GConf;
-    inherit (pkgs.gnome2) libgnome libgnomeui;
-    inherit (pkgs.gnome3) defaultIconTheme;
-  };
-
-  firefox-bin = wrapFirefox firefox-bin-unwrapped {
-    browserName = "firefox";
-    name = "firefox-bin-" +
-      (builtins.parseDrvName firefox-bin-unwrapped.name).version;
-    desktopName = "Firefox";
-  };
-
-  firefox-beta-bin-unwrapped = firefox-bin-unwrapped.override {
-    channel = "beta";
-    generated = import ../applications/networking/browsers/firefox-bin/beta_sources.nix;
-    gconf = pkgs.gnome2.GConf;
-    inherit (pkgs.gnome2) libgnome libgnomeui;
-    inherit (pkgs.gnome3) defaultIconTheme;
-  };
-
-  firefox-beta-bin = self.wrapFirefox firefox-beta-bin-unwrapped {
-    browserName = "firefox";
-    name = "firefox-beta-bin-" +
-      (builtins.parseDrvName firefox-beta-bin-unwrapped.name).version;
-    desktopName = "Firefox Beta";
-  };
-
-  firefox-devedition-bin-unwrapped = callPackage ../applications/networking/browsers/firefox-bin {
-    channel = "devedition";
-    generated = import ../applications/networking/browsers/firefox-bin/devedition_sources.nix;
-    gconf = pkgs.gnome2.GConf;
-    inherit (pkgs.gnome2) libgnome libgnomeui;
-    inherit (pkgs.gnome3) defaultIconTheme;
-  };
-
-  firefox-devedition-bin = self.wrapFirefox firefox-devedition-bin-unwrapped {
-    browserName = "firefox";
-    nameSuffix = "-devedition";
-    name = "firefox-devedition-bin-" +
-      (builtins.parseDrvName firefox-devedition-bin-unwrapped.name).version;
-    desktopName = "Firefox DevEdition";
-  };
 
   firestr = libsForQt5.callPackage ../applications/networking/p2p/firestr
     { boost = boost155;
@@ -18454,12 +18397,6 @@ with pkgs;
   };
 
   thunderbolt = callPackage ../os-specific/linux/thunderbolt {};
-
-  thunderbird-bin = callPackage ../applications/networking/mailreaders/thunderbird-bin {
-    gconf = pkgs.gnome2.GConf;
-    inherit (pkgs.gnome2) libgnome libgnomeui;
-    inherit (pkgs.gnome3) defaultIconTheme;
-  };
 
   tig = gitAndTools.tig;
 
