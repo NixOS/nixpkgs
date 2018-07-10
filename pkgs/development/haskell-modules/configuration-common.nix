@@ -1088,4 +1088,7 @@ self: super: {
     '';
   });
 
+  # Break out of "aeson <1.3, temporary <1.3".
+  stack = doJailbreak super.stack;
+
 }
