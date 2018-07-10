@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub
 # nativeBuildInputs
-, qmake, pkgconfig
+, qmake, pkgconfig, makeWrapper
 # Qt
 , qtbase, qtsvg, qtwebengine
 # buildInputs
@@ -30,10 +30,17 @@ stdenv.mkDerivation rec {
       --replace "include(lib_radare2.pri)" ""
   '';
 
-  nativeBuildInputs = [ qmake pkgconfig ];
+  nativeBuildInputs = [ qmake pkgconfig makeWrapper ];
   buildInputs = [ qtbase qtsvg qtwebengine radare2 python3 ];
 
   qmakeFlags = [ "CONFIG+=link_pkgconfig" "PKGCONFIG+=r_core" ];
+
+  # Fix crash on startup in some situations
+  postInstall = ''
+    wrapProgram $out/bin/Cutter \
+      --prefix QT_PLUGIN_PATH : ${qtbase.bin}/${qtbase.qtPluginPrefix} \
+      --prefix LD_LIBRARY_PATH : ${qtbase.out}/lib
+  '';
 
   enableParallelBuilding = true;
 
