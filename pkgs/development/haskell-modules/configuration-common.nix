@@ -81,34 +81,25 @@ self: super: {
 
   # The Hackage tarball is purposefully broken, because it's not intended to be, like, useful.
   # https://git-annex.branchable.com/bugs/bash_completion_file_is_missing_in_the_6.20160527_tarball_on_hackage/
-  git-annex = ((overrideCabal super.git-annex (drv: {
+  git-annex = (overrideSrc super.git-annex {
     src = pkgs.fetchgit {
-      name = "git-annex-${drv.version}-src";
+      name = "git-annex-${super.git-annex.version}-src";
       url = "git://git-annex.branchable.com/";
-      rev = "refs/tags/" + drv.version;
+      rev = "refs/tags/" + super.git-annex.version;
       sha256 = "0q9z5q7vrcqa831wni972kchcdivqp55x1z2fgmdp8jfq4pidvyb";
     };
-  })).overrideScope (self: super: {
-    aws = dontCheck (self.aws_0_18);
-    conduit = self.conduit_1_2_13_1;
-    conduit-extra = self.conduit-extra_1_2_3_2;
-    cryptonite-conduit = dontCheck super.cryptonite-conduit;  # test suite does not compile with old versions used here
-    html-conduit = self.html-conduit_1_2_1_2;
-    http-conduit = self.http-conduit_2_2_4;
-    persistent = self.persistent_2_7_3_1;
-    persistent-sqlite = self.persistent-sqlite_2_6_4;
-    resourcet = self.resourcet_1_1_11;
-    xml-conduit = self.xml-conduit_1_7_1_2;
-    yesod = self.yesod_1_4_5;
-    yesod-core = self.yesod-core_1_4_37_3;
-    yesod-form = self.yesod-form_1_4_16;
-    yesod-persistent = self.yesod-persistent_1_4_3;
-    yesod-static = self.yesod-static_1_5_3_1;
-    yesod-test = self.yesod-test_1_5_9_1;
-  })).override {
+  }).override {
     dbus = if pkgs.stdenv.isLinux then self.dbus else null;
     fdo-notify = if pkgs.stdenv.isLinux then self.fdo-notify else null;
     hinotify = if pkgs.stdenv.isLinux then self.hinotify else self.fsnotify;
+  };
+  esqueleto = overrideSrc (addBuildDepend (dontCheck (dontHaddock super.esqueleto)) self.unliftio) {
+    src = pkgs.fetchFromGitHub {
+      owner = "bitemyapp";
+      repo = "esqueleto";
+      rev = "b81e0d951e510ebffca03c5a58658ad884cc6fbd";
+      sha256 = "0lz1qxms7cfg5p3j37inlych0r2fwhm8xbarcys3df9m7jy9nixa";
+    };
   };
 
   # Fix test trying to access /home directory
