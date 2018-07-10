@@ -946,17 +946,13 @@ with pkgs;
     isLibrary = false;
     enableSharedExecutables = false;
     executableToolDepends = [ makeWrapper ];
-    postInstall = ''
+    postInstall = drv.postInstall or "" + ''
       exe=$out/libexec/${drv.pname}-${drv.version}/${drv.pname}
       install -D $out/bin/${drv.pname} $exe
-      rm -rf $out/{bin,lib,share}
+      rm -rf $out/{bin,lib}
       makeWrapper $exe $out/bin/${drv.pname} \
         --prefix PATH ":" "${nix}/bin" \
         --prefix PATH ":" "${nix-prefetch-scripts}/bin"
-      mkdir -p $out/share/{bash-completion/completions,zsh/vendor-completions,fish/completions}
-      $exe --bash-completion-script $exe >$out/share/bash-completion/completions/${drv.pname}
-      $exe --zsh-completion-script $exe >$out/share/zsh/vendor-completions/_${drv.pname}
-      $exe --fish-completion-script $exe >$out/share/fish/completions/${drv.pname}.fish
     '';
   });
 
