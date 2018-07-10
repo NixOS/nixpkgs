@@ -1094,6 +1094,10 @@ self: super: {
   # https://github.com/phadej/tree-diff/issues/19
   tree-diff = doJailbreak super.tree-diff;
 
+  # The test suite is broken. Break out of "base-compat >=0.9.3 && <0.10, hspec >=2.4.4 && <2.5".
+  haddock-library = doJailbreak (dontCheck super.haddock-library);
+  haddock-library_1_6_0 = doJailbreak (dontCheck super.haddock-library_1_6_0);
+
 }
 
 //
