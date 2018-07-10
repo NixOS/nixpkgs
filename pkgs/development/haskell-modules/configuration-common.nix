@@ -1091,6 +1091,9 @@ self: super: {
   cborg = doJailbreak super.cborg;
   serialise = doJailbreak (dontCheck super.serialise);
 
+  # https://github.com/phadej/tree-diff/issues/19
+  tree-diff = doJailbreak super.tree-diff;
+
 }
 
 //
