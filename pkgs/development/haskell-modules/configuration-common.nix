@@ -1093,6 +1093,14 @@ self: super: {
   haddock-library = doJailbreak (dontCheck super.haddock-library);
   haddock-library_1_6_0 = doJailbreak (dontCheck super.haddock-library_1_6_0);
 
+  # The test suite does not know how to find the 'cabal2nix' binary.
+  cabal2nix = overrideCabal super.cabal2nix (drv: {
+    preCheck = ''
+      export PATH="$PWD/dist/build/cabal2nix:$PATH"
+      export HOME="$TMPDIR/home"
+    '';
+  });
+
 }
 
 //
