@@ -41,6 +41,8 @@ let
       ./qtbase.patch
       ./qtbase-darwin.patch
       ./qtbase-revert-no-macos10.10.patch
+    ] ++ optionals stdenv.isDarwin [
+      ./qtbase-darwin-nseventtype.patch
     ];
     qtdeclarative = [ ./qtdeclarative.patch ];
     qtscript = [ ./qtscript.patch ];
