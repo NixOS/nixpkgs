@@ -313,6 +313,7 @@ let
     Rglpk = [ pkgs.glpk ];
     RGtk2 = [ pkgs.gtk2.dev ];
     rhdf5 = [ pkgs.zlib ];
+    Rhdf5lib = [ pkgs.zlib ];
     Rhpc = [ pkgs.zlib pkgs.bzip2.dev pkgs.icu pkgs.lzma.dev pkgs.openmpi pkgs.pcre.dev ];
     Rhtslib = [ pkgs.zlib.dev pkgs.automake pkgs.autoconf ];
     RJaCGH = [ pkgs.zlib.dev ];
@@ -744,8 +745,8 @@ let
       patches = [ ./patches/BayesXsrc.patch ];
     });
 
-    rhdf5 = old.rhdf5.overrideDerivation (attrs: {
-      patches = [ ./patches/rhdf5.patch ];
+    Rhdf5lib = old.Rhdf5lib.overrideDerivation (attrs: {
+      patches = [ ./patches/Rhdf5lib.patch ];
     });
 
     rJava = old.rJava.overrideDerivation (attrs: {
