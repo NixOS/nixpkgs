@@ -1,5 +1,5 @@
 { stdenv, fetchurl, libuuid, libselinux }:
-let 
+let
   sourceInfo = rec {
     version = "2.2.7";
     url = "http://nilfs.sourceforge.net/download/nilfs-utils-${version}.tar.bz2";
@@ -22,6 +22,8 @@ stdenv.mkDerivation rec {
     sed -e "s@sbindir=/sbin@sbindir=$out/sbin@" -i configure
     sed -e 's@/sbin/@'"$out"'/sbin/@' -i ./lib/cleaner*.c
   '';
+
+  configureFlags = [ "--with-libmount" ];
 
   # FIXME: https://github.com/NixOS/patchelf/pull/98 is in, but stdenv
   # still doesn't use it

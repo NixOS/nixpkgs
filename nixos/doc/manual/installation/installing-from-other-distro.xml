@@ -210,7 +210,7 @@ $ sudo groupdel nixbld</screen>
     or to lock the account with <literal>sudo passwd -l root</literal> if you
     use <literal>sudo</literal>)
    </para>
-<programlisting>users.extraUsers.root.initialHashedPassword = "";</programlisting>
+<programlisting>users.users.root.initialHashedPassword = "";</programlisting>
   </listitem>
   <listitem>
    <para>
