@@ -77,8 +77,13 @@ rec {
 
     , ... } @ attrs:
 
-    # TODO(@Ericson2314): Make this more modular, and not O(n^2).
     let
+      fixedOutputDrv = attrs ? outputHash;
+      noNonNativeDeps = builtins.length (depsBuildTarget ++ depsBuildTargetPropagated
+                                      ++ depsHostHost ++ depsHostHostPropagated
+                                      ++ buildInputs ++ propagatedBuildInputs
+                                      ++ depsTargetTarget ++ depsTargetTargetPropagated) == 0;
+      runtimeSensativeIfFixedOutput = fixedOutputDrv -> !noNonNativeDeps;
       supportedHardeningFlags = [ "fortify" "stackprotector" "pie" "pic" "strictoverflow" "format" "relro" "bindnow" ];
       defaultHardeningFlags = lib.remove "pie" supportedHardeningFlags;
       enabledHardeningOptions =
@@ -168,7 +173,11 @@ rec {
           # A hack to make `nix-env -qa` and `nix search` ignore broken packages.
           # TODO(@oxij): remove this assert when something like NixOS/nix#1771 gets merged into nix.
           name = assert validity.handled; name + lib.optionalString
-            (stdenv.hostPlatform != stdenv.buildPlatform)
+            # Fixed-output derivations like source tarballs shouldn't get a host
+            # suffix. But we have some weird ones with run-time deps that are
+            # just used for their side-affects. Those might as well since the
+            # hash can't be the same. See #32986.
+            (stdenv.hostPlatform != stdenv.buildPlatform && runtimeSensativeIfFixedOutput)
             ("-" + stdenv.hostPlatform.config);
 
           builder = attrs.realBuilder or stdenv.shell;

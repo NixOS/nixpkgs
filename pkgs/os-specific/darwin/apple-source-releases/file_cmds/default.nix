@@ -1,7 +1,8 @@
-{ stdenv, appleDerivation, xcbuild, zlib, bzip2, lzma, ncurses, libutil-new }:
+{ stdenv, appleDerivation, xcbuildHook, zlib, bzip2, lzma, ncurses, libutil-new }:
 
 appleDerivation rec {
-  buildInputs = [ xcbuild zlib bzip2 lzma ncurses libutil-new ];
+  nativeBuildInputs = [ xcbuildHook ];
+  buildInputs = [ zlib bzip2 lzma ncurses libutil-new ];
 
   # some commands not working:
   # mtree: _simple.h not found

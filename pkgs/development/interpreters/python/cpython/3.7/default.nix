@@ -65,6 +65,11 @@ in stdenv.mkDerivation {
 
   patches = [
     ./no-ldconfig.patch
+    # Fix darwin build https://bugs.python.org/issue34027
+    (fetchpatch {
+      url = https://bugs.python.org/file47666/darwin-libutil.patch;
+      sha256 = "0242gihnw3wfskl4fydp2xanpl8k5q7fj4dp7dbbqf46a4iwdzpa";
+    })
   ] ++ optionals hasDistutilsCxxPatch [
     # Fix for http://bugs.python.org/issue1222585
     # Upstream distutils is calling C compiler to compile C++ code, which

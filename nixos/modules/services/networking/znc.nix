@@ -36,6 +36,7 @@ let
             IPv4 = true
             IPv6 = true
             SSL = ${boolToString confOpts.useSSL}
+            ${lib.optionalString (confOpts.uriPrefix != null) "URIPrefix = ${confOpts.uriPrefix}"}
     </Listener>
 
     <User ${confOpts.userName}>
@@ -307,6 +308,16 @@ in
           type = types.bool;
           description = ''
             Indicates whether the ZNC server should use SSL when listening on the specified port. A self-signed certificate will be generated.
+          '';
+        };
+
+        uriPrefix = mkOption {
+          type = types.nullOr types.str;
+          default = null;
+          example = "/znc/";
+          description = ''
+            An optional URI prefix for the ZNC web interface. Can be
+            used to make ZNC available behind a reverse proxy.
           '';
         };
 

@@ -230,7 +230,7 @@ let
     };
 
     usb = {
-      USB_DEBUG            = option no;
+      USB_DEBUG            = option (whenOlder "4.18" no);
       USB_EHCI_ROOT_HUB_TT = yes; # Root Hub Transaction Translators
       USB_EHCI_TT_NEWSCHED = yes; # Improved transaction translator scheduling
     };
