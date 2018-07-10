@@ -2,15 +2,15 @@
 
 buildGo110Package rec {
   name = "gomuks-${version}";
-  version = "2018-05-16";
+  version = "2018-07-10";
 
   goPackagePath = "maunium.net/go/gomuks";
 
   src = fetchFromGitHub {
     owner = "tulir";
     repo = "gomuks";
-    rev = "512ca88804268bf58a754e8a02be556f953db317";
-    sha256 = "1bpgjkpvqqks3ljw9s0hm5pgscjs4rjy8rfpl2444m4rbpz1xvmr";
+    rev = "68db26bcace31297471641fe95f8882e301f5699";
+    sha256 = "0dagdvsvn8nwqsvjbqk1c6gg2q1m40869nayrkwm3ndg2xkfdpm6";
   };
 
   meta = with stdenv.lib; {
