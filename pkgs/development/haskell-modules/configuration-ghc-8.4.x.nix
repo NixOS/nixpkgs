@@ -48,6 +48,12 @@ self: super: {
     sha256 = "1mj3k0w8aqyy71kmc71vzhgxmr4h6i5b3sykwflzays50grjm5jp";
   })) self.semigroups;
 
+  # This package desperately needs a maintainer.
+  xmobar = super.xmobar.overrideScope (self: super: {
+    hinotify = self.hinotify_0_3_9;  # https://github.com/jaor/xmobar/issues/356
+    dbus = self.dbus_0_10_15;        # https://github.com/jaor/xmobar/issues/346
+  });
+  hinotify_0_3_9 = dontCheck (doJailbreak super.hinotify_0_3_9); # allow async 2.2.x
 
 
 ##   # https://github.com/xmonad/xmonad-contrib/issues/235
