@@ -8519,6 +8519,10 @@ with pkgs;
     flex = flex_2_5_35;
   };
 
+  spoofer = callPackage ../tools/networking/spoofer { };
+
+  spoofer-gui = callPackage ../tools/networking/spoofer { withGUI = true; };
+
   sqlitebrowser = libsForQt5.callPackage ../development/tools/database/sqlitebrowser { };
 
   sselp = callPackage ../tools/X11/sselp{ };
