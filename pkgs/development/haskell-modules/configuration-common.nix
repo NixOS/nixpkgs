@@ -1049,23 +1049,8 @@ self: super: {
   # Work around overspecified constraint on github ==0.18.
   github-backup = doJailbreak super.github-backup;
 
-  # Work around large number of repeated arguments
-  # https://github.com/NixOS/nixpkgs/issues/40013
-  taffybar = super.taffybar.overrideDerivation (drv: { strictDeps = true; });
-
-  # dhall-json requires a very particular dhall version
-  # dhall-json_1_2_1 = super.dhall-json_1_2_1.override { dhall = self.dhall_1_15_0; };
-
-  # # dhall-nix requires a very particular dhall version
-  # dhall-nix = super.dhall-nix.override { dhall = self.dhall_1_15_0; };
-
   # https://github.com/fpco/streaming-commons/issues/49
   streaming-commons = dontCheck super.streaming-commons;
-
-  # # cabal2nix generates a dependency on base-compat, which is the wrong version
-  # base-compat-batteries = super.base-compat-batteries.override {
-  #   base-compat = super.base-compat_0_10_4;
-  # };
 
   # Test suite depends on old QuickCheck 2.10.x.
   cassava = dontCheck super.cassava;
