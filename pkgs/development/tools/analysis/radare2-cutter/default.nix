@@ -33,7 +33,14 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ qmake pkgconfig makeWrapper ];
   buildInputs = [ qtbase qtsvg qtwebengine radare2 python3 ];
 
-  qmakeFlags = [ "CONFIG+=link_pkgconfig" "PKGCONFIG+=r_core" ];
+  qmakeFlags = [
+    "CONFIG+=link_pkgconfig"
+    "PKGCONFIG+=r_core"
+    # Leaving this enabled doesn't break build but generates errors
+    # at runtime (to console) about being unable to load needed bits.
+    # Disable until can be looked at.
+    "CUTTER_ENABLE_JUPYTER=false"
+  ];
 
   # Fix crash on startup in some situations
   postInstall = ''
