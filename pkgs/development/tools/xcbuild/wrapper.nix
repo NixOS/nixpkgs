@@ -43,7 +43,7 @@ while [ $# -gt 0 ]; do
          -s | --switch) shift;; # noop
          -r | --reset) ;; # noop
          -v | --version) echo xcode-select version ${xcodeSelectVersion} ;;
-         -p | --print-path) echo @DEVELOPER_DIR@ ;;
+         -p | -print-path | --print-path) echo @DEVELOPER_DIR@ ;;
          --install) ;; # noop
     esac
     shift

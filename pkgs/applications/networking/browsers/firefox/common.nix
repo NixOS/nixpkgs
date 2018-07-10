@@ -16,7 +16,7 @@
 
 ## optional libraries
 
-, alsaSupport ? true, alsaLib
+, alsaSupport ? stdenv.isLinux, alsaLib
 , pulseaudioSupport ? true, libpulseaudio
 , ffmpegSupport ? true, gstreamer, gst-plugins-base
 , gtk3Support ? !isTorBrowserLike, gtk2, gtk3, wrapGAppsHook
@@ -39,6 +39,9 @@
 , safeBrowsingSupport ? false
 , drmSupport ? false
 
+# macOS dependencies
+, xcbuild, CoreMedia
+
 ## other
 
 # As stated by Sylvestre Ledru (@sylvestre) on Nov 22, 2017 at
@@ -60,13 +63,16 @@
 # > the experience of Firefox users, you won't have any issues using the
 # > official branding.
 , enableOfficialBranding ? true
+, gcc
 }:
 
 assert stdenv.cc.libc or null != null;
 
 let
   flag = tf: x: [(if tf then "--enable-${x}" else "--disable-${x}")];
-  gcc = if stdenv.cc.isGNU then stdenv.cc.cc else stdenv.cc.cc.gcc;
+
+  default-toolkit = if stdenv.isDarwin then "cairo-cocoa"
+                    else "cairo-gtk${if gtk3Support then "3" else "2"}";
 in
 
 stdenv.mkDerivation (rec {
@@ -90,13 +96,16 @@ stdenv.mkDerivation (rec {
   ++ lib.optional  pulseaudioSupport libpulseaudio # only headers are needed
   ++ lib.optionals ffmpegSupport [ gstreamer gst-plugins-base ]
   ++ lib.optional  gtk3Support gtk3
-  ++ lib.optional  gssSupport kerberos;
+  ++ lib.optional  gssSupport kerberos
+  ++ lib.optionals stdenv.isDarwin [ CoreMedia ];
 
   NIX_CFLAGS_COMPILE = "-I${nspr.dev}/include/nspr -I${nss.dev}/include/nss -I${glib.dev}/include/gio-unix-2.0";
 
   nativeBuildInputs =
     [ autoconf213 which gnused pkgconfig perl python2 cargo rustc ]
-    ++ lib.optional gtk3Support wrapGAppsHook ++ extraNativeBuildInputs;
+    ++ lib.optional gtk3Support wrapGAppsHook
+    ++ lib.optional stdenv.isDarwin xcbuild
+    ++ extraNativeBuildInputs;
 
   preConfigure = ''
     # remove distributed configuration files
@@ -146,7 +155,8 @@ stdenv.mkDerivation (rec {
     "--enable-jemalloc"
     "--disable-maintenance-service"
     "--disable-gconf"
-    "--enable-default-toolkit=cairo-gtk${if gtk3Support then "3" else "2"}"
+    "--enable-default-toolkit=${default-toolkit}"
+    "--disable-xcode-checks"
   ]
   ++ lib.optional (lib.versionOlder version "61") "--enable-system-hunspell"
   ++ lib.optionals (lib.versionAtLeast version "56" && !stdenv.hostPlatform.isi686) [
