@@ -207,13 +207,14 @@ let
   allPkgconfigDepends = pkgconfigDepends ++ libraryPkgconfigDepends ++ executablePkgconfigDepends ++
                         optionals doCheck testPkgconfigDepends ++ optionals doBenchmark benchmarkPkgconfigDepends;
 
-  depsBuildBuild = [ nativeGhc ];
+  depsBuildBuild = [ nativeGhc ] ++
+                   map (stdenv.lib.getOutput "out") setupHaskellDepends;
   nativeBuildInputs = map stdenv.lib.getBin (
                         [ ghc removeReferencesTo ] ++ optional (allPkgconfigDepends != []) pkgconfig ++
                         setupHaskellDepends ++
                         buildTools ++ libraryToolDepends ++ executableToolDepends ++
                         optionals doCheck testToolDepends ++
-                        optionals doBenchmark benchmarkToolDepends;
+                        optionals doBenchmark benchmarkToolDepends
                       );
   propagatedBuildInputs = buildDepends ++ libraryHaskellDepends ++ executableHaskellDepends ++ libraryFrameworkDepends;
   otherBuildInputs = extraLibraries ++ librarySystemDepends ++ executableSystemDepends ++ executableFrameworkDepends ++
