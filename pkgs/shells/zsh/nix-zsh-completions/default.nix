@@ -15,15 +15,16 @@ stdenv.mkDerivation rec {
   };
 
   installPhase = ''
-    mkdir -p $out/share/zsh/site-functions
+    mkdir -p $out/share/zsh/{site-functions,plugins/nix}
     cp _* $out/share/zsh/site-functions
+    cp *.zsh $out/share/zsh/plugins/nix
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = https://github.com/spwhitt/nix-zsh-completions;
     description = "ZSH completions for Nix, NixOS, and NixOps";
-    license = stdenv.lib.licenses.bsd3;
-    platforms = stdenv.lib.platforms.all;
-    maintainers = [ stdenv.lib.maintainers.spwhitt stdenv.lib.maintainers.olejorgenb stdenv.lib.maintainers.hedning ];
+    license = licenses.bsd3;
+    platforms = platforms.all;
+    maintainers = with maintainers; [ spwhitt olejorgenb hedning ma27 ];
   };
 }
