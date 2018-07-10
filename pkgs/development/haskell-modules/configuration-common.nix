@@ -624,18 +624,15 @@ self: super: {
 
   # Build the latest git version instead of the official release. This isn't
   # ideal, but Chris doesn't seem to make official releases any more.
-  structured-haskell-mode = (overrideCabal super.structured-haskell-mode (drv: {
+  structured-haskell-mode = overrideCabal super.structured-haskell-mode (drv: {
     src = pkgs.fetchFromGitHub {
       owner = "chrisdone";
       repo = "structured-haskell-mode";
-      rev = "bd08a0b2297667e2ac7896e3b480033ae5721d4d";
-      sha256 = "14rl739z19ns31h9fj48sx9ppca4g4mqkc7ccpacagwwf55m259c";
+      rev = "7f9df73f45d107017c18ce4835bbc190dfe6782e";
+      sha256 = "1jcc30048j369jgsbbmkb63whs4wb37bq21jrm3r6ry22izndsqa";
     };
-    version = "20170523-git";
+    version = "20170205-git";
     editedCabalFile = null;
-    # Statically linked Haskell libraries make the tool start-up much faster,
-    # which is important for use in Emacs.
-    enableSharedExecutables = false;
     # Make elisp files available at a location where people expect it. We
     # cannot easily byte-compile these files, unfortunately, because they
     # depend on a new version of haskell-mode that we don't have yet.
@@ -644,8 +641,15 @@ self: super: {
       mkdir -p $data/share/emacs
       ln -s $lispdir $data/share/emacs/site-lisp
     '';
-  })).override {
-    haskell-src-exts = self.haskell-src-exts_1_19_1;
+  });
+  descriptive = overrideSrc super.descriptive {
+    version = "20180514-git";
+    src = pkgs.fetchFromGitHub {
+      owner = "chrisdone";
+      repo = "descriptive";
+      rev = "c088960113b2add758553e41cbe439d183b750cd";
+      sha256 = "17p65ihcvm1ghq23ww6phh8gdj7hwxlypjvh9jabsxvfbp2s8mrk";
+    };
   };
 
   # Make elisp files available at a location where people expect it.
