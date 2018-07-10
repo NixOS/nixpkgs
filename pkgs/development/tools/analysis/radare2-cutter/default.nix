@@ -21,8 +21,19 @@ stdenv.mkDerivation rec {
 
   postUnpack = "export sourceRoot=$sourceRoot/src";
 
+  # Remove this "very helpful" helper file intended for discovering r2,
+  # as it's a doozy of harddcoded paths and unexpected behavior.
+  # Happily Nix has everything all set so we don't need it,
+  # other than as basis for the qmakeFlags set below.
+  postPatch = ''
+    substituteInPlace Cutter.pro \
+      --replace "include(lib_radare2.pri)" ""
+  '';
+
   nativeBuildInputs = [ qmake pkgconfig ];
   buildInputs = [ qtbase qtsvg qtwebengine radare2 python3 ];
+
+  qmakeFlags = [ "CONFIG+=link_pkgconfig" "PKGCONFIG+=r_core" ];
 
   enableParallelBuilding = true;
 
