@@ -14,7 +14,7 @@ buildGoPackage rec {
   };
 
   meta = with stdenv.lib; {
-    description = "A tool that provides secure DNS resolution.";
+    description = "A tool that provides secure DNS resolution";
 
     license = licenses.isc;
     homepage = https://dnscrypt.info/;
