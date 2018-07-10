@@ -44,7 +44,7 @@ let
     url = "https://api.github.com/repos/JuliaLang/Rmath-julia/tarball/v${rmathVersion}";
     sha256 = "1qyps217175qhid46l8f5i1v8i82slgp23ia63x2hzxwfmx8617p";
   };
-  
+
   virtualenvVersion = "15.0.0";
   virtualenv = fetchurl {
     url = "mirror://pypi/v/virtualenv/virtualenv-${virtualenvVersion}.tar.gz";
@@ -53,7 +53,7 @@ let
 
   majorVersion = "0";
   minorVersion = "6";
-  maintenanceVersion = "2";
+  maintenanceVersion = "4";
   version = "${majorVersion}.${minorVersion}.${maintenanceVersion}";
 in
 
@@ -64,7 +64,7 @@ stdenv.mkDerivation rec {
 
   src = fetchzip {
     url = "https://github.com/JuliaLang/${pname}/releases/download/v${version}/${name}.tar.gz";
-    sha256 = "0ym4n9vn6w8vj175mmsc2nzvdk2ij0cdrs44lkr3p0signji73b5";
+    sha256 = "09axkkj914al7lzvcvhb33hz5wp083lk18llsvrn622fqhmyqabl";
   };
   prePatch = ''
     mkdir deps/srccache
@@ -135,7 +135,7 @@ stdenv.mkDerivation rec {
       "USE_SYSTEM_GMP=1"
       "USE_SYSTEM_LIBGIT2=1"
       "USE_SYSTEM_LIBUNWIND=1"
-      
+
       "USE_SYSTEM_LLVM=1"
       "LLVM_VER=3.9.1"
 
