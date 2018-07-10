@@ -199,10 +199,16 @@ rec {
   generateOptparseApplicativeCompletion = command: pkg:
     overrideCabal pkg (old: {
       postInstall = old.postInstall or "" + ''
-        echo "installing bash completion script for ${command}"
-        mkdir -p $out/share/bash-completion/completions
-        $out/bin/${command} --bash-completion-script $out/bin/${command} \
+        echo "installing shell completion scripts for ${command}"
+        mkdir -p $out/share/{bash-completion/completions,zsh/vendor-completions,fish/completions}
+        exe="$out/bin/${command}"
+        $exe --bash-completion-script $exe \
           >$out/share/bash-completion/completions/${command}
+        $exe --zsh-completion-script $exe \
+          >$out/share/zsh/vendor-completions/_${command}
+        $exe --fish-completion-script $exe \
+          >$out/share/fish/completions/${command}.fish
+
         # Sanity check
         grep -F ${command} <$out/share/bash-completion/completions/${command} >/dev/null || {
           echo 'Could not find ${command} in completion script.'
