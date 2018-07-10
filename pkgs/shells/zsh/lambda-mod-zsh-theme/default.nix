@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub }:
+{ stdenv, fetchFromGitHub, zsh }:
 
 stdenv.mkDerivation {
   name = "lambda-mod-zsh-theme-unstable-2017-10-08";
@@ -10,9 +10,13 @@ stdenv.mkDerivation {
     rev = "61c373c8aa5556d51522290b82ad44e7166bced1";
   };
 
+  buildInputs = [ zsh ];
+
   installPhase = ''
-    mkdir -p $out/share/themes
-    cp lambda-mod.zsh-theme $out/share/themes
+    chmod +x lambda-mod.zsh-theme # only executable scripts are found by `patchShebangs`
+    patchShebangs .
+
+    install -Dm0644 lambda-mod.zsh-theme $out/share/zsh/themes/lambda-mod.zsh-theme
   '';
 
   meta = with stdenv.lib; {
