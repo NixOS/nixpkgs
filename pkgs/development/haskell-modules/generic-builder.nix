@@ -186,13 +186,14 @@ let
 
   depsBuildBuild = [ nativeGhc ];
   nativeBuildInputs = [ ghc removeReferencesTo ]
-                   ++ map (mkCoreLib ghc) (ghc.libraries or [])
                    ++ optional (allPkgconfigDepends != []) pkgconfig ++
                       setupHaskellDepends ++
                       buildTools ++ libraryToolDepends ++ executableToolDepends ++
                       optionals doCheck testToolDepends ++
                       optionals doBenchmark benchmarkToolDepends;
-  propagatedBuildInputs = buildDepends ++ libraryHaskellDepends ++ executableHaskellDepends ++ libraryFrameworkDepends;
+  propagatedBuildInputs = buildDepends ++ libraryHaskellDepends
+                      ++ executableHaskellDepends ++ libraryFrameworkDepends
+                      ++ map (mkCoreLib ghc) (ghc.libraries or []);
   otherBuildInputs = extraLibraries ++ librarySystemDepends ++ executableSystemDepends ++ executableFrameworkDepends ++
                      allPkgconfigDepends ++
                      optionals doCheck (testDepends ++ testHaskellDepends ++ testSystemDepends ++ testFrameworkDepends) ++
