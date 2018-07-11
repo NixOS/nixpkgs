@@ -1,6 +1,6 @@
 {stdenv, fetchurl, gmp, cmake, python}:
 
-let version = "0.1.4";
+let version = "0.1.5";
 in
 
 stdenv.mkDerivation {
@@ -8,7 +8,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "https://github.com/SRI-CSL/libpoly/archive/v${version}.tar.gz";
-    sha256 = "16x1pk2a3pcb5a0dzyw28ccjwkhmbsck4hy80ss7kx0dd7qgpi7j";
+    sha256 = "0yj3gd60lx8dcgw7hgld8wqvjkpixx3ww3v33sdf7p6lln7ksxyn";
   };
 
   buildInputs = [ cmake gmp python ];
