@@ -5440,6 +5440,8 @@ with pkgs;
 
   trickle = callPackage ../tools/networking/trickle {};
 
+  triggerhappy = callPackage ../tools/inputmethods/triggerhappy {};
+
   trousers = callPackage ../tools/security/trousers { };
 
   tryton = callPackage ../applications/office/tryton { };
