@@ -62,6 +62,7 @@ buildFHSUserEnv {
     libcap
     SDL2
     libusb1
+    libudev
     dbus-glib
     libav
     atk
