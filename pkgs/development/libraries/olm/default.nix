@@ -8,6 +8,7 @@ stdenv.mkDerivation rec {
     description = "Implements double cryptographic ratchet and Megolm ratchet";
     license = stdenv.lib.licenses.asl20;
     homepage = https://matrix.org/git/olm/about;
+    platforms = stdenv.lib.platforms.linux;
   };
 
   src = fetchurl {
