@@ -28,6 +28,17 @@ let
     };
   };
 
+  reformatPackageName = pname:
+    let
+      # regex adapted from `validate-npm-package-name`
+      # will produce 3 parts e.g.
+      # "@someorg/somepackage" -> [ "@someorg/" "someorg" "somepackage" ]
+      # "somepackage" -> [ null null "somepackage" ]
+      parts = builtins.tail (builtins.match "(@([^/]*)/)?([^/]*)" pname);
+      # if there is no organisation we need to filter out null values.
+      non-null = builtins.filter (x: x != null) parts;
+    in builtins.concatStringsSep "-" non-null;
+
   # Generates the yarn.nix from the yarn.lock file
   mkYarnNix = yarnLock:
     runCommand "yarn.nix" {}
@@ -132,9 +143,10 @@ let
     let
       package = lib.importJSON packageJSON;
       pname = package.name;
+      safeName = reformatPackageName pname;
       version = package.version;
       deps = mkYarnModules {
-        name = "${pname}-modules-${version}";
+        name = "${safeName}-modules-${version}";
         preBuild = yarnPreBuild;
         inherit packageJSON yarnLock yarnNix yarnFlags pkgConfig;
       };
@@ -142,7 +154,7 @@ let
     in stdenv.mkDerivation (builtins.removeAttrs attrs ["pkgConfig"] // {
       inherit src;
 
-      name = unlessNull name "${pname}-${version}";
+      name = unlessNull name "${safeName}-${version}";
 
       buildInputs = [ yarn nodejs ] ++ extraBuildInputs;
 
