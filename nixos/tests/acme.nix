@@ -29,7 +29,7 @@ in import ./make-test.nix {
   name = "acme";
 
   nodes = {
-    letsencrypt = ./common/letsencrypt.nix;
+    letsencrypt = ./common/letsencrypt;
 
     webserver = { config, pkgs, ... }: {
       imports = [ commonConfig ];
