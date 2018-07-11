@@ -173,6 +173,21 @@ let
       rm -r go/src/github.com/letsencrypt/boulder/vendor/github.com/miekg/pkcs11
     '';
 
+    # XXX: Temporarily brought back putting the source code in the output,
+    # since e95f17e2720e67e2eabd59d7754c814d3e27a0b2 was removing that from
+    # buildGoPackage.
+    preInstall = ''
+      mkdir -p $out
+      pushd "$NIX_BUILD_TOP/go"
+      while read f; do
+        echo "$f" | grep -q '^./\(src\|pkg/[^/]*\)/${goPackagePath}' \
+          || continue
+        mkdir -p "$(dirname "$out/share/go/$f")"
+        cp "$NIX_BUILD_TOP/go/$f" "$out/share/go/$f"
+      done < <(find . -type f)
+      popd
+    '';
+
     extraSrcs = map mkGoDep [
       { goPackagePath = "github.com/miekg/pkcs11";
         rev           = "6dbd569b952ec150d1425722dbbe80f2c6193f83";
