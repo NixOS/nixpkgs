@@ -268,7 +268,7 @@ let self = stdenv.mkDerivation {
     homepage = https://www.mesa3d.org/;
     license = licenses.mit; # X11 variant, in most files
     platforms = platforms.linux;
-    maintainers = with maintainers; [ eduarrrd vcunat ];
+    maintainers = with maintainers; [ vcunat ];
   };
 };
 in self
