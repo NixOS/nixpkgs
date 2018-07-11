@@ -2385,6 +2385,9 @@ extra-packages:
   - haskell-src-exts == 1.19.*          # required by hindent and structured-haskell-mode
   - hinotify == 0.3.9                   # for xmonad-0.26: https://github.com/kolmodin/hinotify/issues/29
   - hoogle == 5.0.14                    # required by hie-hoogle
+  - hspec < 2.5                         # stylish-cabal-0.4.0.1: https://github.com/pikajude/stylish-cabal/issues/11
+  - hspec-core < 2.5                    # stylish-cabal-0.4.0.1: https://github.com/pikajude/stylish-cabal/issues/11
+  - hspec-discover < 2.5                # stylish-cabal-0.4.0.1: https://github.com/pikajude/stylish-cabal/issues/11
   - html-conduit ^>= 1.2                # pre-lts-11.x versions neeed by git-annex 6.20180227
   - http-conduit ^>= 2.2                # pre-lts-11.x versions neeed by git-annex 6.20180227
   - inline-c < 0.6                      # required on GHC 8.0.x
