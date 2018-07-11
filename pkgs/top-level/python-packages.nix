@@ -342,6 +342,8 @@ in {
 
   outcome = callPackage ../development/python-modules/outcome {};
 
+  palettable = callPackage ../development/python-modules/palettable { };
+
   pdf2image = callPackage ../development/python-modules/pdf2image { };
 
   pdfminer = callPackage ../development/python-modules/pdfminer_six { };
