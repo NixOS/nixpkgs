@@ -1,4 +1,5 @@
-{ lib, buildPackages, makeWrapper, writeText, runCommand
+{ stdenv, lib, buildPackages, makeWrapper, writeText, runCommand
+, bash
 , CoreServices, ImageIO, CoreGraphics
 , targetPlatform
 , xcodePlatform ? targetPlatform.xcodePlatform or "MacOSX"
@@ -36,7 +37,7 @@ let
   '';
 
   xcode-select = writeText "xcode-select" ''
-#!/usr/bin/env sh
+#!${bash}/bin/sh
 while [ $# -gt 0 ]; do
    case "$1" in
          -h | --help) ;; # noop
@@ -51,7 +52,7 @@ done
   '';
 
   xcrun = writeText "xcrun" ''
-#!/usr/bin/env sh
+#!${bash}/bin/sh
 while [ $# -gt 0 ]; do
    case "$1" in
          --sdk | -sdk) shift ;;
@@ -86,16 +87,20 @@ runCommand "xcodebuild-${xcbuild.version}" {
   inherit (xcbuild) meta;
 
   # ensure that the toolchain goes in PATH
-  propagatedBuildInputs = [ "${toolchains}/XcodeDefault.xctoolchain/usr" ];
+  propagatedBuildInputs = [ "${toolchains}/XcodeDefault.xctoolchain" ];
 
-  passthru = { inherit xcbuild; };
+  passthru = {
+    inherit xcbuild;
+    toolchain = "${toolchains}/XcodeDefault.xctoolchain";
+    sdk = "${sdks}/${sdkName}";
+    platform = "${platforms}/${xcodePlatform}.platform";
+  };
 
   preferLocalBuild = true;
 } ''
   mkdir -p $out/bin
 
-  mkdir -p $out/usr
-  ln -s $out/bin $out/usr/bin
+  ln -s $out $out/usr
 
   mkdir -p $out/Library/Xcode
   ln -s ${xcbuild}/Library/Xcode/Specifications $out/Library/Xcode/Specifications
@@ -108,7 +113,8 @@ runCommand "xcodebuild-${xcbuild.version}" {
     --add-flags "DERIVED_DATA_DIR=." \
     --set DEVELOPER_DIR "$out" \
     --set SDKROOT ${sdkName} \
-    --run '[ "$1" = "-version" ] && (echo Xcode ${xcodeVer}; echo Build version ${sdkBuildVersion}) && exit 0'
+    --run '[ "$1" = "-version" ] && (echo Xcode ${xcodeVer}; echo Build version ${sdkBuildVersion}) && exit 0' \
+    --run '[ "$1" = "-license" ] && exit 0'
 
   substitute ${xcode-select} $out/bin/xcode-select \
     --subst-var-by DEVELOPER_DIR $out
