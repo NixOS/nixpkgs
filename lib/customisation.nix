@@ -202,7 +202,7 @@ rec {
           callPackage = self.newScope {};
           overrideScope = g:
             makeScope newScope
-            (lib.fixed-points.extends f g);
+            (lib.fixedPoints.extends f g);
           packages = f;
         };
     in self;
