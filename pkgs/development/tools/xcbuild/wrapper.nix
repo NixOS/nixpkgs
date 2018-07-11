@@ -1,5 +1,4 @@
 { stdenv, lib, buildPackages, makeWrapper, writeText, runCommand
-, bash
 , CoreServices, ImageIO, CoreGraphics
 , targetPlatform
 , xcodePlatform ? targetPlatform.xcodePlatform or "MacOSX"
@@ -37,7 +36,7 @@ let
   '';
 
   xcode-select = writeText "xcode-select" ''
-#!${bash}/bin/sh
+#!${stdenv.shell}
 while [ $# -gt 0 ]; do
    case "$1" in
          -h | --help) ;; # noop
@@ -52,7 +51,7 @@ done
   '';
 
   xcrun = writeText "xcrun" ''
-#!${bash}/bin/sh
+#!${stdenv.shell}
 while [ $# -gt 0 ]; do
    case "$1" in
          --sdk | -sdk) shift ;;
