@@ -17,7 +17,6 @@ perlPackages.buildPerlPackage rec {
 
   meta = with stdenv.lib; {
     description = "Perl extension for renaming multiple files";
-    homepage = http://search.cpan.org/~rmbarker;
     license = licenses.artistic1;
     maintainers = with maintainers; [ peterhoeg ];
   };
