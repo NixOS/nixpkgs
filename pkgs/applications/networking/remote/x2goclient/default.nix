@@ -3,11 +3,11 @@ makeWrapper, qtbase, qtsvg, qtx11extras, qttools, phonon }:
 
 stdenv.mkDerivation rec {
   name = "x2goclient-${version}";
-  version = "4.1.2.0";
+  version = "4.1.2.1";
 
   src = fetchurl {
     url = "https://code.x2go.org/releases/source/x2goclient/${name}.tar.gz";
-    sha256 = "1x1iiyszz6mbrnsqacxzclyx172djq865bw3y83ya7lc9j8a71zn";
+    sha256 = "1bzjzz2m9bqqndnk1p9p522cfapsqgkb0wllvqj9d4ir18grh60w";
   };
 
   buildInputs = [ cups libssh libXpm nxproxy openldap openssh
