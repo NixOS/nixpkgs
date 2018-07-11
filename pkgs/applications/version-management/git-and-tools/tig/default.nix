@@ -33,6 +33,9 @@ stdenv.mkDerivation rec {
     make install-doc
     mkdir -p $out/etc/bash_completion.d/
     cp contrib/tig-completion.bash $out/etc/bash_completion.d/
+    mkdir -p $out/share/zsh/site-functions
+    cp contrib/tig-completion.zsh $out/share/zsh/site-functions/
+    cp contrib/vim.tigrc $out/etc/
 
     wrapProgram $out/bin/tig \
       --prefix PATH ':' "${git}/bin"
