@@ -9,11 +9,11 @@ assert pariSupport -> pari != null;
 
 buildPythonPackage rec {
   pname = "cysignals";
-  version = "1.7.1";
+  version = "1.7.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "15nky8siwlc7s8v23vv4m0mnxa1z6jcs2qfr26m2mkw9j9g2na2j";
+    sha256 = "0rzwd9bjw6bj01xcmimqfim1g0njjyyyal0f93frm1la4hcmq96v";
   };
 
   # explicit check:
@@ -23,6 +23,7 @@ buildPythonPackage rec {
   ];
 
   # currently fails, probably because of formatting changes in gdb 8.0
+  # https://trac.sagemath.org/ticket/24692
   doCheck = false;
 
   preCheck = ''
