@@ -1,5 +1,5 @@
 { stdenv, fetchurl, makeWrapper, jre
-, version ? "1.4" }:
+, version ? "1.5" }:
 
 let
   versionMap = {
@@ -13,6 +13,12 @@ let
       flinkVersion = "1.4.2";
       scalaVersion = "2.11";
       sha256 = "0x3cikys5brin0kx9zr69xfp8k5w6g8141yrrr26ks7gpss2x636";
+      hadoopBundle = "";
+    };
+    "1.5" = {
+      flinkVersion = "1.5.0";
+      scalaVersion = "2.11";
+      sha256 = "0n5023dj8ivmbhqxmb3abmfh3ahb9vmcywq5i0ll5p7xxcw2c1cv";
       hadoopBundle = "";
     };
   };
