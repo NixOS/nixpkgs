@@ -1144,6 +1144,11 @@
     github = "proteansec";
     name = "Dejan Lukan";
   };
+  eliasp = {
+    email = "mail@eliasprobst.eu";
+    github = "eliasp";
+    name = "Elias Probst";
+  };
   elijahcaine = {
     email = "elijahcainemv@gmail.com";
     github = "pop";
