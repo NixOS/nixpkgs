@@ -14408,12 +14408,12 @@ let self = _self // overrides; _self = with self; {
   };
 
   SysVirt = buildPerlModule rec {
-    version = "4.4.0";
+    version = "4.5.0";
     name = "Sys-Virt-${version}";
     src = assert version == pkgs.libvirt.version; pkgs.fetchgit {
       url = git://libvirt.org/libvirt-perl.git;
       rev = "v${version}";
-      sha256 = "1swlbis7mk1dk36badyibi3s467vhrjii0hhvhbsn2n0l6wa49x6";
+      sha256 = "18ns94i29c9x0j50pz9r1vcif6baayz769sa7b51v8kcvam9j52s";
     };
     nativeBuildInputs = [ pkgs.pkgconfig ];
     buildInputs = [ pkgs.libvirt CPANChanges TestPod TestPodCoverage XMLXPath ];
