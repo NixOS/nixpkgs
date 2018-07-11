@@ -10,8 +10,8 @@ neovim:
 
 let
   wrapper = {
-      withPython ? true,  extraPythonPackages ? []
-    , withPython3 ? true,  extraPython3Packages ? []
+      withPython ? true,  extraPythonPackages ? (_: []) /* the function you would have passed to python.withPackages */
+    , withPython3 ? true,  extraPython3Packages ? (_: []) /* the function you would have passed to python.withPackages */
     , withRuby ? true
     , withPyGUI ? false
     , vimAlias ? false
@@ -28,25 +28,25 @@ let
     '';
   };
 
+  /* for compatibility with passing extraPythonPackages as a list; added 2018-07-11 */
+  compatFun = funOrList: (if builtins.isList funOrList then
+    (_: builtins.trace "passing a list as extraPythonPackages to the neovim wrapper is deprecated, pass a function as to python.withPackages instead" funOrList)
+    else funOrList);
+  extraPythonPackagesFun = compatFun extraPythonPackages;
+  extraPython3PackagesFun = compatFun extraPython3Packages;
+
   pluginPythonPackages = if configure == null then [] else builtins.concatLists
     (map ({ pythonDependencies ? [], ...}: pythonDependencies)
          (vimUtils.requiredPlugins configure));
-  pythonEnv = pythonPackages.python.buildEnv.override {
-    extraLibs = (
-        if withPyGUI
-          then [ pythonPackages.neovim_gui ]
-          else [ pythonPackages.neovim ]
-      ) ++ extraPythonPackages ++ pluginPythonPackages;
-    ignoreCollisions = true;
-  };
+  pythonEnv = pythonPackages.python.withPackages(ps:
+        (if withPyGUI then [ ps.neovim_gui ] else [ ps.neovim ])
+        ++ (extraPythonPackagesFun ps) ++ pluginPythonPackages);
 
   pluginPython3Packages = if configure == null then [] else builtins.concatLists
     (map ({ python3Dependencies ? [], ...}: python3Dependencies)
          (vimUtils.requiredPlugins configure));
-  python3Env = python3Packages.python.buildEnv.override {
-    extraLibs = [ python3Packages.neovim ] ++ extraPython3Packages ++ pluginPython3Packages;
-    ignoreCollisions = true;
-  };
+  python3Env = python3Packages.python.withPackages (ps:
+    [ ps.neovim ] ++ (extraPython3PackagesFun ps) ++ pluginPython3Packages);
 
   in
   stdenv.mkDerivation {
