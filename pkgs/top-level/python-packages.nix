@@ -426,6 +426,8 @@ in {
   };
 
   pykerberos = callPackage ../development/python-modules/pykerberos { };
+  
+  pymatgen = callPackage ../development/python-modules/pymatgen { };
 
   pynisher = callPackage ../development/python-modules/pynisher { };
 
