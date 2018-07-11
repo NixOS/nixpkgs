@@ -5944,6 +5944,8 @@ with pkgs;
     libxml2 = libxml2Python;
   };
 
+  xsecurelock = callPackage ../tools/X11/xsecurelock { };
+
   xsel = callPackage ../tools/misc/xsel { };
 
   xsv = callPackage ../tools/text/xsv { };
