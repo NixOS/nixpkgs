@@ -350,6 +350,8 @@ in {
 
   pdfx = callPackage ../development/python-modules/pdfx { };
 
+  phonopy = callPackage ../development/python-modules/phonopy { };
+
   plantuml = callPackage ../tools/misc/plantuml { };
 
   Pmw = callPackage ../development/python-modules/Pmw { };
