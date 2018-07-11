@@ -49,7 +49,7 @@ with pkgs;
     by Hydra.
   '';
 
-  tests = recurseIntoAttrs (callPackages ../test {});
+  tests = callPackages ../test {};
 
   ### Nixpkgs maintainer tools
 
@@ -21955,14 +21955,14 @@ with pkgs;
   apeClex = callPackage ../applications/misc/ape/apeclex.nix { };
 
   # Unix tools
-  unixtools = recurseIntoAttrs (callPackages ./unix-tools.nix { });
+  unixtools = callPackages ./unix-tools.nix { };
   inherit (unixtools) hexdump ps logger eject umount
                       mount wall hostname more sysctl getconf
                       getent locale killall;
 
   fts = if hostPlatform.isMusl then netbsd.fts else null;
 
-  inherit (recurseIntoAttrs (callPackages ../os-specific/bsd { }))
+  inherit (callPackages ../os-specific/bsd { })
           netbsd;
 
   yrd = callPackage ../tools/networking/yrd { };
