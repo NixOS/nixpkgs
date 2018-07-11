@@ -3781,6 +3781,11 @@
     github = "Radvendii";
     name = "Taeer Bar-Yam";
   };
+  taha = {
+    email = "xrcrod@gmail.com";
+    github = "tgharib";
+    name = "Taha Gharib";
+  };
   tailhook = {
     email = "paul@colomiets.name";
     github = "tailhook";
