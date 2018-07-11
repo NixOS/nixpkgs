@@ -16,7 +16,8 @@ let
 
   glibcDynLinker = assert stdenv.isLinux;
     if stdenv.hostPlatform.libc == "glibc" then
-       stdenv.cc.bintools.dynamicLinker
+       # Could be stdenv.cc.bintools.dynamicLinker, keeping as-is to avoid rebuild.
+       ''"$(cat $NIX_CC/nix-support/dynamic-linker)"''
     else
       "${stdenv.lib.getLib glibc}/lib/ld-linux*";
 
