@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "tio-${version}";
-  version = "1.30";
+  version = "1.31";
 
   src = fetchzip {
     url = "https://github.com/tio/tio/archive/v${version}.tar.gz";
-    sha256 = "1cyjy1jg2s32h1jkb99qb79sxkxh92niiyig0vysr14m4xnw01mr";
+    sha256 = "1164ida1vxvm0z76nmkk2d5y9i3wj8rni9sl1mid6c09gi4k2slk";
   };
 
   nativeBuildInputs = [ autoreconfHook ];
