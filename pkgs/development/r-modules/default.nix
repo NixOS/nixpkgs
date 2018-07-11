@@ -306,6 +306,7 @@ let
     RcppCNPy = [ pkgs.zlib.dev ];
     RcppGSL = [ pkgs.gsl_1 ];
     RcppZiggurat = [ pkgs.gsl_1 ];
+    reprex = [ pkgs.which ];
     rgdal = [ pkgs.proj pkgs.gdal ];
     rgeos = [ pkgs.geos ];
     rggobi = [ pkgs.ggobi pkgs.gtk2.dev pkgs.libxml2.dev ];
