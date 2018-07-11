@@ -118,6 +118,13 @@ stdenv.mkDerivation rec {
       url = "https://git.archlinux.org/svntogit/community.git/plain/trunk/sagemath-lcalc-c++11.patch?h=packages/sagemath&id=0e31ae526ab7c6b5c0bfacb3f8b1c4fd490035aa";
       sha256 = "0p5wnvbx65i7cp0bjyaqgp4rly8xgnk12pqwaq3dqby0j2bk6ijb";
     })
+
+    # cddlib 0.94i -> 0.94j
+    (fetchpatch {
+      name = "cddlib-0.94j.patch";
+      url = "https://git.sagemath.org/sage.git/patch/?id=2ab1546b3e21d1d0ab3b4fcd58576848b3a2d888";
+      sha256 = "1c5gnasq7y9xxj762bn79bis0zi8d9bgg7jzlf64ifixsrc5cymb";
+    })
   ];
 
   patches = nixPatches ++ packageUpgradePatches ++ [
