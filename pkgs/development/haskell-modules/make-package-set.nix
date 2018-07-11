@@ -158,7 +158,10 @@ let
       '';
     });
 
-in genAttrs (ghc.passthru.bootPackages or []) (name: ghc."${haskellLib.toOutputName name}") //
+  extractBootPackage = ghc: name:
+    ghc."${haskellLib.toOutputName name}" // { isHaskellLibrary = true; };
+
+in genAttrs (ghc.bootPackages or []) (extractBootPackage ghc) //
 
    package-set { inherit pkgs stdenv callPackage; } self // {
 
