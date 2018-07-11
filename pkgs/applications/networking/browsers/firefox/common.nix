@@ -40,7 +40,8 @@
 , drmSupport ? false
 
 # macOS dependencies
-, xcbuild, CoreMedia
+, xcbuild, CoreMedia, ExceptionHandling, Kerberos, AVFoundation, MediaToolbox
+, CoreLocation, Foundation, libobjc
 
 ## other
 
@@ -97,9 +98,20 @@ stdenv.mkDerivation (rec {
   ++ lib.optionals ffmpegSupport [ gstreamer gst-plugins-base ]
   ++ lib.optional  gtk3Support gtk3
   ++ lib.optional  gssSupport kerberos
-  ++ lib.optionals stdenv.isDarwin [ CoreMedia ];
+  ++ lib.optionals stdenv.isDarwin [ CoreMedia ExceptionHandling Kerberos
+                                     AVFoundation MediaToolbox CoreLocation
+                                     Foundation libobjc ];
 
-  NIX_CFLAGS_COMPILE = "-I${nspr.dev}/include/nspr -I${nss.dev}/include/nss -I${glib.dev}/include/gio-unix-2.0";
+  NIX_CFLAGS_COMPILE = [ "-I${nspr.dev}/include/nspr"
+                         "-I${nss.dev}/include/nss"
+                         "-I${glib.dev}/include/gio-unix-2.0" ]
+                      ++ lib.optional stdenv.isDarwin [
+                         "-isystem ${llvmPackages.libcxx}/include/c++/v1"
+                         "-DMAC_OS_X_VERSION_MAX_ALLOWED=MAC_OS_X_VERSION_10_10" ];
+
+  postPatch = lib.optionalString stdenv.isDarwin ''
+    substituteInPlace js/src/jsmath.cpp --replace 'defined(HAVE___SINCOS)' 0
+  '';
 
   nativeBuildInputs =
     [ autoconf213 which gnused pkgconfig perl python2 cargo rustc ]
@@ -120,10 +132,14 @@ stdenv.mkDerivation (rec {
     make -f client.mk configure-files
     configureScript="$(realpath ./configure)"
   '') + ''
-    cxxLib=$( echo -n ${gcc}/include/c++/* )
-    archLib=$cxxLib/$( ${gcc}/bin/gcc -dumpmachine )
+    export MOZCONFIG=$(pwd)/mozconfig
 
-    test -f layout/style/ServoBindings.toml && sed -i -e '/"-DRUST_BINDGEN"/ a , "-cxx-isystem", "'$cxxLib'", "-isystem", "'$archLib'"' layout/style/ServoBindings.toml
+    # Set C flags for Rust's bindgen program. Unlike ordinary C
+    # compilation, bindgen does not invoke $CC directly. Instead it
+    # uses LLVM's libclang. To make sure all necessary flags are
+    # included we need to look in a few places.
+    # TODO: generalize this process for other use-cases.
+    echo "ac_add_options BINDGEN_CFLAGS='$(< ${stdenv.cc}/nix-support/libc-cflags) $(< ${stdenv.cc}/nix-support/cc-cflags) ${stdenv.cc.default_cxx_stdlib_compile} -idirafter ${llvmPackages.clang.cc}/lib/clang/${lib.getVersion llvmPackages.clang}/include $NIX_CFLAGS_COMPILE'" >> $MOZCONFIG
   '' + lib.optionalString googleAPISupport ''
     # Google API key used by Chromium and Firefox.
     # Note: These are for NixOS/nixpkgs use ONLY. For your own distribution,
