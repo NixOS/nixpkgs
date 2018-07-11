@@ -1065,9 +1065,6 @@ self: super: {
   # https://github.com/haskell-servant/servant-auth/issues/113
   servant-auth-client = dontCheck super.servant-auth-client;
 
-  # Over-specified constraint on X11 ==1.8.*.
-  xmonad = doJailbreak super.xmonad;
-
   # Test has either build errors or fails anyway, depending on the compiler.
   vector-algorithms = dontCheck super.vector-algorithms;
 
