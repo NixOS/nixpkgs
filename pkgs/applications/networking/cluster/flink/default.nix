@@ -4,9 +4,9 @@
 let
   versionMap = {
     "1.3" = {
-      flinkVersion = "1.3.2";
+      flinkVersion = "1.3.3";
       scalaVersion = "2.11";
-      sha256 = "0mf4qz0963bflzidgslvwpdlvj9za9sj20dfybplw9lhd4sf52rp";
+      sha256 = "0gfm48k5adr14gnhqri9cd01i9dprd0nwmnnz3yrpd20nq4ap4qy";
       hadoopBundle = "-hadoop27";
     };
     "1.4" = {
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
   name = "flink-${flinkVersion}";
 
   src = fetchurl {
-    url = "mirror://apache/flink/${name}/${name}-bin-scala_${hadoopBundle}${scalaVersion}.tgz";
+    url = "mirror://apache/flink/${name}/${name}-bin${hadoopBundle}-scala_${scalaVersion}.tgz";
     inherit sha256;
   };
 
