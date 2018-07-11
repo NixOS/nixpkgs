@@ -124,6 +124,22 @@ stdenv.mkDerivation (rec {
     export NIX_LDFLAGS+=" -no_dtrace_dof"
   '' + stdenv.lib.optionalString targetPlatform.useAndroidPrebuilt ''
     sed -i -e '5i ,("armv7a-unknown-linux-androideabi", ("e-m:e-p:32:32-i64:64-v128:64:128-a:0:32-n32-S64", "cortex-a8", ""))' llvm-targets
+  '' + stdenv.lib.optionalString targetPlatform.isMusl ''
+      echo "patching llvm-targets for musl targets..."
+      echo "Cloning these existing '*-linux-gnu*' targets:"
+      grep linux-gnu llvm-targets | sed 's/^/  /'
+      echo "(go go gadget sed)"
+      sed -i 's,\(^.*linux-\)gnu\(.*\)$,\0\n\1musl\2,' llvm-targets
+      echo "llvm-targets now contains these '*-linux-musl*' targets:"
+      grep linux-musl llvm-targets | sed 's/^/  /'
+
+      echo "And now patching to preserve '-musleabi' as done with '-gnueabi'"
+      # (aclocal.m4 is actual source, but patch configure as well since we don't re-gen)
+      for x in configure aclocal.m4; do
+        substituteInPlace $x \
+          --replace '*-android*|*-gnueabi*)' \
+                    '*-android*|*-gnueabi*|*-musleabi*)'
+      done
   '';
 
   # TODO(@Ericson2314): Always pass "--target" and always prefix.
