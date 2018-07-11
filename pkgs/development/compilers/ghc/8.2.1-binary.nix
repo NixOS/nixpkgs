@@ -1,6 +1,6 @@
 { stdenv
 , fetchurl, perl, gcc, llvm_39
-, ncurses5, gmp, libiconv
+, ncurses5, gmp, glibc, libiconv
 }:
 
 # Prebuilt only does native
@@ -13,6 +13,12 @@ let
 
   libEnvVar = stdenv.lib.optionalString stdenv.hostPlatform.isDarwin "DY"
     + "LD_LIBRARY_PATH";
+
+  glibcDynLinker = assert stdenv.isLinux;
+    if stdenv.hostPlatform.libc == "glibc" then
+       stdenv.cc.bintools.dynamicLinker
+    else
+      "${stdenv.lib.getLib glibc}/lib/ld-linux*";
 
 in
 
@@ -95,7 +101,7 @@ stdenv.mkDerivation rec {
       find . -type f -perm -0100 -exec patchelf \
           --replace-needed libncurses${stdenv.lib.optionalString stdenv.is64bit "w"}.so.5 libncurses.so \
           --replace-needed libtinfo.so libtinfo.so.5 \
-          --interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" {} \;
+          --interpreter ${glibcDynLinker} {} \;
 
       paxmark m ./ghc-${version}/ghc/stage2/build/tmp/ghc-stage2
 
