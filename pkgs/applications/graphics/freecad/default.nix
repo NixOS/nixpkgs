@@ -1,5 +1,5 @@
 { stdenv, fetchurl, cmake, coin3d, xercesc, ode, eigen, qt4, opencascade, gts
-, hdf5, vtk, medfile, boost, zlib, python27Packages, swig, gfortran, fetchpatch
+, hdf5, vtk, medfile, zlib, python27Packages, swig, gfortran, fetchpatch
 , soqt, libf2c, makeWrapper, makeDesktopItem
 , mpi ? null }:
 
@@ -16,7 +16,7 @@ in stdenv.mkDerivation rec {
     sha256 = "1yv6abdzlpn4wxy315943xwrnbywxqfgkjib37qwfvbb8y9p60df";
   };
 
-  buildInputs = with pythonPackages; [ cmake coin3d xercesc ode eigen qt4 opencascade gts
+  buildInputs = [ cmake coin3d xercesc ode eigen qt4 opencascade gts
     zlib  swig gfortran soqt libf2c makeWrapper  mpi vtk hdf5 medfile
   ] ++ (with pythonPackages; [
     matplotlib pycollada pyside pysideShiboken pysideTools pivy python boost
