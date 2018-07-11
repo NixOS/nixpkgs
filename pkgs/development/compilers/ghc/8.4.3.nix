@@ -7,7 +7,7 @@
 
 , libffi, libiconv ? null, ncurses
 
-, useLLVM ? !targetPlatform.isx86 || targetPlatform.isMusl
+, useLLVM ? !targetPlatform.isx86 || (targetPlatform.isMusl && hostPlatform != targetPlatform)
 , # LLVM is conceptually a run-time-only depedendency, but for
   # non-x86, we need LLVM to bootstrap later stages, so it becomes a
   # build-time dependency too.
