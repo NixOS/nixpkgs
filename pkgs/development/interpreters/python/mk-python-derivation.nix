@@ -54,7 +54,7 @@
 
 , passthru ? {}
 
-, doCheck ? config.doCheckByDefault or false
+, doCheck ? config.doCheckByDefault
 
 , ... } @ attrs:
 

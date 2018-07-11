@@ -45,13 +45,8 @@ let # Rename the function arguments
 in let
   lib = import ../../lib;
 
-  # Allow both:
-  # { /* the config */ } and
-  # { pkgs, ... } : { /* the config */ }
-  config =
-    if lib.isFunction configExpr
-    then configExpr { inherit pkgs; }
-    else configExpr;
+  # Build a config attribute set with builtin defaults.
+  config = import ./config.nix { inherit pkgs lib configExpr; };
 
   # From a minimum of `system` or `config` (actually a target triple, *not*
   # nixpkgs configuration), infer the other one and platform as needed.

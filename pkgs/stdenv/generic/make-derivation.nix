@@ -51,11 +51,11 @@ rec {
 
     # TODO(@Ericson2314): Make unconditional / resolve #33599
     # Check phase
-    , doCheck ? config.doCheckByDefault or false
+    , doCheck ? config.doCheckByDefault
 
     # TODO(@Ericson2314): Make unconditional / resolve #33599
     # InstallCheck phase
-    , doInstallCheck ? config.doCheckByDefault or false
+    , doInstallCheck ? config.doCheckByDefault
 
     , # TODO(@Ericson2314): Make always true and remove
       strictDeps ? stdenv.hostPlatform != stdenv.buildPlatform
@@ -272,7 +272,7 @@ rec {
         # Expose the result of the checks for everyone to see.
         } // {
           available = validity.valid
-                   && (if config.checkMetaRecursively or false
+                   && (if config.checkMetaRecursively
                        then lib.all (d: d.meta.available or true) references
                        else true);
         };
