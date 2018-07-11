@@ -34,7 +34,7 @@ buildPerlPackage {
       ConfigGitLike DevelStackTrace TreeDAGNode ClassObservable ClassFactory TimeDate ConfigAny
       CGIFast ClassISA YAML YAMLLibYAML AuthenSASL TextCSV FileFindRulePerl IODigest ]
     ++ stdenv.lib.optionals extraDependencies3
-    [ # dependencies taken from http://search.cpan.org/~alech/Bundle-OpenXPKI-0.06/lib/Bundle/OpenXPKI.pm
+    [ # dependencies taken from https://metacpan.org/pod/release/ALECH/Bundle-OpenXPKI-0.06/lib/Bundle/OpenXPKI.pm
       AttributeHandlers AttributeParamsValidate AutoLoader BC CGI CPAN CacheCache ClassClassgenclassgen
       ClassContainer ClassDataInheritable ClassSingleton ConvertASN1 DBDSQLite DBIxHTMLViewLATEST
       DBFile DataPage DataSpreadPagination DateTimeLocale DateTimeTimeZone DevelPPPort DevelSelfStubber
