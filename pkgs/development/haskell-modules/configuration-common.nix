@@ -1091,4 +1091,8 @@ self: super: {
   # Break out of "aeson <1.3, temporary <1.3".
   stack = doJailbreak super.stack;
 
+  # https://github.com/pikajude/stylish-cabal/issues/11
+  stylish-cabal = super.stylish-cabal.override { hspec = self.hspec_2_4_8; hspec-core = self.hspec-core_2_4_8; };
+  hspec_2_4_8 = super.hspec_2_4_8.override { hspec-core = self.hspec-core_2_4_8; hspec-discover = self.hspec-discover_2_4_8; };
+
 }
