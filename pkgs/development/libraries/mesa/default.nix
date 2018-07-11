@@ -6,9 +6,6 @@
 , libglvnd
 , grsecEnabled ? false
 , enableRadv ? true
-# Texture floats are patented, see docs/patents.txt, so we don't enable them for full Mesa.
-# It's overridden for mesa_drivers.
-, enableTextureFloats ? false
 , galliumDrivers ? null
 , driDrivers ? null
 , vulkanDrivers ? null
@@ -115,7 +112,6 @@ let self = stdenv.mkDerivation {
       ("--with-vulkan-drivers=" +
         builtins.concatStringsSep "," vulkanDrivers))
   ++ [
-    (enableFeature enableTextureFloats "texture-float")
     (enableFeature grsecEnabled "glx-rts")
     (enableFeature stdenv.isLinux "dri3")
     (enableFeature stdenv.isLinux "nine") # Direct3D in Wine
