@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, fetchzip, python3Packages
+{ stdenv, lib, fetchurl, fetchzip, fetchpatch, python3Packages
 , makeWrapper, wrapGAppsHook, qtbase, glib-networking
 , asciidoc, docbook_xml_dtd_45, docbook_xsl, libxml2
 , libxslt, gst_all_1 ? null
@@ -36,6 +36,13 @@ in python3Packages.buildPythonApplication rec {
   src = fetchurl {
     url = "https://github.com/qutebrowser/qutebrowser/releases/download/v${version}/${name}.tar.gz";
     sha256 = "01lrbkddm4wagx4hq6cz5qwvb8q8nlz0xa35k317gvr3pmnvgjk8";
+  };
+
+  patches = fetchpatch {
+    name = "CVE-2018-10895.patch";
+    url = https://github.com/qutebrowser/qutebrowser/commit/c2ff32d92ba9bf40ff53498ee04a4124d4993c85.patch;
+    excludes = [ "tests/*" ];
+    sha256 = "0mdqa9w1p6cmli6976v4wi0sw9r4p5prkj7lzfd1877wk11c9c73";
   };
 
   # Needs tox
