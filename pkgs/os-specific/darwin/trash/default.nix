@@ -1,12 +1,12 @@
 { stdenv, fetchFromGitHub, frameworks, perl } :
 stdenv.mkDerivation rec {
-  version = "0.9.0";
+  version = "0.9.1";
   name = "trash-${version}";
 
   src = fetchFromGitHub {
     owner = "ali-rantakari";
     repo = "trash";
-    rev = "f68ad25a02e24cc58eb8ef9a493d6dc0122bcd8f";
+    rev = "v${version}";
     sha256 = "0ylkf7jxfy1pj7i1s48w28kzqjdfd57m2pw0jycsgcj5bkzwll41";
   };
 
