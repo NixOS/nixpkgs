@@ -12,17 +12,6 @@ buildGoPackage rec {
   # Fixes Cgo related build failures (see https://github.com/NixOS/nixpkgs/issues/25959 )
   hardeningDisable = [ "fortify" ];
 
-  # Only install binaries in $out, source is not interesting and takes ~50M
-  outputs = [ "out" ];
-  preFixup = ''
-    export bin="''${out}"
-  '';
-  installPhase = ''
-    mkdir -p $out/bin $out
-    dir="$NIX_BUILD_TOP/go/bin"
-    [ -e "$dir" ] && cp -r $dir $out
-  '';
-
   src = fetchFromGitHub {
     owner = "ethereum";
     repo = "go-ethereum";
