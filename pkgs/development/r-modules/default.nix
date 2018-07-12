@@ -264,7 +264,7 @@ let
     graphscan = [ pkgs.gsl_1 ];
     gsl = [ pkgs.gsl_1 ];
     h5 = [ pkgs.hdf5-cpp pkgs.which ];
-    haven = [ pkgs.libiconv ];
+    haven = [ pkgs.libiconv pkgs.zlib.dev ];
     h5vc = [ pkgs.zlib.dev ];
     HiCseg = [ pkgs.gsl_1 ];
     imager = [ pkgs.x11 ];
