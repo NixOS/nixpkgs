@@ -18246,6 +18246,8 @@ with pkgs;
     inherit (xfce) exo;
   };
 
+  lightdm-web-greeter = python3Packages.callPackage ../applications/display-managers/lightdm-web-greeter { };
+
   lightdm-mini-greeter = callPackage ../applications/display-managers/lightdm-mini-greeter { };
 
   slic3r = callPackage ../applications/misc/slic3r { };
