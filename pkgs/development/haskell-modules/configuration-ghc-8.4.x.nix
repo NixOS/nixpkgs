@@ -51,6 +51,10 @@ self: super: {
   # https://github.com/xmonad/xmonad-contrib/issues/235
   xmonad-contrib = doJailbreak (appendPatch super.xmonad-contrib ./patches/xmonad-contrib-ghc-8.4.1-fix.patch);
 
+  # Our xmonad claims that it's version 0.14, which is outside of this
+  # package's version constraints.
+  xmonad-extras = doJailbreak super.xmonad-extras;
+
   # This package desperately needs a maintainer.
   xmobar = super.xmobar.overrideScope (self: super: {
     hinotify = self.hinotify_0_3_9;  # https://github.com/jaor/xmobar/issues/356
