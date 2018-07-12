@@ -26,9 +26,11 @@ stdenv.mkDerivation rec {
 
   # Includes a fix for the embedded soname being libyices.so.2.5, but
   # only installing the libyices.so.2.5.x file.
-  installPhase = ''
+  installPhase = let
+    ver_XdotY = builtins.concatStringsSep "." (stdenv.lib.take 2 (builtins.splitVersion version));
+  in ''
       make install LDCONFIG=true
-      (cd $out/lib && ln -s -f libyices.so.${version} libyices.so.2.5)
+      (cd $out/lib && ln -s -f libyices.so.${version} libyices.so.${ver_XdotY}
   '';
 
   meta = with stdenv.lib; {
