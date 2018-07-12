@@ -3213,7 +3213,7 @@ let
 
   };
 
-} // lib.optionalAttrs (config.skipAliases or false == false) (with self; {
+} // lib.optionalAttrs (config.allowAliases or true) (with self; {
 
   # aliasess
   airline             = vim-airline;
