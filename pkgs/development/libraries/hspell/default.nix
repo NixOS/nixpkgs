@@ -8,6 +8,8 @@ stdenv.mkDerivation rec {
     version = "1.1";
   };
 
+  PERL_USE_UNSAFE_INC = stdenv.lib.optionalString (stdenv.lib.versionAtLeast (stdenv.lib.getVersion perl) "5.26") "1";
+
   src = fetchurl {
     url = "${meta.homepage}${name}.tar.gz";
     sha256 = "08x7rigq5pa1pfpl30qp353hbdkpadr1zc49slpczhsn0sg36pd6";
@@ -21,6 +23,5 @@ stdenv.mkDerivation rec {
     homepage = http://hspell.ivrix.org.il/;
     platforms = stdenv.lib.platforms.all;
     maintainers = [ ];
-# Note that I don't speak hebrew, so I can only fix compile problems
   };
 }
