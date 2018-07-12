@@ -1676,11 +1676,11 @@ let
   }) // {inherit ;};
 
   xeyes = (mkDerivation "xeyes" {
-    name = "xeyes-1.1.1";
+    name = "xeyes-1.1.2";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/app/xeyes-1.1.1.tar.bz2;
-      sha256 = "08d5x2kar5kg4yammw6hhk10iva6jmh8cqq176a1z7nm1il9hplp";
+      url = mirror://xorg/individual/app/xeyes-1.1.2.tar.bz2;
+      sha256 = "0lq5j7fryx1wn998jq6h3icz1h6pqrsbs3adskjzjyhn5l6yrg2p";
     };
     nativeBuildInputs = [ pkgconfig ];
     buildInputs = [ libX11 libXext libXmu libXrender libXt ];
