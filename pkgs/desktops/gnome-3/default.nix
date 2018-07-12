@@ -391,7 +391,7 @@ lib.makeScope pkgs.newScope (self: with self; {
 
   gnome-packagekit = callPackage ./misc/gnome-packagekit { };
 
-} // lib.optionalAttrs (config.skipAliases or false == false) {
+} // lib.optionalAttrs (config.allowAliases or true) {
 #### Legacy aliases
 
   evolution_data_server = evolution-data-server; # added 2018-02-25
