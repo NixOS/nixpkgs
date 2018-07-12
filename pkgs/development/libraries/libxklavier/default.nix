@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, pkgconfig, automake, autoconf, libtool, which, gtk-doc, intltool, xkeyboard_config, libxml2, xorg
+{ stdenv, fetchgit, autoreconfHook, pkgconfig, gtk-doc, xkeyboard_config, libxml2, xorg, docbook_xsl
 , glib, isocodes, gobjectIntrospection }:
 
 let
@@ -13,23 +13,26 @@ stdenv.mkDerivation rec {
     sha256 = "1w1x5mrgly2ldiw3q2r6y620zgd89gk7n90ja46775lhaswxzv7a";
   };
 
-  outputs = [ "out" "dev" ];
+  outputs = [ "out" "dev" "devdoc" ];
 
   # TODO: enable xmodmap support, needs xmodmap DB
   propagatedBuildInputs = with xorg; [ libX11 libXi xkeyboard_config libxml2 libICE glib libxkbfile isocodes ];
 
-  nativeBuildInputs = [ automake autoconf libtool intltool pkgconfig which gtk-doc ];
+  nativeBuildInputs = [ autoreconfHook pkgconfig gtk-doc docbook_xsl ];
 
   buildInputs = [ gobjectIntrospection ];
 
-  preConfigure = ''
-    ./autogen.sh \
-      --with-xkb-base=${xkeyboard_config}/etc/X11/xkb \
-      --with-xkb-bin-base=${xorg.xkbcomp}/bin \
-      --disable-xmodmap-support \
-      --disable-static \
-      --enable-gtk-doc
+  preAutoreconf = ''
+    export NOCONFIGURE=1
+    gtkdocize
   '';
+
+  configureFlags = [
+    "--with-xkb-base=${xkeyboard_config}/etc/X11/xkb"
+    "--with-xkb-bin-base=${xorg.xkbcomp}/bin"
+    "--disable-xmodmap-support"
+    "--enable-gtk-doc"
+  ];
 
   meta = with stdenv.lib; {
     description = "Library providing high-level API for X Keyboard Extension known as XKB";
