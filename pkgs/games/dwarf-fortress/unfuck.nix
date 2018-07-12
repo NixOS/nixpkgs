@@ -1,18 +1,27 @@
-{ stdenv, fetchFromGitHub, cmake
+{ stdenv, lib, fetchFromGitHub, cmake
 , libGL, libSM, SDL, SDL_image, SDL_ttf, glew, openalSoft
 , ncurses, glib, gtk2, libsndfile, zlib
+, dfVersion
 }:
 
-let dfVersion = "0.44.12"; in
+with lib;
+
+let
+  unfuck-releases = builtins.fromJSON (builtins.readFile ./unfuck.json);
+
+  release = if hasAttr dfVersion unfuck-releases
+            then getAttr dfVersion unfuck-releases
+            else throw "[unfuck] Unknown Dwarf Fortress version: ${dfVersion}";
+in
 
 stdenv.mkDerivation {
-  name = "dwarf_fortress_unfuck-${dfVersion}";
+  name = "dwarf_fortress_unfuck-${release.unfuckRelease}";
 
   src = fetchFromGitHub {
     owner = "svenstaro";
     repo = "dwarf_fortress_unfuck";
-    rev = dfVersion;
-    sha256 = "1kszkb1d1vll8p04ja41nangsaxb5lv4p3xh2jhmsmipfixw7nvz";
+    rev = release.unfuckRelease;
+    sha256 = release.sha256;
   };
 
   cmakeFlags = [
@@ -20,22 +29,11 @@ stdenv.mkDerivation {
     "-DGTK2_GDKCONFIG_INCLUDE_DIR=${gtk2.out}/lib/gtk-2.0/include"
   ];
 
-  makeFlags = [
-    ''CFLAGS="-fkeep-inline-functions"''
-    ''CXXFLAGS="-fkeep-inline-functions"''
-  ];
-
   nativeBuildInputs = [ cmake ];
   buildInputs = [
     libSM SDL SDL_image SDL_ttf glew openalSoft
     ncurses gtk2 libsndfile zlib libGL
   ];
-
-  postPatch = ''
-    substituteInPlace CMakeLists.txt --replace \
-      'set(CMAKE_BUILD_TYPE Release)' \
-      'set(CMAKE_BUILD_TYPE Debug)'
-  '';
 
   # Don't strip unused symbols; dfhack hooks into some of them.
   dontStrip = true;
@@ -56,6 +54,6 @@ stdenv.mkDerivation {
     homepage = https://github.com/svenstaro/dwarf_fortress_unfuck;
     license = licenses.free;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ abbradar ];
+    maintainers = with maintainers; [ abbradar numinit ];
   };
 }

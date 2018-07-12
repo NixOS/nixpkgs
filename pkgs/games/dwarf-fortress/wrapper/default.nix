@@ -1,4 +1,5 @@
-{ stdenv, lib, buildEnv, dwarf-fortress, substituteAll
+{ stdenv, lib, buildEnv, substituteAll
+, dwarf-fortress, dwarf-fortress-unfuck
 , enableDFHack ? false, dfhack
 , enableSoundSense ? false, soundSense, jdk
 , enableStoneSense ? false
@@ -37,33 +38,11 @@ let
     paths = themePkg ++ pkgs;
     pathsToLink = [ "/" "/hack" "/hack/scripts" ];
     ignoreCollisions = true;
-
-    postBuild = ''
-      # De-symlink init.txt
-      cp $out/data/init/init.txt init.txt
-      rm $out/data/init/init.txt
-      mv init.txt $out/data/init/init.txt
-    '' + lib.optionalString enableDFHack ''
-      rm $out/hack/symbols.xml
-      substitute ${dfhack_}/hack/symbols.xml $out/hack/symbols.xml \
-        --replace $(cat ${dwarf-fortress}/hash.md5.orig) \
-                  $(cat ${dwarf-fortress}/hash.md5)
-    '' + lib.optionalString enableTWBT ''
-      substituteInPlace $out/data/init/init.txt \
-        --replace '[PRINT_MODE:2D]' '[PRINT_MODE:TWBT]'
-    '' + ''
-      substituteInPlace $out/data/init/init.txt \
-        --replace '[INTRO:YES]' '[INTRO:${unBool enableIntro}]' \
-        --replace '[TRUETYPE:YES]' '[TRUETYPE:${unBool enableTruetype}]' \
-        --replace '[FPS:NO]' '[FPS:${unBool enableFPS}]'
-    '';
   };
 in
 
 stdenv.mkDerivation rec {
   name = "dwarf-fortress-${dwarf-fortress.dfVersion}";
-
-  compatible = lib.all (x: assert (x.dfVersion == dwarf-fortress.dfVersion); true) pkgs;
 
   dfInit = substituteAll {
     name = "dwarf-fortress-init";
@@ -97,6 +76,27 @@ stdenv.mkDerivation rec {
       --subst-var-by jre ${jdk.jre} \
       --subst-var dfInit
     chmod 755 $out/bin/soundsense
+  '';
+
+  postBuild = ''
+    # De-symlink init.txt
+    cp $out/data/init/init.txt init.txt
+    rm $out/data/init/init.txt
+    mv init.txt $out/data/init/init.txt
+  '' + lib.optionalString enableDFHack ''
+    rm $out/hack/symbols.xml
+    echo "[$out/hack/symbols.xml] $(cat ${dwarf-fortress}/hash.md5.orig) => $(cat ${dwarf-fortress}/hash.md5)"
+    substitute ${dfhack_}/hack/symbols.xml $out/hack/symbols.xml \
+      --replace $(cat ${dwarf-fortress}/hash.md5.orig) \
+                $(cat ${dwarf-fortress}/hash.md5)
+  '' + lib.optionalString enableTWBT ''
+    substituteInPlace $out/data/init/init.txt \
+      --replace '[PRINT_MODE:2D]' '[PRINT_MODE:TWBT]'
+  '' + ''
+    substituteInPlace $out/data/init/init.txt \
+      --replace '[INTRO:YES]' '[INTRO:${unBool enableIntro}]' \
+      --replace '[TRUETYPE:YES]' '[TRUETYPE:${unBool enableTruetype}]' \
+      --replace '[FPS:NO]' '[FPS:${unBool enableFPS}]'
   '';
 
   preferLocalBuild = true;

@@ -5,7 +5,8 @@
 # This directory menaces with spikes of Nix code. It is terrifying.
 #
 # If this is your first time here, you should probably install the dwarf-fortress-full package,
-# for instance with `environment.systempackages = [ pkgs.dwarf-fortress.dwarf-fortress-full ];`.
+# for instance with:
+# `environment.systemPackages = [ pkgs.dwarf-fortress-packages.dwarf-fortress-full ];`
 #
 # You can adjust its settings by using override, or compile your own package by
 # using the other packages here. Take a look at lazy-pack.nix to get an idea of
@@ -24,11 +25,36 @@ let
   callPackage = pkgs.newScope self;
 
   df-games = lib.listToAttrs (map (dfVersion: {
-    name = "dwarf-fortress_${lib.replaceStrings ["."] ["_"] dfVersion}";
-    value = callPackage ./wrapper {
-      inherit (self) themes;
-      dwarf-fortress = callPackage ./game.nix { inherit dfVersion; };
-    };
+    name = "dwarf-fortress_${lib.replaceStrings ["."] ["_"] dfVersion}"; 
+    value =
+      let
+        # I can't believe this syntax works. Spikes of Nix code indeed...
+        dwarf-fortress = callPackage ./game.nix {
+          inherit dfVersion;
+          inherit dwarf-fortress-unfuck;
+        };
+
+        # unfuck is linux-only right now, we will only use it there.
+        dwarf-fortress-unfuck = if stdenv.isLinux then callPackage ./unfuck.nix { inherit dfVersion; }
+                                else null;
+
+        twbt = callPackage ./twbt { inherit dfVersion; };
+
+        dfhack = callPackage ./dfhack {
+          inherit (pkgs.perlPackages) XMLLibXML XMLLibXSLT;
+          inherit dfVersion;
+          inherit twbt;
+          stdenv = gccStdenv;
+        };
+      in
+      callPackage ./wrapper {
+        inherit (self) themes;
+
+        dwarf-fortress = dwarf-fortress;
+        dwarf-fortress-unfuck = dwarf-fortress-unfuck;
+        twbt = twbt;
+        dfhack = dfhack;
+      };
   }) (lib.attrNames self.df-hashes));
 
   self = rec {
@@ -37,16 +63,7 @@ let
 
     dwarf-fortress-full = callPackage ./lazy-pack.nix { };
 
-    dfhack = callPackage ./dfhack {
-      inherit (pkgs.perlPackages) XMLLibXML XMLLibXSLT;
-      stdenv = gccStdenv;
-    };
-
     soundSense = callPackage ./soundsense.nix { };
-
-    # unfuck is linux-only right now, we will only use it there.
-    dwarf-fortress-unfuck = if stdenv.isLinux then callPackage ./unfuck.nix { }
-                            else null;
 
     dwarf-therapist = callPackage ./dwarf-therapist/wrapper.nix {
       inherit (dwarf-fortress) dwarf-fortress;
@@ -59,8 +76,9 @@ let
 
     legends-browser = callPackage ./legends-browser {};
 
-    twbt = callPackage ./twbt {};
-    themes = recurseIntoAttrs (callPackage ./themes { });
+    themes = recurseIntoAttrs (callPackage ./themes {
+      stdenv = stdenvNoCC;
+    });
 
     # aliases
     phoebus-theme = themes.phoebus;

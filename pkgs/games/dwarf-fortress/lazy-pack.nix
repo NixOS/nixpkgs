@@ -6,7 +6,7 @@
 , enableDFHack ? stdenvNoCC.isLinux
 , enableTWBT ? enableDFHack
 , enableSoundSense ? true
-, enableStoneSense ? false  # StoneSense is currently broken.
+, enableStoneSense ? true
 , enableDwarfTherapist ? true, dwarf-therapist
 , enableLegendsBrowser ? true, legends-browser
 , theme ? themes.phoebus

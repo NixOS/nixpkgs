@@ -3,14 +3,25 @@
 , enableStoneSense ? false,  allegro5, libGLU_combined
 , enableTWBT ? true, twbt
 , SDL
+, dfVersion
 }:
 
+with lib;
+
 let
-  dfVersion = "0.44.12";
-  version = "${dfVersion}-r1";
+  dfhack-releases = builtins.fromJSON (builtins.readFile ./dfhack.json);
+
+  release = if hasAttr dfVersion dfhack-releases
+            then getAttr dfVersion dfhack-releases
+            else throw "[DFHack] Unsupported Dwarf Fortress version: ${dfVersion}";
+
+  version = release.dfHackRelease;
+
+  warning = if release.prerelease then builtins.trace "[DFHack] Version ${version} is a prerelease. Careful!"
+                                  else null;
 
   # revision of library/xml submodule
-  xmlRev = "23500e4e9bd1885365d0a2ef1746c321c1dd5094";
+  xmlRev = release.xmlRev;
 
   arch =
     if stdenv.hostPlatform.system == "x86_64-linux" then "64"
@@ -41,8 +52,8 @@ let
     src = fetchFromGitHub {
       owner = "DFHack";
       repo = "dfhack";
-      sha256 = "0j03lq6j6w378z6cvm7jspxc7hhrqm8jaszlq0mzfvap0k13fgyy";
-      rev = version;
+      rev = release.dfHackRelease;
+      sha256 = release.sha256;
       fetchSubmodules = true;
     };
 
