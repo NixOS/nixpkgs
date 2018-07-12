@@ -31,8 +31,9 @@ stdenv.mkDerivation rec {
   installPhase = ''
     make install
     make install-doc
-    mkdir -p $out/etc/bash_completion.d/
-    cp contrib/tig-completion.bash $out/etc/bash_completion.d/
+    install -D contrib/tig-completion.bash $out/etc/bash_completion.d/tig-completion.bash
+    install -D contrib/tig-completion.zsh $out/share/zsh/site-functions/_tig
+    cp contrib/vim.tigrc $out/etc/
 
     wrapProgram $out/bin/tig \
       --prefix PATH ':' "${git}/bin"
