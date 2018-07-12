@@ -1,6 +1,8 @@
 { stdenv, fetchzip, pkgconfig, ncurses, libev, jbuilder
-, ocaml, findlib, camlp4, cppo
+, ocaml, findlib, cppo
 , ocaml-migrate-parsetree, ppx_tools_versioned, result
+, withP4 ? !stdenv.lib.versionAtLeast ocaml.version "4.07"
+, camlp4 ? null
 }:
 
 stdenv.mkDerivation rec {
@@ -13,12 +15,13 @@ stdenv.mkDerivation rec {
   };
 
   preConfigure = ''
-    ocaml src/util/configure.ml -use-libev true -use-camlp4 true
+    ocaml src/util/configure.ml -use-libev true -use-camlp4 ${if withP4 then "true" else "false"}
   '';
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ ncurses ocaml findlib jbuilder camlp4 cppo
-    ocaml-migrate-parsetree ppx_tools_versioned ];
+  buildInputs = [ ncurses ocaml findlib jbuilder cppo
+    ocaml-migrate-parsetree ppx_tools_versioned ]
+  ++ stdenv.lib.optional withP4 camlp4;
   propagatedBuildInputs = [ libev result ];
 
   installPhase = ''
