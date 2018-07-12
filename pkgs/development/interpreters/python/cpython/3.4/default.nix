@@ -1,6 +1,7 @@
 { stdenv, fetchurl, fetchpatch
 , bzip2
 , expat
+, llvm
 , libffi
 , gdbm
 , lzma
@@ -36,8 +37,9 @@ let
 
   buildInputs = filter (p: p != null) [
     zlib bzip2 expat lzma libffi gdbm sqlite readline ncurses openssl ]
-    ++ optionals x11Support [ tcl tk libX11 xproto ]
-    ++ optionals stdenv.isDarwin [ CF configd ];
+    ++ optional stdenv.cc.isClang llvm
+    ++ optionals stdenv.isDarwin [ CF configd ]
+    ++ optionals x11Support [ tcl tk libX11 xproto ];
 
   hasDistutilsCxxPatch = !(stdenv.cc.isGNU or false);
 
@@ -103,6 +105,7 @@ in stdenv.mkDerivation {
   LIBS="${optionalString (!stdenv.isDarwin) "-lcrypt"} ${optionalString (ncurses != null) "-lncurses"}";
 
   configureFlags = [
+    "--enable-optimizations"
     "--enable-shared"
     "--with-threads"
     "--without-ensurepip"
