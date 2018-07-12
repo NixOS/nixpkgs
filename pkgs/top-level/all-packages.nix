@@ -1948,7 +1948,7 @@ with pkgs;
 
   daq = callPackage ../applications/networking/ids/daq { };
 
-  dar = callPackage ../tools/archivers/dar { };
+  dar = callPackage ../tools/backup/dar { };
 
   darkhttpd = callPackage ../servers/http/darkhttpd { };
 
