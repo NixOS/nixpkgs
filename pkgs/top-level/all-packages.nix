@@ -4916,6 +4916,8 @@ with pkgs;
 
   s3cmd = callPackage ../tools/networking/s3cmd { };
 
+  s4cmd = callPackage ../tools/networking/s4cmd { };
+
   s3gof3r = callPackage ../tools/networking/s3gof3r { };
 
   s6Dns = callPackage ../tools/networking/s6-dns { };
