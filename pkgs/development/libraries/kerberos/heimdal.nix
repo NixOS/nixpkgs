@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     sha256 = "1j38wjj4k0q8vx168k3d3k0fwa8j1q5q8f2688nnx1b9qgjd6w1d";
   };
 
-  outputs = [ "out" "bin" "dev" "man" "info" ];
+  outputs = [ "out" "dev" "man" "info" ];
 
   patches = [ ./heimdal-make-missing-headers.patch ];
 
@@ -53,9 +53,9 @@ stdenv.mkDerivation rec {
 
   preConfigure = ''
     configureFlagsArray+=(
-      "--bindir=$out/bin" # Put binaries to $out, then move them to $bin,
-                          # otherwise we go a cyclic dependecny
+      "--bindir=$out/bin"
       "--sbindir=$out/sbin"
+      "--libexecdir=$out/libexec/heimdal"
       "--mandir=$man/share/man"
       "--infodir=$man/share/info"
       "--includedir=$dev/include")
@@ -75,18 +75,12 @@ stdenv.mkDerivation rec {
     # Do we need it?
     rm $out/bin/su
 
-    # Doesn't succeed with --libexec=$out/sbin, so
     mkdir -p $dev/bin
-    mkdir -p $bin/{,s}bin
-    mv "$out/libexec/heimdal/"* $dev/bin/
-    rmdir $out/libexec/heimdal
-    mv "$out/libexec/"* $bin/sbin/
-    rmdir $out/libexec
+    mv $out/bin/krb5-config $dev/bin/
 
-    mkdir -p $dev/bin && mv $out/bin/krb5-config $dev/bin/
-
-    # Move remaining binaries to $bin
-    mv $out/bin/* $bin/bin/
+    # asn1 compilers, move them to $dev
+    mv $out/libexec/heimdal/heimdal/* $dev/bin
+    rmdir $out/libexec/heimdal/heimdal
   '';
 
   # Issues with hydra
