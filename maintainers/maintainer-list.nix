@@ -97,6 +97,11 @@
     github = "FireyFly";
     name = "Jonas Höglund";
   };
+  fragamus = {
+    email = "innovative.engineer@gmail.com";
+    github = "fragamus";
+    name = "Michael Gough";
+  };
   Fresheyeball = {
     email = "fresheyeball@gmail.com";
     github = "fresheyeball";
