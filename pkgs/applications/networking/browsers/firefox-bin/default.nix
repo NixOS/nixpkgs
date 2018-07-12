@@ -19,9 +19,11 @@
 , libXScrnSaver
 , libxcb
 , libXcomposite
+, libXcursor
 , libXdamage
 , libXext
 , libXfixes
+, libXi
 , libXinerama
 , libXrender
 , libXt
@@ -104,10 +106,12 @@ stdenv.mkDerivation {
       libX11
       libXScrnSaver
       libXcomposite
+      libXcursor
       libxcb
       libXdamage
       libXext
       libXfixes
+      libXi
       libXinerama
       libXrender
       libXt
