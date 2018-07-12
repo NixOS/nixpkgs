@@ -4,7 +4,6 @@
 , llvmPackages, libffi, libomxil-bellagio, libva-minimal
 , libelf, libvdpau, valgrind-light, python2
 , libglvnd
-, grsecEnabled ? false
 , enableRadv ? true
 , galliumDrivers ? null
 , driDrivers ? null
@@ -87,7 +86,6 @@ let self = stdenv.mkDerivation {
   #  revive ./dricore-gallium.patch when it gets ported (from Ubuntu), as it saved
   #  ~35 MB in $drivers; watch https://launchpad.net/ubuntu/+source/mesa/+changelog
   patches = [
-    ./glx_ro_text_segm.patch # fix for grsecurity/PaX
     ./symlink-drivers.patch
     ./missing-includes.patch # dev_t needs sys/stat.h, time_t needs time.h, etc.-- fixes build w/musl
   ];
@@ -112,7 +110,6 @@ let self = stdenv.mkDerivation {
       ("--with-vulkan-drivers=" +
         builtins.concatStringsSep "," vulkanDrivers))
   ++ [
-    (enableFeature grsecEnabled "glx-rts")
     (enableFeature stdenv.isLinux "dri3")
     (enableFeature stdenv.isLinux "nine") # Direct3D in Wine
     "--enable-libglvnd"
@@ -131,7 +128,6 @@ let self = stdenv.mkDerivation {
     "--enable-xvmc"
     "--enable-vdpau"
     "--enable-shared-glapi"
-    "--enable-sysfs"
     "--enable-llvm-shared-libs"
     "--enable-omx-bellagio"
     "--enable-va"
