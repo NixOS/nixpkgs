@@ -6645,20 +6645,7 @@ with pkgs;
   icedtea_web = icedtea8_web;
 
   idrisPackages = callPackage ../development/idris-modules {
-
-    idris-no-deps =
-      let
-        inherit (self.haskell) lib;
-        haskellPackages = self.haskellPackages.override {
-          overrides = self: super: {
-            binary = lib.dontCheck self.binary_0_8_5_1;
-            parsers = lib.dontCheck super.parsers;
-            semigroupoids = lib.dontCheck super.semigroupoids;
-            trifecta = lib.dontCheck super.trifecta;
-          };
-        };
-      in
-        haskellPackages.idris;
+    idris-no-deps = haskellPackages.idris;
   };
 
   idris = idrisPackages.with-packages [ idrisPackages.base ] ;
