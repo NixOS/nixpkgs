@@ -1095,4 +1095,9 @@ self: super: {
   stylish-cabal = super.stylish-cabal.override { hspec = self.hspec_2_4_8; hspec-core = self.hspec-core_2_4_8; };
   hspec_2_4_8 = super.hspec_2_4_8.override { hspec-core = self.hspec-core_2_4_8; hspec-discover = self.hspec-discover_2_4_8; };
 
+  # musl fixes
+  # dontCheck: use of non-standard strptime "%s" which musl doesn't support; only used in test
+  unix-time = if pkgs.stdenv.hostPlatform.isMusl then dontCheck super.unix-time else super.unix-time;
+  # dontCheck: printf double rounding behavior
+  prettyprinter = if pkgs.stdenv.hostPlatform.isMusl then dontCheck super.prettyprinter else super.prettyprinter;
 }
