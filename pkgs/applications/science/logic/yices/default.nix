@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
     ver_XdotY = builtins.concatStringsSep "." (stdenv.lib.take 2 (builtins.splitVersion version));
   in ''
       make install LDCONFIG=true
-      (cd $out/lib && ln -s -f libyices.so.${version} libyices.so.${ver_XdotY}
+      ln -sfr $out/lib/libyices.so.{${version},${ver_XdotY}}
   '';
 
   meta = with stdenv.lib; {
