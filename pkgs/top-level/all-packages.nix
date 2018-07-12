@@ -19214,6 +19214,8 @@ with pkgs;
 
   xsd = callPackage ../development/libraries/xsd { };
 
+  xscope = callPackage ../applications/misc/xscope { };
+
   xscreensaver = callPackage ../misc/screensavers/xscreensaver {
     inherit (gnome2) libglade;
   };
