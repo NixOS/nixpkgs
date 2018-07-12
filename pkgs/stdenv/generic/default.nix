@@ -125,6 +125,9 @@ let
         isi686 isx86_64 is64bit isAarch32 isAarch64 isMips isBigEndian;
       isArm = builtins.trace "stdenv.isArm is deprecated after 18.03" hostPlatform.isArm;
 
+      # Whether this is an stdenv from one of the bootstrap stages.
+      isBootstrap = false;
+
       # Whether we should run paxctl to pax-mark binaries.
       needsPax = isLinux;
 

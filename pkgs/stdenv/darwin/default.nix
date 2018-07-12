@@ -132,7 +132,8 @@ in rec {
 
         extraAttrs = {
           inherit platform;
-          parent = last;
+          isBootstrap = true;
+          parent      = last;
 
           # This is used all over the place so I figured I'd just leave it here for now
           secure-format-patch = ./darwin-secure-format.patch;
