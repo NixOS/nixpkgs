@@ -4370,6 +4370,7 @@ with pkgs;
   pepper = callPackage ../tools/admin/salt/pepper { };
 
   percona-xtrabackup = callPackage ../tools/backup/percona-xtrabackup {
+    stdenv = overrideCC stdenv gcc5;
     boost = boost159;
   };
 
