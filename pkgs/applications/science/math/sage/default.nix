@@ -14,16 +14,6 @@ let
 
       cvxopt = super.cvxopt.override { inherit glpk; };
 
-      # https://github.com/sagemath/sagenb/issues/437
-      flask-babel = super.flask-babel.overridePythonAttrs (attrs: rec {
-        version = "0.9";
-        src = attrs.src.override {
-          inherit version;
-          sha256 = "0k7vk4k54y55ma0nx2k5s0phfqbriwslhy5shh3b0d046q7ibzaa";
-        };
-        doCheck = false;
-      });
-
       # python packages that appear unmaintained and were not accepted into the nixpkgs
       # tree because of that. These packages are only dependencies of the more-or-less
       # deprecated sagenb. However sagenb is still a default dependency and the doctests
