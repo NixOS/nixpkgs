@@ -1,14 +1,28 @@
-{ stdenvNoCC, fetchurl, unzip }:
+{ stdenvNoCC, lib, fetchurl, unzip
+, dfVersion
+}:
 
+with lib;
+
+let
+  twbt-releases = builtins.fromJSON (builtins.readFile ./twbt.json);
+
+  release = if hasAttr dfVersion twbt-releases
+            then getAttr dfVersion twbt-releases
+            else throw "[TWBT] Unsupported Dwarf Fortress version: ${dfVersion}";
+
+  warning = if release.prerelease then builtins.trace "[TWBT] Version ${version} is a prerelease. Careful!"
+                                  else null;
+
+in
 
 stdenvNoCC.mkDerivation rec {
   name = "twbt-${version}";
-  version = "6.54";
-  dfVersion = "0.44.12";
+  version = release.twbtRelease;
 
   src = fetchurl {
     url = "https://github.com/mifki/df-twbt/releases/download/v${version}/twbt-${version}-linux.zip";
-    sha256 = "10gfd6vv0vk4v1r5hjbz7vf1zqys06dsad695gysc7fbcik2dakh";
+    sha256 = release.sha256;
   };
 
   sourceRoot = ".";
@@ -24,10 +38,9 @@ stdenvNoCC.mkDerivation rec {
     cp -a *.png $art/data/art/
   '';
 
-  
   meta = with stdenvNoCC.lib; {
     description = "A plugin for Dwarf Fortress / DFHack that improves various aspects the game interface.";
-    maintainers = with maintainers; [ Baughn ];
+    maintainers = with maintainers; [ Baughn numinit ];
     license = licenses.mit;
     platforms = platforms.linux;
     homepage = https://github.com/mifki/df-twbt;
