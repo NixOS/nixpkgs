@@ -89,7 +89,7 @@ stdenv.mkDerivation rec {
           "1n96rx95spj4r34amapqr1i1klhv944fpvhdmn7gqjawr2hf36js"
       else
         if arch == "x86_64" then
-          "08z7a3m0crd9z2rp6cm9q002dpi5vphcgp0607k9wix0sr5zfvyh"
+          "0331r5af4zrvwc4h7dp5qyy91dfam5z03yjggls3x04i10nz5myw"
         else
           "01ibzqzlscpkfqp33bx7qcpz6gfqp4dq9ny3zasvjhi5xqd78j1k";
   };
