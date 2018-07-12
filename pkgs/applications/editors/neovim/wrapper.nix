@@ -16,7 +16,7 @@ let
     , withPyGUI ? false
     , vimAlias ? false
     , viAlias ? false
-    , configure ? null
+    , configure ? {}
   }:
   let
 
@@ -35,18 +35,20 @@ let
   extraPythonPackagesFun = compatFun extraPythonPackages;
   extraPython3PackagesFun = compatFun extraPython3Packages;
 
-  pluginPythonPackages = if configure == null then [] else builtins.concatLists
-    (map ({ pythonDependencies ? [], ...}: pythonDependencies)
-         (vimUtils.requiredPlugins configure));
+  requiredPlugins = vimUtils.requiredPlugins configure;
+  getDeps = attrname: map (plugin: plugin.${attrname} or (_:[]));
+
+  pluginPythonPackages = getDeps "pythonDependencies" requiredPlugins;
   pythonEnv = pythonPackages.python.withPackages(ps:
         (if withPyGUI then [ ps.neovim_gui ] else [ ps.neovim ])
-        ++ (extraPythonPackagesFun ps) ++ pluginPythonPackages);
+        ++ (extraPythonPackagesFun ps)
+        ++ (concatMap (f: f ps) pluginPythonPackages));
 
-  pluginPython3Packages = if configure == null then [] else builtins.concatLists
-    (map ({ python3Dependencies ? [], ...}: python3Dependencies)
-         (vimUtils.requiredPlugins configure));
+  pluginPython3Packages = getDeps "python3Dependencies" requiredPlugins;
   python3Env = python3Packages.python.withPackages (ps:
-    [ ps.neovim ] ++ (extraPython3PackagesFun ps) ++ pluginPython3Packages);
+        [ ps.neovim ]
+        ++ (extraPython3PackagesFun ps)
+        ++ (concatMap (f: f ps) pluginPython3Packages));
 
   in
   stdenv.mkDerivation {
@@ -87,7 +89,7 @@ let
       ln -s $out/bin/nvim $out/bin/vim
     '' + optionalString viAlias ''
       ln -s $out/bin/nvim $out/bin/vi
-    '' + optionalString (configure != null) ''
+    '' + optionalString (configure != {}) ''
     wrapProgram $out/bin/nvim --add-flags "-u ${vimUtils.vimrcFile configure}"
     ''
     ;

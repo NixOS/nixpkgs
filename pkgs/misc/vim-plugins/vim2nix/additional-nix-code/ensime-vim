@@ -1,1 +1,1 @@
-    pythonDependencies = with pythonPackages; [ sexpdata websocket_client ];
+    passthru.python3Dependencies = ps: with ps; [ sexpdata websocket_client ];
