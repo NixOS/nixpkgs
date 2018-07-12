@@ -84,14 +84,14 @@ stdenv.mkDerivation rec {
     sha256 =
       if debug then
         if arch == "x86_64" then
-          "1ld9ldsqd5vgghpidskxqmlz8gwdyf3mi3wmfdiaabdjxgzbg8sk"
+          "1xa2mcbcxpfrqdf37a98nvvsvyp0bm3lsv21ky3ps9cba8a13z80"
         else
-          "1n96rx95spj4r34amapqr1i1klhv944fpvhdmn7gqjawr2hf36js"
+          "1jgl57ggcszdim51dcr0gsjmrdb2kdvxl0lv5zl83cvxcyz0z4p6"
       else
         if arch == "x86_64" then
           "0331r5af4zrvwc4h7dp5qyy91dfam5z03yjggls3x04i10nz5myw"
         else
-          "01ibzqzlscpkfqp33bx7qcpz6gfqp4dq9ny3zasvjhi5xqd78j1k";
+          "011cf0kycs4ih45l23bp6rr2vm7w7jaj4pjvmqwjax4xrb5pzkic";
   };
 
   nativeBuildInputs = [ unzip ];
