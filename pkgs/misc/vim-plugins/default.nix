@@ -1863,7 +1863,7 @@ rec {
       rev = "f0d63579eab7548cf12f979dc52ef5a370ecbe63";
       sha256 = "06nix49j4inxy3rkcv32f4ka89g4crqwfqnrm3b76iwwky8m2p17";
     };
-    dependencies = [];
+    dependencies = ["WebAPI"];
 
   };
 
