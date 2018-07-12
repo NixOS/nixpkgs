@@ -65,9 +65,9 @@ stdenv.mkDerivation rec {
         "https://fpdownload.macromedia.com/pub/flashplayer/updaters/30/flash_player_sa_linux.x86_64.tar.gz";
     sha256 =
       if debug then
-        "0snkhs9w192azgv3nykxmgb47z395yrx7faxshasmc7abvvnfpx1"
+        "1plmhv1799j0habmyxy7zhvilh823djmg4i387s6qifr5iv66pax"
       else
-        "1wgcsbm9w46sp8347agd5m05x3xrki8vi6pf208ifihljw04hbx3";
+        "13cb7sca5mw5b1iiimyxbfxwpmdh7aya8rnlhkv3fgk5a1jwrxqr";
   };
 
   nativeBuildInputs = [ unzip ];
