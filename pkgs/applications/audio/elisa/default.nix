@@ -7,13 +7,13 @@
 
 mkDerivation rec {
   name = "elisa-${version}";
-  version = "0.2.0";
+  version = "0.2.1";
 
   src = fetchFromGitHub {
     owner  = "KDE";
     repo   = "elisa";
     rev    = "v${version}";
-    sha256 = "0lpzn55b8gf3byzwv9909x40p98aqlh35vidkrwnnbwgygsa85bw";
+    sha256 = "0b3rx3gh6adlrbmgj75dicqv6qzzn4fyfxbf1nwh3zd2hi0ca89w";
   };
 
   nativeBuildInputs = [ extra-cmake-modules kdoctools wrapGAppsHook ];
