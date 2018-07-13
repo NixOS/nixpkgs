@@ -3,14 +3,14 @@ SDL2_mixer, freetype, gettext, CoreFoundation, Cocoa,
 tiles ? true }:
 
 stdenv.mkDerivation rec {
-  version = "2017-12-09";
+  version = "2018-07-15";
   name = "cataclysm-dda-git-${version}";
 
   src = fetchFromGitHub {
     owner = "CleverRaven";
     repo = "Cataclysm-DDA";
-    rev = "24e92956db5587809750283873c242cc0796d7e6";
-    sha256 = "1a7kdmx76na4g65zra01qaq98lxp9j2dl9ddv09r0p5yxaizw68z";
+    rev = "e1e5d81";
+    sha256 = "198wfj8l1p8xlwicj92cq237pzv2ha9pcf240y7ijhjpmlc9jkr1";
   };
 
   nativeBuildInputs = [ pkgconfig ];
@@ -89,6 +89,7 @@ stdenv.mkDerivation rec {
       substances or radiation, now more closely resemble insects, birds or fish
       than their original form.
     '';
+    maintainers = with maintainers; [ rardiol ];
     homepage = https://cataclysmdda.org/;
     license = licenses.cc-by-sa-30;
     platforms = platforms.unix;
