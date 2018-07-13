@@ -848,6 +848,8 @@ with pkgs;
 
   bluemix-cli = callPackage ../tools/admin/bluemix-cli { };
 
+  charles = callPackage ../applications/networking/charles { };
+
   libqmatrixclient = libsForQt5.callPackage ../development/libraries/libqmatrixclient { };
 
   quaternion = libsForQt5.callPackage ../applications/networking/instant-messengers/quaternion { };
@@ -3718,7 +3720,7 @@ with pkgs;
   lzip = callPackage ../tools/compression/lzip { };
 
   luxcorerender = callPackage ../tools/graphics/luxcorerender { };
-  
+
   xz = callPackage ../tools/compression/xz { };
 
   lz4 = callPackage ../tools/compression/lz4 { };
@@ -4987,7 +4989,7 @@ with pkgs;
   securefs = callPackage ../tools/filesystems/securefs { };
 
   seexpr = callPackage ../development/compilers/seexpr { };
- 
+
   setroot = callPackage  ../tools/X11/setroot { };
 
   setserial = callPackage ../tools/system/setserial { };
