@@ -4,14 +4,14 @@
 with lib;
 
 stdenv.mkDerivation rec {
-  version = "0.75.0";
+  version = "0.76.0";
   name = "flow-${version}";
 
   src = fetchFromGitHub {
     owner = "facebook";
     repo = "flow";
     rev = "v${version}";
-    sha256 = "0xrcjjk16w6anpy58qa4la1jyfjs0xg5xkp58slhai996wqif24k";
+    sha256 = "0r3yl4m7dhm1h4c431zp8hd2gg6k1d9bwd2371xav5q7hviwmjl6";
   };
 
   # lwt.log is being split out into a separate package, so this can be
