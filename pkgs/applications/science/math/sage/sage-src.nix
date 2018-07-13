@@ -84,6 +84,12 @@ stdenv.mkDerivation rec {
   ];
 
   packageUpgradePatches = [
+    (fetchpatch {
+      name = "cypari2-1.2.1.patch";
+      url = "https://git.sagemath.org/sage.git/patch/?h=62fe6eb15111327d930336d4252d5b23cbb22ab9";
+      sha256 = "1xax7vvs8h4xip16xcsp47xdb6lig6f2r3pl8cksvlz8lhgbyxh2";
+    })
+
     # matplotlib 2.2.2 deprecated `normed` (replaced by `density`).
     # This patch only ignores the warning. It would be equally easy to fix it
     # (by replacing all mentions of `normed` by `density`), but its better to

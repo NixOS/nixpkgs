@@ -7,16 +7,15 @@
 , gmp
 , cython
 , cysignals
-, six
 }:
 
 buildPythonPackage rec {
   pname = "cypari2";
-  version = "1.1.4"; # remove six dependency on upgrade to >1.1.4
+  version = "1.2.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0n0mp8qmvvzmfaawg39d3mkyzf65q2zkz7bnqyk4sfjbz4xwc6mb";
+    sha256 = "0v2kikwf0advq8j76nwzhlacwj1yys9cvajm4fqgmasjdsnf1q4k";
   };
 
   # This differs slightly from the default python installPhase in that it pip-installs
@@ -39,7 +38,6 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     cysignals
     cython
-    six # after 1.1.4: will not be needed
   ];
 
   checkPhase = ''
