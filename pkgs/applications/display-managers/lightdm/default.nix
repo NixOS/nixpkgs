@@ -2,6 +2,7 @@
 , intltool, xlibsWrapper, libxklavier, libgcrypt, libaudit, coreutils
 , qt4 ? null
 , withQt5 ? false, qtbase
+, gobjectIntrospection
 }:
 
 with stdenv.lib;
@@ -18,7 +19,7 @@ stdenv.mkDerivation rec {
     sha256 = "18j33bm54i8k7ncxcs69zqi4105s62n58jrydqn3ikrb71s9nl6d";
   };
 
-  nativeBuildInputs = [ pkgconfig intltool ];
+  nativeBuildInputs = [ pkgconfig intltool gobjectIntrospection ];
   buildInputs = [
     pam libxcb glib libXdmcp itstool libxml2 libxklavier libgcrypt
     qt4 libaudit
