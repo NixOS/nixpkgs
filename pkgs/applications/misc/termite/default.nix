@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, pkgconfig, vte, gtk3, ncurses, makeWrapper, wrapGAppsHook, symlinkJoin
+{ stdenv, fetchFromGitHub, lib, pkgconfig, vte, gtk3, ncurses, makeWrapper, wrapGAppsHook, symlinkJoin
 , configFile ? null
 }:
 
@@ -7,16 +7,17 @@ let
   termite = stdenv.mkDerivation {
     name = "termite-${version}";
 
-    src = fetchgit {
-      url = "https://github.com/thestinger/termite";
-      rev = "refs/tags/v${version}";
+    src = fetchFromGitHub {
+      owner = "thestinger";
+      repo = "termite";
+      rev = "v${version}";
       sha256 = "02cn70ygl93ghhkhs3xdxn5b1yadc255v3yp8cmhhyzsv5027hvj";
+      fetchSubmodules = true;
     };
 
     # https://github.com/thestinger/termite/pull/516
-    patches = [ ./url_regexp_trailing.patch ];
-
-    postPatch = "sed '1i#include <math.h>' -i termite.cc";
+    patches = [ ./url_regexp_trailing.patch ./add_errno_header.patch
+                ] ++ lib.optional stdenv.isDarwin ./remove_ldflags_macos.patch;
 
     makeFlags = [ "VERSION=v${version}" "PREFIX=" "DESTDIR=$(out)" ];
 
