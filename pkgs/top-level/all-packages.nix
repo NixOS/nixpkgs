@@ -1680,6 +1680,8 @@ with pkgs;
 
   ciopfs = callPackage ../tools/filesystems/ciopfs { };
 
+  circleci-cli = callPackage ../development/tools/misc/circleci-cli { };
+
   citrix_receiver = callPackage ../applications/networking/remote/citrix-receiver { };
   citrix_receiver_13_10_0 = citrix_receiver.override { version = "13.10.0"; };
   citrix_receiver_13_9_1  = citrix_receiver.override { version = "13.9.1";  };
@@ -2866,6 +2868,8 @@ with pkgs;
   gtkd = callPackage ../development/libraries/gtkd { };
 
   gtkgnutella = callPackage ../tools/networking/p2p/gtk-gnutella { };
+
+  gtkperf = callPackage ../development/tools/misc/gtkperf { };
 
   gtkvnc = callPackage ../tools/admin/gtk-vnc {};
 
@@ -14301,6 +14305,8 @@ with pkgs;
   radeontop = callPackage ../os-specific/linux/radeontop { };
 
   raspberrypifw = callPackage ../os-specific/linux/firmware/raspberrypi {};
+  raspberrypiWirelessFirmware = callPackage ../os-specific/linux/firmware/raspberrypi-wireless { };
+
   raspberrypi-tools = callPackage ../os-specific/linux/firmware/raspberrypi/tools.nix {};
 
   regionset = callPackage ../os-specific/linux/regionset { };
@@ -19211,6 +19217,8 @@ with pkgs;
   xrestop = callPackage ../tools/X11/xrestop { };
 
   xsd = callPackage ../development/libraries/xsd { };
+
+  xscope = callPackage ../applications/misc/xscope { };
 
   xscreensaver = callPackage ../misc/screensavers/xscreensaver {
     inherit (gnome2) libglade;
