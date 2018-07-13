@@ -1,0 +1,41 @@
+diff --git a/whither/toolkits/qt/web_container.py b/whither/toolkits/qt/web_container.py
+index d2c846e..74fa55b 100644
+--- a/whither/toolkits/qt/web_container.py
++++ b/whither/toolkits/qt/web_container.py
+@@ -50,7 +50,7 @@ from PyQt5.QtCore import (
+ # This Library
+ from whither.base.objects import WebContainer
+ from .devtools import DevTools
+-from .interceptor import QtUrlRequestInterceptor
++#from .interceptor import QtUrlRequestInterceptor
+ 
+ 
+ # Typing Helpers
+@@ -82,7 +82,7 @@ class QtWebContainer(WebContainer):
+             os.environ['QTWEBENGINE_REMOTE_DEBUGGING'] = '12345'
+ 
+         self.profile = QWebEngineProfile.defaultProfile()
+-        self.interceptor = QtUrlRequestInterceptor()
++        #self.interceptor = QtUrlRequestInterceptor()
+ 
+         self.view = QWebEngineView(parent=self._main_window.widget)
+         self.page = self.view.page()
+@@ -98,8 +98,8 @@ class QtWebContainer(WebContainer):
+         if not self._config.context_menu.enabled:
+             self.view.setContextMenuPolicy(Qt.PreventContextMenu)
+ 
+-        if not self._config.allow_remote_urls:
+-            self.profile.setRequestInterceptor(self.interceptor)
++        #if not self._config.allow_remote_urls:
++        #    self.profile.setRequestInterceptor(self.interceptor)
+ 
+         if self._config.entry_point.autoload:
+             self.initialize_bridge_objects()
+@@ -168,6 +168,7 @@ class QtWebContainer(WebContainer):
+         url = url if url else self._config.entry_point.url
+ 
+         if 'http' not in url and not os.path.exists(url):
++            self.logger.debug(f'Could not load url "{url}".')
+             self.page.setHtml(DEFAULT_ENTRY_POINT)
+             return
+ 
