@@ -127,7 +127,7 @@ stdenv.mkDerivation rec {
     moveToOutput "bin/infotocap" "$out"
   '';
 
-  preFixup = lib.optionalString (!hostPlatform.isCygwin) ''
+  preFixup = lib.optionalString (!hostPlatform.isCygwin && !enableStatic) ''
     rm "$out"/lib/*.a
   '';
 
