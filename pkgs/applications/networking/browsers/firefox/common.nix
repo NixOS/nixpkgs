@@ -76,7 +76,7 @@ stdenv.mkDerivation (rec {
 
   buildInputs = [
     gtk2 perl zip libIDL libjpeg zlib bzip2
-    dbus dbus-glib pango freetype fontconfig xorg.libXi
+    dbus dbus-glib pango freetype fontconfig xorg.libXi xorg.libXcursor
     xorg.libX11 xorg.libXrender xorg.libXft xorg.libXt file
     nspr libnotify xorg.pixman yasm libGLU_combined
     xorg.libXScrnSaver xorg.scrnsaverproto
