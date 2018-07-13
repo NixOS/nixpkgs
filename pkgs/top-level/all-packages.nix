@@ -1680,6 +1680,8 @@ with pkgs;
 
   ciopfs = callPackage ../tools/filesystems/ciopfs { };
 
+  circleci-cli = callPackage ../development/tools/misc/circleci-cli { };
+
   citrix_receiver = callPackage ../applications/networking/remote/citrix-receiver { };
   citrix_receiver_13_10_0 = citrix_receiver.override { version = "13.10.0"; };
   citrix_receiver_13_9_1  = citrix_receiver.override { version = "13.9.1";  };
