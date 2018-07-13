@@ -12,14 +12,14 @@ with stdenv.lib;
 assert libgcrypt != null -> libsodium == null;
 
 stdenv.mkDerivation rec {
-  version = "0.7.2";
+  version = "0.7.4";
   name = "usbguard-${version}";
 
   repo = "https://github.com/USBGuard/usbguard";
 
   src = fetchurl {
     url = "${repo}/releases/download/${name}/${name}.tar.gz";
-    sha256 = "5bd3e5219c590c3ae27b21315bd10b60e823cef64e5deff3305ff5b4087fc2d6";
+    sha256 = "1qkskd6q5cwlh2cpcsbzmmmgk6w63z0825wlb2sjwqq3kfgwjb3k";
   };
 
   nativeBuildInputs = [
