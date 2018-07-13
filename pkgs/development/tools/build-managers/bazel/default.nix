@@ -483,9 +483,9 @@ stdenv.mkDerivation rec {
   # Change this to $(mktemp -d) as soon as we figure out why.
 
   buildPhase = ''
-    export TMPDIR=/tmp
+    export TMPDIR=/tmp/.bazel-$UID
     ./compile.sh
-    ./output/bazel --output_user_root=/tmp/.bazel build //scripts:bash_completion \
+    ./output/bazel --output_user_root=$TMPDIR/.bazel build //scripts:bash_completion \
       --spawn_strategy=standalone \
       --genrule_strategy=standalone \
       --crosstool_top=//nix:nix --host_crosstool_top=//nix:nix
