@@ -3,13 +3,13 @@
 
 stdenv.mkDerivation rec {
   name = "libqmatrixclient-${version}";
-  version = "0.2.1";
+  version = "0.3.0.2";
 
   src = fetchFromGitHub {
     owner  = "QMatrixClient";
     repo   = "libqmatrixclient";
     rev    = "v${version}";
-    sha256 = "0sv5hhdsffq7092n6hggfz9a78qn3jfmbvw2flmc4ippzz563akv";
+    sha256 = "03pxmr4wa818fgqddkr2fkwz6pda538x3ic9yq7c40x98zqf55w5";
   };
 
   buildInputs = [ qtbase ];
