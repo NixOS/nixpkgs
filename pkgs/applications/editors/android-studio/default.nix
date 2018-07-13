@@ -43,9 +43,9 @@ in rec {
   beta = mkStudio (latestVersion // {
     pname = "android-studio-preview";
     #pname = "android-studio-beta"; # TODO: Rename and provide symlink
-    version = "3.2.0.19"; # "Android Studio 3.2 Beta 2"
-    build = "181.4860949";
-    sha256Hash = "1v1h42xp2fxj8366q9l9b0shk0y1vz9kny0rf7y48kyr5h9glnwr";
+    version = "3.2.0.20"; # "Android Studio 3.2 Beta 3"
+    build = "181.4868252";
+    sha256Hash = "17r7gvy317vh2r56yvhnn7dym0q6gs8r04fdr7hx53s9rb79sd1j";
 
     meta = stable.meta // {
       description = "The Official IDE for Android (beta channel)";
