@@ -1929,6 +1929,11 @@
     github = "kaiha";
     name = "Kai Harries";
   };
+  kalbasit = {
+    email = "wael.nasreddine@gmail.com";
+    github = "kalbasit";
+    name = "Wael Nasreddine";
+  };
   kamilchm = {
     email = "kamil.chm@gmail.com";
     github = "kamilchm";
