@@ -75,8 +75,8 @@ in rec {
     ghc861 = callPackage ../development/compilers/ghc/8.6.1.nix rec {
       bootPkgs = packages.ghc822;
       inherit (bootPkgs) alex happy hscolour;
-      buildLlvmPackages = buildPackages.llvmPackages_5;
-      llvmPackages = pkgs.llvmPackages_5;
+      buildLlvmPackages = buildPackages.llvmPackages_6;
+      llvmPackages = pkgs.llvmPackages_6;
     };
     ghcHEAD = callPackage ../development/compilers/ghc/head.nix rec {
       bootPkgs = packages.ghc821Binary;
@@ -200,6 +200,7 @@ in rec {
         (pkgs.lib.attrNames packages);
     in pkgs.lib.genAttrs integerSimpleGhcNames (name: packages."${name}".override {
       ghc = bh.compiler.integer-simple."${name}";
+      buildHaskellPackages = bh.packages.integer-simple."${name}";
       overrides = _self : _super : {
         integer-simple = null;
         integer-gmp = null;

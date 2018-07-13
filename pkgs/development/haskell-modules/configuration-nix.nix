@@ -146,11 +146,7 @@ self: super: builtins.intersectAttrs super {
   gtk-traymanager = addPkgconfigDepend super.gtk-traymanager pkgs.gtk3;
 
   # Add necessary reference to gtk3 package, plus specify needed dbus version, plus turn on strictDeps to fix build
-  taffybar = ((addPkgconfigDepend super.taffybar pkgs.gtk3).overrideDerivation (drv: { strictDeps = true; })).override { dbus = self.dbus_1_0_1; };
-
-  # Specify needed dbus version
-  dbus-hslogger = super.dbus-hslogger.override { dbus = self.dbus_1_0_1; };
-  status-notifier-item = super.status-notifier-item.override { dbus = self.dbus_1_0_1; };
+  taffybar = ((addPkgconfigDepend super.taffybar pkgs.gtk3).overrideDerivation (drv: { strictDeps = true; }));
 
   # Add necessary reference to gtk3 package
   gi-dbusmenugtk3 = addPkgconfigDepend super.gi-dbusmenugtk3 pkgs.gtk3;
@@ -508,6 +504,7 @@ self: super: builtins.intersectAttrs super {
   # Break cyclic reference that results in an infinite recursion.
   partial-semigroup = dontCheck super.partial-semigroup;
   colour = dontCheck super.colour;
+  manifolds = super.manifolds.override { spatial-rotations = dontCheck self.spatial-rotations; };
 
   LDAP = dontCheck (overrideCabal super.LDAP (drv: {
     librarySystemDepends = drv.librarySystemDepends or [] ++ [ pkgs.cyrus_sasl.dev ];
@@ -516,4 +513,5 @@ self: super: builtins.intersectAttrs super {
   # Tests require a browser: https://github.com/ku-fpg/blank-canvas/issues/73
   blank-canvas = dontCheck super.blank-canvas;
   blank-canvas_0_6_2 = dontCheck super.blank-canvas_0_6_2;
+
 }

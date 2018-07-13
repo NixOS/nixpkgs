@@ -242,9 +242,7 @@ let
 
     estring = callPackage ../development/ocaml-modules/estring { };
 
-    ezjsonm = callPackage ../development/ocaml-modules/ezjsonm {
-      lwt = ocaml_lwt;
-    };
+    ezjsonm = callPackage ../development/ocaml-modules/ezjsonm { };
 
     facile = callPackage ../development/ocaml-modules/facile { };
 

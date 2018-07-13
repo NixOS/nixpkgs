@@ -36,6 +36,14 @@ buildPythonPackage rec {
   # tests depend on sage
   doCheck = false;
 
+  patches = [
+    # work with latest flask-babel
+    (fetchpatch {
+      url = "https://github.com/sagemath/sagenb/commit/ba065eca63dd34a383e4c7ba7561430a90fcd087.patch";
+      sha256 = "1lamzsrgymdd618imrasjp6ivhw2aynh83gkybsd7pm1rzjcq4x8";
+    })
+  ];
+
   meta = with stdenv.lib; {
     description = "Sage Notebook";
     license = licenses.gpl3Plus;

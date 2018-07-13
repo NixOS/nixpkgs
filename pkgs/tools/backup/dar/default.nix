@@ -3,27 +3,37 @@
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  version = "2.5.14";
+  version = "2.5.15";
   name = "dar-${version}";
 
   src = fetchurl {
-    url = "mirror://sourceforge/dar/${name}-bis.tar.gz";
-    sha256 = "1sbd7n5mfqkwxy5rz2v8575y21j94ypwrpinizr3l2yy9pq49rx5";
+    url = "mirror://sourceforge/dar/${name}.tar.gz";
+    sha256 = "1h700i2k524w5rf5gr9yxl50ca5jwzqlkifay4ffcbhbkqln1n2q";
   };
 
   buildInputs = [ zlib bzip2 openssl lzo libgcrypt gpgme xz ]
     ++ optionals stdenv.isLinux [ attr e2fsprogs ];
 
-  configureFlags = [ "--disable-dar-static" ];
+  configureFlags = [
+    "--disable-birthtime"
+    "--disable-upx"
+    "--disable-dar-static"
+    "--disable-build-html"
+    "--enable-threadar"
+  ];
+
+  postInstall = ''
+    rm -r "$out"/share/dar # Disable html help
+  '';
 
   enableParallelBuilding = true;
 
   hardeningDisable = [ "format" ];
 
   meta = {
-    homepage = http://dar.linux.free.fr/;
+    homepage = http://dar.linux.free.fr;
     description = "Disk ARchiver, allows backing up files into indexed archives";
-    maintainers = [ maintainers.viric ];
+    maintainers = with maintainers; [ viric ];
     platforms = platforms.unix;
   };
 }

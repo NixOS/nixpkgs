@@ -17,7 +17,7 @@
 # A configuration example of a full node setup using this would be this:
 #
 # {
-#   letsencrypt = import ./common/letsencrypt.nix;
+#   letsencrypt = import ./common/letsencrypt;
 #
 #   example = { nodes, ... }: {
 #     networking.nameservers = [
@@ -30,14 +30,14 @@
 # }
 #
 # By default, this module runs a local resolver, generated using resolver.nix
-# from the same directory to automatically discover all zones in the network.
+# from the parent directory to automatically discover all zones in the network.
 #
 # If you do not want this and want to use your own resolver, you can just
 # override networking.nameservers like this:
 #
 # {
 #   letsencrypt = { nodes, ... }: {
-#     imports = [ ./common/letsencrypt.nix ];
+#     imports = [ ./common/letsencrypt ];
 #     networking.nameservers = [
 #       nodes.myresolver.config.networking.primaryIPAddress
 #     ];
@@ -164,13 +164,28 @@ let
         -e 's,exec \./bin/,,' \
         test/startservers.py
 
-      cat "${snakeOilCa}/ca.key" > test/test-ca.key
-      cat "${snakeOilCa}/ca.pem" > test/test-ca.pem
+      cat ${lib.escapeShellArg snakeOilCerts.ca.key} > test/test-ca.key
+      cat ${lib.escapeShellArg snakeOilCerts.ca.cert} > test/test-ca.pem
     '';
 
     # Until vendored pkcs11 is go 1.9 compatible
     preBuild = ''
       rm -r go/src/github.com/letsencrypt/boulder/vendor/github.com/miekg/pkcs11
+    '';
+
+    # XXX: Temporarily brought back putting the source code in the output,
+    # since e95f17e2720e67e2eabd59d7754c814d3e27a0b2 was removing that from
+    # buildGoPackage.
+    preInstall = ''
+      mkdir -p $out
+      pushd "$NIX_BUILD_TOP/go"
+      while read f; do
+        echo "$f" | grep -q '^./\(src\|pkg/[^/]*\)/${goPackagePath}' \
+          || continue
+        mkdir -p "$(dirname "$out/share/go/$f")"
+        cp "$NIX_BUILD_TOP/go/$f" "$out/share/go/$f"
+      done < <(find . -type f)
+      popd
     '';
 
     extraSrcs = map mkGoDep [
@@ -191,53 +206,15 @@ let
     1:/var/lib/softhsm/slot1.db
   '';
 
-  snakeOilCa = pkgs.runCommand "snakeoil-ca" {
-    buildInputs = [ pkgs.openssl ];
-    allowSubstitutes = false;
-  } ''
-    mkdir "$out"
-    openssl req -newkey rsa:4096 -x509 -sha256 -days 36500 \
-      -subj '/CN=Snakeoil CA' -nodes \
-      -out "$out/ca.pem" -keyout "$out/ca.key"
-  '';
+  snakeOilCerts = import ./snakeoil-certs.nix;
 
-  createAndSignCert = fqdn: let
-    snakeoilCertConf = pkgs.writeText "snakeoil.cnf" ''
-      [req]
-      default_bits = 4096
-      prompt = no
-      default_md = sha256
-      req_extensions = req_ext
-      distinguished_name = dn
-      [dn]
-      CN = ${fqdn}
-      [req_ext]
-      subjectAltName = DNS:${fqdn}
-    '';
-  in pkgs.runCommand "snakeoil-certs-${fqdn}" {
-    buildInputs = [ pkgs.openssl ];
-    allowSubstitutes = false;
-  } ''
-    mkdir "$out"
-    openssl genrsa -out "$out/snakeoil.key" 4096
-    openssl req -new -key "$out/snakeoil.key" \
-      -config ${lib.escapeShellArg snakeoilCertConf} \
-      -out snakeoil.csr
-    openssl x509 -req -in snakeoil.csr -sha256 -set_serial 666 \
-      -CA "${snakeOilCa}/ca.pem" -CAkey "${snakeOilCa}/ca.key" \
-      -extfile ${lib.escapeShellArg snakeoilCertConf} \
-      -out "$out/snakeoil.pem" -days 36500
-  '';
-
-  wfeCerts = createAndSignCert wfeDomain;
   wfeDomain = "acme-v01.api.letsencrypt.org";
-  wfeCertFile = "${wfeCerts}/snakeoil.pem";
-  wfeKeyFile = "${wfeCerts}/snakeoil.key";
+  wfeCertFile = snakeOilCerts.${wfeDomain}.cert;
+  wfeKeyFile = snakeOilCerts.${wfeDomain}.key;
 
-  siteCerts = createAndSignCert siteDomain;
   siteDomain = "letsencrypt.org";
-  siteCertFile = "${siteCerts}/snakeoil.pem";
-  siteKeyFile = "${siteCerts}/snakeoil.key";
+  siteCertFile = snakeOilCerts.${siteDomain}.cert;
+  siteKeyFile = snakeOilCerts.${siteDomain}.key;
 
   # Retrieved via:
   # curl -s -I https://acme-v01.api.letsencrypt.org/terms \
@@ -350,7 +327,7 @@ let
   }) components;
 
 in {
-  imports = [ ./resolver.nix ];
+  imports = [ ../resolver.nix ];
 
   options.test-support.letsencrypt.caCert = lib.mkOption {
     type = lib.types.path;
@@ -366,7 +343,7 @@ in {
       resolver.enable = let
         isLocalResolver = config.networking.nameservers == [ "127.0.0.1" ];
       in lib.mkOverride 900 isLocalResolver;
-      letsencrypt.caCert = "${snakeOilCa}/ca.pem";
+      letsencrypt.caCert = snakeOilCerts.ca.cert;
     };
 
     # This has priority 140, because modules/testing/test-instrumentation.nix
