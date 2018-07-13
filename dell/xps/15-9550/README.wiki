@@ -36,3 +36,17 @@ These settings are needed both for booting the final install, and installer itse
 * ''Update BIOS.'' According to Reddit, this helps with battery life.
 
 * ''Update Intel's Thunderbolt firmware.'' Without this, the Thunderbolt port will only work as power source, and not transfer data.
+
+=== Troubleshooting ===
+
+==== rcu_sched freezing problems ====
+
+After a recent update my machine became unstable. X couldn't start and even running `lspci` would lock the machine. I'm not sure what the root cause was, but I found the fix here: https://wiki.archlinux.org/index.php/Dell_XPS_15_9560#Troubleshooting
+
+TL;DR I added this line:
+
+```
+boot.kernelParams = [ "acpi_rev_override=1" "pcie_aspm=off" "nouveau.modeset=0" ];
+```
+
+
