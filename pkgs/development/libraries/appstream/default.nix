@@ -43,7 +43,6 @@ stdenv.mkDerivation rec {
   mesonFlags = [
     "-Dapidocs=false"
     "-Ddocs=false"
-    "-Dgir=false"
   ];
 
   meta = with stdenv.lib; {
