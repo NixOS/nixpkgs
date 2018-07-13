@@ -20,7 +20,7 @@ let
   };
 in
 stdenv.mkDerivation ({
-  name = "${name}-${version}";
+  name = "idris-${name}-${version}";
 
   buildInputs = [ idris-with-packages gmp ] ++ extraBuildInputs;
   propagatedBuildInputs = allIdrisDeps;
