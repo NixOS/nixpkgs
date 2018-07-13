@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "bubblewrap-${version}";
-  version = "0.2.1";
+  version = "0.3.0";
 
   src = fetchurl {
     url = "https://github.com/projectatomic/bubblewrap/releases/download/v${version}/${name}.tar.xz";
-    sha256 = "1qhzwgpfsw66hcv5kqc7i4dbzhxr8drrqn3md4grcp7dn02wif2l";
+    sha256 = "0b5gkr5xiqnr9cz5padkkkhm74ia9cb06pkpfi8j642anmq2irf8";
   };
 
   nativeBuildInputs = [ libcap libxslt docbook_xsl ];
