@@ -49,4 +49,4 @@ TL;DR I added this line:
 boot.kernelParams = [ "acpi_rev_override=1" "pcie_aspm=off" "nouveau.modeset=0" ];
 ```
 
-
+Some more detail about the problem can be found here: https://bbs.archlinux.org/viewtopic.php?id=223056
