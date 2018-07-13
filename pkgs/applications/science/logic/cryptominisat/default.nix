@@ -2,23 +2,18 @@
 
 stdenv.mkDerivation rec {
   name = "cryptominisat-${version}";
-  version = "5.0.1";
+  version = "5.6.3";
 
   src = fetchFromGitHub {
     owner  = "msoos";
     repo   = "cryptominisat";
     rev    = version;
-    sha256 = "0cpw5d9vplxvv3aaplhnga55gz1hy29p7s4pkw1306knkbhlzvkb";
+    sha256 = "0902dy2k5qkvav9qc4b4nvz7bynsahb46llms46bnpamb0rqnzc8";
+    fetchSubmodules = true;
   };
 
   buildInputs = [ python xxd ];
   nativeBuildInputs = [ cmake ];
-
-  patches = [(fetchpatch rec {
-    name = "fix-exported-library-name.patch";
-    url = "https://github.com/msoos/cryptominisat/commit/7a47795cbe5ad5a899731102d297f234bcade077.patch";
-    sha256 = "11hf3cfqs4cykn7rlgjglq29lzqfxvlm0f20qasi0kdrz01cr30f";
-  })];
 
   meta = with stdenv.lib; {
     description = "An advanced SAT Solver";
