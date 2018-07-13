@@ -336,6 +336,8 @@ in {
 
   pdfminer = callPackage ../development/python-modules/pdfminer_six { };
 
+  pdfx = callPackage ../development/python-modules/pdfx { };
+
   plantuml = callPackage ../tools/misc/plantuml { };
 
   Pmw = callPackage ../development/python-modules/Pmw { };
