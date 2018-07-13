@@ -18111,6 +18111,8 @@ EOF
   qiskit = callPackage ../development/python-modules/qiskit { };
 
   qasm2image = callPackage ../development/python-modules/qasm2image { };
+
+  whither = callPackage ../development/python-modules/whither { };
 });
 
 in fix' (extends overrides packages)
