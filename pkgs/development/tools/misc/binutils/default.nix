@@ -26,11 +26,6 @@ stdenv.mkDerivation rec {
   });
 
   patches = [
-    # Turn on --enable-new-dtags by default to make the linker set
-    # RUNPATH instead of RPATH on binaries.  This is important because
-    # RUNPATH can be overriden using LD_LIBRARY_PATH at runtime.
-    ./new-dtags.patch
-
     # Since binutils 2.22, DT_NEEDED flags aren't copied for dynamic outputs.
     # That requires upstream changes for things to work. So we can patch it to
     # get the old behaviour by now.
@@ -117,6 +112,11 @@ stdenv.mkDerivation rec {
     "--enable-deterministic-archives"
     "--disable-werror"
     "--enable-fix-loongson2f-nop"
+
+    # Turn on --enable-new-dtags by default to make the linker set
+    # RUNPATH instead of RPATH on binaries.  This is important because
+    # RUNPATH can be overriden using LD_LIBRARY_PATH at runtime.
+    "--enable-new-dtags"
   ] ++ optionals gold [ "--enable-gold" "--enable-plugins" ];
 
   doCheck = false; # fails
