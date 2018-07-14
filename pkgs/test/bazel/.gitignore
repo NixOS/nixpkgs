@@ -1,4 +1,4 @@
 node_modules
 vendor
-bazel-*/
+bazel-*
 .tool-versions
