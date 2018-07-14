@@ -1,6 +1,6 @@
 {
   "name": "yarn2nix",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Convert packages.json and yarn.lock into a Nix expression that downloads all the dependencies",
   "main": "index.js",
   "repository": ".",
