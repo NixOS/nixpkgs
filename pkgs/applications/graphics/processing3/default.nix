@@ -1,4 +1,4 @@
-{ stdenv, callPackage, fetchFromGitHub, makeWrapper, ant, jdk, rsync, javaPackages, libXxf86vm }:
+{ stdenv, callPackage, fetchFromGitHub, makeWrapper, ant, jdk, rsync, javaPackages, libXxf86vm, gsettings-desktop-schemas }:
 
 stdenv.mkDerivation rec {
   version = "3.3.7";
@@ -37,9 +37,11 @@ stdenv.mkDerivation rec {
     ln -s ${jdk} $out/${name}/java
 
     makeWrapper $out/${name}/processing      $out/bin/processing \
+        --prefix XDG_DATA_DIRS : ${gsettings-desktop-schemas}/share/gsettings-schemas/${gsettings-desktop-schemas.name} \
         --prefix _JAVA_OPTIONS " " -Dawt.useSystemAAFontSettings=lcd \
         --prefix LD_LIBRARY_PATH : ${libXxf86vm}/lib
     makeWrapper $out/${name}/processing-java $out/bin/processing-java \
+        --prefix XDG_DATA_DIRS : ${gsettings-desktop-schemas}/share/gsettings-schemas/${gsettings-desktop-schemas.name} \
         --prefix _JAVA_OPTIONS " " -Dawt.useSystemAAFontSettings=lcd \
         --prefix LD_LIBRARY_PATH : ${libXxf86vm}/lib
   '';
