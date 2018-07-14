@@ -96,6 +96,15 @@ stdenv.mkDerivation rec {
     sed -i -e "361 a --host_copt=\"$(echo $NIX_CFLAGS_COMPILE | sed -e 's/ /" --host_copt=\"/g')\" \\\\" scripts/bootstrap/compile.sh
     sed -i -e "361 a --linkopt=\"-Wl,$(echo $NIX_LDFLAGS | sed -e 's/ /" --linkopt=\"-Wl,/g')\" \\\\" scripts/bootstrap/compile.sh
     sed -i -e "361 a --host_linkopt=\"-Wl,$(echo $NIX_LDFLAGS | sed -e 's/ /" --host_linkopt=\"-Wl,/g')\" \\\\" scripts/bootstrap/compile.sh
+
+    # --experimental_strict_action_env (which will soon become the
+    # default, see bazelbuild/bazel#2574) hardcodes the default
+    # action environment to a value that on NixOS at least is bogus.
+    # So we hardcode it to something useful.
+    substituteInPlace \
+		  src/main/java/com/google/devtools/build/lib/bazel/rules/BazelRuleClassProvider.java \
+      --replace /bin:/usr/bin ${defaultShellPath}
+
     patchShebangs .
   '';
 
