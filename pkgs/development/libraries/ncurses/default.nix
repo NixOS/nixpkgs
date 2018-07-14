@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
     "--enable-pc-files"
     "--enable-symlinks"
   ] ++ lib.optional unicode "--enable-widec"
-    ++ lib.optional enableStatic "--enable-static"
+    ++ lib.optional enableStatic "--enable-normal"
     ++ lib.optional (!withCxx) "--without-cxx"
     ++ lib.optional (abiVersion == "5") "--with-abi-version=5";
 
