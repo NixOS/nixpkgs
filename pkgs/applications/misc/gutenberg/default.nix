@@ -2,16 +2,16 @@
 
 rustPlatform.buildRustPackage rec {
   name = "gutenberg-${version}";
-  version = "0.3.1";
+  version = "0.3.4";
 
   src = fetchFromGitHub {
     owner = "Keats";
     repo = "gutenberg";
     rev = "v${version}";
-    sha256 = "03zhbwxp4dbqydiydx0hpp3vpg769zzn5i95h2sl868mpfia8gyd";
+    sha256 = "1v26q1m3bx7mdmmwgd6p601ncf13rr4rrx9s06fiy8vnd0ar1vlf";
   };
 
-  cargoSha256 = "0441lbmxx16aar6fn651ihk3psrx0lk3qdbbyih05xjlkkbk1qxs";
+  cargoSha256 = "0cdy0wvibkpnmlqwxvn02a2k2vqy6zdqzflj2dh6g1cjbz1j8qh5";
 
   nativeBuildInputs = [ cmake ];
   buildInputs = stdenv.lib.optionals stdenv.isDarwin [ CoreServices cf-private ];
@@ -29,7 +29,7 @@ rustPlatform.buildRustPackage rec {
     description = "An opinionated static site generator with everything built-in";
     homepage = https://www.getgutenberg.io;
     license = licenses.mit;
-    maintainers = [];
+    maintainers = with maintainers; [ dywedir ];
     platforms = platforms.all;
   };
 }
