@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi, iana-etc, libredirect,
+{ stdenv, buildPythonPackage, fetchPypi, fetchpatch, iana-etc, libredirect,
   pytest, case, kombu, billiard, pytz, anyjson, amqp, eventlet
 }:
 
@@ -9,6 +9,13 @@ buildPythonPackage rec {
   src = fetchPypi {
     inherit pname version;
     sha256 = "ff727c115533edbc7b81b2b4ba1ec88d1c2fc4836e1e2f4c3c33a76ff53e5d7f";
+  };
+
+  # Skip test_RedisBackend.test_timeouts_in_url_coerced
+  # See https://github.com/celery/celery/pull/4847
+  patches = fetchpatch {
+    url = https://github.com/celery/celery/commit/b2668607c909c61becd151905b4525190c19ff4a.patch;
+    sha256 = "11w0z2ycyh8kccj4y69zb7bxppiipcwwigg6jn1q9yrcsvz170jq";
   };
 
   # make /etc/protocols accessible to fix socket.getprotobyname('tcp') in sandbox
