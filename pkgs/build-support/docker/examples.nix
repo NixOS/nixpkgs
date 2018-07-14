@@ -13,6 +13,7 @@ rec {
   # 1. basic example
   bash = buildImage {
     name = "bash";
+    tag = "latest";
     contents = pkgs.bashInteractive;
   };
 
@@ -65,6 +66,7 @@ rec {
   in
   buildImage {
     name = "nginx-container";
+    tag = "latest";
     contents = pkgs.nginx;
 
     runAsRoot = ''
@@ -106,6 +108,7 @@ rec {
   # docker run -it --rm nix nix-store -qR $(nix-build '<nixpkgs>' -A nix)
   nix = buildImageWithNixDb {
     name = "nix";
+    tag = "latest";
     contents = [
       # nix-store uses cat program to display results as specified by
       # the image env variable NIX_PAGER.
@@ -121,6 +124,7 @@ rec {
   # dockerTools chain.
   onTopOfPulledImage = buildImage {
     name = "onTopOfPulledImage";
+    tag = "latest";
     fromImage = nixFromDockerHub;
     contents = [ pkgs.hello ];
   };
@@ -129,6 +133,7 @@ rec {
   # See issue #34779 and PR #40947 for details.
   runAsRootExtraCommands = pkgs.dockerTools.buildImage {
     name = "runAsRootExtraCommands";
+    tag = "latest";
     contents = [ pkgs.coreutils ];
     # The parens here are to create problematic bash to embed and eval. In case
     # this is *embedded* into the script (with nix expansion) the initial quotes

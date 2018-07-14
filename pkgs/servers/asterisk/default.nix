@@ -2,7 +2,7 @@
   jansson, libxml2, libxslt, ncurses, openssl, sqlite,
   utillinux, dmidecode, libuuid, newt,
   lua, speex,
-  srtp, wget, curl
+  srtp, wget, curl, iksemel
 }:
 
 let
@@ -10,7 +10,7 @@ let
     inherit version;
     name = "asterisk-${version}";
 
-    buildInputs = [ jansson libxml2 libxslt ncurses openssl sqlite utillinux dmidecode libuuid newt lua speex srtp wget curl ];
+    buildInputs = [ jansson libxml2 libxslt ncurses openssl sqlite utillinux dmidecode libuuid newt lua speex srtp wget curl iksemel ];
 
     patches = [
       # We want the Makefile to install the default /var skeleton

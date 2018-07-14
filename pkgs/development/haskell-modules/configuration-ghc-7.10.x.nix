@@ -36,10 +36,17 @@ self: super: {
   unix = null;
   xhtml = null;
 
+  # These are now core libraries in GHC 8.4.x.
+  mtl = self.mtl_2_2_2;
+  parsec = self.parsec_3_1_13_0;
+  parsec_3_1_13_0 = addBuildDepends super.parsec_3_1_13_0 [self.fail self.semigroups];
+  stm = self.stm_2_4_5_0;
+  text = self.text_1_2_3_0;
+
   # Build jailbreak-cabal with the latest version of Cabal.
   jailbreak-cabal = super.jailbreak-cabal.override { Cabal = self.Cabal_1_24_2_0; };
 
-  gtk2hs-buildtools = super.gtk2hs-buildtools.override { Cabal = self.Cabal_1_24_2_0; };
+  gtk2hs-buildtools = super.gtk2hs-buildtools.override { Cabal = self.buildHaskellPackages.Cabal_1_24_2_0; };
 
   # https://github.com/mrkkrp/megaparsec/issues/282
   megaparsec = addBuildDepend (dontCheck super.megaparsec) self.fail;
@@ -195,7 +202,6 @@ self: super: {
   mono-traversable = addBuildDepend super.mono-traversable self.semigroups;
   natural-transformation = addBuildDepend super.natural-transformation self.semigroups;
   optparse-applicative = addBuildDepends super.optparse-applicative [self.semigroups self.fail];
-  parsec = addBuildDepends super.parsec [self.fail self.semigroups];
   parser-combinators = addBuildDepend super.parser-combinators self.semigroups;
   QuickCheck = addBuildDepend super.QuickCheck self.semigroups;
   reflection = addBuildDepend super.reflection self.semigroups;

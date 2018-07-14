@@ -56,6 +56,17 @@ let
 
     bap = callPackage ../development/ocaml-modules/bap {
       inherit (janeStreet_0_9_0) core_kernel ppx_jane parsexp;
+      ezjsonm = ezjsonm.override {
+        inherit (janeStreet_0_9_0) sexplib;
+        hex = hex.override {
+          cstruct = cstruct.override {
+            inherit (janeStreet_0_9_0) sexplib;
+          };
+        };
+      };
+      uri = uri.override {
+        inherit (janeStreet_0_9_0) ppx_sexp_conv sexplib;
+      };
     };
 
     batteries = callPackage ../development/ocaml-modules/batteries { };
@@ -231,9 +242,7 @@ let
 
     estring = callPackage ../development/ocaml-modules/estring { };
 
-    ezjsonm = callPackage ../development/ocaml-modules/ezjsonm {
-      lwt = ocaml_lwt;
-    };
+    ezjsonm = callPackage ../development/ocaml-modules/ezjsonm { };
 
     facile = callPackage ../development/ocaml-modules/facile { };
 
@@ -310,6 +319,8 @@ let
 
     inifiles = callPackage ../development/ocaml-modules/inifiles { };
 
+    iri = callPackage ../development/ocaml-modules/iri { };
+
     jingoo = callPackage ../development/ocaml-modules/jingoo {
       pcre = ocaml_pcre;
     };
@@ -380,6 +391,10 @@ let
       else throw "lwt3 is not available for OCaml ${ocaml.version}";
 
     ocaml_lwt = if lib.versionOlder "4.02" ocaml.version then lwt3 else lwt2;
+
+    lwt_log = callPackage ../development/ocaml-modules/lwt_log {
+      lwt = lwt3;
+    };
 
     lwt_ppx = callPackage ../development/ocaml-modules/lwt/ppx.nix {
       lwt = lwt3;
@@ -530,6 +545,8 @@ let
 
     piqi = callPackage ../development/ocaml-modules/piqi { };
     piqi-ocaml = callPackage ../development/ocaml-modules/piqi-ocaml { };
+
+    ppxlib = callPackage ../development/ocaml-modules/ppxlib { };
 
     psmt2-frontend = callPackage ../development/ocaml-modules/psmt2-frontend { };
 
@@ -735,7 +752,7 @@ let
     janeStreet = import ../development/ocaml-modules/janestreet {
       inherit lib janePackage ocaml ocamlbuild angstrom ctypes cryptokit;
       inherit magic-mime num ocaml-migrate-parsetree octavius ounit;
-      inherit ppx_deriving re zarith;
+      inherit ppx_deriving re zarith ppxlib;
       inherit (pkgs) stdenv openssl;
     };
     

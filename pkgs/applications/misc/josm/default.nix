@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, makeDesktopItem, makeWrapper, unzip, bash, jre8 }:
+{ fetchurl, stdenv, makeDesktopItem, makeWrapper, unzip, bash, jre10 }:
 
 stdenv.mkDerivation rec {
   name = "josm-${version}";
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "1j98wxw84f5rf3finr38bkr1sh9ckah8pmhmxyhmcw2rxf1mv9bf";
   };
 
-  buildInputs = [ jre8 makeWrapper ];
+  buildInputs = [ jre10 makeWrapper ];
 
   desktopItem = makeDesktopItem {
     name = "josm";
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
     mkdir -p $out/bin $out/share/java
     cp -v $src $out/share/java/josm.jar
 
-    makeWrapper ${jre8}/bin/java $out/bin/josm \
+    makeWrapper ${jre10}/bin/java $out/bin/josm \
       --add-flags "-jar $out/share/java/josm.jar"
 
     mkdir -p $out/share/applications

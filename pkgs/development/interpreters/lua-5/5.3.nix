@@ -53,6 +53,7 @@ stdenv.mkDerivation rec {
     Libs: -L$out/lib -llua -lm
     Cflags: -I$out/include
     EOF
+    ln -s "$out/lib/pkgconfig/lua.pc" "$out/lib/pkgconfig/lua${luaversion}.pc"
   '';
 
   meta = {

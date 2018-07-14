@@ -130,5 +130,5 @@ in
     };
   };
 
-  meta.maintainers = with stdenv.lib.maintainers; [ ironpinguin ];
+  meta.maintainers = with lib.maintainers; [ ironpinguin ];
 }
