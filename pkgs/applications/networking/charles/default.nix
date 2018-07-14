@@ -25,7 +25,7 @@ in stdenv.mkDerivation rec {
 
   installPhase = ''
     makeWrapper ${jre}/bin/java $out/bin/charles \
-      --add-flags "-Xmx1024M -Dcharles.config="~/.charles.config" -Djava.library.path="$out/lib" -jar $out/share/java/charles.jar"
+      --add-flags "-Xmx1024M -Dcharles.config="~/.charles.config" -Djava.library.path="$out/share/java" -jar $out/share/java/charles.jar"
 
     for fn in lib/*.jar; do
       install -D -m644 $fn $out/share/java/$(basename $fn)
