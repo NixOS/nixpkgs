@@ -961,20 +961,8 @@ in {
     };
   };
 
-  backports_ssl_match_hostname = if !(pythonOlder "3.5") then null else self.buildPythonPackage rec {
-    name = "backports.ssl_match_hostname-${version}";
-    version = "3.5.0.1";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/b/backports.ssl_match_hostname/${name}.tar.gz";
-      sha256 = "1wndipik52cyqy0677zdgp90i435pmvwd89cz98lm7ri0y3xjajh";
-    };
-
-    meta = {
-      description = "The Secure Sockets layer is only actually *secure*";
-      homepage = https://bitbucket.org/brandon/backports.ssl_match_hostname;
-    };
-  };
+  backports_ssl_match_hostname = if !(pythonOlder "3.5") then null else
+    callPackage ../development/python-modules/backports_ssl_match_hostname { };
 
   backports_lzma = callPackage ../development/python-modules/backports_lzma { };
 
