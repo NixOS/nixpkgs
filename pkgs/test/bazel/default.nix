@@ -3,7 +3,10 @@
 stdenv.mkDerivation rec {
   name = "bazel-test";
 
-  buildInputs = with pkgs; [ bazel python2Full python3Full ];
+  # Getting the error:
+  # /tmp/.bazel-619/.bazel/962e61887c2adf20fb3a0a8cd817313c/execroot/nix_test/bazel-out/host/bin/external/bazel_gazelle/cmd/gazelle/linux_amd64_stripped/gazelle: error while loading shared libraries: libstdc++.so.6: cannot open shared object file: No such file or directory
+  # TODO: fix this!
+  buildInputs = with pkgs; [ bazel python2Full python3Full git cacert ];
 
   src = ./.;
 
@@ -15,7 +18,12 @@ stdenv.mkDerivation rec {
 
     export TMPDIR=/tmp/.bazel-$UID
 
-    printf "running bazel //:gazelle... " >&2
-    bazel --output_user_root=$TMPDIR/.bazel run //:gazelle
+    echo "startup --batch --output_user_root=$TMPDIR/.bazel" > .bazelrc
+
+    printf "running bazel run //:gazelle " >&2
+    bazel run //:gazelle
+
+    printf "running bazel test //... " >&2
+    bazel test //...
   '';
 }
