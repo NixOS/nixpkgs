@@ -1067,7 +1067,7 @@ in rec
 
   ocamlPackages_4_07 = mkOcamlPackages (callPackage ../development/compilers/ocaml/4.07.nix { }) (self: super: { });
 
-  ocamlPackages_latest = ocamlPackages_4_06;
+  ocamlPackages_latest = ocamlPackages_4_07;
 
   ocamlPackages =
     # OCaml 4.05 is broken on aarch64
