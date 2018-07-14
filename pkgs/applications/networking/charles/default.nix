@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, makeDesktopItem, jre, hicolor-icon-theme }:
+{ stdenv, fetchurl, makeDesktopItem, jre, makeWrapper }:
 
 let
   desktopItem = makeDesktopItem {
@@ -21,19 +21,14 @@ in stdenv.mkDerivation rec {
     sha256 = "1hjfimyr9nnbbxadwni02d2xl64ybarh42l1g6hlslq5qwl8ywzb";
   };
 
+  buildInputs = [ makeWrapper ];
+
   installPhase = ''
-    mkdir -pv $out/bin
-
-    cat > $out/bin/charles << EOF
-    #!${stdenv.shell}
-
-    ${jre}/bin/java -Xmx1024M -Dcharles.config="~/.charles.config" -Djava.library.path="$out/lib" -jar $out/lib/charles.jar $*
-    EOF
-
-    chmod +x $out/bin/charles
+    makeWrapper ${jre}/bin/java $out/bin/charles \
+      --add-flags "-Xmx1024M -Dcharles.config="~/.charles.config" -Djava.library.path="$out/lib" -jar $out/share/java/charles.jar"
 
     for fn in lib/*.jar; do
-      install -D -m644 $fn $out/$fn
+      install -D -m644 $fn $out/share/java/$(basename $fn)
     done
 
     mkdir -p $out/share/applications
