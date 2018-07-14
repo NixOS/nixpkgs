@@ -18450,8 +18450,9 @@ with pkgs;
 
   syncthing-tray = callPackage ../applications/misc/syncthing-tray { };
 
-  # linux only by now
-  synergy = callPackage ../applications/misc/synergy { };
+  synergy = callPackage ../applications/misc/synergy {
+    inherit (darwin.apple_sdk.frameworks) ApplicationServices Carbon Cocoa CoreServices ScreenSaver;
+  };
 
   tabbed = callPackage ../applications/window-managers/tabbed {
     # if you prefer a custom config, write the config.h in tabbed.config.h
