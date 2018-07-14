@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "adapta-gtk-theme-${version}";
-  version = "3.93.1.28";
+  version = "3.94.0.1";
 
   src = fetchFromGitHub {
     owner = "adapta-project";
     repo = "adapta-gtk-theme";
     rev = version;
-    sha256 = "0r7fsyy074xd63p58fin3qsfq1535wafk0nag49551915hgdr18n";
+    sha256 = "17hck0hzkdj1bibn9wi7cxca8r539idb916v2l71gz7ynhav006d";
   };
 
   preferLocalBuild = true;
