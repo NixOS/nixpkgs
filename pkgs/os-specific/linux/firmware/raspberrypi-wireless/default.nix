@@ -1,4 +1,4 @@
-{ stdenv, fetchurl }:
+{ stdenv, fetchurl, dpkg }:
 
 stdenv.mkDerivation rec {
   name = "raspberrypi-wireless-firmware-${version}";
@@ -20,11 +20,12 @@ stdenv.mkDerivation rec {
   # Firmware blobs do not need fixing and should not be modified
   dontFixup = true;
 
+
   # Unpack the debian package
+  nativeBuildInputs = [ dpkg ];
   unpackCmd = ''
     if ! [[ "$curSrc" =~ \.deb$ ]]; then return 1; fi
-    ar -xf "$curSrc"
-    tar -xf data.tar.xz
+    dpkg -x "$curSrc" .
   '';
 
   installPhase = ''
@@ -38,6 +39,10 @@ stdenv.mkDerivation rec {
     # Bluetooth firmware
     cp broadcom/*.hcd "$out/lib/firmware/brcm"
   '';
+
+  outputHashMode = "recursive";
+  outputHashAlgo = "sha256";
+  outputHash = "1gwzasl5w5nc0awqv3w2081ns63wd1yds0xh0dg95dc6brnqhhf8";
 
   meta = with stdenv.lib; {
     description = "Firmware for builtin Wifi/Bluetooth devices in the Raspberry Pi 3 and Zero W";
