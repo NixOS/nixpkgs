@@ -2420,22 +2420,7 @@ in {
     };
   };
 
-  events = buildPythonPackage rec {
-    name = "Events-${version}";
-    version = "0.2.1";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/E/Events/${name}.tar.gz";
-      sha256 = "0rymyfvarjdi2fdhfz2iqmp4wgd2n2sm0p2mx44c3spm7ylnqzqa";
-    };
-
-    meta = {
-      homepage = "http://events.readthedocs.org";
-      description = "Bringing the elegance of C# EventHanlder to Python";
-      license = licenses.bsd3;
-    };
-  };
-
+  events = callPackage ../development/python-modules/events { };
 
   eyeD3 = buildPythonPackage rec {
     version = "0.7.8";
