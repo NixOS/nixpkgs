@@ -947,20 +947,6 @@ in {
 
   backports_shutil_get_terminal_size = callPackage ../development/python-modules/backports_shutil_get_terminal_size { };
 
-  backports_ssl_match_hostname_3_4_0_2 = if !(pythonOlder "3.5") then null else self.buildPythonPackage rec {
-    name = "backports.ssl_match_hostname-3.4.0.2";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/b/backports.ssl_match_hostname/backports.ssl_match_hostname-3.4.0.2.tar.gz";
-      sha256 = "07410e7fb09aab7bdaf5e618de66c3dac84e2e3d628352814dc4c37de321d6ae";
-    };
-
-    meta = {
-      description = "The Secure Sockets layer is only actually *secure*";
-      homepage = https://bitbucket.org/brandon/backports.ssl_match_hostname;
-    };
-  };
-
   backports_ssl_match_hostname = if !(pythonOlder "3.5") then null else
     callPackage ../development/python-modules/backports_ssl_match_hostname { };
 
