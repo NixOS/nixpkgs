@@ -19,6 +19,27 @@
 
   <itemizedlist>
    <listitem>
+     <para>
+       Support for wrapping binaries using <literal>firejail</literal> has been
+       added through <varname>programs.firejail.wrappedBinaries</varname>.
+     </para>
+     <para>
+       For example
+     </para>
+<programlisting>
+programs.firejail = {
+  enable = true;
+  wrappedBinaries = {
+    firefox = "${lib.getBin pkgs.firefox}/bin/firefox";
+    mpv = "${lib.getBin pkgs.mpv}/bin/mpv";
+  };
+};
+</programlisting>
+      <para>
+        This will place <literal>firefox</literal> and <literal>mpv</literal> binaries in the global path wrapped by firejail.
+      </para>
+   </listitem>
+   <listitem>
     <para>
      User channels are now in the default <literal>NIX_PATH</literal>, allowing
      users to use their personal <command>nix-channel</command> defined
