@@ -1,5 +1,5 @@
 { stdenv, lib, fetchurl, writeScript, coreutils, ncurses, gzip, flex, bison, less
-, x11Mode ? false, libXaw, libXext, mkfontdir
+, x11Mode ? false, qt4Mode ? false, libXaw, libXext, mkfontdir, pkgconfig, qt4
 }:
 
 let
@@ -8,6 +8,7 @@ let
     else throw "Unknown platform for NetHack: ${stdenv.system}";
   unixHint =
     if x11Mode then "linux-x11"
+    else if qt4Mode then "linux-qt4"
     else if stdenv.hostPlatform.isLinux  then "linux"
     else if stdenv.hostPlatform.isDarwin then "macosx10.10"
     # We probably want something different for Darwin
@@ -23,9 +24,13 @@ in stdenv.mkDerivation {
     sha256 = "1dha0ijvxhx7c9hr0452h93x81iiqsll8bc9msdnp7xdqcfbz32b";
   };
 
-  buildInputs = [ ncurses ] ++ lib.optionals x11Mode [ libXaw libXext ];
+  buildInputs = [ ncurses ]
+                ++ lib.optionals x11Mode [ libXaw libXext ]
+                ++ lib.optionals qt4Mode [ qt4 ];
 
-  nativeBuildInputs = [ flex bison ] ++ lib.optionals x11Mode [ mkfontdir ];
+  nativeBuildInputs = [ flex bison ]
+                      ++ lib.optionals x11Mode [ mkfontdir ]
+                      ++ lib.optionals qt4Mode [ pkgconfig mkfontdir ];
 
   makeFlags = [ "PREFIX=$(out)" ];
 
@@ -45,6 +50,9 @@ in stdenv.mkDerivation {
       -e 's,^SHELLDIR=.*$,SHELLDIR=\$(PREFIX)/games,' \
       -i sys/unix/hints/macosx10.10
     sed -e '/define CHDIR/d' -i include/config.h
+    sed \
+      -e 's,^QTDIR *=.*,QTDIR=${qt4},' \
+      -i sys/unix/hints/linux-qt4
   '';
 
   configurePhase = ''
@@ -90,6 +98,7 @@ in stdenv.mkDerivation {
     EOF
     chmod +x $out/bin/nethack
     ${lib.optionalString x11Mode "mv $out/bin/nethack $out/bin/nethack-x11"}
+    ${lib.optionalString qt4Mode "mv $out/bin/nethack $out/bin/nethack-qt4"}
   '';
 
   meta = with stdenv.lib; {
