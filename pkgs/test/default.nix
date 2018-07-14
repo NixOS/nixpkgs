@@ -3,6 +3,8 @@
 with pkgs;
 
 {
+  bazel = callPackage ./bazel {  };
+
   cc-wrapper = callPackage ./cc-wrapper { };
   cc-wrapper-gcc = callPackage ./cc-wrapper { stdenv = gccStdenv; };
   cc-wrapper-gcc7 = callPackage ./cc-wrapper { stdenv = gcc7Stdenv; };

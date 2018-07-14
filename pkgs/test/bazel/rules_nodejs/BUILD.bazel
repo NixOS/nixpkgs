@@ -1,0 +1,17 @@
+load("@build_bazel_rules_nodejs//:defs.bzl", "jasmine_node_test")
+
+# This is like a "js_library", but there are no actions to run on JS files so a
+# filegroup is semantically equivalent.
+filegroup(
+    name = "program",
+    srcs = ["index.js"],
+)
+
+jasmine_node_test(
+    name = "test",
+    srcs = glob(["*.spec.js"]),
+    node_modules = "@root_node_modules//:node_modules",
+    deps = [
+        ":program",
+    ],
+)

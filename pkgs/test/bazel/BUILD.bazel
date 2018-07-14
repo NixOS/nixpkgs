@@ -1,0 +1,40 @@
+# gazelle:exclude vendor
+# gazelle:exclude node_modules
+
+#
+# Golang
+#
+
+load("@bazel_gazelle//:def.bzl", "gazelle")
+
+gazelle(
+    name = "gazelle",
+    command = "fix",
+    external = "external",
+    extra_args = [
+        "-build_file_name",
+        "BUILD.bazel",
+    ],
+    prefix = "github.com/NixOS/nixpkgs/pkgs/test/bazel",
+)
+
+#
+# Typescript
+#
+
+exports_files([
+    "tsconfig.json",
+    "package.json",
+])
+
+#
+# Tools
+#
+
+load("@com_github_bazelbuild_buildtools//buildifier:def.bzl", "buildifier")
+
+buildifier(
+    name = "buildifier",
+)
+
+# packages
