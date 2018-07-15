@@ -114,8 +114,27 @@ let
   # attributes to refer to the original attributes (e.g. "foo =
   # ... pkgs.foo ...").
   configOverrides = self: super:
-    lib.optionalAttrs allowCustomOverrides
-      ((config.packageOverrides or (super: {})) super);
+      (if allowCustomOverrides && config ? packageOverrides
+      then lib.warn ''
+        packageOverrides is deprecated in favour of the overlay mechanism.
+
+        A packageOverrides function can be ported into an overlay
+        simply by adding the self parameter, and replacing the
+        packageOverrides self pattern with it as appropriate. Thus,
+        the packageOverrides function
+
+        super: let self = super.pkgs; in { hello = super.callPackage ~/hello {}; }
+
+        Becomes the overlay
+
+        self: super: { hello = super.callPackage ~/hello {}; }
+
+        Overlays may be activated in a number of places. See the
+        relevant nixpkgs manual chapter for details.
+        https://nixos.org/nixpkgs/manual/#chap-overlays
+      '' config.packageOverrides
+      else (super: {}))
+      super;
 
   # Convenience attributes for instantitating package sets. Each of
   # these will instantiate a new version of allPackages. Currently the
