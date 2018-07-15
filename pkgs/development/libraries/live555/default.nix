@@ -2,14 +2,14 @@
 
 # Based on https://projects.archlinux.org/svntogit/packages.git/tree/trunk/PKGBUILD
 let
-  version = "2018.02.28";
+  version = "2018.07.07";
 in
 stdenv.mkDerivation {
   name = "live555-${version}";
 
   src = fetchurl { # the upstream doesn't provide a stable URL
     url = "mirror://sourceforge/slackbuildsdirectlinks/live.${version}.tar.gz";
-    sha256 = "0zi47asv1qmb09g321m02q684i3c90vci0mgkdh1mlmx2rbg1d1d";
+    sha256 = "17s0zjgza5f7xvc2qw01yhjsysckwmnjw18l1vkar228z1av04hc";
   };
 
   postPatch = ''
