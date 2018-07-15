@@ -176,6 +176,9 @@ stdenv.mkDerivation rec {
 
     # https://trac.sagemath.org/ticket/24838 rebased
     ./patches/pynac-0.7.22.patch
+
+    # https://trac.sagemath.org/ticket/25862
+    ./patches/eclib-20180710.patch
   ];
 
   patches = nixPatches ++ packageUpgradePatches;
