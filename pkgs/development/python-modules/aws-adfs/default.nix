@@ -1,5 +1,5 @@
-{ lib, buildPythonPackage, fetchPypi, pythonPackages, isPy3k
-, pytest, pytestrunner, pytestcov, mock, lxml, boto3, requests, click, configparser }:
+{ lib, buildPythonPackage, fetchPypi
+, pytest, pytestrunner, pytestcov, mock, glibcLocales, lxml, boto3, requests, click, configparser }:
 
 buildPythonPackage rec {
   version = "0.12.0";
@@ -18,11 +18,11 @@ buildPythonPackage rec {
   # Test suite writes files to $HOME/.aws/, or /homeless-shelter if unset
   HOME = ".";
 
-  checkInputs = [ pytest pytestrunner pytestcov mock ];
-  propagatedBuildInputs = [ lxml boto3 requests click configparser ];
+  # Required for python3 tests, along with glibcLocales
+  LC_ALL = "en_US.UTF-8";
 
-  # Python3 tests fail with UTF-8 issues due to click
-  doCheck = !isPy3k;
+  checkInputs = [ glibcLocales pytest pytestrunner pytestcov mock ];
+  propagatedBuildInputs = [ lxml boto3 requests click configparser ];
 
   meta = {
     description = "Command line tool to ease aws cli authentication against ADFS";
