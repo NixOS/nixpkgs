@@ -37,6 +37,39 @@ let
 
     paths = themePkg ++ pkgs;
     pathsToLink = [ "/" "/hack" "/hack/scripts" ];
+
+    postBuild = ''
+      # De-symlink init.txt
+      cp $out/data/init/init.txt init.txt
+      rm -f $out/data/init/init.txt
+      mv init.txt $out/data/init/init.txt
+    '' + lib.optionalString enableDFHack ''
+      # De-symlink symbols.xml
+      rm $out/hack/symbols.xml
+
+      # Patch the MD5
+      orig_md5=$(cat "${dwarf-fortress}/hash.md5.orig")
+      patched_md5=$(cat "${dwarf-fortress}/hash.md5")
+      input_file="${dfhack_}/hack/symbols.xml"
+      output_file="$out/hack/symbols.xml"
+
+      echo "[DFHack Wrapper] Fixing Dwarf Fortress MD5:"
+      echo "  Input:   $input_file"
+      echo "  Search:  $orig_md5"
+      echo "  Output:  $output_file"
+      echo "  Replace: $patched_md5"
+
+      substitute "$input_file" "$output_file" --replace "$orig_md5" "$patched_md5"
+    '' + lib.optionalString enableTWBT ''
+      substituteInPlace $out/data/init/init.txt \
+        --replace '[PRINT_MODE:2D]' '[PRINT_MODE:TWBT]'
+    '' + ''
+      substituteInPlace $out/data/init/init.txt \
+        --replace '[INTRO:YES]' '[INTRO:${unBool enableIntro}]' \
+        --replace '[TRUETYPE:YES]' '[TRUETYPE:${unBool enableTruetype}]' \
+        --replace '[FPS:NO]' '[FPS:${unBool enableFPS}]'
+    '';
+
     ignoreCollisions = true;
   };
 in
@@ -76,27 +109,6 @@ stdenv.mkDerivation rec {
       --subst-var-by jre ${jdk.jre} \
       --subst-var dfInit
     chmod 755 $out/bin/soundsense
-  '';
-
-  postBuild = ''
-    # De-symlink init.txt
-    cp $out/data/init/init.txt init.txt
-    rm $out/data/init/init.txt
-    mv init.txt $out/data/init/init.txt
-  '' + lib.optionalString enableDFHack ''
-    rm $out/hack/symbols.xml
-    echo "[$out/hack/symbols.xml] $(cat ${dwarf-fortress}/hash.md5.orig) => $(cat ${dwarf-fortress}/hash.md5)"
-    substitute ${dfhack_}/hack/symbols.xml $out/hack/symbols.xml \
-      --replace $(cat ${dwarf-fortress}/hash.md5.orig) \
-                $(cat ${dwarf-fortress}/hash.md5)
-  '' + lib.optionalString enableTWBT ''
-    substituteInPlace $out/data/init/init.txt \
-      --replace '[PRINT_MODE:2D]' '[PRINT_MODE:TWBT]'
-  '' + ''
-    substituteInPlace $out/data/init/init.txt \
-      --replace '[INTRO:YES]' '[INTRO:${unBool enableIntro}]' \
-      --replace '[TRUETYPE:YES]' '[TRUETYPE:${unBool enableTruetype}]' \
-      --replace '[FPS:NO]' '[FPS:${unBool enableFPS}]'
   '';
 
   preferLocalBuild = true;
