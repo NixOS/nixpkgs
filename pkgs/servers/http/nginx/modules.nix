@@ -28,9 +28,10 @@
     src = fetchFromGitHub {
       owner = "masonicboom";
       repo = "ipscrub";
-      rev = "99230f66d5afe1f929cf4ed217901acb6206f620";
-      sha256 = "0mfrwkg4srql38w713pg6qxi0h4hgy8inkvgc9cm80bwlv2ng9s1";
+      rev = "v1.0.1";
+      sha256 = "0qcx15c8wbsmyz2hkmyy5yd7qn1n84kx9amaxnfxkpqi05vzm1zz";
     } + "/ipscrub";
+    inputs = [ pkgs.libbsd ];
   };
 
   rtmp ={
@@ -56,8 +57,8 @@
     src = fetchFromGitHub {
       owner = "openresty";
       repo = "headers-more-nginx-module";
-      rev = "v0.26";
-      sha256 = "0zhr3ai4xf5yghxvlbrwv8n06fgx33f1n1d4a6gmsczdfjzf8g6g";
+      rev = "v0.33";
+      sha256 = "1cgdjylrdd69vlkwwmn018hrglzjwd83nqva1hrapgcfw12f7j53";
     };
   };
 
@@ -92,8 +93,8 @@
     src = fetchFromGitHub {
       owner = "simpl";
       repo = "ngx_devel_kit";
-      rev = "v0.3.0";
-      sha256 = "1br1997zqsjcb1aqm6h6xmi5yx7akxk0qvk8wxc0fnvmyhgzxgx0";
+      rev = "v0.3.1rc1";
+      sha256 = "00vqvpx67qra2hr85hkvj1dha4h7x7v9sblw7w1df11nq1gzsdbb";
     };
   };
 
@@ -101,8 +102,8 @@
     src = fetchFromGitHub {
       owner = "openresty";
       repo = "lua-nginx-module";
-      rev = "v0.10.10";
-      sha256 = "1dlqnlkpn3pnhk2m09jdx3iw3m6xk31pw2m5xrpcmqk3bll68mw6";
+      rev = "v0.10.13";
+      sha256 = "19mpc76lfhyyvkfs2n08b4rc9cf2v7rm8fskkf60hsdcf6qna822";
     };
     inputs = [ pkgs.luajit ];
     preConfigure = ''
@@ -115,8 +116,8 @@
     src = fetchFromGitHub {
       owner = "openresty";
       repo = "set-misc-nginx-module";
-      rev = "v0.28";
-      sha256 = "1vixj60q0liri7k5ax85grj7q9vvgybkx421bwphbhai5xrjip96";
+      rev = "v0.32";
+      sha256 = "048a6jwinbjgxiprjj9ml3fdp0mhkx89g6ggams57fsx9m5vaxax";
     };
   };
 
@@ -142,8 +143,8 @@
     src = fetchFromGitHub {
       owner = "stogh";
       repo = "ngx_http_auth_pam_module";
-      rev = "v1.4";
-      sha256 = "068zwyrc1dji55rlaj2kx6n0v2n5rpj7nz26ipvz26ida712md35";
+      rev = "v1.5.1";
+      sha256 = "031q006bcv10dzxi3mzamqiyg14p48v0bzd5mrwz073pbf0ba2fl";
     };
     inputs = [ pkgs.pam ];
   };
@@ -152,8 +153,8 @@
     src = fetchFromGitHub {
       owner = "apcera";
       repo = "nginx-statsd";
-      rev = "2147d61dc31dd4865604be92349e6192a905d21a";
-      sha256 = "19s3kwjgf51jkwknh7cfi82p6kifl8rl146wxc3ijds12776ilsv";
+      rev = "b970e40467a624ba710c9a5106879a0554413d15";
+      sha256 = "1x8j4i1i2ahrr7qvz03vkldgdjdxi6mx75mzkfizfcc8smr4salr";
     };
   };
 
@@ -161,8 +162,8 @@
     src = fetchFromGitHub {
       owner = "yaoweibin";
       repo = "nginx_upstream_check_module";
-      rev = "10782eaff51872a8f44e65eed89bbe286004bcb1";
-      sha256 = "0h98a8kiw2qkqfavysm1v16kf4cs4h39j583wapif4p0qx3bbm89";
+      rev = "9aecf15ec379fe98f62355c57b60c0bc83296f04";
+      sha256 = "1cjisxw1wykll683nw09k0i1nvzslp4dr59x58cvarpk43paim2y";
     };
   };
 
