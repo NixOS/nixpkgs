@@ -11,22 +11,12 @@ let
   ]);
 in
 stdenv.mkDerivation rec {
-  name = "dnsmasq-2.78";
+  name = "dnsmasq-2.79";
 
   src = fetchurl {
     url = "http://www.thekelleys.org.uk/dnsmasq/${name}.tar.xz";
-    sha256 = "0ar5h5v3kas2qx2wgy5iqin15gc4jhqrqs067xacgc3lii1rz549";
+    sha256 = "07w6cw706yyahwvbvslhkrbjf2ynv567cgy9pal8bz8lrbsp9bbq";
   };
-
-  patches = [
-    (fetchpatch {
-      name = "CVE-2017-15107.patch";
-      url = "http://thekelleys.org.uk/gitweb/?p=dnsmasq.git;a=patch;h=4fe6744a220eddd3f1749b40cac3dfc510787de6";
-      sha256 = "0r8grhh1q46z8v6manx1vvfpf2vmchfzsg7l1djh63b1fy1mbjkk";
-      # changelog does not apply cleanly but its safe to skip
-      excludes = [ "CHANGELOG" ];
-    })
-  ];
 
   preBuild = ''
     makeFlagsArray=("COPTS=${copts}")
