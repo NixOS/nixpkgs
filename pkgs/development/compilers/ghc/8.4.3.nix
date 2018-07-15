@@ -32,6 +32,8 @@
   ghcFlavour ? stdenv.lib.optionalString (targetPlatform != hostPlatform) "perf-cross"
 }:
 
+assert !enableIntegerSimple -> gmp != null;
+
 let
   inherit (bootPkgs) ghc;
 
