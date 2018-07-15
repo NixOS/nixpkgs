@@ -28,6 +28,7 @@ stdenv.mkDerivation rec {
     "-DWITH_SSL=system"
     "-DWITH_ZLIB=system"
     "-DWITH_MAN_PAGES=OFF"
+    "-DCMAKE_CXX_FLAGS=-std=gnu++03"
   ];
 
   postInstall = ''
