@@ -26,7 +26,7 @@ pythonPackages.buildPythonApplication rec {
       Streamlink is a fork of the livestreamer project.
     '';
     license = licenses.bsd2;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ dezgeg zraexy ];
+    platforms = platforms.linux ++ platforms.darwin;
+    maintainers = with maintainers; [ dezgeg zraexy enzime ];
   };
 }
