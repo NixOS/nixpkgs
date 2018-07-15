@@ -86,6 +86,7 @@
   ./programs/dconf.nix
   ./programs/digitalbitbox/default.nix
   ./programs/environment.nix
+  ./programs/firejail.nix
   ./programs/fish.nix
   ./programs/freetds.nix
   ./programs/gnupg.nix

@@ -8,12 +8,12 @@
 
 python3Packages.buildPythonApplication rec {
   name = "diffoscope-${version}";
-  version = "95";
+  version = "98";
 
   src = fetchgit {
     url    = "https://anonscm.debian.org/git/reproducible/diffoscope.git";
     rev    = "refs/tags/${version}";
-    sha256 = "1x06krs3lp41x5w2l8ck8g47il3qzlclyphw9a2wv71sqkb5zxzi";
+    sha256 = "1xvalxz11jlyk9aczq5g367ldx0wfib4kpxs8f1rg7kh97r8z1rh";
   };
 
   patches = [
@@ -32,7 +32,7 @@ python3Packages.buildPythonApplication rec {
   pythonPath = with python3Packages; [ debian libarchive-c python_magic tlsh rpm ] ++ [
       acl binutils-unwrapped bzip2 cdrkit colordiff coreutils cpio db diffutils
       dtc e2fsprogs file findutils fontforge-fonttools gettext gnutar gzip
-      libarchive libcaca pgpdump sng sqlite squashfsTools unzip xxd xz
+      libarchive libcaca pgpdump progressbar33 sng sqlite squashfsTools unzip xxd xz
     ] ++ lib.optionals enableBloat [
       apktool cbfstool colord fpc ghc ghostscriptX giflib gnupg1 imagemagick
       llvm jdk mono openssh pdftk poppler_utils tcpdump unoconv

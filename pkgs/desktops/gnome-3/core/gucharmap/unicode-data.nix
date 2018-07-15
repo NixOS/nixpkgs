@@ -1,30 +1,31 @@
 { fetchurl, stdenv, gnome3 }:
-stdenv.mkDerivation {
-  name = "unicode-data-10.0.0";
+stdenv.mkDerivation rec {
+  name = "unicode-data-${version}";
+  version = "11.0.0";
   srcs = [
     (fetchurl {
-      url = "http://www.unicode.org/Public/10.0.0/ucd/Blocks.txt";
-      sha256 = "19zf2kd198mcv1paa194c1zf36hay1irbxssi35yi2pd8ad69qas";
+      url = "http://www.unicode.org/Public/${version}/ucd/Blocks.txt";
+      sha256 = "0lnh9iazikpr548bd7nkaq9r3vfljfvz0rg2462prac8qxk7ni8b";
     })
     (fetchurl {
-      url = "http://www.unicode.org/Public/10.0.0/ucd/DerivedAge.txt";
-      sha256 = "1h9p1g0wnh686l6cqar7cmky465vwc6vjzzn1s7v0i9zcjaqkr4h";
+      url = "http://www.unicode.org/Public/${version}/ucd/DerivedAge.txt";
+      sha256 = "0rlqqd0b1sqbzvrj29dwdizx8lyvrbfirsnn8za9lb53x5fml4gb";
     })
     (fetchurl {
-      url = "http://www.unicode.org/Public/10.0.0/ucd/NamesList.txt";
-      sha256 = "0gvpcyq852rnlqmx4y5i1by7bavvcw6rj40i54w48yc7xr3zmgd1";
+      url = "http://www.unicode.org/Public/${version}/ucd/NamesList.txt";
+      sha256 = "0yr2h0nfqhirfi3bxl33z6cc94qqshlpgi06c25xh9754irqsgv8";
     })
     (fetchurl {
-      url = "http://www.unicode.org/Public/10.0.0/ucd/Scripts.txt";
-      sha256 = "0b9prz2hs6w61afqaplcxnv115f8yk4d5hn9dc5hks8nqpj28bnh";
+      url = "http://www.unicode.org/Public/${version}/ucd/Scripts.txt";
+      sha256 = "1mbnvf97nwa3pvyzx9nd2wa94f8s0npg9740kic2p2ag7jmc1wz9";
     })
     (fetchurl {
-      url = "http://www.unicode.org/Public/10.0.0/ucd/UnicodeData.txt";
-      sha256 = "1cfak1j753zcrbgixwgppyxhm4w8vda8vxhqymi7n5ljfi6kwhjj";
+      url = "http://www.unicode.org/Public/${version}/ucd/UnicodeData.txt";
+      sha256 = "16b0jzvvzarnlxdvs2izd5ia0ipbd87md143dc6lv6xpdqcs75s9";
     })
     (fetchurl {
-      url = "http://www.unicode.org/Public/10.0.0/ucd/Unihan.zip";
-      sha256 = "199kz6laypkvc0ykms6d7bkb571jmpds39sv2p7kd5jjm1ij08q1";
+      url = "http://www.unicode.org/Public/${version}/ucd/Unihan.zip";
+      sha256 = "0cy8gxb17ksi5h4ysypk4c09z61am1svjrvg97hm5m5ccjfrs1vj";
     })
   ];
   phases = "installPhase";
