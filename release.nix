@@ -31,6 +31,7 @@ in
   apple-macbook-pro-11-5 = buildProfile ./apple/macbook-pro/11-5;
   apple-macbook-pro-12-1 = buildProfile ./apple/macbook-pro/12-1;
 
+  dell-e7240 = buildProfile ./dell/e7240;
   dell-xps-13-9380 = buildProfile ./dell/xps/13-9380;
   dell-xps-13-9370 = buildProfile ./dell/xps/13-9370;
   dell-xps-15-9550 = buildProfile ./dell/xps/15-9550;
