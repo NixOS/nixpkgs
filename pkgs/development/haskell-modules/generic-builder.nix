@@ -138,12 +138,12 @@ let
   buildFlagsString = optionalString (buildFlags != []) (" " + concatStringsSep " " buildFlags);
 
   defaultConfigureFlags = [
-    "--verbose" "--prefix=$out" "--libdir=\\$prefix/lib/\\$compiler" "--libsubdir=\\$pkgid"
+    "--verbose" "--prefix=$out" "--libdir=\\$prefix/\\$compiler" "--libsubdir=\\$pkgid"
     (optionalString enableSeparateDataOutput "--datadir=$data/share/${ghc.name}")
     (optionalString enableSeparateDocOutput "--docdir=${docdir "$doc"}")
     "--with-gcc=$CC" # Clang won't work without that extra information.
     "--package-db=$packageConfDir"
-    (optionalString (enableSharedExecutables && stdenv.isLinux) "--ghc-option=-optl=-Wl,-rpath=$out/lib/${ghc.name}/${pname}-${version}")
+    (optionalString (enableSharedExecutables && stdenv.isLinux) "--ghc-option=-optl=-Wl,-rpath=$out/${ghc.name}/${pname}-${version}")
     (optionalString (enableSharedExecutables && stdenv.isDarwin) "--ghc-option=-optl=-Wl,-headerpad_max_install_names")
     (optionalString enableParallelBuilding "--ghc-option=-j$NIX_BUILD_CORES")
     (optionalString useCpphs "--with-cpphs=${cpphs}/bin/cpphs --ghc-options=-cpp --ghc-options=-pgmP${cpphs}/bin/cpphs --ghc-options=-optP--cpp")
@@ -209,8 +209,8 @@ let
   nativeGhcCommand = "${nativeGhc.targetPrefix}ghc";
 
   buildPkgDb = ghcName: packageConfDir: ''
-    if [ -d "$p/lib/${ghcName}/package.conf.d" ]; then
-      cp -f "$p/lib/${ghcName}/package.conf.d/"*.conf ${packageConfDir}/
+    if [ -d "$p/${ghcName}/package.conf.d" ]; then
+      cp -f "$p/${ghcName}/package.conf.d/"*.conf ${packageConfDir}/
       continue
     fi
   '';
@@ -379,7 +379,7 @@ stdenv.mkDerivation ({
 
     ${if !hasActiveLibrary then "${setupCommand} install" else ''
       ${setupCommand} copy
-      local packageConfDir="$out/lib/${ghc.name}/package.conf.d"
+      local packageConfDir="$out/${ghc.name}/package.conf.d"
       local packageConfFile="$packageConfDir/${pname}-${version}.conf"
       mkdir -p "$packageConfDir"
       ${setupCommand} register --gen-pkg-config=$packageConfFile
@@ -404,7 +404,7 @@ stdenv.mkDerivation ({
     ${optionalString doCoverage "mkdir -p $out/share && cp -r dist/hpc $out/share"}
     ${optionalString (enableSharedExecutables && isExecutable && !isGhcjs && stdenv.isDarwin && stdenv.lib.versionOlder ghc.version "7.10") ''
       for exe in "$out/bin/"* ; do
-        install_name_tool -add_rpath "$out/lib/ghc-${ghc.version}/${pname}-${version}" "$exe"
+        install_name_tool -add_rpath "$out/ghc-${ghc.version}/${pname}-${version}" "$exe"
       done
     ''}
 
