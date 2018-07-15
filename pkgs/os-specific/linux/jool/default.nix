@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, kernel }:
 
-assert stdenv.lib.versionOlder kernel.version "4.13";
+assert stdenv.lib.versionOlder kernel.version "4.17";
 
 let
   sourceAttrs = (import ./source.nix) { inherit fetchFromGitHub; };
@@ -11,6 +11,7 @@ stdenv.mkDerivation {
 
   src = sourceAttrs.src;
 
+  nativeBuildInputs = kernel.moduleBuildDependencies;
   hardeningDisable = [ "pic" ];
 
   prePatch = ''
