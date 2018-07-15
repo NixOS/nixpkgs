@@ -12122,6 +12122,25 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
+  PerconaToolkit = buildPerlPackage rec {
+    name = "Percona-Toolkit-3.0.11";
+    src = fetchFromGitHub {
+      owner = "percona";
+      repo = "percona-toolkit";
+      rev = "6e5c5c5e6db0a32c6951c8f798c4547539cdab87";
+      sha256 = "18wxvp7psqrx0zdvg47azrals572hv9fx1s3p0q65s87lnk3q63l";
+    };
+    outputs = [ "out" ];
+    buildInputs = [ DBDmysql DBI DigestMD5 IOSocketSSL TermReadKey TimeHiRes ];
+    meta = {
+      description = ''Collection of advanced command-line tools to perform a variety of MySQL and system tasks.'';
+      homepage = http://www.percona.com/software/percona-toolkit;
+      license = with stdenv.lib.licenses; [ lgpl2 ];
+      platforms = stdenv.lib.platforms.linux;
+      maintainers = with stdenv.lib.maintainers; [ izorkin ];
+    };
+  };
+
   Perl5lib = buildPerlPackage rec {
     name = "perl5lib-1.02";
     src = fetchurl {
