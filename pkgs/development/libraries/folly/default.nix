@@ -1,5 +1,5 @@
-{ stdenv, fetchFromGitHub, cmake, boost, libevent, double-conversion, glog
-, google-gflags, libiberty, openssl }:
+{ stdenv, fetchFromGitHub, fetchpatch, cmake, boost, libevent, double-conversion, glog
+, google-gflags, gtest, libiberty, openssl }:
 
 stdenv.mkDerivation rec {
   name = "folly-${version}";
@@ -25,7 +25,22 @@ stdenv.mkDerivation rec {
     openssl
   ];
 
+  patches = [ ./disable-tests-x86_64-linux.patch ];
+
+  cmakeFlags = [
+    "-DBUILD_TESTS:BOOL=ON"
+    "-DUSE_CMAKE_GOOGLE_TEST_INTEGRATION:BOOL=ON"
+  ];
+  CXXFLAGS = [
+    "-Wno-error=maybe-uninitialized"
+    "-Wno-error=stringop-overflow"
+  ];
+
   enableParallelBuilding = true;
+
+  checkInputs = [ gtest ];
+  checkTarget = "test";
+  doCheck = true;
 
   meta = with stdenv.lib; {
     description = "An open-source C++ library developed and used at Facebook";
