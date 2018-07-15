@@ -153,8 +153,8 @@
     src = fetchFromGitHub {
       owner = "apcera";
       repo = "nginx-statsd";
-      rev = "2147d61dc31dd4865604be92349e6192a905d21a";
-      sha256 = "19s3kwjgf51jkwknh7cfi82p6kifl8rl146wxc3ijds12776ilsv";
+      rev = "b970e40467a624ba710c9a5106879a0554413d15";
+      sha256 = "1x8j4i1i2ahrr7qvz03vkldgdjdxi6mx75mzkfizfcc8smr4salr";
     };
   };
 
