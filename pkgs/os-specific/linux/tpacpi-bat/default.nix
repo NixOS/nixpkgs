@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, perl, kmod }:
+{ stdenv, fetchFromGitHub, perl, kmod, coreutils }:
 
 # Requires the acpi_call kernel module in order to run.
 stdenv.mkDerivation rec {
@@ -20,7 +20,9 @@ stdenv.mkDerivation rec {
   '';
 
   postPatch = ''
-    substituteInPlace tpacpi-bat --replace modprobe ${kmod}/bin/modprobe
+    substituteInPlace tpacpi-bat \
+      --replace modprobe ${kmod}/bin/modprobe \
+      --replace cat ${coreutils}/bin/cat
   '';
 
   meta = {
