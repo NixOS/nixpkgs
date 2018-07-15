@@ -14572,6 +14572,8 @@ in {
     };
   };
 
+  vega_datasets = callPackage ../development/python-modules/vega_datasets { };
+
   virtkey = callPackage ../development/python-modules/virtkey { };
 
   virtual-display = callPackage ../development/python-modules/virtual-display { };
