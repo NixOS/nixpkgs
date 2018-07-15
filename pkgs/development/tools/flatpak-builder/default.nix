@@ -36,7 +36,7 @@
 }:
 
 let
-  version = "0.99.1";
+  version = "0.99.3";
 in stdenv.mkDerivation rec {
   name = "flatpak-builder-${version}";
 
@@ -44,7 +44,7 @@ in stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://github.com/flatpak/flatpak-builder/releases/download/${version}/${name}.tar.xz";
-    sha256 = "0xgywl4qsxq7lw1v7hmvczzv3pl12bzz3jv59y8s5gbk54rzbyi5";
+    sha256 = "0sq3rcy3vwa36p6wq63wdvkk0hrs3qj1ngk26j9947nc14z39plk";
   };
 
   nativeBuildInputs = [
