@@ -1,0 +1,19 @@
+--- a/folly/experimental/io/test/FsUtilTest.cpp
++++ b/folly/experimental/io/test/FsUtilTest.cpp
+@@ -50,10 +50,10 @@ TEST(Simple, Path) {
+ }
+
+ TEST(Simple, CanonicalizeParent) {
+-  path a("/usr/bin/tail");
+-  path b("/usr/lib/../bin/tail");
+-  path c("/usr/bin/DOES_NOT_EXIST_ASDF");
+-  path d("/usr/lib/../bin/DOES_NOT_EXIST_ASDF");
++  path a("/var/empty");
++  path b("/var/log/../empty");
++  path c("/var/empty/DOES_NOT_EXIST_ASDF");
++  path d("/var/log/../empty/DOES_NOT_EXIST_ASDF");
+
+   EXPECT_EQ(a, canonical(a));
+   EXPECT_EQ(a, canonical_parent(b));
+
+

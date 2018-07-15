@@ -1,7 +1,9 @@
-{ stdenv, fetchFromGitHub, cmake, boost, libevent, double-conversion, glog
-, google-gflags, libiberty, openssl }:
+{ stdenv, fetchFromGitHub, fetchpatch, cmake, boost, libevent, double-conversion, glog
+, google-gflags, gtest, libiberty, openssl }:
 
-stdenv.mkDerivation rec {
+let
+  disableTests = import ./disable-tests.nix { inherit (stdenv) lib; };
+in stdenv.mkDerivation rec {
   name = "folly-${version}";
   version = "2019.04.22.00";
 
@@ -25,7 +27,33 @@ stdenv.mkDerivation rec {
     openssl
   ];
 
+  patches = [ ./nixos-test-paths.patch ];
+  postPatch = disableTests {
+    "EventBaseTest" = true;
+    "HHWheelTimerTest" = true;
+    "folly/executors/test/ThreadPoolExecutorTest.cpp" = [ "CPUExpiration" ];
+    "folly/experimental/test/TestUtilTest.cpp" = [ "ChunkCob" "GlogPatterns" ];
+    "folly/fibers/test/FibersTest.cpp" = [ "batonTimedWaitPostEvb" "batonTimedWaitTimeoutEvb" ];
+    "folly/futures/test/RetryingTest.cpp" = [ "policy_capped_jittered_exponential_backoff" ];
+    "folly/futures/test/WaitTest.cpp" = [ "multipleWait" ];
+    "folly/io/async/test/AsyncUDPSocketTest.cpp" = [ "ConnectedPingPong" ];
+    "folly/logging/test/AsyncFileWriterTest.cpp" = [ "fork" ];
+  };
+
+  cmakeFlags = [
+    "-DBUILD_TESTS:BOOL=ON"
+    "-DUSE_CMAKE_GOOGLE_TEST_INTEGRATION:BOOL=ON"
+  ];
+  CXXFLAGS = [
+    "-Wno-error=maybe-uninitialized"
+    "-Wno-error=stringop-overflow"
+  ];
+
   enableParallelBuilding = true;
+
+  checkInputs = [ gtest ];
+  checkTarget = "test";
+  doCheck = true;
 
   meta = with stdenv.lib; {
     description = "An open-source C++ library developed and used at Facebook";
