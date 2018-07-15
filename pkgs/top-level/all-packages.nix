@@ -19717,6 +19717,8 @@ with pkgs;
 
   nethack = callPackage ../games/nethack { };
 
+  nethack-qt = callPackage ../games/nethack { qtMode = true; };
+
   nethack-x11 = callPackage ../games/nethack { x11Mode = true; };
 
   neverball = callPackage ../games/neverball { };
