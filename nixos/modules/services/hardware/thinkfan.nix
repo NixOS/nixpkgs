@@ -32,7 +32,6 @@ let
     # will add a fixed value of 10 °C the 3rd value read from that file. Check out
     # http://www.thinkwiki.org/wiki/Thermal_Sensors to find out how much you may
     # want to add to certain temperatures.
-    
 
     ${cfg.fan}
     ${cfg.sensors}
@@ -55,6 +54,7 @@ in {
     services.thinkfan = {
 
       enable = mkOption {
+        type = types.bool;
         default = false;
         description = ''
           Whether to enable thinkfan, fan controller for IBM/Lenovo ThinkPads.
@@ -62,6 +62,7 @@ in {
       };
 
       sensors = mkOption {
+        type = types.lines;
         default = ''
           tp_thermal /proc/acpi/ibm/thermal (0,0,10)
         '';
@@ -79,28 +80,26 @@ in {
             S.M.A.R.T. (since 0.9 and requires the USE_ATASMART compilation flag)
               Which reads the temperature directly from the hard
               disk using libatasmart (keyword atasmart)
+
           Multiple sensors may be added, in which case they will be
           numbered in their order of appearance.
         '';
       };
 
       fan = mkOption {
+        type = types.str;
         default = "tp_fan /proc/acpi/ibm/fan";
         description =''
           Specifies the fan we want to use.
           On anything other than a Thinkpad you'll probably
           use some PWM control file in /sys/class/hwmon.
-          Remember that fan levels range from 0 to 255 and that
-          they're just a number, not including the word "level"
-          as seen below.
           A sysfs fan would be specified like this:
             pwm_fan /sys/class/hwmon/hwmon2/device/pwm1
-
-          Remember you can only have one fan.
         '';
       };
 
       levels = mkOption {
+        type = types.lines;
         default = ''
           (0,     0,      55)
           (1,     48,     60)
@@ -110,13 +109,12 @@ in {
           (7,     60,     85)
           (127,   80,     32767)
         '';
-        description =''
-					Syntax:
-					(LEVEL, LOW, HIGH)
-					LEVEL is the fan level to use (0-7 with thinkpad_acpi)
-					LOW is the temperature at which to step down to the previous level
-					HIGH is the temperature at which to step up to the next level
-					All numbers are integers.
+        description = ''
+          (LEVEL, LOW, HIGH)
+          LEVEL is the fan level to use (0-7 with thinkpad_acpi).
+          LOW is the temperature at which to step down to the previous level.
+          HIGH is the temperature at which to step up to the next level.
+          All numbers are integers.
         '';
       };
 
