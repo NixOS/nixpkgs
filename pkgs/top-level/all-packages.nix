@@ -19150,11 +19150,9 @@ with pkgs;
 
   xmind = callPackage ../applications/misc/xmind { };
 
-  xneur_0_13 = callPackage ../applications/misc/xneur { };
+  xneur = callPackage ../applications/misc/xneur { };
 
   xneur_0_8 = callPackage ../applications/misc/xneur/0.8.nix { };
-
-  xneur = xneur_0_13;
 
   gxneur = callPackage ../applications/misc/gxneur  {
     inherit (gnome2) libglade GConf;
