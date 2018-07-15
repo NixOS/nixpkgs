@@ -32,6 +32,10 @@ let
     #! ${stdenv.shell}
     if [ "$*" = "describe --tags --long" ]; then
       echo "${version}-unknown"
+    elif [ "$*" = "describe --tags --abbrev=8 --long" ]; then
+      echo "${version}-unknown"
+    elif [ "$*" = "describe --tags --abbrev=8 --exact-match" ]; then
+      echo "${version}"
     elif [ "$*" = "rev-parse HEAD" ]; then
       if [ "$(dirname "$(pwd)")" = "xml" ]; then
         echo "${xmlRev}"
