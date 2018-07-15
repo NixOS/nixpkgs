@@ -1,4 +1,5 @@
-{ stdenv, lib, fetchurl, writeScript, coreutils, ncurses, gzip, flex, bison, less
+{ stdenv, lib, fetchurl, writeScript, coreutils, ncurses, gzip, flex, bison
+, less, makeWrapper
 , x11Mode ? false, qtMode ? false, libXaw, libXext, mkfontdir, pkgconfig, qt5
 }:
 
@@ -35,7 +36,7 @@ in stdenv.mkDerivation rec {
                       ++ lib.optionals x11Mode [ mkfontdir ]
                       ++ lib.optionals qtMode [
                            pkgconfig mkfontdir qt5.qtbase.dev
-                           qt5.qtmultimedia.dev
+                           qt5.qtmultimedia.dev makeWrapper
                          ];
 
   makeFlags = [ "PREFIX=$(out)" ];
@@ -113,6 +114,11 @@ in stdenv.mkDerivation rec {
     chmod +x $out/bin/nethack
     ${lib.optionalString x11Mode "mv $out/bin/nethack $out/bin/nethack-x11"}
     ${lib.optionalString qtMode "mv $out/bin/nethack $out/bin/nethack-qt"}
+  '';
+
+  postFixup = lib.optionalString qtMode ''
+    wrapProgram $out/bin/nethack-qt \
+      --prefix QT_PLUGIN_PATH : "${qt5.qtbase}/${qt5.qtbase.qtPluginPrefix}"
   '';
 
   meta = with stdenv.lib; {
