@@ -120,6 +120,15 @@
     };
   };
 
+  sla = {
+    src = fetchFromGitHub {
+      owner = "goldenclone";
+      repo = "nginx-sla";
+      rev = "7778f0125974befbc83751d0e1cadb2dcea57601";
+      sha256 = "1x5hm6r0dkm02ffny8kjd7mmq8przyd9amg2qvy5700x6lb63pbs";
+    };
+  }; 
+
   fluentd = {
     src = fetchFromGitHub {
       owner = "fluent";
