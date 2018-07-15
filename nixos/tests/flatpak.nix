@@ -10,6 +10,7 @@ import ./make-test.nix ({ pkgs, ... }:
   machine = { config, pkgs, ... }: {
     imports = [ ./common/x11.nix ];
     services.xserver.desktopManager.gnome3.enable = true; # TODO: figure out minimal environment where the tests work
+    environment.gnome3.excludePackages = pkgs.gnome3.optionalPackages;
     services.flatpak.enable = true;
     environment.systemPackages = with pkgs; [ gnupg gnome-desktop-testing ostree python2 ];
     virtualisation.memorySize = 2047;
