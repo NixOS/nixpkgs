@@ -30,11 +30,17 @@ in symlinkJoin {
     # Fix up memory layouts
     rm -rf $out/share/dwarftherapist/memory_layouts/linux
     mkdir -p $out/share/dwarftherapist/memory_layouts/linux
-    origmd5=$(cat "${dwarf-fortress}/hash.md5.orig" | cut -c1-8)
-    patchedmd5=$(cat "${dwarf-fortress}/hash.md5" | cut -c1-8)
-    substitute \
-      ${dwarf-therapist}/share/dwarftherapist/memory_layouts/${inifile} \
-      $out/share/dwarftherapist/memory_layouts/${inifile} \
-      --replace "$origmd5" "$patchedmd5"
+    orig_md5=$(cat "${dwarf-fortress}/hash.md5.orig" | cut -c1-8)
+    patched_md5=$(cat "${dwarf-fortress}/hash.md5" | cut -c1-8)
+    input_file="${dwarf-therapist}/share/dwarftherapist/memory_layouts/${inifile}"
+    output_file="$out/share/dwarftherapist/memory_layouts/${inifile}"
+
+    echo "[Dwarf Therapist Wrapper] Fixing Dwarf Fortress MD5 prefix:"
+    echo "  Input:   $input_file"
+    echo "  Search:  $orig_md5"
+    echo "  Output:  $output_file"
+    echo "  Replace: $patched_md5"
+
+    substitute "$input_file" "$output_file" --replace "$orig_md5" "$patched_md5"
   '';
 }
