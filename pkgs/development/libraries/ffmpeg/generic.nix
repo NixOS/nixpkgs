@@ -148,7 +148,7 @@ stdenv.mkDerivation rec {
       "--disable-stripping"
     # Disable mmx support for 0.6.90
       (verFix null "0.6.90" "--disable-mmx")
-  ] ++ optionals (stdenv.hostPlatform == stdenv.buildPlatform) [
+  ] ++ optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
       "--cross-prefix=${stdenv.cc.targetPrefix}"
       "--enable-cross-compile"
   ] ++ optional stdenv.cc.isClang "--cc=clang";
