@@ -1,0 +1,88 @@
+--- a/folly/IndexedMemPool.h
++++ b/folly/IndexedMemPool.h
+@@ -359,7 +359,7 @@ struct IndexedMemPool : boost::noncopyable {
+     }
+   };
+
+-  struct alignas(hardware_destructive_interference_size) LocalList {
++  struct LocalList {
+     AtomicStruct<TaggedPtr, Atom> head;
+
+     LocalList() : head(TaggedPtr{}) {}
+@@ -385,7 +385,7 @@ struct IndexedMemPool : boost::noncopyable {
+
+   /// raw storage, only 1..min(size_,actualCapacity_) (inclusive) are
+   /// actually constructed.  Note that slots_[0] is not constructed or used
+-  alignas(hardware_destructive_interference_size) Slot* slots_;
++  Slot* slots_;
+
+   /// use AccessSpreader to find your list.  We use stripes instead of
+   /// thread-local to avoid the need to grow or shrink on thread start
+@@ -394,8 +394,7 @@ struct IndexedMemPool : boost::noncopyable {
+
+   /// this is the head of a list of node chained by globalNext, that are
+   /// themselves each the head of a list chained by localNext
+-  alignas(hardware_destructive_interference_size)
+-      AtomicStruct<TaggedPtr, Atom> globalHead_;
++  AtomicStruct<TaggedPtr, Atom> globalHead_;
+
+   ///////////// private methods
+
+--- a/folly/concurrency/UnboundedQueue.h
++++ b/folly/concurrency/UnboundedQueue.h
+@@ -213,7 +213,7 @@ template <
+     bool SingleConsumer,
+     bool MayBlock,
+     size_t LgSegmentSize = 8,
+-    size_t LgAlign = constexpr_log2(hardware_destructive_interference_size),
++    size_t LgAlign = 4,
+     template <typename> class Atom = std::atomic>
+ class UnboundedQueue {
+   using Ticket = uint64_t;
+@@ -865,7 +865,7 @@ template <
+     typename T,
+     bool MayBlock,
+     size_t LgSegmentSize = 8,
+-    size_t LgAlign = constexpr_log2(hardware_destructive_interference_size),
++    size_t LgAlign = 4,
+     template <typename> class Atom = std::atomic>
+ using USPSCQueue =
+     UnboundedQueue<T, true, true, MayBlock, LgSegmentSize, LgAlign, Atom>;
+@@ -874,7 +874,7 @@ template <
+     typename T,
+     bool MayBlock,
+     size_t LgSegmentSize = 8,
+-    size_t LgAlign = constexpr_log2(hardware_destructive_interference_size),
++    size_t LgAlign = 4,
+     template <typename> class Atom = std::atomic>
+ using UMPSCQueue =
+     UnboundedQueue<T, false, true, MayBlock, LgSegmentSize, LgAlign, Atom>;
+@@ -883,7 +883,7 @@ template <
+     typename T,
+     bool MayBlock,
+     size_t LgSegmentSize = 8,
+-    size_t LgAlign = constexpr_log2(hardware_destructive_interference_size),
++    size_t LgAlign = 4,
+     template <typename> class Atom = std::atomic>
+ using USPMCQueue =
+     UnboundedQueue<T, true, false, MayBlock, LgSegmentSize, LgAlign, Atom>;
+@@ -892,7 +892,7 @@ template <
+     typename T,
+     bool MayBlock,
+     size_t LgSegmentSize = 8,
+-    size_t LgAlign = constexpr_log2(hardware_destructive_interference_size),
++    size_t LgAlign = 4,
+     template <typename> class Atom = std::atomic>
+ using UMPMCQueue =
+     UnboundedQueue<T, false, false, MayBlock, LgSegmentSize, LgAlign, Atom>;
+--- a/folly/synchronization/HazptrRec.h
++++ b/folly/synchronization/HazptrRec.h
+@@ -29,7 +29,7 @@ namespace folly {
+  *  Contains the actual hazard pointer.
+  */
+ template <template <typename> class Atom>
+-class alignas(hardware_destructive_interference_size) hazptr_rec {
++class hazptr_rec {
+   Atom<const void*> hazptr_{nullptr}; // the hazard pointer
+   hazptr_domain<Atom>* domain_;
+   hazptr_rec* next_;

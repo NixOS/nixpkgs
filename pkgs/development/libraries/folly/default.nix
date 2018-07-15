@@ -3,6 +3,7 @@
 
 let
   disableTests = import ./disable-tests.nix { inherit (stdenv) lib; };
+  optionals = stdenv.lib.optionals;
 in stdenv.mkDerivation rec {
   name = "folly-${version}";
   version = "2019.04.22.00";
@@ -27,24 +28,40 @@ in stdenv.mkDerivation rec {
     openssl
   ];
 
-  patches = [ ./nixos-test-paths.patch ];
+  patches = optionals stdenv.isDarwin [
+    ./darwin-printf-test.patch
+    ./macos-10.11.patch
+  ] ++ optionals stdenv.isLinux [
+    ./nixos-test-paths.patch
+  ];
   postPatch = disableTests {
+    "AsyncUDPSocketTest" = stdenv.isDarwin;
     "EventBaseTest" = true;
     "HHWheelTimerTest" = true;
-    "folly/executors/test/ThreadPoolExecutorTest.cpp" = [ "CPUExpiration" ];
+    "baton_test" = stdenv.isDarwin;
+    "codel_test" = stdenv.isDarwin;
+    "deterministic_schedule_test" = stdenv.isDarwin;
+    "exception_wrapper_test" = stdenv.isDarwin;
+    "fibers_test" = stdenv.isDarwin;
+    "folly/executors/test/ThreadPoolExecutorTest.cpp" = optionals stdenv.isLinux [ "CPUExpiration" ];
+    "folly/experimental/test/LockFreeRingBufferTest.cpp" = optionals stdenv.isDarwin [ "writesNeverFail" ];
     "folly/experimental/test/TestUtilTest.cpp" = [ "ChunkCob" "GlogPatterns" ];
-    "folly/fibers/test/FibersTest.cpp" = [ "batonTimedWaitPostEvb" "batonTimedWaitTimeoutEvb" ];
-    "folly/futures/test/RetryingTest.cpp" = [ "policy_capped_jittered_exponential_backoff" ];
-    "folly/futures/test/WaitTest.cpp" = [ "multipleWait" ];
-    "folly/io/async/test/AsyncUDPSocketTest.cpp" = [ "ConnectedPingPong" ];
-    "folly/logging/test/AsyncFileWriterTest.cpp" = [ "fork" ];
+    "folly/fibers/test/FibersTest.cpp" = optionals stdenv.isLinux [ "batonTimedWaitPostEvb" "batonTimedWaitTimeoutEvb" ];
+    "folly/futures/test/RetryingTest.cpp" = [ "policy_capped_jittered_exponential_backoff" ] ++ optionals stdenv.isDarwin [ "policy_sleep_defaults" ];
+    "folly/futures/test/WaitTest.cpp" = optionals stdenv.isLinux [ "multipleWait" ];
+    "folly/io/async/test/AsyncUDPSocketTest.cpp" = optionals stdenv.isLinux [ "ConnectedPingPong" ];
+    "folly/logging/test/AsyncFileWriterTest.cpp" = [ "fork" ] ++ optionals stdenv.isDarwin [ "discard" ];
+    "folly/test/FutexTest.cpp" = optionals stdenv.isDarwin [ "basic_deterministic" ];
+    "folly/test/sorted_vector_test.cpp" = optionals stdenv.isDarwin [ "TestSetBulkInsertionSortMerge" "TestSetBulkInsertionSortMergeDups" "TestSetBulkInsertionSortNoMerge" ];
+    "lifo_sem_test" = stdenv.isDarwin;
+    "ssl_session_test" = stdenv.isDarwin;
   };
 
   cmakeFlags = [
     "-DBUILD_TESTS:BOOL=ON"
     "-DUSE_CMAKE_GOOGLE_TEST_INTEGRATION:BOOL=ON"
   ];
-  CXXFLAGS = [
+  CXXFLAGS = optionals stdenv.cc.isGNU [
     "-Wno-error=maybe-uninitialized"
     "-Wno-error=stringop-overflow"
   ];
@@ -60,7 +77,7 @@ in stdenv.mkDerivation rec {
     homepage = https://github.com/facebook/folly;
     license = licenses.asl20;
     # 32bit is not supported: https://github.com/facebook/folly/issues/103
-    platforms = [ "x86_64-linux" ];
+    platforms = [ "x86_64-darwin" "x86_64-linux" ];
     maintainers = with maintainers; [ abbradar ];
   };
 }

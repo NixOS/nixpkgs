@@ -10167,7 +10167,10 @@ in
 
   fontconfig-ultimate = callPackage ../development/libraries/fontconfig-ultimate {};
 
-  folly = callPackage ../development/libraries/folly { };
+  folly = callPackage ../development/libraries/folly {
+    # Clang 5 miscompiles folly. Build with a newer compiler on Darwin.
+    stdenv = if stdenv.isDarwin then llvmPackages_7.stdenv else stdenv;
+  };
 
   folks = callPackage ../development/libraries/folks { };
 
