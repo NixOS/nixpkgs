@@ -19684,7 +19684,7 @@ with pkgs;
 
   nethack = callPackage ../games/nethack { };
 
-  nethack-qt4 = callPackage ../games/nethack { qt4Mode = true; };
+  nethack-qt = callPackage ../games/nethack { qtMode = true; };
 
   nethack-x11 = callPackage ../games/nethack { x11Mode = true; };
 
