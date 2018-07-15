@@ -15666,6 +15666,8 @@ with pkgs;
     inherit (gnome3) gtksourceview;
   };
 
+  dronin = callPackage ../applications/science/robotics/dronin { };
+
   dvb_apps  = callPackage ../applications/video/dvb-apps { };
 
   dvdauthor = callPackage ../applications/video/dvdauthor { };

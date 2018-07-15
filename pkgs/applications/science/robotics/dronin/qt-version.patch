@@ -1,0 +1,26 @@
+diff --git a/ground/tools.pri b/ground/tools.pri
+index 2dd885da8..0f930cca3 100644
+--- a/ground/tools.pri
++++ b/ground/tools.pri
+@@ -10,7 +10,7 @@ ccache {
+ 
+ DR_QT_MAJOR_VERSION=5
+ DR_QT_MINOR_VERSION=9
+-DR_QT_PATCH_VERSION=2
++DR_QT_PATCH_VERSION=3
+ 
+ # Must match make/tools.mk
+ BREAKPAD = $$TOOLS_DIR/breakpad/20170922
+diff --git a/make/tools.mk b/make/tools.mk
+index 30c56ba9f..1c90d8071 100644
+--- a/make/tools.mk
++++ b/make/tools.mk
+@@ -23,7 +23,7 @@ endif
+ 
+ # Change the Qt version here, format is e.g. 5.8.0, 5.8.0-1 or 5.8.0-beta etc.
+ 
+-QT_VERSION := 5.9.2
++QT_VERSION := 5.9.3
+ QT_MINGW_VERSION := 530
+ 
+ # These bits are not user serviceable
