@@ -142,13 +142,18 @@ let
       # https://git.archlinux.org/svntogit/packages.git/tree/trunk?h=packages/chromium
       # for updated patches and hints about build flags
     # (gentooPatch "<patch>" "0000000000000000000000000000000000000000000000000000000000000000")
-      ./patches/fix-openh264.patch
       ./patches/fix-freetype.patch
     ]  ++ optionals (versionRange "66" "68") [
       ./patches/nix_plugin_paths_52.patch
+      (githubPatch "4d10424f9e2a06978cdd6cdf5403fcaef18e49fc" "11la1jycmr5b5rw89mzcdwznmd2qh28sghvz9klr1qhmsmw1vzjc")
     ]  ++ optionals (versionAtLeast version "68") [
       ./patches/nix_plugin_paths_68.patch
+    ]  ++ optionals (versionRange "68" "69") [
+      ./patches/remove-webp-include-68.patch
+      (githubPatch "4d10424f9e2a06978cdd6cdf5403fcaef18e49fc" "11la1jycmr5b5rw89mzcdwznmd2qh28sghvz9klr1qhmsmw1vzjc")
       (githubPatch "56cb5f7da1025f6db869e840ed34d3b98b9ab899" "04mp5r1yvdvdx6m12g3lw3z51bzh7m3gr73mhblkn4wxdbvi3dcs")
+    ]  ++ optionals (versionAtLeast version "69") [
+      ./patches/remove-webp-include-69.patch
     ] ++ optional enableWideVine ./patches/widevine.patch;
 
     postPatch = ''
