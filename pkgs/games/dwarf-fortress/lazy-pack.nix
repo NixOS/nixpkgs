@@ -1,8 +1,9 @@
-{ stdenvNoCC, lib, buildEnv
-, dwarf-fortress, themes
+{ stdenvNoCC, lib, buildEnv, callPackage
+, df-games, themes, latestVersion, versionToName
+, dfVersion ? latestVersion
   # This package should, at any given time, provide an opinionated "optimal"
   # DF experience. It's the equivalent of the Lazy Newbie Pack, that is, and
-  # should contain every utility available.
+  # should contain every utility available unless you disable them.
 , enableDFHack ? stdenvNoCC.isLinux
 , enableTWBT ? enableDFHack
 , enableSoundSense ? true
@@ -16,6 +17,14 @@
 , enableFPS ? false
 }:
 
+with lib;
+
+let
+  dfGame = versionToName dfVersion;
+  dwarf-fortress = if hasAttr dfGame df-games
+                   then getAttr dfGame df-games
+                   else throw "Unknown Dwarf Fortress version: ${dfVersion}";
+in
 buildEnv {
   name = "dwarf-fortress-full";
   paths = [
@@ -28,7 +37,7 @@ buildEnv {
 
   meta = with stdenvNoCC.lib; {
     description = "An opinionated wrapper for Dwarf Fortress";
-    maintainers = with maintainers; [ Baughn ];
+    maintainers = with maintainers; [ Baughn numinit ];
     license = licenses.mit;
     platforms = platforms.all;
     homepage = https://github.com/NixOS/nixpkgs/;
