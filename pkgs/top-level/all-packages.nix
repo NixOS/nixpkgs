@@ -10919,6 +10919,8 @@ with pkgs;
 
   mergerfs = callPackage ../tools/filesystems/mergerfs { };
 
+  mergerfs-tools = callPackage ../tools/filesystems/mergerfs/tools.nix { };
+
   ## libGL/libGLU/Mesa stuff
 
   # Default libGL implementation, should provide headers and libGL.so/libEGL.so/... to link agains them
