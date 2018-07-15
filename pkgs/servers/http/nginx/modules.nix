@@ -116,8 +116,8 @@
     src = fetchFromGitHub {
       owner = "openresty";
       repo = "set-misc-nginx-module";
-      rev = "v0.28";
-      sha256 = "1vixj60q0liri7k5ax85grj7q9vvgybkx421bwphbhai5xrjip96";
+      rev = "v0.32";
+      sha256 = "048a6jwinbjgxiprjj9ml3fdp0mhkx89g6ggams57fsx9m5vaxax";
     };
   };
 
