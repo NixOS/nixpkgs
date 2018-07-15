@@ -8,7 +8,7 @@
 , enableTWBT ? enableDFHack
 , enableSoundSense ? true
 , enableStoneSense ? true
-, enableDwarfTherapist ? true, dwarf-therapist
+, enableDwarfTherapist ? true
 , enableLegendsBrowser ? true, legends-browser
 , theme ? themes.phoebus
 # General config options:
@@ -24,6 +24,7 @@ let
   dwarf-fortress = if hasAttr dfGame df-games
                    then getAttr dfGame df-games
                    else throw "Unknown Dwarf Fortress version: ${dfVersion}";
+  dwarf-therapist = dwarf-fortress.dwarf-therapist;
 in
 buildEnv {
   name = "dwarf-fortress-full";

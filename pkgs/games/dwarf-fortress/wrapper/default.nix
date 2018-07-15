@@ -1,5 +1,6 @@
 { stdenv, lib, buildEnv, substituteAll
 , dwarf-fortress, dwarf-fortress-unfuck
+, dwarf-therapist
 , enableDFHack ? false, dfhack
 , enableSoundSense ? false, soundSense, jdk
 , enableStoneSense ? false
@@ -89,7 +90,7 @@ stdenv.mkDerivation rec {
   runDFHack = ./dfhack.in;
   runSoundSense = ./soundSense.in;
 
-  passthru = { inherit dwarf-fortress; };
+  passthru = { inherit dwarf-fortress dwarf-therapist; };
 
   buildCommand = ''
     mkdir -p $out/bin

@@ -64,9 +64,17 @@ let
 
         dfhack = callPackage ./dfhack {
           inherit (pkgs.perlPackages) XMLLibXML XMLLibXSLT;
-          inherit dfVersion;
-          inherit twbt;
+          inherit dfVersion twbt;
           stdenv = gccStdenv;
+        };
+
+        dwarf-therapist = callPackage ./dwarf-therapist/wrapper.nix {
+          inherit dwarf-fortress;
+          dwarf-therapist = pkgs.qt5.callPackage ./dwarf-therapist {
+            texlive = pkgs.texlive.combine {
+              inherit (pkgs.texlive) scheme-basic float caption wrapfig adjmulticol sidecap preprint enumitem;
+            };
+          };
         };
       in
       callPackage ./wrapper {
@@ -76,30 +84,23 @@ let
         dwarf-fortress-unfuck = dwarf-fortress-unfuck;
         twbt = twbt;
         dfhack = dfhack;
+        dwarf-therapist = dwarf-therapist;
       };
   }) (lib.attrNames self.df-hashes));
 
   self = rec {
     df-hashes = builtins.fromJSON (builtins.readFile ./game.json);
-    
+
+    # Aliases for the latest Dwarf Fortress and the selected Therapist install
     dwarf-fortress = getAttr (versionToName latestVersion) df-games;
+    dwarf-therapist = dwarf-fortress.dwarf-therapist;
+    dwarf-fortress-original = dwarf-fortress.dwarf-fortress;
 
     dwarf-fortress-full = callPackage ./lazy-pack.nix {
-      inherit versionToName;
-      inherit latestVersion;
-      inherit df-games;
+      inherit df-games versionToName latestVersion;
     };
-
+    
     soundSense = callPackage ./soundsense.nix { };
-
-    dwarf-therapist = callPackage ./dwarf-therapist/wrapper.nix {
-      inherit (dwarf-fortress) dwarf-fortress;
-      dwarf-therapist = pkgs.qt5.callPackage ./dwarf-therapist {
-        texlive = pkgs.texlive.combine {
-          inherit (pkgs.texlive) scheme-basic float caption wrapfig adjmulticol sidecap preprint enumitem;
-        };
-      };
-    };
 
     legends-browser = callPackage ./legends-browser {};
 
@@ -107,10 +108,9 @@ let
       stdenv = stdenvNoCC;
     });
 
-    # aliases
+    # Theme aliases
     phoebus-theme = themes.phoebus;
     cla-theme = themes.cla;
-    dwarf-fortress-original = dwarf-fortress.dwarf-fortress;
   };
 
 in self // df-games
