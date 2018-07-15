@@ -41,8 +41,13 @@ in python3Packages.buildPythonApplication rec {
   patches = fetchpatch {
     name = "CVE-2018-10895.patch";
     url = https://github.com/qutebrowser/qutebrowser/commit/c2ff32d92ba9bf40ff53498ee04a4124d4993c85.patch;
-    excludes = [ "tests/*" ];
-    sha256 = "0mdqa9w1p6cmli6976v4wi0sw9r4p5prkj7lzfd1877wk11c9c73";
+    excludes = [
+      "tests/end2end/data/misc/qutescheme_csrf.html"
+      "tests/end2end/features/qutescheme.feature"
+      "tests/end2end/test_invocations.py"
+      "tests/unit/browser/webkit/network/test_filescheme.py"
+    ];
+    sha256 = "0mf0b7659xfvg1v45v6kv8cb1cjzb9y30rvikn76bi3w10j9dysv";
   };
 
   # Needs tox
