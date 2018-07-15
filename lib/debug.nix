@@ -77,7 +77,7 @@ rec {
                (modify depth snip x)) y;
 
   /* A combination of `traceVal` and `traceSeq` */
-  traceValSeqFn = f: v: traceVal f (builtins.deepSeq v v);
+  traceValSeqFn = f: v: traceValFn f (builtins.deepSeq v v);
   traceValSeq = traceValSeqFn id;
 
   /* A combination of `traceVal` and `traceSeqN`. */
