@@ -1,28 +1,30 @@
-{ stdenv, fetchFromGitHub, bison, flex, openssl }:
+{ stdenv, fetchFromGitHub, autoreconfHook, bison, flex, openssl, gnutls }:
 
 stdenv.mkDerivation rec {
-  name = "charybdis-3.5.5";
+  name = "charybdis-4.1";
 
   src = fetchFromGitHub {
     owner = "charybdis-ircd";
     repo = "charybdis";
     rev = name;
-    sha256 = "16bl516hcj1chgzkfnpg9bf9s6zr314pqzhlz6641lgyzaw1z3w0";
+    sha256 = "1j0fjf4rdiyvakxqa97x272xra64rzjhbj8faciyb4b13pyrdsmw";
   };
 
-  patches = [
-     ./remove-setenv.patch
-  ];
+  postPatch = ''
+    substituteInPlace include/defaults.h --replace 'PKGLOCALSTATEDIR "' '"/var/lib/charybdis'
+  '';
+
+  autoreconfPhase = "sh autogen.sh";
 
   configureFlags = [
     "--enable-epoll"
     "--enable-ipv6"
     "--enable-openssl=${openssl.dev}"
     "--with-program-prefix=charybdis-"
-    "--sysconfdir=/etc/charybdis"
   ];
 
-  buildInputs = [ bison flex openssl ];
+  nativeBuildInputs = [ autoreconfHook bison flex ];
+  buildInputs = [ openssl gnutls ];
 
   meta = with stdenv.lib; {
     description = "IRCv3 server designed to be highly scalable";
