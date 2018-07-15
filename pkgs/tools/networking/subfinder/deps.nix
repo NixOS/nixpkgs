@@ -19,15 +19,6 @@
     };
   }
   {
-    goPackagePath  = "github.com/subfinder/subfinder";
-    fetch = {
-      type = "git";
-      url = "https://github.com/subfinder/subfinder";
-      rev =  "26596affed961c535676395f443acc5af95ac9e6";
-      sha256 = "0m842jyrwlg4kaja1m3kca07jf20fxva0frg66b13zpsm8hdp10q";
-    };
-  }
-  {
     goPackagePath  = "github.com/subfinder/urlx";
     fetch = {
       type = "git";
