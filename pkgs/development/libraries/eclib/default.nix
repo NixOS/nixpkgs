@@ -17,12 +17,12 @@ assert withFlint -> flint != null;
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";
   pname = "eclib";
-  version = "20171219";
+  version = "20180710";
   src = fetchFromGitHub {
     owner = "JohnCremona";
     repo = "${pname}";
     rev = "v${version}";
-    sha256 = "1yw488ng0labpxqqpxq0710qnndxl8plvcaqklpbwwd62a47knlr";
+    sha256 = "1kmwpw971sipb4499c9b35q5pz6sms5qndqrvq7396d8hhwjg1i2";
   };
   buildInputs = [
     pari
