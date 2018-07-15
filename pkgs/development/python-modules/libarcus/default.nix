@@ -3,7 +3,8 @@
 
 buildPythonPackage rec {
   pname = "libarcus";
-  version = "3.3.0";
+  version = "3.4.1";
+  format = "other";
 
   src = fetchFromGitHub {
     owner = "Ultimaker";
