@@ -1,4 +1,4 @@
-{ stdenv, callPackage, fetchFromGitHub, makeWrapper, ant, jdk, rsync, javaPackages, libXxf86vm, gsettings-desktop-schemas }:
+{ stdenv, callPackage, fetchFromGitHub, fetchurl, xmlstarlet, makeWrapper, ant, jdk, rsync, javaPackages, libXxf86vm, gsettings-desktop-schemas }:
 
 stdenv.mkDerivation rec {
   version = "3.3.7";
@@ -18,6 +18,14 @@ stdenv.mkDerivation rec {
     # use compiled jogl to avoid patchelf'ing .so files inside jars
     rm core/library/*.jar
     cp ${javaPackages.jogl_2_3_2}/share/java/*.jar core/library/
+
+    # do not download a file during build
+    ${xmlstarlet}/bin/xmlstarlet ed --inplace -P -d '//get[@src="http://download.processing.org/reference.zip"]' build/build.xml
+    install -D -m0444 ${fetchurl {
+                          url    = http://download.processing.org/reference.zip;
+                          sha256 = "104zig026y8vbl4qksmscjq0bms8mi2jmri1ijdlbkxcqnv9bnlf";
+                        }
+                       } ./java/reference.zip
 
     # suppress "Not fond of this Java VM" message box
     substituteInPlace app/src/processing/app/platform/LinuxPlatform.java \
