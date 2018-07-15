@@ -5,7 +5,9 @@ let
     "linux32" else "linux64";
   inifile = "linux/v0.${dwarf-fortress.baseVersion}.${dwarf-fortress.patchVersion}_${platformSlug}.ini";
 
-in symlinkJoin {
+in
+  
+stdenv.mkDerivation rec {
   name = "dwarf-therapist-${dwarf-therapist.version}";
   
   wrapper = ./dwarf-therapist.in;
@@ -43,4 +45,6 @@ in symlinkJoin {
 
     substitute "$input_file" "$output_file" --replace "$orig_md5" "$patched_md5"
   '';
+
+  preferLocalBuild = true;
 }
