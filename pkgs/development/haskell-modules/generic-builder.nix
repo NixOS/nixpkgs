@@ -294,14 +294,14 @@ stdenv.mkDerivation ({
   ''
   # only use the links hack if we're actually building dylibs. otherwise, the
   # "dynamic-library-dirs" point to nonexistent paths, and the ln command becomes
-  # "ln -s $out/lib/links", which tries to recreate the links dir and fails
+  # "ln -s $out/lib-links", which tries to recreate the links dir and fails
   + (optionalString (stdenv.isDarwin && (enableSharedLibraries || enableSharedExecutables)) ''
     # Work around a limit in the macOS Sierra linker on the number of paths
     # referenced by any one dynamic library:
     #
     # Create a local directory with symlinks of the *.dylib (macOS shared
     # libraries) from all the dependencies.
-    local dynamicLinksDir="$out/lib/links"
+    local dynamicLinksDir="$out/lib-links"
     mkdir -p $dynamicLinksDir
     for d in $(grep dynamic-library-dirs "$packageConfDir/"*|awk '{print $2}'|sort -u); do
       ln -s "$d/"*.dylib $dynamicLinksDir
