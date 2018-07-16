@@ -17119,6 +17119,8 @@ with pkgs;
 
   lyx = libsForQt5.callPackage ../applications/misc/lyx { };
 
+  mac = callPackage ../development/libraries/mac { };
+
   magic-wormhole = with python3Packages; toPythonApplication magic-wormhole;
 
   mail-notification = callPackage ../desktops/gnome-2/desktop/mail-notification {};
