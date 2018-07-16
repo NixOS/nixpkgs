@@ -394,6 +394,9 @@ stdenv.mkDerivation ({
         local pkgId=$( ${gnused}/bin/sed -n -e 's|^id: ||p' $packageConfFile )
         mv $packageConfFile $packageConfDir/$pkgId.conf
       done
+
+      # delete confdir if there are no libraries
+      find $packageConfDir -maxdepth 0 -empty -delete;
     ''}
     ${optionalString isGhcjs ''
       for exeDir in "$out/bin/"*.jsexe; do
