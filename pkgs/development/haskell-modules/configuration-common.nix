@@ -558,7 +558,7 @@ self: super: {
   vimus = overrideCabal super.vimus (drv: { broken = pkgs.stdenv.isLinux && pkgs.stdenv.isi686; });
 
   # https://github.com/hspec/mockery/issues/6
-  mockery = overrideCabal super.mockery (drv: { preCheck = "export TRAVIS=true"; });
+  mockery = addTestToolDepend (overrideCabal super.mockery (drv: { preCheck = "export TRAVIS=true"; })) self.hspec-discover;
 
   # https://github.com/alphaHeavy/lzma-conduit/issues/5
   lzma-conduit = dontCheck super.lzma-conduit;
@@ -815,7 +815,7 @@ self: super: {
   http-api-data = dontCheck super.http-api-data;
 
   # https://github.com/snoyberg/yaml/issues/106
-  yaml = disableCabalFlag super.yaml "system-libyaml";
+  yaml = addTestToolDepend (disableCabalFlag super.yaml "system-libyaml") self.hspec-discover;
 
   # https://github.com/diagrams/diagrams-lib/issues/288
   diagrams-lib = overrideCabal super.diagrams-lib (drv: { doCheck = !pkgs.stdenv.isi686; });
@@ -1120,4 +1120,11 @@ self: super: {
 
   unliftio = addTestToolDepend super.unliftio self.hspec-discover;
   word8 = addTestToolDepend super.word8 self.hspec-discover;
+  distributive = addTestToolDepend super.distributive self.hspec-discover;
+  facade = addTestToolDepend super.facade self.hspec-discover;
+  logging-facade = addTestToolDepend super.logging-facade self.hspec-discover;
+  interpolate = addTestToolDepend super.interpolate self.hspec-discover;
+  http-types = addTestToolDepend super.http-types self.hspec-discover;
+  invariant = addTestToolDepend super.invariant self.hspec-discover;
+  hpack = addTestToolDepend super.hpack self.hspec-discover;
 }
