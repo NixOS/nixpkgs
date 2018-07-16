@@ -11177,9 +11177,7 @@ with pkgs;
       withQt5 = true;
     };
 
-    phonon-backend-vlc = callPackage ../development/libraries/phonon/backends/vlc.nix {
-      withQt5 = true;
-    };
+    phonon-backend-vlc = callPackage ../development/libraries/phonon/backends/vlc.nix { };
 
     polkit-qt = callPackage ../development/libraries/polkit-qt-1/qt-5.nix { };
 
