@@ -207,7 +207,7 @@ let self = stdenv.mkDerivation {
     done
 
     # Update search path used by pkg-config
-    for pc in $dev/lib/pkgconfig/*.pc; do
+    for pc in $dev/lib/pkgconfig/{d3d,dri,xatracker}.pc; do
       substituteInPlace "$pc" --replace $out $drivers
     done
   '' + optionalString (vulkanDrivers != []) ''
