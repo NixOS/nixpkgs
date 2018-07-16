@@ -5,7 +5,7 @@
 # stripLen acts as the -p parameter when applying a patch.
 
 { lib, fetchurl, patchutils }:
-{ stripLen ? 0, extraPrefix ? null, excludes ? [], includes ? [], ... }@args:
+{ stripLen ? 0, extraPrefix ? null, excludes ? [], includes ? [], revert ? false, ... }@args:
 
 fetchurl ({
   postFetch = ''
@@ -37,7 +37,7 @@ fetchurl ({
       ${builtins.toString (builtins.map (x: "-x ${lib.escapeShellArg x}") excludes)} \
       ${builtins.toString (builtins.map (x: "-i ${lib.escapeShellArg x}") includes)} \
       "$tmpfile" > "$out"
-    ${args.postFetch or ""}
+
     if [ ! -s "$out" ]; then
       echo "error: Filtered patch '$out$' is empty (while the original patch file was not)!" 1>&2
       echo "Check your includes and excludes." 1>&2
@@ -45,6 +45,9 @@ fetchurl ({
       cat "$tmpfile" 1>&2
       exit 1
     fi
-  '';
+  '' + lib.optionalString revert ''
+    ${patchutils}/bin/interdiff "$out" /dev/null > "$tmpfile"
+    mv "$tmpfile" "$out"
+  '' + (args.postFetch or "");
   meta.broken = excludes != [] && includes != [];
-} // builtins.removeAttrs args ["stripLen" "extraPrefix" "excludes" "includes" "postFetch"])
+} // builtins.removeAttrs args ["stripLen" "extraPrefix" "excludes" "includes" "revert" "postFetch"])
