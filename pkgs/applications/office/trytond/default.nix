@@ -5,10 +5,10 @@ with stdenv.lib;
 
 python2Packages.buildPythonApplication rec {
   pname = "trytond";
-  version = "4.8.1";
+  version = "4.8.2";
   src = python2Packages.fetchPypi {
     inherit pname version;
-    sha256 = "8e72a24bdf2fd090c5e12ce5f73a00322e31519608b31db44d7bb76382078db9";
+    sha256 = "ec5c419418517bf9f7d2af08b2bfd3bcc7526f6d6f07d122abf1699c728ae2a9";
   };
 
   # Tells the tests which database to use
