@@ -30,7 +30,8 @@ stdenv.mkDerivation rec {
     description = "Flash-optimized, in-memory, NoSQL database";
     homepage = http://aerospike.com/;
     license = licenses.agpl3;
-    platforms = [ "x86_64-linux" ];
+    #platforms = [ "x86_64-linux" ];  # breaks eval of nixos manual for aarch64
+    platforms = platforms.linux;
     maintainer = with maintainers; [ kalbasit ];
   };
 }
