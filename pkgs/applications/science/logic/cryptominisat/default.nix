@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, fetchpatch, cmake, python, boost, libzip, sqlite, xxd }:
+{ stdenv, fetchFromGitHub, fetchpatch, cmake, lit, python, boost, libzip, sqlite }:
 
 stdenv.mkDerivation rec {
   name = "cryptominisat-${version}";
@@ -12,8 +12,16 @@ stdenv.mkDerivation rec {
     fetchSubmodules = true;
   };
 
-  buildInputs = [ boost libzip sqlite python xxd ];
-  nativeBuildInputs = [ cmake ];
+  buildInputs = [ boost libzip sqlite python ];
+  nativeBuildInputs = [ cmake lit ];
+
+  cmakeFlags = [ "-DENABLE_TESTING=ON" ];
+
+  doCheck = true;
+
+  checkPhase = ''
+    LD_LIBRARY_PATH=$PWD/lib:$LD_LIBRARY_PATH make test
+  '';
 
   meta = with stdenv.lib; {
     description = "An advanced SAT Solver";
