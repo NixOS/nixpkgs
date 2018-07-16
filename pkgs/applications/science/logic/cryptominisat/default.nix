@@ -1,24 +1,33 @@
-{ stdenv, fetchFromGitHub, fetchpatch, cmake, python, xxd }:
+{ stdenv, fetchFromGitHub, fetchpatch, cmake, lit, python, boost, libzip, sqlite, ncurses }:
 
 stdenv.mkDerivation rec {
   name = "cryptominisat-${version}";
-  version = "5.0.1";
+  version = "5.6.3";
 
   src = fetchFromGitHub {
     owner  = "msoos";
     repo   = "cryptominisat";
     rev    = version;
-    sha256 = "0cpw5d9vplxvv3aaplhnga55gz1hy29p7s4pkw1306knkbhlzvkb";
+    sha256 = "0902dy2k5qkvav9qc4b4nvz7bynsahb46llms46bnpamb0rqnzc8";
+    fetchSubmodules = true;
   };
 
-  buildInputs = [ python xxd ];
-  nativeBuildInputs = [ cmake ];
+  buildInputs = [ boost libzip sqlite python ncurses];
+  nativeBuildInputs = [ cmake lit ];
 
-  patches = [(fetchpatch rec {
-    name = "fix-exported-library-name.patch";
-    url = "https://github.com/msoos/cryptominisat/commit/7a47795cbe5ad5a899731102d297f234bcade077.patch";
-    sha256 = "11hf3cfqs4cykn7rlgjglq29lzqfxvlm0f20qasi0kdrz01cr30f";
-  })];
+  cmakeFlags = [ "-DENABLE_TESTING=ON" "-DLIT_ARGS=-vv" ];
+
+  hardeningDisable = [ "fortify" ];
+
+  patches = [ ./darwin-rpath.patch ];
+
+  doCheck = true;
+
+  checkPhase = ''
+    LD_LIBRARY_PATH=$PWD/lib:$LD_LIBRARY_PATH \
+    DYLD_LIBRARY_PATH=$PWD/lib:$DYLD_LIBRARY_PATH \
+      make test ARGS=-VV
+  '';
 
   meta = with stdenv.lib; {
     description = "An advanced SAT Solver";

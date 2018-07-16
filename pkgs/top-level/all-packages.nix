@@ -8953,7 +8953,10 @@ with pkgs;
 
   cryptopp = callPackage ../development/libraries/crypto++ { };
 
-  cryptominisat = callPackage ../applications/science/logic/cryptominisat { };
+  cryptominisat = callPackage ../applications/science/logic/cryptominisat {
+    python = python3;
+    lit = lit.override { python = python3; };
+  };
 
   curlcpp = callPackage ../development/libraries/curlcpp { };
 

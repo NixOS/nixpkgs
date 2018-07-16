@@ -1,0 +1,31 @@
+From fd3b19d39f064fb5ef5410c75981160d60812c23 Mon Sep 17 00:00:00 2001
+From: Will Dietz <w@wdtz.org>
+Date: Mon, 16 Jul 2018 07:55:09 -0500
+Subject: [PATCH] CMakeLists.txt: darwin rpath touchup
+
+From minisat.
+---
+ CMakeLists.txt | 7 +++++++
+ 1 file changed, 7 insertions(+)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 6712e87f..968a194b 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -46,6 +46,13 @@ if(POLICY CMP0026)
+     cmake_policy(SET CMP0026 NEW)
+ endif()
+ 
++# Reference specific library paths used during linking for install
++if (POLICY CMP0042)
++  # Enable `MACOSX_RPATH` by default.
++  cmake_policy(SET CMP0042 NEW)
++endif()
++SET(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
++
+ # -----------------------------------------------------------------------------
+ # Provide scripts dir for included cmakes to use
+ # -----------------------------------------------------------------------------
+-- 
+2.18.0
+
