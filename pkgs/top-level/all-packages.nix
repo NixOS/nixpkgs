@@ -15932,7 +15932,8 @@ with pkgs;
     external = {
       inherit (haskellPackages) ghc-mod structured-haskell-mode Agda hindent;
       inherit (pythonPackages) elpy;
-      inherit rtags libffi autoconf automake libpng zlib poppler pkgconfig w3m;
+      inherit
+        autoconf automake git libffi libpng pkgconfig poppler rtags w3m zlib;
     };
   };
 

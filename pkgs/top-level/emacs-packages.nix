@@ -50,7 +50,7 @@ let
   };
 
   melpaStablePackages = import ../applications/editors/emacs-modes/melpa-stable-packages.nix {
-    inherit lib;
+    inherit external lib;
   };
 
   melpaPackages = import ../applications/editors/emacs-modes/melpa-packages.nix {

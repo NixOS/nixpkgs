@@ -13,7 +13,7 @@ To update the list of packages from MELPA,
 
 */
 
-{ lib }:
+{ lib, external }:
 
 self:
 
@@ -131,6 +131,17 @@ self:
 
       # upstream issue: missing file header
       maxframe = markBroken super.maxframe;
+
+      magit =
+        (super.magit.override {
+          # version of magit-popup needs to match magit
+          # https://github.com/magit/magit/issues/3286
+          inherit (self.melpaStablePackages) magit-popup;
+        }).overrideAttrs (attrs: {
+          # searches for Git at build time
+          nativeBuildInputs =
+            (attrs.nativeBuildInputs or []) ++ [ external.git ];
+        });
 
       # missing OCaml
       merlin = markBroken super.merlin;
