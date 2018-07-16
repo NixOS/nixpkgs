@@ -19,7 +19,7 @@ let srcDeps = stdenv.lib.singleton (
 in
 stdenv.mkDerivation rec {
 
-  version = "0.15.0";
+  version = "0.15.1";
 
   meta = with stdenv.lib; {
     homepage = "https://github.com/bazelbuild/bazel/";
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://github.com/bazelbuild/bazel/releases/download/${version}/bazel-${version}-dist.zip";
-    sha256 = "00mnlzcflnsdah8dvpaq0jqawmhgmv9mrjah6cr8qssycbk1ddy3";
+    sha256 = "0v7wdwbxy4bcx488lm1glf4iv3wfdwbkg8fh6kmmmfn1lhgkaay6";
   };
 
   sourceRoot = ".";
