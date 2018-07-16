@@ -3,7 +3,7 @@
 , freefont_ttf, freetype, libass, libpthreadstubs
 , lua, luasocket, libuchardet, libiconv ? null, darwin
 
-, x11Support ? true,
+, x11Support ? stdenv.isLinux,
     libGLU_combined       ? null,
     libX11     ? null,
     libXext    ? null,
@@ -98,7 +98,8 @@ in stdenv.mkDerivation rec {
     patchShebangs ./TOOLS/
   '';
 
-  NIX_LDFLAGS = optionalString x11Support "-lX11 -lXext";
+  NIX_LDFLAGS = optionalString x11Support "-lX11 -lXext "
+              + optionalString stdenv.isDarwin "-framework CoreFoundation";
 
   configureFlags = [
     "--enable-libmpv-shared"
@@ -155,7 +156,7 @@ in stdenv.mkDerivation rec {
     ++ optionals x11Support        [ libX11 libXext libGLU_combined libXxf86vm libXrandr ]
     ++ optionals waylandSupport    [ wayland wayland-protocols libxkbcommon ]
     ++ optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
-      libiconv Cocoa CoreAudio
+      CoreFoundation libiconv Cocoa CoreAudio
     ]);
 
   enableParallelBuilding = true;
