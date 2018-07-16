@@ -84,7 +84,7 @@ in rec {
       buildLlvmPackages = buildPackages.llvmPackages_5;
       llvmPackages = pkgs.llvmPackages_5;
     };
-    ghcjs = compiler.ghcjs82;
+    ghcjs = compiler.ghcjs84;
     ghcjs710 = packages.ghc7103.callPackage ../development/compilers/ghcjs {
       bootPkgs = packages.ghc7103;
       inherit (pkgs) cabal-install;
@@ -166,7 +166,7 @@ in rec {
       ghc = bh.compiler.ghcHEAD;
       compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-head.nix { };
     };
-    ghcjs = packages.ghcjs82;
+    ghcjs = packages.ghcjs84;
     ghcjs710 = callPackage ../development/haskell-modules rec {
       buildHaskellPackages = ghc.bootPkgs;
       ghc = bh.compiler.ghcjs710;
