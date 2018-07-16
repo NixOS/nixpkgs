@@ -16865,7 +16865,7 @@ with pkgs;
     let
       mkApplications = import ../applications/kde;
       attrs = {
-        inherit stdenv lib libsForQt5 fetchurl recurseIntoAttrs;
+        inherit stdenv lib libsForQt5 fetchurl;
         inherit plasma5;
         inherit attica phonon;
         inherit okteta;
