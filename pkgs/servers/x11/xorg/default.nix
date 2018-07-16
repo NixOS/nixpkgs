@@ -2420,11 +2420,11 @@ let
   }) // {inherit inputproto libX11 libXext libXi libXinerama libXrandr ;};
 
   xkbcomp = (mkDerivation "xkbcomp" {
-    name = "xkbcomp-1.4.0";
+    name = "xkbcomp-1.4.2";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/app/xkbcomp-1.4.0.tar.bz2;
-      sha256 = "0syfc6zscvai824mzihlnrqxhkcr27dzkpy8zndavi83iischsdw";
+      url = mirror://xorg/individual/app/xkbcomp-1.4.2.tar.bz2;
+      sha256 = "0944rrkkf0dxp07vhh9yr4prslxhqyw63qmbjirbv1bypswvrn3d";
     };
     nativeBuildInputs = [ pkgconfig ];
     buildInputs = [ libX11 libxkbfile xproto ];
