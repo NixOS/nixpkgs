@@ -19,6 +19,8 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = [ "fortify" ];
 
+  patches = [ ./darwin-rpath.patch ];
+
   doCheck = true;
 
   checkPhase = ''
