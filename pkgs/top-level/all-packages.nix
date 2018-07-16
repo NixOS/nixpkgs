@@ -18201,6 +18201,8 @@ with pkgs;
 
   spideroak = callPackage ../applications/networking/spideroak { };
 
+  split2flac = callPackage ../applications/audio/split2flac { };
+
   squishyball = callPackage ../applications/audio/squishyball {
     ncurses = ncurses5;
   };
