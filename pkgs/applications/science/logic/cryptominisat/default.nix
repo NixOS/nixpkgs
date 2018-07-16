@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, fetchpatch, cmake, lit, python, boost, libzip, sqlite }:
+{ stdenv, fetchFromGitHub, fetchpatch, cmake, lit, python, boost, libzip, sqlite, ncurses }:
 
 stdenv.mkDerivation rec {
   name = "cryptominisat-${version}";
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     fetchSubmodules = true;
   };
 
-  buildInputs = [ boost libzip sqlite python ];
+  buildInputs = [ boost libzip sqlite python ncurses];
   nativeBuildInputs = [ cmake lit ];
 
   cmakeFlags = [ "-DENABLE_TESTING=ON" ];
