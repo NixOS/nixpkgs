@@ -429,6 +429,8 @@ with pkgs;
     portaudioSupport  = config.aegisub.portaudioSupport or false;
   };
 
+  aerospike = callPackage ../servers/nosql/aerospike { };
+
   aespipe = callPackage ../tools/security/aespipe { };
 
   aescrypt = callPackage ../tools/misc/aescrypt { };
