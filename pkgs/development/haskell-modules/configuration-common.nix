@@ -1117,4 +1117,7 @@ self: super: {
   hspec-contrib = addTestToolDepend super.hspec-contrib self.hspec-meta;
   hspec-wai = addTestToolDepend super.hspec-wai self.hspec-meta;
   hspec-checkers = addTestToolDepend super.hspec-checkers self.hspec-meta;
+
+  unliftio = addTestToolDepend super.unliftio self.hspec-discover;
+  word8 = addTestToolDepend super.word8 self.hspec-discover;
 }
