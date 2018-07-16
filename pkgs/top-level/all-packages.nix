@@ -16494,6 +16494,8 @@ with pkgs;
 
   gmtp = callPackage ../applications/misc/gmtp {};
 
+  gnomecast = callPackage ../applications/video/gnomecast { };
+
   gnome-mpv = callPackage ../applications/video/gnome-mpv { };
 
   gollum = callPackage ../applications/misc/gollum { };
