@@ -10937,14 +10937,6 @@ with pkgs;
 
   libGLSupported = lib.elem system lib.platforms.mesaPlatforms;
 
-  libGLDarwin = callPackage ../development/libraries/mesa-darwin {
-    inherit (darwin.apple_sdk.frameworks) OpenGL;
-    inherit (darwin.apple_sdk.libs) Xplugin;
-    inherit (darwin) apple_sdk;
-  };
-
-  libGLDarwinOr = alternative: if stdenv.isDarwin then libGLDarwin else alternative;
-
   mesa_noglu = callPackage ../development/libraries/mesa {
     # makes it slower, but during runtime we link against just mesa_drivers
     # through /run/opengl-driver*, which is overriden according to config.grsecurity
