@@ -35,6 +35,10 @@ with pkgs;
   # inside the set for derivations.
   recurseIntoAttrs = attrs: attrs // { recurseForDerivations = true; };
 
+  # Applying this to an attribute set will cause Hydra to look inside
+  # the set & build each derivation.
+  recurseOnHydra = attrs: attrs // { recurseForRelease = true; };
+
   stringsWithDeps = lib.stringsWithDeps;
 
   ### Evaluating the entire Nixpkgs naively will fail, make failure fast
