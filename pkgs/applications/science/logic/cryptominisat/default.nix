@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ boost libzip sqlite python ncurses];
   nativeBuildInputs = [ cmake lit ];
 
-  cmakeFlags = [ "-DENABLE_TESTING=ON" ];
+  cmakeFlags = [ "-DENABLE_TESTING=ON" "-DLIT_ARGS=-vv" ];
 
   hardeningDisable = [ "fortify" ];
 
