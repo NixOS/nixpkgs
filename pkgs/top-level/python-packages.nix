@@ -204,6 +204,8 @@ in {
 
   aws-xray-sdk = callPackage ../development/python-modules/aws-xray-sdk { };
 
+  aws-adfs = callPackage ../development/python-modules/aws-adfs { };
+
   # packages defined elsewhere
 
   amazon_kclpy = callPackage ../development/python-modules/amazon_kclpy { };
@@ -10338,6 +10340,7 @@ in {
     };
   };
 
+  pycaption = callPackage ../development/python-modules/pycaption { };
 
   pycdio = buildPythonPackage rec {
     name = "pycdio-2.0.0";
@@ -14526,6 +14529,8 @@ in {
       license = licenses.mit;
     };
   };
+
+  vega_datasets = callPackage ../development/python-modules/vega_datasets { };
 
   virtkey = callPackage ../development/python-modules/virtkey { };
 

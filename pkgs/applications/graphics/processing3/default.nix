@@ -1,4 +1,4 @@
-{ stdenv, callPackage, fetchFromGitHub, makeWrapper, ant, jdk, rsync, javaPackages, libXxf86vm }:
+{ stdenv, callPackage, fetchFromGitHub, fetchurl, xmlstarlet, makeWrapper, ant, jdk, rsync, javaPackages, libXxf86vm, gsettings-desktop-schemas }:
 
 stdenv.mkDerivation rec {
   version = "3.3.7";
@@ -19,6 +19,14 @@ stdenv.mkDerivation rec {
     rm core/library/*.jar
     cp ${javaPackages.jogl_2_3_2}/share/java/*.jar core/library/
 
+    # do not download a file during build
+    ${xmlstarlet}/bin/xmlstarlet ed --inplace -P -d '//get[@src="http://download.processing.org/reference.zip"]' build/build.xml
+    install -D -m0444 ${fetchurl {
+                          url    = http://download.processing.org/reference.zip;
+                          sha256 = "104zig026y8vbl4qksmscjq0bms8mi2jmri1ijdlbkxcqnv9bnlf";
+                        }
+                       } ./java/reference.zip
+
     # suppress "Not fond of this Java VM" message box
     substituteInPlace app/src/processing/app/platform/LinuxPlatform.java \
       --replace 'Messages.showWarning' 'if (false) Messages.showWarning'
@@ -37,9 +45,11 @@ stdenv.mkDerivation rec {
     ln -s ${jdk} $out/${name}/java
 
     makeWrapper $out/${name}/processing      $out/bin/processing \
+        --prefix XDG_DATA_DIRS : ${gsettings-desktop-schemas}/share/gsettings-schemas/${gsettings-desktop-schemas.name} \
         --prefix _JAVA_OPTIONS " " -Dawt.useSystemAAFontSettings=lcd \
         --prefix LD_LIBRARY_PATH : ${libXxf86vm}/lib
     makeWrapper $out/${name}/processing-java $out/bin/processing-java \
+        --prefix XDG_DATA_DIRS : ${gsettings-desktop-schemas}/share/gsettings-schemas/${gsettings-desktop-schemas.name} \
         --prefix _JAVA_OPTIONS " " -Dawt.useSystemAAFontSettings=lcd \
         --prefix LD_LIBRARY_PATH : ${libXxf86vm}/lib
   '';

@@ -2,20 +2,20 @@
 
 mkDerivation rec {
   name = "cura-${version}";
-  version = "3.3.1";
+  version = "3.4.1";
 
   src = fetchFromGitHub {
     owner = "Ultimaker";
     repo = "Cura";
     rev = version;
-    sha256 = "0a2xxiw1h5cq4nd4pdkq757hap85p2i29msxs57kbfdd78izrjlx";
+    sha256 = "03s9nf1aybbnbf1rzqja41m9g6991bbvrcly1lcrfqksianfn06w";
   };
 
   materials = fetchFromGitHub {
     owner = "Ultimaker";
     repo = "fdm_materials";
-    rev = "3.3.0";
-    sha256 = "0vf7s4m14aqhdg4m2yjj87kjxi2gpa46mgx86p0a91jwvkxa8a1q";
+    rev = "3.4.1";
+    sha256 = "1pw30clxqd7qgnidsyx6grizvlgfn8rhj6rd5ppkvv3rdjh0gj28";
   };
 
   buildInputs = [ qtbase qtquickcontrols2 ];
