@@ -18662,6 +18662,8 @@ with pkgs;
 
   vcprompt = callPackage ../applications/version-management/vcprompt { };
 
+  vcv-rack = callPackage ../applications/audio/vcv-rack { };
+
   vdirsyncer = callPackage ../tools/misc/vdirsyncer { };
 
   vdpauinfo = callPackage ../tools/X11/vdpauinfo { };
