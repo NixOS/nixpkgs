@@ -3086,6 +3086,8 @@ with pkgs;
 
   iannix = libsForQt5.callPackage ../applications/audio/iannix { };
 
+  ibniz = callPackage ../tools/graphics/ibniz { };
+
   icecast = callPackage ../servers/icecast { };
 
   darkice = callPackage ../tools/audio/darkice { };
