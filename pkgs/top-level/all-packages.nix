@@ -11122,15 +11122,9 @@ with pkgs;
 
   neardal = callPackage ../development/libraries/neardal { };
 
-  neon = callPackage ../development/libraries/neon {
-    compressionSupport = true;
-    sslSupport = true;
-  };
+  neon = callPackage ../development/libraries/neon { };
 
-  neon_0_29 = callPackage ../development/libraries/neon/0.29.nix {
-    compressionSupport = true;
-    sslSupport = true;
-  };
+  neon_0_29 = callPackage ../development/libraries/neon/0.29.nix { };
 
   nettle = callPackage ../development/libraries/nettle { };
 
