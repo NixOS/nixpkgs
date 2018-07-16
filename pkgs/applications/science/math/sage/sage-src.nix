@@ -156,7 +156,12 @@ stdenv.mkDerivation rec {
       sha256 = "0fmw7pzbaxs2dshky6iw9pr8i23p9ih2y2lw661qypdrxh5xw03k";
       stripLen = 1;
     })
-    ./patches/revert-269c1e1551285.patch
+    (fetchpatch {
+      name = "revert-cddlib-doctest-changes.patch";
+      url = "https://git.sagemath.org/sage.git/patch/?id=269c1e1551285566b8ba7a2b890989e5590e9f11";
+      sha256 = "12bcjhq7hm2pmmj2bgjvcffjyls2x7q61ivlnaj5v5bsvhc183iy";
+      revert = true;
+    })
 
 
     # Only formatting changes.
