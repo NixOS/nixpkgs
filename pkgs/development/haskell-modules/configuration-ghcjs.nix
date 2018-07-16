@@ -202,4 +202,11 @@ self: super:
 
   base-orphans = dontCheck super.base-orphans;
   distributive = dontCheck super.distributive;
+
+  # https://github.com/glguy/th-abstraction/issues/53
+  th-abstraction = dontCheck super.th-abstraction;
+  # https://github.com/dreixel/syb/issues/21
+  syb = dontCheck super.syb;
+  # https://github.com/ghcjs/ghcjs/issues/677
+  hspec-core = dontCheck super.hspec-core;
 }
