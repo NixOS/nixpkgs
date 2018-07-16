@@ -1958,6 +1958,8 @@ with pkgs;
 
   darkstat = callPackage ../tools/networking/darkstat { };
 
+  dattobd = callPackage ../tools/backup/dattobd { };
+
   davfs2 = callPackage ../tools/filesystems/davfs2 { };
 
   dbeaver = callPackage ../applications/misc/dbeaver { };
