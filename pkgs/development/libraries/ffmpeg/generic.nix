@@ -26,7 +26,7 @@
  * see `ffmpeg-full' for an ffmpeg build with all features included.
  *
  * Need fixes to support Darwin:
- *   libvpx pulseaudio
+ *   pulseaudio
  *
  * Known issues:
  * 0.6     - fails to compile (unresolved) (so far, only disabling a number of
@@ -58,6 +58,8 @@ let
   disDarwinOrArmFix = origArg: minVer: fixArg: if ((isDarwin || isAarch32) && reqMin minVer) then fixArg else origArg;
 
   vaapiSupport = reqMin "0.6" && ((isLinux || isFreeBSD) && !isAarch32);
+
+  vpxSupport = reqMin "0.6" && !isAarch32;
 in
 
 assert openglSupport -> libGLU_combined != null;
@@ -130,7 +132,7 @@ stdenv.mkDerivation rec {
       (ifMinVer "0.6" (enableFeature vaapiSupport "vaapi"))
       "--enable-vdpau"
       "--enable-libvorbis"
-      (disDarwinOrArmFix (ifMinVer "0.6" "--enable-libvpx") "0.6" "--disable-libvpx")
+      (ifMinVer "0.6" (enableFeature vpxSupport "libvpx"))
       (ifMinVer "2.4" "--enable-lzma")
       (ifMinVer "2.2" (enableFeature openglSupport "opengl"))
       (disDarwinOrArmFix (ifMinVer "0.9" "--enable-libpulse") "0.9" "--disable-libpulse")
@@ -159,7 +161,8 @@ stdenv.mkDerivation rec {
     bzip2 fontconfig freetype gnutls libiconv lame libass libogg libtheora
     libvdpau libvorbis lzma soxr x264 x265 xvidcore zlib libopus
   ] ++ optional openglSupport libGLU_combined
-    ++ optionals (!isDarwin && !isAarch32) [ libvpx libpulseaudio ] # Need to be fixed on Darwin and ARM
+    ++ optional vpxSupport libvpx
+    ++ optionals (!isDarwin && !isAarch32) [ libpulseaudio ] # Need to be fixed on Darwin and ARM
     ++ optional ((isLinux || isFreeBSD) && !isAarch32) libva
     ++ optional isLinux alsaLib
     ++ optionals isDarwin darwinFrameworks

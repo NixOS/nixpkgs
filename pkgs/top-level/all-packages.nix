@@ -9138,7 +9138,6 @@ with pkgs;
     game-music-emu = if stdenv.isDarwin then null else game-music-emu;
     libjack2 = if stdenv.isDarwin then null else libjack2;
     libmodplug = if stdenv.isDarwin then null else libmodplug;
-    libvpx = if stdenv.isDarwin then null else libvpx;
     openal = if stdenv.isDarwin then null else openal;
     libpulseaudio = if stdenv.isDarwin then null else libpulseaudio;
     samba = if stdenv.isDarwin then null else samba;
