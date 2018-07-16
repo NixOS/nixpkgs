@@ -26,7 +26,7 @@ still shows most of the available features is in `./gwenview.nix`.
 */
 
 {
-  stdenv, lib, libsForQt5, fetchurl, recurseIntoAttrs,
+  stdenv, lib, libsForQt5, fetchurl,
   plasma5, attica, phonon,
   okteta
 }:
