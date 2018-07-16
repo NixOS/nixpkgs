@@ -32,6 +32,6 @@ stdenv.mkDerivation rec {
     license = licenses.agpl3;
     #platforms = [ "x86_64-linux" ];  # breaks eval of nixos manual for aarch64
     platforms = platforms.linux;
-    maintainer = with maintainers; [ kalbasit ];
+    maintainers = with maintainers; [ kalbasit ];
   };
 }
