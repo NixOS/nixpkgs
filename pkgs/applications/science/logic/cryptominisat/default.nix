@@ -20,7 +20,9 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   checkPhase = ''
-    LD_LIBRARY_PATH=$PWD/lib:$LD_LIBRARY_PATH make test
+    LD_LIBRARY_PATH=$PWD/lib:$LD_LIBRARY_PATH \
+    DYLD_LIBRARY_PATH=$PWD/lib:$DYLD_LIBRARY_PATH \
+      make test
   '';
 
   meta = with stdenv.lib; {
