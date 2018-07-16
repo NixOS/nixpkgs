@@ -51,8 +51,6 @@ self: super: {
   clock = dontCheck super.clock;
   Dust-crypto = dontCheck super.Dust-crypto;
   hasql-postgres = dontCheck super.hasql-postgres;
-  hspec = super.hspec.override { stringbuilder = dontCheck self.stringbuilder; };
-  hspec-core = super.hspec-core.override { silently = dontCheck self.silently; temporary = dontCheck self.temporary; };
   hspec-expectations = dontCheck super.hspec-expectations;
   HTTP = dontCheck super.HTTP;
   http-streams = dontCheck super.http-streams;
@@ -1100,4 +1098,23 @@ self: super: {
   unix-time = if pkgs.stdenv.hostPlatform.isMusl then dontCheck super.unix-time else super.unix-time;
   # dontCheck: printf double rounding behavior
   prettyprinter = if pkgs.stdenv.hostPlatform.isMusl then dontCheck super.prettyprinter else super.prettyprinter;
+
+  # A few things for hspec*:
+  #
+  #   1. Break cycles for test
+  #
+  #   2. https://github.com/hspec/hspec/pull/355 The buildTool will be properly
+  #      cabal2nixed when run on the patched cabal file.
+  hspec = let
+    breakCycles = super.hspec.override { stringbuilder = dontCheck self.stringbuilder; };
+  in addTestToolDepend breakCycles self.hspec-meta;
+  hspec-core = let
+    breakCycles = super.hspec-core.override { silently = dontCheck self.silently; temporary = dontCheck self.temporary; };
+  in addTestToolDepend breakCycles self.hspec-meta;
+  hspec-discover = addTestToolDepend super.hspec-discover self.hspec-meta;
+  hspec-smallcheck = addTestToolDepend super.hspec-smallcheck self.hspec-meta;
+  hspec-attoparsec = addTestToolDepend super.hspec-attoparsec self.hspec-meta;
+  hspec-contrib = addTestToolDepend super.hspec-contrib self.hspec-meta;
+  hspec-wai = addTestToolDepend super.hspec-wai self.hspec-meta;
+  hspec-checkers = addTestToolDepend super.hspec-checkers self.hspec-meta;
 }
