@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
   version = "3.924";
 
   src = fetchurl {
-    url    = "http://www.veripool.org/ftp/${name}.tgz";
+    url    = "https://www.veripool.org/ftp/${name}.tgz";
     sha256 = "0xarifraycmdzjxs0lscpwvrwr59z84p8g8dkyjssc463dqikjvx";
   };
 
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     description = "Fast and robust (System)Verilog simulator/compiler";
     homepage    = "https://www.veripool.org/wiki/verilator";
     license     = stdenv.lib.licenses.lgpl3;
-    platforms   = stdenv.lib.platforms.linux;
+    platforms   = stdenv.lib.platforms.unix;
     maintainers = with stdenv.lib.maintainers; [ thoughtpolice ];
   };
 }

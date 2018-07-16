@@ -211,7 +211,7 @@ in
 
     environment.etc.asterisk.source = asteriskEtc;
 
-    users.extraUsers.asterisk =
+    users.users.asterisk =
       { name = asteriskUser;
         group = asteriskGroup;
         uid = config.ids.uids.asterisk;
@@ -219,7 +219,7 @@ in
         home = varlibdir;
       };
 
-    users.extraGroups.asterisk =
+    users.groups.asterisk =
       { name = asteriskGroup;
         gid = config.ids.gids.asterisk;
       };

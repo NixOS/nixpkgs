@@ -57,7 +57,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "Bayesian estimation, particularly using Markov chain Monte Carlo (MCMC)";
-    homepage = http://github.com/pymc-devs/pymc3;
+    homepage = https://github.com/pymc-devs/pymc3;
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ ilya-kolpakov ];
   };

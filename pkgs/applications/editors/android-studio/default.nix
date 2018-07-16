@@ -13,9 +13,9 @@ let
     sha256Hash = "196yaswbxh2nd83gimjxr8ggr5xkdxq7n3xlh6ax73v59pj4hryq";
   };
   latestVersion = {
-    version = "3.2.0.18"; # "Android Studio 3.2 Beta 1"
-    build = "181.4847800";
-    sha256Hash = "1ipdvrx3qxwygq72jlf0dl4haxviscl41q18kclg519r1zbzd4cw";
+    version = "3.3.0.2"; # "Android Studio 3.3 Canary 3"
+    build = "181.4884283";
+    sha256Hash = "0r93yzw87cgzz60p60gknij5vaqmv1a1kyd4cr9gx8cbxw46lhwh";
   };
 in rec {
   # Old alias
@@ -43,6 +43,9 @@ in rec {
   beta = mkStudio (latestVersion // {
     pname = "android-studio-preview";
     #pname = "android-studio-beta"; # TODO: Rename and provide symlink
+    version = "3.2.0.20"; # "Android Studio 3.2 Beta 3"
+    build = "181.4868252";
+    sha256Hash = "17r7gvy317vh2r56yvhnn7dym0q6gs8r04fdr7hx53s9rb79sd1j";
 
     meta = stable.meta // {
       description = "The Official IDE for Android (beta channel)";

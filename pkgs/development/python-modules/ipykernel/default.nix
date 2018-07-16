@@ -14,7 +14,6 @@
 buildPythonPackage rec {
   pname = "ipykernel";
   version = "4.8.2";
-  name = "${pname}-${version}";
 
   src = fetchPypi {
     inherit pname version;

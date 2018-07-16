@@ -4,7 +4,6 @@
 buildPythonPackage rec {
   version = "2.1.0";
   pname = "intervaltree";
-  name = "${pname}-${version}";
 
   src = fetchPypi {
     inherit pname version;

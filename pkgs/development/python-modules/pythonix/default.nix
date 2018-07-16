@@ -1,9 +1,9 @@
-{ stdenv, fetchFromGitHub, ninja, boost, meson, pkgconfig, nix, isPy3k }:
+{ stdenv, buildPythonPackage, fetchFromGitHub, ninja, boost, meson, pkgconfig, nix, isPy3k }:
 
-
-stdenv.mkDerivation rec {
-  name = "pythonix-${version}";
+buildPythonPackage rec {
+  pname = "pythonix";
   version = "0.1.4";
+  format = "other";
 
   src = fetchFromGitHub {
     owner = "Mic92";

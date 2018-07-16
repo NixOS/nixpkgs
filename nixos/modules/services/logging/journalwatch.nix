@@ -197,7 +197,7 @@ in {
 
   config = mkIf cfg.enable {
 
-    users.extraUsers.${user} = {
+    users.users.${user} = {
       isSystemUser = true;
       createHome = true;
       home = dataDir;
@@ -241,6 +241,6 @@ in {
   };
 
   meta = {
-    maintainers = with stdenv.lib.maintainers; [ florianjacob ];
+    maintainers = with lib.maintainers; [ florianjacob ];
   };
 }

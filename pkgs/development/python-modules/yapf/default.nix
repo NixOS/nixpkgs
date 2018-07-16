@@ -3,7 +3,6 @@
 buildPythonPackage rec {
   pname = "yapf";
   version = "0.22.0";
-  name = "${pname}-${version}";
 
   src = fetchPypi {
     inherit pname version;

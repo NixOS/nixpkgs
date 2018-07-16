@@ -15,11 +15,14 @@ stdenv.mkDerivation rec {
     sed -e "s@ldconfig@@" -i Makefile
   '';
 
-  installPhase = ''
-    make PREFIX="$out" SUFFIX="" install
+  makeFlags = [
+    "PREFIX=$(out)"
+    "SUFFIX="
+  ];
 
+  postInstall = ''
     # create lib link for building apps
-    ln -s $out/lib/libzita-convolver.so.$version $out/lib/libzita-convolver.so.3
+    ln -s $out/lib/libzita-convolver.so.${version} $out/lib/libzita-convolver.so.${stdenv.lib.versions.major version}
   '';
 
   meta = {

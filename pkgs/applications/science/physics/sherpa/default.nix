@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
   version = "2.2.5";
 
   src = fetchurl {
-    url = "http://www.hepforge.org/archive/sherpa/SHERPA-MC-${version}.tar.gz";
+    url = "https://www.hepforge.org/archive/sherpa/SHERPA-MC-${version}.tar.gz";
     sha256 = "0rv14j8gvjjr3darb0wcradlmsnyq915jz7v2yybrjzqfbsr3zb5";
   };
 

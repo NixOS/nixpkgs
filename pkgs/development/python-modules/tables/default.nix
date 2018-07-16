@@ -1,13 +1,12 @@
-{ stdenv, fetchurl, python, buildPythonPackage
+{ stdenv, fetchPypi, python, buildPythonPackage
 , cython, bzip2, lzo, numpy, numexpr, hdf5, six, c-blosc }:
 
 buildPythonPackage rec {
   version = "3.4.4";
   pname = "tables";
-  name = "${pname}-${version}";
 
-  src = fetchurl {
-    url = "mirror://pypi/t/tables/${name}.tar.gz";
+  src = fetchPypi {
+    inherit pname version;
     sha256 = "bdc5c073712af2a43babd139c4855fc99496bb2c3f3f5d1b4770a985e6f9ce29";
   };
 
@@ -31,7 +30,7 @@ buildPythonPackage rec {
   # github issue:
   #     https://github.com/PyTables/PyTables/issues/269
   checkPhase = ''
-    ${python}/bin/${python.executable} <<EOF
+    ${python.interpreter} <<EOF
     import sysconfig
     import sys
     import os

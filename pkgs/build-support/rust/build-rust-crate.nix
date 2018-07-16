@@ -15,6 +15,12 @@ let makeDeps = dependencies:
            " --extern ${extern}=${dep.out}/lib/lib${extern}-${dep.metadata}${buildPlatform.extensions.sharedLibrary}")
       ) dependencies);
 
+    # This doesn't appear to be officially documented anywhere yet.
+    # See https://github.com/rust-lang-nursery/rust-forge/issues/101.
+    target_os = if buildPlatform.isDarwin
+      then "macos"
+      else buildPlatform.parsed.kernel.name;
+
     echo_build_heading = colors: ''
       echo_build_heading() {
        start=""
@@ -101,7 +107,7 @@ let makeDeps = dependencies:
       export CARGO_PKG_AUTHORS="${authors}"
 
       export CARGO_CFG_TARGET_ARCH=${buildPlatform.parsed.cpu.name}
-      export CARGO_CFG_TARGET_OS=${buildPlatform.parsed.kernel.name}
+      export CARGO_CFG_TARGET_OS=${target_os}
       export CARGO_CFG_TARGET_FAMILY="unix"
       export CARGO_CFG_UNIX=1
       export CARGO_CFG_TARGET_ENV="gnu"

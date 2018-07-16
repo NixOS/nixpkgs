@@ -126,7 +126,7 @@ in
 
   config = mkIf config.services.gnunet.enable {
 
-    users.extraUsers.gnunet = {
+    users.users.gnunet = {
       group = "gnunet";
       description = "GNUnet User";
       home = homeDir;
@@ -134,7 +134,7 @@ in
       uid = config.ids.uids.gnunet;
     };
 
-    users.extraGroups.gnunet.gid = config.ids.gids.gnunet;
+    users.groups.gnunet.gid = config.ids.gids.gnunet;
 
     # The user tools that talk to `gnunetd' should come from the same source,
     # so install them globally.

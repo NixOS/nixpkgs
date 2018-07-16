@@ -2,7 +2,6 @@
 , nose, mock, vcversioner, functools32 }:
 
 buildPythonPackage rec {
-  name = "${pname}-${version}";
   pname = "jsonschema";
   version = "2.6.0";
 

@@ -124,7 +124,6 @@ let
 in buildPythonPackage rec {
   pname = "tensorflow";
   inherit version;
-  name = "${pname}-${version}";
 
   src = pkg;
 

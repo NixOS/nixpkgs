@@ -3,7 +3,6 @@
 buildPythonPackage rec {
   pname = "simanneal";
   version = "0.4.1";
-  name = "${pname}-${version}";
 
   src = fetchFromGitHub {
     owner = "perrygeo";

@@ -6,7 +6,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     sha256 = "1mc7qqvrnl0zyhgh8n7wx1g1cbwq74xpvbz8rfjmyi77p693a6fp";
-    url = "http://humdi.net/vnstat/${name}.tar.gz";
+    url = "https://humdi.net/vnstat/${name}.tar.gz";
   };
 
   buildInputs = [ gd ncurses ];
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
       This means that vnStat won't actually be sniffing any traffic and also
       ensures light use of system resources.
     '';
-    homepage = http://humdi.net/vnstat/;
+    homepage = https://humdi.net/vnstat/;
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
   };

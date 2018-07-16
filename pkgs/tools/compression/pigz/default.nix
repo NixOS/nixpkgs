@@ -7,7 +7,7 @@ stdenv.mkDerivation {
   name = name + "-" + version;
 
   src = fetchurl {
-    url = "http://www.zlib.net/${name}/${name}-${version}.tar.gz";
+    url = "https://www.zlib.net/${name}/${name}-${version}.tar.gz";
     sha256 = "0wsgw5vwl23jrnpsvd8v3xcp5k4waw5mk0164fynjhkv58i1dy54";
   };
 

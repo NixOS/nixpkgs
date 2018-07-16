@@ -7,7 +7,6 @@
 buildPythonApplication rec {
   pname = "behave";
   version = "1.2.6";
-  name = "${pname}-${version}";
 
   src = fetchPypi {
     inherit pname version;

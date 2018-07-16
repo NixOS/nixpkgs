@@ -3,7 +3,6 @@
 }:
 
 buildPythonPackage rec {
-  name = "${pname}-${version}";
   pname = "libagent";
   version = "0.9.8";
 

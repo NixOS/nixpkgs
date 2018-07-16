@@ -86,7 +86,7 @@ in
 
     services.dbus.packages = [ dnsmasq ];
 
-    users.extraUsers = singleton {
+    users.users = singleton {
       name = "dnsmasq";
       uid = config.ids.uids.dnsmasq;
       description = "Dnsmasq daemon user";

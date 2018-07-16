@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
   version = "1.1.19";
 
   src = fetchurl {
-    url    = "http://www.musl-libc.org/releases/musl-${version}.tar.gz";
+    url    = "https://www.musl-libc.org/releases/musl-${version}.tar.gz";
     sha256 = "1nf1wh44bhm8gdcfr75ayib29b99vpq62zmjymrq7f96h9bshnfv";
   };
 

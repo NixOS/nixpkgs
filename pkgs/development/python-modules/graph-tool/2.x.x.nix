@@ -4,15 +4,14 @@ gobjectIntrospection, pygobject3, gtk3, matplotlib, ncurses,
 buildPythonPackage }:
 
 buildPythonPackage rec {
+  pname = "graph-tool";
   format = "other";
   version = "2.26";
-  name = "${python.libPrefix}-graph-tool-${version}";
 
   meta = with stdenv.lib; {
     description = "Python module for manipulation and statistical analysis of graphs";
     homepage    = https://graph-tool.skewed.de/;
     license     = licenses.gpl3;
-    platforms   = platforms.all;
     maintainers = [ stdenv.lib.maintainers.joelmo ];
   };
 

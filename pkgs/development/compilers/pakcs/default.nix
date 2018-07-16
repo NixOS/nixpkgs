@@ -5,7 +5,7 @@ let
   fname = "pakcs-1.14.0";
 
   fsrc = fetchurl {
-    url = "http://www.informatik.uni-kiel.de/~pakcs/download/${fname}-src.tar.gz";
+    url = "https://www.informatik.uni-kiel.de/~pakcs/download/${fname}-src.tar.gz";
     sha256 = "1651ssh4ql79x8asd7kp4yis2n5rhn3lml4s26y03b0cgbfhs78s";
   };
 

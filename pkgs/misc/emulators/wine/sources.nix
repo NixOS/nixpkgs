@@ -13,9 +13,9 @@ let fetchurl = args@{url, sha256, ...}:
 in rec {
 
   stable = fetchurl rec {
-    version = "3.0.1";
+    version = "3.0.2";
     url = "https://dl.winehq.org/wine/source/3.0/wine-${version}.tar.xz";
-    sha256 = "1wr63n70pli83p3rmclr2j4lxzs4ll1cwlpdlaajfrf6v9yhvl5s";
+    sha256 = "1zv3nk31s758ghp4795ym3w8l5868c2dllmjx9245qh9ahvp3mya";
 
     ## see http://wiki.winehq.org/Gecko
     gecko32 = fetchurl rec {
@@ -39,16 +39,16 @@ in rec {
 
   unstable = fetchurl rec {
     # NOTE: Don't forget to change the SHA256 for staging as well.
-    version = "3.9";
+    version = "3.11";
     url = "https://dl.winehq.org/wine/source/3.x/wine-${version}.tar.xz";
-    sha256 = "0ddphvlp9lsjyqc6zckinc36bggpkg925v0x2vqr8nkdjs0w5bfc";
+    sha256 = "0zlhkz6aybkr9jg8za9x56fp92q10df0abadn9bsa8ryparr5d15";
     inherit (stable) mono gecko32 gecko64;
   };
 
   staging = fetchFromGitHub rec {
     # https://github.com/wine-compholio/wine-staging/releases
     inherit (unstable) version;
-    sha256 = "022hzh9i0pc063vcdy7ilb1lxlxpzgr4llcb52y2j3gz1psrcyqs";
+    sha256 = "0si6mvva4li6cix2p43dgpdg297642l0vipaam0ng4rmgpr92jrf";
     owner = "wine-staging";
     repo = "wine-staging";
     rev = "v${version}";

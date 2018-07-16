@@ -8,7 +8,6 @@
 buildPythonPackage rec {
   pname = "browsermob-proxy";
   version = "0.8.0";
-  name = "${pname}-${version}";
 
   src = fetchPypi {
     inherit pname version;

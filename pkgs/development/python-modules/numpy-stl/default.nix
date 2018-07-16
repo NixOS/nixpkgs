@@ -2,7 +2,6 @@
 
 buildPythonPackage rec {
   pname = "numpy-stl";
-  name = "${pname}-${version}";
   version = "2.4.1";
 
   src = fetchPypi {

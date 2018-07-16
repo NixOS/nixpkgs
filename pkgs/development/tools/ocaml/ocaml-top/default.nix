@@ -2,15 +2,16 @@
 , ocamlPackages
 , jbuilder }:
 
-stdenv.mkDerivation {
-  name = "ocaml-top-1.1.4";
+stdenv.mkDerivation rec {
+  version = "1.1.5";
+  name = "ocaml-top-${version}";
   src = fetchzip {
-    url = https://github.com/OCamlPro/ocaml-top/archive/1.1.4.tar.gz;
-    sha256 = "1lmzjmnzsg8xdz0q5nm95zclihi9z80kzsalapg0s9wq0id8qm4j";
+    url = "https://github.com/OCamlPro/ocaml-top/archive/${version}.tar.gz";
+    sha256 = "1d4i6aanrafgrgk4mh154k6lkwk0b6mh66rykz33awlf5pfqd8yv";
   };
 
   buildInputs = [ ncurses jbuilder ]
-  ++ (with ocamlPackages; [ ocaml ocpBuild findlib lablgtk ocp-index ]);
+  ++ (with ocamlPackages; [ ocaml ocp-build findlib lablgtk ocp-index ]);
 
   configurePhase = ''
     export TERM=xterm

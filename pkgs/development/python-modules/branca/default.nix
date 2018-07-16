@@ -9,7 +9,6 @@
 buildPythonPackage rec {
   pname = "branca";
   version = "0.3.0";
-  name = "${pname}-${version}";
 
   src = fetchPypi {
     inherit pname version;

@@ -34,7 +34,7 @@ stdenv.mkDerivation (rec {
   enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
-    homepage = http://www.rosegardenmusic.com/;
+    homepage = https://www.rosegardenmusic.com/;
     description = "Music composition and editing environment";
     longDescription = ''
       Rosegarden is a music composition and editing environment based around

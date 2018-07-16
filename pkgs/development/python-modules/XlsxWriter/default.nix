@@ -1,7 +1,6 @@
 {lib, buildPythonPackage, fetchPypi}:
 
 buildPythonPackage rec {
-  name = "${pname}-${version}";
   pname = "XlsxWriter";
   version = "1.0.5";
 

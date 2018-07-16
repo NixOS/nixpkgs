@@ -938,9 +938,12 @@ in {
         protection.
       '';
 
-      hw_offload = mkYesNoParam no ''
+      hw_offload = mkEnumParam ["yes" "no" "auto"] "no" ''
         Enable hardware offload for this CHILD_SA, if supported by the IPsec
-        implementation.
+        implementation. The value <literal>yes</literal> enforces offloading
+        and the installation will fail if it's not supported by either kernel or
+        device. The value <literal>auto</literal> enables offloading, if it's
+        supported, but the installation does not fail otherwise.
       '';
 
       start_action = mkEnumParam ["none" "trap" "start"] "none" ''

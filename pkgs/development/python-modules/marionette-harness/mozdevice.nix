@@ -9,7 +9,6 @@
 buildPythonPackage rec {
   pname = "mozdevice";
   version = "1.0.0";
-  name = "${pname}-${version}";
 
   src = fetchPypi {
     inherit pname version;

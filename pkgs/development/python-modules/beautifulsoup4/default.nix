@@ -1,7 +1,6 @@
 { stdenv, buildPythonPackage, fetchPypi, nose }:
 
 buildPythonPackage rec {
-  name = "${pname}-${version}";
   pname = "beautifulsoup4";
   version = "4.6.0";
 

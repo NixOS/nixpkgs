@@ -4,7 +4,7 @@ stdenv.mkDerivation rec {
   name = "exempi-2.4.5";
 
   src = fetchurl {
-    url = "http://libopenraw.freedesktop.org/download/${name}.tar.bz2";
+    url = "https://libopenraw.freedesktop.org/download/${name}.tar.bz2";
     sha256 = "07i29xmg8bqriviaf4vi1mwha4lrw85kfla29cfym14fp3z8aqa0";
   };
 

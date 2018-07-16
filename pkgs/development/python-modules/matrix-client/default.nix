@@ -2,26 +2,21 @@
 , buildPythonPackage
 , fetchPypi
 , requests
-, tox, pytest, flake8, responses
+, pytest, pytestrunner, responses
 }:
 
 buildPythonPackage rec {
-  pname = "matrix-client";
-  version = "0.2.0";
-  name = "${pname}-${version}";
+  pname = "matrix_client";
+  version = "0.3.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "b96e87adf1bc2270166b2a4cff1320d2ef283779ea8b3c4edd0d9051fc7b7924";
+    sha256 = "1mgjd0ymf9mvqjkvgx3xjhxap7rzdmpa21wfy0cxbw2xcswcrqyw";
   };
 
-  checkInputs = [ tox pytest flake8 responses ];
+  checkInputs = [ pytest pytestrunner responses ];
 
   propagatedBuildInputs = [ requests ];
-
-  checkPhase = ''
-    pytest
-  '';
 
   meta = with stdenv.lib; {
     description = "Matrix Client-Server SDK";

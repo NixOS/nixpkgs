@@ -1,12 +1,12 @@
-{ stdenv, fetchurl, buildPythonPackage, isPy3k }:
+{ stdenv, fetchPypi, buildPythonPackage, isPy3k }:
 
 buildPythonPackage rec {
+  pname = "antlr4-python3-runtime";
   version = "4.7.1";
-  name = "antlr4-python3-runtime-${version}";
   disabled = !isPy3k;
 
-  src = fetchurl {
-    url = "mirror://pypi/a/antlr4-python3-runtime/${name}.tar.gz";
+  src = fetchPypi {
+    inherit pname version;
     sha256 = "1lrzmagawmavyw1n1z0qarvs2jmbnbv0p89dah8g7klj8hnbf9hv";
   };
 

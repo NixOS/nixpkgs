@@ -17,7 +17,6 @@
 }:
 
 buildPythonPackage rec {
-  name = "${pname}-${version}";
   pname = "pyspread";
   version = "1.1.2";
 

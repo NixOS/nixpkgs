@@ -211,7 +211,7 @@ $ sudo groupdel nixbld</screen>
     use <literal>sudo</literal>)
    </para>
 <programlisting>
-<link linkend="opt-users.users._name__.initialHashedPassword">users.extraUsers.root.initialHashedPassword</link> = "";
+<link linkend="opt-users.users._name__.initialHashedPassword">users.users.root.initialHashedPassword</link> = "";
               </programlisting>
   </listitem>
   <listitem>

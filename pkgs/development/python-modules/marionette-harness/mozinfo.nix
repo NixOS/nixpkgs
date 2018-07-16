@@ -8,7 +8,6 @@
 buildPythonPackage rec {
   pname = "mozinfo";
   version = "0.9";
-  name = "${pname}-${version}";
 
   src = fetchPypi {
     inherit pname version;

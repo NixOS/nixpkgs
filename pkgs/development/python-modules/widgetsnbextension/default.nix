@@ -7,7 +7,6 @@
 
 buildPythonPackage rec {
   pname = "widgetsnbextension";
-  name = "${pname}-${version}";
   version = "3.2.1";
 
   src = fetchPypi {

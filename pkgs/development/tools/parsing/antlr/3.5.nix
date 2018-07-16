@@ -4,7 +4,7 @@ stdenv.mkDerivation rec {
   name = "antlr-${version}";
   version = "3.5.2";
   src = fetchurl {
-    url ="http://www.antlr3.org/download/antlr-${version}-complete.jar";
+    url ="https://www.antlr3.org/download/antlr-${version}-complete.jar";
     sha256 = "0srjwxipwsfzmpi0v32d1l5lzk9gi5in8ayg33sq8wyp8ygnbji6";
   };
 

@@ -4,7 +4,7 @@ stdenv.mkDerivation rec {
   name = "b43-fwcutter-019";
 
   src = fetchurl {
-    url = "http://bues.ch/b43/fwcutter/${name}.tar.bz2";
+    url = "https://bues.ch/b43/fwcutter/${name}.tar.bz2";
     sha256 = "1ki1f5fy3yrw843r697f8mqqdz0pbsbqnvg4yzkhibpn1lqqbsnn";
   };
 

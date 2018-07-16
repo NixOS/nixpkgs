@@ -397,7 +397,7 @@ in {
 
     environment.systemPackages = [ pkgs.bacula ];
 
-    users.extraUsers.bacula = {
+    users.users.bacula = {
       group = "bacula";
       uid = config.ids.uids.bacula;
       home = "${libDir}";
@@ -406,6 +406,6 @@ in {
       shell = "${pkgs.bash}/bin/bash";
     };
 
-    users.extraGroups.bacula.gid = config.ids.gids.bacula;
+    users.groups.bacula.gid = config.ids.gids.bacula;
   };
 }

@@ -122,6 +122,10 @@ in stdenv.mkDerivation rec {
     "-DLLVM_ENABLE_FFI=ON"
     "-DLLVM_ENABLE_RTTI=ON"
     "-DCOMPILER_RT_INCLUDE_TESTS=OFF" # FIXME: requires clang source code
+
+    "-DLLVM_HOST_TRIPLE=${stdenv.hostPlatform.config}"
+    "-DLLVM_DEFAULT_TARGET_TRIPLE=${stdenv.targetPlatform.config}"
+    "-DTARGET_TRIPLE=${stdenv.targetPlatform.config}"
   ] ++ stdenv.lib.optional enableSharedLibraries [
     "-DLLVM_LINK_LLVM_DYLIB=ON"
   ] ++ stdenv.lib.optional (!isDarwin)
@@ -133,9 +137,6 @@ in stdenv.mkDerivation rec {
     "-DCMAKE_CROSSCOMPILING=True"
     "-DLLVM_TABLEGEN=${buildPackages.llvmPackages_39.llvm}/bin/llvm-tblgen"
   ] ++ stdenv.lib.optionals stdenv.hostPlatform.isMusl [
-    "-DLLVM_HOST_TRIPLE=${stdenv.hostPlatform.config}"
-    "-DLLVM_DEFAULT_TARGET_TRIPLE=${stdenv.targetPlatform.config}"
-    "-DTARGET_TRIPLE=${stdenv.targetPlatform.config}"
     # Not yet supported
     "-DCOMPILER_RT_BUILD_SANITIZERS=OFF"
     "-DCOMPILER_RT_BUILD_XRAY=OFF"

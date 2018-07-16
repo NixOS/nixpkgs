@@ -34,6 +34,8 @@ stdenv.mkDerivation rec {
     sha256 = "0i89298dgnmpmam3ifkm0ax266vvbq1yz7wfw8wwrcma0szrbrnb";
   };
 
+  GOCACHE = "off";
+
   # perl is used for testing go vet
   nativeBuildInputs = [ perl which pkgconfig patch makeWrapper procps ];
   buildInputs = [ cacert pcre ]

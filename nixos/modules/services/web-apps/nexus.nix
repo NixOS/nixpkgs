@@ -80,12 +80,12 @@ in
   };
 
   config = mkIf cfg.enable {
-    users.extraUsers."${cfg.user}" = {
+    users.users."${cfg.user}" = {
       isSystemUser = true;
       group = cfg.group;
     };
 
-    users.extraGroups."${cfg.group}" = {};
+    users.groups."${cfg.group}" = {};
 
     systemd.services.nexus = {
       description = "Sonatype Nexus3";
@@ -130,5 +130,5 @@ in
     };
   };
 
-  meta.maintainers = with stdenv.lib.maintainers; [ ironpinguin ];
+  meta.maintainers = with lib.maintainers; [ ironpinguin ];
 }

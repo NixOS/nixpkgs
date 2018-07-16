@@ -635,7 +635,7 @@ in {
   };
 
   config = mkIf cfg.enable {
-    users.extraUsers = [
+    users.users = [
       { name = "matrix-synapse";
         group = "matrix-synapse";
         home = cfg.dataDir;
@@ -644,7 +644,7 @@ in {
         uid = config.ids.uids.matrix-synapse;
       } ];
 
-    users.extraGroups = [
+    users.groups = [
       { name = "matrix-synapse";
         gid = config.ids.gids.matrix-synapse;
       } ];

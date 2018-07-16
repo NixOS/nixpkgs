@@ -82,7 +82,7 @@ in {
   };
 
   config = mkIf cfg.enable {
-    users.extraUsers = singleton {
+    users.users = singleton {
       name = "shout";
       uid = config.ids.uids.shout;
       description = "Shout daemon user";

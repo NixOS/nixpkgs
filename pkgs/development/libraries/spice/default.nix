@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
   name = "spice-0.14.0";
 
   src = fetchurl {
-    url = "http://www.spice-space.org/download/releases/${name}.tar.bz2";
+    url = "https://www.spice-space.org/download/releases/${name}.tar.bz2";
     sha256 = "0j5q7cp5p95jk8fp48gz76rz96lifimdsx1wnpmfal0nnnar9nrs";
   };
 

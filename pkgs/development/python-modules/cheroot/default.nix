@@ -1,7 +1,8 @@
 { stdenv, fetchPypi, buildPythonPackage
 , more-itertools, six
 , pytest, pytestcov, portend
-, backports_unittest-mock, setuptools_scm }:
+, backports_unittest-mock
+, backports_functools_lru_cache }:
 
 buildPythonPackage rec {
   pname = "cheroot";
@@ -14,9 +15,16 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ more-itertools six ];
 
-  buildInputs = [ setuptools_scm ];
+  checkInputs = [ pytest pytestcov portend backports_unittest-mock backports_functools_lru_cache ];
 
-  checkInputs = [ pytest pytestcov portend backports_unittest-mock ];
+# Disable testmon, it needs pytest-testmon, which we do not currently have in nikpkgs,
+# and is only used to skip some tests that are already known to work.
+  postPatch = ''
+    substituteInPlace "./pytest.ini" --replace "--testmon" ""
+    substituteInPlace setup.py --replace "use_scm_version=True" "version=\"${version}\"" \
+  --replace "'setuptools_scm>=1.15.0'," "" \
+  --replace "'setuptools_scm_git_archive>=1.0'," "" \
+  '';
 
   checkPhase = ''
     py.test cheroot

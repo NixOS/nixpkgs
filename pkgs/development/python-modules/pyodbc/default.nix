@@ -3,7 +3,6 @@
 buildPythonPackage rec {
   pname = "pyodbc";
   version = "4.0.23";
-  name = "${pname}-${version}";
   disabled = isPyPy;  # use pypypdbc instead
 
   src = fetchPypi {

@@ -4,7 +4,6 @@
 
 buildPythonPackage rec {
   pname = "easy-thumbnails";
-  name = "${pname}-${version}";
   version = "2.5";
 
   meta = {

@@ -23,7 +23,6 @@
 }:
 
 buildPythonPackage rec {
-  name = "${pname}-${version}";
   pname = "textacy";
   version = "0.6.1";
 

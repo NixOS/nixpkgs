@@ -77,14 +77,14 @@ in
       systemPackages = [ exim ];
     };
 
-    users.extraUsers = singleton {
+    users.users = singleton {
       name = cfg.user;
       description = "Exim mail transfer agent user";
       uid = config.ids.uids.exim;
       group = cfg.group;
     };
 
-    users.extraGroups = singleton {
+    users.groups = singleton {
       name = cfg.group;
       gid = config.ids.gids.exim;
     };

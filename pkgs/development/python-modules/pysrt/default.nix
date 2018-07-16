@@ -7,7 +7,6 @@
 
 buildPythonApplication rec {
   pname = "pysrt";
-  name = "${pname}-${version}";
   version = "1.1.1";
 
   src = fetchFromGitHub {

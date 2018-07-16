@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   name = "lighttpd-1.4.49";
 
   src = fetchurl {
-    url = "http://download.lighttpd.net/lighttpd/releases-1.4.x/${name}.tar.xz";
+    url = "https://download.lighttpd.net/lighttpd/releases-1.4.x/${name}.tar.xz";
     sha256 = "02ff77cpvy1006cwfym38vf78xm18plyj636ll74r7kx2bblkpxf";
   };
 

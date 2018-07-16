@@ -7,7 +7,6 @@
 buildPythonPackage rec {
   pname = "virtualenv";
   version = "16.0.0";
-  name = "${pname}-${version}";
 
   src = fetchPypi {
     inherit pname version;

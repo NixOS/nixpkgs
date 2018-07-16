@@ -284,7 +284,7 @@ in
 
     services.btsync.package = mkOptionDefault pkgs.bittorrentSync14;
 
-    users.extraUsers.btsync = {
+    users.users.btsync = {
       description     = "Bittorrent Sync Service user";
       home            = cfg.storagePath;
       createHome      = true;
@@ -292,7 +292,7 @@ in
       group           = "btsync";
     };
 
-    users.extraGroups = [
+    users.groups = [
       { name = "btsync";
       }];
 

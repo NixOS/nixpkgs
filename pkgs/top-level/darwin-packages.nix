@@ -44,10 +44,10 @@ in
 
   insert_dylib = callPackage ../os-specific/darwin/insert_dylib { };
 
-  iosSdkPkgs = darwin.callPackage ../os-specific/darwin/ios-sdk-pkgs {
+  iosSdkPkgs = darwin.callPackage ../os-specific/darwin/xcode/sdk-pkgs.nix {
     buildIosSdk = buildPackages.darwin.iosSdkPkgs.sdk;
     targetIosSdkPkgs = targetPackages.darwin.iosSdkPkgs;
-    xcode = darwin.xcode_8_2;
+    xcode = darwin.xcode;
     inherit (pkgs.llvmPackages) clang-unwrapped;
   };
 

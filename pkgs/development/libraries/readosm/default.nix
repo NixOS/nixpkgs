@@ -4,7 +4,7 @@ stdenv.mkDerivation rec {
   name = "readosm-1.1.0";
 
   src = fetchurl {
-    url = "http://www.gaia-gis.it/gaia-sins/readosm-sources/${name}.tar.gz";
+    url = "https://www.gaia-gis.it/gaia-sins/readosm-sources/${name}.tar.gz";
     sha256 = "1v20pnda67imjd70fn0zw30aar525xicy3d3v49md5cvqklws265";
   };
 

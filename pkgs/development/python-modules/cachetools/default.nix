@@ -1,7 +1,6 @@
 { stdenv, buildPythonPackage, fetchPypi, isPyPy }:
 
 buildPythonPackage rec {
-  name = "${pname}-${version}";
   pname = "cachetools";
   version = "2.1.0";
 

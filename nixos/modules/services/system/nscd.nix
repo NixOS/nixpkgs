@@ -41,7 +41,7 @@ in
   config = mkIf cfg.enable {
     environment.etc."nscd.conf".text = cfg.config;
 
-    users.extraUsers.nscd =
+    users.users.nscd =
       { isSystemUser = true;
         description = "Name service cache daemon user";
       };

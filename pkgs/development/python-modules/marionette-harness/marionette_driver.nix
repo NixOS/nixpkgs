@@ -10,7 +10,6 @@
 buildPythonPackage rec {
   pname = "marionette_driver";
   version = "2.7.0";
-  name = "${pname}-${version}";
   disabled = isPy3k;
 
   src = fetchPypi {

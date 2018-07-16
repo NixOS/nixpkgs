@@ -10,7 +10,6 @@
 buildPythonPackage rec {
   pname = "ntlm-auth";
   version = "1.0.3";
-  name = "${pname}-${version}";
 
   src = fetchFromGitHub {
     owner = "jborean93";

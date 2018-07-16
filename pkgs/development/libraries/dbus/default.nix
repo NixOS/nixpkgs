@@ -14,7 +14,7 @@ self = stdenv.mkDerivation {
     inherit version;
 
     src = fetchurl {
-      url = "http://dbus.freedesktop.org/releases/dbus/dbus-${version}.tar.gz";
+      url = "https://dbus.freedesktop.org/releases/dbus/dbus-${version}.tar.gz";
       inherit sha256;
     };
 

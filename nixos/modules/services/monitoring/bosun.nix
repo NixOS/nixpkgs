@@ -153,13 +153,13 @@ in {
       };
     };
 
-    users.extraUsers.bosun = {
+    users.users.bosun = {
       description = "bosun user";
       group = "bosun";
       uid = config.ids.uids.bosun;
     };
 
-    users.extraGroups.bosun.gid = config.ids.gids.bosun;
+    users.groups.bosun.gid = config.ids.gids.bosun;
 
   };
 

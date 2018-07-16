@@ -1,7 +1,6 @@
 { stdenv, fetchPypi, buildPythonPackage }:
 
 buildPythonPackage rec {
-  name = "${pname}-${version}";
   pname = "easydict";
   version = "1.7";
 

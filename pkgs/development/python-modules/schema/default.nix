@@ -4,7 +4,6 @@ buildPythonPackage rec {
 
   pname = "schema";
   version = "0.6.8";
-  name = "${pname}-${version}";
 
   src = fetchPypi {
     inherit pname version;

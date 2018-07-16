@@ -1,40 +1,39 @@
 { stdenv, fetchFromGitHub, cmake, pkgconfig
-, boost, bison, curl, ncurses, openssl, readline, xxd
+, boost, bison, curl, ncurses, openssl, xxd
 , libaio, libev, libgcrypt, libgpgerror, libtool, zlib
 }:
 
 stdenv.mkDerivation rec {
   name = "percona-xtrabackup-${version}";
-  version = "2.4.9";
+  version = "2.4.12";
 
   src = fetchFromGitHub {
     owner = "percona";
     repo = "percona-xtrabackup";
     rev = name;
-    sha256 = "11w87wj2jasrnygzjg3b59q9x0m6lhyg1wzdvclmgbmqsk9bvqv4";
+    sha256 = "1w17v2c677b3vfnm81bs63kjbfiin7f12wl9fbgp83hfpyx5msan";
   };
 
   nativeBuildInputs = [ cmake pkgconfig ];
 
   buildInputs = [
-    boost bison curl ncurses openssl readline xxd
+    boost bison curl ncurses openssl xxd
     libaio libev libgcrypt libgpgerror libtool zlib
   ];
 
   cmakeFlags = [
     "-DBUILD_CONFIG=xtrabackup_release"
     "-DINSTALL_MYSQLTESTDIR=OFF"
-    "-DMYSQL_UNIX_ADDR=/run/mysqld/mysqld.sock"
+    "-DWITH_BOOST=system"
     "-DWITH_SSL=system"
     "-DWITH_ZLIB=system"
-    "-DWITH_MECAB=system"
-    "-DWITH_EXTRA_CHARSETS=all"
-    "-DWITH_INNODB_MEMCACHED=1"
     "-DWITH_MAN_PAGES=OFF"
-    "-DWITH_HTML_DOCS=OFF"
-    "-DWITH_LATEX_DOCS=OFF"
-    "-DWITH_PDF_DOCS=OFF"
+    "-DCMAKE_CXX_FLAGS=-std=gnu++03"
   ];
+
+  postInstall = ''
+    rm -r "$out"/lib/plugin/debug
+  '';
 
   meta = with stdenv.lib; {
     description = "Non-blocking backup tool for MySQL";

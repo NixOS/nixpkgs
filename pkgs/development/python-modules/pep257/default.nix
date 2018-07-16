@@ -1,7 +1,6 @@
 { stdenv, buildPythonPackage, fetchurl, pytest, mock }:
 buildPythonPackage rec {
   pname = "pep257";
-  name = "${pname}-${version}";
   version = "0.7.0";
 
   src = fetchurl {

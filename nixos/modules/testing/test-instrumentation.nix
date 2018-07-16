@@ -126,7 +126,7 @@ in
     networking.usePredictableInterfaceNames = false;
 
     # Make it easy to log in as root when running the test interactively.
-    users.extraUsers.root.initialHashedPassword = mkOverride 150 "";
+    users.users.root.initialHashedPassword = mkOverride 150 "";
 
     services.xserver.displayManager.job.logToJournal = true;
 

@@ -2,7 +2,7 @@
 , gtk3, keybinder3, libnotify, libutempter, vte }:
 
 let
-  version = "3.2.2";
+  version = "3.3.0";
 in python3.pkgs.buildPythonApplication rec {
   name = "guake-${version}";
   format = "other";
@@ -11,7 +11,7 @@ in python3.pkgs.buildPythonApplication rec {
     owner = "Guake";
     repo = "guake";
     rev = version;
-    sha256 = "1wx8vghn0h52xryyn6cf9z1lbwsk766lhff162szbaxlxyl6xsc0";
+    sha256 = "1wckzz18rpgacnkynh4rknhhki52agd76i2p80kk9rlrdifqs788";
   };
 
   nativeBuildInputs = [ gettext gobjectIntrospection wrapGAppsHook python3.pkgs.pip glibcLocales ];

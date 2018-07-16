@@ -3,7 +3,6 @@
 buildPythonPackage rec {
   pname = "py3exiv2";
   version = "0.3.0";
-  name = "${pname}-${version}";
   disabled = !(isPy3k);
 
   src = fetchPypi {

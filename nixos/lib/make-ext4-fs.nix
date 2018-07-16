@@ -5,6 +5,7 @@
 { pkgs
 , storePaths
 , volumeLabel
+, uuid ? "44444444-4444-4444-8888-888888888888"
 }:
 
 let
@@ -32,7 +33,7 @@ pkgs.stdenv.mkDerivation {
       echo "Creating an EXT4 image of $bytes bytes (numInodes=$numInodes, numDataBlocks=$numDataBlocks)"
 
       truncate -s $bytes $out
-      faketime -f "1970-01-01 00:00:01" mkfs.ext4 -L ${volumeLabel} -U 44444444-4444-4444-8888-888888888888 $out
+      faketime -f "1970-01-01 00:00:01" mkfs.ext4 -L ${volumeLabel} -U ${uuid} $out
 
       # Populate the image contents by piping a bunch of commands to the `debugfs` tool from e2fsprogs.
       # For example, to copy /nix/store/abcd...efg-coreutils-8.23/bin/sleep:

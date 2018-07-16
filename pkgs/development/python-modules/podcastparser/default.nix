@@ -3,7 +3,6 @@
 buildPythonPackage rec {
   pname = "podcastparser";
   version = "0.6.2";
-  name = "${pname}-${version}";
 
   src = fetchFromGitHub {
     owner = "gpodder";

@@ -2,7 +2,6 @@
 
 buildPythonPackage rec {
   pname = "django-picklefield";
-  name = "${pname}-${version}";
   version = "1.0.0";
 
   meta = {

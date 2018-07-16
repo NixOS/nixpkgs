@@ -3,7 +3,6 @@
 buildPythonPackage rec {
   pname = "pylast";
   version = "2.3.0";
-  name = "${pname}-${version}";
 
   src = fetchPypi {
     inherit pname version;

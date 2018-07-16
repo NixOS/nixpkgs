@@ -4,7 +4,6 @@
 buildPythonPackage rec {
   version = "1.0.0";
   pname = "requests-oauthlib";
-  name = "${pname}-${version}";
 
   src = fetchPypi {
     inherit pname version;

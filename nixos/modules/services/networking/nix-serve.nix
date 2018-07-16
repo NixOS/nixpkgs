@@ -64,7 +64,7 @@ in
       };
     };
 
-    users.extraUsers.nix-serve = {
+    users.users.nix-serve = {
       description = "Nix-serve user";
       uid = config.ids.uids.nix-serve;
     };

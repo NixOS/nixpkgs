@@ -3,16 +3,16 @@
 
 , cmake
 , ninja
+, mbedtls
 
-, libxslt
-, libxml2
-
-, enableSSL ? true
-, enableMonitor ? false
-, enableRproxy ? true
-, enableTomahawk ? false
-, enableXSLT ? true
-, enableToolkit ? true
+, enableCache     ? true     # Internal cache support.
+, enableIpV6      ? true
+, enableTls       ? true
+, enableMonitor   ? false    # Support for the Hiawatha Monitor.
+, enableRproxy    ? true     # Reverse proxy support.
+, enableTomahawk  ? false    # Tomahawk, the Hiawatha command shell.
+, enableXslt      ? true, libxml2 ? null, libxslt ? null
+, enableToolkit   ? true     # The URL Toolkit.
 }:
 
 stdenv.mkDerivation rec {
@@ -27,28 +27,29 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ cmake ninja ];
-  buildInputs = [ libxslt libxml2 ];
+  buildInputs = [ mbedtls ] ++ stdenv.lib.optionals enableXslt [ libxslt libxml2 ];
 
   prePatch = ''
     substituteInPlace CMakeLists.txt --replace SETUID ""
   '';
 
   cmakeFlags = [
-    (
-      # FIXME: 2018-06-08: Uses bundled library, with external ("-DUSE_SYSTEM_MBEDTLS=on") asks:
-      # ../src/tls.c:46:2: error: #error "The mbed TLS library must be compiled with MBEDTLS_THREADING_PTHREAD and MBEDTLS_THREADING_C enabled."
-      if enableSSL then "-DENABLE_TLS=on" else "-DENABLE_TLS=off" )
-    ( if enableMonitor then "-DENABLE_MONITOR=on" else "-DENABLE_MONITOR=off" )
-    ( if enableRproxy then "-DENABLE_RPROXY=on" else "-DENABLE_RPROXY=off" )
-    ( if enableTomahawk then "-DENABLE_TOMAHAWK=on" else "-DENABLE_TOMAHAWK=off" )
-    ( if enableXSLT then "-DENABLE_XSLT=on" else "-DENABLE_XSLT=off" )
-    ( if enableToolkit then "-DENABLE_TOOLKIT=on" else "-DENABLE_TOOLKIT=off" )
+    "-DUSE_SYSTEM_MBEDTLS=on" # Policy to use Nix deps, and Nix uses up to date deps
+    ( if enableCache     then "-DENABLE_CACHE=on"       else "-DENABLE_CACHE=off"       )
+    ( if enableIpV6      then "-DENABLE_IPV6=on"        else "-DENABLE_IPV6=off"        )
+    ( if enableTls       then "-DENABLE_TLS=on"         else "-DENABLE_TLS=off"         )
+    ( if enableMonitor   then "-DENABLE_MONITOR=on"     else "-DENABLE_MONITOR=off"     )
+    ( if enableRproxy    then "-DENABLE_RPROXY=on"      else "-DENABLE_RPROXY=off"      )
+    ( if enableTomahawk  then "-DENABLE_TOMAHAWK=on"    else "-DENABLE_TOMAHAWK=off"    )
+    ( if enableXslt      then "-DENABLE_XSLT=on"        else "-DENABLE_XSLT=off"        )
+    ( if enableToolkit   then "-DENABLE_TOOLKIT=on"     else "-DENABLE_TOOLKIT=off"     )
   ];
 
   meta = with stdenv.lib; {
+    homepage = https://www.hiawatha-webserver.org;
     description = "An advanced and secure webserver";
     license = licenses.gpl2;
-    homepage = https://www.hiawatha-webserver.org;
+    platforms = platforms.unix;    # "Hiawatha runs perfectly on Linux, BSD and MacOS X"
     maintainers = [ maintainers.ndowens ];
   };
 

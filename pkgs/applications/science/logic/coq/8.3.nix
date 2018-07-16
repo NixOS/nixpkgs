@@ -27,7 +27,7 @@ stdenv.mkDerivation {
   name = "coq-${version}";
 
   src = fetchurl {
-    url = "http://coq.inria.fr/V${version}/files/coq-${version}.tar.gz";
+    url = "https://coq.inria.fr/V${version}/files/coq-${version}.tar.gz";
     sha256 = "17d3lmchmqir1rawnr52g78srg4wkd7clzpzfsivxc4y1zp6rwkr";
   };
 

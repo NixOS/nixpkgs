@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
   version = "2.6.2";
 
   src = fetchurl {
-    url = "http://ftp.gnome.org/pub/GNOME/sources/banshee/2.6/banshee-${version}.tar.xz";
+    url = "https://ftp.gnome.org/pub/GNOME/sources/banshee/2.6/banshee-${version}.tar.xz";
     sha256 = "1y30p8wxx5li39i5gpq2wib0ympy8llz0gyi6ri9bp730ndhhz7p";
   };
 

@@ -3,7 +3,6 @@
 buildPythonPackage rec {
   version = "1.0.3";
   pname = "python-editor";
-  name = "${pname}-${version}";
 
   src = fetchPypi {
     inherit pname version;

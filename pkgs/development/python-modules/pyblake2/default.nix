@@ -6,7 +6,6 @@
 buildPythonPackage rec {
   pname = "pyblake2";
   version = "1.1.2";
-  name = "${pname}-${version}";
 
   src = fetchPypi {
     inherit pname version;

@@ -1,11 +1,14 @@
-{ fetchurl, stdenv, meson, ninja, pkgconfig, python, pygobject3
+{ buildPythonPackage, fetchurl, stdenv, meson, ninja, pkgconfig, python, pygobject3
 , gst-plugins-base, ncurses
 }:
 
-stdenv.mkDerivation rec {
+let
   pname = "gst-python";
   version = "1.14.0";
   name = "${pname}-${version}";
+in buildPythonPackage rec {
+  inherit pname version;
+  format = "other";
 
   src = fetchurl {
     urls = [
@@ -32,9 +35,6 @@ stdenv.mkDerivation rec {
   '';
 
   propagatedBuildInputs = [ gst-plugins-base pygobject3 ];
-
-  # Needed for python.buildEnv
-  passthru.pythonPath = [];
 
   meta = {
     homepage = https://gstreamer.freedesktop.org;

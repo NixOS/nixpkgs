@@ -13,7 +13,10 @@ stdenv.mkDerivation rec {
     fetchSubmodules = true;
   };
 
-  buildInputs = [ boost gmp mpfr libedit python texinfo gnused ];
+  buildInputs = [
+    (boost.override { enablePython = usePython; })
+    gmp mpfr libedit python texinfo gnused
+  ];
 
   nativeBuildInputs = [ cmake ];
 

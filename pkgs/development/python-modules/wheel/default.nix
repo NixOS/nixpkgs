@@ -10,7 +10,6 @@
 buildPythonPackage rec {
   pname = "wheel";
   version = "0.31.1";
-  name = "${pname}-${version}";
 
   src = fetchPypi {
     inherit pname version;

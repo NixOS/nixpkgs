@@ -4,7 +4,7 @@
 let
   inherit (python3Packages) buildPythonApplication python isPy3k dbus-python pygobject3 mpd2;
 in buildPythonApplication rec {
-  name = "sonata-${version}";
+  pname = "sonata";
   version = "1.7b1";
 
   src = fetchFromGitHub {

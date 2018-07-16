@@ -20,7 +20,7 @@
   follows:
 <!-- FIXME: this might not work if the user is unmanaged. -->
 <programlisting>
-<link linkend="opt-users.users._name__.openssh.authorizedKeys.keys">users.extraUsers.alice.openssh.authorizedKeys.keys</link> =
+<link linkend="opt-users.users._name__.openssh.authorizedKeys.keys">users.users.alice.openssh.authorizedKeys.keys</link> =
   [ "ssh-dss AAAAB3NzaC1kc3MAAACBAPIkGWVEt4..." ];
 </programlisting>
  </para>

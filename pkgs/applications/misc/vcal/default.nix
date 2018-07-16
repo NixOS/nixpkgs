@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
   version = "2.8";
 
   src = fetchurl {
-    url    = "http://waynemorrison.com/software/vcal";
+    url    = "https://waynemorrison.com/software/vcal";
     sha256 = "0jrm0jzqxb1xjp24hwbzlxsh22gjssay9gj4zszljzdm68r5afvc";
   };
 
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Parser for VCalendar and ICalendar files, usable from the command line";
-    homepage = http://waynemorrison.com/software/;
+    homepage = https://waynemorrison.com/software/;
     license = licenses.asl20;
     maintainers = with maintainers; [ peterhoeg ];
   };

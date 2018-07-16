@@ -1,7 +1,7 @@
-{ stdenv, fetchurl, buildPythonPackage, dns, pyasn1 }:
+{ stdenv, fetchPypi, buildPythonPackage, dns, pyasn1 }:
 
 buildPythonPackage rec {
-  name = "sleekxmpp-${version}";
+  pname = "sleekxmpp";
   version = "1.3.1";
 
   propagatedBuildInputs = [ dns pyasn1 ];
@@ -10,8 +10,8 @@ buildPythonPackage rec {
     ./dnspython-ip6.patch
   ];
 
-  src = fetchurl {
-    url = "mirror://pypi/s/sleekxmpp/${name}.tar.gz";
+  src = fetchPypi {
+    inherit pname version;
     sha256 = "1krkhkvj8xw5a6c2xlf7h1rg9xdcm9d8x2niivwjahahpvbl6krr";
   };
 

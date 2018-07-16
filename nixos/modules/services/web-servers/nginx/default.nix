@@ -613,13 +613,13 @@ in
         listToAttrs acmePairs
     );
 
-    users.extraUsers = optionalAttrs (cfg.user == "nginx") (singleton
+    users.users = optionalAttrs (cfg.user == "nginx") (singleton
       { name = "nginx";
         group = cfg.group;
         uid = config.ids.uids.nginx;
       });
 
-    users.extraGroups = optionalAttrs (cfg.group == "nginx") (singleton
+    users.groups = optionalAttrs (cfg.group == "nginx") (singleton
       { name = "nginx";
         gid = config.ids.gids.nginx;
       });

@@ -43,12 +43,6 @@ in
         default = true;
         description = "Enable the XFWM (default) window manager.";
       };
-
-      screenLock = mkOption {
-        type = types.enum [ "xscreensaver" "xlockmore" "slock" ];
-        default = "xlockmore";
-        description = "Application used by XFCE to lock the screen.";
-      };
     };
   };
 
@@ -92,7 +86,7 @@ in
       thunar-volman # TODO: drop
     ] ++ (if config.hardware.pulseaudio.enable
           then [ xfce4-mixer-pulse xfce4-volumed-pulse ]
-	  else [ xfce4-mixer xfce4-volumed ])
+          else [ xfce4-mixer xfce4-volumed ])
       # TODO: NetworkManager doesn't belong here
       ++ optionals config.networking.networkmanager.enable [ networkmanagerapplet ]
       ++ optionals config.powerManagement.enable [ xfce4-power-manager ]

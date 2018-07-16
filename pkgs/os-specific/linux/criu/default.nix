@@ -7,7 +7,7 @@ stdenv.mkDerivation rec {
   version = "3.9";
 
   src = fetchurl {
-    url    = "http://download.openvz.org/criu/${name}.tar.bz2";
+    url    = "https://download.openvz.org/criu/${name}.tar.bz2";
     sha256 = "0l71lmklr42pc2bj37pkp7y8va8bx42n9f6i4q4idsx4wrdd75fx";
   };
 

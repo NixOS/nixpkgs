@@ -62,13 +62,13 @@ in
   config = mkIf cfg.enable {
     environment.etc."kresd.conf".source = configFile; # not required
 
-    users.extraUsers = singleton
+    users.users = singleton
       { name = "kresd";
         uid = config.ids.uids.kresd;
         group = "kresd";
         description = "Knot-resolver daemon user";
       };
-    users.extraGroups = singleton
+    users.groups = singleton
       { name = "kresd";
         gid = config.ids.gids.kresd;
       };

@@ -21,7 +21,6 @@ in
 buildPythonPackage rec {
   pname = "PyLD";
   version = "0.7.2";
-  name = "${pname}-${version}";
 
   src = fetchFromGitHub {
     owner = "digitalbazaar";

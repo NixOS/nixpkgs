@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ guile ];
 
   src = fetchurl {
-    url = "http://ftp.gnu.org/gnu/libmatheval/${name}.tar.gz";
+    url = "https://ftp.gnu.org/gnu/libmatheval/${name}.tar.gz";
     sha256 = "474852d6715ddc3b6969e28de5e1a5fbaff9e8ece6aebb9dc1cc63e9e88e89ab";
   };
 

@@ -4,7 +4,6 @@
 buildPythonPackage rec {
   pname = "aiodns";
   version = "1.1.1";
-  name = "${pname}-${version}";
 
   src = fetchPypi {
     inherit pname version;

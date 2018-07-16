@@ -8,7 +8,6 @@
 buildPythonPackage rec {
   pname = "zc.lockfile";
   version = "1.3.0";
-  name = "${pname}-${version}";
 
   src = fetchPypi {
     inherit pname version;
@@ -20,7 +19,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Inter-process locks";
-    homepage =  http://www.python.org/pypi/zc.lockfile;
+    homepage =  https://www.python.org/pypi/zc.lockfile;
     license = licenses.zpl20;
     maintainers = with maintainers; [ goibhniu ];
   };

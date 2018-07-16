@@ -94,7 +94,7 @@ in
         rm -rf /var/lib/{polkit-1,PolicyKit}
       '';
 
-    users.extraUsers.polkituser = {
+    users.users.polkituser = {
       description = "PolKit daemon";
       uid = config.ids.uids.polkituser;
     };

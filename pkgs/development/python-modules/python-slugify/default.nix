@@ -1,7 +1,6 @@
 { stdenv, fetchPypi, buildPythonPackage, unidecode, regex, isPy3k }:
 
 buildPythonPackage rec {
-    name = "${pname}-${version}";
     pname = "python-slugify";
     version = "1.2.5";
 

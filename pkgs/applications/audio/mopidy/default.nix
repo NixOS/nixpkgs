@@ -3,8 +3,7 @@
 }:
 
 pythonPackages.buildPythonApplication rec {
-  name = "mopidy-${version}";
-
+  pname = "mopidy";
   version = "2.1.0";
 
   src = fetchFromGitHub {

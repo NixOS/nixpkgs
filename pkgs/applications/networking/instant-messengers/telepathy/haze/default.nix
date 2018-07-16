@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
   name = "${pname}-0.8.0";
 
   src = fetchurl {
-    url = "http://telepathy.freedesktop.org/releases/${pname}/${name}.tar.gz";
+    url = "https://telepathy.freedesktop.org/releases/${pname}/${name}.tar.gz";
     sha256 = "1jgrp32p6rllj089ynbsk3n9xrvsvzmwzhf0ql05kkgj0nf08xiy";
   };
 

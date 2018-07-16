@@ -3,35 +3,42 @@
 
 # Our own "unfuck" libs for macOS
 , ncurses, fmodex, gcc
+
+, dfVersion, df-hashes
 }:
 
 with lib;
 
 let
-  baseVersion = "44";
-  patchVersion = "10";
-  dfVersion = "0.${baseVersion}.${patchVersion}";
-
   libpath = makeLibraryPath [ stdenv.cc.cc stdenv.cc.libc dwarf-fortress-unfuck SDL ];
 
   homepage = http://www.bay12games.com/dwarves/;
 
+  # Map Dwarf Fortress platform names to Nixpkgs platform names.
   # Other srcs are avilable like 32-bit mac & win, but I have only
   # included the ones most likely to be needed by Nixpkgs users.
-  srcs = {
-    "x86_64-linux" = fetchurl {
-      url = "${homepage}df_${baseVersion}_${patchVersion}_linux.tar.bz2";
-      sha256 = "1cqm43hn3ar9d8a7y7dwq48ajp72cirn1gclh8r2fykkypprxmp2";
-    };
-    "i686-linux" = fetchurl {
-      url = "${homepage}df_${baseVersion}_${patchVersion}_linux32.tar.bz2";
-      sha256 = "0gdb6sq8725nwdisxwha8f5b6arq570s73aj4gdrh611gxh13r6n";
-    };
-    "x86_64-darwin" = fetchurl {
-      url = "${homepage}df_${baseVersion}_${patchVersion}_osx.tar.bz2";
-      sha256 = "1wpa45d81q8f5mhqmaxvdkz93k6cm3pg7vpsqjjjsp5s961gd74g";
-    };
+  platforms = {
+    "x86_64-linux" = "linux";
+    "i686-linux" = "linux32";
+    "x86_64-darwin" = "osx";
+    "i686-darwin" = "osx32";
+    "x86_64-cygwin" = "win";
+    "i686-cygwin" = "win32";
   };
+
+  dfVersionTriple = splitString "." dfVersion;
+  baseVersion = elemAt dfVersionTriple 1;
+  patchVersion = elemAt dfVersionTriple 2;
+
+  game = if hasAttr dfVersion df-hashes
+         then getAttr dfVersion df-hashes
+         else throw "Unknown Dwarf Fortress version: ${dfVersion}";
+  dfPlatform = if hasAttr stdenv.system platforms
+               then getAttr stdenv.system platforms
+               else throw "Unsupported system: ${stdenv.system}";
+  sha256 = if hasAttr dfPlatform game
+           then getAttr dfPlatform game
+           else throw "Unsupported dfPlatform: ${dfPlatform}";
 
 in
 
@@ -39,11 +46,12 @@ assert dwarf-fortress-unfuck != null ->
        dwarf-fortress-unfuck.dfVersion == dfVersion;
 
 stdenv.mkDerivation {
-  name = "dwarf-fortress-original-${dfVersion}";
+  name = "dwarf-fortress-${dfVersion}";
 
-  src = if builtins.hasAttr stdenv.system srcs
-        then builtins.getAttr stdenv.system srcs
-        else throw "Unsupported systems";
+  src = fetchurl {
+    url = "${homepage}df_${baseVersion}_${patchVersion}_${dfPlatform}.tar.bz2";
+    inherit sha256;
+  };
 
   installPhase = ''
     mkdir -p $out
@@ -81,13 +89,16 @@ stdenv.mkDerivation {
     md5sum $exe | awk '{ print $1 }' > $out/hash.md5
   '';
 
-  passthru = { inherit baseVersion patchVersion dfVersion; };
+  passthru = {
+    inherit baseVersion patchVersion dfVersion;
+    updateScript = ./update.sh;
+  };
 
   meta = {
     description = "A single-player fantasy game with a randomly generated adventure world";
     inherit homepage;
     license = licenses.unfreeRedistributable;
-    platforms = attrNames srcs;
-    maintainers = with maintainers; [ a1russell robbinch roconnor the-kenny abbradar ];
+    platforms = attrNames platforms;
+    maintainers = with maintainers; [ a1russell robbinch roconnor the-kenny abbradar numinit ];
   };
 }

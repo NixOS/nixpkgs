@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = {
-    homepage = http://gravit.slowchop.com;
+    homepage = https://gravit.slowchop.com;
     description = "Beautiful OpenGL-based gravity simulator";
     license = stdenv.lib.licenses.gpl2;
 

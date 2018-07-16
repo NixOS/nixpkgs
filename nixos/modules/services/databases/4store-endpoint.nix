@@ -52,7 +52,7 @@ with lib;
         message = "Must specify 4Store database name";
       };
 
-    users.extraUsers = singleton
+    users.users = singleton
       { name = endpointUser;
         uid = config.ids.uids.fourstorehttp;
         description = "4Store SPARQL endpoint user";

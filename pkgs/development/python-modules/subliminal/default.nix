@@ -1,5 +1,5 @@
 { stdenv
-, fetchurl
+, fetchPypi
 , buildPythonApplication
 , guessit
 , babelfish
@@ -20,11 +20,10 @@
 
 buildPythonApplication rec {
   pname = "subliminal";
-  name = "${pname}-${version}";
   version = "2.0.5";
 
-  src = fetchurl {
-    url = "mirror://pypi/s/subliminal/${name}.tar.gz";
+  src = fetchPypi {
+    inherit pname version;
     sha256 = "1dzv5csjcwgz69aimarx2c6606ckm2gbn4x2mzydcqnyai7sayhl";
   };
 

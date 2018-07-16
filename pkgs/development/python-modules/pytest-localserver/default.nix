@@ -9,7 +9,6 @@
 
 buildPythonPackage rec {
   pname = "pytest-localserver";
-  name = "${pname}-${version}";
   version = "0.4.1";
 
   src = fetchPypi {

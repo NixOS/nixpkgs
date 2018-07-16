@@ -3,25 +3,15 @@
 , tasty-golden, transformers, fetchFromGitHub, fetchpatch
 }:
 
-let
-
-  newShellCheck = fetchpatch {
-    url = https://github.com/haskell-CI/haskell-ci/pull/159.patch;
-    sha256 = "17qn099lvfiii5z3hg24idmg4sk6ph7m2k940fsxzhqrad8fkjmw";
-  };
-
-in
-
 mkDerivation {
   pname = "haskell-ci";
   version = "0";
   src = fetchFromGitHub {
     owner = "haskell-CI";
     repo = "haskell-ci";
-    rev = "05926968f17256cae2308756835a3a24d9de437b";
-    sha256 = "0s1g1yq6j6vl2bspc90bwbwp7532pcrmh8fhnz8j6yv9py927mmm";
+    rev = "f7ab8c794d7a957370d89f9b4e285a6d20bf8af8";
+    sha256 = "0w8qjdy8hzdrwmqnkf4y967r9xh0k21w3hxqlsjp66cay1vby2s8";
   };
-  patches = [ newShellCheck ];
   isLibrary = true;
   isExecutable = true;
   libraryHaskellDepends = [

@@ -13,7 +13,6 @@
 buildPythonPackage rec {
   pname = "dask";
   version = "0.18.0";
-  name = "${pname}-${version}";
 
   src = fetchPypi {
     inherit pname version;

@@ -1,7 +1,6 @@
 { stdenv, fetchPypi, buildPythonPackage, agate, openpyxl, xlrd }:
 
 buildPythonPackage rec {
-    name = "${pname}-${version}";
     pname = "agate-excel";
     version = "0.2.2";
 

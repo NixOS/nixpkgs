@@ -40,7 +40,6 @@ let
   libgpuarray_ = libgpuarray.override { inherit cudaSupport; };
 
 in buildPythonPackage rec {
-  name = "${pname}-${version}";
   pname = "Theano";
   version = "1.0.2";
 

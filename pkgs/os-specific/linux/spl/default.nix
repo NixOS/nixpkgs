@@ -25,7 +25,7 @@ let
 
       nativeBuildInputs = [ autoreconfHook ] ++ kernel.moduleBuildDependencies;
 
-      hardeningDisable = [ "pic" ];
+      hardeningDisable = [ "fortify" "stackprotector" "pic" ];
 
       preConfigure = ''
         substituteInPlace ./module/spl/spl-generic.c --replace /usr/bin/hostid hostid

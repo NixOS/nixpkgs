@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
   version = "4.1.0";
 
   src = fetchurl {
-    url = "http://download.linuxsampler.org/packages/${name}.tar.bz2";
+    url = "https://download.linuxsampler.org/packages/${name}.tar.bz2";
     sha256 = "02xx6bqxzgkvrawwnzrnxx1ypk244q4kpwfd58266f9ji8kq18h6";
   };
 

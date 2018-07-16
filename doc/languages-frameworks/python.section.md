@@ -200,7 +200,7 @@ building Python libraries is `buildPythonPackage`. Let's see how we can build th
     doCheck = false;
 
     meta = {
-      homepage = "http://github.com/pytoolz/toolz/";
+      homepage = "https://github.com/pytoolz/toolz/";
       description = "List processing tools and functional utilities";
       license = licenses.bsd3;
       maintainers = with maintainers; [ fridh ];
@@ -245,7 +245,7 @@ with import <nixpkgs> {};
       doCheck = false;
 
       meta = {
-        homepage = "http://github.com/pytoolz/toolz/";
+        homepage = "https://github.com/pytoolz/toolz/";
         description = "List processing tools and functional utilities";
       };
     };
@@ -328,7 +328,7 @@ when building the bindings and are therefore added as `buildInputs`.
 
     meta = {
       description = "Pythonic binding for the libxml2 and libxslt libraries";
-      homepage = http://lxml.de;
+      homepage = https://lxml.de;
       license = licenses.bsd3;
       maintainers = with maintainers; [ sjourdois ];
     };
@@ -436,7 +436,7 @@ Let's split the package definition from the environment definition.
 We first create a function that builds `toolz` in `~/path/to/toolz/release.nix`
 
 ```nix
-{ pkgs, buildPythonPackage }:
+{ lib, pkgs, buildPythonPackage }:
 
 buildPythonPackage rec {
   pname = "toolz";
@@ -447,7 +447,7 @@ buildPythonPackage rec {
     sha256 = "43c2c9e5e7a16b6c88ba3088a9bfc82f7db8e13378be7c78d6c14a5f8ed05afd";
   };
 
-  meta = {
+  meta = with lib; {
     homepage = "http://github.com/pytoolz/toolz/";
     description = "List processing tools and functional utilities";
     license = licenses.bsd3;
@@ -484,7 +484,7 @@ and in this case the `python35` interpreter is automatically used.
 
 ### Interpreters
 
-Versions 2.7, 3.3, 3.4, 3.5 and 3.6 of the CPython interpreter are available as
+Versions 2.7, 3.4, 3.5, 3.6 and 3.7 of the CPython interpreter are available as
 respectively `python27`, `python34`, `python35` and `python36`. The PyPy interpreter
 is available as `pypy`. The aliases `python2` and `python3` correspond to respectively `python27` and
 `python35`. The default interpreter, `python`, maps to `python2`.
@@ -533,6 +533,7 @@ sets are
 * `pkgs.python34Packages`
 * `pkgs.python35Packages`
 * `pkgs.python36Packages`
+* `pkgs.python37Packages`
 * `pkgs.pypyPackages`
 
 and the aliases
@@ -1028,7 +1029,7 @@ To alter a python package using overlays, you would use the following approach:
 
 ```nix
 self: super:
-rec {
+{
   python = super.python.override {
     packageOverrides = python-self: python-super: {
       bepasty-server = python-super.bepasty-server.overrideAttrs ( oldAttrs: {
@@ -1040,7 +1041,7 @@ rec {
       });
     };
   };
-  pythonPackages = python.pkgs;
+  pythonPackages = self.python.pkgs;
 }
 ```
 

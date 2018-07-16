@@ -1,7 +1,6 @@
 { stdenv, buildPythonPackage, fetchPypi, pillow }:
 
 buildPythonPackage rec {
-  name = "${pname}-${version}";
   pname = "piexif";
   version = "1.0.13";
 

@@ -10,7 +10,6 @@
 buildPythonPackage rec {
   pname = "aiofiles";
   version = "0.3.2";
-  name = "${pname}-${version}";
 
   src = fetchPypi {
     inherit pname version;

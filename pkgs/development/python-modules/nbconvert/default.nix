@@ -23,7 +23,6 @@
 buildPythonPackage rec {
   pname = "nbconvert";
   version = "5.3.1";
-  name = "${pname}-${version}";
 
   src = fetchPypi {
     inherit pname version;

@@ -4,7 +4,6 @@
 
 buildPythonPackage rec {
   pname = "marshmallow";
-  name = "${pname}-${version}";
   version = "2.15.3";
 
   meta = {

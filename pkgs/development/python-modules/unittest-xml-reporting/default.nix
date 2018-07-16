@@ -1,7 +1,6 @@
 {lib, fetchPypi, buildPythonPackage, six}:
 
 buildPythonPackage rec {
-  name = "${pname}-${version}";
   pname = "unittest-xml-reporting";
   version = "2.2.0";
 

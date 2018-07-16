@@ -15,7 +15,6 @@
 buildPythonPackage rec {
   pname = "marionette-harness";
   version = "4.5.0";
-  name = "${pname}-${version}";
   disabled = isPy3k;
 
   src = fetchPypi {

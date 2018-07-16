@@ -6,7 +6,7 @@ stdenv.mkDerivation rec {
   name = "freeswitch-1.6.20";
 
   src = fetchurl {
-    url = "http://files.freeswitch.org/freeswitch-releases/${name}.tar.bz2";
+    url = "https://files.freeswitch.org/freeswitch-releases/${name}.tar.bz2";
     sha256 = "0hqz68abs5x5vzf1mndcvdi35nrhmnklzdrnrk8dyvzvz67hp2ah";
   };
   postPatch = ''

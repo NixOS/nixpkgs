@@ -19,6 +19,27 @@
 
   <itemizedlist>
    <listitem>
+     <para>
+       Support for wrapping binaries using <literal>firejail</literal> has been
+       added through <varname>programs.firejail.wrappedBinaries</varname>.
+     </para>
+     <para>
+       For example
+     </para>
+<programlisting>
+programs.firejail = {
+  enable = true;
+  wrappedBinaries = {
+    firefox = "${lib.getBin pkgs.firefox}/bin/firefox";
+    mpv = "${lib.getBin pkgs.mpv}/bin/mpv";
+  };
+};
+</programlisting>
+      <para>
+        This will place <literal>firefox</literal> and <literal>mpv</literal> binaries in the global path wrapped by firejail.
+      </para>
+   </listitem>
+   <listitem>
     <para>
      User channels are now in the default <literal>NIX_PATH</literal>, allowing
      users to use their personal <command>nix-channel</command> defined
@@ -125,6 +146,12 @@ $ nix-instantiate -E '(import &lt;nixpkgsunstable&gt; {}).gitFull'
     <para>
      <varname>services.munge</varname> now runs as user (and group) <literal>munge</literal> instead of root.
      Make sure the key file is accessible to the daemon.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+      <varname>dockerTools.buildImage</varname> now uses <literal>null</literal> as default value for <varname>tag</varname>,
+      which indicates that the nix output hash will be used as tag.
     </para>
    </listitem>
   </itemizedlist>
@@ -328,6 +355,11 @@ inherit (pkgs.nixos {
      <literal>/etc/screenrc</literal>, however the module behaved fairly counterintuitive as
      the config exists, but the package wasn't available. Since 18.09 <literal>pkgs.screen</literal>
      will be added to <literal>environment.systemPackages</literal>.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+      The module <option>services.networking.hostapd</option> now uses WPA2 by default.
     </para>
    </listitem>
   </itemizedlist>

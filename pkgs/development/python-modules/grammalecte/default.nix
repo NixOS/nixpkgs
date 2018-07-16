@@ -8,7 +8,6 @@
 buildPythonPackage rec {
   pname = "grammalecte";
   version = "0.6.1";
-  name = "${pname}-${version}";
 
   src = fetchurl {
     url = "http://www.dicollecte.org/grammalecte/zip/Grammalecte-fr-v${version}.zip";

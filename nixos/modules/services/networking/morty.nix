@@ -72,7 +72,7 @@ in
 
   config = mkIf config.services.morty.enable {
 
-    users.extraUsers.morty =
+    users.users.morty =
       { description = "Morty user";
         createHome = true;
         home = "/var/lib/morty";

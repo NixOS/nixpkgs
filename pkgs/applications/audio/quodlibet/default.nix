@@ -8,7 +8,7 @@
 
 let optionals = stdenv.lib.optionals; in
 python3.pkgs.buildPythonApplication rec {
-  name = "quodlibet${tag}-${version}";
+  pname = "quodlibet${tag}";
   version = "4.1.0";
 
   # XXX, tests fail

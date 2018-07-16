@@ -3,7 +3,6 @@
 , mock, nose}:
 buildPythonPackage rec {
   pname = "Flask-OAuthlib";
-  name = "${pname}-${version}";
   version = "0.9.3";
 
   src = fetchFromGitHub {

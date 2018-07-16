@@ -5,7 +5,6 @@
 buildPythonPackage rec {
   pname = "cligj";
   version = "0.4.0";
-  name = "${pname}-${version}";
 
   src = fetchFromGitHub {
     owner = "mapbox";

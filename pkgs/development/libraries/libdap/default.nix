@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ libuuid curl libxml2 ];
 
   src = fetchurl {
-    url = "http://www.opendap.org/pub/source/${name}.tar.gz";
+    url = "https://www.opendap.org/pub/source/${name}.tar.gz";
     sha256 = "0gnki93z3kkzp65x7n1kancy7bd503j4qja5fhzvm1gkmi5l65aj";
   };
 

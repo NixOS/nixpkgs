@@ -14,7 +14,7 @@ with lib;
   boot.loader.grub.fsIdentifier = "provided";
 
   # Allow mounting of shared folders.
-  users.extraUsers.demo.extraGroups = [ "vboxsf" ];
+  users.users.demo.extraGroups = [ "vboxsf" ];
 
   # Add some more video drivers to give X11 a shot at working in
   # VMware and QEMU.

@@ -34,6 +34,7 @@ fhsEnv = buildFHSUserEnv {
   targetPkgs = pkgs: with pkgs; with xorg; [
     gtk3 dbus-glib
     libXt nss
+    libX11
   ];
 };
 

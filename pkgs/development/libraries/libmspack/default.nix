@@ -4,7 +4,7 @@ stdenv.mkDerivation rec {
   name = "libmspack-0.6alpha";
 
   src = fetchurl {
-    url = "http://www.cabextract.org.uk/libmspack/${name}.tar.gz";
+    url = "https://www.cabextract.org.uk/libmspack/${name}.tar.gz";
     sha256 = "08gr2pcinas6bdqz3k0286g5cnksmcx813skmdwyca6bmj1fxnqy";
   };
 

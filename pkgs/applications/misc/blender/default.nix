@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   name = "blender-2.79b";
 
   src = fetchurl {
-    url = "http://download.blender.org/source/${name}.tar.gz";
+    url = "https://download.blender.org/source/${name}.tar.gz";
     sha256 = "1g4kcdqmf67srzhi3hkdnr4z1ph4h9sza1pahz38mrj998q4r52c";
   };
 

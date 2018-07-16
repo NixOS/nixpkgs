@@ -7,7 +7,6 @@
 , python
 }:
 buildPythonPackage rec {
-  name = "${pname}-${version}";
   pname = "preshed";
   version = "1.0.0";
 

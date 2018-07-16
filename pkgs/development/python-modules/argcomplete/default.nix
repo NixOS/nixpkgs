@@ -2,7 +2,6 @@
   coverage, dicttoxml, flake8, pexpect, prettytable, requests_toolbelt
 }:
 buildPythonPackage rec {
-  name = "${pname}-${version}";
   pname = "argcomplete";
   version = "1.9.4";
 

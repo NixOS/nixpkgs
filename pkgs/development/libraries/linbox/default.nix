@@ -5,7 +5,6 @@
 , givaro
 , pkgconfig
 , openblas
-, liblapack
 , fflas-ffpack
 , gmpxx
 , optimize ? false # impure
@@ -30,7 +29,6 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     givaro
-    (liblapack.override {shared = true;})
     openblas
     gmpxx
     fflas-ffpack
@@ -38,7 +36,6 @@ stdenv.mkDerivation rec {
 
   configureFlags = [
     "--with-blas-libs=-lopenblas"
-    "--with-lapack-libs=-llapack"
     "--disable-optimization"
   ] ++ stdenv.lib.optionals (!optimize) [
     # disable SIMD instructions (which are enabled *when available* by default)

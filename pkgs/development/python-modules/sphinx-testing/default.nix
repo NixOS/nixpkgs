@@ -10,7 +10,6 @@
 buildPythonPackage rec {
   pname = "sphinx-testing";
   version = "0.7.2";
-  name = "${pname}-${version}";
 
   src = fetchPypi {
     inherit pname version;

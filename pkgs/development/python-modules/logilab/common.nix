@@ -3,7 +3,6 @@
 buildPythonPackage rec {
   pname = "logilab-common";
   version = "1.4.1";
-  name = "${pname}-${version}";
 
   src = fetchPypi {
     inherit pname version;

@@ -17,7 +17,6 @@ buildPhase() {
         # Create the module.
         echo "Building linux driver against kernel: $kernel";
         cd kernel
-        kernelVersion=$(cd $kernel/lib/modules && ls)
         sysSrc=$(echo $kernel/lib/modules/$kernelVersion/source)
         sysOut=$(echo $kernel/lib/modules/$kernelVersion/build)
         unset src # used by the nv makefile

@@ -2,7 +2,6 @@
 , itsdangerous, click, werkzeug, jinja2, pytest }:
 
 buildPythonPackage rec {
-  name = "${pname}-${version}";
   version = "1.0.2";
   pname = "Flask";
 

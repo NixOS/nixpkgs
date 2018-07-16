@@ -6,7 +6,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     sha256 = "1m3z9w3h6qpgk265xf030w7lcs181jgw2cdyzshb7l97mn1f7hh2";
-    url = "http://code.x2go.org/releases/source/nx-libs/nx-libs-${version}-lite.tar.gz";
+    url = "https://code.x2go.org/releases/source/nx-libs/nx-libs-${version}-lite.tar.gz";
   };
 
   buildInputs = [ libjpeg libpng libX11 zlib ];

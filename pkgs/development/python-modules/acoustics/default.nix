@@ -4,7 +4,6 @@
 buildPythonPackage rec {
   pname = "acoustics";
   version = "0.1.2";
-  name = "${pname}-${version}";
 
   buildInputs = [ cython pytest ];
   propagatedBuildInputs = [ numpy scipy matplotlib pandas tabulate ];

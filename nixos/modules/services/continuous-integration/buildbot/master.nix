@@ -191,11 +191,11 @@ in {
   };
 
   config = mkIf cfg.enable {
-    users.extraGroups = optional (cfg.group == "buildbot") {
+    users.groups = optional (cfg.group == "buildbot") {
       name = "buildbot";
     };
 
-    users.extraUsers = optional (cfg.user == "buildbot") {
+    users.users = optional (cfg.user == "buildbot") {
       name = "buildbot";
       description = "Buildbot User.";
       isNormalUser = true;

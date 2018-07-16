@@ -4,7 +4,6 @@
 
 buildPythonPackage rec {
   pname = "premailer";
-  name = "${pname}-${version}";
   version = "3.2.0";
 
   meta = {

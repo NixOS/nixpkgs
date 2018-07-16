@@ -7,7 +7,6 @@
 buildPythonPackage rec {
   pname = "parso";
   version = "0.2.1";
-  name = "${pname}-${version}";
 
   src = fetchPypi {
     inherit pname version;

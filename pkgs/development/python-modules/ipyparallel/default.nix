@@ -17,7 +17,6 @@
 buildPythonPackage rec {
   pname = "ipyparallel";
   version = "6.2.1";
-  name = "${pname}-${version}";
 
   src = fetchPypi {
     inherit pname version;

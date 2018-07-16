@@ -79,7 +79,7 @@ in
   };
 
   config = mkIf cfg.enable {
-    users.extraUsers.minetest = {
+    users.users.minetest = {
       description     = "Minetest Server Service user";
       home            = "/var/lib/minetest";
       createHome      = true;

@@ -8,7 +8,6 @@
 buildPythonPackage rec {
   pname = "pytest-timeout";
   version = "1.3.0";
-  name = "${pname}-${version}";
 
   src = fetchPypi {
     inherit pname version;
@@ -20,7 +19,7 @@ buildPythonPackage rec {
 
   meta = with lib;{
     description = "py.test plugin to abort hanging tests";
-    homepage = http://bitbucket.org/pytest-dev/pytest-timeout/;
+    homepage = https://bitbucket.org/pytest-dev/pytest-timeout/;
     license = licenses.mit;
     maintainers = with maintainers; [ makefu ];
   };

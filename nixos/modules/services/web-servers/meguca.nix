@@ -104,15 +104,16 @@ in
       preStart = ''
         # Ensure folder exists and links are correct or create them
         mkdir -p ${cfg.baseDir}
+        chmod 750 ${cfg.baseDir}
         ln -sf ${pkgs.meguca}/share/meguca/www ${cfg.baseDir}
 
         # Ensure the database is correct or create it
         ${pkgs.sudo}/bin/sudo -u ${postgres.superUser} ${postgres.package}/bin/createuser \
           -SDR meguca || true
-        ${pkgs.sudo}/bin/sudo -u ${postgres.superUser} ${postgres.package}/bin/psql \
-          -c "ALTER ROLE meguca WITH PASSWORD '$(cat ${cfg.passwordFile})';" || true
         ${pkgs.sudo}/bin/sudo -u ${postgres.superUser} ${postgres.package}/bin/createdb \
           -T template0 -E UTF8 -O meguca meguca || true
+        ${pkgs.sudo}/bin/sudo -u meguca ${postgres.package}/bin/psql \
+          -c "ALTER ROLE meguca WITH PASSWORD '$(cat ${cfg.passwordFile})';" || true
       '';
 
     script = ''
@@ -139,7 +140,7 @@ in
     };
 
     users = {
-      extraUsers.meguca = {
+      users.meguca = {
         description = "meguca server service user";
         home = cfg.baseDir;
         createHome = true;
@@ -147,7 +148,7 @@ in
         uid = config.ids.uids.meguca;
       };
 
-      extraGroups.meguca = {
+      groups.meguca = {
         gid = config.ids.gids.meguca;
         members = [ "meguca" ];
       };

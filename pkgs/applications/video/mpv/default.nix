@@ -3,15 +3,17 @@
 , freefont_ttf, freetype, libass, libpthreadstubs
 , lua, luasocket, libuchardet, libiconv ? null, darwin
 
-, x11Support ? true,
+, x11Support ? stdenv.isLinux,
     libGLU_combined       ? null,
     libX11     ? null,
     libXext    ? null,
-    libXxf86vm ? null
+    libXxf86vm ? null,
+    libXrandr  ? null
 
-, waylandSupport ? false,
-    wayland      ? null,
-    libxkbcommon ? null
+, waylandSupport ? false
+  , wayland           ? null
+  , wayland-protocols ? null
+  , libxkbcommon      ? null
 
 , rubberbandSupport  ? true,  rubberband    ? null
 , xineramaSupport    ? true,  libXinerama   ? null
@@ -46,8 +48,8 @@ with stdenv.lib;
 let
   available = x: x != null;
 in
-assert x11Support         -> all available [libGLU_combined libX11 libXext libXxf86vm];
-assert waylandSupport     -> all available [wayland libxkbcommon];
+assert x11Support         -> all available [libGLU_combined libX11 libXext libXxf86vm libXrandr];
+assert waylandSupport     -> all available [wayland wayland-protocols libxkbcommon];
 assert rubberbandSupport  -> available rubberband;
 assert xineramaSupport    -> x11Support && available libXinerama;
 assert xvSupport          -> x11Support && available libXv;
@@ -96,7 +98,8 @@ in stdenv.mkDerivation rec {
     patchShebangs ./TOOLS/
   '';
 
-  NIX_LDFLAGS = optionalString x11Support "-lX11 -lXext";
+  NIX_LDFLAGS = optionalString x11Support "-lX11 -lXext "
+              + optionalString stdenv.isDarwin "-framework CoreFoundation";
 
   configureFlags = [
     "--enable-libmpv-shared"
@@ -150,10 +153,10 @@ in stdenv.mkDerivation rec {
     ++ optional vapoursynthSupport vapoursynth
     ++ optional archiveSupport     libarchive
     ++ optionals dvdnavSupport     [ libdvdnav libdvdnav.libdvdread ]
-    ++ optionals x11Support        [ libX11 libXext libGLU_combined libXxf86vm ]
-    ++ optionals waylandSupport    [ wayland libxkbcommon ]
+    ++ optionals x11Support        [ libX11 libXext libGLU_combined libXxf86vm libXrandr ]
+    ++ optionals waylandSupport    [ wayland wayland-protocols libxkbcommon ]
     ++ optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
-      libiconv Cocoa CoreAudio
+      CoreFoundation libiconv Cocoa CoreAudio
     ]);
 
   enableParallelBuilding = true;

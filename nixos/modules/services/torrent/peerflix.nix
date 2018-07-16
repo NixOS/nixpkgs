@@ -58,6 +58,6 @@ in {
       };
     };
 
-    users.extraUsers.peerflix.uid = config.ids.uids.peerflix;
+    users.users.peerflix.uid = config.ids.uids.peerflix;
   };
 }

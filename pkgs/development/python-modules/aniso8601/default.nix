@@ -4,7 +4,6 @@
 buildPythonPackage rec {
   pname = "aniso8601";
   version = "3.0.2";
-  name = "${pname}-${version}";
 
   meta = with stdenv.lib; {
     description = "Parses ISO 8601 strings.";

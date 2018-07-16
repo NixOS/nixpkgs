@@ -15,7 +15,6 @@
 buildPythonPackage rec {
   pname = "tensorflow-tensorboard";
   version = "1.7.0";
-  name = "${pname}-${version}";
   format = "wheel";
 
   src = fetchPypi ({

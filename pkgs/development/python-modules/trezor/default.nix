@@ -3,7 +3,6 @@
 }:
 
 buildPythonPackage rec {
-  name = "${pname}-${version}";
   pname = "trezor";
   version = "0.9.1";
 

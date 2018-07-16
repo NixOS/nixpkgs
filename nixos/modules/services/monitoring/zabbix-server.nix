@@ -85,7 +85,7 @@ in
 
     services.postgresql.enable = useLocalPostgres;
 
-    users.extraUsers = singleton
+    users.users = singleton
       { name = "zabbix";
         uid = config.ids.uids.zabbix;
         description = "Zabbix daemon user";

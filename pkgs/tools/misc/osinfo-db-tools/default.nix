@@ -3,11 +3,11 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "osinfo-db-tools-1.1.0";
+  name = "osinfo-db-tools-1.2.0";
 
   src = fetchurl {
     url = "https://releases.pagure.org/libosinfo/${name}.tar.gz";
-    sha256 = "0sslzrbhpb2js1vn48c11s5p0bic3yqzdnxm054dhc3wq0pwshd1";
+    sha256 = "07zqbwsmdgnzqah2smm4zri04c0qm82z1jn8kzz1bnsqbfg84l1v";
   };
 
   nativeBuildInputs = [ pkgconfig intltool ];

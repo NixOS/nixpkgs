@@ -1,14 +1,14 @@
-{ stdenv, lib, fetchurl, pkgconfig, audiofile
+{ stdenv, lib, fetchurl, pkgconfig, pruneLibtoolFiles
 , openglSupport ? false, libGL
 , alsaSupport ? true, alsaLib
-, x11Support ? true, libICE, libXi, libXScrnSaver, libXcursor, libXinerama, libXext, libXxf86vm, libXrandr
+, x11Support ? true, libX11, xproto, libICE, libXi, libXScrnSaver, libXcursor, libXinerama, libXext, libXxf86vm, libXrandr
 , waylandSupport ? true, wayland, wayland-protocols, libxkbcommon
 , dbusSupport ? false, dbus
 , udevSupport ? false, udev
 , ibusSupport ? false, ibus
 , pulseaudioSupport ? true, libpulseaudio
 , AudioUnit, Cocoa, CoreAudio, CoreServices, ForceFeedback, OpenGL
-, libiconv
+, audiofile, libiconv
 }:
 
 # NOTE: When editing this expression see if the same change applies to
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
   version = "2.0.8";
 
   src = fetchurl {
-    url = "http://www.libsdl.org/release/${name}.tar.gz";
+    url = "https://www.libsdl.org/release/${name}.tar.gz";
     sha256 = "1v4js1gkr75hzbxzhwzzif0sf9g07234sd23x1vdaqc661bprizd";
   };
 
@@ -33,18 +33,26 @@ stdenv.mkDerivation rec {
 
   patches = [ ./find-headers.patch ];
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkgconfig pruneLibtoolFiles ];
 
-  propagatedBuildInputs = [ libiconv ]
-    ++ optional  dbusSupport dbus
-    ++ optional  udevSupport udev
-    ++ optionals x11Support [ libICE libXi libXScrnSaver libXcursor libXinerama libXext libXrandr libXxf86vm ]
-    ++ optionals waylandSupport [ wayland wayland-protocols libxkbcommon ]
+  propagatedBuildInputs = dlopenPropagatedBuildInputs;
+
+  dlopenPropagatedBuildInputs = [ ]
+    # Propagated for #include <GLES/gl.h> in SDL_opengles.h.
+    ++ optional openglSupport libGL
+    # Propagated for #include <X11/Xlib.h> and <X11/Xatom.h> in SDL_syswm.h.
+    ++ optionals x11Support [ libX11 xproto ];
+
+  dlopenBuildInputs = [ ]
     ++ optional  alsaSupport alsaLib
-    ++ optional  pulseaudioSupport libpulseaudio;
+    ++ optional  dbusSupport dbus
+    ++ optional  pulseaudioSupport libpulseaudio
+    ++ optional  udevSupport udev
+    ++ optionals waylandSupport [ wayland wayland-protocols libxkbcommon ]
+    ++ optionals x11Support [ libICE libXi libXScrnSaver libXcursor libXinerama libXext libXrandr libXxf86vm ];
 
-  buildInputs = [ audiofile ]
-    ++ optional  openglSupport libGL
+  buildInputs = [ audiofile libiconv ]
+    ++ dlopenBuildInputs
     ++ optional  ibusSupport ibus
     ++ optionals stdenv.isDarwin [ AudioUnit Cocoa CoreAudio CoreServices ForceFeedback OpenGL ];
 
@@ -76,12 +84,13 @@ stdenv.mkDerivation rec {
   # SDL API that requires said libraries will fail to start.
   #
   # You can grep SDL sources with `grep -rE 'SDL_(NAME|.*_SYM)'` to
-  # confirm that they actually use most of the `propagatedBuildInputs`
-  # from above in this way. This is pretty weird.
-  postFixup = ''
+  # list the symbols used in this way.
+  postFixup = let
+    rpath = makeLibraryPath (dlopenPropagatedBuildInputs ++ dlopenBuildInputs);
+  in optionalString (stdenv.hostPlatform.extensions.sharedLibrary == ".so") ''
     for lib in $out/lib/*.so* ; do
-      if [[ -L "$lib" ]]; then
-        patchelf --set-rpath "$(patchelf --print-rpath $lib):${lib.makeLibraryPath propagatedBuildInputs}" "$lib"
+      if ! [[ -L "$lib" ]]; then
+        patchelf --set-rpath "$(patchelf --print-rpath $lib):${rpath}" "$lib"
       fi
     done
   '';

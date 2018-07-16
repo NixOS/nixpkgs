@@ -1,5 +1,6 @@
 { stdenv
 , lib
+, fetchurl
 , requireFile
 , makeWrapper
 , libredirect
@@ -23,10 +24,20 @@
 , alsaLib
 , libidn
 , zlib
-, version ? "13.9.1"
+, version ? "13.10.0"
 }:
 
 let
+  # In 56e1bdc7f9c (libidn: 1.34 -> 1.35), libidn.so.11 became libidn.so.12.
+  # Citrix looks for the former so we build version 1.34 to please the binary
+  libidn_134 = libidn.overrideDerivation (_: rec {
+    name = "libidn-1.34";
+    src = fetchurl {
+      url = "mirror://gnu/libidn/${name}.tar.gz";
+      sha256 = "0g3fzypp0xjcgr90c5cyj57apx1cmy0c6y9lvw2qdcigbyby469p";
+    };
+  });
+
   versionInfo = {
     "13.4.0" = rec {
       major     = "13";
@@ -102,6 +113,17 @@ let
       x86hash   = "A93E9770FD10FDD3586A2D47448559EA037265717A7000B9BD2B1DCCE7B0A483";
       x64suffix = "6";
       x86suffix = "6";
+      homepage  = https://www.citrix.com/downloads/citrix-receiver/legacy-receiver-for-linux/receiver-for-linux-1391.html;
+    };
+
+    "13.10.0" = {
+      major     = "13";
+      minor     = "10";
+      patch     = "0";
+      x64hash   = "7025688C7891374CDA11C92FC0BA2FA8151AEB4C4D31589AD18747FAE943F6EA";
+      x86hash   = "2DCA3C8EDED11C5D824D579BC3A6B7D531EAEDDCBFB16E91B5702C72CAE9DEE4";
+      x64suffix = "20";
+      x86suffix = "20";
       homepage  = https://www.citrix.com/downloads/citrix-receiver/linux/receiver-for-linux-latest.html;
     };
   };
@@ -160,7 +182,7 @@ let
         xorg.libXinerama
         xorg.libXfixes
         libpng12
-        libidn
+        libidn_134
         zlib
         gtk_engines
         freetype

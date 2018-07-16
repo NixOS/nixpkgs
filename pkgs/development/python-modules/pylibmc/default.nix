@@ -3,7 +3,6 @@
 buildPythonPackage rec {
   version = "1.5.2";
   pname = "pylibmc";
-  name = "${pname}-${version}";
 
   src = fetchPypi {
     inherit pname version;

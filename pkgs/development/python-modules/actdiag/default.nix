@@ -4,7 +4,6 @@
 buildPythonPackage rec {
   pname = "actdiag";
   version = "0.5.4";
-  name = "${pname}-${version}";
 
   src = fetchPypi {
     inherit pname version;

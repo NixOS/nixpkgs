@@ -1,5 +1,5 @@
 { stdenv, buildPythonPackage, fetchPypi
-, setuptools, google_api_core, google_gax, google_cloud_core, pytest, mock }:
+, google_api_core, pytest, mock }:
 
 buildPythonPackage rec {
   pname = "google-cloud-speech";
@@ -10,7 +10,7 @@ buildPythonPackage rec {
     sha256 = "8396646aa9de210bacb144fabd82ab5fe577b3b11708725c879b72c96009d631";
   };
 
-  propagatedBuildInputs = [ setuptools google_api_core google_gax google_cloud_core ];
+  propagatedBuildInputs = [ google_api_core ];
   checkInputs = [ pytest mock ];
 
   # needs credentials

@@ -16,7 +16,7 @@ in {
   };
 
   config = mkIf cfg.enable {
-    users.extraUsers.vnstatd = {
+    users.users.vnstatd = {
       isSystemUser = true;
       description = "vnstat daemon user";
       home = "/var/lib/vnstat";

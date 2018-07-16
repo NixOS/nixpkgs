@@ -11,7 +11,6 @@
 buildPythonPackage rec {
   pname = "plotly";
   version = "2.7.0";
-  name = "${pname}-${version}";
 
   src = fetchPypi {
     inherit pname version;

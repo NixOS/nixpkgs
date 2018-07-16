@@ -10,7 +10,6 @@
 
 buildPythonPackage rec {
   pname = "SQLAlchemy";
-  name = "${pname}-${version}";
   version = "1.2.8";
 
   src = fetchPypi {

@@ -264,7 +264,7 @@ let
     graphscan = [ pkgs.gsl_1 ];
     gsl = [ pkgs.gsl_1 ];
     h5 = [ pkgs.hdf5-cpp pkgs.which ];
-    haven = [ pkgs.libiconv ];
+    haven = [ pkgs.libiconv pkgs.zlib.dev ];
     h5vc = [ pkgs.zlib.dev ];
     HiCseg = [ pkgs.gsl_1 ];
     imager = [ pkgs.x11 ];
@@ -296,7 +296,6 @@ let
     protolite = [ pkgs.protobuf ];
     qtbase = [ pkgs.qt4 ];
     qtpaint = [ pkgs.qt4 ];
-    R2GUESS = [ pkgs.gsl_1 ];
     R2SWF = [ pkgs.zlib pkgs.libpng pkgs.freetype.dev ];
     RAppArmor = [ pkgs.libapparmor ];
     rapportools = [ pkgs.which ];
@@ -307,6 +306,7 @@ let
     RcppCNPy = [ pkgs.zlib.dev ];
     RcppGSL = [ pkgs.gsl_1 ];
     RcppZiggurat = [ pkgs.gsl_1 ];
+    reprex = [ pkgs.which ];
     rgdal = [ pkgs.proj pkgs.gdal ];
     rgeos = [ pkgs.geos ];
     rggobi = [ pkgs.ggobi pkgs.gtk2.dev pkgs.libxml2.dev ];
@@ -314,6 +314,7 @@ let
     Rglpk = [ pkgs.glpk ];
     RGtk2 = [ pkgs.gtk2.dev ];
     rhdf5 = [ pkgs.zlib ];
+    Rhdf5lib = [ pkgs.zlib ];
     Rhpc = [ pkgs.zlib pkgs.bzip2.dev pkgs.icu pkgs.lzma.dev pkgs.openmpi pkgs.pcre.dev ];
     Rhtslib = [ pkgs.zlib.dev pkgs.automake pkgs.autoconf ];
     RJaCGH = [ pkgs.zlib.dev ];
@@ -478,7 +479,6 @@ let
     "cpa"
     "DALY"
     "dave"
-    "debug"
     "Deducer"
     "DeducerExtras"
     "DeducerPlugInExample"
@@ -497,7 +497,6 @@ let
     "EasyqpcR"
     "EcoVirtual"
     "ENiRG"
-    "eVenn"
     "exactLoglinTest"
     "fat2Lpoly"
     "fbati"
@@ -596,7 +595,6 @@ let
     "rareNMtests"
     "rAverage"
     "Rcmdr"
-    "RcmdrPlugin_BCA"
     "RcmdrPlugin_coin"
     "RcmdrPlugin_depthTools"
     "RcmdrPlugin_DoE"
@@ -630,7 +628,6 @@ let
     "RcmdrPlugin_temis"
     "RcmdrPlugin_UCA"
     "recluster"
-    "relax"
     "relimp"
     "RenextGUI"
     "reportRx"
@@ -749,6 +746,10 @@ let
       patches = [ ./patches/BayesXsrc.patch ];
     });
 
+    Rhdf5lib = old.Rhdf5lib.overrideDerivation (attrs: {
+      patches = [ ./patches/Rhdf5lib.patch ];
+    });
+
     rJava = old.rJava.overrideDerivation (attrs: {
       preConfigure = ''
         export JAVA_CPPFLAGS=-I${pkgs.jdk}/include/
@@ -772,10 +773,6 @@ let
       preConfigure = ''
         patchShebangs configure
       '';
-    });
-
-    Mposterior = old.Mposterior.overrideDerivation (attrs: {
-      PKG_LIBS = "-L${pkgs.openblasCompat}/lib -lopenblas";
     });
 
     pbdZMQ = old.pbdZMQ.overrideDerivation (attrs: {

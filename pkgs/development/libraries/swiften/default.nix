@@ -7,7 +7,7 @@ stdenv.mkDerivation rec {
   propagatedBuildInputs = [ openssl boost ];
 
   src = fetchurl {
-    url    = "http://swift.im/downloads/releases/swift-${version}/swift-${version}.tar.gz";
+    url    = "https://swift.im/downloads/releases/swift-${version}/swift-${version}.tar.gz";
     sha256 = "0w0aiszjd58ynxpacwcgf052zpmbpcym4dhci64vbfgch6wryz0w";
   };
   

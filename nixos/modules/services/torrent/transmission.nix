@@ -113,8 +113,8 @@ in
     # It's useful to have transmission in path, e.g. for remote control
     environment.systemPackages = [ pkgs.transmission ];
 
-    users.extraGroups.transmission.gid = config.ids.gids.transmission;
-    users.extraUsers.transmission = {
+    users.groups.transmission.gid = config.ids.gids.transmission;
+    users.users.transmission = {
       group = "transmission";
       uid = config.ids.uids.transmission;
       description = "Transmission BitTorrent user";

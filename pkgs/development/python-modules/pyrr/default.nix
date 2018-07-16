@@ -4,7 +4,6 @@
 buildPythonPackage rec {
   version = "0.7.2";
   pname = "pyrr";
-  name = "${pname}-${version}";
 
   src = fetchPypi {
     inherit pname version;

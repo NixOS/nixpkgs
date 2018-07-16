@@ -4,7 +4,6 @@
 buildPythonPackage rec {
   pname = "yamllint";
   version = "1.9.0";
-  name = "${pname}-${version}";
 
   src = fetchPypi {
     inherit pname version;

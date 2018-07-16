@@ -1,15 +1,15 @@
-{ lib, fetchPypi, buildPythonPackage, pytest, hypothesis }:
+{ lib, fetchPypi, buildPythonPackage, pytest }:
 
 buildPythonPackage rec {
   pname = "rlp";
-  version = "1.0.1";
+  version = "0.6.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "492c11b18e89af42f98e96bca7671ffee4ad4cf5e69ea23b4d2221157d81b512";
+    sha256 = "0d3gx4mp8q4z369s5yk1n9c55sgfw9fidbwqxq67d6s7l45rm1w7";
   };
 
-  checkInputs = [ pytest hypothesis ];
+  checkInputs = [ pytest ];
   propagatedBuildInputs = [ ];
 
   meta = {
@@ -17,6 +17,5 @@ buildPythonPackage rec {
     homepage = "https://github.com/ethereum/pyrlp";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ gebner ];
-    broken = true; # Requires a chain of unpackaged dependencies.
   };
 }

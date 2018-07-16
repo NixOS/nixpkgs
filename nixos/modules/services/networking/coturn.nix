@@ -294,12 +294,12 @@ in {
   };
 
   config = mkIf cfg.enable {
-    users.extraUsers = [
+    users.users = [
       { name = "turnserver";
         uid = config.ids.uids.turnserver;
         description = "coturn TURN server user";
       } ];
-    users.extraGroups = [
+    users.groups = [
       { name = "turnserver";
         gid = config.ids.gids.turnserver;
         members = [ "turnserver" ];

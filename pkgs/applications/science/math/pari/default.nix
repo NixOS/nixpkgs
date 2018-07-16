@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   version = "2.9.5";
 
   src = fetchurl {
-    url = "http://pari.math.u-bordeaux.fr/pub/pari/unix/${name}.tar.gz";
+    url = "https://pari.math.u-bordeaux.fr/pub/pari/unix/${name}.tar.gz";
     sha256 = "05z6y5iwdzcdggbrkic9cy9vy9wmk5qxc21cb4lqnbqxnhjihibb";
   };
 

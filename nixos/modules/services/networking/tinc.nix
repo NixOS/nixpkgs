@@ -209,7 +209,7 @@ in
       };
     in [ cli-wrappers ];
 
-    users.extraUsers = flip mapAttrs' cfg.networks (network: _:
+    users.users = flip mapAttrs' cfg.networks (network: _:
       nameValuePair ("tinc.${network}") ({
         description = "Tinc daemon user for ${network}";
         isSystemUser = true;

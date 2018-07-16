@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
   name = "${pname}-${version}";
 
   src = fetchurl {
-    url = "http://mirrors.mit.edu/sage/spkg/upstream/rw/rw-${version}.tar.gz";
+    url = "mirror://sageupstream/rw/rw-${version}.tar.gz";
     sha256 = "1rv2v42x2506x7f10349m1wpmmfxrv9l032bkminni2gbip9cjg0";
   };
 

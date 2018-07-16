@@ -19,7 +19,7 @@ in stdenv.mkDerivation rec {
       }
     else if stdenv.system == "x86_64-linux" then
       fetchurl {
-        url = "http://download.brother.com/welcome/dlf006645/${name}.amd64.deb";
+        url = "https://download.brother.com/welcome/dlf006645/${name}.amd64.deb";
         sha256 = "0xy5px96y1saq9l80vwvfn6anr2q42qlxdhm6ci2a0diwib5q9fd";
       }
     else throw "${name} is not supported on ${stdenv.system} (only i686-linux and x86_64 linux are supported)";

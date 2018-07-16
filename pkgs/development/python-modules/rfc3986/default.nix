@@ -4,7 +4,6 @@
 buildPythonPackage rec {
   pname = "rfc3986";
   version = "1.1.0";
-  name = "${pname}-${version}";
 
   src = fetchPypi {
     inherit pname version;

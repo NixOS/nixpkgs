@@ -114,12 +114,12 @@ in {
       };
     };
 
-    users.extraUsers.traefik = {
+    users.users.traefik = {
       group = "traefik";
       home = cfg.dataDir;
       createHome = true;
     };
 
-    users.extraGroups.traefik = {};
+    users.groups.traefik = {};
   };
 }

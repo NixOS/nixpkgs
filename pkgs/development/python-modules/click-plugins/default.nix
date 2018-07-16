@@ -5,7 +5,6 @@
 buildPythonPackage rec {
   pname = "click-plugins";
   version = "1.0.3";
-  name = "${pname}-${version}";
 
   src = fetchPypi {
     inherit pname version;

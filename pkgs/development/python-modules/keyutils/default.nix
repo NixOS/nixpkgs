@@ -1,18 +1,19 @@
-{ lib, buildPythonPackage, fetchurl, pkgs, pytestrunner }:
+{ lib, buildPythonPackage, fetchFromGitHub, keyutils, pytestrunner, pytest }:
 
 buildPythonPackage rec {
   pname = "keyutils";
   version = "0.5";
-  name = "${pname}-${version}";
 
-  src = fetchurl {
-    url = "mirror://pypi/k/${pname}/${name}.tar.gz";
-    sha256 = "0dskys71vkn59vlsfs1ljli0qnzk7b10iv4pawxawnk2hvyjrf10";
+  # github version comes bundled with tests
+  src = fetchFromGitHub {
+    owner = "sassoftware";
+    repo = "python-keyutils";
+    rev = "v${version}";
+    sha256 = "1gga60w8sb3r5bxa0bfp7d7wzg6s3db5y7aizr14p2pvp92d8bdi";
   };
 
-  buildInputs = [ pkgs.keyutils pytestrunner ];
-
-  doCheck = false;
+  buildInputs = [ keyutils ];
+  checkInputs = [ pytest pytestrunner ];
 
   meta = {
     description = "A set of python bindings for keyutils";

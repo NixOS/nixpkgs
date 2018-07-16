@@ -1,9 +1,11 @@
 { lib, buildPythonPackage, fetchurl, pkgconfig, gtk2, libX11, libXtst, libXi, libxkbfile, xextproto, xproto }:
 
-buildPythonPackage rec {
-  name = "virtkey-${version}";
+let
   majorVersion = "0.63";
-  version = "${majorVersion}.0";
+  minorVersion = "0";
+in buildPythonPackage rec {
+  pname = "virtkey";
+  version = "${majorVersion}.${minorVersion}";
 
   src = fetchurl {
     url = "https://launchpad.net/virtkey/${majorVersion}/${version}/+download/virtkey-${version}.tar.gz";

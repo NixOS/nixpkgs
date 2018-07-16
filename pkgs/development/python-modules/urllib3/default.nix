@@ -5,7 +5,6 @@
 buildPythonPackage rec {
   pname = "urllib3";
   version = "1.23";
-  name = "${pname}-${version}";
 
   src = fetchPypi {
     inherit pname version;

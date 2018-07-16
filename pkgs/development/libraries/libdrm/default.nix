@@ -4,7 +4,7 @@ stdenv.mkDerivation rec {
   name = "libdrm-2.4.92";
 
   src = fetchurl {
-    url = "http://dri.freedesktop.org/libdrm/${name}.tar.bz2";
+    url = "https://dri.freedesktop.org/libdrm/${name}.tar.bz2";
     sha256 = "1yirzx8hmlvv6r0l7lb3zxmgy5la2mri9al0k16xqfg19pdqzr79";
   };
 

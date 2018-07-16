@@ -140,11 +140,11 @@ in
       };
     };
 
-    users.extraUsers = singleton {
+    users.users = singleton {
       name = iodinedUser;
       uid = config.ids.uids.iodined;
       description = "Iodine daemon user";
     };
-    users.extraGroups.iodined.gid = config.ids.gids.iodined;
+    users.groups.iodined.gid = config.ids.gids.iodined;
   };
 }

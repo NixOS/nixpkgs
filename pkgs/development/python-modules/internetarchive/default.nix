@@ -5,7 +5,6 @@ buildPythonPackage rec {
 
   pname = "internetarchive";
   version = "1.7.2";
-  name = "${pname}-${version}";
 
   # Can't use pypi, data files for tests missing
   src = fetchFromGitHub {

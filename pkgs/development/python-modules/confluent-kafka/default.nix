@@ -1,7 +1,6 @@
 { stdenv, buildPythonPackage, fetchPypi, isPy3k, rdkafka, requests, avro3k, avro}:
 
 buildPythonPackage rec {
-  name = "${pname}-${version}";
   version = "0.11.4";
   pname = "confluent-kafka";
 

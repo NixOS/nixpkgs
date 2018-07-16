@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "man" "doc" ];
 
   buildInputs = [ bind zlib openssl ]
-              ++ stdenv.lib.optional stdenv.isLinux [ libcap libseccomp ];
+              ++ stdenv.lib.optional stdenv.isLinux [ libcap libcap.lib libseccomp ];
 
   postInstall = ''
     mkdir -p "$out/share/doc/"

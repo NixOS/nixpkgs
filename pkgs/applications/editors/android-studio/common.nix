@@ -16,6 +16,7 @@
 , fontconfig
 , freetype
 , libpulseaudio
+, libGL
 , libX11
 , libXext
 , libXi
@@ -97,6 +98,7 @@ let
           # For Android emulator
           libpulseaudio
           libX11
+          libGL
 
           # For GTKLookAndFeel
           gtk2

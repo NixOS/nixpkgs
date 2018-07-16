@@ -7,7 +7,7 @@ stdenv.mkDerivation rec {
     urls = [
       "mirror://ubuntu/pool/universe/n/netkit-tftp/netkit-tftp_0.17.orig.tar.gz"
       "ftp://ftp.uk.linux.org/pub/linux/Networking/netkit/${name}.tar.gz"
-      "http://ftp.cc.uoc.gr/mirrors/linux/ubuntu/packages/pool/universe/n/netkit-tftp/netkit-tftp_0.17.orig.tar.gz"
+      "https://ftp.cc.uoc.gr/mirrors/linux/ubuntu/packages/pool/universe/n/netkit-tftp/netkit-tftp_0.17.orig.tar.gz"
     ];
     sha256 = "0kfibbjmy85r3k92cdchha78nzb6silkgn1zaq9g8qaf1l0w0hrs";
   };

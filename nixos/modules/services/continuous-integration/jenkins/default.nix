@@ -150,12 +150,12 @@ in {
       pkgs.dejavu_fonts
     ];
 
-    users.extraGroups = optional (cfg.group == "jenkins") {
+    users.groups = optional (cfg.group == "jenkins") {
       name = "jenkins";
       gid = config.ids.gids.jenkins;
     };
 
-    users.extraUsers = optional (cfg.user == "jenkins") {
+    users.users = optional (cfg.user == "jenkins") {
       name = "jenkins";
       description = "jenkins user";
       createHome = true;

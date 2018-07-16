@@ -6,26 +6,20 @@
 let
 
   py = python3.override {
+    # Override the version of some packages pinned in Home Assistant's setup.py
     packageOverrides = self: super: {
+      aiohttp = super.aiohttp.overridePythonAttrs (oldAttrs: rec {
+        version = "3.3.2";
+        src = oldAttrs.src.override {
+          inherit version;
+          sha256 = "f20deec7a3fbaec7b5eb7ad99878427ad2ee4cc16a46732b705e8121cbb3cc12";
+        };
+      });
       requests = super.requests.overridePythonAttrs (oldAttrs: rec {
-        version = "2.18.4";
+        version = "2.19.1";
         src = oldAttrs.src.override {
           inherit version;
-          sha256 = "0zi3v9nsmv9j27d0c0m1dvqyvaxz53g8m0aa1h3qanxs4irkwi4w";
-        };
-      });
-      urllib3 = super.urllib3.overridePythonAttrs (oldAttrs: rec {
-        version = "1.22";
-        src = oldAttrs.src.override {
-          inherit version;
-          sha256 = "0kyvc9zdlxr5r96bng5rhm9a6sfqidrbvvkz64s76qs5267dli6c";
-        };
-      });
-      idna = super.idna.overridePythonAttrs (oldAttrs: rec {
-        version = "2.6";
-        src = oldAttrs.src.override {
-          inherit version;
-          sha256 = "13qaab6d0s15gknz8v3zbcfmbj6v86hn9pjxgkdf62ch13imssic";
+          sha256 = "ec22d826a36ed72a7358ff3fe56cbd4ba69dd7a6718ffd450ff0e9df7a47ce6a";
         };
       });
       voluptuous = super.voluptuous.overridePythonAttrs (oldAttrs: rec {
@@ -74,7 +68,7 @@ let
   extraBuildInputs = extraPackages py.pkgs;
 
   # Don't forget to run parse-requirements.py after updating
-  hassVersion = "0.72.0";
+  hassVersion = "0.73.1";
 
 in with py.pkgs; buildPythonApplication rec {
   pname = "homeassistant";
@@ -89,7 +83,7 @@ in with py.pkgs; buildPythonApplication rec {
     owner = "home-assistant";
     repo = "home-assistant";
     rev = version;
-    sha256 = "1jz16ikxdh8bkscjs5pczvjqbfllz8avs11gkw8a97c2lds8la76";
+    sha256 = "1hcxwsyj15qks2il06dbwk1ycwspz97pgrwydp00qgcraw0yafmp";
   };
 
   propagatedBuildInputs = [
@@ -108,7 +102,7 @@ in with py.pkgs; buildPythonApplication rec {
     py.test --ignore tests/components
     # Some basic components should be tested however
     py.test \
-      tests/components/{group,http} \
+      tests/components/{group,http,frontend} \
       tests/components/test_{api,configurator,demo,discovery,init,introduction,logger,script,shell_command,system_log,websocket_api}.py
   '';
 

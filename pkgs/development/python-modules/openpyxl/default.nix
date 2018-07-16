@@ -10,7 +10,6 @@
 buildPythonPackage rec {
   pname = "openpyxl";
   version = "2.5.4";
-  name = "${pname}-${version}";
 
   src = fetchPypi {
     inherit pname version;

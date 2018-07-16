@@ -2,7 +2,7 @@
 
 buildGoPackage rec {
   name = "antibody-${version}";
-  version = "3.5.0";
+  version = "3.5.1";
   rev = "v${version}";
   
   goPackagePath = "github.com/getantibody/antibody";
@@ -11,7 +11,7 @@ buildGoPackage rec {
     inherit rev;
     owner  = "getantibody";
     repo   = "antibody";
-    sha256 = "0x9wfki7cl3cm9h21zj37196gwdzgllfgqmgy9n86m82wbla6slb";
+    sha256 = "0bqq59vnnm80jiqlhn7wfyzj96nkv8k9zp8i4sgcj8gvk1zq2lbc";
   };
 
   goDeps = ./deps.nix;

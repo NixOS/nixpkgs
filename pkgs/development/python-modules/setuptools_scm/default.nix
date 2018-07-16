@@ -1,7 +1,6 @@
 { stdenv, buildPythonPackage, fetchPypi, pip }:
 buildPythonPackage rec {
   pname = "setuptools_scm";
-  name = "${pname}-${version}";
   version = "2.1.0";
 
   src = fetchPypi {

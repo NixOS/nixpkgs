@@ -7,7 +7,7 @@ stdenv.mkDerivation rec {
   name = "colord-1.4.2";
 
   src = fetchurl {
-    url = "http://www.freedesktop.org/software/colord/releases/${name}.tar.xz";
+    url = "https://www.freedesktop.org/software/colord/releases/${name}.tar.xz";
     sha256 = "19zc9gldz469jshl16av7na459kwr5nhvs2pz98xm5lw582xaw2c";
   };
 

@@ -1,9 +1,9 @@
 diff --git a/FDBLibTLS/local.mk b/FDBLibTLS/local.mk
-index 0b6eac8..b1891ca 100644
+index 5e6b9cfb..73f4e5f3 100644
 --- a/FDBLibTLS/local.mk
 +++ b/FDBLibTLS/local.mk
 @@ -1,6 +1,5 @@
- FDBLibTLS_CFLAGS := -fPIC -I/usr/local/include -I$(BOOSTDIR)
+ FDBLibTLS_CFLAGS := -fPIC -I/usr/local/include -I$(BOOSTDIR) -Ifdbrpc
 -FDBLibTLS_STATIC_LIBS := -ltls -lssl -lcrypto
 -FDBLibTLS_LDFLAGS := -L/usr/local/lib -static-libstdc++ -static-libgcc -lrt
 +FDBLibTLS_LDFLAGS := -L/usr/local/lib -static-libstdc++ -static-libgcc -lrt -ltls -lssl -lcrypto
@@ -11,7 +11,7 @@ index 0b6eac8..b1891ca 100644
  
  # The plugin isn't a typical library, so it feels more sensible to have a copy
 diff --git a/bindings/c/local.mk b/bindings/c/local.mk
-index 44f0c31..7aea5a4 100644
+index 44f0c31b..7aea5a4f 100644
 --- a/bindings/c/local.mk
 +++ b/bindings/c/local.mk
 @@ -29,8 +29,8 @@ fdb_c_tests_HEADERS := -Ibindings/c
@@ -26,7 +26,7 @@ index 44f0c31..7aea5a4 100644
  endif
  
 diff --git a/bindings/flow/tester/local.mk b/bindings/flow/tester/local.mk
-index 2ef4fcb..6e59625 100644
+index 2ef4fcb7..6e59625c 100644
 --- a/bindings/flow/tester/local.mk
 +++ b/bindings/flow/tester/local.mk
 @@ -35,8 +35,7 @@ _fdb_flow_tester_clean:
@@ -40,7 +40,7 @@ index 2ef4fcb..6e59625 100644
    fdb_flow_tester_LDFLAGS += -lc++
  endif
 diff --git a/fdbbackup/local.mk b/fdbbackup/local.mk
-index 033fe7d..865fc92 100644
+index 033fe7d4..865fc923 100644
 --- a/fdbbackup/local.mk
 +++ b/fdbbackup/local.mk
 @@ -25,8 +25,7 @@ fdbbackup_LDFLAGS := $(fdbrpc_LDFLAGS)
@@ -54,7 +54,7 @@ index 033fe7d..865fc92 100644
    # GPerfTools profiler (uncomment to use)
    # fdbbackup_CFLAGS += -I/opt/gperftools/include -DUSE_GPERFTOOLS=1
 diff --git a/fdbcli/local.mk b/fdbcli/local.mk
-index 81a4a42..892c079 100644
+index 81a4a42e..892c079c 100644
 --- a/fdbcli/local.mk
 +++ b/fdbcli/local.mk
 @@ -22,14 +22,13 @@
@@ -75,7 +75,7 @@ index 81a4a42..892c079 100644
    fdbcli_LDFLAGS += -lc++
  endif
 diff --git a/fdbserver/local.mk b/fdbserver/local.mk
-index 78cad1b..36f2c0f 100644
+index 78cad1bf..36f2c0f7 100644
 --- a/fdbserver/local.mk
 +++ b/fdbserver/local.mk
 @@ -25,8 +25,7 @@ fdbserver_LDFLAGS := $(fdbrpc_LDFLAGS)

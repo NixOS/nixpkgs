@@ -1,6 +1,5 @@
 { stdenv, buildPythonPackage, fetchPypi }:
 buildPythonPackage rec {
-  name = "${pname}-${version}";
   pname = "hyperframe";
   version = "5.1.0";
 

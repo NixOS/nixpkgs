@@ -3,7 +3,6 @@
 buildPythonPackage rec {
   version = "3.2.5";
   pname = "nltk";
-  name = "${pname}-${version}";
 
   src = fetchurl {
     url = "mirror://pypi/n/nltk/nltk-${version}.tar.gz";

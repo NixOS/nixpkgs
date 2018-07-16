@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
   name = "smokeping-${version}";
   version = "2.6.11";
   src = fetchurl {
-    url = "http://oss.oetiker.ch/smokeping/pub/smokeping-${version}.tar.gz";
+    url = "https://oss.oetiker.ch/smokeping/pub/smokeping-${version}.tar.gz";
     sha256 = "1p9hpa2zs33p7hzrds80kwrm5255s0869v3s3qmsyx2sx63c7czj";
   };
   propagatedBuildInputs = [

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, cmake, curl, xorg, avahi, qt5,
+{ stdenv, fetchpatch, fetchurl, cmake, curl, xorg, avahi, qt5,
   avahiWithLibdnssdCompat ? avahi.override { withLibdnssdCompat = true; }
 }:
 
@@ -13,9 +13,18 @@ stdenv.mkDerivation rec {
   buildInputs = [ cmake curl xorg.libX11 xorg.libXext xorg.libXtst avahiWithLibdnssdCompat ];
   propagatedBuildInputs = with qt5; [ qtbase ];
 
+  patches = [
+    # Fix compilation on Qt 5.11
+    # Patch should be removed on next version bump from 2.1.1!
+    (fetchpatch {
+      url = "https://github.com/debauchee/barrier/commit/a956cad0da23f544b874888c6c3540dc7f8f22cf.patch";
+      sha256 = "0x5045bdks1f9casp0v7svx9ml1gxhkhw5sqc7xk36h184m24a21";
+    })
+  ];
+
   postFixup = ''
-      substituteInPlace "$out/share/applications/barrier.desktop" --replace "Exec=barrier" "Exec=$out/bin/barrier"
-    '';
+    substituteInPlace "$out/share/applications/barrier.desktop" --replace "Exec=barrier" "Exec=$out/bin/barrier"
+  '';
 
   meta = {
     description = "Open-source KVM software";

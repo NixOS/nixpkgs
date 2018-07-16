@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
   name = "multitail-${version}";
 
   src = fetchurl {
-    url = "http://www.vanheusden.com/multitail/${name}.tgz";
+    url = "https://www.vanheusden.com/multitail/${name}.tgz";
     sha256 = "1zd1r89xkxngl1pdrvsc877838nwkfqkbcgfqm3vglwalxc587dg";
   };
 

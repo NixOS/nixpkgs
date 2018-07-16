@@ -7,7 +7,7 @@ stdenv.mkDerivation rec {
   name = "alfred-${ver}";
 
   src = fetchurl {
-    url = "http://downloads.open-mesh.org/batman/releases/batman-adv-${ver}/${name}.tar.gz";
+    url = "https://downloads.open-mesh.org/batman/releases/batman-adv-${ver}/${name}.tar.gz";
     sha256 = "0xkd842yp227jzfybjq8c5s7y5c7amm1f5ai80k8wyjwysnad3w0";
   };
 

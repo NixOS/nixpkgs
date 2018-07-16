@@ -1,7 +1,7 @@
 { stdenv, fetchurl, gzip, which, unzip, jdk }:
 
 let
-  version = "6.5.3";
+  version = "6.5.3.6";
   srcs = {
     i686-linux = fetchurl {
       url = "https://cdn.sencha.com/cmd/${version}/no-jre/SenchaCmd-${version}-linux-i386.sh.zip";

@@ -100,11 +100,11 @@ in {
     };
 
 
-    users.extraUsers = optional (cfg.user == defaultUser) {
+    users.users = optional (cfg.user == defaultUser) {
       name = defaultUser;
     };
 
-    users.extraGroups = optional (cfg.group == defaultUser) {
+    users.groups = optional (cfg.group == defaultUser) {
       name = defaultUser;
     };
 

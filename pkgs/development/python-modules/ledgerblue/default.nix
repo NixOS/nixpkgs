@@ -3,7 +3,6 @@
 }:
 
 buildPythonPackage rec {
-  name = "${pname}-${version}";
   pname = "ledgerblue";
   version = "0.1.17";
 

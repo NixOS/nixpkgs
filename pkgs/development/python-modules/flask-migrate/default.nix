@@ -6,7 +6,6 @@ with stdenv.lib;
 buildPythonPackage rec {
   pname = "Flask-Migrate";
   version = "2.2.1";
-  name = "${pname}-${version}";
 
   src = fetchPypi {
     inherit pname version;

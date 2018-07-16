@@ -3,15 +3,15 @@
 
 buildGoPackage rec {
   name = "easyjson-unstable-${version}";
-  version = "2018-03-23";
-  rev = "8b799c424f57fa123fc63a99d6383bc6e4c02578";
+  version = "2018-06-06";
+  rev = "3fdea8d05856a0c8df22ed4bc71b3219245e4485";
 
   goPackagePath = "github.com/mailru/easyjson";
 
   src = fetchgit {
     inherit rev;
     url = "https://github.com/mailru/easyjson";
-    sha256 = "15ba6drfmw98lzw5qjh3ijcxh9iz9rcp3hid169yfd08l06z05w0";
+    sha256 = "0g3crph77yhv4ipdnwqc32z4cp87ahi4ikad5kyy6q4znnxliz74";
   };
 
   goDeps = ./deps.nix;

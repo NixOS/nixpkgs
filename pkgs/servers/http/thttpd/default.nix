@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
   version = "2.29";
 
   src = fetchurl {
-    url = "http://acme.com/software/thttpd/${name}.tar.gz";
+    url = "https://acme.com/software/thttpd/${name}.tar.gz";
     sha256 = "15x3h4b49wgfywn82i3wwbf38mdns94mbi4ma9xiwsrjv93rzh4r";
   };
 

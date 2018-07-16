@@ -63,7 +63,7 @@ in {
       };
     };
 
-    users.extraUsers = [
+    users.users = [
       { 
         name = "serviio";
         group = "serviio";
@@ -74,7 +74,7 @@ in {
       }
     ];
 
-    users.extraGroups = [
+    users.groups = [
       { name = "serviio";} 
     ];
 

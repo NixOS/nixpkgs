@@ -4,7 +4,7 @@ stdenv.mkDerivation rec {
   name = "cabextract-1.6";
 
   src = fetchurl {
-    url = "http://www.cabextract.org.uk/${name}.tar.gz";
+    url = "https://www.cabextract.org.uk/${name}.tar.gz";
     sha256 = "1ysmmz25fjghq7mxb2anyyvr1ljxqxzi4piwjhk0sdamcnsn3rnf";
   };
 

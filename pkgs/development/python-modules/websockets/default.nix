@@ -1,17 +1,15 @@
 { lib
-, fetchurl
+, fetchPypi
 , buildPythonPackage
 , pythonOlder
 }:
 
-let
+buildPythonPackage rec {
   pname = "websockets";
   version = "5.0.1";
-in buildPythonPackage rec {
-  name = "${pname}-${version}";
 
-  src = fetchurl {
-    url = "mirror://pypi/${builtins.substring 0 1 pname}/${pname}/${name}.tar.gz";
+  src = fetchPypi {
+    inherit pname version;
     sha256 = "a49d315db5a7a19d55422e1678e8a1c3b9661d7296bef3179fa620cf80b12674";
   };
 

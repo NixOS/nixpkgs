@@ -471,8 +471,8 @@ in {
   };
 
   config = mkIf cfg.enable {
-    users.extraGroups.${promGroup}.gid = config.ids.gids.prometheus;
-    users.extraUsers.${promUser} = {
+    users.groups.${promGroup}.gid = config.ids.gids.prometheus;
+    users.users.${promUser} = {
       description = "Prometheus daemon user";
       uid = config.ids.uids.prometheus;
       group = promGroup;

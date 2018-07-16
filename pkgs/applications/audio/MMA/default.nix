@@ -5,7 +5,7 @@
   name = "mma-${version}";
 
   src = fetchurl {
-    url = "http://www.mellowood.ca/mma/mma-bin-${version}.tar.gz";
+    url = "https://www.mellowood.ca/mma/mma-bin-${version}.tar.gz";
     sha256 = "1g4gvc0nr0qjc0fyqrnx037zpaasgymgmrm5s7cdxqnld9wqw8ww";
   };
 

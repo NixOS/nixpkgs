@@ -35,6 +35,12 @@ self: super: {
   unix = null;
   xhtml = null;
 
+  # These are now core libraries in GHC 8.4.x.
+  mtl = self.mtl_2_2_2;
+  parsec = self.parsec_3_1_13_0;
+  stm = self.stm_2_4_5_0;
+  text = self.text_1_2_3_0;
+
   # https://github.com/bmillwood/applicative-quoters/issues/6
   applicative-quoters = appendPatch super.applicative-quoters (pkgs.fetchpatch {
     url = "https://patch-diff.githubusercontent.com/raw/bmillwood/applicative-quoters/pull/7.patch";
@@ -43,9 +49,6 @@ self: super: {
 
   # Requires ghc 8.2
   ghc-proofs = dontDistribute super.ghc-proofs;
-
-  # http://hub.darcs.net/dolio/vector-algorithms/issue/9#comment-20170112T145715
-  vector-algorithms = dontCheck super.vector-algorithms;
 
   # https://github.com/thoughtbot/yesod-auth-oauth2/pull/77
   yesod-auth-oauth2 = doJailbreak super.yesod-auth-oauth2;

@@ -6,7 +6,7 @@ in buildPythonApplication rec {
   name = "arandr-0.1.9";
 
   src = fetchurl {
-    url = "http://christian.amsuess.com/tools/arandr/files/${name}.tar.gz";
+    url = "https://christian.amsuess.com/tools/arandr/files/${name}.tar.gz";
     sha256 = "1i3f1agixxbfy4kxikb2b241p7c2lg73cl9wqfvlwz3q6zf5faxv";
   };
 

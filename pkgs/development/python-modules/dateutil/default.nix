@@ -1,6 +1,5 @@
 { stdenv, buildPythonPackage, fetchPypi, six, setuptools_scm }:
 buildPythonPackage rec {
-  name = "${pname}-${version}";
   pname = "python-dateutil";
   version = "2.7.3";
 

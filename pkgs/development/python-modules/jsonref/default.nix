@@ -4,7 +4,6 @@
 buildPythonPackage rec {
   pname = "jsonref";
   version = "0.1";
-  name = "${pname}-${version}";
 
   src = fetchPypi {
     inherit pname version;

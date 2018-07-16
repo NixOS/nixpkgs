@@ -1,0 +1,13 @@
+diff --new-file -r -u gildas-src-dec17a.orig/admin/gildas-env.sh gildas-src-dec17a/admin/gildas-env.sh
+--- gildas-src-dec17a.orig/admin/gildas-env.sh	2017-10-24 11:39:18.000000000 +0200
++++ gildas-src-dec17a/admin/gildas-env.sh	2017-12-01 11:17:32.051953670 +0100
+@@ -1010,6 +1010,9 @@
+     gagenv_message "$gagenv_errors error(s) and $gagenv_warnings warning(s) detected"
+     if [ $gagenv_errors -ne 0 ]; then
+         gagenv_message "GILDAS will not compile"
++	gagenv_clean
++        echo
++        \return 1
+     elif [ $gagenv_warnings -ne 0 ]; then
+         gagenv_message "GILDAS will compile with some optional features disabled"
+     else

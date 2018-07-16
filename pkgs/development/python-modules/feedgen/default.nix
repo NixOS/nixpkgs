@@ -3,7 +3,6 @@
 buildPythonPackage rec {
   pname = "feedgen";
   version = "0.7.0";
-  name = "${pname}-${version}";
 
   src = fetchPypi {
     inherit pname version;

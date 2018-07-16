@@ -4,7 +4,6 @@
 buildPythonPackage rec {
   pname = "onkyo-eiscp";
   version = "1.2.5";
-  name = "${pname}-${version}";
 
   src = fetchPypi {
     inherit pname version;

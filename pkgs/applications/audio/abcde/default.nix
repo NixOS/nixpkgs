@@ -8,7 +8,7 @@ in
   stdenv.mkDerivation {
     name = "abcde-${version}";
     src = fetchurl {
-      url = "http://abcde.einval.com/download/abcde-${version}.tar.gz";
+      url = "https://abcde.einval.com/download/abcde-${version}.tar.gz";
       sha256 = "0f9bjs0phk23vry7gvh0cll9vl6kmc1y4fwwh762scfdvpbp3774";
     };
 

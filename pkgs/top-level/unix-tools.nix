@@ -81,6 +81,10 @@ let
       linux = pkgs.nettools;
       darwin = pkgs.darwin.network_cmds;
     };
+    killall = {
+      linux = pkgs.psmisc;
+      darwin = pkgs.darwin.shell_cmds;
+    };
     locale = {
       linux = pkgs.glibc;
       darwin = pkgs.netbsd.locale;

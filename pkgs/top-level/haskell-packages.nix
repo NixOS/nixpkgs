@@ -72,13 +72,19 @@ in rec {
       buildLlvmPackages = buildPackages.llvmPackages_5;
       llvmPackages = pkgs.llvmPackages_5;
     };
+    ghc861 = callPackage ../development/compilers/ghc/8.6.1.nix rec {
+      bootPkgs = packages.ghc822;
+      inherit (bootPkgs) alex happy hscolour;
+      buildLlvmPackages = buildPackages.llvmPackages_6;
+      llvmPackages = pkgs.llvmPackages_6;
+    };
     ghcHEAD = callPackage ../development/compilers/ghc/head.nix rec {
       bootPkgs = packages.ghc821Binary;
       inherit (bootPkgs) alex happy hscolour;
       buildLlvmPackages = buildPackages.llvmPackages_5;
       llvmPackages = pkgs.llvmPackages_5;
     };
-    ghcjs = compiler.ghcjs82;
+    ghcjs = compiler.ghcjs84;
     ghcjs710 = packages.ghc7103.callPackage ../development/compilers/ghcjs {
       bootPkgs = packages.ghc7103;
       inherit (pkgs) cabal-install;
@@ -150,12 +156,17 @@ in rec {
       ghc = bh.compiler.ghc843;
       compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-8.4.x.nix { };
     };
+    ghc861 = callPackage ../development/haskell-modules {
+      buildHaskellPackages = bh.packages.ghc861;
+      ghc = bh.compiler.ghc861;
+      compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-8.6.x.nix { };
+    };
     ghcHEAD = callPackage ../development/haskell-modules {
       buildHaskellPackages = bh.packages.ghcHEAD;
       ghc = bh.compiler.ghcHEAD;
       compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-head.nix { };
     };
-    ghcjs = packages.ghcjs82;
+    ghcjs = packages.ghcjs84;
     ghcjs710 = callPackage ../development/haskell-modules rec {
       buildHaskellPackages = ghc.bootPkgs;
       ghc = bh.compiler.ghcjs710;
@@ -189,6 +200,7 @@ in rec {
         (pkgs.lib.attrNames packages);
     in pkgs.lib.genAttrs integerSimpleGhcNames (name: packages."${name}".override {
       ghc = bh.compiler.integer-simple."${name}";
+      buildHaskellPackages = bh.packages.integer-simple."${name}";
       overrides = _self : _super : {
         integer-simple = null;
         integer-gmp = null;

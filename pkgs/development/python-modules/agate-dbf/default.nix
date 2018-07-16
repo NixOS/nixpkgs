@@ -1,7 +1,6 @@
 { stdenv, fetchPypi, buildPythonPackage, agate, dbf, dbfread }:
 
 buildPythonPackage rec {
-    name = "${pname}-${version}";
     pname = "agate-dbf";
     version = "0.2.0";
 

@@ -5,7 +5,8 @@ let utf =
   else if python.ucsEncoding == 4 then "32"
   else throw "Unsupported python UCS encoding UCS${toString python.ucsEncoding}";
 in python.pkgs.buildPythonPackage
-  { name = "gurobipy-7.5.2";
+  { pname = "gurobipy";
+    version = "7.5.2";
     src = fetchurl
       { url = "http://packages.gurobi.com/7.5/gurobi7.5.2_linux64.tar.gz";
         sha256 = "13i1dl22lnmg7z9mb48zl3hy1qnpwdpr0zl2aizda0qnb7my5rnj";

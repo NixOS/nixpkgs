@@ -1,18 +1,17 @@
-{ stdenv, buildPythonPackage, fetchurl
+{ stdenv, buildPythonPackage, fetchPypi
 , flask, flask_wtf, flask_testing, ldap
 , mock, nose }:
 
 buildPythonPackage rec {
   pname = "flask-ldap-login";
   version = "0.3.0";
-  name = "${pname}-${version}";
 
-  src = fetchurl {
-    url = "mirror://pypi/f/flask-ldap-login/${name}.tar.gz";
+  src = fetchPypi {
+    inherit pname version;
     sha256 = "085rik7q8xrp5g95346p6jcp9m2yr8kamwb2kbiw4q0b0fpnnlgq";
   };
 
-  buildInputs = [ nose mock flask_testing ];
+  checkInputs = [ nose mock flask_testing ];
   propagatedBuildInputs = [ flask flask_wtf ldap ];
 
   checkPhase = "nosetests -d";

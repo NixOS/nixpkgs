@@ -456,7 +456,7 @@ in
 
   config = mkIf cfg.enable {
 
-    users.extraUsers.i2pd = {
+    users.users.i2pd = {
       group = "i2pd";
       description = "I2Pd User";
       home = homeDir;
@@ -464,7 +464,7 @@ in
       uid = config.ids.uids.i2pd;
     };
 
-    users.extraGroups.i2pd.gid = config.ids.gids.i2pd;
+    users.groups.i2pd.gid = config.ids.gids.i2pd;
 
     systemd.services.i2pd = {
       description = "Minimal I2P router";

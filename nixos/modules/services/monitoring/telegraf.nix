@@ -62,7 +62,7 @@ in {
       };
     };
 
-    users.extraUsers = [{
+    users.users = [{
       name = "telegraf";
       uid = config.ids.uids.telegraf;
       description = "telegraf daemon user";

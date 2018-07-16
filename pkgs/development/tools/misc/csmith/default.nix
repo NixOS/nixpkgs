@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
   version = "2.3.0";
 
   src = fetchurl {
-    url = "http://embed.cs.utah.edu/csmith/${name}.tar.gz";
+    url = "https://embed.cs.utah.edu/csmith/${name}.tar.gz";
     sha256 = "1mb5zgixsyf86slggs756k8a5ddmj980md3ic9sa1y75xl5cqizj";
   };
 

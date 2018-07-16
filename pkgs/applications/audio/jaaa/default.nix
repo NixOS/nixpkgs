@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
   version = "0.8.4";
 
   src = fetchurl {
-    url = "http://kokkinizita.linuxaudio.org/linuxaudio/downloads/${name}.tar.bz2";
+    url = "https://kokkinizita.linuxaudio.org/linuxaudio/downloads/${name}.tar.bz2";
     sha256 = "0jyll4rkb6vja2widc340ww078rr24c6nmxbxdqvbxw409nccd01";
   };
 

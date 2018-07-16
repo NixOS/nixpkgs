@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
   name = "nullmailer-${version}";
 
   src = fetchurl {
-    url = "http://untroubled.org/nullmailer/nullmailer-${version}.tar.gz";
+    url = "https://untroubled.org/nullmailer/nullmailer-${version}.tar.gz";
     sha256 = "0gykh0qc86rk0knfvp8ndqkryal3pvqdfdya94wvb6n1cc8p3ild";
   };
 

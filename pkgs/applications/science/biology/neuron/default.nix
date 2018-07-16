@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ ncurses readline python mpi iv ];
 
   src = fetchurl {
-    url = "http://www.neuron.yale.edu/ftp/neuron/versions/v${version}/nrn-${version}.tar.gz";
+    url = "https://www.neuron.yale.edu/ftp/neuron/versions/v${version}/nrn-${version}.tar.gz";
     sha256 = "0f26v3qvzblcdjg7isq0m9j2q8q7x3vhmkfllv8lsr3gyj44lljf";
   };
 

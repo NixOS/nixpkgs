@@ -5,7 +5,6 @@
 buildPythonPackage rec {
   pname = "paperspace";
   version = "0.0.11";
-  name = "${pname}-${version}";
 
   src = fetchPypi {
     inherit pname version;

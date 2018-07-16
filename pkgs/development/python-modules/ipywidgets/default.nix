@@ -15,7 +15,6 @@
 buildPythonPackage rec {
   pname = "ipywidgets";
   version = "7.2.1";
-  name = "${pname}-${version}";
 
   src = fetchPypi {
     inherit pname version;

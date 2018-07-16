@@ -83,7 +83,7 @@ in {
 
     environment.systemPackages = [ pkgs.rabbitmq_server ];
 
-    users.extraUsers.rabbitmq = {
+    users.users.rabbitmq = {
       description = "RabbitMQ server user";
       home = "${cfg.dataDir}";
       createHome = true;
@@ -91,7 +91,7 @@ in {
       uid = config.ids.uids.rabbitmq;
     };
 
-    users.extraGroups.rabbitmq.gid = config.ids.gids.rabbitmq;
+    users.groups.rabbitmq.gid = config.ids.gids.rabbitmq;
 
     systemd.services.rabbitmq = {
       description = "RabbitMQ Server";

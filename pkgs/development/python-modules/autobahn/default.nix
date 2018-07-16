@@ -1,15 +1,14 @@
-{ stdenv, buildPythonPackage, fetchurl, isPy3k, isPy33,
+{ stdenv, buildPythonPackage, fetchPypi, isPy3k, isPy33,
   unittest2, mock, pytest, trollius, asyncio,
   pytest-asyncio, futures,
   six, twisted, txaio, zope_interface
 }:
 buildPythonPackage rec {
-  name = "${pname}-${version}";
   pname = "autobahn";
   version = "18.6.1";
 
-  src = fetchurl {
-    url = "mirror://pypi/a/${pname}/${name}.tar.gz";
+  src = fetchPypi {
+    inherit pname version;
     sha256 = "2f41bfc512ec482044fa8cfa74182118dedd87e03b3494472d9ff1b5a1e27d24";
   };
 

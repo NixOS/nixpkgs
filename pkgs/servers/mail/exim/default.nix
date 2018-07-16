@@ -6,7 +6,7 @@ stdenv.mkDerivation rec {
   name = "exim-4.91";
 
   src = fetchurl {
-    url = "http://ftp.exim.org/pub/exim/exim4/${name}.tar.xz";
+    url = "https://ftp.exim.org/pub/exim/exim4/${name}.tar.xz";
     sha256 = "066ip7a5lqfn9rcr14j4nm0kqysw6mzvbbb0ip50lmfm0fqsqmzc";
   };
 

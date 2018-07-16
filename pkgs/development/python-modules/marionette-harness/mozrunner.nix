@@ -14,7 +14,6 @@
 buildPythonPackage rec {
   pname = "mozrunner";
   version = "7.0.1";
-  name = "${pname}-${version}";
 
   src = fetchPypi {
     inherit pname version;

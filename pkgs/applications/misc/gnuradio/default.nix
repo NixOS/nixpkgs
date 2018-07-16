@@ -6,7 +6,7 @@
 # May be able to upgrade to swig3
 , python, swig2, numpy, scipy, matplotlib
 # => grc - the gnu radio companion
-, cheetah, pygtk
+, Mako, cheetah, pygtk # Note: GR is migrating to Mako. Cheetah should be removed for GR3.8
 # => gr-wavelet: collection of wavelet blocks
 , gsl
 # => gr-qtgui: the Qt-based GUI
@@ -26,13 +26,13 @@
 
 stdenv.mkDerivation rec {
   name = "gnuradio-${version}";
-  version = "3.7.11.1";
+  version = "3.7.13.3";
 
   src = fetchFromGitHub {
     owner = "gnuradio";
     repo = "gnuradio";
-    rev = "6d2221196082a4954c249dc6955e33d5832a56f2";
-    sha256 = "1fkrb8cnjbriy2x94lz73q6aqxar1rkvfbafp266ykdpm29b4xgm";
+    rev = "v${version}";
+    sha256 = "1qpa53axqavdv2ykby7rwh7xmhvv964xq1d7rcvbwkry7dngrbib";
     fetchSubmodules = true;
   };
 
@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
     ++ stdenv.lib.optionals stdenv.isDarwin [ CoreAudio ];
 
   propagatedBuildInputs = [
-    cheetah numpy scipy matplotlib pyqt4 pygtk wxPython pyopengl
+    Mako cheetah numpy scipy matplotlib pyqt4 pygtk wxPython pyopengl
   ];
 
   enableParallelBuilding = true;
@@ -69,6 +69,8 @@ stdenv.mkDerivation rec {
   setupHook = [ grcSetupHook ];
 
   # patch wxgui and pygtk check due to python importerror in a headless environment
+  # wxgtk gui will be removed in GR3.8
+  # c++11 hack may not be necessary anymore
   preConfigure = ''
     export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -Wno-unused-variable ${stdenv.lib.optionalString (!stdenv.isDarwin) "-std=c++11"}"
     sed -i 's/.*wx\.version.*/set(WX_FOUND TRUE)/g' gr-wxgui/CMakeLists.txt

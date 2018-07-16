@@ -12,7 +12,7 @@ in stdenv.mkDerivation rec {
   version = "1.20.3";
 
   src = fetchurl {
-    url = "http://openprinting.org/download/cups-filters/${name}.tar.xz";
+    url = "https://openprinting.org/download/cups-filters/${name}.tar.xz";
     sha256 = "1g18qkvl9zdxickiblgs2vvkip4b6p2jalw4d30zzz3hh8f1g6iv";
   };
 

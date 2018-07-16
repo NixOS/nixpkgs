@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     inherit sha256;
-    url = "http://download.mono-project.com/sources/mono/${name}.tar.bz2";
+    url = "https://download.mono-project.com/sources/mono/${name}.tar.bz2";
   };
 
   buildInputs =
