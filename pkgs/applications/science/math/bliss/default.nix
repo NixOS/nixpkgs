@@ -21,11 +21,11 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
-    mkdir -p $out/bin $out/share/doc/bliss $out/lib $out/include
+    mkdir -p $out/bin $out/share/doc/bliss $out/lib $out/include/bliss
     mv bliss $out/bin 
     mv html/* COPYING* $out/share/doc/bliss
     mv *.a $out/lib
-    mv *.h *.hh $out/include
+    mv *.h *.hh $out/include/bliss
   '';
 
   meta = with stdenv.lib; {
