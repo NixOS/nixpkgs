@@ -27,6 +27,7 @@
 , zam-plugins
 , rubberband
 , mda_lv2
+, hicolor-icon-theme
 }:
 
 let
@@ -75,6 +76,7 @@ in stdenv.mkDerivation rec {
     boost
     fftwFloat
     zita-convolver
+    hicolor-icon-theme
   ];
 
   postPatch = ''
