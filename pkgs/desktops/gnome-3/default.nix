@@ -293,6 +293,8 @@ lib.makeScope pkgs.newScope (self: with self; {
 
   gnome-power-manager = callPackage ./apps/gnome-power-manager { };
 
+  gnome-sound-recorder = callPackage ./apps/gnome-sound-recorder { };
+
   gnome-weather = callPackage ./apps/gnome-weather { };
 
   nautilus-sendto = callPackage ./apps/nautilus-sendto { };
