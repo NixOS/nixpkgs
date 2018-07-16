@@ -17,6 +17,8 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [ "-DENABLE_TESTING=ON" ];
 
+  hardeningDisable = [ "fortify" ];
+
   doCheck = true;
 
   checkPhase = ''
