@@ -1126,4 +1126,5 @@ self: super: {
   http-types = addTestToolDepend super.http-types self.hspec-discover;
   invariant = addTestToolDepend super.invariant self.hspec-discover;
   hpack = addTestToolDepend super.hpack self.hspec-discover;
+  conduit-extra = addTestToolDepend super.conduit-extra self.hspec-discover;
 }
