@@ -1121,7 +1121,6 @@ self: super: {
   unliftio = addTestToolDepend super.unliftio self.hspec-discover;
   word8 = addTestToolDepend super.word8 self.hspec-discover;
   distributive = addTestToolDepend super.distributive self.hspec-discover;
-  facade = addTestToolDepend super.facade self.hspec-discover;
   logging-facade = addTestToolDepend super.logging-facade self.hspec-discover;
   interpolate = addTestToolDepend super.interpolate self.hspec-discover;
   http-types = addTestToolDepend super.http-types self.hspec-discover;
