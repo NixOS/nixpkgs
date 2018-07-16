@@ -16,5 +16,6 @@ $ nix-prefetch-git https://github.com/ghcjs/ghcjs --rev refs/heads/ghc-8.4 \
   | jq '{ url, rev, fetchSubmodules, sha256 }' \
   > 8.4/git.json
 $ cat $(nix-build ../../../.. -A haskell.compiler.ghcjs82.genStage0 --no-out-link) > 8.4/stage0.nix
+$ cabal2nix git://github.com/ghcjs/ghcjs-base > ghcjs-base.nix
 ```
 
