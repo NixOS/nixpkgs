@@ -21758,6 +21758,8 @@ with pkgs;
 
   xinput_calibrator = callPackage ../tools/X11/xinput_calibrator { };
 
+  xlog = callPackage ../applications/misc/xlog { };
+
   xmagnify = callPackage ../tools/X11/xmagnify { };
 
   xosd = callPackage ../misc/xosd { };
