@@ -86,6 +86,7 @@
   ./programs/dconf.nix
   ./programs/digitalbitbox/default.nix
   ./programs/environment.nix
+  ./programs/firejail.nix
   ./programs/fish.nix
   ./programs/freetds.nix
   ./programs/gnupg.nix
@@ -199,6 +200,7 @@
   ./services/continuous-integration/jenkins/slave.nix
   ./services/databases/4store-endpoint.nix
   ./services/databases/4store.nix
+  ./services/databases/aerospike.nix
   ./services/databases/clickhouse.nix
   ./services/databases/couchdb.nix
   ./services/databases/firebird.nix
@@ -319,6 +321,7 @@
   ./services/misc/canto-daemon.nix
   ./services/misc/calibre-server.nix
   ./services/misc/cfdyndns.nix
+  ./services/misc/clipmenu.nix
   ./services/misc/cpuminer-cryptonight.nix
   ./services/misc/cgminer.nix
   ./services/misc/confd.nix

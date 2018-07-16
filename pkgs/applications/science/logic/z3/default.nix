@@ -27,9 +27,7 @@ stdenv.mkDerivation rec {
     mv $out/lib          $lib/lib
     mv $out/include      $dev/include
 
-    # clean up a copy of libz3.so and symlink it instead
-    rm $python/${python.sitePackages}/z3/lib/libz3.so
-    ln -s $lib/lib/libz3.so $python/${python.sitePackages}/z3/lib/libz3.so
+    ln -sf $lib/lib/libz3${stdenv.hostPlatform.extensions.sharedLibrary} $python/${python.sitePackages}/z3/lib/libz3${stdenv.hostPlatform.extensions.sharedLibrary}
   '';
 
   outputs = [ "out" "lib" "dev" "python" ];

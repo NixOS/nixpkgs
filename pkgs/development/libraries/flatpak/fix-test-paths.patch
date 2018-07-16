@@ -1,6 +1,6 @@
 --- a/tests/libtest.sh
 +++ b/tests/libtest.sh
-@@ -324,7 +324,7 @@
+@@ -315,7 +315,7 @@
          # running installed-tests: assume we know what we're doing
          :
      elif ! "$FLATPAK_BWRAP" --unshare-ipc --unshare-net --unshare-pid \
@@ -9,7 +9,7 @@
          sed -e 's/^/# /' < bwrap-result
          echo "1..0 # SKIP Cannot run bwrap"
          exit 0
-@@ -332,7 +332,7 @@
+@@ -323,7 +323,7 @@
  }
  
  skip_without_python2 () {
@@ -18,7 +18,7 @@
          echo "1..0 # SKIP this test requires /usr/bin/python2 (2.7) support"
          exit 0
      fi
-@@ -352,12 +352,12 @@
+@@ -335,12 +335,12 @@
  export DBUS_SESSION_BUS_ADDRESS="$(cat dbus-session-bus-address)"
  DBUS_SESSION_BUS_PID="$(cat dbus-session-bus-pid)"
  
@@ -135,12 +135,12 @@
      collection_args=--collection-id=${COLLECTION_ID}
 --- a/tests/testlibrary.c
 +++ b/tests/testlibrary.c
-@@ -610,7 +610,7 @@
+@@ -584,7 +584,7 @@
      {
        gint exit_code = 0;
-       char *argv[] = { (char *)bwrap, "--unshare-ipc", "--unshare-net",
--          "--unshare-pid", "--ro-bind", "/", "/", "/bin/true", NULL };
-+          "--unshare-pid", "--ro-bind", "/", "/", "@coreutils@/bin/true", NULL };
+       char *argv[] = { (char *) bwrap, "--unshare-ipc", "--unshare-net",
+-                       "--unshare-pid", "--ro-bind", "/", "/", "/bin/true", NULL };
++                       "--unshare-pid", "--ro-bind", "/", "/", "@coreutils@/bin/true", NULL };
        g_autofree char *argv_str = g_strjoinv (" ", argv);
        g_test_message ("Spawning %s", argv_str);
        g_spawn_sync (NULL, argv, NULL, G_SPAWN_SEARCH_PATH, NULL, NULL, NULL, NULL, &exit_code, &error);

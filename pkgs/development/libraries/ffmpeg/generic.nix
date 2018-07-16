@@ -148,7 +148,7 @@ stdenv.mkDerivation rec {
       "--disable-stripping"
     # Disable mmx support for 0.6.90
       (verFix null "0.6.90" "--disable-mmx")
-  ] ++ optionals (stdenv.hostPlatform == stdenv.buildPlatform) [
+  ] ++ optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
       "--cross-prefix=${stdenv.cc.targetPrefix}"
       "--enable-cross-compile"
   ] ++ optional stdenv.cc.isClang "--cc=clang";
@@ -170,9 +170,15 @@ stdenv.mkDerivation rec {
 
   doCheck = false; # fails
 
+  # ffmpeg 3+ generates pkg-config (.pc) files that don't have the
+  # form automatically handled by the multiple-outputs hooks.
   postFixup = ''
     moveToOutput bin "$bin"
     moveToOutput share/ffmpeg/examples "$doc"
+    for pc in ''${!outputDev}/lib/pkgconfig/*.pc; do
+      substituteInPlace $pc \
+        --replace "includedir=$out" "includedir=''${!outputInclude}"
+    done
   '';
 
   installFlags = [ "install-man" ];

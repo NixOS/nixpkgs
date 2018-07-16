@@ -19,17 +19,6 @@ let
 
   Xsetup = pkgs.writeScript "Xsetup" ''
     #!/bin/sh
-
-    # Prior to Qt 5.9.2, there is a QML cache invalidation bug which sometimes
-    # strikes new Plasma 5 releases. If the QML cache is not invalidated, SDDM
-    # will segfault without explanation. We really tore our hair out for awhile
-    # before finding the bug:
-    # https://bugreports.qt.io/browse/QTBUG-62302
-    # We work around the problem by deleting the QML cache before startup. It
-    # will be regenerated, causing a small but perceptible delay when SDDM
-    # starts.
-    rm -fr /var/lib/sddm/.cache/sddm-greeter/qmlcache
-
     ${cfg.setupScript}
   '';
 
@@ -285,5 +274,20 @@ in
     # To enable user switching, allow sddm to allocate TTYs/displays dynamically.
     services.xserver.tty = null;
     services.xserver.display = null;
+
+    systemd.tmpfiles.rules = [
+      # Prior to Qt 5.9.2, there is a QML cache invalidation bug which sometimes
+      # strikes new Plasma 5 releases. If the QML cache is not invalidated, SDDM
+      # will segfault without explanation. We really tore our hair out for awhile
+      # before finding the bug:
+      # https://bugreports.qt.io/browse/QTBUG-62302
+      # We work around the problem by deleting the QML cache before startup.
+      # This was supposedly fixed in Qt 5.9.2 however it has been reported with
+      # 5.10 and 5.11 as well. The initial workaround was to delete the directory
+      # in the Xsetup script but that doesn't do anything.
+      # Instead we use tmpfiles.d to ensure it gets wiped.
+      # This causes a small but perceptible delay when SDDM starts.
+      "e ${config.users.users.sddm.home}/.cache - - - 0"
+    ];
   };
 }

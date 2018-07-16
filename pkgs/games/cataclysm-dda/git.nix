@@ -1,16 +1,16 @@
 { fetchFromGitHub, stdenv, pkgconfig, ncurses, lua, SDL2, SDL2_image, SDL2_ttf,
 SDL2_mixer, freetype, gettext, CoreFoundation, Cocoa,
-tiles ? true }:
+tiles ? true, debug ? false }:
 
 stdenv.mkDerivation rec {
-  version = "2017-12-09";
+  version = "2018-07-15";
   name = "cataclysm-dda-git-${version}";
 
   src = fetchFromGitHub {
     owner = "CleverRaven";
     repo = "Cataclysm-DDA";
-    rev = "24e92956db5587809750283873c242cc0796d7e6";
-    sha256 = "1a7kdmx76na4g65zra01qaq98lxp9j2dl9ddv09r0p5yxaizw68z";
+    rev = "e1e5d81";
+    sha256 = "198wfj8l1p8xlwicj92cq237pzv2ha9pcf240y7ijhjpmlc9jkr1";
   };
 
   nativeBuildInputs = [ pkgconfig ];
@@ -31,7 +31,6 @@ stdenv.mkDerivation rec {
   makeFlags = with stdenv.lib; [
     "PREFIX=$(out)"
     "LUA=1"
-    "RELEASE=1"
     "USE_HOME_DIR=1"
     "LANGUAGES=all"
     "VERSION=git-${version}-${substring 0 8 src.rev}"
@@ -41,6 +40,8 @@ stdenv.mkDerivation rec {
   ] ++ optionals stdenv.isDarwin [
     "NATIVE=osx"
     "CLANG=1"
+  ] ++ optionals (! debug) [
+    "RELEASE=1"
   ];
 
   postInstall = with stdenv.lib; optionalString (tiles && !stdenv.isDarwin) ''
@@ -63,6 +64,8 @@ stdenv.mkDerivation rec {
   # src/weather_data.cpp:203:1: fatal error: opening dependency file obj/tiles/weather_data.d: No such file or directory
   # make: *** [Makefile:687: obj/tiles/weather_data.o] Error 1
   enableParallelBuilding = false;
+
+  dontStrip = debug;
 
   meta = with stdenv.lib; {
     description = "A free, post apocalyptic, zombie infested rogue-like";
@@ -89,6 +92,7 @@ stdenv.mkDerivation rec {
       substances or radiation, now more closely resemble insects, birds or fish
       than their original form.
     '';
+    maintainers = with maintainers; [ rardiol ];
     homepage = https://cataclysmdda.org/;
     license = licenses.cc-by-sa-30;
     platforms = platforms.unix;
