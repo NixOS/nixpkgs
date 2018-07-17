@@ -8163,6 +8163,8 @@ with pkgs;
 
   gotty = callPackage ../servers/gotty { };
 
+  gputils = callPackage ../development/tools/misc/gputils { };
+
   gradleGen = callPackage ../development/tools/build-managers/gradle { };
   gradle = self.gradleGen.gradle_latest;
   gradle_2_14 = self.gradleGen.gradle_2_14;
