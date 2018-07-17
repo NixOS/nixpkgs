@@ -17909,7 +17909,7 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-} // stdenv.lib.optionalAttrs (config.skipAliases or false == false) {
+} // stdenv.lib.optionalAttrs (config.allowAliases or true) {
   autodie = null; # part of Perl
   AutoLoader = null; # part of Perl 5.22
   constant = null; # part of Perl 5.22
