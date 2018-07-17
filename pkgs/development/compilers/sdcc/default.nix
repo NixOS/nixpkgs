@@ -1,25 +1,27 @@
-{ stdenv, fetchurl, bison, flex, boost, texinfo, autoconf, gputils ? null, disabled ? [] }:
+{ stdenv, fetchurl, autoconf, bison, boost, flex, texinfo, gputils ? null
+, excludePorts ? [] }:
+
+with stdenv.lib;
+
 let
-  allDisabled = (if gputils == null then [ "pic14" "pic16" ] else []) ++ disabled;
   # choices: mcs51 z80 z180 r2k r3ka gbz80 tlcs90 ds390 ds400 pic14 pic16 hc08 s08 stm8
-  inherit (stdenv) lib;
+  excludedPorts = excludePorts ++ (optionals (gputils == null) [ "pic14" "pic16" ]);
 in
+
 stdenv.mkDerivation rec {
-  version = "3.7.0";
   name = "sdcc-${version}";
+  version = "3.7.0";
 
   src = fetchurl {
     url = "mirror://sourceforge/sdcc/sdcc-src-${version}.tar.bz2";
     sha256 = "13llvx0j3v5qa7qd4fh7nix4j3alpd3ccprxvx163c4q8q4lfkc5";
   };
 
-  buildInputs = [ bison flex boost texinfo gputils autoconf ];
+  buildInputs = [ autoconf bison boost flex gputils texinfo ];
 
-  configureFlags = ''
-    ${lib.concatMapStringsSep " " (f: "--disable-${f}-port") allDisabled}
-  '';
+  configureFlags = map (f: "--disable-${f}-port") excludedPorts;
 
-  meta = with lib; {
+  meta = {
     description = "Small Device C Compiler";
     longDescription = ''
       SDCC is a retargettable, optimizing ANSI - C compiler suite that targets
@@ -30,8 +32,8 @@ stdenv.mkDerivation rec {
       PIC18 targets. It can be retargeted for other microprocessors.
     '';
     homepage = http://sdcc.sourceforge.net/;
-    license = licenses.gpl2;
+    license = with licenses; if (gputils == null) then unfreeRedistributable else gpl2;
+    maintainers = with maintainers; [ bjornfor yorickvp ];
     platforms = platforms.linux;
-    maintainers = [ maintainers.bjornfor maintainers.yorickvp ];
   };
 }
