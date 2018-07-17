@@ -4,13 +4,13 @@
 
 stdenv.mkDerivation rec {
   name = "brotli-${version}";
-  version = "1.0.4";
+  version = "1.0.5";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "brotli";
     rev = "v" + version;
-    sha256 = "0n5snycxgwqj2v8sgxiqxq4zqh5ydx70dr7qa4ygizs02ms69n1i";
+    sha256 = "0ssj7mnhpdpk7qnwr49qfd4gxhkmvbli5mhs274pz55cx1xp7xja";
   };
 
   nativeBuildInputs = [ cmake ];

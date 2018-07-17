@@ -6797,7 +6797,7 @@ with pkgs;
     fpc = fpc;
   };
 
-  lessc = callPackage ../development/compilers/lessc { };
+  lessc = nodePackages.less;
 
   liquibase = callPackage ../development/tools/database/liquibase { };
 
@@ -9758,8 +9758,8 @@ with pkgs;
   isocodes = callPackage ../development/libraries/iso-codes { };
 
   ispc = callPackage ../development/compilers/ispc {
-    llvmPackages = llvmPackages_4;
-    stdenv = llvmPackages_4.stdenv;
+    llvmPackages = llvmPackages_6;
+    stdenv = llvmPackages_6.stdenv;
   };
 
   isso = callPackage ../servers/isso { };
@@ -10736,9 +10736,7 @@ with pkgs;
     then darwin.libunwind
     else callPackage ../development/libraries/libunwind { };
 
-  libuv = callPackage ../development/libraries/libuv {
-    inherit (darwin.apple_sdk.frameworks) ApplicationServices CoreServices;
-  };
+  libuv = callPackage ../development/libraries/libuv { };
 
   libv4l = lowPrio (v4l_utils.override {
     withUtils = false;
@@ -18686,8 +18684,6 @@ with pkgs;
     flags = [ "python" "X11" ]; # only flag "X11" by now
   });
 
-  xxd = callPackage ../tools/misc/xxd { };
-
   vimNox = lowPrio (vim_configurable.override {
     source = "vim-nox";
     lua = pkgs.lua5_1; # vimNox source is from 2012, requires older lua
@@ -21945,7 +21941,7 @@ with pkgs;
   unixtools = recurseIntoAttrs (callPackages ./unix-tools.nix { });
   inherit (unixtools) hexdump ps logger eject umount
                       mount wall hostname more sysctl getconf
-                      getent locale killall;
+                      getent locale killall xxd;
 
   fts = if hostPlatform.isMusl then netbsd.fts else null;
 

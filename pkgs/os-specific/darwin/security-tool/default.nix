@@ -15,6 +15,8 @@ stdenv.mkDerivation rec {
     sha256 = "0apcz4vy2z5645jhrs60wj3w27mncjjqv42h5lln36g6qs2n9113";
   };
 
+  disallowedRequisites = [ apple_sdk.sdk  ];
+
   patchPhase = ''
     # copied from libsecurity_generic
     cp -R ${osx_private_sdk}/include/SecurityPrivateHeaders Security
@@ -34,7 +36,7 @@ stdenv.mkDerivation rec {
   '';
 
   preBuild = ''
-    makeFlagsArray=(-j''$NIX_BUILD_CORES)
+    makeFlagsArray=(-j$NIX_BUILD_CORES)
   '';
 
   NIX_LDFLAGS = "-no_dtrace_dof";
@@ -97,4 +99,3 @@ stdenv.mkDerivation rec {
     license = licenses.apsl20;
   };
 }
-

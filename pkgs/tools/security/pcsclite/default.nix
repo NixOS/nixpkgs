@@ -5,6 +5,8 @@ stdenv.mkDerivation rec {
   name = "pcsclite-${version}";
   version = "1.8.23";
 
+  outputs = [ "bin" "out" "dev" "doc" "man" ];
+
   src = fetchurl {
     url = "https://pcsclite.apdu.fr/files/pcsc-lite-${version}.tar.bz2";
     sha256 = "1jc9ws5ra6v3plwraqixin0w0wfxj64drahrbkyrrwzghqjjc9ss";
@@ -26,6 +28,11 @@ stdenv.mkDerivation rec {
     sed -i -re '/^#define *PCSCLITE_HP_DROPDIR */ {
       s/(DROPDIR *)(.*)/\1(getenv("PCSCLITE_HP_DROPDIR") ? : \2)/
     }' config.h
+  '';
+
+  postInstall = ''
+    # pcsc-spy is a debugging utility and it drags python into the closure
+    moveToOutput bin/pcsc-spy "$dev"
   '';
 
   nativeBuildInputs = [ pkgconfig perl python2 ];

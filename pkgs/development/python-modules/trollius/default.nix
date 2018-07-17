@@ -1,17 +1,14 @@
-{ lib, stdenv, buildPythonPackage, fetchPypi, isPy27, isPy26, isPyPy, mock, futures  }:
+{ lib, stdenv, buildPythonPackage, fetchPypi, isPy27, isPyPy, mock, futures  }:
 buildPythonPackage rec {
   pname = "trollius";
   version = "1.0.4";
-  name  = "${pname}-${version}";
-
-  disabled = isPy26;
 
   src = fetchPypi {
     inherit pname version;
     sha256 = "0xny8y12x3wrflmyn6xi8a7n3m3ac80fgmgzphx5jbbaxkjcm148";
   };
 
-  buildInputs = [ mock ];
+  checkInputs = [ mock ];
 
   propagatedBuildInputs = lib.optionals (isPy27 || isPyPy) [ futures ];
 

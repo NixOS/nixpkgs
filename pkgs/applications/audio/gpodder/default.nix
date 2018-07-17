@@ -6,7 +6,6 @@
 python3Packages.buildPythonApplication rec {
   pname = "gpodder";
   version = "3.10.3";
-
   format = "other";
 
   src = fetchFromGitHub {

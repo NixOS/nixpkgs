@@ -70,8 +70,8 @@ stdenv.mkDerivation rec {
     cat -n .config
     substituteInPlace Makefile --replace /usr/local $out
     export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE \
-      -I$(echo "${libnl.dev}"/include/libnl*/) \
-      -I${pcsclite}/include/PCSC/"
+      -I$(echo "${stdenv.lib.getDev libnl}"/include/libnl*/) \
+      -I${stdenv.lib.getDev pcsclite}/include/PCSC/"
   '';
 
   buildInputs = [ openssl libnl dbus_libs readline pcsclite ];
