@@ -1,2 +1,2 @@
 language: nix
-script: tests/eval.sh
+script: nix-build --dry-run --show-trace
