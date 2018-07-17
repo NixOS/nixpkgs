@@ -7074,7 +7074,9 @@ with pkgs;
 
   scalafmt = callPackage ../development/tools/scalafmt { };
 
-  sdcc = callPackage ../development/compilers/sdcc { };
+  sdcc = callPackage ../development/compilers/sdcc {
+    gputils = null;
+  };
 
   serpent = callPackage ../development/compilers/serpent { };
 
@@ -8162,6 +8164,8 @@ with pkgs;
   gocd-server = callPackage ../development/tools/continuous-integration/gocd-server { };
 
   gotty = callPackage ../servers/gotty { };
+
+  gputils = callPackage ../development/tools/misc/gputils { };
 
   gradleGen = callPackage ../development/tools/build-managers/gradle { };
   gradle = self.gradleGen.gradle_latest;
