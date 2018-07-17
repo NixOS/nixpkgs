@@ -2696,6 +2696,11 @@
     github = "nand0p";
     name = "Fernando Jose Pando";
   };
+  nanexcool = {
+    email = "nanexcool@gmail.com";
+    github = "nanexcool";
+    name = "Mariano Conti";
+  };
   Nate-Devv = {
     email = "natedevv@gmail.com";
     name = "Nathan Moore";
