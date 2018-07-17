@@ -15845,44 +15845,7 @@ EOF
     };
   };
 
-  graphite_api = buildPythonPackage rec {
-    name = "graphite-api-1.0.1";
-    disabled = isPyPy;
-
-    src = pkgs.fetchgit {
-      url = "https://github.com/brutasse/graphite-api.git";
-      rev = "b6f75e8a08fae695c094fece6de611b893fc65fb";
-      sha256 = "1n8h5krhv7hzmn336y9vjrmv6b6009lz5hj0d9wz7v1k2500ws5k";
-    };
-
-    checkPhase = "nosetests";
-
-    propagatedBuildInputs = with self; [
-      flask
-      flask-caching
-      cairocffi
-      pyparsing
-      pytz
-      pyyaml
-      raven
-      six
-      structlog
-      tzlocal
-    ];
-
-    buildInputs = with self; [
-      nose
-      mock
-    ];
-
-    LD_LIBRARY_PATH = "${pkgs.cairo.out}/lib";
-
-    meta = {
-      description = "Graphite-web, without the interface. Just the rendering HTTP API";
-      homepage = https://github.com/brutasse/graphite-api;
-      license = licenses.asl20;
-    };
-  };
+  graphite_api = callPackage ../development/python-modules/graphite-api { };
 
   graphite_beacon = buildPythonPackage rec {
     name = "graphite_beacon-0.27.0";
