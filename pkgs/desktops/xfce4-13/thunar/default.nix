@@ -4,9 +4,9 @@
 mkXfceDerivation rec {
   category = "xfce";
   pname = "thunar";
-  version = "1.7.0";
+  version = "1.8.1";
 
-  sha256 = "1s262hii524a5hb15pb8xbrrrhyi5fj3837zgbscg3rdnsm52igw";
+  sha256 = "00n5iinhg3xgzj2rcy7zl6g9449i59x2l09cnlkhyrjzghb4k5ha";
 
   postPatch = ''
     substituteInPlace docs/Makefile.am \
