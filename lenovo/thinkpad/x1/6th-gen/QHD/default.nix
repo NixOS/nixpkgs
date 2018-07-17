@@ -16,7 +16,7 @@
     GDK_DPI_SCALE= lib.mkDefault "0.5";
   };
   # Enable readable font on console. The example configuration that
-  # foollows is taliored towards western languages. To see how to
+  # follows is taliored towards western languages. To see how to
   # configure the font download the source tarball from
   # http://terminus-font.sourceforge.net/ and read the README file on
   # the root dir
