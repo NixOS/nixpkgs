@@ -1,4 +1,4 @@
-{ pkgs, lib }:
+{ config, pkgs, lib }:
 
 lib.makeScope pkgs.newScope (self: with self; {
   # Convert a version to branch (3.26.18 → 3.26)
@@ -391,6 +391,7 @@ lib.makeScope pkgs.newScope (self: with self; {
 
   gnome-packagekit = callPackage ./misc/gnome-packagekit { };
 
+} // lib.optionalAttrs (config.allowAliases or true) {
 #### Legacy aliases
 
   evolution_data_server = evolution-data-server; # added 2018-02-25
