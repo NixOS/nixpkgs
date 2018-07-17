@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, pythonPackages,
-  asciidoc, libxml2, libxslt, docbook_xml_xslt }:
+  asciidoc, libxml2, libxslt, docbook_xsl }:
 
 pythonPackages.buildPythonApplication rec {
   version = "7.2.1";
@@ -20,7 +20,7 @@ pythonPackages.buildPythonApplication rec {
 
   doCheck = false;
 
-  nativeBuildInputs = [ asciidoc libxml2 libxslt docbook_xml_xslt ];
+  nativeBuildInputs = [ asciidoc libxml2 libxslt docbook_xsl ];
   propagatedBuildInputs = [ pythonPackages.six pythonPackages.kerberos ];
 
   postInstall = ''

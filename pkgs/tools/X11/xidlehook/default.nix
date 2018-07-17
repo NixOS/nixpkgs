@@ -1,4 +1,5 @@
-{ lib, stdenv, rustPlatform, fetchFromGitHub, x11, xorg, libpulseaudio, pkgconfig, patchelf }:
+{ lib, stdenv, rustPlatform, fetchFromGitHub
+, xlibsWrapper, xorg, libpulseaudio, pkgconfig, patchelf }:
 
 rustPlatform.buildRustPackage rec {
   name = "xidlehook-${version}";
@@ -17,7 +18,7 @@ rustPlatform.buildRustPackage rec {
   cargoBuildFlags = lib.optionals (!stdenv.isLinux) ["--no-default-features" "--features" "pulse"];
   cargoSha256 = "1mrg59flmmqg5wwi2l8lw6p1xpgdw597fdfsmpn8b126rgzqmjl8";
 
-  buildInputs = [ x11 xorg.libXScrnSaver libpulseaudio ];
+  buildInputs = [ xlibsWrapper xorg.libXScrnSaver libpulseaudio ];
   nativeBuildInputs = [ pkgconfig patchelf ];
 
   postFixup = lib.optionalString stdenv.isLinux ''

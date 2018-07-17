@@ -1,5 +1,5 @@
 { stdenv, fetchgit, cmake, perl
-, alsaLib, libevdev, libopus, libudev, SDL2
+, alsaLib, libevdev, libopus, udev, SDL2
 , ffmpeg, pkgconfig, xorg, libvdpau, libpulseaudio, libcec
 , curl, expat, avahi, enet, libuuid
 }:
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake perl ];
   buildInputs = [
-    alsaLib libevdev libopus libudev SDL2
+    alsaLib libevdev libopus udev SDL2
     ffmpeg pkgconfig xorg.libxcb libvdpau libpulseaudio libcec
     xorg.libpthreadstubs curl expat avahi enet libuuid
   ];

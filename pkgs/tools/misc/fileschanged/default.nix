@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fam }:
+{ stdenv, fetchurl, gamin }:
 
 stdenv.mkDerivation rec {
   name = "fileschanged-0.6.9";
@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     sha256 = "0ajc9h023vzpnlqqjli4wbvs0q36nr5p9msc3wzbic8rk687qcxc";
   };
 
-  buildInputs = [ fam ];
+  buildInputs = [ gamin ];
 
   patches = [./unused-variables.debian.patch];
 

@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, cmake, python3, vulkan-headers, vulkan-loader,
-  glslang, pkgconfig, x11, libxcb, libXrandr, wayland }:
+  glslang, pkgconfig, xlibsWrapper, libxcb, libXrandr, wayland }:
 
 stdenv.mkDerivation rec {
   name = "vulkan-validation-layers-${version}";
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ cmake python3 vulkan-headers vulkan-loader x11 libxcb libXrandr wayland ];
+  buildInputs = [ cmake python3 vulkan-headers vulkan-loader xlibsWrapper libxcb libXrandr wayland ];
   enableParallelBuilding = true;
 
   cmakeFlags = [ "-DGLSLANG_INSTALL_DIR=${glslang}" ];

@@ -1,4 +1,4 @@
-{ mkXfceDerivation, automakeAddFlags, dbus_glib, gst-plugins-base, gtk2
+{ mkXfceDerivation, automakeAddFlags, dbus-glib, gst-plugins-base, gtk2
 , libICE, libSM, libunique, libxfce4ui, libxfce4util, xfce4-panel, xfconf }:
 
 mkXfceDerivation rec {
@@ -16,7 +16,7 @@ mkXfceDerivation rec {
   '';
 
   buildInputs = [
-    dbus_glib
+    dbus-glib
     gst-plugins-base
     gtk2
     libICE

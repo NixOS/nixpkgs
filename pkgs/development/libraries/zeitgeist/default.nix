@@ -1,5 +1,5 @@
 { stdenv, fetchgit, pkgconfig, glib, sqlite, vala_0_38
-, autoconf, automake, libtool, gettext, dbus_libs, telepathy-glib
+, autoconf, automake, libtool, gettext, dbus, telepathy-glib
 , gtk3, json-glib, librdf_raptor2, dbus-glib
 , pythonSupport ? true, python2Packages
 }:
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoconf automake libtool pkgconfig gettext vala_0_38 python2Packages.python ];
   buildInputs = [
-    glib sqlite dbus_libs telepathy-glib dbus-glib
+    glib sqlite dbus telepathy-glib dbus-glib
     gtk3 json-glib librdf_raptor2 python2Packages.rdflib
   ];
 

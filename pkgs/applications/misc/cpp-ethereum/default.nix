@@ -2,7 +2,7 @@
 , fetchFromGitHub
 , cmake
 , jsoncpp
-, libjson_rpc_cpp
+, libjson-rpc-cpp
 , curl
 , boost
 , leveldb
@@ -58,7 +58,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     cmake
     jsoncpp
-    libjson_rpc_cpp
+    libjson-rpc-cpp
     curl
     boost
     leveldb

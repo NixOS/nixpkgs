@@ -1,5 +1,5 @@
 { stdenv, fetchurl, fetchgit, autogen, flex, bison, python, autoconf, automake
-, gettext, ncurses, libusb, freetype, qemu, devicemapper
+, gettext, ncurses, libusb, freetype, qemu, lvm2
 , for_HP_laptop ? false
 }:
 
@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
         };
 
   nativeBuildInputs = [ autogen flex bison python autoconf automake ];
-  buildInputs = [ ncurses libusb freetype gettext devicemapper ]
+  buildInputs = [ ncurses libusb freetype gettext lvm2 ]
     ++ optional doCheck qemu;
 
   hardeningDisable = [ "stackprotector" "pic" ];

@@ -1,5 +1,5 @@
 { stdenv, fetchurl, unzip, cairo, xorg, gdk_pixbuf, fontconfig, pango, gnome2, atk, gtk2, glib
-, freetype, dbus, nss, nspr, alsaLib, cups, expat, libudev, makeDesktopItem
+, freetype, dbus, nss, nspr, alsaLib, cups, expat, udev, makeDesktopItem
 }:
 
 let
@@ -19,7 +19,7 @@ let
     alsaLib
     cups
     expat
-    libudev
+    udev
 
     gnome2.GConf
 

@@ -1,6 +1,6 @@
 { stdenv, intltool, fetchurl, webkitgtk, pkgconfig, gtk3, glib
 , file, librsvg, gnome3, gdk_pixbuf
-, dbus-glib, dbus_libs, telepathy-glib, telepathy-farstream
+, dbus-glib, telepathy-glib, telepathy-farstream
 , clutter-gtk, clutter-gst, gst_all_1, cogl, gnome-online-accounts
 , gcr, libsecret, folks, libpulseaudio, telepathy-mission-control
 , telepathy-logger, libnotify, clutter, libsoup, gnutls

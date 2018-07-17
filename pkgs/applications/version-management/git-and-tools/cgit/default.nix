@@ -1,5 +1,5 @@
 { stdenv, fetchurl, openssl, zlib, asciidoc, libxml2, libxslt
-, docbook_xml_xslt, pkgconfig, luajit
+, docbook_xsl, pkgconfig, luajit
 , gzip, bzip2, xz
 , python, wrapPython, pygments, markdown
 }:
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig ] ++ [ python wrapPython ];
   buildInputs = [
-    openssl zlib asciidoc libxml2 libxslt docbook_xml_xslt luajit
+    openssl zlib asciidoc libxml2 libxslt docbook_xsl luajit
   ];
   pythonPath = [ pygments markdown ];
 

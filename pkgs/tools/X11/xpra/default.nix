@@ -3,7 +3,7 @@
 , makeWrapper, xkbcomp, xorgserver, getopt, xauth, utillinux, which, fontsConf
 , ffmpeg, x264, libvpx, libwebp
 , libfakeXinerama
-, gst_all_1, pulseaudioLight, gobjectIntrospection
+, gst_all_1, pulseaudio, gobjectIntrospection
 , pam }:
 
 with lib;
@@ -61,7 +61,7 @@ in buildPythonApplication rec {
       --set GI_TYPELIB_PATH "$GI_TYPELIB_PATH" \
       --set GST_PLUGIN_SYSTEM_PATH_1_0 "$GST_PLUGIN_SYSTEM_PATH_1_0" \
       --prefix LD_LIBRARY_PATH : ${libfakeXinerama}/lib  \
-      --prefix PATH : ${stdenv.lib.makeBinPath [ getopt xorgserver xauth which utillinux pulseaudioLight ]}
+      --prefix PATH : ${stdenv.lib.makeBinPath [ getopt xorgserver xauth which utillinux pulseaudio ]}
   '';
 
   preCheck = "exit 0";

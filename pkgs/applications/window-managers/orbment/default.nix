@@ -1,5 +1,5 @@
 { lib, stdenv, fetchgit, cmake, pkgconfig, makeWrapper, callPackage
-, wlc, dbus_libs, wayland, libxkbcommon, pixman, libinput, udev, zlib, libpng
+, wlc, dbus, wayland, libxkbcommon, pixman, libinput, udev, zlib, libpng
 , libdrm, libX11
 , westonLite
 }:
@@ -20,7 +20,7 @@ in stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake pkgconfig makeWrapper ];
 
   buildInputs = [
-    wlc dbus_libs wayland libxkbcommon pixman libinput udev zlib libpng libX11
+    wlc dbus wayland libxkbcommon pixman libinput udev zlib libpng libX11
     libdrm
   ];
 

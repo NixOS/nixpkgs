@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, devicemapper }:
+{ stdenv, fetchurl, lvm2 }:
 
 stdenv.mkDerivation rec {
   name = "dmraid-1.0.0.rc15";
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
 
   preConfigure = "cd */";
 
-  buildInputs = [ devicemapper ];
+  buildInputs = [ lvm2 ];
 
   meta = {
     description = "Old-style RAID configuration utility";

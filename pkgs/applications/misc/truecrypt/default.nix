@@ -40,7 +40,7 @@ library, use the 'NOGUI' parameter:
    $ make NOGUI=1
 */
 
-{ fetchurl, stdenv, pkgconfig, nasm, fuse, wxGTK, devicemapper,
+{ fetchurl, stdenv, pkgconfig, nasm, fuse, wxGTK, lvm2,
   wxGUI ? true
 }:
 
@@ -86,7 +86,7 @@ stdenv.mkDerivation {
   };
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ fuse devicemapper wxGTK nasm ];
+  buildInputs = [ fuse lvm2 wxGTK nasm ];
 
   meta = {
     description = "Free Open-Source filesystem on-the-fly encryption";

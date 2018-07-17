@@ -1,6 +1,6 @@
 { stdenv, lib, fetchFromGitHub, makeWrapper, removeReferencesTo, pkgconfig
 , go-md2man, go, containerd, runc, docker-proxy, tini, libtool
-, sqlite, iproute, bridge-utils, devicemapper, systemd
+, sqlite, iproute, bridge-utils, lvm2, systemd
 , btrfs-progs, iptables, e2fsprogs, xz, utillinux, xfsprogs
 , procps, libseccomp
 }:
@@ -66,7 +66,7 @@ rec {
     DOCKER_BUILDTAGS = []
       ++ optional (systemd != null) [ "journald" ]
       ++ optional (btrfs-progs == null) "exclude_graphdriver_btrfs"
-      ++ optional (devicemapper == null) "exclude_graphdriver_devicemapper"
+      ++ optional (lvm2 == null) "exclude_graphdriver_devicemapper"
       ++ optional (libseccomp != null) "seccomp";
 
    }) // rec {
@@ -88,7 +88,7 @@ rec {
     buildInputs = [
       makeWrapper removeReferencesTo go-md2man go libtool
     ] ++ optionals (stdenv.isLinux) [
-      sqlite devicemapper btrfs-progs systemd libseccomp
+      sqlite lvm2 btrfs-progs systemd libseccomp
     ];
 
     dontStrip = true;

@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, cmake, pkgconfig, pandoc
-, ethtool, nettools, libnl, libudev, python, perl
+, ethtool, nettools, libnl, udev, python, perl
 } :
 
 let
@@ -16,7 +16,7 @@ in stdenv.mkDerivation {
   };
 
   nativeBuildInputs = [ cmake pkgconfig pandoc ];
-  buildInputs = [ libnl ethtool nettools libudev python perl ];
+  buildInputs = [ libnl ethtool nettools udev python perl ];
 
   cmakeFlags = [
     "-DCMAKE_INSTALL_RUNDIR=/run"
@@ -37,4 +37,3 @@ in stdenv.mkDerivation {
     maintainers = with maintainers; [ markuskowa ];
   };
 }
-

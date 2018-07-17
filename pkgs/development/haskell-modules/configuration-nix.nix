@@ -442,7 +442,7 @@ self: super: builtins.intersectAttrs super {
     then addBuildDepend (dontCheck super.fsnotify) pkgs.darwin.apple_sdk.frameworks.Cocoa
     else dontCheck super.fsnotify;
 
-  hidapi = addExtraLibrary super.hidapi pkgs.libudev;
+  hidapi = addExtraLibrary super.hidapi pkgs.udev;
 
   hs-GeoIP = super.hs-GeoIP.override { GeoIP = pkgs.geoipWithDatabase; };
 

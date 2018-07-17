@@ -16,7 +16,7 @@ pkgs.stdenv.mkDerivation {
   # $ nix-shell --run "make clean all"
   # otherwise they won't reapply :)
   HIGHLIGHTJS = pkgs.documentation-highlighter;
-  XSL = "${pkgs.docbook5_xsl}/xml/xsl";
+  XSL = "${pkgs.docbook_xsl_ns}/xml/xsl";
   RNG = "${pkgs.docbook5}/xml/rng/docbook/docbook.rng";
   XMLFORMAT_CONFIG = ../nixos/doc/xmlformat.conf;
   xsltFlags = lib.concatStringsSep " " [

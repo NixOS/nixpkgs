@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgconfig, meson, ninja, gettext, gnome3, libxslt, packagekit, polkit
-, fontconfig, libcanberra-gtk3, systemd, libnotify, wrapGAppsHook, dbus-glib, dbus_libs, desktop-file-utils }:
+, fontconfig, libcanberra-gtk3, systemd, libnotify, wrapGAppsHook, dbus-glib, dbus, desktop-file-utils }:
 
 stdenv.mkDerivation rec {
   name = "gnome-packagekit-${version}";
@@ -14,11 +14,11 @@ stdenv.mkDerivation rec {
     updateScript = gnome3.updateScript { packageName = "gnome-packagekit"; attrPath = "gnome3.gnome-packagekit"; };
   };
 
-  NIX_CFLAGS_COMPILE = "-I${dbus-glib.dev}/include/dbus-1.0 -I${dbus_libs.dev}/include/dbus-1.0";
+  NIX_CFLAGS_COMPILE = "-I${dbus-glib.dev}/include/dbus-1.0 -I${dbus.dev}/include/dbus-1.0";
 
   nativeBuildInputs = [ pkgconfig meson ninja gettext wrapGAppsHook desktop-file-utils ];
   buildInputs = [ libxslt gnome3.gtk packagekit fontconfig systemd polkit
-                  libcanberra-gtk3 libnotify dbus-glib dbus_libs ];
+                  libcanberra-gtk3 libnotify dbus-glib dbus ];
 
   prePatch = "patchShebangs meson_post_install.sh";
 

@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, gtk-doc, libxslt, docbook_xsl
-, docbook_xml_dtd_43, python3, gobjectIntrospection, glib, libudev, kmod, parted, libyaml
-, cryptsetup, devicemapper, dmraid, utillinux, libbytesize, libndctl, nss, volume_key
+, docbook_xml_dtd_43, python3, gobjectIntrospection, glib, udev, kmod, parted, libyaml
+, cryptsetup, lvm2, dmraid, utillinux, libbytesize, libndctl, nss, volume_key
 }:
 
 let
@@ -26,7 +26,7 @@ in stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    glib libudev kmod parted cryptsetup devicemapper dmraid utillinux libbytesize libndctl nss volume_key libyaml
+    glib udev kmod parted cryptsetup lvm2 dmraid utillinux libbytesize libndctl nss volume_key libyaml
   ];
 
   meta = with stdenv.lib; {

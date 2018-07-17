@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, glib, dbus_libs, libgcrypt, pkgconfig, intltool, gobjectIntrospection, gnome3 }:
+{ stdenv, fetchurl, glib, dbus, libgcrypt, pkgconfig, intltool, gobjectIntrospection, gnome3 }:
 
 let
   pname = "libgnome-keyring";
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "dev" ];
 
-  propagatedBuildInputs = [ glib gobjectIntrospection dbus_libs libgcrypt ];
+  propagatedBuildInputs = [ glib gobjectIntrospection dbus libgcrypt ];
   nativeBuildInputs = [ pkgconfig intltool ];
 
   passthru = {

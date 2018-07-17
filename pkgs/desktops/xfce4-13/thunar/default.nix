@@ -1,4 +1,4 @@
-{ mkXfceDerivation, docbook_xml_xslt, exo, gdk_pixbuf, gtk3, libgudev ? null
+{ mkXfceDerivation, docbook_xsl, exo, gdk_pixbuf, gtk3, libgudev ? null
 , libnotify ? null, libX11, libxfce4ui, libxfce4util, libxslt, xfconf }:
 
 mkXfceDerivation rec {
@@ -11,7 +11,7 @@ mkXfceDerivation rec {
   postPatch = ''
     substituteInPlace docs/Makefile.am \
       --replace http://docbook.sourceforge.net/release/xsl/current \
-                ${docbook_xml_xslt}/share/xml/docbook-xsl
+                ${docbook_xsl}/share/xml/docbook-xsl
   '';
 
   nativeBuildInputs = [ libxslt ];

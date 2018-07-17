@@ -1,4 +1,4 @@
-{ mkXfceDerivation, docbook_xml_xslt, libxslt, perlPackages, gtk2, gtk3
+{ mkXfceDerivation, docbook_xsl, libxslt, perlPackages, gtk2, gtk3
 , libxfce4ui, libxfce4util }:
 
 mkXfceDerivation rec {
@@ -14,7 +14,7 @@ mkXfceDerivation rec {
   postPatch = ''
     substituteInPlace docs/reference/Makefile.am \
       --replace http://docbook.sourceforge.net/release/xsl/current \
-                ${docbook_xml_xslt}/share/xml/docbook-xsl
+                ${docbook_xsl}/share/xml/docbook-xsl
   '';
 
   meta = {

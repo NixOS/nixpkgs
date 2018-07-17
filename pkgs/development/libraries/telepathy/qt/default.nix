@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, cmake, qtbase, pkgconfig, python2Packages, dbus-glib, dbus_daemon
+{ stdenv, fetchurl, cmake, qtbase, pkgconfig, python2Packages, dbus-glib, dbus
 , telepathy-farstream, telepathy-glib, fetchpatch }:
 
 let
@@ -14,7 +14,7 @@ in stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake pkgconfig python ];
   propagatedBuildInputs = [ qtbase telepathy-farstream telepathy-glib ];
   buildInputs = [ dbus-glib ];
-  checkInputs = [ dbus_daemon dbus-python ];
+  checkInputs = [ dbus.daemon dbus-python ];
 
   patches = [
     # https://github.com/TelepathyIM/telepathy-qt/issues/25

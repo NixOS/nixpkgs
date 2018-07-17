@@ -5,7 +5,7 @@
 , curl
 , cups
 , dbus-glib
-, dbus_libs
+, dbus
 , fontconfig
 , freetype
 , gconf
@@ -93,7 +93,7 @@ stdenv.mkDerivation {
       curl
       cups
       dbus-glib
-      dbus_libs
+      dbus
       fontconfig
       freetype
       gconf
