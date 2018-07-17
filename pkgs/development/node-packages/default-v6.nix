@@ -20,4 +20,8 @@ nodePackages // {
       done
     '';
   };
+
+  scuttlebot = nodePackages.scuttlebot.override (oldAttrs: {
+    buildInputs = oldAttrs.buildInputs ++ [ pkgs.automake pkgs.autoconf nodePackages.node-gyp-build ];
+  });
 }
