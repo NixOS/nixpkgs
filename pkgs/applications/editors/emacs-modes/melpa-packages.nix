@@ -124,11 +124,16 @@ self:
       # upstream issue: missing file header
       maxframe = markBroken super.maxframe;
 
-      # version of magit-popup needs to match magit
-      # https://github.com/magit/magit/issues/3286
-      magit = super.magit.override {
-        inherit (self.melpaPackages) magit-popup;
-      };
+      magit =
+        (super.magit.override {
+          # version of magit-popup needs to match magit
+          # https://github.com/magit/magit/issues/3286
+          inherit (self.melpaPackages) magit-popup;
+        }).overrideAttrs (attrs: {
+          # searches for Git at build time
+          nativeBuildInputs =
+            (attrs.nativeBuildInputs or []) ++ [ external.git ];
+        });
 
       # missing OCaml
       merlin = markBroken super.merlin;
