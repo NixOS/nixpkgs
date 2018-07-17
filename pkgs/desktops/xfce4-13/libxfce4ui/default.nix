@@ -1,4 +1,4 @@
-{ lib, mkXfceDerivation, gobjectIntrospection, gtk2, gtk3
+{ lib, mkXfceDerivation, gobjectIntrospection, gtk2, gtk3, libICE, libSM
 , libstartup_notification ? null, libxfce4util, xfconf }:
 
 mkXfceDerivation rec {
@@ -9,7 +9,7 @@ mkXfceDerivation rec {
   sha256 = "0m9h3kvkk2nx8pxxmsg9sjnyp6ajwjrz9djjxxvranjsdw3ilydy";
 
   buildInputs =  [ gobjectIntrospection gtk2 gtk3 libstartup_notification xfconf ];
-  propagatedBuildInputs = [ libxfce4util ];
+  propagatedBuildInputs = [ libxfce4util libICE libSM ];
 
   meta = with lib; {
     description = "Widgets library for Xfce";
