@@ -210,6 +210,7 @@ let
       use_gold = true;
       gold_path = "${stdenv.cc}/bin";
       is_debug = false;
+      use_jumbo_build = true;
 
       proprietary_codecs = false;
       use_sysroot = false;
