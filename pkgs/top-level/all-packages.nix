@@ -17129,6 +17129,8 @@ with pkgs;
   marathon = callPackage ../applications/networking/cluster/marathon { };
   marathonctl = callPackage ../tools/virtualization/marathonctl { } ;
 
+  markdown-pp = callPackage ../tools/text/markdown-pp { };
+
   marp = callPackage ../applications/office/marp { };
 
   matchbox = callPackage ../applications/window-managers/matchbox { };
