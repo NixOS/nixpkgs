@@ -17449,6 +17449,8 @@ with pkgs;
 
   polybar = callPackage ../applications/misc/polybar { };
 
+  polybar-git = callPackage ../applications/misc/polybar/git.nix { };
+
   ptex = callPackage ../development/libraries/ptex {};
 
   rssguard = libsForQt5.callPackage ../applications/networking/feedreaders/rssguard { };
