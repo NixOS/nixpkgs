@@ -8,7 +8,7 @@
 
 , file
 , icu
-, libgumbo
+, gumbo
 , lzma
 , xapian
 , zimlib
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ automake autoconf libtool pkgconfig ];
-  buildInputs = [ file icu libgumbo lzma zimlib zlib xapian ];
+  buildInputs = [ file icu gumbo lzma zimlib zlib xapian ];
   setSourceRoot = ''
     sourceRoot=$(echo */zimwriterfs)
   '';

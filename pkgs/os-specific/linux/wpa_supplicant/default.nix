@@ -1,5 +1,5 @@
 { stdenv, fetchpatch, fetchurl, lib, openssl, pkgconfig, libnl
-, dbus_libs ? null, readline ? null, pcsclite ? null
+, dbus, readline ? null, pcsclite ? null
 }:
 
 with stdenv.lib;
@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
     CONFIG_EAP_AKA=y
     CONFIG_EAP_AKA_PRIME=y
     CONFIG_PCSC=y
-  '' + optionalString (dbus_libs != null) ''
+  '' + optionalString (dbus != null) ''
     CONFIG_CTRL_IFACE_DBUS=y
     CONFIG_CTRL_IFACE_DBUS_NEW=y
     CONFIG_CTRL_IFACE_DBUS_INTRO=y
@@ -74,7 +74,7 @@ stdenv.mkDerivation rec {
       -I${stdenv.lib.getDev pcsclite}/include/PCSC/"
   '';
 
-  buildInputs = [ openssl libnl dbus_libs readline pcsclite ];
+  buildInputs = [ openssl libnl dbus readline pcsclite ];
 
   nativeBuildInputs = [ pkgconfig ];
 

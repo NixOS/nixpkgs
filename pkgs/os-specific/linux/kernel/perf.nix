@@ -1,6 +1,6 @@
 { lib, stdenv, kernel, elfutils, python, perl, newt, slang, asciidoc, xmlto, makeWrapper
 , docbook_xsl, docbook_xml_dtd_45, libxslt, flex, bison, pkgconfig, libunwind, binutils
-, libiberty, libaudit, libbfd, openssl, systemtap, numactl
+, libiberty, audit, libbfd, openssl, systemtap, numactl
 , zlib, withGtk ? false, gtk2 ? null
 }:
 
@@ -36,7 +36,7 @@ stdenv.mkDerivation {
   # perf refers both to newt and slang
   nativeBuildInputs = [
     asciidoc xmlto docbook_xsl docbook_xml_dtd_45 libxslt
-    flex bison libiberty libaudit makeWrapper pkgconfig python perl
+    flex bison libiberty audit makeWrapper pkgconfig python perl
   ];
   buildInputs = [
     elfutils newt slang libunwind libbfd zlib openssl systemtap.stapBuild numactl

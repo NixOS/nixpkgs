@@ -1,5 +1,5 @@
 { stdenv, lib, buildGoPackage, fetchFromGitHub, runCommand
-, gpgme, libgpgerror, devicemapper, btrfs-progs, pkgconfig, ostree, libselinux, libseccomp
+, gpgme, libgpgerror, lvm2, btrfs-progs, pkgconfig, ostree, libselinux, libseccomp
 , go-md2man }:
 
 let
@@ -26,7 +26,7 @@ in buildGoPackage rec {
   hardeningDisable = [ "fortify" ];
 
   nativeBuildInputs = [ pkgconfig go-md2man.bin ];
-  buildInputs = [ gpgme libgpgerror devicemapper btrfs-progs ostree libselinux libseccomp ];
+  buildInputs = [ gpgme libgpgerror lvm2 btrfs-progs ostree libselinux libseccomp ];
 
   # Copied from the skopeo package, doesn’t seem to make a difference?
   # If something related to these libs failed, uncomment these lines.

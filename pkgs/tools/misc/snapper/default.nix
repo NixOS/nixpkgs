@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, fetchpatch
 , autoreconfHook, pkgconfig, docbook_xsl, libxslt, docbook_xml_dtd_45
-, acl, attr, boost, btrfs-progs, dbus_libs, diffutils, e2fsprogs, libxml2
+, acl, attr, boost, btrfs-progs, dbus, diffutils, e2fsprogs, libxml2
 , lvm2, pam, python, utillinux }:
 
 stdenv.mkDerivation rec {
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     docbook_xsl libxslt docbook_xml_dtd_45
   ];
   buildInputs = [
-    acl attr boost btrfs-progs dbus_libs diffutils e2fsprogs libxml2
+    acl attr boost btrfs-progs dbus diffutils e2fsprogs libxml2
     lvm2 pam python utillinux
   ];
 

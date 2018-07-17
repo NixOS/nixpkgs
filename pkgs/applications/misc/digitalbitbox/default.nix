@@ -7,7 +7,7 @@
 , libevent
 , libtool
 , libqrencode
-, libudev
+, udev
 , libusb
 , makeWrapper
 , pkgconfig
@@ -67,12 +67,12 @@ in stdenv.mkDerivation rec {
     qttools
   ];
 
-  buildInputs = with stdenv.lib; [
+  buildInputs = [
     # TODO: remove libcap when pruneLibtoolFiles applies to pulseaudio.
     libcap
     libevent
     libtool
-    libudev
+    udev
     libusb
     libqrencode
 

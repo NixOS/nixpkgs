@@ -6,7 +6,7 @@
 , libcaca, libpulseaudio, flac, schroedinger, libxml2, librsvg
 , mpeg2dec, systemd, gnutls, avahi, libcddb, libjack2, SDL, SDL_image
 , libmtp, unzip, taglib, libkate, libtiger, libv4l, samba, liboggz
-, libass, libva-full, libdvbpsi, libdc1394, libraw1394, libopus
+, libass, libva, libdvbpsi, libdc1394, libraw1394, libopus
 , libvdpau, libsamplerate, live555, fluidsynth, wayland, wayland-protocols
 , onlyLibVLC ? false
 , withQt5 ? true, qtbase ? null, qtsvg ? null, qtx11extras ? null
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
     libbluray dbus fribidi libvorbis libtheora speex lua5 libgcrypt libgpgerror
     libupnp libcaca libpulseaudio flac schroedinger libxml2 librsvg mpeg2dec
     systemd gnutls avahi libcddb SDL SDL_image libmtp unzip taglib libarchive
-    libkate libtiger libv4l samba liboggz libass libdvbpsi libva-full
+    libkate libtiger libv4l samba liboggz libass libdvbpsi libva
     xorg.xlibsWrapper xorg.libXv xorg.libXvMC xorg.libXpm xorg.xcbutilkeysyms
     libdc1394 libraw1394 libopus libebml libmatroska libvdpau libsamplerate live555
     fluidsynth wayland wayland-protocols
