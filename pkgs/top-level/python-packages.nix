@@ -20466,6 +20466,8 @@ EOF
   h11 = callPackage ../development/python-modules/h11 { };
 
   prometheus_client = callPackage ../development/python-modules/prometheus_client { };
+
+  simpy = callPackage ../development/python-modules/simpy { };
 });
 
 in fix' (extends overrides packages)
