@@ -1,7 +1,7 @@
 { stdenv, fetchpatch, fetchFromGitHub, meson, ninja, pkgconfig, gettext
 , xmlto, docbook_xsl, docbook_xml_dtd_45, libxslt
 , libstemmer, glib, xapian, libxml2, libyaml, gobjectIntrospection
-, pcre, itstool
+, pcre, itstool, vala
 }:
 
 stdenv.mkDerivation rec {
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     meson ninja pkgconfig gettext
     libxslt xmlto docbook_xsl docbook_xml_dtd_45
-    gobjectIntrospection itstool
+    gobjectIntrospection itstool vala
   ];
 
   buildInputs = [ libstemmer pcre glib xapian libxml2 libyaml ];
@@ -43,6 +43,7 @@ stdenv.mkDerivation rec {
   mesonFlags = [
     "-Dapidocs=false"
     "-Ddocs=false"
+    "-Dvapi=true"
   ];
 
   meta = with stdenv.lib; {
