@@ -16,15 +16,9 @@ stdenv.mkDerivation rec {
 
   buildPhase = ":";   # nothing to build
 
-  icon = fetchurl {
-    url = "https://www.getpostman.com/img-rebrand/logo.png";
-    sha256 = "0jdhl9c07b1723j2f172z3s5p5lh8sqa1rcvdzz3h6z5zwn21g7v";
-  };
-
   desktopItem = makeDesktopItem {
     name = "postman";
     exec = "postman";
-    icon = "${icon}";
     comment = "API Development Environment";
     desktopName = "Postman";
     genericName = "Postman";
