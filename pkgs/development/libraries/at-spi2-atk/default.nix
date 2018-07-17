@@ -27,6 +27,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ meson ninja pkgconfig ];
   buildInputs = [ at-spi2-core atk dbus glib libxml2 ];
 
+  doCheck = false; # fails with "No test data file provided"
+
   passthru = {
     updateScript = gnome3.updateScript {
       packageName = pname;
