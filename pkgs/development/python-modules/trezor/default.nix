@@ -1,11 +1,13 @@
 { lib, fetchPypi, buildPythonPackage,
-  protobuf, hidapi, ecdsa, mnemonic, requests, pyblake2, click, libusb1, rlp
+  protobuf, hidapi, ecdsa, mnemonic, requests, pyblake2, click, libusb1, rlp, isPy3k
 }:
 
 buildPythonPackage rec {
   name = "${pname}-${version}";
   pname = "trezor";
   version = "0.9.1";
+
+  disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
