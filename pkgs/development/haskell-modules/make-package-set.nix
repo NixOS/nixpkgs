@@ -128,7 +128,7 @@ let
       preferLocalBuild = true;
       phases = ["installPhase"];
       LANG = "en_US.UTF-8";
-      LOCALE_ARCHIVE = pkgs.lib.optionalString buildPlatform.isLinux "${buildPackages.glibcLocales}/lib/locale/locale-archive";
+      LOCALE_ARCHIVE = pkgs.lib.optionalString (buildPlatform.libc == "glibc") "${buildPackages.glibcLocales}/lib/locale/locale-archive";
       installPhase = ''
         export HOME="$TMP"
         mkdir -p "$out"
