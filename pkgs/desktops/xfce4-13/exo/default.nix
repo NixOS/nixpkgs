@@ -4,9 +4,9 @@
 mkXfceDerivation rec {
   category = "xfce";
   pname = "exo";
-  version = "0.11.5";
+  version = "0.12.2";
 
-  sha256 = "0zxv7cx1xbjls7q2blv8ir9zwzyq7r189n6q35jwasns7rxj256v";
+  sha256 = "1b4hl9yxvf8b8akqf2zngq3m93yqnqcmxqqds1dwzm9vm5sqydgh";
 
   nativeBuildInputs = [ libxslt perlPackages.URI ];
   buildInputs = [ gtk2 gtk3 libxfce4ui libxfce4util ];
