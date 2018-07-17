@@ -76,6 +76,10 @@ stdenv.mkDerivation rec {
   # [1] https://github.com/mono/mono/blob/master/scripts/gmcs.in
   + ''
     ln -s $out/bin/mcs $out/bin/gmcs
+  ''
+  # Make MSBuild stop complaining
+  + ''
+    cp $out/lib/mono/xbuild/14.0/Microsoft.Common.props $out/lib/mono/xbuild/15.0/Microsoft.Common.props
   '';
 
   inherit enableParallelBuilding;

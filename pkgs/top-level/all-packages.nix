@@ -6966,6 +6966,8 @@ with pkgs;
 
   monoDLLFixer = callPackage ../build-support/mono-dll-fixer { };
 
+  msbuild = callPackage ../development/tools/build-managers/msbuild { };
+
   mozart-binary = callPackage ../development/compilers/mozart/binary.nix { };
   mozart = mozart-binary;
 
