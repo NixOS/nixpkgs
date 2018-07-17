@@ -46,11 +46,6 @@ buildPythonPackage rec {
     export CVXOPT_FFTW_INC_DIR=${fftw.dev}/include
   '';
 
-  # https://github.com/cvxopt/cvxopt/issues/122
-  # This is fixed on staging (by #43234, status 2018-07-15), but until that
-  # lands we should disable the tests. Otherwise the 99% of use cases that
-  # should be unaffected by that failure are affected.
-  doCheck = false;
   checkPhase = ''
     ${python.interpreter} -m unittest discover -s tests
   '';
