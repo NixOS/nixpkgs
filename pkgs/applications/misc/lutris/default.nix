@@ -96,8 +96,10 @@ let
     bison flex
 
     # WINE
-    wine perl which p7zip gnused gnugrep psmisc cups lcms2 mpg123 cairo unixODBC
+    perl which p7zip gnused gnugrep psmisc cups lcms2 mpg123 cairo unixODBC
     samba4 sane-backends openldap opencl-headers ocl-icd
+
+    (wine.override { wineBuild = "wineWow"; })
 
     # ZDOOM
     soundfont-fluid bzip2 game-music-emu
