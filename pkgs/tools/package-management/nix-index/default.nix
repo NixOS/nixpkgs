@@ -4,15 +4,15 @@ with rustPlatform;
 
 buildRustPackage rec {
   name = "nix-index-${version}";
-  version = "0.1.0";
+  version = "0.1.1";
 
   src = fetchFromGitHub {
     owner = "bennofs";
     repo = "nix-index";
     rev = "v${version}";
-    sha256 = "1lmg65yqkwf2a5qxm3dmv8158kqhnriir062vlgar5wimf409rm5";
+    sha256 = "17pms3cq3i3jan1irxgqfr3nrjy6zb21y07pwqp9v08hyrjpfqin";
   };
-  cargoSha256 = "0cxdrzjmqq3ywdh0f5mzkcf50hbbgd3bak4398v2ls5gy5s9fcz2";
+  cargoSha256 = "0b7xwcgjds80g08sx91lqip8syb52n458si4q4xycvvsand5fa10";
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ openssl curl];
 
