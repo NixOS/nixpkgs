@@ -26,12 +26,12 @@
 , ntl
 , ecm
 , pynac
-, pythonEnv
+, sagePython2Env
 }:
 
 let
   buildInputs = [
-    pythonEnv # for patchShebangs
+    sagePython2Env # for patchShebangs
     makeWrapper
     pkg-config
     openblasCompat # lots of segfaults with regular (64 bit) openblas
@@ -80,7 +80,7 @@ let
       []
     );
 
-  allInputs = lib.remove null (buildInputs ++ pythonEnv.extraLibs);
+  allInputs = lib.remove null (buildInputs ++ sagePython2Env.extraLibs);
   transitiveDeps = lib.unique (builtins.concatLists (map transitiveClosure allInputs ));
   # fix differences between spkg and sage names
   # (could patch sage instead, but this is more lightweight and also works for packages depending on sage)

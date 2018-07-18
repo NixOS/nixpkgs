@@ -11,7 +11,7 @@
 , gnused
 , gnugrep
 , binutils
-, pythonEnv
+, sagePython2Env
 , python3
 , pkg-config
 , pari
@@ -51,7 +51,7 @@ let
   runtimepath = (lib.makeBinPath ([
     "@sage-local@"
     "@sage-local@/build"
-    pythonEnv
+    sagePython2Env
     # empty python env to add python wrapper that clears PYTHONHOME (see
     # wrapper.nix). This is necessary because sage will call the python3 binary
     # (from python2 code). The python2 PYTHONHOME (again set in wrapper.nix)
@@ -73,6 +73,7 @@ let
     singular
     giac
     palp
+    # needs to be rWrapper, standard "R" doesn't include default packages
     rWrapper
     gfan
     cddlib
