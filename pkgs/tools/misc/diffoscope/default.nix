@@ -23,6 +23,9 @@ python3Packages.buildPythonApplication rec {
   postPatch = ''
     # Upstream doesn't provide a PKG-INFO file
     sed -i setup.py -e "/'rpm-python',/d"
+
+    # When generating manpage, use the installed version
+    substituteInPlace doc/Makefile --replace "../bin" "$out/bin"
   '';
 
   nativeBuildInputs = [ docutils help2man ];
