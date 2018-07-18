@@ -32,6 +32,8 @@
   ghcFlavour ? stdenv.lib.optionalString (targetPlatform != hostPlatform) "perf-cross"
 }:
 
+assert !enableIntegerSimple -> gmp != null;
+
 let
   inherit (bootPkgs) ghc;
 
@@ -46,8 +48,7 @@ let
     include mk/flavours/\$(BuildFlavour).mk
     endif
     DYNAMIC_GHC_PROGRAMS = ${if enableShared then "YES" else "NO"}
-  '' + stdenv.lib.optionalString enableIntegerSimple ''
-    INTEGER_LIBRARY = integer-simple
+    INTEGER_LIBRARY = ${if enableIntegerSimple then "integer-simple" else "integer-gmp"}
   '' + stdenv.lib.optionalString (targetPlatform != hostPlatform) ''
     Stage1Only = ${if targetPlatform.system == hostPlatform.system then "NO" else "YES"}
     CrossCompilePrefix = ${targetPrefix}
@@ -141,8 +142,8 @@ stdenv.mkDerivation (rec {
   configureFlags = [
     "--datadir=$doc/share/doc/ghc"
     "--with-curses-includes=${ncurses.dev}/include" "--with-curses-libraries=${ncurses.out}/lib"
-  ] ++ stdenv.lib.optional (targetPlatform == hostPlatform && ! enableIntegerSimple) [
-    "--with-gmp-includes=${gmp.dev}/include" "--with-gmp-libraries=${gmp.out}/lib"
+  ] ++ stdenv.lib.optional (targetPlatform == hostPlatform && !enableIntegerSimple) [
+    "--with-gmp-includes=${targetPackages.gmp.dev}/include" "--with-gmp-libraries=${targetPackages.gmp.out}/lib"
   ] ++ stdenv.lib.optional (targetPlatform == hostPlatform && hostPlatform.libc != "glibc" && !targetPlatform.isWindows) [
     "--with-iconv-includes=${libiconv}/include" "--with-iconv-libraries=${libiconv}/lib"
   ] ++ stdenv.lib.optionals (targetPlatform != hostPlatform) [
