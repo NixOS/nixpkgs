@@ -1,7 +1,7 @@
 { lib, stdenv, fetchgit, python3Packages, docutils, help2man
 , acl, apktool, binutils-unwrapped, bzip2, cbfstool, cdrkit, colord, colordiff, coreutils, cpio, db, diffutils, dtc
 , e2fsprogs, file, findutils, fontforge-fonttools, fpc, gettext, ghc, ghostscriptX, giflib, gnupg1, gnutar
-, gzip, imagemagick, jdk, libarchive, libcaca, llvm, mono, openssh, pdftk, pgpdump, poppler_utils, sng, sqlite
+, gzip, imagemagick, jdk, libarchive, libcaca, llvm, lz4, mono, openssh, pdftk, pgpdump, poppler_utils, sng, sqlite
 , squashfsTools, tcpdump, unoconv, unzip, xxd, xz
 , enableBloat ? false
 }:
@@ -32,7 +32,7 @@ python3Packages.buildPythonApplication rec {
   pythonPath = with python3Packages; [ debian libarchive-c python_magic tlsh rpm ] ++ [
       acl binutils-unwrapped bzip2 cdrkit colordiff coreutils cpio db diffutils
       dtc e2fsprogs file findutils fontforge-fonttools gettext gnutar gzip
-      libarchive libcaca pgpdump progressbar33 sng sqlite squashfsTools unzip xxd xz
+      libarchive libcaca lz4 pgpdump progressbar33 sng sqlite squashfsTools unzip xxd xz
     ] ++ lib.optionals enableBloat [
       apktool cbfstool colord fpc ghc ghostscriptX giflib gnupg1 imagemagick
       llvm jdk mono openssh pdftk poppler_utils tcpdump unoconv
