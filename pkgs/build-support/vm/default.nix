@@ -22,7 +22,6 @@ rec {
 
   hd = "vda"; # either "sda" or "vda"
 
-
   initrdUtils = runCommand "initrd-utils"
     { buildInputs = [ nukeReferences ];
       allowedReferences = [ "out" modulesClosure ]; # prevent accidents like glibc being included in the initrd
@@ -35,6 +34,7 @@ rec {
       cp -p ${pkgs.stdenv.glibc.out}/lib/ld-linux*.so.? $out/lib
       cp -p ${pkgs.stdenv.glibc.out}/lib/libc.so.* $out/lib
       cp -p ${pkgs.stdenv.glibc.out}/lib/libm.so.* $out/lib
+      cp -p ${pkgs.stdenv.glibc.out}/lib/libresolv.so.* $out/lib
 
       # Copy BusyBox.
       cp -pd ${pkgs.busybox}/bin/* $out/bin
