@@ -10,7 +10,6 @@
 
 assert aclSupport -> acl != null;
 assert selinuxSupport -> libselinux != null && libsepol != null;
-assert hostPlatform.libc != "msvcrt";
 
 with lib;
 
@@ -101,7 +100,7 @@ stdenv.mkDerivation rec {
 
     license = licenses.gpl3Plus;
 
-    platforms = platforms.all;
+    platforms = platforms.unix;
 
     maintainers = [ maintainers.eelco ];
   };
