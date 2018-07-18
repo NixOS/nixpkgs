@@ -114,7 +114,7 @@ rec {
 
   # Make a package that just contains a setup hook with the given contents.
   makeSetupHook = { name ? "hook", deps ? [], substitutions ? {} }: script:
-    runCommand name substitutions
+    runCommand name (substitutions // { meta = { isHook = true; }; })
       (''
         mkdir -p $out/nix-support
         cp ${script} $out/nix-support/setup-hook
