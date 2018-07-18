@@ -10,8 +10,8 @@ in {
 
     rbac = mkOption {
       description = "Role-based access control (RBAC) options";
+      default = {};
       type = types.submodule {
-
         options = {
           enable = mkOption {
             description = "Whether to enable role based access control is enabled for kubernetes dashboard";
@@ -24,7 +24,6 @@ in {
             type = types.bool;
             default = false;
           };
-          
         };
       };
     };
