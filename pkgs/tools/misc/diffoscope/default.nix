@@ -6,6 +6,7 @@
 , enableBloat ? false
 }:
 
+# Note: when upgrading this package, please run the list-missing-tools.sh script as described below!
 python3Packages.buildPythonApplication rec {
   name = "diffoscope-${version}";
   version = "99";
@@ -30,6 +31,9 @@ python3Packages.buildPythonApplication rec {
 
   nativeBuildInputs = [ docutils help2man ];
 
+  # Most of the non-Python dependencies here are optional command-line tools for various file-format parsers.
+  # To help figuring out what's missing from the list, run: ./pkgs/tools/misc/diffoscope/list-missing-tools.sh
+  #
   # Still missing these tools: abootimg docx2txt dumpxsb enjarify js-beautify lipo oggDump otool procyon-decompiler Rscript
   # Also these libraries: python3-guestfs
   pythonPath = with python3Packages; [ debian libarchive-c python_magic tlsh rpm ] ++ [
