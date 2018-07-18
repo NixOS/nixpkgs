@@ -7150,7 +7150,7 @@ in {
 
   locustio = callPackage ../development/python-modules/locustio { };
 
-  llvmlite = callPackage ../development/python-modules/llvmlite { llvm = pkgs.llvm; };
+  llvmlite = callPackage ../development/python-modules/llvmlite { llvm = pkgs.llvm_6; };
 
   lockfile = buildPythonPackage rec {
     pname = "lockfile";
