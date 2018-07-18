@@ -1,4 +1,4 @@
-{ buildPackages, runCommand, nettools, bc, bison, flex, perl, gmp, libmpc, mpfr, openssl
+{ buildPackages, runCommand, nettools, bc, bison, flex, perl, rsync, gmp, libmpc, mpfr, openssl
 , libelf
 , utillinux
 , writeTextFile
@@ -164,8 +164,14 @@ let
         unlink $out/lib/modules/${modDirVersion}/build
         unlink $out/lib/modules/${modDirVersion}/source
 
-        mkdir -p $dev/lib/modules/${modDirVersion}/build
-        cp -dpR .. $dev/lib/modules/${modDirVersion}/source
+        mkdir -p $dev/lib/modules/${modDirVersion}/{build,source}
+
+        # To save space, exclude a bunch of unneeded stuff when copying.
+        (cd .. && rsync --archive --prune-empty-dirs \
+            --exclude='/build/' \
+            --exclude='/Documentation/' \
+            * $dev/lib/modules/${modDirVersion}/source/)
+
         cd $dev/lib/modules/${modDirVersion}/source
 
         cp $buildRoot/{.config,Module.symvers} $dev/lib/modules/${modDirVersion}/build
@@ -251,7 +257,7 @@ stdenv.mkDerivation ((drvAttrs config hostPlatform.platform kernelPatches config
   enableParallelBuilding = true;
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
-  nativeBuildInputs = [ perl bc nettools openssl gmp libmpc mpfr ]
+  nativeBuildInputs = [ perl bc nettools openssl rsync gmp libmpc mpfr ]
       ++ optional (stdenv.hostPlatform.platform.kernelTarget == "uImage") buildPackages.ubootTools
       ++ optional (stdenv.lib.versionAtLeast version "4.14") libelf
       ++ optional (stdenv.lib.versionAtLeast version "4.15") utillinux
