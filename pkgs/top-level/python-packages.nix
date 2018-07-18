@@ -3143,6 +3143,8 @@ in {
 
   };
 
+  image-match = callPackage ../development/python-modules/image-match { };
+
   imbalanced-learn = callPackage ../development/python-modules/imbalanced-learn { };
 
   immutables = callPackage ../development/python-modules/immutables {};
