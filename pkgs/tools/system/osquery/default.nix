@@ -20,7 +20,7 @@ in
 
 stdenv.mkDerivation rec {
   name = "osquery-${version}";
-  version = "3.2.8";
+  version = "3.2.9";
 
   # this is what `osquery --help` will show as the version.
   OSQUERY_BUILD_VERSION = version;
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
     owner = "facebook";
     repo = "osquery";
     rev = version;
-    sha256 = "1py5jizl7z1f9xzpg7pylbdnawvvifiyv9gpjwiim8ilgkmpaiv4";
+    sha256 = "1fac0yj1701469qhbsp38ab2fmavm3jw6x278bf78yvxdi99ivai";
   };
 
   patches = [ ./misc.patch ];
