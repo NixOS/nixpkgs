@@ -4,11 +4,11 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "podofo-0.9.5";
+  name = "podofo-0.9.6";
 
   src = fetchurl {
     url = "mirror://sourceforge/podofo/${name}.tar.gz";
-    sha256 = "012kgfx5j5n6w4zkc1d290d2cwjk60jhzsjlr2x19g3yi75q2jc5";
+    sha256 = "0wj0y4zcmj4q79wrn3vv3xq4bb0vhhxs8yifafwy9f2sjm83c5p9";
   };
 
   propagatedBuildInputs = [ zlib freetype libjpeg libtiff fontconfig openssl libpng libidn expat ];
