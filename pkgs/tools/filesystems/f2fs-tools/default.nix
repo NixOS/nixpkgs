@@ -2,12 +2,12 @@
 
 stdenv.mkDerivation rec {
   name = "f2fs-tools-${version}";
-  version = "1.10.0";
+  version = "1.11.0";
 
   src = fetchgit {
     url = "git://git.kernel.org/pub/scm/linux/kernel/git/jaegeuk/f2fs-tools.git";
     rev = "refs/tags/v${version}";
-    sha256 = "1254pd254l1hxkzkkzqmzc0j9vywj2wddg9apqaixjninj21jrbc";
+    sha256 = "188yv77ga466wpzbirsx6vspym8idaschgi7cx92z4jwqpnkk5gv";
   };
 
   nativeBuildInputs = [ autoreconfHook pkgconfig ];
