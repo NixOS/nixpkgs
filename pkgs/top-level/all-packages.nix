@@ -12774,6 +12774,8 @@ with pkgs;
 
   home-assistant = callPackage ../servers/home-assistant { };
 
+  hydron = callPackage ../servers/hydron { };
+
   ircdHybrid = callPackage ../servers/irc/ircd-hybrid { };
 
   jboss = callPackage ../servers/http/jboss { };
