@@ -101,11 +101,17 @@ releaseTools.sourceTarball rec {
     stopNest
 
     header "checking for missing versions"
-    nix-instantiate --arg condition 'v: (builtins.parseDrvName v.name).version == ""' --argstr conditionName 'missing version numbers' --show-trace ./maintainers/scripts/find-bad-packages.nix
+    nix-instantiate --show-trace \
+       --arg condition 'v: (builtins.parseDrvName v.name).version == ""' \
+       --argstr conditionName 'missing version numbers' \
+       ./maintainers/scripts/find-bad-packages.nix
     stopNest
 
     header "checking for missing licenses"
-    nix-instantiate --arg condition 'v: (v ? meta) && (v.meta.license or null == null)' --argstr conditionName 'missing licenses' --show-trace ./maintainers/scripts/find-bad-packages.nix
+    nix-instantiate  --show-trace \
+      --arg condition 'v: (v.meta.license or null == null)' \
+      --argstr conditionName 'missing licenses' \
+      ./maintainers/scripts/find-bad-packages.nix
     stopNest
 
     header "checking find-tarballs.nix"

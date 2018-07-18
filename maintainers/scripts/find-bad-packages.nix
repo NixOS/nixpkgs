@@ -1,13 +1,8 @@
 # to run: nix-env -qa -f find-missing-versions.nix
 
-{ condition ? v: (builtins.parseDrvName v.name).version == ""
-, conditionName ? "missing version numbers"
-, nixpkgs ? import <nixpkgs> { config = {
-                                 allowUnsupportedSystem = true;
-                                 allowInsecure = true;
-                                 allowUnfree = true;
-                               };
-                             }
+{ condition
+, conditionName
+, nixpkgs ? import ../.. { }
 }:
 
 with nixpkgs.lib;
@@ -17,6 +12,7 @@ let toplevel = filterAttrs (n: v: let v' = tryEval v; in
                  && isDerivation v'.value
                  && v'.value.meta.available or false
                  && (tryEval v'.value.name).success
+                 && !(v.meta.isHook or false)
                  && (condition v'.value)
                ) nixpkgs;
     badPackages = attrNames toplevel;
@@ -27,5 +23,5 @@ in if badPackages == [] then []
    else throw ''
 Some packages are ${conditionName}. Here is the list:
 
-- ${concatStringsSep "\n- " badPackages}
+- [ ] ${concatStringsSep "\n- [ ] " badPackages}
    ''
