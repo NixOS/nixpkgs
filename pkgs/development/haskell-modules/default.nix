@@ -18,6 +18,24 @@ let
     inherit stdenv haskellLib ghc buildHaskellPackages extensible-self all-cabal-hashes;
   };
 
+  # Create core library set. Each library listed in the GHC compiler’s
+  # libraries passthru is mapped to a scrapped package.
+  coreLibraries = self: super: let
+  # Make a derivation that is just a copy of one of GHC’s core
+  # libraries. This is done to prevent stuff built by GHC from
+  # referencing GHC itself.
+  mkCoreLib = ghc: pkg: rec {
+    inherit (builtins.parseDrvName pkg) name;
+    value = pkgs.runCommand pkg {} ''
+      install -D ${ghc}/lib/${ghc.name}/package.conf.d/${pkg}.conf \
+                 $out/lib/${ghc.name}/package.conf.d/${pkg}.conf
+      cp -r ${ghc}/lib/${ghc.name}/${pkg} $out/lib/${ghc.name}
+      for conf in $out/lib/${ghc.name}/package.conf.d/*.conf; do
+        substituteInPlace $conf --replace ${ghc} $out
+      done
+    '';
+  }; in builtins.listToAttrs (map (mkCoreLib ghc) (super.ghc.libraries or []));
+
   commonConfiguration = configurationCommon { inherit pkgs haskellLib; };
   nixConfiguration = configurationNix { inherit pkgs haskellLib; };
 
@@ -25,8 +43,9 @@ let
     (extends overrides
       (extends packageSetConfig
         (extends compilerConfig
-          (extends commonConfiguration
-            (extends nixConfiguration haskellPackages)))));
+          (extends coreLibraries
+            (extends commonConfiguration
+              (extends nixConfiguration haskellPackages))))));
 
 in
 

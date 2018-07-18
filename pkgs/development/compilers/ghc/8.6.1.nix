@@ -222,7 +222,7 @@ stdenv.mkDerivation (rec {
       "deepseq-1.4.4.0"
       "directory-1.3.2.3"
       "filepath-1.4.2"
-      "ghc-8.6.0.20180627"
+      # "ghc-8.6.0.20180627"
       "ghc-boot-8.6.0.20180627"
       "ghc-boot-th-8.6.0.20180627"
       "ghc-compact-0.1.0.0"

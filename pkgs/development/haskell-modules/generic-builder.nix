@@ -1,6 +1,6 @@
 { stdenv, buildPackages, buildHaskellPackages, ghc
 , jailbreak-cabal, hscolour, cpphs, nodejs
-, buildPlatform, hostPlatform, runCommand
+, buildPlatform, hostPlatform
 }:
 
 let
@@ -185,15 +185,12 @@ let
                         optionals doCheck testPkgconfigDepends ++ optionals doBenchmark benchmarkPkgconfigDepends;
 
   depsBuildBuild = [ nativeGhc ];
-  nativeBuildInputs = [ ghc removeReferencesTo ]
-                   ++ optional (allPkgconfigDepends != []) pkgconfig ++
+  nativeBuildInputs = [ ghc removeReferencesTo ] ++ optional (allPkgconfigDepends != []) pkgconfig ++
                       setupHaskellDepends ++
                       buildTools ++ libraryToolDepends ++ executableToolDepends ++
                       optionals doCheck testToolDepends ++
                       optionals doBenchmark benchmarkToolDepends;
-  propagatedBuildInputs = buildDepends ++ libraryHaskellDepends
-                      ++ executableHaskellDepends ++ libraryFrameworkDepends
-                      ++ map (mkCoreLib ghc) (ghc.libraries or []);
+  propagatedBuildInputs = buildDepends ++ libraryHaskellDepends ++ executableHaskellDepends ++ libraryFrameworkDepends;
   otherBuildInputs = extraLibraries ++ librarySystemDepends ++ executableSystemDepends ++ executableFrameworkDepends ++
                      allPkgconfigDepends ++
                      optionals doCheck (testDepends ++ testHaskellDepends ++ testSystemDepends ++ testFrameworkDepends) ++
@@ -216,32 +213,11 @@ let
 
   nativeGhcCommand = "${nativeGhc.targetPrefix}ghc";
 
-  buildPkgDb = ghcName: packageConfDir: optionalString (ghc ? libraries) ''
-    # Skip the ghc compiler. We want to avoid referencing it directly
-    # in the output. We don't care about nativeGhc currently because
-    # it doesn't end up in the output (but it might not hurt to do the
-    # same thing there)
-    if [ "$p" = "${ghc}" ]; then
-      continue
-    fi
-  '' + ''
+  buildPkgDb = ghcName: packageConfDir: ''
     if [ -d "$p/lib/${ghcName}/package.conf.d" ]; then
       cp -f "$p/lib/${ghcName}/package.conf.d/"*.conf ${packageConfDir}/
       continue
     fi
-  '';
-
-  # Make a derivation that is just a copy of one of GHC’s core
-  # libraries. This is done to prevent stuff built by GHC from
-  # referencing GHC itself.
-  mkCoreLib = ghc: pkg: runCommand pkg {} ''
-    install -D ${ghc}/lib/${ghc.name}/package.conf.d/${pkg}.conf \
-               $out/lib/${ghc.name}/package.conf.d/${pkg}.conf
-    cp -r ${ghc}/lib/${ghc.name}/${pkg} $out/lib/${ghc.name}/${pkg}
-    substituteInPlace $out/lib/${ghc.name}/package.conf.d/${pkg}.conf \
-      --replace ${ghc} $out
-    ${optionalString (pkg == "rts")
-        "cp -r ${ghc}/lib/${ghc.name}/include $out/lib/${ghc.name}/include"}
   '';
 
 in
