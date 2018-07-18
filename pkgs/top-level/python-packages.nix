@@ -6508,6 +6508,8 @@ in {
     };
   };
 
+  imgaug = callPackage ../development/python-modules/imgaug { };
+
   inflection = callPackage ../development/python-modules/inflection { };
 
   influxdb = buildPythonPackage rec {
