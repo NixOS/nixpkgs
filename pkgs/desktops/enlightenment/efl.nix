@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
     xorg.libXdamage xorg.libXinerama xorg.libXp xorg.libXtst xorg.libXi xorg.libXext
     bullet xorg.libXScrnSaver xorg.libXrender xorg.libXfixes xorg.libXrandr
     xorg.libxkbfile xorg.libxcb xorg.xcbutilkeysyms openjpeg doxygen expat luajit
-    harfbuzz jbig2dec librsvg alsaLib poppler ghostscript libraw libspectre xineLib libwebp curl libdrm
+    harfbuzz jbig2dec librsvg dbus alsaLib poppler ghostscript libraw libspectre xineLib libwebp curl libdrm
     libinput utillinux fribidi SDL2 ];
 
   # ac_ct_CXX must be set to random value, because then it skips some magic which does alternative searching for g++
