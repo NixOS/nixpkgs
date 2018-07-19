@@ -17,8 +17,8 @@ stdenv.mkDerivation rec {
   buildPhase = ":";   # nothing to build
 
   icon = fetchurl {
-    url = "https://www.getpostman.com/img-rebrand/logo.png";
-    sha256 = "0jdhl9c07b1723j2f172z3s5p5lh8sqa1rcvdzz3h6z5zwn21g7v";
+    url = "https://www.getpostman.com/img/v2/media-kit/Logo/PNG/pm-logo-horiz.png";
+    sha256 = "271b88317bd787f4a30ab374148e73314d60fb1b220ef791611774a061c49f30";
   };
 
   desktopItem = makeDesktopItem {
