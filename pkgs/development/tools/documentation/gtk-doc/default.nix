@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
   # Make six available for binaries, python.withPackages creates a wrapper
   # but scripts are not allowed in shebangs so we link it into sys.path.
   postInstall = ''
-    ln -s ${python.pkgs.six}/lib/python2.7/site-packages/* $out/share/gtk-doc/python/
+    ln -s ${python.pkgs.six}/${python.sitePackages}/* $out/share/gtk-doc/python/
   '';
 
   doCheck = false; # requires a lot of stuff
