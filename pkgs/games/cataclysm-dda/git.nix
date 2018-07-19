@@ -38,7 +38,7 @@ stdenv.mkDerivation (common // rec {
   # make: *** [Makefile:687: obj/tiles/weather_data.o] Error 1
   enableParallelBuilding = false;
 
-  meta = common.meta // {
-    maintainers = with stdenv.lib.maintainers; [ rardiol ];
+  meta = with stdenv.lib.maintainers; common.meta // {
+    maintainers = common.meta.maintainers ++ [ rardiol ];
   };
 })

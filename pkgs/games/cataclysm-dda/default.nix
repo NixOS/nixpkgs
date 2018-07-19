@@ -46,7 +46,7 @@ stdenv.mkDerivation (common // rec {
   # Disable, possible problems with hydra
   #enableParallelBuilding = true;
 
-  meta = common.meta // {
-    maintainers = with stdenv.lib.maintainers; [ skeidel ];
+  meta = with stdenv.lib.maintainers; common.meta // {
+    maintainers = common.meta.maintainers ++ [ skeidel ];
   };
 })
