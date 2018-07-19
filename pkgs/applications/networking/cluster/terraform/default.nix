@@ -60,7 +60,7 @@ let
           # of plugins, which might be counterintuitive if someone just wants a vanilla Terraform.
           if actualPlugins == []
             then terraform.overrideAttrs (orig: { passthru = orig.passthru // passthru; })
-            else lib.appendToName "with-plugins "(stdenv.mkDerivation {
+            else lib.appendToName "with-plugins"(stdenv.mkDerivation {
               inherit (terraform) name;
               buildInputs = [ makeWrapper ];
 
