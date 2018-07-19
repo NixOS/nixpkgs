@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   CLUCENE_HOME = clucene_core;
 
   buildInputs =
-    [ zlib bzip2 libxml2 qt4 exiv2 clucene_core fam dbus ];
+    [ zlib bzip2 libxml2 qt4 exiv2 clucene_core fam dbus.out ];
 
   nativeBuildInputs = [ cmake pkgconfig perl ];
 
