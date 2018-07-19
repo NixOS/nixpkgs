@@ -122,6 +122,8 @@ let
           echo "file ipxe $out/netboot.ipxe" >> $out/nix-support/hydra-build-products
         '';
         preferLocalBuild = true;
+        # Allow acquiring individual files from netboot channel attr
+        inherit (build) netbootRamdisk kernel netbootIpxeScript;
       };
 
 in rec {
