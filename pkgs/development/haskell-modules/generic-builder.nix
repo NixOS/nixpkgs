@@ -422,6 +422,13 @@ stdenv.mkDerivation ({
     ''}
     ${optionalString enableSeparateDataOutput "mkdir -p $data"}
 
+    # Try to prevent hitting ARG_MAX
+    # skip-flags tells the wrappers to skip adding the LDFLAGS &
+    # CFLAGS automatically. This is unused in Haskell packages where
+    # dependencies are handled right here in the generic builder.
+    mkdir -p $out/nix-support
+    echo > $out/nix-support/skip-flags
+
     runHook postInstall
   '';
 
