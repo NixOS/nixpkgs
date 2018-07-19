@@ -123,6 +123,7 @@ in if configure == null then weechat else
     ${lib.concatMapStringsSep "\n" (p: lib.optionalString (p ? extraEnv) p.extraEnv) plugins}
     exec ${weechat}/bin/weechat "$@"
   '') // {
+    name = weechat.name;
     unwrapped = weechat;
     meta = weechat.meta;
   }
