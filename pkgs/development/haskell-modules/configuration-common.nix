@@ -244,19 +244,21 @@ self: super: {
   # base bound
   digit = doJailbreak super.digit;
 
-  # https://github.com/jwiegley/hnix/issues/98 - tied to an older deriving-compat
-  hnix = (overrideCabal super.hnix (old: {
+  # dontCheck: Can be removed once https://github.com/haskell-nix/hnix/commit/471712f is in (5.2 probably)
+  #   This is due to GenList having been removed from generic-random in 1.2.0.0
+  # doJailbreak: Can be removed once https://github.com/haskell-nix/hnix/pull/329 is in (5.2 probably)
+  #   This is due to hnix currently having an upper bound of <0.5 on deriving-compat, works just fine with our current version 0.5.1 though
+  hnix = dontCheck (doJailbreak (overrideCabal super.hnix (old: {
     patches = old.patches or [] ++ [
       # should land in hnix-5.2
       (pkgs.fetchpatch {
         url = "https://github.com/haskell-nix/hnix/commit/9cfe060a9dbe9e7c64867956a0523eed9661803a.patch";
         sha256 = "0ci4n7nw2pzqw0gkmkp4szzvxjyb143a4znjm39jmb0s397a68sh";
         name = "disable-hpack-test-by-default.patch";
-       })
+      })
     ];
     testHaskellDepends = old.testHaskellDepends or [] ++ [ pkgs.nix ];
-    broken = true;   # can't cope with deriving-compat 0.5.x.
-  }));
+  })));
 
   # Fails for non-obvious reasons while attempting to use doctest.
   search = dontCheck super.search;
