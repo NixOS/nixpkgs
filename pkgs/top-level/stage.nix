@@ -177,4 +177,6 @@ let
 
 in
   # Return the complete set of packages.
-  lib.fix toFix
+  # Note we use fix' instead of fix in order to perform an override
+  # of the package set from within.
+  lib.fix' toFix
