@@ -159,6 +159,10 @@ let
     };
   };
 
+  # Recurse into attrs definitions for all-packages.nix
+  recurse = self: super: if (config.dontRecurse or false) then {}
+                         else import ./recurse.nix self super;
+
   # The complete chain of package set builders, applied from top to bottom.
   # stdenvOverlays must be last as it brings package forward from the
   # previous bootstrapping phases which have already been overlayed.
@@ -169,6 +173,7 @@ let
     trivialBuilders
     splice
     allPackages
+    recurse
     otherPackageSets
     aliases
     configOverrides
