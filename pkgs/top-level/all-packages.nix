@@ -16766,8 +16766,6 @@ with pkgs;
 
   inferno = pkgsi686Linux.callPackage ../applications/inferno { };
 
-  inginious = callPackage ../servers/inginious {};
-
   inkscape = callPackage ../applications/graphics/inkscape {
     lcms = lcms2;
     poppler = poppler_0_61;
