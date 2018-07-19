@@ -21250,7 +21250,7 @@ with pkgs;
     lilypond = lilypond-unstable;
   };
 
-  lollypop-portal = callPackages ../misc/lollypop-portal { };
+  lollypop-portal = callPackage ../misc/lollypop-portal { };
 
   openlilylib-fonts = callPackage ../misc/lilypond/fonts.nix { };
 
