@@ -455,11 +455,11 @@ let
   };
 
   deoplete-nvim = buildVimPluginFrom2Nix { # created by nix#NixDerivation
-    name = "deoplete-nvim-2018-06-17";
+    name = "deoplete-nvim-2018-07-16";
     src = fetchgit {
-      url = "https://github.com/Shougo/deoplete.nvim";
-      rev = "62078d04aea43aceb7cbdcfc4b22cf8f7767f614";
-      sha256 = "1gc6hl3yi7h2mzw2sf1phnaphwmalyfqd6lfzmzq0lzf111mq9r3";
+      url = "git://github.com/Shougo/deoplete.nvim";
+      rev = "96fb777feeb2ddec46539cba2df501239db6512e";
+      sha256 = "0ymq5j06k4apr5kznydyjx72cyhr02vlxvamv4fybw1hvvsiqlir";
     };
     dependencies = [];
 
