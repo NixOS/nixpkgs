@@ -2,14 +2,14 @@
 
 buildGoPackage rec {
   name = "ical2org-${version}";
-  version="v.1.1.5";
+  version="1.1.5";
 
   goPackagePath = "github.com/rjhorniii/ical2org";
 
   src = fetchFromGitHub {
     owner = "rjhorniii";
     repo = "ical2org";
-    rev = "${version}";
+    rev = "v.${version}";
     sha256 = "0hdx2j2innjh0z4kxcfzwdl2d54nv0g9ai9fyacfiagjhnzgf7cm";
     fetchSubmodules = true;
   };
