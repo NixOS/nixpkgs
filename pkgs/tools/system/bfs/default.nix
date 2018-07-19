@@ -11,8 +11,6 @@ stdenv.mkDerivation rec {
     sha256 = "0a7zsipvndvg1kp2i35jrg9y9kncj7i6mp36dhpj8zjmkm5d5b8g";
   };
 
-  # Disable fstype test, tries to read /etc/mtab
-  patches = [ ./tests.patch ];
   postPatch = ''
     # Patch tests (both shebangs and usage in scripts)
     for f in $(find -type f -name '*.sh'); do
