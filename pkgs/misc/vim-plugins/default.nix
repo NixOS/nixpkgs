@@ -19,8 +19,9 @@ let
 
 
 # TL;DR
-# Add your plugin to ./vim-plugin-names
-# Regenerate via `nix-shell -I nixpkgs=/path/to/your/local/fork -p vimPlugins.pluginnames2nix --command "vim-plugin-names-to-nix +'w result' +qall"`
+# * Add your plugin to ./vim-plugin-names
+#   * sort -df ./vim-plugin-names > sorted && mv sorted vim-plugin-names
+# * Regenerate via `nix-shell -I nixpkgs=/path/to/your/local/fork -p vimPlugins.pluginnames2nix --command "vim-plugin-names-to-nix +silent +'w result' +qall"`
 # Note: pluginnames2nix will fetch any plugins in the file; to speed up the process,
 #       update ./vim-plugin-names to contain only plugins which need generation
 # Copy the generated expression(s) into this file from the ./result file.
