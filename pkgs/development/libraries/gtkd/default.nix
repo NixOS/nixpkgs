@@ -1,5 +1,5 @@
 { stdenv, fetchzip, atk, cairo, dmd, gdk_pixbuf, gnome3, gst_all_1, librsvg
-, pango, pkgconfig, substituteAll, which, gst_plugins_base }:
+, pango, pkgconfig, substituteAll, which }:
 
 stdenv.mkDerivation rec {
   name = "gtkd-${version}";
