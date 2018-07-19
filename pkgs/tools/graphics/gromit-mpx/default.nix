@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, autoreconfHook, autoconf, automake, pkgconfig
 , gtk, glib, pcre, libappindicator, libpthreadstubs, libXdmcp
-, libxkbcommon, epoxy, at-spi2-core, dbus, libdbusmenu-glib
+, libxkbcommon, epoxy, at-spi2-core, dbus, libdbusmenu
 }:
 
 stdenv.mkDerivation rec {
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     autoconf automake autoreconfHook
     gtk glib pcre libappindicator libpthreadstubs
     libXdmcp libxkbcommon epoxy at-spi2-core
-    dbus libdbusmenu-glib
+    dbus libdbusmenu
   ];
 
   meta = with stdenv.lib; {

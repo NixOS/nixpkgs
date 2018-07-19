@@ -1,5 +1,5 @@
 { stdenv, lib, buildGoPackage, fetchFromGitHub, runCommand
-, gpgme, libgpgerror, devicemapper, btrfs-progs, pkgconfig, ostree, libselinux
+, gpgme, libgpgerror, lvm2, btrfs-progs, pkgconfig, ostree, libselinux
 , go-md2man }:
 
 with stdenv.lib;
@@ -28,7 +28,7 @@ buildGoPackage rec {
   excludedPackages = "integration";
 
   nativeBuildInputs = [ pkgconfig (lib.getBin go-md2man) ];
-  buildInputs = [ gpgme libgpgerror devicemapper btrfs-progs ostree libselinux ];
+  buildInputs = [ gpgme libgpgerror lvm2 btrfs-progs ostree libselinux ];
 
   buildFlagsArray = ''
     -ldflags=
@@ -37,8 +37,8 @@ buildGoPackage rec {
   '';
 
   preBuild = ''
-    export CGO_CFLAGS="-I${getDev gpgme}/include -I${getDev libgpgerror}/include -I${getDev devicemapper}/include -I${getDev btrfs-progs}/include"
-    export CGO_LDFLAGS="-L${getLib gpgme}/lib -L${getLib libgpgerror}/lib -L${getLib devicemapper}/lib"
+    export CGO_CFLAGS="-I${getDev gpgme}/include -I${getDev libgpgerror}/include -I${getDev lvm2}/include -I${getDev btrfs-progs}/include"
+    export CGO_LDFLAGS="-L${getLib gpgme}/lib -L${getLib libgpgerror}/lib -L${getLib lvm2}/lib"
   '';
 
   postBuild = ''

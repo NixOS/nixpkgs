@@ -25,7 +25,7 @@
 , gitMinimal
 , glib
 , gnutar
-, json_glib
+, json-glib
 , libcap
 , libdwarf
 , libsoup
@@ -67,7 +67,7 @@ in stdenv.mkDerivation rec {
     elfutils
     flatpak
     glib
-    json_glib
+    json-glib
     libcap
     libdwarf
     libsoup
