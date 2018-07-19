@@ -1,20 +1,22 @@
-{ stdenv, fetchFromGitHub, gcc, gmp, libsigsegv, openssl, automake, autoconf, ragel,
-  cmake, re2c, libtool, ncurses, perl, zlib, python2, curl }:
+{ autoconf, automake, cmake, curl, fetchFromGitHub, gcc, git, gmp, libsigsegv,
+  libtool, meson, ncurses, ninja, openssl, pkgconfig, python2, ragel, re2c,
+  stdenv, zlib }:
 
 stdenv.mkDerivation rec {
   name = "urbit-${version}";
-  version = "0.4.5";
+  version = "0.6.0";
 
   src = fetchFromGitHub {
     owner = "urbit";
     repo = "urbit";
-    rev = "v${version}";
-    sha256 = "1zgxgqbz74nsgfyrvsnjj6xxpb64mrnby7bb5qy733sy04gmzgik";
+    rev = "urbit-${version}";
+    sha256 = "158mz6c6y5z1b6piid8hvrl5mcqh8q1ny185gz51jayia51azmgs";
+    fetchSubmodules = true;
   };
 
   buildInputs = with stdenv.lib; [
-    gcc gmp libsigsegv openssl automake autoconf ragel cmake re2c libtool
-    ncurses perl zlib python2 curl
+    autoconf automake cmake curl gcc git gmp libsigsegv libtool
+    meson ncurses ninja openssl pkgconfig python2 ragel re2c zlib
   ];
 
   # uses 'readdir_r' deprecated by glibc 2.24
@@ -24,12 +26,16 @@ stdenv.mkDerivation rec {
     :
   '';
 
+  postPatch = ''
+    patchShebangs .
+    substituteInPlace scripts/build --replace 'meson .' 'meson --prefix $out .'
+  '';
+
   buildPhase = ''
-    sed -i 's/-lcurses/-lncurses/' Makefile
-    mkdir -p $out
-    cp -r . $out/
-    cd $out
-    make
+    git init .
+    ./scripts/bootstrap
+    ./scripts/build
+    ninja -C ./build/ install
   '';
 
   installPhase = ''
