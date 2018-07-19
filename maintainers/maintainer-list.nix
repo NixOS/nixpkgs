@@ -93,6 +93,11 @@
     github = "adolfogc";
     name = "Adolfo E. García Castro";
   };
+  aepsil0n = {
+    email = "eduard.bopp@aepsil0n.de";
+    github = "aepsil0n";
+    name = "Eduard Bopp";
+  };
   aespinosa = {
     email = "allan.espinosa@outlook.com";
     github = "aespinosa";
@@ -1928,6 +1933,11 @@
     email = "kai.harries@gmail.com";
     github = "kaiha";
     name = "Kai Harries";
+  };
+  kalbasit = {
+    email = "wael.nasreddine@gmail.com";
+    github = "kalbasit";
+    name = "Wael Nasreddine";
   };
   kamilchm = {
     email = "kamil.chm@gmail.com";
@@ -4409,6 +4419,11 @@
   zef = {
     email = "zef@zef.me";
     name = "Zef Hemel";
+  };
+  zgrannan = {
+    email = "zgrannan@gmail.com";
+    github = "zgrannan";
+    name = "Zack Grannan";
   };
   zimbatm = {
     email = "zimbatm@zimbatm.com";

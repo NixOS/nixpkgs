@@ -1,0 +1,40 @@
+diff --git a/src/sage/interfaces/mwrank.py b/src/sage/interfaces/mwrank.py
+index 4417b59276..ae57ca2991 100644
+--- a/src/sage/interfaces/mwrank.py
++++ b/src/sage/interfaces/mwrank.py
+@@ -54,8 +54,9 @@ def Mwrank(options="", server=None, server_tmpdir=None):
+         sage: M = Mwrank('-v 0 -l')
+         sage: print(M('0 0 1 -1 0'))
+         Curve [0,0,1,-1,0] :    Rank = 1
+-        Generator 1 is [0:-1:1]; height 0.0511114082399688
+-        Regulator = 0.0511114082399688
++        Generator 1 is [0:-1:1]; height 0.051111408239969
++        Regulator = 0.051111408239969
++
+     """
+     global instances
+     try:
+diff --git a/src/sage/libs/eclib/wrap.cpp b/src/sage/libs/eclib/wrap.cpp
+index 5fd5693b53..d12468faa8 100644
+--- a/src/sage/libs/eclib/wrap.cpp
++++ b/src/sage/libs/eclib/wrap.cpp
+@@ -133,8 +133,8 @@ char* Curvedata_isogeny_class(struct Curvedata* E, int verbose)
+ 
+ 
+ int mw_process(struct Curvedata* curve, struct mw* m,
+-                      const struct bigint* x, const struct bigint* y,
+-                      const struct bigint* z, int sat)
++                      const bigint* x, const bigint* y,
++                      const bigint* z, int sat)
+ {
+   Point P(*curve, *x, *y, *z);
+   if (!P.isvalid())
+@@ -188,7 +188,7 @@ int mw_rank(struct mw* m)
+ }
+ 
+ /* Returns index and unsat long array, which user must deallocate */
+-int mw_saturate(struct mw* m, struct bigint* index, char** unsat,
++int mw_saturate(struct mw* m, bigint* index, char** unsat,
+                        long sat_bd, int odd_primes_only)
+ {
+   vector<long> v;

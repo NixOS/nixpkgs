@@ -46,6 +46,7 @@ let
       fetchSubmodules = true;
     };
 
+    patches = [ ./fix-stonesense.patch ];
     nativeBuildInputs = [ cmake perl XMLLibXML XMLLibXSLT fakegit ];
     # We don't use system libraries because dfhack needs old C++ ABI.
     buildInputs = [ zlib SDL ]

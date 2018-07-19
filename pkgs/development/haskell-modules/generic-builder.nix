@@ -160,6 +160,9 @@ let
     "--enable-library-for-ghci" # TODO: Should this be configurable?
   ] ++ optionals (enableDeadCodeElimination && (stdenv.lib.versionOlder "8.0.1" ghc.version)) [
      "--ghc-option=-split-sections"
+  ] ++ optionals dontStrip [
+    "--disable-library-stripping"
+    "--disable-executable-stripping"
   ] ++ optionals isGhcjs [
     "--ghcjs"
   ] ++ optionals isCross ([
@@ -391,6 +394,9 @@ stdenv.mkDerivation ({
         local pkgId=$( ${gnused}/bin/sed -n -e 's|^id: ||p' $packageConfFile )
         mv $packageConfFile $packageConfDir/$pkgId.conf
       done
+
+      # delete confdir if there are no libraries
+      find $packageConfDir -maxdepth 0 -empty -delete;
     ''}
     ${optionalString isGhcjs ''
       for exeDir in "$out/bin/"*.jsexe; do

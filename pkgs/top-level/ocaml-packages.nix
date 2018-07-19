@@ -242,9 +242,7 @@ let
 
     estring = callPackage ../development/ocaml-modules/estring { };
 
-    ezjsonm = callPackage ../development/ocaml-modules/ezjsonm {
-      lwt = ocaml_lwt;
-    };
+    ezjsonm = callPackage ../development/ocaml-modules/ezjsonm { };
 
     facile = callPackage ../development/ocaml-modules/facile { };
 
@@ -393,6 +391,10 @@ let
       else throw "lwt3 is not available for OCaml ${ocaml.version}";
 
     ocaml_lwt = if lib.versionOlder "4.02" ocaml.version then lwt3 else lwt2;
+
+    lwt_log = callPackage ../development/ocaml-modules/lwt_log {
+      lwt = lwt3;
+    };
 
     lwt_ppx = callPackage ../development/ocaml-modules/lwt/ppx.nix {
       lwt = lwt3;

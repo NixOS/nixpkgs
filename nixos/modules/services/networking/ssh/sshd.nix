@@ -198,6 +198,10 @@ in
           [ { type = "rsa"; bits = 4096; path = "/etc/ssh/ssh_host_rsa_key"; }
             { type = "ed25519"; path = "/etc/ssh/ssh_host_ed25519_key"; }
           ];
+        example =
+          [ { type = "rsa"; bits = 4096; path = "/etc/ssh/ssh_host_rsa_key"; rounds = 100; openSSHFormat = true; }
+            { type = "ed25519"; path = "/etc/ssh/ssh_host_ed25519_key"; rounds = 100; comment = "key comment"; }
+          ];
         description = ''
           NixOS can automatically generate SSH host keys.  This option
           specifies the path, type and size of each key.  See
@@ -358,7 +362,14 @@ in
 
                 ${flip concatMapStrings cfg.hostKeys (k: ''
                   if ! [ -f "${k.path}" ]; then
-                      ssh-keygen -t "${k.type}" ${if k ? bits then "-b ${toString k.bits}" else ""} -f "${k.path}" -N ""
+                      ssh-keygen \
+                        -t "${k.type}" \
+                        ${if k ? bits then "-b ${toString k.bits}" else ""} \
+                        ${if k ? rounds then "-a ${toString k.rounds}" else ""} \
+                        ${if k ? comment then "-C '${k.comment}'" else ""} \
+                        ${if k ? openSSHFormat && k.openSSHFormat then "-o" else ""} \
+                        -f "${k.path}" \
+                        -N ""
                   fi
                 '')}
               '';
@@ -404,6 +415,9 @@ in
         unixAuth = cfg.passwordAuthentication;
       };
 
+    # These values are merged with the ones defined externally, see:
+    # https://github.com/NixOS/nixpkgs/pull/10155
+    # https://github.com/NixOS/nixpkgs/pull/41745
     services.openssh.authorizedKeysFiles =
       [ ".ssh/authorized_keys" ".ssh/authorized_keys2" "/etc/ssh/authorized_keys.d/%u" ];
 

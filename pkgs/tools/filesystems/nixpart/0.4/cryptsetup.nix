@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, devicemapper, libgcrypt, libuuid, pkgconfig, popt
+{ stdenv, fetchurl, lvm2, libgcrypt, libuuid, pkgconfig, popt
 , enablePython ? true, python ? null
 }:
 
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
                 ++ stdenv.lib.optional enablePython "--enable-python";
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ devicemapper libgcrypt libuuid popt ]
+  buildInputs = [ lvm2 libgcrypt libuuid popt ]
              ++ stdenv.lib.optional enablePython python;
 
   meta = {

@@ -16,7 +16,7 @@
   # Strip most of attributes when evaluating to spare memory usage
 ,  scrubJobs ? true
   # Attributes passed to nixpkgs. Don't build packages marked as unfree.
-,  nixpkgsArgs ? { config = { allowUnfree = false; inHydra = true; }; }
+,  nixpkgsArgs ? { config = { allowUnfree = false; inHydra = true; allowAliases = false; }; }
 }:
 
 with import ./release-lib.nix { inherit supportedSystems scrubJobs nixpkgsArgs; };
@@ -166,6 +166,7 @@ let
     } // (mapTestOn ((packagePlatforms pkgs) // rec {
       haskell.compiler = packagePlatforms pkgs.haskell.compiler;
       haskellPackages = packagePlatforms pkgs.haskellPackages;
+      idrisPackages = packagePlatforms pkgs.idrisPackages;
 
       # Language packages disabled in https://github.com/NixOS/nixpkgs/commit/ccd1029f58a3bb9eca32d81bf3f33cb4be25cc66
 

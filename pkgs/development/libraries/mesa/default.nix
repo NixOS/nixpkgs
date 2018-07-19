@@ -67,7 +67,7 @@ let
 in
 
 let
-  version = "18.0.3";
+  version = "18.1.4";
   branch  = head (splitString "." version);
 in
 
@@ -81,7 +81,7 @@ let self = stdenv.mkDerivation {
       "ftp://ftp.freedesktop.org/pub/mesa/older-versions/${branch}.x/${version}/mesa-${version}.tar.xz"
       "https://mesa.freedesktop.org/archive/mesa-${version}.tar.xz"
     ];
-    sha256 = "0c4yskqwmh5k0wavjrkfcldafvnpcx8gjcx584bscxks69krd789";
+    sha256 = "12zm9hc3v4wnzhqyrvf2kfnz55idzdn82hs3ry940l45bn5lhq9h";
   };
 
   prePatch = "patchShebangs .";
@@ -154,7 +154,7 @@ let self = stdenv.mkDerivation {
     libX11 libXext libxcb libXt libXfixes libxshmfence
     libffi wayland wayland-protocols libvdpau libelf libXvMC
     libomxil-bellagio libva-minimal libpthreadstubs openssl/*or another sha1 provider*/
-    valgrind-light python2
+    valgrind-light python2 python2.pkgs.Mako
   ];
 
   enableParallelBuilding = true;
@@ -204,6 +204,11 @@ let self = stdenv.mkDerivation {
     # Update search path used by glvnd
     for js in $drivers/share/glvnd/egl_vendor.d/*.json; do
       substituteInPlace "$js" --replace '"libEGL_' '"'"$drivers/lib/libEGL_"
+    done
+
+    # Update search path used by pkg-config
+    for pc in $dev/lib/pkgconfig/{d3d,dri,xatracker}.pc; do
+      substituteInPlace "$pc" --replace $out $drivers
     done
   '' + optionalString (vulkanDrivers != []) ''
     # Update search path used by Vulkan (it's pointing to $out but

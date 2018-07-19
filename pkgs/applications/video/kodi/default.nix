@@ -19,7 +19,7 @@
 , libcrossguid, libmicrohttpd
 , bluez, doxygen, giflib, glib, harfbuzz, lcms2, libidn, libpthreadstubs, libtasn1, libXdmcp
 , libplist, p11-kit, zlib
-, dbusSupport ? true, dbus_libs ? null
+, dbusSupport ? true, dbus ? null
 , joystickSupport ? true, cwiid ? null
 , nfsSupport ? true, libnfs ? null
 , pulseSupport ? true, libpulseaudio ? null
@@ -30,7 +30,7 @@
 , vdpauSupport ? true, libvdpau ? null
 }:
 
-assert dbusSupport  -> dbus_libs != null;
+assert dbusSupport  -> dbus != null;
 assert nfsSupport   -> libnfs != null;
 assert pulseSupport -> libpulseaudio != null;
 assert rtmpSupport  -> rtmpdump != null;
@@ -139,7 +139,7 @@ in stdenv.mkDerivation rec {
       ffmpeg
       # libdvdcss libdvdnav libdvdread
     ]
-    ++ lib.optional  dbusSupport     dbus_libs
+    ++ lib.optional  dbusSupport     dbus
     ++ lib.optionals joystickSupport [ cwiid ]
     ++ lib.optional  nfsSupport      libnfs
     ++ lib.optional  pulseSupport    libpulseaudio

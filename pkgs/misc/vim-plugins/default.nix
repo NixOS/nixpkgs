@@ -1,5 +1,5 @@
 # TODO check that no license information gets lost
-{ fetchurl, stdenv, python, git, go, cmake, vim, vimUtils, perl, ruby
+{ config, lib, fetchurl, stdenv, python, git, go, cmake, vim, vimUtils, perl, ruby
 , which, fetchgit, llvmPackages, rustPlatform
 , xkb_switch, rustracerd, fzf, skim
 , python3, boost, icu, ncurses
@@ -14,9 +14,9 @@ let
 
   _skim = skim;
 
-inherit (vimUtils.override {inherit vim;}) rtpPath addRtp buildVimPlugin
-  buildVimPluginFrom2Nix vimHelpTags;
-in
+  inherit (vimUtils.override {inherit vim;}) rtpPath addRtp buildVimPlugin
+    buildVimPluginFrom2Nix vimHelpTags;
+
 
 # TL;DR
 # Add your plugin to ./vim-plugin-names
@@ -32,7 +32,7 @@ in
 # Documentation & usage see vim-utils.nix.
 # attribute names should be the same as used by vim-pi to make dependency
 # resolution work
-rec {
+  self = rec {
   # This is not a plugin, it provides bin/vim-open-buffer-with-plugins-derivations
   # which recreates this the following derivations based on ./vim-plugin-names
   pluginnames2nix = vimUtils.pluginnames2Nix {
@@ -52,114 +52,6 @@ rec {
 
   # Section II
   # Update with vimUtils.vimPlugins.pluginnames2Nix command
-
-  # aliasess
-  airline             = vim-airline;
-  alternative         = a-vim; # backwards compat, added 2014-10-21
-  bats                = bats-vim;
-  calendar            = calendar-vim;
-  coffee-script       = vim-coffee-script;
-  coffeeScript        = coffee-script; # backwards compat, added 2014-10-18
-  Solarized           = vim-colors-solarized;
-  solarized           = vim-colors-solarized;
-  colors-solarized    = vim-colors-solarized;
-  caw                 = caw-vim;
-  colorsamplerpack    = Colour_Sampler_Pack;
-  Colour_Sampler_Pack = Colour-Sampler-Pack;
-  command_T           = command-t; # backwards compat, added 2014-10-18
-  commentary          = vim-commentary;
-  committia           = committia-vim-git;
-  concealedyank       = concealedyank-vim;
-  context-filetype    = context_filetype-vim;
-  Cosco               = cosco-vim;
-  css_color_5056      = vim-css-color;
-  CSApprox            = csapprox;
-  csv                 = csv-vim;
-  ctrlp               = ctrlp-vim;
-  cute-python         = vim-cute-python-git;
-  denite              = denite-nvim;
-  easy-align          = vim-easy-align;
-  easygit             = vim-easygit;
-  easymotion          = vim-easymotion;
-  echodoc             = echodoc-vim;
-  eighties            = vim-eighties;
-  extradite           = vim-extradite;
-  fugitive            = vim-fugitive;
-  ghc-mod-vim         = ghcmod-vim;
-  ghcmod              = ghcmod-vim;
-  goyo                = goyo-vim;
-  Gist                = gist-vim;
-  gitgutter           = vim-gitgutter;
-  gundo               = gundo-vim;
-  Gundo               = gundo-vim; # backwards compat, added 2015-10-03
-  haskellConceal      = haskellconceal; # backwards compat, added 2014-10-18
-  haskellConcealPlus  = vim-haskellConcealPlus;
-  haskellconceal      = vim-haskellconceal;
-  hier                = vim-hier;
-  hlint-refactor      = hlint-refactor-vim;
-  hoogle              = vim-hoogle;
-  Hoogle              = vim-hoogle;
-  ipython             = vim-ipython;
-  latex-live-preview  = vim-latex-live-preview;
-  mayansmoke          = mayansmoke-git;
-  multiple-cursors    = vim-multiple-cursors;
-  necoGhc             = neco-ghc; # backwards compat, added 2014-10-18
-  neocomplete         = neocomplete-vim;
-  neoinclude          = neoinclude-vim;
-  neomru              = neomru-vim;
-  neosnippet          = neosnippet-vim;
-  neoyank             = neoyank-vim-git;
-  The_NERD_Commenter  = nerdcommenter;
-  The_NERD_tree       = nerdtree;
-  open-browser        = open-browser-vim;
-  pathogen            = vim-pathogen;
-  peskcolor           = peskcolor-vim-git;
-  polyglot            = vim-polyglot;
-  prettyprint         = vim-prettyprint;
-  quickrun            = vim-quickrun;
-  rainbow_parentheses = rainbow_parentheses-vim;
-  repeat              = vim-repeat;
-  riv                 = riv-vim;
-  rhubarb             = vim-rhubarb;
-  sensible            = vim-sensible;
-  signature           = vim-signature;
-  snipmate            = vim-snipmate;
-  sourcemap           = sourcemap-vim;
-  "sourcemap.vim"     = sourcemap-vim;
-  surround            = vim-surround;
-  sleuth              = vim-sleuth;
-  solidity            = vim-solidity;
-  stylish-haskell     = vim-stylish-haskell;
-  stylishHaskell      = stylish-haskell; # backwards compat, added 2014-10-18
-  Supertab            = supertab;
-  Syntastic           = syntastic;
-  SyntaxRange         = vim-SyntaxRange;
-  table-mode          = vim-table-mode;
-  taglist             = taglist-vim;
-  tabpagebuffer       = tabpagebuffer-vim;
-  tabpagecd           = vim-tabpagecd;
-  Tabular             = tabular;
-  Tagbar              = tagbar;
-  thumbnail           = thumbnail-vim;
-  tlib                = tlib_vim;
-  tmux-navigator      = vim-tmux-navigator;
-  tmuxNavigator       = tmux-navigator; # backwards compat, added 2014-10-18
-  tslime              = tslime-vim;
-  unite               = unite-vim;
-  UltiSnips           = ultisnips;
-  vim-grepper         = vim-grepper-git;
-  vim-test            = vim-test-git;
-  vimproc             = vimproc-vim;
-  vimshell            = vimshell-vim;
-  vinegar             = vim-vinegar;
-  watchdogs           = vim-watchdogs;
-  WebAPI              = webapi-vim;
-  wombat256           = wombat256-vim; # backwards compat, added 2015-7-8
-  yankring            = YankRing-vim;
-  Yankring            = YankRing-vim;
-  YouCompleteMe       = youcompleteme;
-  xterm-color-table   = xterm-color-table-vim;
-  zeavim              = zeavim-vim;
 
   fzfWrapper = buildVimPluginFrom2Nix {
     name = fzf.name;
@@ -3320,4 +3212,115 @@ rec {
     dependencies = [];
 
   };
-}
+
+} // lib.optionalAttrs (config.allowAliases or true) (with self; {
+
+  # aliasess
+  airline             = vim-airline;
+  alternative         = a-vim; # backwards compat, added 2014-10-21
+  bats                = bats-vim;
+  calendar            = calendar-vim;
+  coffee-script       = vim-coffee-script;
+  coffeeScript        = coffee-script; # backwards compat, added 2014-10-18
+  Solarized           = vim-colors-solarized;
+  solarized           = vim-colors-solarized;
+  colors-solarized    = vim-colors-solarized;
+  caw                 = caw-vim;
+  colorsamplerpack    = Colour_Sampler_Pack;
+  Colour_Sampler_Pack = Colour-Sampler-Pack;
+  command_T           = command-t; # backwards compat, added 2014-10-18
+  commentary          = vim-commentary;
+  committia           = committia-vim-git;
+  concealedyank       = concealedyank-vim;
+  context-filetype    = context_filetype-vim;
+  Cosco               = cosco-vim;
+  css_color_5056      = vim-css-color;
+  CSApprox            = csapprox;
+  csv                 = csv-vim;
+  ctrlp               = ctrlp-vim;
+  cute-python         = vim-cute-python-git;
+  denite              = denite-nvim;
+  easy-align          = vim-easy-align;
+  easygit             = vim-easygit;
+  easymotion          = vim-easymotion;
+  echodoc             = echodoc-vim;
+  eighties            = vim-eighties;
+  extradite           = vim-extradite;
+  fugitive            = vim-fugitive;
+  ghc-mod-vim         = ghcmod-vim;
+  ghcmod              = ghcmod-vim;
+  goyo                = goyo-vim;
+  Gist                = gist-vim;
+  gitgutter           = vim-gitgutter;
+  gundo               = gundo-vim;
+  Gundo               = gundo-vim; # backwards compat, added 2015-10-03
+  haskellConceal      = haskellconceal; # backwards compat, added 2014-10-18
+  haskellConcealPlus  = vim-haskellConcealPlus;
+  haskellconceal      = vim-haskellconceal;
+  hier                = vim-hier;
+  hlint-refactor      = hlint-refactor-vim;
+  hoogle              = vim-hoogle;
+  Hoogle              = vim-hoogle;
+  ipython             = vim-ipython;
+  latex-live-preview  = vim-latex-live-preview;
+  mayansmoke          = mayansmoke-git;
+  multiple-cursors    = vim-multiple-cursors;
+  necoGhc             = neco-ghc; # backwards compat, added 2014-10-18
+  neocomplete         = neocomplete-vim;
+  neoinclude          = neoinclude-vim;
+  neomru              = neomru-vim;
+  neosnippet          = neosnippet-vim;
+  neoyank             = neoyank-vim-git;
+  The_NERD_Commenter  = nerdcommenter;
+  The_NERD_tree       = nerdtree;
+  open-browser        = open-browser-vim;
+  pathogen            = vim-pathogen;
+  peskcolor           = peskcolor-vim-git;
+  polyglot            = vim-polyglot;
+  prettyprint         = vim-prettyprint;
+  quickrun            = vim-quickrun;
+  rainbow_parentheses = rainbow_parentheses-vim;
+  repeat              = vim-repeat;
+  riv                 = riv-vim;
+  rhubarb             = vim-rhubarb;
+  sensible            = vim-sensible;
+  signature           = vim-signature;
+  snipmate            = vim-snipmate;
+  sourcemap           = sourcemap-vim;
+  "sourcemap.vim"     = sourcemap-vim;
+  surround            = vim-surround;
+  sleuth              = vim-sleuth;
+  solidity            = vim-solidity;
+  stylish-haskell     = vim-stylish-haskell;
+  stylishHaskell      = stylish-haskell; # backwards compat, added 2014-10-18
+  Supertab            = supertab;
+  Syntastic           = syntastic;
+  SyntaxRange         = vim-SyntaxRange;
+  table-mode          = vim-table-mode;
+  taglist             = taglist-vim;
+  tabpagebuffer       = tabpagebuffer-vim;
+  tabpagecd           = vim-tabpagecd;
+  Tabular             = tabular;
+  Tagbar              = tagbar;
+  thumbnail           = thumbnail-vim;
+  tlib                = tlib_vim;
+  tmux-navigator      = vim-tmux-navigator;
+  tmuxNavigator       = tmux-navigator; # backwards compat, added 2014-10-18
+  tslime              = tslime-vim;
+  unite               = unite-vim;
+  UltiSnips           = ultisnips;
+  vim-grepper         = vim-grepper-git;
+  vim-test            = vim-test-git;
+  vimproc             = vimproc-vim;
+  vimshell            = vimshell-vim;
+  vinegar             = vim-vinegar;
+  watchdogs           = vim-watchdogs;
+  WebAPI              = webapi-vim;
+  wombat256           = wombat256-vim; # backwards compat, added 2015-7-8
+  yankring            = YankRing-vim;
+  Yankring            = YankRing-vim;
+  YouCompleteMe       = youcompleteme;
+  xterm-color-table   = xterm-color-table-vim;
+  zeavim              = zeavim-vim;
+});
+in self

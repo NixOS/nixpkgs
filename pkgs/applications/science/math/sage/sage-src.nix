@@ -84,6 +84,12 @@ stdenv.mkDerivation rec {
   ];
 
   packageUpgradePatches = [
+    (fetchpatch {
+      name = "cypari2-1.2.1.patch";
+      url = "https://git.sagemath.org/sage.git/patch/?h=62fe6eb15111327d930336d4252d5b23cbb22ab9";
+      sha256 = "1xax7vvs8h4xip16xcsp47xdb6lig6f2r3pl8cksvlz8lhgbyxh2";
+    })
+
     # matplotlib 2.2.2 deprecated `normed` (replaced by `density`).
     # This patch only ignores the warning. It would be equally easy to fix it
     # (by replacing all mentions of `normed` by `density`), but its better to
@@ -150,7 +156,12 @@ stdenv.mkDerivation rec {
       sha256 = "0fmw7pzbaxs2dshky6iw9pr8i23p9ih2y2lw661qypdrxh5xw03k";
       stripLen = 1;
     })
-    ./patches/revert-269c1e1551285.patch
+    (fetchpatch {
+      name = "revert-cddlib-doctest-changes.patch";
+      url = "https://git.sagemath.org/sage.git/patch/?id=269c1e1551285566b8ba7a2b890989e5590e9f11";
+      sha256 = "12bcjhq7hm2pmmj2bgjvcffjyls2x7q61ivlnaj5v5bsvhc183iy";
+      revert = true;
+    })
 
 
     # Only formatting changes.
@@ -170,6 +181,9 @@ stdenv.mkDerivation rec {
 
     # https://trac.sagemath.org/ticket/24838 rebased
     ./patches/pynac-0.7.22.patch
+
+    # https://trac.sagemath.org/ticket/25862
+    ./patches/eclib-20180710.patch
   ];
 
   patches = nixPatches ++ packageUpgradePatches;

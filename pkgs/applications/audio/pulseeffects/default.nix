@@ -18,8 +18,12 @@
 , sord
 , sratom
 , libbs2b
+, libsamplerate
+, libsndfile
 , boost
+, fftwFloat
 , calf
+, zita-convolver
 , zam-plugins
 , rubberband
 , mda_lv2
@@ -36,13 +40,13 @@ let
   ];
 in stdenv.mkDerivation rec {
   name = "pulseeffects-${version}";
-  version = "4.1.3";
+  version = "4.1.7";
 
   src = fetchFromGitHub {
     owner = "wwmm";
     repo = "pulseeffects";
     rev = "v${version}";
-    sha256 = "1f89msg8hzaf1pa9w3gaifb88dm0ca2wd81jlz3vr98hm7kxd85k";
+    sha256 = "13yj1958jsz76zxi3ag133i4337cicvm5b58l22g2xvbqa5vraq9";
   };
 
   nativeBuildInputs = [
@@ -61,11 +65,16 @@ in stdenv.mkDerivation rec {
     gtk3
     gtkmm3
     gst_all_1.gstreamer
+    gst_all_1.gst-plugins-base
     gst_all_1.gst-plugins-good
     gst_all_1.gst-plugins-bad
     lilv lv2 serd sord sratom
     libbs2b
+    libsamplerate
+    libsndfile
     boost
+    fftwFloat
+    zita-convolver
   ];
 
   postPatch = ''
@@ -74,6 +83,8 @@ in stdenv.mkDerivation rec {
   '';
 
   preFixup = ''
+    addToSearchPath GST_PLUGIN_SYSTEM_PATH_1_0 $out/lib/gstreamer-1.0
+
     gappsWrapperArgs+=(
       --set LV2_PATH "${stdenv.lib.makeSearchPath "lib/lv2" lv2Plugins}"
       --set LADSPA_PATH "${stdenv.lib.makeSearchPath "lib/ladspa" ladspaPlugins}"

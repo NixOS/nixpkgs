@@ -2,13 +2,13 @@
 , freetype, fontconfig, dbus, libXi, libXcursor, libXdamage, libXrandr
 , libXcomposite, libXext, libXfixes, libXrender, libX11, libXtst, libXScrnSaver
 , libxcb, makeWrapper, nodejs
-, nss, nspr, alsaLib, cups, expat, libudev, libpulseaudio }:
+, nss, nspr, alsaLib, cups, expat, udev, libpulseaudio }:
 
 let
   libPath = stdenv.lib.makeLibraryPath [
     stdenv.cc.cc gtk2 atk glib pango gdk_pixbuf cairo freetype fontconfig dbus
     libXi libXcursor libXdamage libXrandr libXcomposite libXext libXfixes libxcb
-    libXrender libX11 libXtst libXScrnSaver gnome3.gconf nss nspr alsaLib cups expat libudev libpulseaudio
+    libXrender libX11 libXtst libXScrnSaver gnome3.gconf nss nspr alsaLib cups expat udev libpulseaudio
   ];
 in
 stdenv.mkDerivation rec {

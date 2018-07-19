@@ -3,14 +3,14 @@
 , python36Packages, gnome3, glib, gst_all_1 }:
 
 stdenv.mkDerivation rec  {  
-  version = "0.9.519";
+  version = "0.9.521";
   name = "lollypop-${version}";
 
   src = fetchgit {
     url = "https://gitlab.gnome.org/World/lollypop";
     rev = "refs/tags/${version}";
     fetchSubmodules = true;
-    sha256 = "1v4p59w4yf86djk7xv1xwbximpjm64wn42il090w7q1wy04my6fl";
+    sha256 = "1iwv0fj50h0xynv152anisbq29jfbmb9hpm60kaa9a9hdiypskcc";
   };
 
   nativeBuildInputs = with python36Packages; [
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec  {
   ];
 
   buildInputs = [ glib ] ++ (with gnome3; [
-    easytag gsettings_desktop_schemas gtk3 libsecret libsoup totem-pl-parser
+    gsettings_desktop_schemas gtk3 libsecret libsoup totem-pl-parser
   ]) ++ (with gst_all_1; [
     gst-libav gst-plugins-bad gst-plugins-base gst-plugins-good gst-plugins-ugly
     gstreamer
