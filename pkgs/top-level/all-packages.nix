@@ -17703,7 +17703,7 @@ with pkgs;
 
   pavucontrol = callPackage ../applications/audio/pavucontrol { };
 
-  paraview = libsForQt5.callPackage ../applications/graphics/paraview { };
+  paraview = libsForQt59.callPackage ../applications/graphics/paraview { };
 
   packet = callPackage ../development/tools/packet { };
 
