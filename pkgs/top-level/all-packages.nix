@@ -35,6 +35,10 @@ with pkgs;
   # inside the set for derivations.
   recurseIntoAttrs = attrs: attrs // { recurseForDerivations = true; };
 
+  # Applying this to an attribute set will cause Hydra to look inside
+  # the set & build each derivation.
+  recurseOnHydra = attrs: attrs // { recurseForRelease = true; };
+
   stringsWithDeps = lib.stringsWithDeps;
 
   ### Evaluating the entire Nixpkgs naively will fail, make failure fast
@@ -45,7 +49,7 @@ with pkgs;
     by Hydra.
   '';
 
-  tests = recurseIntoAttrs (callPackages ../test {});
+  tests = callPackages ../test {};
 
   ### Nixpkgs maintainer tools
 
@@ -668,7 +672,7 @@ with pkgs;
 
   pass = callPackage ../tools/security/pass { };
 
-  passExtensions = recurseIntoAttrs pass.extensions;
+  passExtensions = recurseOnHydra pass.extensions;
 
   asc-key-to-qr-code-gif = callPackage ../tools/security/asc-key-to-qr-code-gif { };
 
@@ -722,7 +726,7 @@ with pkgs;
 
   androidsdk_extras = self.androidenv.androidsdk_8_0_extras;
 
-  webos = recurseIntoAttrs {
+  webos = recurseOnHydra {
     cmake-modules = callPackage ../development/mobile/webos/cmake-modules.nix { };
 
     novacom = callPackage ../development/mobile/webos/novacom.nix { };
@@ -1780,7 +1784,7 @@ with pkgs;
 
   ibus-qt = callPackage ../tools/inputmethods/ibus/ibus-qt.nix { };
 
-  ibus-engines = recurseIntoAttrs {
+  ibus-engines = recurseOnHydra {
     anthy = callPackage ../tools/inputmethods/ibus-engines/ibus-anthy { };
 
     hangul = callPackage ../tools/inputmethods/ibus-engines/ibus-hangul { };
@@ -2214,7 +2218,7 @@ with pkgs;
 
   emscriptenfastcomp = emscriptenfastcompPackages.emscriptenfastcomp;
 
-  emscriptenPackages = recurseIntoAttrs (callPackage ./emscripten-packages.nix { });
+  emscriptenPackages = recurseOnHydra (callPackage ./emscripten-packages.nix { });
 
   emscriptenStdenv = stdenv // { mkDerivation = buildEmscriptenPackage; };
 
@@ -2233,7 +2237,7 @@ with pkgs;
   elasticsearch5 = callPackage ../servers/search/elasticsearch/5.x.nix { };
   elasticsearch6 = callPackage ../servers/search/elasticsearch/6.x.nix { };
 
-  elasticsearchPlugins = recurseIntoAttrs (
+  elasticsearchPlugins = recurseOnHydra (
     callPackage ../servers/search/elasticsearch/plugins.nix { }
   );
 
@@ -2328,7 +2332,7 @@ with pkgs;
     plugins = [];
   };
 
-  fcitx-engines = recurseIntoAttrs {
+  fcitx-engines = recurseOnHydra {
 
     anthy = callPackage ../tools/inputmethods/fcitx-engines/fcitx-anthy { };
 
@@ -2565,7 +2569,7 @@ with pkgs;
 
   gawp = callPackage ../tools/misc/gawp { };
 
-  gazeboSimulator = recurseIntoAttrs rec {
+  gazeboSimulator = recurseOnHydra rec {
     sdformat = gazeboSimulator.sdformat4;
 
     sdformat3 = callPackage ../development/libraries/sdformat/3.nix { };
@@ -2775,7 +2779,7 @@ with pkgs;
   grails = callPackage ../development/web/grails { jdk = null; };
 
   graylog = callPackage ../tools/misc/graylog { };
-  graylogPlugins = recurseIntoAttrs (
+  graylogPlugins = recurseOnHydra (
     callPackage ../tools/misc/graylog/plugins.nix { }
   );
 
@@ -3117,7 +3121,7 @@ with pkgs;
       irods
       irods-icommands;
 
-  ignition = recurseIntoAttrs {
+  ignition = recurseOnHydra {
 
     math = callPackage ../development/libraries/ignition-math { };
 
@@ -3480,7 +3484,7 @@ with pkgs;
 
   netdata = callPackage ../tools/system/netdata { };
 
-  netsurf = recurseIntoAttrs (let callPackage = newScope pkgs.netsurf; in rec {
+  netsurf = recurseOnHydra (let callPackage = newScope pkgs.netsurf; in rec {
     # ui could be gtk, sixel or framebuffer. Note that console display (sixel)
     # requires a terminal that supports `sixel` capabilities such as mlterm
     # or xterm -ti 340
@@ -3954,7 +3958,7 @@ with pkgs;
 
   mt-st = callPackage ../tools/backup/mt-st {};
 
-  multitran = recurseIntoAttrs (let callPackage = newScope pkgs.multitran; in rec {
+  multitran = recurseOnHydra (let callPackage = newScope pkgs.multitran; in rec {
     multitrandata = callPackage ../tools/text/multitran/data { };
 
     libbtree = callPackage ../tools/text/multitran/libbtree { };
@@ -5401,7 +5405,7 @@ with pkgs;
 
   tmuxinator = callPackage ../tools/misc/tmuxinator { };
 
-  tmuxPlugins = recurseIntoAttrs (callPackage ../misc/tmux-plugins { });
+  tmuxPlugins = recurseOnHydra (callPackage ../misc/tmux-plugins { });
 
   tmsu = callPackage ../tools/filesystems/tmsu { };
 
@@ -6251,7 +6255,7 @@ with pkgs;
 
   eql = callPackage ../development/compilers/eql {};
 
-  elmPackages = recurseIntoAttrs (callPackage ../development/compilers/elm { });
+  elmPackages = recurseOnHydra (callPackage ../development/compilers/elm { });
 
   apache-flex-sdk = callPackage ../development/compilers/apache-flex-sdk { };
 
@@ -6588,7 +6592,7 @@ with pkgs;
 
   inherit (ocamlPackages.haxe) haxe_3_2 haxe_3_4;
   haxe = haxe_3_4;
-  haxePackages = recurseIntoAttrs (callPackage ./haxe-packages.nix { });
+  haxePackages = recurseOnHydra (callPackage ./haxe-packages.nix { });
   inherit (haxePackages) hxcpp;
 
   hhvm = callPackage ../development/compilers/hhvm { };
@@ -6611,7 +6615,7 @@ with pkgs;
     ocamlPackages = ocaml-ng.ocamlPackages_4_06;
   };
 
-  dotnetPackages = recurseIntoAttrs (callPackage ./dotnet-packages.nix {});
+  dotnetPackages = recurseOnHydra (callPackage ./dotnet-packages.nix {});
 
   glslang = callPackage ../development/compilers/glslang { };
 
@@ -6828,7 +6832,7 @@ with pkgs;
   llvm_35 = llvmPackages_35.llvm;
   llvm_34 = llvmPackages_34.llvm;
 
-  llvmPackages = recurseIntoAttrs llvmPackages_5;
+  llvmPackages = recurseOnHydra llvmPackages_5;
 
   llvmPackages_34 = callPackage ../development/compilers/llvm/3.4 ({
     isl = isl_0_12;
@@ -6899,7 +6903,7 @@ with pkgs;
 
   manticore = callPackage ../development/compilers/manticore { };
 
-  mentorToolchains = recurseIntoAttrs (
+  mentorToolchains = recurseOnHydra (
     pkgsi686Linux.callPackage ../development/compilers/mentor {}
   );
 
@@ -6983,7 +6987,7 @@ with pkgs;
   ocaml-ng = callPackage ./ocaml-packages.nix { };
   ocaml = ocamlPackages.ocaml;
 
-  ocamlPackages = recurseIntoAttrs ocaml-ng.ocamlPackages;
+  ocamlPackages = recurseOnHydra ocaml-ng.ocamlPackages;
 
   orc = callPackage ../development/compilers/orc { };
 
@@ -7036,7 +7040,7 @@ with pkgs;
 
   defaultCrateOverrides = callPackage ../build-support/rust/default-crate-overrides.nix { };
 
-  rustPlatform = recurseIntoAttrs (makeRustPlatform rust);
+  rustPlatform = recurseOnHydra (makeRustPlatform rust);
 
   makeRustPlatform = rust: lib.fix (self:
     let
@@ -7333,9 +7337,9 @@ with pkgs;
   lua5 = lua5_2_compat;
   lua = lua5;
 
-  lua51Packages = recurseIntoAttrs (callPackage ./lua-packages.nix { lua = lua5_1; });
-  lua52Packages = recurseIntoAttrs (callPackage ./lua-packages.nix { lua = lua5_2; });
-  luajitPackages = recurseIntoAttrs (callPackage ./lua-packages.nix { lua = luajit; });
+  lua51Packages = recurseOnHydra (callPackage ./lua-packages.nix { lua = lua5_1; });
+  lua52Packages = recurseOnHydra (callPackage ./lua-packages.nix { lua = lua5_2; });
+  luajitPackages = recurseOnHydra (callPackage ./lua-packages.nix { lua = luajit; });
 
   luaPackages = lua52Packages;
 
@@ -7411,19 +7415,19 @@ with pkgs;
   php = php72;
   phpPackages = php72Packages;
 
-  php56Packages = recurseIntoAttrs (callPackage ./php-packages.nix {
+  php56Packages = recurseOnHydra (callPackage ./php-packages.nix {
     php = php56;
   });
 
-  php70Packages = recurseIntoAttrs (callPackage ./php-packages.nix {
+  php70Packages = recurseOnHydra (callPackage ./php-packages.nix {
     php = php70;
   });
 
-  php71Packages = recurseIntoAttrs (callPackage ./php-packages.nix {
+  php71Packages = recurseOnHydra (callPackage ./php-packages.nix {
     php = php71;
   });
 
-  php72Packages = recurseIntoAttrs (callPackage ./php-packages.nix {
+  php72Packages = recurseOnHydra (callPackage ./php-packages.nix {
     php = php72;
   });
 
@@ -7456,7 +7460,7 @@ with pkgs;
   pure = callPackage ../development/interpreters/pure {
     llvm = llvm_35;
   };
-  purePackages = recurseIntoAttrs (callPackage ./pure-packages.nix {});
+  purePackages = recurseOnHydra (callPackage ./pure-packages.nix {});
 
   # Python interpreters. All standard library modules are included except for tkinter, which is
   # available as `pythonPackages.tkinter` and can be used as any other Python package.
@@ -7510,10 +7514,10 @@ with pkgs;
   };
 
   # Python package sets.
-  python27Packages = lib.hiPrioSet (recurseIntoAttrs python27.pkgs);
+  python27Packages = lib.hiPrioSet (recurseOnHydra python27.pkgs);
   python34Packages = python34.pkgs;
   python35Packages = python35.pkgs;
-  python36Packages = recurseIntoAttrs python36.pkgs;
+  python36Packages = recurseOnHydra python36.pkgs;
   python37Packages = python37.pkgs;
   pypyPackages = pypy.pkgs;
 
@@ -7522,7 +7526,7 @@ with pkgs;
 
   python2nix = callPackage ../tools/package-management/python2nix { };
 
-  pythonDocs = recurseIntoAttrs (callPackage ../development/interpreters/python/cpython/docs {});
+  pythonDocs = recurseOnHydra (callPackage ../development/interpreters/python/cpython/docs {});
 
   pypi2nix = callPackage ../development/tools/pypi2nix {
     pythonPackages = python3Packages;
@@ -8161,7 +8165,7 @@ with pkgs;
   gnumake42 = callPackage ../development/tools/build-managers/gnumake/4.2 { };
   gnumake = gnumake42;
 
-  gnustep = recurseIntoAttrs (callPackage ../desktops/gnustep {});
+  gnustep = recurseOnHydra (callPackage ../desktops/gnustep {});
 
   gob2 = callPackage ../development/tools/misc/gob2 { };
 
@@ -8738,7 +8742,7 @@ with pkgs;
 
   aspell = callPackage ../development/libraries/aspell { };
 
-  aspellDicts = recurseIntoAttrs (callPackages ../development/libraries/aspell/dictionaries.nix {});
+  aspellDicts = recurseOnHydra (callPackages ../development/libraries/aspell/dictionaries.nix {});
 
   aspellWithDicts = callPackage ../development/libraries/aspell/aspell-with-dicts.nix {
     aspell = aspell.override { searchNixProfiles = false; };
@@ -9024,7 +9028,7 @@ with pkgs;
   dotconf = callPackage ../development/libraries/dotconf { };
 
   # Multi-arch "drivers" which we want to build for i686.
-  driversi686Linux = recurseIntoAttrs {
+  driversi686Linux = recurseOnHydra {
     inherit (pkgsi686Linux)
       mesa_drivers
       vaapiIntel
@@ -9435,7 +9439,7 @@ with pkgs;
 
   gsettings-qt = libsForQt5.callPackage ../development/libraries/gsettings-qt { };
 
-  gst_all_1 = recurseIntoAttrs(callPackage ../development/libraries/gstreamer {
+  gst_all_1 = recurseOnHydra(callPackage ../development/libraries/gstreamer {
     callPackage = pkgs.newScope (pkgs // { libav = pkgs.ffmpeg; });
   });
 
@@ -9690,7 +9694,7 @@ with pkgs;
 
   hunspell = callPackage ../development/libraries/hunspell { };
 
-  hunspellDicts = recurseIntoAttrs (callPackages ../development/libraries/hunspell/dictionaries.nix {});
+  hunspellDicts = recurseOnHydra (callPackages ../development/libraries/hunspell/dictionaries.nix {});
 
   hunspellWithDicts = dicts: callPackage ../development/libraries/hunspell/wrapper.nix { inherit dicts; };
 
@@ -9820,7 +9824,7 @@ with pkgs;
         inherit lib fetchurl;
       };
     in
-      recurseIntoAttrs (makeOverridable mkFrameworks attrs);
+      recurseOnHydra (makeOverridable mkFrameworks attrs);
 
   keybinder = callPackage ../development/libraries/keybinder {
     automake = automake111x;
@@ -9843,7 +9847,7 @@ with pkgs;
   };
   kerberos = libkrb5; # TODO: move to aliases.nix
 
-  languageMachines = recurseIntoAttrs (import ../development/libraries/languagemachines/packages.nix { inherit callPackage; });
+  languageMachines = recurseOnHydra (import ../development/libraries/languagemachines/packages.nix { inherit callPackage; });
 
   lasso = callPackage ../development/libraries/lasso { };
 
@@ -11435,7 +11439,7 @@ with pkgs;
     developerBuild = true;
   });
 
-  qt56 = recurseIntoAttrs (makeOverridable
+  qt56 = recurseOnHydra (makeOverridable
     (import ../development/libraries/qt-5/5.6) {
       inherit newScope;
       inherit stdenv fetchurl makeSetupHook makeWrapper;
@@ -11449,7 +11453,7 @@ with pkgs;
 
   libsForQt56 = lib.makeScope qt56.newScope mkLibsForQt5;
 
-  qt59 = recurseIntoAttrs (makeOverridable
+  qt59 = recurseOnHydra (makeOverridable
     (import ../development/libraries/qt-5/5.9) {
       inherit newScope;
       inherit stdenv fetchurl makeSetupHook makeWrapper;
@@ -11464,7 +11468,7 @@ with pkgs;
 
   libsForQt59 = lib.makeScope qt59.newScope mkLibsForQt5;
 
-  qt511 = recurseIntoAttrs (makeOverridable
+  qt511 = recurseOnHydra (makeOverridable
     (import ../development/libraries/qt-5/5.11) {
       inherit newScope;
       inherit stdenv fetchurl fetchFromGitHub makeSetupHook makeWrapper;
@@ -11477,7 +11481,7 @@ with pkgs;
       inherit (gnome3) gtk3 dconf;
     });
 
-  libsForQt511 = recurseIntoAttrs (lib.makeScope qt511.newScope mkLibsForQt5);
+  libsForQt511 = recurseOnHydra (lib.makeScope qt511.newScope mkLibsForQt5);
 
   qt5 = qt511;
   libsForQt5 = libsForQt511;
@@ -12065,7 +12069,7 @@ with pkgs;
 
   unixODBC = callPackage ../development/libraries/unixODBC { };
 
-  unixODBCDrivers = recurseIntoAttrs (callPackages ../development/libraries/unixODBCDrivers {});
+  unixODBCDrivers = recurseOnHydra (callPackages ../development/libraries/unixODBCDrivers {});
 
   ustr = callPackage ../development/libraries/ustr { };
 
@@ -12491,7 +12495,7 @@ with pkgs;
 
   ### DEVELOPMENT / JAVA MODULES
 
-  javaPackages = recurseIntoAttrs (callPackage ./java-packages.nix { });
+  javaPackages = recurseOnHydra (callPackage ./java-packages.nix { });
 
   ### DEVELOPMENT / LISP MODULES
 
@@ -12516,7 +12520,7 @@ with pkgs;
     inherit clwrapper;
   };
 
-  lispPackages = recurseIntoAttrs (quicklispPackages_asdf_3_1 //
+  lispPackages = recurseOnHydra (quicklispPackages_asdf_3_1 //
     lispPackagesFor ((wrapLisp sbcl).override { asdf = asdf_3_1; }));
 
   quicklispPackagesFor = clwrapper: callPackage ../development/lisp-modules/quicklisp-to-nix.nix {
@@ -12532,7 +12536,7 @@ with pkgs;
 
   buildPerlPackage = callPackage ../development/perl-modules/generic perl;
 
-  perlPackages = recurseIntoAttrs (callPackage ./perl-packages.nix {
+  perlPackages = recurseOnHydra (callPackage ./perl-packages.nix {
     overrides = (config.perlPackageOverrides or (p: {})) pkgs;
   });
 
@@ -12698,7 +12702,7 @@ with pkgs;
       libmaa = callPackage ../servers/dict/libmaa.nix {};
   };
 
-  dictdDBs = recurseIntoAttrs (callPackages ../servers/dict/dictd-db.nix {});
+  dictdDBs = recurseOnHydra (callPackages ../servers/dict/dictd-db.nix {});
 
   dictDBCollector = callPackage ../servers/dict/dictd-db-collector.nix {};
 
@@ -13325,7 +13329,7 @@ with pkgs;
     inherit (darwin.apple_sdk.libs) Xplugin;
   };
 
-  xorg = recurseIntoAttrs (lib.callPackagesWith pkgs ../servers/x11/xorg {
+  xorg = recurseOnHydra (lib.callPackagesWith pkgs ../servers/x11/xorg {
     inherit clangStdenv fetchurl fetchgit fetchpatch stdenv intltool freetype fontconfig
       libxslt expat libpng zlib perl mesa_drivers spice-protocol libunwind
       dbus libuuid openssl gperf m4 libevdev tradcpp libinput mcpp makeWrapper autoreconfHook
@@ -13349,7 +13353,7 @@ with pkgs;
 
   youtrack = callPackage ../servers/jetbrains/youtrack.nix { };
 
-  zabbix = recurseIntoAttrs (callPackages ../servers/monitoring/zabbix {});
+  zabbix = recurseOnHydra (callPackages ../servers/monitoring/zabbix {});
 
   zabbix20 = callPackage ../servers/monitoring/zabbix/2.0.nix { };
   zabbix22 = callPackage ../servers/monitoring/zabbix/2.2.nix { };
@@ -13592,7 +13596,7 @@ with pkgs;
   nmon = callPackage ../os-specific/linux/nmon { };
 
   # GNU/Hurd core packages.
-  gnu = recurseIntoAttrs (callPackage ../os-specific/gnu {
+  gnu = recurseOnHydra (callPackage ../os-specific/gnu {
     inherit platform;
   });
 
@@ -13996,17 +14000,17 @@ with pkgs;
   linuxPackages_beagleboard = linuxPackagesFor pkgs.linux_beagleboard;
   linuxPackages_mptcp = linuxPackagesFor pkgs.linux_mptcp;
   linuxPackages_rpi = linuxPackagesFor pkgs.linux_rpi;
-  linuxPackages_4_4 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_4_4);
-  linuxPackages_4_9 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_4_9);
-  linuxPackages_4_14 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_4_14);
-  linuxPackages_4_17 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_4_17);
+  linuxPackages_4_4 = recurseOnHydra (linuxPackagesFor pkgs.linux_4_4);
+  linuxPackages_4_9 = recurseOnHydra (linuxPackagesFor pkgs.linux_4_9);
+  linuxPackages_4_14 = recurseOnHydra (linuxPackagesFor pkgs.linux_4_14);
+  linuxPackages_4_17 = recurseOnHydra (linuxPackagesFor pkgs.linux_4_17);
   # Don't forget to update linuxPackages_latest!
 
-  # Intentionally lacks recurseIntoAttrs, as -rc kernels will quite likely break out-of-tree modules and cause failed Hydra builds.
+  # Intentionally lacks recurseOnHydra, as -rc kernels will quite likely break out-of-tree modules and cause failed Hydra builds.
   linuxPackages_testing = linuxPackagesFor pkgs.linux_testing;
 
   linuxPackages_custom = { version, src, configfile, allowImportFromDerivation ? true }:
-    recurseIntoAttrs (linuxPackagesFor (pkgs.linuxManualConfig {
+    recurseOnHydra (linuxPackagesFor (pkgs.linuxManualConfig {
       inherit version src configfile stdenv allowImportFromDerivation;
       inherit (stdenv) hostPlatform;
     }));
@@ -14025,12 +14029,12 @@ with pkgs;
     in tinyLinuxPackages.kernel;
 
   # Build a kernel with bcachefs module
-  linuxPackages_testing_bcachefs = recurseIntoAttrs (linuxPackagesFor pkgs.linux_testing_bcachefs);
+  linuxPackages_testing_bcachefs = recurseOnHydra (linuxPackagesFor pkgs.linux_testing_bcachefs);
 
   # Build a kernel for Xen dom0
-  linuxPackages_xen_dom0 = recurseIntoAttrs (linuxPackagesFor (pkgs.linux.override { features.xen_dom0=true; }));
+  linuxPackages_xen_dom0 = recurseOnHydra (linuxPackagesFor (pkgs.linux.override { features.xen_dom0=true; }));
 
-  linuxPackages_latest_xen_dom0 = recurseIntoAttrs (linuxPackagesFor (pkgs.linux_latest.override { features.xen_dom0=true; }));
+  linuxPackages_latest_xen_dom0 = recurseOnHydra (linuxPackagesFor (pkgs.linux_latest.override { features.xen_dom0=true; }));
 
   # Hardened linux
   hardenedLinuxPackagesFor = kernel: linuxPackagesFor (kernel.override {
@@ -14040,25 +14044,25 @@ with pkgs;
     };
   });
 
-  linuxPackages_hardened = recurseIntoAttrs (hardenedLinuxPackagesFor pkgs.linux);
+  linuxPackages_hardened = recurseOnHydra (hardenedLinuxPackagesFor pkgs.linux);
   linux_hardened = linuxPackages_hardened.kernel;
 
-  linuxPackages_latest_hardened = recurseIntoAttrs (hardenedLinuxPackagesFor pkgs.linux_latest);
+  linuxPackages_latest_hardened = recurseOnHydra (hardenedLinuxPackagesFor pkgs.linux_latest);
   linux_latest_hardened = linuxPackages_latest_hardened.kernel;
 
-  linuxPackages_xen_dom0_hardened = recurseIntoAttrs (hardenedLinuxPackagesFor (pkgs.linux.override { features.xen_dom0=true; }));
+  linuxPackages_xen_dom0_hardened = recurseOnHydra (hardenedLinuxPackagesFor (pkgs.linux.override { features.xen_dom0=true; }));
 
-  linuxPackages_latest_xen_dom0_hardened = recurseIntoAttrs (hardenedLinuxPackagesFor (pkgs.linux_latest.override { features.xen_dom0=true; }));
+  linuxPackages_latest_xen_dom0_hardened = recurseOnHydra (hardenedLinuxPackagesFor (pkgs.linux_latest.override { features.xen_dom0=true; }));
 
-  linuxPackages_copperhead_lts = recurseIntoAttrs (hardenedLinuxPackagesFor pkgs.linux_copperhead_lts);
+  linuxPackages_copperhead_lts = recurseOnHydra (hardenedLinuxPackagesFor pkgs.linux_copperhead_lts);
 
   # Samus kernels
-  linuxPackages_samus_4_12 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_samus_4_12);
+  linuxPackages_samus_4_12 = recurseOnHydra (linuxPackagesFor pkgs.linux_samus_4_12);
   linuxPackages_samus_latest = linuxPackages_samus_4_12;
   linux_samus_latest = linuxPackages_samus_latest.kernel;
 
   # Hardkernel (Odroid) kernels.
-  linuxPackages_hardkernel_4_14 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_hardkernel_4_14);
+  linuxPackages_hardkernel_4_14 = recurseOnHydra (linuxPackagesFor pkgs.linux_hardkernel_4_14);
   linuxPackages_hardkernel_latest = linuxPackages_hardkernel_4_14;
   linux_hardkernel_latest = linuxPackages_hardkernel_latest.kernel;
 
@@ -14811,7 +14815,7 @@ with pkgs;
   # lohit-fonts.kannada lohit-fonts.malayalam lohit-fonts.marathi lohit-fonts.nepali lohit-fonts.odia
   # lohit-fonts.tamil-classical lohit-fonts.tamil lohit-fonts.telugu
   # lohit-fonts.kashmiri lohit-fonts.konkani lohit-fonts.maithili lohit-fonts.sindhi
-  lohit-fonts = recurseIntoAttrs ( callPackages ../data/fonts/lohit-fonts { } );
+  lohit-fonts = recurseOnHydra ( callPackages ../data/fonts/lohit-fonts { } );
 
   maia-icon-theme = callPackage ../data/icons/maia-icon-theme { };
 
@@ -15210,7 +15214,7 @@ with pkgs;
 
   schismtracker = callPackage ../applications/audio/schismtracker { };
 
-  altcoins = recurseIntoAttrs ( callPackage ../applications/altcoins { } );
+  altcoins = recurseOnHydra ( callPackage ../applications/altcoins { } );
 
   bitcoin = altcoins.bitcoin;
   clightning = altcoins.clightning;
@@ -15334,7 +15338,7 @@ with pkgs;
 
   bitmeter = callPackage ../applications/audio/bitmeter { };
 
-  bitscope = recurseIntoAttrs
+  bitscope = recurseOnHydra
     (callPackage ../applications/science/electronics/bitscope/packages.nix { });
 
   bitwig-studio1 =  callPackage ../applications/audio/bitwig-studio/bitwig-studio1.nix {
@@ -15714,7 +15718,7 @@ with pkgs;
 
   eaglemode = callPackage ../applications/misc/eaglemode { };
 
-  eclipses = recurseIntoAttrs (callPackage ../applications/editors/eclipse {
+  eclipses = recurseOnHydra (callPackage ../applications/editors/eclipse {
     jdk = jdk10;
   });
 
@@ -16200,7 +16204,7 @@ with pkgs;
 
   filezilla = callPackage ../applications/networking/ftp/filezilla { };
 
-  firefoxPackages = recurseIntoAttrs (callPackage ../applications/networking/browsers/firefox/packages.nix {
+  firefoxPackages = recurseOnHydra (callPackage ../applications/networking/browsers/firefox/packages.nix {
     callPackage = pkgs.newScope {
       inherit (gnome2) libIDL;
       libpng = libpng_apng;
@@ -16349,13 +16353,13 @@ with pkgs;
     plugins = null; # All packaged plugins enabled, if not explicit plugin list supplied
   };
 
-  gimpPlugins = recurseIntoAttrs (callPackage ../applications/graphics/gimp/plugins {});
+  gimpPlugins = recurseOnHydra (callPackage ../applications/graphics/gimp/plugins {});
 
   girara = callPackage ../applications/misc/girara {
     gtk = gtk3;
   };
 
-  gitAndTools = recurseIntoAttrs (callPackage ../applications/version-management/git-and-tools {});
+  gitAndTools = recurseOnHydra (callPackage ../applications/version-management/git-and-tools {});
 
   inherit (gitAndTools) git gitFull gitSVN git-cola svn2git git-radar git-secret git-secrets transcrypt git-crypt;
 
@@ -16412,7 +16416,7 @@ with pkgs;
     libart = pkgs.gnome2.libart_lgpl;
   };
 
-  jetbrains = (recurseIntoAttrs (callPackages ../applications/editors/jetbrains {
+  jetbrains = (recurseOnHydra (callPackages ../applications/editors/jetbrains {
     jdk = jetbrains.jdk;
     androidsdk = androidsdk_extras;
   }) // {
@@ -16869,13 +16873,13 @@ with pkgs;
     let
       mkApplications = import ../applications/kde;
       attrs = {
-        inherit stdenv lib libsForQt5 fetchurl recurseIntoAttrs;
+        inherit stdenv lib libsForQt5 fetchurl;
         inherit plasma5;
         inherit attica phonon;
         inherit okteta;
       };
     in
-      recurseIntoAttrs (makeOverridable mkApplications attrs);
+      recurseOnHydra (makeOverridable mkApplications attrs);
 
   inherit (kdeApplications)
     akonadi akregator ark dolphin ffmpegthumbs filelight gwenview k3b
@@ -17827,7 +17831,7 @@ with pkgs;
     gtksharp = gtk-sharp-2_0;
   };
 
-  plover = recurseIntoAttrs (callPackage ../applications/misc/plover { });
+  plover = recurseOnHydra (callPackage ../applications/misc/plover { });
 
   plugin-torture = callPackage ../applications/audio/plugin-torture { };
 
@@ -18257,7 +18261,7 @@ with pkgs;
 
   linuxstopmotion = callPackage ../applications/video/linuxstopmotion { };
 
-  sweethome3d = recurseIntoAttrs (  (callPackage ../applications/misc/sweethome3d { })
+  sweethome3d = recurseOnHydra (  (callPackage ../applications/misc/sweethome3d { })
                                  // (callPackage ../applications/misc/sweethome3d/editors.nix {
                                       sweethome3dApp = sweethome3d.application;
                                     })
@@ -18326,7 +18330,7 @@ with pkgs;
 
   smartgithg = callPackage ../applications/version-management/smartgithg { };
 
-  slimThemes = recurseIntoAttrs (callPackage ../applications/display-managers/slim/themes.nix {});
+  slimThemes = recurseOnHydra (callPackage ../applications/display-managers/slim/themes.nix {});
 
   smartdeblur = callPackage ../applications/graphics/smartdeblur { };
 
@@ -18397,7 +18401,7 @@ with pkgs;
 
   sublime = callPackage ../applications/editors/sublime/2 { };
 
-  sublime3Packages = recurseIntoAttrs (callPackage ../applications/editors/sublime/3/packages.nix { });
+  sublime3Packages = recurseOnHydra (callPackage ../applications/editors/sublime/3/packages.nix { });
 
   sublime3 = sublime3Packages.sublime3;
 
@@ -18591,7 +18595,7 @@ with pkgs;
 
   topydo = callPackage ../applications/misc/topydo {};
 
-  torchPackages = recurseIntoAttrs ( callPackage ../applications/science/machine-learning/torch {
+  torchPackages = recurseOnHydra ( callPackage ../applications/science/machine-learning/torch {
     lua = luajit ;
   } );
 
@@ -18848,7 +18852,7 @@ with pkgs;
 
   vscode-utils = callPackage ../misc/vscode-extensions/vscode-utils.nix {};
 
-  vscode-extensions = recurseIntoAttrs (callPackage ../misc/vscode-extensions {});
+  vscode-extensions = recurseOnHydra (callPackage ../misc/vscode-extensions {});
 
   vue = callPackage ../applications/misc/vue { };
 
@@ -19096,7 +19100,7 @@ with pkgs;
 
   kodiPlain = callPackage ../applications/video/kodi { };
 
-  kodiPlugins = recurseIntoAttrs (callPackage ../applications/video/kodi/plugins.nix {});
+  kodiPlugins = recurseOnHydra (callPackage ../applications/video/kodi/plugins.nix {});
 
   kodi = wrapKodi {
     kodi = kodiPlain;
@@ -19140,7 +19144,7 @@ with pkgs;
 
   xdotool = callPackage ../tools/X11/xdotool { };
 
-  xenPackages = recurseIntoAttrs (callPackage ../applications/virtualization/xen/packages.nix {});
+  xenPackages = recurseOnHydra (callPackage ../applications/virtualization/xen/packages.nix {});
 
   xen = xenPackages.xen-vanilla;
   xen-slim = xenPackages.xen-slim;
@@ -19493,7 +19497,7 @@ with pkgs;
 
   duckmarines = callPackage ../games/duckmarines { love = love_0_9; };
 
-  dwarf-fortress-packages = recurseIntoAttrs (callPackage ../games/dwarf-fortress { });
+  dwarf-fortress-packages = recurseOnHydra (callPackage ../games/dwarf-fortress { });
 
   dwarf-fortress = dwarf-fortress-packages.dwarf-fortress;
 
@@ -20005,7 +20009,7 @@ with pkgs;
 
   ue4 = callPackage ../games/ue4 { };
 
-  ue4demos = recurseIntoAttrs (callPackage ../games/ue4demos { });
+  ue4demos = recurseOnHydra (callPackage ../games/ue4demos { });
 
   ut2004Packages = callPackage ../games/ut2004 { };
 
@@ -20124,16 +20128,16 @@ with pkgs;
 
   clearlooks-phenix = callPackage ../misc/themes/clearlooks-phenix { };
 
-  deepin = recurseIntoAttrs (import ../desktops/deepin {
+  deepin = recurseOnHydra (import ../desktops/deepin {
     inherit pkgs libsForQt5;
     inherit (lib) makeScope;
   });
 
-  enlightenment = recurseIntoAttrs (callPackage ../desktops/enlightenment {
+  enlightenment = recurseOnHydra (callPackage ../desktops/enlightenment {
     callPackage = newScope pkgs.enlightenment;
   });
 
-  gnome2 = recurseIntoAttrs (callPackage ../desktops/gnome-2 {
+  gnome2 = recurseOnHydra (callPackage ../desktops/gnome-2 {
     callPackage = pkgs.newScope pkgs.gnome2;
     self = pkgs.gnome2;
   } // {
@@ -20148,9 +20152,9 @@ with pkgs;
     gtkmm = self.gtkmm2;
   });
 
-  gnome3 = recurseIntoAttrs (callPackage ../desktops/gnome-3 { });
+  gnome3 = recurseOnHydra (callPackage ../desktops/gnome-3 { });
 
-  gnomeExtensions = recurseIntoAttrs {
+  gnomeExtensions = recurseOnHydra {
     appindicator = callPackage ../desktops/gnome-3/extensions/appindicator { };
     battery-status = callPackage ../desktops/gnome-3/extensions/battery-status { };
     caffeine = callPackage ../desktops/gnome-3/extensions/caffeine { };
@@ -20175,16 +20179,16 @@ with pkgs;
 
   lumina = libsForQt5.callPackage ../desktops/lumina { };
 
-  lxqt = recurseIntoAttrs (import ../desktops/lxqt {
+  lxqt = recurseOnHydra (import ../desktops/lxqt {
     inherit pkgs libsForQt5 fetchFromGitHub;
     inherit (lib) makeScope;
   });
 
-  mate = recurseIntoAttrs (callPackage ../desktops/mate { });
+  mate = recurseOnHydra (callPackage ../desktops/mate { });
 
   maxx = callPackage ../desktops/maxx { };
 
-  pantheon = recurseIntoAttrs rec {
+  pantheon = recurseOnHydra rec {
     callPackage = newScope pkgs.pantheon;
     pantheon-terminal = callPackage ../desktops/pantheon/apps/pantheon-terminal { };
   };
@@ -20234,8 +20238,8 @@ with pkgs;
   xfce = xfce4-12;
   xfceUnstable = xfce4-13;
 
-  xfce4-12 = recurseIntoAttrs (callPackage ../desktops/xfce { });
-  xfce4-13 = recurseIntoAttrs (callPackage ../desktops/xfce4-13 { });
+  xfce4-12 = recurseOnHydra (callPackage ../desktops/xfce { });
+  xfce4-13 = recurseOnHydra (callPackage ../desktops/xfce4-13 { });
 
   xrandr-invert-colors = callPackage ../applications/misc/xrandr-invert-colors { };
 
@@ -20249,7 +20253,7 @@ with pkgs;
         inherit (gnome3) gconf gsettings-desktop-schemas;
       };
     in
-      recurseIntoAttrs (makeOverridable mkPlasma5 attrs);
+      recurseOnHydra (makeOverridable mkPlasma5 attrs);
 
   inherit (kdeFrameworks) kded kinit frameworkintegration;
 
@@ -21481,7 +21485,7 @@ with pkgs;
 
   retroarch = wrapRetroArch { retroarch = retroarchBare; };
 
-  libretro = recurseIntoAttrs (callPackage ../misc/emulators/retroarch/cores.nix {
+  libretro = recurseOnHydra (callPackage ../misc/emulators/retroarch/cores.nix {
     retroarch = retroarchBare;
   });
 
@@ -21638,7 +21642,7 @@ with pkgs;
   texFunctions = callPackage ../tools/typesetting/tex/nix pkgs;
 
   # TeX Live; see http://nixos.org/nixpkgs/manual/#sec-language-texlive
-  texlive = recurseIntoAttrs
+  texlive = recurseOnHydra
     (callPackage ../tools/typesetting/tex/texlive { });
 
   ib-tws = callPackage ../applications/office/ib/tws { jdk=oraclejdk8; };
@@ -21692,7 +21696,7 @@ with pkgs;
 
   vimUtils = callPackage ../misc/vim-plugins/vim-utils.nix { };
 
-  vimPlugins = recurseIntoAttrs (callPackage ../misc/vim-plugins {
+  vimPlugins = recurseOnHydra (callPackage ../misc/vim-plugins {
     inherit (darwin.apple_sdk.frameworks) Cocoa CoreFoundation CoreServices;
     llvmPackages = llvmPackages_39;
   });
@@ -21731,8 +21735,8 @@ with pkgs;
       minimal base full stable unstable staging;
   });
 
-  winePackages = recurseIntoAttrs (winePackagesFor (config.wine.build or "wine32"));
-  wineWowPackages = recurseIntoAttrs (winePackagesFor "wineWow");
+  winePackages = recurseOnHydra (winePackagesFor (config.wine.build or "wine32"));
+  wineWowPackages = recurseOnHydra (winePackagesFor "wineWow");
 
   wine = winePackages.full;
 
@@ -21839,7 +21843,7 @@ with pkgs;
 
   znc = callPackage ../applications/networking/znc { };
 
-  zncModules = recurseIntoAttrs (
+  zncModules = recurseOnHydra (
     callPackage ../applications/networking/znc/modules.nix { }
   );
 
@@ -21978,14 +21982,14 @@ with pkgs;
   apeClex = callPackage ../applications/misc/ape/apeclex.nix { };
 
   # Unix tools
-  unixtools = recurseIntoAttrs (callPackages ./unix-tools.nix { });
+  unixtools = callPackages ./unix-tools.nix { };
   inherit (unixtools) hexdump ps logger eject umount
                       mount wall hostname more sysctl getconf
                       getent locale killall xxd;
 
   fts = if hostPlatform.isMusl then netbsd.fts else null;
 
-  inherit (recurseIntoAttrs (callPackages ../os-specific/bsd { }))
+  inherit (callPackages ../os-specific/bsd { })
           netbsd;
 
   yrd = callPackage ../tools/networking/yrd { };

@@ -37,8 +37,7 @@ in
 
     boot.extraModulePackages = [ package ];
 
-    boot.kernelPackages =
-      pkgs.recurseIntoAttrs (pkgs.linuxPackagesFor kernel);
+    boot.kernelPackages = pkgs.linuxPackagesFor kernel;
 
     boot.blacklistedKernelModules = [ "radeon" ];
 
