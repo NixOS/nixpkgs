@@ -66,6 +66,15 @@ set -u
 # over no state, and there's no @-substitutions within, so any redefined
 # function is guaranteed to be exactly the same.
 ccWrapper_addCVars () {
+    # If a package has this file, we will not add any flags
+    # automatically. This is needed to fix the ARG_MAX issue in
+    # Haskell packages where many unused Haskell LDFLAGS are added.
+    # This causes some packages with large dependency graphs to hit
+    # the ARG_MAX threshold on macOS (and even Linux!)
+    if [[ -f "$1/nix-support/skip-flags" ]]; then
+        return
+    fi
+
     # See ../setup-hooks/role.bash
     local role_post role_pre
     getHostRoleEnvHook
