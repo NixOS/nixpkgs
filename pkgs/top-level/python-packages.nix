@@ -5499,23 +5499,6 @@ in {
 
   flask-babel = callPackage ../development/python-modules/flask-babel { };
 
-  flask_cache = buildPythonPackage rec {
-    name = "Flask-Cache-0.13.1";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/F/Flask-Cache/${name}.tar.gz";
-      sha256 = "90126ca9bc063854ef8ee276e95d38b2b4ec8e45fd77d5751d37971ee27c7ef4";
-    };
-
-    propagatedBuildInputs = with self; [ werkzeug flask ];
-
-    meta = {
-      homepage = https://github.com/thadeusb/flask-cache;
-      description = "Adds cache support to your Flask application";
-      license = "BSD";
-    };
-  };
-
   flask-caching = callPackage ../development/python-modules/flask-caching { };
 
   flask-common = callPackage ../development/python-modules/flask-common { };
@@ -15838,44 +15821,7 @@ EOF
     };
   };
 
-  graphite_api = buildPythonPackage rec {
-    name = "graphite-api-1.0.1";
-    disabled = isPyPy;
-
-    src = pkgs.fetchgit {
-      url = "https://github.com/brutasse/graphite-api.git";
-      rev = "b6f75e8a08fae695c094fece6de611b893fc65fb";
-      sha256 = "1n8h5krhv7hzmn336y9vjrmv6b6009lz5hj0d9wz7v1k2500ws5k";
-    };
-
-    checkPhase = "nosetests";
-
-    propagatedBuildInputs = with self; [
-      flask
-      flask_cache
-      cairocffi
-      pyparsing
-      pytz
-      pyyaml
-      raven
-      six
-      structlog
-      tzlocal
-    ];
-
-    buildInputs = with self; [
-      nose
-      mock
-    ];
-
-    LD_LIBRARY_PATH = "${pkgs.cairo.out}/lib";
-
-    meta = {
-      description = "Graphite-web, without the interface. Just the rendering HTTP API";
-      homepage = https://github.com/brutasse/graphite-api;
-      license = licenses.asl20;
-    };
-  };
+  graphite_api = callPackage ../development/python-modules/graphite-api { };
 
   graphite_beacon = buildPythonPackage rec {
     name = "graphite_beacon-0.27.0";
