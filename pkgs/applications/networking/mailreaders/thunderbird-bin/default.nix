@@ -7,7 +7,7 @@
 , cups
 , curl
 , dbus-glib
-, dbus_libs
+, dbus
 , fontconfig
 , freetype
 , gdk_pixbuf
@@ -86,7 +86,7 @@ stdenv.mkDerivation {
       cups
       curl
       dbus-glib
-      dbus_libs
+      dbus
       fontconfig
       freetype
       gdk_pixbuf

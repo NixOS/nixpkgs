@@ -2,7 +2,7 @@
 , which, git
 , boost, python2Packages
 , libxml2, zlib
-, openldap, lttngUst
+, openldap, lttng-ust
 , babeltrace, gperf
 , cunit, snappy
 , rocksdb, makeWrapper
@@ -84,11 +84,11 @@ let
     none = [ ];
   };
 
-  ceph-python-env = python2Packages.python.withPackages (ps: [ 
+  ceph-python-env = python2Packages.python.withPackages (ps: [
     ps.sphinx
     ps.flask
     ps.argparse
-    ps.cython 
+    ps.cython
     ps.setuptools
     ps.pip
     # Libraries needed by the python tools
@@ -105,9 +105,9 @@ stdenv.mkDerivation {
 
   inherit src;
 
-  patches = [ 
+  patches = [
  #	 ./ceph-patch-cmake-path.patch
-    ./0001-kv-RocksDBStore-API-break-additional.patch   
+    ./0001-kv-RocksDBStore-API-break-additional.patch
   ] ++ optionals stdenv.isLinux [
     ./0002-fix-absolute-include-path.patch
   ];
@@ -117,10 +117,10 @@ stdenv.mkDerivation {
     pkgconfig which git python2Packages.wrapPython makeWrapper
     (ensureNewerSourcesHook { year = "1980"; })
   ];
-  
+
   buildInputs = buildInputs ++ cryptoLibsMap.${cryptoStr} ++ [
-    boost ceph-python-env libxml2 optYasm optLibatomic_ops optLibs3 
-    malloc zlib openldap lttngUst babeltrace gperf cunit
+    boost ceph-python-env libxml2 optYasm optLibatomic_ops optLibs3
+    malloc zlib openldap lttng-ust babeltrace gperf cunit
     snappy rocksdb
   ] ++ optionals stdenv.isLinux [
     linuxHeaders libuuid udev keyutils optLibaio optLibxfs optZfs
@@ -130,28 +130,28 @@ stdenv.mkDerivation {
     optKinetic-cpp-client
   ];
 
-  
+
   preConfigure =''
     # rip off submodule that interfer with system libs
 	rm -rf src/boost
 	rm -rf src/rocksdb
-	
+
 	# require LD_LIBRARY_PATH for cython to find internal dep
 	export LD_LIBRARY_PATH="$PWD/build/lib:$LD_LIBRARY_PATH"
-	
+
 	# requires setuptools due to embedded in-cmake setup.py usage
 	export PYTHONPATH="${python2Packages.setuptools}/lib/python2.7/site-packages/:$PYTHONPATH"
   '';
 
-  cmakeFlags = [ 
+  cmakeFlags = [
     "-DENABLE_GIT_VERSION=OFF"
     "-DWITH_SYSTEM_BOOST=ON"
     "-DWITH_SYSTEM_ROCKSDB=ON"
     "-DWITH_LEVELDB=OFF"
-    
+
     # enforce shared lib
     "-DBUILD_SHARED_LIBS=ON"
-    
+
     # disable cephfs, cmake build broken for now
     "-DWITH_CEPHFS=OFF"
     "-DWITH_LIBCEPHFS=OFF"
@@ -163,7 +163,7 @@ stdenv.mkDerivation {
   '';
 
   enableParallelBuilding = true;
-  
+
   outputs = [ "dev" "lib" "out" "doc" ];
 
   meta = {

@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, cmake, python3, vulkan-headers, pkgconfig,
-  x11, libxcb, libXrandr, libXext, wayland, libGL_driver }:
+  xlibsWrapper, libxcb, libXrandr, libXext, wayland, libGL_driver }:
 let version = "1.1.77.0"; in
 assert version == vulkan-headers.version;
 stdenv.mkDerivation rec {
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ cmake python3 x11 libxcb libXrandr libXext wayland ];
+  buildInputs = [ cmake python3 xlibsWrapper libxcb libXrandr libXext wayland ];
   enableParallelBuilding = true;
 
   cmakeFlags = [

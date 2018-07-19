@@ -1,14 +1,15 @@
-{ stdenv, lib, fetchurl, dpkg, gnome2, gtk2, atk, glib, pango, gdk_pixbuf, cairo
+{ stdenv, lib, fetchurl, dpkg, gnome3, gtk2, atk, glib, pango, gdk_pixbuf, cairo
 , freetype, fontconfig, dbus, libXi, libXcursor, libXdamage, libXrandr
 , libXcomposite, libXext, libXfixes, libXrender, libX11, libXtst, libXScrnSaver
 , libxcb, makeWrapper, nodejs
-, nss, nspr, alsaLib, cups, expat, libudev, libpulseaudio }:
+, nss, nspr, alsaLib, cups, expat, systemd, libpulseaudio }:
 
+# FIXME: gnome3.gconf was unavailable when merging master into staging-next
 let
   libPath = stdenv.lib.makeLibraryPath [
     stdenv.cc.cc gtk2 atk glib pango gdk_pixbuf cairo freetype fontconfig dbus
     libXi libXcursor libXdamage libXrandr libXcomposite libXext libXfixes libxcb
-    libXrender libX11 libXtst libXScrnSaver gnome2.GConf nss nspr alsaLib cups expat libudev libpulseaudio
+    libXrender libX11 libXtst libXScrnSaver nss nspr alsaLib cups expat systemd libpulseaudio
   ];
 in
 stdenv.mkDerivation rec {

@@ -1,8 +1,6 @@
 { stdenv
-, bash
-, gnused
 , fetchFromGitHub
-, gettext
+, fetchpatch
 , pkgconfig
 , gtk3
 , granite
@@ -11,23 +9,30 @@
 , ninja
 , vala
 , libqalculate
-, elementary-cmake-modules
+, gobjectIntrospection
 , wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
   name = "nasc-${version}";
-  version = "0.4.6";
+  version = "0.4.7";
 
   src = fetchFromGitHub {
     owner = "parnold-x";
     repo = "nasc";
     rev = version;
-    sha256 = "01n4ldj5phrsv97vb04qvs9c1ip6v8wygx9llj704hly1il9fb54";
+    sha256 = "0p74953pdgsijvqj3msssqiwm6sc1hzp68dlmjamqrqirwgqv5aa";
   };
 
-  XDG_DATA_DIRS = stdenv.lib.concatStringsSep ":" [
-    "${granite}/share"
-    "${gnome3.libgee}/share"
+  patches = [
+    # Install libqalculatenasc.so
+    (fetchpatch {
+      url = https://github.com/parnold-x/nasc/commit/93a799f9afb3e32f3f1a54e056b59570aae2e437.patch;
+      sha256 = "1m32w2zaswzxnzbr7p3lf8s6fac4mjvfhm8v9k59b4jyzmvrl631";
+    })
+    (fetchpatch {
+      url = https://github.com/parnold-x/nasc/commit/570b49169326de154af2cf43c5f12268fff1dc6d.patch;
+      sha256 = "1y3w6rxn0453iscx2xg427wy1bd5kv4z1c41hhbjmg614ycp6bka";
+    })
   ];
 
   nativeBuildInputs = [
@@ -35,7 +40,8 @@ stdenv.mkDerivation rec {
     wrapGAppsHook
     vala
     cmake
-    gettext
+    ninja
+    gobjectIntrospection # for setup-hook
   ];
   buildInputs = [
     libqalculate
@@ -45,14 +51,6 @@ stdenv.mkDerivation rec {
     gnome3.libsoup
     gnome3.gtksourceview
   ];
-
-  prePatch = ''
-    substituteInPlace ./libqalculatenasc/libtool \
-      --replace "/bin/bash" "${bash}/bin/bash" \
-      --replace "/bin/sed" "${gnused}/bin/sed"
-    substituteInPlace ./libqalculatenasc/configure.inc \
-      --replace 'ac_default_path="/sbin:/usr/sbin:/bin:/usr/bin:/usr/local/bin:/usr/X11R6/bin"' 'ac_default_path=$PATH'
-  '';
 
   meta = with stdenv.lib; {
     description = "Do maths like a normal person";

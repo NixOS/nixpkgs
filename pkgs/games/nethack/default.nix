@@ -1,5 +1,6 @@
-{ stdenv, lib, fetchurl, writeScript, coreutils, ncurses, gzip, flex, bison, less
-, x11Mode ? false, libXaw, libXext, mkfontdir
+{ stdenv, lib, fetchurl, writeScript, coreutils, ncurses, gzip, flex, bison
+, less, makeWrapper
+, x11Mode ? false, qtMode ? false, libXaw, libXext, mkfontdir, pkgconfig, qt5
 }:
 
 let
@@ -8,6 +9,7 @@ let
     else throw "Unknown platform for NetHack: ${stdenv.system}";
   unixHint =
     if x11Mode then "linux-x11"
+    else if qtMode then "linux-qt4"
     else if stdenv.hostPlatform.isLinux  then "linux"
     else if stdenv.hostPlatform.isDarwin then "macosx10.10"
     # We probably want something different for Darwin
@@ -15,17 +17,27 @@ let
   userDir = "~/.config/nethack";
   binPath = lib.makeBinPath [ coreutils less ];
 
-in stdenv.mkDerivation {
-  name = "nethack${lib.optionalString x11Mode "-x11"}-3.6.1";
+in stdenv.mkDerivation rec {
+  version = "3.6.1";
+  name = if x11Mode then "nethack-x11-${version}"
+         else if qtMode then "nethack-qt-${version}"
+         else "nethack-${version}";
 
   src = fetchurl {
     url = "https://nethack.org/download/3.6.1/nethack-361-src.tgz";
     sha256 = "1dha0ijvxhx7c9hr0452h93x81iiqsll8bc9msdnp7xdqcfbz32b";
   };
 
-  buildInputs = [ ncurses ] ++ lib.optionals x11Mode [ libXaw libXext ];
+  buildInputs = [ ncurses ]
+                ++ lib.optionals x11Mode [ libXaw libXext ]
+                ++ lib.optionals qtMode [ gzip qt5.qtbase.bin qt5.qtmultimedia.bin ];
 
-  nativeBuildInputs = [ flex bison ] ++ lib.optionals x11Mode [ mkfontdir ];
+  nativeBuildInputs = [ flex bison ]
+                      ++ lib.optionals x11Mode [ mkfontdir ]
+                      ++ lib.optionals qtMode [
+                           pkgconfig mkfontdir qt5.qtbase.dev
+                           qt5.qtmultimedia.dev makeWrapper
+                         ];
 
   makeFlags = [ "PREFIX=$(out)" ];
 
@@ -36,6 +48,11 @@ in stdenv.mkDerivation {
       -e 's/^LEX *=.*/LEX = flex/' \
       -i sys/unix/Makefile.utl
     sed \
+      -e 's,^WINQT4LIB =.*,WINQT4LIB = `pkg-config Qt5Gui --libs` \\\
+            `pkg-config Qt5Widgets --libs` \\\
+            `pkg-config Qt5Multimedia --libs`,' \
+      -i sys/unix/Makefile.src
+    sed \
       -e 's,/bin/gzip,${gzip}/bin/gzip,g' \
       -e 's,^WINTTYLIB=.*,WINTTYLIB=-lncurses,' \
       -i sys/unix/hints/linux
@@ -45,6 +62,12 @@ in stdenv.mkDerivation {
       -e 's,^SHELLDIR=.*$,SHELLDIR=\$(PREFIX)/games,' \
       -i sys/unix/hints/macosx10.10
     sed -e '/define CHDIR/d' -i include/config.h
+    sed \
+      -e 's,^QTDIR *=.*,QTDIR=${qt5.qtbase.dev},' \
+      -e 's,CFLAGS.*QtGui.*,CFLAGS += `pkg-config Qt5Gui --cflags`,' \
+      -e 's,CFLAGS+=-DCOMPRESS.*,CFLAGS+=-DCOMPRESS=\\"${gzip}/bin/gzip\\" \\\
+        -DCOMPRESS_EXTENSION=\\".gz\\",' \
+      -i sys/unix/hints/linux-qt4
   '';
 
   configurePhase = ''
@@ -90,6 +113,12 @@ in stdenv.mkDerivation {
     EOF
     chmod +x $out/bin/nethack
     ${lib.optionalString x11Mode "mv $out/bin/nethack $out/bin/nethack-x11"}
+    ${lib.optionalString qtMode "mv $out/bin/nethack $out/bin/nethack-qt"}
+  '';
+
+  postFixup = lib.optionalString qtMode ''
+    wrapProgram $out/bin/nethack-qt \
+      --prefix QT_PLUGIN_PATH : "${qt5.qtbase}/${qt5.qtbase.qtPluginPrefix}"
   '';
 
   meta = with stdenv.lib; {

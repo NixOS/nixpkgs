@@ -5,7 +5,8 @@
   , pythonPackages, utillinux
 
   # these deps are hidden; cmake doesn't catch them
-  , gazeboSimulator, sdformat ? gazeboSimulator.sdformat, curl, tinyxml, qt4, x11
+  , gazeboSimulator, sdformat ? gazeboSimulator.sdformat, curl, tinyxml, qt4
+  , xlibsWrapper
   , withIgnitionTransport ? true
   , libav, withLibAvSupport ? true
   , openal, withAudioSupport ? false
@@ -60,7 +61,7 @@ stdenv.mkDerivation rec {
     # TODO: add these hidden deps to cmake configuration & submit upstream
     curl
     tinyxml
-    x11
+    xlibsWrapper
     qt4
   ] ++ optional stdenv.isLinux utillinux # on Linux needs uuid/uuid.h
     ++ optional withDocs doxygen

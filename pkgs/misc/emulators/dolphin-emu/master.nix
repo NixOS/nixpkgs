@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, makeWrapper, makeDesktopItem, pkgconfig, cmake, qt5
 , bluez, ffmpeg, libao, libGLU_combined, pcre, gettext, libXrandr, libusb, lzo
 , libpthreadstubs, libXext, libXxf86vm, libXinerama, libSM, libXdmcp, readline
-, openal, libudev, libevdev, portaudio, curl, alsaLib, miniupnpc, enet, polarssl
+, openal, udev, libevdev, portaudio, curl, alsaLib, miniupnpc, enet, mbedtls
 , soundtouch, sfml, vulkan-loader ? null, libpulseaudio ? null
 
 # - Inputs used for Darwin
@@ -36,10 +36,10 @@ in stdenv.mkDerivation rec {
   buildInputs = [
     curl ffmpeg libao libGLU_combined pcre gettext libpthreadstubs libpulseaudio
     libXrandr libXext libXxf86vm libXinerama libSM readline openal libXdmcp lzo
-    portaudio libusb libpng hidapi miniupnpc enet polarssl soundtouch sfml
+    portaudio libusb libpng hidapi miniupnpc enet mbedtls soundtouch sfml
     qt5.qtbase
   ] ++ stdenv.lib.optionals stdenv.isLinux [
-    bluez libudev libevdev alsaLib vulkan-loader
+    bluez udev libevdev alsaLib vulkan-loader
   ] ++ stdenv.lib.optionals stdenv.isDarwin [
     CoreBluetooth cf-private OpenGL ForceFeedback IOKit
   ];

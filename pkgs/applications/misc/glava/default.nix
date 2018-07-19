@@ -84,8 +84,9 @@ in
       mv $out/usr/bin/glava $out/bin/.glava-unwrapped
       rm -rf $out/usr
 
-      patchelf $out/bin/.glava-unwrapped \
+      patchelf \
         --set-rpath "$(patchelf --print-rpath $out/bin/.glava-unwrapped):${makeLibraryPath [ libGL ]}" \
+        $out/bin/.glava-unwrapped
 
       substitute ${wrapperScript} $out/bin/glava --subst-var out
       chmod +x $out/bin/glava

@@ -4,7 +4,7 @@ coreutils,  # mktemp
 grub2,      # grub-mount and grub-probe
 cryptsetup, # cryptsetup
 libuuid,    # blkid and blockdev
-libudev,    # udevadm udevinfo
+udev,    # udevadm udevinfo
 ntfs3g      # ntfs3g
 }:
 
@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
     done;
     for file in $out/bin/*; do
       wrapProgram $file \
-        --suffix PATH : ${stdenv.lib.makeBinPath [ grub2 libudev coreutils cryptsetup libuuid ntfs3g ]} \
+        --suffix PATH : ${stdenv.lib.makeBinPath [ grub2 udev coreutils cryptsetup libuuid ntfs3g ]} \
         --run "[ -d /var/lib/os-prober ] || mkdir /var/lib/os-prober"
     done;
   '';

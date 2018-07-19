@@ -1,13 +1,13 @@
 { stdenv, fetchurl, pkgs, lib, glibc, augeas, dnsutils, c-ares, curl,
   cyrus_sasl, ding-libs, libnl, libunistring, nss, samba, libnfsidmap, doxygen,
   python, python3, pam, popt, talloc, tdb, tevent, pkgconfig, ldb, openldap,
-  pcre, kerberos, cifs_utils, glib, keyutils, dbus, fakeroot, libxslt, libxml2,
-  libuuid, docbook_xml_xslt, ldap, systemd, nspr, check, cmocka, uid_wrapper,
+  pcre, kerberos, cifs-utils, glib, keyutils, dbus, fakeroot, libxslt, libxml2,
+  libuuid, docbook_xsl, ldap, systemd, nspr, check, cmocka, uid_wrapper,
   nss_wrapper, docbook_xml_dtd_44, ncurses, Po4a, http-parser, jansson
   , withSudo ? false }:
 
 let
-  docbookFiles = "${pkgs.docbook_xml_xslt}/share/xml/docbook-xsl/catalog.xml:${pkgs.docbook_xml_dtd_44}/xml/dtd/docbook/catalog.xml";
+  docbookFiles = "${pkgs.docbook_xsl}/share/xml/docbook-xsl/catalog.xml:${pkgs.docbook_xml_dtd_44}/xml/dtd/docbook/catalog.xml";
 in
 stdenv.mkDerivation rec {
   name = "sssd-${version}";
@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ augeas dnsutils c-ares curl cyrus_sasl ding-libs libnl libunistring nss
                   samba libnfsidmap doxygen python python3 popt
                   talloc tdb tevent pkgconfig ldb pam openldap pcre kerberos
-                  cifs_utils glib keyutils dbus fakeroot libxslt libxml2
+                  cifs-utils glib keyutils dbus fakeroot libxslt libxml2
                   libuuid ldap systemd nspr check cmocka uid_wrapper
                   nss_wrapper ncurses Po4a http-parser jansson ];
 

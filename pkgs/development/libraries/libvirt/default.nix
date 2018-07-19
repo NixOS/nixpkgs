@@ -1,6 +1,6 @@
 { stdenv, fetchurl, fetchgit
 , pkgconfig, makeWrapper, libtool, autoconf, automake
-, coreutils, libxml2, gnutls, devicemapper, perl, python2, attr
+, coreutils, libxml2, gnutls, perl, python2, attr
 , iproute, iptables, readline, lvm2, utillinux, systemd, libpciaccess, gettext
 , libtasn1, ebtables, libgcrypt, yajl, pmutils, libcap_ng, libapparmor
 , dnsmasq, libnl, libpcap, libxslt, xhtml1, numad, numactl, perlPackages
@@ -39,7 +39,7 @@ in stdenv.mkDerivation rec {
   ] ++ optionals (!buildFromTarball) [
     libtool autoconf automake
   ] ++ optionals stdenv.isLinux [
-    libpciaccess devicemapper lvm2 utillinux systemd libnl numad zfs
+    libpciaccess lvm2 lvm2 utillinux systemd libnl numad zfs
     libapparmor libcap_ng numactl attr parted
   ] ++ optionals (enableXen && stdenv.isLinux && stdenv.isx86_64) [
     xen
