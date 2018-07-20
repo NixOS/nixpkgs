@@ -27,7 +27,7 @@ buildGoPackage rec {
 
   meta = with stdenv.lib; {
     description = "Official Go implementation of the Livepeer protocol";
-    homepage = http://livepeer.org;
+    homepage = https://livepeer.org;
     license = licenses.mit;
     platforms = platforms.linux;
     maintainers = with maintainers; [ elitak ];
