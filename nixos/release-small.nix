@@ -38,7 +38,7 @@ in rec {
         login
         misc
         nat
-        nfs3
+        #nfs3  FIXME: temporarily disabled, see #43473
         openssh
         php-pcre
         predictable-interface-names
