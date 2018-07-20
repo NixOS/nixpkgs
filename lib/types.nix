@@ -412,6 +412,14 @@ rec {
         functor = (defaultFunctor name) // { payload = values; binOp = a: b: unique (a ++ b); };
       };
 
+    # A duration in time.
+    duration = mkOptionType rec {
+      name = "duration";
+      description = "time duration";
+      check = x: !(lib.durations.parse x ? error);
+      merge = mergeOneOption;
+    };
+
     # Either value of type `t1` or `t2`.
     either = t1: t2: mkOptionType rec {
       name = "either";

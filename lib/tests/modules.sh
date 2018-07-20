@@ -149,6 +149,10 @@ checkConfigOutput "1 2 3 4 5 6 7 8 9 10" config.result ./loaOf-with-long-list.ni
 # Check loaOf with many merges of lists.
 checkConfigOutput "1 2 3 4 5 6 7 8 9 10" config.result ./loaOf-with-many-list-merges.nix
 
+# Check duration.
+checkConfigOutput "1s 1ms" config.result ./declare-duration.nix ./define-duration-ok.nix
+checkConfigError 'The option value .* in .* is not of type.*time duration.*' config.result ./declare-duration.nix ./define-duration-error.nix
+
 cat <<EOF
 ====== module tests ======
 $pass Pass
