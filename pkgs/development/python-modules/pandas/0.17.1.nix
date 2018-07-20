@@ -23,7 +23,7 @@
 }:
 
 let
-  inherit (stdenv.lib) optional optionalString concatStringsSep;
+  inherit (stdenv.lib) optional optionalString;
   inherit (stdenv) isDarwin;
 in buildPythonPackage rec {
   pname = "pandas";

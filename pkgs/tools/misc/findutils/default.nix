@@ -3,8 +3,6 @@
 , buildPlatform, hostPlatform
 }:
 
-let inherit (stdenv.lib) optionals; in
-
 stdenv.mkDerivation rec {
   name = "findutils-4.6.0";
 

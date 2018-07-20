@@ -3,9 +3,9 @@
 
 let
   inherit (builtins) head tail length;
-  inherit (lib.trivial) and or;
+  inherit (lib.trivial) and;
   inherit (lib.strings) concatStringsSep;
-  inherit (lib.lists) fold concatMap concatLists all deepSeqList;
+  inherit (lib.lists) fold concatMap concatLists;
 in
 
 rec {

@@ -17,7 +17,7 @@ infoFile: let
     ${lib.concatStrings (map (dep: let
       inherit (dep)
         url sha1 groupId artifactId version
-        authenticated metadata extension repository-id;
+        authenticated metadata repository-id;
 
       versionDir = dep.unresolved-version or version;
 

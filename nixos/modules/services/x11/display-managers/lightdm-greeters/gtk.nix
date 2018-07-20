@@ -8,7 +8,7 @@ let
   ldmcfg = dmcfg.lightdm;
   cfg = ldmcfg.greeters.gtk;
 
-  inherit (pkgs) stdenv lightdm writeScript writeText;
+  inherit (pkgs) writeText;
 
   theme = cfg.theme.package;
   icons = cfg.iconTheme.package;

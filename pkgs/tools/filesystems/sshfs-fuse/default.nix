@@ -2,9 +2,7 @@
 , docutils
 }:
 
-let
-  inherit (stdenv.lib) optional;
-in stdenv.mkDerivation rec {
+stdenv.mkDerivation rec {
   version = "3.4.0";
   name = "sshfs-fuse-${version}";
 

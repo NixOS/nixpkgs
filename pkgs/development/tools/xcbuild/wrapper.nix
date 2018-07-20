@@ -7,8 +7,6 @@
 
 let
 
-  inherit (lib) toLower;
-
   toolchainName = "com.apple.dt.toolchain.XcodeDefault";
   sdkName = "${xcodePlatform}${sdkVer}";
 
