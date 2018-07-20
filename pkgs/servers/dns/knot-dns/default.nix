@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, gnutls, liburcu, lmdb, libcap_ng, libidn
+{ stdenv, fetchurl, pkgconfig, gnutls, liburcu, lmdb, libcap_ng, libidn2, libunistring
 , systemd, nettle, libedit, zlib, libiconv, libintl
 }:
 
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
-    gnutls liburcu libidn
+    gnutls liburcu libidn2 libunistring
     nettle libedit
     libiconv lmdb libintl
     # without sphinx &al. for developer documentation
