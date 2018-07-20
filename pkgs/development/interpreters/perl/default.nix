@@ -163,19 +163,10 @@ let
       sha256 = "02cic7lk91hgmsg8klkm2kv88m2a8y22m4m8gl4ydxbap2z7g42r";
     };
 
-    # https://github.com/arsv/perl-cross/issues/60
-    perl-cross-gcc7-patch = fetchpatch {
-      url = "https://github.com/arsv/perl-cross/commit/07208bc1707b8be3ea170c62c59120020cf0f87f.patch";
-      sha256 = "1gh8w9m5if2s0lrx2x8f8grp74d1l6d46m8jglpjm5a1kf55j810";
-    };
-
     depsBuildBuild = [ buildPackages.stdenv.cc makeWrapper ];
 
     postUnpack = ''
       unpackFile ${perl-cross-src}
-      cd perl-cross-*
-      patch -Np1 -i ${perl-cross-gcc7-patch}
-      cd ..
       cp -R perl-cross-${crossVersion}/* perl-${version}/
     '';
 
