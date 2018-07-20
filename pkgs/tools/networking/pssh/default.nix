@@ -20,6 +20,8 @@ pythonPackages.buildPythonApplication rec {
     done
   '';
 
+  propagatedBuildDependencies = [ openssh rsync ];
+
   meta = with stdenv.lib; {
     description = "Parallel SSH Tools";
     longDescription = ''
