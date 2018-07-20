@@ -5,7 +5,7 @@ import ./make-test.nix ({ pkgs, ...} : {
   };
 
   machine =
-    { config, lib, pkgs, ... }:
+    { lib, pkgs, ... }:
     with lib;
     { users.users.alice = { isNormalUser = true; extraGroups = [ "proc" ]; };
       users.users.sybil = { isNormalUser = true; group = "wheel"; };

@@ -4,7 +4,7 @@ import ../make-test.nix ({ pkgs, ... }:
   meta = with pkgs.stdenv.lib.maintainers; {
     maintainers = [ jflanglois ];
   };
-  machine = { config, pkgs, ... }: {
+  machine = { pkgs, ... }: {
     environment.systemPackages = [ pkgs.curl ];
     services.hitch = {
       enable = true;

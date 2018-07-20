@@ -6,7 +6,7 @@ import ./make-test.nix ({ pkgs, ...} : {
 
   nodes = {
     master =
-      { pkgs, config, ... }:
+      { pkgs, ... }:
 
       {
         services.mysql.enable = true;

@@ -8,7 +8,7 @@ import ./make-test.nix ({ pkgs, ... }: {
 
   nodes = {
     docker =
-      { config, pkgs, ... }: {
+      { ... }: {
         virtualisation = {
           diskSize = 2048;
           docker.enable = true;

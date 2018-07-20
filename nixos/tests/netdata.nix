@@ -8,7 +8,7 @@ import ./make-test.nix ({ pkgs, ...} : {
 
   nodes = {
     netdata =
-      { config, pkgs, ... }:
+      { pkgs, ... }:
         {
           environment.systemPackages = with pkgs; [ curl jq ];
           services.netdata.enable = true;

@@ -5,7 +5,7 @@ with import ../lib/testing.nix { inherit system; };
 let
   output = runInMachine {
     drv = pkgs.hello;
-    machine = { config, pkgs, ... }: { /* services.sshd.enable = true; */ };
+    machine = { ... }: { /* services.sshd.enable = true; */ };
   };
 in pkgs.runCommand "verify-output" { inherit output; } ''
   if [ ! -e "$output/bin/hello" ]; then

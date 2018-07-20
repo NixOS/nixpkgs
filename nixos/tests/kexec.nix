@@ -6,7 +6,7 @@ import ./make-test.nix ({ pkgs, ...} : {
     maintainers = [ eelco chaoflow ];
   };
 
-  machine = { config, pkgs, ... }:
+  machine = { ... }:
     { virtualisation.vlans = [ ]; };
 
   testScript =

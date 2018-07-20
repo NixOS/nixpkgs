@@ -1,5 +1,5 @@
 # Avahi daemon.
-{ config, lib, utils, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 
 with lib;
 

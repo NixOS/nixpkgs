@@ -1,9 +1,9 @@
-import ./make-test.nix ({ pkgs, ... } :
+import ./make-test.nix ({ ... } :
 
 let
   connAuthFile="beegfs/auth-def.key";
 
-  client = { config, pkgs, lib, ... } : {
+  client = { pkgs, ... } : {
     networking.firewall.enable = false;
     services.beegfsEnable = true;
     services.beegfs.default = {
@@ -31,7 +31,7 @@ let
   };
 
 
-  server = service : { config, pkgs, lib, ... } : {
+  server = service : { pkgs, ... } : {
     networking.firewall.enable = false;
     boot.initrd.postDeviceCommands = ''
       ${pkgs.e2fsprogs}/bin/mkfs.ext4 -L data /dev/vdb

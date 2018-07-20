@@ -1,7 +1,7 @@
 # This module gets rid of all dependencies on X11 client libraries
 # (including fontconfig).
 
-{ config, lib, pkgs, ... }:
+{ config, lib, ... }:
 
 with lib;
 

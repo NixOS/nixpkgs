@@ -97,7 +97,7 @@ let
     ${dir_cfg.extraConfig}
     '';
 
-  directorOptions = {name, config, ...}:
+  directorOptions = {...}:
   {
     options = {
       password = mkOption {
@@ -117,7 +117,7 @@ let
     };
   };
 
-  deviceOptions = {name, config, ...}:
+  deviceOptions = {...}:
   {
     options = {
       archiveDevice = mkOption {

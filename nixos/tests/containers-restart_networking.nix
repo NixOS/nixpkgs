@@ -17,7 +17,7 @@ let
       };
     };
   };
-in import ./make-test.nix ({ pkgs, lib, ...} :
+in import ./make-test.nix ({ pkgs, ...} :
 {
   name = "containers-restart_networking";
   meta = with pkgs.stdenv.lib.maintainers; {
@@ -25,7 +25,7 @@ in import ./make-test.nix ({ pkgs, lib, ...} :
   };
 
   nodes = {
-    client = { lib, pkgs, ... }: client_base // {
+    client = { lib, ... }: client_base // {
       virtualisation.vlans = [ 1 ];
 
       networking.bridges.br0 = {
@@ -38,7 +38,7 @@ in import ./make-test.nix ({ pkgs, lib, ...} :
       };
 
     };
-    client_eth1 = { lib, pkgs, ... }: client_base // {
+    client_eth1 = { lib, ... }: client_base // {
       networking.bridges.br0 = {
         interfaces = [ "eth1" ];
         rstp = false;
@@ -48,7 +48,7 @@ in import ./make-test.nix ({ pkgs, lib, ...} :
         br0.ipv4.addresses = [ { address = "192.168.1.2"; prefixLength = 24; } ];
       };
     };
-    client_eth1_rstp = { lib, pkgs, ... }: client_base // {
+    client_eth1_rstp = { lib, ... }: client_base // {
       networking.bridges.br0 = {
         interfaces = [ "eth1" ];
         rstp = true;

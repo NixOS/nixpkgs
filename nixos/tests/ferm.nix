@@ -7,7 +7,7 @@ import ./make-test.nix ({ pkgs, ...} : {
 
   nodes =
     { client =
-        { config, pkgs, ... }:
+        { pkgs, ... }:
         with pkgs.lib;
         {
           networking = {
@@ -16,7 +16,7 @@ import ./make-test.nix ({ pkgs, ...} : {
           };
       };
       server =
-        { config, pkgs, ... }:
+        { pkgs, ... }:
         with pkgs.lib;
         {
           networking = {

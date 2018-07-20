@@ -4,7 +4,7 @@ let
   carolPassword = "678287829ce4c67bc8b227e56d94422ee1b85fa11618157b2f591de6c6322b52";
 
   basicConfig =
-    { config, pkgs, ... }:
+    { ... }:
     { services.cjdns.enable = true;
 
       # Turning off DHCP isn't very realistic but makes
@@ -29,7 +29,7 @@ import ./make-test.nix ({ pkgs, ...} : {
   nodes = rec
     { # Alice finds peers over over ETHInterface.
       alice =
-        { config, ... }:
+        { ... }:
         { imports = [ basicConfig ];
 
           services.cjdns.ETHInterface.bind = "eth1";
@@ -41,7 +41,7 @@ import ./make-test.nix ({ pkgs, ...} : {
 
       # Bob explicitly connects to Carol over UDPInterface.
       bob =
-        { config, lib, nodes, ... }:
+        { ... }:
 
         { imports = [ basicConfig ];
 
@@ -63,7 +63,7 @@ import ./make-test.nix ({ pkgs, ...} : {
       # Carol listens on ETHInterface and UDPInterface,
       # but knows neither Alice or Bob.
       carol =
-        { config, lib, nodes, ... }:
+        { ... }:
         { imports = [ basicConfig ];
 
           environment.etc."cjdns.keys".text = ''

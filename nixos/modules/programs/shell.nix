@@ -1,6 +1,6 @@
 # This module defines a standard configuration for NixOS shells.
 
-{ config, lib, pkgs, ... }:
+{ config, lib, ... }:
 
 with lib;
 
