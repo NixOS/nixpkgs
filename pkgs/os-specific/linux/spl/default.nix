@@ -12,7 +12,7 @@ let
     , rev ? "spl-${version}"
     , broken ? false
     , patches ? []
-    } @ args : stdenv.mkDerivation rec {
+    }: stdenv.mkDerivation rec {
       name = "spl-${version}-${kernel.version}";
 
       src = fetchFromGitHub {
