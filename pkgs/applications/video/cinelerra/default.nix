@@ -7,7 +7,7 @@
 , fontconfig, intltool }:
 
 stdenv.mkDerivation {
-  name = "cinelerra-git";
+  name = "cinelerra-unstable-2016-01-12";
 
   # # REGION AUTO UPDATE:    { name="cinelerra"; type="git"; url="git://git.cinelerra.org/j6t/cinelerra.git"; }
   # src= sourceFromHead "cinelerra-9f9adf2ad5472886d5bc43a05c6aa8077cabd967.tar.gz"
