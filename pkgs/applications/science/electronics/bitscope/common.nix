@@ -60,10 +60,6 @@ let
       ${(wrapBinary libs) attrs.toolName}
     '';
   });
-  fhs = target: buildFHSUserEnv {
-    inherit (pkg) name;
-    runScript = target;
-  };
 in buildFHSUserEnv {
   name = "${attrs.toolName}-${attrs.version}";
   runScript = "${pkg.outPath}/bin/${attrs.toolName}";

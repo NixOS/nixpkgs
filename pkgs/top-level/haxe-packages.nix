@@ -2,7 +2,6 @@
 
 let
   self = haxePackages;
-  callPackage = newScope self;
   haxePackages = with self; {
 
     withCommas = stdenv.lib.replaceChars ["."] [","];

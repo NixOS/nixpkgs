@@ -6,10 +6,6 @@
 with lib;
 with import ../../lib/qemu-flags.nix { inherit pkgs; };
 
-let
-  kernel = config.boot.kernelPackages.kernel;
-in
-
 {
 
   # This option is a dummy that if used in conjunction with

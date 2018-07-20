@@ -6,8 +6,6 @@
 with lib;
 
 let
-  cfg = config.installer;
-
   makeProg = args: pkgs.substituteAll (args // {
     dir = "bin";
     isExecutable = true;

@@ -36,10 +36,6 @@ let
     if !isGhcjs
     then "haddock"
     else "haddock-ghcjs";
-  ghcName =
-    if !isGhcjs
-    then "ghc"
-    else "ghcjs";
   ghcDocLibDir =
     if !isGhcjs
     then ghc.doc + ''/share/doc/ghc*/html/libraries''

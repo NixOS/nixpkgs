@@ -12,8 +12,6 @@ let
   # and picking a the first 4:
   oathSnakeOilPassword1 = "143349";
   oathSnakeOilPassword2 = "801753";
-  oathSnakeOilPassword3 = "019933";
-  oathSnakeOilPassword4 = "403895";
 
   alicePassword = "foobar";
   # Generated via: mkpasswd -m sha-512 and passing in "foobar"

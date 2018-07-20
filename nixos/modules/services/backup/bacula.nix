@@ -97,17 +97,6 @@ let
     ${dir_cfg.extraConfig}
     '';
 
-  # TODO: by default use this config
-  bconsole_conf = pkgs.writeText "bconsole.conf"
-    ''
-    Director {
-      Name = ${dir_cfg.name};
-      Address = "localhost";
-      DirPort = ${toString dir_cfg.port};
-      Password = "${dir_cfg.password}";
-    }
-    '';
-
   directorOptions = {name, config, ...}:
   {
     options = {

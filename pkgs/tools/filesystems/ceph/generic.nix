@@ -44,8 +44,6 @@ let
   optExpat = shouldUsePkg expat;
   optCurl = shouldUsePkg curl;
   optFuse = shouldUsePkg fuse;
-  optLibibverbs = shouldUsePkg libibverbs;
-  optLibrdmacm = shouldUsePkg librdmacm;
   optLibedit = shouldUsePkg libedit;
   optLibatomic_ops = shouldUsePkg libatomic_ops;
   optKinetic-cpp-client = shouldUsePkg kinetic-cpp-client;
@@ -62,9 +60,6 @@ let
   optLibxfs = shouldUsePkg libxfs;
   optZfs = shouldUsePkg zfs;
 
-  hasMon = true;
-  hasMds = true;
-  hasOsd = true;
   hasRadosgw = optFcgi != null && optExpat != null && optCurl != null && optLibedit != null;
 
 

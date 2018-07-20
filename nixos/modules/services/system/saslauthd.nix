@@ -4,7 +4,6 @@ with lib;
 
 let
 
-  nssModulesPath = config.system.nssModules.path;
   cfg = config.services.saslauthd;
 
 in

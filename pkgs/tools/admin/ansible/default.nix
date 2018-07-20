@@ -3,19 +3,6 @@
 }:
 
 let
-  oldJinja = python2.override {
-    packageOverrides = self: super: {
-      jinja2 = super.jinja2.overridePythonAttrs (oldAttrs: rec {
-        version = "2.8.1";
-        src = oldAttrs.src.override {
-          inherit version;
-          sha256 = "14aqmhkc9rw5w0v311jhixdm6ym8vsm29dhyxyrjfqxljwx1yd1m";
-        };
-        doCheck = false;
-      });
-    };
-  };
-
   generic = { version, sha256, py ? python2 }: py.pkgs.buildPythonPackage rec {
     pname = "ansible";
     inherit version;

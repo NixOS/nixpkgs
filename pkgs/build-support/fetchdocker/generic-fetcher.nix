@@ -2,8 +2,6 @@
 let
   awk                   = "${gawk}/bin/awk";
   dockerCredentialsFile = import ./credentials.nix;
-  stripScheme           =
-    builtins.replaceStrings [ "https://" "http://" ] [ "" "" ];
 in
 { fetcher
 , name

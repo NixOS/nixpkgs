@@ -13,7 +13,6 @@
 }:
 
 let
-  isLua51 = lua.luaversion == "5.1";
   isLua52 = lua.luaversion == "5.2";
   isLuaJIT = (builtins.parseDrvName lua.name).name == "luajit";
 

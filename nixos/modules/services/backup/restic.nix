@@ -127,7 +127,6 @@ with lib;
       mapAttrs' (name: backup:
         let
           extraOptions = concatMapStrings (arg: " -o ${arg}") backup.extraOptions;
-          connectTo = elemAt (splitString ":" backup.repository) 1;
           resticCmd = "${pkgs.restic}/bin/restic${extraOptions}";
         in nameValuePair "restic-backups-${name}" ({
           environment = {

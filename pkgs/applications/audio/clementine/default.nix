@@ -4,15 +4,12 @@
 , qca2, pkgconfig, sparsehash, config, makeWrapper, runCommand, gst_plugins }:
 
 let
-  withSpotify = config.clementine.spotify or false;
   withIpod = config.clementine.ipod or false;
   withMTP = config.clementine.mtp or true;
   withCD = config.clementine.cd or true;
   withCloud = config.clementine.cloud or true;
 
   version = "1.3.1";
-
-  exeName = "clementine";
 
   src = fetchurl {
     url = https://github.com/clementine-player/Clementine/archive/1.3.1.tar.gz;

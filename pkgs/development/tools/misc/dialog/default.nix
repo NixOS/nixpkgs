@@ -3,8 +3,7 @@
 , unicodeSupport ? true
 }:
 
-let optional = stdenv.lib.optional;
-    optStr = stdenv.lib.optionalString;
+let optStr = stdenv.lib.optionalString;
     buildShared = !stdenv.isDarwin;
 in
 
