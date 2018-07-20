@@ -15528,6 +15528,8 @@ with pkgs;
     cmake = cmake_2_8;
   };
 
+  circleci = callPackage ../applications/misc/circleci { };
+
   codeblocks = callPackage ../applications/editors/codeblocks { };
   codeblocksFull = codeblocks.override { contribPlugins = true; };
 
