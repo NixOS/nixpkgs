@@ -4,7 +4,7 @@ stdenv.mkDerivation rec {
   name = "lzip-${version}";
   version = "1.20";
 
-  buildInputs = [ texinfo ];
+  nativeBuildInputs = [ texinfo ];
 
   src = fetchurl {
     url = "mirror://savannah/lzip/${name}.tar.gz";
@@ -27,6 +27,6 @@ stdenv.mkDerivation rec {
     homepage = http://www.nongnu.org/lzip/lzip.html;
     description = "A lossless data compressor based on the LZMA algorithm";
     license = stdenv.lib.licenses.gpl3Plus;
-    platforms = stdenv.lib.platforms.unix;
+    platforms = stdenv.lib.platforms.all;
   };
 }
