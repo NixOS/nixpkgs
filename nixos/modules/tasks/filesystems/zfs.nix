@@ -9,7 +9,6 @@ with lib;
 
 let
 
-  cfgSpl = config.boot.spl;
   cfgZfs = config.boot.zfs;
   cfgSnapshots = config.services.zfs.autoSnapshot;
   cfgSnapFlags = cfgSnapshots.flags;

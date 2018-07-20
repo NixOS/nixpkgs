@@ -20,8 +20,6 @@ in
 assert cargoVendorDir == null -> cargoSha256 != "unset";
 
 let
-  lib = stdenv.lib;
-
   cargoDeps = if cargoVendorDir == null
     then fetchcargo {
         inherit name src srcs sourceRoot cargoUpdateHook;

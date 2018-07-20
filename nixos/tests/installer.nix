@@ -58,9 +58,6 @@ let
     '';
 
 
-  channelContents = [ pkgs.rlwrap ];
-
-
   # The test script boots a NixOS VM, installs NixOS on an empty hard
   # disk, and then reboot from the hard disk.  It's parameterized with
   # a test script fragment `createPartitions', which must create

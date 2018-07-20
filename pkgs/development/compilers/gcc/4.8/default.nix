@@ -54,9 +54,6 @@ with builtins;
 
 let version = "4.8.5";
 
-    # Whether building a cross-compiler for GNU/Hurd.
-    crossGNU = targetPlatform != hostPlatform && targetPlatform.config == "i586-pc-gnu";
-
     enableParallelBuilding = true;
 
     patches = [ ]

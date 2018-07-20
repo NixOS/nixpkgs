@@ -309,7 +309,6 @@ rec {
               }
           else
             def;
-        listOnly = listOf elemType;
         attrOnly = attrsOf elemType;
       in mkOptionType rec {
         name = "loaOf";

@@ -7,16 +7,6 @@ let
 
   taskd = "${pkgs.taskserver}/bin/taskd";
 
-  mkVal = val:
-    if val == true then "true"
-    else if val == false then "false"
-    else if isList val then concatStringsSep ", " val
-    else toString val;
-
-  mkConfLine = key: val: let
-    result = "${key} = ${mkVal val}";
-  in optionalString (val != null && val != []) result;
-
   mkManualPkiOption = desc: mkOption {
     type = types.nullOr types.path;
     default = null;

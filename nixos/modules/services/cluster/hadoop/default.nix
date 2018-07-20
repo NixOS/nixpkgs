@@ -1,8 +1,5 @@
 { config, lib, pkgs, ...}:
-let 
-  cfg = config.services.hadoop;
-  hadoopConf = import ./conf.nix { hadoop = cfg; pkgs = pkgs; };
-in
+
 with lib;
 {
   imports = [ ./yarn.nix ./hdfs.nix ];

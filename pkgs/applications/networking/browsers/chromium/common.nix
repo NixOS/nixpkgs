@@ -43,10 +43,6 @@ let
   # source tree.
   extraAttrs = buildFun base;
 
-  gentooPatch = name: sha256: fetchpatch {
-    url = "https://gitweb.gentoo.org/repo/gentoo.git/plain/www-client/chromium/files/${name}";
-    inherit sha256;
-  };
   githubPatch = commit: sha256: fetchpatch {
     url = "https://github.com/chromium/chromium/commit/${commit}.patch";
     inherit sha256;

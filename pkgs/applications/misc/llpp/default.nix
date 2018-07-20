@@ -3,8 +3,7 @@
 
 assert lib.versionAtLeast (lib.getVersion ocaml) "4.02";
 
-let ocamlVersion = (builtins.parseDrvName (ocaml.name)).version;
-in stdenv.mkDerivation rec {
+stdenv.mkDerivation rec {
   name = "llpp-${version}";
   version = "2018-03-02";
 

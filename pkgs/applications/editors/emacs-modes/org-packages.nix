@@ -23,12 +23,6 @@ self:
 
     super = imported;
 
-    markBroken = pkg: pkg.override {
-      elpaBuild = args: self.elpaBuild (args // {
-        meta = (args.meta or {}) // { broken = true; };
-      });
-    };
-
     overrides = {
     };
 

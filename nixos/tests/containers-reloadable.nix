@@ -45,7 +45,6 @@ in {
   };
 
   testScript = {nodes, ...}: let
-    originalSystem = nodes.client.config.system.build.toplevel;
     c1System = nodes.client_c1.config.system.build.toplevel;
     c2System = nodes.client_c2.config.system.build.toplevel;
   in ''

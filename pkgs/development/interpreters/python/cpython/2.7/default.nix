@@ -33,7 +33,6 @@ let
   majorVersion = "2.7";
   minorVersion = "15";
   minorVersionSuffix = "";
-  pythonVersion = majorVersion;
   version = "${majorVersion}.${minorVersion}${minorVersionSuffix}";
   libPrefix = "python${majorVersion}";
   sitePackages = "lib/${libPrefix}/site-packages";
@@ -160,10 +159,6 @@ let
     # Never even try to use lchmod on linux,
     # don't rely on detecting glibc-isms.
   ++ optional hostPlatform.isLinux "ac_cv_func_lchmod=no";
-
-  postConfigure = if hostPlatform.isCygwin then ''
-    sed -i Makefile -e 's,PYTHONPATH="$(srcdir),PYTHONPATH="$(abs_srcdir),'
-  '' else null;
 
   buildInputs =
     optional (stdenv ? cc && stdenv.cc.libc != null) stdenv.cc.libc ++

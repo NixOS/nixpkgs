@@ -36,11 +36,6 @@
 let
   version = "3.2.1";
 
-  primus = if useNvidia then primusLib else primusLib.override { nvidia_x11 = null; };
-  primus_i686 = if useNvidia then primusLib_i686 else primusLib_i686.override { nvidia_x11 = null; };
-
-  primusLibs = lib.makeLibraryPath ([ primus ] ++ lib.optional (primusLib_i686 != null) primus_i686);
-
   nvidia_x11s = [ nvidia_x11 ]
                 ++ lib.optional nvidia_x11.useGLVND libglvnd
                 ++ lib.optionals (nvidia_x11_i686 != null)

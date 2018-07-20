@@ -9,8 +9,6 @@ let
   baseDir = "/run/dovecot2";
   stateDir = "/var/lib/dovecot";
 
-  canCreateMailUserGroup = cfg.mailUser != null && cfg.mailGroup != null;
-
   dovecotConf = concatStrings [
     ''
       base_dir = ${baseDir}

@@ -2,7 +2,6 @@
 
 let
    useX11 = stdenv.isi686 || stdenv.isx86_64;
-   useNativeCompilers = stdenv.isi686 || stdenv.isx86_64 || stdenv.isMips;
    inherit (stdenv.lib) optionals optionalString;
 in
 
