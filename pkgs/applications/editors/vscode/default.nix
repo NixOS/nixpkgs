@@ -2,7 +2,7 @@
   gtk2, makeWrapper, libXScrnSaver, libxkbfile, libsecret }:
 
 let
-  version = "1.25.0";
+  version = "1.25.1";
   channel = "stable";
 
   plat = {
@@ -12,9 +12,9 @@ let
   }.${stdenv.system};
 
   sha256 = {
-    "i686-linux" = "1dgn9swqax54pn5ykk97zdkkzyj46jambmnkb67cn44p29bw9s9m";
-    "x86_64-linux" = "0w2lzif7iilibvwhvg13gxarwz41qsb72s8hvj87mk5iqfdms1px";
-    "x86_64-darwin" = "08xhwvggflzh9lfc5s3jgrqb49yz4jdfii8sfq6v8w3c6yy8cdly";
+    "i686-linux" = "1qljnajk4h9ki5gvydh1b557fvhvcryvkrvypvz0pr804lpdqsmg";
+    "x86_64-linux" = "0f1lpwyxfchmbymzzxv97w9cy1z5pdljhwm49mc5v84aygmvnmjq";
+    "x86_64-darwin" = "1dgda1drij1c114xzv4hs44k7rx4x1vzghlxgii0h2rg641n6pbn";
   }.${stdenv.system};
 
   archive_fmt = if stdenv.system == "x86_64-darwin" then "zip" else "tar.gz";
