@@ -573,6 +573,11 @@ in {
 
   appdirs = callPackage ../development/python-modules/appdirs { };
 
+  appleseed = disabledIf isPy3k
+    (toPythonModule (pkgs.appleseed.override {
+      inherit (self) python;
+    }));
+
   application = callPackage ../development/python-modules/application { };
 
   appnope = buildPythonPackage rec {
