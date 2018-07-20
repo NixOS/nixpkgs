@@ -569,6 +569,10 @@ in {
         ${pkgs.openssl}/bin/openssl rand -hex 32 > ${cfg.statePath}/config/gitlab_shell_secret
 
         mkdir -p /run/gitlab
+
+        mkdir -p ${cfg.statePath}/uploads
+        ln -sf ${cfg.statePath}/uploads /run/gitlab/uploads
+
         mkdir -p ${cfg.statePath}/log
         [ -d /run/gitlab/log ] || ln -sf ${cfg.statePath}/log /run/gitlab/log
         [ -d /run/gitlab/tmp ] || ln -sf ${cfg.statePath}/tmp /run/gitlab/tmp
@@ -590,7 +594,7 @@ in {
         if [ -e ${cfg.statePath}/lib ]; then
           rm ${cfg.statePath}/lib
         fi
-        ln -sf ${pkgs.gitlab}/share/gitlab/lib ${cfg.statePath}/lib
+        ln -sf ${cfg.packages.gitlab}/share/gitlab/lib ${cfg.statePath}/lib
         cp ${cfg.packages.gitlab}/share/gitlab/VERSION ${cfg.statePath}/VERSION
 
         # JSON is a subset of YAML
