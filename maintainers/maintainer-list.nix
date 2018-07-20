@@ -589,6 +589,11 @@
     github = "c0bw3b";
     name = "Renaud";
   };
+  c0deaddict = {
+    email = "josvanbakel@protonmail.com";
+    github = "c0deaddict";
+    name = "Jos van Bakel";
+  };
   c0dehero = {
     email = "codehero@nerdpol.ch";
     name = "CodeHero";
