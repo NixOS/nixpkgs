@@ -707,6 +707,8 @@ self: super: {
   # vaultenv is not available from Hackage.
   vaultenv = self.callPackage ../tools/haskell/vaultenv { };
 
+  futhark = self.callPackage ../compilers/futhark { };
+
   # https://github.com/Philonous/hs-stun/pull/1
   # Remove if a version > 0.1.0.1 ever gets released.
   stunclient = overrideCabal super.stunclient (drv: {
