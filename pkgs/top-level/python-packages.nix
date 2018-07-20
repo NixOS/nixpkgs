@@ -4574,6 +4574,8 @@ in {
 
   };
 
+  pywavelets = callPackage ../development/python-modules/pywavelets { };
+
   zope_deprecation = buildPythonPackage rec {
     name = "zope.deprecation-4.1.2";
 
