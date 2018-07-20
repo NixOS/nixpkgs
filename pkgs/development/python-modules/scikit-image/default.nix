@@ -2,30 +2,35 @@
 , fetchPypi
 , buildPythonPackage
 , cython
-, dask
-, nose
 , numpy
 , scipy
-, six
-, pillow
 , matplotlib
 , networkx
+, six
+, pillow
+, pywavelets
+, dask
+, cloudpickle
+, nose
+, pytest
 }:
 
 buildPythonPackage rec {
   pname = "scikit-image";
-  version = "0.12.3";
+  version = "0.14.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1iypjww5hk46i9vzg2zlfc9w4vdw029cfyakkkl02isj1qpiknl2";
+    sha256 = "325f75eb80fbc5371136e37f323445309ca9f65b6c6f718d0d0e2189e5de1224";
   };
 
-  buildInputs = [ cython dask nose ];
+  buildInputs = [ cython ];
 
-  propagatedBuildInputs = [ pillow matplotlib networkx scipy six numpy ];
+  propagatedBuildInputs = [ numpy scipy matplotlib networkx six pillow pywavelets dask cloudpickle ];
 
-  # the test fails because the loader cannot create test objects!
+  checkInputs = [ pytest ];
+
+  # No tests in archive
   doCheck = false;
 
   meta = {
