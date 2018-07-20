@@ -334,9 +334,8 @@ in rec {
   tests.networking.scripted = callSubTests tests/networking.nix { networkd = false; };
   # TODO: put in networking.nix after the test becomes more complete
   tests.networkingProxy = callTest tests/networking-proxy.nix {};
-  # FIXME: temporarily disabled, see #43473
-  #tests.nfs3 = callTest tests/nfs.nix { version = 3; };
-  #tests.nfs4 = callTest tests/nfs.nix { version = 4; };
+  tests.nfs3 = callTest tests/nfs.nix { version = 3; };
+  tests.nfs4 = callTest tests/nfs.nix { version = 4; };
   tests.nginx = callTest tests/nginx.nix { };
   tests.nghttpx = callTest tests/nghttpx.nix { };
   tests.nix-ssh-serve = callTest tests/nix-ssh-serve.nix { };
