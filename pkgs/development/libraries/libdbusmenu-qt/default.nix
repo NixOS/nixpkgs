@@ -3,7 +3,7 @@
 let
   baseName = "libdbusmenu-qt";
   v = "0.9.2";
-  homepage = "http://launchpad.net/${baseName}";
+  homepage = "https://launchpad.net/${baseName}";
   name = "${baseName}-${v}";
 in
 
@@ -19,7 +19,7 @@ stdenv.mkDerivation {
   nativeBuildInputs = [ cmake ];
 
   cmakeFlags = "-DWITH_DOC=OFF";
-  
+
   meta = with stdenv.lib; {
     description = "Provides a Qt implementation of the DBusMenu spec";
     inherit homepage;
