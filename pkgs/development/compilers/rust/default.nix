@@ -1,11 +1,11 @@
-{ stdenv, callPackage, recurseIntoAttrs, makeRustPlatform, llvm, fetchurl
+{ stdenv, callPackage, makeRustPlatform, llvm, fetchurl
 , targets ? []
 , targetToolchains ? []
 , targetPatches ? []
 }:
 
 let
-  rustPlatform = recurseIntoAttrs (makeRustPlatform (callPackage ./bootstrap.nix {}));
+  rustPlatform = makeRustPlatform (callPackage ./bootstrap.nix {});
   version = "1.27.0";
   cargoVersion = "1.27.0";
   src = fetchurl {
