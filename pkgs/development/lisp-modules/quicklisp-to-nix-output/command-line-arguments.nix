@@ -1,4 +1,4 @@
-args @ { fetchurl, ... }:
+{ fetchurl, ... }:
 rec {
   baseName = ''command-line-arguments'';
   version = ''20151218-git'';

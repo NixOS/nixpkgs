@@ -1,4 +1,4 @@
-args @ { fetchurl, ... }:
+{ fetchurl, ... }:
 rec {
   baseName = ''asdf-system-connections'';
   version = ''20170124-git'';

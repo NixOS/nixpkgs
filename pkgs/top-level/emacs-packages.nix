@@ -39,7 +39,7 @@
 , melpaBuild
 
 , external
-}@args:
+}:
 
 with lib.licenses;
 

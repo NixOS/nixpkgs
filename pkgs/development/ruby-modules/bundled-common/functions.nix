@@ -22,9 +22,9 @@ rec {
     else gemset;
   };
 
-  filterGemset = {ruby, groups,...}@env: gemset: lib.filterAttrs (name: attrs: platformMatches ruby attrs && groupMatches groups attrs) gemset;
+  filterGemset = {ruby, groups,...}: gemset: lib.filterAttrs (name: attrs: platformMatches ruby attrs && groupMatches groups attrs) gemset;
 
-  platformMatches = {rubyEngine, version, ...}@ruby: attrs: (
+  platformMatches = {rubyEngine, version, ...}: attrs: (
   !(attrs ? "platforms") ||
   builtins.length attrs.platforms == 0 ||
     builtins.any (platform:

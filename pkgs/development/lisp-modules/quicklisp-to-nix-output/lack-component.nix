@@ -1,4 +1,4 @@
-args @ { fetchurl, ... }:
+{ fetchurl, ... }:
 rec {
   baseName = ''lack-component'';
   version = ''lack-20180430-git'';

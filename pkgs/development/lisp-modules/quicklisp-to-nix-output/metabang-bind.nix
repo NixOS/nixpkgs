@@ -1,4 +1,4 @@
-args @ { fetchurl, ... }:
+{ fetchurl, ... }:
 rec {
   baseName = ''metabang-bind'';
   version = ''20171130-git'';

@@ -2,7 +2,7 @@
 
 let
 
-  common = { versionMajor, versionMinor, sha256 } @ args: stdenv.mkDerivation (rec {
+  common = { versionMajor, versionMinor, sha256 }: stdenv.mkDerivation (rec {
     name = "apache-tomcat-${version}";
     version = "${versionMajor}.${versionMinor}";
 

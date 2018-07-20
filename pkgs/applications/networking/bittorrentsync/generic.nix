@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, version, sha256s, ... } @ args:
+{ stdenv, fetchurl, version, sha256s, ... }:
 
 let
   arch = {

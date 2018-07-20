@@ -1,4 +1,4 @@
-args @ { fetchurl, ... }:
+{ fetchurl, ... }:
 rec {
   baseName = ''cl-l10n-cldr'';
   version = ''20120909-darcs'';
