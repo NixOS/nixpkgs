@@ -53,7 +53,9 @@ let
         patches =
           [ # For 5.2+, we need a slightly adjusted patch to fix all the ldflags
             (if lib.versionAtLeast version "5.2"
-             then ./ldflags.patch
+             then (if lib.versionAtLeast version "6.0"
+                   then ./ldflags-6.0.patch
+                   else ./ldflags-5.2.patch)
              else ./ldflags-5.1.patch)
           ] ++
           # for 6.0+, we do NOT need to apply this version fix, since we can specify
@@ -77,10 +79,20 @@ let
             --replace 'exit 1' '#exit 1'
 
           patchShebangs .
+        '' + lib.optionalString (lib.versionAtLeast version "6.0") ''
+          substituteInPlace ./Makefile \
+            --replace 'TLS_LIBS +=' '#TLS_LIBS +=' \
+            --replace 'LDFLAGS :=' 'LDFLAGS := -ltls -lssl -lcrypto'
         '';
 
         enableParallelBuilding = true;
-        makeFlags = [ "all" "fdb_c" "fdb_java" "KVRELEASE=1" ];
+
+        makeFlags = [ "all" "fdb_java" ]
+          # Don't compile FDBLibTLS if we don't need it in 6.0 or later;
+          # it gets statically linked in
+          ++ lib.optional (!lib.versionAtLeast version "6.0") [ "fdb_c" ]
+          # Needed environment overrides
+          ++ [ "KVRELEASE=1" ];
 
         # on 6.0 and later, we can specify all this information manually
         configurePhase = lib.optionalString (lib.versionAtLeast version "6.0") ''
@@ -93,7 +105,9 @@ let
           mkdir -vp $out/{bin,libexec/plugins} $lib/{lib,share/java} $dev/include/foundationdb
 
           cp -v ./lib/libfdb_c.so     $lib/lib
+        '' + lib.optionalString (!lib.versionAtLeast version "6.0") ''
           cp -v ./lib/libFDBLibTLS.so $out/libexec/plugins/FDBLibTLS.so
+        '' + ''
 
           cp -v ./bindings/c/foundationdb/fdb_c.h           $dev/include/foundationdb
           cp -v ./bindings/c/foundationdb/fdb_c_options.g.h $dev/include/foundationdb
@@ -131,15 +145,16 @@ in with builtins; {
   };
 
   foundationdb52 = makeFdb rec {
-    version = "5.2.5";
+    version = "5.2.6";
     branch  = "release-5.2";
-    sha256  = "00csr4v9cwl9y8r63p73grc6cvhlqmzcniwrf80i0klxv5asg7q7";
+    rev     = "refs/tags/v5.2.6"; # seemed to be tagged incorrectly
+    sha256  = "1q3lq1hqq0f53n51gd4cw5cpayyw65dmkfplhsw1m5mghymzmskk";
   };
 
   foundationdb60 = makeFdb rec {
-    version = "6.0.0pre2227_${substring 0 8 rev}";
-    branch  = "master";
-    rev     = "8caa6eaecf1eeec0298fc77db334761b0c1d1523";
-    sha256  = "1q200rpsphl5fzwzp2vk7ifgsnqh95k0xfiicfi1c8253ylnsgll";
+    version = "6.0.2pre2430_${substring 0 8 rev}";
+    branch  = "release-6.0";
+    rev     = "7938d247a5eaf886a176575de6592b76374df58c";
+    sha256  = "0g8h2zs0f3aacs7x4hyjh0scybv33gjj6dqfb789h4n6r4gd7d9h";
   };
 }
