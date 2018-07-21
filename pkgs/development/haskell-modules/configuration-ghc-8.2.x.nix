@@ -96,4 +96,83 @@ self: super: {
     haddock-library = dontHaddock (dontCheck self.haddock-library_1_5_0_1);
   }));
 
+} // # All the following is needed to build tensorflow.
+(
+let
+  tensorflow-haskell = pkgs.fetchFromGitHub {
+    owner = "tensorflow";
+    repo = "haskell";
+    rev = "e40d2c44f0a861701cc90ec73c2bcee669ab5ba7";
+    sha256 = "05pda34jfrlqmb8y9l8g87n4iq87v1z820vnd3cy41v5c5nrdpa8";
+    fetchSubmodules = true;
+  };
+in
+{
+  proto-lens-descriptors = super.proto-lens-descriptors.override {
+    proto-lens = self.proto-lens_0_2_2_0;
+    lens-labels = self.lens-labels_0_1_0_2;
+  };
+  proto-lens-protoc_0_2_2_3 = super.proto-lens-protoc_0_2_2_3.override {
+    haskell-src-exts = self.haskell-src-exts_1_19_1;
+  };
+  proto-lens-protobuf-types_0_2_2_0 = super.proto-lens-protobuf-types_0_2_2_0.override {
+    proto-lens = self.proto-lens_0_2_2_0;
+    proto-lens-protoc = self.proto-lens-protoc_0_2_2_3;
+  };
+  tensorflow-proto = (super.callPackage (
+    { mkDerivation, base, Cabal, proto-lens, proto-lens-protobuf-types
+    , proto-lens-protoc, stdenv
+    }:
+    mkDerivation {
+      pname = "tensorflow-proto";
+      version = "0.1.0.0";
+      src = tensorflow-haskell;
+      setupHaskellDepends = [ base Cabal proto-lens-protoc ];
+      libraryHaskellDepends = [
+        base proto-lens proto-lens-protobuf-types proto-lens-protoc
+      ];
+      libraryToolDepends = [ pkgs.protobuf ];
+      homepage = "https://github.com/tensorflow/haskell#readme";
+      description = "TensorFlow protocol buffers";
+      license = stdenv.lib.licenses.asl20;
+    }
+  ) {
+    proto-lens = self.proto-lens_0_2_2_0;
+    proto-lens-protoc = self.proto-lens-protoc_0_2_2_3;
+    proto-lens-protobuf-types = self.proto-lens-protobuf-types_0_2_2_0;
+  }).overrideAttrs (_oldAttrs: {
+    sourceRoot = "source/tensorflow-proto";
+  });
+  tensorflow = (super.callPackage (
+    { mkDerivation, async, attoparsec, base, bytestring, c2hs
+    , containers, data-default, exceptions, fgl, HUnit, lens-family
+    , mainland-pretty, mtl, proto-lens, semigroups, split, stdenv
+    , temporary, libtensorflow, tensorflow-proto, test-framework
+    , test-framework-hunit, test-framework-quickcheck2, text
+    , transformers, vector
+    }:
+    mkDerivation {
+      pname = "tensorflow";
+      version = "0.1.0.2";
+      src = tensorflow-haskell;
+      libraryHaskellDepends = [
+        async attoparsec base bytestring containers data-default exceptions
+        fgl lens-family mainland-pretty mtl proto-lens semigroups split
+        temporary tensorflow-proto text transformers vector
+      ];
+      librarySystemDepends = [ libtensorflow ];
+      libraryToolDepends = [ c2hs ];
+      testHaskellDepends = [
+        attoparsec base bytestring HUnit lens-family proto-lens
+        tensorflow-proto test-framework test-framework-hunit
+        test-framework-quickcheck2
+      ];
+      homepage = "https://github.com/tensorflow/haskell#readme";
+      description = "TensorFlow bindings";
+      license = stdenv.lib.licenses.asl20;
+    }
+  ) {}).overrideAttrs (_oldAttrs: {
+    sourceRoot = "source/tensorflow";
+  });
 }
+)
