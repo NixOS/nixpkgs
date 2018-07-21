@@ -1,4 +1,4 @@
-{ lib, bundlerApp, ruby }:
+{ lib, bundlerApp }:
 
 bundlerApp rec {
   pname = "solargraph";
