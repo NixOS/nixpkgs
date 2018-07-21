@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, CF, configd, coreutils }:
+{ stdenv, fetchurl, configd, CF, coreutils }:
 
 with stdenv.lib;
 
