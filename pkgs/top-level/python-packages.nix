@@ -16565,29 +16565,6 @@ EOF
     '';
   };
 
-  ghp-import = buildPythonPackage rec {
-    version = "0.4.1";
-    name = "ghp-import-${version}";
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/g/ghp-import/${name}.tar.gz";
-      sha256 = "6058810e1c46dd3b5b1eee87e203bdfbd566e10cfc77566edda7aa4dbf6a3053";
-    };
-    disabled = isPyPy;
-    buildInputs = [ pkgs.glibcLocales ];
-
-    LC_ALL="en_US.UTF-8";
-
-    # No tests available
-    doCheck = false;
-
-    meta = {
-      description = "Copy your docs directly to the gh-pages branch";
-      homepage = "https://github.com/davisp/ghp-import";
-      license = "Tumbolia Public License";
-      maintainers = with maintainers; [ garbas ];
-    };
-  };
-
   typogrify = buildPythonPackage rec {
     name = "typogrify-2.0.7";
     src = pkgs.fetchurl {
