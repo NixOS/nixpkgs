@@ -14548,6 +14548,8 @@ with pkgs;
     };
 
     wxMSW = callPackage ../os-specific/windows/wxMSW-2.8 { };
+
+    libgnurx = callPackage ../os-specific/windows/libgnurx { };
   };
 
   wirelesstools = callPackage ../os-specific/linux/wireless-tools { };
