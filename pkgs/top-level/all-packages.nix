@@ -9264,8 +9264,6 @@ with pkgs;
     gtk = self.gtk2;
   };
 
-  geoclue = callPackage ../development/libraries/geoclue {};
-
   geoclue2 = callPackage ../development/libraries/geoclue/2.0.nix {};
 
   geoipWithDatabase = makeOverridable (callPackage ../development/libraries/geoip) {
