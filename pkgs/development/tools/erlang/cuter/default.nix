@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   '';
 
   nativeBuildInputs = [ autoreconfHook ];
-  buildInputs = with beamPackages; [ python27.pkgs.setuptools erlang z3 python27 makeWrapper which ];
+  buildInputs = with beamPackages; [ python27.pkgs.setuptools erlang z3.python python27 makeWrapper which ];
 
   buildFlags = "PWD=$(out)/lib/erlang/lib/cuter-${version} cuter_target";
   configurePhase = ''
