@@ -18,6 +18,8 @@ stdenv.mkDerivation rec {
     sha256 = "1p6glp4vdpwl8hmhypayc4cvs3j9jfmjfhhrgqm2xkgl5bfbv2qd";
   };
 
+  # taken from: https://www.iconfinder.com/icons/50835/edit_pencil_write_icon
+  # license: Free for commercial use
   icon = fetchurl {
     url = "https://oyra.eu/write/icon.tar.gz";
     sha256 = "1zd98g63apwi17qc1hm1g14maain5d18g4afadxm30qjz2s0mvs8";
