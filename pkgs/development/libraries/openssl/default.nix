@@ -44,7 +44,9 @@ let
         if hostPlatform == buildPlatform
           then "./config"
         else if hostPlatform.isMinGW
-          then "./Configure mingw${toString hostPlatform.parsed.cpu.bits}"
+          then "./Configure mingw${optionalString
+                                     (hostPlatform.parsed.cpu.bits != 32)
+                                     (toString hostPlatform.parsed.cpu.bits)}"
         else if hostPlatform.isLinux
           then "./Configure linux-generic${toString hostPlatform.parsed.cpu.bits}"
         else if hostPlatform.isiOS

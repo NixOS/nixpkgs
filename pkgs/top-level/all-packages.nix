@@ -2387,7 +2387,9 @@ with pkgs;
 
   figlet = callPackage ../tools/misc/figlet { };
 
-  file = callPackage ../tools/misc/file { };
+  file = callPackage ../tools/misc/file {
+    inherit (windows) libgnurx;
+  };
 
   filegive = callPackage ../tools/networking/filegive { };
 
@@ -14538,6 +14540,8 @@ with pkgs;
     };
 
     wxMSW = callPackage ../os-specific/windows/wxMSW-2.8 { };
+
+    libgnurx = callPackage ../os-specific/windows/libgnurx { };
   };
 
   wirelesstools = callPackage ../os-specific/linux/wireless-tools { };
