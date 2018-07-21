@@ -660,6 +660,10 @@ substituteStream() {
                     echo "substituteStream(): ERROR: substitution variables must be valid Bash names, \"$varName\" isn't." >&2
                     return 1
                 fi
+                if [ -z ${!varName+x} ]; then
+                    echo "substituteStream(): ERROR: variable \$$varName is unset" >&2
+                    return 1
+                fi
                 pattern="@$varName@"
                 replacement="${!varName}"
                 ;;
