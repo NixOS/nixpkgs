@@ -17689,32 +17689,7 @@ EOF
 
   yarl = callPackage ../development/python-modules/yarl { };
 
-  suseapi = buildPythonPackage rec {
-    name = "${pname}-${version}";
-    pname = "suseapi";
-    version = "0.24-31-g0fcbe96";
-
-    src = pkgs.fetchFromGitHub {
-      owner = "openSUSE";
-      repo = "python-${pname}";
-      rev = version;
-      sha256 = "0hyzq0h1w8gp0zfvhqh7qsgcg1wp05a14371m6bn5a7gss93rbv4";
-    };
-
-    propagatedBuildInputs = with self; [
-      django suds-jurko ldap mechanize beautifulsoup4 pyxdg dateutil requests
-    ];
-
-    buildInputs = with self; [ httpretty ];
-
-    doCheck = false;
-
-    meta = {
-      homepage = "https://github.com/openSUSE/python-suseapi/";
-      description = "Python module to work with various SUSE services";
-      license = licenses.gpl3Plus;
-    };
-  };
+  suseapi = callPackage ../development/python-modules/suseapi { };
 
   typed-ast = callPackage ../development/python-modules/typed-ast { };
 
