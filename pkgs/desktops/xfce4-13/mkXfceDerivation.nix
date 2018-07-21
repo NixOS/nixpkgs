@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, pkgconfig, xfce4-dev-tools }:
+{ stdenv, fetchgit, pkgconfig, xfce4-dev-tools, hicolor-icon-theme }:
 
 { category, pname, version, rev ? "${pname}-${version}", sha256, ... } @ args:
 
@@ -16,6 +16,7 @@ let
     name = "${pname}-${version}";
 
     nativeBuildInputs = [ pkgconfig xfce4-dev-tools ];
+    buildInputs = [ hicolor-icon-theme ];
     configureFlags = [ "--enable-maintainer-mode" ];
 
     src = fetchgit {
@@ -25,8 +26,6 @@ let
 
     enableParallelBuilding = true;
     outputs = [ "out" "dev" ];
-
-    preFixup = ''rm $out/share/icons/hicolor/icon-theme.cache || true'';
 
     meta = with stdenv.lib; {
       homepage = "https://git.xfce.org/${category}/${pname}/about";
