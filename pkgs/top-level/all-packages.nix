@@ -11119,6 +11119,10 @@ with pkgs;
 
   nvidia-video-sdk = callPackage ../development/libraries/nvidia-video-sdk { };
 
+  nvtop = callPackage ../tools/system/nvtop {
+    nvidia_x11 = linuxPackages.nvidia_x11.override { libsOnly = true; };
+  };
+
   ocl-icd-oclhGen = oclh: callPackage ../development/libraries/ocl-icd { opencl-headers = oclh; };
   ocl-icd-oclh_1_2 = ocl-icd-oclhGen opencl-headers_1_2;
   ocl-icd-oclh_2_2 = ocl-icd-oclhGen opencl-headers_2_2;
