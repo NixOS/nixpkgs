@@ -10,7 +10,6 @@
 , zlib
 , callPackage
 , self
-, gettext
 , db
 , expat
 , libffi
@@ -19,7 +18,7 @@
 # Some proprietary libs assume UCS2 unicode, especially on darwin :(
 , ucsEncoding ? 4
 # For the Python package set
-, pkgs, packageOverrides ? (self: super: {})
+, packageOverrides ? (self: super: {})
 }:
 
 assert x11Support -> tcl != null

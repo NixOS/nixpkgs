@@ -1,5 +1,4 @@
 {stdenv, fetchurl, fetchpatch, bzip2, zlib, newt, openssl, pkgconfig, slang
-, automake, autoconf, libtool, gettext
 }:
 stdenv.mkDerivation {
   name = "partimage-0.6.9";

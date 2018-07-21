@@ -1,4 +1,4 @@
-{ stdenv, python2, fetchurl, fetchFromGitHub }:
+{ stdenv, python2, fetchFromGitHub }:
 
 let python = python2.override {
   packageOverrides = self: super: {

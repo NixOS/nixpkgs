@@ -1,6 +1,6 @@
-{ stdenv, fetchurl, python2Packages, makeWrapper, docutils, unzip
+{ stdenv, fetchurl, python2Packages, makeWrapper, unzip
 , guiSupport ? false, tk ? null
-, ApplicationServices, cf-private }:
+, ApplicationServices }:
 
 let
   # if you bump version, update pkgs.tortoisehg too or ping maintainer

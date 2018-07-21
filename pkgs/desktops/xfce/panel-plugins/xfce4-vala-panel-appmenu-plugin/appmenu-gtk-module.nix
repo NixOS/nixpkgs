@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, substituteAll, cmake, vala, glib, gtk2, gtk3 }:
+{ stdenv, fetchFromGitHub, cmake, vala, glib, gtk2, gtk3 }:
 stdenv.mkDerivation rec {
   name = "vala-panel-appmenu-xfce-${version}";
   version = "0.6.94";

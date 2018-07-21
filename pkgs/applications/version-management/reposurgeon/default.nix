@@ -1,7 +1,7 @@
 { stdenv, fetchurl, makeWrapper, python27Packages, git
 , docbook_xml_dtd_412, docbook_xsl, asciidoc, xmlto
 , bazaar ? null, cvs ? null, darcs ? null, fossil ? null
-, mercurial ? null, monotone ? null, rcs ? null, src ? null
+, mercurial ? null, monotone ? null, rcs ? null
 , subversion ? null, cvs_fast_export ? null }:
 
 with stdenv; with lib;

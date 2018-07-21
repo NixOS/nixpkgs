@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, SDL2, SDL2_image, pkgconfig
+{ stdenv, fetchFromGitHub, SDL2, SDL2_image, pkgconfig
 , libvorbis, libGL, boost, cmake, zlib, curl, SDL2_mixer, python3
 }:
 

@@ -4,7 +4,6 @@
 , sqlite, systemd, glib, gst_all_1, cmake
 , bison2, flex, gdb, gperf, perl, pkgconfig, python2, ruby
 , darwin
-, substituteAll
 , flashplayerFix ? false
 , src ? null
 , version ? null

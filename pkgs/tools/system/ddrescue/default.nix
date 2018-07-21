@@ -1,6 +1,5 @@
 { stdenv
 , fetchurl, lzip
-, hostPlatform, buildPlatform
 }:
 
 let inherit (stdenv.lib) optionals; in

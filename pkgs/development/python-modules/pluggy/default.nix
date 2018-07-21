@@ -1,7 +1,6 @@
 { buildPythonPackage
 , lib
 , fetchPypi
-, pytest
 }:
 
 buildPythonPackage rec {

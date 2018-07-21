@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, which, python2Packages }:
+{ stdenv, fetchgit, python2Packages }:
 
 let
   inherit (python2Packages) buildPythonApplication boto m2crypto;

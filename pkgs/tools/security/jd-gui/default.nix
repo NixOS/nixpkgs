@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, gradle_2_5, perl, makeWrapper, jre, makeDesktopItem, writeShellScriptBin, writeText }:
+{ stdenv, fetchurl, gradle_2_5, perl, makeWrapper, jre, makeDesktopItem, writeText }:
 
 let
   version = "1.4.0";

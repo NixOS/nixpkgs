@@ -1,4 +1,4 @@
-{stdenv, fetchurl, libedit, ncurses, automake, autoconf, libtool
+{stdenv, fetchurl, libedit, automake, autoconf, libtool
 ,
   # icu = null: use icu which comes with firebird
 

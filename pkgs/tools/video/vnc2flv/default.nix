@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pythonPackages }:
+{ fetchurl, pythonPackages }:
 
 pythonPackages.buildPythonApplication rec {
   name = "vnc2flv-20100207";

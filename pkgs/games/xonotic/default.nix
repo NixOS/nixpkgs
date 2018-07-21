@@ -1,6 +1,6 @@
 { stdenv, fetchurl
 , # required for both
-  unzip, libjpeg, zlib, libvorbis, curl, patchelf
+  unzip, libjpeg, zlib, libvorbis, curl
 , # glx
   libX11, libGLU_combined, libXpm, libXext, libXxf86vm, alsaLib
 , # sdl

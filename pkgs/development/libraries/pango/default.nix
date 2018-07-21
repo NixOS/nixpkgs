@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, pkgconfig, libXft, cairo, harfbuzz
+{ stdenv, fetchurl, pkgconfig, libXft, cairo, harfbuzz
 , libintl, gobjectIntrospection, darwin
 }:
 

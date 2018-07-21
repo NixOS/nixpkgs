@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, parted, substituteAll, utillinux }:
+{ stdenv, fetchurl, parted, utillinux }:
 
 stdenv.mkDerivation rec {
   

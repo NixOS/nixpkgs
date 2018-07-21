@@ -1,8 +1,7 @@
 { stdenv, fetchurl, substituteAll
 , pkgconfig
-, makeWrapper
-, cups, zlib, libjpeg, libusb1, pythonPackages, sane-backends, dbus, usbutils
-, net_snmp, openssl, polkit, nettools
+, cups, libjpeg, libusb1, pythonPackages, sane-backends, dbus, usbutils
+, net_snmp, openssl, nettools
 , bash, coreutils, utillinux
 , qtSupport ? true
 , withPlugin ? false

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, m4, which, yasm }:
+{ stdenv, fetchurl, m4, which, yasm }:
 
 stdenv.mkDerivation rec {
   name = "mpir-${version}";

@@ -1,4 +1,4 @@
-{ stdenv, lib, gnome2, fetchurl, pkgs, xorg, udev, makeWrapper, makeDesktopItem }:
+{ stdenv, lib, gnome2, fetchurl, pkgs, xorg, makeWrapper, makeDesktopItem }:
 
 stdenv.mkDerivation rec {
   name = "postman-${version}";

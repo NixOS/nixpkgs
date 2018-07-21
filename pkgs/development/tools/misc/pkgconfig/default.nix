@@ -1,4 +1,4 @@
-{stdenv, fetchurl, automake, libiconv, vanilla ? false }:
+{stdenv, fetchurl, libiconv, vanilla ? false }:
 
 with stdenv.lib;
 

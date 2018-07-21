@@ -11,7 +11,6 @@
 , pywavelets
 , dask
 , cloudpickle
-, nose
 , pytest
 }:
 

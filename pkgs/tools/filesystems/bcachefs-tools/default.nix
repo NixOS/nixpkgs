@@ -1,4 +1,4 @@
-{ stdenv, pkgs, fetchgit, pkgconfig, attr, libuuid, libscrypt, libsodium
+{ stdenv, fetchgit, pkgconfig, attr, libuuid, libscrypt, libsodium
 , keyutils, liburcu, zlib, libaio, zstd }:
 
 stdenv.mkDerivation rec {

@@ -1,4 +1,4 @@
-{ mkDerivation, lib, fetchurl, fetchpatch, cmake, extra-cmake-modules
+{ mkDerivation, lib, fetchurl, cmake, extra-cmake-modules
 , karchive, kconfig, kwidgetsaddons, kcompletion, kcoreaddons
 , kguiaddons, ki18n, kitemmodels, kitemviews, kwindowsystem
 , kio, kcrash

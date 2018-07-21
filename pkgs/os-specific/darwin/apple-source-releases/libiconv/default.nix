@@ -1,4 +1,4 @@
-{ stdenv, appleDerivation, lib, autoreconfHook, targetPlatform
+{ stdenv, appleDerivation, lib, targetPlatform
 , enableStatic ? targetPlatform.isiOS
 , enableShared ? !targetPlatform.isiOS
 }:

@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, fetchhg, fetchurl, fetchzip, mercurial, python27, zlib, makeWrapper, oraclejdk8 }:
+{ stdenv, lib, fetchFromGitHub, fetchurl, fetchzip, mercurial, python27, zlib, makeWrapper, oraclejdk8 }:
 
 let
   # pre-download some cache entries ('mx' will not be able to download under nixbld1)

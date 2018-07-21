@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, cairo, libxml2, libxslt, glib, gtk, pango, atk
+{ stdenv, fetchurl, pkgconfig, libxml2, libxslt, gtk
 , gnome-doc-utils, intltool, libglade, libX11, which, docbook_xml_dtd_412 }:
 
 stdenv.mkDerivation {

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchFromGitHub, python2
+{ stdenv, fetchurl, python2
 , windowsSupport ? false
 }:
 

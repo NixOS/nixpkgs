@@ -1,5 +1,4 @@
 { stdenv, lib, fetchgit, cmake
-, avxSupport ? false
 , cudaSupport ? false, cudatoolkit
 , ncclSupport ? false, nccl
 , llvmPackages

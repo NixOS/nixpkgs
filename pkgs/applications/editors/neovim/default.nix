@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, cmake, gettext, libmsgpack, libtermkey, libiconv
-, libtool, libuv, luaPackages, ncurses, perl, pkgconfig
-, unibilium, vimUtils, xsel, gperf, callPackage
+, libuv, luaPackages, ncurses, pkgconfig
+, unibilium, xsel, gperf
 , libvterm-neovim
 , withJemalloc ? true, jemalloc
 }:

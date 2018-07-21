@@ -1,4 +1,4 @@
-{ config, stdenv, fetchgit, makeWrapper, gnome3, at-spi2-core, libcxx,
+{ stdenv, fetchgit, gnome3, at-spi2-core,
   boost, epoxy, cmake, aspell, llvmPackages, libgit2, pkgconfig, pcre,
   libXdmcp, libxkbcommon, libpthreadstubs, wrapGAppsHook, aspellDicts,
   coreutils, glibc, dbus, openssl, libxml2, gnumake, ctags }:

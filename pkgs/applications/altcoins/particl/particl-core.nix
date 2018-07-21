@@ -4,14 +4,11 @@
 , db48
 , fetchurl
 , libevent
-, libtool
 , miniupnpc
 , openssl
 , pkgconfig
-, utillinux
 , zeromq
 , zlib
-, withGui
 , unixtools
 }:
 

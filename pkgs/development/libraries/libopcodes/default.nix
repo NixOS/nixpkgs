@@ -1,5 +1,5 @@
 { stdenv, buildPackages
-, fetchurl, autoreconfHook264, bison, binutils-unwrapped
+, autoreconfHook264, bison, binutils-unwrapped
 , libiberty, libbfd
 }:
 

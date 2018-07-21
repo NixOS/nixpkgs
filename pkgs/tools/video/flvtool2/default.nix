@@ -1,4 +1,4 @@
-{ buildRubyGem, lib, ruby }:
+{ buildRubyGem, ruby }:
 
 buildRubyGem rec {
   inherit ruby;

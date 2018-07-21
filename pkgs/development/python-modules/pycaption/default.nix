@@ -1,5 +1,5 @@
 { lib, fetchpatch
-, buildPythonPackage, fetchPypi, isPy3k, pythonOlder
+, buildPythonPackage, fetchPypi, isPy3k
 , beautifulsoup4, lxml, cssutils, future, enum34, six
 }:
 

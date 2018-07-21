@@ -1,4 +1,4 @@
-{pkgs, buildLispPackage, clwrapper, quicklisp-to-nix-packages}:
+{pkgs, quicklisp-to-nix-packages}:
 let
   addNativeLibs = libs: x: { propagatedBuildInputs = libs; };
   skipBuildPhase = x: {

@@ -1,4 +1,4 @@
-{ stdenv, buildGoPackage, fetchFromGitHub, go, ronn, ruby, groff, Security, utillinux }:
+{ stdenv, buildGoPackage, fetchFromGitHub, ronn, ruby, groff, Security, utillinux }:
 
 buildGoPackage rec {
   name = "hub-${version}";

@@ -3,7 +3,6 @@
 , fetchFromGitHub
 , makeWrapper
 , pkgconfig
-, clang
 , llvm
 , emscripten
 , openssl

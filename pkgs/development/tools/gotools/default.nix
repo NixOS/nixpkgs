@@ -1,4 +1,4 @@
-{ stdenv, lib, go, buildGoPackage, fetchgit, fetchhg, fetchbzr, fetchsvn }:
+{ stdenv, go, buildGoPackage, fetchgit }:
 
 buildGoPackage rec {
   name = "gotools-${version}";

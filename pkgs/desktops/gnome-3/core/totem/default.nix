@@ -1,7 +1,7 @@
-{ stdenv, fetchurl, meson, ninja, intltool, gst_all_1, clutter
+{ stdenv, fetchurl, meson, ninja, intltool, gst_all_1
 , clutter-gtk, clutter-gst, python3Packages, shared-mime-info
 , pkgconfig, gtk3, glib, gobjectIntrospection
-, bash, wrapGAppsHook, itstool, libxml2, vala, gnome3, librsvg
+, wrapGAppsHook, itstool, libxml2, vala, gnome3
 , gdk_pixbuf, tracker, nautilus }:
 
 stdenv.mkDerivation rec {

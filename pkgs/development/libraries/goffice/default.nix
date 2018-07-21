@@ -1,5 +1,5 @@
 { fetchurl, stdenv, pkgconfig, intltool, glib, gtk3
-, libgsf, libxml2, libxslt, cairo, pango, librsvg, libspectre }:
+, libgsf, libxml2, libxslt, cairo, pango, librsvg }:
 
 stdenv.mkDerivation rec {
   name = "goffice-0.10.39";

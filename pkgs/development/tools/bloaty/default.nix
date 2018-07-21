@@ -1,4 +1,4 @@
-{ stdenv, binutils, cmake, zlib, fetchFromGitHub }:
+{ stdenv, cmake, zlib, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
   version = "2018-06-15";

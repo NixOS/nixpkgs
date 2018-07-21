@@ -1,6 +1,6 @@
 {
 fetchFromGitHub, stdenv, lib,
-autoreconfHook, intltool, pkgconfig, makeWrapper, pkgs,
+makeWrapper, pkgs,
 perl, perlPackages,
 gnome2 }:
 

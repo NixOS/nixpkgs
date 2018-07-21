@@ -1,4 +1,4 @@
-{ stdenv, lib, callPackage, fetchurl, unzip, atomEnv, makeDesktopItem,
+{ stdenv, lib, fetchurl, unzip, atomEnv, makeDesktopItem,
   gtk2, makeWrapper, libXScrnSaver, libxkbfile, libsecret }:
 
 let

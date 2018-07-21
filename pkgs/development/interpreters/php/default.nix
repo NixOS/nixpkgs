@@ -1,6 +1,6 @@
 # pcre functionality is tested in nixos/tests/php-pcre.nix
 
-{ lib, stdenv, fetchurl, composableDerivation, autoconf, automake, flex, bison
+{ lib, stdenv, fetchurl, composableDerivation, flex, bison
 , mysql, libxml2, readline, zlib, curl, postgresql, gettext
 , openssl, pcre, pkgconfig, sqlite, config, libjpeg, libpng, freetype
 , libxslt, libmcrypt, bzip2, icu, openldap, cyrus_sasl, libmhash, freetds

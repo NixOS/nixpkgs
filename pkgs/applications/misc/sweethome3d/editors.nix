@@ -1,5 +1,5 @@
-{ stdenv, fetchurl, fetchcvs, makeWrapper, makeDesktopItem, jdk, jre, ant
-, gtk3, gsettings-desktop-schemas, p7zip, sweethome3dApp }:
+{ stdenv, fetchcvs, makeWrapper, makeDesktopItem, jdk, jre, ant
+, gtk3, gsettings-desktop-schemas, sweethome3dApp }:
 
 let
 

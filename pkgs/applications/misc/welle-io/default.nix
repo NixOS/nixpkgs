@@ -1,4 +1,4 @@
-{ stdenv, buildEnv, fetchFromGitHub, cmake, pkgconfig
+{ stdenv, fetchFromGitHub, cmake, pkgconfig
 , qtbase, qtcharts, qtmultimedia, qtquickcontrols, qtquickcontrols2
 , faad2, rtl-sdr, soapysdr-with-plugins, libusb, fftwSinglePrec }:
 let

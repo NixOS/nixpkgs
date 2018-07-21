@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, pkgconfig, zlib, libjpeg, xz }:
+{ stdenv, fetchurl, pkgconfig, zlib, libjpeg, xz }:
 
 let
   version = "4.0.9";

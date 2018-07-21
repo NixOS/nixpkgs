@@ -1,5 +1,5 @@
-{stdenv, fetchurl, pkgconfig, libxml2Python, libxslt, intltool
-, makeWrapper, python2Packages }:
+{fetchurl, pkgconfig, libxml2Python, libxslt, intltool
+, python2Packages }:
 
 python2Packages.buildPythonApplication {
   name = "gnome-doc-utils-0.20.10";

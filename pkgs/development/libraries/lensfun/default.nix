@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, python, glib, zlib, libpng, gnumake3, cmake }:
+{ stdenv, fetchurl, pkgconfig, glib, zlib, libpng, gnumake3, cmake }:
 
 stdenv.mkDerivation rec {
   version = "0.3.2";

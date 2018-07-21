@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, gnumake, file }:
+{ stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
   name = "keyutils-${version}";

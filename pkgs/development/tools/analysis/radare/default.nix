@@ -1,4 +1,4 @@
-{stdenv, fetchurl, pkgconfig, libusb, readline, lua, libewf, perl,
+{stdenv, fetchurl, pkgconfig, libusb, readline, lua, perl,
 gtk2 ? null, vte ? null, gtkdialog ? null,
 python ? null,
 ruby ? null,

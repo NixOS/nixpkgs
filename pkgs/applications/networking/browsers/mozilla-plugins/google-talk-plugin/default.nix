@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, rpm, cpio, libGL, xorg, cairo
+{ stdenv, fetchurl, libGL, xorg, cairo
 , libpng, gtk2, glib, gdk_pixbuf, fontconfig, freetype, curl
 , dbus-glib, alsaLib, libpulseaudio, systemd, pango
 }:

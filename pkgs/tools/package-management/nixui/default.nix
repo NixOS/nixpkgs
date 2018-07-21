@@ -1,4 +1,4 @@
-{ stdenv, pkgs, fetchgit, nix, node_webkit, config, makeDesktopItem
+{ stdenv, pkgs, fetchgit, nix, node_webkit, makeDesktopItem
 , writeScript }:
 let
   version = "0.2.1";

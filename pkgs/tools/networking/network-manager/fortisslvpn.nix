@@ -1,5 +1,5 @@
 { stdenv, fetchurl, openfortivpn, automake, autoconf, libtool, intltool, pkgconfig,
-networkmanager, ppp, lib, libsecret, withGnome ? true, gnome3, procps, kmod }:
+networkmanager, ppp, libsecret, withGnome ? true, gnome3 }:
 
 let
   pname   = "NetworkManager-fortisslvpn";

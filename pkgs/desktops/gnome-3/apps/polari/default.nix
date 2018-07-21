@@ -1,4 +1,4 @@
-{ stdenv, itstool, fetchurl, fetchpatch, gdk_pixbuf, adwaita-icon-theme
+{ stdenv, itstool, fetchurl, gdk_pixbuf, adwaita-icon-theme
 , telepathy-glib, gjs, meson, ninja, gettext, telepathy-idle, libxml2, desktop-file-utils
 , pkgconfig, gtk3, glib, libsecret, libsoup, gobjectIntrospection, appstream-glib
 , gnome3, wrapGAppsHook, telepathy-logger, gspell }:

@@ -1,5 +1,5 @@
-{ stdenv, buildPackages
-, fetchurl, fetchpatch, gnu-config, autoreconfHook264, bison, binutils-unwrapped
+{ stdenv
+, fetchpatch, gnu-config, autoreconfHook264, bison, binutils-unwrapped
 , libiberty, zlib
 }:
 

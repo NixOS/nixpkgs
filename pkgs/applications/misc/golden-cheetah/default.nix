@@ -1,6 +1,6 @@
 { stdenv, fetchurl
 , qtbase, qtsvg, qtserialport, qtwebkit, qtmultimedia, qttools, qtconnectivity
-, yacc, flex, zlib, config, qmake, makeWrapper
+, yacc, flex, zlib, qmake, makeWrapper
 }:
 stdenv.mkDerivation rec {
   name = "golden-cheetah-${version}";

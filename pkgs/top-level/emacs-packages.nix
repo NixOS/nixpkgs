@@ -50,16 +50,14 @@ let
   };
 
   melpaStablePackages = import ../applications/editors/emacs-modes/melpa-stable-packages.nix {
-    inherit external lib;
+    inherit external;
   };
 
   melpaPackages = import ../applications/editors/emacs-modes/melpa-packages.nix {
     inherit external lib;
   };
 
-  orgPackages = import ../applications/editors/emacs-modes/org-packages.nix {
-    inherit fetchurl lib stdenv texinfo;
-  };
+  orgPackages = import ../applications/editors/emacs-modes/org-packages.nix { };
 
   emacsWithPackages = import ../build-support/emacs/wrapper.nix {
     inherit lib lndir makeWrapper stdenv runCommand;

@@ -1,8 +1,8 @@
 { stdenv, fetchurl, zlib, libX11, libXext, libSM, libICE
 , libXfixes, libXt, libXi, libXcursor, libXScrnSaver, libXcomposite, libXdamage, libXtst, libXrandr
 , alsaLib, dbus, cups, libexif, ffmpeg, systemd
-, freetype, fontconfig, libXft, libXrender, libxcb, expat, libXau, libXdmcp
-, libuuid, xz
+, freetype, fontconfig, libXft, libXrender, libxcb, expat
+, libuuid
 , gstreamer, gst-plugins-base, libxml2
 , glib, gtk3, pango, gdk_pixbuf, cairo, atk, at-spi2-atk, gnome3
 , nss, nspr

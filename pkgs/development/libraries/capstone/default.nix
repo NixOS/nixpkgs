@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, bash, pkgconfig }:
+{ stdenv, fetchurl, pkgconfig }:
 
 stdenv.mkDerivation rec {
   name    = "capstone-${version}";

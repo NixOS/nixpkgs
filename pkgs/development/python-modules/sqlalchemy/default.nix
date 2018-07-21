@@ -3,7 +3,6 @@
 , buildPythonPackage
 , pytest
 , mock
-, pytest_xdist
 , isPy3k
 , pysqlite
 }:

@@ -1,5 +1,4 @@
-{ stdenv, lib, fetchurl, copyPathsToStore
-, hostPlatform
+{ stdenv, fetchurl
 , pkgconfig, which, makeWrapper
 , zlib, bzip2, libpng, gnumake, glib
 

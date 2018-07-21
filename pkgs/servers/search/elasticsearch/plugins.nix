@@ -1,4 +1,4 @@
-{ pkgs,  stdenv, fetchurl, fetchFromGitHub, unzip, elasticsearch }:
+{ pkgs,  stdenv, fetchurl, unzip, elasticsearch }:
 
 with pkgs.lib;
 

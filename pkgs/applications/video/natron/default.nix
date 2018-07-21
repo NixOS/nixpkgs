@@ -1,6 +1,6 @@
 { lib, stdenv, fetchurl, qt4, pkgconfig, boost, expat, cairo, python2Packages,
   cmake, flex, bison, pango, librsvg, librevenge, libxml2, libcdr, libzip,
-  poppler, imagemagick, glew, openexr, ffmpeg, opencolorio, openimageio,
+  poppler, imagemagick, openexr, ffmpeg, opencolorio, openimageio,
   qmake4Hook, libpng, libGL, lndir }:
 
 let

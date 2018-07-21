@@ -9,7 +9,6 @@
 , isPy3k
 , nose
 , numpy
-, pydot_ng
 , scipy
 , six
 , libgpuarray

@@ -1,5 +1,5 @@
 { stdenv, lib, fetchurl, pkgconfig, gtk3, itstool, gst_all_1, libxml2, libnotify
-, libcanberra-gtk3, intltool, makeWrapper, dvdauthor, libburn, libisofs
+, libcanberra-gtk3, intltool, dvdauthor, libburn, libisofs
 , vcdimager, wrapGAppsHook, hicolor-icon-theme }:
 
 # libdvdcss is "too old" (in fast "too new"), see https://bugs.launchpad.net/ubuntu/+source/brasero/+bug/611590

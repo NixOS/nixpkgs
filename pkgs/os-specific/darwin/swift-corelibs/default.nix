@@ -1,4 +1,4 @@
-{callPackage, stdenv, darwin, xcbuild}:
+{callPackage, darwin}:
 
 rec {
   corefoundation = callPackage ./corefoundation.nix {};

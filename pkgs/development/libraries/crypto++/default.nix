@@ -1,4 +1,4 @@
-{ fetchurl, fetchFromGitHub, stdenv }:
+{ fetchFromGitHub, stdenv }:
 
 stdenv.mkDerivation rec {
   name = "crypto++-${version}";

@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pam, pkgconfig, libxcb, glib, libXdmcp, itstool, libxml2
-, intltool, xlibsWrapper, libxklavier, libgcrypt, audit, coreutils
+, intltool, libxklavier, libgcrypt, audit, coreutils
 , qt4 ? null
 , withQt5 ? false, qtbase
 }:

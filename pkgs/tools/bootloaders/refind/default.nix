@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, gnu-efi }:
+{ stdenv, fetchurl, gnu-efi }:
 
 let
   archids = {

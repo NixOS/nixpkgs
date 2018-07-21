@@ -1,7 +1,6 @@
 { stdenv
 , fetchFromGitHub
 , cmake
-, makeWrapper
 , pkgconfig
 , wrapGAppsHook
 , gsettings-desktop-schemas

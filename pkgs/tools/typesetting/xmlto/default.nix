@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, flex, libxml2, libxslt
+{ fetchurl, stdenv, libxml2, libxslt
 , docbook_xml_dtd_45, docbook_xsl, w3m
 , bash, getopt, makeWrapper }:
 

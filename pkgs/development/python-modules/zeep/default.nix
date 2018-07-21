@@ -19,7 +19,6 @@
 , pytest
 , pytestcov
 , requests-mock
-, testtools
 , tornado
 }:
 

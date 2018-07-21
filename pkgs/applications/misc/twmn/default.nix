@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, fetchgit, qtbase, qtx11extras, qmake, pkgconfig, boost }:
+{ stdenv, fetchgit, qtbase, qtx11extras, qmake, pkgconfig, boost }:
 
 stdenv.mkDerivation rec {
   name = "twmn-git-2014-09-23";

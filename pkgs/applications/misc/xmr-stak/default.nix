@@ -1,5 +1,5 @@
 { stdenv, stdenvGcc6, lib
-, fetchFromGitHub, cmake, libuv, libmicrohttpd, openssl
+, fetchFromGitHub, cmake, libmicrohttpd, openssl
 , opencl-headers, ocl-icd, hwloc, cudatoolkit
 , devDonationLevel ? "0.0"
 , cudaSupport ? false

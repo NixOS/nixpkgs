@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, cmake, libGLU_combined, libX11, xproto, libXt
+{ stdenv, fetchurl, cmake, libGLU_combined, libX11, xproto, libXt
 , qtLib ? null
 # Darwin support
 , Cocoa, CoreServices, DiskArbitration, IOKit, CFNetwork, Security, GLUT, OpenGL

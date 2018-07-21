@@ -1,9 +1,9 @@
 # TODO check that no license information gets lost
-{ config, lib, fetchurl, stdenv, python, git, go, cmake, vim, vimUtils, perl, ruby
+{ config, lib, stdenv, python, cmake, vim, vimUtils, ruby
 , which, fetchgit, llvmPackages, rustPlatform
-, xkb_switch, rustracerd, fzf, skim
+, xkb_switch, fzf, skim
 , python3, boost, icu, ncurses
-, ycmd, makeWrapper, rake
+, ycmd, rake
 , pythonPackages, python3Packages
 , substituteAll
 , languagetool

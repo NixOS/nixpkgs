@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, writeScript, coreutils, ncurses, gzip, flex, bison
+{ stdenv, lib, fetchurl, coreutils, ncurses, gzip, flex, bison
 , less, makeWrapper
 , x11Mode ? false, qtMode ? false, libXaw, libXext, mkfontdir, pkgconfig, qt5
 }:

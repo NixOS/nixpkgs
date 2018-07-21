@@ -1,4 +1,4 @@
-{ stdenv, fetchpatch, fetchurl, lib, openssl, pkgconfig, libnl
+{ stdenv, fetchurl, openssl, pkgconfig, libnl
 , dbus, readline ? null, pcsclite ? null
 }:
 

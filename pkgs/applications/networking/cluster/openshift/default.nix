@@ -1,5 +1,5 @@
-{ stdenv, lib, fetchFromGitHub, fetchpatch, removeReferencesTo, which, go_1_9, go-bindata, makeWrapper, rsync, utillinux
-, iptables, coreutils, kerberos, clang
+{ stdenv, lib, fetchFromGitHub, removeReferencesTo, which, go_1_9, go-bindata, makeWrapper, rsync, utillinux
+, coreutils, kerberos, clang
 , components ? [
   "cmd/oc"
   "cmd/openshift"

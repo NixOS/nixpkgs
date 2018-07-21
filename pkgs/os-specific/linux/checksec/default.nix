@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, file, findutils, binutils, glibc, procps, coreutils, sysctl }:
+{ stdenv, fetchurl, file, findutils, binutils, glibc, coreutils, sysctl }:
 
 stdenv.mkDerivation rec {
   name = "checksec-${version}";

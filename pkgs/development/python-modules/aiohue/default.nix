@@ -1,4 +1,4 @@
-{ lib, stdenv, buildPythonPackage, fetchPypi, aiohttp }:
+{ lib, buildPythonPackage, fetchPypi, aiohttp }:
 
 buildPythonPackage rec {
   pname = "aiohue";

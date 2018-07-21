@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchFromGitHub, znc }:
+{ stdenv, fetchFromGitHub, znc }:
 
 let
   zncDerivation = a@{

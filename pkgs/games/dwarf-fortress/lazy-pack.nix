@@ -1,4 +1,4 @@
-{ stdenvNoCC, lib, buildEnv, callPackage
+{ stdenvNoCC, lib, buildEnv
 , dwarf-fortress, themes
   # This package should, at any given time, provide an opinionated "optimal"
   # DF experience. It's the equivalent of the Lazy Newbie Pack, that is, and

@@ -1,4 +1,4 @@
-{ stdenv, lib, janePackage, ocaml, ocamlbuild, angstrom, cryptokit, ctypes,
+{ stdenv, janePackage, ocamlbuild, angstrom, cryptokit, ctypes,
   magic-mime, ocaml-migrate-parsetree, octavius, ounit, ppx_deriving, re,
   zarith, num, openssl
 , ppxlib

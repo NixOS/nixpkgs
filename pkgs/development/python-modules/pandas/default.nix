@@ -2,7 +2,6 @@
 , fetchPypi
 , python
 , stdenv
-, fetchurl
 , pytest
 , glibcLocales
 , cython
