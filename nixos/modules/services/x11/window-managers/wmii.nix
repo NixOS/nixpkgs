@@ -1,4 +1,4 @@
-{ config, lib, pkgs, options, modulesPath, ... }:
+{ config, lib, pkgs, ... }:
 
 with lib;
 let

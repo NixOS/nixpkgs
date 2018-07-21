@@ -5,7 +5,7 @@ import ./make-test.nix ({ pkgs, ...} : {
     maintainers = [ aszlig ];
   };
 
-  machine = { pkgs, lib, ... }: {
+  machine = { pkgs, ... }: {
     imports = [ ./common/user-account.nix ];
     services.xserver.enable = true;
     services.xserver.windowManager.default = "icewm";

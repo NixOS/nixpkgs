@@ -45,7 +45,7 @@ let
 
 
   makeIso =
-    { module, type, maintainers ? ["eelco"], system }:
+    { module, type, system, ... }:
 
     with import nixpkgs { inherit system; };
 
@@ -56,7 +56,7 @@ let
 
 
   makeSdImage =
-    { module, maintainers ? ["dezgeg"], system }:
+    { module, system, ... }:
 
     with import nixpkgs { inherit system; };
 
@@ -96,7 +96,7 @@ let
   buildFromConfig = module: sel: forAllSystems (system: hydraJob (sel (import ./lib/eval-config.nix {
     inherit system;
     modules = [ module versionModule ] ++ singleton
-      ({ config, lib, ... }:
+      ({ ... }:
       { fileSystems."/".device  = mkDefault "/dev/sda1";
         boot.loader.grub.device = mkDefault "/dev/sda";
       });
@@ -128,15 +128,15 @@ in rec {
 
   channel = import lib/make-channel.nix { inherit pkgs nixpkgs version versionSuffix; };
 
-  manual = buildFromConfig ({ pkgs, ... }: { }) (config: config.system.build.manual.manual);
-  manualEpub = (buildFromConfig ({ pkgs, ... }: { }) (config: config.system.build.manual.manualEpub));
-  manpages = buildFromConfig ({ pkgs, ... }: { }) (config: config.system.build.manual.manpages);
-  manualGeneratedSources = buildFromConfig ({ pkgs, ... }: { }) (config: config.system.build.manual.generatedSources);
-  options = (buildFromConfig ({ pkgs, ... }: { }) (config: config.system.build.manual.optionsJSON)).x86_64-linux;
+  manual = buildFromConfig ({ ... }: { }) (config: config.system.build.manual.manual);
+  manualEpub = (buildFromConfig ({ ... }: { }) (config: config.system.build.manual.manualEpub));
+  manpages = buildFromConfig ({ ... }: { }) (config: config.system.build.manual.manpages);
+  manualGeneratedSources = buildFromConfig ({ ... }: { }) (config: config.system.build.manual.generatedSources);
+  options = (buildFromConfig ({ ... }: { }) (config: config.system.build.manual.optionsJSON)).x86_64-linux;
 
 
   # Build the initial ramdisk so Hydra can keep track of its size over time.
-  initialRamdisk = buildFromConfig ({ pkgs, ... }: { }) (config: config.system.build.initialRamdisk);
+  initialRamdisk = buildFromConfig ({ ... }: { }) (config: config.system.build.initialRamdisk);
 
   netboot = forMatchingSystems [ "x86_64-linux" "aarch64-linux" ] (system: makeNetboot {
     inherit system;
@@ -195,7 +195,7 @@ in rec {
   dummy = forAllSystems (system: pkgs.runCommand "dummy"
     { toplevel = (import lib/eval-config.nix {
         inherit system;
-        modules = singleton ({ config, pkgs, ... }:
+        modules = singleton ({ ... }:
           { fileSystems."/".device  = mkDefault "/dev/sda1";
             boot.loader.grub.device = mkDefault "/dev/sda";
             system.nixos.stateVersion = mkDefault "18.03";
@@ -424,27 +424,27 @@ in rec {
 
   closures = {
 
-    smallContainer = makeClosure ({ pkgs, ... }:
+    smallContainer = makeClosure ({ ... }:
       { boot.isContainer = true;
         services.openssh.enable = true;
       });
 
-    tinyContainer = makeClosure ({ pkgs, ... }:
+    tinyContainer = makeClosure ({ ... }:
       { boot.isContainer = true;
         imports = [ modules/profiles/minimal.nix ];
       });
 
-    ec2 = makeClosure ({ pkgs, ... }:
+    ec2 = makeClosure ({ ... }:
       { imports = [ modules/virtualisation/amazon-image.nix ];
       });
 
-    kde = makeClosure ({ pkgs, ... }:
+    kde = makeClosure ({ ... }:
       { services.xserver.enable = true;
         services.xserver.displayManager.sddm.enable = true;
         services.xserver.desktopManager.plasma5.enable = true;
       });
 
-    xfce = makeClosure ({ pkgs, ... }:
+    xfce = makeClosure ({ ... }:
       { services.xserver.enable = true;
         services.xserver.desktopManager.xfce.enable = true;
       });

@@ -5,7 +5,7 @@ import ./make-test.nix ({ pkgs, ...} : {
   };
 
   nodes = {
-    machine = { config, pkgs, ... }: {
+    machine = { pkgs, ... }: {
       services.minio = {
         enable = true;
         accessKey = "BKIKJAA5BMMU2RHO6IBB";

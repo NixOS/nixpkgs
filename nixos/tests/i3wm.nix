@@ -4,14 +4,14 @@ import ./make-test.nix ({ pkgs, ...} : {
     maintainers = [ aszlig ];
   };
 
-  machine = { lib, pkgs, ... }: {
+  machine = { lib, ... }: {
     imports = [ ./common/x11.nix ./common/user-account.nix ];
     services.xserver.displayManager.auto.user = "alice";
     services.xserver.windowManager.default = lib.mkForce "i3";
     services.xserver.windowManager.i3.enable = true;
   };
 
-  testScript = { nodes, ... }: ''
+  testScript = { ... }: ''
     $machine->waitForX;
     $machine->waitForFile("/home/alice/.Xauthority");
     $machine->succeed("xauth merge ~alice/.Xauthority");

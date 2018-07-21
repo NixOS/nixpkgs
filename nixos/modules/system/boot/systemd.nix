@@ -193,7 +193,7 @@ let
         x = pkgs.writeTextFile { name = "unit-script"; executable = true; destination = "/bin/${mkScriptName name}"; inherit text; };
     in "${x}/bin/${mkScriptName name}";
 
-  unitConfig = { name, config, ... }: {
+  unitConfig = { config, ... }: {
     config = {
       unitConfig =
         optionalAttrs (config.requires != [])
@@ -275,7 +275,7 @@ let
       ];
   };
 
-  mountConfig = { name, config, ... }: {
+  mountConfig = { config, ... }: {
     config = {
       mountConfig =
         { What = config.what;
@@ -288,7 +288,7 @@ let
     };
   };
 
-  automountConfig = { name, config, ... }: {
+  automountConfig = { config, ... }: {
     config = {
       automountConfig =
         { Where = config.where;

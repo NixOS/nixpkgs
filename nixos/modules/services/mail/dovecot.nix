@@ -110,7 +110,7 @@ let
       special_use = \${toString mailbox.specialUse}
   '' + "}";
 
-  mailboxes = { lib, pkgs, ... }: {
+  mailboxes = { ... }: {
     options = {
       name = mkOption {
         type = types.strMatching ''[^"]+'';

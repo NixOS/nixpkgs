@@ -24,9 +24,9 @@ in
   name = "cassandra-ci";
 
   nodes = {
-    cass0 = {pkgs, config, nodes, ...}: nodeCfg nodes "192.168.1.1" {};
-    cass1 = {pkgs, config, nodes, ...}: nodeCfg nodes "192.168.1.2" {};
-    cass2 = {pkgs, config, nodes, ...}: nodeCfg nodes "192.168.1.3" {
+    cass0 = { nodes, ... }: nodeCfg nodes "192.168.1.1" {};
+    cass1 = { nodes, ... }: nodeCfg nodes "192.168.1.2" {};
+    cass2 = { nodes, ... }: nodeCfg nodes "192.168.1.3" {
       extraParams = [
         ''JVM_OPTS="$JVM_OPTS -Dcassandra.replace_address=192.168.1.2"''
       ];

@@ -1,4 +1,4 @@
-import ./make-test.nix ({ pkgs, ... }:
+import ./make-test.nix ({ ... }:
 let mungekey = "mungeverryweakkeybuteasytointegratoinatest";
     slurmconfig = {
       controlMachine = "control";
@@ -14,7 +14,7 @@ in {
   nodes =
     let
     computeNode =
-      { config, pkgs, ...}:
+      { ...}:
       {
         # TODO slrumd port and slurmctld port should be configurations and
         # automatically allowed by the  firewall.
@@ -26,7 +26,7 @@ in {
     in {
 
     control =
-      { config, pkgs, ...}:
+      { ...}:
       {
         networking.firewall.enable = false;
         services.slurm = {
@@ -35,7 +35,7 @@ in {
       };
 
     submit =
-      { config, pkgs, ...}:
+      { ...}:
       {
         networking.firewall.enable = false;
         services.slurm = {

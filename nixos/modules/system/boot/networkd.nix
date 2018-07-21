@@ -523,7 +523,7 @@ let
 
   };
 
-  networkConfig = { name, config, ... }: {
+  networkConfig = { config, ... }: {
     config = {
       matchConfig = optionalAttrs (config.name != null) {
         Name = config.name;
