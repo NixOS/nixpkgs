@@ -2,16 +2,18 @@
 
 rustPlatform.buildRustPackage rec {
   name = "todiff-${version}";
-  version = "0.5.0";
+  version = "0.6.1";
 
   src = fetchFromGitHub {
     owner = "Ekleog";
     repo = "todiff";
     rev = version;
-    sha256 = "0xnqw98nccnkqfdmbkblm897v981rw1fagbi5q895bpwfg0p71lk";
+    sha256 = "1y0v8nkaqb8kn61xwarpbyrq019gxx1f5f5p1hzw73nqxadc1rcm";
   };
 
-  cargoSha256 = "0ih7lw5hbayvc66fjqwga0i7l3sb9qn0m26vnham5li39f5i3rqp";
+  cargoSha256 = "1r7l9zbw6kq8yb5cv6h0qgl2gp71bkn9xv7b2n49a5r7by98jjqr";
+
+  checkPhase = "cargo test --features=integration_tests";
 
   meta = with stdenv.lib; {
     description = "Human-readable diff for todo.txt files";
