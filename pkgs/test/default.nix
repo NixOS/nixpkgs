@@ -23,4 +23,6 @@ with pkgs;
   cc-multilib-clang = callPackage ./cc-wrapper/multilib.nix { stdenv = clangMultiStdenv; };
 
   macOSSierraShared = callPackage ./macos-sierra-shared {};
+
+  cross = callPackage ./cross {};
 }
