@@ -17585,8 +17585,6 @@ EOF
     };
   };
 
-  moreItertools = self.more-itertools;
-
   more-itertools = callPackage ../development/python-modules/more-itertools { };
 
   jaraco_functools = buildPythonPackage rec {
