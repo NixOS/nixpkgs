@@ -1,6 +1,6 @@
-{ stdenv, fetchgit, pkgconfig, xfce4-dev-tools ? null }:
+{ stdenv, fetchgit, pkgconfig, xfce4-dev-tools }:
 
-{ category, pname, sha256 ? null, version, ... } @ args:
+{ category, pname, version, rev ? "${pname}-${version}", sha256, ... } @ args:
 
 let
   inherit (builtins) filter getAttr head isList;
@@ -20,12 +20,13 @@ let
 
     src = fetchgit {
       url = "git://git.xfce.org/${category}/${pname}";
-      rev = name;
-      inherit sha256;
+      inherit rev sha256;
     };
 
     enableParallelBuilding = true;
     outputs = [ "out" "dev" ];
+
+    preFixup = ''rm $out/share/icons/hicolor/icon-theme.cache || true'';
 
     meta = with stdenv.lib; {
       homepage = "https://git.xfce.org/${category}/${pname}/about";

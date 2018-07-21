@@ -44,6 +44,8 @@ makeScope newScope (self: with self; {
 
   xfce4-appfinder = callPackage ./xfce4-appfinder { };
 
+  xfce4-battery-plugin = callPackage ./xfce4-battery-plugin { };
+
   xfce4-dev-tools = callPackage ./xfce4-dev-tools {
     mkXfceDerivation = mkXfceDerivation.override {
       xfce4-dev-tools = null;
