@@ -1,5 +1,4 @@
 { stdenv, fetchurl
-, buildPlatform, hostPlatform
 , enableSigbusFix ? false # required by kernels < 3.18.6
 }:
 

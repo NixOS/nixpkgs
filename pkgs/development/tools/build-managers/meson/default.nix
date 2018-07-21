@@ -1,4 +1,4 @@
-{ lib, python3Packages, stdenv, ninja, pkgconfig, targetPlatform, writeTextDir, substituteAll }: let
+{ lib, python3Packages, stdenv, targetPlatform, writeTextDir, substituteAll }: let
   targetPrefix = lib.optionalString stdenv.isCross
                    (targetPlatform.config + "-");
 in python3Packages.buildPythonApplication rec {

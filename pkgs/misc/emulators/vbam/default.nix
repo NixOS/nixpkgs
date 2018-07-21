@@ -5,10 +5,6 @@
 , ffmpeg
 , gettext
 , gtk2-x11
-, libpng
-, libpthreadstubs
-, libXdmcp
-, libxshmfence
 , libGLU_combined
 , openal
 , pkgconfig

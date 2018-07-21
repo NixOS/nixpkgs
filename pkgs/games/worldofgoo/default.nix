@@ -1,4 +1,4 @@
-{ stdenv, config, requireFile, fetchurl
+{ stdenv, requireFile
 , libX11, libXext, libXau, libxcb, libXdmcp , SDL, SDL_mixer, libvorbis, libGLU_combined
 , demo ? false }:
 

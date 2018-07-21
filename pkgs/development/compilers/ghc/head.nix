@@ -5,7 +5,7 @@
 , bootPkgs, alex, happy, hscolour
 , autoconf, automake, coreutils, fetchgit, perl, python3, m4
 
-, libffi, libiconv ? null, ncurses
+, libiconv ? null, ncurses
 
 , useLLVM ? !targetPlatform.isx86 || (targetPlatform.isMusl && hostPlatform != targetPlatform)
 , # LLVM is conceptually a run-time-only depedendency, but for

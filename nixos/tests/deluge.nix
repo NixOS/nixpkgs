@@ -6,7 +6,7 @@ import ./make-test.nix ({ pkgs, ...} : {
 
   nodes = {
     server =
-      { pkgs, config, ... }:
+      { ... }:
 
       { services.deluge = {
           enable = true;

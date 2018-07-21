@@ -1,6 +1,5 @@
-{pkgs, buildLispPackage, clwrapper, quicklisp-to-nix-packages}:
+{pkgs, quicklisp-to-nix-packages}:
 let
-  addDeps = newdeps: x: {deps = x.deps ++ newdeps;};
   addNativeLibs = libs: x: { propagatedBuildInputs = libs; };
   skipBuildPhase = x: {
     overrides = y: ((x.overrides y) // { buildPhase = "true"; });

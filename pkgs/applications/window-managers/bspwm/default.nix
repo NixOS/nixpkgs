@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, libxcb, libXinerama
-, sxhkd, xcbutil, xcbutilkeysyms, xcbutilwm
+, xcbutil, xcbutilkeysyms, xcbutilwm
 }:
 
 stdenv.mkDerivation rec {

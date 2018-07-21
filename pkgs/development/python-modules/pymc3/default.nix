@@ -12,7 +12,6 @@
 , pytest
 , nose
 , parameterized
-, matplotlib
 }:
 
 buildPythonPackage rec {

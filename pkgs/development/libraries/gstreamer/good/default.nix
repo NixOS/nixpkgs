@@ -12,7 +12,7 @@
 assert gtkSupport -> gtk3 != null;
 
 let
-  inherit (stdenv.lib) optional optionals optionalString;
+  inherit (stdenv.lib) optional optionals;
 in
 stdenv.mkDerivation rec {
   name = "gst-plugins-good-1.14.0";

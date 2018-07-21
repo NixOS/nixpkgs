@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, dpkg, gettext, gawk, perl, wget, coreutils, fakeroot }:
+{ stdenv, fetchurl, dpkg, gettext, gawk, perl, wget, coreutils }:
 
 # USAGE like this: debootstrap sid /tmp/target-chroot-directory
 # There is also cdebootstrap now. Is that easier to maintain?

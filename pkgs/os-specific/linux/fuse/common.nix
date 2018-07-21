@@ -2,7 +2,6 @@
 
 { stdenv, fetchFromGitHub, fetchpatch
 , fusePackages, utillinux, gettext
-, autoconf, automake, libtool
 , meson, ninja, pkgconfig
 , autoreconfHook
 }:

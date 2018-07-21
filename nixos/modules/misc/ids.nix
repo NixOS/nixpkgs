@@ -9,7 +9,7 @@
 # Systemd can also change ownership of service directories using the
 # RuntimeDirectory/StateDirectory options.
 
-{ config, pkgs, lib, ... }:
+{ lib, ... }:
 
 {
   options = {

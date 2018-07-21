@@ -4,7 +4,6 @@ with lib;
 
 let
 
-  uid = config.ids.uids.mediatomb;
   gid = config.ids.gids.mediatomb;
   cfg = config.services.mediatomb;
 

@@ -1,4 +1,4 @@
-{ stdenv, lib, buildGoPackage, fetchFromGitHub, fetchpatch
+{ lib, buildGoPackage, fetchFromGitHub, fetchpatch
 , pkgconfig, zlib, geoip }:
 
 buildGoPackage rec {

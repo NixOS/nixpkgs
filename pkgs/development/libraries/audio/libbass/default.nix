@@ -1,4 +1,4 @@
-{ stdenv, unzip, fetchurl, writeText }:
+{ stdenv, unzip, fetchurl }:
 
 let
   version = "24";

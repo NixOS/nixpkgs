@@ -282,7 +282,7 @@ let
 
   };
 
-  groupOpts = { name, config, ... }: {
+  groupOpts = { name, ... }: {
 
     options = {
 

@@ -1,10 +1,10 @@
-import ./make-test.nix ({ pkgs, ... }:
+import ./make-test.nix ({ ... }:
 
 {
   name = "owncloud";
   nodes =
     { web =
-        { config, pkgs, ... }:
+        { ... }:
         {
           services.postgresql.enable = true;
           services.httpd = {

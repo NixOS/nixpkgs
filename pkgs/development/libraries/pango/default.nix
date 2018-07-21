@@ -1,5 +1,5 @@
-{ stdenv, fetchurl, fetchpatch, pkgconfig, libXft, cairo, harfbuzz, fribidi
-, libintl, gobjectIntrospection, darwin
+{ stdenv, fetchurl, pkgconfig, libXft, cairo, harfbuzz
+, libintl, gobjectIntrospection, darwin, fribidi
 }:
 
 with stdenv.lib;

@@ -1,5 +1,5 @@
 { stdenv, fetchurl
-, sysfsutils, gnutls, openssl
+, sysfsutils, openssl
 , libcap, opensp, docbook_sgml_dtd_31
 , libidn, nettle
 , SGMLSpm, libgcrypt }:

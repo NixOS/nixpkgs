@@ -5,13 +5,6 @@ with types;
 
 let
 
-  # Converts a plan like
-  #   { "1d" = "1h"; "1w" = "1d"; }
-  # into
-  #   "1d=>1h,1w=>1d"
-  attrToPlan = attrs: concatStringsSep "," (builtins.attrValues (
-    mapAttrs (n: v: "${n}=>${v}") attrs));
-
   planDescription = ''
       The znapzend backup plan to use for the source.
     </para>

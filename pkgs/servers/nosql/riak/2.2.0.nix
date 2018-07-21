@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, unzip, erlang, which, pam, coreutils }:
+{ stdenv, lib, fetchurl, unzip, erlang, which, pam }:
 
 let
   solrName = "solr-4.10.4-yz-2.tgz";

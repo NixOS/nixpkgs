@@ -1,5 +1,5 @@
 let
-  commonConfig = { config, lib, pkgs, nodes, ... }: {
+  commonConfig = { lib, nodes, ... }: {
     networking.nameservers = [
       nodes.letsencrypt.config.networking.primaryIPAddress
     ];

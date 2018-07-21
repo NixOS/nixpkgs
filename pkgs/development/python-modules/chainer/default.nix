@@ -1,4 +1,4 @@
-{ stdenv, lib, python
+{ stdenv, lib
 , buildPythonPackage, fetchPypi, isPy3k
 , filelock, protobuf, numpy, pytest, mock
 , cupy, cudaSupport ? false

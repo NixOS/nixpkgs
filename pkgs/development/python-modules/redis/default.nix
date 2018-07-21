@@ -1,4 +1,4 @@
-{ stdenv, fetchPypi, buildPythonPackage }:
+{ fetchPypi, buildPythonPackage }:
 buildPythonPackage rec {
   pname = "redis";
   version = "2.10.6";

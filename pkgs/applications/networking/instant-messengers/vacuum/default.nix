@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub
+{ stdenv, fetchFromGitHub
   , qt4, qmake4Hook, openssl
   , xproto, libX11, libXScrnSaver, scrnsaverproto
   , xz, zlib

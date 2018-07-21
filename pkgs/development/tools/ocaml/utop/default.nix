@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, bash, ocaml, findlib, ocamlbuild, jbuilder
+{ stdenv, fetchurl, ocaml, findlib, ocamlbuild, jbuilder
 , lambdaTerm, cppo, makeWrapper
 }:
 

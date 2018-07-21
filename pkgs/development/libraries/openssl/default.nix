@@ -1,6 +1,5 @@
 { stdenv, fetchurl, buildPackages, perl
 , buildPlatform, hostPlatform
-, fetchpatch
 , withCryptodev ? false, cryptodevHeaders
 , enableSSL2 ? false
 }:

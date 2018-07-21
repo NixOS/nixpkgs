@@ -1,6 +1,6 @@
 {stdenv, fetchurl, lib, gfortran
 , ncurses
-, Xaw3d, withXaw3d ? false
+, withXaw3d ? false
 #, withPVMlib ? false
 , tcl, tk, withTk ? false
 , gtk2, withGtk ? false # working ?

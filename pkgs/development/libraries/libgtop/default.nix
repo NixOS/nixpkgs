@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, glib, pkgconfig, perl, gettext, gobjectIntrospection, libintl, libtool, gnome3, gtk-doc }:
+{ stdenv, fetchurl, fetchpatch, glib, pkgconfig, perl, gettext, gobjectIntrospection, libtool, gnome3, gtk-doc }:
 let
   pname = "libgtop";
   version = "2.38.0";

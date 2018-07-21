@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch }:
+{ stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
   name = "jbig2dec-0.14";

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, perl, perlPackages, makeWrapper, imagemagick, gdk_pixbuf, librsvg
+{ stdenv, fetchurl, perl, perlPackages, makeWrapper, imagemagick, gdk_pixbuf, librsvg
 , hicolor-icon-theme
 }:
 

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, pkgs }:
+{ fetchpatch }:
 
 rec {
   bridge_stp_helper =

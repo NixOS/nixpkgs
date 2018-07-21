@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, skalibs, gcc }:
+{ stdenv, fetchurl, skalibs }:
 
 with stdenv.lib;
 

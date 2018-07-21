@@ -1,5 +1,5 @@
 { lib, stdenv
-, fetchurl, fetchFromGitHub, fetchpatch
+, fetchurl, fetchFromGitHub
 , cmake, pkgconfig, unzip, zlib, pcre, hdf5
 , glog, boost, google-gflags, protobuf
 , config

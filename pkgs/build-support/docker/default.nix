@@ -1,5 +1,4 @@
 {
-  callPackage,
   coreutils,
   docker,
   e2fsprogs,

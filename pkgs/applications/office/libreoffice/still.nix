@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pam, python3, libxslt, perl, ArchiveZip
-, CompressZlib, zlib, libjpeg, expat, pkgconfigUpstream, freetype, libwpd
+, CompressZlib, zlib, libjpeg, expat, freetype, libwpd
 , libxml2, db, sablotron, curl, fontconfig, libsndfile, neon
 , bison, flex, zip, unzip, gtk3, gtk2, libmspack, getopt, file, cairo, which
 , icu, boost, jdk, ant, cups, xorg, libcmis, carlito
@@ -8,7 +8,7 @@
 , autoconf, automake, openldap, bash, hunspell, librdf_redland, nss, nspr
 , libwpg, dbus-glib, glibc, qt4, clucene_core, libcdr, lcms, vigra
 , unixODBC, mdds, sane-backends, mythes, libexttextcat, libvisio
-, fontsConf, pkgconfig, libzip, bluez5, libtool, maven
+, fontsConf, pkgconfig, bluez5, libtool
 , libatomic_ops, graphite2, harfbuzz, libodfgen, libzmf
 , librevenge, libe-book, libmwaw, glm, glew, gst_all_1
 , gdb, commonsLogging, librdf_rasqal, wrapGAppsHook

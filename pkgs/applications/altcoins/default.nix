@@ -88,5 +88,5 @@ rec {
   parity = callPackage ./parity { };
   parity-ui = callPackage ./parity-ui { };
 
-  particl-core = callPackage ./particl/particl-core.nix { boost = boost165; miniupnpc = miniupnpc_2; withGui = false; };
+  particl-core = callPackage ./particl/particl-core.nix { boost = boost165; miniupnpc = miniupnpc_2; };
 }

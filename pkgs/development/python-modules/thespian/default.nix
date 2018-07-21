@@ -1,4 +1,4 @@
-{ stdenv, fetchPypi, buildPythonPackage, lib }:
+{ fetchPypi, buildPythonPackage, lib }:
 
 buildPythonPackage rec {
   version = "3.9.2";

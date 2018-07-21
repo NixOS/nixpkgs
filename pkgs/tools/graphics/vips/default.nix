@@ -1,6 +1,6 @@
-{ stdenv, fetchurl, pkgconfig, glib, libxml2, flex, bison, vips, expat,
+{ stdenv, fetchurl, pkgconfig, glib, libxml2, expat,
   fftw, orc, lcms, imagemagick, openexr, libtiff, libjpeg, libgsf, libexif,
-  python27, libpng, matio ? null, cfitsio ? null, libwebp ? null
+  python27, libpng ? null
 }:
 
 stdenv.mkDerivation rec {

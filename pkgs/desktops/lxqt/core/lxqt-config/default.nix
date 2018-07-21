@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, fetchpatch, cmake, pkgconfig, lxqt-build-tools, qtbase, qtx11extras, qttools, qtsvg, kwindowsystem, libkscreen, liblxqt, libqtxdg, libpthreadstubs, xorg }:
+{ stdenv, fetchFromGitHub, cmake, pkgconfig, lxqt-build-tools, qtbase, qtx11extras, qttools, qtsvg, kwindowsystem, libkscreen, liblxqt, libqtxdg, xorg }:
 
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";

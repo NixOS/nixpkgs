@@ -1,4 +1,4 @@
-{ lib, callPackage, fetchurl, fetchpatch }:
+{ lib, callPackage, fetchurl }:
 
 let
   generic = args: callPackage (import ./generic.nix args) { };

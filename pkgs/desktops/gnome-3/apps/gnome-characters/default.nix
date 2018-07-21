@@ -1,5 +1,5 @@
 { stdenv, fetchurl, meson, ninja, pkgconfig, gettext, gnome3, glib, gtk3, pango, wrapGAppsHook
-, gobjectIntrospection, gjs, gdk_pixbuf, librsvg, libunistring }:
+, gobjectIntrospection, gjs, libunistring }:
 
 stdenv.mkDerivation rec {
   name = "gnome-characters-${version}";

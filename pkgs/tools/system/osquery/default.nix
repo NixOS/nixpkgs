@@ -4,7 +4,7 @@
 , beecrypt, augeas, libxml2, sleuthkit, yara, lldpd, google-gflags
 , thrift, boost, rocksdb_lite, glog, gbenchmark, snappy
 , openssl, file, doxygen
-, gtest, sqlite, fpm, zstd, rdkafka, rapidjson, path
+, gtest, sqlite, fpm, zstd, rdkafka, rapidjson
 }:
 
 let

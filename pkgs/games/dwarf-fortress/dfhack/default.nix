@@ -1,4 +1,4 @@
-{ stdenv, buildEnv, hostPlatform, lib, fetchurl, fetchFromGitHub, cmake, writeScriptBin, callPackage
+{ stdenv, buildEnv, lib, fetchFromGitHub, cmake, writeScriptBin
 , perl, XMLLibXML, XMLLibXSLT, zlib
 , enableStoneSense ? false,  allegro5, libGLU_combined
 , enableTWBT ? true, twbt

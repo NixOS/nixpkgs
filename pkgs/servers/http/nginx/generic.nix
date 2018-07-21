@@ -1,10 +1,9 @@
-{ stdenv, fetchurl, fetchFromGitHub, openssl, zlib, pcre, libxml2, libxslt, expat
+{ stdenv, fetchurl, openssl, zlib, pcre, libxml2, libxslt
 , gd, geoip
 , withDebug ? false
 , withStream ? true
 , withMail ? false
 , modules ? []
-, hardening ? true
 , version, sha256, ...
 }:
 

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, bash, cabextract, curl, gnupg, libX11, libGLU_combined, perl, wineStaging
+{ stdenv, fetchurl, bash, cabextract, curl, gnupg, libX11, libGLU_combined, wineStaging
  }:
 
 let

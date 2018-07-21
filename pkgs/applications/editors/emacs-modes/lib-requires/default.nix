@@ -1,4 +1,4 @@
-{ fetchurl, lib, stdenv, melpaBuild }:
+{ fetchurl, lib, melpaBuild }:
 
 melpaBuild {
   pname = "lib-requires";

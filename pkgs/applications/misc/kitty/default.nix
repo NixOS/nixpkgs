@@ -1,5 +1,5 @@
-{ stdenv, fetchFromGitHub, pkgs, python3Packages, glfw, libunistring, harfbuzz,
-  fontconfig, zlib, pkgconfig, ncurses, imagemagick, makeWrapper, xsel,
+{ stdenv, fetchFromGitHub, python3Packages, glfw, libunistring, harfbuzz,
+  fontconfig, pkgconfig, ncurses, imagemagick, xsel,
   libstartup_notification, libX11, libXrandr, libXinerama, libXcursor,
   libxkbcommon, libXi, libXext, wayland-protocols, wayland,
   which

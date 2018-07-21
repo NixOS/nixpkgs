@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchPypi, buildPythonPackage, fetchurl, libvorbis, flac, libogg, libopus, opusfile }:
+{ stdenv, lib, fetchPypi, buildPythonPackage, libvorbis, flac, libogg, libopus, opusfile }:
 
 buildPythonPackage rec {
     pname = "PyOgg";

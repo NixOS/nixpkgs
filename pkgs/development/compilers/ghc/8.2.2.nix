@@ -6,7 +6,7 @@
 , autoconf, autoreconfHook, automake, coreutils, fetchurl, fetchpatch, perl, python3, sphinx
 , runCommand
 
-, libffi, libiconv ? null, ncurses
+, libiconv ? null, ncurses
 
 , useLLVM ? !targetPlatform.isx86 || (targetPlatform.isMusl && hostPlatform != targetPlatform)
 , # LLVM is conceptually a run-time-only depedendency, but for

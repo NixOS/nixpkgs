@@ -4,7 +4,7 @@ import ./make-test.nix ({ pkgs, ... } : {
   name = "buildbot";
 
   nodes = {
-    bbmaster = { config, pkgs, ... }: {
+    bbmaster = { pkgs, ... }: {
       services.buildbot-master = {
         enable = true;
         package = pkgs.buildbot-full;
@@ -22,7 +22,7 @@ import ./make-test.nix ({ pkgs, ... } : {
       environment.systemPackages = with pkgs; [ git buildbot-full ];
     };
 
-    bbworker = { config, pkgs, ... }: {
+    bbworker = { pkgs, ... }: {
       services.buildbot-worker = {
         enable = true;
         masterUrl = "bbmaster:9989";
@@ -30,7 +30,7 @@ import ./make-test.nix ({ pkgs, ... } : {
       environment.systemPackages = with pkgs; [ git buildbot-worker ];
     };
 
-    gitrepo = { config, pkgs, ... }: {
+    gitrepo = { pkgs, ... }: {
       services.openssh.enable = true;
       networking.firewall.allowedTCPPorts = [ 22 9418 ];
       environment.systemPackages = with pkgs; [ git ];

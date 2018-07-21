@@ -1,7 +1,7 @@
-{ stdenv, fetchurl, pkgconfig, dbus-glib, dbus, cairo, popt, which, libxml2Python, libxslt, bzip2, python
-, glib, gtk, pango, atk, libXau, libcanberra-gtk2
+{ stdenv, fetchurl, pkgconfig, dbus-glib, popt, which, libxml2Python, libxslt, bzip2, python
+, gtk, libXau, libcanberra-gtk2
 , intltool, ORBit2, libglade, libgnome, libgnomeui, libbonobo, libbonoboui, GConf, gnome_menus, gnome-desktop
-, libwnck, librsvg, libgweather, gnome-doc-utils, libgnomecanvas, libart_lgpl, libtasn1, libtool, xorg }:
+, libwnck, librsvg, libgweather, gnome-doc-utils, libtasn1, libtool, xorg }:
 
 stdenv.mkDerivation {
   name = "gnome-panel-2.32.1";

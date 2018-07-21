@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchgit, fetchurl, makeWrapper,
+{ stdenv, lib, fetchurl, makeWrapper,
   ocaml, unzip, ncurses, curl, aspcud
 }:
 

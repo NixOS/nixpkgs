@@ -1,5 +1,5 @@
-{ stdenv, fetchurl, libcdio-paranoia, cddiscid, wget, bash, which, vorbis-tools, id3v2, eyeD3
-, lame, flac, eject, mkcue, glyr
+{ stdenv, fetchurl, libcdio-paranoia, cddiscid, wget, which, vorbis-tools, id3v2, eyeD3
+, lame, flac, glyr
 , perl, DigestSHA, MusicBrainz, MusicBrainzDiscID
 , makeWrapper }:
 

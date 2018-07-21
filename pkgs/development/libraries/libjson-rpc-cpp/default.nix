@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, cmake, jsoncpp, argtable, curl, libmicrohttpd
-, doxygen, catch, pkgconfig, git
+, doxygen, catch, pkgconfig
 }:
 
 stdenv.mkDerivation rec {

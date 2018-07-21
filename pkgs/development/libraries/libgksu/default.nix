@@ -1,6 +1,6 @@
 { stdenv, fetchurl, pkgconfig, wrapGAppsHook, gtk2, gnome2, gnome3,
   libstartup_notification, libgtop, perl, perlXMLParser,
-  autoreconfHook, intltool, docbook_xsl, xauth, sudo
+  autoreconfHook, intltool, docbook_xsl, xauth
 }:
 
 stdenv.mkDerivation rec {

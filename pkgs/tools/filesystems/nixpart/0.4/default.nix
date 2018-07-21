@@ -1,8 +1,6 @@
 { stdenv, fetchurl, python, buildPythonApplication
 # Propagated to blivet
 , useNixUdev ? true
-# No longer needed, but kept for backwards-compatibility with older NixOps.
-, udevSoMajor ? null
 # Propagated dependencies
 , pkgs, urlgrabber
 }:

@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, fetchpatch, perl, pkgconfig, systemd, openssl
+{ stdenv, lib, fetchurl, perl, pkgconfig, systemd, openssl
 , bzip2, zlib, lz4, inotify-tools, pam, libcap
 , clucene_core_2, icu, openldap, libsodium, libstemmer
 # Auth modules

@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchdarcs, zope_interface, isPy3k }:
+{ buildPythonPackage, fetchdarcs, zope_interface, isPy3k }:
 
 buildPythonPackage rec {
   pname = "python-application";

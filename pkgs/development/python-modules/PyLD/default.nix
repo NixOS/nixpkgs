@@ -1,4 +1,4 @@
-{ stdenv, fetchPypi, buildPythonPackage, fetchFromGitHub, python, gnugrep }:
+{ stdenv, buildPythonPackage, fetchFromGitHub, python, gnugrep }:
 
 let
 

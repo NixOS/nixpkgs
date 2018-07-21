@@ -1,4 +1,4 @@
-{ stdenv, pkgs, fetchurl, lib, makeWrapper, gvfs, atomEnv}:
+{ stdenv, pkgs, fetchurl, makeWrapper, gvfs, atomEnv}:
 
 let
   common = pname: {version, sha256}: stdenv.mkDerivation rec {

@@ -1,6 +1,6 @@
 { stdenv, fetchurl, cmake, pkgconfig, ncurses, zlib, xz, lzo, lz4, bzip2, snappy
 , libiconv, openssl, pcre, boost, judy, bison, libxml2
-, libaio, libevent, groff, jemalloc, cracklib, systemd, numactl, perl
+, libaio, libevent, jemalloc, cracklib, systemd, numactl, perl
 , fixDarwinDylibNames, cctools, CoreServices
 , asio, buildEnv, check, scons
 }:

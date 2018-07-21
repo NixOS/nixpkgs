@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, substituteAll, pkgconfig, glib, itstool, libxml2, xorg, dbus
+{ stdenv, fetchurl, substituteAll, pkgconfig, glib, itstool, libxml2, xorg
 , intltool, accountsservice, libX11, gnome3, systemd, autoreconfHook
 , gtk, libcanberra-gtk3, pam, libtool, gobjectIntrospection, plymouth
 , librsvg, coreutils, xwayland }:

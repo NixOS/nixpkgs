@@ -1,9 +1,9 @@
 { lib, stdenv, fetchurl, python, pkgconfig, perl, libxslt, docbook_xsl
 , fetchpatch
-, docbook_xml_dtd_42, docbook_xml_dtd_45, readline, talloc
+, docbook_xml_dtd_42, readline, talloc
 , popt, iniparser, libbsd, libarchive, libiconv, gettext
 , krb5Full, zlib, openldap, cups, pam, avahi, acl, libaio, fam, libceph, glusterfs
-, gnutls, libgcrypt, libgpgerror
+, gnutls
 , ncurses, libunwind, libibverbs, librdmacm, systemd
 
 , enableInfiniband ? false

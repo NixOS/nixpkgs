@@ -1,18 +1,15 @@
 { stdenv, fetchurl, fetchpatch, boost, cmake, chromaprint, gettext, gst_all_1, liblastfm
 , qt4, taglib, fftw, glew, qjson, sqlite, libgpod, libplist, usbmuxd, libmtp
 , libpulseaudio, gvfs, libcdio, libechonest, libspotify, pcre, projectm, protobuf
-, qca2, pkgconfig, sparsehash, config, makeWrapper, runCommand, gst_plugins }:
+, qca2, pkgconfig, sparsehash, config, makeWrapper, gst_plugins }:
 
 let
-  withSpotify = config.clementine.spotify or false;
   withIpod = config.clementine.ipod or false;
   withMTP = config.clementine.mtp or true;
   withCD = config.clementine.cd or true;
   withCloud = config.clementine.cloud or true;
 
   version = "1.3.1";
-
-  exeName = "clementine";
 
   src = fetchurl {
     url = https://github.com/clementine-player/Clementine/archive/1.3.1.tar.gz;

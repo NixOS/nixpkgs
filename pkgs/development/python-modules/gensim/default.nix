@@ -5,9 +5,6 @@
 , six
 , scipy
 , smart_open
-, scikitlearn
-, testfixtures
-, unittest2
 }:
 
 buildPythonPackage rec {

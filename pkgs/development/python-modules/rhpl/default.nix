@@ -1,4 +1,4 @@
-{stdenv, buildPythonPackage, fetchurl, rpmextract, python, wirelesstools, gettext}:
+{buildPythonPackage, fetchurl, rpmextract, python, wirelesstools, gettext}:
 
 buildPythonPackage rec {
   pname = "rhpl";

@@ -1,4 +1,4 @@
-{ stdenv, lib, makeWrapper, fetchurl, unzip, atomEnv, makeDesktopItem, buildFHSUserEnv }:
+{ stdenv, makeWrapper, fetchurl, unzip, atomEnv, makeDesktopItem, buildFHSUserEnv }:
 
 let
   version = "0.10.0";
@@ -26,7 +26,7 @@ let
   };
 
   mist = stdenv.lib.appendToName "unwrapped" (stdenv.mkDerivation {
-    inherit name version;
+    inherit name version meta;
 
     src = {
       i686-linux = fetchurl {
@@ -56,7 +56,7 @@ let
   });
 in
 buildFHSUserEnv {
-  inherit name;
+  inherit name meta;
 
   targetPkgs = pkgs: with pkgs; [
      mist

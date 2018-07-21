@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi, python
+{ buildPythonPackage, fetchPypi, python
 , mock, testrepository, testtools
 , requests, six }:
 

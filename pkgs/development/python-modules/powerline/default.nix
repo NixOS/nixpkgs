@@ -1,9 +1,6 @@
 { lib
 , fetchurl
 , buildPythonPackage
-, git
-, mercurial
-, bazaar
 , psutil
 , pygit2
 }:

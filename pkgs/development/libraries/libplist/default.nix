@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, libxml2, swig2, python2Packages, glib }:
+{ stdenv, fetchurl, pkgconfig, swig2, python2Packages, glib }:
 
 let
   inherit (python2Packages) python cython;

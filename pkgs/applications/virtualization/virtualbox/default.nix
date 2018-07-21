@@ -1,12 +1,12 @@
 { stdenv, fetchurl, lib, fetchpatch, iasl, dev86, pam, libxslt, libxml2
 , libX11, xproto, libXext, libXcursor, libXmu, qt5, libIDL, SDL, libcap
-, zlib, libpng, glib, lvm2, libXrandr, libXinerama
+, libpng, glib, lvm2, libXrandr, libXinerama
 , pkgconfig, which, docbook_xsl, docbook_xml_dtd_43
-, alsaLib, curl, libvpx, gawk, nettools, dbus
+, alsaLib, curl, libvpx, nettools, dbus
 , xorriso, makeself, perl
 , javaBindings ? false, jdk ? null
 , pythonBindings ? false, python2 ? null
-, enableExtensionPack ? false, requireFile ? null, patchelf ? null, fakeroot ? null
+, enableExtensionPack ? false, requireFile ? null, fakeroot ? null
 , pulseSupport ? false, libpulseaudio ? null
 , enableHardening ? false
 , headless ? false

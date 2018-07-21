@@ -1,8 +1,6 @@
 let
   pkgs = import ./.. { };
   lib = pkgs.lib;
-  sources = lib.sourceFilesBySuffices ./. [".xml"];
-  sources-langs = ./languages-frameworks;
 in
 pkgs.stdenv.mkDerivation {
   name = "nixpkgs-manual";

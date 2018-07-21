@@ -1,7 +1,7 @@
 { stdenv, fetchPypi, buildPythonPackage, pythonOlder, isPy3k
 , pyperclip, six, pyparsing, vim, wcwidth, colorama
-, contextlib2 ? null, subprocess32 ? null
-, pytest, mock, which, fetchFromGitHub, glibcLocales
+, contextlib2 ? null
+, pytest, mock, which, glibcLocales
 }:
 buildPythonPackage rec {
   pname = "cmd2";

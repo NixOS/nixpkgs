@@ -1,4 +1,4 @@
-{ pkgs, stdenv, fetchurl, fetchFromGitHub, makeWrapper, gawk, gnum4, gnused
+{ pkgs, stdenv, fetchFromGitHub, makeWrapper, gawk, gnum4, gnused
 , libxml2, libxslt, ncurses, openssl, perl, autoreconfHook
 , openjdk ? null # javacSupport
 , unixODBC ? null # odbcSupport

@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, rustPlatform, makeWrapper
+{ stdenv, fetchFromGitHub, rustPlatform
 , darwin, fontconfig, harfbuzz-icu, openssl, pkgconfig }:
 
 rustPlatform.buildRustPackage rec {

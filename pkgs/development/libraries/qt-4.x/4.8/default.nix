@@ -1,8 +1,8 @@
 { stdenv, fetchurl, fetchpatch, substituteAll
 , hostPlatform
-, libXrender, libXinerama, libXcursor, libXmu, libXv, libXext
+, libXrender, libXinerama, libXcursor, libXv, libXext
 , libXfixes, libXrandr, libSM, freetype, fontconfig, zlib, libjpeg, libpng
-, libmng, which, libGLSupported, libGL, libGLU, openssl, dbus, cups, pkgconfig
+, libmng, which, libGLSupported, libGLU, openssl, dbus, cups, pkgconfig
 , libtiff, glib, icu, mysql, postgresql, sqlite, perl, coreutils, libXi
 , buildMultimedia ? stdenv.isLinux, alsaLib, gstreamer, gst-plugins-base
 , buildWebkit ? (stdenv.isLinux || stdenv.isDarwin)

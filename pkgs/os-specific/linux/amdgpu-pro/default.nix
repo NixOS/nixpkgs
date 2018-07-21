@@ -1,7 +1,7 @@
 { stdenv, fetchurl, elfutils
 , xorg, patchelf, openssl, libdrm, udev
 , libxcb, libxshmfence, epoxy, perl, zlib
-, fetchFromGitHub, ncurses
+, ncurses
 , libsOnly ? false, kernel ? null
 }:
 

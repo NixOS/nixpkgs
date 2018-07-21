@@ -10,14 +10,14 @@ with lib;
 
   nodes = {
     couchdb1 =
-      { pkgs, config, ... }:
+      { pkgs, ... }:
 
       { environment.systemPackages = with pkgs; [ jq ];
         services.couchdb.enable = true;
       };
 
     couchdb2 =
-      { pkgs, config, ... }:
+      { pkgs, ... }:
 
       { environment.systemPackages = with pkgs; [ jq ];
         services.couchdb.enable = true;

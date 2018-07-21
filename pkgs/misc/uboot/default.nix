@@ -1,6 +1,6 @@
 { stdenv, fetchurl, fetchpatch, bc, bison, dtc, flex, openssl, python2, swig
 , armTrustedFirmwareAllwinner
-, hostPlatform, buildPackages
+, buildPackages
 }:
 
 let

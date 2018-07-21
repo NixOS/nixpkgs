@@ -4,7 +4,7 @@ import ./make-test.nix ({ pkgs, ...} : {
     maintainers = [ nequissimus ];
   };
 
-  machine = { config, lib, pkgs, ... }:
+  machine = { pkgs, ... }:
     {
       boot.kernelPackages = pkgs.linuxPackages;
     };

@@ -1,4 +1,4 @@
-{ stdenv, hostPlatform, fetchurl, gettext, pkgconfig, perl, python
+{ stdenv, fetchurl, gettext, pkgconfig, perl, python
 , libiconv, zlib, libffi, pcre, libelf, gnome3
 # use utillinuxMinimal to avoid circular dependency (utillinux, systemd, glib)
 , utillinuxMinimal ? null

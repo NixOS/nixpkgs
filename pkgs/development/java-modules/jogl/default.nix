@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, makeWrapper, ant, jdk, openjdk8, zulu8, git, xorg, udev, libGL, libGLU }:
+{ stdenv, fetchgit, ant, jdk, openjdk8, zulu8, git, xorg, udev, libGL, libGLU }:
 
 let
   # workaround https://github.com/NixOS/nixpkgs/issues/37364

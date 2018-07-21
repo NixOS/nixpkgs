@@ -1,4 +1,4 @@
-{ lib, fetchpatch, python }:
+{ lib, python }:
 
 let newPython = python.override {
   packageOverrides = self: super: {

@@ -1,4 +1,4 @@
-{ stdenv, lib, qtbase, qtsvg,  makeWrapper, fetchurl, makeDesktopItem }:
+{ stdenv, lib, qtbase, qtsvg,  fetchurl, makeDesktopItem }:
 stdenv.mkDerivation rec {
   name = "write_stylus-${version}";
   version = "209";

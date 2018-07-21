@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi, fetchFromGitHub }:
+{ stdenv, buildPythonPackage, fetchPypi }:
 
 buildPythonPackage rec {
   pname = "lmtpd";

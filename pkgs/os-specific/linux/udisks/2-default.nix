@@ -2,7 +2,7 @@
 , gnome3, gtk-doc, acl, systemd, glib, libatasmart, polkit, coreutils, bash
 , expat, libxslt, docbook_xsl, utillinux, mdadm, libgudev, libblockdev, parted
 , gobjectIntrospection, docbook_xml_dtd_412, docbook_xml_dtd_43
-, libxfs, f2fs-tools, dosfstools, e2fsprogs, btrfs-progs, exfat, nilfs-utils, udftools, ntfs3g
+, libxfs, f2fs-tools, dosfstools, e2fsprogs, btrfs-progs, exfat, nilfs-utils, ntfs3g
 }:
 
 let

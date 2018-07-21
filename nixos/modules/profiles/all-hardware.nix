@@ -3,7 +3,7 @@
 # enabled in the initrd.  Its primary use is in the NixOS installation
 # CDs.
 
-{ config, pkgs, ... }:
+{ ... }:
 
 {
 

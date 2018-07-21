@@ -1,6 +1,6 @@
 { stdenv, lib, fetchurl, python2Packages, pkgconfig
 , xorg, gtk2, glib, pango, cairo, gdk_pixbuf, atk
-, makeWrapper, xkbcomp, xorgserver, getopt, xauth, utillinux, which, fontsConf
+, makeWrapper, xorgserver, getopt, xauth, utillinux, which
 , ffmpeg, x264, libvpx, libwebp
 , libfakeXinerama
 , gst_all_1, pulseaudio, gobjectIntrospection
@@ -9,7 +9,7 @@
 with lib;
 
 let
-  inherit (python2Packages) python cython buildPythonApplication;
+  inherit (python2Packages) cython buildPythonApplication;
 in buildPythonApplication rec {
   name = "xpra-${version}";
   version = "2.3.2";

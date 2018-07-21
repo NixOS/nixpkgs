@@ -2,13 +2,13 @@
 , knot-dns, luajit, libuv, lmdb, gnutls, nettle
 , cmocka, systemd, dns-root-data, makeWrapper
 , extraFeatures ? false /* catch-all if defaults aren't enough */
-, hiredis, libmemcached, luajitPackages
+, luajitPackages
 }:
 let # un-indented, over the whole file
 
 result = if extraFeatures then wrapped-full else unwrapped;
 
-inherit (stdenv.lib) optional optionals optionalString concatStringsSep;
+inherit (stdenv.lib) optional concatStringsSep;
 
 unwrapped = stdenv.mkDerivation rec {
   name = "knot-resolver-${version}";

@@ -1,5 +1,5 @@
 { stdenv, fetchurl, unzip
-, buildPlatform, hostPlatform
+, hostPlatform
 }:
 
 let

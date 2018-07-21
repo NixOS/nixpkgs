@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, fetchpatch, removeReferencesTo, go-md2man
+{ stdenv, lib, fetchFromGitHub, removeReferencesTo, go-md2man
 , go, pkgconfig, libapparmor, apparmor-parser, libseccomp }:
 
 with lib;

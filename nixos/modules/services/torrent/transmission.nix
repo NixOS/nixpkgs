@@ -13,12 +13,6 @@ let
   settingsDir = "${homeDir}/.config/transmission-daemon";
   settingsFile = pkgs.writeText "settings.json" (builtins.toJSON fullSettings);
 
-  # Strings must be quoted, ints and bools must not (for settings.json).
-  toOption = x:
-    if isBool x then boolToString x
-    else if isInt x then toString x
-    else toString ''"${x}"'';
-
   # for users in group "transmission" to have access to torrents
   fullSettings = { umask = 2; download-dir = downloadDir; incomplete-dir = incompleteDir; } // cfg.settings;
 

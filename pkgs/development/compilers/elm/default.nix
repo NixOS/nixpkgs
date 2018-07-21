@@ -1,4 +1,4 @@
-{ lib, stdenv, buildEnv, haskell, nodejs, fetchurl, fetchpatch, makeWrapper }:
+{ lib, stdenv, buildEnv, haskell, nodejs, fetchurl, makeWrapper }:
 
 # To update:
 # 1) Update versions in ./update-elm.rb and run it.

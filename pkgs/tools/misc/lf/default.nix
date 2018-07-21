@@ -28,6 +28,10 @@ buildGoPackage rec {
     runHook postBuild
   '';
 
+  postInstall = ''
+    install -D --mode=444 lf.1 $out/share/man/man1/lf.1
+  '';
+
   meta = with stdenv.lib; {
     description = "A terminal file manager written in Go and heavily inspired by ranger";
     longDescription = ''

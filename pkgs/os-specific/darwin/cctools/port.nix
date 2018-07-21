@@ -1,5 +1,5 @@
-{ stdenv, fetchFromGitHub, makeWrapper, autoconf, automake, libtool_2, autoreconfHook
-, libcxx, libcxxabi, libuuid
+{ stdenv, fetchFromGitHub, autoconf, automake, libtool_2, autoreconfHook
+, libcxxabi, libuuid
 , libobjc ? null, maloader ? null
 , hostPlatform, targetPlatform
 , enableDumpNormalizedLibArgs ? false

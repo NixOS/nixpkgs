@@ -1,8 +1,5 @@
 { stdenv, lib, ruby, callPackage, ... }:
 let
-  real = {
-    inherit (stdenv) mkDerivation;
-  };
   mkDerivation = {name, ...}@argSet:
   derivation {
     inherit name;

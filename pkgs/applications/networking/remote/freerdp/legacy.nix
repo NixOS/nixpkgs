@@ -14,10 +14,9 @@
 , ffmpeg
 , libxkbfile
 #, xmlto, docbook_xml_dtd_412, docbook_xml_xslt
-, libXfixes
 , libXinerama
 , libXv
-, pulseaudioSupport ? true, libpulseaudio
+, pulseaudioSupport ? true
 }:
 
 assert printerSupport -> cups != null;

@@ -6,7 +6,6 @@
 , libffi
 , libbfd
 , libxml2
-, valgrind
 , ncurses
 , version
 , release_version
@@ -15,7 +14,6 @@
 , debugVersion ? false
 , enableManpages ? false
 , enableSharedLibraries ? true
-, darwin
 }:
 
 let

@@ -1,7 +1,7 @@
 # A profile with most (vanilla) hardening options enabled by default,
 # potentially at the cost of features and performance.
 
-{ config, lib, pkgs, ... }:
+{ lib, pkgs, ... }:
 
 with lib;
 

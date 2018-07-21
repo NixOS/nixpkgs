@@ -1,5 +1,5 @@
 {
-  mkDerivation, lib, copyPathsToStore, fetchpatch,
+  mkDerivation, lib, copyPathsToStore,
   extra-cmake-modules, kdoctools,
 
   epoxy,libICE, libSM, libinput, libxkbcommon, udev, wayland, xcb-util-cursor,

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchFromGitHub, cmake, qt4, quazip, qt-mobility, qxt, pythonPackages, glib }:
+{ stdenv, fetchFromGitHub, cmake, qt4, quazip, qt-mobility, qxt, pythonPackages }:
 
 with stdenv.lib;
 stdenv.mkDerivation rec {
