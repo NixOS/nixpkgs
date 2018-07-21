@@ -129,7 +129,7 @@ let
 
   transcrypt = callPackage ./transcrypt { };
 
-} // lib.optionalAttrs (config.allowAliases or false) (with self; {
+} // lib.optionalAttrs (config.allowAliases or true) (with self; {
   # aliases
   gitAnnex = git-annex;
   svn_all_fast_export = svn-all-fast-export;
