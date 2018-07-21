@@ -2,7 +2,7 @@
 , coreutils, gnugrep, which, git, unzip, libsecret
 }:
 
-{ name, product, version, src, wmClass, jdk, meta } @ attrs:
+{ name, product, version, src, wmClass, jdk, meta }:
 
 with stdenv.lib;
 

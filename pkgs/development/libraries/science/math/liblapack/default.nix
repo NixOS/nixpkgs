@@ -11,8 +11,7 @@ let
   atlasMaybeShared = if atlas != null then atlas.override { inherit shared; }
                      else null;
   usedLibExtension = if shared then ".so" else ".a";
-  inherit (stdenv.lib) optional optionals concatStringsSep;
-  inherit (builtins) hasAttr attrNames;
+  inherit (stdenv.lib) optional optionals;
   version = "3.8.0";
 in
 

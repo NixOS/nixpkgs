@@ -40,7 +40,7 @@
 }:
 
 let
-  inherit (stdenv) isi686 isx86_64 isAarch32 is64bit isMips isDarwin isCygwin;
+  inherit (stdenv) is64bit isMips isDarwin isCygwin;
   inherit (stdenv.lib) enableFeature optional optionals;
 in
 

@@ -6,7 +6,7 @@
 
 let
 
-  inherit (stdenv.lib) optional optionals optionalString;
+  inherit (stdenv.lib) optionals optionalString;
 
   clangHack = writeScriptBin "clang" ''
     #!${stdenv.shell}

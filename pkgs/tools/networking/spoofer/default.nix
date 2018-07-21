@@ -1,7 +1,7 @@
 { stdenv, fetchurl, pkgconfig, protobuf, openssl, libpcap, traceroute
 , withGUI ? false, qt5 }:
 
-let inherit (stdenv.lib) optional optionalString;
+let inherit (stdenv.lib) optional;
 in
 
 stdenv.mkDerivation rec {

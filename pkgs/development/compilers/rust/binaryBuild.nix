@@ -6,8 +6,7 @@
 }:
 
 let
-  inherit (stdenv.lib) getLib optionalString;
-  inherit (darwin) libiconv;
+  inherit (stdenv.lib) optionalString;
   inherit (darwin.apple_sdk.frameworks) Security;
 
   bootstrapping = versionType == "bootstrap";

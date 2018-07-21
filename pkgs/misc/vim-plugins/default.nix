@@ -14,8 +14,7 @@ let
 
   _skim = skim;
 
-  inherit (vimUtils.override {inherit vim;}) rtpPath addRtp buildVimPlugin
-    buildVimPluginFrom2Nix vimHelpTags;
+  inherit (vimUtils.override {inherit vim;}) buildVimPluginFrom2Nix;
 
 
 # TL;DR
@@ -1652,6 +1651,17 @@ let
       url = "https://github.com/leafgarland/typescript-vim";
       rev = "e25636b44211a4be7b089bfed7cf09aa7dd086f5";
       sha256 = "1i422j4za5xwcv3zz7cjw523nnh5q652c04phqp681lgdmgqszh4";
+    };
+    dependencies = [];
+
+  };
+
+  vim-ledger = buildVimPluginFrom2Nix { # created by nix#NixDerivation
+    name = "vim-ledger-2017-12-12";
+    src = fetchgit {
+      url = "https://github.com/ledger/vim-ledger";
+      rev = "6eb3bb21aa979cc295d0480b2179938c12b33d0d";
+      sha256 = "0rbwyaanvl2bqk8xm4kq8fkv8y92lpf9xx5n8gw54iij7xxhnj01";
     };
     dependencies = [];
 

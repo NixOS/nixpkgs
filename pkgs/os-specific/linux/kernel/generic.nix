@@ -47,7 +47,7 @@
 
 , mkValueOverride ? null
 , ...
-} @ args:
+}:
 
 assert stdenv.isLinux;
 

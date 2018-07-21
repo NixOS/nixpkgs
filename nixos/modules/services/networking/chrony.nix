@@ -4,8 +4,6 @@ with lib;
 
 let
 
-  inherit (pkgs) chrony;
-
   stateDir = "/var/lib/chrony";
 
   keyFile = "/etc/chrony.keys";

@@ -4,7 +4,7 @@
 with import ./lib.nix { inherit config lib pkgs; };
 
 let
-  inherit (lib) concatStringsSep intersperse mapAttrsToList mkForce mkIf mkMerge mkOption optionalString types;
+  inherit (lib) concatStringsSep mkIf mkOption optionalString types;
 
   bosConfig = pkgs.writeText "BosConfig" (''
     restrictmode 1

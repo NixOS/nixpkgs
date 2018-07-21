@@ -2392,6 +2392,7 @@ extra-packages:
   - http-conduit ^>= 2.2                # pre-lts-11.x versions neeed by git-annex 6.20180227
   - inline-c < 0.6                      # required on GHC 8.0.x
   - inline-c-cpp < 0.2                  # required on GHC 8.0.x
+  - lens-labels == 0.1.*                # required for proto-lens-descriptors
   - mtl < 2.2                           # newer versions require transformers > 0.4.x, which we cannot provide in GHC 7.8.x
   - mtl-prelude < 2                     # required for to build postgrest on mtl 2.1.x platforms
   - network == 2.6.3.1                  # newer versions don't compile with GHC 7.4.x and below
@@ -2399,6 +2400,9 @@ extra-packages:
   - persistent >=2.5 && <2.8            # pre-lts-11.x versions neeed by git-annex 6.20180227
   - persistent-sqlite < 2.7             # pre-lts-11.x versions neeed by git-annex 6.20180227
   - primitive == 0.5.1.*                # required to build alex with GHC 6.12.3
+  - proto-lens == 0.2.*                 # required for tensorflow-proto-0.1.x on GHC 8.2.x
+  - proto-lens-protoc == 0.2.*          # required for tensorflow-proto-0.1.x on GHC 8.2.x
+  - proto-lens-protobuf-types == 0.2.*  # required for tensorflow-proto-0.1.x on GHC 8.2.x
   - QuickCheck < 2                      # required by test-framework-quickcheck and its users
   - resourcet ==1.1.*                   # pre-lts-11.x versions neeed by git-annex 6.20180227
   - seqid < 0.2                         # newer versions depend on transformers 0.4.x which we cannot provide in GHC 7.8.x
@@ -2581,6 +2585,7 @@ dont-distribute-packages:
   passman-core:                                 [ i686-linux, x86_64-linux, x86_64-darwin ]
   reflex-dom-colonnade:                         [ i686-linux, x86_64-linux, x86_64-darwin ]
   reflex-dom-contrib:                           [ i686-linux, x86_64-linux, x86_64-darwin ]
+  reflex-dom-fragment-shader-canvas:            [ i686-linux, x86_64-linux, x86_64-darwin ]
   reflex-dom-helpers:                           [ i686-linux, x86_64-linux, x86_64-darwin ]
   reflex-dom:                                   [ i686-linux, x86_64-linux, x86_64-darwin ]
   reflex-jsx:                                   [ i686-linux, x86_64-linux, x86_64-darwin ]

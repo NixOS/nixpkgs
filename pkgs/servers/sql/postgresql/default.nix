@@ -2,7 +2,7 @@
 
 let
 
-  common = { version, sha256, psqlSchema } @ args:
+  common = { version, sha256, psqlSchema }:
    let atLeast = lib.versionAtLeast version; in stdenv.mkDerivation (rec {
     name = "postgresql-${version}";
 

@@ -3,13 +3,13 @@
 
 stdenv.mkDerivation rec {
   name = "playerctl-${version}";
-  version = "0.6.0";
+  version = "0.6.1";
 
   src = fetchFromGitHub {
     owner = "acrisci";
     repo = "playerctl";
     rev = "v${version}";
-    sha256 = "1sxy87syrfk485f2x556rl567j6rph4ss0xahf04bv26bzj3mqrp";
+    sha256 = "0jnylj5d6i29c5y6yjxg1a88r2qfbac5pj95f2aljjkfh9428jbb";
   };
 
   nativeBuildInputs = [ pkgconfig ];

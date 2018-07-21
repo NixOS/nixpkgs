@@ -9,7 +9,7 @@
 with lib;
 
 let
-  inherit (python2Packages) python cython buildPythonApplication;
+  inherit (python2Packages) cython buildPythonApplication;
 in buildPythonApplication rec {
   name = "xpra-${version}";
   version = "2.3.2";
