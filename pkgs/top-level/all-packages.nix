@@ -158,6 +158,8 @@ with pkgs;
 
   fetchbzr = callPackage ../build-support/fetchbzr { };
 
+  fetchclojar = callPackage ../build-support/fetchclojar { };
+
   fetchcvs = callPackage ../build-support/fetchcvs { };
 
   fetchdarcs = callPackage ../build-support/fetchdarcs { };
