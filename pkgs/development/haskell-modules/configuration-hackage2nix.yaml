@@ -2581,6 +2581,7 @@ dont-distribute-packages:
   passman-core:                                 [ i686-linux, x86_64-linux, x86_64-darwin ]
   reflex-dom-colonnade:                         [ i686-linux, x86_64-linux, x86_64-darwin ]
   reflex-dom-contrib:                           [ i686-linux, x86_64-linux, x86_64-darwin ]
+  reflex-dom-fragment-shader-canvas:            [ i686-linux, x86_64-linux, x86_64-darwin ]
   reflex-dom-helpers:                           [ i686-linux, x86_64-linux, x86_64-darwin ]
   reflex-dom:                                   [ i686-linux, x86_64-linux, x86_64-darwin ]
   reflex-jsx:                                   [ i686-linux, x86_64-linux, x86_64-darwin ]
