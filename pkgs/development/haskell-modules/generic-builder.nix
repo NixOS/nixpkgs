@@ -213,6 +213,19 @@ let
 
   buildPkgDb = ghcName: packageConfDir: ''
     if [ -d "$p/lib/${ghcName}/package.conf.d" ]; then
+
+      # Remove ldflags to lessen number of args. Once we have found a
+      # package config for this package we can safely assume that GHC
+      # can use the package configuration to discover everything. That
+      # means it should not need the traditional unix style `-L' flag
+      # anymore. This is kind of a hack but one that can cut down on
+      # LDFLAGS tremendously helping to alleviate the ARG_MAX limit
+      # issue found in Nixpkgs.
+      NIX_LDFLAGS=$(echo "$NIX_LDFLAGS" | \
+                    sed "s,-L$p/lib\( \+\|$\),,g")
+      NIX_BUILD_LDFLAGS=$(echo "$NIX_BUILD_LDFLAGS" | \
+                          sed "s,-L$p/lib\( \+\|$\),,g")
+
       cp -f "$p/lib/${ghcName}/package.conf.d/"*.conf ${packageConfDir}/
       continue
     fi
