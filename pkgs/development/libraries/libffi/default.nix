@@ -1,6 +1,9 @@
 { stdenv, fetchurl, fetchpatch
 , buildPlatform, hostPlatform, autoreconfHook
-, doCheck ? true, dejagnu
+
+# libffi is used in darwin stdenv
+# we cannot run checks within it
+, doCheck ? !stdenv.isDarwin, dejagnu
 }:
 
 stdenv.mkDerivation rec {
