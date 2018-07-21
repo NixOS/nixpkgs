@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi, pythonOlder, nose, dnspython
+{ stdenv, buildPythonPackage, fetchPypi, nose, dnspython
 ,  chardet, lmtpd, pythondaemon, six, jinja2, mock }:
 
 buildPythonPackage rec {

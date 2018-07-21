@@ -1,6 +1,4 @@
-{ stdenv, fetchurl, readline, compat ? false
-, hostPlatform
-}:
+{ stdenv, fetchurl, readline, compat ? false }:
 
 stdenv.mkDerivation rec {
   name = "lua-${version}";

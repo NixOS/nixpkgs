@@ -1,5 +1,5 @@
-{ stdenv, fetchpatch, python3, pkgconfig, which, libtool, autoconf, automake,
-  autogen, git, sqlite, gmp, zlib, fetchFromGitHub }:
+{ stdenv, python3, pkgconfig, which, libtool, autoconf, automake,
+  autogen, sqlite, gmp, zlib, fetchFromGitHub }:
 
 with stdenv.lib;
 stdenv.mkDerivation rec {

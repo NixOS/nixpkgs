@@ -1,4 +1,4 @@
-{ pkgs, makeScope, libsForQt5, fetchFromGitHub }:
+{ pkgs, makeScope, libsForQt5 }:
 
 let
   packages = self: with self; {

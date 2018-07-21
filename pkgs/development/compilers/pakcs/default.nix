@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
 
   curryBase = haskellPackages.callPackage (
     { mkDerivation, base, Cabal, containers, directory, either
-    , filepath, mtl, pretty, stdenv, syb, time
+    , filepath, mtl, pretty, syb, time
     }:
     mkDerivation {
       pname = "curry-base";
@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
 
   curryFront = haskellPackages.callPackage (
     { mkDerivation, base, Cabal, containers, directory
-    , filepath, mtl, network-uri, process, stdenv, syb, transformers
+    , filepath, mtl, network-uri, process, syb, transformers
     }:
     mkDerivation {
       pname = "curry-frontend";

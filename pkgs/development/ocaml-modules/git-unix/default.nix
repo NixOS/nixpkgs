@@ -1,6 +1,6 @@
 { stdenv, ocaml, findlib, jbuilder, git-http
 , cohttp-lwt-unix
-, tls, magic-mime, cmdliner, mtime
+, tls, cmdliner, mtime
 }:
 
 stdenv.mkDerivation rec {

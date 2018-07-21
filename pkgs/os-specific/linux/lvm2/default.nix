@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, pkgconfig, systemd, udev, utillinux, coreutils, libuuid
+{ stdenv, fetchurl, fetchpatch, pkgconfig, systemd, udev, utillinux, libuuid
 , thin-provisioning-tools, enable_dmeventd ? false }:
 
 let

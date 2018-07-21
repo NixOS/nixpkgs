@@ -1,4 +1,4 @@
-{ stdenv, pythonPackages, fetchurl, callPackage, nix, ronn }:
+{ stdenv, pythonPackages, nix, ronn }:
 
 pythonPackages.buildPythonApplication rec {
   pname = "vulnix";

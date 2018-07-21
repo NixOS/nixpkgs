@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, runCommand, vscode, unzip }:
+{ stdenv, lib, fetchurl, vscode, unzip }:
 
 let
   extendedPkgVersion = lib.getVersion vscode;

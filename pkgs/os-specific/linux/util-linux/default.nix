@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkgconfig, zlib, fetchpatch, shadow
+{ lib, stdenv, fetchurl, pkgconfig, zlib, shadow
 , ncurses ? null, perl ? null, pam, systemd, minimal ? false }:
 
 let

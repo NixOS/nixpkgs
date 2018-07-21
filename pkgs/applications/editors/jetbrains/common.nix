@@ -1,5 +1,5 @@
-{ stdenv, fetchurl, makeDesktopItem, makeWrapper, patchelf, p7zip
-, coreutils, gnugrep, which, git, python, unzip, libsecret
+{ stdenv, makeDesktopItem, makeWrapper, patchelf, p7zip
+, coreutils, gnugrep, which, git, unzip, libsecret
 }:
 
 { name, product, version, src, wmClass, jdk, meta }:

@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, pythonPackages
-, sysstat, unzip, makeWrapper }:
+, unzip, makeWrapper }:
 let
   inherit (pythonPackages) python;
   docker_1_10 = pythonPackages.buildPythonPackage rec {

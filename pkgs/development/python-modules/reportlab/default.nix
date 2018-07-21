@@ -1,9 +1,7 @@
-{ lib
-, buildPythonPackage
+{ buildPythonPackage
 , fetchPypi
 , freetype
 , pillow
-, pip
 , glibcLocales
 , python
 , isPyPy

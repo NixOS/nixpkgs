@@ -2,7 +2,7 @@
 , lib
 , fetchurl
 , buildPythonPackage
-, isPy3k, isPy35, isPy36, pythonOlder
+, isPy3k, isPy36, pythonOlder
 , astor
 , gast
 , numpy

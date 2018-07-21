@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, pkgconfig, darwin, cairo, xlibsWrapper, fontconfig, freetype, libsigcxx }:
+{ fetchurl, stdenv, pkgconfig, darwin, cairo, fontconfig, freetype, libsigcxx }:
 let
   ver_maj = "1.12";
   ver_min = "2";

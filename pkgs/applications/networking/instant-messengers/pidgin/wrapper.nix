@@ -1,4 +1,4 @@
-{ stdenv, symlinkJoin, pidgin, makeWrapper, plugins }:
+{ symlinkJoin, pidgin, makeWrapper, plugins }:
 
 let
 extraArgs = map (x: x.wrapArgs or "") plugins;

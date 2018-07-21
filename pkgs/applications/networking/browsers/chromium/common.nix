@@ -5,7 +5,7 @@
 , libevent, expat, libjpeg, snappy
 , libpng, libcap
 , xdg_utils, yasm, minizip, libwebp
-, libusb1, pciutils, nss, re2, zlib, libvpx
+, libusb1, pciutils, nss, re2, zlib
 
 , python2Packages, perl, pkgconfig
 , nspr, systemd, kerberos
@@ -14,11 +14,10 @@
 , glib, gtk2, gtk3, dbus-glib
 , libXScrnSaver, libXcursor, libXtst, libGLU_combined
 , protobuf, speechd, libXdamage, cups
-, ffmpeg, harfbuzz, harfbuzz-icu, libxslt, libxml2
+, ffmpeg, libxslt, libxml2
 
 # optional dependencies
 , libgcrypt ? null # gnomeSupport || cupsSupport
-, libexif ? null # only needed for Chromium before version 51
 
 # package customization
 , enableNaCl ? false

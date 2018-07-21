@@ -1,4 +1,4 @@
-{ stdenv, callPackage, utillinux }:
+{ callPackage, utillinux }:
 
 let
   mkFuse = args: callPackage (import ./common.nix args) {

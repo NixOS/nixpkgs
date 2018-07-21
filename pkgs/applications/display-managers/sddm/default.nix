@@ -1,5 +1,5 @@
-{ mkDerivation, lib, fetchFromGitHub, fetchpatch
-, cmake, extra-cmake-modules, pkgconfig, libxcb, libpthreadstubs, lndir
+{ mkDerivation, lib, fetchFromGitHub
+, cmake, extra-cmake-modules, pkgconfig, libxcb, libpthreadstubs
 , libXdmcp, libXau, qtbase, qtdeclarative, qttools, pam, systemd
 }:
 

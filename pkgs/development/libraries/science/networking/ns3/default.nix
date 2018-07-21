@@ -1,5 +1,5 @@
 { stdenv
-, fetchFromGitHub, fetchurl
+, fetchFromGitHub
 , python
 
 # for binding generation

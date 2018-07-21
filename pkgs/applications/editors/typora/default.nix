@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, dpkg, lib, glib, dbus, makeWrapper, gnome3, gtk3, atk, cairo, pango
+{ stdenv, fetchurl, dpkg, glib, dbus, makeWrapper, gnome3, gtk3, atk, cairo, pango
 , gdk_pixbuf, freetype, fontconfig, nspr, nss, xorg, alsaLib, cups, expat, udev, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {

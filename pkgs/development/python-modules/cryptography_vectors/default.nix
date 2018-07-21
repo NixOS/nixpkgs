@@ -1,6 +1,5 @@
 { buildPythonPackage
 , fetchPypi
-, cryptography
 }:
 
 buildPythonPackage rec {

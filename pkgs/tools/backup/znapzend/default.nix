@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, fetchurl, zfs, mbuffer, perl, perlPackages, wget, autoconf, automake }:
+{ stdenv, fetchFromGitHub, fetchurl, perl, perlPackages, wget, autoconf, automake }:
 
 let
   # when upgrade znapzend, check versions of Perl libs here: https://github.com/oetiker/znapzend/blob/master/PERL_MODULES

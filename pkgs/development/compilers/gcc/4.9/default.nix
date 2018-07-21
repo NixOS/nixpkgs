@@ -28,7 +28,6 @@
 , # Strip kills static libs of other archs (hence no cross)
   stripped ? hostPlatform == buildPlatform && targetPlatform == hostPlatform
 , gnused ? null
-, darwin ? null
 , buildPlatform, hostPlatform, targetPlatform
 , buildPackages
 }:

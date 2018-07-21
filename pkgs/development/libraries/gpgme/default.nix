@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, libgpgerror, gnupg, pkgconfig, glib, pth, libassuan
+{ stdenv, fetchurl, libgpgerror, gnupg, pkgconfig, glib, pth, libassuan
 , file, which
 , autoreconfHook
 , git

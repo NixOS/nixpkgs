@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cargo, rustPlatform }:
+{ stdenv, fetchFromGitHub, rustPlatform }:
 
 rustPlatform.buildRustPackage rec {
   name = "dust-${version}";

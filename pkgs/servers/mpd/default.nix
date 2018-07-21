@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, fetchpatch, autoreconfHook, pkgconfig, glib, systemd, boost, darwin
+{ stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, glib, systemd, boost, darwin
 , alsaSupport ? true, alsaLib
 , avahiSupport ? true, avahi, dbus
 , flacSupport ? true, flac

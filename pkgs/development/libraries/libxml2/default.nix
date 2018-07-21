@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, fetchpatch
+{ stdenv, lib, fetchurl
 , zlib, xz, python2, findXMLCatalogs, libiconv
 , buildPlatform, hostPlatform
 , pythonSupport ? buildPlatform == hostPlatform

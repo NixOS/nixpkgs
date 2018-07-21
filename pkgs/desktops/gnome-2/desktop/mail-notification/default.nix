@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchFromGitHub, pkgconfig, glib, gnome2, dbus-glib, gmime, libnotify, libgnome-keyring, openssl, cyrus_sasl, gnonlin, sylpheed, gob2, gettext, intltool, libxml2, hicolor-icon-theme, tango-icon-theme }:
+{ stdenv, fetchFromGitHub, pkgconfig, glib, gnome2, dbus-glib, gmime, libnotify, libgnome-keyring, openssl, cyrus_sasl, gnonlin, sylpheed, gob2, gettext, intltool, libxml2, hicolor-icon-theme, tango-icon-theme }:
 
 stdenv.mkDerivation rec {
   rev = "9ae8768";

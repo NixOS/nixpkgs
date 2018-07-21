@@ -1,11 +1,10 @@
-{ stdenv, fetchgit, fetchurl, fetchzip
+{ stdenv, fetchurl, fetchzip
 # build tools
 , gfortran, m4, makeWrapper, patchelf, perl, which, python2
-, runCommand
 , paxctl
 # libjulia dependencies
 , libunwind, readline, utf8proc, zlib
-, llvm, libffi, ncurses
+, llvm
 # standard library dependencies
 , curl, fftwSinglePrec, fftw, gmp, libgit2, mpfr, openlibm, openspecfun, pcre2
 # linear algebra

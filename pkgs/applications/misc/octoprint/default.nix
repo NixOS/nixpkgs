@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, python2, fetchurl }:
+{ stdenv, fetchFromGitHub, python2 }:
 
 let
 

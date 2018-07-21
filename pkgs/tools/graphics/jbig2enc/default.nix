@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, leptonica, zlib, libwebp, giflib, libjpeg, libpng, libtiff }:
+{ stdenv, fetchurl, leptonica, zlib, libwebp, giflib, libjpeg, libpng, libtiff }:
 
 stdenv.mkDerivation {
   name = "jbig2enc-0.28";

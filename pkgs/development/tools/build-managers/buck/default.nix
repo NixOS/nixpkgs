@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, jdk, ant, python2, python2Packages, watchman, unzip, bash, makeWrapper }:
+{ stdenv, fetchFromGitHub, jdk, ant, python2, python2Packages, watchman, bash, makeWrapper }:
 
 stdenv.mkDerivation rec {
   name = "buck-unstable-${version}";

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, pkgconfig, perl, pam, nspr, nss, openldap
+{ stdenv, fetchurl, pkgconfig, perl, pam, nspr, nss, openldap
 , db, cyrus_sasl, svrcore, icu, net_snmp, kerberos, pcre, perlPackages
 }:
 let

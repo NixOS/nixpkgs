@@ -1,4 +1,4 @@
-{ lib, hostPlatform, targetPlatform
+{ targetPlatform
 , clang-unwrapped
 , binutils-unwrapped
 , runCommand

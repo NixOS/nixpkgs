@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, pkgconfig, intltool, wrapGAppsHook
+{ stdenv, fetchFromGitHub, pkgconfig, intltool, wrapGAppsHook
 , python3Packages, gnome3, gtk3, gobjectIntrospection}:
 
 let

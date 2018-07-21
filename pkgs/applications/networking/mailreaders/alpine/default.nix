@@ -1,4 +1,4 @@
-{stdenv, fetchurl, ncurses, tcl, openssl, pam, pkgconfig, gettext, kerberos
+{stdenv, fetchurl, ncurses, tcl, openssl, pam, kerberos
 , openldap
 }:
 

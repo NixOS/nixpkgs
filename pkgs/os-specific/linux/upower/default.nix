@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, glib, dbus-glib
+{ stdenv, fetchurl, pkgconfig, dbus-glib
 , intltool, libxslt, docbook_xsl, udev, libgudev, libusb1
 , useSystemd ? true, systemd, gobjectIntrospection
 }:

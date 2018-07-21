@@ -1,7 +1,5 @@
-{ pkgs
-, stdenv
+{ stdenv
 , sage-src
-, env-locations
 , sage-with-env
 , sagelib
 , python2

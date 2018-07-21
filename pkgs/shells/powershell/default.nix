@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, autoPatchelfHook, fetchzip, libunwind, libuuid, icu, curl,
+{ stdenv, autoPatchelfHook, fetchzip, libunwind, libuuid, icu, curl,
   makeWrapper, less, openssl, pam, lttng-ust }:
 
 let platformString = if stdenv.isDarwin then "osx"

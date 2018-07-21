@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, ncurses, gettext
+{ stdenv, fetchurl, ncurses
 , withLibrary ? false, libtool
 , unicodeSupport ? true
 }:

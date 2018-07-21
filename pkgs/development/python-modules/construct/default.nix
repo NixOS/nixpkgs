@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchFromGitHub, six, pytest, pythonOlder }:
+{ stdenv, buildPythonPackage, fetchFromGitHub, six, pytest }:
 
 buildPythonPackage rec {
   pname = "construct";

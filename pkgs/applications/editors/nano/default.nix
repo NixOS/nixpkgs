@@ -1,4 +1,4 @@
-{ stdenv, hostPlatform, fetchurl, fetchFromGitHub
+{ stdenv, fetchurl, fetchFromGitHub
 , ncurses
 , texinfo
 , gettext ? null

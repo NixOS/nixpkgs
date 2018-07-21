@@ -1,4 +1,4 @@
-{ stdenv, lib, buildEnv, buildGoPackage, fetchpatch, fetchFromGitHub, makeWrapper }:
+{ stdenv, lib, buildEnv, buildGoPackage, fetchFromGitHub, makeWrapper }:
 
 let
   goPackagePath = "github.com/hashicorp/terraform";
@@ -75,7 +75,7 @@ let
             });
     in withPlugins (_: []);
 
-  plugins = import ./providers { inherit stdenv lib buildGoPackage fetchFromGitHub; };
+  plugins = import ./providers { inherit lib buildGoPackage fetchFromGitHub; };
 in rec {
   terraform_0_8_5 = generic {
     version = "0.8.5";

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, autoreconfHook, which, pkgconfig, mono }:
+{ stdenv, fetchurl, which, pkgconfig, mono }:
 
 stdenv.mkDerivation rec {
   name = "mono-zeroconf-${version}";

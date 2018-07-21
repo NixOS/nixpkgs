@@ -1,7 +1,5 @@
 { lib
-, pkgs
 , buildPythonPackage
-, python
 , fetchPypi
 , pythonOlder
 , html5lib

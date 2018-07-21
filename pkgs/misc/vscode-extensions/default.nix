@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, callPackage, vscode-utils }:
+{ stdenv, callPackage, vscode-utils }:
 
 let
   inherit (vscode-utils) buildVscodeMarketplaceExtension;

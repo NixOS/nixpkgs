@@ -1,5 +1,5 @@
-{ stdenv, buildGoPackage, fetchFromGitHub, fetchurl, go-bindata, libvirt, qemu
-, gpgme, makeWrapper, hostPlatform, vmnet, python, pkgconfig
+{ stdenv, buildGoPackage, fetchFromGitHub, go-bindata, libvirt, qemu
+, gpgme, makeWrapper, hostPlatform, vmnet, python
 , docker-machine-kvm, docker-machine-kvm2
 , extraDrivers ? []
 }:

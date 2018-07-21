@@ -1,4 +1,4 @@
-{lib, pkgs, stdenv, fetchFromGitHub, cmake, pkgconfig, boost, libGL, qtbase}:
+{lib, stdenv, fetchFromGitHub, cmake, pkgconfig, boost, libGL, qtbase}:
 
 stdenv.mkDerivation rec {
 

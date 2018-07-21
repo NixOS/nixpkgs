@@ -1,5 +1,5 @@
 { stdenv, buildPythonPackage, fetchFromGitHub
-, glibcLocales, pandoc, git
+, glibcLocales, git
 , mock, nose, markdown, lxml, typogrify
 , jinja2, pygments, docutils, pytz, unidecode, six, dateutil, feedgenerator
 , blinker, pillow, beautifulsoup4, markupsafe }:

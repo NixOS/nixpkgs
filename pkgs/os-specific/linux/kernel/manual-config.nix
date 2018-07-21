@@ -1,8 +1,7 @@
 { buildPackages, runCommand, nettools, bc, bison, flex, perl, gmp, libmpc, mpfr, openssl
-, ncurses ? null
 , libelf
 , utillinux
-, writeTextFile, ubootTools
+, writeTextFile
 }:
 
 let

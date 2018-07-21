@@ -1,4 +1,4 @@
-{ stdenv, lib, makeDesktopItem, fetchurl, unzip
+{ stdenv, makeDesktopItem, fetchurl, unzip
 , gdk_pixbuf, glib, gtk2, atk, pango, cairo, freetype, fontconfig, dbus, nss, nspr, alsaLib, cups, expat, udev, gnome2
 , xorg, mozjpeg
 }:

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, patchelf, libredirect, coreutils, pcsclite
+{ stdenv, fetchurl, patchelf, coreutils, pcsclite
 , zlib, glib, gdk_pixbuf, gtk2, cairo, pango, libX11, atk, openssl }:
 
 let

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, unzip, libusb, fetchgit }:
+{ stdenv, unzip, libusb, fetchgit }:
 let
   version = "2.1";
 in

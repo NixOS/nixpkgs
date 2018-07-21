@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, cmake, pkgconfig, lndir
+{ stdenv, lib, fetchurl, cmake, pkgconfig
 , zlib, gettext, libvdpau, libva, libXv, sqlite
 , yasm, freetype, fontconfig, fribidi
 , makeWrapper, libXext, libGLU, qttools, qtbase

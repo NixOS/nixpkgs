@@ -1,4 +1,4 @@
-{ stdenv, lib, go, buildGoPackage, fetchgit }:
+{ stdenv, go, buildGoPackage, fetchgit }:
 
 buildGoPackage rec {
   name = "gotools-unstable-${version}";

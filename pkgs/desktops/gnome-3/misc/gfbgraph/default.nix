@@ -1,4 +1,4 @@
-{ stdenv, intltool, fetchurl, pkgconfig, glib
+{ stdenv, fetchurl, pkgconfig, glib
 , gnome3, libsoup, json-glib, gobjectIntrospection }:
 
 let

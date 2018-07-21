@@ -1,6 +1,5 @@
 { stdenv
 , fetchurl, lzip
-, hostPlatform, buildPlatform
 }:
 
 stdenv.mkDerivation rec {

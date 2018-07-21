@@ -9650,7 +9650,7 @@ in {
   fixtures = callPackage ../development/python-modules/fixtures { };
 
   pelican = callPackage ../development/python-modules/pelican {
-    inherit (pkgs) glibcLocales pandoc git;
+    inherit (pkgs) glibcLocales git;
   };
 
   pep8 = buildPythonPackage rec {

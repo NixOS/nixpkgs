@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi, isPy33, pythonOlder }:
+{ stdenv, buildPythonPackage, fetchPypi, pythonOlder }:
 
 buildPythonPackage rec {
   pname = "asyncio";

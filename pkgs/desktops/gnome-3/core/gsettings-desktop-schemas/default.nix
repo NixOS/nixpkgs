@@ -1,6 +1,6 @@
 { stdenv, fetchurl, pkgconfig, intltool, glib, gobjectIntrospection
   # just for passthru
-, gnome3, gtk3, gsettings-desktop-schemas }:
+, gnome3 }:
 
 stdenv.mkDerivation rec {
   name = "gsettings-desktop-schemas-${version}";

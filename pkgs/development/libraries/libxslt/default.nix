@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, libxml2, findXMLCatalogs, python2
+{ stdenv, fetchurl, libxml2, findXMLCatalogs, python2
 , buildPlatform, hostPlatform
 , cryptoSupport ? false
 , pythonSupport ? buildPlatform == hostPlatform

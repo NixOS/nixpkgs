@@ -1,4 +1,4 @@
-{ stdenv, lib, sudo, coreutils, systemd, cryptsetup
+{ sudo, coreutils, systemd, cryptsetup
 , mount, umount
 , buildGoPackage, fetchFromGitHub }:
 

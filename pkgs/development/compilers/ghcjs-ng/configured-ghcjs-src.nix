@@ -4,7 +4,6 @@
 , python3
 , gcc
 , cabal-install
-, gmp
 , runCommand
 , lib
 , stdenv

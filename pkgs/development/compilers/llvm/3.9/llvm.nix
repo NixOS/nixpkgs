@@ -8,14 +8,12 @@
 , libffi
 , libbfd
 , libxml2
-, valgrind
 , ncurses
 , version
 , zlib
 , compiler-rt_src
 , debugVersion ? false
 , enableSharedLibraries ? (buildPlatform == hostPlatform)
-, darwin
 , buildPackages
 , buildPlatform
 , hostPlatform

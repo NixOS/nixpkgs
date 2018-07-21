@@ -1,4 +1,4 @@
-{stdenv, atd, yojson, menhir, easy-format, biniou, cppo, buildOcaml, fetchurl, which}:
+{stdenv, atd, yojson, biniou, buildOcaml, fetchurl, which}:
 
 buildOcaml rec {
   name = "atdgen";

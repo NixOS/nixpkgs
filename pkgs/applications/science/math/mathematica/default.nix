@@ -8,7 +8,6 @@
 , freetype
 , gcc
 , glib
-, libpng
 , ncurses
 , opencv
 , openssl

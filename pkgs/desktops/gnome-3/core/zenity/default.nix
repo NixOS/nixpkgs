@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, cairo, libxml2, libxslt, gnome3, pango
+{ stdenv, fetchurl, pkgconfig, libxml2, libxslt, gnome3
 , gnome-doc-utils, intltool, libX11, which, itstool, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {

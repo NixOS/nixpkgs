@@ -2,14 +2,12 @@
 , buildFHSUserEnv
 , cairo
 , dpkg
-, fetchurl
 , gdk_pixbuf
 , glib
 , gtk2-x11
 , makeWrapper
 , pango
 , stdenv
-, writeTextFile
 , xorg
 }:
 

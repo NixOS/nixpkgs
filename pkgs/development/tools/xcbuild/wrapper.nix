@@ -1,4 +1,4 @@
-{ stdenv, lib, buildPackages, makeWrapper, writeText, runCommand
+{ lib, buildPackages, makeWrapper, writeText, runCommand
 , CoreServices, ImageIO, CoreGraphics
 , targetPlatform
 , xcodePlatform ? targetPlatform.xcodePlatform or "MacOSX"

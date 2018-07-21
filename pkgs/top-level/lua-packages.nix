@@ -5,9 +5,9 @@
    for each package in a separate file: the call to the function would
    be almost as must code as the function itself. */
 
-{ fetchurl, fetchzip, stdenv, lua, callPackage, unzip, zziplib, pkgconfig, libtool
-, pcre, oniguruma, gnulib, tre, glibc, sqlite, openssl, expat, cairo
-, perl, gtk2, python, glib, gobjectIntrospection, libevent, zlib, autoreconfHook
+{ fetchurl, stdenv, lua, callPackage, unzip, zziplib, pkgconfig
+, pcre, oniguruma, gnulib, tre, glibc, sqlite, openssl, expat
+, glib, gobjectIntrospection, libevent, zlib, autoreconfHook
 , mysql, postgresql, cyrus_sasl
 , fetchFromGitHub, libmpack, which, fetchpatch, writeText
 }:

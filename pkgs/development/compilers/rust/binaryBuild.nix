@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, makeWrapper, bash, cacert, zlib, buildRustPackage, curl, darwin
+{ stdenv, makeWrapper, bash, buildRustPackage, curl, darwin
 , version
 , src
 , platform

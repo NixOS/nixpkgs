@@ -1,7 +1,7 @@
 { stdenv, fetchurl, dpkg, makeWrapper
 , alsaLib, atk, cairo, cups, curl, dbus, expat, fontconfig, freetype, glib
 , gnome3, gtk3, gdk_pixbuf, libnotify, libxcb, nspr, nss, pango
-, systemd, wget, xorg, xprintidle-ng }:
+, systemd, xorg, xprintidle-ng }:
 
 let
 

@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, pythonPackages, makeWrapper, gettext, git }:
+{ stdenv, fetchFromGitHub, pythonPackages, gettext, git }:
 
 let
   inherit (pythonPackages) buildPythonApplication pyqt5 sip pyinotify;

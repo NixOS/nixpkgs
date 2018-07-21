@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, python3Packages, qtbase }:
+{ stdenv, fetchurl, python3Packages }:
 
 let
 

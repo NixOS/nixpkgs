@@ -4,7 +4,6 @@
 , fetchPypi
 , cachetools
 , cld2-cffi
-, cython
 , cytoolz
 , ftfy
 , ijson

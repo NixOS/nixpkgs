@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, buildPythonPackage, python, pkgconfig, glib, gobjectIntrospection, pycairo, cairo, which, ncurses}:
+{ stdenv, fetchurl, buildPythonPackage, pkgconfig, glib, gobjectIntrospection, pycairo, cairo, which, ncurses}:
 
 buildPythonPackage rec {
   major = "3.26";

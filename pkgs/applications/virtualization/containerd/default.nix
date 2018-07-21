@@ -1,5 +1,5 @@
 { stdenv, lib, fetchFromGitHub, removeReferencesTo
-, go, libapparmor, apparmor-parser, libseccomp, btrfs-progs }:
+, go, btrfs-progs }:
 
 with lib;
 

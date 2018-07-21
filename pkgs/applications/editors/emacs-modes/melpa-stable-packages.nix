@@ -13,7 +13,7 @@ To update the list of packages from MELPA,
 
 */
 
-{ lib, external }:
+{ external }:
 
 self:
 

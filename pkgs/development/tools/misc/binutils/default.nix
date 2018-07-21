@@ -1,6 +1,6 @@
 { stdenv, buildPackages
 , fetchurl, zlib, autoreconfHook264
-, buildPlatform, hostPlatform, targetPlatform
+, hostPlatform, targetPlatform
 , noSysDirs, gold ? true, bison ? null
 }:
 

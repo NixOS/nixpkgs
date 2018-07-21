@@ -1,5 +1,4 @@
 { fetchurl
-, coreutils
 , libX11
 , libXrandr
 , libXcursor

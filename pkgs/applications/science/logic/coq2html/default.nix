@@ -1,4 +1,4 @@
-{ stdenv, lib, make, fetchgit, ocaml }:
+{ stdenv, make, fetchgit, ocaml }:
 
 let 
   version = "20170720";

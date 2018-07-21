@@ -1,9 +1,8 @@
-{ stdenv, lib, buildPackages, fetchurl, fetchpatch
+{ stdenv, lib, buildPackages, fetchurl
 , enableStatic ? false
 , enableMinimal ? false
 , useMusl ? stdenv.hostPlatform.libc == "musl", musl
 , extraConfig ? ""
-, buildPlatform, hostPlatform
 }:
 
 assert stdenv.hostPlatform.libc == "musl" -> useMusl;

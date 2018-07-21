@@ -1,4 +1,4 @@
-{ stdenv, ghcWithPackages, xmessage, makeWrapper, packages ? (x: []) }:
+{ stdenv, ghcWithPackages, makeWrapper, packages ? (x: []) }:
 
 let
 taffybarEnv = ghcWithPackages (self: [ self.taffybar ] ++ packages self);

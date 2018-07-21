@@ -1,4 +1,4 @@
-{ lib, buildPythonApplication, fetchFromGitHub, python, protobuf, roundup }:
+{ lib, buildPythonApplication, fetchFromGitHub, protobuf, roundup }:
 
 buildPythonApplication rec {
   pname = "ddar";

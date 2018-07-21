@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, autoconf, automake, libtool, pkgconfig, gnome3
-, gtk-doc, gtk3, python, lua, libX11, libXext, libXrender, gobjectIntrospection
+, gtk-doc, gtk3, libX11, libXext, libXrender, gobjectIntrospection
 }:
 
 stdenv.mkDerivation rec {

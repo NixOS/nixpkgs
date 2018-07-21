@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, nix, readline, boehmgc }:
+{ lib, stdenv, fetchFromGitHub, nix, readline }:
 
 let rev = "a1ea85e92b067a0a42354a28355c633eac7be65c"; in
 

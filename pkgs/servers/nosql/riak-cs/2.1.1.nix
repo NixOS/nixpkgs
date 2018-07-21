@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, unzip, erlang, git, wget, which, pam, coreutils, riak
+{ stdenv, lib, fetchurl, unzip, erlang, git, wget, which, pam
 , Carbon ? null, Cocoa ? null }:
 
 stdenv.mkDerivation rec {

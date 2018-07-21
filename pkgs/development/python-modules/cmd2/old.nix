@@ -1,4 +1,4 @@
-{ stdenv, fetchPypi, buildPythonPackage, pythonOlder
+{ stdenv, buildPythonPackage, pythonOlder
 , pyperclip, six, pyparsing, vim
 , contextlib2 ? null, subprocess32 ? null
 , pytest, mock, which, fetchFromGitHub, glibcLocales

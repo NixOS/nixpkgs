@@ -1,5 +1,5 @@
 { stdenv, fetchurl, intltool, pkgconfig
-, gtk3, ibus, libhangul, librsvg, python3
+, gtk3, ibus, libhangul, python3
 }:
 
 stdenv.mkDerivation rec {

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgsi686Linux, dpkg, makeWrapper, coreutils, gnused, gawk, file, cups, patchelf, utillinux, xxd
+{ stdenv, fetchurl, pkgsi686Linux, dpkg, makeWrapper, coreutils, gnused, gawk, file, cups, utillinux, xxd
 , ghostscript, a2ps }:
 
 # Why:

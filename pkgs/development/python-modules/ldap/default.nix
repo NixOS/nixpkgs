@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi
+{ buildPythonPackage, fetchPypi
 , pyasn1, pyasn1-modules, pytest
 , openldap, cyrus_sasl }:
 

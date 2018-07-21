@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, cmake, patchelf, imagemagick }:
+{ stdenv, fetchurl, cmake, imagemagick }:
 
 stdenv.mkDerivation rec {
   name = "cuneiform-${version}";

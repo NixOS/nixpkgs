@@ -9,7 +9,6 @@
   freetype,
   fontconfig,
   libX11,
-  gperf,
   libXcursor,
   libXxf86vm,
   libXi,

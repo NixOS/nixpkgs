@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, makeWrapper, pythonPackages, perl, zip
-, rtmpdump, substituteAll }:
+, rtmpdump }:
 
 let
   inherit (pythonPackages) python nose pycrypto requests mock;

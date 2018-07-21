@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, rustPlatform, makeWrapper, asciidoc, docbook_xsl, libxslt  }:
+{ stdenv, fetchFromGitHub, rustPlatform, asciidoc, docbook_xsl, libxslt  }:
 
 rustPlatform.buildRustPackage rec {
   name = "ripgrep-${version}";

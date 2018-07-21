@@ -1,5 +1,5 @@
 { lib, stdenv, fetchurlBoot, buildPackages
-, enableThreading ? stdenv ? glibc, fetchpatch, makeWrapper
+, enableThreading ? stdenv ? glibc, makeWrapper
 }:
 
 with lib;

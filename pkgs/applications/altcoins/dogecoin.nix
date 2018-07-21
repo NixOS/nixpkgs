@@ -1,7 +1,7 @@
 { stdenv , fetchFromGitHub
 , pkgconfig, autoreconfHook
 , db5, openssl, boost, zlib, miniupnpc
-, glib, protobuf, utillinux, qt4, qrencode
+, protobuf, utillinux, qt4, qrencode
 , withGui }:
 
 with stdenv.lib;

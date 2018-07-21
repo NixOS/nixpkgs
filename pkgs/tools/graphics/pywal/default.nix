@@ -1,4 +1,4 @@
-{ lib, python3Packages, fetchFromGitHub, imagemagick, feh }:
+{ lib, python3Packages, imagemagick, feh }:
 
 python3Packages.buildPythonApplication rec {
   pname = "pywal";

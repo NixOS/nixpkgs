@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, pkgconfig, perl, texinfo, yasm
+{ stdenv, fetchurl, pkgconfig, perl, texinfo, yasm
 , hostPlatform
 /*
  *  Licensing options (yes some are listed twice, filters and such are not listed)
@@ -80,7 +80,6 @@
 #, libnut ? null # NUT (de)muxer, native (de)muser exists
 , libogg ? null # Ogg container used by vorbis & theora
 , libopus ? null # Opus de/encoder
-, libsndio ? null # sndio playback/record support
 , libssh ? null # SFTP protocol
 , libtheora ? null # Theora encoder
 , libv4l ? null # Video 4 Linux support

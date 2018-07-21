@@ -2,8 +2,6 @@
 , isPy3k
 , buildPythonPackage
 , fetchPypi
-, fetchurl
-, python
 , numpy
 , scipy
 , sympy

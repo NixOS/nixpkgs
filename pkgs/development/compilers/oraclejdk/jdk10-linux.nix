@@ -2,11 +2,9 @@
 , stdenv
 , requireFile
 , makeWrapper
-, unzip
 , file
 , xorg ? null
 , packageType ? "JDK" # JDK, JRE, or ServerJRE
-, pluginSupport ? true
 , glib
 , libxml2
 , ffmpeg_2

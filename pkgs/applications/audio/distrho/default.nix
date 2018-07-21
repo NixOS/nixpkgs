@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, alsaLib, fftwSinglePrec, freetype, libjack2
-, libxslt, lv2, pkgconfig, premake3, xorg, ladspa-sdk }:
+, pkgconfig, premake3, xorg, ladspa-sdk }:
 
 stdenv.mkDerivation rec {
   name = "distrho-ports-unstable-2018-01-01";

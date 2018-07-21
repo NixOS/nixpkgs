@@ -1,6 +1,6 @@
 { stdenv, fetchurl, barcode, gnome3, autoreconfHook
 , gtk3, gtk-doc, libxml2, librsvg , libtool, libe-book
-, intltool, itstool, makeWrapper, pkgconfig, which
+, intltool, itstool, makeWrapper, pkgconfig
 }:
 
 stdenv.mkDerivation rec {

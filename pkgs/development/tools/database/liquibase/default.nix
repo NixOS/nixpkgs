@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, writeText, jre, makeWrapper, fetchMavenArtifact
+{ stdenv, fetchurl, jre, makeWrapper
 , mysqlSupport ? true, mysql_jdbc ? null }:
 
 assert mysqlSupport -> mysql_jdbc != null;
