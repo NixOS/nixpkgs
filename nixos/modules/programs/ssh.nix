@@ -212,8 +212,8 @@ in
 
         ForwardX11 ${if cfg.forwardX11 then "yes" else "no"}
 
-        ${optionalString (cfg.pubkeyAcceptedKeyTypes != []) PubkeyAcceptedKeyTypes "${concatStringsSep "," cfg.pubkeyAcceptedKeyTypes}"}
-        ${optionalString (cfg.hostKeyAlgorithms != []) HostKeyAlgorithms "${concatStringsSep "," cfg.hostKeyAlgorithms}"}
+        ${optionalString (cfg.pubkeyAcceptedKeyTypes != []) "PubkeyAcceptedKeyTypes ${concatStringsSep "," cfg.pubkeyAcceptedKeyTypes}"}
+        ${optionalString (cfg.hostKeyAlgorithms != []) "HostKeyAlgorithms ${concatStringsSep "," cfg.hostKeyAlgorithms}"}
 
         ${cfg.extraConfig}
       '';
