@@ -151,6 +151,13 @@ self:
       # missing OCaml
       ocp-indent = markBroken super.ocp-indent;
 
+      orgit =
+        (super.orgit.overrideAttrs (attrs: {
+          # searches for Git at build time
+          nativeBuildInputs =
+            (attrs.nativeBuildInputs or []) ++ [ external.git ];
+         }));
+
       # upstream issue: missing dependency
       org-readme = markBroken super.org-readme;
 
