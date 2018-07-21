@@ -26,13 +26,13 @@ let
   };
 in pythonPackages.buildPythonApplication rec {
   name = "matrix-synapse-${version}";
-  version = "0.31.2";
+  version = "0.33.0";
 
   src = fetchFromGitHub {
     owner = "matrix-org";
     repo = "synapse";
     rev = "v${version}";
-    sha256 = "15nfdq5s0d4bv1in6vymhq70hpz48p0nlzx25wxpibbrix630h8q";
+    sha256 = "1immk6k0wgiks1s39dhyjg79n6rgans9zy85r5wmkp4dlc3r5rx6";
   };
 
   patches = [
@@ -45,7 +45,7 @@ in pythonPackages.buildPythonApplication rec {
     signedjson systemd twisted ujson unpaddedbase64 pyyaml prometheus_client
     matrix-angular-sdk bleach netaddr jinja2 psycopg2
     psutil msgpack-python lxml matrix-synapse-ldap3
-    phonenumbers jsonschema affinity bcrypt
+    phonenumbers jsonschema affinity bcrypt sortedcontainers
   ];
 
   # Checks fail because of Tox.
@@ -59,6 +59,6 @@ in pythonPackages.buildPythonApplication rec {
     homepage = https://matrix.org;
     description = "Matrix reference homeserver";
     license = licenses.asl20;
-    maintainers = [ maintainers.ralith maintainers.roblabla ];
+    maintainers = with maintainers; [ ralith roblabla ekleog ];
   };
 }
