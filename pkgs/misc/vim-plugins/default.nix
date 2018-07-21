@@ -1657,6 +1657,17 @@ let
 
   };
 
+  vim-ledger = buildVimPluginFrom2Nix { # created by nix#NixDerivation
+    name = "vim-ledger-2017-12-12";
+    src = fetchgit {
+      url = "https://github.com/ledger/vim-ledger";
+      rev = "6eb3bb21aa979cc295d0480b2179938c12b33d0d";
+      sha256 = "0rbwyaanvl2bqk8xm4kq8fkv8y92lpf9xx5n8gw54iij7xxhnj01";
+    };
+    dependencies = [];
+
+  };
+
   vim-jinja = buildVimPluginFrom2Nix { # created by nix#NixDerivation
     name = "vim-jinja-2016-11-16";
     src = fetchgit {
