@@ -52,11 +52,11 @@
 /doc/languages-frameworks/python.md     @FRidh
 
 # Haskell
-/pkgs/development/compilers/ghc                       @peti
-/pkgs/development/haskell-modules                     @peti
-/pkgs/development/haskell-modules/default.nix         @peti
-/pkgs/development/haskell-modules/generic-builder.nix @peti
-/pkgs/development/haskell-modules/hoogle.nix          @peti
+/pkgs/development/compilers/ghc                       @peti @ryantm
+/pkgs/development/haskell-modules                     @peti @ryantm
+/pkgs/development/haskell-modules/default.nix         @peti @ryantm
+/pkgs/development/haskell-modules/generic-builder.nix @peti @ryantm
+/pkgs/development/haskell-modules/hoogle.nix          @peti @ryantm
 
 # R
 /pkgs/applications/science/math/R   @peti
