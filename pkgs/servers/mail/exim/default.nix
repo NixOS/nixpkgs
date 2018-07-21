@@ -1,5 +1,7 @@
-{ coreutils, db, fetchurl, openldap, openssl, pcre, perl, pkgconfig, stdenv
-, enableLDAP ? false
+{ coreutils, db, fetchurl, openssl, pcre, perl, pkgconfig, stdenv
+, enableLDAP ? false, openldap
+, enableMySQL ? false, mysql, zlib
+, enableAuthDovecot ? false, dovecot
 }:
 
 stdenv.mkDerivation rec {
@@ -11,10 +13,13 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ coreutils db openssl pcre perl ]
-    ++ stdenv.lib.optional enableLDAP openldap;
+  buildInputs = [ coreutils db openssl perl pcre ]
+    ++ stdenv.lib.optional enableLDAP openldap
+    ++ stdenv.lib.optionals enableMySQL [ mysql zlib ]
+    ++ stdenv.lib.optional enableAuthDovecot dovecot;
 
   preBuild = ''
+    ${stdenv.lib.optionalString enableMySQL "PKG_CONFIG_PATH=$PKG_CONFIG_PATH:${mysql}/share/mysql/pkgconfig/"}
     sed '
       s:^\(BIN_DIRECTORY\)=.*:\1='"$out"'/bin:
       s:^\(CONFIGURE_FILE\)=.*:\1=/etc/exim.conf:
@@ -39,7 +44,18 @@ stdenv.mkDerivation rec {
       ${stdenv.lib.optionalString enableLDAP ''
         s:^# \(LDAP_LIB_TYPE=OPENLDAP2\)$:\1:
         s:^# \(LOOKUP_LDAP=yes\)$:\1:
+        s:^\(LOOKUP_LIBS\)=\(.*\):\1=\2 -lldap:
         s:^# \(LOOKUP_LIBS\)=.*:\1=-lldap:
+      ''}
+      ${stdenv.lib.optionalString enableMySQL ''
+        s:^# \(LOOKUP_MYSQL=yes\)$:\1:
+        s:^# \(LOOKUP_MYSQL_PC=mariadb\)$:\1:
+        s:^\(LOOKUP_LIBS\)=\(.*\):\1=\2 -lmysqlclient:
+        s:^# \(LOOKUP_LIBS\)=.*:\1=-lmysqlclient:
+        s:^# \(LOOKUP_INCLUDE\)=.*:\1=-I${mysql}/include/mysql/:
+      ''}
+      ${stdenv.lib.optionalString enableAuthDovecot ''
+        s:^# \(AUTH_DOVECOT\)=.*:\1=yes:
       ''}
       #/^\s*#.*/d
       #/^\s*$/d
