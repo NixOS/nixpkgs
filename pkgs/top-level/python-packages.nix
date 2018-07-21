@@ -264,6 +264,10 @@ in {
 
   discordpy = callPackage ../development/python-modules/discordpy { };
 
+  parver = callPackage ../development/python-modules/parver { };
+  arpeggio = callPackage ../development/python-modules/arpeggio { };
+  invoke = callPackage ../development/python-modules/invoke { };
+
   distorm3 = callPackage ../development/python-modules/distorm3 { };
 
   dogtail = callPackage ../development/python-modules/dogtail { };
