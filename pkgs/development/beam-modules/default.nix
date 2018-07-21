@@ -1,7 +1,7 @@
 { stdenv, pkgs, erlang }:
 
 let
-  inherit (stdenv.lib) getVersion versionAtLeast makeExtensible;
+  inherit (stdenv.lib) makeExtensible;
 
   lib = pkgs.callPackage ./lib.nix {};
 

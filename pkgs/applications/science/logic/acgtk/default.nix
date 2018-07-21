@@ -4,8 +4,7 @@
   installExamples ? true,
   installEmacsMode ? true }:
 
-let inherit (stdenv.lib) versionAtLeast
-                         optionals optionalString; in
+let inherit (stdenv.lib) versionAtLeast optionalString; in
 
 let inherit (ocamlPackages) ocaml camlp4; in
 

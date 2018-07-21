@@ -14,8 +14,7 @@ let
 
   _skim = skim;
 
-  inherit (vimUtils.override {inherit vim;}) rtpPath addRtp buildVimPlugin
-    buildVimPluginFrom2Nix vimHelpTags;
+  inherit (vimUtils.override {inherit vim;}) buildVimPluginFrom2Nix;
 
 
 # TL;DR

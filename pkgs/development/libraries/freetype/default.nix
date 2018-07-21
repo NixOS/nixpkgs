@@ -10,7 +10,7 @@
 }:
 
 let
-  inherit (stdenv.lib) optional optionals optionalString;
+  inherit (stdenv.lib) optional optionalString;
 
 in stdenv.mkDerivation rec {
   name = "freetype-${version}";

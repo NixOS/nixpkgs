@@ -3,8 +3,6 @@
 , hostPlatform, buildPlatform
 }:
 
-let inherit (stdenv.lib) optionals; in
-
 stdenv.mkDerivation rec {
   name = "ddrescue-1.23";
 
