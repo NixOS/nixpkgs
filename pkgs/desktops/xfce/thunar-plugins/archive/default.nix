@@ -2,7 +2,7 @@
 , gtk
 , thunarx-2-dev
 , exo, libxfce4util, libxfce4ui
-, xfconf, udev, libnotify
+, xfconf, udev, libnotify, hicolor-icon-theme
 }:
 
 stdenv.mkDerivation rec {
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     xfce4-dev-tools
     thunarx-2-dev
     exo gtk libxfce4util libxfce4ui
-    xfconf udev libnotify
+    xfconf udev libnotify hicolor-icon-theme
   ];
 
   preConfigure = ''
@@ -44,7 +44,6 @@ stdenv.mkDerivation rec {
     pushd $out/libexec/thunar-archive-plugin > /dev/null
     ln -s ./file-roller.tap org.gnome.FileRoller.tap
     popd > /dev/null
-    rm $out/share/icons/hicolor/icon-theme.cache
   '';
 
   enableParallelBuilding = true;
