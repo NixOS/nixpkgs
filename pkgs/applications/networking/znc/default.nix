@@ -9,11 +9,11 @@ with stdenv.lib;
 
 stdenv.mkDerivation rec {
   name = "znc-${version}";
-  version = "1.7.0";
+  version = "1.7.1";
 
   src = fetchurl {
     url = "https://znc.in/releases/archive/${name}.tar.gz";
-    sha256 = "0vxra50418bsjfdpf8vl70fijv8syvasjqdxfyjliff6k91k2zn0";
+    sha256 = "1i1r1lh9q2mr1bg520zrvrlwhrhy6wibrin78wjxq1gab1qymks4";
   };
 
   nativeBuildInputs = [ pkgconfig ];
