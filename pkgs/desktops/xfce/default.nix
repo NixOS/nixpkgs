@@ -159,7 +159,7 @@ lib.makeScope pkgs.newScope (self: with self; {
 
   xfce4_power_manager_gtk3 = xfce4-power-manager.override { withGtk3 = true; };
 
-} // lib.optionalAttrs (config.allowAliases or true) {
+} // lib.optionalAttrs (config.allowAliases or false) {
   #### ALIASES - added 2018-01
 
   terminal = xfce4-terminal;

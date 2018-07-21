@@ -49,7 +49,7 @@ buildPerlPackage rec {
     IOSocketSSL
     IPCRun
     JSON
-    LWPProtocolhttps
+    LWPProtocolHttps
     ModuleInstall
     NetSNMP
     TestCompile

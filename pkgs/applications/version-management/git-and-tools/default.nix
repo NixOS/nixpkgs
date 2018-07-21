@@ -10,10 +10,9 @@ let
     sendEmailSupport = false;   # requires plenty of perl libraries
     perlLibs = [perlPackages.LWP perlPackages.URI perlPackages.TermReadKey];
     smtpPerlLibs = [
-      perlPackages.NetSMTP perlPackages.NetSMTPSSL
+      perlPackages.libnet perlPackages.NetSMTPSSL
       perlPackages.IOSocketSSL perlPackages.NetSSLeay
-      perlPackages.MIMEBase64 perlPackages.AuthenSASL
-      perlPackages.DigestHMAC
+      perlPackages.AuthenSASL perlPackages.DigestHMAC
     ];
   };
 
@@ -130,7 +129,7 @@ let
 
   transcrypt = callPackage ./transcrypt { };
 
-} // lib.optionalAttrs (config.allowAliases or true) (with self; {
+} // lib.optionalAttrs (config.allowAliases or false) (with self; {
   # aliases
   gitAnnex = git-annex;
   svn_all_fast_export = svn-all-fast-export;

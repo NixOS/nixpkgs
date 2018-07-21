@@ -10983,7 +10983,6 @@ let self = _self // overrides; _self = with self; {
     patchPhase = ''sed -ie 's/`which pkg-config`/"pkg-config"/' Build.PL'';
     doCheck = false; # The main test performs network access
     nativeBuildInputs = [ pkgs.pkgconfig ];
-    #buildInputs = [ TestMore TestPod ];
     propagatedBuildInputs = [ pkgs.libdiscid ];
   };
 
@@ -17909,7 +17908,7 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-} // stdenv.lib.optionalAttrs (config.allowAliases or true) {
+} // stdenv.lib.optionalAttrs (config.allowAliases or false) {
   autodie = null; # part of Perl
   AutoLoader = null; # part of Perl 5.22
   constant = null; # part of Perl 5.22
