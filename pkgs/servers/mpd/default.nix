@@ -84,8 +84,8 @@ in stdenv.mkDerivation rec {
     ++ opt clientSupport mpd_clientlib
     ++ opt opusSupport libopus
     ++ opt soundcloudSupport yajl
-    ++ opt nfsSupport libnfs
-    ++ opt smbSupport smbclient;
+    ++ opt (!stdenv.isDarwin && nfsSupport) libnfs
+    ++ opt (!stdenv.isDarwin && smbSupport) smbclient;
 
   nativeBuildInputs = [ autoreconfHook pkgconfig ];
 
@@ -120,8 +120,8 @@ in stdenv.mkDerivation rec {
       (mkFlag clientSupport "libmpdclient")
       (mkFlag opusSupport "opus")
       (mkFlag soundcloudSupport "soundcloud")
-      (mkFlag nfsSupport "libnfs")
-      (mkFlag smbSupport "smbclient")
+      (mkFlag (!stdenv.isDarwin && nfsSupport) "libnfs")
+      (mkFlag (!stdenv.isDarwin && smbSupport) "smbclient")
       "--enable-debug"
       "--with-zeroconf=avahi"
     ]
