@@ -8,6 +8,7 @@
 , iwSupport     ? true,  wirelesstools ? null
 , githubSupport ? false, curl          ? null
 , mpdSupport    ? false, mpd_clientlib ? null
+, pulseSupport  ? false, libpulseaudio ? null
 , i3Support ? false, i3GapsSupport ? false, i3 ? null, i3-gaps ? null, jsoncpp ? null
 }:
 
@@ -15,17 +16,18 @@ assert alsaSupport   -> alsaLib       != null;
 assert githubSupport -> curl          != null;
 assert iwSupport     -> wirelesstools != null;
 assert mpdSupport    -> mpd_clientlib != null;
+assert pulseSupport  -> libpulseaudio != null;
 
 assert i3Support     -> ! i3GapsSupport && jsoncpp != null && i3      != null;
 assert i3GapsSupport -> ! i3Support     && jsoncpp != null && i3-gaps != null;
 
 stdenv.mkDerivation rec {
     name = "polybar-${version}";
-    version = "3.1.0";
+    version = "3.2.0";
     src = fetchgit {
       url = "https://github.com/jaagr/polybar";
-      rev = "bf16a4d415ea7d8845f578544de0c71e56ad314e";
-      sha256 = "1jcvqxl0477j0snvh1rzqsm1dkfsybix2lgrlsgiczdxfknwz8iy";
+      rev = version;
+      sha256 = "0p94brndysvmmbidhl4ds4w3qvddb752s4vryp0qckb0hz3knqk8";
     };
 
     meta = with stdenv.lib; {
@@ -48,6 +50,7 @@ stdenv.mkDerivation rec {
       (if githubSupport then curl          else null)
       (if iwSupport     then wirelesstools else null)
       (if mpdSupport    then mpd_clientlib else null)
+      (if pulseSupport  then libpulseaudio else null)
 
       (if i3Support || i3GapsSupport then jsoncpp else null)
       (if i3Support then i3 else null)
