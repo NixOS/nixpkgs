@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, pkgconfig, bison, flex, intltool, gtk, libical, dbus-glib
+{ stdenv, fetchurl, fetchpatch, pkgconfig, bison, flex, intltool, gtk, libical, dbus-glib, tzdata
 , libnotify, popt, xfce
 }:
 
@@ -21,6 +21,14 @@ stdenv.mkDerivation rec {
       sha256 = "1l8s106mcidmbx2p8c2pi8v9ngbv2x3fsgv36j8qk8wyd4qd1jbf";
     })
   ];
+
+  postPatch = ''
+    substituteInPlace src/parameters.c        --replace "/usr/share/zoneinfo" "${tzdata}/share/zoneinfo"
+    substituteInPlace src/tz_zoneinfo_read.c  --replace "/usr/share/zoneinfo" "${tzdata}/share/zoneinfo"
+    substituteInPlace tz_convert/tz_convert.c --replace "/usr/share/zoneinfo" "${tzdata}/share/zoneinfo"
+  '';
+
+  postConfigure = "rm -rf libical"; # ensure pkgs.libical is used instead of one included in the orage sources
 
   nativeBuildInputs = [ pkgconfig intltool bison flex ];
 
